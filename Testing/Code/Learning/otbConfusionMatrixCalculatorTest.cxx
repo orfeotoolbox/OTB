@@ -153,20 +153,21 @@ int otbConfusionMatrixCalculatorUpdate(int argc, char* argv[])
 
   CalculatorType::ConfusionMatrixType confmat = calculator->GetConfusionMatrix();
 
-  long int totalError = 0.0;
+  double totalError = 0.0;
 
   for(int i=0; i<nbClasses; i++)
       for(int j=0; j<nbClasses; j++)
 	{
 	double goodValue = 0.0;
 	if(i==j)
-	  goodValue = 1.0;
+	  goodValue = nbSamples/nbClasses;
 	if( confmat(i,j)!= goodValue)
-	  ++totalError;
+	  totalError+=confmat(i,j);
 	}
 
-  if( totalError > 0 )
+  if( totalError > 0.001 )
     {
+    std::cerr << confmat << std::endl;
     std::cerr<< "Error = " << totalError << std::endl;
     return EXIT_FAILURE;
     }

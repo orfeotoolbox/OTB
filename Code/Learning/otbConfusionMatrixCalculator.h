@@ -84,7 +84,7 @@ private:
   double                m_KappaIndex;
   double                m_OverallAccuracy;
 
-  std::vector<int>      m_VecOfClasses;
+  std::map<int,int>         m_MapOfClasses;
 
   unsigned short        m_NumberOfClasses;
 

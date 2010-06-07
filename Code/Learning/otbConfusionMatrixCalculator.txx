@@ -52,37 +52,54 @@ ConfusionMatrixCalculator<TListLabel>
 ::GenerateData()
 {
   
-  typename ListLabelType::ConstPointer refLabels = this->GetReferenceLabels();
-  typename ListLabelType::ConstPointer prodLabels = this->GetProducedLabels();
-  
   typename ListLabelType::ConstIterator  refIterator = m_ReferenceLabels->Begin();
-  typename ListLabelType::ConstIterator  prodIterator = prodLabels->Begin();
+  typename ListLabelType::ConstIterator  prodIterator = m_ProducedLabels->Begin();
 
   //check that both lists have the same number of samples
 
-  if( refLabels->Size() != prodLabels->Size() )
+  if( m_ReferenceLabels->Size() != m_ProducedLabels->Size() )
     {
-    otbMsgDebugMacro(<< "refLabels size = " << refLabels->Size() << " / proLabels size = " << prodLabels->Size());
+    otbMsgDebugMacro(<< "refLabels size = " << m_ReferenceLabels->Size() << " / proLabels size = " << m_ProducedLabels->Size());
         throw itk::ExceptionObject(__FILE__, __LINE__, "ListSample size missmatch", ITK_LOCATION);
     }
 
   // count de number of classes
 
+  int countClasses = 0;
    while( refIterator != m_ReferenceLabels->End() )
     {
 
     int currentLabel = refIterator.GetMeasurementVector()[0];
-    if(find(m_VecOfClasses.begin(), m_VecOfClasses.end(), currentLabel) == m_VecOfClasses.end())
-    m_VecOfClasses.push_back(currentLabel);
-
+    if(m_MapOfClasses.find(currentLabel) == m_MapOfClasses.end())
+      {
+      m_MapOfClasses[currentLabel] = countClasses;
+      ++countClasses;
+      }
     ++refIterator;
 
     }
 
-  m_NumberOfClasses = m_VecOfClasses.size();
+  m_NumberOfClasses = countClasses;
 
   m_ConfusionMatrix = ConfusionMatrixType(m_NumberOfClasses, m_NumberOfClasses);
 
+  refIterator = m_ReferenceLabels->Begin();
+  prodIterator = m_ProducedLabels->Begin();
+
+  while( refIterator != m_ReferenceLabels->End() )
+    {
+    int refLabel = refIterator.GetMeasurementVector()[0];
+    int prodLabel = prodIterator.GetMeasurementVector()[0];
+
+    int refPos = m_MapOfClasses[refLabel];
+    int prodPos = m_MapOfClasses[prodLabel];
+
+    m_ConfusionMatrix(refPos,prodPos)+=1;
+
+    ++refIterator;
+    ++prodIterator;
+
+    }
   
 
 
