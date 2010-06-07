@@ -89,6 +89,11 @@ else()
   set(IS_X86_64 0)
 endif()
 
+IF(OTB_DISABLE_FAST_FUNCTIONS_VALUE)
+    ADD_DEFINITIONS(-DOTB_DISABLE_FAST_FUNCTIONS)
+ENDIF(OTB_DISABLE_FAST_FUNCTIONS_VALUE)
+
+
 include(CheckIncludeFile)
 include(CheckLibraryExists)
 include(CheckCXXSourceRuns)
