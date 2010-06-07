@@ -54,15 +54,15 @@ public:
   
   /** Sets the reference labels (i.e. ground truth) */
   void SetReferenceLabels( const ListLabelType * );
+  const ListLabelType * GetReferenceLabels() const;
 
   /** Sets the produced labels (i.e. output of a classifier) */
   void SetProducedLabels( const ListLabelType * );
+  const ListLabelType * GetProducedLabels() const;
 
   virtual void Update();
   
   /** Accessors */
-  itkGetObjectMacro(ReferenceLabels, ListLabelType);
-  itkGetObjectMacro(ProducedLabels, ListLabelType);
 
   itkGetConstMacro(KappaIndex, double);
   itkGetConstMacro(OverallAccuracy, double);
@@ -81,11 +81,10 @@ private:
   ConfusionMatrixCalculator(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
   
-  ListLabelPointerType  m_ReferenceLabels;
-  ListLabelPointerType  m_ProducedLabels;
-
   double                m_KappaIndex;
   double                m_OverallAccuracy;
+
+  std::vector<int>      m_VecOfClasses;
 
   unsigned short        m_NumberOfClasses;
 
