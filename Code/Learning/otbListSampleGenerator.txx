@@ -117,8 +117,6 @@ ListSampleGenerator<TImage,TVectorData>
 ::GenerateData()
 {
   typename VectorDataType::ConstPointer vectorData = this->GetInputVectorData();
-  std::cout << "******** Number of elements in the tree: " << vectorData->Size() << std::endl;
-  
  
   typename ImageType::Pointer image = const_cast<ImageType*>(this->GetInput());
   
@@ -134,18 +132,16 @@ ListSampleGenerator<TImage,TVectorData>
   m_TrainingListLabel->Clear();
   m_ValidationListSample->Clear();
   m_ValidationListLabel->Clear();
+  
+  m_ClassesSamplesNumberTraining.clear();
+  m_ClassesSamplesNumberValidation.clear();
 
   m_RandomGenerator->SetSeed(1234); //FIXME switch to member
-
-  std::map<int, int> classesSamplesNumberTraining; //Just a counter
-  std::map<int, int> classesSamplesNumberValidation; //Just a counter
-
 
   TreeIteratorType itVector(vectorData->GetDataTree());
   itVector.GoToBegin();
   while (!itVector.IsAtEnd())
     {
-
     if (itVector.Get()->IsPolygonFeature())
       {
 
@@ -172,7 +168,7 @@ ListSampleGenerator<TImage,TVectorData>
             //Add the sample to the training list
             m_TrainingListSample->PushBack(it.Get());
             m_TrainingListLabel->PushBack(itVector.Get()->GetFieldAsInt(m_ClassKey));
-            classesSamplesNumberTraining[itVector.Get()->GetFieldAsInt(m_ClassKey)] += 1;
+            m_ClassesSamplesNumberTraining[itVector.Get()->GetFieldAsInt(m_ClassKey)] += 1;
             }
           else if (randomValue < m_ClassesProbTraining[itVector.Get()->GetFieldAsInt(m_ClassKey)]
                                 + m_ClassesProbValidation[itVector.Get()->GetFieldAsInt(m_ClassKey)])
@@ -180,8 +176,9 @@ ListSampleGenerator<TImage,TVectorData>
             //Add the sample to the validation list
             m_ValidationListSample->PushBack(it.Get());
             m_ValidationListLabel->PushBack(itVector.Get()->GetFieldAsInt(m_ClassKey));
-            classesSamplesNumberValidation[itVector.Get()->GetFieldAsInt(m_ClassKey)] += 1;
+            m_ClassesSamplesNumberValidation[itVector.Get()->GetFieldAsInt(m_ClassKey)] += 1;
             }
+            //Note: some samples may not be used at all
           }
         ++it;
         }
@@ -191,20 +188,6 @@ ListSampleGenerator<TImage,TVectorData>
 
   assert(m_TrainingListSample->Size() == m_TrainingListLabel->Size());
   assert(m_ValidationListSample->Size() == m_ValidationListLabel->Size());
-  
-  std::cout << "Training\n";
-  std::cout << "1: " << classesSamplesNumberTraining[1] << "\n";
-  std::cout << "2: " << classesSamplesNumberTraining[2] << "\n";
-  std::cout << "3: " << classesSamplesNumberTraining[3] << "\n";
-  std::cout << "4: " << classesSamplesNumberTraining[4] << "\n";
-  std::cout << "5: " << classesSamplesNumberTraining[5] << "\n";
-  std::cout << "Validation\n";
-  std::cout << "1: " << classesSamplesNumberValidation[1] << "\n";
-  std::cout << "2: " << classesSamplesNumberValidation[2] << "\n";
-  std::cout << "3: " << classesSamplesNumberValidation[3] << "\n";
-  std::cout << "4: " << classesSamplesNumberValidation[4] << "\n";
-  std::cout << "5: " << classesSamplesNumberValidation[5] << "\n";
-
 }
 
 template < class TImage, class TVectorData >
@@ -212,6 +195,8 @@ void
 ListSampleGenerator<TImage,TVectorData>
 ::GenerateClassStatistics()
 {
+  m_ClassesSize.clear();
+  
   //Compute pixel area:
   typename ImageType::Pointer image = const_cast<ImageType*>(this->GetInput());
   double pixelArea = vcl_abs(image->GetSpacing()[0]*image->GetSpacing()[1]);
@@ -225,9 +210,6 @@ ListSampleGenerator<TImage,TVectorData>
       {
       m_ClassesSize[itVector.Get()->GetFieldAsInt(m_ClassKey)] +=
           itVector.Get()->GetPolygonExteriorRing()->GetArea()/pixelArea;// in pixel
-      std::cout << itVector.Get()->GetFieldAsInt(m_ClassKey) << std::endl;
-      std::cout << itVector.Get()->GetPolygonExteriorRing()->GetArea()/pixelArea
-          << " pixels" << std::endl;
       }
     ++itVector;
     }
@@ -241,17 +223,18 @@ void
 ListSampleGenerator<TImage,TVectorData>
 ::ComputeClassSelectionProbability()
 {
+  m_ClassesProbTraining.clear();
+  m_ClassesProbValidation.clear();
+  
   //Go throught the classes size to find the smallest one
   double minSizeTraining = -1;
-  for (std::map<int, double>::iterator itmap = m_ClassesSize.begin(); itmap != m_ClassesSize.end(); ++itmap)
+  for (std::map<int, double>::const_iterator itmap = m_ClassesSize.begin(); itmap != m_ClassesSize.end(); ++itmap)
     {
-    std::cout << itmap->first << ": " << itmap->second << std::endl;
     if ((minSizeTraining < 0) || (minSizeTraining > itmap->second))
       {
       minSizeTraining = itmap->second;
       }
     }
-  std::cout << "MinSize: " << minSizeTraining << std::endl;
 
   double minSizeValidation = minSizeTraining;
   
@@ -270,15 +253,12 @@ ListSampleGenerator<TImage,TVectorData>
     minSizeValidation = m_MaxValidationSize;
     }
   
-  std::cout << "MinSizeTraining: " << minSizeTraining << std::endl;
-  std::cout << "MinSizeValidation: " << minSizeValidation << std::endl;
-  
   //Compute the probability selection for each class
-  for (std::map<int, double>::iterator itmap = m_ClassesSize.begin(); itmap != m_ClassesSize.end(); ++itmap)
+  for (std::map<int, double>::const_iterator itmap = m_ClassesSize.begin(); itmap != m_ClassesSize.end(); ++itmap)
     {
     m_ClassesProbTraining[itmap->first] = minSizeTraining / itmap->second;
     }
-  for (std::map<int, double>::iterator itmap = m_ClassesSize.begin(); itmap != m_ClassesSize.end(); ++itmap)
+  for (std::map<int, double>::const_iterator itmap = m_ClassesSize.begin(); itmap != m_ClassesSize.end(); ++itmap)
     {
     m_ClassesProbValidation[itmap->first] = minSizeValidation / itmap->second;
     }
@@ -290,7 +270,60 @@ void
 ListSampleGenerator<TImage,TVectorData>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  os << indent << "TODO";
+  os << indent << "* Input data:\n";
+  if (m_ClassesSize.empty())
+    {
+    os << indent << "Empty\n";
+    }
+  else
+    {
+    for (std::map<int, double>::const_iterator itmap = m_ClassesSize.begin(); itmap != m_ClassesSize.end(); ++itmap)
+      {
+      os << indent << itmap->first << ": " << itmap->second << "\n";
+      }
+    }
+  
+  os << "\n" << indent << "* Training set:\n";
+  if (m_ClassesProbTraining.empty())
+    {
+    os << indent << "Not computed\n";
+    }
+  else
+    {
+    os << indent << "** Selection probability:\n";
+    for (std::map<int, double>::const_iterator itmap = m_ClassesProbTraining.begin();
+        itmap != m_ClassesProbTraining.end(); ++itmap)
+      {
+      os << indent << itmap->first << ": " << itmap->second << "\n";
+      }
+    os << indent << "** Number of selected samples:\n";
+    for (std::map<int, int>::const_iterator itmap = m_ClassesSamplesNumberTraining.begin();
+        itmap != m_ClassesSamplesNumberTraining.end(); ++itmap)
+      {
+      os << indent << itmap->first << ": " << itmap->second << "\n";
+      }
+    }
+  
+  os  << "\n" << indent << "* Validation set:\n";
+  if (m_ClassesProbValidation.empty())
+    {
+    os << indent << "Not computed\n";
+    }
+  else
+    {
+    os << indent << "** Selection probability:\n";
+    for (std::map<int, double>::const_iterator itmap = m_ClassesProbValidation.begin();
+        itmap != m_ClassesProbValidation.end(); ++itmap)
+      {
+      os << indent << itmap->first << ": " << itmap->second << "\n";
+      }
+    os << indent << "** Number of selected samples:\n";
+    for (std::map<int, int>::const_iterator itmap = m_ClassesSamplesNumberValidation.begin();
+        itmap != m_ClassesSamplesNumberValidation.end(); ++itmap)
+      {
+      os << indent << itmap->first << ": " << itmap->second << "\n";
+      }
+    }
 }
 
 }

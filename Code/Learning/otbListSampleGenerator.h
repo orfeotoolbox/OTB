@@ -49,7 +49,9 @@ public:
   
   typedef TImage      ImageType;
   typedef TVectorData VectorDataType;
+  
   typedef typename VectorDataType::Pointer VectorDataPointerType;
+  
   typedef itk::PreOrderTreeIterator<typename VectorDataType::DataTreeType> TreeIteratorType;
   
   /** List to store the pixel values */
@@ -128,6 +130,9 @@ private:
   std::map<int, double> m_ClassesSize;
   std::map<int, double> m_ClassesProbTraining;
   std::map<int, double> m_ClassesProbValidation;
+  
+  std::map<int, int> m_ClassesSamplesNumberTraining; //Just a counter
+  std::map<int, int> m_ClassesSamplesNumberValidation; //Just a counter
   
   typedef itk::Statistics::MersenneTwisterRandomVariateGenerator RandomGeneratorType;
   RandomGeneratorType::Pointer m_RandomGenerator;
