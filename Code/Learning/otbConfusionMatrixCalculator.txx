@@ -18,18 +18,17 @@
 #ifndef __otbConfusionMatrixCalculator_txx
 #define __otbConfusionMatrixCalculator_txx
 
+#include <algorithm>
 
 namespace otb
 {
 template<class TListLabel>
 ConfusionMatrixCalculator<TListLabel>
 ::ConfusionMatrixCalculator() :
-  m_KappaIndex(0.0), m_OverallAccuracy(0.0), m_NumberOfClasses(2)
+  m_KappaIndex(0.0), m_OverallAccuracy(0.0), m_NumberOfClasses(0)
 {
   this->SetNumberOfRequiredInputs(2);
   this->SetNumberOfRequiredOutputs(1);
-  m_ReferenceLabels = ListLabelType::New();
-  m_ProducedLabels = ListLabelType::New();
   m_ConfusionMatrix = ConfusionMatrixType(m_NumberOfClasses,m_NumberOfClasses);
   m_ConfusionMatrix.Fill(0);
 }
@@ -46,31 +45,76 @@ ConfusionMatrixCalculator<TListLabel>
 template < class TListLabel > 
 void
 ConfusionMatrixCalculator<TListLabel>
+::SetProducedLabels( const ListLabelType * prodLabs)
+{
+  this->ProcessObject::SetNthInput(0, const_cast< ListLabelType * >( prodLabs ) );
+}
+
+
+template < class TListLabel >
+const TListLabel *
+ConfusionMatrixCalculator<TListLabel>
+::GetProducedLabels( ) const
+  {
+  if (this->GetNumberOfInputs() < 2)
+    {
+    return 0;
+    }
+
+  return dynamic_cast<const ListLabelType * >(this->ProcessObject::GetInput(1) );
+}
+
+
+template < class TListLabel > 
+void
+ConfusionMatrixCalculator<TListLabel>
+::SetReferenceLabels( const ListLabelType * refLabs)
+{
+  this->ProcessObject::SetNthInputSetNthInput(0, const_cast< ListLabelType * >( refLabs ) );
+  m_ReferenceLabels =   this->GetReferenceLabels();
+
+  typename ListLabelType::ConstIterator  refIterator = m_ReferenceLabels->Begin();
+
+   while( refIterator != m_ReferenceLabels->End() )
+    {
+
+    int currentLabel = refIterator.GetMeasurementVector()[0];
+    if(find(m_VecOfClasses.begin(), m_VecOfClasses.end(), currentLabel) == m_VecOfClasses.end())
+    m_VecOfClasses.push_back(currentLabel);
+
+    ++refIterator;
+
+    }
+
+  m_NumberOfClasses = m_VecOfClasses.size();
+
+
+}
+
+
+template < class TListLabel >
+const TListLabel *
+ConfusionMatrixCalculator<TListLabel>
+::GetReferenceLabels( ) const
+  {
+  if (this->GetNumberOfInputs() < 1)
+    {
+    return 0;
+    }
+
+  return dynamic_cast<const ListLabelType * >(this->ProcessObject::GetInput(0) );
+}
+
+
+template < class TListLabel > 
+void
+ConfusionMatrixCalculator<TListLabel>
 ::GenerateData()
 {
   
   typename ListLabelType::ConstPointer refLabels = this->GetReferenceLabels();
   typename ListLabelType::ConstPointer prodLabels = this->GetProducedLabels();
   
-  std::vector<int> vecOfClasses;
-
-  typename ListLabelType::ConstIterator  refIterator = refLabels->Begin();
-
-  //vecOfClasses.push_back(refIterator.GetMeasurementVector()[0]);
-
-  while( refIterator != refLabels->End() )
-    {
-
-    int currentLabel = refIterator.GetMeasurementVector()[0];
-    //if(find(vecOfClasses.begin(), vecOfClasses.end(), currentLabel) == vecOfClasses.end())
-    //vecOfClasses.push_back(currentLabel);
-
-    ++refIterator;
-
-    }
-
-  m_NumberOfClasses = vecOfClasses.size();
-
   
 
   
