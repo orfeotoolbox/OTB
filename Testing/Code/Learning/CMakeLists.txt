@@ -412,13 +412,16 @@ ADD_TEST(leTuExhaustiveExponentialOptimizerNew ${LEARNING_TESTS4}
         otbExhaustiveExponentialOptimizerNew)
 
 ADD_TEST(leTvListSampleGenerator1 ${LEARNING_TESTS4}
- --compare-ascii ${NOTOL}
+ --compare-n-ascii ${NOTOL} 2
     ${BASELINE_FILES}/leTvListSampleGenerator1.txt
     ${TEMP}/leTvListSampleGenerator1.txt
+    ${BASELINE_FILES}/leTvListSampleGeneratorValidation1.txt
+    ${TEMP}/leTvListSampleGeneratorValidation1.txt
         otbListSampleGenerator
     ${EXAMPLEDATA}/qb_RoadExtract.tif
     ${EXAMPLEDATA}/qb_RoadExtract_classification.shp
     ${TEMP}/leTvListSampleGenerator1.txt
+    ${TEMP}/leTvListSampleGeneratorValidation1.txt
     -1
     -1
     0
