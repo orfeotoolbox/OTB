@@ -79,6 +79,7 @@ IF(GENERATE_WRAPPING_DOC)
   #ENDIF(OTB-Wrapping_FOUND)
 ENDIF(GENERATE_WRAPPING_DOC)
 
+OPTION(GENERATE_MONTEVERDI_DOC "Generate Monteverdi user guide as well" OFF)
 
 # OTB_DATA_PATHS is searched recursively.. you need not enter sub-directories
 SET(OTB_DATA_PATHS "${OTB_DATA_ROOT}/Examples::${OTB_DATA_ROOT}/Input" CACHE STRING "Where the OTB data is. Enter a double colon seperated list.")

@@ -113,6 +113,7 @@ SET( Tex_SRCS
   ReleaseNotes.tex
 )
 
+
 FOREACH( file ${Tex_SRCS})
 MESSAGE("Processing File " ${file})
 SET( SoftwareGuide_Tex_SRCS
@@ -186,7 +187,7 @@ IF(LATEX_COMPILER)
     COMMENT   "Generating dvi file"
   )
   SET(TEX_OUTPUTS ${TEX_OUTPUTS} ${SoftwareGuide_SOURCE_DIR}/Latex/SoftwareGuide.dvi)
-
+  
   IF(DVIPS_CONVERTER)
     MESSAGE("DVIPS converter")
     ADD_CUSTOM_COMMAND(
@@ -246,6 +247,85 @@ IF(LATEX_COMPILER)
   ENDIF(BIBTEX_COMPILER)
 
 
+  IF (GENERATE_MONTEVERDI_DOC)
+  
+    SET ( Monteverdi_Tex_SRCS 
+      ${SoftwareGuide_SOURCE_DIR}/Latex/MonteverdiGuide.tex
+    )
+    
+    #tex
+    ADD_CUSTOM_COMMAND(
+    SOURCE    ${MonteverdiGuide_Tex_SRCS}  ${ITK_EXAMPLES_TEX_SRCS}
+    COMMAND   ${LATEX_WRAPPER1}
+    ARGS      ${LATEX_WRAPPER2}
+              ${SoftwareGuide_SOURCE_DIR}/Latex/MonteverdiGuide.tex
+    DEPENDS   ${MonteverdiGuide_Tex_SRCS} ${ITK_EXAMPLES_TEX_SRCS}
+    OUTPUT    ${SoftwareGuide_SOURCE_DIR}/Latex/MonteverdiGuide.dvi
+    COMMENT   "Generating Monteverdi user guide dvi file"
+  )
+  SET(Monteverdi_TEX_OUTPUTS ${Monteverdi_TEX_OUTPUTS} ${SoftwareGuide_SOURCE_DIR}/Latex/MonteverdiGuide.dvi)
+  
+  IF(DVIPS_CONVERTER)
+    MESSAGE("DVIPS converter")
+    ADD_CUSTOM_COMMAND(
+      SOURCE    MonteverdiGuide.dvi
+      COMMAND   ${DVIPS_WRAPPER1}
+      ARGS      ${DVIPS_WRAPPER2}
+                MonteverdiGuide.dvi ${DVIPS_CONVERTER_OPTIONS} -o  MonteverdiGuide.ps
+      #DEPENDS   MonteverdiGuide.ind MonteverdiGuide.bbl MonteverdiGuide.dvi
+      OUTPUT    ${SoftwareGuide_SOURCE_DIR}/Latex/MonteverdiGuide.ps
+      COMMENT   "Generating Monteverdi user guide ps file"
+    )
+  SET(Monteverdi_TEX_OUTPUTS ${Monteverdi_TEX_OUTPUTS} ${SoftwareGuide_SOURCE_DIR}/Latex/MonteverdiGuide.ps)
+
+  ENDIF(DVIPS_CONVERTER)
+
+  IF(PS2PDF_CONVERTER)
+    ADD_CUSTOM_COMMAND(
+      SOURCE    MonteverdiGuide.ps
+      COMMAND   ${PS2PDF_CONVERTER}
+      ARGS      ${PS2PDF_CONVERTER_OPTIONS} MonteverdiGuide.ps
+      OUTPUT    ${SoftwareGuide_SOURCE_DIR}/Latex/MonteverdiGuide.pdf
+      COMMENT   "Generating Monteverdi user guide pdf file"
+    )
+    SET(Monteverdi_TEX_OUTPUTS ${Monteverdi_TEX_OUTPUTS} ${SoftwareGuide_SOURCE_DIR}/Latex/MonteverdiGuide.pdf)
+  ENDIF(PS2PDF_CONVERTER)
+
+#   IF(MAKEINDEX_COMPILER)
+#     ADD_CUSTOM_COMMAND(
+#       SOURCE    ${MonteverdiGuide_Tex_SRCS}  ${ITK_EXAMPLES_TEX_SRCS}
+#       COMMAND   ${LATEX_WRAPPER1}
+#       ARGS      ${LATEX_WRAPPER2}
+#                 ${SoftwareGuide_SOURCE_DIR}/Latex/MonteverdiGuide.tex
+#       OUTPUT    ${SoftwareGuide_SOURCE_DIR}/Latex/MonteverdiGuide.idx
+#       COMMENT   "Generating Monteverdi idx file"
+#     )
+#   SET(Monteverdi_TEX_OUTPUTS ${Monteverdi_TEX_OUTPUTS} ${SoftwareGuide_SOURCE_DIR}/Latex/MonteverdiGuide.idx)
+#   
+#     ADD_CUSTOM_COMMAND(
+#       SOURCE    MonteverdiGuide.idx
+#       COMMAND   ${MAKEINDEX_COMPILER}
+#       ARGS      MonteverdiGuide
+#       OUTPUT    ${SoftwareGuide_SOURCE_DIR}/Latex/MonteverdiGuide.ind
+#       COMMENT   "Generating Monteverdi ind file"
+#     )
+#   SET(Monteverdi_TEX_OUTPUTS ${Monteverdi_TEX_OUTPUTS} ${SoftwareGuide_SOURCE_DIR}/Latex/MonteverdiGuide.ind)
+#   ENDIF(MAKEINDEX_COMPILER)
+# 
+#   IF(BIBTEX_COMPILER)
+#     ADD_CUSTOM_COMMAND(
+#       SOURCE    MonteverdiGuide.aux
+#       COMMAND   ${BIBTEX_COMPILER}
+#       ARGS      MonteverdiGuide
+#       OUTPUT    ${SoftwareGuide_SOURCE_DIR}/Latex/MonteverdiGuide.bbl
+#       COMMENT   "Generating Monteverdi bbl file"
+#     )
+#   SET(Monteverdi_TEX_OUTPUTS ${Monteverdi_TEX_OUTPUTS} ${SoftwareGuide_SOURCE_DIR}/Latex/MonteverdiGuide.bbl)
+#   ENDIF(BIBTEX_COMPILER)
+  
+  ADD_CUSTOM_TARGET(MonteverdiGuideLatex ALL DEPENDS ${Monteverdi_TEX_OUTPUTS})
+  ENDIF (GENERATE_MONTEVERDI_DOC)
+           
 ENDIF(LATEX_COMPILER)
 
 
