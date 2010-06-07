@@ -62,9 +62,17 @@ public:
   void SetInput( const ImageType * );
   const ImageType * GetInput() const;
   
-  /** Connects the vector data for which the sample list is going to be extracted */
+  /** Connects the vector data for which the sample list is going to be extracted
+   * if this is the only input vector data, both the training and validation samples
+   * come from it */
   void SetInputVectorData( const VectorDataType * );
   const VectorDataType * GetInputVectorData() const;
+  
+  /** Connects the vector data for which the validation list is going to be extracted
+   * this input is optional and the validation list can be also extracted from the same
+   * vector data as the training */
+  void SetValidationVectorData( const VectorDataType * );
+  const VectorDataType * GetValidationVectorData() const;
   
 // Switch to the classic interface once OTB use the new stat framework?
 // ListSample are a full DataObject
@@ -102,6 +110,8 @@ private:
   ListSampleGenerator(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
   
+  void GenerateClassStatistics();
+  
   int    m_MaxTrainingSize;
   int    m_MaxValidationSize;
   double m_ValidationTrainingRatio;
@@ -113,6 +123,8 @@ private:
   ListLabelPointerType  m_TrainingListLabel;
   ListSamplePointerType m_ValidationListSample;
   ListLabelPointerType  m_ValidationListLabel;
+  
+  std::map<int, double> m_ClassesSize;
   
 };
 }// end of namespace otb
