@@ -21,6 +21,8 @@
 
 #include "itkProcessObject.h"
 #include "itkListSample.h"
+#include "itkPreOrderTreeIterator.h"
+#include "itkMersenneTwisterRandomVariateGenerator.h"
 
 namespace otb
 {
@@ -48,6 +50,10 @@ public:
   typedef TImage      ImageType;
   typedef TVectorData VectorDataType;
   
+  typedef typename VectorDataType::Pointer VectorDataPointerType;
+  
+  typedef itk::PreOrderTreeIterator<typename VectorDataType::DataTreeType> TreeIteratorType;
+  
   /** List to store the pixel values */
   typedef typename ImageType::PixelType           SampleType;
   typedef itk::Statistics::ListSample<SampleType> ListSampleType;
@@ -68,12 +74,6 @@ public:
   void SetInputVectorData( const VectorDataType * );
   const VectorDataType * GetInputVectorData() const;
   
-  /** Connects the vector data for which the validation list is going to be extracted
-   * this input is optional and the validation list can be also extracted from the same
-   * vector data as the training */
-  void SetValidationVectorData( const VectorDataType * );
-  const VectorDataType * GetValidationVectorData() const;
-  
 // Switch to the classic interface once OTB use the new stat framework?
 // ListSample are a full DataObject
 //  typedef itk::DataObject::Pointer DataObjectPointer;
@@ -85,8 +85,8 @@ public:
   itkSetMacro(MaxTrainingSize, int);
   itkGetMacro(MaxValidationSize, int);
   itkSetMacro(MaxValidationSize, int);
-  itkGetMacro(ValidationTrainingRatio, double);
-  itkSetMacro(ValidationTrainingRatio, double);
+  itkGetMacro(ValidationTrainingProportion, double);
+  itkSetClampMacro(ValidationTrainingProportion, double, 0.0, 1.0);
 
   itkGetMacro(NumberOfClasses, unsigned short);
 
@@ -111,10 +111,12 @@ private:
   void operator=(const Self&); //purposely not implemented
   
   void GenerateClassStatistics();
+  void ComputeClassSelectionProbability();
   
-  int    m_MaxTrainingSize;
-  int    m_MaxValidationSize;
-  double m_ValidationTrainingRatio;
+  int    m_MaxTrainingSize; // number of traning samples (-1 = no limit)
+  int    m_MaxValidationSize; // number of validation samples (-1 = no limit)
+  double m_ValidationTrainingProportion; // proportion of training vs validation 
+                                         // (0.0 = all training, 1.0 = all validation)
 
   unsigned short        m_NumberOfClasses;
   std::string           m_ClassKey;
@@ -124,8 +126,16 @@ private:
   ListSamplePointerType m_ValidationListSample;
   ListLabelPointerType  m_ValidationListLabel;
   
-  std::map<int, double> m_ClassesSize;
   
+  std::map<int, double> m_ClassesSize;
+  std::map<int, double> m_ClassesProbTraining;
+  std::map<int, double> m_ClassesProbValidation;
+  
+  std::map<int, int> m_ClassesSamplesNumberTraining; //Just a counter
+  std::map<int, int> m_ClassesSamplesNumberValidation; //Just a counter
+  
+  typedef itk::Statistics::MersenneTwisterRandomVariateGenerator RandomGeneratorType;
+  RandomGeneratorType::Pointer m_RandomGenerator;
 };
 }// end of namespace otb
   
