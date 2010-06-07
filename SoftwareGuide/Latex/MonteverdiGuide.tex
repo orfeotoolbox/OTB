@@ -1,0 +1,420 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Complete documentation on the extended LaTeX markup used for Insight
+% documentation is available in ``Documenting Insight'', that is part
+% of the standard documentation for Insight.  It may be found online
+% at:
+%
+%                    http://www.itk.org
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass{InsightSoftwareGuide}
+
+
+\usepackage[dvips]{graphicx}
+\usepackage{times,lscape,url}
+%\usepackage{mdwtab}
+
+
+%%% \usepackage[latin1]{inputenc}
+%%% \selectlanguage{french}
+% Configuration pour les accents francais pour l'OTB
+\usepackage[latin1]{inputenc}
+%\usepackage[french]{babel}
+\usepackage{tikz}
+
+
+\usepackage{color}
+
+\definecolor{listcomment}{rgb}{0.0,0.5,0.0}
+\definecolor{listkeyword}{rgb}{0.0,0.0,0.5}
+\definecolor{listnumbers}{gray}{0.65}
+\definecolor{listlightgray}{gray}{0.955}
+\definecolor{listwhite}{gray}{1.0}
+
+\usepackage{listings}
+\newcommand{\lstsetcpp}
+{
+\lstset{frame = tb,
+       framerule = 0.25pt,
+       float,
+       fontadjust,
+       backgroundcolor={\color{listlightgray}},
+       basicstyle = {\ttfamily\footnotesize},
+       keywordstyle = {\ttfamily\color{listkeyword}\textbf},
+       identifierstyle = {\ttfamily},
+       commentstyle = {\ttfamily\color{listcomment}\textit},
+       stringstyle = {\ttfamily},
+       showstringspaces = false,
+       showtabs = false,
+       numbers = none,
+       numbersep = 6pt,
+       numberstyle={\ttfamily\color{listnumbers}},
+       tabsize = 2,
+       language=[ANSI]C++,
+       floatplacement=!h
+       }
+}
+\newcommand{\lstsetpython}
+{
+\lstset{language=Python
+        }
+}
+\newcommand{\lstsetjava}
+{
+\lstset{language=Java
+        }
+}
+
+
+\newif\ifitkFullVersion
+\itkFullVersiontrue
+%\itkFullVersionfalse
+
+\newif\ifitkPrintedVersion
+\itkPrintedVersiontrue
+%\itkPrintedVersionfalse
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  hyperref should be the last package to be loaded.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\ifitkPrintedVersion
+\usepackage[dvips,
+pdftitle={Monteverdi Guide},
+pdfauthor={CNES},
+pdfsubject={Remote Sensing, Orfeo, Pleiades, Cosmo Skymed},
+pdfkeywords={mage processing, Remote sensing, Guide},
+pdfpagemode={UseOutlines},
+bookmarks,bookmarksopen,
+pdfstartview={FitH},
+backref,
+colorlinks,linkcolor={black},citecolor={black},urlcolor={black},
+]{hyperref}
+\else
+\usepackage[dvips,
+pdftitle={Monteverdi Guide},
+pdfauthor={CNES},
+pdfsubject={Remote Sensing, Orfeo, Pleiades, Cosmo Skymed},
+pdfkeywords={mage processing, Remote sensing, Guide},
+pdfpagemode={UseOutlines},
+bookmarks,bookmarksopen,
+pdfstartview={FitH},
+backref,
+colorlinks,linkcolor={blue},citecolor={blue},urlcolor={blue},
+]{hyperref}
+\fi
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{bbm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+%   Load configuration parameters prepared by CMake
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{SoftwareGuideConfiguration.tex}
+
+\def\logoCNES{CNES_nom.eps}
+
+\newtheorem{algo}{Algorithm}
+\newtheorem{defin}{Definition}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+%           The Insight Toolkit Software Guide
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title{The Monteverdi Guide\\ Updated
+  for OTB-3.2}
+
+\author{OTB Development Team}
+
+\authoraddress{
+  \url{http://www.orfeo-toolbox.org}\\
+  e-mail: \email{otb@cnes.fr}
+}
+
+\date{\today}
+
+
+% actually write the .idx file
+\makeindex
+
+\setcounter{tocdepth}{3}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%           Begin Document
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\ifitkPrintedVersion
+%% \input{PrintedPreamble.tex}
+\fi
+
+\maketitle
+
+\frontmatter
+
+\hyperbaseurl{http://www.orfeo-toolbox.org}
+
+\lstsetcpp
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  Page with OTB logo
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\cleardoublepage
+
+\begin{minipage}[t][10cm][b]{\textwidth}
+\center
+\includegraphics[width=0.5\textwidth]{logoVectoriel.eps}
+\large
+\begin{center}
+\emph{The ORFEO Toolbox is not a black box.}\\
+\end{center}
+\hspace{8cm} Ch.D.
+\normalsize
+\end{minipage}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% remove headings from the following material
+\pagestyle{plain}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%\ifitkPrintedVersion
+%% \input{Cover.tex}
+%%\fi
+
+%\input{Abstract.tex}
+\chapter*{Foreword}
+\noindent
+
+
+The OTB-Applications package makes available a set of simple software tools which were designed to 
+demonstrates what can be done with OTB. Many users started using these applications for real processing 
+tasks, so we tried to make them more generic, more robust and easy to use. OTB users have been asking 
+for an integrated application for a while, since using several applications for a complete processing 
+(ortho-rectification, segmentation, classification, etc.) can be a burden. Recently, the OTB team 
+received a request from CNES' Strategy and Programs Office in order to provide an integrated application 
+for capacity building activities (teaching, simple image manipulation, etc.). The specifications included 
+ease of integration of new processing modules.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Insert Table of Contents; List of Figures and Tables
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% enable headings from the following material
+\pagestyle{normal}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\small
+\tableofcontents
+\listoffigures
+\listoftables
+\normalsize
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Begin technical content
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\mainmatter
+
+\part{User's guide}\label{part:userguide}
+
+\chapter{Introduction to Monteverdi}
+\chapter{Getting started}
+\section{Why this software is called Monteverdi?}
+The application is called Monteverdi, since this is the name of the Orfeo composer.The application allows you to build 
+interactivelly remote sensing processes based on the Orfeo Toolbox library. This is also in remebering of the great 
+(and once open source) Khoros/Cantata software.
+\section{Installation}
+Installation of Monteverdi is very simple. Standard installer packages are available for now only on MS Windows. 
+For many flavors of GNU/Linux binary packages (rpm and deb) or software repositories
+to add to your installation manager will be provided soon. Get the latest information on binary packages at
+the OTB website at http://www.orfeo-toolbox.org/otb/download.html.
+
+\section{Installation from source}
+If you need to build Monteverdi from source, please refer to the coding and compiling guide available at
+http://www.orfeo-toolbox.org/otb/documentation.html.
+ 
+\chapter{Anatomy of the application}
+\section{What does it look like}
+This is Monteverdi's main window where the menus are available and where you can see the different modules which have been 
+set up for the processing. Input data are obtained by readers. When you choose to use a new module, you select its input data,
+ and therefore, you build a processing pipeline sequentially. Let's have a look at the different menus. The first one is of
+ course the "File" menu. This menu allows you to open a data set, to save it and to cache it. The "data set" concept is
+ interesting, since you don't need to define by hand if you are looking for an image or a vector file. Of course, 
+you don't need to do anything special for any particular file format. So opening a data set will create a "reader" 
+which will appear in the main window. At any time, you can use the "save data set" option in order to store to a 
+file the result of any processing module.
+\section{Open an image with Monteverdi}
+\section{Visualize an image with Monteverdi}
+\section{Cache dataset}
+The "cache data set" is a very interesting thing. As you know, OTB implements processing on demand, so when you build a 
+processing pipeline, no processing takes place unless you ask for it explicitly. That means that you can plug together
+ the opening of a data set, an orthorectification and a spleckle filter, for example, but nothing will really be computed 
+until you trigger the pipeline execution. This is very convenient, since you can quicly build a processing pipeline and 
+let it execute afterwards while you have a coffee. In Monteverdi, you execute the processing by saving the result of the 
+last module of a pipeline. However, sometimes, you may want to execute a part of the pipeline without wanting to give a 
+name to the obtained result. You can do this by caching a data set. That is, the result will be stored in a temporary 
+file which will be created in the "Caching" directory created by the application. Another situation in which you may need 
+to cache a data set is when you need the input of a module to exist when you set its parameters. This is nor a real requirement, 
+since Monteverdi will generate the needed data by streaming it, but this can be inefficient. This for instance about visualization
+ of the result of a complex processing. Using streaming for brwsing through the result image means processing the visible part 
+every time you move inside the image. Caching the data before visualization generated the whole data set in advance allowing 
+for a more swift display. All modules allow you to cache their input data sets.
+
+\chapter{Architecture of the application}
+\section{Dynamic GUI definition}
+\section{Dynamic I/O definition}
+\section{Dynamic chain process}
+
+
+\chapter{Available modules}
+\section{I/O operations}
+\subsection{Extract region of interest}
+extracting regions of interest (ROI) from an image.
+\subsection{Concatenate image bands}
+ne for concatenating images into one single multi-band image (they need to have the same size).
+The pink button to the right of the image selection menu indicates that the image has not been generated (streamed). 
+If you push the button, the image will be cached. 
+\section{Image Vizualization}
+It allows to display RGB composition of raster images and vector data (ESRI Shapefile or KML). It is also possible to take into consideration
+the Digtal Elevation Model. 
+\section{Geometric process}
+\subsection{Orthorectification}
+\subsection{Re-projection module}
+\subsection{Registering 2 images by taking homologous point}
+This module allows to register two images by taking separately homologous points in the reference image and in the image 
+that you need to register. The principle is to estimate a transformation with the list of points.
+The output of the module the input image that you need to register where the calculate transformation was applied. 
+\subsection{Estimating sensor model based on ground control points}
+This module allows to take ground copntrol points on a raster image where you 
+This GCPs list is making correspondence between pixel coordinate in the input image and physical coordinates. The list
+allows to derive a general function which to translate any pixel coordinates in physical positions. This function is 
+based on a RPC transformation (Rational Polynomial Coefficients). As a consequence, the module enriches the output image 
+with metadata informations defining a RPC sensor model associated with the input raster. 
+There is several ways to generate the GCPs:
+--With a Internet connection: Dynamically generate the correspondence on the input image and Open Street Map layers
+--Without an  Internet connection
+
+It is also possible to import/export the GCP list from/to an XML file.
+
+This output image could be without getting any geometric informations. Moreover, if the input image have already GCPs
+in its metadata, the module allows to add or remove points from the existing list which is automatically loaded.       
+
+\section{Calibration}
+
+\subsection{Optical calibration}
+\subsection{SAR calibration}
+
+The calibration and validation of the measurement systems are important to maintain the
+reliability and reproducibility of the SAR measurements but the establishment of correspondence between quantities measured 
+by SAR and physical measure requires scientific background. The SAR calibration module allow to estimate quantitative accuracy
+from Terra SAR X.
+Describe the outputs!!!
+
+\section{Filtering Operations}
+\subsection{Band Math}
+The Band Math module allow to perform simple mathematical operations (addition, substraction, multiplication) on 2 images. 
+An operational example, on how this simple module can produce reliable information.
+In rapid mapping context, it allows to compare easily . Figure XX shows the result of the substraction of water indices . The diiference was produce by the band math module
+and allow to get a reliable estimation of the flood events.
+\subsection{Feature extraction}
+\subsection{Mean-shift segmentation}
+\section{Learning}
+\subsection{Supervised classification}
+\subsection{Non-supervised classification}
+\section{Specific SAR functionnalities}
+
+
+
+\part{Developper's guide}\label{part:developperguide}
+\chapter{Module architecture}
+\chapter{Starter guide}
+
+\part{Appendix}\label{part:appendix}
+% \chapter{Frequently Asked Questions}
+% \label{sec:FrequentlyAskedQuestions}
+% \input{FAQ.tex}
+
+\chapter{Release Notes}
+\label{sec:ReleaseNotes}
+% \input{ReleaseNotes.tex}
+
+%Comment generation of wrapping documentation for release 3.2
+% \chapter{Wrappings to other languages}
+%Set the code style to Java for the Wrapping
+
+% \input{Wrapping.tex}
+% 
+% \input{Contributors.tex}
+
+\backmatter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  Insert the bibliography using BibTeX
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \bibliographystyle{plain}
+\bibliographystyle{abbrv}
+\bibliography{\bibtexdatabasepath/Insight}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  Insert the Index file
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\InputIfFileExists{MonteverdiGuide.ind}
+
+
+
+
+%%\ifitkPrintedVersion
+%%\cleardoublepage
+%%% \input{MarketingMaterial.tex}
+%%\fi
+
+
+
+\end{document}
+
+
+
