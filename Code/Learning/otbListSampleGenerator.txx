@@ -270,6 +270,9 @@ void
 ListSampleGenerator<TImage,TVectorData>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
+  os << indent << "* MaxTrainingSize: " << m_MaxTrainingSize << "\n";
+  os << indent << "* MaxValidationSize: " << m_MaxValidationSize << "\n";
+  os << indent << "* Proportion: " << m_ValidationTrainingProportion << "\n";
   os << indent << "* Input data:\n";
   if (m_ClassesSize.empty())
     {

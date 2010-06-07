@@ -42,7 +42,7 @@ int otbListSampleGenerator(int argc, char* argv[])
   std::string outputSampleListValidation = argv[4];
   int maxTrainingSize = atoi(argv[5]);
   int maxValidationSize = atoi(argv[6]);
-  int validationTrainingProportion = atof(argv[7]);
+  double validationTrainingProportion = atof(argv[7]);
   
   std::string classKey = "Class";
 
