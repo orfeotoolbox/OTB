@@ -28,6 +28,19 @@ namespace otb
 {
 /** \class ListSampleGenerator
  *  \brief Produces a ListSample from a VectorImage and a VectorData
+ *  
+ *  This filter produces two ListSample for learning and validation of
+ *  learning algorithms. The repartition between the learning and validation
+ *  ListSample can be adjusted using the SetValidationTrainingProportion()
+ *  method.
+ *  
+ *  The size of the training and validation ListSample can be limited using the
+ *  SetMaxTrainingSize() and SetMaxValidationSize() methods.
+ *  
+ *  Classes are specified by the VectorData with a metadata identified by
+ *  a specific key. This key can be provided by the SetClassKey() method
+ *  (using "Class" as a default key).
+
  *
  */
 template < class TImage, class TVectorData > 
