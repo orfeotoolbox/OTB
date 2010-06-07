@@ -52,18 +52,14 @@ public:
   /** Type for the confusion matrix */
   typedef itk::VariableSizeMatrix<double>         ConfusionMatrixType;
   
-  /** Sets the reference labels (i.e. ground truth) */
-  void SetReferenceLabels( const ListLabelType * );
-  const ListLabelType * GetReferenceLabels() const;
-
-  /** Sets the produced labels (i.e. output of a classifier) */
-  void SetProducedLabels( const ListLabelType * );
-  const ListLabelType * GetProducedLabels() const;
-
   virtual void Update();
   
   /** Accessors */
 
+  itkSetObjectMacro(ReferenceLabels, ListLabelType);
+  itkGetConstObjectMacro(ReferenceLabels, ListLabelType);
+  itkSetObjectMacro(ProducedLabels, ListLabelType);
+  itkGetConstObjectMacro(ProducedLabels, ListLabelType);
   itkGetConstMacro(KappaIndex, double);
   itkGetConstMacro(OverallAccuracy, double);
   itkGetConstMacro(NumberOfClasses, unsigned short);
@@ -89,6 +85,9 @@ private:
   unsigned short        m_NumberOfClasses;
 
   ConfusionMatrixType   m_ConfusionMatrix;
+
+  ListLabelPointerType  m_ReferenceLabels;
+  ListLabelPointerType  m_ProducedLabels;
   
 };
 }// end of namespace otb

@@ -39,6 +39,7 @@ int otbConfusionMatrixCalculatorSetListSamples(int argc, char* argv[])
   if( argc!= 3)
     {
     std::cerr << "Usage: " << argv[0] << " nbSamples nbClasses " << std::endl;
+    return EXIT_FAILURE;
     }
   typedef itk::FixedArray<int, 1>                 LabelType;
   typedef itk::Statistics::ListSample<LabelType>  ListLabelType;

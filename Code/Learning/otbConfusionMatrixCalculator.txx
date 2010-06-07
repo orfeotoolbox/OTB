@@ -31,6 +31,8 @@ ConfusionMatrixCalculator<TListLabel>
   this->SetNumberOfRequiredOutputs(1);
   m_ConfusionMatrix = ConfusionMatrixType(m_NumberOfClasses,m_NumberOfClasses);
   m_ConfusionMatrix.Fill(0);
+  m_ReferenceLabels = ListLabelType::New();
+  m_ProducedLabels = ListLabelType::New();
 }
 
 
@@ -42,37 +44,16 @@ ConfusionMatrixCalculator<TListLabel>
   this->GenerateData();
 }
 
-template < class TListLabel > 
-void
-ConfusionMatrixCalculator<TListLabel>
-::SetProducedLabels( const ListLabelType * prodLabs)
-{
-  this->ProcessObject::SetNthInput(0, const_cast< ListLabelType * >( prodLabs ) );
-}
-
-
-template < class TListLabel >
-const TListLabel *
-ConfusionMatrixCalculator<TListLabel>
-::GetProducedLabels( ) const
-  {
-  if (this->GetNumberOfInputs() < 2)
-    {
-    return 0;
-    }
-
-  return dynamic_cast<const ListLabelType * >(this->ProcessObject::GetInput(1) );
-}
-
 
 template < class TListLabel > 
 void
 ConfusionMatrixCalculator<TListLabel>
-::SetReferenceLabels( const ListLabelType * refLabs)
+::GenerateData()
 {
-  this->ProcessObject::SetNthInputSetNthInput(0, const_cast< ListLabelType * >( refLabs ) );
-  m_ReferenceLabels =   this->GetReferenceLabels();
-
+  
+  typename ListLabelType::ConstPointer refLabels = this->GetReferenceLabels();
+  typename ListLabelType::ConstPointer prodLabels = this->GetProducedLabels();
+  
   typename ListLabelType::ConstIterator  refIterator = m_ReferenceLabels->Begin();
 
    while( refIterator != m_ReferenceLabels->End() )
@@ -87,34 +68,6 @@ ConfusionMatrixCalculator<TListLabel>
     }
 
   m_NumberOfClasses = m_VecOfClasses.size();
-
-
-}
-
-
-template < class TListLabel >
-const TListLabel *
-ConfusionMatrixCalculator<TListLabel>
-::GetReferenceLabels( ) const
-  {
-  if (this->GetNumberOfInputs() < 1)
-    {
-    return 0;
-    }
-
-  return dynamic_cast<const ListLabelType * >(this->ProcessObject::GetInput(0) );
-}
-
-
-template < class TListLabel > 
-void
-ConfusionMatrixCalculator<TListLabel>
-::GenerateData()
-{
-  
-  typename ListLabelType::ConstPointer refLabels = this->GetReferenceLabels();
-  typename ListLabelType::ConstPointer prodLabels = this->GetProducedLabels();
-  
   
 
   

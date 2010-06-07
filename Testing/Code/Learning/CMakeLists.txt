@@ -464,7 +464,7 @@ ADD_TEST(leTvListSampleGenerator3 ${LEARNING_TESTS4}
 ADD_TEST(leTuConfusionMatrixCalculatorNew ${LEARNING_TESTS4}
 otbConfusionMatrixCalculatorNew)
 ADD_TEST(leTVConfusionMatrixCalculatorSetListSamples ${LEARNING_TESTS4}
-otbConfusionMatrixCalculatorSetListSamples)
+otbConfusionMatrixCalculatorSetListSamples 1000 4)
 
 # A enrichir
 SET(BasicLearning_SRCS1
