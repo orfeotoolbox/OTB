@@ -24,12 +24,6 @@
 
 #include "otbListSampleGenerator.h"
 
-//temporary
-#include "itkPreOrderTreeIterator.h"
-#include "itkImageRegionConstIteratorWithIndex.h"
-#include "itkMersenneTwisterRandomVariateGenerator.h"
-
-
 int otbListSampleGenerator(int argc, char* argv[])
 {
 

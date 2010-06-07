@@ -18,6 +18,8 @@
 #ifndef __otbListSampleGenerator_txx
 #define __otbListSampleGenerator_txx
 
+#include "otbListSampleGenerator.h"
+
 #include "itkPreOrderTreeIterator.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
 #include "itkMersenneTwisterRandomVariateGenerator.h"
@@ -86,6 +88,27 @@ ListSampleGenerator<TImage,TVectorData>
   return static_cast<const VectorDataType * >(this->ProcessObject::GetInput(1) );
 }
 
+template < class TImage, class TVectorData >
+void
+ListSampleGenerator<TImage,TVectorData>
+::SetValidationVectorData( const VectorDataType * vectorData )
+{
+  this->ProcessObject::SetNthInput(2, const_cast< VectorDataType * >( vectorData ) );
+}
+
+template < class TImage, class TVectorData >
+const TVectorData *
+ListSampleGenerator<TImage,TVectorData>
+::GetValidationVectorData( ) const
+{
+  if (this->GetNumberOfInputs() < 3)
+    {
+    return 0;
+    }
+
+  return static_cast<const VectorDataType * >(this->ProcessObject::GetInput(2) );
+}
+
 /**
  *
  */
@@ -118,30 +141,15 @@ ListSampleGenerator<TImage,TVectorData>
   std::cout << "******** Number of elements in the tree: " << vectorData->Size() << std::endl;
   
   typename ImageType::Pointer image = const_cast<ImageType*>(this->GetInput());
+  
   //Gather some information about the relative size of the classes
   //we would like to have the same number of samples per class
-  std::map<int, double> classesSize;
+  this->GenerateClassStatistics();
 
-  typedef itk::PreOrderTreeIterator<typename VectorDataType::DataTreeType> TreeIteratorType;
-  TreeIteratorType itVector(vectorData->GetDataTree());
-  itVector.GoToBegin();
-  while (!itVector.IsAtEnd())
-    {
-    if (itVector.Get()->IsPolygonFeature())
-      {
-      classesSize[itVector.Get()->GetFieldAsInt(m_ClassKey)] += 
-          itVector.Get()->GetPolygonExteriorRing()->GetArea()/1000000.;// in km2
-      std::cout << itVector.Get()->GetFieldAsInt(m_ClassKey) << std::endl;
-      std::cout << itVector.Get()->GetPolygonExteriorRing()->GetArea()/1000000.  
-          << " km2" << std::endl;
-      }
-    ++itVector;
-    }
 
-  m_NumberOfClasses = classesSize.size();
   
   double minSize = -1;
-  for (std::map<int, double>::iterator itmap = classesSize.begin(); itmap != classesSize.end(); ++itmap)
+  for (std::map<int, double>::iterator itmap = m_ClassesSize.begin(); itmap != m_ClassesSize.end(); ++itmap)
     {
     std::cout << itmap->first << ": " << itmap->second << std::endl;
     if ((minSize < 0) || (minSize > itmap->second))
@@ -153,7 +161,7 @@ ListSampleGenerator<TImage,TVectorData>
 
   //Compute the probability selection for each class
   std::map<int, double> classesProb;
-  for (std::map<int, double>::iterator itmap = classesSize.begin(); itmap != classesSize.end(); ++itmap)
+  for (std::map<int, double>::iterator itmap = m_ClassesSize.begin(); itmap != m_ClassesSize.end(); ++itmap)
     {
     classesProb[itmap->first] = minSize/itmap->second;
     }
@@ -169,6 +177,8 @@ ListSampleGenerator<TImage,TVectorData>
 
   std::map<int, int> classesSamplesNumber;
 
+  typedef itk::PreOrderTreeIterator<typename VectorDataType::DataTreeType> TreeIteratorType;
+  TreeIteratorType itVector(vectorData->GetDataTree());
   itVector.GoToBegin();
   while (!itVector.IsAtEnd())
     {
@@ -210,6 +220,31 @@ ListSampleGenerator<TImage,TVectorData>
   std::cout << "5: " << classesSamplesNumber[5] << std::endl;
 
 
+}
+
+template < class TImage, class TVectorData >
+void
+ListSampleGenerator<TImage,TVectorData>
+::GenerateClassStatistics()
+{
+  typename VectorDataType::ConstPointer vectorData = this->GetInputVectorData();
+  typedef itk::PreOrderTreeIterator<typename VectorDataType::DataTreeType> TreeIteratorType;
+  TreeIteratorType itVector(vectorData->GetDataTree());
+  itVector.GoToBegin();
+  while (!itVector.IsAtEnd())
+    {
+    if (itVector.Get()->IsPolygonFeature())
+      {
+      m_ClassesSize[itVector.Get()->GetFieldAsInt(m_ClassKey)] +=
+          itVector.Get()->GetPolygonExteriorRing()->GetArea()/1000000.;// in km2
+      std::cout << itVector.Get()->GetFieldAsInt(m_ClassKey) << std::endl;
+      std::cout << itVector.Get()->GetPolygonExteriorRing()->GetArea()/1000000.
+          << " km2" << std::endl;
+      }
+    ++itVector;
+    }
+
+  m_NumberOfClasses = m_ClassesSize.size();
 }
 
 
