@@ -461,7 +461,18 @@ ADD_TEST(leTvListSampleGenerator3 ${LEARNING_TESTS4}
     0.5
 )
 
-ADD_TEST(leTuConfusionMatrixCalculatorNew ${LEARNING_TESTS4} otbConfusionMatrixCalculatorNew)
+ADD_TEST(leTuConfusionMatrixCalculatorNew ${LEARNING_TESTS4}
+otbConfusionMatrixCalculatorNew)
+ADD_TEST(leTVConfusionMatrixCalculatorSetListSamples ${LEARNING_TESTS4}
+otbConfusionMatrixCalculatorSetListSamples 1000 4)
+
+ADD_TEST(leTVConfusionMatrixCalculatorWrongSize ${LEARNING_TESTS4}
+otbConfusionMatrixCalculatorWrongSize 1000 4)
+SET_TESTS_PROPERTIES(leTVConfusionMatrixCalculatorWrongSize PROPERTIES WILL_FAIL true)
+
+ADD_TEST(leTVConfusionMatrixCalculatorUpdate ${LEARNING_TESTS4}
+otbConfusionMatrixCalculatorUpdate 1000 4)
+
 
 # A enrichir
 SET(BasicLearning_SRCS1

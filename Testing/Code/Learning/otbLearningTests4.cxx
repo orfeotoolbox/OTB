@@ -32,4 +32,7 @@ void RegisterTests()
   REGISTER_TEST(otbExhaustiveExponentialOptimizerNew);
   REGISTER_TEST(otbListSampleGenerator);
   REGISTER_TEST(otbConfusionMatrixCalculatorNew);
+  REGISTER_TEST(otbConfusionMatrixCalculatorSetListSamples);
+  REGISTER_TEST(otbConfusionMatrixCalculatorWrongSize);
+  REGISTER_TEST(otbConfusionMatrixCalculatorUpdate);
 }

@@ -18,20 +18,22 @@
 #ifndef __otbConfusionMatrixCalculator_txx
 #define __otbConfusionMatrixCalculator_txx
 
+#include <algorithm>
+#include "otbMacro.h"
 
 namespace otb
 {
 template<class TListLabel>
 ConfusionMatrixCalculator<TListLabel>
 ::ConfusionMatrixCalculator() :
-  m_KappaIndex(0.0), m_OverallAccuracy(0.0), m_NumberOfClasses(2)
+  m_KappaIndex(0.0), m_OverallAccuracy(0.0), m_NumberOfClasses(0)
 {
   this->SetNumberOfRequiredInputs(2);
   this->SetNumberOfRequiredOutputs(1);
-  m_ReferenceLabels = ListLabelType::New();
-  m_ProducedLabels = ListLabelType::New();
   m_ConfusionMatrix = ConfusionMatrixType(m_NumberOfClasses,m_NumberOfClasses);
   m_ConfusionMatrix.Fill(0);
+  m_ReferenceLabels = ListLabelType::New();
+  m_ProducedLabels = ListLabelType::New();
 }
 
 
@@ -43,6 +45,7 @@ ConfusionMatrixCalculator<TListLabel>
   this->GenerateData();
 }
 
+
 template < class TListLabel > 
 void
 ConfusionMatrixCalculator<TListLabel>
@@ -52,29 +55,36 @@ ConfusionMatrixCalculator<TListLabel>
   typename ListLabelType::ConstPointer refLabels = this->GetReferenceLabels();
   typename ListLabelType::ConstPointer prodLabels = this->GetProducedLabels();
   
-  std::vector<int> vecOfClasses;
+  typename ListLabelType::ConstIterator  refIterator = m_ReferenceLabels->Begin();
+  typename ListLabelType::ConstIterator  prodIterator = prodLabels->Begin();
 
-  typename ListLabelType::ConstIterator  refIterator = refLabels->Begin();
+  //check that both lists have the same number of samples
 
-  //vecOfClasses.push_back(refIterator.GetMeasurementVector()[0]);
+  if( refLabels->Size() != prodLabels->Size() )
+    {
+    otbMsgDebugMacro(<< "refLabels size = " << refLabels->Size() << " / proLabels size = " << prodLabels->Size());
+    std::cout<< "refLabels size = " << refLabels->Size() << " / proLabels size = " << prodLabels->Size();
+        throw itk::ExceptionObject(__FILE__, __LINE__, "ListSample size missmatch", ITK_LOCATION);
+    }
 
-  while( refIterator != refLabels->End() )
+  // count de number of classes
+
+   while( refIterator != m_ReferenceLabels->End() )
     {
 
     int currentLabel = refIterator.GetMeasurementVector()[0];
-    //if(find(vecOfClasses.begin(), vecOfClasses.end(), currentLabel) == vecOfClasses.end())
-    //vecOfClasses.push_back(currentLabel);
+    if(find(m_VecOfClasses.begin(), m_VecOfClasses.end(), currentLabel) == m_VecOfClasses.end())
+    m_VecOfClasses.push_back(currentLabel);
 
     ++refIterator;
 
     }
 
-  m_NumberOfClasses = vecOfClasses.size();
+  m_NumberOfClasses = m_VecOfClasses.size();
+
+  m_ConfusionMatrix = ConfusionMatrixType(m_NumberOfClasses, m_NumberOfClasses);
 
   
-
-  
-  typename ListLabelType::ConstIterator  prodIterator = prodLabels->Begin();
 
 
 

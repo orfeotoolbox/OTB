@@ -25,6 +25,10 @@
 namespace otb
 {
 /** \class ConfusionMatrixCalculator
+ *  This class computes a confusion matrix from 2 lists of labels. It
+ *  assumes that the 2 lists have the same length and uses the
+ *  position of the labels in the lists to build the pairs
+ *  reference/produced labels.
  *  \brief TODO
  *
  */
@@ -52,18 +56,14 @@ public:
   /** Type for the confusion matrix */
   typedef itk::VariableSizeMatrix<double>         ConfusionMatrixType;
   
-  /** Sets the reference labels (i.e. ground truth) */
-  void SetReferenceLabels( const ListLabelType * );
-
-  /** Sets the produced labels (i.e. output of a classifier) */
-  void SetProducedLabels( const ListLabelType * );
-
   virtual void Update();
   
   /** Accessors */
-  itkGetObjectMacro(ReferenceLabels, ListLabelType);
-  itkGetObjectMacro(ProducedLabels, ListLabelType);
 
+  itkSetObjectMacro(ReferenceLabels, ListLabelType);
+  itkGetConstObjectMacro(ReferenceLabels, ListLabelType);
+  itkSetObjectMacro(ProducedLabels, ListLabelType);
+  itkGetConstObjectMacro(ProducedLabels, ListLabelType);
   itkGetConstMacro(KappaIndex, double);
   itkGetConstMacro(OverallAccuracy, double);
   itkGetConstMacro(NumberOfClasses, unsigned short);
@@ -81,15 +81,17 @@ private:
   ConfusionMatrixCalculator(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
   
-  ListLabelPointerType  m_ReferenceLabels;
-  ListLabelPointerType  m_ProducedLabels;
-
   double                m_KappaIndex;
   double                m_OverallAccuracy;
+
+  std::vector<int>      m_VecOfClasses;
 
   unsigned short        m_NumberOfClasses;
 
   ConfusionMatrixType   m_ConfusionMatrix;
+
+  ListLabelPointerType  m_ReferenceLabels;
+  ListLabelPointerType  m_ProducedLabels;
   
 };
 }// end of namespace otb
