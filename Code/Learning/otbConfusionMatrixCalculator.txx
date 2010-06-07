@@ -19,6 +19,7 @@
 #define __otbConfusionMatrixCalculator_txx
 
 #include <algorithm>
+#include "otbMacro.h"
 
 namespace otb
 {
@@ -55,6 +56,18 @@ ConfusionMatrixCalculator<TListLabel>
   typename ListLabelType::ConstPointer prodLabels = this->GetProducedLabels();
   
   typename ListLabelType::ConstIterator  refIterator = m_ReferenceLabels->Begin();
+  typename ListLabelType::ConstIterator  prodIterator = prodLabels->Begin();
+
+  //check that both lists have the same number of samples
+
+  if( refLabels->Size() != prodLabels->Size() )
+    {
+    otbMsgDebugMacro(<< "refLabels size = " << refLabels->Size() << " / proLabels size = " << prodLabels->Size());
+    std::cout<< "refLabels size = " << refLabels->Size() << " / proLabels size = " << prodLabels->Size();
+        throw itk::ExceptionObject(__FILE__, __LINE__, "ListSample size missmatch", ITK_LOCATION);
+    }
+
+  // count de number of classes
 
    while( refIterator != m_ReferenceLabels->End() )
     {
@@ -68,10 +81,10 @@ ConfusionMatrixCalculator<TListLabel>
     }
 
   m_NumberOfClasses = m_VecOfClasses.size();
-  
+
+  m_ConfusionMatrix = ConfusionMatrixType(m_NumberOfClasses, m_NumberOfClasses);
 
   
-  typename ListLabelType::ConstIterator  prodIterator = prodLabels->Begin();
 
 
 

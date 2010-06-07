@@ -25,6 +25,10 @@
 namespace otb
 {
 /** \class ConfusionMatrixCalculator
+ *  This class computes a confusion matrix from 2 lists of labels. It
+ *  assumes that the 2 lists have the same length and uses the
+ *  position of the labels in the lists to build the pairs
+ *  reference/produced labels.
  *  \brief TODO
  *
  */
