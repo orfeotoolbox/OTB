@@ -27,10 +27,10 @@
 int otbListSampleGenerator(int argc, char* argv[])
 {
 
-  if (argc != 7)
+  if (argc != 8)
     {
-    std::cerr << "Usage: " << argv[0] << " inputImage inputVectorData outputTrainingFile" 
-        << " maxTrainingSize maxValidationSize validationTrainingRatio"
+    std::cerr << "Usage: " << argv[0] << " inputImage inputVectorData outputTrainingFile outputValidationFile" 
+        << " maxTrainingSize maxValidationSize validationTrainingProportion"
         << std::endl;
     return EXIT_FAILURE;
     }
@@ -39,9 +39,10 @@ int otbListSampleGenerator(int argc, char* argv[])
   std::string imageFilename = argv[1];
   std::string vectorDataFilename = argv[2];
   std::string outputSampleList = argv[3];
-  int maxTrainingSize = atoi(argv[4]);
-  int maxValidationSize = atoi(argv[4]);
-  int validationTrainingRatio = atof(argv[4]);
+  std::string outputSampleListValidation = argv[4];
+  int maxTrainingSize = atoi(argv[5]);
+  int maxValidationSize = atoi(argv[6]);
+  double validationTrainingProportion = atof(argv[7]);
   
   std::string classKey = "Class";
 
@@ -67,7 +68,7 @@ int otbListSampleGenerator(int argc, char* argv[])
   ListSampleGeneratorType::Pointer generator = ListSampleGeneratorType::New();
   generator->SetMaxTrainingSize(maxTrainingSize);
   generator->SetMaxValidationSize(maxValidationSize);
-  generator->SetValidationTrainingRatio(validationTrainingRatio);
+  generator->SetValidationTrainingProportion(validationTrainingProportion);
 
   generator->SetInput(reader->GetOutput());
   generator->SetInputVectorData(vectorReader->GetOutput());
@@ -78,31 +79,62 @@ int otbListSampleGenerator(int argc, char* argv[])
 
   std::cout << "Number of classes: " << generator->GetNumberOfClasses() << std::endl;
 
-  ListSampleGeneratorType::ListSamplePointerType samples = generator->GetTrainingListSample();
-  ListSampleGeneratorType::ListLabelPointerType  labels  = generator->GetTrainingListLabel();
+  {
+    ListSampleGeneratorType::ListSamplePointerType samples = generator->GetTrainingListSample();
+    ListSampleGeneratorType::ListLabelPointerType labels = generator->GetTrainingListLabel();
 
-  typedef ListSampleGeneratorType::ListSampleType::ConstIterator SampleIterator;
-  typedef ListSampleGeneratorType::ListLabelType::ConstIterator  LabelIterator;
-  
-  std::ofstream trainingFile;
-  trainingFile.open(outputSampleList.c_str());
-  
-  SampleIterator sampleIt = samples->Begin();
-  LabelIterator labelIt = labels->Begin();
-  while (sampleIt != samples->End())
-    {
-    trainingFile << labelIt.GetMeasurementVector()[0];
-    for (unsigned int i = 0; i < sampleIt.GetMeasurementVector().Size(); i++)
+    typedef ListSampleGeneratorType::ListSampleType::ConstIterator SampleIterator;
+    typedef ListSampleGeneratorType::ListLabelType::ConstIterator LabelIterator;
+
+    std::ofstream trainingFile;
+    trainingFile.open(outputSampleList.c_str());
+
+    SampleIterator sampleIt = samples->Begin();
+    LabelIterator labelIt = labels->Begin();
+    while (sampleIt != samples->End())
       {
-      // Careful, the numbering is 1..N in libsvm
-      trainingFile << " " << i + 1 << ":" << sampleIt.GetMeasurementVector()[i];
+      trainingFile << labelIt.GetMeasurementVector()[0];
+      for (unsigned int i = 0; i < sampleIt.GetMeasurementVector().Size(); i++)
+        {
+        // Careful, the numbering is 1..N in libsvm
+        trainingFile << " " << i + 1 << ":" << sampleIt.GetMeasurementVector()[i];
+        }
+      trainingFile << "\n";
+      ++sampleIt;
+      ++labelIt;
       }
-    trainingFile << "\n";
-    ++sampleIt;
-    ++labelIt;
+
+    trainingFile.close();
     }
-  
-  trainingFile.close();
+
+    {
+
+    ListSampleGeneratorType::ListSamplePointerType samples = generator->GetValidationListSample();
+    ListSampleGeneratorType::ListLabelPointerType labels = generator->GetValidationListLabel();
+
+    typedef ListSampleGeneratorType::ListSampleType::ConstIterator SampleIterator;
+    typedef ListSampleGeneratorType::ListLabelType::ConstIterator LabelIterator;
+
+    std::ofstream validationFile;
+    validationFile.open(outputSampleListValidation.c_str());
+
+    SampleIterator sampleIt = samples->Begin();
+    LabelIterator labelIt = labels->Begin();
+    while (sampleIt != samples->End())
+      {
+      validationFile << labelIt.GetMeasurementVector()[0];
+      for (unsigned int i = 0; i < sampleIt.GetMeasurementVector().Size(); i++)
+        {
+        // Careful, the numbering is 1..N in libsvm
+        validationFile << " " << i + 1 << ":" << sampleIt.GetMeasurementVector()[i];
+        }
+      validationFile << "\n";
+      ++sampleIt;
+      ++labelIt;
+      }
+
+    validationFile.close();
+    }
   
    return EXIT_SUCCESS;
 }

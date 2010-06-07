@@ -412,16 +412,53 @@ ADD_TEST(leTuExhaustiveExponentialOptimizerNew ${LEARNING_TESTS4}
         otbExhaustiveExponentialOptimizerNew)
 
 ADD_TEST(leTvListSampleGenerator1 ${LEARNING_TESTS4}
- --compare-ascii ${NOTOL}
+ --compare-n-ascii ${NOTOL} 2
     ${BASELINE_FILES}/leTvListSampleGenerator1.txt
     ${TEMP}/leTvListSampleGenerator1.txt
+    ${BASELINE_FILES}/leTvListSampleGeneratorValidation1.txt
+    ${TEMP}/leTvListSampleGeneratorValidation1.txt
         otbListSampleGenerator
     ${EXAMPLEDATA}/qb_RoadExtract.tif
     ${EXAMPLEDATA}/qb_RoadExtract_classification.shp
     ${TEMP}/leTvListSampleGenerator1.txt
+    ${TEMP}/leTvListSampleGeneratorValidation1.txt
     -1
     -1
     0
+)
+
+# test the proportion between training and validation
+ADD_TEST(leTvListSampleGenerator2 ${LEARNING_TESTS4}
+ --compare-n-ascii ${NOTOL} 2
+    ${BASELINE_FILES}/leTvListSampleGenerator2.txt
+    ${TEMP}/leTvListSampleGenerator2.txt
+    ${BASELINE_FILES}/leTvListSampleGeneratorValidation2.txt
+    ${TEMP}/leTvListSampleGeneratorValidation2.txt
+        otbListSampleGenerator
+    ${EXAMPLEDATA}/qb_RoadExtract.tif
+    ${EXAMPLEDATA}/qb_RoadExtract_classification.shp
+    ${TEMP}/leTvListSampleGenerator2.txt
+    ${TEMP}/leTvListSampleGeneratorValidation2.txt
+    -1
+    -1
+    0.5
+)
+
+# test the size limit for training and validation
+ADD_TEST(leTvListSampleGenerator3 ${LEARNING_TESTS4}
+ --compare-n-ascii ${NOTOL} 2
+    ${BASELINE_FILES}/leTvListSampleGenerator3.txt
+    ${TEMP}/leTvListSampleGenerator3.txt
+    ${BASELINE_FILES}/leTvListSampleGeneratorValidation3.txt
+    ${TEMP}/leTvListSampleGeneratorValidation3.txt
+        otbListSampleGenerator
+    ${EXAMPLEDATA}/qb_RoadExtract.tif
+    ${EXAMPLEDATA}/qb_RoadExtract_classification.shp
+    ${TEMP}/leTvListSampleGenerator3.txt
+    ${TEMP}/leTvListSampleGeneratorValidation3.txt
+    100
+    200
+    0.5
 )
 
 ADD_TEST(leTuConfusionMatrixCalculatorNew ${LEARNING_TESTS4} otbConfusionMatrixCalculatorNew)
