@@ -63,7 +63,6 @@ ConfusionMatrixCalculator<TListLabel>
   if( refLabels->Size() != prodLabels->Size() )
     {
     otbMsgDebugMacro(<< "refLabels size = " << refLabels->Size() << " / proLabels size = " << prodLabels->Size());
-    std::cout<< "refLabels size = " << refLabels->Size() << " / proLabels size = " << prodLabels->Size();
         throw itk::ExceptionObject(__FILE__, __LINE__, "ListSample size missmatch", ITK_LOCATION);
     }
 
