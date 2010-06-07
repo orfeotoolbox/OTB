@@ -159,7 +159,7 @@ int otbConfusionMatrixCalculatorUpdate(int argc, char* argv[])
 	double goodValue = 0.0;
         if(i==j)
           goodValue = nbSamples/nbClasses;
-        if( confmat( i,j )!= goodValue )
+        if( confmat( i,j ) != goodValue )
 	  totalError+=confmat( i,j );
 	}
 
