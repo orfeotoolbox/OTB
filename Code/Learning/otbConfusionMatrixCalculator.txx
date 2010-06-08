@@ -83,6 +83,7 @@ ConfusionMatrixCalculator<TRefListLabel,TProdListLabel>
   m_NumberOfClasses = countClasses;
 
   m_ConfusionMatrix = ConfusionMatrixType(m_NumberOfClasses, m_NumberOfClasses);
+  m_ConfusionMatrix.Fill(0);
 
   refIterator = m_ReferenceLabels->Begin();
   prodIterator = m_ProducedLabels->Begin();
