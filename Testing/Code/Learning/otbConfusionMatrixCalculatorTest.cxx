@@ -205,17 +205,18 @@ int otbConfusionMatrixCalculatorUpdate(int argc, char* argv[])
     return EXIT_FAILURE;
     }
 
+  if( calculator->GetKappaIndex() != 1.0 )
+    {
+    std::cerr<< "Kappa = " << calculator->GetKappaIndex() << std::endl;
+    return EXIT_FAILURE;
+    }
+
   if( calculator->GetOverallAccuracy() != 1.0 )
     {
     std::cerr<< "OA = " << calculator->GetOverallAccuracy() << std::endl;
     return EXIT_FAILURE;
     }
 
-  if( calculator->GetKappaIndex() != 1.0 )
-    {
-    std::cerr<< "OA = " << calculator->GetKappaIndex() << std::endl;
-    return EXIT_FAILURE;
-    }
 
   
   return EXIT_SUCCESS;

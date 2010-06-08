@@ -112,11 +112,6 @@ ConfusionMatrixCalculator<TRefListLabel,TProdListLabel>
     }
 
 
-  otbGenericMsgDebugMacro(<<"Confusion matrix " << m_ConfusionMatrix);
-  
-  for(unsigned int i=0; i<m_NumberOfClasses; i++)
-    otbGenericMsgDebugMacro(<<"Samples per class " << samplesPerClass[i]);
-  
   this->m_OverallAccuracy  = 0.;
   for (unsigned int i = 0;i<m_NumberOfClasses;++i)
   {
@@ -125,9 +120,6 @@ ConfusionMatrixCalculator<TRefListLabel,TProdListLabel>
 
   this->m_OverallAccuracy/=static_cast<double>(m_NumberOfSamples);
 
-  otbGenericMsgDebugMacro(<<"OA " << this->m_OverallAccuracy);
-
-  
   double luckyRate = 0.;
   for (unsigned int i = 0;i<m_NumberOfClasses;++i)
   {
@@ -144,9 +136,8 @@ ConfusionMatrixCalculator<TRefListLabel,TProdListLabel>
 
   luckyRate/=vcl_pow(m_NumberOfSamples,2.0);
 
-  double m_KappaIndex = (m_OverallAccuracy-luckyRate)/(1-luckyRate);
+  m_KappaIndex = (m_OverallAccuracy-luckyRate)/(1-luckyRate);
 
-  
 }
 
 
