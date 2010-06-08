@@ -473,7 +473,7 @@ otbConfusionMatrixCalculatorSetListSamples 1000 4)
 
 ADD_TEST(leTvConfusionMatrixCalculatorWrongSize ${LEARNING_TESTS4}
 otbConfusionMatrixCalculatorWrongSize 1000 4)
-SET_TESTS_PROPERTIES(leTVConfusionMatrixCalculatorWrongSize PROPERTIES WILL_FAIL true)
+SET_TESTS_PROPERTIES(leTvConfusionMatrixCalculatorWrongSize PROPERTIES WILL_FAIL true)
 
 ADD_TEST(leTvConfusionMatrixCalculatorUpdate ${LEARNING_TESTS4}
 otbConfusionMatrixCalculatorUpdate 1000 4)
