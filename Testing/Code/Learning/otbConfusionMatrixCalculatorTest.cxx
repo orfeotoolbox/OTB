@@ -22,9 +22,12 @@
 int otbConfusionMatrixCalculatorNew(int argc, char* argv[])
 {
 
-  typedef itk::FixedArray<int, 1>                         LabelType;
-  typedef itk::Statistics::ListSample<LabelType>          ListLabelType;
-  typedef otb::ConfusionMatrixCalculator< ListLabelType > CalculatorType;
+  typedef itk::VariableLengthVector<int>                   PLabelType;
+  typedef itk::Statistics::ListSample<PLabelType>          PListLabelType;
+  typedef itk::FixedArray<int, 1>                          RLabelType;
+  typedef itk::Statistics::ListSample<RLabelType>           RListLabelType;
+  typedef otb::ConfusionMatrixCalculator< RListLabelType,
+                                          PListLabelType > CalculatorType;
 
   CalculatorType::Pointer calculator = CalculatorType::New();
   
@@ -39,14 +42,18 @@ int otbConfusionMatrixCalculatorSetListSamples(int argc, char* argv[])
     std::cerr << "Usage: " << argv[0] << " nbSamples nbClasses " << std::endl;
     return EXIT_FAILURE;
     }
-  typedef itk::FixedArray<int, 1>                         LabelType;
-  typedef itk::Statistics::ListSample<LabelType>          ListLabelType;
-  typedef otb::ConfusionMatrixCalculator< ListLabelType > CalculatorType;
 
+  typedef itk::VariableLengthVector<int>                   PLabelType;
+  typedef itk::Statistics::ListSample<PLabelType>          PListLabelType;
+  typedef itk::FixedArray<int, 1>                          RLabelType;
+  typedef itk::Statistics::ListSample<RLabelType>           RListLabelType;
+  typedef otb::ConfusionMatrixCalculator< RListLabelType,
+                                          PListLabelType > CalculatorType;
+                                                  
   CalculatorType::Pointer calculator = CalculatorType::New();
 
-  ListLabelType::Pointer refLabels = ListLabelType::New();
-  ListLabelType::Pointer prodLabels = ListLabelType::New();
+  RListLabelType::Pointer         refLabels = RListLabelType::New();
+  PListLabelType::Pointer         prodLabels = PListLabelType::New();
 
   int nbSamples = atoi(argv[1]);
   int nbClasses = atoi(argv[2]);
@@ -55,8 +62,11 @@ int otbConfusionMatrixCalculatorSetListSamples(int argc, char* argv[])
   for(int i=0; i<nbSamples; i++)
     {
     int label = (i%nbClasses)+1;
+    PLabelType plab;
+    plab.SetSize(1);
+    plab[0] = label;
     refLabels->PushBack( label );
-    prodLabels->PushBack( label );
+    prodLabels->PushBack( plab );
     }
 
   calculator->SetReferenceLabels( refLabels );
@@ -68,31 +78,42 @@ int otbConfusionMatrixCalculatorSetListSamples(int argc, char* argv[])
 int otbConfusionMatrixCalculatorWrongSize(int argc, char* argv[])
 {
 
-  if( argc!= 3)
+    if( argc!= 3)
     {
     std::cerr << "Usage: " << argv[0] << " nbSamples nbClasses " << std::endl;
     return EXIT_FAILURE;
     }
-  typedef itk::FixedArray<int, 1>                         LabelType;
-  typedef itk::Statistics::ListSample<LabelType>          ListLabelType;
-  typedef otb::ConfusionMatrixCalculator< ListLabelType > CalculatorType;
+
+    typedef itk::VariableLengthVector<int>                   PLabelType;
+    typedef itk::Statistics::ListSample<PLabelType>          PListLabelType;
+    typedef itk::FixedArray<int, 1>                          RLabelType;
+    typedef itk::Statistics::ListSample<RLabelType>          RListLabelType;
+    typedef otb::ConfusionMatrixCalculator< RListLabelType,
+                                            PListLabelType > CalculatorType;
 
   CalculatorType::Pointer calculator = CalculatorType::New();
 
-  ListLabelType::Pointer refLabels = ListLabelType::New();
-  ListLabelType::Pointer prodLabels = ListLabelType::New();
+  RListLabelType::Pointer refLabels = RListLabelType::New();
+  PListLabelType::Pointer         prodLabels = PListLabelType::New();
 
   int nbSamples = atoi(argv[1]);
   int nbClasses = atoi(argv[2]);
   
+
   for(int i=0; i<nbSamples; i++)
     {
     int label = (i%nbClasses)+1;
+    PLabelType plab;
+    plab.SetSize(1);
+    plab[0] = label;
     refLabels->PushBack( label );
-    prodLabels->PushBack( label );
+    prodLabels->PushBack( plab );
     }
-  prodLabels->PushBack( 0 );
 
+  PLabelType plab;
+  plab.SetSize(1);
+  plab[0] = 0;
+  prodLabels->PushBack( plab );
   
   calculator->SetReferenceLabels( refLabels );
   calculator->SetProducedLabels( prodLabels );
@@ -118,14 +139,18 @@ int otbConfusionMatrixCalculatorUpdate(int argc, char* argv[])
     std::cerr << "Usage: " << argv[0] << " nbSamples nbClasses " << std::endl;
     return EXIT_FAILURE;
     }
-  typedef itk::FixedArray<int, 1>                         LabelType;
-  typedef itk::Statistics::ListSample<LabelType>          ListLabelType;
-  typedef otb::ConfusionMatrixCalculator< ListLabelType > CalculatorType;
+
+  typedef itk::VariableLengthVector<int>                   PLabelType;
+  typedef itk::Statistics::ListSample<PLabelType>          PListLabelType;
+  typedef itk::FixedArray<int, 1>                          RLabelType;
+  typedef itk::Statistics::ListSample<RLabelType>           RListLabelType;
+  typedef otb::ConfusionMatrixCalculator< RListLabelType,
+                                          PListLabelType > CalculatorType;
 
   CalculatorType::Pointer calculator = CalculatorType::New();
 
-  ListLabelType::Pointer refLabels = ListLabelType::New();
-  ListLabelType::Pointer prodLabels = ListLabelType::New();
+  RListLabelType::Pointer refLabels = RListLabelType::New();
+  PListLabelType::Pointer         prodLabels = PListLabelType::New();
 
   int nbSamples = atoi(argv[1]);
   int nbClasses = atoi(argv[2]);
@@ -134,11 +159,14 @@ int otbConfusionMatrixCalculatorUpdate(int argc, char* argv[])
   for(int i=0; i<nbSamples; i++)
     {
     int label = (i%nbClasses)+1;
+    PLabelType plab;
+    plab.SetSize(1);
+    plab[0] = label;
     refLabels->PushBack( label );
-    prodLabels->PushBack( label );
+    prodLabels->PushBack( plab );
     }
 
-  
+    
   calculator->SetReferenceLabels( refLabels );
   calculator->SetProducedLabels( prodLabels );
 
