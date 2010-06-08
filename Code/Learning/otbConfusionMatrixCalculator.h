@@ -67,9 +67,10 @@ public:
   itkGetConstObjectMacro(ReferenceLabels, RefListLabelType);
   itkSetObjectMacro(ProducedLabels, ProdListLabelType);
   itkGetConstObjectMacro(ProducedLabels, ProdListLabelType);
-  itkGetConstMacro(KappaIndex, double);
-  itkGetConstMacro(OverallAccuracy, double);
-  itkGetConstMacro(NumberOfClasses, unsigned short);
+  itkGetMacro(KappaIndex, double);
+  itkGetMacro(OverallAccuracy, double);
+  itkGetMacro(NumberOfClasses, unsigned short);
+  itkGetMacro(NumberOfSamples, unsigned long);
   itkGetMacro(ConfusionMatrix, ConfusionMatrixType);
   
 protected:
@@ -90,6 +91,7 @@ private:
   std::map<int,int>         m_MapOfClasses;
 
   unsigned short            m_NumberOfClasses;
+  unsigned long             m_NumberOfSamples;
 
   ConfusionMatrixType       m_ConfusionMatrix;
 

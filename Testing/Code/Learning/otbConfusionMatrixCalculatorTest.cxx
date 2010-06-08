@@ -177,6 +177,11 @@ int otbConfusionMatrixCalculatorUpdate(int argc, char* argv[])
     std::cerr << "Wrong number of classes" << std::endl;
     return EXIT_FAILURE;
     }
+  if( calculator->GetNumberOfSamples() != nbSamples )
+    {
+    std::cerr << "Wrong number of samples" << std::endl;
+    return EXIT_FAILURE;
+    }
 
   CalculatorType::ConfusionMatrixType confmat = calculator->GetConfusionMatrix();
 
@@ -186,14 +191,29 @@ int otbConfusionMatrixCalculatorUpdate(int argc, char* argv[])
     for (int j = 0; j < nbClasses; j++)
       {
       double goodValue = 0.0;
-      if (i == j) goodValue = nbSamples / nbClasses;
-      if (confmat(i, j) != goodValue) totalError += confmat(i, j);
+      if (i == j)
+	goodValue = nbSamples / nbClasses;
+      else
+	if (confmat(i, j) != goodValue)
+	  totalError += confmat(i, j);
       }
 
   if( totalError > 0.001 )
     {
     std::cerr << confmat << std::endl;
     std::cerr<< "Error = " << totalError << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  if( calculator->GetOverallAccuracy() != 1.0 )
+    {
+    std::cerr<< "OA = " << calculator->GetOverallAccuracy() << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  if( calculator->GetKappaIndex() != 1.0 )
+    {
+    std::cerr<< "OA = " << calculator->GetKappaIndex() << std::endl;
     return EXIT_FAILURE;
     }
 

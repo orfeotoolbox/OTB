@@ -64,6 +64,8 @@ ConfusionMatrixCalculator<TRefListLabel,TProdListLabel>
         throw itk::ExceptionObject(__FILE__, __LINE__, "ListSample size missmatch", ITK_LOCATION);
     }
 
+  m_NumberOfSamples = m_ReferenceLabels->Size();
+  
   // count de number of classes
 
   int countClasses = 0;
@@ -82,6 +84,11 @@ ConfusionMatrixCalculator<TRefListLabel,TProdListLabel>
 
   m_NumberOfClasses = countClasses;
 
+  std::vector< long int > samplesPerClass;
+
+  for(unsigned int i=0; i<m_NumberOfClasses; i++)
+    samplesPerClass.push_back(0);
+
   m_ConfusionMatrix = ConfusionMatrixType(m_NumberOfClasses, m_NumberOfClasses);
   m_ConfusionMatrix.Fill(0);
 
@@ -96,12 +103,49 @@ ConfusionMatrixCalculator<TRefListLabel,TProdListLabel>
     int refPos = m_MapOfClasses[refLabel];
     int prodPos = m_MapOfClasses[prodLabel];
 
+    ++samplesPerClass[refPos];
     m_ConfusionMatrix( refPos,prodPos )+=1;
 
     ++refIterator;
     ++prodIterator;
 
     }
+
+
+  otbGenericMsgDebugMacro(<<"Confusion matrix " << m_ConfusionMatrix);
+  
+  for(unsigned int i=0; i<m_NumberOfClasses; i++)
+    otbGenericMsgDebugMacro(<<"Samples per class " << samplesPerClass[i]);
+  
+  this->m_OverallAccuracy  = 0.;
+  for (unsigned int i = 0;i<m_NumberOfClasses;++i)
+  {
+    this->m_OverallAccuracy += m_ConfusionMatrix(i,i);
+  }
+
+  this->m_OverallAccuracy/=static_cast<double>(m_NumberOfSamples);
+
+  otbGenericMsgDebugMacro(<<"OA " << this->m_OverallAccuracy);
+
+  
+  double luckyRate = 0.;
+  for (unsigned int i = 0;i<m_NumberOfClasses;++i)
+  {
+    double sum_ij = 0.;
+    double sum_ji = 0.;
+    for (unsigned int j = 0;j<m_NumberOfClasses;++j)
+    {
+      sum_ij +=m_ConfusionMatrix(i,j);
+      sum_ji +=m_ConfusionMatrix(j,i);
+    }
+    luckyRate+=sum_ij*sum_ji;
+  }
+
+
+  luckyRate/=vcl_pow(m_NumberOfSamples,2.0);
+
+  double m_KappaIndex = (m_OverallAccuracy-luckyRate)/(1-luckyRate);
+
   
 }
 
