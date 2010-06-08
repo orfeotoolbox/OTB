@@ -32,7 +32,7 @@ namespace otb
  *  \brief TODO
  *
  */
-template < class TListLabel > 
+template < class TRefListLabel, class TProdListLabel > 
 class ITK_EXPORT ConfusionMatrixCalculator :
   public itk::ProcessObject
 {
@@ -50,8 +50,11 @@ public:
   itkNewMacro(Self);
 
   /** List to store the corresponding labels */
-  typedef TListLabel                              ListLabelType;
-  typedef typename ListLabelType::Pointer         ListLabelPointerType;
+  typedef TRefListLabel                           RefListLabelType;
+  typedef typename RefListLabelType::Pointer      RefListLabelPointerType;
+
+  typedef TProdListLabel                          ProdListLabelType;
+  typedef typename ProdListLabelType::Pointer     ProdListLabelPointerType;
 
   /** Type for the confusion matrix */
   typedef itk::VariableSizeMatrix<double>         ConfusionMatrixType;
@@ -60,10 +63,10 @@ public:
   
   /** Accessors */
 
-  itkSetObjectMacro(ReferenceLabels, ListLabelType);
-  itkGetConstObjectMacro(ReferenceLabels, ListLabelType);
-  itkSetObjectMacro(ProducedLabels, ListLabelType);
-  itkGetConstObjectMacro(ProducedLabels, ListLabelType);
+  itkSetObjectMacro(ReferenceLabels, RefListLabelType);
+  itkGetConstObjectMacro(ReferenceLabels, RefListLabelType);
+  itkSetObjectMacro(ProducedLabels, ProdListLabelType);
+  itkGetConstObjectMacro(ProducedLabels, ProdListLabelType);
   itkGetConstMacro(KappaIndex, double);
   itkGetConstMacro(OverallAccuracy, double);
   itkGetConstMacro(NumberOfClasses, unsigned short);
@@ -81,17 +84,17 @@ private:
   ConfusionMatrixCalculator(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
   
-  double                m_KappaIndex;
-  double                m_OverallAccuracy;
+  double                    m_KappaIndex;
+  double                    m_OverallAccuracy;
 
   std::map<int,int>         m_MapOfClasses;
 
-  unsigned short        m_NumberOfClasses;
+  unsigned short            m_NumberOfClasses;
 
-  ConfusionMatrixType   m_ConfusionMatrix;
+  ConfusionMatrixType       m_ConfusionMatrix;
 
-  ListLabelPointerType  m_ReferenceLabels;
-  ListLabelPointerType  m_ProducedLabels;
+  RefListLabelPointerType   m_ReferenceLabels;
+  ProdListLabelPointerType  m_ProducedLabels;
   
 };
 }// end of namespace otb

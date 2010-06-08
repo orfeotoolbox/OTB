@@ -23,8 +23,8 @@
 
 namespace otb
 {
-template<class TListLabel>
-ConfusionMatrixCalculator<TListLabel>
+template<class TRefListLabel, class TProdListLabel>
+ConfusionMatrixCalculator<TRefListLabel,TProdListLabel>
 ::ConfusionMatrixCalculator() :
   m_KappaIndex(0.0), m_OverallAccuracy(0.0), m_NumberOfClasses(0)
 {
@@ -32,28 +32,28 @@ ConfusionMatrixCalculator<TListLabel>
   this->SetNumberOfRequiredOutputs(1);
   m_ConfusionMatrix = ConfusionMatrixType(m_NumberOfClasses,m_NumberOfClasses);
   m_ConfusionMatrix.Fill(0);
-  m_ReferenceLabels = ListLabelType::New();
-  m_ProducedLabels = ListLabelType::New();
+  m_ReferenceLabels = RefListLabelType::New();
+  m_ProducedLabels = ProdListLabelType::New();
 }
 
 
-template < class TListLabel > 
+template < class TRefListLabel, class TProdListLabel > 
 void 
-ConfusionMatrixCalculator<TListLabel>
+ConfusionMatrixCalculator<TRefListLabel,TProdListLabel>
 ::Update()
 {
   this->GenerateData();
 }
 
 
-template < class TListLabel > 
+template < class TRefListLabel, class TProdListLabel > 
 void
-ConfusionMatrixCalculator<TListLabel>
+ConfusionMatrixCalculator<TRefListLabel,TProdListLabel>
 ::GenerateData()
 {
   
-  typename ListLabelType::ConstIterator  refIterator = m_ReferenceLabels->Begin();
-  typename ListLabelType::ConstIterator  prodIterator = m_ProducedLabels->Begin();
+  typename RefListLabelType::ConstIterator  refIterator = m_ReferenceLabels->Begin();
+  typename ProdListLabelType::ConstIterator  prodIterator = m_ProducedLabels->Begin();
 
   //check that both lists have the same number of samples
 
@@ -105,9 +105,9 @@ ConfusionMatrixCalculator<TListLabel>
 }
 
 
-template < class TListLabel > 
+template < class TRefListLabel, class TProdListLabel > 
 void
-ConfusionMatrixCalculator<TListLabel>
+ConfusionMatrixCalculator<TRefListLabel,TProdListLabel>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   os << indent << "TODO";
