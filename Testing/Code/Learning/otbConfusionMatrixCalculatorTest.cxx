@@ -48,8 +48,8 @@ int otbConfusionMatrixCalculatorSetListSamples(int argc, char* argv[])
   ListLabelType::Pointer refLabels = ListLabelType::New();
   ListLabelType::Pointer prodLabels = ListLabelType::New();
 
-  unsigned int nbSamples = atoi(argv[1]);
-  unsigned int nbClasses = atoi(argv[2]);
+  int nbSamples = atoi(argv[1]);
+  int nbClasses = atoi(argv[2]);
   
 
   for(int i=0; i<nbSamples; i++)
@@ -82,8 +82,8 @@ int otbConfusionMatrixCalculatorWrongSize(int argc, char* argv[])
   ListLabelType::Pointer refLabels = ListLabelType::New();
   ListLabelType::Pointer prodLabels = ListLabelType::New();
 
-  unsigned int nbSamples = atoi(argv[1]);
-  unsigned int nbClasses = atoi(argv[2]);
+  int nbSamples = atoi(argv[1]);
+  int nbClasses = atoi(argv[2]);
   
   for(int i=0; i<nbSamples; i++)
     {
@@ -97,10 +97,11 @@ int otbConfusionMatrixCalculatorWrongSize(int argc, char* argv[])
   calculator->SetReferenceLabels( refLabels );
   calculator->SetProducedLabels( prodLabels );
 
-  try{
-  calculator->Update();
-  }
-  catch(itk::ExceptionObject)
+  try
+    {
+    calculator->Update();
+    }
+  catch (itk::ExceptionObject)
     {
     return EXIT_FAILURE;
     }
@@ -126,8 +127,8 @@ int otbConfusionMatrixCalculatorUpdate(int argc, char* argv[])
   ListLabelType::Pointer refLabels = ListLabelType::New();
   ListLabelType::Pointer prodLabels = ListLabelType::New();
 
-  unsigned int nbSamples = atoi(argv[1]);
-  unsigned int nbClasses = atoi(argv[2]);
+  int nbSamples = atoi(argv[1]);
+  int nbClasses = atoi(argv[2]);
   
 
   for(int i=0; i<nbSamples; i++)
@@ -153,15 +154,13 @@ int otbConfusionMatrixCalculatorUpdate(int argc, char* argv[])
 
   double totalError = 0.0;
 
-  for(int i=0; i<nbClasses; i++)
-      for(int j=0; j<nbClasses; j++)
-	{
-	double goodValue = 0.0;
-        if(i==j)
-          goodValue = nbSamples/nbClasses;
-        if( confmat( i,j )!= goodValue )
-	  totalError+=confmat( i,j );
-	}
+  for (int i = 0; i < nbClasses; i++)
+    for (int j = 0; j < nbClasses; j++)
+      {
+      double goodValue = 0.0;
+      if (i == j) goodValue = nbSamples / nbClasses;
+      if (confmat(i, j) != goodValue) totalError += confmat(i, j);
+      }
 
   if( totalError > 0.001 )
     {
