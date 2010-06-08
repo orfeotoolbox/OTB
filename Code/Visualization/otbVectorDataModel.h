@@ -46,6 +46,8 @@ public:
 
   typedef otb::VectorData<double, 2>   VectorDataType;
   typedef VectorDataType::DataNodeType DataNodeType;
+  typedef VectorDataType::PointType    PointType;
+  typedef VectorDataType::SpacingType  SpacingType;
   typedef VectorDataType::PolygonType  PolygonType;
   typedef VectorDataType::LineType     LineType;
   typedef PolygonType::VertexType      VertexType;
@@ -75,6 +77,12 @@ public:
   void SetSelectedGeometry(int n);
   itkGetObjectMacro(SelectedGeometry, DataNodeType);
 
+  itkSetMacro(Origin,PointType);
+  itkGetConstReferenceMacro(Origin,PointType);
+
+  itkSetMacro(Spacing,SpacingType);
+  itkGetConstReferenceMacro(Spacing,SpacingType);
+
 protected:
   /** Constructor */
   VectorDataModel();
@@ -97,6 +105,12 @@ private:
 
   /** Currently selected node */
   DataNodeType::Pointer m_SelectedGeometry;
+
+  /** Origin of image used for vectorization */
+  PointType m_Origin;
+
+  /** Spacing of image used for vectorization */
+  SpacingType m_Spacing;
 
 }; // end class
 } // end namespace otb

@@ -22,8 +22,11 @@ namespace otb
 
 VectorDataModel::VectorDataModel() :
   m_VectorData(), m_CurrentNodeType(FEATURE_POLYGON), m_CurrentRootNode(),
-  m_CurrentGeometry()    //, m_UpperModel()
+  m_CurrentGeometry(), m_Origin(),m_Spacing()    //, m_UpperModel()
 {
+  m_Origin.Fill(0.);
+  m_Spacing.Fill(1.);
+
   m_VectorData = VectorDataType::New();
   m_CurrentRootNode = DataNodeType::New();
   m_CurrentRootNode->SetNodeId("DOCUMENT");
@@ -41,6 +44,10 @@ void VectorDataModel::Update(void)
 
 void VectorDataModel::AddPointToGeometry(VertexType& vertex)
 {
+  VertexType newPoint;
+  newPoint[0] = m_Origin[0] + vertex[0]/m_Spacing[0];
+  newPoint[1] = m_Origin[1] + vertex[1]/m_Spacing[1];
+
   // Check if current node type changed, and if so, close current geometry first
   if(m_CurrentGeometry.IsNotNull() && m_CurrentNodeType != m_CurrentGeometry->GetNodeType())
     {
@@ -55,7 +62,7 @@ void VectorDataModel::AddPointToGeometry(VertexType& vertex)
       m_CurrentGeometry = DataNodeType::New();
       m_CurrentGeometry->SetNodeId("FEATURE_POINT");
       m_CurrentGeometry->SetNodeType(FEATURE_POINT);
-      m_CurrentGeometry->SetPoint(vertex);
+      m_CurrentGeometry->SetPoint(newPoint);
       m_VectorData->GetDataTree()->Add(m_CurrentGeometry, m_CurrentRootNode);
       m_CurrentGeometry = NULL;
       this->Modified();
@@ -77,8 +84,8 @@ void VectorDataModel::AddPointToGeometry(VertexType& vertex)
       m_CurrentGeometry->SetPolygonExteriorRing(exteriorRing);
       m_VectorData->GetDataTree()->Add(m_CurrentGeometry, m_CurrentRootNode);
       }
-    otbMsgDevMacro(<< "VectorDataModel::AddPoint: Adding point " << vertex);
-    m_CurrentGeometry->GetPolygonExteriorRing()->AddVertex(vertex);
+    otbMsgDevMacro(<< "VectorDataModel::AddPoint: Adding point " << newPoint);
+    m_CurrentGeometry->GetPolygonExteriorRing()->AddVertex(newPoint);
     }
   else if (m_CurrentNodeType == FEATURE_LINE)
     {
@@ -92,8 +99,8 @@ void VectorDataModel::AddPointToGeometry(VertexType& vertex)
       m_CurrentGeometry->SetLine(line);
       m_VectorData->GetDataTree()->Add(m_CurrentGeometry,m_CurrentRootNode);
       }
-    otbMsgDevMacro(<< "VectorDataModel::AddPoint: Adding point " << vertex);
-    m_CurrentGeometry->GetLine()->AddVertex(vertex);
+    otbMsgDevMacro(<< "VectorDataModel::AddPoint: Adding point " << newPoint);
+    m_CurrentGeometry->GetLine()->AddVertex(newPoint);
     }
   else
     {
