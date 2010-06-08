@@ -30,6 +30,10 @@ void RegisterTests()
   REGISTER_TEST(otbROIdataConversion);
   REGISTER_TEST(otbSVMCrossValidationCostFunctionNew);
   REGISTER_TEST(otbExhaustiveExponentialOptimizerNew);
+  REGISTER_TEST(otbListSampleGeneratorNew);
   REGISTER_TEST(otbListSampleGenerator);
   REGISTER_TEST(otbConfusionMatrixCalculatorNew);
+  REGISTER_TEST(otbConfusionMatrixCalculatorSetListSamples);
+  REGISTER_TEST(otbConfusionMatrixCalculatorWrongSize);
+  REGISTER_TEST(otbConfusionMatrixCalculatorUpdate);
 }

@@ -410,6 +410,10 @@ ADD_TEST(leTuSVMCrossValidationCostFunctionNew ${LEARNING_TESTS4}
 
 ADD_TEST(leTuExhaustiveExponentialOptimizerNew ${LEARNING_TESTS4}
         otbExhaustiveExponentialOptimizerNew)
+        
+# -------            otb::ListSampleGenerator   -----------------------------
+ADD_TEST(leTuListSampleGeneratorNew ${LEARNING_TESTS4}
+        otbListSampleGeneratorNew)
 
 ADD_TEST(leTvListSampleGenerator1 ${LEARNING_TESTS4}
  --compare-n-ascii ${NOTOL} 2
@@ -460,8 +464,20 @@ ADD_TEST(leTvListSampleGenerator3 ${LEARNING_TESTS4}
     200
     0.5
 )
+# -------            otb::ConfusionMatrixCalculator   -----------------------------
+ADD_TEST(leTuConfusionMatrixCalculatorNew ${LEARNING_TESTS4}
+otbConfusionMatrixCalculatorNew)
 
-ADD_TEST(leTuConfusionMatrixCalculatorNew ${LEARNING_TESTS4} otbConfusionMatrixCalculatorNew)
+ADD_TEST(leTVConfusionMatrixCalculatorSetListSamples ${LEARNING_TESTS4}
+otbConfusionMatrixCalculatorSetListSamples 1000 4)
+
+ADD_TEST(leTvConfusionMatrixCalculatorWrongSize ${LEARNING_TESTS4}
+otbConfusionMatrixCalculatorWrongSize 1000 4)
+SET_TESTS_PROPERTIES(leTvConfusionMatrixCalculatorWrongSize PROPERTIES WILL_FAIL true)
+
+ADD_TEST(leTvConfusionMatrixCalculatorUpdate ${LEARNING_TESTS4}
+otbConfusionMatrixCalculatorUpdate 1000 4)
+
 
 # A enrichir
 SET(BasicLearning_SRCS1

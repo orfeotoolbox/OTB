@@ -25,10 +25,14 @@
 namespace otb
 {
 /** \class ConfusionMatrixCalculator
+ *  This class computes a confusion matrix from 2 lists of labels. It
+ *  assumes that the 2 lists have the same length and uses the
+ *  position of the labels in the lists to build the pairs
+ *  reference/produced labels.
  *  \brief TODO
  *
  */
-template < class TListLabel > 
+template < class TRefListLabel, class TProdListLabel > 
 class ITK_EXPORT ConfusionMatrixCalculator :
   public itk::ProcessObject
 {
@@ -46,27 +50,27 @@ public:
   itkNewMacro(Self);
 
   /** List to store the corresponding labels */
-  typedef TListLabel                              ListLabelType;
-  typedef typename ListLabelType::Pointer         ListLabelPointerType;
+  typedef TRefListLabel                           RefListLabelType;
+  typedef typename RefListLabelType::Pointer      RefListLabelPointerType;
+
+  typedef TProdListLabel                          ProdListLabelType;
+  typedef typename ProdListLabelType::Pointer     ProdListLabelPointerType;
 
   /** Type for the confusion matrix */
   typedef itk::VariableSizeMatrix<double>         ConfusionMatrixType;
   
-  /** Sets the reference labels (i.e. ground truth) */
-  void SetReferenceLabels( const ListLabelType * );
-
-  /** Sets the produced labels (i.e. output of a classifier) */
-  void SetProducedLabels( const ListLabelType * );
-
   virtual void Update();
   
   /** Accessors */
-  itkGetObjectMacro(ReferenceLabels, ListLabelType);
-  itkGetObjectMacro(ProducedLabels, ListLabelType);
 
-  itkGetConstMacro(KappaIndex, double);
-  itkGetConstMacro(OverallAccuracy, double);
-  itkGetConstMacro(NumberOfClasses, unsigned short);
+  itkSetObjectMacro(ReferenceLabels, RefListLabelType);
+  itkGetConstObjectMacro(ReferenceLabels, RefListLabelType);
+  itkSetObjectMacro(ProducedLabels, ProdListLabelType);
+  itkGetConstObjectMacro(ProducedLabels, ProdListLabelType);
+  itkGetMacro(KappaIndex, double);
+  itkGetMacro(OverallAccuracy, double);
+  itkGetMacro(NumberOfClasses, unsigned short);
+  itkGetMacro(NumberOfSamples, unsigned long);
   itkGetMacro(ConfusionMatrix, ConfusionMatrixType);
   
 protected:
@@ -81,15 +85,18 @@ private:
   ConfusionMatrixCalculator(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
   
-  ListLabelPointerType  m_ReferenceLabels;
-  ListLabelPointerType  m_ProducedLabels;
+  double                    m_KappaIndex;
+  double                    m_OverallAccuracy;
 
-  double                m_KappaIndex;
-  double                m_OverallAccuracy;
+  std::map<int,int>         m_MapOfClasses;
 
-  unsigned short        m_NumberOfClasses;
+  unsigned short            m_NumberOfClasses;
+  unsigned long             m_NumberOfSamples;
 
-  ConfusionMatrixType   m_ConfusionMatrix;
+  ConfusionMatrixType       m_ConfusionMatrix;
+
+  RefListLabelPointerType   m_ReferenceLabels;
+  ProdListLabelPointerType  m_ProducedLabels;
   
 };
 }// end of namespace otb

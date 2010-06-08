@@ -230,6 +230,9 @@ ADD_TEST(FA-0000132-jpg ${CXX_TEST_PATH}/0000132-jpg
 	)
 ENDIF(OTB_USE_VISU_GUI)
 
+ADD_TEST(FA-0000169-fftcomplextocomplex ${CXX_TEST_PATH}/0000169-fftcomplextocomplex 
+  )
+
 # -------       Vectorization issue   -----------------------------------
 # FIXME Desactivated until http://bugs.orfeo-toolbox.org/view.php?id=94
 # has somebody working on it
@@ -261,5 +264,8 @@ ENDIF(OTB_USE_VISU_GUI)
 
 ADD_EXECUTABLE(PolygonsVectorization PolygonsVectorization.cxx)
 TARGET_LINK_LIBRARIES(PolygonsVectorization OTBIO OTBCommon)
+
+ADD_EXECUTABLE(0000169-fftcomplextocomplex  0000169-fftcomplextocomplex.cxx)
+TARGET_LINK_LIBRARIES(0000169-fftcomplextocomplex OTBIO OTBCommon)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
