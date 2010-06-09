@@ -94,14 +94,17 @@ public:
   virtual void Update();
   
   /** Accessors */
-  itkGetMacro(MaxTrainingSize, int);
-  itkSetMacro(MaxTrainingSize, int);
-  itkGetMacro(MaxValidationSize, int);
-  itkSetMacro(MaxValidationSize, int);
-  itkGetMacro(ValidationTrainingProportion, double);
+  itkGetConstMacro(MaxTrainingSize, long int);
+  itkSetMacro(MaxTrainingSize, long int);
+  itkGetConstMacro(MaxValidationSize, long int);
+  itkSetMacro(MaxValidationSize, long int);
+  itkGetConstMacro(ValidationTrainingProportion, double);
   itkSetClampMacro(ValidationTrainingProportion, double, 0.0, 1.0);
 
-  itkGetMacro(NumberOfClasses, unsigned short);
+  itkGetConstMacro(NumberOfClasses, unsigned short);
+  typedef std::map<int, int> SampleNumberType;
+  itkGetConstMacro(ClassesSamplesNumberTraining, SampleNumberType);
+  itkGetConstMacro(ClassesSamplesNumberValidation, SampleNumberType);
 
   itkGetStringMacro(ClassKey);
   itkSetStringMacro(ClassKey);
@@ -126,8 +129,8 @@ private:
   void GenerateClassStatistics();
   void ComputeClassSelectionProbability();
   
-  int    m_MaxTrainingSize; // number of traning samples (-1 = no limit)
-  int    m_MaxValidationSize; // number of validation samples (-1 = no limit)
+  long int    m_MaxTrainingSize; // number of training samples (-1 = no limit)
+  long int    m_MaxValidationSize; // number of validation samples (-1 = no limit)
   double m_ValidationTrainingProportion; // proportion of training vs validation 
                                          // (0.0 = all training, 1.0 = all validation)
 
