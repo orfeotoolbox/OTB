@@ -254,13 +254,14 @@ ease of integration of new processing modules.
 
 \part{User's guide}\label{part:userguide}
 
-\chapter{Introduction to Monteverdi}
+%\chapter{Introduction to Monteverdi}
 \chapter{Getting started}
-\section{Why this software is called Monteverdi?}
+%\section{Why this software is called Monteverdi?}
+
+\section{Installation}
 The application is called Monteverdi, since this is the name of the Orfeo composer.The application allows you to build 
 interactivelly remote sensing processes based on the Orfeo Toolbox library. This is also in remebering of the great 
 (and once open source) Khoros/Cantata software.
-\section{Installation}
 Installation of Monteverdi is very simple. Standard installer packages are available for now only on MS Windows. 
 For many flavors of GNU/Linux binary packages (rpm and deb) or software repositories
 to add to your installation manager will be provided soon. Get the latest information on binary packages at
@@ -269,6 +270,7 @@ the OTB website at http://www.orfeo-toolbox.org/otb/download.html.
 \section{Installation from source}
 If you need to build Monteverdi from source, please refer to the coding and compiling guide available at
 http://www.orfeo-toolbox.org/otb/documentation.html.
+
  
 \chapter{Anatomy of the application}
 \section{What does it look like?}
@@ -281,8 +283,11 @@ you don't need to do anything special for any particular file format. So opening
 which will appear in the main window. At any time, you can use the "save data set" option in order to store to a 
 file the result of any processing module.
 \section{Open an image with Monteverdi}
-The application allows to interactivelly select raster/vector dataset by browsing your PC. Monteverdi takes
+The application allows to interactively select raster/vector dataset by browsing your PC. Monteverdi takes
 advantage of the automatic detection of images' extensions to indicate the dataset type (optical, SAR or vector data).   
+
+The input dataset is added to the "Data and Process" tree . The application is the best
+
 \section{Visualize an image with Monteverdi}
 This module allows to visualize raster image creating RGB composition from the imput rasters. It is possible to add 
 vector dataset which are automatically reproject in the same projection of the input image. 
@@ -292,7 +297,7 @@ Describe Get access to the pixel description
 The "cache data set" is a very interesting thing. As you know, OTB implements processing on demand, so when you build a 
 processing pipeline, no processing takes place unless you ask for it explicitly. That means that you can plug together
  the opening of a data set, an orthorectification and a spleckle filter, for example, but nothing will really be computed 
-until you trigger the pipeline execution. This is very convenient, since you can quicly build a processing pipeline and 
+until you trigger the pipeline execution. This is very convenient, since you can quickly build a processing pipeline and 
 let it execute afterwards while you have a coffee. In Monteverdi, you execute the processing by saving the result of the 
 last module of a pipeline. However, sometimes, you may want to execute a part of the pipeline without wanting to give a 
 name to the obtained result. You can do this by caching a data set. That is, the result will be stored in a temporary 
