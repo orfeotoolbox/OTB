@@ -103,9 +103,15 @@ public:
 
   itkGetConstMacro(NumberOfClasses, unsigned short);
   typedef std::map<int, int> SampleNumberType;
-  itkGetConstMacro(ClassesSamplesNumberTraining, SampleNumberType);
-  itkGetConstMacro(ClassesSamplesNumberValidation, SampleNumberType);
 
+  const  SampleNumberType GetClassesSamplesNumberTraining(void){
+    return m_ClassesSamplesNumberTraining;
+  }
+
+  const  SampleNumberType GetClassesSamplesNumberValidation(void){
+    return m_ClassesSamplesNumberValidation;
+  }
+  
   itkGetStringMacro(ClassKey);
   itkSetStringMacro(ClassKey);
   
