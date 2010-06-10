@@ -209,7 +209,7 @@ bool ossimTileMapModel::loadState(const ossimKeywordlist& kwl,
    }
 
    const char* value = NULL;
-   const char* keyword =NULL;
+   //const char* keyword =NULL;
    bool success;
 
    //***

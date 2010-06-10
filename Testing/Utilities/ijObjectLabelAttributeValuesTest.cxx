@@ -200,6 +200,11 @@ int ijObjectLabelAttributeValuesTest(int argc, char * argv[])
 
 //  std::cout << ball->GetBinaryPrincipalAxes() << std::endl;
 
+  // avoid warning when compiling in release
+  ball = 0;
+  ellipsoid = 0;
+  disk = 0;
+
   return 0;
 }
 

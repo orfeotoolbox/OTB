@@ -161,6 +161,8 @@ int classifyKNN2( int argc, char *argv[] ){
 
   DiagramImageType::IndexType index;
   InputImageType::IndexType index_espacial;
+  index.Fill(0);
+  index_espacial.Fill(0);
 
   classifyKNNCoreType::ListType proto;
   classifyKNNCoreType::NodeType auxNode;
@@ -186,8 +188,8 @@ struct nodeDataNew {
   int slice;
 };
   int pclass = -1;
-  float prob = 0.0;
-  int pdim;
+  //float prob = 0.0;
+  int pdim = 0;
 //  int* marker = (int*)malloc(sizeof(int)*input->GetRequestedRegion().GetSize(0)*input->GetRequestedRegion().GetSize(1));
   char *straux,*end2;
   FILE *fp = NULL;
@@ -272,8 +274,8 @@ struct nodeDataNew {
     diagram = voronoi->GetOutput();
     voronoi->Update();
 
-    IndexType featureIndex,mapIndex;  
-    classifyKNNCoreType::NodeType auxNodo;
+    //IndexType featureIndex,mapIndex;
+    //classifyKNNCoreType::NodeType auxNodo;
 
     KNNCore->SetDiagram(diagram);
     KNNCore->SetCh1(ch1Reader->GetOutput());

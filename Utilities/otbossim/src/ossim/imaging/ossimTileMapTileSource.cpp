@@ -98,7 +98,7 @@ ossimImageGeometry* ossimTileMapTileSource::getImageGeometry()
 bool ossimTileMapTileSource::loadState(const ossimKeywordlist& kwl,
                                        const char* prefix)
 {
-   const char* lookup = kwl.find(prefix, ossimKeywordNames::FILENAME_KW);
+   //const char* lookup = kwl.find(prefix, ossimKeywordNames::FILENAME_KW);
    return true;
 
 }
