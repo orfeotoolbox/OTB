@@ -116,7 +116,7 @@ namespace itk
   voronoiFilter<TDomain, MapElement, m_ImageDimension> 
   ::GenerateData()
   {
-    int j,l,d,next,dist,dist_2,asignacion,icurold,icurnew,icuraux,r,aux_j,rechazar,index,newIndex;
+    int j,l,d,dist,dist_2,asignacion,icurold,icurnew,icuraux,r,aux_j,rechazar,index,newIndex;
     int numrechazos=0;
     float distreal,distreal_2;
     IndexType CurrentIndex, newMapIndex;

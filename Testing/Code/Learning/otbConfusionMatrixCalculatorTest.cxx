@@ -172,12 +172,12 @@ int otbConfusionMatrixCalculatorUpdate(int argc, char* argv[])
 
   calculator->Update();
 
-  if( calculator->GetNumberOfClasses() != nbClasses )
+  if( static_cast<int>(calculator->GetNumberOfClasses()) != nbClasses )
     {
     std::cerr << "Wrong number of classes" << std::endl;
     return EXIT_FAILURE;
     }
-  if( calculator->GetNumberOfSamples() != nbSamples )
+  if( static_cast<int>(calculator->GetNumberOfSamples()) != nbSamples )
     {
     std::cerr << "Wrong number of samples" << std::endl;
     return EXIT_FAILURE;

@@ -20,11 +20,11 @@
 
 namespace otb
 {
+namespace Functor
+{
 /** \class MeanFunctor
  *  \brief This functor generate the mean value of a component pixels
  */
-namespace Functor
-{
 template<class TInput, class TOutputValue>
 class MeanFunctor
 {

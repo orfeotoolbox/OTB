@@ -26,7 +26,7 @@
 namespace otb
 {
 /** \class PixelDescriptionModel
-*   \brief This class is a layer based model reporting pixel  information
+*   \brief This class is a layer based model reporting pixel information
 *
 *   \sa ImageLayer
 *

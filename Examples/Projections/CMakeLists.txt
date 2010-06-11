@@ -119,7 +119,7 @@ ADD_TEST(prTeEstimateRPCSensorModelExampleTest ${EXE_TESTS}
          --compare-ascii ${EPSILON_4} 
          ${BASELINE}/otbGCPsToRPCSensorModelImageFilterWithoutDEMOutput.txt
          ${TEMP}/otbGCPsToRPCSensorModelImageFilterWithoutDEMOutput.txt
-         --ignore-lines-with 4 PipelineMTime ImportImageContaine Source: Image
+         --ignore-lines-with 5 PipelineMTime ImportImageContaine Source: Image Time:
     EstimateRPCSensorModelExample
 	 ${INPUTLARGEDATA}/SPOT4/RIO_DE_JANEIRO/IMAG_01.DAT
 	 ${TEMP}/otbGCPsToRPCSensorModelImageFilterWithoutDEMOutput.txt

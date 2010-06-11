@@ -192,7 +192,8 @@ inline void OGRIOHelper<TVectorData>
     {
     chrono.Start();
 
-    typename InternalTreeNodeType::Pointer folderPtr = documentPtr; //TODO: clean references to folder and replace by documentPtr
+    //TODO: clean references to folder and replace by documentPtr
+    typename InternalTreeNodeType::Pointer folderPtr = documentPtr;
 
     // A pointer to the current multi-geometry
     typename InternalTreeNodeType::Pointer multiPtr;
@@ -303,6 +304,10 @@ inline void OGRIOHelper<TVectorData>
           {
           typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
           newNode->Set(ConvertGeometryToPointNode(ogrMulti->getGeometryRef(geoIndex)));
+          itk::MetaDataDictionary& dict = newNode->Get()->GetMetaDataDictionary();
+          itk::EncapsulateMetaData<VectorDataKeywordlist>(dict,
+                                                          MetaDataKey::VectorDataKeywordlistKey,
+                                                          kwl);
           multiPtr->AddChild(newNode);
           }
         break;
@@ -322,6 +327,10 @@ inline void OGRIOHelper<TVectorData>
           {
           typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
           newNode->Set(ConvertGeometryToPointNode(ogrMulti->getGeometryRef(geoIndex)));
+          itk::MetaDataDictionary& dict = newNode->Get()->GetMetaDataDictionary();
+          itk::EncapsulateMetaData<VectorDataKeywordlist>(dict,
+                                                          MetaDataKey::VectorDataKeywordlistKey,
+                                                          kwl);
           multiPtr->AddChild(newNode);
           }
         break;
@@ -341,6 +350,10 @@ inline void OGRIOHelper<TVectorData>
           {
           typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
           newNode->Set(ConvertGeometryToLineNode(ogrMulti->getGeometryRef(geoIndex)));
+          itk::MetaDataDictionary& dict = newNode->Get()->GetMetaDataDictionary();
+          itk::EncapsulateMetaData<VectorDataKeywordlist>(dict,
+                                                          MetaDataKey::VectorDataKeywordlistKey,
+                                                          kwl);
           multiPtr->AddChild(newNode);
           }
         break;
@@ -360,6 +373,10 @@ inline void OGRIOHelper<TVectorData>
           {
           typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
           newNode->Set(ConvertGeometryToLineNode(ogrMulti->getGeometryRef(geoIndex)));
+          itk::MetaDataDictionary& dict = newNode->Get()->GetMetaDataDictionary();
+          itk::EncapsulateMetaData<VectorDataKeywordlist>(dict,
+                                                          MetaDataKey::VectorDataKeywordlistKey,
+                                                          kwl);
           multiPtr->AddChild(newNode);
           }
         break;
@@ -379,6 +396,10 @@ inline void OGRIOHelper<TVectorData>
           {
           typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
           newNode->Set(ConvertGeometryToPolygonNode(ogrMulti->getGeometryRef(geoIndex)));
+          itk::MetaDataDictionary& dict = newNode->Get()->GetMetaDataDictionary();
+          itk::EncapsulateMetaData<VectorDataKeywordlist>(dict,
+                                                          MetaDataKey::VectorDataKeywordlistKey,
+                                                          kwl);
           multiPtr->AddChild(newNode);
           }
         break;
@@ -398,6 +419,10 @@ inline void OGRIOHelper<TVectorData>
           {
           typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
           newNode->Set(ConvertGeometryToPolygonNode(ogrMulti->getGeometryRef(geoIndex)));
+          itk::MetaDataDictionary& dict = newNode->Get()->GetMetaDataDictionary();
+          itk::EncapsulateMetaData<VectorDataKeywordlist>(dict,
+                                                          MetaDataKey::VectorDataKeywordlistKey,
+                                                          kwl);
           multiPtr->AddChild(newNode);
           }
         break;
@@ -421,6 +446,10 @@ inline void OGRIOHelper<TVectorData>
             {
             typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
             newNode->Set(ConvertGeometryToPointNode(ogrMulti->getGeometryRef(geoIndex)));
+            itk::MetaDataDictionary& dict = newNode->Get()->GetMetaDataDictionary();
+            itk::EncapsulateMetaData<VectorDataKeywordlist>(dict,
+                                                            MetaDataKey::VectorDataKeywordlistKey,
+                                                            kwl);
             multiPtr->AddChild(newNode);
             break;
             }
@@ -428,6 +457,10 @@ inline void OGRIOHelper<TVectorData>
             {
             typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
             newNode->Set(ConvertGeometryToPointNode(ogrMulti->getGeometryRef(geoIndex)));
+            itk::MetaDataDictionary& dict = newNode->Get()->GetMetaDataDictionary();
+            itk::EncapsulateMetaData<VectorDataKeywordlist>(dict,
+                                                            MetaDataKey::VectorDataKeywordlistKey,
+                                                            kwl);
             multiPtr->AddChild(newNode);
             break;
             }
@@ -435,6 +468,10 @@ inline void OGRIOHelper<TVectorData>
             {
             typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
             newNode->Set(ConvertGeometryToLineNode(ogrMulti->getGeometryRef(geoIndex)));
+            itk::MetaDataDictionary& dict = newNode->Get()->GetMetaDataDictionary();
+            itk::EncapsulateMetaData<VectorDataKeywordlist>(dict,
+                                                            MetaDataKey::VectorDataKeywordlistKey,
+                                                            kwl);
             multiPtr->AddChild(newNode);
             break;
             }
@@ -442,6 +479,10 @@ inline void OGRIOHelper<TVectorData>
             {
             typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
             newNode->Set(ConvertGeometryToLineNode(ogrMulti->getGeometryRef(geoIndex)));
+            itk::MetaDataDictionary& dict = newNode->Get()->GetMetaDataDictionary();
+            itk::EncapsulateMetaData<VectorDataKeywordlist>(dict,
+                                                            MetaDataKey::VectorDataKeywordlistKey,
+                                                            kwl);
             multiPtr->AddChild(newNode);
             break;
             }
@@ -449,6 +490,10 @@ inline void OGRIOHelper<TVectorData>
             {
             typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
             newNode->Set(ConvertGeometryToPolygonNode(ogrMulti->getGeometryRef(geoIndex)));
+            itk::MetaDataDictionary& dict = newNode->Get()->GetMetaDataDictionary();
+            itk::EncapsulateMetaData<VectorDataKeywordlist>(dict,
+                                                            MetaDataKey::VectorDataKeywordlistKey,
+                                                            kwl);
             multiPtr->AddChild(newNode);
             break;
             }
@@ -456,6 +501,10 @@ inline void OGRIOHelper<TVectorData>
             {
             typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
             newNode->Set(ConvertGeometryToPolygonNode(ogrMulti->getGeometryRef(geoIndex)));
+            itk::MetaDataDictionary& dict = newNode->Get()->GetMetaDataDictionary();
+            itk::EncapsulateMetaData<VectorDataKeywordlist>(dict,
+                                                            MetaDataKey::VectorDataKeywordlistKey,
+                                                            kwl);
             multiPtr->AddChild(newNode);
             break;
             }
@@ -794,7 +843,7 @@ unsigned int OGRIOHelper<TVectorData>
       if (ogrCurrentLayer->CreateFeature(ogrFeature) != OGRERR_NONE)
         {
         itkExceptionMacro(<< "Failed to create feature in shapefile.");
-        }      
+        }
       ProcessNodeWrite(*it, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
       break;
       }
