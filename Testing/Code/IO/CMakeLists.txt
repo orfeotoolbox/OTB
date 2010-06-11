@@ -543,6 +543,16 @@ ADD_TEST(ioTuGDALImageIOCanRead_QUICK_PAN ${IO_TESTS5} otbGDALImageIOTestCanRead
 ADD_TEST(ioTuGDALImageIOCanRead_QUICK_XS ${IO_TESTS5} otbGDALImageIOTestCanRead
         ${LARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF )
 
+ADD_TEST(ioTuGDALImageIOCanRead_WV2_PAN ${IO_TESTS5} otbGDALImageIOTestCanRead
+        ${LARGEDATA}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF )
+
+ADD_TEST(ioTuGDALImageIOCanRead_WV2_MUL ${IO_TESTS5} otbGDALImageIOTestCanRead
+        ${LARGEDATA}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL/09DEC10103019-M2AS-052298844010_01_P001.TIF )
+
+ADD_TEST(ioTuGDALImageIOCanRead_WV2_PSH ${IO_TESTS5} otbGDALImageIOTestCanRead
+        ${LARGEDATA}/WORLDVIEW2/ROME/WV-2_standard_pansharpened_natural_color_8bit/052298834010_01_P001_PSH/09DEC10103019-S2AS-052298834010_01_P001.TIF )
+
+
 ADD_TEST(ioTuGDALImageIOCanRead_IKONOS_PAN ${IO_TESTS5} otbGDALImageIOTestCanRead
         ${LARGEDATA}/IKONOS/PARIS/po_79039_pan_0000000.tif)
 
@@ -2026,6 +2036,10 @@ ADD_TEST(ioTuQuickBirdImageMetadataInterfaceNew ${IO_TESTS18}
         otbQuickBirdImageMetadataInterfaceNew
 )
 
+ADD_TEST(ioTuWorldView2ImageMetadataInterfaceNew ${IO_TESTS18}
+        otbWorldView2ImageMetadataInterfaceNew
+)
+
 ADD_TEST(ioTuTerraSarImageMetadataInterfaceNew ${IO_TESTS18}
         otbTerraSarImageMetadataInterfaceNew
 )
@@ -2052,6 +2066,22 @@ ADD_TEST(ioTvImageMetadataInterfaceQBMULTest ${IO_TESTS18}
         ${LARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
         ${TEMP}/ioTvImageMetadataInterfaceQBMUL.txt
 )
+ADD_TEST(ioTvImageMetadataInterfaceWV2PanTest ${IO_TESTS18}
+#         --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceWV2RomePan.txt
+#                         ${TEMP}/ioTvImageMetadataInterfaceWV2RomePan.txt
+        otbImageMetadataInterfaceTest
+        ${LARGEDATA}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF
+        ${TEMP}/ioTvImageMetadataInterfaceWV2RomePan.txt
+)
+
+ADD_TEST(ioTvImageMetadataInterfaceWV2MulTest ${IO_TESTS18}
+#         --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceWV2RomeMul.txt
+#                         ${TEMP}/ioTvImageMetadataInterfaceWV2RomeMul.txt
+        otbImageMetadataInterfaceTest
+        ${LARGEDATA}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL/09DEC10103019-M2AS-052298844010_01_P001.TIF
+        ${TEMP}/ioTvImageMetadataInterfaceWV2RomeMul.txt
+)
+
 ADD_TEST(ioTvImageMetadataInterfaceIKONOSTest ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceIKONOS.txt
                          ${TEMP}/ioTvImageMetadataInterfaceIKONOS.txt
@@ -2525,6 +2555,7 @@ otbImageKeywordlist.cxx
 otbTerraSarImageMetadataInterface.cxx
 otbSpotImageMetadataInterfaceNew.cxx
 otbQuickBirdImageMetadataInterfaceNew.cxx
+otbWorldView2ImageMetadataInterfaceNew.cxx
 otbIkonosImageMetadataInterfaceNew.cxx
 otbTerraSarImageMetadataInterfaceNew.cxx
 otbImageMetadataInterfaceTest.cxx
