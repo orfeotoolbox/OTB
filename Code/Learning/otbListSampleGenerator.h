@@ -104,11 +104,13 @@ public:
   itkGetConstMacro(NumberOfClasses, unsigned short);
   typedef std::map<int, int> SampleNumberType;
 
-  const  SampleNumberType GetClassesSamplesNumberTraining(void){
+  SampleNumberType GetClassesSamplesNumberTraining(void) const
+  {
     return m_ClassesSamplesNumberTraining;
   }
 
-  const  SampleNumberType GetClassesSamplesNumberValidation(void){
+  SampleNumberType GetClassesSamplesNumberValidation(void) const
+  {
     return m_ClassesSamplesNumberValidation;
   }
   
@@ -135,9 +137,9 @@ private:
   void GenerateClassStatistics();
   void ComputeClassSelectionProbability();
   
-  long int    m_MaxTrainingSize; // number of training samples (-1 = no limit)
-  long int    m_MaxValidationSize; // number of validation samples (-1 = no limit)
-  double m_ValidationTrainingProportion; // proportion of training vs validation 
+  long int m_MaxTrainingSize; // number of training samples (-1 = no limit)
+  long int m_MaxValidationSize; // number of validation samples (-1 = no limit)
+  double   m_ValidationTrainingProportion; // proportion of training vs validation 
                                          // (0.0 = all training, 1.0 = all validation)
 
   unsigned short        m_NumberOfClasses;
