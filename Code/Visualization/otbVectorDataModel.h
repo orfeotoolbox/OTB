@@ -72,9 +72,6 @@ public:
   void EndGeometry(void);
   void DeleteGeometry(void);
 
-  /** Set the VectorData to work on */
-  itkGetObjectMacro(VectorData,VectorDataType);
-
   /** return the Nth data node without counting the Root/Document/Folder*/
   DataNodeType::Pointer GetNthDataNode(int n);
   void SetSelectedGeometry(int n);
