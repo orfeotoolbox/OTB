@@ -310,7 +310,22 @@ for a more swift display. All modules allow you to cache their input data sets.
 
 \chapter{Architecture of the application}
 \section{Dynamic GUI definition}
+The aim of Monteverdi is to provide a generic interface which is based on the definition of the internal processes. 
+In this frame, the way that that you have to manage modules are identical during the definition of a new processes.
+Selecting a module on the upper main window, open automatically the "Inputs definition Window" wich allow to select data which
+are inputs of the current module. Monteverdi module can manage single or multiple inputs and these inputs can be images on your 
+DD or results of previous module already registered in the "Data and Process" tree.    
 \section{Dynamic I/O definition}
+Management of image formats in Motneevrdi works in the manner as in the OTB library.
+The principle is that the software automatically recognise the image format and.
+The way that
+Communication between modules follow also the same principle and the Input definition of modules request to all available
+outputs of the same type in the "Data and process" tree.
+
+Internally, all the treatments in Monteverdi are compute in Float precision by default. It is also possible to switch to Double 
+precision by compiling the application from source and set the CMAKE option compile_float to ON.
+ 
+
 \section{Dynamic chain process}
 
 
@@ -334,6 +349,14 @@ This section gives access to a large set of geometric operations.
 It performs re-projection and orthorectification operations of images using the available sensor models 
 (image informations available in the meta-data are automatically read by the application).  
 \subsection{Orthorectification}
+The application is derived from the otbOrthorectificationApplication and allow to produce orthorectified imagery from level 1 
+product.
+The application is able to parse metadata informations available with the image. The application contains 4 tabs:
+
+-Positins
+-Elevation informations: 
+-quick view
+
 \subsection{Re-projection module}
 \subsection{Registering 2 images by taking homologous point}
 This module allows to register two images by taking separately homologous points in the reference image and in the image 
@@ -355,8 +378,20 @@ This output image could be without getting any geometric informations. Moreover,
 in its metadata, the module allows to add or remove points from the existing list which is automatically loaded.       
 
 \section{Calibration}
-
+The basic idea is to be able to  
 \subsection{Optical calibration}
+In the case of the Optical calibration, the basic idea is to be able to retrieve reflectance of the observed physical object.
+The input image contains only numerical which 
+The process can be split in 3 main operations:
+\begin{itemize}
+\item Derived luminance from the numerical count in the input image. 
+\item Convert the Luminance to Reflectance to produce the TOA(Top Of Atmosphere) image.
+\item Inverse a radiative transfer code which simulate the reflection of solar radiation by a coupled atmosphere-surface system. This step produce 
+the TOC (Top of Canopy) imagery which is the final result of the Optical calibration module. 
+\end{itemize}
+    
+The module produce also a calculeted product which the TOC - TOA image.
+
 \subsection{SAR calibration}
 
 The calibration and validation of the measurement systems are important to maintain the
@@ -376,8 +411,10 @@ and allow to get a reliable estimation of the flood events.
 \section{Learning}
 \subsection{Supervised classification}
 \subsection{Non-supervised classification}
+The supervised classification  module is based on the Kmeans algorithm (link to the doc).
+The GUI allows to modify parameters of the algorithm and produce
 \section{Specific SAR functionnalities}
-
+This section give access to specific treatments related to the 
 
 
 \part{Developper's guide}\label{part:developperguide}
