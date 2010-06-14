@@ -117,11 +117,21 @@ public:
   itkGetStringMacro(ClassKey);
   itkSetStringMacro(ClassKey);
   
+  itkGetConstMacro(ClassMinSize, double);
+
   itkGetObjectMacro(TrainingListSample, ListSampleType);
   itkGetObjectMacro(TrainingListLabel, ListLabelType);
   itkGetObjectMacro(ValidationListSample, ListSampleType);
   itkGetObjectMacro(ValidationListLabel, ListLabelType);
   
+  std::map<ClassLabelType, double> GetClassesSize() const
+    {
+    return m_ClassesSize;
+    }
+
+
+  void GenerateClassStatistics();
+
 protected:
   ListSampleGenerator();
   virtual ~ListSampleGenerator() {}
@@ -134,7 +144,6 @@ private:
   ListSampleGenerator(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
   
-  void GenerateClassStatistics();
   void ComputeClassSelectionProbability();
   
   long int m_MaxTrainingSize; // number of training samples (-1 = no limit)
@@ -144,12 +153,13 @@ private:
 
   unsigned short        m_NumberOfClasses;
   std::string           m_ClassKey;
+  double                m_ClassMinSize;
 
   ListSamplePointerType m_TrainingListSample;
   ListLabelPointerType  m_TrainingListLabel;
   ListSamplePointerType m_ValidationListSample;
   ListLabelPointerType  m_ValidationListLabel;
-  
+
   
   std::map<ClassLabelType, double> m_ClassesSize;
   std::map<ClassLabelType, double> m_ClassesProbTraining;

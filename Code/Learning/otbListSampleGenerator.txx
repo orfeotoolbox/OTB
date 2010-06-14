@@ -32,7 +32,8 @@ ListSampleGenerator<TImage, TVectorData>
   m_MaxValidationSize(-1), 
   m_ValidationTrainingProportion(0.0),
   m_NumberOfClasses(0),
-  m_ClassKey("Class")
+  m_ClassKey("Class"),
+  m_ClassMinSize(-1)
 {
   this->SetNumberOfRequiredInputs(2);
   this->SetNumberOfRequiredOutputs(1);
@@ -214,8 +215,20 @@ ListSampleGenerator<TImage,TVectorData>
     ++itVector;
     }
 
-  m_NumberOfClasses = m_ClassesSize.size();
+  std::map<ClassLabelType, double>::const_iterator itmap = m_ClassesSize.begin();
+  double minSize = itmap->second;
+  ++itmap;
+  while(itmap != m_ClassesSize.end())
+    {
+    if (minSize > itmap->second)
+      {
+      minSize = itmap->second;
+      }
+    ++itmap;
+    }
 
+  m_ClassMinSize = minSize;
+  m_NumberOfClasses = m_ClassesSize.size();
 }
 
 template < class TImage, class TVectorData >
@@ -226,7 +239,7 @@ ListSampleGenerator<TImage,TVectorData>
   m_ClassesProbTraining.clear();
   m_ClassesProbValidation.clear();
   
-  //Go throught the classes size to find the smallest one
+  //Go through the classes size to find the smallest one
   double minSizeTraining = -1;
   for (std::map<ClassLabelType, double>::const_iterator itmap = m_ClassesSize.begin(); itmap != m_ClassesSize.end(); ++itmap)
     {
