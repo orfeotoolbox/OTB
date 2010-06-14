@@ -18,7 +18,7 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {qb_RoadExtract.tif}
-//    OUTPUTS: {OBIARadiometricAttribute1.tif}, {qb_ExtractRoad_Radiometry_pretty.png}
+//    OUTPUTS: {OBIARadiometricAttribute1.tif}, {qb_ExtractRoad_Radiometry_pretty.jpg}
 //    STATS::Ndvi::Mean 0 0.5 16 16 50 1.0
 //  Software Guide : EndCommandLineArgs
 
