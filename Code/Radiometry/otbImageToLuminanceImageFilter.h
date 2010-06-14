@@ -188,6 +188,11 @@ protected:
       m_Beta = imageMetadataInterface->GetPhysicalBias(this->GetInput()->GetMetaDataDictionary());
       }
 
+    otbMsgDevMacro(<< "Dimension: ");
+    otbMsgDevMacro(<< "m_Alpha.GetSize(): " << m_Alpha.GetSize());
+    otbMsgDevMacro(<< "m_Beta.GetSize() : " << m_Beta.GetSize());
+    otbMsgDevMacro(<< "this->GetInput()->GetNumberOfComponentsPerPixel() : " << this->GetInput()->GetNumberOfComponentsPerPixel());
+
     if ((m_Alpha.GetSize() != this->GetInput()->GetNumberOfComponentsPerPixel())
         || (m_Beta.GetSize() != this->GetInput()->GetNumberOfComponentsPerPixel()))
       {

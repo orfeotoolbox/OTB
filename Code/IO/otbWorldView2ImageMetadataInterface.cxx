@@ -243,6 +243,11 @@ WorldView2ImageMetadataInterface::GetMinute(const MetaDataDictionaryType& dict) 
   separatorList = "-T:";
   ossimString keywordString = kwl.find(key.c_str());
 
+  if (keywordString == ossimString("Unknown"))
+     {
+      itkExceptionMacro("Unknown date")
+     }
+
   std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
 
   if (keywordStrings.size() <= 2) itkExceptionMacro("Invalid Minute");
@@ -439,7 +444,8 @@ WorldView2ImageMetadataInterface
      }
      else
      {
-       ossimString keywordStringAbsCalFactor = kwl.find("support_data.B_band_absCalFactor");
+//       ossimString keywordStringAbsCalFactor = kwl.find("support_data.B_band_absCalFactor");
+       ossimString keywordStringAbsCalFactor = kwl.find("band_C.abscalfactor");
        outputValuesVariableLengthVector[0] = keywordStringAbsCalFactor.toDouble();
        keywordStringAbsCalFactor = kwl.find("support_data.G_band_absCalFactor");
        outputValuesVariableLengthVector[1] = keywordStringAbsCalFactor.toDouble();

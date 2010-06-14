@@ -2069,7 +2069,7 @@ ADD_TEST(ioTvImageMetadataInterfaceQBMULTest ${IO_TESTS18}
 ADD_TEST(ioTvImageMetadataInterfaceWV2PanTest ${IO_TESTS18}
 #         --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceWV2RomePan.txt
 #                         ${TEMP}/ioTvImageMetadataInterfaceWV2RomePan.txt
-        otbImageMetadataInterfaceTest
+        otbImageMetadataInterfaceTest2
         ${LARGEDATA}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF
         ${TEMP}/ioTvImageMetadataInterfaceWV2RomePan.txt
 )
@@ -2077,7 +2077,7 @@ ADD_TEST(ioTvImageMetadataInterfaceWV2PanTest ${IO_TESTS18}
 ADD_TEST(ioTvImageMetadataInterfaceWV2MulTest ${IO_TESTS18}
 #         --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceWV2RomeMul.txt
 #                         ${TEMP}/ioTvImageMetadataInterfaceWV2RomeMul.txt
-        otbImageMetadataInterfaceTest
+        otbImageMetadataInterfaceTest2
         ${LARGEDATA}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL/09DEC10103019-M2AS-052298844010_01_P001.TIF
         ${TEMP}/ioTvImageMetadataInterfaceWV2RomeMul.txt
 )

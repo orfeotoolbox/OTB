@@ -213,7 +213,7 @@ ADD_TEST(raTvImageToLuminanceImageFilterAutoWV2 ${RADIOMETRY_TESTS2}
   #--compare-image ${EPSILON}  ${BASELINE}/raTvImageToLuminanceImageFilterAutoIkonos.tif
    #                       ${TEMP}/raTvImageToLuminanceImageFilterAutoIkonos.tif
         otbImageToLuminanceImageFilterAuto
-        ${LARGEINPUT}/WORLDVIEW2/VERSAILLES/052310006010_01_P001_PAN/10MAR01111601-P1BS-052310006010_01_P001.TIF
+        ${LARGEINPUT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL/09DEC10103019-M2AS-052298844010_01_P001.TIF
         ${TEMP}/raTvImageToLuminanceImageFilterAutoWV2.tif
          )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
