@@ -32,8 +32,8 @@
 namespace otb
 {
 
-template <class TInputImage, class TOutputImage, class TBoundaryCondition>
-ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition>
+template <class TInputImage, class TOutputImage, class TBoundaryCondition, class TFilterPrecision>
+ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition, TFilterPrecision>
 ::ConvolutionImageFilter()
 {
   m_Radius.Fill(1);
@@ -42,9 +42,9 @@ ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition>
   m_NormalizeFilter = false;
 }
 
-template <class TInputImage, class TOutputImage, class TBoundaryCondition>
+template <class TInputImage, class TOutputImage, class TBoundaryCondition, class TFilterPrecision>
 void
-ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition>
+ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition, TFilterPrecision>
 ::GenerateInputRequestedRegion() throw (itk::InvalidRequestedRegionError)
   {
   // call the superclass' implementation of this method
@@ -93,9 +93,9 @@ ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition>
     }
   }
 
-template<class TInputImage, class TOutputImage, class TBoundaryCondition>
+template<class TInputImage, class TOutputImage, class TBoundaryCondition, class TFilterPrecision>
 void
-ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition>
+ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition, TFilterPrecision>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                        int threadId)
 {
@@ -158,9 +158,9 @@ ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition>
 /**
  * Standard "PrintSelf" method
  */
-template <class TInputImage, class TOutput, class TBoundaryCondition>
+template <class TInputImage, class TOutput, class TBoundaryCondition, class TFilterPrecision>
 void
-ConvolutionImageFilter<TInputImage, TOutput, TBoundaryCondition>
+ConvolutionImageFilter<TInputImage, TOutput, TBoundaryCondition, TFilterPrecision>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);

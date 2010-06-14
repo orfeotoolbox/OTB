@@ -59,7 +59,8 @@ namespace otb
  * \ingroup MultiThreaded
  */
 template <class TInputImage, class TOutputImage, class TBoundaryCondition =
-            itk::ZeroFluxNeumannBoundaryCondition<TInputImage> >
+            itk::ZeroFluxNeumannBoundaryCondition<TInputImage>,
+          class TFilterPrecision = typename itk::NumericTraits<typename TInputImage::InternalPixelType>::RealType >
 class ITK_EXPORT ConvolutionImageFilter :
   public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
@@ -93,7 +94,8 @@ public:
   typedef typename InputImageType::RegionType                   InputImageRegionType;
   typedef typename OutputImageType::RegionType                  OutputImageRegionType;
   typedef typename InputImageType::SizeType                     InputSizeType;
-  typedef typename itk::Array<InputRealType>                    ArrayType;
+  typedef TFilterPrecision                                      FilterPrecisionType;
+  typedef typename itk::Array<FilterPrecisionType>              ArrayType;
   typedef TBoundaryCondition                                    BoundaryConditionType;
 
   /** Set the radius of the neighborhood of the filter */
