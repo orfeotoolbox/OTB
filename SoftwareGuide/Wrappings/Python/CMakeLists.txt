@@ -29,7 +29,7 @@ SET(OTB_PYTHON_EXAMPLES_SRCS
   ${OTB-Wrapping_SOURCE_DIR}/Languages/Python/Tutorials/SmarterFilteringPipeline.py
   ${OTB-Wrapping_SOURCE_DIR}/Languages/Python/Tutorials/ScalingPipeline.py
   ${OTB-Wrapping_SOURCE_DIR}/Languages/Python/Tutorials/MultiSpectral.py
-  ${OTB-Wrapping_SOURCE_DIR}/Languages/Python/Tutorials/OrthoFusion.py
+#   ${OTB-Wrapping_SOURCE_DIR}/Languages/Python/Tutorials/OrthoFusion.py
 )
 
 #MESSAGE("In python after ")

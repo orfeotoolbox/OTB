@@ -446,8 +446,18 @@ sub GetArgsAndFilenames {
           }
         else
           {
+          my $ext = ($cmdlineoutfile =~ m/([^.]+)$/)[0];
+          print "ext \n";print $ext ; print "\n";
           if (IsAnInputFile($cmdlineoutfile,$searchdirs,\$path))
-            { $myline = sprintf("CONVERT_INPUT_IMG( \"%s\" \"%s\" \"%s\" )\n",$cmdlineoutfile,$lateximgFile,$path); }
+            {
+            if ($ext =~ "jpg")
+              {
+              print "Hello World\n";print $cmdlineoutfile ; print "\n";
+              $myline = sprintf("CONVERT_JPG_INPUT_IMG( \"%s\" \"%s\" \"%s\" \"%s\" )\n","-o",$cmdlineoutfile,$lateximgFile,$path); }
+            else
+              {
+              $myline = sprintf("CONVERT_INPUT_IMG( \"%s\" \"%s\" \"%s\" )\n",$cmdlineoutfile,$lateximgFile,$path); }
+            }
           else
             { 
             if (ShouldBeNormalized($cmdlineoutfile, \@normalizedfiles))
@@ -455,8 +465,14 @@ sub GetArgsAndFilenames {
               $myline = sprintf("CONVERT_AND_NORMALIZE_IMG( \"%s\" \"%s\" \"%s\" )\n",$cmdlineoutfile,$lateximgFile,$filepath); 
               }
             else
-              { 
-              $myline = sprintf("CONVERT_IMG( \"%s\" \"%s\" \"%s\" )\n",$cmdlineoutfile,$lateximgFile,$filepath); 
+              {
+              if ($ext =~ "jpg")
+                {
+                print "Hello World2\n";print $cmdlineoutfile ; print "\n";
+                $myline = sprintf("CONVERT_JPG_IMG( \"%s\" \"%s\" \"%s\" \"%s\" )\n","-o",$cmdlineoutfile,$lateximgFile,$filepath); }
+              else
+                {
+                $myline = sprintf("CONVERT_IMG( \"%s\" \"%s\" \"%s\" )\n",$cmdlineoutfile,$lateximgFile,$filepath); }
               }
             }
           }
