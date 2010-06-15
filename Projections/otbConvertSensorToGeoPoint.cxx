@@ -7,12 +7,12 @@
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-See OTBCopyright.txt for details.
+  See OTBCopyright.txt for details.
 
 
     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE,  See the above copyright notices for more information.
+    the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+    PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
@@ -50,10 +50,11 @@ int main(int argc, char* argv[])
     typedef otb::CommandLineArgumentParser ParserType;
     ParserType::Pointer parser = ParserType::New();
 
-    parser->SetProgramDescription("Sensor to geographic coordinates conversion");
+    parser->SetProgramDescription("Sensor to geographic coordinates conversion. "
+        "If x,y are not provided, convert the four corners");
     parser->AddOption("--data","sensor image","-in");
-    parser->AddOption("--sample","X value of desired point","-x");
-    parser->AddOption("--line","Y value of desired point","-y");
+    parser->AddOption("--sample","X value of desired point","-x", 1, false);
+    parser->AddOption("--line","Y value of desired point","-y", 1, false);
 
     typedef otb::CommandLineArgumentParseResult ParserResultType;
     ParserResultType::Pointer  parseResult = ParserResultType::New();
@@ -80,8 +81,6 @@ int main(int argc, char* argv[])
     // Code
 
     std::string filename = parseResult->GetParameterString("--data");
-    int sample = parseResult->GetParameterInt("--sample");
-    int line = parseResult->GetParameterInt("--line");
 
     typedef otb::VectorImage<double, 2> ImageType;
     typedef otb::ImageFileReader<ImageType> ReaderType;
@@ -89,45 +88,82 @@ int main(int argc, char* argv[])
     reader->SetFileName(filename);
     reader->GenerateOutputInformation();
 
-    typedef otb::ForwardSensorModel<double>  ModelType;
-    ModelType::Pointer   model= ModelType::New();
+    typedef otb::ForwardSensorModel<double> ModelType;
+    ModelType::Pointer model = ModelType::New();
     model->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
 
     ImageType::Pointer inputImage = reader->GetOutput();
     if (!model)
-    {
+      {
       std::cerr << "Unable to create a model" << std::endl;
       return 1;
-    }
+      }
 
-    ModelType::OutputPointType outputPoint;
-    typedef itk::Point <double, 2>    PointType;
-    PointType inputPoint;
-    inputPoint[0] = sample;
-    inputPoint[1] = line;
-
-    outputPoint = model->TransformPoint(inputPoint);
-
-    if (!parseResult->IsOptionPresent("--OTBTesting"))
-    {
-      std::cout << std::setprecision(10) << "Sensor Point  (x , y)  : (" << inputPoint[0] << ", "
-          << inputPoint[1] << ")" << std::endl;
-      std::cout << std::setprecision(10) << "Geographic Point (Lat, Lon) : (" << outputPoint[1] << ", "
-          << outputPoint[0] << ")" << std::endl;
-    }
+    typedef itk::Point<double, 2> PointType;
+    std::vector<PointType> points;
+    if (parseResult->IsOptionPresent("--sample") && parseResult->IsOptionPresent("--line"))
+      {
+      PointType point;
+      point[0] = parseResult->GetParameterInt("--sample");
+      point[1] = parseResult->GetParameterInt("--line");
+      points.push_back(point);
+      }
     else
-    {
-      std::string outputTestFileName = parseResult->GetParameterString("--OTBTesting", 0);
+      {
+      // find the four corners
+      PointType point;
+      point[0] = reader->GetOutput()->GetLargestPossibleRegion().GetIndex()[0];
+      point[1] = reader->GetOutput()->GetLargestPossibleRegion().GetIndex()[1];
+      points.push_back(point);
 
-      ofstream outputTestFile;
-      outputTestFile.open(outputTestFileName.c_str());
+      point[0] = reader->GetOutput()->GetLargestPossibleRegion().GetIndex()[0]
+               + reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0];
+      point[1] = reader->GetOutput()->GetLargestPossibleRegion().GetIndex()[1]-1;
+      points.push_back(point);
 
-      outputTestFile << std::setprecision(10) << "Sensor Point  (x , y)  : (" << inputPoint[0] << ", "
-          << inputPoint[1] << ")" << std::endl;
-      outputTestFile << std::setprecision(10) << "Geographic Point (Lat, Lon) : (" << outputPoint[1] << ", "
-          << outputPoint[0] << ")" << std::endl;
-      outputTestFile.close();
-    }
+      point[0] = reader->GetOutput()->GetLargestPossibleRegion().GetIndex()[0];
+      point[1] = reader->GetOutput()->GetLargestPossibleRegion().GetIndex()[1]
+               + reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]-1;
+      points.push_back(point);
+
+      point[0] = reader->GetOutput()->GetLargestPossibleRegion().GetIndex()[0];
+               + reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0]-1;
+      point[1] = reader->GetOutput()->GetLargestPossibleRegion().GetIndex()[1];
+               + reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]-1;
+      points.push_back(point);
+
+      }
+
+    for (int i = 0; i < points.size(); ++i)
+      {
+
+
+      ModelType::OutputPointType outputPoint;
+
+
+      outputPoint = model->TransformPoint(points[i]);
+
+      if (!parseResult->IsOptionPresent("--OTBTesting"))
+        {
+        std::cout << std::setprecision(10) << "Sensor Point  (x , y)  : (" << points[i][0] << ", " << points[i][1]
+            << ")\n";
+        std::cout << std::setprecision(10) << "Geographic Point (Lat, Lon) : (" << outputPoint[1] << ", "
+            << outputPoint[0] << ")\n\n";
+        }
+      else
+        {
+        std::string outputTestFileName = parseResult->GetParameterString("--OTBTesting", 0);
+
+        ofstream outputTestFile;
+        outputTestFile.open(outputTestFileName.c_str());
+
+        outputTestFile << std::setprecision(10) << "Sensor Point  (x , y)  : (" << points[i][0] << ", "
+            << points[i][1] << ")\n";
+        outputTestFile << std::setprecision(10) << "Geographic Point (Lat, Lon) : (" << outputPoint[1] << ", "
+            << outputPoint[0] << ")\n\n";
+        outputTestFile.close();
+        }
+      }
 
   }
   catch ( itk::ExceptionObject & err )
