@@ -6495,6 +6495,10 @@ msgstr "SAR/Calcul intensite et log-intensite"
 msgid "Learning/SVM classification"
 msgstr "Apprentissage/Classification par SVM"
 
+#: Code/Application/Monteverdi.cxx:163
+msgid "Learning/SVM classification (EXPERIMENTAL)"
+msgstr "Apprentissage/Classification par SVM (EXPERIMENTAL)"
+
 #: Code/Application/Monteverdi.cxx:155
 msgid "Learning/KMeans clustering"
 msgstr "Apprentissage/KMeans clusterisation"
@@ -6522,6 +6526,10 @@ msgstr "Geometrie/GCP vers modele capteur"
 #: Code/Application/Monteverdi.cxx:164
 msgid "File/Tile Map Import"
 msgstr "Fichier/Importer une carte"
+
+#: Code/Application/Monteverdi.cxx:141
+msgid "File/Export To Kmz"
+msgstr "Fichier/Exporter vers un KMZ"
 
 #: Code/Application/otbMonteverdiViewGUI.cxx:166
 msgid "File/Quit"
