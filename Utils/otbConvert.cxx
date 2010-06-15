@@ -34,6 +34,25 @@
 #include "itkCastImageFilter.h"
 #include "otbStandardFilterWatcher.h"
 #include "otbStandardWriterWatcher.h"
+#include "otbUnaryImageFunctorWithVectorImageFilter.h"
+
+namespace otb
+{
+namespace Functor
+{
+template< class TScalar >
+class ITK_EXPORT LogFunctor
+{
+public:
+  LogFunctor(){};
+  ~LogFunctor(){};
+  TScalar operator() (const TScalar& v) const
+  {
+    return vcl_log(v);
+  }
+};
+}
+}
 
 template<typename OutputPixelType>
 int generic_main_convert(otb::CommandLineArgumentParseResult* parseResult)
@@ -50,10 +69,22 @@ int generic_main_convert(otb::CommandLineArgumentParseResult* parseResult)
 
   if (parseResult->IsOptionPresent("--UseRescale"))
   {
+    unsigned int transferNum = 1;
+    if (parseResult->IsOptionPresent("--RescaleType"))
+      {
+      transferNum = parseResult->GetParameterUInt("--RescaleType");
+      }
     typedef otb::ImageFileReader<InputImageType> ReaderType;
     typename ReaderType::Pointer reader=ReaderType::New();
     reader->SetFileName(parseResult->GetInputImage().c_str());
     reader->UpdateOutputInformation();
+
+    //define the transfer log
+    typedef otb::Functor::LogFunctor<InputImageType::InternalPixelType> TransferLogFunctor;
+    typedef otb::UnaryImageFunctorWithVectorImageFilter<InputImageType,InputImageType,TransferLogFunctor> TransferLogType;
+    TransferLogType::Pointer transferLog = TransferLogType::New();
+    transferLog->SetInput(reader->GetOutput());
+    transferLog->UpdateOutputInformation();
 
     typedef otb::VectorRescaleIntensityImageFilter<InputImageType, OutputImageType> RescalerType;
     typename OutputImageType::PixelType minimum;
@@ -68,7 +99,15 @@ int generic_main_convert(otb::CommandLineArgumentParseResult* parseResult)
     rescaler->SetOutputMinimum(minimum);
     rescaler->SetOutputMaximum(maximum);
 
-    rescaler->SetInput(reader->GetOutput());
+    if (transferNum == 2)
+      {
+      rescaler->SetInput(transferLog->GetOutput());
+      }
+    else
+      {
+      rescaler->SetInput(reader->GetOutput());
+      }
+
     writer->SetInput(rescaler->GetOutput());
 
     otb::StandardWriterWatcher watcher(writer,rescaler,"Conversion");
@@ -98,11 +137,15 @@ int main(int argc, char * argv[])
     typedef otb::CommandLineArgumentParser ParserType;
     ParserType::Pointer parser = ParserType::New();
 
-    parser->SetProgramDescription("Convert an image to a different format, eventually rescaling the data and/or changing the pixel type");
+    parser->SetProgramDescription("Convert an image to a different format, eventually rescaling the data"
+        " and/or changing the pixel type");
     parser->AddInputImage();
     parser->AddOutputImage();
-    parser->AddOption("--OutputPixelType","OutputPixelType: unsigned char (1), short int (2), int (3), float (4), double (5), unsigned short int (12), unsigned int (13); default 1","-t", 1, false);
+    parser->AddOption("--OutputPixelType","OutputPixelType: unsigned char (1), short int (2), int (3), float (4),"
+                      " double (5), unsigned short int (12), unsigned int (13); default 1","-t", 1, false);
     parser->AddOption("--UseRescale", "Rescale value between output type min and max","-r", 0, false);
+    parser->AddOption("--RescaleType", "Transfer function for the rescaling: linear (1), log (2); default 1","-rt", 1, false);
+
 
     typedef otb::CommandLineArgumentParseResult ParserResultType;
     ParserResultType::Pointer  parseResult = ParserResultType::New();
