@@ -166,6 +166,18 @@ VectorDataKeywordlist
   return m_FieldList.size();
 }
 
+std::vector<std::string>
+VectorDataKeywordlist
+::GetFieldList() const
+{
+  std::vector<std::string> res;
+  for (int i = 0; i < m_FieldList.size(); ++i)
+    {
+    res.push_back((m_FieldList[i].first)->GetNameRef());
+    }
+  return res;
+}
+
 void
 VectorDataKeywordlist
 ::operator =(const Self& p)
