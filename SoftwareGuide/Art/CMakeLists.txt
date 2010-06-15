@@ -45,6 +45,7 @@ FILE(GLOB JPEG_IMAGES *.jpg)
 FILE(GLOB TIFF_IMAGES *.tif)
 FILE(GLOB EPS_IMAGES *.eps)
 
+FILE(GLOB MONTEVERDI_PNG_IMAGES ${CMAKE_CURRENT_SOURCE_DIR}/MonteverdiImages/*.png)
 #
 # If we built the figures, remove figures that were already generated 
 # from the list
@@ -62,6 +63,7 @@ IF (BUILD_FIGURES)
       REMOVE(PNG_IMAGES ${FILES_TO_REMOVE})
       REMOVE(JPEG_IMAGES ${FILES_TO_REMOVE})
       REMOVE(EPS_IMAGES ${FILES_TO_REMOVE})
+      REMOVE(MONTEVERDI_PNG_IMAGES ${FILES_TO_REMOVE})
     ENDIF(NOT NUMBER_OF_FILES_TO_REMOVE MATCHES 0)
   ENDIF(GENERATED_FILES)
 ENDIF(BUILD_FIGURES)
@@ -132,6 +134,20 @@ FOREACH(image ${EPS_IMAGES})
                 "${SoftwareGuide_SOURCE_DIR}/Art/${ImageBase}.eps" 
                 "${SoftwareGuide_BINARY_DIR}/Art/${ImageBase}.eps" 
                 COPYONLY IMMEDIATE)
+  SET(EPS_DEPS ${EPS_DEPS} ${SoftwareGuide_BINARY_DIR}/Art/${ImageBase}.eps)
+ENDFOREACH(image)
+
+FOREACH(image ${MONTEVERDI_PNG_IMAGES})
+  GET_FILENAME_COMPONENT(Imagebase ${image} NAME)
+  GET_FILENAME_COMPONENT(ImageBase ${Imagebase} NAME_WE)
+  ADD_CUSTOM_COMMAND( 
+  SOURCE    ${SoftwareGuide_SOURCE_DIR}/Art/MonteverdiImages/${ImageBase}.png
+  COMMAND   ${IMAGEMAGICK_CONVERT_EXECUTABLE}
+  ARGS      ${SoftwareGuide_SOURCE_DIR}/Art/MonteverdiImages/${ImageBase}.png
+            ${ImageBase}.eps
+  TARGET    SoftwareGuideArt
+  OUTPUTS   ${SoftwareGuide_BINARY_DIR}/Art/${ImageBase}.eps
+  )
   SET(EPS_DEPS ${EPS_DEPS} ${SoftwareGuide_BINARY_DIR}/Art/${ImageBase}.eps)
 ENDFOREACH(image)
 

@@ -282,6 +282,15 @@ set up for the processing. Input data are obtained by readers. When you choose t
 you don't need to do anything special for any particular file format. So opening a data set will create a "reader" 
 which will appear in the main window. At any time, you can use the "save data set" option in order to store to a 
 file the result of any processing module.
+
+\begin{figure}
+   \center
+   \includegraphics[width=0.44\textwidth]{monteverdi_mainwindow.eps}
+   \itkcaption[Monteverdi main window]{Monteverdi main window.}
+   \label{fig:MeanImageFilterOutput}
+   \end{figure}
+
+
 \section{Open an image with Monteverdi}
 The application allows to interactively select raster/vector dataset by browsing your PC. Monteverdi takes
 advantage of the automatic detection of images' extensions to indicate the dataset type (optical, SAR or vector data).   
@@ -321,13 +330,12 @@ The principle is that the software automatically recognise the image format and.
 The way that
 Communication between modules follow also the same principle and the Input definition of modules request to all available
 outputs of the same type in the "Data and process" tree.
-
 Internally, all the treatments in Monteverdi are compute in Float precision by default. It is also possible to switch to Double 
-precision by compiling the application from source and set the CMAKE option compile_float to ON.
+precision by compiling the application from source and set the CMAKE option compile float to ON.
  
 
 \section{Dynamic chain process}
-
+fdsfsdfsdf
 
 \chapter{Available modules}
 \section{I/O operations}
