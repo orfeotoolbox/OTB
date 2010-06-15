@@ -117,8 +117,8 @@ int main(int argc, char* argv[])
       points.push_back(point);
 
       point[0] = reader->GetOutput()->GetLargestPossibleRegion().GetIndex()[0]
-               + reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0];
-      point[1] = reader->GetOutput()->GetLargestPossibleRegion().GetIndex()[1]-1;
+               + reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0]-1;
+      point[1] = reader->GetOutput()->GetLargestPossibleRegion().GetIndex()[1];
       points.push_back(point);
 
       point[0] = reader->GetOutput()->GetLargestPossibleRegion().GetIndex()[0];
@@ -126,9 +126,9 @@ int main(int argc, char* argv[])
                + reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]-1;
       points.push_back(point);
 
-      point[0] = reader->GetOutput()->GetLargestPossibleRegion().GetIndex()[0];
+      point[0] = reader->GetOutput()->GetLargestPossibleRegion().GetIndex()[0]
                + reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0]-1;
-      point[1] = reader->GetOutput()->GetLargestPossibleRegion().GetIndex()[1];
+      point[1] = reader->GetOutput()->GetLargestPossibleRegion().GetIndex()[1]
                + reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]-1;
       points.push_back(point);
 
