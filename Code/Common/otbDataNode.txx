@@ -354,6 +354,8 @@ DataNode<TPrecision, VDimension, TValuePrecision>
   return false;
 }
 
+
+
 /*
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 typename DataNode<TPrecision,VDimension,TValuePrecision>
@@ -380,6 +382,25 @@ DataNode<TPrecision,VDimension,TValuePrecision>
 {
   return m_FieldMap.size();
 }
+*/
+
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
+std::vector<std::string>
+DataNode<TPrecision, VDimension, TValuePrecision>
+::GetFieldList() const
+{
+  VectorDataKeywordlist keywordlist;
+  if (this->GetMetaDataDictionary().HasKey(MetaDataKey::VectorDataKeywordlistKey))
+    {
+    itk::ExposeMetaData<VectorDataKeywordlist>(this->GetMetaDataDictionary(),
+                                               MetaDataKey::VectorDataKeywordlistKey, keywordlist);
+    return keywordlist.GetFieldList();
+    }
+  std::vector<std::string> empty;
+  return empty;
+}
+
+/*
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 void
 DataNode<TPrecision,VDimension,TValuePrecision>
@@ -387,6 +408,9 @@ DataNode<TPrecision,VDimension,TValuePrecision>
 {
   m_FieldMap.clear();
 }*/
+
+
+
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 bool
 DataNode<TPrecision, VDimension, TValuePrecision>

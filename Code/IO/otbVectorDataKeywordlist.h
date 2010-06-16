@@ -89,6 +89,11 @@ public:
   unsigned int GetNumberOfFields() const;
 
   /**
+    * \return the name of fields in the node.
+    */
+  std::vector<std::string> GetFieldList() const;
+
+  /**
    * Print the keyword list
    */
   virtual void Print(std::ostream& os, itk::Indent indent = 0) const;

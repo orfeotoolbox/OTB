@@ -233,6 +233,8 @@ public:
  * \param key The name of the field.
  */
   bool HasField(std::string key) const;
+
+
   /**
    * \return the nth field of the node as a std::pair of (key,value).
    * \param index the index of the field to return.
@@ -242,6 +244,12 @@ public:
  * \return the number of fields in the node.
  */
 //   unsigned int GetNumberOfFields() const;
+
+  /**
+    * \return the name of fields in the node.
+    */
+  std::vector<string> GetFieldList() const;
+
 /**
  * Clear all fields.
  */
