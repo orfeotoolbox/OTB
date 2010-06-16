@@ -171,7 +171,7 @@ VectorDataKeywordlist
 ::GetFieldList() const
 {
   std::vector<std::string> res;
-  for (int i = 0; i < m_FieldList.size(); ++i)
+  for (unsigned int i = 0; i < m_FieldList.size(); ++i)
     {
     res.push_back((m_FieldList[i].first)->GetNameRef());
     }
