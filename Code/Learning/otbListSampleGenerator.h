@@ -61,8 +61,7 @@ public:
   itkNewMacro(Self);
   
   typedef TImage      ImageType;
-  typedef TVectorData VectorDataType;
-  
+  typedef TVectorData VectorDataType;  
   typedef typename VectorDataType::Pointer VectorDataPointerType;
   
   typedef itk::PreOrderTreeIterator<typename VectorDataType::DataTreeType> TreeIteratorType;
@@ -73,7 +72,8 @@ public:
   typedef typename ListSampleType::Pointer        ListSamplePointerType;
   
   /** List to store the corresponding labels */
-  typedef itk::FixedArray<int, 1>                 LabelType; //note could be templated by an std:::string
+  typedef int                                     ClassLabelType;
+  typedef itk::FixedArray<ClassLabelType, 1>      LabelType; //note could be templated by an std:::string
   typedef itk::Statistics::ListSample<LabelType>  ListLabelType;
   typedef typename ListLabelType::Pointer         ListLabelPointerType;
   
@@ -102,7 +102,7 @@ public:
   itkSetClampMacro(ValidationTrainingProportion, double, 0.0, 1.0);
 
   itkGetConstMacro(NumberOfClasses, unsigned short);
-  typedef std::map<int, int> SampleNumberType;
+  typedef std::map<ClassLabelType, int> SampleNumberType;
 
   SampleNumberType GetClassesSamplesNumberTraining(void) const
   {
@@ -117,11 +117,21 @@ public:
   itkGetStringMacro(ClassKey);
   itkSetStringMacro(ClassKey);
   
+  itkGetConstMacro(ClassMinSize, double);
+
   itkGetObjectMacro(TrainingListSample, ListSampleType);
   itkGetObjectMacro(TrainingListLabel, ListLabelType);
   itkGetObjectMacro(ValidationListSample, ListSampleType);
   itkGetObjectMacro(ValidationListLabel, ListLabelType);
   
+  std::map<ClassLabelType, double> GetClassesSize() const
+    {
+    return m_ClassesSize;
+    }
+
+
+  void GenerateClassStatistics();
+
 protected:
   ListSampleGenerator();
   virtual ~ListSampleGenerator() {}
@@ -134,7 +144,6 @@ private:
   ListSampleGenerator(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
   
-  void GenerateClassStatistics();
   void ComputeClassSelectionProbability();
   
   long int m_MaxTrainingSize; // number of training samples (-1 = no limit)
@@ -144,19 +153,20 @@ private:
 
   unsigned short        m_NumberOfClasses;
   std::string           m_ClassKey;
+  double                m_ClassMinSize;
 
   ListSamplePointerType m_TrainingListSample;
   ListLabelPointerType  m_TrainingListLabel;
   ListSamplePointerType m_ValidationListSample;
   ListLabelPointerType  m_ValidationListLabel;
+
   
+  std::map<ClassLabelType, double> m_ClassesSize;
+  std::map<ClassLabelType, double> m_ClassesProbTraining;
+  std::map<ClassLabelType, double> m_ClassesProbValidation;
   
-  std::map<int, double> m_ClassesSize;
-  std::map<int, double> m_ClassesProbTraining;
-  std::map<int, double> m_ClassesProbValidation;
-  
-  std::map<int, int> m_ClassesSamplesNumberTraining; //Just a counter
-  std::map<int, int> m_ClassesSamplesNumberValidation; //Just a counter
+  std::map<ClassLabelType, int> m_ClassesSamplesNumberTraining; //Just a counter
+  std::map<ClassLabelType, int> m_ClassesSamplesNumberValidation; //Just a counter
   
   typedef itk::Statistics::MersenneTwisterRandomVariateGenerator RandomGeneratorType;
   RandomGeneratorType::Pointer m_RandomGenerator;

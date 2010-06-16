@@ -66,8 +66,7 @@ ConfusionMatrixCalculator<TRefListLabel,TProdListLabel>
 
   m_NumberOfSamples = m_ReferenceLabels->Size();
   
-  // count de number of classes
-
+  // count the number of classes
   int countClasses = 0;
    while( refIterator != m_ReferenceLabels->End() )
     {
