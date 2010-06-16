@@ -248,7 +248,7 @@ public:
   /**
     * \return the name of fields in the node.
     */
-  std::vector<string> GetFieldList() const;
+  std::vector<std::string> GetFieldList() const;
 
 /**
  * Clear all fields.
