@@ -326,7 +326,7 @@ The viewer offers three types of data visualisation:
   \item The pixel value 
   \item The computed value (the dynamic of hte input image is modify to get a proper visualisation
   \item The coordinates of the current pixel (long/lat)
-  \item In case where there is a Internet connection available, Monteverdi displays the estimate location (country + city)  
+  \item In case where there is a Internet connection available, Monteverdi displays the estimate location of the current pixel (country + city)  
   \end{itemize} 
 \end{itemize}
 
@@ -337,11 +337,51 @@ The viewer offers three types of data visualisation:
    \label{fig:viewerpixeldescription}
 \end{figure}
 
-The Visualization offers others great functionnalities which are available in the detached window (see figure 
+The Visualization offers others great functionnalities which are available in the detached window.
+Figure \ref{viewervectordata} emphase the possibility It is possible to superpose vector dataset
+to the raster image (see Figure \ref{viewervectordata}).
 
+\begin{figure}
+   \center
+   \includegraphics[width=0.44\textwidth]{monteverdi_viewer_vector_data.eps}
+   \itkcaption[Vector Data visualization]{Monteverdi pixel description box.}
+   \label{fig:viewervectordata}
+\end{figure}
+
+The "Setup Tab" allow to modify the RGB composition or use the grayscale mode to display only one layer. 
+
+\begin{figure}
+   \center
+   \includegraphics[width=0.44\textwidth]{monteverdi_viewer_rgb_composition.eps}
+   \itkcaption[Manage RGB composition]{Manage RGB composition.}
+   \label{fig:rgbcomposition}
+\end{figure}
+
+The "Histogram Tab" get access to the dynamic of the displayed layers. The basic idea is to Convert the output of the 
+pixel representation to a RGB pixel on unsigned char to be displayed on screen. 
+Values are contrained to 0-255 with a transfer function and a clamping operation.
+By default, the dynamic of each layer is modified by
+clamping the histogram at $min + 2\%$ and $max - 2\%$. 
+
+\begin{figure}
+   \center
+   \includegraphics[width=0.44\textwidth]{monteverdi_viewer_histogram.eps}
+   \itkcaption[Manage the dynamic of each layer]{Manage the dynamic.}
+   \label{fig:histogram}
+\end{figure}
+
+There is also possible to select pixel coordinates and get access to all the informations abvailable in the Pixel description 
+Box.
+
+\begin{figure}
+   \center
+   \includegraphics[width=0.44\textwidth]{monteverdi_viewer_pixel_description.eps}
+   \itkcaption[Pixel description via index selection]{Index description via index selection.}
+   \label{fig:pixeldescriptioninformations}
+\end{figure}
 
 \section{Cache dataset}
-The "cache data set" is a very interesting thing. As you know, OTB implements processing on demand, so when you build a 
+The "cache data set" (Figure \ref{cachingmodule}) is a very interesting thing. As you know, OTB implements processing on demand, so when you build a 
 processing pipeline, no processing takes place unless you ask for it explicitly. That means that you can plug together
  the opening of a data set, an orthorectification and a spleckle filter, for example, but nothing will really be computed 
 until you trigger the pipeline execution. This is very convenient, since you can quickly build a processing pipeline and 
@@ -354,6 +394,13 @@ since Monteverdi will generate the needed data by streaming it, but this can be 
  of the result of a complex processing. Using streaming for brwsing through the result image means processing the visible part 
 every time you move inside the image. Caching the data before visualization generated the whole data set in advance allowing 
 for a more swift display. All modules allow you to cache their input data sets.
+
+\begin{figure}
+   \center
+   \includegraphics[width=0.44\textwidth]{monteverdi_caching_module.eps}
+   \itkcaption[Cache operation on the panchromatic image in progress]{Cached and streamed dataset.}
+   \label{fig:pixeldescriptioninformations}
+\end{figure}
 
 \chapter{Architecture of the application}
 \section{Dynamic GUI definition}
@@ -379,12 +426,24 @@ fdsfsdfsdf
 \section{I/O operations}
 \subsection{Extract region of interest}
 It allows to extract regions of interest (ROI) from an image. There are two ways to select the region:
---By indicating the X and Y coordinatres of the upper-left coordinates and the X-Y size of the regions.
---By interactivelly selecting the region on the input image
+\begin{itemize}
+\item By indicating the X and Y coordinatres of the upper-left coordinates and the X-Y size of the regions.
+\item By interactivelly selecting the region of interest in the input image.
+\end{itemize}
+
 \subsection{Concatenate image bands}
-ne for concatenating images into one single multi-band image (they need to have the same size).
-The pink button to the right of the image selection menu indicates that the image has not been generated (streamed). 
-If you push the button, the image will be cached. 
+With Monteverdi, you could generate a large scale of value added informations from lots of inputs data. One of the basic
+functionnality is to be able to superpose result's layers into the same dataset.  
+Concatenating images into one single multi-band image (they need to have the same size), and to be able to create RGB composition 
+with the inputs layer.
+
+\begin{figure}
+   \center
+   \includegraphics[width=0.44\textwidth]{monteverdi_concatenate_before_after.eps}
+   \itkcaption[Concatenation of multitemporal data]{Concatenation module.}
+   \label{fig:concatenate}
+\end{figure}
+ 
 \section{Image Vizualization}
 It allows to display RGB composition of raster images and vector data (ESRI Shapefile or KML). It is also possible to take 
 into consideration the Digital Elevation Model by indicating the path to a directory containing SRTM files. 
