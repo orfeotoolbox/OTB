@@ -274,34 +274,72 @@ http://www.orfeo-toolbox.org/otb/documentation.html.
  
 \chapter{Anatomy of the application}
 \section{What does it look like?}
-This is Monteverdi's main window where the menus are available and where you can see the different modules which have been 
+
+\begin{figure}
+   \center
+   \includegraphics[width=0.44\textwidth]{monteverdi_mainwindow.eps}
+   \itkcaption[Monteverdi main window]{Monteverdi main window.}
+   \label{fig:mainwindow}
+\end{figure}
+
+This is Monteverdi's main window (figure \ref{mainwindow} )where the menus are available and where you can see the different 
+modules which have been 
 set up for the processing. Input data are obtained by readers. When you choose to use a new module, you select its input data,
- and therefore, you build a processing pipeline sequentially. Let's have a look at the different menus. The first one is of
+ and therefore, you build a processing pipeline sequentially. 
+Figure \ref{inputswindow} shows the generic window which allows to specify output(s) of Monteverdi's modules. 
+ 
+\begin{figure}
+   \center
+   \includegraphics[width=0.44\textwidth]{monteverdi_inputs_window.eps}
+   \itkcaption[Monteverdi main window]{Monteverdi inputs selection generic window.}
+   \label{fig:inputswindow}
+\end{figure}
+Let's have a look at the different menus. The first one is of
  course the "File" menu. This menu allows you to open a data set, to save it and to cache it. The "data set" concept is
  interesting, since you don't need to define by hand if you are looking for an image or a vector file. Of course, 
 you don't need to do anything special for any particular file format. So opening a data set will create a "reader" 
 which will appear in the main window. At any time, you can use the "save data set" option in order to store to a 
 file the result of any processing module.
 
-\begin{figure}
-   \center
-   \includegraphics[width=0.44\textwidth]{monteverdi_mainwindow.eps}
-   \itkcaption[Monteverdi main window]{Monteverdi main window.}
-   \label{fig:MeanImageFilterOutput}
-   \end{figure}
+
 
 
 \section{Open an image with Monteverdi}
 The application allows to interactively select raster/vector dataset by browsing your PC. Monteverdi takes
 advantage of the automatic detection of images' extensions to indicate the dataset type (optical, SAR or vector data).   
 
-The input dataset is added to the "Data and Process" tree . The application is the best
+The input dataset is added to the "Data and Process" tree whcich describes the dataset content and each node corresponds to a layer.
 
 \section{Visualize an image with Monteverdi}
-This module allows to visualize raster image creating RGB composition from the imput rasters. It is possible to add 
-vector dataset which are automatically reproject in the same projection of the input image. 
-It is also possible to add elevation informations 
-Describe Get access to the pixel description
+This module allows to visualize raster or vector data. It allows to create RGB composition from the imput rasters. It is also possible to add 
+vector dataset which are automatically reproject in the same projection of the input image or Digital Elevation informations. 
+
+The viewer offers three types of data visualisation: 
+
+\begin{itemize}
+\item The scroll Window : to navigate quickly inside the entire scene
+\item The Full resolution window: the view of the region of interest selected in the scroll window 
+\item The Zoom window
+\item The Pixel description: give access to dynamic informations on the current pixel pointed. Informations display are:
+  \begin{itemize}
+  \item The current index
+  \item The pixel value 
+  \item The computed value (the dynamic of hte input image is modify to get a proper visualisation
+  \item The coordinates of the current pixel (long/lat)
+  \item In case where there is a Internet connection available, Monteverdi displays the estimate location (country + city)  
+  \end{itemize} 
+\end{itemize}
+
+\begin{figure}
+   \center
+   \includegraphics[width=0.44\textwidth]{monteverdi_viewer_pixel_description.eps}
+   \itkcaption[Monteverdi main window]{Monteverdi pixel description box.}
+   \label{fig:viewerpixeldescription}
+\end{figure}
+
+The Visualization offers others great functionnalities which are available in the detached window (see figure 
+
+
 \section{Cache dataset}
 The "cache data set" is a very interesting thing. As you know, OTB implements processing on demand, so when you build a 
 processing pipeline, no processing takes place unless you ask for it explicitly. That means that you can plug together
