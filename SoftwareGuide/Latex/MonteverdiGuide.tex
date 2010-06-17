@@ -444,6 +444,10 @@ with the inputs layer.
    \label{fig:concatenate}
 \end{figure}
  
+\subsection{Save dataset to file}
+
+In 
+
 \section{Geometric process}
 In the frame of remote sensing process, the first operation is often to be able to superpose and maipulate imageries which 
 come from different sources.
@@ -587,15 +591,54 @@ The difference was produce by the band math module and allow to get a reliable e
 \end{figure}
 
 \subsection{Feature extraction}
+
+Under the term Feature Extraction we include several techniques aiming to detect or extract infor-
+mations of low level of abstraction from images. These features can be objects : points, lines, etc.
+They can also be measures : moments, textures, etc.
+
 \subsection{Mean-shift segmentation}
+
+For a given pixel, the mean shift will build a set of neighboring pixels within a given 
+spatial radius and a color range. The spatial and color center of this set is then 
+computed and the algorithm iterates with this new spatial and
+color center. The Mean Shift can be used for edge-preserving smoothing, or for clustering.
+
+\begin{figure}
+   \center
+   \includegraphics[width=0.44\textwidth]{monteverdi_mean_shift.eps}
+   \itkcaption[Mean-shift clustering]{Mean-shift module.}
+   \label{fig:meanshift}
+\end{figure}
+
 \section{Learning}
 \subsection{Supervised classification}
+Supervised classification is a procedure in which individual items are placed into 
+groups based on quantitative information on one or more characteristics inherent 
+in the items and based on a training set of previously labeled items.
+
+The supervised classification module is based on the Support Vector Machine method
+which consists in searching for the separating surface between 2 classes by
+the determination of the subset of training samples which best describes the boundary between the 2
+classes.
+
+The module allow to interactivelly describe learnings samples which corresponds to polygons samples on the input images.
+
+Then a SVM model is derived from this learning sample which allows to classify each pixel of the 
+input image in one of the defined class.
+ 
+
 \subsection{Non-supervised classification}
 The supervised classification  module is based on the Kmeans algorithm (link to the doc).
 The GUI allows to modify parameters of the algorithm and produce
 \section{Specific SAR functionnalities}
-This section give access to specific treatments related to the 
+This section give access to specific treatments related to the SAR functionnalities
 
+\begin{itemize}
+\item Synthetic aperture radar images are generally corrupted by speckle noise. 
+To suppress speckle and improve the radar image interpretability lots of filtering techniques have been proposed.
+The module implements to well-known despeckle methods: Frost and Lee.
+\item Derived intensity and log-intensity from the input SAR imagery.
+\end{itemize}
 
 \part{Developper's guide}\label{part:developperguide}
 \chapter{Module architecture}
