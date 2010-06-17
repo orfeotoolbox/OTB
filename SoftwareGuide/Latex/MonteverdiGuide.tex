@@ -444,29 +444,51 @@ with the inputs layer.
    \label{fig:concatenate}
 \end{figure}
  
-\section{Image Vizualization}
-It allows to display RGB composition of raster images and vector data (ESRI Shapefile or KML). It is also possible to take 
-into consideration the Digital Elevation Model by indicating the path to a directory containing SRTM files. 
 \section{Geometric process}
 In the frame of remote sensing process, the first operation is often to be able to superpose and maipulate imageries which 
 come from different sources.
 This section gives access to a large set of geometric operations.
-It performs re-projection and orthorectification operations of images using the available sensor models 
+It performs re-projection and orthorectification operations on Optical or SAR imageries using the available sensor models 
 (image informations available in the meta-data are automatically read by the application).  
 \subsection{Orthorectification}
 The application is derived from the otbOrthorectificationApplication and allow to produce orthorectified imagery from level 1 
 product.
-The application is able to parse metadata informations available with the image. The application contains 4 tabs:
+The application is able to parse metadata informations and set default parameters. The application contains 4 tabs:
 
--Positins
--Elevation informations: 
--quick view
+\begin{itemize}
+\item Coordinates: Define the center or upper-left pixel coordinates of the orthorectified image (the Long/Lat coordinates are 
+calculated through meta-data informations. It is also possible to specify the map projection of the output.
+\item Output image: The module allow to only orthorectified a Region Of interest inside the input dataset. This tab allow the X and Y size 
+around the center pixel coordinate or from the upper left index. The orthorectified imagery can also be resample at any resolution in the
+line or column directions by setting the "Spacing X" and the "Spacing Y" and choosing the method of interpolation.
+\item DEM: Indicate path to a directory containing SRTM elevation file. The application is able to detect inside the direcory which 
+DEM files are relevant in the process.
+\item Image extent: Compare the initial image extension with the preview the orthorectified result. This preview is automatically 
+updated if the user change the "Size X" or "Size Y" values in the "Output Image" tab.   
+\end{itemize}
+
+\begin{figure}
+   \center
+   \includegraphics[width=0.44\textwidth]{monteverdi_ortho_extent.eps}
+   \itkcaption[Preview of the orthorectified imagery]{Orthorectification module.}
+   \label{fig:concatenate}
+\end{figure}
 
 \subsection{Re-projection module}
+Allow raster reprojection of raster images.
 \subsection{Registering 2 images by taking homologous point}
 This module allows to register two images by taking separately homologous points in the reference image and in the image 
 that you need to register. The principle is to estimate a transformation with the list of points.
 The output of the module the input image that you need to register where the calculate transformation was applied. 
+
+\begin{figure}
+   \center
+   \includegraphics[width=0.44\textwidth]{monteverdi_homologous_point.eps}
+   \itkcaption[Estimate transformation between 2 images]{Homologous point module.}
+   \label{fig:concatenate}
+\end{figure}
+
+
 \subsection{Estimating sensor model based on ground control points}
 This module allows to take ground copntrol points on a raster image where you 
 This GCPs list is making correspondence between pixel coordinate in the input image and physical coordinates. The list
@@ -474,8 +496,11 @@ allows to derive a general function which to translate any pixel coordinates in 
 based on a RPC transformation (Rational Polynomial Coefficients). As a consequence, the module enriches the output image 
 with metadata informations defining a RPC sensor model associated with the input raster. 
 There is several ways to generate the GCPs:
---With a Internet connection: Dynamically generate the correspondence on the input image and Open Street Map layers
---Without an  Internet connection
+
+\begin{itemize}
+\item With a Internet connection: Dynamically generate the correspondence on the input image and Open Street Map layers
+\item Without an  Internet connection
+\end{itemize}
 
 It is also possible to import/export the GCP list from/to an XML file.
 
