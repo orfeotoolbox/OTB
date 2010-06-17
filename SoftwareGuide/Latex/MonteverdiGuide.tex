@@ -471,7 +471,7 @@ updated if the user change the "Size X" or "Size Y" values in the "Output Image"
    \center
    \includegraphics[width=0.44\textwidth]{monteverdi_ortho_extent.eps}
    \itkcaption[Preview of the orthorectified imagery]{Orthorectification module.}
-   \label{fig:concatenate}
+   \label{fig:ortho}
 \end{figure}
 
 \subsection{Re-projection module}
@@ -485,7 +485,7 @@ The output of the module the input image that you need to register where the cal
    \center
    \includegraphics[width=0.44\textwidth]{monteverdi_homologous_point.eps}
    \itkcaption[Estimate transformation between 2 images]{Homologous point module.}
-   \label{fig:concatenate}
+   \label{fig:homologous}
 \end{figure}
 
 
@@ -498,8 +498,9 @@ with metadata informations defining a RPC sensor model associated with the input
 There is several ways to generate the GCPs:
 
 \begin{itemize}
-\item With a Internet connection: Dynamically generate the correspondence on the input image and Open Street Map layers
-\item Without an  Internet connection
+\item With a Internet connection: Dynamically generate the correspondance on the input image and Open Street Map layers
+\item Without an  Internet connection: Set manually Ground control points : indicate index position and cartographic 
+coordinates in the input image.  
 \end{itemize}
 
 It is also possible to import/export the GCP list from/to an XML file.
@@ -508,34 +509,83 @@ This output image could be without getting any geometric informations. Moreover,
 in its metadata, the module allows to add or remove points from the existing list which is automatically loaded.       
 
 \section{Calibration}
-The basic idea is to be able to  
+In the solar spectrum, sensors on Earth remote sensing satellites measure
+the radiance reflected by the atmosphere-Earth surface system illuminated by the sun. This signal
+depends on the surface reflectance, but it is also perturbed by two atmospheric processes, the
+gaseous absorption and the scattering by molecules and aerosols.
+
+   
 \subsection{Optical calibration}
 In the case of the Optical calibration, the basic idea is to be able to retrieve reflectance of the observed physical object.
 The input image contains only numerical which 
 The process can be split in 3 main operations:
 \begin{itemize}
-\item Derived luminance from the numerical count in the input image. 
+\item Derived luminance from the raw value in the input image. 
 \item Convert the Luminance to Reflectance to produce the TOA(Top Of Atmosphere) image.
 \item Inverse a radiative transfer code which simulate the reflection of solar radiation by a coupled atmosphere-surface system. This step produce 
 the TOC (Top of Canopy) imagery which is the final result of the Optical calibration module. 
 \end{itemize}
     
-The module produce also a calculeted product which the TOC - TOA image.
+\begin{figure}
+   \center
+   \includegraphics[width=0.44\textwidth]{monteverdi_optical_calibration.eps}
+   \itkcaption[GUI of the optical calibration module based on the 6S model]{Optical calibration module.}
+   \label{fig:opticalcalibration}
+\end{figure}
+
+The 6S model needs atmospheric parameters to be able to compute radiative terms to estimate the atmoshperic contributions on the input
+signal. Default parameters are available in the module but it is possible to indicate AERONET file. The AERONET 
+(AErosol RObotic NETwork) program is a federation of ground-based remote sensing aerosol networks established by 
+NASA and PHOTONS (Univ. of Lille 1, CNES, and CNRS-INSU) and is greatly expanded by collaborators from national 
+agencies, institutes, universities, individual scientists, and partners. The program provides accessible public 
+domain database of aerosol optical, mircrophysical and radiative properties.
+
+The module produce different outputs:
+
+\begin{itemize}
+\item Luminance image
+\item TOA reflectance image
+\item TOC reflectance image
+\end{itemize}
+
+
+\begin{figure}
+   \center
+   \includegraphics[width=0.44\textwidth]{monteverdi_optical_calibration_outputs.eps}
+   \itkcaption[Output of the optical calibration module]{Optical calibration module's outputs.}
+   \label{fig:opticalcalibrationoutput}
+\end{figure}
 
 \subsection{SAR calibration}
 
 The calibration and validation of the measurement systems are important to maintain the
 reliability and reproducibility of the SAR measurements but the establishment of correspondence between quantities measured 
-by SAR and physical measure requires scientific background. The SAR calibration module allow to estimate quantitative accuracy
-from Terra SAR X.
+by SAR and physical measure which requires scientific background. The SAR calibration module allow to estimate quantitative accuracy
+from Terra SAR X imagery.
 Describe the outputs!!!
 
 \section{Filtering Operations}
 \subsection{Band Math}
 The Band Math module allow to perform simple mathematical operations (addition, substraction, multiplication) on 2 images. 
 An operational example, on how this simple module can produce reliable information.
-In rapid mapping context, it allows to compare easily . Figure XX shows the result of the substraction of water indices . The diiference was produce by the band math module
-and allow to get a reliable estimation of the flood events.
+In rapid mapping context, it allows to compare easily . Figure \ref{ndwi2} shows the result of the subtraction of a water indice on 2 images
+which was taken before and during the crisis event. 
+The difference was produce by the band math module and allow to get a reliable estimation of the flood events.
+
+\begin{figure}
+   \center
+   \includegraphics[width=0.44\textwidth]{monteverdi_band_math_substraction.eps}
+   \itkcaption[Band math operations module]{Subtraction module.}
+   \label{fig:concatenate}
+\end{figure}
+
+\begin{figure}
+   \center
+   \includegraphics[width=0.44\textwidth]{monteverdi_NDWI2_substraction.eps}
+   \itkcaption[Difference of NDWI2 on 2 images]{Subtraction of NDWI2.}
+   \label{fig:ndwi2}
+\end{figure}
+
 \subsection{Feature extraction}
 \subsection{Mean-shift segmentation}
 \section{Learning}
