@@ -37,8 +37,7 @@ GCPsToRPCSensorModelImageFilter<TImage>
   m_MeanElevation(0.),
   m_DEMHandler(),
   m_GCPsContainer(),
-  m_RpcProjection(),
-  m_Projection()
+  m_RpcProjection()
 {
   // This filter does not modify the image buffer, but only its
   // metadata.Therefore, it can be run inplace to reduce memory print.
@@ -114,8 +113,8 @@ GCPsToRPCSensorModelImageFilter<TImage>
   // Create the ground point with elevation
   Point3DType groundPointWithElevation;
   // Fill it with ground point data
-  groundPointWithElevation[0] = groundPoint[0];
-  groundPointWithElevation[1] = groundPoint[1];
+  groundPointWithElevation[1] = groundPoint[0];
+  groundPointWithElevation[0] = groundPoint[1];
 
   // Check wether we are using a DEM or not
   if (m_UseDEM)
@@ -233,12 +232,12 @@ GCPsToRPCSensorModelImageFilter<TImage>
 
   gpoint.hgt = height;
 
-  if (m_Projection != NULL)
+  if (m_RpcProjection != NULL)
     {
-    m_Projection->lineSampleToWorld(spoint, gpoint);
+    m_RpcProjection->lineSampleToWorld(spoint, gpoint);
 
-    groundPoint[0] = gpoint.lon;
-    groundPoint[1] = gpoint.lat;
+    groundPoint[1] = gpoint.lon;
+    groundPoint[0] = gpoint.lat;
     groundPoint[2] = gpoint.hgt;
     }
   else
@@ -288,17 +287,15 @@ GCPsToRPCSensorModelImageFilter<TImage>
     idTrans3D[1] = groundPointTemp[1];
     idTrans3D[2] = groundPointTemp[2];
 
-    double distance = idOut3D.EuclideanDistanceTo(idTrans3D);
-    double error = vcl_sqrt(distance);
+    double error = idOut3D.EuclideanDistanceTo(idTrans3D);
 
     // Add error to the container
     m_ErrorsContainer.push_back(error);
 
     // Compute mean error
-    sum += distance;
+    sum += error;
     }
 
-  sum = vcl_sqrt(sum);
   m_MeanError = sum / static_cast<double>(m_ErrorsContainer.size());
 }
 
@@ -339,7 +336,7 @@ GCPsToRPCSensorModelImageFilter<TImage>
     }
 
   // Build the ossim rpc solver
-  ossimRefPtr<ossimRpcSolver> rpcSolver = new ossimRpcSolver(false, false);
+  ossimRefPtr<ossimRpcSolver> rpcSolver = new ossimRpcSolver(true, false);
 
   // Call the solve method
   rpcSolver->solveCoefficients(sensorPoints, geoPoints);
@@ -355,14 +352,11 @@ GCPsToRPCSensorModelImageFilter<TImage>
   rpcModel->saveState(geom_kwl);
 
   // Compute projection
-  ossimRefPtr<ossimRpcProjection> objp = dynamic_cast<ossimRpcProjection*>(
+  m_RpcProjection = dynamic_cast<ossimRpcProjection*>(
     rpcSolver->createRpcProjection()->getProjection());
   ossimKeywordlist kwl;
-  objp->saveState(kwl);
-  m_RpcProjection->loadState(kwl);
-  m_Projection = m_RpcProjection.get();
-
-  // Compute errors
+  m_RpcProjection->saveState(kwl);
+   // Compute errors
   this->ComputeErrors();
 
   // Build an otb::ImageKeywordList

@@ -212,9 +212,6 @@ private:
   /** RPC Projection */
   ossimRefPtr<ossimRpcProjection> m_RpcProjection;
 
-  /** Projection */
-  ossimRefPtr<ossimProjection> m_Projection;
-
   /** Keywordlist */
   ImageKeywordlist m_Keywordlist;
 
