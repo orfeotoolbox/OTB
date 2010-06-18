@@ -66,7 +66,10 @@ public:
       for (unsigned s = 0; s < this->GetHisto()[r].size(); ++s)
         {
         double p = static_cast<double>(this->GetHisto()[r][s]);
-        out += (static_cast<double>(s) + 0.5) * this->GetNeighBinLength() * p;
+        double pixProd =
+          ((static_cast<double>(r) + 0.5) * this->GetOffsetBinLength())
+          * ((static_cast<double>(s) + 0.5) * this->GetNeighBinLength());
+        out += pixProd * p;
         }
       }
 
