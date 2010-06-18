@@ -66,7 +66,7 @@ public:
     for (unsigned sB = 0; sB < this->GetHisto()[0].size(); sB++)
       {
       double nCeil = (static_cast<double>(sB) + 0.5) * this->GetNeighBinLength();
-      double nCeilSquare = vcl_pow(nCeil, 2);
+      double nCeilSquare = nCeil*nCeil;
       for (unsigned r = 0; r < this->GetHisto().size(); ++r)
         {
         double rVal = (static_cast<double>(r) + 0.5) * this->GetOffsetBinLength();
