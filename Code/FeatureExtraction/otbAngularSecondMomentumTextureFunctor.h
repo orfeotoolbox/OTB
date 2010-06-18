@@ -67,7 +67,7 @@ public:
       for (unsigned s = 0; s < this->GetHisto()[r].size(); ++s)
         {
         double p = static_cast<double>(this->GetHisto()[r][s]) * areaInv;
-        out += vcl_pow(p, 2);
+        out += p*p;
         }
       }
     return out;
