@@ -65,12 +65,12 @@ public:
       {
       for (unsigned s = 0; s < this->GetHisto()[r].size(); ++s)
         {
-        double p = static_cast<double>(this->GetHisto()[r][s]) * areaInv;
+        double p = static_cast<double>(this->GetHisto()[r][s]);
         out += (static_cast<double>(s) + 0.5) * this->GetNeighBinLength() * p;
         }
       }
 
-    return out;
+    return out * areaInv;
   }
 };
 
