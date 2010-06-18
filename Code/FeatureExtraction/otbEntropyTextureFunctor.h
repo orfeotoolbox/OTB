@@ -58,29 +58,25 @@ public:
   typedef typename Superclass::OffsetType                                   OffsetType;
   typedef typename Superclass::RadiusType                                   RadiusType;
   typedef typename Superclass::NeighborhoodType                             NeighborhoodType;
-  /*
-  typedef TIterInput                            IterType;
-  typedef TOutput                               OutputType;
-  typedef typename IterType::InternalPixelType  InternalPixelType;
-  typedef typename IterType::ImageType          ImageType;
-  typedef itk::Neighborhood<InternalPixelType,::itk::GetImageDimension<ImageType>::ImageDimension>    NeighborhoodType;
-  */
 
   virtual double ComputeOverSingleChannel(const NeighborhoodType& neigh, const NeighborhoodType& neighOff)
   {
     this->ComputeJointHistogram(neigh, neighOff);
+    
     double area = static_cast<double>(neigh.GetSize()[0] * neigh.GetSize()[1]);
     double areaInv = 1 / area;
     double out = 0.;
+    double p = 0.;
+    double epsilon = 0.0000000001;
     for (unsigned r = 0; r < this->GetHisto().size(); ++r)
       {
       for (unsigned s = 0; s < this->GetHisto()[r].size(); ++s)
         {
-        double p = static_cast<double>(this->GetHisto()[r][s]) * areaInv;
-        if (p != 0) out += (p * vcl_log(p));
+        p = static_cast<double>(this->GetHisto()[r][s]) * areaInv;
+        if (vcl_abs(p) > epsilon) out += (p * vcl_log(p));
         }
       }
-    if (out != 0.) out = -(out);
+    if (vcl_abs(out) > epsilon) out = -(out);
 
     return out;
   }
