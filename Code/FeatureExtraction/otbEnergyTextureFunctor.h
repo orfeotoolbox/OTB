@@ -60,37 +60,22 @@ public:
 
   double ComputeOverSingleChannel(const NeighborhoodType& neigh, const NeighborhoodType& neighOff)
   {
-    RadiusType radius = neigh.GetRadius();
-    double     area = static_cast<double>(neigh.GetSize()[0] * neigh.GetSize()[1]);
-
-    OffsetType offset;
-    offset.Fill(0);
-    OffsetType offsetOff;
-    OffsetType offsetOffInit;
-
-    offsetOffInit[0] = -radius[0] + this->GetOffset()[0] - 1;
-    offsetOffInit[1] = -radius[1] + this->GetOffset()[1] - 1;
-
-    double temp = 0.;
-    double norm = 0.;
-
-    offsetOff = offsetOffInit;
-    for (int l = -static_cast<int>(radius[0]); l <= static_cast<int>(radius[0]); l++)
+    this->ComputeJointHistogram(neigh, neighOff);
+    
+    double area = static_cast<double>(neigh.GetSize()[0] * neigh.GetSize()[1]);
+    double areaInv = 1 / area;
+    double out = 0.;
+    double p = 0.;
+    for (unsigned r = 0; r < this->GetHisto().size(); ++r)
       {
-      offsetOff[0]++;
-      offsetOff[1] = offsetOffInit[1];
-      offset[0] = l;
-      for (int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); ++k)
+      for (unsigned s = 0; s < this->GetHisto()[r].size(); ++s)
         {
-        offsetOff[1]++;
-        offset[1] = k;
-        norm = vcl_pow(static_cast<double>((neigh[offset] - neighOff[neighOff.GetCenterNeighborhoodIndex()])), 2);
-        temp += norm;
+        p = static_cast<double>(this->GetHisto()[r][s]) * areaInv;
+        out += p*p;
         }
       }
-    temp /= area;
-    return vcl_pow(temp, 2);
-  }
+    return out;
+    }
 
 };
 
