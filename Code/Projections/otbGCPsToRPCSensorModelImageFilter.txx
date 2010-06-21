@@ -191,8 +191,8 @@ GCPsToRPCSensorModelImageFilter<TImage>
     // Sensor and Ground points
     Point3DType groundPoint;
 
-    groundPoint[0] = imagePtr->GetGCPX(i);  // Lat
-    groundPoint[1] = imagePtr->GetGCPY(i);  // Lon
+    groundPoint[0] = imagePtr->GetGCPX(i);  // Lon
+    groundPoint[1] = imagePtr->GetGCPY(i);  // Lat
     groundPoint[2] = imagePtr->GetGCPZ(i);
 
     // Search image GCPs and remove them from container
