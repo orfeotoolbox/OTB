@@ -104,7 +104,7 @@ template <class TCh1, class TCh2, class TDiagram, class TOutput, unsigned int m_
     
     DiagramIndexType featureIndex;
     
-    struct NodeType auxNodo;
+    //struct NodeType auxNodo;
 
     //Presuponemos que las clases estan ordenadas, siendo cero el fondo y
     //1,2,3...  las clases.
