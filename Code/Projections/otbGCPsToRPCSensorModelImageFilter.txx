@@ -113,8 +113,8 @@ GCPsToRPCSensorModelImageFilter<TImage>
   // Create the ground point with elevation
   Point3DType groundPointWithElevation;
   // Fill it with ground point data
-  groundPointWithElevation[1] = groundPoint[0];
-  groundPointWithElevation[0] = groundPoint[1];
+  groundPointWithElevation[0] = groundPoint[0];
+  groundPointWithElevation[1] = groundPoint[1];
 
   // Check wether we are using a DEM or not
   if (m_UseDEM)
@@ -191,8 +191,8 @@ GCPsToRPCSensorModelImageFilter<TImage>
     // Sensor and Ground points
     Point3DType groundPoint;
 
-    groundPoint[1] = imagePtr->GetGCPX(i);  // Lat
-    groundPoint[0] = imagePtr->GetGCPY(i);  // Lon
+    groundPoint[0] = imagePtr->GetGCPX(i);  // Lat
+    groundPoint[1] = imagePtr->GetGCPY(i);  // Lon
     groundPoint[2] = imagePtr->GetGCPZ(i);
 
     // Search image GCPs and remove them from container
@@ -236,8 +236,8 @@ GCPsToRPCSensorModelImageFilter<TImage>
     {
     m_RpcProjection->lineSampleToWorld(spoint, gpoint);
 
-    groundPoint[1] = gpoint.lon;
-    groundPoint[0] = gpoint.lat;
+    groundPoint[0] = gpoint.lon;
+    groundPoint[1] = gpoint.lat;
     groundPoint[2] = gpoint.hgt;
     }
   else
@@ -325,8 +325,8 @@ GCPsToRPCSensorModelImageFilter<TImage>
     // Fill sensor point
     sensorPoint = ossimDpt(gcpIt->first[0], gcpIt->first[1]);
 
-    // Fill geo point
-    geoPoint = ossimGpt(gcpIt->second[0], gcpIt->second[1], gcpIt->second[2]);
+    // Fill geo point (lat, lon, elev)
+    geoPoint =  ossimGpt(gcpIt->second[1], gcpIt->second[0], gcpIt->second[2]);
 
     // Add the sensor point to the list
     sensorPoints.push_back(sensorPoint);
