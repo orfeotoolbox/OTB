@@ -31,7 +31,9 @@ IF(NOT IMAGEMAGICK_CONVERT_EXECUTABLE)
 ENDIF(NOT IMAGEMAGICK_CONVERT_EXECUTABLE)
 
 
-
+IF(NOT BMEPS_EXECUTABLE)
+  MESSAGE("bmeps utility was not found. Please pass to advanced mode and provide its full path. It is part of DKTools available on http://dktools.sourceforge.net/")
+ENDIF(NOT BMEPS_EXECUTABLE)
 
 ADD_CUSTOM_TARGET(SoftwareGuideArt  ALL echo)
 
@@ -77,8 +79,8 @@ FOREACH(image ${TIFF_IMAGES})
   GET_FILENAME_COMPONENT(ImageBase ${Imagebase} NAME_WE)
   ADD_CUSTOM_COMMAND( 
   SOURCE    ${SoftwareGuide_SOURCE_DIR}/Art/${ImageBase}.tif
-  COMMAND   ${IMAGEMAGICK_CONVERT_EXECUTABLE}
-  ARGS      ${SoftwareGuide_SOURCE_DIR}/Art/${ImageBase}.tif
+  COMMAND   ${BMEPS_EXECUTABLE}
+  ARGS      "-ttiff" ${SoftwareGuide_SOURCE_DIR}/Art/${ImageBase}.tif
             ${ImageBase}.eps
   TARGET    SoftwareGuideArt
   OUTPUTS   ${SoftwareGuide_BINARY_DIR}/Art/${ImageBase}.eps
@@ -91,8 +93,8 @@ FOREACH(image ${JPEG_IMAGES})
   GET_FILENAME_COMPONENT(ImageBase ${Imagebase} NAME_WE)
   ADD_CUSTOM_COMMAND( 
   SOURCE    ${SoftwareGuide_SOURCE_DIR}/Art/${ImageBase}.jpg
-  COMMAND   ${IMAGEMAGICK_CONVERT_EXECUTABLE}
-  ARGS      ${SoftwareGuide_SOURCE_DIR}/Art/${ImageBase}.jpg
+  COMMAND   ${BMEPS_EXECUTABLE}
+  ARGS      "-tjpg" ${SoftwareGuide_SOURCE_DIR}/Art/${ImageBase}.jpg
             ${ImageBase}.eps
   TARGET    SoftwareGuideArt
   OUTPUTS   ${SoftwareGuide_BINARY_DIR}/Art/${ImageBase}.eps
@@ -105,8 +107,8 @@ FOREACH(image ${PNG_IMAGES})
   GET_FILENAME_COMPONENT(ImageBase ${Imagebase} NAME_WE)
   ADD_CUSTOM_COMMAND( 
   SOURCE    ${SoftwareGuide_SOURCE_DIR}/Art/${ImageBase}.png
-  COMMAND   ${IMAGEMAGICK_CONVERT_EXECUTABLE}
-  ARGS      ${SoftwareGuide_SOURCE_DIR}/Art/${ImageBase}.png
+  COMMAND   ${BMEPS_EXECUTABLE}
+  ARGS      "-tpng" ${SoftwareGuide_SOURCE_DIR}/Art/${ImageBase}.png
             ${ImageBase}.eps
   TARGET    SoftwareGuideArt
   OUTPUTS   ${SoftwareGuide_BINARY_DIR}/Art/${ImageBase}.eps
@@ -142,7 +144,7 @@ FOREACH(image ${MONTEVERDI_PNG_IMAGES})
   GET_FILENAME_COMPONENT(ImageBase ${Imagebase} NAME_WE)
   ADD_CUSTOM_COMMAND( 
   SOURCE    ${SoftwareGuide_SOURCE_DIR}/Art/MonteverdiImages/${ImageBase}.png
-  COMMAND   ${IMAGEMAGICK_CONVERT_EXECUTABLE}
+  COMMAND   ${BMEPS_EXECUTABLE}
   ARGS      ${SoftwareGuide_SOURCE_DIR}/Art/MonteverdiImages/${ImageBase}.png
             ${ImageBase}.eps
   TARGET    SoftwareGuideArt
