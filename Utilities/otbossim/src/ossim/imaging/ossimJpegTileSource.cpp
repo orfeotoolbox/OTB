@@ -506,14 +506,6 @@ bool ossimJpegTileSource::open()
    thePrivateData = new PrivateData();
    rewind(theFilePtr);
 
-/*
-   std::ifstream file("file.bin", std::ios_base::binary | std::ios_base::ate | std::ios_base::in);
-   int filesize = file.tellg();
-   char* buffer = new char[filesize];
-   file.seekg(0, std::ios_base::beg);
-   file.read(buffer, filesize);
-   file.close();
-*/
    //---
    // Step 1: allocate and initialize JPEG decompression object
    // We set up the normal JPEG error routines, then override error_exit.
@@ -690,7 +682,7 @@ void ossimJpegTileSource::restart()
    jpeg_create_decompress(&thePrivateData->theCinfo);
 
    // Specify data source.
-   jpeg_stdio_src(&thePrivateData->theCinfo, theFilePtr);
+   ossimJpegStdIOSrc(&thePrivateData->theCinfo, theFilePtr);
 
    // Read the file parameters with jpeg_read_header.
    jpeg_read_header(&thePrivateData->theCinfo, TRUE);
