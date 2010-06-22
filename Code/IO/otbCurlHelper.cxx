@@ -35,13 +35,9 @@ int CurlHelper::TestUrlAvailability(const std::string& url) const
   CURLcode res = CURL_LAST;
   curl = curl_easy_init();
 
-  // Set up the browser
-  std::string browser =
-    "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-GB; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11";
-
   if (curl)
     {
-    curl_easy_setopt(curl, CURLOPT_USERAGENT, browser.data());
+    curl_easy_setopt(curl, CURLOPT_USERAGENT, m_Browser.data());
     curl_easy_setopt(curl, CURLOPT_URL, url.data());
     // Set the dummy write function
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &Self::curlDummyWriteFunction);
@@ -69,26 +65,32 @@ int CurlHelper::RetrieveFile(const std::string& urlString, std::string filename)
   CURLcode res = CURL_LAST;
 
   FILE* output_file = fopen(filename.c_str(), "w");
+ 
   curl = curl_easy_init();
-
+  
   char url[256];
-  strcpy(url, urlString.data());
+  strcpy(url, urlString.c_str());
 
-//   std::cout << url << std::endl;
   if (curl)
     {
-    std::vector<char> chunk;
     curl_easy_setopt(curl, CURLOPT_URL, url);
 
     // Set 5s timeout
     curl_easy_setopt(curl, CURLOPT_TIMEOUT, 5);
+    
+    // Use our writing static function to avoid file descriptor 
+    // pointer crash on windows
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &Self::write_data);
 
-    curl_easy_setopt(curl, CURLOPT_WRITEDATA, output_file);
+    // Say the file where to write the received data
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void*)output_file);
+    
     res = curl_easy_perform(curl);
 
-    fclose(output_file);
     /* always cleanup */
     curl_easy_cleanup(curl);
+    
+    fclose(output_file);
     }
   return res;
 #else
@@ -105,7 +107,7 @@ int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs,
 #ifdef OTB_USE_CURL
 #ifdef OTB_CURL_MULTI_AVAILABLE
   otbMsgDevMacro(<< "Using curl multi");
-  std::string  m_Browser = "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-GB; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11";
+  //std::string  m_Browser = "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-GB; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11";
 
   CURLM *             multiHandle;
   std::vector<CURL *> listCurlHandles;
@@ -155,7 +157,8 @@ int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs,
     // Param easy handle
     curl_easy_setopt(lEasyHandle, CURLOPT_USERAGENT, m_Browser.data());
     curl_easy_setopt(lEasyHandle, CURLOPT_URL, (*url).data());
-    curl_easy_setopt(lEasyHandle, CURLOPT_WRITEDATA, *file);
+    curl_easy_setopt(lEasyHandle, CURLOPT_WRITEFUNCTION, &Self::write_data);
+    curl_easy_setopt(lEasyHandle, CURLOPT_WRITEDATA, (void*)(*file));
 
     // Add easy handle to multi handle
     curl_multi_add_handle(multiHandle, lEasyHandle);
@@ -166,7 +169,7 @@ int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs,
     ++file;
     }
 
-//fetch tiles
+  //fetch tiles
   // Configure multi handle - set the maximum connections
   curl_multi_setopt(multiHandle, CURLMOPT_MAXCONNECTS, maxConnect);
   curl_multi_setopt(multiHandle, CURLMOPT_PIPELINING, 0);
