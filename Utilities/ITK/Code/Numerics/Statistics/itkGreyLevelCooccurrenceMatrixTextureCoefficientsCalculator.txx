@@ -53,6 +53,14 @@ Compute( void )
     m_Inertia = m_ClusterShade = m_ClusterProminence = m_HaralickCorrelation = 0;
       
   double pixelVarianceSquared = pixelVariance * pixelVariance;
+
+  // Variance is only used in correlation. If variance is 0, then index[0] - pixelMean) * (index[1] - pixelMean)
+  // should be zero as well. In this case, set the variance to 1. in order to avoid NaN correlation.
+  if(pixelVarianceSquared < 0.0001)
+    {
+    pixelVarianceSquared = 1.;
+    }
+
   double log2 = vcl_log(2.);
   for (HistogramIterator hit = m_Histogram->Begin();
        hit != m_Histogram->End(); ++hit)
