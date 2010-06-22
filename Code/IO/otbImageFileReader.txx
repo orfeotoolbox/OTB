@@ -391,7 +391,10 @@ ImageFileReader<TOutputImage>
           //we need to pass the depth information which in on the IO to the projection
           //to be handle throught the kwl
           typename TileMapImageIO::Pointer imageIO = dynamic_cast<TileMapImageIO*>(this->GetImageIO());
-          dynamic_cast<ossimTileMapModel*>(projection)->setDepth(imageIO->GetDepth());
+	  if(imageIO.IsNotNull())
+	    {
+	      dynamic_cast<ossimTileMapModel*>(projection)->setDepth(imageIO->GetDepth());
+	    }
           }
         hasMetaData = projection->saveState(geom_kwl);
 //             delete projection; //FIXME find out where this should occur
