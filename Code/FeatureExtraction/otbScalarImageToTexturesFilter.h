@@ -26,7 +26,54 @@
 namespace otb
 {
 /** \class ScalarImageToTexturesFilter
- *  \brief
+ *  \brief This class computes the standard texture indices based on GLCM.
+ *
+ *  This class computes the classical texture features based on the grey-level co-occurrence matrix.
+ *  The co-occurence matrix is estimated over a neighborhood given by the user-defined radius, and the features
+ *  are then derived from this matrix.
+ *
+ *  This filter takes advantages of the GreyLevelCooccurrenceMatrixTextureCoefficientsCalculator filter from ITK,
+ *  as well as the otb::MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator.
+ *
+ * The features calculated are as follows (where \f$ g(i, j) \f$ is the element in
+ * cell i, j of a a normalized GLCM):
+ *
+ * "Energy" \f$ = f_1 = \sum_{i,j}g(i, j)^2 \f$
+ *
+ * "Entropy" \f$ = f_2 = -\sum_{i,j}g(i, j) \log_2 g(i, j)\f$, or 0 if \f$g(i, j) = 0\f$
+ *
+ * "Correlation" \f$ = f_3 = \sum_{i,j}\frac{(i - \mu)(j - \mu)g(i, j)}{\sigma^2} \f$
+ *
+ * "Difference Moment" \f$= f_4 = \sum_{i,j}\frac{1}{1 + (i - j)^2}g(i, j) \f$
+ *
+ * "Inertia" \f$ = f_5 = \sum_{i,j}(i - j)^2g(i, j) \f$ (sometimes called "contrast.")
+ *
+ * "Cluster Shade" \f$ = f_6 = \sum_{i,j}((i - \mu) + (j - \mu))^3 g(i, j) \f$
+ *
+ * "Cluster Prominence" \f$ = f_7 = \sum_{i,j}((i - \mu) + (j - \mu))^4 g(i, j) \f$
+ *
+ * "Haralick's Correlation" \f$ = f_8 = \frac{\sum_{i,j}(i, j) g(i, j) -\mu_t^2}{\sigma_t^2} \f$
+ * where \f$\mu_t\f$ and \f$\sigma_t\f$ are the mean and standard deviation of the row
+ * (or column, due to symmetry) sums.
+ *
+ * Above, \f$ \mu =  \f$ (weighted pixel average) \f$ = \sum_{i,j}i \cdot g(i, j) =
+ * \sum_{i,j}j \cdot g(i, j) \f$ (due to matrix summetry), and
+ *
+ * \f$ \sigma =  \f$ (weighted pixel variance) \f$ = \sum_{i,j}(i - \mu)^2 \cdot g(i, j) =
+ * \sum_{i,j}(j - \mu)^2 \cdot g(i, j)  \f$  (due to matrix summetry)
+ *
+ * The Radius parameter is the radius of the window over which the co-occurence matrix is estimated at
+ * each pixel location. The Offset parameter is the offset used in the matrix estimation, defining orientation
+ * and frequency of the texture to denote. The NumberOfBinsPerAxis allows to tune the resolution of the bins in
+ * the co-occurence matrix, and the InputPixelMinimum and InputPixelMaximum parameters is used in bin width computation
+ * along with the NumberOfBinPerAxis.
+ *
+ * For more information, please refer to the documentation of the following class :
+ * \sa MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator
+ * \sa GreyLevelCooccurrenceMatrixTextureCoefficientsCalculator
+ *
+ * \ingroup Streamed
+ * \ingroup Threaded
  */
 
 template<class TInpuImage, class TOutputImage>
