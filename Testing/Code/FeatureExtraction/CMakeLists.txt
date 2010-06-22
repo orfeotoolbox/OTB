@@ -1776,6 +1776,21 @@ ADD_TEST(feTvSqrtSpectralAngleImageFilter ${FEATUREEXTRACTION_TESTS15}
         185 270 150 619 #reference pixel
 )
 
+# -------            otb::ScalarImageToTexturesFilter (Ossman)------------------------------
+ADD_TEST(feTuScalarImageToTexturesFilterNew ${FEATUREEXTRACTION_TESTS15}
+        otbScalarImageToTexturesfilterNew
+)
+
+ADD_TEST(feTvScalarImageToTexturesFilter ${FEATUREEXTRACTION_TESTS15}
+        otbScalarImageToTexturesFilter
+        ${INPUTDATA}/Mire_Cosinus_500_500.png
+        ${TEMP}/feTvScalarImageToTexturesFilterOutput
+        256
+        5
+        1
+        1
+)
+
 
 # A enrichir
 SET(BasicFeatureExtraction_SRCS1
@@ -1955,6 +1970,8 @@ otbFeatureExtractionTests15.cxx
 otbImageToLineSegmentVectorDataNew.cxx
 otbImageToLineSegmentVectorData.cxx
 otbSqrtSpectralAngleImageFilter.cxx
+otbScalarImageToTexturesFilterNew.cxx
+otbScalarImageToTexturesFilter.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbFeatureExtractionTests1 "${BasicFeatureExtraction_SRCS1}" "OTBFeatureExtraction;OTBIO;OTBTesting")
