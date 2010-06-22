@@ -1902,6 +1902,10 @@ ADD_TEST(ioTvKMLVectorDataIOFileReaderLines ${IO_TESTS15}
         ${INPUTDATA}/lines.kml
         ${TEMP}/lines.kml)
 
+ADD_TEST(ioTuVectorDataKeywordlistNew ${IO_TESTS15}
+        otbVectorDataKeywordlistNew
+         )
+
 ADD_TEST(ioTvVectorDataKeywordlist ${IO_TESTS15}
         --compare-ascii ${EPSILON_9}
             ${BASELINE_FILES}/ioTuVectorDataKeywordlist.txt
@@ -2525,7 +2529,7 @@ otbKMLVectorDataIONew.cxx
 otbKMLVectorDataIOTestCanRead.cxx
 otbKMLVectorDataIOTestCanWrite.cxx
 otbKMLVectorDataIOTestFileReader.cxx
-otbVectorDataKeywordlist.cxx
+otbVectorDataKeywordlistTest.cxx
 )
 
 SET(BasicIO_SRCS16
