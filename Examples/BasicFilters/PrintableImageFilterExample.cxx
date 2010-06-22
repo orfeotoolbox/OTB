@@ -25,13 +25,13 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {IMAGERY_SSECH.tif}
-//    OUTPUTS: {PrintableExampleOutput1.png}
+//    OUTPUTS: {PrintableExampleOutput1.jpg}
 //    1 2 3
 //  Software Guide : EndCommandLineArgs
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {IMAGERY_SSECH.tif}
-//    OUTPUTS: {PrintableExampleOutput2.png}
+//    OUTPUTS: {PrintableExampleOutput2.jpg}
 //    1 4 2
 //  Software Guide : EndCommandLineArgs
 

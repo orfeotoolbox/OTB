@@ -70,12 +70,12 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {qb_RoadExtract.tif}
-//    OUTPUTS: {ExtractRoadByStepsExampleOutput.png}, {qb_ExtractRoad_pretty.png}
+//    OUTPUTS: {ExtractRoadByStepsExampleOutput.jpg}, {qb_ExtractRoad_pretty.jpg}
 //    337 557 432 859 0.00005 1.0
 //  Software Guide : EndCommandLineArgs
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {qb_RoadExtract2.tif}
-//    OUTPUTS: {ExtractRoadByStepsExampleOutput2.png}, {qb_ExtractRoad_pretty2.png}
+//    OUTPUTS: {ExtractRoadByStepsExampleOutput2.jpg}, {qb_ExtractRoad_pretty2.jpg}
 //    228 316 207 282 0.00005 1.0
 //  Software Guide : EndCommandLineArgs
 

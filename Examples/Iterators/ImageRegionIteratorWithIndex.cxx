@@ -20,7 +20,7 @@
 #endif
 //  Software Guide : BeginCommandLineArgs
 //     INPUTS: {ROI_QB_MUL_2.tif}
-//     OUTPUTS: {ImageRegionIteratorWithIndexOutput.png}
+//     OUTPUTS: {ImageRegionIteratorWithIndexOutput.jpg}
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
