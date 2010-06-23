@@ -88,7 +88,8 @@ int otbScalarImageToAdvancedTexturesFilter(int argc, char * argv[])
   oss<<outprefix<<"Variance.tif";
   writer->SetInput(filter->GetVarianceOutput());
   writer->SetFileName(oss.str());
-
+  writer->Update();
+  
   oss.str("");
   oss<<outprefix<<"SumAverage.tif";
   writer->SetInput(filter->GetSumAverageOutput());
