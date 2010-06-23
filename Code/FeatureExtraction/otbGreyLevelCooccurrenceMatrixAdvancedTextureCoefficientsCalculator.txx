@@ -90,16 +90,16 @@ Compute ()
   m_SumEntropy = 0;
   m_SumVariance = 0;
   double PSSquareCumul = 0;
+  double log2 = vcl_log(2.);
   
   for (long unsigned int i = 0 ; i < m_Histogram->GetSize()[0] + m_Histogram->GetSize()[1]; ++i)
     {
     double psTmp = ComputePS (i);
     
     m_SumAverage += i *psTmp;
-    m_SumEntropy += psTmp * vcl_log ( psTmp );
+    m_SumEntropy -= (psTmp > 0.0001) ? psTmp * vcl_log(psTmp) / log2 : 0;
     PSSquareCumul += i * i * psTmp;
     }                          
-  m_SumEntropy = - m_SumEntropy;
   m_SumVariance = PSSquareCumul - m_SumAverage * m_SumAverage;
   
   double minSizeHist = std::min (m_Histogram->GetSize()[0] , m_Histogram->GetSize()[1]);
@@ -114,10 +114,9 @@ Compute ()
     double pdTmp = ComputePD (i);
     
     PDCumul += i *pdTmp;
-    m_DifferenceEntropy += pdTmp * vcl_log ( pdTmp );
+    m_DifferenceEntropy -= (pdTmp > 0.0001) ? pdTmp * vcl_log(pdTmp) / log2 : 0;
     PDSquareCumul += i * i * pdTmp;
     }
-  m_DifferenceEntropy = - m_SumEntropy;
   m_DifferenceVariance = PDSquareCumul - PDCumul * PDCumul;
   
   typedef typename HistogramType::Iterator HistogramIterator;
@@ -142,7 +141,6 @@ Compute ()
   
   m_Variance = 0;
   double Entropy = 0;
-  double log2 = vcl_log(2.);
   
   for (HistogramIterator hit = m_Histogram->Begin();
        hit != m_Histogram->End(); ++hit)
@@ -159,11 +157,11 @@ Compute ()
     
     double pipj = m_Histogram->GetFrequency (index[0] , 0) * m_Histogram->GetFrequency (index[1] , 1);
     
-    hxy1 += frequency * vcl_log ( pipj );
-    hxy2 += pipj * vcl_log ( pipj );
+    hxy1 += (pipj > 0.0001) ? frequency * vcl_log ( pipj ) : 0;
+    hxy2 += (pipj > 0.0001) ? pipj * vcl_log ( pipj ) : 0;
     }
     
-    m_IC1 = ( Entropy - hxy1 ) / (std::max ( hx, hy ) );
+    m_IC1 = (vcl_abs( std::max ( hx, hy ) ) > 0.0001) ? ( Entropy - hxy1 ) / (std::max ( hx, hy ) ) : 0;
     m_IC2 = vcl_sqrt ( 1 - vcl_exp ( -2. * vcl_abs ( hxy2 - Entropy ) ) ); 
 }   
 
