@@ -317,7 +317,7 @@ public:
       }
   }
 
-  virtual double ComputeOverSingleChannel( ) = 0;
+  virtual double ComputeOverSingleChannel(const NeighborhoodType& neigh, const NeighborhoodType& neighOff) = 0;
 
   /** Return the texture name */
   virtual std::string GetName() const = 0;
