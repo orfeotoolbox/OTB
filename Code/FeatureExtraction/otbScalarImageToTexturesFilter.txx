@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otb_ScalarImageToTexturesFilter_txx
-#define __otb_ScalarImageToTexturesFilter_txx
+#ifndef __otbScalarImageToTexturesFilter_txx
+#define __otbScalarImageToTexturesFilter_txx
 
 #include "otbScalarImageToTexturesFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"

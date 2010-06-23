@@ -23,6 +23,7 @@ extern "C"
 }
 
 #include <ossim/imaging/ossimJpegTileSource.h>
+#include <ossim/imaging/ossimJpegStdIOSrc.h>
 #include <ossim/imaging/ossimTiffTileSource.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
 #include <ossim/base/ossimConstants.h>
@@ -515,7 +516,8 @@ bool ossimJpegTileSource::open()
    jpeg_create_decompress(&thePrivateData->theCinfo);
 
    // Specify data source.
-   jpeg_stdio_src(&thePrivateData->theCinfo, theFilePtr);
+   //jpeg_stdio_src(&thePrivateData->theCinfo, theFilePtr);
+   ossimJpegStdIOSrc(&thePrivateData->theCinfo, theFilePtr);
 
    // Read the file parameters with jpeg_read_header.
    jpeg_read_header(&thePrivateData->theCinfo, TRUE);
@@ -680,7 +682,7 @@ void ossimJpegTileSource::restart()
    jpeg_create_decompress(&thePrivateData->theCinfo);
 
    // Specify data source.
-   jpeg_stdio_src(&thePrivateData->theCinfo, theFilePtr);
+   ossimJpegStdIOSrc(&thePrivateData->theCinfo, theFilePtr);
 
    // Read the file parameters with jpeg_read_header.
    jpeg_read_header(&thePrivateData->theCinfo, TRUE);
