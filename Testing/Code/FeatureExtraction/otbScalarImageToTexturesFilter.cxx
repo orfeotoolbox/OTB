@@ -88,6 +88,7 @@ int otbScalarImageToTexturesFilter(int argc, char * argv[])
   oss<<outprefix<<"Energy.tif";
   writer->SetInput(filter->GetEnergyOutput());
   writer->SetFileName(oss.str());
+  writer->Update();
 
   oss.str("");
   oss<<outprefix<<"Entropy.tif";

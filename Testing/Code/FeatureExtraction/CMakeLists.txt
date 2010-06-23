@@ -1782,14 +1782,27 @@ ADD_TEST(feTuScalarImageToTexturesFilterNew ${FEATUREEXTRACTION_TESTS15}
 )
 
 ADD_TEST(feTvScalarImageToTexturesFilter ${FEATUREEXTRACTION_TESTS15}
+        --compare-n-images ${EPSILON_8} 8   
+            ${BASELINE}/feTvScalarImageToTexturesFilterOutputEnergy.tif
+            ${TEMP}/feTvScalarImageToTexturesFilterOutputEnergy.tif
+            ${BASELINE}/feTvScalarImageToTexturesFilterOutputEntropy.tif
+            ${TEMP}/feTvScalarImageToTexturesFilterOutputEntropy.tif
+            ${BASELINE}/feTvScalarImageToTexturesFilterOutputCorrelation.tif
+            ${TEMP}/feTvScalarImageToTexturesFilterOutputCorrelation.tif
+            ${BASELINE}/feTvScalarImageToTexturesFilterOutputInverseDifferenceMoment.tif
+            ${TEMP}/feTvScalarImageToTexturesFilterOutputInverseDifferenceMoment.tif
+            ${BASELINE}/feTvScalarImageToTexturesFilterOutputInertia.tif
+            ${TEMP}/feTvScalarImageToTexturesFilterOutputInertia.tif
+            ${BASELINE}/feTvScalarImageToTexturesFilterOutputClusterShade.tif
+            ${TEMP}/feTvScalarImageToTexturesFilterOutputClusterShade.tif
+            ${BASELINE}/feTvScalarImageToTexturesFilterOutputClusterProminence.tif
+            ${TEMP}/feTvScalarImageToTexturesFilterOutputClusterProminence.tif
+            ${BASELINE}/feTvScalarImageToTexturesFilterOutputHaralickCorrelation.tif
+            ${TEMP}/feTvScalarImageToTexturesFilterOutputHaralickCorrelation.tif
         otbScalarImageToTexturesFilter
-        ${INPUTDATA}/Mire_Cosinus_500_500.png
-        ${TEMP}/feTvScalarImageToTexturesFilterOutput
-        256
-        5
-        1
-        1
-)
+            ${INPUTDATA}/Mire_Cosinus_500_500.png
+            ${TEMP}/feTvScalarImageToTexturesFilterOutput
+            32 5 2 2)
 
 ADD_TEST(feTuotbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculatorNew ${FEATUREEXTRACTION_TESTS15}
          otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculatorNew
