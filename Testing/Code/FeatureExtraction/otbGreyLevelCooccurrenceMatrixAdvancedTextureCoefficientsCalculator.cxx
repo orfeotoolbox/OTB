@@ -36,7 +36,7 @@ int otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator(int argc
   //------------------------------------------------------
   const unsigned int Dimension = 2;
   typedef float MeasurementType ;
-  typedef itk::Statistics::Histogram< MeasurementType, 2 > HistogramType ;
+  typedef itk::Statistics::Histogram< MeasurementType, Dimension > HistogramType ;
   HistogramType::Pointer histogram = HistogramType::New() ;
   HistogramType::SizeType size ;
   size.Fill(HISTOGRAM_AXIS_LEN) ;
