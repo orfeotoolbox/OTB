@@ -23,8 +23,6 @@
 
 namespace otb {
     
-       
- 
 template< class THistogram >
 void
 GreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator< THistogram >::
@@ -81,8 +79,7 @@ Compute ()
     this->NormalizeHistogram();
     }
       
-  // Now get the various means and variances. This is takes two passes
-  // through the histogram.
+  // Now get the pixel mean.
   double pixelMean;
   this->ComputeMean( pixelMean );
                                                                 
@@ -92,6 +89,7 @@ Compute ()
   double PSSquareCumul = 0;
   double log2 = vcl_log(2.);
   
+  // First pass to compute SumAverage, SumVariance
   for (long unsigned int i = 0 ; i < m_Histogram->GetSize()[0] + m_Histogram->GetSize()[1]; ++i)
     {
     double psTmp = ComputePS (i);
@@ -110,6 +108,7 @@ Compute ()
   double PDSquareCumul = 0;
   double PDCumul = 0;
   
+  // Second pass to compute DifferenceVariance and DifferenceEntropy
   for (long unsigned int i = 0 ; i < minSizeHist ; ++i)
     {
     double pdTmp = ComputePD (i);
@@ -125,6 +124,7 @@ Compute ()
   double hx = 0;
   double hy = 0;
   
+  // Compute hx and hy need to compute f12 and f13 texture coefficients
   for (long unsigned int i = 0 ; i < m_Histogram->GetSize()[0] ; ++i)
     {
     double marginalfreq = m_Histogram->GetFrequency ( i , 0 );
@@ -143,6 +143,7 @@ Compute ()
   m_Variance = 0;
   double Entropy = 0;
   
+  // Third pass over the histogram to compute Sum of squares (variance), entropy (needed for f12)
   for (HistogramIterator hit = m_Histogram->Begin();
        hit != m_Histogram->End(); ++hit)
     {
@@ -159,6 +160,7 @@ Compute ()
     hxy2 -= (pipj > 0.0001) ? pipj * vcl_log ( pipj ) : 0;
     }
     
+    //Finally get f12 and f13
     m_IC1 = (vcl_abs( std::max ( hx, hy ) ) > 0.0001) ? ( Entropy - hxy1 ) / (std::max ( hx, hy ) ) : 0;
     
     m_IC2 = 1 - vcl_exp ( -2. * vcl_abs ( hxy2 - Entropy ) );
