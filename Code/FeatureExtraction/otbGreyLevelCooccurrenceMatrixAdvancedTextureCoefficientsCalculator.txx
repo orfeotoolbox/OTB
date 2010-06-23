@@ -164,8 +164,8 @@ ComputeAdvancedTextures ()
     m_DifferenceEntropy += pdTmp * vcl_log ( pdTmp );
     PDSquareCumul += i * i * pdTmp;
     }
-  m_differenceentropy = - m_sumentropy;
-  m_differencevariance = pdsquarecumul - pdcumul * pdcumul;
+  m_DifferenceEntropy = - m_SumEntropy;
+  m_DifferenceVariance = PDSquareCumul - PDCumul * PDCumul;
   
   typedef typename HistogramType::Iterator HistogramIterator;
   
