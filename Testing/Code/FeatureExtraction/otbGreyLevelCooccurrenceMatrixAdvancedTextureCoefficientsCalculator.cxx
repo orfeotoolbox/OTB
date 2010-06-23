@@ -78,14 +78,14 @@ int otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator(int argc
   glcmCalc->SetHistogram(histogram);
   glcmCalc->Compute();
   
-  double trueVariance = 0.295;
-  double trueSumAverage = 2.26096;
-  double trueSumVariance = 0.12819;
-  double trueSumEntropy = 0.85;
-  double trueDifferenceEntropy = 0.3;
-  double trueDifferenceVariance = 139.1879;
-  double trueIC1 = 2732.557;
-  double trueIC2 = 2264.549;
+  double trueVariance = 7.6475;
+  double trueSumAverage = 0;
+  double trueSumVariance = 0;
+  double trueSumEntropy = 0;
+  double trueDifferenceEntropy = 0.770746;
+  double trueDifferenceVariance = 0.1275;
+  double trueIC1 = 0.557305;
+  double trueIC2 = 0.908663;
   
   double variance = glcmCalc->GetVariance();
   double sumAverage = glcmCalc->GetSumAverage();
