@@ -499,7 +499,13 @@ More specific applications can be contributed to the OTB-Applications package.
 
 \subsection{What are the tests?}
 
-OTB is an ever changing library, it is quite active and have scores of changes per day from different people. It would be a headache to make sure that the brand new improvement that you introduced didn't break anything, if we didn't have automated tests. You also have to take into account differences in OS, compilers, options, versions of external libraries, etc.
+OTB is an ever changing library, it is quite active and have scores of
+changes per day from different people. It would be a headache to make
+sure that the brand new improvement that you introduced didn't break
+anything, if we didn't have automated tests. You also have to take into
+account differences in OS, compilers, options, versions of external
+libraries, etc. By running the tests and submitting it to the dashboard,
+you will help us detect problems and fix them early.
 
 For each class, at minimum there is a test which tries to instantiate it and another one which uses the class. The output of each test (image, text file, binary file) is controlled against a baseline to make sure that the result hasn't changed.
 
@@ -517,7 +523,8 @@ Once OTB is built with the tests, you just have to go to the binary directory wh
 
 \subsection{How to get the test data?}\label{sec:FAQTestData}
 
-Tests data are also versioned using Mercurial (see \ref{sec:FAQMercurial}).
+If you have a problem at the compilation, you can skip this step first.
+Data used for the tests are also versioned using Mercurial (see \ref{sec:FAQMercurial}).
 
 You can get the base doing:
 \begin{verbatim}
@@ -538,7 +545,7 @@ Once you know how to run the tests, you can also help us to detect the bugs or c
 
 You just have to launch ctest with the \texttt{-D Experimental} switch. Hence:
 \begin{verbatim}
-      ctest -D Experimental
+      ctest -D Experimental -A CMakeCache.txt
 \end{verbatim}
 
 And you will be able to see the result at
