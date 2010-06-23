@@ -1778,7 +1778,7 @@ ADD_TEST(feTvSqrtSpectralAngleImageFilter ${FEATUREEXTRACTION_TESTS15}
 
 # -------            otb::ScalarImageToTexturesFilter (Ossman)------------------------------
 ADD_TEST(feTuScalarImageToTexturesFilterNew ${FEATUREEXTRACTION_TESTS15}
-        otbScalarImageToTexturesfilterNew
+        otbScalarImageToTexturesFilterNew
 )
 
 ADD_TEST(feTvScalarImageToTexturesFilter ${FEATUREEXTRACTION_TESTS15}
