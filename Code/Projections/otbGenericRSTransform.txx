@@ -163,17 +163,20 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
       {
       OSRDestroySpatialReference(hSRS);
       firstTransformGiveGeo = false;
+      otbMsgDevMacro(<< "- Considering that the first transform does not give geo (WKT)")
       }
 
     else if (static_cast<OGRSpatialReference *>(hSRS)->IsGeographic())
       {
       OSRDestroySpatialReference(hSRS);
       firstTransformGiveGeo = true;
+      otbMsgDevMacro(<< "- Considering that the first transform gives geo")
       }
     else
       {
       OSRDestroySpatialReference(hSRS);
       firstTransformGiveGeo = false;
+      otbMsgDevMacro(<< "- Considering that the first transform does not give geo (fallback)")
       }
 
     otbMsgDevMacro(<< "Input projection set to identity")
@@ -237,11 +240,16 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
   m_Transform->SetFirstTransform(m_InputTransform);
   m_Transform->SetSecondTransform(m_OutputTransform);
   m_TransformUpToDate = true;
-  //The acurracy information is a simplistic model for now and should be refined
+  //The accuracy information is a simplistic model for now and should be refined
   if ((inputTransformIsSensor || outputTransformIsSensor) && (m_DEMDirectory.empty()))
     {
     //Sensor model without DEM
     m_TransformAccuracy = Projection::ESTIMATE;
+    }
+  else if (firstTransformGiveGeo && !outputTransformIsSensor && !outputTransformIsMap)
+    {
+    //The original image was in lon/lat and we did not change anything
+    m_TransformAccuracy = Projection::PRECISE;
     }
   else if (!inputTransformIsSensor && !outputTransformIsSensor && !inputTransformIsMap && !outputTransformIsMap)
     {

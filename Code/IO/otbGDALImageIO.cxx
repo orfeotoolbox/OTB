@@ -602,6 +602,13 @@ void GDALImageIO::InternalReadImageInformation()
     m_Origin[1] = VadfGeoTransform[3];
     m_Spacing[0] = VadfGeoTransform[1];
     m_Spacing[1] = VadfGeoTransform[5];
+
+    //In this case, we are in a geographic projection
+    // FIXME is there any way to know if we are in WGS 84 ???
+    std::string projRef =
+          "GEOGCS[\"GCS_WGS_1984\",DATUM[\"D_WGS_1984\",SPHEROID[\"WGS_1984\",6378137,298.257223563]],PRIMEM[\"Greenwich\",0],UNIT[\"Degree\",0.017453292519943295]]";
+
+    itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projRef);
     }
 
   /* -------------------------------------------------------------------- */
