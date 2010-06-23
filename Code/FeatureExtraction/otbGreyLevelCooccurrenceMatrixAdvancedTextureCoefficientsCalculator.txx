@@ -106,6 +106,7 @@ Compute ()
   
   m_DifferenceEntropy = 0;
   m_DifferenceVariance = 0;
+
   double PDSquareCumul = 0;
   double PDCumul = 0;
   
@@ -154,8 +155,8 @@ Compute ()
     
     double pipj = m_Histogram->GetFrequency (index[0] , 0) * m_Histogram->GetFrequency (index[1] , 1);
     
-    hxy1 += (pipj > 0.0001) ? frequency * vcl_log ( pipj ) : 0;
-    hxy2 += (pipj > 0.0001) ? pipj * vcl_log ( pipj ) : 0;
+    hxy1 -= (pipj > 0.0001) ? frequency * vcl_log ( pipj ) : 0;
+    hxy2 -= (pipj > 0.0001) ? pipj * vcl_log ( pipj ) : 0;
     }
     
     m_IC1 = (vcl_abs( std::max ( hx, hy ) ) > 0.0001) ? ( Entropy - hxy1 ) / (std::max ( hx, hy ) ) : 0;
