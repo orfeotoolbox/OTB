@@ -104,6 +104,16 @@ IF(NOT IMAGEMAGICK_CONVERT_EXECUTABLE)
 ENDIF(NOT IMAGEMAGICK_CONVERT_EXECUTABLE)
 
 
+#
+# Find bmeps tools
+# This is used to convert image formats from png to eps
+#
+#INCLUDE (${CMAKE_ROOT}/Modules/FindImageMagick.cmake)
+IF(NOT BMEPS_EXECUTABLE)
+  MESSAGE("bmeps utility was not found. Please pass to advanced mode and provide its full path. It is part of DKTools available on http://dktools.sourceforge.net/")
+ENDIF(NOT BMEPS_EXECUTABLE)
+
+
 IF (BUILD_FIGURES)
 
   #

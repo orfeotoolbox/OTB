@@ -1,5 +1,14 @@
 PROJECT(Examples C)
 
+#
+#  Find jpg2ps : this program convert jpg figures 
+#  to Encapsulated Postscript on the command line.
+#
+FIND_PROGRAM(BMEPS_EXECUTABLE
+  NAMES bmeps
+)
+
+
 # Macro defs
 
 # This macro states that the executable "EXECUTABLE" upon execution will generate
@@ -57,7 +66,7 @@ ENDMACRO(CONVERT_AND_FLIP_AND_NORMALIZE_IMG)
 MACRO(CONVERT_IMG SOME_IMG EPS_IMG PATH)
   ADD_CUSTOM_COMMAND(
       SOURCE      "${PATH}/${SOME_IMG}"
-      COMMAND     ${IMAGEMAGICK_CONVERT_EXECUTABLE}
+      COMMAND     ${BMEPS_EXECUTABLE}
       ARGS        "${PATH}/${SOME_IMG}" "${SoftwareGuide_BINARY_DIR}/Art/${EPS_IMG}"
       DEPENDS     ${RUN_EXAMPLES_SCRIPT} "${SoftwareGuide_BINARY_DIR}/Art/Generated/${SOME_IMG}"
       OUTPUT      "${SoftwareGuide_BINARY_DIR}/Art/${EPS_IMG}"
@@ -82,7 +91,7 @@ ENDMACRO(CONVERT_AND_FLIP_IMG)
 MACRO(CONVERT_INPUT_IMG SOME_IMG EPS_IMG PATH)
   ADD_CUSTOM_COMMAND(
       SOURCE      "${PATH}/${SOME_IMG}"
-      COMMAND     ${IMAGEMAGICK_CONVERT_EXECUTABLE}
+      COMMAND     ${BMEPS_EXECUTABLE}
       ARGS        "${PATH}/${SOME_IMG}" "${SoftwareGuide_BINARY_DIR}/Art/${EPS_IMG}"
       DEPENDS     ${RUN_EXAMPLES_SCRIPT}
       OUTPUT      "${SoftwareGuide_BINARY_DIR}/Art/${EPS_IMG}"
@@ -90,47 +99,39 @@ MACRO(CONVERT_INPUT_IMG SOME_IMG EPS_IMG PATH)
 ENDMACRO(CONVERT_INPUT_IMG)
 
 
-#
-#  Find jpg2ps : this program convert jpg figures 
-#  to Encapsulated Postscript on the command line.
-#
-FIND_PROGRAM(JPG2PS_EXECUTABLE
-  NAMES jpg2ps
-)
+
 
 #
 #
 #  Error checking for the components we need
 #
 #
-IF(NOT JPG2PS_EXECUTABLE)
-  MESSAGE("jpg2ps convert utility was not found. Please pass to advanced mode and provide its full path")
-ENDIF(NOT JPG2PS_EXECUTABLE)
+
 
 
 # Convert an image from some file format to EPS for inclusion in Latex using
 # jpg2ps.. This image is an input image. A seperate macro is necessary
 # cause input images do not have any dependecies
 #in case of input image is in jpeg
-MACRO(CONVERT_INPUT_JPG_IMG BASIC_OPTION SOME_IMG EPS_IMG PATH)
+MACRO(CONVERT_INPUT_COMPRESSED_IMG BASIC_OPTION SOME_IMG EPS_IMG PATH)
   ADD_CUSTOM_COMMAND(
       SOURCE      "${PATH}/${SOME_IMG}"
       COMMAND     ${JPG2PS_EXECUTABLE}
-      ARGS        "${BASIC_OPTION}" "${SoftwareGuide_BINARY_DIR}/Art/${EPS_IMG}" "${PATH}/${SOME_IMG}"
+      ARGS        "${BASIC_OPTION}" "${PATH}/${SOME_IMG}" "${SoftwareGuide_BINARY_DIR}/Art/${EPS_IMG}" 
       DEPENDS     ${RUN_EXAMPLES_SCRIPT}
       OUTPUT      "${SoftwareGuide_BINARY_DIR}/Art/${EPS_IMG}"
   )
-ENDMACRO(CONVERT_INPUT_JPG_IMG)
+ENDMACRO(CONVERT_INPUT_COMPRESSED_IMG)
 
-MACRO(CONVERT_JPG_IMG BASIC_OPTION SOME_IMG EPS_IMG PATH)
+MACRO(CONVERT_COMPRESSED_IMG BASIC_OPTION SOME_IMG EPS_IMG PATH)
   ADD_CUSTOM_COMMAND(
       SOURCE      "${PATH}/${SOME_IMG}"
       COMMAND     ${JPG2PS_EXECUTABLE}
-      ARGS        "${BASIC_OPTION}" "${SoftwareGuide_BINARY_DIR}/Art/${EPS_IMG}" "${PATH}/${SOME_IMG}"
+      ARGS        "${BASIC_OPTION}" "${PATH}/${SOME_IMG}" "${SoftwareGuide_BINARY_DIR}/Art/${EPS_IMG}" 
       DEPENDS     ${RUN_EXAMPLES_SCRIPT} "${SoftwareGuide_BINARY_DIR}/Art/Generated/${SOME_IMG}"
       OUTPUT      "${SoftwareGuide_BINARY_DIR}/Art/${EPS_IMG}"
   )
-ENDMACRO(CONVERT_JPG_IMG)
+ENDMACRO(CONVERT_COMPRESSED_IMG)
 
 
 # Convert an image from some file format to EPS for inclusion in Latex using

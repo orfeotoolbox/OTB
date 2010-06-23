@@ -446,16 +446,11 @@ sub GetArgsAndFilenames {
           }
         else
           {
-          my $ext = ($cmdlineoutfile =~ m/([^.]+)$/)[0];
+          my $ext = lc ( ($cmdlineoutfile =~ m/([^.]+)$/)[0] );
           
           if (IsAnInputFile($cmdlineoutfile,$searchdirs,\$path))
             {
-            if ( ($ext eq "jpg") || ($ext eq "jpeg") )
-              {
-              $myline = sprintf("CONVERT_INPUT_JPG_IMG( \"%s\" \"%s\" \"%s\" \"%s\" )\n","-o",$cmdlineoutfile,$lateximgFile,$path); }
-            else
-              {
-              $myline = sprintf("CONVERT_INPUT_IMG( \"%s\" \"%s\" \"%s\" )\n",$cmdlineoutfile,$lateximgFile,$path); }
+            $myline = sprintf("CONVERT_INPUT_IMG( \"%s\" \"%s\" \"%s\" )\n",$cmdlineoutfile,$lateximgFile,$path); 
             }
           else
             { 
@@ -465,12 +460,7 @@ sub GetArgsAndFilenames {
               }
             else
               {
-              if ( ($ext eq "jpg")  || ($ext eq "jpeg" ) )
-                {
-                $myline = sprintf("CONVERT_JPG_IMG( \"%s\" \"%s\" \"%s\" \"%s\" )\n","-o",$cmdlineoutfile,$lateximgFile,$filepath); }
-              else
-                {
-                $myline = sprintf("CONVERT_IMG( \"%s\" \"%s\" \"%s\" )\n",$cmdlineoutfile,$lateximgFile,$filepath); }
+              $myline = sprintf("CONVERT_IMG( \"%s\" \"%s\" \"%s\" )\n",$cmdlineoutfile,$lateximgFile,$filepath); 
               }
             }
           }
