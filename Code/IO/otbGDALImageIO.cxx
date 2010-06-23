@@ -512,7 +512,7 @@ void GDALImageIO::InternalReadImageInformation()
   /* Get the projection coordinate system of the image : ProjectionRef  */
   /* -------------------------------------------------------------------- */
 
-  if (m_poDataset->GetProjectionRef() != NULL)
+  if (m_poDataset->GetProjectionRef() != NULL && !std::string(m_poDataset->GetProjectionRef()).empty() )
     {
     OGRSpatialReference* pSR;
     const char *         pszProjection = NULL;
@@ -537,7 +537,7 @@ void GDALImageIO::InternalReadImageInformation()
 
     if (pSR != NULL)
       {
-      delete pSR;
+      pSR->Release();
       pSR = NULL;
       }
 
