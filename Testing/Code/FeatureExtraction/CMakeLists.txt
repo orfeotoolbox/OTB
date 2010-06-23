@@ -1792,7 +1792,8 @@ ADD_TEST(feTvScalarImageToTexturesFilter ${FEATUREEXTRACTION_TESTS15}
 )
 
 ADD_TEST(feTuotbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculatorNew ${FEATUREEXTRACTION_TESTS15}
-    otbotbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculatorNew)
+         otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculatorNew
+)
 
 # A enrichir
 SET(BasicFeatureExtraction_SRCS1
