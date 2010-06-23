@@ -512,7 +512,7 @@ void GDALImageIO::InternalReadImageInformation()
   /* Get the projection coordinate system of the image : ProjectionRef  */
   /* -------------------------------------------------------------------- */
 
-  if (m_poDataset->GetProjectionRef() != NULL)
+  if (m_poDataset->GetProjectionRef() != NULL && !std::string(m_poDataset->GetProjectionRef()).empty() )
     {
     OGRSpatialReference* pSR;
     const char *         pszProjection = NULL;
@@ -537,7 +537,7 @@ void GDALImageIO::InternalReadImageInformation()
 
     if (pSR != NULL)
       {
-      delete pSR;
+      pSR->Release();
       pSR = NULL;
       }
 
@@ -603,12 +603,18 @@ void GDALImageIO::InternalReadImageInformation()
     m_Spacing[0] = VadfGeoTransform[1];
     m_Spacing[1] = VadfGeoTransform[5];
 
-    //In this case, we are in a geographic projection
+    //In this case, we are in a geographic projection if no other cartographic information was already
+    // available
     // FIXME is there any way to know if we are in WGS 84 ???
-    std::string projRef =
+    std::string projRef;
+    itk::ExposeMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projRef);
+    if (projRef.empty())
+      {
+      projRef =
           "GEOGCS[\"GCS_WGS_1984\",DATUM[\"D_WGS_1984\",SPHEROID[\"WGS_1984\",6378137,298.257223563]],PRIMEM[\"Greenwich\",0],UNIT[\"Degree\",0.017453292519943295]]";
 
-    itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projRef);
+      itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projRef);
+      }
     }
 
   /* -------------------------------------------------------------------- */

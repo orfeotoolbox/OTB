@@ -66,7 +66,7 @@ int CurlHelper::RetrieveFile(const std::string& urlString, std::string filename)
   CURL *   curl;
   CURLcode res = CURL_LAST;
 
-  FILE* output_file = fopen(filename.c_str(), "w");
+  FILE* output_file = fopen(filename.c_str(), "wb");
  
   curl = curl_easy_init();
   
@@ -118,7 +118,7 @@ int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs,
   filename = listFilename.begin();
   while (filename != listFilename.end() )
     {
-    FILE* lOutputFile = fopen((*filename).c_str(), "w");
+    FILE* lOutputFile = fopen((*filename).c_str(), "wb");
     if (lOutputFile == NULL)
     {
     itkExceptionMacro(<< "otbCurlHelper: bad file name: " << (*filename).c_str());
@@ -270,6 +270,8 @@ int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs,
     {
     resTmp = RetrieveFile(*url, *file);
     if (res == 0) res = resTmp;  
+    ++url;
+    ++file;
     }
   return res;
 #endif
