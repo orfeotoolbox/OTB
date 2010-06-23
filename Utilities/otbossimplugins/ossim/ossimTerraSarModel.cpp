@@ -1901,9 +1901,15 @@ bool ossimplugins::ossimTerraSarModel::findTSXLeader(const ossimFilename& file, 
    }
    else
    {
-      ossimFilename filePath = ossimFilename(file.path());
+     ossimFilename filePath = ossimFilename(file.path());
+     if(!filePath.exists())
+     {
+     res = false;
+     }
+     else
+     {
       ossimDirectory directory = ossimDirectory(filePath.path());
-
+     
       std::vector<ossimFilename> vectName;
       ossimString reg = ".xml";
       directory.findAllFilesThatMatch( vectName, reg, 1 );
@@ -1938,6 +1944,7 @@ bool ossimplugins::ossimTerraSarModel::findTSXLeader(const ossimFilename& file, 
                << std::endl;
          }
       }
+     }
    }
 
    return res;
