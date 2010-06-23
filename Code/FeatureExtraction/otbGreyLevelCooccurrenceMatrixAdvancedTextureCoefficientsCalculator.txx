@@ -127,13 +127,13 @@ Compute ()
   for (long unsigned int i = 0 ; i < m_Histogram->GetSize()[0] ; ++i)
     {
     double marginalfreq = m_Histogram->GetFrequency ( i , 0 );
-    hx += vcl_log ( marginalfreq ) * marginalfreq ;
+    hx += (marginalfreq > 0.0001) ? vcl_log ( marginalfreq ) * marginalfreq : 0;
     }
   
   for (long unsigned int j = 0 ; j < m_Histogram->GetSize()[1] ; ++j)
     {
     double marginalfreq = m_Histogram->GetFrequency ( j , 1 );
-    hy += vcl_log ( marginalfreq ) * marginalfreq ;
+    hy += (marginalfreq > 0.0001) ? vcl_log ( marginalfreq ) * marginalfreq : 0;
     }
     
   double hxy1 = 0;
@@ -146,10 +146,7 @@ Compute ()
        hit != m_Histogram->End(); ++hit)
     {
     MeasurementType frequency = hit.GetFrequency();
-//       if (frequency == 0)
-//         {
-//         continue; // no use doing these calculations if we're just multiplying by zero.
-//         }
+    
     IndexType index = m_Histogram->GetIndex(hit.GetInstanceIdentifier());
     
     m_Variance += ( (index[0] - pixelMean) * (index[0] - pixelMean) ) * frequency;
@@ -162,7 +159,9 @@ Compute ()
     }
     
     m_IC1 = (vcl_abs( std::max ( hx, hy ) ) > 0.0001) ? ( Entropy - hxy1 ) / (std::max ( hx, hy ) ) : 0;
-    m_IC2 = vcl_sqrt ( 1 - vcl_exp ( -2. * vcl_abs ( hxy2 - Entropy ) ) ); 
+    
+    m_IC2 = 1 - vcl_exp ( -2. * vcl_abs ( hxy2 - Entropy ) );
+    m_IC2 = (m_IC2 >= 0) ? vcl_sqrt ( m_IC2 ) : 0; 
 }   
 
 
