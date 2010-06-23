@@ -85,6 +85,7 @@ IF(Mercurial_FOUND)
   ENDIF(OTB_WC_STATUS)
   STRING(REGEX REPLACE "\n" ";" OTB_WC_STATUS "${OTB_WC_STATUS}")
   SET(OTB_WC_STATUS ${OTB_WC_STATUS} CACHE STRING "Repository status" FORCE)
+  MARK_AS_ADVANCED(OTB_WC_STATUS)
 ENDIF(Mercurial_FOUND)
 
 # Version string should not include patch level.  The major.minor is
