@@ -1818,22 +1818,22 @@ ADD_TEST(feTuScalarImageToAdvancedTexturesFilterNew ${FEATUREEXTRACTION_TESTS15}
 
 ADD_TEST(feTvScalarImageToAdvancedTexturesFilter ${FEATUREEXTRACTION_TESTS15}
         --compare-n-images ${EPSILON_8} 8   
-            ${BASELINE}/feTvScalarImageToAdvancedTexturesFilterOutputEnergy.tif
-            ${TEMP}/feTvScalarImageToAdvancedTexturesFilterOutputEnergy.tif
-            ${BASELINE}/feTvScalarImageToAdvancedTexturesFilterOutputEntropy.tif
-            ${TEMP}/feTvScalarImageToAdvancedTexturesFilterOutputEntropy.tif
-            ${BASELINE}/feTvScalarImageToAdvancedTexturesFilterOutputCorrelation.tif
-            ${TEMP}/feTvScalarImageToAdvancedTexturesFilterOutputCorrelation.tif
-            ${BASELINE}/feTvScalarImageToAdvancedTexturesFilterOutputInverseDifferenceMoment.tif
-            ${TEMP}/feTvScalarImageToAdvancedTexturesFilterOutputInverseDifferenceMoment.tif
-            ${BASELINE}/feTvScalarImageToAdvancedTexturesFilterOutputInertia.tif
-            ${TEMP}/feTvScalarImageToAdvancedTexturesFilterOutputInertia.tif
-            ${BASELINE}/feTvScalarImageToAdvancedTexturesFilterOutputClusterShade.tif
-            ${TEMP}/feTvScalarImageToAdvancedTexturesFilterOutputClusterShade.tif
-            ${BASELINE}/feTvScalarImageToTexturesFilterOutputClusterProminence.tif
-            ${TEMP}/feTvScalarImageToAdvancedTexturesFilterOutputClusterProminence.tif
-            ${BASELINE}/feTvScalarImageToAdvancedTexturesFilterOutputHaralickCorrelation.tif
-            ${TEMP}/feTvScalarImageToAdvancedTexturesFilterOutputHaralickCorrelation.tif
+            ${BASELINE}/feTvScalarImageToAdvancedTexturesFilterOutputVariance.tif
+            ${TEMP}/feTvScalarImageToAdvancedTexturesFilterOutputVariance.tif
+            ${BASELINE}/feTvScalarImageToAdvancedTexturesFilterOutputSumAverage.tif
+            ${TEMP}/feTvScalarImageToAdvancedTexturesFilterOutputSumAverage.tif
+            ${BASELINE}/feTvScalarImageToAdvancedTexturesFilterOutputSumVariance.tif
+            ${TEMP}/feTvScalarImageToAdvancedTexturesFilterOutputSumVariance.tif
+            ${BASELINE}/feTvScalarImageToAdvancedTexturesFilterOutputSumEntropy.tif
+            ${TEMP}/feTvScalarImageToAdvancedTexturesFilterOutputSumEntropy.tif
+            ${BASELINE}/feTvScalarImageToAdvancedTexturesFilterOutputDifferenceEntropy.tif
+            ${TEMP}/feTvScalarImageToAdvancedTexturesFilterOutputDifferenceEntropy.tif
+            ${BASELINE}/feTvScalarImageToAdvancedTexturesFilterOutputDifferenceVariance.tif
+            ${TEMP}/feTvScalarImageToAdvancedTexturesFilterOutputDifferenceVariance.tif
+            ${BASELINE}/feTvScalarImageToAdvancedTexturesFilterOutputIC1.tif
+            ${TEMP}/feTvScalarImageToAdvancedTexturesFilterOutputIC1.tif
+            ${BASELINE}/feTvScalarImageToAdvancedTexturesFilterOutputIC2.tif
+            ${TEMP}/feTvScalarImageToAdvancedTexturesFilterOutputIC2.tif
         otbScalarImageToAdvancedTexturesFilter
         ${INPUTDATA}/Mire_Cosinus_500_500.png
         ${TEMP}/feTvScalarImageToAdvancedTexturesFilterOutput
