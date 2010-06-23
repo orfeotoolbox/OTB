@@ -50,7 +50,6 @@ ComputeMean( double &pixelMean )
   typedef typename HistogramType::Iterator HistogramIterator;
       
   // Initialize everything
-  typename HistogramType::SizeValueType binsPerAxis = m_Histogram->GetSize(0);
   pixelMean = 0;
       
   // Ok, now do the first pass through the histogram to get the marginal sums
