@@ -1791,6 +1791,8 @@ ADD_TEST(feTvScalarImageToTexturesFilter ${FEATUREEXTRACTION_TESTS15}
         1
 )
 
+ADD_TEST(feTuotbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculatorNew ${FEATUREEXTRACTION_TESTS15}
+    otbotbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculatorNew)
 
 # A enrichir
 SET(BasicFeatureExtraction_SRCS1
@@ -1972,6 +1974,7 @@ otbImageToLineSegmentVectorData.cxx
 otbSqrtSpectralAngleImageFilter.cxx
 otbScalarImageToTexturesFilterNew.cxx
 otbScalarImageToTexturesFilter.cxx
+otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculatorNew.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbFeatureExtractionTests1 "${BasicFeatureExtraction_SRCS1}" "OTBFeatureExtraction;OTBIO;OTBTesting")
