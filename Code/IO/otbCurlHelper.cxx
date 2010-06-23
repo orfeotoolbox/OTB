@@ -24,6 +24,8 @@
 #include <cstring>
 #endif
 
+#include <cstdio>
+
 namespace otb
 {
 
@@ -107,7 +109,6 @@ int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs,
 #ifdef OTB_USE_CURL
 #ifdef OTB_CURL_MULTI_AVAILABLE
   otbMsgDevMacro(<< "Using curl multi");
-  //std::string  m_Browser = "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-GB; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11";
 
   CURLM *             multiHandle;
   std::vector<CURL *> listCurlHandles;
@@ -276,6 +277,17 @@ int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs,
   otbMsgDevMacro(<< "Curl is not available, compile with OTB_USE_CURL to ON");
   return -1;
 #endif
+}
+
+size_t CurlHelper::write_data(void* ptr, size_t size, size_t nmemb, void* data)
+{
+  size_t written;
+
+  FILE * fDescriptor = (FILE *)(data);
+
+  written = fwrite(ptr,size,nmemb,fDescriptor);
+
+  return written;
 }
 
 }
