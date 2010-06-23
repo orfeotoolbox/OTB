@@ -1795,6 +1795,20 @@ ADD_TEST(feTuotbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator
          otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculatorNew
 )
 
+ADD_TEST(feTuScalarImageToAdvancedTexturesFilterNew ${FEATUREEXTRACTION_TESTS15}
+        otbScalarImageToAdvancedTexturesfilterNew
+)
+
+ADD_TEST(feTvScalarImageToAdvancedTexturesFilter ${FEATUREEXTRACTION_TESTS15}
+        otbScalarImageToAdvancedTexturesFilter
+        ${INPUTDATA}/Mire_Cosinus_500_500.png
+        ${TEMP}/feTvScalarImageToAdvancedTexturesFilterOutput
+        256
+        5
+        1
+        1
+)
+
 # A enrichir
 SET(BasicFeatureExtraction_SRCS1
 otbFeatureExtractionTests1.cxx
@@ -1976,6 +1990,8 @@ otbSqrtSpectralAngleImageFilter.cxx
 otbScalarImageToTexturesFilterNew.cxx
 otbScalarImageToTexturesFilter.cxx
 otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculatorNew.cxx
+otbScalarImageToAdvancedTexturesFilterNew.cxx
+otbScalarImageToAdvancedTexturesFilter.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbFeatureExtractionTests1 "${BasicFeatureExtraction_SRCS1}" "OTBFeatureExtraction;OTBIO;OTBTesting")

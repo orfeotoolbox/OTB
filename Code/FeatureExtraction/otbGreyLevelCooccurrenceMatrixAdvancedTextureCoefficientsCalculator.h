@@ -17,8 +17,8 @@
 #ifndef __otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator_h
 #define __otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator_h
 
-#include "otbMacro.h"
-#include "itkGreyLevelCooccurrenceMatrixTextureCoefficientsCalculator.h"
+#include "itkHistogram.h"
+#include "itkMacro.h"
 
 namespace otb {
   
@@ -29,17 +29,17 @@ namespace otb {
     
 template < typename THistogram >
 class ITK_EXPORT GreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator : 
-  public itk::Statistics::GreyLevelCooccurrenceMatrixTextureCoefficientsCalculator<THistogram>
+  public itk::Object
 {
 public:
   /** Standard typedefs */
   typedef GreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator  Self;
-  typedef itk::Statistics::GreyLevelCooccurrenceMatrixTextureCoefficientsCalculator<THistogram>                                                   Superclass;
+  typedef itk::Object                                                   Superclass;
   typedef itk::SmartPointer<Self>                                       Pointer;
   typedef itk::SmartPointer<const Self>                                 ConstPointer;
   
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator, itk::Statistics::GreyLevelCooccurrenceMatrixTextureCoefficientsCalculator);
+  itkTypeMacro(GreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator, itk::Object);
   
   /** standard New() method support */
   itkNewMacro(Self);
@@ -52,11 +52,21 @@ public:
   typedef typename HistogramType::IndexType               IndexType;
   typedef typename HistogramType::FrequencyType           FrequencyType;
     
-  itkGetMacro(SumOfSquares, double);
+  /** Connects the GLCM histogram over which the features are going to be computed */
+  itkSetObjectMacro( Histogram, HistogramType );
+  itkGetObjectMacro( Histogram, HistogramType );
+  
+  itkGetMacro(Variance, double);
   itkGetMacro(SumAverage, double);
+  itkGetMacro(SumVariance, double);
+  itkGetMacro(SumEntropy, double);
+  itkGetMacro(DifferenceEntropy, double);
+  itkGetMacro(DifferenceVariance, double);
+  itkGetMacro(IC1, double);
+  itkGetMacro(IC2, double);
   
   /** Triggers the Computation of the histogram */
-  void ComputeAdvancedTextures( void );
+  void Compute( void );
   
 protected:
   GreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator() {};
@@ -69,17 +79,14 @@ private:
   void operator=(const Self&); //purposely not implemented
    
   HistogramPointer m_Histogram;
-//   double m_Energy, m_Entropy, m_Correlation, m_InverseDifferenceMoment,
-//     m_Inertia, m_ClusterShade, m_ClusterProminence, m_HaralickCorrelation;
-   
+  
   void NormalizeHistogram(void);
-  void ComputeMeansAndVariances( double &pixelMean, double &marginalMean, 
-                                double &marginalDevSquared, double &pixelVariance );
-  double m_SumOfSquares, m_SumAverage, m_SumVariance,m_SumEntropy, m_DifferenceEntropy,
+  void ComputeMean( double &pixelMean );
+  double m_Variance, m_SumAverage, m_SumVariance,m_SumEntropy, m_DifferenceEntropy,
   m_DifferenceVariance, m_IC1, m_IC2;
 
-  double ComputePS ( unsigned int k );
-  double ComputePD ( unsigned int k );
+  double ComputePS ( long unsigned int k );
+  double ComputePD ( long unsigned int k );
 };
 } // end of namespace otb 
 
