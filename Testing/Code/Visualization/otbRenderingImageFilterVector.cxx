@@ -68,9 +68,9 @@ int otbRenderingImageFilterVector(int argc, char * argv[])
 //   function->SetMinimum(min);
 //   function->SetMaximum(max);
   function->SetParameters(parameters);
-  function->GetPixelRepresentationFunction().SetRedChannelIndex(channelRed);
-  function->GetPixelRepresentationFunction().SetGreenChannelIndex(channelGreen);
-  function->GetPixelRepresentationFunction().SetBlueChannelIndex(channelBlue);
+  function->GetPixelRepresentationFunction()->SetRedChannelIndex(channelRed);
+  function->GetPixelRepresentationFunction()->SetGreenChannelIndex(channelGreen);
+  function->GetPixelRepresentationFunction()->SetBlueChannelIndex(channelBlue);
 
   // writing
   writer->SetFileName(argv[2]);

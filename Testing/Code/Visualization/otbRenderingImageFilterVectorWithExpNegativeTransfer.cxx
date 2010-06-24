@@ -71,9 +71,9 @@ int otbRenderingImageFilterVectorWithExpNegativeTransfer(int argc, char * argv[]
   rendering->SetInput(reader->GetOutput());
   rendering->SetRenderingFunction(function);
   function->SetParameters(parameters);
-  function->GetPixelRepresentationFunction().SetRedChannelIndex(channelRed);
-  function->GetPixelRepresentationFunction().SetGreenChannelIndex(channelGreen);
-  function->GetPixelRepresentationFunction().SetBlueChannelIndex(channelBlue);
+  function->GetPixelRepresentationFunction()->SetRedChannelIndex(channelRed);
+  function->GetPixelRepresentationFunction()->SetGreenChannelIndex(channelGreen);
+  function->GetPixelRepresentationFunction()->SetBlueChannelIndex(channelBlue);
   function->GetTransferFunction().SetFactor(atof(argv[6]));
 
   // writing

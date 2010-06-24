@@ -111,6 +111,7 @@ public:
   typedef std::vector<RealScalarType>                               ExtremaVectorType;
   typedef TTransferFunction                                         TransferFunctionType;
   typedef TPixelRepresentationFunction                              PixelRepresentationFunctionType;
+  typedef typename PixelRepresentationFunctionType::Pointer         PixelRepresentationFunctionPointerType;
   typedef typename PixelRepresentationFunctionType::ChannelListType ChannelListType;
 
   /** Convert the input pixel to a pixel representation that can be displayed on
@@ -118,7 +119,7 @@ public:
     */
   virtual InternalPixelType EvaluatePixelRepresentation(const PixelType&  spixel) const
   {
-    return m_PixelRepresentationFunction(spixel);
+    return (*m_PixelRepresentationFunction)(spixel);
   }
 
   /** Convert the output of the pixel representation to a RGB pixel on unsigned char
@@ -174,39 +175,39 @@ public:
 
   virtual unsigned int GetPixelRepresentationSize() const
   {
-    return m_PixelRepresentationFunction.GetOutputSize();
+    return m_PixelRepresentationFunction->GetOutputSize();
   }
 
   virtual void Initialize() //FIXME should disappear and be automatic (IsModified())
   {
-    if ((this->GetMTime() > m_UTime) || (this->GetPixelRepresentationFunction().GetMTime() > m_UTime))
+    if ((this->GetMTime() > m_UTime) || (this->GetPixelRepresentationFunction()->GetMTime() > m_UTime))
     //NOTE: we assume that Transfer function have no parameters
       {
       if ((this->GetListSample()).IsNotNull())
         {
         //the size of the Vector was unknow at construction time for the
         //m_PixelRepresentationFunction, now, we may get a better default
-        if (m_PixelRepresentationFunction.IsUsingDefaultParameters())
+        if (m_PixelRepresentationFunction->IsUsingDefaultParameters())
           {
           // Case of image with 4 bands or more : Display in the B,G,R ,NIR channel order
           if (this->GetListSample()->GetMeasurementVectorSize() >= 4)
             {
-            m_PixelRepresentationFunction.SetRedChannelIndex(2);
-            m_PixelRepresentationFunction.SetGreenChannelIndex(1);
-            m_PixelRepresentationFunction.SetBlueChannelIndex(0);
+            m_PixelRepresentationFunction->SetRedChannelIndex(2);
+            m_PixelRepresentationFunction->SetGreenChannelIndex(1);
+            m_PixelRepresentationFunction->SetBlueChannelIndex(0);
             }
 
           // Classic case
           if (this->GetListSample()->GetMeasurementVectorSize() == 3)
             {
-            m_PixelRepresentationFunction.SetRedChannelIndex(0);
-            m_PixelRepresentationFunction.SetGreenChannelIndex(1);
-            m_PixelRepresentationFunction.SetBlueChannelIndex(2);
+            m_PixelRepresentationFunction->SetRedChannelIndex(0);
+            m_PixelRepresentationFunction->SetGreenChannelIndex(1);
+            m_PixelRepresentationFunction->SetBlueChannelIndex(2);
             }
 
           }
         }
-      unsigned int nbComps = m_PixelRepresentationFunction.GetOutputSize();
+      unsigned int nbComps = m_PixelRepresentationFunction->GetOutputSize();
       if (m_AutoMinMax)
         {
         //FIXME check what happen if the m_PixelRepresentationFunction is modified AFTER the Initialize.
@@ -291,9 +292,9 @@ public:
   const std::string Describe(const PixelType& spixel) const
   {
     itk::OStringStream oss;
-    oss << m_PixelRepresentationFunction.GetDescription() << ": ";
+    oss << m_PixelRepresentationFunction->GetDescription() << ": ";
     typename PixelRepresentationFunctionType::ChannelListType channels;
-    channels = m_PixelRepresentationFunction.GetChannelList();
+    channels = m_PixelRepresentationFunction->GetChannelList();
 
     for (unsigned int i = 0; i < channels.size(); ++i)
       {
@@ -357,7 +358,7 @@ public:
    */
   virtual ParametersType GetParameters() const
   {
-    unsigned int   nbBands = m_PixelRepresentationFunction.GetOutputSize();
+    unsigned int   nbBands = m_PixelRepresentationFunction->GetOutputSize();
     ParametersType param;
     param.SetSize(2 * nbBands);
 
@@ -374,16 +375,16 @@ public:
 
   virtual void SetChannelList(std::vector<unsigned int>& channels)
   {
-    if (m_PixelRepresentationFunction.GetChannelList() != channels)
+    if (m_PixelRepresentationFunction->GetChannelList() != channels)
       {
-      m_PixelRepresentationFunction.SetChannelList(channels);
+      m_PixelRepresentationFunction->SetChannelList(channels);
       this->Modified();
       }
   }
 
   virtual std::vector<unsigned int> GetChannelList()
   {
-    return m_PixelRepresentationFunction.GetChannelList();
+    return m_PixelRepresentationFunction->GetChannelList();
   }
 
   /** Accessor to set some specific parameters on the transfer function */
@@ -392,7 +393,7 @@ public:
     return m_TransferFunction;
   }
   /** Accessor to set some specific parameters on the pixel representation function */
-  virtual PixelRepresentationFunctionType& GetPixelRepresentationFunction()
+  virtual PixelRepresentationFunctionPointerType& GetPixelRepresentationFunction()
   {
     return m_PixelRepresentationFunction;
   }
@@ -408,10 +409,12 @@ public:
 
 protected:
   /** Constructor */
-  StandardRenderingFunction() : m_TransferedMinimum(), m_TransferedMaximum(), m_UTime(),
+  StandardRenderingFunction() : m_TransferedMinimum(), m_TransferedMaximum(),
+    m_PixelRepresentationFunction(PixelRepresentationFunctionType::New()), m_UTime(),
     m_RedChannelIndex(0), m_GreenChannelIndex(1), m_BlueChannelIndex(2), m_AutoMinMax(true),
     m_AutoMinMaxQuantile(0.02), m_DefaultChannelsAreSet(false)
-  {}
+  {
+  }
   /** Destructor */
   virtual ~StandardRenderingFunction() {}
 
@@ -466,7 +469,7 @@ protected:
    */
   mutable TransferFunctionType m_TransferFunction;
 
-  PixelRepresentationFunctionType m_PixelRepresentationFunction;
+  PixelRepresentationFunctionPointerType m_PixelRepresentationFunction;
 
   /** Update time */
   itk::TimeStamp m_UTime;
