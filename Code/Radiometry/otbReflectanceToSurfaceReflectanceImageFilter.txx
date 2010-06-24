@@ -181,6 +181,7 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
   if (!m_IsSetAtmosphericRadiativeTerms)
     {
     this->UpdateAtmosphericRadiativeTerms();
+    m_IsSetAtmosphericRadiativeTerms = true;
     }
 
   this->UpdateFunctors();
