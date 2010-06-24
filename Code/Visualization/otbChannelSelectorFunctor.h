@@ -62,36 +62,6 @@ public:
 
   typedef std::vector<unsigned int> ChannelListType;
 
-  /** Constructor */
-  ChannelSelectorFunctor() :
-    usingDefaultParameters(true)
-  {
-    if (std::string(typeid(PixelType).name()).find("RGBAPixel") != std::string::npos)
-      {
-      m_ChannelList.push_back(0);
-      m_ChannelList.push_back(1);
-      m_ChannelList.push_back(2);
-      m_ChannelList.push_back(3);
-      }
-    else if (std::string(typeid(PixelType).name()).find("RGBPixel") != std::string::npos)
-      {
-      m_ChannelList.push_back(0);
-      m_ChannelList.push_back(1);
-      m_ChannelList.push_back(2);
-      }
-    else if (std::string(typeid(PixelType).name()).find("VariableLengthVector") != std::string::npos)
-      {
-      m_ChannelList.push_back(0);
-      }
-    else
-      {
-      m_ChannelList.push_back(0);
-      }
-  }
-
-  /** Destructor */
-  virtual ~ChannelSelectorFunctor() {}
-
   const char *GetDescription() const
   {return "Channel Selection"; }
 
@@ -244,6 +214,38 @@ public:
   {
     return usingDefaultParameters;
   }
+protected:
+
+  /** Constructor */
+  ChannelSelectorFunctor() :
+    usingDefaultParameters(true)
+  {
+    if (std::string(typeid(PixelType).name()).find("RGBAPixel") != std::string::npos)
+      {
+      m_ChannelList.push_back(0);
+      m_ChannelList.push_back(1);
+      m_ChannelList.push_back(2);
+      m_ChannelList.push_back(3);
+      }
+    else if (std::string(typeid(PixelType).name()).find("RGBPixel") != std::string::npos)
+      {
+      m_ChannelList.push_back(0);
+      m_ChannelList.push_back(1);
+      m_ChannelList.push_back(2);
+      }
+    else if (std::string(typeid(PixelType).name()).find("VariableLengthVector") != std::string::npos)
+      {
+      m_ChannelList.push_back(0);
+      }
+    else
+      {
+      m_ChannelList.push_back(0);
+      }
+  }
+
+  /** Destructor */
+  virtual ~ChannelSelectorFunctor() {}
+
 private:
 
   ChannelListType m_ChannelList;

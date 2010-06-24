@@ -68,7 +68,7 @@ int otbRenderingImageFilterAmplitude(int argc, char * argv[])
   rendering->SetInput(reader->GetOutput());
   rendering->SetRenderingFunction(function);
   function->SetParameters(parameters);
-  function->GetPixelRepresentationFunction().SetChannelList(channels);
+  function->GetPixelRepresentationFunction()->SetChannelList(channels);
 
   // writing
   writer->SetFileName(argv[2]);
