@@ -30,10 +30,11 @@ IF(NOT IMAGEMAGICK_CONVERT_EXECUTABLE)
   MESSAGE("ImageMagick convert utility was not found. Please pass to advanced mode and provide its full path")
 ENDIF(NOT IMAGEMAGICK_CONVERT_EXECUTABLE)
 
-
-IF(NOT BMEPS_EXECUTABLE)
-  MESSAGE("bmeps utility was not found. Please pass to advanced mode and provide its full path. It is part of DKTools available on http://dktools.sourceforge.net/")
-ENDIF(NOT BMEPS_EXECUTABLE)
+IF(OTB_USE_BMEPS)
+  IF(NOT BMEPS_EXECUTABLE)
+    MESSAGE("bmeps utility was not found. Please pass to advanced mode and provide its full path. It is part of DKTools available on http://dktools.sourceforge.net/")
+  ENDIF(NOT BMEPS_EXECUTABLE)
+ENDIF(OTB_USE_BMEPS)
 
 ADD_CUSTOM_TARGET(SoftwareGuideArt  ALL echo)
 
@@ -77,42 +78,75 @@ ENDIF(BUILD_FIGURES)
 FOREACH(image ${TIFF_IMAGES})
   GET_FILENAME_COMPONENT(Imagebase ${image} NAME)
   GET_FILENAME_COMPONENT(ImageBase ${Imagebase} NAME_WE)
-  ADD_CUSTOM_COMMAND( 
-  SOURCE    ${SoftwareGuide_SOURCE_DIR}/Art/${ImageBase}.tif
-  COMMAND   ${BMEPS_EXECUTABLE}
-  ARGS      "-ttiff" ${SoftwareGuide_SOURCE_DIR}/Art/${ImageBase}.tif
-            ${ImageBase}.eps
-  TARGET    SoftwareGuideArt
-  OUTPUTS   ${SoftwareGuide_BINARY_DIR}/Art/${ImageBase}.eps
-  )
+  IF(OTB_USE_BMEPS)
+    ADD_CUSTOM_COMMAND( 
+    SOURCE    ${SoftwareGuide_SOURCE_DIR}/Art/${ImageBase}.tif
+    COMMAND   ${BMEPS_EXECUTABLE}
+    ARGS      "-ttiff" ${SoftwareGuide_SOURCE_DIR}/Art/${ImageBase}.tif
+              ${ImageBase}.eps
+    TARGET    SoftwareGuideArt
+    OUTPUTS   ${SoftwareGuide_BINARY_DIR}/Art/${ImageBase}.eps
+    )
+  ELSE(OTB_USE_BMEPS)
+    ADD_CUSTOM_COMMAND( 
+    SOURCE    ${SoftwareGuide_SOURCE_DIR}/Art/${ImageBase}.tif
+    COMMAND   ${IMAGEMAGICK_CONVERT_EXECUTABLE}
+    ARGS      ${SoftwareGuide_SOURCE_DIR}/Art/${ImageBase}.tif
+              ${ImageBase}.eps
+    TARGET    SoftwareGuideArt
+    OUTPUTS   ${SoftwareGuide_BINARY_DIR}/Art/${ImageBase}.eps
+    )
+  ENDIF(OTB_USE_BMEPS)
   SET(EPS_DEPS ${EPS_DEPS} ${SoftwareGuide_BINARY_DIR}/Art/${ImageBase}.eps)
 ENDFOREACH(image)
 
 FOREACH(image ${JPEG_IMAGES})
   GET_FILENAME_COMPONENT(Imagebase ${image} NAME)
   GET_FILENAME_COMPONENT(ImageBase ${Imagebase} NAME_WE)
-  ADD_CUSTOM_COMMAND( 
-  SOURCE    ${SoftwareGuide_SOURCE_DIR}/Art/${ImageBase}.jpg
-  COMMAND   ${BMEPS_EXECUTABLE}
-  ARGS      "-tjpg" ${SoftwareGuide_SOURCE_DIR}/Art/${ImageBase}.jpg
-            ${ImageBase}.eps
-  TARGET    SoftwareGuideArt
-  OUTPUTS   ${SoftwareGuide_BINARY_DIR}/Art/${ImageBase}.eps
-  )
+  IF(OTB_USE_BMEPS)
+    ADD_CUSTOM_COMMAND( 
+    SOURCE    ${SoftwareGuide_SOURCE_DIR}/Art/${ImageBase}.jpg
+    COMMAND   ${BMEPS_EXECUTABLE}
+    ARGS      "-tjpg" ${SoftwareGuide_SOURCE_DIR}/Art/${ImageBase}.jpg
+              ${ImageBase}.eps
+    TARGET    SoftwareGuideArt
+    OUTPUTS   ${SoftwareGuide_BINARY_DIR}/Art/${ImageBase}.eps
+    )
+  ELSE(OTB_USE_BMEPS)
+    ADD_CUSTOM_COMMAND( 
+    SOURCE    ${SoftwareGuide_SOURCE_DIR}/Art/${ImageBase}.jpg
+    COMMAND   ${IMAGEMAGICK_CONVERT_EXECUTABLE}
+    ARGS      ${SoftwareGuide_SOURCE_DIR}/Art/${ImageBase}.jpg
+              ${ImageBase}.eps
+    TARGET    SoftwareGuideArt
+    OUTPUTS   ${SoftwareGuide_BINARY_DIR}/Art/${ImageBase}.eps
+    )
+  ENDIF (OTB_USE_BMEPS)
   SET(EPS_DEPS ${EPS_DEPS} ${SoftwareGuide_BINARY_DIR}/Art/${ImageBase}.eps)
 ENDFOREACH(image)
 
 FOREACH(image ${PNG_IMAGES})
   GET_FILENAME_COMPONENT(Imagebase ${image} NAME)
   GET_FILENAME_COMPONENT(ImageBase ${Imagebase} NAME_WE)
-  ADD_CUSTOM_COMMAND( 
-  SOURCE    ${SoftwareGuide_SOURCE_DIR}/Art/${ImageBase}.png
-  COMMAND   ${BMEPS_EXECUTABLE}
-  ARGS      "-tpng" ${SoftwareGuide_SOURCE_DIR}/Art/${ImageBase}.png
-            ${ImageBase}.eps
-  TARGET    SoftwareGuideArt
-  OUTPUTS   ${SoftwareGuide_BINARY_DIR}/Art/${ImageBase}.eps
-  )
+  IF(OTB_USE_BMEPS)
+    ADD_CUSTOM_COMMAND( 
+    SOURCE    ${SoftwareGuide_SOURCE_DIR}/Art/${ImageBase}.png
+    COMMAND   ${BMEPS_EXECUTABLE}
+    ARGS      "-tpng" ${SoftwareGuide_SOURCE_DIR}/Art/${ImageBase}.png
+              ${ImageBase}.eps
+    TARGET    SoftwareGuideArt
+    OUTPUTS   ${SoftwareGuide_BINARY_DIR}/Art/${ImageBase}.eps
+    )
+  ELSE(OTB_USE_BMEPS)
+    ADD_CUSTOM_COMMAND( 
+    SOURCE    ${SoftwareGuide_SOURCE_DIR}/Art/${ImageBase}.png
+    COMMAND   ${IMAGEMAGICK_CONVERT_EXECUTABLE}
+    ARGS      ${SoftwareGuide_SOURCE_DIR}/Art/${ImageBase}.png
+              ${ImageBase}.eps
+    TARGET    SoftwareGuideArt
+    OUTPUTS   ${SoftwareGuide_BINARY_DIR}/Art/${ImageBase}.eps
+    )
+  ENDIF(OTB_USE_BMEPS)
   SET(EPS_DEPS ${EPS_DEPS} ${SoftwareGuide_BINARY_DIR}/Art/${ImageBase}.eps)
 ENDFOREACH(image)
 
@@ -142,14 +176,25 @@ ENDFOREACH(image)
 FOREACH(image ${MONTEVERDI_PNG_IMAGES})
   GET_FILENAME_COMPONENT(Imagebase ${image} NAME)
   GET_FILENAME_COMPONENT(ImageBase ${Imagebase} NAME_WE)
-  ADD_CUSTOM_COMMAND( 
-  SOURCE    ${SoftwareGuide_SOURCE_DIR}/Art/MonteverdiImages/${ImageBase}.png
-  COMMAND   ${BMEPS_EXECUTABLE}
-  ARGS      ${SoftwareGuide_SOURCE_DIR}/Art/MonteverdiImages/${ImageBase}.png
-            ${ImageBase}.eps
-  TARGET    SoftwareGuideArt
-  OUTPUTS   ${SoftwareGuide_BINARY_DIR}/Art/${ImageBase}.eps
-  )
+  IF(OTB_USE_BMEPS)
+    ADD_CUSTOM_COMMAND( 
+    SOURCE    ${SoftwareGuide_SOURCE_DIR}/Art/MonteverdiImages/${ImageBase}.png
+    COMMAND   ${BMEPS_EXECUTABLE}
+    ARGS      ${SoftwareGuide_SOURCE_DIR}/Art/MonteverdiImages/${ImageBase}.png
+              ${ImageBase}.eps
+    TARGET    SoftwareGuideArt
+    OUTPUTS   ${SoftwareGuide_BINARY_DIR}/Art/${ImageBase}.eps
+    )
+  ELSE(OTB_USE_BMEPS)
+    ADD_CUSTOM_COMMAND( 
+    SOURCE    ${SoftwareGuide_SOURCE_DIR}/Art/MonteverdiImages/${ImageBase}.png
+    COMMAND   ${IMAGEMAGICK_CONVERT_EXECUTABLE}
+    ARGS      ${SoftwareGuide_SOURCE_DIR}/Art/MonteverdiImages/${ImageBase}.png
+              ${ImageBase}.eps
+    TARGET    SoftwareGuideArt
+    OUTPUTS   ${SoftwareGuide_BINARY_DIR}/Art/${ImageBase}.eps
+    )
+  ENDIF(OTB_USE_BMEPS)
   SET(EPS_DEPS ${EPS_DEPS} ${SoftwareGuide_BINARY_DIR}/Art/${ImageBase}.eps)
 ENDFOREACH(image)
 

@@ -100,7 +100,7 @@ ENDIF( BUILD_FIGURES )
 #
 INCLUDE (${CMAKE_ROOT}/Modules/FindImageMagick.cmake)
 IF(NOT IMAGEMAGICK_CONVERT_EXECUTABLE)
-  MESSAGE("ImageMagick convert utility was not found. Please pass to advanced mode and provide its full path")
+  MESSAGE(FATAL_ERROR "ImageMagick convert utility was not found. Please pass to advanced mode and provide its full path")
 ENDIF(NOT IMAGEMAGICK_CONVERT_EXECUTABLE)
 
 
@@ -108,11 +108,16 @@ ENDIF(NOT IMAGEMAGICK_CONVERT_EXECUTABLE)
 # Find bmeps tools
 # This is used to convert image formats from png to eps
 #
-#INCLUDE (${CMAKE_ROOT}/Modules/FindImageMagick.cmake)
-IF(NOT BMEPS_EXECUTABLE)
-  MESSAGE("bmeps utility was not found. Please pass to advanced mode and provide its full path. It is part of DKTools available on http://dktools.sourceforge.net/")
-ENDIF(NOT BMEPS_EXECUTABLE)
 
+OPTION(OTB_USE_BMEPS "Use bmeps library to convert figures and images." OFF)
+MARK_AS_ADVANCED(OTB_USE_BMEPS)
+IF(OTB_USE_BMEPS)
+  FIND_PROGRAM(BMEPS_EXECUTABLE bmeps)
+  MARK_AS_ADVANCED(BMEPS_EXECUTABLE)
+  IF(NOT BMEPS_EXECUTABLE)
+    MESSAGE(FATAL_ERROR "bmeps utility was not found. Please pass to advanced mode and provide its full path. It is part of DKTools available on http://dktools.sourceforge.net/")
+  ENDIF(NOT BMEPS_EXECUTABLE)
+ENDIF(OTB_USE_BMEPS)
 
 IF (BUILD_FIGURES)
 
