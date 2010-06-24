@@ -802,7 +802,7 @@ ImageViewerManagerViewGUI
  ImageViewerManagerViewGUI
  ::RGBSet()
  {
-   std::cout << "RGBSet" << std::endl;
+   otbMsgDevMacro( << "RGBSet");
 
    unsigned int selectedItem = guiImageList->value();
    if (selectedItem == 0)
