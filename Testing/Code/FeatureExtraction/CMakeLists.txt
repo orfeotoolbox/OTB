@@ -1813,7 +1813,7 @@ ADD_TEST(feTuotbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator
 )
 
 ADD_TEST(feTuScalarImageToAdvancedTexturesFilterNew ${FEATUREEXTRACTION_TESTS15}
-        otbScalarImageToAdvancedTexturesfilterNew
+        otbScalarImageToAdvancedTexturesFilterNew
 )
 
 ADD_TEST(feTvScalarImageToAdvancedTexturesFilter ${FEATUREEXTRACTION_TESTS15}
