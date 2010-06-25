@@ -132,7 +132,7 @@ SET(EXE_TESTS2  ${CXX_TEST_PATH}/otbIOExamplesTests2)
 
 SET(NOTOL 0.0)
 SET(EPSILON_5 0.00001)
-SET(HIGHTOL 5000.0)
+SET(HIGHTOL 10.0)
 
 # ------- ExtractROITest----------
 
