@@ -91,6 +91,9 @@ public:
   /** Get the input image maximum */
   itkGetMacro(InputImageMaximum,InputPixelType);
 
+  /** Get the mean output image */
+  OutputImageType * GetMeanOutput();
+  
   /** Get the variance output image */
   OutputImageType * GetVarianceOutput();
 

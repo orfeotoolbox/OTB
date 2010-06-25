@@ -34,6 +34,8 @@ namespace otb {
  * The features calculated are as follows (where \f$ g(i, j) \f$ is the element in
  * cell i, j of a a normalized GLCM):
  *
+ * "Mean" \f$ = \sum_{i,j}i g(i,j) \f$
+ *
  * "Sum of squares: Variance" \f$ = f_4 = \sum_{i,j}(i -mu)^2 g(i,j) \f$
  *
  * "Sum average" \f$ = f_6 = -\sum_{i}i g_{x+y}(i)  
@@ -117,6 +119,7 @@ public:
   itkSetObjectMacro( Histogram, HistogramType );
   itkGetObjectMacro( Histogram, HistogramType );
   
+  itkGetMacro(Mean, double);
   itkGetMacro(Variance, double);
   itkGetMacro(SumAverage, double);
   itkGetMacro(SumVariance, double);
@@ -142,8 +145,8 @@ private:
   HistogramPointer m_Histogram;
   
   void NormalizeHistogram(void);
-  void ComputeMean( double &pixelMean );
-  double m_Variance, m_SumAverage, m_SumVariance,m_SumEntropy, m_DifferenceEntropy,
+  void ComputeMean();
+  double m_Mean, m_Variance, m_SumAverage, m_SumVariance,m_SumEntropy, m_DifferenceEntropy,
   m_DifferenceVariance, m_IC1, m_IC2;
 
   double ComputePS ( long unsigned int k );

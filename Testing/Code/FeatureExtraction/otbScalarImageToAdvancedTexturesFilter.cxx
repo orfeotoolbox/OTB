@@ -90,6 +90,12 @@ int otbScalarImageToAdvancedTexturesFilter(int argc, char * argv[])
   writer->SetFileName(oss.str());
   writer->Update();
   
+   oss.str("");
+  oss<<outprefix<<"Mean.tif";
+  writer->SetInput(filter->GetMeanOutput());
+  writer->SetFileName(oss.str());
+  writer->Update();
+  
   oss.str("");
   oss<<outprefix<<"SumAverage.tif";
   writer->SetInput(filter->GetSumAverageOutput());
