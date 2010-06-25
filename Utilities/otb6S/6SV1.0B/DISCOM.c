@@ -83,7 +83,7 @@ Extern struct {
     integer i__, j, k, l;
     doublereal rorayl_fi__[181], wl;
     integer ifi;
-    doublereal taer, nbmu, piza, tray, coeff, taerp, tamoy, romix, trayp, 
+    doublereal taer, nbmu, piza, tray, coeff = 0., taerp, tamoy, romix, trayp, 
 	    rqmix, rumix, rolut[1025]	/* was [25][41] */, ddifta, ddirta, 
 	    ddiftt, ddiftr, udifta;
     extern /* Subroutine */ int atmref_(integer *, integer *, doublereal *, 
