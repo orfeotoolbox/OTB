@@ -33,10 +33,10 @@ ScalarImageToAdvancedTexturesFilter<TInputImage,TOutputImage>
                                   m_InputImageMinimum(0),
                                   m_InputImageMaximum(256)
 {
-  // There are 8 outputs corresponding to the 8 textures indices
-  this->SetNumberOfOutputs(8);
+  // There are 9 outputs corresponding to the 8 textures indices
+  this->SetNumberOfOutputs(9);
 
-  // Create the 8 outputs
+  // Create the 9 outputs
   this->SetNthOutput(0,OutputImageType::New());
   this->SetNthOutput(1,OutputImageType::New());
   this->SetNthOutput(2,OutputImageType::New());
@@ -45,6 +45,7 @@ ScalarImageToAdvancedTexturesFilter<TInputImage,TOutputImage>
   this->SetNthOutput(5,OutputImageType::New());
   this->SetNthOutput(6,OutputImageType::New());
   this->SetNthOutput(7,OutputImageType::New());
+  this->SetNthOutput(8,OutputImageType::New());
 }
 
 template <class TInputImage,class TOutputImage>
@@ -157,6 +158,19 @@ ScalarImageToAdvancedTexturesFilter<TInputImage,TOutputImage>
 }
 
 template <class TInputImage,class TOutputImage>
+typename ScalarImageToAdvancedTexturesFilter<TInputImage,TOutputImage>
+::OutputImageType *
+ScalarImageToAdvancedTexturesFilter<TInputImage,TOutputImage>
+::GetMeanOutput()
+{
+  if(this->GetNumberOfOutputs()<1)
+    {
+    return 0;
+    }
+  return static_cast<OutputImageType *>(this->GetOutput(8));
+}
+
+template <class TInputImage,class TOutputImage>
 void
 ScalarImageToAdvancedTexturesFilter<TInputImage,TOutputImage>
 ::GenerateInputRequestedRegion()
@@ -221,6 +235,7 @@ ScalarImageToAdvancedTexturesFilter<TInputImage,TOutputImage>
 {
   // Retrieve the input and output pointers
   InputImagePointerType  inputPtr             =      const_cast<InputImageType *>(this->GetInput());
+  OutputImagePointerType meanPtr            =      this->GetMeanOutput();
   OutputImagePointerType variancePtr            =      this->GetVarianceOutput();
   OutputImagePointerType sumAveragePtr           =      this->GetSumAverageOutput();
   OutputImagePointerType sumVariancePtr       =      this->GetSumVarianceOutput();
@@ -232,6 +247,7 @@ ScalarImageToAdvancedTexturesFilter<TInputImage,TOutputImage>
 
   // Build output iterators
   itk::ImageRegionIteratorWithIndex<OutputImageType> varianceIt(variancePtr,outputRegionForThread);
+  itk::ImageRegionIterator<OutputImageType>          meanIt(meanPtr,outputRegionForThread);
   itk::ImageRegionIterator<OutputImageType>          sumAverageIt(sumAveragePtr,outputRegionForThread);
   itk::ImageRegionIterator<OutputImageType>          sumVarianceIt(sumVariancePtr,outputRegionForThread);
   itk::ImageRegionIterator<OutputImageType>          sumEntropytIt(sumEntropytPtr,outputRegionForThread);
@@ -242,6 +258,7 @@ ScalarImageToAdvancedTexturesFilter<TInputImage,TOutputImage>
 
   // Go to begin
   varianceIt.GoToBegin();
+  meanIt.GoToBegin();
   sumAverageIt.GoToBegin();
   sumVarianceIt.GoToBegin();
   sumEntropytIt.GoToBegin();
@@ -265,6 +282,7 @@ ScalarImageToAdvancedTexturesFilter<TInputImage,TOutputImage>
 
   // Iterate on outputs to compute textures
   while(!varianceIt.IsAtEnd()
+      &&!meanIt.IsAtEnd()
       &&!sumAverageIt.IsAtEnd()
       &&!sumVarianceIt.IsAtEnd()
       &&!sumEntropytIt.IsAtEnd()
@@ -302,6 +320,7 @@ ScalarImageToAdvancedTexturesFilter<TInputImage,TOutputImage>
 
     // Fill outputs
     varianceIt.Set(texturesCalculator->GetVariance());
+    meanIt.Set(texturesCalculator->GetMean());
     sumAverageIt.Set(texturesCalculator->GetSumAverage());
     sumVarianceIt.Set(texturesCalculator->GetSumVariance());
     sumEntropytIt.Set(texturesCalculator->GetSumEntropy());
@@ -315,6 +334,7 @@ ScalarImageToAdvancedTexturesFilter<TInputImage,TOutputImage>
 
     // Increment iterators
     ++varianceIt;
+    ++meanIt;
     ++sumAverageIt;
     ++sumVarianceIt;
     ++sumEntropytIt;

@@ -79,6 +79,7 @@ int otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator(int argc
   glcmCalc->Compute();
   
   double trueVariance = 7.6475;
+  double trueMean = 3.95;
   double trueSumAverage = 0;
   double trueSumVariance = 0;
   double trueSumEntropy = 0;
@@ -88,6 +89,7 @@ int otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator(int argc
   double trueIC2 = 0.908663;
   
   double variance = glcmCalc->GetVariance();
+  double mean = glcmCalc->GetMean();
   double sumAverage = glcmCalc->GetSumAverage();
   double sumVariance = glcmCalc->GetSumVariance();
   double sumEntropy = glcmCalc->GetSumEntropy();
@@ -105,7 +107,15 @@ int otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator(int argc
       << variance << std::endl;
     passed = false;
     }
-   
+  
+  if( vnl_math_abs(mean - trueMean) > 0.001 )
+    {
+    std::cerr << "Error:" << std::endl;
+    std::cerr << "Mean calculated wrong. Expected: " << trueMean << ", got: " 
+      << mean << std::endl;
+    passed = false;
+    }
+    
   if( vnl_math_abs(sumAverage - trueSumAverage) > 0.001 )
     {
     std::cerr << "Error:" << std::endl;
