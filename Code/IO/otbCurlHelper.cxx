@@ -63,6 +63,7 @@ int CurlHelper::RetrieveFile(const std::ostringstream& urlStream, std::string fi
 int CurlHelper::RetrieveFile(const std::string& urlString, std::string filename) const
 {
 #ifdef OTB_USE_CURL
+  otbMsgDevMacro(<< "Retrieving: " << urlString);
   CURL *   curl;
   CURLcode res = CURL_LAST;
 
@@ -94,6 +95,7 @@ int CurlHelper::RetrieveFile(const std::string& urlString, std::string filename)
     
     fclose(output_file);
     }
+  otbMsgDevMacro(<< " -> " << res);
   return res;
 #else
   otbMsgDevMacro(<< "Curl is not available, compile with OTB_USE_CURL to ON");
@@ -147,6 +149,7 @@ int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs,
   file = listFiles.begin();
   while ( (url != listURLs.end()) && (file != listFiles.end() ))
     {
+    otbMsgDevMacro(<< "Retrieving: " << (*url).data());
     CURL * lEasyHandle;
     lEasyHandle = curl_easy_init();
 
