@@ -1,3 +1,36 @@
+OTB-v.3.4.0 - Changes since version 3.2.0 (2010/06/30)
+-----------------------------------------
+
+* Applications
+  * New utility otbConvertSensorToGeoPoint to convert from sensor coordinates to lon/lat
+  * otbExtractROI can change its output type
+  * New utility otbSplitImage to separate a multispectral image into N images
+  * otbConcatenateImage can change its output type
+  * otbConvert can now use a log transfer function when rescaling the image
+
+* Library
+  * Add HillShadingFilter to produce hill shade image from DEM (HillShadingFilter)
+  * Add point set density function (gaussian, epanechnikov)
+  * Add filter to extract a subset from a point set (PointSetExtractROI)
+  * Add filter to apply a transform to a point set (TransformPointSetFilter)
+  * Add filter to generate a random point set (RandomPointSetSource)
+  * Add support for WorldView2 metadata
+  * Add class to compute confusion matrix (ConfusionMatrixCalculator)
+  * Add class to generate a list of samples from a vector data (ListSampleGenerator)
+  * Add a class to compute the ground spacing (GroundSpacingImageFunction)
+  * Add a class to read 6S spectral sensitivity files (SpectralSensitivityReader)
+  * Fix radiometry correction for SPOT5
+  * Lots of bug fixes
+
+* System
+  * Internal ITK updated to 3.18.0 + OTB Patches
+  * Internal OSSIM updated to svn revision 16861 + OTB patches
+  * Internal OSSIM SAR plugins updated to svn revision 16952 + OTB patches
+  * Internal libkml updated to 1.2.0
+  * Internal siftfast updated to 1.2
+  * Internal boost updated to 1.42
+
+
 OTB-v.3.2.0 - Changes since version 3.0.0 (2010/01/15)
 -----------------------------------------
 
