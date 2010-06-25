@@ -61,23 +61,22 @@ int main(int argc, char* argv[])
 //
 //  SoftwareGuide: EndLatex
 
-//  SoftwareGuide: BeginCodeSnippet
-
+// SoftwareGuide : BeginCodeSnippet
   typedef unsigned char InputPixelType;
   const unsigned int Dimension = 2;
 
   typedef otb::Image<InputPixelType,  Dimension> InputImageType;
 
   typedef otb::ImageFileReader<InputImageType> ReaderType;
-//  SoftwareGuide: EndCodeSnippet
+// SoftwareGuide : EndCodeSnippet
+
 //  SoftwareGuide: BeginLatex
 //
 //  We can now instantiate the reader and get a pointer to the input image.
 //
 //  SoftwareGuide: EndLatex
 
-//  SoftwareGuide: BeginCodeSnippet
-
+// SoftwareGuide : BeginCodeSnippet
   ReaderType::Pointer     reader = ReaderType::New();
   InputImageType::Pointer image = InputImageType::New();
 
@@ -85,8 +84,8 @@ int main(int argc, char* argv[])
   reader->Update();
 
   image = reader->GetOutput();
+// SoftwareGuide : EndCodeSnippet
 
-//  SoftwareGuide: EndCodeSnippet
 //  SoftwareGuide: BeginLatex
 //
 //  Once the image has been read, we can access the metadata
@@ -95,13 +94,12 @@ int main(int argc, char* argv[])
 //
 //  SoftwareGuide: EndLatex
 
-//  SoftwareGuide: BeginCodeSnippet
-
+// SoftwareGuide : BeginCodeSnippet
   std::ofstream file;
 
   file.open(outputAsciiFilename);
+// SoftwareGuide : EndCodeSnippet
 
-//  SoftwareGuide: EndCodeSnippet
 //  SoftwareGuide: BeginLatex
 //
 //  We can now call the different available methods for accessing the
@@ -117,8 +115,7 @@ int main(int argc, char* argv[])
 //
 //  SoftwareGuide: EndLatex
 
-//  SoftwareGuide: BeginCodeSnippet
-
+// SoftwareGuide : BeginCodeSnippet
   file << "Spacing " << image->GetSpacing() << std::endl;
   file << "Origin " << image->GetOrigin() << std::endl;
 
@@ -128,8 +125,8 @@ int main(int argc, char* argv[])
 
   unsigned int GCPCount = image->GetGCPCount();
   file << "GCP Count " << image->GetGCPCount() << std::endl;
+// SoftwareGuide : EndCodeSnippet
 
-//  SoftwareGuide: EndCodeSnippet
 //  SoftwareGuide: BeginLatex
 //
 //  One can also get the GCPs by number, as well as their coordinates
@@ -137,8 +134,7 @@ int main(int argc, char* argv[])
 //
 //  SoftwareGuide: EndLatex
 
-//  SoftwareGuide: BeginCodeSnippet
-
+// SoftwareGuide : BeginCodeSnippet
   for (unsigned int GCPnum = 0; GCPnum < GCPCount; GCPnum++)
     {
     file << "GCP[" << GCPnum << "] Id " << image->GetGCPId(GCPnum) << std::endl;
@@ -153,8 +149,8 @@ int main(int argc, char* argv[])
     file << "GCP[" << GCPnum << "] Z " << image->GetGCPZ(GCPnum) << std::endl;
     file << "----------------" << std::endl;
     }
+// SoftwareGuide : EndCodeSnippet
 
-//  SoftwareGuide: EndCodeSnippet
 //  SoftwareGuide: BeginLatex
 //
 //  If a geographical transformation is available, it can be recovered
@@ -162,8 +158,7 @@ int main(int argc, char* argv[])
 //
 //  SoftwareGuide: EndLatex
 
-//  SoftwareGuide: BeginCodeSnippet
-
+// SoftwareGuide : BeginCodeSnippet
   InputImageType::VectorType tab = image->GetGeoTransform();
 
   file << "Geo Transform " << std::endl;
@@ -203,7 +198,7 @@ int main(int argc, char* argv[])
   tab.clear();
 
   file.close();
+  // SoftwareGuide : EndCodeSnippet
 
-  //  SoftwareGuide: EndCodeSnippet
   return EXIT_SUCCESS;
 }
