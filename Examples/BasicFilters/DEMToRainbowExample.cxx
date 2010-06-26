@@ -42,9 +42,10 @@
 //
 // In some situation, it is desirable to represent a gray level image in color for easier
 // interpretation. This is particularly the case if pixel values in the image are used
-// to represent some data such as elevation, deformation map, interferogram.
-//
-// In this case, it is important to ensure that similar values will get similar colors.
+// to represent some data such as elevation, deformation map,
+// interferogram. In this case, it is important to ensure that similar
+// values will get similar colors. You can notice how this requirement
+// differ from the previous case.
 //
 // The following example illustrates the use of the \doxygen{otb}{DEMToImageGenerator} class
 // combined with the \doxygen{otb}{ScalarToRainbowRGBPixelFunctor}. You can refer to the
@@ -163,6 +164,13 @@ int main(int argc, char * argv[])
       colormapper->SetColormap(colormap);
       }
     }
+  // Software Guide : BeginLatex
+  //
+  // And we connect the color mapper filter with the filter producing
+  // the image of the DEM:
+  //
+  // Software Guide : EndLatex
+
 
   // Software Guide : BeginCodeSnippet
   colormapper->SetInput(demToImage->GetOutput());

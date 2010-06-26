@@ -30,13 +30,13 @@
 
 //  Software Guide : BeginLatex
 //
-//  Some algorithms produce as an output an indexed image. In such images,
+//  Some algorithms produce an indexed image as output. In such images,
 // each pixel is given a value according to the region number it belongs to.
 // This value starting at 0 or 1 is usually an integer value.
-// Often, such images are produced by segmentation or classification algorithm.
+// Often, such images are produced by segmentation or classification algorithms.
 //
-// If such regions are easy to manipulate, as it is easier to compare two integers
-// than a RGB value, it is different when it comes to displaying the results.
+// If such regions are easy to manipulate -- it is easier and faster to compare two integers
+// than a RGB value -- it is different when it comes to displaying the results.
 //
 // Here we present a convient way to convert such indexed image to a color image. In
 // such conversion, it is important to ensure that neighborhood region, which are
