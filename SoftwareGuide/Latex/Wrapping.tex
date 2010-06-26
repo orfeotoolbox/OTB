@@ -1,6 +1,6 @@
 \section{OTB-Wrapping: bindings to Java language}
 OTB-Wrapping is a project designed to allow classes from OTB 
-to be wrapped for use with languages like Python, and Java and TCl. 
+to be wrapped for use with languages like Python, and Java and Tcl. 
 The project is based on CMake. SWIG, CableSwig and finally OTB that must be already built.
  The OTB-wrapping project is an extension of the project WrapITK \url{http://code.google.com/p/wrapitk/}. 
 It allows the Python, Java and Tcl users to have program written in their own language to use the classes and 
@@ -9,14 +9,14 @@ Since OTB-Wrapping provides an interface to some C++ compiled code, execution ti
 pure programs in most of cases.
 Once the project compiled, one can use the wrapped classes to write programs in your favorite language.
 The OTB Tutorials were translated in Java and can use the OTB capabilities to show how to use the 
-Orfeo ToolBox easily. 
+Orfeo Toolbox easily. 
 
 \subsection{Mangling}
 You have probably notice that class names are quite barbaric. It is due to the mangling. 
-With the java versions less or equal to 1.6, no generic programming is allowed. That means that no templates can be used. 
-Then, to use a C++  class in Java, the class generated (called proxies) are templated with the available types and for each type a java proxy is generated. 
+With the Java versions less or equal to 1.6, no generic programming is allowed. That means that no templates can be used. 
+Then, to use a C++  class in Java, the class generated (called proxies) are templated with the available types and for each type a Java proxy is generated. 
 The mangled types are concatenated and added in the end of the class.
-For instance, when one want to use the otb::Image with the pixel type float and the dimension 2 , the class generated will be otbImageF2. \\
+For instance, when one want to use the otb::Image with the pixel type float and the dimension 2, the class generated will be otbImageF2. \\
 
 The table ~\ref{tab:basictypetomangle} summarize the mangling used for the basic types. 
 
@@ -59,7 +59,7 @@ otb::VectorData            &  VD        \\
 
 
 The mangled name otbImageF2 means that we are dealing with the class otb::Image with 
-template arguments float and 2. So, otbImageF2 is equivalent to \verb|otb::Image<float,2>|. Another exemple 
+template arguments float and 2. So, otbImageF2 is equivalent to \verb|otb::Image<float,2>|. Another example 
 can be otbImageFileReaderIF2, knowing that I (~\ref{tab:typetomangle}) is the mangle for otb::Image, F is the mangle 
 for the type float then IF2 is the mangle for \verb|otb::Image<float,2>|, and finally otbImageFileReaderIF2 is the mangle for
  \verb|otb::ImageFileReader< otb::Image< float,2 > >|.
@@ -69,23 +69,23 @@ for the type float then IF2 is the mangle for \verb|otb::Image<float,2>|, and fi
 
 \subsubsection{Import OTB classes}
 The OTB-Wrapping project provides some jar files that corresponds to the modules implemented in the directory Libraries. Each OTB-wrapping 
-module is automatically wrapped to a separate java package. For instance, the directory Libraries contains the modules otbImages and otbLearning. The jars produced will be org.otb.otbimages and 
+module is automatically wrapped to a separate Java package. For instance, the directory Libraries contains the modules otbImages and otbLearning. The jars produced will be org.otb.otbimages and 
 org.otb.otblearning. Those jars can be used as usual in Java.
 
 To write an example that uses OTB classes, you have to import those jars in your program by adding the directive 
 \verb?import org.otb.otbio.*?. You can than access to all the classes in the module otbIO (cf section \ref{sec:tuto}).
 
 \subsubsection{Compile Java programs}
-The next step is to compile the java program. Note that the java compiler needs some options like 
+The next step is to compile the Java program. Note that the Java compiler needs some options like 
 \begin{itemize}
 \item The class path  : specifies where to find user class files. The option is  -classpath .:path\_to\_the\_jar1:path\_to\_the\_jar2.
 \end{itemize}
 
 \subsubsection{Java programs execution}
-Now we can execute the java class compiled, it needs some options too.
+Now we can execute the Java class compiled, it needs some options too.
 \begin{itemize}
 \item The class path  : specifies where to find user class files. The option is -classpath .:path\_to\_the\_jar1:path\_to\_the\_jar2...
-\item The java.library.path : A system proprety that specifies where the libraries are. The libraries are named moduleJava.\{ dll|so|nylib \}.
+\item The java.library.path : A system property that specifies where the libraries are. The libraries are named moduleJava.\{ dll|so|nylib \}.
 \end{itemize}
 
 \begin{landscape}
@@ -153,9 +153,9 @@ and libraries :
 \begin{itemize}
 \item CMake (\verb!>2.6!) to configure the compilation system.
 \item CableSwig (\verb!>0.1.0!) for parsing and automatic instanciation of C++ templates. The source code is available 
-  here
+  here: \url{http://FIXME}
 \item SWIG  (\verb!>1.3.40!) for language binding
-\item Target Language developement libraries (JRE for Java, Python 2.5 for Python).
+\item Target Language developement libraries (JRE for Java, Python 2.6 for Python).
 \end{itemize}
 
 \subsubsection{Compile OTB-Wrapping sources}
@@ -164,7 +164,7 @@ directory where the project will be compiled (Don't compile in the sources direc
 The compilation can be done successfully following those steps :
 
 \begin{itemize}
-\item Run cmake (ccmake under Linux and macosX or cmake.exe under Windows) and specify the path to the sources.
+\item Run CMake (ccmake under Linux and macosX or cmake.exe under Windows) and specify the path to the sources.
 \item Edit the paths for OTB, CableSwig and SWIG binary directories.
 \item Turn the option WRAP\_ITK\_(JAVA | PYTHON | Tcl  )  to ON to choose your target language.
 \item Choose the modules you want to wrap.
@@ -399,7 +399,7 @@ instantiating some templated classes according to the options selected by the us
 
 With OTB-Wrapping, the developer don't have to declare that a class is instantiated with the template parameters
 \verb$unsigned char$, \verb$unsigned short$, and \verb$unsigned long$, but rather declares that the
-templated classe can be instantiated with all the unsigned integer types choosed by the user.
+templated class can be instantiated with all the unsigned integer types chosen by the user.
 To do that, OTB-wrapping provides some already defined list which are grouping the types chosen by
 the user.
 
