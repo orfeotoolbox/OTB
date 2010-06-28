@@ -1042,7 +1042,7 @@ ossimSensorModel::CovMatStatus ossimSensorModel::getObsCovMat(
 }
 
 #if defined(_WIN32)
-void ossimSensorModel::computeGsd() throw (...)
+void ossimSensorModel::computeGsd() //throw (...)
 #else
 void ossimSensorModel::computeGsd() throw (ossimException)
 #endif
