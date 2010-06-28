@@ -24,6 +24,26 @@
 
 namespace otb
 {
+/** \class ScalarImageToPanTexTextureFilter 
+ *  \brief This class computes a texture derived built-up precense index (PanTex)
+ *
+ * This class computes a texture-derived built-up presence index (PanTex) from textural
+ * characteristics of scalar images.It is the min value of the contrast in 8 directions.
+ *
+ * Print references:
+ *
+ * Pesari, M., A. Gerhardinger, F. Kayitakire. 2008.  A robust built-up area precense
+ * index by anisotropic rotation-invariant textural measure. 
+ * IEEE Journal of selected topics in applied earth observations and remote sensing. 
+ * Vol1,NO3.
+ *
+ *
+ * \sa ScalarImageToGreyLevelCooccurrenceMatrixGenerator
+ * \sa GreyLevelCooccurrenceMatrixTextureCoefficientsCalculator
+ * \sa ScalarImageTextureCalculator
+ *
+ */
+
 template<class TInpuImage, class TOutputImage>
 class ScalarImageToPanTexTextureFilter : public itk::ImageToImageFilter
   <TInpuImage, TOutputImage>

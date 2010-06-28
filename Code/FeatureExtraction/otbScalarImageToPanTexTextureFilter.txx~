@@ -90,25 +90,14 @@ ScalarImageToPanTexTextureFilter<TInputImage,TOutputImage>
   // by the default GenerateOutputRequestedRegiont() implementation
   OutputRegionType outputRequestedRegion = outputPtr->GetRequestedRegion();
 
-  typename OutputRegionType::IndexType outputIndex = outputRequestedRegion.GetIndex();
-  typename OutputRegionType::SizeType outputSize   = outputRequestedRegion.GetSize();
-  typename InputRegionType::IndexType inputIndex;
-  typename InputRegionType::SizeType  inputSize;
-
-  // First, apply offset
-  for(unsigned int dim = 0; dim<InputImageType::ImageDimension;++dim)
-    {
-    inputIndex[dim]=std::min(outputIndex[dim],outputIndex[dim]+2);
-    inputSize[dim] =std::max(outputIndex[dim]+outputSize[dim],outputIndex[dim]+outputSize[dim]+2)-inputIndex[dim];
-    }
-
   // Build the input requested region
-  InputRegionType inputRequestedRegion;
-  inputRequestedRegion.SetIndex(inputIndex);
-  inputRequestedRegion.SetSize(inputSize);
-
+  InputRegionType inputRequestedRegion = outputRequestedRegion;
+  
   // Apply the radius
-  inputRequestedRegion.PadByRadius(m_Radius);
+  SizeType  maxOffsetSize;
+  maxOffsetSize[0] = 2;
+  maxOffsetSize[1] = 2;
+  inputRequestedRegion.PadByRadius(m_Radius + maxOffsetSize);
 
   // Try to apply the requested region to the input image
   if(inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()))
@@ -146,12 +135,9 @@ ScalarImageToPanTexTextureFilter<TInputImage,TOutputImage>
   // Iterate on outputs to compute textures
   while(!outputIt.IsAtEnd())
     {
-    double     out = itk::NumericTraits<double>::max();
-    const unsigned int offsetListSize = m_OffsetList.size();
-    
-    
-      
-    for (unsigned int i = 0; i < offsetListSize; ++i)
+    double out = itk::NumericTraits<double>::max();
+    typename OffsetListType::const_iterator offIt;
+    for (offIt = m_OffsetList.begin(); offIt != m_OffsetList.end(); ++offIt)
       {
       // Find the input region on which texture will be computed
       InputRegionType currentRegion;
@@ -164,8 +150,8 @@ ScalarImageToPanTexTextureFilter<TInputImage,TOutputImage>
         currentSize[dim] = 2*m_Radius[dim]+1;
 
         // Apply offset
-        currentIndex[dim] = std::min(currentIndex[dim],currentIndex[dim]+m_OffsetList[i][dim]);
-        currentSize[dim] = std::max(currentIndex[dim]+currentSize[dim],currentIndex[dim]+currentSize[dim]+m_OffsetList[i][dim])-currentIndex[dim];
+        currentIndex[dim] = std::min(currentIndex[dim],currentIndex[dim]+(*offIt)[dim]);
+        currentSize[dim] = std::max(currentIndex[dim]+currentSize[dim],currentIndex[dim]+currentSize[dim]+(*offIt)[dim])-currentIndex[dim];
         }
 
       // Fill current region
@@ -175,46 +161,36 @@ ScalarImageToPanTexTextureFilter<TInputImage,TOutputImage>
       // Build the co-occurence matrix generator
       CoocurrenceMatrixGeneratorPointerType coOccurenceMatrixGenerator = CoocurrenceMatrixGeneratorType::New();
       coOccurenceMatrixGenerator->SetInput(inputPtr);
-      coOccurenceMatrixGenerator->SetOffset(m_OffsetList[i]);
+      coOccurenceMatrixGenerator->SetOffset((*offIt));
       coOccurenceMatrixGenerator->SetNumberOfBinsPerAxis(m_NumberOfBinsPerAxis);
       coOccurenceMatrixGenerator->SetPixelValueMinMax(m_InputImageMinimum,m_InputImageMaximum);
       
       // Compute the co-occurence matrix
       coOccurenceMatrixGenerator->SetRegion(currentRegion);
+      coOccurenceMatrixGenerator->SetNormalize(true);
       coOccurenceMatrixGenerator->Compute();
       
-      //HistogramType::Pointer histo(coOccurenceMatrixGenerator->GetOutput());
+      typename HistogramType::Pointer histo = coOccurenceMatrixGenerator->GetOutput();
       
-      FrequencyType totalFrequency = coOccurenceMatrixGenerator->GetOutput()->GetTotalFrequency();
-      if ( (totalFrequency - itk::NumericTraits<MeasurementType>::One) > 0.0001 )
-        {
-        // Doesn't look normalized:
-        HistogramIterator hit;
-        FrequencyType totalFrequency = 
-          coOccurenceMatrixGenerator->GetOutput()->GetTotalFrequency();
-              
-        for (hit = coOccurenceMatrixGenerator->GetOutput()->Begin(); hit != coOccurenceMatrixGenerator->GetOutput()->End(); ++hit)
-          {
-          hit.SetFrequency(hit.GetFrequency() / totalFrequency);
-          }
-        }
       double inertia = 0;
-      for (HistogramIterator hit = coOccurenceMatrixGenerator->GetOutput()->Begin();
-       hit != coOccurenceMatrixGenerator->GetOutput()->End(); ++hit)
-      {
-      MeasurementType frequency = hit.GetFrequency();
-      if (frequency == 0)
+      for (HistogramIterator hit = histo->Begin();hit != histo->End(); ++hit)
         {
-        continue; // no use doing these calculations if we're just multiplying by zero.
+        MeasurementType frequency = hit.GetFrequency();
+        if (frequency == 0)
+          {
+          continue; // no use doing these calculations if we're just multiplying by zero.
+          }
+        typename InputRegionType::IndexType index = histo->GetIndex(hit.GetInstanceIdentifier());
+        inertia += (index[0] - index[1]) * (index[0] - index[1]) * frequency;
         }
-      typename InputRegionType::IndexType index = histo->GetIndex(hit.GetInstanceIdentifier());
-      inertia += (index[0] - index[1]) * (index[0] - index[1]) * frequency;
-      }
       
       if (inertia < out) out = inertia;
       }
       
       outputIt.Set(out);
+//       std::cout << "Insert pan tex value " << out << std::endl;
+      ++outputIt;
+      progress.CompletedPixel();
     }
 }
 

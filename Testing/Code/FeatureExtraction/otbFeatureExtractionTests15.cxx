@@ -36,4 +36,5 @@ void RegisterTests()
   REGISTER_TEST(otbScalarImageToAdvancedTexturesFilterNew);
   REGISTER_TEST(otbScalarImageToAdvancedTexturesFilter);
   REGISTER_TEST(otbScalarImageToPanTexTextureFilterNew);
+  REGISTER_TEST(otbScalarImageToPanTexTextureFilter);
 }
