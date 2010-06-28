@@ -13,7 +13,7 @@
 #if !defined(BOOST_FUNCTIONAL_HASH_EXTENSIONS_HPP)
 #define BOOST_FUNCTIONAL_HASH_EXTENSIONS_HPP
 
-#include <boost/functional/hash/hash.hpp>
+#include <boost/bfunctional/hash/hash.hpp>
 #include <boost/detail/container_fwd.hpp>
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)

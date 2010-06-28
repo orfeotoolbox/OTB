@@ -11,8 +11,8 @@
 #endif
 
 #include <boost/config.hpp>
-#include <boost/functional/hash/detail/float_functions.hpp>
-#include <boost/functional/hash/detail/limits.hpp>
+#include <boost/bfunctional/hash/detail/float_functions.hpp>
+#include <boost/bfunctional/hash/detail/limits.hpp>
 #include <boost/integer/static_log2.hpp>
 #include <boost/cstdint.hpp>
 #include <boost/assert.hpp>
@@ -22,12 +22,12 @@
 // Cygwn
 #if defined(__CYGWIN__)
 #  if defined(__i386__) || defined(_M_IX86)
-#    include <boost/functional/hash/detail/hash_float_x86.hpp>
+#    include <boost/bfunctional/hash/detail/hash_float_x86.hpp>
 #  else
-#    include <boost/functional/hash/detail/hash_float_generic.hpp>
+#    include <boost/bfunctional/hash/detail/hash_float_generic.hpp>
 #  endif
 #else
-#  include <boost/functional/hash/detail/hash_float_generic.hpp>
+#  include <boost/bfunctional/hash/detail/hash_float_generic.hpp>
 #endif
 
 // Can we use fpclassify?

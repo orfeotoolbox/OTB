@@ -8,9 +8,9 @@
 #if !defined(BOOST_FUNCTIONAL_HASH_DETAIL_HASH_FLOAT_GENERIC_HEADER)
 #define BOOST_FUNCTIONAL_HASH_DETAIL_HASH_FLOAT_GENERIC_HEADER
 
-#include <boost/functional/hash/detail/float_functions.hpp>
+#include <boost/bfunctional/hash/detail/float_functions.hpp>
 #include <boost/integer/static_log2.hpp>
-#include <boost/functional/hash/detail/limits.hpp>
+#include <boost/bfunctional/hash/detail/limits.hpp>
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once

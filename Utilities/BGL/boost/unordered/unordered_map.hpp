@@ -14,7 +14,7 @@
 #endif
 
 #include <boost/unordered/unordered_map_fwd.hpp>
-#include <boost/functional/hash.hpp>
+#include <boost/bfunctional/hash.hpp>
 #include <boost/unordered/detail/allocator_helpers.hpp>
 #include <boost/unordered/detail/equivalent.hpp>
 #include <boost/unordered/detail/unique.hpp>
