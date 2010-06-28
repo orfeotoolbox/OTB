@@ -294,6 +294,7 @@ ScalarImageToTexturesFilter<TInputImage,TOutputImage>
 
     // Compute the co-occurence matrix
     coOccurenceMatrixGenerator->SetRegion(currentRegion);
+    coOccurenceMatrixGenerator->SetNormalize(true);
     coOccurenceMatrixGenerator->Compute();
 
     // Compute textures indices
