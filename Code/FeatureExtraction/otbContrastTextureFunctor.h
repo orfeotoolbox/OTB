@@ -18,8 +18,7 @@
 #ifndef __otbContrastTextureFunctor_h
 #define __otbContrastTextureFunctor_h
 
-#pragma message("ContrastTextureFunctor has been deprecated.  Please use otbScalarImageToTexturesFilter instead")
-
+#include "#vcl_deprecated_header.h#"
 #include "otbTextureFunctorBase.h"
 
 namespace otb

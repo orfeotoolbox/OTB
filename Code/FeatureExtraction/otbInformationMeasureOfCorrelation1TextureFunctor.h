@@ -18,8 +18,7 @@
 #ifndef __otbInformationMeasureOfCorrelation1TextureFunctor_h
 #define __otbInformationMeasureOfCorrelation1TextureFunctor_h
 
-#pragma message("InformationMeasureOfCorrelation1TextureFunctor has been deprecated.  Please use otbScalarImageToAdvancedTexturesFilter instead")
-
+#include "#vcl_deprecated_header.h#"
 #include "otbEntropyTextureFunctor.h"
 
 namespace otb

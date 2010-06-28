@@ -18,8 +18,7 @@
 #ifndef __otbEnergyTextureFunctor_h
 #define __otbEnergyTextureFunctor_h
 
-#pragma message("EnergyTextureFunctor has been deprecated.  Please use otbScalarImageToTexturesFilter instead")
-
+#include "#vcl_deprecated_header.h#"
 #include "otbTextureFunctorBase.h"
 
 namespace otb

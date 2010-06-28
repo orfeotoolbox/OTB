@@ -18,7 +18,7 @@
 #ifndef __otbVarianceTextureFunctor_h
 #define __otbVarianceTextureFunctor_h
 
-#pragma message("VarianceTextureFunctor has been deprecated.  Please use otbScalarImageToTexturesFilter instead")
+#include "#vcl_deprecated_header.h#"
 
 #include "otbMeanTextureFunctor.h"
 

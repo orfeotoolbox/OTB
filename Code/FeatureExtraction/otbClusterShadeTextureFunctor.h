@@ -18,8 +18,7 @@
 #ifndef __otbClusterShadeTextureFunctor_h
 #define __otbClusterShadeTextureFunctor_h
 
-#pragma message("ClusterShadeTextureFunctor has been deprecated.  Please use otbScalarImageToTexturesFilter instead")
-
+#include "#vcl_deprecated_header.h#"
 #include "otbMeanTextureFunctor.h"
 
 namespace otb

@@ -18,8 +18,7 @@
 #ifndef __otbDifferenceEntropyTextureFunctor_h
 #define __otbDifferenceEntropyTextureFunctor_h
 
-#pragma message("DifferenceEntropyTextureFunctor has been deprecated.  Please use otbScalarImageToAdvancedTexturesFilter instead")
-
+#include "#vcl_deprecated_header.h#"
 #include "otbTextureFunctorBase.h"
 
 namespace otb

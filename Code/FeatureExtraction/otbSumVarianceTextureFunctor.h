@@ -18,8 +18,7 @@
 #ifndef __otbSumVarianceTextureFunctor_h
 #define __otbSumVarianceTextureFunctor_h
 
-#pragma message("SumVarianceTextureFunctor has been deprecated.  Please use otbScalarImageToAdvancedTexturesFilter instead")
-
+#include "#vcl_deprecated_header.h#"
 #include "otbSumAverageTextureFunctor.h"
 
 namespace otb

@@ -18,8 +18,7 @@
 #ifndef __otbEntropyTextureFunctor_h
 #define __otbEntropyTextureFunctor_h
 
-#pragma message("EntropyTextureFunctor has been deprecated.  Please use otbScalarImageToTexturesFilter instead")
-
+#include "#vcl_deprecated_header.h#"
 #include "otbTextureFunctorBase.h"
 
 namespace otb
