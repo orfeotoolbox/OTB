@@ -1841,6 +1841,19 @@ ADD_TEST(feTvScalarImageToAdvancedTexturesFilter ${FEATUREEXTRACTION_TESTS15}
         ${TEMP}/feTvScalarImageToAdvancedTexturesFilterOutput
         8 5 1 1)
 
+ADD_TEST(feTuScalarImageToPanTexTextureFilterNew ${FEATUREEXTRACTION_TESTS15}
+        otbScalarImageToPanTexTextureFilterNew
+)
+
+ADD_TEST(feTvScalarImageToPanTexTextureFilter ${FEATUREEXTRACTION_TESTS15}
+        --compare-image ${EPSILON_8}   
+            ${BASELINE}/feTvScalarImageToPanTexTextureFilterOutputPanTex.tif
+            ${TEMP}/feTvScalarImageToPanTexTextureFilterOutputPanTex.tif
+        otbScalarImageToPanTexTextureFilter
+        ${INPUTDATA}/Mire_Cosinus_500_500.png
+        ${TEMP}/feTvScalarImageToPanTexTextureFilterOutput
+        8 5)
+
 # A enrichir
 SET(BasicFeatureExtraction_SRCS1
 otbFeatureExtractionTests1.cxx
@@ -2025,6 +2038,8 @@ otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculatorNew.cxx
 otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator.cxx
 otbScalarImageToAdvancedTexturesFilterNew.cxx
 otbScalarImageToAdvancedTexturesFilter.cxx
+otbScalarImageToPanTexTextureFilterNew.cxx
+otbScalarImageToPanTexTextureFilter.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbFeatureExtractionTests1 "${BasicFeatureExtraction_SRCS1}" "OTBFeatureExtraction;OTBIO;OTBTesting")
