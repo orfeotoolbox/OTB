@@ -32,7 +32,8 @@
 namespace otb
 {
 /** \class InnerProductPCAImageFilter
- *  \brief Base class for InnerProductPCAImageFilter.
+ *  \brief Performs a PCA with streaming capabilities
+ *
  * InnerProductPCAImageFilter performs a principal component analysis (as
  * itk::ImagePCAShapeModelEstimator) (PCA) on a vector image in streaming capabilities.
  * Alls channels of the input vector image are used for training images
