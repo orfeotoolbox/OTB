@@ -1841,6 +1841,10 @@ ADD_TEST(feTvScalarImageToAdvancedTexturesFilter ${FEATUREEXTRACTION_TESTS15}
         ${TEMP}/feTvScalarImageToAdvancedTexturesFilterOutput
         8 5 1 1)
 
+ADD_TEST(feTuScalarImageToPanTexTextureFilterNew ${FEATUREEXTRACTION_TESTS15}
+        otbScalarImageToPanTexTextureFilterNew
+)
+
 # A enrichir
 SET(BasicFeatureExtraction_SRCS1
 otbFeatureExtractionTests1.cxx
@@ -2025,6 +2029,7 @@ otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculatorNew.cxx
 otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator.cxx
 otbScalarImageToAdvancedTexturesFilterNew.cxx
 otbScalarImageToAdvancedTexturesFilter.cxx
+otbScalarImageToPanTexTextureFilterNew.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbFeatureExtractionTests1 "${BasicFeatureExtraction_SRCS1}" "OTBFeatureExtraction;OTBIO;OTBTesting")
