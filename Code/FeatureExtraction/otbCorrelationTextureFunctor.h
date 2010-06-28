@@ -18,6 +18,8 @@
 #ifndef __otbCorrelationTextureFunctor_h
 #define __otbCorrelationTextureFunctor_h
 
+#pragma message("CorrelationTextureFunctor has been deprecated.  Please use otbScalarImageToTexturesFilter instead")
+
 #include "otbTextureFunctorBase.h"
 
 namespace otb
@@ -25,20 +27,10 @@ namespace otb
 namespace Functor
 {
 /** \class CorrelationTextureFunctor
- *  \brief This functor calculates the correlation image texture according to Haralick descriptors.
+ *  \brief <b>DEPRECATED<\b>
  *
- *  Computes correlation using joint histogram (neighborhood and offset neighborhood).
- *  The formula is:
- *  \f[ \frac{\sum_{i}\sum_{j}i.j.p(i,j)-\mu_{x}\mu_{y}} {\sigma_{x}\sigma_{y}} \f]
- *
- *  Where \f$ \mu_{x} \f$, \f$ \mu_{y} \f$, \f$ \sigma_{x} \f$ and \f$ \sigma_{y} \f$ are the mean
- * and standard deviation of \f$ p_{x} \f$ and \f$ p_{y} \f$.
- *  TIterInput is an iterator, TOutput is a PixelType.
- *
- *  \sa TextureFunctorBase
- *  \ingroup Functor
- *  \ingroup Statistics
-   * \ingroup Textures
+ * \deprecated in OTB 3.2.2, please use
+ * otbScalarImageToTexturesFilter instead.
  */
 
 template <class TScalarInputPixelType, class TScalarOutputPixelType>
@@ -52,7 +44,10 @@ public:
     return "CorrelationTexture";
   }
 
-  CorrelationTextureFunctor(){};
+  CorrelationTextureFunctor()
+    {
+    };
+
   virtual ~CorrelationTextureFunctor(){}
 
   typedef TextureFunctorBase<TScalarInputPixelType, TScalarOutputPixelType> Superclass;

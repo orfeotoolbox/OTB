@@ -18,6 +18,8 @@
 #ifndef __otbSumEntropyTextureFunctor_h
 #define __otbSumEntropyTextureFunctor_h
 
+#pragma message("SumEntropyTextureFunctor has been deprecated.  Please use otbScalarImageToAdvancedTexturesFilter instead")
+
 #include "otbTextureFunctorBase.h"
 
 namespace otb
@@ -25,18 +27,12 @@ namespace otb
 namespace Functor
 {
 /** \class SumEntropyTextureFunctor
- *  \brief This functor calculates the sum entropy image texture according to Haralick descriptors.
+ *  \brief <b>DEPRECATED<\b>
  *
- *  Computes sum entropy using joint histogram (neighborhood and offset neighborhood).
- *  The formula is:
- *  \f$ -\sum_{i}{2N}p_{x+y}(i)\log{(p_{x+y}(i))} \f$
- *  TIterInput is an iterator, TOutput is a PixelType.
- *
- *  \sa TextureFunctorBase
- *  \ingroup Functor
- *  \ingroup Statistics
-   * \ingroup Textures
+ * \deprecated in OTB 3.2.2, please use
+ * otbScalarImageToAdvancedTexturesFilter instead.
  */
+
 template <class TScalarInputPixelType, class TScalarOutputPixelType>
 class ITK_EXPORT SumEntropyTextureFunctor :
   public TextureFunctorBase<TScalarInputPixelType, TScalarOutputPixelType>
@@ -48,7 +44,9 @@ public:
     return "SumEntropyTexture";
   }
 
-  SumEntropyTextureFunctor(){};
+  SumEntropyTextureFunctor()
+    {
+    };
   virtual ~SumEntropyTextureFunctor(){}
 
   typedef TextureFunctorBase<TScalarInputPixelType, TScalarOutputPixelType> Superclass;

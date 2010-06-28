@@ -18,6 +18,8 @@
 #ifndef __otbInverseDifferenceMomentTextureFunctor_h
 #define __otbInverseDifferenceMomentTextureFunctor_h
 
+#pragma message("InverseDifferenceMomentTextureFunctor has been deprecated.  Please use otbScalarImageToTexturesFilter instead")
+
 #include "otbTextureFunctorBase.h"
 
 namespace otb
@@ -25,17 +27,10 @@ namespace otb
 namespace Functor
 {
 /** \class InverseDifferenceMomentTextureFunctor
- *  \brief This functor calculates the inverse difference moment of an image
+ *  \brief <b>DEPRECATED<\b>
  *
- *  Computes joint histogram (neighborhood and offset neighborhood).
- *  The formula is:
- *  \f$ \sum_{i}\sum_{j}\frac{1}{1+(i-j)^2}p(i,j) \f$
- *  TIterInput is an ietrator, TOutput is a PixelType.
- *
- *  \sa TextureFunctorBase
- *  \ingroup Functor
- *  \ingroup Statistics
-   * \ingroup Textures
+ * \deprecated in OTB 3.2.2, please use
+ * otbScalarImageToTexturesFilter instead.
  */
 
 template <class TScalarInputPixelType, class TScalarOutputPixelType>
@@ -49,7 +44,10 @@ public:
     return "InverseDifferenceMomentTexture";
   }
 
-  InverseDifferenceMomentTextureFunctor(){};
+  InverseDifferenceMomentTextureFunctor()
+  {
+  };
+
   virtual ~InverseDifferenceMomentTextureFunctor(){}
 
   typedef TextureFunctorBase<TScalarInputPixelType, TScalarOutputPixelType> Superclass;

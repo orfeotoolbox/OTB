@@ -18,6 +18,8 @@
 #ifndef __otbContrastTextureFunctor_h
 #define __otbContrastTextureFunctor_h
 
+#pragma message("ContrastTextureFunctor has been deprecated.  Please use otbScalarImageToTexturesFilter instead")
+
 #include "otbTextureFunctorBase.h"
 
 namespace otb
@@ -25,18 +27,12 @@ namespace otb
 namespace Functor
 {
 /** \class ContrastTextureFunctor
- *  \brief This functor calculates the contrast image texture according to Haralick descriptors.
+ *  \brief <b>DEPRECATED<\b>
  *
- *  Computes contrast using joint histogram (neighborhood and offset neighborhood).
- *  The formula is:
- *  \f[ \sum_{n}n^2.p_{x-y}(n)^2 \f]
- *  TIterInput is an iterator, TOutput is a PixelType.
- *
- *  \sa TextureFunctorBase
- *  \ingroup Functor
- *  \ingroup Statistics
-   * \ingroup Textures
+ * \deprecated in OTB 3.2.2, please use
+ * otbScalarImageToTexturesFilter instead.
  */
+
 
 template <class TScalarInputPixelType, class TScalarOutputPixelType>
 class ITK_EXPORT ContrastTextureFunctor :
@@ -49,7 +45,10 @@ public:
     return "ContrastTexture";
   }
 
-  ContrastTextureFunctor(){};
+  ContrastTextureFunctor()
+    {
+    };
+
   virtual ~ContrastTextureFunctor(){}
 
   typedef TextureFunctorBase<TScalarInputPixelType, TScalarOutputPixelType> Superclass;
@@ -66,7 +65,7 @@ public:
     for (unsigned sB = 0; sB < this->GetHisto()[0].size(); sB++)
       {
       double nCeil = (static_cast<double>(sB) + 0.5) * this->GetNeighBinLength();
-      double nCeilSquare = nCeil*nCeil;
+      double nCeilSquare = vcl_pow(nCeil, 2);
       for (unsigned r = 0; r < this->GetHisto().size(); ++r)
         {
         double rVal = (static_cast<double>(r) + 0.5) * this->GetOffsetBinLength();
