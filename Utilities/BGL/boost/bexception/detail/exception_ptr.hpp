@@ -16,10 +16,10 @@
 #ifdef BOOST_NO_EXCEPTIONS
 #error This header requires exception handling to be enabled.
 #endif
-#include <boost/exception/exception.hpp>
-#include <boost/exception/info.hpp>
-#include <boost/exception/diagnostic_information.hpp>
-#include <boost/exception/detail/type_info.hpp>
+#include <boost/bexception/bexception/.hpp>
+#include <boost/bexception/info.hpp>
+#include <boost/bexception/diagnostic_information.hpp>
+#include <boost/bexception/detail/type_info.hpp>
 #include <boost/shared_ptr.hpp>
 #include <stdexcept>
 #include <new>

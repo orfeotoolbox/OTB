@@ -5,7 +5,7 @@
 //  accompanying file LICENSE_1_0.txt or a copy at
 //  <http://www.boost.org/LICENSE_1_0.txt>.)
 
-//  See <http://www.boost.org/libs/utility/> for the library's home page.
+//  See <http://www.boost.org/libs/butility/> for the library's home page.
 
 #ifndef BOOST_UTILITY_BASE_FROM_MEMBER_HPP
 #define BOOST_UTILITY_BASE_FROM_MEMBER_HPP

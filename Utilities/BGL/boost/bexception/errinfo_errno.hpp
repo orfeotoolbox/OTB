@@ -12,7 +12,7 @@
 #pragma warning(push,1)
 #endif
 
-#include "boost/exception/info.hpp"
+#include "boost/bexception/info.hpp"
 #include <errno.h>
 #include <string.h>
 

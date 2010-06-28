@@ -17,7 +17,7 @@
 // fact that various compilers haven't fully implemented value-initialization.
 // The constructor of boost::value_initialized<T> works around these compiler
 // issues, by clearing the bytes of T, before constructing the T object it
-// contains. More details on these issues are at libs/utility/value_init.htm
+// contains. More details on these issues are at libs/butility/value_init.htm
 
 #include <boost/aligned_storage.hpp>
 #include <boost/detail/workaround.hpp>

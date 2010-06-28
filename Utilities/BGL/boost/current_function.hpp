@@ -16,7 +16,7 @@
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 //
-//  http://www.boost.org/libs/utility/current_function.html
+//  http://www.boost.org/libs/butility/current_function.html
 //
 
 namespace boost

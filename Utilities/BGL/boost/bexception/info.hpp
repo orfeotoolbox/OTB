@@ -12,9 +12,9 @@
 #pragma warning(push,1)
 #endif
 
-#include <boost/exception/exception.hpp>
-#include <boost/exception/to_string_stub.hpp>
-#include <boost/exception/detail/error_info_impl.hpp>
+#include <boost/bexception/bexception/.hpp>
+#include <boost/bexception/to_string_stub.hpp>
+#include <boost/bexception/detail/error_info_impl.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/config.hpp>
 #include <map>

@@ -4,7 +4,7 @@
 //  http://www.boost.org/LICENSE_1_0.txt).
 //
 //  See http://www.boost.org/libs/utility for most recent version including documentation.
-//  see libs/utility/compressed_pair.hpp
+//  see libs/butility/compressed_pair.hpp
 //
 /* Release notes:
    20 Jan 2001:

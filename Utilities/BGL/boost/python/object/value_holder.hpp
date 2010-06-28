@@ -29,7 +29,7 @@
 #  include <boost/preprocessor/repetition/enum_params.hpp>
 #  include <boost/preprocessor/repetition/enum_binary_params.hpp>
 
-#  include <boost/utility/addressof.hpp>
+#  include <boost/butility/addressof.hpp>
 
 namespace boost { namespace python { namespace objects { 
 
