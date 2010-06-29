@@ -18,6 +18,7 @@
 #ifndef __otbPanTexTextureFunctor_h
 #define __otbPanTexTextureFunctor_h
 
+#include "vcl_deprecated_header.h"
 #include "otbContrastTextureFunctor.h"
 
 namespace otb

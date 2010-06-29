@@ -18,6 +18,7 @@
 #ifndef __otbPanTexTextureImageFilter_h
 #define __otbPanTexTextureImageFilter_h
 
+#include "vcl_deprecated_header.h"
 #include "otbUnaryFunctorNeighborhoodWithOffsetImageFilter.h"
 #include "otbPanTexTextureFunctor.h"
 #include "itkConstNeighborhoodIterator.h"
