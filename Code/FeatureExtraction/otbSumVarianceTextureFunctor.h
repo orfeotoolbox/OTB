@@ -28,7 +28,7 @@ namespace Functor
 /** \class SumVarianceTextureFunctor
  *  \brief <b>DEPRECATED<\b>
  *
- * \deprecated in OTB 3.2.2, please use
+ * \deprecated in OTB 3.4, please use
  * otbScalarImageToAdvancedTexturesFilter instead.
  */
 
