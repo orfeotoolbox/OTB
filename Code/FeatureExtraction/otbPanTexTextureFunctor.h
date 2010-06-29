@@ -25,17 +25,10 @@ namespace otb
 namespace Functor
 {
 /** \class PanTexTextureFunctor
- *  \brief This functor calculates the contrast image texture according to Haralick descriptors.
+ *  \brief <b>DEPRECATED<\b>
  *
- *  Computes contrast using joint histogram (neighborhood and offset neighborhood).
- *  The formula is:
- *  \f$ \sum_{n}n^2.p_{x-y}(n)^2 \f$
- *  TIterInput is an iterator, TOutput is a PixelType.
- *
- *  \sa TextureFunctorBase
- *  \ingroup Functor
- *  \ingroup Statistics
-   * \ingroup Textures
+ * \deprecated in OTB 3.4, please use
+ * otbScalarImageToPanTexTextureFilter instead.
  */
 
 template <class TScalarInputPixelType, class TScalarOutputPixelType>

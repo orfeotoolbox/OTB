@@ -30,13 +30,10 @@ namespace otb
 
 /**
  * \class PanTexTextureImageFunction
- * \brief Calculate a texture over an image.
+ *  \brief <b>DEPRECATED<\b>
  *
- * This class is templated with the input image and the Functor
- * that will compute the texture.
- *
- * \ingroup ImageFunctions
-   * \ingroup Textures
+ * \deprecated in OTB 3.4, please use
+ * otbScalarImageToPanTexTextureFilter instead.
  */
 
 template <class TInputImage, class TOutputImage, class TCoordRep = float>
