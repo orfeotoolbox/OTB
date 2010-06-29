@@ -18,7 +18,7 @@
 #ifndef __otbDifferenceEntropyTextureFunctor_h
 #define __otbDifferenceEntropyTextureFunctor_h
 
-#include "#vcl_deprecated_header.h#"
+#include "vcl_deprecated_header.h"
 #include "otbTextureFunctorBase.h"
 
 namespace otb

@@ -18,7 +18,7 @@
 #ifndef __otbClusterProminenceTextureFunctor_h
 #define __otbClusterProminenceTextureFunctor_h
 
-#include "#vcl_deprecated_header.h#"
+#include "vcl_deprecated_header.h"
 #include "otbMeanTextureFunctor.h"
 
 namespace otb

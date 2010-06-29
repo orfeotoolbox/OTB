@@ -18,7 +18,7 @@
 #ifndef __otbMeanTextureFunctor_h
 #define __otbMeanTextureFunctor_h
 
-#include "#vcl_deprecated_header.h#"
+#include "vcl_deprecated_header.h"
 #include "otbTextureFunctorBase.h"
 
 namespace otb

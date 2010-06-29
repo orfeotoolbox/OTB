@@ -18,7 +18,7 @@
 #ifndef __otbContrastTextureFunctor_h
 #define __otbContrastTextureFunctor_h
 
-#include "#vcl_deprecated_header.h#"
+#include "vcl_deprecated_header.h"
 #include "otbTextureFunctorBase.h"
 
 namespace otb

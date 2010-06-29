@@ -18,7 +18,7 @@
 #ifndef __otbSumAverageTextureFunctor_h
 #define __otbSumAverageTextureFunctor_h
 
-#include "#vcl_deprecated_header.h#"
+#include "vcl_deprecated_header.h"
 #include "otbTextureFunctorBase.h"
 
 namespace otb

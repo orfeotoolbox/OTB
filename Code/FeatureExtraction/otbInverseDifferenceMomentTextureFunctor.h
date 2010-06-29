@@ -18,7 +18,7 @@
 #ifndef __otbInverseDifferenceMomentTextureFunctor_h
 #define __otbInverseDifferenceMomentTextureFunctor_h
 
-#include "#vcl_deprecated_header.h#"
+#include "vcl_deprecated_header.h"
 #include "otbTextureFunctorBase.h"
 
 namespace otb

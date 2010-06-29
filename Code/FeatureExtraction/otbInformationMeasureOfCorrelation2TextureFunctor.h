@@ -18,7 +18,7 @@
 #ifndef __otbInformationMeasureOfCorrelation2TextureFunctor_h
 #define __otbInformationMeasureOfCorrelation2TextureFunctor_h
 
-#include "#vcl_deprecated_header.h#"
+#include "vcl_deprecated_header.h"
 #include "otbEntropyTextureFunctor.h"
 
 namespace otb
