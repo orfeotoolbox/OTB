@@ -29,7 +29,7 @@ template <class TInputImage,class TOutputImage>
 ScalarImageToAdvancedTexturesFilter<TInputImage,TOutputImage>
 ::ScalarImageToAdvancedTexturesFilter() : m_Radius(),
                                   m_Offset(),
-                                  m_NumberOfBinsPerAxis(),
+                                  m_NumberOfBinsPerAxis(8),
                                   m_InputImageMinimum(0),
                                   m_InputImageMaximum(256)
 {

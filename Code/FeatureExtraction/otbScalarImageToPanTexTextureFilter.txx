@@ -28,7 +28,7 @@ namespace otb
 template <class TInputImage,class TOutputImage>
 ScalarImageToPanTexTextureFilter<TInputImage,TOutputImage>
 ::ScalarImageToPanTexTextureFilter() : m_Radius(),
-                                  m_NumberOfBinsPerAxis(),
+                                  m_NumberOfBinsPerAxis(8),
                                   m_InputImageMinimum(0),
                                   m_InputImageMaximum(256)
 {
@@ -135,29 +135,28 @@ ScalarImageToPanTexTextureFilter<TInputImage,TOutputImage>
   // Iterate on outputs to compute textures
   while(!outputIt.IsAtEnd())
     {
+    // Find the input region on which texture will be computed
+    InputRegionType currentRegion;
+    typename InputRegionType::IndexType currentIndex = outputIt.GetIndex()-m_Radius;
+    typename InputRegionType::SizeType  currentSize;
+
+    for(unsigned int dim = 0; dim<InputImageType::ImageDimension;++dim)
+      {
+      // Compute current size before applying offset
+      currentSize[dim] = 2*m_Radius[dim]+1;
+      }
+
+    // Fill current region
+    currentRegion.SetIndex(currentIndex);
+    currentRegion.SetSize(currentSize);
+
+    // Initialise output value
     double out = itk::NumericTraits<double>::max();
+
+    // For each offset
     typename OffsetListType::const_iterator offIt;
     for (offIt = m_OffsetList.begin(); offIt != m_OffsetList.end(); ++offIt)
       {
-      // Find the input region on which texture will be computed
-      InputRegionType currentRegion;
-      typename InputRegionType::IndexType currentIndex = outputIt.GetIndex()-m_Radius;
-      typename InputRegionType::SizeType  currentSize;
-
-      for(unsigned int dim = 0; dim<InputImageType::ImageDimension;++dim)
-        {
-        // Compute current size before applying offset
-        currentSize[dim] = 2*m_Radius[dim]+1;
-
-        // Apply offset
-        currentIndex[dim] = std::min(currentIndex[dim],currentIndex[dim]+(*offIt)[dim]);
-        currentSize[dim] = std::max(currentIndex[dim]+currentSize[dim],currentIndex[dim]+currentSize[dim]+(*offIt)[dim])-currentIndex[dim];
-        }
-
-      // Fill current region
-      currentRegion.SetIndex(currentIndex);
-      currentRegion.SetSize(currentSize);
-      
       // Build the co-occurence matrix generator
       CoocurrenceMatrixGeneratorPointerType coOccurenceMatrixGenerator = CoocurrenceMatrixGeneratorType::New();
       coOccurenceMatrixGenerator->SetInput(inputPtr);
