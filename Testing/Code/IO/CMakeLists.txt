@@ -2328,25 +2328,19 @@ ADD_TEST(ioTvTileMapFetcherTest ${IO_TESTS19}
 
 # We do not perform regression testing here because images on server might change
 ADD_TEST(ioTvTileMapImageIOFile ${IO_TESTS19}
-  --ignore-order --compare-image ${NOTOL}                   
-        ${BASELINE}/ioTvTileMapImageIOFileOutput.png 
-        ${TEMP}/ioTvTileMapImageIOFileOutput.png            
-   otbTileMapImageIOTest
-        ${OTB_DATA_ROOT}/Examples/osmfile.otb
-	${TEMP}/ioTvTileMapImageIOFileOutput.png
-	${TEMP}
-	1.4835345 43.55968261 13
+  otbTileMapImageIOTest
+    ${OTB_DATA_ROOT}/Examples/osmfile.otb
+    ${TEMP}/ioTvTileMapImageIOFileOutput.png
+    ${TEMP}
+    1.4835345 43.55968261 13
 )
 
 ADD_TEST(ioTvTileMapImageIOWeb ${IO_TESTS19}
- --ignore-order --compare-image ${NOTOL}                  
-        ${BASELINE}/ioTvTileMapImageIOWebOutput.png  
-        ${TEMP}/ioTvTileMapImageIOWebOutput.png             
   otbTileMapImageIOTest
-        http://tile.openstreetmap.org/
-	${TEMP}/ioTvTileMapImageIOWebOutput.png
-	${TEMP}
-	1.4835345 43.55968261 13
+    http://tile.openstreetmap.org/
+    ${TEMP}/ioTvTileMapImageIOWebOutput.png
+    ${TEMP}
+    1.4835345 43.55968261 13
 )
 
 IF(OTB_DATA_USE_LARGEINPUT)
