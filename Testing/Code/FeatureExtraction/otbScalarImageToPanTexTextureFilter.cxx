@@ -18,7 +18,6 @@
 #include "itkExceptionObject.h"
 
 #include "otbScalarImageToPanTexTextureFilter.h"
-#include "itkMinimumMaximumImageCalculator.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -43,8 +42,6 @@ int otbScalarImageToPanTexTextureFilter(int argc, char * argv[])
     <ImageType,ImageType>                        PanTexTextureFilterType;
   typedef otb::ImageFileReader<ImageType>        ReaderType;
   typedef otb::ImageFileWriter<ImageType>        WriterType;
-  typedef itk::MinimumMaximumImageCalculator
-    <ImageType>                                  MinMaxCalculatorType;
 
   ReaderType::Pointer         reader = ReaderType::New();
   PanTexTextureFilterType::Pointer filter = PanTexTextureFilterType::New();
@@ -52,7 +49,6 @@ int otbScalarImageToPanTexTextureFilter(int argc, char * argv[])
 
   // Read image
   reader->SetFileName(infname);
-  reader->Update();
 
   // Build radius
   PanTexTextureFilterType::SizeType sradius;
@@ -64,14 +60,8 @@ int otbScalarImageToPanTexTextureFilter(int argc, char * argv[])
 
   otb::StandardFilterWatcher watcher(filter,"Textures filter");
 
-  // Compute min/max
-  MinMaxCalculatorType::Pointer minMax = MinMaxCalculatorType::New();
-  minMax->SetImage(reader->GetOutput());
-  minMax->Compute();
-
-  filter->SetInputImageMinimum(minMax->GetMinimum());
-  filter->SetInputImageMaximum(minMax->GetMaximum());
-  filter->Update();
+  filter->SetInputImageMinimum(0);
+  filter->SetInputImageMaximum(255);
 
   // Write outputs
   itk::OStringStream oss;
@@ -80,6 +70,7 @@ int otbScalarImageToPanTexTextureFilter(int argc, char * argv[])
   oss<<outprefix<<"PanTex.tif";
   writer->SetInput(filter->GetOutput());
   writer->SetFileName(oss.str());
+  writer->SetNumberOfStreamDivisions(2);
   writer->Update();
 
   return EXIT_SUCCESS;
