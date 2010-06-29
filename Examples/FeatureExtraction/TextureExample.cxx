@@ -33,7 +33,11 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "itkRescaleIntensityImageFilter.h"
+
+// Pretty RGB output
+#include "otbVectorImage.h"
+#include "otbImageToVectorImageCastFilter.h"
+#include "otbVectorRescaleIntensityImageFilter.h"
 
 // Software Guide : BeginLatex
 //
@@ -192,17 +196,14 @@ int main(int argc, char * argv[])
 
     // Software Guide : BeginLatex
     //
-    // We can now plug the pipeline and trigger the execution by calling
-    // the \code{Update} method of the writer.
+    // We can now plug the pipeline.
     //
     // Software Guide : EndLatex
     // Software Guide : BeginCodeSnippet
     texturesFilter->SetInput(reader->GetOutput());
-    // Software Guide : EndCodeSnippet
 
     writer->SetInput(texturesFilter->GetInertiaOutput());
     writer->Update();
-
     // Software Guide : EndCodeSnippet
 
     //  Software Guide : BeginLatex
@@ -222,21 +223,30 @@ int main(int argc, char * argv[])
 
     // Pretty image creation for printing
 
-    typedef otb::Image<unsigned char,
-                     Dimension>
-    OutputPrettyImageType;
-    typedef otb::ImageFileWriter<OutputPrettyImageType>
+    typedef otb::VectorImage<double,2> VectorImageType;
+    typedef otb::VectorImage<unsigned char,2 > PrettyVectorImageType;
+    typedef otb::ImageFileWriter<PrettyVectorImageType>
     WriterPrettyOutputType;
-    typedef itk::RescaleIntensityImageFilter<ImageType,
-                                           OutputPrettyImageType>
+
+    typedef otb::ImageToVectorImageCastFilter<ImageType,VectorImageType> VectorCastFilterType;
+    typedef otb::VectorRescaleIntensityImageFilter<VectorImageType,PrettyVectorImageType>
     RescalerOutputType;
 
+    VectorCastFilterType::Pointer   vectorCast         = VectorCastFilterType::New();
     RescalerOutputType::Pointer     outputRescaler     = RescalerOutputType::New();
     WriterPrettyOutputType::Pointer prettyOutputWriter =
     WriterPrettyOutputType::New();
-    outputRescaler->SetInput(texturesFilter->GetInertiaOutput());
-    outputRescaler->SetOutputMinimum(0);
-    outputRescaler->SetOutputMaximum(255);
+    VectorCastFilterType::Pointer vectorCastFilter = VectorCastFilterType::New();
+    vectorCastFilter->SetInput(texturesFilter->GetInertiaOutput());
+    outputRescaler->SetInput(vectorCastFilter->GetOutput());
+
+    PrettyVectorImageType::PixelType min(1),max(1);
+    min.Fill(0);
+    max.Fill(255);
+
+    outputRescaler->SetOutputMinimum(min);
+    outputRescaler->SetOutputMaximum(max);
+
     prettyOutputWriter->SetFileName(outprettyfname);
     prettyOutputWriter->SetInput(outputRescaler->GetOutput());
 
