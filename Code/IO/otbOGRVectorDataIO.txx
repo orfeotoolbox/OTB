@@ -250,7 +250,7 @@ void OGRVectorDataIO<TData>::Write(const VectorDataConstPointerType data, char *
   OGRSpatialReference * oSRS = NULL;
   if (projectionInformationAvailable)
     {
-    oSRS = new OGRSpatialReference(projectionRefWkt.c_str());
+    oSRS = static_cast<OGRSpatialReference *>(OSRNewSpatialReference(projectionRefWkt.c_str()));
     }
 
   // Retrieving root node
@@ -279,7 +279,7 @@ void OGRVectorDataIO<TData>::Write(const VectorDataConstPointerType data, char *
 
   if (oSRS != NULL)
     {
-    delete oSRS;
+    OSRDestroySpatialReference(oSRS);
     }
 
   chrono.Stop();
