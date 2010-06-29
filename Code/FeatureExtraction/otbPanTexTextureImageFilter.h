@@ -18,6 +18,7 @@
 #ifndef __otbPanTexTextureImageFilter_h
 #define __otbPanTexTextureImageFilter_h
 
+#include "vcl_deprecated_header.h"
 #include "otbUnaryFunctorNeighborhoodWithOffsetImageFilter.h"
 #include "otbPanTexTextureFunctor.h"
 #include "itkConstNeighborhoodIterator.h"
@@ -26,14 +27,11 @@ namespace otb
 {
 
 /** \class PanTexTextureImageFilter
-  * \brief This filter computes the panchromatic Texture measure.
-  *
-  * It is the min value of the contrast in 8 directions.
-  *
-  * \sa ContrastTextureFunctor
-  *
-   * \ingroup Textures
-  */
+  *  \brief <b>DEPRECATED<\b>
+ *
+ * \deprecated in OTB 3.4, please use
+ * otbScalarImageToPanTexTextureFilter instead.
+ */
 
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT PanTexTextureImageFilter :
