@@ -10,6 +10,7 @@
 // $Id$
 
 #include <cmath>
+#include <cstdio>
 
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimKeywordNames.h>

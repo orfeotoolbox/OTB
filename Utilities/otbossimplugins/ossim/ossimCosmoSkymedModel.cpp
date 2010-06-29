@@ -9,6 +9,9 @@
 //----------------------------------------------------------------------------
 // $Id$
 
+#include <cmath>
+#include <cstdio>
+
 #include <ossimCosmoSkymedModel.h>
 
 #include <otb/GalileanEphemeris.h>
@@ -19,8 +22,6 @@
 #include <otb/SensorParams.h>
 #include <otb/RefPoint.h>
 #include <otb/SarSensor.h>
-
-#include <cmath>
 
 namespace ossimplugins
 {

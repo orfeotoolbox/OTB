@@ -24,7 +24,7 @@ OTB-v.3.4.0 - Changes since version 3.2.0 (2010/06/30)
 * System
   * Internal ITK updated to 3.18.0 + OTB Patches
   * Internal OSSIM updated to svn revision 16861 + OTB patches
-  * Internal OSSIM SAR plugins updated to svn revision 16952 + OTB patches
+  * Internal OSSIM SAR plugins updated to svn revision 17643 + OTB patches
   * Internal libkml updated to 1.2.0
   * Internal siftfast updated to 1.2
   * Internal boost updated to 1.42

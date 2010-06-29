@@ -9,6 +9,9 @@
 //----------------------------------------------------------------------------
 // $Id$
 
+#include <cmath>
+#include <cstdio>
+
 #include <ossimTerraSarModel.h>
 #include <ossimPluginCommon.h>
 #include <ossimTerraSarProductDoc.h>
@@ -26,7 +29,6 @@
 #include <otb/RefPoint.h>
 #include <otb/SarSensor.h>
 
-#include <cmath>
 
 // Keyword constants:
 static const char NUMBER_SRGR_COEFFICIENTS_KW[] = "sr_gr_coeffs_count";
@@ -175,12 +177,12 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
       //---
       // Instantiate the XML parser:
       //---
-      ossimXmlDocument* xdoc = new ossimXmlDocument();
+      ossimRefPtr<ossimXmlDocument> xdoc = new ossimXmlDocument();
       if ( xdoc->openFile(xmlfile) )
       {
          ossimTerraSarProductDoc tsDoc;
 	 
-         result = tsDoc.isTerraSarX(xdoc);
+         result = tsDoc.isTerraSarX(xdoc.get());
          if (traceDebug())
          {
             ossimNotify(ossimNotifyLevel_DEBUG)
@@ -189,14 +191,26 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
          
          if (result)
          {
-            if (traceDebug())
+            ossimString s;
+            if ( tsDoc.getProjection(xdoc.get(), s) )
             {
-               ossimNotify(ossimNotifyLevel_DEBUG)
-                  << "isTerraSarX...\n";
+               s.upcase();
+               if ( s == "MAP" )
+               {
+                  result = false;
+                  if (traceDebug())
+                  {
+                     ossimNotify(ossimNotifyLevel_DEBUG)
+                        << "Map projected image, returning false...\n";
+                  }
+               }
             }
-            
-            // Set the base class number of lines and samples
-            result = tsDoc.initImageSize(xdoc, theImageSize);
+
+            if (result)
+            {
+               // Set the base class number of lines and samples
+               result = tsDoc.initImageSize(xdoc.get(), theImageSize);
+            }
 	    
             if (traceDebug())
             {
@@ -215,7 +229,7 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
                
                
                // Set the image ID to the scene ID.
-               result = tsDoc.getSceneId(xdoc, theImageID);
+               result = tsDoc.getSceneId(xdoc.get(), theImageID);
                
                if (traceDebug())
                {
@@ -226,7 +240,7 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
                // Set the sensor ID to the mission ID.
                if (result)
                {
-		  result = tsDoc.getMission(xdoc, theSensorID);
+		  result = tsDoc.getMission(xdoc.get(), theSensorID);
 		  
 		  if (traceDebug())
                   {
@@ -235,7 +249,7 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
                   }
                   
                   // Set the base class gsd:
-                  result = tsDoc.initGsd(xdoc, theGSD);
+                  result = tsDoc.initGsd(xdoc.get(), theGSD);
                   
                   if (traceDebug())
                   {
@@ -247,7 +261,7 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
                   {
                      theMeanGSD = (theGSD.x + theGSD.y)/2.0;
 
-                     /*result = */initSRGR(xdoc, tsDoc);
+                     /*result = */initSRGR(xdoc.get(), tsDoc);
                      
                      if (traceDebug())
                      {
@@ -257,7 +271,7 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
                      
                      if (result)
                      {
-                        result = initPlatformPosition(xdoc, tsDoc);
+                        result = initPlatformPosition(xdoc.get(), tsDoc);
                         
                         if (traceDebug())
                         {
@@ -267,7 +281,7 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
                         
                         if (result)
                         {
-                           result = initSensorParams(xdoc, tsDoc);
+                           result = initSensorParams(xdoc.get(), tsDoc);
                            
                            if (traceDebug())
                            {
@@ -277,7 +291,7 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
                            
                            if (result)
                            {
-                              result = initRefPoint(xdoc, tsDoc);
+                              result = initRefPoint(xdoc.get(), tsDoc);
 
                               if (traceDebug())
                               {
@@ -287,46 +301,46 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
                               
                               if (result)
                               {
-                                 result = tsDoc.getProductType(xdoc, _productType);
+                                 result = tsDoc.getProductType(xdoc.get(), _productType);
                                  
                                  if (result)
                                  {
-                                    result = tsDoc.getRadiometricCorrection(xdoc, _radiometricCorrection);
+                                    result = tsDoc.getRadiometricCorrection(xdoc.get(), _radiometricCorrection);
                                     if (result)
                                     {
-                                       result = initAcquisitionInfo(xdoc, tsDoc);
+                                       result = initAcquisitionInfo(xdoc.get(), tsDoc);
 
                                        if (result)
                                        {
-                                          result = initNoise(xdoc, tsDoc);
+                                          result = initNoise(xdoc.get(), tsDoc);
                                           if (result)
                                           {
                                              ossimString s;
-                                             result = tsDoc.getCalFactor(xdoc, s);
+                                             result = tsDoc.getCalFactor(xdoc.get(), s);
 
                                              if (result)
                                              {
                                                 _calFactor = s.toFloat64();
 
-                                                result = tsDoc.getRadarFrequency(xdoc, s);
+                                                result = tsDoc.getRadarFrequency(xdoc.get(), s);
 
                                                 if (result)
                                                 {
                                                    _radarFrequency= s.toFloat64();
 
-                                                   result = tsDoc.getAzimuthStartTime(xdoc, _azStartTime);
+                                                   result = tsDoc.getAzimuthStartTime(xdoc.get(), _azStartTime);
 
                                                    if (result)
                                                    {
-                                                      result = tsDoc.getAzimuthStopTime(xdoc, _azStopTime);
+                                                      result = tsDoc.getAzimuthStopTime(xdoc.get(), _azStopTime);
 
                                                       if (result)
                                                       {
-                                                         result = tsDoc.getGenerationTime(xdoc, _generationTime);
+                                                         result = tsDoc.getGenerationTime(xdoc.get(), _generationTime);
                                                          
                                                          if (result)
                                                          {
-                                                            result = initIncidenceAngles(xdoc, tsDoc);
+                                                            result = initIncidenceAngles(xdoc.get(), tsDoc);
                                                          }
                                                       }
                                                    }
@@ -348,7 +362,6 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
          
       } // matches: if ( xdoc->openFile(file) )
          
-      delete xdoc;
       xdoc = 0;
          
    } // matches: if (findMeatadataFile)
@@ -1890,7 +1903,8 @@ bool ossimplugins::ossimTerraSarModel::initNoise(
    return result;
 }
 
-bool ossimplugins::ossimTerraSarModel::findTSXLeader(const ossimFilename& file,  ossimFilename& metadataFile)
+bool ossimplugins::ossimTerraSarModel::findTSXLeader(const ossimFilename& file,
+                                                     ossimFilename& metadataFile)
 {
    bool res = false;
 
