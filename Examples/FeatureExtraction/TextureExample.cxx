@@ -38,71 +38,50 @@
 // Software Guide : BeginLatex
 //
 // This example illustrates the use of the
-// \doxygen{otb}{ContrastTextureFunctor}, and more generally it
-// demonstrates how to compute Haralick's textural features.
+// \doxygen{otb}{ScalarImageToTexturesFilter},
+// which compute the standard Haralick's textural features presented in table~\ref{tab:haralickStandardFeatures}.
+//
+// \begin{tabular}{|c|c|}
+// Energy & $ = f_1 = \sum_{i,j}g(i, j)^2 $ \\
+//
+// Entropy & $ = f_2 = -\sum_{i,j}g(i, j) \log_2 g(i, j)$, or 0 if $g(i, j) = 0$ \\
+//
+// Correlation & $ = f_3 = \sum_{i,j}rac{(i - \mu)(j - \mu)g(i, j)}{\sigma^2} $ \\
+//
+// Difference Moment &  $= f_4 = \sum_{i,j}rac{1}{1 + (i - j)^2}g(i, j) $ \\
+//
+// Inertia (a.k.a. Contrast) & $ = f_5 = \sum_{i,j}(i - j)^2g(i, j) $ \\
+//
+// Cluster Shade & $ = f_6 = \sum_{i,j}((i - \mu) + (j - \mu))^3 g(i, j) $ \\
+//
+// Cluster Prominence & $ = f_7 = \sum_{i,j}((i - \mu) + (j - \mu))^4 g(i, j) $ \\
+//
+// Haralick's Correlation & $ = f_8 = rac{\sum_{i,j}(i, j) g(i, j) -\mu_t^2}{\sigma_t^2} $ \\
+//
+// \caption{Haralick features available in \doxygen{otb}{ScalarImageToTexturesFilter} ($\mu_t$ and $\sigma_t$ are the mean and standard deviation of the row
+// (or column, due to symmetry) sums, $ \mu =  $ (weighted pixel average) $ = \sum_{i,j}i \cdot g(i, j) =
+// \sum_{i,j}j \cdot g(i, j) $ due to matrix summetry, and $ \sigma =  $ (weighted pixel variance) $ = \sum_{i,j}(i - \mu)^2 \cdot g(i, j) =
+// \sum_{i,j}(j - \mu)^2 \cdot g(i, j)  $  due to matrix summetry}
+// \label{tab:haralickStandardFeatures}
+// \end{tabular}
+
+// More features are available in \doxygen{otb}{ScalarImageToAdvancedTexturesFilter}.
 // \relatedClasses
-//  \begin{itemize}
-//  \item \doxygen{otb}{EnergyTextureFunctor}
-//  \item \doxygen{otb}{EntropyTextureFunctor}
-//  \item \doxygen{otb}{InverseDifferenceMomentTextureFunctor}
-//  \item \doxygen{otb}{AngularSecondMomentumTextureFunctor}
-//  \item \doxygen{otb}{VarianceTextureFunctor}
-//  \item \doxygen{otb}{CorrelationTextureFunctor}
-//  \item \doxygen{otb}{SumAverageTextureFunctor}
-//  \item \doxygen{otb}{DifferenceEntropyTextureFunctor}
-//  \item \doxygen{otb}{SumEntropyTextureFunctor}
-//  \item \doxygen{otb}{SumVarianceTextureFunctor}
-//  \item \doxygen{otb}{DifferenceVarianceTextureFunctor}
-//  \item \doxygen{otb}{InformationMeasureOfCorrelation1TextureFunctor}
-//  \item \doxygen{otb}{InformationMeasureOfCorrelation2TextureFunctor}
-//  \item \doxygen{otb}{ClusterShadeTextureFunctor}
-//  \item \doxygen{otb}{ClusterProminenceTextureFunctor}
-//  \item \doxygen{otb}{MeanTextureFunctor}
-//  \end{itemize}
-//
-// The first step required to use this filter is to include its header file.
+// \begin{itemize}
+// \item \doxygen{otb}{ScalarImageToAdvancedTexturesFilter}
+// \item \doxygen{otb}{ScalarImageToPanTexTextureFilter}
+// \item \doxygen{otb}{MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator}
+// \item \doxygen{itk}{GreyLevelCooccurrenceMatrixTextureCoefficientsCalculator}
+// \item \doxygen{otb}{GreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator}
+// \end{itemize}
+
+// The first step required to use the filter is to include the header file.
 //
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-#include "otbContrastTextureFunctor.h"
+#include "otbScalarImageToTexturesFilter.h"
 // Software Guide : EndCodeSnippet
-// Software Guide : BeginLatex
-//
-// Although including the individual header file for a texture functor
-// is O.K., OTB provides a single header file which will include all
-// other texture functors. Since often we might want to compute
-// several texture parameters, it is more efficient to use this single
-// header file.
-//
-// Software Guide : EndLatex
-
-// Software Guide : BeginCodeSnippet
-#include "otbTextureFunctors.h"
-// Software Guide : EndCodeSnippet
-// Software Guide : BeginLatex
-//
-// The texture functors compute a texture feature for a given
-// neighborhood. Since we want here to compute the texture features
-// for all pixels ofthe image, we will use a filter which will apply
-// the functor to every pixel in the image. This filter will take care
-// of building the neighborhoods with the needed offsets for texture
-// computation.
-//
-// Software Guide : EndLatex
-
-// Software Guide : BeginCodeSnippet
-#include "otbUnaryFunctorNeighborhoodWithOffsetImageFilter.h"
-// Software Guide : EndCodeSnippet
-// Software Guide : BeginLatex
-//
-// Please note that if you want to compute a single scalar texture
-// feature for the whole image or for a whole image region, the most
-// efficient way to do that is using the
-// \doxygen{otb}{TextureImageFunction} class which provides the
-// \code{Evaluate} and \code{EvaluateAtIndex} methods for this purpose.
-//
-// Software Guide : EndLatex
 
 int main(int argc, char * argv[])
 {
@@ -129,31 +108,18 @@ int main(int argc, char * argv[])
   typedef otb::Image<PixelType, Dimension> ImageType;
 
   // Software Guide : BeginLatex
-//
-// After defining the types for the pixels and the images used in the
-// example, we define the type for the texture functor. It is
-// templated by the input and output pixel types.
-//
-// Software Guide : EndLatex
+  //
+  // After defining the types for the pixels and the images used in the
+  // example, we define the types for the textures filter. It is
+  // templated by the input and output image types.
+  //
+  // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::Functor::ContrastTextureFunctor<PixelType, PixelType>
-  FunctorType;
+  typedef otb::ScalarImageToTexturesFilter
+    <ImageType,ImageType> TexturesFilterType;
   // Software Guide : EndCodeSnippet
-  // Software Guide : BeginLatex
-//
-// The filter for computing the texture features for a complete image
-// is templated by the input and output image types and, of course,
-// the functor type.
-//
-// Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
-  typedef otb::UnaryFunctorNeighborhoodWithOffsetImageFilter<ImageType,
-                                                             ImageType,
-                                                             FunctorType>
-  FilterType;
-  // Software Guide : EndCodeSnippet
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::ImageFileWriter<ImageType> WriterType;
 
@@ -164,88 +130,116 @@ int main(int argc, char * argv[])
   writer->SetFileName(outfname);
 
   // Software Guide : BeginLatex
-//
-// We can now instantiate the filter.
-//
-// Software Guide : EndLatex
+  //
+  // We can now instantiate the filters.
+  //
+  // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  FilterType::Pointer textureFilter = FilterType::New();
+  TexturesFilterType::Pointer texturesFilter
+    = TexturesFilterType::New();
   // Software Guide : EndCodeSnippet
+
   // Software Guide : BeginLatex
-//
-// The texture filter takes 2 parameters: the radius of the
-// neighborhood on which the texture will be computed and the offset
-// used. Texture features are bivariate statistics, that is, they are
-// computed using pair of pixels. Each texture feature is defined for
-// an offset defining the pixel pair.
-//
-// The radius parameter can be passed to the filter as a scalar
-// parameter if the neighborhood is square, or as \code{SizeType} in
-// any case.
-//
-// The offset is always an array of N values, where N is the number of
-// dimensions of the image.
-//
-// Software Guide : EndLatex
-// Software Guide : BeginCodeSnippet
-  textureFilter->SetRadius(radius);
-
-  typedef ImageType::OffsetType OffsetType;
-  OffsetType offset;
-  offset[0] =  xOffset;
-  offset[1] =  yOffset;
-
-  textureFilter->SetOffset(offset);
-  // Software Guide : EndCodeSnippet
-  // Software Guide : BeginLatex
-//
-// We can now plug the pipeline and trigger the execution by calling
-// the \code{Update} method of the writer.
-//
-// Software Guide : EndLatex
-// Software Guide : BeginCodeSnippet
-  textureFilter->SetInput(reader->GetOutput());
-  writer->SetInput(textureFilter->GetOutput());
-
-  writer->Update();
-  // Software Guide : EndCodeSnippet
-
-  //  Software Guide : BeginLatex
-  // Figure~\ref{fig:TEXTUREFUNCTOR} shows the result of applying
-  // the contrast texture computation.
-  // \begin{figure}
-  // \center
-  // \includegraphics[width=0.40\textwidth]{ADS40RoiSmall.eps}
-  // \includegraphics[width=0.40\textwidth]{pretty_TextureOutput.eps}
-  // \itkcaption[Texture Functor]{Result of applying the
-  // \doxygen{otb}{ContrastTextureFunctor} to an image. From left to right :
-  // original image, contrast.}
-  // \label{fig:TEXTUREFUNCTOR}
-  // \end{figure}
   //
-  //  Software Guide : EndLatex
+  // The texture filters takes at least 2 parameters: the radius of the
+  // neighborhood on which the texture will be computed and the offset
+  // used. Texture features are bivariate statistics, that is, they are
+  // computed using pair of pixels. Each texture feature is defined for
+  // an offset defining the pixel pair.
+  //
+  // The radius parameter can be passed to the filter as a scalar
+  // parameter if the neighborhood is square, or as \code{SizeType} in
+  // any case.
+  //
+  // The offset is always an array of N values, where N is the number of
+  // dimensions of the image.
+  //
+  // Software Guide : EndLatex
+  // Software Guide : BeginCodeSnippet
+  typedef ImageType::SizeType SizeType;
+  SizeType sradius;
+  sradius.Fill(radius);
 
-  // Pretty image creation for printing
+  texturesFilter->SetRadius(sradius);
 
-  typedef otb::Image<unsigned char,
+    typedef ImageType::OffsetType OffsetType;
+    OffsetType offset;
+    offset[0] =  xOffset;
+    offset[1] =  yOffset;
+
+    texturesFilter->SetOffset(offset);
+    // Software Guide : EndCodeSnippet
+
+    // Software Guide : BeginLatex
+    //
+    // The textures filter will automatically derive the optimal
+    // bin size for co-occurences histogram, but they need to know
+    // the input image minimum and maximum. These values can be set
+    // like this :
+    // Software Guide : EndLatex
+    // Software Guide : BeginCodeSnippet
+    texturesFilter->SetInputImageMinimum(0);
+    texturesFilter->SetInputImageMaximum(255);
+    // Software Guide : EndCodeSnippet
+
+    // Software Guide : BeginLatex
+    //
+    // To tune co-occurence histogram resolution, you can use
+    // the SetNumberOfBinsPerAxis() method.
+    //
+    // Software Guide : EndLatex
+
+    // Software Guide : BeginLatex
+    //
+    // We can now plug the pipeline and trigger the execution by calling
+    // the \code{Update} method of the writer.
+    //
+    // Software Guide : EndLatex
+    // Software Guide : BeginCodeSnippet
+    texturesFilter->SetInput(reader->GetOutput());
+    // Software Guide : EndCodeSnippet
+
+    writer->SetInput(texturesFilter->GetInertiaOutput());
+    writer->Update();
+
+    // Software Guide : EndCodeSnippet
+
+    //  Software Guide : BeginLatex
+    // Figure~\ref{fig:TEXTUREFUNCTOR} shows the result of applying
+    // the contrast texture computation.
+    // \begin{figure}
+    // \center
+    // \includegraphics[width=0.40\textwidth]{ADS40RoiSmall.eps}
+    // \includegraphics[width=0.40\textwidth]{pretty_TextureOutput.eps}
+    // \itkcaption[Texture Functor]{Result of applying the
+    // \doxygen{otb}{ContrastTextureFunctor} to an image. From left to right :
+    // original image, contrast.}
+    // \label{fig:TEXTUREFUNCTOR}
+    // \end{figure}
+    //
+    //  Software Guide : EndLatex
+
+    // Pretty image creation for printing
+
+    typedef otb::Image<unsigned char,
                      Dimension>
-  OutputPrettyImageType;
-  typedef otb::ImageFileWriter<OutputPrettyImageType>
-  WriterPrettyOutputType;
-  typedef itk::RescaleIntensityImageFilter<ImageType,
+    OutputPrettyImageType;
+    typedef otb::ImageFileWriter<OutputPrettyImageType>
+    WriterPrettyOutputType;
+    typedef itk::RescaleIntensityImageFilter<ImageType,
                                            OutputPrettyImageType>
-  RescalerOutputType;
+    RescalerOutputType;
 
-  RescalerOutputType::Pointer     outputRescaler     = RescalerOutputType::New();
-  WriterPrettyOutputType::Pointer prettyOutputWriter =
+    RescalerOutputType::Pointer     outputRescaler     = RescalerOutputType::New();
+    WriterPrettyOutputType::Pointer prettyOutputWriter =
     WriterPrettyOutputType::New();
-  outputRescaler->SetInput(textureFilter->GetOutput());
-  outputRescaler->SetOutputMinimum(0);
-  outputRescaler->SetOutputMaximum(255);
-  prettyOutputWriter->SetFileName(outprettyfname);
-  prettyOutputWriter->SetInput(outputRescaler->GetOutput());
+    outputRescaler->SetInput(texturesFilter->GetInertiaOutput());
+    outputRescaler->SetOutputMinimum(0);
+    outputRescaler->SetOutputMaximum(255);
+    prettyOutputWriter->SetFileName(outprettyfname);
+    prettyOutputWriter->SetInput(outputRescaler->GetOutput());
 
-  prettyOutputWriter->Update();
-  return EXIT_SUCCESS;
+    prettyOutputWriter->Update();
+    return EXIT_SUCCESS;
 }
