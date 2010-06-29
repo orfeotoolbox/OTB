@@ -1802,7 +1802,7 @@ ADD_TEST(feTvScalarImageToTexturesFilter ${FEATUREEXTRACTION_TESTS15}
         otbScalarImageToTexturesFilter
             ${INPUTDATA}/Mire_Cosinus_500_500.png
             ${TEMP}/feTvScalarImageToTexturesFilterOutput
-            8 5 1 1)
+            8 3 2 2)
 
 ADD_TEST(feTuotbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculatorNew ${FEATUREEXTRACTION_TESTS15}
          otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculatorNew

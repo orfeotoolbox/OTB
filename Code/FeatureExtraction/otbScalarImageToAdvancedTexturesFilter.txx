@@ -235,15 +235,15 @@ ScalarImageToAdvancedTexturesFilter<TInputImage,TOutputImage>
 {
   // Retrieve the input and output pointers
   InputImagePointerType  inputPtr             =      const_cast<InputImageType *>(this->GetInput());
-  OutputImagePointerType meanPtr            =      this->GetMeanOutput();
-  OutputImagePointerType variancePtr            =      this->GetVarianceOutput();
-  OutputImagePointerType sumAveragePtr           =      this->GetSumAverageOutput();
+  OutputImagePointerType meanPtr              =      this->GetMeanOutput();
+  OutputImagePointerType variancePtr          =      this->GetVarianceOutput();
+  OutputImagePointerType sumAveragePtr        =      this->GetSumAverageOutput();
   OutputImagePointerType sumVariancePtr       =      this->GetSumVarianceOutput();
-  OutputImagePointerType sumEntropytPtr     =      this->GetSumEntropyOutput();
-  OutputImagePointerType differenceEntropyPtr           =      this->GetDifferenceEntropyOutput();
-  OutputImagePointerType differenceVariancePtr      =      this->GetDifferenceVarianceOutput();
-  OutputImagePointerType ic1Ptr =      this->GetIC1Output();
-  OutputImagePointerType ic2Ptr       =      this->GetIC2Output();
+  OutputImagePointerType sumEntropytPtr       =      this->GetSumEntropyOutput();
+  OutputImagePointerType differenceEntropyPtr =      this->GetDifferenceEntropyOutput();
+  OutputImagePointerType differenceVariancePtr=      this->GetDifferenceVarianceOutput();
+  OutputImagePointerType ic1Ptr               =      this->GetIC1Output();
+  OutputImagePointerType ic2Ptr               =      this->GetIC2Output();
 
   // Build output iterators
   itk::ImageRegionIteratorWithIndex<OutputImageType> varianceIt(variancePtr,outputRegionForThread);
@@ -300,10 +300,6 @@ ScalarImageToAdvancedTexturesFilter<TInputImage,TOutputImage>
       {
       // Compute current size before applying offset
       currentSize[dim] = 2*m_Radius[dim]+1;
-
-      // Apply offset
-      currentIndex[dim] = std::min(currentIndex[dim],currentIndex[dim]+m_Offset[dim]);
-      currentSize[dim] = std::max(currentIndex[dim]+currentSize[dim],currentIndex[dim]+currentSize[dim]+m_Offset[dim])-currentIndex[dim];
       }
 
     // Fill current region

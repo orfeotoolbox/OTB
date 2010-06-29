@@ -18,7 +18,6 @@
 #include "itkExceptionObject.h"
 
 #include "otbScalarImageToAdvancedTexturesFilter.h"
-#include "itkMinimumMaximumImageCalculator.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -45,8 +44,6 @@ int otbScalarImageToAdvancedTexturesFilter(int argc, char * argv[])
     <ImageType,ImageType>                        TexturesFilterType;
   typedef otb::ImageFileReader<ImageType>        ReaderType;
   typedef otb::ImageFileWriter<ImageType>        WriterType;
-  typedef itk::MinimumMaximumImageCalculator
-    <ImageType>                                  MinMaxCalculatorType;
 
   ReaderType::Pointer         reader = ReaderType::New();
   TexturesFilterType::Pointer filter = TexturesFilterType::New();
@@ -54,7 +51,6 @@ int otbScalarImageToAdvancedTexturesFilter(int argc, char * argv[])
 
   // Read image
   reader->SetFileName(infname);
-  reader->Update();
 
   // Build radius
   TexturesFilterType::SizeType sradius;
@@ -72,17 +68,13 @@ int otbScalarImageToAdvancedTexturesFilter(int argc, char * argv[])
 
   otb::StandardFilterWatcher watcher(filter,"Textures filter");
 
-  // Compute min/max
-  MinMaxCalculatorType::Pointer minMax = MinMaxCalculatorType::New();
-  minMax->SetImage(reader->GetOutput());
-  minMax->Compute();
-
-  filter->SetInputImageMinimum(minMax->GetMinimum());
-  filter->SetInputImageMaximum(minMax->GetMaximum());
-  filter->Update();
+  filter->SetInputImageMinimum(0);
+  filter->SetInputImageMaximum(256);
 
   // Write outputs
   itk::OStringStream oss;
+
+  writer->SetNumberOfStreamDivisions(2);
 
   oss.str("");
   oss<<outprefix<<"Variance.tif";
