@@ -58,12 +58,15 @@
 // Special case for recent Borland compiler, comes with stdint.h
 #if defined(_MSC_VER) || defined(__BORLANDC__) && (__BORLANDC__ < 0x0560)  \
                       || defined(__MINGW32__)
+namespace gdcm
+{
 typedef  signed char         int8_t;
 typedef  signed short        int16_t;
 typedef  signed int          int32_t;
 typedef  unsigned char       uint8_t;
 typedef  unsigned short      uint16_t;
 typedef  unsigned int        uint32_t;
+}
 #else
 #ifndef SWIG
 #error "Sorry your platform is not supported"
