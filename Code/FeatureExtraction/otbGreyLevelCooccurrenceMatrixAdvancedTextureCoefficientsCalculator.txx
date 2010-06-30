@@ -41,7 +41,7 @@ NormalizeHistogram( void )
 template< class THistogram >
 void
 GreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator< THistogram >::
-ComputeMean( double &pixelMean )
+ComputeMean( )
 {
   // This function takes two passes through the histogram and two passes through
   // an array of the same length as a histogram axis. This could probably be
@@ -49,7 +49,7 @@ ComputeMean( double &pixelMean )
   typedef typename HistogramType::Iterator HistogramIterator;
       
   // Initialize everything
-  pixelMean = 0;
+  m_Mean = 0;
       
   // Ok, now do the first pass through the histogram to get the marginal sums
   // and compute the pixel mean
@@ -58,7 +58,7 @@ ComputeMean( double &pixelMean )
     {
     MeasurementType frequency = hit.GetFrequency();
     IndexType index = m_Histogram->GetIndex(hit.GetInstanceIdentifier());
-    pixelMean += index[0] * frequency;
+    m_Mean += index[0] * frequency;
     }
 } 
 
@@ -80,8 +80,7 @@ Compute ()
     }
       
   // Now get the pixel mean.
-  double pixelMean;
-  this->ComputeMean( pixelMean );
+  this->ComputeMean();
                                                                 
   m_SumAverage = 0;
   m_SumEntropy = 0;
@@ -151,7 +150,7 @@ Compute ()
     
     IndexType index = m_Histogram->GetIndex(hit.GetInstanceIdentifier());
     
-    m_Variance += ( (index[0] - pixelMean) * (index[0] - pixelMean) ) * frequency;
+    m_Variance += ( (index[0] - m_Mean) * (index[0] - m_Mean) ) * frequency;
     Entropy -= (frequency > 0.0001) ? frequency * vcl_log(frequency) / log2 : 0;
     
     double pipj = m_Histogram->GetFrequency (index[0] , 0) * m_Histogram->GetFrequency (index[1] , 1);

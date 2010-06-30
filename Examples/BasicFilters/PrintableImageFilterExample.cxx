@@ -50,7 +50,7 @@
 // captured by the satellite with those captured by your eye: thus matching the red band
 // with the red color, etc.
 //
-// Some satellite (SPOT 5 is an example) do not acquire all the {\em human} spectral bands:
+// Some satellites (SPOT 5 is an example) do not acquire all the {\em human} spectral bands:
 // the blue can be missing and replaced by some other wavelength of interest for a specific application.
 // In these situations, another mapping has to be created. That's why, the vegetation often appears in
 // red in satellite images (see on left of figure~\ref{fig:PRINTABLE_FILTER}).

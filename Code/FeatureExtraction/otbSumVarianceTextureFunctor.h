@@ -18,27 +18,20 @@
 #ifndef __otbSumVarianceTextureFunctor_h
 #define __otbSumVarianceTextureFunctor_h
 
+#include "vcl_deprecated_header.h"
 #include "otbSumAverageTextureFunctor.h"
 
 namespace otb
 {
 namespace Functor
 {
-/** \class SumVarianceextureFunctor
- *  \brief This functor calculates the sum variance image texture according to Haralick descriptors.
+/** \class SumVarianceTextureFunctor
+ *  \brief <b>DEPRECATED<\b>
  *
- *  Computes sum variance using joint histogram (neighborhood and offset neighborhood).
- *  The formula is:
- *  \f$ \sum_{i}{2N}(i-SAV)^2.p_{x+y}(i) \f$
- *  With \f$ SAV \f$ is the sum average texture value.
- *  TIterInput is an iterator, TOutput is a PixelType.
- *
- *  \sa SumAverageTextureFunctor
- *  \sa TextureFunctorBase
- *  \ingroup Functor
- *  \ingroup Statistics
-   * \ingroup Textures
+ * \deprecated in OTB 3.4, please use
+ * otbScalarImageToAdvancedTexturesFilter instead.
  */
+
 template <class TScalarInputPixelType, class TScalarOutputPixelType>
 class ITK_EXPORT SumVarianceTextureFunctor :
   public SumAverageTextureFunctor<TScalarInputPixelType, TScalarOutputPixelType>
@@ -50,7 +43,9 @@ public:
     return "SumVarianceTexture";
   }
 
-  SumVarianceTextureFunctor(){};
+  SumVarianceTextureFunctor()
+    {
+    };
   virtual ~SumVarianceTextureFunctor(){}
 
   typedef SumAverageTextureFunctor<TScalarInputPixelType, TScalarOutputPixelType> Superclass;

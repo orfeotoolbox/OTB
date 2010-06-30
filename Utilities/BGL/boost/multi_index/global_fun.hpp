@@ -19,7 +19,7 @@
 #include <boost/type_traits/is_reference.hpp>
 #include <boost/type_traits/remove_const.hpp>
 #include <boost/type_traits/remove_reference.hpp>
-#include <boost/utility/enable_if.hpp>
+#include <boost/butility/enable_if.hpp>
 
 #if !defined(BOOST_NO_SFINAE)
 #include <boost/type_traits/is_convertible.hpp>

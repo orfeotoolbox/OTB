@@ -73,7 +73,8 @@ int main(int argc, char* argv[])
 
   // Software Guide : BeginLatex
   //
-  // If you tried with a string such as "Toulouse", you should obtain something
+  // If you tried with a string such as "Toulouse" -- a city where the
+  // heart of OTB relies -- you should obtain something
   // like:
   //
   // \begin{verbatim}

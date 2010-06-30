@@ -95,22 +95,18 @@ SIXSTraits::ComputeAtmosphericParameters(
     // Generate WavelengthSpectralBand  in 6S compatible buffer s[1501]
     wlinf = static_cast<otb_6s_doublereal>(WavelengthSpectralBand->GetMinSpectralValue());
     wlsup = static_cast<otb_6s_doublereal>(WavelengthSpectralBand->GetMaxSpectralValue());
-
     otb_6s_integer iinf =
       static_cast<otb_6s_integer>((wlinf - (float) .25) / SIXSStepOfWavelengthSpectralBandValues + (float) 1.5);
-    otb_6s_integer isup =
-      static_cast<otb_6s_integer>((wlsup - (float) .25) / SIXSStepOfWavelengthSpectralBandValues + (float) 1.5);
-
     otb_6s_integer      cpt = iinf - 1;
     otb_6s_doublereal * s(NULL);
     s = new otb_6s_doublereal[S_6S_SIZE];
     memset(s, 0, S_6S_SIZE * sizeof(otb_6s_doublereal));
     const ValuesVectorType& FilterFunctionValues6S = WavelengthSpectralBand->GetFilterFunctionValues6S();
     // Set the values of FilterFunctionValues6S in s between [iinf-1;isup]
-    for (unsigned int i = 0; cpt < isup; ++i)
+    for (unsigned int i = 0; i < FilterFunctionValues6S.size() && cpt < S_6S_SIZE; ++i)
       {
       s[cpt] = FilterFunctionValues6S[i];
-      cpt++;
+      ++cpt;
       }
 
     // Call 6s main function

@@ -268,7 +268,7 @@ int main(int argc, char* argv[])
   // \label{fig:TILEMAPIMAGEIOEXAMPLE}
   // \end{figure}
   //
-  // If your street is missing, go and improve the map.
+  // If your street is missing, go and improve the map by adding it yourself.
   //
   // \begin{figure}
   // \center

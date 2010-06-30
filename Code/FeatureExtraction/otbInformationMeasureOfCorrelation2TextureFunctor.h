@@ -18,6 +18,7 @@
 #ifndef __otbInformationMeasureOfCorrelation2TextureFunctor_h
 #define __otbInformationMeasureOfCorrelation2TextureFunctor_h
 
+#include "vcl_deprecated_header.h"
 #include "otbEntropyTextureFunctor.h"
 
 namespace otb
@@ -25,20 +26,10 @@ namespace otb
 namespace Functor
 {
 /** \class InformationMeasureOfCorrelation2TextureFunctor
- *  \brief This functor calculates the information measure of correlation 2 image texture according to Haralick descriptors.
+ *  \brief <b>DEPRECATED<\b>
  *
- *  Computes  information measure of correlation 2 using joint histogram (neighborhood and offset neighborhood) .
- *  The formula is:
- *  \f$ \sqrt{|1-exp(2.(H(X,Y)_{2}-H(X,Y)))|} \f$
- *  Where \f$H(X,Y)\f$, \f$H(X)\f$, \f$H(Y)\f$ are the entropies and
- *  \f$ H(X,Y)_{2} = -\sum_{i}\sum_{j}p_{x}(i)p_{y}(j)\log{(p_{x}(i)p_{y}(j))} \f$
- *  TIterInput is an iterator, TOutput is a PixelType.
- *
- *  \sa EntropyTextureFunctor
- *  \sa TextureFunctorBase
- *  \ingroup Functor
- *  \ingroup Statistics
-   * \ingroup Textures
+ * \deprecated in OTB 3.4, please use
+ * otbScalarImageToAdvancedTexturesFilter instead.
  */
 
 template <class TScalarInputPixelType, class TScalarOutputPixelType>
@@ -52,7 +43,9 @@ public:
     return "InformationMeasureOfCorrelation2Texture";
   }
 
-  InformationMeasureOfCorrelation2TextureFunctor(){};
+  InformationMeasureOfCorrelation2TextureFunctor()
+    {
+    };
   virtual ~InformationMeasureOfCorrelation2TextureFunctor(){}
 
   typedef EntropyTextureFunctor<TScalarInputPixelType, TScalarOutputPixelType> Superclass;

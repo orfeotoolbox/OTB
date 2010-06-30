@@ -18,6 +18,7 @@
 #ifndef __otbEntropyTextureFunctor_h
 #define __otbEntropyTextureFunctor_h
 
+#include "vcl_deprecated_header.h"
 #include "otbTextureFunctorBase.h"
 
 namespace otb
@@ -25,18 +26,12 @@ namespace otb
 namespace Functor
 {
 /** \class EntropyTextureFunctor
- *  \brief This functor calculates the local entropy of an image
+ *  \brief <b>DEPRECATED<\b>
  *
- *  Computes joint histogram (neighborhood and offset neighborhood).
- *  This formula is:
- *  \f[ -\sum_{i}p_{x-y}(i)\log{(p_{x-y}(i))}  \f]
- *
- *  TIterInput is an iterator, TOutput is a PixelType.
- *
- *  \ingroup Functor
- *  \ingroup Statistics
-   * \ingroup Textures
+ * \deprecated in OTB 3.4, please use
+ * otbScalarImageToTexturesFilter instead.
  */
+
 
 template <class TScalarInputPixelType, class TScalarOutputPixelType>
 class ITK_EXPORT EntropyTextureFunctor :
@@ -49,7 +44,10 @@ public:
     return "EntropyTexture";
   }
 
-  EntropyTextureFunctor(){};
+  EntropyTextureFunctor()
+    {
+    };
+
   virtual ~EntropyTextureFunctor(){}
 
   typedef TScalarInputPixelType                                             InputScalarType;
@@ -62,21 +60,18 @@ public:
   virtual double ComputeOverSingleChannel(const NeighborhoodType& neigh, const NeighborhoodType& neighOff)
   {
     this->ComputeJointHistogram(neigh, neighOff);
-    
     double area = static_cast<double>(neigh.GetSize()[0] * neigh.GetSize()[1]);
     double areaInv = 1 / area;
     double out = 0.;
-    double p = 0.;
-    double epsilon = 0.0000000001;
     for (unsigned r = 0; r < this->GetHisto().size(); ++r)
       {
       for (unsigned s = 0; s < this->GetHisto()[r].size(); ++s)
         {
-        p = static_cast<double>(this->GetHisto()[r][s]) * areaInv;
-        if (vcl_abs(p) > epsilon) out += (p * vcl_log(p));
+        double p = static_cast<double>(this->GetHisto()[r][s]) * areaInv;
+        if (p != 0) out += (p * vcl_log(p));
         }
       }
-    if (vcl_abs(out) > epsilon) out = -(out);
+    if (out != 0.) out = -(out);
 
     return out;
   }

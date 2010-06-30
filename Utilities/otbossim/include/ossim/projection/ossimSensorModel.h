@@ -250,7 +250,7 @@ public:
     * @return Nothing but throws ossimException on error.
     */
 #if defined(_WIN32)
-   void computeGsd() throw(...);
+   void computeGsd();// throw();
 #else
    void computeGsd() throw(ossimException);
 #endif

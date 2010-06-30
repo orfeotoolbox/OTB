@@ -29,7 +29,7 @@ template <class TInputImage,class TOutputImage>
 ScalarImageToTexturesFilter<TInputImage,TOutputImage>
 ::ScalarImageToTexturesFilter() : m_Radius(),
                                   m_Offset(),
-                                  m_NumberOfBinsPerAxis(),
+                                  m_NumberOfBinsPerAxis(8),
                                   m_InputImageMinimum(0),
                                   m_InputImageMaximum(256)
 {
@@ -250,6 +250,8 @@ ScalarImageToTexturesFilter<TInputImage,TOutputImage>
   clusterProminenceIt.GoToBegin();
   haralickCorIt.GoToBegin();
 
+
+
   // Build the co-occurence matrix generator
   CoocurrenceMatrixGeneratorPointerType coOccurenceMatrixGenerator = CoocurrenceMatrixGeneratorType::New();
   coOccurenceMatrixGenerator->SetInput(inputPtr);
@@ -273,27 +275,24 @@ ScalarImageToTexturesFilter<TInputImage,TOutputImage>
       &&!clusterProminenceIt.IsAtEnd()
       &&!haralickCorIt.IsAtEnd())
     {
-    // Find the input region on which texture will be computed
-    InputRegionType currentRegion;
-    typename InputRegionType::IndexType currentIndex = energyIt.GetIndex()-m_Radius;
-    typename InputRegionType::SizeType  currentSize;
+    // Compute the region on which co-occurence will be estimated
+    typename InputRegionType::IndexType inputIndex = energyIt.GetIndex()-m_Radius;
+    typename InputRegionType::SizeType inputSize;
 
+    // First, apply offset
     for(unsigned int dim = 0; dim<InputImageType::ImageDimension;++dim)
       {
-      // Compute current size before applying offset
-      currentSize[dim] = 2*m_Radius[dim]+1;
-
-      // Apply offset
-      currentIndex[dim] = std::min(currentIndex[dim],currentIndex[dim]+m_Offset[dim]);
-      currentSize[dim] = std::max(currentIndex[dim]+currentSize[dim],currentIndex[dim]+currentSize[dim]+m_Offset[dim])-currentIndex[dim];
+      inputSize[dim] =2*m_Radius[dim]+1;
       }
 
-    // Fill current region
-    currentRegion.SetIndex(currentIndex);
-    currentRegion.SetSize(currentSize);
+    // Build the input  region
+    InputRegionType inputRegion;
+    inputRegion.SetIndex(inputIndex);
+    inputRegion.SetSize(inputSize);
 
     // Compute the co-occurence matrix
-    coOccurenceMatrixGenerator->SetRegion(currentRegion);
+    coOccurenceMatrixGenerator->SetRegion(inputRegion);
+    coOccurenceMatrixGenerator->SetNormalize(true);
     coOccurenceMatrixGenerator->Compute();
 
     // Compute textures indices

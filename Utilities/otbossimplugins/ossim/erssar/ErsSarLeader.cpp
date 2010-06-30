@@ -9,6 +9,8 @@
 //----------------------------------------------------------------------------
 // $Id$
 
+#include <cstdio>
+
 #include "erssar/ErsSarLeader.h"
 #include "erssar/ErsSarLeaderFactory.h"
 #include "erssar/ErsSarRecordHeader.h"

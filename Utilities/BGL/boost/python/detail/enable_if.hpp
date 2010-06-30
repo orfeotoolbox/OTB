@@ -41,7 +41,7 @@ struct disable_if_ret
 }}} // namespace boost::python::detail
 
 # elif !defined(BOOST_NO_SFINAE)
-#  include <boost/utility/enable_if.hpp>
+#  include <boost/butility/enable_if.hpp>
 
 namespace boost { namespace python { namespace detail { 
 

@@ -18,6 +18,7 @@
 #ifndef __otbClusterShadeTextureFunctor_h
 #define __otbClusterShadeTextureFunctor_h
 
+#include "vcl_deprecated_header.h"
 #include "otbMeanTextureFunctor.h"
 
 namespace otb
@@ -25,19 +26,10 @@ namespace otb
 namespace Functor
 {
 /** \class ClusterShadeTextureFunctor
- *  \brief This functor calculates the cluster shade image texture.
+ *  \brief <b>DEPRECATED<\b>
  *
- *  Computes cluster shade using joint histogram (neighborhood and offset neighborhood).
- *  The formula is:
- *  \f[ \sum_{i}\sum_{j}((i-\mu_{x})+(j-\mu_{y}))^3p(i,j) \f]
-    Where \f$ \mu \f$ is the mean texture value.
- *  TIterInput is an iterator, TOutput is a PixelType.
- *
- *  \sa MeanTextureFunctor
- *  \sa TextureFunctorBase
- *  \ingroup Functor
- *  \ingroup Statistics
-   * \ingroup Textures
+ * \deprecated in OTB 3.4, please use
+ * otbScalarImageToTexturesFilter instead.
  */
 
 template <class TScalarInputPixelType, class TScalarOutputPixelType>
@@ -51,7 +43,9 @@ public:
     return "ClusterShadeTexture";
   }
 
-  ClusterShadeTextureFunctor(){};
+  ClusterShadeTextureFunctor()
+    {
+    };
   virtual ~ClusterShadeTextureFunctor(){}
 
   typedef MeanTextureFunctor<TScalarInputPixelType, TScalarOutputPixelType> Superclass;
@@ -60,24 +54,11 @@ public:
   virtual double ComputeOverSingleChannel(const NeighborhoodType& neigh, const NeighborhoodType& neighOff)
   {
     this->ComputeJointHistogram(neigh, neighOff);
-    
-    //compute meanPOff and meanPNeigh
+    double mean = Superclass::ComputeOverSingleChannel(neigh, neighOff);
     double area = static_cast<double>(neigh.GetSize()[0] * neigh.GetSize()[1]);
     double areaInv = 1 / area;
     double out = 0.;
-    double sumProb = 0.;
-    
-    for (unsigned r = 0; r < this->GetHisto().size(); ++r)
-      {
-      for (unsigned s = 0; s < this->GetHisto()[r].size(); ++s)
-        {
-        double p =  static_cast<double>(this->GetHisto()[r][s]) * areaInv;
-        sumProb += p;
-        }
-      }
-    double meanPOff = sumProb / static_cast<double>(this->GetHisto().size());
-    double meanPNeigh = sumProb / static_cast<double>(this->GetHisto()[0].size());
-    
+
     for (unsigned r = 0; r < this->GetHisto().size(); ++r)
       {
       for (unsigned s = 0; s < this->GetHisto()[r].size(); ++s)
@@ -86,7 +67,7 @@ public:
         double sumPixel =
           (static_cast<double>(s) +
             0.5) * this->GetNeighBinLength() + (static_cast<double>(r) + 0.5) * this->GetOffsetBinLength();
-        out += vcl_pow(sumPixel - meanPOff - meanPNeigh, 3) * p;
+        out += vcl_pow(sumPixel - 2 * mean, 3) * p;
         }
       }
 

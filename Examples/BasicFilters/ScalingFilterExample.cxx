@@ -30,8 +30,9 @@
 
 //  Software Guide : BeginLatex
 //
-//  Satellite images are commonly coded on more that 8 bits. On the opposite, image formats
-// use for printing and display are usually limited to 8 bits. We need to convert the value
+// On one hand, satellite images are commonly coded on more that 8 bits to provide
+// the dynamic range required from shadows to clouds. On the other hand, image formats
+// in use for printing and display are usually limited to 8 bits. We need to convert the value
 // to enable a proper display. This is usually done using linear scaling. Of course, you have
 // to be aware that some information is lost in the process.
 //
@@ -91,8 +92,9 @@ int main(int argc, char * argv[])
   writer->Update();
 
   //  Software Guide : BeginLatex
-  // Figure~\ref{fig:SCALING_FILTER} shows the difference between a proper scaling and
-  // a simple truncation of the value
+  // Figure~\ref{fig:SCALING_FILTER} illustrates the difference between a proper scaling and
+  // a simple truncation of the value and demonstrates why it is
+  // important to keep this in mind.
   // \begin{figure}
   // \center
   // \includegraphics[width=0.44\textwidth]{QB_Toulouse_Ortho_PAN_casted.eps}

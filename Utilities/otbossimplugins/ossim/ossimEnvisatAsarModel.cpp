@@ -9,6 +9,9 @@
 //----------------------------------------------------------------------------
 // $Id$
 
+#include <cmath>
+#include <cstdio>
+
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimKeywordNames.h>
 
@@ -24,8 +27,6 @@
 #include <otb/SensorParams.h>
 #include <otb/RefPoint.h>
 #include <otb/SarSensor.h>
-
-#include <cmath>
 
 namespace ossimplugins
 {

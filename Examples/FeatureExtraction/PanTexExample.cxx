@@ -37,7 +37,7 @@
 // Software Guide : BeginLatex
 //
 // This example illustrates the use of the
-// \doxygen{otb}{PanTexTextureImageFilter}. This texture parameter was
+// \doxygen{otb}{ScalarImageToPanTexTextureFilter}. This texture parameter was
 // first introduced in \cite{PanTex} and is very useful for urban area
 // detection.
 // \relatedClasses
@@ -50,7 +50,7 @@
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-#include "otbPanTexTextureImageFilter.h"
+#include "otbScalarImageToPanTexTextureFilter.h"
 // Software Guide : EndCodeSnippet
 
 int main(int argc, char * argv[])
@@ -82,7 +82,7 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::PanTexTextureImageFilter<ImageType, ImageType> PanTexType;
+  typedef otb::ScalarImageToPanTexTextureFilter<ImageType, ImageType> PanTexTextureFilterType;
   // Software Guide : EndCodeSnippet
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::ImageFileWriter<ImageType> WriterType;
@@ -100,14 +100,37 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  PanTexType::Pointer textureFilter = PanTexType::New();
+  PanTexTextureFilterType::Pointer textureFilter = PanTexTextureFilterType::New();
   // Software Guide : EndCodeSnippet
-  // Software Guide : BeginLatex//
-// We can now plug the pipeline and trigger the execution by calling
-// the \code{Update} method of the writer.
-//
-// Software Guide : EndLatex
-// Software Guide : BeginCodeSnippet
+  
+  // Software Guide : BeginLatex
+  //
+  // Then, we set the parameters of the filter.The radius of
+  // the neighborhood to compute the texture.
+  // The number of bins per axis for histogramm generation (it is the 
+  // size of the co-occurrence matrix). Moreover, we have to specify 
+  // the Min/Max in the input image. In the example, image Min/Max is setted
+  // by the user to 0 and 255. Alternatyvely you can use the class \doxygen{itk}{MinimumMaximumImageCalculator}
+  // to calculate these values.
+  //
+  // Software Guide : EndLatex
+  
+  // Software Guide : BeginCodeSnippet
+  PanTexTextureFilterType::SizeType sradius;
+  sradius.Fill(4);
+  textureFilter->SetNumberOfBinsPerAxis(8);
+  textureFilter->SetRadius(sradius);
+  textureFilter->SetInputImageMinimum(0);
+  textureFilter->SetInputImageMaximum(256);
+  // Software Guide : EndCodeSnippet
+  
+  // Software Guide : BeginLatex
+  //
+  // We can now plug the pipeline and trigger the execution by calling
+  // the \code{Update} method of the writer.
+  //
+  // Software Guide : EndLatex
+  // Software Guide : BeginCodeSnippet
   textureFilter->SetInput(reader->GetOutput());
   writer->SetInput(textureFilter->GetOutput());
 
@@ -122,7 +145,7 @@ int main(int argc, char * argv[])
   // \includegraphics[width=0.40\textwidth]{pretty_PanTexInput.eps}
   // \includegraphics[width=0.40\textwidth]{pretty_PanTexOutput.eps}
   // \itkcaption[PanTex Filter]{Result of applying the
-  // \doxygen{otb}{PanTexTextureImageFilter} to an image. From left to right :
+  // \doxygen{otb}{ScalarImageToPanTexTextureFilter} to an image. From left to right :
   // original image, PanTex feature.}
   // \label{fig:PANTEXFILTER}
   // \end{figure}

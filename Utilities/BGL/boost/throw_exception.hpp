@@ -17,10 +17,10 @@
 //  accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 //
-//  http://www.boost.org/libs/utility/throw_exception.html
+//  http://www.boost.org/libs/butility/throw_exception.html
 //
 
-#include <boost/exception/detail/attribute_noreturn.hpp>
+#include <boost/bexception/detail/attribute_noreturn.hpp>
 #include <boost/detail/workaround.hpp>
 #include <boost/config.hpp>
 #include <exception>
@@ -34,7 +34,7 @@
 #endif
 
 #if !defined( BOOST_EXCEPTION_DISABLE )
-# include <boost/exception/exception.hpp>
+# include <boost/bexception/exception.hpp>
 # include <boost/current_function.hpp>
 # define BOOST_THROW_EXCEPTION(x) ::boost::throw_exception(::boost::enable_error_info(x) <<\
     ::boost::throw_function(BOOST_CURRENT_FUNCTION) <<\

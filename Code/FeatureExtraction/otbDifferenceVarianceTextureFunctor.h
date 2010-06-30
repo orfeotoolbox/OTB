@@ -18,6 +18,7 @@
 #ifndef __otbDifferenceVarianceTextureFunctor_h
 #define __otbDifferenceVarianceTextureFunctor_h
 
+#include "vcl_deprecated_header.h"
 #include "otbTextureFunctorBase.h"
 
 namespace otb
@@ -25,17 +26,10 @@ namespace otb
 namespace Functor
 {
 /** \class DifferenceVarianceTextureFunctor
- *  \brief This functor calculates the difference variance image texture according to Haralick descriptors.
+ *  \brief <b>DEPRECATED<\b>
  *
- *  Computes  difference variance using joint histogram (neighborhood and offset neighborhood).
- *  The formula is:
- *  variance of \f$ p_{x-y} \f$
- *  TIterInput is an iterator, TOutput is a PixelType.
- *
- *  \sa TextureFunctorBase
- *  \ingroup Functor
- *  \ingroup Statistics
-   * \ingroup Textures
+ * \deprecated in OTB 3.4, please use
+ * otbScalarImageToAdvancedTexturesFilter instead.
  */
 
 template <class TScalarInputPixelType, class TScalarOutputPixelType>
@@ -49,7 +43,9 @@ public:
     return "DifferenceVarianceTexture";
   }
 
-  DifferenceVarianceTextureFunctor(){};
+  DifferenceVarianceTextureFunctor()
+    {
+    };
   virtual ~DifferenceVarianceTextureFunctor(){}
 
   typedef TextureFunctorBase<TScalarInputPixelType, TScalarOutputPixelType> Superclass;

@@ -18,6 +18,7 @@
 #ifndef __otbMeanTextureFunctor_h
 #define __otbMeanTextureFunctor_h
 
+#include "vcl_deprecated_header.h"
 #include "otbTextureFunctorBase.h"
 
 namespace otb
@@ -25,17 +26,10 @@ namespace otb
 namespace Functor
 {
 /** \class MeanTextureFunctor
- *  \brief This functor calculates the local entropy of an image
+ *  \brief <b>DEPRECATED<\b>
  *
- *  Computes joint histogram (neighborhood and offset neighborhood) .
- *  The formula is:
- *  \f$ -\sum_{i}p(i,j) \f$
- *  TIterInput is an ietrator, TOutput is a PixelType.
- *
- *  \sa TextureFunctorBase
- *  \ingroup Functor
- *  \ingroup Statistics
-   * \ingroup Textures
+ * \deprecated in OTB 3.4, please use
+ * otbScalarImageToTexturesFilter instead.
  */
 
 template <class TScalarInputPixelType, class TScalarOutputPixelType>
@@ -49,7 +43,10 @@ public:
     return "MeanTexture";
   }
 
-  MeanTextureFunctor(){};
+  MeanTextureFunctor()
+    {
+    };
+
   virtual ~MeanTextureFunctor(){}
 
   typedef TextureFunctorBase<TScalarInputPixelType, TScalarOutputPixelType> Superclass;
@@ -65,15 +62,12 @@ public:
       {
       for (unsigned s = 0; s < this->GetHisto()[r].size(); ++s)
         {
-        double p = static_cast<double>(this->GetHisto()[r][s]);
-        double pixProd =
-          ((static_cast<double>(r) + 0.5) * this->GetOffsetBinLength())
-          * ((static_cast<double>(s) + 0.5) * this->GetNeighBinLength());
-        out += pixProd * p;
+        double p = static_cast<double>(this->GetHisto()[r][s]) * areaInv;
+        out += (static_cast<double>(s) + 0.5) * this->GetNeighBinLength() * p;
         }
       }
 
-    return out * areaInv;
+    return out;
   }
 };
 

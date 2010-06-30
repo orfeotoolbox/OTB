@@ -15,8 +15,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otb_ScalarImageToTexturesFilter_h
-#define __otb_ScalarImageToTexturesFilter_h
+#ifndef __otbScalarImageToTexturesFilter_h
+#define __otbScalarImageToTexturesFilter_h
 
 #include "itkImageToImageFilter.h"
 
@@ -25,6 +25,48 @@
 
 namespace otb
 {
+/** \class ScalarImageToTexturesFilter
+ *  \brief This class compute 8 local Haralick textures features.
+ *
+ *  This filter computes the following Haralick textures over a sliding windows with
+ *  user defined radius:
+ *  (where \f$ g(i, j) \f$ is the element in
+ * cell i, j of a a normalized GLCM):
+ *
+ * "Energy" \f$ = f_1 = \sum_{i,j}g(i, j)^2 \f$
+ *
+ * "Entropy" \f$ = f_2 = -\sum_{i,j}g(i, j) \log_2 g(i, j)\f$, or 0 if \f$g(i, j) = 0\f$
+ *
+ * "Correlation" \f$ = f_3 = \sum_{i,j}\frac{(i - \mu)(j - \mu)g(i, j)}{\sigma^2} \f$
+ *
+ * "Difference Moment" \f$= f_4 = \sum_{i,j}\frac{1}{1 + (i - j)^2}g(i, j) \f$
+ *
+ * "Inertia" \f$ = f_5 = \sum_{i,j}(i - j)^2g(i, j) \f$ (sometimes called "contrast.")
+ *
+ * "Cluster Shade" \f$ = f_6 = \sum_{i,j}((i - \mu) + (j - \mu))^3 g(i, j) \f$
+ *
+ * "Cluster Prominence" \f$ = f_7 = \sum_{i,j}((i - \mu) + (j - \mu))^4 g(i, j) \f$
+ *
+ * "Haralick's Correlation" \f$ = f_8 = \frac{\sum_{i,j}(i, j) g(i, j) -\mu_t^2}{\sigma_t^2} \f$
+ * where \f$\mu_t\f$ and \f$\sigma_t\f$ are the mean and standard deviation of the row
+ * (or column, due to symmetry) sums.
+ *
+ * Above, \f$ \mu =  \f$ (weighted pixel average) \f$ = \sum_{i,j}i \cdot g(i, j) =
+ * \sum_{i,j}j \cdot g(i, j) \f$ (due to matrix summetry), and
+ *
+ * \f$ \sigma =  \f$ (weighted pixel variance) \f$ = \sum_{i,j}(i - \mu)^2 \cdot g(i, j) =
+ * \sum_{i,j}(j - \mu)^2 \cdot g(i, j)  \f$  (due to matrix summetry)
+ *
+ * Neighborhood size can be set using the SetRadius() method. Offset for co-occurence estimation
+ * is set using the SetOffset() method.
+ *
+ * \sa otb::MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator
+ * \sa itk::GreyLevelCooccurrenceMatrixTextureCoefficientsCalculator
+ *
+ * \ingroup Streamed
+ * \ingroup Threaded
+ *
+ */
 template<class TInpuImage, class TOutputImage>
 class ScalarImageToTexturesFilter : public itk::ImageToImageFilter
   <TInpuImage, TOutputImage>

@@ -18,6 +18,7 @@
 #ifndef __otbAngularSecondMomentumTextureFunctor_h
 #define __otbAngularSecondMomentumTextureFunctor_h
 
+#include "vcl_deprecated_header.h"
 #include "otbTextureFunctorBase.h"
 
 namespace otb
@@ -25,18 +26,12 @@ namespace otb
 namespace Functor
 {
 /** \class AngularSecondMomentumTextureFunctor
- *  \brief This functor calculates the cluster shade image texture.
+ *  \brief <b>DEPRECATED<\b>
  *
- *  Computes angular second moment using joint histogram (neighborhood and offset neighborhood) .
- *  The formula is:
- *  \f[ sum_{i}\sum_{j}p(i,j)^2 \f]
- *  TIterInput is an iterator, TOutput is a PixelType.
- *
- *  \sa TextureFunctorBase
- *  \ingroup Functor
- *  \ingroup Statistics
-   * \ingroup Textures
+ * \deprecated in OTB 3.4, please use
+ * otbScalarImageToTexturesFilter instead.
  */
+
 template <class TScalarInputPixelType, class TScalarOutputPixelType>
 class ITK_EXPORT AngularSecondMomentumTextureFunctor :
   public TextureFunctorBase<TScalarInputPixelType, TScalarOutputPixelType>
@@ -48,7 +43,10 @@ public:
     return "AngularSecondMomentumTexture";
   }
 
-  AngularSecondMomentumTextureFunctor(){};
+  AngularSecondMomentumTextureFunctor()
+    {
+    };
+
   virtual ~AngularSecondMomentumTextureFunctor(){}
 
   typedef TextureFunctorBase<TScalarInputPixelType, TScalarOutputPixelType> Superclass;

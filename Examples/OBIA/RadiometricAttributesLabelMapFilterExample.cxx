@@ -155,6 +155,10 @@ int main(int argc, char * argv[])
   filter->SetScale(scale);
   // Software Guide : EndCodeSnippet
 
+  // For non regression tests, set the number of threads to 1
+  // because MeanShift results depends on the number of threads
+  filter->SetNumberOfThreads(1);
+
   //  Software Guide : BeginLatex
   //
   // The \doxygen{otb}{MeanShiftImageFilter} type is instantiated using the image

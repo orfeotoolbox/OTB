@@ -18,6 +18,7 @@
 #ifndef __otbVarianceTextureFunctor_h
 #define __otbVarianceTextureFunctor_h
 
+#include "vcl_deprecated_header.h"
 #include "otbMeanTextureFunctor.h"
 
 namespace otb
@@ -25,19 +26,10 @@ namespace otb
 namespace Functor
 {
 /** \class VarianceTextureFunctor
- *  \brief This functor calculates the cluster shade image texture.
+ *  \brief <b>DEPRECATED<\b>
  *
- *  Computes variance using joint histogram (neighborhood and offset neighborhood) .
- *  The formula is:
- *  \f$ \sum_{i}{2N}(i-SAV)^2.p_{x+y}(i) \f$
- *  With \f$ SAV \f$ is the sum average texture value.
- *  TIterInput is an iterator, TOutput is a PixelType.
- *
- *  \sa MeanTextureFunctor
- *  \sa TextureFunctorBase
- *  \ingroup Functor
- *  \ingroup Statistics
-   * \ingroup Textures
+ * \deprecated in OTB 3.4, please use
+ * otbScalarImageToTexturesFilter instead.
  */
 
 template <class TScalarInputPixelType, class TScalarOutputPixelType>
@@ -51,7 +43,10 @@ public:
     return "VarianceTexture";
   }
 
-  VarianceTextureFunctor(){};
+  VarianceTextureFunctor()
+    {
+    };
+
   virtual ~VarianceTextureFunctor(){}
 
   typedef MeanTextureFunctor<TScalarInputPixelType, TScalarOutputPixelType> Superclass;

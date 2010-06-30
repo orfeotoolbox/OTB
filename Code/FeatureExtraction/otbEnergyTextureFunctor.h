@@ -18,6 +18,7 @@
 #ifndef __otbEnergyTextureFunctor_h
 #define __otbEnergyTextureFunctor_h
 
+#include "vcl_deprecated_header.h"
 #include "otbTextureFunctorBase.h"
 
 namespace otb
@@ -25,18 +26,12 @@ namespace otb
 namespace Functor
 {
 /** \class EnergyTextureFunctor
- *  \brief This functor calculates the energy image texture.
+ *  \brief <b>DEPRECATED<\b>
  *
- *  The formula is:
- *  \f[ \frac{1}{N}\sum_{i}\sum_{j}(i-j)^2 \f]
- *
- *  TIterInput is an iterator, TOutput is a PixelType.
- *
- *  \sa TextureFunctorBase
- *  \ingroup Functor
- *  \ingroup Statistics
-   * \ingroup Textures
+ * \deprecated in OTB 3.4, please use
+ * otbScalarImageToTexturesFilter instead.
  */
+
 template <class TScalarInputPixelType, class TScalarOutputPixelType>
 class ITK_EXPORT EnergyTextureFunctor :
   public TextureFunctorBase<TScalarInputPixelType, TScalarOutputPixelType>
@@ -48,7 +43,10 @@ public:
     return "EnergyTexture";
   }
 
-  EnergyTextureFunctor(){};
+  EnergyTextureFunctor()
+    {
+    };
+  
   virtual ~EnergyTextureFunctor(){}
 
   typedef TScalarInputPixelType                                             InputScalarType;
@@ -60,22 +58,37 @@ public:
 
   double ComputeOverSingleChannel(const NeighborhoodType& neigh, const NeighborhoodType& neighOff)
   {
-    this->ComputeJointHistogram(neigh, neighOff);
-    
-    double area = static_cast<double>(neigh.GetSize()[0] * neigh.GetSize()[1]);
-    double areaInv = 1 / area;
-    double out = 0.;
-    double p = 0.;
-    for (unsigned r = 0; r < this->GetHisto().size(); ++r)
+    RadiusType radius = neigh.GetRadius();
+    double     area = static_cast<double>(neigh.GetSize()[0] * neigh.GetSize()[1]);
+
+    OffsetType offset;
+    offset.Fill(0);
+    OffsetType offsetOff;
+    OffsetType offsetOffInit;
+
+    offsetOffInit[0] = -radius[0] + this->GetOffset()[0] - 1;
+    offsetOffInit[1] = -radius[1] + this->GetOffset()[1] - 1;
+
+    double temp = 0.;
+    double norm = 0.;
+
+    offsetOff = offsetOffInit;
+    for (int l = -static_cast<int>(radius[0]); l <= static_cast<int>(radius[0]); l++)
       {
-      for (unsigned s = 0; s < this->GetHisto()[r].size(); ++s)
+      offsetOff[0]++;
+      offsetOff[1] = offsetOffInit[1];
+      offset[0] = l;
+      for (int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); ++k)
         {
-        p = static_cast<double>(this->GetHisto()[r][s]) * areaInv;
-        out += p*p;
+        offsetOff[1]++;
+        offset[1] = k;
+        norm = vcl_pow(static_cast<double>((neigh[offset] - neighOff[neighOff.GetCenterNeighborhoodIndex()])), 2);
+        temp += norm;
         }
       }
-    return out;
-    }
+    temp /= area;
+    return vcl_pow(temp, 2);
+  }
 
 };
 

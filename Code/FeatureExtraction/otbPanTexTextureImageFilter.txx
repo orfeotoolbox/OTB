@@ -18,6 +18,7 @@
 #ifndef __otbPanTexTextureImageFilter_txx
 #define __otbPanTexTextureImageFilter_txx
 
+#include "vcl_deprecated_header.h"
 #include "otbPanTexTextureImageFilter.h"
 
 namespace otb

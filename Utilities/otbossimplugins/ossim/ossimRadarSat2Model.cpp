@@ -10,6 +10,7 @@
 // $Id$
 
 #include <cmath>
+#include <cstdio>
 
 #include <ossimRadarSat2Model.h>
 #include <ossimPluginCommon.h>

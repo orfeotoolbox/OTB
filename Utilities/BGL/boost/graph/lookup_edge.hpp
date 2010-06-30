@@ -12,7 +12,7 @@
 
 #include <utility>
 #include <boost/config.hpp>
-#include <boost/utility/enable_if.hpp>
+#include <boost/butility/enable_if.hpp>
 #include <boost/graph/graph_traits.hpp>
 
 // lookup_edge: a function that acts like edge() but falls back to out_edges()

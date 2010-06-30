@@ -13,7 +13,7 @@
 #include <boost/config.hpp>
 #include <memory>
 #include <functional>
-#include <boost/functional/hash_fwd.hpp>
+#include <boost/bfunctional/hash_fwd.hpp>
 
 namespace boost
 {

@@ -20,7 +20,8 @@
 #include <ossim/base/ossimXmlDocument.h>
 #include <ossim/base/ossimXmlNode.h>
 #include <otb/CivilDateTime.h>
-
+#include <ossim/base/ossimTrace.h>
+static ossimTrace traceDebug("ossimPluginCommon:debug");
 namespace ossimplugins
 {
 
@@ -69,25 +70,36 @@ bool ossim::getPath(const ossimString& path,
          }
          else
          {
-            ossimNotify(ossimNotifyLevel_WARN)
+            if(traceDebug())
+            {
+               
+               ossimNotify(ossimNotifyLevel_WARN)
                << "ossim::getPath ERROR:\n"
                << "Node not found: " << path
                << std::endl;
+            }
          }
       }
       else if ( xnodes.size() == 0 )
       {
-         ossimNotify(ossimNotifyLevel_WARN)
-            << "ossim::getPath ERROR:\n"
+         if(traceDebug())
+         {
+           ossimNotify(ossimNotifyLevel_WARN)
+               << "ossim::getPath ERROR:\n"
                << "Node not found: " << path
             << std::endl;
+         }
       }
       else
       {
-         ossimNotify(ossimNotifyLevel_WARN)
+         if(traceDebug())
+         {
+
+            ossimNotify(ossimNotifyLevel_WARN)
                << "ossim::getPath ERROR:\n"
                << "Multiple nodes found: " << path
                << std::endl;
+         }
       }
    }
    if (!result)
@@ -119,10 +131,13 @@ bool ossim::getPath(const ossimString& path,
       }
       else
       {
-         ossimNotify(ossimNotifyLevel_WARN)
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
             << "ossim::getPath ERROR:\n"
             << "Nodes not found: " << path
             << std::endl;
+         }
       }
    }
    if (!result)
@@ -149,18 +164,24 @@ bool ossim::findFirstNode(const ossimString& path,
          }
          else
          {
-            ossimNotify(ossimNotifyLevel_WARN)
+            if(!traceDebug())
+            {
+               ossimNotify(ossimNotifyLevel_WARN)
                << "ossim::findFirstNode ERROR:\n"
                << "Node empty: " << path
                << std::endl;
+            }
          }
       }
       else
       {
-         ossimNotify(ossimNotifyLevel_WARN)
-            << "ossim::findFirstNode ERROR:\n"
-            << "Node not found: " << path
-            << std::endl;
+         if(!traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
+               << "ossim::findFirstNode ERROR:\n"
+               << "Node not found: " << path
+               << std::endl;
+         }
       }
    }
    return result;

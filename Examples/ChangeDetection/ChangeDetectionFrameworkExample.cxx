@@ -217,10 +217,8 @@ int main(int argc, char* argv[])
   // SoftwareGuide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef MyChangeDetectorImageFilter<
-    InputImageType1,
-    InputImageType2,
-    ChangeImageType>       FilterType;
+  typedef MyChangeDetectorImageFilter<InputImageType1,InputImageType2,
+                                      ChangeImageType>      FilterType;
   // Software Guide : EndCodeSnippet
 
   ReaderType1::Pointer  reader1 = ReaderType1::New();

@@ -72,7 +72,7 @@ OGRIOHelper<TVectorData>
 
   LinePointerType line = LineType::New();
 
-  OGRPoint * ogrTmpPoint = new OGRPoint();
+  OGRPoint * ogrTmpPoint = (OGRPoint *)OGRGeometryFactory::createGeometry(wkbPoint);
 
   for (int pIndex = 0; pIndex < ogrLine->getNumPoints(); ++pIndex)
     {
@@ -95,7 +95,7 @@ OGRIOHelper<TVectorData>
 
     line->AddVertex(vertex);
     }
-  delete ogrTmpPoint;
+  OGRGeometryFactory::destroyGeometry(ogrTmpPoint);
 
   DataNodePointerType node = DataNodeType::New();
   node->SetLine(line);
@@ -116,8 +116,7 @@ OGRIOHelper<TVectorData>
     itkGenericExceptionMacro(<< "Failed to convert OGRGeometry to OGRPolygon");
     }
 
-  OGRPoint * ogrTmpPoint = new OGRPoint();
-
+  OGRPoint * ogrTmpPoint = (OGRPoint *)OGRGeometryFactory::createGeometry(wkbPoint);
   OGRLinearRing * ogrRing = ogrPolygon->getExteriorRing();
 
   PolygonPointerType extRing = PolygonType::New();
@@ -167,7 +166,7 @@ OGRIOHelper<TVectorData>
     intRings->PushBack(ring);
     }
 
-  delete ogrTmpPoint;
+  OGRGeometryFactory::destroyGeometry(ogrTmpPoint);
 
   DataNodePointerType node = DataNodeType::New();
   node->SetPolygonExteriorRing(extRing);
@@ -726,8 +725,8 @@ unsigned int OGRIOHelper<TVectorData>
       {
       
       //Build the ogrObject
-      OGRPolygon *               ogrPolygon = new OGRPolygon();
-      OGRLinearRing *            ogrExternalRing = new OGRLinearRing();
+      OGRPolygon *               ogrPolygon = (OGRPolygon *)OGRGeometryFactory::createGeometry(wkbPolygon);
+      OGRLinearRing *            ogrExternalRing = (OGRLinearRing *)OGRGeometryFactory::createGeometry(wkbLinearRing);
       VertexListConstPointerType vertexList = dataNode->GetPolygonExteriorRing()->GetVertexList();
 
       typename VertexListType::ConstIterator vIt = vertexList->Begin();
@@ -748,13 +747,13 @@ unsigned int OGRIOHelper<TVectorData>
       ogrPolygon->addRing(ogrExternalRing);
       // Close the polygon
       ogrPolygon->closeRings();
-      delete ogrExternalRing;
-
+      OGRGeometryFactory::destroyGeometry(ogrExternalRing);
+      
       // Retrieving internal rings as well
       for (typename PolygonListType::Iterator pIt = dataNode->GetPolygonInteriorRings()->Begin();
            pIt != dataNode->GetPolygonInteriorRings()->End(); ++pIt)
         {
-        OGRLinearRing * ogrInternalRing = new OGRLinearRing();
+        OGRLinearRing * ogrInternalRing = (OGRLinearRing *)OGRGeometryFactory::createGeometry(wkbLinearRing);
         vertexList = pIt.Get()->GetVertexList();
         vIt = vertexList->Begin();
 
@@ -771,7 +770,7 @@ unsigned int OGRIOHelper<TVectorData>
           ++vIt;
           }
         ogrPolygon->addRing(ogrInternalRing);
-        delete ogrInternalRing;
+        OGRGeometryFactory::destroyGeometry(ogrInternalRing);
         }
 
       //Save it in the structure
@@ -796,7 +795,7 @@ unsigned int OGRIOHelper<TVectorData>
         ogrCollection->addGeometry(ogrPolygon);
         }
 
-      delete ogrPolygon;
+      OGRGeometryFactory::destroyGeometry(ogrPolygon);
       break;
       }
     case FEATURE_MULTIPOINT:
@@ -806,8 +805,7 @@ unsigned int OGRIOHelper<TVectorData>
         itkExceptionMacro(<< "Problem while creating multipoint.");
         }
       
-      OGRMultiPoint*  ogrMultiPoint= new OGRMultiPoint();
-
+      OGRMultiPoint*  ogrMultiPoint= (OGRMultiPoint* )OGRGeometryFactory::createGeometry(wkbMultiPoint);
       OGRFeature *ogrFeature;
 
       ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
@@ -831,8 +829,8 @@ unsigned int OGRIOHelper<TVectorData>
         }
 
       // Instanciate a new  ogrMultiLineString feature
-      OGRMultiLineString*  ogrMultiLineString= new OGRMultiLineString();
-
+      OGRMultiLineString*  ogrMultiLineString= (OGRMultiLineString* )OGRGeometryFactory::createGeometry(wkbMultiLineString);
+      
       OGRFeature *ogrFeature;
 
       ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
@@ -855,14 +853,13 @@ unsigned int OGRIOHelper<TVectorData>
         }
       
       // Instanciate a new multipolygon feature
-      OGRMultiPolygon* ogrMutliPolygon = new OGRMultiPolygon();
-
+      OGRMultiPolygon*  ogrMultiPolygon= (OGRMultiPolygon* )OGRGeometryFactory::createGeometry(wkbMultiPolygon);
       OGRFeature *ogrFeature;
 
       ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
       ogrFeature->SetField("Name", dataNode->GetNodeId());
       ogrFeature->GetDefnRef()->SetGeomType(wkbMultiPolygon);
-      ogrFeature->SetGeometry(ogrMutliPolygon);
+      ogrFeature->SetGeometry(ogrMultiPolygon);
 
       if (ogrCurrentLayer->CreateFeature(ogrFeature) != OGRERR_NONE)
         {
@@ -878,7 +875,7 @@ unsigned int OGRIOHelper<TVectorData>
         itkExceptionMacro(<< "Problem while creating collection.");
         }
 
-      OGRGeometryCollection*  ogrCollectionGeometry = new OGRGeometryCollection();
+      OGRGeometryCollection*  ogrCollectionGeometry = (OGRGeometryCollection* )OGRGeometryFactory::createGeometry(wkbGeometryCollection);
       
       OGRFeature *ogrFeature;
 
@@ -900,16 +897,7 @@ unsigned int OGRIOHelper<TVectorData>
 
   return m_Kept;
 }
-/*
-template<class TLabelObject, class TPolygon>
-inline typename OGRIOHelper<TLabelObject,TPolygon>
-::PolygonPointerType
-OGRIOHelper<TLabelObject,TPolygon>
-::operator()(const LabelObjectType * labelObject)
-{
 
-}
-*/
 
 } // end namespace otb
 

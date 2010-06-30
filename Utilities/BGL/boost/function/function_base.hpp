@@ -31,7 +31,7 @@
 #include <boost/detail/workaround.hpp>
 #include <boost/type_traits/alignment_of.hpp>
 #ifndef BOOST_NO_SFINAE
-#  include "boost/utility/enable_if.hpp"
+#  include "boost/butility/enable_if.hpp"
 #else
 #  include "boost/mpl/bool.hpp"
 #endif

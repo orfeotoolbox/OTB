@@ -24,7 +24,6 @@
 #include <ossim/imaging/ossimImageGeometryRegistry.h>
 #include <ossim/projection/ossimProjection.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
-#include <ossim/support_data/ossimGeoTiff.h>
 
 // Keyword constants:
 static const char PRODUCT_XML_FILE_KW[] = "product_xml_filename";
@@ -257,21 +256,21 @@ ossimplugins::ossimRadarSat2TiffReader::getInternalImageGeometry()
    ossimXmlDocument* xdoc = new ossimXmlDocument();
    if ( xdoc->openFile(theProductXmlFile) )
    {
-	  ossimRefPtr<ossimRadarSat2Model> model = new ossimRadarSat2Model();
+      ossimRefPtr<ossimRadarSat2Model> model = new ossimRadarSat2Model();
             
-	  if ( model->open(theProductXmlFile) )
-	  {     
-		  // Assign the model to our ossimImageGeometry object.        
-		  theGeometry->setProjection( model.get() );      
-	  } 
-	  else    
-	  {       
-		  if (traceDebug())    
-		  {
-		   ossimNotify(ossimNotifyLevel_DEBUG)
-			   << "WARNING: Unhandled projection: " << std::endl;        
-		  }
-	  }
+      if ( model->open(theProductXmlFile) )
+      {     
+         // Assign the model to our ossimImageGeometry object.        
+         theGeometry->setProjection( model.get() );      
+      } 
+      else    
+      {       
+         if (traceDebug())    
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << "WARNING: Unhandled projection: " << std::endl;        
+         }
+      }
    } // matches: if ( xdoc->openFile(theProductXmlFile) )
    
    delete xdoc;

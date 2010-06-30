@@ -18,6 +18,7 @@
 #ifndef __otbClusterProminenceTextureFunctor_h
 #define __otbClusterProminenceTextureFunctor_h
 
+#include "vcl_deprecated_header.h"
 #include "otbMeanTextureFunctor.h"
 
 namespace otb
@@ -25,19 +26,10 @@ namespace otb
 namespace Functor
 {
 /** \class ClusterProminenceTextureFunctor
- *  \brief This functor calculates the cluster prominence image texture.
+ *  \brief <b>DEPRECATED<\b>
  *
- *  Computes scluster prominence using joint histogram (neighborhood and offset neighborhood).
- *  The formula is:
- *  \f[ \sum_{i}\sum_{j}((i-\mu) + (j-\mu))^4p(i,j) \f]
- *  Where \f$ \mu \f$ is the mean texture value.
- *  TIterInput is an iterator, TOutput is a PixelType.
- *
- *  \sa MeanTextureFunctor
- *  \sa TextureFunctorBase
- *  \ingroup Functor
- *  \ingroup Statistics
-   * \ingroup Textures
+ * \deprecated in OTB 3.4, please use
+ * otbScalarImageToTexturesFilter instead.
  */
 
 template <class TScalarInputPixelType, class TScalarOutputPixelType>
@@ -51,7 +43,9 @@ public:
     return "ClusterProminenceTexture";
   }
 
-  ClusterProminenceTextureFunctor(){};
+  ClusterProminenceTextureFunctor()
+    {
+    };
   virtual ~ClusterProminenceTextureFunctor(){}
 
   typedef MeanTextureFunctor<TScalarInputPixelType, TScalarOutputPixelType> Superclass;
