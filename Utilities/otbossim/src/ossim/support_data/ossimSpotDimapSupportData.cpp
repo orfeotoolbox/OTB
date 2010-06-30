@@ -187,7 +187,8 @@ ossimObject* ossimSpotDimapSupportData::dup()const
 void ossimSpotDimapSupportData::clearFields()
 {
    clearErrorStatus();
-   theSensorID="Spot 5";
+   //theSensorID="Spot 5";
+   theSensorID="";
    theMetadataVersion = OSSIM_SPOT_METADATA_VERSION_UNKNOWN;
    theImageID = "";
    theMetadataFile = "";
@@ -235,6 +236,8 @@ void ossimSpotDimapSupportData::clearFields()
    theGeoPosGroundPoints.clear();
 
 }
+
+
 
 bool ossimSpotDimapSupportData::loadXmlFile(const ossimFilename& file,
                                             bool processSwir)
@@ -2356,6 +2359,8 @@ bool ossimSpotDimapSupportData::parsePart4(
   {
     if (xml_nodes[0]->getText() == "1")
       theSensorID = "Spot 1";
+    if (xml_nodes[0]->getText() == "2")
+      theSensorID = "Spot 2";
     if (xml_nodes[0]->getText() == "4")
       theSensorID = "Spot 4";
     if (xml_nodes[0]->getText() == "5")
@@ -2597,7 +2602,12 @@ bool ossimSpotDimapSupportData::initSceneSource(
    /*
     * From the SPOT Dimap documentation (Dimap Generic 1.0), VIEWING_ANGLE
     * (the scene instrumental viewing angle) is ONLY available for SPOT5 data.
-    * WORKAROUND: if SPOT1 or SPOT4 data, then set VIEWING_ANGLE to -1.0
+    * FROM SPOT: You can use use incidence angle to calculate viewing angle
+    * (called look direction as well).
+    * FIX (see below): need theSatelliteAltitude and theIncidenceAngle. The
+    * equation is shown below where RT is the mean value of WGS84 ellipsoid 
+    * semi-axis.
+    *
     * */
    //---
    if(this->theSensorID == "Spot 5") {
@@ -2617,7 +2627,27 @@ bool ossimSpotDimapSupportData::initSceneSource(
    }
    theViewingAngle = xml_nodes[0]->getText().toDouble();
    } else {
+       xml_nodes.clear();
+       xpath = "/Dimap_Document/Data_Strip/Ephemeris/SATELLITE_ALTITUDE";
+
        theViewingAngle = -1.0;
+       xmlDocument->findNodes(xpath, xml_nodes);
+   if (xml_nodes.size() == 0)
+   {
+      setErrorStatus();
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "DEBUG:\nCould not find: " << xpath
+            << std::endl;
+      }
+      return false;
+   }
+       //compute VIEWING_ANGLE
+       double theSatelliteAltitude =  xml_nodes[0]->getText().toDouble();
+       double RT = 63710087714;
+       theViewingAngle = asin((RT/(RT+theSatelliteAltitude))*sin(theIncidenceAngle));
+
    }
 
    //---
