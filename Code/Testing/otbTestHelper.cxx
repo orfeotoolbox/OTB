@@ -872,7 +872,7 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
           {
           itkGenericExceptionMacro(<< "Impossible to create ASCII file <" << ref_filename << ">.");
           }
-        ref_poFeature->DumpReadable(ref_f);
+        DumpOGRFeature(ref_f, ref_poFeature );
         delete ref_poFeature;
         fclose(ref_f);
 
@@ -882,7 +882,7 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
           {
           itkGenericExceptionMacro(<< "Impossible to create ASCII file <" << test_filename << ">.");
           }
-        test_poFeature->DumpReadable(test_f);
+        DumpOGRFeature(test_f, test_poFeature );
         delete test_poFeature;
         fclose(test_f);
 
@@ -921,6 +921,146 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
 
   return (nbdiff != 0) ? 1 : 0;
 
+}
+
+void TestHelper::DumpOGRFeature(FILE* fpOut, OGRFeature* feature, char** papszOptions)
+{
+if( fpOut == NULL )
+	fpOut = stdout;
+
+fprintf( fpOut, "OGRFeature(%s):%ld\n", feature->GetDefnRef()->GetName(), feature->GetFID() );
+
+const char* pszDisplayFields =
+        CSLFetchNameValue(papszOptions, "DISPLAY_FIELDS");
+if (pszDisplayFields == NULL || CSLTestBoolean(pszDisplayFields))
+{
+    for( int iField = 0; iField < feature->GetFieldCount(); iField++ )
+    {
+        OGRFieldDefn    *poFDefn = feature->GetDefnRef()->GetFieldDefn(iField);
+
+        fprintf( fpOut, "  %s (%s) = ",
+        		poFDefn->GetNameRef(),
+                OGRFieldDefn::GetFieldTypeName(poFDefn->GetType()) );
+
+        if( feature->IsFieldSet( iField ) )
+            fprintf( fpOut, "%s\n", feature->GetFieldAsString( iField ) );
+        else
+            fprintf( fpOut, "(null)\n" );
+
+    }
+}
+
+
+if( feature->GetStyleString() != NULL )
+{
+    const char* pszDisplayStyle =
+        CSLFetchNameValue(papszOptions, "DISPLAY_STYLE");
+    if (pszDisplayStyle == NULL || CSLTestBoolean(pszDisplayStyle))
+    {
+        fprintf( fpOut, "  Style = %s\n", feature->GetStyleString() );
+    }
+}
+
+if( feature->GetGeometryRef() != NULL )
+{
+    const char* pszDisplayGeometry =
+            CSLFetchNameValue(papszOptions, "DISPLAY_GEOMETRY");
+    if ( ! (pszDisplayGeometry != NULL && EQUAL(pszDisplayGeometry, "NO") ) )
+    	DumpOGRGeometry(fpOut, feature->GetGeometryRef(), "  ", papszOptions);
+}
+
+fprintf( fpOut, "\n" );
+}
+
+void TestHelper::DumpOGRGeometry(FILE* fp, OGRGeometry* geometry, const char * pszPrefix, char** papszOptions)
+{
+    char        *pszWkt = NULL;
+
+    if( pszPrefix == NULL )
+        pszPrefix = "";
+
+    if( fp == NULL )
+        fp = stdout;
+
+    const char* pszDisplayGeometry =
+                CSLFetchNameValue(papszOptions, "DISPLAY_GEOMETRY");
+    if (pszDisplayGeometry != NULL && EQUAL(pszDisplayGeometry, "SUMMARY"))
+    {
+        OGRLineString *poLine;
+        OGRPolygon *poPoly;
+        OGRLinearRing *poRing;
+        OGRGeometryCollection *poColl;
+        fprintf( fp, "%s%s : ", pszPrefix, geometry->getGeometryName() );
+        switch( geometry->getGeometryType() )
+        {
+            case wkbUnknown:
+            case wkbNone:
+                break;
+            case wkbPoint:
+            case wkbPoint25D:
+                break;
+            case wkbLineString:
+            case wkbLineString25D:
+                poLine = (OGRLineString*)geometry;
+                fprintf( fp, "%d points\n", poLine->getNumPoints() );
+                break;
+            case wkbPolygon:
+            case wkbPolygon25D:
+            {
+                int ir;
+                int nRings;
+                poPoly = (OGRPolygon*)geometry;
+                poRing = poPoly->getExteriorRing();
+                nRings = poPoly->getNumInteriorRings();
+                fprintf( fp, "%d points", poRing->getNumPoints() );
+                if (nRings)
+                {
+                    fprintf( fp, ", %d inner rings (", nRings);
+                    for( ir = 0; ir < nRings; ir++)
+                    {
+                        if (ir)
+                            fprintf( fp, ", ");
+                        fprintf( fp, "%d points",
+                                 poPoly->getInteriorRing(ir)->getNumPoints() );
+                    }
+                    fprintf( fp, ")");
+                }
+                fprintf( fp, "\n");
+                break;
+            }
+            case wkbMultiPoint:
+            case wkbMultiPoint25D:
+            case wkbMultiLineString:
+            case wkbMultiLineString25D:
+            case wkbMultiPolygon:
+            case wkbMultiPolygon25D:
+            case wkbGeometryCollection:
+            case wkbGeometryCollection25D:
+            {
+                int ig;
+                poColl = (OGRGeometryCollection*)geometry;
+                fprintf( fp, "%d geometries:\n", poColl->getNumGeometries() );
+                for ( ig = 0; ig < poColl->getNumGeometries(); ig++)
+                {
+                    OGRGeometry * poChild = (OGRGeometry*)poColl->getGeometryRef(ig);
+                    fprintf( fp, "%s", pszPrefix);
+                    poChild->dumpReadable( fp, pszPrefix, papszOptions );
+                }
+                break;
+            }
+            case wkbLinearRing:
+                break;
+        }
+    }
+    else if (pszDisplayGeometry == NULL || CSLTestBoolean(pszDisplayGeometry) ||
+             EQUAL(pszDisplayGeometry, "WKT"))
+    {
+        if( geometry->exportToWkt( &pszWkt ) == OGRERR_NONE )
+        {
+            fprintf( fp, "%s%s\n", pszPrefix, pszWkt );
+            CPLFree( pszWkt );
+        }
+    }
 }
 
 // Regression Testing Code

@@ -105,6 +105,9 @@ private:
                    OGRLayer * test_poLayer, const char *test_pszWHERE, OGRGeometry *test_poSpatialFilter,
                    int& nbdiff) const;
 
+  static void DumpOGRFeature(FILE* fileid, OGRFeature* feature, char** papszOptions = NULL);
+  static void DumpOGRGeometry(FILE* fileid, OGRGeometry* geometry, const char * pszPrefix, char** papszOptions = NULL);
+
   double m_EpsilonBoundaryChecking;
   bool   m_ReportErrors;
   bool   m_IgnoreLineOrder;
