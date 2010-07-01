@@ -42,7 +42,8 @@
 // detection.
 // \relatedClasses
 //  \begin{itemize}
-//  \item \doxygen{otb}{ContrastTextureFunctor}
+//  \item \doxygen{otb}{ScalarImageToTexturesFilter}
+//  \item \doxygen{otb}{ScalarIamgeToAdvancedTexturesFilter}
 //  \end{itemize}
 //
 // The first step required to use this filter is to include its header file.
@@ -82,7 +83,8 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::ScalarImageToPanTexTextureFilter<ImageType, ImageType> PanTexTextureFilterType;
+  typedef otb::ScalarImageToPanTexTextureFilter
+    <ImageType, ImageType> PanTexTextureFilterType;
   // Software Guide : EndCodeSnippet
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::ImageFileWriter<ImageType> WriterType;
@@ -109,7 +111,7 @@ int main(int argc, char * argv[])
   // the neighborhood to compute the texture.
   // The number of bins per axis for histogramm generation (it is the 
   // size of the co-occurrence matrix). Moreover, we have to specify 
-  // the Min/Max in the input image. In the example, image Min/Max is setted
+  // the Min/Max in the input image. In the example, image Min/Max is set
   // by the user to 0 and 255. Alternatyvely you can use the class \doxygen{itk}{MinimumMaximumImageCalculator}
   // to calculate these values.
   //
