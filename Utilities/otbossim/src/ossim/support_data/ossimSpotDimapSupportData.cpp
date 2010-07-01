@@ -1337,6 +1337,12 @@ bool ossimSpotDimapSupportData::saveState(ossimKeywordlist& kwl,
            theLlCorner.datum()->code(),
            true);
 
+   kwl.add(prefix,
+           "sensorID",
+           theSensorID,
+           true);
+
+
    tempString = "";
    for(idx = 0; idx < thePhysicalBias.size(); ++idx)
    {
@@ -1536,6 +1542,7 @@ bool ossimSpotDimapSupportData::loadState(const ossimKeywordlist& kwl,
    theLrCorner =createGround( kwl.find(prefix, "lr_ground_point"));
    theLlCorner =createGround( kwl.find(prefix, "ll_ground_point"));
 
+   theSensorID = ossimString(kwl.find(prefix, "sensorID"));
 
    thePhysicalBias.resize(theNumBands);
    tempString = kwl.find(prefix,"physical_bias");
