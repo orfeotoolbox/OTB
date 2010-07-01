@@ -95,7 +95,7 @@ ADD_TEST(prTvRegionProjectionResamplerCevennes ${PROJECTIONS_TESTS1}
 				-0.00001
         )
 
-ADD_TEST(prTvSensorModelSpot5 ${PROJECTIONS_TESTS1}
+ADD_TEST(prTvSensorModelSPOT5 ${PROJECTIONS_TESTS1}
   --ignore-order --compare-ascii ${NOTOL}
          ${BASELINE_FILES}/prTvSensorModelSpot5.txt
          ${TEMP}/prTvSensorModelSpot5.txt
