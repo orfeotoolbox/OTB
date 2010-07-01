@@ -1044,7 +1044,7 @@ void TestHelper::DumpOGRGeometry(FILE* fp, OGRGeometry* geometry, const char * p
                 {
                     OGRGeometry * poChild = (OGRGeometry*)poColl->getGeometryRef(ig);
                     fprintf( fp, "%s", pszPrefix);
-                    poChild->dumpReadable( fp, pszPrefix, papszOptions );
+                    DumpOGRGeometry(fp, poChild, pszPrefix, papszOptions);
                 }
                 break;
             }
