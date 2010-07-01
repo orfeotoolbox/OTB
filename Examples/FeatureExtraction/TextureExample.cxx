@@ -43,37 +43,53 @@
 //
 // This example illustrates the use of the
 // \doxygen{otb}{ScalarImageToTexturesFilter},
-// which compute the standard Haralick's textural features presented in table~\ref{tab:haralickStandardFeatures}.
+// which compute the standard Haralick's textural features presented in table~\ref{tab:haralickStandardFeatures},
+// where $\mu_t$ and $\sigma_t$ are the mean and standard deviation of the row
+// (or column, due to symmetry) sums, $ \mu =  $ (weighted pixel average)
+// $ = \sum_{i,j}i \cdot g(i, j) =\sum_{i,j}j \cdot g(i, j) $ due to matrix summetry, and
+// $ \sigma =  $ (weighted pixel variance) $ = \sum_{i,j}(i - \mu)^2 \cdot g(i, j) =\sum_{i,j}(j - \mu)^2 \cdot g(i, j)  $
+// due to matrix symmetry.
 //
 // \begin{table}
+// \begin{center}
 // \begin{tabular}{|c|c|}
 // \hline
+// & \\
 // Energy & $ f_1 = \sum_{i,j}g(i, j)^2 $ \\
+// & \\
 // \hline
+// & \\
 // Entropy & $ f_2 = -\sum_{i,j}g(i, j) \log_2 g(i, j)$, or 0 if $g(i, j) = 0$ \\
+// & \\
 // \hline
+// & \\
 // Correlation & $ f_3 = \sum_{i,j}\frac{(i - \mu)(j - \mu)g(i, j)}{\sigma^2} $ \\
+// & \\
 // \hline
+// & \\
 // Difference Moment &  $f_4 = \sum_{i,j}\frac{1}{1 + (i - j)^2}g(i, j) $ \\
+// & \\
 // \hline
+// & \\
 // Inertia (a.k.a. Contrast) & $ f_5 = \sum_{i,j}(i - j)^2g(i, j) $ \\
+// & \\
 // \hline
+// & \\
 // Cluster Shade & $ f_6 = \sum_{i,j}((i - \mu) + (j - \mu))^3 g(i, j) $ \\
+// & \\
 // \hline
 // Cluster Prominence & $ f_7 = \sum_{i,j}((i - \mu) + (j - \mu))^4 g(i, j) $ \\
+// & \\
 // \hline
+// & \\
 // Haralick's Correlation & $ f_8 = \frac{\sum_{i,j}(i, j) g(i, j) -\mu_t^2}{\sigma_t^2} $ \\
+// & \\
 // \hline
 // \end{tabular}
-// \itkcaption[Haralick features available in] {\doxygen{otb}{ScalarImageToTexturesFilter}}
-//
+// \itkcaption[Haralick features]{Haralick features available in \doxygen{otb}{ScalarImageToTexturesFilter}}
+// \end{center}
 // \label{tab:haralickStandardFeatures}
 // \end{table}
-// where $\mu_t$ and $\sigma_t$ are the mean and standard deviation of the row
-// (or column, due to symmetry) sums, $ \mu =  $ (weighted pixel average) 
-// $ = \sum_{i,j}i \cdot g(i, j) =\sum_{i,j}j \cdot g(i, j) $ due to matrix summetry, and 
-// $ \sigma =  $ (weighted pixel variance) $ = \sum_{i,j}(i - \mu)^2 \cdot g(i, j) =\sum_{i,j}(j - \mu)^2 \cdot g(i, j)  $  
-// due to matrix symmetry
 //
 // More features are available in \doxygen{otb}{ScalarImageToAdvancedTexturesFilter}.
 // \relatedClasses
@@ -219,8 +235,8 @@ int main(int argc, char * argv[])
     // \center
     // \includegraphics[width=0.40\textwidth]{ADS40RoiSmall.eps}
     // \includegraphics[width=0.40\textwidth]{pretty_TextureOutput.eps}
-    // \itkcaption[Texture Functor]{Result of applying the
-    // \doxygen{otb}{ContrastTextureFunctor} to an image. From left to right :
+    // \itkcaption[Results of applying Haralick contrast]{Result of applying the
+    // \doxygen{otb}{ScalarImageToTexturesFilter} to an image. From left to right :
     // original image, contrast.}
     // \label{fig:TEXTUREFUNCTOR}
     // \end{figure}
