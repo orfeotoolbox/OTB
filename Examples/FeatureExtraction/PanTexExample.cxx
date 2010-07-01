@@ -42,7 +42,8 @@
 // detection.
 // \relatedClasses
 //  \begin{itemize}
-//  \item \doxygen{otb}{ContrastTextureFunctor}
+//  \item \doxygen{otb}{ScalarImageToTexturesFilter}
+//  \item \doxygen{otb}{ScalarIamgeToAdvancedTexturesFilter}
 //  \end{itemize}
 //
 // The first step required to use this filter is to include its header file.
@@ -82,7 +83,8 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::ScalarImageToPanTexTextureFilter<ImageType, ImageType> PanTexTextureFilterType;
+  typedef otb::ScalarImageToPanTexTextureFilter
+    <ImageType, ImageType> PanTexTextureFilterType;
   // Software Guide : EndCodeSnippet
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::ImageFileWriter<ImageType> WriterType;
@@ -107,10 +109,10 @@ int main(int argc, char * argv[])
   //
   // Then, we set the parameters of the filter.The radius of
   // the neighborhood to compute the texture.
-  // The number of bins per axis for histogramm generation (it is the 
+  // The number of bins per axis for histogram generation (it is the
   // size of the co-occurrence matrix). Moreover, we have to specify 
-  // the Min/Max in the input image. In the example, image Min/Max is setted
-  // by the user to 0 and 255. Alternatyvely you can use the class \doxygen{itk}{MinimumMaximumImageCalculator}
+  // the Min/Max in the input image. In the example, image Min/Max is set
+  // by the user to 0 and 255. Alternatively you can use the class \doxygen{itk}{MinimumMaximumImageCalculator}
   // to calculate these values.
   //
   // Software Guide : EndLatex
@@ -145,7 +147,7 @@ int main(int argc, char * argv[])
   // \includegraphics[width=0.40\textwidth]{pretty_PanTexInput.eps}
   // \includegraphics[width=0.40\textwidth]{pretty_PanTexOutput.eps}
   // \itkcaption[PanTex Filter]{Result of applying the
-  // \doxygen{otb}{ScalarImageToPanTexTextureFilter} to an image. From left to right :
+  // \doxygen{otb}{ScalarImageToPanTexTextureFilter} to an image. From left to right:
   // original image, PanTex feature.}
   // \label{fig:PANTEXFILTER}
   // \end{figure}
