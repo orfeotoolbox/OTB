@@ -254,7 +254,6 @@ int main(int argc, char * argv[])
     typedef otb::VectorRescaleIntensityImageFilter<VectorImageType,PrettyVectorImageType>
     RescalerOutputType;
 
-    VectorCastFilterType::Pointer   vectorCast         = VectorCastFilterType::New();
     RescalerOutputType::Pointer     outputRescaler     = RescalerOutputType::New();
     WriterPrettyOutputType::Pointer prettyOutputWriter =
     WriterPrettyOutputType::New();

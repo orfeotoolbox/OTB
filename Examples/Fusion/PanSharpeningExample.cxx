@@ -84,7 +84,8 @@
 
 #include "otbPrintableImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
-
+#include "otbImageToVectorImageCastFilter.h"
+#include "otbVectorRescaleIntensityImageFilter.h"
 // Software Guide : BeginCodeSnippet
 int main(int argc, char* argv[])
 {
@@ -187,18 +188,23 @@ int main(int argc, char* argv[])
   pngwriter->SetInput(printable2->GetOutput());
   pngwriter->Update();
 
-  typedef otb::Image<unsigned char,
-                     2>                                    CharImageType;
-  typedef itk::RescaleIntensityImageFilter <ImageType,
-                                            CharImageType> RescalerType;
-  RescalerType::Pointer rescaler = RescalerType::New();
-  typedef otb::StreamingImageFileWriter<CharImageType> PNGWriterType2;
-  PNGWriterType2::Pointer pngwriter2 = PNGWriterType2::New();
-  rescaler->SetInput(readerPAN->GetOutput());
-  pngwriter2->SetFileName(argv[5]);
-  pngwriter2->SetInput(rescaler->GetOutput());
-  pngwriter2->Update();
+  typedef otb::ImageToVectorImageCastFilter<ImageType,VectorImageType> VectorCastFilterType;
+    
+  VectorCastFilterType::Pointer   vectorCastFilter         = VectorCastFilterType::New();
+  PNGWriterType::Pointer pngwriterPan = PNGWriterType::New();
+  
+  vectorCastFilter->SetInput(readerPAN->GetOutput());
+  PrintableImageType2::Pointer printable3 = PrintableImageType2::New();
+  printable3->SetInput(vectorCastFilter->GetOutput());
+  printable3->SetChannel(1);
+  printable3->SetChannel(1);
+  printable3->SetChannel(1);
 
+  pngwriterPan->SetFileName(argv[5]);
+
+  pngwriterPan->SetInput(printable3->GetOutput());
+
+  pngwriterPan->Update();
+  
   return EXIT_SUCCESS;
-
 }
