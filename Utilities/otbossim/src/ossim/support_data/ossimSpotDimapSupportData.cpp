@@ -367,7 +367,7 @@ bool ossimSpotDimapSupportData::loadXmlFile(const ossimFilename& file,
          << std::endl;
       return false;
    }
-
+ 
    if (parsePart1(xmlDocument) == false)
    {
       ossimNotify(ossimNotifyLevel_FATAL)
@@ -2357,24 +2357,6 @@ bool ossimSpotDimapSupportData::parsePart4(
   std::vector<ossimRefPtr<ossimXmlNode> >::iterator node;
 
   //---
-  // Fetch the mission index (Spot 1, 4 or 5):
-  //---
-  xml_nodes.clear();
-  xpath = "/Dimap_Document/Dataset_Sources/Source_Information/Scene_Source/MISSION_INDEX";
-  xmlDocument->findNodes(xpath, xml_nodes);
-  if (xml_nodes.size() != 0)
-  {
-    if (xml_nodes[0]->getText() == "1")
-      theSensorID = "Spot 1";
-    if (xml_nodes[0]->getText() == "2")
-      theSensorID = "Spot 2";
-    if (xml_nodes[0]->getText() == "4")
-      theSensorID = "Spot 4";
-    if (xml_nodes[0]->getText() == "5")
-      theSensorID = "Spot 5";
-  }
-
-  //---
   // Fetch the gain and bias for each spectral band:
   //---
 
@@ -2548,9 +2530,37 @@ bool ossimSpotDimapSupportData::initSceneSource(
    ossimString xpath;
    vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
 
+  //---
+  // Fetch the mission index (Spot 1, 4 or 5):
+  // and generate theSensorID
+  //---
+   xml_nodes.clear();
+   xpath = "/Dimap_Document/Dataset_Sources/Source_Information/Scene_Source/MISSION_INDEX";
+   xmlDocument->findNodes(xpath, xml_nodes);
+   if (xml_nodes.size() == 0)
+   {
+     setErrorStatus();
+     if(traceDebug())
+       {
+	 ossimNotify(ossimNotifyLevel_DEBUG)
+	   << "DEBUG:\nCould not find: " << xpath
+	   << std::endl;
+       }
+     return false;
+   }
+   if (xml_nodes[0]->getText() == "1")
+     theSensorID = "Spot 1";
+   if (xml_nodes[0]->getText() == "2")
+     theSensorID = "Spot 2";
+   if (xml_nodes[0]->getText() == "4")
+     theSensorID = "Spot 4";
+   if (xml_nodes[0]->getText() == "5")
+     theSensorID = "Spot 5";
+
    //---
    // Fetch the Sun Azimuth:
    //---
+   xml_nodes.clear();
    xpath = "/Dimap_Document/Dataset_Sources/Source_Information/Scene_Source/SUN_AZIMUTH";
    xmlDocument->findNodes(xpath, xml_nodes);
    if (xml_nodes.size() == 0)
@@ -2617,6 +2627,7 @@ bool ossimSpotDimapSupportData::initSceneSource(
     *
     * */
    //---
+  
    if(this->theSensorID == "Spot 5") {
    xml_nodes.clear();
    xpath = "/Dimap_Document/Dataset_Sources/Source_Information/Scene_Source/VIEWING_ANGLE";
