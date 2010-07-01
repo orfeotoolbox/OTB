@@ -2645,7 +2645,7 @@ bool ossimSpotDimapSupportData::initSceneSource(
    }
        //compute VIEWING_ANGLE
        double theSatelliteAltitude =  xml_nodes[0]->getText().toDouble();
-       double RT = 63710087714;
+       double RT = 63710087714.0;
        theViewingAngle = asin((RT/(RT+theSatelliteAltitude))*sin(theIncidenceAngle));
 
    }
