@@ -316,6 +316,34 @@ bool ossimSpotDimapSupportData::loadXmlFile(const ossimFilename& file,
    }
 
    //---
+   // Check that it is a SPOT DIMAP file format
+   //---
+   vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
+   xml_nodes.clear();
+   ossimString xpath = "/Dimap_Document/Dataset_Sources/Source_Information/Scene_Source/MISSION";
+   xmlDocument->findNodes(xpath, xml_nodes);
+   if (xml_nodes.size() == 0)
+   {
+     setErrorStatus();
+     if(traceDebug())
+       {
+	 ossimNotify(ossimNotifyLevel_DEBUG)
+	   << "DEBUG:\n Not a SPOT DIMAP file format."<< std::endl;
+       }
+     return false;
+   }
+   if ( xml_nodes[0]->getText() != "SPOT" && xml_nodes[0]->getText() != "Spot" && xml_nodes[0]->getText() != "spot" )
+     {
+       if(traceDebug())
+	 {
+	   ossimNotify(ossimNotifyLevel_DEBUG)
+	     << "DEBUG:\n Not a SPOT DIMAP file format."<< std::endl;
+	 }
+       return false;
+   }
+
+
+   //---
    // Get the version string.  This must be performed first as it is used
    // as a key for parsing different versions.
    //---
