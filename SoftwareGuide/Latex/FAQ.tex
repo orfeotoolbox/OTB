@@ -296,14 +296,14 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
 \end{enumerate}
 
 \subsubsection{Microsoft Visual Studio (7.1 .NET 2003/8.0 .NET 2005/Express 2005/Express 2008)}
-\begin{enumerate}
-
 Since OTB 3.4, installation of required libraries for OTB compilation on Windows Platform is facilited with the  
 OSGeo4W installer. OSGeo4W is a binary distribution of a broad set of open source geospatial software 
 for Win32 environments (Windows XP, Vista, etc).
-\item Install OSGEO4W with the following packages: (DO NOT USE THE SAME
-OSGEO4W installation that you use with GRASS)
-It allows to download and install : gdal16, curl, libgeotiff, libjpeg, zlib,libpng
+\begin{enumerate}
+
+\item Install OSGEO4W with the following packages
+
+    It allows to download and install : gdal16, curl, libgeotiff, libjpeg, zlib,libpng
 
 \item Install OTB with CMake (Example for release mode, with internal FLTK and ITK)
 
@@ -320,7 +320,7 @@ It allows to download and install : gdal16, curl, libgeotiff, libjpeg, zlib,libp
     Press the "Configure" button and you will be asked to set the following variables :
 
         \texttt{GDAL\_INCLUDE\_DIR = "C:/OSGeo4W/apps/gdal-16/include"}\\
-        \texttt{GDAL\_LIBRARY\_DIR = C:/OSGeo4W/apps/gdal-16/lib/gdal_i.lib"}
+        \texttt{GDAL\_LIBRARY\_DIR = "C:/OSGeo4W/apps/gdal-16/lib/gdal\_i.lib"}
     
     Press the "Configure" button, and follow the last instructions if any.
 
