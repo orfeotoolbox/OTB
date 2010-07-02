@@ -301,7 +301,7 @@ OSGeo4W installer. OSGeo4W is a binary distribution of a broad set of open sourc
 for Win32 environments (Windows XP, Vista, etc).
 \begin{enumerate}
 
-\item Install OSGEO4W with the following packages : gdal16, curl, libgeotiff, libjpeg, zlib, libpng
+\item Install OSGEO4W with the following packages : gdal16, curl, libtiff, libgeotiff, libjpeg, zlib, libpng
 
 \item Configure OTB with CMake (Example for release mode, with internal FLTK and ITK)
 
@@ -339,6 +339,7 @@ for Win32 environments (Windows XP, Vista, etc).
 
 \end{enumerate}
 
+Microsoft Visual Studio 2010 is currently not supported.
 
 \subsubsection{Cygwin}
 \begin{enumerate}
@@ -389,11 +390,38 @@ Put OTB\_USE\_VISU to OFF to avoid these problems.
 
 Some bugs can appear while compiling GDAL with JPEG2000 files : disable this format to solve the problem.
 
-\subsubsection{MSVC++ 8.0}
-Execution errors can appear on some platforms, using GDAL compiled with MSVC++ 8.0.
+\subsubsection{MacOSX 10.6 Snow Leopard}
+Since 10.6 (Snow Leopard), OS X does not support Carbon calls from 64bit code anymore. Until FLTK is ported to Cocoa, it can only be compiled in 32 bits mode, thus OTB needs to be compiled in 32 bits mode, as well as GDAL. Moreover, there is a compilation issue with liblas, so liblas must be disabled.
+You can follow these steps :
 
-This problem can be solved by downloading GDAL binaries for Windows
-at \url{http://vterrain.org/Distrib/gdal.html}.
+\begin{enumerate}
+
+\item Install GDAL
+
+	To compile GDAL, at configure step, use these options :
+\begin{verbatim}
+	export CFLAGS="-O2 -W -arch i386 "
+	export CXXFLAGS="-O2 -W  -arch i386 "
+	export LDFLAGS="-arch i386"
+
+	./configure --prefix=INSTALL_DIR --with-png=internal --with-libtiff=internal
+	--with-geotiff=internal --with-jpeg=internal
+\end{verbatim}
+
+	Then the usual make and make install.
+
+
+\item Configure OTB
+
+        Follow the Unix/Linux instructions. In particular set the following variables :
+        \texttt{CMAKE\_OSX\_ARCHITECTURES = i386}\\
+        \texttt{GDAL\_INCLUDE\_DIR}\\
+        \texttt{GDAL\_LIBRARY\_DIR}\\
+        \texttt{OTB\_USE\_LIBLAS = OFF}\\
+
+        Then the usual make and make install.
+
+\end{enumerate}
 
 \subsubsection{Open Solaris}
 There are some issues on Open Solaris 2009.06 and before with libLAS (library included
