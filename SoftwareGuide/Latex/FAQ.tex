@@ -296,20 +296,18 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
 \end{enumerate}
 
 \subsubsection{Microsoft Visual Studio (7.1 .NET 2003/8.0 .NET 2005/Express 2005/Express 2008)}
-Since OTB 3.4, installation of required libraries for OTB compilation on Windows Platform is facilited with the  
+Since OTB 3.4, installation of required libraries for OTB compilation on Windows Platform is eased with the  
 OSGeo4W installer. OSGeo4W is a binary distribution of a broad set of open source geospatial software 
 for Win32 environments (Windows XP, Vista, etc).
 \begin{enumerate}
 
-\item Install OSGEO4W with the following packages
+\item Install OSGEO4W with the following packages : gdal16, curl, libgeotiff, libjpeg, zlib, libpng
 
-    It allows to download and install : gdal16, curl, libgeotiff, libjpeg, zlib,libpng
-
-\item Install OTB with CMake (Example for release mode, with internal FLTK and ITK)
+\item Configure OTB with CMake (Example for release mode, with internal FLTK and ITK)
 
     First give the path where the source code is and where to build the binaries.
 
-    Then press the "Configure" button and choose the genrator for your project. For example, Visual Studio 9 2008.
+    Then press the "Configure" button and choose the generator for your project. For example, Visual Studio 9 2008.
 
     Select the option "Advanced View".
 
@@ -320,12 +318,21 @@ for Win32 environments (Windows XP, Vista, etc).
     Press the "Configure" button and you will be asked to set the following variables :
 
         \texttt{GDAL\_INCLUDE\_DIR = "C:/OSGeo4W/apps/gdal-16/include"}\\
-        \texttt{GDAL\_LIBRARY\_DIR = "C:/OSGeo4W/apps/gdal-16/lib/gdal\_i.lib"}
-    
-    Press the "Configure" button, and follow the last instructions if any.
-
-    Finaly, press "Generate".
-
+        \texttt{GDAL\_LIBRARY\_DIR = "C:/OSGeo4W/apps/gdal-16/lib/gdal\_i.lib"}\\
+        \texttt{OGR\_INCLUDE\_DIR = "C:/OSGeo4W/apps/gdal-16/include"}\\
+        \texttt{CURL\_INCLUDE\_DIR = "C:/OSGeo4W/include/curl"}\\
+        \texttt{CURL\_LIBRARY = "C:/OSGeo4W/lib/libcurl_imp.lib"}\\
+        \texttt{TIFF\_INCLUDE\_DIRS = "C:/OSGeo4W/include"}\\
+        \texttt{TIFF\_LIBRARY = "C:/OSGeo4W/lib/libtiff\_i.lib"}\\
+        \texttt{GEOTIFF\_INCLUDE\_DIRS = "C:/OSGeo4W/include"}\\
+        \texttt{GEOTIFF\_LIBRARY = "C:/OSGeo4W/lib/geotiff\_i.lib"}\\
+        \texttt{JPEG\_INCLUDE\_DIR = "C:/OSGeo4W/include" }\\
+        \texttt{JPEG\_INCLUDE\_DIRS = "C:/OSGeo4W/include "}\\
+        \texttt{JPEG\_LIBRARY = "C:/OSGeo4W/lib/jpeg\_i.lib"}\\
+        \texttt{PNG\_PNG\_INCLUDE\_DIR = "C:/OSGeo4W/include" }\\
+        \texttt{PNG\_LIBRARY = "C:/OSGeo4W/lib/libpng13.lib"}\\
+        \texttt{ZLIB\_INCLUDE\_DIR = "C:/OSGeo4W/include"}\\
+        \texttt{ZLIB\_LIBRARY = "C:/OSGeo4W/lib/zlib.lib"}
 
 \item Compile OTB with Microsoft Visual Studio
   When the MSVC++ project is generated, you can open the solution and build the otb project.
@@ -390,7 +397,7 @@ at \url{http://vterrain.org/Distrib/gdal.html}.
 
 \subsubsection{Open Solaris}
 There are some issues on Open Solaris 2009.06 and before with libLAS (library included
-in OTB to process LIDAR data). You will need to desactivate it: set the
+in OTB to process LIDAR data). You will need to deactivate it: set the
 OTB\_USE\_LIBLAS option to OFF.
 
 It seems to be fine with the more recent release of Open Solaris.
