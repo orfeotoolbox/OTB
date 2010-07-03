@@ -2127,7 +2127,7 @@ ADD_TEST(ioTvTerraSarImageMetadataInterface_TORONTO ${IO_TESTS18}
         ${TEMP}/ioTvTerraSarImageMetadataInterface_TORONTO.txt
 )
 
-ADD_TEST(ioTvImageKeywordlistSpot5 ${IO_TESTS18}
+ADD_TEST(ioTvImageKeywordlistSPOT5 ${IO_TESTS18}
   --ignore-order --compare-n-ascii ${NOTOL} 2
          ${BASELINE_FILES}/ioTvImageKeywordlistSpot5.txt
          ${TEMP}/ioTvImageKeywordlistSpot5.txt
