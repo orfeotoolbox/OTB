@@ -630,7 +630,7 @@ unsigned int
 WorldView2ImageMetadataInterface
 ::GetDefaultBBand() const
 { 
-  return 2;
+  return 0;
 }
 
 } // end namespace otb
