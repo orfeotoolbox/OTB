@@ -25,7 +25,7 @@
 #include <boost/mpl/aux_/unwrap.hpp>
 
 #include <boost/type_traits/is_same.hpp>
-#include <boost/butility/value_init.hpp>
+#include <boost/utility/value_init.hpp>
 
 namespace boost { namespace mpl {
 

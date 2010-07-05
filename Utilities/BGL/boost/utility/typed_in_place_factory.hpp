@@ -13,19 +13,19 @@
 #ifndef BOOST_UTILITY_TYPED_INPLACE_FACTORY_04APR2007_HPP
 #ifndef BOOST_PP_IS_ITERATING
 
-#include <boost/butility/detail/in_place_factory_prefix.hpp>
+#include <boost/utility/detail/in_place_factory_prefix.hpp>
 
 namespace boost {
 
 class typed_in_place_factory_base {} ;
 
 #define  BOOST_PP_ITERATION_LIMITS (0, BOOST_MAX_INPLACE_FACTORY_ARITY)
-#define  BOOST_PP_FILENAME_1 <boost/butility/typed_in_place_factory.hpp>
+#define  BOOST_PP_FILENAME_1 <boost/utility/typed_in_place_factory.hpp>
 #include BOOST_PP_ITERATE()
 
 } // namespace boost
 
-#include <boost/butility/detail/in_place_factory_suffix.hpp>
+#include <boost/utility/detail/in_place_factory_suffix.hpp>
 
 #define BOOST_UTILITY_TYPED_INPLACE_FACTORY_04APR2007_HPP
 #else 

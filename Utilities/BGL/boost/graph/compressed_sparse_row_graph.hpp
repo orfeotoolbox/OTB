@@ -39,7 +39,7 @@
 #include <boost/mpl/if.hpp>
 #include <boost/graph/graph_selectors.hpp>
 #include <boost/static_assert.hpp>
-#include <boost/bfunctional/hash.hpp>
+#include <boost/functional/hash.hpp>
 #include <boost/utility.hpp>
 
 #ifdef BOOST_GRAPH_NO_BUNDLED_PROPERTIES

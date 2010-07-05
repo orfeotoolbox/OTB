@@ -6,7 +6,7 @@
 //  See http://www.boost.org/libs/utility for most recent version including documentation.
 //
 //  Crippled version for crippled compilers:
-//  see libs/butility/call_traits.htm
+//  see libs/utility/call_traits.htm
 //
 
 /* Release notes:

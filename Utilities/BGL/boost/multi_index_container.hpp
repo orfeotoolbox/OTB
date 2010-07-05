@@ -40,7 +40,7 @@
 #include <boost/multi_index/detail/scope_guard.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_same.hpp>
-#include <boost/butility/base_from_member.hpp>
+#include <boost/utility/base_from_member.hpp>
 
 #if !defined(BOOST_MULTI_INDEX_DISABLE_SERIALIZATION)
 #include <boost/multi_index/detail/archive_constructed.hpp>

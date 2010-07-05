@@ -15,7 +15,7 @@
 #endif
 
 #include <boost/graph/named_graph.hpp>
-#include <boost/bfunctional/hash.hpp>
+#include <boost/functional/hash.hpp>
 #include <boost/variant.hpp>
 #include <boost/graph/parallel/simple_trigger.hpp>
 #include <boost/graph/parallel/process_group.hpp>

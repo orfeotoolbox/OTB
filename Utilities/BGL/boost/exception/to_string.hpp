@@ -12,8 +12,8 @@
 #pragma warning(push,1)
 #endif
 
-#include <boost/butility/enable_if.hpp>
-#include <boost/bexception/detail/is_output_streamable.hpp>
+#include <boost/utility/enable_if.hpp>
+#include <boost/exception/detail/is_output_streamable.hpp>
 #include <sstream>
 
 namespace

@@ -19,7 +19,7 @@
   && !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
   && !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x592))
 
-#  include <boost/butility/enable_if.hpp>
+#  include <boost/utility/enable_if.hpp>
 #  include <boost/mpl/lambda.hpp>
 
 namespace boost { namespace parameter { namespace aux {

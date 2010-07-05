@@ -13,15 +13,15 @@
 #endif
 
 #include <boost/config.hpp>
-#include <boost/bexception/get_error_info.hpp>
-#include <boost/butility/enable_if.hpp>
+#include <boost/exception/get_error_info.hpp>
+#include <boost/utility/enable_if.hpp>
 #include <boost/config.hpp>
 #include <exception>
 #include <sstream>
 #include <string>
 
 #ifndef BOOST_NO_EXCEPTIONS
-#include <boost/bexception/current_exception_cast.hpp>
+#include <boost/exception/current_exception_cast.hpp>
 namespace
 boost
     {

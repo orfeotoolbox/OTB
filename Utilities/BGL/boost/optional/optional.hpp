@@ -27,7 +27,7 @@
 #include "boost/mpl/not.hpp"
 #include "boost/detail/reference_content.hpp"
 #include "boost/none.hpp"
-#include "boost/butility/compare_pointees.hpp"
+#include "boost/utility/compare_pointees.hpp"
 
 #include "boost/optional/optional_fwd.hpp"
 

@@ -16,7 +16,7 @@
 #include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
 #include <boost/mpl/if.hpp>
 #include <boost/type_traits/is_const.hpp>
-#include <boost/butility/enable_if.hpp>
+#include <boost/utility/enable_if.hpp>
 #include <cstddef>
 
 #if !defined(BOOST_NO_SFINAE)

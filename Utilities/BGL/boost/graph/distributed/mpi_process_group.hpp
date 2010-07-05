@@ -29,7 +29,7 @@
 #include <boost/function/function0.hpp>
 #include <boost/mpi.hpp>
 #include <boost/graph/parallel/process_group.hpp>
-#include <boost/butility/enable_if.hpp>
+#include <boost/utility/enable_if.hpp>
 
 namespace boost { namespace graph { namespace distributed {
 

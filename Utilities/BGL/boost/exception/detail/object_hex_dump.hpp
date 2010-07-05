@@ -12,7 +12,7 @@
 #pragma warning(push,1)
 #endif
 
-#include <boost/bexception/detail/type_info.hpp>
+#include <boost/exception/detail/type_info.hpp>
 #include <iomanip>
 #include <ios>
 #include <string>

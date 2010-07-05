@@ -8,7 +8,7 @@
 #endif
 
 #include <boost/config.hpp>
-#include <boost/butility/addressof.hpp>
+#include <boost/utility/addressof.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/detail/workaround.hpp>
 

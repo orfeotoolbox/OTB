@@ -12,9 +12,9 @@
 #pragma warning(push,1)
 #endif
 
-#include <boost/bexception/bexception/.hpp>
-#include <boost/bexception/detail/error_info_impl.hpp>
-#include <boost/bexception/detail/type_info.hpp>
+#include <boost/exception/exception.hpp>
+#include <boost/exception/detail/error_info_impl.hpp>
+#include <boost/exception/detail/type_info.hpp>
 #include <boost/shared_ptr.hpp>
 
 namespace

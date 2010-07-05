@@ -6,7 +6,7 @@
 //  See http://www.boost.org/libs/utility for most recent version including documentation.
 
 // call_traits: defines typedefs for function usage
-// (see libs/butility/call_traits.htm)
+// (see libs/utility/call_traits.htm)
 
 /* Release notes:
    23rd July 2000:

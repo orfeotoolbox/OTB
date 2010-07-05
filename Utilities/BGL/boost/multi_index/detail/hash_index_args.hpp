@@ -14,7 +14,7 @@
 #endif
 
 #include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
-#include <boost/bfunctional/hash.hpp>
+#include <boost/functional/hash.hpp>
 #include <boost/mpl/aux_/na.hpp>
 #include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/identity.hpp>
