@@ -254,7 +254,7 @@ ImageLayer<TImage, TOutputImage>
   this->UpdateListSample();
 
   // Ensure rendering function intialization
-  m_RenderingFunction->Initialize(); //FIXME check, but the call must be done in the generator. To be moved to the layer?
+  m_RenderingFunction->Initialize(m_Image->GetMetaDataDictionary()); //FIXME check, but the call must be done in the generator. To be moved to the layer?
   // The ouptut stringstream
   itk::OStringStream oss;
   oss << otbGetTextMacro("Layer") << ": " << this->GetName();

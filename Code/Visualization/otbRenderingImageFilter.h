@@ -24,6 +24,8 @@
 #include "itkRGBAPixel.h"
 #include "otbRenderingFunction.h"
 
+#include "itkMetaDataDictionary.h"
+
 namespace otb
 {
 namespace Functor
@@ -60,6 +62,8 @@ public:
   typedef itk::RGBPixel<ScalarPixelType>                    RGBPixelType;
   typedef itk::RGBAPixel<ScalarPixelType>                   RGBAPixelType;
 
+  typedef typename itk::MetaDataDictionary                           MetaDataDictionaryType;
+
   /** Pixel operator */
   inline TRGBPixel operator ()(const PixelType& pixel) const
   {
@@ -95,10 +99,11 @@ public:
   /**
    * Initialize the rendering function.
    */
-  void InitializeFunction(void)
+   void InitializeFunction(const MetaDataDictionaryType &metadatadictionary)
   {
-    m_Function->Initialize();
+   m_Function->Initialize(metadatadictionary);
   }
+
 
 private:
   /** The rendering function */
@@ -182,7 +187,8 @@ public:
       }
 
     // Initialize the rendering function
-    this->GetFunctor().InitializeFunction();
+    this->GetFunctor().InitializeFunction(this->GetInput()->GetMetaDataDictionary()) 
+
     otbMsgDevMacro(<< "RenderingImageFilter::BeforeThreadedGenerateData():");
     otbMsgDevMacro(<< " - Output functor size "
                    << (this->GetFunctor().GetFunction())->GetPixelRepresentationSize());

@@ -50,7 +50,7 @@ SpotImageMetadataInterface::GetInstrument(const MetaDataDictionaryType& dict) co
 {
   if (!this->CanRead(dict))
     {
-    itkExceptionMacro(<< "Invalid Metadata, no Ikonos Image");
+    itkExceptionMacro(<< "Invalid Metadata, no Spot Image");
     }
 
   ImageKeywordlistType imageKeywordlist;
@@ -74,7 +74,7 @@ SpotImageMetadataInterface::GetInstrumentIndex(const MetaDataDictionaryType& dic
 {
   if (!this->CanRead(dict))
     {
-    itkExceptionMacro(<< "Invalid Metadata, no Ikonos Image");
+    itkExceptionMacro(<< "Invalid Metadata, no Spot Image");
     }
 
   ImageKeywordlistType imageKeywordlist;
@@ -98,7 +98,7 @@ SpotImageMetadataInterface::GetSolarIrradiance(const MetaDataDictionaryType& dic
 {
   if (!this->CanRead(dict))
     {
-    itkExceptionMacro(<< "Invalid Metadata, no Ikonos Image");
+    itkExceptionMacro(<< "Invalid Metadata, no Spot Image");
     }
 
   ImageKeywordlistType imageKeywordlist;
@@ -154,7 +154,7 @@ SpotImageMetadataInterface::GetDay(const MetaDataDictionaryType& dict) const
 {
   if (!this->CanRead(dict))
     {
-    itkExceptionMacro(<< "Invalid Metadata, no Ikonos Image");
+    itkExceptionMacro(<< "Invalid Metadata, no Spot Image");
     }
 
   ImageKeywordlistType imageKeywordlist;
@@ -187,7 +187,7 @@ SpotImageMetadataInterface::GetMonth(const MetaDataDictionaryType& dict) const
 {
   if (!this->CanRead(dict))
     {
-    itkExceptionMacro(<< "Invalid Metadata, no Ikonos Image");
+    itkExceptionMacro(<< "Invalid Metadata, no Spot Image");
     }
 
   ImageKeywordlistType imageKeywordlist;
@@ -220,7 +220,7 @@ SpotImageMetadataInterface::GetYear(const MetaDataDictionaryType& dict) const
 {
   if (!this->CanRead(dict))
     {
-    itkExceptionMacro(<< "Invalid Metadata, no Ikonos Image");
+    itkExceptionMacro(<< "Invalid Metadata, no Spot Image");
     }
 
   ImageKeywordlistType imageKeywordlist;
@@ -417,7 +417,7 @@ SpotImageMetadataInterface
 {
   if (!this->CanRead(dict))
     {
-    itkExceptionMacro(<< "Invalid Metadata, no Ikonos Image");
+    itkExceptionMacro(<< "Invalid Metadata, no Spot Image");
     }
 
   ImageKeywordlistType imageKeywordlist;
@@ -474,7 +474,7 @@ SpotImageMetadataInterface
 {
   if (!this->CanRead(dict))
     {
-    itkExceptionMacro(<< "Invalid Metadata, no Ikonos Image");
+    itkExceptionMacro(<< "Invalid Metadata, no Spot Image");
     }
 
   ImageKeywordlistType imageKeywordlist;
@@ -684,6 +684,27 @@ SpotImageMetadataInterface
   if (i == 0) return 2;
   if (i == 2) return 0;
   return i;
+}
+
+unsigned int 
+SpotImageMetadataInterface
+::GetDefaultRBand() const
+{ 
+  return 0;
+}
+
+unsigned int 
+SpotImageMetadataInterface
+::GetDefaultGBand() const
+{ 
+  return 1;
+}
+
+unsigned int 
+SpotImageMetadataInterface
+::GetDefaultBBand() const
+{ 
+  return 2;
 }
 
 } // end namespace otb

@@ -589,4 +589,25 @@ IkonosImageMetadataInterface
   return wavel;
 }
 
+unsigned int 
+IkonosImageMetadataInterface
+::GetDefaultRBand() const
+{ 
+  return 2;
+}
+
+unsigned int 
+IkonosImageMetadataInterface
+::GetDefaultGBand() const
+{ 
+  return 1;
+}
+
+unsigned int 
+IkonosImageMetadataInterface
+::GetDefaultBBand() const
+{ 
+  return 0;
+}
+
 } // end namespace otb

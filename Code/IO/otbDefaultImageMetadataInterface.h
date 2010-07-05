@@ -22,6 +22,8 @@
 #pragma warning ( disable : 4786 )
 #endif
 
+#include "otbMacro.h"
+
 #include "otbImageMetadataInterfaceBase.h"
 
 namespace otb
@@ -148,15 +150,30 @@ public:
     return true;
   }
 
+  unsigned int GetDefaultRBand() const
+  { 
+    return 0;
+  }
+  
+  unsigned int GetDefaultGBand() const
+  { 
+    return 1;
+  }
+  
+  unsigned int GetDefaultBBand() const
+  { 
+    return 2;
+  }
+  
 protected:
   DefaultImageMetadataInterface(){};
   virtual ~DefaultImageMetadataInterface() {}
-
+  
 private:
-
+  
   DefaultImageMetadataInterface(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
-
+  
 };
 
 } // end namespace otb

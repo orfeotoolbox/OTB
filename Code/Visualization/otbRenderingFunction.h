@@ -32,6 +32,8 @@
 #include "itkConceptChecking.h"
 #include "itkDenseFrequencyContainer.h"
 
+#include "itkMetaDataDictionary.h"
+
 namespace otb
 {
 
@@ -86,6 +88,8 @@ public:
                   (itk::Concept::SameType<typename HistogramFilterType::HistogramType, HistogramType>));
 
   typedef  itk::Array<double> ParametersType;
+
+  typedef typename itk::MetaDataDictionary                                   MetaDataDictionaryType;
 
   /** Evaluate method: required interface */
   virtual OutputPixelType Evaluate(const PixelType&  spixel) const
@@ -152,7 +156,7 @@ public:
    */
   // REVIEW: I agree, we should not be calling intialize ourselve, it
   // would better be seamless
-  virtual void Initialize(){} //FIXME should disappear and be
+  virtual void Initialize(const MetaDataDictionaryType &metadatadictionary){} //FIXME should disappear and be
                               //automatic (IsModified())
 
 protected:
