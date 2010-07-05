@@ -19,6 +19,7 @@ OTB-v.3.4.0 - Changes since version 3.2.0 (2010/06/30)
   * Add a class to compute the ground spacing (GroundSpacingImageFunction)
   * Add a class to read 6S spectral sensitivity files (SpectralSensitivityReader)
   * Fix radiometry correction for SPOT5
+  * Fix compilation on windows using osgeo4w dependencies
   * Lots of bug fixes
 
 * System

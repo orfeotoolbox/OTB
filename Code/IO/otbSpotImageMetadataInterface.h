@@ -109,6 +109,13 @@ public:
    *  proper band. */
   virtual unsigned int BandIndexToWavelengthPosition(unsigned int i) const;
 
+  /** Those methodes are to retrieve the spectral band corresponding
+   * to the R, G, B or A chanel */ 
+  unsigned int GetDefaultRBand() const;
+
+  unsigned int GetDefaultGBand() const;
+
+  unsigned int GetDefaultBBand() const;
 
   bool CanRead(const MetaDataDictionaryType& dict) const;
 

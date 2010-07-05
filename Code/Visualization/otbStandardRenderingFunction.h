@@ -25,7 +25,11 @@
 #include "otbMacro.h"
 #include "otbI18n.h"
 #include "otbChannelSelectorFunctor.h"
+#include "otbImageMetadataInterfaceFactory.h"
+#include "otbImageMetadataInterfaceBase.h"
 #include "otbRenderingFunction.h"
+
+#include "itkMetaDataDictionary.h"
 
 namespace otb
 {
@@ -114,6 +118,8 @@ public:
   typedef typename PixelRepresentationFunctionType::Pointer         PixelRepresentationFunctionPointerType;
   typedef typename PixelRepresentationFunctionType::ChannelListType ChannelListType;
 
+  typedef typename itk::MetaDataDictionary                                   MetaDataDictionaryType;
+
   /** Convert the input pixel to a pixel representation that can be displayed on
     *  RGB. For example, channel selection, modulus computation, etc.
     */
@@ -178,7 +184,9 @@ public:
     return m_PixelRepresentationFunction->GetOutputSize();
   }
 
-  virtual void Initialize() //FIXME should disappear and be automatic (IsModified())
+  /* Sensor aware */
+//virtual void Initialize() //FIXME should disappear and be automatic (IsModified())
+  virtual void Initialize(const MetaDataDictionaryType &metadatadictionary)   
   {
     if ((this->GetMTime() > m_UTime) || (this->GetPixelRepresentationFunction()->GetMTime() > m_UTime))
     //NOTE: we assume that Transfer function have no parameters
@@ -189,22 +197,16 @@ public:
         //m_PixelRepresentationFunction, now, we may get a better default
         if (m_PixelRepresentationFunction->IsUsingDefaultParameters())
           {
-          // Case of image with 4 bands or more : Display in the B,G,R ,NIR channel order
-          if (this->GetListSample()->GetMeasurementVectorSize() >= 4)
-            {
-            m_PixelRepresentationFunction->SetRedChannelIndex(2);
-            m_PixelRepresentationFunction->SetGreenChannelIndex(1);
-            m_PixelRepresentationFunction->SetBlueChannelIndex(0);
-            }
 
-          // Classic case
-          if (this->GetListSample()->GetMeasurementVectorSize() == 3)
-            {
-            m_PixelRepresentationFunction->SetRedChannelIndex(0);
-            m_PixelRepresentationFunction->SetGreenChannelIndex(1);
-            m_PixelRepresentationFunction->SetBlueChannelIndex(2);
-            }
-
+            //RGB rendering needs at least 3 chanels
+	    if (this->GetListSample()->GetMeasurementVectorSize() >=3)
+	    {
+	      typedef otb::ImageMetadataInterfaceBase            ImageMetadataInterfaceType;      
+	      ImageMetadataInterfaceType::Pointer metadataInterface = ImageMetadataInterfaceFactory::CreateIMI(metadatadictionary);	      
+	      m_PixelRepresentationFunction->SetRedChannelIndex(metadataInterface->GetDefaultRBand());
+	      m_PixelRepresentationFunction->SetGreenChannelIndex(metadataInterface->GetDefaultGBand());
+	      m_PixelRepresentationFunction->SetBlueChannelIndex(metadataInterface->GetDefaultBBand());
+	    }
           }
         }
       unsigned int nbComps = m_PixelRepresentationFunction->GetOutputSize();

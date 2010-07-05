@@ -213,6 +213,15 @@ public:
    *  proper band. */
   virtual unsigned int BandIndexToWavelengthPosition(unsigned int i) const;
 
+  /** Those methodes are to retrieve the spectral band corresponding
+   * to the R, G, B or A chanel */ 
+  virtual unsigned int GetDefaultRBand() const = 0;
+
+  virtual unsigned int GetDefaultGBand() const = 0;
+
+  virtual unsigned int GetDefaultBBand() const = 0;
+
+
   virtual bool CanRead(const MetaDataDictionaryType& dict) const = 0;
 
   virtual void PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType& dict) const;

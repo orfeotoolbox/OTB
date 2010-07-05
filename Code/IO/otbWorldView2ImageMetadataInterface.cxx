@@ -612,4 +612,25 @@ WorldView2ImageMetadataInterface
   return wavel;
 }
 
+unsigned int 
+WorldView2ImageMetadataInterface
+::GetDefaultRBand() const
+{ 
+  return 2;
+}
+
+unsigned int 
+WorldView2ImageMetadataInterface
+::GetDefaultGBand() const
+{ 
+  return 1;
+}
+
+unsigned int 
+WorldView2ImageMetadataInterface
+::GetDefaultBBand() const
+{ 
+  return 0;
+}
+
 } // end namespace otb

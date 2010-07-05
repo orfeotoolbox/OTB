@@ -685,4 +685,25 @@ QuickBirdImageMetadataInterface
   return wavel;
 }
 
+unsigned int 
+QuickBirdImageMetadataInterface
+::GetDefaultRBand() const
+{ 
+  return 2;
+}
+
+unsigned int 
+QuickBirdImageMetadataInterface
+::GetDefaultGBand() const
+{ 
+  return 1;
+}
+
+unsigned int 
+QuickBirdImageMetadataInterface
+::GetDefaultBBand() const
+{ 
+  return 0;
+}
+
 } // end namespace otb

@@ -99,6 +99,14 @@ public:
 
   bool CanRead(const MetaDataDictionaryType& dict) const;
 
+  /** Those methodes are to retrieve the spectral band corresponding
+   * to the R, G, B or A chanel */ 
+  unsigned int GetDefaultRBand() const;
+
+  unsigned int GetDefaultGBand() const;
+
+  unsigned int GetDefaultBBand() const;
+
 protected:
   QuickBirdImageMetadataInterface();
   virtual ~QuickBirdImageMetadataInterface() {}
