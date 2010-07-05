@@ -187,7 +187,7 @@ public:
       }
 
     // Initialize the rendering function
-    this->GetFunctor().InitializeFunction(this->GetInput()->GetMetaDataDictionary()) 
+    this->GetFunctor().InitializeFunction(this->GetInput()->GetMetaDataDictionary()); 
 
     otbMsgDevMacro(<< "RenderingImageFilter::BeforeThreadedGenerateData():");
     otbMsgDevMacro(<< " - Output functor size "
