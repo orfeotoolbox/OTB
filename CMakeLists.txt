@@ -135,6 +135,10 @@ ELSE(WIN32)
     ENDIF(OTB_BUILD_PEDANTIC)
   ENDIF(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
 ENDIF(WIN32)
+
+OPTION(OTB_USE_DEPRECATED "Turn on the use and test of deprecated classes" OFF)
+MARK_AS_ADVANCED(OTB_USE_DEPRECATED)
+
 #-----------------------------------------------------------------------------
 
 # Use the openjpeg library.
