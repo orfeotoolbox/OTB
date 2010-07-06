@@ -309,7 +309,8 @@ ImageViewerManagerModel
   //Update the layer
   m_ObjectTrackedList.at(selectedItem-1).pLayer->SetRenderingFunction(renderFunction);
   m_ObjectTrackedList.at(selectedItem-1).pRenderFunction = renderFunction;
-  renderFunction->Initialize();//FIXME Initialize() should disappear from the renderingFunction
+  //FIXME Initialize should disappear from the renderingFunction
+  renderFunction->Initialize(m_ObjectTrackedList.at(selectedItem-1).pLayer->GetMetaDataDictionary());
   m_ObjectTrackedList.at(selectedItem-1).pRendering->Update();
 
   //Notify
@@ -336,7 +337,8 @@ ImageViewerManagerModel
   //Update the layer
   m_ObjectTrackedList.at(selectedItem-1).pLayer->SetRenderingFunction(renderFunction);
   m_ObjectTrackedList.at(selectedItem-1).pRenderFunction = renderFunction;
-  renderFunction->Initialize();//FIXME Initialize() should disappear from the renderingFunction
+  //FIXME Initialize should disappear from the renderingFunction
+  renderFunction->Initialize(m_ObjectTrackedList.at(selectedItem-1).pLayer->GetMetaDataDictionary());
   m_ObjectTrackedList.at(selectedItem-1).pRendering->Update();
 
   //Notify
@@ -362,7 +364,8 @@ ImageViewerManagerModel
   //Update the layer
   m_ObjectTrackedList.at(selectedItem-1).pLayer->SetRenderingFunction(modulusFunction);
   m_ObjectTrackedList.at(selectedItem-1).pRenderFunction = modulusFunction;
-  modulusFunction->Initialize();//FIXME Initialize() should disappear from the renderinFunction
+  //FIXME Initialize should disappear from the renderinFunction
+  modulusFunction->Initialize(m_ObjectTrackedList.at(selectedItem-1).pLayer->GetMetaDataDictionary());
   m_ObjectTrackedList.at(selectedItem-1).pRendering->Update();
 
   //Notify
@@ -390,7 +393,8 @@ ImageViewerManagerModel
   //Update the layer
   m_ObjectTrackedList.at(selectedItem-1).pLayer->SetRenderingFunction(phaseFunction);
   m_ObjectTrackedList.at(selectedItem-1).pRenderFunction = phaseFunction;
-  phaseFunction->Initialize();//FIXME Initialize() should disappear from the renderinFunction
+  //FIXME Initialize should disappear from the renderinFunction
+  phaseFunction->Initialize(m_ObjectTrackedList.at(selectedItem-1).pLayer->GetMetaDataDictionary());
   m_ObjectTrackedList.at(selectedItem-1).pRendering->Update();
 
   //Notify
