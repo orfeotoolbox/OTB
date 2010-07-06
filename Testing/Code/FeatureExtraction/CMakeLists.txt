@@ -813,6 +813,7 @@ ADD_TEST(feTlImageToSIFTKeyPointSetFilterDistanceMap ${FEATUREEXTRACTION_TESTS9}
         15.0 # rotation
         1.2 # zoom factor
         10 255
+        ${TEMP}/feTvImageToSIFTKeyPointSetFilterDistanceMap.txt
 )
 
 ADD_TEST(feTvImageToSIFTKeyPointSetFilterSceneOutputInterestPointAscii ${FEATUREEXTRACTION_TESTS9}

@@ -265,7 +265,7 @@ void subtract(OutputImageType::Pointer image1,
 int otbImageToSIFTKeyPointSetFilterDistanceMap(int argc, char * argv[])
 {
 
-  if (argc < 9)
+  if (argc < 10)
     {
     std::cout << "Missing arguments " << std::endl;
     return EXIT_FAILURE;
@@ -273,6 +273,7 @@ int otbImageToSIFTKeyPointSetFilterDistanceMap(int argc, char * argv[])
 
   // Input Image file name
   const char * infname = argv[1];
+  const char * outfname = argv[10];
 
   const unsigned int octaves = atoi(argv[2]);
   const unsigned int scales = atoi(argv[3]);
@@ -288,6 +289,13 @@ int otbImageToSIFTKeyPointSetFilterDistanceMap(int argc, char * argv[])
   // contrast factor
   const unsigned int contrastMin = atoi(argv[8]);
   const unsigned int contrastMax = atoi(argv[9]);
+
+  //redirect cout to a file
+  ofstream file(outfname);
+  streambuf* strm_buffer = std::cout.rdbuf();//save the cout to put it
+                                             //back later
+  std::cout.rdbuf(file.rdbuf());
+
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
@@ -351,6 +359,9 @@ int otbImageToSIFTKeyPointSetFilterDistanceMap(int argc, char * argv[])
 
   subtract(ddm_base, ddm_combined,
            "subtract_combined.png");
+
+  std::cout.rdbuf(strm_buffer);
+  file.close();
 
   return EXIT_SUCCESS;
 }
