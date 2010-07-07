@@ -206,6 +206,7 @@ public:
             }
           }
         }
+
       unsigned int nbComps = m_PixelRepresentationFunction->GetOutputSize();
       if (m_AutoMinMax)
         {
@@ -235,6 +236,17 @@ public:
           m_Maximum.push_back(static_cast<ScalarType> (this->GetHistogramList()->GetNthElement(comp)->Quantile(0, 1
                                                                                                                -
                                                                                                                m_AutoMinMaxQuantile)));
+          }
+        }
+      else
+        {
+        if (m_Minimum.empty())
+          {
+          m_Minimum.resize(nbComps, 0);
+          }
+        if (m_Maximum.empty())
+          {
+          m_Maximum.resize(nbComps, 255);
           }
         }
 
