@@ -22,7 +22,7 @@
 int otbHistogramCurveNew(int argc, char * argv[])
 {
   typedef itk::Statistics::Histogram<double, 1,
-                                     itk::Statistics::DenseFrequencyContainer>  HistogramType;
+      itk::Statistics::DenseFrequencyContainer>  HistogramType;
   typedef otb::HistogramCurve<HistogramType> HistogramCurveType;
   HistogramCurveType::Pointer curve = HistogramCurveType::New();
 

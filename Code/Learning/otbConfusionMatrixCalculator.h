@@ -32,7 +32,7 @@ namespace otb
  *  \brief TODO
  *
  */
-template < class TRefListLabel, class TProdListLabel > 
+template <class TRefListLabel, class TProdListLabel>
 class ITK_EXPORT ConfusionMatrixCalculator :
   public itk::ProcessObject
 {
@@ -40,29 +40,29 @@ public:
   /** Standard class typedefs */
   typedef ConfusionMatrixCalculator     Self;
   typedef itk::ProcessObject            Superclass;
-  typedef itk::SmartPointer< Self >     Pointer;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(ConfusionMatrixCalculator, itk::ProcessObject);
-  
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** List to store the corresponding labels */
-  typedef TRefListLabel                           RefListLabelType;
-  typedef typename RefListLabelType::Pointer      RefListLabelPointerType;
+  typedef TRefListLabel                      RefListLabelType;
+  typedef typename RefListLabelType::Pointer RefListLabelPointerType;
 
-  typedef TProdListLabel                          ProdListLabelType;
-  typedef typename ProdListLabelType::Pointer     ProdListLabelPointerType;
+  typedef TProdListLabel                      ProdListLabelType;
+  typedef typename ProdListLabelType::Pointer ProdListLabelPointerType;
 
-  typedef int                                     ClassLabelType;
+  typedef int ClassLabelType;
 
   /** Type for the confusion matrix */
-  typedef itk::VariableSizeMatrix<double>         ConfusionMatrixType;
-  
+  typedef itk::VariableSizeMatrix<double> ConfusionMatrixType;
+
   virtual void Update();
-  
+
   /** Accessors */
 
   itkSetObjectMacro(ReferenceLabels, RefListLabelType);
@@ -74,7 +74,7 @@ public:
   itkGetMacro(NumberOfClasses, unsigned short);
   itkGetMacro(NumberOfSamples, unsigned long);
   itkGetMacro(ConfusionMatrix, ConfusionMatrixType);
-  
+
   std::map<ClassLabelType, int> GetMapOfClasses() const
   {
     return m_MapOfClasses;
@@ -83,31 +83,31 @@ public:
 protected:
   ConfusionMatrixCalculator();
   virtual ~ConfusionMatrixCalculator() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;  
-  
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+
   /** Triggers the computation of the confusion matrix */
-  void GenerateData( void );
-  
+  void GenerateData(void);
+
 private:
-  ConfusionMatrixCalculator(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-  
-  double                    m_KappaIndex;
-  double                    m_OverallAccuracy;
+  ConfusionMatrixCalculator(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
+
+  double m_KappaIndex;
+  double m_OverallAccuracy;
 
   std::map<ClassLabelType, int> m_MapOfClasses;
 
-  unsigned short            m_NumberOfClasses;
-  unsigned long             m_NumberOfSamples;
+  unsigned short m_NumberOfClasses;
+  unsigned long  m_NumberOfSamples;
 
-  ConfusionMatrixType       m_ConfusionMatrix;
+  ConfusionMatrixType m_ConfusionMatrix;
 
-  RefListLabelPointerType   m_ReferenceLabels;
-  ProdListLabelPointerType  m_ProducedLabels;
-  
+  RefListLabelPointerType  m_ReferenceLabels;
+  ProdListLabelPointerType m_ProducedLabels;
+
 };
-}// end of namespace otb
-  
+} // end of namespace otb
+
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbConfusionMatrixCalculator.txx"
 #endif

@@ -116,7 +116,7 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
     if (!m_InputProjectionRef.empty()) //map projection
       {
       typedef otb::GenericMapProjection<otb::INVERSE, ScalarType, InputSpaceDimension,
-                                        InputSpaceDimension> InverseMapProjectionType;
+          InputSpaceDimension> InverseMapProjectionType;
       typename InverseMapProjectionType::Pointer mapTransform = InverseMapProjectionType::New();
       mapTransform->SetWkt(m_InputProjectionRef);
       if (mapTransform->GetMapProjection() != NULL)
@@ -191,7 +191,7 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
     if (!m_OutputProjectionRef.empty()) //map projection
       {
       typedef otb::GenericMapProjection<otb::FORWARD, ScalarType, InputSpaceDimension,
-                                        OutputSpaceDimension> ForwardMapProjectionType;
+          OutputSpaceDimension> ForwardMapProjectionType;
       typename ForwardMapProjectionType::Pointer mapTransform = ForwardMapProjectionType::New();
       mapTransform->SetWkt(m_OutputProjectionRef);
       if (mapTransform->GetMapProjection() != NULL)

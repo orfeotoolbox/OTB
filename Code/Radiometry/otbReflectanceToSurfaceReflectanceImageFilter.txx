@@ -30,11 +30,11 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage>
 ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
-::ReflectanceToSurfaceReflectanceImageFilter():
-   m_IsSetAtmosphericRadiativeTerms(false),
-   m_AeronetFileName(""),
-   m_FilterFunctionValuesFileName(""),
-   m_UseGenerateParameters(true)
+::ReflectanceToSurfaceReflectanceImageFilter() :
+  m_IsSetAtmosphericRadiativeTerms(false),
+  m_AeronetFileName(""),
+  m_FilterFunctionValuesFileName(""),
+  m_UseGenerateParameters(true)
 {
   m_AtmosphericRadiativeTerms = AtmosphericRadiativeTerms::New();
   m_CorrectionParameters      = AtmosphericCorrectionParameters::New();
@@ -101,7 +101,8 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
     {
     bool ffvfOK = true;
     if (m_FilterFunctionCoef.size() == 0) ffvfOK = false;
-    else if (m_FilterFunctionCoef.size() != this->GetInput()->GetNumberOfComponentsPerPixel()) itkExceptionMacro(
+    else if (m_FilterFunctionCoef.size() != this->GetInput()->GetNumberOfComponentsPerPixel())
+      itkExceptionMacro(
         << "Function Values and Input image size mismatch");
 
     for (unsigned int i = 0; i < this->GetInput()->GetNumberOfComponentsPerPixel(); i++)
@@ -156,8 +157,8 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
 
   for (unsigned int i = 0; i < this->GetInput()->GetNumberOfComponentsPerPixel(); ++i)
     {
-    double coef;
-    double res;
+    double       coef;
+    double       res;
     unsigned int wavelengthPosition = imageMetadataInterface->BandIndexToWavelengthPosition(i);
     coef = static_cast<double>(m_AtmosphericRadiativeTerms->GetTotalGaseousTransmission(wavelengthPosition)
                                * m_AtmosphericRadiativeTerms->GetDownwardTransmittance(wavelengthPosition)

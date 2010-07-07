@@ -235,7 +235,7 @@ int main(int argc, char* argv[])
 
   typedef otb::Image<unsigned char, 2> UCharImageType;
   typedef itk::RescaleIntensityImageFilter<ImageType,
-                                           UCharImageType> RescalerType;
+      UCharImageType> RescalerType;
   RescalerType::Pointer rescaler = RescalerType::New();
   rescaler->SetInput(image);
   rescaler->SetOutputMaximum(255);

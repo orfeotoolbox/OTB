@@ -66,9 +66,9 @@ int otbSetASetBMultiChannelRAndNIRVegetationIndexImageFilter(int argc, char * ar
   argv++;
   if (strArgv == "PVI")
     generic_SetASetBMultiChannelRAndNIRVegetationIndexImageFilter<InputImageType, OutputImageType,
-                                                                  otb::Functor::PVI<InputImageType::InternalPixelType,
-                                                                                    InputImageType::InternalPixelType,
-                                                                                    OutputImageType::PixelType> >
+        otb::Functor::PVI<InputImageType::InternalPixelType,
+            InputImageType::InternalPixelType,
+            OutputImageType::PixelType> >
       (argc, argv);
 
   return EXIT_SUCCESS;

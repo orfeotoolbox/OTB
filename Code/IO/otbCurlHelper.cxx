@@ -68,9 +68,9 @@ int CurlHelper::RetrieveFile(const std::string& urlString, std::string filename)
   CURLcode res = CURL_LAST;
 
   FILE* output_file = fopen(filename.c_str(), "wb");
- 
+
   curl = curl_easy_init();
-  
+
   char url[256];
   strcpy(url, urlString.c_str());
 
@@ -80,19 +80,19 @@ int CurlHelper::RetrieveFile(const std::string& urlString, std::string filename)
 
     // Set 5s timeout
     curl_easy_setopt(curl, CURLOPT_TIMEOUT, 5);
-    
-    // Use our writing static function to avoid file descriptor 
+
+    // Use our writing static function to avoid file descriptor
     // pointer crash on windows
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &Self::write_data);
 
     // Say the file where to write the received data
-    curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void*)output_file);
-    
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void*) output_file);
+
     res = curl_easy_perform(curl);
 
     /* always cleanup */
     curl_easy_cleanup(curl);
-    
+
     fclose(output_file);
     }
   otbMsgDevMacro(<< " -> " << res);
@@ -103,8 +103,7 @@ int CurlHelper::RetrieveFile(const std::string& urlString, std::string filename)
 #endif
 }
 
-
-int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs, 
+int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs,
                                   const std::vector<std::string>& listFilename,
                                   int maxConnect) const
 {
@@ -115,16 +114,16 @@ int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs,
   CURLM *             multiHandle;
   std::vector<CURL *> listCurlHandles;
   std::vector<FILE *> listFiles;
-  
+
   std::vector<std::string>::const_iterator filename;
   filename = listFilename.begin();
-  while (filename != listFilename.end() )
+  while (filename != listFilename.end())
     {
     FILE* lOutputFile = fopen((*filename).c_str(), "wb");
     if (lOutputFile == NULL)
-    {
-    itkExceptionMacro(<< "otbCurlHelper: bad file name: " << (*filename).c_str());
-    }
+      {
+      itkExceptionMacro(<< "otbCurlHelper: bad file name: " << (*filename).c_str());
+      }
 
     // Add file to vector
     listFiles.push_back(lOutputFile);
@@ -144,10 +143,10 @@ int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs,
   // Initialize curl handle
 
   std::vector<std::string>::const_iterator url;
-  std::vector<FILE *>::const_iterator file;
+  std::vector<FILE *>::const_iterator      file;
   url = listURLs.begin();
   file = listFiles.begin();
-  while ( (url != listURLs.end()) && (file != listFiles.end() ))
+  while ((url != listURLs.end()) && (file != listFiles.end()))
     {
     otbMsgDevMacro(<< "Retrieving: " << (*url).data());
     CURL * lEasyHandle;
@@ -162,7 +161,7 @@ int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs,
     curl_easy_setopt(lEasyHandle, CURLOPT_USERAGENT, m_Browser.data());
     curl_easy_setopt(lEasyHandle, CURLOPT_URL, (*url).data());
     curl_easy_setopt(lEasyHandle, CURLOPT_WRITEFUNCTION, &Self::write_data);
-    curl_easy_setopt(lEasyHandle, CURLOPT_WRITEDATA, (void*)(*file));
+    curl_easy_setopt(lEasyHandle, CURLOPT_WRITEDATA, (void*) (*file));
 
     // Add easy handle to multi handle
     curl_multi_add_handle(multiHandle, lEasyHandle);
@@ -181,7 +180,8 @@ int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs,
   // Perform
   int lStillRunning;
 
-  while (CURLM_CALL_MULTI_PERFORM == curl_multi_perform(multiHandle, &lStillRunning));
+  while (CURLM_CALL_MULTI_PERFORM == curl_multi_perform(multiHandle, &lStillRunning))
+    ;
 
   // Now get that URL
   while (lStillRunning)
@@ -209,18 +209,18 @@ int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs,
 
     switch (rc)
       {
-    case -1:
-      /* select error */
-      break;
-    case 0:
-    /* timeout */
-    default:
-      /* timeout or readable/writable sockets */
-      while (
-        CURLM_CALL_MULTI_PERFORM == curl_multi_perform(multiHandle, &lStillRunning)
-        )
-        ;
-      break;
+      case -1:
+        /* select error */
+        break;
+      case 0:
+      /* timeout */
+      default:
+        /* timeout or readable/writable sockets */
+        while (
+          CURLM_CALL_MULTI_PERFORM == curl_multi_perform(multiHandle, &lStillRunning)
+          )
+          ;
+        break;
       }
     }
 
@@ -240,7 +240,6 @@ int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs,
     {
     itkExceptionMacro(<< "otbCurlHelper: Error occurs while perform Multi handle");
     }
-
 
 // Cleanup
 
@@ -269,10 +268,10 @@ int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs,
   file = listFilename.begin();
   int res = 0;
   int resTmp = -1;
-  while ( (url != listURLs.end()) && (file != listFilename.end() ))
+  while ((url != listURLs.end()) && (file != listFilename.end()))
     {
     resTmp = RetrieveFile(*url, *file);
-    if (res == 0) res = resTmp;  
+    if (res == 0) res = resTmp;
     ++url;
     ++file;
     }
@@ -288,9 +287,9 @@ size_t CurlHelper::write_data(void* ptr, size_t size, size_t nmemb, void* data)
 {
   size_t written;
 
-  FILE * fDescriptor = (FILE *)(data);
+  FILE * fDescriptor = (FILE *) (data);
 
-  written = fwrite(ptr,size,nmemb,fDescriptor);
+  written = fwrite(ptr, size, nmemb, fDescriptor);
 
   return written;
 }

@@ -51,10 +51,10 @@ public:
   typedef ImageWidgetController WidgetsControllerType;
   typedef WidgetResizingActionHandler
   <VisualizationModelType,
-   ImageViewType>                          ResizingHandlerType;
+      ImageViewType>                          ResizingHandlerType;
   typedef ChangeExtractRegionActionHandler
   <VisualizationModelType,
-   ImageViewType>                        ChangeRegionHandlerType;
+      ImageViewType>                        ChangeRegionHandlerType;
 
   /** Set the pointer to the view */
   void SetView(BasicApplicationView * view);

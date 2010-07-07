@@ -23,68 +23,68 @@
 
 namespace otb
 {
-  /** \class MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator
-   *  \brief This class extends the ITK version by providing matrix estimation on a sub-region.
-   *
-   *  This class compute the co-occurence matrix over a given region of the image. The region can be set
-   *  using the SetRegion()/GetRegion() methods.
-   *
-   *  \sa itk::MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator
-   */
-template <class TImage, class THistogramFrequencyContainer = itk::Statistics::DenseFrequencyContainer >
+/** \class MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator
+ *  \brief This class extends the ITK version by providing matrix estimation on a sub-region.
+ *
+ *  This class compute the co-occurence matrix over a given region of the image. The region can be set
+ *  using the SetRegion()/GetRegion() methods.
+ *
+ *  \sa itk::MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator
+ */
+template <class TImage, class THistogramFrequencyContainer = itk::Statistics::DenseFrequencyContainer>
 class MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator
- : public itk::Statistics::MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator<TImage,THistogramFrequencyContainer>
+  : public itk::Statistics::MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator<TImage,
+      THistogramFrequencyContainer>
 {
 public:
-   /** Standard class typedef */
-   typedef MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator      Self;
-   typedef itk::Statistics::MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator
-     <TImage,THistogramFrequencyContainer>                              Superclass;
-   typedef itk::SmartPointer<Self>                                      Pointer;
-   typedef itk::SmartPointer<const Self>                                ConstPointer;
+  /** Standard class typedef */
+  typedef MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator Self;
+  typedef itk::Statistics::MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator
+  <TImage, THistogramFrequencyContainer>                              Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-   /** Creation through object factory */
-   itkNewMacro(Self);
+  /** Creation through object factory */
+  itkNewMacro(Self);
 
-   /** RTTI */
-   itkTypeMacro(MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator,
-       itk::MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator);
+  /** RTTI */
+  itkTypeMacro(MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator,
+               itk::MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator);
 
-   /** Superclass typedefs */
-   typedef TImage                                                      ImageType;
-   typedef typename ImageType::RegionType                              RegionType;
-   typedef typename Superclass::RadiusType                             RadiusType;
+  /** Superclass typedefs */
+  typedef TImage                          ImageType;
+  typedef typename ImageType::RegionType  RegionType;
+  typedef typename Superclass::RadiusType RadiusType;
 
-   /** Set/Get the region on which the co-occurence matrix is computed */
-   itkSetMacro(Region,RegionType);
-   itkGetMacro(Region,RegionType);
+  /** Set/Get the region on which the co-occurence matrix is computed */
+  itkSetMacro(Region, RegionType);
+  itkGetMacro(Region, RegionType);
 
 protected:
-   /** Constructor */
-   MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator() : m_Region() {}
-   /** Destructor */
-   ~MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator(){}
+  /** Constructor */
+  MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator() : m_Region() {}
+  /** Destructor */
+  ~MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator(){}
 
-   /** Overload this method to restrict co-occurence to the given region */
-   virtual void FillHistogram(RadiusType radius, RegionType region)
-   {
-     // Check that region is inside the requested region
-     RegionType subregion = m_Region;
+  /** Overload this method to restrict co-occurence to the given region */
+  virtual void FillHistogram(RadiusType radius, RegionType region)
+  {
+    // Check that region is inside the requested region
+    RegionType subregion = m_Region;
 
-     if(subregion.Crop(region))
-       {
-       // If so, call superclass FillHistogram implementation
-       this->Superclass::FillHistogram(radius,subregion);
-       }
-   }
+    if (subregion.Crop(region))
+      {
+      // If so, call superclass FillHistogram implementation
+      this->Superclass::FillHistogram(radius, subregion);
+      }
+  }
 
 private:
-   MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator(const Self&); //purposely not implemented
-   void operator=(const Self&); //purposely not implemented
+  MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator(const Self&);  //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
-   /** Region on which to compute co-occurence */
-   RegionType m_Region;
-
+  /** Region on which to compute co-occurence */
+  RegionType m_Region;
 
 };
 } // End namespace otb

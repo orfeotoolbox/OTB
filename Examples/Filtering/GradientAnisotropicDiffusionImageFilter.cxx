@@ -108,7 +108,7 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef itk::GradientAnisotropicDiffusionImageFilter<
-    InputImageType, OutputImageType>  FilterType;
+      InputImageType, OutputImageType>  FilterType;
   FilterType::Pointer filter = FilterType::New();
   // Software Guide : EndCodeSnippet
 
@@ -172,7 +172,7 @@ int main(int argc, char * argv[])
   typedef unsigned char                 WritePixelType;
   typedef otb::Image<WritePixelType, 2> WriteImageType;
   typedef itk::RescaleIntensityImageFilter<
-    OutputImageType, WriteImageType> RescaleFilterType;
+      OutputImageType, WriteImageType> RescaleFilterType;
 
   RescaleFilterType::Pointer rescaler = RescaleFilterType::New();
   rescaler->SetOutputMinimum(0);

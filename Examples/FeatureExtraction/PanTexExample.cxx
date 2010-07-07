@@ -84,7 +84,7 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::ScalarImageToPanTexTextureFilter
-    <ImageType, ImageType> PanTexTextureFilterType;
+  <ImageType, ImageType> PanTexTextureFilterType;
   // Software Guide : EndCodeSnippet
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::ImageFileWriter<ImageType> WriterType;
@@ -104,19 +104,19 @@ int main(int argc, char * argv[])
   // Software Guide : BeginCodeSnippet
   PanTexTextureFilterType::Pointer textureFilter = PanTexTextureFilterType::New();
   // Software Guide : EndCodeSnippet
-  
+
   // Software Guide : BeginLatex
   //
   // Then, we set the parameters of the filter.The radius of
   // the neighborhood to compute the texture.
   // The number of bins per axis for histogram generation (it is the
-  // size of the co-occurrence matrix). Moreover, we have to specify 
+  // size of the co-occurrence matrix). Moreover, we have to specify
   // the Min/Max in the input image. In the example, image Min/Max is set
   // by the user to 0 and 255. Alternatively you can use the class \doxygen{itk}{MinimumMaximumImageCalculator}
   // to calculate these values.
   //
   // Software Guide : EndLatex
-  
+
   // Software Guide : BeginCodeSnippet
   PanTexTextureFilterType::SizeType sradius;
   sradius.Fill(4);
@@ -125,7 +125,7 @@ int main(int argc, char * argv[])
   textureFilter->SetInputImageMinimum(0);
   textureFilter->SetInputImageMaximum(256);
   // Software Guide : EndCodeSnippet
-  
+
   // Software Guide : BeginLatex
   //
   // We can now plug the pipeline and trigger the execution by calling
@@ -157,12 +157,12 @@ int main(int argc, char * argv[])
   // Pretty image creation for printing
 
   typedef otb::Image<unsigned char,
-                     Dimension>
+      Dimension>
   OutputPrettyImageType;
   typedef otb::ImageFileWriter<OutputPrettyImageType>
   WriterPrettyOutputType;
   typedef itk::RescaleIntensityImageFilter<ImageType,
-                                           OutputPrettyImageType>
+      OutputPrettyImageType>
   RescalerOutputType;
 
   RescalerOutputType::Pointer     outputRescaler     = RescalerOutputType::New();

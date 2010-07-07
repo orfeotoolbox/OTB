@@ -45,7 +45,7 @@ int otbAssymmetricFusionOfLineDetectorNew(int argc, char * argv[])
   typedef itk::LinearInterpolateImageFunction<InputImageType, double> InterpolatorType;
 
   typedef otb::AssymmetricFusionOfLineDetectorImageFilter<InputImageType, OutputImageType, OutputImageDirectionType,
-                                                          InterpolatorType> FilterType;
+      InterpolatorType> FilterType;
 
   FilterType::Pointer FilterAssSymSum = FilterType::New();
 

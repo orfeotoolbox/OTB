@@ -79,7 +79,7 @@ public:
   typedef otb::ListSampleToHistogramListGenerator
   <ListSampleType, ScalarType, DFContainerType>           HistogramFilterType;
   typedef itk::Statistics::Histogram<
-    RealScalarType, 1, DFContainerType>         HistogramType;
+      RealScalarType, 1, DFContainerType>         HistogramType;
   typedef typename HistogramType::Pointer     HistogramPointerType;
   typedef ObjectList<HistogramType>           HistogramListType;
   typedef typename HistogramListType::Pointer HistogramListPointerType;
@@ -89,7 +89,7 @@ public:
 
   typedef  itk::Array<double> ParametersType;
 
-  typedef typename itk::MetaDataDictionary                                   MetaDataDictionaryType;
+  typedef typename itk::MetaDataDictionary MetaDataDictionaryType;
 
   /** Evaluate method: required interface */
   virtual OutputPixelType Evaluate(const PixelType&  spixel) const
@@ -156,8 +156,8 @@ public:
    */
   // REVIEW: I agree, we should not be calling intialize ourselve, it
   // would better be seamless
-  virtual void Initialize(const MetaDataDictionaryType &metadatadictionary){} //FIXME should disappear and be
-                              //automatic (IsModified())
+  virtual void Initialize(const MetaDataDictionaryType& metadatadictionary){} //FIXME should disappear and be
+  //automatic (IsModified())
 
 protected:
   /** Constructor */

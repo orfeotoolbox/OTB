@@ -125,14 +125,14 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef itk::ScalarToRGBColormapImageFilter<ImageType,
-                                              RGBImageType> ColorMapFilterType;
+      RGBImageType> ColorMapFilterType;
   ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
   colormapper->UseInputImageExtremaForScalingOff();
 
   if (argc == 9)
     {
     typedef otb::Functor::ScalarToRainbowRGBPixelFunctor<PixelType,
-                                                         RGBPixelType>
+        RGBPixelType>
     ColorMapFunctorType;
     ColorMapFunctorType::Pointer colormap = ColorMapFunctorType::New();
     colormap->SetMinimumInputValue(0);
@@ -146,7 +146,7 @@ int main(int argc, char * argv[])
     if (strcmp(argv[9], "hot") == 0)
       {
       typedef itk::Functor::HotColormapFunctor<PixelType,
-                                               RGBPixelType>
+          RGBPixelType>
       ColorMapFunctorType;
       ColorMapFunctorType::Pointer colormap = ColorMapFunctorType::New();
       colormap->SetMinimumInputValue(0);
@@ -156,7 +156,7 @@ int main(int argc, char * argv[])
     else
       {
       typedef otb::Functor::ReliefColormapFunctor<PixelType,
-                                                  RGBPixelType>
+          RGBPixelType>
       ColorMapFunctorType;
       ColorMapFunctorType::Pointer colormap = ColorMapFunctorType::New();
       colormap->SetMinimumInputValue(0);
@@ -170,7 +170,6 @@ int main(int argc, char * argv[])
   // the image of the DEM:
   //
   // Software Guide : EndLatex
-
 
   // Software Guide : BeginCodeSnippet
   colormapper->SetInput(demToImage->GetOutput());

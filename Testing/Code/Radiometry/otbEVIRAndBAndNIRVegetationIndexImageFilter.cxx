@@ -83,11 +83,11 @@ int otbEVIRAndBAndNIRVegetationIndexImageFilter(int argc, char * argv[])
   argv++;
   if (strArgv == "EVI")
     return (generic_EVIRAndBAndNIRVegetationIndexImageFilter<InputRImageType, InputBImageType, InputNIRImageType,
-                                                             OutputImageType,
-                                                             otb::Functor::EVI<InputRImageType::PixelType,
-                                                                               InputBImageType::PixelType,
-                                                                               InputNIRImageType::PixelType,
-                                                                               OutputImageType::PixelType> >
+                OutputImageType,
+                otb::Functor::EVI<InputRImageType::PixelType,
+                    InputBImageType::PixelType,
+                    InputNIRImageType::PixelType,
+                    OutputImageType::PixelType> >
               (argc, argv));
   else return EXIT_FAILURE;
   return EXIT_SUCCESS;

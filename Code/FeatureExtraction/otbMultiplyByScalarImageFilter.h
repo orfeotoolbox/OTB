@@ -65,20 +65,20 @@ private:
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT MultiplyByScalarImageFilter :
   public itk::UnaryFunctorImageFilter<
-    TInputImage, TOutputImage,
-    Functor::MultiplyByScalar<
-      ITK_TYPENAME TInputImage::PixelType,
-      ITK_TYPENAME TOutputImage::PixelType> >
+      TInputImage, TOutputImage,
+      Functor::MultiplyByScalar<
+          ITK_TYPENAME TInputImage::PixelType,
+          ITK_TYPENAME TOutputImage::PixelType> >
 {
 public:
   /** Standard class typedefs. */
   typedef MultiplyByScalarImageFilter Self;
   typedef typename itk::UnaryFunctorImageFilter<
-    TInputImage,
-    TOutputImage,
-    Functor::MultiplyByScalar<
-      ITK_TYPENAME TInputImage::PixelType,
-      ITK_TYPENAME TOutputImage::PixelType> > Superclass;
+      TInputImage,
+      TOutputImage,
+      Functor::MultiplyByScalar<
+          ITK_TYPENAME TInputImage::PixelType,
+          ITK_TYPENAME TOutputImage::PixelType> > Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 

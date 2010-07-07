@@ -48,13 +48,13 @@ int otbMeanRatioChangeDetectionTest(int argc, char* argv[])
   typedef itk::ImageFileReader<InputImageType2> ReaderType2;
   typedef itk::ImageFileWriter<OutputImageType> WriterType;
   typedef itk::RescaleIntensityImageFilter<ChangeImageType,
-                                           OutputImageType> RescalerType;
+      OutputImageType> RescalerType;
 
   // Declare the type for the filter
   typedef otb::MeanRatioImageFilter<
-    InputImageType1,
-    InputImageType2,
-    ChangeImageType>       FilterType;
+      InputImageType1,
+      InputImageType2,
+      ChangeImageType>       FilterType;
 
   ReaderType1::Pointer  reader1 = ReaderType1::New();
   ReaderType2::Pointer  reader2 = ReaderType2::New();

@@ -19,7 +19,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-
 #include "otbPointSetExtractROI.h"
 #include "itkPointSet.h"
 #include "otbRandomPointSetSource.h"
@@ -45,7 +44,7 @@ int otbPointSetExtractROITest(int, char*[])
   pointSetSource->Update();
 
   std::cout << "Input PointSet has " << pointSetSource->GetOutput()->GetNumberOfPoints();
-  std::cout << " points " << std::endl; 
+  std::cout << " points " << std::endl;
 
   typedef otb::PointSetExtractROI<PointSetType, PointSetType> FilterType;
   FilterType::Pointer filter = FilterType::New();

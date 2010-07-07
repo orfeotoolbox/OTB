@@ -31,18 +31,18 @@ namespace otb
  *
  */
 template <InverseOrForwardTransformationEnum TDirectionOfMapping,
-          class TScalarType = double,
-          unsigned int NInputDimensions = 3,
-          unsigned int NOutputDimensions = 3>
+    class TScalarType = double,
+    unsigned int NInputDimensions = 3,
+    unsigned int NOutputDimensions = 3>
 class ITK_EXPORT GeocentricTransform : public itk::Transform<TScalarType,            // Data type for scalars
-                                                             NInputDimensions, // Number of dimensions in the input space
-                                                             NOutputDimensions> // Number of dimensions in the output space
+      NInputDimensions,                                                        // Number of dimensions in the input space
+      NOutputDimensions>                                                        // Number of dimensions in the output space
 {
 public:
   /** Standard class typedefs. */
   typedef itk::Transform<TScalarType,
-                         NInputDimensions,
-                         NOutputDimensions>       Superclass;
+      NInputDimensions,
+      NOutputDimensions>       Superclass;
   typedef GeocentricTransform           Self;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;

@@ -66,16 +66,16 @@ public:
 template <class TInputImage, class TOutputVectorImage>
 class ITK_EXPORT ImageToVectorImageCastFilter
   : public itk::UnaryFunctorImageFilter<TInputImage, TOutputVectorImage,
-                                        Functor::VectorCast<typename TInputImage::PixelType,
-                                                            typename TOutputVectorImage::PixelType> >
+      Functor::VectorCast<typename TInputImage::PixelType,
+          typename TOutputVectorImage::PixelType> >
 {
 public:
   /// Standard class typedefs
   typedef ImageToVectorImageCastFilter Self;
   typedef itk::UnaryFunctorImageFilter<TInputImage, TOutputVectorImage,
-                                       Functor::VectorCast<typename TInputImage::PixelType,
-                                                           typename TOutputVectorImage
-                                                           ::PixelType> > Superclass;
+      Functor::VectorCast<typename TInputImage::PixelType,
+          typename TOutputVectorImage
+          ::PixelType> > Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 

@@ -38,14 +38,14 @@ namespace otb
 template<class TImage>
 class ITK_EXPORT AttributesMapOpeningLabelMapFilter
   : public itk::AttributeOpeningLabelMapFilter<TImage,
-                                               Functor::AttributesMapLabelObjectAccessor<typename TImage::
-                                                                                         LabelObjectType> >
+      Functor::AttributesMapLabelObjectAccessor<typename TImage::
+          LabelObjectType> >
 {
 public:
   /** Standard class typedefs. */
   typedef AttributesMapOpeningLabelMapFilter Self;
   typedef itk::AttributeOpeningLabelMapFilter <TImage,
-                                               Functor::AttributesMapLabelObjectAccessor<TImage> > Superclass;
+      Functor::AttributesMapLabelObjectAccessor<TImage> > Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 

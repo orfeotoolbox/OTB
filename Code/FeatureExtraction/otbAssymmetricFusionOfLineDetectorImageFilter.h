@@ -38,9 +38,9 @@ namespace otb
  */
 
 template <class TInputImage,
-          class TOutputImage,
-          class TOutputImageDirection = TOutputImage,
-          class TInterpolator = itk::LinearInterpolateImageFunction<TInputImage> >
+    class TOutputImage,
+    class TOutputImageDirection = TOutputImage,
+    class TInterpolator = itk::LinearInterpolateImageFunction<TInputImage> >
 class ITK_EXPORT AssymmetricFusionOfLineDetectorImageFilter :
   public LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, TInterpolator>
 {
@@ -80,11 +80,11 @@ protected:
   virtual ~AssymmetricFusionOfLineDetectorImageFilter() {}
 
   typedef otb::LineRatioDetectorImageFilter<InputImageType, OutputImageType, OutputImageDirectionType,
-                                            InterpolatorType>        LineRatioType;
+      InterpolatorType>        LineRatioType;
   typedef otb::LineCorrelationDetectorImageFilter<InputImageType, OutputImageType, OutputImageDirectionType,
-                                                  InterpolatorType>  LineCorrelationType;
+      InterpolatorType>  LineCorrelationType;
   typedef otb::AssociativeSymmetricalSumImageFilter<InputImageType1, InputImageType2,
-                                                    OutputImageType> AssSymSumType;
+      OutputImageType> AssSymSumType;
 
   virtual void GenerateData();
 

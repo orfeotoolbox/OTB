@@ -39,8 +39,8 @@ namespace otb
  * \ingroup IntensityImageFilters Multithreaded
  */
 template <class TInputImage1, class TInputImage2,
-          class TInputImage3, class TInputImage4,
-          class TOutputImage, class TFunction>
+    class TInputImage3, class TInputImage4,
+    class TOutputImage, class TFunction>
 class ITK_EXPORT QuaternaryFunctorImageFilter :
   public itk::InPlaceImageFilter<TInputImage1, TOutputImage>
 {

@@ -36,13 +36,13 @@ int otbNDBITM4AndTM5IndexImageFilter(int argc, char * argv[])
   typedef otb::ImageFileWriter<OutputImageType>   WriterType;
 
   typedef otb::Functor::NDBI  <InputTM4ImageType::PixelType,
-                               InputTM5ImageType::PixelType,
-                               OutputImageType::PixelType> FunctorType;
+      InputTM5ImageType::PixelType,
+      OutputImageType::PixelType> FunctorType;
 
   typedef itk::BinaryFunctorImageFilter<InputTM4ImageType,
-                                        InputTM5ImageType,
-                                        OutputImageType,
-                                        FunctorType> BinaryFunctorImageFilterType;
+      InputTM5ImageType,
+      OutputImageType,
+      FunctorType> BinaryFunctorImageFilterType;
 
   // Instantiating object
   BinaryFunctorImageFilterType::Pointer filter = BinaryFunctorImageFilterType::New();

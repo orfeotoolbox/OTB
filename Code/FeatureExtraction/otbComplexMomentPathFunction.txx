@@ -83,7 +83,7 @@ ComplexMomentPathFunction<TInputPath, TOutput, TPrecision>
 
 template <class TInputPath, class TOutput, class TPrecision>
 typename ComplexMomentPathFunction<TInputPath,
-                                   TOutput, TPrecision>::OutputType
+    TOutput, TPrecision>::OutputType
 ComplexMomentPathFunction<TInputPath, TOutput, TPrecision>
 ::Evaluate(const PathType& path) const
 {
@@ -166,7 +166,7 @@ ComplexMomentPathFunction<TInputPath, TOutput, TPrecision>
 
 template <class TInputPath, class TOutput, class TPrecision>
 typename ComplexMomentPathFunction<TInputPath,
-                                   TOutput, TPrecision>::OutputType
+    TOutput, TPrecision>::OutputType
 ComplexMomentPathFunction<TInputPath, TOutput, TPrecision>
 ::Evaluate() const
 {

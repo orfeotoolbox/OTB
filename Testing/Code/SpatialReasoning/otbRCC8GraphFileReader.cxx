@@ -59,57 +59,57 @@ int otbRCC8GraphFileReader(int argc, char* argv[])
     {
     switch (count)
       {
-    case 0:
-      otbControlConditionTestMacro(eIt.GetValue() != otb::OTB_RCC8_EC,
-                                   "eIt.GetValue()!=otb::OTB_RCC8_EC");
-      otbControlConditionTestMacro(eIt.GetSourceIndex() != 0,
-                                   "eIt.GetSourceIndex()!=0");
-      otbControlConditionTestMacro(eIt.GetTargetIndex() != 1,
-                                   "eIt.GetTargetIndex()!=1");
-      break;
-    case 1:
-      otbControlConditionTestMacro(eIt.GetValue() != otb::OTB_RCC8_PO,
-                                   "eIt.GetValue()!=otb::OTB_RCC8_PO");
-      otbControlConditionTestMacro(eIt.GetSourceIndex() != 1,
-                                   "eIt.GetSourceIndex()!=1");
-      otbControlConditionTestMacro(eIt.GetTargetIndex() != 2,
-                                   "eIt.GetTargetIndex()!=2");
-      break;
-    case 2:
-      otbControlConditionTestMacro(eIt.GetValue() != otb::OTB_RCC8_TPP,
-                                   "eIt.GetValue()!=otb::OTB_RCC8_TPP");
-      otbControlConditionTestMacro(eIt.GetSourceIndex() != 2,
-                                   "eIt.GetSourceIndex()!=2");
-      otbControlConditionTestMacro(eIt.GetTargetIndex() != 3,
-                                   "eIt.GetTargetIndex()!=3");
-      break;
-    case 3:
-      otbControlConditionTestMacro(eIt.GetValue() != otb::OTB_RCC8_TPPI,
-                                   "eIt.GetValue()!=otb::OTB_RCC8_TPPI");
-      otbControlConditionTestMacro(eIt.GetSourceIndex() != 0,
-                                   "eIt.GetSourceIndex()!=0");
-      otbControlConditionTestMacro(eIt.GetTargetIndex() != 2,
-                                   "eIt.GetTargetIndex()!=2");
-      break;
-    case 4:
-      otbControlConditionTestMacro(eIt.GetValue() != otb::OTB_RCC8_NTPP,
-                                   "eIt.GetValue()!=otb::OTB_RCC8_NTPP");
-      otbControlConditionTestMacro(eIt.GetSourceIndex() != 1,
-                                   "eIt.GetSourceIndex()!=1");
-      otbControlConditionTestMacro(eIt.GetTargetIndex() != 3,
-                                   "eIt.GetTargetIndex()!=3");
-      break;
-    case 5:
-      otbControlConditionTestMacro(eIt.GetValue() != otb::OTB_RCC8_NTPPI,
-                                   "eIt.GetValue()!=otb::OTB_RCC8_NTPPI");
-      otbControlConditionTestMacro(eIt.GetSourceIndex() != 0,
-                                   "eIt.GetSourceIndex()!=0");
-      otbControlConditionTestMacro(eIt.GetTargetIndex() != 3,
-                                   "eIt.GetTargetIndex()!=3");
-      break;
-    default:
-      otbControlConditionTestMacro(true, "Error in graph reading.");
-      break;
+      case 0:
+        otbControlConditionTestMacro(eIt.GetValue() != otb::OTB_RCC8_EC,
+                                     "eIt.GetValue()!=otb::OTB_RCC8_EC");
+        otbControlConditionTestMacro(eIt.GetSourceIndex() != 0,
+                                     "eIt.GetSourceIndex()!=0");
+        otbControlConditionTestMacro(eIt.GetTargetIndex() != 1,
+                                     "eIt.GetTargetIndex()!=1");
+        break;
+      case 1:
+        otbControlConditionTestMacro(eIt.GetValue() != otb::OTB_RCC8_PO,
+                                     "eIt.GetValue()!=otb::OTB_RCC8_PO");
+        otbControlConditionTestMacro(eIt.GetSourceIndex() != 1,
+                                     "eIt.GetSourceIndex()!=1");
+        otbControlConditionTestMacro(eIt.GetTargetIndex() != 2,
+                                     "eIt.GetTargetIndex()!=2");
+        break;
+      case 2:
+        otbControlConditionTestMacro(eIt.GetValue() != otb::OTB_RCC8_TPP,
+                                     "eIt.GetValue()!=otb::OTB_RCC8_TPP");
+        otbControlConditionTestMacro(eIt.GetSourceIndex() != 2,
+                                     "eIt.GetSourceIndex()!=2");
+        otbControlConditionTestMacro(eIt.GetTargetIndex() != 3,
+                                     "eIt.GetTargetIndex()!=3");
+        break;
+      case 3:
+        otbControlConditionTestMacro(eIt.GetValue() != otb::OTB_RCC8_TPPI,
+                                     "eIt.GetValue()!=otb::OTB_RCC8_TPPI");
+        otbControlConditionTestMacro(eIt.GetSourceIndex() != 0,
+                                     "eIt.GetSourceIndex()!=0");
+        otbControlConditionTestMacro(eIt.GetTargetIndex() != 2,
+                                     "eIt.GetTargetIndex()!=2");
+        break;
+      case 4:
+        otbControlConditionTestMacro(eIt.GetValue() != otb::OTB_RCC8_NTPP,
+                                     "eIt.GetValue()!=otb::OTB_RCC8_NTPP");
+        otbControlConditionTestMacro(eIt.GetSourceIndex() != 1,
+                                     "eIt.GetSourceIndex()!=1");
+        otbControlConditionTestMacro(eIt.GetTargetIndex() != 3,
+                                     "eIt.GetTargetIndex()!=3");
+        break;
+      case 5:
+        otbControlConditionTestMacro(eIt.GetValue() != otb::OTB_RCC8_NTPPI,
+                                     "eIt.GetValue()!=otb::OTB_RCC8_NTPPI");
+        otbControlConditionTestMacro(eIt.GetSourceIndex() != 0,
+                                     "eIt.GetSourceIndex()!=0");
+        otbControlConditionTestMacro(eIt.GetTargetIndex() != 3,
+                                     "eIt.GetTargetIndex()!=3");
+        break;
+      default:
+        otbControlConditionTestMacro(true, "Error in graph reading.");
+        break;
       }
     }
 

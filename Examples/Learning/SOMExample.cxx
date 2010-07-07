@@ -171,7 +171,7 @@ int main(int argc, char* argv[])
   typedef otb::Functor::CzihoSOMNeighborhoodBehaviorFunctor
   NeighborhoodBehaviorFunctorType;
   typedef otb::SOM<SampleListType, MapType,
-                   LearningBehaviorFunctorType, NeighborhoodBehaviorFunctorType>
+      LearningBehaviorFunctorType, NeighborhoodBehaviorFunctorType>
   SOMType;
 // Software Guide : EndCodeSnippet
 //
@@ -298,13 +298,13 @@ int main(int argc, char* argv[])
 
   //Just for visualization purposes, we zoom the image, and pass it to the printable image filter
   typedef otb::Image<PixelType,
-                     2>                             SingleImageType;
+      2>                             SingleImageType;
   typedef itk::ExpandImageFilter<SingleImageType,
-                                 SingleImageType>   ExpandType;
+      SingleImageType>   ExpandType;
   typedef otb::PerBandVectorImageFilter<MapType, MapType,
-                                        ExpandType> VectorExpandType;
+      ExpandType> VectorExpandType;
   typedef itk::NearestNeighborInterpolateImageFunction<SingleImageType,
-                                                       double>
+      double>
   InterpolatorType;
   typedef otb::PrintableImageFilter<MapType>
   PrintableFilterType;
@@ -387,7 +387,7 @@ int main(int argc, char* argv[])
 
 // Software Guide : BeginCodeSnippet
   typedef otb::SOMActivationBuilder<SampleListType, MapType,
-                                    OutputImageType> SOMActivationBuilderType;
+      OutputImageType> SOMActivationBuilderType;
 // Software Guide : EndCodeSnippet
 //  Software Guide : BeginLatex
 //
@@ -424,10 +424,10 @@ int main(int argc, char* argv[])
 
     //Just for visualization purposes, we zoom the image.
     typedef itk::ExpandImageFilter<OutputImageType,
-                                   OutputImageType> ExpandType2;
+        OutputImageType> ExpandType2;
     typedef itk::NearestNeighborInterpolateImageFunction<OutputImageType,
-                                                         double>
-                                                    InterpolatorType2;
+        double>
+    InterpolatorType2;
 
     InterpolatorType2::Pointer interpolator2 = InterpolatorType2::New();
     ExpandType2::Pointer       expand2 = ExpandType2::New();

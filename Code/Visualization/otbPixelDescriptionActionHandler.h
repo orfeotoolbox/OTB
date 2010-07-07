@@ -86,43 +86,43 @@ public:
         {
         switch (event)
           {
-        case FL_ENTER:
-          {
-          return true;
-          break;
-          }
-        case FL_LEAVE:
-          {
-          return true;
-          break;
-          }
-        case FL_MOVE:
-          {
-          // Get the clicked index
-          typename ViewType::ImageWidgetType::PointType screenPoint, imagePoint;
-          screenPoint = sourceWidget->GetMousePosition();
+          case FL_ENTER:
+            {
+            return true;
+            break;
+            }
+          case FL_LEAVE:
+            {
+            return true;
+            break;
+            }
+          case FL_MOVE:
+            {
+            // Get the clicked index
+            typename ViewType::ImageWidgetType::PointType screenPoint, imagePoint;
+            screenPoint = sourceWidget->GetMousePosition();
 
-          // Transform to image point
-          imagePoint = sourceWidget->GetScreenToImageTransform()->TransformPoint(screenPoint);
+            // Transform to image point
+            imagePoint = sourceWidget->GetScreenToImageTransform()->TransformPoint(screenPoint);
 
-          // Transform to index
-          typename ViewType::IndexType index;
-          index[0] = static_cast<int>(imagePoint[0]);
-          index[1] = static_cast<int>(imagePoint[1]);
+            // Transform to index
+            typename ViewType::IndexType index;
+            index[0] = static_cast<int>(imagePoint[0]);
+            index[1] = static_cast<int>(imagePoint[1]);
 
-          //Add the offset
-          index += m_Offset;
+            //Add the offset
+            index += m_Offset;
 
-          // Communicate new index to model
-          m_Model->UpdatePixelDescription(index);
+            // Communicate new index to model
+            m_Model->UpdatePixelDescription(index);
 
-          return true;
-          break;
-          }
-        default:
-          {
-          break;
-          }
+            return true;
+            break;
+            }
+          default:
+            {
+            break;
+            }
           }
         }
       }

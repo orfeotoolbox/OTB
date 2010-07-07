@@ -49,22 +49,22 @@ namespace otb
 template <class TInputImage1, class TInputImage2, class TOutputImage>
 class ITK_EXPORT MeanRatioImageFilter :
   public BinaryFunctorNeighborhoodImageFilter<
-    TInputImage1, TInputImage2, TOutputImage,
-    Functor::MeanRatio<
-      ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage1>,
-      ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage2>,
-      ITK_TYPENAME TOutputImage::PixelType> >
+      TInputImage1, TInputImage2, TOutputImage,
+      Functor::MeanRatio<
+          ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage1>,
+          ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage2>,
+          ITK_TYPENAME TOutputImage::PixelType> >
 {
 public:
   /** Standard class typedefs. */
   typedef MeanRatioImageFilter Self;
   typedef BinaryFunctorNeighborhoodImageFilter<
-    TInputImage1, TInputImage2, TOutputImage,
-    Functor::MeanRatio<
-      ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage1>,
-      ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage2>,
-      ITK_TYPENAME TOutputImage::PixelType>
-    >  Superclass;
+      TInputImage1, TInputImage2, TOutputImage,
+      Functor::MeanRatio<
+          ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage1>,
+          ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage2>,
+          ITK_TYPENAME TOutputImage::PixelType>
+      >  Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -72,7 +72,7 @@ public:
   itkNewMacro(Self);
 
   /** Macro defining the type*/
-  itkTypeMacro(MeanRatioImageFilter,SuperClass);
+  itkTypeMacro(MeanRatioImageFilter, SuperClass);
 
 protected:
   MeanRatioImageFilter() {}

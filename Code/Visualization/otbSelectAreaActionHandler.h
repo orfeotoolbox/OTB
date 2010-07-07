@@ -93,37 +93,37 @@ public:
 
         switch (event)
           {
-        case FL_PUSH:
-          {
-          m_FirstPush = false;
-          m_StartIndex = lIndex;
-          // ImageView.txx hide the GlComponent when Update
-          m_RegionGlComponent->SetVisible(true);
-          break;
-          }
-        case FL_RELEASE:
-          {
-          if (m_StartIndex[0] != lIndex[0] && m_StartIndex[1] != lIndex[1])
+          case FL_PUSH:
             {
-            m_FirstPush = true;
+            m_FirstPush = false;
+            m_StartIndex = lIndex;
+            // ImageView.txx hide the GlComponent when Update
+            m_RegionGlComponent->SetVisible(true);
+            break;
+            }
+          case FL_RELEASE:
+            {
+            if (m_StartIndex[0] != lIndex[0] && m_StartIndex[1] != lIndex[1])
+              {
+              m_FirstPush = true;
+              m_StopIndex = lIndex;
+              m_Model->SetExtractRegionByIndex(m_StartIndex, m_StopIndex);
+              m_Model->Update();
+              }
+            break;
+            }
+          case FL_DRAG:
+            {
+            // only redraw the red box in the widget
             m_StopIndex = lIndex;
             m_Model->SetExtractRegionByIndex(m_StartIndex, m_StopIndex);
-            m_Model->Update();
+            m_RegionGlComponent->SetRegion(m_Model->GetExtractRegion());
+            m_Widget->redraw();
+            break;
             }
-          break;
-          }
-        case FL_DRAG:
-          {
-          // only redraw the red box in the widget
-          m_StopIndex = lIndex;
-          m_Model->SetExtractRegionByIndex(m_StartIndex, m_StopIndex);
-          m_RegionGlComponent->SetRegion(m_Model->GetExtractRegion());
-          m_Widget->redraw();
-          break;
-          }
-        default:
-          {
-          }
+          default:
+            {
+            }
           }
         return true;
         }

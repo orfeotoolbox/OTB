@@ -57,23 +57,23 @@ namespace otb
  */
 
 template <class TInputImageHH, class TInputImageHV, class TInputImageVH, class TInputImageVV, class TOutputImage,
-          class TFunction = Functor::PolarimetricSynthesisFunctor<
-            typename TInputImageHH::PixelType,
-            typename TInputImageHV::PixelType,
-            typename TInputImageVH::PixelType,
-            typename TInputImageVV::PixelType,
-            typename TOutputImage::PixelType> >
+    class TFunction = Functor::PolarimetricSynthesisFunctor<
+        typename TInputImageHH::PixelType,
+        typename TInputImageHV::PixelType,
+        typename TInputImageVH::PixelType,
+        typename TInputImageVV::PixelType,
+        typename TOutputImage::PixelType> >
 class ITK_EXPORT PolarimetricSynthesisFilter :  public otb::QuaternaryFunctorImageFilter<TInputImageHH,
-                                                                                         TInputImageHV, TInputImageVH,
-                                                                                         TInputImageVV, TOutputImage,
-                                                                                         TFunction>
+      TInputImageHV, TInputImageVH,
+      TInputImageVV, TOutputImage,
+      TFunction>
 {
 public:
 
   /** Standard typedefs */
   typedef PolarimetricSynthesisFilter Self;
   typedef otb::QuaternaryFunctorImageFilter<TInputImageHH, TInputImageHV,
-                                            TInputImageVH, TInputImageVV, TOutputImage, TFunction>  Superclass;
+      TInputImageVH, TInputImageVV, TOutputImage, TFunction>  Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 

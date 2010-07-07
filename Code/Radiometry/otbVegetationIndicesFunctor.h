@@ -49,12 +49,12 @@ public:
   typedef itk::VariableLengthVector<TInput1> InputVectorType;
 
   //operators !=
-  bool operator != (const RAndNIRIndexBase&) const
+  bool operator !=(const RAndNIRIndexBase&) const
   {
     return false;
   }
   //operator ==
-  bool operator == (const RAndNIRIndexBase& other) const
+  bool operator ==(const RAndNIRIndexBase& other) const
   {
     return !(*this != other);
   }
@@ -153,13 +153,13 @@ public:
   typedef itk::VariableLengthVector<TInput1> InputVectorType;
 
   //operators !=
-  bool operator != (const RAndBAndNIRIndexBase&) const
+  bool operator !=(const RAndBAndNIRIndexBase&) const
   {
     return false;
   }
 
   //operator ==
-  bool operator == (const RAndBAndNIRIndexBase& other) const
+  bool operator ==(const RAndBAndNIRIndexBase& other) const
   {
     return !(*this != other);
   }
@@ -330,7 +330,6 @@ public:
       }
   }
 
-
   /// Set Red Index
   void SetRedIndex(unsigned int channel)
   {
@@ -377,7 +376,6 @@ private:
   unsigned int m_GreenIndex;
   unsigned int m_NIRIndex;
 };
-
 
 /** \class NDVI
  *  \brief This functor computes the Normalized Difference Vegetation Index (NDVI)
@@ -473,7 +471,7 @@ public:
     return "PVI";
   }
 
-  PVI(): m_A(0.90893), m_B(7.46216), m_Coeff(0.74) {}
+  PVI() : m_A(0.90893), m_B(7.46216), m_Coeff(0.74) {}
   virtual ~PVI() {}
   /** Set/Get A and B parameters */
   void SetA(const double A)
@@ -635,7 +633,6 @@ private:
 
 };
 
-
 /** \class WDVI
  *  \brief This functor computes the Weighted Difference Vegetation Index (WDVI)
  *
@@ -754,7 +751,6 @@ private:
   WDVIFunctorType       m_WDVIfunctor;
 
 };
-
 
 /** \class MSAVI2
  *  \brief This functor computes the Modified Soil Adjusted Vegetation Index (MSAVI2)

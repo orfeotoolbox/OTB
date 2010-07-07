@@ -178,7 +178,8 @@ ImportVectorImageFilter<TOutputImage>
 
   int numberOfBands = m_Size / (size[0] * size[1]);
 
-  if (numberOfBands != static_cast<int>(numberOfBands)) itkExceptionMacro(
+  if (numberOfBands != static_cast<int>(numberOfBands))
+    itkExceptionMacro(
       << "Buffer size and image size are not compatible !");
 
   outputPtr->SetNumberOfComponentsPerPixel(numberOfBands);

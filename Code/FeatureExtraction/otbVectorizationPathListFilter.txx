@@ -289,230 +289,230 @@ VectorizationPathListFilter<TInputModulus, TInputDirection, TOutputPath>
   OffsetType tmpOffset;
   switch (neighborhoodNumber)
     {
-  case 0:
-    tmpOffset[0] = 1;
-    tmpOffset[1] = 0;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = 1;
-    tmpOffset[1] = 1;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = 0;
-    tmpOffset[1] = 1;
-    offset.push_back(tmpOffset);
+    case 0:
+      tmpOffset[0] = 1;
+      tmpOffset[1] = 0;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = 1;
+      tmpOffset[1] = 1;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = 0;
+      tmpOffset[1] = 1;
+      offset.push_back(tmpOffset);
 
-    tmpOffset[0] = 2;
-    tmpOffset[1] = 0;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = 2;
-    tmpOffset[1] = 1;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = 2;
-    tmpOffset[1] = 2;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = 1;
-    tmpOffset[1] = 2;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = 0;
-    tmpOffset[1] = 2;
-    offset.push_back(tmpOffset);
+      tmpOffset[0] = 2;
+      tmpOffset[1] = 0;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = 2;
+      tmpOffset[1] = 1;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = 2;
+      tmpOffset[1] = 2;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = 1;
+      tmpOffset[1] = 2;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = 0;
+      tmpOffset[1] = 2;
+      offset.push_back(tmpOffset);
 
-    break;
+      break;
 
-  case 1:
-    tmpOffset[0] = 1;
-    tmpOffset[1] = 1;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = 0;
-    tmpOffset[1] = 1;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = -1;
-    tmpOffset[1] = 1;
-    offset.push_back(tmpOffset);
+    case 1:
+      tmpOffset[0] = 1;
+      tmpOffset[1] = 1;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = 0;
+      tmpOffset[1] = 1;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = -1;
+      tmpOffset[1] = 1;
+      offset.push_back(tmpOffset);
 
-    tmpOffset[0] = 2;
-    tmpOffset[1] = 2;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = 1;
-    tmpOffset[1] = 2;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = 0;
-    tmpOffset[1] = 2;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = -1;
-    tmpOffset[1] = 2;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = -2;
-    tmpOffset[1] = 2;
-    offset.push_back(tmpOffset);
-    break;
+      tmpOffset[0] = 2;
+      tmpOffset[1] = 2;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = 1;
+      tmpOffset[1] = 2;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = 0;
+      tmpOffset[1] = 2;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = -1;
+      tmpOffset[1] = 2;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = -2;
+      tmpOffset[1] = 2;
+      offset.push_back(tmpOffset);
+      break;
 
-  case 2:
-    tmpOffset[0] = 0;
-    tmpOffset[1] = 1;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = -1;
-    tmpOffset[1] = 1;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = -1;
-    tmpOffset[1] = 0;
-    offset.push_back(tmpOffset);
+    case 2:
+      tmpOffset[0] = 0;
+      tmpOffset[1] = 1;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = -1;
+      tmpOffset[1] = 1;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = -1;
+      tmpOffset[1] = 0;
+      offset.push_back(tmpOffset);
 
-    tmpOffset[0] = 0;
-    tmpOffset[1] = 2;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = -1;
-    tmpOffset[1] = 2;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = -2;
-    tmpOffset[1] = 2;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = -2;
-    tmpOffset[1] = 1;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = -2;
-    tmpOffset[1] = 0;
-    offset.push_back(tmpOffset);
-    break;
+      tmpOffset[0] = 0;
+      tmpOffset[1] = 2;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = -1;
+      tmpOffset[1] = 2;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = -2;
+      tmpOffset[1] = 2;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = -2;
+      tmpOffset[1] = 1;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = -2;
+      tmpOffset[1] = 0;
+      offset.push_back(tmpOffset);
+      break;
 
-  case 3:
-    tmpOffset[0] = -1;
-    tmpOffset[1] = 1;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = -1;
-    tmpOffset[1] = 0;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = -1;
-    tmpOffset[1] = -1;
-    offset.push_back(tmpOffset);
+    case 3:
+      tmpOffset[0] = -1;
+      tmpOffset[1] = 1;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = -1;
+      tmpOffset[1] = 0;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = -1;
+      tmpOffset[1] = -1;
+      offset.push_back(tmpOffset);
 
-    tmpOffset[0] = -2;
-    tmpOffset[1] = 2;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = -2;
-    tmpOffset[1] = 1;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = -2;
-    tmpOffset[1] = 0;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = -2;
-    tmpOffset[1] = -1;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = -2;
-    tmpOffset[1] = -2;
-    offset.push_back(tmpOffset);
-    break;
+      tmpOffset[0] = -2;
+      tmpOffset[1] = 2;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = -2;
+      tmpOffset[1] = 1;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = -2;
+      tmpOffset[1] = 0;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = -2;
+      tmpOffset[1] = -1;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = -2;
+      tmpOffset[1] = -2;
+      offset.push_back(tmpOffset);
+      break;
 
-  case 4:
-    tmpOffset[0] = -1;
-    tmpOffset[1] = 0;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = -1;
-    tmpOffset[1] = -1;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = 0;
-    tmpOffset[1] = -1;
-    offset.push_back(tmpOffset);
+    case 4:
+      tmpOffset[0] = -1;
+      tmpOffset[1] = 0;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = -1;
+      tmpOffset[1] = -1;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = 0;
+      tmpOffset[1] = -1;
+      offset.push_back(tmpOffset);
 
-    tmpOffset[0] = -2;
-    tmpOffset[1] = 0;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = -2;
-    tmpOffset[1] = -1;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = -2;
-    tmpOffset[1] = -2;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = -1;
-    tmpOffset[1] = -2;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = 0;
-    tmpOffset[1] = -2;
-    offset.push_back(tmpOffset);
-    break;
+      tmpOffset[0] = -2;
+      tmpOffset[1] = 0;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = -2;
+      tmpOffset[1] = -1;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = -2;
+      tmpOffset[1] = -2;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = -1;
+      tmpOffset[1] = -2;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = 0;
+      tmpOffset[1] = -2;
+      offset.push_back(tmpOffset);
+      break;
 
-  case 5:
-    tmpOffset[0] = -1;
-    tmpOffset[1] = -1;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = 0;
-    tmpOffset[1] = -1;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = 1;
-    tmpOffset[1] = -1;
-    offset.push_back(tmpOffset);
+    case 5:
+      tmpOffset[0] = -1;
+      tmpOffset[1] = -1;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = 0;
+      tmpOffset[1] = -1;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = 1;
+      tmpOffset[1] = -1;
+      offset.push_back(tmpOffset);
 
-    tmpOffset[0] = -2;
-    tmpOffset[1] = -2;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = -1;
-    tmpOffset[1] = -2;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = 0;
-    tmpOffset[1] = -2;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = 1;
-    tmpOffset[1] = -2;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = 2;
-    tmpOffset[1] = -2;
-    offset.push_back(tmpOffset);
-    break;
+      tmpOffset[0] = -2;
+      tmpOffset[1] = -2;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = -1;
+      tmpOffset[1] = -2;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = 0;
+      tmpOffset[1] = -2;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = 1;
+      tmpOffset[1] = -2;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = 2;
+      tmpOffset[1] = -2;
+      offset.push_back(tmpOffset);
+      break;
 
-  case 6:
-    tmpOffset[0] = 0;
-    tmpOffset[1] = -1;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = 1;
-    tmpOffset[1] = -1;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = 1;
-    tmpOffset[1] = 0;
-    offset.push_back(tmpOffset);
+    case 6:
+      tmpOffset[0] = 0;
+      tmpOffset[1] = -1;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = 1;
+      tmpOffset[1] = -1;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = 1;
+      tmpOffset[1] = 0;
+      offset.push_back(tmpOffset);
 
-    tmpOffset[0] = 0;
-    tmpOffset[1] = -2;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = 1;
-    tmpOffset[1] = -2;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = 2;
-    tmpOffset[1] = -2;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = 2;
-    tmpOffset[1] = -1;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = 2;
-    tmpOffset[1] = 0;
-    offset.push_back(tmpOffset);
-    break;
+      tmpOffset[0] = 0;
+      tmpOffset[1] = -2;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = 1;
+      tmpOffset[1] = -2;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = 2;
+      tmpOffset[1] = -2;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = 2;
+      tmpOffset[1] = -1;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = 2;
+      tmpOffset[1] = 0;
+      offset.push_back(tmpOffset);
+      break;
 
-  case 7:
-    tmpOffset[0] = 1;
-    tmpOffset[1] = -1;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = 1;
-    tmpOffset[1] = 0;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = 1;
-    tmpOffset[1] = 1;
-    offset.push_back(tmpOffset);
+    case 7:
+      tmpOffset[0] = 1;
+      tmpOffset[1] = -1;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = 1;
+      tmpOffset[1] = 0;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = 1;
+      tmpOffset[1] = 1;
+      offset.push_back(tmpOffset);
 
-    tmpOffset[0] = 2;
-    tmpOffset[1] = -2;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = 2;
-    tmpOffset[1] = -1;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = 2;
-    tmpOffset[1] = 0;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = 2;
-    tmpOffset[1] = 1;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = 2;
-    tmpOffset[1] = 2;
-    offset.push_back(tmpOffset);
-    break;
+      tmpOffset[0] = 2;
+      tmpOffset[1] = -2;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = 2;
+      tmpOffset[1] = -1;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = 2;
+      tmpOffset[1] = 0;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = 2;
+      tmpOffset[1] = 1;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = 2;
+      tmpOffset[1] = 2;
+      offset.push_back(tmpOffset);
+      break;
     }
   return offset;
 }
@@ -552,109 +552,109 @@ VectorizationPathListFilter<TInputModulus, TInputDirection, TOutputPath>
 //  otbMsgDevMacro(<<"Direction: " << neighborhoodNumber)
   switch (neighborhoodNumber)
     {
-  case 0:
-    tmpOffset[0] = 1;
-    tmpOffset[1] = 0;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = 1;
-    tmpOffset[1] = 1;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = 0;
-    tmpOffset[1] = 1;
-    offset.push_back(tmpOffset);
+    case 0:
+      tmpOffset[0] = 1;
+      tmpOffset[1] = 0;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = 1;
+      tmpOffset[1] = 1;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = 0;
+      tmpOffset[1] = 1;
+      offset.push_back(tmpOffset);
 
-    break;
+      break;
 
-  case 1:
-    tmpOffset[0] = 1;
-    tmpOffset[1] = 1;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = 0;
-    tmpOffset[1] = 1;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = -1;
-    tmpOffset[1] = 1;
-    offset.push_back(tmpOffset);
+    case 1:
+      tmpOffset[0] = 1;
+      tmpOffset[1] = 1;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = 0;
+      tmpOffset[1] = 1;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = -1;
+      tmpOffset[1] = 1;
+      offset.push_back(tmpOffset);
 
-    break;
+      break;
 
-  case 2:
-    tmpOffset[0] = 0;
-    tmpOffset[1] = 1;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = -1;
-    tmpOffset[1] = 1;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = -1;
-    tmpOffset[1] = 0;
-    offset.push_back(tmpOffset);
+    case 2:
+      tmpOffset[0] = 0;
+      tmpOffset[1] = 1;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = -1;
+      tmpOffset[1] = 1;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = -1;
+      tmpOffset[1] = 0;
+      offset.push_back(tmpOffset);
 
-    break;
+      break;
 
-  case 3:
-    tmpOffset[0] = -1;
-    tmpOffset[1] = 1;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = -1;
-    tmpOffset[1] = 0;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = -1;
-    tmpOffset[1] = -1;
-    offset.push_back(tmpOffset);
+    case 3:
+      tmpOffset[0] = -1;
+      tmpOffset[1] = 1;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = -1;
+      tmpOffset[1] = 0;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = -1;
+      tmpOffset[1] = -1;
+      offset.push_back(tmpOffset);
 
-    break;
+      break;
 
-  case 4:
-    tmpOffset[0] = -1;
-    tmpOffset[1] = 0;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = -1;
-    tmpOffset[1] = -1;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = 0;
-    tmpOffset[1] = -1;
-    offset.push_back(tmpOffset);
+    case 4:
+      tmpOffset[0] = -1;
+      tmpOffset[1] = 0;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = -1;
+      tmpOffset[1] = -1;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = 0;
+      tmpOffset[1] = -1;
+      offset.push_back(tmpOffset);
 
-    break;
+      break;
 
-  case 5:
-    tmpOffset[0] = -1;
-    tmpOffset[1] = -1;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = 0;
-    tmpOffset[1] = -1;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = 1;
-    tmpOffset[1] = -1;
-    offset.push_back(tmpOffset);
+    case 5:
+      tmpOffset[0] = -1;
+      tmpOffset[1] = -1;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = 0;
+      tmpOffset[1] = -1;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = 1;
+      tmpOffset[1] = -1;
+      offset.push_back(tmpOffset);
 
-    break;
+      break;
 
-  case 6:
-    tmpOffset[0] = 0;
-    tmpOffset[1] = -1;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = 1;
-    tmpOffset[1] = -1;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = 1;
-    tmpOffset[1] = 0;
-    offset.push_back(tmpOffset);
+    case 6:
+      tmpOffset[0] = 0;
+      tmpOffset[1] = -1;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = 1;
+      tmpOffset[1] = -1;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = 1;
+      tmpOffset[1] = 0;
+      offset.push_back(tmpOffset);
 
-    break;
+      break;
 
-  case 7:
-    tmpOffset[0] = 1;
-    tmpOffset[1] = -1;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = 1;
-    tmpOffset[1] = 0;
-    offset.push_back(tmpOffset);
-    tmpOffset[0] = 1;
-    tmpOffset[1] = 1;
-    offset.push_back(tmpOffset);
+    case 7:
+      tmpOffset[0] = 1;
+      tmpOffset[1] = -1;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = 1;
+      tmpOffset[1] = 0;
+      offset.push_back(tmpOffset);
+      tmpOffset[0] = 1;
+      tmpOffset[1] = 1;
+      offset.push_back(tmpOffset);
 
-    break;
+      break;
     }
   return offset;
 }

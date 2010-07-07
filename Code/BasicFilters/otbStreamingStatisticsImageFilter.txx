@@ -72,25 +72,25 @@ PersistentStatisticsImageFilter<TInputImage>
 {
   switch (output)
     {
-  case 0:
-    return static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
-    break;
-  case 1:
-    return static_cast<itk::DataObject*>(PixelObjectType::New().GetPointer());
-    break;
-  case 2:
-    return static_cast<itk::DataObject*>(PixelObjectType::New().GetPointer());
-    break;
-  case 3:
-  case 4:
-  case 5:
-  case 6:
-    return static_cast<itk::DataObject*>(RealObjectType::New().GetPointer());
-    break;
-  default:
-    // might as well make an image
-    return static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
-    break;
+    case 0:
+      return static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
+      break;
+    case 1:
+      return static_cast<itk::DataObject*>(PixelObjectType::New().GetPointer());
+      break;
+    case 2:
+      return static_cast<itk::DataObject*>(PixelObjectType::New().GetPointer());
+      break;
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+      return static_cast<itk::DataObject*>(RealObjectType::New().GetPointer());
+      break;
+    default:
+      // might as well make an image
+      return static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
+      break;
     }
 }
 

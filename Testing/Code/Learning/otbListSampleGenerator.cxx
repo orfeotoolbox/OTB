@@ -39,21 +39,20 @@ int otbListSampleGenerator(int argc, char* argv[])
 
   if (argc != 8)
     {
-    std::cerr << "Usage: " << argv[0] << " inputImage inputVectorData outputTrainingFile outputValidationFile" 
-        << " maxTrainingSize maxValidationSize validationTrainingProportion"
-        << std::endl;
+    std::cerr << "Usage: " << argv[0] << " inputImage inputVectorData outputTrainingFile outputValidationFile"
+              << " maxTrainingSize maxValidationSize validationTrainingProportion"
+              << std::endl;
     return EXIT_FAILURE;
     }
 
-  
   std::string imageFilename = argv[1];
   std::string vectorDataFilename = argv[2];
   std::string outputSampleList = argv[3];
   std::string outputSampleListValidation = argv[4];
-  int maxTrainingSize = atoi(argv[5]);
-  int maxValidationSize = atoi(argv[6]);
-  double validationTrainingProportion = atof(argv[7]);
-  
+  int         maxTrainingSize = atoi(argv[5]);
+  int         maxValidationSize = atoi(argv[6]);
+  double      validationTrainingProportion = atof(argv[7]);
+
   std::string classKey = "Class";
 
   typedef double                          PixelType;
@@ -89,18 +88,18 @@ int otbListSampleGenerator(int argc, char* argv[])
 
   std::cout << "Number of classes: " << generator->GetNumberOfClasses() << std::endl;
 
-  {
+    {
     ListSampleGeneratorType::ListSamplePointerType samples = generator->GetTrainingListSample();
-    ListSampleGeneratorType::ListLabelPointerType labels = generator->GetTrainingListLabel();
+    ListSampleGeneratorType::ListLabelPointerType  labels = generator->GetTrainingListLabel();
 
     typedef ListSampleGeneratorType::ListSampleType::ConstIterator SampleIterator;
-    typedef ListSampleGeneratorType::ListLabelType::ConstIterator LabelIterator;
+    typedef ListSampleGeneratorType::ListLabelType::ConstIterator  LabelIterator;
 
     std::ofstream trainingFile;
     trainingFile.open(outputSampleList.c_str());
 
     SampleIterator sampleIt = samples->Begin();
-    LabelIterator labelIt = labels->Begin();
+    LabelIterator  labelIt = labels->Begin();
     while (sampleIt != samples->End())
       {
       trainingFile << labelIt.GetMeasurementVector()[0];
@@ -120,16 +119,16 @@ int otbListSampleGenerator(int argc, char* argv[])
     {
 
     ListSampleGeneratorType::ListSamplePointerType samples = generator->GetValidationListSample();
-    ListSampleGeneratorType::ListLabelPointerType labels = generator->GetValidationListLabel();
+    ListSampleGeneratorType::ListLabelPointerType  labels = generator->GetValidationListLabel();
 
     typedef ListSampleGeneratorType::ListSampleType::ConstIterator SampleIterator;
-    typedef ListSampleGeneratorType::ListLabelType::ConstIterator LabelIterator;
+    typedef ListSampleGeneratorType::ListLabelType::ConstIterator  LabelIterator;
 
     std::ofstream validationFile;
     validationFile.open(outputSampleListValidation.c_str());
 
     SampleIterator sampleIt = samples->Begin();
-    LabelIterator labelIt = labels->Begin();
+    LabelIterator  labelIt = labels->Begin();
     while (sampleIt != samples->End())
       {
       validationFile << labelIt.GetMeasurementVector()[0];
@@ -145,6 +144,6 @@ int otbListSampleGenerator(int argc, char* argv[])
 
     validationFile.close();
     }
-  
-   return EXIT_SUCCESS;
+
+  return EXIT_SUCCESS;
 }

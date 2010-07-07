@@ -47,7 +47,7 @@ int otbLineSpatialObjectListToRightAnglePointSetFilterByStepsOutputAscii(int arg
   typedef itk::PointSet<VectorLines, Dimension>          PointSetType;
   typedef otb::LineSegmentDetector<ImageType, PixelType> lsdFilterType;
   typedef otb::LineSpatialObjectListToRightAnglePointSetFilter<ImageType, LinesListType,
-                                                               PointSetType>    RightAngleFilterType;
+      PointSetType>    RightAngleFilterType;
 
   /** Creatop, of an instance of the filters */
   RightAngleFilterType::Pointer rightAngleFilter  = RightAngleFilterType::New();

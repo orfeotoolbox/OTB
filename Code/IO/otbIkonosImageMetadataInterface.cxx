@@ -589,24 +589,24 @@ IkonosImageMetadataInterface
   return wavel;
 }
 
-unsigned int 
+unsigned int
 IkonosImageMetadataInterface
 ::GetDefaultRBand() const
-{ 
+{
   return 2;
 }
 
-unsigned int 
+unsigned int
 IkonosImageMetadataInterface
 ::GetDefaultGBand() const
-{ 
+{
   return 1;
 }
 
-unsigned int 
+unsigned int
 IkonosImageMetadataInterface
 ::GetDefaultBBand() const
-{ 
+{
   return 0;
 }
 

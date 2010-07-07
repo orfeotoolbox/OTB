@@ -100,37 +100,37 @@ public:
   typedef otb::Image<VectorPixelType, InputImageType::ImageDimension> CovariantVectorImageType;
 
   typedef itk::SqrtImageFilter<
-    InputImageType,
-    InputImageType>                      SquareRootImageFilterType;
+      InputImageType,
+      InputImageType>                      SquareRootImageFilterType;
 
   typedef itk::GradientRecursiveGaussianImageFilter<
-    InputImageType,
-    CovariantVectorImageType>               GradientFilterType;
+      InputImageType,
+      CovariantVectorImageType>               GradientFilterType;
 
   typedef NeighborhoodScalarProductFilter<
-    CovariantVectorImageType,
-    ModulusType,
-    DirectionType>                          NeighborhoodScalarProductFilterType;
+      CovariantVectorImageType,
+      ModulusType,
+      DirectionType>                          NeighborhoodScalarProductFilterType;
 
   typedef RemoveIsolatedByDirectionFilter<
-    ModulusType,
-    DirectionType,
-    ModulusType>                           RemoveIsolatedByDirectionFilterType;
+      ModulusType,
+      DirectionType,
+      ModulusType>                           RemoveIsolatedByDirectionFilterType;
 
   typedef RemoveWrongDirectionFilter<
-    ModulusType,
-    DirectionType,
-    ModulusType>                            RemoveWrongDirectionFilterType;
+      ModulusType,
+      DirectionType,
+      ModulusType>                            RemoveWrongDirectionFilterType;
 
   typedef NonMaxRemovalByDirectionFilter<
-    ModulusType,
-    DirectionType,
-    ModulusType>                           NonMaxRemovalByDirectionFilterType;
+      ModulusType,
+      DirectionType,
+      ModulusType>                           NonMaxRemovalByDirectionFilterType;
 
   typedef VectorizationPathListFilter<
-    ModulusType,
-    DirectionType,
-    OutputPathType>                        VectorizationPathListFilterType;
+      ModulusType,
+      DirectionType,
+      OutputPathType>                        VectorizationPathListFilterType;
 
   typedef SimplifyPathListFilter<OutputPathType>                SimplifyPathListFilterType;
   typedef BreakAngularPathListFilter<OutputPathType>            BreakAngularPathListFilterType;

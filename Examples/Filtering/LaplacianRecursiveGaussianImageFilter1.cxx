@@ -112,7 +112,7 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef itk::RecursiveGaussianImageFilter<
-    InputImageType, OutputImageType>  FilterType;
+      InputImageType, OutputImageType>  FilterType;
   // Software Guide : EndCodeSnippet
 
   ReaderType::Pointer reader = ReaderType::New();
@@ -280,9 +280,9 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef itk::AddImageFilter<
-    OutputImageType,
-    OutputImageType,
-    OutputImageType> AddFilterType;
+      OutputImageType,
+      OutputImageType,
+      OutputImageType> AddFilterType;
 
   AddFilterType::Pointer addFilter = AddFilterType::New();
 

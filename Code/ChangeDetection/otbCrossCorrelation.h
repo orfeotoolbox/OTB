@@ -85,7 +85,7 @@ public:
         {
         crossCorrel +=
           (static_cast<TOutput>(itA.GetPixel(pos)) -
-            meanA) *
+           meanA) *
           (static_cast<TOutput>(itB.GetPixel(pos)) - meanB) / (itA.Size() * vcl_sqrt(static_cast<double>(varA * varB)));
         }
       }

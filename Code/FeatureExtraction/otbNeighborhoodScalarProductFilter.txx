@@ -97,30 +97,30 @@ NeighborhoodScalarProductFilter<TInputImage, TOutputModulus, TOutputDirection>
         OffsetType offset2;
         switch (neighborhoodNumber)
           {
-        case 0:
-          offset1[0] = 1;
-          offset1[1] = -1;
-          offset2[0] = -1;
-          offset2[1] = 1;
-          break;
-        case 1:
-          offset1[0] = 1;
-          offset1[1] = 0;
-          offset2[0] = -1;
-          offset2[1] = 0;
-          break;
-        case 2:
-          offset1[0] = 1;
-          offset1[1] = 1;
-          offset2[0] = -1;
-          offset2[1] = -1;
-          break;
-        case 3:
-          offset1[0] = 0;
-          offset1[1] = 1;
-          offset2[0] = 0;
-          offset2[1] = -1;
-          break;
+          case 0:
+            offset1[0] = 1;
+            offset1[1] = -1;
+            offset2[0] = -1;
+            offset2[1] = 1;
+            break;
+          case 1:
+            offset1[0] = 1;
+            offset1[1] = 0;
+            offset2[0] = -1;
+            offset2[1] = 0;
+            break;
+          case 2:
+            offset1[0] = 1;
+            offset1[1] = 1;
+            offset2[0] = -1;
+            offset2[1] = -1;
+            break;
+          case 3:
+            offset1[0] = 0;
+            offset1[1] = 1;
+            offset2[0] = 0;
+            offset2[1] = -1;
+            break;
           }
         // Get the gradient values
         InputPixelType pixel1 = neighInputIt.GetPixel(offset1);

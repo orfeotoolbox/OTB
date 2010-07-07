@@ -46,14 +46,12 @@ public:
   CommandLineArgumentParserHelpException(const char *file, unsigned int line,
                                          const char* message = "Help:",
                                          const char* loc = "Unknown") :
-    ExceptionObject(file, line, message, loc)
-     {}
+    ExceptionObject(file, line, message, loc) {}
   /** Constructor. */
   CommandLineArgumentParserHelpException(const std::string & file, unsigned int line,
                                          const char* message = "Help:",
                                          const char* loc = "Unknown") :
-    ExceptionObject(file, line, message, loc)
-     {}
+    ExceptionObject(file, line, message, loc) {}
 };
 
 /** \class CommandLineArgumentParserVersionException
@@ -70,14 +68,12 @@ public:
   CommandLineArgumentParserVersionException(const char *file, unsigned int line,
                                             const char* message = "Version:",
                                             const char* loc = "Unknown") :
-    ExceptionObject(file, line, message, loc)
-     {}
+    ExceptionObject(file, line, message, loc) {}
   /** Constructor. */
   CommandLineArgumentParserVersionException(const std::string & file, unsigned int line,
                                             const char* message = "Version:",
                                             const char* loc = "Unknown") :
-    ExceptionObject(file, line, message, loc)
-     {}
+    ExceptionObject(file, line, message, loc) {}
 };
 
 /** \class CommandLineArgumentParserArgumentErrorException
@@ -94,14 +90,12 @@ public:
   CommandLineArgumentParserArgumentErrorException(const char *file, unsigned int line,
                                                   const char* message = "Argument error:",
                                                   const char* loc = "Unknown") :
-    ExceptionObject(file, line, message, loc)
-     {}
+    ExceptionObject(file, line, message, loc) {}
   /** Constructor. */
   CommandLineArgumentParserArgumentErrorException(const std::string & file, unsigned int line,
                                                   const char* message = "Argument error:",
                                                   const char* loc = "Unknown") :
-    ExceptionObject(file, line, message, loc)
-     {}
+    ExceptionObject(file, line, message, loc) {}
 };
 
 namespace otb

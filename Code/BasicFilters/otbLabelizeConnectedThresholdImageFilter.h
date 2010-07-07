@@ -31,18 +31,18 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT LabelizeConnectedThresholdImageFilter
   : public otb::LabelizeImageFilterBase<TInputImage, TOutputImage,
-                                        itk::ConnectedThresholdImageFilter<TInputImage, TOutputImage> >
+      itk::ConnectedThresholdImageFilter<TInputImage, TOutputImage> >
 {
 public:
   /** typedef for standard classes. */
   typedef LabelizeConnectedThresholdImageFilter
-                                                                                                       Self;
+  Self;
   typedef otb::LabelizeImageFilterBase<TInputImage, TOutputImage,
-                                       itk::ConnectedThresholdImageFilter<TInputImage, TOutputImage> > Superclass;
+      itk::ConnectedThresholdImageFilter<TInputImage, TOutputImage> > Superclass;
   typedef itk::SmartPointer<Self>
-                                                                                                       Pointer;
+  Pointer;
   typedef itk::SmartPointer<const Self>
-                                                                                                       ConstPointer;
+  ConstPointer;
 
   typedef TInputImage  InputImageType;
   typedef TOutputImage OutputImageType;

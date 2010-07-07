@@ -58,11 +58,14 @@ namespace otb
 #define otbMsgDebugMacro(x)
 #else
 #define otbMsgDebugMacro(x) \
-        { if (this->GetDebug() && ::itk::Object::GetGlobalWarningDisplay())   \
-          { ::itk::OStringStream itkmsg; \
-          itkmsg << " Msg Debug: " x << "\n"; \
-          ::itk::OutputWindowDisplayDebugText(itkmsg.str().c_str()); } \
-        }
+    { \
+    if (this->GetDebug() && ::itk::Object::GetGlobalWarningDisplay())   \
+      { \
+      ::itk::OStringStream itkmsg; \
+      itkmsg << " Msg Debug: " x << "\n"; \
+      ::itk::OutputWindowDisplayDebugText(itkmsg.str().c_str()); \
+      } \
+    }
 #endif
 
 #if defined(OTB_LEAN_AND_MEAN) || defined(__BORLANDC__)
@@ -72,9 +75,11 @@ namespace otb
 #define otbGenericMsgDebugMacro(x) \
     {  \
     if (::itk::Object::GetGlobalWarningDisplay())   \
-              { ::itk::OStringStream itkmsg; \
-              itkmsg << " Generic Msg Debug: " x << "\n"; \
-              ::itk::OutputWindowDisplayDebugText(itkmsg.str().c_str()); } \
+      { \
+      ::itk::OStringStream itkmsg; \
+      itkmsg << " Generic Msg Debug: " x << "\n"; \
+      ::itk::OutputWindowDisplayDebugText(itkmsg.str().c_str()); \
+      } \
     }
 #else
 #define otbGenericMsgDebugMacro(x)
@@ -91,10 +96,13 @@ namespace otb
 #else
 #ifdef OTB_SHOW_ALL_MSG_DEBUG
 #define otbMsgDevMacro(x) \
-          { { ::itk::OStringStream itkmsg; \
-              itkmsg << " Msg Dev: (" << __FILE__ << ":" << __LINE__ << ") " x << "\n"; \
-              ::itk::OutputWindowDisplayDebugText(itkmsg.str().c_str()); } \
-          }
+    { \
+      { \
+      ::itk::OStringStream itkmsg; \
+      itkmsg << " Msg Dev: (" << __FILE__ << ":" << __LINE__ << ") " x << "\n"; \
+      ::itk::OutputWindowDisplayDebugText(itkmsg.str().c_str()); \
+      } \
+    }
 #else
 #define otbMsgDevMacro(x)
 #endif
@@ -107,21 +115,25 @@ namespace otb
 #define otbWarningMacro(x)
 #else
 #define otbWarningMacro(x) \
-      { if (itk::Object::GetGlobalWarningDisplay()) \
-          { ::itk::OStringStream itkmsg; \
-          itkmsg << "WARNING: In " __FILE__ ", line " << __LINE__ << "\n" \
-                 << this->GetNameOfClass() << " (" << this << "): " x  \
-                 << "\n\n"; \
-          itk::OutputWindowDisplayWarningText(itkmsg.str().c_str()); } \
-      }
+    { \
+    if (itk::Object::GetGlobalWarningDisplay()) \
+      { \
+      ::itk::OStringStream itkmsg; \
+      itkmsg << "WARNING: In " __FILE__ ", line " << __LINE__ << "\n" \
+             << this->GetNameOfClass() << " (" << this << "): " x  \
+             << "\n\n"; \
+      itk::OutputWindowDisplayWarningText(itkmsg.str().c_str()); \
+      } \
+    }
 #endif
 
 /** This macro is used to control condition. It use ONLY by the OTB developpers
   *
   */
 #define otbControlConditionTestMacro(condition, message) \
-                        {       if ((condition)) itkGenericExceptionMacro(<< message); \
-                        }
+    { \
+    if ((condition)) itkGenericExceptionMacro(<< message); \
+    }
 
 /** Set built-in type.  Creates member Set"name"() (e.g., SetVisibility()); */
 #define otbSetObjectMemberMacro(object, name, type) \

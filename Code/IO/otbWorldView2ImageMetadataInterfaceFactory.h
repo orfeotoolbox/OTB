@@ -34,9 +34,9 @@ class ITK_EXPORT WorldView2ImageMetadataInterfaceFactory : public itk::ObjectFac
 public:
   /** Standard class typedefs. */
   typedef WorldView2ImageMetadataInterfaceFactory Self;
-  typedef itk::ObjectFactoryBase                 Superclass;
-  typedef itk::SmartPointer<Self>                Pointer;
-  typedef itk::SmartPointer<const Self>          ConstPointer;
+  typedef itk::ObjectFactoryBase                  Superclass;
+  typedef itk::SmartPointer<Self>                 Pointer;
+  typedef itk::SmartPointer<const Self>           ConstPointer;
 
   /** Class methods used to interface with the registered factories. */
   virtual const char* GetITKSourceVersion(void) const;
@@ -51,7 +51,8 @@ public:
   /** Register one factory of this type  */
   static void RegisterOneFactory(void)
   {
-    WorldView2ImageMetadataInterfaceFactory::Pointer worldView2IMIFactory = WorldView2ImageMetadataInterfaceFactory::New();
+    WorldView2ImageMetadataInterfaceFactory::Pointer worldView2IMIFactory =
+      WorldView2ImageMetadataInterfaceFactory::New();
     itk::ObjectFactoryBase::RegisterFactory(worldView2IMIFactory);
   }
 

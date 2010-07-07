@@ -28,11 +28,11 @@ namespace otb
 {
 
 template<class TListSample,
-         class THistogramMeasurement,
-         class TFrequencyContainer>
+    class THistogramMeasurement,
+    class TFrequencyContainer>
 ListSampleToVariableDimensionHistogramGenerator<TListSample,
-                                                THistogramMeasurement,
-                                                TFrequencyContainer>
+    THistogramMeasurement,
+    TFrequencyContainer>
 ::ListSampleToVariableDimensionHistogramGenerator()
 {
   m_Histogram = HistogramType::New();
@@ -41,12 +41,12 @@ ListSampleToVariableDimensionHistogramGenerator<TListSample,
 }
 
 template<class TListSample,
-         class THistogramMeasurement,
-         class TFrequencyContainer>
+    class THistogramMeasurement,
+    class TFrequencyContainer>
 void
 ListSampleToVariableDimensionHistogramGenerator<TListSample,
-                                                THistogramMeasurement,
-                                                TFrequencyContainer>
+    THistogramMeasurement,
+    TFrequencyContainer>
 ::GenerateData()
 {
   otbMsgDebugMacro(<< "ListSampleToVariableDimensionHistogramGenerator::GenerateData(): Entering");
@@ -169,12 +169,12 @@ ListSampleToVariableDimensionHistogramGenerator<TListSample,
 }
 
 template<class TListSample,
-         class THistogramMeasurement,
-         class TFrequencyContainer>
+    class THistogramMeasurement,
+    class TFrequencyContainer>
 void
 ListSampleToVariableDimensionHistogramGenerator<TListSample,
-                                                THistogramMeasurement,
-                                                TFrequencyContainer>
+    THistogramMeasurement,
+    TFrequencyContainer>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);

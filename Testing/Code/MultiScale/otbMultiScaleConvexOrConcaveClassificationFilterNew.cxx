@@ -32,7 +32,7 @@ int otbMultiScaleConvexOrConcaveClassificationFilterNew(int argc, char * argv[])
   typedef otb::Image<LabeledPixelType, 2>        LabeledImageType;
 
   typedef otb::MultiScaleConvexOrConcaveClassificationFilter<InputImageType,
-                                                             LabeledImageType> MultiScaleClassificationFilterType;
+      LabeledImageType> MultiScaleClassificationFilterType;
 
   // Instantiation
   MultiScaleClassificationFilterType::Pointer classificationFilter = MultiScaleClassificationFilterType::New();

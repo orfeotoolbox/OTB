@@ -38,15 +38,15 @@ int otbTSARVIRAndBAndNIRVegetationIndexImageFilter(int argc, char * argv[])
   typedef otb::ImageFileWriter<OutputImageType>   WriterType;
 
   typedef otb::Functor::TSARVI<InputRImageType::PixelType,
-                               InputBImageType::PixelType,
-                               InputNIRImageType::PixelType,
-                               OutputImageType::PixelType> FunctorType;
+      InputBImageType::PixelType,
+      InputNIRImageType::PixelType,
+      OutputImageType::PixelType> FunctorType;
 
   typedef otb::RAndBAndNIRIndexImageFilter<InputRImageType,
-                                           InputBImageType,
-                                           InputNIRImageType,
-                                           OutputImageType,
-                                           FunctorType> RAndBAndNIRIndexImageFilterType;
+      InputBImageType,
+      InputNIRImageType,
+      OutputImageType,
+      FunctorType> RAndBAndNIRIndexImageFilterType;
 
   // Instantiating object
   RAndBAndNIRIndexImageFilterType::Pointer filter = RAndBAndNIRIndexImageFilterType::New();

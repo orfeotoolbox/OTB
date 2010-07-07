@@ -43,7 +43,7 @@ ImageToModulusAndDirectionImageFilter()
 /** Return the const output image modulus */
 template <class TInputImage, class TOutputImage, class TOutputImageDirection>
 const typename ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage,
-                                                     TOutputImageDirection>::OutputImageType *
+    TOutputImageDirection>::OutputImageType *
 ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::
 GetOutput() const
 {
@@ -71,7 +71,7 @@ GetOutput()
 /** Return the const output image direction */
 template <class TInputImage, class TOutputImage, class TOutputImageDirection>
 const typename ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage,
-                                                     TOutputImageDirection>::OutputImageDirectionType *
+    TOutputImageDirection>::OutputImageDirectionType *
 ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::
 GetOutputDirection() const
 {
@@ -86,7 +86,7 @@ GetOutputDirection() const
 /** Return the output image direction */
 template <class TInputImage, class TOutputImage, class TOutputImageDirection>
 typename ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage,
-                                               TOutputImageDirection>::OutputImageDirectionType *
+    TOutputImageDirection>::OutputImageDirectionType *
 ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::
 GetOutputDirection()
 {

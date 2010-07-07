@@ -95,25 +95,25 @@ SVMCrossValidationCostFunction<TModel>
 
   switch (m_Model->GetKernelType())
     {
-  case LINEAR:
-    // C
-    return 1;
+    case LINEAR:
+      // C
+      return 1;
 
-  case POLY:
-    // C, gamma and coef0
-    return 3;
+    case POLY:
+      // C, gamma and coef0
+      return 3;
 
-  case RBF:
-    // C and gamma
-    return 2;
+    case RBF:
+      // C and gamma
+      return 2;
 
-  case SIGMOID:
-    // C, gamma and coef0
-    return 3;
+    case SIGMOID:
+      // C, gamma and coef0
+      return 3;
 
-  default:
-    // C
-    return 1;
+    default:
+      // C
+      return 1;
     }
 }
 
@@ -124,34 +124,34 @@ SVMCrossValidationCostFunction<TModel>
 {
   switch (m_Model->GetKernelType())
     {
-  case LINEAR:
-    // C
-    svm_parameters.C = parameters[0];
-    break;
+    case LINEAR:
+      // C
+      svm_parameters.C = parameters[0];
+      break;
 
-  case POLY:
-    // C, gamma and coef0
-    svm_parameters.C = parameters[0];
-    svm_parameters.gamma = parameters[1];
-    svm_parameters.coef0 = parameters[2];
-    break;
+    case POLY:
+      // C, gamma and coef0
+      svm_parameters.C = parameters[0];
+      svm_parameters.gamma = parameters[1];
+      svm_parameters.coef0 = parameters[2];
+      break;
 
-  case RBF:
-    // C and gamma
-    svm_parameters.C = parameters[0];
-    svm_parameters.gamma = parameters[1];
-    break;
+    case RBF:
+      // C and gamma
+      svm_parameters.C = parameters[0];
+      svm_parameters.gamma = parameters[1];
+      break;
 
-  case SIGMOID:
-    // C, gamma and coef0
-    svm_parameters.C = parameters[0];
-    svm_parameters.gamma = parameters[1];
-    svm_parameters.coef0 = parameters[2];
-    break;
+    case SIGMOID:
+      // C, gamma and coef0
+      svm_parameters.C = parameters[0];
+      svm_parameters.gamma = parameters[1];
+      svm_parameters.coef0 = parameters[2];
+      break;
 
-  default:
-    svm_parameters.C = parameters[0];
-    break;
+    default:
+      svm_parameters.C = parameters[0];
+      break;
     }
 }
 

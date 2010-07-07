@@ -183,7 +183,7 @@ public:
     /**
        * Decrement.
        */
-    Iterator& operator --()
+    Iterator & operator --()
     {
       --m_Iter;
       return *this;
@@ -222,7 +222,7 @@ public:
     /**
        * Instantiation operator.
        */
-    Iterator& operator =(const Iterator& it)
+    Iterator & operator =(const Iterator& it)
     {
       m_Iter = it.m_Iter;
       return *this;
@@ -274,7 +274,7 @@ public:
     /**
        * Increment.
        */
-    ConstIterator& operator ++()
+    ConstIterator & operator ++()
     {
       ++m_Iter;
       return *this;
@@ -282,7 +282,7 @@ public:
     /**
        * Decrement.
        */
-    ConstIterator& operator --()
+    ConstIterator & operator --()
     {
       --m_Iter;
       return *this;
@@ -304,7 +304,7 @@ public:
     /**
        * Instantiation operator.
        */
-    ConstIterator& operator =(const ConstIterator& it)
+    ConstIterator & operator =(const ConstIterator& it)
     {
       m_Iter = it.m_Iter;
       return *this;
@@ -312,7 +312,7 @@ public:
     /**
        * Instantiation operator.
        */
-    ConstIterator& operator =(const Iterator& it)
+    ConstIterator & operator =(const Iterator& it)
     {
       m_Iter = it.m_Iter;
       return *this;
@@ -381,7 +381,7 @@ public:
     /**
        * Decrement.
        */
-    ReverseIterator& operator --()
+    ReverseIterator & operator --()
     {
       --m_Iter;
       return *this;
@@ -403,7 +403,7 @@ public:
     /**
        * Instantiation operator.
        */
-    ReverseIterator& operator =(const ReverseIterator& it)
+    ReverseIterator & operator =(const ReverseIterator& it)
     {
       m_Iter = it.m_Iter;
       return *this;
@@ -458,7 +458,7 @@ public:
     /**
        * Increment.
        */
-    ReverseConstIterator& operator ++()
+    ReverseConstIterator & operator ++()
     {
       ++m_Iter;
       return *this;
@@ -466,7 +466,7 @@ public:
     /**
        * Decrement.
        */
-    ReverseConstIterator& operator --()
+    ReverseConstIterator & operator --()
     {
       --m_Iter;
       return *this;
@@ -488,7 +488,7 @@ public:
     /**
        * Instantiation operator.
        */
-    ReverseConstIterator& operator =(const ReverseConstIterator& it)
+    ReverseConstIterator & operator =(const ReverseConstIterator& it)
     {
       m_Iter = it.m_Iter;
       return *this;
@@ -496,7 +496,7 @@ public:
     /**
        * Instantiation operator.
        */
-    ReverseConstIterator& operator =(const ReverseIterator& it)
+    ReverseConstIterator & operator =(const ReverseIterator& it)
     {
       m_Iter = it.m_Iter;
       return *this;

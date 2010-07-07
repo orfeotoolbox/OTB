@@ -214,7 +214,7 @@ ADD_TEST(ioTeTileMapImageIOExampleTest ${EXE_TESTS2}
          ${TEMP}
          1.4835345
          43.55968261
-         12
+         8
          )
                  
 ENDIF( OTB_USE_CURL )

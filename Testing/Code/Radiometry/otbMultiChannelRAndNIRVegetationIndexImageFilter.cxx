@@ -64,59 +64,59 @@ int otbMultiChannelRAndNIRVegetationIndexImageFilter(int argc, char * argv[])
   argv++;
   if (strArgv == "NDVI")
     return (generic_MultiChannelRAndNIRVegetationIndexImageFilter<InputImageType, OutputImageType,
-                                                                  otb::Functor::NDVI<InputImageType::InternalPixelType,
-                                                                                     InputImageType::InternalPixelType,
-                                                                                     OutputImageType::PixelType> >
+                otb::Functor::NDVI<InputImageType::InternalPixelType,
+                    InputImageType::InternalPixelType,
+                    OutputImageType::PixelType> >
               (argc, argv));
   else if (strArgv == "RVI")
     return (generic_MultiChannelRAndNIRVegetationIndexImageFilter<InputImageType, OutputImageType,
-                                                                  otb::Functor::RVI<InputImageType::InternalPixelType,
-                                                                                    InputImageType::InternalPixelType,
-                                                                                    OutputImageType::PixelType> >
+                otb::Functor::RVI<InputImageType::InternalPixelType,
+                    InputImageType::InternalPixelType,
+                    OutputImageType::PixelType> >
               (argc, argv));
   else if (strArgv == "SAVI")
     return (generic_MultiChannelRAndNIRVegetationIndexImageFilter<InputImageType, OutputImageType,
-                                                                  otb::Functor::SAVI<InputImageType::InternalPixelType,
-                                                                                     InputImageType::InternalPixelType,
-                                                                                     OutputImageType::PixelType> >
+                otb::Functor::SAVI<InputImageType::InternalPixelType,
+                    InputImageType::InternalPixelType,
+                    OutputImageType::PixelType> >
               (argc, argv));
   else if (strArgv == "TSAVI")
     return (generic_MultiChannelRAndNIRVegetationIndexImageFilter<InputImageType, OutputImageType,
-                                                                  otb::Functor::TSAVI<InputImageType::InternalPixelType,
-                                                                                      InputImageType::InternalPixelType,
-                                                                                      OutputImageType::PixelType> >
+                otb::Functor::TSAVI<InputImageType::InternalPixelType,
+                    InputImageType::InternalPixelType,
+                    OutputImageType::PixelType> >
               (argc, argv));
   else if (strArgv == "MSAVI")
     return (generic_MultiChannelRAndNIRVegetationIndexImageFilter<InputImageType, OutputImageType,
-                                                                  otb::Functor::MSAVI<InputImageType::InternalPixelType,
-                                                                                      InputImageType::InternalPixelType,
-                                                                                      OutputImageType::PixelType> >
+                otb::Functor::MSAVI<InputImageType::InternalPixelType,
+                    InputImageType::InternalPixelType,
+                    OutputImageType::PixelType> >
               (argc, argv));
   else if (strArgv == "MSAVI2")
     return (generic_MultiChannelRAndNIRVegetationIndexImageFilter<InputImageType, OutputImageType,
-                                                                  otb::Functor::MSAVI2<InputImageType::
-                                                                                       InternalPixelType,
-                                                                                       InputImageType::
-                                                                                       InternalPixelType,
-                                                                                       OutputImageType::PixelType> >
+                otb::Functor::MSAVI2<InputImageType::
+                    InternalPixelType,
+                    InputImageType::
+                    InternalPixelType,
+                    OutputImageType::PixelType> >
               (argc, argv));
   else if (strArgv == "GEMI")
     return (generic_MultiChannelRAndNIRVegetationIndexImageFilter<InputImageType, OutputImageType,
-                                                                  otb::Functor::GEMI<InputImageType::InternalPixelType,
-                                                                                     InputImageType::InternalPixelType,
-                                                                                     OutputImageType::PixelType> >
+                otb::Functor::GEMI<InputImageType::InternalPixelType,
+                    InputImageType::InternalPixelType,
+                    OutputImageType::PixelType> >
               (argc, argv));
   else if (strArgv == "IPVI")
     return (generic_MultiChannelRAndNIRVegetationIndexImageFilter<InputImageType, OutputImageType,
-                                                                  otb::Functor::IPVI<InputImageType::InternalPixelType,
-                                                                                     InputImageType::InternalPixelType,
-                                                                                     OutputImageType::PixelType> >
+                otb::Functor::IPVI<InputImageType::InternalPixelType,
+                    InputImageType::InternalPixelType,
+                    OutputImageType::PixelType> >
               (argc, argv));
   else if (strArgv == "TNDVI")
     return (generic_MultiChannelRAndNIRVegetationIndexImageFilter<InputImageType, OutputImageType,
-                                                                  otb::Functor::TNDVI<InputImageType::InternalPixelType,
-                                                                                      InputImageType::InternalPixelType,
-                                                                                      OutputImageType::PixelType> >
+                otb::Functor::TNDVI<InputImageType::InternalPixelType,
+                    InputImageType::InternalPixelType,
+                    OutputImageType::PixelType> >
               (argc, argv));
   else return EXIT_FAILURE;
   return EXIT_SUCCESS;

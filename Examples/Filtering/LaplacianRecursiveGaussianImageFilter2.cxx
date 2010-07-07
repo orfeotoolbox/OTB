@@ -114,7 +114,7 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef itk::LaplacianRecursiveGaussianImageFilter<
-    InputImageType, OutputImageType>  FilterType;
+      InputImageType, OutputImageType>  FilterType;
   // Software Guide : EndCodeSnippet
 
   ReaderType::Pointer reader = ReaderType::New();

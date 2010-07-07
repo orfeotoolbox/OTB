@@ -31,7 +31,7 @@ namespace otb
  * Constructor
  */
 template <class TInputImage1, class TInputImage2,
-          class TOutputImage, class TFunction>
+    class TOutputImage, class TFunction>
 BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TOutputImage, TFunction>
 ::BinaryFunctorNeighborhoodJoinHistogramImageFilter()
 {
@@ -46,7 +46,7 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TO
  * Connect one of the operands for neighborhood-wise operation
  */
 template <class TInputImage1, class TInputImage2,
-          class TOutputImage, class TFunction>
+    class TOutputImage, class TFunction>
 void
 BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TOutputImage, TFunction>
 ::SetInput1(const TInputImage1 * image1)
@@ -59,7 +59,7 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TO
  * Connect one of the operands for neighborhood-wise operation
  */
 template <class TInputImage1, class TInputImage2,
-          class TOutputImage, class TFunction>
+    class TOutputImage, class TFunction>
 void
 BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TOutputImage, TFunction>
 ::SetInput2(const TInputImage2 * image2)
@@ -69,7 +69,7 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TO
 }
 
 template <class TInputImage1, class TInputImage2,
-          class TOutputImage, class TFunction>
+    class TOutputImage, class TFunction>
 const TInputImage1 *
 BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TOutputImage, TFunction>
 ::GetInput1()
@@ -82,7 +82,7 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TO
 }
 
 template <class TInputImage1, class TInputImage2,
-          class TOutputImage, class TFunction>
+    class TOutputImage, class TFunction>
 const TInputImage2 *
 BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TOutputImage, TFunction>
 ::GetInput2()
@@ -95,7 +95,7 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TO
 }
 
 template <class TInputImage1, class TInputImage2,
-          class TOutputImage, class TFunction>
+    class TOutputImage, class TFunction>
 void
 BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TOutputImage, TFunction>
 ::GenerateInputRequestedRegion()
@@ -175,7 +175,7 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TO
  * Initialize the histogram
  */
 template <class TInputImage1, class TInputImage2,
-          class TOutputImage, class TFunction>
+    class TOutputImage, class TFunction>
 BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TOutputImage, TFunction>
 ::HistogramType::Pointer
 BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TOutputImage, TFunction>

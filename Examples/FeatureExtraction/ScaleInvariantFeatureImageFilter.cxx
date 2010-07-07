@@ -89,20 +89,20 @@ int main(int argc, char *argv[])
   int    mode = 's';
 
   typedef float
-                                                           PixelType;
+  PixelType;
   typedef itk::Image<PixelType,
-                     Dimension>                            FixedImageType;
+      Dimension>                            FixedImageType;
   typedef itk::ScaleInvariantFeatureImageFilter<FixedImageType,
-                                                Dimension> SiftFilterType;
+      Dimension> SiftFilterType;
   typedef itk::Image<unsigned char,
-                     Dimension>                            OutputImageType;
+      Dimension>                            OutputImageType;
 
   typedef itk::ImageSource<FixedImageType> ImageSourceType;
 
   ImageSourceType::Pointer fixedImageReader, fixedImageReader2;
 
   typedef itk::PointSetToImageFilter<SiftFilterType::PointSetType,
-                                     OutputImageType> PointSetFilterType;
+      OutputImageType> PointSetFilterType;
 
   std::cerr << "Dimension = " << Dimension << "\n";
   std::cerr << "Test Scale = " << test_scale << "\n";

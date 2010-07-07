@@ -27,7 +27,7 @@ int otbReflectanceToSurfaceReflectanceImageFilterNew(int argc, char * argv[])
   typedef otb::VectorImage<PixelType, Dimension> InputImageType;
 
   typedef otb::ReflectanceToSurfaceReflectanceImageFilter<InputImageType,
-                                                          InputImageType>
+      InputImageType>
   ReflectanceToSurfaceReflectanceImageFilterType;
 
   // Instantiating object

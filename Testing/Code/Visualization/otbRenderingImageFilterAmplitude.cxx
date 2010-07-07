@@ -36,7 +36,7 @@ int otbRenderingImageFilterAmplitude(int argc, char * argv[])
   typedef otb::Function::AmplitudeFunctor<VectorPixelType>   PixelRepresentationFunctionType;
   typedef otb::Function::StandardRenderingFunction
   <VectorPixelType, itk::RGBPixel<unsigned char>,
-   PixelRepresentationFunctionType>              RenderingFunctionType;
+      PixelRepresentationFunctionType>              RenderingFunctionType;
   typedef RenderingFilterType::RenderingFunctionType::ParametersType ParametersType;
 
   // Instantiation

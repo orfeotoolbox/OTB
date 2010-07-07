@@ -24,9 +24,9 @@ namespace otb
 {
 
 /** \class MultiChannelRAndNIRVegetationIndexImageFilter
-   * \brief <b>DEPRECATED:</b> use otbMultiChannelRAndNIRIndexImageFilter. 
+   * \brief <b>DEPRECATED:</b> use otbMultiChannelRAndNIRIndexImageFilter.
    *
-   * Implements multi channel R and NIR  pixel-wise generic 
+   * Implements multi channel R and NIR  pixel-wise generic
    * vegetation index operation on one vector image.
    *
    * This class is parameterized over the type of the input image and
@@ -39,9 +39,9 @@ namespace otb
    * \ingroup Radiometry
  */
 template <class TInputImage, class TOutputImage,
-          class TFunction = Functor::NDVI<typename TInputImage::InternalPixelType,
-                                          typename TInputImage::InternalPixelType,
-                                          typename TOutputImage::PixelType> >
+    class TFunction = Functor::NDVI<typename TInputImage::InternalPixelType,
+        typename TInputImage::InternalPixelType,
+        typename TOutputImage::PixelType> >
 class ITK_EXPORT MultiChannelRAndNIRVegetationIndexImageFilter
   : public MultiChannelRAndNIRIndexImageFilter<TInputImage, TOutputImage, TFunction>
 {

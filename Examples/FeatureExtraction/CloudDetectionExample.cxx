@@ -115,7 +115,7 @@ int main(int argc, char * argv[])
 
   //  Software Guide : BeginCodeSnippet
   typedef otb::Functor::CloudDetectionFunctor<VectorPixelType,
-                                              OutputPixelType>   FunctorType;
+      OutputPixelType>   FunctorType;
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -128,7 +128,7 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::CloudDetectionFilter<VectorImageType, OutputImageType,
-                                    FunctorType> CloudDetectionFilterType;
+      FunctorType> CloudDetectionFilterType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -227,23 +227,23 @@ int main(int argc, char * argv[])
 
   // Pretty image creation for printing
   typedef otb::Image<unsigned char,
-                     Dimension>
+      Dimension>
   OutputPrettyImageType;
   typedef otb::VectorImage<unsigned char,
-                           Dimension>
+      Dimension>
   InputPrettyImageType;
   typedef otb::ImageFileWriter<OutputPrettyImageType>
   WriterPrettyOutputType;
   typedef otb::ImageFileWriter<InputPrettyImageType>
   WriterPrettyInputType;
   typedef itk::RescaleIntensityImageFilter<OutputImageType,
-                                           OutputPrettyImageType>
+      OutputPrettyImageType>
   RescalerOutputType;
   typedef otb::VectorRescaleIntensityImageFilter<VectorImageType,
-                                                 InputPrettyImageType>
+      InputPrettyImageType>
   RescalerInputType;
   typedef otb::MultiChannelExtractROI<InputPixelType,
-                                      InputPixelType>
+      InputPixelType>
   ChannelExtractorType;
 
   ChannelExtractorType::Pointer  selecter           = ChannelExtractorType::New();

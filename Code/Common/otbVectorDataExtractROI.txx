@@ -137,106 +137,106 @@ VectorDataExtractROI<TVectorData>
 
     switch (dataNode->GetNodeType())
       {
-    case ROOT:
-      {
-      newContainer = InternalTreeNodeType::New();
-      newContainer->Set(newDataNode);
-      destination->AddChild(newContainer);
-      ProcessNode((*it), newContainer);
-      ++m_Kept;
-      break;
-      }
-    case DOCUMENT:
-      {
-      newContainer = InternalTreeNodeType::New();
-      newContainer->Set(newDataNode);
-      destination->AddChild(newContainer);
-      ++m_Kept;
-      ProcessNode((*it), newContainer);
-      break;
-      }
-    case FOLDER:
-      {
-      newContainer = InternalTreeNodeType::New();
-      newContainer->Set(newDataNode);
-      destination->AddChild(newContainer);
-      ++m_Kept;
-      ProcessNode((*it), newContainer);
-      break;
-      }
-    case FEATURE_POINT:
-      {
-      if (m_GeoROI.IsInside(this->PointToContinuousIndex(dataNode->GetPoint())))
+      case ROOT:
         {
-        newDataNode->SetPoint(dataNode->GetPoint());
+        newContainer = InternalTreeNodeType::New();
+        newContainer->Set(newDataNode);
+        destination->AddChild(newContainer);
+        ProcessNode((*it), newContainer);
+        ++m_Kept;
+        break;
+        }
+      case DOCUMENT:
+        {
         newContainer = InternalTreeNodeType::New();
         newContainer->Set(newDataNode);
         destination->AddChild(newContainer);
         ++m_Kept;
+        ProcessNode((*it), newContainer);
+        break;
         }
-      break;
-      }
-    case FEATURE_LINE:
-      {
-      if (this->IsLineIntersectionNotNull(dataNode->GetLine()))
+      case FOLDER:
         {
-        newDataNode->SetLine(dataNode->GetLine());
         newContainer = InternalTreeNodeType::New();
         newContainer->Set(newDataNode);
         destination->AddChild(newContainer);
         ++m_Kept;
+        ProcessNode((*it), newContainer);
+        break;
         }
-      break;
-      }
-    case FEATURE_POLYGON:
-      {
-      if (this->IsPolygonIntersectionNotNull(dataNode->GetPolygonExteriorRing()))
+      case FEATURE_POINT:
         {
-        newDataNode->SetPolygonExteriorRing(dataNode->GetPolygonExteriorRing());
-        newDataNode->SetPolygonInteriorRings(dataNode->GetPolygonInteriorRings());
+        if (m_GeoROI.IsInside(this->PointToContinuousIndex(dataNode->GetPoint())))
+          {
+          newDataNode->SetPoint(dataNode->GetPoint());
+          newContainer = InternalTreeNodeType::New();
+          newContainer->Set(newDataNode);
+          destination->AddChild(newContainer);
+          ++m_Kept;
+          }
+        break;
+        }
+      case FEATURE_LINE:
+        {
+        if (this->IsLineIntersectionNotNull(dataNode->GetLine()))
+          {
+          newDataNode->SetLine(dataNode->GetLine());
+          newContainer = InternalTreeNodeType::New();
+          newContainer->Set(newDataNode);
+          destination->AddChild(newContainer);
+          ++m_Kept;
+          }
+        break;
+        }
+      case FEATURE_POLYGON:
+        {
+        if (this->IsPolygonIntersectionNotNull(dataNode->GetPolygonExteriorRing()))
+          {
+          newDataNode->SetPolygonExteriorRing(dataNode->GetPolygonExteriorRing());
+          newDataNode->SetPolygonInteriorRings(dataNode->GetPolygonInteriorRings());
+          newContainer = InternalTreeNodeType::New();
+          newContainer->Set(newDataNode);
+          destination->AddChild(newContainer);
+          ++m_Kept;
+          }
+        break;
+        }
+      case FEATURE_MULTIPOINT:
+        {
         newContainer = InternalTreeNodeType::New();
         newContainer->Set(newDataNode);
         destination->AddChild(newContainer);
         ++m_Kept;
+        ProcessNode((*it), newContainer);
+        break;
         }
-      break;
-      }
-    case FEATURE_MULTIPOINT:
-      {
-      newContainer = InternalTreeNodeType::New();
-      newContainer->Set(newDataNode);
-      destination->AddChild(newContainer);
-      ++m_Kept;
-      ProcessNode((*it), newContainer);
-      break;
-      }
-    case FEATURE_MULTILINE:
-      {
-      newContainer = InternalTreeNodeType::New();
-      newContainer->Set(newDataNode);
-      destination->AddChild(newContainer);
-      ++m_Kept;
-      ProcessNode((*it), newContainer);
-      break;
-      }
-    case FEATURE_MULTIPOLYGON:
-      {
-      newContainer = InternalTreeNodeType::New();
-      newContainer->Set(newDataNode);
-      destination->AddChild(newContainer);
-      ++m_Kept;
-      ProcessNode((*it), newContainer);
-      break;
-      }
-    case FEATURE_COLLECTION:
-      {
-      newContainer = InternalTreeNodeType::New();
-      newContainer->Set(newDataNode);
-      destination->AddChild(newContainer);
-      ++m_Kept;
-      ProcessNode((*it), newContainer);
-      break;
-      }
+      case FEATURE_MULTILINE:
+        {
+        newContainer = InternalTreeNodeType::New();
+        newContainer->Set(newDataNode);
+        destination->AddChild(newContainer);
+        ++m_Kept;
+        ProcessNode((*it), newContainer);
+        break;
+        }
+      case FEATURE_MULTIPOLYGON:
+        {
+        newContainer = InternalTreeNodeType::New();
+        newContainer->Set(newDataNode);
+        destination->AddChild(newContainer);
+        ++m_Kept;
+        ProcessNode((*it), newContainer);
+        break;
+        }
+      case FEATURE_COLLECTION:
+        {
+        newContainer = InternalTreeNodeType::New();
+        newContainer->Set(newDataNode);
+        destination->AddChild(newContainer);
+        ++m_Kept;
+        ProcessNode((*it), newContainer);
+        break;
+        }
       }
     }
 }

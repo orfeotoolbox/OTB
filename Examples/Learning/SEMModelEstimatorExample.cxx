@@ -213,7 +213,7 @@ int main(int argc, char * argv[])
 
 //  Software Guide : BeginCodeSnippet
     typedef itk::RescaleIntensityImageFilter<OutputImageType,
-                                             OutputImageType> RescalerType;
+        OutputImageType> RescalerType;
     RescalerType::Pointer rescaler = RescalerType::New();
 
     rescaler->SetOutputMinimum(itk::NumericTraits<unsigned char>::min());

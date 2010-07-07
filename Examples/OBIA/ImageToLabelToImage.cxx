@@ -136,12 +136,12 @@ int main(int argc, char * argv[])
 
   // Pretty image creation for the printing
   typedef otb::Image<unsigned char,
-                     dim>
-                                                                  OutputPrettyImageType;
+      dim>
+  OutputPrettyImageType;
   typedef otb::ImageFileWriter<OutputPrettyImageType>
-                                                                  WriterPrettyType;
+  WriterPrettyType;
   typedef itk::RescaleIntensityImageFilter<ImageType,
-                                           OutputPrettyImageType> RescalerType;
+      OutputPrettyImageType> RescalerType;
 
   RescalerType::Pointer     rescaler     = RescalerType::New();
   WriterPrettyType::Pointer prettyWriter = WriterPrettyType::New();

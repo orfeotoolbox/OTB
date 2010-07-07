@@ -156,22 +156,22 @@ protected:
 template <class TInputImage1, class TInputImage2, class TOutputImage>
 class ITK_EXPORT KullbackLeiblerProfileImageFilter :
   public BinaryFunctorNeighborhoodVectorImageFilter<
-    TInputImage1, TInputImage2, TOutputImage,
-    Functor::KullbackLeiblerProfile<
-      typename itk::ConstNeighborhoodIterator<TInputImage1>,
-      typename itk::ConstNeighborhoodIterator<TInputImage2>,
-      typename TOutputImage::PixelType> >
+      TInputImage1, TInputImage2, TOutputImage,
+      Functor::KullbackLeiblerProfile<
+          typename itk::ConstNeighborhoodIterator<TInputImage1>,
+          typename itk::ConstNeighborhoodIterator<TInputImage2>,
+          typename TOutputImage::PixelType> >
 {
 public:
   /** Standard class typedefs. */
   typedef KullbackLeiblerProfileImageFilter Self;
   typedef /*typename*/ BinaryFunctorNeighborhoodVectorImageFilter<
-    TInputImage1, TInputImage2, TOutputImage,
-    Functor::KullbackLeiblerProfile<
-      typename itk::ConstNeighborhoodIterator<TInputImage1>,
-      typename itk::ConstNeighborhoodIterator<TInputImage2>,
-      typename TOutputImage::PixelType>
-    >  Superclass;
+      TInputImage1, TInputImage2, TOutputImage,
+      Functor::KullbackLeiblerProfile<
+          typename itk::ConstNeighborhoodIterator<TInputImage1>,
+          typename itk::ConstNeighborhoodIterator<TInputImage2>,
+          typename TOutputImage::PixelType>
+      >  Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 

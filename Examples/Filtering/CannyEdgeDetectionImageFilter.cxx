@@ -99,7 +99,7 @@ int main(int argc, char* argv[])
   typedef otb::ImageFileWriter<CharImageType> WriterType;
 
   typedef itk::RescaleIntensityImageFilter<RealImageType,
-                                           CharImageType> RescaleFilter;
+      CharImageType> RescaleFilter;
 
   //  Software Guide : BeginLatex
   //
@@ -110,7 +110,7 @@ int main(int argc, char* argv[])
   //  Software Guide : EndLatex
 
   typedef itk::CannyEdgeDetectionImageFilter<RealImageType,
-                                             RealImageType> CannyFilter;
+      RealImageType> CannyFilter;
 
   //Setting the IO
 

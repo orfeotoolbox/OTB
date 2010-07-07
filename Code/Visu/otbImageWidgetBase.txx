@@ -478,47 +478,47 @@ ImageWidgetBase<TPixel>
 #endif
     switch (m_ViewModel)
       {
-    case RGB:
-      {
-      m_OpenGlBuffer[index] =   Normalize(it.Get()[m_RedChannelIndex], m_RedChannelIndex);
-      m_OpenGlBuffer[index + 1] = Normalize(it.Get()[m_GreenChannelIndex], m_GreenChannelIndex);
-      m_OpenGlBuffer[index + 2] = Normalize(it.Get()[m_BlueChannelIndex], m_BlueChannelIndex);
-      m_OpenGlBuffer[index + 3] = 255;
-      break;
-      }
-    case GRAYSCALE:
-      {
-      unsigned char gray = Normalize(it.Get()[m_RedChannelIndex], m_RedChannelIndex);
-      m_OpenGlBuffer[index] =   gray;
-      m_OpenGlBuffer[index + 1] = gray;
-      m_OpenGlBuffer[index + 2] = gray;
-      m_OpenGlBuffer[index + 3] = 255;
-      break;
-      }
-    case COMPLEX_MODULUS:
-      {
-      double re = static_cast<double>(it.Get()[m_RedChannelIndex]);
-      double im = static_cast<double>(it.Get()[m_GreenChannelIndex]);
-      //     std::cout << " *** " << m_RedChannelIndex << " " << m_GreenChannelIndex << std::endl;
-      unsigned char modulus = Normalize(static_cast<PixelType>(vcl_sqrt(static_cast<double>(im * im + re * re))), 0);
-      //     std::cout << " ** " << im << " " << re << " -> " << static_cast<int>(modulus) << std::endl;
-      m_OpenGlBuffer[index] =   modulus;
-      m_OpenGlBuffer[index + 1] = modulus;
-      m_OpenGlBuffer[index + 2] = modulus;
-      m_OpenGlBuffer[index + 3] = 255;
-      break;
-      }
-    case COMPLEX_PHASE:
-      {
-      unsigned char phase =
-        Normalize(static_cast<PixelType>(vcl_atan2(static_cast<double>(it.Get()[m_GreenChannelIndex]),
-                                                   static_cast<double>(it.Get()[m_RedChannelIndex]))), 0);
-      m_OpenGlBuffer[index]   = phase;
-      m_OpenGlBuffer[index + 1] = phase;
-      m_OpenGlBuffer[index + 2] = phase;
-      m_OpenGlBuffer[index + 3] = 255;
-      break;
-      }
+      case RGB:
+        {
+        m_OpenGlBuffer[index] =   Normalize(it.Get()[m_RedChannelIndex], m_RedChannelIndex);
+        m_OpenGlBuffer[index + 1] = Normalize(it.Get()[m_GreenChannelIndex], m_GreenChannelIndex);
+        m_OpenGlBuffer[index + 2] = Normalize(it.Get()[m_BlueChannelIndex], m_BlueChannelIndex);
+        m_OpenGlBuffer[index + 3] = 255;
+        break;
+        }
+      case GRAYSCALE:
+        {
+        unsigned char gray = Normalize(it.Get()[m_RedChannelIndex], m_RedChannelIndex);
+        m_OpenGlBuffer[index] =   gray;
+        m_OpenGlBuffer[index + 1] = gray;
+        m_OpenGlBuffer[index + 2] = gray;
+        m_OpenGlBuffer[index + 3] = 255;
+        break;
+        }
+      case COMPLEX_MODULUS:
+        {
+        double re = static_cast<double>(it.Get()[m_RedChannelIndex]);
+        double im = static_cast<double>(it.Get()[m_GreenChannelIndex]);
+        //     std::cout << " *** " << m_RedChannelIndex << " " << m_GreenChannelIndex << std::endl;
+        unsigned char modulus = Normalize(static_cast<PixelType>(vcl_sqrt(static_cast<double>(im * im + re * re))), 0);
+        //     std::cout << " ** " << im << " " << re << " -> " << static_cast<int>(modulus) << std::endl;
+        m_OpenGlBuffer[index] =   modulus;
+        m_OpenGlBuffer[index + 1] = modulus;
+        m_OpenGlBuffer[index + 2] = modulus;
+        m_OpenGlBuffer[index + 3] = 255;
+        break;
+        }
+      case COMPLEX_PHASE:
+        {
+        unsigned char phase =
+          Normalize(static_cast<PixelType>(vcl_atan2(static_cast<double>(it.Get()[m_GreenChannelIndex]),
+                                                     static_cast<double>(it.Get()[m_RedChannelIndex]))), 0);
+        m_OpenGlBuffer[index]   = phase;
+        m_OpenGlBuffer[index + 1] = phase;
+        m_OpenGlBuffer[index + 2] = phase;
+        m_OpenGlBuffer[index + 3] = 255;
+        break;
+        }
       }
     }
 }

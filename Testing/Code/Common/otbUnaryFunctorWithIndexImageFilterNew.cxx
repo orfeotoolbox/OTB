@@ -45,7 +45,7 @@ int otbUnaryFunctorWithIndexImageFilterNew(int argc, char * argv[])
   typedef ImageType::PixelType                                                          PixelType;
   typedef Functor::UnaryFunctorWithIndexImageFilterFunctorNewTest<PixelType, PixelType> FunctorType;
   typedef otb::UnaryFunctorWithIndexImageFilter<ImageType, ImageType,
-                                                FunctorType>      UnaryFunctorWithIndexImageFilterType;
+      FunctorType>      UnaryFunctorWithIndexImageFilterType;
 
   // Instantiating object
   UnaryFunctorWithIndexImageFilterType::Pointer object = UnaryFunctorWithIndexImageFilterType::New();

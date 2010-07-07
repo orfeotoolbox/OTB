@@ -152,12 +152,12 @@ int main(int argc, char * argv[])
   writer->SetInput(rescaler->GetOutput());
 
   typedef itk::ScalarToRGBColormapImageFilter<ImageType,
-                                              RGBImageType> ColorMapFilterType;
+      RGBImageType> ColorMapFilterType;
   ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
   colormapper->UseInputImageExtremaForScalingOff();
 
   typedef otb::Functor::ReliefColormapFunctor<PixelType,
-                                              RGBPixelType> ColorMapFunctorType;
+      RGBPixelType> ColorMapFunctorType;
   ColorMapFunctorType::Pointer colormap = ColorMapFunctorType::New();
   colormap->SetMinimumInputValue(0);
   colormap->SetMaximumInputValue(4000);
@@ -166,10 +166,10 @@ int main(int argc, char * argv[])
   colormapper->SetInput(demToImage->GetOutput());
 
   typedef itk::BinaryFunctorImageFilter<RGBImageType, ImageType, RGBImageType,
-                                        otb::Functor::
-                                        HillShadeModulationFunctor<RGBPixelType,
-                                                                   PixelType,
-                                                                   RGBPixelType> >
+      otb::Functor::
+      HillShadeModulationFunctor<RGBPixelType,
+          PixelType,
+          RGBPixelType> >
   MultiplyFilterType;
 
   MultiplyFilterType::Pointer multiply = MultiplyFilterType::New();

@@ -50,14 +50,14 @@ int otbFusionImageBaseNew(int argc, char * argv[])
   typedef otb::Image<OutputPixelType, Dimension>      OutputImageType;
 
   typedef otb::FusionImageBase<InputMultiSpectralImageType,
-                               InputMultiSpectralInterpImageType,
-                               InputPanchroImageType,
-                               OutputImageType,
-                               Functor::NewFunctorTest<InputMultiSpectralImageType::PixelType,
-                                                       InputMultiSpectralInterpImageType::PixelType,
-                                                       InputPanchroImageType::PixelType,
-                                                       OutputImageType::PixelType>
-                               >  FusionImageBaseType;
+      InputMultiSpectralInterpImageType,
+      InputPanchroImageType,
+      OutputImageType,
+      Functor::NewFunctorTest<InputMultiSpectralImageType::PixelType,
+          InputMultiSpectralInterpImageType::PixelType,
+          InputPanchroImageType::PixelType,
+          OutputImageType::PixelType>
+      >  FusionImageBaseType;
 
   // Instantiation
   FusionImageBaseType::Pointer base = FusionImageBaseType::New();

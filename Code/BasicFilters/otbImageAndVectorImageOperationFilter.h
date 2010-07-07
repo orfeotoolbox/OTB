@@ -60,33 +60,33 @@ public:
 
     switch (m_Operator)
       {
-    case MULTIPLICATION:
-      {
-      vInTmp *= static_cast<InternalInputPixelType>(inPix);
-      break;
-      }
-    case ADDITION:
-      {
-      vInTmp += static_cast<InternalInputPixelType>(inPix);
-      break;
-      }
-    case DIVISON:
-      {
-      if (inPix != 0) vInTmp /= static_cast<InternalInputPixelType>(inPix);
-      else
+      case MULTIPLICATION:
         {
-        vInTmp.Fill(0);
+        vInTmp *= static_cast<InternalInputPixelType>(inPix);
+        break;
         }
-      break;
-      }
-    case SUBSTRACTION:
-      {
-      vInTmp -= static_cast<InternalInputPixelType>(inPix);
-      break;
-      }
-    default:
-      {
-      }
+      case ADDITION:
+        {
+        vInTmp += static_cast<InternalInputPixelType>(inPix);
+        break;
+        }
+      case DIVISON:
+        {
+        if (inPix != 0) vInTmp /= static_cast<InternalInputPixelType>(inPix);
+        else
+          {
+          vInTmp.Fill(0);
+          }
+        break;
+        }
+      case SUBSTRACTION:
+        {
+        vInTmp -= static_cast<InternalInputPixelType>(inPix);
+        break;
+        }
+      default:
+        {
+        }
       }
 
     for (unsigned int i = 0; i < vInTmp.Size(); i++)
@@ -118,13 +118,13 @@ protected:
 template <class TInputImage, class TVectorInputImage, class TOutputImage>
 class ITK_EXPORT ImageAndVectorImageOperationFilter :
   public itk::BinaryFunctorImageFilter<TInputImage,
-                                       TVectorInputImage,
-                                       TOutputImage,
-                                       Functor::ImageAndVectorImageOperationFunctor<ITK_TYPENAME TInputImage::PixelType,
-                                                                                    ITK_TYPENAME TVectorInputImage::
-                                                                                    PixelType,
-                                                                                    ITK_TYPENAME TOutputImage::
-                                                                                    PixelType> >
+      TVectorInputImage,
+      TOutputImage,
+      Functor::ImageAndVectorImageOperationFunctor<ITK_TYPENAME TInputImage::PixelType,
+          ITK_TYPENAME TVectorInputImage::
+          PixelType,
+          ITK_TYPENAME TOutputImage::
+          PixelType> >
 //ImageToImageFilter< TVectorInputImage, TOutputImage >
 {
 public:
@@ -133,8 +133,8 @@ public:
   typedef ImageAndVectorImageOperationFilter Self;
   //typedef itk::ImageToImageFilter<TVectorInputImage, TOutputImage> Superclass;
   typedef Functor::ImageAndVectorImageOperationFunctor<ITK_TYPENAME TInputImage::PixelType,
-                                                       ITK_TYPENAME TVectorInputImage::PixelType,
-                                                       ITK_TYPENAME TOutputImage::PixelType> FunctorType;
+      ITK_TYPENAME TVectorInputImage::PixelType,
+      ITK_TYPENAME TOutputImage::PixelType> FunctorType;
   typedef itk::BinaryFunctorImageFilter<TInputImage, TVectorInputImage, TOutputImage, FunctorType> Superclass;
   typedef itk::SmartPointer<Self>                                                                  Pointer;
   typedef itk::SmartPointer<const Self>                                                            ConstPointer;

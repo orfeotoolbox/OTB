@@ -51,7 +51,7 @@ int otbVHnVVPolarimetricSynthesisFilter(int argc, char * argv[])
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
   typedef otb::PolarimetricSynthesisFilter<InputImageType, InputImageType, InputImageType, InputImageType,
-                                           OutputImageType> FilterType;
+      OutputImageType> FilterType;
 
   FilterType::Pointer polarimetricSynthesis = FilterType::New();
 

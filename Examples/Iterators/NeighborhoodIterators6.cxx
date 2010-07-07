@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
   typedef itk::NeighborhoodIterator<ImageType> NeighborhoodIteratorType;
 
   typedef itk::FastMarchingImageFilter<ImageType,
-                                       ImageType> FastMarchingFilterType;
+      ImageType> FastMarchingFilterType;
 
   FastMarchingFilterType::Pointer fastMarching = FastMarchingFilterType::New();
 
@@ -227,7 +227,7 @@ int main(int argc, char *argv[])
   typedef otb::ImageFileWriter<WriteImageType> WriterType;
 
   typedef itk::RescaleIntensityImageFilter<ImageType,
-                                           WriteImageType> RescaleFilterType;
+      WriteImageType> RescaleFilterType;
 
   RescaleFilterType::Pointer rescaler = RescaleFilterType::New();
 

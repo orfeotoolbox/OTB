@@ -51,8 +51,8 @@ public:
   /// standard class typedefs
   typedef KeyPointSetsMatchingFilter Self;
   typedef ObjectListSource<ObjectList<
-                             Landmark<typename TPointSet::PointType,
-                                      typename TPointSet::PixelType, double> > >      Superclass;
+          Landmark<typename TPointSet::PointType,
+              typename TPointSet::PixelType, double> > >      Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -68,7 +68,7 @@ public:
   typedef TDistance                                      DistanceType;
   typedef typename DistanceType::Pointer                 DistancePointerType;
   typedef Landmark<typename TPointSet::PointType,
-                   typename TPointSet::PixelType, double>                  LandmarkType;
+      typename TPointSet::PixelType, double>                  LandmarkType;
   typedef typename LandmarkType::Pointer     LandmarkPointerType;
   typedef ObjectList<LandmarkType>           LandmarkListType;
   typedef typename LandmarkListType::Pointer LandmarkListPointerType;

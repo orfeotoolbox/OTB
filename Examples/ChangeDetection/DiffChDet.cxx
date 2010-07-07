@@ -120,9 +120,9 @@ int main(int argc, char* argv[])
 
   //  Software Guide : BeginCodeSnippet
   typedef itk::AbsImageFilter<ChangeImageType,
-                              ChangeImageType> AbsType;
+      ChangeImageType> AbsType;
   typedef itk::RescaleIntensityImageFilter<ChangeImageType,
-                                           OutputImageType> RescalerType;
+      OutputImageType> RescalerType;
 
   //  Software Guide : EndCodeSnippet
 
@@ -136,9 +136,9 @@ int main(int argc, char* argv[])
 
   //  Software Guide : BeginCodeSnippet
   typedef otb::MeanDifferenceImageFilter<
-    InputImageType1,
-    InputImageType2,
-    ChangeImageType>       FilterType;
+      InputImageType1,
+      InputImageType2,
+      ChangeImageType>       FilterType;
   //  Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex

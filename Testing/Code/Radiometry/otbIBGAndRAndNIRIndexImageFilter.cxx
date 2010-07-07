@@ -38,16 +38,16 @@ int otbIBGAndRAndNIRIndexImageFilter(int argc, char * argv[])
   typedef otb::ImageFileWriter<OutputImageType>   WriterType;
 
   typedef otb::Functor::IB2<InputGImageType::PixelType,
-                            InputRImageType::PixelType,
-                            InputNIRImageType::PixelType,
-                            OutputImageType::PixelType> FunctorType;
+      InputRImageType::PixelType,
+      InputNIRImageType::PixelType,
+      OutputImageType::PixelType> FunctorType;
 
   // Warning : the order of the channels are not the same between the functor and the filter
   typedef otb::RAndGAndNIRIndexImageFilter<InputRImageType,
-                                           InputGImageType,
-                                           InputNIRImageType,
-                                           OutputImageType,
-                                           FunctorType> RAndGAndNIRIndexImageFilterType;
+      InputGImageType,
+      InputNIRImageType,
+      OutputImageType,
+      FunctorType> RAndGAndNIRIndexImageFilterType;
 
   // Instantiating object
   RAndGAndNIRIndexImageFilterType::Pointer filter = RAndGAndNIRIndexImageFilterType::New();

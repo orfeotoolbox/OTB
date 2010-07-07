@@ -64,21 +64,21 @@ int otbMultiChannelGAndRIndexImageFilter(int argc, char * argv[])
   argv++;
   if (strArgv == "IR")
     return (generic_MultiChannelGAndRIndexImageFilter<InputImageType, OutputImageType,
-                                                      otb::Functor::IR<InputImageType::InternalPixelType,
-                                                                       InputImageType::InternalPixelType,
-                                                                       OutputImageType::PixelType> >
+                otb::Functor::IR<InputImageType::InternalPixelType,
+                    InputImageType::InternalPixelType,
+                    OutputImageType::PixelType> >
               (argc, argv));
   else if (strArgv == "IC")
     return (generic_MultiChannelGAndRIndexImageFilter<InputImageType, OutputImageType,
-                                                      otb::Functor::IC<InputImageType::InternalPixelType,
-                                                                       InputImageType::InternalPixelType,
-                                                                       OutputImageType::PixelType> >
+                otb::Functor::IC<InputImageType::InternalPixelType,
+                    InputImageType::InternalPixelType,
+                    OutputImageType::PixelType> >
               (argc, argv));
   else if (strArgv == "IB")
     return (generic_MultiChannelGAndRIndexImageFilter<InputImageType, OutputImageType,
-                                                      otb::Functor::IB<InputImageType::InternalPixelType,
-                                                                       InputImageType::InternalPixelType,
-                                                                       OutputImageType::PixelType> >
+                otb::Functor::IB<InputImageType::InternalPixelType,
+                    InputImageType::InternalPixelType,
+                    OutputImageType::PixelType> >
               (argc, argv));
   else return EXIT_FAILURE;
   return EXIT_SUCCESS;

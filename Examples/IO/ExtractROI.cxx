@@ -114,7 +114,7 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::MultiChannelExtractROI<InputPixelType,
-                                      OutputPixelType>  ExtractROIFilterType;
+      OutputPixelType>  ExtractROIFilterType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -219,7 +219,7 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::MultiToMonoChannelExtractROI<InputPixelType,
-                                            OutputPixelType>
+      OutputPixelType>
   ExtractROIMonoFilterType;
   // Software Guide : EndCodeSnippet
 

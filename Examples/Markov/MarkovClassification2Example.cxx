@@ -103,7 +103,7 @@ int main(int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::MRFSamplerRandomMAP<InputImageType,
-                                   LabelledImageType> SamplerType;
+      LabelledImageType> SamplerType;
 //   typedef otb::MRFSamplerRandom< InputImageType, LabelledImageType> SamplerType;
 // Software Guide : EndCodeSnippet
 

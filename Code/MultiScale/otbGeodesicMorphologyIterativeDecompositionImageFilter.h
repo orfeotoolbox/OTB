@@ -95,9 +95,9 @@ public:
 
   /** Typedef of the decomposition filter */
   typedef GeodesicMorphologyDecompositionImageFilter<InputImageType, InputImageType,
-                                                     StructuringElementType> DecompositionFilterType;
+      StructuringElementType> DecompositionFilterType;
   typedef typename DecompositionFilterType::Pointer
-                                                                             DecompositionFilterPointerType;
+  DecompositionFilterPointerType;
 
   /** Accessors */
   itkSetMacro(Step, unsigned int);

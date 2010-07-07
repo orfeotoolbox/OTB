@@ -73,10 +73,10 @@ public:
   typedef typename ImageType::IndexType                     IndexType;
   typedef typename IndexType::IndexValueType                IndexValueType;
 
-  typedef itk::Point<double, 2>                             PointType;
-  typedef otb::GenericRSTransform<double>                   TransformType;
-  typedef otb::GroundSpacingImageFunction<ImageType>        GroundSpacingImageType;
-  typedef typename GroundSpacingImageType::FloatType        FloatType;
+  typedef itk::Point<double, 2>                      PointType;
+  typedef otb::GenericRSTransform<double>            TransformType;
+  typedef otb::GroundSpacingImageFunction<ImageType> GroundSpacingImageType;
+  typedef typename GroundSpacingImageType::FloatType FloatType;
   /** Output image typedef */
   typedef TOutputImage                        OutputImageType;
   typedef typename OutputImageType::PixelType OutputPixelType;
@@ -89,8 +89,8 @@ public:
 
   typedef itk::Statistics::DenseFrequencyContainer DFContainerType;
   typedef itk::Statistics::Histogram<
-    typename itk::NumericTraits<ScalarType>::RealType, 1,
-    DFContainerType>                                    HistogramType;
+      typename itk::NumericTraits<ScalarType>::RealType, 1,
+      DFContainerType>                                    HistogramType;
   typedef typename HistogramType::Pointer     HistogramPointerType;
   typedef ObjectList<HistogramType>           HistogramListType;
   typedef typename HistogramListType::Pointer HistogramListPointerType;
@@ -255,11 +255,11 @@ private:
   /** General info about the image*/
   std::string m_PlaceName; //FIXME the call should be done by a more general method outside of the layer
   std::string m_CountryName; //which would also handle the dependance to curl
-  
+
   /** Ground spacing calculator */
   typename GroundSpacingImageType::Pointer m_GroundSpacing; //FIXME the call should be done by a more general method outside of the layer
   FloatType m_ApproxGroundSpacing;
-  
+
 }; // end class
 } // end namespace otb
 

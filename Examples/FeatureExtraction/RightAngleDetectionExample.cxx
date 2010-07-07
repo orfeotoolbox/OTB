@@ -133,8 +133,8 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::LineSpatialObjectListToRightAnglePointSetFilter<ImageType,
-                                                               LinesListType,
-                                                               PointSetType>
+      LinesListType,
+      PointSetType>
   RightAngleFilterType;
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
@@ -239,7 +239,7 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::DrawLineSpatialObjectListFilter<ImageType,
-                                               ImageType> DrawLineListType;
+      ImageType> DrawLineListType;
   DrawLineListType::Pointer drawLineFilter =   DrawLineListType::New();
 
   drawLineFilter->SetInput(reader->GetOutput());
@@ -271,11 +271,11 @@ int main(int argc, char * argv[])
   typedef unsigned char OutputPixelType;
 
   typedef otb::Image<OutputPixelType,
-                     Dimension>                             OutputImageType;
+      Dimension>                             OutputImageType;
   typedef otb::ImageFileWriter<OutputImageType>
-                                                            OutputWriterType;
+  OutputWriterType;
   typedef itk::RescaleIntensityImageFilter<ImageType,
-                                           OutputImageType> RescalerType;
+      OutputImageType> RescalerType;
 
   RescalerType::Pointer     rescaler = RescalerType::New();
   OutputWriterType::Pointer outwriter = OutputWriterType::New();

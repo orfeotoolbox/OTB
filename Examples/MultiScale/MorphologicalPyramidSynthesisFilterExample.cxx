@@ -116,8 +116,8 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
   typedef otb::OpeningClosingMorphologicalFilter<InputImageType,
-                                                 InputImageType,
-                                                 StructuringElementType>
+      InputImageType,
+      StructuringElementType>
   OpeningClosingFilterType;
 // Software Guide : EndCodeSnippet
 
@@ -131,8 +131,8 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
   typedef otb::MorphologicalPyramidAnalysisFilter<InputImageType,
-                                                  OutputImageType,
-                                                  OpeningClosingFilterType>
+      OutputImageType,
+      OpeningClosingFilterType>
   PyramidAnalysisFilterType;
 // Software Guide : EndCodeSnippet
 
@@ -146,7 +146,7 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
   typedef otb::MorphologicalPyramidSynthesisFilter<InputImageType,
-                                                   OutputImageType>
+      OutputImageType>
   PyramidSynthesisFilterType;
 // Software Guide : EndCodeSnippet
 

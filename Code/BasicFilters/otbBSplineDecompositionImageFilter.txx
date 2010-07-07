@@ -132,39 +132,39 @@ BSplineDecompositionImageFilter<TInputImage, TOutputImage>
   //  2000, pg. 416.
   switch (m_SplineOrder)
     {
-  case 3:
-    m_NumberOfPoles = 1;
-    m_SplinePoles[0] = vcl_sqrt(3.0) - 2.0;
-    break;
-  case 0:
-    m_NumberOfPoles = 0;
-    break;
-  case 1:
-    m_NumberOfPoles = 0;
-    break;
-  case 2:
-    m_NumberOfPoles = 1;
-    m_SplinePoles[0] = vcl_sqrt(8.0) - 3.0;
-    break;
-  case 4:
-    m_NumberOfPoles = 2;
-    m_SplinePoles[0] = vcl_sqrt(664.0 - vcl_sqrt(438976.0)) + vcl_sqrt(304.0) - 19.0;
-    m_SplinePoles[1] = vcl_sqrt(664.0 + vcl_sqrt(438976.0)) - vcl_sqrt(304.0) - 19.0;
-    break;
-  case 5:
-    m_NumberOfPoles = 2;
-    m_SplinePoles[0] = vcl_sqrt(135.0 / 2.0 - vcl_sqrt(17745.0 / 4.0)) + vcl_sqrt(105.0 / 4.0)
-                       - 13.0 / 2.0;
-    m_SplinePoles[1] = vcl_sqrt(135.0 / 2.0 + vcl_sqrt(17745.0 / 4.0)) - vcl_sqrt(105.0 / 4.0)
-                       - 13.0 / 2.0;
-    break;
-  default:
-    // SplineOrder not implemented yet.
-    itk::ExceptionObject err(__FILE__, __LINE__);
-    err.SetLocation(ITK_LOCATION);
-    err.SetDescription("SplineOrder must be between 0 and 5. Requested spline order has not been implemented yet.");
-    throw err;
-    break;
+    case 3:
+      m_NumberOfPoles = 1;
+      m_SplinePoles[0] = vcl_sqrt(3.0) - 2.0;
+      break;
+    case 0:
+      m_NumberOfPoles = 0;
+      break;
+    case 1:
+      m_NumberOfPoles = 0;
+      break;
+    case 2:
+      m_NumberOfPoles = 1;
+      m_SplinePoles[0] = vcl_sqrt(8.0) - 3.0;
+      break;
+    case 4:
+      m_NumberOfPoles = 2;
+      m_SplinePoles[0] = vcl_sqrt(664.0 - vcl_sqrt(438976.0)) + vcl_sqrt(304.0) - 19.0;
+      m_SplinePoles[1] = vcl_sqrt(664.0 + vcl_sqrt(438976.0)) - vcl_sqrt(304.0) - 19.0;
+      break;
+    case 5:
+      m_NumberOfPoles = 2;
+      m_SplinePoles[0] = vcl_sqrt(135.0 / 2.0 - vcl_sqrt(17745.0 / 4.0)) + vcl_sqrt(105.0 / 4.0)
+                         - 13.0 / 2.0;
+      m_SplinePoles[1] = vcl_sqrt(135.0 / 2.0 + vcl_sqrt(17745.0 / 4.0)) - vcl_sqrt(105.0 / 4.0)
+                         - 13.0 / 2.0;
+      break;
+    default:
+      // SplineOrder not implemented yet.
+      itk::ExceptionObject err(__FILE__, __LINE__);
+      err.SetLocation(ITK_LOCATION);
+      err.SetDescription("SplineOrder must be between 0 and 5. Requested spline order has not been implemented yet.");
+      throw err;
+      break;
     }
 }
 

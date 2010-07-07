@@ -19,9 +19,9 @@
 #include "itkExceptionObject.h"
 #include "itkFFTComplexToComplexImageFilter.h"
 
-int main( int argc, char * argv [] )
+int main(int argc, char * argv[])
 {
-  typedef itk::FFTComplexToComplexImageFilter < float, 2> FFTFilterType;
+  typedef itk::FFTComplexToComplexImageFilter <float, 2> FFTFilterType;
 
   FFTFilterType::Pointer fftFilter =    FFTFilterType::New();
   fftFilter->DebugOn();

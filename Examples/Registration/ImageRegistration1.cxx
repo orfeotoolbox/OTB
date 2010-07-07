@@ -170,8 +170,8 @@ int main(int argc, char *argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef itk::MeanSquaresImageToImageMetric<
-    FixedImageType,
-    MovingImageType>    MetricType;
+      FixedImageType,
+      MovingImageType>    MetricType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -183,8 +183,8 @@ int main(int argc, char *argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef itk::LinearInterpolateImageFunction<
-    MovingImageType,
-    double>    InterpolatorType;
+      MovingImageType,
+      double>    InterpolatorType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -197,8 +197,8 @@ int main(int argc, char *argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef itk::ImageRegistrationMethod<
-    FixedImageType,
-    MovingImageType>    RegistrationType;
+      FixedImageType,
+      MovingImageType>    RegistrationType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -255,10 +255,10 @@ int main(int argc, char *argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef itk::MeanImageFilter<
-    FixedImageType, FixedImageType>  FixedFilterType;
+      FixedImageType, FixedImageType>  FixedFilterType;
 
   typedef itk::MeanImageFilter<
-    MovingImageType, MovingImageType>  MovingFilterType;
+      MovingImageType, MovingImageType>  MovingFilterType;
 
   FixedFilterType::Pointer  fixedFilter  = FixedFilterType::New();
   MovingFilterType::Pointer movingFilter = MovingFilterType::New();
@@ -542,8 +542,8 @@ int main(int argc, char *argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef itk::ResampleImageFilter<
-    MovingImageType,
-    FixedImageType>    ResampleFilterType;
+      MovingImageType,
+      FixedImageType>    ResampleFilterType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -626,8 +626,8 @@ int main(int argc, char *argv[])
   typedef unsigned char                          OutputPixelType;
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
   typedef itk::CastImageFilter<FixedImageType,
-                               OutputImageType>  CastFilterType;
-  typedef otb::ImageFileWriter<OutputImageType>  WriterType;
+      OutputImageType>  CastFilterType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -680,9 +680,9 @@ int main(int argc, char *argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef itk::SubtractImageFilter<
-    FixedImageType,
-    FixedImageType,
-    FixedImageType> DifferenceFilterType;
+      FixedImageType,
+      FixedImageType,
+      FixedImageType> DifferenceFilterType;
 
   DifferenceFilterType::Pointer difference = DifferenceFilterType::New();
 
@@ -715,8 +715,8 @@ int main(int argc, char *argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef itk::RescaleIntensityImageFilter<
-    FixedImageType,
-    OutputImageType>   RescalerType;
+      FixedImageType,
+      OutputImageType>   RescalerType;
 
   RescalerType::Pointer intensityRescaler = RescalerType::New();
 

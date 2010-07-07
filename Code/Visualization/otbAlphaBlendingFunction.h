@@ -46,8 +46,8 @@ public:
   /** Standard class typedefs */
   typedef AlphaBlendingFunction Self;
   typedef BlendingFunction<TInputRGBPixel1,
-                           TInputRGBPixel2,
-                           TOutputRGBPixel>            Superclass;
+      TInputRGBPixel2,
+      TOutputRGBPixel>            Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 

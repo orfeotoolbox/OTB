@@ -92,11 +92,11 @@ public:
   /** typedef of the computing filter (this allows us to derive from ModulusAndDirectionToImageFilter as well as
       using the BinaryFunctorNeighBorhoodImageFilter, which is appropriate here */
   typedef Functor::RemoveIsolatedByDirectionFunctor<
-    typename itk::ConstNeighborhoodIterator<TInputModulus>,
-    typename itk::ConstNeighborhoodIterator<TInputDirection>,
-    typename TOutputImage::PixelType>  FunctorType;
+      typename itk::ConstNeighborhoodIterator<TInputModulus>,
+      typename itk::ConstNeighborhoodIterator<TInputDirection>,
+      typename TOutputImage::PixelType>  FunctorType;
   typedef otb::BinaryFunctorNeighborhoodImageFilter<TInputModulus, TInputDirection, TOutputImage,
-                                                    FunctorType> ComputingFilterType;
+      FunctorType> ComputingFilterType;
 
 protected:
   /** Constructor */

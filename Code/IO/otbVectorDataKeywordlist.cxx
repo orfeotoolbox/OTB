@@ -97,7 +97,9 @@ VectorDataKeywordlist
         ss << std::setprecision(15) << m_FieldList[i].second.Real;
         return ss.str();
         }
-      itkExceptionMacro(<< "This type (" << m_FieldList[i].first->GetType() << ") is not handled (yet) by GetFieldAsString(), please request for it");
+      itkExceptionMacro(
+        << "This type (" << m_FieldList[i].first->GetType() <<
+        ") is not handled (yet) by GetFieldAsString(), please request for it");
       }
     }
   return "";
@@ -217,70 +219,70 @@ VectorDataKeywordlist
   output << field.first->GetFieldTypeName(field.first->GetType()) << "): ";
   switch (field.first->GetType())
     {
-  case OFTInteger:
-    {
-    output << field.second.Integer;
-    break;
-    }
-  case OFTIntegerList:
-    {
-    output << "Type not handled for printing";
-    break;
-    }
-  case OFTReal:
-    {
-    output << field.second.Real;
-    break;
-    }
-  case OFTRealList:
-    {
-    output << "Type not handled for printing";
-    break;
-    }
-  case OFTString:
-    {
-    if (field.second.String != NULL)
+    case OFTInteger:
       {
-      output << field.second.String;
+      output << field.second.Integer;
+      break;
       }
-    break;
-    }
-  case OFTStringList:
-    {
-    output << "Type not handled for printing";
-    break;
-    }
-  case OFTWideString:
-    {
-    output << "Type not handled for printing";
-    break;
-    }
-  case OFTWideStringList:
-    {
-    output << "Type not handled for printing";
-    break;
-    }
-  case OFTBinary:
-    {
-    output << "Type not handled for printing";
-    break;
-    }
-  case OFTDate:
-    {
-    output << field.second.Date.Year << field.second.Date.Month << field.second.Date.Day;
-    break;
-    }
-  case OFTTime:
-    {
-    output << field.second.Date.Hour << field.second.Date.Minute << field.second.Date.Second;
-    break;
-    }
-  case OFTDateTime:
-    {
-    output << field.second.Date.Year << field.second.Date.Month << field.second.Date.Day << "-"
-           << field.second.Date.Hour << field.second.Date.Minute << field.second.Date.Second;
-    break;
-    }
+    case OFTIntegerList:
+      {
+      output << "Type not handled for printing";
+      break;
+      }
+    case OFTReal:
+      {
+      output << field.second.Real;
+      break;
+      }
+    case OFTRealList:
+      {
+      output << "Type not handled for printing";
+      break;
+      }
+    case OFTString:
+      {
+      if (field.second.String != NULL)
+        {
+        output << field.second.String;
+        }
+      break;
+      }
+    case OFTStringList:
+      {
+      output << "Type not handled for printing";
+      break;
+      }
+    case OFTWideString:
+      {
+      output << "Type not handled for printing";
+      break;
+      }
+    case OFTWideStringList:
+      {
+      output << "Type not handled for printing";
+      break;
+      }
+    case OFTBinary:
+      {
+      output << "Type not handled for printing";
+      break;
+      }
+    case OFTDate:
+      {
+      output << field.second.Date.Year << field.second.Date.Month << field.second.Date.Day;
+      break;
+      }
+    case OFTTime:
+      {
+      output << field.second.Date.Hour << field.second.Date.Minute << field.second.Date.Second;
+      break;
+      }
+    case OFTDateTime:
+      {
+      output << field.second.Date.Year << field.second.Date.Month << field.second.Date.Day << "-"
+             << field.second.Date.Hour << field.second.Date.Minute << field.second.Date.Second;
+      break;
+      }
     }
   output << std::endl;
   return output.str();
@@ -294,79 +296,79 @@ VectorDataKeywordlist
   outField.first = new OGRFieldDefn(field.first);
   switch (field.first->GetType())
     {
-  case OFTInteger:
-    {
-    outField.second.Integer = field.second.Integer;
-    break;
-    }
-  case OFTIntegerList:
-    {
-    std::cerr << "OGR type not handled" << std::endl;
-    break;
-    }
-  case OFTReal:
-    {
-    outField.second.Real = field.second.Real;
-    break;
-    }
-  case OFTRealList:
-    {
-    std::cerr << "OGR type not handled" << std::endl;
-    break;
-    }
-  case OFTString:
-    {
-    if (field.second.String != NULL)
+    case OFTInteger:
       {
-      CPLFree(outField.second.String);
-      outField.second.String = CPLStrdup(field.second.String);
+      outField.second.Integer = field.second.Integer;
+      break;
       }
-    break;
-    }
-  case OFTStringList:
-    {
-    std::cerr << "OGR type not handled" << std::endl;
-    break;
-    }
-  case OFTWideString:
-    {
-    std::cerr << "OGR type not handled" << std::endl;
-    break;
-    }
-  case OFTWideStringList:
-    {
-    std::cerr << "OGR type not handled" << std::endl;
-    break;
-    }
-  case OFTBinary:
-    {
-    std::cerr << "OGR type not handled" << std::endl;
-    break;
-    }
-  case OFTDate:
-    {
-    outField.second.Date.Year = field.second.Date.Year;
-    outField.second.Date.Month = field.second.Date.Month;
-    outField.second.Date.Day = field.second.Date.Day;
-    break;
-    }
-  case OFTTime:
-    {
-    outField.second.Date.Hour = field.second.Date.Hour;
-    outField.second.Date.Minute = field.second.Date.Minute;
-    outField.second.Date.Second = field.second.Date.Second;
-    break;
-    }
-  case OFTDateTime:
-    {
-    outField.second.Date.Year = field.second.Date.Year;
-    outField.second.Date.Month = field.second.Date.Month;
-    outField.second.Date.Day = field.second.Date.Day;
-    outField.second.Date.Hour = field.second.Date.Hour;
-    outField.second.Date.Minute = field.second.Date.Minute;
-    outField.second.Date.Second = field.second.Date.Second;
-    break;
-    }
+    case OFTIntegerList:
+      {
+      std::cerr << "OGR type not handled" << std::endl;
+      break;
+      }
+    case OFTReal:
+      {
+      outField.second.Real = field.second.Real;
+      break;
+      }
+    case OFTRealList:
+      {
+      std::cerr << "OGR type not handled" << std::endl;
+      break;
+      }
+    case OFTString:
+      {
+      if (field.second.String != NULL)
+        {
+        CPLFree(outField.second.String);
+        outField.second.String = CPLStrdup(field.second.String);
+        }
+      break;
+      }
+    case OFTStringList:
+      {
+      std::cerr << "OGR type not handled" << std::endl;
+      break;
+      }
+    case OFTWideString:
+      {
+      std::cerr << "OGR type not handled" << std::endl;
+      break;
+      }
+    case OFTWideStringList:
+      {
+      std::cerr << "OGR type not handled" << std::endl;
+      break;
+      }
+    case OFTBinary:
+      {
+      std::cerr << "OGR type not handled" << std::endl;
+      break;
+      }
+    case OFTDate:
+      {
+      outField.second.Date.Year = field.second.Date.Year;
+      outField.second.Date.Month = field.second.Date.Month;
+      outField.second.Date.Day = field.second.Date.Day;
+      break;
+      }
+    case OFTTime:
+      {
+      outField.second.Date.Hour = field.second.Date.Hour;
+      outField.second.Date.Minute = field.second.Date.Minute;
+      outField.second.Date.Second = field.second.Date.Second;
+      break;
+      }
+    case OFTDateTime:
+      {
+      outField.second.Date.Year = field.second.Date.Year;
+      outField.second.Date.Month = field.second.Date.Month;
+      outField.second.Date.Day = field.second.Date.Day;
+      outField.second.Date.Hour = field.second.Date.Hour;
+      outField.second.Date.Minute = field.second.Date.Minute;
+      outField.second.Date.Second = field.second.Date.Second;
+      break;
+      }
     }
   return outField;
 }

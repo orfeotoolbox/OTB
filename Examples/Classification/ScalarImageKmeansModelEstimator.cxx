@@ -97,7 +97,7 @@ int main(int argc, char * argv[])
 
   // Create the K-d tree structure
   typedef itk::Statistics::WeightedCentroidKdTreeGenerator<
-    AdaptorType>
+      AdaptorType>
   TreeGeneratorType;
 
   TreeGeneratorType::Pointer treeGenerator = TreeGeneratorType::New();

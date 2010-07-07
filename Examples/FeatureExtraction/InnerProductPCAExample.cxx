@@ -148,11 +148,11 @@ int main(int argc, char* argv[])
   ExtractROIFilterType;
 
   typedef otb::Image<unsigned char,
-                     2>                                     OutputImageType;
+      2>                                     OutputImageType;
   typedef otb::ImageFileWriter<OutputImageType>
-                                                            WriterType2;
+  WriterType2;
   typedef itk::RescaleIntensityImageFilter<MonoImageType,
-                                           OutputImageType> RescalerType;
+      OutputImageType> RescalerType;
 
   for (unsigned int cpt = 0; cpt < numberOfPrincipalComponentsRequired; cpt++)
     {

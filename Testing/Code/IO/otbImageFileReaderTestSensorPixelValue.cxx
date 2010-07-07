@@ -29,10 +29,9 @@
 #include <string>
 #include <algorithm>
 
-
 int otbImageFileReaderTestSensorPixelValue(int argc, char* argv[])
 {
-   if (argc < 9)
+  if (argc < 9)
     {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
@@ -42,11 +41,11 @@ int otbImageFileReaderTestSensorPixelValue(int argc, char* argv[])
     return 1;
     }
   // Verify the number of parameters in the command line
-  const char *       inputFilename    = argv[1];
-  const std::string       baselineFilename    = argv[2];
-  const std::string       sensorType    = argv[3];
-  const std::string       sensorName    = argv[4];
-  const std::string       sensorMode    = argv[5];
+  const char *      inputFilename    = argv[1];
+  const std::string baselineFilename    = argv[2];
+  const std::string sensorType    = argv[3];
+  const std::string sensorName    = argv[4];
+  const std::string sensorMode    = argv[5];
 
   const unsigned int nbBands    = atoi(argv[6]);
   const unsigned int indexX    = atoi(argv[7]);
@@ -57,13 +56,13 @@ int otbImageFileReaderTestSensorPixelValue(int argc, char* argv[])
   typedef otb::VectorImage<InputPixelType,  Dimension> ImageType;
 
   typedef otb::ImageFileReader<ImageType> ReaderType;
-  
+
   ReaderType::Pointer reader = ReaderType::New();
 
   reader->SetFileName(inputFilename);
 
   reader->UpdateOutputInformation();
-  ConfigFile *   pixelValuesConfig;
+  ConfigFile * pixelValuesConfig;
 
   try
     {
@@ -74,7 +73,7 @@ int otbImageFileReaderTestSensorPixelValue(int argc, char* argv[])
     itkGenericExceptionMacro(<< "Error - File '" << e.filename << "' not found.");
     }
   std::string paramName;
-  
+
   std::string key;
   key += sensorType;
   key += "_";
@@ -84,8 +83,8 @@ int otbImageFileReaderTestSensorPixelValue(int argc, char* argv[])
   key += "_";
 
   std::stringstream out;
-  out << nbBands << "_" ;
-  out << indexX <<  "_" ;
+  out << nbBands << "_";
+  out << indexX <<  "_";
   out << indexY;
   key += out.str();
   std::transform(key.begin(), key.end(), key.begin(), (int (*)(int))toupper);
@@ -102,7 +101,7 @@ int otbImageFileReaderTestSensorPixelValue(int argc, char* argv[])
     {
     itkGenericExceptionMacro(<< "Error - Key '" << e.key << "' not found.");
     }
-    
+
   ImageType::IndexType index;
   index[0] = indexX;
   index[1] = indexY;
@@ -114,26 +113,26 @@ int otbImageFileReaderTestSensorPixelValue(int argc, char* argv[])
   ImageType::RegionType region;
   region.SetSize(size);
   region.SetIndex(index);
-  
+
   reader->GetOutput()->UpdateOutputInformation();
   reader->GetOutput()->SetRequestedRegion(region);
   reader->GetOutput()->PropagateRequestedRegion();
   reader->GetOutput()->UpdateOutputData();
-  
-  ImageType::PixelType pixelValue = reader->GetOutput()->GetPixel(index);
+
+  ImageType::PixelType            pixelValue = reader->GetOutput()->GetPixel(index);
   ImageType::PixelType::ValueType imagePixelValue;
   imagePixelValue = pixelValue[nbBands - 1];
 
   otbGenericMsgDebugMacro(<< "Pixel value in image " << imagePixelValue);
-  
+
   double epsilon = 0.0000000001;
   double error = vcl_abs(imagePixelValue - baselinePixelValue);
-  if ( error < epsilon ) 
+  if (error < epsilon)
     {
-      return EXIT_SUCCESS;
+    return EXIT_SUCCESS;
     }
-  else 
+  else
     {
-      return EXIT_FAILURE;
+    return EXIT_FAILURE;
     }
 }

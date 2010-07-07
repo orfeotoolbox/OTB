@@ -28,10 +28,10 @@ namespace otb
  * \sa TernaryFunctorImageFilter
  */
 template <class TInputMultiSpectralImage, class TInputMultiSpectralInterpImage, class TInputPanchroImage,
-          class TOutputImage, class TFunctor>
+    class TOutputImage, class TFunctor>
 class ITK_EXPORT FusionImageBase :  public itk::TernaryFunctorImageFilter<TInputMultiSpectralImage,
-                                                                          TInputMultiSpectralInterpImage,
-                                                                          TInputPanchroImage, TOutputImage, TFunctor>
+      TInputMultiSpectralInterpImage,
+      TInputPanchroImage, TOutputImage, TFunctor>
 {
 public:
   /**   Extract input and output images dimensions.*/
@@ -48,10 +48,10 @@ public:
   /** "typedef" for standard classes. */
   typedef FusionImageBase Self;
   typedef itk::TernaryFunctorImageFilter<InputMultiSpectralImageType,
-                                         InputMultiSpectralInterpImageType,
-                                         InputPanchroImageType,
-                                         OutputImageType,
-                                         FunctorType> Superclass;
+      InputMultiSpectralInterpImageType,
+      InputPanchroImageType,
+      OutputImageType,
+      FunctorType> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 

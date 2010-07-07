@@ -43,9 +43,10 @@ ImageRegionTileMapSplitter<VImageDimension>
   for (unsigned int j = VImageDimension; j > 0; --j)
     {
 //    otbMsgDevMacro(<< "*** Dimension: " << j-1);
-    unsigned long int remainingToDo = static_cast<unsigned long int>(vcl_ceil(static_cast<double>(requestedNumber) / numPieces));
-    unsigned int      maxPieces = (regionIndex[j - 1] + regionSize[j - 1] - 1) / m_AlignStep - regionIndex[j - 1]
-                                  / m_AlignStep + 1;
+    unsigned long int remainingToDo =
+      static_cast<unsigned long int>(vcl_ceil(static_cast<double>(requestedNumber) / numPieces));
+    unsigned int maxPieces = (regionIndex[j - 1] + regionSize[j - 1] - 1) / m_AlignStep - regionIndex[j - 1]
+                             / m_AlignStep + 1;
     unsigned int stepPerPiece = 1;
     if (remainingToDo < maxPieces)
       {

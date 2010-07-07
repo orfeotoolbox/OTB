@@ -150,21 +150,21 @@ private:
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT SurfaceAdjacencyEffect6SCorrectionSchemeFilter :
   public UnaryFunctorNeighborhoodImageFilter<TInputImage,
-                                             TOutputImage,
-                                             ITK_TYPENAME Functor::ComputeNeighborhoodContributionFunctor<itk::
-                                                                                                          ConstNeighborhoodIterator
-                                                                                                          <TInputImage>,
-                                                                                                          ITK_TYPENAME
-                                                                                                          TOutputImage
-                                                                                                          ::PixelType> >
+      TOutputImage,
+      ITK_TYPENAME Functor::ComputeNeighborhoodContributionFunctor<itk::
+          ConstNeighborhoodIterator
+          <TInputImage>,
+          ITK_TYPENAME
+          TOutputImage
+          ::PixelType> >
 {
 public:
   /** "typedef" to simplify the variables definition and the declaration. */
   typedef Functor::ComputeNeighborhoodContributionFunctor<itk::ConstNeighborhoodIterator<TInputImage>,
-                                                          ITK_TYPENAME TOutputImage::PixelType> FunctorType;
+      ITK_TYPENAME TOutputImage::PixelType> FunctorType;
 
   /** "typedef" for standard classes. */
-  typedef SurfaceAdjacencyEffect6SCorrectionSchemeFilter                                Self;
+  typedef SurfaceAdjacencyEffect6SCorrectionSchemeFilter                              Self;
   typedef UnaryFunctorNeighborhoodImageFilter<TInputImage, TOutputImage, FunctorType> Superclass;
   typedef itk::SmartPointer<Self>                                                     Pointer;
   typedef itk::SmartPointer<const Self>                                               ConstPointer;

@@ -55,7 +55,7 @@ namespace otb
  * \ingroup IntensityImageFilters
  */
 template <class TInputImage, class TOutputImage,
-          class TBoundaryCondition = itk::ZeroFluxNeumannBoundaryCondition<TInputImage> >
+    class TBoundaryCondition = itk::ZeroFluxNeumannBoundaryCondition<TInputImage> >
 class ITK_EXPORT OverlapSaveConvolutionImageFilter
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {

@@ -33,7 +33,7 @@ namespace otb
  * Constructor
  */
 template <class TInputImage1, class TInputImage2, class TInputImage3,
-          class TInputImage4, class TOutputImage, class TFunction>
+    class TInputImage4, class TOutputImage, class TFunction>
 QuaternaryFunctorImageFilter<TInputImage1, TInputImage2, TInputImage3, TInputImage4, TOutputImage, TFunction>
 ::QuaternaryFunctorImageFilter()
 {
@@ -44,7 +44,7 @@ QuaternaryFunctorImageFilter<TInputImage1, TInputImage2, TInputImage3, TInputIma
  * Connect one of the operands for pixel-wise addition
  */
 template <class TInputImage1, class TInputImage2, class TInputImage3,
-          class TInputImage4, class TOutputImage, class TFunction>
+    class TInputImage4, class TOutputImage, class TFunction>
 void
 QuaternaryFunctorImageFilter<TInputImage1, TInputImage2, TInputImage3, TInputImage4, TOutputImage, TFunction>
 ::SetInput1(const TInputImage1 *image1)
@@ -57,7 +57,7 @@ QuaternaryFunctorImageFilter<TInputImage1, TInputImage2, TInputImage3, TInputIma
  * Connect one of the operands for pixel-wise addition
  */
 template <class TInputImage1, class TInputImage2, class TInputImage3,
-          class TInputImage4, class TOutputImage, class TFunction>
+    class TInputImage4, class TOutputImage, class TFunction>
 void
 QuaternaryFunctorImageFilter<TInputImage1, TInputImage2, TInputImage3, TInputImage4, TOutputImage, TFunction>
 ::SetInput2(const TInputImage2 *image2)
@@ -70,7 +70,7 @@ QuaternaryFunctorImageFilter<TInputImage1, TInputImage2, TInputImage3, TInputIma
  * Connect one of the operands for pixel-wise addition
  */
 template <class TInputImage1, class TInputImage2, class TInputImage3,
-          class TInputImage4, class TOutputImage, class TFunction>
+    class TInputImage4, class TOutputImage, class TFunction>
 void
 QuaternaryFunctorImageFilter<TInputImage1, TInputImage2, TInputImage3, TInputImage4, TOutputImage, TFunction>
 ::SetInput3(const TInputImage3 *image3)
@@ -83,7 +83,7 @@ QuaternaryFunctorImageFilter<TInputImage1, TInputImage2, TInputImage3, TInputIma
  * Connect one of the operands for pixel-wise addition
  */
 template <class TInputImage1, class TInputImage2, class TInputImage3,
-          class TInputImage4, class TOutputImage, class TFunction>
+    class TInputImage4, class TOutputImage, class TFunction>
 void
 QuaternaryFunctorImageFilter<TInputImage1, TInputImage2, TInputImage3, TInputImage4, TOutputImage, TFunction>
 ::SetInput4(const TInputImage4 *image4)
@@ -96,7 +96,7 @@ QuaternaryFunctorImageFilter<TInputImage1, TInputImage2, TInputImage3, TInputIma
  * BeforeThreadedGenerateData function. Validate inputs
  */
 template <class TInputImage1, class TInputImage2, class TInputImage3,
-          class TInputImage4, class TOutputImage, class TFunction>
+    class TInputImage4, class TOutputImage, class TFunction>
 void
 QuaternaryFunctorImageFilter<TInputImage1, TInputImage2, TInputImage3, TInputImage4, TOutputImage, TFunction>
 ::BeforeThreadedGenerateData()
@@ -124,7 +124,7 @@ QuaternaryFunctorImageFilter<TInputImage1, TInputImage2, TInputImage3, TInputIma
  * ThreadedGenerateData function. Performs the pixel-wise addition
  */
 template <class TInputImage1, class TInputImage2, class TInputImage3,
-          class TInputImage4, class TOutputImage, class TFunction>
+    class TInputImage4, class TOutputImage, class TFunction>
 void
 QuaternaryFunctorImageFilter<TInputImage1, TInputImage2, TInputImage3, TInputImage4, TOutputImage, TFunction>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,

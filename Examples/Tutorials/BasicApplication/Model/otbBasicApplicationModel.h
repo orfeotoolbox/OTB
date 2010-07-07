@@ -59,18 +59,18 @@ public:
   typedef itk::RGBPixel<unsigned char>
   RGBPixelType;
   typedef      Image<RGBPixelType,
-                     2>
+      2>
   RGBImageType;
   typedef      ImageLayer<VectorImageType,
-                          RGBImageType>
+      RGBImageType>
   LayerType;
   typedef      ImageLayerGenerator<LayerType>
   LayerGeneratorType;
   typedef      ImageLayerRenderingModel<RGBImageType>
   VisualizationModelType;
   typedef Function::UniformAlphaBlendingFunction<LayerGeneratorType::
-                                                 ImageLayerType::
-                                                 OutputPixelType>
+      ImageLayerType::
+      OutputPixelType>
   BlendingFunctionType;
 
   /** Get the unique instanc1e of the model */

@@ -72,8 +72,8 @@ public:
 
   /** PointSetToDensityImageFilter support*/
   typedef otb::BinaryImageToDensityImageFilter<InputImageType,
-                                               OutputImageType,
-                                               DensityCountFunctionType>   DensityImageType;
+      OutputImageType,
+      DensityCountFunctionType>   DensityImageType;
 
   typedef typename DensityImageType::Pointer DensityImagePointerType;
 

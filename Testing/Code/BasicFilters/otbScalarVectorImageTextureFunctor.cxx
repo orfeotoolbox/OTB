@@ -43,11 +43,11 @@ int otbScalarVectorImageTextureFunctor(int argc, char * argv[])
   typedef otb::StreamingImageFileWriter<OutputVectorImageType> WriterType;
 
   typedef otb::Functor::ScalarVectorImageTextureFunctor<IterType, InputImageType,
-                                                        OutputVectorImagePixelType> FunctorType;
+      OutputVectorImagePixelType> FunctorType;
 
   typedef FunctorType::IndexSelectFeaturesType ListIndexType;
   typedef otb::UnaryFunctorNeighborhoodImageFilter<InputImageType, OutputVectorImageType,
-                                                   FunctorType> UnaryFunctorNeighborhoodImageFilterType;
+      FunctorType> UnaryFunctorNeighborhoodImageFilterType;
 
   // Instantiating object
   UnaryFunctorNeighborhoodImageFilterType::Pointer object = UnaryFunctorNeighborhoodImageFilterType::New();

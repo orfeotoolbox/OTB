@@ -39,16 +39,16 @@ class ITK_EXPORT HillShadingFilter :
   public UnaryFunctorNeighborhoodImageFilter<TInputImage, TOutputImage,
       Functor::HillShadingFunctor<itk::ConstNeighborhoodIterator<TInputImage>,
           TInputImage, typename TOutputImage::PixelType>
-  >
+      >
 {
 
 public:
 
   /** Standard class typedefs. */
-  typedef  HillShadingFilter               Self;
+  typedef  HillShadingFilter Self;
 
-  typedef itk::SmartPointer<Self>          Pointer;
-  typedef itk::SmartPointer<const Self>    ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

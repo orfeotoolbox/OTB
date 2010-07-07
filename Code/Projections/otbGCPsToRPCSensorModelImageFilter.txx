@@ -356,7 +356,7 @@ GCPsToRPCSensorModelImageFilter<TImage>
     rpcSolver->createRpcProjection()->getProjection());
   ossimKeywordlist kwl;
   m_RpcProjection->saveState(kwl);
-   // Compute errors
+  // Compute errors
   this->ComputeErrors();
 
   // Build an otb::ImageKeywordList

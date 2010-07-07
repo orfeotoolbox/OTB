@@ -71,7 +71,7 @@ public:
   /** Typedef for the boost graph representation */
   typedef boost::adjacency_list
   <boost::vecS, boost::vecS, boost::bidirectionalS,
-   VertexPointerType, EdgePointerType> InternalGraphType;
+      VertexPointerType, EdgePointerType> InternalGraphType;
   /** Edges and vertices descriptors typedefs (boost objects)*/
   typedef typename InternalGraphType::vertex_descriptor VertexDescriptorType;
   typedef typename InternalGraphType::edge_descriptor   EdgeDescriptorType;

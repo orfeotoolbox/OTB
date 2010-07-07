@@ -294,8 +294,8 @@ int main(int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef itk::ResampleImageFilter<
-    ImageType,
-    OutputImageType>    ResampleFilterType;
+      ImageType,
+      OutputImageType>    ResampleFilterType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex

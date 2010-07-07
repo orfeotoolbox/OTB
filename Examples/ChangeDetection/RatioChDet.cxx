@@ -117,7 +117,7 @@ int main(int argc, char* argv[])
 
   //  Software Guide : BeginCodeSnippet
   typedef itk::ShiftScaleImageFilter<ChangeImageType,
-                                     OutputImageType> RescalerType;
+      OutputImageType> RescalerType;
 
   //  Software Guide : EndCodeSnippet
 
@@ -131,9 +131,9 @@ int main(int argc, char* argv[])
 
   //  Software Guide : BeginCodeSnippet
   typedef otb::MeanRatioImageFilter<
-    InputImageType1,
-    InputImageType2,
-    ChangeImageType>       FilterType;
+      InputImageType1,
+      InputImageType2,
+      ChangeImageType>       FilterType;
 
   //  Software Guide : EndCodeSnippet
 

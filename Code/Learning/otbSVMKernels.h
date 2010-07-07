@@ -287,19 +287,20 @@ public:
       }
     switch (degree)
       {
-    case 0:
-      return kernelValue;
-      break;
-    case 1:
-      return (-2 * gamma * (yval - xval) * kernelValue);
-      break;
-    default:
-      return (-2 * gamma *
-              ((degree -
-                1) *
-        this->derivative(x, y, param, degree - 2, index, isAtEnd,
-                         constValue) + (yval - xval) * derivative(x, y, param, degree - 1, index, isAtEnd, constValue)));
-      break;
+      case 0:
+        return kernelValue;
+        break;
+      case 1:
+        return (-2 * gamma * (yval - xval) * kernelValue);
+        break;
+      default:
+        return (-2 * gamma *
+                ((degree -
+                  1) *
+                 this->derivative(x, y, param, degree - 2, index, isAtEnd,
+                                  constValue) +
+                 (yval - xval) * derivative(x, y, param, degree - 1, index, isAtEnd, constValue)));
+        break;
       }
 
   }

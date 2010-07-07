@@ -67,10 +67,11 @@ typename ImageSeriesFileReaderBase<TImage, TInternalImage>::OutputImageListType 
 ImageSeriesFileReaderBase<TImage, TInternalImage>
 ::GetOutput()
 {
-  if (this->GetNumberOfOutputs() < 1) throw ImageSeriesFileReaderException(__FILE__,
-                                                                           __LINE__,
-                                                                           "No data to output",
-                                                                           ITK_LOCATION);
+  if (this->GetNumberOfOutputs() < 1)
+    throw ImageSeriesFileReaderException(__FILE__,
+                                         __LINE__,
+                                         "No data to output",
+                                         ITK_LOCATION);
 
   return static_cast<OutputImageListType*>(this->m_OutputList);
 }
@@ -80,15 +81,17 @@ typename ImageSeriesFileReaderBase<TImage, TInternalImage>::OutputImageType *
 ImageSeriesFileReaderBase<TImage, TInternalImage>
 ::GetOutput(unsigned int idx)
 {
-  if (this->GetNumberOfOutputs() < 1) throw ImageSeriesFileReaderException(__FILE__,
-                                                                           __LINE__,
-                                                                           "No data to output",
-                                                                           ITK_LOCATION);
+  if (this->GetNumberOfOutputs() < 1)
+    throw ImageSeriesFileReaderException(__FILE__,
+                                         __LINE__,
+                                         "No data to output",
+                                         ITK_LOCATION);
 
-  if (idx >= m_OutputList->Size()) throw ImageSeriesFileReaderException(__FILE__,
-                                                                        __LINE__,
-                                                                        "Index out of bounds",
-                                                                        ITK_LOCATION);
+  if (idx >= m_OutputList->Size())
+    throw ImageSeriesFileReaderException(__FILE__,
+                                         __LINE__,
+                                         "Index out of bounds",
+                                         ITK_LOCATION);
 
   return static_cast<OutputImageType*>(this->m_OutputList->GetNthElement(idx));
 }

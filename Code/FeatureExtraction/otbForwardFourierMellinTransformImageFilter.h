@@ -46,12 +46,12 @@ namespace otb
  */
 
 template <class TPixel,
-          class TInterpol,
-          unsigned int Dimension = 2>
+    class TInterpol,
+    unsigned int Dimension = 2>
 
 class ITK_EXPORT ForwardFourierMellinTransformImageFilter :
   public itk::ImageToImageFilter<Image<TPixel, Dimension>,
-                                 itk::Image<std::complex<TPixel>, Dimension> >
+      itk::Image<std::complex<TPixel>, Dimension> >
 {
 public:
 

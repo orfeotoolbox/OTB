@@ -24,7 +24,7 @@ namespace otb
 /** \class Threads
  * \brief Operation from open threads that are used in Monteverdi
  *
- * Implement the sleep operation from openthreads to remove Monteverdi 
+ * Implement the sleep operation from openthreads to remove Monteverdi
  * dependance to openthreads at compile time.
  *
  */

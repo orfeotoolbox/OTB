@@ -69,20 +69,20 @@ int otbVectorDataModelTest(int argc, char * argv[])
   <ModelType, ViewType>                                  ChangeRegionHandlerType;
   typedef otb::ChangeScaleActionHandler
   <ModelType, ViewType>                                  ChangeScaleHandlerType;
-  typedef otb::PixelDescriptionModel<OutputImageType>    PixelDescriptionModelType;
+  typedef otb::PixelDescriptionModel<OutputImageType> PixelDescriptionModelType;
   typedef otb::PixelDescriptionActionHandler
   <PixelDescriptionModelType, ViewType>                  PixelDescriptionActionHandlerType;
   typedef otb::PixelDescriptionView
   <PixelDescriptionModelType>                            PixelDescriptionViewType;
   typedef otb::VectorDataActionHandler
-    <otb::VectorDataModel,ViewType>                      VectorDataActionHandlerType;
+  <otb::VectorDataModel, ViewType>                      VectorDataActionHandlerType;
   // VectorData
-  typedef otb::VectorDataModel::VectorDataType           VectorDataType;
-  typedef otb::VectorDataFileReader<VectorDataType>      VectorDataFileReaderType;
+  typedef otb::VectorDataModel::VectorDataType      VectorDataType;
+  typedef otb::VectorDataFileReader<VectorDataType> VectorDataFileReaderType;
   typedef otb::VectorDataProjectionFilter<VectorDataType,
-                                          VectorDataType>
-                                                         VectorDataProjectionFilterType;
-  typedef otb::VectorDataGlComponent<VectorDataType>     VectorDataGlComponentType;
+      VectorDataType>
+  VectorDataProjectionFilterType;
+  typedef otb::VectorDataGlComponent<VectorDataType> VectorDataGlComponentType;
 
   // Instantiation
   ModelType::Pointer                 model      = ModelType::New();
@@ -107,11 +107,11 @@ int otbVectorDataModelTest(int argc, char * argv[])
   view->SetModel(model);
 
   // Build the VectorDataModel
-   otb::VectorDataModel::Pointer vdModel = otb::VectorDataModel::New();
-   vdModel->RegisterListener(view);
+  otb::VectorDataModel::Pointer vdModel = otb::VectorDataModel::New();
+  vdModel->RegisterListener(view);
 
-   VectorDataGlComponentType::Pointer vgl = VectorDataGlComponentType::New();
-   vgl->SetVectorData(vdModel->GetVectorData());
+  VectorDataGlComponentType::Pointer vgl = VectorDataGlComponentType::New();
+  vgl->SetVectorData(vdModel->GetVectorData());
 
   view->GetScrollWidget()->AddGlComponent(vgl);
   view->GetFullWidget()->AddGlComponent(vgl);

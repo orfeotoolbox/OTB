@@ -38,7 +38,7 @@ int otbLuminanceToReflectanceImageFilterAuto(int argc, char * argv[])
   typedef otb::ImageFileWriter<OutputImageType>                             WriterType;
   typedef otb::ImageToLuminanceImageFilter<InputImageType, OutputImageType> ImageToLuminanceImageFilterType;
   typedef otb::LuminanceToReflectanceImageFilter<OutputImageType,
-                                                 OutputImageType> LuminanceToReflectanceImageFilterType;
+      OutputImageType> LuminanceToReflectanceImageFilterType;
   typedef ImageToLuminanceImageFilterType::VectorType       VectorType;
   typedef otb::MultiChannelExtractROI<PixelType, PixelType> RoiFilterType;
 

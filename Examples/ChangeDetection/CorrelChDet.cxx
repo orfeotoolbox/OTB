@@ -109,7 +109,7 @@ int main(int argc, char* argv[])
 
   //  Software Guide : BeginCodeSnippet
   typedef itk::ShiftScaleImageFilter<ChangeImageType,
-                                     OutputImageType> RescalerType;
+      OutputImageType> RescalerType;
   //  Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -122,9 +122,9 @@ int main(int argc, char* argv[])
 
   //  Software Guide : BeginCodeSnippet
   typedef otb::CorrelationChangeDetector<
-    InputImageType1,
-    InputImageType2,
-    ChangeImageType>       FilterType;
+      InputImageType1,
+      InputImageType2,
+      ChangeImageType>       FilterType;
   //  Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex

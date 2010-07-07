@@ -129,7 +129,7 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef itk::GradientMagnitudeRecursiveGaussianImageFilter<
-    InputImageType, OutputImageType>  FilterType;
+      InputImageType, OutputImageType>  FilterType;
   // Software Guide : EndCodeSnippet
 
   ReaderType::Pointer reader = ReaderType::New();
@@ -199,7 +199,7 @@ int main(int argc, char * argv[])
   typedef otb::Image<WritePixelType, 2> WriteImageType;
 
   typedef itk::RescaleIntensityImageFilter<
-    OutputImageType, WriteImageType> RescaleFilterType;
+      OutputImageType, WriteImageType> RescaleFilterType;
 
   RescaleFilterType::Pointer rescaler = RescaleFilterType::New();
 

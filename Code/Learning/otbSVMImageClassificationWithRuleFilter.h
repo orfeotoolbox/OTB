@@ -46,7 +46,7 @@ public:
   /** Standard typedefs */
   typedef SVMImageClassificationWithRuleFilter Self;
   typedef SVMImageClassificationFilter<TInputImage,
-                                       TOutputImage, TMaskImage>              Superclass;
+      TOutputImage, TMaskImage>              Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 

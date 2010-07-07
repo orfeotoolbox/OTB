@@ -40,8 +40,8 @@ namespace otb
  * \param radius The radius of the nieghbourhood.
  */
 template <class TListSample, class TMap,
-          class TSOMLearningBehaviorFunctor,
-          class TSOMNeighborhoodBehaviorFunctor>
+    class TSOMLearningBehaviorFunctor,
+    class TSOMNeighborhoodBehaviorFunctor>
 void
 SOMWithMissingValue<TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighborhoodBehaviorFunctor>
 ::UpdateMap(const NeuronType& sample, double beta, SizeType& radius)

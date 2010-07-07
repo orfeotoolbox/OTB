@@ -86,10 +86,10 @@ public:
   typedef itk::Vector<double, 2> SpacingType;
   typedef itk::Point<double, 2>  OriginType;
 
-  typedef typename InputVectorDataType::DataNodePointerType                     InputDataNodePointerType;
-  typedef typename OutputVectorDataType::DataNodeType                           OutputDataNodeType;
-  typedef typename OutputVectorDataType::DataNodePointerType                    OutputDataNodePointerType;
-  typedef typename OutputVectorDataType::DataTreePointerType                    OutputDataTreePointerType;
+  typedef typename InputVectorDataType::DataNodePointerType  InputDataNodePointerType;
+  typedef typename OutputVectorDataType::DataNodeType        OutputDataNodeType;
+  typedef typename OutputVectorDataType::DataNodePointerType OutputDataNodePointerType;
+  typedef typename OutputVectorDataType::DataTreePointerType OutputDataTreePointerType;
 
   typedef typename InputVectorDataType::DataTreeType::TreeNodeType  InputInternalTreeNodeType;
   typedef typename OutputVectorDataType::DataTreeType::TreeNodeType OutputInternalTreeNodeType;

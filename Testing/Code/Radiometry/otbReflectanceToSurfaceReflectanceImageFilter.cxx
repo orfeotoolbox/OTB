@@ -35,7 +35,7 @@ int otbReflectanceToSurfaceReflectanceImageFilter(int argc, char * argv[])
   typedef otb::ImageFileReader<InputImageType>   ReaderType;
   typedef otb::ImageFileWriter<OutputImageType>  WriterType;
   typedef otb::ReflectanceToSurfaceReflectanceImageFilter<InputImageType,
-                                                          OutputImageType>
+      OutputImageType>
   ReflectanceToSurfaceReflectanceImageFilterType;
   typedef otb::AtmosphericRadiativeTerms::DataVectorType DataVectorType;
   otb::AtmosphericRadiativeTerms::Pointer atmo = otb::AtmosphericRadiativeTerms::New();

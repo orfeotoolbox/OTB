@@ -105,28 +105,28 @@ int main(int argc, char * argv[])
   typedef otb::VectorRescaleIntensityImageFilter
   <VectorImageType, OutputVectorImageType> VectorRescalerType;
   typedef otb::MultiChannelExtractROI<unsigned char,
-                                      unsigned char> ChannelExtractorType;
+      unsigned char> ChannelExtractorType;
   // Label map typedef
   typedef otb::AttributesMapLabelObject<LabelType, Dimension,
-                                        double>
+      double>
   LabelObjectType;
   typedef itk::LabelMap<LabelObjectType>
   LabelMapType;
   typedef itk::LabelImageToLabelMapFilter<LabeledImageType,
-                                          LabelMapType>
+      LabelMapType>
   LabelMapFilterType;
   typedef otb::ShapeAttributesLabelMapFilter<LabelMapType>
   ShapeLabelMapFilterType;
   typedef otb::StatisticsAttributesLabelMapFilter<LabelMapType,
-                                                  ImageType>
+      ImageType>
   StatisticsLabelMapFilterType;
   typedef otb::RadiometricAttributesLabelMapFilter<LabelMapType,
-                                                   VectorImageType>
+      VectorImageType>
   RadiometricLabelMapFilterType;
   typedef otb::AttributesMapOpeningLabelMapFilter<LabelMapType>
   OpeningLabelMapFilterType;
   typedef itk::LabelMapToBinaryImageFilter<LabelMapType,
-                                           LabeledImageType>
+      LabeledImageType>
   LabelMapToBinaryImageFilterType;
 
   ReaderType::Pointer reader = ReaderType::New();
@@ -293,7 +293,7 @@ int main(int argc, char * argv[])
 //
 // Figure~\ref{fig:RADIOMETRIC_LABEL_MAP_FILTER} shows the result of applying
 // the object selection based on radiometric attributes.
-// \begin{figure} [htbp] 
+// \begin{figure} [htbp]
 // \center
 // \includegraphics[width=0.44\textwidth]{qb_ExtractRoad_Radiometry_pretty.eps}
 // \includegraphics[width=0.44\textwidth]{OBIARadiometricAttribute1.eps}

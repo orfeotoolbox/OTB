@@ -38,15 +38,15 @@ int otbModulusAndDirectionImageFiltersNew(int argc, char* argv[])
   typedef otb::Image<OutputPixelType, Dimension> OutputImageDirectionType;
 
   typedef otb::ImageToModulusAndDirectionImageFilter<InputImageType,
-                                                     OutputImageType>          FilterType;
+      OutputImageType>          FilterType;
   typedef otb::ImageToModulusAndDirectionImageFilter<InputImageType, OutputImageType,
-                                                     OutputImageDirectionType> Filter2Type;
+      OutputImageDirectionType> Filter2Type;
 
   FilterType::Pointer  Filter = FilterType::New();
   Filter2Type::Pointer Filter2 = Filter2Type::New();
 
   typedef otb::ModulusAndDirectionImageToImageFilter<InputImageType, InputImageDirectionType,
-                                                     OutputImageType> Filter3Type;
+      OutputImageType> Filter3Type;
   Filter3Type::Pointer Filter3 = Filter3Type::New();
 
   return EXIT_SUCCESS;

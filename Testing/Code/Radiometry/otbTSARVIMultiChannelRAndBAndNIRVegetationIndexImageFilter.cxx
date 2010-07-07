@@ -32,9 +32,9 @@ int otbTSARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter(int argc, char * 
   typedef otb::ImageFileReader<InputImageType>  ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
   typedef otb::Functor::TSARVI<InputImageType::InternalPixelType,
-                               InputImageType::InternalPixelType,
-                               InputImageType::InternalPixelType,
-                               OutputImageType::PixelType> FunctorType;
+      InputImageType::InternalPixelType,
+      InputImageType::InternalPixelType,
+      OutputImageType::PixelType> FunctorType;
   typedef otb::MultiChannelRAndBAndNIRIndexImageFilter<InputImageType, OutputImageType, FunctorType>
   MultiChannelRAndBAndNIRIndexImageFilterType;
 

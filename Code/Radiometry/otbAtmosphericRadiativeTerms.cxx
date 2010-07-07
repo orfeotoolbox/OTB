@@ -563,25 +563,25 @@ AtmosphericRadiativeTerms
     os << "Channel " << i << " : " << std::endl;
     //ValueType::(os,indent);
     os << indent << "Intrinsic Atmospheric Reflectance     : "
-        << m_Values[i]->GetIntrinsicAtmosphericReflectance() << std::endl;
+       << m_Values[i]->GetIntrinsicAtmosphericReflectance() << std::endl;
     os << indent << "Shperical Albedo of the Atmosphere    : "
-        << m_Values[i]->GetSphericalAlbedo() << std::endl;
+       << m_Values[i]->GetSphericalAlbedo() << std::endl;
     os << indent << "Total Gaseous Transmission            : "
-        << m_Values[i]->GetTotalGaseousTransmission() << std::endl;
+       << m_Values[i]->GetTotalGaseousTransmission() << std::endl;
     os << indent << "Atmosphere Downward Transmittance     : "
-        << m_Values[i]->GetDownwardTransmittance() << std::endl;
+       << m_Values[i]->GetDownwardTransmittance() << std::endl;
     os << indent << "Atmosphere Upward Transmittance       : "
-        << m_Values[i]->GetUpwardTransmittance() << std::endl;
+       << m_Values[i]->GetUpwardTransmittance() << std::endl;
     os << indent << "Upward Diffuse Transmittance          : "
-        << m_Values[i]->GetUpwardDiffuseTransmittance() << std::endl;
+       << m_Values[i]->GetUpwardDiffuseTransmittance() << std::endl;
     os << indent << "Upward Direct Transmittance           : "
-        << m_Values[i]->GetUpwardDirectTransmittance() << std::endl;
+       << m_Values[i]->GetUpwardDirectTransmittance() << std::endl;
     os << indent << "Rayleigh Upward Diffuse Transmittance : "
-        << m_Values[i]->GetUpwardDiffuseTransmittanceForRayleigh() << std::endl;
+       << m_Values[i]->GetUpwardDiffuseTransmittanceForRayleigh() << std::endl;
     os << indent << "Aerosols Upward Diffuse Transmittance : "
-        << m_Values[i]->GetUpwardDiffuseTransmittanceForAerosol() << std::endl;
+       << m_Values[i]->GetUpwardDiffuseTransmittanceForAerosol() << std::endl;
     os << indent << "Wavelength           : "
-        << m_Values[i]->GetWavelengthSpectralBand() << std::endl;
+       << m_Values[i]->GetWavelengthSpectralBand() << std::endl;
     }
 }
 

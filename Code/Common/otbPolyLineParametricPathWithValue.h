@@ -105,8 +105,7 @@ protected:
   /** Constructor */
   PolyLineParametricPathWithValue();
   /** Destructor */
-  virtual ~PolyLineParametricPathWithValue()
-    {}
+  virtual ~PolyLineParametricPathWithValue() {}
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

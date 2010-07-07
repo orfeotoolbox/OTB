@@ -38,7 +38,7 @@ public:
   /** Standard typedefs */
   typedef PointSetAndValuesFunction Self;
   typedef itk::FunctionBase<itk::Point<TCoordRep,
-                                       ::itk::GetPointSetDimension<TPointSet>::PointDimension>, TValue> Superclass;
+          ::itk::GetPointSetDimension<TPointSet>::PointDimension>, TValue> Superclass;
   typedef itk::SmartPointer<Self>
   Pointer;
   typedef itk::SmartPointer<const Self>

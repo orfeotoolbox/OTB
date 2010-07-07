@@ -32,20 +32,20 @@ namespace otb
  */
 
 template <class TInputImageR, class TInputImageG, class TInputImageNIR, class TOutputImage,
-          class TFunction = Functor::AVI<typename TInputImageR::PixelType,
-                                         typename TInputImageG::PixelType,
-                                         typename TInputImageNIR::PixelType,
-                                         typename TOutputImage::PixelType> >
+    class TFunction = Functor::AVI<typename TInputImageR::PixelType,
+        typename TInputImageG::PixelType,
+        typename TInputImageNIR::PixelType,
+        typename TOutputImage::PixelType> >
 class ITK_EXPORT RAndGAndNIRIndexImageFilter :  public itk::TernaryFunctorImageFilter<TInputImageR, TInputImageG,
-                                                                                      TInputImageNIR, TOutputImage,
-                                                                                      TFunction>
+      TInputImageNIR, TOutputImage,
+      TFunction>
 {
 public:
 
   /** Standard typedefs */
   typedef RAndGAndNIRIndexImageFilter Self;
   typedef itk::TernaryFunctorImageFilter<TInputImageR, TInputImageG, TInputImageNIR, TOutputImage,
-                                         TFunction> Superclass;
+      TFunction> Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self>
   ConstPointer;

@@ -37,10 +37,10 @@ class ITK_EXPORT PostGISTable
 {
 public:
   /** Standard class typedefs */
-  typedef PostGISTable                                                       Self;
+  typedef PostGISTable                                                        Self;
   typedef GISTable <TConnectionImplementation, TPrecision, TSpatialDimension> Superclass;
-  typedef itk::SmartPointer<Self>                                            Pointer;
-  typedef itk::SmartPointer<const Self>                                      ConstPointer;
+  typedef itk::SmartPointer<Self>                                             Pointer;
+  typedef itk::SmartPointer<const Self>                                       ConstPointer;
 
   /** Standard macros */
   itkNewMacro(Self);
@@ -48,17 +48,17 @@ public:
   itkStaticConstMacro(Dimension, unsigned int, TSpatialDimension);
 
   /** Some convenient typedefs */
-  typedef TConnectionImplementation                                      ConnectionType;
-  typedef typename ConnectionType::Pointer                               ConnectionPointerType;
+  typedef TConnectionImplementation                                       ConnectionType;
+  typedef typename ConnectionType::Pointer                                ConnectionPointerType;
   typedef itk::Point<TPrecision, TSpatialDimension>                       PointType;
   typedef PolyLineParametricPathWithValue <TPrecision, TSpatialDimension> LineType;
-  typedef typename LineType::Pointer                                     LinePointerType;
-  typedef Polygon <TPrecision>                                           PolygonType;
-  typedef typename PolygonType::Pointer                                  PolygonPointerType;
-  typedef typename PolygonType::ConstPointer                             PolygonConstPointerType;
-  typedef ObjectList<PolygonType>                                        PolygonListType;
-  typedef typename PolygonListType::Pointer                              PolygonListPointerType;
-  typedef typename PolygonListType::ConstPointer                         PolygonListConstPointerType;
+  typedef typename LineType::Pointer                                      LinePointerType;
+  typedef Polygon <TPrecision>                                            PolygonType;
+  typedef typename PolygonType::Pointer                                   PolygonPointerType;
+  typedef typename PolygonType::ConstPointer                              PolygonConstPointerType;
+  typedef ObjectList<PolygonType>                                         PolygonListType;
+  typedef typename PolygonListType::Pointer                               PolygonListPointerType;
+  typedef typename PolygonListType::ConstPointer                          PolygonListConstPointerType;
 
   /** typedefs for correct polygon */
   typedef otb::CorrectPolygonFunctor<PolygonType> CorrectFunctorType;

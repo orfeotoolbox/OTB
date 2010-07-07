@@ -119,7 +119,7 @@ public:
 
   /** Calibration functor typedef */
   typedef typename Functor::TerraSarCalibrationFunctor<InputValueType,
-                                                       OutputValueType>    CalibrationFunctorType;
+      OutputValueType>    CalibrationFunctorType;
 
   /** typedef to access metadata */
   typedef itk::MetaDataDictionary           MetaDataDictionaryType;

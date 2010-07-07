@@ -35,12 +35,12 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputImage,
-          class TFunction = Functor::PolarimetricSynthesisFunctor<
-            typename TInputImage::InternalPixelType,
-            typename TInputImage::InternalPixelType,
-            typename TInputImage::InternalPixelType,
-            typename TInputImage::InternalPixelType,
-            typename TOutputImage::PixelType> >
+    class TFunction = Functor::PolarimetricSynthesisFunctor<
+        typename TInputImage::InternalPixelType,
+        typename TInputImage::InternalPixelType,
+        typename TInputImage::InternalPixelType,
+        typename TInputImage::InternalPixelType,
+        typename TOutputImage::PixelType> >
 class ITK_EXPORT MultiChannelsPolarimetricSynthesisFilter : public itk::InPlaceImageFilter<TInputImage, TOutputImage>
 {
 public:

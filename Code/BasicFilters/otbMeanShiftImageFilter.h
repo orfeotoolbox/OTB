@@ -106,8 +106,8 @@ public:
  */
 
 template <class TInputImage, class TOutputImage,
-          class TLabeledOutput = otb::Image<unsigned short, 2>,
-          class TBufferConverter = MeanShift::ScalarBufferConverter>
+    class TLabeledOutput = otb::Image<unsigned short, 2>,
+    class TBufferConverter = MeanShift::ScalarBufferConverter>
 class ITK_EXPORT MeanShiftImageFilter
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {

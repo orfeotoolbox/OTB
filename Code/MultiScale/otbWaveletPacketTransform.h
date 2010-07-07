@@ -54,8 +54,8 @@ namespace otb {
  * \sa WaveletTransform
  */
 template <class TInputImage, class TOutputImage, class TFilter,
-          Wavelet::WaveletDirection TDirectionOfTransformation,
-          class TCost = FullyDecomposedWaveletPacketCost<TInputImage> >
+    Wavelet::WaveletDirection TDirectionOfTransformation,
+    class TCost = FullyDecomposedWaveletPacketCost<TInputImage> >
 class ITK_EXPORT WaveletPacketTransform
   : public itk::ImageSource<TOutputImage>
 {
@@ -238,7 +238,7 @@ private:
  */
 template <class TInputImage, class TOutputImage, class TFilter>
 class ITK_EXPORT WaveletPacketTransform<TInputImage, TOutputImage, TFilter,
-                                        Wavelet::INVERSE, FullyDecomposedWaveletPacketCost<TInputImage> >
+    Wavelet::INVERSE, FullyDecomposedWaveletPacketCost<TInputImage> >
   : public ImageListToImageFilter<TInputImage, TOutputImage>
 {
 public:

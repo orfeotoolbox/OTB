@@ -165,7 +165,7 @@ int otbSVMClassifierImage(int argc, char* argv[])
   typedef otb::Image<unsigned char, Dimension> FileImageType;
 
   typedef itk::RescaleIntensityImageFilter<OutputImageType,
-                                           FileImageType> RescalerType;
+      FileImageType> RescalerType;
 
   RescalerType::Pointer rescaler = RescalerType::New();
 

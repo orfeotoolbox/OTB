@@ -47,11 +47,11 @@ class Identity
 public:
   Identity(){}
   virtual ~Identity(){}
-  bool operator!=(const Identity&) const
+  bool operator !=(const Identity&) const
   {
     return false;
   }
-  bool operator==(const Identity& other) const
+  bool operator ==(const Identity& other) const
   {
     return !(*this != other);
   }
@@ -78,11 +78,11 @@ public:
  *  \ingroup Visualization
  */
 template <class TPixel, class TRGBPixel,
-          class TPixelRepresentationFunction = ChannelSelectorFunctor<TPixel>,
-          class TTransferFunction = Identity<
-            typename itk::NumericTraits<typename itk::NumericTraits<TPixel>::ValueType>::RealType,
-            typename itk::NumericTraits<typename itk::NumericTraits<TPixel>::ValueType>::RealType
-            > >
+    class TPixelRepresentationFunction = ChannelSelectorFunctor<TPixel>,
+    class TTransferFunction = Identity<
+        typename itk::NumericTraits<typename itk::NumericTraits<TPixel>::ValueType>::RealType,
+        typename itk::NumericTraits<typename itk::NumericTraits<TPixel>::ValueType>::RealType
+        > >
 class StandardRenderingFunction
   : public RenderingFunction<TPixel, TRGBPixel>
 {
@@ -118,7 +118,7 @@ public:
   typedef typename PixelRepresentationFunctionType::Pointer         PixelRepresentationFunctionPointerType;
   typedef typename PixelRepresentationFunctionType::ChannelListType ChannelListType;
 
-  typedef typename itk::MetaDataDictionary                                   MetaDataDictionaryType;
+  typedef typename itk::MetaDataDictionary MetaDataDictionaryType;
 
   /** Convert the input pixel to a pixel representation that can be displayed on
     *  RGB. For example, channel selection, modulus computation, etc.
@@ -184,7 +184,7 @@ public:
     return m_PixelRepresentationFunction->GetOutputSize();
   }
 
-  virtual void Initialize(const MetaDataDictionaryType &metadatadictionary) //FIXME should disappear and be automatic (IsModified())
+  virtual void Initialize(const MetaDataDictionaryType& metadatadictionary) //FIXME should disappear and be automatic (IsModified())
   {
     if ((this->GetMTime() > m_UTime) || (this->GetPixelRepresentationFunction()->GetMTime() > m_UTime))
     //NOTE: we assume that Transfer function have no parameters
@@ -196,10 +196,11 @@ public:
         if (m_PixelRepresentationFunction->IsUsingDefaultParameters())
           {
           //RGB rendering needs at least 3 channels
-          if (this->GetListSample()->GetMeasurementVectorSize() >=3)
+          if (this->GetListSample()->GetMeasurementVectorSize() >= 3)
             {
             typedef otb::ImageMetadataInterfaceBase ImageMetadataInterfaceType;
-            ImageMetadataInterfaceType::Pointer metadataInterface = ImageMetadataInterfaceFactory::CreateIMI(metadatadictionary);
+            ImageMetadataInterfaceType::Pointer metadataInterface = ImageMetadataInterfaceFactory::CreateIMI(
+              metadatadictionary);
             m_PixelRepresentationFunction->SetRedChannelIndex(metadataInterface->GetDefaultRBand());
             m_PixelRepresentationFunction->SetGreenChannelIndex(metadataInterface->GetDefaultGBand());
             m_PixelRepresentationFunction->SetBlueChannelIndex(metadataInterface->GetDefaultBBand());

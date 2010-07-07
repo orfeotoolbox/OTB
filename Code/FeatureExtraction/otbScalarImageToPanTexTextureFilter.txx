@@ -25,16 +25,16 @@
 
 namespace otb
 {
-template <class TInputImage,class TOutputImage>
-ScalarImageToPanTexTextureFilter<TInputImage,TOutputImage>
+template <class TInputImage, class TOutputImage>
+ScalarImageToPanTexTextureFilter<TInputImage, TOutputImage>
 ::ScalarImageToPanTexTextureFilter() : m_Radius(),
-                                  m_NumberOfBinsPerAxis(8),
-                                  m_InputImageMinimum(0),
-                                  m_InputImageMaximum(256)
+  m_NumberOfBinsPerAxis(8),
+  m_InputImageMinimum(0),
+  m_InputImageMaximum(256)
 {
   // There are 1 output corresponding to the Pan Tex texture indice
   this->SetNumberOfOutputs(1);
-  
+
   //Fill the offset list for contrast computation
   OffsetType off;
   off[0] = 0;
@@ -62,25 +62,24 @@ ScalarImageToPanTexTextureFilter<TInputImage,TOutputImage>
   m_OffsetList.push_back(off);   //(2,1)
 }
 
-template <class TInputImage,class TOutputImage>
-ScalarImageToPanTexTextureFilter<TInputImage,TOutputImage>
+template <class TInputImage, class TOutputImage>
+ScalarImageToPanTexTextureFilter<TInputImage, TOutputImage>
 ::~ScalarImageToPanTexTextureFilter()
 {}
- 
 
-template <class TInputImage,class TOutputImage>
+template <class TInputImage, class TOutputImage>
 void
-ScalarImageToPanTexTextureFilter<TInputImage,TOutputImage>
+ScalarImageToPanTexTextureFilter<TInputImage, TOutputImage>
 ::GenerateInputRequestedRegion()
 {
   // First, call superclass implementation
   Superclass::GenerateInputRequestedRegion();
 
   // Retrieve the input and output pointers
-  InputImagePointerType inputPtr = const_cast<InputImageType *>(this->GetInput());
+  InputImagePointerType  inputPtr = const_cast<InputImageType *>(this->GetInput());
   OutputImagePointerType outputPtr = this->GetOutput();
 
-  if(!inputPtr || !outputPtr)
+  if (!inputPtr || !outputPtr)
     {
     return;
     }
@@ -92,22 +91,22 @@ ScalarImageToPanTexTextureFilter<TInputImage,TOutputImage>
 
   // Build the input requested region
   InputRegionType inputRequestedRegion = outputRequestedRegion;
-  
+
   // Apply the radius
-  SizeType  maxOffsetSize;
+  SizeType maxOffsetSize;
   maxOffsetSize[0] = 2;
   maxOffsetSize[1] = 2;
   inputRequestedRegion.PadByRadius(m_Radius + maxOffsetSize);
 
   // Try to apply the requested region to the input image
-  if(inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()))
+  if (inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()))
     {
     inputPtr->SetRequestedRegion(inputRequestedRegion);
     }
   else
     {
     // Build an exception
-    itk::InvalidRequestedRegionError e(__FILE__,__LINE__);
+    itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
     e.SetLocation(ITK_LOCATION);
     e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
     e.SetDataObject(inputPtr);
@@ -115,35 +114,35 @@ ScalarImageToPanTexTextureFilter<TInputImage,TOutputImage>
     }
 }
 
-template <class TInputImage,class TOutputImage>
+template <class TInputImage, class TOutputImage>
 void
-ScalarImageToPanTexTextureFilter<TInputImage,TOutputImage>
-::ThreadedGenerateData(const OutputRegionType & outputRegionForThread, int threadId)
+ScalarImageToPanTexTextureFilter<TInputImage, TOutputImage>
+::ThreadedGenerateData(const OutputRegionType& outputRegionForThread, int threadId)
 {
   // Retrieve the input and output pointers
   InputImagePointerType  inputPtr             =      const_cast<InputImageType *>(this->GetInput());
   OutputImagePointerType outputPtr = this->GetOutput();
-  
-  itk::ImageRegionIteratorWithIndex<OutputImageType> outputIt(outputPtr,outputRegionForThread);
-  
+
+  itk::ImageRegionIteratorWithIndex<OutputImageType> outputIt(outputPtr, outputRegionForThread);
+
   // Go to begin
   outputIt.GoToBegin();
 
   // Set-up progress reporting
-  itk::ProgressReporter progress(this,threadId,outputRegionForThread.GetNumberOfPixels());
+  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   // Iterate on outputs to compute textures
-  while(!outputIt.IsAtEnd())
+  while (!outputIt.IsAtEnd())
     {
     // Find the input region on which texture will be computed
-    InputRegionType currentRegion;
-    typename InputRegionType::IndexType currentIndex = outputIt.GetIndex()-m_Radius;
+    InputRegionType                     currentRegion;
+    typename InputRegionType::IndexType currentIndex = outputIt.GetIndex() - m_Radius;
     typename InputRegionType::SizeType  currentSize;
 
-    for(unsigned int dim = 0; dim<InputImageType::ImageDimension;++dim)
+    for (unsigned int dim = 0; dim < InputImageType::ImageDimension; ++dim)
       {
       // Compute current size before applying offset
-      currentSize[dim] = 2*m_Radius[dim]+1;
+      currentSize[dim] = 2 * m_Radius[dim] + 1;
       }
 
     // Fill current region
@@ -162,17 +161,17 @@ ScalarImageToPanTexTextureFilter<TInputImage,TOutputImage>
       coOccurenceMatrixGenerator->SetInput(inputPtr);
       coOccurenceMatrixGenerator->SetOffset((*offIt));
       coOccurenceMatrixGenerator->SetNumberOfBinsPerAxis(m_NumberOfBinsPerAxis);
-      coOccurenceMatrixGenerator->SetPixelValueMinMax(m_InputImageMinimum,m_InputImageMaximum);
-      
+      coOccurenceMatrixGenerator->SetPixelValueMinMax(m_InputImageMinimum, m_InputImageMaximum);
+
       // Compute the co-occurence matrix
       coOccurenceMatrixGenerator->SetRegion(currentRegion);
       coOccurenceMatrixGenerator->SetNormalize(true);
       coOccurenceMatrixGenerator->Compute();
-      
+
       typename HistogramType::Pointer histo = coOccurenceMatrixGenerator->GetOutput();
-      
+
       double inertia = 0;
-      for (HistogramIterator hit = histo->Begin();hit != histo->End(); ++hit)
+      for (HistogramIterator hit = histo->Begin(); hit != histo->End(); ++hit)
         {
         MeasurementType frequency = hit.GetFrequency();
         if (frequency == 0)
@@ -182,13 +181,13 @@ ScalarImageToPanTexTextureFilter<TInputImage,TOutputImage>
         typename InputRegionType::IndexType index = histo->GetIndex(hit.GetInstanceIdentifier());
         inertia += (index[0] - index[1]) * (index[0] - index[1]) * frequency;
         }
-      
+
       if (inertia < out) out = inertia;
       }
-      
-      outputIt.Set(out);
-      ++outputIt;
-      progress.CompletedPixel();
+
+    outputIt.Set(out);
+    ++outputIt;
+    progress.CompletedPixel();
     }
 }
 

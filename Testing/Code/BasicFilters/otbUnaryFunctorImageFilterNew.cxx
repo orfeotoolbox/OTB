@@ -22,15 +22,15 @@
 
 int otbUnaryFunctorImageFilterNew(int argc, char * argv[])
 {
-  const unsigned int                                     Dimension = 2;
+  const unsigned int Dimension = 2;
   typedef double                                         PixelType;
   typedef otb::VectorImage<PixelType, Dimension>         InputImageType;
   typedef InputImageType::InternalPixelType              InternalPixelType;
   typedef otb::Function::PhaseFunctor<InternalPixelType> FunctorType;
 
   typedef otb::UnaryFunctorImageFilter<InputImageType,
-                                       InputImageType,
-                                       FunctorType> FilterType;
+      InputImageType,
+      FunctorType> FilterType;
   FilterType::Pointer filter = FilterType::New();
 
   return EXIT_SUCCESS;

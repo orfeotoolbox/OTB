@@ -50,9 +50,9 @@ int otbStreamingResampleImageFilterCompareWithITK(int argc, char * argv[])
   typedef itk::NearestNeighborInterpolateImageFunction<InputImageType, InterpolatorPrecisionType> NNInterpolatorType;
 
   typedef itk::ResampleImageFilter<InputImageType, OutputImageType,
-                                   InterpolatorPrecisionType>          ITKResampleImageFilterType;
+      InterpolatorPrecisionType>          ITKResampleImageFilterType;
   typedef otb::StreamingResampleImageFilter<InputImageType, OutputImageType,
-                                            InterpolatorPrecisionType> OTBResampleImageFilterType;
+      InterpolatorPrecisionType> OTBResampleImageFilterType;
 
   // Instantiating object
   ReaderType::Pointer          reader = ReaderType::New();

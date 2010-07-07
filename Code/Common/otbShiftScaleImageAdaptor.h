@@ -100,23 +100,23 @@ private:
 template <class TImage, class TOutputPixelType>
 class ITK_EXPORT ShiftScaleImageAdaptor : public
   itk::ImageAdaptor<TImage, Accessor::ShiftScalePixelAccessor<
-                      typename TImage::PixelType,
-                      TOutputPixelType> >
+          typename TImage::PixelType,
+          TOutputPixelType> >
 {
 public:
   /** Standard class typedefs. */
   typedef ShiftScaleImageAdaptor Self;
   typedef itk::ImageAdaptor<
-    TImage,
-    Accessor::ShiftScalePixelAccessor<typename TImage::PixelType, TOutputPixelType>
-    >                                    Superclass;
+      TImage,
+      Accessor::ShiftScalePixelAccessor<typename TImage::PixelType, TOutputPixelType>
+      >                                    Superclass;
   typedef itk::SmartPointer<Self>        Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
   typedef typename TImage::PixelType     InternalType;
   typedef typename Superclass::IndexType IndexType;
   typedef typename Accessor::ShiftScalePixelAccessor<
-    typename TImage::PixelType,
-    TOutputPixelType>                 AccessorType;
+      typename TImage::PixelType,
+      TOutputPixelType>                 AccessorType;
   typedef typename AccessorType::ExternalType PixelType;
 
   /** Method for creation through the object factory. */

@@ -79,13 +79,13 @@ int otbEVIMultiChannelRAndBAndNIRVegetationIndexImageFilter(int argc, char * arg
   argv++;
   if (strArgv == "EVI")
     return (generic_EVIMultiChannelRAndBAndNIRVegetationIndexImageFilter<InputImageType, OutputImageType,
-                                                                         otb::Functor::EVI<InputImageType::
-                                                                                           InternalPixelType,
-                                                                                           InputImageType::
-                                                                                           InternalPixelType,
-                                                                                           InputImageType::
-                                                                                           InternalPixelType,
-                                                                                           OutputImageType::PixelType> >
+                otb::Functor::EVI<InputImageType::
+                    InternalPixelType,
+                    InputImageType::
+                    InternalPixelType,
+                    InputImageType::
+                    InternalPixelType,
+                    OutputImageType::PixelType> >
               (argc, argv));
   else return EXIT_FAILURE;
   return EXIT_SUCCESS;
