@@ -34,13 +34,13 @@
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {nearmapfile.otb}
 //    OUTPUTS: {nearMap-Toulouse.png}
-//    ${GeneratedFolder} 1.4835345 43.55968261 11
+//    ${GeneratedFolder} 1.4835345 43.55968261 8
 //  Software Guide : EndCommandLineArgs
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {nearmapfile.otb}
 //    OUTPUTS: {nearMap-Singapore.png}
-//    ${GeneratedFolder} 103.780646 1.297643 11
+//    ${GeneratedFolder} 103.780646 1.297643 8
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
