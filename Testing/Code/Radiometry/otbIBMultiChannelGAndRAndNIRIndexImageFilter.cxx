@@ -32,9 +32,9 @@ int otbIBMultiChannelGAndRAndNIRIndexImageFilter(int argc, char * argv[])
   typedef otb::ImageFileReader<InputImageType>  ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
   typedef otb::Functor::IB2<InputImageType::InternalPixelType,
-                            InputImageType::InternalPixelType,
-                            InputImageType::InternalPixelType,
-                            OutputImageType::PixelType> FunctorType;
+      InputImageType::InternalPixelType,
+      InputImageType::InternalPixelType,
+      OutputImageType::PixelType> FunctorType;
 
   // Warning : the order of the channels are not the same between the functor and the filter
   typedef otb::MultiChannelRAndGAndNIRIndexImageFilter<InputImageType, OutputImageType, FunctorType>

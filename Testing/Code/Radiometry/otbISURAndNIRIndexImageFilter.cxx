@@ -36,13 +36,13 @@ int otbISURAndNIRIndexImageFilter(int argc, char * argv[])
   typedef otb::ImageFileWriter<OutputImageType>   WriterType;
 
   typedef otb::Functor::ISU  <InputRImageType::PixelType,
-                              InputNIRImageType::PixelType,
-                              OutputImageType::PixelType> FunctorType;
+      InputNIRImageType::PixelType,
+      OutputImageType::PixelType> FunctorType;
 
   typedef otb::RAndNIRIndexImageFilter<InputRImageType,
-                                       InputNIRImageType,
-                                       OutputImageType,
-                                       FunctorType> RAndNIRIndexImageFilterType;
+      InputNIRImageType,
+      OutputImageType,
+      FunctorType> RAndNIRIndexImageFilterType;
 
   // Instantiating object
   RAndNIRIndexImageFilterType::Pointer filter = RAndNIRIndexImageFilterType::New();

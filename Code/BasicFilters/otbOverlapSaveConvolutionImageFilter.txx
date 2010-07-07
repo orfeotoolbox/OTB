@@ -269,7 +269,7 @@ OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition>
     typename InputImageType::IndexType index = outputIt.GetIndex();
     unsigned int                       linearIndex =
       (index[1] + sizeOfFilter[1] - 1 -
-      outputRegionForThread.GetIndex()[1]) * pieceSize[0] - 1 + index[0] + sizeOfFilter[0] -
+       outputRegionForThread.GetIndex()[1]) * pieceSize[0] - 1 + index[0] + sizeOfFilter[0] -
       outputRegionForThread.GetIndex()[0];
     outputIt.Set(static_cast<OutputPixelType>((inverseFFTpiece[linearIndex] /
                                                pieceNbOfPixel) * static_cast<double>(norm)));

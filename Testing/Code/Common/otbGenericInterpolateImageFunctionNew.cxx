@@ -55,7 +55,7 @@ int otbGenericInterpolateImageFunctionNew(int argc, char * argv[])
   typedef double                                                 CoordRepType;
 
   typedef otb::GenericInterpolateImageFunction<ImageType, FunctionType, BoundaryConditionType,
-                                               CoordRepType> GenericFunctionType;
+      CoordRepType> GenericFunctionType;
 
   // Instantiating object
   GenericFunctionType::Pointer generic = GenericFunctionType::New();

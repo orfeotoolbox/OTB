@@ -90,11 +90,11 @@ int otbCenteredRigidDeformationFieldEstimation(int argc, char* argv[])
 
   // Interpolator definition
   typedef itk::Function::HammingWindowFunction<3>
-                                                            WindowFunctionType;
+  WindowFunctionType;
   typedef itk::ZeroFluxNeumannBoundaryCondition<ImageType>
-                                                            ConditionType;
+  ConditionType;
   typedef itk::WindowedSincInterpolateImageFunction<ImageType, 3, WindowFunctionType, ConditionType,
-                                                    double> InterpolatorType;
+      double> InterpolatorType;
 
   // Optimizer definition
   typedef itk::GradientDescentOptimizer OptimizerType;
@@ -109,22 +109,22 @@ int otbCenteredRigidDeformationFieldEstimation(int argc, char* argv[])
 
   // Deformation fields generator
   typedef otb::NearestPointDeformationFieldGenerator<PointSetType,
-                                                     DeformationFieldType>
-                                                                                  NearestPointGeneratorType;
+      DeformationFieldType>
+  NearestPointGeneratorType;
   typedef otb::NNearestPointsLinearInterpolateDeformationFieldGenerator<PointSetType,
-                                                                        DeformationFieldType>
-                                                                                  NNearestPointGeneratorType;
+      DeformationFieldType>
+  NNearestPointGeneratorType;
   typedef otb::BSplinesInterpolateDeformationFieldGenerator<PointSetType,
-                                                            DeformationFieldType> BSplinesGeneratorType;
+      DeformationFieldType> BSplinesGeneratorType;
   typedef otb::NearestTransformDeformationFieldGenerator<PointSetType,
-                                                         DeformationFieldType>
-                                                                                  NearestTransformGeneratorType;
+      DeformationFieldType>
+  NearestTransformGeneratorType;
   typedef otb::NNearestTransformsLinearInterpolateDeformationFieldGenerator<PointSetType,
-                                                                            DeformationFieldType>
-                                                                                  NNearestTransformGeneratorType;
+      DeformationFieldType>
+  NNearestTransformGeneratorType;
   typedef otb::BSplinesInterpolateTransformDeformationFieldGenerator<PointSetType,
-                                                                     DeformationFieldType>
-                                                                                  BSplinesTransformGeneratorType;
+      DeformationFieldType>
+  BSplinesTransformGeneratorType;
 
   // Warper
   typedef itk::WarpImageFilter<ImageType, ImageType, DeformationFieldType> ImageWarperType;

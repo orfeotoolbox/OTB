@@ -99,22 +99,22 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::AttributesMapLabelObject<LabelType, Dimension,
-                                        double>
-                                                                 LabelObjectType;
+      double>
+  LabelObjectType;
   typedef itk::LabelMap<LabelObjectType>
-                                                                 LabelMapType;
+  LabelMapType;
   typedef itk::LabelImageToLabelMapFilter<LabeledImageType,
-                                          LabelMapType>
-                                                                 LabelMapFilterType;
+      LabelMapType>
+  LabelMapFilterType;
   typedef otb::Polygon<double>
-                                                                 PolygonType;
+  PolygonType;
   typedef otb::Functor::LabelObjectToPolygonFunctor<LabelObjectType,
-                                                    PolygonType> FunctorType;
+      PolygonType> FunctorType;
   // Software Guide : EndCodeSnippet
   typedef VectorDataType::DataNodeType DataNodeType;
 
   typedef otb::VectorDataProjectionFilter<VectorDataType,
-                                          VectorDataType> VectorDataFilterType;
+      VectorDataType> VectorDataFilterType;
 
   LabeledReaderType::Pointer lreader = LabeledReaderType::New();
   WriterType::Pointer        writer = WriterType::New();
@@ -151,7 +151,7 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::LabelMapToVectorDataFilter<LabelMapType,
-                                          VectorDataType>
+      VectorDataType>
   LabelMapToVectorDataFilterType;
 
   LabelMapToVectorDataFilterType::Pointer MyFilter =

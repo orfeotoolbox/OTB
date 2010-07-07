@@ -128,7 +128,7 @@ void CoordinateToName::ParseXMLGeonames(std::string& placeName, std::string& cou
       placeName = childName->GetText();
       }
     TiXmlElement* childCountryName = docHandle.FirstChild("geonames").FirstChild("geoname").
-                                   FirstChild("countryName").Element();
+                                     FirstChild("countryName").Element();
     if (childCountryName)
       {
       countryName = childCountryName->GetText();

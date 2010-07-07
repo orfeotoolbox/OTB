@@ -78,7 +78,7 @@ int otbUnaryFunctorNeighborhoodWithOffsetImageFilter(int argc, char * argv[])
   typedef itk::ConstNeighborhoodIterator<ImageType>                                                 IterType;
   typedef Functor::UnaryFunctorNeighborhoodWithOffseImageFilterTest<InputPixelType, InputPixelType> FunctorType;
   typedef otb::UnaryFunctorNeighborhoodWithOffsetImageFilter<ImageType, ImageType,
-                                                             FunctorType>     UnaryFunctorNeighborhoodImageFilterType;
+      FunctorType>     UnaryFunctorNeighborhoodImageFilterType;
 
   // Instantiating object
   UnaryFunctorNeighborhoodImageFilterType::Pointer object = UnaryFunctorNeighborhoodImageFilterType::New();

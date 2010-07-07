@@ -33,7 +33,7 @@ namespace otb
  * \example FeatureExtraction/CloudDetectionExample.cxx
  */
 template <class TInputImage, class TOutputImage, class TFunction = Functor::SpectralAngleFunctor<
-            ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
+        ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
 class ITK_EXPORT CloudEstimatorFilter : public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction>
 {
 public:

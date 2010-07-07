@@ -27,7 +27,7 @@ int otbMultiChannelRAndGAndNIRIndexImageFilterNew(int argc, char * argv[])
   typedef otb::VectorImage<unsigned char, Dimension> InputImageType;
   typedef otb::Image<float, Dimension>               OutputImageType;
   typedef otb::MultiChannelRAndGAndNIRIndexImageFilter<InputImageType,
-                                                       OutputImageType> MultiChannelRAndGAndNIRIndexImageFilterType;
+      OutputImageType> MultiChannelRAndGAndNIRIndexImageFilterType;
 
   // Instantiating object
   MultiChannelRAndGAndNIRIndexImageFilterType::Pointer object = MultiChannelRAndGAndNIRIndexImageFilterType::New();

@@ -196,16 +196,16 @@ private:
 template <class TInputImage, class TOutputImage = TInputImage>
 class ITK_EXPORT VectorRescaleIntensityImageFilter
   :  public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
-                                         Functor::VectorAffineTransform<
-                                           typename TInputImage::PixelType,
-                                           typename TOutputImage::PixelType> >
+      Functor::VectorAffineTransform<
+          typename TInputImage::PixelType,
+          typename TOutputImage::PixelType> >
 {
 public:
   /** Standard class typedefs. */
   typedef VectorRescaleIntensityImageFilter Self;
   typedef itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
-                                       Functor::VectorAffineTransform<typename TInputImage::PixelType,
-                                                                      typename TOutputImage::PixelType> >  Superclass;
+      Functor::VectorAffineTransform<typename TInputImage::PixelType,
+          typename TOutputImage::PixelType> >  Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 

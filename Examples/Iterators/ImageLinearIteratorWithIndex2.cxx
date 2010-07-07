@@ -131,7 +131,7 @@ int main(int argc, char *argv[])
   const unsigned int timeLength = region4D.GetSize()[3];
 
   typedef itk::ImageLinearConstIteratorWithIndex<
-    Image4DType> IteratorType;
+      Image4DType> IteratorType;
 
   IteratorType it(image4D, region4D);
   it.SetDirection(3);   // Walk along time dimension

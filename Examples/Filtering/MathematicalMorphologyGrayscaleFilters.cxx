@@ -108,8 +108,8 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef itk::BinaryBallStructuringElement<
-    InputPixelType,
-    Dimension>             StructuringElementType;
+      InputPixelType,
+      Dimension>             StructuringElementType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -121,14 +121,14 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef itk::GrayscaleErodeImageFilter<
-    InputImageType,
-    OutputImageType,
-    StructuringElementType>  ErodeFilterType;
+      InputImageType,
+      OutputImageType,
+      StructuringElementType>  ErodeFilterType;
 
   typedef itk::GrayscaleDilateImageFilter<
-    InputImageType,
-    OutputImageType,
-    StructuringElementType>  DilateFilterType;
+      InputImageType,
+      OutputImageType,
+      StructuringElementType>  DilateFilterType;
   // Software Guide : EndCodeSnippet
 
   // Creation of Reader and Writer filters

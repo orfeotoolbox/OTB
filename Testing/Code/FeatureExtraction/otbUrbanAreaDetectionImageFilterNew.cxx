@@ -29,7 +29,7 @@ int otbUrbanAreaDetectionImageFilterNew(int argc, char * argv[])
   typedef otb::Image<unsigned char, Dimension>   OutputImageType;
 
   typedef otb::UrbanAreaDetectionImageFilter<InputVectorImageType,
-                                             OutputImageType> UrbanAreaDetectionFilterType;
+      OutputImageType> UrbanAreaDetectionFilterType;
 
   // Instantiating objects
   UrbanAreaDetectionFilterType::Pointer filter = UrbanAreaDetectionFilterType::New();

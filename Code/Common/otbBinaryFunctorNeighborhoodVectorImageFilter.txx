@@ -31,7 +31,7 @@ namespace otb
  * Constructor
  */
 template <class TInputImage1, class TInputImage2,
-          class TOutputImage, class TFunction>
+    class TOutputImage, class TFunction>
 BinaryFunctorNeighborhoodVectorImageFilter<TInputImage1, TInputImage2, TOutputImage, TFunction>
 ::BinaryFunctorNeighborhoodVectorImageFilter()
 {
@@ -44,7 +44,7 @@ BinaryFunctorNeighborhoodVectorImageFilter<TInputImage1, TInputImage2, TOutputIm
  * Connect one of the operands for neighborhood-wise operation
  */
 template <class TInputImage1, class TInputImage2,
-          class TOutputImage, class TFunction>
+    class TOutputImage, class TFunction>
 void
 BinaryFunctorNeighborhoodVectorImageFilter<TInputImage1, TInputImage2, TOutputImage, TFunction>
 ::SetInput1(const TInputImage1 * image1)
@@ -57,7 +57,7 @@ BinaryFunctorNeighborhoodVectorImageFilter<TInputImage1, TInputImage2, TOutputIm
  * Connect one of the operands for neighborhood-wise operation
  */
 template <class TInputImage1, class TInputImage2,
-          class TOutputImage, class TFunction>
+    class TOutputImage, class TFunction>
 void
 BinaryFunctorNeighborhoodVectorImageFilter<TInputImage1, TInputImage2, TOutputImage, TFunction>
 ::SetInput2(const TInputImage2 * image2)
@@ -70,7 +70,7 @@ BinaryFunctorNeighborhoodVectorImageFilter<TInputImage1, TInputImage2, TOutputIm
  * Connect the interval of radius
  */
 template <class TInputImage1, class TInputImage2,
-          class TOutputImage, class TFunction>
+    class TOutputImage, class TFunction>
 void
 BinaryFunctorNeighborhoodVectorImageFilter<TInputImage1, TInputImage2, TOutputImage, TFunction>
 ::SetRadius(const unsigned char& min, const unsigned char& max)

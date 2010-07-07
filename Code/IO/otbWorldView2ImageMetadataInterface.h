@@ -36,9 +36,9 @@ class ITK_EXPORT WorldView2ImageMetadataInterface : public ImageMetadataInterfac
 public:
 
   typedef WorldView2ImageMetadataInterface Self;
-  typedef ImageMetadataInterfaceBase      Superclass;
-  typedef itk::SmartPointer<Self>         Pointer;
-  typedef itk::SmartPointer<const Self>   ConstPointer;
+  typedef ImageMetadataInterfaceBase       Superclass;
+  typedef itk::SmartPointer<Self>          Pointer;
+  typedef itk::SmartPointer<const Self>    ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -97,11 +97,10 @@ public:
   /** Get the last wavelength for the spectral band definition */
   VariableLengthVectorType GetLastWavelengths(const MetaDataDictionaryType& dict) const;
 
-
   bool CanRead(const MetaDataDictionaryType& dict) const;
 
   /** Those methodes are to retrieve the spectral band corresponding
-   * to the R, G, B or A chanel */ 
+   * to the R, G, B or A chanel */
   unsigned int GetDefaultRBand() const;
 
   unsigned int GetDefaultGBand() const;

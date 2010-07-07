@@ -67,21 +67,21 @@ int otbGAndRIndexImageFilter(int argc, char * argv[])
   argv++;
   if (strArgv == "IR")
     return (generic_GAndRIndexImageFilter<InputGImageType, InputRImageType, OutputImageType,
-                                          otb::Functor::IR<InputRImageType::PixelType,
-                                                           InputRImageType::PixelType,
-                                                           OutputImageType::PixelType> >
+                otb::Functor::IR<InputRImageType::PixelType,
+                    InputRImageType::PixelType,
+                    OutputImageType::PixelType> >
               (argc, argv));
   else if (strArgv == "IC")
     return (generic_GAndRIndexImageFilter<InputGImageType, InputRImageType, OutputImageType,
-                                          otb::Functor::IC<InputGImageType::PixelType,
-                                                           InputRImageType::PixelType,
-                                                           OutputImageType::PixelType> >
+                otb::Functor::IC<InputGImageType::PixelType,
+                    InputRImageType::PixelType,
+                    OutputImageType::PixelType> >
               (argc, argv));
   else if (strArgv == "IB")
     return (generic_GAndRIndexImageFilter<InputGImageType, InputRImageType, OutputImageType,
-                                          otb::Functor::IB<InputGImageType::PixelType,
-                                                           InputRImageType::PixelType,
-                                                           OutputImageType::PixelType> >
+                otb::Functor::IB<InputGImageType::PixelType,
+                    InputRImageType::PixelType,
+                    OutputImageType::PixelType> >
               (argc, argv));
   else return EXIT_FAILURE;
   return EXIT_SUCCESS;

@@ -33,7 +33,7 @@ int otbLineSpatialObjectListToPointSetFilterNew(int argc, char* argv[])
   typedef itk::PointSet<InputPixelType> PointSetType;
 
   typedef otb::LineSpatialObjectListToPointSetFilter<LinesListType,
-                                                     PointSetType>   FilterType;
+      PointSetType>   FilterType;
 
   FilterType::Pointer filter = FilterType::New();
 

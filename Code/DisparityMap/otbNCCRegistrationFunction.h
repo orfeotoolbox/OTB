@@ -47,13 +47,13 @@ namespace otb
 template<class TFixedImage, class TMovingImage, class TDeformationField>
 class ITK_EXPORT NCCRegistrationFunction :
   public itk::PDEDeformableRegistrationFunction<TFixedImage,
-                                                TMovingImage, TDeformationField>
+      TMovingImage, TDeformationField>
 {
 public:
   /** Standard class typedefs. */
   typedef NCCRegistrationFunction Self;
   typedef itk::PDEDeformableRegistrationFunction<TFixedImage,
-                                                 TMovingImage, TDeformationField>    Superclass;
+      TMovingImage, TDeformationField>    Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 

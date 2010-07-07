@@ -162,7 +162,7 @@ int main(int argc, char *argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef itk::NeighborhoodConnectedImageFilter<InternalImageType,
-                                                InternalImageType>
+      InternalImageType>
   ConnectedFilterType;
   // Software Guide : EndCodeSnippet
 

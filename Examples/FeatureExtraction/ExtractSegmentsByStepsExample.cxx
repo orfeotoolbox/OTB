@@ -105,18 +105,18 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::LineRatioDetectorImageFilter<InternalImageType,
-                                            InternalImageType>  DetectorType;
+      InternalImageType>  DetectorType;
 
   typedef otb::PixelSuppressionByDirectionImageFilter<InternalImageType,
-                                                      InternalImageType>
-                                                       PixelSuppressionType;
+      InternalImageType>
+  PixelSuppressionType;
 
   typedef otb::LocalHoughFilter<InternalImageType> LocalHoughType;
   typedef otb::FillGapsFilter                      FillGapsType;
 
   typedef otb::DrawLineSpatialObjectListFilter<InternalImageType,
-                                               OutputImageType>
-                                                           DrawLineListType;
+      OutputImageType>
+  DrawLineListType;
 
   typedef itk::RescaleIntensityImageFilter<InternalImageType> RescalerType;
   // Software Guide : EndCodeSnippet

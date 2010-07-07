@@ -253,7 +253,8 @@ protected:
             {
             if ((iti != itj) || (iti != itk) ||
                 (iti !=
-                itl)) termeQ +=
+                 itl))
+              termeQ +=
                 static_cast<TOutput>(vcl_pow(static_cast<double>(Qxijkl((*iti), (*itj), (*itk), (*itl))), 2));
             }
         }

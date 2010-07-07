@@ -177,15 +177,15 @@ private:
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ConvexOrConcaveClassificationFilter
   : public itk::BinaryFunctorImageFilter<TInputImage, TInputImage, TOutputImage,
-                                         Functor::ConvexOrConcaveDecisionRule<typename TInputImage::PixelType,
-                                                                              typename TOutputImage::PixelType> >
+      Functor::ConvexOrConcaveDecisionRule<typename TInputImage::PixelType,
+          typename TOutputImage::PixelType> >
 {
 public:
   /** Standard typedefs */
   typedef ConvexOrConcaveClassificationFilter Self;
   typedef itk::BinaryFunctorImageFilter<TInputImage, TInputImage, TOutputImage,
-                                        Functor::ConvexOrConcaveDecisionRule<typename TInputImage::PixelType,
-                                                                             typename TOutputImage::PixelType> >
+      Functor::ConvexOrConcaveDecisionRule<typename TInputImage::PixelType,
+          typename TOutputImage::PixelType> >
   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -201,7 +201,7 @@ public:
   typedef TOutputImage                        OutputImageType;
   typedef typename OutputImageType::PixelType LabelType;
   typedef Functor::ConvexOrConcaveDecisionRule<typename TInputImage::PixelType,
-                                               typename TOutputImage::PixelType> DecisionFunctorType;
+      typename TOutputImage::PixelType> DecisionFunctorType;
   /**
    * Set the input image
    * \param image the input image

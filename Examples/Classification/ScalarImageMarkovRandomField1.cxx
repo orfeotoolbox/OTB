@@ -161,7 +161,7 @@ int main(int argc, char * argv[])
   typedef otb::Image<ArrayPixelType, Dimension> ArrayImageType;
 
   typedef itk::ScalarToArrayCastImageFilter<
-    ImageType, ArrayImageType> ScalarToArrayFilterType;
+      ImageType, ArrayImageType> ScalarToArrayFilterType;
 
   ScalarToArrayFilterType::Pointer
     scalarToArrayFilter = ScalarToArrayFilterType::New();
@@ -227,8 +227,8 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
   typedef itk::ImageClassifierBase<
-    ArrayImageType,
-    LabelImageType>   SupervisedClassifierType;
+      ArrayImageType,
+      LabelImageType>   SupervisedClassifierType;
 
   SupervisedClassifierType::Pointer classifier =
     SupervisedClassifierType::New();
@@ -264,7 +264,7 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
   typedef itk::Statistics::DistanceToCentroidMembershipFunction<
-    ArrayPixelType>
+      ArrayPixelType>
   MembershipFunctionType;
 
   typedef MembershipFunctionType::Pointer MembershipFunctionPointer;
@@ -382,7 +382,7 @@ int main(int argc, char * argv[])
   // Rescale outputs to the dynamic range of the display
   typedef otb::Image<unsigned char, Dimension> RescaledOutputImageType;
   typedef itk::RescaleIntensityImageFilter<
-    OutputImageType, RescaledOutputImageType>   RescalerType;
+      OutputImageType, RescaledOutputImageType>   RescalerType;
 
   RescalerType::Pointer intensityRescaler = RescalerType::New();
   intensityRescaler->SetOutputMinimum(0);

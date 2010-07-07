@@ -62,7 +62,7 @@ public:
   void Update(void);
 
   /** Set/Get the node type used */
-  itkSetMacro(CurrentNodeType,NodeType);
+  itkSetMacro(CurrentNodeType, NodeType);
   itkGetMacro(CurrentNodeType, NodeType);
 
   /** Return a pointer to the vector data */
@@ -77,11 +77,11 @@ public:
   void SetSelectedGeometry(int n);
   itkGetObjectMacro(SelectedGeometry, DataNodeType);
 
-  itkSetMacro(Origin,PointType);
-  itkGetConstReferenceMacro(Origin,PointType);
+  itkSetMacro(Origin, PointType);
+  itkGetConstReferenceMacro(Origin, PointType);
 
-  itkSetMacro(Spacing,SpacingType);
-  itkGetConstReferenceMacro(Spacing,SpacingType);
+  itkSetMacro(Spacing, SpacingType);
+  itkGetConstReferenceMacro(Spacing, SpacingType);
 
 protected:
   /** Constructor */

@@ -32,8 +32,8 @@ namespace otb
  * \class GroundSpacingImageFunction
  * \brief Calculate the approximate ground spacing in X and Y directions
  *
- * This uses the ‘Haversine’ formula to calculate great-circle distances between 
- * the two points – that is, the shortest distance over the earth’s surface – 
+ * This uses the ‘Haversine’ formula to calculate great-circle distances between
+ * the two points – that is, the shortest distance over the earth’s surface –
  * giving an ‘as-the-crow-flies’ distance between the points (ignoring any hills!).
  *
  * \ingroup ImageFunctions
@@ -41,13 +41,13 @@ namespace otb
 template <class TInputImage, class TCoordRep = float>
 class ITK_EXPORT GroundSpacingImageFunction :
   public itk::ImageFunction<TInputImage, typename itk::NumericTraits<std::complex<float> >::FloatType,
-                            TCoordRep>
+      TCoordRep>
 {
 public:
   /** Standard class typedefs. */
   typedef GroundSpacingImageFunction Self;
   typedef itk::ImageFunction<TInputImage, typename itk::NumericTraits<std::complex<float> >::FloatType,
-                             TCoordRep>                                          Superclass;
+      TCoordRep>                                          Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -65,7 +65,7 @@ public:
   typedef typename Superclass::PointType           PointType;
 
   typedef otb::GenericRSTransform<double> TransformType;
-  
+
   itkStaticConstMacro(ImageDimension, unsigned int, InputImageType::ImageDimension);
 
   /** Datatype used for the density */
@@ -73,8 +73,8 @@ public:
   FloatType;
   typedef  typename itk::NumericTraits<std::complex<float> >::ValueType
   ValueType;
-  typedef typename IndexType::IndexValueType                IndexValueType;
-  
+  typedef typename IndexType::IndexValueType IndexValueType;
+
   /** Evalulate the function at specified index */
   virtual FloatType EvaluateAtIndex(const IndexType& index) const;
 
@@ -106,10 +106,10 @@ protected:
 private:
   GroundSpacingImageFunction(const Self &);  //purposely not implemented
   void operator =(const Self&);  //purposely not implemented
-  
-  TransformType::Pointer    m_Transform;
-  ValueType m_R;
-  ValueType m_deg2radCoef;
+
+  TransformType::Pointer m_Transform;
+  ValueType              m_R;
+  ValueType              m_deg2radCoef;
 };
 
 } // end namespace otb

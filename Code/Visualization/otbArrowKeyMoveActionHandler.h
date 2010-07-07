@@ -86,123 +86,123 @@ public:
         {
         switch (Fl::event_key())
           {
-        case FL_Up:
-          {
-          typename ViewType::SizeType size;
-          size = m_View->GetFullWidget()->GetExtent().GetSize();
+          case FL_Up:
+            {
+            typename ViewType::SizeType size;
+            size = m_View->GetFullWidget()->GetExtent().GetSize();
 
-          // Get the current position
-          typename ViewType::ImageWidgetType::PointType screenPoint, imagePoint;
-          screenPoint[0] = size[0] / 2;
-          screenPoint[1] = size[1] / 2;
+            // Get the current position
+            typename ViewType::ImageWidgetType::PointType screenPoint, imagePoint;
+            screenPoint[0] = size[0] / 2;
+            screenPoint[1] = size[1] / 2;
 
-          // Transform to image point
-          imagePoint = m_View->GetFullWidget()->GetScreenToImageTransform()->TransformPoint(screenPoint);
+            // Transform to image point
+            imagePoint = m_View->GetFullWidget()->GetScreenToImageTransform()->TransformPoint(screenPoint);
 
-          // Transform to index
-          typename ViewType::IndexType index;
-          index[0] = static_cast<int>(imagePoint[0]);
-          index[1] = static_cast<int>(imagePoint[1]);
+            // Transform to index
+            typename ViewType::IndexType index;
+            index[0] = static_cast<int>(imagePoint[0]);
+            index[1] = static_cast<int>(imagePoint[1]);
 
-          // Move
-          index[1] -= size[1];
+            // Move
+            index[1] -= size[1];
 
-          // Change scaled extract region center
-          m_Model->SetExtractRegionCenter(index);
-          // Update model
-          m_Model->Update();
-          return true;
-          break;
-          }
-        case FL_Down:
-          {
-          typename ViewType::SizeType size;
-          size = m_View->GetFullWidget()->GetExtent().GetSize();
+            // Change scaled extract region center
+            m_Model->SetExtractRegionCenter(index);
+            // Update model
+            m_Model->Update();
+            return true;
+            break;
+            }
+          case FL_Down:
+            {
+            typename ViewType::SizeType size;
+            size = m_View->GetFullWidget()->GetExtent().GetSize();
 
-          // Get the current position
-          typename ViewType::ImageWidgetType::PointType screenPoint, imagePoint;
-          screenPoint[0] = size[0] / 2;
-          screenPoint[1] = size[1] / 2;
+            // Get the current position
+            typename ViewType::ImageWidgetType::PointType screenPoint, imagePoint;
+            screenPoint[0] = size[0] / 2;
+            screenPoint[1] = size[1] / 2;
 
-          // Transform to image point
-          imagePoint = m_View->GetFullWidget()->GetScreenToImageTransform()->TransformPoint(screenPoint);
+            // Transform to image point
+            imagePoint = m_View->GetFullWidget()->GetScreenToImageTransform()->TransformPoint(screenPoint);
 
-          // Transform to index
-          typename ViewType::IndexType index;
-          index[0] = static_cast<int>(imagePoint[0]);
-          index[1] = static_cast<int>(imagePoint[1]);
+            // Transform to index
+            typename ViewType::IndexType index;
+            index[0] = static_cast<int>(imagePoint[0]);
+            index[1] = static_cast<int>(imagePoint[1]);
 
-          // Move
-          index[1] += size[1];
+            // Move
+            index[1] += size[1];
 
-          // Change scaled extract region center
-          m_Model->SetExtractRegionCenter(index);
-          // Update model
-          m_Model->Update();
-          return true;
-          break;
-          }
-        case FL_Left:
-          {
-          typename ViewType::SizeType size;
-          size = m_View->GetFullWidget()->GetExtent().GetSize();
+            // Change scaled extract region center
+            m_Model->SetExtractRegionCenter(index);
+            // Update model
+            m_Model->Update();
+            return true;
+            break;
+            }
+          case FL_Left:
+            {
+            typename ViewType::SizeType size;
+            size = m_View->GetFullWidget()->GetExtent().GetSize();
 
-          // Get the current position
-          typename ViewType::ImageWidgetType::PointType screenPoint, imagePoint;
-          screenPoint[0] = size[0] / 2;
-          screenPoint[1] = size[1] / 2;
+            // Get the current position
+            typename ViewType::ImageWidgetType::PointType screenPoint, imagePoint;
+            screenPoint[0] = size[0] / 2;
+            screenPoint[1] = size[1] / 2;
 
-          // Transform to image point
-          imagePoint = m_View->GetFullWidget()->GetScreenToImageTransform()->TransformPoint(screenPoint);
+            // Transform to image point
+            imagePoint = m_View->GetFullWidget()->GetScreenToImageTransform()->TransformPoint(screenPoint);
 
-          // Transform to index
-          typename ViewType::IndexType index;
-          index[0] = static_cast<int>(imagePoint[0]);
-          index[1] = static_cast<int>(imagePoint[1]);
+            // Transform to index
+            typename ViewType::IndexType index;
+            index[0] = static_cast<int>(imagePoint[0]);
+            index[1] = static_cast<int>(imagePoint[1]);
 
-          // Move
-          index[0] -= size[0];
+            // Move
+            index[0] -= size[0];
 
-          // Change scaled extract region center
-          m_Model->SetExtractRegionCenter(index);
-          // Update model
-          m_Model->Update();
-          return true;
-          break;
-          }
-        case FL_Right:
-          {
-          typename ViewType::SizeType size;
-          size = m_View->GetFullWidget()->GetExtent().GetSize();
+            // Change scaled extract region center
+            m_Model->SetExtractRegionCenter(index);
+            // Update model
+            m_Model->Update();
+            return true;
+            break;
+            }
+          case FL_Right:
+            {
+            typename ViewType::SizeType size;
+            size = m_View->GetFullWidget()->GetExtent().GetSize();
 
-          // Get the current position
-          typename ViewType::ImageWidgetType::PointType screenPoint, imagePoint;
-          screenPoint[0] = size[0] / 2;
-          screenPoint[1] = size[1] / 2;
+            // Get the current position
+            typename ViewType::ImageWidgetType::PointType screenPoint, imagePoint;
+            screenPoint[0] = size[0] / 2;
+            screenPoint[1] = size[1] / 2;
 
-          // Transform to image point
-          imagePoint = m_View->GetFullWidget()->GetScreenToImageTransform()->TransformPoint(screenPoint);
+            // Transform to image point
+            imagePoint = m_View->GetFullWidget()->GetScreenToImageTransform()->TransformPoint(screenPoint);
 
-          // Transform to index
-          typename ViewType::IndexType index;
-          index[0] = static_cast<int>(imagePoint[0]);
-          index[1] = static_cast<int>(imagePoint[1]);
+            // Transform to index
+            typename ViewType::IndexType index;
+            index[0] = static_cast<int>(imagePoint[0]);
+            index[1] = static_cast<int>(imagePoint[1]);
 
-          // Move
-          index[0] += size[0];
+            // Move
+            index[0] += size[0];
 
-          // Change scaled extract region center
-          m_Model->SetExtractRegionCenter(index);
-          // Update model
-          m_Model->Update();
-          return true;
-          break;
-          }
-        default:
-          {
-          return false;
-          break;
-          }
+            // Change scaled extract region center
+            m_Model->SetExtractRegionCenter(index);
+            // Update model
+            m_Model->Update();
+            return true;
+            break;
+            }
+          default:
+            {
+            return false;
+            break;
+            }
           }
         }
       }

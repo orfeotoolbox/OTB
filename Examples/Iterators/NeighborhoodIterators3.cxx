@@ -203,7 +203,7 @@ int main(int argc, char * argv[])
   typedef otb::ImageFileWriter<WriteImageType> WriterType;
 
   typedef itk::RescaleIntensityImageFilter<
-    ImageType, WriteImageType> RescaleFilterType;
+      ImageType, WriteImageType> RescaleFilterType;
 
   RescaleFilterType::Pointer rescaler = RescaleFilterType::New();
 

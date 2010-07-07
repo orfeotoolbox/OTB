@@ -83,16 +83,16 @@ public:
 
 protected:
   typedef ROIdataConversion<
-    typename TInput1::ImageType, TInputROIImage> ROIConversionType1;
+      typename TInput1::ImageType, TInputROIImage> ROIConversionType1;
 
   typedef itk::ConstNeighborhoodIterator<
-    typename ROIConversionType1::OutputImageType> ROIInputType1;
+      typename ROIConversionType1::OutputImageType> ROIInputType1;
 
   typedef ROIdataConversion<
-    typename TInput2::ImageType, TInputROIImage> ROIConversionType2;
+      typename TInput2::ImageType, TInputROIImage> ROIConversionType2;
 
   typedef itk::ConstNeighborhoodIterator<
-    typename ROIConversionType2::OutputImageType> ROIInputType2;
+      typename ROIConversionType2::OutputImageType> ROIInputType2;
 
   CumulantsForEdgeworth<ROIInputType1> * m_CumROI1;
   CumulantsForEdgeworth<ROIInputType2> * m_CumROI2;
@@ -105,24 +105,24 @@ private:
 template <class TInputImage1, class TInputImage2, class TInputROIImage, class TOutputImage>
 class ITK_EXPORT KullbackLeiblerSupervizedDistanceImageFilter :
   public otb::BinaryFunctorNeighborhoodImageFilter<
-    TInputImage1, TInputImage2, TOutputImage,
-    Functor::KullbackLeiblerSupervizedDistance<
-      typename itk::ConstNeighborhoodIterator<TInputImage1>,
-      typename itk::ConstNeighborhoodIterator<TInputImage2>,
-      TInputROIImage,
-      typename TOutputImage::PixelType> >
+      TInputImage1, TInputImage2, TOutputImage,
+      Functor::KullbackLeiblerSupervizedDistance<
+          typename itk::ConstNeighborhoodIterator<TInputImage1>,
+          typename itk::ConstNeighborhoodIterator<TInputImage2>,
+          TInputROIImage,
+          typename TOutputImage::PixelType> >
 {
 public:
   /** Standard class typedefs. */
   typedef KullbackLeiblerSupervizedDistanceImageFilter Self;
   typedef typename otb::BinaryFunctorNeighborhoodImageFilter<
-    TInputImage1, TInputImage2, TOutputImage,
-    Functor::KullbackLeiblerSupervizedDistance<
-      typename itk::ConstNeighborhoodIterator<TInputImage1>,
-      typename itk::ConstNeighborhoodIterator<TInputImage2>,
-      TInputROIImage,
-      typename TOutputImage::PixelType>
-    >  Superclass;
+      TInputImage1, TInputImage2, TOutputImage,
+      Functor::KullbackLeiblerSupervizedDistance<
+          typename itk::ConstNeighborhoodIterator<TInputImage1>,
+          typename itk::ConstNeighborhoodIterator<TInputImage2>,
+          TInputROIImage,
+          typename TOutputImage::PixelType>
+      >  Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 

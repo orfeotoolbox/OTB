@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
   typedef otb::ImageFileReader<ImageType> ReaderType;
 
   typedef itk::ConstShapedNeighborhoodIterator<ImageType>
-                                              ShapedNeighborhoodIteratorType;
+  ShapedNeighborhoodIteratorType;
   typedef itk::ImageRegionIterator<ImageType> IteratorType;
 
   ReaderType::Pointer reader = ReaderType::New();

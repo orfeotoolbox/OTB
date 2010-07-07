@@ -48,7 +48,7 @@ int otbScalarImageTextureFunctor(int argc, char * argv[])
   typedef otb::Functor::ScalarImageTextureFunctor<IterType, InputImageType, InputPixelType> FunctorType;
 
   typedef otb::UnaryFunctorNeighborhoodImageFilter<InputImageType, InputImageType,
-                                                   FunctorType> UnaryFunctorNeighborhoodImageFilterType;
+      FunctorType> UnaryFunctorNeighborhoodImageFilterType;
 
   // Instantiating object
   UnaryFunctorNeighborhoodImageFilterType::Pointer object = UnaryFunctorNeighborhoodImageFilterType::New();

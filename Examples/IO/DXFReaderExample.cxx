@@ -84,7 +84,7 @@ int main(int argc, char * argv[])
   typedef otb::SpatialObjectToImageDrawingFilter<GroupType, ImageType>
   SpatialObjectToImageDrawingFilterType;
   typedef itk::RescaleIntensityImageFilter<ImageType,
-                                           OutputImageType>     CastFilterType;
+      OutputImageType>     CastFilterType;
   typedef itk::SpatialObject<Dimension> SpatialObjectType;
 
   // Instantiating object

@@ -27,7 +27,7 @@ namespace otb
  * \brief Applies cloud detection functor to an image.
  */
 template <class TInputImage, class TOutputImage, class TFunction = Functor::CloudDetectionFunctor<
-            ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
+        ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
 class ITK_EXPORT CloudDetectionFilter : public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction>
 {
 public:

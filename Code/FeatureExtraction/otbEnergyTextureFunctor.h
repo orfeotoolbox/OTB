@@ -46,7 +46,7 @@ public:
   EnergyTextureFunctor()
     {
     };
-  
+
   virtual ~EnergyTextureFunctor(){}
 
   typedef TScalarInputPixelType                                             InputScalarType;

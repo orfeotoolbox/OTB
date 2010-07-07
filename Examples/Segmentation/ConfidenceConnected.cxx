@@ -180,7 +180,7 @@ int main(int argc, char *argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef itk::ConfidenceConnectedImageFilter<InternalImageType,
-                                              InternalImageType>
+      InternalImageType>
   ConnectedFilterType;
   // Software Guide : EndCodeSnippet
 

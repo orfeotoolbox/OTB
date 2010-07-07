@@ -29,9 +29,9 @@ int otbGeodesicMorphologyIterativeDecompositionImageFilterNew(int argc, char * a
   typedef otb::Image<InputPixelType, Dimension> InputImageType;
 
   typedef itk::BinaryBallStructuringElement<InputPixelType,
-                                            Dimension>                                     StructuringElementType;
+      Dimension>                                     StructuringElementType;
   typedef otb::GeodesicMorphologyIterativeDecompositionImageFilter<InputImageType,
-                                                                   StructuringElementType> DecompositionFilterType;
+      StructuringElementType> DecompositionFilterType;
 
   // Instantiation
   DecompositionFilterType::Pointer decomposition = DecompositionFilterType::New();

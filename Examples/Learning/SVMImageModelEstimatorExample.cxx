@@ -92,7 +92,7 @@ int main(int argc, char* argv[])
 // Software Guide : EndLatex
 //  Software Guide : BeginCodeSnippet
   typedef otb::SVMImageModelEstimator<InputImageType,
-                                      TrainingImageType>   EstimatorType;
+      TrainingImageType>   EstimatorType;
 
 //  Software Guide : EndCodeSnippet
 

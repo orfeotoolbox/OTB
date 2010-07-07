@@ -38,15 +38,15 @@ int otbAVIRAndGAndNIRVegetationIndexImageFilter(int argc, char * argv[])
   typedef otb::ImageFileWriter<OutputImageType>   WriterType;
 
   typedef otb::Functor::AVI<InputRImageType::PixelType,
-                            InputGImageType::PixelType,
-                            InputNIRImageType::PixelType,
-                            OutputImageType::PixelType> FunctorType;
+      InputGImageType::PixelType,
+      InputNIRImageType::PixelType,
+      OutputImageType::PixelType> FunctorType;
 
   typedef otb::RAndGAndNIRIndexImageFilter<InputRImageType,
-                                           InputGImageType,
-                                           InputNIRImageType,
-                                           OutputImageType,
-                                           FunctorType> RAndGAndNIRIndexImageFilterType;
+      InputGImageType,
+      InputNIRImageType,
+      OutputImageType,
+      FunctorType> RAndGAndNIRIndexImageFilterType;
 
   // Instantiating object
   RAndGAndNIRIndexImageFilterType::Pointer filter = RAndGAndNIRIndexImageFilterType::New();

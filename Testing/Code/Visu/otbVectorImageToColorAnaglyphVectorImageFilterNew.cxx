@@ -26,9 +26,9 @@ int otbVectorImageToColorAnaglyphVectorImageFilterNew(int argc, char * argv[])
   typedef unsigned char PixelType;
 
   typedef otb::VectorImage<PixelType,
-                           Dimension>                                       VectorImageType;
+      Dimension>                                       VectorImageType;
   typedef otb::VectorImageToColorAnaglyphVectorImageFilter<VectorImageType, VectorImageType,
-                                                           VectorImageType> FilterType;
+      VectorImageType> FilterType;
 
   // Instantiating object
   FilterType::Pointer object = FilterType::New();

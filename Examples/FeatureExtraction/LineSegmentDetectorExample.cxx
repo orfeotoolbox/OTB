@@ -84,7 +84,7 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
   typedef otb::LineSegmentDetector<ImageType,
-                                   PrecisionType> LsdFilterType;
+      PrecisionType> LsdFilterType;
 
   LsdFilterType::Pointer lsdFilter = LsdFilterType::New();
   // Software Guide : EndCodeSnippet
@@ -99,7 +99,7 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
   typedef otb::DrawLineSpatialObjectListFilter<ImageType,
-                                               ImageType> DrawLineListType;
+      ImageType> DrawLineListType;
   DrawLineListType::Pointer drawLineFilter =   DrawLineListType::New();
   // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex

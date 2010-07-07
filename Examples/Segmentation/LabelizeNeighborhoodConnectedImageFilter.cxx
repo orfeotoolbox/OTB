@@ -87,7 +87,7 @@ int main(int argc, char * argv[])
 
   // Labelize filter
   typedef otb::LabelizeNeighborhoodConnectedImageFilter<InputImageType,
-                                                        OutputImageType>
+      OutputImageType>
   LabelizeFilterType;
   LabelizeFilterType::Pointer filter = LabelizeFilterType::New();
 
@@ -98,9 +98,9 @@ int main(int argc, char * argv[])
 
   // Label to RGB image
   typedef itk::Functor::ScalarToRGBPixelFunctor<OutputPixelType>
-                                                    FunctorType;
+  FunctorType;
   typedef itk::UnaryFunctorImageFilter<OutputImageType, RGBImageType,
-                                       FunctorType> ColorLabelFilterType;
+      FunctorType> ColorLabelFilterType;
   ColorLabelFilterType::Pointer labelToRGB = ColorLabelFilterType::New();
 
   filter->SetInput(reader->GetOutput());

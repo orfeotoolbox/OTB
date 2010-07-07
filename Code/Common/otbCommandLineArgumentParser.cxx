@@ -405,14 +405,14 @@ void CommandLineArgumentParser::PrintUsage(std::ostream& os) const
         {
         switch (m_OptionList[i].NumberOfParameters)
           {
-        case 0:
-          break;
-        case 1:
-          os << "  (" << m_OptionList[i].NumberOfParameters << " parameter)";
-          break;
-        default:
-          os << "  (" << m_OptionList[i].NumberOfParameters << " parameters)";
-          break;
+          case 0:
+            break;
+          case 1:
+            os << "  (" << m_OptionList[i].NumberOfParameters << " parameter)";
+            break;
+          default:
+            os << "  (" << m_OptionList[i].NumberOfParameters << " parameters)";
+            break;
           }
         }
       else

@@ -72,7 +72,7 @@ int main(int argc, char* argv[])
   typedef otb::ImageFileReader<ImageType> ReaderType;
 
   typedef otb::GCPsToRPCSensorModelImageFilter<ImageType>
-                                              GCPsToSensorModelFilterType;
+  GCPsToSensorModelFilterType;
 
   typedef GCPsToSensorModelFilterType::Point2DType Point2DType;
   typedef GCPsToSensorModelFilterType::Point3DType Point3DType;

@@ -280,13 +280,15 @@ public:
     int histoIdY = 0;
 
     IntVectorType histoTemp;
-    if (m_NeighBinLength != 0) histoTemp =
+    if (m_NeighBinLength != 0)
+      histoTemp =
         IntVectorType(static_cast<unsigned int>(vcl_floor(static_cast<double>(this->GetMaxi() -
                                                                               this->GetMini()) / m_NeighBinLength) + 1.),
                       0);
     else histoTemp = IntVectorType(1, 0);
 
-    if (m_OffsetBinLength != 0) m_Histo =
+    if (m_OffsetBinLength != 0)
+      m_Histo =
         IntVectorVectorType(static_cast<unsigned int>(vcl_floor(static_cast<double>(this->GetMaxiOff() -
                                                                                     this->GetMiniOff()) /
                                                                 m_OffsetBinLength) + 1.), histoTemp);
@@ -304,10 +306,12 @@ public:
         offset[1] = k;
         histoIdX = 0;
         histoIdY = 0;
-        if (m_OffsetBinLength != 0) histoIdX =
+        if (m_OffsetBinLength != 0)
+          histoIdX =
             static_cast<int>(vcl_floor((static_cast<double>(neighOff[offsetOff]) -
                                         this->GetMiniOff()) / static_cast<double>(m_OffsetBinLength)));
-        if (m_NeighBinLength != 0) histoIdY =
+        if (m_NeighBinLength != 0)
+          histoIdY =
             static_cast<int>(vcl_floor((static_cast<double>(neigh[offset]) -
                                         this->GetMini()) / static_cast<double>(m_NeighBinLength)));
 

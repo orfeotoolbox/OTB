@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::HarrisImageFilter<InputImageType,
-                                 InputImageType>   HarrisFilterType;
+      InputImageType>   HarrisFilterType;
   // Software Guide : EndCodeSnippet
   typedef itk::RescaleIntensityImageFilter
   <InputImageType, OutputImageType> RescalerType;

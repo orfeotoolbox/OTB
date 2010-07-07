@@ -46,17 +46,17 @@ namespace otb
 template <class TInputImage, class TOutputImage, class TStructuringElement>
 class ITK_EXPORT MorphologicalClosingProfileFilter
   : public ImageToProfileFilter<TInputImage, TOutputImage,
-                                itk::ClosingByReconstructionImageFilter
-                                <TInputImage, TOutputImage, TStructuringElement>,
-                                unsigned int>
+      itk::ClosingByReconstructionImageFilter
+      <TInputImage, TOutputImage, TStructuringElement>,
+      unsigned int>
 {
 public:
   /** Standard typedefs */
   typedef MorphologicalClosingProfileFilter Self;
   typedef ImageToProfileFilter<TInputImage, TOutputImage,
-                               itk::ClosingByReconstructionImageFilter
-                               <TInputImage, TOutputImage, TStructuringElement>,
-                               unsigned int> Superclass;
+      itk::ClosingByReconstructionImageFilter
+      <TInputImage, TOutputImage, TStructuringElement>,
+      unsigned int> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 

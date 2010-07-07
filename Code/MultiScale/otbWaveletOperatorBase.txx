@@ -25,7 +25,7 @@
 namespace otb {
 
 template <Wavelet::Wavelet TMotherWaveletOperator,
-          class TPixel, unsigned int VDimension, class TAllocator>
+    class TPixel, unsigned int VDimension, class TAllocator>
 void
 WaveletOperatorBase<TMotherWaveletOperator, TPixel, VDimension, TAllocator>
 ::PrintSelf(std::ostream& os, itk::Indent i) const
@@ -44,7 +44,7 @@ WaveletOperatorBase<TMotherWaveletOperator, TPixel, VDimension, TAllocator>
 }
 
 template <Wavelet::Wavelet TMotherWaveletOperator,
-          class TPixel, unsigned int VDimension, class TAllocator>
+    class TPixel, unsigned int VDimension, class TAllocator>
 void
 WaveletOperatorBase<TMotherWaveletOperator, TPixel, VDimension, TAllocator>
 ::UpSamplingCoefficients(CoefficientVector& coeff)
@@ -68,7 +68,7 @@ WaveletOperatorBase<TMotherWaveletOperator, TPixel, VDimension, TAllocator>
 }
 
 template <Wavelet::Wavelet TMotherWaveletOperator,
-          class TPixel, unsigned int VDimension, class TAllocator>
+    class TPixel, unsigned int VDimension, class TAllocator>
 void
 WaveletOperatorBase<TMotherWaveletOperator, TPixel, VDimension, TAllocator>
 ::RevertFilter(CoefficientVector& coeff)
@@ -88,7 +88,7 @@ WaveletOperatorBase<TMotherWaveletOperator, TPixel, VDimension, TAllocator>
 }
 
 template <Wavelet::Wavelet TMotherWaveletOperator,
-          class TPixel, unsigned int VDimension, class TAllocator>
+    class TPixel, unsigned int VDimension, class TAllocator>
 void
 WaveletOperatorBase<TMotherWaveletOperator, TPixel, VDimension, TAllocator>
 ::GenerateForwardHighPassFilterFromLowPassFilter(CoefficientVector& coeff)
@@ -119,7 +119,7 @@ WaveletOperatorBase<TMotherWaveletOperator, TPixel, VDimension, TAllocator>
 }
 
 template <Wavelet::Wavelet TMotherWaveletOperator,
-          class TPixel, unsigned int VDimension, class TAllocator>
+    class TPixel, unsigned int VDimension, class TAllocator>
 void
 WaveletOperatorBase<TMotherWaveletOperator, TPixel, VDimension, TAllocator>
 ::GenerateInverseHighPassFilterFromLowPassFilter(CoefficientVector& coeff)
@@ -146,7 +146,7 @@ WaveletOperatorBase<TMotherWaveletOperator, TPixel, VDimension, TAllocator>
 }
 
 template <Wavelet::Wavelet TMotherWaveletOperator,
-          class TPixel, unsigned int VDimension, class TAllocator>
+    class TPixel, unsigned int VDimension, class TAllocator>
 void
 WaveletOperatorBase<TMotherWaveletOperator, TPixel, VDimension, TAllocator>
 ::GenerateInverseLowPassFilterFromHighPassFilter(CoefficientVector& coeff)
@@ -173,7 +173,7 @@ WaveletOperatorBase<TMotherWaveletOperator, TPixel, VDimension, TAllocator>
 }
 
 template <Wavelet::Wavelet TMotherWaveletOperator,
-          class TPixel, unsigned int VDimension, class TAllocator>
+    class TPixel, unsigned int VDimension, class TAllocator>
 void
 WaveletOperatorBase<TMotherWaveletOperator, TPixel, VDimension, TAllocator>
 ::ReduceFilterLength(CoefficientVector& coeff)

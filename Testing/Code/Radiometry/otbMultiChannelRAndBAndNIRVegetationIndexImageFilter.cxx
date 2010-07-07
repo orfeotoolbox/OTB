@@ -69,13 +69,13 @@ int otbMultiChannelRAndBAndNIRVegetationIndexImageFilter(int argc, char * argv[]
   argv++;
   if (strArgv == "ARVI")
     return (generic_MultiChannelRAndBAndNIRVegetationIndexImageFilter<InputImageType, OutputImageType,
-                                                                      otb::Functor::ARVI<InputImageType::
-                                                                                         InternalPixelType,
-                                                                                         InputImageType::
-                                                                                         InternalPixelType,
-                                                                                         InputImageType::
-                                                                                         InternalPixelType,
-                                                                                         OutputImageType::PixelType> >
+                otb::Functor::ARVI<InputImageType::
+                    InternalPixelType,
+                    InputImageType::
+                    InternalPixelType,
+                    InputImageType::
+                    InternalPixelType,
+                    OutputImageType::PixelType> >
               (argc, argv));
   else return EXIT_FAILURE;
 

@@ -31,7 +31,7 @@ namespace otb
  */
 template <InverseOrForwardTransformationEnum transform>
 class ITK_EXPORT LambertConformalConicMapProjection : public MapProjection<ossimLambertConformalConicProjection,
-                                                                           transform>
+      transform>
 {
 public:
   /** Standard class typedefs. */

@@ -130,7 +130,7 @@ int main(int argc, char *argv[])
   typedef itk::CovariantVector<float, Dimension> VectorPixelType;
   typedef otb::Image<VectorPixelType, Dimension> VectorImageType;
   typedef itk::GradientRecursiveGaussianImageFilter<InputImageType,
-                                                    VectorImageType>
+      VectorImageType>
   GradientFilterType;
 
   GradientFilterType::Pointer gradient = GradientFilterType::New();
@@ -146,7 +146,7 @@ int main(int argc, char *argv[])
 
 // Software Guide : BeginCodeSnippet
   typedef itk::ImageAdaptor<VectorImageType,
-                            VectorPixelAccessor> ImageAdaptorType;
+      VectorPixelAccessor> ImageAdaptorType;
 
   ImageAdaptorType::Pointer adaptor = ImageAdaptorType::New();
 // Software Guide : EndCodeSnippet

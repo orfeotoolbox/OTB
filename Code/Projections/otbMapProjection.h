@@ -54,19 +54,19 @@ namespace otb
  **/
 
 template <class TOssimMapProjection,
-          InverseOrForwardTransformationEnum TDirectionOfMapping,
-          class TScalarType = double,
-          unsigned int NInputDimensions = 2,
-          unsigned int NOutputDimensions = 2>
+    InverseOrForwardTransformationEnum TDirectionOfMapping,
+    class TScalarType = double,
+    unsigned int NInputDimensions = 2,
+    unsigned int NOutputDimensions = 2>
 class ITK_EXPORT MapProjection : public itk::Transform<TScalarType,       // Data type for scalars
-                                                       NInputDimensions, // Number of dimensions in the input space
-                                                       NOutputDimensions> // Number of dimensions in the output space
+      NInputDimensions,                                                  // Number of dimensions in the input space
+      NOutputDimensions>                                                  // Number of dimensions in the output space
 {
 public:
   /** Standard class typedefs. */
   typedef itk::Transform<TScalarType,
-                         NInputDimensions,
-                         NOutputDimensions>       Superclass;
+      NInputDimensions,
+      NOutputDimensions>       Superclass;
   typedef MapProjection                 Self;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;

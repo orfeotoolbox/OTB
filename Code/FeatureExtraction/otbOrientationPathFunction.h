@@ -33,7 +33,7 @@ namespace otb
  */
 
 template <class TInputPath,
-          class TOutput      = double>
+    class TOutput      = double>
 class ITK_EXPORT OrientationPathFunction :
   public PathFunction<TInputPath, TOutput>
 {

@@ -394,11 +394,11 @@ MeanShiftImageFilter<TInputImage, TOutputImage, TLabeledOutput, TBufferConverter
       {
       boundIndex[0] =
         (regionIndeces[i] %
-        clusterBoudariesOutputPtr->GetRequestedRegion().GetSize()[0]) +
+         clusterBoudariesOutputPtr->GetRequestedRegion().GetSize()[0]) +
         clusterBoudariesOutputPtr->GetRequestedRegion().GetIndex()[0];
       boundIndex[1] =
         (regionIndeces[i] /
-        clusterBoudariesOutputPtr->GetRequestedRegion().GetSize()[0]) +
+         clusterBoudariesOutputPtr->GetRequestedRegion().GetSize()[0]) +
         clusterBoudariesOutputPtr->GetRequestedRegion().GetIndex()[1];
       if (clusterBoudariesOutputPtr->GetBufferedRegion().IsInside(boundIndex))
         {

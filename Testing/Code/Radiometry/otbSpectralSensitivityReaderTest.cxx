@@ -23,12 +23,12 @@
 
 using namespace otb;
 
-int otbSpectralSensitivityReaderTest(int argc,char* argv[])
+int otbSpectralSensitivityReaderTest(int argc, char* argv[])
 {
   const char * dataPath  = argv[1];
-  const char * imageName = argv[2];  
+  const char * imageName = argv[2];
   const char * output    = argv[3];
-  
+
   typedef VectorImage<double>        ImageType;
   typedef ImageFileReader<ImageType> ReaderType;
 
@@ -38,13 +38,13 @@ int otbSpectralSensitivityReaderTest(int argc,char* argv[])
 
   SpectralSensitivityReader::Pointer spectSen = SpectralSensitivityReader::New();
 
-  spectSen->SetDataPath( dataPath );
-  spectSen->SetImage( reader->GetOutput() );
+  spectSen->SetDataPath(dataPath);
+  spectSen->SetImage(reader->GetOutput());
 
   spectSen->Update();
 
   std::ofstream fout(output);
-  fout <<spectSen<<std::endl;
+  fout << spectSen << std::endl;
   fout.close();
 
   return EXIT_SUCCESS;

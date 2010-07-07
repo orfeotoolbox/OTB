@@ -24,30 +24,30 @@ namespace otb
 {
 
 template<class TInputMapProjection,
-         class TOutputMapProjection,
-         class TScalarType,
-         unsigned int NInputDimensions,
-         unsigned int NOutputDimensions>
+    class TOutputMapProjection,
+    class TScalarType,
+    unsigned int NInputDimensions,
+    unsigned int NOutputDimensions>
 MapToMapProjection<TInputMapProjection,
-                   TOutputMapProjection,
-                   TScalarType,
-                   NInputDimensions,
-                   NOutputDimensions>
+    TOutputMapProjection,
+    TScalarType,
+    NInputDimensions,
+    NOutputDimensions>
 ::MapToMapProjection()
   : Superclass(SpaceDimension, ParametersDimension)
 {
 }
 
 template<class TInputMapProjection,
-         class TOutputMapProjection,
-         class TScalarType,
-         unsigned int NInputDimensions,
-         unsigned int NOutputDimensions>
+    class TOutputMapProjection,
+    class TScalarType,
+    unsigned int NInputDimensions,
+    unsigned int NOutputDimensions>
 MapToMapProjection<TInputMapProjection,
-                   TOutputMapProjection,
-                   TScalarType,
-                   NInputDimensions,
-                   NOutputDimensions>
+    TOutputMapProjection,
+    TScalarType,
+    NInputDimensions,
+    NOutputDimensions>
 ::~MapToMapProjection()
 {
 }
@@ -110,21 +110,21 @@ MapToMapProjection<TInputMapProjection,
   }*/
 
 template<class TInputMapProjection,
-         class TOutputMapProjection,
-         class TScalarType,
-         unsigned int NInputDimensions,
-         unsigned int NOutputDimensions>
+    class TOutputMapProjection,
+    class TScalarType,
+    unsigned int NInputDimensions,
+    unsigned int NOutputDimensions>
 typename MapToMapProjection<TInputMapProjection,
-                            TOutputMapProjection,
-                            TScalarType,
-                            NInputDimensions,
-                            NOutputDimensions>
+    TOutputMapProjection,
+    TScalarType,
+    NInputDimensions,
+    NOutputDimensions>
 ::OutputPointType
 MapToMapProjection<TInputMapProjection,
-                   TOutputMapProjection,
-                   TScalarType,
-                   NInputDimensions,
-                   NOutputDimensions>::
+    TOutputMapProjection,
+    TScalarType,
+    NInputDimensions,
+    NOutputDimensions>::
 TransformPoint(const InputPointType& point) const
 {
   OutputPointOfInputMapProjectionType geopoint;

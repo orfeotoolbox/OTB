@@ -79,7 +79,7 @@ int otbImageViewerEndToEndWithVectorData(int argc, char * argv[])
   typedef otb::VectorData<double>                   VectorDataType;
   typedef otb::VectorDataFileReader<VectorDataType> VectorDataFileReaderType;
   typedef otb::VectorDataProjectionFilter<VectorDataType,
-                                          VectorDataType>
+      VectorDataType>
   VectorDataProjectionFilterType;
   typedef otb::VectorDataGlComponent<VectorDataType> VectorDataGlComponentType;
 

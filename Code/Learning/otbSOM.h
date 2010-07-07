@@ -52,8 +52,8 @@ namespace otb
  * \sa CzihoSOMNeighborhoodBehaviorFunctor
  */
 template <class TListSample, class TMap,
-          class TSOMLearningBehaviorFunctor = Functor::CzihoSOMLearningBehaviorFunctor,
-          class TSOMNeighborhoodBehaviorFunctor = Functor::CzihoSOMNeighborhoodBehaviorFunctor>
+    class TSOMLearningBehaviorFunctor = Functor::CzihoSOMLearningBehaviorFunctor,
+    class TSOMNeighborhoodBehaviorFunctor = Functor::CzihoSOMNeighborhoodBehaviorFunctor>
 class ITK_EXPORT SOM
   : public itk::ImageSource<TMap>
 {

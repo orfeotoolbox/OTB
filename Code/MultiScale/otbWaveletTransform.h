@@ -48,7 +48,7 @@ namespace otb {
  *
  */
 template <class TInputImage, class TOutputImage, class TFilter,
-          Wavelet::WaveletDirection TDirectionOfTransformation>
+    Wavelet::WaveletDirection TDirectionOfTransformation>
 class ITK_EXPORT WaveletTransform
   : public itk::ImageSource<TOutputImage>
 {

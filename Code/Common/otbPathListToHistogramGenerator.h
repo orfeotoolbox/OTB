@@ -74,9 +74,9 @@ public:
   typedef itk::Statistics::DenseFrequencyContainer FrequencyContainerType;
 
   typedef itk::Statistics::ListSampleToHistogramGenerator<
-    ListSampleType,
-    MeasurementType,
-    FrequencyContainerType, 1>        GeneratorType;
+      ListSampleType,
+      MeasurementType,
+      FrequencyContainerType, 1>        GeneratorType;
 
   typedef typename GeneratorType::Pointer GeneratorPointer;
 

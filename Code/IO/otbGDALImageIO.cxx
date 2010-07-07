@@ -306,7 +306,7 @@ void GDALImageIO::InternalReadImageInformation()
 
 //  else
 //  {
-  // Get image dimensions
+// Get image dimensions
   m_width = m_poDataset->GetRasterXSize();
   m_height = m_poDataset->GetRasterYSize();
 
@@ -512,7 +512,7 @@ void GDALImageIO::InternalReadImageInformation()
   /* Get the projection coordinate system of the image : ProjectionRef  */
   /* -------------------------------------------------------------------- */
 
-  if (m_poDataset->GetProjectionRef() != NULL && !std::string(m_poDataset->GetProjectionRef()).empty() )
+  if (m_poDataset->GetProjectionRef() != NULL && !std::string(m_poDataset->GetProjectionRef()).empty())
     {
     OGRSpatialReference* pSR;
     const char *         pszProjection = NULL;
@@ -611,7 +611,7 @@ void GDALImageIO::InternalReadImageInformation()
     if (projRef.empty())
       {
       projRef =
-          "GEOGCS[\"GCS_WGS_1984\",DATUM[\"D_WGS_1984\",SPHEROID[\"WGS_1984\",6378137,298.257223563]],PRIMEM[\"Greenwich\",0],UNIT[\"Degree\",0.017453292519943295]]";
+        "GEOGCS[\"GCS_WGS_1984\",DATUM[\"D_WGS_1984\",SPHEROID[\"WGS_1984\",6378137,298.257223563]],PRIMEM[\"Greenwich\",0],UNIT[\"Degree\",0.017453292519943295]]";
 
       itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projRef);
       }

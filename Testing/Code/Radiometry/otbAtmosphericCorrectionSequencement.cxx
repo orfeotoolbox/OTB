@@ -48,7 +48,8 @@ int otbAtmosphericCorrectionSequencementTest(int argc, char *argv[])
     std::cerr << "    atmosphericPressure , waterVaporAmount , ozoneAmount , aerosolModel , AerosolOptical,"  <<
     std::endl;
     std::cerr <<
-    "    wavelengthSpectralBandFileName , adjacencyEffect6SCorrectionWindowRadius, pixelSpacingInKilometers" << std::endl;
+    "    wavelengthSpectralBandFileName , adjacencyEffect6SCorrectionWindowRadius, pixelSpacingInKilometers" <<
+    std::endl;
     std::cerr << std::endl;
     return 1;
     }
@@ -201,7 +202,7 @@ int otbAtmosphericCorrectionSequencementTest(int argc, char *argv[])
 //-------------------------------
 
   typedef otb::ReflectanceToSurfaceReflectanceImageFilter<ImageType,
-                                                          ImageType> ReflectanceToSurfaceReflectanceImageFilterType;
+      ImageType> ReflectanceToSurfaceReflectanceImageFilterType;
   ReflectanceToSurfaceReflectanceImageFilterType::Pointer filterReflectanceToSurfaceReflectanceImageFilter =
     ReflectanceToSurfaceReflectanceImageFilterType::New();
 
@@ -211,7 +212,7 @@ int otbAtmosphericCorrectionSequencementTest(int argc, char *argv[])
 
 //-------------------------------
   typedef otb::SurfaceAdjacencyEffect6SCorrectionSchemeFilter<ImageType,
-                                                            ImageType> SurfaceAdjacencyEffect6SCorrectionSchemeFilterType;
+      ImageType> SurfaceAdjacencyEffect6SCorrectionSchemeFilterType;
   SurfaceAdjacencyEffect6SCorrectionSchemeFilterType::Pointer filterSurfaceAdjacencyEffect6SCorrectionSchemeFilter =
     SurfaceAdjacencyEffect6SCorrectionSchemeFilterType::New();
 

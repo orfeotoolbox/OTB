@@ -68,14 +68,14 @@ int otbUnaryFunctorNeighborhoodWithOffsetImageFilterNew(int argc, char * argv[])
   typedef double InputPixelType;
   const int Dimension = 2;
   typedef otb::VectorImage<InputPixelType,
-                           Dimension>               ImageType;
+      Dimension>               ImageType;
   typedef ImageType::PixelType
-                                                    PixelType;
+  PixelType;
   typedef itk::ConstNeighborhoodIterator<ImageType> IterType;
   typedef Functor::UnaryFunctorNeighborhoodWithOffsetImageFilterFunctorNewTest<InputPixelType,
-                                                                               InputPixelType> FunctorType;
+      InputPixelType> FunctorType;
   typedef otb::UnaryFunctorNeighborhoodWithOffsetImageFilter<ImageType, ImageType,
-                                                             FunctorType>
+      FunctorType>
   UnaryFunctorNeighborhoodWithOffsetImageFilterType;
 
   // Instantiating object

@@ -87,7 +87,7 @@ public:
 
   /** Template parameters typedefs for mean component generation */
   typedef Image<typename InputImageType::InternalPixelType,
-                ::itk::GetImageDimension<InputImageType>::ImageDimension> InternalImageType;
+      ::itk::GetImageDimension<InputImageType>::ImageDimension> InternalImageType;
   typedef Functor::MeanFunctor<typename InputImageType::PixelType, typename InternalImageType::PixelType>
   MeanFunctorType;
   typedef itk::UnaryFunctorImageFilter<InputImageType, InternalImageType, MeanFunctorType> MeanFilterType;

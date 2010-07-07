@@ -99,18 +99,18 @@ public:
   typedef TOutputImage OutputImageType;
 
   typedef TStructuringElement
-                                                      StructuringElementType;
+  StructuringElementType;
   typedef typename StructuringElementType::RadiusType RadiusType;
   typedef itk::OpeningByReconstructionImageFilter<InputImageType, InputImageType,
-                                                  StructuringElementType> OpeningFilterType;
+      StructuringElementType> OpeningFilterType;
   typedef itk::ClosingByReconstructionImageFilter<InputImageType, InputImageType,
-                                                  StructuringElementType> ClosingFilterType;
+      StructuringElementType> ClosingFilterType;
   typedef itk::SubtractImageFilter<InputImageType, InputImageType,
-                                   OutputImageType>                       ConvexFilterType;
+      OutputImageType>                       ConvexFilterType;
   typedef itk::SubtractImageFilter<OutputImageType, InputImageType,
-                                   OutputImageType>                      ConcaveFilterType;
+      OutputImageType>                      ConcaveFilterType;
   typedef otb::GeodesicMorphologyLevelingFilter<InputImageType, OutputImageType,
-                                                OutputImageType>         LevelingFilterType;
+      OutputImageType>         LevelingFilterType;
 
   /** Pointers typedefs*/
   typedef typename OpeningFilterType::Pointer  OpeningFilterPointerType;

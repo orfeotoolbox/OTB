@@ -125,7 +125,7 @@ int main(int argc, char *argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef itk::IsolatedConnectedImageFilter<InternalImageType,
-                                            InternalImageType>
+      InternalImageType>
   ConnectedFilterType;
   // Software Guide : EndCodeSnippet
 

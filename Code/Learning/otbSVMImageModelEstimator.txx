@@ -35,7 +35,7 @@ SVMImageModelEstimator<TInputImage, TTrainingImage>
 }
 
 template<class TInputImage,
-         class TTrainingImage>
+    class TTrainingImage>
 SVMImageModelEstimator<TInputImage, TTrainingImage>
 ::~SVMImageModelEstimator(void)
 {}
@@ -44,7 +44,7 @@ SVMImageModelEstimator<TInputImage, TTrainingImage>
  * PrintSelf
  */
 template<class TInputImage,
-         class TTrainingImage>
+    class TTrainingImage>
 void
 SVMImageModelEstimator<TInputImage, TTrainingImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
@@ -96,7 +96,7 @@ SVMImageModelEstimator<TInputImage, TTrainingImage>
  * Generate data (start the model building process)
  */
 template<class TInputImage,
-         class TTrainingImage>
+    class TTrainingImage>
 void
 SVMImageModelEstimator<TInputImage,  TTrainingImage>
 ::PrepareData()
@@ -115,7 +115,8 @@ SVMImageModelEstimator<TInputImage,  TTrainingImage>
   // Check if size of the two inputs are same
   for (unsigned int i = 0; i < TInputImage::ImageDimension; ++i)
     {
-    if (inputImageSize[i] != trainingImageSize[i]) throw itk::ExceptionObject(
+    if (inputImageSize[i] != trainingImageSize[i])
+      throw itk::ExceptionObject(
         __FILE__,
         __LINE__,
         "Input image size is not the same as the training image size.",

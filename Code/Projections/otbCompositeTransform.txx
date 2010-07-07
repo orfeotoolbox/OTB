@@ -29,15 +29,15 @@ namespace otb
 {
 
 template<class TFirstTransform,
-         class TSecondTransform,
-         class TScalarType,
-         unsigned int NInputDimensions,
-         unsigned int NOutputDimensions>
+    class TSecondTransform,
+    class TScalarType,
+    unsigned int NInputDimensions,
+    unsigned int NOutputDimensions>
 CompositeTransform<TFirstTransform,
-                   TSecondTransform,
-                   TScalarType,
-                   NInputDimensions,
-                   NOutputDimensions>
+    TSecondTransform,
+    TScalarType,
+    NInputDimensions,
+    NOutputDimensions>
 ::CompositeTransform() : Superclass(SpaceDimension, ParametersDimension)
 {
   m_FirstTransform = 0;
@@ -45,34 +45,34 @@ CompositeTransform<TFirstTransform,
 }
 
 template<class TFirstTransform,
-         class TSecondTransform,
-         class TScalarType,
-         unsigned int NInputDimensions,
-         unsigned int NOutputDimensions>
+    class TSecondTransform,
+    class TScalarType,
+    unsigned int NInputDimensions,
+    unsigned int NOutputDimensions>
 CompositeTransform<TFirstTransform,
-                   TSecondTransform,
-                   TScalarType,
-                   NInputDimensions,
-                   NOutputDimensions>
+    TSecondTransform,
+    TScalarType,
+    NInputDimensions,
+    NOutputDimensions>
 ::~CompositeTransform()
 {
 }
 
 template<class TFirstTransform,
-         class TSecondTransform,
-         class TScalarType,
-         unsigned int NInputDimensions,
-         unsigned int NOutputDimensions>
+    class TSecondTransform,
+    class TScalarType,
+    unsigned int NInputDimensions,
+    unsigned int NOutputDimensions>
 typename CompositeTransform<TFirstTransform,
-                            TSecondTransform,
-                            TScalarType,
-                            NInputDimensions,
-                            NOutputDimensions>::SecondTransformOutputPointType
+    TSecondTransform,
+    TScalarType,
+    NInputDimensions,
+    NOutputDimensions>::SecondTransformOutputPointType
 CompositeTransform<TFirstTransform,
-                   TSecondTransform,
-                   TScalarType,
-                   NInputDimensions,
-                   NOutputDimensions>
+    TSecondTransform,
+    TScalarType,
+    NInputDimensions,
+    NOutputDimensions>
 ::TransformPoint(const FirstTransformInputPointType& point1) const
 {
   FirstTransformOutputPointType geoPoint;

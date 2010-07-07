@@ -24,7 +24,7 @@ namespace otb
 {
 
 template<InverseOrForwardTransformationEnum TransformDirection, class TScalarType, unsigned int NInputDimensions,
-         unsigned int NOutputDimensions>
+    unsigned int NOutputDimensions>
 GeocentricTransform<TransformDirection, TScalarType, NInputDimensions, NOutputDimensions>
 ::GeocentricTransform() : Superclass(SpaceDimension, ParametersDimension)
 {
@@ -32,7 +32,7 @@ GeocentricTransform<TransformDirection, TScalarType, NInputDimensions, NOutputDi
 }
 
 template<InverseOrForwardTransformationEnum TransformDirection, class TScalarType, unsigned int NInputDimensions,
-         unsigned int NOutputDimensions>
+    unsigned int NOutputDimensions>
 GeocentricTransform<TransformDirection, TScalarType, NInputDimensions, NOutputDimensions>
 ::~GeocentricTransform()
 {
@@ -43,7 +43,7 @@ GeocentricTransform<TransformDirection, TScalarType, NInputDimensions, NOutputDi
 }
 
 template<InverseOrForwardTransformationEnum TransformDirection, class TScalarType, unsigned int NInputDimensions,
-         unsigned int NOutputDimensions>
+    unsigned int NOutputDimensions>
 typename GeocentricTransform<TransformDirection, TScalarType, NInputDimensions, NOutputDimensions>::OutputPointType
 GeocentricTransform<TransformDirection, TScalarType, NInputDimensions, NOutputDimensions>
 ::TransformPoint(const InputPointType& point) const
@@ -52,22 +52,22 @@ GeocentricTransform<TransformDirection, TScalarType, NInputDimensions, NOutputDi
 
   switch (DirectionOfMapping)
     {
-  case INVERSE:
-    {
-    m_Ellipsoid->XYZToLatLonHeight(point[0], point[1], point[2], outputPoint[1], outputPoint[0], outputPoint[2]);
-    break;
-    }
-  case FORWARD:
-    {
-    m_Ellipsoid->latLonHeightToXYZ(point[1], point[0], point[2], outputPoint[0], outputPoint[1], outputPoint[2]);
+    case INVERSE:
+      {
+      m_Ellipsoid->XYZToLatLonHeight(point[0], point[1], point[2], outputPoint[1], outputPoint[0], outputPoint[2]);
+      break;
+      }
+    case FORWARD:
+      {
+      m_Ellipsoid->latLonHeightToXYZ(point[1], point[0], point[2], outputPoint[0], outputPoint[1], outputPoint[2]);
 
-    break;
-    }
-  default:
-    {
-    itkExceptionMacro(<< "Model is INVERSE or FORWARD only !!");
-    break;
-    }
+      break;
+      }
+    default:
+      {
+      itkExceptionMacro(<< "Model is INVERSE or FORWARD only !!");
+      break;
+      }
     }
   //To be completed
   return outputPoint;

@@ -22,7 +22,7 @@ namespace otb
 
 VectorDataModel::VectorDataModel() :
   m_VectorData(), m_CurrentNodeType(FEATURE_POLYGON), m_CurrentRootNode(),
-  m_CurrentGeometry(), m_Origin(),m_Spacing()    //, m_UpperModel()
+  m_CurrentGeometry(), m_Origin(), m_Spacing()    //, m_UpperModel()
 {
   m_Origin.Fill(0.);
   m_Spacing.Fill(1.);
@@ -45,11 +45,11 @@ void VectorDataModel::Update(void)
 void VectorDataModel::AddPointToGeometry(VertexType& vertex)
 {
   VertexType newPoint;
-  newPoint[0] = m_Origin[0] + vertex[0]/m_Spacing[0];
-  newPoint[1] = m_Origin[1] + vertex[1]/m_Spacing[1];
+  newPoint[0] = m_Origin[0] + vertex[0] / m_Spacing[0];
+  newPoint[1] = m_Origin[1] + vertex[1] / m_Spacing[1];
 
   // Check if current node type changed, and if so, close current geometry first
-  if(m_CurrentGeometry.IsNotNull() && m_CurrentNodeType != m_CurrentGeometry->GetNodeType())
+  if (m_CurrentGeometry.IsNotNull() && m_CurrentNodeType != m_CurrentGeometry->GetNodeType())
     {
     this->EndGeometry();
     }
@@ -89,7 +89,7 @@ void VectorDataModel::AddPointToGeometry(VertexType& vertex)
     }
   else if (m_CurrentNodeType == FEATURE_LINE)
     {
-    if(m_CurrentGeometry.IsNull())
+    if (m_CurrentGeometry.IsNull())
       {
       otbMsgDevMacro(<< "VectorDataModel::AddPointToGeometry: Creating new line");
       m_CurrentGeometry = DataNodeType::New();
@@ -97,7 +97,7 @@ void VectorDataModel::AddPointToGeometry(VertexType& vertex)
       m_CurrentGeometry->SetNodeType(FEATURE_LINE);
       LineType::Pointer line = LineType::New();
       m_CurrentGeometry->SetLine(line);
-      m_VectorData->GetDataTree()->Add(m_CurrentGeometry,m_CurrentRootNode);
+      m_VectorData->GetDataTree()->Add(m_CurrentGeometry, m_CurrentRootNode);
       }
     otbMsgDevMacro(<< "VectorDataModel::AddPoint: Adding point " << newPoint);
     m_CurrentGeometry->GetLine()->AddVertex(newPoint);
@@ -112,7 +112,7 @@ void VectorDataModel::AddPointToGeometry(VertexType& vertex)
 void VectorDataModel::EndGeometry(void)
 {
   // Avoid multiple endings
-  if(!m_CurrentGeometry)
+  if (!m_CurrentGeometry)
     {
     return;
     }

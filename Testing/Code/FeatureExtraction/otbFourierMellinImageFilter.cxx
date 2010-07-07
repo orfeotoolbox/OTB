@@ -46,11 +46,11 @@ int otbFourierMellinImageFilter(int argc, char* argv[])
 
   typedef itk::LinearInterpolateImageFunction<InputImageType, double> InterpolatorType;
   typedef otb::ForwardFourierMellinTransformImageFilter<InputPixelType, InterpolatorType,
-                                                        Dimension> FourierMellinTransformType;
+      Dimension> FourierMellinTransformType;
   typedef FourierMellinTransformType::OutputImageType                    OutputImageType;
   typedef itk::ComplexToRealImageFilter<OutputImageType, InputImageType> RealFilterType;
   typedef itk::ComplexToImaginaryImageFilter<OutputImageType,
-                                             InputImageType>                        ImaginaryFilterType;
+      InputImageType>                        ImaginaryFilterType;
   typedef itk::RescaleIntensityImageFilter<InputImageType, InputImageType> RescalerType;
 
   FourierMellinTransformType::Pointer FourierMellinTransform = FourierMellinTransformType::New();

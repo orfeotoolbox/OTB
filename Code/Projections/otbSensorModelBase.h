@@ -41,11 +41,11 @@ namespace otb
  *
  */
 template <class TScalarType,
-          unsigned int NInputDimensions = 3,
-          unsigned int NOutputDimensions = 2>
+    unsigned int NInputDimensions = 3,
+    unsigned int NOutputDimensions = 2>
 class ITK_EXPORT SensorModelBase : public itk::Transform<TScalarType,
-                                                         NInputDimensions,
-                                                         NOutputDimensions>
+      NInputDimensions,
+      NOutputDimensions>
 {
 
 public:
@@ -53,8 +53,8 @@ public:
   /** Standard class typedefs. */
   typedef SensorModelBase Self;
   typedef itk::Transform<TScalarType,
-                         NInputDimensions,
-                         NOutputDimensions>         Superclass;
+      NInputDimensions,
+      NOutputDimensions>         Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 

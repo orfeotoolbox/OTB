@@ -57,7 +57,7 @@ namespace otb
 
 template <class TInputImage, class TOutputImage, class TOutputImageDirection = TOutputImage>
 class ITK_EXPORT TouziEdgeDetectorImageFilter :  public ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage,
-                                                                                              TOutputImageDirection>
+      TOutputImageDirection>
 {
 public:
   /** Extract input and output images sizes. */

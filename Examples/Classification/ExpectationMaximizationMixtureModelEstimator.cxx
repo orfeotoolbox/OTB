@@ -126,8 +126,8 @@ int main()
   // Software Guide : BeginCodeSnippet
   unsigned int numberOfClasses = 2;
   typedef itk::Vector<double,
-                      1>
-                                                             MeasurementVectorType;
+      1>
+  MeasurementVectorType;
   typedef itk::Statistics::ListSample<MeasurementVectorType> SampleType;
   SampleType::Pointer sample = SampleType::New();
   sample->SetMeasurementVectorSize(1);   // length of measurement vectors
@@ -221,7 +221,7 @@ int main()
 
   // Software Guide : BeginCodeSnippet
   typedef itk::Statistics::ExpectationMaximizationMixtureModelEstimator<
-    SampleType> EstimatorType;
+      SampleType> EstimatorType;
   EstimatorType::Pointer estimator = EstimatorType::New();
 
   estimator->SetSample(sample);

@@ -89,7 +89,7 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef itk::OtsuThresholdImageFilter<
-    InputImageType, OutputImageType>  FilterType;
+      InputImageType, OutputImageType>  FilterType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex

@@ -207,11 +207,11 @@ int main(int argc, char * argv[])
 
   /************** pretty images for printing *********/
   typedef otb::Image<unsigned char,
-                     2>                                     OutputImageType;
+      2>                                     OutputImageType;
   typedef itk::RescaleIntensityImageFilter<ImageType,
-                                           OutputImageType> RescalerType;
+      OutputImageType> RescalerType;
   typedef otb::ImageFileWriter<OutputImageType>
-                                                            OutputWriterType;
+  OutputWriterType;
 
   RescalerType::Pointer rescaler = RescalerType::New();
   rescaler->SetOutputMinimum(0);

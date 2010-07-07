@@ -244,9 +244,9 @@ WorldView2ImageMetadataInterface::GetMinute(const MetaDataDictionaryType& dict) 
   ossimString keywordString = kwl.find(key.c_str());
 
   if (keywordString == ossimString("Unknown"))
-     {
-      itkExceptionMacro("Unknown date")
-     }
+    {
+    itkExceptionMacro("Unknown date")
+    }
 
   std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
 
@@ -413,7 +413,7 @@ WorldView2ImageMetadataInterface
 
   ossimString keywordStringBitsPerPixel = kwl.find("support_data.bits_per_pixel");
   int         bitsPerPixel = keywordStringBitsPerPixel.toInt();
-  if (bitsPerPixel != 16 )
+  if (bitsPerPixel != 16)
     {
     itkExceptionMacro(<< "Invalid bitsPerPixel " << bitsPerPixel);
     }
@@ -424,10 +424,10 @@ WorldView2ImageMetadataInterface
     {
     itkExceptionMacro(<< "Invalid bandID " << keywordStringBId);
     }
-    
+
   ossimString keywordStringTDILevel = kwl.find("support_data.TDI_level");
   int         TDILevel = keywordStringTDILevel.toInt();
-  if (keywordStringBId == ossimString("P") && TDILevel != 24 )
+  if (keywordStringBId == ossimString("P") && TDILevel != 24)
     {
     itkExceptionMacro(<< "Invalid TDILevel " << TDILevel);
     }
@@ -438,23 +438,22 @@ WorldView2ImageMetadataInterface
   outputValuesVariableLengthVector.Fill(1.);
 
   if (keywordStringBId == ossimString("P"))
-     {
-       ossimString keywordStringAbsCalFactor = kwl.find("support_data.absCalFactor");
-       outputValuesVariableLengthVector[0] = keywordStringAbsCalFactor.toDouble();
-     }
-     else
-     {
+    {
+    ossimString keywordStringAbsCalFactor = kwl.find("support_data.absCalFactor");
+    outputValuesVariableLengthVector[0] = keywordStringAbsCalFactor.toDouble();
+    }
+  else
+    {
 //       ossimString keywordStringAbsCalFactor = kwl.find("support_data.B_band_absCalFactor");
-       ossimString keywordStringAbsCalFactor = kwl.find("band_C.abscalfactor");
-       outputValuesVariableLengthVector[0] = keywordStringAbsCalFactor.toDouble();
-       keywordStringAbsCalFactor = kwl.find("support_data.G_band_absCalFactor");
-       outputValuesVariableLengthVector[1] = keywordStringAbsCalFactor.toDouble();
-       keywordStringAbsCalFactor = kwl.find("support_data.N_band_absCalFactor");
-       outputValuesVariableLengthVector[2] = keywordStringAbsCalFactor.toDouble();
-       keywordStringAbsCalFactor = kwl.find("support_data.R_band_absCalFactor");
-       outputValuesVariableLengthVector[3] = keywordStringAbsCalFactor.toDouble();
-     }
-
+    ossimString keywordStringAbsCalFactor = kwl.find("band_C.abscalfactor");
+    outputValuesVariableLengthVector[0] = keywordStringAbsCalFactor.toDouble();
+    keywordStringAbsCalFactor = kwl.find("support_data.G_band_absCalFactor");
+    outputValuesVariableLengthVector[1] = keywordStringAbsCalFactor.toDouble();
+    keywordStringAbsCalFactor = kwl.find("support_data.N_band_absCalFactor");
+    outputValuesVariableLengthVector[2] = keywordStringAbsCalFactor.toDouble();
+    keywordStringAbsCalFactor = kwl.find("support_data.R_band_absCalFactor");
+    outputValuesVariableLengthVector[3] = keywordStringAbsCalFactor.toDouble();
+    }
 
 /* PIO : To be confirmed !!!
  if (keywordStringBId == ossimString("P"))
@@ -612,24 +611,24 @@ WorldView2ImageMetadataInterface
   return wavel;
 }
 
-unsigned int 
+unsigned int
 WorldView2ImageMetadataInterface
 ::GetDefaultRBand() const
-{ 
+{
   return 2;
 }
 
-unsigned int 
+unsigned int
 WorldView2ImageMetadataInterface
 ::GetDefaultGBand() const
-{ 
+{
   return 1;
 }
 
-unsigned int 
+unsigned int
 WorldView2ImageMetadataInterface
 ::GetDefaultBBand() const
-{ 
+{
   return 0;
 }
 

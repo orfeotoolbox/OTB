@@ -370,22 +370,26 @@ RegionImageToRectangularPathListFilter<TInputImage, TOutputPath>
         point[0] = (avgX + x1 * halfLength + x2 * halfWidth) * spacing[0] + origin[0];
         point[1] = (avgY + y1 * halfLength + y2 * halfWidth) * spacing[1] + origin[1];
         path->AddVertex(point);
-        if (regionCount <= regionDebugNumber) std::cout << "corner 1 : [" << point[0] << ", " << point[1] << "]" <<
+        if (regionCount <= regionDebugNumber)
+          std::cout << "corner 1 : [" << point[0] << ", " << point[1] << "]" <<
           std::endl;
         point[0] = (avgX - x1 * halfLength + x2 * halfWidth) * spacing[0] + origin[0];
         point[1] = (avgY - y1 * halfLength + y2 * halfWidth) * spacing[1] + origin[1];
         path->AddVertex(point);
-        if (regionCount <= regionDebugNumber) std::cout << "corner 2 : [" << point[0] << ", " << point[1] << "]" <<
+        if (regionCount <= regionDebugNumber)
+          std::cout << "corner 2 : [" << point[0] << ", " << point[1] << "]" <<
           std::endl;
         point[0] = (avgX - x1 * halfLength - x2 * halfWidth) * spacing[0] + origin[0];
         point[1] = (avgY - y1 * halfLength - y2 * halfWidth) * spacing[1] + origin[1];
         path->AddVertex(point);
-        if (regionCount <= regionDebugNumber) std::cout << "corner 3 : [" << point[0] << ", " << point[1] << "]" <<
+        if (regionCount <= regionDebugNumber)
+          std::cout << "corner 3 : [" << point[0] << ", " << point[1] << "]" <<
           std::endl;
         point[0] = (avgX + x1 * halfLength - x2 * halfWidth) * spacing[0] + origin[0];
         point[1] = (avgY + y1 * halfLength - y2 * halfWidth) * spacing[1] + origin[1];
         path->AddVertex(point);
-        if (regionCount <= regionDebugNumber) std::cout << "corner 4 : [" << point[0] << ", " << point[1] << "]" <<
+        if (regionCount <= regionDebugNumber)
+          std::cout << "corner 4 : [" << point[0] << ", " << point[1] << "]" <<
           std::endl;
         point[0] = (avgX + x1 * halfLength + x2 * halfWidth) * spacing[0] + origin[0];
         point[1] = (avgY + y1 * halfLength + y2 * halfWidth) * spacing[1] + origin[1];

@@ -89,7 +89,7 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::AssymmetricFusionOfLineDetectorImageFilter<InternalImageType,
-                                                          InternalImageType>
+      InternalImageType>
   FilterType;
   // Software Guide : EndCodeSnippet
 
@@ -125,7 +125,7 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef itk::RescaleIntensityImageFilter<InternalImageType,
-                                           OutputImageType> RescalerType;
+      OutputImageType> RescalerType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex

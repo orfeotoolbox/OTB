@@ -159,7 +159,7 @@ ImageToPointSetFilter<TInputImage, TOutputPointSet>
     {
     streamRegion = m_RegionSplitter->GetSplit(piece, numDivisions, inputRegion);
     typedef itk::ImageToImageFilterDetail::ImageRegionCopier<itkGetStaticConstMacro(InputImageDimension),
-                                                             itkGetStaticConstMacro(InputImageDimension)>
+        itkGetStaticConstMacro(InputImageDimension)>
     OutputToInputRegionCopierType;
     OutputToInputRegionCopierType regionCopier;
     InputImageRegionType          inputRegion;

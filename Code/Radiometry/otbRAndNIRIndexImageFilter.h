@@ -31,11 +31,11 @@ namespace otb
  */
 
 template <class TInputImageR, class TInputImageNIR, class TOutputImage,
-          class TFunction = Functor::NDVI<typename TInputImageR::PixelType,
-                                          typename TInputImageNIR::PixelType,
-                                          typename TOutputImage::PixelType> >
+    class TFunction = Functor::NDVI<typename TInputImageR::PixelType,
+        typename TInputImageNIR::PixelType,
+        typename TOutputImage::PixelType> >
 class ITK_EXPORT RAndNIRIndexImageFilter :  public itk::BinaryFunctorImageFilter<TInputImageR, TInputImageNIR,
-                                                                                 TOutputImage, TFunction>
+      TOutputImage, TFunction>
 {
 public:
 

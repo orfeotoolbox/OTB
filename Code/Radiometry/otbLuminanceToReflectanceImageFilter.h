@@ -118,13 +118,13 @@ private:
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT LuminanceToReflectanceImageFilter :
   public UnaryImageFunctorWithVectorImageFilter<TInputImage,
-                                                TOutputImage,
-                                                ITK_TYPENAME Functor::LuminanceToReflectanceImageFunctor<ITK_TYPENAME
-                                                                                                         TInputImage::
-                                                                                                         InternalPixelType,
-                                                                                                         ITK_TYPENAME
-                                                                                                         TOutputImage::
-                                                                                                         InternalPixelType> >
+      TOutputImage,
+      ITK_TYPENAME Functor::LuminanceToReflectanceImageFunctor<ITK_TYPENAME
+          TInputImage::
+          InternalPixelType,
+          ITK_TYPENAME
+          TOutputImage::
+          InternalPixelType> >
 {
 public:
   /**   Extract input and output images dimensions.*/
@@ -135,7 +135,7 @@ public:
   typedef TInputImage  InputImageType;
   typedef TOutputImage OutputImageType;
   typedef typename Functor::LuminanceToReflectanceImageFunctor<ITK_TYPENAME InputImageType::InternalPixelType,
-                                                               ITK_TYPENAME OutputImageType::InternalPixelType>
+      ITK_TYPENAME OutputImageType::InternalPixelType>
   FunctorType;
 
   /** "typedef" for standard classes. */

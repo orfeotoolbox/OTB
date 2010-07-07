@@ -174,7 +174,7 @@ int main(int argc, char *argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef itk::ConnectedThresholdImageFilter<InternalImageType,
-                                             InternalImageType>
+      InternalImageType>
   ConnectedFilterType;
   // Software Guide : EndCodeSnippet
 

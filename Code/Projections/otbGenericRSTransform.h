@@ -45,17 +45,17 @@ enum TransformAccuracy {UNKNOWN, ESTIMATE, PRECISE};
  **/
 
 template <class TScalarType = double,
-          unsigned int NInputDimensions = 2,
-          unsigned int NOutputDimensions = 2>
+    unsigned int NInputDimensions = 2,
+    unsigned int NOutputDimensions = 2>
 class ITK_EXPORT GenericRSTransform : public itk::Transform<TScalarType,          // Data type for scalars
-                                                            NInputDimensions, // Number of dimensions in the input space
-                                                            NOutputDimensions> // Number of dimensions in the output space
+      NInputDimensions,                                                       // Number of dimensions in the input space
+      NOutputDimensions>                                                       // Number of dimensions in the output space
 {
 public:
   /** Standard class typedefs. */
   typedef itk::Transform<TScalarType,
-                         NInputDimensions,
-                         NOutputDimensions>       Superclass;
+      NInputDimensions,
+      NOutputDimensions>       Superclass;
   typedef GenericRSTransform            Self;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;

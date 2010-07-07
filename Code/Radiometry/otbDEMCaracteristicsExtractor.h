@@ -87,9 +87,9 @@ public:
 
   /** Filter definition */
   typedef itk::GradientMagnitudeImageFilter<InputImageType,
-                                            OutputImageType>                 GradientMagnitudeFilterType;
+      OutputImageType>                 GradientMagnitudeFilterType;
   typedef itk::GradientImageFilter<InputImageType, InputInternalPixelType,
-                                   InputInternalPixelType>                   GradientRecursiveGaussianImageFilterType;
+      InputInternalPixelType>                   GradientRecursiveGaussianImageFilterType;
   typedef typename GradientRecursiveGaussianImageFilterType::OutputImageType tutuType;
   typedef itk::NthElementImageAdaptor<tutuType, InputInternalPixelType>      AdaptorType;
   typedef itk::Atan2ImageFilter<AdaptorType, AdaptorType, OutputImageType>   Atan2FilterType;

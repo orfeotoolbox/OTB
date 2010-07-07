@@ -32,8 +32,8 @@ int otbISUMultiChannelRAndNIRIndexImageFilter(int argc, char * argv[])
   typedef otb::ImageFileReader<InputImageType>  ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
   typedef otb::Functor::ISU <InputImageType::InternalPixelType,
-                             InputImageType::InternalPixelType,
-                             OutputImageType::PixelType> FunctorType;
+      InputImageType::InternalPixelType,
+      OutputImageType::PixelType> FunctorType;
   typedef otb::MultiChannelRAndNIRIndexImageFilter<InputImageType, OutputImageType, FunctorType>
   MultiChannelRAndNIRIndexImageFilterType;
 

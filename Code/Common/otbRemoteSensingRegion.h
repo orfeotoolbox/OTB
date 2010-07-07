@@ -228,7 +228,7 @@ public:
 
   /** Compare two regions. */
   bool
-  operator == (const Self& region) const
+  operator ==(const Self& region) const
   {
     bool same = 1;
     same = (m_Index == region.m_Index);
@@ -238,7 +238,7 @@ public:
 
   /** Compare two regions. */
   bool
-  operator != (const Self& region) const
+  operator !=(const Self& region) const
   {
     bool same = 1;
     same = (m_Index == region.m_Index);
@@ -368,8 +368,8 @@ std::ostream & operator <<(std::ostream& os, const RemoteSensingRegion<TType>& r
   return os;
 }
 
-template<class ImageType, class RemoteSensingRegionType >
-typename ImageType::RegionType 
+template<class ImageType, class RemoteSensingRegionType>
+typename ImageType::RegionType
 TransformPhysicalRegionToIndexRegion(const RemoteSensingRegionType& region, const ImageType* image)
 {
   typename ImageType::RegionType outputRegion;
@@ -380,7 +380,6 @@ TransformPhysicalRegionToIndexRegion(const RemoteSensingRegionType& region, cons
   point[0] = region.GetIndex()[0];
   point[1] = region.GetIndex()[1];
   image->TransformPhysicalPointToIndex(point, index);
-
 
   point[0] = region.GetIndex()[0] + region.GetSize()[0];
   point[1] = region.GetIndex()[1] + region.GetSize()[1];
@@ -397,7 +396,6 @@ TransformPhysicalRegionToIndexRegion(const RemoteSensingRegionType& region, cons
   outputRegion.SetSize(size);
   return outputRegion;
 }
-
 
 } // end namespace otb
 

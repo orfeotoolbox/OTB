@@ -40,7 +40,7 @@ namespace otb
  * \ingroup PathFunction
  */
 template <class TInputPath,
-          class TOutput>
+    class TOutput>
 class ITK_EXPORT PathFunction :
   public itk::FunctionBase<TInputPath, TOutput>
 {

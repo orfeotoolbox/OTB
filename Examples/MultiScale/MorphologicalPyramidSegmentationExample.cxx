@@ -107,12 +107,12 @@ int main(int argc, char * argv[])
   typedef itk::BinaryBallStructuringElement<InputPixelType, Dimension>
   StructuringElementType;
   typedef otb::OpeningClosingMorphologicalFilter<InputImageType,
-                                                 InputImageType,
-                                                 StructuringElementType>
+      InputImageType,
+      StructuringElementType>
   OpeningClosingFilterType;
   typedef otb::MorphologicalPyramidAnalysisFilter<InputImageType,
-                                                  InputImageType,
-                                                  OpeningClosingFilterType>
+      InputImageType,
+      OpeningClosingFilterType>
   PyramidFilterType;
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
@@ -125,7 +125,7 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
   typedef otb::MorphologicalPyramidSegmentationFilter<InputImageType,
-                                                      OutputImageType>
+      OutputImageType>
   SegmentationFilterType;
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex

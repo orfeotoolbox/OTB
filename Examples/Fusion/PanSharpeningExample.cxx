@@ -165,8 +165,8 @@ int main(int argc, char* argv[])
   PrintableImageType::Pointer printable = PrintableImageType::New();
 
   typedef otb::VectorImage<unsigned char,
-                           2>
-                                                             VectorCharImageType;
+      2>
+  VectorCharImageType;
   typedef otb::StreamingImageFileWriter<VectorCharImageType> PNGWriterType;
   PNGWriterType::Pointer pngwriter = PNGWriterType::New();
 
@@ -188,11 +188,11 @@ int main(int argc, char* argv[])
   pngwriter->SetInput(printable2->GetOutput());
   pngwriter->Update();
 
-  typedef otb::ImageToVectorImageCastFilter<ImageType,VectorImageType> VectorCastFilterType;
-    
-  VectorCastFilterType::Pointer   vectorCastFilter         = VectorCastFilterType::New();
-  PNGWriterType::Pointer pngwriterPan = PNGWriterType::New();
-  
+  typedef otb::ImageToVectorImageCastFilter<ImageType, VectorImageType> VectorCastFilterType;
+
+  VectorCastFilterType::Pointer vectorCastFilter         = VectorCastFilterType::New();
+  PNGWriterType::Pointer        pngwriterPan = PNGWriterType::New();
+
   vectorCastFilter->SetInput(readerPAN->GetOutput());
   PrintableImageType2::Pointer printable3 = PrintableImageType2::New();
   printable3->SetInput(vectorCastFilter->GetOutput());
@@ -205,6 +205,6 @@ int main(int argc, char* argv[])
   pngwriterPan->SetInput(printable3->GetOutput());
 
   pngwriterPan->Update();
-  
+
   return EXIT_SUCCESS;
 }

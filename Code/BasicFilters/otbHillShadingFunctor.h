@@ -148,8 +148,8 @@ public:
 
     float xSlope =
       ((makeValid(it.GetPixel(LEFTUP)) + 2 * makeValid(it.GetPixel(LEFT)) + makeValid(it.GetPixel(RIGHTDOWN)))
-        - (makeValid(it.GetPixel(RIGHTUP)) + 2 * makeValid(it.GetPixel(RIGHT)) +
-           makeValid(it.GetPixel(RIGHTDOWN))))
+       - (makeValid(it.GetPixel(RIGHTUP)) + 2 * makeValid(it.GetPixel(RIGHT)) +
+          makeValid(it.GetPixel(RIGHTDOWN))))
       / (m_XRes * m_Scale);
     // - as the azimuth is given compared to y axis pointing up
     float ySlope = -((makeValid(it.GetPixel(LEFTUP)) + 2 * makeValid(it.GetPixel(UP)) + makeValid(it.GetPixel(RIGHTUP)))

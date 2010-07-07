@@ -27,7 +27,7 @@ int otbSurfaceAdjacencyEffect6SCorrectionSchemeFilterNew(int argc, char * argv[]
   typedef double                                 PixelType;
   typedef otb::VectorImage<PixelType, Dimension> InputImageType;
   typedef otb::SurfaceAdjacencyEffect6SCorrectionSchemeFilter<InputImageType,
-                                                            InputImageType>
+      InputImageType>
   SurfaceAdjacencyEffect6SCorrectionSchemeFilterType;
 
   // Instantiating object

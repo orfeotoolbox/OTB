@@ -113,17 +113,17 @@ private:
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ChangeLabelImageFilter :
   public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
-                                      Functor::VectorChangeLabel<typename TInputImage::PixelType,
-                                                                 typename TOutputImage::PixelType> >
+      Functor::VectorChangeLabel<typename TInputImage::PixelType,
+          typename TOutputImage::PixelType> >
 {
 public:
   /** Standard class typedefs. */
   typedef ChangeLabelImageFilter Self;
   typedef itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
-                                       Functor::VectorChangeLabel<
-                                         typename TInputImage::PixelType,
-                                         typename TOutputImage::PixelType>
-                                       >                                Superclass;
+      Functor::VectorChangeLabel<
+          typename TInputImage::PixelType,
+          typename TOutputImage::PixelType>
+      >                                Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 

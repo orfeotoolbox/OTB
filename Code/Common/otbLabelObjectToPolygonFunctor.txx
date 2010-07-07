@@ -102,215 +102,217 @@ LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
     {
     switch (m_CurrentState)
       {
-    case UP_RIGHT:
-      {
-      // First candidate run
-      IndexType firstCandidateRun = Within(m_CurrentPoint, m_CurrentLine - 1);
-      if (IsRunIndexValid(firstCandidateRun))
+      case UP_RIGHT:
         {
-        // Second candidate run
-        IndexType secondCandidateRun = RightMostLeftEndInside(m_CurrentLine, RightEnd(m_CurrentRun), firstCandidateRun);
-        if (IsRunIndexValid(secondCandidateRun))
+        // First candidate run
+        IndexType firstCandidateRun = Within(m_CurrentPoint, m_CurrentLine - 1);
+        if (IsRunIndexValid(firstCandidateRun))
           {
-          // Down-Right case
-          m_CurrentRun = secondCandidateRun;
-          m_CurrentState = DOWN_RIGHT;
-          m_PositionFlag = LEFT_END;
-          WalkRight(m_CurrentLine - 1, m_CurrentPoint, LeftEnd(m_CurrentRun), m_Polygon, m_CurrentState);
+          // Second candidate run
+          IndexType secondCandidateRun = RightMostLeftEndInside(m_CurrentLine, RightEnd(
+                                                                  m_CurrentRun), firstCandidateRun);
+          if (IsRunIndexValid(secondCandidateRun))
+            {
+            // Down-Right case
+            m_CurrentRun = secondCandidateRun;
+            m_CurrentState = DOWN_RIGHT;
+            m_PositionFlag = LEFT_END;
+            WalkRight(m_CurrentLine - 1, m_CurrentPoint, LeftEnd(m_CurrentRun), m_Polygon, m_CurrentState);
 
+            }
+          else
+            {
+            // Up-Right case
+            m_CurrentLine--;
+            m_CurrentRun = firstCandidateRun;
+            m_CurrentState = UP_RIGHT;
+            m_PositionFlag = RIGHT_END;
+            WalkRight(m_CurrentLine, m_CurrentPoint, RightEnd(m_CurrentRun), m_Polygon, m_CurrentState);
+
+            }
           }
         else
           {
-          // Up-Right case
-          m_CurrentLine--;
-          m_CurrentRun = firstCandidateRun;
-          m_CurrentState = UP_RIGHT;
-          m_PositionFlag = RIGHT_END;
-          WalkRight(m_CurrentLine, m_CurrentPoint, RightEnd(m_CurrentRun), m_Polygon, m_CurrentState);
+          IndexType secondCandidateRun = LeftMostRightEndInside(m_CurrentLine - 1, RightEnd(m_CurrentRun), m_CurrentRun);
 
+          if (IsRunIndexValid(secondCandidateRun))
+            {
+            // Up-Left Case
+            m_CurrentState = UP_LEFT;
+            m_PositionFlag = RIGHT_END;
+            WalkLeft(m_CurrentLine, m_CurrentPoint, RightEnd(secondCandidateRun), m_Polygon, m_CurrentState);
+            m_CurrentLine--;
+            m_CurrentRun = secondCandidateRun;
+            }
+          else
+            {
+            // Down-Left case
+            m_CurrentState = DOWN_LEFT;
+            m_PositionFlag = LEFT_END;
+            WalkLeft(m_CurrentLine, m_CurrentPoint, LeftEnd(m_CurrentRun), m_Polygon, m_CurrentState);
+            }
           }
+        break;
         }
-      else
+      case DOWN_LEFT:
         {
-        IndexType secondCandidateRun = LeftMostRightEndInside(m_CurrentLine - 1, RightEnd(m_CurrentRun), m_CurrentRun);
+        // First candidate run
+        IndexType firstCandidateRun = Within(m_CurrentPoint, m_CurrentLine + 1);
 
-        if (IsRunIndexValid(secondCandidateRun))
+        if (IsRunIndexValid(firstCandidateRun))
           {
-          // Up-Left Case
-          m_CurrentState = UP_LEFT;
-          m_PositionFlag = RIGHT_END;
-          WalkLeft(m_CurrentLine, m_CurrentPoint, RightEnd(secondCandidateRun), m_Polygon, m_CurrentState);
-          m_CurrentLine--;
-          m_CurrentRun = secondCandidateRun;
+          // Second candidate run
+          IndexType secondCandidateRun = LeftMostRightEndInside(m_CurrentLine, LeftEnd(m_CurrentRun), firstCandidateRun);
+
+          if (IsRunIndexValid(secondCandidateRun))
+            {
+            // Up-Left case
+            m_CurrentRun = secondCandidateRun;
+            m_CurrentState = UP_LEFT;
+            m_PositionFlag = RIGHT_END;
+            WalkLeft(m_CurrentLine + 1, m_CurrentPoint, RightEnd(m_CurrentRun), m_Polygon, m_CurrentState);
+            }
+          else
+            {
+            // Down-Left case
+            m_CurrentLine++;
+            m_CurrentRun = firstCandidateRun;
+            m_CurrentState = DOWN_LEFT;
+            m_PositionFlag = LEFT_END;
+            WalkLeft(m_CurrentLine, m_CurrentPoint, LeftEnd(m_CurrentRun), m_Polygon, m_CurrentState);
+
+            }
           }
         else
           {
-          // Down-Left case
-          m_CurrentState = DOWN_LEFT;
-          m_PositionFlag = LEFT_END;
-          WalkLeft(m_CurrentLine, m_CurrentPoint, LeftEnd(m_CurrentRun), m_Polygon, m_CurrentState);
+          IndexType secondCandidateRun = RightMostLeftEndInside(m_CurrentLine + 1, LeftEnd(m_CurrentRun), m_CurrentRun);
+
+          if (IsRunIndexValid(secondCandidateRun))
+            {
+            // Down-Right case
+            m_CurrentRun = secondCandidateRun;
+            m_CurrentLine++;
+            m_CurrentState = DOWN_RIGHT;
+            m_PositionFlag = LEFT_END;
+            WalkRight(m_CurrentLine, m_CurrentPoint, LeftEnd(m_CurrentRun), m_Polygon, m_CurrentState);
+
+            }
+          else
+            {
+            // Up-Right case
+            m_CurrentState = UP_RIGHT;
+            m_PositionFlag = RIGHT_END;
+            WalkRight(m_CurrentLine, m_CurrentPoint, RightEnd(m_CurrentRun), m_Polygon, m_CurrentState);
+
+            }
           }
+        break;
         }
-      break;
-      }
-    case DOWN_LEFT:
-      {
-      // First candidate run
-      IndexType firstCandidateRun = Within(m_CurrentPoint, m_CurrentLine + 1);
-
-      if (IsRunIndexValid(firstCandidateRun))
+      case DOWN_RIGHT:
         {
-        // Second candidate run
-        IndexType secondCandidateRun = LeftMostRightEndInside(m_CurrentLine, LeftEnd(m_CurrentRun), firstCandidateRun);
+        IndexType firstCandidateRun = Within(m_CurrentPoint, m_CurrentLine + 1);
 
-        if (IsRunIndexValid(secondCandidateRun))
+        if (IsRunIndexValid(firstCandidateRun))
           {
-          // Up-Left case
-          m_CurrentRun = secondCandidateRun;
-          m_CurrentState = UP_LEFT;
-          m_PositionFlag = RIGHT_END;
-          WalkLeft(m_CurrentLine + 1, m_CurrentPoint, RightEnd(m_CurrentRun), m_Polygon, m_CurrentState);
+          IndexType secondCandidateRun = LeftMostRightEndInside(m_CurrentLine, RightEnd(
+                                                                  m_CurrentRun), firstCandidateRun);
+
+          if (IsRunIndexValid(secondCandidateRun))
+            {
+            // Up-Left case
+            m_CurrentState = UP_LEFT;
+            m_PositionFlag = RIGHT_END;
+            m_CurrentRun = secondCandidateRun;
+            WalkLeft(m_CurrentLine + 1, m_CurrentPoint, RightEnd(m_CurrentRun), m_Polygon, m_CurrentState);
+
+            }
+          else
+            {
+            // Down-Left case
+            m_CurrentLine++;
+            m_CurrentRun = firstCandidateRun;
+            m_CurrentState = DOWN_LEFT;
+            m_PositionFlag = LEFT_END;
+            WalkLeft(m_CurrentLine, m_CurrentPoint, LeftEnd(m_CurrentRun), m_Polygon, m_CurrentState);
+
+            }
           }
         else
           {
-          // Down-Left case
-          m_CurrentLine++;
-          m_CurrentRun = firstCandidateRun;
-          m_CurrentState = DOWN_LEFT;
-          m_PositionFlag = LEFT_END;
-          WalkLeft(m_CurrentLine, m_CurrentPoint, LeftEnd(m_CurrentRun), m_Polygon, m_CurrentState);
+          IndexType secondCandidateRun = RightMostLeftEndInside(m_CurrentLine + 1, LeftEnd(m_CurrentRun), m_CurrentRun);
 
+          if (IsRunIndexValid(secondCandidateRun))
+            {
+            // Down-Right case
+            m_CurrentLine++;
+            m_CurrentRun = secondCandidateRun;
+            m_CurrentState = DOWN_RIGHT;
+            m_PositionFlag = LEFT_END;
+            WalkRight(m_CurrentLine, m_CurrentPoint, LeftEnd(m_CurrentRun), m_Polygon, m_CurrentState);
+            }
+          else
+            {
+            // Up-Right case
+            m_CurrentState = UP_RIGHT;
+            m_PositionFlag = RIGHT_END;
+            WalkRight(m_CurrentLine, m_CurrentPoint, RightEnd(m_CurrentRun), m_Polygon, m_CurrentState);
+
+            }
           }
+        break;
         }
-      else
+      case UP_LEFT:
         {
-        IndexType secondCandidateRun = RightMostLeftEndInside(m_CurrentLine + 1, LeftEnd(m_CurrentRun), m_CurrentRun);
+        IndexType firstCandidateRun = Within(m_CurrentPoint, m_CurrentLine - 1);
 
-        if (IsRunIndexValid(secondCandidateRun))
+        if (IsRunIndexValid(firstCandidateRun))
           {
-          // Down-Right case
-          m_CurrentRun = secondCandidateRun;
-          m_CurrentLine++;
-          m_CurrentState = DOWN_RIGHT;
-          m_PositionFlag = LEFT_END;
-          WalkRight(m_CurrentLine, m_CurrentPoint, LeftEnd(m_CurrentRun), m_Polygon, m_CurrentState);
+          IndexType secondCandidateRun = RightMostLeftEndInside(m_CurrentLine, LeftEnd(m_CurrentRun), firstCandidateRun);
 
+          if (IsRunIndexValid(secondCandidateRun))
+            {
+            // Down-Right case
+            m_CurrentRun = secondCandidateRun;
+            m_CurrentState = DOWN_RIGHT;
+            m_PositionFlag = LEFT_END;
+            WalkRight(m_CurrentLine - 1, m_CurrentPoint, LeftEnd(m_CurrentRun), m_Polygon, m_CurrentState);
+
+            }
+          else
+            {
+            // Up-Right case
+            m_CurrentLine--;
+            m_CurrentRun = firstCandidateRun;
+            m_CurrentState = UP_RIGHT;
+            m_PositionFlag = RIGHT_END;
+            WalkRight(m_CurrentLine, m_CurrentPoint, RightEnd(m_CurrentRun), m_Polygon, m_CurrentState);
+            }
           }
         else
           {
-          // Up-Right case
-          m_CurrentState = UP_RIGHT;
-          m_PositionFlag = RIGHT_END;
-          WalkRight(m_CurrentLine, m_CurrentPoint, RightEnd(m_CurrentRun), m_Polygon, m_CurrentState);
+          IndexType secondCandidateRun = LeftMostRightEndInside(m_CurrentLine - 1, RightEnd(m_CurrentRun), m_CurrentRun);
 
+          if (IsRunIndexValid(secondCandidateRun))
+            {
+            // Up-Left case
+            m_CurrentState = UP_LEFT;
+            m_PositionFlag = RIGHT_END;
+            WalkLeft(m_CurrentLine, m_CurrentPoint, RightEnd(secondCandidateRun), m_Polygon, m_CurrentState);
+            m_CurrentLine--;
+            m_CurrentRun = secondCandidateRun;
+
+            }
+          else
+            {
+            // Down-Left case
+            m_CurrentState = DOWN_LEFT;
+            m_PositionFlag = LEFT_END;
+            WalkLeft(m_CurrentLine, m_CurrentPoint, LeftEnd(m_CurrentRun), m_Polygon, m_CurrentState);
+
+            }
           }
+        break;
         }
-      break;
-      }
-    case DOWN_RIGHT:
-      {
-      IndexType firstCandidateRun = Within(m_CurrentPoint, m_CurrentLine + 1);
-
-      if (IsRunIndexValid(firstCandidateRun))
-        {
-        IndexType secondCandidateRun = LeftMostRightEndInside(m_CurrentLine, RightEnd(m_CurrentRun), firstCandidateRun);
-
-        if (IsRunIndexValid(secondCandidateRun))
-          {
-          // Up-Left case
-          m_CurrentState = UP_LEFT;
-          m_PositionFlag = RIGHT_END;
-          m_CurrentRun = secondCandidateRun;
-          WalkLeft(m_CurrentLine + 1, m_CurrentPoint, RightEnd(m_CurrentRun), m_Polygon, m_CurrentState);
-
-          }
-        else
-          {
-          // Down-Left case
-          m_CurrentLine++;
-          m_CurrentRun = firstCandidateRun;
-          m_CurrentState = DOWN_LEFT;
-          m_PositionFlag = LEFT_END;
-          WalkLeft(m_CurrentLine, m_CurrentPoint, LeftEnd(m_CurrentRun), m_Polygon, m_CurrentState);
-
-          }
-        }
-      else
-        {
-        IndexType secondCandidateRun = RightMostLeftEndInside(m_CurrentLine + 1, LeftEnd(m_CurrentRun), m_CurrentRun);
-
-        if (IsRunIndexValid(secondCandidateRun))
-          {
-          // Down-Right case
-          m_CurrentLine++;
-          m_CurrentRun = secondCandidateRun;
-          m_CurrentState = DOWN_RIGHT;
-          m_PositionFlag = LEFT_END;
-          WalkRight(m_CurrentLine, m_CurrentPoint, LeftEnd(m_CurrentRun), m_Polygon, m_CurrentState);
-          }
-        else
-          {
-          // Up-Right case
-          m_CurrentState = UP_RIGHT;
-          m_PositionFlag = RIGHT_END;
-          WalkRight(m_CurrentLine, m_CurrentPoint, RightEnd(m_CurrentRun), m_Polygon, m_CurrentState);
-
-          }
-        }
-      break;
-      }
-    case UP_LEFT:
-      {
-      IndexType firstCandidateRun = Within(m_CurrentPoint, m_CurrentLine - 1);
-
-      if (IsRunIndexValid(firstCandidateRun))
-        {
-        IndexType secondCandidateRun = RightMostLeftEndInside(m_CurrentLine, LeftEnd(m_CurrentRun), firstCandidateRun);
-
-        if (IsRunIndexValid(secondCandidateRun))
-          {
-          // Down-Right case
-          m_CurrentRun = secondCandidateRun;
-          m_CurrentState = DOWN_RIGHT;
-          m_PositionFlag = LEFT_END;
-          WalkRight(m_CurrentLine - 1, m_CurrentPoint, LeftEnd(m_CurrentRun), m_Polygon, m_CurrentState);
-
-          }
-        else
-          {
-          // Up-Right case
-          m_CurrentLine--;
-          m_CurrentRun = firstCandidateRun;
-          m_CurrentState = UP_RIGHT;
-          m_PositionFlag = RIGHT_END;
-          WalkRight(m_CurrentLine, m_CurrentPoint, RightEnd(m_CurrentRun), m_Polygon, m_CurrentState);
-          }
-        }
-      else
-        {
-        IndexType secondCandidateRun = LeftMostRightEndInside(m_CurrentLine - 1, RightEnd(m_CurrentRun), m_CurrentRun);
-
-        if (IsRunIndexValid(secondCandidateRun))
-          {
-          // Up-Left case
-          m_CurrentState = UP_LEFT;
-          m_PositionFlag = RIGHT_END;
-          WalkLeft(m_CurrentLine, m_CurrentPoint, RightEnd(secondCandidateRun), m_Polygon, m_CurrentState);
-          m_CurrentLine--;
-          m_CurrentRun = secondCandidateRun;
-
-          }
-        else
-          {
-          // Down-Left case
-          m_CurrentState = DOWN_LEFT;
-          m_PositionFlag = LEFT_END;
-          WalkLeft(m_CurrentLine, m_CurrentPoint, LeftEnd(m_CurrentRun), m_Polygon, m_CurrentState);
-
-          }
-        }
-      break;
-      }
       }
     goesOn = m_CurrentPoint != m_StartingPoint;
     }
@@ -347,13 +349,13 @@ LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
 
   switch (m_PositionFlag)
     {
-  case LEFT_END:
-    rightoffset = 1;
-    break;
+    case LEFT_END:
+      rightoffset = 1;
+      break;
 
-  case RIGHT_END:
-    leftoffset = -1;
-    break;
+    case RIGHT_END:
+      leftoffset = -1;
+      break;
     }
 
   typename RunsPerLineType::iterator it = m_InternalDataSet.at(line).begin();
@@ -483,28 +485,28 @@ LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
 
   switch (state)
     {
-  case UP_RIGHT:
-    offset[1] = 1;
-    break;
-  case UP_LEFT:
-    offset[1] = 1;
-    break;
-  case DOWN_RIGHT:
-    offset[1] = 0;
-    break;
-  case DOWN_LEFT:
-    offset[1] = 0;
-    break;
+    case UP_RIGHT:
+      offset[1] = 1;
+      break;
+    case UP_LEFT:
+      offset[1] = 1;
+      break;
+    case DOWN_RIGHT:
+      offset[1] = 0;
+      break;
+    case DOWN_LEFT:
+      offset[1] = 0;
+      break;
     }
 
   switch (m_PositionFlag)
     {
-  case LEFT_END:
-    offset[0] = 0;
-    break;
-  case RIGHT_END:
-    offset[0] = 1;
-    break;
+    case LEFT_END:
+      offset[0] = 0;
+      break;
+    case RIGHT_END:
+      offset[0] = 1;
+      break;
     }
   typename PolygonType::VertexType newPoint;
 
@@ -554,22 +556,22 @@ LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
 
   switch (state)
     {
-  case UP_RIGHT:
-    offset[0] = 1;
-    offset[1] = 1;
-    break;
-  case UP_LEFT:
-    offset[0] = 0;
-    offset[1] = 1;
-    break;
-  case DOWN_RIGHT:
-    offset[0] = 1;
-    offset[1] = 0;
-    break;
-  case DOWN_LEFT:
-    offset[0] = 0;
-    offset[1] = 0;
-    break;
+    case UP_RIGHT:
+      offset[0] = 1;
+      offset[1] = 1;
+      break;
+    case UP_LEFT:
+      offset[0] = 0;
+      offset[1] = 1;
+      break;
+    case DOWN_RIGHT:
+      offset[0] = 1;
+      offset[1] = 0;
+      break;
+    case DOWN_LEFT:
+      offset[0] = 0;
+      offset[1] = 0;
+      break;
     }
 
   typename PolygonType::VertexType newPoint;

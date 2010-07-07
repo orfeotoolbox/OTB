@@ -34,7 +34,7 @@ namespace otb
 template <class TPointSet, class TOutput>
 class ITK_EXPORT PointSetFunction :
   public itk::SpatialFunction<TOutput, 2 /* TODO : change 2 by PointType::PointDimension*/,
-                              typename TPointSet::PointType>
+      typename TPointSet::PointType>
 {
 public:
   /** Standard class typedefs. */

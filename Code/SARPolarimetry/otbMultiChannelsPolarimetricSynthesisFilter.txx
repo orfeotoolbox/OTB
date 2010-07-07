@@ -177,54 +177,54 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage, TOutputImage, TFunction>
   // Computation with 4 channels
   switch (val)
     {
-  case HH_HV_VH_VV:
-    while (!inputIt.IsAtEnd())
-      {
-      outputIt.Set(m_Gain * GetFunctor() (inputIt.Get()[0], inputIt.Get()[1],
-                                          inputIt.Get()[2], inputIt.Get()[3]));
-      ++inputIt;
-      ++outputIt;
-      progress.CompletedPixel();  // potential exception thrown here
-      }
-    break;
+    case HH_HV_VH_VV:
+      while (!inputIt.IsAtEnd())
+        {
+        outputIt.Set(m_Gain * GetFunctor() (inputIt.Get()[0], inputIt.Get()[1],
+                                            inputIt.Get()[2], inputIt.Get()[3]));
+        ++inputIt;
+        ++outputIt;
+        progress.CompletedPixel(); // potential exception thrown here
+        }
+      break;
 
-  // With 3 channels : HH HV VV ou HH VH VV
-  case HH_HV_VV:
-    while (!inputIt.IsAtEnd())
-      {
-      outputIt.Set(m_Gain * GetFunctor() (inputIt.Get()[0], inputIt.Get()[1],
-                                          inputIt.Get()[1], inputIt.Get()[2]));
-      ++inputIt;
-      ++outputIt;
-      progress.CompletedPixel();  // potential exception thrown here
-      }
-    break;
+    // With 3 channels : HH HV VV ou HH VH VV
+    case HH_HV_VV:
+      while (!inputIt.IsAtEnd())
+        {
+        outputIt.Set(m_Gain * GetFunctor() (inputIt.Get()[0], inputIt.Get()[1],
+                                            inputIt.Get()[1], inputIt.Get()[2]));
+        ++inputIt;
+        ++outputIt;
+        progress.CompletedPixel(); // potential exception thrown here
+        }
+      break;
 
-  // Only HH and HV are present
-  case HH_HV:
-    while (!inputIt.IsAtEnd())
-      {
-      outputIt.Set(m_Gain * GetFunctor() (inputIt.Get()[0], inputIt.Get()[1], 0, 0));
-      ++inputIt;
-      ++outputIt;
-      progress.CompletedPixel();  // potential exception thrown here
-      }
-    break;
+    // Only HH and HV are present
+    case HH_HV:
+      while (!inputIt.IsAtEnd())
+        {
+        outputIt.Set(m_Gain * GetFunctor() (inputIt.Get()[0], inputIt.Get()[1], 0, 0));
+        ++inputIt;
+        ++outputIt;
+        progress.CompletedPixel(); // potential exception thrown here
+        }
+      break;
 
-  // Only VH and VV are present
-  case VH_VV:
-    while (!inputIt.IsAtEnd())
-      {
-      outputIt.Set(m_Gain * GetFunctor() (0, 0, inputIt.Get()[2], inputIt.Get()[3]));
-      ++inputIt;
-      ++outputIt;
-      progress.CompletedPixel();  // potential exception thrown here
-      }
-    break;
+    // Only VH and VV are present
+    case VH_VV:
+      while (!inputIt.IsAtEnd())
+        {
+        outputIt.Set(m_Gain * GetFunctor() (0, 0, inputIt.Get()[2], inputIt.Get()[3]));
+        ++inputIt;
+        ++outputIt;
+        progress.CompletedPixel(); // potential exception thrown here
+        }
+      break;
 
-  default:
-    itkExceptionMacro("Unknown architecture : Polarimetric synthesis is impossible !");
-    return;
+    default:
+      itkExceptionMacro("Unknown architecture : Polarimetric synthesis is impossible !");
+      return;
     }
 
 }
@@ -283,31 +283,31 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage, TOutputImage, TFunction>
   switch (val)
     {
 
-  case HH_HV_VH_VV:
-    break;
-  case HH_HV_VV:
-    break;
-  case HH_VH_VV:
-    break;
-  // Only HH and HV are present
-  case HH_HV:
+    case HH_HV_VH_VV:
+      break;
+    case HH_HV_VV:
+      break;
+    case HH_VH_VV:
+      break;
+    // Only HH and HV are present
+    case HH_HV:
 
-    // Forcing KhiI=0 PsiI=0
-    this->SetKhiI(0);
-    this->SetPsiI(0);
-    break;
+      // Forcing KhiI=0 PsiI=0
+      this->SetKhiI(0);
+      this->SetPsiI(0);
+      break;
 
-  // Only VH and VV are present
-  case VH_VV:
+    // Only VH and VV are present
+    case VH_VV:
 
-    // Forcing KhiI=0 PsiI=90
-    this->SetKhiI(0);
-    this->SetPsiI(90);
-    break;
+      // Forcing KhiI=0 PsiI=90
+      this->SetKhiI(0);
+      this->SetPsiI(90);
+      break;
 
-  default:
-    itkExceptionMacro("Unknown architecture : Polarimetric synthesis is impossible !!");
-    return;
+    default:
+      itkExceptionMacro("Unknown architecture : Polarimetric synthesis is impossible !!");
+      return;
     }
 
   if (GetMode() == 1) ForceCoPolar();

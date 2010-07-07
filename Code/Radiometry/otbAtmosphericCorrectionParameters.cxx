@@ -50,11 +50,11 @@ FilterFunctionValues
     total += m_FilterFunctionValues6S[i];
     }
   unsigned int centerIndex = 0;
-  double total2 = 0;
+  double       total2 = 0;
   for (centerIndex = 0; centerIndex < m_FilterFunctionValues6S.size(); ++centerIndex)
     {
     total2 += m_FilterFunctionValues6S[centerIndex];
-    if (total2 > total/2) break;
+    if (total2 > total / 2) break;
     }
   return m_MinSpectralValue + m_UserStep * centerIndex;
 }

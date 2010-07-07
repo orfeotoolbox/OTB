@@ -114,11 +114,13 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
                                            &outputRegionForThread) &&
           this->IsColumnOutsideOfTheRegion(&indexEndLine, &indexBeginLine, &outputRegionForThread)))
       {
-      if (indexEndLine[0] >= static_cast<OutputIndexValueType>(size[0])) this->CropRightSegment(&indexEndLine,
-                                                                                                &indexBeginLine,
-                                                                                                &outputRegionForThread);
+      if (indexEndLine[0] >= static_cast<OutputIndexValueType>(size[0]))
+        this->CropRightSegment(&indexEndLine,
+                               &indexBeginLine,
+                               &outputRegionForThread);
 
-      if (indexBeginLine[0] >= static_cast<OutputIndexValueType>(size[0])) this->CropRightSegment(
+      if (indexBeginLine[0] >= static_cast<OutputIndexValueType>(size[0]))
+        this->CropRightSegment(
           &indexBeginLine,
           &indexEndLine,
           &
@@ -130,14 +132,16 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
      * Technically, the X component of the index is inside the image
      */
     if (this->IsDownsideTheImage(&indexBeginLine)  &&
-        input->GetLargestPossibleRegion().IsInside(indexEndLine)) this->CropSegment(&indexBeginLine,
-                                                                                    &indexEndLine,
-                                                                                    &outputRegionForThread);
+        input->GetLargestPossibleRegion().IsInside(indexEndLine))
+      this->CropSegment(&indexBeginLine,
+                        &indexEndLine,
+                        &outputRegionForThread);
 
     if (this->IsDownsideTheImage(&indexEndLine) &&
-        input->GetLargestPossibleRegion().IsInside(indexBeginLine)) this->CropSegment(&indexEndLine,
-                                                                                      &indexBeginLine,
-                                                                                      &outputRegionForThread);
+        input->GetLargestPossibleRegion().IsInside(indexBeginLine))
+      this->CropSegment(&indexEndLine,
+                        &indexBeginLine,
+                        &outputRegionForThread);
 
     /** If the segments are not in the region (upside or downside the region)*/
     if (!(this->IsUpsideTheRegion(&indexBeginLine,

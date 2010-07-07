@@ -452,7 +452,7 @@ int main(int argc, char *argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::ReflectanceToSurfaceReflectanceImageFilter<ImageType,
-                                                          ImageType>
+      ImageType>
   ReflectanceToSurfaceReflectanceImageFilterType;
 
   ReflectanceToSurfaceReflectanceImageFilterType::Pointer
@@ -535,7 +535,7 @@ int main(int argc, char *argv[])
 
   //  Software Guide : BeginCodeSnippet
   typedef otb::SurfaceAdjacencyEffect6SCorrectionSchemeFilter<ImageType,
-                                                            ImageType>
+      ImageType>
   SurfaceAdjacencyEffect6SCorrectionSchemeFilterType;
   SurfaceAdjacencyEffect6SCorrectionSchemeFilterType::Pointer
     filterSurfaceAdjacencyEffect6SCorrectionSchemeFilter
@@ -559,7 +559,7 @@ int main(int argc, char *argv[])
   filterSurfaceAdjacencyEffect6SCorrectionSchemeFilter->SetZenithalViewingAngle(
     dataAtmosphericCorrectionParameters->GetViewingZenithalAngle());
   filterSurfaceAdjacencyEffect6SCorrectionSchemeFilter->SetWindowRadius(atoi(argv
-                                                                           [17]));
+                                                                             [17]));
   filterSurfaceAdjacencyEffect6SCorrectionSchemeFilter->
   SetPixelSpacingInKilometers(static_cast<double>(atof(argv[18])));
 

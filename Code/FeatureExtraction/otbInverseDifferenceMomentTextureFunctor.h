@@ -44,8 +44,8 @@ public:
   }
 
   InverseDifferenceMomentTextureFunctor()
-  {
-  };
+    {
+    };
 
   virtual ~InverseDifferenceMomentTextureFunctor(){}
 

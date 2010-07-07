@@ -58,7 +58,6 @@ public:
   StandardFilterWatcher(itk::ProcessObject* process,
                         const std::string& comment = "");
 
-
   /** Copy constructor */
   StandardFilterWatcher(const StandardFilterWatcher&);
 

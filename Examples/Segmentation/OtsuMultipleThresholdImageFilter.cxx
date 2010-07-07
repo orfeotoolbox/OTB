@@ -75,7 +75,7 @@ int main(int argc, char * argv[])
   typedef itk::Statistics::ScalarImageToHistogramGenerator<InputImageType>
   ScalarImageToHistogramGeneratorType;
   typedef itk::OtsuMultipleThresholdsCalculator<
-    ScalarImageToHistogramGeneratorType::HistogramType>   CalculatorType;
+      ScalarImageToHistogramGeneratorType::HistogramType>   CalculatorType;
   // Software Guide : EndCodeSnippet
 
   typedef otb::ImageFileReader<InputImageType>  ReaderType;

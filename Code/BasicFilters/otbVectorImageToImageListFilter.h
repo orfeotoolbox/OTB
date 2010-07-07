@@ -40,7 +40,7 @@ public:
   /** Standard typedefs */
   typedef VectorImageToImageListFilter Self;
   typedef ImageToImageListFilter<TVectorImageType,
-                                 typename TImageList::ImageType>         Superclass;
+      typename TImageList::ImageType>         Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 

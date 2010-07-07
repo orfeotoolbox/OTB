@@ -118,17 +118,17 @@ public:
   typedef itk::Statistics::ListSample<MeasurementVectorType>                    ListSampleType;
   typedef float                                                                 HistogramMeasurementType;
   typedef itk::Statistics::ListSampleToHistogramGenerator<ListSampleType, HistogramMeasurementType,
-                                                          itk::Statistics::DenseFrequencyContainer,
-                                                          1> HistogramGeneratorType;
+      itk::Statistics::DenseFrequencyContainer,
+      1> HistogramGeneratorType;
   typedef otb::ObjectList<ListSampleType>
-                                                         ListSampleListType;
+  ListSampleListType;
   typedef otb::ObjectList<HistogramGeneratorType>
-                                                         HistogramGeneratorListType;
+  HistogramGeneratorListType;
   typedef typename HistogramGeneratorListType::Pointer
-                                                         HistogramGeneratorListPointerType;
+  HistogramGeneratorListPointerType;
   typedef typename HistogramGeneratorType::HistogramType HistogramType;
   typedef otb::ImageViewerHistogramAndTransferFunctionWidget<HistogramType, InputPixelType,
-                                                             LabelType> HistogramWidgetType;
+      LabelType> HistogramWidgetType;
   typedef typename HistogramWidgetType::Pointer
   HistogramWidgetPointerType;
 

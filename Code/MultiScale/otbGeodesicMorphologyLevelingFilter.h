@@ -70,19 +70,19 @@ public:
 template <class TInputImage, class TInputMaps, class TOutputImage>
 class ITK_EXPORT GeodesicMorphologyLevelingFilter
   : public itk::TernaryFunctorImageFilter<TInputImage, TInputImage,
-                                          TInputImage, TOutputImage,
-                                          Functor::LevelingFunctor<typename TInputImage::PixelType,
-                                                                   typename TInputMaps::PixelType,
-                                                                   typename TOutputImage::PixelType> >
+      TInputImage, TOutputImage,
+      Functor::LevelingFunctor<typename TInputImage::PixelType,
+          typename TInputMaps::PixelType,
+          typename TOutputImage::PixelType> >
 {
 public:
   /** Standard typedefs */
   typedef GeodesicMorphologyLevelingFilter Self;
   typedef   itk::TernaryFunctorImageFilter<TInputImage, TInputImage,
-                                           TInputImage, TOutputImage,
-                                           Functor::LevelingFunctor<typename TInputImage::PixelType,
-                                                                    typename TInputMaps::PixelType,
-                                                                    typename TOutputImage::PixelType> > Superclass;
+      TInputImage, TOutputImage,
+      Functor::LevelingFunctor<typename TInputImage::PixelType,
+          typename TInputMaps::PixelType,
+          typename TOutputImage::PixelType> > Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 

@@ -46,8 +46,8 @@ namespace otb {
  * \sa VariableDimensionHistogram, ListSample, ListSampleToHistogramGenerator
  */
 template<class TListSample,
-         class THistogramMeasurement,
-         class TFrequencyContainer = itk::Statistics::DenseFrequencyContainer>
+    class THistogramMeasurement,
+    class TFrequencyContainer = itk::Statistics::DenseFrequencyContainer>
 class ITK_EXPORT ListSampleToVariableDimensionHistogramGenerator :
   public itk::Object
 {
@@ -69,7 +69,7 @@ public:
   HistogramMeasurementRealType;
 
   typedef itk::Statistics::VariableDimensionHistogram<HistogramMeasurementRealType,
-                                                      TFrequencyContainer> HistogramType;
+      TFrequencyContainer> HistogramType;
 
   typedef typename HistogramType::SizeType              HistogramSizeType;
   typedef typename HistogramType::MeasurementVectorType MeasurementVectorType;

@@ -34,7 +34,7 @@ StandardFilterWatcher
 StandardFilterWatcher
 ::StandardFilterWatcher(itk::ProcessObject* process,
                         const std::string& comment)
- : FilterWatcherBase(process, comment.c_str())
+  : FilterWatcherBase(process, comment.c_str())
 {
   m_StarsCount = 50;
 }

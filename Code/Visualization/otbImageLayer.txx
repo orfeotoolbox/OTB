@@ -48,7 +48,7 @@ ImageLayer<TImage, TOutputImage>
 
   // Default rendering function
   typedef Function::StandardRenderingFunction<PixelType,
-                                              typename TOutputImage::PixelType> DefaultRenderingFunctionType;
+      typename TOutputImage::PixelType> DefaultRenderingFunctionType;
   m_RenderingFunction = DefaultRenderingFunctionType::New();
   m_QuicklookRenderingFilter->SetRenderingFunction(m_RenderingFunction);
   m_ExtractRenderingFilter->SetRenderingFunction(m_RenderingFunction);
@@ -67,9 +67,9 @@ ImageLayer<TImage, TOutputImage>
 
   m_PlaceName = "";
   m_CountryName = "";
-  
+
   m_GroundSpacing = GroundSpacingImageType::New();
-  m_ApproxGroundSpacing = itk::NumericTraits<FloatType >::min();
+  m_ApproxGroundSpacing = itk::NumericTraits<FloatType>::min();
 }
 
 template <class TImage, class TOutputImage>
@@ -98,7 +98,7 @@ ImageLayer<TImage, TOutputImage>
 
   // Initialize the geotransform
   this->InitTransform();
-  
+
   //Get the ground spacing of the central pixel
   this->ComputeApproximativeGroundSpacing();
 }
@@ -284,8 +284,9 @@ ImageLayer<TImage, TOutputImage>
       {
       PointType point = this->GetPixelLocation (index);
 
-      oss << setiosflags(ios::fixed) << setprecision(2) << "Ground spacing(in m): " << m_ApproxGroundSpacing << std::endl;
-      
+      oss << setiosflags(ios::fixed) << setprecision(2) << "Ground spacing(in m): " << m_ApproxGroundSpacing <<
+      std::endl;
+
       oss << setiosflags(ios::fixed) << setprecision(6) << "Lon: " << point[0] << " Lat: " << point[1] << std::endl;
 
       if (m_Transform->GetTransformAccuracy() == Projection::PRECISE) oss << "(precise location)" << std::endl;
@@ -337,12 +338,11 @@ ImageLayer<TImage, TOutputImage>
   m_Transform->SetInputSpacing(m_Image->GetSpacing());
   //  m_Transform->SetDEMDirectory(m_DEMDirectory);
   m_Transform->InstanciateTransform();
-  
+
   //Set parameters of the ground spacing image calculators
   m_GroundSpacing->SetInputImage(m_Image);
   m_GroundSpacing->SetTransform(m_Transform);
-      
-      
+
 }
 
 template <class TImage, class TOutputImage>
@@ -350,20 +350,20 @@ void
 ImageLayer<TImage, TOutputImage>
 ::ComputeApproximativeGroundSpacing()
 {
-   if (m_Transform->IsUpToDate())
+  if (m_Transform->IsUpToDate())
     {
     if (m_Transform->GetTransformAccuracy() != Projection::UNKNOWN)
       {
-          IndexType index;
-          vnl_random rand;
-          
-          index[0] = static_cast<IndexValueType>(rand.lrand32(0,m_Image->GetLargestPossibleRegion().GetSize()[0]));
-          index[1] = static_cast<IndexValueType>(rand.lrand32(0,m_Image->GetLargestPossibleRegion().GetSize()[1]));
-          
-          m_ApproxGroundSpacing = m_GroundSpacing->EvaluateAtIndex(index);
+      IndexType  index;
+      vnl_random rand;
+
+      index[0] = static_cast<IndexValueType>(rand.lrand32(0, m_Image->GetLargestPossibleRegion().GetSize()[0]));
+      index[1] = static_cast<IndexValueType>(rand.lrand32(0, m_Image->GetLargestPossibleRegion().GetSize()[1]));
+
+      m_ApproxGroundSpacing = m_GroundSpacing->EvaluateAtIndex(index);
       }
-    }  
-      
+    }
+
 }
 
 }

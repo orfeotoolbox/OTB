@@ -57,8 +57,8 @@ namespace otb
  */
 
 template <class TInputPath,
-          class TOutput      = double,
-          class TPrecision   = double>
+    class TOutput      = double,
+    class TPrecision   = double>
 class ITK_EXPORT FlusserPathFunction :
   public RealMomentPathFunction<TInputPath, TOutput, TPrecision>
 {

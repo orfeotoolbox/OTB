@@ -68,7 +68,7 @@ int main(int argc, char * argv[])
 {
   if (argc != 12)
     {
-    std::cerr << "Usage: " << argv[0] 
+    std::cerr << "Usage: " << argv[0]
               << " infname filteredfname clusteredfname labeledclusteredfname "
               << "clusterboundariesfname filteredPretty clusteredPretty "
               << "spatialRadius rangeRadius minregionsize scale"
@@ -91,8 +91,8 @@ int main(int argc, char * argv[])
   //  Software Guide : BeginLatex
 //
 //  We start by the classical \code{typedef}s needed for reading and
-//  writing the images. The EDISON 
-//  \url{http://www.caip.rutgers.edu/riul/research/code/EDISON/index.html} 
+//  writing the images. The EDISON
+//  \url{http://www.caip.rutgers.edu/riul/research/code/EDISON/index.html}
 //  code upon which OTB's implementation is based, uses float pixel
 //  precision, so we choose to work with a float pixel type.
 //

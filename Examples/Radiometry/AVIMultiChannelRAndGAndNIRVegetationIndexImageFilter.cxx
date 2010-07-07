@@ -125,7 +125,7 @@ int main(int argc, char *argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef  otb::Functor::AVI<InputPixelType, InputPixelType,
-                             InputPixelType,  OutputPixelType> FunctorType;
+      InputPixelType,  OutputPixelType> FunctorType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -227,23 +227,23 @@ int main(int argc, char *argv[])
 
   // Pretty image creation for the printing
   typedef otb::Image<unsigned char,
-                     Dimension>
+      Dimension>
   OutputPrettyImageType;
   typedef otb::VectorImage<unsigned char,
-                           Dimension>
+      Dimension>
   OutputVectorPrettyImageType;
   typedef otb::ImageFileWriter<OutputVectorPrettyImageType>
   WriterVectorPrettyType;
   typedef otb::ImageFileWriter<OutputPrettyImageType>
   WriterPrettyType;
   typedef itk::RescaleIntensityImageFilter<OutputImageType,
-                                           OutputPrettyImageType>
+      OutputPrettyImageType>
   RescalerType;
   typedef otb::VectorRescaleIntensityImageFilter<InputImageType,
-                                                 OutputVectorPrettyImageType>
+      OutputVectorPrettyImageType>
   VectorRescalerType;
   typedef otb::MultiChannelExtractROI<unsigned char,
-                                      unsigned char>
+      unsigned char>
   ChannelExtractorType;
 
   VectorRescalerType::Pointer vectRescaler         =

@@ -36,7 +36,7 @@ CompacityPathFunction<TInputPath, TOutput>
 
 template <class TInputPath, class TOutput>
 typename CompacityPathFunction<TInputPath,
-                               TOutput>::OutputType
+    TOutput>::OutputType
 CompacityPathFunction<TInputPath, TOutput>
 ::Evaluate(const PathType& path) const
 {
@@ -100,7 +100,7 @@ CompacityPathFunction<TInputPath, TOutput>
 
 template <class TInputPath, class TOutput>
 typename CompacityPathFunction<TInputPath,
-                               TOutput>::OutputType
+    TOutput>::OutputType
 CompacityPathFunction<TInputPath, TOutput>
 ::Evaluate() const
 {

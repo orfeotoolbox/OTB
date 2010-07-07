@@ -64,16 +64,16 @@ PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
 {
   switch (output)
     {
-  case 0:
-    return static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
-    break;
-  case 1:
-    return static_cast<itk::DataObject*>(MatrixObjectType::New().GetPointer());
-    break;
-  default:
-    // might as well make an image
-    return static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
-    break;
+    case 0:
+      return static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
+      break;
+    case 1:
+      return static_cast<itk::DataObject*>(MatrixObjectType::New().GetPointer());
+      break;
+    default:
+      // might as well make an image
+      return static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
+      break;
     }
 
 }

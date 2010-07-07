@@ -125,7 +125,7 @@ int main(int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::EdgeDensityImageFilter<ImageType, ImageType, CannyDetectorType,
-                                      CountFunctionType> EdgeDensityFilterType;
+      CountFunctionType> EdgeDensityFilterType;
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //

@@ -42,7 +42,7 @@ namespace otb
  */
 
 template <class TOutputImage,
-          class TLayer = otb::ImageLayerBase<TOutputImage> >
+    class TLayer = otb::ImageLayerBase<TOutputImage> >
 class ImageLayerRenderingModel
   : public MVCModel<ListenerBase>, public LayerBasedModel<TLayer>
 {

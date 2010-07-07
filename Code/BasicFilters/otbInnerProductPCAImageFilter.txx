@@ -48,7 +48,8 @@ InnerProductPCAImageFilter<TInputImage, TOutputImage>
 ::GenerateOutputInformation(void)
 {
   Superclass::GenerateOutputInformation();
-  if (m_GenerateMeanComponent == false) this->GetOutput()->SetNumberOfComponentsPerPixel(
+  if (m_GenerateMeanComponent == false)
+    this->GetOutput()->SetNumberOfComponentsPerPixel(
       m_NumberOfPrincipalComponentsRequired);
   else this->GetOutput()->SetNumberOfComponentsPerPixel(m_NumberOfPrincipalComponentsRequired + 1);
 }

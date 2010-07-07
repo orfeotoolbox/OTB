@@ -57,7 +57,7 @@ int otbMultiScaleConvexOrConcaveClassificationFilter(int argc, char * argv[])
   typedef otb::ProfileDerivativeToMultiScaleCharacteristicsFilter<InputImageType, OutputImageType, LabeledImageType>
   MultiScaleCharacteristicsFilterType;
   typedef otb::MultiScaleConvexOrConcaveClassificationFilter<InputImageType,
-                                                             LabeledImageType> MultiScaleClassificationFilterType;
+      LabeledImageType> MultiScaleClassificationFilterType;
 
   // Reading input image
   ReaderType::Pointer reader = ReaderType::New();

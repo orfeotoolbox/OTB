@@ -143,8 +143,8 @@ int main()
 
   // Software Guide : BeginCodeSnippet
   typedef itk::Vector<double,
-                      1>
-                                                             MeasurementVectorType;
+      1>
+  MeasurementVectorType;
   typedef itk::Statistics::ListSample<MeasurementVectorType> SampleType;
   SampleType::Pointer sample = SampleType::New();
   sample->SetMeasurementVectorSize(1);
@@ -300,7 +300,7 @@ int main()
 
   // Software Guide : BeginCodeSnippet
   typedef itk::Statistics::EuclideanDistance
-           <MeasurementVectorType> MembershipFunctionType;
+  <MeasurementVectorType> MembershipFunctionType;
   typedef itk::MinimumDecisionRule DecisionRuleType;
   DecisionRuleType::Pointer decisionRule = DecisionRuleType::New();
 
@@ -338,7 +338,7 @@ int main()
   std::vector<MembershipFunctionType::Pointer> membershipFunctions;
 
   MembershipFunctionType::OriginType origin(
-                       sample->GetMeasurementVectorSize());
+    sample->GetMeasurementVectorSize());
   int index = 0;
   for (unsigned int i = 0; i < 2; i++)
     {

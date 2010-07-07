@@ -41,12 +41,12 @@ class BlendingFunctor
 public:
   /** Blending function typedef */
   typedef otb::Function::BlendingFunction<TInputPixel1,
-                                          TInputPixel2, TOutputPixel>          BlendingFunctionType;
+      TInputPixel2, TOutputPixel>          BlendingFunctionType;
   /** Blending function pointer typedef */
   typedef typename BlendingFunctionType::Pointer BlendingFunctionPointerType;
   /** Default rendering function typedef */
   typedef otb::Function::UniformAlphaBlendingFunction<TInputPixel1,
-                                                      TInputPixel2, TOutputPixel>          DefaultBlendingFunctionType;
+      TInputPixel2, TOutputPixel>          DefaultBlendingFunctionType;
 
   /** Scalar pixel operator */
   inline TOutputPixel operator ()(const TInputPixel1& input1, const TInputPixel2& input2)
@@ -98,19 +98,19 @@ private:
 template <class TInputImage1, class TInputImage2 = TInputImage1, class TOutputImage = TInputImage1>
 class BlendingImageFilter
   : public itk::BinaryFunctorImageFilter<TInputImage1, TInputImage2, TOutputImage,
-                                         Functor::BlendingFunctor
-                                         <typename TInputImage1::PixelType,
-                                          typename TInputImage2::PixelType,
-                                          typename TOutputImage::PixelType> >
+      Functor::BlendingFunctor
+      <typename TInputImage1::PixelType,
+          typename TInputImage2::PixelType,
+          typename TOutputImage::PixelType> >
 {
 public:
   /** Standard typedefs */
   typedef BlendingImageFilter Self;
   typedef itk::BinaryFunctorImageFilter
   <TInputImage1, TInputImage2, TOutputImage, Functor::BlendingFunctor
-   <typename TInputImage1::PixelType,
-    typename TInputImage2::PixelType,
-    typename TOutputImage::PixelType> >                        Superclass;
+      <typename TInputImage1::PixelType,
+          typename TInputImage2::PixelType,
+          typename TOutputImage::PixelType> >                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -123,8 +123,8 @@ public:
   /** Blending function typedef */
   typedef Functor::BlendingFunctor
   <typename TInputImage1::PixelType,
-   typename TInputImage2::PixelType,
-   typename TOutputImage::PixelType>                       BlendingFunctorType;
+      typename TInputImage2::PixelType,
+      typename TOutputImage::PixelType>                       BlendingFunctorType;
   typedef typename BlendingFunctorType::BlendingFunctionType BlendingFunctionType;
 
   /**

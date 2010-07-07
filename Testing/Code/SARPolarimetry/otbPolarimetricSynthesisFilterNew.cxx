@@ -36,7 +36,7 @@ int otbPolarimetricSynthesisFilterNew(int argc, char * argv[])
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
   typedef otb::PolarimetricSynthesisFilter<InputImageType, InputImageType, InputImageType, InputImageType,
-                                           OutputImageType> FilterType;
+      OutputImageType> FilterType;
 
   FilterType::Pointer filter = FilterType::New();
 

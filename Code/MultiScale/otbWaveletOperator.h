@@ -47,9 +47,9 @@ namespace otb {
  * \sa WaveletHighPassOperator
  */
 template <Wavelet::Wavelet TMotherWaveletOperator,
-          Wavelet::WaveletDirection TDirectionOfTransformation,
-          class TPixel, unsigned int VDimension,
-          class TAllocator = itk::NeighborhoodAllocator<TPixel> >
+    Wavelet::WaveletDirection TDirectionOfTransformation,
+    class TPixel, unsigned int VDimension,
+    class TAllocator = itk::NeighborhoodAllocator<TPixel> >
 class ITK_EXPORT WaveletOperator
 {
 public:
@@ -58,12 +58,12 @@ public:
 
   /** Typedefs redirections */
   typedef WaveletLowPassOperator<
-    TMotherWaveletOperator, TDirectionOfTransformation,
-    TPixel, VDimension, TAllocator>
+      TMotherWaveletOperator, TDirectionOfTransformation,
+      TPixel, VDimension, TAllocator>
   LowPassOperator;
   typedef WaveletHighPassOperator<
-    TMotherWaveletOperator, TDirectionOfTransformation,
-    TPixel, VDimension, TAllocator>
+      TMotherWaveletOperator, TDirectionOfTransformation,
+      TPixel, VDimension, TAllocator>
   HighPassOperator;
 
 private:

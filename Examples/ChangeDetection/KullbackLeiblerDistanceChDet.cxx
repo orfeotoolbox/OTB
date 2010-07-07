@@ -123,8 +123,8 @@ int main(int argc, char * argv[])
 
     //  Software Guide : BeginCodeSnippet
     typedef otb::KullbackLeiblerDistanceImageFilter<ImageType,
-                                                    ImageType,
-                                                    ImageType> FilterType;
+        ImageType,
+        ImageType> FilterType;
     //  Software Guide : EndCodeSnippet
 
     //  Software Guide : BeginLatex
@@ -167,7 +167,7 @@ int main(int argc, char * argv[])
     //  Software Guide : EndCodeSnippet
 
     typedef itk::RescaleIntensityImageFilter<ImageType,
-                                             OutputImageType> RescaleFilterType;
+        OutputImageType> RescaleFilterType;
     RescaleFilterType::Pointer rescaler = RescaleFilterType::New();
 
     rescaler->SetInput(filter->GetOutput());

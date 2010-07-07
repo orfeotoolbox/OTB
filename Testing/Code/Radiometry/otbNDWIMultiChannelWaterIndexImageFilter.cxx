@@ -32,8 +32,8 @@ int otbNDWIMultiChannelWaterIndexImageFilter(int argc, char * argv[])
   typedef otb::ImageFileReader<InputImageType>  ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
   typedef otb::Functor::NDWI <InputImageType::InternalPixelType,
-                              InputImageType::InternalPixelType,
-                              OutputImageType::PixelType> FunctorType;
+      InputImageType::InternalPixelType,
+      OutputImageType::PixelType> FunctorType;
 
   typedef itk::UnaryFunctorImageFilter<InputImageType, OutputImageType, FunctorType>
   UnaryFunctorImageFilterType;

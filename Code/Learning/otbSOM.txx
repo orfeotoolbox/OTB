@@ -35,8 +35,8 @@ namespace otb
  * Constructor
  */
 template <class TListSample, class TMap,
-          class TSOMLearningBehaviorFunctor,
-          class TSOMNeighborhoodBehaviorFunctor>
+    class TSOMLearningBehaviorFunctor,
+    class TSOMNeighborhoodBehaviorFunctor>
 SOM<TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighborhoodBehaviorFunctor>
 ::SOM()
 {
@@ -57,8 +57,8 @@ SOM<TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighborhoodBehaviorFunc
  * Destructor
  */
 template <class TListSample, class TMap,
-          class TSOMLearningBehaviorFunctor,
-          class TSOMNeighborhoodBehaviorFunctor>
+    class TSOMLearningBehaviorFunctor,
+    class TSOMNeighborhoodBehaviorFunctor>
 SOM<TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighborhoodBehaviorFunctor>
 ::~SOM()
 {
@@ -70,8 +70,8 @@ SOM<TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighborhoodBehaviorFunc
  * \param radius The radius of the nieghbourhood.
  */
 template <class TListSample, class TMap,
-          class TSOMLearningBehaviorFunctor,
-          class TSOMNeighborhoodBehaviorFunctor>
+    class TSOMLearningBehaviorFunctor,
+    class TSOMNeighborhoodBehaviorFunctor>
 void
 SOM<TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighborhoodBehaviorFunctor>
 ::UpdateMap(const NeuronType& sample, double beta, SizeType& radius)
@@ -127,8 +127,8 @@ SOM<TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighborhoodBehaviorFunc
  * Step one iteration.
  */
 template <class TListSample, class TMap,
-          class TSOMLearningBehaviorFunctor,
-          class TSOMNeighborhoodBehaviorFunctor>
+    class TSOMLearningBehaviorFunctor,
+    class TSOMNeighborhoodBehaviorFunctor>
 void
 SOM<TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighborhoodBehaviorFunctor>
 ::Step(unsigned int currentIteration)
@@ -154,8 +154,8 @@ SOM<TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighborhoodBehaviorFunc
  *  Output information redefinition
  */
 template <class TListSample, class TMap,
-          class TSOMLearningBehaviorFunctor,
-          class TSOMNeighborhoodBehaviorFunctor>
+    class TSOMLearningBehaviorFunctor,
+    class TSOMNeighborhoodBehaviorFunctor>
 void
 SOM<TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighborhoodBehaviorFunctor>
 ::GenerateOutputInformation()
@@ -177,8 +177,8 @@ SOM<TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighborhoodBehaviorFunc
  *  Output redefinition
  */
 template <class TListSample, class TMap,
-          class TSOMLearningBehaviorFunctor,
-          class TSOMNeighborhoodBehaviorFunctor>
+    class TSOMLearningBehaviorFunctor,
+    class TSOMNeighborhoodBehaviorFunctor>
 void
 SOM<TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighborhoodBehaviorFunctor>
 ::AllocateOutputs()
@@ -194,8 +194,8 @@ SOM<TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighborhoodBehaviorFunc
  * Main computation method
  */
 template <class TListSample, class TMap,
-          class TSOMLearningBehaviorFunctor,
-          class TSOMNeighborhoodBehaviorFunctor>
+    class TSOMLearningBehaviorFunctor,
+    class TSOMNeighborhoodBehaviorFunctor>
 void
 SOM<TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighborhoodBehaviorFunctor>
 ::GenerateData(void)
@@ -247,8 +247,8 @@ SOM<TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighborhoodBehaviorFunc
  *PrintSelf method
  */
 template <class TListSample, class TMap,
-          class TSOMLearningBehaviorFunctor,
-          class TSOMNeighborhoodBehaviorFunctor>
+    class TSOMLearningBehaviorFunctor,
+    class TSOMNeighborhoodBehaviorFunctor>
 void
 SOM<TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighborhoodBehaviorFunctor>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const

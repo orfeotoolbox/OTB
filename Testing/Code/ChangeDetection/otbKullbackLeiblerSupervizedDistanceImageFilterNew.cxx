@@ -26,11 +26,11 @@ int otbKullbackLeiblerSupervizedDistanceImageFilterNew(int argc, char * argv[])
   typedef unsigned char TrainingPixelType;
 
   typedef otb::Image<PixelType,
-                     Dimension>                                        ImageType;
+      Dimension>                                        ImageType;
   typedef otb::Image<TrainingPixelType,
-                     Dimension>                                        TrainingImageType;
+      Dimension>                                        TrainingImageType;
   typedef otb::KullbackLeiblerSupervizedDistanceImageFilter<ImageType, ImageType, TrainingImageType,
-                                                            ImageType> FilterType;
+      ImageType> FilterType;
 
   FilterType::Pointer filter = FilterType::New();
 

@@ -77,8 +77,8 @@ namespace otb {
  * \ingroup Streamed
  */
 template <class TInputImage, class TOutputImage,
-          class TWaveletOperator,
-          Wavelet::WaveletDirection TDirectionOfTransformation>
+    class TWaveletOperator,
+    Wavelet::WaveletDirection TDirectionOfTransformation>
 class ITK_EXPORT WaveletFilterBank
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {

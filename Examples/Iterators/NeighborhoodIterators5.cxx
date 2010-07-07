@@ -191,7 +191,7 @@ int main(int argc, char * argv[])
   typedef itk::ImageFileWriter<WriteImageType> WriterType;
 
   typedef itk::RescaleIntensityImageFilter<ImageType,
-                                           WriteImageType> RescaleFilterType;
+      WriteImageType> RescaleFilterType;
 
   RescaleFilterType::Pointer rescaler = RescaleFilterType::New();
 

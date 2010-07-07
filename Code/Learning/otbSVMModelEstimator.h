@@ -70,7 +70,7 @@ public:
   itkNewMacro(Self);
 
   /** Macro defining the type*/
-  itkTypeMacro(SVMModelEstimator,SuperClass);
+  itkTypeMacro(SVMModelEstimator, SuperClass);
 
   /** Get the output model */
   ModelType * GetModel();
@@ -295,7 +295,6 @@ public:
     //implemented in term of const char * version
     this->SaveModel(fname.c_str());
   }
-
 
 protected:
   /** Constructor */

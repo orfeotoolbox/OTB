@@ -34,8 +34,8 @@ namespace otb
  *
  */
 template <class TInputImage,
-          class TInputImageDirection,
-          class TOutputImage>
+    class TInputImageDirection,
+    class TOutputImage>
 class ITK_EXPORT ModulusAndDirectionImageToImageFilter :  public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:

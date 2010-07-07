@@ -32,7 +32,6 @@ namespace Functor
  * otbScalarImageToTexturesFilter instead.
  */
 
-
 template <class TScalarInputPixelType, class TScalarOutputPixelType>
 class ITK_EXPORT EntropyTextureFunctor :
   public TextureFunctorBase<TScalarInputPixelType, TScalarOutputPixelType>

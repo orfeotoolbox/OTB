@@ -53,8 +53,8 @@ namespace otb
  * \sa CzihoSOMNeighborhoodBehaviorFunctor
  */
 template <class TListSample, class TMap,
-          class TSOMLearningBehaviorFunctor = Functor::CzihoSOMLearningBehaviorFunctor,
-          class TSOMNeighborhoodBehaviorFunctor = Functor::CzihoSOMNeighborhoodBehaviorFunctor>
+    class TSOMLearningBehaviorFunctor = Functor::CzihoSOMLearningBehaviorFunctor,
+    class TSOMNeighborhoodBehaviorFunctor = Functor::CzihoSOMNeighborhoodBehaviorFunctor>
 class ITK_EXPORT PeriodicSOM
   : public SOM<TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighborhoodBehaviorFunctor>
 {
@@ -62,8 +62,8 @@ public:
   /** Standard typedefs */
   typedef PeriodicSOM Self;
   typedef SOM<TListSample, TMap,
-              TSOMLearningBehaviorFunctor,
-              TSOMNeighborhoodBehaviorFunctor> Superclass;
+      TSOMLearningBehaviorFunctor,
+      TSOMNeighborhoodBehaviorFunctor> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 

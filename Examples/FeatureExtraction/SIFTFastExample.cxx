@@ -302,19 +302,23 @@ int main(int argc, char * argv[])
       outputImage->SetPixel(index, keyPixel);
 
       if (outputImage->GetLargestPossibleRegion().IsInside(index +
-                                                           t)) outputImage->
+                                                           t))
+        outputImage->
         SetPixel(index + t, keyPixel);
 
       if (outputImage->GetLargestPossibleRegion().IsInside(index +
-                                                           b)) outputImage->
+                                                           b))
+        outputImage->
         SetPixel(index + b, keyPixel);
 
       if (outputImage->GetLargestPossibleRegion().IsInside(index +
-                                                           l)) outputImage->
+                                                           l))
+        outputImage->
         SetPixel(index + l, keyPixel);
 
       if (outputImage->GetLargestPossibleRegion().IsInside(index +
-                                                           r)) outputImage->
+                                                           r))
+        outputImage->
         SetPixel(index + r, keyPixel);
       }
     ++pIt;

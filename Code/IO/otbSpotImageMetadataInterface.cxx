@@ -686,24 +686,24 @@ SpotImageMetadataInterface
   return i;
 }
 
-unsigned int 
+unsigned int
 SpotImageMetadataInterface
 ::GetDefaultRBand() const
-{ 
+{
   return 0;
 }
 
-unsigned int 
+unsigned int
 SpotImageMetadataInterface
 ::GetDefaultGBand() const
-{ 
+{
   return 1;
 }
 
-unsigned int 
+unsigned int
 SpotImageMetadataInterface
 ::GetDefaultBBand() const
-{ 
+{
   return 2;
 }
 

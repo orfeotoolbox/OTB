@@ -239,13 +239,16 @@ int main(int argc, char * argv[])
     //  Software Guide : EndLatex
 
     // Software Guide : BeginCodeSnippet
-    if (parseResult->IsOptionPresent("--SigmaD")) filter->SetSigmaD(
+    if (parseResult->IsOptionPresent("--SigmaD"))
+      filter->SetSigmaD(
         parseResult->GetParameterDouble("--SigmaD"));
 
-    if (parseResult->IsOptionPresent("--SigmaI")) filter->SetSigmaI(
+    if (parseResult->IsOptionPresent("--SigmaI"))
+      filter->SetSigmaI(
         parseResult->GetParameterDouble("--SigmaI"));
 
-    if (parseResult->IsOptionPresent("--Alpha")) filter->SetAlpha(
+    if (parseResult->IsOptionPresent("--Alpha"))
+      filter->SetAlpha(
         parseResult->GetParameterDouble("--Alpha"));
     // Software Guide : EndCodeSnippet
 

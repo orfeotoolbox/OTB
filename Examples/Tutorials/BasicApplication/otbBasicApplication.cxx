@@ -72,7 +72,8 @@ int main(int argc, char* argv[])
   view->SetWidgetsController(controller->GetWidgetsController());
   view->Build();
 
-  if (parseResult->IsOptionPresent("--InputImage")) view->GetController()->
+  if (parseResult->IsOptionPresent("--InputImage"))
+    view->GetController()->
     OpenImage(parseResult->GetInputImage().c_str());
   Fl::run();
 

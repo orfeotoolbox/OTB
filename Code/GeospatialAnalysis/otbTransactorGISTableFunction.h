@@ -35,12 +35,12 @@ namespace otb
  * \ingroup TransactorGISTableFunctions
  */
 template <
-  class TInputTable,
-  class TOutput, class TTransactor
-  >
+    class TInputTable,
+    class TOutput, class TTransactor
+    >
 class ITK_EXPORT TransactorGISTableFunction :
   public GISTableFunction<TInputTable,
-                          TOutput>
+      TOutput>
 {
 public:
   /** Dimension underlying input table. */

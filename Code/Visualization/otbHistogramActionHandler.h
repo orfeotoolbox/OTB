@@ -93,66 +93,66 @@ public:
       {
       switch (event)
         {
-      case FL_PUSH:
-        {
-        // Position Clicked
-        double x = Fl::event_x();
-
-        if ((vcl_abs(x - abcisseL) < 50) || (vcl_abs(x - abcisseR) < 50))
+        case FL_PUSH:
           {
-          if (vcl_abs(x - abcisseL) < vcl_abs(x - abcisseR))
+          // Position Clicked
+          double x = Fl::event_x();
+
+          if ((vcl_abs(x - abcisseL) < 50) || (vcl_abs(x - abcisseR) < 50))
             {
-            m_ModifyLeft = true;
+            if (vcl_abs(x - abcisseL) < vcl_abs(x - abcisseR))
+              {
+              m_ModifyLeft = true;
+              }
+            else
+              {
+              m_ModifyRight = true;
+              }
             }
-          else
+          return true;
+          }
+        case FL_RELEASE:
+          {
+          if (m_ModifyLeft || m_ModifyRight)
             {
-            m_ModifyRight = true;
+            m_Model->Update();
             }
+
+          m_ModifyLeft  = false;
+          m_ModifyRight = false;
+          return true;
           }
-        return true;
-        }
-      case FL_RELEASE:
-        {
-        if (m_ModifyLeft || m_ModifyRight)
+        case FL_DRAG:
           {
-          m_Model->Update();
+          double x = Fl::event_x();
+
+          if (m_ModifyLeft)
+            {
+            double tx = x - abcisseL;
+            m_LeftAsymptote->SetAbcisse(m_LeftAsymptote->GetAbcisse() + tx);
+            m_Curve->redraw();
+
+            //  Update The Rendering Function min and max
+            ParametersType param = m_RenderingFunction->GetParameters();
+            param.SetElement(2 * m_Channel, m_LeftAsymptote->GetAbcisse() + tx);
+            param.SetElement(2 * m_Channel + 1, m_RightAsymptote->GetAbcisse());
+            m_RenderingFunction->SetParameters(param);
+            }
+
+          if (m_ModifyRight)
+            {
+            double tx = x - abcisseR;
+            m_RightAsymptote->SetAbcisse(m_RightAsymptote->GetAbcisse() + tx);
+            m_Curve->redraw();
+
+            //  Update The Rendering Function min and max
+            ParametersType param = m_RenderingFunction->GetParameters();
+            param.SetElement(2 * m_Channel, m_LeftAsymptote->GetAbcisse());
+            param.SetElement(2 * m_Channel + 1, m_RightAsymptote->GetAbcisse() + tx);
+            m_RenderingFunction->SetParameters(param);
+            }
+          return true;
           }
-
-        m_ModifyLeft  = false;
-        m_ModifyRight = false;
-        return true;
-        }
-      case FL_DRAG:
-        {
-        double x = Fl::event_x();
-
-        if (m_ModifyLeft)
-          {
-          double tx = x - abcisseL;
-          m_LeftAsymptote->SetAbcisse(m_LeftAsymptote->GetAbcisse() + tx);
-          m_Curve->redraw();
-
-          //  Update The Rendering Function min and max
-          ParametersType param = m_RenderingFunction->GetParameters();
-          param.SetElement(2 * m_Channel, m_LeftAsymptote->GetAbcisse() + tx);
-          param.SetElement(2 * m_Channel + 1, m_RightAsymptote->GetAbcisse());
-          m_RenderingFunction->SetParameters(param);
-          }
-
-        if (m_ModifyRight)
-          {
-          double tx = x - abcisseR;
-          m_RightAsymptote->SetAbcisse(m_RightAsymptote->GetAbcisse() + tx);
-          m_Curve->redraw();
-
-          //  Update The Rendering Function min and max
-          ParametersType param = m_RenderingFunction->GetParameters();
-          param.SetElement(2 * m_Channel, m_LeftAsymptote->GetAbcisse());
-          param.SetElement(2 * m_Channel + 1, m_RightAsymptote->GetAbcisse() + tx);
-          m_RenderingFunction->SetParameters(param);
-          }
-        return true;
-        }
         }
       }
     return false;

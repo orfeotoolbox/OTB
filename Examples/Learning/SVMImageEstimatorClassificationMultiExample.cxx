@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
 // Software Guide : EndLatex
 //  Software Guide : BeginCodeSnippet
   typedef otb::SVMImageModelEstimator<InputImageType,
-                                      TrainingImageType>   EstimatorType;
+      TrainingImageType>   EstimatorType;
 
 //  Software Guide : EndCodeSnippet
 
@@ -175,7 +175,7 @@ int main(int argc, char *argv[])
 
 // Software Guide : BeginCodeSnippet
   typedef otb::Image<itk::FixedArray<InputPixelType, 3>,
-                     Dimension>          ClassifyImageType;
+      Dimension>          ClassifyImageType;
 
   typedef otb::ImageFileReader<ClassifyImageType> ClassifyReaderType;
 // Software Guide : EndCodeSnippet
@@ -380,8 +380,8 @@ int main(int argc, char *argv[])
   typedef itk::Functor::ScalarToRGBPixelFunctor<unsigned long>
   ColorMapFunctorType;
   typedef itk::UnaryFunctorImageFilter<OutputImageType,
-                                       RGBImageType,
-                                       ColorMapFunctorType> ColorMapFilterType;
+      RGBImageType,
+      ColorMapFunctorType> ColorMapFilterType;
   ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
 
   colormapper->SetInput(outputImage);

@@ -109,11 +109,11 @@ template <class TInputImage1, class TInputImage2, class TOutputImage>
 class ITK_EXPORT VectorImageToColorAnaglyphVectorImageFilter
   : public itk::BinaryFunctorImageFilter
   <TInputImage1, TInputImage2, TOutputImage,
-   Functor::ColorAnaglyphFunctor<
-     typename TInputImage1::PixelType,
-     typename TInputImage2::PixelType,
-     typename TOutputImage::PixelType
-     > >
+      Functor::ColorAnaglyphFunctor<
+          typename TInputImage1::PixelType,
+          typename TInputImage2::PixelType,
+          typename TOutputImage::PixelType
+          > >
 {
 public:
   /** Standard typedefs */
@@ -121,11 +121,11 @@ public:
 
   typedef itk::BinaryFunctorImageFilter
   <TInputImage1, TInputImage2, TOutputImage,
-   Functor::ColorAnaglyphFunctor<
-     typename TInputImage1::PixelType,
-     typename TInputImage2::PixelType,
-     typename TOutputImage::PixelType
-     > > Superclass;
+      Functor::ColorAnaglyphFunctor<
+          typename TInputImage1::PixelType,
+          typename TInputImage2::PixelType,
+          typename TOutputImage::PixelType
+          > > Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 

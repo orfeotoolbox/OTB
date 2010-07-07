@@ -216,7 +216,7 @@ int main(int argc, char *argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef itk::BinaryThresholdImageFilter<InternalImageType,
-                                          OutputImageType>
+      OutputImageType>
   ThresholdingFilterType;
   ThresholdingFilterType::Pointer thresholder = ThresholdingFilterType::New();
   // Software Guide : EndCodeSnippet
@@ -259,8 +259,8 @@ int main(int argc, char *argv[])
   //  renormalize image before sending them to writers.
   //
   typedef itk::RescaleIntensityImageFilter<
-    InternalImageType,
-    OutputImageType>   CastFilterType;
+      InternalImageType,
+      OutputImageType>   CastFilterType;
 
   //  Software Guide : BeginLatex
   //
@@ -271,8 +271,8 @@ int main(int argc, char *argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef   itk::CurvatureAnisotropicDiffusionImageFilter<
-    InternalImageType,
-    InternalImageType>  SmoothingFilterType;
+      InternalImageType,
+      InternalImageType>  SmoothingFilterType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -297,12 +297,12 @@ int main(int argc, char *argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef   itk::GradientMagnitudeRecursiveGaussianImageFilter<
-    InternalImageType,
-    InternalImageType>  GradientFilterType;
+      InternalImageType,
+      InternalImageType>  GradientFilterType;
 
   typedef   itk::SigmoidImageFilter<
-    InternalImageType,
-    InternalImageType>  SigmoidFilterType;
+      InternalImageType,
+      InternalImageType>  SigmoidFilterType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -342,7 +342,7 @@ int main(int argc, char *argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef  itk::FastMarchingImageFilter<InternalImageType,
-                                        InternalImageType>
+      InternalImageType>
   FastMarchingFilterType;
   // Software Guide : EndCodeSnippet
 

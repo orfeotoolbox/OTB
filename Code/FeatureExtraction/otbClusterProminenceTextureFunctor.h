@@ -67,7 +67,7 @@ public:
         double p = this->GetHisto()[r][s] * areaInv;
         double sumPixel =
           (static_cast<double>(s) +
-            0.5) * this->GetNeighBinLength() + (static_cast<double>(r) + 0.5) * this->GetOffsetBinLength();
+           0.5) * this->GetNeighBinLength() + (static_cast<double>(r) + 0.5) * this->GetOffsetBinLength();
         out += vcl_pow(sumPixel - 2 * mean, 4) * p;
         }
       }

@@ -73,8 +73,8 @@ int main(int argc, char * argv[])
   typedef otb::Image<PixelType, 2> ImageType;
 
   typedef itk::ConstShapedNeighborhoodIterator<
-    ImageType
-    > ShapedNeighborhoodIteratorType;
+      ImageType
+      > ShapedNeighborhoodIteratorType;
 
   typedef itk::ImageRegionIterator<ImageType> IteratorType;
   // Software Guide : EndCodeSnippet
@@ -127,7 +127,7 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
   typedef itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<
-    ImageType> FaceCalculatorType;
+      ImageType> FaceCalculatorType;
 
   FaceCalculatorType                         faceCalculator;
   FaceCalculatorType::FaceListType           faceList;

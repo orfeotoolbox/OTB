@@ -36,13 +36,13 @@ int otbNDWIWaterIndexImageFilter(int argc, char * argv[])
   typedef otb::ImageFileWriter<OutputImageType>   WriterType;
 
   typedef otb::Functor::NDWI  <InputNIRImageType::PixelType,
-                               InputMIRImageType::PixelType,
-                               OutputImageType::PixelType> FunctorType;
+      InputMIRImageType::PixelType,
+      OutputImageType::PixelType> FunctorType;
 
   typedef itk::BinaryFunctorImageFilter<InputNIRImageType,
-                                        InputMIRImageType,
-                                        OutputImageType,
-                                        FunctorType> BinaryFunctorImageFilterType;
+      InputMIRImageType,
+      OutputImageType,
+      FunctorType> BinaryFunctorImageFilterType;
 
   // Instantiating object
   BinaryFunctorImageFilterType::Pointer filter = BinaryFunctorImageFilterType::New();

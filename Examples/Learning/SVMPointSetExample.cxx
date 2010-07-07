@@ -105,7 +105,7 @@ int main(int argc, char* argv[])
   lPSet->SetPoints(lCont);
 
   typedef otb::SVMPointSetModelEstimator<MeasurePointSetType,
-                                         LabelPointSetType>   EstimatorType;
+      LabelPointSetType>   EstimatorType;
 
   EstimatorType::Pointer estimator = EstimatorType::New();
 
@@ -161,7 +161,7 @@ int main(int argc, char* argv[])
 
   /** preparing classifier and decision rule object */
   typedef otb::SVMModel<SampleType::MeasurementVectorType::ValueType,
-                        LabelPixelType> ModelType;
+      LabelPixelType> ModelType;
 
   ModelType::Pointer model = estimator->GetModel();
 

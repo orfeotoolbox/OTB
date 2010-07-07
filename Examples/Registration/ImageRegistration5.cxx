@@ -149,13 +149,13 @@ int main(int argc, char *argv[])
   typedef itk::RegularStepGradientDescentOptimizer OptimizerType;
 
   typedef itk::MeanSquaresImageToImageMetric<FixedImageType,
-                                             MovingImageType>    MetricType;
+      MovingImageType>    MetricType;
 
   typedef itk::LinearInterpolateImageFunction<MovingImageType,
-                                              double>    InterpolatorType;
+      double>    InterpolatorType;
 
   typedef itk::ImageRegistrationMethod<FixedImageType,
-                                       MovingImageType>  RegistrationType;
+      MovingImageType>  RegistrationType;
 
   MetricType::Pointer       metric        = MetricType::New();
   OptimizerType::Pointer    optimizer     = OptimizerType::New();
@@ -202,10 +202,10 @@ int main(int argc, char *argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef itk::MeanImageFilter<
-    FixedImageType, FixedImageType>  FixedFilterType;
+      FixedImageType, FixedImageType>  FixedFilterType;
 
   typedef itk::MeanImageFilter<
-    MovingImageType, MovingImageType>  MovingFilterType;
+      MovingImageType, MovingImageType>  MovingFilterType;
 
   FixedFilterType::Pointer  fixedFilter  = FixedFilterType::New();
   MovingFilterType::Pointer movingFilter = MovingFilterType::New();
@@ -513,8 +513,8 @@ int main(int argc, char *argv[])
   //  Software Guide : EndLatex
 
   typedef itk::ResampleImageFilter<
-    MovingImageType,
-    FixedImageType>    ResampleFilterType;
+      MovingImageType,
+      FixedImageType>    ResampleFilterType;
 
   TransformType::Pointer finalTransform = TransformType::New();
 
@@ -553,9 +553,9 @@ int main(int argc, char *argv[])
   typedef itk::Image<float, Dimension> DifferenceImageType;
 
   typedef itk::SubtractImageFilter<
-    FixedImageType,
-    FixedImageType,
-    DifferenceImageType> DifferenceFilterType;
+      FixedImageType,
+      FixedImageType,
+      DifferenceImageType> DifferenceFilterType;
 
   DifferenceFilterType::Pointer difference = DifferenceFilterType::New();
 
@@ -564,8 +564,8 @@ int main(int argc, char *argv[])
   typedef itk::Image<OutputPixelType, Dimension> OutputImageType;
 
   typedef itk::RescaleIntensityImageFilter<
-    DifferenceImageType,
-    OutputImageType>   RescalerType;
+      DifferenceImageType,
+      OutputImageType>   RescalerType;
 
   RescalerType::Pointer intensityRescaler = RescalerType::New();
 

@@ -134,12 +134,10 @@ public:
       dist = vcl_sqrt(vcl_pow(static_cast<double>(offEnd[0]), 2) + vcl_pow(static_cast<double>(offEnd[1]), 2));
 
       // for length computation
-      if (m_SelectedTextures[0] == true)
-        if (dist > length) length = dist;
+      if (m_SelectedTextures[0] == true) if (dist > length) length = dist;
 
       // for width computation
-      if (m_SelectedTextures[1] == true)
-        if (dist < width) width = dist;
+      if (m_SelectedTextures[1] == true) if (dist < width) width = dist;
 
       // for PSI computation
       if (m_SelectedTextures[2] == true || m_SelectedTextures[5] == true) sum += dist;

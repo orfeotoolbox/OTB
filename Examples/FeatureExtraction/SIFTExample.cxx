@@ -105,11 +105,11 @@ int main(int argc, char * argv[])
   typedef itk::VariableLengthVector<RealType> RealVectorType;
   typedef otb::ImageFileReader<ImageType>     ReaderType;
   typedef itk::PointSet<RealVectorType,
-                        Dimension>            PointSetType;
+      Dimension>            PointSetType;
 
   typedef otb::ImageToSIFTKeyPointSetFilter<ImageType,
-                                            PointSetType>
-                                              ImageToSIFTKeyPointSetFilterType;
+      PointSetType>
+  ImageToSIFTKeyPointSetFilterType;
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -268,14 +268,16 @@ int main(int argc, char * argv[])
       outputImage->SetPixel(index, keyPixel);
 
       if (static_cast<unsigned int>(index[1]) <
-          static_cast<unsigned int>(size[1] - 1)) outputImage->SetPixel(
+          static_cast<unsigned int>(size[1] - 1))
+        outputImage->SetPixel(
           index + t,
           keyPixel);
 
       if (index[1] > 0) outputImage->SetPixel(index + b, keyPixel);
 
       if (static_cast<unsigned int>(index[0]) <
-          static_cast<unsigned int>(size[0] - 1)) outputImage->SetPixel(
+          static_cast<unsigned int>(size[0] - 1))
+        outputImage->SetPixel(
           index + r,
           keyPixel);
 

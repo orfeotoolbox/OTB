@@ -42,11 +42,11 @@ int otbGeodesicMorphologyIterativeDecompositionImageFilter(int argc, char * argv
   typedef otb::ImageFileWriter<InputImageType>  WriterType;
 
   typedef itk::BinaryBallStructuringElement<InputPixelType,
-                                            Dimension>                                     StructuringElementType;
+      Dimension>                                     StructuringElementType;
   typedef otb::GeodesicMorphologyIterativeDecompositionImageFilter<InputImageType,
-                                                                   StructuringElementType> DecompositionImageFilterType;
+      StructuringElementType> DecompositionImageFilterType;
   typedef DecompositionImageFilterType::OutputImageListType::Iterator
-                                                                                           ImageListIterator;
+  ImageListIterator;
 
   // Reading input image
   ReaderType::Pointer reader = ReaderType::New();

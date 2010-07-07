@@ -105,7 +105,7 @@ int main(int argc, char * argv[])
   typedef otb::VectorRescaleIntensityImageFilter
   <MultiSpectralImageType, OutputVectorImageType> VectorRescalerType;
   typedef otb::MultiChannelExtractROI<unsigned char,
-                                      unsigned char> ChannelExtractorType;
+      unsigned char> ChannelExtractorType;
 
   // The GenerateOutputInformation() information is required here so
   // that the number of component per pixel is update and known to set
@@ -173,7 +173,7 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::SpectralAngleDistanceImageFilter<MultiSpectralImageType,
-                                                InternalImageType> SAFilterType;
+      InternalImageType> SAFilterType;
   SAFilterType::Pointer saFilter = SAFilterType::New();
   saFilter->SetReferencePixel(pixelRef);
   saFilter->SetInput(multispectralReader->GetOutput());
@@ -188,7 +188,7 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef itk::SqrtImageFilter<InternalImageType,
-                               InternalImageType> SqrtFilterType;
+      InternalImageType> SqrtFilterType;
   SqrtFilterType::Pointer sqrtFilter = SqrtFilterType::New();
   sqrtFilter->SetInput(saFilter->GetOutput());
   // Software Guide : EndCodeSnippet
@@ -204,7 +204,7 @@ int main(int argc, char * argv[])
   // Software Guide : BeginCodeSnippet
   double sigma = alpha * (1.2 / resolution + 1);
   typedef itk::GradientRecursiveGaussianImageFilter<InternalImageType,
-                                                    VectorImageType>
+      VectorImageType>
   GradientFilterType;
   GradientFilterType::Pointer gradientFilter = GradientFilterType::New();
   gradientFilter->SetSigma(sigma);
@@ -222,8 +222,8 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::NeighborhoodScalarProductFilter<VectorImageType,
-                                               InternalImageType,
-                                               InternalImageType>
+      InternalImageType,
+      InternalImageType>
   NeighborhoodScalarProductType;
   NeighborhoodScalarProductType::Pointer scalarFilter
     = NeighborhoodScalarProductType::New();
@@ -240,8 +240,8 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::RemoveIsolatedByDirectionFilter<InternalImageType,
-                                               InternalImageType,
-                                               InternalImageType>
+      InternalImageType,
+      InternalImageType>
   RemoveIsolatedByDirectionType;
   RemoveIsolatedByDirectionType::Pointer removeIsolatedByDirectionFilter
     = RemoveIsolatedByDirectionType::New();
@@ -260,8 +260,8 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::RemoveWrongDirectionFilter<InternalImageType,
-                                          InternalImageType,
-                                          InternalImageType>
+      InternalImageType,
+      InternalImageType>
   RemoveWrongDirectionType;
   RemoveWrongDirectionType::Pointer removeWrongDirectionFilter
     = RemoveWrongDirectionType::New();
@@ -280,8 +280,8 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::NonMaxRemovalByDirectionFilter<InternalImageType,
-                                              InternalImageType,
-                                              InternalImageType>
+      InternalImageType,
+      InternalImageType>
   NonMaxRemovalByDirectionType;
   NonMaxRemovalByDirectionType::Pointer nonMaxRemovalByDirectionFilter
     = NonMaxRemovalByDirectionType::New();
@@ -299,8 +299,8 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::VectorizationPathListFilter<InternalImageType,
-                                           InternalImageType,
-                                           PathType> VectorizationFilterType;
+      InternalImageType,
+      PathType> VectorizationFilterType;
   VectorizationFilterType::Pointer vectorizationFilter
     = VectorizationFilterType::New();
   vectorizationFilter->SetInput(nonMaxRemovalByDirectionFilter->GetOutput());
@@ -374,7 +374,7 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::LikelihoodPathListFilter<PathType,
-                                        InternalImageType>
+      InternalImageType>
   PathListToPathListWithValueType;
   PathListToPathListWithValueType::Pointer pathListConverter
     = PathListToPathListWithValueType::New();
@@ -406,7 +406,7 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::DrawPathListFilter<InternalImageType, PathType,
-                                  InternalImageType> DrawPathType;
+      InternalImageType> DrawPathType;
   DrawPathType::Pointer drawPathListFilter = DrawPathType::New();
   drawPathListFilter->SetInput(output);
   drawPathListFilter->SetInputPath(pathListConverter->GetOutput());
@@ -423,7 +423,7 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef itk::RescaleIntensityImageFilter<InternalImageType,
-                                           InternalImageType> RescalerType;
+      InternalImageType> RescalerType;
   RescalerType::Pointer rescaler = RescalerType::New();
   rescaler->SetOutputMaximum(255);
   rescaler->SetOutputMinimum(0);
@@ -433,27 +433,27 @@ int main(int argc, char * argv[])
 
   // this small piece of code aims at producing a pretty RGB png result image.
   typedef otb::MultiToMonoChannelExtractROI<OutputPixelType,
-                                            PixelType>
-                                                       ChannelExtractionFilterType;
+      PixelType>
+  ChannelExtractionFilterType;
   typedef itk::AddImageFilter<InternalImageType, InternalImageType,
-                              InternalImageType>       AddFilterType;
+      InternalImageType>       AddFilterType;
   typedef itk::SubtractImageFilter<InternalImageType, InternalImageType,
-                                   InternalImageType>  SubtractFilterType;
+      InternalImageType>  SubtractFilterType;
   typedef itk::ThresholdImageFilter<InternalImageType>
-                                                       ThresholdFilterType;
+  ThresholdFilterType;
   typedef itk::RGBPixel<OutputPixelType>
-                                                       RGBPixelType;
+  RGBPixelType;
   typedef otb::Image<RGBPixelType,
-                     Dimension>                        RGBImageType;
+      Dimension>                        RGBImageType;
   typedef itk::ComposeRGBImageFilter<InternalImageType,
-                                     RGBImageType>     ComposeRGBFilterType;
+      RGBImageType>     ComposeRGBFilterType;
   typedef otb::ImageFileWriter<RGBImageType>
-                                                       RGBWriterType;
+  RGBWriterType;
   typedef itk::BinaryBallStructuringElement<PixelType,
-                                            Dimension> StructuringElementType;
+      Dimension> StructuringElementType;
   typedef itk::GrayscaleDilateImageFilter
   <InternalImageType, InternalImageType,
-   StructuringElementType> DilateFilterType;
+      StructuringElementType> DilateFilterType;
 
   StructuringElementType se;
   se.SetRadius(1);

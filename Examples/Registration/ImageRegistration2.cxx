@@ -172,10 +172,10 @@ int main(int argc, char *argv[])
   typedef itk::GradientDescentOptimizer                OptimizerType;
 
   typedef itk::LinearInterpolateImageFunction<InternalImageType,
-                                              double> InterpolatorType;
+      double> InterpolatorType;
 
   typedef itk::ImageRegistrationMethod<InternalImageType,
-                                       InternalImageType>  RegistrationType;
+      InternalImageType>  RegistrationType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -187,8 +187,8 @@ int main(int argc, char *argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef itk::MutualInformationImageToImageMetric<
-    InternalImageType,
-    InternalImageType>    MetricType;
+      InternalImageType,
+      InternalImageType>    MetricType;
   // Software Guide : EndCodeSnippet
 
   TransformType::Pointer    transform     = TransformType::New();
@@ -253,14 +253,14 @@ int main(int argc, char *argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef itk::NormalizeImageFilter<
-    FixedImageType,
-    InternalImageType
-    > FixedNormalizeFilterType;
+      FixedImageType,
+      InternalImageType
+      > FixedNormalizeFilterType;
 
   typedef itk::NormalizeImageFilter<
-    MovingImageType,
-    InternalImageType
-    > MovingNormalizeFilterType;
+      MovingImageType,
+      InternalImageType
+      > MovingNormalizeFilterType;
 
   FixedNormalizeFilterType::Pointer fixedNormalizer =
     FixedNormalizeFilterType::New();
@@ -279,9 +279,9 @@ int main(int argc, char *argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef itk::DiscreteGaussianImageFilter<
-    InternalImageType,
-    InternalImageType
-    > GaussianFilterType;
+      InternalImageType,
+      InternalImageType
+      > GaussianFilterType;
 
   GaussianFilterType::Pointer fixedSmoother  = GaussianFilterType::New();
   GaussianFilterType::Pointer movingSmoother = GaussianFilterType::New();
@@ -465,8 +465,8 @@ int main(int argc, char *argv[])
   //  Software Guide : EndLatex
 
   typedef itk::ResampleImageFilter<
-    MovingImageType,
-    FixedImageType>    ResampleFilterType;
+      MovingImageType,
+      FixedImageType>    ResampleFilterType;
 
   TransformType::Pointer finalTransform = TransformType::New();
 
@@ -489,8 +489,8 @@ int main(int argc, char *argv[])
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
   typedef itk::CastImageFilter<
-    FixedImageType,
-    OutputImageType> CastFilterType;
+      FixedImageType,
+      OutputImageType> CastFilterType;
 
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
 

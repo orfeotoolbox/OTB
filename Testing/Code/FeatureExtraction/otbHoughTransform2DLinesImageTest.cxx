@@ -112,8 +112,8 @@ int otbHoughTransform2DLinesImageTest(int argc, char* argv[])
 
   /** Apply gradient filter to the input image */
   typedef itk::CastImageFilter<
-    ImageType,
-    HoughImageType>    CastingFilterType;
+      ImageType,
+      HoughImageType>    CastingFilterType;
 
   CastingFilterType::Pointer caster = CastingFilterType::New();
   caster->SetInput(m_Image);

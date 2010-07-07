@@ -19,14 +19,13 @@
 
 #include "otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator.h"
 
-
 int otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculatorNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef float MeasurementType ;
-  typedef itk::Statistics::Histogram< MeasurementType, Dimension > HistogramType ;
+  typedef float                                                  MeasurementType;
+  typedef itk::Statistics::Histogram<MeasurementType, Dimension> HistogramType;
   typedef otb::GreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator<
-    HistogramType > FilterType;
+      HistogramType> FilterType;
 
   FilterType::Pointer filter = FilterType::New();
 

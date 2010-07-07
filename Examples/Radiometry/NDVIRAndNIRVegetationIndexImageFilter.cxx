@@ -120,8 +120,8 @@ int main(int argc, char *argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::Functor::NDVI<InputPixelType,
-                             InputPixelType,
-                             OutputPixelType>   FunctorType;
+      InputPixelType,
+      OutputPixelType>   FunctorType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -133,9 +133,9 @@ int main(int argc, char *argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::RAndNIRIndexImageFilter<InputRImageType,
-                                       InputNIRImageType,
-                                       OutputImageType,
-                                       FunctorType>
+      InputNIRImageType,
+      OutputImageType,
+      FunctorType>
   RAndNIRIndexImageFilterType;
   // Software Guide : EndCodeSnippet
 
@@ -200,17 +200,17 @@ int main(int argc, char *argv[])
 
   // Pretty image creation for the printing
   typedef otb::Image<unsigned char,
-                     Dimension>
-                                                                  OutputPrettyImageType;
+      Dimension>
+  OutputPrettyImageType;
   typedef otb::ImageFileWriter<OutputPrettyImageType>
-                                                                  WriterPrettyType;
+  WriterPrettyType;
   typedef itk::RescaleIntensityImageFilter<OutputImageType,
-                                           OutputPrettyImageType> RescalerType;
+      OutputPrettyImageType> RescalerType;
   typedef itk::RescaleIntensityImageFilter<InputRImageType,
-                                           OutputPrettyImageType> RescalerRType;
+      OutputPrettyImageType> RescalerRType;
   typedef itk::RescaleIntensityImageFilter<InputNIRImageType,
-                                           OutputPrettyImageType>
-                                                                  RescalerNIRType;
+      OutputPrettyImageType>
+  RescalerNIRType;
 
   RescalerType::Pointer     rescaler     = RescalerType::New();
   WriterPrettyType::Pointer prettyWriter = WriterPrettyType::New();

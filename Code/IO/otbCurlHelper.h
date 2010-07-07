@@ -49,15 +49,14 @@ public:
   int RetrieveFile(const std::ostringstream& urlStream, std::string filename) const;
   int RetrieveFile(const std::string& urlString, std::string filename) const;
 
-  int RetrieveFileMulti(const std::vector<std::string>& listURLs, 
+  int RetrieveFileMulti(const std::vector<std::string>& listURLs,
                         const std::vector<std::string>& listFiles,
                         int maxConnect) const;
 protected:
   CurlHelper() :
     m_Browser("Mozilla/5.0 (Windows; U; Windows NT 6.0; en-GB; rv:1.8.1.11) "
-        "Gecko/20071127 Firefox/2.0.0.11") {}
+              "Gecko/20071127 Firefox/2.0.0.11") {}
   ~CurlHelper() {}
-
 
 private:
   CurlHelper(const Self &);  //purposely not implemented
@@ -67,14 +66,14 @@ private:
   {
     return nmemb;
   }
-  
+
   // Need to use our writing function to handle windows segfaults
   // Need to be static cause the CURL_OPT is expecting a pure C
   // function or a static c++ method.
   static size_t write_data(void* ptr, size_t size, size_t nmemb, void* data);
 
   // Browser Agent used
-  std::string  m_Browser;
+  std::string m_Browser;
 };
 }
 #endif

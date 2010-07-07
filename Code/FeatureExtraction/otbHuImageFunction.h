@@ -54,9 +54,9 @@ namespace otb
 //  public itk::ImageFunction< TInput, TOutput,TCoordRep >
 
 template <class TInput,
-          class TOutput    = double,
-          class TPrecision = double,
-          class TCoordRep  = float>
+    class TOutput    = double,
+    class TPrecision = double,
+    class TCoordRep  = float>
 class ITK_EXPORT HuImageFunction :
   public RealMomentImageFunction<TInput, TOutput, TPrecision, TCoordRep>
 {

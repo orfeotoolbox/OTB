@@ -335,16 +335,16 @@ void MSTARImageIO::Read(void* buffer)
    ******************************************************/
   switch (mstartype)
     {
-  case CHIP_IMAGE:
-    magloc  = phlen;
-    fseek(MSTARfp, magloc, 0);
-    nchunks = numrows * numcols;
-    break;
-  case FSCENE_IMAGE:
-    magloc  = phlen + nhlen; /* nhlen = 512 */
-    fseek(MSTARfp, magloc, 0);
-    nchunks = numrows * numcols;
-    break;
+    case CHIP_IMAGE:
+      magloc  = phlen;
+      fseek(MSTARfp, magloc, 0);
+      nchunks = numrows * numcols;
+      break;
+    case FSCENE_IMAGE:
+      magloc  = phlen + nhlen; /* nhlen = 512 */
+      fseek(MSTARfp, magloc, 0);
+      nchunks = numrows * numcols;
+      break;
     }
 
   /******************************************************
@@ -357,12 +357,12 @@ void MSTARImageIO::Read(void* buffer)
   byteorder = (int) CheckByteOrder();
   switch (byteorder)
     {
-  case LSB_FIRST:
-    printf("==> Little-Endian CPU detected: Will byteswap before scaling data!\n");
-    break;
-  case MSB_FIRST:
-    printf("==> Big-Endian CPU detected: No byteswap needed!\n");
-    break;
+    case LSB_FIRST:
+      printf("==> Little-Endian CPU detected: Will byteswap before scaling data!\n");
+      break;
+    case MSB_FIRST:
+      printf("==> Big-Endian CPU detected: No byteswap needed!\n");
+      break;
     }
 
   /******************************************************
@@ -386,148 +386,148 @@ void MSTARImageIO::Read(void* buffer)
   /* Open output file for writing... */
   switch (mstartype)
     {
-  case CHIP_IMAGE:
-    otbMsgDevMacro(<< " Chip and all ");
-    totchunks = nchunks * 2;
-    bytesPerImage = totchunks * sizeof(float);
-    CHIPdata = (float *) malloc(bytesPerImage);
+    case CHIP_IMAGE:
+      otbMsgDevMacro(<< " Chip and all ");
+      totchunks = nchunks * 2;
+      bytesPerImage = totchunks * sizeof(float);
+      CHIPdata = (float *) malloc(bytesPerImage);
 
-    if (CHIPdata == (float *) NULL)
-      {
-      fclose(MSTARfp);
-      itkExceptionMacro("Error: Unable to malloc CHIP memory!\n");
-
-      }
-
-    switch (byteorder)
-      {
-    case LSB_FIRST: /* Little-endian..do byteswap */
-
-      otbMsgDevMacro(<< "Performing auto-byteswap...\n");
-      for (i = 0; i < totchunks; ++i)
+      if (CHIPdata == (float *) NULL)
         {
-        fread(bigfloatbuf, sizeof(char), 4, MSTARfp);
-        littlefloatval = byteswap_SR_IR(bigfloatbuf);
-        CHIPdata[i] = littlefloatval;
+        fclose(MSTARfp);
+        itkExceptionMacro("Error: Unable to malloc CHIP memory!\n");
+
         }
-      break;
 
-    case MSB_FIRST: /* Big-endian..no swap */
-
-      numgot = fread(CHIPdata, sizeof(float), totchunks, MSTARfp);
-      break;
-      }
-
-    /* Writes ALL data or MAG only data based on totchunks */
-    //n = fwrite(CHIPdata, sizeof(float), totchunks, RAWfp);
-
-    // Recopie dans le buffer
-
-    for (int ci = 0; ci < nchunks; ++ci)
-      {
-      p[ci * 2] = CHIPdata[ci]; //magnitude
-      p[ci * 2 + 1] = CHIPdata[nchunks + ci]; //phase
-      }
-
-    /* Cleanup: Close file..free memory */
-    free(CHIPdata);
-    break; /* End of CHIP_IMAGE case */
-
-  case FSCENE_IMAGE:
-    bytesPerImage = nchunks * sizeof(short);
-    FSCENEdata = (unsigned short *) malloc(bytesPerImage);
-    if (FSCENEdata == (unsigned short *) NULL)
-      {
-      fclose(MSTARfp);
-      itkExceptionMacro(<< "Error: Unable to malloc fullscene memory!\n");
-      }
-
-    otbMsgDevMacro(<< "Reading MSTAR fullscene magnitude data from [" << MSTARname << "].");
-
-    switch (byteorder)
-      {
-    case LSB_FIRST: /* Little-endian..do byteswap */
-      otbMsgDevMacro(<< "Performing auto-byteswap...");
-      for (i = 0; i < nchunks; ++i)
+      switch (byteorder)
         {
-        fread(bigushortbuf, sizeof(char), 2, MSTARfp);
-        littleushortval = byteswap_SUS_IUS(bigushortbuf);
-        FSCENEdata[i] = littleushortval;
+        case LSB_FIRST: /* Little-endian..do byteswap */
+
+          otbMsgDevMacro(<< "Performing auto-byteswap...\n");
+          for (i = 0; i < totchunks; ++i)
+            {
+            fread(bigfloatbuf, sizeof(char), 4, MSTARfp);
+            littlefloatval = byteswap_SR_IR(bigfloatbuf);
+            CHIPdata[i] = littlefloatval;
+            }
+          break;
+
+        case MSB_FIRST: /* Big-endian..no swap */
+
+          numgot = fread(CHIPdata, sizeof(float), totchunks, MSTARfp);
+          break;
         }
-      break;
 
-    case MSB_FIRST: /* Big-endian..no swap */
-      numgot = fread(FSCENEdata, sizeof(short), nchunks, MSTARfp);
-      break;
-      }
+      /* Writes ALL data or MAG only data based on totchunks */
+      //n = fwrite(CHIPdata, sizeof(float), totchunks, RAWfp);
 
-    otbMsgDevMacro(<< "Writing MSTAR fullscene magnitude data to [" << RAWname << "].");
-    //n = fwrite(FSCENEdata, sizeof(short), nchunks, RAWfp);
-    for (int nbComponents = 0; nbComponents < 1; ++nbComponents)
-      {
       // Recopie dans le buffer
 
-      unsigned long cpt(0);
-      cpt = (unsigned long) (nbComponents) * (unsigned long) (m_NbOctetPixel);
-      for (unsigned long i = 0; i < lTailleBuffer; i = i + m_NbOctetPixel)
+      for (int ci = 0; ci < nchunks; ++ci)
         {
-        memcpy((void*) (&(p[cpt])), (const void*) (&(FSCENEdata[i])), (size_t) (m_NbOctetPixel));
-        cpt += step;
+        p[ci * 2] = CHIPdata[ci]; //magnitude
+        p[ci * 2 + 1] = CHIPdata[nchunks + ci]; //phase
         }
 
-      }
+      /* Cleanup: Close file..free memory */
+      free(CHIPdata);
+      break; /* End of CHIP_IMAGE case */
 
-    if (n != nchunks)
-      {
-      fclose(MSTARfp);
-      itkExceptionMacro(<< "Error: in writing MSTAR Fullscene data!");
-      }
-
-    otbMsgDevMacro(<< "Reading MSTAR fullscene phase data from [" << MSTARname << "].");
-
-    switch (byteorder)
-      {
-    case LSB_FIRST: /* Little-endian..do byteswap */
-      otbMsgDevMacro(<< "Performing auto-byteswap...");
-      for (i = 0; i < nchunks; ++i)
+    case FSCENE_IMAGE:
+      bytesPerImage = nchunks * sizeof(short);
+      FSCENEdata = (unsigned short *) malloc(bytesPerImage);
+      if (FSCENEdata == (unsigned short *) NULL)
         {
-        fread(bigushortbuf, sizeof(char), 2, MSTARfp);
-        littleushortval = byteswap_SUS_IUS(bigushortbuf);
-        FSCENEdata[i] = littleushortval;
+        fclose(MSTARfp);
+        itkExceptionMacro(<< "Error: Unable to malloc fullscene memory!\n");
         }
-      break;
 
-    case MSB_FIRST: /* Big-endian..no swap */
-      numgot = fread(FSCENEdata, sizeof(short), nchunks, MSTARfp);
-      break;
-      }
+      otbMsgDevMacro(<< "Reading MSTAR fullscene magnitude data from [" << MSTARname << "].");
 
-    otbMsgDevMacro(<< "Writing MSTAR fullscene phase data to [" << RAWname << "].");
+      switch (byteorder)
+        {
+        case LSB_FIRST: /* Little-endian..do byteswap */
+          otbMsgDevMacro(<< "Performing auto-byteswap...");
+          for (i = 0; i < nchunks; ++i)
+            {
+            fread(bigushortbuf, sizeof(char), 2, MSTARfp);
+            littleushortval = byteswap_SUS_IUS(bigushortbuf);
+            FSCENEdata[i] = littleushortval;
+            }
+          break;
+
+        case MSB_FIRST: /* Big-endian..no swap */
+          numgot = fread(FSCENEdata, sizeof(short), nchunks, MSTARfp);
+          break;
+        }
+
+      otbMsgDevMacro(<< "Writing MSTAR fullscene magnitude data to [" << RAWname << "].");
+      //n = fwrite(FSCENEdata, sizeof(short), nchunks, RAWfp);
+      for (int nbComponents = 0; nbComponents < 1; ++nbComponents)
+        {
+        // Recopie dans le buffer
+
+        unsigned long cpt(0);
+        cpt = (unsigned long) (nbComponents) * (unsigned long) (m_NbOctetPixel);
+        for (unsigned long i = 0; i < lTailleBuffer; i = i + m_NbOctetPixel)
+          {
+          memcpy((void*) (&(p[cpt])), (const void*) (&(FSCENEdata[i])), (size_t) (m_NbOctetPixel));
+          cpt += step;
+          }
+
+        }
+
+      if (n != nchunks)
+        {
+        fclose(MSTARfp);
+        itkExceptionMacro(<< "Error: in writing MSTAR Fullscene data!");
+        }
+
+      otbMsgDevMacro(<< "Reading MSTAR fullscene phase data from [" << MSTARname << "].");
+
+      switch (byteorder)
+        {
+        case LSB_FIRST: /* Little-endian..do byteswap */
+          otbMsgDevMacro(<< "Performing auto-byteswap...");
+          for (i = 0; i < nchunks; ++i)
+            {
+            fread(bigushortbuf, sizeof(char), 2, MSTARfp);
+            littleushortval = byteswap_SUS_IUS(bigushortbuf);
+            FSCENEdata[i] = littleushortval;
+            }
+          break;
+
+        case MSB_FIRST: /* Big-endian..no swap */
+          numgot = fread(FSCENEdata, sizeof(short), nchunks, MSTARfp);
+          break;
+        }
+
+      otbMsgDevMacro(<< "Writing MSTAR fullscene phase data to [" << RAWname << "].");
 //     n = fwrite(FSCENEdata, sizeof(short), nchunks, RAWfp);
-    for (unsigned int nbComponents = 1; nbComponents < this->GetNumberOfComponents(); ++nbComponents)
-      {
-      // Recopie dans le buffer
-
-      unsigned long cpt(0);
-      cpt = (unsigned long) (nbComponents) * (unsigned long) (m_NbOctetPixel);
-      for (unsigned long i = 0; i < lTailleBuffer; i = i + m_NbOctetPixel)
+      for (unsigned int nbComponents = 1; nbComponents < this->GetNumberOfComponents(); ++nbComponents)
         {
-        memcpy((void*) (&(p[cpt])), (const void*) (&(CHIPdata[i])), (size_t) (m_NbOctetPixel));
-        cpt += step;
+        // Recopie dans le buffer
+
+        unsigned long cpt(0);
+        cpt = (unsigned long) (nbComponents) * (unsigned long) (m_NbOctetPixel);
+        for (unsigned long i = 0; i < lTailleBuffer; i = i + m_NbOctetPixel)
+          {
+          memcpy((void*) (&(p[cpt])), (const void*) (&(CHIPdata[i])), (size_t) (m_NbOctetPixel));
+          cpt += step;
+          }
+
         }
 
-      }
+      if (n != nchunks)
+        {
+        fclose(MSTARfp);
+        itkExceptionMacro(<< "Error: in writing MSTAR Fullscene Phase data!");
+        }
 
-    if (n != nchunks)
-      {
-      fclose(MSTARfp);
-      itkExceptionMacro(<< "Error: in writing MSTAR Fullscene Phase data!");
-      }
+      /* Cleanup: free memory */
+      free(FSCENEdata);
 
-    /* Cleanup: free memory */
-    free(FSCENEdata);
-
-    break; /* End of FSCENE_IMAGE case */
+      break; /* End of FSCENE_IMAGE case */
 
     } /* End of 'mstartype' switch */
 

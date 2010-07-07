@@ -65,8 +65,8 @@ enum WaveletDirection {FORWARD, INVERSE};
  * \ingroup Operators
  */
 template <Wavelet::Wavelet TMotherWaveletOperator,
-          class TPixel, unsigned int VDimension,
-          class TAllocator = itk::NeighborhoodAllocator<TPixel> >
+    class TPixel, unsigned int VDimension,
+    class TAllocator = itk::NeighborhoodAllocator<TPixel> >
 class ITK_EXPORT WaveletOperatorBase
   : public itk::NeighborhoodOperator<TPixel, VDimension, TAllocator>
 {

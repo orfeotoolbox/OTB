@@ -77,8 +77,8 @@ int main(int argc, char* argv[])
 
 // Software Guide : BeginCodeSnippet
   typedef otb::PolarimetricSynthesisFilter<InputImageType, InputImageType,
-                                           InputImageType, InputImageType,
-                                           OutputImageType> FilterType;
+      InputImageType, InputImageType,
+      OutputImageType> FilterType;
 // Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex

@@ -31,7 +31,7 @@ namespace otb
  * Constructor
  */
 template <class TInputImageR, class TInputImageNIR,
-          class TOutputImage, class TFunction>
+    class TOutputImage, class TFunction>
 RAndNIRIndexImageFilter<TInputImageR, TInputImageNIR, TOutputImage, TFunction>
 ::RAndNIRIndexImageFilter()
 {
@@ -41,7 +41,7 @@ RAndNIRIndexImageFilter<TInputImageR, TInputImageNIR, TOutputImage, TFunction>
  * Connect one of the operands for pixel-wise addition
  */
 template <class TInputImageR, class TInputImageNIR,
-          class TOutputImage, class TFunction>
+    class TOutputImage, class TFunction>
 void
 RAndNIRIndexImageFilter<TInputImageR, TInputImageNIR, TOutputImage, TFunction>
 ::SetInputR(const TInputImageR * image1)
@@ -54,7 +54,7 @@ RAndNIRIndexImageFilter<TInputImageR, TInputImageNIR, TOutputImage, TFunction>
  * Connect one of the operands for pixel-wise addition
  */
 template <class TInputImageR, class TInputImageNIR,
-          class TOutputImage, class TFunction>
+    class TOutputImage, class TFunction>
 void
 RAndNIRIndexImageFilter<TInputImageR, TInputImageNIR, TOutputImage, TFunction>
 ::SetInputNIR(const TInputImageNIR * image2)

@@ -101,7 +101,7 @@ protected:
   <TPanImageType, InternalImageType> ConvolutionFilterType;
   typedef itk::DivideImageFilter
   <TXsImageType, InternalImageType,
-   InternalVectorImageType> DivideFilterType;
+      InternalVectorImageType> DivideFilterType;
   typedef itk::MultiplyImageFilter
   <InternalVectorImageType, TPanImageType, TOutputImageType> MultiplyFilterType;
 

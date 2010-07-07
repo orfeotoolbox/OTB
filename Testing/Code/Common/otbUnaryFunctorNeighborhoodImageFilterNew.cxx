@@ -46,7 +46,7 @@ int otbUnaryFunctorNeighborhoodImageFilterNew(int argc, char * argv[])
   typedef itk::ConstNeighborhoodIterator<ImageType>                                       IterType;
   typedef Functor::UnaryFunctorNeighborhoodImageFilterFunctorNewTest<IterType, PixelType> FunctorType;
   typedef otb::UnaryFunctorNeighborhoodImageFilter<ImageType, ImageType,
-                                                   FunctorType>     UnaryFunctorNeighborhoodImageFilterType;
+      FunctorType>     UnaryFunctorNeighborhoodImageFilterType;
 
   // Instantiating object
   UnaryFunctorNeighborhoodImageFilterType::Pointer object = UnaryFunctorNeighborhoodImageFilterType::New();

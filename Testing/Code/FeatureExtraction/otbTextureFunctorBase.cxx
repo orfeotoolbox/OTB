@@ -64,7 +64,7 @@ int otbTextureFunctorBase(int argc, char * argv[])
   typedef itk::ConstNeighborhoodIterator<ImageType>          IterType;
   typedef TextureFunctorTest<InputPixelType, InputPixelType> FunctorType;
   typedef otb::UnaryFunctorNeighborhoodWithOffsetImageFilter<ImageType, ImageType,
-                                                             FunctorType> UnaryFunctorNeighborhoodImageFilterType;
+      FunctorType> UnaryFunctorNeighborhoodImageFilterType;
 
   // Instantiating object
   UnaryFunctorNeighborhoodImageFilterType::Pointer object = UnaryFunctorNeighborhoodImageFilterType::New();

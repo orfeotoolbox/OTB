@@ -96,7 +96,7 @@ int otbImageFileReaderMSTAR(int argc, char* argv[])
     }
 
   typedef itk::RescaleIntensityImageFilter<InternalImageType,
-                                           OutputImageType> RescalerType;
+      OutputImageType> RescalerType;
 
   RescalerType::Pointer rescaler = RescalerType::New();
   rescaler->SetOutputMinimum(itk::NumericTraits<OutputPixelType>::min());

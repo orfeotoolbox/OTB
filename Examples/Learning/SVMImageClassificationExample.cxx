@@ -96,7 +96,7 @@ int main(int argc, char* argv[])
 
 // Software Guide : BeginCodeSnippet
   typedef otb::Image<itk::FixedArray<PixelType, 3>,
-                     Dimension>          InputImageType;
+      Dimension>          InputImageType;
 
   typedef otb::ImageFileReader<InputImageType> ReaderType;
 // Software Guide : EndCodeSnippet
@@ -293,7 +293,7 @@ int main(int argc, char* argv[])
   typedef otb::Image<unsigned char, Dimension> FileImageType;
 
   typedef itk::RescaleIntensityImageFilter<OutputImageType,
-                                           FileImageType> RescalerType;
+      FileImageType> RescalerType;
 
   RescalerType::Pointer rescaler = RescalerType::New();
 

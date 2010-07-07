@@ -113,7 +113,7 @@ int main(int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::VectorDataProjectionFilter<InputVectorDataType,
-                                          OutputVectorDataType>
+      OutputVectorDataType>
   VectorDataFilterType;
   VectorDataFilterType::Pointer vectorDataProjection =
     VectorDataFilterType::New();
