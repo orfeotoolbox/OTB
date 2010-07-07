@@ -59,7 +59,7 @@ KullbackLeiblerSupervizedDistance<TInput1, TInput2, TInputROIImage, TOutput>
   ROIConversionType1;
 
   typedef itk::ConstNeighborhoodIterator<
-    typename ROIConversionType1::OutputImageType> ROIInputType1;
+      typename ROIConversionType1::OutputImageType> ROIInputType1;
 
   typename ROIConversionType1::Pointer convertion1 = ROIConversionType1::New();
   convertion1->SetInputImage(img1);
@@ -82,7 +82,7 @@ KullbackLeiblerSupervizedDistance<TInput1, TInput2, TInputROIImage, TOutput>
   ROIConversionType2;
 
   typedef itk::ConstNeighborhoodIterator<
-    typename ROIConversionType2::OutputImageType> ROIInputType2;
+      typename ROIConversionType2::OutputImageType> ROIInputType2;
 
   typename ROIConversionType2::Pointer convertion2 = ROIConversionType2::New();
   convertion2->SetInputImage(img2);

@@ -42,7 +42,7 @@ int otbLineSpatialObjectListToRightAnglePointSetFilter(int argc, char * argv[])
   typedef std::vector<LineType*>                VectorLines;
   typedef itk::PointSet<VectorLines, Dimension> PointSetType;
   typedef otb::LineSpatialObjectListToRightAnglePointSetFilter<ImageType, LinesListType,
-                                                               PointSetType>    RightAngleFilterType;
+      PointSetType>    RightAngleFilterType;
 
   /** Creatop, of an instance of the filters */
   RightAngleFilterType::Pointer rightAngleFilter  = RightAngleFilterType::New();

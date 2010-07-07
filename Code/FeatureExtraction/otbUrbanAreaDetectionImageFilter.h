@@ -152,9 +152,9 @@ protected:
  *  \brief where the white areas represents the urban areas.
  */
 template <class TInputImage, class TOutputImage,
-          class TFunction = Functor::RadiometricNonWaterNonVegetationIndexFunctor<
-            typename TInputImage::PixelType,
-            typename TOutputImage::PixelType> >
+    class TFunction = Functor::RadiometricNonWaterNonVegetationIndexFunctor<
+        typename TInputImage::PixelType,
+        typename TOutputImage::PixelType> >
 class ITK_EXPORT UrbanAreaDetectionImageFilter :
   public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
@@ -183,18 +183,18 @@ public:
   /** Filters typedefs */
   // NonVegetationNonWaterIndexFilter
   typedef Functor::RadiometricNonWaterNonVegetationDetectionFunctor<VectorImagePixelType,
-                                                                    OutputImagePixelType> FunctorType;
+      OutputImagePixelType> FunctorType;
   typedef MultiChannelRAndGAndNIRIndexImageFilter <VectorImageType, OutputImageType,
-                                                   FunctorType>                           UrbanAreaExtractionFilterType;
+      FunctorType>                           UrbanAreaExtractionFilterType;
   typedef typename UrbanAreaExtractionFilterType::Pointer
-                                                                                          UrbanAreaExtrationFilterPointerType;
+  UrbanAreaExtrationFilterPointerType;
   // Erode/Dilate Filters
   typedef typename itk::BinaryBallStructuringElement<OutputImagePixelType,
-                                                     2>                 StructuringElementType;
+      2>                 StructuringElementType;
   typedef typename itk::BinaryErodeImageFilter<OutputImageType, OutputImageType,
-                                               StructuringElementType>  ErodeFilterType;
+      StructuringElementType>  ErodeFilterType;
   typedef typename itk::BinaryDilateImageFilter<OutputImageType, OutputImageType,
-                                                StructuringElementType> DilateFilterType;
+      StructuringElementType> DilateFilterType;
   // MaskImageFilter
   typedef typename itk::MaskImageFilter<VectorImageType, OutputImageType> MaskImageFilterType;
   typedef typename MaskImageFilterType::Pointer                           MaskImageFilterPointerType;
@@ -203,12 +203,12 @@ public:
   typedef typename IntensityFilterType::Pointer                               IntensityFilterPointerType;
   // EdgeDensityFilter
   typedef BinaryImageDensityFunction<SingleImageType>
-                                                                               CountFunctionType;
+  CountFunctionType;
   typedef itk::SobelEdgeDetectionImageFilter<SingleImageType, SingleImageType> SobelType;
   typedef EdgeDetectorImageFilter<SingleImageType, SingleImageType,
-                                  SobelType>                           SobelDetectorType;
+      SobelType>                           SobelDetectorType;
   typedef EdgeDensityImageFilter<SingleImageType, SingleImageType, SobelDetectorType,
-                                 CountFunctionType> EdgeDensityFilterType;
+      CountFunctionType> EdgeDensityFilterType;
   typedef typename EdgeDensityFilterType::Pointer
   EdgeDensityFilterPointerType;
   // Threshold

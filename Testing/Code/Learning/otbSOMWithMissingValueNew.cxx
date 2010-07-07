@@ -43,7 +43,7 @@ int otbSOMWithMissingValueNew(int argc, char * argv[])
   typedef otb::Functor::CzihoSOMLearningBehaviorFunctor     LearningBehaviorFunctorType;
   typedef otb::Functor::CzihoSOMNeighborhoodBehaviorFunctor NeighborhoodBehaviorFunctorType;
   typedef otb::SOMWithMissingValue<SampleListType, MapType,
-                                   LearningBehaviorFunctorType, NeighborhoodBehaviorFunctorType> SOMType;
+      LearningBehaviorFunctorType, NeighborhoodBehaviorFunctorType> SOMType;
 
   SOMType::Pointer som = SOMType::New();
 

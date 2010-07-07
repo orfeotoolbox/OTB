@@ -84,18 +84,18 @@ public:
   typedef TPoint                           PointType;
   typedef typename PointType::CoordRepType PrecisionType;
   typedef itk::CovariantVector<PrecisionType,
-                               PointDimension>  CovariantVectorType;
+      PointDimension>  CovariantVectorType;
   typedef std::pair<PointType, PointType> TiePointsType;
   typedef std::vector<TiePointsType>      TiePointsContainerType;
 
   /** Affine transform components typedefs */
   typedef itk::Matrix<PrecisionType,
-                      PointDimension,
-                      PointDimension>           MatrixType;
+      PointDimension,
+      PointDimension>           MatrixType;
   typedef itk::Vector<PrecisionType,
-                      PointDimension>           VectorType;
+      PointDimension>           VectorType;
   typedef itk::AffineTransform<PrecisionType,
-                               PointDimension>  AffineTransformType;
+      PointDimension>  AffineTransformType;
   typedef typename AffineTransformType::Pointer AffineTransformPointerType;
 
   /** Get the affine transform matrix */

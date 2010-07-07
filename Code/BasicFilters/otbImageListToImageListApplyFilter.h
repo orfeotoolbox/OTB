@@ -41,13 +41,13 @@ namespace otb
 template <class TInputImageList, class TOutputImageList, class TFilter>
 class ITK_EXPORT ImageListToImageListApplyFilter
   : public ImageListToImageListFilter<typename TInputImageList::ImageType,
-                                      typename TOutputImageList::ImageType>
+      typename TOutputImageList::ImageType>
 {
 public:
   /** Standard typedefs */
   typedef ImageListToImageListApplyFilter Self;
   typedef ImageListToImageListFilter<typename TInputImageList::ImageType,
-                                     typename TOutputImageList::ImageType> Superclass;
+      typename TOutputImageList::ImageType> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 

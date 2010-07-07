@@ -85,9 +85,9 @@ int otbTransformPointSetFilterTest(int, char*[])
 
   // Declare the type for the filter
   typedef otb::TransformPointSetFilter<
-    PointSetType,
-    PointSetType,
-    TransformType>       FilterType;
+      PointSetType,
+      PointSetType,
+      TransformType>       FilterType;
 
   // Create a Filter
   FilterType::Pointer filter = FilterType::New();

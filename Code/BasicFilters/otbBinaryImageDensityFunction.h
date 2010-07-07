@@ -44,13 +44,13 @@ namespace otb
 template <class TInputImage, class TCoordRep = float>
 class ITK_EXPORT BinaryImageDensityFunction :
   public itk::ImageFunction<TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::RealType,
-                            TCoordRep>
+      TCoordRep>
 {
 public:
   /** Standard class typedefs. */
   typedef BinaryImageDensityFunction Self;
   typedef itk::ImageFunction<TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::RealType,
-                             TCoordRep>                                          Superclass;
+      TCoordRep>                                          Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 

@@ -25,16 +25,16 @@
 namespace otb
 {
 template<class TInputPointSet,
-         class TTrainingPointSet>
+    class TTrainingPointSet>
 SVMPointSetModelEstimator<TInputPointSet, TTrainingPointSet>
 ::SVMPointSetModelEstimator(void) :  SVMModelEstimator<ITK_TYPENAME TInputPointSet::PixelType::value_type,
-                                                       ITK_TYPENAME TTrainingPointSet::PixelType>()
+      ITK_TYPENAME TTrainingPointSet::PixelType>()
 {
   this->SetNumberOfRequiredInputs(2);
 }
 
 template<class TInputPointSet,
-         class TTrainingPointSet>
+    class TTrainingPointSet>
 SVMPointSetModelEstimator<TInputPointSet, TTrainingPointSet>
 ::~SVMPointSetModelEstimator(void)
 {}
@@ -43,7 +43,7 @@ SVMPointSetModelEstimator<TInputPointSet, TTrainingPointSet>
  * PrintSelf
  */
 template<class TInputPointSet,
-         class TTrainingPointSet>
+    class TTrainingPointSet>
 void
 SVMPointSetModelEstimator<TInputPointSet, TTrainingPointSet>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
@@ -95,7 +95,7 @@ SVMPointSetModelEstimator<TInputPointSet, TTrainingPointSet>
  * Generate data (start the model building process)
  */
 template<class TInputPointSet,
-         class TTrainingPointSet>
+    class TTrainingPointSet>
 void
 SVMPointSetModelEstimator<TInputPointSet,  TTrainingPointSet>
 ::PrepareData()
@@ -110,7 +110,8 @@ SVMPointSetModelEstimator<TInputPointSet,  TTrainingPointSet>
   int trainingPointSetSize = trainingPointSet->GetNumberOfPoints();
 
   // Check if size of the two inputs are same
-  if (inputPointSetSize != trainingPointSetSize) throw itk::ExceptionObject(
+  if (inputPointSetSize != trainingPointSetSize)
+    throw itk::ExceptionObject(
       __FILE__,
       __LINE__,
       "Input pointset size is not the same as the training pointset size.",

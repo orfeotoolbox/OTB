@@ -41,9 +41,9 @@ namespace otb
  * \ingroup ImageFunctions
  */
 template <
-  class TImageType,
-  class TCoordRep = double,
-  class TCoefficientType = double>
+    class TImageType,
+    class TCoordRep = double,
+    class TCoefficientType = double>
 class ITK_EXPORT BSplineInterpolateImageFunction :
   public itk::InterpolateImageFunction<TImageType, TCoordRep>
 {
@@ -87,8 +87,8 @@ public:
   /** Internal Coefficient typedef support */
   typedef TCoefficientType CoefficientDataType;
   typedef itk::Image<CoefficientDataType,
-                     itkGetStaticConstMacro(ImageDimension)
-                     > CoefficientImageType;
+      itkGetStaticConstMacro(ImageDimension)
+      > CoefficientImageType;
 
   /** Define filter for calculating the BSpline coefficients */
   typedef otb::BSplineDecompositionImageFilter<TImageType, CoefficientImageType>
@@ -108,8 +108,8 @@ public:
 
   /** Derivative typedef support */
   typedef itk::CovariantVector<OutputType,
-                               itkGetStaticConstMacro(ImageDimension)
-                               > CovariantVectorType;
+      itkGetStaticConstMacro(ImageDimension)
+      > CovariantVectorType;
 
   CovariantVectorType EvaluateDerivative(const PointType& point) const
   {

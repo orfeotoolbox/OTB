@@ -49,20 +49,20 @@ namespace otb
 //} ProjectionTypeEnum;
 
 template <class TFirstTransform,
-          class TSecondTransform,
-          class TScalarType = typename TFirstTransform::ScalarType,
-          unsigned int NInputDimensions = TFirstTransform::InputSpaceDimension,
-          unsigned int NOutputDimensions = TSecondTransform::OutputSpaceDimension>
+    class TSecondTransform,
+    class TScalarType = typename TFirstTransform::ScalarType,
+    unsigned int NInputDimensions = TFirstTransform::InputSpaceDimension,
+    unsigned int NOutputDimensions = TSecondTransform::OutputSpaceDimension>
 class ITK_EXPORT CompositeTransform : public itk::Transform<TScalarType,  // Data type for scalars
-                                                            NInputDimensions, // Number of dimensions in the input space
-                                                            NOutputDimensions> // Number of dimensions in the output space
+      NInputDimensions,                                                       // Number of dimensions in the input space
+      NOutputDimensions>                                                       // Number of dimensions in the output space
 {
 public:
 
   /** Standard class typedefs */
   typedef itk::Transform<TScalarType,
-                         NInputDimensions,
-                         NOutputDimensions>         Superclass;
+      NInputDimensions,
+      NOutputDimensions>         Superclass;
   typedef CompositeTransform            Self;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;

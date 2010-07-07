@@ -55,7 +55,7 @@ int otbImageFileReaderERS(int argc, char* argv[])
   complexReader->SetFileName(inputFilename);
 
   typedef otb::MultiChannelExtractROI<InputPixelType,
-                                      OutputPixelType>  ExtractROIFilterType;
+      OutputPixelType>  ExtractROIFilterType;
 
   ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
 

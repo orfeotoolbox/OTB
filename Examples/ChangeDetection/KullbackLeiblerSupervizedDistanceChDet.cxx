@@ -90,7 +90,8 @@ int main(int argc, char * argv[])
     const char * outputImageFileName = parseResult->GetOutputImage().c_str();
 
     int winSize = 35;
-    if (parseResult->IsOptionPresent("--winSize")) winSize =
+    if (parseResult->IsOptionPresent("--winSize"))
+      winSize =
         parseResult->GetParameterInt("--winSize");
 
     /*
@@ -116,7 +117,7 @@ int main(int argc, char * argv[])
     imgRoi = readerRoi->GetOutput();
 
     typedef otb::KullbackLeiblerSupervizedDistanceImageFilter<
-      ImageType, ImageType, TrainingImageType, ImageType> FilterType;
+        ImageType, ImageType, TrainingImageType, ImageType> FilterType;
 
     FilterType::Pointer changeDetector = FilterType::New();
     changeDetector->SetRadius((winSize - 1) / 2);

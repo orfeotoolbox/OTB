@@ -205,7 +205,7 @@ ProlateFunction<TInput, TOutput>
 
 /** Constructor */
 template<class TInputImage, class TBoundaryCondition, class TCoordRep, class TInputInterpolator,
-         class TOutputInterpolator>
+    class TOutputInterpolator>
 ProlateInterpolateImageFunction<TInputImage, TBoundaryCondition, TCoordRep, TInputInterpolator, TOutputInterpolator>
 ::ProlateInterpolateImageFunction()
 {
@@ -215,14 +215,14 @@ ProlateInterpolateImageFunction<TInputImage, TBoundaryCondition, TCoordRep, TInp
 
 /** Destructor */
 template<class TInputImage, class TBoundaryCondition, class TCoordRep, class TInputInterpolator,
-         class TOutputInterpolator>
+    class TOutputInterpolator>
 ProlateInterpolateImageFunction<TInputImage, TBoundaryCondition, TCoordRep, TInputInterpolator, TOutputInterpolator>
 ::~ProlateInterpolateImageFunction()
 {
 }
 
 template<class TInputImage, class TBoundaryCondition, class TCoordRep, class TInputInterpolator,
-         class TOutputInterpolator>
+    class TOutputInterpolator>
 void
 ProlateInterpolateImageFunction<TInputImage, TBoundaryCondition, TCoordRep, TInputInterpolator, TOutputInterpolator>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const

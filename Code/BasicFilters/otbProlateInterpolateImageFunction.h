@@ -125,20 +125,20 @@ private:
  * \ingroup ImageFunctions ImageInterpolators
  */
 template<class TInputImage, class TBoundaryCondition = itk::ConstantBoundaryCondition<TInputImage>, class TCoordRep =
-           double, class TInputInterpolator = double, class TOutputInterpolator = double>
+      double, class TInputInterpolator = double, class TOutputInterpolator = double>
 class ITK_EXPORT ProlateInterpolateImageFunction :
   public GenericInterpolateImageFunction<TInputImage,
-                                         ITK_TYPENAME Function::ProlateFunction<TInputInterpolator, TOutputInterpolator>,
-                                         TBoundaryCondition,
-                                         TCoordRep>
+      ITK_TYPENAME Function::ProlateFunction<TInputInterpolator, TOutputInterpolator>,
+      TBoundaryCondition,
+      TCoordRep>
 {
 public:
   /** Standard class typedefs. */
   typedef ProlateInterpolateImageFunction Self;
   typedef GenericInterpolateImageFunction<TInputImage,
-                                          Function::ProlateFunction<TInputInterpolator, TOutputInterpolator>,
-                                          TBoundaryCondition,
-                                          TCoordRep>                                                    Superclass;
+      Function::ProlateFunction<TInputInterpolator, TOutputInterpolator>,
+      TBoundaryCondition,
+      TCoordRep>                                                    Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 

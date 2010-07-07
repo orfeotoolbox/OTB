@@ -30,7 +30,7 @@ int otbStreamingResampleImageFilterNew(int argc, char * argv[])
   typedef double                                 InterpolatorPrecisionType;
 
   typedef otb::StreamingResampleImageFilter<InputImageType, OutputImageType,
-                                            InterpolatorPrecisionType> StreamingResampleImageFilterType;
+      InterpolatorPrecisionType> StreamingResampleImageFilterType;
 
   // Instantiating object
   StreamingResampleImageFilterType::Pointer object = StreamingResampleImageFilterType::New();

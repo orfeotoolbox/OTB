@@ -37,10 +37,10 @@ int otbRenderingImageFilterVectorWithExpNegativeTransfer(int argc, char * argv[]
   typedef otb::Function::ChannelSelectorFunctor<VectorPixelType> PixelRepresentationFunctionType;
   typedef itk::Function::ExpNegative<PixelType, PixelType>       ExpNegativeFunctionType;
   typedef otb::Function::StandardRenderingFunction<
-    VectorPixelType,
-    itk::RGBPixel<unsigned char>,
-    PixelRepresentationFunctionType,
-    ExpNegativeFunctionType>                               RenderingFunctionType;
+      VectorPixelType,
+      itk::RGBPixel<unsigned char>,
+      PixelRepresentationFunctionType,
+      ExpNegativeFunctionType>                               RenderingFunctionType;
   typedef RenderingFunctionType::ParametersType ParametersType;
 
   // Instantiation

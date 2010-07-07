@@ -142,9 +142,9 @@ int main(int argc, char *argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::BayesianFusionFilter<MultiSpecImageType,
-                                    MultiSpecImageType,
-                                    PanchroImageType,
-                                    OutputImageType>
+      MultiSpecImageType,
+      PanchroImageType,
+      OutputImageType>
   BayesianFusionFilterType;
   // Software Guide : EndCodeSnippet
 
@@ -212,21 +212,21 @@ int main(int argc, char *argv[])
   typedef otb::VectorImage<OutputPixelType2, Dimension> OutputVectorImageType;
   typedef otb::ImageFileWriter<OutputVectorImageType>   VectorWriterType;
   typedef otb::VectorRescaleIntensityImageFilter<MultiSpecImageType,
-                                                 OutputVectorImageType>
+      OutputVectorImageType>
   VectorRescalerType;
   typedef otb::VectorRescaleIntensityImageFilter<OutputImageType,
-                                                 OutputVectorImageType>
+      OutputVectorImageType>
   VectorRescalerBayesianType;
   typedef otb::Image<OutputPixelType2,
-                     Dimension>
-                                                                PanchroOutputImageType;
+      Dimension>
+  PanchroOutputImageType;
   typedef otb::ImageToVectorImageCastFilter<PanchroImageType,
-                                            MultiSpecImageType> CasterType;
+      MultiSpecImageType> CasterType;
   typedef otb::MultiChannelExtractROI<OutputPixelType2,
-                                      OutputPixelType2>
-                                                                ChannelExtractorType;
+      OutputPixelType2>
+  ChannelExtractorType;
   typedef otb::ImageFileWriter<PanchroOutputImageType>
-                                                                WriterType2;
+  WriterType2;
 
   multiSpectReader->GenerateOutputInformation();
   multiSpectInterpReader->GenerateOutputInformation();

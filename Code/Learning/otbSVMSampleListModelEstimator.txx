@@ -26,14 +26,14 @@
 namespace otb
 {
 template<class TInputSampleList,
-         class TTrainingSampleList, class TMeasurementFunctor>
+    class TTrainingSampleList, class TMeasurementFunctor>
 SVMSampleListModelEstimator<TInputSampleList, TTrainingSampleList, TMeasurementFunctor>
 ::SVMSampleListModelEstimator(void) :  SVMModelEstimator<ITK_TYPENAME TInputSampleList::MeasurementType,
-                                                         ITK_TYPENAME TTrainingSampleList::MeasurementType>()
+      ITK_TYPENAME TTrainingSampleList::MeasurementType>()
 {}
 
 template<class TInputSampleList,
-         class TTrainingSampleList, class TMeasurementFunctor>
+    class TTrainingSampleList, class TMeasurementFunctor>
 SVMSampleListModelEstimator<TInputSampleList, TTrainingSampleList, TMeasurementFunctor>
 ::~SVMSampleListModelEstimator(void)
 {}
@@ -42,7 +42,7 @@ SVMSampleListModelEstimator<TInputSampleList, TTrainingSampleList, TMeasurementF
  * PrintSelf
  */
 template<class TInputSampleList,
-         class TTrainingSampleList, class TMeasurementFunctor>
+    class TTrainingSampleList, class TMeasurementFunctor>
 void
 SVMSampleListModelEstimator<TInputSampleList, TTrainingSampleList, TMeasurementFunctor>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
@@ -54,7 +54,7 @@ SVMSampleListModelEstimator<TInputSampleList, TTrainingSampleList, TMeasurementF
  * Generate data (start the model building process)
  */
 template<class TInputSampleList,
-         class TTrainingSampleList, class TMeasurementFunctor>
+    class TTrainingSampleList, class TMeasurementFunctor>
 void
 SVMSampleListModelEstimator<TInputSampleList, TTrainingSampleList, TMeasurementFunctor>
 ::PrepareData()
@@ -68,7 +68,8 @@ SVMSampleListModelEstimator<TInputSampleList, TTrainingSampleList, TMeasurementF
   int trainingSampleListSize = trainingSampleList->Size();
 
   // Check if size of the two inputs are same
-  if (inputSampleListSize != trainingSampleListSize) throw itk::ExceptionObject(
+  if (inputSampleListSize != trainingSampleListSize)
+    throw itk::ExceptionObject(
       __FILE__,
       __LINE__,
       "Input pointset size is not the same as the training pointset size.",

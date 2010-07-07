@@ -319,7 +319,7 @@ Polygon<TValue>
       {
       double xcross = (oo2 - oo1) / (cd1 - cd2);
       resp = (xamin <xcross  && xbmin <xcross
-                                       &&   xamax> xcross  && xbmax> xcross);
+                      &&   xamax> xcross  && xbmax> xcross);
       }
     }
   return resp;

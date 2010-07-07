@@ -42,14 +42,14 @@ namespace otb
 template<class TInputImage, class TOutputImage>
 class ITK_EXPORT SEMClassifier
   : public itk::Statistics::SampleClassifier<
-    typename itk::Statistics::ListSample<typename TInputImage::PixelType> >
+      typename itk::Statistics::ListSample<typename TInputImage::PixelType> >
 {
 public:
   /** Standard class typedef*/
   typedef SEMClassifier Self;
   //typedef itk::Object Superclass;
   typedef itk::Statistics::SampleClassifier<
-    typename itk::Statistics::ListSample<typename TInputImage::PixelType> >
+      typename itk::Statistics::ListSample<typename TInputImage::PixelType> >
   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;

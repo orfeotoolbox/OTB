@@ -23,9 +23,9 @@
 int otbScalarImageToAdvancedTexturesFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef double                                 PixelType;
-  typedef otb::Image<PixelType, Dimension>       ImageType;
-  typedef otb::ScalarImageToAdvancedTexturesFilter<ImageType,ImageType> FilterType;
+  typedef double                                                         PixelType;
+  typedef otb::Image<PixelType, Dimension>                               ImageType;
+  typedef otb::ScalarImageToAdvancedTexturesFilter<ImageType, ImageType> FilterType;
 
   FilterType::Pointer filter = FilterType::New();
 

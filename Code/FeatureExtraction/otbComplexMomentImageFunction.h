@@ -46,9 +46,9 @@ namespace otb
  * \ingroup ImageFunctions
  */
 template <class TInput,
-          class TOutput = std::complex<double>,
-          class TPrecision = double,
-          class TCoordRep = float>
+    class TOutput = std::complex<double>,
+    class TPrecision = double,
+    class TCoordRep = float>
 class ITK_EXPORT ComplexMomentImageFunction :
   public GeometricMomentImageFunction<TInput, TOutput, TPrecision, TCoordRep>
 {

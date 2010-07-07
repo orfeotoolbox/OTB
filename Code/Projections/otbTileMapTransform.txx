@@ -25,7 +25,7 @@ namespace otb
 {
 
 template<InverseOrForwardTransformationEnum TTransformDirection, class TScalarType,
-         unsigned int NInputDimensions, unsigned int NOutputDimensions>
+    unsigned int NInputDimensions, unsigned int NOutputDimensions>
 TileMapTransform<TTransformDirection, TScalarType, NInputDimensions, NOutputDimensions>
 ::TileMapTransform() : Superclass(SpaceDimension, ParametersDimension)
 {
@@ -33,7 +33,7 @@ TileMapTransform<TTransformDirection, TScalarType, NInputDimensions, NOutputDime
 }
 
 template<InverseOrForwardTransformationEnum TTransformDirection, class TScalarType,
-         unsigned int NInputDimensions, unsigned int NOutputDimensions>
+    unsigned int NInputDimensions, unsigned int NOutputDimensions>
 TileMapTransform<TTransformDirection, TScalarType, NInputDimensions, NOutputDimensions>
 ::~TileMapTransform()
 {
@@ -41,7 +41,7 @@ TileMapTransform<TTransformDirection, TScalarType, NInputDimensions, NOutputDime
 }
 
 template<InverseOrForwardTransformationEnum TTransformDirection, class TScalarType,
-         unsigned int NInputDimensions, unsigned int NOutputDimensions>
+    unsigned int NInputDimensions, unsigned int NOutputDimensions>
 typename TileMapTransform<TTransformDirection, TScalarType, NInputDimensions, NOutputDimensions>::OutputPointType
 TileMapTransform<TTransformDirection, TScalarType, NInputDimensions, NOutputDimensions>
 ::TransformPoint(const InputPointType& point) const
@@ -50,48 +50,48 @@ TileMapTransform<TTransformDirection, TScalarType, NInputDimensions, NOutputDime
 
   switch (DirectionOfMapping)
     {
-  case INVERSE:
-    {
+    case INVERSE:
+      {
 //         otbMsgDevMacro(<< "Cartographic coordinates: (" << point[0] << "," << point[1] << ")");
 
-    //from "itk::point" to "ossim::ossimDpt"
-    ossimDpt ossimDPoint(point[0], point[1]);
+      //from "itk::point" to "ossim::ossimDpt"
+      ossimDpt ossimDPoint(point[0], point[1]);
 
-    //map projection
-    ossimGpt ossimGPoint;
+      //map projection
+      ossimGpt ossimGPoint;
 //         ossimGPoint=m_TileMapTransform->inverse(ossimDPoint);
-    m_TileMapTransform->lineSampleToWorld(ossimDPoint, ossimGPoint);
+      m_TileMapTransform->lineSampleToWorld(ossimDPoint, ossimGPoint);
 //     otbGenericMsgDebugMacro(<< "Inverse : " << std::endl << m_TileMapTransform->print(std::cout));
 
-    outputPoint[0] = ossimGPoint.lon;
-    outputPoint[1] = ossimGPoint.lat;
+      outputPoint[0] = ossimGPoint.lon;
+      outputPoint[1] = ossimGPoint.lat;
 //         otbMsgDevMacro(<< "Geographic coordinates (long/lat) : (" << outputPoint[0] << "," << outputPoint[1] << ")");
-    break;
-    }
-  case FORWARD:
-    {
+      break;
+      }
+    case FORWARD:
+      {
 //         otbMsgDevMacro(<< "Geographic coordinates (long/lat) : (" << point[1] << "," << point[0] << ")");
-    //from "itk::point" to "ossim::ossimGpt"
-    ossimGpt ossimGPoint(point[1], point[0]);
+      //from "itk::point" to "ossim::ossimGpt"
+      ossimGpt ossimGPoint(point[1], point[0]);
 
-    //map projection
-    ossimDpt ossimDPoint;
+      //map projection
+      ossimDpt ossimDPoint;
 //         ossimDPoint=m_TileMapTransform->forward(ossimGPoint);
-    m_TileMapTransform->worldToLineSample(ossimGPoint, ossimDPoint);
+      m_TileMapTransform->worldToLineSample(ossimGPoint, ossimDPoint);
 //     otbGenericMsgDebugMacro(<< "Forward : ========================= \n"
 //                             << m_TileMapTransform->print(std::cout));
-    outputPoint[0] = ossimDPoint.x;
-    outputPoint[1] = ossimDPoint.y;
+      outputPoint[0] = ossimDPoint.x;
+      outputPoint[1] = ossimDPoint.y;
 
 //         otbMsgDevMacro(<< "Cartographic coordinates: (" << outputPoint[0] << "," << outputPoint[1] << ")");
 
-    break;
-    }
-  default:
-    {
-    itkExceptionMacro(<< "Model is INVERSE or FORWARD only !!");
-    break;
-    }
+      break;
+      }
+    default:
+      {
+      itkExceptionMacro(<< "Model is INVERSE or FORWARD only !!");
+      break;
+      }
     }
 
   return outputPoint;
@@ -99,7 +99,7 @@ TileMapTransform<TTransformDirection, TScalarType, NInputDimensions, NOutputDime
 
 ///\return The geographic point corresponding to (0,0)
 template<InverseOrForwardTransformationEnum TTransformDirection, class TScalarType,
-         unsigned int NInputDimensions, unsigned int NOutputDimensions>
+    unsigned int NInputDimensions, unsigned int NOutputDimensions>
 typename TileMapTransform<TTransformDirection, TScalarType, NInputDimensions, NOutputDimensions>::InputPointType
 TileMapTransform<TTransformDirection, TScalarType, NInputDimensions, NOutputDimensions>
 ::Origin()
@@ -113,7 +113,7 @@ TileMapTransform<TTransformDirection, TScalarType, NInputDimensions, NOutputDime
 }
 
 template<InverseOrForwardTransformationEnum TTransformDirection, class TScalarType,
-         unsigned int NInputDimensions, unsigned int NOutputDimensions>
+    unsigned int NInputDimensions, unsigned int NOutputDimensions>
 void
 TileMapTransform<TTransformDirection, TScalarType, NInputDimensions, NOutputDimensions>
 ::PrintMap() const
@@ -122,7 +122,7 @@ TileMapTransform<TTransformDirection, TScalarType, NInputDimensions, NOutputDime
 }
 
 template<InverseOrForwardTransformationEnum TTransformDirection, class TScalarType,
-         unsigned int NInputDimensions, unsigned int NOutputDimensions>
+    unsigned int NInputDimensions, unsigned int NOutputDimensions>
 void TileMapTransform<TTransformDirection, TScalarType, NInputDimensions, NOutputDimensions>
 ::SetLevel(unsigned int level)
 {
@@ -130,7 +130,7 @@ void TileMapTransform<TTransformDirection, TScalarType, NInputDimensions, NOutpu
 }
 
 template<InverseOrForwardTransformationEnum TTransformDirection, class TScalarType,
-         unsigned int NInputDimensions, unsigned int NOutputDimensions>
+    unsigned int NInputDimensions, unsigned int NOutputDimensions>
 unsigned int TileMapTransform<TTransformDirection, TScalarType, NInputDimensions, NOutputDimensions>
 ::GetLevel() const
 {

@@ -148,8 +148,8 @@ template<class TImage, class TFeatureImage>
 class ITK_EXPORT RadiometricAttributesLabelMapFilter
   : public LabelMapFeaturesFunctorImageFilter
   <TImage,
-   typename Functor::MultiStatsAttributesLabelObjectFunctor
-   <typename TImage::LabelObjectType, otb::Image<double, 2> > >
+      typename Functor::MultiStatsAttributesLabelObjectFunctor
+      <typename TImage::LabelObjectType, otb::Image<double, 2> > >
 {
 public:
   /** Some convenient typedefs. */
@@ -184,42 +184,42 @@ public:
 
   // GEMI
   typedef Functor::GEMI <FeatureInternalPixelType,
-                         FeatureInternalPixelType, InternalPrecisionType>        GEMIFunctorType;
+      FeatureInternalPixelType, InternalPrecisionType>        GEMIFunctorType;
   typedef MultiChannelRAndNIRIndexImageFilter
   <FeatureImageType, InternalImageType, GEMIFunctorType>  GEMIFilterType;
   typedef typename GEMIFilterType::Pointer GEMIFilterPointerType;
 
   // NDVI
   typedef Functor::NDVI <FeatureInternalPixelType,
-                         FeatureInternalPixelType, InternalPrecisionType>        NDVIFunctorType;
+      FeatureInternalPixelType, InternalPrecisionType>        NDVIFunctorType;
   typedef MultiChannelRAndNIRIndexImageFilter
   <FeatureImageType, InternalImageType, NDVIFunctorType>  NDVIFilterType;
   typedef typename NDVIFilterType::Pointer NDVIFilterPointerType;
 
   // IR
   typedef Functor::IR <FeatureInternalPixelType,
-                       FeatureInternalPixelType, InternalPrecisionType>        IRFunctorType;
+      FeatureInternalPixelType, InternalPrecisionType>        IRFunctorType;
   typedef MultiChannelGAndRIndexImageFilter
   <FeatureImageType, InternalImageType, IRFunctorType>    IRFilterType;
   typedef typename IRFilterType::Pointer IRFilterPointerType;
 
   // IC
   typedef Functor::IC <FeatureInternalPixelType,
-                       FeatureInternalPixelType, InternalPrecisionType>        ICFunctorType;
+      FeatureInternalPixelType, InternalPrecisionType>        ICFunctorType;
   typedef MultiChannelGAndRIndexImageFilter
   <FeatureImageType, InternalImageType, ICFunctorType>    ICFilterType;
   typedef typename ICFilterType::Pointer ICFilterPointerType;
 
   // IB
   typedef Functor::IB <FeatureInternalPixelType,
-                       FeatureInternalPixelType, InternalPrecisionType>        IBFunctorType;
+      FeatureInternalPixelType, InternalPrecisionType>        IBFunctorType;
   typedef MultiChannelGAndRIndexImageFilter
   <FeatureImageType, InternalImageType, IBFunctorType>    IBFilterType;
   typedef typename IBFilterType::Pointer IBFilterPointerType;
 
   // NDWI2
   typedef Functor::NDWI2 <FeatureInternalPixelType,
-                          FeatureInternalPixelType, InternalPrecisionType>        NDWI2FunctorType;
+      FeatureInternalPixelType, InternalPrecisionType>        NDWI2FunctorType;
   typedef itk::UnaryFunctorImageFilter
   <FeatureImageType, InternalImageType, NDWI2FunctorType> NDWI2FilterType;
   typedef typename NDWI2FilterType::Pointer NDWI2FilterPointerType;

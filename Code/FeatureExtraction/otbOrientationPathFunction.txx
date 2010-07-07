@@ -36,7 +36,7 @@ OrientationPathFunction<TInputPath, TOutput>
 
 template <class TInputPath, class TOutput>
 typename OrientationPathFunction<TInputPath,
-                                 TOutput>::OutputType
+    TOutput>::OutputType
 OrientationPathFunction<TInputPath, TOutput>
 ::Evaluate(const PathType& path) const
 {
@@ -72,7 +72,7 @@ OrientationPathFunction<TInputPath, TOutput>
 
 template <class TInputPath, class TOutput>
 typename OrientationPathFunction<TInputPath,
-                                 TOutput>::OutputType
+    TOutput>::OutputType
 OrientationPathFunction<TInputPath, TOutput>
 ::Evaluate() const
 {

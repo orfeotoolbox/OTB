@@ -42,7 +42,7 @@ namespace otb
 template <class TInputImage>
 ImageFileWriter<TInputImage>
 ::ImageFileWriter() : itk::ImageFileWriter<TInputImage>()
-, m_WriteGeomFile(false)
+  , m_WriteGeomFile(false)
 {
   m_BufferMemorySize = 0;
   m_BufferNumberOfLinesDivisions = 0;
@@ -95,9 +95,9 @@ ImageFileWriter<TInputImage>
     itk::ExposeMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
     otb_kwl.convertToOSSIMKeywordlist(geom_kwl);
 
-    if(geom_kwl.getSize()>0)
+    if (geom_kwl.getSize() > 0)
       {
-      otbMsgDevMacro(<<"Exporting keywordlist ...");
+      otbMsgDevMacro(<< "Exporting keywordlist ...");
       ossimFilename geomFileName(this->GetFileName());
       geomFileName.setExtension(".geom");
       geom_kwl.write(geomFileName.chars());

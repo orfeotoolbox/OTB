@@ -46,7 +46,7 @@ namespace otb {
  * \sa DecimateImageFilter
  */
 template <class TInputImage, class TOutputImage,
-          Wavelet::WaveletDirection TDirectionOfTransformation>
+    Wavelet::WaveletDirection TDirectionOfTransformation>
 class ITK_EXPORT SubsampleImageFilter :
   public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {

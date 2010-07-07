@@ -77,7 +77,7 @@ GetInput(void)
 /** Return the intput image direction */
 template <class TInputImage, class TInputImageDirection, class TOutputImage>
 const typename ModulusAndDirectionImageToImageFilter<TInputImage, TInputImageDirection,
-                                                     TOutputImage>::InputImageDirectionType *
+    TOutputImage>::InputImageDirectionType *
 ModulusAndDirectionImageToImageFilter<TInputImage, TInputImageDirection, TOutputImage>::
 GetInputDirection(void)
 {

@@ -31,9 +31,9 @@ namespace otb
  */
 
 template <class TInput,
-          class TOutput = float,
-          class TPrecision = double,
-          class TCoordRep = float>
+    class TOutput = float,
+    class TPrecision = double,
+    class TCoordRep = float>
 class ITK_EXPORT GeometricMomentImageFunction :
   public itk::ImageFunction<TInput, TOutput, TCoordRep>
 {

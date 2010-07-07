@@ -59,8 +59,8 @@ namespace otb
  * \ingroup MultiThreaded
  */
 template <class TInputImage, class TOutputImage, class TBoundaryCondition =
-            itk::ZeroFluxNeumannBoundaryCondition<TInputImage>,
-          class TFilterPrecision = typename itk::NumericTraits<typename TInputImage::InternalPixelType>::RealType >
+      itk::ZeroFluxNeumannBoundaryCondition<TInputImage>,
+    class TFilterPrecision = typename itk::NumericTraits<typename TInputImage::InternalPixelType>::RealType>
 class ITK_EXPORT ConvolutionImageFilter :
   public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {

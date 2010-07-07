@@ -262,87 +262,87 @@ BSplineInterpolateImageFunction<TImageType, TCoordRep, TCoefficientType>
 
   switch (splineOrder)
     {
-  case 3:
-    for (unsigned int n = 0; n < ImageDimension; ++n)
-      {
-      w = x[n] - (double) EvaluateIndex[n][1];
-      weights[n][3] = (1.0 / 6.0) * w * w * w;
-      weights[n][0] = (1.0 / 6.0) + 0.5 * w * (w - 1.0) - weights[n][3];
-      weights[n][2] = w + weights[n][0] - 2.0 * weights[n][3];
-      weights[n][1] = 1.0 - weights[n][0] - weights[n][2] - weights[n][3];
-      }
-    break;
-  case 0:
-    for (unsigned int n = 0; n < ImageDimension; ++n)
-      {
-      weights[n][0] = 1; // implements nearest neighbor
-      }
-    break;
-  case 1:
-    for (unsigned int n = 0; n < ImageDimension; ++n)
-      {
-      w = x[n] - (double) EvaluateIndex[n][0];
-      weights[n][1] = w;
-      weights[n][0] = 1.0 - w;
-      }
-    break;
-  case 2:
-    for (unsigned int n = 0; n < ImageDimension; ++n)
-      {
-      /* x */
-      w = x[n] - (double) EvaluateIndex[n][1];
-      weights[n][1] = 0.75 - w * w;
-      weights[n][2] = 0.5 * (w - weights[n][1] + 1.0);
-      weights[n][0] = 1.0 - weights[n][1] - weights[n][2];
-      }
-    break;
-  case 4:
-    for (unsigned int n = 0; n < ImageDimension; ++n)
-      {
-      /* x */
-      w = x[n] - (double) EvaluateIndex[n][2];
-      w2 = w * w;
-      t = (1.0 / 6.0) * w2;
-      weights[n][0] = 0.5 - w;
-      weights[n][0] *= weights[n][0];
-      weights[n][0] *= (1.0 / 24.0) * weights[n][0];
-      t0 = w * (t - 11.0 / 24.0);
-      t1 = 19.0 / 96.0 + w2 * (0.25 - t);
-      weights[n][1] = t1 + t0;
-      weights[n][3] = t1 - t0;
-      weights[n][4] = weights[n][0] + t0 + 0.5 * w;
-      weights[n][2] = 1.0 - weights[n][0] - weights[n][1] - weights[n][3] - weights[n][4];
-      }
-    break;
-  case 5:
-    for (unsigned int n = 0; n < ImageDimension; ++n)
-      {
-      /* x */
-      w = x[n] - (double) EvaluateIndex[n][2];
-      w2 = w * w;
-      weights[n][5] = (1.0 / 120.0) * w * w2 * w2;
-      w2 -= w;
-      w4 = w2 * w2;
-      w -= 0.5;
-      t = w2 * (w2 - 3.0);
-      weights[n][0] = (1.0 / 24.0) * (1.0 / 5.0 + w2 + w4) - weights[n][5];
-      t0 = (1.0 / 24.0) * (w2 * (w2 - 5.0) + 46.0 / 5.0);
-      t1 = (-1.0 / 12.0) * w * (t + 4.0);
-      weights[n][2] = t0 + t1;
-      weights[n][3] = t0 - t1;
-      t0 = (1.0 / 16.0) * (9.0 / 5.0 - t);
-      t1 = (1.0 / 24.0) * w * (w4 - w2 - 5.0);
-      weights[n][1] = t0 + t1;
-      weights[n][4] = t0 - t1;
-      }
-    break;
-  default:
-    // SplineOrder not implemented yet.
-    itk::ExceptionObject err(__FILE__, __LINE__);
-    err.SetLocation(ITK_LOCATION);
-    err.SetDescription("SplineOrder must be between 0 and 5. Requested spline order has not been implemented yet.");
-    throw err;
-    break;
+    case 3:
+      for (unsigned int n = 0; n < ImageDimension; ++n)
+        {
+        w = x[n] - (double) EvaluateIndex[n][1];
+        weights[n][3] = (1.0 / 6.0) * w * w * w;
+        weights[n][0] = (1.0 / 6.0) + 0.5 * w * (w - 1.0) - weights[n][3];
+        weights[n][2] = w + weights[n][0] - 2.0 * weights[n][3];
+        weights[n][1] = 1.0 - weights[n][0] - weights[n][2] - weights[n][3];
+        }
+      break;
+    case 0:
+      for (unsigned int n = 0; n < ImageDimension; ++n)
+        {
+        weights[n][0] = 1; // implements nearest neighbor
+        }
+      break;
+    case 1:
+      for (unsigned int n = 0; n < ImageDimension; ++n)
+        {
+        w = x[n] - (double) EvaluateIndex[n][0];
+        weights[n][1] = w;
+        weights[n][0] = 1.0 - w;
+        }
+      break;
+    case 2:
+      for (unsigned int n = 0; n < ImageDimension; ++n)
+        {
+        /* x */
+        w = x[n] - (double) EvaluateIndex[n][1];
+        weights[n][1] = 0.75 - w * w;
+        weights[n][2] = 0.5 * (w - weights[n][1] + 1.0);
+        weights[n][0] = 1.0 - weights[n][1] - weights[n][2];
+        }
+      break;
+    case 4:
+      for (unsigned int n = 0; n < ImageDimension; ++n)
+        {
+        /* x */
+        w = x[n] - (double) EvaluateIndex[n][2];
+        w2 = w * w;
+        t = (1.0 / 6.0) * w2;
+        weights[n][0] = 0.5 - w;
+        weights[n][0] *= weights[n][0];
+        weights[n][0] *= (1.0 / 24.0) * weights[n][0];
+        t0 = w * (t - 11.0 / 24.0);
+        t1 = 19.0 / 96.0 + w2 * (0.25 - t);
+        weights[n][1] = t1 + t0;
+        weights[n][3] = t1 - t0;
+        weights[n][4] = weights[n][0] + t0 + 0.5 * w;
+        weights[n][2] = 1.0 - weights[n][0] - weights[n][1] - weights[n][3] - weights[n][4];
+        }
+      break;
+    case 5:
+      for (unsigned int n = 0; n < ImageDimension; ++n)
+        {
+        /* x */
+        w = x[n] - (double) EvaluateIndex[n][2];
+        w2 = w * w;
+        weights[n][5] = (1.0 / 120.0) * w * w2 * w2;
+        w2 -= w;
+        w4 = w2 * w2;
+        w -= 0.5;
+        t = w2 * (w2 - 3.0);
+        weights[n][0] = (1.0 / 24.0) * (1.0 / 5.0 + w2 + w4) - weights[n][5];
+        t0 = (1.0 / 24.0) * (w2 * (w2 - 5.0) + 46.0 / 5.0);
+        t1 = (-1.0 / 12.0) * w * (t + 4.0);
+        weights[n][2] = t0 + t1;
+        weights[n][3] = t0 - t1;
+        t0 = (1.0 / 16.0) * (9.0 / 5.0 - t);
+        t1 = (1.0 / 24.0) * w * (w4 - w2 - 5.0);
+        weights[n][1] = t0 + t1;
+        weights[n][4] = t0 - t1;
+        }
+      break;
+    default:
+      // SplineOrder not implemented yet.
+      itk::ExceptionObject err(__FILE__, __LINE__);
+      err.SetLocation(ITK_LOCATION);
+      err.SetDescription("SplineOrder must be between 0 and 5. Requested spline order has not been implemented yet.");
+      throw err;
+      break;
     }
 
 }
@@ -364,98 +364,98 @@ BSplineInterpolateImageFunction<TImageType, TCoordRep, TCoefficientType>
   switch (derivativeSplineOrder)
     {
 
-  // Calculates B(splineOrder) ( (x + 1/2) - xi) - B(splineOrder -1) ( (x - 1/2) - xi)
-  case -1:
-    // Why would we want to do this?
-    for (unsigned int n = 0; n < ImageDimension; ++n)
-      {
-      weights[n][0] = 0.0;
-      }
-    break;
-  case 0:
-    for (unsigned int n = 0; n < ImageDimension; ++n)
-      {
-      weights[n][0] = -1.0;
-      weights[n][1] =  1.0;
-      }
-    break;
-  case 1:
-    for (unsigned int n = 0; n < ImageDimension; ++n)
-      {
-      w = x[n] + 0.5 - (double) EvaluateIndex[n][1];
-      // w2 = w;
-      w1 = 1.0 - w;
+    // Calculates B(splineOrder) ( (x + 1/2) - xi) - B(splineOrder -1) ( (x - 1/2) - xi)
+    case -1:
+      // Why would we want to do this?
+      for (unsigned int n = 0; n < ImageDimension; ++n)
+        {
+        weights[n][0] = 0.0;
+        }
+      break;
+    case 0:
+      for (unsigned int n = 0; n < ImageDimension; ++n)
+        {
+        weights[n][0] = -1.0;
+        weights[n][1] =  1.0;
+        }
+      break;
+    case 1:
+      for (unsigned int n = 0; n < ImageDimension; ++n)
+        {
+        w = x[n] + 0.5 - (double) EvaluateIndex[n][1];
+        // w2 = w;
+        w1 = 1.0 - w;
 
-      weights[n][0] = 0.0 - w1;
-      weights[n][1] = w1 - w;
-      weights[n][2] = w;
-      }
-    break;
-  case 2:
+        weights[n][0] = 0.0 - w1;
+        weights[n][1] = w1 - w;
+        weights[n][2] = w;
+        }
+      break;
+    case 2:
 
-    for (unsigned int n = 0; n < ImageDimension; ++n)
-      {
-      w = x[n] + .5 - (double) EvaluateIndex[n][2];
-      w2 = 0.75 - w * w;
-      w3 = 0.5 * (w - w2 + 1.0);
-      w1 = 1.0 - w2 - w3;
+      for (unsigned int n = 0; n < ImageDimension; ++n)
+        {
+        w = x[n] + .5 - (double) EvaluateIndex[n][2];
+        w2 = 0.75 - w * w;
+        w3 = 0.5 * (w - w2 + 1.0);
+        w1 = 1.0 - w2 - w3;
 
-      weights[n][0] = 0.0 - w1;
-      weights[n][1] = w1 - w2;
-      weights[n][2] = w2 - w3;
-      weights[n][3] = w3;
-      }
-    break;
-  case 3:
+        weights[n][0] = 0.0 - w1;
+        weights[n][1] = w1 - w2;
+        weights[n][2] = w2 - w3;
+        weights[n][3] = w3;
+        }
+      break;
+    case 3:
 
-    for (unsigned int n = 0; n < ImageDimension; ++n)
-      {
-      w = x[n] + 0.5 - (double) EvaluateIndex[n][2];
-      w4 = (1.0 / 6.0) * w * w * w;
-      w1 = (1.0 / 6.0) + 0.5 * w * (w - 1.0) - w4;
-      w3 = w + w1 - 2.0 * w4;
-      w2 = 1.0 - w1 - w3 - w4;
+      for (unsigned int n = 0; n < ImageDimension; ++n)
+        {
+        w = x[n] + 0.5 - (double) EvaluateIndex[n][2];
+        w4 = (1.0 / 6.0) * w * w * w;
+        w1 = (1.0 / 6.0) + 0.5 * w * (w - 1.0) - w4;
+        w3 = w + w1 - 2.0 * w4;
+        w2 = 1.0 - w1 - w3 - w4;
 
-      weights[n][0] = 0.0 - w1;
-      weights[n][1] = w1 - w2;
-      weights[n][2] = w2 - w3;
-      weights[n][3] = w3 - w4;
-      weights[n][4] = w4;
-      }
-    break;
-  case 4:
-    for (unsigned int n = 0; n < ImageDimension; ++n)
-      {
-      w = x[n] + .5 - (double) EvaluateIndex[n][3];
-      t2 = w * w;
-      t = (1.0 / 6.0) * t2;
-      w1 = 0.5 - w;
-      w1 *= w1;
-      w1 *= (1.0 / 24.0) * w1;
-      t0 = w * (t - 11.0 / 24.0);
-      t1 = 19.0 / 96.0 + t2 * (0.25 - t);
-      w2 = t1 + t0;
-      w4 = t1 - t0;
-      w5 = w1 + t0 + 0.5 * w;
-      w3 = 1.0 - w1 - w2 - w4 - w5;
+        weights[n][0] = 0.0 - w1;
+        weights[n][1] = w1 - w2;
+        weights[n][2] = w2 - w3;
+        weights[n][3] = w3 - w4;
+        weights[n][4] = w4;
+        }
+      break;
+    case 4:
+      for (unsigned int n = 0; n < ImageDimension; ++n)
+        {
+        w = x[n] + .5 - (double) EvaluateIndex[n][3];
+        t2 = w * w;
+        t = (1.0 / 6.0) * t2;
+        w1 = 0.5 - w;
+        w1 *= w1;
+        w1 *= (1.0 / 24.0) * w1;
+        t0 = w * (t - 11.0 / 24.0);
+        t1 = 19.0 / 96.0 + t2 * (0.25 - t);
+        w2 = t1 + t0;
+        w4 = t1 - t0;
+        w5 = w1 + t0 + 0.5 * w;
+        w3 = 1.0 - w1 - w2 - w4 - w5;
 
-      weights[n][0] = 0.0 - w1;
-      weights[n][1] = w1 - w2;
-      weights[n][2] = w2 - w3;
-      weights[n][3] = w3 - w4;
-      weights[n][4] = w4 - w5;
-      weights[n][5] = w5;
-      }
-    break;
+        weights[n][0] = 0.0 - w1;
+        weights[n][1] = w1 - w2;
+        weights[n][2] = w2 - w3;
+        weights[n][3] = w3 - w4;
+        weights[n][4] = w4 - w5;
+        weights[n][5] = w5;
+        }
+      break;
 
-  default:
-    // SplineOrder not implemented yet.
-    itk::ExceptionObject err(__FILE__, __LINE__);
-    err.SetLocation(ITK_LOCATION);
-    err.SetDescription(
-      "SplineOrder (for derivatives) must be between 1 and 5. Requested spline order has not been implemented yet.");
-    throw err;
-    break;
+    default:
+      // SplineOrder not implemented yet.
+      itk::ExceptionObject err(__FILE__, __LINE__);
+      err.SetLocation(ITK_LOCATION);
+      err.SetDescription(
+        "SplineOrder (for derivatives) must be between 1 and 5. Requested spline order has not been implemented yet.");
+      throw err;
+      break;
     }
 
 }

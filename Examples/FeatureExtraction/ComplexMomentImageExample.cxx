@@ -76,7 +76,7 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef std::complex<float>
-                                                                       ComplexType;
+  ComplexType;
   typedef otb::ComplexMomentImageFunction<InputImageType, ComplexType> CMType;
 
   CMType::Pointer cmFunction = CMType::New();

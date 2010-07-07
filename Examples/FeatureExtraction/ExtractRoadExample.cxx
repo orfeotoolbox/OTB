@@ -123,7 +123,7 @@ int main(int argc, char * argv[])
   //  Software Guide : BeginCodeSnippet
 
   typedef otb::PolyLineParametricPathWithValue<InputPixelType,
-                                               Dimension> PathType;
+      Dimension> PathType;
 
   // Software Guide : EndCodeSnippet
 
@@ -137,7 +137,7 @@ int main(int argc, char * argv[])
   // Software Guide : BeginCodeSnippet
 
   typedef otb::RoadExtractionFilter<InputVectorImageType,
-                                    PathType> RoadExtractionFilterType;
+      PathType> RoadExtractionFilterType;
 
   // Software Guide : EndCodeSnippet
 
@@ -151,7 +151,7 @@ int main(int argc, char * argv[])
   // Software Guide : BeginCodeSnippet
 
   typedef otb::DrawPathListFilter<InputImageType, PathType,
-                                  InputImageType> DrawPathFilterType;
+      InputImageType> DrawPathFilterType;
 
   // Software Guide : EndCodeSnippet
 
@@ -166,7 +166,7 @@ int main(int argc, char * argv[])
   // Software Guide : BeginCodeSnippet
 
   typedef itk::RescaleIntensityImageFilter<InputImageType,
-                                           OutputImageType> RescalerType;
+      OutputImageType> RescalerType;
 
   // Software Guide : EndCodeSnippet
 
@@ -389,13 +389,13 @@ int main(int argc, char * argv[])
 
   // output image enhancement
   typedef itk::BinaryBallStructuringElement<OutputPixelType,
-                                            Dimension>
+      Dimension>
   StructuringElementType;
   typedef itk::GrayscaleDilateImageFilter<OutputImageType, OutputImageType,
-                                          StructuringElementType>
+      StructuringElementType>
   DilateFilterType;
   typedef itk::InvertIntensityImageFilter<OutputImageType,
-                                          OutputImageType>
+      OutputImageType>
   InvertFilterType;
 
   StructuringElementType se;

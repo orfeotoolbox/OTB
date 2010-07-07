@@ -27,7 +27,7 @@ int otbMultiChannelRAndBAndNIRVegetationIndexImageFilterNew(int argc, char * arg
   typedef otb::VectorImage<unsigned char, Dimension> InputImageType;
   typedef otb::Image<float, Dimension>               OutputImageType;
   typedef otb::MultiChannelRAndBAndNIRIndexImageFilter<InputImageType,
-                                                       OutputImageType> MultiChannelRAndBAndNIRIndexImageFilterType;
+      OutputImageType> MultiChannelRAndBAndNIRIndexImageFilterType;
 
   // Instantiating object
   MultiChannelRAndBAndNIRIndexImageFilterType::Pointer object = MultiChannelRAndBAndNIRIndexImageFilterType::New();

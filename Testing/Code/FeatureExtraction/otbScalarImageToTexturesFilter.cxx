@@ -25,25 +25,25 @@
 
 int otbScalarImageToTexturesFilter(int argc, char * argv[])
 {
-  if(argc != 7)
+  if (argc != 7)
     {
-    std::cerr<<"Usage: "<<argv[0]<<" infname outprefix nbBins radius offsetx offsety"<<std::endl;
+    std::cerr << "Usage: " << argv[0] << " infname outprefix nbBins radius offsetx offsety" << std::endl;
     return EXIT_FAILURE;
     }
-  const char * infname      = argv[1];
-  const char * outprefix    = argv[2];
+  const char *       infname      = argv[1];
+  const char *       outprefix    = argv[2];
   const unsigned int nbBins = atoi(argv[3]);
   const unsigned int radius = atoi(argv[4]);
-  const int offsetx         = atoi(argv[5]);
-  const int offsety         = atoi(argv[6]);
+  const int          offsetx         = atoi(argv[5]);
+  const int          offsety         = atoi(argv[6]);
 
   const unsigned int Dimension = 2;
-  typedef float                                  PixelType;
-  typedef otb::Image<PixelType, Dimension>       ImageType;
+  typedef float                            PixelType;
+  typedef otb::Image<PixelType, Dimension> ImageType;
   typedef otb::ScalarImageToTexturesFilter
-    <ImageType,ImageType>                        TexturesFilterType;
-  typedef otb::ImageFileReader<ImageType>        ReaderType;
-  typedef otb::ImageFileWriter<ImageType>        WriterType;
+  <ImageType, ImageType>                        TexturesFilterType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
 
   ReaderType::Pointer         reader = ReaderType::New();
   TexturesFilterType::Pointer filter = TexturesFilterType::New();
@@ -66,7 +66,7 @@ int otbScalarImageToTexturesFilter(int argc, char * argv[])
   filter->SetRadius(sradius);
   filter->SetOffset(offset);
 
-  otb::StandardFilterWatcher watcher(filter,"Textures filter");
+  otb::StandardFilterWatcher watcher(filter, "Textures filter");
 
   filter->SetInputImageMinimum(0);
   filter->SetInputImageMaximum(256);
@@ -77,49 +77,49 @@ int otbScalarImageToTexturesFilter(int argc, char * argv[])
   writer->SetNumberOfStreamDivisions(2);
 
   oss.str("");
-  oss<<outprefix<<"Energy.tif";
+  oss << outprefix << "Energy.tif";
   writer->SetInput(filter->GetEnergyOutput());
   writer->SetFileName(oss.str());
   writer->Update();
 
   oss.str("");
-  oss<<outprefix<<"Entropy.tif";
+  oss << outprefix << "Entropy.tif";
   writer->SetInput(filter->GetEntropyOutput());
   writer->SetFileName(oss.str());
   writer->Update();
 
   oss.str("");
-  oss<<outprefix<<"Correlation.tif";
+  oss << outprefix << "Correlation.tif";
   writer->SetInput(filter->GetCorrelationOutput());
   writer->SetFileName(oss.str());
   writer->Update();
 
   oss.str("");
-  oss<<outprefix<<"InverseDifferenceMoment.tif";
+  oss << outprefix << "InverseDifferenceMoment.tif";
   writer->SetInput(filter->GetInverseDifferenceMomentOutput());
   writer->SetFileName(oss.str());
   writer->Update();
 
   oss.str("");
-  oss<<outprefix<<"Inertia.tif";
+  oss << outprefix << "Inertia.tif";
   writer->SetInput(filter->GetInertiaOutput());
   writer->SetFileName(oss.str());
   writer->Update();
 
   oss.str("");
-  oss<<outprefix<<"ClusterShade.tif";
+  oss << outprefix << "ClusterShade.tif";
   writer->SetInput(filter->GetClusterShadeOutput());
   writer->SetFileName(oss.str());
   writer->Update();
 
   oss.str("");
-  oss<<outprefix<<"ClusterProminence.tif";
+  oss << outprefix << "ClusterProminence.tif";
   writer->SetInput(filter->GetClusterProminenceOutput());
   writer->SetFileName(oss.str());
   writer->Update();
 
   oss.str("");
-  oss<<outprefix<<"HaralickCorrelation.tif";
+  oss << outprefix << "HaralickCorrelation.tif";
   writer->SetInput(filter->GetHaralickCorrelationOutput());
   writer->SetFileName(oss.str());
   writer->Update();

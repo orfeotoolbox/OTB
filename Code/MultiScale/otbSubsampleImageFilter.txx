@@ -32,7 +32,7 @@
 namespace otb {
 
 template <class TInputImage, class TOutputImage,
-          Wavelet::WaveletDirection TDirectionOfTransformation>
+    Wavelet::WaveletDirection TDirectionOfTransformation>
 void
 SubsampleImageFilter<TInputImage, TOutputImage, TDirectionOfTransformation>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
@@ -47,7 +47,7 @@ SubsampleImageFilter<TInputImage, TOutputImage, TDirectionOfTransformation>
 }
 
 template <class TInputImage, class TOutputImage,
-          Wavelet::WaveletDirection TDirectionOfTransformation>
+    Wavelet::WaveletDirection TDirectionOfTransformation>
 bool
 SubsampleImageFilter<TInputImage, TOutputImage, TDirectionOfTransformation>
 ::IsSubsampleFactorOne() const
@@ -61,7 +61,7 @@ SubsampleImageFilter<TInputImage, TOutputImage, TDirectionOfTransformation>
 }
 
 template <class TInputImage, class TOutputImage,
-          Wavelet::WaveletDirection TDirectionOfTransformation>
+    Wavelet::WaveletDirection TDirectionOfTransformation>
 void
 SubsampleImageFilter<TInputImage, TOutputImage, TDirectionOfTransformation>
 ::GenerateOutputInformation()
@@ -77,7 +77,7 @@ SubsampleImageFilter<TInputImage, TOutputImage, TDirectionOfTransformation>
 }
 
 template <class TInputImage, class TOutputImage,
-          Wavelet::WaveletDirection TDirectionOfTransformation>
+    Wavelet::WaveletDirection TDirectionOfTransformation>
 void
 SubsampleImageFilter<TInputImage, TOutputImage, TDirectionOfTransformation>
 ::CallCopyOutputRegionToInputRegion
@@ -106,7 +106,7 @@ SubsampleImageFilter<TInputImage, TOutputImage, TDirectionOfTransformation>
 }
 
 template <class TInputImage, class TOutputImage,
-          Wavelet::WaveletDirection TDirectionOfTransformation>
+    Wavelet::WaveletDirection TDirectionOfTransformation>
 void
 SubsampleImageFilter<TInputImage, TOutputImage, TDirectionOfTransformation>
 ::CallCopyInputRegionToOutputRegion
@@ -134,7 +134,7 @@ SubsampleImageFilter<TInputImage, TOutputImage, TDirectionOfTransformation>
 }
 
 template <class TInputImage, class TOutputImage,
-          Wavelet::WaveletDirection TDirectionOfTransformation>
+    Wavelet::WaveletDirection TDirectionOfTransformation>
 void
 SubsampleImageFilter<TInputImage, TOutputImage, TDirectionOfTransformation>
 ::BeforeThreadedGenerateData()
@@ -144,7 +144,7 @@ SubsampleImageFilter<TInputImage, TOutputImage, TDirectionOfTransformation>
 }
 
 template <class TInputImage, class TOutputImage,
-          Wavelet::WaveletDirection TDirectionOfTransformation>
+    Wavelet::WaveletDirection TDirectionOfTransformation>
 void
 SubsampleImageFilter<TInputImage, TOutputImage, TDirectionOfTransformation>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
@@ -165,47 +165,47 @@ SubsampleImageFilter<TInputImage, TOutputImage, TDirectionOfTransformation>
 
   switch (DirectionOfTransformation)
     {
-  case Wavelet::FORWARD:
-    {
-    inputIter.SetSubsampleFactor(GetSubsampleFactor());
-    inputIter.GoToBegin();
-
-    while (!inputIter.IsAtEnd())
+    case Wavelet::FORWARD:
       {
-      outputIter.SetOffset(
-        static_cast<typename SubsampledImageRegionIterator<OutputImageType>::OffsetType>
-          (inputIter.GetOffset()));
-      outputIter.Set(static_cast<OutputPixelType>(inputIter.Get()));
-      ++inputIter;
-      }
+      inputIter.SetSubsampleFactor(GetSubsampleFactor());
+      inputIter.GoToBegin();
 
-    break;
-    }
-  case Wavelet::INVERSE:
-    {
-    inputIter.SetSubsampleFactor(1);
-    inputIter.GoToBegin();
-
-    while (!inputIter.IsAtEnd())
-      {
-      InputImageIndexType  inputIndex = inputIter.GetIndex();
-      OutputImageIndexType outputIndex;
-      for (unsigned int i = 0; i < OutputImageDimension; i++)
+      while (!inputIter.IsAtEnd())
         {
-        outputIndex[i] = inputIndex[i] * m_SubsampleFactor[i];
+        outputIter.SetOffset(
+          static_cast<typename SubsampledImageRegionIterator<OutputImageType>::OffsetType>
+            (inputIter.GetOffset()));
+        outputIter.Set(static_cast<OutputPixelType>(inputIter.Get()));
+        ++inputIter;
         }
-      outputIter.SetIndex(outputIndex);
-      outputIter.Set(static_cast<OutputPixelType>(inputIter.Get()));
-      ++inputIter;
-      }
 
-    break;
-    }
-  default:
-    {
-    itkExceptionMacro(<< "otb::SubsampleImageFilter have to be Wavelet::FORWARD or Wavelet::INVERSE only!!");
-    break;
-    }
+      break;
+      }
+    case Wavelet::INVERSE:
+      {
+      inputIter.SetSubsampleFactor(1);
+      inputIter.GoToBegin();
+
+      while (!inputIter.IsAtEnd())
+        {
+        InputImageIndexType  inputIndex = inputIter.GetIndex();
+        OutputImageIndexType outputIndex;
+        for (unsigned int i = 0; i < OutputImageDimension; i++)
+          {
+          outputIndex[i] = inputIndex[i] * m_SubsampleFactor[i];
+          }
+        outputIter.SetIndex(outputIndex);
+        outputIter.Set(static_cast<OutputPixelType>(inputIter.Get()));
+        ++inputIter;
+        }
+
+      break;
+      }
+    default:
+      {
+      itkExceptionMacro(<< "otb::SubsampleImageFilter have to be Wavelet::FORWARD or Wavelet::INVERSE only!!");
+      break;
+      }
     }
 }
 

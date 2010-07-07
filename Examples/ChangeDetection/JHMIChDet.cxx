@@ -50,13 +50,13 @@ int main(int argc, char* argv[])
   typedef otb::StreamingImageFileWriter<OutputImageType> WriterType;
 
   typedef itk::ShiftScaleImageFilter<ChangeImageType,
-                                     OutputImageType> RescalerType;
+      OutputImageType> RescalerType;
 
   // Declare the type for the filter
   typedef otb::JoinHistogramMIImageFilter<
-    InputImageType1,
-    InputImageType2,
-    ChangeImageType>       FilterType;
+      InputImageType1,
+      InputImageType2,
+      ChangeImageType>       FilterType;
 
   ReaderType1::Pointer  reader1 = ReaderType1::New();
   ReaderType2::Pointer  reader2 = ReaderType2::New();

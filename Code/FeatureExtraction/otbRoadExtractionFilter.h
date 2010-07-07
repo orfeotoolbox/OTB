@@ -90,8 +90,8 @@ public:
 
   /* Template parameters typedefs for composites filters */
   typedef SpectralAngleDistanceImageFilter<
-    InputImageType,
-    SpectralAngleType>                      SpectralAngleDistanceImageFilterType;
+      InputImageType,
+      SpectralAngleType>                      SpectralAngleDistanceImageFilterType;
 
   typedef GenericRoadExtractionFilter<SpectralAngleType, OutputPathType>
   GenericRoadExtractionFilterType;

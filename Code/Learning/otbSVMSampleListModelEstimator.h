@@ -99,8 +99,8 @@ public:
  * \ingroup ClassificationFilters
  */
 template <class TInputSampleList,
-          class TTrainingSampleList, class TMeasurementFunctor =
-            Functor::VectorToMeasurementVectorFunctor<typename TInputSampleList::MeasurementVectorType> >
+    class TTrainingSampleList, class TMeasurementFunctor =
+      Functor::VectorToMeasurementVectorFunctor<typename TInputSampleList::MeasurementVectorType> >
 class ITK_EXPORT SVMSampleListModelEstimator :
   public SVMModelEstimator<typename TInputSampleList::MeasurementType, typename TTrainingSampleList::MeasurementType>
 {
@@ -108,7 +108,7 @@ public:
   /** Standard class typedefs. */
   typedef SVMSampleListModelEstimator Self;
   typedef SVMModelEstimator<typename TInputSampleList::MeasurementType,
-                            typename TTrainingSampleList::MeasurementType>
+      typename TTrainingSampleList::MeasurementType>
   Superclass;
 
   typedef itk::SmartPointer<Self>       Pointer;

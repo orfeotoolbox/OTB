@@ -107,7 +107,7 @@ int otbTileMapWriter(int argc, char *argv[])
   lonLatLR = mapProjection->TransformPoint(pointLRexact);
 
   typedef otb::PerBandVectorImageFilter<VectorImageType,
-                                        DoubleVectorImageType, OrthoRectifFilterType> VectorOrthoRectifFilterType;
+      DoubleVectorImageType, OrthoRectifFilterType> VectorOrthoRectifFilterType;
 
   OrthoRectifFilterType::Pointer orthoRectifXS =
     OrthoRectifFilterType::New();

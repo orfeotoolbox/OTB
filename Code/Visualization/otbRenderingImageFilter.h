@@ -62,7 +62,7 @@ public:
   typedef itk::RGBPixel<ScalarPixelType>                    RGBPixelType;
   typedef itk::RGBAPixel<ScalarPixelType>                   RGBAPixelType;
 
-  typedef typename itk::MetaDataDictionary                           MetaDataDictionaryType;
+  typedef typename itk::MetaDataDictionary MetaDataDictionaryType;
 
   /** Pixel operator */
   inline TRGBPixel operator ()(const PixelType& pixel) const
@@ -99,11 +99,10 @@ public:
   /**
    * Initialize the rendering function.
    */
-   void InitializeFunction(const MetaDataDictionaryType &metadatadictionary)
+  void InitializeFunction(const MetaDataDictionaryType& metadatadictionary)
   {
-   m_Function->Initialize(metadatadictionary);
+    m_Function->Initialize(metadatadictionary);
   }
-
 
 private:
   /** The rendering function */
@@ -123,17 +122,17 @@ private:
 template <class TInputImage, class TOutputImage = Image<itk::RGBAPixel<unsigned char>, 2> >
 class RenderingImageFilter
   : public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
-                                        Functor::RenderingFunctor
-                                        <typename TInputImage::PixelType,
-                                         typename TOutputImage::PixelType> >
+      Functor::RenderingFunctor
+      <typename TInputImage::PixelType,
+          typename TOutputImage::PixelType> >
 {
 public:
   /** Standard typedefs */
   typedef RenderingImageFilter Self;
   typedef itk::UnaryFunctorImageFilter
   <TInputImage, TOutputImage, Functor::RenderingFunctor
-   <typename TInputImage::PixelType,
-    typename TOutputImage::PixelType> >          Superclass;
+      <typename TInputImage::PixelType,
+          typename TOutputImage::PixelType> >          Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -146,7 +145,7 @@ public:
   /** Rendering function typedef */
   typedef Functor::RenderingFunctor
   <typename TInputImage::PixelType,
-   typename TOutputImage::PixelType>                         RenderingFunctorType;
+      typename TOutputImage::PixelType>                         RenderingFunctorType;
   typedef typename RenderingFunctorType::RenderingFunctionType RenderingFunctionType;
 
   /**
@@ -187,7 +186,7 @@ public:
       }
 
     // Initialize the rendering function
-    this->GetFunctor().InitializeFunction(this->GetInput()->GetMetaDataDictionary()); 
+    this->GetFunctor().InitializeFunction(this->GetInput()->GetMetaDataDictionary());
 
     otbMsgDevMacro(<< "RenderingImageFilter::BeforeThreadedGenerateData():");
     otbMsgDevMacro(<< " - Output functor size "
@@ -218,8 +217,8 @@ protected:
   virtual ~RenderingImageFilter() {}
 
   typedef Function::StandardRenderingFunction<
-    typename TInputImage::PixelType,
-    typename TOutputImage::PixelType> DefaultRenderingFunctionType;
+      typename TInputImage::PixelType,
+      typename TOutputImage::PixelType> DefaultRenderingFunctionType;
 
   void SetDefaultRenderingFunction()
   {

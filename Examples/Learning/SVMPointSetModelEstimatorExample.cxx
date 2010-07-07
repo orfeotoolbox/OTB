@@ -201,7 +201,7 @@ int main(int argc, char* argv[])
 
 // Software Guide : BeginCodeSnippet
   typedef otb::SVMPointSetModelEstimator<FeaturePointSetType,
-                                         LabelPointSetType>   EstimatorType;
+      LabelPointSetType>   EstimatorType;
 
   EstimatorType::Pointer estimator = EstimatorType::New();
 // Software Guide : EndCodeSnippet

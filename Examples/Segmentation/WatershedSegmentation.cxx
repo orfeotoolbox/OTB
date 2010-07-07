@@ -122,10 +122,10 @@ int main(int argc, char *argv[])
   typedef itk::VectorCastImageFilter<RGBImageType, VectorImageType>
   CastFilterType;
   typedef itk::VectorGradientAnisotropicDiffusionImageFilter<VectorImageType,
-                                                             VectorImageType>
+      VectorImageType>
   DiffusionFilterType;
   typedef itk::VectorGradientMagnitudeImageFilter<VectorImageType, float,
-                                                  ScalarImageType>
+      ScalarImageType>
   GradientMagnitudeFilterType;
   typedef itk::WatershedImageFilter<ScalarImageType> WatershedFilterType;
   // Software Guide : EndCodeSnippet
@@ -207,8 +207,8 @@ int main(int argc, char *argv[])
   typedef itk::Functor::ScalarToRGBPixelFunctor<unsigned long>
   ColorMapFunctorType;
   typedef itk::UnaryFunctorImageFilter<LabeledImageType,
-                                       RGBImageType,
-                                       ColorMapFunctorType> ColorMapFilterType;
+      RGBImageType,
+      ColorMapFunctorType> ColorMapFilterType;
   ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
   // Software Guide : EndCodeSnippet
 

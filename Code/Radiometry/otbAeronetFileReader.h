@@ -42,14 +42,12 @@ public:
   AeronetFileReaderException(const char *file, unsigned int line,
                              const char* message = "Error in Radiometry IO",
                              const char* loc = "Unknown") :
-    ExceptionObject(file, line, message, loc)
-     {}
+    ExceptionObject(file, line, message, loc) {}
   /** Constructor. */
   AeronetFileReaderException(const std::string & file, unsigned int line,
                              const char* message = "Error in Radiometry IO",
                              const char* loc = "Unknown") :
-    ExceptionObject(file, line, message, loc)
-     {}
+    ExceptionObject(file, line, message, loc) {}
 };
 
 /**

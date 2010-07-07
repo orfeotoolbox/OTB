@@ -105,8 +105,8 @@ public:
 
 protected:
   /// Constructor
-  MultiChannelRadiometricImageFilter() : 
-      m_BlueIndex(0), m_GreenIndex(0), m_RedIndex(0), m_NIRIndex(0), m_MIRIndex(0) {};
+  MultiChannelRadiometricImageFilter() :
+    m_BlueIndex(0), m_GreenIndex(0), m_RedIndex(0), m_NIRIndex(0), m_MIRIndex(0) {};
   /// Destructor
   virtual ~MultiChannelRadiometricImageFilter() {}
   /// Before generating data, set functor parameters

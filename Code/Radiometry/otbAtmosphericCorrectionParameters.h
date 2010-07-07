@@ -147,7 +147,7 @@ public:
 
   typedef enum {NO_AEROSOL = 0, CONTINENTAL = 1, MARITIME = 2, URBAN = 3, DESERTIC = 5} AerosolModelType;
 
-  typedef ObjectList<FilterFunctionValues> InternalWavelengthSpectralBandVectorType;
+  typedef ObjectList<FilterFunctionValues>                  InternalWavelengthSpectralBandVectorType;
   typedef InternalWavelengthSpectralBandVectorType::Pointer WavelengthSpectralBandVectorType;
 
   /**

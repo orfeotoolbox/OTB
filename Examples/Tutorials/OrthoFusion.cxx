@@ -157,8 +157,8 @@ int main(int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::OrthoRectificationFilter<ImageType, DoubleImageType,
-                                        utmMapProjectionType>
-                                                        OrthoRectifFilterType;
+      utmMapProjectionType>
+  OrthoRectifFilterType;
 
   OrthoRectifFilterType::Pointer orthoRectifPAN =
     OrthoRectifFilterType::New();
@@ -185,9 +185,9 @@ int main(int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::PerBandVectorImageFilter<VectorImageType,
-                                        DoubleVectorImageType,
-                                        OrthoRectifFilterType>
-                                                  VectorOrthoRectifFilterType;
+      DoubleVectorImageType,
+      OrthoRectifFilterType>
+  VectorOrthoRectifFilterType;
 
   OrthoRectifFilterType::Pointer orthoRectifXS =
     OrthoRectifFilterType::New();

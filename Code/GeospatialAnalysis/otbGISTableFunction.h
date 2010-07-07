@@ -39,12 +39,12 @@ namespace otb
  * \ingroup GISTableFunctions
  */
 template <
-  class TInputTable,
-  class TOutput
-  >
+    class TInputTable,
+    class TOutput
+    >
 class ITK_EXPORT GISTableFunction :
   public FunctionBase<TInputTable,
-                      TOutput>
+      TOutput>
 {
 public:
   /** Dimension underlying input table. */
@@ -54,8 +54,8 @@ public:
   /** Standard class typedefs. */
   typedef GISTableFunction Self;
   typedef FunctionBase<
-    TInputTable,
-    TOutput>                                                   Superclass;
+      TInputTable,
+      TOutput>                                                   Superclass;
   typedef SmartPointer<Self>       Pointer;
   typedef SmartPointer<const Self> ConstPointer;
 

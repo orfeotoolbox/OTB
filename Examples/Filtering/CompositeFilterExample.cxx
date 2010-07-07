@@ -153,9 +153,9 @@ private:
 //  Software Guide : EndLatex
 
 //  Software Guide : BeginCodeSnippet
-  typename GradientType::Pointer  m_GradientFilter;
+  typename GradientType::Pointer m_GradientFilter;
   typename ThresholdType::Pointer m_ThresholdFilter;
-  typename RescalerType::Pointer  m_RescaleFilter;
+  typename RescalerType::Pointer m_RescaleFilter;
 
   PixelType m_Threshold;
 };

@@ -80,11 +80,11 @@ int main(int argc, char * argv[])
   // Software Guide : EndCodeSnippet
 
   typedef otb::ImageFileReader<ImageType>
-                                                            ReaderType;
+  ReaderType;
   typedef otb::ImageFileWriter<OutputImageType>
-                                                            WriterType;
+  WriterType;
   typedef itk::RescaleIntensityImageFilter<ImageType,
-                                           OutputImageType> RescalerType;
+      OutputImageType> RescalerType;
 
   ReaderType::Pointer   reader = ReaderType::New();
   WriterType::Pointer   writer = WriterType::New();

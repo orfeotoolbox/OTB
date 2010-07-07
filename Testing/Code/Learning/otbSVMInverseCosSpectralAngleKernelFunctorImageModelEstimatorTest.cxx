@@ -38,15 +38,15 @@ int otbSVMInverseCosSpectralAngleKernelFunctorImageModelEstimatorTest(int argc, 
   const char* trainingImageFileName = argv[2];
   const char* outputModelFileName = argv[3];
 
-  typedef double                                       InputPixelType;
-  const unsigned int                                   Dimension = 2;
+  typedef double InputPixelType;
+  const unsigned int Dimension = 2;
   typedef otb::VectorImage<InputPixelType,  Dimension> InputImageType;
   typedef otb::Image<int,  Dimension>                  TrainingImageType;
   typedef std::vector<double>                          VectorType;
   typedef otb::SVMImageModelEstimator<InputImageType,
-                                      TrainingImageType> EstimatorType;
-  typedef otb::ImageFileReader<InputImageType>           InputReaderType;
-  typedef otb::ImageFileReader<TrainingImageType>        TrainingReaderType;
+      TrainingImageType> EstimatorType;
+  typedef otb::ImageFileReader<InputImageType>    InputReaderType;
+  typedef otb::ImageFileReader<TrainingImageType> TrainingReaderType;
 
   InputReaderType::Pointer    inputReader    = InputReaderType::New();
   TrainingReaderType::Pointer trainingReader = TrainingReaderType::New();

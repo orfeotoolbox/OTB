@@ -82,7 +82,7 @@ public:
 
   typedef
   itk::ImageToImageFilterDetail::ExtractImageFilterRegionCopier<itkGetStaticConstMacro(InputImageDimension),
-                                                                itkGetStaticConstMacro(OutputImageDimension)>
+      itkGetStaticConstMacro(OutputImageDimension)>
   ExtractROIBaseRegionCopierType;
 
   itkGetMacro(ExtractionRegion, InputImageRegionType);

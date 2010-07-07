@@ -79,9 +79,9 @@ int otbPathLengthFunctor(int argc, char * argv[])
     }
 
   typedef otb::PathLengthFunctor<PolygonType::Pointer>
-                                                                      LengthFunctorType;
+  LengthFunctorType;
   typedef otb::UnaryFunctorObjectListBooleanFilter<PolygonListType, PolygonListType,
-                                                   LengthFunctorType> PathLengthFilterType;
+      LengthFunctorType> PathLengthFilterType;
   PathLengthFilterType::Pointer pathLengthFilter = PathLengthFilterType::New();
   pathLengthFilter->SetInput(polygonList);
   pathLengthFilter->GetFunctor().SetThreshold(500);

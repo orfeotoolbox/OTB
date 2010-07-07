@@ -83,9 +83,9 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef itk::Functor::ScalarToRGBPixelFunctor<unsigned long>
-                                                            ColorMapFunctorType;
+  ColorMapFunctorType;
   typedef itk::UnaryFunctorImageFilter<ImageType, RGBImageType,
-                                       ColorMapFunctorType> ColorMapFilterType;
+      ColorMapFunctorType> ColorMapFilterType;
   ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
 
   colormapper->SetInput(reader->GetOutput());
@@ -99,9 +99,9 @@ int main(int argc, char * argv[])
   writer->Update();
 
   //The following is just to produce the input image for the software guide
-  typedef otb::Image<unsigned char, 2>                      OutputImageType;
+  typedef otb::Image<unsigned char, 2> OutputImageType;
   typedef itk::RescaleIntensityImageFilter<ImageType,
-                                           OutputImageType> RescalerType;
+      OutputImageType> RescalerType;
   RescalerType::Pointer rescaler = RescalerType::New();
   rescaler->SetInput(reader->GetOutput());
 

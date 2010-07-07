@@ -120,8 +120,8 @@ int main(int,  char *[])
 
   // Software Guide : BeginCodeSnippet
   typedef itk::Vector<double,
-                      1>
-                                                             MeasurementVectorType;
+      1>
+  MeasurementVectorType;
   typedef itk::Statistics::ListSample<MeasurementVectorType> SampleType;
   SampleType::Pointer sample = SampleType::New();
   sample->SetMeasurementVectorSize(1);   // length of measurement vectors
@@ -263,7 +263,7 @@ int main(int,  char *[])
 
   // Software Guide : BeginCodeSnippet
   typedef itk::Statistics::GaussianDensityFunction
-                <MeasurementVectorType> MembershipFunctionType;
+  <MeasurementVectorType> MembershipFunctionType;
   typedef itk::MaximumRatioDecisionRule DecisionRuleType;
   DecisionRuleType::Pointer decisionRule = DecisionRuleType::New();
 

@@ -31,7 +31,7 @@ namespace otb
  * Constructor
  */
 template <class TInputImage1, class TInputImage2,
-          class TOutputImage, class TFunction>
+    class TOutputImage, class TFunction>
 BinaryFunctorNeighborhoodImageFilter<TInputImage1, TInputImage2, TOutputImage, TFunction>
 ::BinaryFunctorNeighborhoodImageFilter()
 {
@@ -43,7 +43,7 @@ BinaryFunctorNeighborhoodImageFilter<TInputImage1, TInputImage2, TOutputImage, T
  * Connect one of the operands for neighborhood-wise operation
  */
 template <class TInputImage1, class TInputImage2,
-          class TOutputImage, class TFunction>
+    class TOutputImage, class TFunction>
 void
 BinaryFunctorNeighborhoodImageFilter<TInputImage1, TInputImage2, TOutputImage, TFunction>
 ::SetInput1(const TInputImage1 * image1)
@@ -56,7 +56,7 @@ BinaryFunctorNeighborhoodImageFilter<TInputImage1, TInputImage2, TOutputImage, T
  * Connect one of the operands for neighborhood-wise operation
  */
 template <class TInputImage1, class TInputImage2,
-          class TOutputImage, class TFunction>
+    class TOutputImage, class TFunction>
 void
 BinaryFunctorNeighborhoodImageFilter<TInputImage1, TInputImage2, TOutputImage, TFunction>
 ::SetInput2(const TInputImage2 * image2)
@@ -66,7 +66,7 @@ BinaryFunctorNeighborhoodImageFilter<TInputImage1, TInputImage2, TOutputImage, T
 }
 
 template <class TInputImage1, class TInputImage2,
-          class TOutputImage, class TFunction>
+    class TOutputImage, class TFunction>
 const TInputImage1 *
 BinaryFunctorNeighborhoodImageFilter<TInputImage1, TInputImage2, TOutputImage, TFunction>
 ::GetInput1()
@@ -79,7 +79,7 @@ BinaryFunctorNeighborhoodImageFilter<TInputImage1, TInputImage2, TOutputImage, T
 }
 
 template <class TInputImage1, class TInputImage2,
-          class TOutputImage, class TFunction>
+    class TOutputImage, class TFunction>
 const TInputImage2 *
 BinaryFunctorNeighborhoodImageFilter<TInputImage1, TInputImage2, TOutputImage, TFunction>
 ::GetInput2()
@@ -92,7 +92,7 @@ BinaryFunctorNeighborhoodImageFilter<TInputImage1, TInputImage2, TOutputImage, T
 }
 
 template <class TInputImage1, class TInputImage2,
-          class TOutputImage, class TFunction>
+    class TOutputImage, class TFunction>
 void
 BinaryFunctorNeighborhoodImageFilter<TInputImage1, TInputImage2, TOutputImage, TFunction>
 ::GenerateInputRequestedRegion()

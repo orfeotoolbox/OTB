@@ -35,15 +35,15 @@ namespace otb
 template <class TImage>
 class ITK_EXPORT VectorImageToASImageAdaptor : public
   itk::ImageAdaptor<TImage, otb::Accessor::VectorImageToASPixelAccessor<
-                      typename TImage::PixelType::ValueType> >
+          typename TImage::PixelType::ValueType> >
 {
 public:
   /** Standard class typedefs. */
   typedef VectorImageToASImageAdaptor Self;
   typedef itk::ImageAdaptor<TImage,
-                            otb::Accessor::VectorImageToASPixelAccessor<
-                              typename TImage::PixelType::ValueType
-                              > > Superclass;
+      otb::Accessor::VectorImageToASPixelAccessor<
+          typename TImage::PixelType::ValueType
+          > > Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 

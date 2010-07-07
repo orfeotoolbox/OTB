@@ -71,20 +71,20 @@ private:
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT HessianToScalarImageFilter :
   public itk::UnaryFunctorImageFilter<
-    TInputImage, TOutputImage,
-    Functor::HessianToScalar<
-      ITK_TYPENAME TInputImage::PixelType,
-      ITK_TYPENAME TOutputImage::PixelType> >
+      TInputImage, TOutputImage,
+      Functor::HessianToScalar<
+          ITK_TYPENAME TInputImage::PixelType,
+          ITK_TYPENAME TOutputImage::PixelType> >
 {
 public:
   /** Standard class typedefs. */
   typedef HessianToScalarImageFilter Self;
   typedef typename itk::UnaryFunctorImageFilter<
-    TInputImage,
-    TOutputImage,
-    Functor::HessianToScalar<
-      ITK_TYPENAME TInputImage::PixelType,
-      ITK_TYPENAME TOutputImage::PixelType> > Superclass;
+      TInputImage,
+      TOutputImage,
+      Functor::HessianToScalar<
+          ITK_TYPENAME TInputImage::PixelType,
+          ITK_TYPENAME TOutputImage::PixelType> > Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 

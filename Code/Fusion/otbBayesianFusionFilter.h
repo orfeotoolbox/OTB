@@ -42,9 +42,9 @@ namespace Functor
  *
  */
 template <class TInputMultiSpectral,
-          class TInputMultiSpectralInterp,
-          class TInputPanchro,
-          class TOutput>
+    class TInputMultiSpectralInterp,
+    class TInputPanchro,
+    class TOutput>
 class BayesianFunctor
 {
 public:
@@ -189,18 +189,18 @@ private:
  */
 
 template <class TInputMultiSpectralImage,
-          class TInputMultiSpectralInterpImage,
-          class TInputPanchroImage,
-          class TOutputImage>
+    class TInputMultiSpectralInterpImage,
+    class TInputPanchroImage,
+    class TOutputImage>
 class ITK_EXPORT BayesianFusionFilter
   :  public FusionImageBase<TInputMultiSpectralImage,
-                            TInputMultiSpectralInterpImage,
-                            TInputPanchroImage,
-                            TOutputImage,
-                            Functor::BayesianFunctor<ITK_TYPENAME TInputMultiSpectralImage::PixelType,
-                                                     ITK_TYPENAME TInputMultiSpectralInterpImage::PixelType,
-                                                     ITK_TYPENAME TInputPanchroImage::PixelType,
-                                                     ITK_TYPENAME TOutputImage::PixelType> >
+      TInputMultiSpectralInterpImage,
+      TInputPanchroImage,
+      TOutputImage,
+      Functor::BayesianFunctor<ITK_TYPENAME TInputMultiSpectralImage::PixelType,
+          ITK_TYPENAME TInputMultiSpectralInterpImage::PixelType,
+          ITK_TYPENAME TInputPanchroImage::PixelType,
+          ITK_TYPENAME TOutputImage::PixelType> >
 {
 public:
   /**   Extract input and output images dimensions.*/
@@ -216,13 +216,13 @@ public:
   /** "typedef" for standard classes. */
   typedef BayesianFusionFilter Self;
   typedef FusionImageBase<InputMultiSpectralImageType,
-                          InputMultiSpectralInterpImageType,
-                          InputPanchroImageType,
-                          OutputImageType,
-                          Functor::BayesianFunctor<ITK_TYPENAME InputMultiSpectralImageType::PixelType,
-                                                   ITK_TYPENAME InputMultiSpectralInterpImageType::PixelType,
-                                                   ITK_TYPENAME InputPanchroImageType::PixelType,
-                                                   ITK_TYPENAME OutputImageType::PixelType> > Superclass;
+      InputMultiSpectralInterpImageType,
+      InputPanchroImageType,
+      OutputImageType,
+      Functor::BayesianFunctor<ITK_TYPENAME InputMultiSpectralImageType::PixelType,
+          ITK_TYPENAME InputMultiSpectralInterpImageType::PixelType,
+          ITK_TYPENAME InputPanchroImageType::PixelType,
+          ITK_TYPENAME OutputImageType::PixelType> > Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -258,13 +258,13 @@ public:
 
   /** Typedef for statistic computing. */
   typedef StreamingStatisticsVectorImageFilter<InputMultiSpectralInterpImageType>
-                                                                                 StreamingStatisticsVectorImageFilterType;
+  StreamingStatisticsVectorImageFilterType;
   typedef typename StreamingStatisticsVectorImageFilterType::MatrixType
-                                                                                 MatrixType;
+  MatrixType;
   typedef StreamingMatrixTransposeMatrixImageFilter<InputMultiSpectralImageType,
-                                                    InputMultiSpectralImageType> MSTransposeMSType;
+      InputMultiSpectralImageType> MSTransposeMSType;
   typedef ImageToVectorImageCastFilter<InputPanchroImageType,
-                                       InputMultiSpectralImageType>              CasterType;
+      InputMultiSpectralImageType>              CasterType;
 
   /** Set the ponderation value. */
   itkSetMacro(Lambda, float);

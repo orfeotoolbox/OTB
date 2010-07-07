@@ -79,7 +79,7 @@ public:
 
   /** Tyepdef for the functor used to access a neighborhood of pixel pointers.*/
   typedef itk::VectorImageNeighborhoodAccessorFunctor<
-    Self>              NeighborhoodAccessorFunctorType;
+      Self>              NeighborhoodAccessorFunctorType;
 
   /** Dimension of the image.  This constant is used by functions that are
    * templated over image type (as opposed to being templated over pixel type

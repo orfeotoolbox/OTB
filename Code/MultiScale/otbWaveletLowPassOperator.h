@@ -35,18 +35,18 @@ namespace otb {
  * \sa WaveletGenerator
  */
 template <Wavelet::Wavelet TMotherWaveletOperator,
-          Wavelet::WaveletDirection TDirectionOfTransformation,
-          class TPixel, unsigned int VDimension,
-          class TAllocator = itk::NeighborhoodAllocator<TPixel> >
+    Wavelet::WaveletDirection TDirectionOfTransformation,
+    class TPixel, unsigned int VDimension,
+    class TAllocator = itk::NeighborhoodAllocator<TPixel> >
 class ITK_EXPORT WaveletLowPassOperator
   : public WaveletOperatorBase<TMotherWaveletOperator,
-                               TPixel, VDimension, TAllocator>
+      TPixel, VDimension, TAllocator>
 {
 public:
   /** Standard typedefs */
   typedef WaveletLowPassOperator Self;
   typedef WaveletOperatorBase<TMotherWaveletOperator,
-                              TPixel, VDimension, TAllocator>  Superclass;
+      TPixel, VDimension, TAllocator>  Superclass;
 
   itkTypeMacro(WaveletLowPassOperator, WaveletOperatorBase);
 
@@ -77,15 +77,15 @@ protected:
     CoefficientVector coeff;
     switch (DirectionOfTransformation)
       {
-    case Wavelet::FORWARD:
-      this->m_WaveletGenerator->GetLowPassCoefficientVector(coeff);
-      break;
-    case Wavelet::INVERSE:
-      this->m_WaveletGenerator->GetHighPassCoefficientVector(coeff);
-      Superclass::GenerateInverseLowPassFilterFromHighPassFilter(coeff);
-      break;
-    default:   // Here to prevent from compilation warnings
-      break;
+      case Wavelet::FORWARD:
+        this->m_WaveletGenerator->GetLowPassCoefficientVector(coeff);
+        break;
+      case Wavelet::INVERSE:
+        this->m_WaveletGenerator->GetHighPassCoefficientVector(coeff);
+        Superclass::GenerateInverseLowPassFilterFromHighPassFilter(coeff);
+        break;
+      default: // Here to prevent from compilation warnings
+        break;
       }
 
     Superclass::UpSamplingCoefficients(coeff);

@@ -53,11 +53,11 @@ namespace otb
  */
 
 template <class TInputImage,
-          class TOutputImage,
-          class TOutputImageDirection = TOutputImage,
-          class TInterpolator = itk::LinearInterpolateImageFunction<TInputImage> >
+    class TOutputImage,
+    class TOutputImageDirection = TOutputImage,
+    class TInterpolator = itk::LinearInterpolateImageFunction<TInputImage> >
 class ITK_EXPORT LineDetectorImageFilterBase :  public ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage,
-                                                                                             TOutputImageDirection>
+      TOutputImageDirection>
 {
 public:
   /**   Extract dimensions as well of the images of entry of exit. */

@@ -39,7 +39,7 @@ int otbStreamingResampleImageFilter(int argc, char * argv[])
   typedef otb::StreamingImageFileWriter<OutputImageType>       WriterType;
   typedef itk::TranslationTransform<InputPixelType, Dimension> TransformType;
   typedef otb::StreamingResampleImageFilter<InputImageType, OutputImageType,
-                                            InterpolatorPrecisionType> StreamingResampleImageFilterType;
+      InterpolatorPrecisionType> StreamingResampleImageFilterType;
 
   // Instantiating object
   ReaderType::Pointer                       reader = ReaderType::New();

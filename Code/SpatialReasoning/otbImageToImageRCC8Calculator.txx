@@ -214,11 +214,11 @@ ImageToImageRCC8Calculator<TInputImage>
 
   /// Definition of the Filters used to compute the boolean
   typedef itk::SubtractImageFilter<BoolImageType, BoolImageType,
-                                   BoolImageType>
-                                                                                                       SubtractFilterType;
+      BoolImageType>
+  SubtractFilterType;
   typedef itk::BinaryBallStructuringElement<bool,
-                                            BoolImageType::ImageDimension>
-                                                                                                       BinaryBallStructuringElementType;
+      BoolImageType::ImageDimension>
+  BinaryBallStructuringElementType;
   typedef itk::BinaryDilateImageFilter<BoolImageType, BoolImageType, BinaryBallStructuringElementType> DilateFilterType;
   typedef itk::AndImageFilter<BoolImageType, BoolImageType, BoolImageType>                             AndFilterType;
   /// Declaration and instantiation

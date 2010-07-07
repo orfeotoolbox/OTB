@@ -31,69 +31,69 @@ class ScalarImageToAdvancedTexturesFilter : public itk::ImageToImageFilter
 {
 public:
   /** Standard class typedefs */
-  typedef ScalarImageToAdvancedTexturesFilter                            Self;
-  typedef itk::ImageToImageFilter<TInpuImage, TOutputImage>      Superclass;
-  typedef itk::SmartPointer<Self>                                Pointer;
-  typedef itk::SmartPointer<const Self>                          ConstPointer;
+  typedef ScalarImageToAdvancedTexturesFilter               Self;
+  typedef itk::ImageToImageFilter<TInpuImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>                           Pointer;
+  typedef itk::SmartPointer<const Self>                     ConstPointer;
 
   /** Creation through the object factory */
   itkNewMacro(Self);
 
   /** RTTI */
-  itkTypeMacro(ScalarImageToAdvancedTexturesFilter,ImageToImageFilter);
+  itkTypeMacro(ScalarImageToAdvancedTexturesFilter, ImageToImageFilter);
 
   /** Template class typedefs */
-  typedef TInpuImage                                             InputImageType;
-  typedef typename InputImageType::Pointer                       InputImagePointerType;
-  typedef typename InputImageType::PixelType                     InputPixelType;
-  typedef typename InputImageType::RegionType                    InputRegionType;
-  typedef typename InputRegionType::SizeType                     SizeType;
-  typedef TOutputImage                                           OutputImageType;
-  typedef typename OutputImageType::Pointer                      OutputImagePointerType;
-  typedef typename OutputImageType::RegionType                   OutputRegionType;
+  typedef TInpuImage                           InputImageType;
+  typedef typename InputImageType::Pointer     InputImagePointerType;
+  typedef typename InputImageType::PixelType   InputPixelType;
+  typedef typename InputImageType::RegionType  InputRegionType;
+  typedef typename InputRegionType::SizeType   SizeType;
+  typedef TOutputImage                         OutputImageType;
+  typedef typename OutputImageType::Pointer    OutputImagePointerType;
+  typedef typename OutputImageType::RegionType OutputRegionType;
 
   /** Co-occurence matrix and textures calculator */
   typedef otb::MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator
-    <InputImageType>                                             CoocurrenceMatrixGeneratorType;
+  <InputImageType>                                             CoocurrenceMatrixGeneratorType;
   typedef typename CoocurrenceMatrixGeneratorType::Pointer       CoocurrenceMatrixGeneratorPointerType;
   typedef typename CoocurrenceMatrixGeneratorType::OffsetType    OffsetType;
   typedef typename CoocurrenceMatrixGeneratorType::HistogramType HistogramType;
   typedef GreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator
   <HistogramType>                                                TextureCoefficientsCalculatorType;
-  typedef typename TextureCoefficientsCalculatorType::Pointer    TextureCoefficientsCalculatorPointerType;
+  typedef typename TextureCoefficientsCalculatorType::Pointer TextureCoefficientsCalculatorPointerType;
 
   /** Set the radius of the window on which textures will be computed */
-  itkSetMacro(Radius,SizeType);
+  itkSetMacro(Radius, SizeType);
   /** Get the radius of the window on which textures will be computed */
-  itkGetMacro(Radius,SizeType);
+  itkGetMacro(Radius, SizeType);
 
   /** Set the offset for co-occurence computation */
-  itkSetMacro(Offset,OffsetType);
+  itkSetMacro(Offset, OffsetType);
 
   /** Get the offset for co-occurence computation */
-  itkGetMacro(Offset,OffsetType);
+  itkGetMacro(Offset, OffsetType);
 
   /** Set the number of bin per axis for histogram generation */
-  itkSetMacro(NumberOfBinsPerAxis,unsigned int);
+  itkSetMacro(NumberOfBinsPerAxis, unsigned int);
 
   /** Get the number of bin per axis for histogram generation */
-  itkGetMacro(NumberOfBinsPerAxis,unsigned int);
+  itkGetMacro(NumberOfBinsPerAxis, unsigned int);
 
   /** Set the input image minimum */
-  itkSetMacro(InputImageMinimum,InputPixelType);
+  itkSetMacro(InputImageMinimum, InputPixelType);
 
   /** Get the input image minimum */
-  itkGetMacro(InputImageMinimum,InputPixelType);
+  itkGetMacro(InputImageMinimum, InputPixelType);
 
   /** Set the input image maximum */
-  itkSetMacro(InputImageMaximum,InputPixelType);
+  itkSetMacro(InputImageMaximum, InputPixelType);
 
   /** Get the input image maximum */
-  itkGetMacro(InputImageMaximum,InputPixelType);
+  itkGetMacro(InputImageMaximum, InputPixelType);
 
   /** Get the mean output image */
   OutputImageType * GetMeanOutput();
-  
+
   /** Get the variance output image */
   OutputImageType * GetVarianceOutput();
 
@@ -126,29 +126,29 @@ protected:
   /** Generate the input requested region */
   virtual void GenerateInputRequestedRegion();
   /** Parallel textures extraction */
-  virtual void ThreadedGenerateData(const OutputRegionType & outputRegion, int threadId);
+  virtual void ThreadedGenerateData(const OutputRegionType& outputRegion, int threadId);
 
 private:
   ScalarImageToAdvancedTexturesFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Convenient method to compute union of 2 regions */
-  static OutputRegionType RegionUnion(const OutputRegionType & region1, const OutputRegionType & region2);
+  static OutputRegionType RegionUnion(const OutputRegionType& region1, const OutputRegionType& region2);
 
   /** Radius of the window on which to compute textures */
-  SizeType                                                       m_Radius;
+  SizeType m_Radius;
 
   /** Offset for co-occurence */
-  OffsetType                                                     m_Offset;
+  OffsetType m_Offset;
 
   /** Number of bins per axis for histogram generation */
-  unsigned int                                                   m_NumberOfBinsPerAxis;
+  unsigned int m_NumberOfBinsPerAxis;
 
   /** Input image minimum */
-  InputPixelType                                                 m_InputImageMinimum;
+  InputPixelType m_InputImageMinimum;
 
   /** Input image maximum */
-  InputPixelType                                                 m_InputImageMaximum;
+  InputPixelType m_InputImageMaximum;
 };
 } // End namespace otb
 

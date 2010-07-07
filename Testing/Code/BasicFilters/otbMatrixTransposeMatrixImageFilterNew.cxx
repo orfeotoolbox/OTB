@@ -30,7 +30,7 @@ int otbMatrixTransposeMatrixImageFilterNew(int argc, char * argv[])
   typedef otb::VectorImage<InputPixelType, Dimension> InputImage1Type;
   typedef otb::VectorImage<InputPixelType, Dimension> InputImage2Type;
   typedef otb::StreamingMatrixTransposeMatrixImageFilter<InputImage1Type,
-                                                         InputImage2Type> MatrixTransposeMatrixImageFilterType;
+      InputImage2Type> MatrixTransposeMatrixImageFilterType;
 
   // Instantiation
   MatrixTransposeMatrixImageFilterType::Pointer filter = MatrixTransposeMatrixImageFilterType::New();

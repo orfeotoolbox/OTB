@@ -37,14 +37,12 @@ public:
   RCC8GraphFileReaderException(const char *file, unsigned int line,
                                const char* message = "Error in IO",
                                const char* loc = "Unknown") :
-    ExceptionObject(file, line, message, loc)
-    {}
+    ExceptionObject(file, line, message, loc) {}
   /** Constructor. */
   RCC8GraphFileReaderException(const std::string & file, unsigned int line,
                                const char* message = "Error in IO",
                                const char* loc = "Unknown") :
-    ExceptionObject(file, line, message, loc)
-    {}
+    ExceptionObject(file, line, message, loc) {}
 };
 /**
  * \class RCC8GraphFileReader

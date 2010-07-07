@@ -552,59 +552,59 @@ ImageAlternateViewer<TPixel>
 
   switch (part)
     {
-  case 0:
-    index   = deUL;
-    size[0] = max(bufUL[0] - deUL[0], 0L);
-    size[1] = max(bufUL[1] - deUL[1], 0L);
-    break;
+    case 0:
+      index   = deUL;
+      size[0] = max(bufUL[0] - deUL[0], 0L);
+      size[1] = max(bufUL[1] - deUL[1], 0L);
+      break;
 
-  case 1:
-    index[0] = max(deUL[0], bufUL[0]);
-    index[1] = deUL[1];
-    size[0]  = min(bufLR[0] - max(bufUL[0], 0L), deLR[0] - index[0]);
-    size[1]  = max(bufUL[1] - deUL[1], 0L);
-    break;
+    case 1:
+      index[0] = max(deUL[0], bufUL[0]);
+      index[1] = deUL[1];
+      size[0]  = min(bufLR[0] - max(bufUL[0], 0L), deLR[0] - index[0]);
+      size[1]  = max(bufUL[1] - deUL[1], 0L);
+      break;
 
-  case 2:
-    index[0] = min(bufLR[0], deLR[0]);
-    index[1] = deUL[1];
-    size[0]  = max(deLR[0] - bufLR[0], 0L);
-    size[1]  = max(bufUL[1] - deUL[1], 0L);
-    break;
+    case 2:
+      index[0] = min(bufLR[0], deLR[0]);
+      index[1] = deUL[1];
+      size[0]  = max(deLR[0] - bufLR[0], 0L);
+      size[1]  = max(bufUL[1] - deUL[1], 0L);
+      break;
 
-  case 3:
-    index[0] = deUL[0];
-    index[1] = max(bufUL[1], 0L);
-    size[0]  = max(bufUL[0] - deUL[0], 0L);
-    size[1]  = min(bufLR[1] - max(bufUL[1], 0L), deLR[1] - index[1]);
-    break;
+    case 3:
+      index[0] = deUL[0];
+      index[1] = max(bufUL[1], 0L);
+      size[0]  = max(bufUL[0] - deUL[0], 0L);
+      size[1]  = min(bufLR[1] - max(bufUL[1], 0L), deLR[1] - index[1]);
+      break;
 
-  case 4:
-    index[0] = min(bufLR[0], deLR[0]);
-    index[1] = max(bufUL[1], deUL[0]);
-    size[0]  = max(deLR[0] - bufLR[0], 0L);
-    size[1]  = min(bufLR[1] - max(bufUL[1], 0L), deLR[1] - index[1]);
-    break;
+    case 4:
+      index[0] = min(bufLR[0], deLR[0]);
+      index[1] = max(bufUL[1], deUL[0]);
+      size[0]  = max(deLR[0] - bufLR[0], 0L);
+      size[1]  = min(bufLR[1] - max(bufUL[1], 0L), deLR[1] - index[1]);
+      break;
 
-  case 5:
-    index[0] = deUL[0];
-    index[1] = min(deLR[1], bufLR[1]);
-    size[0]  = max(bufUL[0] - deUL[0], 0L);
-    size[1]  = max(deLR[1] - bufLR[1], 0L);
-    break;
+    case 5:
+      index[0] = deUL[0];
+      index[1] = min(deLR[1], bufLR[1]);
+      size[0]  = max(bufUL[0] - deUL[0], 0L);
+      size[1]  = max(deLR[1] - bufLR[1], 0L);
+      break;
 
-  case 6:
-    index[0] = max(deUL[0], bufUL[0]);
-    index[1] = min(deLR[1], bufLR[1]);
-    size[0]  = min(bufLR[0] - max(bufUL[0], 0L), deLR[0] - index[0]);
-    size[1]  = max(deLR[1] - bufLR[1], 0L);
-    break;
+    case 6:
+      index[0] = max(deUL[0], bufUL[0]);
+      index[1] = min(deLR[1], bufLR[1]);
+      size[0]  = min(bufLR[0] - max(bufUL[0], 0L), deLR[0] - index[0]);
+      size[1]  = max(deLR[1] - bufLR[1], 0L);
+      break;
 
-  case 7:
-    index[0] = min(bufLR[0], deLR[0]);
-    index[1] = min(deLR[1], bufLR[1]);
-    size[0]  = max(deLR[0] - bufLR[0], 0L);
-    size[1]  = max(deLR[1] - bufLR[1], 0L);
+    case 7:
+      index[0] = min(bufLR[0], deLR[0]);
+      index[1] = min(deLR[1], bufLR[1]);
+      size[0]  = max(deLR[0] - bufLR[0], 0L);
+      size[1]  = max(deLR[1] - bufLR[1], 0L);
     }
   region.SetSize(size);
   region.SetIndex(index);
@@ -812,119 +812,121 @@ ImageAlternateViewer<TPixel>
   if (m_Updating) return 0;
   switch (event)
     {
-  case FL_PUSH:
-    {
-    if (!m_Drag)
+    case FL_PUSH:
       {
-      m_OldMousePos[0] = static_cast<long int>(static_cast<double>(m_DisplayExtent.GetSize()[0] / 2)
-                                               + (static_cast<double>(Fl::event_x()) -
-                                                  static_cast<double>(
-                                                    m_DisplayExtent.GetSize()[0] / 2)) / m_OpenGlIsotropicZoom);
-      m_OldMousePos[1] = static_cast<long int>(static_cast<double>(m_DisplayExtent.GetSize()[1] / 2)
-                                               + (static_cast<double>(Fl::event_y()) -
-                                                  static_cast<double>(
-                                                    m_DisplayExtent.GetSize()[1] / 2)) / m_OpenGlIsotropicZoom);
-      m_Drag = true;
-      m_DragEventCounter = 0;
-
-      if (m_SubWindowRegion.IsInside(m_OldMousePos))
+      if (!m_Drag)
         {
-        m_SubWindowMove = true;
+        m_OldMousePos[0] = static_cast<long int>(static_cast<double>(m_DisplayExtent.GetSize()[0] / 2)
+                                                 + (static_cast<double>(Fl::event_x()) -
+                                                    static_cast<double>(
+                                                      m_DisplayExtent.GetSize()[0] / 2)) / m_OpenGlIsotropicZoom);
+        m_OldMousePos[1] = static_cast<long int>(static_cast<double>(m_DisplayExtent.GetSize()[1] / 2)
+                                                 + (static_cast<double>(Fl::event_y()) -
+                                                    static_cast<double>(
+                                                      m_DisplayExtent.GetSize()[1] / 2)) / m_OpenGlIsotropicZoom);
+        m_Drag = true;
+        m_DragEventCounter = 0;
+
+        if (m_SubWindowRegion.IsInside(m_OldMousePos))
+          {
+          m_SubWindowMove = true;
+          }
+        else
+          {
+          m_OldViewedRegionCenter = m_ViewedRegionCenter;
+          }
         }
+      return 1;
+      }
+
+    case FL_DRAG:
+      {
+      m_Drag = true;
+
+      int x = static_cast<int>(static_cast<double>(m_DisplayExtent.GetSize()[0] / 2)
+                               + (Fl::event_x() - static_cast<double>(
+                                    m_DisplayExtent.GetSize()[0] / 2)) / m_OpenGlIsotropicZoom);
+      int y = static_cast<long int>(static_cast<double>(m_DisplayExtent.GetSize()[1] / 2)
+                                    + (Fl::event_y() - static_cast<double>(
+                                         m_DisplayExtent.GetSize()[1] / 2)) / m_OpenGlIsotropicZoom);
+      if (Fl::event_button() == FL_MIDDLE_MOUSE)
+        {
+        if (!m_SubWindowMode) m_SubWindowMode = true;
+        IndexType newIndex;
+        SizeType  newSize;
+
+        newIndex[0] = (x > m_OldMousePos[0] ? m_OldMousePos[0] : x);
+        newIndex[1] = (y > m_OldMousePos[1] ? m_OldMousePos[1] : y);
+        newSize[0] = vcl_abs(x - m_OldMousePos[0]);
+        newSize[1] = vcl_abs(y - m_OldMousePos[1]);
+        m_SubWindowRegion.SetIndex(newIndex);
+        m_SubWindowRegion.SetSize(newSize);
+        this->redraw();
+        ++m_DragEventCounter;
+        }
+      else if (m_SubWindowMove)
+        {
+        IndexType index = m_SubWindowRegion.GetIndex();
+        index[0] += (x - m_OldMousePos[0]);
+        index[1] += (y - m_OldMousePos[1]);
+        m_SubWindowRegion.SetIndex(index);
+        m_OldMousePos[0] = x;
+        m_OldMousePos[1] = y;
+        this->redraw();
+        ++m_DragEventCounter;
+        }
+
       else
         {
-        m_OldViewedRegionCenter = m_ViewedRegionCenter;
+        SpacingType spacing = m_Image->GetSpacing() * m_SpacingZoomFactor;
+        PointType   origin;
+        origin[0] = static_cast<double>(m_OldViewedRegionCenter[0]) - static_cast<double>(
+          this->m_DisplayExtent.GetSize()[0] / 2) * spacing[0];
+        origin[1] = static_cast<double>(m_OldViewedRegionCenter[1]) - static_cast<double>(
+          this->m_DisplayExtent.GetSize()[1] / 2) * spacing[1];
+        PointType newCenter;
+        newCenter[0] = origin[0] +
+                       static_cast<double>(m_OldMousePos[0] - x + static_cast<long>(
+                                             this->m_DisplayExtent.GetSize()[0]) /
+                                           2) * spacing[0];
+        newCenter[1] = origin[1] +
+                       static_cast<double>(m_OldMousePos[1] - y + static_cast<long>(
+                                             this->m_DisplayExtent.GetSize()[1]) /
+                                           2) * spacing[1];
+        m_Image->TransformPhysicalPointToIndex(newCenter, m_ViewedRegionCenter);
+        this->redraw();
+        ++m_DragEventCounter;
         }
+
+      DecorationRedraw();
+      return 1;
       }
-    return 1;
-    }
 
-  case FL_DRAG:
-    {
-    m_Drag = true;
-
-    int x = static_cast<int>(static_cast<double>(m_DisplayExtent.GetSize()[0] / 2)
-                             + (Fl::event_x() - static_cast<double>(
-                                  m_DisplayExtent.GetSize()[0] / 2)) / m_OpenGlIsotropicZoom);
-    int y = static_cast<long int>(static_cast<double>(m_DisplayExtent.GetSize()[1] / 2)
-                                  + (Fl::event_y() - static_cast<double>(
-                                       m_DisplayExtent.GetSize()[1] / 2)) / m_OpenGlIsotropicZoom);
-    if (Fl::event_button() == FL_MIDDLE_MOUSE)
+    case FL_RELEASE:
       {
-      if (!m_SubWindowMode) m_SubWindowMode = true;
-      IndexType newIndex;
-      SizeType  newSize;
-
-      newIndex[0] = (x > m_OldMousePos[0] ? m_OldMousePos[0] : x);
-      newIndex[1] = (y > m_OldMousePos[1] ? m_OldMousePos[1] : y);
-      newSize[0] = vcl_abs(x - m_OldMousePos[0]);
-      newSize[1] = vcl_abs(y - m_OldMousePos[1]);
-      m_SubWindowRegion.SetIndex(newIndex);
-      m_SubWindowRegion.SetSize(newSize);
-      this->redraw();
-      ++m_DragEventCounter;
+      m_OldViewedRegionCenter = m_ViewedRegionCenter;
+      m_Drag = false;
+      AdditionalRedraw();
+      m_SubWindowMove = false;
+      return 1;
       }
-    else if (m_SubWindowMove)
+    case FL_FOCUS:
       {
-      IndexType index = m_SubWindowRegion.GetIndex();
-      index[0] += (x - m_OldMousePos[0]);
-      index[1] += (y - m_OldMousePos[1]);
-      m_SubWindowRegion.SetIndex(index);
-      m_OldMousePos[0] = x;
-      m_OldMousePos[1] = y;
-      this->redraw();
-      ++m_DragEventCounter;
+      return 1;
       }
-
-    else
+    case FL_UNFOCUS:
       {
-      SpacingType spacing = m_Image->GetSpacing() * m_SpacingZoomFactor;
-      PointType   origin;
-      origin[0] = static_cast<double>(m_OldViewedRegionCenter[0]) - static_cast<double>(
-        this->m_DisplayExtent.GetSize()[0] / 2) * spacing[0];
-      origin[1] = static_cast<double>(m_OldViewedRegionCenter[1]) - static_cast<double>(
-        this->m_DisplayExtent.GetSize()[1] / 2) * spacing[1];
-      PointType newCenter;
-      newCenter[0] = origin[0] +
-                     static_cast<double>(m_OldMousePos[0] - x + static_cast<long>(this->m_DisplayExtent.GetSize()[0]) /
-                                         2) * spacing[0];
-      newCenter[1] = origin[1] +
-                     static_cast<double>(m_OldMousePos[1] - y + static_cast<long>(this->m_DisplayExtent.GetSize()[1]) /
-                                         2) * spacing[1];
-      m_Image->TransformPhysicalPointToIndex(newCenter, m_ViewedRegionCenter);
-      this->redraw();
-      ++m_DragEventCounter;
+      return 1;
       }
-
-    DecorationRedraw();
-    return 1;
-    }
-
-  case FL_RELEASE:
-    {
-    m_OldViewedRegionCenter = m_ViewedRegionCenter;
-    m_Drag = false;
-    AdditionalRedraw();
-    m_SubWindowMove = false;
-    return 1;
-    }
-  case FL_FOCUS:
-    {
-    return 1;
-    }
-  case FL_UNFOCUS:
-    {
-    return 1;
-    }
-  case FL_KEYDOWN:
-    {
-    if (Fl::event_key() == 116) // T key
+    case FL_KEYDOWN:
       {
-      m_SubWindowMode = !m_SubWindowMode;
-      this->redraw();
+      if (Fl::event_key() == 116) // T key
+        {
+        m_SubWindowMode = !m_SubWindowMode;
+        this->redraw();
+        }
+      return 1;
       }
-    return 1;
-    }
     }
   return 0;
 }

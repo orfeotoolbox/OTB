@@ -42,8 +42,8 @@ int otbSurfaceAdjacencyEffect6SCorrectionSchemeFilter(int argc, char * argv[])
   typedef otb::ImageFileWriter<OutputImageType>  WriterType;
 
   typedef otb::SurfaceAdjacencyEffect6SCorrectionSchemeFilter<InputImageType,
-                                                            OutputImageType>
-                                                                                SurfaceAdjacencyEffect6SCorrectionSchemeFilterType;
+      OutputImageType>
+  SurfaceAdjacencyEffect6SCorrectionSchemeFilterType;
   typedef SurfaceAdjacencyEffect6SCorrectionSchemeFilterType::WeightingMatrixType WeightingMatrixType;
   typedef SurfaceAdjacencyEffect6SCorrectionSchemeFilterType::WeightingValuesContainerType
   WeightingValuesContainerType;

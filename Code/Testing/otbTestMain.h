@@ -347,7 +347,7 @@ int main(int ac, char* av[])
               std::string testFilenameImage = (*itTestFilenames);
 
               std::map<std::string,
-                       int> baselines =
+                  int> baselines =
                 testHelper.RegressionTestbaselines(const_cast<char*>(baselineFilenameImage.c_str()));
               std::map<std::string, int>::reverse_iterator baseline = baselines.rbegin();
               multiResult = 1;
@@ -393,7 +393,7 @@ int main(int ac, char* av[])
               std::string testFilenameImage = (*itTestFilenames);
 
               std::map<std::string,
-                       int> baselines =
+                  int> baselines =
                 testHelper.RegressionTestbaselines(const_cast<char*>(baselineFilenameImage.c_str()));
               std::map<std::string, int>::reverse_iterator baseline = baselines.rbegin();
               multiResult = 1;
@@ -451,7 +451,7 @@ int main(int ac, char* av[])
               std::string testFilenameAscii = (*itTestFilenames);
 
               std::map<std::string,
-                       int> baselines =
+                  int> baselines =
                 testHelper.RegressionTestbaselines(const_cast<char*>(baselineFilenameAscii.c_str()));
               std::map<std::string, int>::reverse_iterator baseline = baselines.rbegin();
               multiResult = 1;
@@ -500,7 +500,7 @@ int main(int ac, char* av[])
               std::string testFilenameBinary = (*itTestFilenames);
 
               std::map<std::string,
-                       int> baselines =
+                  int> baselines =
                 testHelper.RegressionTestbaselines(const_cast<char*>(baselineFilenameBinary.c_str()));
               std::map<std::string, int>::reverse_iterator baseline = baselines.rbegin();
               multiResult = 1;
@@ -541,7 +541,7 @@ int main(int ac, char* av[])
               std::string testFilenameOgr = (*itTestFilenames);
 
               std::map<std::string,
-                       int> baselines =
+                  int> baselines =
                 testHelper.RegressionTestbaselines(const_cast<char*>(baselineFilenameOgr.c_str()));
               std::map<std::string, int>::reverse_iterator baseline = baselines.rbegin();
               multiResult = 1;

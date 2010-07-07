@@ -124,7 +124,7 @@ int main(int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef itk::NormalizedCorrelationImageToImageMetric<ImageType,
-                                                       ImageType> MetricType;
+      ImageType> MetricType;
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -138,9 +138,9 @@ int main(int argc, char* argv[])
   typedef itk::Function::HammingWindowFunction<3>          WindowFunctionType;
   typedef itk::ZeroFluxNeumannBoundaryCondition<ImageType> ConditionType;
   typedef itk::WindowedSincInterpolateImageFunction<ImageType, 3,
-                                                    WindowFunctionType,
-                                                    ConditionType,
-                                                    double> InterpolatorType;
+      WindowFunctionType,
+      ConditionType,
+      double> InterpolatorType;
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -178,8 +178,8 @@ int main(int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::DisparityMapEstimationMethod<ImageType,
-                                            ImageType,
-                                            PointSetType> DMEstimationType;
+      ImageType,
+      PointSetType> DMEstimationType;
   typedef DMEstimationType::SizeType SizeType;
   // Software Guide : EndCodeSnippet
 
@@ -350,7 +350,7 @@ int main(int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::NearestPointDeformationFieldGenerator<PointSetType,
-                                                     DeformationFieldType>
+      DeformationFieldType>
   GeneratorType;
 
   // Software GUide : EndCodeSnippet
@@ -424,7 +424,7 @@ int main(int argc, char* argv[])
   // Software Guide :  BeginCodeSnippet
 
   typedef itk::WarpImageFilter<ImageType, ImageType,
-                               DeformationFieldType> ImageWarperType;
+      DeformationFieldType> ImageWarperType;
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -459,7 +459,7 @@ int main(int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef itk::RescaleIntensityImageFilter<ImageType,
-                                           OutputImageType> RescalerType;
+      OutputImageType> RescalerType;
 
   RescalerType::Pointer outputRescaler = RescalerType::New();
   outputRescaler->SetInput(warper->GetOutput());
@@ -492,7 +492,7 @@ int main(int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::MultiToMonoChannelExtractROI<PixelType,
-                                            PixelType>
+      PixelType>
   ChannelExtractionFilterType;
 
   ChannelExtractionFilterType::Pointer channelExtractor

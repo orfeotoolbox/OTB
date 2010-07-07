@@ -24,8 +24,8 @@
 
 int otbGISTableToGISTableFilterNew(int argc, char * argv[])
 {
-  typedef otb::PostGISConnectionImplementation        GISConnectionType;
-  typedef otb::GISTable<GISConnectionType, double, 2> GISTableType;
+  typedef otb::PostGISConnectionImplementation                      GISConnectionType;
+  typedef otb::GISTable<GISConnectionType, double, 2>               GISTableType;
   typedef otb::GISTableToGISTableFilter<GISTableType, GISTableType> GISFilterType;
 
   //Instantiation

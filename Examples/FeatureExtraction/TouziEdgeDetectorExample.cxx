@@ -104,7 +104,7 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::TouziEdgeDetectorImageFilter<InternalImageType,
-                                            InternalImageType> FilterType;
+      InternalImageType> FilterType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -139,7 +139,7 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef itk::RescaleIntensityImageFilter<InternalImageType,
-                                           OutputImageType> RescalerType;
+      OutputImageType> RescalerType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex

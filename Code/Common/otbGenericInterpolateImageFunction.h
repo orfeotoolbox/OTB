@@ -36,7 +36,7 @@ namespace otb
  * \ingroup ImageFunctions ImageInterpolators
  */
 template <class TInputImage, class TFunction, class TBoundaryCondition = itk::ConstantBoundaryCondition<TInputImage>,
-          class TCoordRep = double>
+    class TCoordRep = double>
 class ITK_EXPORT GenericInterpolateImageFunction :
   public itk::InterpolateImageFunction<TInputImage, TCoordRep>
 {

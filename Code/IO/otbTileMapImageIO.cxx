@@ -40,7 +40,6 @@
 #include "itkTimeProbe.h"
 #include "otbCurlHelper.h"
 
-
 namespace otb
 {
 
@@ -151,7 +150,6 @@ void TileMapImageIO::Read(void* buffer)
 
   int nTilesX = (int) ceil(totSamples / 256.) + 1;
   int nTilesY = (int) ceil(totLines / 256.) + 1;
-
 
   // Clear vectors
   m_ListFilename.clear();
@@ -311,7 +309,6 @@ void TileMapImageIO::GenerateBuffer(unsigned char *p)
   for (unsigned int currentTile = 0; currentTile < m_ListTiles.size(); currentTile++)
     {
 
-
     // Read tile from cache
     this->ReadTile(m_ListTiles[currentTile].filename, bufferTile);
 
@@ -456,20 +453,20 @@ void TileMapImageIO::ReadImageInformation()
     std::getline(file, mode);
     switch (atoi(mode.c_str()))
       {
-    case 0:
-      m_AddressMode = TileMapAdressingStyle::GM;
-      return;
-    case 1:
-      m_AddressMode = TileMapAdressingStyle::OSM;
-      return;
-    case 2:
-      m_AddressMode = TileMapAdressingStyle::NEARMAP;
-      return;
-    case 3:
-      m_AddressMode = TileMapAdressingStyle::LOCAL;
-      return;
-    default:
-      itkExceptionMacro(<< "Addressing style unknown");
+      case 0:
+        m_AddressMode = TileMapAdressingStyle::GM;
+        return;
+      case 1:
+        m_AddressMode = TileMapAdressingStyle::OSM;
+        return;
+      case 2:
+        m_AddressMode = TileMapAdressingStyle::NEARMAP;
+        return;
+      case 3:
+        m_AddressMode = TileMapAdressingStyle::LOCAL;
+        return;
+      default:
+        itkExceptionMacro(<< "Addressing style unknown");
       }
 
     otbMsgDevMacro(<< "File parameters: " << m_ServerName << " " << m_FileSuffix << " " << m_AddressMode);
@@ -722,18 +719,18 @@ int TileMapImageIO::XYToQuadTree(double x, double y, std::ostringstream& quad) c
 
     switch (quad_index)
       {
-    case 0:
-      quad << "q";
-      break;
-    case 1:
-      quad << "r";
-      break;
-    case 2:
-      quad << "t";
-      break;
-    case 3:
-      quad << "s";
-      break;
+      case 0:
+        quad << "q";
+        break;
+      case 1:
+        quad << "r";
+        break;
+      case 2:
+        quad << "t";
+        break;
+      case 3:
+        quad << "s";
+        break;
       }
 // level down
     x *= 2;
@@ -756,18 +753,18 @@ int TileMapImageIO::XYToQuadTree2(double x, double y, std::ostringstream& quad) 
 
     switch (quad_index)
       {
-    case 0:
-      quad << "0";
-      break;
-    case 1:
-      quad << "1";
-      break;
-    case 2:
-      quad << "2";
-      break;
-    case 3:
-      quad << "3";
-      break;
+      case 0:
+        quad << "0";
+        break;
+      case 1:
+        quad << "1";
+        break;
+      case 2:
+        quad << "2";
+        break;
+      case 3:
+        quad << "3";
+        break;
       }
 // level down
     x *= 2;
@@ -776,7 +773,7 @@ int TileMapImageIO::XYToQuadTree2(double x, double y, std::ostringstream& quad) 
 
   return 0;
 }
-    
+
 unsigned int
 TileMapImageIO::GetActualNumberOfSplitsForWritingCanStreamWrite(unsigned int numberOfRequestedSplits,
                                                                 const ImageIORegion& pasteRegion) const

@@ -55,13 +55,14 @@ int otbImageMetadataInterfaceTest(int argc, char* argv[])
   file << "GetPhysicalBias:    " << lImageMetadata->GetPhysicalBias(reader->GetOutput()->GetMetaDataDictionary()) <<
   std::endl;
   try
-  {
-  file << "GetMinute:          " << lImageMetadata->GetMinute(reader->GetOutput()->GetMetaDataDictionary()) << std::endl;
-  }
-  catch(itk::ExceptionObject &excep)
-  {
+    {
+    file << "GetMinute:          " << lImageMetadata->GetMinute(reader->GetOutput()->GetMetaDataDictionary()) <<
+    std::endl;
+    }
+  catch (itk::ExceptionObject& excep)
+    {
     std::cerr << excep.GetDescription() << endl;
-  }
+    }
 
   file << "GetHour:            " << lImageMetadata->GetHour(reader->GetOutput()->GetMetaDataDictionary()) << std::endl;
   file << "GetDay:             " << lImageMetadata->GetDay(reader->GetOutput()->GetMetaDataDictionary()) << std::endl;

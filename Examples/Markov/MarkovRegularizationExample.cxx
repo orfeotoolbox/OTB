@@ -95,7 +95,7 @@ int main(int argc, char* argv[])
   <LabelledImageType, LabelledImageType> MarkovRandomFieldFilterType;
 
   typedef otb::MRFSamplerRandom<LabelledImageType,
-                                LabelledImageType> SamplerType;
+      LabelledImageType> SamplerType;
 
   typedef otb::MRFOptimizerMetropolis OptimizerType;
 

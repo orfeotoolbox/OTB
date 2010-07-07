@@ -41,8 +41,8 @@ namespace otb
  *  \sa EuclideanDistanceWithMissingValue
  */
 template <class TListSample, class TMap,
-          class TSOMLearningBehaviorFunctor = Functor::CzihoSOMLearningBehaviorFunctor,
-          class TSOMNeighborhoodBehaviorFunctor = Functor::CzihoSOMNeighborhoodBehaviorFunctor>
+    class TSOMLearningBehaviorFunctor = Functor::CzihoSOMLearningBehaviorFunctor,
+    class TSOMNeighborhoodBehaviorFunctor = Functor::CzihoSOMNeighborhoodBehaviorFunctor>
 class ITK_EXPORT SOMWithMissingValue
   : public PeriodicSOM<TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighborhoodBehaviorFunctor>
 {
@@ -50,8 +50,8 @@ public:
   /** Standard typedefs */
   typedef SOMWithMissingValue Self;
   typedef PeriodicSOM<TListSample, TMap,
-                      TSOMLearningBehaviorFunctor,
-                      TSOMNeighborhoodBehaviorFunctor> Superclass;
+      TSOMLearningBehaviorFunctor,
+      TSOMNeighborhoodBehaviorFunctor> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 

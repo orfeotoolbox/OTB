@@ -26,7 +26,7 @@ int otbPointSetDensityEpanechnikovFunctionNew(int, char*[])
 {
 
   const unsigned int Dimension = 2;
-  typedef float      PixelType;
+  typedef float PixelType;
 
   typedef itk::VariableLengthVector<PixelType>                               RealVectorType;
   typedef itk::PointSet<RealVectorType, Dimension>                           PointSetType;

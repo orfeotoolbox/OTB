@@ -52,7 +52,8 @@ int otbRectangle(int argc, char * argv[])
 
   std::ofstream outfile(outfname);
 
-  if (rectangle1->IsInside(InsideVertex)) outfile << "The point " <<  InsideVertex << " Is Inside the rectangle"  <<
+  if (rectangle1->IsInside(InsideVertex))
+    outfile << "The point " <<  InsideVertex << " Is Inside the rectangle"  <<
     std::endl;
   else outfile << "The point " <<  InsideVertex << " Is Outside the rectangle"  << std::endl;
 

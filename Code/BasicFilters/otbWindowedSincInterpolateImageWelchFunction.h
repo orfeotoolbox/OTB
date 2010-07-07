@@ -80,22 +80,22 @@ private:
  * \ingroup ImageFunctionBases ImageInterpolators
  */
 template<class TInputImage, class TBoundaryCondition = itk::ConstantBoundaryCondition<TInputImage>, class TCoordRep =
-           double, class TInputInterpolator = double, class TOutputInterpolator = double>
+      double, class TInputInterpolator = double, class TOutputInterpolator = double>
 class ITK_EXPORT WindowedSincInterpolateImageWelchFunction :
   public WindowedSincInterpolateImageFunctionBase<TInputImage,
-                                                  ITK_TYPENAME Function::WelchWindowFunction<TInputInterpolator,
-                                                                                             TOutputInterpolator>,
-                                                  TBoundaryCondition,
-                                                  TCoordRep>
+      ITK_TYPENAME Function::WelchWindowFunction<TInputInterpolator,
+          TOutputInterpolator>,
+      TBoundaryCondition,
+      TCoordRep>
 {
 public:
   /** Standard class typedefs. */
   typedef WindowedSincInterpolateImageWelchFunction Self;
   typedef WindowedSincInterpolateImageFunctionBase<TInputImage,
-                                                   ITK_TYPENAME Function::WelchWindowFunction<TInputInterpolator,
-                                                                                              TOutputInterpolator>,
-                                                   TBoundaryCondition,
-                                                   TCoordRep>
+      ITK_TYPENAME Function::WelchWindowFunction<TInputInterpolator,
+          TOutputInterpolator>,
+      TBoundaryCondition,
+      TCoordRep>
   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;

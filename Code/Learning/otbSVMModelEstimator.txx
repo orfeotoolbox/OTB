@@ -127,40 +127,40 @@ SVMModelEstimator<InputPixelType, LabelPixelType>
 
   switch (this->GetModel()->GetKernelType())
     {
-  case LINEAR:
-    // C
-    initialParameters.SetSize(1);
-    initialParameters[0] = this->GetModel()->GetC();
-    break;
+    case LINEAR:
+      // C
+      initialParameters.SetSize(1);
+      initialParameters[0] = this->GetModel()->GetC();
+      break;
 
-  case POLY:
-    // C, gamma and coef0
-    initialParameters.SetSize(3);
-    initialParameters[0] = this->GetModel()->GetC();
-    initialParameters[1] = this->GetModel()->GetKernelGamma();
-    initialParameters[2] = this->GetModel()->GetKernelCoef0();
-    break;
+    case POLY:
+      // C, gamma and coef0
+      initialParameters.SetSize(3);
+      initialParameters[0] = this->GetModel()->GetC();
+      initialParameters[1] = this->GetModel()->GetKernelGamma();
+      initialParameters[2] = this->GetModel()->GetKernelCoef0();
+      break;
 
-  case RBF:
-    // C and gamma
-    initialParameters.SetSize(2);
-    initialParameters[0] = this->GetModel()->GetC();
-    initialParameters[1] = this->GetModel()->GetKernelGamma();
-    break;
+    case RBF:
+      // C and gamma
+      initialParameters.SetSize(2);
+      initialParameters[0] = this->GetModel()->GetC();
+      initialParameters[1] = this->GetModel()->GetKernelGamma();
+      break;
 
-  case SIGMOID:
-    // C, gamma and coef0
-    initialParameters.SetSize(3);
-    initialParameters[0] = this->GetModel()->GetC();
-    initialParameters[1] = this->GetModel()->GetKernelGamma();
-    initialParameters[2] = this->GetModel()->GetKernelCoef0();
-    break;
+    case SIGMOID:
+      // C, gamma and coef0
+      initialParameters.SetSize(3);
+      initialParameters[0] = this->GetModel()->GetC();
+      initialParameters[1] = this->GetModel()->GetKernelGamma();
+      initialParameters[2] = this->GetModel()->GetKernelCoef0();
+      break;
 
-  default:
-    // Only C
-    initialParameters.SetSize(1);
-    initialParameters[0] = this->GetModel()->GetC();
-    break;
+    default:
+      // Only C
+      initialParameters.SetSize(1);
+      initialParameters[0] = this->GetModel()->GetC();
+      break;
     }
 
   m_InitialCrossValidationAccuracy = crossValidationFunction->GetValue(initialParameters);
@@ -215,35 +215,35 @@ SVMModelEstimator<InputPixelType, LabelPixelType>
 
     switch (this->GetModel()->GetKernelType())
       {
-    case LINEAR:
-      // C
-      this->GetModel()->SetC(fineBestParameters[0]);
-      break;
+      case LINEAR:
+        // C
+        this->GetModel()->SetC(fineBestParameters[0]);
+        break;
 
-    case POLY:
-      // C, gamma and coef0
-      this->GetModel()->SetC(fineBestParameters[0]);
-      this->GetModel()->SetKernelGamma(fineBestParameters[1]);
-      this->GetModel()->SetKernelCoef0(fineBestParameters[2]);
-      break;
+      case POLY:
+        // C, gamma and coef0
+        this->GetModel()->SetC(fineBestParameters[0]);
+        this->GetModel()->SetKernelGamma(fineBestParameters[1]);
+        this->GetModel()->SetKernelCoef0(fineBestParameters[2]);
+        break;
 
-    case RBF:
-      // C and gamma
-      this->GetModel()->SetC(fineBestParameters[0]);
-      this->GetModel()->SetKernelGamma(fineBestParameters[1]);
-      break;
+      case RBF:
+        // C and gamma
+        this->GetModel()->SetC(fineBestParameters[0]);
+        this->GetModel()->SetKernelGamma(fineBestParameters[1]);
+        break;
 
-    case SIGMOID:
-      // C, gamma and coef0
-      this->GetModel()->SetC(fineBestParameters[0]);
-      this->GetModel()->SetKernelGamma(fineBestParameters[1]);
-      this->GetModel()->SetKernelCoef0(fineBestParameters[2]);
-      break;
+      case SIGMOID:
+        // C, gamma and coef0
+        this->GetModel()->SetC(fineBestParameters[0]);
+        this->GetModel()->SetKernelGamma(fineBestParameters[1]);
+        this->GetModel()->SetKernelCoef0(fineBestParameters[2]);
+        break;
 
-    default:
-      // Only C
-      this->GetModel()->SetC(fineBestParameters[0]);
-      break;
+      default:
+        // Only C
+        this->GetModel()->SetC(fineBestParameters[0]);
+        break;
       }
     }
 }

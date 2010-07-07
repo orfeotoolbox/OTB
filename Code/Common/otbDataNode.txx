@@ -171,57 +171,58 @@ DataNode<TPrecision, VDimension, TValuePrecision>
   itk::OStringStream oss;
   switch (m_NodeType)
     {
-  case ROOT:
-    {
-    oss << "Root (" << m_NodeId << ")";
-    break;
-    }
-  case DOCUMENT:
-    {
-    oss << "Document (" << m_NodeId << ")";
-    break;
-    }
-  case FOLDER:
-    {
-    oss << "Folder (" << m_NodeId << ")";
-    break;
-    }
-  case FEATURE_POINT:
-    {
-    oss << "Point (" << m_NodeId << ") " << m_Data.point;
-    break;
-    }
-  case FEATURE_LINE:
-    {
-    oss << "Line (" << m_NodeId << ") " << m_Data.line->GetVertexList()->Size() << " points";
-    break;
-    }
-  case FEATURE_POLYGON:
-    {
-    oss << "Polygon (" << m_NodeId << ") " << this->GetPolygonExteriorRing()->GetVertexList()->Size() << " points, " <<
-    this->GetPolygonInteriorRings()->Size() << " interior rings";
-    break;
-    }
-  case FEATURE_MULTIPOINT:
-    {
-    oss << "MultiPoint (" << m_NodeId << ")";
-    break;
-    }
-  case FEATURE_MULTILINE:
-    {
-    oss << "MultiLine (" << m_NodeId << ")";
-    break;
-    }
-  case FEATURE_MULTIPOLYGON:
-    {
-    oss << "MultiPolygon (" << m_NodeId << ")";
-    break;
-    }
-  case FEATURE_COLLECTION:
-    {
-    oss << "Collection (" << m_NodeId << ")";
-    break;
-    }
+    case ROOT:
+      {
+      oss << "Root (" << m_NodeId << ")";
+      break;
+      }
+    case DOCUMENT:
+      {
+      oss << "Document (" << m_NodeId << ")";
+      break;
+      }
+    case FOLDER:
+      {
+      oss << "Folder (" << m_NodeId << ")";
+      break;
+      }
+    case FEATURE_POINT:
+      {
+      oss << "Point (" << m_NodeId << ") " << m_Data.point;
+      break;
+      }
+    case FEATURE_LINE:
+      {
+      oss << "Line (" << m_NodeId << ") " << m_Data.line->GetVertexList()->Size() << " points";
+      break;
+      }
+    case FEATURE_POLYGON:
+      {
+      oss << "Polygon (" << m_NodeId << ") " << this->GetPolygonExteriorRing()->GetVertexList()->Size() <<
+      " points, " <<
+      this->GetPolygonInteriorRings()->Size() << " interior rings";
+      break;
+      }
+    case FEATURE_MULTIPOINT:
+      {
+      oss << "MultiPoint (" << m_NodeId << ")";
+      break;
+      }
+    case FEATURE_MULTILINE:
+      {
+      oss << "MultiLine (" << m_NodeId << ")";
+      break;
+      }
+    case FEATURE_MULTIPOLYGON:
+      {
+      oss << "MultiPolygon (" << m_NodeId << ")";
+      break;
+      }
+    case FEATURE_COLLECTION:
+      {
+      oss << "Collection (" << m_NodeId << ")";
+      break;
+      }
     }
   if (GetMetaDataDictionary().HasKey(MetaDataKey::VectorDataKeywordlistKey))
     {
@@ -354,8 +355,6 @@ DataNode<TPrecision, VDimension, TValuePrecision>
   return false;
 }
 
-
-
 /*
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 typename DataNode<TPrecision,VDimension,TValuePrecision>
@@ -408,8 +407,6 @@ DataNode<TPrecision,VDimension,TValuePrecision>
 {
   m_FieldMap.clear();
 }*/
-
-
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 bool

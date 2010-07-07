@@ -77,7 +77,7 @@ int main(int argc, char * argv[])
   // Software Guide : BeginCodeSnippet
   typedef float MomentType;
   typedef otb::HuImageFunction<InputImageType,
-                               MomentType>   HuType;
+      MomentType>   HuType;
 
   HuType::Pointer hmFunction = HuType::New();
   // Software Guide : EndCodeSnippet

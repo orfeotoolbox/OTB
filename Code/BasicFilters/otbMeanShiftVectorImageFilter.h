@@ -82,7 +82,7 @@ public:
   /** Standard class typedef */
   typedef MeanShiftVectorImageFilter Self;
   typedef MeanShiftImageFilter<TInputImage, TOutputImage, TLabeledOutput,
-                               MeanShift::VectorBufferConverter>                       Superclass;
+      MeanShift::VectorBufferConverter>                       Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 

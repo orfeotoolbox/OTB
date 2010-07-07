@@ -114,7 +114,7 @@ public:
   typedef itk::HessianRecursiveGaussianImageFilter
   <InputImageType, VectorImageType>                          ImageToHessianImageFilterType;
   typedef typename ImageToHessianImageFilterType::Pointer
-                                                                                                 ImageToHessianImageFilterPointerType;
+  ImageToHessianImageFilterPointerType;
   typedef Functor::HessianDeterminant<VectorType, OutputPixelType>                               DeterminantFunctorType;
   typedef itk::UnaryFunctorImageFilter<VectorImageType, OutputImageType, DeterminantFunctorType> DeterminantFilterType;
   typedef typename DeterminantFilterType::Pointer

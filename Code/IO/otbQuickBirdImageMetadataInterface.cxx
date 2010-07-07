@@ -449,10 +449,11 @@ QuickBirdImageMetadataInterface
     {
     itkExceptionMacro(<< "Invalid bandID " << keywordStringBId);
     }
-    
+
   ossimString keywordStringTDILevel = kwl.find("support_data.TDI_level");
   int         TDILevel = keywordStringTDILevel.toInt();
-  if (keywordStringBId == ossimString("P") && TDILevel != 10 && TDILevel != 13 && TDILevel != 18 && TDILevel != 24 && TDILevel != 32)
+  if (keywordStringBId == ossimString("P") && TDILevel != 10 && TDILevel != 13 && TDILevel != 18 && TDILevel != 24 &&
+      TDILevel != 32)
     {
     itkExceptionMacro(<< "Invalid TDILevel " << TDILevel);
     }
@@ -685,24 +686,24 @@ QuickBirdImageMetadataInterface
   return wavel;
 }
 
-unsigned int 
+unsigned int
 QuickBirdImageMetadataInterface
 ::GetDefaultRBand() const
-{ 
+{
   return 2;
 }
 
-unsigned int 
+unsigned int
 QuickBirdImageMetadataInterface
 ::GetDefaultGBand() const
-{ 
+{
   return 1;
 }
 
-unsigned int 
+unsigned int
 QuickBirdImageMetadataInterface
 ::GetDefaultBBand() const
-{ 
+{
   return 0;
 }
 

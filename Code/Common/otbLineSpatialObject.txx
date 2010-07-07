@@ -163,7 +163,8 @@ LineSpatialObject<VDimension>
             (int) ((*it1).GetPosition()[1] +
                    (((*it2).GetPosition()[1] -
                      (*it1).GetPosition()[1]) /
-          ((*it2).GetPosition()[0] - (*it1).GetPosition()[0])) * (transformedPoint[0] - (*it1).GetPosition()[0])) &&
+                    ((*it2).GetPosition()[0] -
+                     (*it1).GetPosition()[0])) * (transformedPoint[0] - (*it1).GetPosition()[0])) &&
             transformedPoint[0] >= (*it1).GetPosition()[0] && transformedPoint[0] <= (*it2).GetPosition()[0])
           {
           return true;
@@ -175,7 +176,8 @@ LineSpatialObject<VDimension>
             (int) ((((*it2).GetPosition()[1] -
                      (*it1).GetPosition()[1]) /
                     ((*it1).GetPosition()[0] -
-          (*it2).GetPosition()[0])) * ((*it1).GetPosition()[0] - transformedPoint[0]) + (*it1).GetPosition()[1]) &&
+                     (*it2).GetPosition()[0])) *
+                   ((*it1).GetPosition()[0] - transformedPoint[0]) + (*it1).GetPosition()[1]) &&
             transformedPoint[0] >= (*it2).GetPosition()[0] && transformedPoint[0] <= (*it1).GetPosition()[0])
           {
           return true;
@@ -187,7 +189,8 @@ LineSpatialObject<VDimension>
             (int) ((((*it2).GetPosition()[0] -
                      (*it1).GetPosition()[0]) /
                     ((*it2).GetPosition()[1] -
-          (*it1).GetPosition()[1])) * (transformedPoint[1] - (*it1).GetPosition()[1]) + (*it1).GetPosition()[0]) &&
+                     (*it1).GetPosition()[1])) *
+                   (transformedPoint[1] - (*it1).GetPosition()[1]) + (*it1).GetPosition()[0]) &&
             transformedPoint[1] >= (*it1).GetPosition()[1] && transformedPoint[1] <= (*it2).GetPosition()[1])
           {
           return true;
@@ -199,7 +202,8 @@ LineSpatialObject<VDimension>
             (int) ((((*it2).GetPosition()[0] -
                      (*it1).GetPosition()[0]) /
                     ((*it1).GetPosition()[1] -
-          (*it2).GetPosition()[1])) * ((*it1).GetPosition()[1] - transformedPoint[1]) + (*it1).GetPosition()[0]) &&
+                     (*it2).GetPosition()[1])) *
+                   ((*it1).GetPosition()[1] - transformedPoint[1]) + (*it1).GetPosition()[0]) &&
             transformedPoint[1] >= (*it2).GetPosition()[1] && transformedPoint[1] <= (*it1).GetPosition()[1])
           {
           return true;

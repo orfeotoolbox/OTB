@@ -35,17 +35,17 @@ int otbBayesianFusionFilter(int argc, char * argv[])
   typedef double PixelType;
 
   typedef otb::VectorImage<PixelType,
-                           Dimension>
-                                                                                                         VectorImageType;
+      Dimension>
+  VectorImageType;
   typedef otb::Image<PixelType,
-                     Dimension>
-                                                                                                         PanchroImageType;
+      Dimension>
+  PanchroImageType;
   typedef otb::ImageFileReader<VectorImageType>
-                                                                                                         VectorReaderType;
+  VectorReaderType;
   typedef otb::ImageFileReader<PanchroImageType>
-                                                                                                         ImageReaderType;
+  ImageReaderType;
   typedef otb::StreamingImageFileWriter<VectorImageType>
-                                                                                                         VectorImageWriterType;
+  VectorImageWriterType;
   typedef otb::BayesianFusionFilter<VectorImageType, VectorImageType, PanchroImageType, VectorImageType> FilterType;
 
   VectorReaderType::Pointer      multiSpectReader = VectorReaderType::New();

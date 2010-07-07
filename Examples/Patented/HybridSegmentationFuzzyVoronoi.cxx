@@ -108,9 +108,9 @@ int main(int argc, char *argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef   itk::SimpleFuzzyConnectednessScalarImageFilter<
-    InputImageType,
-    BinaryImageType
-    >  FuzzySegmentationFilterType;
+      InputImageType,
+      BinaryImageType
+      >  FuzzySegmentationFilterType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -158,9 +158,9 @@ int main(int argc, char *argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef  itk::VoronoiSegmentationImageFilter<
-    InputImageType,
-    OutputImageType,
-    BinaryImageType>
+      InputImageType,
+      OutputImageType,
+      BinaryImageType>
   VoronoiSegmentationFilterType;
 
   VoronoiSegmentationFilterType::Pointer voronoisegmenter =

@@ -27,13 +27,13 @@ namespace otb
 {
 
 template <class TInputMultiSpectralImage,
-          class TInputMultiSpectralInterpImage,
-          class TInputPanchroImage,
-          class TOutputImage>
+    class TInputMultiSpectralInterpImage,
+    class TInputPanchroImage,
+    class TOutputImage>
 BayesianFusionFilter<TInputMultiSpectralImage,
-                     TInputMultiSpectralInterpImage,
-                     TInputPanchroImage,
-                     TOutputImage>
+    TInputMultiSpectralInterpImage,
+    TInputPanchroImage,
+    TOutputImage>
 ::BayesianFusionFilter()
 {
   m_Lambda = 0.9999;
@@ -42,26 +42,26 @@ BayesianFusionFilter<TInputMultiSpectralImage,
 }
 
 template <class TInputMultiSpectralImage,
-          class TInputMultiSpectralInterpImage,
-          class TInputPanchroImage,
-          class TOutputImage>
+    class TInputMultiSpectralInterpImage,
+    class TInputPanchroImage,
+    class TOutputImage>
 BayesianFusionFilter<TInputMultiSpectralImage,
-                     TInputMultiSpectralInterpImage,
-                     TInputPanchroImage,
-                     TOutputImage>
+    TInputMultiSpectralInterpImage,
+    TInputPanchroImage,
+    TOutputImage>
 ::~BayesianFusionFilter()
 {
 
 }
 template <class TInputMultiSpectralImage,
-          class TInputMultiSpectralInterpImage,
-          class TInputPanchroImage,
-          class TOutputImage>
+    class TInputMultiSpectralInterpImage,
+    class TInputPanchroImage,
+    class TOutputImage>
 void
 BayesianFusionFilter<TInputMultiSpectralImage,
-                     TInputMultiSpectralInterpImage,
-                     TInputPanchroImage,
-                     TOutputImage>
+    TInputMultiSpectralInterpImage,
+    TInputPanchroImage,
+    TOutputImage>
 ::Modified()
 {
   Superclass::Modified();
@@ -69,14 +69,14 @@ BayesianFusionFilter<TInputMultiSpectralImage,
 }
 
 template <class TInputMultiSpectralImage,
-          class TInputMultiSpectralInterpImage,
-          class TInputPanchroImage,
-          class TOutputImage>
+    class TInputMultiSpectralInterpImage,
+    class TInputPanchroImage,
+    class TOutputImage>
 void
 BayesianFusionFilter<TInputMultiSpectralImage,
-                     TInputMultiSpectralInterpImage,
-                     TInputPanchroImage,
-                     TOutputImage>
+    TInputMultiSpectralInterpImage,
+    TInputPanchroImage,
+    TOutputImage>
 ::BeforeThreadedGenerateData()
 {
   if (!m_StatisticsHaveBeenGenerated)
@@ -87,14 +87,14 @@ BayesianFusionFilter<TInputMultiSpectralImage,
 }
 
 template <class TInputMultiSpectralImage,
-          class TInputMultiSpectralInterpImage,
-          class TInputPanchroImage,
-          class TOutputImage>
+    class TInputMultiSpectralInterpImage,
+    class TInputPanchroImage,
+    class TOutputImage>
 void
 BayesianFusionFilter<TInputMultiSpectralImage,
-                     TInputMultiSpectralInterpImage,
-                     TInputPanchroImage,
-                     TOutputImage>
+    TInputMultiSpectralInterpImage,
+    TInputPanchroImage,
+    TOutputImage>
 ::ComputeInternalStatistics()
 {
   OutputImageRegionType msiRequestedRegion = this->GetMultiSpectInterp()->GetRequestedRegion();

@@ -72,7 +72,7 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef itk::RescaleIntensityImageFilter<InputImageType,
-                                           OutputImageType> RescalerType;
+      OutputImageType> RescalerType;
   RescalerType::Pointer rescaler = RescalerType::New();
   rescaler->SetInput(reader->GetOutput());
   // Software Guide : EndCodeSnippet

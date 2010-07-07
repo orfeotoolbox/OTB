@@ -92,7 +92,7 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
   typedef otb::MorphologicalPyramid::Segmenter<InputImageType,
-                                               LabelImageType>
+      LabelImageType>
   SegmenterType;
 // Software Guide : EndCodeSnippet
 
@@ -156,8 +156,8 @@ int main(int argc, char * argv[])
   typedef itk::Functor::ScalarToRGBPixelFunctor<LabelPixelType>
   ColorMapFunctorType;
   typedef itk::UnaryFunctorImageFilter<LabelImageType,
-                                       RGBImageType,
-                                       ColorMapFunctorType> ColorMapFilterType;
+      RGBImageType,
+      ColorMapFunctorType> ColorMapFilterType;
   ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
   // Software Guide : EndCodeSnippet
 

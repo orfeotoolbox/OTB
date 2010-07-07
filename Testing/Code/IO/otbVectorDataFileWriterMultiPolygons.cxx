@@ -30,7 +30,7 @@ int otbVectorDataFileWriterMultiPolygons(int argc, char * argv[])
   typedef DataNodeType::PointType                   PointType;
   typedef DataNodeType::LineType                    LineType;
   typedef DataNodeType::PolygonType                 PolygonType;
-  typedef DataNodeType::PolygonListType                 PolygonListType;
+  typedef DataNodeType::PolygonListType             PolygonListType;
   typedef LineType::VertexType                      VertexType;
 
   //Instantiation
@@ -57,7 +57,6 @@ int otbVectorDataFileWriterMultiPolygons(int argc, char * argv[])
   polygon5->SetNodeId("FEATURE_MULTIPOLYGON");
   polygon1->SetNodeId("FEATURE_POLYGON");
   polygon2->SetNodeId("FEATURE_POLYGON");
-  
 
   VertexType p1;
   p1.Fill(5);
@@ -73,13 +72,11 @@ int otbVectorDataFileWriterMultiPolygons(int argc, char * argv[])
   p4[0] = 1;
   p4[1] = 15;
 
-
   PolygonType::Pointer poly = PolygonType::New();
   poly->AddVertex(p1);
   poly->AddVertex(p2);
   poly->AddVertex(p3);
   polygon1->SetPolygonExteriorRing(poly);
-
 
   PolygonType::Pointer poly1 = PolygonType::New();
   poly1->AddVertex(p1);
@@ -95,10 +92,9 @@ int otbVectorDataFileWriterMultiPolygons(int argc, char * argv[])
   data->GetDataTree()->Add(document, root);
   data->GetDataTree()->Add(folder, document);
   data->GetDataTree()->Add(polygon5, folder);
-  data->GetDataTree()->Add(polygon1,polygon5);
-  data->GetDataTree()->Add(polygon2,polygon5);
-  data->GetDataTree()->Add(polygon3,polygon5);
- 
+  data->GetDataTree()->Add(polygon1, polygon5);
+  data->GetDataTree()->Add(polygon2, polygon5);
+  data->GetDataTree()->Add(polygon3, polygon5);
 
   writer->SetFileName(argv[1]);
   writer->SetInput(data);

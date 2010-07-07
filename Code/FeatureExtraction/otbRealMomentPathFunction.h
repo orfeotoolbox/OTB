@@ -32,8 +32,8 @@ namespace otb
  */
 
 template <class TInputPath,
-          class TOutput      = double,
-          class TPrecision   = double>
+    class TOutput      = double,
+    class TPrecision   = double>
 class ITK_EXPORT RealMomentPathFunction :
   public GeometricMomentPathFunction<TInputPath, TOutput, TPrecision>
 {
@@ -61,8 +61,7 @@ public:
   typedef typename Superclass::OutputType RealType;
 
 protected:
-  RealMomentPathFunction()
-    {}
+  RealMomentPathFunction() {}
   ~RealMomentPathFunction() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {

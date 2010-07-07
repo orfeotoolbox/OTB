@@ -109,7 +109,7 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef itk::DerivativeImageFilter<
-    InputImageType, OutputImageType>  FilterType;
+      InputImageType, OutputImageType>  FilterType;
 
   FilterType::Pointer filter = FilterType::New();
   // Software Guide : EndCodeSnippet
@@ -169,8 +169,8 @@ int main(int argc, char * argv[])
   typedef otb::Image<unsigned char, Dimension> WriteImageType;
 
   typedef itk::RescaleIntensityImageFilter<
-    OutputImageType,
-    WriteImageType>    NormalizeFilterType;
+      OutputImageType,
+      WriteImageType>    NormalizeFilterType;
 
   typedef otb::ImageFileWriter<WriteImageType> NormalizedWriterType;
 

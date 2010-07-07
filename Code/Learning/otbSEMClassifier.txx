@@ -300,7 +300,8 @@ SEMClassifier<TInputImage, TOutputImage>
   m_NbClasses = theNumberOfClasses;
   m_ComponentVector.resize(theNumberOfClasses);
 
-  if (m_ComponentDeclared == 1) otbMsgDebugMacro(
+  if (m_ComponentDeclared == 1)
+    otbMsgDebugMacro(
       << "Previous component declarations will be lost since called before SetNumberOfClasses");
 
   m_ComponentDeclared = 0;
@@ -445,13 +446,13 @@ SEMClassifier<TInputImage, TOutputImage>
 
   switch (GetCurrentIteration())
     {
-  case 0:
-  case 1:
-    otbMsgDebugMacro(<< "Doing iteration " << GetCurrentIteration());
-    break;
-  default:
-    otbMsgDebugMacro(<< m_NbChange << " sample change at iteration "
-                     << GetCurrentIteration());
+    case 0:
+    case 1:
+      otbMsgDebugMacro(<< "Doing iteration " << GetCurrentIteration());
+      break;
+    default:
+      otbMsgDebugMacro(<< m_NbChange << " sample change at iteration "
+                       << GetCurrentIteration());
     }
 }
 

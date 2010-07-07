@@ -41,19 +41,19 @@ namespace otb
  * \ingroup Projection
  */
 template <class TScalarType,
-          unsigned int NInputDimensions = 2,
-          unsigned int NOutputDimensions = 2>
+    unsigned int NInputDimensions = 2,
+    unsigned int NOutputDimensions = 2>
 class ITK_EXPORT InverseSensorModel : public SensorModelBase<TScalarType,
-                                                             NInputDimensions,
-                                                             NOutputDimensions>
+      NInputDimensions,
+      NOutputDimensions>
 {
 
 public:
   /** Standard class typedefs. */
   typedef InverseSensorModel Self;
   typedef SensorModelBase<TScalarType,
-                          NInputDimensions,
-                          NOutputDimensions>         Superclass;
+      NInputDimensions,
+      NOutputDimensions>         Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 

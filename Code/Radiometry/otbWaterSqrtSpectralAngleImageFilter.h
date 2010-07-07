@@ -30,7 +30,7 @@ namespace otb
  *
  *  This filter calculates a pixel wise water indice by calculating
  *  the spectral angle distance with a reference radiometry.
- *  This class is templated over the input multispectral image type, 
+ *  This class is templated over the input multispectral image type,
  *  and the output image type.
  *  By default, the filter use the channel 0 as blue, the channel 1 as
  *  green, the channel 2 as red, and the channel 3 as near
@@ -44,9 +44,9 @@ namespace otb
  */
 
 template <class TInputVectorImage, class TOutputImage,
-          class TFunction = Functor::WaterSqrtSpectralAngleFunctor <
-            typename TInputVectorImage::PixelType,
-            typename TOutputImage::PixelType> >
+    class TFunction = Functor::WaterSqrtSpectralAngleFunctor <
+        typename TInputVectorImage::PixelType,
+        typename TOutputImage::PixelType> >
 class ITK_EXPORT WaterSqrtSpectralAngleImageFilter :
   public itk::UnaryFunctorImageFilter<TInputVectorImage, TOutputImage, TFunction>
 {

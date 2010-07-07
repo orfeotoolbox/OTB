@@ -252,121 +252,123 @@ VectorDataToLabelMapFilter<TVectorData, TLabelMap>
     otbGenericMsgDebugMacro(<< "Type of node " << dataNode->GetNodeType() << " id" << dataNode->GetNodeId());
     switch (dataNode->GetNodeType())
       {
-    case otb::ROOT:
-      {
-      ProcessNode((*it));
-      break;
-      }
-    case otb::DOCUMENT:
-      {
-      ProcessNode((*it));
-      break;
-      }
-    case otb::FOLDER:
-      {
-      ProcessNode((*it));
-      break;
-      }
-    case FEATURE_POINT:
-      {
-      otbGenericMsgDebugMacro(<< "Insert Point from vectorData");
-      IndexType index;
-      this->GetOutput()->TransformPhysicalPointToIndex(dataNode->GetPoint(), index);
-
-      this->GetOutput()->SetPixel(index, m_lab);
-      m_lab += 10;
-      break;
-      }
-    case otb::FEATURE_LINE:
-      {
-      //TODO Bresenham
-      itkExceptionMacro(
-        << "This type (FEATURE_LINE) is not handle (yet) by VectorDataToLabelMapFilter(), please request for it");
-      break;
-      }
-    case FEATURE_POLYGON:
-      {
-
-      /** correct polygon exterior ring (simplify and close the pokygon)*/
-      CorrectFunctorType correct;
-      PolygonPointerType correctPolygonExtRing = correct(dataNode->GetPolygonExteriorRing());
-
-      typedef typename DataNodeType::PolygonType PolygonType;
-      typedef typename PolygonType::RegionType   RegionType;
-      typedef typename PolygonType::VertexType   VertexType;
-      typedef typename IndexType::IndexValueType IndexValueType;
-      typedef typename VertexType::ValueType     VertexValueType;
-      RegionType polygonExtRingBoundReg = correctPolygonExtRing->GetBoundingRegion();
-
-      VertexType vertex;
-      std::cout << "Polygon bounding region " << polygonExtRingBoundReg << std::endl;
-      std::cout << "output origin " << this->GetOutput()->GetOrigin() << std::endl;
-      std::cout << "spacing " << this->GetOutput()->GetSpacing() << std::endl;
-      // For each position in the bounding region of the polygon
-
-      for (double i = polygonExtRingBoundReg.GetOrigin(0);
-           i < polygonExtRingBoundReg.GetOrigin(0) + polygonExtRingBoundReg.GetSize(0);
-           i += this->GetOutput()->GetSpacing()[0])
+      case otb::ROOT:
         {
-        vertex[0] = static_cast<VertexValueType>(i);
-        for (double j = polygonExtRingBoundReg.GetOrigin(1);
-             j < polygonExtRingBoundReg.GetOrigin(1) + polygonExtRingBoundReg.GetSize(1);
-             j += this->GetOutput()->GetSpacing()[1])
-          {
-          vertex[1] = static_cast<VertexValueType>(j);
+        ProcessNode((*it));
+        break;
+        }
+      case otb::DOCUMENT:
+        {
+        ProcessNode((*it));
+        break;
+        }
+      case otb::FOLDER:
+        {
+        ProcessNode((*it));
+        break;
+        }
+      case FEATURE_POINT:
+        {
+        otbGenericMsgDebugMacro(<< "Insert Point from vectorData");
+        IndexType index;
+        this->GetOutput()->TransformPhysicalPointToIndex(dataNode->GetPoint(), index);
 
-          if (correctPolygonExtRing->IsInside(vertex) || correctPolygonExtRing->IsOnEdge (vertex))
+        this->GetOutput()->SetPixel(index, m_lab);
+        m_lab += 10;
+        break;
+        }
+      case otb::FEATURE_LINE:
+        {
+        //TODO Bresenham
+        itkExceptionMacro(
+          << "This type (FEATURE_LINE) is not handle (yet) by VectorDataToLabelMapFilter(), please request for it");
+        break;
+        }
+      case FEATURE_POLYGON:
+        {
+
+        /** correct polygon exterior ring (simplify and close the pokygon)*/
+        CorrectFunctorType correct;
+        PolygonPointerType correctPolygonExtRing = correct(dataNode->GetPolygonExteriorRing());
+
+        typedef typename DataNodeType::PolygonType PolygonType;
+        typedef typename PolygonType::RegionType   RegionType;
+        typedef typename PolygonType::VertexType   VertexType;
+        typedef typename IndexType::IndexValueType IndexValueType;
+        typedef typename VertexType::ValueType     VertexValueType;
+        RegionType polygonExtRingBoundReg = correctPolygonExtRing->GetBoundingRegion();
+
+        VertexType vertex;
+        std::cout << "Polygon bounding region " << polygonExtRingBoundReg << std::endl;
+        std::cout << "output origin " << this->GetOutput()->GetOrigin() << std::endl;
+        std::cout << "spacing " << this->GetOutput()->GetSpacing() << std::endl;
+        // For each position in the bounding region of the polygon
+
+        for (double i = polygonExtRingBoundReg.GetOrigin(0);
+             i < polygonExtRingBoundReg.GetOrigin(0) + polygonExtRingBoundReg.GetSize(0);
+             i += this->GetOutput()->GetSpacing()[0])
+          {
+          vertex[0] = static_cast<VertexValueType>(i);
+          for (double j = polygonExtRingBoundReg.GetOrigin(1);
+               j < polygonExtRingBoundReg.GetOrigin(1) + polygonExtRingBoundReg.GetSize(1);
+               j += this->GetOutput()->GetSpacing()[1])
             {
-            IndexType index;
-            index[0] = static_cast<IndexValueType>(vertex[0] - polygonExtRingBoundReg.GetOrigin(0));
-            index[1] = static_cast<IndexValueType>(vertex[1] - polygonExtRingBoundReg.GetOrigin(1));
+            vertex[1] = static_cast<VertexValueType>(j);
+
+            if (correctPolygonExtRing->IsInside(vertex) || correctPolygonExtRing->IsOnEdge (vertex))
+              {
+              IndexType index;
+              index[0] = static_cast<IndexValueType>(vertex[0] - polygonExtRingBoundReg.GetOrigin(0));
+              index[1] = static_cast<IndexValueType>(vertex[1] - polygonExtRingBoundReg.GetOrigin(1));
 //               index[0] += this->GetOutput()->GetOrigin()[0];
 //               index[1] += this->GetOutput()->GetOrigin()[1];
 //               std::cout << "index " << index << std::endl;
-            if (this->GetOutput()->HasLabel(m_lab))
-              {
-              if (!this->GetOutput()->GetLabelObject(m_lab)->HasIndex(index))
-                {  //Add a pixel to the current labelObject
+              if (this->GetOutput()->HasLabel(m_lab))
+                {
+                if (!this->GetOutput()->GetLabelObject(m_lab)->HasIndex(index))
+                  { //Add a pixel to the current labelObject
+                  this->GetOutput()->SetPixel(index, m_lab);
+                  }
+                }
+              else
+                {
+                //Add a pixel to the current labelObject
                 this->GetOutput()->SetPixel(index, m_lab);
                 }
               }
-            else
-              {
-              //Add a pixel to the current labelObject
-              this->GetOutput()->SetPixel(index, m_lab);
-              }
             }
           }
+        //Modify the label for the next layer
+        m_lab += 10;
+        break;
         }
-      //Modify the label for the next layer
-      m_lab += 10;
-      break;
-      }
-    case FEATURE_MULTIPOINT:
-      {
-      itkExceptionMacro(
-        << "This type (FEATURE_MULTIPOINT) is not handle (yet) by VectorDataToLabelMapFilter(), please request for it");
-      break;
-      }
-    case FEATURE_MULTILINE:
-      {
-      itkExceptionMacro(
-        << "This type (FEATURE_MULTILINE) is not handle (yet) by VectorDataToLabelMapFilter(), please request for it");
-      break;
-      }
-    case FEATURE_MULTIPOLYGON:
-      {
-      itkExceptionMacro(
-        <<
-        "This type (FEATURE_MULTIPOLYGON) is not handle (yet) by VectorDataToLabelMapFilter(), please request for it");
-      break;
-      }
-    case FEATURE_COLLECTION:
-      {
-      itkExceptionMacro(
-        << "This type (FEATURE_COLLECTION) is not handle (yet) by VectorDataToLabelMapFilter(), please request for it");
-      break;
-      }
+      case FEATURE_MULTIPOINT:
+        {
+        itkExceptionMacro(
+          <<
+          "This type (FEATURE_MULTIPOINT) is not handle (yet) by VectorDataToLabelMapFilter(), please request for it");
+        break;
+        }
+      case FEATURE_MULTILINE:
+        {
+        itkExceptionMacro(
+          << "This type (FEATURE_MULTILINE) is not handle (yet) by VectorDataToLabelMapFilter(), please request for it");
+        break;
+        }
+      case FEATURE_MULTIPOLYGON:
+        {
+        itkExceptionMacro(
+          <<
+          "This type (FEATURE_MULTIPOLYGON) is not handle (yet) by VectorDataToLabelMapFilter(), please request for it");
+        break;
+        }
+      case FEATURE_COLLECTION:
+        {
+        itkExceptionMacro(
+          <<
+          "This type (FEATURE_COLLECTION) is not handle (yet) by VectorDataToLabelMapFilter(), please request for it");
+        break;
+        }
       }
     }
 }

@@ -145,15 +145,15 @@ private:
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT MultiScaleConvexOrConcaveClassificationFilter
   : public QuaternaryFunctorImageFilter<TInputImage, TInputImage, TOutputImage, TOutputImage, TOutputImage,
-                                        Functor::MultiScaleConvexOrConcaveDecisionRule<typename TInputImage::PixelType,
-                                                                                       typename TOutputImage::PixelType> >
+      Functor::MultiScaleConvexOrConcaveDecisionRule<typename TInputImage::PixelType,
+          typename TOutputImage::PixelType> >
 {
 public:
   /** Standard typedefs */
   typedef MultiScaleConvexOrConcaveClassificationFilter Self;
   typedef QuaternaryFunctorImageFilter<TInputImage, TInputImage, TOutputImage, TOutputImage, TOutputImage,
-                                       Functor::MultiScaleConvexOrConcaveDecisionRule<typename TInputImage::PixelType,
-                                                                                      typename TOutputImage::PixelType> >
+      Functor::MultiScaleConvexOrConcaveDecisionRule<typename TInputImage::PixelType,
+          typename TOutputImage::PixelType> >
   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -169,7 +169,7 @@ public:
   typedef TOutputImage                        OutputImageType;
   typedef typename OutputImageType::PixelType LabelType;
   typedef Functor::MultiScaleConvexOrConcaveDecisionRule<typename TInputImage::PixelType,
-                                                         typename TOutputImage::PixelType> DecisionFunctorType;
+      typename TOutputImage::PixelType> DecisionFunctorType;
   /**
    * Set the opening profile derivative maxima image
    * \param derivativeMaxima the opening profile derivative maxima image

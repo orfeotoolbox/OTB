@@ -323,7 +323,6 @@ public:
       }
   }
 
-
 protected:
   inline TOutput Evaluate(const TInput1& g, const TInput2& nir) const
   {
@@ -407,7 +406,6 @@ public:
       }
   }
 
-
 protected:
   inline TOutput Evaluate(const TInput1& g, const TInput2& mir) const
   {
@@ -490,7 +488,6 @@ public:
       return this->GetIndex2();
       }
   }
-
 
 protected:
   inline TOutput Evaluate(const TInput1& mir, const TInput2& g) const
@@ -576,7 +573,6 @@ public:
       return this->GetIndex2();
       }
   }
-
 
 protected:
   inline TOutput Evaluate(const TInput1& r, const TInput2& g) const
@@ -712,7 +708,6 @@ public:
       return m_NIRIndex;
       }
   }
-
 
 protected:
   inline TOutputPixel Evaluate(const TInputVectorPixel& inPix) const

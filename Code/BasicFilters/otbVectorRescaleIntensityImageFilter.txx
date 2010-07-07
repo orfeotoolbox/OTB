@@ -95,8 +95,8 @@ VectorRescaleIntensityImageFilter<TInputImage, TOutputImage>
     typedef itk::Statistics::ListSample<MeasurementVectorType>         ListSampleType;
     typedef float                                                      HistogramMeasurementType;
     typedef itk::Statistics::ListSampleToHistogramGenerator<ListSampleType, HistogramMeasurementType,
-                                                            itk::Statistics::DenseFrequencyContainer,
-                                                            1> HistogramGeneratorType;
+        itk::Statistics::DenseFrequencyContainer,
+        1> HistogramGeneratorType;
 
     typedef ObjectList<ListSampleType> ListSampleListType;
 

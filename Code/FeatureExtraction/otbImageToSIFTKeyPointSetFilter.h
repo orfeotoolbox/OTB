@@ -205,14 +205,14 @@ public:
   typedef typename GradientFilterType::OutputImageType                   GradientOutputImageType;
 
   typedef itk::UnaryFunctorImageFilter<GradientOutputImageType, InputImageType,
-                                       Functor::MagnitudeFunctor<typename GradientOutputImageType::PixelType,
-                                                                 typename InputImageType::PixelType> >
+      Functor::MagnitudeFunctor<typename GradientOutputImageType::PixelType,
+          typename InputImageType::PixelType> >
   MagnitudeFilterType;
   typedef typename MagnitudeFilterType::Pointer MagnitudeFilterPointerType;
 
   typedef itk::UnaryFunctorImageFilter<GradientOutputImageType, InputImageType,
-                                       Functor::OrientationFunctor<typename GradientOutputImageType::PixelType,
-                                                                   typename InputImageType::PixelType> >
+      Functor::OrientationFunctor<typename GradientOutputImageType::PixelType,
+          typename InputImageType::PixelType> >
   OrientationFilterType;
   typedef typename OrientationFilterType::Pointer OrientationFilterPointerType;
 

@@ -311,8 +311,8 @@ int main(int argc, char* argv[])
   typedef   otb::Image<VectorType,  Dimension> DeformationFieldType;
 
   typedef itk::DeformationFieldSource<
-    DeformationFieldType
-    >  DeformationSourceType;
+      DeformationFieldType
+      >  DeformationSourceType;
 
   DeformationSourceType::Pointer deformer = DeformationSourceType::New();
   // Software Guide : EndCodeSnippet
@@ -337,9 +337,9 @@ int main(int argc, char* argv[])
   // Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet
   typedef DeformationSourceType::LandmarkContainerPointer
-                                                   LandmarkContainerPointer;
+  LandmarkContainerPointer;
   typedef DeformationSourceType::LandmarkContainer
-                                                   LandmarkContainerType;
+  LandmarkContainerType;
   typedef DeformationSourceType::LandmarkPointType LandmarkPointType;
 
   LandmarkContainerType::Pointer sourceLandmarks =
@@ -418,7 +418,7 @@ int main(int argc, char* argv[])
     }
 
   typedef itk::RescaleIntensityImageFilter<ImageType,
-                                           OutputImageType> RescaleType;
+      OutputImageType> RescaleType;
 
   RescaleType::Pointer rescaler = RescaleType::New();
   rescaler->SetInput(outdf);

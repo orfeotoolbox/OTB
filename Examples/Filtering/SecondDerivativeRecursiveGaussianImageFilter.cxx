@@ -66,8 +66,8 @@ int main(int argc, char * argv[])
   typedef itk::ImageDuplicator<OutputImageType> DuplicatorType;
 
   typedef itk::RecursiveGaussianImageFilter<
-    ImageType,
-    ImageType>  FilterType;
+      ImageType,
+      ImageType>  FilterType;
 
   ReaderType::Pointer reader  = ReaderType::New();
   WriterType::Pointer writer  = WriterType::New();

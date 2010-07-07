@@ -31,12 +31,12 @@ namespace otb
  */
 
 template <class TInputImage,
-          class TOutputImage,
-          class TOutputImageDirection = TOutputImage,
-          class TInterpolator = itk::LinearInterpolateImageFunction<TInputImage> >
+    class TOutputImage,
+    class TOutputImageDirection = TOutputImage,
+    class TInterpolator = itk::LinearInterpolateImageFunction<TInputImage> >
 class ITK_EXPORT LineCorrelationDetectorImageFilter :  public LineDetectorImageFilterBase<TInputImage, TOutputImage,
-                                                                                          TOutputImageDirection,
-                                                                                          TInterpolator>
+      TOutputImageDirection,
+      TInterpolator>
 {
 public:
   /**   Extract dimensions as well of the images of entry of exit. */

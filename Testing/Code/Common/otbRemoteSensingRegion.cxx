@@ -52,7 +52,8 @@ int otbRemoteSensingRegion(int argc, char * argv[])
   indexPt[0] = pointX;
   indexPt[1] = pointY;
 
-  if (region.IsInside(indexPt)) std::cout << "Le point "  << indexPt[0] << "," << indexPt[1] <<
+  if (region.IsInside(indexPt))
+    std::cout << "Le point "  << indexPt[0] << "," << indexPt[1] <<
     " is inside the region "  << std::endl;
   else std::cout << "Le point  is OUTSIDE the region " <<  std::endl;
 

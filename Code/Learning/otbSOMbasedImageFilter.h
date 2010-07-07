@@ -95,21 +95,21 @@ private:
  * \sa EuclideanDistanceWithMissingValue
  */
 template <class TInputImage, class TOutputImage,
-          class TDistanceMetric, class TMap>
+    class TDistanceMetric, class TMap>
 class ITK_EXPORT SOMbasedImageFilter
   : public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
-                                        Functor::SOMbasedImageFilterFunctor<typename TInputImage::PixelType,
-                                                                            typename TOutputImage::PixelType,
-                                                                            TDistanceMetric, TMap> >
+      Functor::SOMbasedImageFilterFunctor<typename TInputImage::PixelType,
+          typename TOutputImage::PixelType,
+          TDistanceMetric, TMap> >
 {
 public:
   /** Standard class typedefs. */
   typedef SOMbasedImageFilter Self;
   typedef typename itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
-                                                Functor::SOMbasedImageFilterFunctor<
-                                                  typename TInputImage::PixelType,
-                                                  typename TOutputImage::PixelType,
-                                                  TDistanceMetric, TMap> >  Superclass;
+      Functor::SOMbasedImageFilterFunctor<
+          typename TInputImage::PixelType,
+          typename TOutputImage::PixelType,
+          TDistanceMetric, TMap> >  Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -127,9 +127,9 @@ public:
   typedef typename MapType::Pointer MapPointerType;
 
   typedef Functor::SOMbasedImageFilterFunctor<
-    typename TInputImage::PixelType,
-    typename TOutputImage::PixelType,
-    TDistanceMetric, TMap> FunctorType;
+      typename TInputImage::PixelType,
+      typename TOutputImage::PixelType,
+      TDistanceMetric, TMap> FunctorType;
 
   /** Vectors that hold the training area */
   typedef typename TInputImage::PixelType MeasurementType;

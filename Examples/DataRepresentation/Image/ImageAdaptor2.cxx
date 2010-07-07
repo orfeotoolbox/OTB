@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
   typedef otb::Image<InputPixelType, Dimension> ImageType;
 
   typedef itk::ImageAdaptor<ImageType,
-                            RedChannelPixelAccessor> ImageAdaptorType;
+      RedChannelPixelAccessor> ImageAdaptorType;
 
   ImageAdaptorType::Pointer adaptor = ImageAdaptorType::New();
 // Software Guide : EndCodeSnippet
@@ -142,8 +142,8 @@ int main(int argc, char *argv[])
 // Software Guide : BeginCodeSnippet
   typedef otb::Image<unsigned char, Dimension> OutputImageType;
   typedef itk::RescaleIntensityImageFilter<ImageAdaptorType,
-                                           OutputImageType
-                                           >   RescalerType;
+      OutputImageType
+      >   RescalerType;
 
   RescalerType::Pointer rescaler = RescalerType::New();
   typedef otb::ImageFileWriter<OutputImageType> WriterType;

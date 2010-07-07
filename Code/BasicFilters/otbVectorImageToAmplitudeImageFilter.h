@@ -54,18 +54,18 @@ public:
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT VectorImageToAmplitudeImageFilter
   : public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
-                                        Functor::VectorToAmplitudeFunctor<
-                                          typename TInputImage::PixelType, typename TOutputImage::PixelType> >
+      Functor::VectorToAmplitudeFunctor<
+          typename TInputImage::PixelType, typename TOutputImage::PixelType> >
 {
 public:
   /** Standard typedefs */
   typedef VectorImageToAmplitudeImageFilter Self;
   typedef itk::UnaryFunctorImageFilter<
-    TInputImage,
-    TOutputImage,
-    Functor::VectorToAmplitudeFunctor<
-      typename TInputImage::PixelType,
-      typename TOutputImage::PixelType> > Superclass;
+      TInputImage,
+      TOutputImage,
+      Functor::VectorToAmplitudeFunctor<
+          typename TInputImage::PixelType,
+          typename TOutputImage::PixelType> > Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 

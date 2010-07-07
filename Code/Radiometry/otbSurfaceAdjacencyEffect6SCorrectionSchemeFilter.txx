@@ -227,7 +227,9 @@ SurfaceAdjacencyEffect6SCorrectionSchemeFilter<TInputImage, TOutputImage>
         SIXSTraits::ComputeEnvironmentalContribution(rayleigh, aerosol,
                                                      radiusMatrix(i,
                                                                   j), palt,
-                                                     vcl_cos(m_ZenithalViewingAngle * CONST_PI_180), notUsed1, notUsed2, factor);                                    //Call to 6S
+                                                     vcl_cos(
+                                                       m_ZenithalViewingAngle * CONST_PI_180), notUsed1, notUsed2,
+                                                     factor);                                                                                                        //Call to 6S
         currentWeightingMatrix(i, j) = factor;
         }
       }

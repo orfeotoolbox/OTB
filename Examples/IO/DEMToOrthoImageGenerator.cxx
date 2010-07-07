@@ -96,7 +96,7 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::DEMToOrthoImageGenerator<ImageType,
-                                        UtmProjectionType>
+      UtmProjectionType>
   DEMToOrthoImageGeneratorType;
 
   DEMToOrthoImageGeneratorType::Pointer object =
@@ -215,14 +215,14 @@ int main(int argc, char * argv[])
 
   // Pretty image creation for the printing
   typedef otb::Image<unsigned char,
-                     Dimension>
-                                                                  OutputPrettyImageType;
+      Dimension>
+  OutputPrettyImageType;
   typedef otb::ImageFileWriter<OutputPrettyImageType>
-                                                                  WriterPrettyType;
+  WriterPrettyType;
   typedef itk::RescaleIntensityImageFilter<ImageType,
-                                           OutputPrettyImageType> RescalerType;
+      OutputPrettyImageType> RescalerType;
   typedef itk::ThresholdImageFilter<ImageType>
-                                                                  ThresholderType;
+  ThresholderType;
 
   ThresholderType::Pointer  thresholder  = ThresholderType::New();
   RescalerType::Pointer     rescaler     = RescalerType::New();

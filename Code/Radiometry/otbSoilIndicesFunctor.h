@@ -275,7 +275,7 @@ protected:
       return static_cast<TOutput>(0.);
       }
 
-    return static_cast<TOutput>( dRed*dRed/ (dGreen*dGreen*dGreen) );
+    return static_cast<TOutput>(dRed * dRed / (dGreen * dGreen * dGreen));
   }
 };
 

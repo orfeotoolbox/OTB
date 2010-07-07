@@ -157,7 +157,7 @@ int main(int argc, char *argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::DrawPathFilter<InputImageType, PathType,
-                              OutputImageType>  DrawPathFilterType;
+      OutputImageType>  DrawPathFilterType;
   // Software Guide : EndCodeSnippet
   //  Software Guide : BeginLatex
   // We will now go through the list of detected paths and feed them

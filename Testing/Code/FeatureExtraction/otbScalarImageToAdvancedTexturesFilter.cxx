@@ -25,25 +25,25 @@
 
 int otbScalarImageToAdvancedTexturesFilter(int argc, char * argv[])
 {
-  if(argc != 7)
+  if (argc != 7)
     {
-    std::cerr<<"Usage: "<<argv[0]<<" infname outprefix nbBins radius offsetx offsety"<<std::endl;
+    std::cerr << "Usage: " << argv[0] << " infname outprefix nbBins radius offsetx offsety" << std::endl;
     return EXIT_FAILURE;
     }
-  const char * infname      = argv[1];
-  const char * outprefix    = argv[2];
+  const char *       infname      = argv[1];
+  const char *       outprefix    = argv[2];
   const unsigned int nbBins = atoi(argv[3]);
   const unsigned int radius = atoi(argv[4]);
-  const int offsetx         = atoi(argv[5]);
-  const int offsety         = atoi(argv[6]);
-  
+  const int          offsetx         = atoi(argv[5]);
+  const int          offsety         = atoi(argv[6]);
+
   const unsigned int Dimension = 2;
-  typedef float                                  PixelType;
-  typedef otb::Image<PixelType, Dimension>       ImageType;
+  typedef float                            PixelType;
+  typedef otb::Image<PixelType, Dimension> ImageType;
   typedef otb::ScalarImageToAdvancedTexturesFilter
-    <ImageType,ImageType>                        TexturesFilterType;
-  typedef otb::ImageFileReader<ImageType>        ReaderType;
-  typedef otb::ImageFileWriter<ImageType>        WriterType;
+  <ImageType, ImageType>                        TexturesFilterType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
 
   ReaderType::Pointer         reader = ReaderType::New();
   TexturesFilterType::Pointer filter = TexturesFilterType::New();
@@ -66,7 +66,7 @@ int otbScalarImageToAdvancedTexturesFilter(int argc, char * argv[])
   filter->SetRadius(sradius);
   filter->SetOffset(offset);
 
-  otb::StandardFilterWatcher watcher(filter,"Textures filter");
+  otb::StandardFilterWatcher watcher(filter, "Textures filter");
 
   filter->SetInputImageMinimum(0);
   filter->SetInputImageMaximum(256);
@@ -77,55 +77,55 @@ int otbScalarImageToAdvancedTexturesFilter(int argc, char * argv[])
   writer->SetNumberOfStreamDivisions(2);
 
   oss.str("");
-  oss<<outprefix<<"Variance.tif";
+  oss << outprefix << "Variance.tif";
   writer->SetInput(filter->GetVarianceOutput());
   writer->SetFileName(oss.str());
   writer->Update();
-  
-   oss.str("");
-  oss<<outprefix<<"Mean.tif";
+
+  oss.str("");
+  oss << outprefix << "Mean.tif";
   writer->SetInput(filter->GetMeanOutput());
   writer->SetFileName(oss.str());
   writer->Update();
-  
+
   oss.str("");
-  oss<<outprefix<<"SumAverage.tif";
+  oss << outprefix << "SumAverage.tif";
   writer->SetInput(filter->GetSumAverageOutput());
   writer->SetFileName(oss.str());
   writer->Update();
 
   oss.str("");
-  oss<<outprefix<<"SumVariance.tif";
+  oss << outprefix << "SumVariance.tif";
   writer->SetInput(filter->GetSumVarianceOutput());
   writer->SetFileName(oss.str());
   writer->Update();
 
   oss.str("");
-  oss<<outprefix<<"SumEntropy.tif";
+  oss << outprefix << "SumEntropy.tif";
   writer->SetInput(filter->GetSumEntropyOutput());
   writer->SetFileName(oss.str());
   writer->Update();
 
   oss.str("");
-  oss<<outprefix<<"DifferenceEntropy.tif";
+  oss << outprefix << "DifferenceEntropy.tif";
   writer->SetInput(filter->GetDifferenceEntropyOutput());
   writer->SetFileName(oss.str());
   writer->Update();
 
   oss.str("");
-  oss<<outprefix<<"DifferenceVariance.tif";
+  oss << outprefix << "DifferenceVariance.tif";
   writer->SetInput(filter->GetDifferenceVarianceOutput());
   writer->SetFileName(oss.str());
   writer->Update();
 
   oss.str("");
-  oss<<outprefix<<"IC1.tif";
+  oss << outprefix << "IC1.tif";
   writer->SetInput(filter->GetIC1Output());
   writer->SetFileName(oss.str());
   writer->Update();
 
   oss.str("");
-  oss<<outprefix<<"IC2.tif";
+  oss << outprefix << "IC2.tif";
   writer->SetInput(filter->GetIC2Output());
   writer->SetFileName(oss.str());
   writer->Update();

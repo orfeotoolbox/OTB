@@ -69,13 +69,13 @@ int main(int argc, char * argv[])
   typedef  itk::LabelImageToLabelMapFilter<IType, LabelMapType> LabelizerType;
 
   typedef itk::StatisticsLabelMapFilter<LabelMapType,
-                                        IType>    LabelObjectValuatorType;
+      IType>    LabelObjectValuatorType;
   typedef  LabelObjectType::AttributeType
-                                                  AttributeType;
+  AttributeType;
   typedef  itk::StatisticsKeepNObjectsLabelMapFilter<LabelMapType>
-                                                  KeepNObjectsType;
+  KeepNObjectsType;
   typedef  itk::LabelMapToLabelImageFilter<LabelMapType,
-                                           IType> BinarizerType;
+      IType> BinarizerType;
 
   LabelizerType::Pointer labelizer = LabelizerType::New();
   labelizer->SetInput(reader->GetOutput());

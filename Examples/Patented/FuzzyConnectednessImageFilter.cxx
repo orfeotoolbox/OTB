@@ -105,9 +105,9 @@ int main(int argc, char *argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef itk::ConfidenceConnectedImageFilter<
-    InputImageType,
-    BinaryImageType
-    >  ConfidenceConnectedFilterType;
+      InputImageType,
+      BinaryImageType
+      >  ConfidenceConnectedFilterType;
 
   ConfidenceConnectedFilterType::Pointer confidenceConnectedFilter =
     ConfidenceConnectedFilterType::New();
@@ -122,9 +122,9 @@ int main(int argc, char *argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef itk::SimpleFuzzyConnectednessScalarImageFilter<
-    InputImageType,
-    BinaryImageType
-    >  FuzzySegmentationFilterType;
+      InputImageType,
+      BinaryImageType
+      >  FuzzySegmentationFilterType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex

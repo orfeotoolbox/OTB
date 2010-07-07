@@ -33,11 +33,11 @@ int otbSVMSampleListModelEstimatorNew(int argc, char* argv[])
 
   typedef itk::VariableLengthVector<InputPixelType>       SampleType;
   typedef itk::Statistics::ListSample<SampleType>         ListSampleType;
-  typedef itk::FixedArray<LabelPixelType,1>               TrainingSampleType;
+  typedef itk::FixedArray<LabelPixelType, 1>              TrainingSampleType;
   typedef itk::Statistics::ListSample<TrainingSampleType> TrainingListSampleType;
 
   typedef otb::SVMSampleListModelEstimator<ListSampleType,
-                                           TrainingListSampleType> EstimatorType;
+      TrainingListSampleType> EstimatorType;
 
   EstimatorType::Pointer estimator = EstimatorType::New();
 

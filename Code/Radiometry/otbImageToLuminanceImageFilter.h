@@ -107,13 +107,13 @@ private:
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ImageToLuminanceImageFilter :
   public UnaryImageFunctorWithVectorImageFilter<TInputImage,
-                                                TOutputImage,
-                                                ITK_TYPENAME Functor::ImageToLuminanceImageFunctor<ITK_TYPENAME
-                                                                                                   TInputImage::
-                                                                                                   InternalPixelType,
-                                                                                                   ITK_TYPENAME
-                                                                                                   TOutputImage::
-                                                                                                   InternalPixelType> >
+      TOutputImage,
+      ITK_TYPENAME Functor::ImageToLuminanceImageFunctor<ITK_TYPENAME
+          TInputImage::
+          InternalPixelType,
+          ITK_TYPENAME
+          TOutputImage::
+          InternalPixelType> >
 {
 public:
   /**   Extract input and output images dimensions.*/
@@ -124,7 +124,7 @@ public:
   typedef TInputImage  InputImageType;
   typedef TOutputImage OutputImageType;
   typedef typename Functor::ImageToLuminanceImageFunctor<ITK_TYPENAME InputImageType::InternalPixelType,
-                                                         ITK_TYPENAME OutputImageType::InternalPixelType> FunctorType;
+      ITK_TYPENAME OutputImageType::InternalPixelType> FunctorType;
 
   /** "typedef" for standard classes. */
   typedef ImageToLuminanceImageFilter                                                          Self;
@@ -191,7 +191,8 @@ protected:
     otbMsgDevMacro(<< "Dimension: ");
     otbMsgDevMacro(<< "m_Alpha.GetSize(): " << m_Alpha.GetSize());
     otbMsgDevMacro(<< "m_Beta.GetSize() : " << m_Beta.GetSize());
-    otbMsgDevMacro(<< "this->GetInput()->GetNumberOfComponentsPerPixel() : " << this->GetInput()->GetNumberOfComponentsPerPixel());
+    otbMsgDevMacro(
+      << "this->GetInput()->GetNumberOfComponentsPerPixel() : " << this->GetInput()->GetNumberOfComponentsPerPixel());
 
     if ((m_Alpha.GetSize() != this->GetInput()->GetNumberOfComponentsPerPixel())
         || (m_Beta.GetSize() != this->GetInput()->GetNumberOfComponentsPerPixel()))

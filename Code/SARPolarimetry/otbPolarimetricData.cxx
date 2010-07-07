@@ -81,29 +81,29 @@ PolarimetricData
 
   switch (NumberOfImages)
     {
-  case 4:
-    SetArchitectureType(HH_HV_VH_VV);
-    break;
+    case 4:
+      SetArchitectureType(HH_HV_VH_VV);
+      break;
 
-  case 3:
-    SetArchitectureType(HH_HV_VV);
-    break;
+    case 3:
+      SetArchitectureType(HH_HV_VV);
+      break;
 
-  case 2:
+    case 2:
 
-    if (EmissionH && !EmissionV)
-      {
-      SetArchitectureType(HH_HV);
-      }
-    else if (!EmissionH && EmissionV)
-      {
-      SetArchitectureType(VH_VV);
-      }
-    break;
+      if (EmissionH && !EmissionV)
+        {
+        SetArchitectureType(HH_HV);
+        }
+      else if (!EmissionH && EmissionV)
+        {
+        SetArchitectureType(VH_VV);
+        }
+      break;
 
-  default:
-    itkExceptionMacro("Unknown architecture !");
-    return;
+    default:
+      itkExceptionMacro("Unknown architecture !");
+      return;
     }
 }
 

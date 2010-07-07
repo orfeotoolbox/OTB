@@ -41,19 +41,19 @@ namespace otb
  */
 
 template <class TScalarType,
-          unsigned int NInputDimensions = 2,
-          unsigned int NOutputDimensions = 2>
+    unsigned int NInputDimensions = 2,
+    unsigned int NOutputDimensions = 2>
 class ITK_EXPORT ForwardSensorModel : public SensorModelBase<TScalarType,
-                                                             NInputDimensions,
-                                                             NOutputDimensions>
+      NInputDimensions,
+      NOutputDimensions>
 {
 
 public:
   /** Standard class typedefs. */
   typedef ForwardSensorModel Self;
   typedef SensorModelBase<TScalarType,
-                          NInputDimensions,
-                          NOutputDimensions>         Superclass;
+      NInputDimensions,
+      NOutputDimensions>         Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 

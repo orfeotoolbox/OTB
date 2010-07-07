@@ -36,10 +36,10 @@ namespace otb
    * \ingroup Radiometry
  */
 template <class TInputImage, class TOutputImage,
-          class TFunction = Functor::AVI<typename TInputImage::InternalPixelType,
-                                         typename TInputImage::InternalPixelType,
-                                         typename TInputImage::InternalPixelType,
-                                         typename TOutputImage::PixelType> >
+    class TFunction = Functor::AVI<typename TInputImage::InternalPixelType,
+        typename TInputImage::InternalPixelType,
+        typename TInputImage::InternalPixelType,
+        typename TOutputImage::PixelType> >
 class ITK_EXPORT MultiChannelRAndGAndNIRIndexImageFilter
   : public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction>
 {
@@ -101,7 +101,6 @@ public:
       return m_NIRIndex;
       }
   }
-
 
 protected:
   /// Constructor

@@ -291,11 +291,10 @@ int otbImageToSIFTKeyPointSetFilterDistanceMap(int argc, char * argv[])
   const unsigned int contrastMax = atoi(argv[9]);
 
   //redirect cout to a file
-  ofstream file(outfname);
-  streambuf* strm_buffer = std::cout.rdbuf();//save the cout to put it
+  ofstream   file(outfname);
+  streambuf* strm_buffer = std::cout.rdbuf(); //save the cout to put it
                                              //back later
   std::cout.rdbuf(file.rdbuf());
-
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);

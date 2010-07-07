@@ -61,7 +61,7 @@ public:
 
   typedef itk::Point<TPrecision, TSpatialDimension>                       PointType;
   typedef PolyLineParametricPathWithValue <TPrecision, TSpatialDimension> LineType;
-  typedef typename LineType::Pointer                                     LinePointerType;
+  typedef typename LineType::Pointer                                      LinePointerType;
 
   typedef Polygon <TPrecision>                   PolygonType;
   typedef typename PolygonType::Pointer          PolygonPointerType;

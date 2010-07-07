@@ -33,7 +33,7 @@ namespace otb
 
 template <class TInputImage, class TOutputImage, class TInterpolatorPrecisionType = double>
 class ITK_EXPORT StreamingResampleImageFilter :  public itk::ResampleImageFilter<TInputImage, TOutputImage,
-                                                                                 TInterpolatorPrecisionType>
+      TInterpolatorPrecisionType>
 {
 public:
 

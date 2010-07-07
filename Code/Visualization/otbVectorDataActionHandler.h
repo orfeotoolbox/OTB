@@ -41,11 +41,11 @@ public:
 
   /** Method for creation through the object factory */
   itkNewMacro(Self)
- ;
+  ;
 
   /** Runtime information */
   itkTypeMacro(VectorDataActionHandler, ImageWidgetActionHandler)
- ;
+  ;
 
   /** Model typedefs */
   typedef TModel                      ModelType;
@@ -67,15 +67,14 @@ public:
       {
       typename ViewType::ImageWidgetType::Pointer sourceWidget = NULL;
 
-      if(widgetId == m_View->GetFullWidget()->GetIdentifier())
+      if (widgetId == m_View->GetFullWidget()->GetIdentifier())
         {
         sourceWidget = m_View->GetFullWidget();
         }
-      else if(widgetId == m_View->GetZoomWidget()->GetIdentifier())
+      else if (widgetId == m_View->GetZoomWidget()->GetIdentifier())
         {
         sourceWidget = m_View->GetZoomWidget();
         }
-
 
       //Left click
       if (sourceWidget
@@ -127,37 +126,37 @@ public:
         {
         switch (Fl::event_key())
           {
-        case FL_Delete:
-          {
-          m_Model->DeleteGeometry();
-          // Update model
-          m_Model->Update();
-          return true;
-          break;
-          }
-        case FL_F + 1:
-          {
-          m_Model->SetCurrentNodeType(FEATURE_POINT);
-          otbMsgDevMacro(
+          case FL_Delete:
+            {
+            m_Model->DeleteGeometry();
+            // Update model
+            m_Model->Update();
+            return true;
+            break;
+            }
+          case FL_F + 1:
+            {
+            m_Model->SetCurrentNodeType(FEATURE_POINT);
+            otbMsgDevMacro(
               << "VectorDataActionHandler::HandleWidgetEvent() : changing node type to point");
-          break;
-          }
-        case FL_F + 2:
-          {
-          m_Model->SetCurrentNodeType(FEATURE_LINE);
-          otbMsgDevMacro(
+            break;
+            }
+          case FL_F + 2:
+            {
+            m_Model->SetCurrentNodeType(FEATURE_LINE);
+            otbMsgDevMacro(
               << "VectorDataActionHandler::HandleWidgetEvent() : changing node type to line");
-          break;
-          }
-        case FL_F + 3:
-          {
-          m_Model->SetCurrentNodeType(FEATURE_POLYGON);
-          otbMsgDevMacro(
+            break;
+            }
+          case FL_F + 3:
+            {
+            m_Model->SetCurrentNodeType(FEATURE_POLYGON);
+            otbMsgDevMacro(
               << "VectorDataActionHandler::HandleWidgetEvent() : changing node type to polygon");
-          break;
-          }
-        default:
-          break;
+            break;
+            }
+          default:
+            break;
           }
         }
 

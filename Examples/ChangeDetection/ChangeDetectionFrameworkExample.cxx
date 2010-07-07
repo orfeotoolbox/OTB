@@ -117,23 +117,23 @@ public:
 template <class TInputImage1, class TInputImage2, class TOutputImage>
 class ITK_EXPORT MyChangeDetectorImageFilter :
   public otb::BinaryFunctorNeighborhoodImageFilter<
-    TInputImage1, TInputImage2, TOutputImage,
-    MyChangeDetector<
-      typename itk::ConstNeighborhoodIterator<TInputImage1>,
-      typename itk::ConstNeighborhoodIterator<TInputImage2>,
-      typename TOutputImage::PixelType> >
+      TInputImage1, TInputImage2, TOutputImage,
+      MyChangeDetector<
+          typename itk::ConstNeighborhoodIterator<TInputImage1>,
+          typename itk::ConstNeighborhoodIterator<TInputImage2>,
+          typename TOutputImage::PixelType> >
 {
 public:
   /** Standard class typedefs. */
   typedef MyChangeDetectorImageFilter Self;
 
   typedef typename otb::BinaryFunctorNeighborhoodImageFilter<
-    TInputImage1, TInputImage2, TOutputImage,
-    MyChangeDetector<
-      typename itk::ConstNeighborhoodIterator<TInputImage1>,
-      typename itk::ConstNeighborhoodIterator<TInputImage2>,
-      typename TOutputImage::PixelType>
-    >  Superclass;
+      TInputImage1, TInputImage2, TOutputImage,
+      MyChangeDetector<
+          typename itk::ConstNeighborhoodIterator<TInputImage1>,
+          typename itk::ConstNeighborhoodIterator<TInputImage2>,
+          typename TOutputImage::PixelType>
+      >  Superclass;
 
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -207,7 +207,7 @@ int main(int argc, char* argv[])
   typedef otb::ImageFileReader<InputImageType2> ReaderType2;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
   typedef itk::RescaleIntensityImageFilter<ChangeImageType,
-                                           OutputImageType> RescalerType;
+      OutputImageType> RescalerType;
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -217,8 +217,8 @@ int main(int argc, char* argv[])
   // SoftwareGuide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef MyChangeDetectorImageFilter<InputImageType1,InputImageType2,
-                                      ChangeImageType>      FilterType;
+  typedef MyChangeDetectorImageFilter<InputImageType1, InputImageType2,
+      ChangeImageType>      FilterType;
   // Software Guide : EndCodeSnippet
 
   ReaderType1::Pointer  reader1 = ReaderType1::New();

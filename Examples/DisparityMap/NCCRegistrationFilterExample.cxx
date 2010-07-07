@@ -90,7 +90,7 @@ int main(int argc, char** argv)
   typedef otb::Image<PixelType, ImageDimension> MovingImageType;
   typedef otb::Image<PixelType, ImageDimension> FixedImageType;
   typedef otb::Image<DeformationPixelType,
-                     ImageDimension>         DeformationFieldType;
+      ImageDimension>         DeformationFieldType;
   // Software Guide : EndCodeSnippet
 
   typedef otb::ImageFileReader<FixedImageType> FixedReaderType;
@@ -112,14 +112,14 @@ int main(int argc, char** argv)
   //Blur input images
   // Software Guide : BeginCodeSnippet
   typedef itk::RecursiveGaussianImageFilter<FixedImageType,
-                                            FixedImageType> FixedBlurType;
+      FixedImageType> FixedBlurType;
 
   FixedBlurType::Pointer fBlur = FixedBlurType::New();
   fBlur->SetInput(fReader->GetOutput());
   fBlur->SetSigma(atof(argv[7]));
 
   typedef itk::RecursiveGaussianImageFilter<MovingImageType,
-                                            MovingImageType> MovingBlurType;
+      MovingImageType> MovingBlurType;
 
   MovingBlurType::Pointer mBlur = MovingBlurType::New();
   mBlur->SetInput(mReader->GetOutput());
@@ -135,8 +135,8 @@ int main(int argc, char** argv)
   //Create the filter
   // Software Guide : BeginCodeSnippet
   typedef otb::NCCRegistrationFilter<FixedImageType,
-                                     MovingImageType,
-                                     DeformationFieldType>
+      MovingImageType,
+      DeformationFieldType>
   RegistrationFilterType;
 
   RegistrationFilterType::Pointer registrator = RegistrationFilterType::New();
@@ -189,7 +189,7 @@ int main(int argc, char** argv)
   // Software Guide : EndLatex
 
   typedef otb::ImageOfVectorsToMonoChannelExtractROI<DeformationFieldType,
-                                                     MovingImageType>
+      MovingImageType>
   ChannelExtractionFilterType;
   ChannelExtractionFilterType::Pointer channelExtractor =
     ChannelExtractionFilterType::New();
@@ -198,7 +198,7 @@ int main(int argc, char** argv)
   channelExtractor->SetChannel(1);
 
   typedef itk::RescaleIntensityImageFilter<MovingImageType,
-                                           OutputImageType> RescalerType;
+      OutputImageType> RescalerType;
   RescalerType::Pointer fieldRescaler = RescalerType::New();
 
   fieldRescaler->SetInput(channelExtractor->GetOutput());
@@ -217,7 +217,7 @@ int main(int argc, char** argv)
   dfWriter->Update();
 
   typedef itk::WarpImageFilter<MovingImageType, MovingImageType,
-                               DeformationFieldType> WarperType;
+      DeformationFieldType> WarperType;
   WarperType::Pointer warper = WarperType::New();
 
   MovingImageType::PixelType padValue = 4.0;

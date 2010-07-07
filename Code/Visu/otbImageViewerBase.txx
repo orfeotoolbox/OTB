@@ -1052,146 +1052,146 @@ ImageViewerBase<TPixel, TLabel>
 
   switch (viewModel)
     {
-  case ScrollWidgetType::RGB:
-    {
+    case ScrollWidgetType::RGB:
+      {
 //       if(m_InputImage->GetNumberOfComponentsPerPixel()>2)
 //   { //NOTE: No reason to prevent a 2 bands image to be displayed in RGB
 //       and the image is not necessarily loaded at that time.
-    if (m_UseScroll)
-      {
-      m_ScrollWidget->SetViewModel(viewModel);
-      m_ScrollWidget->SetRedChannelIndex(m_RedChannelIndex);
-      m_ScrollWidget->SetGreenChannelIndex(m_GreenChannelIndex);
-      m_ScrollWidget->SetBlueChannelIndex(m_BlueChannelIndex);
-      }
-    m_FullWidget->SetViewModel(viewModel);
-    m_ZoomWidget->SetViewModel(viewModel);
-    m_ZoomWidget->SetRedChannelIndex(m_RedChannelIndex);
-    m_ZoomWidget->SetGreenChannelIndex(m_GreenChannelIndex);
-    m_ZoomWidget->SetBlueChannelIndex(m_BlueChannelIndex);
-    m_FullWidget->SetRedChannelIndex(m_RedChannelIndex);
-    m_FullWidget->SetGreenChannelIndex(m_GreenChannelIndex);
-    m_FullWidget->SetBlueChannelIndex(m_BlueChannelIndex);
+      if (m_UseScroll)
+        {
+        m_ScrollWidget->SetViewModel(viewModel);
+        m_ScrollWidget->SetRedChannelIndex(m_RedChannelIndex);
+        m_ScrollWidget->SetGreenChannelIndex(m_GreenChannelIndex);
+        m_ScrollWidget->SetBlueChannelIndex(m_BlueChannelIndex);
+        }
+      m_FullWidget->SetViewModel(viewModel);
+      m_ZoomWidget->SetViewModel(viewModel);
+      m_ZoomWidget->SetRedChannelIndex(m_RedChannelIndex);
+      m_ZoomWidget->SetGreenChannelIndex(m_GreenChannelIndex);
+      m_ZoomWidget->SetBlueChannelIndex(m_BlueChannelIndex);
+      m_FullWidget->SetRedChannelIndex(m_RedChannelIndex);
+      m_FullWidget->SetGreenChannelIndex(m_GreenChannelIndex);
+      m_FullWidget->SetBlueChannelIndex(m_BlueChannelIndex);
 
-    ComputeNormalizationFactors();
+      ComputeNormalizationFactors();
 
-    typename HistogramWidgetType::ColorType blue, red, green;
+      typename HistogramWidgetType::ColorType blue, red, green;
 
-    red[0] = 0.5;
-    red[1] = 0;
-    red[2] = 0;
+      red[0] = 0.5;
+      red[1] = 0;
+      red[2] = 0;
 
-    green[0] = 0;
-    green[1] = 0.5;
-    green[2] = 0;
+      green[0] = 0;
+      green[1] = 0.5;
+      green[2] = 0;
 
-    blue[0] = 0;
-    blue[1] = 0;
-    blue[2] = 0.5;
+      blue[0] = 0;
+      blue[1] = 0;
+      blue[2] = 0.5;
 
-    m_RedHistogramWidget->SetHistogram(m_HistogramGeneratorList->GetNthElement(m_RedChannelIndex)->GetOutput());
-    m_RedHistogramWidget->SetTransferFunction(m_TransferFunctionList->GetNthElement(m_RedChannelIndex));
-    m_RedHistogramWidget->SetLabel("Red channel");
-    m_RedHistogramWidget->SetTransferFunctionLabel("Affine");
-    m_RedHistogramWidget->SetHistogramColor(red);
-    m_RedHistogramWidget->SetTextColor(red);
+      m_RedHistogramWidget->SetHistogram(m_HistogramGeneratorList->GetNthElement(m_RedChannelIndex)->GetOutput());
+      m_RedHistogramWidget->SetTransferFunction(m_TransferFunctionList->GetNthElement(m_RedChannelIndex));
+      m_RedHistogramWidget->SetLabel("Red channel");
+      m_RedHistogramWidget->SetTransferFunctionLabel("Affine");
+      m_RedHistogramWidget->SetHistogramColor(red);
+      m_RedHistogramWidget->SetTextColor(red);
 
-    m_BlueHistogramWidget->SetHistogram(m_HistogramGeneratorList->GetNthElement(m_BlueChannelIndex)->GetOutput());
-    m_BlueHistogramWidget->SetTransferFunction(m_TransferFunctionList->GetNthElement(m_BlueChannelIndex));
-    m_BlueHistogramWidget->SetLabel("Blue channel");
-    m_BlueHistogramWidget->SetTransferFunctionLabel("Affine");
-    m_BlueHistogramWidget->SetHistogramColor(blue);
-    m_BlueHistogramWidget->SetTextColor(blue);
-    m_GreenHistogramWidget->SetHistogram(m_HistogramGeneratorList->GetNthElement(m_GreenChannelIndex)->GetOutput());
-    m_GreenHistogramWidget->SetTransferFunction(m_TransferFunctionList->GetNthElement(m_GreenChannelIndex));
-    m_GreenHistogramWidget->SetLabel("Green channel");
-    m_GreenHistogramWidget->SetTransferFunctionLabel("Affine");
-    m_GreenHistogramWidget->SetHistogramColor(green);
-    m_GreenHistogramWidget->SetTextColor(green);
-    break;
+      m_BlueHistogramWidget->SetHistogram(m_HistogramGeneratorList->GetNthElement(m_BlueChannelIndex)->GetOutput());
+      m_BlueHistogramWidget->SetTransferFunction(m_TransferFunctionList->GetNthElement(m_BlueChannelIndex));
+      m_BlueHistogramWidget->SetLabel("Blue channel");
+      m_BlueHistogramWidget->SetTransferFunctionLabel("Affine");
+      m_BlueHistogramWidget->SetHistogramColor(blue);
+      m_BlueHistogramWidget->SetTextColor(blue);
+      m_GreenHistogramWidget->SetHistogram(m_HistogramGeneratorList->GetNthElement(m_GreenChannelIndex)->GetOutput());
+      m_GreenHistogramWidget->SetTransferFunction(m_TransferFunctionList->GetNthElement(m_GreenChannelIndex));
+      m_GreenHistogramWidget->SetLabel("Green channel");
+      m_GreenHistogramWidget->SetTransferFunctionLabel("Affine");
+      m_GreenHistogramWidget->SetHistogramColor(green);
+      m_GreenHistogramWidget->SetTextColor(green);
+      break;
 //   }
-    }
-  case ScrollWidgetType::GRAYSCALE:
-    {
-    if (m_UseScroll)
-      {
-      m_ScrollWidget->SetViewModel(viewModel);
-      m_ScrollWidget->SetRedChannelIndex(m_RedChannelIndex);
       }
-    m_FullWidget->SetViewModel(viewModel);
-    m_ZoomWidget->SetViewModel(viewModel);
-    m_ZoomWidget->SetRedChannelIndex(m_RedChannelIndex);
-    m_FullWidget->SetRedChannelIndex(m_RedChannelIndex);
-
-    ComputeNormalizationFactors();
-
-    typename HistogramWidgetType::ColorType gray;
-    gray.Fill(0.5);
-
-    m_RedHistogramWidget->SetHistogram(m_HistogramGeneratorList->GetNthElement(m_RedChannelIndex)->GetOutput());
-    m_RedHistogramWidget->SetTransferFunction(m_TransferFunctionList->GetNthElement(m_RedChannelIndex));
-    m_RedHistogramWidget->SetLabel("Grayscale channel");
-    m_RedHistogramWidget->SetTransferFunctionLabel("Affine");
-    m_RedHistogramWidget->SetHistogramColor(gray);
-    m_RedHistogramWidget->SetTextColor(gray);
-    break;
-    }
-  case ScrollWidgetType::COMPLEX_MODULUS:
-    {
-    if (m_UseScroll)
+    case ScrollWidgetType::GRAYSCALE:
       {
-      m_ScrollWidget->SetViewModel(viewModel);
-      m_ScrollWidget->SetRedChannelIndex(m_RedChannelIndex);
-      m_ScrollWidget->SetGreenChannelIndex(m_GreenChannelIndex);
+      if (m_UseScroll)
+        {
+        m_ScrollWidget->SetViewModel(viewModel);
+        m_ScrollWidget->SetRedChannelIndex(m_RedChannelIndex);
+        }
+      m_FullWidget->SetViewModel(viewModel);
+      m_ZoomWidget->SetViewModel(viewModel);
+      m_ZoomWidget->SetRedChannelIndex(m_RedChannelIndex);
+      m_FullWidget->SetRedChannelIndex(m_RedChannelIndex);
+
+      ComputeNormalizationFactors();
+
+      typename HistogramWidgetType::ColorType gray;
+      gray.Fill(0.5);
+
+      m_RedHistogramWidget->SetHistogram(m_HistogramGeneratorList->GetNthElement(m_RedChannelIndex)->GetOutput());
+      m_RedHistogramWidget->SetTransferFunction(m_TransferFunctionList->GetNthElement(m_RedChannelIndex));
+      m_RedHistogramWidget->SetLabel("Grayscale channel");
+      m_RedHistogramWidget->SetTransferFunctionLabel("Affine");
+      m_RedHistogramWidget->SetHistogramColor(gray);
+      m_RedHistogramWidget->SetTextColor(gray);
+      break;
       }
-    m_FullWidget->SetViewModel(viewModel);
-    m_ZoomWidget->SetViewModel(viewModel);
-    m_ZoomWidget->SetRedChannelIndex(m_RedChannelIndex);
-    m_FullWidget->SetRedChannelIndex(m_RedChannelIndex);
-    m_ZoomWidget->SetGreenChannelIndex(m_GreenChannelIndex);
-    m_FullWidget->SetGreenChannelIndex(m_GreenChannelIndex);
-
-    ComputeNormalizationFactors();
-
-    typename HistogramWidgetType::ColorType gray;
-    gray.Fill(0.5);
-
-    m_RedHistogramWidget->SetHistogram(m_HistogramGeneratorList->GetNthElement(0)->GetOutput());
-    m_RedHistogramWidget->SetTransferFunction(m_TransferFunctionList->GetNthElement(0));
-    m_RedHistogramWidget->SetLabel("Modulus");
-    m_RedHistogramWidget->SetTransferFunctionLabel("Affine");
-    m_RedHistogramWidget->SetHistogramColor(gray);
-    m_RedHistogramWidget->SetTextColor(gray);
-    break;
-    }
-  case ScrollWidgetType::COMPLEX_PHASE:
-    {
-    if (m_UseScroll)
+    case ScrollWidgetType::COMPLEX_MODULUS:
       {
-      m_ScrollWidget->SetViewModel(viewModel);
-      m_ScrollWidget->SetRedChannelIndex(m_RedChannelIndex);
-      m_ScrollWidget->SetGreenChannelIndex(m_GreenChannelIndex);
+      if (m_UseScroll)
+        {
+        m_ScrollWidget->SetViewModel(viewModel);
+        m_ScrollWidget->SetRedChannelIndex(m_RedChannelIndex);
+        m_ScrollWidget->SetGreenChannelIndex(m_GreenChannelIndex);
+        }
+      m_FullWidget->SetViewModel(viewModel);
+      m_ZoomWidget->SetViewModel(viewModel);
+      m_ZoomWidget->SetRedChannelIndex(m_RedChannelIndex);
+      m_FullWidget->SetRedChannelIndex(m_RedChannelIndex);
+      m_ZoomWidget->SetGreenChannelIndex(m_GreenChannelIndex);
+      m_FullWidget->SetGreenChannelIndex(m_GreenChannelIndex);
+
+      ComputeNormalizationFactors();
+
+      typename HistogramWidgetType::ColorType gray;
+      gray.Fill(0.5);
+
+      m_RedHistogramWidget->SetHistogram(m_HistogramGeneratorList->GetNthElement(0)->GetOutput());
+      m_RedHistogramWidget->SetTransferFunction(m_TransferFunctionList->GetNthElement(0));
+      m_RedHistogramWidget->SetLabel("Modulus");
+      m_RedHistogramWidget->SetTransferFunctionLabel("Affine");
+      m_RedHistogramWidget->SetHistogramColor(gray);
+      m_RedHistogramWidget->SetTextColor(gray);
+      break;
       }
-    m_FullWidget->SetViewModel(viewModel);
-    m_ZoomWidget->SetViewModel(viewModel);
-    m_ZoomWidget->SetRedChannelIndex(m_RedChannelIndex);
-    m_FullWidget->SetRedChannelIndex(m_RedChannelIndex);
-    m_ZoomWidget->SetGreenChannelIndex(m_GreenChannelIndex);
-    m_FullWidget->SetGreenChannelIndex(m_GreenChannelIndex);
+    case ScrollWidgetType::COMPLEX_PHASE:
+      {
+      if (m_UseScroll)
+        {
+        m_ScrollWidget->SetViewModel(viewModel);
+        m_ScrollWidget->SetRedChannelIndex(m_RedChannelIndex);
+        m_ScrollWidget->SetGreenChannelIndex(m_GreenChannelIndex);
+        }
+      m_FullWidget->SetViewModel(viewModel);
+      m_ZoomWidget->SetViewModel(viewModel);
+      m_ZoomWidget->SetRedChannelIndex(m_RedChannelIndex);
+      m_FullWidget->SetRedChannelIndex(m_RedChannelIndex);
+      m_ZoomWidget->SetGreenChannelIndex(m_GreenChannelIndex);
+      m_FullWidget->SetGreenChannelIndex(m_GreenChannelIndex);
 
-    ComputeNormalizationFactors();
+      ComputeNormalizationFactors();
 
-    typename HistogramWidgetType::ColorType gray;
-    gray.Fill(0.5);
+      typename HistogramWidgetType::ColorType gray;
+      gray.Fill(0.5);
 
-    m_RedHistogramWidget->SetHistogram(m_HistogramGeneratorList->GetNthElement(0)->GetOutput());
-    m_RedHistogramWidget->SetTransferFunction(m_TransferFunctionList->GetNthElement(0));
-    m_RedHistogramWidget->SetLabel("Phase");
-    m_RedHistogramWidget->SetTransferFunctionLabel("Affine");
-    m_RedHistogramWidget->SetHistogramColor(gray);
-    m_RedHistogramWidget->SetTextColor(gray);
-    break;
-    }
+      m_RedHistogramWidget->SetHistogram(m_HistogramGeneratorList->GetNthElement(0)->GetOutput());
+      m_RedHistogramWidget->SetTransferFunction(m_TransferFunctionList->GetNthElement(0));
+      m_RedHistogramWidget->SetLabel("Phase");
+      m_RedHistogramWidget->SetTransferFunctionLabel("Affine");
+      m_RedHistogramWidget->SetHistogramColor(gray);
+      m_RedHistogramWidget->SetTextColor(gray);
+      break;
+      }
     }
 }
 

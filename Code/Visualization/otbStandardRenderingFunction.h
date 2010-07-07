@@ -47,11 +47,11 @@ class Identity
 public:
   Identity(){}
   virtual ~Identity(){}
-  bool operator!=(const Identity&) const
+  bool operator !=(const Identity&) const
   {
     return false;
   }
-  bool operator==(const Identity& other) const
+  bool operator ==(const Identity& other) const
   {
     return !(*this != other);
   }
@@ -78,11 +78,11 @@ public:
  *  \ingroup Visualization
  */
 template <class TPixel, class TRGBPixel,
-          class TPixelRepresentationFunction = ChannelSelectorFunctor<TPixel>,
-          class TTransferFunction = Identity<
-            typename itk::NumericTraits<typename itk::NumericTraits<TPixel>::ValueType>::RealType,
-            typename itk::NumericTraits<typename itk::NumericTraits<TPixel>::ValueType>::RealType
-            > >
+    class TPixelRepresentationFunction = ChannelSelectorFunctor<TPixel>,
+    class TTransferFunction = Identity<
+        typename itk::NumericTraits<typename itk::NumericTraits<TPixel>::ValueType>::RealType,
+        typename itk::NumericTraits<typename itk::NumericTraits<TPixel>::ValueType>::RealType
+        > >
 class StandardRenderingFunction
   : public RenderingFunction<TPixel, TRGBPixel>
 {
@@ -118,7 +118,7 @@ public:
   typedef typename PixelRepresentationFunctionType::Pointer         PixelRepresentationFunctionPointerType;
   typedef typename PixelRepresentationFunctionType::ChannelListType ChannelListType;
 
-  typedef typename itk::MetaDataDictionary                                   MetaDataDictionaryType;
+  typedef typename itk::MetaDataDictionary MetaDataDictionaryType;
 
   /** Convert the input pixel to a pixel representation that can be displayed on
     *  RGB. For example, channel selection, modulus computation, etc.
@@ -184,38 +184,38 @@ public:
     return m_PixelRepresentationFunction->GetOutputSize();
   }
 
-  /* Sensor aware */
-//virtual void Initialize() //FIXME should disappear and be automatic (IsModified())
-  virtual void Initialize(const MetaDataDictionaryType &metadatadictionary)   
+  virtual void Initialize(const MetaDataDictionaryType& metadatadictionary) //FIXME should disappear and be automatic (IsModified())
   {
     if ((this->GetMTime() > m_UTime) || (this->GetPixelRepresentationFunction()->GetMTime() > m_UTime))
     //NOTE: we assume that Transfer function have no parameters
       {
       if ((this->GetListSample()).IsNotNull())
         {
-        //the size of the Vector was unknow at construction time for the
+        //the size of the Vector was unknown at construction time for the
         //m_PixelRepresentationFunction, now, we may get a better default
         if (m_PixelRepresentationFunction->IsUsingDefaultParameters())
           {
-
-            //RGB rendering needs at least 3 chanels
-	    if (this->GetListSample()->GetMeasurementVectorSize() >=3)
-	    {
-	      typedef otb::ImageMetadataInterfaceBase            ImageMetadataInterfaceType;      
-	      ImageMetadataInterfaceType::Pointer metadataInterface = ImageMetadataInterfaceFactory::CreateIMI(metadatadictionary);	      
-	      m_PixelRepresentationFunction->SetRedChannelIndex(metadataInterface->GetDefaultRBand());
-	      m_PixelRepresentationFunction->SetGreenChannelIndex(metadataInterface->GetDefaultGBand());
-	      m_PixelRepresentationFunction->SetBlueChannelIndex(metadataInterface->GetDefaultBBand());
-	    }
+          //RGB rendering needs at least 3 channels
+          if (this->GetListSample()->GetMeasurementVectorSize() >= 3)
+            {
+            typedef otb::ImageMetadataInterfaceBase ImageMetadataInterfaceType;
+            ImageMetadataInterfaceType::Pointer metadataInterface = ImageMetadataInterfaceFactory::CreateIMI(
+              metadatadictionary);
+            m_PixelRepresentationFunction->SetRedChannelIndex(metadataInterface->GetDefaultRBand());
+            m_PixelRepresentationFunction->SetGreenChannelIndex(metadataInterface->GetDefaultGBand());
+            m_PixelRepresentationFunction->SetBlueChannelIndex(metadataInterface->GetDefaultBBand());
+            }
           }
         }
+
       unsigned int nbComps = m_PixelRepresentationFunction->GetOutputSize();
       if (m_AutoMinMax)
         {
-        //FIXME check what happen if the m_PixelRepresentationFunction is modified AFTER the Initialize.
+        //FIXME check what happens if the m_PixelRepresentationFunction is modified AFTER the Initialize.
 
         otbMsgDevMacro(
           << "Initialize(): " << nbComps << " components, quantile= " << 100 * m_AutoMinMaxQuantile << " %");
+
         // For each components, use the histogram to compute min and max
         m_Minimum.clear();
         m_Maximum.clear();
@@ -238,28 +238,8 @@ public:
                                                                                                                -
                                                                                                                m_AutoMinMaxQuantile)));
           }
-
-        //Check if the rescaling should be applied
-        //if all data are already coded on unsigned char
-        //and at least one band has enough dynamic
-        //no rescaling should be applied
-        bool allMinMaxWithinDynamic = true;
-        bool enoughDynamic = false;
-        for (unsigned int comp = 0; comp < nbComps; ++comp)
-          {
-          if (m_Minimum[comp] < -1) allMinMaxWithinDynamic = false;  //take margin for rounding errors
-          if (m_Maximum[comp] > 256) allMinMaxWithinDynamic = false;
-          if (((m_Maximum[comp] - m_Minimum[comp]) > 10) || (m_Maximum[comp] == m_Minimum[comp])) enoughDynamic = true;
-          }
-        if (allMinMaxWithinDynamic && enoughDynamic)
-          {
-          this->AutoMinMaxOff();
-          m_Minimum.clear();
-          m_Maximum.clear();
-          }
         }
-
-      if (!m_AutoMinMax)
+      else
         {
         if (m_Minimum.empty())
           {
@@ -408,6 +388,8 @@ public:
   }
   itkGetMacro(AutoMinMax, bool);
   itkBooleanMacro(AutoMinMax);
+
+  itkGetMacro(AutoMinMaxQuantile, double);
 
 protected:
   /** Constructor */

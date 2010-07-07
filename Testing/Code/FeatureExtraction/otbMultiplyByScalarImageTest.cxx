@@ -35,10 +35,10 @@ int otbMultiplyByScalarImageFilterTest(int argc, char * argv[])
 
   // Declare Iterator types apropriated for each image
   typedef itk::ImageRegionIteratorWithIndex<
-    InputImageType>  InputIteratorType;
+      InputImageType>  InputIteratorType;
 
   typedef itk::ImageRegionIteratorWithIndex<
-    OutputImageType>  OutputIteratorType;
+      OutputImageType>  OutputIteratorType;
 
   // Declare the type of the index to access images
   typedef itk::Index<ImageDimension> IndexType;

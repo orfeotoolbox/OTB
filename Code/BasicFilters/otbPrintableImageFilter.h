@@ -137,7 +137,7 @@ public:
   typedef typename MaskImageType::PixelType MaskPixelType;
 
   typedef otb::MultiChannelExtractROI<InputInternalPixelType,
-                                      InputInternalPixelType>               ChannelExtractorType;
+      InputInternalPixelType>               ChannelExtractorType;
   typedef typename ChannelExtractorType::ChannelsType ChannelsType;
 
   typedef VectorRescaleIntensityImageFilter
@@ -145,7 +145,7 @@ public:
 
   typedef Functor::MaskFunctor<InputPixelType, MaskPixelType, OutputPixelType> FunctorType;
   typedef itk::BinaryFunctorImageFilter<OutputImageType, MaskImageType,
-                                        OutputImageType, FunctorType>     FunctorFilterType;
+      OutputImageType, FunctorType>     FunctorFilterType;
   typedef typename FunctorFilterType::Pointer FunctorFilterPointerType;
 
   /** Method for creation through object factory */

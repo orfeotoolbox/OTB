@@ -53,8 +53,8 @@ class ITK_EXPORT OrthoRectificationFilter :
 public:
   /** Standard class typedefs */
   typedef StreamingResampleImageFilter<TInputImage,
-                                       TOutputImage,
-                                       TInterpolatorPrecision>  Superclass;
+      TOutputImage,
+      TInterpolatorPrecision>  Superclass;
   typedef OrthoRectificationFilter      Self;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;

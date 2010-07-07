@@ -110,75 +110,77 @@ VectorDataProperties<TVectorData>
 
     switch (dataNode->GetNodeType())
       {
-    case otb::ROOT:
-      {
-      ProcessNode((*it));
-      break;
-      }
-    case otb::DOCUMENT:
-      {
-      ProcessNode((*it));
-      break;
-      }
-    case otb::FOLDER:
-      {
-      ProcessNode((*it));
-      break;
-      }
-    case FEATURE_POINT:
-      {
-//         otbGenericMsgDebugMacro(<<"Insert Point from vectorData");
-      IndexType start;
-      for (unsigned int i = 0; i < VectorDataDimension; ++i)
+      case otb::ROOT:
         {
-        start[i] = dataNode->GetPoint()[i];
+        ProcessNode((*it));
+        break;
         }
+      case otb::DOCUMENT:
+        {
+        ProcessNode((*it));
+        break;
+        }
+      case otb::FOLDER:
+        {
+        ProcessNode((*it));
+        break;
+        }
+      case FEATURE_POINT:
+        {
+//         otbGenericMsgDebugMacro(<<"Insert Point from vectorData");
+        IndexType start;
+        for (unsigned int i = 0; i < VectorDataDimension; ++i)
+          {
+          start[i] = dataNode->GetPoint()[i];
+          }
 
-      SizeType size;
-      size.Fill(itk::NumericTraits<Type>::ZeroValue());
-      RegionType region;
-      region.SetSize(size);
-      region.SetIndex(start);
-      this->AddRegion(region);
-      break;
-      }
-    case otb::FEATURE_LINE:
-      {
+        SizeType size;
+        size.Fill(itk::NumericTraits<Type>::ZeroValue());
+        RegionType region;
+        region.SetSize(size);
+        region.SetIndex(start);
+        this->AddRegion(region);
+        break;
+        }
+      case otb::FEATURE_LINE:
+        {
 //         this->GetOutput()->InsertLineString( static_cast<typename TGISTable::LinePointerType> (dataNode->GetLine()), dataNode->GetNodeId() );
-      this->AddRegion(dataNode->GetLine()->GetBoundingRegion());
-      break;
-      }
-    case FEATURE_POLYGON:
-      {
-      //otbGenericMsgDebugMacro(<<"Insert polygons from vectorData");
-      this->AddRegion(dataNode->GetPolygonExteriorRing()->GetBoundingRegion());
-      break;
-      }
-    case FEATURE_MULTIPOINT:
-      {
-      itkExceptionMacro(
-        << "This type (FEATURE_MULTIPOINT) is not handle (yet) by VectorDataToGISTableFilter(), please request for it");
-      break;
-      }
-    case FEATURE_MULTILINE:
-      {
-      itkExceptionMacro(
-        << "This type (FEATURE_MULTILINE) is not handle (yet) by VectorDataToGISTableFilter(), please request for it");
-      break;
-      }
-    case FEATURE_MULTIPOLYGON:
-      {
-      itkExceptionMacro(
-        <<
-        "This type (FEATURE_MULTIPOLYGON) is not handle (yet) by VectorDataToGISTableFilter(), please request for it");
-      break;
-      }
-    case FEATURE_COLLECTION:
-      {
-      itkExceptionMacro(
-        << "This type (FEATURE_COLLECTION) is not handle (yet) by VectorDataToGISTableFilter(), please request for it");
-      break;
-      }
+        this->AddRegion(dataNode->GetLine()->GetBoundingRegion());
+        break;
+        }
+      case FEATURE_POLYGON:
+        {
+        //otbGenericMsgDebugMacro(<<"Insert polygons from vectorData");
+        this->AddRegion(dataNode->GetPolygonExteriorRing()->GetBoundingRegion());
+        break;
+        }
+      case FEATURE_MULTIPOINT:
+        {
+        itkExceptionMacro(
+          <<
+          "This type (FEATURE_MULTIPOINT) is not handle (yet) by VectorDataToGISTableFilter(), please request for it");
+        break;
+        }
+      case FEATURE_MULTILINE:
+        {
+        itkExceptionMacro(
+          << "This type (FEATURE_MULTILINE) is not handle (yet) by VectorDataToGISTableFilter(), please request for it");
+        break;
+        }
+      case FEATURE_MULTIPOLYGON:
+        {
+        itkExceptionMacro(
+          <<
+          "This type (FEATURE_MULTIPOLYGON) is not handle (yet) by VectorDataToGISTableFilter(), please request for it");
+        break;
+        }
+      case FEATURE_COLLECTION:
+        {
+        itkExceptionMacro(
+          <<
+          "This type (FEATURE_COLLECTION) is not handle (yet) by VectorDataToGISTableFilter(), please request for it");
+        break;
+        }
       }
     }
 }

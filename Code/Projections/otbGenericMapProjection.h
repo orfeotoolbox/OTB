@@ -52,18 +52,18 @@ namespace otb
 typedef enum {FORWARD = 0, INVERSE = 1} InverseOrForwardTransformationEnum;
 
 template <InverseOrForwardTransformationEnum TDirectionOfMapping,
-          class TScalarType = double,
-          unsigned int NInputDimensions = 2,
-          unsigned int NOutputDimensions = 2>
+    class TScalarType = double,
+    unsigned int NInputDimensions = 2,
+    unsigned int NOutputDimensions = 2>
 class ITK_EXPORT GenericMapProjection : public itk::Transform<TScalarType,       // Data type for scalars
-                                                              NInputDimensions, // Number of dimensions in the input space
-                                                              NOutputDimensions> // Number of dimensions in the output space
+      NInputDimensions,                                                         // Number of dimensions in the input space
+      NOutputDimensions>                                                         // Number of dimensions in the output space
 {
 public:
   /** Standard class typedefs. */
   typedef itk::Transform<TScalarType,
-                         NInputDimensions,
-                         NOutputDimensions>       Superclass;
+      NInputDimensions,
+      NOutputDimensions>       Superclass;
   typedef GenericMapProjection          Self;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;

@@ -264,28 +264,28 @@ VectorDataGlComponent<TVectorData>
   // Render the current node
   switch (node->Get()->GetNodeType())
     {
-  case FEATURE_POINT:
-    {
+    case FEATURE_POINT:
+      {
 //    this->RenderPoint(node->Get()->GetPoint(),extent,space2ScreenTransform);
-    this->RenderPoint(node->Get(), extent, space2ScreenTransform);
-    break;
+      this->RenderPoint(node->Get(), extent, space2ScreenTransform);
+      break;
 
-    }
-  case FEATURE_LINE:
-    {
-    this->RenderLine(node->Get(), extent, space2ScreenTransform);
-    break;
-    }
-  case FEATURE_POLYGON:
-    {
-    this->RenderPolygon(node->Get(), extent, space2ScreenTransform);
-    break;
-    }
-  default:
-    {
-    // discard
-    break;
-    }
+      }
+    case FEATURE_LINE:
+      {
+      this->RenderLine(node->Get(), extent, space2ScreenTransform);
+      break;
+      }
+    case FEATURE_POLYGON:
+      {
+      this->RenderPolygon(node->Get(), extent, space2ScreenTransform);
+      break;
+      }
+    default:
+      {
+      // discard
+      break;
+      }
     }
 
   // Get the children list from the input node

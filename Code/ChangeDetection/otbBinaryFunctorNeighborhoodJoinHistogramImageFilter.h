@@ -36,9 +36,9 @@ namespace otb
  * \ingroup IntensityImageFilters   Multithreaded
  */
 template <class TInputImage1, class TInputImage2,
-          class TOutputImage, class TFunction>
+    class TOutputImage, class TFunction>
 class ITK_EXPORT BinaryFunctorNeighborhoodJoinHistogramImageFilter : public itk::ImageToImageFilter<TInputImage1,
-                                                                                                    TOutputImage>
+      TOutputImage>
 {
 public:
   /** Standard class typedefs. */

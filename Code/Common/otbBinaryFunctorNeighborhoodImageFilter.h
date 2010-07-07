@@ -39,7 +39,7 @@ namespace otb
  *
  */
 template <class TInputImage1, class TInputImage2,
-          class TOutputImage, class TFunction>
+    class TOutputImage, class TFunction>
 class ITK_EXPORT BinaryFunctorNeighborhoodImageFilter : public itk::ImageToImageFilter<TInputImage1, TOutputImage>
 {
 public:

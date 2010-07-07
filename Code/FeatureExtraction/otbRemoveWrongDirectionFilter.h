@@ -88,9 +88,9 @@ public:
   /** typedef of the computing filter (this allows us to derive from ModulusAndDirectionToImageFilter as well as
       using the BinaryFunctorImageFilter, which is appropriate here */
   typedef Functor::RemoveWrongDirectionFunctor<
-    typename TInputModulus::PixelType,
-    typename TInputDirection::PixelType,
-    typename TOutputImage::PixelType>  FunctorType;
+      typename TInputModulus::PixelType,
+      typename TInputDirection::PixelType,
+      typename TOutputImage::PixelType>  FunctorType;
   typedef itk::BinaryFunctorImageFilter<TInputModulus, TInputDirection, TOutputImage, FunctorType> ComputingFilterType;
 
 protected:

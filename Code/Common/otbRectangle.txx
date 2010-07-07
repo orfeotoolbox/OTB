@@ -35,7 +35,8 @@ Rectangle<TValue>
 ::IsInside(VertexType point) const
 {
   /*Iterate through the inputVertexList*/
-  if (m_VertexList->Size() < 2) itkGenericExceptionMacro(
+  if (m_VertexList->Size() < 2)
+    itkGenericExceptionMacro(
       << "Rectangle needs  TWO vertex, up-to-date the start and the end of the segments with AdDVertex Method ");
 
   VertexListConstIteratorType it = m_VertexList->Begin();
@@ -192,7 +193,8 @@ void
 Rectangle<TValue>
 ::AddVertex(const ContinuousIndexType& vertex)
 {
-  if (m_VertexList->Size() > 1) itkGenericExceptionMacro(
+  if (m_VertexList->Size() > 1)
+    itkGenericExceptionMacro(
       << "Rectangle needs only TWO vertex, a width and an orientation ");
 
   m_VertexList->InsertElement(m_VertexList->Size(), vertex);

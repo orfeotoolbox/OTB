@@ -111,7 +111,7 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::ExtractROI<InputImageType::PixelType,
-                          OutputImageType::PixelType> FilterType;
+      OutputImageType::PixelType> FilterType;
 
   FilterType::Pointer filter = FilterType::New();
   // Software Guide : EndCodeSnippet

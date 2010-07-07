@@ -36,9 +36,9 @@ namespace otb
    * \ingroup Radiometry
  */
 template <class TInputImage, class TOutputImage,
-          class TFunction = Functor::IR<typename TInputImage::InternalPixelType,
-                                        typename TInputImage::InternalPixelType,
-                                        typename TOutputImage::PixelType> >
+    class TFunction = Functor::IR<typename TInputImage::InternalPixelType,
+        typename TInputImage::InternalPixelType,
+        typename TOutputImage::PixelType> >
 class ITK_EXPORT MultiChannelGAndRIndexImageFilter
   : public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction>
 {
@@ -89,7 +89,6 @@ public:
       return m_GreenIndex;
       }
   }
-
 
 protected:
   /// Constructor

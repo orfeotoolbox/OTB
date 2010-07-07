@@ -93,22 +93,22 @@ int main(int argc, char * argv[])
     typedef otb::Image<PixelType, Dimension>       ImageType;
     typedef otb::VectorImage<PixelType, Dimension> VectorImageType;
     typedef otb::KullbackLeiblerProfileImageFilter<ImageType,
-                                                   ImageType,
-                                                   VectorImageType> FilterType;
+        ImageType,
+        VectorImageType> FilterType;
     //  Software Guide : EndCodeSnippet
 
     typedef otb::VectorImage<OutPixelType,
-                             Dimension>
+        Dimension>
     OutVectorImageType;
     typedef otb::ImageFileReader<ImageType>
     ReaderType;
     typedef otb::ImageFileWriter<OutVectorImageType>
     WriterType;
     typedef otb::MultiChannelExtractROI<PixelType,
-                                        PixelType>
+        PixelType>
     ChannelSelecterType;
     typedef otb::VectorRescaleIntensityImageFilter<VectorImageType,
-                                                   OutVectorImageType>
+        OutVectorImageType>
     RescalerType;
 
     ReaderType::Pointer reader1 = ReaderType::New();

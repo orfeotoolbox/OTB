@@ -36,7 +36,7 @@ int otbExtractROI2(int argc, char * argv[])
   typedef unsigned char OutputPixelType;
 
   typedef otb::ExtractROI<InputPixelType,
-                          OutputPixelType>   FilterType;
+      OutputPixelType>   FilterType;
 
   typedef FilterType::InputImageType  InputImageType;
   typedef FilterType::OutputImageType OutputImageType;
