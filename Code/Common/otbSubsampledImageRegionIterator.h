@@ -70,16 +70,13 @@ public:
     : SubsampledImageRegionConstIterator<TImage> () {}
 
   SubsampledImageRegionIterator (const ImageType * ptr, const RegionType &region)
-    : SubsampledImageRegionConstIterator<TImage> (ptr, region)
-    {}
+    : SubsampledImageRegionConstIterator<TImage> (ptr, region) {}
 
   SubsampledImageRegionIterator(const itk::ImageIterator<TImage> &it)
-    : SubsampledImageRegionConstIterator<TImage> (it)
-    {}
+    : SubsampledImageRegionConstIterator<TImage> (it) {}
 
   SubsampledImageRegionIterator(const itk::ImageConstIterator<TImage> &it)
-    : SubsampledImageRegionConstIterator<TImage> (it)
-    {}
+    : SubsampledImageRegionConstIterator<TImage> (it) {}
 
   /** Set the current pixel value */
   void Set(const PixelType& value) const

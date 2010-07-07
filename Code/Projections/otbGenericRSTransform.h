@@ -182,8 +182,7 @@ public:
 
 protected:
   GenericRSTransform();
-  virtual ~GenericRSTransform()
-        {}
+  virtual ~GenericRSTransform() {}
 
   virtual void Modified()
   {

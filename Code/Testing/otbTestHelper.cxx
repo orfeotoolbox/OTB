@@ -966,7 +966,9 @@ if( feature->GetGeometryRef() != NULL )
     const char* pszDisplayGeometry =
             CSLFetchNameValue(papszOptions, "DISPLAY_GEOMETRY");
     if ( ! (pszDisplayGeometry != NULL && EQUAL(pszDisplayGeometry, "NO") ) )
-    	DumpOGRGeometry(fpOut, feature->GetGeometryRef(), "  ", papszOptions);
+      {
+      DumpOGRGeometry(fpOut, feature->GetGeometryRef(), "  ", papszOptions);
+      }
 }
 
 fprintf( fpOut, "\n" );
@@ -1348,11 +1350,8 @@ bool TestHelper::CompareLines(std::string strfileref,
           if (isNumeric(strRef))
             {
 
-            if ((strRef != strTest) && (vcl_abs(atof(strRef.c_str())) > m_EpsilonBoundaryChecking) && (vcl_abs(
-                                                                                                         atof(strRef.
-                                                                                                              c_str())
-                                                                                                         - atof(strTest
-                                                                                                                .c_str())) > epsilon * vcl_abs(atof(strRef.c_str())))) //epsilon as relative error
+            if ((strRef != strTest) && (vcl_abs(atof(strRef.c_str())) > m_EpsilonBoundaryChecking) 
+                   && (vcl_abs(atof(strRef.c_str()) - atof(strTest.c_str())) > epsilon * vcl_abs(atof(strRef.c_str())))) //epsilon as relative error
               {
               if (m_ReportErrors)
                 {

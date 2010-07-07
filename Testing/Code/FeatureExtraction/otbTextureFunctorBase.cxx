@@ -35,8 +35,7 @@ public:
     return "TextureFunctorTest";
   }
 
-  TextureFunctorTest()
-       {};
+  TextureFunctorTest(){};
   ~TextureFunctorTest(){}
 
   typedef itk::Neighborhood<TScalarInput, 2> NeighborhoodType;

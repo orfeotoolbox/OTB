@@ -86,8 +86,7 @@ protected:
   WorldFile() : m_LonOrigin(0.0), m_LatOrigin(0.0),
     m_LonSpacing(0.0), m_LatSpacing(0.0),
     m_LonRotation(0.0), m_LatRotation(0.0),
-    m_ImageFilename("")
-    {};
+    m_ImageFilename("") {}
   ~WorldFile() {}
 
 private:

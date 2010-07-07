@@ -221,8 +221,7 @@ public:
 
 protected:
   /** Constructor */
-  AttributesMapLabelObject() : m_Attributes(), m_Polygon(PolygonType::New())
-      {}
+  AttributesMapLabelObject() : m_Attributes(), m_Polygon(PolygonType::New()) {}
   /** Destructor */
   virtual ~AttributesMapLabelObject() {}
 

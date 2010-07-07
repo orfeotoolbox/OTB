@@ -61,8 +61,7 @@ public:
   typedef typename Superclass::OutputType RealType;
 
 protected:
-  RealMomentPathFunction()
-    {}
+  RealMomentPathFunction() {}
   ~RealMomentPathFunction() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
