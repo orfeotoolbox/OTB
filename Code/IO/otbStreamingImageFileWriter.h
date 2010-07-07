@@ -175,7 +175,10 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Does the real work. */
-  void GenerateData(void);
+  virtual void GenerateData(void);
+
+  virtual void GenerateInputRequestedRegion();
+
 
 private:
   StreamingImageFileWriter(const StreamingImageFileWriter &); //purposely not implemented

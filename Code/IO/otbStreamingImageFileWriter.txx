@@ -267,6 +267,28 @@ StreamingImageFileWriter<TInputImage>
                                             m_BufferNumberOfLinesDivisions);
 }
 
+template<class TInputImage>
+void
+StreamingImageFileWriter<TInputImage>
+::GenerateInputRequestedRegion()
+ {
+  Superclass::GenerateInputRequestedRegion();
+
+  InputImageType * inputPtr = const_cast<InputImageType*>(this->GetInput());
+
+  if(!inputPtr)
+    {
+    return;
+    }
+  typename InputImageType::RegionType lregion = inputPtr->GetLargestPossibleRegion();
+  typename InputImageType::SizeType rsize;
+  rsize.Fill(0);
+  lregion.SetSize(rsize);
+
+  inputPtr->SetRequestedRegion(lregion);
+
+ }
+
 /**
  *
  */
