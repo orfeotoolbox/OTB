@@ -32,6 +32,8 @@ DEMHandler
 ::DEMHandler() :
   m_ElevManager(ossimElevManager::instance())
 {
+  // Ensure that Elev manager never returns default nan value
+  m_ElevManager->setDefaultHeightAboveEllipsoid(0.);
 }
 
 void
