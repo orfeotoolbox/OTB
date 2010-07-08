@@ -25,7 +25,7 @@
 // The following example illustrates the application of estimation
 // of a sensor model to an image (limited to a RPC sensor model for now).
 
-// The \doxygen{otb}{GCPsToRPCSensorModelImageFilter} estimates an RPC
+// The \doxygen{otb}{GCPsToRPCSensorModelImageFilter} estimates a RPC
 // sensor model from a list of user defined GCPs. Internally, it uses
 // an ossimRpcSolver, which performs the estimation using the well
 // known least-square method.

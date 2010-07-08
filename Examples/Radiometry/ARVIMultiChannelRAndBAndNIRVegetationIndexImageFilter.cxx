@@ -38,9 +38,9 @@
 //
 //
 // The following example illustrates the use of the
-// otb::MultiChannelRAndBAndNIR VegetationIndexImageFilter with the
+//  \doxygen{otb}{MultiChannelRAndBAndNIRIndexImageFilter} with the
 // use of the Atmospherically Resistant Vegetation Index (ARVI) \subdoxygen{otb}{Functor}{ARVI}.  ARVI
-// is an improved version of the NDVI that is more resistent to the
+// is an improved version of the NDVI that is more robust to the
 // atmospheric effect.  In addition to the red and NIR channels (used
 // in the NDVI), the ARVI takes advantage of the presence of the blue
 // channel to accomplish a self-correction process for the atmospheric
@@ -68,7 +68,7 @@
 // \mathbf{ARVI} = \frac{ L_{NIR}-L_{rb} }{ L_{NIR}+L_{rb} }
 // \end{equation}
 //
-// For more details, refer to Kaufman and Tanr� work \cite{ARVI}.
+// For more details, refer to Kaufman and Tanré work \cite{ARVI}.
 //
 //  \relatedClasses
 //  \begin{itemize}

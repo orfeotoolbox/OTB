@@ -261,7 +261,7 @@ int main(int argc, char* argv[])
 // Software Guide : BeginLatex
 //
 // The tricky part starts here. Note that this example is only
-// intended for pedagogic purposes and that you do not need to proceed
+// intended for educationnal purposes and that you do not need to proceed
 // as this. See the example in section
 // \ref{sec:OrthorectificationwithOTB} in order to code
 // ortho-rectification chains in a very simple way.\\
@@ -381,8 +381,8 @@ int main(int argc, char* argv[])
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
-// By this point, we have stored all the indexes we need for the piece
-// of image we are processing. Now we can compute the bounds of the
+// At this point, we have stored all the indexes we need for the piece
+// of image we are processing. We can now compute the bounds of the
 // area in the input image we need to extract.
 //
 // Software Guide : EndLatex
