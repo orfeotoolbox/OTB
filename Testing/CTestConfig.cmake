@@ -7,7 +7,7 @@
 set(CTEST_PROJECT_NAME "OTB")
 set(CTEST_NIGHTLY_START_TIME "20:00:00 CEST")
 
-set(CTEST_NIGHTLY_IDENT_LOCATION "http://www.orfeo-toolbox.org/nightly/libNightlyNumber")
+set(CTEST_NIGHTLY_IDENT_LOCATION "http://host2.orfeo-toolbox.org/nightly/libNightlyNumber")
 
 set(CTEST_DROP_METHOD "http")
 set(CTEST_DROP_SITE "dash.orfeo-toolbox.org")
