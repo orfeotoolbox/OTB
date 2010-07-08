@@ -34,6 +34,13 @@ ADD_TEST(prTvMapProjection ${PROJECTIONS_TESTS1}
         ${TEMP}/prTvMapProjection.txt
 )
 
+ADD_TEST(prTvUtmMapProjection ${PROJECTIONS_TESTS1}
+        --compare-ascii ${EPSILON_4} ${BASELINE_FILES}/prTvUtmMapProjection.txt
+        ${TEMP}/prTvUtmMapProjection.txt
+        otbUtmMapProjection
+        ${TEMP}/prTvUtmMapProjection.txt
+)
+
 ADD_TEST(prTuSensorModelsNew ${PROJECTIONS_TESTS1}  otbSensorModelsNew )
 
 IF(OTB_DATA_USE_LARGEINPUT)
@@ -569,6 +576,7 @@ otbProjectionsTests1.cxx
 otbProjectionBaseNew.cxx
 otbMapProjectionsNew.cxx
 otbMapProjection.cxx
+otbUtmMapProjection.cxx
 otbSensorModelsNew.cxx
 otbCreateProjectionWithOSSIM.cxx
 otbCreateProjectionWithOTB.cxx
