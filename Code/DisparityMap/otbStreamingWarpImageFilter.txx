@@ -190,16 +190,23 @@ StreamingWarpImageFilter<TInputImage, TOutputImage, TDeformationField>
     {
     // Couldn't crop the region (requested region is outside the largest
     // possible region).  Throw an exception.
+    std::cout<<"Requested region: "<<inputRequestedRegion<<std::endl;
+    std::cout<<"Largest region"<<inputPtr->GetLargestPossibleRegion()<<std::endl;
+
+    inputFinalSize.Fill(0);
+    inputRequestedRegion.SetSize(inputFinalSize);
+    inputFinalIndex.Fill(0);
+    inputRequestedRegion.SetIndex(inputFinalIndex);
 
     // store what we tried to request (prior to trying to crop)
     inputPtr->SetRequestedRegion(inputRequestedRegion);
 
-    // build an exception
-    itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
-    e.SetLocation(ITK_LOCATION);
-    e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
-    e.SetDataObject(inputPtr);
-    throw e;
+//    // build an exception
+//    itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
+//    e.SetLocation(ITK_LOCATION);
+//    e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
+//    e.SetDataObject(inputPtr);
+//    throw e;
     }
  }
 
