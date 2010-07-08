@@ -117,20 +117,20 @@ and the acquisition geometry (platform altitude, viewing angle, focal
 length for optical sensors, doppler centroid for SAR images, etc.).\\
 
 In OTB, sensor models are implemented as \doxygen{itk}{Transform}s
-(see section \ref{sec:Transforms} for details), which are the
-appropiate way to express coordinate changes. The base class for
+(see section \ref{sec:Transforms} for details), which is the
+appropriate way to express coordinate changes. The base class for
 sensor models is \doxygen{otb}{SensorModelBase} from which the classes
 \doxygen{otb}{InverseSensorModel} and
 \doxygen{otb}{ForwardSensorModel} inherit.\\
 
 As one may note from the model equations, the height of the ground, $h$,
-must be known. Usually, that means that a Digital Elevation Model,
+must be known. Usually, it means that a Digital Elevation Model,
 DEM, will be used.\\
 
 
 \subsection{Types of Sensor Models}
 \label{sec:TypesofSensorModels}
-There exist two main types of sensor models. On one hand, we have the
+There exists two main types of sensor models. On one hand, we have the
 so-called {\em physical models}, which are rigorous, complex,
 eventually highly non-linear equations of the sensor geometry. As
 such, they are difficult to inverse (obtain the inverse model from the
@@ -192,7 +192,7 @@ access it when needed.
 \subsection{Evaluating Sensor Model}
 \label{sec:EvaluatingSensorModels}
 
-If any appropriate sensor model is available in the image meta-data,
+If no appropriate sensor model is available in the image meta-data,
 OTB offers the possibility to estimate a sensor model from the image. 
 
 \input{EstimateRPCSensorModelExample.tex}
@@ -218,7 +218,7 @@ implemented in coming versions of OTB.
 
 Even if the model parameters are refined, errors due to DEM accuracy
 can not be eliminated. In this case, image to image registration can
-be applied. This approaches are presented in chapters
+be applied. These approaches are presented in chapters
 \ref{chap:ImageRegistration} and \ref{sec:DisparityMapEstimation}.
 
 %% \section{Bundle-block adjustment}
