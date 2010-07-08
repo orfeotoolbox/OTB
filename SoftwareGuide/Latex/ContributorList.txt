@@ -34,4 +34,7 @@ Manuel Grizonnet (CNES)
 Stephane May (CNES)
 Conrad Bielski (JRC)
 Antonio Valentino
+Aur\'elien Bricier (CS)
+S\'ebastien Dinot (CS)
+Julien Malik (CS)
 

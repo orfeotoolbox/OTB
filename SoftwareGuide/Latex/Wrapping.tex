@@ -6,18 +6,19 @@ The project is based on CMake. SWIG, CableSwig and finally OTB that must be alre
 It allows the Python, Java and Tcl users to have program written in their own language to use the classes and 
 the capabilities of OTB.
 Since OTB-Wrapping provides an interface to some C++ compiled code, execution times are very similar to C++ 
-pure programs in most of cases.
+pure programs in most cases.
 Once the project compiled, one can use the wrapped classes to write programs in your favorite language.
 The OTB Tutorials were translated in Java and can use the OTB capabilities to show how to use the 
 Orfeo Toolbox easily. 
 
 \subsection{Mangling}
-You have probably notice that class names are quite barbaric. It is due to the mangling. 
-With the Java versions less or equal to 1.6, no generic programming is allowed. That means that no templates\\
-can be used. Then, to use a C++  class in Java, the class generated (called proxies) are templated with\\
-the available types and for each type a Java proxy is generated. The mangled types are concatenated and added\\
-in the end of the class. For instance, when one want to use the otb::Image with the pixel type float and the\\
-dimension 2, the class generated will be otbImageF2. \\
+You probably noticed that class names are quite barbaric. It is due to the
+mangling. With the Java versions less or equal to 1.6, no generic programming is
+allowed. It means that no templates can be used. Then, to use a C++  class in Java, the class generated 
+(called proxies) are templated with the available types and for each type a Java
+proxy is generated. The mangled types are concatenated and added in the end of
+the class. For instance, when one want to use the \doxygen{otb}{Image} with the pixel type float 
+and the dimension 2, the class generated will be otbImageF2.
 
 The table ~\ref{tab:basictypetomangle} summarize the mangling used for the basic types. 
 
@@ -40,7 +41,7 @@ bool                  &  B         \\
 \end{center}
 \end{table}
 
-In OTB, there are some types used in several classes like otb::Image and otb::VectorImage,  or otb::VectorData.
+In OTB, there are some types used in several classes like \doxygen{otb}{Image} and  \doxygen{otb}{VectorImage}, or \doxygen{otb}{VectorData}.
 Then those classes have their own mangling two. The table ~\ref{tab:typetomangle} shows some of the mangled classes. 
 
 \begin{table}[!htbp]
@@ -62,21 +63,21 @@ otb::VectorData            &  VD        \\
 The mangled name otbImageF2 means that we are dealing with the class otb::Image with 
 template arguments float and 2. So, otbImageF2 is equivalent to \verb|otb::Image<float,2>|. Another example 
 can be otbImageFileReaderIF2, knowing that I (~\ref{tab:typetomangle}) is the mangle for otb::Image, F is the mangle 
-for the type float then IF2 is the mangle for \verb|otb::Image<float,2>|, and finally otbImageFileReaderIF2 is\\
-the mangle for
- \verb|otb::ImageFileReader< otb::Image< float,2 > >|.
+for the type float then IF2 is the mangle for \verb|otb::Image<float,2>|, and
+finally otbImageFileReaderIF2 is the mangle for \verb|otb::ImageFileReader< otb::Image< float,2 > >|.
 
 
 \subsection{How to Use OTB-Wrapping in Java}
 
 \subsubsection{Import OTB classes}
-The OTB-Wrapping project provides some jar files that corresponds to the modules implemented in the directory Libraries.\\
-Each OTB-wrapping module is automatically wrapped to a separate Java package. For instance, the directory Libraries\\
-contains the modules otbImages and otbLearning. The jars produced will be org.otb.otbimages and org.otb.otblearning.\\
-Those jars can be used as usual in Java.
+The OTB-Wrapping project provides some \verb|jar| files that corresponds to the
+modules implemented in the directory Libraries. Each OTB-wrapping module is automatically wrapped to a separate Java package.
+For instance, the directory Libraries contains the modules otbImages and
+otbLearning. The jars produced will be \verb|org.otb.otbimages| and
+\verb|org.otb.otblearning|. Those jars can be used as usual in Java.
 
 To write an example that uses OTB classes, you have to import those jars in your program by adding the directive 
-\verb?import org.otb.otbio.*?. You can than access to all the classes in the module otbIO (cf section \ref{sec:tuto}).
+\verb?import org.otb.otbio.*?. You can then access to all the classes in the otbIO module (cf section \ref{sec:tuto}).
 
 \subsubsection{Compile Java programs}
 The next step is to compile the Java program. Note that the Java compiler needs some options like 
@@ -91,7 +92,7 @@ Now we can execute the Java class compiled, it needs some options too.
 \item The class path  : specifies where to find user class files.\\
       The option is -classpath .:path\_to\_the\_jar1:path\_to\_the\_jar2...
 \item The java.library.path : A system property that specifies where the libraries are.\\
-      The libraries are named moduleJava.\{ dll|so|nylib \}.
+      The libraries are named moduleJava.\{ dll|so|dylib \}.
 \end{itemize}
 
 \begin{landscape}
@@ -151,7 +152,8 @@ Example in C++                  &  Example translated in Java  \\
 \subsection{Use OTB-Wrapping}
 
 \subsubsection{Download sources}
-The source code for the project OTB-Wrapping is available here: \url{http://hg/orfeo-toolbox.org/OTB-Wrapping}. 
+The source code for the project OTB-Wrapping is available here: \\
+\url{http://hg.orfeo-toolbox.org/OTB-Wrapping}
 
 \subsubsection{Required Tools}
 OTB-Wrapping required the release 3.2 of the Orfeo Toolbox or greater. This project required some tools and 
@@ -159,46 +161,46 @@ and libraries :
 \begin{itemize}
 \item CMake (\verb!>2.6!) to configure the compilation system.
 \item CableSwig (\verb!>0.1.0!) for parsing and automatic instanciation of C++ templates.\\
-      The source code is available here: \url{http://FIXME}
+      The source code is available here: \url{http://www.itk.org/ITK/resources/CableSwig.html}
 \item SWIG  (\verb!>1.3.40!) for language binding
-\item Target Language developement libraries (JRE for Java, Python 2.6 for Python).
+\item Target Language development libraries (JRE for Java, Python 2.6 for Python).
 \end{itemize}
 
 \subsubsection{Compile OTB-Wrapping sources}
-First, this project needs OTB, CableSwig and SWIG to be built. Once, this step done, create a 
-directory where the project will be compiled (Don't compile in the sources directory).
+First, this project needs OTB, CableSwig and SWIG to be built. Once this step done, create a 
+directory where the project will be compiled (don't compile in the sources directory).
 The compilation can be done successfully following those steps :
 
 \begin{itemize}
-\item Run CMake (ccmake under Linux and macosX or cmake.exe under Windows) and specify the path to the sources.
+\item Run CMake (ccmake under Linux and MacOSX or cmake.exe under Windows) and specify the path to the sources.
 \item Edit the paths for OTB, CableSwig and SWIG binary directories.
-\item Turn the option WRAP\_ITK\_(JAVA | PYTHON | Tcl  )  to ON to choose your target language.
+\item Turn the option \verb|WRAP\_ITK\_|(\verb|JAVA| | \verb|PYTHON| | \verb|Tcl|  )  to ON to choose your target language.
 \item Choose the modules you want to wrap.
 \item Configure the project and generate the solution.
-\item Compile using make in the binary directory (if Linux or macosX), or open the solution (.sln)\\
-      and generate the solution.
+\item Compile using make in the binary directory (on Linux and MacOSX), or open the solution (.sln)\\
+      and generate the solution on Windows.
 \end{itemize}
 
-Once the compilation completed successfully, the directory lib will contains several jars which are Java archives 
+Once the compilation completed successfully, the directory \verb|lib| will contain several jars which are Java archives 
 and the libraries corresponding to the modules. Those are the useful to use OTB capabilities in Java language.
 
 \subsubsection{Download binaries}
-The binaries are available here :
+Ready-to-use binaries for Windows are available here : \url{http://sourceforge.net/projects/orfeo-toolbox/files}
 
 \subsubsection{Use OTB-Wrapping with Eclipse}
-OTB-Wrapping produces Java archives and libraries that can be used with Eclipse. You can then create your Java \\
+OTB-Wrapping produces Java archives and libraries that can be used with Eclipse. You can then create your Java 
 project and use the OTB wrapped classes. 
 Eclipse gives the possibility to add external jars. 
 After creating a new project, 
 \begin{itemize}
-\item Run the project configuration (Run then Run Configurations) to add the externals OTB-Wrapping Jars.\\
+\item Run the project configuration (Run then Run Configurations) to add the externals OTB-Wrapping Jars.
       In the Classpath section, add external jars by searching the jars produced. (They are generally in directory lib).
-\item Add the path to the OTB-Wrapping libraries to  the environment variable PATH. Go to the tab Environment \\
-      (always in Run Configurations setup), \emph{Select} the environment variable PATH, and add the complete path \\
+\item Add the path to the OTB-Wrapping libraries to  the environment variable PATH. Go to the tab Environment 
+      (always in Run Configurations setup), \emph{Select} the environment variable PATH, and add the complete path 
       to the location of the libraries.
 \end{itemize}
 
-You can know write Java classes, main and import the OTB wrapped classes like shown in section \ref{sec:tuto}.
+You can now import the OTB wrapped classes in your own Java classes, like shown in section \ref{sec:tuto}.
 
 
 \normalsize
@@ -253,7 +255,7 @@ You can know write Java classes, main and import the OTB wrapped classes like sh
 
 
 
-\section{Developper Guide}\label{sec:dev}
+\section{Developer Guide}\label{sec:dev}
 
 \subsection{Add a new Library : Creating a new CMakeList.txt file}
 Each OTB-Wrapping sub-library (e.g. itkBase, or otbChangeDetection) 
@@ -293,7 +295,7 @@ be linked in, like OTBCommon, OTBIO, etc.
 
 \subsection{Add a new cmake file}
 A \verb$wrap_XXX.cmake$ file defines a group of classes and/or template instantiations to be wrapped. 
-Most of time, one such file is defined for each class wrapped, but this is not strictly necessary. 
+Most of the time, one such file is defined for each class wrapped, but this is not strictly necessary. 
 Within such a file, directives are issued to wrap classes and particular template instances.
 OTB-Wrapping define several macros and variables designed to:
 
@@ -323,7 +325,7 @@ END_WRAP_CLASS()
 \normalsize
 
 The file contains several macros useful to make the wrapping easy. It contains 
-a \verb$WRAP_CLASS$ - \verb$END_WRAP_CLASS$ wich contains itself some 
+a \verb$WRAP_CLASS$ - \verb$END_WRAP_CLASS$ which contains itself some 
 \verb$WRAP_IMAGE_FILTER_*$ macros. 
 \verb$WRAP_CLASS("otb::StreamingShrinkImageFilter" POINTER)$ begins the wrapping of the 
 \verb$otb::StreamingShrinkImageFilter$ templated class.
@@ -393,7 +395,7 @@ are defined, with \verb|${ITKM_UC} = "UC"|  and \verb|${ITKT_UC} = "unsigned cha
 The same thing is done for the defined classes. 
 For instance, to retrieve the mangling used for  \verb|otb::Image<float, 2>|, 
 it is stored in the variable  \verb|ITKM_IF2|.
-Note that I corresponds to otb::Image following ~\ref{tab:typetomangle}.
+Note that it corresponds to \code{otb::Image} following ~\ref{tab:typetomangle}.
 The complete type will be stored in the variable \verb?ITKT_IF2?. 
 These variables are used to make easier the mechanism of 
 wrapping for the user (cf Section \ref{sec:dev})
@@ -456,19 +458,19 @@ selected by the user.
 \end{itemize}
 
 \subsubsection{Macro MANGLE\_NAME}
-MANGLE\_NAME() is a macro used to make the mangling easier for the developper. 
+\verb!MANGLE_NAME()! is a macro used to make the mangling easier for the developer. 
 This macro aims at formatting the mangled name using a separator. The separator can be user-defined by
-setting the MANGLE\_SEPARATOR CMake value. This Macro takes as input a  list of types names.
-At the end of the macro, the MANGLED\_NAME variable will contain the proper mangling. 
+setting the \verb!MANGLE_SEPARATOR! CMake value. This Macro takes as input a  list of types names.
+At the end of the macro, the \verb!MANGLED_NAME! variable will contain the proper mangling. 
 The macro was written to allow the user adding a separator to make the Java classes name more clear.
 It is written in the file OTB-WrappingTypes.cmake. 
 
-For instance, when one use the CMake macro  ADD\_TEMPLATE to add a template 
+For instance, when one use the CMake macro \verb!ADD_TEMPLATE! to add a template 
 for the types used to wrap a class, a correct way to do so is :
 
 \verb!ADD_TEMPLATE("${ITKM_IF2}${ITKM_IF2}" "${ITKT_IF2}, ${ITKM_IF2} ")!.
 
-With the MANGLE\_NAME Macro, it will be in two steps : 
+With the \verb!MANGLE_NAME! Macro, it will be in two steps : 
 \begin{itemize}
 \item\verb!MANGLE_NAME(${ITKM_IF2} ${ITKM_IF2} )!
 \item\verb!ADD_TEMPLATE("${MANGLED_NAME}" "${ITKT_IF2}, \${ITKM_IF2}")!
@@ -487,7 +489,7 @@ JavaDoc comments.
 
 First, download the taglet LatexLet 
 here~:\\ \url{http://users.informatik.uni-halle.de/~grau/LaTeXlet/index.html}. 
-Once the OTB-Wrapping project built, go to the directory Language/Java/Proxies/src/. 
+Once the OTB-Wrapping project is built, go to the directory Language/Java/Proxies/src/. 
 All the java classes generated are there.
 
 Then, to generate the javadoc HTML documentaion use the javadoc command with the following options : 
@@ -503,22 +505,22 @@ Then, to generate the javadoc HTML documentaion use the javadoc command with the
 
 The options mean :
 \begin{itemize}
-\item -d DESTINTAION : Destination directory for output files
-\item -taglet *      : The fully qualified name of Taglet to register
-\item -tagletpath PATH\_TO\_THE\_LATEXLET\_JAR : Complete path to the taglet jar
-\item org/*/*/*.java : the sources files. 
+\item \verb!-d DESTINATION! : Destination directory for output files
+\item \verb!-taglet *!      : The fully qualified name of Taglet to register
+\item \verb!-tagletpath PATH_TO_THE_LATEXLET_JAR! : Complete path to the taglet jar
+\item \verb!org/*/*/*.java! : the sources files. 
 \end{itemize}
 
 
 \subsubsection{Generate JavaDoc while compilation}
 The method above shows how to generate the HTML javadoc documentation with 
-a command line after OTB-Wrapping was built. It is possible to include this step 
+a command line after OTB-Wrapping is built. It is possible to include this step 
 in the compilation process. 
 For that, two cmake variables have to be edited in the project configuration step with cmake.
 \begin{itemize}
-\item  LATEXLET\_JAR : Path to the LatexLet taglet allowing to convert Tex formula to PNG. 
+\item  \verb!LATEXLET_JAR! : Path to the LatexLet taglet allowing to convert Tex formula to PNG. 
        Not setting this field will result in the absence of formulas in the generated javadoc
-\item  WRAP\_ITK\_JAVADOC : by default on OFF. Put this variable to ON if to include the html \\
+\item  \verb!WRAP_ITK_JAVADOC! : by default on OFF. Put this variable to ON if to include the html \\
        javadoc generation in the compilation process.
 \end{itemize}
 
