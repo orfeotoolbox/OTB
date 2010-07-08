@@ -149,6 +149,14 @@ protected:
   std::string                   m_ProjectionRefWkt;
   virtual void InstanciateProjection();
 
+  virtual void Modified()
+  {
+    Superclass::Modified();
+    // Update map projection
+    m_MapProjection->update();
+
+  }
+
 private:
   MapProjection(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
