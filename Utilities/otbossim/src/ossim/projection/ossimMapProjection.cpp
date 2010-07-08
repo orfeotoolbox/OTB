@@ -1734,10 +1734,10 @@ bool ossimMapProjection::verifyPcsCodeMatches() const
             result = true;
          }
       }
-      else
-      {
-        result = true; //projection is not state plane
-      }
+//      else
+//      {
+//        result = true; //projection is not state plane
+//      }
    }
    return result;
 }
