@@ -31,7 +31,7 @@ namespace otb
  *  This filter computes the following Haralick textures over a sliding windows with
  *  user defined radius:
  *  (where \f$ g(i, j) \f$ is the element in
- * cell i, j of a a normalized GLCM):
+ * cell i, j of a normalized GLCM):
  *
  * "Energy" \f$ = f_1 = \sum_{i,j}g(i, j)^2 \f$
  *
@@ -41,7 +41,7 @@ namespace otb
  *
  * "Difference Moment" \f$= f_4 = \sum_{i,j}\frac{1}{1 + (i - j)^2}g(i, j) \f$
  *
- * "Inertia" \f$ = f_5 = \sum_{i,j}(i - j)^2g(i, j) \f$ (sometimes called "contrast.")
+ * "Inertia" \f$ = f_5 = \sum_{i,j}(i - j)^2g(i, j) \f$ (sometimes called "contrast")
  *
  * "Cluster Shade" \f$ = f_6 = \sum_{i,j}((i - \mu) + (j - \mu))^3 g(i, j) \f$
  *
