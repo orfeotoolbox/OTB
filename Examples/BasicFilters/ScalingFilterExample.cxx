@@ -30,7 +30,7 @@
 
 //  Software Guide : BeginLatex
 //
-// On one hand, satellite images are commonly coded on more that 8 bits to provide
+// On one hand, satellite images are commonly coded on more than 8 bits to provide
 // the dynamic range required from shadows to clouds. On the other hand, image formats
 // in use for printing and display are usually limited to 8 bits. We need to convert the value
 // to enable a proper display. This is usually done using linear scaling. Of course, you have

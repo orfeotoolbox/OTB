@@ -48,13 +48,13 @@ int main(int argc, char * argv[])
   // Software Guide : BeginLatex
   //
   // We will build a very simple pipeline where a reader gets an image
-  // from a file and gives it to the viewer. We define the types for
+  // from a file and gives it to a viewer. We define the types for
   // the pixel, the image and the reader. The viewer class is templated
   // over the scalar component of the pixel type.
   //
   // Software Guide : EndLatex
 
-  // Siftware Guide : BeginCodeSnippet
+  // Software Guide : BeginCodeSnippet
   typedef int                             PixelType;
   typedef otb::VectorImage<PixelType, 2>  ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
@@ -120,14 +120,14 @@ int main(int argc, char * argv[])
   // images. This procedure is inspired from the navigation window of
   // the Gimp and other image visualization tools. The navigation
   // window is called here \emph{scroll} window and it shows the
-  // complete image but subsampled to a lower resolution. The pricipal
+  // complete image but subsampled to a lower resolution. The principal
   // window shows the region marked by a red rectangle in the scroll
   // window using the real resolution of the image. Finally, a zoom
   // window displays the region inside the red rectangle shown in the
   // principal window. A mouse click on a pixel of the scroll (respectively, the
-  // pricipal window) updates the rectangle prosition and, therefore,
+  // principal window) updates the rectangle position and, therefore,
   // the region viewed in the principal (respectively, the zoom)
-  // window. The zoom rate can be modified by using the mous wheel.
+  // window. The zoom rate can be modified by using the mouse wheel.
   //
   // Software Guide : EndLatex
 

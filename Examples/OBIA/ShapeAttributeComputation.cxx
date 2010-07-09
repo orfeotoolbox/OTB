@@ -143,8 +143,8 @@ int main(int argc, char * argv[])
        label <= labelMap->GetNumberOfLabelObjects();
        label++)
     {
-    // we don't need a SmartPointer of the label object here, because the reference is kept
-    // in the label map.
+    // We don't need a SmartPointer of the label object here,
+    // because the reference is kept in the label map.
     const LabelObjectType * labelObject = labelMap->GetLabelObject(label);
     outfile << label << "\t" << labelObject->GetPhysicalSize() << "\t"
             << labelObject->GetCentroid() << std::endl;
