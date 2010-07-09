@@ -123,7 +123,7 @@ int main(int argc, char * argv[])
   textureFilter->SetNumberOfBinsPerAxis(8);
   textureFilter->SetRadius(sradius);
   textureFilter->SetInputImageMinimum(0);
-  textureFilter->SetInputImageMaximum(256);
+  textureFilter->SetInputImageMaximum(255);
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
