@@ -32,8 +32,6 @@ DEMHandler
 ::DEMHandler() :
   m_ElevManager(ossimElevManager::instance())
 {
-  // Ensure that Elev manager never returns default nan value
-  m_ElevManager->setDefaultHeightAboveEllipsoid(0.);
 }
 
 void
@@ -95,6 +93,13 @@ DEMHandler
   otbMsgDevMacro(<< "Geoid offset: " << ossimGeoidManager::instance()->offsetFromEllipsoid(ossimWorldPoint));
   height = m_ElevManager->getHeightAboveEllipsoid(ossimWorldPoint);
   return height;
+}
+
+void
+DEMHandler
+::SetDefaultHeightAboveEllipsoid(double h)
+{
+  m_ElevManager->setDefaultHeightAboveEllipsoid(h);
 }
 
 void

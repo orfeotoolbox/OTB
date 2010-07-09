@@ -71,6 +71,9 @@ public:
   /** Compute the height above ellipsoid of a geographic point. */
   virtual double GetHeightAboveEllipsoid(const PointType& geoPoint) const;
 
+  /** Set the default height above ellipsoid in case no information is available*/
+  virtual void SetDefaultHeightAboveEllipsoid(double h);
+
 protected:
   DEMHandler();
   virtual ~DEMHandler() {}
