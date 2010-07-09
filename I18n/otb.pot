@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: otb 3.2\n"
+"Project-Id-Version: otb 3.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-19 17:03+0800\n"
+"POT-Creation-Date: 2010-07-09 16:06+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,7 +29,7 @@ msgstr ""
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:65
 #: Code/Modules/otbInteractiveChangeDetectionGUI.cxx:51
 #: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:86
-#: Code/Application/otbMonteverdiViewGUI.cxx:146
+#: Code/Application/otbMonteverdiViewGUI.cxx:144
 msgid "File"
 msgstr ""
 
@@ -65,12 +65,12 @@ msgstr ""
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:522
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:577
 #: Code/Modules/otbSpeckleFilteringViewGUI.cxx:54
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:48
 #: Code/Modules/otbInteractiveChangeDetectionGUI.cxx:56
 #: Code/Modules/otbOrthorectificationGUI.cxx:400
-#: Code/Modules/otbWriterViewGroup.cxx:284
-#: Code/Modules/otbViewerModuleGroup.cxx:429
-#: Code/Modules/otbViewerModuleGroup.cxx:474
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:30
+#: Code/Modules/otbWriterViewGroup.cxx:278
+#: Code/Modules/otbViewerModuleGroup.cxx:441
+#: Code/Modules/otbViewerModuleGroup.cxx:486
 msgid "Quit"
 msgstr ""
 
@@ -94,6 +94,7 @@ msgstr ""
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:155
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:215
 #: RoadExtraction/otbRoadExtractionViewGroup.cxx:328
+#: Code/Modules/otbObjectCountingViewGroup.cxx:115
 msgid "Parameters"
 msgstr ""
 
@@ -133,9 +134,13 @@ msgstr ""
 #: Pireo/RegistrationParametersGUI.cxx:732
 #: Pireo/RegistrationParametersGUI.cxx:749
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1302
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1254
-#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:360
-#: Code/Modules/otbViewerModuleGroup.cxx:404
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1105
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1550
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1576
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1627
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1653
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:274
+#: Code/Modules/otbViewerModuleGroup.cxx:416
 msgid "X"
 msgstr ""
 
@@ -185,6 +190,8 @@ msgstr ""
 #: StereoscopicApplication/otbStereoscopicApplicationViewGroup.cxx:406
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:146
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:195
+#: Code/Modules/otbVectorizationViewGroup.cxx:69
+#: Code/Modules/otbObjectCountingViewGroup.cxx:106
 msgid "Minimap"
 msgstr ""
 
@@ -192,6 +199,7 @@ msgstr ""
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:147
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:343
 #: Common/otbMsgReporterGUI.cxx:15 Code/Common/otbMsgReporterGUI.cxx:15
+#: Code/Modules/otbObjectCountingViewGroup.cxx:107
 msgid "Navigate through the image"
 msgstr ""
 
@@ -224,22 +232,26 @@ msgstr ""
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:751
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:379
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:415
-#: Code/Application/otbMonteverdiViewGroup.cxx:129
-#: Code/Application/otbMonteverdiViewGroup.cxx:159
-#: Code/Application/otbMonteverdiViewGroup.cxx:204
+#: Code/Application/otbMonteverdiViewGroup.cxx:151
+#: Code/Application/otbMonteverdiViewGroup.cxx:181
+#: Code/Application/otbMonteverdiViewGroup.cxx:226
 #: Code/Application/otbInputViewGroup.cxx:42
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1837
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1883
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:356
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:337
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:477
+#: Code/Modules/otbTileExportModuleGUI.cxx:161
 #: Code/Modules/otbReaderModuleGUI.cxx:66
-#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:509
-#: Code/Modules/otbExtractROIModuleGUI.cxx:42
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:805
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:889
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:622
+#: Code/Modules/otbExtractROIModuleGUI.cxx:161
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:249
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:390
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:433
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:803
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:887
 #: Code/Modules/otbSuperimpositionModuleGUI.cxx:71
-#: Code/Modules/otbSarCalibrationModuleGUI.cxx:78
-#: Code/Modules/otbWriterModuleGUI.cxx:78
+#: Code/Modules/otbFieldEditorGroup.cxx:69
+#: Code/Modules/otbTileMapImportModuleGUI.cxx:121
+#: Code/Modules/otbSarCalibrationModuleGUI.cxx:106
+#: Code/Modules/otbWriterModuleGUI.cxx:50
 #: Code/Modules/otbKMeansModuleGUI.cxx:43
 msgid "Cancel"
 msgstr ""
@@ -264,23 +276,25 @@ msgstr ""
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:361
 #: OrthoRectif/otbOrthoRectifGUI.cxx:437
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:397
-#: Code/Application/otbMonteverdiViewGroup.cxx:121
-#: Code/Application/otbMonteverdiViewGroup.cxx:167
-#: Code/Application/otbMonteverdiViewGroup.cxx:212
+#: Code/Application/otbMonteverdiViewGroup.cxx:143
+#: Code/Application/otbMonteverdiViewGroup.cxx:189
+#: Code/Application/otbMonteverdiViewGroup.cxx:234
 #: Code/Application/otbInputViewGroup.cxx:34
 #: Code/Modules/otbSpeckleFilteringViewGUI.cxx:114
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1815
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1861
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:345
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:467
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:729
-#: Code/Modules/otbExtractROIModuleGUI.cxx:34
+#: Code/Modules/otbExtractROIModuleGUI.cxx:153
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:241
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:374
 #: Code/Modules/otbOrthorectificationGUI.cxx:391
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:790
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:878
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:788
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:876
 #: Code/Modules/otbSuperimpositionModuleGUI.cxx:63
-#: Code/Modules/otbViewerModuleGroup.cxx:332
-#: Code/Modules/otbViewerModuleGroup.cxx:416
-#: Code/Modules/otbViewerModuleGroup.cxx:483
+#: Code/Modules/otbViewerModuleGroup.cxx:339
+#: Code/Modules/otbViewerModuleGroup.cxx:428
+#: Code/Modules/otbViewerModuleGroup.cxx:495
+#: Code/Modules/otbFieldEditorGroup.cxx:61
+#: Code/Modules/otbTileMapImportModuleGUI.cxx:113
 #: Code/Modules/otbKMeansModuleGUI.cxx:35
 msgid "Ok"
 msgstr ""
@@ -304,13 +318,14 @@ msgstr ""
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1144
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:559
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:572
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:566
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:579
+#: Code/Modules/otbTileExportModuleGUI.cxx:197
 #: Code/Modules/otbReaderModuleGUI.cxx:74
-#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:499
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:612
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:226
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:239
 #: Code/Modules/otbSuperimpositionModuleGUI.cxx:79
-#: Code/Modules/otbWriterViewGroup.cxx:172
-#: Code/Modules/otbWriterModuleGUI.cxx:70
+#: Code/Modules/otbWriterViewGroup.cxx:165
+#: Code/Modules/otbWriterModuleGUI.cxx:42
 msgid "..."
 msgstr ""
 
@@ -326,9 +341,10 @@ msgstr ""
 #: LandCoverMap/otbLandCoverMapView.cxx:82
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:543
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1786
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1735
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:519
-#: Code/Modules/otbWriterViewGroup.cxx:193
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1781
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:209
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:517
+#: Code/Modules/otbWriterViewGroup.cxx:187
 msgid "Tools for classification"
 msgstr ""
 
@@ -373,16 +389,16 @@ msgstr ""
 
 #: LandCoverMap/otbLandCoverMapView.cxx:114
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1869
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1816
-#: Code/Modules/otbWriterViewGroup.cxx:274
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1862
+#: Code/Modules/otbWriterViewGroup.cxx:268
 msgid "Save the Composition"
 msgstr ""
 
 #: LandCoverMap/otbLandCoverMapView.cxx:125
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1902
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1838
-#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:317
-#: Code/Modules/otbWriterViewGroup.cxx:285
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1884
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:439
+#: Code/Modules/otbWriterViewGroup.cxx:279
 msgid "Quit Application"
 msgstr ""
 
@@ -396,6 +412,7 @@ msgstr ""
 
 #: LandCoverMap/otbLandCoverMapView.cxx:152
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:442
+#: Code/Modules/otbMeanShiftModuleViewGroup.cxx:241
 #: Code/Modules/otbInteractiveChangeDetectionGUI.cxx:437
 msgid "Opacity"
 msgstr ""
@@ -410,13 +427,13 @@ msgstr ""
 
 #: LandCoverMap/otbLandCoverMapView.cxx:175
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:632
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:594
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:459
 msgid "Vegetation"
 msgstr ""
 
 #: LandCoverMap/otbLandCoverMapView.cxx:184
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:659
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:621
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:486
 msgid "Water"
 msgstr ""
 
@@ -438,75 +455,76 @@ msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:117 OrthoRectif/otbOrthoRectifGUI.cxx:89
 #: Code/Modules/otbProjectionGroup.cxx:99
-#: Code/Modules/otbProjectionGroup.cxx:209
+#: Code/Modules/otbProjectionGroup.cxx:222
 #: Code/Modules/otbOrthorectificationGUI.cxx:103
 msgid "UTM"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:118 OrthoRectif/otbOrthoRectifGUI.cxx:90
 #: Code/Modules/otbProjectionGroup.cxx:100
-#: Code/Modules/otbProjectionGroup.cxx:210
+#: Code/Modules/otbProjectionGroup.cxx:223
 #: Code/Modules/otbOrthorectificationGUI.cxx:104
 msgid "LAMBERT2"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:119 OrthoRectif/otbOrthoRectifGUI.cxx:91
 #: Code/Modules/otbProjectionGroup.cxx:101
-#: Code/Modules/otbProjectionGroup.cxx:211
+#: Code/Modules/otbProjectionGroup.cxx:224
 #: Code/Modules/otbOrthorectificationGUI.cxx:106
 msgid "TRANSMERCATOR"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:312 OrthoRectif/otbOrthoRectifGUI.cxx:284
-#: Code/Modules/otbProjectionGroup.cxx:425
+#: Code/Modules/otbProjectionGroup.cxx:439
 #: Code/Modules/otbOrthorectificationGUI.cxx:281
+#: Code/Modules/otbSarCalibrationModuleGUI.cxx:172
 msgid "Linear"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:313 OrthoRectif/otbOrthoRectifGUI.cxx:285
-#: Code/Modules/otbProjectionGroup.cxx:426
+#: Code/Modules/otbProjectionGroup.cxx:440
 #: Code/Modules/otbOrthorectificationGUI.cxx:282
 msgid "Nearest"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:314 OrthoRectif/otbOrthoRectifGUI.cxx:286
-#: Code/Modules/otbProjectionGroup.cxx:427
+#: Code/Modules/otbProjectionGroup.cxx:441
 #: Code/Modules/otbOrthorectificationGUI.cxx:283
 msgid "SinC"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:361 OrthoRectif/otbOrthoRectifGUI.cxx:333
-#: Code/Modules/otbProjectionGroup.cxx:353
+#: Code/Modules/otbProjectionGroup.cxx:367
 #: Code/Modules/otbOrthorectificationGUI.cxx:330
 msgid "Blackman"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:362 OrthoRectif/otbOrthoRectifGUI.cxx:334
-#: Code/Modules/otbProjectionGroup.cxx:354
+#: Code/Modules/otbProjectionGroup.cxx:368
 #: Code/Modules/otbOrthorectificationGUI.cxx:331
 msgid "Cosine"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:363 OrthoRectif/otbOrthoRectifGUI.cxx:335
-#: Code/Modules/otbProjectionGroup.cxx:355
+#: Code/Modules/otbProjectionGroup.cxx:369
 #: Code/Modules/otbOrthorectificationGUI.cxx:332
 msgid "Gaussian"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:364 OrthoRectif/otbOrthoRectifGUI.cxx:336
-#: Code/Modules/otbProjectionGroup.cxx:356
+#: Code/Modules/otbProjectionGroup.cxx:370
 #: Code/Modules/otbOrthorectificationGUI.cxx:333
 msgid "Hamming"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:365 OrthoRectif/otbOrthoRectifGUI.cxx:337
-#: Code/Modules/otbProjectionGroup.cxx:357
+#: Code/Modules/otbProjectionGroup.cxx:371
 #: Code/Modules/otbOrthorectificationGUI.cxx:334
 msgid "Lanczos"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:366 OrthoRectif/otbOrthoRectifGUI.cxx:338
-#: Code/Modules/otbProjectionGroup.cxx:358
+#: Code/Modules/otbProjectionGroup.cxx:372
 #: Code/Modules/otbOrthorectificationGUI.cxx:335
 msgid "Welch"
 msgstr ""
@@ -542,7 +560,7 @@ msgid "Close the selected image"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:466 OrthoRectif/otbOrthoRectifGUI.cxx:438
-#: Code/Modules/otbProjectionGroup.cxx:440
+#: Code/Modules/otbProjectionGroup.cxx:454
 #: Code/Modules/otbOrthorectificationGUI.cxx:392
 msgid "Compute result"
 msgstr ""
@@ -555,7 +573,7 @@ msgstr ""
 #: Code/Modules/otbSpeckleFilteringViewGUI.cxx:55
 #: Code/Modules/otbSpeckleFilteringViewGUI.cxx:115
 #: Code/Modules/otbOrthorectificationGUI.cxx:401
-#: Code/Modules/otbAlgebraGroup.cxx:132
+#: Code/Modules/otbAlgebraGroup.cxx:200
 msgid "Quit the viewer manager"
 msgstr ""
 
@@ -638,8 +656,8 @@ msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:538 OrthoFusion/otbOrthoFusionGUI.cxx:550
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1807
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1755
-#: Code/Modules/otbWriterViewGroup.cxx:213
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1801
+#: Code/Modules/otbWriterViewGroup.cxx:207
 msgid ">>"
 msgstr ""
 
@@ -649,8 +667,8 @@ msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:544 OrthoFusion/otbOrthoFusionGUI.cxx:556
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1818
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1766
-#: Code/Modules/otbWriterViewGroup.cxx:224
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1812
+#: Code/Modules/otbWriterViewGroup.cxx:218
 msgid "<<"
 msgstr ""
 
@@ -692,23 +710,23 @@ msgid "Map projection"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:584 OrthoRectif/otbOrthoRectifGUI.cxx:522
-#: Code/Modules/otbProjectionGroup.cxx:503
-#: Code/Modules/otbProjectionGroup.cxx:627
+#: Code/Modules/otbProjectionGroup.cxx:517
+#: Code/Modules/otbProjectionGroup.cxx:641
 #: Code/Modules/otbOrthorectificationGUI.cxx:464
 msgid "Select the map projection type"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:592
-#: Code/Modules/otbProjectionGroup.cxx:636
+#: Code/Modules/otbProjectionGroup.cxx:650
 msgid "Cartographic coordinates"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:599 OrthoFusion/otbOrthoFusionGUI.cxx:642
 #: OrthoFusion/otbOrthoFusionGUI.cxx:664 OrthoRectif/otbOrthoRectifGUI.cxx:546
 #: OrthoRectif/otbOrthoRectifGUI.cxx:578 OrthoRectif/otbOrthoRectifGUI.cxx:627
-#: Code/Modules/otbProjectionGroup.cxx:652
-#: Code/Modules/otbProjectionGroup.cxx:684
-#: Code/Modules/otbProjectionGroup.cxx:733
+#: Code/Modules/otbProjectionGroup.cxx:666
+#: Code/Modules/otbProjectionGroup.cxx:698
+#: Code/Modules/otbProjectionGroup.cxx:747
 #: Code/Modules/otbOrthorectificationGUI.cxx:488
 #: Code/Modules/otbOrthorectificationGUI.cxx:520
 #: Code/Modules/otbOrthorectificationGUI.cxx:542
@@ -719,9 +737,9 @@ msgstr ""
 #: OrthoFusion/otbOrthoFusionGUI.cxx:600 OrthoFusion/otbOrthoFusionGUI.cxx:643
 #: OrthoFusion/otbOrthoFusionGUI.cxx:665 OrthoRectif/otbOrthoRectifGUI.cxx:547
 #: OrthoRectif/otbOrthoRectifGUI.cxx:579 OrthoRectif/otbOrthoRectifGUI.cxx:628
-#: Code/Modules/otbProjectionGroup.cxx:653
-#: Code/Modules/otbProjectionGroup.cxx:685
-#: Code/Modules/otbProjectionGroup.cxx:734
+#: Code/Modules/otbProjectionGroup.cxx:667
+#: Code/Modules/otbProjectionGroup.cxx:699
+#: Code/Modules/otbProjectionGroup.cxx:748
 #: Code/Modules/otbOrthorectificationGUI.cxx:489
 #: Code/Modules/otbOrthorectificationGUI.cxx:521
 #: Code/Modules/otbOrthorectificationGUI.cxx:543
@@ -732,9 +750,9 @@ msgstr ""
 #: OrthoFusion/otbOrthoFusionGUI.cxx:608 OrthoFusion/otbOrthoFusionGUI.cxx:651
 #: OrthoFusion/otbOrthoFusionGUI.cxx:673 OrthoRectif/otbOrthoRectifGUI.cxx:555
 #: OrthoRectif/otbOrthoRectifGUI.cxx:587 OrthoRectif/otbOrthoRectifGUI.cxx:636
-#: Code/Modules/otbProjectionGroup.cxx:661
-#: Code/Modules/otbProjectionGroup.cxx:693
-#: Code/Modules/otbProjectionGroup.cxx:742
+#: Code/Modules/otbProjectionGroup.cxx:675
+#: Code/Modules/otbProjectionGroup.cxx:707
+#: Code/Modules/otbProjectionGroup.cxx:756
 #: Code/Modules/otbOrthorectificationGUI.cxx:497
 #: Code/Modules/otbOrthorectificationGUI.cxx:529
 #: Code/Modules/otbOrthorectificationGUI.cxx:551
@@ -745,9 +763,9 @@ msgstr ""
 #: OrthoFusion/otbOrthoFusionGUI.cxx:609 OrthoFusion/otbOrthoFusionGUI.cxx:652
 #: OrthoFusion/otbOrthoFusionGUI.cxx:674 OrthoRectif/otbOrthoRectifGUI.cxx:556
 #: OrthoRectif/otbOrthoRectifGUI.cxx:588 OrthoRectif/otbOrthoRectifGUI.cxx:637
-#: Code/Modules/otbProjectionGroup.cxx:662
-#: Code/Modules/otbProjectionGroup.cxx:694
-#: Code/Modules/otbProjectionGroup.cxx:743
+#: Code/Modules/otbProjectionGroup.cxx:676
+#: Code/Modules/otbProjectionGroup.cxx:708
+#: Code/Modules/otbProjectionGroup.cxx:757
 #: Code/Modules/otbOrthorectificationGUI.cxx:498
 #: Code/Modules/otbOrthorectificationGUI.cxx:530
 #: Code/Modules/otbOrthorectificationGUI.cxx:552
@@ -756,94 +774,112 @@ msgid "Enter the northing of the output image center"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:617 OrthoRectif/otbOrthoRectifGUI.cxx:537
-#: Code/Modules/otbProjectionGroup.cxx:521
-#: Code/Modules/otbProjectionGroup.cxx:643
+#: Code/Modules/otbProjectionGroup.cxx:535
+#: Code/Modules/otbProjectionGroup.cxx:657
 #: Code/Modules/otbOrthorectificationGUI.cxx:479
 msgid "Zone"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:618 OrthoRectif/otbOrthoRectifGUI.cxx:538
-#: Code/Modules/otbProjectionGroup.cxx:522
-#: Code/Modules/otbProjectionGroup.cxx:644
+#: Code/Modules/otbProjectionGroup.cxx:536
+#: Code/Modules/otbProjectionGroup.cxx:658
 #: Code/Modules/otbOrthorectificationGUI.cxx:480
 msgid "Enter the zone number"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:626
-#: Code/Modules/otbProjectionGroup.cxx:530
-#: Code/Modules/otbProjectionGroup.cxx:670
+#: Code/Modules/otbProjectionGroup.cxx:544
+#: Code/Modules/otbProjectionGroup.cxx:684
 msgid "Northern hemisphere"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:633
-#: Code/Modules/otbProjectionGroup.cxx:536
-#: Code/Modules/otbProjectionGroup.cxx:676
+#: Code/Modules/otbProjectionGroup.cxx:550
+#: Code/Modules/otbProjectionGroup.cxx:690
 msgid "Southern hemisphere"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:682
-#: Code/Modules/otbProjectionGroup.cxx:549
-#: Code/Modules/otbProjectionGroup.cxx:706
+#: Code/Modules/otbProjectionGroup.cxx:563
+#: Code/Modules/otbProjectionGroup.cxx:720
 msgid "False easting"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:683 OrthoRectif/otbOrthoRectifGUI.cxx:601
-#: Code/Modules/otbProjectionGroup.cxx:550
-#: Code/Modules/otbProjectionGroup.cxx:707
+#: Code/Modules/otbProjectionGroup.cxx:564
+#: Code/Modules/otbProjectionGroup.cxx:721
 #: Code/Modules/otbOrthorectificationGUI.cxx:565
 msgid "Enter false easting"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:691
-#: Code/Modules/otbProjectionGroup.cxx:558
-#: Code/Modules/otbProjectionGroup.cxx:715
+#: Code/Modules/otbProjectionGroup.cxx:572
+#: Code/Modules/otbProjectionGroup.cxx:729
 msgid "False northing"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:692 OrthoRectif/otbOrthoRectifGUI.cxx:610
-#: Code/Modules/otbProjectionGroup.cxx:559
-#: Code/Modules/otbProjectionGroup.cxx:716
+#: Code/Modules/otbProjectionGroup.cxx:573
+#: Code/Modules/otbProjectionGroup.cxx:730
 #: Code/Modules/otbOrthorectificationGUI.cxx:574
 msgid "Enter false northing"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:700
-#: Code/Modules/otbProjectionGroup.cxx:567
-#: Code/Modules/otbProjectionGroup.cxx:724
+#: Code/Modules/otbProjectionGroup.cxx:581
+#: Code/Modules/otbProjectionGroup.cxx:738
 msgid "Scale factor"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:701
-#: Code/Modules/otbProjectionGroup.cxx:568
-#: Code/Modules/otbProjectionGroup.cxx:725
+#: Code/Modules/otbProjectionGroup.cxx:582
+#: Code/Modules/otbProjectionGroup.cxx:739
 msgid "Enter scale factor"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:713
-#: Code/Modules/otbProjectionGroup.cxx:461
+#: Code/Modules/otbProjectionGroup.cxx:475
 msgid "Geographical coordinates"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:720 OrthoRectif/otbOrthoRectifGUI.cxx:656
-#: Code/Modules/otbProjectionGroup.cxx:480
+#: Code/Modules/otbTileExportModuleGUI.cxx:289
+#: Code/Modules/otbTileExportModuleGUI.cxx:319
+#: Code/Modules/otbTileExportModuleGUI.cxx:369
+#: Code/Modules/otbTileExportModuleGUI.cxx:387
+#: Code/Modules/otbTileExportModuleGUI.cxx:414
+#: Code/Modules/otbTileExportModuleGUI.cxx:441
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:256
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:505
+#: Code/Modules/otbProjectionGroup.cxx:494
 #: Code/Modules/otbOrthorectificationGUI.cxx:429
+#: Code/Modules/otbTileMapImportModuleGUI.cxx:93
 msgid "Longitude"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:721 OrthoRectif/otbOrthoRectifGUI.cxx:657
-#: Code/Modules/otbProjectionGroup.cxx:481
+#: Code/Modules/otbProjectionGroup.cxx:495
 #: Code/Modules/otbOrthorectificationGUI.cxx:430
 msgid "Enter the longitude of the output image center"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:729 OrthoRectif/otbOrthoRectifGUI.cxx:665
-#: Code/Modules/otbProjectionGroup.cxx:489
+#: Code/Modules/otbTileExportModuleGUI.cxx:300
+#: Code/Modules/otbTileExportModuleGUI.cxx:329
+#: Code/Modules/otbTileExportModuleGUI.cxx:359
+#: Code/Modules/otbTileExportModuleGUI.cxx:396
+#: Code/Modules/otbTileExportModuleGUI.cxx:423
+#: Code/Modules/otbTileExportModuleGUI.cxx:450
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:265
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:496
+#: Code/Modules/otbProjectionGroup.cxx:503
 #: Code/Modules/otbOrthorectificationGUI.cxx:438
+#: Code/Modules/otbTileMapImportModuleGUI.cxx:86
 msgid "Latitude"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:730 OrthoRectif/otbOrthoRectifGUI.cxx:666
-#: Code/Modules/otbProjectionGroup.cxx:490
+#: Code/Modules/otbProjectionGroup.cxx:504
 #: Code/Modules/otbOrthorectificationGUI.cxx:439
 msgid "Enter the latitude of the output image center"
 msgstr ""
@@ -869,59 +905,61 @@ msgid "If checked, use the upper left output image pixel coodinates"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:758 OrthoRectif/otbOrthoRectifGUI.cxx:692
-#: Code/Modules/otbProjectionGroup.cxx:586
+#: Code/Modules/otbProjectionGroup.cxx:600
 #: Code/Modules/otbOrthorectificationGUI.cxx:615
 msgid "Output image"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:764 OrthoRectif/otbOrthoRectifGUI.cxx:699
-#: Code/Modules/otbExtractROIModuleGUI.cxx:60
-#: Code/Modules/otbExtractROIModuleGUI.cxx:86
-#: Code/Modules/otbProjectionGroup.cxx:594
+#: Code/Modules/otbExtractROIModuleGUI.cxx:80
+#: Code/Modules/otbExtractROIModuleGUI.cxx:140
+#: Code/Modules/otbProjectionGroup.cxx:608
 #: Code/Modules/otbOrthorectificationGUI.cxx:623
+#: Code/Modules/otbTileMapImportModuleGUI.cxx:54
 msgid "Size X"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:765 OrthoRectif/otbOrthoRectifGUI.cxx:700
-#: Code/Modules/otbProjectionGroup.cxx:595
+#: Code/Modules/otbProjectionGroup.cxx:609
 #: Code/Modules/otbOrthorectificationGUI.cxx:624
 msgid "Enter the X output size"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:773 OrthoRectif/otbOrthoRectifGUI.cxx:708
-#: Code/Modules/otbExtractROIModuleGUI.cxx:63
-#: Code/Modules/otbExtractROIModuleGUI.cxx:88
-#: Code/Modules/otbProjectionGroup.cxx:602
+#: Code/Modules/otbExtractROIModuleGUI.cxx:86
+#: Code/Modules/otbExtractROIModuleGUI.cxx:144
+#: Code/Modules/otbProjectionGroup.cxx:616
 #: Code/Modules/otbOrthorectificationGUI.cxx:632
+#: Code/Modules/otbTileMapImportModuleGUI.cxx:59
 msgid "Size Y"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:774 OrthoRectif/otbOrthoRectifGUI.cxx:709
-#: Code/Modules/otbProjectionGroup.cxx:603
+#: Code/Modules/otbProjectionGroup.cxx:617
 #: Code/Modules/otbOrthorectificationGUI.cxx:633
 msgid "Enter the Y output size"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:782 OrthoRectif/otbOrthoRectifGUI.cxx:717
-#: Code/Modules/otbProjectionGroup.cxx:610
+#: Code/Modules/otbProjectionGroup.cxx:624
 #: Code/Modules/otbOrthorectificationGUI.cxx:641
 msgid "Spacing X"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:783 OrthoRectif/otbOrthoRectifGUI.cxx:718
-#: Code/Modules/otbProjectionGroup.cxx:611
+#: Code/Modules/otbProjectionGroup.cxx:625
 #: Code/Modules/otbOrthorectificationGUI.cxx:642
 msgid "Enter X spacing"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:791 OrthoRectif/otbOrthoRectifGUI.cxx:726
-#: Code/Modules/otbProjectionGroup.cxx:618
+#: Code/Modules/otbProjectionGroup.cxx:632
 #: Code/Modules/otbOrthorectificationGUI.cxx:650
 msgid "Spacing Y"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:792 OrthoRectif/otbOrthoRectifGUI.cxx:727
-#: Code/Modules/otbProjectionGroup.cxx:619
+#: Code/Modules/otbProjectionGroup.cxx:633
 #: Code/Modules/otbOrthorectificationGUI.cxx:651
 msgid "Enter Y spacing"
 msgstr ""
@@ -929,8 +967,8 @@ msgstr ""
 #: OrthoFusion/otbOrthoFusionGUI.cxx:800 OrthoFusion/otbOrthoFusionGUI.cxx:824
 #: Pireo/RegistrationParametersGUI.cxx:831
 #: OrthoRectif/otbOrthoRectifGUI.cxx:735 OrthoRectif/otbOrthoRectifGUI.cxx:759
-#: Code/Modules/otbProjectionGroup.cxx:779
-#: Code/Modules/otbProjectionGroup.cxx:806
+#: Code/Modules/otbProjectionGroup.cxx:793
+#: Code/Modules/otbProjectionGroup.cxx:820
 #: Code/Modules/otbOrthorectificationGUI.cxx:659
 #: Code/Modules/otbOrthorectificationGUI.cxx:683
 msgid "Interpolator"
@@ -941,7 +979,7 @@ msgid "Select the orthorectif interpolator"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:809
-#: Code/Modules/otbProjectionGroup.cxx:764
+#: Code/Modules/otbProjectionGroup.cxx:778
 msgid "Interpolator parameters"
 msgstr ""
 
@@ -952,10 +990,12 @@ msgstr ""
 #: OrthoRectif/otbOrthoRectifGUI.cxx:768 OrthoRectif/otbOrthoRectifGUI.cxx:775
 #: Code/Modules/otbSpeckleFilteringViewGUI.cxx:82
 #: Code/Modules/otbSpeckleFilteringViewGUI.cxx:97
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:772
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1582
-#: Code/Modules/otbProjectionGroup.cxx:788
-#: Code/Modules/otbProjectionGroup.cxx:795
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:661
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1433
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1546
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1623
+#: Code/Modules/otbProjectionGroup.cxx:802
+#: Code/Modules/otbProjectionGroup.cxx:809
 #: Code/Modules/otbOrthorectificationGUI.cxx:692
 #: Code/Modules/otbOrthorectificationGUI.cxx:699
 msgid "Radius"
@@ -967,10 +1007,10 @@ msgid "DEM"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:866 OrthoRectif/otbOrthoRectifGUI.cxx:822
-#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:483
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:596
 #: Code/Modules/otbOrthorectificationGUI.cxx:750
 #: Code/Modules/otbSuperimpositionModuleGUI.cxx:90
-#: Code/Modules/otbViewerModuleGroup.cxx:246
+#: Code/Modules/otbViewerModuleGroup.cxx:254
 msgid "Use DEM"
 msgstr ""
 
@@ -1049,8 +1089,7 @@ msgstr ""
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:293
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:341
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:284
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:44
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:407
+#: Code/Modules/otbViewerModuleGroup.cxx:188
 msgid "Viewer setup"
 msgstr ""
 
@@ -1115,12 +1154,11 @@ msgstr ""
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:693
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:347
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:291
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:413
 #: Code/Modules/otbInteractiveChangeDetectionGUI.cxx:605
 #: Code/Modules/otbInteractiveChangeDetectionGUI.cxx:654
 #: Code/Modules/otbInteractiveChangeDetectionGUI.cxx:703
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:822
-#: Code/Modules/otbViewerModuleGroup.cxx:282
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:820
+#: Code/Modules/otbViewerModuleGroup.cxx:289
 msgid "Grayscale mode"
 msgstr ""
 
@@ -1131,9 +1169,8 @@ msgstr ""
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:312
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:348
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:292
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:414
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:823
-#: Code/Modules/otbViewerModuleGroup.cxx:283
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:821
+#: Code/Modules/otbViewerModuleGroup.cxx:290
 msgid "Swith the image viewer mode to grayscale"
 msgstr ""
 
@@ -1147,12 +1184,11 @@ msgstr ""
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:700
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:357
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:300
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:423
 #: Code/Modules/otbInteractiveChangeDetectionGUI.cxx:612
 #: Code/Modules/otbInteractiveChangeDetectionGUI.cxx:661
 #: Code/Modules/otbInteractiveChangeDetectionGUI.cxx:710
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:833
-#: Code/Modules/otbViewerModuleGroup.cxx:292
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:831
+#: Code/Modules/otbViewerModuleGroup.cxx:299
 msgid "RGB composition mode"
 msgstr ""
 
@@ -1163,9 +1199,8 @@ msgstr ""
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:322
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:358
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:301
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:424
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:834
-#: Code/Modules/otbViewerModuleGroup.cxx:293
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:832
+#: Code/Modules/otbViewerModuleGroup.cxx:300
 msgid "Switch the image viewer mode to RGB composition"
 msgstr ""
 
@@ -1177,10 +1212,9 @@ msgstr ""
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:330
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:366
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:310
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:432
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:592
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:843
-#: Code/Modules/otbViewerModuleGroup.cxx:301
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:256
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:841
+#: Code/Modules/otbViewerModuleGroup.cxx:308
 msgid "Channel index"
 msgstr ""
 
@@ -1191,9 +1225,8 @@ msgstr ""
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:331
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:367
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:311
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:433
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:844
-#: Code/Modules/otbViewerModuleGroup.cxx:302
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:842
+#: Code/Modules/otbViewerModuleGroup.cxx:309
 msgid "Select the band to view in grayscale mode"
 msgstr ""
 
@@ -1218,24 +1251,23 @@ msgstr ""
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:717
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:337
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:373
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:919
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:939
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:981
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1013
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1041
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1089
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1117
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1152
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1213
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1267
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1330
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1349
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1385
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1521
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:770
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:790
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:832
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:864
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:892
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:940
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:968
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1003
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1064
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1118
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1181
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1200
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1236
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1372
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:318
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:440
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:851
-#: Code/Modules/otbViewerModuleGroup.cxx:308
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:849
+#: Code/Modules/otbViewerModuleGroup.cxx:315
 msgid "Red channel"
 msgstr ""
 
@@ -1247,9 +1279,8 @@ msgstr ""
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:338
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:374
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:319
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:441
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:852
-#: Code/Modules/otbViewerModuleGroup.cxx:309
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:850
+#: Code/Modules/otbViewerModuleGroup.cxx:316
 msgid "Select band for red channel in RGB composition"
 msgstr ""
 
@@ -1267,17 +1298,16 @@ msgstr ""
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:725
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:345
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:381
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1274
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1323
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1342
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1461
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1481
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1509
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1529
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1125
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1174
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1193
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1312
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1332
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1360
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1380
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:327
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:449
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:860
-#: Code/Modules/otbViewerModuleGroup.cxx:316
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:858
+#: Code/Modules/otbViewerModuleGroup.cxx:323
 msgid "Green channel"
 msgstr ""
 
@@ -1289,9 +1319,8 @@ msgstr ""
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:346
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:382
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:328
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:450
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:861
-#: Code/Modules/otbViewerModuleGroup.cxx:317
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:859
+#: Code/Modules/otbViewerModuleGroup.cxx:324
 msgid "Select band for green channel in RGB composition"
 msgstr ""
 
@@ -1304,13 +1333,12 @@ msgstr ""
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:733
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:353
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:389
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1124
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1159
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1220
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:975
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1010
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1071
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:336
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:458
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:869
-#: Code/Modules/otbViewerModuleGroup.cxx:324
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:867
+#: Code/Modules/otbViewerModuleGroup.cxx:331
 msgid "Blue channel"
 msgstr ""
 
@@ -1321,9 +1349,8 @@ msgstr ""
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:354
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:390
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:337
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:459
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:870
-#: Code/Modules/otbViewerModuleGroup.cxx:325
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:868
+#: Code/Modules/otbViewerModuleGroup.cxx:332
 msgid "Select band for blue channel in RGB composition"
 msgstr ""
 
@@ -1336,10 +1363,10 @@ msgstr ""
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:362
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:398
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:346
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:468
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:879
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:1004
-#: Code/Modules/otbViewerModuleGroup.cxx:333
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:412
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:877
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:1002
+#: Code/Modules/otbViewerModuleGroup.cxx:340
 msgid "Save changes and leave viewer set up interface"
 msgstr ""
 
@@ -1364,9 +1391,10 @@ msgstr ""
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:380
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:416
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:357
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:478
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:806
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:890
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:250
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:391
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:804
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:888
 msgid "Leave viewer set up interface without saving changes"
 msgstr ""
 
@@ -1374,7 +1402,7 @@ msgstr ""
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:923
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:388
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:424
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:899
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:897
 msgid "Complex composition mode"
 msgstr ""
 
@@ -1382,7 +1410,7 @@ msgstr ""
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:924
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:389
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:425
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:900
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:898
 msgid "Switch the image viewer mode to complex composition"
 msgstr ""
 
@@ -1390,7 +1418,7 @@ msgstr ""
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:933
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:397
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:433
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:909
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:907
 msgid "Real channel index"
 msgstr ""
 
@@ -1398,7 +1426,7 @@ msgstr ""
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:934
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:398
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:434
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:910
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:908
 msgid "Select band for real channel in complex composition"
 msgstr ""
 
@@ -1406,7 +1434,7 @@ msgstr ""
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:942
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:405
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:441
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:918
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:916
 msgid "Imaginary channel index"
 msgstr ""
 
@@ -1414,14 +1442,14 @@ msgstr ""
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:943
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:406
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:442
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:919
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:917
 msgid "Select band for imaginary channel in complex composition"
 msgstr ""
 
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:413
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:951
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:413
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:927
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:925
 msgid "Modulus"
 msgstr ""
 
@@ -1429,7 +1457,7 @@ msgstr ""
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:952
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:414
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:450
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:928
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:926
 msgid "Toggle modulus mode"
 msgstr ""
 
@@ -1437,7 +1465,7 @@ msgstr ""
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:961
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:421
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:457
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:937
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:935
 msgid "Phase"
 msgstr ""
 
@@ -1445,7 +1473,7 @@ msgstr ""
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:962
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:422
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:458
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:938
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:936
 msgid "Toggle phase mode"
 msgstr ""
 
@@ -1486,8 +1514,8 @@ msgstr ""
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:457
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:457
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:486
-#: Code/Modules/otbViewerModuleGroup.cxx:371
-#: Code/Modules/otbViewerModuleGroup.cxx:379
+#: Code/Modules/otbViewerModuleGroup.cxx:378
+#: Code/Modules/otbViewerModuleGroup.cxx:386
 msgid "Apply"
 msgstr ""
 
@@ -1529,6 +1557,7 @@ msgstr ""
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:484
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:385
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:513
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:371
 #: Code/Modules/otbInteractiveChangeDetectionGUI.cxx:374
 msgid "Clear"
 msgstr ""
@@ -1596,95 +1625,118 @@ msgid "Save polygon"
 msgstr ""
 
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:126
+#: Code/Modules/otbObjectCountingViewGroup.cxx:91
 msgid "Object counting application"
 msgstr ""
 
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:133
+#: Code/Modules/otbObjectCountingViewGroup.cxx:98
 msgid "Extract"
 msgstr ""
 
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:161
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:121
+#: Code/Modules/otbObjectCountingViewGroup.cxx:121
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:24
 #: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:97
 msgid "SVM"
 msgstr ""
 
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:162
+#: Code/Modules/otbObjectCountingViewGroup.cxx:122
 msgid "Use SVM for classification"
 msgstr ""
 
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:170
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:595
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:557
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:437
+#: Code/Modules/otbObjectCountingViewGroup.cxx:130
 msgid "Spectral Angle"
 msgstr ""
 
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:171
+#: Code/Modules/otbObjectCountingViewGroup.cxx:131
 msgid "Use spectral angle for classification"
 msgstr ""
 
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:178
 #: Segmentation/otbPreprocessingViewGroup.cxx:53
+#: Code/Modules/otbObjectCountingViewGroup.cxx:138
 msgid "Use smoothing"
 msgstr ""
 
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:179
+#: Code/Modules/otbObjectCountingViewGroup.cxx:139
 msgid "Smooth input image before working"
 msgstr ""
 
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:186
+#: Code/Modules/otbObjectCountingViewGroup.cxx:146
 msgid "Minimum object size"
 msgstr ""
 
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:187
+#: Code/Modules/otbObjectCountingViewGroup.cxx:147
 msgid "Minimum region size"
 msgstr ""
 
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:196
+#: Code/Modules/otbObjectCountingViewGroup.cxx:156
 msgid "Mean shift"
 msgstr ""
 
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:203
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:183
+#: Code/Modules/otbObjectCountingViewGroup.cxx:163
 msgid "Spatial radius"
 msgstr ""
 
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:212
+#: Code/Modules/otbObjectCountingViewGroup.cxx:172
 msgid "Range radius"
 msgstr ""
 
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:221
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1726
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1678
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1529
+#: Code/Modules/otbObjectCountingViewGroup.cxx:181
 msgid "Scale"
 msgstr ""
 
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:232
+#: Code/Modules/otbObjectCountingViewGroup.cxx:192
 msgid "Spectral angle"
 msgstr ""
 
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:240
 #: RoadExtraction/otbRoadExtractionViewGroup.cxx:288
+#: Code/Modules/otbObjectCountingViewGroup.cxx:200
 msgid "Reference pixel"
 msgstr ""
 
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:247
+#: Code/Modules/otbObjectCountingViewGroup.cxx:207
 msgid "Threshold value"
 msgstr ""
 
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:259
+#: Code/Modules/otbObjectCountingViewGroup.cxx:219
 msgid "Nu (svm)"
 msgstr ""
 
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:260
+#: Code/Modules/otbObjectCountingViewGroup.cxx:220
 msgid "SVM classifier margin"
 msgstr ""
 
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:271
+#: Code/Modules/otbObjectCountingViewGroup.cxx:231
+#: Code/Modules/otbObjectCountingViewGroup.cxx:246
 msgid "Run over the extracted image"
 msgstr ""
 
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:279
+#: Code/Modules/otbObjectCountingViewGroup.cxx:238
 msgid "Statistics"
 msgstr ""
 
@@ -1772,6 +1824,7 @@ msgstr ""
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:381
 #: RoadExtraction/otbRoadExtractionViewGroup.cxx:469
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:263
+#: Code/Modules/otbObjectCountingViewGroup.cxx:230
 msgid "Run"
 msgstr ""
 
@@ -1886,13 +1939,13 @@ msgstr ""
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:42
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:28
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:150
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:42
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:28
 msgid "Menu"
 msgstr ""
 
 #: ImageToDBRegistration/otbImageToDBRegistrationViewGroup.cxx:58
 #: ImageToDBRegistration/otbImageToDBRegistrationViewGroup.cxx:314
-#: Code/Modules/otbViewerModuleGroup.cxx:188
+#: Code/Modules/otbViewerModuleGroup.cxx:195
 msgid "Vector data"
 msgstr ""
 
@@ -1906,8 +1959,9 @@ msgstr ""
 
 #: ImageToDBRegistration/otbImageToDBRegistrationViewGroup.cxx:62
 #: Pireo/PireoViewerGUI.cxx:232 Pireo/PireoViewerGUI.cxx:233
-#: Code/Modules/otbWriterViewGroup.cxx:273
-#: Code/Modules/otbWriterModuleGUI.cxx:86
+#: Code/Modules/otbTileExportModuleGUI.cxx:170
+#: Code/Modules/otbWriterViewGroup.cxx:267
+#: Code/Modules/otbWriterModuleGUI.cxx:58
 msgid "Save"
 msgstr ""
 
@@ -1972,7 +2026,7 @@ msgstr ""
 
 #: ImageToDBRegistration/otbImageToDBRegistrationViewGroup.cxx:322
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:516
-#: Code/Modules/otbViewerModuleGroup.cxx:197
+#: Code/Modules/otbViewerModuleGroup.cxx:205
 msgid "Display the selected ROI color"
 msgstr ""
 
@@ -1980,7 +2034,7 @@ msgstr ""
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:469
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:524
 #: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:447
-#: Code/Modules/otbViewerModuleGroup.cxx:204
+#: Code/Modules/otbViewerModuleGroup.cxx:212
 msgid "Color"
 msgstr ""
 
@@ -1988,13 +2042,13 @@ msgstr ""
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:470
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:525
 #: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:448
-#: Code/Modules/otbViewerModuleGroup.cxx:205
+#: Code/Modules/otbViewerModuleGroup.cxx:213
 msgid "Change the color of the selected class"
 msgstr ""
 
 #: ImageToDBRegistration/otbImageToDBRegistrationViewGroup.cxx:341
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:536
-#: Code/Modules/otbViewerModuleGroup.cxx:215
+#: Code/Modules/otbViewerModuleGroup.cxx:223
 msgid "Browse and select ROI"
 msgstr ""
 
@@ -2002,17 +2056,17 @@ msgstr ""
 #: Segmentation/otbSegmentationApplicationViewGroup.cxx:262
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:611
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:547
-#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:235
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:382
 #: Code/Modules/otbHomologousPointExtractionViewGroup.cxx:230
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:587
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:585
 msgid "Delete"
 msgstr ""
 
 #: ImageToDBRegistration/otbImageToDBRegistrationViewGroup.cxx:352
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:612
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:548
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:588
-#: Code/Modules/otbViewerModuleGroup.cxx:227
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:586
+#: Code/Modules/otbViewerModuleGroup.cxx:235
 msgid "Delete the selected region of interest"
 msgstr ""
 
@@ -2021,9 +2075,9 @@ msgid "ClearAll"
 msgstr ""
 
 #: ImageToDBRegistration/otbImageToDBRegistrationViewGroup.cxx:362
-#: Code/Modules/otbViewerModuleGroup.cxx:237
-#: Code/Modules/otbViewerModuleGroup.cxx:253
-#: Code/Modules/otbViewerModuleGroup.cxx:263
+#: Code/Modules/otbViewerModuleGroup.cxx:245
+#: Code/Modules/otbViewerModuleGroup.cxx:261
+#: Code/Modules/otbViewerModuleGroup.cxx:271
 msgid "Clear all vector data"
 msgstr ""
 
@@ -2044,7 +2098,7 @@ msgstr ""
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1030
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1031
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:862
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:814
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:703
 msgid "Pixel value"
 msgstr ""
 
@@ -2061,7 +2115,7 @@ msgid "Use DEM for processing"
 msgstr ""
 
 #: ImageToDBRegistration/otbImageToDBRegistrationViewGroup.cxx:452
-#: Code/Modules/otbViewerModuleGroup.cxx:459
+#: Code/Modules/otbViewerModuleGroup.cxx:471
 msgid "Load"
 msgstr ""
 
@@ -2195,6 +2249,9 @@ msgid "Automatic update"
 msgstr ""
 
 #: Segmentation/otbSVMBasedRegionGrowingSegmentationViewGroup.cxx:132
+#: Code/Modules/otbExtractROIModuleGUI.cxx:122
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:404
+#: Code/Modules/otbTileMapImportModuleGUI.cxx:100
 msgid "Update"
 msgstr ""
 
@@ -2209,10 +2266,12 @@ msgstr ""
 #: Segmentation/otbSVMBasedRegionGrowingSegmentationViewGroup.cxx:167
 #: Segmentation/otbRegionGrowingSegmentationViewGroup.cxx:185
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:353
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:360
-#: Code/Modules/otbProjectionGroup.cxx:455
-#: Code/Modules/GCPToSensorModel/otbGCPToSensorModelModule.cxx:46
+#: Code/Modules/otbProjectionGroup.cxx:469
+#: Code/Modules/SupervisedClassification/otbSupervisedClassificationModule2.cxx:44
+#: Code/Modules/GCPToSensorModel/otbGCPToSensorModelModule.cxx:50
 #: Code/Modules/SarCalibration/otbSarCalibrationModule.cxx:36
+#: Code/Modules/Vectorization/otbVectorizationModule.cxx:43
+#: Code/Modules/TileExport/otbTileExportModule.cxx:41
 msgid "Input image"
 msgstr ""
 
@@ -2234,7 +2293,8 @@ msgstr ""
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:467
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1920
 #: RoadExtraction/otbRoadExtractionViewGroup.cxx:221
-#: Code/Modules/otbWriterViewGroup.cxx:304
+#: Code/Modules/otbVectorizationViewGroup.cxx:85
+#: Code/Modules/otbWriterViewGroup.cxx:298
 msgid "Full resolution"
 msgstr ""
 
@@ -2242,9 +2302,9 @@ msgstr ""
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:478
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1913
 #: RoadExtraction/otbRoadExtractionViewGroup.cxx:230
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1849
-#: Code/Modules/otbThresholdGroup.cxx:126
-#: Code/Modules/otbWriterViewGroup.cxx:296
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1895
+#: Code/Modules/otbThresholdGroup.cxx:128
+#: Code/Modules/otbWriterViewGroup.cxx:290
 msgid "Scroll"
 msgstr ""
 
@@ -2283,7 +2343,8 @@ msgstr ""
 #: Segmentation/otbSegmentationApplicationViewGroup.cxx:255
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:709
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:569
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:685
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:404
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:683
 msgid "Focus"
 msgstr ""
 
@@ -2453,8 +2514,8 @@ msgstr ""
 
 #: Pireo/PireoViewerGUI.cxx:260
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:550
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:526
-#: Code/Modules/otbViewerModuleGroup.cxx:262
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:524
+#: Code/Modules/otbViewerModuleGroup.cxx:270
 msgid "Display"
 msgstr ""
 
@@ -2490,7 +2551,7 @@ msgstr ""
 msgid "Display Metric values"
 msgstr ""
 
-#: Pireo/PireoViewerGUI.cxx:275 Code/Modules/otbViewerModuleGroup.cxx:437
+#: Pireo/PireoViewerGUI.cxx:275 Code/Modules/otbViewerModuleGroup.cxx:449
 msgid "Show"
 msgstr ""
 
@@ -2718,8 +2779,12 @@ msgstr ""
 
 #: Pireo/RegistrationParametersGUI.cxx:736
 #: Pireo/RegistrationParametersGUI.cxx:753
-#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:369
-#: Code/Modules/otbViewerModuleGroup.cxx:410
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1560
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1586
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1637
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1663
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:282
+#: Code/Modules/otbViewerModuleGroup.cxx:422
 msgid "Y"
 msgstr ""
 
@@ -2923,6 +2988,7 @@ msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:498
 #: RoadExtraction/otbRoadExtractionViewGroup.cxx:306
+#: Code/Modules/otbTileExportModuleGUI.cxx:248
 msgid "Red"
 msgstr ""
 
@@ -3034,10 +3100,12 @@ msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:618
 #: RoadExtraction/otbRoadExtractionViewGroup.cxx:316
+#: Code/Modules/otbTileExportModuleGUI.cxx:256
 msgid "Green"
 msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:739
+#: Code/Modules/otbTileExportModuleGUI.cxx:264
 msgid "Blue"
 msgstr ""
 
@@ -3179,43 +3247,41 @@ msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:78
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:82
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:43
-#: Code/Modules/otbProjectionGroup.cxx:757
+#: Code/Modules/otbProjectionGroup.cxx:771
 msgid "Settings"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:80
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:45
 msgid "Coef. setup"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:156
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:140
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:36
 msgid "NO AEROSOL"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:157
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:141
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:37
 msgid "CONTINENTAL"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:158
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:142
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:38
 msgid "MARITIME"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:159
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:143
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:39
 msgid "URBAN"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:160
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:144
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:40
 msgid "DESERTIC"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:207
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:191
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:94
 msgid "0"
 msgstr ""
 
@@ -3225,50 +3291,40 @@ msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:281
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:167
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:259
 msgid "Navigation view"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:289
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:297
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:175
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:267
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:275
 msgid "Zoom view"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:305
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:283
 msgid "Histograms"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:313
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:291
 msgid "Pixel information"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:321
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:299
 msgid "Result pixel information"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:361
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:368
 msgid "Luminance"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:369
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:376
 msgid "TOA reflectance"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:377
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:384
 msgid "TOC reflectance"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:385
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:392
 msgid "TOA - TOC"
 msgstr ""
 
@@ -3277,189 +3333,191 @@ msgid "Radiometric Coefficients Setup"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:492
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:499
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:159
 msgid "Correction parameters"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:498
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:499
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:505
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:506
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:165
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:166
 msgid "Aerosol model"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:507
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:514
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:174
 msgid "Ozone amount"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:508
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:515
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:175
 msgid "Ozone Amount (cm.atm)."
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:516
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:523
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:183
 msgid "Atmo. pressure"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:517
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:524
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:184
 msgid "Atmospheric pressure (mbar)."
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:530
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:537
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:197
 msgid "Aerosol thickness"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:531
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:538
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:198
 msgid "Aerosol optical thickness at 550nm.."
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:541
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:548
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:208
 msgid "Water amount"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:542
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:549
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:209
 msgid "Water vapor amount (g/cm2)."
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:552
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:559
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:219
 msgid "Aeronet file"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:565
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:572
 msgid "Filter function values file"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:578
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:740
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:585
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:747
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:249
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:394
 msgid "Radiative terms"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:600
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:607
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:271
 msgid "Intrinsic refl"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:601
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:608
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:272
 msgid "Intrinsic atmospheric reflectance"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:611
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:618
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:282
 msgid "Albedo"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:612
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:619
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:283
 msgid "Shperical albedo of the atmosphere"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:622
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:629
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:293
 msgid "Gaseous trans"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:623
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:630
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:294
 msgid "Total gaseous transmission"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:633
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:640
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:304
 msgid "Down trans"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:634
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:641
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:305
 msgid "Downward transmittance of the atmosphere"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:644
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:651
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:315
 msgid "Up trans"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:645
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:652
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:316
 msgid "Upward transmittance of the atmosphere"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:655
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:662
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:326
 msgid "Up diffuse trans"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:656
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:663
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:327
 msgid "Upward diffuse transmittance"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:666
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:673
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:337
 msgid "Up direct trans"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:667
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:674
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:338
 msgid "Upward direct transmittance"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:677
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:684
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:348
 msgid "Up diff. trans. (Rayleigh)"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:678
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:685
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:349
 msgid "Upward diffuse transmittance for Rayleigh"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:688
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:695
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:359
 msgid "Up diff trans. (aerososl)"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:689
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:696
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:360
 msgid "Upward diffuse transmittance for aerosols"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:701
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:708
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:372
 msgid "Reload channel radiative terms"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:714
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:1027
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:271
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:721
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:1003
+#: Code/Modules/otbObjectCountingViewGroup.cxx:245
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:411
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:462
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:1001
 msgid "Close"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:715
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:722
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:434
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:463
 msgid "Close the window"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:723
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:730
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:423
 msgid "Set up radiometric parameters"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:732
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:739
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:386
 msgid "Atmospheric parameters"
 msgstr ""
 
@@ -3505,8 +3563,9 @@ msgstr ""
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:571
 #: Code/Modules/otbInteractiveChangeDetectionGUI.cxx:451
 #: Code/Modules/otbInteractiveChangeDetectionGUI.cxx:580
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:23
 #: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:95
-#: Code/Modules/otbViewerModuleGroup.cxx:274
+#: Code/Modules/otbViewerModuleGroup.cxx:282
 msgid "Setup"
 msgstr ""
 
@@ -3518,6 +3577,7 @@ msgstr ""
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:273
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:342
 #: Code/Modules/otbInteractiveChangeDetectionGUI.cxx:331
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:65
 #: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:251
 msgid "c_svc"
 msgstr ""
@@ -3525,6 +3585,7 @@ msgstr ""
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:274
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:343
 #: Code/Modules/otbInteractiveChangeDetectionGUI.cxx:332
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:66
 #: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:252
 msgid "nu_svc"
 msgstr ""
@@ -3532,6 +3593,7 @@ msgstr ""
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:275
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:344
 #: Code/Modules/otbInteractiveChangeDetectionGUI.cxx:333
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:67
 #: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:253
 msgid "one_class"
 msgstr ""
@@ -3539,6 +3601,7 @@ msgstr ""
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:276
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:345
 #: Code/Modules/otbInteractiveChangeDetectionGUI.cxx:334
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:68
 #: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:254
 msgid "epsilon_svr"
 msgstr ""
@@ -3546,6 +3609,7 @@ msgstr ""
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:277
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:346
 #: Code/Modules/otbInteractiveChangeDetectionGUI.cxx:335
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:69
 #: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:255
 msgid "nu_svr"
 msgstr ""
@@ -3553,6 +3617,7 @@ msgstr ""
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:282
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:351
 #: Code/Modules/otbInteractiveChangeDetectionGUI.cxx:340
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:74
 #: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:260
 msgid "linear"
 msgstr ""
@@ -3560,6 +3625,7 @@ msgstr ""
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:283
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:352
 #: Code/Modules/otbInteractiveChangeDetectionGUI.cxx:341
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:75
 #: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:261
 msgid "polynomial"
 msgstr ""
@@ -3567,6 +3633,7 @@ msgstr ""
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:284
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:353
 #: Code/Modules/otbInteractiveChangeDetectionGUI.cxx:342
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:76
 #: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:262
 msgid "rbf"
 msgstr ""
@@ -3574,6 +3641,7 @@ msgstr ""
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:285
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:354
 #: Code/Modules/otbInteractiveChangeDetectionGUI.cxx:343
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:77
 #: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:263
 msgid "sigmoid"
 msgstr ""
@@ -3622,8 +3690,8 @@ msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:436
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1749
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1700
-#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:421
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1739
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:311
 #: Code/Modules/otbHomologousPointExtractionViewGroup.cxx:301
 #: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:414
 msgid "Add"
@@ -3640,6 +3708,7 @@ msgid "Remove the selected class"
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:458
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:489
 #: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:436
 msgid "Name"
 msgstr ""
@@ -3655,6 +3724,7 @@ msgid "Sets"
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:489
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:164
 msgid "Training"
 msgstr ""
 
@@ -3665,90 +3735,95 @@ msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:503
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:1008
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:984
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:172
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:402
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:982
 msgid "Validation"
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:504
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:481
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:480
 msgid ""
 "Display the validation set. Only available if random validation samples is "
 "not activated"
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:517
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:493
 msgid "Random"
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:518
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:494
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:492
 msgid ""
 "If activated, validation sample is randomly choosen as a subset of the "
 "training samples"
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:526
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:502
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:500
 msgid "Probability     "
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:527
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:503
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:501
 msgid ""
 "Tune the probability for a sample to be choosen as a training sample. Only "
 "available is random validation sample generation is activated"
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:542
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:518
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:208
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:516
 msgid "Classification"
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:551
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:527
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:525
 msgid "Display the results of the classification"
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:563
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:539
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:537
 msgid "Learn"
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:564
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:540
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:217
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:538
 msgid "Learn the SVM model from training samples"
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:577
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:553
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:229
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:551
 msgid "Validate"
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:578
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:554
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:230
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:552
 msgid "Display some quality assesment on the classification"
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:592
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:568
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:566
 msgid "Regions of interest"
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:593
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:569
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:567
 msgid "Tools to edit the regions of interest"
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:600
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:514
 #: Code/Modules/otbInteractiveChangeDetectionGUI.cxx:514
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:576
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:574
 msgid "Erase last point"
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:601
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:577
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:575
 msgid "Delete the last point of the selected region of interest"
 msgstr ""
 
@@ -3759,76 +3834,76 @@ msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:623
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:559
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:599
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:597
 msgid "Clear all regions of interest"
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:633
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:522
 #: Code/Modules/otbInteractiveChangeDetectionGUI.cxx:523
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:609
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:607
 msgid "End polygon"
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:634
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:610
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:608
 msgid "End the current polygon"
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:644
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:620
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:618
 msgid "Polygon"
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:645
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:621
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:619
 msgid "Switch between polygonal or rectangular selection"
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:658
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:634
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:632
 msgid "Opacity         "
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:659
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:635
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:633
 msgid "Tune the region of interest and classification result opacity"
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:675
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:481
 #: Code/Modules/otbInteractiveChangeDetectionGUI.cxx:479
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:651
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:649
 msgid "Pixel locations and values"
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:676
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:652
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:650
 msgid "Display pixel location and values"
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:688
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:664
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:662
 msgid "Class color"
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:689
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:665
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:663
 msgid "Display the selected class color"
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:697
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:673
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:671
 msgid "ROI list"
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:698
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:674
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:672
 msgid "Browse and select ROI associated to the selected class"
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:710
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:686
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:684
 msgid "Focus the viewer on the selected ROI"
 msgstr ""
 
@@ -3845,7 +3920,8 @@ msgid "SVM Type"
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:728
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:704
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:282
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:702
 msgid "Set the SVM type"
 msgstr ""
 
@@ -3856,7 +3932,8 @@ msgid "Kernel Type"
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:739
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:715
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:293
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:713
 msgid "Set the kernel type"
 msgstr ""
 
@@ -3899,7 +3976,8 @@ msgstr ""
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:791
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:838
 #: Code/Modules/otbInteractiveChangeDetectionGUI.cxx:847
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:767
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:350
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:765
 msgid "Shrinking"
 msgstr ""
 
@@ -3934,27 +4012,27 @@ msgid "Scroll Window"
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:988
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:964
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:962
 msgid "Class name chooser"
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:992
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:968
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:966
 msgid "Name: "
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:996
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:972
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:970
 msgid "ok"
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:1013
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:989
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:987
 msgid "Confusion matrix"
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:1020
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:996
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:994
 msgid "Accuracy"
 msgstr ""
 
@@ -3963,375 +4041,358 @@ msgid "Save Result"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:593
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:555
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:435
 msgid "Touzi"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:594
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:556
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:436
 msgid "Harris (experimental)"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:596
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:617
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1651
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:558
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:579
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1603
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:438
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1454
 msgid "Variance"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:597
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:612
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:559
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:574
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:439
 msgid "Mean"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:598
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:560
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:440
 msgid "Rec. Gradient"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:599
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:561
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:441
 msgid "Textures"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:600
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:562
 msgid "Angular Second Momentum Order"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:601
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:563
 msgid "Cluster Shade"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:602
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:564
 msgid "Cluster Prominence"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:603
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:565
 msgid "Contrast"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:604
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:566
 msgid "Correlation"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:605
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:567
 msgid "Difference Entropy"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:606
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:568
 msgid "Difference Variance"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:607
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:569
 msgid "Energy"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:608
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:570
 msgid "Entropy"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:609
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:571
 msgid "Information Correlation 1"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:610
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:572
 msgid "Information Correlation 2"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:611
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:573
 msgid "Inverse Difference Moment"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:613
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:575
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:442
 msgid "PanTex"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:614
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:576
 msgid "Sum Average"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:615
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:577
 msgid "Sum Entropy"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:616
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:578
 msgid "Sum Variance"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:618
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:580
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:443
 msgid "SFS"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:619
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:581
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:444
 msgid "Length"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:620
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:582
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:445
 msgid "Width"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:621
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:583
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:446
 msgid "PSI"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:622
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:584
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:447
 msgid "W-mean"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:623
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:585
-#: Code/Modules/otbAlgebraGroup.cxx:52
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:448
+#: Code/Modules/otbAlgebraGroup.cxx:57
 msgid "Ratio"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:624
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:586
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:449
 msgid "SD"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:627
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:589
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:454
 msgid "Morphology"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:628
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:590
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:455
 msgid "Morphological Opening Profile (experimental)"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:629
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:591
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:456
 msgid "Morphological Closing Profile (experimental)"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:631
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:593
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:458
 msgid "Radiometry Indexes"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:633
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:595
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:460
 msgid "NDVI"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:634
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:596
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:461
 msgid "RVI"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:635
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:597
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:462
 msgid "PVI"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:636
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:598
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:463
 msgid "SAVI"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:637
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:599
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:464
 msgid "MSAVI"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:638
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:600
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:465
 msgid "MSAVI2"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:639
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:601
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:466
 msgid "TSAVI"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:640
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:602
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:467
 msgid "GEMI"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:641
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:603
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:468
 msgid "WDVI"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:642
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:604
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:469
 msgid "IPVI"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:643
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:605
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:470
 msgid "TNDVI"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:644
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:606
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:471
 msgid "ARVI"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:645
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:607
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:472
 msgid "EVI"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:646
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:608
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:473
 msgid "TSARVI"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:647
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:609
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:474
 msgid "AVI"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:649
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:611
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:476
 msgid "Soil"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:650
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:612
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:477
 msgid "RI"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:651
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:613
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:478
 msgid "CI"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:652
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:614
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:479
 msgid "BI"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:653
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:615
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:480
 msgid "BI2"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:655
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:617
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:482
 msgid "Built Up"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:656
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:618
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:483
 msgid "NDBI"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:657
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:619
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:484
 msgid "ISU"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:660
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:622
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:487
 msgid "SRWI"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:661
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:623
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:488
 msgid "NDWI"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:662
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:624
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:489
 msgid "NDWI2"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:663
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:625
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:490
 msgid "MNDWI"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:664
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:626
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:491
 msgid "NDPI"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:665
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:627
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:492
 msgid "NDTI"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:668
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:630
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:495
 msgid "Edge Density"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:669
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:631
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:496
 msgid "Sobel"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:671
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:633
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:498
 msgid "Mean Shift"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:672
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:634
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:499
 msgid "Smooth"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:673
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:635
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:500
 msgid "Clusters"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:674
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:636
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:501
 msgid "Labels"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:675
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:637
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:502
 msgid "Boundries"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:677
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:639
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:504
 msgid "Original data"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:774
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:729
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:618
 msgid "Feature Extraction Application"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:792
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:743
-#: Code/Modules/otbWriterViewGroup.cxx:162
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:632
+#: Code/Modules/otbWriterViewGroup.cxx:155
 msgid "Action"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:799
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:750
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:639
 msgid "Feature Choice"
 msgstr ""
 
@@ -4340,73 +4401,69 @@ msgid "Feature parameters"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:831
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:783
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:672
 msgid "Sigma D"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:838
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:790
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:679
 msgid "Sigma I"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:845
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1610
 #: RoadExtraction/otbRoadExtractionViewGroup.cxx:335
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:797
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1562
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:686
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1413
 msgid "Alpha"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:856
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:808
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:697
 msgid "Pixel coordinates"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:872
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:824
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:713
 msgid "Initial Value"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:879
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:831
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:720
 msgid "Profile Size"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:886
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:838
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:727
 msgid "Step"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:897
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:929
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1669
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:849
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:881
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1621
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:738
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1472
 msgid "Radius along X"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:905
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:937
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1677
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:857
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:889
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1629
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:746
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1480
 msgid "Radius along Y"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:917
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:869
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:758
 msgid "Sigma"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:945
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:897
 msgid "Offset along X"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:954
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:906
 msgid "Offset along Y"
 msgstr ""
 
@@ -4424,29 +4481,29 @@ msgstr ""
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1440
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1489
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1517
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:927
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:778
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:798
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:840
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:871
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:899
 #: Code/Modules/otbFeatureExtractionViewGroup.cxx:947
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:989
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1020
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1048
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1096
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1131
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1166
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1227
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1281
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1356
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1392
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1441
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1469
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:982
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1017
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1078
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1132
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1207
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1243
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1292
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1320
 msgid "NIR channel"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1003
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1113
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1447
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:955
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1065
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1399
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:806
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:916
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1250
 msgid "a"
 msgstr ""
 
@@ -4454,38 +4511,38 @@ msgstr ""
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1076
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1104
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1283
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:956
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1028
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1056
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1235
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:807
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:879
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:907
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1086
 msgid "Soil line slope"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1014
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1456
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:966
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1408
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:817
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1259
 msgid "b"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1015
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1114
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1293
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:967
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1066
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1245
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:818
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:917
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1096
 msgid "Soil line intercept"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1045
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1230
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:997
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1182
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:848
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1033
 msgid "L"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1046
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:998
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:849
 msgid ""
 "Correction factor. 0 for high vegetation cover, 1 for low, and usually L = "
 "0.5"
@@ -4494,258 +4551,258 @@ msgstr ""
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1075
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1103
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1151
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1027
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1055
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1103
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:878
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:906
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:954
 msgid "s"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1123
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1075
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:926
 msgid "x"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1124
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1076
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:927
 msgid "Adjustement factor"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1152
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1104
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:955
 msgid "Slope of soil line"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1186
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1138
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:989
 msgid "gamma"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1187
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1139
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:990
 msgid "gamma generally = 0.5 (default value) or 1 (depending on aerosols)"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1221
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1173
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1024
 msgid "G"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1239
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1191
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1042
 msgid "C1"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1248
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1200
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1051
 msgid "C2"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1282
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1234
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1085
 msgid "a_rb"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1292
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1244
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1095
 msgid "b_rb"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1336
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1288
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1139
 msgid "lambda 1"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1337
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1289
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1140
 msgid "Central wavelength of the G band (0.55 for Pleiade)"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1346
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1298
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1149
 msgid "lambda 2"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1347
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1299
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1150
 msgid "Central wavelength of the R band (0.66  for Pleiade)"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1356
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1308
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1159
 msgid "lambda 3"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1357
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1309
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1160
 msgid "Central wavelength of the NIR band (0.84 for Pleiade)"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1415
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1367
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1218
 msgid "TM4 channel"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1422
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1374
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1225
 msgid "TM5 channel"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1469
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1421
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1272
 msgid "Rho 860 Index"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1477
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1429
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1280
 msgid "Rho 1240 Index"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1497
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1537
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1549
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1449
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1489
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1501
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1300
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1340
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1352
 msgid "MIR channel"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1589
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1541
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1392
 msgid "Spectral Thresh"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1596
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1548
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1399
 msgid "Spatial Thresh"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1603
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1555
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1406
 msgid "Nbr of Directions"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1618
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1570
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1421
 msgid "Ratio MaxCons. Nb"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1637
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1589
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1440
 msgid "Max Thresh"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1644
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1596
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1447
 msgid "Min Thresh"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1658
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1610
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1461
 msgid "Max Error"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1685
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1637
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1488
 msgid "Lower Thresh"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1692
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1644
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1495
 msgid "Upper Thresh"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1704
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1656
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1507
 msgid "Spatial Radius"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1711
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1663
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1514
 msgid "Range Radius"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1719
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1671
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1522
 msgid "Min. Region Size"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1738
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1690
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1729
 msgid "Channels Selection"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1750
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1701
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1740
 msgid "Add feature to list (one per selected channel)"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1760
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1794
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1711
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1743
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1750
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1789
 msgid "Feature Image List"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1761
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1795
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1712
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1744
-#: Code/Modules/otbWriterViewGroup.cxx:202
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1751
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1790
+#: Code/Modules/otbWriterViewGroup.cxx:196
 msgid "Contains each Computed Feature"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1773
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1723
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1762
 msgid "Feature Information"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1785
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1734
-#: Code/Modules/otbWriterViewGroup.cxx:192
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1780
+#: Code/Modules/otbWriterViewGroup.cxx:186
 msgid "Output"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1808
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1756
-#: Code/Modules/otbWriterViewGroup.cxx:214
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1802
+#: Code/Modules/otbWriterViewGroup.cxx:208
 msgid "Add mono Channel Image to Intput List"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1819
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1767
-#: Code/Modules/otbWriterViewGroup.cxx:225
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1813
+#: Code/Modules/otbWriterViewGroup.cxx:219
 msgid "Remove Mono channel Image from Output List"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1829
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1777
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1823
 msgid "Selected Output Channels"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1830
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1778
-#: Code/Modules/otbWriterViewGroup.cxx:236
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1824
+#: Code/Modules/otbWriterViewGroup.cxx:230
 msgid "Contains each Selected Feature for Output Generation"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1842
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1789
-#: Code/Modules/otbWriterViewGroup.cxx:247
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1835
+#: Code/Modules/otbWriterViewGroup.cxx:241
 msgid "+"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1843
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1854
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1790
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1801
-#: Code/Modules/otbWriterViewGroup.cxx:248
-#: Code/Modules/otbWriterViewGroup.cxx:259
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1836
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1847
+#: Code/Modules/otbWriterViewGroup.cxx:242
+#: Code/Modules/otbWriterViewGroup.cxx:253
 msgid "Change selected Feature Position in Output Image"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1853
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1800
-#: Code/Modules/otbWriterViewGroup.cxx:258
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1846
+#: Code/Modules/otbWriterViewGroup.cxx:252
 msgid "-"
 msgstr ""
 
@@ -4754,20 +4811,20 @@ msgid "Erase Feature and Close Input Image"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1890
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1826
-#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:224
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1872
 msgid "Clear List"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1891
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1827
-#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:225
-#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:236
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1873
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:372
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:383
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:450
 msgid "Clear Feature List"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1927
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1863
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1909
 msgid "Feature"
 msgstr ""
 
@@ -5026,6 +5083,7 @@ msgid "Preview Window"
 msgstr ""
 
 #: OrthoRectif/otbOrthoRectifGUI.cxx:521
+#: Code/Modules/otbProjectionGroup.cxx:640
 #: Code/Modules/otbOrthorectificationGUI.cxx:463
 msgid "Map Projection"
 msgstr ""
@@ -5071,7 +5129,7 @@ msgid "Geographical Coordinates"
 msgstr ""
 
 #: OrthoRectif/otbOrthoRectifGUI.cxx:736 OrthoRectif/otbOrthoRectifGUI.cxx:760
-#: Code/Modules/otbProjectionGroup.cxx:807
+#: Code/Modules/otbProjectionGroup.cxx:821
 #: Code/Modules/otbOrthorectificationGUI.cxx:660
 #: Code/Modules/otbOrthorectificationGUI.cxx:684
 msgid "Select the Orthorectif Interpolator"
@@ -5332,7 +5390,8 @@ msgstr ""
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:739
 #: Code/Modules/otbInteractiveChangeDetectionGUI.cxx:749
-#: Code/Modules/otbViewerModuleGroup.cxx:346
+#: Code/Modules/otbViewerModuleGroup.cxx:353
+#: Code/Modules/Viewer/otbViewerModule.cxx:970
 msgid "Histogram"
 msgstr ""
 
@@ -5385,50 +5444,66 @@ msgid "Link Images"
 msgstr ""
 
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:494
-#: Code/Modules/otbAlgebraGroup.cxx:63
+#: Code/Modules/otbAlgebraGroup.cxx:68 Code/Modules/otbAlgebraGroup.cxx:97
+#: Code/Modules/otbAlgebraGroup.cxx:133
 #: Code/Modules/Algebra/otbAlgebraModule.cxx:33
 msgid "First image"
 msgstr ""
 
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:532
-#: Code/Modules/otbAlgebraGroup.cxx:64
+#: Code/Modules/otbAlgebraGroup.cxx:69 Code/Modules/otbAlgebraGroup.cxx:98
+#: Code/Modules/otbAlgebraGroup.cxx:134
 #: Code/Modules/Algebra/otbAlgebraModule.cxx:34
 msgid "Second image"
 msgstr ""
 
-#: Code/Application/otbMonteverdiViewGroup.cxx:73
+#: Code/Application/otbMonteverdiViewGroup.cxx:94
 msgid "Monteverdi"
 msgstr ""
 
-#: Code/Application/otbMonteverdiViewGroup.cxx:94
+#: Code/Application/otbMonteverdiViewGroup.cxx:116
 msgid "Help me..."
 msgstr ""
 
-#: Code/Application/otbMonteverdiViewGroup.cxx:114
+#: Code/Application/otbMonteverdiViewGroup.cxx:136
 #: Code/Application/otbInputViewGroup.cxx:24
 msgid "Set inputs"
 msgstr ""
 
-#: Code/Application/otbMonteverdiViewGroup.cxx:140
+#: Code/Application/otbMonteverdiViewGroup.cxx:162
 msgid "Module renamer"
 msgstr ""
 
-#: Code/Application/otbMonteverdiViewGroup.cxx:147
-#: Code/Application/otbMonteverdiViewGroup.cxx:192
+#: Code/Application/otbMonteverdiViewGroup.cxx:169
+#: Code/Application/otbMonteverdiViewGroup.cxx:214
 msgid "Old instance label"
 msgstr ""
 
-#: Code/Application/otbMonteverdiViewGroup.cxx:153
-#: Code/Application/otbMonteverdiViewGroup.cxx:198
+#: Code/Application/otbMonteverdiViewGroup.cxx:175
+#: Code/Application/otbMonteverdiViewGroup.cxx:220
 msgid "New instance label"
 msgstr ""
 
-#: Code/Application/otbMonteverdiViewGroup.cxx:179
+#: Code/Application/otbMonteverdiViewGroup.cxx:201
 msgid "Output  renamer"
 msgstr ""
 
-#: Code/Application/otbMonteverdiViewGroup.cxx:186
+#: Code/Application/otbMonteverdiViewGroup.cxx:208
 msgid "Root  instance label"
+msgstr ""
+
+#: Code/Application/otbMonteverdiViewGroup.cxx:246
+msgid "Erase the caching directory?"
+msgstr ""
+
+#: Code/Application/otbMonteverdiViewGroup.cxx:253
+#: Code/Modules/otbSarCalibrationModuleGUI.cxx:120
+msgid "Yes"
+msgstr ""
+
+#: Code/Application/otbMonteverdiViewGroup.cxx:261
+#: Code/Modules/otbSarCalibrationModuleGUI.cxx:129
+msgid "No"
 msgstr ""
 
 #: Code/Application/otbInputViewGroup.cxx:50
@@ -5452,7 +5527,7 @@ msgid "Filter type"
 msgstr ""
 
 #: Code/Modules/otbSpeckleFilteringViewGUI.cxx:64
-#: Code/Modules/otbAlgebraGroup.cxx:85 Code/Modules/otbAlgebraGroup.cxx:120
+#: Code/Modules/otbAlgebraGroup.cxx:148
 msgid "Set the filter type"
 msgstr ""
 
@@ -5469,7 +5544,7 @@ msgid "Frost filter parameters"
 msgstr ""
 
 #: Code/Modules/otbSpeckleFilteringViewGUI.cxx:98
-#: Code/Modules/otbAlgebraGroup.cxx:101
+#: Code/Modules/otbAlgebraGroup.cxx:175
 msgid "Radius parameter for Frost image filter"
 msgstr ""
 
@@ -5478,15 +5553,103 @@ msgid "DeRamp"
 msgstr ""
 
 #: Code/Modules/otbSpeckleFilteringViewGUI.cxx:105
-#: Code/Modules/otbAlgebraGroup.cxx:110
+#: Code/Modules/otbAlgebraGroup.cxx:186
 msgid "Deramp parameter for Frost image filter"
 msgstr ""
 
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:759
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:451
+msgid "Haralick1"
+msgstr ""
+
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:452
+msgid "Haralick2"
+msgstr ""
+
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:510
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:518
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:526
+msgid "8"
+msgstr ""
+
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:511
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:519
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:527
+msgid "16"
+msgstr ""
+
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:512
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:520
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:528
+msgid "32"
+msgstr ""
+
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:513
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:521
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:529
+msgid "64"
+msgstr ""
+
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:648
 msgid "Feature Parameters"
 msgstr ""
 
-#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1856
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1551
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1561
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1628
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1638
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1696
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1706
+msgid "Neighborhood radius."
+msgstr ""
+
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1572
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1649
+msgid "Offset"
+msgstr ""
+
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1577
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1587
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1654
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1664
+msgid "Used offset value."
+msgstr ""
+
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1598
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1675
+msgid "Quantization levels"
+msgstr ""
+
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1602
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1679
+msgid "Bin"
+msgstr ""
+
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1603
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1680
+msgid "Histogram bin size."
+msgstr ""
+
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1695
+msgid "Radius X"
+msgstr ""
+
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1705
+msgid "Radius Y"
+msgstr ""
+
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1715
+msgid "Bin length"
+msgstr ""
+
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1716
+msgid "Quantization levels."
+msgstr ""
+
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1771
+msgid "Updating feature preview"
+msgstr ""
+
+#: Code/Modules/otbFeatureExtractionViewGroup.cxx:1902
 msgid "Full Resolution"
 msgstr ""
 
@@ -5495,7 +5658,7 @@ msgid "View Manager"
 msgstr ""
 
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:30
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:47
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:29
 msgid "Save and quit"
 msgstr ""
 
@@ -5527,33 +5690,115 @@ msgstr ""
 msgid "Display Boundaries"
 msgstr ""
 
-#: Code/Modules/otbMeanShiftModuleViewGroup.cxx:241
-msgid "Opcaity"
-msgstr ""
-
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:255
 msgid "Display Cluster"
 msgstr ""
 
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:238
-msgid "Optical calibration module"
+#: Code/Modules/otbVectorizationViewGroup.cxx:61
+msgid "Vectorization Tool"
 msgstr ""
 
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:328
-msgid "Save-Quit"
+#: Code/Modules/otbVectorizationViewGroup.cxx:77
+msgid "Zoom"
 msgstr ""
 
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:346
-msgid "Reflectances * 1000"
+#: Code/Modules/otbVectorizationViewGroup.cxx:101
+msgid "Vector Data Browser"
 msgstr ""
 
-#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:488
-msgid "Optical Coefficients Setup"
+#: Code/Modules/otbVectorizationViewGroup.cxx:109
+msgid "Next geometry"
+msgstr ""
+
+#: Code/Modules/otbVectorizationViewGroup.cxx:114
+msgid "Point"
+msgstr ""
+
+#: Code/Modules/otbVectorizationViewGroup.cxx:118
+msgid "Line"
+msgstr ""
+
+#: Code/Modules/otbVectorizationViewGroup.cxx:122
+msgid "Polygon (Exterior ring)"
+msgstr ""
+
+#: Code/Modules/otbVectorizationViewGroup.cxx:127
+msgid "Polygon (Interior rings)"
+msgstr ""
+
+#: Code/Modules/otbVectorizationViewGroup.cxx:134
+msgid "Color table"
+msgstr ""
+
+#: Code/Modules/otbVectorizationViewGroup.cxx:139
+msgid "Default Color"
+msgstr ""
+
+#: Code/Modules/otbTileExportModuleGUI.cxx:140
+msgid "Google Earth export data"
+msgstr ""
+
+#: Code/Modules/otbTileExportModuleGUI.cxx:147
+msgid "Informations"
+msgstr ""
+
+#: Code/Modules/otbTileExportModuleGUI.cxx:154
+msgid "Kmz Setup"
+msgstr ""
+
+#: Code/Modules/otbTileExportModuleGUI.cxx:183
+msgid "Output KMZ filename"
+msgstr ""
+
+#: Code/Modules/otbTileExportModuleGUI.cxx:207
+msgid "KMZ Parameters"
+msgstr ""
+
+#: Code/Modules/otbTileExportModuleGUI.cxx:215
+msgid "Tile Size"
+msgstr ""
+
+#: Code/Modules/otbTileExportModuleGUI.cxx:223
+msgid "Use Extended KMZ"
+msgstr ""
+
+#: Code/Modules/otbTileExportModuleGUI.cxx:224
+msgid "Uncheck if using GoogleEearth version less than 5.0"
+msgstr ""
+
+#: Code/Modules/otbTileExportModuleGUI.cxx:241
+msgid "Channels Parameters"
+msgstr ""
+
+#: Code/Modules/otbTileExportModuleGUI.cxx:274
+msgid "No Geographical Information : please Set the bounding Box Informations"
+msgstr ""
+
+#: Code/Modules/otbTileExportModuleGUI.cxx:283
+#: Code/Modules/otbTileExportModuleGUI.cxx:353
+msgid "Upper Left"
+msgstr ""
+
+#: Code/Modules/otbTileExportModuleGUI.cxx:313
+#: Code/Modules/otbTileExportModuleGUI.cxx:381
+msgid "Lower Right"
+msgstr ""
+
+#: Code/Modules/otbTileExportModuleGUI.cxx:344
+msgid "No Geographical Information : please Set the 4 corners coordinates"
+msgstr ""
+
+#: Code/Modules/otbTileExportModuleGUI.cxx:408
+msgid "Upper Right"
+msgstr ""
+
+#: Code/Modules/otbTileExportModuleGUI.cxx:435
+msgid "Lower Left"
 msgstr ""
 
 #: Code/Modules/otbReaderModuleGUI.cxx:42
 #: Code/Modules/otbSuperimpositionModuleGUI.cxx:48
-#: Code/Modules/otbSarCalibrationModuleGUI.cxx:63
+#: Code/Modules/otbSarCalibrationModuleGUI.cxx:91
 msgid "Open dataset"
 msgstr ""
 
@@ -5569,236 +5814,356 @@ msgstr ""
 msgid "Name "
 msgstr ""
 
-#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:21
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:42
 msgid "Bilinear"
 msgstr ""
 
-#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:22
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:43
 msgid "RPC"
 msgstr ""
 
-#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:190
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:218
 msgid "GCP to sensor model module"
 msgstr ""
 
-#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:201
-msgid "Projection:"
-msgstr ""
-
-#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:212
-msgid "GCPs List"
-msgstr ""
-
-#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:213
-#: Code/Modules/otbHomologousPointExtractionViewGroup.cxx:208
-msgid "Contains selected points"
-msgstr ""
-
-#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:246
-msgid "Reload"
-msgstr ""
-
-#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:247
-#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:258
-msgid "Focus on the selected point couple."
-msgstr ""
-
-#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:257
-msgid "Focus Point"
-msgstr ""
-
-#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:268
-msgid "Point Errors"
-msgstr ""
-
-#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:269
-#: Code/Modules/otbHomologousPointExtractionViewGroup.cxx:127
-msgid "Euclidean distances"
-msgstr ""
-
-#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:280
-msgid "Ground Error Var (m^2):"
-msgstr ""
-
-#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:288
-msgid "Mean Square Error:"
-msgstr ""
-
-#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:296
-msgid "Pixel Values"
-msgstr ""
-
-#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:304
-msgid "Elevation"
-msgstr ""
-
-#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:305
-msgid "Set the source for the elevation information"
-msgstr ""
-
-#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:316
-#: Code/Modules/otbAlgebraGroup.cxx:131
-#: Code/Modules/otbHomologousPointExtractionViewGroup.cxx:162
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:93
-#: Code/Modules/otbSarCalibrationModuleGUI.cxx:70
-msgid "Save/Quit"
-msgstr ""
-
-#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:333
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:226
 #: Code/Modules/otbHomologousPointExtractionViewGroup.cxx:188
 msgid "Scroll fix"
 msgstr ""
 
-#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:341
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:234
 #: Code/Modules/otbHomologousPointExtractionViewGroup.cxx:196
 msgid "Zoom fix"
 msgstr ""
 
-#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:349
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:242
 #: Code/Modules/otbHomologousPointExtractionViewGroup.cxx:180
 msgid "Full fix"
 msgstr ""
 
-#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:378
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:250
+msgid "Selected Point"
+msgstr ""
+
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:290
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:333
+msgid "Elevation"
+msgstr ""
+
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:299
 #: Code/Modules/otbHomologousPointExtractionViewGroup.cxx:313
 msgid "Focus Click"
 msgstr ""
 
-#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:379
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:300
 msgid "Focus on the last clicked point couple."
 msgstr ""
 
-#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:390
-msgid "Long"
-msgstr ""
-
-#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:400
-msgid "Lat"
-msgstr ""
-
-#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:410
-msgid "Elev"
-msgstr ""
-
-#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:422
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:312
 #: Code/Modules/otbHomologousPointExtractionViewGroup.cxx:302
 msgid "Clear Feature List (shortcut KP_Enter)"
 msgstr ""
 
-#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:443
-msgid "Elevation manager"
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:322
+msgid "Elevation Mode..."
 msgstr ""
 
-#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:450
-msgid "GCPs elevation"
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:323
+msgid "Set the source for the elevation information"
 msgstr ""
 
-#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:463
-msgid "Use mean elevation"
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:348
+msgid "Projection:"
+msgstr ""
+
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:360
+msgid "GCPs List"
+msgstr ""
+
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:361
+#: Code/Modules/otbHomologousPointExtractionViewGroup.cxx:208
+msgid "Contains selected points"
+msgstr ""
+
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:393
+msgid "Reload"
+msgstr ""
+
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:394
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:405
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:461
+msgid "Focus on the selected point couple."
+msgstr ""
+
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:415
+msgid "Ground Error Var (m^2):"
+msgstr ""
+
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:422
+msgid "Mean Square Error:"
+msgstr ""
+
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:429
+msgid "Pixel Values"
+msgstr ""
+
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:430
+msgid "pixel information"
+msgstr ""
+
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:438
+#: Code/Modules/otbAlgebraGroup.cxx:199
+#: Code/Modules/otbHomologousPointExtractionViewGroup.cxx:162
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:422
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:93
+#: Code/Modules/otbSarCalibrationModuleGUI.cxx:98
+msgid "Save/Quit"
+msgstr ""
+
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:449
+msgid "Import ..."
+msgstr ""
+
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:460
+msgid "Export ..."
 msgstr ""
 
 #: Code/Modules/otbGCPToSensorModelViewGroup.cxx:473
+msgid "Street Map"
+msgstr ""
+
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:478
+msgid "Full Map"
+msgstr ""
+
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:514
+msgid "Update lon/lat"
+msgstr ""
+
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:523
+msgid "Update Name"
+msgstr ""
+
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:532
+#: Code/Modules/otbTileMapImportModuleGUI.cxx:140
+msgid "Depth"
+msgstr ""
+
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:540
+msgid "Refresh Map"
+msgstr ""
+
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:556
+msgid "Elevation manager"
+msgstr ""
+
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:563
+msgid "GCPs elevation"
+msgstr ""
+
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:576
+msgid "Use mean elevation"
+msgstr ""
+
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:586
 msgid "value:"
 msgstr ""
 
-#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:493
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:606
 msgid "file:"
 msgstr ""
 
-#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:518
+#: Code/Modules/otbGCPToSensorModelViewGroup.cxx:631
 msgid "OK"
 msgstr ""
 
 #: Code/Modules/otbInteractiveChangeDetectionGUI.cxx:541
-#: Code/Modules/otbThresholdGroup.cxx:142
+#: Code/Modules/otbThresholdGroup.cxx:144
 msgid "Save Quit"
 msgstr ""
 
-#: Code/Modules/otbExtractROIModuleGUI.cxx:28
+#: Code/Modules/otbExtractROIModuleGUI.cxx:56
 msgid "Select the ROI"
 msgstr ""
 
-#: Code/Modules/otbExtractROIModuleGUI.cxx:50
+#: Code/Modules/otbExtractROIModuleGUI.cxx:63
 msgid "Definition of the ROI extracted"
 msgstr ""
 
-#: Code/Modules/otbExtractROIModuleGUI.cxx:54
+#: Code/Modules/otbExtractROIModuleGUI.cxx:68
 msgid "Start X"
 msgstr ""
 
-#: Code/Modules/otbExtractROIModuleGUI.cxx:57
+#: Code/Modules/otbExtractROIModuleGUI.cxx:74
 msgid "Start Y"
 msgstr ""
 
-#: Code/Modules/otbExtractROIModuleGUI.cxx:70
-msgid "Longitude1"
+#: Code/Modules/otbExtractROIModuleGUI.cxx:94
+msgid "Upper Left Longitude"
 msgstr ""
 
-#: Code/Modules/otbExtractROIModuleGUI.cxx:72
-msgid "Latitude1"
+#: Code/Modules/otbExtractROIModuleGUI.cxx:101
+msgid "Upper Left Latitude"
 msgstr ""
 
-#: Code/Modules/otbExtractROIModuleGUI.cxx:74
-msgid "Longitude2"
+#: Code/Modules/otbExtractROIModuleGUI.cxx:108
+msgid "Lower Right Longitude"
 msgstr ""
 
-#: Code/Modules/otbExtractROIModuleGUI.cxx:76
-msgid "Latitude2"
+#: Code/Modules/otbExtractROIModuleGUI.cxx:115
+msgid "Lower Right Latitude"
 msgstr ""
 
-#: Code/Modules/otbExtractROIModuleGUI.cxx:82
+#: Code/Modules/otbExtractROIModuleGUI.cxx:136
 msgid "Input image size information"
 msgstr ""
 
-#: Code/Modules/otbExtractROIModuleGUI.cxx:94
-msgid "Select Long/Lat (NW (1) ; SE (2))"
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:104
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:360
+msgid "Supervised classification"
+msgstr ""
+
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:118
+msgid "Sets repartition"
+msgstr ""
+
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:126
+msgid "Controls the repartition between the training and validation samples"
+msgstr ""
+
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:138
+msgid "Controls the maximum number of samples per class in the training set"
+msgstr ""
+
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:152
+msgid "Controls the maximum number of samples per class in the validation set"
+msgstr ""
+
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:180
+msgid "Max. training"
+msgstr ""
+
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:188
+msgid "Max. validation"
+msgstr ""
+
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:196
+msgid "Class key"
+msgstr ""
+
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:216
+msgid "Train"
+msgstr ""
+
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:261
+msgid "Description"
+msgstr ""
+
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:276
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:696
+msgid "SVM setup"
+msgstr ""
+
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:281
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:701
+msgid "SVM type"
+msgstr ""
+
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:292
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:712
+msgid "Kernel type"
+msgstr ""
+
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:303
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:723
+msgid "Kernel degree"
+msgstr ""
+
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:310
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:730
+msgid "Gamma"
+msgstr ""
+
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:318
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:737
+msgid "Nu"
+msgstr ""
+
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:326
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:744
+msgid "Coef0"
+msgstr ""
+
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:334
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:751
+msgid "C"
+msgstr ""
+
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:342
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:758
+msgid "Epsilon"
+msgstr ""
+
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:359
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:773
+msgid "Probability estimation"
+msgstr ""
+
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:367
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:781
+msgid "Cache size"
+msgstr ""
+
+#: Code/Modules/otbSupervisedClassificationGUI.cxx:382
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:796
+msgid "P"
 msgstr ""
 
 #: Code/Modules/otbProjectionGroup.cxx:102
 msgid "SENSOR MODEL"
 msgstr ""
 
-#: Code/Modules/otbProjectionGroup.cxx:428
+#: Code/Modules/otbProjectionGroup.cxx:225
+msgid "WGS 84"
+msgstr ""
+
+#: Code/Modules/otbProjectionGroup.cxx:442
 msgid "Splines"
 msgstr ""
 
-#: Code/Modules/otbProjectionGroup.cxx:433
+#: Code/Modules/otbProjectionGroup.cxx:447
 msgid "Projection"
 msgstr ""
 
-#: Code/Modules/otbProjectionGroup.cxx:439
+#: Code/Modules/otbProjectionGroup.cxx:453
 msgid "Save / Quit"
 msgstr ""
 
-#: Code/Modules/otbProjectionGroup.cxx:468
+#: Code/Modules/otbProjectionGroup.cxx:482
 msgid "Use center pixel"
 msgstr ""
 
-#: Code/Modules/otbProjectionGroup.cxx:469
+#: Code/Modules/otbProjectionGroup.cxx:483
 msgid "If checked, use the output center image coordinates"
 msgstr ""
 
-#: Code/Modules/otbProjectionGroup.cxx:475
+#: Code/Modules/otbProjectionGroup.cxx:489
 msgid "Use upper-left pixel"
 msgstr ""
 
-#: Code/Modules/otbProjectionGroup.cxx:476
+#: Code/Modules/otbProjectionGroup.cxx:490
 msgid "If checked, use the upper left output image pixel coordinates"
 msgstr ""
 
-#: Code/Modules/otbProjectionGroup.cxx:502
+#: Code/Modules/otbProjectionGroup.cxx:516
 msgid "Input map projection"
 msgstr ""
 
-#: Code/Modules/otbProjectionGroup.cxx:513
+#: Code/Modules/otbProjectionGroup.cxx:527
 msgid "Input cartographic coordinates"
 msgstr ""
 
-#: Code/Modules/otbProjectionGroup.cxx:626
-msgid "Map Pprojection"
-msgstr ""
-
-#: Code/Modules/otbProjectionGroup.cxx:780
+#: Code/Modules/otbProjectionGroup.cxx:794
 msgid "Select the orthorectification interpolator"
 msgstr ""
 
@@ -5814,44 +6179,60 @@ msgstr ""
 msgid "otbOrthorectification"
 msgstr ""
 
-#: Code/Modules/otbAlgebraGroup.cxx:49
+#: Code/Modules/otbAlgebraGroup.cxx:54
 msgid "Addition"
 msgstr ""
 
-#: Code/Modules/otbAlgebraGroup.cxx:50
+#: Code/Modules/otbAlgebraGroup.cxx:55
 msgid "Subtraction"
 msgstr ""
 
-#: Code/Modules/otbAlgebraGroup.cxx:51
+#: Code/Modules/otbAlgebraGroup.cxx:56
 msgid "Multiplication"
 msgstr ""
 
-#: Code/Modules/otbAlgebraGroup.cxx:53
+#: Code/Modules/otbAlgebraGroup.cxx:58
 msgid "Shift-scale"
 msgstr ""
 
-#: Code/Modules/otbAlgebraGroup.cxx:78
+#: Code/Modules/otbAlgebraGroup.cxx:141
 msgid "Band math module"
 msgstr ""
 
-#: Code/Modules/otbAlgebraGroup.cxx:84
+#: Code/Modules/otbAlgebraGroup.cxx:147
 msgid "Operation type"
 msgstr ""
 
-#: Code/Modules/otbAlgebraGroup.cxx:94
-msgid "Shift scale parameters : A*X + B"
+#: Code/Modules/otbAlgebraGroup.cxx:157
+msgid "Shift scale parameters : (X + B) * A"
 msgstr ""
 
-#: Code/Modules/otbAlgebraGroup.cxx:100
+#: Code/Modules/otbAlgebraGroup.cxx:164
+msgid "Choose input"
+msgstr ""
+
+#: Code/Modules/otbAlgebraGroup.cxx:165
+msgid "Set the filter input."
+msgstr ""
+
+#: Code/Modules/otbAlgebraGroup.cxx:174
 msgid "A"
 msgstr ""
 
-#: Code/Modules/otbAlgebraGroup.cxx:109
+#: Code/Modules/otbAlgebraGroup.cxx:185
 msgid "B"
 msgstr ""
 
-#: Code/Modules/otbAlgebraGroup.cxx:119
-msgid "Choose input"
+#: Code/Modules/otbAlgebraGroup.cxx:209
+msgid "Ratio A/B"
+msgstr ""
+
+#: Code/Modules/otbAlgebraGroup.cxx:216
+msgid "A input"
+msgstr ""
+
+#: Code/Modules/otbAlgebraGroup.cxx:225
+msgid "B input"
 msgstr ""
 
 #: Code/Modules/otbHomologousPointExtractionViewGroup.cxx:21
@@ -5876,6 +6257,10 @@ msgstr ""
 
 #: Code/Modules/otbHomologousPointExtractionViewGroup.cxx:126
 msgid "Point errors"
+msgstr ""
+
+#: Code/Modules/otbHomologousPointExtractionViewGroup.cxx:127
+msgid "Euclidean distances"
 msgstr ""
 
 #: Code/Modules/otbHomologousPointExtractionViewGroup.cxx:138
@@ -5957,64 +6342,92 @@ msgstr ""
 msgid "Zoom moving"
 msgstr ""
 
-#: Code/Modules/otbThresholdGroup.cxx:114
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:137
+msgid "Optical calibration module"
+msgstr ""
+
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:232
+msgid "Spectral sensitivity  file"
+msgstr ""
+
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:243
+msgid "?"
+msgstr ""
+
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:405
+msgid "Update parameters"
+msgstr ""
+
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:415
+msgid "*1000"
+msgstr ""
+
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:416
+msgid "Multiply output reflectance images by 1000."
+msgstr ""
+
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:443
+msgid "Busy"
+msgstr ""
+
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:452
+msgid "Sensitivity helper"
+msgstr ""
+
+#: Code/Modules/otbThresholdGroup.cxx:116
 msgid "Threshold Module"
 msgstr ""
 
-#: Code/Modules/otbThresholdGroup.cxx:121
+#: Code/Modules/otbThresholdGroup.cxx:123
 msgid "Inside Value :"
 msgstr ""
 
-#: Code/Modules/otbThresholdGroup.cxx:134
+#: Code/Modules/otbThresholdGroup.cxx:136
 msgid "Full"
 msgstr ""
 
-#: Code/Modules/otbThresholdGroup.cxx:149
-msgid "Lower Threshold :"
-msgstr ""
-
-#: Code/Modules/otbThresholdGroup.cxx:164
-msgid "Upper Threshold :"
-msgstr ""
-
-#: Code/Modules/otbThresholdGroup.cxx:180
+#: Code/Modules/otbThresholdGroup.cxx:151
 msgid "Outside value :"
 msgstr ""
 
-#: Code/Modules/otbThresholdGroup.cxx:190
+#: Code/Modules/otbThresholdGroup.cxx:161
 msgid "Threshold Above"
 msgstr ""
 
-#: Code/Modules/otbThresholdGroup.cxx:197
+#: Code/Modules/otbThresholdGroup.cxx:168
 msgid "Threshold Below"
 msgstr ""
 
-#: Code/Modules/otbThresholdGroup.cxx:204
+#: Code/Modules/otbThresholdGroup.cxx:175
 msgid "Threshold Outside"
 msgstr ""
 
-#: Code/Modules/otbThresholdGroup.cxx:212
+#: Code/Modules/otbThresholdGroup.cxx:183
 msgid "alpha :"
 msgstr ""
 
-#: Code/Modules/otbThresholdGroup.cxx:227
+#: Code/Modules/otbThresholdGroup.cxx:198
 msgid "Inside value :"
 msgstr ""
 
-#: Code/Modules/otbThresholdGroup.cxx:239
+#: Code/Modules/otbThresholdGroup.cxx:210
 msgid "Generic Threshold"
 msgstr ""
 
-#: Code/Modules/otbThresholdGroup.cxx:247
+#: Code/Modules/otbThresholdGroup.cxx:218
 msgid "Binary Threshold"
+msgstr ""
+
+#: Code/Modules/otbThresholdGroup.cxx:244
+msgid "Lower Treshhold :"
+msgstr ""
+
+#: Code/Modules/otbThresholdGroup.cxx:253
+msgid "Upper Threshold :"
 msgstr ""
 
 #: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:91
 msgid "Export selected polygons"
-msgstr ""
-
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:360
-msgid "Supervised classification"
 msgstr ""
 
 #: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:378
@@ -6029,71 +6442,27 @@ msgstr ""
 msgid "Training Set"
 msgstr ""
 
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:480
-msgid "Validation Set"
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:479
+msgid "Display Validation Set"
 msgstr ""
 
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:598
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:491
+msgid "Random Validation Set"
+msgstr ""
+
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:596
 msgid "Clear ROIs"
 msgstr ""
 
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:698
-msgid "SVM setup"
-msgstr ""
-
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:703
-msgid "SVM type"
-msgstr ""
-
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:714
-msgid "Kernel type"
-msgstr ""
-
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:725
-msgid "Kernel degree"
-msgstr ""
-
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:732
-msgid "Gamma"
-msgstr ""
-
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:739
-msgid "Nu"
-msgstr ""
-
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:746
-msgid "Coef0"
-msgstr ""
-
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:753
-msgid "C"
-msgstr ""
-
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:760
-msgid "Epsilon"
-msgstr ""
-
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:775
-msgid "Probability estimation"
-msgstr ""
-
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:783
-msgid "Cache size"
-msgstr ""
-
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:798
-msgid "P"
-msgstr ""
-
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:817
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:815
 msgid "Visualisation setup"
 msgstr ""
 
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:948
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:946
 msgid "Full window"
 msgstr ""
 
-#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:956
+#: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:954
 msgid "Scroll window"
 msgstr ""
 
@@ -6101,125 +6470,170 @@ msgstr ""
 msgid "Elevation value    "
 msgstr ""
 
-#: Code/Modules/otbWriterViewGroup.cxx:78
+#: Code/Modules/otbWriterViewGroup.cxx:73
 msgid "unsigned char"
 msgstr ""
 
-#: Code/Modules/otbWriterViewGroup.cxx:79
+#: Code/Modules/otbWriterViewGroup.cxx:74
 msgid "short int"
 msgstr ""
 
-#: Code/Modules/otbWriterViewGroup.cxx:80
+#: Code/Modules/otbWriterViewGroup.cxx:75
 msgid "int"
 msgstr ""
 
-#: Code/Modules/otbWriterViewGroup.cxx:81
+#: Code/Modules/otbWriterViewGroup.cxx:76
 msgid "float"
 msgstr ""
 
-#: Code/Modules/otbWriterViewGroup.cxx:82
+#: Code/Modules/otbWriterViewGroup.cxx:77
 msgid "double"
 msgstr ""
 
-#: Code/Modules/otbWriterViewGroup.cxx:83
+#: Code/Modules/otbWriterViewGroup.cxx:78
 msgid "unsigned short int"
 msgstr ""
 
-#: Code/Modules/otbWriterViewGroup.cxx:84
+#: Code/Modules/otbWriterViewGroup.cxx:79
 msgid "unsigned int"
 msgstr ""
 
-#: Code/Modules/otbWriterViewGroup.cxx:147
+#: Code/Modules/otbWriterViewGroup.cxx:140
 msgid "Writer application"
 msgstr ""
 
-#: Code/Modules/otbWriterViewGroup.cxx:177
+#: Code/Modules/otbWriterViewGroup.cxx:170
 msgid "Output pixel type"
 msgstr ""
 
-#: Code/Modules/otbWriterViewGroup.cxx:185
+#: Code/Modules/otbWriterViewGroup.cxx:178
 msgid "Use scaling"
 msgstr ""
 
-#: Code/Modules/otbWriterViewGroup.cxx:201
+#: Code/Modules/otbWriterViewGroup.cxx:195
 msgid "Feature image list"
 msgstr ""
 
-#: Code/Modules/otbWriterViewGroup.cxx:235
+#: Code/Modules/otbWriterViewGroup.cxx:229
 msgid "Selected output channels"
 msgstr ""
 
-#: Code/Modules/otbWriterViewGroup.cxx:312
+#: Code/Modules/otbWriterViewGroup.cxx:306
 msgid "Band"
 msgstr ""
 
-#: Code/Modules/otbViewerModuleGroup.cxx:181
-#: Code/Modules/otbViewerModuleGroup.cxx:189
+#: Code/Modules/otbViewerModuleGroup.cxx:196
 msgid "Vector data propreties"
 msgstr ""
 
-#: Code/Modules/otbViewerModuleGroup.cxx:226
+#: Code/Modules/otbViewerModuleGroup.cxx:234
 msgid "Hide"
 msgstr ""
 
-#: Code/Modules/otbViewerModuleGroup.cxx:236
+#: Code/Modules/otbViewerModuleGroup.cxx:244
 msgid "Hide All"
 msgstr ""
 
-#: Code/Modules/otbViewerModuleGroup.cxx:252
+#: Code/Modules/otbViewerModuleGroup.cxx:260
 msgid "Display All"
 msgstr ""
 
-#: Code/Modules/otbViewerModuleGroup.cxx:358
+#: Code/Modules/otbViewerModuleGroup.cxx:365
 msgid "Upper quantile  %:"
 msgstr ""
 
-#: Code/Modules/otbViewerModuleGroup.cxx:364
+#: Code/Modules/otbViewerModuleGroup.cxx:371
 msgid "Lower quantile  %:"
 msgstr ""
 
 #: Code/Modules/otbViewerModuleGroup.cxx:394
+msgid "Enable scaling"
+msgstr ""
+
+#: Code/Modules/otbViewerModuleGroup.cxx:406
 msgid "Pixel description"
 msgstr ""
 
-#: Code/Modules/otbViewerModuleGroup.cxx:452
+#: Code/Modules/otbViewerModuleGroup.cxx:464
 msgid "DEM Selection"
 msgstr ""
 
-#: Code/Modules/otbSarCalibrationModuleGUI.cxx:86
+#: Code/Modules/otbFieldEditorGroup.cxx:45
+msgid "Add a new field"
+msgstr ""
+
+#: Code/Modules/otbFieldEditorGroup.cxx:52
+msgid "Field type:"
+msgstr ""
+
+#: Code/Modules/otbFieldEditorGroup.cxx:77
+msgid "Field Name:"
+msgstr ""
+
+#: Code/Modules/otbFieldEditorGroup.cxx:84
+#: Code/Modules/otbFieldEditorGroup.cxx:91
+#: Code/Modules/otbFieldEditorGroup.cxx:100
+msgid "Field Value:"
+msgstr ""
+
+#: Code/Modules/otbTileMapImportModuleGUI.cxx:42
+msgid "Tile Map Import"
+msgstr ""
+
+#: Code/Modules/otbTileMapImportModuleGUI.cxx:49
+msgid "Size of the ROI"
+msgstr ""
+
+#: Code/Modules/otbTileMapImportModuleGUI.cxx:68
+msgid "Choose the Place"
+msgstr ""
+
+#: Code/Modules/otbTileMapImportModuleGUI.cxx:72
+msgid "Placename"
+msgstr ""
+
+#: Code/Modules/otbTileMapImportModuleGUI.cxx:78
+msgid "Search"
+msgstr ""
+
+#: Code/Modules/otbTileMapImportModuleGUI.cxx:135
+msgid "Select Depth"
+msgstr ""
+
+#: Code/Modules/otbTileMapImportModuleGUI.cxx:151
+msgid "Select Tile Map Server"
+msgstr ""
+
+#: Code/Modules/otbSarCalibrationModuleGUI.cxx:114
 msgid "Use fast computation method"
 msgstr ""
 
-#: Code/Modules/otbSarCalibrationModuleGUI.cxx:92
-msgid "Yes"
-msgstr ""
-
-#: Code/Modules/otbSarCalibrationModuleGUI.cxx:101
-msgid "No"
-msgstr ""
-
-#: Code/Modules/otbSarCalibrationModuleGUI.cxx:112
+#: Code/Modules/otbSarCalibrationModuleGUI.cxx:140
 msgid "Output file"
 msgstr ""
 
-#: Code/Modules/otbSarCalibrationModuleGUI.cxx:118
+#: Code/Modules/otbSarCalibrationModuleGUI.cxx:146
 msgid "Brightness"
 msgstr ""
 
-#: Code/Modules/otbSarCalibrationModuleGUI.cxx:126
+#: Code/Modules/otbSarCalibrationModuleGUI.cxx:154
 msgid "Calibration"
 msgstr ""
 
-#: Code/Modules/otbWriterModuleGUI.cxx:56
+#: Code/Modules/otbSarCalibrationModuleGUI.cxx:166
+msgid "Scale representation"
+msgstr ""
+
+#: Code/Modules/otbSarCalibrationModuleGUI.cxx:182
+msgid "Log(dB)"
+msgstr ""
+
+#: Code/Modules/otbWriterModuleGUI.cxx:28
 msgid "Save dataset"
 msgstr ""
 
-#: Code/Modules/otbWriterModuleGUI.cxx:94
-msgid "Write image in 16bits"
-msgstr ""
-
-#: Code/Modules/otbWriterModuleGUI.cxx:104
-msgid "Write image in 32bits"
+#: Code/Modules/otbWriterModuleGUI.cxx:70
+msgid "Output Data Type"
 msgstr ""
 
 #: Code/Modules/otbKMeansModuleGUI.cxx:28
@@ -6251,119 +6665,127 @@ msgstr ""
 msgid "Convergence threshold "
 msgstr ""
 
-#: Code/Application/Monteverdi.cxx:132
+#: Code/Application/Monteverdi.cxx:134
 msgid "File/Open dataset"
 msgstr ""
 
-#: Code/Application/Monteverdi.cxx:133
+#: Code/Application/Monteverdi.cxx:135
 msgid "File/Save dataset"
 msgstr ""
 
-#: Code/Application/Monteverdi.cxx:134
+#: Code/Application/Monteverdi.cxx:137
 msgid "File/Save dataset (advanced)"
 msgstr ""
 
-#: Code/Application/Monteverdi.cxx:135
+#: Code/Application/Monteverdi.cxx:138
 msgid "File/Cache dataset"
 msgstr ""
 
-#: Code/Application/Monteverdi.cxx:136
+#: Code/Application/Monteverdi.cxx:139
 msgid "File/Extract ROI from dataset"
 msgstr ""
 
-#: Code/Application/Monteverdi.cxx:137
+#: Code/Application/Monteverdi.cxx:140
 msgid "File/Concatenate images"
 msgstr ""
 
-#: Code/Application/Monteverdi.cxx:139
-msgid "Visualization/Viewer"
-msgstr ""
-
-#: Code/Application/Monteverdi.cxx:141
-msgid "Calibration/Optical Calibration"
-msgstr ""
-
 #: Code/Application/Monteverdi.cxx:142
-msgid "Calibration/SAR Calibration"
+msgid "File/Export To Kmz"
 msgstr ""
 
 #: Code/Application/Monteverdi.cxx:144
-msgid "Filtering/Band math"
-msgstr ""
-
-#: Code/Application/Monteverdi.cxx:145
-msgid "Filtering/Threshold"
-msgstr ""
-
-#: Code/Application/Monteverdi.cxx:146
-msgid "Filtering/Pansharpening"
+msgid "Visualization/Viewer"
 msgstr ""
 
 #: Code/Application/Monteverdi.cxx:147
-msgid "Filtering/Mean shift clustering"
+msgid "Calibration/Optical Calibration"
 msgstr ""
 
 #: Code/Application/Monteverdi.cxx:148
-msgid "Filtering/Feature extraction"
+msgid "Calibration/SAR Calibration"
 msgstr ""
 
-#: Code/Application/Monteverdi.cxx:149
-msgid "Filtering/Change detection"
+#: Code/Application/Monteverdi.cxx:150
+msgid "Filtering/Band math"
 msgstr ""
 
 #: Code/Application/Monteverdi.cxx:151
-msgid "SAR/Despeckle image"
+msgid "Filtering/Threshold"
 msgstr ""
 
 #: Code/Application/Monteverdi.cxx:152
-msgid "SAR/Compute intensity and log-intensity"
+msgid "Filtering/Pansharpening"
 msgstr ""
 
-#: Code/Application/Monteverdi.cxx:154
-msgid "Learning/SVM classification"
+#: Code/Application/Monteverdi.cxx:153
+msgid "Filtering/Mean shift clustering"
 msgstr ""
 
 #: Code/Application/Monteverdi.cxx:155
-msgid "Learning/KMeans clustering"
+msgid "Filtering/Feature extraction"
+msgstr ""
+
+#: Code/Application/Monteverdi.cxx:156
+msgid "Filtering/Change detection"
 msgstr ""
 
 #: Code/Application/Monteverdi.cxx:157
-msgid "Geometry/Orthorectification"
-msgstr ""
-
-#: Code/Application/Monteverdi.cxx:158
-msgid "Geometry/Reproject image"
+msgid "SAR/Despeckle image"
 msgstr ""
 
 #: Code/Application/Monteverdi.cxx:159
+msgid "SAR/Compute intensity and log-intensity"
+msgstr ""
+
+#: Code/Application/Monteverdi.cxx:162
+msgid "Learning/SVM classification"
+msgstr ""
+
+#: Code/Application/Monteverdi.cxx:165
+msgid "Learning/SVM classification (EXPERIMENTAL)"
+msgstr ""
+
+#: Code/Application/Monteverdi.cxx:166
+msgid "Learning/KMeans clustering"
+msgstr ""
+
+#: Code/Application/Monteverdi.cxx:169
+msgid "Geometry/Orthorectification"
+msgstr ""
+
+#: Code/Application/Monteverdi.cxx:170
+msgid "Geometry/Reproject image"
+msgstr ""
+
+#: Code/Application/Monteverdi.cxx:172
 msgid "Geometry/Superimpose two images"
 msgstr ""
 
-#: Code/Application/Monteverdi.cxx:160
+#: Code/Application/Monteverdi.cxx:174
 msgid "Geometry/Homologous points extraction"
 msgstr ""
 
-#: Code/Application/Monteverdi.cxx:161
+#: Code/Application/Monteverdi.cxx:176
 msgid "Geometry/GCP to sensor model"
 msgstr ""
 
-#: Code/Application/Monteverdi.cxx:164
+#: Code/Application/Monteverdi.cxx:179
 msgid "File/Tile Map Import"
 msgstr ""
 
-#: Code/Application/otbMonteverdiViewGUI.cxx:166
+#: Code/Application/otbMonteverdiViewGUI.cxx:165
 msgid "File/Quit"
 msgstr ""
 
-#: Code/Application/otbMonteverdiViewGUI.cxx:167
+#: Code/Application/otbMonteverdiViewGUI.cxx:166
 msgid "?/Help"
 msgstr ""
 
-#: Code/Application/otbMonteverdiViewGUI.cxx:180
+#: Code/Application/otbMonteverdiViewGUI.cxx:179
 msgid "Datasets Browser"
 msgstr ""
 
-#: Code/Application/otbMonteverdiViewGUI.cxx:197
+#: Code/Application/otbMonteverdiViewGUI.cxx:196
 msgid "Dataset"
 msgstr ""
 
@@ -6375,35 +6797,40 @@ msgstr ""
 msgid "Moving Image"
 msgstr ""
 
-#: Code/Modules/HomologousPointExtraction/otbHomologousPointExtractionModule.cxx:106
+#: Code/Modules/HomologousPointExtraction/otbHomologousPointExtractionModule.cxx:105
 msgid "Transformed moving image"
 msgstr ""
 
-#: Code/Modules/Algebra/otbAlgebraModule.cxx:211
+#: Code/Modules/Algebra/otbAlgebraModule.cxx:228
 msgid "Result image"
 msgstr ""
 
-#: Code/Modules/GCPToSensorModel/otbGCPToSensorModelModule.cxx:107
+#: Code/Modules/SupervisedClassification/otbSupervisedClassificationModule2.cxx:45
+msgid "Training/validation ROIs"
+msgstr ""
+
+#: Code/Modules/SupervisedClassification/otbSupervisedClassificationModule2.cxx:101
+#: Code/Modules/GCPToSensorModel/otbGCPToSensorModelModule.cxx:123
 msgid "Input image with new keyword list"
 msgstr ""
 
-#: Code/Modules/GCPToSensorModel/otbGCPToSensorModelView.cxx:379
-#: Code/Modules/Superimposition/otbSuperimpositionModule.cxx:191
-#: Code/Modules/Orthorectification/otbOrthorectification.cxx:123
+#: Code/Modules/GCPToSensorModel/otbGCPToSensorModelView.cxx:328
+#: Code/Modules/Superimposition/otbSuperimpositionModule.cxx:188
+#: Code/Modules/Orthorectification/otbOrthorectification.cxx:121
 msgid "Choose the dataset dir..."
 msgstr ""
 
-#: Code/Modules/GCPToSensorModel/otbGCPToSensorModelView.cxx:564
+#: Code/Modules/GCPToSensorModel/otbGCPToSensorModelView.cxx:510
 msgid "Choose an XML file containing GCPs ..."
 msgstr ""
 
-#: Code/Modules/GCPToSensorModel/otbGCPToSensorModelView.cxx:581
+#: Code/Modules/GCPToSensorModel/otbGCPToSensorModelView.cxx:527
 msgid "Choose an XML file to export GCPs ..."
 msgstr ""
 
-#: Code/Modules/TileMapImport/otbTileMapImportModule.cxx:248
-#: Code/Modules/ExtractROI/otbExtractROIModule.cxx:408
-#: Code/Modules/ExtractROI/otbExtractROIModule.cxx:428
+#: Code/Modules/TileMapImport/otbTileMapImportModule.cxx:260
+#: Code/Modules/ExtractROI/otbExtractROIModule.cxx:403
+#: Code/Modules/ExtractROI/otbExtractROIModule.cxx:424
 msgid "Image extracted"
 msgstr ""
 
@@ -6415,66 +6842,34 @@ msgstr ""
 msgid "Image to reproject"
 msgstr ""
 
-#: Code/Modules/Superimposition/otbSuperimpositionModule.cxx:157
-#: Code/Modules/Superimposition/otbSuperimpositionModule.cxx:180
+#: Code/Modules/Superimposition/otbSuperimpositionModule.cxx:154
+#: Code/Modules/Superimposition/otbSuperimpositionModule.cxx:177
 msgid "Image superimposable to reference"
 msgstr ""
 
 #: Code/Modules/Caching/otbCachingModule.cxx:36
-#: Code/Modules/Writer/otbWriterModule.cxx:33
-#: Code/Modules/WriterMVC/otbWriterMVCModule.cxx:45
+#: Code/Modules/Writer/otbWriterModule.cxx:37
+#: Code/Modules/WriterMVC/otbWriterMVCModule.cxx:44
 msgid "Dataset to write"
 msgstr ""
 
-#: Code/Modules/Caching/otbCachingModule.cxx:50
+#: Code/Modules/Caching/otbCachingModule.cxx:51
 msgid "Caching dataset (0%)"
 msgstr ""
 
-#: Code/Modules/Caching/otbCachingModule.cxx:82
+#: Code/Modules/Caching/otbCachingModule.cxx:92
 msgid "Caching dataset"
 msgstr ""
 
-#: Code/Modules/Caching/otbCachingModule.cxx:176
+#: Code/Modules/Caching/otbCachingModule.cxx:192
 msgid "Cached data from"
 msgstr ""
 
-#: Code/Modules/OpticalCalibration/otbOpticalCalibrationModule.cxx:41
-msgid "Image to apply OpticalCalibration on"
-msgstr ""
-
-#: Code/Modules/OpticalCalibration/otbOpticalCalibrationModule.cxx:502
-msgid "Luminance image"
-msgstr ""
-
-#: Code/Modules/OpticalCalibration/otbOpticalCalibrationModule.cxx:518
-msgid "TOA image (*1000)"
-msgstr ""
-
-#: Code/Modules/OpticalCalibration/otbOpticalCalibrationModule.cxx:519
-msgid "TOC image (*1000)"
-msgstr ""
-
-#: Code/Modules/OpticalCalibration/otbOpticalCalibrationModule.cxx:520
-msgid "Difference TOA-TOC image (*1000)"
-msgstr ""
-
-#: Code/Modules/OpticalCalibration/otbOpticalCalibrationModule.cxx:524
-msgid "TOA Image"
-msgstr ""
-
-#: Code/Modules/OpticalCalibration/otbOpticalCalibrationModule.cxx:525
-msgid "TOC Image"
-msgstr ""
-
-#: Code/Modules/OpticalCalibration/otbOpticalCalibrationModule.cxx:526
-msgid "Difference TOA-TOC image"
-msgstr ""
-
-#: Code/Modules/Writer/otbWriterModule.cxx:103
+#: Code/Modules/Writer/otbWriterModule.cxx:149
 msgid "Choose the dataset file..."
 msgstr ""
 
-#: Code/Modules/Writer/otbWriterModule.cxx:127
+#: Code/Modules/Writer/otbWriterModule.cxx:171
 msgid "Writing dataset"
 msgstr ""
 
@@ -6494,23 +6889,23 @@ msgstr ""
 msgid "Vector"
 msgstr ""
 
-#: Code/Modules/SarCalibration/otbSarCalibrationModule.cxx:164
-#: Code/Modules/SarCalibration/otbSarCalibrationModule.cxx:226
+#: Code/Modules/SarCalibration/otbSarCalibrationModule.cxx:157
+#: Code/Modules/SarCalibration/otbSarCalibrationModule.cxx:222
 msgid "Calibrated image"
 msgstr ""
 
-#: Code/Modules/SarCalibration/otbSarCalibrationModule.cxx:170
-#: Code/Modules/SarCalibration/otbSarCalibrationModule.cxx:232
+#: Code/Modules/SarCalibration/otbSarCalibrationModule.cxx:164
+#: Code/Modules/SarCalibration/otbSarCalibrationModule.cxx:229
 msgid "Calibrated image dB"
 msgstr ""
 
-#: Code/Modules/SarCalibration/otbSarCalibrationModule.cxx:188
-#: Code/Modules/SarCalibration/otbSarCalibrationModule.cxx:251
+#: Code/Modules/SarCalibration/otbSarCalibrationModule.cxx:183
+#: Code/Modules/SarCalibration/otbSarCalibrationModule.cxx:249
 msgid "Brightness image"
 msgstr ""
 
-#: Code/Modules/SarCalibration/otbSarCalibrationModule.cxx:193
-#: Code/Modules/SarCalibration/otbSarCalibrationModule.cxx:256
+#: Code/Modules/SarCalibration/otbSarCalibrationModule.cxx:189
+#: Code/Modules/SarCalibration/otbSarCalibrationModule.cxx:255
 msgid "Brightness image dB"
 msgstr ""
 
@@ -6542,28 +6937,36 @@ msgstr ""
 msgid "Image concatenated"
 msgstr ""
 
-#: Code/Modules/PanSharpening/otbPanSharpeningModule.cxx:31
+#: Code/Modules/PanSharpening/otbPanSharpeningModule.cxx:30
 msgid "Panchromatic image"
 msgstr ""
 
-#: Code/Modules/PanSharpening/otbPanSharpeningModule.cxx:32
+#: Code/Modules/PanSharpening/otbPanSharpeningModule.cxx:31
 msgid "Multispectral image"
 msgstr ""
 
-#: Code/Modules/PanSharpening/otbPanSharpeningModule.cxx:74
+#: Code/Modules/PanSharpening/otbPanSharpeningModule.cxx:71
 msgid "Pansharpened image"
 msgstr ""
 
-#: Code/Modules/Classification/otbSupervisedClassificationModule.cxx:34
+#: Code/Modules/Classification/otbSupervisedClassificationModule.cxx:35
 msgid "Image to apply Classification on"
 msgstr ""
 
-#: Code/Modules/Classification/otbSupervisedClassificationModule.cxx:88
+#: Code/Modules/Classification/otbSupervisedClassificationModule.cxx:90
 msgid "Classified image"
 msgstr ""
 
-#: Code/Modules/Classification/otbSupervisedClassificationModule.cxx:114
+#: Code/Modules/Classification/otbSupervisedClassificationModule.cxx:117
 msgid "Vectors of classified image"
+msgstr ""
+
+#: Code/Modules/TileExport/otbTileExportModule.cxx:42
+msgid "Input Legend"
+msgstr ""
+
+#: Code/Modules/TileExport/otbTileExportModule.cxx:43
+msgid "Input Logos"
 msgstr ""
 
 #: Code/Modules/FeatureExtraction/otbFeatureExtractionModule.cxx:45
@@ -6578,23 +6981,23 @@ msgstr ""
 msgid "Image to cluster"
 msgstr ""
 
-#: Code/Modules/KMeans/otbKMeansModule.cxx:117
+#: Code/Modules/KMeans/otbKMeansModule.cxx:116
 msgid "Generating decision tree"
 msgstr ""
 
-#: Code/Modules/KMeans/otbKMeansModule.cxx:253
+#: Code/Modules/KMeans/otbKMeansModule.cxx:254
 msgid "Tree generated"
 msgstr ""
 
-#: Code/Modules/KMeans/otbKMeansModule.cxx:262
+#: Code/Modules/KMeans/otbKMeansModule.cxx:263
 msgid "Optimization ended"
 msgstr ""
 
-#: Code/Modules/KMeans/otbKMeansModule.cxx:289
+#: Code/Modules/KMeans/otbKMeansModule.cxx:290
 msgid "The labeled image from kmeans classification"
 msgstr ""
 
-#: Code/Modules/KMeans/otbKMeansModule.cxx:291
+#: Code/Modules/KMeans/otbKMeansModule.cxx:292
 msgid "The clustered image from kmeans classification"
 msgstr ""
 
@@ -6602,46 +7005,54 @@ msgstr ""
 msgid "Image to apply MeanShift on"
 msgstr ""
 
-#: Code/Modules/MeanShift/otbMeanShiftModule.cxx:103
+#: Code/Modules/MeanShift/otbMeanShiftModule.cxx:102
 msgid "Result of the MeanShift filtering"
 msgstr ""
 
-#: Code/Modules/MeanShift/otbMeanShiftModule.cxx:106
+#: Code/Modules/MeanShift/otbMeanShiftModule.cxx:105
 msgid "Result of the MeanShift clustering"
 msgstr ""
 
-#: Code/Modules/MeanShift/otbMeanShiftModule.cxx:109
+#: Code/Modules/MeanShift/otbMeanShiftModule.cxx:108
 msgid "Result of the MeanShift labeling"
 msgstr ""
 
-#: Code/Modules/MeanShift/otbMeanShiftModule.cxx:112
+#: Code/Modules/MeanShift/otbMeanShiftModule.cxx:111
 msgid "Cluster image boundaries"
 msgstr ""
 
-#: Code/Modules/Threshold/otbThresholdModule.cxx:106
+#: Code/Modules/Threshold/otbThresholdModule.cxx:104
 msgid "Image to threshold"
 msgstr ""
 
-#: Code/Modules/Threshold/otbThresholdModule.cxx:137
-#: Code/Modules/Viewer/otbViewerModule.cxx:256
+#: Code/Modules/Threshold/otbThresholdModule.cxx:135
+#: Code/Modules/Viewer/otbViewerModule.cxx:250
 msgid "Generating QuickLook ..."
 msgstr ""
 
-#: Code/Modules/Threshold/otbThresholdModule.cxx:317
-#: Code/Modules/Threshold/otbThresholdModule.cxx:321
+#: Code/Modules/Threshold/otbThresholdModule.cxx:320
+#: Code/Modules/Threshold/otbThresholdModule.cxx:324
 msgid "Thresholded image"
 msgstr ""
 
-#: Code/Modules/SARIntensity/otbSarIntensityModule.cxx:31
+#: Code/Modules/SARIntensity/otbSarIntensityModule.cxx:30
 msgid "Complex image to extract intensity from"
 msgstr ""
 
-#: Code/Modules/SARIntensity/otbSarIntensityModule.cxx:72
+#: Code/Modules/SARIntensity/otbSarIntensityModule.cxx:71
 msgid "Intensity of the complex image"
 msgstr ""
 
 #: Code/Modules/SARIntensity/otbSarIntensityModule.cxx:73
 msgid "Log10-intensity of the complex image"
+msgstr ""
+
+#: Code/Modules/ObjectCounting/otbObjectCountingModule.cxx:42
+msgid "Image to apply ObjectCounting on"
+msgstr ""
+
+#: Code/Modules/ObjectCounting/otbObjectCountingModule.cxx:101
+msgid "Result of the ObjectCounting labeling"
 msgstr ""
 
 #: Code/Modules/ChangeDetection/otbChangeDetectionModule.cxx:35
@@ -6654,6 +7065,38 @@ msgstr ""
 
 #: Code/Modules/ChangeDetection/otbChangeDetectionModule.cxx:108
 msgid "Change image Label"
+msgstr ""
+
+#: Code/Modules/OpticalCalibration/otbOpticalCalibrationModule.cxx:40
+msgid "Image to apply OpticalCalibration on"
+msgstr ""
+
+#: Code/Modules/OpticalCalibration/otbOpticalCalibrationModule.cxx:488
+msgid "Luminance image"
+msgstr ""
+
+#: Code/Modules/OpticalCalibration/otbOpticalCalibrationModule.cxx:504
+msgid "TOA image (*1000)"
+msgstr ""
+
+#: Code/Modules/OpticalCalibration/otbOpticalCalibrationModule.cxx:505
+msgid "TOC image (*1000)"
+msgstr ""
+
+#: Code/Modules/OpticalCalibration/otbOpticalCalibrationModule.cxx:507
+msgid "Difference TOA-TOC image (*1000)"
+msgstr ""
+
+#: Code/Modules/OpticalCalibration/otbOpticalCalibrationModule.cxx:511
+msgid "TOA Image"
+msgstr ""
+
+#: Code/Modules/OpticalCalibration/otbOpticalCalibrationModule.cxx:513
+msgid "TOC Image"
+msgstr ""
+
+#: Code/Modules/OpticalCalibration/otbOpticalCalibrationModule.cxx:515
+msgid "Difference TOA-TOC image"
 msgstr ""
 
 #: Code/Modules/Viewer/otbViewerModule.cxx:76
@@ -6672,7 +7115,7 @@ msgstr ""
 msgid "Vector data to display"
 msgstr ""
 
-#: Code/Modules/Viewer/otbViewerModule.cxx:618
+#: Code/Modules/Viewer/otbViewerModule.cxx:612
 msgid "Changed class color"
 msgstr ""
 
@@ -6696,10 +7139,10 @@ msgstr ""
 msgid "This is my multiple input"
 msgstr ""
 
-#: StarterKit/otbExampleModule.cxx:126
+#: StarterKit/otbExampleModule.cxx:124
 msgid "This is my image output"
 msgstr ""
 
-#: StarterKit/otbExampleModule.cxx:131
+#: StarterKit/otbExampleModule.cxx:129
 msgid "These are my pointset outputs"
 msgstr ""
