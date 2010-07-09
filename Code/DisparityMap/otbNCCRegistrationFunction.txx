@@ -194,14 +194,14 @@ NCCRegistrationFunction<TFixedImage, TMovingImage, TDeformationField>
 
       typedef typename TDeformationField::PixelType DeformationPixelType;
 
-      // Edited by OTB developpers
+      // Edited by OTB developers
       DeformationPixelType vec;
       vec.Fill(0);
       if (this->GetDeformationField()->GetBufferedRegion().IsInside(index))
         {
         vec = this->GetDeformationField()->GetPixel(index);
         }
-      // End Edited by OTB developpers
+      // End Edited by OTB developers
 
       for (j = 0; j < ImageDimension; ++j)
         {

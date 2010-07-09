@@ -127,7 +127,7 @@ namespace otb
     }
 #endif
 
-/** This macro is used to control condition. It use ONLY by the OTB developpers
+/** This macro is used to control condition. It use ONLY by the OTB developers
   *
   */
 #define otbControlConditionTestMacro(condition, message) \

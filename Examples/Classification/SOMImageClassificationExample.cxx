@@ -23,7 +23,7 @@
 // introduces the limitations of not being able to use streaming and
 // being able to know at compilation time the number of bands of the
 // image to be classified. In OTB we have avoided this limitation by
-// developping the \doxygen{otb}{SOMImageClassificationFilter}. In
+// developing the \doxygen{otb}{SOMImageClassificationFilter}. In
 // this example we will illustrate its use. We start by including the
 // appropriate header file.
 //
