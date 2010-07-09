@@ -11,7 +11,7 @@ etc. They can also be measures : moments, textures, etc.
 \subsection{Haralick Descriptors}
 
 This example illustrates the use of the \doxygen{otb}{ScalarImageToTexturesFilter},
-which compute the standard Haralick's textural features presented in table~\ref{tab:haralickStandardFeatures},
+which compute the standard Haralick's textural features~\cite{Haralick1973} presented in table~\ref{tab:haralickStandardFeatures},
 where $\mu_t$ and $\sigma_t$ are the mean and standard deviation of the row
 (or column, due to symmetry) sums, $ \mu =  $ (weighted pixel average)
 $ = \sum_{i,j}i \cdot g(i, j) =\sum_{i,j}j \cdot g(i, j) $ due to matrix summetry, and
@@ -54,7 +54,7 @@ Haralick's Correlation & $ f_8 = \frac{\sum_{i,j}(i, j) g(i, j) -\mu_t^2}{\sigma
 & \\
 \hline
 \end{tabular}
-\itkcaption[Haralick features]{Haralick features available in \doxygen{otb}{ScalarImageToTexturesFilter}}
+\itkcaption[Haralick features]{Haralick features~\cite{Haralick1973} available in \doxygen{otb}{ScalarImageToTexturesFilter}}
 \end{center}
 \label{tab:haralickStandardFeatures}
 \end{table}
