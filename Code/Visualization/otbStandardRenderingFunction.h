@@ -118,7 +118,7 @@ public:
   typedef typename PixelRepresentationFunctionType::Pointer         PixelRepresentationFunctionPointerType;
   typedef typename PixelRepresentationFunctionType::ChannelListType ChannelListType;
 
-  typedef typename itk::MetaDataDictionary MetaDataDictionaryType;
+  typedef itk::MetaDataDictionary MetaDataDictionaryType;
 
   /** Convert the input pixel to a pixel representation that can be displayed on
     *  RGB. For example, channel selection, modulus computation, etc.

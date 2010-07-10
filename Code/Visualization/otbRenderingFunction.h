@@ -89,7 +89,7 @@ public:
 
   typedef  itk::Array<double> ParametersType;
 
-  typedef typename itk::MetaDataDictionary MetaDataDictionaryType;
+  typedef itk::MetaDataDictionary MetaDataDictionaryType;
 
   /** Evaluate method: required interface */
   virtual OutputPixelType Evaluate(const PixelType&  spixel) const

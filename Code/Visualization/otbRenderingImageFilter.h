@@ -62,7 +62,7 @@ public:
   typedef itk::RGBPixel<ScalarPixelType>                    RGBPixelType;
   typedef itk::RGBAPixel<ScalarPixelType>                   RGBAPixelType;
 
-  typedef typename itk::MetaDataDictionary MetaDataDictionaryType;
+  typedef itk::MetaDataDictionary MetaDataDictionaryType;
 
   /** Pixel operator */
   inline TRGBPixel operator ()(const PixelType& pixel) const
