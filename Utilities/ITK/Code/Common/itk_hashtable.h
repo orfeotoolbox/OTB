@@ -471,7 +471,9 @@ public:
 
   const_iterator end() const { return const_iterator((node*)0, this); }
 
+#if _MSC_VER != 1600
   friend bool operator==ITK_FRIEND_TEMPLATE_FUNCTION_ARGUMENT(self)(const self&,const self&);
+#endif
 
 public:
 
@@ -1144,14 +1146,17 @@ void hashtable_base<Value, Alloc>::copy_from(const hashtable_base<Value, Alloc>&
 
 // A few compatability fixes.  Placed here for automatic include in
 // both the hash_set and the hash_map sources.
+
 # if defined (_MSC_VER) || defined(__BORLANDC__) || ((defined(__ICC)||defined(__ECC)) && defined(linux))
 namespace std
 {
+#if _MSC_VER != 1600
 template <class T>
 struct identity : public std::unary_function<T, T> {
 public:
   const T& operator()(const T& x) const { return x; }
 };
+#endif
 }
 
 template <class _Pair>
