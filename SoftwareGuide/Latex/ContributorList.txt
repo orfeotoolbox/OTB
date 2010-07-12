@@ -1,6 +1,6 @@
 Jordi Inglada (CNES)
 Thomas Feuvrier (CS)
-Julien Michel (CS)
+Julien Michel (CS then CNES)
 Romain Garrigues (CS)
 Emmanuel Christophe (CNES then CRISP)
 Cyrille Valladeau (CS)
