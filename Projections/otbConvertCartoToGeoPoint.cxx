@@ -96,7 +96,7 @@ int generic_main_carto_geo(TMapProjection* mapProjection, otb::CommandLineArgume
   }
   return EXIT_SUCCESS;
 
-}//Fin main()
+}//End main()
 
 
 
