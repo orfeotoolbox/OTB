@@ -11,7 +11,6 @@
 
 SET(Mercurial_FOUND FALSE)
 SET(Mercurial_HG_FOUND FALSE)
-SET(Mercurial_HG_PROJECT FALSE)
 
 FIND_PROGRAM(Mercurial_HG_EXECUTABLE hg
   DOC "mercurial command line client")
@@ -44,15 +43,14 @@ IF(Mercurial_HG_EXECUTABLE)
       OUTPUT_STRIP_TRAILING_WHITESPACE)
 
     IF(NOT ${Mercurial_hg_identify_result} EQUAL 0)
-      #MESSAGE(WARNING "Command \"${Mercurial_HG_EXECUTABLE} identify ${dir}\" failed with output:\n${Mercurial_hg_identify_error}")
-      SET(Mercurial_HG_PROJECT FALSE)
+      MESSAGE(SEND_ERROR "Command \"${Mercurial_HG_EXECUTABLE} identify ${dir}\" failed with output:\n${Mercurial_hg_identify_error}")
     ELSE(NOT ${Mercurial_hg_identify_result} EQUAL 0)
 
       STRING(REGEX REPLACE "^(.*\n)?Mercurial Distributed SCM [(]version ([.0-9]+).*"
         "\\2" Mercurial_VERSION_HG "${Mercurial_VERSION_HG}")
       STRING(REGEX REPLACE "^(.*\n)?([0-9a-f]+).*"
         "\\2" ${prefix}_WC_REVISION "${${prefix}_WC_IDENTIFY}")
-    SET(Mercurial_HG_PROJECT TRUE)
+
     ENDIF(NOT ${Mercurial_hg_identify_result} EQUAL 0)
 
     # restore the previous LC_ALL
