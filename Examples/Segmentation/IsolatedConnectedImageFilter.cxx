@@ -22,10 +22,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#ifdef __BORLANDC__
-#define ITK_LEAN_AND_MEAN
-#endif
-
 //  INPUTS: {QB_Suburb.png}
 //  OUTPUTS: {ConnectedThresholdOutput1.png}
 //  110 38 50 100

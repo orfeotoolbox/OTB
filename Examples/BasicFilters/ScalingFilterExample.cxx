@@ -19,10 +19,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#ifdef __BORLANDC__
-#define ITK_LEAN_AND_MEAN
-#endif
-
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {QB_Toulouse_Ortho_PAN.tif}
 //    OUTPUTS: {QB_Toulouse_Ortho_PAN_rescaled.png}, {QB_Toulouse_Ortho_PAN_casted.png}

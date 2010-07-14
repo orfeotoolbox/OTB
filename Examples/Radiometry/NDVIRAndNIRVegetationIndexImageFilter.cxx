@@ -19,10 +19,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#ifdef __BORLANDC__
-#define ITK_LEAN_AND_MEAN
-#endif
-
 //  Software Guide : BeginCommandLineArgs
 //  INPUTS: {NDVI_2.hdr} , {NDVI_3.hdr}
 //  OUTPUTS: {NDVIRAndNIRVegetationIndex.tif} , {pretty_Red.png} , {pretty_NIR.png} , {pretty_NDVIRAndNIRVegetationIndex.png}

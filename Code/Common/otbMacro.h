@@ -41,9 +41,6 @@ namespace otb
 /** This macro is used to print debug (or other information). They are
  * also used to catch errors, etc. Example usage looks like:
  * itkDebugMacro(<< "this is debug info" << this->SomeVariable); */
-#if defined(OTB_LEAN_AND_MEAN) || defined(__BORLANDC__)
-#define otbDebugMacro(x)
-#else
 #define otbDebugMacro(x) itkDebugMacro(x)
 /*  { if ( this->GetDebug() && *::itk::Object::GetGlobalWarningDisplay())   \
     { ::itk::OStringStream itkmsg; \
@@ -52,11 +49,7 @@ namespace otb
              << "\n\n"; \
       ::itk::OutputWindowDisplayDebugText(itkmsg.str().c_str());} \
 }*/
-#endif
 
-#if defined(OTB_LEAN_AND_MEAN) || defined(__BORLANDC__)
-#define otbMsgDebugMacro(x)
-#else
 #define otbMsgDebugMacro(x) \
     { \
     if (this->GetDebug() && ::itk::Object::GetGlobalWarningDisplay())   \
@@ -66,11 +59,8 @@ namespace otb
       ::itk::OutputWindowDisplayDebugText(itkmsg.str().c_str()); \
       } \
     }
-#endif
 
-#if defined(OTB_LEAN_AND_MEAN) || defined(__BORLANDC__)
-#define otbGenericMsgDebugMacro(x)
-#else
+
 #ifndef NDEBUG
 #define otbGenericMsgDebugMacro(x) \
     {  \
@@ -84,16 +74,12 @@ namespace otb
 #else
 #define otbGenericMsgDebugMacro(x)
 #endif
-#endif
 
 #define otbGenericMsgTestingMacro(x) \
     {  \
     std::cout x << std::endl; \
     }
 
-#if defined(OTB_LEAN_AND_MEAN) || defined(__BORLANDC__)
-#define otbMsgDevMacro(x)
-#else
 #ifdef OTB_SHOW_ALL_MSG_DEBUG
 #define otbMsgDevMacro(x) \
     { \
@@ -106,14 +92,10 @@ namespace otb
 #else
 #define otbMsgDevMacro(x)
 #endif
-#endif
 
 /** This macro is used to print warning information (i.e., unusual circumstance
  * but not necessarily fatal.) Example usage looks like:
  * itkWarningMacro(<< "this is warning info" << this->SomeVariable); */
-#ifdef OTB_LEAN_AND_MEAN
-#define otbWarningMacro(x)
-#else
 #define otbWarningMacro(x) \
     { \
     if (itk::Object::GetGlobalWarningDisplay()) \
@@ -125,7 +107,6 @@ namespace otb
       itk::OutputWindowDisplayWarningText(itkmsg.str().c_str()); \
       } \
     }
-#endif
 
 /** This macro is used to control condition. It use ONLY by the OTB developers
   *

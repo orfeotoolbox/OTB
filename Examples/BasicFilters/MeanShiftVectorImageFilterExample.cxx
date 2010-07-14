@@ -20,10 +20,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#ifdef __BORLANDC__
-#define ITK_LEAN_AND_MEAN
-#endif
-
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {ROI_QB_MUL_1.png}
 //    OUTPUTS: {MSFilteredOutput.tif}, {MSClusteredOutput.tif}, {MSLabeledOutput.tif}, {MSBoundariesOutput.tif}, {MSFilteredOutput-pretty.jpg}, {MSClusteredOutput-pretty.jpg}

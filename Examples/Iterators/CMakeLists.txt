@@ -13,7 +13,6 @@ TARGET_LINK_LIBRARIES(NeighborhoodIterators4 OTBIO OTBCommon   )
 ADD_EXECUTABLE(NeighborhoodIterators5 NeighborhoodIterators5.cxx)
 TARGET_LINK_LIBRARIES(NeighborhoodIterators5 OTBIO OTBCommon   )
 
-IF(NOT BORLAND)
 ADD_EXECUTABLE(NeighborhoodIterators1 NeighborhoodIterators1.cxx)
 TARGET_LINK_LIBRARIES(NeighborhoodIterators1 OTBIO OTBCommon   )
 
@@ -49,8 +48,6 @@ TARGET_LINK_LIBRARIES(ShapedNeighborhoodIterators2 ITKAlgorithms ITKBasicFilters
 
 ADD_EXECUTABLE(IteratorsExamples IteratorsExamples.cxx )
 TARGET_LINK_LIBRARIES(IteratorsExamples OTBIO OTBCommon ITKBasicFilters )
-
-ENDIF(NOT BORLAND)
 
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

@@ -19,10 +19,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#ifdef __BORLANDC__
-#define ITK_LEAN_AND_MEAN
-#endif
-
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {QB_Suburb.png}, {QB_SuburbR10X13Y17.png}
 //    OUTPUTS: {AffineTransformationOutput.png}, {AffineTransformationTxtOutput.txt}

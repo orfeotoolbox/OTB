@@ -20,10 +20,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#ifdef __BORLANDC__
-#define ITK_LEAN_AND_MEAN
-#endif
-
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {ROI_QB_MUL_1.png}, {ROI_mask_multi.png}
 //    OUTPUTS: {ROI_QB_MUL_1_SVN_CLASS_MULTI.png}, {ROI_QB_MUL_1_SVN_CLASS_MULTI_Rescaled.jpg}

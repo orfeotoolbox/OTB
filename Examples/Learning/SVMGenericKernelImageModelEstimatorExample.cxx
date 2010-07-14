@@ -22,10 +22,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#ifdef __BORLANDC__
-#define ITK_LEAN_AND_MEAN
-#endif
-
 //  Software Guide : BeginLatex
 // This example illustrates the modifications to be added to the
 // use of \doxygen{otb}{SVMImageModelEstimator} in order to add a
