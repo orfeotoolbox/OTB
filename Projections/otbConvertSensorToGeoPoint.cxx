@@ -111,26 +111,29 @@ int main(int argc, char* argv[])
     else
       {
       // find the four corners
-      PointType point;
-      point[0] = reader->GetOutput()->GetLargestPossibleRegion().GetIndex()[0];
-      point[1] = reader->GetOutput()->GetLargestPossibleRegion().GetIndex()[1];
-      points.push_back(point);
+    PointType point;
+    point[0] = reader->GetOutput()->GetLargestPossibleRegion().GetIndex()[0];
+    point[1] = reader->GetOutput()->GetLargestPossibleRegion().GetIndex()[1]
+             + reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]-1;
+    points.push_back(point);
+
+    point[0] = reader->GetOutput()->GetLargestPossibleRegion().GetIndex()[0]
+             + reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0]-1;
+    point[1] = reader->GetOutput()->GetLargestPossibleRegion().GetIndex()[1]
+             + reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]-1;
+    points.push_back(point);
+
 
       point[0] = reader->GetOutput()->GetLargestPossibleRegion().GetIndex()[0]
                + reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0]-1;
       point[1] = reader->GetOutput()->GetLargestPossibleRegion().GetIndex()[1];
       points.push_back(point);
 
+
       point[0] = reader->GetOutput()->GetLargestPossibleRegion().GetIndex()[0];
-      point[1] = reader->GetOutput()->GetLargestPossibleRegion().GetIndex()[1]
-               + reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]-1;
+      point[1] = reader->GetOutput()->GetLargestPossibleRegion().GetIndex()[1];
       points.push_back(point);
 
-      point[0] = reader->GetOutput()->GetLargestPossibleRegion().GetIndex()[0]
-               + reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0]-1;
-      point[1] = reader->GetOutput()->GetLargestPossibleRegion().GetIndex()[1]
-               + reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]-1;
-      points.push_back(point);
 
       }
 
@@ -145,10 +148,12 @@ int main(int argc, char* argv[])
 
       if (!parseResult->IsOptionPresent("--OTBTesting"))
         {
-        std::cout << std::setprecision(10) << "Sensor Point  (x , y)  : (" << points[i][0] << ", " << points[i][1]
-            << ")\n";
-        std::cout << std::setprecision(10) << "Geographic Point (Lat, Lon) : (" << outputPoint[1] << ", "
-            << outputPoint[0] << ")\n\n";
+//        std::cout << std::setprecision(10) << "Sensor Point  (x , y)  : (" << points[i][0] << ", " << points[i][1]
+//            << ")\n";
+//        std::cout << std::setprecision(10) << "Geographic Point (Lat, Lon) : (" << outputPoint[1] << ", "
+//            << outputPoint[0] << ")\n\n";
+      std::cout << std::setprecision(10)  << outputPoint[0] << ", "
+                << outputPoint[1] << "\n";
         }
       else
         {
