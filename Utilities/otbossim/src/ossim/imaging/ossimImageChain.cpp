@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageChain.cpp 16816 2010-03-07 17:23:23Z dburken $
+// $Id: ossimImageChain.cpp 17206 2010-04-25 23:20:40Z dburken $
 #include <algorithm>
 #include <iostream>
 #include <iterator>
@@ -214,7 +214,7 @@ ossimObject* ossimImageChain::getLastObject()
 }
 
 ossimConnectableObject* ossimImageChain::findObject(const ossimId& id,
-                                                    bool recurse)
+                                                    bool /* recurse */)
 {
    std::vector<ossimRefPtr<ossimConnectableObject> >::iterator current =  theImageChainList.begin();
    
@@ -251,7 +251,7 @@ ossimConnectableObject* ossimImageChain::findObject(const ossimId& id,
 }
 
 ossimConnectableObject* ossimImageChain::findObject(const ossimConnectableObject* obj,
-                                                    bool recurse)
+                                                    bool /* recurse */)
 {
    std::vector<ossimRefPtr<ossimConnectableObject> >::iterator current =  theImageChainList.begin();
    
@@ -1653,7 +1653,7 @@ void ossimImageChain::disconnectInputEvent(ossimConnectionEvent& event)
    }
 }
 
-void ossimImageChain::disconnectOutputEvent(ossimConnectionEvent& event)
+void ossimImageChain::disconnectOutputEvent(ossimConnectionEvent& /* event */)
 {
 }
 
@@ -1685,7 +1685,7 @@ void ossimImageChain::connectInputEvent(ossimConnectionEvent& event)
    }
 }
 
-void ossimImageChain::connectOutputEvent(ossimConnectionEvent& event)
+void ossimImageChain::connectOutputEvent(ossimConnectionEvent& /* event */)
 {
 } 
 

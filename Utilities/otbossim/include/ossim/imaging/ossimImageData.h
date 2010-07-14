@@ -9,7 +9,7 @@
 // Description: Container class for a tile of image data.
 //
 //*******************************************************************
-// $Id: ossimImageData.h 16103 2009-12-16 22:06:29Z dburken $
+// $Id: ossimImageData.h 17003 2010-04-12 20:04:07Z dburken $
 #ifndef ossimImageData_HEADER
 #define ossimImageData_HEADER
 
@@ -33,17 +33,53 @@ public:
    {
       /*
        * The COLOR_DISCREPANCY rule directs that the selected band of a pixel
-       * of the destination buffer is to be overwritten if any one of the other 
-       * bands of the same pixel have color values that deviate from the  
-       * color value of the selected band. 
+       * of the destination buffer is to be overwritten if *any* one of the
+       * other bands of the same destination pixel have color values that 
+       * deviate from its color. 
+       * Deprecated in favor of COLOR_DISCREPANCY_OF_ANY_FROM_DEST.
        */
       COLOR_DISCREPANCY = 0,
-      
+
+      /*
+       * The COLOR_DISCREPANCY_OF_ANY_FROM_DEST rule directs that the selected 
+       * band of a pixel of the destination buffer is to be overwritten if 
+       * *any* one of the other bands of the same destination pixel have color 
+       * values that deviate from its color. 
+       * Same as the deprecated COLOR_DISCREPANCY.
+       */
+      COLOR_DISCREPANCY_OF_ANY_FROM_DEST = 1,
+
+      /*
+       * The COLOR_DISCREPANCY_OF_ALL_FROM_DEST rule directs that the selected 
+       * band of a pixel of the destination buffer is to be overwritten only if 
+       * *all* of the other bands of the same destination pixel have color 
+       * values that deviate from its color. 
+       */
+      COLOR_DISCREPANCY_OF_ALL_FROM_DEST = 2,
+
+      /*
+       * The COLOR_EQUALITY_OF_ANY_TO_SRC rule directs that the selected 
+       * band of a pixel of the destination buffer is to be overwritten if 
+       * *any* one of the other bands of the same destination pixel have color 
+       * values that are equal to the color of the selected band of the source
+       * pixel. 
+       */
+      COLOR_EQUALITY_OF_ANY_TO_SRC = 3,
+
+      /*
+       * The COLOR_EQUALITY_OF_ALL_TO_SRC rule directs that the selected 
+       * band of a pixel of the destination buffer is to be overwritten only if 
+       * *all* of the other bands of the same destination pixel have color 
+       * values that are equal to the color of the selected band of the source
+       * pixel. 
+       */
+      COLOR_EQUALITY_OF_ALL_TO_SRC = 4,
+
       /*
        * The selected band of the destination buffer is to be overwritten 
        * by the selected band of the source image data (no questions asked).
        */
-      NULL_RULE = 1
+      NULL_RULE = 5
    };
 
    /** @brief copy constructor */
@@ -615,10 +651,27 @@ public:
     *
     * Currently the rules available in OverwriteBandRule are: 
     *
-    * The COLOR_DISCREPANCY rule directs that the selected band of a pixel
-    * of the destination buffer is to be overwritten if any one of the other 
-    * bands of the same pixel have color values that deviate from the  
-    * color value of the selected band. 
+    * The COLOR_DISCREPANCY_OF_ANY_FROM_DEST rule directs that the selected 
+    * band of a pixel of the destination buffer is to be overwritten if *any* 
+    * one of the other bands of the same destination pixel have color values 
+    * that deviate from its color. Same as the deprecated COLOR_DISCREPANCY.
+    *
+    * The COLOR_DISCREPANCY_OF_ALL_FROM_DEST rule directs that the selected 
+    * band of a pixel of the destination buffer is to be overwritten only if 
+    * *all* of the other bands of the same destination pixel have color values
+    * that deviate from its color. 
+    *
+    * The COLOR_EQUALITY_OF_ANY_TO_SRC rule directs that the selected 
+    * band of a pixel of the destination buffer is to be overwritten if 
+    * *any* one of the other bands of the same destination pixel have color 
+    * values that are equal to the color of the selected band of the source
+    * pixel. 
+    *
+    * The COLOR_EQUALITY_OF_ALL_TO_SRC rule directs that the selected 
+    * band of a pixel of the destination buffer is to be overwritten only if 
+    * *all* of the other bands of the same destination pixel have color 
+    * values that are equal to the color of the selected band of the source
+    * pixel. 
     *
     * The NULL_RULE rule directs that the selected band of the 
     * destination buffer is to be overwritten by the selected band of the 
@@ -652,10 +705,27 @@ public:
     *
     * Currently the rules available in OverwriteBandRule are: 
     *
-    * The COLOR_DISCREPANCY rule directs that the selected band of a pixel
-    * of the destination buffer is to be overwritten if any one of the other 
-    * bands of the same pixel have color values that deviate from the  
-    * color value of the selected band. 
+    * The COLOR_DISCREPANCY_OF_ANY_FROM_DEST rule directs that the selected 
+    * band of a pixel of the destination buffer is to be overwritten if *any* 
+    * one of the other bands of the same destination pixel have color values 
+    * that deviate from its color. Same as the deprecated COLOR_DISCREPANCY.
+    *
+    * The COLOR_DISCREPANCY_OF_ALL_FROM_DEST rule directs that the selected 
+    * band of a pixel of the destination buffer is to be overwritten only if 
+    * *all* of the other bands of the same destination pixel have color values
+    * that deviate from its color. 
+    *
+    * The COLOR_EQUALITY_OF_ANY_TO_SRC rule directs that the selected 
+    * band of a pixel of the destination buffer is to be overwritten if 
+    * *any* one of the other bands of the same destination pixel have color 
+    * values that are equal to the color of the selected band of the source
+    * pixel. 
+    *
+    * The COLOR_EQUALITY_OF_ALL_TO_SRC rule directs that the selected 
+    * band of a pixel of the destination buffer is to be overwritten only if 
+    * *all* of the other bands of the same destination pixel have color 
+    * values that are equal to the color of the selected band of the source
+    * pixel. 
     *
     * The NULL_RULE rule directs that the selected band of the 
     * destination buffer is to be overwritten by the selected band of the 

@@ -395,20 +395,20 @@ void display_message(char *str)
 
 #else
 
-void displaymessage( char *string, ... )
+void displaymessage( char *s, ... )
 {
    int         i, nlines;
    char **text;
    va_list arglist;
 
-   va_start(arglist,string);
+   va_start(arglist,s);
    nlines = 1;
    while (va_arg(arglist,char *)) nlines++;
    va_end(arglist);
 
    text = (char **)vpfmalloc((nlines+1)*sizeof(char *));
-   text[0] = string;
-   va_start(arglist,string);
+   text[0] = s;
+   va_start(arglist,s);
    for (i=1;i<nlines;i++) {
       text[i] = va_arg(arglist,char *);
    }

@@ -8,7 +8,7 @@
 // AUTHOR: Garrett Potts
 //
 //*****************************************************************************
-//  $Id: ossimRpcSolver.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
+//  $Id: ossimRpcSolver.cpp 17206 2010-04-25 23:20:40Z dburken $
 
 #include <cstdlib>
 #include <ctime>
@@ -143,7 +143,7 @@ void ossimRpcSolver::solveCoefficients(const ossimDrect& imageBounds,
 
 void ossimRpcSolver::solveCoefficients(const std::vector<ossimDpt>& imagePoints,
                                        const std::vector<ossimGpt>& groundControlPoints,
-                                       const ossimDpt& imageShift)
+                                       const ossimDpt& /* imageShift */)
 {
    if((imagePoints.size() != groundControlPoints.size()))
    {

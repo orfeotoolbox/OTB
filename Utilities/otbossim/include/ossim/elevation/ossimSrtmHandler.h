@@ -9,7 +9,7 @@
 // Shuttle Radar Topography Mission (SRTM) elevation source.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimSrtmHandler.h 16356 2010-01-14 21:30:03Z dburken $
+// $Id: ossimSrtmHandler.h 17195 2010-04-23 17:32:18Z dburken $
 #ifndef ossimSrtmHandler_HEADER
 #define ossimSrtmHandler_HEADER
 
@@ -91,16 +91,14 @@ protected:
    double           m_lonSpacing;   // degrees
    ossimDpt         m_nwCornerPost; // cell origin;
    ossimEndian*     m_swapper;
-   ossimScalarType m_scalarType;
+   ossimScalarType  m_scalarType;
    
    mutable std::vector<ossim_int8> m_memoryMap;
    
    template <class T>
-   double getHeightAboveMSLFileTemplate(T dummy,
-                                    const ossimGpt& gpt);
+   double getHeightAboveMSLFileTemplate(T dummy, const ossimGpt& gpt);
    template <class T>
-   double getHeightAboveMSLMemoryTemplate(T dummy,
-                                          const ossimGpt& gpt);
+   double getHeightAboveMSLMemoryTemplate(T dummy, const ossimGpt& gpt);
    TYPE_DATA
 };
 

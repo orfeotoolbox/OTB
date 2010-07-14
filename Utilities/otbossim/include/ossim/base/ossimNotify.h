@@ -7,7 +7,7 @@
 //
 // Contains class declaration for ossimNotify
 //-------------------------------------------------------------------
-//  $Id: ossimNotify.h 16636 2010-02-22 19:02:00Z dburken $
+//  $Id: ossimNotify.h 17195 2010-04-23 17:32:18Z dburken $
 #ifndef ossimNotify_HEADER
 #define ossimNotify_HEADER
 #include <iostream>
@@ -94,7 +94,7 @@ OSSIMDLLEXPORT ossimNotifyFlags ossimGetNotifyFlags();
  */
 OSSIMDLLEXPORT void  ossimSetError( const char *className,
                                     ossim_int32 error,
-                                    const char *fmtString, ...);
+                                    const char *fmtString=0, ...);
 
 /**
  * This is for general warnings and information feedback
@@ -103,6 +103,6 @@ OSSIMDLLEXPORT void  ossimSetError( const char *className,
  * following arguments) to prepare an error message.
  */
 OSSIMDLLEXPORT void  ossimSetInfo( const char *className,
-                                   const char *fmtString, ...);
+                                   const char *fmtString=0, ...);
 }
 #endif

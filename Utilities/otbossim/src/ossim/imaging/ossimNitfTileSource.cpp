@@ -9,7 +9,7 @@
 // Description:  Contains class definition for ossimNitfTileSource.
 // 
 //*******************************************************************
-//  $Id: ossimNitfTileSource.cpp 16314 2010-01-10 18:25:28Z dburken $
+//  $Id: ossimNitfTileSource.cpp 17598 2010-06-19 15:37:46Z dburken $
 #include <jerror.h>
 
 #include <algorithm> /* for std::fill */
@@ -45,7 +45,7 @@
 RTTI_DEF1_INST(ossimNitfTileSource, "ossimNitfTileSource", ossimImageHandler)
 
 #ifdef OSSIM_ID_ENABLED
-   static const char OSSIM_ID[] = "$Id: ossimNitfTileSource.cpp 16314 2010-01-10 18:25:28Z dburken $";
+   static const char OSSIM_ID[] = "$Id: ossimNitfTileSource.cpp 17598 2010-06-19 15:37:46Z dburken $";
 #endif
    
 //---
@@ -323,12 +323,8 @@ bool ossimNitfTileSource::parseFile()
       }
    }
    
-   // initialize the lut to the current entry if the current entry has a lut.
-   //
-   if(theNitfImageHeader[theCurrentEntry]->getRepresentation().contains("LUT"))
-   {
-      theLut = theNitfImageHeader[theCurrentEntry]->createLut(0);
-   }
+   // Initialize the lut to the current entry if the current entry has a lut.
+   initializeLut();
    
    if (traceDebug())
    {
@@ -461,6 +457,7 @@ bool ossimNitfTileSource::allocate()
 
 bool ossimNitfTileSource::canUncompress(const ossimNitfImageHeader* hdr) const
 {
+
    bool result = false;
    if (hdr)
    {
@@ -1011,13 +1008,16 @@ bool ossimNitfTileSource::initializeImageRect()
    
    theBlockImageRect = hdr->getBlockImageRect();
    theImageRect      = hdr->getImageRect();
-   
+
    if (traceDebug())
    {
+      ossimIpt iloc;
+      hdr->getImageLocation(iloc); // for temp debug (drb)
       ossimNotify(ossimNotifyLevel_DEBUG)
          << "ossimNitfTileSource::initializeImageRect DEBUG:"
-         << "\nImage Rect:        " << theImageRect
-         << "\nBlock rect:        " << theBlockImageRect
+         << "\noffset from ILOC field:  " << iloc
+         << "\nImage Rect:              " << theImageRect
+         << "\nBlock rect:              " << theBlockImageRect
          << endl;
    }
    return true;
@@ -1151,6 +1151,21 @@ void ossimNitfTileSource::initializeOutputTile()
    theTile->initialize();
 }
 
+void ossimNitfTileSource::initializeLut()
+{
+   const ossimNitfImageHeader* hdr = getCurrentImageHeader();
+   if (hdr)
+   {
+      if ( hdr->hasLut() )
+      {
+         //---
+         // NOTE: Only band 0 ??? (drb)
+         //---
+         theLut = theNitfImageHeader[theCurrentEntry]->createLut(0);
+      }
+   }
+}
+
 ossimRefPtr<ossimImageData> ossimNitfTileSource::getTile(
    const  ossimIrect& tileRect, ossim_uint32 resLevel)
 {
@@ -1198,7 +1213,7 @@ ossimRefPtr<ossimImageData> ossimNitfTileSource::getTile(
       // Start with a blank tile.
       theTile->makeBlank();
    }
-   
+
    //---
    // See if any point of the requested tile is in the image.
    //---
@@ -1215,7 +1230,7 @@ ossimRefPtr<ossimImageData> ossimNitfTileSource::getTile(
          // Note: Clip the cache tile(nitf block) to the image clipRect since
          // there are nitf blocks that go beyond the image dimensions, i.e.,
          // edge blocks.
-         //---        
+         //---
          ossimIrect cr =
                theCacheTile->getImageRectangle().clipToRect(clipRect);
          theTile->loadTile(theCacheTile->getBuf(),
@@ -1343,6 +1358,7 @@ bool ossimNitfTileSource::loadBlockFromCache(ossim_uint32 x, ossim_uint32 y,
          result = true;
       }
    }
+   
    return result;
 }
 
@@ -1758,7 +1774,6 @@ bool ossimNitfTileSource::getPosition(std::streamoff& streamPosition,
 
    ossim_uint64 blockNumber = getBlockNumber(ossimIpt(x,y));
    
-
 #if 0
    cout << "ossimNitfTileSource::getPosition blockNumber:  "
         << blockNumber << endl;
@@ -2089,7 +2104,7 @@ ossim_uint32 ossimNitfTileSource::getBlockNumber(const ossimIpt& block_origin) c
    return blockNumber;
 }
 
-ossim_uint32 ossimNitfTileSource::getPartialReadSize(const ossimIpt& blockOrigin)const
+ossim_uint32 ossimNitfTileSource::getPartialReadSize(const ossimIpt& /* blockOrigin */)const
 {
    ossim_uint32 result = 0;
    const ossimNitfImageHeader* hdr = getCurrentImageHeader();
@@ -2247,6 +2262,7 @@ bool ossimNitfTileSource::setCurrentEntry(ossim_uint32 entryIdx)
       {
          theLut = theNitfImageHeader[theCurrentEntry]->createLut(0);
       }
+      
       
    }
    return result;
@@ -2548,8 +2564,10 @@ void ossimNitfTileSource::vqUncompressC4(
 
    const ossim_uint32 BANDS = destination->getNumberOfBands();
 
-   if( (BANDS!=3) || (!destination->getBuf()) ||
-       (destination->getScalarType()!=OSSIM_UINT8) || !theLut.valid() ||
+   if( ( (BANDS != 1) && (BANDS!=3) ) ||
+       (!destination->getBuf()) ||
+       (destination->getScalarType()!=OSSIM_UINT8) ||
+       !theLut.valid() ||
        (theLut->getNumberOfBands() != BANDS) )
    {
       return;
@@ -2806,6 +2824,8 @@ void ossimNitfTileSource::vqUncompressM4(
 
 bool ossimNitfTileSource::scanForJpegBlockOffsets()
 {
+   // return false;
+   
    const ossimNitfImageHeader* hdr = getCurrentImageHeader();
 
    if ( !hdr || (theReadMode != READ_JPEG_BLOCK) || !theFileStr )
@@ -2816,6 +2836,13 @@ bool ossimNitfTileSource::scanForJpegBlockOffsets()
    theNitfBlockOffset.clear();
    theNitfBlockSize.clear();
 
+   //---
+   // Get the totol blocks.
+   // Note:  There can be more than one jpeg image in the nitf.  So after blocks
+   // found equals total_blocks get out.
+   //---
+   ossim_uint32 total_blocks = hdr->getNumberOfBlocksPerRow()*hdr->getNumberOfBlocksPerCol();
+   
    //---
    // NOTE:
    // SOI = 0xffd8 Start of image
@@ -2879,15 +2906,21 @@ bool ossimNitfTileSource::scanForJpegBlockOffsets()
             theNitfBlockSize.push_back(blockSize);
             blockSize = 0;
          }
+
+         //---
+         // Since there can be more than one jpeg entry in a file, breeak out of
+         // loop when we hit block size.
+         //---
+         if ( (theNitfBlockOffset.size() == total_blocks) &&
+              (theNitfBlockSize.size()   == total_blocks) )
+         {
+            break;
+         }
       }
    }
 
    theFileStr.seekg(0, ios::beg);
    theFileStr.clear();
-
-   // We should have the same amount of offsets as we do blocks...
-   ossim_uint32 total_blocks =
-      hdr->getNumberOfBlocksPerRow()*hdr->getNumberOfBlocksPerCol();
    
    if (theNitfBlockOffset.size() != total_blocks)
    {
@@ -2917,6 +2950,16 @@ bool ossimNitfTileSource::scanForJpegBlockOffsets()
 
       return false;
    }
+
+#if 0 /* Please leave for debug. (drb) */
+   ossimNotify(ossimNotifyLevel_WARN) << "current entry: " << theCurrentEntry << "\n";
+   for (ossim_uint32 i = 0; i < total_blocks; ++i)
+   {
+      cout << "theNitfBlockOffset[" << i << "]: " << theNitfBlockOffset[i]
+           << "\ntheNitfBlockSize[" << i << "]: " << theNitfBlockSize[i]
+           << "\n";
+   }
+#endif
 
    return true;
 }
@@ -3026,6 +3069,16 @@ bool ossimNitfTileSource::uncompressJpegBlock(ossim_uint32 x, ossim_uint32 y)
 
    /* Step 5: Start decompressor */
    jpeg_start_decompress(&cinfo);
+
+#if 0 /* Please leave for debug. (drb) */
+   if ( traceDebug() )
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "jpeg cinfo.output_width:  " << cinfo.output_width
+         << "\njpeg cinfo.output_height: " << cinfo.output_height
+         << "\n";
+   }
+#endif
    
    const ossim_uint32 SAMPLES = cinfo.output_width;
 

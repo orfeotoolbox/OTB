@@ -2,9 +2,10 @@
 #include <cstdlib>
 
 #if defined(_WIN32) && !defined(__CYGWIN__)
-#define OSSIM_ENVIRONEMENT_UTILITY_UNIX 0
+#  define OSSIM_ENVIRONMENT_UTILITY_UNIX 0
+#  include <direct.h>
 #else
-#define OSSIM_ENVIRONEMENT_UTILITY_UNIX 1
+#  define OSSIM_ENVIRONMENT_UTILITY_UNIX 1
 #endif
 
 ossimEnvironmentUtility* ossimEnvironmentUtility::theInstance=0;
@@ -53,7 +54,7 @@ ossimFilename ossimEnvironmentUtility::getUserOssimSupportDir()const
 {
    ossimFilename result = getUserDir();
    
-#if OSSIM_ENVIRONEMENT_UTILITY_UNIX
+#if OSSIM_ENVIRONMENT_UTILITY_UNIX
 #   ifdef __APPLE__
    result = result.dirCat("Library/Application Support/ossim");
    
@@ -69,7 +70,7 @@ ossimFilename ossimEnvironmentUtility::getUserOssimSupportDir()const
 
 ossimString   ossimEnvironmentUtility::getUserName()const
 {
-#if OSSIM_ENVIRONEMENT_UTILITY_UNIX
+#if OSSIM_ENVIRONMENT_UTILITY_UNIX
    return getEnvironmentVariable("USER");
 #else
    return getEnvironmentVariable("USERNAME");
@@ -80,7 +81,7 @@ ossimFilename ossimEnvironmentUtility::getUserDir()const
 {
    ossimFilename result;
 
-#if OSSIM_ENVIRONEMENT_UTILITY_UNIX
+#if OSSIM_ENVIRONMENT_UTILITY_UNIX
    result = ossimFilename(getEnvironmentVariable("HOME"));
 #else
    result =ossimFilename(getEnvironmentVariable("USERPROFILE"));
@@ -118,7 +119,7 @@ ossimFilename ossimEnvironmentUtility::getUserOssimPluginDir()const
 ossimFilename ossimEnvironmentUtility::getInstalledOssimSupportDir()const
 {
    ossimFilename result;
-#if OSSIM_ENVIRONEMENT_UTILITY_UNIX
+#if OSSIM_ENVIRONMENT_UTILITY_UNIX
 #   ifdef __APPLE__
    result = "/Library/Application Support/ossim";
 #   else
@@ -147,7 +148,7 @@ ossimFilename ossimEnvironmentUtility::getInstalledOssimPluginDir()const
    ossimFilename result = getInstalledOssimSupportDir();
 
    //Need generic unix plugin location
-#if OSSIM_ENVIRONEMENT_UTILITY_UNIX
+#if OSSIM_ENVIRONMENT_UTILITY_UNIX
 #   ifndef __APPLE__
    return "";
 #   endif
@@ -192,10 +193,12 @@ ossimFilename ossimEnvironmentUtility::getCurrentWorkingDir()const
 {
    ossimFilename result;
 
-#if OSSIM_ENVIRONEMENT_UTILITY_UNIX
+#if OSSIM_ENVIRONMENT_UTILITY_UNIX
    result = getEnvironmentVariable("PWD");
 #else
-   result = getEnvironmentVariable(ossimString("CD"));
+   char buf[512];
+   _getcwd(buf, 512);
+   result = buf;
 #endif
 
    return result;

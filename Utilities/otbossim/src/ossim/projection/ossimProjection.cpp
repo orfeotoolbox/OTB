@@ -8,7 +8,7 @@
 //
 // Base class for all projections.  
 //*******************************************************************
-//  $Id: ossimProjection.cpp 11510 2007-08-06 09:52:07Z dburken $
+//  $Id: ossimProjection.cpp 17206 2010-04-25 23:20:40Z dburken $
 
 #include <iostream>
 #include <iomanip>
@@ -54,8 +54,8 @@ bool ossimProjection::saveState(ossimKeywordlist& kwl,
 //*****************************************************************************
 //  METHOD: ossimProjection::loadState()
 //*****************************************************************************
-bool ossimProjection::loadState(const ossimKeywordlist& kwl,
-                                const char*             prefix)
+bool ossimProjection::loadState(const ossimKeywordlist& /* kwl */,
+                                const char*             /* prefix */)
 {
    return true;
 }
@@ -192,7 +192,7 @@ void ossimProjection::getRoundTripError(const ossimGpt& groundPoint,
    errorResult = ossimDpt(groundPoint) - ossimDpt(tempGround);
 }
 
-void ossimProjection::getGroundClipPoints(ossimGeoPolygon& gpts)const
+void ossimProjection::getGroundClipPoints(ossimGeoPolygon& /* gpts */)const
 {
 }
 

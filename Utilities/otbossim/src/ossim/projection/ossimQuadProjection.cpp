@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 // 
 //********************************************************************
-// $Id: ossimQuadProjection.cpp 11808 2007-10-05 14:58:59Z dburken $
+// $Id: ossimQuadProjection.cpp 17206 2010-04-25 23:20:40Z dburken $
 
 #include <ossim/projection/ossimQuadProjection.h>
 #include <ossim/base/ossimDatumFactory.h>
@@ -397,7 +397,7 @@ bool ossimQuadProjection::loadState(const ossimKeywordlist& kwl,
    return true;
 }
 
-bool ossimQuadProjection::operator==(const ossimProjection& projection) const
+bool ossimQuadProjection::operator==(const ossimProjection& /* projection */) const
 {
    return false;
 }

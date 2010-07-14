@@ -6,7 +6,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimCadrgProjection.cpp 11347 2007-07-23 13:01:59Z gpotts $
+//  $Id: ossimCadrgProjection.cpp 17206 2010-04-25 23:20:40Z dburken $
 #include <ossim/projection/ossimCadrgProjection.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimKeywordlist.h>
@@ -54,7 +54,7 @@ ossimDpt ossimCadrgProjection::worldToLineSample(const ossimGpt &worldPoint)    
    return lineSample;
 }
 
-ossimGpt ossimCadrgProjection::inverse(const ossimDpt &eastingNorthing)const
+ossimGpt ossimCadrgProjection::inverse(const ossimDpt& /* eastingNorthing */)const
 {
    double lat=0.0;
    double lon=0.0;

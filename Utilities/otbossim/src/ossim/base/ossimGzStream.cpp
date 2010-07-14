@@ -18,8 +18,8 @@
 // ============================================================================
 //
 // File          : gzstream.C
-// Revision      : $Revision: 13213 $
-// Revision_date : $Date: 2008-07-24 01:36:39 +0800 (Thu, 24 Jul 2008) $
+// Revision      : $Revision: 17195 $
+// Revision_date : $Date: 2010-04-24 01:32:18 +0800 (Sat, 24 Apr 2010) $
 // Author(s)     : Deepak Bandyopadhyay, Lutz Kettner
 // 
 // Standard streambuf implementation following Nicolai Josuttis, "The 
@@ -199,7 +199,7 @@ int ossimGzStreamBuf::sync() {
 
 ossimGzStreamBuf::pos_type ossimGzStreamBuf::seekoff(off_type t,
                                                      std::ios_base::seekdir dir,
-                                                     std::ios_base::openmode omode)
+                                                     std::ios_base::openmode /* omode */)
 {
    int whence = 0;
    switch(dir)
@@ -325,8 +325,8 @@ ossimOgzStream::ossimOgzStream()
    init(&buf);
 }
 
-ossimOgzStream::ossimOgzStream( const char* name,
-                                std::ios_base::openmode mode )
+ossimOgzStream::ossimOgzStream( const char* /* name */,
+                                std::ios_base::openmode /* mode */)
    : ossimOFStream()
 {
    init(&buf);

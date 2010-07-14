@@ -16,7 +16,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimImageViewProjectionTransform.cpp 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimImageViewProjectionTransform.cpp 17417 2010-05-20 14:33:16Z dburken $
 //
 #include <ossim/projection/ossimImageViewProjectionTransform.h>
 #include <ossim/base/ossimKeywordlist.h>
@@ -60,104 +60,114 @@ ossimImageViewProjectionTransform::~ossimImageViewProjectionTransform()
 //*****************************************************************************
 void ossimImageViewProjectionTransform::imageToView(const ossimDpt& ip, ossimDpt& vp) const
 {
-    // Check for same geometries on input and output (this includes NULL geoms):
-    if (m_ImageGeometry == m_ViewGeometry)
-    {
-        vp = ip;
-        return;
-    }
-
-    // Otherwise we need access to good geoms. Check for a bad geometry object:
-    if (!m_ImageGeometry || !m_ViewGeometry)
-    {
-        vp.makeNan();
-        return;
-    }
-
-    // Check for same projection on input and output sides to save projection to ground:
-    if (m_ImageGeometry->getProjection() == m_ViewGeometry->getProjection())
-    {
-        // Check for possible same 2D transforms as well:
-        if (m_ImageGeometry->getTransform() == m_ViewGeometry->getTransform())
-        {
-            vp = ip;
-            return;
-        }
-
-        // Not the same 2D transform, so just perform local-image -> full-image -> local-view:
-        ossimDpt fp;
-        m_ImageGeometry->localToFullImage(ip, fp);
-        m_ViewGeometry->fullToLocalImage(fp, vp);
-        return;
-    }
-
-    // Completely different left and right side geoms (typical situation). Need to project to ground
-    ossimGpt gp;
-    m_ImageGeometry->localToWorld(ip, gp);
-    m_ViewGeometry->worldToLocal(gp, vp);
-
+   // Check for same geometries on input and output (this includes NULL geoms):
+   if (m_ImageGeometry == m_ViewGeometry)
+   {
+      vp = ip;
+      return;
+   }
+   
+   // Otherwise we need access to good geoms. Check for a bad geometry object:
+   if (!m_ImageGeometry || !m_ViewGeometry)
+   {
+      vp.makeNan();
+      return;
+   }
+   
+   // Check for same projection on input and output sides to save projection to ground:
+   if (m_ImageGeometry->getProjection() == m_ViewGeometry->getProjection())
+   {
+      // Check for possible same 2D transforms as well:
+      if ( (m_ImageGeometry->getTransform() == m_ViewGeometry->getTransform()) &&
+           (m_ImageGeometry->decimationFactor(0) == m_ViewGeometry->decimationFactor(0)) )
+      {
+         vp = ip;
+         return;
+      }
+      
+      // Not the same 2D transform, so just perform local-image -> full-image -> local-view:
+      ossimDpt fp;
+      m_ImageGeometry->rnToFull(ip, 0, fp);
+      m_ViewGeometry->fullToRn(fp, 0, vp);
+      return;
+   }
+   
+   //---
+   // Completely different left and right side geoms (typical situation).
+   // Need to project to ground.
+   //---
+   ossimGpt gp;
+   m_ImageGeometry->localToWorld(ip, gp);
+   m_ViewGeometry->worldToLocal(gp, vp);
+   
 #if 0
-    if (traceDebug())
-    {
-     ossimNotify(ossimNotifyLevel_DEBUG)<<"DEBUG ossimImageViewProjectionTransform::imageToView:"
-        <<"\n    ip: "<<ip
-        <<"\n    gp: "<<gp
-        <<"\n    vp: "<<vp<<std::endl;
-     
-    }
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         <<"DEBUG ossimImageViewProjectionTransform::imageToView:"
+         <<"\n    ip: "<<ip
+         <<"\n    gp: "<<gp
+         <<"\n    vp: "<<vp<<std::endl;
+      
+   }
 #endif
 }
-   
+
 //*****************************************************************************
 //  Other workhorse of the object. Converts view-space to image-space.
 //*****************************************************************************
 void ossimImageViewProjectionTransform::viewToImage(const ossimDpt& vp, ossimDpt& ip) const
 {
-    // Check for same geometries on input and output (this includes NULL geoms):
-    if (m_ImageGeometry == m_ViewGeometry)
-    {
-        ip = vp;
-        return;
-    }
-
-    // Otherwise we need access to good geoms. Check for a bad geometry object:
-    if (!m_ImageGeometry || !m_ViewGeometry)
-    {
-        ip.makeNan();
-        return;
-    }
-
-    // Check for same projection on input and output sides to save projection to ground:
-    if (m_ImageGeometry->getProjection() == m_ViewGeometry->getProjection())
-    {
-        // Check for possible same 2D transforms as well:
-        if (m_ImageGeometry->getTransform() == m_ViewGeometry->getTransform())
-        {
-            ip = vp;
-            return;
-        }
-
-        // Not the same 2D transform, so just perform local-image -> full-image -> local-view:
-        ossimDpt fp;
-        m_ViewGeometry->localToFullImage(vp, fp);
-        m_ImageGeometry->fullToLocalImage(fp, ip);
-        return;
-    }
-
-    // Completely different left and right side geoms (typical situation). Need to project to ground
-    ossimGpt gp;
-    m_ViewGeometry->localToWorld(vp, gp);
-    m_ImageGeometry->worldToLocal(gp, ip);
-
+   // Check for same geometries on input and output (this includes NULL geoms):
+   if (m_ImageGeometry == m_ViewGeometry)
+   {
+      ip = vp;
+      return;
+   }
+   
+   // Otherwise we need access to good geoms. Check for a bad geometry object:
+   if (!m_ImageGeometry || !m_ViewGeometry)
+   {
+      ip.makeNan();
+      return;
+   }
+   
+   // Check for same projection on input and output sides to save projection to ground:
+   if (m_ImageGeometry->getProjection() == m_ViewGeometry->getProjection())
+   {
+      // Check for possible same 2D transforms as well:
+      if ( (m_ImageGeometry->getTransform() == m_ViewGeometry->getTransform()) &&
+           (m_ImageGeometry->decimationFactor(0) == m_ViewGeometry->decimationFactor(0)) )
+      {
+         ip = vp;
+         return;
+      }
+      
+      // Not the same 2D transform, so just perform local-image -> full-image -> local-view:
+      ossimDpt fp;
+      m_ViewGeometry->rnToFull(vp, 0, fp);
+      m_ImageGeometry->fullToRn(fp, 0, ip);
+      return;
+   }
+   
+   //---
+   // Completely different left and right side geoms (typical situation).
+   // Need to project to ground.
+   //---
+   ossimGpt gp;
+   m_ViewGeometry->localToWorld(vp, gp);
+   m_ImageGeometry->worldToLocal(gp, ip);
+   
 #if 0
-    if (traceDebug())
-    {
-        ossimNotify(ossimNotifyLevel_DEBUG)<<"DEBUG ossimImageViewProjectionTransform::viewToImage:"
-            <<"\n    vp: "<<vp
-            <<"\n    gp: "<<gp
-            <<"\n    ip: "<<ip<<std::endl;
-
-    }
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         <<"DEBUG ossimImageViewProjectionTransform::viewToImage:"
+         <<"\n    vp: "<<vp
+         <<"\n    gp: "<<gp
+         <<"\n    ip: "<<ip<<std::endl;
+      
+   }
 #endif
 }
 

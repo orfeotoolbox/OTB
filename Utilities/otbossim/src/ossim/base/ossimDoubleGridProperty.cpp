@@ -4,9 +4,9 @@
 RTTI_DEF1(ossimDoubleGridProperty, "ossimDoubleGridProperty", ossimProperty);
 
 ossimDoubleGridProperty::ossimDoubleGridProperty(const ossimString& name,
-						 int numberOfRows,
-						 int numberOfCols,
-						 const std::vector<double>& values)
+						 int /* numberOfRows */,
+						 int /* numberOfCols */,
+						 const std::vector<double>& /* values*/ )
   :ossimProperty(name),
    theMinNumberOfCols(-1),
    theMaxNumberOfCols(-1),

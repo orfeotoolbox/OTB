@@ -5,7 +5,7 @@
 // Author: David Burken (dburken@imagelinks.com)
 //
 //*************************************************************************
-// $Id: ossimVertexExtractor.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimVertexExtractor.h 17207 2010-04-25 23:21:14Z dburken $
 
 #ifndef ossimVertexExtractor_HEADER
 #define ossimVertexExtractor_HEADER
@@ -102,7 +102,7 @@ public:
          fireEvent(event);      
       }
 
-   bool canConnectMyInputTo(ossim_int32 inputIndex,
+   bool canConnectMyInputTo(ossim_int32 /* inputIndex */,
                             const ossimConnectableObject* object)const
       {
          

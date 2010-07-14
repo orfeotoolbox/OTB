@@ -11,7 +11,7 @@
 // This class parses a Space Imaging Ikonos meta data file.
 //
 //********************************************************************
-// $Id: ossimIkonosMetaData.cpp 16086 2009-12-11 23:38:49Z eshirschorn $
+// $Id: ossimIkonosMetaData.cpp 17206 2010-04-25 23:20:40Z dburken $
 
 #include <cstdio>
 #include <iostream>
@@ -593,7 +593,7 @@ bool ossimIkonosMetaData::parseHdrData(const ossimFilename& data_file)
 //  Parses the Ikonos rpc file.
 //
 //*****************************************************************************
-bool ossimIkonosMetaData::parseRpcData(const ossimFilename& data_file)
+bool ossimIkonosMetaData::parseRpcData(const ossimFilename& /* data_file */)
 {
    return true;
 }

@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFileHeader.h 14662 2009-06-07 16:15:23Z dburken $
+// $Id: ossimNitfFileHeader.h 16997 2010-04-12 18:53:48Z dburken $
 #ifndef ossimNitfFileHeader_HEADER
 #define ossimNitfFileHeader_HEADER
 
@@ -17,7 +17,6 @@
 #include <vector>
 #include <iterator>
 #include <ossim/base/ossimDrect.h>
-#include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimObject.h>
 #include <ossim/base/ossimPropertyInterface.h>
 #include <ossim/base/ossimProperty.h>
@@ -27,9 +26,7 @@ class ossimNitfImageHeader;
 class ossimNitfSymbolHeader;
 class ossimNitfTextHeader;
 class ossimNitfLabelHeader;
-class ossimNitfRegisteredTag;
 class ossimNitfDataExtensionSegment;
-class ossimNitfRegisteredTag;
 // These structures are just data holders and will
 // not be used directly by outside users.  This is for internal use
 //
@@ -170,6 +167,11 @@ public:
 
    virtual ossim_uint32 getTotalTagLength()const;
 
+   /** @brief Sets file length (FL) field. */
+   virtual void setFileLength(ossim_uint64 fileLength) = 0;
+
+   /** @brief Sets header length (HL) field. */
+   virtual void setHeaderLength(ossim_uint64 headerLength) = 0;
 
    virtual void setProperty(ossimRefPtr<ossimProperty> property);
    virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;

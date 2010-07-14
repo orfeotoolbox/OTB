@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeader.h 15436 2009-09-17 00:12:59Z dburken $
+// $Id: ossimNitfImageHeader.h 17598 2010-06-19 15:37:46Z dburken $
 #ifndef ossimNitfImageHeader_HEADER
 #define ossimNitfImageHeader_HEADER
 
@@ -23,8 +23,9 @@
 #include <ossim/support_data/ossimNitfImageBand.h>
 
 class ossimString;
-class ossimDrect;
 class ossimDpt;
+class ossimIpt;
+class ossimIrect;
 
 class OSSIMDLLEXPORT ossimNitfImageHeader : public ossimObject,
                                             public ossimPropertyInterface
@@ -71,12 +72,12 @@ public:
    virtual ossimString getTitle()const=0;
    virtual ossim_int32 getActualBitsPerPixelPerBand()const=0;
    virtual ossim_int32 getBitsPerPixelPerBand()const=0;
-   virtual ossimDrect  getImageRect()const=0;
+   virtual ossimIrect  getImageRect()const=0;
    /**
     * Blocks might not be the same size as the significant rows and cols used
     * by the getImageRect.
     */
-   virtual ossimDrect   getBlockImageRect()const=0;
+   virtual ossimIrect   getBlockImageRect()const=0;
    virtual ossimString  getIMode()const=0;
    virtual ossim_uint64 getDataLocation()const=0;
 
@@ -94,6 +95,13 @@ public:
 
    /** @return IMAG field */
    virtual ossimString  getImageMagnification()const=0;
+
+   /**
+    * @brief Gets the ILOC field as an ossimIpt.
+    * @param loc Initialized with the field.
+    * @note: Do not confuse with "data location".
+    */
+   virtual void getImageLocation(ossimIpt& loc)const=0;
 
    /**
     * @brief Convenience method to get the decimation factor as a double from

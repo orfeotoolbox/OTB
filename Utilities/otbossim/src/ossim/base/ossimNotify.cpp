@@ -7,7 +7,7 @@
 //
 // Contains class definition for ossimNotify.
 //*******************************************************************
-//  $Id: ossimNotify.cpp 16636 2010-02-22 19:02:00Z dburken $
+//  $Id: ossimNotify.cpp 17195 2010-04-23 17:32:18Z dburken $
 
 #include <iostream>
 #include <cstdio>
@@ -39,7 +39,7 @@ public:
 
 protected:
 
-   std::streamsize xsputn(const charT * pChar, std::streamsize n)
+   std::streamsize xsputn(const charT * /* pChar */, std::streamsize /* n */)
       {
          return 0;
       }
@@ -395,9 +395,9 @@ void ossimNotify(ossimString msg,
    ossimNotify(notifyLevel) << msg << "\n";
 }
 
-void ossimSetError( const char *className,
-                    ossim_int32 error,
-                    const char *fmtString=NULL, ...)
+void ossimSetError( const char* /* className */,
+                    ossim_int32 /* error */,
+                    const char *fmtString, ...)
 {
    OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
    va_list args;
@@ -408,8 +408,8 @@ void ossimSetError( const char *className,
    ossimNotify(ossimNotifyLevel_WARN) << result << "\n";
 }
 
-void ossimSetInfo( const char *className,
-                   const char *fmtString=NULL, ...)
+void ossimSetInfo( const char* /* className */,
+                   const char *fmtString, ...)
 {
    OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
    va_list args;

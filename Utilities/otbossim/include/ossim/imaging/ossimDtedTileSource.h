@@ -13,7 +13,7 @@
 // handler for DTED files.
 //
 //********************************************************************
-// $Id: ossimDtedTileSource.h 16235 2009-12-31 20:30:14Z gpotts $
+// $Id: ossimDtedTileSource.h 17599 2010-06-20 13:52:34Z dburken $
 
 #ifndef ossimDtedTileSource_HEADER
 #define ossimDtedTileSource_HEADER
@@ -174,6 +174,15 @@ public:
     */
    virtual void getPropertyNames(
       std::vector<ossimString>& propertyNames)const;
+
+   /**
+    * @brief Sets the min/max.
+    *
+    * looks for an omd or statistics file for min/max.  If not found
+    * calls gatherStatistics method.  Overrides ossimImageHandler::loadMetaData
+    * called by completeOpen.
+    */
+   virtual void loadMetaData();  
    
 protected:
    virtual ~ossimDtedTileSource();
@@ -194,7 +203,14 @@ protected:
                    const ossimIrect& clip_rect,
                    ossimImageData* tile);
 
-   void gatherStatistics();
+   
+   /**
+    * @brief Scans for min and max.
+    * @param writeStatsFile If true and statistics file does not exists it
+    * will write one; else, no file will be written.
+    */
+   void gatherStatistics(bool writeStatsFile);
+   
    ossim_sint16 convertSignedMagnitude(ossim_uint16& s) const;
    
    ossimRefPtr<ossimImageData> theTile;

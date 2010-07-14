@@ -9,15 +9,16 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeader.cpp 15436 2009-09-17 00:12:59Z dburken $
+// $Id: ossimNitfImageHeader.cpp 17598 2010-06-19 15:37:46Z dburken $
 
 #include <cmath> /* for fmod */
 #include <iomanip>
 
 #include <ossim/support_data/ossimNitfImageHeader.h>
-#include <ossim/base/ossimNotifyContext.h>
-#include <ossim/base/ossimDrect.h>
 #include <ossim/base/ossimContainerProperty.h>
+#include <ossim/base/ossimDrect.h>
+#include <ossim/base/ossimIrect.h>
+#include <ossim/base/ossimNotifyContext.h>
 
 RTTI_DEF2(ossimNitfImageHeader,
           "ossimNitfImageHeader",
@@ -144,7 +145,7 @@ bool ossimNitfImageHeader::isSameAs(const ossimNitfImageHeader* hdr) const
 }
 
 
-void ossimNitfImageHeader::setProperty(ossimRefPtr<ossimProperty> property)
+void ossimNitfImageHeader::setProperty(ossimRefPtr<ossimProperty> /* property */)
 {
 }
 
@@ -237,12 +238,33 @@ void ossimNitfImageHeader::getMetadata(ossimKeywordlist& kwl,
            false);
 }
 
-bool ossimNitfImageHeader::hasLut()const
+bool ossimNitfImageHeader::hasLut() const
 {
-   return true;
+   bool result = false;
+
+   const ossim_uint32 BANDS = static_cast<ossim_uint32>(getNumberOfBands());
+   for (ossim_uint32 band = 0; band < BANDS; ++band)
+   {
+      const ossimRefPtr<ossimNitfImageBand> imgBand = getBandInformation(band);
+      if(imgBand.valid())
+      {
+         ossim_uint32 luts = imgBand->getNumberOfLuts();
+         if(luts > 0)
+         {
+            if(imgBand->getLut(0).valid())
+            {
+               result = true;
+               break;
+            }
+         }
+      }
+   }
+   
+   return result;
 }
 
-ossimRefPtr<ossimNBandLutDataObject> ossimNitfImageHeader::createLut(ossim_uint32 bandIdx)const
+ossimRefPtr<ossimNBandLutDataObject> ossimNitfImageHeader::createLut(
+   ossim_uint32 bandIdx)const
 {
    ossimRefPtr<ossimNBandLutDataObject> result;
    

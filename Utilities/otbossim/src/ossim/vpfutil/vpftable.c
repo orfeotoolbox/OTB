@@ -649,7 +649,7 @@ static int vpfhandler(long int errval, long int ax, long int bp, long int si)
  *************************************************************************/
 FILE *vpfopencheck( const char *filename,
 		    const char *mode,
-		    const char *diskname )
+		    const char * diskname )
 {
    FILE *fp;
    char* tmpFilename = (char*) malloc ( strlen(filename) + 1 );

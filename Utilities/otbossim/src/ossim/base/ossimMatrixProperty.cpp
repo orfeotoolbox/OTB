@@ -5,7 +5,7 @@
 // Author: Garrett Potts (gpotts@imagelinks.com)
 //
 //*************************************************************************
-// $Id: ossimMatrixProperty.cpp 13710 2008-10-14 16:27:57Z gpotts $
+// $Id: ossimMatrixProperty.cpp 17074 2010-04-14 18:49:11Z dburken $
 #include <sstream>
 #include <ossim/base/ossimMatrixProperty.h>
 #include <ossim/base/ossimCommon.h>
@@ -233,29 +233,29 @@ void ossimMatrixProperty::clearConstraints()
    theMaxNumberOfRows = -1;
 }
 
-void ossimMatrixProperty::setColContraints(int minNumberOfCols,
-                                           int maxNumberOfCols)
+void ossimMatrixProperty::setColConstraints(int minNumberOfCols,
+                                            int maxNumberOfCols)
 {
    theMinNumberOfCols = minNumberOfCols;
-   theMaxNumberOfCols = theMaxNumberOfCols;
+   theMaxNumberOfCols = maxNumberOfCols;
 }
 
-void ossimMatrixProperty::setRowContraints(int minNumberOfRows,
-                                          int maxNumberOfRows)
+void ossimMatrixProperty::setRowConstraints(int minNumberOfRows,
+                                            int maxNumberOfRows)
 {
    theMinNumberOfRows = minNumberOfRows;
-   theMaxNumberOfRows = theMaxNumberOfRows;
+   theMaxNumberOfRows = maxNumberOfRows;
 }
 
-void ossimMatrixProperty::getColContraints(int& minNumberOfCols,
-                                           int& maxNumberOfCols)
+void ossimMatrixProperty::getColConstraints(int& minNumberOfCols,
+                                            int& maxNumberOfCols) const
 {
    minNumberOfCols = theMinNumberOfCols;
    maxNumberOfCols = theMaxNumberOfCols;
 }
 
-void ossimMatrixProperty::getRowContraints(int& minNumberOfRows,
-                                           int& maxNumberOfRows)
+void ossimMatrixProperty::getRowConstraints(int& minNumberOfRows,
+                                            int& maxNumberOfRows) const
 {
    minNumberOfRows = theMinNumberOfRows;
    maxNumberOfRows = theMaxNumberOfRows;

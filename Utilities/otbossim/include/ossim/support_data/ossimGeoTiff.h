@@ -9,7 +9,7 @@
 // information.
 //
 //***************************************************************************
-// $Id: ossimGeoTiff.h 15868 2009-11-06 22:30:38Z dburken $
+// $Id: ossimGeoTiff.h 17108 2010-04-15 21:08:06Z dburken $
 
 #ifndef ossimGeoTiff_HEADER
 #define ossimGeoTiff_HEADER 1
@@ -208,8 +208,8 @@ public:
 private:
 
    // Disallow ...
-   ossimGeoTiff(const ossimGeoTiff* rhs) {}
-   ossimGeoTiff& operator=(const ossimGeoTiff& rhs) { return *this; }
+   ossimGeoTiff(const ossimGeoTiff* /* rhs */) {}
+   ossimGeoTiff& operator=(const ossimGeoTiff& /* rhs */) { return *this; }
 
    /**
     *  Attempts to parse the pcs code (3072).

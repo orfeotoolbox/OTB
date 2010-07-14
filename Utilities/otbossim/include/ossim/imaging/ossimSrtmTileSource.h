@@ -12,7 +12,7 @@
 // Image handler class for a Shuttle Radar Topography Mission (SRTM) file.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimSrtmTileSource.h 16075 2009-12-10 15:46:43Z gpotts $
+// $Id: ossimSrtmTileSource.h 17602 2010-06-20 19:12:24Z dburken $
 #ifndef ossimSrtmTileSource_HEADER
 #define ossimSrtmTileSource_HEADER
 
@@ -29,10 +29,10 @@ public:
    virtual ossimString getLongName()  const;
 
    virtual bool open();
-   
-   //! Returns the image geometry object associated with this tile source or NULL if non defined.
+
+   //! Returns the image geometry object associated with this tile source or NULL if not defined.
    //! The geometry contains full-to-local image transform as well as projection (image-to-world)
-   virtual ossimImageGeometry* getInternalImageGeometry();
+   virtual ossimImageGeometry* getImageGeometry();
 
    /**
     * Method to save the state of an object to a keyword list.

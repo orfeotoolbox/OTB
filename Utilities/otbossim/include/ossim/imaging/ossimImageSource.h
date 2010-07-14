@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageSource.h 15798 2009-10-23 19:15:20Z gpotts $
+// $Id: ossimImageSource.h 17638 2010-06-29 16:56:29Z gpotts $
 #ifndef ossimImageSource_HEADER
 #define ossimImageSource_HEADER
 
@@ -187,7 +187,7 @@ public:
    virtual ossimImageGeometry* getImageGeometry();
 
    //! Default implementation sets geometry of the first input to the geometry specified.
-   virtual void setImageGeometry(const ossimImageGeometry* geom);
+   virtual void setImageGeometry(ossimImageGeometry* geom);
 
    /**
     * Default method to call input's saveImageGeometry.

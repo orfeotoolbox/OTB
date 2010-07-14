@@ -5,7 +5,7 @@
 // Author: Garrett Potts (gpotts@imagelinks)
 //
 //*************************************************************************
-// $Id: ossimMouseListener.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimMouseListener.h 17195 2010-04-23 17:32:18Z dburken $
 #ifndef ossimMouseListener_HEADER
 #define ossimMouseListener_HEADER
 #include <ossim/base/ossimListener.h>
@@ -22,7 +22,7 @@ public:
    /*!
     * processes all mouse events
     */
-   virtual void mouseEvent(ossimMouseEvent& event)
+   virtual void mouseEvent(ossimMouseEvent& /* event */)
       {}
 
 TYPE_DATA

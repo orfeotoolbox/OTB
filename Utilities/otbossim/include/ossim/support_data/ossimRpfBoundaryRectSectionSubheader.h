@@ -6,34 +6,65 @@
 // Description: Rpf support class
 // 
 //********************************************************************
-// $Id: ossimRpfBoundaryRectSectionSubheader.h 9967 2006-11-29 02:01:23Z gpotts $
+// $Id: ossimRpfBoundaryRectSectionSubheader.h 16997 2010-04-12 18:53:48Z dburken $
 #ifndef ossimRpfBoundaryRectSectionSubheader_HEADER
 #define ossimRpfBoundaryRectSectionSubheader_HEADER
-#include <iostream>
-using namespace std;
+
+#include <iosfwd>
 
 #include <ossim/base/ossimConstants.h>
-#include <ossim/base/ossimErrorContext.h>
+#include <ossim/base/ossimErrorCodes.h>
+#include <ossim/base/ossimReferenced.h>
 
-class ossimRpfBoundaryRectSectionSubheader
+class ossimRpfBoundaryRectSectionSubheader : public ossimReferenced
 {
 public:
-   friend ostream& operator <<(ostream& out,
-                               const ossimRpfBoundaryRectSectionSubheader &data);
+   friend std::ostream& operator <<(std::ostream& out,
+                                    const ossimRpfBoundaryRectSectionSubheader &data);
+
+   /** default constructor */
    ossimRpfBoundaryRectSectionSubheader();
-   virtual ~ossimRpfBoundaryRectSectionSubheader(){}
 
-   ossimErrorCode parseStream(istream& in, ossimByteOrder);
-   virtual void print(ostream& out)const;
-   ossim_uint16 getNumberOfEntries()const{return theNumberOfEntries;}
-   ossim_uint32 getTableOffset()const{return theRectangleTableOffset;}
-   ossim_uint16 getLengthOfEachEntry()const{return theLengthOfEachEntry;}
+   /** copy constructor */
+   ossimRpfBoundaryRectSectionSubheader(const ossimRpfBoundaryRectSectionSubheader& obj);
 
+   /** assignment operator */
+   const ossimRpfBoundaryRectSectionSubheader& operator=(
+      const ossimRpfBoundaryRectSectionSubheader& rhs);
+
+   virtual ~ossimRpfBoundaryRectSectionSubheader();
+
+   ossimErrorCode parseStream(std::istream& in, ossimByteOrder);
+
+   /**
+    * @brief Write method.
+    *
+    * @param out Stream to write to.
+    */
+   void writeStream(std::ostream& out);
+
+   /**
+    * @brief print method
+    * @param out String to output to.
+    * @return output stream.
+    */
+   std::ostream& print(std::ostream& out) const;
+
+   ossim_uint16 getNumberOfEntries() const;
+   ossim_uint32 getTableOffset() const;
+   ossim_uint16 getLengthOfEachEntry() const;
+
+   void setNumberOfEntries(ossim_uint16 entries);
+   void setTableOffset(ossim_uint32 offset);
+   void setLengthOfEachEntry(ossim_uint16 length);
+   
    void clearFields();
-private:   
-   ossim_uint32 theRectangleTableOffset;
-   ossim_uint16 theNumberOfEntries;
-   ossim_uint16 theLengthOfEachEntry;
+   
+private:
+   
+   ossim_uint32 m_rectangleTableOffset;
+   ossim_uint16 m_numberOfEntries;
+   ossim_uint16 m_lengthOfEachEntry;
 };
 
 #endif

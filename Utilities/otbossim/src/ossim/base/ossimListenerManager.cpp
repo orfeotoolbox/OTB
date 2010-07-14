@@ -8,7 +8,7 @@
 // Description: A brief description of the contents of the file.
 //
 //*************************************************************************
-// $Id: ossimListenerManager.cpp 13362 2008-08-01 14:02:32Z gpotts $
+// $Id: ossimListenerManager.cpp 17193 2010-04-23 14:59:44Z dburken $
 
 #include <algorithm>
 #include <ossim/base/ossimListenerManager.h>
@@ -22,7 +22,7 @@ ossimListenerManager::ossimListenerManager()
    theFireEventFlag = false;
 }
 
-ossimListenerManager::ossimListenerManager(const ossimListenerManager& rhs)
+ossimListenerManager::ossimListenerManager(const ossimListenerManager& /* rhs */)
 {
 //    replaceListeners(rhs.getListeners());
 }

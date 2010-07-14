@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimGeoAnnotationSource.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimGeoAnnotationSource.cpp 17195 2010-04-23 17:32:18Z dburken $
 
 #include <ossim/imaging/ossimGeoAnnotationSource.h>
 #include <ossim/imaging/ossimGeoAnnotationObject.h>
@@ -32,7 +32,7 @@ ostream& operator <<(ostream& out, const ossimGeoAnnotationSource& rhs)
 }
 
 ossimGeoAnnotationSource::ossimGeoAnnotationSource(ossimImageGeometry* geom,
-                                                   bool ownsProjectionFlag)
+                                                   bool /* ownsProjectionFlag */ )
    :ossimAnnotationSource(),
     ossimViewInterface(),
     m_geometry(geom)
@@ -42,7 +42,7 @@ ossimGeoAnnotationSource::ossimGeoAnnotationSource(ossimImageGeometry* geom,
 
 ossimGeoAnnotationSource::ossimGeoAnnotationSource(ossimImageSource* inputSource,
                                                    ossimImageGeometry* geom,
-                                                   bool ownsProjectionFlag)
+                                                   bool /* ownsProjectionFlag */)
    :ossimAnnotationSource(inputSource),
     ossimViewInterface(),
     m_geometry(geom)

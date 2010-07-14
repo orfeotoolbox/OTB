@@ -8,7 +8,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimEdgeFilter.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimEdgeFilter.cpp 17195 2010-04-23 17:32:18Z dburken $
 #include <ossim/imaging/ossimEdgeFilter.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
 #include <ossim/imaging/ossimImageData.h>
@@ -284,7 +284,7 @@ void ossimEdgeFilter::runFilter(T dummyVariable,
 }
 
 template <class T>
-void ossimEdgeFilter::runSobelFilter(T dummyVariable,
+void ossimEdgeFilter::runSobelFilter(T /* dummyVariable */,
                                      ossimRefPtr<ossimImageData> inputData)
 {
    ossim_uint32 bandIdx = 0;
@@ -355,7 +355,7 @@ void ossimEdgeFilter::runSobelFilter(T dummyVariable,
 }
 
 template <class T>
-void ossimEdgeFilter::runPrewittFilter(T dummyVariable,
+void ossimEdgeFilter::runPrewittFilter(T /* dummyVariable */,
                                        ossimRefPtr<ossimImageData> inputData)
 {
    ossim_uint32 bandIdx = 0;
@@ -426,7 +426,7 @@ void ossimEdgeFilter::runPrewittFilter(T dummyVariable,
 }
 
 template <class T>
-void ossimEdgeFilter::runRobertsFilter(T dummyVariable,
+void ossimEdgeFilter::runRobertsFilter(T /* dummyVariable */,
                                        ossimRefPtr<ossimImageData> inputData)
 {
    ossim_uint32 bandIdx = 0;
@@ -493,7 +493,7 @@ void ossimEdgeFilter::runRobertsFilter(T dummyVariable,
 }
 
 template <class T>
-void ossimEdgeFilter::runLaplacianFilter(T dummyVariable,
+void ossimEdgeFilter::runLaplacianFilter(T /* dummyVariable */,
                                          ossimRefPtr<ossimImageData> inputData)
 {
    ossim_uint32 bandIdx = 0;
@@ -559,7 +559,7 @@ void ossimEdgeFilter::runLaplacianFilter(T dummyVariable,
 }
 
 template <class T>
-void ossimEdgeFilter::runLocalMax8Filter(T dummyVariable,
+void ossimEdgeFilter::runLocalMax8Filter(T /* dummyVariable */,
                                          ossimRefPtr<ossimImageData> inputData)
 {
    ossim_uint32 bandIdx = 0;

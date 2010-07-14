@@ -9,9 +9,11 @@
 // Description: This class extends the stl's string class.
 // 
 //********************************************************************
-// $Id: ossimString.cpp 16377 2010-01-21 15:41:34Z gpotts $
+// $Id: ossimString.cpp 17586 2010-06-17 14:40:07Z dburken $
 
+#include <cctype> /* for toupper */
 #include <cstdlib> /* for getenv() */
+#include <stack> 
 #include <iostream>
 #include <iomanip>
 #include <sstream>
@@ -26,7 +28,7 @@
 static ossimTrace traceDebug("ossimString:debug");
 
 #ifdef OSSIM_ID_ENABLED
-static char OSSIM_ID[] = "$Id: ossimString.cpp 16377 2010-01-21 15:41:34Z gpotts $";
+static char OSSIM_ID[] = "$Id: ossimString.cpp 17586 2010-06-17 14:40:07Z dburken $";
 #endif
 
 ossimString ossimString::upcase(const ossimString& aString)
@@ -258,53 +260,63 @@ std::vector<ossimString> ossimString::explode(const ossimString& delimeter) cons
 
 ossimString ossimString::expandEnvironmentVariable() const
 {
-   static const char MODULE[] = "ossimString::expandEnvironmentVariable()";
+   ossimString result(*this);
+   std::stack<ossim_uint32> startChars;
+   ossimRegExp regExpStart("\\$\\(");
 
-   ossimString varStartStr( "$(" );
-   ossimString afterVarStartStr = after(varStartStr);
-   if ( afterVarStartStr.empty() == false )
+   ossim_uint32 startIndex = 0;
+   if(regExpStart.find(result.c_str()))
    {
-      // Save off the beginning of the original string that 
-      // comes before the environment variable.
-      ossimString beforeVarStartStr = before(varStartStr);
-
-      ossimString varEndStr( ")" );
-      ossimString envVarStr = afterVarStartStr.before(varEndStr);
-
-      // Find the value of the environment variable
-      char* lookup = getenv( envVarStr.c_str() );
-      if ( lookup )
+      startIndex = regExpStart.start();
+      startChars.push(regExpStart.start());
+      while(!startChars.empty())
       {
-         // Place the environment variable value into an ossimString
-         ossimString replacementStr( lookup );
-
-         // Save off the end of the original string that 
-         // comes after the environment variable.
-         ossimString afterVarEndStr = afterVarStartStr.after(varEndStr);
-
-         ossimString evaluationStr = beforeVarStartStr;
-         evaluationStr += replacementStr;
-         evaluationStr += afterVarEndStr;
-
-         return evaluationStr;
-      }
-      else
-      {
-         if(traceDebug())
+         ossim_uint32 offset = startChars.top() + 2; // skip over the $(
+         
+         // We will replace like a stack by looking at the right most $(
+         //
+         if(regExpStart.find(result.c_str()+offset))
          {
-            ossimNotify(ossimNotifyLevel_WARN)
-            << "In member function "
-            << MODULE 
-            << "\n\tERROR: Environment variable("
-            << envVarStr.c_str()
-            << ") not found!"
-            << std::endl;
+            // maintain absolute offset to the original string
+            startChars.push(regExpStart.start()+offset);
+         }
+         else 
+         {
+            // now look for a closing ) for the stating $(
+            ossimRegExp regExpEnd("\\)");
+            if(regExpEnd.find(result.c_str()+startChars.top()))
+            {
+               ossimString envVarStr(result.begin()+startChars.top()+2,
+                                     result.begin()+startChars.top()+regExpEnd.start());
+               char* lookup = getenv( envVarStr.c_str() );
+               if ( lookup )
+               {
+                  result.replace(result.begin()+startChars.top(),
+                                 result.begin()+startChars.top()+regExpEnd.start()+1,
+                                 ossimString(lookup));
+               }
+               else 
+               {
+                  if(traceDebug())
+                  {
+                     ossimNotify(ossimNotifyLevel_WARN)
+                     << "In member function ossimString::expandEnvironmentVariable() "
+                     << "\n\tERROR: Environment variable("
+                     << envVarStr.c_str()
+                     << ") not found!"
+                     << std::endl;
+                  }
+                  result.replace(result.begin()+startChars.top(),
+                                 result.begin()+startChars.top()+regExpEnd.start()+1,
+                                 "");
+               }
+            }
+            startChars.pop();
          }
       }
    }
-
-   // Return the original string
-   ossimString result(*this);
+   
+   
    return result;
 }
 
@@ -495,6 +507,27 @@ bool ossimString::toBool(const ossimString& aString)
    }
 
    return false;
+}
+
+ossim_uint8 ossimString::toUInt8()const
+{
+   // Note the std::istringstream::operator>> does not work with unsigned 8 bit.
+   ossim_uint16 i = 0;
+   if (!empty())
+   {
+      std::istringstream is(*this);
+      is >> i;
+      if(is.fail())
+      {
+        i = 0;
+      }
+   }
+   return static_cast<ossim_uint8>(i);
+}
+
+ossim_uint8 ossimString::toUInt8(const ossimString& aString)
+{
+   return aString.toUInt8();
 }
 
 int ossimString::toInt()const
@@ -847,7 +880,7 @@ ossimString ossimString::toString(ossim_float32 aValue,
    
    if (fixed)
    {
-      s << setiosflags(std::ios::fixed); 
+      s << std::setiosflags(std::ios::fixed); 
    }
    
    s << aValue;
@@ -869,7 +902,7 @@ ossimString ossimString::toString(ossim_float64 aValue,
    
    if (fixed)
    {
-      s << setiosflags(std::ios::fixed); 
+      s << std::setiosflags(std::ios::fixed); 
    }
    
    s << aValue;

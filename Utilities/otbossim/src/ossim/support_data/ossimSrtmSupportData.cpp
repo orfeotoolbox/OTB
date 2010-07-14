@@ -9,7 +9,7 @@
 // Support data class for a Shuttle Radar Topography Mission (SRTM) file.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimSrtmSupportData.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
+// $Id: ossimSrtmSupportData.cpp 17602 2010-06-20 19:12:24Z dburken $
 
 #include <cmath>
 #include <fstream>
@@ -27,7 +27,8 @@
 #include <ossim/base/ossimRegExp.h>
 #include <ossim/base/ossimScalarTypeLut.h>
 #include <ossim/base/ossimStreamFactoryRegistry.h>
-
+#include <ossim/projection/ossimEquDistCylProjection.h>
+#include <ossim/projection/ossimMapProjection.h>
 
 // Static trace for debugging
 static ossimTrace traceDebug("ossimSrtmSupportData:debug");
@@ -249,6 +250,34 @@ bool ossimSrtmSupportData::getImageGeometry(ossimKeywordlist& kwl,
            true);
    
    return true;
+}
+
+ossimRefPtr<ossimProjection> ossimSrtmSupportData::getProjection() const
+{
+   //---
+   // Make an Equidistant Cylindrical projection with a origin at the equator
+   // since the DTED post spacing is considered to be square.
+   //---
+   const ossimDatum* datum = ossimDatumFactory::instance()->wgs84();
+   ossimRefPtr<ossimEquDistCylProjection> eq =
+      new ossimEquDistCylProjection(*(datum->ellipsoid()),
+                                    ossimGpt(0.0, 0.0, 0.0, datum),
+                                    0.0,   // false easting
+                                    0.0);  // false northing
+   
+   //---
+   // Set the tie point.
+   // NOTE: Latitude southwest corner we need northwest; hence, the +1.
+   //---
+   eq->setUlTiePoints( ossimGpt(theSouthwestLatitude+1.0, theSouthwestLongitude, 0.0, datum) );
+   
+   // Set the scale:
+   eq->setDecimalDegreesPerPixel( ossimDpt(theLonSpacing, theLatSpacing) );
+   
+   // Give it to the geometry object.
+   ossimRefPtr<ossimProjection> proj = eq.get();
+
+   return proj;
 }
 
 bool ossimSrtmSupportData::saveState(ossimKeywordlist& kwl,
@@ -838,7 +867,7 @@ bool ossimSrtmSupportData::computeMinMax()
 }
 
 template <class T>
-bool ossimSrtmSupportData::computeMinMaxTemplate(T dummy,
+bool ossimSrtmSupportData::computeMinMaxTemplate(T /* dummy */,
                                                  double defaultNull)
 {
    if(theFileStream->is_open() == false)

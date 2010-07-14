@@ -33,8 +33,9 @@
 //! some cases however, the first pixel in the file does not correspond to the upper-left pixel of
 //! the original, full image. Since the image's sensor model may only apply to full-image pixel 
 //! coordinates, it is necessary to reference the latter when making computing ground point 
-//! location.
-//! 
+//! location.  Also the local image could be a reduced resolution level of the full image.  So
+//! the image could be a decimated sub image of the full image.
+//!
 //! Additionally, images typically are accompanied by some form of metadata that defines the mapping
 //! from 2D image coordinates to 3D world coordinates. This mapping may be in the form of a map
 //! projection for orthorectified images, or a perspective projection such as a sensor model.
@@ -42,6 +43,13 @@
 //! This object class maintains both 2D transform and 3D projection information for the associated
 //! image. This object will typically be created and "owned" by the image handler object. Therefore,
 //! only one copy per image will exist at a time.
+//!
+//! Notes:
+//! 1) Shifts are relative to "full image space".  So if you have a sub image from r2 the shift
+//!    given to the transform should be relative to "full image space".
+//
+//! 2) A decimation of 1.0 is the full image.  This may or may not be r0 as r0 can be decimated.
+//!
 //**************************************************************************************************
 class OSSIM_DLL ossimImageGeometry : public ossimObject
 {
@@ -60,15 +68,17 @@ public:
    //! Constructs with projection and transform objects available for referencing. Either pointer
    //! can be NULL -- the associated mapping would be identity.
    ossimImageGeometry(ossim2dTo2dTransform* transform, ossimProjection* projection);
-   
-   //! rnToLocal is a utility method that takes a rn resolution image point and maps it to the local
-   //! image point.
+
+   //! rnToRn is a utility method that takes a rn resolution image point and maps it to the another
+   //! rn resolution image point.
    //!
-   //! @param rnPt Is a point in resolution n.
-   //! @param resolutionLevel Is the resolution of the point rnPt.  a value of 0 is the local image
-   //! @param localPt Is the result of the transform
+   //! @param inRnPt Is a point in resolution n.
+   //! @param inResolutionLevel Is the resolution of the point inRnPt.
+   //! @param outResolutionLevel Is the resolution of the point outRnPt.
+   //! @param outRnPt Is the result of the transform.
    //!
-   void rnToLocal(const ossimDpt& rnPt, ossim_uint32 resolutionLevel, ossimDpt& localPt);
+   void rnToRn(const ossimDpt& inRnPt, ossim_uint32 inResolutionLevel,
+               ossim_uint32 outResolutionLevel,ossimDpt& outRnPt) const;
    
    //! rnToFull is a utility method that takes a rn resolution image point and maps it to the full
    //! image point.
@@ -77,7 +87,15 @@ public:
    //! @param resolutionLevel Is the resolution of the point rnPt.  a value of 0 is the local image
    //! @param fullPt Is the result of the transform
    //!
-   void rnToFull(const ossimDpt& rnPt, ossim_uint32 resolutionLevel, ossimDpt& fullPt);
+   void rnToFull(const ossimDpt& rnPt, ossim_uint32 resolutionLevel, ossimDpt& fullPt) const;
+
+   //! @brief fullToRn is a utility method that takes a full image point and maps it to a rn
+   //! resolution image point.
+   //! 
+   //! @param fullPt Is a point in full image space.
+   //! @param resolutionLevel Is the resolution of the point rnPt. A value of 0 is the local image.
+   //! @param fullPt Is the result of the transform
+   void fullToRn(const ossimDpt& fullPt, ossim_uint32 resolutionLevel, ossimDpt& rnPt) const;
 
    //! rnToWorld is a utility method that takes a rn resolution image point and maps it to the 
    //! world point.
@@ -86,8 +104,7 @@ public:
    //! @param resolutionLevel Is the resolution of the point rnPt.  a value of 0 is the local image
    //! @param wpt Is the result of the transform
    //!
-   void rnToWorld(const ossimDpt& rnPt, ossim_uint32 resolutionLevel, ossimGpt& wpt);
-   
+   void rnToWorld(const ossimDpt& rnPt, ossim_uint32 resolutionLevel, ossimGpt& wpt) const;
    
    //! worldToRn is a utility method that takes a world point allows one to transform all the way back to
    //! an rn point.
@@ -96,15 +113,7 @@ public:
    //! @param resolutionLevel Is the resolution of the point rnPt.  a value of 0 is the local image
    //! @param rnPt Is the resoltion point.
    //!
-   void worldToRn(const ossimGpt& wpt, ossim_uint32 resolutionLevel, ossimDpt& rnPt);
-   
-   //! Exposes the 2D functionality that transforms from local (file) x,y pixel to full-image
-   //! X,Y coordinates
-   void localToFullImage(const ossimDpt& local_pt, ossimDpt& full_pt) const;
-
-   //! Exposes the 2D functionality that transforms from full-image X,Y coordinates to 
-   //! local (file) x,y pixel coordinates
-   void fullToLocalImage(const ossimDpt& full_pt, ossimDpt& local_pt) const;
+   void worldToRn(const ossimGpt& wpt, ossim_uint32 resolutionLevel, ossimDpt& rnPt) const;
 
    //! Exposes the 3D projection from image to world coordinates. The caller should verify that
    //! a valid projection exists before calling this method. Returns TRUE if a valid ground point
@@ -205,6 +214,22 @@ protected:
 
    //! When either the projection or the transform changes, this method recomputes the GSD.
    void computeGsd()const;
+
+   //! @brief Method to back out decimation of a point.
+   //! @param rnPt Is a point in resolution n.
+   //! @param resolutionLevel Is the resolution of the point rnPt.
+   //! @param outPt Is the result of the transform a non-decimated point.
+   void undecimatePoint(const ossimDpt& rnPt,
+                        ossim_uint32 resolutionLevel,
+                        ossimDpt& outPt) const;
+
+   //! @brief Method to apply decimation of a point.
+   //! @param inPt Is a point with no decimation.
+   //! @param resolutionLevel Is the resolution of the point rnPt.
+   //! @param rnPt Is the result of the transform
+   void decimatePoint(const ossimDpt& inPt,
+                      ossim_uint32 resolutionLevel,
+                      ossimDpt& rnPt) const;
 
    ossimRefPtr<ossim2dTo2dTransform> m_transform;   //!< Maintains local_image-to-full_image transformation 
    ossimRefPtr<ossimProjection>      m_projection;  //!< Maintains full_image-to-world_space transformation

@@ -7,7 +7,7 @@
  * Description: Common file for global constants.
  *
  **************************************************************************
- * $Id: ossimConstants.h 13590 2008-09-24 12:35:43Z gpotts $
+ * $Id: ossimConstants.h 17194 2010-04-23 15:05:19Z dburken $
  */
 #ifndef ossimConstants_HEADER
 #define ossimConstants_HEADER
@@ -252,6 +252,15 @@ enum ossimVertexOrdering
    OSSIM_COUNTERCLOCKWISE_ORDER  = 2
 };
 
+//---
+// For histogram builders.  Note that FAST computation mode will not sample all tiles.
+//---   
+enum ossimHistogramMode
+{
+   OSSIM_HISTO_MODE_UNKNOWN = 0,
+   OSSIM_HISTO_MODE_NORMAL  = 1,
+   OSSIM_HISTO_MODE_FAST    = 2
+};
 
 /*
  Corner coordinates are relative to center (0) of pixel

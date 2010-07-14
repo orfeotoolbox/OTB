@@ -1,7 +1,7 @@
 //---
 // License:  See top level LICENSE.txt file.
 //
-// $Id: ossimPolyArea2d.cpp 13710 2008-10-14 16:27:57Z gpotts $
+// $Id: ossimPolyArea2d.cpp 17195 2010-04-23 17:32:18Z dburken $
 //---
 #include <ossim/base/ossimPolyArea2d.h>
 #include <ossim/base/ossimKeywordNames.h>
@@ -499,7 +499,7 @@ bool ossimPolyArea2d::isEmpty()const
 
 bool ossimPolyArea2d::isPointWithin(const ossimDpt& point, double epsilonBall)const
 {
-   return isPointWithin(point.x, point.y);
+   return isPointWithin(point.x, point.y, epsilonBall);
 }
 
 bool ossimPolyArea2d::isPointWithin(double x, double y,double epsilonBall)const
@@ -678,7 +678,7 @@ bool ossimPolyArea2d::loadState(const ossimKeywordlist& kwl,
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimPolyArea2d.cpp 13710 2008-10-14 16:27:57Z gpotts $
+// $Id: ossimPolyArea2d.cpp 17195 2010-04-23 17:32:18Z dburken $
 #include <list>
 #include <sstream>
 using namespace std;

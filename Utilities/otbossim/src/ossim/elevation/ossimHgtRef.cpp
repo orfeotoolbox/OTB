@@ -20,7 +20,7 @@
 static ossimTrace traceDebug(ossimString("ossimHgtRef:debug"));
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimHgtRef.cpp 12577 2008-03-26 17:02:39Z dhicks $";
+static const char OSSIM_ID[] = "$Id: ossimHgtRef.cpp 17195 2010-04-23 17:32:18Z dburken $";
 #endif
 
 
@@ -111,8 +111,7 @@ ossim_float64 ossimHgtRef::getRefHeight(const ossimGpt& pg) const
 //  Get reference surface covariance matrix.
 //  
 //*****************************************************************************
-bool ossimHgtRef::
-getSurfaceCovMatrix(const ossimGpt& pg, NEWMAT::Matrix& cov) const
+bool ossimHgtRef::getSurfaceCovMatrix(const ossimGpt& /* pg */, NEWMAT::Matrix& cov) const
 {
    
    ossim_float64 refCE;

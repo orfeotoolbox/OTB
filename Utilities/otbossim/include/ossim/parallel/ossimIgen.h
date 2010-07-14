@@ -10,7 +10,7 @@
 // Description: Class declaration for image generator.
 //
 //*************************************************************************
-// $Id: ossimIgen.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimIgen.h 17024 2010-04-13 15:26:40Z dburken $
 #ifndef ossimIgen_HEADER
 #define ossimIgen_HEADER
 
@@ -44,51 +44,26 @@ public:
    virtual void outputProduct();
    
 protected:
-   ossimRefPtr<ossimConnectableContainer> theContainer;
+   void initializeAttributes();
+   void slaveSetup();
+   bool loadProductSpec();
+   void setView();
+   void initThumbnailProjection();
+   void initializeChain();
+   bool writeToFile(ossimImageFileWriter* writer);
 
+   ossimRefPtr<ossimConnectableContainer> theContainer;
    ossimRefPtr<ossimProjection>  theProductProjection;
+   ossimRefPtr<ossimImageChain>  theProductChain;
    ossimDrect        theOutputRect;
    bool              theBuildThumbnailFlag;
-   ossimIpt          theThumbnailResolution;
+   ossimIpt          theThumbnailSize;
    long              theNumberOfTilesToBuffer;
    ossimKeywordlist  theKwl;
    bool              theTilingEnabled;
    ossimTiling       theTiling;
    bool              theProgressFlag;
    
-   /**
-    * Initializes attributes of class.
-    *
-    * Keywords searched for by method:
-    * 
-    * igen.output_progress: true (bool)
-    *
-    * igen.thumbnail: true (bool)
-    *
-    * igen.thumbnail_res: 128 128 (x_res, y_res)
-    *
-    * (number of buffers for slave nodes to process before waiting)
-    * igen.slave_tile_buffers: 2
-    *
-    * igen.tiling.type: ?
-    *
-    * igen.tiling: ?
-    */
-   void initializeAttributes();
-   void slaveSetup();
-
-   bool loadProduct();
-   
-   void deleteAttributes();
-   void setView(ossimConnectableObject* obj, ossimObject* viewObj);
-   ossimProjection* createImageProjection(const ossimKeywordlist& kwl);
-   virtual ossimProjection* buildProductProjection(const ossimKeywordlist& kwl,
-                                                   const char* prefix="product.");
-   bool getOutputRect(const ossimKeywordlist& kwl,
-                      ossimDrect& rect);
-   void buildThumbnail();
-   void outputImageGeometry(const char* filename);
-   ossimImageChain* getChain();
 };
 
 #endif

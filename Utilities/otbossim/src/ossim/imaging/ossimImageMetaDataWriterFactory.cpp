@@ -5,7 +5,7 @@
 // Author:  Kenneth Melero
 //
 //*******************************************************************
-//  $Id: ossimImageMetaDataWriterFactory.cpp 10320 2007-01-19 19:22:50Z dburken $
+//  $Id: ossimImageMetaDataWriterFactory.cpp 17206 2010-04-25 23:20:40Z dburken $
 
 #include <ossim/imaging/ossimImageMetaDataWriterFactory.h>
 
@@ -203,13 +203,13 @@ void ossimImageMetaDataWriterFactory::getMetadatatypeList(
 }
 
 ossimImageMetaDataWriterFactory::ossimImageMetaDataWriterFactory(
-   const ossimImageMetaDataWriterFactory& rhs)
+   const ossimImageMetaDataWriterFactory& /* rhs */)
 {
 }
 
 const ossimImageMetaDataWriterFactory&
 ossimImageMetaDataWriterFactory::operator=(
-   const ossimImageMetaDataWriterFactory& rhs)
+   const ossimImageMetaDataWriterFactory& /* rhs */)
 {
    return *this;
 }

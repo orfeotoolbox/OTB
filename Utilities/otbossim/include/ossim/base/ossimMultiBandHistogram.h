@@ -7,39 +7,42 @@
 // Description: 
 //
 //*******************************************************************
-//  $Id: ossimMultiBandHistogram.h 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimMultiBandHistogram.h 17205 2010-04-24 18:10:01Z dburken $
 #ifndef ossimMultiBandHistogram_HEADER
 #define ossimMultiBandHistogram_HEADER
 #include <vector>
 #include <ossim/base/ossimFilename.h>
+#include <ossim/base/ossimHistogram.h>
 #include <ossim/base/ossimRefPtr.h>
 #include <ossim/base/ossimXmlNode.h>
 #include <ossim/base/ossimReferenced.h>
 
-class ossimHistogram;
 class ossimKeywordlist;
+class ossimImageSource;
 
 class OSSIMDLLEXPORT ossimMultiBandHistogram : public ossimReferenced
 {
 public:
    ossimMultiBandHistogram();
    ossimMultiBandHistogram(const ossimMultiBandHistogram& rhs);
-   ossimMultiBandHistogram(long numberOfBands,
-                           long numberOfBuckets,
+   ossimMultiBandHistogram(ossim_int32 numberOfBands,
+                           ossim_int32 numberOfBuckets,
                            float minValue,
                            float maxValue);
 
-   void create(long numberOfBands,
-               long numberOfBuckets,
+   void create(const ossimImageSource* input);
+   
+   void create(ossim_int32 numberOfBands,
+               ossim_int32 numberOfBuckets,
                float minValue,
                float maxValue);
    
    ossim_uint32 getNumberOfBands() const;
 
-   void create(long numberOfBands);
+   void create(ossim_int32 numberOfBands);
    void setBinCount(double binNumber, double count);
-   ossimRefPtr<ossimHistogram> getHistogram(long band);
-   const ossimRefPtr<ossimHistogram> getHistogram(long band)const;
+   ossimRefPtr<ossimHistogram> getHistogram(ossim_int32 band);
+   const ossimRefPtr<ossimHistogram> getHistogram(ossim_int32 band)const;
 
    ossimRefPtr<ossimMultiBandHistogram> createAccumulationLessThanEqual()const;
    ossimRefPtr<ossimMultiBandHistogram> createAccumulationGreaterThanEqual()const;
@@ -64,16 +67,10 @@ protected:
 
       bool parseStream(std::istream& in);
 
-      ossim_uint32 getNumberOfBands()
-         {
-            return theNumberOfBands.toULong();
-         }
-      void clear()
-         {
-            theFileType      = "";
-            theVersion       = "";
-            theNumberOfBands = "";
-         }
+      ossim_uint32 getNumberOfBands() const;
+
+      void clear();
+
       ossimString theFileType;
       ossimString theVersion;
       ossimString theNumberOfBands;

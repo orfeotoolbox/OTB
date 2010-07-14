@@ -2,40 +2,59 @@
 //
 // License:  See top level LICENSE.txt file.
 // 
-// Author: Garrett Potts (gpotts@imagelinks.com)
+// Author: Garrett Potts
+// 
 // Description: Rpf support class
 // 
 //********************************************************************
-// $Id: ossimRpfBoundaryRectTable.cpp 9963 2006-11-28 21:11:01Z gpotts $
+// $Id: ossimRpfBoundaryRectTable.cpp 16997 2010-04-12 18:53:48Z dburken $
+
+
+#include <istream>
+#include <iterator>
+#include <ostream>
+
 #include <ossim/support_data/ossimRpfBoundaryRectTable.h>
-#include <iomanip>
-using namespace std;
-
-#include <string.h> // for memset
 #include <ossim/base/ossimEndian.h>
-#include <ossim/base/ossimErrorCodes.h>
 
-ostream& operator <<(ostream& out,
-                     const ossimRpfBoundaryRectTable& data)
+std::ostream& operator <<(std::ostream& out, const ossimRpfBoundaryRectTable& data)
 {
-   data.print(out);
-
-   return out;
+   return data.print(out);
 }
 
-ossimRpfBoundaryRectTable::ossimRpfBoundaryRectTable(unsigned long numberOfEntries)
+ossimRpfBoundaryRectTable::ossimRpfBoundaryRectTable(ossim_uint32 numberOfEntries)
+   :
+   m_table(numberOfEntries)
 {
-   theTable.resize(numberOfEntries);  
 }
 
-ossimErrorCode ossimRpfBoundaryRectTable::parseStream(istream& in,
+ossimRpfBoundaryRectTable::ossimRpfBoundaryRectTable(const ossimRpfBoundaryRectTable& obj)
+   :
+   m_table(obj.m_table)
+{
+}
+
+const ossimRpfBoundaryRectTable& ossimRpfBoundaryRectTable::operator=(
+   const ossimRpfBoundaryRectTable& rhs)
+{
+   if ( this != &rhs )
+   {
+      m_table = rhs.m_table;
+   }
+   return *this;
+}
+
+ossimRpfBoundaryRectTable::~ossimRpfBoundaryRectTable()
+{}
+
+ossimErrorCode ossimRpfBoundaryRectTable::parseStream(std::istream& in,
                                                       ossimByteOrder byteOrder)
 {
    if(in)
    {
-      vector<ossimRpfBoundaryRectRecord>::iterator entry = theTable.begin();
+      std::vector<ossimRpfBoundaryRectRecord>::iterator entry = m_table.begin();
       
-      while(entry != theTable.end())
+      while(entry != m_table.end())
       {
          (*entry).parseStream(in, byteOrder);
          ++entry;
@@ -49,14 +68,44 @@ ossimErrorCode ossimRpfBoundaryRectTable::parseStream(istream& in,
    return ossimErrorCodes::OSSIM_OK;
 }
 
-void ossimRpfBoundaryRectTable::setNumberOfEntries(unsigned long numberOfEntries)
+void ossimRpfBoundaryRectTable::writeStream(std::ostream& out)
 {
-   theTable.resize(numberOfEntries);
+   std::vector<ossimRpfBoundaryRectRecord>::iterator entry = m_table.begin();
+   while ( entry != m_table.end() )
+   {
+      (*entry).writeStream(out);
+      ++entry;
+   }
 }
 
-void ossimRpfBoundaryRectTable::print(ostream& out)const
+void ossimRpfBoundaryRectTable::setNumberOfEntries(ossim_uint32 numberOfEntries)
 {
-   copy(theTable.begin(),
-        theTable.end(),
-        ostream_iterator<ossimRpfBoundaryRectRecord>(out, "\n"));
+   m_table.resize(numberOfEntries);
+}
+
+ossim_uint32 ossimRpfBoundaryRectTable::getNumberOfEntries() const
+{
+   return static_cast<ossim_uint32>(m_table.size());
+}
+
+bool ossimRpfBoundaryRectTable::getEntry(
+   ossim_uint32 entry, ossimRpfBoundaryRectRecord& record) const
+{
+   bool result = true;
+   if ( entry < m_table.size() )
+   {
+      record = m_table[entry];
+   }
+   else
+   {
+      result = false;
+   }
+   return result;
+}
+
+std::ostream& ossimRpfBoundaryRectTable::print(std::ostream& out)const
+{
+   std::copy(m_table.begin(), m_table.end(),
+             std::ostream_iterator<ossimRpfBoundaryRectRecord>(out, "\n"));
+   return out;
 }

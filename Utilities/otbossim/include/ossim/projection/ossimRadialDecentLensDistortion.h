@@ -32,7 +32,7 @@
 //   Reference book: Elements of Photogrammetry Paul Wolf
 //   
 //*******************************************************************
-//  $Id: ossimRadialDecentLensDistortion.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimRadialDecentLensDistortion.h 17195 2010-04-23 17:32:18Z dburken $
 #ifndef ossimRadialDecentLensDistortion_HEADER
 #define ossimRadialDecentLensDistortion_HEADER
 #include <iostream>
@@ -51,10 +51,11 @@ class OSSIMDLLEXPORT ossimRadialDecentLensDistortion
 public:
    ossimRadialDecentLensDistortion() {}
    ossimRadialDecentLensDistortion
-      (ossimDpt    calibratedPrincipalPoint,
+      (const ossimDpt& calibratedPrincipalPoint,
        const NEWMAT::ColumnVector &radialDistortionParameters,
        const NEWMAT::ColumnVector &decentDistortionParameters)
-      : theRadialDistortionParameters(radialDistortionParameters),
+      : theCalibratedPrincipalPoint(calibratedPrincipalPoint),
+        theRadialDistortionParameters(radialDistortionParameters),
         theDecentDistortionParameters(decentDistortionParameters)
       {  }
 

@@ -9,7 +9,7 @@
 // Description: This class provides manipulation of filenames.
 //
 //*************************************************************************
-// $Id: ossimFilename.h 16815 2010-03-07 17:22:13Z dburken $
+// $Id: ossimFilename.h 17597 2010-06-19 15:33:01Z dburken $
 
 #ifndef ossimFilename_HEADER
 #define ossimFilename_HEADER
@@ -102,7 +102,7 @@ public:
    ossimFilename file() const;
 
    /**
-    * @return @return "t1.tif" if file is "/data/images/t1.tif".
+    * @return @return "t1" if file is "/data/images/t1.tif".
     */
    ossimFilename fileNoExtension() const;
 
@@ -228,6 +228,9 @@ public:
     * @note This will return false if file name is empty.
     */
    bool needsExpansion() const;
+
+   /** @return The path separator. */
+   char getPathSeparator() const;
    
 protected:
 

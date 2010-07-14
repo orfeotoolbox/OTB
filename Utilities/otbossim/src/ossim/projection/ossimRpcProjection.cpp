@@ -8,7 +8,7 @@
 // AUTHOR: Garrett Potts
 //
 //*****************************************************************************
-//$Id: ossimRpcProjection.cpp 15766 2009-10-20 12:37:09Z gpotts $
+//$Id: ossimRpcProjection.cpp 17206 2010-04-25 23:20:40Z dburken $
 
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
 #include <ossim/projection/ossimRpcProjection.h>
@@ -1027,7 +1027,7 @@ ossimRpcProjection::getForwardDeriv(int parmIdx, const ossimGpt& gpos, double hd
 }
 
 double
-ossimRpcProjection::optimizeFit(const ossimTieGptSet& tieSet, double* targetVariance)
+ossimRpcProjection::optimizeFit(const ossimTieGptSet& tieSet, double* /* targetVariance */)
 {
 #if 1
    //NOTE : ignore targetVariance

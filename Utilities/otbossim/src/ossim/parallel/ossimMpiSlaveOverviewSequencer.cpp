@@ -8,7 +8,7 @@
 // overview files.
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimMpiSlaveOverviewSequencer.cpp 12099 2007-12-01 16:09:36Z dburken $
+// $Id: ossimMpiSlaveOverviewSequencer.cpp 17208 2010-04-26 14:03:48Z dburken $
 
 #include <ossim/parallel/ossimMpiSlaveOverviewSequencer.h>
 #include <ossim/ossimConfig.h>        /* To pick up OSSIM_HAS_MPI. */
@@ -26,26 +26,26 @@
 ossimMpiSlaveOverviewSequencer::ossimMpiSlaveOverviewSequencer()
    :
    ossimOverviewSequencer(),
-   theRank(0),
-   theNumberOfProcessors(1)
+   m_rank(0),
+   m_numberOfProcessors(1)
 {
 #if OSSIM_HAS_MPI   
-   MPI_Comm_rank(MPI_COMM_WORLD, &theRank);
-   MPI_Comm_size(MPI_COMM_WORLD, &theNumberOfProcessors);
+   MPI_Comm_rank(MPI_COMM_WORLD, &m_rank);
+   MPI_Comm_size(MPI_COMM_WORLD, &m_numberOfProcessors);
 #endif
    
-   if( theRank != 0 )
+   if( m_rank != 0 )
    {
       //---
       // Master process (rank 0) does not resample tiles so our process rank
       // is 1 then we'll start at tile 0, rank 2 starts at 1, rank 3 starts
       // at 2 and so on...
       //---
-      theCurrentTileNumber = theRank -1;
+      m_currentTileNumber = m_rank -1;
    }
    else
    {
-      theCurrentTileNumber = 0;
+      m_currentTileNumber = 0;
    }   
 }
 
@@ -62,23 +62,23 @@ void ossimMpiSlaveOverviewSequencer::initialize()
 {
    ossimOverviewSequencer::initialize();
 
-   theCurrentTileNumber = theRank-1;
+   m_currentTileNumber = m_rank-1;
 }
 
 void ossimMpiSlaveOverviewSequencer::setToStartOfSequence()
 {
-   if(theRank != 0)
+   if(m_rank != 0)
    {
       //---
       // Subtract one since the masters job is just writing and not issue
       // getTiles.
       //---
-      theCurrentTileNumber = theRank-1;
+      m_currentTileNumber = m_rank-1;
    }
    else
    {
       // the master will start at 0
-      theCurrentTileNumber = 0;
+      m_currentTileNumber = 0;
    }
 }
 
@@ -92,9 +92,9 @@ void ossimMpiSlaveOverviewSequencer::slaveProcessTiles()
    // use the endian pointer itself as a flag to swap.
    //---
    ossimEndian* endian = 0;
-   if (theImageHandler)
+   if (m_imageHandler)
    {
-      if (theImageHandler->getOutputScalarType() != OSSIM_UINT8)
+      if (m_imageHandler->getOutputScalarType() != OSSIM_UINT8)
       {
          if (ossim::byteOrder() != OSSIM_BIG_ENDIAN)
          {
@@ -109,7 +109,7 @@ void ossimMpiSlaveOverviewSequencer::slaveProcessTiles()
    int         errorValue; // Needed for MPI_Isend and MPI_Wait.
    MPI_Request request;    // Needed for MPI_Isend and MPI_Wait.
 
-   while(theCurrentTileNumber < numberOfTiles)
+   while(m_currentTileNumber < numberOfTiles)
    {
       ossimRefPtr<ossimImageData> data = ossimOverviewSequencer::getNextTile();
 
@@ -118,7 +118,7 @@ void ossimMpiSlaveOverviewSequencer::slaveProcessTiles()
       // Data always sent in big endian byte order.
       if (endian)
       {
-         endian->swap(theTile->getScalarType(), buf, theTile->getSize());
+         endian->swap(m_tile->getScalarType(), buf, m_tile->getSize());
       }
 
       // Send the buffer to the master process.
@@ -141,12 +141,12 @@ void ossimMpiSlaveOverviewSequencer::slaveProcessTiles()
       // If we have eight processes only seven are used for resampling tiles,
       // so we would process every seventh tile.
       // 
-      // The call to getNextTile has already incremented theCurrentTileNumber
+      // The call to getNextTile has already incremented m_currentTileNumber
       // by one so adjust accordingly.
       //---
-      if (theNumberOfProcessors>2)
+      if (m_numberOfProcessors>2)
       {
-         theCurrentTileNumber += (theNumberOfProcessors-2);
+         m_currentTileNumber += (m_numberOfProcessors-2);
       }
       
    } // End of while loop through number of tiles.

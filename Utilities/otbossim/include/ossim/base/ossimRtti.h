@@ -372,7 +372,7 @@ inline RTTIdyntypeid::~RTTIdyntypeid()
 	   if (t == &RTTI_obj) return this;			\
 	   return 0;						\
 	}							\
-	void* cls::RTTI_scast(int i,void* p)			\
+        void* cls::RTTI_scast(int /* i */,void* p)			\
 	{  cls* ptr = (cls*)p; return ptr; }			
 	
 

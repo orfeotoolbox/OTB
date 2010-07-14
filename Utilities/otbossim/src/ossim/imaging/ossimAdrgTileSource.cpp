@@ -9,7 +9,7 @@
 //              ADRG file.
 //
 //********************************************************************
-// $Id: ossimAdrgTileSource.cpp 16075 2009-12-10 15:46:43Z gpotts $
+// $Id: ossimAdrgTileSource.cpp 17195 2010-04-23 17:32:18Z dburken $
 
 #include <iostream>
 
@@ -155,7 +155,7 @@ bool ossimAdrgTileSource::getTile(ossimImageData* result,
 //*******************************************************************
 // Private Method:
 //*******************************************************************
-bool ossimAdrgTileSource::fillBuffer(const ossimIrect& tile_rect,
+bool ossimAdrgTileSource::fillBuffer(const ossimIrect& /* tile_rect */,
                                      const ossimIrect& clip_rect,
                                      ossimImageData* tile)
 {

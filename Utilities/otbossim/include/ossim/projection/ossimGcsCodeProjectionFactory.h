@@ -5,7 +5,7 @@
 // See LICENSE.txt file in the top level directory for more details.
 //
 //*******************************************************************
-//  $Id: ossimGcsCodeProjectionFactory.h 457 2009-12-17 23:17:07Z ming.su $
+//  $Id: ossimGcsCodeProjectionFactory.h 509 2010-02-02 20:07:53Z eric.hirschorn $
 #ifndef ossimGcsCodeProjectionFactory_HEADER
 #define ossimGcsCodeProjectionFactory_HEADER
 #include <ossim/projection/ossimProjectionFactoryBase.h>

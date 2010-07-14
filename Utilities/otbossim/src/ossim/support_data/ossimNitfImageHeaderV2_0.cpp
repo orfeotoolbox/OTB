@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeaderV2_0.cpp 16314 2010-01-10 18:25:28Z dburken $
+// $Id: ossimNitfImageHeaderV2_0.cpp 17598 2010-06-19 15:37:46Z dburken $
 
 
 #include <iomanip>
@@ -174,12 +174,16 @@ void ossimNitfImageHeaderV2_0::parseStream(std::istream &in)
    //---
    // Note: "C4" added to skip over the image data mask subheader.
    // See MIL-STD-2500A paragraph 5.5.1.5
+   //
+   // Seems like CIB data does not have.  Could not find a hard and fast
+   // rule in the specs.  Need a better was to detect if this needs to be
+   // read. (drb - 20100317)
    //---
-   if((compressionType == "NM")||
-      (compressionType == "M0")||
-      (compressionType == "M3")||
-      (compressionType == "M4")||
-      (compressionType == "C4"))
+   if( (compressionType == "NM") ||
+       (compressionType == "M0") ||
+       (compressionType == "M3") ||
+       (compressionType == "M4") ||
+       ( (compressionType == "C4") && ( !getImageId().contains("CIB")) ) )
    {
       in.read((char*)(&theBlockedImageDataOffset), 4);
       in.read((char*)(&theBlockMaskRecordLength),2);
@@ -272,8 +276,10 @@ void ossimNitfImageHeaderV2_0::parseStream(std::istream &in)
    if((getCompressionCode() == "C4")||
       (getCompressionCode() == "M4"))
    {
-      ossimRefPtr<ossimNitfVqCompressionHeader> compressionHeader = new ossimNitfVqCompressionHeader;
+      ossimRefPtr<ossimNitfVqCompressionHeader> compressionHeader =
+         new ossimNitfVqCompressionHeader;
       compressionHeader->parseStream(in);
+      
       // do a check to see if the compression header is good
       //
       
@@ -526,34 +532,6 @@ std::ostream& ossimNitfImageHeaderV2_0::print(std::ostream& out,
    out << std::endl;
 
    return printTags(out, prefix);
-}
-
-ossimDrect ossimNitfImageHeaderV2_0::getImageRect()const
-{
-   ossimDpt ul(ossimString((char*)(&theImageLocation[5])).toDouble(),
-               ossimString((char*)theImageLocation, (char*)(&theImageLocation[5])).toDouble());
-   
-   double rows = ossimString(theSignificantRows).toDouble();
-   double cols = ossimString(theSignificantCols).toDouble();
-
-   ossimDpt lr(ul.x + cols-1,
-               ul.y + rows-1);
-   
-   return ossimDrect(ul, lr);
-}
-
-ossimDrect ossimNitfImageHeaderV2_0::getBlockImageRect()const
-{
-   ossimDpt ul(ossimString((char*)(&theImageLocation[5])).toDouble(),
-               ossimString((char*)theImageLocation, (char*)(&theImageLocation[5])).toDouble());
-   
-   double rows = getNumberOfPixelsPerBlockVert()*getNumberOfBlocksPerCol();
-   double cols = getNumberOfPixelsPerBlockHoriz()*getNumberOfBlocksPerRow();;
-
-   ossimDpt lr(ul.x + cols-1,
-               ul.y + rows-1);
-   
-   return ossimDrect(ul, lr);
 }
 
 bool ossimNitfImageHeaderV2_0::isCompressed()const

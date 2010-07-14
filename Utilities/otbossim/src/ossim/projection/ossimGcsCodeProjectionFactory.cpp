@@ -5,7 +5,7 @@
 // See LICENSE.txt file in the top level directory for more details.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimGcsCodeProjectionFactory.cpp 482 2010-01-06 20:37:02Z eric.hirschorn $
+// $Id: ossimGcsCodeProjectionFactory.cpp 709 2010-04-01 03:02:03Z oscar.kramer $
 
 #include <fstream>
 #include <sstream>
@@ -34,7 +34,7 @@ ossimGcsCodeProjectionFactory::ossimGcsCodeProjectionFactory()
      theCsvFiles()
 {
    // Get the csv file(s) with the key "state_plane_csv_file":
-   ossimString regExpression =  ossimString("gcs_csv");
+   ossimString regExpression =  ossimString("ossim_gcs");
    
    std::vector<ossimString> keys = ossimPreferences::instance()->
       preferencesKWL().getSubstringKeyList( regExpression );
@@ -88,8 +88,7 @@ ossimProjection* ossimGcsCodeProjectionFactory::createProjection(
 }
 
 
-ossimProjection* ossimGcsCodeProjectionFactory::createProjection(
-   const ossimString& name) const
+ossimProjection* ossimGcsCodeProjectionFactory::createProjection(const ossimString& name) const
 {
    ossimProjection* result = 0;
 
@@ -100,20 +99,18 @@ ossimProjection* ossimGcsCodeProjectionFactory::createProjection(
       case 4322:
       {
          ossimEquDistCylProjection* proj =
-            new ossimEquDistCylProjection(*(ossimDatumFactory::instance()->
-                                            wgs72()->ellipsoid()));
-         proj->setDatum(ossimDatumFactory::instance()->
-                        wgs72());
+            new ossimEquDistCylProjection(*(ossimDatumFactory::instance()->wgs72()->ellipsoid()));
+         proj->setDatum(ossimDatumFactory::instance()->wgs72());
+         proj->setGcsCode(code);
          result = proj;
          break;
       }
       case 4326:
       {
          ossimEquDistCylProjection* proj =
-            new ossimEquDistCylProjection(*(ossimDatumFactory::instance()->
-                                            wgs84()->ellipsoid()));
-         proj->setDatum(ossimDatumFactory::instance()->
-                        wgs84());
+            new ossimEquDistCylProjection(*(ossimDatumFactory::instance()->wgs84()->ellipsoid()));
+         proj->setDatum(ossimDatumFactory::instance()->wgs84());
+         proj->setGcsCode(code);
          result = proj;
          break;
       }
@@ -168,7 +165,7 @@ ossimObject* ossimGcsCodeProjectionFactory::createObject(
 }
 
 void ossimGcsCodeProjectionFactory::getTypeNameList(
-   std::vector<ossimString>& typeList)const
+   std::vector<ossimString>& /* typeList */)const
 {
 }
 

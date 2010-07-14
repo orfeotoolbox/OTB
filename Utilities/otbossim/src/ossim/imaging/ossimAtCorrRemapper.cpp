@@ -13,7 +13,7 @@
 // Converts Lsat to Surface Reflectance values
 //
 //*************************************************************************
-// $Id: ossimAtCorrRemapper.cpp 12956 2008-06-02 01:38:50Z dburken $
+// $Id: ossimAtCorrRemapper.cpp 17206 2010-04-25 23:20:40Z dburken $
 
 #include <cstdlib>
 #include <cmath>
@@ -603,7 +603,7 @@ void ossimAtCorrRemapper::setSensorType(const ossimString& sensorType)
    theSensorType = sensorType;
 }
 
-void ossimAtCorrRemapper::interpolate(const ossimDpt& pt,
+void ossimAtCorrRemapper::interpolate(const ossimDpt& /* pt */,
                                       int band,
                                       double& a,
                                       double& b,

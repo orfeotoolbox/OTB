@@ -8,7 +8,7 @@
 // Description: Common file for global Keywords.
 //
 //*************************************************************************
-// $Id: ossimKeywordNames.cpp 16038 2009-12-04 15:15:15Z dburken $
+// $Id: ossimKeywordNames.cpp 17609 2010-06-23 12:51:04Z dburken $
 
 #include <ossim/base/ossimKeywordNames.h>
 
@@ -50,6 +50,7 @@ const char* ossimKeywordNames::ELEVATION_CELL_KW = "elevation_cell";
 const char* ossimKeywordNames::ELEVATION_SOURCE_KW = "elevation_source";
 const char* ossimKeywordNames::ELEVATION_LOOKUP_FLAG_KW = "elevation_lookup_flag";
 const char* ossimKeywordNames::ELLIPSE_CODE_KW = "ellipse_code";
+const char* ossimKeywordNames::ELLIPSE_EPSG_CODE_KW = "ellipse_epsg_code";
 const char* ossimKeywordNames::ELLIPSE_NAME_KW = "ellipse_name";
 const char* ossimKeywordNames::ENABLED_KW = "enabled";
 const char* ossimKeywordNames::ENABLE_CACHE_KW = "enable_cache";

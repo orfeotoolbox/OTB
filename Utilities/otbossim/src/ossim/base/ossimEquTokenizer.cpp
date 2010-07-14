@@ -23,7 +23,8 @@
 
 #ifdef __cplusplus
 
-#include <stdlib.h>
+#include <cstdio> /* for EOF */
+#include <cstdlib>
 #include <iostream>
 #include <fstream>
 using namespace std;

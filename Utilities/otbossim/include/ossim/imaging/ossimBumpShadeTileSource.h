@@ -8,15 +8,12 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimBumpShadeTileSource.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimBumpShadeTileSource.h 17587 2010-06-17 14:42:39Z dburken $
 #ifndef ossimBumpShadeTileSource_HEADER
 #define ossimBumpShadeTileSource_HEADER
 #include <ossim/imaging/ossimImageCombiner.h>
-#include <ossim/matrix/newmat.h>
-#include <ossim/base/ossimColumnVector3d.h>
-#include <ossim/base/ossimConnectableObjectListener.h>
 #include <ossim/base/ossimPropertyEvent.h>
-#include <ossim/imaging/ossimImageToPlaneNormalFilter.h>
+#include <ossim/matrix/newmat.h>
 
 class ossimImageData;
 
@@ -86,7 +83,17 @@ class ossimImageSourceConnection;
  *                                               |--> BumpShade-->Output 
  * ColorSource----------------------->Renderer-->|
  *
- * NOTE:  "Normals" is an ossimImageToPlaneNormalFilter class
+ * NOTES:
+ *
+ * 1) "Normals" is an ossimImageToPlaneNormalFilter class
+ *
+ * 2) The bump map input source is used to bump or shade the input color
+ * source.  The input color source currently must be a 1 or 3 band
+ * image.  Note that the output of this source is always
+ * 3 bands (r, g, b).
+ *
+ * 3) If no color source (2nd input layer) is present the r,g,b values will be
+ * used.  The method setRgbColorSource can be used to control this.
  * 
  * </pre>
  * 
@@ -96,15 +103,6 @@ class OSSIMDLLEXPORT ossimBumpShadeTileSource : public ossimImageCombiner
 public:
    ossimBumpShadeTileSource();
 
-   /**
-    * The bump map  input source is used to bump or shade the input color
-    * source.  The input color source currently must be a 1 or 3 band
-    * image.  Note that the output of this source is always
-    * 3 bands (r, g, b).
-    */
-   ossimBumpShadeTileSource(ossimImageSource* colorSource,
-                            ossimImageSource* bumpMapSource);
-      
    ossimString getShortName()const;
    ossimString getLongName()const;
 
@@ -236,6 +234,27 @@ public:
    virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
    /* ------------------ PROPERTY INTERFACE END ------------------- */
+
+   /**
+    * @brief Set the red, green and blue color source values.
+    *
+    * This sets the rgb value used when no second layer is present.
+    *
+    * The default is: r = 255, g = 255, b = 255
+    *
+    * @param r red
+    * @param g green
+    * @param b blue
+    */
+   void setRgbColorSource(ossim_uint8 r, ossim_uint8 g, ossim_uint8 b);
+
+   /**
+    * Gets the red, green and blue color source values.
+    * @param r red
+    * @param g green
+    * @param b blue
+    */
+   void getRgbColorSource(ossim_uint8& r, ossim_uint8& g, ossim_uint8& b) const;
    
 protected:
    virtual ~ossimBumpShadeTileSource();
@@ -244,23 +263,30 @@ protected:
     * The result of the illumination equation is stored in
     * here.  This is populated on each call to getTile.
     */
-   ossimRefPtr<ossimImageData> theTile;
+   ossimRefPtr<ossimImageData> m_tile;
 
    /**
     * Used for the light vector computation.
     */
-   double theLightSourceElevationAngle;
+   double m_lightSourceElevationAngle;
 
    /**
     * Used for the light vector computation.
     */
-   double theLightSourceAzimuthAngle;
+   double m_lightSourceAzimuthAngle;
 
    /**
     * This is computed from the elevation and
     * azimuth angles of the light source.
     */
-   NEWMAT::ColumnVector theLightDirection;
+   NEWMAT::ColumnVector m_lightDirection;
+
+   /**
+    * rgb values used when no color source (2nd layer) is present.
+    */
+   ossim_uint8 m_r;
+   ossim_uint8 m_g;
+   ossim_uint8 m_b;
 
    void computeColor(ossim_uint8& r,
                      ossim_uint8& g,

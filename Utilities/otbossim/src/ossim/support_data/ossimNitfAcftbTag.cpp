@@ -176,6 +176,32 @@ void ossimNitfAcftbTag::clearFields()
    theMtiTot[MTI_TOT_SIZE] = '\0';
 }
 
+ossimString ossimNitfAcftbTag::getFocalLength()const
+{
+   return ossimString(theFocalLength);
+}
+
+ossimString ossimNitfAcftbTag::getColumnSpacing()const
+{
+   return ossimString(theColSpacing);
+}
+
+ossimString ossimNitfAcftbTag::getColumnSpacingUnits()const
+{
+   return ossimString(theColSpacingUnits);
+}
+
+ossimString ossimNitfAcftbTag::getRowSpacing()const
+{
+   return ossimString(theRowSpacing);
+}
+
+ossimString ossimNitfAcftbTag::getRowSpacingUnits()const
+{
+   return ossimString(theRowSpacingUnits);
+}
+
+
 std::ostream& ossimNitfAcftbTag::print(
    std::ostream& out, const std::string& prefix) const
 {

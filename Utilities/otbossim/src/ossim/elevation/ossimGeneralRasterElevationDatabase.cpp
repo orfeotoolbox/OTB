@@ -5,7 +5,7 @@
 #include <sstream>
 #include <iomanip>
 
-RTTI_DEF1(ossimGeneralRasterElevationDatabase, "ossimGeneralRasterElevationDatabase", ossimElevationDatabase);
+RTTI_DEF1(ossimGeneralRasterElevationDatabase, "ossimGeneralRasterElevationDatabase", ossimElevationCellDatabase);
 
 double ossimGeneralRasterElevationDatabase::getHeightAboveMSL(const ossimGpt& gpt)
 {
@@ -81,7 +81,8 @@ bool ossimGeneralRasterElevationDatabase::openGeneralRasterDirectory(const ossim
    return m_cellHandler.valid();
 }
 
-void ossimGeneralRasterElevationDatabase::createRelativePath(ossimFilename& file, const ossimGpt& gpt)const
+void ossimGeneralRasterElevationDatabase::createRelativePath(
+   ossimFilename& /* file */, const ossimGpt& /* gpt */)const
 {
 }
 

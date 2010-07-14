@@ -505,8 +505,8 @@ void ossimVpfAnnotationFeatureInfo::setDrawingFeaturesToAnnotation()
 
 void ossimVpfAnnotationFeatureInfo::buildTxtFeature(const ossimFilename& tableName,
 						    const ossimString&   tableKey,
-						    const ossimFilename& primitiveName,
-						    const ossimString&   primitiveKey)
+						    const ossimFilename& /* primitiveName */,
+						    const ossimString&   /* primitiveKey */)
 {
   ossimFilename tableFileName      = theCoverage.getPath().dirCat(tableName);
   ossimFilename primitiveTableName;
@@ -608,8 +608,8 @@ void ossimVpfAnnotationFeatureInfo::buildTxtFeature(const ossimFilename& tableNa
 
 void ossimVpfAnnotationFeatureInfo::buildEdgFeature(const ossimFilename& tableName,
 						    const ossimString&   tableKey,
-						    const ossimFilename& primitiveName,
-						    const ossimString&   primitiveKey)
+						    const ossimFilename& /* primitiveName */,
+						    const ossimString&   /* primitiveKey */)
 {
    ossimFilename tableFileName      = theCoverage.getPath().dirCat(tableName);
    ossimFilename primitiveTableName;
@@ -694,8 +694,8 @@ void ossimVpfAnnotationFeatureInfo::readAttributes(ossimPolyLine& polyLine, ossi
 void ossimVpfAnnotationFeatureInfo::buildPointFeature(const ossimString& primitiveName,
 						      const ossimFilename& tableName,
 						      const ossimString&   tableKey,
-						      const ossimFilename& primitive,
-						      const ossimString&   primitiveKey)
+						      const ossimFilename& /* primitive */,
+						      const ossimString&   /* primitiveKey */)
 {
   ossimFilename tableFileName      = theCoverage.getPath().dirCat(tableName);
   ossimFilename primitiveTableName;
@@ -790,8 +790,8 @@ int myFaceCount = 0;
 
 void ossimVpfAnnotationFeatureInfo::buildFaceFeature(const ossimFilename& tableName,
 						     const ossimString&   tableKey, // face_id
-						     const ossimFilename& primitive, //face
-						     const ossimString&   primitiveKey) // id
+						     const ossimFilename& /* primitive */, //face
+						     const ossimString&   /* primitiveKey */) // id
 {
   ossimFilename tableFileName      = theCoverage.getPath().dirCat(tableName);
   ossimFilename primitiveTableName;

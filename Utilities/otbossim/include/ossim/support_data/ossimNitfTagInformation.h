@@ -8,7 +8,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfTagInformation.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimNitfTagInformation.h 16997 2010-04-12 18:53:48Z dburken $
 #ifndef ossimNitfTagInformation_HEADER
 #define ossimNitfTagInformation_HEADER
 
@@ -20,8 +20,8 @@ class ossimString;
 class OSSIMDLLEXPORT ossimNitfTagInformation : public ossimObject
 {
 public:
-   ossimNitfTagInformation(ossimRefPtr<ossimNitfRegisteredTag> tagData = NULL);
-   ~ossimNitfTagInformation();
+   ossimNitfTagInformation(ossimRefPtr<ossimNitfRegisteredTag> tagData = 0);
+   virtual ~ossimNitfTagInformation();
    
    virtual void parseStream(std::istream& in);
    virtual void writeStream(std::ostream& out);
@@ -51,7 +51,6 @@ public:
    ossimRefPtr<ossimNitfRegisteredTag> getTagData();
    const ossimRefPtr<ossimNitfRegisteredTag> getTagData()const;
    void setTagData(ossimRefPtr<ossimNitfRegisteredTag> tagData);
-
    
 private:
 

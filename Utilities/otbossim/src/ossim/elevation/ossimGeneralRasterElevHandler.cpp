@@ -208,8 +208,10 @@ ossimIpt ossimGeneralRasterElevHandler::getSizeOfElevCell() const
    return ossimIpt(theGeneralRasterInfo.theWidth, theGeneralRasterInfo.theHeight);
 }
    
-double ossimGeneralRasterElevHandler::getPostValue(const ossimIpt& gridPt) const
+double ossimGeneralRasterElevHandler::getPostValue(const ossimIpt& /* gridPt */) const
 {
+   ossimNotify(ossimNotifyLevel_WARN)
+      << "ossimGeneralRasterElevHandler::getPostValue(const ossimIpt& gridPt):  NEED TO IMPLEMENT TO NEW INTERFACE\n";
    return ossim::nan();
 }
 
@@ -429,9 +431,9 @@ void ossimGeneralRasterElevHandler::initializeList(const ossimFilename& file)
 #endif
 template <class T>
 double ossimGeneralRasterElevHandler::getHeightAboveMSLFileTemplate(
-                                                                T dummy,
-                                                                const ossimGeneralRasterElevHandler::GeneralRasterInfo& info,
-                                                                const ossimGpt& gpt)
+   T /* dummy */,
+   const ossimGeneralRasterElevHandler::GeneralRasterInfo& info,
+   const ossimGpt& gpt)
 {
    ossimEndian endian;
    
@@ -560,9 +562,9 @@ double ossimGeneralRasterElevHandler::getHeightAboveMSLFileTemplate(
 
 template <class T>
 double ossimGeneralRasterElevHandler::getHeightAboveMSLMemoryTemplate(
-                                                                T dummy,
-                                                                const ossimGeneralRasterElevHandler::GeneralRasterInfo& info,
-                                                                const ossimGpt& gpt)
+   T /* dummy */,
+   const ossimGeneralRasterElevHandler::GeneralRasterInfo& info,
+   const ossimGpt& gpt)
 {
    ossimEndian endian;
    

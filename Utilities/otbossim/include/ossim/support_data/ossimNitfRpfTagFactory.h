@@ -7,7 +7,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfRpfTagFactory.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimNitfRpfTagFactory.h 17207 2010-04-25 23:21:14Z dburken $
 #ifndef ossimNitfRpfTagFactory_HEADER
 #define ossimNitfRpfTagFactory_HEADER
 #include <ossim/support_data/ossimNitfTagFactory.h>
@@ -28,12 +28,12 @@ private:
    /*!
     * Hide this.
     */
-   ossimNitfRpfTagFactory(const ossimNitfRpfTagFactory &rhs){}
+   ossimNitfRpfTagFactory(const ossimNitfRpfTagFactory & /* rhs */){}
 
    /*!
     * Hide this.
     */ 
-   ossimNitfRpfTagFactory& operator =(const ossimNitfRpfTagFactory &rhs){return *this;}
+   ossimNitfRpfTagFactory& operator =(const ossimNitfRpfTagFactory & /* rhs */){return *this;}
 TYPE_DATA
 };
 #endif

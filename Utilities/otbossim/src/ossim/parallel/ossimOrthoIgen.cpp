@@ -1,4 +1,11 @@
-// $Id: ossimOrthoIgen.cpp 16471 2010-02-01 19:52:02Z gpotts $
+//----------------------------------------------------------------------------
+//
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
+//
+//----------------------------------------------------------------------------
+// $Id: ossimOrthoIgen.cpp 17590 2010-06-17 18:09:02Z dburken $
 
 // In Windows, standard output is ASCII by default. 
 // Let's include the following in case we have
@@ -8,24 +15,23 @@
 #include <fcntl.h>
 #endif
 
-#include <sstream>
 #include <ossim/parallel/ossimOrthoIgen.h>
+#include <sstream>
+#include <ossim/base/ossimCommon.h>
 #include <ossim/parallel/ossimIgen.h>
 #include <ossim/parallel/ossimMpi.h>
 #include <ossim/base/ossimException.h>
-#include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimNotifyContext.h>
 #include <ossim/base/ossimObjectFactoryRegistry.h>
 #include <ossim/base/ossimTrace.h>
-#include <ossim/base/ossimUnitConversionTool.h>
 #include <ossim/imaging/ossimBandSelector.h>
+#include <ossim/imaging/ossimCacheTileSource.h>
 #include <ossim/imaging/ossimGeoAnnotationSource.h>
-#include <ossim/imaging/ossimImageChain.h>
 #include <ossim/imaging/ossimImageHandler.h>
 #include <ossim/imaging/ossimImageRenderer.h>
 #include <ossim/imaging/ossimHistogramRemapper.h>
-#include <ossim/imaging/ossimImageCombiner.h>
+#include <ossim/imaging/ossimImageMosaic.h>
 #include <ossim/imaging/ossimFilterResampler.h>
 #include <ossim/imaging/ossimImageHandlerRegistry.h>
 #include <ossim/imaging/ossimOrthoImageMosaic.h>
@@ -35,15 +41,14 @@
 #include <ossim/projection/ossimEquDistCylProjection.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
 #include <ossim/projection/ossimPcsCodeProjectionFactory.h>
-#include <ossim/projection/ossimGcsCodeProjectionFactory.h>
-#include <ossim/projection/ossimStatePlaneProjectionFactory.h>
 #include <ossim/imaging/ossimGeoPolyCutter.h>
 #include <ossim/imaging/ossimEastingNorthingCutter.h>
-
-
+#include <ossim/imaging/ossimHistogramEqualization.h>
 
 static ossimTrace traceDebug("ossimOrthoIgen:debug");
 static ossimTrace traceLog("ossimOrthoIgen:log");
+
+using namespace ossim;
 
 ossimOrthoIgen::ossimOrthoIgenFilename::ossimOrthoIgenFilename(const ossimFilename& file, bool decodeEntry)
 {
@@ -194,9 +199,8 @@ ossimOrthoIgen::ossimOrthoIgen()
    theThumbnailFlag(false),
    theDeltaPerPixelUnit(OSSIM_UNIT_UNKNOWN),
    theDeltaPerPixelOverride(ossim::nan(), ossim::nan()),
-   theProjectionType(OSSIM_INPUT_PROJECTION),
+   theProjectionType(OSSIM_UNKNOWN_PROJECTION),
    theProjectionName(""),
-   theSrsName(""),
    theGeographicOriginOfLatitude(0.0),
    theCombinerType("ossimImageMosaic"),
    theResamplerType("nearest neighbor"),
@@ -217,66 +221,103 @@ ossimOrthoIgen::ossimOrthoIgen()
    theCutDxDyUnit(OSSIM_UNIT_UNKNOWN),
    theLowPercentClip(ossim::nan()),
    theHighPercentClip(ossim::nan()),
+   theStdDevClip(-1),
    theUseAutoMinMaxFlag(false),
    theScaleToEightBitFlag(false),
-   // theSrsCode(),
    theStdoutFlag(false),
-   theFilenames()
+   theWriterProperties(),
+   theCutRectSpecIsConsolidated(false),
+   theTargetHistoFileName(),
+   theContainer(new ossimConnectableContainer),
+   theProductProjection(0),
+   theProductChain(0),
+   theKwl(),
+   theFilenames(0)
 {
    // setDefaultValues();
 }
 
 void ossimOrthoIgen::addArguments(ossimArgumentParser& argumentParser)
 {
-   argumentParser.getApplicationUsage()->addCommandLineOption("--annotate", "annotation keyword list");
-
-   argumentParser.getApplicationUsage()->addCommandLineOption("-t or --thumbnail", "thumbnail resolution");
-   
-   argumentParser.getApplicationUsage()->addCommandLineOption("--meters","Specifies an override for the meters per pixel");
-   argumentParser.getApplicationUsage()->addCommandLineOption("--slave-buffers","number of slave tile buffers for mpi processing (default = 2)");
-   argumentParser.getApplicationUsage()->addCommandLineOption("--view-template","Specify an external file that contains view information");
-   argumentParser.getApplicationUsage()->addCommandLineOption("--chain-template","Specify an external file that contains chain information");
-   argumentParser.getApplicationUsage()->addCommandLineOption("--combiner-template","Specify an external file that contains combiner information");
-   argumentParser.getApplicationUsage()->addCommandLineOption("--tiling-template","Specify an external file that contains tiling information");
-   argumentParser.getApplicationUsage()->addCommandLineOption("--writer-template","Specify an external file that contains tiling information");
-   
-   argumentParser.getApplicationUsage()->addCommandLineOption("--utm","Defaults to a utm image chain with GSD = to the input");
-
-   argumentParser.getApplicationUsage()->addCommandLineOption("--geo","Defaults to a geographic image chain with GSD = to the input.  Origin of latitude is on the equator.");
-   argumentParser.getApplicationUsage()->addCommandLineOption("--input-proj","Makes the view equal to the input.  If more than one file then the first is taken");
-   argumentParser.getApplicationUsage()->addCommandLineOption("--srs","specify an output reference frame/projection. Example: --srs EPSG:4326");
-   argumentParser.getApplicationUsage()->addCommandLineOption("--wkt","specify an output reference frame/projection that is in a wkt format.  Must have the ossimgdal_plugin compiled");
-   
-   argumentParser.getApplicationUsage()->addCommandLineOption("--geo-scaled","Takes a latitude as an argument for purpose of scaling.  Specifies that no spec file was defined.  Defaults to a scaled geographic image chain with GSD = to the input.");
-   
-   argumentParser.getApplicationUsage()->addCommandLineOption("--combiner-type","Specify what mosaic to use, ossimImageMosiac or ossimFeatherMosaic or osimBlendMosaic ... etc");
-   
-   argumentParser.getApplicationUsage()->addCommandLineOption("--resample-type","Specify what resampler to use, nearest neighbor, bilinear, bicubic");
-   
-   argumentParser.getApplicationUsage()->addCommandLineOption("--cut-center-ll","Specify the center cut in lat lon space.  Takes two argument <lat> <lon>");
-   argumentParser.getApplicationUsage()->addCommandLineOption("--cut-radius-meters","Specify the cut distance in meters.  A bounding box for the cut will be produced");
-
-   argumentParser.getApplicationUsage()->addCommandLineOption("--cut-bbox-ll","Specify the min lat and min lon and max lat and maxlon <minLat> <minLon> <maxLat> <maxLon>");
-   argumentParser.getApplicationUsage()->addCommandLineOption("--cut-pixel-width-height","Specify cut box's width and height in pixels");
-
-   argumentParser.getApplicationUsage()->addCommandLineOption("--hist-stretch","Specify in normalized percent the low clip and then the high clip value");
-
-   argumentParser.getApplicationUsage()->addCommandLineOption("--hist-auto-minmax","uses the automatic search for the best min and max clip values");
-
-   argumentParser.getApplicationUsage()->addCommandLineOption("--supplementary-directory","Specify the supplementary directory path where overviews are located");
-
-   argumentParser.getApplicationUsage()->addCommandLineOption("--scale-to-8-bit","Scales output to eight bits if not already.");
-
-   argumentParser.getApplicationUsage()->addCommandLineOption("-w or --writer","Specifies the output writer.  Default uses output file extension to determine writer.");
-    
-   argumentParser.getApplicationUsage()->addCommandLineOption("--writer-prop","Passes a name=value pair to the writer for setting it's property.  Any number of these can appear on the line.");
-
-#if 0 /* TODO */
-   argumentParser.getApplicationUsage()->addCommandLineOption("--srs-code","Takes spatial reference system(srs) code supplied to the option and attempts to derive output projection.   This will return an error if the projection cannont be derived from code.");
-#endif
-   
-   argumentParser.getApplicationUsage()->addCommandLineOption("--stdout","Output the image to standard out.  This will return an error if writer does not support writing to standard out.  Callers should combine this with the --ossim-logfile option to ensure output image stream does not get corrupted.  You must still pass an output file so the writer type can be determined like \"dummy.png\".");
-
+   argumentParser.getApplicationUsage()->addCommandLineOption(
+      "--annotate", "annotation keyword list");
+   argumentParser.getApplicationUsage()->addCommandLineOption(
+      "-t or --thumbnail", "thumbnail resolution");
+   argumentParser.getApplicationUsage()->addCommandLineOption(
+   "--meters","Specifies an override for the meters per pixel");
+   argumentParser.getApplicationUsage()->addCommandLineOption(
+      "--slave-buffers","number of slave tile buffers for mpi processing (default = 2)");
+   argumentParser.getApplicationUsage()->addCommandLineOption(
+      "--view-template","Specify an external file that contains view information");
+   argumentParser.getApplicationUsage()->addCommandLineOption(
+      "--chain-template","Specify an external file that contains chain information");
+   argumentParser.getApplicationUsage()->addCommandLineOption(
+      "--combiner-template","Specify an external file that contains combiner information");
+   argumentParser.getApplicationUsage()->addCommandLineOption(
+      "--tiling-template","Specify an external file that contains tiling information");
+   argumentParser.getApplicationUsage()->addCommandLineOption(
+      "--writer-template","Specify an external file that contains tiling information");
+   argumentParser.getApplicationUsage()->addCommandLineOption(
+      "--utm","Defaults to a utm image chain with GSD = to the input");
+   argumentParser.getApplicationUsage()->addCommandLineOption(
+      "--geo","Defaults to a geographic image chain with GSD = to the input.  Origin of latitude is"
+      "on the equator.");
+   argumentParser.getApplicationUsage()->addCommandLineOption(
+      "--input-proj","Makes the view equal to the input.  If more than one file then the first is "
+      "taken");
+   argumentParser.getApplicationUsage()->addCommandLineOption(
+      "--srs","specify an output reference frame/projection. Example: --srs EPSG:4326");
+   argumentParser.getApplicationUsage()->addCommandLineOption(
+      "--wkt","specify an output reference frame/projection that is in a wkt format.  Must have the"
+      " ossimgdal_plugin compiled");
+   argumentParser.getApplicationUsage()->addCommandLineOption(
+      "--geo-scaled","Takes a latitude as an argument for purpose of scaling.  Specifies that no "
+      "spec file was defined.  Defaults to a scaled geographic image chain with GSD = to the input.");
+   argumentParser.getApplicationUsage()->addCommandLineOption(
+      "--combiner-type","Specify what mosaic to use, ossimImageMosiac or ossimFeatherMosaic or "
+      "osimBlendMosaic ... etc");
+   argumentParser.getApplicationUsage()->addCommandLineOption(
+      "--resample-type","Specify what resampler to use, nearest neighbor, bilinear, cubic");
+   argumentParser.getApplicationUsage()->addCommandLineOption(
+      "--cut-center-ll","Specify the center cut in lat lon space.  Takes two argument <lat> <lon>");
+   argumentParser.getApplicationUsage()->addCommandLineOption(
+      "--cut-radius-meters","Specify the cut distance in meters.  A bounding box for the cut will "
+      "be produced");
+   argumentParser.getApplicationUsage()->addCommandLineOption(
+      "--cut-bbox-ll","Specify the min lat and min lon and max lat and maxlon <minLat> <minLon> "
+      "<maxLat> <maxLon>");
+   argumentParser.getApplicationUsage()->addCommandLineOption(
+      "--cut-pixel-width-height","Specify cut box's width and height in pixels");
+   argumentParser.getApplicationUsage()->addCommandLineOption(
+      "--hist-match","Takes one image filename argument for target histogram to match."
+      " Incompatible with other histogram options.");
+   argumentParser.getApplicationUsage()->addCommandLineOption(
+      "--hist-stretch","Specify in normalized percent the low clip and then the high clip value"
+      " as <low.dd> <hi.dd>."
+      " Incompatible with other histogram options.");
+   argumentParser.getApplicationUsage()->addCommandLineOption(
+      "--hist-std-stretch","Specify histogram stretch as a standard deviation from the mean as"
+      " <int>, where <int> is 1, 2, or 3."
+      " Incompatible with other histogram options.");
+   argumentParser.getApplicationUsage()->addCommandLineOption(
+      "--hist-auto-minmax","uses the automatic search for the best min and max clip values."
+      " Incompatible with other histogram options.");
+   argumentParser.getApplicationUsage()->addCommandLineOption(
+      "--supplementary-directory","Specify the supplementary directory path where overviews are "
+      "located");
+   argumentParser.getApplicationUsage()->addCommandLineOption(
+      "--scale-to-8-bit","Scales output to eight bits if not already.");
+   argumentParser.getApplicationUsage()->addCommandLineOption(
+      "-w or --writer","Specifies the output writer.  Default uses output file extension to "
+      "determine writer.");
+   argumentParser.getApplicationUsage()->addCommandLineOption(
+      "--writer-prop","Passes a name=value pair to the writer for setting it's property.  Any "
+      "number of these can appear on the line.");
+   argumentParser.getApplicationUsage()->addCommandLineOption(
+      "--stdout","Output the image to standard out.  This will return an error if writer does not "
+      "support writing to standard out.  Callers should combine this with the --ossim-logfile "
+      "option to ensure output image stream does not get corrupted.  You must still pass an output "
+      "file so the writer type can be determined like \"dummy.png\".");
 }
 
 void ossimOrthoIgen::initialize(ossimArgumentParser& argumentParser)
@@ -386,14 +427,69 @@ void ossimOrthoIgen::initialize(ossimArgumentParser& argumentParser)
          ossimNotify(ossimNotifyLevel_WARN) << "Can't have option --cut-pixel-width-height without --cut-bbox-ll" << std::endl;
       }
    }
+   
+   // The three histogram options are mutually exclusive:
+   bool histo_op_selected = false;
+   if(argumentParser.read("--hist-match", stringParam))
+   {
+      ossimFilename target_image (tempString);
+      histo_op_selected = true;
+      
+      // Check for histogram matching request and initialize for that:
+      if (target_image.isReadable())
+      {
+         // Establish target histogram file:
+         theTargetHistoFileName = target_image;
+         theTargetHistoFileName.setExtension("his");
+         if (!theTargetHistoFileName.isReadable())
+         {
+            ossimNotify(ossimNotifyLevel_NOTICE)<<"Target histogram file <" << theTargetHistoFileName 
+               << "> not found. Cannot perform histogram matching." << std::endl;
+            theTargetHistoFileName.clear();
+         }
+      }
+   }
    if(argumentParser.read("--hist-stretch", doubleParam, doubleParam2))
    {
-      theLowPercentClip = tempDouble;
-      theHighPercentClip = tempDouble2;
+      if (histo_op_selected)
+      {
+         ossimNotify(ossimNotifyLevel_WARN) << "Cannot specify nore than one histogram operation. "
+            " Ignoring --hist-stretch option." << std::endl;
+      }
+      else
+      {
+         theLowPercentClip = tempDouble;
+         theHighPercentClip = tempDouble2;
+         histo_op_selected = true;
+      }
+   }
+   if(argumentParser.read("--hist-std-stretch", stringParam))
+   {
+      if (histo_op_selected)
+      {
+         ossimNotify(ossimNotifyLevel_WARN) << "Cannot specify nore than one histogram operation. "
+            " Ignoring --hist-stretch option." << std::endl;
+      }
+      else
+      {
+         theStdDevClip = tempString.toInt32();
+         histo_op_selected = true;
+         if ((theStdDevClip < 1) || (theStdDevClip > 3))
+         {
+            ossimNotify(ossimNotifyLevel_WARN) << "Invalid standard deviation value provided with"
+               " --hist-std-stretch option. Only 1,2, or 3 allowed. Ignoring option."<< std::endl;
+         }
+      }
    }
    if(argumentParser.read("--hist-auto-minmax"))
    {
-      theUseAutoMinMaxFlag = true;
+      if (histo_op_selected)
+      {
+         ossimNotify(ossimNotifyLevel_WARN) << "Cannot specify nore than one histogram operation. "
+            " Ignoring --hist-auto-minmax option." << std::endl;
+      }
+      else
+         theUseAutoMinMaxFlag = true;
    }
 
    if(argumentParser.read("--meters", doubleParam))
@@ -408,13 +504,6 @@ void ossimOrthoIgen::initialize(ossimArgumentParser& argumentParser)
       theScaleToEightBitFlag = true;
    }
 
-#if 0
-   if (argumentParser.read("--srs-code", stringParam))
-   {
-      theSrsCode = tempString;
-   }
-#endif
- 
    if (argumentParser.read("--stdout"))
    {
 #if defined(_WIN32)
@@ -469,11 +558,6 @@ void ossimOrthoIgen::initialize(ossimArgumentParser& argumentParser)
    else if (argumentParser.read("--srs", stringParam))
    {
       theSrsString=tempString;
-      theSrsName = tempString;
-      if (theSrsName.contains(":"))
-      {
-         theSrsName = theSrsName.split(":")[1].trim();
-      }
    }
 
    if(argumentParser.read("--view-template", stringParam))
@@ -507,13 +591,8 @@ void ossimOrthoIgen::initialize(ossimArgumentParser& argumentParser)
       }
    }
    if(argumentParser.read("--combiner-type", stringParam))
-   {
       theCombinerType = tempString;
-   }
-   else
-   {
-      theCombinerType = "ossimImageMosaic";
-   }
+
    if(argumentParser.read("--resample-type", stringParam))
    {
       theResamplerType = tempString;
@@ -522,6 +601,7 @@ void ossimOrthoIgen::initialize(ossimArgumentParser& argumentParser)
    {
       theSupplementaryDirectory = ossimFilename(tempString);
    }
+
    if(traceDebug())
    {
          ossimNotify(ossimNotifyLevel_DEBUG)
@@ -573,13 +653,13 @@ bool ossimOrthoIgen::execute()
 //    {
 //       start = ossimMpi::instance()->getTime();
 //    }
-   ossimKeywordlist igenKwl;
-   ossimKeywordlist inputGeom;
+   theKwl.clear();
+   //ossimKeywordlist inputGeom;
    if(ossimMpi::instance()->getRank() == 0)
    {
       try
       {
-         setupIgenKwl(igenKwl);
+         setupIgenKwl();
       }
       catch (const ossimException& e)
       {
@@ -592,18 +672,17 @@ bool ossimOrthoIgen::execute()
 
       if (traceLog())
       {
-         const char* lookup = igenKwl.find("object2.filename");
-         if (lookup)
+         if (theFilenames.size())
          {
-            ossimFilename logFile = lookup;
+            ossimFilename logFile = theFilenames[theFilenames.size()-1].theFilename;
             logFile.setExtension("log");
-            igenKwl.write(logFile.c_str());
+            theKwl.write(logFile.c_str());
          }
       }
    }
 
    ossimIgen *igen = new ossimIgen;
-   igen->initialize(igenKwl);
+   igen->initialize(theKwl);
 
    try
    {
@@ -684,6 +763,15 @@ void ossimOrthoIgen::addFile(const ossimString& fileName,
     }
     else // go to next file or blank line found
     {
+      if (!tmpStr.empty())
+      {
+        ossimNotify(ossimNotifyLevel_DEBUG)
+          << "ossimOrthoIgen::addFile DEBUG:"
+          << "\n" << tmpStr << " is not proper format. It will be ignored. "
+          << std::endl;
+        tmpStr = "";
+        continue;
+      }
       addFiles(tmpStr, fileInfos, withEncodedEntry);
       fileInfos.clear();//after parsing the vector, clear it and get it ready for next set of input
     }
@@ -818,644 +906,370 @@ void ossimOrthoIgen::setDefaultValues()
    theCutDxDyUnit     = OSSIM_UNIT_UNKNOWN;
 }
 
-void ossimOrthoIgen::setCombinerType(const ossimString& combinerType)
-{
-   theCombinerType = combinerType;
-}
-
-void ossimOrthoIgen::setProjectionName(const ossimString& projName)
-{
-   // for now we will only support utm or geographic for this.
-   theProjectionName = projName;
-
-   if(projName == "ossimUtmProjection")
-   {
-      theProjectionType = OSSIM_UTM_PROJECTION;
-   }
-   else if(projName == "ossimEquDistCylProjection")
-   {
-      theProjectionType = OSSIM_GEO_PROJECTION;
-   }
-}
-
-void ossimOrthoIgen::setResamplerType(const ossimString& resamplerType)
-{
-   theResamplerType = resamplerType;
-}
-
-void ossimOrthoIgen::setCutCenter(const ossimDpt& dpt,
-                                  ossimUnitType unit)
-{
-   theCutOriginType = ossimOrthoIgen::OSSIM_CENTER_ORIGIN;
-   theCutOrigin     = dpt;
-   theCutOriginUnit = unit;
-}
-
-void ossimOrthoIgen::setCutDxDy(const ossimDpt& dpt,
-                                ossimUnitType unit)
-{
-   theCutDxDy     = dpt;
-   theCutDxDyUnit = unit;
-}
-
-void ossimOrthoIgen::setupIgenKwl(ossimKeywordlist& kwl)
+void ossimOrthoIgen::setupIgenKwl()
 {
    if (traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "ossimOrthoIgen::setupIgenKwl DEBUG: Entered ..."
-         << std::endl;
-   }
-   setupTiling(kwl);
-   kwl.add("igen.thumbnail",
-           theThumbnailFlag,
-           true);
-   if((theThumbnailRes != "")&&
-      theThumbnailFlag)
-   {
-      kwl.add("igen.thumbnail_res",
-              theThumbnailRes.c_str(),
-              true);
-   }
+      ossimNotify(ossimNotifyLevel_DEBUG)<< "ossimOrthoIgen::setupIgenKwl DEBUG: Entered ..."<< std::endl;
+
+   setupTiling();
+   theKwl.add("igen.thumbnail", theThumbnailFlag, true);
+   if((theThumbnailRes != "")&& theThumbnailFlag)
+      theKwl.add("igen.thumbnail_res", theThumbnailRes.c_str(), true);
 
    // Pass the write to standard out flag to ossimIgen.
-   kwl.add("igen.write_to_stdout", theStdoutFlag, true);
+   theKwl.add("igen.write_to_stdout", theStdoutFlag, true);
 
-   // TODO: kwl.add("igen.srs_code", theSrsCode, true);
-   
    if(theSlaveBuffers == "")
-   {
-      kwl.add("igen.slave_tile_buffers",
-              2,
-              true);
-   }
+      theKwl.add("igen.slave_tile_buffers", 2, true);
    else
-   {
-      kwl.add("igen.slave_tile_buffers",
-              theSlaveBuffers.c_str(),
-              true);
-   }
+      theKwl.add("igen.slave_tile_buffers", theSlaveBuffers.c_str(), true);
+
    ossim_uint32 inputFileIdx = 0;
-
-   try
-   {
-      setupView(kwl);
-   }
-   catch (const ossimException& e)
-   {
-      if (traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG) << e.what() << std::endl;
-      }
-      throw; // re-throw exception
-   }
-
-   if(theFilenames.size() > 1)
-   {
-      ossimKeywordlist tempKwl;
-      ossimRefPtr<ossimObject> obj;
       
-      ossimRefPtr<ossimConnectableObject> mosaicObject;
-      tempKwl.clear();
-      if(theCombinerTemplate.exists())
-      {
-         tempKwl.clear();
-         tempKwl.addFile(theCombinerTemplate);
-      }
-      mosaicObject = (ossimConnectableObject*)ossimObjectFactoryRegistry::instance()->createObject(tempKwl);
-      if(!PTR_CAST(ossimImageCombiner,
-                  mosaicObject.get()))
-      {
-         mosaicObject = 0;
-      }
+   // Set up the output product's projection:
+   setupView();
+
+   if(theFilenames.size()< 1)
+      throw(ossimException(std::string("Must supply an output file.")));
+
+   // Create the output mosaic object, to be connected to its inputs later:
+   ossimKeywordlist templateKwl;
+   templateKwl.clear();
+   ossimRefPtr<ossimImageCombiner> mosaicObject = 0;
+   if(theCombinerTemplate.exists())
+   {
+      templateKwl.addFile(theCombinerTemplate);
+      mosaicObject = PTR_CAST(ossimImageCombiner, 
+                              ossimObjectFactoryRegistry::instance()->createObject(templateKwl));
+   }
+   if (!mosaicObject.valid())
+   {
+      mosaicObject = PTR_CAST(ossimImageCombiner, 
+         ossimObjectFactoryRegistry::instance()->createObject(theCombinerType));
       if(!mosaicObject.valid())
       {
-         mosaicObject = (ossimConnectableObject*)ossimObjectFactoryRegistry::instance()->createObject(theCombinerType);
+         mosaicObject = PTR_CAST(ossimImageMosaic, ossimObjectFactoryRegistry::instance()->
+            createObject(ossimString("ossimImageMosaic")));
       }
-      if(!mosaicObject)
+   }
+
+   // An orthomosaic implies that all input images are already orthorectified to a common projection
+   // so the input chains do not require a renderer:
+   bool orthoMosaic = (PTR_CAST(ossimOrthoImageMosaic, mosaicObject.get()) != 0);
+
+   // Establish default individual input chain from template, if any:
+   templateKwl.clear();
+   ossimRefPtr<ossimImageChain> default_single_image_chain = 0;
+   if(theChainTemplate.exists())
+   {
+      templateKwl.addFile(theChainTemplate);
+      ossimObject* obj = 0;
+      if(templateKwl.find("type"))
+         obj = ossimObjectFactoryRegistry::instance()->createObject(templateKwl);
+      else if(templateKwl.find("object1.type"))
+         obj = ossimObjectFactoryRegistry::instance()->createObject(templateKwl, "object1.");  
+      default_single_image_chain = PTR_CAST(ossimImageChain, obj);
+   }
+   if(!default_single_image_chain.valid())  // then create a default rendering chain
+   {
+      default_single_image_chain = new ossimImageChain;
+      if(theProjectionType != OSSIM_UNKNOWN_PROJECTION)
       {
-         mosaicObject = (ossimConnectableObject*)ossimObjectFactoryRegistry::instance()->createObject(ossimString("ossimImageMosaic"));
-      }
-      
-      if(!mosaicObject)
-      {
-         throw(ossimException(std::string("Unable to create a mosaic object...")));
-      }
-      bool orthoMosaic = (PTR_CAST(ossimOrthoImageMosaic, mosaicObject.get())!=0);
-
-      tempKwl.clear();
-      if(theChainTemplate.exists())
-      {
-         tempKwl.addFile(theChainTemplate);
-         if(tempKwl.find("type"))
+         if(!orthoMosaic)
          {
-            obj = ossimObjectFactoryRegistry::instance()->createObject(tempKwl);
-         }
-         else if(tempKwl.find("object1.type"))
-         {
-            obj = ossimObjectFactoryRegistry::instance()->createObject(tempKwl, "object1.");  
-         }
-      }
-      ossimRefPtr<ossimImageChain> chain = PTR_CAST(ossimImageChain, obj.get());
-      
-      if(!chain)  // then create a default rendering chain
-      {
-         ossimImageChain*    tempChain = new ossimImageChain;
-         if(theProjectionType != OSSIM_UNKNOWN_PROJECTION)
-         {
-            if(!orthoMosaic)
-            {
-               ossimImageRenderer* tempObject   = new ossimImageRenderer;
-               if(tempObject->getResampler())
-               {
-                  tempObject->getResampler()->setFilterType(theResamplerType);
-               }
-               if(tempObject)
-               {
-                  tempChain->addChild(tempObject);
-               }
-            }
-         }
-         obj   = tempChain;
-         chain = tempChain;
-      }
-      
-      ossim_uint32 fileSize = (ossim_uint32)theFilenames.size()-1;
-      ossim_uint32 idx;
-      ossim_uint32 chainIdx = 1;
-      ossimRefPtr<ossimImageChain> rootChain = new ossimImageChain;
-      chain->saveState(kwl, "object1.object1.");
-      for(idx = inputFileIdx;idx < fileSize; ++idx)
-      {
-         // first lets add an input to the chain
-         //
-         ossimFilename input  = theFilenames[idx].theFilename;
-         ossimRefPtr<ossimImageHandler> handler = ossimImageHandlerRegistry::instance()->open(input);
-         ossimHistogramRemapper* histRemapper = 0;
-         if(handler.valid())
-         {
-            std::vector<ossim_uint32> entryList;
-            if(theFilenames[idx].theEntry > -1 )
-            {
-               entryList.push_back(theFilenames[idx].theEntry);
-            }
-            else
-            {
-               handler->getEntryList(entryList);
-            }
-
-            ossim_uint32 entryIdx = 0;
-            for(entryIdx = 0; entryIdx < entryList.size(); ++entryIdx)
-            {
-              ossimImageHandler* h = (ossimImageHandler*)handler->dup();
-              if ( theSupplementaryDirectory.empty() == false )
-              {
-                h->setSupplementaryDirectory( theSupplementaryDirectory );
-              }
-              else if (theFilenames[idx].theSupplementaryDir.empty() == false)
-              {
-                h->setSupplementaryDirectory(theFilenames[idx].theSupplementaryDir);
-              }
-
-              h->setCurrentEntry(entryList[entryIdx]);
-              if ( h->getOverview() == 0 )
-              {
-                 ossimFilename overviewFilename = h->getFilenameWithThisExtension(ossimString(".ovr"));
-                 h->openOverview( overviewFilename );
-              }
-
-              ossimImageChain* tempChain = (ossimImageChain*)chain->dup();
-              tempChain->addLast(h);
-
-              // Capture the end of the chain.
-              ossimImageSource* source = h;
-
-              if (theFilenames[idx].theBands.size() > 0 &&
-                (h->getNumberOfOutputBands() > 1))
-              {
-                ossim_uint32 bands = h->getNumberOfOutputBands();
-                bool validBand = true;
-                for (ossim_uint32 i = 0; i < theFilenames[idx].theBands.size(); ++i)
-                {
-                  if (theFilenames[idx].theBands[i] >= bands)
-                  {
-                    validBand = false;
-                    ossimNotify(ossimNotifyLevel_FATAL)
-                      << " ERROR:" << "\nBand list range error!"
-                      << "\nHighest available band:  " << bands
-                      << std::endl;
-                  }
-                }
-
-                if (validBand)
-                {
-                  ossimRefPtr<ossimBandSelector> bs = new ossimBandSelector();
-                  tempChain->insertRight(bs.get(), source);
-                  source = bs.get();
-                  bs->setOutputBandList(theFilenames[idx].theBands);
-
-                  // Capture the end of the chain.
-                  source = bs.get();
-                }
-              }
-
-              if( ( (ossim::isnan(theHighPercentClip) == false)  &&
-                (ossim::isnan(theLowPercentClip) == false) ) ||
-                theUseAutoMinMaxFlag )
-              {
-                ossimFilename inputHisto = handler->createDefaultHistogramFilename();
-                if(inputHisto.exists())
-                {
-                  histRemapper = new ossimHistogramRemapper;
-                  tempChain->insertRight(histRemapper, source);
-                  histRemapper->openHistogram(inputHisto);
-                  if((ossim::isnan(theHighPercentClip) == false) &&
-                    (ossim::isnan(theLowPercentClip) == false) )
-                  {
-                    histRemapper->setHighNormalizedClipPoint(1.0-theHighPercentClip);
-                    histRemapper->setLowNormalizedClipPoint(theLowPercentClip);
-                  }
-                  else
-                  {
-                    histRemapper->setStretchMode(ossimHistogramRemapper::LINEAR_AUTO_MIN_MAX, true);
-                  }
-                }
-                else
-                {
-                  ossimNotify(ossimNotifyLevel_WARN)
-                    <<"Histogram file " << inputHisto
-                    << " not found!"
-                    << std::endl;
-                }
-              }
-              tempChain->makeUniqueIds();
-              tempChain->saveState(kwl, (ossimString("object1.object")+ossimString::toString(chainIdx)+".").c_str());
-              rootChain->add(tempChain);
-              ++chainIdx;
-              mosaicObject->connectMyInputTo(tempChain);
-            }
-         }
-         else if(input == "NULL_FILE")
-         {
-            ossimImageChain* tempChain = (ossimImageChain*)chain->dup();
-            tempChain->makeUniqueIds();
-            tempChain->saveState(kwl, (ossimString("object1.object")+ossimString::toString(chainIdx)+".").c_str());
-            rootChain->add(tempChain);
-            ++chainIdx;
-            mosaicObject->connectMyInputTo(tempChain);
+            ossimImageRenderer* renderer   = new ossimImageRenderer;
+            if (renderer->getResampler())
+               renderer->getResampler()->setFilterType(theResamplerType);
+            default_single_image_chain->addChild(renderer);
          }
       }
-      mosaicObject->saveState(kwl, (ossimString("object1.object")+
-                                    ossimString::toString(chainIdx)+".").c_str());
+   }
 
-      ossimRefPtr<ossimConnectableObject> input = mosaicObject;
-      ++chainIdx;
-      if(orthoMosaic)
+   ossim_uint32 fileSize = (ossim_uint32)theFilenames.size()-1;
+   ossim_uint32 idx;
+   ossimString prefix ("object1.object");
+
+   // Loop over each input image file to establish a single image chain that will be added to the
+   // output mosaic:
+   ossimImageSource* current_source = 0;
+   for(idx = inputFileIdx;idx < fileSize; ++idx)
+   {
+      // first lets add an input handler to the chain:
+      ossimFilename input  = theFilenames[idx].theFilename;
+      ossimRefPtr<ossimImageHandler> handler = ossimImageHandlerRegistry::instance()->open(input);
+      if(!handler.valid())
       {
-         ossimRefPtr<ossimImageRenderer> tempObject   = new ossimImageRenderer;
-         tempObject->getResampler()->setFilterType(theResamplerType);
-         tempObject->connectMyInputTo(input.get());
-         tempObject->saveState(kwl,
-                              (ossimString("object1.object")+
-                               ossimString::toString(chainIdx)+".").c_str());
-         input = tempObject.get();
+         ossimNotify(ossimNotifyLevel_WARN) << "Could not open input file <" << input << ">. "
+            << "Skipping this entry." << std::endl;
+
+         // WHAT'S THIS? (OLK 02Apr10)
+         //   ossimImageChain* tempChain = (ossimImageChain*)chain->dup();
+         //   tempChain->makeUniqueIds();
+         //   tempChain->saveState(theKwl, (ossimString("object1.object")+ossimString::toString(chainIdx)+".").c_str());
+         //   rootChain->add(tempChain);
+         //   ++chainIdx;
+         //   mosaicObject->connectMyInputTo(tempChain);
+
+         continue;
       }
 
-      // Annotation setup...
-      ossimRefPtr<ossimConnectableObject> annotator =
-         setupAnnotation(kwl, input.get());
-      if (annotator.valid())
-      {
-         annotator->saveState(
-            kwl,
-            (ossimString("object1.object")+
-             ossimString::toString(chainIdx)+".").c_str());
-         input = annotator;
-         ++chainIdx;
-      }
+      std::vector<ossim_uint32> entryList;
+      if(theFilenames[idx].theEntry > -1 )
+         entryList.push_back(theFilenames[idx].theEntry);
       else
-      {
-         if (traceDebug())
-         {
-            ossimNotify(ossimNotifyLevel_DEBUG)
-               << "ossimOrthoIgen::setupIgenKwl DEBUG:\n"
-               << "setupAnnotation failed..."
-               << std::endl;
-         }
-         // return false; Not sure if we want this to be an error???
-      }
-      
-      ossimRefPtr<ossimConnectableObject> cutter = setupCutter(kwl,
-                                                               input.get());
-      
-      if(cutter.valid())
-      {
-         cutter->saveState(kwl, (ossimString("object1.object")+
-                                 ossimString::toString(chainIdx)+".").c_str());
-         input = cutter;
-      }
-                  
-      rootChain = 0;
-      kwl.add("object1.type",
-              "ossimImageChain",
-              true);
+         handler->getEntryList(entryList);
 
-      try
+      // Input image file may have multiple entries. Loop over each and establish single image
+      // chains for each:
+      ossim_uint32 entryIdx = 0;
+      for(entryIdx = 0; entryIdx < entryList.size(); ++entryIdx)
       {
-         setupWriter(kwl, input.get());
-      }
-      catch (const ossimException& e)
-      {
-         if (traceDebug())
+         // Instantiate the chain for one input image source. Copy existing default chain
+         // which may already possess a renderer (so don't do any addFirst()!):
+         ossimImageChain* singleImageChain = (ossimImageChain*) default_single_image_chain->dup();
+
+         // Establish the image handler for this particular frame. This may be just a copy of
+         // the handler already opened in the case of single image per file:
+         ossimImageHandler* img_handler = (ossimImageHandler*)handler->dup();
+         if ( theSupplementaryDirectory.empty() == false )
+            img_handler->setSupplementaryDirectory( theSupplementaryDirectory );
+         else if (theFilenames[idx].theSupplementaryDir.empty() == false)
+            img_handler->setSupplementaryDirectory(theFilenames[idx].theSupplementaryDir);
+         img_handler->setCurrentEntry(entryList[entryIdx]);
+         if ( img_handler->getOverview() == 0 )
          {
-            ossimNotify(ossimNotifyLevel_DEBUG) << e.what() << std::endl;
+            ossimFilename ovrFile = img_handler->getFilenameWithThisExtension(ossimString(".ovr"));
+            img_handler->openOverview( ovrFile );
          }
-         throw; // re-throw exception
+         singleImageChain->addLast(img_handler);
+         current_source = img_handler;
+
+         // Install a band selector if needed:
+         if (theFilenames[idx].theBands.size() && (img_handler->getNumberOfOutputBands() > 1))
+         {
+            ossim_uint32 bands = img_handler->getNumberOfOutputBands();
+            bool validBand = true;
+            for (ossim_uint32 i = 0; i < theFilenames[idx].theBands.size(); ++i)
+            {
+               if (theFilenames[idx].theBands[i] >= bands)
+               {
+                  validBand = false;
+                  ossimNotify(ossimNotifyLevel_FATAL) << " ERROR:" << "\nBand list range error!"
+                     << "\nHighest available band:  " << bands << std::endl;
+               }
+            }
+            if (validBand)
+            {
+               ossimRefPtr<ossimBandSelector> bs = new ossimBandSelector();
+               singleImageChain->insertRight(bs.get(), current_source);
+               bs->setOutputBandList(theFilenames[idx].theBands);
+               current_source = bs.get();
+            }
+         }
+
+         // Install a histogram object if needed:
+         setupHistogram(singleImageChain, img_handler);
+
+         // Add a cache to the left of the resampler.
+         addChainCache(singleImageChain);
+
+         // Add the single image chain to the mosaic and save it to the product spec file:
+         singleImageChain->makeUniqueIds();
+         mosaicObject->connectMyInputTo(singleImageChain);
+         //ossimString newPrefix = (prefix + ossimString::toString(source_index++) + ".");
+         //singleImageChain->saveState(theKwl, newPrefix);
+         theContainer->addChild(singleImageChain);
       }
-      
-   } // matches: if(theFilenames.size() > 1)
-   else
-   {
-      throw(ossimException(std::string("Must suppy an output file.")));
    }
+
+   // Finished initializing the inputs to the mosaic. Add the mosaic to the product chain.
+   theProductChain = new ossimImageChain;
+   theProductChain->addFirst(mosaicObject.get());
+
+   // Now need to pass the product chain through the histogram setup for possible remapper given 
+   // target histogram (used when histo-matching selected):
+   setupHistogram();
+
+   // When mosaicking common input projections without rendering each, need to add a renderer to the
+   // mosaic for reprojectiong to output projection:
+   if(orthoMosaic)
+   {
+      ossimImageRenderer* renderer   = new ossimImageRenderer;
+      renderer->getResampler()->setFilterType(theResamplerType);
+      theProductChain->addFirst(current_source);
+   }
+
+   // Annotation setup...
+   setupAnnotation();
+
+   // Output rect cutter:
+   setupCutter();
+
+   // After all the connections hae been established, save the state of the complete product chain
+   //theProductChain->saveState(theKwl, "object1.");
+   theContainer->addChild(theProductChain.get());
+   theContainer->saveState(theKwl, "object1.");
+
+   // Lastly, set up the write object (object2):
+   setupWriter();
+
 }
 
-ossimRefPtr<ossimConnectableObject> ossimOrthoIgen::setupCutter(
-   ossimKeywordlist& kwl, ossimConnectableObject* input)
+//*************************************************************************************************
+void ossimOrthoIgen::setupCutter()
 {
-   ossimRefPtr<ossimConnectableObject> result;
-   if(theCutDxDy.hasNans())
-   {
-      return result;
-   }
-   ossimRefPtr<ossimProjection> viewProj = ossimProjectionFactoryRegistry::instance()->createProjection(kwl, "product.projection.");
-   
-   if(viewProj.valid())
-   {
-      ossimMapProjection* mapProj = PTR_CAST(ossimMapProjection, viewProj.get());
-      if(mapProj)
-      {
-         ossimGpt originLatLon(theCutOrigin.lat,
-                               theCutOrigin.lon,
-                               0.0,
-                               mapProj->getDatum());
+   ossimImageSource* input_source = theProductChain->getFirstSource();
+   if(theCutDxDy.hasNans() || !theProductProjection.valid() || !input_source)
+      return;
 
-         if(!mapProj->isGeographic())  // projection in meters...
-         {
-            // Convert the cut radius to meters if not already.
-            ossimDpt dxdy;
-            if (theCutDxDyUnit == OSSIM_METERS)
-            {
-               dxdy = theCutDxDy;
-            }
-            else
-            {
-               dxdy.x = ossimUnitConversionTool(
-                  theCutDxDy.x, theCutDxDyUnit).getValue(OSSIM_METERS);
-               dxdy.y = ossimUnitConversionTool(
-                  theCutDxDy.y, theCutDxDyUnit).getValue(OSSIM_METERS);
-            }
+   // Before anything, make sure the cut rect is relative to UL:
+   if (!theCutRectSpecIsConsolidated)
+      consolidateCutRectSpec();
 
-            ossimEastingNorthingCutter* cutter = new ossimEastingNorthingCutter;
-            ossimDpt pt, originEn;
-            mapProj->worldToLineSample(originLatLon,
-                                       pt);
-            pt = ossimIpt(pt);
-            mapProj->lineSampleToEastingNorthing(pt, originEn);
-            
-            ossimDpt ul, lr;
-            
-            switch(theCutOriginType)
-            {
-               case ossimOrthoIgen::OSSIM_CENTER_ORIGIN:  
-               {
-                  ul = originEn + ossimDpt(-dxdy.x,
-                                           dxdy.y);
-                  lr = originEn + ossimDpt(dxdy.x,
-                                           -dxdy.y);
-                  break;
-               }
-               case ossimOrthoIgen::OSSIM_UPPER_LEFT_ORIGIN:
-               {
-                  ul = originEn;
-                  lr = originEn + ossimDpt(dxdy.x,
-                                           -dxdy.y);
-                  
-                  break;
-               }
-               default:
-               {
-                  break;
-               }
-            }
-            
-            cutter->setEastingNorthingRectangle(ul, lr);
-            
-            result = cutter;
-         }
-         else // geographic projection, units = decimal degrees.
-         {
-            // Convert the cut radius to meters if not already.
-            ossimDpt dxdy;
-            if (theCutDxDyUnit == OSSIM_DEGREES)
-            {
-               dxdy = theCutDxDy;
-            }
-            else
-            {
-               dxdy.x = ossimUnitConversionTool(
-                  theCutDxDy.x, theCutDxDyUnit).getValue(OSSIM_DEGREES);
-               dxdy.y = ossimUnitConversionTool(
-                  theCutDxDy.y, theCutDxDyUnit).getValue(OSSIM_DEGREES);
-            }
-            
-            ossimGeoPolyCutter* cutter = new ossimGeoPolyCutter;
-            std::vector<ossimGpt> polygon;
-               
-            switch(theCutOriginType)
-            {
-               case ossimOrthoIgen::OSSIM_CENTER_ORIGIN:  
-               {
-                  ossimGpt ul(originLatLon.latd() + dxdy.y,
-                              originLatLon.lond() - dxdy.x);
-                  ossimGpt ur(originLatLon.latd() + dxdy.y,
-                              originLatLon.lond() + dxdy.x);
-                  ossimGpt lr(originLatLon.latd() - dxdy.y,
-                              originLatLon.lond() + dxdy.x);
-                  ossimGpt ll(originLatLon.latd() - dxdy.y,
-                              originLatLon.lond() - dxdy.x);
-                  
-                  polygon.push_back(ul);
-                  polygon.push_back(ur);
-                  polygon.push_back(lr);
-                  polygon.push_back(ll);
-                  break;
-               }
-               case ossimOrthoIgen::OSSIM_UPPER_LEFT_ORIGIN:
-               {
-                  ossimGpt ul(originLatLon.latd(),
-                              originLatLon.lond());
-                  ossimGpt ur(originLatLon.latd(),
-                              originLatLon.lond() + dxdy.x);
-                  ossimGpt lr(originLatLon.latd() - dxdy.y,
-                              originLatLon.lond() + dxdy.x);
-                  ossimGpt ll(originLatLon.latd() - dxdy.y,
-                              originLatLon.lond());
-                  
-                  polygon.push_back(ul);
-                  polygon.push_back(ur);
-                  polygon.push_back(lr);
-                  polygon.push_back(ll);
-                  
-                  break;
-               }
-               default:
-               {
-                  break;
-               }
-            }
-            cutter->setNumberOfPolygons(1);
-            cutter->setPolygon(polygon);
-            result = cutter;
-         }
-      }
+   ossimGpt originLatLon(theCutOrigin.lat, theCutOrigin.lon, 0.0, theProductProjection->getDatum());
+
+   ossimDpt uli (0,0); // input image UL pixel origin (we want to be an integral distance (in pixels from here)
+   if(!theProductProjection->isGeographic())  // projection in meters...
+   {
+      ossimEastingNorthingCutter* cutter = new ossimEastingNorthingCutter;
+      ossimDpt ul (theProductProjection->forward(originLatLon));
+      ossimDpt lr (ul.x + theCutDxDy.x, ul.y - theCutDxDy.y);
+      cutter->setEastingNorthingRectangle(ul, lr);
+      theProductChain->addFirst(cutter);
    }
 
-   if(result.valid())
+   else // geographic projection, units = decimal degrees.
    {
-      result->connectMyInputTo(input);
+      ossimGeoPolyCutter* cutter = new ossimGeoPolyCutter;
+      std::vector<ossimGpt> polygon;
+
+      ossimGpt ul(originLatLon.lat,                originLatLon.lon               );
+      ossimGpt ur(originLatLon.lat,                originLatLon.lon + theCutDxDy.x);
+      ossimGpt lr(originLatLon.lat - theCutDxDy.y, originLatLon.lon + theCutDxDy.x);
+      ossimGpt ll(originLatLon.lat - theCutDxDy.y, originLatLon.lon               );
+
+      polygon.push_back(ul);
+      polygon.push_back(ur);
+      polygon.push_back(lr);
+      polygon.push_back(ll);
+
+      cutter->setView(theProductProjection.get());
+      cutter->setNumberOfPolygons(1);
+      cutter->setPolygon(polygon);
+      theProductChain->addFirst(cutter);
    }
-   
-   return result;
+
+   return;
 }
 
-void ossimOrthoIgen::setupWriter(ossimKeywordlist& kwl,
-                                 ossimConnectableObject* input)
+void ossimOrthoIgen::setupWriter()
 {
+   if (!theProductChain.valid())
+      return;
+
    ossimFilename outputFilename = ossimFilename::NIL;
    ossimRefPtr<ossimImageFileWriter> writer = 0;
    
    if (theWriterType.size())
    {
        // User selected writer with -w or --writer option.
-      writer = ossimImageWriterFactoryRegistry::instance()->
-         createWriter(theWriterType);
+      writer = ossimImageWriterFactoryRegistry::instance()->createWriter(theWriterType);
    }
    else if ( theWriterTemplate.size() && theWriterTemplate.exists() )
    {
       // User sent us a writer template.
-      ossimKeywordlist kwlTemp;
-      kwlTemp.addFile(theWriterTemplate);
+      ossimKeywordlist kwlTemplate;
+      kwlTemplate.addFile(theWriterTemplate);
 
       // Try first with no prefix.
-      writer = ossimImageWriterFactoryRegistry::instance()->
-         createWriter(kwlTemp);
-
+      writer = ossimImageWriterFactoryRegistry::instance()->createWriter(kwlTemplate);
       if ( !writer.valid() )
-      {
-         writer = ossimImageWriterFactoryRegistry::instance()->
-            createWriter(kwlTemp, "object2.");
-      }
+         writer = ossimImageWriterFactoryRegistry::instance()->createWriter(kwlTemplate, "object2.");
    }
    else if ( theTilingFilename == "%SRTM%")
    {
       ossimKeywordlist kwlWriter;
-      
-      kwlWriter.add("type",
-                    "ossimGeneralRasterWriter",
-                    true);
-      kwlWriter.add("byte_order",
-                    "big_endian");
-      writer = ossimImageWriterFactoryRegistry::instance()->
-         createWriter(kwlWriter);
+      kwlWriter.add("type", "ossimGeneralRasterWriter", true);
+      kwlWriter.add("byte_order", "big_endian");
+      writer = ossimImageWriterFactoryRegistry::instance()->createWriter(kwlWriter);
       outputFilename = outputFilename.path();
    }
 
-   //---
-   // Set the output file name if not already set.
-   // NOTE: Could be outputing to stdout in which case outputFilename does not
-   // make sense.  Leaving here though to not break code downstream. (drb)
-   //---
-   if ( outputFilename == ossimFilename::NIL )
+   try
    {
-      if (theFilenames.size())
+      //---
+      // Set the output file name if not already set.
+      // NOTE: Could be outputing to stdout in which case outputFilename does not
+      // make sense.  Leaving here though to not break code downstream. (drb)
+      //---
+      if ( outputFilename == ossimFilename::NIL )
       {
-         outputFilename = theFilenames[theFilenames.size()-1].theFilename;
+         if (theFilenames.size())
+            outputFilename = theFilenames[theFilenames.size()-1].theFilename;
+         else
+            throw(ossimException(std::string("Writer output filename not set.")));
+      }
+
+      //---
+      // Final check for writer.
+      //---
+      if ( !writer.valid() )
+      {
+         // Derive writer from the extension.
+         ossimFilename ext = outputFilename.ext();
+         if ( ext.size() )
+            writer = ossimImageWriterFactoryRegistry::instance()->createWriterFromExtension(ext);
+
+         //---
+         // Lastly default to tiff.  Perhaps throw exception here instead. (drb)
+         //---
+         if( !writer.valid() )
+         {
+            writer = new ossimTiffWriter;
+            outputFilename.setExtension("tif");
+         }
+      }
+
+      //---
+      // Set writer filename, connect and add to writer to keyword list.
+      //---
+      if ( writer.valid() )
+      {
+         writer->setFilename(outputFilename);
+         if(theScaleToEightBitFlag)
+            writer->setScaleToEightBitFlag(theScaleToEightBitFlag);
+
+         writer->connectMyInputTo(0, theProductChain.get());
+
+         ossimPropertyInterface* propInterface = (ossimPropertyInterface*)writer.get();
+         PropertyMap::iterator iter = theWriterProperties.begin();
+         while(iter != theWriterProperties.end())
+         {
+            propInterface->setProperty(iter->first, iter->second);
+            ++iter;
+         }
+         writer->saveState(theKwl, "object2.");
+         //theContainer->addChild(writer.get());
       }
       else
       {
-         throw(ossimException(std::string("Writer output filename not set.")));
+         throw(ossimException(std::string("Unable to create writer.")));
       }
    }
-
-   //---
-   // Final check for writer.
-   //---
-   if ( !writer.valid() )
+   catch (const ossimException& e)
    {
-      // Derive writer from the extension.
-      ossimFilename ext = outputFilename.ext();
-
-      if ( ext.size() )
-      {
-         writer = ossimImageWriterFactoryRegistry::instance()->
-            createWriterFromExtension(ext);
-      }
-
-      //---
-      // Lastly default to tiff.  Perhaps throw exception here instead. (drb)
-      //---
-      if( !writer.valid() )
-      {
-            writer = new ossimTiffWriter;
-            outputFilename.setExtension("tif");
-      }
-   }
-
-   //---
-   // Set writer filename, connect and add to writer to keyword list.
-   //---
-   if ( writer.valid() )
-   {
-      writer->setFilename(outputFilename);
-      
-      if(theScaleToEightBitFlag)
-      {
-         writer->setScaleToEightBitFlag(theScaleToEightBitFlag);
-      }
-      
-      writer->connectMyInputTo(0, input);
-      
-      ossimPropertyInterface* propInterface =
-         (ossimPropertyInterface*)writer.get();
-      PropertyMap::iterator iter = theWriterProperties.begin();
-      while(iter != theWriterProperties.end())
-      {
-         propInterface->setProperty(iter->first, iter->second);
-         ++iter;
-      }
-      writer->saveState(kwl, "object2.");
-   
-      kwl.add("object2.",
-              ossimKeywordNames::FILENAME_KW,
-              outputFilename.c_str(),
-              true);
-      
-      if(!kwl.find("object2.type"))
-      {
-         kwl.add("object2.",
-                 "type",
-                 "ossimImageFileWriter",
-                 true);
-      }
-   }
-   else
-   {
-      throw(ossimException(std::string("Unable to create writer.")));
+      if (traceDebug())
+         ossimNotify(ossimNotifyLevel_DEBUG) << e.what() << std::endl;
+      throw; // re-throw exception
    }
 }
 
-void ossimOrthoIgen::setupView(ossimKeywordlist& kwl)
+
+//*************************************************************************************************
+// This method establishes the output (view) projection of the product.
+// NOTE: Completely rewritten to simplify and reduce redundancy. OLK 3/10
+//*************************************************************************************************
+void ossimOrthoIgen::setupView()
 {
    if (traceDebug())
    {
@@ -1464,246 +1278,182 @@ void ossimOrthoIgen::setupView(ossimKeywordlist& kwl)
          << "Entered...."
          << std::endl;
    }
-   ossimKeywordlist tempKwl;
-   if(theTemplateView != "")
+
+   theProductProjection = 0;
+
+   // The input projection may be referenced, so establish it here corresponding to the first
+   // input image in the list:
+   ossimRefPtr<ossimProjection> inputProj = 0;
+   ossimFilename input  = theFilenames[0].theFilename;
+   ossimRefPtr<ossimImageHandler> handler = ossimImageHandlerRegistry::instance()->open(input);
+   if(!handler.valid())
    {
-      tempKwl.addFile(theTemplateView);
+      std::string errMsg = "ossimOrthoIgen::setupView() -- Could not open file: ";
+      errMsg += input;
+      throw(ossimException(errMsg));
    }
-   ossimRefPtr<ossimObject> productObj = ossimObjectFactoryRegistry::instance()->createObject(tempKwl, "product.projection.");
-   if(!productObj.valid())
-   {
-      productObj = ossimObjectFactoryRegistry::instance()->createObject(tempKwl);
-      if(!PTR_CAST(ossimProjection, productObj.get()))
-      {
-         productObj = 0;
-      }
-      else
-      {
-         if(!theDeltaPerPixelOverride.hasNans())
-         {
-            ossimMapProjection* mapProj = PTR_CAST(ossimMapProjection, productObj.get());
-            
-            if(mapProj)
-            {
-               if(mapProj->isGeographic())
-               {
-                  mapProj->setDecimalDegreesPerPixel(ossimDpt(ossimUnitConversionTool(theDeltaPerPixelOverride.x,
-                                                                                      theDeltaPerPixelUnit).getValue(OSSIM_DEGREES),
-                                                              ossimUnitConversionTool(theDeltaPerPixelOverride.y,
-                                                                                      theDeltaPerPixelUnit).getValue(OSSIM_DEGREES)));
-               }
-               else
-               {
-                  mapProj->setMetersPerPixel(ossimDpt(ossimUnitConversionTool(theDeltaPerPixelOverride.x,
-                                                                              theDeltaPerPixelUnit).getValue(OSSIM_METERS),
-                                                      ossimUnitConversionTool(theDeltaPerPixelOverride.y,
-                                                                              theDeltaPerPixelUnit).getValue(OSSIM_METERS)));
-               }
-            }
-         }
-      }
-   }
-   if(!productObj.valid() && (theTemplateView!=""))
-   {
-      ossimNotify(ossimNotifyLevel_WARN)
-         << "ossimOrthoIgen::setupView WARNING: File template "
-         << theTemplateView << " did not have a valid view" << std::endl;
-   }
-   if(productObj.valid())
-   {
-      productObj->saveState(kwl, "product.projection.");
-   }
+
+   // Consider distributed image data directories (I guess this is sometimes needed for establishing
+   // an image geometry???)
+   if ( theSupplementaryDirectory.empty() == false )
+      handler->setSupplementaryDirectory( theSupplementaryDirectory );
+   else if (theFilenames[0].theSupplementaryDir.empty() == false )
+      handler->setSupplementaryDirectory( theFilenames[0].theSupplementaryDir );
+   if(theFilenames[0].theEntry > -1)
+      handler->setCurrentEntry(theFilenames[0].theEntry);
    else
    {
-      // Open up the image.
-      ossimFilename input  = theFilenames[0].theFilename;
-      ossimRefPtr<ossimImageHandler> handler = ossimImageHandlerRegistry::instance()->open(input);
+      std::vector<ossim_uint32> entryList;
+      handler->getEntryList(entryList);
+      if ( entryList.size() > 0 )
+         handler->setCurrentEntry(entryList[0]);
+   }
 
-      if(!handler)
+   // Fetch this first input image's geometry and corresponding projection:
+   ossimRefPtr<ossimImageGeometry> inputGeom = handler->getImageGeometry();
+   if (inputGeom.valid())
+      inputProj = inputGeom->getProjection();
+
+   // Throw exception if no valid input image projection could be established:
+   if(!inputProj.valid())
+   {
+      std::string errMsg = "ossimOrthoIgen::setupView() -- Could not establish input image's "
+         "projection. Cannot setup output view.";
+      throw(ossimException(errMsg));
+   }
+
+   // The input projection was successfully established. Define some quantities that may be needed
+   // for the output projection:
+   ossimDpt metersPerPixel = inputProj->getMetersPerPixel();
+   double meanGSD = (metersPerPixel.x+metersPerPixel.y)*.5;
+   ossimDpt gsd(meanGSD, meanGSD);
+   ossimUnitType gsdUnits = OSSIM_METERS;
+   if(!theDeltaPerPixelOverride.hasNans())
+   {
+      gsd = theDeltaPerPixelOverride;
+      gsdUnits = theDeltaPerPixelUnit;
+   }
+   ossimIrect rect = handler->getBoundingRect();
+
+   // Now focus on establishing the output product projection.
+   // Consider externally specified geometry first:
+   if (theProjectionType == OSSIM_EXTERNAL_PROJECTION)
+   {
+      if (!theTemplateView.isReadable())
       {
-         std::string errMsg = "Could not open file: ";
-         errMsg += input;
+         std::string errMsg = "ossimOrthoIgen::setupView() -- Could not read the product "
+            "projection template file at <";
+         errMsg += theTemplateView;
+         errMsg += ">. Cannot establish output projection.";
          throw(ossimException(errMsg));
       }
 
-      if ( theSupplementaryDirectory.empty() == false )
+      // Default template format is no prefix, but consider alternate with prefix if first attempt 
+      // fails:
+      ossimKeywordlist templateKwl (theTemplateView);
+      ossimObjectFactoryRegistry* ofr = ossimObjectFactoryRegistry::instance();
+      ossimRefPtr<ossimObject> productObj = ofr->createObject(templateKwl, "product.projection.");
+      if(!productObj.valid())
+         productObj = ofr->createObject(templateKwl);
+      theProductProjection = PTR_CAST(ossimMapProjection, productObj.get());
+   }
+
+   // Geographic? (Assuming WGS 84 for now.)
+   else if (theProjectionType == OSSIM_GEO_PROJECTION)
+   {
+      theProductProjection = new ossimEquDistCylProjection();
+      ossimGpt gpt(theGeographicOriginOfLatitude, 0.0);
+      theProductProjection->setOrigin(gpt);
+   }
+
+   // SRS code specified on the command line
+   else if (!theSrsString.empty())
+   {
+      // Inconsistent specification of PCS, GCS, SRS codes. Need to check with full name then just code:
+      ossimProjection* base_proj = 
+         ossimProjectionFactoryRegistry::instance()->createProjection(theSrsString);
+      if (!base_proj && (theSrsString.contains(":")))
       {
-         handler->setSupplementaryDirectory( theSupplementaryDirectory );
-      }
-      else if (theFilenames[0].theSupplementaryDir.empty() == false )
-      {
-         handler->setSupplementaryDirectory( theFilenames[0].theSupplementaryDir );
+         ossimString srs_code = theSrsString.split(":")[1].trim();
+         base_proj = ossimProjectionFactoryRegistry::instance()->createProjection(srs_code);
       }
 
-      if(theFilenames[0].theEntry > -1)
+      theProductProjection = PTR_CAST(ossimMapProjection, base_proj);
+      if(theProductProjection.valid())
       {
-         handler->setCurrentEntry(theFilenames[0].theEntry);
+         // Was not assigned before. Now we know
+         if (theProductProjection->isGeographic())
+         {
+            theProjectionType = OSSIM_GEO_PROJECTION;
+            ossimGpt gpt(theGeographicOriginOfLatitude, 0.0);
+            theProductProjection->setOrigin(gpt);
+         }
+         else
+            theProjectionType = OSSIM_UTM_PROJECTION;
       }
       else
       {
-         std::vector<ossim_uint32> entryList;
-         handler->getEntryList(entryList);
-         if ( entryList.size() > 0 )
-         {
-            handler->setCurrentEntry(entryList[0]);
-         }
-      }
-
-      if ( handler->getOverview() == 0 )
-      {
-         ossimFilename overviewFilename = handler->getFilenameWithThisExtension(ossimString(".ovr"));
-         handler->openOverview( overviewFilename );
-      }
-
-      ossimRefPtr<ossimProjection> inputProj = 0;
-      ossimRefPtr<ossimImageGeometry> inputGeom = handler->getImageGeometry();
-      if (inputGeom.valid())
-         inputProj = inputGeom->getProjection();
-
-      if(inputProj.valid() && (theProjectionType !=OSSIM_UNKNOWN_PROJECTION))
-      {
-         // Get the input resolution.
-         ossimDpt metersPerPixel = inputProj->getMetersPerPixel();
-
-         double gsdTemp = (metersPerPixel.x+metersPerPixel.y)*.5;
-         ossimUnitType gsdUnits = OSSIM_METERS;
-         ossimDpt gsd(gsdTemp, gsdTemp);
-         if(!theDeltaPerPixelOverride.hasNans())
-         {
-            gsd      = theDeltaPerPixelOverride;
-            gsdUnits = theDeltaPerPixelUnit;
-         }
-         
-         // Get the bounding rect.
-         ossimIrect rect = handler->getBoundingRect();
-         
-         // Create an output projection.
-         ossimRefPtr<ossimMapProjection> outputProjection;
-         if (theProjectionType == OSSIM_GEO_PROJECTION)
-         {
-            // Assuming WGS 84 for now.
-            outputProjection = new ossimEquDistCylProjection();
-            ossimGpt gpt(theGeographicOriginOfLatitude, 0.0);
-            
-            // Set the origin.
-            outputProjection->setOrigin(gpt);
-            // Set the resolution.
-//             outputProjection->setMetersPerPixel(ossimDpt(gsd, gsd));
-            outputProjection->setDecimalDegreesPerPixel
-               (ossimDpt(ossimUnitConversionTool(gsd.x, gsdUnits).getValue(OSSIM_DEGREES),
-                         ossimUnitConversionTool(gsd.y, gsdUnits).getValue(OSSIM_DEGREES)));
-
-            // Save the state to keyword list.
-            outputProjection->saveState(kwl, "product.projection.");
-         }
-         else if ((theProjectionType == OSSIM_UTM_PROJECTION) ||
-                 ((theProjectionType == OSSIM_INPUT_PROJECTION) &&
-                  !dynamic_cast<ossimMapProjection*>(inputProj.get())))
-            
-         {
-            // Default to UTM.
-            ossimUtmProjection* utm = new ossimUtmProjection;
-            ossimGpt midGpt;
-            
-            inputProj->lineSampleToWorld(ossimDpt(rect.midPoint()), midGpt);
-            
-            utm->setZone(midGpt);
-            utm->setHemisphere(midGpt);
-            ossimDpt eastingNorthing;
-            
-            utm->setMetersPerPixel(ossimDpt(ossimUnitConversionTool(gsd.x,
-                                                                    gsdUnits).getValue(OSSIM_METERS),
-                                            ossimUnitConversionTool(gsd.y,
-                                                                    gsdUnits).getValue(OSSIM_METERS)));
-            
-            eastingNorthing = utm->forward(utm->origin());
-            
-            utm->setUlEastingNorthing(eastingNorthing);
-            outputProjection = utm;
-            utm->setHemisphere(((midGpt.latd()<0.0)?'S':'N'));
-            // Set the resolution.
-//             outputProjection->setMetersPerPixel(ossimDpt(gsd, gsd));
-            // Save the state to keyword list.
-            outputProjection->saveState(kwl, "product.projection.");
-         }
-         else if (theSrsName.empty() == false)
-         {
-            bool isGeo = false;
-            inputProj = ossimProjectionFactoryRegistry::instance()->createProjection(theSrsString);
-            if(!inputProj)
-            {
-               int codeInt = theSrsName.toInt();
-               if (((codeInt >= 2759) && (codeInt <= 3760)) ||    //harn state plane
-                   ((codeInt >= 26729) && (codeInt <= 26803)) ||
-                   ((codeInt >= 26929) && (codeInt <= 26998)) || 
-                   ((codeInt >= 32001) && (codeInt <= 32060)) || 
-                   ((codeInt >= 32100) && (codeInt <= 32161))) // handled by state plane factory.
-               {
-                  kwl.add(ossimKeywordNames::PCS_CODE_KW, theSrsName, true);
-                  inputProj = ossimStatePlaneProjectionFactory::instance()->createProjection(kwl);
-               }
-               else
-               {
-                  kwl.add(ossimKeywordNames::PCS_CODE_KW, theSrsName, true);
-                  inputProj = ossimPcsCodeProjectionFactory::instance()->createProjection(kwl);
-               }
-               if (inputProj == NULL)//try gcs code
-               {
-                  kwl.add(ossimKeywordNames::GCS_CODE_KW, theSrsName, true);
-                  inputProj = ossimGcsCodeProjectionFactory::instance()->createProjection(kwl);
-                  isGeo = true;
-               }
-            }
-            else 
-            {
-               ossimMapProjection* mapProj = dynamic_cast<ossimMapProjection*>(inputProj.get());
-               if(mapProj)
-               {
-                  isGeo = mapProj->isGeographic();
-               }
-            }
-
-            if (inputProj.valid())
-            {
-               ossimRefPtr<ossimMapProjection> outputProjection = dynamic_cast<ossimMapProjection*>(inputProj.get());
-               if (isGeo)
-               {
-                  ossimGpt gpt(theGeographicOriginOfLatitude, 0.0);
-                  
-                  // Set the origin.
-                  outputProjection->setOrigin(gpt);
-                  // Set the resolution.
-                  outputProjection->setDecimalDegreesPerPixel
-                  (ossimDpt(ossimUnitConversionTool(gsd.x, gsdUnits).getValue(OSSIM_DEGREES),
-                            ossimUnitConversionTool(gsd.y, gsdUnits).getValue(OSSIM_DEGREES)));
-               }
-               else
-               {
-                  outputProjection->setMetersPerPixel(ossimDpt(ossimUnitConversionTool(gsd.x,
-                                                                                       gsdUnits).getValue(OSSIM_METERS),
-                                                               ossimUnitConversionTool(gsd.y,
-                                                                                       gsdUnits).getValue(OSSIM_METERS)));
-               }
-               theProjectionName = outputProjection->getProjectionName();
-               outputProjection->saveState(kwl, "product.projection.");
-            }
-         }
-         else // input is a map projection so just use that if we are type INPUT
-         {
-            inputProj->saveState(kwl, "product.projection.");
-         }
-      }
-      else if(theProjectionType == OSSIM_UNKNOWN_PROJECTION)
-      {
-         if (traceDebug())
-         {
-            ossimNotify(ossimNotifyLevel_DEBUG)
-               << "ossimOrthoIgen::setupView DEBUG:"
-               << "UNKNOWN PROJECTION"
-               << std::endl;
-         }
+         ossimNotify(ossimNotifyLevel_WARN)
+            << "ossimOrthoIgen::srs WARNING:" << " Unsupported spatial reference system."
+            << " Will default to the projection from the input image."
+            << std::endl;
       }
    }
+
+   // UTM?
+   else if (theProjectionType == OSSIM_UTM_PROJECTION)
+   {
+      ossimUtmProjection* utm = new ossimUtmProjection;
+      ossimGpt midGpt;
+
+      inputProj->lineSampleToWorld(ossimDpt(rect.midPoint()), midGpt);
+
+      utm->setZone(midGpt);
+      utm->setHemisphere(midGpt);
+      int pcsCode = ossimPcsCodeProjectionFactory::instance()->getPcsCodeFromProjection(utm);
+      utm->setPcsCode(pcsCode);
+      theProductProjection = utm;
+   }
+
+   // None of the above?
+   else
+   {
+      // Either OSSIM_INPUT_PROJECTION or OSSIM_UNKNOWN_PROJECTION. In both cases
+      // just use the first image's input projection for the output. Need to make 
+      // sure the input_proj is a map projection though:
+      ossimMapProjection* map_proj = PTR_CAST(ossimMapProjection, inputProj.get());
+      if (!map_proj)
+      {
+         std::string errMsg = "ossimOrthoIgen::setupView() -- First input image's projection must "
+            "be a map projection when specifying \"input-proj\".";
+         throw(ossimException(errMsg));
+      }
+      theProductProjection = PTR_CAST(ossimMapProjection, map_proj->dup());
+      theProjectionType = OSSIM_INPUT_PROJECTION; // just in case it was unknown before
+   }
+
+   // At this point there should be a valid output projection defined:
+   if (!theProductProjection.valid())
+   {
+      std::string errMsg = "ossimOrthoIgen::setupView() -- Could not establish valid output "
+         "projection";
+      throw(ossimException(errMsg));
+   }
+
+   //Perform some tasks common to all projection types:
+   if (gsdUnits == OSSIM_DEGREES)
+      theProductProjection->setDecimalDegreesPerPixel(gsd);
+   else
+      theProductProjection->setMetersPerPixel(gsd);
+   theProjectionName = theProductProjection->getProjectionName();
+
+   // Fix the tiepoint misalignment between input and output image projections:
+   consolidateCutRectSpec();
+   snapTiePointToInputProj(PTR_CAST(ossimMapProjection, inputProj.get()));
+
+   // Finally, save this output projection spec to the Igen KWL:
+   theProductProjection->saveState(theKwl, "product.projection.");
+
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -1713,59 +1463,45 @@ void ossimOrthoIgen::setupView(ossimKeywordlist& kwl)
    }
 }
 
-ossimRefPtr<ossimConnectableObject> ossimOrthoIgen::setupAnnotation(
-   ossimKeywordlist& kwl, ossimConnectableObject* input) const
+void ossimOrthoIgen::setupAnnotation()
 {
-   ossimRefPtr<ossimConnectableObject> result = NULL;
-   
+   ossimImageSource* input_source = theProductChain->getFirstSource();
+   if (!input_source)
+      return;
+
    if(theAnnotationTemplate.exists() == false)
-   {
-      return result;
-   }
+      return;
    
-   ossimKeywordlist tempKwl;
-   if (tempKwl.addFile(theAnnotationTemplate) == false)
-   {
-      return result;
-   }
+   ossimKeywordlist templateKwl;
+   if (templateKwl.addFile(theAnnotationTemplate) == false)
+      return;
    
    ossimRefPtr<ossimObject> obj = ossimObjectFactoryRegistry::instance()->
-      createObject(tempKwl, "object1.");
+      createObject(templateKwl, "object1.");
    if (obj.valid())
    {
-      ossimGeoAnnotationSource* oga = PTR_CAST(ossimGeoAnnotationSource,
-                                               obj.get());
+      ossimGeoAnnotationSource* oga = PTR_CAST(ossimGeoAnnotationSource, obj.get());
       if (oga)
       {
-         ossimRefPtr<ossimImageGeometry> geom = new ossimImageGeometry;
-         geom->loadState(kwl, "product.projection.");
-         // Connect to input.
-         oga->connectMyInputTo(input);
-         
-         if (geom->hasProjection())
-         {
-            oga->setGeometry(geom.get()); 
-         }
-
-         result = oga;
+         if (theProductProjection.valid())
+            oga->setGeometry(new ossimImageGeometry(0, theProductProjection.get())); 
+         theProductChain->addFirst(oga);
       }
    }
-   
-   return result;
+   return;
 }
 
-bool ossimOrthoIgen::setupTiling(ossimKeywordlist& kwl)
+bool ossimOrthoIgen::setupTiling()
 {
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimOrthoIgen::setupTiling: Entered......" << std::endl;
-      
    }
-   ossimKeywordlist tempKwl;
+   ossimKeywordlist templateKwl;
    ossimFilename outputFilename = theFilenames[theFilenames.size()-1].theFilename;
 
    if((theTilingTemplate == "")||
-      (!tempKwl.addFile(theTilingTemplate)))
+      (!templateKwl.addFile(theTilingTemplate)))
    {
       if(traceDebug())
       {
@@ -1777,35 +1513,35 @@ bool ossimOrthoIgen::setupTiling(ossimKeywordlist& kwl)
 
    if(outputFilename.isDir())
    {
-      if(tempKwl.find("igen.tiling.type"))
+      if(templateKwl.find("igen.tiling.type"))
       {
-         kwl.add(tempKwl);
-         theTilingFilename = tempKwl.find("igen.tiling.tile_name_mask");
+         theKwl.add(templateKwl);
+         theTilingFilename = templateKwl.find("igen.tiling.tile_name_mask");
       }
-      else if(tempKwl.find("type"))
+      else if(templateKwl.find("type"))
       {
-         kwl.add("igen.tiling.", tempKwl);
-         theTilingFilename = tempKwl.find("tile_name_mask");
+         theKwl.add("igen.tiling.", templateKwl);
+         theTilingFilename = templateKwl.find("tile_name_mask");
       }
    }
    else
    {
       bool tilingEnabled = false;
       theTilingFilename = outputFilename.file();
-      if(tempKwl.find("igen.tiling.type"))
+      if(templateKwl.find("igen.tiling.type"))
       {
-         tempKwl.add("igen.tiling.tile_name_mask",
+         templateKwl.add("igen.tiling.tile_name_mask",
                      theTilingFilename.c_str(),
                      true);
-         kwl.add(tempKwl);
+         theKwl.add(templateKwl);
          tilingEnabled = true;
       }
-      else if(tempKwl.find("type"))
+      else if(templateKwl.find("type"))
       {
-         tempKwl.add("tile_name_mask",
+         templateKwl.add("tile_name_mask",
                      theTilingFilename.c_str(),
                      true);
-         kwl.add("igen.tiling.", tempKwl);
+         theKwl.add("igen.tiling.", templateKwl);
          tilingEnabled = true;
       }
       if(tilingEnabled) // check for tile mask override
@@ -1816,29 +1552,314 @@ bool ossimOrthoIgen::setupTiling(ossimKeywordlist& kwl)
 
    if(traceDebug())
    {
-      ossimNotify(ossimNotifyLevel_DEBUG) << "ossimOrthoIgen::setupTiling: tempKwl = \n" << tempKwl << std::endl;
+      ossimNotify(ossimNotifyLevel_DEBUG) << "ossimOrthoIgen::setupTiling: templateKwl = \n" << templateKwl << std::endl;
       ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimOrthoIgen::setupTiling: Leaving......" << __LINE__ << std::endl;
    }
    
    return true;
 }
 
-void ossimOrthoIgen::setMetersPerPixel(const ossimDpt& mpp)
+//*************************************************************************************************
+// Consolidates specification of bounding rect given various ways of specifying on the command
+// line. This avoids multiple, redundant checks scattered throughout the code. On exit:
+// 
+//   1. theCutOriginType is converted to OSSIM_UPPER_LEFT_ORIGIN
+//   2. theCutDxDy reflects the full size of the rect, in the units corresponding to the projection
+//   3. theCutDxDyUnit is METERS for UTM, DEGREES for geographic
+//   4. A boolean data member (theCutRectSpecIsConsolidated) is set. This is checked throughout to
+//      make sure the consolidation was done.
+//
+//*************************************************************************************************
+void ossimOrthoIgen::consolidateCutRectSpec()
 {
-   theDeltaPerPixelOverride = mpp;
-   theDeltaPerPixelUnit = OSSIM_METERS;
+   theCutRectSpecIsConsolidated = true;
+   if (!theProductProjection.valid() || theCutDxDy.hasNans())
+      return; 
+
+   if ((theCutDxDyUnit != OSSIM_METERS) && 
+       (theCutDxDyUnit != OSSIM_DEGREES) &&
+       (theCutDxDyUnit != OSSIM_UNIT_UNKNOWN))
+   {
+      ossimNotify(ossimNotifyLevel_WARN) << "ossimOrthoIgen::consolidateCutRectSpec: An unhandled"
+         " type of units was encountered. The cut rect needs to be specified in either meters or"
+         " degrees. The resulting cut rect and origin may be incorrect." << std::endl;
+      return;
+   }
+
+   ossimGpt originPLH (theCutOrigin.lat, theCutOrigin.lon);
+   if(theProductProjection->isGeographic()) 
+   {
+      // geographic projection; units need to be decimal degrees:
+      if (theCutDxDyUnit == OSSIM_METERS)
+      {
+         // POTENTIAL BUG: converion from meters to degrees longitude should be a function 
+         //                of latitude here. Implemented here but needs testing:
+         ossimDpt mtrs_per_deg (originPLH.metersPerDegree());
+         theCutDxDy.x = theCutDxDy.x/mtrs_per_deg.x;
+         theCutDxDy.y = theCutDxDy.y/mtrs_per_deg.y;
+         theCutDxDyUnit = OSSIM_DEGREES;
+      }
+      else // unknown, assume native units
+         theCutDxDyUnit = OSSIM_DEGREES;
+
+      std::vector<ossimGpt> polygon;
+
+      if (theCutOriginType == OSSIM_CENTER_ORIGIN)
+      {
+         theCutOrigin.lat += theCutDxDy.y;
+         theCutOrigin.lon += theCutDxDy.x;
+      }
+   }
+
+   else 
+   {
+       // projection in meters; units need to be in meters:
+      if (theCutDxDyUnit == OSSIM_DEGREES)
+      {
+         // POTENTIAL BUG: converion from degrees longitude to meters should be a function 
+         //                of latitude here. Implemented here but needs testing:
+         ossimDpt mtrs_per_deg (originPLH.metersPerDegree());
+         theCutDxDy.x = theCutDxDy.x * mtrs_per_deg.x;
+         theCutDxDy.y = theCutDxDy.y * mtrs_per_deg.y;
+         theCutDxDyUnit = OSSIM_METERS;
+      }
+      else // unknown, assume native units
+         theCutDxDyUnit = OSSIM_METERS;
+
+      if (theCutOriginType == OSSIM_CENTER_ORIGIN)
+      {
+         ossimDpt originEN = theProductProjection->forward(originPLH);
+         originEN = originEN + theCutDxDy;
+         originPLH = theProductProjection->inverse(originEN);
+         theCutOrigin.lat = originPLH.lat;
+         theCutOrigin.lon = originPLH.lon;
+      }
+   }
+
+   // One more check then everything should be relative to UL:
+   if (theCutOriginType == OSSIM_CENTER_ORIGIN)
+   {
+      // theCutDxDy in this case represented a radius. This needs to be converted to 
+      // OSSIM_UPPER_LEFT_ORIGIN form:
+      theCutDxDy.x *= 2.0;
+      theCutDxDy.y *= 2.0;
+      theCutOriginType = OSSIM_UPPER_LEFT_ORIGIN;
+   }
 }
 
-void ossimOrthoIgen::setThumbnailResolution(const ossimIpt& res)
+//*************************************************************************************************
+// Implemented to fix the misalignment between the input projection and the product. This was
+// due to an UL corner in the product that was not an integral distance (in pixels) from the UL
+// corner of the input image (assuming single input). OLK 3/10
+//*************************************************************************************************
+void ossimOrthoIgen::snapTiePointToInputProj(ossimMapProjection* in_proj)
 {
-   std::ostringstream out;
+   if (!in_proj || !theProductProjection.valid())
+      return;
 
-   out << res.x << " " << res.y;
+   // Make sure the AOI is specified in terms of UL corner and distance towards LR:
+   if (!theCutRectSpecIsConsolidated)
+      consolidateCutRectSpec();
 
-   theThumbnailRes = out.str().c_str();
+   ossimDpt uli (0,0); // upper left corner of input image in pixels
+
+   // When no cutting is requested, then it's the trivial case of simply copying the input
+   // projection's tiepoint to the output:
+   if (theCutOrigin.hasNans())
+   {
+      ossimGpt ulg; // input image UL geographic origin.
+      in_proj->lineSampleToWorld(uli, ulg);
+      theProductProjection->setUlTiePoints(ulg);
+      return;
+   }
+
+   // We will be modifying the progection's tiepoint (a.k.a. UL corner point):
+   ossimGpt originLatLon(theCutOrigin.lat, theCutOrigin.lon, 0.0, theProductProjection->getDatum());
+   if(in_proj->isGeographic())  // geographic projection, units = decimal degrees.
+   {
+      // Need to use the degrees-per-pixel quantity for accurate snap:
+      ossimGpt ulg; // input image UL geographic origin.
+      ossimDpt degPerPixel (in_proj->getDecimalDegreesPerPixel());
+      in_proj->lineSampleToWorld(uli, ulg);
+
+      // Establish offset from cut-rect UL to input image UL in integral pixels, and
+      // correct the cut-rect's origin for the misalignment:
+      double dLat = originLatLon.lat - ulg.lat;
+      dLat = ossim::round<int>(dLat/degPerPixel.y) * degPerPixel.y;
+      originLatLon.lat = ulg.lat + dLat - 0.5*degPerPixel.y;
+
+      double dLon = originLatLon.lon - ulg.lon;
+      dLon = ossim::round<int>(dLon/degPerPixel.x) * degPerPixel.x;
+      originLatLon.lon = ulg.lon + dLon - 0.5*degPerPixel.x;
+
+      theProductProjection->setUlTiePoints(originLatLon);
+   }
+
+   else    // projection in meters...
+   {
+      ossimDpt originEN = in_proj->forward(originLatLon);
+
+      // Directly use the meters offset from input image UL in computing snap shift:
+      ossimDpt ulEN; // input image UL E/N origin.
+      ossimDpt mtrsPerPixel (theProductProjection->getMetersPerPixel());
+      in_proj->lineSampleToEastingNorthing(uli, ulEN);
+
+      // Establish offset from cut-rect UL to input image UL in integral pixels, and
+      // correct the cut-rect's origin for the misalignment:
+      double dE = originEN.x - ulEN.x;
+      dE = ossim::round<int>(dE/mtrsPerPixel.x) * mtrsPerPixel.x;
+      originEN.x = ulEN.x + dE; // - 0.5*mtrsPerPixel.x;
+
+      double dN = originEN.y - ulEN.y;
+      dN = ossim::round<int>(dN/mtrsPerPixel.y) * mtrsPerPixel.y;
+      originEN.y = ulEN.y + dN; // - 0.5*mtrsPerPixel.y;
+
+      theProductProjection->setUlTiePoints(originEN);
+   }
 }
 
-void ossimOrthoIgen::setThumbnailFlag(bool thumbnailFlag)
+//*************************************************************************************************
+//! Sets up the histogram operation requested for the image chain passed in.
+//*************************************************************************************************
+void ossimOrthoIgen::setupHistogram(ossimImageChain* input_chain,  ossimImageHandler* handler)
 {
-   theThumbnailFlag = thumbnailFlag;
+   // Check if any histo operation was requested:
+   if(((ossim::isnan(theHighPercentClip) || ossim::isnan(theLowPercentClip)) &&
+      !theUseAutoMinMaxFlag && (theStdDevClip < 0) && theTargetHistoFileName.empty()))
+   {
+      return; // no histo op requested
+   }
+
+   // Check if the source passed in is the output mosaic object, because the target
+   // histogram remapper needs to be connected to it (only valid when histo matching is requested):
+   if (input_chain == NULL)
+   {
+      if (!theTargetHistoFileName.isReadable())
+         return;
+
+      ossimHistogramRemapper* remapper = new ossimHistogramRemapper;
+      remapper->openHistogram(theTargetHistoFileName);
+      theProductChain->addFirst(remapper);
+      return;
+   }
+
+   // Remaining operations require a histogram on the input image source:
+   ossimFilename inputHistoFilename (handler->createDefaultHistogramFilename());
+   if (!inputHistoFilename.exists())
+   {
+      // Try "foo_e0.his" if image is "foo.tif" where "e0" is entry index.
+      inputHistoFilename = handler->getFilenameWithThisExtension(ossimString(".his"), true);
+      if ( !inputHistoFilename.exists() )
+      {
+         // No histogram availablefor this image, need to create one (TODO):
+         ossimNotify(ossimNotifyLevel_WARN)
+            <<"Histogram file <" << inputHistoFilename 
+            << "> not found. No histogram operations will be performed on this image." 
+            << std::endl;
+         return;
+      }
+   }
+
+   // Need to insert any histogram object to the left of the renderer in the chain. Search for a 
+   // renderer and save for later:
+   ossimConnectableObject* renderer = PTR_CAST(ossimConnectableObject,
+      input_chain->findFirstObjectOfType(ossimString("ossimImageRenderer")));
+
+   // Histo Match?
+   if (theTargetHistoFileName.isReadable())
+   {
+      // A histogram match was requested. This involves applying a histo equalization to the input
+      // chain and then applying an inverted equalization using the target histogram:
+      ossimHistogramEqualization* forwardEq = new ossimHistogramEqualization;
+      ossimHistogramEqualization* inverseEq = new ossimHistogramEqualization;
+      
+      // Init equalizers with the source and target histogram files:
+      forwardEq->setInverseFlag(false);
+      forwardEq->setHistogram(inputHistoFilename);
+      inverseEq->setInverseFlag(true);
+      inverseEq->setHistogram(theTargetHistoFileName);
+
+      // Insert to the left of renderer if one exists:
+      if (renderer)
+         input_chain->insertLeft(forwardEq, renderer);
+      else
+         input_chain->addFirst(forwardEq);
+      input_chain->insertRight(inverseEq, forwardEq);
+      
+      return;
+   }
+
+   // Remaining possibilities (clip or stretch) require a remapper.
+   // Insert to the left of renderer if one exists:
+   ossimHistogramRemapper* remapper = new ossimHistogramRemapper;
+   if (renderer)
+      input_chain->insertLeft(remapper, renderer);
+   else
+      input_chain->addFirst(remapper);
+
+   // Fetch the input histogram:
+   bool histo_read_ok = remapper->openHistogram(inputHistoFilename);
+   if (!histo_read_ok)
+   {
+      // No histogram available for this image, need to create one (TODO):
+      ossimNotify(ossimNotifyLevel_WARN)<<"Error encountered loading histogram file <" 
+         << inputHistoFilename << ">. No histogram operations will be performed on this image." 
+         << std::endl;
+      return;
+   }
+
+   // Set values to construct remap table:
+   if (!ossim::isnan(theHighPercentClip) && !ossim::isnan(theLowPercentClip))
+   {
+      // Hi/Lo clip requested
+      remapper->setHighNormalizedClipPoint(1.0-theHighPercentClip);
+      remapper->setLowNormalizedClipPoint(theLowPercentClip);
+   }
+   else if (theUseAutoMinMaxFlag)
+   {
+      remapper->setStretchMode(ossimHistogramRemapper::LINEAR_AUTO_MIN_MAX, true);
+   }
+   else if (theStdDevClip > 0)
+   {
+      remapper->setStretchMode((ossimHistogramRemapper::StretchMode) theStdDevClip, true);
+   }
+   
+   return;
+}
+
+void ossimOrthoIgen::addChainCache(ossimImageChain* chain) const
+{
+   if (chain)
+   {  
+      ossimConnectableObject* renderer =
+         PTR_CAST(ossimConnectableObject,
+                  chain->findFirstObjectOfType(ossimString("ossimImageRenderer")));
+
+      if (renderer)
+      {
+         ossimCacheTileSource* cache = new ossimCacheTileSource();
+
+#if 0
+         //---
+         // See if the underlying image is tiled.  If so set the cache tile size to that.
+         //
+         // NOTE: This actually slowed things down; hence, commented out (drb).
+         //---
+         ossimImageHandler* ih =
+            PTR_CAST(ossimImageHandler,
+                     chain->findFirstObjectOfType(ossimString("ossimImageHandler")));
+         if ( ih )
+         {
+            if ( ih->isImageTiled() )
+            {
+               ossimIpt size(static_cast<ossim_int32>( ih->getImageTileWidth() ),
+                             static_cast<ossim_int32>( ih->getImageTileHeight() ) );
+               cache->setTileSize(size);
+            }
+         }
+#endif
+         
+         chain->insertLeft(cache, renderer);
+      }
+   }
 }

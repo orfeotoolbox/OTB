@@ -10,7 +10,7 @@
 //               (DSI) of a DTED Level 1 file.
 //
 //********************************************************************
-// $Id: ossimDtedDsi.cpp 16104 2009-12-17 18:09:59Z gpotts $
+// $Id: ossimDtedDsi.cpp 17206 2010-04-25 23:20:40Z dburken $
 
 #include <cstdlib>
 #include <iostream>
@@ -344,7 +344,7 @@ void ossimDtedDsi::parse(std::istream& in)
 }
 
 ossimRefPtr<ossimProperty> ossimDtedDsi::getProperty(
-   const ossimString& name) const
+   const ossimString& /* name */) const
 {
    ossimRefPtr<ossimProperty> result = 0;
    return result;
@@ -577,7 +577,7 @@ std::ostream& ossimDtedDsi::print(std::ostream& out,
    return out;
 }
 
-ossimDtedDsi::ossimDtedDsi(const ossimDtedDsi& source)
+ossimDtedDsi::ossimDtedDsi(const ossimDtedDsi& /* source */)
 {}
 
 const ossimDtedDsi& ossimDtedDsi::operator=(const ossimDtedDsi& rhs)

@@ -11,7 +11,7 @@
 // Contains class declaration for NitfTileSource.
 //
 //*******************************************************************
-//  $Id: ossimNitfTileSource.h 16314 2010-01-10 18:25:28Z dburken $
+//  $Id: ossimNitfTileSource.h 16876 2010-03-17 20:57:26Z dburken $
 #ifndef ossimNitfTileSource_HEADER
 #define ossimNitfTileSource_HEADER
 
@@ -375,7 +375,11 @@ protected:
     * Initializes the output tile size(width and height).
     */
    virtual void initializeOutputTile();
-   
+
+   /**
+    * @brief Initializes "theLut" if applicable.
+    */
+   void initializeLut();
 
    /**
     * Loads a block of data to theCacheTile.

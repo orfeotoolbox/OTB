@@ -7,7 +7,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimImageRenderer.cpp 16600 2010-02-12 19:45:20Z gpotts $
+//  $Id: ossimImageRenderer.cpp 17716 2010-07-09 20:15:16Z dburken $
 
 #include <iostream>
 using namespace std;
@@ -32,7 +32,6 @@ using namespace std;
 #include <ossim/imaging/ossimDiscrete3x3HatFilter.h>
 #include <ossim/imaging/ossimDiscreteNearestNeighbor.h>
 #include <ossim/imaging/ossimFilterResampler.h>
-#include <ossim/projection/ossimImageViewTransform.h>
 #include <ossim/projection/ossimImageViewProjectionTransform.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
 #include <ossim/projection/ossimImageViewTransformFactory.h>
@@ -40,7 +39,7 @@ using namespace std;
 #include <ossim/projection/ossimEquDistCylProjection.h>
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimImageRenderer.cpp 16600 2010-02-12 19:45:20Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimImageRenderer.cpp 17716 2010-07-09 20:15:16Z dburken $";
 #endif
 
 static ossimTrace traceDebug("ossimImageRenderer:debug");
@@ -567,7 +566,7 @@ m_BlankTile(NULL),
 m_Tile(NULL),
 m_TemporaryBuffer(NULL),
 m_StartingResLevel(0),
-m_ImageViewTransform(NULL),
+m_ImageViewTransform(0),
 m_MaxRecursionLevel(5),
 m_AutoUpdateInputTransform(true),
 m_MaxLevelsToCompute(999999) // something large so it will always compute
@@ -599,7 +598,7 @@ ossimImageRenderer::ossimImageRenderer(ossimImageSource* inputSource,
 {
    ossimViewInterface::theObject = this;
    m_Resampler = new ossimFilterResampler();
-   if(!m_ImageViewTransform)
+   if(!m_ImageViewTransform.valid())
    {
       m_ImageViewTransform = new ossimImageViewProjectionTransform;
    }
@@ -610,12 +609,8 @@ ossimImageRenderer::ossimImageRenderer(ossimImageSource* inputSource,
 //**************************************************************************************************
 ossimImageRenderer::~ossimImageRenderer()
 {
-   if (m_ImageViewTransform)
-   {
-      delete m_ImageViewTransform;
-      m_ImageViewTransform = NULL;
-   }
-   
+  m_ImageViewTransform = 0;
+
    if(m_Resampler)
    {
       delete m_Resampler;
@@ -658,17 +653,17 @@ ossimRefPtr<ossimImageData> ossimImageRenderer::getTile(
       return ossimImageSourceFilter::getTile(tileRect, resLevel);
    }
 
-   if(m_BlankTile.valid())
+  if(m_BlankTile.valid())
    {
       m_BlankTile->setImageRectangle(tileRect);
    }
 
-   if(!theInputConnection)
+  if(!theInputConnection)
    {
       return m_BlankTile;
    }
    
-   if ( !isSourceEnabled()||(!m_ImageViewTransform)||
+  if ( !isSourceEnabled()||(!m_ImageViewTransform.valid())||
         (!m_ImageViewTransform->isValid()) )
    {
       // This tile source bypassed, return the input tile source.
@@ -684,6 +679,7 @@ ossimRefPtr<ossimImageData> ossimImageRenderer::getTile(
    {
       return m_BlankTile;
    }
+
    ossimIrect rect = m_BoundingViewRect;
    if( !theInputConnection || !rect.intersects(tileRect) )
    {
@@ -699,7 +695,7 @@ ossimRefPtr<ossimImageData> ossimImageRenderer::getTile(
    {
       return theInputConnection->getTile(tileRect, resLevel);
    }
-   
+
    // long tw = m_Tile->getWidth();
    // long th = m_Tile->getHeight();
    
@@ -725,7 +721,7 @@ ossimRefPtr<ossimImageData> ossimImageRenderer::getTile(
                                         tileRect.lr(),
                                         tileRect.ll());
 #endif
-   subRectInfo.transformViewToImage(m_ImageViewTransform);
+   subRectInfo.transformViewToImage(m_ImageViewTransform.get());
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -770,7 +766,7 @@ void ossimImageRenderer::recursiveResample(ossimRefPtr<ossimImageData> outputDat
       return;
    }
    const double error = 1;
-   if(rectInfo.canBilinearInterpolate(m_ImageViewTransform, error))
+   if(rectInfo.canBilinearInterpolate(m_ImageViewTransform.get(), error))
    {                                // then draw the tile
       fillTile(outputData,
 	       rectInfo);
@@ -784,7 +780,7 @@ void ossimImageRenderer::recursiveResample(ossimRefPtr<ossimImageData> outputDat
       ossimRendererSubRectInfo lrRectInfo;
       ossimRendererSubRectInfo llRectInfo;
       
-      rectInfo.splitView(m_ImageViewTransform,
+      rectInfo.splitView(m_ImageViewTransform.get(),
 			 ulRectInfo,
 			 urRectInfo,
 			 lrRectInfo,
@@ -799,13 +795,13 @@ void ossimImageRenderer::recursiveResample(ossimRefPtr<ossimImageData> outputDat
          << "\nheight = " << vrect.height()
          << "\nlevel  = " << level << endl;
 #endif
-      bool scaleUlNeedsSplit = ((!ulRectInfo.canBilinearInterpolate(m_ImageViewTransform, error))||
+      bool scaleUlNeedsSplit = ((!ulRectInfo.canBilinearInterpolate(m_ImageViewTransform.get(), error))||
 				ulRectInfo.imageHasNans());
-      bool scaleUrNeedsSplit = ((!urRectInfo.canBilinearInterpolate(m_ImageViewTransform, error))||
+      bool scaleUrNeedsSplit = ((!urRectInfo.canBilinearInterpolate(m_ImageViewTransform.get(), error))||
 				urRectInfo.imageHasNans());
-      bool scaleLrNeedsSplit = ((!lrRectInfo.canBilinearInterpolate(m_ImageViewTransform, error))||
+      bool scaleLrNeedsSplit = ((!lrRectInfo.canBilinearInterpolate(m_ImageViewTransform.get(), error))||
 				lrRectInfo.imageHasNans());
-      bool scaleLlNeedsSplit = ((!llRectInfo.canBilinearInterpolate(m_ImageViewTransform, error))||
+      bool scaleLlNeedsSplit = ((!llRectInfo.canBilinearInterpolate(m_ImageViewTransform.get(), error))||
 				llRectInfo.imageHasNans());
       
       bool tooSmall = (vrect.width() < 4) && (vrect.height()<4);
@@ -1108,7 +1104,7 @@ ossimIrect ossimImageRenderer::getBoundingRect(ossim_uint32 resLevel)const
    inputRect.makeNan();
    outputRect.makeNan();
 
-   if(theInputConnection&&m_ImageViewTransform)
+   if(theInputConnection&&m_ImageViewTransform.valid())
    {
       inputRect = theInputConnection->getBoundingRect(resLevel);
       
@@ -1168,7 +1164,7 @@ void ossimImageRenderer::initialize()
    if (theInputConnection)
       m_BoundingRect = theInputConnection->getBoundingRect();
 
-   if (m_ImageViewTransform && !m_ImageViewTransform->isValid())
+   if (m_ImageViewTransform.valid() && !m_ImageViewTransform->isValid())
       checkIVT();
 
    if (m_Resampler)
@@ -1226,7 +1222,7 @@ void ossimImageRenderer::allocate()
 bool ossimImageRenderer::saveState(ossimKeywordlist& kwl,
                                    const char* prefix)const
 {
-   if(m_ImageViewTransform)
+   if(m_ImageViewTransform.valid())
    {
       ossimString newPrefix = ossimString(prefix) + ossimString("image_view_trans.");
       
@@ -1270,11 +1266,7 @@ bool ossimImageRenderer::loadState(const ossimKeywordlist& kwl,
       m_Resampler->loadState(kwl,
                               (ossimString(prefix)+"resampler.").c_str());
    }
-   if(m_ImageViewTransform)
-   {
-      delete m_ImageViewTransform;
-      m_ImageViewTransform = NULL;
-   }
+   m_ImageViewTransform = 0;
    m_ImageViewTransform = ossimImageViewTransformFactory::instance()->createTransform(kwl, newPrefix.c_str());
    if(!m_ImageViewTransform)
    {
@@ -1295,11 +1287,8 @@ bool ossimImageRenderer::loadState(const ossimKeywordlist& kwl,
 //**************************************************************************************************
 void ossimImageRenderer::setImageViewTransform(ossimImageViewTransform* ivt)
 {
-   if(m_ImageViewTransform)
-      delete m_ImageViewTransform;
-
    m_ImageViewTransform = ivt;
-   if (!m_ImageViewTransform || !m_ImageViewTransform->isValid())
+   if (!m_ImageViewTransform.valid()|| !m_ImageViewTransform->isValid())
       checkIVT();
 
    m_BoundingViewRect.makeNan();
@@ -1312,7 +1301,7 @@ bool ossimImageRenderer::setView(ossimObject* baseObject)
 {
    bool result = false;
    m_BoundingViewRect.makeNan();
-   if(m_ImageViewTransform)
+   if(m_ImageViewTransform.valid())
    {
       result = m_ImageViewTransform->setView(baseObject);
    }
@@ -1325,7 +1314,7 @@ bool ossimImageRenderer::setView(ossimObject* baseObject)
 //**************************************************************************************************
 ossimObject* ossimImageRenderer::getView()
 {
-   if(m_ImageViewTransform)
+   if(m_ImageViewTransform.valid())
    {
       return m_ImageViewTransform->getView();
    }
@@ -1337,7 +1326,7 @@ ossimObject* ossimImageRenderer::getView()
 //**************************************************************************************************
 const ossimObject* ossimImageRenderer::getView()const
 {
-   if(m_ImageViewTransform)
+   if(m_ImageViewTransform.valid())
    {
       return m_ImageViewTransform->getView();
    }
@@ -1351,7 +1340,7 @@ void ossimImageRenderer::getValidImageVertices(vector<ossimIpt>& validVertices,
                                                ossimVertexOrdering ordering,
                                                ossim_uint32 resLevel)const
 {
-   if(theInputConnection&&m_ImageViewTransform&&m_ImageViewTransform->isValid())
+   if(theInputConnection&&m_ImageViewTransform.valid()&&m_ImageViewTransform->isValid())
    {
       theInputConnection->getValidImageVertices(validVertices, ordering, resLevel);
       if(isSourceEnabled())
@@ -1360,7 +1349,7 @@ void ossimImageRenderer::getValidImageVertices(vector<ossimIpt>& validVertices,
          if(inputSize)
          {
             ossimDpt viewPt;
-			ossim_uint32 idx = 0;
+            ossim_uint32 idx = 0;
             // transform each point to the view
             for(idx = 0; idx < inputSize; ++idx)
             {
@@ -1382,11 +1371,11 @@ void ossimImageRenderer::getValidImageVertices(vector<ossimIpt>& validVertices,
 ossimImageGeometry* ossimImageRenderer::getImageGeometry()
 {
    // Make sure the IVT was properly initialized
-   if (m_ImageViewTransform && !m_ImageViewTransform->isValid())
+   if (m_ImageViewTransform.valid() && !m_ImageViewTransform->isValid())
       checkIVT();
 
    ossimImageViewProjectionTransform* ivpt = PTR_CAST(ossimImageViewProjectionTransform, 
-                                                      m_ImageViewTransform);
+                                                      m_ImageViewTransform.get());
    if (ivpt)
    {
       // we need to return the right side since the geometry changed to a view geometry
@@ -1399,10 +1388,10 @@ ossimImageGeometry* ossimImageRenderer::getImageGeometry()
 //**************************************************************************************************
 // 
 //**************************************************************************************************
-void ossimImageRenderer::connectInputEvent(ossimConnectionEvent& event)
+void ossimImageRenderer::connectInputEvent(ossimConnectionEvent& /* event */)
 {
    theInputConnection = PTR_CAST(ossimImageSource, getInput(0));
-   if(!m_ImageViewTransform)
+   if(!m_ImageViewTransform.valid())
       m_ImageViewTransform  = new ossimImageViewProjectionTransform;
    
    checkIVT();
@@ -1413,10 +1402,10 @@ void ossimImageRenderer::connectInputEvent(ossimConnectionEvent& event)
 //**************************************************************************************************
 // 
 //**************************************************************************************************
-void ossimImageRenderer::disconnectInputEvent(ossimConnectionEvent& event)
+void ossimImageRenderer::disconnectInputEvent(ossimConnectionEvent& /* event */)
 {
    ossimImageViewProjectionTransform* ivpt = PTR_CAST(ossimImageViewProjectionTransform,
-                                                      m_ImageViewTransform);
+                                                      m_ImageViewTransform.get());
    if(ivpt)
       ivpt->setImageGeometry(NULL);
    
@@ -1427,7 +1416,7 @@ void ossimImageRenderer::disconnectInputEvent(ossimConnectionEvent& event)
 //**************************************************************************************************
 // 
 //**************************************************************************************************
-void ossimImageRenderer::propertyEvent(ossimPropertyEvent& event)
+void ossimImageRenderer::propertyEvent(ossimPropertyEvent& /* event */)
 {
    checkIVT();
    initialize();
@@ -1526,7 +1515,7 @@ void ossimImageRenderer::checkIVT()
    // Detected uninitialized IVT. We are only concerned with projection IVTs (IVPTs) so 
    // make sure that's what we're working with:
    ossimImageViewProjectionTransform* ivpt = 
-      PTR_CAST(ossimImageViewProjectionTransform, m_ImageViewTransform);
+      PTR_CAST(ossimImageViewProjectionTransform, m_ImageViewTransform.get());
    ossimImageSource* inputSrc = PTR_CAST(ossimImageSource, getInput(0));
    if(!ivpt || !inputSrc) 
       return; // nothing to do here yet.
@@ -1566,11 +1555,7 @@ void ossimImageRenderer::checkIVT()
       const ossimMapProjection* mapProj = PTR_CAST(ossimMapProjection, inputProj);
       if (mapProj && !mapProj->hasModelTransform() )
       {
-         // Legacy code dies hard -- should have a copy-projection method defined:
-         ossimKeywordlist kwl;
-         mapProj->saveState(kwl);
-         ossimProjection* my_proj = 
-            ossimProjectionFactoryRegistry::instance()->createProjection(kwl);
+         ossimProjection* my_proj = PTR_CAST(ossimProjection, mapProj->dup());
          myOutGeom->setProjection(my_proj);
       }
       else 
@@ -1693,7 +1678,6 @@ ossimRefPtr<ossimImageData>  ossimImageRenderer::getTileAtResLevel(const ossimIr
    
    // ossim_uint32 maxValue = (ossim_uint32)ossim::max((ossim_uint32)m_BoundingRect.width(),
    //                                            (ossim_uint32)m_BoundingRect.height());
-   
    if(resLevel == 0)
    {
       return theInputConnection->getTile(boundingRect);
@@ -1859,7 +1843,7 @@ ossim_uint32 ossimImageRenderer::getMaxLevelsToCompute()const
 // 
 //**************************************************************************************************
 template <class T>
-void ossimImageRenderer::resampleTileToDecimation(T dummyVariable,
+void ossimImageRenderer::resampleTileToDecimation(T /* dummyVariable */,
 						  ossimRefPtr<ossimImageData> result,
 						  ossimRefPtr<ossimImageData> tile,
 						  ossim_uint32 multiplier)

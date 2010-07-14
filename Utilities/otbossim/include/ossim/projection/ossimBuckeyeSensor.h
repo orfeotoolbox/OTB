@@ -114,7 +114,7 @@ public:
    }
    inline virtual bool useForward()const {return true;} //!ground to image faster (you don't need DEM) //TBC
    
-   void setLensDisortion(ossimSmacCallibrationSystem* distortion)
+   void setLensDistortion(ossimSmacCallibrationSystem* distortion)
    {
       m_lensDistortion = distortion;
    }

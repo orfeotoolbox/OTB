@@ -10,7 +10,7 @@
 //              rpf file.
 //
 //********************************************************************
-// $Id: ossimRpfFrame.cpp 16308 2010-01-09 02:45:54Z eshirschorn $
+// $Id: ossimRpfFrame.cpp 17206 2010-04-25 23:20:40Z dburken $
 
 #include <istream>
 #include <ostream>
@@ -51,17 +51,17 @@ std::ostream& operator <<(std::ostream& out,
 }
 
 ossimRpfFrame::ossimRpfFrame()
-   :theHeader(NULL),
+   :theHeader(0),
     theFilename(""),
-    theCoverage(NULL),
-    theAttributes(NULL),
-    theImageDescriptionSubheader(NULL),
-    theMaskSubheader(NULL),
-    theImageDisplayParameterSubheader(NULL),
-    theCompressionSection(NULL),
-    theColorGrayscaleSubheader(NULL),
-    theColorConverterSubsection(NULL),
-    theNitfFile(NULL)
+    theCoverage(0),
+    theAttributes(0),
+    theImageDescriptionSubheader(0),
+    theMaskSubheader(0),
+    theImageDisplayParameterSubheader(0),
+    theCompressionSection(0),
+    theColorGrayscaleSubheader(0),
+    theColorConverterSubsection(0),
+    theNitfFile(0)
 {
 }
 
@@ -228,11 +228,11 @@ ossimErrorCode ossimRpfFrame::parseFile(const ossimFilename& filename,
    theNitfFile->parseFile(filename);
    
    const ossimRefPtr<ossimNitfFileHeader> nitfFileHeader =
-      theNitfFile.valid() ? theNitfFile->getHeader() : NULL;
+      theNitfFile.valid() ? theNitfFile->getHeader() : 0;
 
    if(!nitfFileHeader)
    {
-      theNitfFile = NULL;
+      theNitfFile = 0;
 
       return ossimErrorCodes::OSSIM_ERROR;
    }
@@ -250,14 +250,17 @@ ossimErrorCode ossimRpfFrame::parseFile(const ossimFilename& filename,
       if(theHeader) delete theHeader;
       theHeader = new ossimRpfHeader;
       
-      if(theHeader->parseStream(in) != ossimErrorCodes::OSSIM_OK)
+      // if(theHeader->parseStream(in) != ossimErrorCodes::OSSIM_OK)
+      theHeader->parseStream(in);
+
+      if ( in.fail() )
       {
          deleteAll();
          
          return ossimErrorCodes::OSSIM_ERROR;
       }
-      
-      if(!in.fail()&&theHeader)
+      else
+         // if(!in.fail()&&theHeader)
       {
          result = populateAttributeSection(in);
 
@@ -285,10 +288,6 @@ ossimErrorCode ossimRpfFrame::parseFile(const ossimFilename& filename,
             }
          }
       }
-      else
-      {
-         return ossimErrorCodes::OSSIM_ERROR;
-      }
    }
    else
    {
@@ -310,7 +309,7 @@ bool ossimRpfFrame::hasSubframeMaskTable()const
 }
 
 bool ossimRpfFrame::fillSubFrameBuffer(ossim_uint8* buffer,
-                                       ossim_uint32 spectralGroup,
+                                       ossim_uint32 /* spectralGroup */,
                                        ossim_uint32 row,
                                        ossim_uint32 col)const
 {
@@ -322,12 +321,12 @@ bool ossimRpfFrame::fillSubFrameBuffer(ossim_uint8* buffer,
    {
       ossimRpfComponentLocationRecord info;
       
-      if(!theHeader->getLocationSection().getComponent(OSSIM_RPF_SPATIAL_DATA_SUBSECTION, info))
+      if(!theHeader->getLocationSection()->getComponent(OSSIM_RPF_SPATIAL_DATA_SUBSECTION, info))
       {
          return false;
       }
       
-      ossim_uint32 offset = info.theComponentLocation;
+      ossim_uint32 offset = info.m_componentLocation;
       ossim_uint32 bytesPerSubframe = 0;
 
       // note that the code length is bit encoded so we must devide by 8
@@ -397,51 +396,51 @@ void ossimRpfFrame::deleteAll()
    if(theHeader)
    {
       delete theHeader;
-      theHeader = NULL;
+      theHeader = 0;
    }
    if(theAttributes)
    {
       delete theAttributes;
-      theAttributes = NULL;
+      theAttributes = 0;
    }
    if(theCoverage)
    {
       delete theCoverage;
-      theCoverage = NULL;
+      theCoverage = 0;
    }
    if(theImageDescriptionSubheader)
    {
       delete theImageDescriptionSubheader;
-      theImageDescriptionSubheader = NULL;
+      theImageDescriptionSubheader = 0;
    }
    if(theMaskSubheader)
    {
       delete theMaskSubheader;
-      theMaskSubheader = NULL;
+      theMaskSubheader = 0;
    }
    if(theImageDisplayParameterSubheader)
    {
       delete theImageDisplayParameterSubheader;
-      theImageDisplayParameterSubheader = NULL;
+      theImageDisplayParameterSubheader = 0;
    }
    if(theCompressionSection)
    {
       delete theCompressionSection;
-      theCompressionSection = NULL;
+      theCompressionSection = 0;
    }
    if(theColorGrayscaleSubheader)
    {
       delete theColorGrayscaleSubheader;
-      theColorGrayscaleSubheader = NULL;
+      theColorGrayscaleSubheader = 0;
    }
    if(theColorConverterSubsection)
    {
       delete theColorConverterSubsection;
-      theColorConverterSubsection = NULL;
+      theColorConverterSubsection = 0;
    }
    if (theNitfFile.valid())
    {
-      theNitfFile = NULL;
+      theNitfFile = 0;
    }
 }
 
@@ -478,25 +477,24 @@ ossimErrorCode ossimRpfFrame::populateColorGrayscaleSection(istream& in)
 
       if(theColorGrayscaleSubheader)
       {
-         const ossimRpfLocationSection& location = theHeader->getLocationSection();
-         if(&location)
+         const ossimRpfLocationSection* location = theHeader->getLocationSection();
+         if(location)
          {
             ossimRpfComponentLocationRecord component;
             
-            if(location.getComponent(OSSIM_RPF_COLOR_CONVERTER_SUBSECTION,
+            if(location->getComponent(OSSIM_RPF_COLOR_CONVERTER_SUBSECTION,
                                      component))
             {
-               in.seekg(component.theComponentLocation,ios::beg);
+               in.seekg(component.m_componentLocation,ios::beg);
                if(theColorConverterSubsection) delete theColorConverterSubsection;
                theColorConverterSubsection = new ossimRpfColorConverterSubsection;
                theColorConverterSubsection->setNumberOfColorConverterOffsetRecords(
                   theColorGrayscaleSubheader->getNumberOfColorConverterOffsetRecords());
                resultError = theColorConverterSubsection->parseStream(in, theHeader->getByteOrder());
             }
-            if(location.getComponent(OSSIM_RPF_COLORMAP_SUBSECTION,
-                                     component))
+            if(location->getComponent(OSSIM_RPF_COLORMAP_SUBSECTION, component))
             {
-               in.seekg(component.theComponentLocation, ios::beg);
+               in.seekg(component.m_componentLocation, ios::beg);
                
                theColorGrayscaleTable.clear();
                theColorGrayscaleTable.resize(theColorGrayscaleSubheader->getNumberOfColorGreyscaleOffsetRecords());
@@ -518,7 +516,7 @@ ossimErrorCode ossimRpfFrame::populateColorGrayscaleSection(istream& in)
                   if(grayscaleOffsetRecord.parseStream(in, theHeader->getByteOrder()) == ossimErrorCodes::OSSIM_OK)
                   {
                      ossim_uint32 rememberLocation = in.tellg();
-                     in.seekg(grayscaleOffsetRecord.getColorGrayscaleTableOffset()+component.theComponentLocation, ios::beg);
+                     in.seekg(grayscaleOffsetRecord.getColorGrayscaleTableOffset()+component.m_componentLocation, ios::beg);
                      theColorGrayscaleTable[index].setTableData(grayscaleOffsetRecord.getColorGrayscaleTableId(),
                                                                 grayscaleOffsetRecord.getNumberOfColorGrayscaleRecords());
                      theColorGrayscaleTable[index].parseStream(in, theHeader->getByteOrder());
@@ -578,16 +576,16 @@ ossimErrorCode ossimRpfFrame::populateAttributeSection(istream& in)
    }
    ossimRpfAttributeSectionSubheader* temp = 0;
    
-   const ossimRpfLocationSection& location = theHeader->getLocationSection();
-   if(&location)
+   const ossimRpfLocationSection* location = theHeader->getLocationSection();
+   if(location)
    {
       ossimRpfComponentLocationRecord component;
       
-      if(location.getComponent(OSSIM_RPF_ATTRIBUTE_SECTION_SUBHEADER,
+      if(location->getComponent(OSSIM_RPF_ATTRIBUTE_SECTION_SUBHEADER,
                                component))
       {
          temp = new ossimRpfAttributeSectionSubheader;
-         in.seekg(component.theComponentLocation, std::ios::beg);
+         in.seekg(component.m_componentLocation, std::ios::beg);
          if(temp->parseStream(in, theHeader->getByteOrder()) != ossimErrorCodes::OSSIM_OK)
          {
             if(traceDebug())
@@ -944,13 +942,13 @@ ossimErrorCode ossimRpfFrame::populateMasks(istream& in)
    
    if(theImageDescriptionSubheader)
    {
-      const ossimRpfLocationSection& location = theHeader->getLocationSection();
-      if(&location)
+      const ossimRpfLocationSection* location = theHeader->getLocationSection();
+      if(location)
       {
          ossimRpfComponentLocationRecord component;
          
-         if(location.getComponent(OSSIM_RPF_MASK_SUBSECTION,
-                                  component))
+         if(location->getComponent(OSSIM_RPF_MASK_SUBSECTION,
+                                   component))
          {
             
             // now allocate the space we need and then reader the table in
@@ -966,7 +964,7 @@ ossimErrorCode ossimRpfFrame::populateMasks(istream& in)
             {
                // move get to the first byte of the Mask table.  This is the offset from the
                // start of the maskSubsection. 
-               in.seekg(component.theComponentLocation +
+               in.seekg(component.m_componentLocation +
                         theImageDescriptionSubheader->getSubframeMaskTableOffset(), ios::beg);
                // first loop through the Mask table and allocate while we do it
                for(spectralIndex = 0;
@@ -1003,7 +1001,7 @@ ossimErrorCode ossimRpfFrame::populateMasks(istream& in)
             {
                // move get to the first byte of the Mask table.  This is the offset from the
                // start of the maskSubsection. 
-               in.seekg(component.theComponentLocation +
+               in.seekg(component.m_componentLocation +
                         theImageDescriptionSubheader->getTransparencyMaskTableOffset(),ios::beg);
                for(spectralIndex = 0;
                    spectralIndex < theImageDescriptionSubheader->getNumberOfSpectralGroups();

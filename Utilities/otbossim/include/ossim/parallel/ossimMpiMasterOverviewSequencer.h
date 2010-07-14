@@ -8,7 +8,7 @@
 // overview files.
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimMpiMasterOverviewSequencer.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimMpiMasterOverviewSequencer.h 17194 2010-04-23 15:05:19Z dburken $
 #ifndef ossimMpiMasterOverviewSequencer_HEADER
 #define ossimMpiMasterOverviewSequencer_HEADER
 
@@ -65,8 +65,8 @@ protected:
    /** virtual destructor */
    virtual ~ossimMpiMasterOverviewSequencer();
 
-   int  theRank;
-   int  theNumberOfProcessors;
+   int  m_rank;
+   int  m_numberOfProcessors;
 };
 
 #endif /* #ifndef ossimMpiMasterOverviewSequencer_HEADER */

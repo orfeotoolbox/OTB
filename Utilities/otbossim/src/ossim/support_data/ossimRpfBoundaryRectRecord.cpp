@@ -6,51 +6,87 @@
 // Description: Rpf support class
 // 
 //********************************************************************
-// $Id: ossimRpfBoundaryRectRecord.cpp 14241 2009-04-07 19:59:23Z dburken $
+// $Id: ossimRpfBoundaryRectRecord.cpp 17455 2010-05-24 18:53:52Z dburken $
+
+#include <cstring> /* for memset/memcpy */
+#include <iomanip>
+#include <istream>
+#include <ostream>
 #include <ossim/support_data/ossimRpfBoundaryRectRecord.h>
-#include <string.h> // for memset
+#include <ossim/base/ossimCommon.h> /* ossim::byteOrder() */
 #include <ossim/base/ossimEndian.h>
 #include <ossim/base/ossimErrorCodes.h>
 
-ostream& operator <<(ostream& out,
-                     const ossimRpfBoundaryRectRecord& data)
+std::ostream& operator <<(std::ostream& out, const ossimRpfBoundaryRectRecord& data)
 {
-   out << setiosflags(ios::fixed)
-       << setprecision(12)
-       << "theProductDataType:             " << data.theProductDataType << endl
-       << "theCompressionRatio:            " << data.theCompressionRatio << endl
-       << "theScale:                       " << data.theScale << endl
-       << "theZone:                        " << data.theZone << endl
-       << "theProducer:                    " << data.theProducer << endl
-       << data.theCoverage << endl
-       << "theNumberOfFramesNorthSouth:    " << data.theNumberOfFramesNorthSouth << endl
-       << "theNumberOfFramesEastWest:      " << data.theNumberOfFramesEastWest;
-      
-   return out;
+   return data.print( out, std::string() );
 }
 
-ossimErrorCode ossimRpfBoundaryRectRecord::parseStream(istream& in, ossimByteOrder byteOrder)
+ossimRpfBoundaryRectRecord::ossimRpfBoundaryRectRecord()
+   :
+   m_zone(),
+   m_coverage(),
+   m_numberOfFramesNorthSouth(0),
+   m_numberOfFramesEastWest(0)
+{
+   clearFields();
+}
+
+ossimRpfBoundaryRectRecord::ossimRpfBoundaryRectRecord(const ossimRpfBoundaryRectRecord& obj)
+   :
+   m_zone(obj.m_zone),
+   m_coverage(obj.m_coverage),
+   m_numberOfFramesNorthSouth(obj.m_numberOfFramesNorthSouth),
+   m_numberOfFramesEastWest(obj.m_numberOfFramesEastWest)
+{
+   memcpy(m_productDataType, obj.m_productDataType, 6);
+   memcpy(m_compressionRatio, obj.m_compressionRatio, 6);
+   memcpy(m_scale, obj.m_scale, 13);
+   memcpy(m_producer, obj.m_producer, 6);
+}
+
+const ossimRpfBoundaryRectRecord& ossimRpfBoundaryRectRecord::operator=(
+   const ossimRpfBoundaryRectRecord& rhs)
+{
+   if ( this != & rhs )
+   {
+      memcpy(m_productDataType, rhs.m_productDataType, 6);
+      memcpy(m_compressionRatio, rhs.m_compressionRatio, 6);
+      memcpy(m_scale, rhs.m_scale, 13);
+      memcpy(m_producer, rhs.m_producer, 6);
+      m_coverage = rhs.m_coverage;
+      m_numberOfFramesNorthSouth = rhs.m_numberOfFramesNorthSouth;
+      m_numberOfFramesEastWest = rhs.m_numberOfFramesEastWest;
+   }
+   return *this;
+}
+
+ossimRpfBoundaryRectRecord::~ossimRpfBoundaryRectRecord()
+{
+}
+
+ossimErrorCode ossimRpfBoundaryRectRecord::parseStream(std::istream& in, ossimByteOrder byteOrder)
 {
    if(in)
    {
-      ossimEndian anEndian;
       clearFields();
       
-      in.read((char*)&theProductDataType, 5);
-      in.read((char*)&theCompressionRatio, 5);
-      in.read((char*)&theScale, 12);
-      in.read((char*)&theZone, 1);
-      in.read((char*)&theProducer, 5);
+      in.read((char*)&m_productDataType, 5);
+      in.read((char*)&m_compressionRatio, 5);
+      in.read((char*)&m_scale, 12);
+      in.read((char*)&m_zone, 1);
+      in.read((char*)&m_producer, 5);
       
-      theCoverage.parseStream(in, byteOrder);
+      m_coverage.parseStream(in, byteOrder);
       
-      in.read((char*)&theNumberOfFramesNorthSouth, 4);
-      in.read((char*)&theNumberOfFramesEastWest, 4);
+      in.read((char*)&m_numberOfFramesNorthSouth, 4);
+      in.read((char*)&m_numberOfFramesEastWest, 4);
 
-      if(anEndian.getSystemEndianType() != byteOrder)
+      if( ossim::byteOrder() != byteOrder )
       {
-         anEndian.swap(theNumberOfFramesNorthSouth);
-         anEndian.swap(theNumberOfFramesEastWest);
+         ossimEndian anEndian;
+         anEndian.swap(m_numberOfFramesNorthSouth);
+         anEndian.swap(m_numberOfFramesEastWest);
       }
    }
    else
@@ -61,48 +97,81 @@ ossimErrorCode ossimRpfBoundaryRectRecord::parseStream(istream& in, ossimByteOrd
    return ossimErrorCodes::OSSIM_OK;
 }
 
-void ossimRpfBoundaryRectRecord::clearFields()
+void ossimRpfBoundaryRectRecord::writeStream(std::ostream& out)
 {
-   memset(theProductDataType, ' ', 5);
-   memset(theCompressionRatio, ' ', 5);
-   memset(theScale, ' ', 12);
-   memset(theProducer, ' ', 5);
-   theNumberOfFramesNorthSouth = 0;
-   theNumberOfFramesEastWest = 0;
-   theCoverage.clearFields();
-
-   theProductDataType[5] = '\0';
-   theCompressionRatio[5] = '\0';
-   theScale[12] = '\0';
-   theProducer[5] = '\0';
-   theZone = ' ';
+   ossimEndian anEndian;
+   if( anEndian.getSystemEndianType() != OSSIM_BIG_ENDIAN )
+   {
+      // Always write out big endian.
+      anEndian.swap(m_numberOfFramesNorthSouth);
+      anEndian.swap(m_numberOfFramesEastWest);
+   }
+   
+   out.write((char*)&m_productDataType, 5);
+   out.write((char*)&m_compressionRatio, 5);
+   out.write((char*)&m_scale, 12);
+   out.write((char*)&m_zone, 1);
+   out.write((char*)&m_producer, 5);
+   
+   m_coverage.writeStream(out);
+   
+   out.write((char*)&m_numberOfFramesNorthSouth, 4);
+   out.write((char*)&m_numberOfFramesEastWest, 4);
+   
+   if( anEndian.getSystemEndianType() != OSSIM_BIG_ENDIAN )
+   {
+      // Swap back to native byte order.
+      anEndian.swap(m_numberOfFramesNorthSouth);
+      anEndian.swap(m_numberOfFramesEastWest);
+   }
 }
 
-std::ostream& ossimRpfBoundaryRectRecord::print(std::ostream& out,
-                                                ossimString prefix) const
+void ossimRpfBoundaryRectRecord::clearFields()
+{
+   memset(m_productDataType, ' ', 5);
+   memset(m_compressionRatio, ' ', 5);
+   memset(m_scale, ' ', 12);
+   memset(m_producer, ' ', 5);
+   m_numberOfFramesNorthSouth = 0;
+   m_numberOfFramesEastWest = 0;
+   m_coverage.clearFields();
+
+   m_productDataType[5] = '\0';
+   m_compressionRatio[5] = '\0';
+   m_scale[12] = '\0';
+   m_producer[5] = '\0';
+   m_zone = ' ';
+}
+
+void ossimRpfBoundaryRectRecord::setCoverage(const ossimRpfCoverageSection& coverage)
+{
+   m_coverage = coverage;
+}
+
+std::ostream& ossimRpfBoundaryRectRecord::print(std::ostream& out, ossimString prefix) const
 {
    // Capture the original flags.
    std::ios_base::fmtflags f = out.flags();
    
-   out << setiosflags(ios::fixed)
-       << setprecision(12)
+   out << std::setiosflags(std::ios_base::fixed)
+       << std::setprecision(12)
        << prefix << "ProductDataType: "
-       << theProductDataType << "\n"
+       << m_productDataType << "\n"
        << prefix << "CompressionRatio: "
-       << theCompressionRatio << "\n"
+       << m_compressionRatio << "\n"
        << prefix << "Scale: "
-       << theScale << "\n"
+       << m_scale << "\n"
        << prefix << "Zone: "
-       << theZone << "\n"
+       << m_zone << "\n"
        << prefix << "Producer: "
-       << theProducer << "\n";
+       << m_producer << "\n";
    
-   theCoverage.print(out, prefix);
+   m_coverage.print(out, prefix);
    
    out << prefix << "NumberOfFramesNorthSouth: "
-       << theNumberOfFramesNorthSouth << "\n"
+       << m_numberOfFramesNorthSouth << "\n"
        << prefix << "NumberOfFramesEastWest: "
-       << theNumberOfFramesEastWest
+       << m_numberOfFramesEastWest
        << "\n";
 
    // Reset flags.

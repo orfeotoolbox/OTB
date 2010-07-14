@@ -11,7 +11,7 @@
 // Contains class declaration for ossimDtedTileSource.
 //
 //********************************************************************
-// $Id: ossimDtedTileSource.cpp 16283 2010-01-06 21:25:19Z dburken $
+// $Id: ossimDtedTileSource.cpp 17601 2010-06-20 18:07:11Z dburken $
 
 #include <cstdlib>
 #include <iostream>
@@ -311,8 +311,7 @@ bool ossimDtedTileSource::open()
       {
          CLOG << "DEBUG:"
               << "\nError parsing file:  " << theImageFile.c_str()
-              << "\nPossibly not a dted file."
-              << endl;
+              << "\nPossibly not a dted file.\n";
       }
       
       theFileStr.close();
@@ -329,9 +328,12 @@ bool ossimDtedTileSource::open()
                        (theNumberOfLines * sizeof(ossim_sint16)) +
                        DATA_RECORD_CHECKSUM_SIZE;
 
-   // Scan the file to get the min / max post.
-   gatherStatistics();
-   
+   //---
+   // Note:
+   // Complete open calls loadMetaData which we have overriden to check for
+   // dot omd or dot statistics file.  If not there it will call
+   // gatherStatistics which will scan the file for min/max values.
+   //---
    completeOpen();
 
    if (traceDebug())
@@ -343,10 +345,8 @@ bool ossimDtedTileSource::open()
            << "\ntheNumberOfLines:  " << theNumberOfLines
            << "\ntheNumberOfSamps:  " << theNumberOfSamps
            << "\ntheOffsetToFirstDataRecord:  " << theOffsetToFirstDataRecord
-           << "\ntheDataRecordSize:  " << theDataRecordSize
-           << endl;
+           << "\ntheDataRecordSize:  " << theDataRecordSize << "\n";
    }
-
 
    return true;
 }
@@ -368,8 +368,7 @@ void ossimDtedTileSource::allocate()
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
          << "DEBUG:"
-         << "\ntheTile:\n" << *theTile
-         << endl;
+         << "\ntheTile:\n" << *theTile << "\n";
    }
 }
 
@@ -402,149 +401,46 @@ ossimImageGeometry* ossimDtedTileSource::getImageGeometry()
 {
    static const char* MODULE = "ossimDtedTileSource::getImageGeometry() -- ";
 
-   if (theGeometry.valid())
-      return theGeometry.get();
-
-   if(!theFileStr)
+   if ( !theGeometry.valid() )
    {
-      if (traceDebug())
-      {
-         CLOG << "DEBUG:"
-              << "\nCannot open:  " << theImageFile.c_str()
-              << endl;
-      }
-
-      return false;
+      //---
+      // Make an Equidistant Cylindrical projection with a origin at the equator
+      // since the DTED post spacing is considered to be square.
+      //---
+      const ossimDatum* datum = ossimDatumFactory::instance()->wgs84();
+      ossimRefPtr<ossimEquDistCylProjection> eq =
+         new ossimEquDistCylProjection(*(datum->ellipsoid()),
+                                       ossimGpt(0.0, 0.0, 0.0, datum),
+                                       0.0,   // false easting
+                                       0.0);  // false northing
+      
+      //---
+      // Set the tie point.
+      // NOTE: Latitude southwest corner we need northwest.
+      //---
+      ossim_float64 lat = m_uhl.latOrigin() + (m_uhl.latInterval() * (m_uhl.numLatPoints()-1.0));
+      ossim_float64 lon = m_uhl.lonOrigin();
+      ossimGpt tie(lat, lon, 0.0, datum);
+      eq->setUlTiePoints(tie);
+      
+      // Set the scale:
+      ossimDpt gsd(m_uhl.lonInterval(), m_uhl.latInterval());
+      eq->setDecimalDegreesPerPixel(gsd);
+      
+      // Give it to the geometry object.
+      ossimRefPtr<ossimProjection> proj = eq.get();
+      
+      // Make the geometry:
+      theGeometry = new ossimImageGeometry;
+      
+      // Set the projection.
+      theGeometry->setProjection( proj.get() );
    }
-
-   //***
-   // Check for errors.  Must have uhl, dsi and acc records.  vol and hdr
-   // are for magnetic tape only; hence, may or may not be there.
-   //***
-   if (m_uhl.getErrorStatus() == ossimErrorCodes::OSSIM_ERROR ||
-       m_dsi.getErrorStatus() == ossimErrorCodes::OSSIM_ERROR ||
-       m_acc.getErrorStatus() == ossimErrorCodes::OSSIM_ERROR)
-   {
-      if (traceDebug())
-      {
-         CLOG << "DEBUG:"
-              << "\nError parsing file:  " << theImageFile.c_str()
-              << "\nPossibly not a dted file."
-              << endl;
-      }
-      return false;
-   }
-
-   //***
-   // Make an Equidistant Cylindrical projection with a origin at the equator
-   // since the DTED post spacing is considered to be square.  Save its
-   // state to the keyword list.
-   //***
-//   ossimString projPref = prefix?prefix:"";
-//   const ossimDatum* datum = ossimDatumFactory::instance()->wgs84();
-//    ossimProjection* proj
-//       = new ossimEquDistCylProjection(*(datum->ellipsoid()),
-//                                       ossimGpt(0.0, 0.0),
-//                                       0.0,   // false easting
-//                                       0.0);  // false northing
-//    proj->saveState(kwl, projPref);
-
-//    delete proj;
-//    proj = NULL;
-
-   //***
-   // Get the latitude origin.  DTED uses the South West corner as the origin
-   // so the latitude must be shifted to the upper left for the purpose of
-   // a tie point.
-   //***
-   double lat = m_uhl.latOrigin() +
-                (m_uhl.latInterval() * (m_uhl.numLatPoints()-1.0));
    
-   // Add the tie point.
-   ossimKeywordlist kwl;
-   const char* prefix = 0; // legacy
-   kwl.add(prefix,
-           ossimKeywordNames::TYPE_KW,
-           "ossimEquDistCylProjection",
-           true);
-
-   kwl.add(prefix,
-           ossimKeywordNames::ORIGIN_LATITUDE_KW,
-           0.0,
-           true);
-
-   kwl.add(prefix,
-           ossimKeywordNames::CENTRAL_MERIDIAN_KW,
-           0.0,
-           true);
-   
-   kwl.add(prefix,
-           ossimKeywordNames::TIE_POINT_LAT_KW,
-           lat,
-           true);
-
-   kwl.add(prefix,
-           ossimKeywordNames::TIE_POINT_LON_KW,
-           m_uhl.lonOrigin(),
-           true);
-
-   // Add the pixel scale.
-   kwl.add(prefix,
-           ossimKeywordNames::DECIMAL_DEGREES_PER_PIXEL_LAT,
-           m_uhl.latInterval(),
-           true);
-   
-   kwl.add(prefix,
-           ossimKeywordNames::DECIMAL_DEGREES_PER_PIXEL_LON,
-           m_uhl.lonInterval(),
-           true);
-
-   //***
-   // The projection code will save a meters_per_pixel of 1.0 off so remove it
-   // since we want it to use the DECIMAL_DEGREES_PER_PIXEL keyword instead.
-   //***
-//   kwl.remove(prefix, ossimKeywordNames::METERS_PER_PIXEL_X_KW);
-//   kwl.remove(prefix, ossimKeywordNames::METERS_PER_PIXEL_Y_KW);
-
-   // Add the datum.  (always WGS-84 per spec)
-   kwl.add(prefix,
-           ossimKeywordNames::DATUM_KW,
-           ossimDatumFactory::instance()->wgs84()->code(),
-           true);
-
-   // Add the number of lines and samples.
-   kwl.add(prefix,
-           ossimKeywordNames::NUMBER_LINES_KW,
-           static_cast<int>(m_uhl.numLatPoints()));
-
-   kwl.add(prefix,
-           ossimKeywordNames::NUMBER_SAMPLES_KW,
-           static_cast<int>(m_uhl.numLonLines()));
-
-   // Add the number of reduced resolution sets.
-   kwl.add(prefix,
-           ossimKeywordNames::NUMBER_REDUCED_RES_SETS_KW,
-           getNumberOfDecimationLevels());
-
-   // Add the number of bands.  (alway one...)
-   kwl.add(prefix,
-           ossimKeywordNames::NUMBER_INPUT_BANDS_KW,
-           1);
-
-   kwl.add(prefix,
-           ossimKeywordNames::NUMBER_OUTPUT_BANDS_KW,
-           1);
-
-   if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG) << "kwl:\n" << kwl << MODULE << " Exited..." << endl;
-
-   // Capture this for next time.
-   theGeometry = new ossimImageGeometry;
-   theGeometry->loadState(kwl, prefix);
    return theGeometry.get();
 }
 
-ossimScalarType
-ossimDtedTileSource::getOutputScalarType() const
+ossimScalarType ossimDtedTileSource::getOutputScalarType() const
 {
    return OSSIM_SSHORT16;  // Always signed 16 bit.
 }
@@ -587,83 +483,96 @@ ossim_uint32 ossimDtedTileSource::getNumberOfSamples(ossim_uint32 reduced_res_le
    return 0;
 }
 
-void ossimDtedTileSource::gatherStatistics()
+void ossimDtedTileSource::loadMetaData()
 {
-   //***
-   // Check to see if there is a statistics file already.  If so; do a lookup
-   // for the min and max values.
-   //***
-   ossimFilename stats_file = theImageFile.path();
-   stats_file = stats_file.dirCat(theImageFile.fileNoExtension());
-   stats_file += ".statistics";
+   ossimKeywordlist kwl;
+   const char* min_str = 0;
+   const char* max_str = 0;
    
-   if (traceDebug())
+   ossimFilename f = theImageFile.fileNoExtension();
+
+   // Check for omd file.
+   f.setExtension("omd");
+   if ( f.exists() )
    {
-      ossimNotify(ossimNotifyLevel_DEBUG) << "Looking for " << stats_file
-                                          << " statistics file..." << std::endl;
+      kwl.addFile(f);
+      min_str = kwl.find("band1.min_value");
+      max_str = kwl.find("band1.max_value");
    }
 
-   ossimKeywordlist kwl;
-   const char* min_str = NULL;
-   const char* max_str = NULL;
-
-   if (stats_file.exists())
+   if ( !min_str || !max_str )
    {
-      if (kwl.addFile(stats_file))
+      f.setExtension("statistics");
+      if ( f.exists() )
       {
-         // Look for the min_pixel_value keyword.
+         kwl.addFile(f);
          min_str = kwl.find(ossimKeywordNames::MIN_VALUE_KW);
          max_str = kwl.find(ossimKeywordNames::MAX_VALUE_KW);
       }
    }
 
-   if (min_str && max_str)
+   if ( min_str || max_str )
    {
       theMinHeight = atoi(min_str);
       theMaxHeight = atoi(max_str);
-   }
-   else  // Scan the cell and gather the statistics...
+   } 
+   else
    {
-      ossimNotify(ossimNotifyLevel_DEBUG) << "ossimDtedTileSource::gatherStatistics() scanning for min/max"
-                                          << "\nThis may take a while..."
-                                          << std::endl;
+      gatherStatistics(false);
+   }
+}
+
+void ossimDtedTileSource::gatherStatistics(bool writeStatsFile)
+{
+   // Scan the cell and gather the statistics...
+   if ( traceDebug() )
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "ossimDtedTileSource::gatherStatistics() scanning for min/max"
+         << "\nThis may take a while...\n";
+   }
+   
+   // Start off with the min and max pegged.
+   theMinHeight =  32767;
+   theMaxHeight = -32767;
+   
+   // Put the file pointer at the start of the first elevation post.
+   theFileStr.seekg(theOffsetToFirstDataRecord, ios::beg);
+   
+   //---
+   // Loop through all records and scan for lowest min and highest max.
+   // Each record contains a row of latitude points for a given longitude.
+   // There are eight bytes in front of the post and four checksum bytes at
+   // the end so ignore them.
+   //---
+   for (ossim_uint32 i=0; i<theNumberOfSamps; i++)  // longitude direction
+   {
+      theFileStr.seekg(DATA_RECORD_OFFSET_TO_POST, ios::cur);
       
-      // Start off with the min and max pegged.
-      theMinHeight =  32767;
-      theMaxHeight = -32767;
-      
-      // Put the file pointer at the start of the first elevation post.
-      theFileStr.seekg(theOffsetToFirstDataRecord, ios::beg);
-      
-      //***
-      // Loop through all records and scan for lowest min and highest max.
-      // Each record contains a row of latitude points for a given longitude.
-      // There are eight bytes in front of the post and four checksum bytes at
-      // the end so ignore them.
-      //***
-      for (ossim_uint32 i=0; i<theNumberOfSamps; i++)  // longitude direction
+      for (ossim_uint32 j=0; j<theNumberOfLines; j++) // latitude direction
       {
-         theFileStr.seekg(DATA_RECORD_OFFSET_TO_POST, ios::cur);
-         
-         for (ossim_uint32 j=0; j<theNumberOfLines; j++) // latitude direction
-         {
-            ossim_uint16 temp;
-            ossim_sint16 s;
-            theFileStr.read((char*)&temp, POST_SIZE);
-            s = convertSignedMagnitude(temp);
-            if (s < theMinHeight && s != NULL_PIXEL) theMinHeight = s;
-            if (s > theMaxHeight) theMaxHeight = s;
-         }
-
-         theFileStr.seekg(DATA_RECORD_CHECKSUM_SIZE, ios::cur);
+         ossim_uint16 temp;
+         ossim_sint16 s;
+         theFileStr.read((char*)&temp, POST_SIZE);
+         s = convertSignedMagnitude(temp);
+         if (s < theMinHeight && s != NULL_PIXEL) theMinHeight = s;
+         if (s > theMaxHeight) theMaxHeight = s;
       }
-
+      
+      theFileStr.seekg(DATA_RECORD_CHECKSUM_SIZE, ios::cur);
+   }
+   
+   if ( writeStatsFile )
+   {
       // Add the stats to the keyword list.
+      ossimKeywordlist kwl;
       kwl.add(ossimKeywordNames::MIN_VALUE_KW, theMinHeight);
       kwl.add(ossimKeywordNames::MAX_VALUE_KW, theMaxHeight);
       
       // Write out the statistics file.
-      kwl.write(stats_file.c_str());
+      ossimFilename f = theImageFile.fileNoExtension();
+      f.setExtension("statistics");
+      kwl.write( f.c_str() );
    }
 
    if (traceDebug())
@@ -672,7 +581,7 @@ void ossimDtedTileSource::gatherStatistics()
          << "ossimDtedTileSource::gatherStatistics DEBUG:"
          << "\ntheMinHeight:  " << theMinHeight
          << "\ntheMaxHeight:  " << theMaxHeight
-         << std::endl;
+         << "\n";
    }
 }
 
@@ -691,7 +600,7 @@ ossim_uint32 ossimDtedTileSource::getNumberOfInputBands() const
    return 1;
 }
 
-double ossimDtedTileSource::getNullPixelValue(ossim_uint32 band)const
+double ossimDtedTileSource::getNullPixelValue(ossim_uint32 /* band */)const
 {
    if(theMetaData.getNumberOfBands())
    {

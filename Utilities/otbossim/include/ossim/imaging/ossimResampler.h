@@ -4,7 +4,7 @@
 // 
 // Author:  Garrett Potts
 //*******************************************************************
-//  $Id: ossimResampler.h 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimResampler.h 17195 2010-04-23 17:32:18Z dburken $
 
 #ifndef ossimResampler_HEADER
 #define ossimResampler_HEADER
@@ -135,11 +135,11 @@ public:
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix=0);
 
-   bool canConnectMyInputTo(ossim_int32 inputIndex,
-                            const ossimConnectableObject* object)const
-      {
-         return false;
-      }
+   bool canConnectMyInputTo(ossim_int32 /* inputIndex */,
+                            const ossimConnectableObject* /* object */)const
+   {
+      return false;
+   }
 protected:
    virtual ~ossimResampler();
 

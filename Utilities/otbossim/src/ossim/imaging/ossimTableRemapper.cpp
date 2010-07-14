@@ -16,7 +16,7 @@
 // uses a normalized remap table (more scalar independent).
 //
 //*************************************************************************
-// $Id: ossimTableRemapper.cpp 13883 2008-11-19 14:21:16Z gpotts $
+// $Id: ossimTableRemapper.cpp 17495 2010-06-01 23:21:42Z gpotts $
 
 #include <ossim/imaging/ossimTableRemapper.h>
 #include <ossim/base/ossimTrace.h>
@@ -234,10 +234,13 @@ void ossimTableRemapper::remapFromNativeTable(
       case OSSIM_SCALAR_UNKNOWN:
       default:
       {
+         if(traceDebug())
+         {
          // Shouldn't hit this.
-         ossimNotify(ossimNotifyLevel_WARN)
+            ossimNotify(ossimNotifyLevel_WARN)
             << "ossimTableRemapper::remapFromNativeTable"
             << "\nOutput scalar type is OSSIM_SCALAR_UNKNOWN!\n";
+         }
          break;
       }
 
@@ -522,9 +525,12 @@ ostream& ossimTableRemapper::print(ostream& os) const
       case OSSIM_SCALAR_UNKNOWN:
       default:
       {
+         if(traceDebug())
+         {
          // Shouldn't hit this.
-         ossimNotify(ossimNotifyLevel_WARN)
-            << "ossimTableRemapper::print OSSIM_SCALAR_UNKNOWN!\n";
+            ossimNotify(ossimNotifyLevel_WARN)
+               << "ossimTableRemapper::print OSSIM_SCALAR_UNKNOWN!\n";
+         }
          break;
       }
 

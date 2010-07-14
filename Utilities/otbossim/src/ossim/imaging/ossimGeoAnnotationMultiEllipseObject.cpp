@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimGeoAnnotationMultiEllipseObject.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
+// $Id: ossimGeoAnnotationMultiEllipseObject.cpp 17195 2010-04-23 17:32:18Z dburken $
 
 #include <ossim/imaging/ossimGeoAnnotationMultiEllipseObject.h>
 #include <ossim/imaging/ossimAnnotationMultiEllipseObject.h>
@@ -100,8 +100,8 @@ void ossimGeoAnnotationMultiEllipseObject::setThickness(ossim_uint8 thickness)
 }
 
 
-void ossimGeoAnnotationMultiEllipseObject::applyScale(double x,
-                                                      double y)
+void ossimGeoAnnotationMultiEllipseObject::applyScale(double /* x */,
+                                                      double /* y */)
 {
    ossimNotify(ossimNotifyLevel_NOTICE)
       << "ossimGeoAnnotationMultiEllipseObject::applyScale NOT IMPLEMENTED"
@@ -145,7 +145,8 @@ ossimObject* ossimGeoAnnotationMultiEllipseObject::dup()const
    return new ossimGeoAnnotationMultiEllipseObject(*this);
 }
 
-ossimAnnotationObject* ossimGeoAnnotationMultiEllipseObject::getNewClippedObject(const ossimDrect& rect)const
+ossimAnnotationObject* ossimGeoAnnotationMultiEllipseObject::getNewClippedObject(
+   const ossimDrect& /* rect */)const
 {
    ossimNotify(ossimNotifyLevel_NOTICE)
       << "ossimGeoAnnotationMultiEllipseObject::getNewClippedObject "

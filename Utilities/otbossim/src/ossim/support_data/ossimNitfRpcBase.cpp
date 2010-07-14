@@ -10,7 +10,7 @@
 // Rational Polynomial Coefficient extension.
 //
 //********************************************************************
-// $Id: ossimNitfRpcBase.cpp 14576 2009-05-20 13:58:45Z dburken $
+// $Id: ossimNitfRpcBase.cpp 17206 2010-04-25 23:20:40Z dburken $
 
 #include <algorithm>
 #include <iostream>
@@ -780,7 +780,7 @@ std::ostream& ossimNitfRpcBase::print(std::ostream& out,
    return out;
 }
 
-void ossimNitfRpcBase::setProperty(ossimRefPtr<ossimProperty> property)
+void ossimNitfRpcBase::setProperty(ossimRefPtr<ossimProperty> /* property */)
 {
    
 }

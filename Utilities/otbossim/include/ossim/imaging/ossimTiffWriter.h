@@ -9,11 +9,10 @@
 // Contains class declaration for TiffWriter.
 //
 //*******************************************************************
-//  $Id: ossimTiffWriter.h 16081 2009-12-10 20:56:36Z eshirschorn $
+//  $Id: ossimTiffWriter.h 17355 2010-05-13 18:55:17Z gpotts $
 #ifndef ossimTiffWriter_HEADER
 #define ossimTiffWriter_HEADER
 
-#include <tiffio.h>
 #include <ossim/imaging/ossimImageFileWriter.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimRefPtr.h>
@@ -210,7 +209,7 @@ protected:
                         const ossimString& projName) const;
    UnitType getPcsUnitType(ossim_int32 pcsCode) const;
    
-   TIFF*                   theTif;
+   void*                   theTif;
    ossimString             theCompressionType;
    ossimString             thePhotoMetric;
    ossim_int32             theJpegQuality;

@@ -7,7 +7,7 @@
 // Description:
 //
 //*******************************************************************
-//  $Id: ossimDiscreteConvolutionKernel.h 11418 2007-07-27 16:24:15Z dburken $
+//  $Id: ossimDiscreteConvolutionKernel.h 17195 2010-04-23 17:32:18Z dburken $
 #ifndef ossimDiscreteConvolutionKernel_HEADER
 #define ossimDiscreteConvolutionKernel_HEADER
 #include <vector>
@@ -110,8 +110,8 @@ public:
     * by 0 vor both then the kernel defaults to 1 in the middle and all other weights
     * are zero.
     */
-   virtual void buildConvolution(double xLocation,
-                                 double yLocation)
+   virtual void buildConvolution(double /* xLocation */,
+                                 double /* yLocation */)
       {}
    virtual long getWidth()const
       {

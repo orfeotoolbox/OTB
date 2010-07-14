@@ -10,7 +10,7 @@
 // Description: A brief description of the contents of the file.
 //
 //*************************************************************************
-// $Id: ossimMaskFilter.cpp 16180 2009-12-24 15:33:56Z dburken $
+// $Id: ossimMaskFilter.cpp 17195 2010-04-23 17:32:18Z dburken $
 
 #include <ossim/imaging/ossimMaskFilter.h>
 #include <ossim/imaging/ossimImageData.h>
@@ -132,7 +132,7 @@ ossimRefPtr<ossimImageData> ossimMaskFilter::getTile(const ossimIrect& rect,
    return theTile;
 }
 
-bool ossimMaskFilter::canConnectMyInputTo(ossim_int32 index,
+bool ossimMaskFilter::canConnectMyInputTo(ossim_int32 /* index */,
                                           const ossimConnectableObject* object)const
 {
    return (PTR_CAST(ossimImageSource, object)!= NULL);
@@ -401,8 +401,8 @@ ossimRefPtr<ossimImageData> ossimMaskFilter::executeMaskFilterWeighted(ossimRefP
 }
 
 template <class inputT, class maskT>
-ossimRefPtr<ossimImageData> ossimMaskFilter::executeMaskFilterSelection(inputT dummyInput,
-                                                            maskT  dummyMask,
+ossimRefPtr<ossimImageData> ossimMaskFilter::executeMaskFilterSelection(inputT /* dummyInput */,
+                                                                        maskT  /* dummyMask */,
                                                             ossimRefPtr<ossimImageData> imageSourceData,
                                                             ossimRefPtr<ossimImageData> maskSourceData)
 {
@@ -461,10 +461,11 @@ ossimRefPtr<ossimImageData> ossimMaskFilter::executeMaskFilterSelection(inputT d
 }
 
 template <class inputT, class maskT>
-ossimRefPtr<ossimImageData> ossimMaskFilter::executeMaskFilterInvertSelection(inputT dummyInput,
-                                                                  maskT  dummyMask,
-                                                                  ossimRefPtr<ossimImageData> imageSourceData,
-                                                                  ossimRefPtr<ossimImageData> maskSourceData)
+ossimRefPtr<ossimImageData> ossimMaskFilter::executeMaskFilterInvertSelection(
+   inputT /* dummyInput */,
+   maskT  /* dummyMask */,
+   ossimRefPtr<ossimImageData> imageSourceData,
+   ossimRefPtr<ossimImageData> maskSourceData)
 {
    ossimDataObjectStatus maskDataStatus  = maskSourceData->getDataObjectStatus();
    ossimDataObjectStatus inputDataStatus = imageSourceData->getDataObjectStatus();
@@ -521,10 +522,11 @@ ossimRefPtr<ossimImageData> ossimMaskFilter::executeMaskFilterInvertSelection(in
 }
 
 template <class inputT, class maskT>
-ossimRefPtr<ossimImageData> ossimMaskFilter::executeMaskFilterWeighted(inputT dummyInput,
-                                                           maskT  dummyMask,
-                                                           ossimRefPtr<ossimImageData> imageSourceData,
-                                                           ossimRefPtr<ossimImageData> maskSourceData)
+ossimRefPtr<ossimImageData> ossimMaskFilter::executeMaskFilterWeighted(
+   inputT /* dummyInput */,
+   maskT  /* dummyMask */,
+   ossimRefPtr<ossimImageData> imageSourceData,
+   ossimRefPtr<ossimImageData> maskSourceData)
 {
    ossimDataObjectStatus maskDataStatus  = maskSourceData->getDataObjectStatus();
    ossimDataObjectStatus inputDataStatus = imageSourceData->getDataObjectStatus();

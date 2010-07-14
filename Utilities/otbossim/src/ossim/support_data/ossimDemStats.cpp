@@ -11,7 +11,7 @@
 // Description: This class provides some statistics for DEMs.
 //
 //********************************************************************
-// $Id: ossimDemStats.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimDemStats.cpp 17206 2010-04-25 23:20:40Z dburken $
 
 #include <stdlib.h>
 
@@ -99,7 +99,7 @@ ossimDemStats::getSampleSizeDE5() const
 }
 
 ostream&
-operator<<(ostream& s,  ossimDemStats const& stats)
+operator<<(ostream& s,  ossimDemStats const& /* stats */)
 {
    return s;
 }

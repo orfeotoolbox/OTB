@@ -6,7 +6,7 @@
 // Description: This class extends the stl's string class.
 //
 //********************************************************************
-// $Id: ossimVpfDatabaseHeader.cpp 13296 2008-07-25 17:51:10Z dburken $
+// $Id: ossimVpfDatabaseHeader.cpp 17206 2010-04-25 23:20:40Z dburken $
 #include <ossim/vec/ossimVpfDatabaseHeader.h>
 #include <ossim/base/ossimErrorCodes.h>
 #include <ossim/vpfutil/vpftable.h>
@@ -46,7 +46,7 @@ ossimErrorCode ossimVpfDatabaseHeader::open(const ossimFilename& databaseHeaderT
    return ossimErrorCodes::OSSIM_OK;
 }
 
-bool ossimVpfDatabaseHeader::isDatabaseHeaderTable(vpf_table_type& tableType)
+bool ossimVpfDatabaseHeader::isDatabaseHeaderTable(vpf_table_type& /* tableType */)
 {
    return true;
 }

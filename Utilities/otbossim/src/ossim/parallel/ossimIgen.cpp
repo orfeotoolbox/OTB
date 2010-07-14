@@ -7,7 +7,7 @@
 // Description: implementation for image generator
 //
 //*************************************************************************
-// $Id: ossimIgen.cpp 15785 2009-10-21 14:55:04Z dburken $
+// $Id: ossimIgen.cpp 17043 2010-04-13 19:00:47Z gpotts $
 
 #include <iterator>
 #include <sstream>
@@ -15,10 +15,10 @@
 
 #include <ossim/ossimConfig.h> /* To pick up define OSSIM_HAS_MPI. */
 
-#ifdef OSSIM_HAS_MPI
-#  if OSSIM_HAS_MPI
-#    include <mpi.h>
-#  endif
+#if OSSIM_HAS_MPI
+#  include <mpi.h>
+#  include <ossim/parallel/ossimImageMpiMWriterSequenceConnection.h>
+#  include <ossim/parallel/ossimImageMpiSWriterSequenceConnection.h>
 #endif
 
 #include <ossim/parallel/ossimIgen.h>
@@ -26,78 +26,51 @@
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimStdOutProgress.h>
-
-#include <ossim/init/ossimInit.h>
-#include <ossim/projection/ossimProjection.h>
-#include <ossim/projection/ossimUtmProjection.h>
-
 #include <ossim/projection/ossimMapProjection.h>
-#include <ossim/projection/ossimMapProjectionInfo.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
-#include <ossim/projection/ossimMapProjectionFactory.h>
 #include <ossim/imaging/ossimImageChain.h>
-#include <ossim/base/ossimKeywordlist.h>
-#include <ossim/imaging/ossimImageData.h>
-#include <ossim/imaging/ossimImageChain.h>
-#include <ossim/imaging/ossimImageRenderer.h>
 #include <ossim/imaging/ossimRectangleCutFilter.h>
 #include <ossim/imaging/ossimTiffWriter.h>
-#include <ossim/imaging/ossimImageWriterFactoryRegistry.h>
-#include <ossim/base/ossimDpt.h>
-#include <ossim/base/ossimDatumFactory.h>
-#include <ossim/imaging/ossimImageHandlerRegistry.h>
-#include <ossim/imaging/ossimImageHandler.h>
-#include <ossim/base/ossimObjectFactoryRegistry.h>
-#include <ossim/imaging/ossimGeoAnnotationSource.h>
 #include <ossim/base/ossimPreferences.h>
-#include <ossim/base/ossimKeywordNames.h>
 #include <ossim/parallel/ossimMpi.h>
-#include <ossim/base/ossimArgumentParser.h>
-#include <ossim/base/ossimApplicationUsage.h>
-
-// include the Master implementation for the writer
-// sequence.
-//
-#include <ossim/parallel/ossimImageMpiMWriterSequenceConnection.h>
-#include <ossim/parallel/ossimImageMpiSWriterSequenceConnection.h>
-
-// #include <parallel/ossimImageMpiSequenceConnection.h>
 
 static ossimTrace traceDebug(ossimString("ossimIgen:debug"));
 static ossimTrace traceLog(ossimString("ossimIgen:log"));
 
 ossimIgen::ossimIgen()
-   :theContainer(new ossimConnectableContainer()),
-    theProductProjection(0),
-    theOutputRect(),
-    theBuildThumbnailFlag(false),
-    theThumbnailResolution(0, 0),
-    theNumberOfTilesToBuffer(2),
-    theKwl(),
-    theTilingEnabled(false),
-    theTiling(),
-    theProgressFlag(true)
+:
+theContainer(new ossimConnectableContainer()),
+theProductProjection(0),
+theBuildThumbnailFlag(false),
+theThumbnailSize(0, 0),
+theNumberOfTilesToBuffer(2),
+theKwl(),
+theTilingEnabled(false),
+theTiling(),
+theProgressFlag(true)
 {
    theOutputRect.makeNan();
 }
 
 ossimIgen::~ossimIgen()
 {
-   deleteAttributes();
-   
+   theProductProjection = 0;
+   theContainer->disconnect();
+   theContainer->deleteAllChildren();
+   theContainer = 0;
 }
 
 void ossimIgen::initializeAttributes()
 {
    theBuildThumbnailFlag  = false;
-   theThumbnailResolution = ossimIpt(0,0);
+   theThumbnailSize = ossimIpt(0,0);
    theTilingEnabled = false;
 
    if(ossimMpi::instance()->getRank() != 0)
    {
       ossimPreferences::instance()->addPreferences(theKwl,
-                                                   "preferences.",
-                                                   true);
+         "preferences.",
+         true);
    }
 
    const char* lookup = theKwl.find("igen.output_progress");
@@ -106,7 +79,7 @@ void ossimIgen::initializeAttributes()
       ossimString os = lookup;
       theProgressFlag = os.toBool();
    }
-   
+
    const char* thumbnailStr = theKwl.find("igen.thumbnail");
    if(traceDebug())
    {
@@ -127,28 +100,36 @@ void ossimIgen::initializeAttributes()
          const char* resStr = theKwl.find("igen.thumbnail_res");
          if(resStr)
          {
-            theThumbnailResolution = ossimIpt(0,0);
+            theThumbnailSize = ossimIpt(0,0);
             std::istringstream in(resStr);
             ossimString x,y;
-            
+
             in >> x >> y;
 
-            theThumbnailResolution.x = x.toInt32();
-            theThumbnailResolution.y = y.toInt32();
-            
-            if(theThumbnailResolution.x < 1)
+            ossim_int32 ix = x.toInt32();
+            ossim_int32 iy = y.toInt32();
+
+            if (ix > 0)
             {
-               theThumbnailResolution.x = 128;
+               theThumbnailSize.x = ix;
             }
-            if(theThumbnailResolution.y < 1)
+            else
             {
-               theThumbnailResolution.y = theThumbnailResolution.x;
+               theThumbnailSize.x = 128;
             }
-            
+
+            if (iy > 0)
+            {
+               theThumbnailSize.y = iy;
+            }
+            else
+            {
+               theThumbnailSize.y = theThumbnailSize.x;
+            }
          }
          else
          {
-            theThumbnailResolution = ossimIpt(128, 128);
+            theThumbnailSize = ossimIpt(128, 128);
          }
       }
    }
@@ -171,23 +152,22 @@ void ossimIgen::initializeAttributes()
 
 void ossimIgen::slaveSetup()
 {
-#ifdef OSSIM_HAS_MPI
-#  if OSSIM_HAS_MPI
+#if OSSIM_HAS_MPI
    int stringSize;
    MPI_Status status;
    int numberOfTimes = 0;
 
    memset((void *)&status, 0, sizeof(MPI_Status));
 
-   
+
    // we first need to receive the size of the keyword list to load
    MPI_Recv(&stringSize,
-            1,
-            MPI_INT,
-            0,    // source
-            0,    // tag
-            MPI_COMM_WORLD,
-            &status);
+      1,
+      MPI_INT,
+      0,    // source
+      0,    // tag
+      MPI_COMM_WORLD,
+      &status);
 
    if(status.MPI_ERROR != MPI_SUCCESS)
    {
@@ -197,7 +177,7 @@ void ossimIgen::slaveSetup()
          << "Had errors receiving!!!!" << std::endl;
       return;
    }
-   
+
    char* buf = new char[stringSize+1];
 
    numberOfTimes = 0;
@@ -206,13 +186,13 @@ void ossimIgen::slaveSetup()
 
    // now lets get the keywordlist as a string so we can load it up
    MPI_Recv(buf,
-            stringSize,
-            MPI_CHAR,
-            0, // source
-            0, // tag
-            MPI_COMM_WORLD,
-            &status);
-   
+      stringSize,
+      MPI_CHAR,
+      0, // source
+      0, // tag
+      MPI_COMM_WORLD,
+      &status);
+
    if(status.MPI_ERROR != MPI_SUCCESS)
    {
       ossimNotify(ossimNotifyLevel_WARN)
@@ -236,7 +216,7 @@ void ossimIgen::slaveSetup()
    std::ostringstream kwlStream;
 
    kwlStream << buf << ends;
-   
+
    istringstream kwlInStream(kwlStream.str());
    theKwl.clear();
    theKwl.parseStream(kwlInStream);
@@ -249,17 +229,15 @@ void ossimIgen::slaveSetup()
       ossimNotify(ossimNotifyLevel_DEBUG) << "****************** KWL ************************" << std::endl;
       ossimNotify(ossimNotifyLevel_DEBUG) << theKwl << std::endl;
       ossimNotify(ossimNotifyLevel_DEBUG) << "**************** END KWL ************************" << std::endl;
-      
+
    }
-   loadProduct();
-#  endif
+   loadProductSpec();
 #endif
 }
 
 void ossimIgen::initialize(const ossimKeywordlist& kwl)
 {
-#ifdef OSSIM_HAS_MPI
-#  if OSSIM_HAS_MPI
+#if OSSIM_HAS_MPI
    if(ossimMpi::instance()->getNumberOfProcessors() > 0)
    {
       if(ossimMpi::instance()->getRank() != 0)
@@ -268,7 +246,6 @@ void ossimIgen::initialize(const ossimKeywordlist& kwl)
          return;
       }
    }
-#  endif
 #endif
    theKwl = kwl;
    if(traceDebug())
@@ -277,568 +254,313 @@ void ossimIgen::initialize(const ossimKeywordlist& kwl)
          << "The igen kewyord list  ==== \n" << theKwl << std::endl;
    }
    ossimKeywordlist kwlPrefs = ossimPreferences::instance()->preferencesKWL();
-   
+
    kwlPrefs.addPrefixToAll("preferences.");
    theKwl.add(kwlPrefs);
 
    initializeAttributes();
-   
+
    // now stream it to all slave processors
    //
-#ifdef OSSIM_HAS_MPI
-#  if OSSIM_HAS_MPI
-
+#if OSSIM_HAS_MPI
    if(ossimMpi::instance()->getNumberOfProcessors() > 0)
    {
       std::ostringstream outputKeywordlist;
-      
+
       theKwl.writeToStream(outputKeywordlist);
       ossimString kwlString = outputKeywordlist.str();
       ossim_uint32 size = kwlString.size();
-      
+
       for(long processor = 1;
-          processor < ossimMpi::instance()->getNumberOfProcessors();
-          ++processor)
+         processor < ossimMpi::instance()->getNumberOfProcessors();
+         ++processor)
       {
-      // let's send the keywordlist argument.
-      // This is two steps.  We send a message to
-      // indicate the size and then we send the
-      // string.
-      //
+         // let's send the keywordlist argument.
+         // This is two steps.  We send a message to
+         // indicate the size and then we send the
+         // string.
+         //
          MPI_Send(&size,
-                  1,
-                  MPI_INT,
-                  processor,
-                  0,
-                  MPI_COMM_WORLD);
-         
+            1,
+            MPI_INT,
+            processor,
+            0,
+            MPI_COMM_WORLD);
+
          MPI_Send((void*)kwlString.c_str(),
-                  size,
-                  MPI_CHAR,
-                  processor,
-                  0,
-                  MPI_COMM_WORLD);
+            size,
+            MPI_CHAR,
+            processor,
+            0,
+            MPI_COMM_WORLD);
       }
    }
-#  endif
 #endif
-   loadProduct();
-   
+   loadProductSpec();
+
 }
 
-bool ossimIgen::loadProduct()//ossimKeywordlist& kwl,
-                            //bool thumbnail,
-                            //long resolution)
+bool ossimIgen::loadProductSpec()
 {
-   const char* MODULE = "ossimIgen::loadProduct";
+   const char* MODULE = "ossimIgen::loadProductSpec";
+   if(traceDebug())  CLOG << "entered..." << std::endl;
 
-   if(traceDebug())
-   {
-      CLOG << "entered..." << std::endl;
-   }
-
-   if(traceDebug())
-   {
-      CLOG << " Creating object1..." << std::endl;
-   }
-
+   // Clear out the overall container and initialize it with spec in KWL:
    theContainer->deleteAllChildren();
-
    theContainer->loadState(theKwl);
 
-   theProductProjection = buildProductProjection(theKwl);
+   // There should be a product chain defined in the container:
+   ossimConnectableObject* obj = 
+      theContainer->findFirstObjectOfType(STATIC_TYPE_NAME(ossimImageChain), false);
+   theProductChain = PTR_CAST(ossimImageChain, obj);
+   if (!theProductChain.valid())
+   {
+      // Search for a connectable container specified that contains the entire product chain:
+      ossimConnectableObject* obj2 = 
+         theContainer->findFirstObjectOfType(STATIC_TYPE_NAME(ossimImageFileWriter), true);
+      ossimImageFileWriter* writer = PTR_CAST(ossimImageFileWriter, obj2);
+      if (writer)
+         theProductChain = PTR_CAST(ossimImageChain, writer->getInput());
 
-   if(theProductProjection.valid())
-   {
-      vector<ossimImageViewTransform*> transforms;
-      setView(theContainer.get(), theProductProjection.get());
-      // if it's a thumbnail then adjust the GSD and
-      // reset the view proj to the chain.
-      if(theBuildThumbnailFlag)
+      if (!theProductChain.valid())
       {
-         buildThumbnail();
-         
-         theProductProjection = buildProductProjection(theKwl);
-         
-         setView(theContainer.get(), theProductProjection.get());
+         ossimNotify(ossimNotifyLevel_FATAL) << MODULE 
+            << " -- No processing chain defined for generating product." << std::endl;
+         return false; 
       }
-      
    }
-   
-   ossimKeywordlist proj;
-   
-   ossimDrect rect;
-   ossimImageChain* chain = getChain();
-   if(!getOutputRect(theKwl, rect)&&chain)
-   {
-      rect = chain->getBoundingRect();
-   }
-   else
-   {
-      rect.makeNan();
-   }
-   
-   // Stretch the rectangle out to integer boundaries.
-   if(!rect.hasNans())
-   {
-      rect.stretchOut();
-   }
-   theOutputRect = rect;
-   
+
+   // The output projection is specified separately in the KWL:
+   ossimString prefix = "product.projection.";
+   theProductProjection = ossimProjectionFactoryRegistry::instance()->createProjection(theKwl, prefix);
    if(theProductProjection.valid())
    {
-      theProductProjection->saveState(proj, "projection.");
-         
+      // Update the chain with the product view specified:
+      setView();
+
+      // if it's a thumbnail then adjust the GSD and reset the view proj to the chain.
+      if(theBuildThumbnailFlag)
+         initThumbnailProjection();
    }
-   
-   if(traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "bounding rect = " << theOutputRect << std::endl;
-      CLOG << "leaving..." << std::endl;
-   }
-   
+
+   initializeChain();
    return true;
 }
 
+//*************************************************************************************************
+//! Writes the output product image. Throws an ossimException if error encountered.
+//*************************************************************************************************
 void ossimIgen::outputProduct()
 {
-   ossimRefPtr<ossimImageChain> chain = getChain();
-   if(chain.valid())
+   // Verify that all vitals have been initialized:
+   if (!theProductChain.valid())
    {
-      chain->initialize();
+      std::string err = "ossimIgen::outputProduct() ERROR:  No product processing chain has yet"
+         " been established. Nothing to output!";
+      throw(ossimException(err));
    }
+   if (!theProductProjection.valid())
+   {
+      std::string err = "ossimIgen::outputProduct() ERROR:  No product projection has yet"
+         " been established. Nothing to output!";
+      throw(ossimException(err));
+   }
+
    ossimRefPtr<ossimImageSourceSequencer> sequencer = 0;
-   
-#ifdef OSSIM_HAS_MPI
-#  if OSSIM_HAS_MPI
-   // only allocate the slave connection if
-   // the number of processors is larger than
-   // 1
-   //
+
+#if OSSIM_HAS_MPI
+   // only allocate the slave connection if the number of processors is larger than 1
    if(ossimMpi::instance()->getNumberOfProcessors() > 1)
    {
       if(ossimMpi::instance()->getRank()!=0)
-      {
-         sequencer = new ossimImageMpiSWriterSequenceConnection(0,
-                                                                theNumberOfTilesToBuffer);
-      }
+         sequencer = new ossimImageMpiSWriterSequenceConnection(0, theNumberOfTilesToBuffer);
       else
-      {
          sequencer = new ossimImageMpiMWriterSequenceConnection();
-      }
    }
-   else
-   {
-      sequencer = new ossimImageSourceSequencer();
-   }
-#  else
-
-   // we will just load a serial connection if MPI is not supported.
-   //
-   sequencer = new ossimImageSourceSequencer(0);
-   
-#  endif
-#else
-
-   // we will just load a serial connection if MPI is not supported.
-   sequencer = new ossimImageSourceSequencer(0);
-   
 #endif
-   
-   ossimConnectableObject::ConnectableObjectList imageWriters =
-      theContainer->findAllObjectsOfType(STATIC_TYPE_INFO(ossimImageFileWriter),
-                                        false);
-   if(imageWriters.size() > 0)
-   {
-      ossimImageFileWriter* writer =
-         PTR_CAST(ossimImageFileWriter, imageWriters[0].get());
-      
-      writer->changeSequencer(sequencer.get());
-      writer->connectMyInputTo(chain.get());
 
-      //---
-      // Check for writing to standard output flag.
-      // Not all writers support this so check and throw an error if not
-      // supported.
-      //---
-      const char* lookup = theKwl.find("igen.write_to_stdout");
-      if (lookup)
-      {
-         // cout << "igen.write_to_stdout: " << lookup << endl;
-         if ( ossimString(lookup).toBool() )
-         {
-            if ( writer->setOutputStream(std::cout) == false )
-            {
-               std::string err = "ERROR:  The write to standard out flag is set; however, writer does not support going to standard out. Bummer...";
-               throw(ossimException(err));
-            }
-         }
-      }     
-      
-      writer->initialize();
-   }
-   else
-   {
-      sequencer->disconnect();
-      sequencer = 0;
-   }
+   // we will just load a serial connection if MPI is not supported.
+   if (!sequencer.valid())
+      sequencer = new ossimImageSourceSequencer(0);
 
-   ossimConnectableObject::ConnectableObjectList processObjects =
-      theContainer->findAllObjectsOfType(STATIC_TYPE_INFO(ossimProcessInterface),
-                                        false);
-   ossim_uint32 i = 0;
+   // Look for the first writer (should be the only writer) in our list of objects:
    ossimRefPtr<ossimImageFileWriter> writer  = 0;
-   for(i = 0; ((i < processObjects.size())&&(!writer)); ++i)
+   ossimConnectableObject::ConnectableObjectList imageWriters =
+      theContainer->findAllObjectsOfType(STATIC_TYPE_INFO(ossimImageFileWriter), false);
+   if (imageWriters.size() == 0)
    {
-      writer = PTR_CAST(ossimImageFileWriter,
-                        processObjects[i].get());
+      sequencer = 0;
+      std::string err = "ossimIgen::outputProduct() ERROR:  No image writer object was found in "
+         " processing chain.";
+      throw(ossimException(err));
    }
 
-   if(writer.valid())
+   writer = PTR_CAST(ossimImageFileWriter, imageWriters[0].get());
+   writer->changeSequencer(sequencer.get());
+   writer->connectMyInputTo(theProductChain.get());
+
+   // Check for writing to standard output flag. Not all writers support this so check and 
+   // throw an error if not supported.
+   const char* lookup = theKwl.find("igen.write_to_stdout");
+   if (lookup && ossimString(lookup).toBool())
    {
-      ossimRefPtr<ossimProjection> proj = buildProductProjection(theKwl);
-      ossimMapProjection *mapProj = PTR_CAST(ossimMapProjection,proj.get());
+      if ( writer->setOutputStream(std::cout) == false )
+      {
+         std::string err = "ERROR:  The write to standard out flag is set; however, writer does "
+            "not support going to standard out. Bummer...";
+         throw(ossimException(err));
+      }
+   }
+   writer->initialize();
+
+   // If multi-file tiled output is not desired perform simple output, handle special:
+   ossimRefPtr<ossimMapProjection> mapProj = PTR_CAST(ossimMapProjection, theProductProjection.get());
+   if(theTilingEnabled && mapProj.valid())
+   {
+      theTiling.initialize(*mapProj, theOutputRect);
+      ossimRectangleCutFilter* cut = new ossimRectangleCutFilter;
+      theProductChain->addFirst(cut);
       
-      if(theTilingEnabled&&mapProj)
+      ossimFilename tempFile = writer->getFilename();
+      if(!tempFile.isDir())
+         tempFile = tempFile.path();
+
+      ossimString tileName;
+      ossimIrect clipRect;
+
+      // 'next' method modifies the mapProj which is the same instance as theProductProjection,
+      // so this data member is modified here, then later accessed by setView:
+      while(theTiling.next(mapProj, clipRect, tileName))
       {
-         ossimRefPtr<ossimMapProjection> view;
-         ossimIrect clipRect;
-         theTiling.initialize(*mapProj,
-                               chain->getBoundingRect());
-         ossimRectangleCutFilter* cut = new ossimRectangleCutFilter;
-         
-         chain->addFirst(cut);
-         ossim_uint32 idx = 0;
-         ossimFilename tempFile = writer->getFilename();
+         setView();
+         cut->setRectangle(clipRect);
+         initializeChain();
+         writer->disconnect();
+         writer->connectMyInputTo(theProductChain.get());
+         writer->setFilename(tempFile.dirCat(tileName));
+         writer->initialize();
 
-         if(!tempFile.isDir())
-         {
-            tempFile = tempFile.path();
-         }
-         ossimString tileName;
-         
-         while(theTiling.next(view,
-                              clipRect,
-                              tileName))
-         {
-            ossimStdOutProgress* prog = 0;
-            if ( (ossimMpi::instance()->getRank() == 0) && theProgressFlag)
-            {
-               // Add a listener to master.
-               prog = new ossimStdOutProgress(0, true);
-               writer->addListener(prog);
-            }
-            
-            setView(chain.get(), view.get());
-            chain->initialize();
-            cut->setRectangle(clipRect);
-            chain->initialize();
-            writer->disconnect();
-            writer->connectMyInputTo(chain.get());
-            writer->setFilename(tempFile.dirCat(tileName));
-            writer->initialize();
-
-            if (traceLog() && (ossimMpi::instance()->getRank() == 0))
-            {
-               ossimFilename logFile = writer->getFilename();
-               logFile.setExtension(ossimString("log"));
-               
-               ossimKeywordlist logKwl;
-               writer->saveStateOfAllInputs(logKwl);
-               logKwl.write(logFile.c_str());
-            }
-
-            try
-            {
-               writer->execute();
-            }
-            catch(std::exception& e)
-            {
-               ossimNotify(ossimNotifyLevel_FATAL)
-                  << "ossimIgen::outputProduct ERROR:\n"
-                  << "Caught exception!\n"
-                  << e.what()
-                  << std::endl;
-            }
-            catch(...)
-            {
-               ossimNotify(ossimNotifyLevel_FATAL)
-                  << "ossimIgen::outputProduct ERROR:\n"
-                  << "Unknown exception caught!\n"
-                  << std::endl;
-            }
-
-            ++idx;
-
-            if (prog)
-            {
-               writer->removeListener(prog);
-               delete prog;
-               prog = 0;
-            }
-         }
+         if (!writeToFile(writer.get()))
+            break;
       }
-      else
-      {
-         ossimStdOutProgress* prog = 0;
-         if ( (ossimMpi::instance()->getRank() == 0) && theProgressFlag)
-         {
-            // Add a listener to master.
-            prog = new ossimStdOutProgress(0, true);
-            writer->addListener(prog);
-         }
-         
-         if (traceLog() && (ossimMpi::instance()->getRank() == 0))
-         {
-            ossimFilename logFile = writer->getFilename();
-            logFile.setExtension(ossimString("log"));
-               
-            ossimKeywordlist logKwl;
-            writer->saveStateOfAllInputs(logKwl);
-            logKwl.write(logFile.c_str());
-         }
-
-         try
-         {
-            writer->execute();
-         }
-         catch(std::exception& e)
-         {
-            ossimNotify(ossimNotifyLevel_FATAL)
-               << "ossimIgen::outputProduct ERROR:\n"
-               << "Caught exception!\n"
-                  << e.what()
-               << std::endl;
-         }
-         catch(...)
-         {
-            ossimNotify(ossimNotifyLevel_FATAL)
-               << "ossimIgen::outputProduct ERROR:\n"
-               << "Unknown exception caught!\n"
-               << std::endl;
-         }
-
-         if (prog)
-         {
-            writer->removeListener(prog);
-            delete prog;
-            prog = 0;
-         }
-      }
-   }
-
-   if(ossimMpi::instance()->getRank() == 0)
-   {
-      for(ossim_uint32 i = 0; i < processObjects.size(); ++i)
-      {
-         if(!PTR_CAST(ossimImageFileWriter,
-                      processObjects[i].get()))
-         {
-            ossimProcessInterface* process = PTR_CAST(ossimProcessInterface,
-                                                      processObjects[i].get());
-            if(process)
-            {
-               processObjects[i]->connectMyInputTo(chain.get());
-               process->execute();
-            }
-         }
-      }
-   }
-}
-
-void ossimIgen::deleteAttributes()
-{
-   theProductProjection = 0;
-   theContainer->disconnect();
-   theContainer->deleteAllChildren();
-   theContainer = 0;
-}
-
-ossimProjection* ossimIgen::createImageProjection(const ossimKeywordlist& kwl)
-{
-   // here we need to modify the factory to produce the correct
-   // projector so we can seemlessly use sensors as well.  For
-   // now we hardcode the Map projector
-   ossimProjection* imageProjection = ossimProjectionFactoryRegistry::instance()->createProjection(kwl);
-   
-   if(!imageProjection)
-   {
-      
-//       cerr << "Unable to create Image projection: "
-//            << ossimString(kwl.find("projection.type"))
-//            << " in ossimIgen::createImageProjection" << endl;
-      // ERROR
-   }
-
-   return imageProjection;   
-}
-
-ossimProjection* ossimIgen::buildProductProjection(const ossimKeywordlist& kwl,
-                                                   const char* prefix)
-{
-   ossimKeywordlist kwlProj;
-
-   ossimString projPrefix = ossimString(prefix) + "projection.";
-   const char* ul_lat = kwl.find(prefix, ossimKeywordNames::UL_LAT_KW);
-   const char* ul_lon = kwl.find(prefix, ossimKeywordNames::UL_LON_KW);
-   const char* lr_lat = kwl.find(prefix, ossimKeywordNames::LR_LAT_KW);
-   const char* lr_lon = kwl.find(prefix, ossimKeywordNames::LR_LON_KW);
-   const char* origin_latitude    = kwl.find(projPrefix.c_str(),
-                                             ossimKeywordNames::ORIGIN_LATITUDE_KW);
-   const char* central_meridian   = kwl.find(projPrefix.c_str(),
-                                             ossimKeywordNames::CENTRAL_MERIDIAN_KW);
-   double      originLat = 0.0;
-   double      originLon = 0.0;
-   
-   ossimRefPtr<ossimProjection> projection = 0;
-   projection = ossimProjectionFactoryRegistry::instance()->createProjection(kwl, "product.projection.");
-   
-   ossimMapProjection* mapProj = PTR_CAST(ossimMapProjection, projection.get());
-   
-
-   if(mapProj)
-   {
-      ossimKeywordlist projKwl;
-      mapProj->saveState(projKwl);
-
-      // allow one to override
-      if(origin_latitude&&central_meridian)
-      {
-         originLat = ossimString(origin_latitude).toDouble();
-         originLon = ossimString(central_meridian).toDouble();
-      }
-      // default
-      else if(ul_lat&&ul_lon&&lr_lat&&lr_lon)
-      {
-         double ulLat = ossimString(ul_lat).toDouble();
-         double ulLon = ossimString(ul_lon).toDouble();
-         double lrLat = ossimString(lr_lat).toDouble();
-         double lrLon = ossimString(lr_lon).toDouble();
-
-         originLat = (ulLat + lrLat)*.5;
-         originLon = (ulLon + lrLon)*.5;
-               
-         if (origin_latitude)
-         {
-            originLat = ossimString(origin_latitude).toDouble();
-         }
-         if (central_meridian)
-         {
-            originLon = ossimString(central_meridian).toDouble();
-         }
-      }
-
-      if(origin_latitude)
-      {
-         projKwl.add(ossimKeywordNames::ORIGIN_LATITUDE_KW,
-                     originLat,
-                     true);
-      }
-
-      if(central_meridian)
-      {
-         projKwl.add(ossimKeywordNames::CENTRAL_MERIDIAN_KW,
-                     originLon,
-                     true);
-      }
-      
-      projection = ossimProjectionFactoryRegistry::instance()->createProjection(projKwl);
-
    }
    else
    {
-      
-//       cout << "ERROR: not all product information was supplied. \n"
-//            << "     need:  ul_lat, ul_lon, lr_lat lr_lon (area of coverage)\n"
-//            << "            projection datum and projection type";
+      // No multi-file tiling, just conventional write to single file:
+      writeToFile(writer.get());
    }
-
-   
-   return projection.release();
 }
 
-void ossimIgen::setView(ossimConnectableObject* obj,
-                        ossimObject* viewObj)
+//*************************************************************************************************
+//! Consolidates job of actually writing to the output file.
+//*************************************************************************************************
+bool ossimIgen::writeToFile(ossimImageFileWriter* writer)
 {
-   if(!viewObj||!obj)
+   ossimStdOutProgress* prog = 0;
+   if ( (ossimMpi::instance()->getRank() == 0) && theProgressFlag)
    {
+      // Add a listener to master.
+      prog = new ossimStdOutProgress(0, true);
+      writer->addListener(prog);
+   }
+
+   if (traceLog() && (ossimMpi::instance()->getRank() == 0))
+   {
+      ossimFilename logFile = writer->getFilename();
+      logFile.setExtension(ossimString("log"));
+
+      ossimKeywordlist logKwl;
+      writer->saveStateOfAllInputs(logKwl);
+      logKwl.write(logFile.c_str());
+   }
+
+   try
+   {
+      writer->execute();
+   }
+
+   // Catch internal exceptions:
+   catch(std::exception& e)
+   {
+      ossimNotify(ossimNotifyLevel_FATAL)
+         << "ossimIgen::outputProduct ERROR:\n"
+         << "Caught exception!\n"
+         << e.what()
+         << std::endl;
+      return false;
+   }
+   catch(...)
+   {
+      ossimNotify(ossimNotifyLevel_FATAL)
+         << "ossimIgen::outputProduct ERROR:\n"
+         << "Unknown exception caught!\n"
+         << std::endl;
+      return false;
+   }
+
+   if (prog)
+   {
+      writer->removeListener(prog);
+      delete prog;
+      prog = 0;
+   }
+
+   return true;
+}
+
+//*************************************************************************************************
+//! Initializes all clients of the view projection to the current product projection.
+//*************************************************************************************************
+void ossimIgen::setView()
+{
+   if(!theProductChain.valid() || !theProductProjection.valid())
       return;
-   }
-   ossimConnectableObject::ConnectableObjectList result;
-   obj->findAllInputsOfType(result, STATIC_TYPE_INFO(ossimViewInterface), true, true);
 
-   for(ossim_uint32 i = 0; i < result.size();++i)
+   // Find all view clients in the chain, and notify them of the new view:
+   ossimConnectableObject::ConnectableObjectList clientList;
+   theProductChain->findAllInputsOfType(clientList, STATIC_TYPE_INFO(ossimViewInterface), true, true);
+   for(ossim_uint32 i = 0; i < clientList.size();++i)
    {
-      ossimViewInterface* viewInterface = PTR_CAST(ossimViewInterface,
-                                                   result[i].get());
-      if(viewInterface)
-      {
-         ossimRefPtr<ossimObject> obj = viewObj->dup();
-         viewInterface->setView(obj.get());
-      }
+      ossimViewInterface* viewClient = PTR_CAST(ossimViewInterface, clientList[i].get());
+      if (viewClient)
+         viewClient->setView(theProductProjection->dup());
    }
 }
 
-
-bool ossimIgen::getOutputRect(const ossimKeywordlist& kwl,
-                              ossimDrect& rect)
+//*************************************************************************************************
+//! Modifies the production chain to output redused-resolution thumbnail image.
+//*************************************************************************************************
+void ossimIgen::initThumbnailProjection()
 {
-   ossimRefPtr<ossimProjection> viewProj = buildProductProjection(kwl);
-   ossimImageChain* chain    = getChain();
-   
-   
-   
-   if(chain)
+   // Set the full product's rect first:
+   initializeChain();
+
+   double thumb_size = ossim::max(theThumbnailSize.x, theThumbnailSize.y);
+   ossimMapProjection* mapProj = PTR_CAST (ossimMapProjection, theProductProjection.get());
+
+   if(mapProj && !theOutputRect.hasNans())
    {
-      setView(chain, viewProj.get());
-      chain->initialize();
-      rect = chain->getBoundingRect();
-      
-      return true;
+      double xScale = theOutputRect.width()  / (double)thumb_size;
+      double yScale = theOutputRect.height() / (double)thumb_size;
+      double scale = ossim::max(xScale, yScale);
+      mapProj->applyScale(ossimDpt(scale, scale), true);
    }
 
-   return false;
+   // Need to change the view in the product chain:
+   setView();
 }
 
-void ossimIgen::buildThumbnail()
+//*************************************************************************************************
+// This method is called after a change is made to the product chain. It recomputes the bounding
+// rectangle.
+//*************************************************************************************************
+void ossimIgen::initializeChain()
 {
-   double resolution = ossim::max(theThumbnailResolution.x, theThumbnailResolution.y);
-   ossimRefPtr<ossimProjection> viewProj   = buildProductProjection(theKwl);
-   ossimMapProjection* mapProj = dynamic_cast<ossimMapProjection*>(viewProj.get());
-   
-   
-   ossimDrect rect;
+   // Force initialization of the chain to recompute parameters:
+   theProductChain->initialize();
+   theOutputRect = theProductChain->getBoundingRect();
 
-   if(mapProj && getOutputRect(theKwl, rect))
-   {
-      double xScale = rect.width()  / (double)resolution;
-      double yScale = rect.height() / (double)resolution;
-
-      //---
-      // Maintain aspect ratio - adjust based on largest Scale.
-      // 
-      // Note the second argument to applyScale is to
-      // "not recenter the tie point".  This was added to fix a resampler
-      // runaway split problem. (drb 20051225)
-      //---
-      if (xScale > yScale)
-      {
-         mapProj->applyScale(ossimDpt(xScale, xScale), false);
-      }
-      else
-      {
-         mapProj->applyScale(ossimDpt(yScale, yScale), false);
-      }
-      mapProj->saveState(theKwl, "product.projection.");
-   }
-   
-}
-
-ossimImageChain* ossimIgen::getChain()
-{
-   ossimConnectableObject* obj = theContainer->findFirstObjectOfType(STATIC_TYPE_NAME(ossimImageChain),
-                                                                    false);
-
-   return dynamic_cast<ossimImageChain*>(obj);
+   // Stretch the rectangle out to integer boundaries.
+   if(!theOutputRect.hasNans())
+      theOutputRect.stretchOut();
 }

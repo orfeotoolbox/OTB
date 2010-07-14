@@ -9,7 +9,7 @@
 // Shuttle Radar Topography Mission (SRTM) elevation source.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimSrtmHandler.cpp 16826 2010-03-08 18:47:32Z gpotts $
+// $Id: ossimSrtmHandler.cpp 17195 2010-04-23 17:32:18Z dburken $
 
 #include <ossim/elevation/ossimSrtmHandler.h>
 #include <ossim/base/ossimCommon.h>
@@ -95,8 +95,7 @@ double ossimSrtmHandler::getHeightAboveMSL(const ossimGpt& gpt)
 }
 
 template <class T>
-double ossimSrtmHandler::getHeightAboveMSLFileTemplate(T dummy,
-                                                   const ossimGpt& gpt)
+double ossimSrtmHandler::getHeightAboveMSLFileTemplate(T /* dummy */, const ossimGpt& gpt)
 {
    // Establish the grid indexes:
    double xi = (gpt.lon - m_nwCornerPost.lon) / m_lonSpacing;
@@ -225,7 +224,7 @@ double ossimSrtmHandler::getHeightAboveMSLFileTemplate(T dummy,
 
 
 template <class T>
-double ossimSrtmHandler::getHeightAboveMSLMemoryTemplate(T dummy,
+double ossimSrtmHandler::getHeightAboveMSLMemoryTemplate(T /* dummy */,
                                                          const ossimGpt& gpt)
 {
    // Establish the grid indexes:
@@ -334,9 +333,10 @@ double ossimSrtmHandler::getHeightAboveMSLMemoryTemplate(T dummy,
    return ossim::nan();
 }
 
-double ossimSrtmHandler::getPostValue(const ossimIpt& gridPt) const
+double ossimSrtmHandler::getPostValue(const ossimIpt& /* gridPt */) const
 {
-   std::cout << "ossimSrtmHandler::getPostValue(const ossimIpt& gridPt):  NEED TO IMPLEMENT TO NEW INTERFACE\n";
+   ossimNotify(ossimNotifyLevel_WARN)
+      << "ossimSrtmHandler::getPostValue(const ossimIpt& gridPt):  NEED TO IMPLEMENT TO NEW INTERFACE\n";
    
    return theNullHeightValue;
 #if 0

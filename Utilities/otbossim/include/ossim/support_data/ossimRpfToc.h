@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimRpfToc.h 16308 2010-01-09 02:45:54Z eshirschorn $
+// $Id: ossimRpfToc.h 17050 2010-04-13 19:56:37Z dburken $
 #ifndef osimRpfToc_HEADER
 #define osimRpfToc_HEADER
 
@@ -15,24 +15,52 @@
 #include <iosfwd>
 
 #include <ossim/base/ossimConstants.h>
-#include <ossim/base/ossimErrorContext.h>
-
+#include <ossim/base/ossimErrorCodes.h>
+#include <ossim/base/ossimException.h>
 #include <ossim/base/ossimFilename.h>
+#include <ossim/base/ossimReferenced.h>
+#include <ossim/base/ossimRefPtr.h>
+#include <ossim/support_data/ossimNitfFileHeader.h>
+#include <ossim/support_data/ossimRpfHeader.h>
 
-class ossimRpfHeader;
-class ossimRpfBoundaryRectTable;
+class ossimRpfFrameFileIndexSubsection;
 class ossimRpfTocEntry;
 class ossimRpfFrameEntry;
 
-class OSSIM_DLL ossimRpfToc
+class OSSIM_DLL ossimRpfToc : public ossimReferenced
 {
 public:
    friend OSSIM_DLL std::ostream& operator <<(std::ostream& out,
                                               const ossimRpfToc& data);
    ossimRpfToc();
-   ~ossimRpfToc();
 
-   ossimErrorCode parseFile(const ossimFilename &fileName);
+   virtual ~ossimRpfToc();
+
+   /**
+    * @brief Parses a.toc file.
+    * @param fileName File to parse.
+    * @param keepFileHeader If true the ossimNitfFileHeader will be kept.
+    * @return ossimErrorCodes::OSSIM_OK on success, ossimErrorCodes::OSSIM_ERROR on error.
+    */
+   ossimErrorCode parseFile(const ossimFilename &fileName,
+                            bool keepFileHeader = false);
+
+   /**
+    * @brief Creates a new a.toc file from list of rpf frames in output directory.
+    *
+    * @param dotRpfFile File containing list of rpf frames wanted.
+    *
+    * @param outputDir Directory to write a.toc file and rpf frames to.
+    *
+    * @see ossim-rpf application usage for dotRpfFile format.
+    */
+#if defined(_WIN32)
+   void createTocAndCopyFrames( const ossimFilename& dotRpfFile,
+                                const ossimFilename& outputDir) throw(...);
+#else
+   void createTocAndCopyFrames( const ossimFilename& dotRpfFile,
+                                const ossimFilename& outputDir) throw(ossimException);
+#endif
 
    /**
     * @brief print method that outputs a key/value type format adding prefix
@@ -47,14 +75,23 @@ public:
                        const std::string& prefix=std::string(),
                        bool printOverviews=false) const;
    
-   unsigned long getNumberOfEntries()const{return (ossim_uint32)theTocEntryList.size();}
-   const ossimRpfTocEntry* getTocEntry(unsigned long index)const;
+   ossim_uint32 getNumberOfEntries()const;
+   
+   const ossimRpfTocEntry* getTocEntry(ossim_uint32 index)const;
+
    /**
     * Returns -1 if not found.
     */
    ossim_int32 getTocEntryIndex(const ossimRpfTocEntry* entry);
+
+   /**
+    * @brief Get the nitf file header.
+    *
+    * @return The nitf file header or 0 if not set.
+    */
+   const ossimNitfFileHeader* getNitfFileHeader()const;
    
-   const ossimRpfHeader* getRpfHeader()const{return theRpfHeader;}
+   const ossimRpfHeader* getRpfHeader() const;
 
    /**
     * For the given entry index, this routine returns the number of 
@@ -115,11 +152,64 @@ private:
    void clearAll();
    void deleteTocEntryList();
    void buildTocEntryList(ossimRpfHeader* rpfHeader);
-   void allocateTocEntryList(unsigned long numberOfEntries);
+   void allocateTocEntryList(ossim_uint32 numberOfEntries);
 
    /** @brief Walks through frames to find the first entry that exists... */
    void getFirstEntry(const ossimRpfTocEntry* rpfTocEntry,
                       ossimRpfFrameEntry& frameEntry) const;
+
+   /**
+    * @brief Writes the frame file sub section of an a.toc.
+    * 
+    * This is a utility method for createTocAndCopyFrames method. 
+    */
+   void writeFrameFileIndexSection(ossimRpfFrameFileIndexSubsection* frameFileSubSection,
+                                   std::ifstream& dotRpfStr,
+                                   std::ofstream& dotTocStr);
+
+   /**
+    * @brief Copies frame to output directory.
+    * 
+    * This is a utility method for createTocAndCopyFrames method. 
+    */
+   void copyFrames(std::ifstream& dotRpfStr, const ossimFilename& outputDir);
+
+   
+
+   /**
+    * @brief Get the number of frames from the dot rpf file.
+    * This is a utility method for createTocAndCopyFrames method.
+    */
+   ossim_uint32 getNumberOfFrames(std::ifstream& dotRpfStr) const;
+
+   /**
+    * @brief Get a.toc file from the dot rpf file.
+    * This is a utility method for createTocAndCopyFrames method.
+    */
+   ossimFilename getSourceTocFile(std::ifstream& dotRpfStr) const;
+
+   /**
+    * @brief Gets the zero based entry number for the first file in the dot rpf file.
+    * This is a utility method for createTocAndCopyFrames method.
+    */
+   bool getCorespondingEntry(ossimRpfFrameFileIndexSubsection* frameFileSubSection,
+                             std::ifstream& dotRpfStr,
+                             ossim_uint32& entry) const;
+   
+   /**
+    * @brief Gets the filename from line in.
+    *
+    * Line format:
+    *
+    * /data/spadac/rpf-frame-test/t1/N03E030/005FNU1B.I21|30.9141787715578,3.03831480449669|30.9889225265623,3.10741371349693
+    *
+    * @param line Line to extract filename from.
+    *
+    * @param out Filename to initialize.
+    *
+    * This is a utility method for createTocAndCopyFrames method.
+    */
+   bool getFile(const std::string& line, ossimFilename& file) const;
 
    /*!
     * This will hold a list of table of content entries.  There is one entry
@@ -127,14 +217,16 @@ private:
     * Each directory is then divided into frames.  There could be 30 or
     * more frame images that make up an entire image.
     */
-   std::vector<ossimRpfTocEntry*> theTocEntryList;
+   std::vector<ossimRpfTocEntry*> m_tocEntryList;
    
    /*!
     * We will remember the file that we opened
     */
-   ossimFilename theFilename;
+   ossimFilename m_filename;
 
-   ossimRpfHeader* theRpfHeader;
+   ossimRefPtr<const ossimNitfFileHeader> m_nitfFileHeader;
+   
+   ossimRefPtr<ossimRpfHeader> m_rpfHeader;
 };
 
 #endif

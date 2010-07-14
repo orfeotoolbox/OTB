@@ -9,7 +9,7 @@
 //   from disk. This elevation files are memory mapped.
 //
 //*****************************************************************************
-// $Id: ossimDtedHandler.cpp 16826 2010-03-08 18:47:32Z gpotts $
+// $Id: ossimDtedHandler.cpp 17599 2010-06-20 13:52:34Z dburken $
 
 #include <cstdlib>
 #include <cstring> /* for memcpy */
@@ -205,9 +205,12 @@ bool ossimDtedHandler::open(const ossimFilename& file, bool memoryMapFlag)
    
    // Set the base class null height value.
    theNullHeightValue = -32767.0;
-   
+
+   //---
+   // Commented out as this writes an un-needed file.  (drb 20100611)
    // Get the statistics.
-   gatherStatistics();
+   // gatherStatistics();
+   //---
 
    return true;
 }

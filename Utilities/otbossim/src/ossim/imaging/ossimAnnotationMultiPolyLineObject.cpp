@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimAnnotationMultiPolyLineObject.cpp 13964 2009-01-14 16:30:07Z gpotts $
+// $Id: ossimAnnotationMultiPolyLineObject.cpp 17195 2010-04-23 17:32:18Z dburken $
 #include <ossim/imaging/ossimAnnotationMultiPolyLineObject.h>
 #include <ossim/imaging/ossimAnnotationMultiLineObject.h>
 #include <ossim/imaging/ossimRgbImage.h>
@@ -68,7 +68,8 @@ bool ossimAnnotationMultiPolyLineObject::intersects(const ossimDrect& rect)const
    return false;
 }
 
-ossimAnnotationObject* ossimAnnotationMultiPolyLineObject::getNewClippedObject(const ossimDrect& rect)const
+ossimAnnotationObject* ossimAnnotationMultiPolyLineObject::getNewClippedObject(
+   const ossimDrect& /* rect */)const
 {
    ossimAnnotationObject* result = (ossimAnnotationObject*)NULL;
    

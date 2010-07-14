@@ -10,7 +10,7 @@
 // Description:
 //
 //*******************************************************************
-//  $Id: ossimGeneralRasterInfo.cpp 12980 2008-06-04 00:50:33Z dburken $
+//  $Id: ossimGeneralRasterInfo.cpp 17504 2010-06-02 11:22:37Z dburken $
 
 #include <cstdlib>
 #include <iostream>
@@ -146,7 +146,7 @@ std::ostream& ossimGeneralRasterInfo::print(std::ostream& out) const
    // This will print in a keyword format that can be read by the constructor.
    // that takes a keyword list.
    //***
-   out << setiosflags(std::ios::left);
+   out << std::setiosflags(std::ios::left);
    ossim_uint32 i;
    for (i=0; i<theImageFileList.size(); ++i)
    {
