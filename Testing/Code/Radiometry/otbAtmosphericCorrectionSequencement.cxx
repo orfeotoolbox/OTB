@@ -19,10 +19,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#ifdef __BORLANDC__
-#define ITK_LEAN_AND_MEAN
-#endif
-
 #include "otbImageToLuminanceImageFilter.h"
 #include "otbLuminanceToReflectanceImageFilter.h"
 #include "otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms.h"

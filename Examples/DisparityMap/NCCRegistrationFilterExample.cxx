@@ -19,10 +19,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#ifdef __BORLANDC__
-#define ITK_LEAN_AND_MEAN
-#endif
-
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {StereoFixed.png}, {StereoMoving.png}
 //    OUTPUTS: {deformationFieldOutput-horizontal.png}, {deformationFieldOutput-vertical.png}, {resampledOutput2.png}
