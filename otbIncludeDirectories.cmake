@@ -189,7 +189,6 @@ ELSE(OTB_USE_EXTERNAL_FLTK)
             ${OTB_BINARY_DIR}/Utilities/FLTK )
 ENDIF(OTB_USE_EXTERNAL_FLTK)
 
-
 #-----------------------------------------------------------------------------
 # Include directories needed for .cxx files in OTB.  These include
 # directories will NOT be available to user projects.
@@ -407,6 +406,14 @@ ELSE(OTB_USE_EXTERNAL_ITK)
               Utilities/ITK/Utilities/vxl/vcl
               Utilities/ITK/Utilities/vxl/core
               Utilities/ITK/Utilities
+              Utilities/ITK/Utilities/itkExtHdrs
+              Utilities/ITK/Utilities/DICOMParser
+              Utilities/ITK/Utilities/MetaIO
+              Utilities/ITK/Utilities/nifti/niftilib
+              Utilities/ITK/Utilities/nifti/znzlib
+              Utilities/ITK/gdcm/src
+	      Utilities/ITK/gdcm
+              Utilities/ITK/Utilities/NrrdIO
         )
 
 # JULIEN Seems that ITK_INCLUDE_DIRS_CONFIG replaces ITK_INCLUDE_DIRS_INSTALL_TREE
