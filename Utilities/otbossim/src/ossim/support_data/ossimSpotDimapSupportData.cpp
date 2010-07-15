@@ -948,11 +948,6 @@ ossimString ossimSpotDimapSupportData::getProductionDate() const
    return theProductionDate;
 }
 
-ossimString ossimSpotDimapSupportData::getProductionDate() const
-{
-   return theProductionDate;
-}
-
 ossimString ossimSpotDimapSupportData::getImageID() const
 {
    return theImageID;
@@ -961,16 +956,6 @@ ossimString ossimSpotDimapSupportData::getImageID() const
 ossimFilename ossimSpotDimapSupportData::getMetadataFile() const
 {
    return theMetadataFile;
-}
-
-ossimString ossimSpotDimapSupportData::getInstrument() const
-{
-   return theInstrument;
-}
-
-ossim_uint32 ossimSpotDimapSupportData::getInstrumentIndex() const
-{
-   return theInstrumentIndex;
 }
 
 ossimString ossimSpotDimapSupportData::getInstrument() const
@@ -1847,68 +1832,6 @@ bool ossimSpotDimapSupportData::parsePart1(
       return false;
    }
    theInstrumentIndex = xml_nodes[0]->getText().toUInt32();
-
-
-   //---
-   // Fetch the ProductionDate:
-   //---
-   xml_nodes.clear();
-   xpath = "/Dimap_Document/Production/DATASET_PRODUCTION_DATE";
-   xmlDocument->findNodes(xpath, xml_nodes);
-   if (xml_nodes.size() == 0)
-   {
-      setErrorStatus();
-      if(traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << MODULE << " DEBUG:"
-            << "\nCould not find: " << xpath
-            << std::endl;
-      }
-      return false;
-   }
-   theProductionDate = xml_nodes[0]->getText();
-   
-   //---
-   // Fetch the Instrument:
-   //---
-   xml_nodes.clear();
-   xpath = "/Dimap_Document/Dataset_Sources/Source_Information/Scene_Source/INSTRUMENT";
-   xmlDocument->findNodes(xpath, xml_nodes);
-   if (xml_nodes.size() == 0)
-   {
-      setErrorStatus();
-      if(traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << MODULE << " DEBUG:"
-            << "\nCould not find: " << xpath
-            << std::endl;
-      }
-      return false;
-   }
-   theInstrument = xml_nodes[0]->getText();
-
-   //---
-   // Fetch the Instrument Index:
-   //---
-   xml_nodes.clear();
-   xpath = "/Dimap_Document/Dataset_Sources/Source_Information/Scene_Source/INSTRUMENT_INDEX";
-   xmlDocument->findNodes(xpath, xml_nodes);
-   if (xml_nodes.size() == 0)
-   {
-      setErrorStatus();
-      if(traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << MODULE << " DEBUG:"
-            << "\nCould not find: " << xpath
-            << std::endl;
-      }
-      return false;
-   }
-   theInstrumentIndex = xml_nodes[0]->getText().toUInt32();
-
 
    return true;
 }

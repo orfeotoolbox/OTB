@@ -701,10 +701,10 @@ void ossimIkonosRpcModel::parseRpcData(const ossimFilename& data_file)
       return;
    }
    else
-     {
-       // copy ossimIkonosMetada-sensor into ossimIkonosRpcModel-sensorId
-       theSensorID = theSupportData->getSensorID();
-     }
+   {
+      // copy ossimIkonosMetada-sensor into ossimIkonosRpcModel-sensorId
+      theSensorID = theSupportData->getSensorID();
+   }
    
 
    theLatScale = atof(buf);
@@ -781,12 +781,6 @@ void ossimIkonosRpcModel::parseRpcData(const ossimFilename& data_file)
       }
       theSampDenCoef[i-1] = atof(buf);
    }
-   else
-     {
-       // copy ossimIkonosMetada-sensor into ossimIkonosRpcModel-sensorId
-       theSensorID = theSupportData->getSensorID();
-     }
-   
 
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimIkonosRpcModel::parseRpcData(data_file): returning..." << std::endl;
    return;
