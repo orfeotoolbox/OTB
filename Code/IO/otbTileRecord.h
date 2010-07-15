@@ -27,7 +27,7 @@
 
 namespace otb
 {
-/** \class TileMapFectcher
+/** \class TileRecord
  * \brief Manages Tiles from OSM.
  *
  */
