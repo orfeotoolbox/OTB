@@ -671,6 +671,16 @@ bool ossimplugins::ossimTerraSarProductDoc::getMission(
    return ossim::getPath(path, xdoc, s);
 }
 
+bool ossimplugins::ossimTerraSarProductDoc::geNumberOfLayers(
+   const ossimXmlDocument* xdoc, ossimString& s) const
+{
+   ossimString path = "/level1Product/productInfo/imageDataInfo/numberOfLayers";
+   ossim::getPath(path, xdoc, s);
+
+   return ossim::getPath(path, xdoc, s);
+}
+
+
 bool ossimplugins::ossimTerraSarProductDoc::getImageFile(
    const ossimXmlDocument* xdoc, ossimString& s) const
 {
@@ -1046,14 +1056,14 @@ bool ossimplugins::ossimTerraSarProductDoc::getPolarisationMode(
    return ossim::getPath(path, xdoc, s);
 }
 bool ossimplugins::ossimTerraSarProductDoc::getPolLayer(
-   const ossimXmlDocument* xdoc, ossimString& s) const
+   const ossimXmlDocument* xdoc, std::vector<ossimString>& s) const
 {
    ossimString path =
       "/level1Product/productInfo/acquisitionInfo/polarisationList/polLayer";
    return ossim::getPath(path, xdoc, s);
 }
 bool ossimplugins::ossimTerraSarProductDoc::getCalFactor(
-   const ossimXmlDocument* xdoc, ossimString& s) const
+   const ossimXmlDocument* xdoc, std::vector<ossimString>& s) const
 {
    ossimString path =
       "/level1Product/calibration/calibrationConstant/calFactor";
@@ -1363,5 +1373,10 @@ bool ossimplugins::ossimTerraSarProductDoc::initNoise(
 
    return result;
 }
+
+
+
+
+
 
 

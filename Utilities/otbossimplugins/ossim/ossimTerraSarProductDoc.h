@@ -112,6 +112,9 @@ namespace ossimplugins
       bool getMission(const ossimXmlDocument* xdoc,
                       ossimString& s) const;
       
+      bool geNumberOfLayers(const ossimXmlDocument* xdoc,
+                      ossimString& s) const;
+
       bool getImageFile(const ossimXmlDocument* xdoc,
                         ossimString& s) const;
       
@@ -214,11 +217,11 @@ namespace ossimplugins
       bool getAcquisitionSensor(const ossimXmlDocument* xdoc,
                                     ossimString& s) const;
       bool getPolarisationMode(const ossimXmlDocument* xdoc,
-                                    ossimString& s) const;
+                                     ossimString& s) const;
       bool getPolLayer(const ossimXmlDocument* xdoc,
-                                    ossimString& s) const;
+                                    std::vector<ossimString>& s) const;
       bool getCalFactor(const ossimXmlDocument* xdoc,
-                                    ossimString& s) const;
+                                    std::vector<ossimString>& s) const;
       bool getRadarFrequency(const ossimXmlDocument* xdoc,
                                     ossimString& s) const;
 /*      bool getCenterIncidenceAngle(const ossimXmlDocument* xdoc,

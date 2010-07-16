@@ -105,6 +105,11 @@ namespace ossimplugins
        */
       virtual std::ostream& print(std::ostream& out) const;
 
+      //---
+   	  // Convenient method to print important image info:
+      //---
+      void  printInfo (ostream& os) const;
+   
       private:
 
       virtual bool InitPlatformPosition(const ossimKeywordlist &kwl,
@@ -149,6 +154,15 @@ namespace ossimplugins
                         const ossimTerraSarProductDoc& tsDoc);
 
       /**
+       * @brief Method to initialize Calibration parameters from
+       * TerraSAR product xml file.
+       * @param xdoc Opened product xml file.
+       * @return true on success, false on error.
+       */
+	  bool initCalibration( const ossimXmlDocument* xmlDocument, 
+                        const ossimTerraSarProductDoc& tsDoc);
+
+      /**
        * @brief Method to initialize InfoIncidenceAngle parameters from
        * TerraSAR product xml file.
        * @param xdoc Opened product xml file.
@@ -163,8 +177,15 @@ namespace ossimplugins
        * @param xdoc Opened product xml file.
        * @return true on success, false on error.
        */
-      bool initNoise(
-                        const ossimXmlDocument* xdoc, const ossimTerraSarProductDoc& tsDoc);
+      bool initNoise( const ossimXmlDocument* xmlDocument, const ossimTerraSarProductDoc& tsDoc);
+
+      /**
+       * @brief Method to get ImageNoise parameters from
+       * TerraSAR product xml file at a given node.
+       * @param xdoc Opened product xml file.
+       * @return true on success, false on error.
+       */
+      bool getNoiseAtGivenNode( const ossimRefPtr<ossimXmlNode> xmlDocument, ossimplugins::Noise* noise);
 
       /**
        * @brief Method to find the metadata file
@@ -237,12 +258,12 @@ namespace ossimplugins
       /**
        * @brief PolLayer (AcquisitionInfo node).
        */
-      ossimString _polLayer;
+      std::vector<ossimString> _polLayer;
 
       /**
        * @brief Noise (Noise node).
        */
-      Noise *_noise;
+      std::vector<Noise *>  _noise;
       
       /**
        * @brief IncidenceAngle (SceneInfo node)
@@ -252,12 +273,17 @@ namespace ossimplugins
       /**
        * @brief CalFactor (Calibration node).
        */
-      double _calFactor;
+      std::vector<double> _calFactor;
 
       /**
        * @brief centerFrequency (instrument node).
        */
       double _radarFrequency;
+
+      /**
+       * @brief number of layer (ImageDataInfo node).
+       */
+      ossim_uint32 _numberOfLayers;
 
       /**
        * @brief Azimuthal Start Time (Start acquisition time).

@@ -2127,6 +2127,24 @@ ADD_TEST(ioTvTerraSarImageMetadataInterface_TORONTO ${IO_TESTS18}
         ${TEMP}/ioTvTerraSarImageMetadataInterface_TORONTO.txt
 )
 
+ADD_TEST(ioTuTerraSarImageMetadataInterface_PANGKALANBUUNUsingHHCosFile ${IO_TESTS18}
+        otbTerraSarImageMetadataInterface
+        ${LARGEDATA}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+        ${TEMP}/ioTvTerraSarImageMetadataInterface_PANGKALANBUUNUsingHHCosFile.txt
+)
+
+ADD_TEST(ioTuTerraSarImageMetadataInterface_PANGKALANBUUNUsingVVCosFile ${IO_TESTS18}
+        otbTerraSarImageMetadataInterface
+        ${LARGEDATA}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_VV_SRA_stripFar_008.cos
+        ${TEMP}/ioTvTerraSarImageMetadataInterface_PANGKALANBUUNUsingVVCosFile.txt
+)
+
+ADD_TEST(ioTuTerraSarImageMetadataInterface_PANGKALANBUUNUsingXmlFile ${IO_TESTS18}
+        otbTerraSarImageMetadataInterface
+        ${LARGEDATA}/TERRASARX/PANGKALANBUUN/TSX1_SAR__SSC_SM.xml
+        ${TEMP}/ioTvTerraSarImageMetadataInterface_PangkalanbuunuUsingXmlFile.txt
+)
+
 ADD_TEST(ioTvImageKeywordlistSPOT5 ${IO_TESTS18}
   --ignore-order --compare-n-ascii ${NOTOL} 2
          ${BASELINE_FILES}/ioTvImageKeywordlistSpot5.txt
@@ -2263,6 +2281,12 @@ ADD_TEST(ioTvImageKeywordlistTerraSarX_Toronto ${IO_TESTS18}
          ${LARGEDATA}/TERRASARX/TORONTO/TSX1_SAR__SSC/TSX1_SAR__SSC.xml
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Toronto.txt
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Toronto_saveState_loadState.txt
+)
+ADD_TEST(ioTuImageKeywordlistTerraSarX_PANGKALANBUUN ${IO_TESTS18}
+    otbImageKeywordlist
+         ${LARGEDATA}/TERRASARX/PANGKALANBUUN/TSX1_SAR__SSC_SM.xml
+         ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun.txt
+         ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun_saveState_loadState.txt
 )
 
 ADD_TEST(ioTvImageKeywordlistErs ${IO_TESTS18}
