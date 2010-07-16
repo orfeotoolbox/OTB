@@ -67,6 +67,7 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Utilities/otbconfigfile
   ${OTB_SOURCE_DIR}/Utilities/otbknn
   ${OTB_BINARY_DIR}/Code/Visualization
+  ${OTB_SOURCE_DIR}/Code/OBIA
 )
 
 IF(NOT OTB_USE_EXTERNAL_BOOST)
@@ -297,6 +298,7 @@ SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
   Fusion
   GeospatialAnalysis
   Testing
+  OBIA
   Utilities
   Utilities/ITK
   Utilities/otbsvm
