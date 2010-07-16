@@ -7,7 +7,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfVqCompressionHeader.cpp 16035 2009-12-03 21:32:27Z dburken $
+// $Id: ossimNitfVqCompressionHeader.cpp 17501 2010-06-02 11:14:55Z dburken $
 
 #include <iostream>
 #include <iomanip>
@@ -212,7 +212,7 @@ std::ostream& ossimNitfVqCompressionHeader::print(
    std::string pfx = prefix;
    pfx += "vq_header.";
 
-   out << setiosflags(std::ios::left)
+   out << std::setiosflags(std::ios::left)
        << pfx << std::setw(24) << "image_rows:"
        << theNumberOfImageRows << "\n"
        << pfx << std::setw(24) << "codes_per_row:"

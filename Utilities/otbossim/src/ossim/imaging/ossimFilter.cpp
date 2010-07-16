@@ -242,7 +242,7 @@ static double Q1(double x)
       return(p/q);
 }
 
-double ossimBesselOrderOneFilter::filter(double x, double support)const
+double ossimBesselOrderOneFilter::filter(double x, double /* support */)const
 {
    double
       p,

@@ -12,7 +12,7 @@
 // derive from.
 //
 //*******************************************************************
-//  $Id: ossimImageHandler.cpp 16519 2010-02-04 18:23:52Z gpotts $
+//  $Id: ossimImageHandler.cpp 17108 2010-04-15 21:08:06Z dburken $
 
 #include <algorithm>
 
@@ -50,7 +50,7 @@ static ossimTrace traceDebug("ossimImageHandler:debug");
 static const char SUPPLEMENTARY_DIRECTORY_KW[] = "supplementary_directory";
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimImageHandler.cpp 16519 2010-02-04 18:23:52Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimImageHandler.cpp 17108 2010-04-15 21:08:06Z dburken $";
 #endif
 
 // GARRETT! All of the decimation factors are scattered throughout. We want to fold that into 
@@ -1011,7 +1011,7 @@ bool ossimImageHandler::isBandSelector() const
    return false;
 }
 
-bool ossimImageHandler::setOutputBandList(const std::vector<ossim_uint32>& band_list)
+bool ossimImageHandler::setOutputBandList(const std::vector<ossim_uint32>& /* band_list */)
 {
    return false;
 }
@@ -1155,7 +1155,7 @@ void ossimImageHandler::completeOpen()
    }
 }
 
-bool ossimImageHandler::canConnectMyInputTo(ossim_int32 inputIndex,
+bool ossimImageHandler::canConnectMyInputTo(ossim_int32 /* inputIndex */,
                                             const ossimConnectableObject* /* object */)const
 {      
    return false;

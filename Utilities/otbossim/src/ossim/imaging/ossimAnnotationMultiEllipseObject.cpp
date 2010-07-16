@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimAnnotationMultiEllipseObject.cpp 11347 2007-07-23 13:01:59Z gpotts $
+// $Id: ossimAnnotationMultiEllipseObject.cpp 17195 2010-04-23 17:32:18Z dburken $
 
 #include <ossim/imaging/ossimAnnotationMultiEllipseObject.h>
 
@@ -57,7 +57,8 @@ ossimObject* ossimAnnotationMultiEllipseObject::dup()const
 ossimAnnotationMultiEllipseObject::~ossimAnnotationMultiEllipseObject()
 {}
 
-ossimAnnotationObject* ossimAnnotationMultiEllipseObject::getNewClippedObject(const ossimDrect& rect)const
+ossimAnnotationObject* ossimAnnotationMultiEllipseObject::getNewClippedObject(
+   const ossimDrect& /* rect */)const
 {
    ossimNotify(ossimNotifyLevel_WARN)
       << "ossimAnnotationMultiEllipseObject::getNewClippedObject WARNING: Not implemented"

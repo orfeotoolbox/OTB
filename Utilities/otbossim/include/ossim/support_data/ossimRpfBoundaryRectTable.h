@@ -2,35 +2,64 @@
 //
 // License:  See top level LICENSE.txt file.
 // 
-// Author: Garrett Potts (gpotts@imagelinks.com)
+// Author: Garrett Potts
+// 
 // Description: Rpf support class
 // 
 //********************************************************************
-// $Id: ossimRpfBoundaryRectTable.h 9967 2006-11-29 02:01:23Z gpotts $
+// $Id: ossimRpfBoundaryRectTable.h 16997 2010-04-12 18:53:48Z dburken $
 #ifndef ossimRpfBoundaryRectTable_HEADER
 #define ossimRpfBoundaryRectTable_HEADER
-#include <iostream>
+
+#include <iosfwd>
 #include <vector>
-#include <iterator>
-using namespace std;
 
 #include <ossim/base/ossimConstants.h>
-#include <ossim/base/ossimErrorContext.h>
+#include <ossim/base/ossimErrorCodes.h>
+#include <ossim/base/ossimReferenced.h>
 #include <ossim/support_data/ossimRpfBoundaryRectRecord.h>
 
-class ossimRpfBoundaryRectTable
+class ossimRpfBoundaryRectTable : public ossimReferenced
 {
 public:
-   friend ostream& operator <<(ostream& out,
-                               const ossimRpfBoundaryRectTable& data);
    
-   ossimRpfBoundaryRectTable(unsigned long numberOfEntries=0);
-   virtual ~ossimRpfBoundaryRectTable(){}
-   ossimErrorCode parseStream(istream& in, ossimByteOrder byteOrder);
-   void setNumberOfEntries(unsigned long numberOfEntries);
-   virtual void print(ostream& out)const;
+   friend std::ostream& operator <<(std::ostream& out, const ossimRpfBoundaryRectTable& data);
+
+   /** default constructor */
+   ossimRpfBoundaryRectTable(ossim_uint32 numberOfEntries=0);
+
+   /** copy constructor */
+   ossimRpfBoundaryRectTable(const ossimRpfBoundaryRectTable& obj);
+
+   /** assignment operator */
+   const ossimRpfBoundaryRectTable& operator=(const ossimRpfBoundaryRectTable& rhs);
+   
+   virtual ~ossimRpfBoundaryRectTable();
+   
+   ossimErrorCode parseStream(std::istream& in, ossimByteOrder byteOrder);
+
+   /**
+    * @brief Write method.
+    *
+    * @param out Stream to write to.
+    */
+   void writeStream(std::ostream& out);   
+
+   void setNumberOfEntries(ossim_uint32 numberOfEntries);
+
+   ossim_uint32 getNumberOfEntries() const;
+
+   /**
+    * @brief Gets record for entry.
+    * @param entry Zero base entry to get.
+    * @param record Record to initialize.
+    * @return true on success, false if entry doesn't exist.
+    */
+   bool getEntry(ossim_uint32 entry, ossimRpfBoundaryRectRecord& record) const;
+
+   std::ostream& print(std::ostream& out)const;
    
 private:
-   vector<ossimRpfBoundaryRectRecord> theTable;
+   std::vector<ossimRpfBoundaryRectRecord> m_table;
 };
 #endif

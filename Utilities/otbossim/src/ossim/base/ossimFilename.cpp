@@ -7,7 +7,7 @@
 // Description: This class provides manipulation of filenames.
 //
 //*************************************************************************
-// $Id: ossimFilename.cpp 16815 2010-03-07 17:22:13Z dburken $
+// $Id: ossimFilename.cpp 16939 2010-03-29 12:41:35Z dburken $
 
 #include <ossim/ossimConfig.h>  /* to pick up platform defines */
 
@@ -991,14 +991,14 @@ bool ossimFilename::createDirectory( bool recurseFlag,
 {
    if(exists()) return true;
 
-   ossimFilename tempFile = *this;
-   //tempFile.convertBackToForwardSlashes();
-   vector<ossimString> result;
-
+   if ( empty() ) return false;
 
    if(recurseFlag)
    {
-      ossimString::split(result,thePathSeparator);
+      ossimString tempString = this->expand().c_str();
+
+      vector<ossimString> result;
+      tempString.split(result,thePathSeparator);
 
       if(result.size())
       {
@@ -1007,9 +1007,9 @@ bool ossimFilename::createDirectory( bool recurseFlag,
 // Reconstruct UNC paths under Windows.
 #if defined(_WIN32)
          bool bGotUNC = false;
-         if ( current.length() == 0 && tempFile.length() > 2 )
+         if ( current.length() == 0 && tempString.length() > 2 )
          {
-            const char* fstr = tempFile.c_str();
+            const char* fstr = tempString.c_str();
             const char fstar0 = fstr[0];
             const char fstar1 = fstr[1];
             if ( fstar0=='\\' && fstar1=='\\' )
@@ -1031,7 +1031,7 @@ bool ossimFilename::createDirectory( bool recurseFlag,
                continue;
             }
 #endif
-
+            
             if(current != thePathSeparator)
             {
                if(!ossimFilename(current).exists())
@@ -1039,13 +1039,13 @@ bool ossimFilename::createDirectory( bool recurseFlag,
 #if defined(__BORLANDC__)
                   if ( _mkdir(current.c_str()) != 0 )
 #elif defined(_WIN32)
-                     if ( _mkdir(current.c_str()) != 0 )
+                  if ( _mkdir(current.c_str()) != 0 )
 #else
-                        if ( mkdir(current.c_str(), perm) != 0 )
+                  if ( mkdir(current.c_str(), perm) != 0 )
 #endif
-                        {
-                           return false;
-                        }
+                  {
+                     return false;
+                  }
                }
             }
          }
@@ -1056,17 +1056,17 @@ bool ossimFilename::createDirectory( bool recurseFlag,
 #if defined (__BORLANDC__)
       if ( _mkdir(c_str()) != 0 )
 #elif defined(_WIN32)
-         if ( _mkdir(c_str()) != 0 )
+      if ( _mkdir(c_str()) != 0 )
 #else
-            if ( mkdir(c_str(), perm) != 0 )
+      if ( mkdir(c_str(), perm) != 0 )
 #endif
-            {
-               return false;
-            }
-            else
-            {
-               return true;
-            }
+      {
+         return false;
+      }
+      else
+      {
+         return true;
+      }
    }
    return true;
 }
@@ -1266,6 +1266,11 @@ bool ossimFilename::needsExpansion() const
       }    
    }
    return result;
+}
+
+char ossimFilename::getPathSeparator() const
+{
+   return thePathSeparator;
 }
 
 void ossimFilename::convertToNative()

@@ -8,7 +8,7 @@
 //
 // Contains class declaration for ossimImageFileWriter.
 //*******************************************************************
-//  $Id: ossimImageFileWriter.cpp 16576 2010-02-09 22:23:05Z dburken $
+//  $Id: ossimImageFileWriter.cpp 17227 2010-04-27 19:01:03Z dburken $
 
 
 #include <tiff.h> /* for tiff compression defines */
@@ -50,7 +50,7 @@
 static ossimTrace traceDebug("ossimImageFileWriter:debug");
 
 #if OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimImageFileWriter.cpp 16576 2010-02-09 22:23:05Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimImageFileWriter.cpp 17227 2010-04-27 19:01:03Z dburken $";
 #endif
 
 RTTI_DEF3(ossimImageFileWriter,
@@ -88,6 +88,7 @@ ossimImageFileWriter::ossimImageFileWriter(const ossimFilename& file,
      theWriteJpegWorldFileFlag(false),
      theWriteReadmeFlag(false),
      theWriteTiffWorldFileFlag(false),
+     theWriteWorldFileFlag(false),
      theLinearUnits(OSSIM_UNIT_UNKNOWN),
      thePixelType(OSSIM_PIXEL_IS_POINT)
 {
@@ -191,6 +192,11 @@ bool ossimImageFileWriter::saveState(ossimKeywordlist& kwl,
    kwl.add(prefix,
            "create_tiff_world_file",
            (ossim_uint32)theWriteTiffWorldFileFlag,
+           true);
+
+   kwl.add(prefix,
+           "create_world_file",
+           (ossim_uint32)theWriteWorldFileFlag,
            true);
 
    kwl.add(prefix,
@@ -350,6 +356,13 @@ bool ossimImageFileWriter::loadState(const ossimKeywordlist& kwl,
    {
       ossimString s = lookup;
       theWriteTiffWorldFileFlag = s.toBool();
+   }
+
+   lookup = kwl.find(prefix, "create_world_file");
+   if(lookup)
+   {
+      ossimString s = lookup;
+      theWriteWorldFileFlag = s.toBool();
    }
 
    lookup = kwl.find(prefix, ossimKeywordNames::CREATE_IMAGE_KW);
@@ -705,6 +718,19 @@ bool ossimImageFileWriter::writeMetaDataFiles()
       }
    }
 
+   if(theWriteWorldFileFlag)
+   {
+      if(writeWorldFile() == false)
+      {
+         status = false;
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
+            << "Write of world file failed!" << endl;
+         }
+      }
+   }
+   
    if (theWriteHistogramFlag)
    {
       if (!writeHistogramFile())
@@ -753,7 +779,7 @@ bool ossimImageFileWriter::writeHistogramFile()
    return true;
 }
 
-void ossimImageFileWriter::disconnectInputEvent(ossimConnectionEvent& event)
+void ossimImageFileWriter::disconnectInputEvent(ossimConnectionEvent& /* event */)
 {
    if(!getInput(0))
    {
@@ -764,7 +790,7 @@ void ossimImageFileWriter::disconnectInputEvent(ossimConnectionEvent& event)
    initialize();
 }
 
-void ossimImageFileWriter::connectInputEvent(ossimConnectionEvent& event)
+void ossimImageFileWriter::connectInputEvent(ossimConnectionEvent& /* event */)
 {
    theInputConnection->connectMyInputTo((ossim_int32)0,
                                         getInput(0),
@@ -773,7 +799,7 @@ void ossimImageFileWriter::connectInputEvent(ossimConnectionEvent& event)
    initialize();
 }
 
-void ossimImageFileWriter::propertyEvent(ossimPropertyEvent& event)
+void ossimImageFileWriter::propertyEvent(ossimPropertyEvent& /* event */)
 {
    initialize();
 }
@@ -857,6 +883,10 @@ bool ossimImageFileWriter::getWriteTiffWorldFileFlag() const
    return theWriteTiffWorldFileFlag;
 }
 
+bool ossimImageFileWriter::getWriteWorldFileFlag() const
+{
+   return theWriteWorldFileFlag;
+}
 
 void ossimImageFileWriter::setWriteOverviewFlag(bool flag)
 {
@@ -911,6 +941,11 @@ void ossimImageFileWriter::setWriteReadme(bool flag)
 void ossimImageFileWriter::setWriteTiffWorldFile(bool flag)
 {
    theWriteTiffWorldFileFlag  = flag;
+}
+
+void ossimImageFileWriter::setWriteWorldFile(bool flag)
+{
+   theWriteWorldFileFlag  = flag;
 }
 
 ossimObject* ossimImageFileWriter::getObject()
@@ -1099,7 +1134,7 @@ bool ossimImageFileWriter::setOutputStream(
    return false;
 }
 
-bool ossimImageFileWriter::setOutputStream(std::ostream& str)
+bool ossimImageFileWriter::setOutputStream(std::ostream& /* str */)
 {
    //---
    // Not implemented in this class. Derived classed should implement if
@@ -1197,6 +1232,10 @@ void ossimImageFileWriter::setProperty(ossimRefPtr<ossimProperty> property)
    {
       theWriteTiffWorldFileFlag = property->valueToString().toBool();
    }
+   else if (property->getName() == "create_world_file")
+   {
+      theWriteWorldFileFlag = property->valueToString().toBool();
+   }
    else if (property->getName() == ossimKeywordNames::CREATE_IMAGE_KW)
    {
       theWriteImageFlag = property->valueToString().toBool();
@@ -1275,6 +1314,10 @@ ossimRefPtr<ossimProperty> ossimImageFileWriter::getProperty(const ossimString& 
    {
       return new ossimBooleanProperty(name, theWriteTiffWorldFileFlag);
    }
+   else if (name == "create_world_file")
+   {
+      return new ossimBooleanProperty(name, theWriteWorldFileFlag);
+   }
    else if (name == ossimKeywordNames::CREATE_IMAGE_KW)
    {
       return new ossimBooleanProperty(name, theWriteImageFlag);
@@ -1347,6 +1390,7 @@ void ossimImageFileWriter::getPropertyNames(std::vector<ossimString>& propertyNa
    propertyNames.push_back(ossimString("create_jpeg_world_file"));
    propertyNames.push_back(ossimString("create_readme"));
    propertyNames.push_back(ossimString("create_tiff_world_file"));
+   propertyNames.push_back(ossimString("create_world_file"));   
    propertyNames.push_back(ossimString(ossimKeywordNames::CREATE_IMAGE_KW));
    propertyNames.push_back(ossimString(ossimKeywordNames::CREATE_OVERVIEW_KW));
    propertyNames.push_back(ossimString(ossimKeywordNames::CREATE_HISTOGRAM_KW));
@@ -1444,6 +1488,57 @@ void ossimImageFileWriter::setTileSize(const ossimIpt& tileSize)
    {
       theInputConnection->setTileSize(tileSize);
    }
+}
+
+bool ossimImageFileWriter::writeWorldFile() 
+{
+   bool result = false;
+   
+   if( theFilename.size() )
+   {
+      // Make the file name.
+      ossimFilename file = theFilename;
+      ossimString ext = file.ext().downcase();
+      
+      ossimString wfExt = ""; // World file extension.
+      
+      if ( ( ext == "tif" ) || ( ext == "tiff" ) )
+      {
+         wfExt = "tfw";
+      }
+      else if ( ( ext == "jpg" ) || ( ext == "jpeg" ) )
+      {
+         wfExt = "jpw";
+      }
+      else if ( ext == "png" )
+      {
+         wfExt = "pgw";
+      }
+      else if ( ext == "sid" )
+      {
+         wfExt = "sdw";
+      }
+      
+      if ( ext.size() )
+      {
+         file.setExtension(wfExt);
+         
+         result = writeWorldFile(file);
+      }
+      else
+      {
+         ossimNotify(ossimNotifyLevel_WARN)
+            << "Could not derive world file extension for: " << theFilename << "\n"; 
+      }
+   }
+   
+   if ( !result )
+   {
+      ossimNotify(ossimNotifyLevel_WARN)
+         << "Write of world file failed!\n";
+   }   
+   
+   return result;
 }
 
 bool ossimImageFileWriter::writeWorldFile(const ossimFilename& file) 

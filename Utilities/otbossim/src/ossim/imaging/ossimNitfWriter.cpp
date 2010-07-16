@@ -7,7 +7,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimNitfWriter.cpp 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimNitfWriter.cpp 16997 2010-04-12 18:53:48Z dburken $
 
 #include <fstream>
 #include <algorithm>
@@ -17,7 +17,6 @@
 #include <ossim/imaging/ossimNitfWriter.h>
 #include <ossim/base/ossimBooleanProperty.h>
 #include <ossim/base/ossimContainerProperty.h>
-#include <ossim/base/ossimDate.h>
 #include <ossim/base/ossimEndian.h>
 #include <ossim/base/ossimNumericProperty.h>
 #include <ossim/base/ossimPreferences.h>
@@ -243,9 +242,7 @@ bool ossimNitfWriter::writeBlockBandSeparate()
    imageInfoRecord.setSubheaderLength(439); // ok if no tags
    imageInfoRecord.setImageLength(bands*byteSize*blocksVertical*blockSize.y*blocksHorizontal*blockSize.x);
 
-   ossimDate currentDate;
-   
-   theFileHeader->setDate(currentDate);
+   theFileHeader->setDate();
    theFileHeader->addImageInfoRecord(imageInfoRecord);
 
    //---
@@ -405,9 +402,7 @@ bool ossimNitfWriter::writeBlockBandSequential()
    imageInfoRecord.setSubheaderLength(439);
    imageInfoRecord.setImageLength(bands*byteSize*blocksHorizontal*blocksVertical*blockSize.x*blockSize.y);
 
-   ossimDate currentDate;
-   
-   theFileHeader->setDate(currentDate);
+   theFileHeader->setDate();
    theFileHeader->addImageInfoRecord(imageInfoRecord);
 
    //---

@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimContainerProperty.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
+// $Id: ossimContainerProperty.cpp 17195 2010-04-23 17:32:18Z dburken $
 #include <ossim/base/ossimContainerProperty.h>
 #include <ossim/base/ossimStringProperty.h>
 
@@ -152,12 +152,12 @@ void ossimContainerProperty::deleteChildren()
 }
 
 
-bool ossimContainerProperty::setValue(const ossimString& value)
+bool ossimContainerProperty::setValue(const ossimString& /* value */ )
 {
    return false;
 }
 
-void ossimContainerProperty::valueToString(ossimString& valueResult)const
+void ossimContainerProperty::valueToString(ossimString& /* valueResult */ )const
 {
 }
 

@@ -10,7 +10,7 @@
 //
 // Contains class definition for ossimGeneralRasterTileSource.
 //*******************************************************************
-//  $Id: ossimGeneralRasterTileSource.cpp 16075 2009-12-10 15:46:43Z gpotts $
+//  $Id: ossimGeneralRasterTileSource.cpp 17711 2010-07-09 15:06:04Z dburken $
 
 #include <ossim/imaging/ossimGeneralRasterTileSource.h>
 #include <ossim/base/ossimConstants.h>
@@ -26,7 +26,6 @@
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
-#include <ossim/imaging/ossimTiffTileSource.h>
 #include <ossim/base/ossimStreamFactoryRegistry.h>
 
 RTTI_DEF1_INST(ossimGeneralRasterTileSource,

@@ -23,7 +23,7 @@
 
 
 ossimGeoref::ossimGeoref(const ossimString &georefString,
-                         long precision)
+                         long /* precision */ )
 {
    double lat, lon;
    

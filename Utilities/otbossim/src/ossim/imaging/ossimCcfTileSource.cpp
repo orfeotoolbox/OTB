@@ -10,7 +10,7 @@
 //
 // Contains class definition for ossimCcfTileSource.
 //*******************************************************************
-//  $Id: ossimCcfTileSource.cpp 16075 2009-12-10 15:46:43Z gpotts $
+//  $Id: ossimCcfTileSource.cpp 17195 2010-04-23 17:32:18Z dburken $
 
 #include <algorithm>
 #include <ossim/imaging/ossimCcfTileSource.h>
@@ -188,7 +188,7 @@ bool ossimCcfTileSource::fillBuffer(const ossimIrect& tile_rect,
 //*******************************************************************
 bool ossimCcfTileSource::fillUcharBuffer(const ossimIrect& tile_rect,
                                          const ossimIrect& clip_rect,
-                                         const ossimIrect& image_rect,
+                                         const ossimIrect& /* image_rect */,
                                          ossim_uint32 reduced_res_level,
                                          ossimImageData* tile)
 {
@@ -379,7 +379,7 @@ bool ossimCcfTileSource::fillUcharBuffer(const ossimIrect& tile_rect,
 //*******************************************************************
 bool ossimCcfTileSource::fillUshortBuffer(const ossimIrect& tile_rect,
                                           const ossimIrect& clip_rect,
-                                          const ossimIrect& image_rect,
+                                          const ossimIrect& /* image_rect */,
                                           ossim_uint32 reduced_res_level,
                                           ossimImageData* tile)
 {

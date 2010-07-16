@@ -6,7 +6,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimBngProjection.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
+//  $Id: ossimBngProjection.cpp 17502 2010-06-02 11:15:43Z dburken $
 #include <ossim/projection/ossimBngProjection.h>
 #include <ossim/projection/ossimTranmerc.h>
 #include <ossim/base/ossimDatumFactory.h>
@@ -14,8 +14,9 @@
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/elevation/ossimElevManager.h>
 
-#include <string.h>
-#include <stdio.h>
+#include <cctype>
+#include <cstring>
+#include <cstdio>
 
 #define BNG_NO_ERROR           0x0000
 #define BNG_LAT_ERROR          0x0001

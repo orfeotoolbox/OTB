@@ -9,7 +9,7 @@
 //              CADRG file.
 //
 //-----------------------------------------------------------------------
-//$Id: ossimCibCadrgTileSource.h 16308 2010-01-09 02:45:54Z eshirschorn $
+//$Id: ossimCibCadrgTileSource.h 17066 2010-04-14 18:11:13Z dburken $
 #ifndef ossimCibCadrgTileSource_HEADER
 #define ossimCibCadrgTileSource_HEADER 1
 #include <ossim/imaging/ossimImageHandler.h>
@@ -410,13 +410,6 @@ protected:
     * @param entry the Rpf toc entry object to set to.
     */
    virtual void setTocEntryToRender(const ossimRpfTocEntry* entry);
-
-
-   /**
-    * Will shift the rect and clamp it so not to go outside the -180 to 180
-    * degree range.
-    */
-   void setActualImageRect();
    
    /**
     * Protected structure that is only used internally by this class.
@@ -537,11 +530,6 @@ protected:
 
    void populateLut();
 
-   /**
-    * This holds the image bounds for the current entry.
-    */
-   ossimIrect                  theActualImageRect;
-   
    /**
     * This is for storage of a single compressed buffer.
     */

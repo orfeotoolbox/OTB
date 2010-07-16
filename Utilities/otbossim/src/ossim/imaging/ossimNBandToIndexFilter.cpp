@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimNBandToIndexFilter.cpp 11955 2007-10-31 16:10:22Z gpotts $
+// $Id: ossimNBandToIndexFilter.cpp 17206 2010-04-25 23:20:40Z dburken $
 
 #include <ossim/imaging/ossimNBandToIndexFilter.h>
 #include <ossim/imaging/ossimImageData.h>
@@ -212,9 +212,10 @@ ossimRefPtr<ossimImageData> ossimNBandToIndexFilter::convertOutputTileTemplate(T
 }
 
 template <class T1, class T2>
-ossimRefPtr<ossimImageData> ossimNBandToIndexFilter::convertInputTileToOutputTemplate(T1 inputDummy,
-                                                                                      T2 outputDummy,
-                                                                                      ossimImageData* inputTile)
+ossimRefPtr<ossimImageData> ossimNBandToIndexFilter::convertInputTileToOutputTemplate(
+   T1 /* inputDummy */,
+   T2 /* outputDummy */,
+   ossimImageData* inputTile)
 {
    if (!inputTile)
    {

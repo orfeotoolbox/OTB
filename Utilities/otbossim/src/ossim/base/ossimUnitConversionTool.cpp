@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimUnitConversionTool.cpp 11408 2007-07-27 13:43:00Z dburken $
+// $Id: ossimUnitConversionTool.cpp 17503 2010-06-02 11:18:49Z dburken $
 
 #include <iostream>
 #include <iomanip>
@@ -18,7 +18,7 @@
 std::ostream& operator<<(std::ostream& out,
                          const ossimUnitConversionTool& data)
 {
-   out << std::setprecision(15) << setiosflags(std::ios::fixed)
+   out << std::setprecision(15) << std::setiosflags(std::ios::fixed)
        << "Meters:           " << data.getMeters()
        << "\nFeet:             " << data.getFeet()
        << "\nU.S. Survey Feet: " << data.getUsSurveyFeet()

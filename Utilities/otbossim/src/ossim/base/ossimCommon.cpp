@@ -9,7 +9,7 @@
 // Description: Common file for global functions.
 //
 //*************************************************************************
-// $Id: ossimCommon.cpp 15927 2009-11-16 17:30:08Z dburken $
+// $Id: ossimCommon.cpp 17496 2010-06-01 23:21:55Z gpotts $
 
 #include <sstream>
 
@@ -114,9 +114,12 @@ double ossim::defaultMin(ossimScalarType scalarType)
       case OSSIM_SCALAR_UNKNOWN:
       default:
       {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << __FILE__ << ":" << __LINE__
-            << "\nUnhandled scalar type:  " << scalarType << std::endl;
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << __FILE__ << ":" << __LINE__
+               << "\nUnhandled scalar type:  " << scalarType << std::endl;
+         }
          break;
       }
    }
@@ -174,9 +177,12 @@ double ossim::defaultMax(ossimScalarType scalarType)
       case OSSIM_SCALAR_UNKNOWN:
       default:
       {
-         ossimNotify(ossimNotifyLevel_WARN)
-            << __FILE__ << ":" << __LINE__
-            << "\nUnhandled scalar type:  " << scalarType << std::endl;
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
+               << __FILE__ << ":" << __LINE__
+               << "\nUnhandled scalar type:  " << scalarType << std::endl;
+         }
          break;
       }
    }
@@ -234,9 +240,12 @@ double ossim::defaultNull(ossimScalarType scalarType)
       case OSSIM_SCALAR_UNKNOWN:
       default:
       {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << __FILE__ << ":" << __LINE__
-            << "\nUnhandled scalar type:  " << scalarType << std::endl;
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << __FILE__ << ":" << __LINE__
+               << "\nUnhandled scalar type:  " << scalarType << std::endl;
+         }
          break;
       }
     }

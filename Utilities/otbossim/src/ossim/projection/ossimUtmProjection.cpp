@@ -8,8 +8,9 @@
 //
 // Calls Geotrans Utm projection code.  
 //*******************************************************************
-//  $Id: ossimUtmProjection.cpp 13859 2008-11-11 14:45:00Z dburken $
+//  $Id: ossimUtmProjection.cpp 17502 2010-06-02 11:15:43Z dburken $
 
+#include <cctype>
 #include <cstdlib>
 #include <cmath>
 using namespace std;
@@ -430,12 +431,12 @@ bool ossimUtmProjection::saveState(ossimKeywordlist& kwl, const char* prefix) co
 }
    
 ossim_int32 ossimUtmProjection::Set_Transverse_Mercator_Parameters(double a,
-                                                                      double f,
-                                                                      double Origin_Latitude,
-                                                                      double Central_Meridian,
-                                                                      double False_Easting,
-                                                                      double False_Northing,
-                                                                      double Scale_Factor)
+                                                                   double f,
+                                                                   double Origin_Latitude,
+                                                                   double Central_Meridian,
+                                                                   double False_Easting,
+                                                                   double False_Northing,
+                                                                   double /* Scale_Factor */)
 
 { /* BEGIN Set_Tranverse_Mercator_Parameters */
   /*

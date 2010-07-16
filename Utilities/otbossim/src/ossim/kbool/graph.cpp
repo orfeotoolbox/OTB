@@ -6,7 +6,7 @@
 
     Licence: wxWidgets Licence
 
-    RCS-ID: $Id: graph.cpp 13795 2008-10-28 19:32:44Z gpotts $
+    RCS-ID: $Id: graph.cpp 17606 2010-06-21 20:46:16Z dburken $
 */
 
 // Grpah is the structure used to store polygons
@@ -2349,7 +2349,7 @@ bool Graph::MakeClockWise()
    return false;
 }
 
-bool Graph::writegraph(bool linked )
+bool Graph::writegraph(bool linked)
 {
 #if DEBUG == 1
 

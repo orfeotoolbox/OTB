@@ -6,7 +6,7 @@
 // Description: This file contains the cache algorithm
 //
 //***********************************
-// $Id: ossimTileCache.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimTileCache.cpp 17206 2010-04-25 23:20:40Z dburken $
 
 #include <ossim/imaging/ossimTileCache.h>
 #include <ossim/base/ossimDataObject.h>
@@ -120,8 +120,8 @@ void ossimTileCache::invalidate()
    
 }
 
-void ossimTileCache::invalidate(const ossimDpt3d &origin,
-                                ossim_uint32 resLevel)
+void ossimTileCache::invalidate(const ossimDpt3d& /* origin */,
+                                ossim_uint32 /* resLevel */)
 {
 }
 

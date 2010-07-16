@@ -15,7 +15,7 @@
 //              Initial coding.
 //<
 //*****************************************************************************
-// $Id: ossimElevSource.cpp 16104 2009-12-17 18:09:59Z gpotts $
+// $Id: ossimElevSource.cpp 17195 2010-04-23 17:32:18Z dburken $
 
 #include <ossim/elevation/ossimElevSource.h>
 #include <ossim/base/ossimPreferences.h>
@@ -110,10 +110,11 @@ const ossimElevSource& ossimElevSource::operator = (const ossimElevSource& src)
    return *this;
 }
 
-double ossimElevSource::getHeightAboveEllipsoid(const ossimGpt& argGpt)
+double ossimElevSource::getHeightAboveEllipsoid(const ossimGpt& /* argGpt */)
 {
-   ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimElevSource::getHeightAboveEllipsoid Not implemented..."
-                                       << std::endl;
+   ossimNotify(ossimNotifyLevel_FATAL)
+      << "FATAL ossimElevSource::getHeightAboveEllipsoid Not implemented..."
+      << std::endl;
    return theNullHeightValue;
 }
 
@@ -257,8 +258,8 @@ const ossimGrect& ossimElevSource::getBoundingGndRect() const
    return theGroundRect;
 }
 
-bool ossimElevSource::canConnectMyInputTo(ossim_int32 inputIndex,
-                                          const ossimConnectableObject* object)const
+bool ossimElevSource::canConnectMyInputTo(ossim_int32 /* inputIndex */,
+                                          const ossimConnectableObject* /* object */)const
 {
    return false;
 }

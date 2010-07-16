@@ -10,6 +10,7 @@
 //
 //*****************************************************************************
 
+#include <cstdio>
 #include <cstdlib>
 #include <ossim/projection/ossimNitfMapModel.h>
 #include <ossim/base/ossimKeywordlist.h>
@@ -414,9 +415,9 @@ ossimNitfMapModel::~ossimNitfMapModel()
 //  The imaging ray is intersected with a level plane at height above ellipsoid.
 //
 //*****************************************************************************
-void ossimNitfMapModel::lineSampleHeightToWorld(const ossimDpt& image_point,
-                                                const double&   height,
-                                                ossimGpt&       gpt) const
+void ossimNitfMapModel::lineSampleHeightToWorld(const ossimDpt& /* image_point */,
+                                                const double&   /* height */,
+                                                ossimGpt&       /* gpt */) const
 {
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimNitfMapModel::lineSampleHeightToWorld: entering..." << std::endl;
 

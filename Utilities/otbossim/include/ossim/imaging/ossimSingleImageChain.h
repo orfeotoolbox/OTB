@@ -16,16 +16,18 @@
 #include <vector>
 
 #include <ossim/base/ossimConstants.h> /* OSSIM_DLL */
+#include <ossim/imaging/ossimBandSelector.h>
+#include <ossim/imaging/ossimCacheTileSource.h>
+#include <ossim/imaging/ossimHistogramRemapper.h>
 #include <ossim/imaging/ossimImageChain.h>
+#include <ossim/imaging/ossimImageHandler.h>
+#include <ossim/imaging/ossimImageRenderer.h>
+#include <ossim/imaging/ossimScalarRemapper.h>
+
 
 // Forward class declarations:
-class ossimBandSelector;
-class ossimCacheTileSource;
 class ossimFilename;
-class ossimHistogramRemapper;
-class ossimImageHandler;
-class ossimImageRenderer;
-class ossimScalarRemapper;
+class ossimSrcRecord;
 
 /**
  * @brief Single image chain class.
@@ -37,6 +39,22 @@ class ossimScalarRemapper;
  *    myChain->createRenderedChain();
  *    your-code-goes-here();
  * }
+ *
+ * Just a clarification on "start of chain" versus "end of chain" in this
+ * file.
+ *
+ * Given chain of:
+ * 1) image handler
+ * 2) band selector (optional)
+ * 3) histogram remapper(optional)
+ * 4) scalar remapper (optional)
+ * 5) resampler cache
+ * 6) resampler
+ * 7) band selector (optional when going one band to three)
+ * 8) chain cache
+ *
+ * The "image handle" is the "start of chain".
+ * The "chain cache" is the "end of chain".
  */
 class OSSIM_DLL ossimSingleImageChain : public ossimImageChain
 {
@@ -45,6 +63,14 @@ public:
    /** default constructor */
    ossimSingleImageChain();
 
+   /** Constructor that takes flags.*/
+   ossimSingleImageChain(bool addHistogramFlag,
+                         bool addResamplerCacheFlag,
+                         bool addChainCacheFlag,
+                         bool remapToEightBitFlag,
+                         bool threeBandFlag,
+                         bool threeBandReverseFlag);
+   
    /** virtual destructor */
    virtual ~ossimSingleImageChain();
 
@@ -56,7 +82,7 @@ public:
    void reset();
    
    /**
-    * @brief open method
+    * @brief open method that takes an image file.
     *
     * Opens file and creates a simple chain with ossimImageHandler.
     *
@@ -65,6 +91,17 @@ public:
     * @note This will close previous chain if one was opened.
     */
    bool open(const ossimFilename& file);
+
+    /**
+    * @brief open method that takes an ossimSrcRecord.
+    *
+    * Opens file and creates a simple chain with ossimImageHandler.
+    *
+    * @return true on success, false on error.
+    *
+    * @note This will close previous chain if one was opened.
+    */
+   bool open(const ossimSrcRecord& src);
 
    /** @brief close method to delete the image handler. */
    void close();
@@ -86,14 +123,24 @@ public:
     * 
     * 1) image handler
     * 2) band selector (optional)
-    * 3) histogram remapper
+    * 3) histogram remapper(optional)
     * 4) scalar remapper (optional)
     * 5) resampler cache
     * 6) resampler
     * 7) band selector (optional when going one band to three)
     * 8) chain cache
+    *
+    * NOTES:
+    * 1) If doing a sequential write where tiles to the right of the
+    *    resampler will not be revisited the chain cache could be
+    *    disabled to save memory.
     */
    void createRenderedChain();
+
+   /**
+    * @brief Create a rendered image chain that takes an ossimSrcRecord.
+    */
+   void createRenderedChain(const ossimSrcRecord& src);
 
    /**
     * @brief Adds an image handler for file.
@@ -101,53 +148,177 @@ public:
     * @return true on success, false on error.
     */
    bool addImageHandler(const ossimFilename& file);
+
+   /**
+    * @brief Adds an image handler from src record.
+    *
+    * This take an ossimSrcRecord which can contain a supplemental directory
+    * to look for overviews.
+    * 
+    * @param rec Record to open.
+    * @return true on success, false on error.
+    */
+   bool addImageHandler(const ossimSrcRecord& src);
    
-   /** @brief Adds a band selector. */
+   /** @brief Adds a band selector to the end of the chain. */
    void addBandSelector();
 
+   /**
+    * @brief Adds a band selector.
+    *
+    * This takes an ossimSrcRecord which can contain a band selection list.
+    * 
+    * @param src Record to initialize band selector from.
+    * 
+    */
+   void addBandSelector(const ossimSrcRecord& src);
+
+   /** @brief Adds histogram remapper to the chain. */
    void addHistogramRemapper();
 
-   ossimCacheTileSource* addCache();
+   /**
+    * @brief Adds a band selector.
+    *
+    * This takes an ossimSrcRecord which can contain a histogram
+    * operation to be performed.
+    * 
+    * @param src Record to initialize band selector from.
+    */
+   void addHistogramRemapper(const ossimSrcRecord& src);
 
+   /** @return A a new cache. */
+   ossimRefPtr<ossimCacheTileSource> addCache();
+
+   /** @brief Adds a resampler to the end of the chain. */ 
    void addResampler();
 
+   /**
+    * @brief Adds scalar remapper either to the left of the resampler cache
+    * or at the end of the chain if not present.
+    */
    void addScalarRemapper();
 
-   /** @return Const point to image handler or 0 if not set. */
-   const ossimImageHandler* getImageHandler() const;
+   /**
+    * @return ossimRefPtr containing the image handler.
+    * @note Can contain a null pointer so callers should validate.
+    */
+   ossimRefPtr<ossimImageHandler> getImageHandler() const;
 
-   /** @return Pointer to the image handler or 0 if not set. */
-   ossimImageHandler* getImageHandler();
+   /**
+    * @return ossimRefPtr containing the image handler.
+    * @note Can contain a null pointer so callers should validate.
+    */
+   ossimRefPtr<ossimImageHandler> getImageHandler();
 
-   /** @return Const point to band selector or 0 if not set. */
-   const ossimBandSelector* getBandSelector() const;
+   /**
+    * @return ossimRefPtr containing  the band selector.
+    * @note Can contain a null pointer so callers should validate.
+    */
+   ossimRefPtr<ossimBandSelector> getBandSelector() const;
 
-   /** @return Pointer to the band selector or 0 if not set. */
-   ossimBandSelector* getBandSelector();
+   /**
+    * @return ossimRefPtr containing  the band selector.
+    * @note Can contain a null pointer so callers should validate.
+    */
+   ossimRefPtr<ossimBandSelector> getBandSelector();
 
-   /** @return Const pointer to histogram remapper or 0 if not set. */
-   const ossimHistogramRemapper* getHistogramRemapper() const;
+   /**
+    * @return ossimRefPtr containing the histogram remapper.
+    * @note Can contain a null pointer so callers should validate.
+    */
+   ossimRefPtr<ossimHistogramRemapper> getHistogramRemapper() const;
 
-   /** @return Pointer to histogram remapper or 0 if not set. */
-   ossimHistogramRemapper* getHistogramRemapper();
+   /**
+    * @return ossimRefPtr containing the histogram remapper.
+    * @note Can contain a null pointer so callers should validate.
+    */
+   ossimRefPtr<ossimHistogramRemapper> getHistogramRemapper();
 
-   /** @return Const pointer to resampler or 0 if not set. */
-   const ossimImageRenderer* getImageRenderer() const;
+   /**
+    * @return  ossimRefPtr containing the resampler cache.
+    * @note Can contain a null pointer so callers should validate.
+    */
+   ossimRefPtr<ossimCacheTileSource> getResamplerCache() const;
 
-   /** @return Pointer to resampler or 0 if not set. */
-   ossimImageRenderer* getImageRenderer();
+   /**
+    * @return  ossimRefPtr containing the resampler cache.
+    * @note Can contain a null pointer so callers should validate.
+    */
+   ossimRefPtr<ossimCacheTileSource> getResamplerCache();
 
-    /** @return Const pointer to scalar remapper or 0 if not set. */
-   const ossimScalarRemapper* getScalarRemapper() const;
+   /**
+    * @return ossimRefPtr containing the resampler.
+    * @note Can contain a null pointer so callers should validate.
+    */
+   ossimRefPtr<ossimImageRenderer> getImageRenderer() const;
 
-   /** @return Pointer to scalar remapper or 0 if not set. */
-   ossimScalarRemapper* getScalarRemapper();
+   /**
+    * @return ossimRefPtr containing the resampler.
+    * @note Can contain a null pointer so callers should validate.
+    */
+   ossimRefPtr<ossimImageRenderer> getImageRenderer();
 
-   /** @return Const pointer to or 0 if not set. */
-   // const ossim* get() const;
-   
-   /** @return Pointer to or 0 if not set. */
-   // ossim* get();
+   /**
+    * @return ossimRefPtr containing the scalar remapper.
+    * @note Can contain a null pointer so callers should validate.
+    */
+   ossimRefPtr<ossimScalarRemapper> getScalarRemapper() const;
+
+   /**
+    * @return ossimRefPtr containing the scalar remapper.
+    * @note Can contain a null pointer so callers should validate.
+    */
+   ossimRefPtr<ossimScalarRemapper> getScalarRemapper();
+
+   /**
+    * @return ossimRefPtr containing the chain cache.
+    * @note Can contain a null pointer so callers should validate.
+    */
+   ossimRefPtr<ossimCacheTileSource> getChainCache() const;
+
+   /**
+    * @return ossimRefPtr containing the chain cache.
+    * @note Can contain a null pointer so callers should validate.
+    */
+   ossimRefPtr<ossimCacheTileSource> getChainCache();
+
+   /**
+    * @brief If flag is true a histogram will be added to the chain at create time.
+    * @param flag
+    */
+   void setAddHistogramFlag(bool flag);
+
+   /**
+    * @brief Gets the add histogram flag.
+    * @return true or false.
+    */
+   bool getAddHistogramFlag() const;
+
+   /**
+    * @brief If flag is true a resampler cache will be added to the chain at create time.
+    * This is a cache to the left of the resampler.
+    * @param flag
+    */
+   void setAddResamplerCacheFlag(bool flag);
+
+   /**
+    * @brief Gets the add resampler cache flag.
+    * @return true or false.
+    */
+   bool getAddResamplerCacheFlag() const;
+
+   /**
+    * @brief If flag is true a chain cache will be added to the chain at create time.
+    * This is a cache at the end of the chain.
+    * @param flag
+    */
+   void setAddChainCacheFlag(bool flag);
+
+   /**
+    * @brief Gets the add chain cache flag.
+    * @return true or false.
+    */
+   bool getAddChainCacheFlag() const;
 
    /**
     * @brief Sets remap to eigth bit flag.
@@ -237,18 +408,22 @@ public:
 private:
 
    /**  Pointers to links in chain. */
-   ossimImageHandler*      m_handler;
-   ossimBandSelector*      m_bandSelector;
-   ossimHistogramRemapper* m_histogramRemapper;
-   ossimCacheTileSource*   m_resamplerCache;
-   ossimImageRenderer*     m_resampler;
-   ossimScalarRemapper*    m_scalarRemapper;
-   ossimCacheTileSource*   m_chainCache;
+   ossimRefPtr<ossimImageHandler>      m_handler;
+   ossimRefPtr<ossimBandSelector>      m_bandSelector;
+   ossimRefPtr<ossimHistogramRemapper> m_histogramRemapper;
+   ossimRefPtr<ossimCacheTileSource>   m_resamplerCache;
+   ossimRefPtr<ossimImageRenderer>     m_resampler;
+   ossimRefPtr<ossimScalarRemapper>    m_scalarRemapper;
+   ossimRefPtr<ossimCacheTileSource>   m_chainCache;
 
    /** control flags */
+   bool m_addHistogramFlag;
+   bool m_addResamplerCacheFlag;
+   bool m_addChainCacheFlag;
    bool m_remapToEightBitFlag;
    bool m_threeBandFlag;
    bool m_threeBandReverseFlag;
+
 };
 
 #endif /* #ifndef ossimSingleImageChain_HEADER */

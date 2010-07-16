@@ -9,7 +9,7 @@
 // Description: This file contains the cache algorithm
 //
 //***********************************
-// $Id: ossimTileCache.h 15833 2009-10-29 01:41:53Z eshirschorn $
+// $Id: ossimTileCache.h 17207 2010-04-25 23:21:14Z dburken $
 
 #ifndef DataCache_HEADER
 #define DataCache_HEADER
@@ -72,7 +72,7 @@ protected:
    {
    public:
       friend ostream& operator <<(ostream &out,
-                                  const ossimTileInformation &info)
+                                  const ossimTileInformation& /* info */)
          {
 
             return out;

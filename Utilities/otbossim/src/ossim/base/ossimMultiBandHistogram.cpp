@@ -2,18 +2,18 @@
 //
 // License:  See top level LICENSE.txt file.
 // 
-// Author: Garrett Potts (gpotts@imagelinks.com)
+// Author: Garrett Potts
 //
 // Description: 
 //
 //*******************************************************************
-//  $Id: ossimMultiBandHistogram.cpp 14999 2009-07-27 18:56:11Z gpotts $
-#include <ossim/base/ossimMultiBandHistogram.h>
-#include <ossim/base/ossimHistogram.h>
-#include <ossim/base/ossimKeywordlist.h>
-
+//  $Id: ossimMultiBandHistogram.cpp 17205 2010-04-24 18:10:01Z dburken $
 #include <fstream>
 using namespace std;
+
+#include <ossim/base/ossimMultiBandHistogram.h>
+#include <ossim/base/ossimKeywordlist.h>
+#include <ossim/imaging/ossimImageSource.h>
 
 ossimMultiBandHistogram::ossimMultiBandHistogram()
 {  
@@ -35,8 +35,8 @@ ossimMultiBandHistogram::ossimMultiBandHistogram(const ossimMultiBandHistogram& 
    }
 }
 
-ossimMultiBandHistogram::ossimMultiBandHistogram(long numberOfBands,
-                                                 long numberOfBuckets,
+ossimMultiBandHistogram::ossimMultiBandHistogram(ossim_int32 numberOfBands,
+                                                 ossim_int32 numberOfBuckets,
                                                  float minValue,
                                                  float maxValue)
 {
@@ -46,10 +46,76 @@ ossimMultiBandHistogram::ossimMultiBandHistogram(long numberOfBands,
    }
 }
 
-void ossimMultiBandHistogram::create(long numberOfBands,
-                                                   long numberOfBuckets,
-                                                   float minValue,
-                                                   float maxValue)
+void ossimMultiBandHistogram::create(const ossimImageSource* input)
+{
+   if (input)
+   {
+      ossim_uint32 bands = input->getNumberOfOutputBands();;
+      ossim_uint32 numberOfBins = 0;
+      ossim_float64 minValue = 0.0;
+      ossim_float64 maxValue = 0.0;
+      
+      switch(input->getOutputScalarType())
+      {
+         case OSSIM_UINT8:
+         {
+            minValue     = 0;
+            maxValue     = OSSIM_DEFAULT_MAX_PIX_UCHAR;
+            numberOfBins = 256;
+            break;
+         }
+         case OSSIM_USHORT11:
+         {
+            minValue     = 0;
+            maxValue     = OSSIM_DEFAULT_MAX_PIX_UINT11;
+            numberOfBins = OSSIM_DEFAULT_MAX_PIX_UINT11 + 1;
+            break;
+         }
+         case OSSIM_UINT16:
+         case OSSIM_UINT32:
+         {
+            minValue     = 0;
+            maxValue     = OSSIM_DEFAULT_MAX_PIX_UINT16;
+            numberOfBins = OSSIM_DEFAULT_MAX_PIX_UINT16 + 1;
+            break;
+         }
+         case OSSIM_SINT16:
+         case OSSIM_SINT32:
+         case OSSIM_FLOAT32:
+         case OSSIM_FLOAT64:
+         {
+            minValue     = OSSIM_DEFAULT_MIN_PIX_SINT16;
+            maxValue     = OSSIM_DEFAULT_MAX_PIX_SINT16;
+            numberOfBins = (OSSIM_DEFAULT_MAX_PIX_SINT16-OSSIM_DEFAULT_MIN_PIX_SINT16) + 1;
+            break;
+         }
+         case OSSIM_NORMALIZED_FLOAT:
+         case OSSIM_NORMALIZED_DOUBLE:
+         {
+            minValue     = 0;
+            maxValue     = 1.0;
+            numberOfBins = OSSIM_DEFAULT_MAX_PIX_UINT16+1;
+            break;
+         }
+         default:
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
+               << "Unsupported scalar type in ossimMultiBandHistogram::create()"
+               << std::endl;
+            return;
+         }
+         
+      }  // switch(input->getOutputScalarType())
+
+      create(bands, numberOfBins, minValue, maxValue);
+      
+   } // if (input)
+}
+
+void ossimMultiBandHistogram::create(ossim_int32 numberOfBands,
+                                     ossim_int32 numberOfBuckets,
+                                     float minValue,
+                                     float maxValue)
 {
    // make sure we clear our internal lists before
    // we start.
@@ -60,7 +126,7 @@ void ossimMultiBandHistogram::create(long numberOfBands,
    {
       numberOfBuckets = numberOfBuckets>0?numberOfBuckets:1;
 
-      for(long bands = 0; bands < numberOfBands; ++bands)
+      for(ossim_int32 bands = 0; bands < numberOfBands; ++bands)
       {
          theHistogramList.push_back(new ossimHistogram(numberOfBuckets,
                                                        minValue,
@@ -69,10 +135,10 @@ void ossimMultiBandHistogram::create(long numberOfBands,
    }
 }
 
-void ossimMultiBandHistogram::create(long numberOfBands)
+void ossimMultiBandHistogram::create(ossim_int32 numberOfBands)
 {
    deleteHistograms();
-   for(long bands = 0; bands < numberOfBands; ++bands)
+   for(ossim_int32 bands = 0; bands < numberOfBands; ++bands)
    {
       theHistogramList.push_back(new ossimHistogram);
    }
@@ -83,9 +149,9 @@ ossim_uint32 ossimMultiBandHistogram::getNumberOfBands() const
    return (ossim_uint32)theHistogramList.size();
 }
 
-ossimRefPtr<ossimHistogram> ossimMultiBandHistogram::getHistogram(long band)
+ossimRefPtr<ossimHistogram> ossimMultiBandHistogram::getHistogram(ossim_int32 band)
 {
-   if((band >=0) && (band < (long)theHistogramList.size()))
+   if((band >=0) && (band < (ossim_int32)theHistogramList.size()))
    {
       return theHistogramList[band];
    }
@@ -93,9 +159,9 @@ ossimRefPtr<ossimHistogram> ossimMultiBandHistogram::getHistogram(long band)
    return NULL;
 }
 
-const ossimRefPtr<ossimHistogram> ossimMultiBandHistogram::getHistogram(long band)const
+const ossimRefPtr<ossimHistogram> ossimMultiBandHistogram::getHistogram(ossim_int32 band)const
 {
-   if((band >=0) && (band < (long)theHistogramList.size()))
+   if((band >=0) && (band < (ossim_int32)theHistogramList.size()))
    {
       return theHistogramList[band];
    }
@@ -107,7 +173,7 @@ void ossimMultiBandHistogram::setBinCount(double binNumber, double count)
 {
    if(theHistogramList.size() > 0)
    {
-      for(long idx = 0; idx < (long)theHistogramList.size(); ++idx)
+      for(ossim_uint32 idx = 0; idx < theHistogramList.size(); ++idx)
       {
          if(theHistogramList[idx].valid())
          {
@@ -126,7 +192,7 @@ ossimRefPtr<ossimMultiBandHistogram> ossimMultiBandHistogram::createAccumulation
       result = new ossimMultiBandHistogram;
       result->theHistogramList.resize(theHistogramList.size());
       
-      for(long idx = 0; idx < (long)theHistogramList.size(); ++idx)
+      for(ossim_uint32 idx = 0; idx < theHistogramList.size(); ++idx)
       {
          if(theHistogramList[idx].valid())
          {
@@ -150,7 +216,7 @@ ossimRefPtr<ossimMultiBandHistogram> ossimMultiBandHistogram::createAccumulation
    {
       result = new ossimMultiBandHistogram;
       
-      for(long idx = 0; idx < (long)theHistogramList.size(); ++idx)
+      for(ossim_uint32 idx = 0; idx < theHistogramList.size(); ++idx)
       {
          if(theHistogramList[idx].valid())
          {
@@ -179,20 +245,20 @@ bool ossimMultiBandHistogram::importHistogram(std::istream& in)
    
    if(header.parseStream(in))
    {
-      long numberOfBands = header.getNumberOfBands();
+      ossim_int32 numberOfBands = header.getNumberOfBands();
       
       if(numberOfBands)
       {
          theHistogramList.resize(numberOfBands);
 
-         for(long counter = 0; counter < (long)theHistogramList.size(); ++counter)
+         for(ossim_int32 counter = 0; counter < (ossim_int32)theHistogramList.size(); ++counter)
          {
             theHistogramList[counter] = 0;
          }
          ossimString bandBuffer;
          ossimString buffer;
          
-         for(long idx = 0; idx < numberOfBands; ++idx)
+         for(ossim_int32 idx = 0; idx < numberOfBands; ++idx)
          {
             getline(in, buffer);
             if(buffer.find("Band") != string::npos)
@@ -213,9 +279,9 @@ bool ossimMultiBandHistogram::importHistogram(std::istream& in)
                deleteHistograms();
                return false;
             }
-            long bandIdx = bandBuffer.toLong();
+            ossim_uint32 bandIdx = bandBuffer.toUInt32();
 
-            if(bandIdx < (long)theHistogramList.size())
+            if(bandIdx < theHistogramList.size())
             {
                if(!theHistogramList[bandIdx].valid())
                {
@@ -265,7 +331,7 @@ bool ossimMultiBandHistogram::ossimProprietaryHeaderInformation::parseStream(std
    getline(in, inputLine);  
    if(inputLine.find("File Type") != string::npos)
    {
-	   std::string::size_type idx = inputLine.find(":");
+      std::string::size_type idx = inputLine.find(":");
       if(idx != string::npos)
       {
          theFileType = inputLine.substr(idx+1);
@@ -285,7 +351,7 @@ bool ossimMultiBandHistogram::ossimProprietaryHeaderInformation::parseStream(std
    getline(in, inputLine);  
    if(inputLine.find("Version") != string::npos)
    {
-	   std::string::size_type idx = inputLine.find(":");
+      std::string::size_type idx = inputLine.find(":");
       if(idx != string::npos)
       {
          theVersion = inputLine.substr(idx+1);
@@ -304,7 +370,7 @@ bool ossimMultiBandHistogram::ossimProprietaryHeaderInformation::parseStream(std
    getline(in, inputLine);  
    if(inputLine.find("Number of Bands") != string::npos)
    {
-	   std::string::size_type idx = inputLine.find(":");
+      std::string::size_type idx = inputLine.find(":");
       if(idx != string::npos)
       {
          theNumberOfBands = inputLine.substr(idx+1);
@@ -321,6 +387,18 @@ bool ossimMultiBandHistogram::ossimProprietaryHeaderInformation::parseStream(std
    }
    
    return true;
+}
+
+ossim_uint32 ossimMultiBandHistogram::ossimProprietaryHeaderInformation::getNumberOfBands() const
+{
+   return theNumberOfBands.toUInt32();
+}
+
+void ossimMultiBandHistogram::ossimProprietaryHeaderInformation::clear()
+{
+   theFileType      = "";
+   theVersion       = "";
+   theNumberOfBands = "";
 }
 
 bool ossimMultiBandHistogram::saveState(ossimKeywordlist& kwl,
@@ -343,8 +421,7 @@ bool ossimMultiBandHistogram::saveState(ossimKeywordlist& kwl,
       {
          ossimString newPrefix = (ossimString(prefix) + ossimString::toString(idx) + ".");
          
-         theHistogramList[idx]->saveState(kwl,
-                                            band.c_str());
+         theHistogramList[idx]->saveState(kwl, band.c_str());
       }
    }
    

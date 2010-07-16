@@ -8,7 +8,7 @@
 // overview files.
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimMpiSlaveOverviewSequencer.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimMpiSlaveOverviewSequencer.h 17194 2010-04-23 15:05:19Z dburken $
 #ifndef ossimMpiSlaveOverviewSequencer_HEADER
 #define ossimMpiSlaveOverviewSequencer_HEADER
 
@@ -58,8 +58,8 @@ protected:
    /** virtual destructor */
    virtual ~ossimMpiSlaveOverviewSequencer();
 
-   int  theRank;
-   int  theNumberOfProcessors;
+   int  m_rank;
+   int  m_numberOfProcessors;
 };
 
 #endif /* #ifndef ossimMpiSlaveOverviewSequencer_HEADER */

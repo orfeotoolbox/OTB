@@ -7,6 +7,15 @@ class OSSIM_DLL ossimNitfImageHeaderV2_X : public ossimNitfImageHeader
 {
 public:
    ossimNitfImageHeaderV2_X();
+
+   /** @brief Returns the zero based image rectangle. */
+   virtual ossimIrect  getImageRect()const;
+
+   /**
+    * @brief Returns the zero based image rectangle expanded out to block boundaries.
+    * @note  This may or may not be the same as the rect from getImageRect.
+    */
+   virtual ossimIrect  getBlockImageRect()const;
    
    void setImageId(const ossimString& value);
    void setAquisitionDateTime(const ossimString& value);
@@ -73,6 +82,13 @@ public:
     */
    virtual ossimString  getImageMagnification()const;
 
+   /**
+    * @brief Gets the ILOC field as an ossimIpt. Satisfies pure virtual.
+    * @param loc Initialized with the field.
+    * @note: Do not confuse with "data location".
+    */
+   virtual void getImageLocation(ossimIpt& loc)const;
+   
    virtual void setGeographicLocationDms(const ossimDpt& ul,
                                          const ossimDpt& ur,
                                          const ossimDpt& lr,

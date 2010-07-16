@@ -3,7 +3,7 @@
 // 
 // See LICENSE.txt file in the top level directory for more details.
 //----------------------------------------------------------------------------
-// $Id: ossimImageMetaDataWriterRegistry.cpp 13508 2008-08-27 15:51:38Z gpotts $
+// $Id: ossimImageMetaDataWriterRegistry.cpp 17206 2010-04-25 23:20:40Z dburken $
 
 
 #include <ossim/imaging/ossimImageMetaDataWriterRegistry.h>
@@ -151,13 +151,13 @@ void ossimImageMetaDataWriterRegistry::getMetadatatypeList(
 }
 
 ossimImageMetaDataWriterRegistry::ossimImageMetaDataWriterRegistry(
-   const ossimImageMetaDataWriterRegistry& rhs)
+   const ossimImageMetaDataWriterRegistry& /* rhs */)
 {
 }
 
 const ossimImageMetaDataWriterRegistry&
 ossimImageMetaDataWriterRegistry::operator=(
-   const ossimImageMetaDataWriterRegistry &rhs)
+   const ossimImageMetaDataWriterRegistry& /* rhs */)
 {
    return *this;
 }

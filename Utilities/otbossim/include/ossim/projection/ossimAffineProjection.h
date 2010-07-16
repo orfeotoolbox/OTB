@@ -9,7 +9,7 @@
 //   implementation of a warping interpolation model.
 //
 //*****************************************************************************
-//  $Id: ossimAffineProjection.h 16104 2009-12-17 18:09:59Z gpotts $
+//  $Id: ossimAffineProjection.h 17207 2010-04-25 23:21:14Z dburken $
 
 #ifndef ossimAffineProjection_HEADER
 #define ossimAffineProjection_HEADER
@@ -95,7 +95,7 @@ public:
    /*!
     * Compares this instance with arg projection. NOT IMPLEMENTED.
     */
-   virtual bool operator==(const ossimProjection& projection) const
+   virtual bool operator==(const ossimProjection& /* projection */) const
       { return false; }
 
    virtual ossimDpt getMetersPerPixel() const;

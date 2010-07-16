@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 // 
 //********************************************************************
-// $Id: ossimFreeTypeFont.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
+// $Id: ossimFreeTypeFont.cpp 17108 2010-04-15 21:08:06Z dburken $
 
 // ossimFreeTypeFont.h should be load prior to checking for OSSIM_HAS_FREETYPE.
 #include <ossim/font/ossimFreeTypeFont.h>
@@ -435,7 +435,7 @@ void ossimFreeTypeFont::getBoundingBox(ossimIrect& box)
    thePrecomputedBoundingRect = box;
 }
 
-void ossimFreeTypeFont::computeGlyphBox(FT_Glyph slot,
+void ossimFreeTypeFont::computeGlyphBox(FT_Glyph /* slot */,
                                         ossimIrect& box)const
 {
    long yBearing = theFontFace->glyph->metrics.horiBearingY/64;

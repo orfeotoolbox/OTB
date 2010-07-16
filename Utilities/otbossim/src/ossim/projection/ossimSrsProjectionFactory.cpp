@@ -5,7 +5,7 @@
 //   Contains implementation of class ossimMapProjectionFactory
 //
 //*****************************************************************************
-//  $Id: ossimSrsProjectionFactory.cpp 16422 2010-01-27 18:25:17Z dburken $
+//  $Id: ossimSrsProjectionFactory.cpp 17206 2010-04-25 23:20:40Z dburken $
 #include <sstream>
 #include <ossim/projection/ossimSrsProjectionFactory.h>
 #include <ossim/base/ossimKeywordNames.h>
@@ -29,8 +29,8 @@ ossimSrsProjectionFactory* ossimSrsProjectionFactory::instance()
    return (ossimSrsProjectionFactory*) theInstance;
 }
 
-ossimProjection* ossimSrsProjectionFactory::createProjection(const ossimFilename& filename,
-                                                             ossim_uint32 entryIdx)const
+ossimProjection* ossimSrsProjectionFactory::createProjection(const ossimFilename& /* filename */,
+                                                             ossim_uint32 /* entryIdx */)const
 {
    return 0;
 }
@@ -64,16 +64,12 @@ ossimProjection* ossimSrsProjectionFactory::createProjection(const ossimString &
       ossimString projUnits;
       ossimString projOriginLon;
       ossimString projOriginLat;
-      tempName = tempName.substitute("AUTO:",
-                                     "");
-      tempName = tempName.substitute(",",
-                                     " ",
-                                     true);
+      tempName = tempName.substitute("AUTO:", "");
+      tempName = tempName.substitute(",", " ", true);
       std::istringstream in(tempName);
       in >> projId >> projUnits >> projOriginLon >> projOriginLat;
 
-      ossimGpt origin(projOriginLat.toDouble(),
-                      projOriginLon.toDouble());
+      ossimGpt origin(projOriginLat.toDouble(), projOriginLon.toDouble());
 
       switch(projId.toUInt32())
       {
@@ -119,11 +115,16 @@ ossimProjection* ossimSrsProjectionFactory::createProjection(const ossimString &
    else if(tempName.contains("EPSG"))
    {
       tempName = tempName.substitute("EPSG:", "");
-      switch(tempName.toUInt32())
+      ossim_uint32 code = tempName.toUInt32();
+      switch(code)
       {
          case 4326:
          {
-            return new ossimEquDistCylProjection;
+            ossimEquDistCylProjection* proj =
+               new ossimEquDistCylProjection(*(ossimDatumFactory::instance()->wgs84()->ellipsoid()));
+            proj->setDatum(ossimDatumFactory::instance()->wgs84());
+            proj->setPcsCode(4326);
+            return proj;
          }
          case 900913: // global mercator projection
          case 3785:
@@ -138,7 +139,7 @@ ossimProjection* ossimSrsProjectionFactory::createProjection(const ossimString &
                merc->setFalseNorthing(0.0);
                merc->setOrigin(origin);
                merc->update();
-               
+               merc->setPcsCode(3785);
                return merc;
             }
             break;
@@ -150,6 +151,7 @@ ossimProjection* ossimSrsProjectionFactory::createProjection(const ossimString &
       }
    }
 
+   // Got here? No projection code recognized:
    return 0;
 }
 
@@ -164,7 +166,7 @@ ossimObject* ossimSrsProjectionFactory::createObject(const ossimKeywordlist& kwl
    return createProjection(kwl, prefix);
 }
 
-void ossimSrsProjectionFactory::getTypeNameList(std::vector<ossimString>& typeList)const
+void ossimSrsProjectionFactory::getTypeNameList(std::vector<ossimString>& /* typeList */)const
 {
    
 }

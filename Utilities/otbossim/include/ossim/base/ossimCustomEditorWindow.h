@@ -6,7 +6,7 @@
 // Description:
 //
 //*************************************************************************
-// $Id: ossimCustomEditorWindow.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimCustomEditorWindow.h 17108 2010-04-15 21:08:06Z dburken $
 #ifndef ossimCustomEditorWindow_HEADER
 #define ossimCustomEditorWindow_HEADER
 #include <ossim/base/ossimObject.h>
@@ -50,7 +50,7 @@ public:
 protected:
    ossimCustomEditorWindow(){}
    ossimCustomEditorWindow(const ossimCustomEditorWindow&){}
-   void operator =(const ossimCustomEditorWindow& rhs){}
+   void operator =(const ossimCustomEditorWindow& /*rhs*/){}
 
 TYPE_DATA
 };

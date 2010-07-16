@@ -229,8 +229,8 @@ std::ostream& ossimNitfEngrdaTag::print(
 
 std::ostream& ossimNitfEngrdaTag::printData(std::ostream& out,
                                             const ossimEngDataElement& element,
-                                            ossim_uint32 elIndex,
-                                            const std::string& prefix) const
+                                            ossim_uint32 /* elIndex */,
+                                            const std::string& /* prefix */) const
 {
    if (element.theEngTyp == 'A')
    {

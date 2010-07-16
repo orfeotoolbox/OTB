@@ -7,7 +7,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimApplanixEcefModel.cpp 16174 2009-12-23 16:34:06Z dburken $
+//  $Id: ossimApplanixEcefModel.cpp 17206 2010-04-25 23:20:40Z dburken $
 #include <sstream>
 #include <ossim/projection/ossimApplanixEcefModel.h>
 #include <ossim/base/ossimEllipsoid.h>
@@ -28,7 +28,7 @@ static ossimTrace traceDebug("ossimApplanixEcefModel:debug");
 RTTI_DEF1(ossimApplanixEcefModel, "ossimApplanixEcefModel", ossimSensorModel);
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimApplanixEcefModel.cpp 16174 2009-12-23 16:34:06Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimApplanixEcefModel.cpp 17206 2010-04-25 23:20:40Z dburken $";
 #endif
 
 ossimApplanixEcefModel::ossimApplanixEcefModel()
@@ -62,7 +62,7 @@ ossimApplanixEcefModel::ossimApplanixEcefModel(const ossimDrect& imageRect,
                                                double roll,
                                                double pitch,
                                                double heading,
-                                               const ossimDpt& principalPoint, // in millimeters
+                                               const ossimDpt& /* principalPoint */, // in millimeters
                                                double focalLength, // in millimeters
                                                const ossimDpt& pixelSize) // in millimeters
 {

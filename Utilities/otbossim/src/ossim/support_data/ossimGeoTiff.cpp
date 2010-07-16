@@ -9,7 +9,7 @@
 // information.
 //
 //***************************************************************************
-// $Id: ossimGeoTiff.cpp 16546 2010-02-05 16:59:06Z dburken $
+// $Id: ossimGeoTiff.cpp 16865 2010-03-16 02:23:13Z gpotts $
 
 #include <ossim/support_data/ossimGeoTiff.h>
 #include <ossim/base/ossimTrace.h>
@@ -52,7 +52,7 @@ static const ossimGeoTiffDatumLut DATUM_LUT;
 OpenThreads::Mutex ossimGeoTiff::theMutex;
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimGeoTiff.cpp 16546 2010-02-05 16:59:06Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimGeoTiff.cpp 16865 2010-03-16 02:23:13Z gpotts $";
 #endif
 
 //---
@@ -383,7 +383,7 @@ bool ossimGeoTiff::writeTags(TIFF* tifPtr,
          gcs = USER_DEFINED;
 
          std::ostringstream os;
-         os << "IMAGINE GeoTIFF Support\nCopyright 1991 -  2001 by ERDAS, Inc. All Rights Reserved\n@(#)$RCSfile$ $Revision: 16546 $ $Date: 2010-02-06 00:59:06 +0800 (Sat, 06 Feb 2010) $\nUnable to match Ellipsoid (Datum) to a GeographicTypeGeoKey value\nEllipsoid = Clarke 1866\nDatum = NAD27 (CONUS)";
+         os << "IMAGINE GeoTIFF Support\nCopyright 1991 -  2001 by ERDAS, Inc. All Rights Reserved\n@(#)$RCSfile$ $Revision: 16865 $ $Date: 2010-03-16 10:23:13 +0800 (Tue, 16 Mar 2010) $\nUnable to match Ellipsoid (Datum) to a GeographicTypeGeoKey value\nEllipsoid = Clarke 1866\nDatum = NAD27 (CONUS)";
 
          GTIFKeySet(gtif,
                     GeogCitationGeoKey,

@@ -10,9 +10,10 @@
 // Description: This class provides some simple utilities for aux file.
 //
 //********************************************************************
-// $Id: ossimAuxFileHandler.cpp 468 2009-12-23 16:58:08Z ming.su $
+// $Id: ossimAuxFileHandler.cpp 992 2010-06-10 18:05:37Z ming.su $
 
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <iostream>
 
 #include <ossim/support_data/ossimAuxFileHandler.h>
@@ -196,7 +197,12 @@ bool ossimAuxFileHandler::open(const ossimFilename& file)
     if( typeLen == strLen)
     {
       ossimAuxEntry* projEntry = node->getNamedChild("Map_Info");
-      const char* proj = projEntry->getStringField("proName");
+      const char* proj = NULL;
+      if (projEntry)
+      {
+        proj = projEntry->getStringField("proName");
+      }
+      
       if (proj != NULL)
       {
         ossimString tmpProj(proj);
@@ -204,7 +210,12 @@ bool ossimAuxFileHandler::open(const ossimFilename& file)
       }
 
       ossimAuxEntry* datumEntry = node->getNamedChild( "Projection.Datum" );
-      const char* datumStr = datumEntry->getStringField("datumname");
+      const char* datumStr = NULL;
+      if (datumEntry)
+      {
+        datumStr = datumEntry->getStringField("datumname");
+      }
+      
       if (datumStr != NULL)
       {
         ossimString tmpDatum(datumStr);
@@ -532,7 +543,7 @@ ossimAuxField::~ossimAuxField()
   }
 }
 
-int ossimAuxField::extractInstValue( const char * auxField, int nIndexValue,
+int ossimAuxField::extractInstValue( const char* /* auxField */, int nIndexValue,
                            char* entryData, ossim_uint32 nDataOffset, int nDataSize,
                            char chReqType, void *reqReturn )
 

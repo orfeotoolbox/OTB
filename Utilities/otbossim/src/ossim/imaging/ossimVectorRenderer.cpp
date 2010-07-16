@@ -10,7 +10,7 @@
 // the "rasterizeVectorData" data method.
 //
 //*******************************************************************
-//  $Id: ossimVectorRenderer.cpp 9963 2006-11-28 21:11:01Z gpotts $
+//  $Id: ossimVectorRenderer.cpp 17195 2010-04-23 17:32:18Z dburken $
 
 #include <iostream>
 using namespace std;
@@ -59,8 +59,8 @@ ossimVectorRenderer::~ossimVectorRenderer()
    }
 }
 
-bool ossimVectorRenderer::saveState(ossimKeywordlist& kwl,
-                                    const char* prefix) const
+bool ossimVectorRenderer::saveState(ossimKeywordlist& /* kwl */,
+                                    const char* /* prefix */ ) const
 {
    return false;
 }
@@ -103,7 +103,7 @@ ossimDrect ossimVectorRenderer::getAreaOfInterest() const
    return theAreaOfInterest;
 }
 
-ossimDrect ossimVectorRenderer::getBoundingRect(long resLevel)const
+ossimDrect ossimVectorRenderer::getBoundingRect(long /* resLevel */)const
 {
    return theBoundingRect;
 }

@@ -2,34 +2,59 @@
 //
 // License:  See top level LICENSE.txt file.
 // 
-// Author: Garrett Potts (gpotts@imagelinks.com)
-// Description: Rpf support class
+// Author: Garrett Potts
+// 
+// Description: Rpf support class.
 // 
 //********************************************************************
-// $Id: ossimRpfPathnameRecord.h 9967 2006-11-29 02:01:23Z gpotts $
+// $Id: ossimRpfPathnameRecord.h 16997 2010-04-12 18:53:48Z dburken $
 #ifndef ossimRpfPathnameRecord_HEADER
 #define ossimRpfPathnameRecord_HEADER
-#include <iostream>
-using namespace std;
 
+#include <iosfwd>
 #include <ossim/base/ossimConstants.h>
-#include <ossim/base/ossimErrorContext.h>
+#include <ossim/base/ossimErrorCodes.h>
 #include <ossim/base/ossimString.h>
 
 class ossimRpfPathnameRecord
 {
 public:
-   friend ostream& operator <<(ostream& out,
-                               const ossimRpfPathnameRecord& data);
+
+   friend std::ostream& operator <<(std::ostream& out,
+                                    const ossimRpfPathnameRecord& data);
+   /** default constructor */
    ossimRpfPathnameRecord();
+
+   /** copy constructor */
+   ossimRpfPathnameRecord(const ossimRpfPathnameRecord& obj);
+
+   /** assignment operator */
+   const ossimRpfPathnameRecord& operator=(const ossimRpfPathnameRecord& rhs);
+
    void clearFields();
-   ossimErrorCode parseStream(istream& in, ossimByteOrder byteOrder);
-   void print(ostream& out)const;
-   ossimString getPathname()const{return thePathname;}
+
+   ossimErrorCode parseStream(std::istream& in, ossimByteOrder byteOrder);
+
+   /**
+    * @brief Write method.
+    *
+    * @param out Stream to write to.
+    */
+   void writeStream(std::ostream& out);
+
+   std::ostream& print(std::ostream& out) const;
+
+   ossimString getPathname()const;
+
+   /**
+    * @brief Set the pathname and length from string size.
+    * @param path Path like: ./N03E030
+    */
+   void setPathName(const ossimString& path);
    
 private:   
-   unsigned short theLength;
-   ossimString thePathname;
+   ossim_uint16 m_length;
+   ossimString  m_pathname;
 };
 
 #endif

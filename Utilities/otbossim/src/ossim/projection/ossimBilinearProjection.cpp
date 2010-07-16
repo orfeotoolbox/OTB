@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 // 
 //********************************************************************
-// $Id: ossimBilinearProjection.cpp 16478 2010-02-02 19:21:32Z gpotts $
+// $Id: ossimBilinearProjection.cpp 17497 2010-06-02 01:43:43Z gpotts $
 
 #include <sstream>
 using namespace std;
@@ -25,7 +25,7 @@ using namespace std;
 #include <ossim/base/ossimTieGptSet.h>
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimBilinearProjection.cpp 16478 2010-02-02 19:21:32Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimBilinearProjection.cpp 17497 2010-06-02 01:43:43Z gpotts $";
 #endif
 
 // static const ossim_uint32 MINIMUM_NMBER_OF_POINTS = 4;
@@ -125,16 +125,22 @@ ossimGpt ossimBilinearProjection::origin()const
 void ossimBilinearProjection::worldToLineSample(const ossimGpt& worldPoint,
                                             ossimDpt&       lineSampPt) const
 {
-   lineSampPt.makeNan();
-
-   if (!theInterpolationPointsHaveNanFlag)
+   if(!theInverseSupportedFlag)
    {
-      lineSampPt.x = theXFit.lsFitValue(worldPoint.latd(),
-                                        worldPoint.lond());
-      lineSampPt.y = theYFit.lsFitValue(worldPoint.latd(),
-                                        worldPoint.lond());
+      ossimProjection::worldToLineSample(worldPoint, lineSampPt);
    }
-//    ossimProjection::worldToLineSample(worldPoint, lineSampPt);
+   else 
+   {
+      lineSampPt.makeNan();
+      
+      if (!theInterpolationPointsHaveNanFlag)
+      {
+         lineSampPt.x = theXFit.lsFitValue(worldPoint.lond(),
+                                           worldPoint.latd());
+         lineSampPt.y = theYFit.lsFitValue(worldPoint.lond(),
+                                           worldPoint.latd());
+      }
+   }
 }
 
 void ossimBilinearProjection::lineSampleToWorld(const ossimDpt& lineSampPt,
@@ -277,7 +283,7 @@ bool ossimBilinearProjection::loadState(const ossimKeywordlist& kwl,
    return true;
 }
 
-bool ossimBilinearProjection::operator==(const ossimProjection& projection) const
+bool ossimBilinearProjection::operator==(const ossimProjection& /* projection */) const
 {
    return false;
 }
@@ -313,11 +319,13 @@ ossimDpt ossimBilinearProjection::getMetersPerPixel() const
 void ossimBilinearProjection::initializeBilinear()
 {
    theInterpolationPointsHaveNanFlag = dPtsHaveNan()||gPtsHaveNan();
-
+   theInverseSupportedFlag = true;
    if(!theInterpolationPointsHaveNanFlag)
    {
       theLatFit.clear();
       theLonFit.clear();
+      theXFit.clear();
+      theYFit.clear();
       
       const ossim_uint32 SIZE = (ossim_uint32)theLineSamplePt.size();
       if (SIZE != theGeographicPt.size())
@@ -335,11 +343,11 @@ void ossimBilinearProjection::initializeBilinear()
                              theLineSamplePt[i].y,
                              theGeographicPt[i].lond());
          
-         theXFit.addSample(theGeographicPt[i].latd(),
-                           theGeographicPt[i].lond(),
+         theXFit.addSample(theGeographicPt[i].lond(),
+                           theGeographicPt[i].latd(),
                            theLineSamplePt[i].x);
-         theYFit.addSample(theGeographicPt[i].latd(),
-                           theGeographicPt[i].lond(),
+         theYFit.addSample(theGeographicPt[i].lond(),
+                           theGeographicPt[i].latd(),
                            theLineSamplePt[i].y);
          
       }
@@ -348,6 +356,13 @@ void ossimBilinearProjection::initializeBilinear()
       theLonFit.solveLS();
       theXFit.solveLS();
       theYFit.solveLS();
+      ossimDpt errorResult;
+      getRoundTripError(theLineSamplePt[0],
+                        errorResult);
+      if(errorResult.length() > 1)
+      {
+         theInverseSupportedFlag = false;
+      }
    }
 }
 
@@ -488,8 +503,7 @@ ossim_float64 ossimBilinearProjection::setTiePoints(const std::vector<ossimDpt>&
    return sumerr2 / theLineSamplePt.size(); //variance in meter^2
 }
 
-bool
-ossimBilinearProjection::setupOptimizer(const ossimString& setup)
+bool ossimBilinearProjection::setupOptimizer(const ossimString& /* setup */)
 {
    return false;
 }
@@ -501,7 +515,7 @@ ossimBilinearProjection::degreesOfFreedom()const
 }
 
 double
-ossimBilinearProjection::optimizeFit(const ossimTieGptSet& tieSet, double* targetVariance)
+ossimBilinearProjection::optimizeFit(const ossimTieGptSet& tieSet, double* /* targetVariance */)
 {
    //NOTE : IGNORE targetVariance
    std::vector<ossimDpt> imagePoints;

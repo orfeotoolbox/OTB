@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimGeoidNgs.cpp 11499 2007-08-06 09:21:41Z dburken $
+//  $Id: ossimGeoidNgs.cpp 17195 2010-04-23 17:32:18Z dburken $
 #include <ossim/base/ossimGeoidNgs.h>
 
 #include <ossim/base/ossimCommon.h>
@@ -33,7 +33,7 @@ ossimGeoidNgs::ossimGeoidNgs()
 }
 
 ossimGeoidNgs::ossimGeoidNgs(const ossimFilename& dir,
-                             ossimByteOrder byteOrder)
+                             ossimByteOrder /* byteOrder */)
 {
    open(dir);
 }

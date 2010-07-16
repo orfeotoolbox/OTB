@@ -6,7 +6,7 @@
 // Description:
 //
 //*************************************************************************
-// $Id: ossimCustomEditorWindowRegistry.h 14789 2009-06-29 16:48:14Z dburken $
+// $Id: ossimCustomEditorWindowRegistry.h 17108 2010-04-15 21:08:06Z dburken $
 #ifndef ossimCustomEditorWindowRegistry_HEADER
 #define ossimCustomEditorWindowRegistry_HEADER
 #include <ossim/base/ossimObject.h>
@@ -48,7 +48,7 @@ public:
 protected:
    ossimCustomEditorWindowRegistry(){}
    ossimCustomEditorWindowRegistry(const ossimCustomEditorWindowRegistry&){}
-   void operator =(const ossimCustomEditorWindowRegistry& rhs){}
+   void operator =(const ossimCustomEditorWindowRegistry& /*rhs*/){}
    
    std::vector<ossimCustomEditorWindowFactoryBase*> theFactoryList;
    

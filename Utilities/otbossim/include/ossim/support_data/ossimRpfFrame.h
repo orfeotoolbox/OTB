@@ -10,7 +10,7 @@
 //              rpf file.
 //
 //********************************************************************
-// $Id: ossimRpfFrame.h 16308 2010-01-09 02:45:54Z eshirschorn $
+// $Id: ossimRpfFrame.h 16997 2010-04-12 18:53:48Z dburken $
 
 #ifndef ossimRpfFrame_HEADER
 #define ossimRpfFrame_HEADER
@@ -18,12 +18,12 @@
 #include <iosfwd>
 #include <vector>
 
+#include <ossim/base/ossimReferenced.h>
 #include <ossim/base/ossimRefPtr.h>
 #include <ossim/base/ossimFilename.h>
-#include <ossim/base/ossimErrorContext.h>
+#include <ossim/base/ossimErrorCodes.h>
 #include <ossim/support_data/ossimNitfFile.h>
 #include <ossim/support_data/ossimRpfColorGrayscaleTable.h>
-#include <ossim/support_data/ossimRpfConstants.h>
 
 class ossimRpfHeader;
 class ossimRpfAttributes;
@@ -35,7 +35,7 @@ class ossimRpfCompressionSection;
 class ossimRpfColorGrayscaleSubheader;
 class ossimRpfColorConverterSubsection;
 
-class OSSIM_DLL ossimRpfFrame
+class OSSIM_DLL ossimRpfFrame : public ossimReferenced
 {
 public:
    friend std::ostream& operator <<(std::ostream& out,
@@ -57,6 +57,7 @@ public:
 
    ossimErrorCode parseFile(const ossimFilename& filename,
                             bool minimalParse = false);
+   
    const ossimRpfHeader* getRpfHeader()const{return theHeader;}
 
    bool hasSubframeMaskTable()const;

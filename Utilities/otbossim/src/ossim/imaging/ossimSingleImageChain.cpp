@@ -14,13 +14,9 @@
 #include <ossim/imaging/ossimSingleImageChain.h>
 
 #include <ossim/base/ossimFilename.h>
-#include <ossim/imaging/ossimBandSelector.h>
-#include <ossim/imaging/ossimCacheTileSource.h>
-#include <ossim/imaging/ossimHistogramRemapper.h>
-#include <ossim/imaging/ossimImageHandler.h>
+#include <ossim/base/ossimNotify.h>
 #include <ossim/imaging/ossimImageHandlerRegistry.h>
-#include <ossim/imaging/ossimImageRenderer.h>
-#include <ossim/imaging/ossimScalarRemapper.h>
+#include <ossim/support_data/ossimSrcRecord.h>
 
 ossimSingleImageChain::ossimSingleImageChain()
    :
@@ -32,9 +28,36 @@ ossimSingleImageChain::ossimSingleImageChain()
    m_resampler(0),
    m_scalarRemapper(0),
    m_chainCache(0),
+   m_addHistogramFlag(false),
+   m_addResamplerCacheFlag(false),
+   m_addChainCacheFlag(false),
    m_remapToEightBitFlag(false),
    m_threeBandFlag(false),
    m_threeBandReverseFlag(false)
+{
+}
+
+ossimSingleImageChain::ossimSingleImageChain(bool addHistogramFlag,
+                                             bool addResamplerCacheFlag,
+                                             bool addChainCacheFlag,
+                                             bool remapToEightBitFlag,
+                                             bool threeBandFlag,
+                                             bool threeBandReverseFlag)
+   :
+   ossimImageChain(),
+   m_handler(0),
+   m_bandSelector(0),
+   m_histogramRemapper(0),
+   m_resamplerCache(0),
+   m_resampler(0),
+   m_scalarRemapper(0),
+   m_chainCache(0),
+   m_addHistogramFlag(addHistogramFlag),
+   m_addResamplerCacheFlag(addResamplerCacheFlag),
+   m_addChainCacheFlag(addChainCacheFlag),
+   m_remapToEightBitFlag(remapToEightBitFlag),
+   m_threeBandFlag(threeBandFlag),
+   m_threeBandReverseFlag(threeBandReverseFlag)   
 {
 }
 
@@ -51,23 +74,26 @@ void ossimSingleImageChain::reset()
       result = deleteLast();
    } while (result);
 
-   m_handler = 0;
-   m_bandSelector = 0;
-   m_histogramRemapper = 0;
-   m_resamplerCache = 0;
-   m_resampler = 0;
-   m_scalarRemapper = 0;
-   m_chainCache = 0;
-   m_remapToEightBitFlag = false;
-   m_threeBandFlag = false;
-   m_threeBandReverseFlag = false;
+   m_handler               = 0;
+   m_bandSelector          = 0;
+   m_histogramRemapper     = 0;
+   m_resamplerCache        = 0;
+   m_resampler             = 0;
+   m_scalarRemapper        = 0;
+   m_chainCache            = 0;
+   m_addHistogramFlag      = false;
+   m_addResamplerCacheFlag = false;
+   m_addChainCacheFlag     = false;
+   m_remapToEightBitFlag   = false;
+   m_threeBandFlag         = false;
+   m_threeBandReverseFlag  = false;
 }
 
 void ossimSingleImageChain::close()
 {
-   if (m_handler)
+   if ( m_handler.valid() )
    {
-      if ( removeChild(m_handler) )
+      if ( removeChild(m_handler.get()) )
       {
          m_handler = 0;
       }
@@ -77,7 +103,7 @@ void ossimSingleImageChain::close()
 ossimFilename ossimSingleImageChain::getFilename() const
 {
    ossimFilename result;
-   if (m_handler)
+   if ( m_handler.valid() )
    {
       result = m_handler->getFilename();
    }
@@ -89,27 +115,39 @@ bool ossimSingleImageChain::open(const ossimFilename& file)
    return addImageHandler(file);
 }
 
+bool ossimSingleImageChain::open(const ossimSrcRecord& src)
+{
+   return addImageHandler(src);
+}
+
 void ossimSingleImageChain::createRenderedChain()
 {
    // Band selector after image handler only if needed.
-   if (m_handler)
+   if ( m_handler.valid() )
    {
       // Only add if multiple bands.
-      if (m_handler->getNumberOfOutputBands() != 1)
+      if ( m_handler->getNumberOfOutputBands() != 1 )
       {
          addBandSelector();
+         if ( m_threeBandReverseFlag )
+         {
+            setToThreeBandsReverse();
+         }
       }
    }
    else // No image handler so just add it.
    {
       addBandSelector();
    }
-
+   
    // histogram
-   addHistogramRemapper();
+   if ( m_addHistogramFlag )
+   {
+      addHistogramRemapper();
+   }
 
    // resampler cache
-   if ( !m_resamplerCache )
+   if ( m_addResamplerCacheFlag )
    {
       m_resamplerCache = addCache();
    }
@@ -117,7 +155,7 @@ void ossimSingleImageChain::createRenderedChain()
    // scalar remapper
    if ( m_remapToEightBitFlag )
    {
-      if (m_handler)
+      if ( m_handler.valid() )
       {
          // See if it's eight bit.
          if (m_handler->getOutputScalarType() != OSSIM_UINT8)
@@ -135,7 +173,6 @@ void ossimSingleImageChain::createRenderedChain()
    // resampler
    addResampler();
 
-
    //---
    // Do this here so that if a band selector is added to the end of the
    // chain it will go in before the end of chain cache.
@@ -152,17 +189,99 @@ void ossimSingleImageChain::createRenderedChain()
    //---
    // Ditto...
    //---
-   if (m_threeBandReverseFlag)
+   if ( m_threeBandReverseFlag && !m_bandSelector )
    {
-      if (!m_bandSelector)
-      {
-         addBandSelector();
-      }
+      addBandSelector();
       setToThreeBandsReverse();
    }
 
    // End of chain cache.
-   if ( !m_chainCache)
+   if ( m_addChainCacheFlag )
+   {
+      m_chainCache = addCache();
+   }
+
+   initialize();
+
+}
+
+void ossimSingleImageChain::createRenderedChain(const ossimSrcRecord& src)
+{
+   // Band selector after image handler only if needed.
+   if ( m_handler.valid() )
+   {
+      // Only add if needed.
+      if ( ( m_handler->getNumberOfOutputBands() != 1 ) || src.getBands().size() )
+      {
+         addBandSelector(src);
+         if ( m_threeBandReverseFlag )
+         {
+            setToThreeBandsReverse();
+         }
+      }
+   }
+   else // No image handler so just add it.
+   {
+      addBandSelector(src);
+   }
+   
+   // histogram
+   if ( m_addHistogramFlag || src.getHistogramOp().size() )
+   {
+      addHistogramRemapper(src);
+   }
+
+   // resampler cache
+   if ( m_addResamplerCacheFlag )
+   {
+      m_resamplerCache = addCache();
+   }
+
+   // scalar remapper
+   if ( m_remapToEightBitFlag )
+   {
+      if ( m_handler.valid() )
+      {
+         // See if it's eight bit.
+         if (m_handler->getOutputScalarType() != OSSIM_UINT8)
+         {
+            addScalarRemapper();
+         }
+      }
+      else
+      {
+         // Just add...
+         addScalarRemapper(); 
+      }
+   }
+   
+   // resampler
+   addResampler();
+
+   //---
+   // Do this here so that if a band selector is added to the end of the
+   // chain it will go in before the end of chain cache.
+   //---
+   if (m_threeBandFlag)
+   {
+      if (!m_bandSelector) // Input must be one band.
+      {
+         addBandSelector(src);
+      }
+      setToThreeBands();
+   }
+
+   //---
+   // Ditto...
+   //---
+   if ( m_threeBandReverseFlag && !m_bandSelector )
+   {
+      addBandSelector();
+      setToThreeBandsReverse();
+   }
+
+   // End of chain cache.
+   if ( m_addChainCacheFlag )
    {
       m_chainCache = addCache();
    }
@@ -177,20 +296,38 @@ bool ossimSingleImageChain::addImageHandler(const ossimFilename& file)
 
    close();
    
-   ossimRefPtr<ossimImageHandler> ih =
-      ossimImageHandlerRegistry::instance()->open(file);
+   m_handler = ossimImageHandlerRegistry::instance()->open(file);
    
-   if (ih.valid())
+   if ( m_handler.valid() )
    {
-      // Capture the pointer.
-      m_handler = ih.get();
-      
       // Add to the chain.  Note: last is really first.
-      addLast( m_handler );
+      addLast( m_handler.get() );
       
       result = true;
    }
 
+   return result;
+}
+
+bool ossimSingleImageChain::addImageHandler(const ossimSrcRecord& src)
+{
+   bool result = addImageHandler( src.getFilename() );
+   if (result)
+   {
+      if ( src.getSupportDir().size() )
+      {
+         m_handler->setSupplementaryDirectory( src.getSupportDir() );
+      }
+      if ( src.getEntryIndex() > 0 ) // defaulted to -1.
+      {
+         m_handler->setCurrentEntry( static_cast<ossim_uint32>( src.getEntryIndex() ) );
+      }
+      if ( m_handler->getOverview() == 0 )
+      {
+         ossimFilename ovrFile = m_handler->getFilenameWithThisExtension(ossimString(".ovr"));
+         m_handler->openOverview( ovrFile ); 
+      }
+   }
    return result;
 }
 
@@ -201,7 +338,22 @@ void ossimSingleImageChain::addBandSelector()
       m_bandSelector = new ossimBandSelector();
 
       // Add to the end of the chain.
-      addFirst(m_bandSelector);
+      addFirst(m_bandSelector.get());
+   }
+}
+
+void ossimSingleImageChain::addBandSelector(const ossimSrcRecord& src)
+{
+   if (!m_bandSelector)
+   {
+      m_bandSelector = new ossimBandSelector();
+      
+      // Add to the end of the chain.
+      addFirst(m_bandSelector.get());
+   }
+   if ( src.getBands().size() )
+   {
+      m_bandSelector->setOutputBandList( src.getBands() );
    }
 }
 
@@ -214,16 +366,92 @@ void ossimSingleImageChain::addHistogramRemapper()
       m_histogramRemapper->setEnableFlag(false);
 
       // Add to the end of the chain.
-      addFirst(m_histogramRemapper);
+      addFirst(m_histogramRemapper.get());
    } 
 }
 
-ossimCacheTileSource* ossimSingleImageChain::addCache()
+void ossimSingleImageChain::addHistogramRemapper(const ossimSrcRecord& src)
 {
-   ossimCacheTileSource* cache = new ossimCacheTileSource();
+   static const char MODULE[] =
+      "ossimSingleImageChain::addHistogramRemapper(const ossimSrcRecord&)";
+   
+   if (!m_histogramRemapper)
+   {
+      m_histogramRemapper = new ossimHistogramRemapper();
+      
+      m_histogramRemapper->setEnableFlag(false);
+
+      // Add to the end of the chain.
+      addFirst(m_histogramRemapper.get());
+   }
+
+   if ( src.getHistogramOp().size() && m_handler.valid() )
+   {
+      // Create histogram code here???
+      
+      // Open the histogram if needed.
+      if ( m_histogramRemapper->getHistogramFile() == ossimFilename::NIL )
+      {
+         ossimFilename f;
+         if ( src.getSupportDir().size() )
+         {
+            f = src.getSupportDir();
+            f.dirCat( m_handler->getFilename().fileNoExtension() );
+            f.setExtension(".his");
+         }
+         else
+         {
+            f = m_handler->getFilenameWithThisExtension( ossimString("his") );
+         }
+         if ( m_histogramRemapper->openHistogram( f ) == false )
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
+               << MODULE << "\nCould not open:  " << f << "\n";
+         }
+      }
+
+      // Set the histogram strech mode.
+      if ( src.getHistogramOp().size() )
+      {
+         // Enable.
+         m_histogramRemapper->setEnableFlag(true);
+         
+         // Set the histo mode:
+         ossimString op = src.getHistogramOp();
+         op.downcase();
+         if ( op == "auto-minmax" )
+         {
+            m_histogramRemapper->setStretchMode( ossimHistogramRemapper::LINEAR_AUTO_MIN_MAX );
+         }
+         else if ( (op == "std-stretch-1") || (op == "std-stretch 1") )
+         {
+            m_histogramRemapper->setStretchMode( ossimHistogramRemapper::LINEAR_1STD_FROM_MEAN );
+         } 
+         else if ( (op == "std-stretch-2") || (op == "std-stretch 2") )
+         {
+            m_histogramRemapper->setStretchMode( ossimHistogramRemapper::LINEAR_2STD_FROM_MEAN );
+         } 
+         else if ( (op == "std-stretch-3") || (op == "std-stretch 3") )
+         {
+            m_histogramRemapper->setStretchMode( ossimHistogramRemapper::LINEAR_3STD_FROM_MEAN );
+         }
+         else
+         {
+            m_histogramRemapper->setEnableFlag(false);
+            ossimNotify(ossimNotifyLevel_WARN)
+               << MODULE << "\nUnhandled operation: " << op << "\n";
+         }
+      }
+      
+   } // End: if ( src.setHistogramOp().size() && m_handler.valid() )
+}
+
+ossimRefPtr<ossimCacheTileSource> ossimSingleImageChain::addCache()
+{
+   ossimRefPtr<ossimCacheTileSource> cache = new ossimCacheTileSource();
 
    // Add to the end of the chain.
-   addFirst(cache);
+   addFirst(cache.get());
 
    return cache;
 }
@@ -235,7 +463,7 @@ void ossimSingleImageChain::addResampler()
       m_resampler = new ossimImageRenderer();
 
       // Add to the end of the chain.
-      addFirst(m_resampler);
+      addFirst(m_resampler.get());
    }
 }
 
@@ -245,68 +473,117 @@ void ossimSingleImageChain::addScalarRemapper()
    {
       m_scalarRemapper = new ossimScalarRemapper();
 
-      if (m_resamplerCache)
+      if ( m_resamplerCache.valid() )
       {
          // Add to the left of the resampler cache.
-         insertLeft(m_scalarRemapper, m_resamplerCache);
+         insertLeft(m_scalarRemapper.get(), m_resamplerCache.get());
       }
       else
       {
          // Add to the end of the chain.
-         addFirst(m_scalarRemapper);
+         addFirst(m_scalarRemapper.get());
       }
    }
 }
 
-const ossimImageHandler* ossimSingleImageChain::getImageHandler() const
+ossimRefPtr<ossimImageHandler> ossimSingleImageChain::getImageHandler() const
 {
    return m_handler;
 }
 
-ossimImageHandler* ossimSingleImageChain::getImageHandler()
+ossimRefPtr<ossimImageHandler> ossimSingleImageChain::getImageHandler()
 {
    return m_handler;
 }
 
-const ossimBandSelector* ossimSingleImageChain::getBandSelector() const
+ossimRefPtr<ossimBandSelector> ossimSingleImageChain::getBandSelector() const
 {
    return m_bandSelector;
 }
 
-ossimBandSelector* ossimSingleImageChain::getBandSelector()
+ossimRefPtr<ossimBandSelector> ossimSingleImageChain::getBandSelector()
 {
    return m_bandSelector;
 }
 
-const ossimHistogramRemapper* ossimSingleImageChain::getHistogramRemapper()
-   const
+ossimRefPtr<ossimHistogramRemapper> ossimSingleImageChain::getHistogramRemapper() const
 {
    return m_histogramRemapper;
 }
 
-ossimHistogramRemapper* ossimSingleImageChain::getHistogramRemapper()
+ossimRefPtr<ossimHistogramRemapper> ossimSingleImageChain::getHistogramRemapper()
 {
    return m_histogramRemapper;
 }
 
-const ossimImageRenderer* ossimSingleImageChain::getImageRenderer() const
+ossimRefPtr<ossimCacheTileSource> ossimSingleImageChain::getResamplerCache() const
+{
+   return m_resamplerCache;
+}
+
+ossimRefPtr<ossimCacheTileSource> ossimSingleImageChain::getResamplerCache()
+{
+   return m_resamplerCache;
+}
+
+ossimRefPtr<ossimImageRenderer> ossimSingleImageChain::getImageRenderer() const
 {
    return m_resampler;
 }
 
-ossimImageRenderer* ossimSingleImageChain::getImageRenderer()
+ossimRefPtr<ossimImageRenderer> ossimSingleImageChain::getImageRenderer()
 {
    return m_resampler;
 }
 
-const ossimScalarRemapper* ossimSingleImageChain::getScalarRemapper() const
+ossimRefPtr<ossimScalarRemapper> ossimSingleImageChain::getScalarRemapper() const
 {
    return m_scalarRemapper;
 }
 
-ossimScalarRemapper* ossimSingleImageChain::getScalarRemapper()
+ossimRefPtr<ossimScalarRemapper> ossimSingleImageChain::getScalarRemapper()
 {
    return m_scalarRemapper;
+}
+
+ossimRefPtr<ossimCacheTileSource> ossimSingleImageChain::getChainCache() const
+{
+   return m_chainCache;
+}
+
+ossimRefPtr<ossimCacheTileSource> ossimSingleImageChain::getChainCache()
+{
+   return m_chainCache;
+}
+
+void ossimSingleImageChain::setAddHistogramFlag(bool flag)
+{
+   m_addHistogramFlag = flag;
+}
+
+bool ossimSingleImageChain::getAddHistogramFlag() const
+{
+   return m_addHistogramFlag;
+}
+
+void ossimSingleImageChain::setAddResamplerCacheFlag(bool flag)
+{
+   m_addResamplerCacheFlag = flag;
+}
+
+bool ossimSingleImageChain::getAddResamplerCacheFlag() const
+{
+   return m_addResamplerCacheFlag;
+}
+
+void ossimSingleImageChain::setAddChainCacheFlag(bool flag)
+{
+   m_addChainCacheFlag = flag;
+}
+
+bool ossimSingleImageChain::getAddChainCacheFlag() const
+{
+   return m_addChainCacheFlag;
 }
 
 void ossimSingleImageChain::setRemapToEightBitFlag(bool flag)
@@ -341,7 +618,7 @@ bool ossimSingleImageChain::getThreeBandReverseFlag() const
 
 void ossimSingleImageChain::setToThreeBands()
 {
-   if (m_handler)
+   if ( m_handler.valid() )
    {
       std::vector<ossim_uint32> bandList(3);
       const ossim_uint32 BANDS = m_handler->getNumberOfInputBands();
@@ -363,7 +640,7 @@ void ossimSingleImageChain::setToThreeBands()
    
 void ossimSingleImageChain::setToThreeBandsReverse()
 {
-   if (m_handler)
+   if ( m_handler.valid() )
    {
       std::vector<ossim_uint32> bandList(3);
       const ossim_uint32 BANDS = m_handler->getNumberOfInputBands();
@@ -392,7 +669,7 @@ void ossimSingleImageChain::setBandSelection(
    }
    m_bandSelector->setEnableFlag(true);
    m_bandSelector->setOutputBandList(bandList);
-   if (m_histogramRemapper)
+   if ( m_histogramRemapper.valid() )
    {
       m_histogramRemapper->initialize();
    }
@@ -400,7 +677,7 @@ void ossimSingleImageChain::setBandSelection(
 ossimScalarType ossimSingleImageChain::getImageHandlerScalarType() const
 {
    ossimScalarType result = OSSIM_SCALAR_UNKNOWN;
-   if (m_handler)
+   if ( m_handler.valid() )
    {
       result = m_handler->getOutputScalarType();
    }

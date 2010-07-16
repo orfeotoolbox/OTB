@@ -6,7 +6,7 @@
 // Description:
 //
 //*************************************************************************
-// $Id: ossimProjectionViewControllerFactory.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimProjectionViewControllerFactory.h 17108 2010-04-15 21:08:06Z dburken $
 #ifndef ossimProjectionViewControllerFactory_HEADER
 #define ossimProjectionViewControllerFactory_HEADER
 #include <ossim/base/ossimBaseObjectFactory.h>
@@ -31,7 +31,7 @@ public:
    
 protected:
    ossimProjectionViewControllerFactory(){}
-   ossimProjectionViewControllerFactory(const ossimProjectionViewControllerFactory& rhs ){}
+   ossimProjectionViewControllerFactory(const ossimProjectionViewControllerFactory& /* rhs */){}
 
    static ossimProjectionViewControllerFactory* theInstance;
 TYPE_DATA

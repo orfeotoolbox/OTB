@@ -12,7 +12,7 @@
 // derive from.
 //
 //********************************************************************
-// $Id: ossimImageHandler.h 16281 2010-01-06 21:23:04Z dburken $
+// $Id: ossimImageHandler.h 17599 2010-06-20 13:52:34Z dburken $
 #ifndef ossimImageHandler_HEADER
 #define ossimImageHandler_HEADER
 
@@ -467,7 +467,7 @@ public:
     * max values.
     * For general raster it will contain much more than that.
     */
-   void loadMetaData();
+   virtual void loadMetaData();
 
    /**
     * Retuns the min pixel value.  If there was an external eta data file

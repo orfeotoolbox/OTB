@@ -6,7 +6,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimSFIMFusion.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
+//  $Id: ossimSFIMFusion.cpp 17603 2010-06-21 11:39:37Z gpotts $
 #include <ossim/imaging/ossimSFIMFusion.h>
 #include <ossim/matrix/newmat.h>
 #include <ossim/matrix/newmatio.h>
@@ -285,7 +285,7 @@ void ossimSFIMFusion::setProperty(ossimRefPtr<ossimProperty> property)
    else if(name=="highPassGain")
    {
       setParameterOffset(HIGH_PASS_GAIN_OFFSET,
-                         property->valueToString().toDouble(computeParameterOffset(HIGH_PASS_GAIN_OFFSET)),
+                         property->valueToString().toDouble(),
                          true);
    }
    else

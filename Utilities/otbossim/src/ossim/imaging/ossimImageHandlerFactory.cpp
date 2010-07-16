@@ -5,7 +5,7 @@
 // See LICENSE.txt file in the top level directory for more details.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimImageHandlerFactory.cpp 16308 2010-01-09 02:45:54Z eshirschorn $
+// $Id: ossimImageHandlerFactory.cpp 17712 2010-07-09 15:46:46Z dburken $
 #include <ossim/imaging/ossimImageHandlerFactory.h>
 #include <ossim/imaging/ossimAdrgTileSource.h>
 #include <ossim/imaging/ossimCcfTileSource.h>
@@ -23,7 +23,6 @@
 #include <ossim/imaging/ossimERSTileSource.h>
 #include <ossim/imaging/ossimVpfTileSource.h>
 #include <ossim/imaging/ossimTileMapTileSource.h>
-#include <ossim/imaging/ossimVirtualImageHandler.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/imaging/ossimJpegTileSource.h>
@@ -98,19 +97,6 @@ ossimImageHandler* ossimImageHandlerFactory::open(
    // If here do it the brute force way by going down the list of available
    // readers...
    //---
-
-   if(traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "trying OSSIM Virtual Image" << std::endl;
-   }
-   result = new ossimVirtualImageHandler;
-   if(result->open(copyFilename))
-   {
-      return result.release();
-   }
-   result = 0;
-
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -280,41 +266,48 @@ ossimImageHandler* ossimImageHandlerFactory::open(
    }
    result = 0;
 
-   // Note:  SRTM should be in front of general raster...
-   if(traceDebug())
+   //---
+   // The srtm and general raser readers were picking up j2k overviews because the
+   // matching base file has an "omd" file that the raster reader can load
+   // so added extension check.  (drb - 20100709)
+   //---
+   if (copyFilename.ext() != "ovr")
    {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "trying SRTM"
-         << std::endl;
+      // Note:  SRTM should be in front of general raster...
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "trying SRTM"
+            << std::endl;
+      }
+      
+      result = new ossimSrtmTileSource;
+      if(result->open(copyFilename))
+      {
+         return result.release();
+      }
+
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "trying General Raster"
+            << std::endl;
+      }
+      result = new ossimGeneralRasterTileSource;
+      if(result->open(copyFilename))
+      {
+         return result.release();
+      }
    }
-   result = new ossimSrtmTileSource;
-   if(result->open(copyFilename))
-   {
-      return result.release();
-   }
-   result = 0;
 
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
-         << "trying General Raster"
-         << std::endl;
-   }
-   result = new ossimGeneralRasterTileSource;
-   if(result->open(copyFilename))
-   {
-      return result.release();
-   }
-   result = 0;
-
-   if(traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-      << "trying adrg" << std::endl;
+         << "trying adrg" << std::endl;
    }
    
    // test if ADRG
-   result  = new ossimAdrgTileSource();
+   result = new ossimAdrgTileSource();
    
    if(result->open(copyFilename))
    {
@@ -798,10 +791,6 @@ ossimObject* ossimImageHandlerFactory::createObject(const ossimString& typeName)
    if(STATIC_TYPE_NAME(ossimTileMapTileSource) == typeName)
    {
       return new ossimTileMapTileSource();
-   }
-   if(STATIC_TYPE_NAME(ossimVirtualImageHandler) == typeName)
-   {
-      return new ossimVirtualImageHandler();
    }
 
    return (ossimObject*)0;

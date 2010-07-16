@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeaderV2_0.h 15611 2009-10-08 18:50:33Z dburken $
+// $Id: ossimNitfImageHeaderV2_0.h 17598 2010-06-19 15:37:46Z dburken $
 #ifndef ossimNitfImageHeaderV2_0_HEADER
 #define ossimNitfImageHeaderV2_0_HEADER
 #include <ossim/support_data/ossimNitfImageHeaderV2_X.h>
@@ -36,8 +36,6 @@ public:
    virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
    
-   virtual ossimDrect  getImageRect()const;
-   virtual ossimDrect  getBlockImageRect()const;
    virtual bool        isCompressed()const;
    virtual bool        isEncrypted()const;
 

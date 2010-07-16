@@ -3,52 +3,70 @@
 //
 // Author: Garrett Potts
 // 
-// Description: This class extends the stl's string class.
+// Description: Rpf support class.
 //
 //********************************************************************
-// $Id: ossimRpfPathnameRecord.cpp 9963 2006-11-28 21:11:01Z gpotts $
+// $Id: ossimRpfPathnameRecord.cpp 16997 2010-04-12 18:53:48Z dburken $
+
+#include <istream>
+#include <ostream>
 #include <ossim/support_data/ossimRpfPathnameRecord.h>
 #include <ossim/base/ossimEndian.h>
 #include <ossim/base/ossimErrorCodes.h>
 
-ostream& operator <<(ostream& out,
-                     const ossimRpfPathnameRecord& data)
+std::ostream& operator <<(std::ostream& out, const ossimRpfPathnameRecord& data)
 {
-   data.print(out);
-   
-   return out;
+   return data.print(out);
 }
 
-
 ossimRpfPathnameRecord::ossimRpfPathnameRecord()
+   :
+   m_length(0),
+   m_pathname("")
 {   
-   clearFields();
+}
+
+ossimRpfPathnameRecord::ossimRpfPathnameRecord(const ossimRpfPathnameRecord& obj)
+   :
+   m_length(obj.m_length),
+   m_pathname(obj.m_pathname)
+{
+}
+
+const ossimRpfPathnameRecord& ossimRpfPathnameRecord::operator=(const ossimRpfPathnameRecord& rhs)
+{
+   if ( this != &rhs )
+   {
+      m_length   = rhs.m_length;
+      m_pathname = rhs.m_pathname;
+   }
+   return *this;
 }
 
 void ossimRpfPathnameRecord::clearFields()
 {
-   theLength   = 0;
-   thePathname = "";
+   m_length   = 0;
+   m_pathname = "";
 }
 
-ossimErrorCode ossimRpfPathnameRecord::parseStream(istream& in, ossimByteOrder byteOrder)
+ossimErrorCode ossimRpfPathnameRecord::parseStream(std::istream& in, ossimByteOrder byteOrder)
 {
    if(in)
    {
       ossimEndian anEndian;
       
       clearFields();
-      in.read((char*)&theLength, 2);
+      in.read((char*)&m_length, 2);
 
       if(anEndian.getSystemEndianType() != byteOrder)
       {
-         anEndian.swap(theLength);
+         anEndian.swap(m_length);
       }
 
-      char *temp = new char[theLength+1];
-      in.read((char*)temp, theLength);
-      temp[theLength] = '\0';
-      thePathname = temp;
+      char *temp = new char[m_length+1];
+      in.read((char*)temp, m_length);
+      temp[m_length] = '\0';
+      m_pathname = temp;
       
       delete [] temp;
    }
@@ -60,8 +78,43 @@ ossimErrorCode ossimRpfPathnameRecord::parseStream(istream& in, ossimByteOrder b
    return ossimErrorCodes::OSSIM_OK;
 }
 
-void ossimRpfPathnameRecord::print(ostream& out)const
+void ossimRpfPathnameRecord::writeStream(std::ostream& out)
 {
-   out << "theLength:        " << theLength   << endl
-       << "thePathname:      " << thePathname;
+   ossimEndian anEndian;
+   if( anEndian.getSystemEndianType() != OSSIM_BIG_ENDIAN )
+   {
+      // Always write big endian.
+      anEndian.swap(m_length);
+   }
+   
+   out.write((char*)&m_length, 2);
+
+   if( anEndian.getSystemEndianType() != OSSIM_BIG_ENDIAN )
+   {
+      // Swap back to native.
+      anEndian.swap(m_length);
+   }   
+
+   if(m_pathname.size() >= m_length)
+   {
+      out.write(m_pathname.c_str(), m_length);
+   }
+}
+
+std::ostream& ossimRpfPathnameRecord::print(std::ostream& out)const
+{
+   out << "length:        " << m_length
+       << "\npathname:      " << m_pathname << std::endl;
+   return out;
+}
+
+ossimString ossimRpfPathnameRecord::getPathname() const
+{
+   return m_pathname;
+}
+
+void ossimRpfPathnameRecord::setPathName(const ossimString& path)
+{
+   m_pathname = path;
+   m_length = static_cast<ossim_uint16>( path.size() );
 }

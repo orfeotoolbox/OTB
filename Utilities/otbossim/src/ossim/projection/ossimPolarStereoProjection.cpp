@@ -9,7 +9,7 @@
 //
 // Calls Geotrans Polar Stereographic  projection code.  
 //*******************************************************************
-//  $Id: ossimPolarStereoProjection.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimPolarStereoProjection.cpp 17206 2010-04-25 23:20:40Z dburken $
 
 #include <math.h>
 #include <ossim/projection/ossimPolarStereoProjection.h>
@@ -58,8 +58,8 @@ ossimPolarStereoProjection::ossimPolarStereoProjection(const ossimEllipsoid& ell
 //    Polar_Delta_Northing = 12713601.0;
 }
 
-ossimPolarStereoProjection::ossimPolarStereoProjection(const ossimEllipsoid& ellipsoid,
-                                                       const ossimGpt& origin,
+ossimPolarStereoProjection::ossimPolarStereoProjection(const ossimEllipsoid& /* ellipsoid */,
+                                                       const ossimGpt& /* origin */,
                                                        double falseEasting,
                                                        double falseNorthing)
 {

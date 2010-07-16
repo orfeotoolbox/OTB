@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimGeoAnnotationBitmap.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimGeoAnnotationBitmap.cpp 17195 2010-04-23 17:32:18Z dburken $
 
 #include <ossim/imaging/ossimGeoAnnotationBitmap.h>
 #include <ossim/projection/ossimProjection.h>
@@ -75,7 +75,7 @@ bool ossimGeoAnnotationBitmap::intersects(const ossimDrect& rect) const
 }
 
 ossimGeoAnnotationBitmap* ossimGeoAnnotationBitmap::getNewClippedObject(
-   const ossimDrect& rect)const
+   const ossimDrect& /* rect */)const
 {
    ossimGeoAnnotationBitmap* result = (ossimGeoAnnotationBitmap*)dup();
    
@@ -86,7 +86,7 @@ ossimGeoAnnotationBitmap* ossimGeoAnnotationBitmap::getNewClippedObject(
    return result;
 }
 
-void ossimGeoAnnotationBitmap::applyScale(double x, double y)
+void ossimGeoAnnotationBitmap::applyScale(double /* x */, double /* y */)
 {
      ossimNotify(ossimNotifyLevel_WARN)
       << "ossimGeoAnnotationBitmap::applyScale WRNING: not implemented"

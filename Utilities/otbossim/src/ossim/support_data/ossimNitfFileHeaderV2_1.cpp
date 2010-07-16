@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFileHeaderV2_1.cpp 16447 2010-01-29 21:49:32Z dburken $
+// $Id: ossimNitfFileHeaderV2_1.cpp 17206 2010-04-25 23:20:40Z dburken $
 
 #include <iostream>
 #include <iomanip>
@@ -433,6 +433,9 @@ void ossimNitfFileHeaderV2_1::writeStream(std::ostream &out)
       
       out.write(theExtendedHeaderDataLength, 5);
 
+      // for now we hard code the 000 for we do not currently support writing to the DES if the total tag length is
+      // larger than supported
+      //
       memset(theExtendedHeaderDataOverflow, '0', 3);
 
       if(totalLength > 0)
@@ -998,8 +1001,8 @@ ossimNitfFileHeaderV2_1::getNewImageHeader(ossim_uint32 imageNumber,
 }
 
 ossimNitfSymbolHeader*
-ossimNitfFileHeaderV2_1::getNewSymbolHeader(ossim_uint32 symbolNumber,
-                                            std::istream& in)const
+ossimNitfFileHeaderV2_1::getNewSymbolHeader(ossim_uint32 /* symbolNumber */,
+                                            std::istream& /* in */)const
 {
    // Currently not implemented...
    
@@ -1009,8 +1012,8 @@ ossimNitfFileHeaderV2_1::getNewSymbolHeader(ossim_uint32 symbolNumber,
 }
 
 ossimNitfLabelHeader*
-ossimNitfFileHeaderV2_1::getNewLabelHeader(ossim_uint32 labelNumber,
-                                           std::istream& in)const
+ossimNitfFileHeaderV2_1::getNewLabelHeader(ossim_uint32 /* labelNumber */,
+                                           std::istream& /* in */)const
 {
    // Currently not implemented...
    ossimNitfLabelHeader *result = 0;
@@ -1019,8 +1022,8 @@ ossimNitfFileHeaderV2_1::getNewLabelHeader(ossim_uint32 labelNumber,
 }
 
 ossimNitfTextHeader*
-ossimNitfFileHeaderV2_1::getNewTextHeader(ossim_uint32 textNumber,
-                                          std::istream& in)const
+ossimNitfFileHeaderV2_1::getNewTextHeader(ossim_uint32 /* textNumber */,
+                                          std::istream& /* in */)const
 {
    // Currently not implemented...
    ossimNitfTextHeader *result = 0;
@@ -1030,7 +1033,7 @@ ossimNitfFileHeaderV2_1::getNewTextHeader(ossim_uint32 textNumber,
 
 ossimNitfDataExtensionSegment*
 ossimNitfFileHeaderV2_1::getNewDataExtensionSegment(
-   ossim_uint32 dataExtNumber, std::istream& in)const
+   ossim_uint32 /* dataExtNumber */, std::istream& /* in */)const
 {
    // Currently not implemented...
    ossimNitfDataExtensionSegment *result = 0;
@@ -1592,8 +1595,8 @@ void ossimNitfFileHeaderV2_1::getPropertyNames(std::vector<ossimString>& propert
    propertyNames.push_back(FBKGC_KW);
 }
 
-bool ossimNitfFileHeaderV2_1::setDefaults(const ossimKeywordlist& kwl,
-                                           const char* prefix)
+bool ossimNitfFileHeaderV2_1::setDefaults(const ossimKeywordlist& /* kwl */,
+                                          const char* /* prefix */)
 {
 #if 0	
    const char* complexityLevel             = kwl.find(prefix, CLEVEL_KW);

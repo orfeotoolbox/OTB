@@ -10,7 +10,7 @@
 //               (HDR) of a DTED Level 1 file.
 //
 //********************************************************************
-// $Id: ossimDtedHdr.cpp 16104 2009-12-17 18:09:59Z gpotts $
+// $Id: ossimDtedHdr.cpp 17501 2010-06-02 11:14:55Z dburken $
 
 #include <iostream>
 #include <fstream>
@@ -25,20 +25,6 @@
 //**************************************************************************
 ossimDtedHdr::ossimDtedHdr(const ossimFilename& dted_file, ossim_int32 offset)
    :
-      theRecSen(),
-      theField2(),
-      theFilename(),
-      theField4(),
-      theField5(),
-      theField6(),
-      theVersion(),
-      theCreationDate(),
-      theField9(),
-      theField10(),
-      theField11(),
-      theField12(),
-      theField13(),
-      theField14(),
       theStartOffset(0),
       theStopOffset(0)
 {
@@ -81,20 +67,6 @@ ossimDtedHdr::ossimDtedHdr(const ossimFilename& dted_file, ossim_int32 offset)
 //**************************************************************************
 ossimDtedHdr::ossimDtedHdr(std::istream& in)
    :
-      theRecSen(),
-      theField2(),
-      theFilename(),
-      theField4(),
-      theField5(),
-      theField6(),
-      theVersion(),
-      theCreationDate(),
-      theField9(),
-      theField10(),
-      theField11(),
-      theField12(),
-      theField13(),
-      theField14(),
       theStartOffset(0),
       theStopOffset(0)
 {
@@ -177,7 +149,7 @@ void ossimDtedHdr::parse(std::istream& in)
 }
 
 ossimRefPtr<ossimProperty> ossimDtedHdr::getProperty(
-   const ossimString& name) const
+   const ossimString& /* name */) const
 {
    ossimRefPtr<ossimProperty> result = 0;
    return result;
@@ -252,7 +224,7 @@ ossim_int32 ossimDtedHdr::stopOffset() const
    return theStopOffset;
 }
 
-ossimDtedHdr::ossimDtedHdr(const ossimDtedHdr& source)
+ossimDtedHdr::ossimDtedHdr(const ossimDtedHdr& /* source */)
 {}
 
 const ossimDtedHdr& ossimDtedHdr::operator=(const ossimDtedHdr& rhs)

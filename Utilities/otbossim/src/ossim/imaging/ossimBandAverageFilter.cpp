@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimBandAverageFilter.cpp 12666 2008-04-13 13:24:29Z dburken $
+// $Id: ossimBandAverageFilter.cpp 17206 2010-04-25 23:20:40Z dburken $
 #include <ossim/imaging/ossimBandAverageFilter.h>
 
 // used for constructing and an ossimImageData object
@@ -251,7 +251,7 @@ void ossimBandAverageFilter::checkWeights()
 
 
 template<class T> void ossimBandAverageFilter::averageInput(
-   T dummyVariable, // used only for template type, value ignored
+   T /* dummyVariable */, // used only for template type, value ignored
    ossimRefPtr<ossimImageData> inputDataObject)
 {
    // since we have already checked the input for empty or

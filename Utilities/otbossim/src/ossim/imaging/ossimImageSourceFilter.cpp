@@ -11,7 +11,7 @@
 // Description:
 //
 //*******************************************************************
-//  $Id: ossimImageSourceFilter.cpp 13312 2008-07-27 01:26:52Z gpotts $
+//  $Id: ossimImageSourceFilter.cpp 17206 2010-04-25 23:20:40Z dburken $
 
 #include <ossim/imaging/ossimImageSourceFilter.h>
 #include <ossim/base/ossimTrace.h>
@@ -215,7 +215,7 @@ bool ossimImageSourceFilter::canConnectMyInputTo(ossim_int32 inputIndex,
   return ((PTR_CAST(ossimImageSource, object)||!object) && ( inputIndex == 0 ) );
 }
 
-void ossimImageSourceFilter::connectInputEvent(ossimConnectionEvent& event)
+void ossimImageSourceFilter::connectInputEvent(ossimConnectionEvent& /* event */)
 {
   if(traceDebug())
     {
@@ -245,7 +245,7 @@ void ossimImageSourceFilter::connectInputEvent(ossimConnectionEvent& event)
      ossimNotify(ossimNotifyLevel_DEBUG) << "Leaving ossimImageSourceFilter::connectInput" << std::endl;
   }
 }
-void ossimImageSourceFilter::disconnectInputEvent(ossimConnectionEvent& event)
+void ossimImageSourceFilter::disconnectInputEvent(ossimConnectionEvent& /* event */)
 {
    if(traceDebug())
    {
@@ -258,7 +258,7 @@ void ossimImageSourceFilter::disconnectInputEvent(ossimConnectionEvent& event)
       ossimNotify(ossimNotifyLevel_DEBUG) << "Leaving ossimImageSourceFilter::disconnectInput" << std::endl;
    }
 }
-void ossimImageSourceFilter::propertyEvent(ossimPropertyEvent& event)
+void ossimImageSourceFilter::propertyEvent(ossimPropertyEvent& /* event */)
 {
    if(traceDebug())
    {
@@ -272,7 +272,7 @@ void ossimImageSourceFilter::propertyEvent(ossimPropertyEvent& event)
    }
 }
 
-void ossimImageSourceFilter::refreshEvent(ossimRefreshEvent& event)
+void ossimImageSourceFilter::refreshEvent(ossimRefreshEvent& /* event */)
 {
    if(traceDebug())
    {

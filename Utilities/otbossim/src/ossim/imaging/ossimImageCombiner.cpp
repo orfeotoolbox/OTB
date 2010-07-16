@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageCombiner.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
+// $Id: ossimImageCombiner.cpp 17206 2010-04-25 23:20:40Z dburken $
 #include <ossim/imaging/ossimImageCombiner.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimIrect.h>
@@ -625,22 +625,22 @@ void ossimImageCombiner::getOverlappingImages(std::vector<ossim_uint32>& result,
    }
 }
 
-void ossimImageCombiner::connectInputEvent(ossimConnectionEvent& event)
+void ossimImageCombiner::connectInputEvent(ossimConnectionEvent& /* event */)
 {
    initialize();
 }
 
-void ossimImageCombiner::disconnectInputEvent(ossimConnectionEvent& event)
+void ossimImageCombiner::disconnectInputEvent(ossimConnectionEvent& /* event */)
 { 
    initialize();
 }
 
-void ossimImageCombiner::propertyEvent(ossimPropertyEvent& event)
+void ossimImageCombiner::propertyEvent(ossimPropertyEvent& /* event */)
 {
    initialize();
 }
 
-void ossimImageCombiner::refreshEvent(ossimRefreshEvent& event)
+void ossimImageCombiner::refreshEvent(ossimRefreshEvent& /* event */)
 {
    initialize();
 }
@@ -668,7 +668,7 @@ bool ossimImageCombiner::saveState(ossimKeywordlist& kwl,
    return ossimImageSource::saveState(kwl, prefix);
 }
 
-bool ossimImageCombiner::canConnectMyInputTo(ossim_int32 inputIndex,
+bool ossimImageCombiner::canConnectMyInputTo(ossim_int32 /* inputIndex */,
                                              const ossimConnectableObject* object)const
 {
    return (object&& PTR_CAST(ossimImageSource, object));

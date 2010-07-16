@@ -8,7 +8,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimImageWriterFactory.cpp 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimImageWriterFactory.cpp 16943 2010-03-30 15:44:22Z dburken $
 
 #include <ossim/imaging/ossimImageWriterFactory.h>
 #include <ossim/imaging/ossimImageWriterFactoryRegistry.h>
@@ -40,29 +40,44 @@ ossimImageWriterFactory::~ossimImageWriterFactory()
    theInstance = (ossimImageWriterFactory*)NULL;
 }
 
-ossimImageFileWriter *ossimImageWriterFactory::createWriterFromExtension(const ossimString& fileExtension)const
+ossimImageFileWriter *ossimImageWriterFactory::createWriterFromExtension(
+   const ossimString& fileExtension)const
 {
-   if((fileExtension == "tif")||
-      (fileExtension == "tiff"))
+   ossimImageFileWriter* result = 0;
+
+   ossimString ext = fileExtension;
+   ext.downcase();
+   
+   if( (ext == "tif")|| (ext == "tiff") )
    {
-      return new ossimTiffWriter;
+      result = new ossimTiffWriter;
    }
-   else if((fileExtension == "jpg")||
-           (fileExtension == "jpeg"))
+   else if( (ext == "jpg")|| (ext == "jpeg") )
    {
-      return new ossimJpegWriter;
+      result = new ossimJpegWriter;
    }
-   else if(fileExtension == "ras")
+   else if( (ext == "ras") || (ext == "bsq") )
    {
-      return new ossimGeneralRasterWriter;
+      // Default is OSSIM_GENERAL_RASTER_BSQ
+      result = new ossimGeneralRasterWriter;
    }
-   else if((fileExtension == "ntf")||
-           (fileExtension == "nitf"))
+   else if(ext == "bil")
    {
-      return new ossimNitfWriter;
+      result = new ossimGeneralRasterWriter;
+      result->setOutputImageType(OSSIM_GENERAL_RASTER_BIL);
+   }
+   else if(ext == "bip")
+   {
+      result = new ossimGeneralRasterWriter;
+      result->setOutputImageType(OSSIM_GENERAL_RASTER_BIP);
+   }
+   else if((ext == "ntf")||
+           (ext == "nitf"))
+   {
+      result = new ossimNitfWriter;
    }
    
-   return NULL;
+   return result;
 }
 
 ossimImageFileWriter*
@@ -248,6 +263,9 @@ ossimObject* ossimImageWriterFactory::createObject(const ossimString& typeName)c
 void ossimImageWriterFactory::getExtensions(std::vector<ossimString>& result)const
 {
    result.push_back("ras");
+   result.push_back("bsq");
+   result.push_back("bil");
+   result.push_back("bip");
    result.push_back("tif");
    result.push_back("jpg");
    result.push_back("ntf");

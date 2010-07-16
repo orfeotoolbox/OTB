@@ -6,7 +6,7 @@
 // Description: 
 // 
 //********************************************************************
-// $Id: ossimFont.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimFont.h 17106 2010-04-15 19:12:59Z dburken $
 #ifndef ossimFont_HEADER
 #define ossimFont_HEADER
 #include <ossim/base/ossimIpt.h>
@@ -61,7 +61,7 @@ public:
        theHorizontalPixelSize(horizontalPixelSize),
        theVerticalPixelSize(verticalPixelSize),
        theHorizontalDeviceUnits(horizontalDeviceUnits),
-       theVerticalDeviceUnits(horizontalDeviceUnits),
+       theVerticalDeviceUnits(verticalDeviceUnits),
        theAffineTransform(2,2)
       {
          theAffineTransform << 1.0 << 0.0

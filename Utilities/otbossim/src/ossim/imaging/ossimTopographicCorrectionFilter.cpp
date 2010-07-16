@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimTopographicCorrectionFilter.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
+// $Id: ossimTopographicCorrectionFilter.cpp 17206 2010-04-25 23:20:40Z dburken $
 #include <algorithm>
 #include <sstream>
 #include <ossim/imaging/ossimTopographicCorrectionFilter.h>
@@ -330,7 +330,7 @@ void ossimTopographicCorrectionFilter::executeTopographicCorrection(
 
 template <class T>
 void ossimTopographicCorrectionFilter::executeTopographicCorrectionTemplate(
-   T dummy,
+   T /* dummy */,
    ossimRefPtr<ossimImageData>& outputData,
    ossimRefPtr<ossimImageData>& colorData,
    ossimRefPtr<ossimImageData>& normalData)
@@ -441,7 +441,7 @@ void ossimTopographicCorrectionFilter::executeTopographicCorrectionTemplate(
 
 template <class T>
 void ossimTopographicCorrectionFilter::executeTopographicCorrectionMinnaertTemplate(
-   T dummy,
+   T /* dummy */,
    ossimRefPtr<ossimImageData>& outputData,
    ossimRefPtr<ossimImageData>& colorData,
    ossimRefPtr<ossimImageData>& normalData)
@@ -1191,22 +1191,22 @@ bool ossimTopographicCorrectionFilter::canConnectMyInputTo(ossim_int32 inputInde
 
 }
 
-void ossimTopographicCorrectionFilter::connectInputEvent(ossimConnectionEvent& event)
+void ossimTopographicCorrectionFilter::connectInputEvent(ossimConnectionEvent& /* event */)
 {
    initialize();
 }
 
-void ossimTopographicCorrectionFilter::disconnectInputEvent(ossimConnectionEvent& event)
+void ossimTopographicCorrectionFilter::disconnectInputEvent(ossimConnectionEvent& /* event */)
 {
    initialize();
 }
 
-void ossimTopographicCorrectionFilter::propertyEvent(ossimPropertyEvent& event)
+void ossimTopographicCorrectionFilter::propertyEvent(ossimPropertyEvent& /* event */)
 {
    initialize();
 }
 
-void ossimTopographicCorrectionFilter::refreshEvent(ossimRefreshEvent& event)
+void ossimTopographicCorrectionFilter::refreshEvent(ossimRefreshEvent& /* event */)
 {
    initialize();
 }

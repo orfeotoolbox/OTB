@@ -7,16 +7,18 @@
 // Description: Class definition for sequencer for building overview files.
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimOverviewSequencer.h 16081 2009-12-10 20:56:36Z eshirschorn $
+// $Id: ossimOverviewSequencer.h 17194 2010-04-23 15:05:19Z dburken $
 #ifndef ossimOverviewSequencer_HEADER
 #define ossimOverviewSequencer_HEADER
 
 #include <ossim/base/ossimReferenced.h>
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimIpt.h>
+#include <ossim/base/ossimMultiBandHistogram.h>
 #include <ossim/imaging/ossimImageHandler.h>
 #include <ossim/imaging/ossimFilterResampler.h>
 
+class ossimFilename;
 class ossimImageHandler;
 
 /**
@@ -25,10 +27,9 @@ class ossimImageHandler;
 class OSSIM_DLL ossimOverviewSequencer : public ossimReferenced
 {
 public:
-   
+
    /** default constructor */
    ossimOverviewSequencer();
-   
    
    /**
     * @return The number of tiles within the area of interest.
@@ -65,6 +66,29 @@ public:
     * @param level The level to decimate.
     */
    void setSourceLevel(ossim_uint32 level);
+
+   /**
+    * @brief Gets the histogram accumulation mode.
+    * @return mode UNKNOWN, NORMAL or FAST.
+    */
+   ossimHistogramMode getHistogramMode() const;
+
+   /**
+    * @brief Sets the histogram accumulation mode.
+    * @param mode NONE, NORMAL or FAST.
+    */
+   void setHistogramMode(ossimHistogramMode mode);
+
+   /**
+    * @brief Write histogram method.
+    */
+   void writeHistogram();
+
+   /**
+    * @brief Write histogram method that takes a file name.
+    * @param file File to write to.
+    */
+   void writeHistogram(const ossimFilename& file);
 
    /**
     * This must be called.  We can only initialize this
@@ -134,6 +158,7 @@ public:
       ossimFilterResampler::ossimFilterResamplerType resampleType);
 
 protected:
+
    /** virtual destructor */
    virtual ~ossimOverviewSequencer();
 
@@ -143,7 +168,6 @@ protected:
     * @param inputRect The rectangle to initialize.
     */
    void getInputTileRectangle(ossimIrect& inputRect) const;
-
    
    /**
     * @brief Gets the image rectangle for the output tile for
@@ -151,6 +175,7 @@ protected:
     * @param outputRect The rectangle to initialize.
     */
    void getOutputTileRectangle(ossimIrect& outputRect) const;
+
    /**
     * @brief Updates theNumberOfTilesHorizontal and theNumberOfTilesVertical.
     *
@@ -163,30 +188,38 @@ protected:
     */
    void resampleTile(const ossimImageData* inputTile);
 
-   template <class T> void  resampleTile(const ossimImageData* inputTile,
-                                         T dummy);
+   template <class T> void  resampleTile(const ossimImageData* inputTile, T dummy);
 
-
-   ossimImageHandler*          theImageHandler;
-   ossimRefPtr<ossimImageData> theTile;
-   ossimIrect                  theAreaOfInterest;
-   ossimIpt                    theTileSize;
-   ossim_uint32                theNumberOfTilesHorizontal;
-   ossim_uint32                theNumberOfTilesVertical;
-   ossim_uint32                theCurrentTileNumber;
+   ossimImageHandler*          m_imageHandler;
+   ossimRefPtr<ossimImageData> m_tile;
+   ossimIrect                  m_areaOfInterest;
+   ossimIpt                    m_tileSize;
+   ossim_uint32                m_numberOfTilesHorizontal;
+   ossim_uint32                m_numberOfTilesVertical;
+   ossim_uint32                m_currentTileNumber;
 
    /** This is the resolution level to build overviews from. */
-   ossim_uint32                theSourceResLevel;
+   ossim_uint32                m_sourceResLevel;
 
    /** Dirty flag - if true, this object is not initialized. */
-   bool                        theDirtyFlag;
+   bool                        m_dirtyFlag;
 
    /** TODO make this handle any decimation.  Right now hard coded to two. */
-   ossim_int32                 theDecimationFactor;
+   ossim_int32                 m_decimationFactor;
 
    /** Currently only handles NEAREST_NEIGHBOR and BOX (default = BOX) */
-   ossimFilterResampler::ossimFilterResamplerType theResampleType;
-   
+   ossimFilterResampler::ossimFilterResamplerType m_resampleType;
+
+   ossimRefPtr<ossimMultiBandHistogram> m_histogram;
+
+   ossimHistogramMode m_histoMode;
+
+   /**
+    * Used to determine which tiles to accumulate a histogram from.  If set to 1 every tile is
+    * accumulated, 2 every other tile, 3 every 3rd tile, and so on.  Set in initialize method
+    * based on mode and image size.
+    */
+   ossim_uint32 m_histoTileIndex;
 };
 
 #endif /* #ifndef ossimOverviewSequencer_HEADER */

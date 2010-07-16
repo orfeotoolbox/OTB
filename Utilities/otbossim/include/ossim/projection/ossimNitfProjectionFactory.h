@@ -9,7 +9,7 @@
 //
 // Contains class declaration for ossimNitfProjectionFactory.
 //
-// $Id: ossimNitfProjectionFactory.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimNitfProjectionFactory.h 16937 2010-03-28 21:49:31Z dburken $
 //----------------------------------------------------------------------------
 #ifndef ossimNitfProjectionFactory_HEADER
 #define ossimNitfProjectionFactory_HEADER
@@ -95,15 +95,10 @@ public:
    virtual void getTypeNameList(std::vector<ossimString>& typeList)const;
 
 private:
-   /**
-    * This will look for the most accurate sensor model for the NITF.  If non found then we will
-    * use the createProjectionFromHeaders call to create a simple bilinear styl mapping using the 
-    * coordinates of the igeolo.
-    */
-   ossimProjection* createModel(ossimNitfTileSource* nitf)const;
    
-   ossimProjection* createProjectionFromHeaders(ossimNitfFileHeader* fileHeader,
-                                                ossimNitfImageHeader* imageHeader)const;
+   ossimProjection* createProjectionFromHeaders(
+      ossimNitfFileHeader* fileHeader,
+      ossimNitfImageHeader* imageHeader)const;
    
    
    /**

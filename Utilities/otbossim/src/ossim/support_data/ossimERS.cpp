@@ -10,8 +10,9 @@
 // file format header.
 //
 //********************************************************************
-// $Id: ossimERS.cpp 13216 2008-07-23 18:56:53Z dburken $
+// $Id: ossimERS.cpp 17501 2010-06-02 11:14:55Z dburken $
 
+#include <cstdio>
 #include <fstream>
 #include <iostream>
 #include <iomanip>

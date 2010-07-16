@@ -1,39 +1,30 @@
 #ifndef ossimRpfFrameFileReader_HEADER
 #define ossimRpfFrameFileReader_HEADER
-#include <iostream>
-#include <fstream>
-using namespace std;
 
-#include <ossim/base/ossimConstants.h>
-#include <ossim/base/ossimErrorContext.h>
+#include <iosfwd>
 
+#include <ossim/base/ossimErrorCodes.h>
 #include <ossim/base/ossimFilename.h>
-
-class ossimRpfHeader;
-class ossimRpfImageDescriptionSubheader;
-class ossimRpfMaskSubsection;
-class ossimRpfCompressionSectionSubheader;
-class ossimRpfAttributeSectionSubheader;
+#include <ossim/base/ossimRefPtr.h>
+#include <ossim/support_data/ossimRpfHeader.h>
 
 class ossimRpfFrameFileReader
 {
 public:
-   friend ostream& operator<<(ostream& out,
-                              const ossimRpfFrameFileReader& data);
+   friend std::ostream& operator<<(std::ostream& out, const ossimRpfFrameFileReader& data);
    
    ossimRpfFrameFileReader();
-   virtual ~ossimRpfFrameFileReader();
+   ~ossimRpfFrameFileReader();
    
    ossimErrorCode parseFile(const ossimFilename& fileName);
-   void print(ostream& out)const;
-   const ossimRpfHeader* getRpfHeader()const{return theRpfHeader;}
+   std::ostream& print(std::ostream& out) const;
+   const ossimRpfHeader* getRpfHeader()const;
    
 private:
    void clearAll();
    
-   ossimRpfHeader* theRpfHeader;
-      
-   ossimFilename   theFilename;
+   ossimRefPtr<ossimRpfHeader> theRpfHeader;
+   ossimFilename               theFilename;
 };
 
 #endif

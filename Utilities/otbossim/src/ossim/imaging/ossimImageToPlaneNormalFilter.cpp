@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageToPlaneNormalFilter.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimImageToPlaneNormalFilter.cpp 17483 2010-05-27 18:13:28Z gpotts $
 #include <ossim/imaging/ossimImageToPlaneNormalFilter.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
@@ -179,7 +179,7 @@ void ossimImageToPlaneNormalFilter::computeNormals(
 }
 
 template <class T> void ossimImageToPlaneNormalFilter::computeNormalsTemplate(
-   T inputScalarTypeDummy,
+   T /* inputScalarTypeDummy */,
    ossimRefPtr<ossimImageData>& inputTile,
    ossimRefPtr<ossimImageData>& outputTile)
 {
@@ -459,19 +459,19 @@ ossimRefPtr<ossimProperty> ossimImageToPlaneNormalFilter::getProperty(const ossi
 {
    if(name == "smoothnessFactor")
    {
-      ossimNumericProperty* prop = new ossimNumericProperty(name, theSmoothnessFactor, .0001, 40);
+      ossimNumericProperty* prop = new ossimNumericProperty(name, ossimString::toString(theSmoothnessFactor), .0001, 40);
       prop->setCacheRefreshBit();
       return prop;
    }
    else if(name == "xscale")
    {
-      ossimNumericProperty* prop = new ossimNumericProperty(name, theXScale, .0001, 50000);
+      ossimNumericProperty* prop = new ossimNumericProperty(name, ossimString::toString(theXScale), .0001, 50000);
       prop->setCacheRefreshBit();
       return prop;
    }
    else if(name == "yscale")
    {
-      ossimNumericProperty* prop = new ossimNumericProperty(name, theYScale, .0001, 50000);
+      ossimNumericProperty* prop = new ossimNumericProperty(name, ossimString::toString(theYScale), .0001, 50000);
       prop->setCacheRefreshBit();
       return prop;
    }

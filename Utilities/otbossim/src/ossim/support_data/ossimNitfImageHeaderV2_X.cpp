@@ -2,17 +2,17 @@
 
 #include <cmath> /* for fmod */
 #include <iomanip>
+#include <sstream>
 
 #include <ossim/base/ossimNotifyContext.h>
 #include <ossim/base/ossimDms.h>
-#include <ossim/base/ossimDrect.h>
+#include <ossim/base/ossimIpt.h>
+#include <ossim/base/ossimIrect.h>
 #include <ossim/base/ossimStringProperty.h>
 #include <ossim/base/ossimNotify.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/support_data/ossimNitfImageHeader.h>
 #include <ossim/support_data/ossimNitfCommon.h>
-
-#include <sstream>
 
 static const ossimTrace traceDebug(
    ossimString("ossimNitfImageHeaderV2_X:debug"));
@@ -53,6 +53,56 @@ RTTI_DEF1(ossimNitfImageHeaderV2_X,
 
 ossimNitfImageHeaderV2_X::ossimNitfImageHeaderV2_X()
 {
+}
+
+ossimIrect ossimNitfImageHeaderV2_X::getImageRect()const
+{
+   ossimIpt ul(0, 0);
+   ossimIpt lr(getNumberOfCols()-1, getNumberOfRows()-1);
+   return ossimIrect(ul, lr);
+   
+#if 0 
+   //---
+   // Changed to not include offset 20100619 (drb).
+   // Use void getImageLocation(ossimIpt& loc)const to get offset.
+   //---
+   ossimDpt ul(ossimString((char*)(&theImageLocation[5])).toDouble(),
+               ossimString((char*)theImageLocation,
+                           (char*)(&theImageLocation[5])).toDouble());
+   
+    double rows = ossimString(theSignificantRows).toDouble();
+    double cols = ossimString(theSignificantCols).toDouble();
+
+    ossimDpt lr(ul.x + cols-1,
+                ul.y + rows-1);
+     return ossimDrect(ul, lr);
+#endif
+}
+
+ossimIrect ossimNitfImageHeaderV2_X::getBlockImageRect()const
+{
+   ossimIpt ul(0, 0);
+   ossimIpt lr( (getNumberOfPixelsPerBlockHoriz()*getNumberOfBlocksPerRow())-1,
+                (getNumberOfPixelsPerBlockVert() *getNumberOfBlocksPerCol())-1);
+               
+   return ossimIrect(ul, lr);
+   
+#if 0
+   //---
+   // Changed to not include offset 20100619 (drb).
+   // Use void getImageLocation(ossimIpt& loc)const to get offset.
+   //---   
+   ossimDpt ul(ossimString((char*)(&theImageLocation[5])).toDouble(),
+               ossimString((char*)theImageLocation,
+                           (char*)(&theImageLocation[5])).toDouble());
+   
+   double rows = getNumberOfPixelsPerBlockVert()*getNumberOfBlocksPerCol();
+   double cols = getNumberOfPixelsPerBlockHoriz()*getNumberOfBlocksPerRow();;
+   
+   ossimDpt lr(ul.x + cols-1,
+               ul.y + rows-1);
+   return ossimDrect(ul, lr);
+#endif
 }
 
 void ossimNitfImageHeaderV2_X::setImageId(const ossimString& value)
@@ -670,6 +720,13 @@ void ossimNitfImageHeaderV2_X::getPropertyNames(std::vector<ossimString>& proper
 ossimString ossimNitfImageHeaderV2_X::getImageMagnification()const
 {
    return ossimString(theImageMagnification).trim();
+}
+
+void ossimNitfImageHeaderV2_X::getImageLocation(ossimIpt& loc)const
+{
+   loc.x = ossimString((char*)(&theImageLocation[5])).toInt32();
+   loc.y = ossimString((char*)theImageLocation,
+                       (char*)(&theImageLocation[5])).toInt32();
 }
 
 void ossimNitfImageHeaderV2_X::setGeographicLocationDms(const ossimDpt& ul,

@@ -9,7 +9,7 @@
 //
 // This holds the class definition of DatumFactory.
 //*******************************************************************
-//  $Id: ossimDatumFactory.cpp 16424 2010-01-27 19:47:10Z gpotts $
+//  $Id: ossimDatumFactory.cpp 17195 2010-04-23 17:32:18Z dburken $
 
 #include <cstring> /* for strlen */
 #include <utility> /* for std::make_pair */
@@ -57,7 +57,7 @@ ossimDatumFactory* ossimDatumFactory::instance()
 } 
 
 
-void ossimDatumFactory::writeCStructure(const ossimFilename& file)
+void ossimDatumFactory::writeCStructure(const ossimFilename& /* file */)
 {
 #if 0
    std::ofstream out(file.c_str());

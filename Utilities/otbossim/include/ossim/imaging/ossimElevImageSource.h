@@ -11,7 +11,7 @@
 // manager.
 //
 //********************************************************************
-// $Id: ossimElevImageSource.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimElevImageSource.h 17108 2010-04-15 21:08:06Z dburken $
 
 #ifndef ossimElevImageSource_HEADER
 #define ossimElevImageSource_HEADER
@@ -91,11 +91,11 @@ public:
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix=0);
 
-   bool canConnectMyInputTo(ossim_int32 inputIndex,
-                            const ossimConnectableObject* object)const
-      {      
-         return false;
-      }
+   bool canConnectMyInputTo(ossim_int32 /* inputIndex */,
+                            const ossimConnectableObject* /* object */ )const
+   {      
+      return false;
+   }
       
    virtual void initialize();
 

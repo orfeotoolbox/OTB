@@ -8,7 +8,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimMeanMedianFilter.cpp 11955 2007-10-31 16:10:22Z gpotts $
+//  $Id: ossimMeanMedianFilter.cpp 17206 2010-04-25 23:20:40Z dburken $
 
 #include <vector>
 #include <algorithm>
@@ -281,7 +281,7 @@ void ossimMeanMedianFilter::applyFilter(ossimRefPtr<ossimImageData>& input)
 }
 
 template <class T>
-void ossimMeanMedianFilter::applyMean(T dummyVariable,
+void ossimMeanMedianFilter::applyMean(T /* dummyVariable */,
                                       ossimRefPtr<ossimImageData>& inputData)
 {
    ossim_uint32 halfWindow = (theWindowSize >> 1);
@@ -406,7 +406,7 @@ void ossimMeanMedianFilter::applyMean(T dummyVariable,
 }
 
 template <class T> void ossimMeanMedianFilter::applyMeanNullCenterOnly(
-   T dummyVariable,
+   T /* dummyVariable */,
    ossimRefPtr<ossimImageData>& inputData)
 {
    ossim_uint32 halfWindow = (theWindowSize >> 1);
@@ -500,7 +500,7 @@ template <class T> void ossimMeanMedianFilter::applyMeanNullCenterOnly(
 }
 
 template <class T>
-void ossimMeanMedianFilter::applyMedian(T dummyVariable,
+void ossimMeanMedianFilter::applyMedian(T /* dummyVariable */,
                                         ossimRefPtr<ossimImageData>& inputData)
 {
    ossim_uint32 halfWindow = (theWindowSize >> 1);
@@ -621,7 +621,7 @@ void ossimMeanMedianFilter::applyMedian(T dummyVariable,
 }
 
 template <class T> void ossimMeanMedianFilter::applyMedianNullCenterOnly (
-   T dummyVariable,
+   T /* dummyVariable */,
    ossimRefPtr<ossimImageData>& inputData)
 {
    ossim_uint32 halfWindow = (theWindowSize >> 1);

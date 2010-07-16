@@ -9,7 +9,7 @@
 // Description: This file contains the Application cache algorithm
 //
 //***********************************
-// $Id: ossimAppFixedTileCache.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimAppFixedTileCache.cpp 17733 2010-07-13 17:54:00Z gpotts $
 #include <algorithm>
 #include <sstream>
 #include <ossim/imaging/ossimAppFixedTileCache.h>
@@ -174,7 +174,7 @@ void ossimAppFixedTileCache::deleteCache(ossimAppFixedCacheId cacheId)
 ossimAppFixedTileCache::ossimAppFixedCacheId ossimAppFixedTileCache::newTileCache(const ossimIrect& tileBoundaryRect,
                                                                                   const ossimIpt& tileSize)
 {
-   ossimAppFixedCacheId result = theUniqueAppIdCounter;
+   ossimAppFixedCacheId result = -1; 
    ossimFixedTileCache* newCache = new ossimFixedTileCache;
    if(tileSize.x == 0 ||
       tileSize.y == 0)
@@ -189,6 +189,7 @@ ossimAppFixedTileCache::ossimAppFixedCacheId ossimAppFixedTileCache::newTileCach
    }
    {
       OpenThreads::ScopedWriteLock lock(theMutex);
+      result = theUniqueAppIdCounter;
       theAppCacheMap.insert(std::make_pair(result, newCache));
       ++theUniqueAppIdCounter;
    }
@@ -198,11 +199,12 @@ ossimAppFixedTileCache::ossimAppFixedCacheId ossimAppFixedTileCache::newTileCach
 
 ossimAppFixedTileCache::ossimAppFixedCacheId ossimAppFixedTileCache::newTileCache()
 {
-   ossimAppFixedCacheId result = theUniqueAppIdCounter;
+   ossimAppFixedCacheId result = -1;
    ossimFixedTileCache* newCache = new ossimFixedTileCache;
    
    {
       OpenThreads::ScopedWriteLock lock(theMutex);
+      result = theUniqueAppIdCounter;
       theAppCacheMap.insert(std::make_pair(result, newCache));
       ++theUniqueAppIdCounter;
    }

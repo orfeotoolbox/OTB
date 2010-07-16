@@ -8,7 +8,7 @@
 // Description: This class defines a DEM point.
 //
 //********************************************************************
-// $Id: ossimDemPoint.h 9967 2006-11-29 02:01:23Z gpotts $
+// $Id: ossimDemPoint.h 17195 2010-04-23 17:32:18Z dburken $
 
 #ifndef ossimDemPoint_HEADER
 #define ossimDemPoint_HEADER
@@ -30,8 +30,8 @@ public:
    void setX(double x);
    void setY(double y);
    void setXY(double x, double y);
-   bool operator<(ossimDemPoint const& rhs) const {return false;}
-   bool operator==(ossimDemPoint const& rhs) const {return false;}
+   bool operator<(ossimDemPoint const& /* rhs */) const {return false;}
+   bool operator==(ossimDemPoint const& /* rhs */) const {return false;}
 
 private:
 

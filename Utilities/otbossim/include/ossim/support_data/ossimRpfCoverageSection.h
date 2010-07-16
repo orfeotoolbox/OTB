@@ -9,7 +9,7 @@
 // Description: Rpf support class
 // 
 //********************************************************************
-// $Id: ossimRpfCoverageSection.h 14241 2009-04-07 19:59:23Z dburken $
+// $Id: ossimRpfCoverageSection.h 16997 2010-04-12 18:53:48Z dburken $
 #ifndef ossimRpfCoverageSection_HEADER
 #define ossimRpfCoverageSection_HEADER
 
@@ -17,7 +17,7 @@
 
 #include <ossim/base/ossimConstants.h>
 #include <ossim/support_data/ossimRpfConstants.h>
-#include <ossim/base/ossimErrorContext.h>
+#include <ossim/base/ossimErrorCodes.h>
 
 class ossimRpfCoverageSection
 {
@@ -26,9 +26,20 @@ public:
                                     const ossimRpfCoverageSection &data);
    
    ossimRpfCoverageSection();
-   virtual ~ossimRpfCoverageSection(){}
+   ossimRpfCoverageSection(const ossimRpfCoverageSection& obj);
+   const ossimRpfCoverageSection& operator=(const ossimRpfCoverageSection& rhs);
+   
+   ~ossimRpfCoverageSection(){}
 
    ossimErrorCode parseStream(std::istream &in, ossimByteOrder byteOrder);
+
+   /**
+    * @brief Write method.
+    *
+    * @param out Stream to write to.
+    */
+   void writeStream(std::ostream& out);
+
 
    /**
     * @brief print method that outputs a key/value type format adding prefix
@@ -60,58 +71,92 @@ public:
       return ((theVerticalInterval   == OSSIM_RPF_ULONG_NULL)&&
               (theHorizontalInterval == OSSIM_RPF_ULONG_NULL));
    }
-   double getUlLat()const{return theUpperLeftLat;}
-   double getUlLon()const{return theUpperLeftLon;}
-   double getLlLat()const{return theLowerLeftLat;}
-   double getLlLon()const{return theLowerLeftLon;}
-   double getLrLat()const{return theLowerRightLat;}
-   double getLrLon()const{return theLowerRightLon;}
-   double getUrLat()const{return theUpperRightLat;}
-   double getUrLon()const{return theUpperRightLon;}
 
-   double getVerticalResolution()const{return theVerticalResolution;}
-   double getHorizontalResolution()const{return theHorizontalResolution;}
+   ossim_float64 getUlLat()const{return theUpperLeftLat;}
+   ossim_float64 getUlLon()const{return theUpperLeftLon;}
+   ossim_float64 getLlLat()const{return theLowerLeftLat;}
+   ossim_float64 getLlLon()const{return theLowerLeftLon;}
+   ossim_float64 getLrLat()const{return theLowerRightLat;}
+   ossim_float64 getLrLon()const{return theLowerRightLon;}
+   ossim_float64 getUrLat()const{return theUpperRightLat;}
+   ossim_float64 getUrLon()const{return theUpperRightLon;}
+
+   ossim_float64 getVerticalResolution()const{return theVerticalResolution;}
+   ossim_float64 getHorizontalResolution()const{return theHorizontalResolution;}
 
    /*!
     * This indicates the lat increment per pixel in degrees.
     */
-   double getVerticalInterval()const{return theVerticalInterval;}
+   ossim_float64 getVerticalInterval()const{return theVerticalInterval;}
 
    /*!
     * This indicates the lon increment per pixel in degrees.
     */
-   double getHorizontalInterval()const{return theHorizontalInterval;}
+   ossim_float64 getHorizontalInterval()const{return theHorizontalInterval;}
+
+   /** @brief Sets theUpperLeftLat to value. */
+   void setUlLat(ossim_float64 value);
+
+   /** @brief Sets theUpperLeftLon to value. */
+   void setUlLon(ossim_float64 value);
+
+   /** @brief Sets theLowerLeftLat to value. */
+   void setLlLat(ossim_float64 value);
+
+   /** @brief Sets theLowerLeftLon to value. */
+   void setLlLon(ossim_float64 value);
+   
+   /** @brief Sets theLowerRightLat to value. */
+   void setLrLat(ossim_float64 value);
+   
+   /** @brief Sets theLowerRightLon to value. */
+   void setLrLon(ossim_float64 value);
+
+   /** @brief Sets theUpperRightLat to value. */
+   void setUrLat(ossim_float64 value);
+
+   /** @brief Sets theUpperRightLon to value. */
+   void setUrLon(ossim_float64 value);
+
+   /** @brief Sets theVerticalResolution to value. */
+   void setVerticalResolution(ossim_float64 value);
+
+   /** @brief Sets theHorizontalResolution to value. */
+   void setHorizontalResolution(ossim_float64 value);
+   
+   /** @brief Sets theVerticalInterval to value. */
+   void setVerticalInterval(ossim_float64 value);
+   
+   /** @brief Sets theHorizontalInterval to value. */
+   void setHorizontalInterval(ossim_float64 value);
    
 private:   
    /*!
-    * 8 byte double and is the upper left lat or
+    * 8 byte ossim_float64 and is the upper left lat or
     * North West portion of the image.
     */
-   double theUpperLeftLat;
+   ossim_float64 theUpperLeftLat;
 
    /*!
-    * 8 byte double and is the upper left lon
+    * 8 byte ossim_float64 and is the upper left lon
     * (North west)
     */
-   double theUpperLeftLon;
+   ossim_float64 theUpperLeftLon;
 
-   double theLowerLeftLat;
-   double theLowerLeftLon;
+   ossim_float64 theLowerLeftLat;
+   ossim_float64 theLowerLeftLon;
 
-   double theUpperRightLat;
-   double theUpperRightLon;
+   ossim_float64 theUpperRightLat;
+   ossim_float64 theUpperRightLon;
 
-   double theLowerRightLat;
-   double theLowerRightLon;
+   ossim_float64 theLowerRightLat;
+   ossim_float64 theLowerRightLon;
 
-   double theVerticalResolution;
+   ossim_float64 theVerticalResolution;
+   ossim_float64 theHorizontalResolution;
 
-   double theHorizontalResolution;
-
-   double theVerticalInterval;
-
-   double theHorizontalInterval;
-   
+   ossim_float64 theVerticalInterval;
+   ossim_float64 theHorizontalInterval;
 };
 
 #endif

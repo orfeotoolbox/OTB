@@ -8,7 +8,7 @@
 // Author:  Kenneth Melero (kmelero@sanz.com)
 //
 //*******************************************************************
-//  $Id: ossimMetadataFileWriter.cpp 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimMetadataFileWriter.cpp 17195 2010-04-23 17:32:18Z dburken $
 
 #include <ossim/imaging/ossimMetadataFileWriter.h>
 #include <ossim/base/ossimTrace.h>
@@ -93,17 +93,17 @@ bool ossimMetadataFileWriter::loadState(const ossimKeywordlist& kwl,
    return result;
 }
 
-void ossimMetadataFileWriter::disconnectInputEvent(ossimConnectionEvent& event)
+void ossimMetadataFileWriter::disconnectInputEvent(ossimConnectionEvent& /* event */)
 {
    initialize();
 }
 
-void ossimMetadataFileWriter::connectInputEvent(ossimConnectionEvent& event)
+void ossimMetadataFileWriter::connectInputEvent(ossimConnectionEvent& /* event */)
 {
    initialize();
 }
 
-void ossimMetadataFileWriter::propertyEvent(ossimPropertyEvent& event)
+void ossimMetadataFileWriter::propertyEvent(ossimPropertyEvent& /* event */)
 {
    initialize();
 }

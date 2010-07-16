@@ -8,7 +8,7 @@
 // Description: This class provides capabilities for keywordlists.
 //
 //********************************************************************
-// $Id: ossimKeywordlist.h 16542 2010-02-05 13:26:37Z gpotts $
+// $Id: ossimKeywordlist.h 17195 2010-04-23 17:32:18Z dburken $
 
 #ifndef ossimKeywordlist_HEADER
 #define ossimKeywordlist_HEADER
@@ -309,8 +309,11 @@ public:
 
    void addList( const ossimKeywordlist &src, bool overwrite = true );
 
+   /** deprecated method */
    virtual bool parseStream(std::istream& is,
-                            bool ignoreBinaryChars = false);
+                            bool ignoreBinaryChars);
+   
+   virtual bool parseStream(std::istream& is);
 
    /*!
     *  Will return a list of keys that contain the string passed in.

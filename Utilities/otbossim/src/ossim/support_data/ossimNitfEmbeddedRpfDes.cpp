@@ -9,12 +9,11 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfEmbeddedRpfDes.cpp 14241 2009-04-07 19:59:23Z dburken $
+// $Id: ossimNitfEmbeddedRpfDes.cpp 17206 2010-04-25 23:20:40Z dburken $
 
 #include <istream>
 #include <ostream>
 #include <ossim/support_data/ossimNitfEmbeddedRpfDes.h>
-#include <ossim/support_data/ossimNitfEmbeddedRpfHeader.h>
 
 
 RTTI_DEF1(ossimNitfEmbeddedRpfDes, "ossimNitfEmbeddedRpfDes", ossimNitfRegisteredTag)
@@ -32,8 +31,7 @@ void ossimNitfEmbeddedRpfDes::parseStream(std::istream& /* in */ )
 {
 }
 
-std::ostream& ossimNitfEmbeddedRpfDes::print(std::ostream& out,
-                                             const std::string& prefix)const
+std::ostream& ossimNitfEmbeddedRpfDes::print(std::ostream& out, const std::string& /* prefix */)const
 {
    return out;
 }

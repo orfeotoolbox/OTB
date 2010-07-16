@@ -23,8 +23,8 @@ public:
    /*!
     *  Swap bytes methods that work on a single pixel.
     */
-   void swap(ossim_sint8    &data){}
-   void swap(ossim_uint8    &data){}
+   void swap(ossim_sint8    &/*data*/){}
+   void swap(ossim_uint8    &/*data*/){}
    void swap(ossim_int16   &data) const;
    void swap(ossim_uint16  &data) const;
    void swap(ossim_int32   &data) const;

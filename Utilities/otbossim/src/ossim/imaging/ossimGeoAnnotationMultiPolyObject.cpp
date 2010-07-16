@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimGeoAnnotationMultiPolyObject.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimGeoAnnotationMultiPolyObject.cpp 17195 2010-04-23 17:32:18Z dburken $
 
 #include <ossim/imaging/ossimGeoAnnotationMultiPolyObject.h>
 #include <ossim/imaging/ossimAnnotationMultiPolyObject.h>
@@ -65,8 +65,8 @@ ossimGeoAnnotationMultiPolyObject::~ossimGeoAnnotationMultiPolyObject()
    theProjectedPolyObject = 0;
 }
 
-void ossimGeoAnnotationMultiPolyObject::applyScale(double x,
-                                              double y)
+void ossimGeoAnnotationMultiPolyObject::applyScale(double /* x */,
+                                                   double /* y */)
 {
    ossimNotify(ossimNotifyLevel_NOTICE)
       << "ossimGeoAnnotationPolyObject::applyScale NOT IMPLEMENTED!!!!"
@@ -127,7 +127,7 @@ std::ostream& ossimGeoAnnotationMultiPolyObject::print(std::ostream& out)const
    return out;
 }
 
-bool ossimGeoAnnotationMultiPolyObject::intersects(const ossimDrect& rect)const
+bool ossimGeoAnnotationMultiPolyObject::intersects(const ossimDrect& /* rect */)const
 {
    ossimNotify(ossimNotifyLevel_NOTICE)
       << "ossimGeoAnnotationMultiPolyObject::intersects NOT IMPLEMENTED"
@@ -135,7 +135,8 @@ bool ossimGeoAnnotationMultiPolyObject::intersects(const ossimDrect& rect)const
   return false;
 }
 
-ossimAnnotationObject* ossimGeoAnnotationMultiPolyObject::getNewClippedObject(const ossimDrect& rect)const
+ossimAnnotationObject* ossimGeoAnnotationMultiPolyObject::getNewClippedObject(
+   const ossimDrect& /* rect */)const
 {
    ossimNotify(ossimNotifyLevel_NOTICE)
       << "ossimGeoAnnotationMultiPolyObject::getNewClippedObject "

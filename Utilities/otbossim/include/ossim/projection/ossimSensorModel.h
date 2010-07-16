@@ -25,7 +25,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimSensorModel.h 16308 2010-01-09 02:45:54Z eshirschorn $
+//  $Id: ossimSensorModel.h 17008 2010-04-13 00:59:13Z gpotts $
 
 #ifndef ossimSensorModel_HEADER
 #define ossimSensorModel_HEADER
@@ -149,7 +149,7 @@ public:
     * Returns the maximum line/sample rigorously defined by this model.
     */
    ossimDpt imageSize() const { return theImageSize; }
-
+   void setImageSize(const ossimDpt& size){theImageSize = size;}
    /*!
     * This is from the adjustable parameter interface.  It is
     * called when a paraemter adjustment is made.

@@ -8,7 +8,7 @@
 // overview files.
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimMpiMasterOverviewSequencer.cpp 12099 2007-12-01 16:09:36Z dburken $
+// $Id: ossimMpiMasterOverviewSequencer.cpp 17208 2010-04-26 14:03:48Z dburken $
 
 #include <ossim/parallel/ossimMpiMasterOverviewSequencer.h>
 #include <ossim/ossimConfig.h> /* To pick up OSSIM_HAS_MPI. */
@@ -21,12 +21,12 @@
 ossimMpiMasterOverviewSequencer::ossimMpiMasterOverviewSequencer()
    :
    ossimOverviewSequencer(),
-   theRank(0),
-   theNumberOfProcessors(1)
+   m_rank(0),
+   m_numberOfProcessors(1)
 {
 #if OSSIM_HAS_MPI   
-   MPI_Comm_rank(MPI_COMM_WORLD, &theRank);
-   MPI_Comm_size(MPI_COMM_WORLD, &theNumberOfProcessors);
+   MPI_Comm_rank(MPI_COMM_WORLD, &m_rank);
+   MPI_Comm_size(MPI_COMM_WORLD, &m_numberOfProcessors);
 #endif
 
    //---
@@ -34,7 +34,7 @@ ossimMpiMasterOverviewSequencer::ossimMpiMasterOverviewSequencer()
    // we have a coding error.  Since we have the getNextTile implemented to
    // recieve from the slave processes we always start the tile count at 0.
    //---
-   theCurrentTileNumber = 0;
+   m_currentTileNumber = 0;
 }
 
 ossimMpiMasterOverviewSequencer::~ossimMpiMasterOverviewSequencer()
@@ -48,12 +48,12 @@ void ossimMpiMasterOverviewSequencer::initialize()
 
 void ossimMpiMasterOverviewSequencer::setToStartOfSequence()
 {
-   theCurrentTileNumber = 0;
+   m_currentTileNumber = 0;
 }
 
 ossimRefPtr<ossimImageData> ossimMpiMasterOverviewSequencer::getNextTile()
 {
-   if ( theDirtyFlag )
+   if ( m_dirtyFlag )
    {
       //---
       // If this happens we have a coding error.  Someone started sequencing
@@ -71,9 +71,9 @@ ossimRefPtr<ossimImageData> ossimMpiMasterOverviewSequencer::getNextTile()
    // little endian. We will use the endian pointer itself as a flag to swap.
    //---
    ossimEndian* endian = 0;
-   if (theImageHandler)
+   if (m_imageHandler)
    {
-      if (theImageHandler->getOutputScalarType() != OSSIM_UINT8)
+      if (m_imageHandler->getOutputScalarType() != OSSIM_UINT8)
       {
          if (ossim::byteOrder() != OSSIM_BIG_ENDIAN)
          {
@@ -85,20 +85,20 @@ ossimRefPtr<ossimImageData> ossimMpiMasterOverviewSequencer::getNextTile()
    int         errorValue;
 
    // Buffer to receive the data from slaves.
-   void* buf = theTile->getBuf();
+   void* buf = m_tile->getBuf();
 
    // Total number of tiles to process...
    ossim_uint32 numberOfTiles = getNumberOfTiles();
    
-   if(theCurrentTileNumber >= numberOfTiles)
+   if(m_currentTileNumber >= numberOfTiles)
    {
       return ossimRefPtr<ossimImageData>();
    }
    
    errorValue = MPI_Recv(buf,
-                         theTile->getSizeInBytes(),
+                         m_tile->getSizeInBytes(),
                          MPI_UNSIGNED_CHAR,
-                         theCurrentTileNumber%(theNumberOfProcessors-1)+1,
+                         m_currentTileNumber%(m_numberOfProcessors-1)+1,
                          0,
                          MPI_COMM_WORLD,
                          MPI_STATUS_IGNORE);
@@ -106,7 +106,7 @@ ossimRefPtr<ossimImageData> ossimMpiMasterOverviewSequencer::getNextTile()
    // Data always sent in big endian order.
    if ( endian )
    {
-      endian->swap(theTile->getScalarType(), buf, theTile->getSize());
+      endian->swap(m_tile->getScalarType(), buf, m_tile->getSize());
    }
 
    // Get the output rectangle.
@@ -114,13 +114,13 @@ ossimRefPtr<ossimImageData> ossimMpiMasterOverviewSequencer::getNextTile()
    getOutputTileRectangle(outputRect);
 
    // Capture the output rectangle.
-   theTile->setImageRectangle(outputRect);
+   m_tile->setImageRectangle(outputRect);
 
    // Set the tile status.
-   theTile->validate();
+   m_tile->validate();
 
    // Increment the tile index.
-   ++theCurrentTileNumber;
+   ++m_currentTileNumber;
 
    // cleanup...
    if ( endian )
@@ -129,7 +129,7 @@ ossimRefPtr<ossimImageData> ossimMpiMasterOverviewSequencer::getNextTile()
       endian = 0;
    }
 
-   return theTile;
+   return m_tile;
 
 #else
 

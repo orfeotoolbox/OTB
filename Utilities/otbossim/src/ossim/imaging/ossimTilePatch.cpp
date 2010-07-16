@@ -8,7 +8,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimTilePatch.cpp 13312 2008-07-27 01:26:52Z gpotts $
+//  $Id: ossimTilePatch.cpp 17195 2010-04-23 17:32:18Z dburken $
 
 #include <vector>
 using namespace std;
@@ -296,9 +296,9 @@ void ossimTilePatch::fillTile(ossimRefPtr<ossimImageData>& result,
 
 
 template<class T>
-void ossimTilePatch::fillTileTemplate(T dummyVariable,
-                              ossimRefPtr<ossimImageData>& result,
-                              ossimDiscreteConvolutionKernel* kernel)const
+void ossimTilePatch::fillTileTemplate(T /* dummyVariable */,
+                                      ossimRefPtr<ossimImageData>& result,
+                                      ossimDiscreteConvolutionKernel* kernel)const
 {
    // get the origin.  The convolution could be
    // an offset into the patch.
@@ -406,7 +406,7 @@ void ossimTilePatch::fillTileTemplate(T dummyVariable,
 
 
 template <class T>
-void ossimTilePatch::fillTileTemplate(T dummyVariable,
+void ossimTilePatch::fillTileTemplate(T /* dummyVariable */,
                               ossimRefPtr<ossimImageData>& result,
                               const ossimDpt   &ul,
                               const ossimDpt   &ur,
@@ -489,9 +489,9 @@ void ossimTilePatch::setRect(const ossimDpt &center,
    setRect(rect, tile_size, padding);
 }
 
-void ossimTilePatch::setRect(const ossimDrect &aRect,
-                             const ossimDpt &tile_size,
-                             const ossimDpt &padding)
+void ossimTilePatch::setRect(const ossimDrect& aRect,
+                             const ossimDpt& /* tile_size*/,
+                             const ossimDpt& padding)
 {
    ossimDpt   ul(aRect.ul().x - padding.x,
                  aRect.ul().y - padding.y);

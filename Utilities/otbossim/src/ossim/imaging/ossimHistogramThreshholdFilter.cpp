@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimHistogramThreshholdFilter.cpp 11721 2007-09-13 13:19:34Z gpotts $
+// $Id: ossimHistogramThreshholdFilter.cpp 17195 2010-04-23 17:32:18Z dburken $
 #include <ossim/imaging/ossimHistogramThreshholdFilter.h>
 #include <ossim/base/ossimMultiResLevelHistogram.h>
 #include <ossim/base/ossimMultiBandHistogram.h>
@@ -172,8 +172,9 @@ void ossimHistogramThreshholdFilter::initialize()
 }
 
 template <class T>
-ossimRefPtr<ossimImageData> ossimHistogramThreshholdFilter::runThreshholdStretchAlgorithm(T dummyVariable,
-                                                                              ossimRefPtr<ossimImageData>& tile)
+ossimRefPtr<ossimImageData> ossimHistogramThreshholdFilter::runThreshholdStretchAlgorithm(
+   T /* dummyVariable */,
+   ossimRefPtr<ossimImageData>& tile)
 {
    if(!getHistogram())
    {

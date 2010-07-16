@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageHistogramSource.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimImageHistogramSource.h 17194 2010-04-23 15:05:19Z dburken $
 #ifndef ossimImageHistogramSource_HEADER
 #define ossimImageHistogramSource_HEADER
 #include <ossim/base/ossimHistogramSource.h>
@@ -25,11 +25,7 @@ class OSSIMDLLEXPORT ossimImageHistogramSource : public ossimHistogramSource,
                                                  public ossimProcessInterface
 {
 public:
-	enum ComputationMode
-	{
-		NORMAL = 0,
-		FAST
-	};
+
    ossimImageHistogramSource(ossimObject* owner = 0);
    
    virtual ossimObject* getObject();
@@ -66,8 +62,8 @@ public:
 
    void setMaxValueOverride(ossim_float32 maxValueOverride);
 
-	ComputationMode getComputationMode()const;
-	void setComputationMode(ComputationMode mode);
+   ossimHistogramMode getComputationMode()const;
+   void setComputationMode(ossimHistogramMode mode);
 	
    virtual void propertyEvent(ossimPropertyEvent& event);
    
@@ -80,9 +76,10 @@ public:
 	
 protected:
    virtual ~ossimImageHistogramSource();
-	void getBinInformation(ossim_uint32& numberOfBins,
-								  ossim_float64& minValue,
-								  ossim_float64& maxValue)const;
+
+   void getBinInformation(ossim_uint32& numberOfBins,
+                          ossim_float64& minValue,
+                          ossim_float64& maxValue)const;
    virtual void computeNormalModeHistogram();
    virtual void computeFastModeHistogram();
    
@@ -91,18 +88,17 @@ protected:
     */
    ossimIrect theAreaOfInterest;
    bool       theHistogramRecomputeFlag;
-
+   
    /*!
     * Will default to 1.  This means it will use up to max
     * number of res levels for the histogram.
     */
-   ossim_uint32     theMaxNumberOfResLevels;
-
-   ossim_float64    theMinValueOverride;
-   ossim_float64    theMaxValueOverride;
-   ossim_int32      theNumberOfBinsOverride;
-	ComputationMode  theComputationMode;
-	ossim_uint32     theNumberOfTilesToUseInFastMode;
+   ossim_uint32       theMaxNumberOfResLevels; 
+   ossim_float64      theMinValueOverride;
+   ossim_float64      theMaxValueOverride;
+   ossim_int32        theNumberOfBinsOverride;
+   ossimHistogramMode theComputationMode;
+   ossim_uint32       theNumberOfTilesToUseInFastMode;
 TYPE_DATA
 };
 

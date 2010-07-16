@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimSource.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimSource.cpp 17195 2010-04-23 17:32:18Z dburken $
 #include <ossim/base/ossimSource.h>
 #include <ossim/base/ossimDataObject.h>
 #include <ossim/base/ossimIdManager.h>
@@ -151,7 +151,7 @@ void ossimSource::getPropertyNames(std::vector<ossimString>& propertyNames)const
    propertyNames.push_back(ossimKeywordNames::ENABLED_KW);
 }
 
-const ossimSource& ossimSource::operator=(const ossimSource &rhs)
+const ossimSource& ossimSource::operator=(const ossimSource& /* rhs */)
 {
    return *this;
 }

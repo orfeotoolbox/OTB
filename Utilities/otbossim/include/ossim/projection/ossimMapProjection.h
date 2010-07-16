@@ -9,7 +9,7 @@
 // Base class for all map projections.
 // 
 //*******************************************************************
-//  $Id: ossimMapProjection.h 16423 2010-01-27 18:29:07Z dburken $
+//  $Id: ossimMapProjection.h 17019 2010-04-13 14:43:41Z dburken $
 
 #ifndef ossimMapProjection_HEADER
 #define ossimMapProjection_HEADER
@@ -100,6 +100,7 @@ public:
    virtual void update();
 
    virtual void setPcsCode(ossim_uint16 pcsCode);
+   virtual void setGcsCode(ossim_uint16 pcsCode);
    virtual ossim_uint16 getPcsCode()const;
    virtual ossim_uint16 getGcsCode()const;
    

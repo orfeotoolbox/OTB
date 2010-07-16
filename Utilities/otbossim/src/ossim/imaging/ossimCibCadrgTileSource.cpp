@@ -7,9 +7,8 @@
 // Author: Garrett Potts
 //
 //********************************************************************
-// $Id: ossimCibCadrgTileSource.cpp 16308 2010-01-09 02:45:54Z eshirschorn $
+// $Id: ossimCibCadrgTileSource.cpp 17709 2010-07-08 20:21:14Z dburken $
 #include <algorithm>
-using namespace std;
 
 #include <ossim/imaging/ossimCibCadrgTileSource.h>
 
@@ -32,7 +31,6 @@ using namespace std;
 #include <ossim/support_data/ossimRpfTocEntry.h>
 #include <ossim/support_data/ossimRpfCompressionSection.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
-#include <ossim/imaging/ossimVirtualImageHandler.h>
 #include <ossim/projection/ossimEquDistCylProjection.h>
 #include <ossim/projection/ossimCylEquAreaProjection.h>
 #include <ossim/base/ossimEndian.h>
@@ -41,7 +39,7 @@ using namespace std;
 static ossimTrace traceDebug = ossimTrace("ossimCibCadrgTileSource:debug");
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimCibCadrgTileSource.cpp 16308 2010-01-09 02:45:54Z eshirschorn $";
+static const char OSSIM_ID[] = "$Id: ossimCibCadrgTileSource.cpp 17709 2010-07-08 20:21:14Z dburken $";
 #endif
 
 RTTI_DEF1(ossimCibCadrgTileSource, "ossimCibCadrgTileSource", ossimImageHandler)
@@ -74,8 +72,6 @@ ossimCibCadrgTileSource::ossimCibCadrgTileSource()
    }
    theWorkFrame = new ossimRpfFrame;
    
-   theActualImageRect.makeNan();
-
    // a CADRG and CIBis a 64*64*12 bit buffer and must divide by 8 to
    // convert to bytes
    theCompressedBuffer   = new ossim_uint8[(64*64*12)/8];
@@ -129,36 +125,25 @@ bool ossimCibCadrgTileSource::isOpen()const
 
 bool ossimCibCadrgTileSource::open()
 {
-	if(traceDebug())
-	{
-		ossimNotify(ossimNotifyLevel_DEBUG) << "ossimCibCadrgTileSource::open(): Entered....." << std::endl;
-	}
-	
-//   if ( theImageFile.isRelative() )
-//   {
-//      if (traceDebug())
-//      {
-//         ossimNotify(ossimNotifyLevel_DEBUG)
-//            << "ossimCibCadrgTileSource::open DEBUG:"
-//            << "\ntheImageFile:  " << theImageFile
-//            << "\nHas a relative path which will not work with this object!"
-//            << "\nReturning false..."
-//            << endl;
-//      }
-//      return false;
-//   }
-	
-   ossimFilename imageFile = theImageFile;
-   bool result = true;
+   if(traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "ossimCibCadrgTileSource::open(): Entered....."
+         << "\ntheImageFile: " << theImageFile << std::endl;
+   }
+
+   bool result = false;
+   
    if(isOpen())
    {
       close();
    }
+
    theTableOfContents = new ossimRpfToc;
    
    if(theTableOfContents)
    {      
-      if(theTableOfContents->parseFile(imageFile) == ossimErrorCodes::OSSIM_OK)
+      if(theTableOfContents->parseFile(theImageFile) == ossimErrorCodes::OSSIM_OK)
       {
          if(theTableOfContents->getNumberOfEntries() > 0)
          {
@@ -168,85 +153,71 @@ bool ossimCibCadrgTileSource::open()
                vector<ossim_int32>  entryList = getProductEntryList(scaleList[0]);
                if(entryList.size() > 0)
                {
-                  //open(imageFile, entryList[0]);
                   setCurrentEntry(entryList[0]);
                   
                   if(theEntryToRender)
                   {
                      // a CADRG is 1536x1536 per frame.
-                     theNumberOfLines   = theEntryToRender->getNumberOfFramesVertical()*CIBCADRG_FRAME_HEIGHT;
-                     theNumberOfSamples = theEntryToRender->getNumberOfFramesHorizontal()*CIBCADRG_FRAME_WIDTH;
+                     theNumberOfLines   =
+                        theEntryToRender->getNumberOfFramesVertical()*CIBCADRG_FRAME_HEIGHT;
+                     theNumberOfSamples =
+                        theEntryToRender->getNumberOfFramesHorizontal()*CIBCADRG_FRAME_WIDTH;
                   }
-                  else // we didn't find a frame to render
-                  {
-                     result = false;
-                  }
+
                   if(theEntryToRender->getProductType().trim().upcase() == "CADRG")
                   {
                      theProductType = OSSIM_PRODUCT_TYPE_CADRG;
+                     result = true;
                   }
                   else if(theEntryToRender->getProductType().trim().upcase() == "CIB")
                   {
                      theProductType = OSSIM_PRODUCT_TYPE_CIB;
+                     result = true;
                   }
-                  else
+                  if ( result )
                   {
-                     result = false;
+                     // This initializes tiles and buffers.
+                     allocateForProduct();
                   }
-                  allocateForProduct();
-               }
-               else
-               {
-                  result = false;
                }
             }
-            else
-            {
-               result = false;
-            }
-         }
-         else
-         {
-            result = false;
          }
       }
-      else
-      {
-         result = false;
-      }
    }
-   else
-   {
-      result = false;
-   }
+
    if(!result)
    {
+      theImageFile.clear();
       close();
    }
+
+#if 0 /* 20100414 - drb */
    else
    {
       //---
       // Adjust image rect so not to go over the -180 to 180 and -90 to 90
       // bounds.
       //---
-      setActualImageRect();
+      // Note this did not do any boundary checking and was in conflict with setTocEntryToRender
+      // method calculation of lines and samps.
+      // setActualImageRect();
 
-      // Set the base class image file name.
-      theImageFile = imageFile;
-
-		std::ifstream in(theImageFile.c_str(), std::ios::in|std::ios::binary);
-		if(in.good()&&theTableOfContents->getRpfHeader())
-		{
-		}
+      std::ifstream in(theImageFile.c_str(), std::ios::in|std::ios::binary);
+      if(in.good()&&theTableOfContents->getRpfHeader())
+      {
+      }
       completeOpen();
 
       theTile = ossimImageDataFactory::instance()->create(this, this);
       theTile->initialize();
    }
+#endif
 
    if(traceDebug())
    {
-      ossimNotify(ossimNotifyLevel_DEBUG) << "ossimCibCadrgTileSource::open(): Leaving at line" << __LINE__ << std::endl;
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "ossimCibCadrgTileSource::open(): Leaving at line " << __LINE__
+         << " result=" << (result?"true":"false") << std::endl;
    }
 
    return result;
@@ -290,14 +261,7 @@ bool ossimCibCadrgTileSource::getTile(ossimImageData* result,
        result && (result->getNumberOfBands() == getNumberOfOutputBands()) &&
        (theProductType != OSSIM_PRODUCT_TYPE_UNKNOWN) )
    {
-      // See if the overview class is a virtual image handler. If so, do not 
-      // check the overview tile when resLevel is 0: you cannot assume that the 
-      // virtual overview is consistent with the parent image data, which can
-      // be partially updated.
-      ossimVirtualImageHandler* pVirtual = PTR_CAST( ossimVirtualImageHandler,
-                                                     theOverview.get() );
-      if ( resLevel > 0 || 
-          (resLevel == 0 && pVirtual == NULL) )
+      if ( resLevel > 0 )
       {
          //---
          // Check for overview tile.  Some overviews can contain r0 so always
@@ -417,32 +381,6 @@ ossim_uint32 ossimCibCadrgTileSource::getNumberOfSamples(ossim_uint32 reduced_re
    return 0;
 }
 
-void ossimCibCadrgTileSource::setActualImageRect()
-{
-   ossimRpfBoundaryRectRecord boundaryInfo = theEntryToRender->getBoundaryInformation();
-   ossimGpt ul(boundaryInfo.getCoverage().getUlLat(),
-               boundaryInfo.getCoverage().getUlLon());
-//    ossimGpt ll(boundaryInfo.getCoverage().getLlLat(),
-//                boundaryInfo.getCoverage().getLlLon());
-//    ossimGpt ur(boundaryInfo.getCoverage().getUrLat(),
-//                boundaryInfo.getCoverage().getUrLon());
-   ossimGpt lr(boundaryInfo.getCoverage().getLrLat(),
-               boundaryInfo.getCoverage().getLrLon());
-   
-   double latInterval = boundaryInfo.getCoverage().getVerticalInterval();
-   double lonInterval = boundaryInfo.getCoverage().getHorizontalInterval();
-   
-   int lines   = ossim::round<int>(fabs(ul.lat - lr.lat)/latInterval);
-   int samples = ossim::round<int>(fabs(ul.lon - lr.lon)/lonInterval);
-
-
-   theNumberOfLines   = lines;
-   theNumberOfSamples = samples;
-
-   theActualImageRect = ossimIrect(0,0,theNumberOfLines, theNumberOfSamples);
-   
-}
-
 ossimIrect ossimCibCadrgTileSource::getImageRectangle(ossim_uint32 reduced_res_level) const
 {
    return ossimIrect(0,                         // upper left x
@@ -450,8 +388,6 @@ ossimIrect ossimCibCadrgTileSource::getImageRectangle(ossim_uint32 reduced_res_l
                      getNumberOfSamples(reduced_res_level) - 1,  // lower right x
                      getNumberOfLines(reduced_res_level)   - 1); // lower right y                     
 }
-   
-
    
 ossimImageGeometry* ossimCibCadrgTileSource::getImageGeometry()
 {
@@ -461,177 +397,74 @@ ossimImageGeometry* ossimCibCadrgTileSource::getImageGeometry()
    }
 
    if (theGeometry.valid())
+   {
       return theGeometry.get();
-
-   // datum
-   // WGS 84
-   ossimKeywordlist kwl;
-   const char* prefix = 0; // legacy
-   kwl.add(prefix,
-           ossimKeywordNames::DATUM_KW,
-           "WGE",
-           true);   
+   }
 
    ossimRpfBoundaryRectRecord boundaryInfo = theEntryToRender->getBoundaryInformation();
 
    ossimGpt ul(boundaryInfo.getCoverage().getUlLat(),
                boundaryInfo.getCoverage().getUlLon());
-   ossimGpt ll(boundaryInfo.getCoverage().getLlLat(),
-               boundaryInfo.getCoverage().getLlLon());
-   ossimGpt ur(boundaryInfo.getCoverage().getUrLat(),
-               boundaryInfo.getCoverage().getUrLon());
-   ossimGpt lr(boundaryInfo.getCoverage().getLrLat(),
-               boundaryInfo.getCoverage().getLrLon());
 
-   
-//    double latInterval = fabs(ul.latd() - lr.latd())/ getNumberOfLines();
-//    double lonInterval = fabs(ul.lond() - ur.lond())/ getNumberOfSamples();
    double latInterval = boundaryInfo.getCoverage().getVerticalInterval();
    double lonInterval = boundaryInfo.getCoverage().getHorizontalInterval();
 
-     
-   // double latInterval = boundaryInfo.getCoverage().getVerticalInterval();
-   // double lonInterval = boundaryInfo.getCoverage().getHorizontalInterval();
+   // Pixel scale:
+   ossimDpt scale(lonInterval, latInterval);
+   
+   // Tie point - Shifted to point:
+   ossimDpt tie( (ul.lond() + (scale.x/2.0)), (ul.latd() - (scale.y/2.0)) );
 
-   kwl.add(prefix,
-           ossimKeywordNames::UL_LAT_KW,
-           ul.latd(),//-(latInterval/2.0),
-           true);
+   // Origin - Use the center of the image aligning to tie point.
+   // ossimGpt origin((ul.latd()+lr.latd())*.5, (ul.lond()+lr.lond())*.5, 0.0);
+   ossimGpt origin( tie.y - ((theNumberOfLines/2)*scale.y),
+                    tie.x + ((theNumberOfSamples/2)*scale.x) );
    
-   kwl.add(prefix,
-           ossimKeywordNames::UL_LON_KW,
-           ul.lond(),//+(lonInterval/2.0),
-           true);
+   ossimKeywordlist kwl;
+   const char* projectionPrefix = "projection."; 
+   const char* prefix = 0; // legacy
 
-   kwl.add(prefix,
-           ossimKeywordNames::LL_LAT_KW,
-           ll.latd(),//+(latInterval/2.0),
-           true);
+   kwl.add(prefix, ossimKeywordNames::TYPE_KW, "ossimImageGeometry", true);
    
-   kwl.add(prefix,
-           ossimKeywordNames::LL_LON_KW,
-           ll.lond(),//+(lonInterval/2.0),
-           true);
+   // Not affected by elevation (map projected).
+   kwl.add(projectionPrefix, ossimKeywordNames::ELEVATION_LOOKUP_FLAG_KW, "false", true);
+   
+   // Datum WGS 84
+   kwl.add(projectionPrefix, ossimKeywordNames::DATUM_KW, "WGE", true);
 
-   kwl.add(prefix,
-           ossimKeywordNames::LR_LAT_KW,
-           lr.latd(),//+(latInterval/2.0),
-           true);
-   
-   kwl.add(prefix,
-           ossimKeywordNames::LR_LON_KW,
-           lr.lond(),//-(lonInterval/2.0),
-           true);
+   // Origin - Use the center of image:
+   kwl.add(projectionPrefix, ossimKeywordNames::ORIGIN_LATITUDE_KW, origin.latd(), true);
 
-   kwl.add(prefix,
-           ossimKeywordNames::UR_LAT_KW,
-           ur.latd(),//-(latInterval/2.0),
-           true);
+   // Central Meridian - Use the center of the image.
+   kwl.add(projectionPrefix, ossimKeywordNames::CENTRAL_MERIDIAN_KW, origin.lond(), true);
 
-   kwl.add(prefix,
-           ossimKeywordNames::UR_LON_KW,
-           ur.lond(),//-(latInterval/2.0),
-           true);
+   // Pixel scale units:
+   kwl.add(projectionPrefix, ossimKeywordNames::PIXEL_SCALE_UNITS_KW, "degrees", true);
 
-   kwl.add(prefix,
-           ossimKeywordNames::NUMBER_INPUT_BANDS_KW,
-           getNumberOfInputBands(),
-           true);
+   // Pixel scale:
+   kwl.add(projectionPrefix, ossimKeywordNames::PIXEL_SCALE_XY_KW, scale.toString().c_str(), true);
 
-   kwl.add(prefix,
-           ossimKeywordNames::NUMBER_OUTPUT_BANDS_KW,
-           getNumberOfOutputBands(),
-           true);
-   
-   kwl.add(prefix,
-           ossimKeywordNames::NUMBER_LINES_KW,
-           getNumberOfLines(),
-           true);
-   
-   kwl.add(prefix,
-           ossimKeywordNames::NUMBER_SAMPLES_KW,
-           getNumberOfSamples(),
-           true);
-   
+   // Tie point units:
+   kwl.add(projectionPrefix, ossimKeywordNames::TIE_POINT_UNITS_KW, "degrees", true);
 
-   //***
-   // Make a projection to get the easting / northing of the tie point and
-   // the scale in meters.  This will only be used by the CIB.
-   //***
-//   const ossimDatum* datum = ossimDatumFactory::instance()->wgs84();
+   // Tie point:
+   kwl.add(projectionPrefix, ossimKeywordNames::TIE_POINT_XY_KW, tie.toString().c_str(), true);
 
-   kwl.add(prefix,
-           ossimKeywordNames::DATUM_KW,
-           "WGE",
-           true);
-
-   ossimGpt origin((ul.latd()+lr.latd())*.5,
-                   (ul.lond()+lr.lond())*.5,
-                   0.0);
-   
-   double deltaLatPerPixel = latInterval;
-   double deltaLonPerPixel = lonInterval;
-   
-   ossimDpt tie;
-
-   tie.lat = boundaryInfo.getCoverage().getUlLat() - deltaLatPerPixel/2.0;
-   tie.lon = boundaryInfo.getCoverage().getUlLon() + deltaLonPerPixel/2.0;
-   
-   kwl.add(prefix,
-           ossimKeywordNames::DECIMAL_DEGREES_PER_PIXEL_LAT,
-           deltaLatPerPixel,
-           true);
-   
-   kwl.add(prefix,
-           ossimKeywordNames::DECIMAL_DEGREES_PER_PIXEL_LON,
-           deltaLonPerPixel,
-           true);
-   
-   kwl.add(prefix,
-           ossimKeywordNames::ORIGIN_LATITUDE_KW,
-           origin.latd(),
-           true);
-   
-   kwl.add(prefix,
-           ossimKeywordNames::CENTRAL_MERIDIAN_KW,
-           origin.lond(),
-           true);
-   
-   kwl.add(prefix,
-           ossimKeywordNames::TIE_POINT_LAT_KW,
-           ul.latd()-(deltaLatPerPixel/2.0),
-           true);
-   
-   kwl.add(prefix,
-           ossimKeywordNames::TIE_POINT_LON_KW,
-           ul.lond()+(deltaLonPerPixel/2.0),
-           true);
-   
-   
    int z = boundaryInfo.getZone();
    
    if (z == 74) z--; // Fix J to a zone.
    if (z > 64) z -= 64; // Below the equator
    else z -= 48; // Above the equator
    
-   kwl.add(prefix,
-           ossimKeywordNames::ZONE_KW,
-            z,
-            true);
+   kwl.add(prefix, ossimKeywordNames::ZONE_KW, z, true);
 
     if(z!=9)
     {
-       kwl.add(prefix,
-               ossimKeywordNames::TYPE_KW,
-	       "ossimEquDistCylProjection",
-               true);
+       kwl.add(projectionPrefix, ossimKeywordNames::TYPE_KW, "ossimEquDistCylProjection", true);
     }
     else
     {
-       kwl.add(prefix,
-               ossimKeywordNames::TYPE_KW,
-               "ossimAzimEquDistProjection",
-               true);
+       kwl.add(projectionPrefix, ossimKeywordNames::TYPE_KW, "ossimAzimEquDistProjection", true);
     }
     
     if(theProductType == OSSIM_PRODUCT_TYPE_CADRG)
@@ -701,10 +534,7 @@ ossimImageGeometry* ossimCibCadrgTileSource::getImageGeometry()
              << "supported for projection --> " << scale << endl;
        }
        
-       kwl.add(prefix,
-               "map_scale",
-               scaleValue,
-               true);        
+       kwl.add(prefix, "map_scale", scaleValue, true);        
     }
     else if(theProductType ==  OSSIM_PRODUCT_TYPE_CIB)
     {
@@ -721,10 +551,7 @@ ossimImageGeometry* ossimCibCadrgTileSource::getImageGeometry()
        //
        double scaleValue = 1.0/((100.0/1000000.0) / scale.toDouble());
 
-       kwl.add(prefix,
-               "map_scale",
-               scaleValue,
-               true);        
+       kwl.add(prefix, "map_scale", scaleValue, true);        
     }
 
     // Capture this for next time.
@@ -755,19 +582,21 @@ ossim_uint32 ossimCibCadrgTileSource::getCurrentEntry()const
 
 bool ossimCibCadrgTileSource::setCurrentEntry(ossim_uint32 entryIdx)
 {
+   bool result = false;
+
    // Clear the geometry.
    theGeometry = 0;
-
+   
    // Must clear or openOverview will use last entries.
    theOverviewFile.clear();
    
-   if(!setEntryToRender(entryIdx))
+   if(setEntryToRender(entryIdx))
    {
-      return false;
+      completeOpen();
+      result = true;
    }
-   completeOpen();
 
-   return true;
+   return result;
 }
 
 void ossimCibCadrgTileSource::getEntryList(std::vector<ossim_uint32>& entryList)const
@@ -931,6 +760,7 @@ vector<ossim_int32> ossimCibCadrgTileSource::getProductEntryList(const ossimStri
    if(isOpen())
    {
       ossim_int32 upperBound = theTableOfContents->getNumberOfEntries();
+
       for(ossim_int32 index = 0; index < upperBound; ++index)
       {
          const ossimRpfTocEntry* entry = theTableOfContents->getTocEntry(index);
@@ -1504,32 +1334,32 @@ ossimString ossimCibCadrgTileSource::getSecurityClassification()const
 ossimRefPtr<ossimProperty> ossimCibCadrgTileSource::getProperty(const ossimString& name)const
 {
    if(name == "file_type")
-	{
-		if(theProductType == OSSIM_PRODUCT_TYPE_CIB)
-		{
-			return new ossimStringProperty("file_type", "CIB");
-		}
-		else if(theProductType == OSSIM_PRODUCT_TYPE_CADRG)
-		{
-			return new ossimStringProperty("file_type", "CADRG");
-		}
-		return 0;
-	}
-	return ossimImageHandler::getProperty(name);
+   {
+      if(theProductType == OSSIM_PRODUCT_TYPE_CIB)
+      {
+         return new ossimStringProperty("file_type", "CIB");
+      }
+      else if(theProductType == OSSIM_PRODUCT_TYPE_CADRG)
+      {
+         return new ossimStringProperty("file_type", "CADRG");
+      }
+      return 0;
+   }
+   return ossimImageHandler::getProperty(name);
 }
 
 void ossimCibCadrgTileSource::getPropertyNames(std::vector<ossimString>& propertyNames)const
 {
-	ossimImageHandler::getPropertyNames(propertyNames);
-	propertyNames.push_back("file_type");
+   ossimImageHandler::getPropertyNames(propertyNames);
+   propertyNames.push_back("file_type");
    const ossimRpfHeader* header =
-	theTableOfContents->getRpfHeader();
-
-	if(header)
-	{
-		std::ifstream in(theImageFile.c_str(), std::ios::in|std::ios::binary);
-		
-	}
+      theTableOfContents->getRpfHeader();
+   
+   if(header)
+   {
+      std::ifstream in(theImageFile.c_str(), std::ios::in|std::ios::binary);
+      
+   }
 }
 
 void ossimCibCadrgTileSource::populateLut()

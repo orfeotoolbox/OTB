@@ -9,45 +9,67 @@
 // Description: Rpf support class
 //
 //********************************************************************
-// $Id: ossimRpfLocationSection.cpp 14241 2009-04-07 19:59:23Z dburken $
+// $Id: ossimRpfLocationSection.cpp 16997 2010-04-12 18:53:48Z dburken $
 
 #include <istream>
 #include <ostream>
 #include <iterator>
 
 #include <ossim/support_data/ossimRpfLocationSection.h>
+#include <ossim/base/ossimCommon.h> /* ossim::byteOrder() */
 #include <ossim/base/ossimEndian.h>
 #include <ossim/base/ossimErrorCodes.h>
 #include <ossim/base/ossimTrace.h>
 
 static const ossimTrace traceDebug("ossimRpfLocationSection:debug");
 
-std::ostream& operator<<(std::ostream& out,
-                         const ossimRpfComponentLocationRecord& data)
+std::ostream& operator<<(std::ostream& out, const ossimRpfComponentLocationRecord& data)
 {
-   data.print(out);
+   return data.print(out);
+}
 
-   return out;
+ossimRpfComponentLocationRecord::ossimRpfComponentLocationRecord()
+   : m_componentId(0),
+     m_componentLength(0),
+     m_componentLocation(0)
+{
+}
+
+ossimRpfComponentLocationRecord::ossimRpfComponentLocationRecord(
+   const ossimRpfComponentLocationRecord& record)
+   : m_componentId(record.m_componentId),
+     m_componentLength(record.m_componentLength),
+     m_componentLocation(record.m_componentLocation)
+{
+}
+
+const ossimRpfComponentLocationRecord& ossimRpfComponentLocationRecord::operator=(
+   const ossimRpfComponentLocationRecord& rhs)
+{
+   if (this != &rhs)
+   {
+      m_componentId       = rhs.m_componentId;
+      m_componentLength   = rhs.m_componentLength;
+      m_componentLocation = rhs.m_componentLocation;
+   }
+   return *this;
 }
 
 std::ostream& ossimRpfComponentLocationRecord::print(
    std::ostream& out, const std::string& prefix) const
 {
    out << prefix << "ComponentId:             "
-       << theComponentId << "\n"
+       << m_componentId << "\n"
        << prefix << "ComponentLength:         "
-       << theComponentLength   << "\n"
+       << m_componentLength   << "\n"
        << prefix << "ComponentLocation:       "
-       << theComponentLocation << "\n";
+       << m_componentLocation << "\n";
    return out;
 }
 
-std::ostream& operator <<(std::ostream& out,
-                          const ossimRpfLocationSection &data)
+std::ostream& operator <<(std::ostream& out, const ossimRpfLocationSection &data)
 {
-   data.print(out);
-
-   return out;
+   return data.print(out);
 }
 
 ossimErrorCode ossimRpfComponentLocationRecord::parseStream(
@@ -55,18 +77,17 @@ ossimErrorCode ossimRpfComponentLocationRecord::parseStream(
 {
    if(in)
    {
-      ossimEndian anEndian;
+      in.read((char*)&m_componentId, 2);
+      in.read((char*)&m_componentLength, 4);
+      in.read((char*)&m_componentLocation, 4);
 
-      
-      in.read((char*)&theComponentId, 2);
-      in.read((char*)&theComponentLength, 4);
-      in.read((char*)&theComponentLocation, 4);
-
-      if(anEndian.getSystemEndianType() != byteOrder)
+      if( ossim::byteOrder() != byteOrder)
       {
-         anEndian.swap(theComponentId);
-         anEndian.swap(theComponentLength);
-         anEndian.swap(theComponentLocation);
+         // swap to native
+         ossimEndian anEndian;
+         anEndian.swap(m_componentId);
+         anEndian.swap(m_componentLength);
+         anEndian.swap(m_componentLocation);
       }
    }
    else
@@ -77,6 +98,29 @@ ossimErrorCode ossimRpfComponentLocationRecord::parseStream(
    return  ossimErrorCodes::OSSIM_OK;
 }
 
+void ossimRpfComponentLocationRecord::writeStream(std::ostream& out)
+{
+   if( ossim::byteOrder() != OSSIM_BIG_ENDIAN)
+   {
+      ossimEndian endian;
+      endian.swap(m_componentId);
+      endian.swap(m_componentLength);
+      endian.swap(m_componentLocation);
+   }
+
+   out.write((char*)&m_componentId, 2);
+   out.write((char*)&m_componentLength, 4);
+   out.write((char*)&m_componentLocation, 4);
+
+   if( ossim::byteOrder() != OSSIM_BIG_ENDIAN)
+   {
+      // Swap back to native byte order.
+      ossimEndian endian;
+      endian.swap(m_componentId);
+      endian.swap(m_componentLength);
+      endian.swap(m_componentLocation);
+   }
+}
 
 ossimRpfLocationSection::ossimRpfLocationSection()
 {
@@ -91,34 +135,36 @@ ossimErrorCode ossimRpfLocationSection::parseStream(std::istream& in,
    if(in)
    {
       clearFields();
-      ossimEndian anEndian;
-
-      in.read((char*)&theLocationSectionLength, 2);
-      in.read((char*)&theLocationTableOffset, 4);
-      in.read((char*)&theNumberOfComponentLocationRecords, 2);
-      in.read((char*)&theLocationRecordLength, 2);
-      in.read((char*)&theComponentAggregateLength, 4);
       
-      if(anEndian.getSystemEndianType() != byteOrder)
+      in.read((char*)&m_locationSectionLength, 2);
+      in.read((char*)&m_locationTableOffset, 4);
+      in.read((char*)&m_numberOfComponentLocationRecords, 2);
+      in.read((char*)&m_locationRecordLength, 2);
+      in.read((char*)&m_componentAggregateLength, 4);
+
+      if( ossim::byteOrder() != byteOrder )
       {
-          anEndian.swap(theLocationSectionLength);
-          anEndian.swap(theLocationTableOffset);
-          anEndian.swap(theNumberOfComponentLocationRecords);
-          anEndian.swap(theLocationRecordLength);
-          anEndian.swap(theComponentAggregateLength);
+         ossimEndian anEndian;
+         anEndian.swap(m_locationSectionLength);
+         anEndian.swap(m_locationTableOffset);
+         anEndian.swap(m_numberOfComponentLocationRecords);
+         anEndian.swap(m_locationRecordLength);
+         anEndian.swap(m_componentAggregateLength);
       }
+      
       if(traceDebug())
       {
          print(ossimNotify(ossimNotifyLevel_DEBUG));
          ossimNotify(ossimNotifyLevel_DEBUG) << std::endl;
       }
-      theComponentLocationList.resize(theNumberOfComponentLocationRecords);
-      for(unsigned long index = 0;
-          (index < theComponentLocationList.size())&&
-                      (result == ossimErrorCodes::OSSIM_OK);
-          index++)
+
+      m_componentLocationList.resize(m_numberOfComponentLocationRecords);
+      for(ossim_uint32 index = 0;
+          (index < m_componentLocationList.size())&&
+             (result == ossimErrorCodes::OSSIM_OK);
+          ++index)
       {        
-         result = theComponentLocationList[index].parseStream(in, byteOrder);
+         result = m_componentLocationList[index].parseStream(in, byteOrder);
       }
    }
    else
@@ -129,25 +175,62 @@ ossimErrorCode ossimRpfLocationSection::parseStream(std::istream& in,
    return result;
 }
 
+
+void ossimRpfLocationSection::writeStream(std::ostream& out)
+{
+   if( ossim::byteOrder() != OSSIM_BIG_ENDIAN)
+   {
+      // Always write in big endian.
+      ossimEndian endian;
+      endian.swap(m_locationSectionLength);
+      endian.swap(m_locationTableOffset);
+      endian.swap(m_numberOfComponentLocationRecords);
+      endian.swap(m_locationRecordLength);
+      endian.swap(m_componentAggregateLength);
+   }
+   
+   out.write((char*)&m_locationSectionLength, 2);
+   out.write((char*)&m_locationTableOffset, 4);
+   out.write((char*)&m_numberOfComponentLocationRecords, 2);
+   out.write((char*)&m_locationRecordLength, 2);
+   out.write((char*)&m_componentAggregateLength, 4);
+
+   if( ossim::byteOrder() != OSSIM_BIG_ENDIAN)
+   {
+      // Swap back to native byte order.
+      ossimEndian endian;
+      endian.swap(m_locationSectionLength);
+      endian.swap(m_locationTableOffset);
+      endian.swap(m_numberOfComponentLocationRecords);
+      endian.swap(m_locationRecordLength);
+      endian.swap(m_componentAggregateLength);
+   }
+   
+   for(ossim_uint32 i = 0; i < m_componentLocationList.size(); ++i)
+   {
+      m_componentLocationList[i].writeStream(out);
+   }
+}
+
 std::ostream& ossimRpfLocationSection::print(
    std::ostream& out, const std::string& prefix) const
 {
    out << prefix << "LocationSectionLength:            "
-       << theLocationSectionLength << "\n"
+       << m_locationSectionLength << "\n"
        << prefix << "LocationTableOffset:              "
-       << theLocationTableOffset << "\n"
+       << m_locationTableOffset << "\n"
        << prefix << "NumberOfComponentLocationRecords: "
-       << theNumberOfComponentLocationRecords << "\n"
+       << m_numberOfComponentLocationRecords << "\n"
        << prefix << "LocationRecordLength:             "
-       << theLocationRecordLength << "\n"
+       << m_locationRecordLength << "\n"
        << prefix << "ComponentAggregateLength:         "
-       << theComponentAggregateLength << "\n";
+       << m_componentAggregateLength << "\n";
    
-   if(theNumberOfComponentLocationRecords > 0)
+   if(m_numberOfComponentLocationRecords > 0)
    {
       std::vector<ossimRpfComponentLocationRecord>::const_iterator i =
-         theComponentLocationList.begin();
-      while (i != theComponentLocationList.end())
+         m_componentLocationList.begin();
+      while (i != m_componentLocationList.end())
       {
          (*i).print(out, prefix);
          ++i;
@@ -167,11 +250,11 @@ bool ossimRpfLocationSection::getComponent(ossimRpfComponentId componentId,
                                            ossimRpfComponentLocationRecord &result)const
 {
    std::vector<ossimRpfComponentLocationRecord>::const_iterator component =
-      theComponentLocationList.begin();
+      m_componentLocationList.begin();
    
-   while(component != theComponentLocationList.end())
+   while(component != m_componentLocationList.end())
    {
-      if((*component).theComponentId == static_cast<unsigned short>(componentId))
+      if((*component).m_componentId == static_cast<unsigned short>(componentId))
       {
          result = *component;
 
@@ -183,13 +266,48 @@ bool ossimRpfLocationSection::getComponent(ossimRpfComponentId componentId,
    return false;
 }
 
+void ossimRpfLocationSection::addComponentRecord(const ossimRpfComponentLocationRecord& record)
+{
+   m_componentLocationList.push_back(record);
+}
+
+void ossimRpfLocationSection::setLocationSectionLength(ossim_uint16 length)
+{
+   m_locationSectionLength = length;
+}
+
+void ossimRpfLocationSection::setLocationTableOffset(ossim_uint32 offset)
+{
+   m_locationTableOffset = offset;
+}
+
+void ossimRpfLocationSection::setNumberOfComponentLocationRecords(ossim_uint16 count)
+{
+   m_numberOfComponentLocationRecords = count;
+}
+
+void ossimRpfLocationSection::setLocationRecordLength(ossim_uint16 length)
+{
+   m_locationRecordLength = length;
+}
+
+void ossimRpfLocationSection::setComponentAggregateLength(ossim_uint32 length)
+{
+   m_componentAggregateLength = length;
+}
+
 void ossimRpfLocationSection::clearFields()
 {
-   theLocationSectionLength            = 0;
-   theLocationTableOffset              = 0;
-   theNumberOfComponentLocationRecords = 0;
-   theLocationRecordLength             = 0;
-   theComponentAggregateLength         = 0;
+   m_locationSectionLength            = 0;
+   m_locationTableOffset              = 0;
+   m_numberOfComponentLocationRecords = 0;
+   m_locationRecordLength             = 0;
+   m_componentAggregateLength         = 0;
 
-   theComponentLocationList.clear();
+   m_componentLocationList.clear();
+}
+
+std::vector<ossimRpfComponentLocationRecord>& ossimRpfLocationSection::getLocationRecordList()
+{
+   return m_componentLocationList;
 }

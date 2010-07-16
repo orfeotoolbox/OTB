@@ -10,7 +10,7 @@
 // Description:
 //
 //*******************************************************************
-//  $Id: ossimImageSourceSequencer.cpp 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimImageSourceSequencer.cpp 17206 2010-04-25 23:20:40Z dburken $
 #include <ossim/imaging/ossimImageSourceSequencer.h>
 #include <ossim/imaging/ossimImageData.h>
 #include <ossim/base/ossimIrect.h>
@@ -148,19 +148,19 @@ void ossimImageSourceSequencer::initialize()
    }
 }
 
-bool ossimImageSourceSequencer::canConnectMyInputTo(ossim_int32 inputIndex,
+bool ossimImageSourceSequencer::canConnectMyInputTo(ossim_int32 /* inputIndex */,
 						    const ossimConnectableObject* object)const
 {      
   return (object&& PTR_CAST(ossimImageSource, object));
 }
 
-void ossimImageSourceSequencer::connectInputEvent(ossimConnectionEvent& event)
+void ossimImageSourceSequencer::connectInputEvent(ossimConnectionEvent& /* event */)
 {
   theInputConnection = PTR_CAST(ossimImageSource, getInput(0));
   initialize();
 }
 
-void ossimImageSourceSequencer::disconnectInputEvent(ossimConnectionEvent& event)
+void ossimImageSourceSequencer::disconnectInputEvent(ossimConnectionEvent& /* event */)
 {
   theInputConnection = PTR_CAST(ossimImageSource, getInput(0));
 }

@@ -4,19 +4,16 @@
 //
 // Author:  David Burken
 //
-// Description: .
+// Description: Factory for overview builders.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimOverviewBuilderFactory.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
+// $Id: ossimOverviewBuilderFactory.cpp 17709 2010-07-08 20:21:14Z dburken $
 
-#include <cstddef> /* for NULL */
 
 #include <ossim/imaging/ossimOverviewBuilderFactory.h>
 #include <ossim/imaging/ossimTiffOverviewBuilder.h>
-#include <ossim/imaging/ossimVirtualOverviewBuilder.h>
 
-ossimOverviewBuilderFactory*
-ossimOverviewBuilderFactory::theInstance = NULL;
+ossimOverviewBuilderFactory* ossimOverviewBuilderFactory::theInstance = 0;
 
 ossimOverviewBuilderFactory* ossimOverviewBuilderFactory::instance()
 {
@@ -29,7 +26,7 @@ ossimOverviewBuilderFactory* ossimOverviewBuilderFactory::instance()
 
 ossimOverviewBuilderFactory::~ossimOverviewBuilderFactory()
 {
-   theInstance = NULL;
+   theInstance = 0;
 }
 
 ossimOverviewBuilderBase* ossimOverviewBuilderFactory::createBuilder(
@@ -38,13 +35,8 @@ ossimOverviewBuilderBase* ossimOverviewBuilderFactory::createBuilder(
    ossimRefPtr<ossimOverviewBuilderBase> result = new ossimTiffOverviewBuilder();
    if ( result->hasOverviewType(typeName) == false )
    {
-      result = new ossimVirtualOverviewBuilder();
-   }
-   if ( result->hasOverviewType(typeName) == false )
-   {
       result = 0;
    }
-
    if ( result.get() )
    {
       result->setOverviewType(typeName);
@@ -57,10 +49,6 @@ void ossimOverviewBuilderFactory::getTypeNameList(
 {
    ossimRefPtr<ossimOverviewBuilderBase> builder = new  ossimTiffOverviewBuilder();
    builder->getTypeNameList(typeList);
-
-   builder = new  ossimVirtualOverviewBuilder();
-   builder->getTypeNameList(typeList);
-   builder = 0;
 }
 
 ossimOverviewBuilderFactory::ossimOverviewBuilderFactory()

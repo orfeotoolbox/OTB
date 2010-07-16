@@ -7,7 +7,7 @@
 //
 //
 //*************************************************************************
-// $Id: ossimViewListener.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimViewListener.h 17195 2010-04-23 17:32:18Z dburken $
 #ifndef ossimViewListener_HEADER
 #define ossimViewListener_HEADER
 #include <ossim/base/ossimListener.h>
@@ -20,16 +20,16 @@ public:
    virtual ~ossimViewListener(){}
    
    virtual void processEvent(ossimEvent& event);
-   virtual void viewScaleChangeEvent(ossimViewEvent& event)
+   virtual void viewScaleChangeEvent(ossimViewEvent& /* event */)
       {}
-   virtual void viewTypeChangeEvent(ossimViewEvent& event)
+   virtual void viewTypeChangeEvent(ossimViewEvent& /* event */)
       {}
-   virtual void viewEvent(ossimViewEvent& event)
+   virtual void viewEvent(ossimViewEvent& /* event */ )
       {}
-   virtual void viewTransformChangeEvent(ossimViewEvent& event)
+   virtual void viewTransformChangeEvent(ossimViewEvent& /* event */)
       {}
 
-   virtual void allViewEvents(ossimViewEvent& event)
+   virtual void allViewEvents(ossimViewEvent& /* event */)
       {}
 TYPE_DATA
 };

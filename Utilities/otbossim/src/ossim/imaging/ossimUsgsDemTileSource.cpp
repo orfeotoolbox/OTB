@@ -9,7 +9,7 @@
 // Contains class declaration for ossimUsgsDemTileSource.
 //
 //********************************************************************
-// $Id: ossimUsgsDemTileSource.cpp 16075 2009-12-10 15:46:43Z gpotts $
+// $Id: ossimUsgsDemTileSource.cpp 17195 2010-04-23 17:32:18Z dburken $
 
 #include <iostream>
 #include <fstream>
@@ -501,7 +501,7 @@ ossim_uint32 ossimUsgsDemTileSource::getNumberOfOutputBands()const
    return 1;
 }
 
-double ossimUsgsDemTileSource::getNullPixelValue(ossim_uint32 band)const 
+double ossimUsgsDemTileSource::getNullPixelValue(ossim_uint32 /* band */)const 
 {
    return theNullValue;
 }

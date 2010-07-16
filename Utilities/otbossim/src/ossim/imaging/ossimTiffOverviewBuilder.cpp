@@ -11,7 +11,7 @@
 // Contains class definition for TiffOverviewBuilder
 // 
 //*******************************************************************
-//  $Id: ossimTiffOverviewBuilder.cpp 15979 2009-11-21 19:23:03Z dburken $
+//  $Id: ossimTiffOverviewBuilder.cpp 17588 2010-06-17 18:07:35Z dburken $
 
 #include <algorithm> /* for std::fill */
 // #include <cstring>
@@ -21,7 +21,7 @@ using namespace std;
 
 #include <ossim/imaging/ossimTiffOverviewBuilder.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
-#include <ossim/imaging/ossimOverviewSequencer.h>
+#include <ossim/imaging/ossimImageGeometry.h>
 #include <ossim/parallel/ossimMpi.h>
 #include <ossim/parallel/ossimMpiMasterOverviewSequencer.h>
 #include <ossim/parallel/ossimMpiSlaveOverviewSequencer.h>
@@ -55,7 +55,7 @@ static ossimTrace traceDebug("ossimTiffOverviewBuilder:degug");
 static const char COPY_ALL_KW[] = "copy_all_flag";
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimTiffOverviewBuilder.cpp 15979 2009-11-21 19:23:03Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimTiffOverviewBuilder.cpp 17588 2010-06-17 18:07:35Z dburken $";
 #endif
 
 
@@ -65,22 +65,22 @@ static const char OSSIM_ID[] = "$Id: ossimTiffOverviewBuilder.cpp 15979 2009-11-
 ossimTiffOverviewBuilder::ossimTiffOverviewBuilder()
    :
       ossimOverviewBuilderBase(),
-      theImageHandler(0),
-      theOutputFile(ossimFilename::NIL),
-      theNullDataBuffer(0),
-      theBytesPerPixel(1),
-      theBitsPerSample(8),
-      theTileWidth(0),
-      theTileHeight(0),
-      theTileSizeInBytes(0),
-      theSampleFormat(0),
-      theCurrentTiffDir(0),
-      theTiffCompressType(COMPRESSION_NONE),
-      theJpegCompressQuality(DEFAULT_COMPRESS_QUALITY),
-      theResampleType(ossimFilterResampler::ossimFilterResampler_BOX),
-      theNullPixelValues(),
-      theCopyAllFlag(false),
-      theOutputTileSizeSetFlag(false)
+      m_imageHandler(0),
+      m_outputFile(ossimFilename::NIL),
+      m_nullDataBuffer(0),
+      m_bytesPerPixel(1),
+      m_bitsPerSample(8),
+      m_tileWidth(0),
+      m_tileHeight(0),
+      m_tileSizeInBytes(0),
+      m_sampleFormat(0),
+      m_currentTiffDir(0),
+      m_tiffCompressType(COMPRESSION_NONE),
+      m_jpegCompressQuality(DEFAULT_COMPRESS_QUALITY),
+      m_resampleType(ossimFilterResampler::ossimFilterResampler_BOX),
+      m_nullPixelValues(),
+      m_copyAllFlag(false),
+      m_outputTileSizeSetFlag(false)
 {
    if (traceDebug())
    {
@@ -93,20 +93,20 @@ ossimTiffOverviewBuilder::ossimTiffOverviewBuilder()
          << "\n";
 #endif
       ossimNotify(ossimNotifyLevel_DEBUG)
-         << "overview stop dimension: " << theOverviewStopDimension
+         << "overview stop dimension: " << m_overviewStopDimension
          << std::endl;
    }
 }
 
 ossimTiffOverviewBuilder::~ossimTiffOverviewBuilder()
 {
-   theImageHandler = 0;
+   m_imageHandler = 0;
 }
 
 void ossimTiffOverviewBuilder::setResampleType(
    ossimFilterResampler::ossimFilterResamplerType resampleType)
 {
-   theResampleType = resampleType;
+   m_resampleType = resampleType;
 }
 
 bool ossimTiffOverviewBuilder::buildOverview(
@@ -122,8 +122,8 @@ bool ossimTiffOverviewBuilder::buildOverview(
    }
 
 
-   theOutputFile  = overview_file;
-   theCopyAllFlag = copy_all;
+   m_outputFile  = overview_file;
+   m_copyAllFlag = copy_all;
 
    return execute();
 }
@@ -142,19 +142,19 @@ bool ossimTiffOverviewBuilder::execute()
       return false;
    }
 
-   if ( !theImageHandler )
+   if ( !m_imageHandler )
    {
       return false;
    }
 
-   theOutputFile = getOutputFile();
-   if (theOutputFile == ossimFilename::NIL)
+   m_outputFile = getOutputFile();
+   if (m_outputFile == ossimFilename::NIL)
    {
       return false;
    }
 
    // Check the file.  Disallow same file overview building.
-   if (theImageHandler->getFilename() == theOutputFile)
+   if (m_imageHandler->getFilename() == m_outputFile)
    {
       ossimNotify(ossimNotifyLevel_WARN)
          << "Source image file and overview file cannot be the same!"
@@ -163,16 +163,16 @@ bool ossimTiffOverviewBuilder::execute()
    }
 
    // Add .tmp in case process gets aborted to avoid leaving bad .ovr file.
-   ossimFilename outputFileTemp = theOutputFile + ".tmp";
+   ossimFilename outputFileTemp = m_outputFile + ".tmp";
 
    // Required number of levels needed including r0.
-   ossim_uint32 requiedResLevels = getRequiredResLevels(theImageHandler.get());
+   ossim_uint32 requiedResLevels = getRequiredResLevels(m_imageHandler.get());
 
    // Zero based starting resLevel.
    ossim_uint32 startingResLevel  = 0;
-   if (!theCopyAllFlag)
+   if (!m_copyAllFlag)
    {
-      startingResLevel = theImageHandler->getNumberOfDecimationLevels();
+      startingResLevel = m_imageHandler->getNumberOfDecimationLevels();
    }
    
    if (traceDebug())
@@ -180,7 +180,7 @@ bool ossimTiffOverviewBuilder::execute()
       ossimNotify(ossimNotifyLevel_DEBUG)
          << MODULE
          << "\nCurrent number of reduced res sets: "
-         << theImageHandler->getNumberOfDecimationLevels()
+         << m_imageHandler->getNumberOfDecimationLevels()
          << "\nNumber of required reduced res sets:  " << requiedResLevels
          << "\nStarting reduced res set:    " << startingResLevel
          << "\nResampling type:  " << getOverviewType().c_str()
@@ -208,11 +208,11 @@ bool ossimTiffOverviewBuilder::execute()
                                static_cast<ossim_uint64>(1024)*
                                static_cast<ossim_uint64>(1024)*
                                static_cast<ossim_uint64>(4));
-      ossimIrect bounds = theImageHandler->getBoundingRect();
+      ossimIrect bounds = m_imageHandler->getBoundingRect();
       ossim_uint64 byteCheck = (static_cast<ossim_uint64>(bounds.width())*
                                 static_cast<ossim_uint64>(bounds.height())*
-                                static_cast<ossim_uint64>(theImageHandler->getNumberOfOutputBands())*
-                                static_cast<ossim_uint64>(ossim::scalarSizeInBytes(theImageHandler->getOutputScalarType())));
+                                static_cast<ossim_uint64>(m_imageHandler->getNumberOfOutputBands())*
+                                static_cast<ossim_uint64>(ossim::scalarSizeInBytes(m_imageHandler->getOutputScalarType())));
       ossimString openMode = "w";
       if((byteCheck*static_cast<ossim_uint64>(2))>fourGigs)
       {
@@ -313,9 +313,9 @@ bool ossimTiffOverviewBuilder::execute()
       // If we copied r0 to the overview file use it instead of the
       // original image handler as it is probably faster.
       //---
-      if ( i <= theImageHandler->getNumberOfDecimationLevels())
+      if ( i <= m_imageHandler->getNumberOfDecimationLevels())
       {
-         ih = theImageHandler;
+         ih = m_imageHandler;
       }
       else
       {
@@ -334,7 +334,7 @@ bool ossimTiffOverviewBuilder::execute()
          }
       }
       
-      if ( !writeRn(ih.get(), tif, i) )
+      if ( !writeRn( ih.get(), tif, i, (i==startingResLevel) ) )
       {
          // Set the error...
          ossimSetError(getClassName(),
@@ -394,13 +394,13 @@ bool ossimTiffOverviewBuilder::execute()
          progressListener = 0;
       }
       
-      outputFileTemp.rename(theOutputFile);
+      outputFileTemp.rename(m_outputFile);
       if(traceDebug())
       {
          ossimNotify(ossimNotifyLevel_INFO)
-            << "Wrote file:  " << theOutputFile.c_str() << std::endl;
+            << "Wrote file:  " << m_outputFile.c_str() << std::endl;
       }
-      ossimFilename file=theOutputFile;
+      ossimFilename file=m_outputFile;
       file = file.setExtension("omd");
       ossimKeywordlist kwl;
       if(file.exists())
@@ -408,16 +408,16 @@ bool ossimTiffOverviewBuilder::execute()
          kwl.addFile(file.c_str());
          
       }
-      ossimImageMetaData metaData(theImageHandler->getOutputScalarType(),
-                                  theImageHandler->getNumberOfInputBands());
+      ossimImageMetaData metaData(m_imageHandler->getOutputScalarType(),
+                                  m_imageHandler->getNumberOfInputBands());
       
       uint32 i= 0;
       
       for(i = 0; i < metaData.getNumberOfBands(); ++i)
       {
-         metaData.setMinPix(i,  theImageHandler->getMinPixelValue(i));
-         metaData.setMaxPix(i,  theImageHandler->getMaxPixelValue(i));
-         metaData.setNullPix(i, theImageHandler->getNullPixelValue(i));
+         metaData.setMinPix(i,  m_imageHandler->getMinPixelValue(i));
+         metaData.setMaxPix(i,  m_imageHandler->getMaxPixelValue(i));
+         metaData.setNullPix(i, m_imageHandler->getNullPixelValue(i));
       }
       metaData.saveState(kwl);
       kwl.write(file.c_str());
@@ -433,7 +433,7 @@ bool ossimTiffOverviewBuilder::writeR0(TIFF* tif)
 {
    static const char MODULE[] = "ossimTiffOverviewBuilder::writeR0";
 
-   ossimIrect rect = theImageHandler->getImageRectangle();
+   ossimIrect rect = m_imageHandler->getImageRectangle();
 
    if (!setTags(tif, rect, 0))
    {
@@ -441,27 +441,26 @@ bool ossimTiffOverviewBuilder::writeR0(TIFF* tif)
          << MODULE << " Error writing tags!" << std::endl;
       return false;
    }
-   // now set the geotiff tags
-   //
-   // Get the geometry from the input.
-   const ossimMapProjection* mapProj = 0;
-   const ossimImageGeometry* inputGeom = theImageHandler->getImageGeometry();
-   if (inputGeom)
-      mapProj = PTR_CAST(ossimMapProjection, inputGeom->getProjection());
-
-   if(mapProj)
+   
+   // Set the geotiff tags.
+   if ( setGeotiffTags(m_imageHandler->getImageGeometry(),
+                       m_imageHandler->getBoundingRect(),
+                       0,
+                       tif) == false )
    {
-      ossimDrect areaOfInterest = theImageHandler->getBoundingRect();
-      ossimRefPtr<ossimMapProjectionInfo> projInfo = new ossimMapProjectionInfo(mapProj, areaOfInterest);
-      ossimGeoTiff::writeTags(tif, projInfo);
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_NOTICE)
+            << MODULE << " NOTICE: geotiff tags not set." << std::endl;
+      } 
    }
    
-   ossim_int32 samples         = theImageHandler->getNumberOfSamples();
-   ossim_int32 lines           = theImageHandler->getNumberOfLines();
-   ossim_int32 tilesWide       = samples % theTileWidth ?
-                           samples / theTileWidth + 1 : samples / theTileWidth;
-   ossim_int32 tilesHigh       = lines % theTileHeight ?
-                           lines / theTileHeight + 1 : lines / theTileHeight;
+   ossim_int32 samples         = m_imageHandler->getNumberOfSamples();
+   ossim_int32 lines           = m_imageHandler->getNumberOfLines();
+   ossim_int32 tilesWide       = samples % m_tileWidth ?
+                           samples / m_tileWidth + 1 : samples / m_tileWidth;
+   ossim_int32 tilesHigh       = lines % m_tileHeight ?
+                           lines / m_tileHeight + 1 : lines / m_tileHeight;
    ossim_int32 numberOfTiles   = tilesWide * tilesHigh;
 
    int tileNumber = 0;
@@ -486,26 +485,26 @@ bool ossimTiffOverviewBuilder::writeR0(TIFF* tif)
    for(int i = 0; i < tilesHigh; ++i)
    {
       ossimIpt origin(0, 0);
-      origin.y = i * theTileHeight;
+      origin.y = i * m_tileHeight;
       
       //***
       // Tile loop in the sample (width) direction.
       //***
       for(int j = 0; j < tilesWide; ++j)
       {
-         origin.x = j * theTileWidth;
+         origin.x = j * m_tileWidth;
 
          ossimRefPtr<ossimImageData> t =
-            theImageHandler->getTile(ossimIrect(origin.x,
+            m_imageHandler->getTile(ossimIrect(origin.x,
                                                 origin.y,
-                                                origin.x +(theTileWidth-1),
-                                                origin.y +(theTileHeight-1)));
+                                                origin.x +(m_tileWidth-1),
+                                                origin.y +(m_tileHeight-1)));
 	 
          //***
          // Band loop.
          //***
          for (uint32 band=0;
-              band<theImageHandler->getNumberOfInputBands();
+              band<m_imageHandler->getNumberOfInputBands();
               ++band)
          {
             tdata_t data;
@@ -517,7 +516,7 @@ bool ossimTiffOverviewBuilder::writeR0(TIFF* tif)
             }
             else
             {
-               data = static_cast<tdata_t>(&(theNullDataBuffer.front()));
+               data = static_cast<tdata_t>(&(m_nullDataBuffer.front()));
             }
 
             // Write the tile.
@@ -529,12 +528,12 @@ bool ossimTiffOverviewBuilder::writeR0(TIFF* tif)
                                          0,        // z
                                          band);    // sample
 
-            if (bytesWritten != theTileSizeInBytes)
+            if (bytesWritten != m_tileSizeInBytes)
             {
                ossimNotify(ossimNotifyLevel_WARN)
                   << MODULE << " ERROR:"
                   << "Error returned writing tiff tile:  " << i
-                  << "\nExpected bytes written:  " << theTileSizeInBytes
+                  << "\nExpected bytes written:  " << m_tileSizeInBytes
                   << "\nBytes written:  " << bytesWritten
                   << std::endl;
                theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
@@ -571,14 +570,15 @@ bool ossimTiffOverviewBuilder::writeR0(TIFF* tif)
       return false;
    }
 
-   ++theCurrentTiffDir;
+   ++m_currentTiffDir;
 
    return true;
 }
 
 bool ossimTiffOverviewBuilder::writeRn(ossimImageHandler* imageHandler,
                                        TIFF* tif,
-                                       ossim_uint32 resLevel)
+                                       ossim_uint32 resLevel,
+                                       bool firstResLevel)
 {
    //---
    // Set up the sequencer.  This will be one of three depending on if we're
@@ -604,12 +604,24 @@ bool ossimTiffOverviewBuilder::writeRn(ossimImageHandler* imageHandler,
 
    sequencer->setImageHandler(imageHandler);
 
-   ossim_uint32 sourceResLevel =
-      imageHandler->getNumberOfDecimationLevels() - 1;
+   ossim_uint32 sourceResLevel = imageHandler->getNumberOfDecimationLevels() - 1;
 
    sequencer->setSourceLevel(sourceResLevel);
-   sequencer->setResampleType(theResampleType);
-   sequencer->setTileSize( ossimIpt(theTileWidth, theTileHeight) );
+   sequencer->setResampleType(m_resampleType);
+   sequencer->setTileSize( ossimIpt(m_tileWidth, m_tileHeight) );
+   
+   if ( firstResLevel && ( getHistogramMode() != OSSIM_HISTO_MODE_UNKNOWN) )
+   {
+      // Accumulate a histogram.  Can't do with mpi/multi-process.
+      if(ossimMpi::instance()->getNumberOfProcessors() == 1)
+      {
+         sequencer->setHistogramMode(getHistogramMode());
+      }
+      //---
+      // else{} Not sure if we want an error thrown here.  For now will handle at the
+      // application level.
+      //---
+   }
    sequencer->initialize();
 
    // If we are a slave process start the resampling of tiles.
@@ -642,6 +654,25 @@ bool ossimTiffOverviewBuilder::writeRn(ossimImageHandler* imageHandler,
       ossimNotify(ossimNotifyLevel_WARN)
          << MODULE << " Error writing tags!" << std::endl;
       return false;
+   }
+
+   if ( !m_copyAllFlag && (resLevel == 1) )
+   {
+      //---
+      // Set the geotif tags for the first layer.
+      // Note this is done in writeR0 method if m_copyAllFlag is set.
+      //---
+      if ( setGeotiffTags(m_imageHandler->getImageGeometry(),
+                          ossimDrect(rect),
+                          resLevel,
+                          tif) == false )
+      {
+         if (traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_NOTICE)
+               << MODULE << " NOTICE: geotiff tags not set." << std::endl;
+         } 
+      }
    }
 
    ossim_uint32 outputTilesWide = sequencer->getNumberOfTilesHorizontal();
@@ -683,12 +714,12 @@ bool ossimTiffOverviewBuilder::writeRn(ossimImageHandler* imageHandler,
                                             0,        // z
                                             band);    // sample
                
-               if (bytesWritten != theTileSizeInBytes)
+               if (bytesWritten != m_tileSizeInBytes)
                {
                   ossimNotify(ossimNotifyLevel_WARN)
                      << MODULE << " ERROR:"
                      << "Error returned writing tiff tile:  " << i
-                     << "\nExpected bytes written:  " << theTileSizeInBytes
+                     << "\nExpected bytes written:  " << m_tileSizeInBytes
                      << "\nBytes written:  " << bytesWritten
                      << std::endl;
                   theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
@@ -697,7 +728,7 @@ bool ossimTiffOverviewBuilder::writeRn(ossimImageHandler* imageHandler,
                }
             }
          }
-         x += theTileWidth; // Increment x for next TIFFWriteTile.
+         x += m_tileWidth; // Increment x for next TIFFWriteTile.
          ++tileNumber;      // Increment tile number for percent complete.
 
       } // End of tile loop in the sample (width) direction.
@@ -714,7 +745,7 @@ bool ossimTiffOverviewBuilder::writeRn(ossimImageHandler* imageHandler,
          setPercentComplete(tile / numTiles * 100.0);
       }
 
-      y += theTileHeight; // Increment y for next TIFFWriteTile.
+      y += m_tileHeight; // Increment y for next TIFFWriteTile.
 
    } // End of tile loop in the line (height) direction.
 
@@ -728,7 +759,18 @@ bool ossimTiffOverviewBuilder::writeRn(ossimImageHandler* imageHandler,
       return false;
    }
 
-   ++theCurrentTiffDir;
+   if ( firstResLevel && ( getHistogramMode() != OSSIM_HISTO_MODE_UNKNOWN) )
+   {
+      // Write the histogram.
+      if(ossimMpi::instance()->getNumberOfProcessors() == 1)
+      {
+         ossimFilename histoFilename = getOutputFile();
+         histoFilename.setExtension("his");
+         sequencer->writeHistogram(histoFilename);
+      }
+   }
+
+   ++m_currentTiffDir;
 
    return true;
 }
@@ -747,9 +789,9 @@ bool ossimTiffOverviewBuilder::setTags(TIFF* tif,
    
    ossim_int32   imageWidth      = outputRect.width();
    ossim_int32   imageHeight     = outputRect.height();
-   int16         samplesPerPixel = theImageHandler->getNumberOfOutputBands();
-   ossim_float64 minSampleValue  = theImageHandler->getMinPixelValue();
-   ossim_float64 maxSampleValue  = theImageHandler->getMaxPixelValue();
+   int16         samplesPerPixel = m_imageHandler->getNumberOfOutputBands();
+   ossim_float64 minSampleValue  = m_imageHandler->getMinPixelValue();
+   ossim_float64 maxSampleValue  = m_imageHandler->getMaxPixelValue();
 
    if (resLevel)
    {
@@ -770,27 +812,27 @@ bool ossimTiffOverviewBuilder::setTags(TIFF* tif,
    TIFFSetField( tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_SEPARATE );
    TIFFSetField( tif, TIFFTAG_IMAGEWIDTH, imageWidth);
    TIFFSetField( tif, TIFFTAG_IMAGELENGTH, imageHeight);
-   TIFFSetField( tif, TIFFTAG_BITSPERSAMPLE, theBitsPerSample );
-   TIFFSetField( tif, TIFFTAG_SAMPLEFORMAT, theSampleFormat );
+   TIFFSetField( tif, TIFFTAG_BITSPERSAMPLE, m_bitsPerSample );
+   TIFFSetField( tif, TIFFTAG_SAMPLEFORMAT, m_sampleFormat );
    TIFFSetField( tif, TIFFTAG_SAMPLESPERPIXEL, samplesPerPixel );
 
-   if( theImageHandler->getNumberOfInputBands() == 3 )
+   if( m_imageHandler->getNumberOfInputBands() == 3 )
       TIFFSetField( tif, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB );
    else
       TIFFSetField( tif, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_MINISBLACK );
    
-   TIFFSetField( tif, TIFFTAG_TILEWIDTH,  theTileWidth  );
-   TIFFSetField( tif, TIFFTAG_TILELENGTH, theTileHeight );
+   TIFFSetField( tif, TIFFTAG_TILEWIDTH,  m_tileWidth  );
+   TIFFSetField( tif, TIFFTAG_TILELENGTH, m_tileHeight );
    
    // Set the compression related tags...
-   TIFFSetField( tif, TIFFTAG_COMPRESSION, theTiffCompressType );
-   if (theTiffCompressType == COMPRESSION_JPEG)
+   TIFFSetField( tif, TIFFTAG_COMPRESSION, m_tiffCompressType );
+   if (m_tiffCompressType == COMPRESSION_JPEG)
    {
-      TIFFSetField( tif, TIFFTAG_JPEGQUALITY,  theJpegCompressQuality);
+      TIFFSetField( tif, TIFFTAG_JPEGQUALITY,  m_jpegCompressQuality);
    }
    
    // Set the min/max values.
-   switch( theImageHandler->getOutputScalarType() )
+   switch( m_imageHandler->getOutputScalarType() )
    {
       case OSSIM_SINT16:
       case OSSIM_FLOAT32:
@@ -813,6 +855,43 @@ bool ossimTiffOverviewBuilder::setTags(TIFF* tif,
    }
    
     return true;
+}
+
+bool ossimTiffOverviewBuilder::setGeotiffTags(const ossimImageGeometry* geom,
+                                              const ossimDrect& boundingRect,
+                                              ossim_uint32 resLevel,
+                                              TIFF* tif)
+{
+   bool result = false;
+
+   if ( geom && tif )
+   {
+      const ossimProjection* proj = geom->getProjection();
+      if (proj)
+      {
+         // Must duplicate if changing scale.
+         ossimObject* obj = proj->dup();
+         ossimMapProjection* mapProj = PTR_CAST(ossimMapProjection, obj);
+         if ( mapProj )
+         {
+            if ( mapProj->hasModelTransform() == false )
+            {
+               if (resLevel)
+               {
+                  ossim_float64 factor = (ossim_float64)(1 << resLevel);
+                  mapProj->applyScale(ossimDpt(factor, factor), true);
+               }
+               ossimRefPtr<ossimMapProjectionInfo> projInfo =
+                  new ossimMapProjectionInfo(mapProj, boundingRect);
+               result = ossimGeoTiff::writeTags(tif, projInfo);
+            }
+         }
+         delete obj; // Cleanup from dup.
+         obj = 0;
+      }
+   }
+   
+   return result;
 }
 
 TIFF* ossimTiffOverviewBuilder::openTiff(const ossimString& filename,
@@ -851,10 +930,10 @@ void ossimTiffOverviewBuilder::setCompressionType(ossim_uint16 compression_type)
    case COMPRESSION_LZW:
    case COMPRESSION_DEFLATE:
    case COMPRESSION_PACKBITS:
-      theTiffCompressType = compression_type;
+      m_tiffCompressType = compression_type;
       break;
    default:
-      theTiffCompressType = COMPRESSION_NONE;
+      m_tiffCompressType = COMPRESSION_NONE;
       if (traceDebug())
       {
          ossimSetError(getClassName(),
@@ -874,11 +953,11 @@ void ossimTiffOverviewBuilder::setJpegCompressionQuality(ossim_int32 quality)
 {
    if (quality > 1 && quality < 101)
    {
-      theJpegCompressQuality = quality;
+      m_jpegCompressQuality = quality;
    }
    else
    {
-      theJpegCompressQuality = DEFAULT_COMPRESS_QUALITY;
+      m_jpegCompressQuality = DEFAULT_COMPRESS_QUALITY;
 
       ossimSetError(getClassName(),
                     ossimErrorCodes::OSSIM_WARNING,
@@ -894,12 +973,12 @@ Range is 100 to 1.  Current quality set to default of 75.",
 
 bool ossimTiffOverviewBuilder::getCopyAllFlag() const
 {
-   return theCopyAllFlag;
+   return m_copyAllFlag;
 }
 
 void ossimTiffOverviewBuilder::setCopyAllFlag(bool flag)
 {
-   theCopyAllFlag = flag;
+   m_copyAllFlag = flag;
 }
 
 ossimObject* ossimTiffOverviewBuilder::getObject()
@@ -914,18 +993,18 @@ const ossimObject* ossimTiffOverviewBuilder::getObject() const
 
 void ossimTiffOverviewBuilder::setOutputFile(const ossimFilename& file)
 {
-   theOutputFile = file;
+   m_outputFile = file;
 }
 
 ossimFilename ossimTiffOverviewBuilder::getOutputFile() const
 {
-   ossimFilename result = theOutputFile;
-   if (theOutputFile == ossimFilename::NIL)
+   ossimFilename result = m_outputFile;
+   if (m_outputFile == ossimFilename::NIL)
    {
-      if (theImageHandler.valid())
+      if (m_imageHandler.valid())
       {
-         bool usePrefix = (theImageHandler->getNumberOfEntries()>1?true:false);
-         result = theImageHandler->
+         bool usePrefix = (m_imageHandler->getNumberOfEntries()>1?true:false);
+         result = m_imageHandler->
             getFilenameWithThisExtension(ossimString("ovr"), usePrefix);
       }
    }
@@ -934,9 +1013,9 @@ ossimFilename ossimTiffOverviewBuilder::getOutputFile() const
 
 void ossimTiffOverviewBuilder::setOutputTileSize(const ossimIpt& tileSize)
 {
-   theTileWidth  = tileSize.x;
-   theTileHeight = tileSize.y;
-   theOutputTileSizeSetFlag = true;
+   m_tileWidth  = tileSize.x;
+   m_tileHeight = tileSize.y;
+   m_outputTileSizeSetFlag = true;
 }
 
 bool ossimTiffOverviewBuilder::setInputSource(ossimImageHandler* imageSource)
@@ -944,9 +1023,9 @@ bool ossimTiffOverviewBuilder::setInputSource(ossimImageHandler* imageSource)
    static const char MODULE[] =
       "ossimTiffOverviewBuilder::initializeFromHandler";
 
-   theImageHandler         = imageSource;
+   m_imageHandler         = imageSource;
 
-   if (!theImageHandler)
+   if (!m_imageHandler)
    {
       // Set the error...
       theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
@@ -962,7 +1041,7 @@ bool ossimTiffOverviewBuilder::setInputSource(ossimImageHandler* imageSource)
                     __LINE__);
       return false;
    }
-   else if (theImageHandler->getErrorStatus() ==
+   else if (m_imageHandler->getErrorStatus() ==
             ossimErrorCodes::OSSIM_ERROR)
    {
       // Set the error...
@@ -980,79 +1059,79 @@ bool ossimTiffOverviewBuilder::setInputSource(ossimImageHandler* imageSource)
       return false;
    }
 
-   if(!theOutputTileSizeSetFlag)
+   if(!m_outputTileSizeSetFlag)
    {
    // Note:  Need a default overview tile size in preferences...
       ossimIpt tileSize;
       ossim::defaultTileSize(tileSize);
-//       if(theImageHandler->isImageTiled())
+//       if(m_imageHandler->isImageTiled())
 //       {
-//          if(theImageHandler->getBoundingRect().width() != theImageHandler->getImageTileWidth())
+//          if(m_imageHandler->getBoundingRect().width() != m_imageHandler->getImageTileWidth())
 //          {
-//             tileSize = ossimIpt(theImageHandler->getImageTileWidth(),
-//                                 theImageHandler->getImageTileHeight());
+//             tileSize = ossimIpt(m_imageHandler->getImageTileWidth(),
+//                                 m_imageHandler->getImageTileHeight());
 //          }
 //       }
 
-      theTileWidth  = tileSize.x;
-      theTileHeight = tileSize.y;
+      m_tileWidth  = tileSize.x;
+      m_tileHeight = tileSize.y;
    }
    if (traceDebug())
    {
       CLOG << "DEBUG:"
-           << "\ntheTileWidth:   " << theTileWidth
-           << "\ntheTileHeight:  " << theTileHeight
+           << "\nm_tileWidth:   " << m_tileWidth
+           << "\nm_tileHeight:  " << m_tileHeight
            << "\nSource image is tiled:  "
-           << (theImageHandler->isImageTiled()?"true":"false")
-           << "\ntheImageHandler->getTileWidth():  "
-           << theImageHandler->getTileWidth()
-           << "\ntheImageHandler->getTileHeight():  "
-           << theImageHandler->getTileHeight()
-           << "\ntheImageHandler->getImageTileWidth():  "
-           << theImageHandler->getImageTileWidth()
-           << "\ntheImageHandler->getImageTileHeight():  "
-           << theImageHandler->getImageTileHeight()
+           << (m_imageHandler->isImageTiled()?"true":"false")
+           << "\nm_imageHandler->getTileWidth():  "
+           << m_imageHandler->getTileWidth()
+           << "\nm_imageHandler->getTileHeight():  "
+           << m_imageHandler->getTileHeight()
+           << "\nm_imageHandler->getImageTileWidth():  "
+           << m_imageHandler->getImageTileWidth()
+           << "\nm_imageHandler->getImageTileHeight():  "
+           << m_imageHandler->getImageTileHeight()
            << std::endl;
    }
 
-   switch(theImageHandler->getOutputScalarType())
+   switch(m_imageHandler->getOutputScalarType())
    {
       case OSSIM_UINT8:
-         theBitsPerSample = 8;
-         theBytesPerPixel = 1;
-         theSampleFormat  = SAMPLEFORMAT_UINT;
+         m_bitsPerSample = 8;
+         m_bytesPerPixel = 1;
+         m_sampleFormat  = SAMPLEFORMAT_UINT;
          break;
          
       case OSSIM_USHORT11:
       case OSSIM_UINT16:
-         theBitsPerSample = 16;
-         theBytesPerPixel = 2;
-         theSampleFormat  = SAMPLEFORMAT_UINT;
+         m_bitsPerSample = 16;
+         m_bytesPerPixel = 2;
+         m_sampleFormat  = SAMPLEFORMAT_UINT;
          break;
       
       case OSSIM_SINT16:
-         theBitsPerSample = 16;
-         theBytesPerPixel = 2;
-         theSampleFormat  = SAMPLEFORMAT_INT;
+         m_bitsPerSample = 16;
+         m_bytesPerPixel = 2;
+         m_sampleFormat  = SAMPLEFORMAT_INT;
          break;
 
       case OSSIM_UINT32:
-         theBitsPerSample = 32;
-         theBytesPerPixel = 4;
-         theSampleFormat  = SAMPLEFORMAT_UINT;
+         m_bitsPerSample = 32;
+         m_bytesPerPixel = 4;
+         m_sampleFormat  = SAMPLEFORMAT_UINT;
          break;
       
       case OSSIM_FLOAT32:
-         theBitsPerSample = 32;
-         theBytesPerPixel = 4;
-         theSampleFormat  = SAMPLEFORMAT_IEEEFP;
+         m_bitsPerSample = 32;
+         m_bytesPerPixel = 4;
+         m_sampleFormat  = SAMPLEFORMAT_IEEEFP;
          break;
          
       case OSSIM_NORMALIZED_DOUBLE:
       case OSSIM_FLOAT64:
-         theBitsPerSample = 64;
-         theBytesPerPixel = 8;
-         theSampleFormat  = SAMPLEFORMAT_IEEEFP;
+         m_bitsPerSample = 64;
+         m_bytesPerPixel = 8;
+         m_sampleFormat  = SAMPLEFORMAT_IEEEFP;
          break;
          
       default:
@@ -1062,7 +1141,7 @@ bool ossimTiffOverviewBuilder::setInputSource(ossimImageHandler* imageSource)
             << MODULE << " ERROR:"
             << "\nUnknow pixel type:  "
             << (ossimScalarTypeLut::instance()->
-                getEntryString(theImageHandler->getOutputScalarType()))
+                getEntryString(m_imageHandler->getOutputScalarType()))
             << std::endl;
          ossimSetError(getClassName(),
                        ossimErrorCodes::OSSIM_ERROR,
@@ -1072,16 +1151,16 @@ bool ossimTiffOverviewBuilder::setInputSource(ossimImageHandler* imageSource)
          return false;
    }
 
-   theTileSizeInBytes = theTileWidth * theTileHeight * theBytesPerPixel;
+   m_tileSizeInBytes = m_tileWidth * m_tileHeight * m_bytesPerPixel;
 
    //---
    // Make a buffer to pass to pass to the write tile methods when an image
    // handler returns a null tile.
    //---
-   theNullDataBuffer.resize(theTileSizeInBytes);
+   m_nullDataBuffer.resize(m_tileSizeInBytes);
 
    // Fill it with zeroes.
-   std::fill(theNullDataBuffer.begin(), theNullDataBuffer.end(), 0);
+   std::fill(m_nullDataBuffer.begin(), m_nullDataBuffer.end(), 0);
 
    return true;
 }
@@ -1091,12 +1170,12 @@ bool ossimTiffOverviewBuilder::setOverviewType(const ossimString& type)
    bool result = true;
    if (type == "ossim_tiff_nearest")
    {
-      theResampleType =
+      m_resampleType =
          ossimFilterResampler::ossimFilterResampler_NEAREST_NEIGHBOR;
    }
    else if (type == "ossim_tiff_box")
    {
-      theResampleType = ossimFilterResampler::ossimFilterResampler_BOX;
+      m_resampleType = ossimFilterResampler::ossimFilterResampler_BOX;
    }
    else
    {
@@ -1108,8 +1187,7 @@ bool ossimTiffOverviewBuilder::setOverviewType(const ossimString& type)
 ossimString ossimTiffOverviewBuilder::getOverviewType() const
 {
    ossimString type;
-   if (theResampleType ==
-       ossimFilterResampler::ossimFilterResampler_NEAREST_NEIGHBOR)
+   if (m_resampleType == ossimFilterResampler::ossimFilterResampler_NEAREST_NEIGHBOR)
    {
       type = "ossim_tiff_nearest";
    }
@@ -1133,7 +1211,7 @@ void ossimTiffOverviewBuilder::setProperty(ossimRefPtr<ossimProperty> property)
    {
       if(property->getName() == ossimKeywordNames::COMPRESSION_QUALITY_KW)
       {
-         theJpegCompressQuality = property->valueToString().toInt32();
+         m_jpegCompressQuality = property->valueToString().toInt32();
       }
       else if(property->getName() == ossimKeywordNames::COMPRESSION_TYPE_KW)
       {
@@ -1141,34 +1219,34 @@ void ossimTiffOverviewBuilder::setProperty(ossimRefPtr<ossimProperty> property)
       value = value.downcase();
       if(value == "jpeg")
       {
-         theTiffCompressType =  COMPRESSION_JPEG;
+         m_tiffCompressType =  COMPRESSION_JPEG;
       }
       else if(value == "lzw")
       {
-         theTiffCompressType =  COMPRESSION_LZW;
+         m_tiffCompressType =  COMPRESSION_LZW;
          
       }
       else if(value == "deflate")
       {
-         theTiffCompressType =  COMPRESSION_DEFLATE;
+         m_tiffCompressType =  COMPRESSION_DEFLATE;
       }
       else if(value == "packbits")
       {
-         theTiffCompressType =  COMPRESSION_PACKBITS;
+         m_tiffCompressType =  COMPRESSION_PACKBITS;
       }
       else
       {
-         theTiffCompressType = COMPRESSION_NONE;
+         m_tiffCompressType = COMPRESSION_NONE;
       }
       }
       else if(property->getName() == COPY_ALL_KW)
       {
-         theCopyAllFlag = property->valueToString().toBool();
+         m_copyAllFlag = property->valueToString().toBool();
       }
       else if(property->getName() ==
               ossimKeywordNames::OVERVIEW_STOP_DIMENSION_KW)
       {
-         theOverviewStopDimension = property->valueToString().toUInt32();
+         m_overviewStopDimension = property->valueToString().toUInt32();
       }
       else if(property->getName() == ossimKeywordNames::OUTPUT_TILE_SIZE_KW)
       {

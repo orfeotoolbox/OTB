@@ -122,8 +122,6 @@ std::ostream& ossimQuickbirdMetaData::print(std::ostream& out) const
 bool ossimQuickbirdMetaData::saveState(ossimKeywordlist& kwl,
 				       const char* prefix)const
 {
-
-
    kwl.add(prefix,
            ossimKeywordNames::TYPE_KW,
            "ossimQuickbirdMetaData",
@@ -179,7 +177,7 @@ bool ossimQuickbirdMetaData::saveState(ossimKeywordlist& kwl,
            theTDILevel,
            true);
 
-   if(theBandId=="Multi")
+   if( (theBandId=="Multi") && (theAbsCalFactors.size() >= 4) )
    {
       kwl.add(prefix,
               "B_band_absCalFactor",
@@ -527,7 +525,6 @@ bool ossimQuickbirdMetaData::parseMetaData(const ossimFilename& data_file)
       }
    }
 
-
    //---
    // TLCTime:
    //---
@@ -546,7 +543,6 @@ bool ossimQuickbirdMetaData::parseMetaData(const ossimFilename& data_file)
          return false;
       }
    }
-
 
    //***
    // Sun Azimuth:
@@ -597,10 +593,10 @@ bool ossimQuickbirdMetaData::parseMetaData(const ossimFilename& data_file)
    }
 
    //***
-        // Sun Azimuth:
-        //***
-             if(getEndOfLine( strptr, ossimString("\n\tsunAz ="), "%9c %s", temp))
-             theSunAzimuth = ossimString(temp).before(";").toFloat64();
+   // Sun Azimuth:
+   //***
+   if(getEndOfLine( strptr, ossimString("\n\tsunAz ="), "%9c %s", temp))
+        theSunAzimuth = ossimString(temp).before(";").toFloat64();
    else
    {
       if(getEndOfLine( strptr, ossimString("\n\tmeanSunAz ="), "%13c %s", temp))
@@ -613,7 +609,7 @@ bool ossimQuickbirdMetaData::parseMetaData(const ossimFilename& data_file)
                << "FATAL ossimQuickbirdRpcModel::parseMetaData(data_file): "
                << "\n\tAborting construction. Error encountered parsing "
                << "presumed meta-data file." << std::endl;
-
+            
             delete [] filebuf;
             return false;
          }
@@ -733,7 +729,7 @@ bool ossimQuickbirdMetaData::parseMetaData(const ossimFilename& data_file)
 //  Parses the Quickbird GEO file.
 //
 //*****************************************************************************
-bool ossimQuickbirdMetaData::parseGEOData(const ossimFilename& data_file)
+bool ossimQuickbirdMetaData::parseGEOData(const ossimFilename& /* data_file */)
 {
   return true;
 }
@@ -744,7 +740,7 @@ bool ossimQuickbirdMetaData::parseGEOData(const ossimFilename& data_file)
 //  Parses the Quickbird EPH file.
 //
 //*****************************************************************************
-bool ossimQuickbirdMetaData::parseEPHData(const ossimFilename& data_file)
+bool ossimQuickbirdMetaData::parseEPHData(const ossimFilename& /* data_file */)
 {
   return true;
 }
@@ -755,7 +751,7 @@ bool ossimQuickbirdMetaData::parseEPHData(const ossimFilename& data_file)
 //  Parses the Quickbird ATT file.
 //
 //*****************************************************************************
-bool ossimQuickbirdMetaData::parseATTData(const ossimFilename& data_file)
+bool ossimQuickbirdMetaData::parseATTData(const ossimFilename& /* data_file */)
 {
   return true;
 }

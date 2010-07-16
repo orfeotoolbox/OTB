@@ -8,7 +8,7 @@
 // Contributor: David A. Horner (DAH) - http://dave.thehorners.com
 //
 //*************************************************************************
-// $Id: ossimRectilinearDataObject.cpp 16052 2009-12-08 22:20:40Z dburken $
+// $Id: ossimRectilinearDataObject.cpp 17195 2010-04-23 17:32:18Z dburken $
 
 #include <ossim/base/ossimRectilinearDataObject.h>
 #include <ossim/base/ossimScalarTypeLut.h>
@@ -39,7 +39,7 @@ ossimRectilinearDataObject::ossimRectilinearDataObject(
    ossimSource* owner,
    ossim_uint32 numberOfDataComponents,
    ossimScalarType   scalarType,
-   ossimDataObjectStatus status)
+   ossimDataObjectStatus /* status */)
    :ossimDataObject(owner, OSSIM_NULL),
     m_numberOfDataComponents(numberOfDataComponents),
     m_scalarType(scalarType),
@@ -53,7 +53,7 @@ ossimRectilinearDataObject::ossimRectilinearDataObject(
    ossim_uint32 numberOfDataComponents,
    ossim_uint32 length,
    ossimScalarType   scalarType,
-   ossimDataObjectStatus status)
+   ossimDataObjectStatus /* status */ )
    :ossimDataObject(owner, OSSIM_NULL),
     m_numberOfDataComponents(numberOfDataComponents),
     m_scalarType(scalarType),
@@ -69,7 +69,7 @@ ossimRectilinearDataObject::ossimRectilinearDataObject(
    ossim_uint32 width,
    ossim_uint32 height,
    ossimScalarType   scalarType,
-   ossimDataObjectStatus status)
+   ossimDataObjectStatus /* status */)
    :ossimDataObject(owner, OSSIM_NULL),
     m_numberOfDataComponents(numberOfDataComponents),
     m_scalarType(scalarType),
@@ -87,7 +87,7 @@ ossimRectilinearDataObject::ossimRectilinearDataObject(
    ossim_uint32 height,
    ossim_uint32 depth,
    ossimScalarType   scalarType,
-   ossimDataObjectStatus status)
+   ossimDataObjectStatus /* status */)
    :ossimDataObject(owner, OSSIM_NULL),
     m_numberOfDataComponents(numberOfDataComponents),
     m_scalarType(scalarType),

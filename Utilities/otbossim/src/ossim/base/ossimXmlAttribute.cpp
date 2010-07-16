@@ -10,7 +10,7 @@
 // Contains definition of class ossimXmlAttribute.
 // 
 //*****************************************************************************
-// $Id: ossimXmlAttribute.cpp 12886 2008-05-21 18:00:43Z gpotts $
+// $Id: ossimXmlAttribute.cpp 17503 2010-06-02 11:18:49Z dburken $
 
 #include <iostream>
 #include <sstream>
@@ -218,7 +218,8 @@ bool ossimXmlAttribute::readValue(std::istream& in)
    if(theValue != "")
    {
       ossimString::iterator startIter = theValue.begin();
-      ossimString::iterator endIter   = --theValue.end();
+      ossimString::iterator endIter   = theValue.end();
+      --endIter;
       if(*startIter == startQuote)
       {
          ++startIter;

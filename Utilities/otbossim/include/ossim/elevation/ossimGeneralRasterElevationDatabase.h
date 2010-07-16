@@ -5,16 +5,15 @@
 #include <ossim/elevation/ossimGeneralRasterElevHandler.h>
 #include <OpenThreads/Mutex>
 
-class OSSIM_DLL ossimGeneralRasterElevationDatabase : public ossimElevationDatabase
+class OSSIM_DLL ossimGeneralRasterElevationDatabase : public ossimElevationCellDatabase
 {
 public:
-   typedef std::vector<ossimRefPtr<CellInfo> > DirectMap; // 360x180 cell grid
    ossimGeneralRasterElevationDatabase()
-   :ossimElevationDatabase()   
+   :ossimElevationCellDatabase()
    {
    }
    ossimGeneralRasterElevationDatabase(const ossimGeneralRasterElevationDatabase& rhs)
-   :ossimElevationDatabase(rhs)
+   :ossimElevationCellDatabase(rhs)
    {
    }
    virtual ~ossimGeneralRasterElevationDatabase()
@@ -42,12 +41,12 @@ public:
     * Returns the vertical and horizontal accuracy (90% confidence) in the
     * region of gpt:
     */
-   virtual double getAccuracyLE90(const ossimGpt& gpt) const
+   virtual double getAccuracyLE90(const ossimGpt& /* gpt */) const
    {
       std::cout << "ossimGeneralElevationDatabase::getAccuracyLE90 \n";
       return 0.0;
    }
-   virtual double getAccuracyCE90(const ossimGpt& gpt) const
+   virtual double getAccuracyCE90(const ossimGpt& /* gpt */) const
    {
       std::cout << "ossimGeneralElevationDatabase::getAccuracyCE90 \n";
       return 0.0;
@@ -56,6 +55,10 @@ public:
    virtual double getHeightAboveEllipsoid(const ossimGpt& gpt);
    virtual bool loadState(const ossimKeywordlist& kwl, const char* prefix = 0);
    virtual bool saveState(ossimKeywordlist& kwl, const char* prefix = 0)const;
+   virtual ossim_uint64 createId(const ossimGpt& pt)const
+   {
+     return 0;
+   }
    
 protected:
    ossimRefPtr<ossimGeneralRasterElevHandler> m_cellHandler;
@@ -67,7 +70,7 @@ protected:
       createRelativePath(relativeFile, gpt);
       file = ossimFilename(m_connectionString).dirCat(relativeFile);
    }
-   ossimRefPtr<ossimElevCellHandler> getOrCreateHandler(const ossimGpt& gpt)
+   ossimRefPtr<ossimElevCellHandler> createHandler(const ossimGpt& /* gpt */)
    {
       return m_cellHandler.get();
    }

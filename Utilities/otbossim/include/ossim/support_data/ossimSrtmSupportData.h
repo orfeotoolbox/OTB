@@ -12,7 +12,7 @@
 // Support data class for a Shuttle Radar Topography Mission (SRTM) file.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimSrtmSupportData.h 11184 2007-06-08 02:21:08Z gpotts $
+// $Id: ossimSrtmSupportData.h 17602 2010-06-20 19:12:24Z dburken $
 #ifndef ossimSrtmSupportData_HEADER
 #define ossimSrtmSupportData_HEADER
 
@@ -21,6 +21,7 @@
 #include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimRefPtr.h>
 #include <ossim/base/ossimIoStream.h>
+#include <ossim/projection/ossimProjection.h>
 
 /**
  * @class ossimStrmSupportData
@@ -83,6 +84,12 @@ public:
     *  keyword ul_lat will be like:  "image01.ul_lat:  -40.00000"
     */
    virtual bool getImageGeometry(ossimKeywordlist& kwl, const char* prefix=0);
+
+   /**
+    * @brief Gets the projection for srtm cell.
+    * @return  The projection for srtm cell.
+    */
+   ossimRefPtr<ossimProjection> getProjection() const;
 
    /**
     * Method to save the state of the object to a keyword list.

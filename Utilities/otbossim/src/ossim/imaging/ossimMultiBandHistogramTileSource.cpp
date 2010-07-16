@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimMultiBandHistogramTileSource.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
+// $Id: ossimMultiBandHistogramTileSource.cpp 17195 2010-04-23 17:32:18Z dburken $
 #include <ossim/imaging/ossimMultiBandHistogramTileSource.h>
 #include <ossim/base/ossimMultiResLevelHistogram.h>
 #include <ossim/base/ossimMultiBandHistogram.h>
@@ -34,10 +34,11 @@ ossimMultiBandHistogramTileSource::ossimMultiBandHistogramTileSource()
    disableSource();
 }
 
-ossimMultiBandHistogramTileSource::ossimMultiBandHistogramTileSource(double minValuePercent,
-                                                               double maxValuePercent,
-                                                               ossimImageSource* inputSource,
-                                                               ossimMultiResLevelHistogram* histogram)
+ossimMultiBandHistogramTileSource::ossimMultiBandHistogramTileSource(
+   double /* minValuePercent */,
+   double /* maxValuePercent */,
+   ossimImageSource* inputSource,
+   ossimMultiResLevelHistogram* histogram)
    : ossimImageSourceHistogramFilter(inputSource, histogram),
      theTile(0),
      theAlgorithm(OSSIM_HISTOGRAM_LINEAR_STRETCH_ALGORITHM)
@@ -302,8 +303,8 @@ bool ossimMultiBandHistogramTileSource::saveState(ossimKeywordlist& kwl,
 }
 
 template <class T>
-ossimRefPtr<ossimImageData> ossimMultiBandHistogramTileSource::runLinearStretchAlgorithm(T dummyVariable,
-                                                                              ossimRefPtr<ossimImageData>& tile)
+ossimRefPtr<ossimImageData> ossimMultiBandHistogramTileSource::runLinearStretchAlgorithm(
+   T /* dummyVariable */, ossimRefPtr<ossimImageData>& tile)
 {
    if(!getHistogram())
    {

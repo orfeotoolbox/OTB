@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageAoiListener.h 14799 2009-06-30 08:54:44Z dburken $
+// $Id: ossimImageAoiListener.h 17195 2010-04-23 17:32:18Z dburken $
 #ifndef ossimImageAoiListener_HEADER
 #define ossimImageAoiListener_HEADER
 #include <ossim/base/ossimListener.h>
@@ -21,9 +21,9 @@ public:
    
    virtual void processEvent(ossimEvent& event);
 
-   virtual void imageRectangleEvent(ossimImageRectangleEvent& event)
+   virtual void imageRectangleEvent(ossimImageRectangleEvent& /* event */)
       {}
-   virtual void imagePolygonEvent(ossimImagePolygonEvent& event)
+   virtual void imagePolygonEvent(ossimImagePolygonEvent& /* event */)
       {}
 };
 #endif

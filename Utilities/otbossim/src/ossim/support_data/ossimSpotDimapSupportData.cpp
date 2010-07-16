@@ -9,10 +9,11 @@
 // Contains definition of class ossimSpotDimapSupportData.
 //
 //*****************************************************************************
-// $Id: ossimSpotDimapSupportData.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
+// $Id: ossimSpotDimapSupportData.cpp 17501 2010-06-02 11:14:55Z dburken $
 
 
 #include <iostream>
+#include <cstdio>
 #include <cstdlib>
 #include <iterator>
 #include <ossim/support_data/ossimSpotDimapSupportData.h>
@@ -237,8 +238,6 @@ void ossimSpotDimapSupportData::clearFields()
 
 }
 
-
-
 bool ossimSpotDimapSupportData::loadXmlFile(const ossimFilename& file,
                                             bool processSwir)
 {
@@ -395,7 +394,7 @@ bool ossimSpotDimapSupportData::loadXmlFile(const ossimFilename& file,
          << std::endl;
       return false;
    }
- 
+
    if (parsePart1(xmlDocument) == false)
    {
       ossimNotify(ossimNotifyLevel_FATAL)
@@ -1834,7 +1833,6 @@ bool ossimSpotDimapSupportData::parsePart1(
    }
    theInstrumentIndex = xml_nodes[0]->getText().toUInt32();
 
-
    return true;
 }
 
@@ -2655,7 +2653,6 @@ bool ossimSpotDimapSupportData::initSceneSource(
     *
     * */
    //---
-  
    if(this->theSensorID == "Spot 5") {
    xml_nodes.clear();
    xpath = "/Dimap_Document/Dataset_Sources/Source_Information/Scene_Source/VIEWING_ANGLE";
@@ -2841,6 +2838,53 @@ bool ossimSpotDimapSupportData::initFramePoints(
    }
    theSceneOrientation = xml_nodes[0]->getText().toDouble();  
 
+   //---
+   // Fetch viewing angle:
+   /*
+    * From the SPOT Dimap documentation (Dimap Generic 1.0), VIEWING_ANGLE
+    * (the scene instrumental viewing angle) is ONLY available for SPOT5 data.
+    * WORKAROUND: if SPOT1 or SPOT4 data, then set VIEWING_ANGLE to -1.0
+    * */
+   //---
+   if(this->theSensorID == "Spot 5") {
+   xml_nodes.clear();
+   xpath = "/Dimap_Document/Dataset_Sources/Source_Information/Scene_Source/VIEWING_ANGLE";
+   xmlDocument->findNodes(xpath, xml_nodes);
+   if (xml_nodes.size() == 0)
+   {
+      setErrorStatus();
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "DEBUG:\nCould not find: " << xpath
+            << std::endl;
+      }
+      return false;
+   }
+   theViewingAngle = xml_nodes[0]->getText().toDouble();
+   } else {
+       theViewingAngle = -1.0;
+   }
+
+   //---
+   // Fetch Step Count:
+   //---
+   xml_nodes.clear();
+   xpath = "/Dimap_Document/Data_Strip/Sensor_Configuration/Mirror_Position/STEP_COUNT";
+   xmlDocument->findNodes(xpath, xml_nodes);
+   if (xml_nodes.size() == 0)
+   {
+      setErrorStatus();
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "DEBUG:\nCould not find: " << xpath
+            << std::endl;
+      }
+      return false;
+   }
+   theStepCount = xml_nodes[0]->getText().toInt();
+   
    return true;
 }
 

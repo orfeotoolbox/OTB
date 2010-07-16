@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimRgbToIndexFilter.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimRgbToIndexFilter.cpp 17195 2010-04-23 17:32:18Z dburken $
 
 #include <ossim/imaging/ossimRgbToIndexFilter.h>
 #include <ossim/imaging/ossimImageData.h>
@@ -207,7 +207,7 @@ double ossimRgbToIndexFilter::getNullPixelValue(ossim_uint32 band)const
    return ossimImageSourceFilter::getNullPixelValue(band);
 }
 
-double ossimRgbToIndexFilter::getMinPixelValue(ossim_uint32 band)const
+double ossimRgbToIndexFilter::getMinPixelValue(ossim_uint32 /* band */)const
 {
    if(isSourceEnabled())
    {
@@ -217,7 +217,7 @@ double ossimRgbToIndexFilter::getMinPixelValue(ossim_uint32 band)const
    return ossimImageSourceFilter::getMinPixelValue();
 }
 
-double ossimRgbToIndexFilter::getMaxPixelValue(ossim_uint32 band)const
+double ossimRgbToIndexFilter::getMaxPixelValue(ossim_uint32 /* band */)const
 {
    if(isSourceEnabled())
    {

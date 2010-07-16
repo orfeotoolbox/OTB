@@ -4,7 +4,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-//$Id: ossimGeoAnnotationFontObject.cpp 15766 2009-10-20 12:37:09Z gpotts $
+//$Id: ossimGeoAnnotationFontObject.cpp 17108 2010-04-15 21:08:06Z dburken $
 
 #include <sstream>
 
@@ -26,9 +26,9 @@ ossimGeoAnnotationFontObject::ossimGeoAnnotationFontObject()
    :
    ossimGeoAnnotationObject(),
    theCenterGround(),
-   theFont(NULL),
+   theFont(0),
    theFontInfo(),
-   theAnnotationFontObject(NULL)
+   theAnnotationFontObject(0)
 {
    theFont = (ossimFont*)ossimFontFactoryRegistry::instance()->
       getDefaultFont()->dup();
@@ -60,9 +60,9 @@ ossimGeoAnnotationFontObject::ossimGeoAnnotationFontObject(
    :
    ossimGeoAnnotationObject(r, g, b),
    theCenterGround(location),
-   theFont(NULL),
+   theFont(0),
    theFontInfo(),
-   theAnnotationFontObject(NULL)
+   theAnnotationFontObject(0)
 {
   ossimDpt pt;
   pt.makeNan();
@@ -83,7 +83,7 @@ ossimGeoAnnotationFontObject::ossimGeoAnnotationFontObject(
    :
    ossimGeoAnnotationObject(rhs),
    theCenterGround(rhs.theCenterGround),
-   theFont(rhs.theFont.valid()?(ossimFont*)rhs.theFont->dup():(ossimFont*)NULL),
+   theFont(rhs.theFont.valid()?(ossimFont*)rhs.theFont->dup():(ossimFont*)0),
    theFontInfo(),
    theAnnotationFontObject(
       new ossimAnnotationFontObject(
@@ -206,9 +206,9 @@ void ossimGeoAnnotationFontObject::getBoundingRect(ossimDrect& rect)const
 }
 
 ossimAnnotationObject* ossimGeoAnnotationFontObject::getNewClippedObject(
-   const ossimDrect& rect)const
+   const ossimDrect& /* rect */)const
 {
-   return (ossimAnnotationObject*)NULL;
+   return (ossimAnnotationObject*)0;
 }
 
 bool ossimGeoAnnotationFontObject::intersects(const ossimDrect& rect)const

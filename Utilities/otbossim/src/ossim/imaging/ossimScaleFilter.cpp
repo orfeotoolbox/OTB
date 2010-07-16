@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimScaleFilter.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimScaleFilter.cpp 17195 2010-04-23 17:32:18Z dburken $
 #include <ossim/imaging/ossimScaleFilter.h>
 #include <ossim/imaging/ossimFilter.h>
 #include <ossim/imaging/ossimDiscreteConvolutionKernel.h>
@@ -382,7 +382,7 @@ void ossimScaleFilter::setScaleFactor(const ossimDpt& scale)
 
 //**************************************************************************************************
 template <class T> void ossimScaleFilter::runHorizontalFilterTemplate(
-   T dummy,
+   T /* dummy */,
    const ossimRefPtr<ossimImageData>& input,
    ossimRefPtr<ossimImageData>& output)
 {
@@ -505,7 +505,7 @@ template <class T> void ossimScaleFilter::runHorizontalFilterTemplate(
 
 //**************************************************************************************************
 template <class T> void ossimScaleFilter::runVerticalFilterTemplate(
-   T dummy,
+   T /* dummy */,
    const ossimRefPtr<ossimImageData>& input,
    ossimRefPtr<ossimImageData>& output)
 {

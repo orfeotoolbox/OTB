@@ -6,7 +6,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfTagInformation.cpp 11093 2007-05-30 14:41:56Z dburken $
+// $Id: ossimNitfTagInformation.cpp 16997 2010-04-12 18:53:48Z dburken $
 
 #include <ossim/support_data/ossimNitfTagInformation.h>
 #include <ossim/support_data/ossimNitfTagFactoryRegistry.h>
@@ -58,18 +58,16 @@ void ossimNitfTagInformation::parseStream(std::istream &in)
          theTagData = (ossimNitfRegisteredTag*)NULL;
       }
    }
-   else
-   {
-      //ERROR
-   }
 }
 
 void ossimNitfTagInformation::writeStream(std::ostream &out)
 {
+   theTagOffset = out.tellp(); // Capture the offset.
    out.write(theTagName, 6);
    out.write(theTagLength, 5);
    if(theTagData.valid())
    {
+      theTagDataOffset = out.tellp();
       theTagData->writeStream(out);
    }
 }

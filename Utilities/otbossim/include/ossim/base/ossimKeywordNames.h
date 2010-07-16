@@ -8,7 +8,7 @@
 // Description: Common file for global Keywors.
 //
 //*************************************************************************
-// $Id: ossimKeywordNames.h 16038 2009-12-04 15:15:15Z dburken $
+// $Id: ossimKeywordNames.h 17609 2010-06-23 12:51:04Z dburken $
 
 #ifndef ossimKeywordNames_HEADER
 #define ossimKeywordNames_HEADER
@@ -60,6 +60,7 @@ public:
    static const char* ELEVATION_SOURCE_KW;
    static const char* ELEVATION_LOOKUP_FLAG_KW;
    static const char* ELLIPSE_CODE_KW;
+   static const char* ELLIPSE_EPSG_CODE_KW;
    static const char* ELLIPSE_NAME_KW;
    static const char* ENABLED_KW;
    static const char* ENABLE_CACHE_KW;

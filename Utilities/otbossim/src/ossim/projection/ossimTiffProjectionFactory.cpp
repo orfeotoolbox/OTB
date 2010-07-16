@@ -7,7 +7,7 @@
 //   Contains implementation of class ossimTiffProjectionFactory
 //
 //*****************************************************************************
-//  $Id: ossimTiffProjectionFactory.cpp 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimTiffProjectionFactory.cpp 17108 2010-04-15 21:08:06Z dburken $
 
 #include <ossim/projection/ossimTiffProjectionFactory.h>
 #include <ossim/support_data/ossimGeoTiff.h>
@@ -41,7 +41,7 @@ ossimTiffProjectionFactory::createProjection(const ossimFilename& filename,
 {
    if(!filename.exists())
    {
-      return NULL;
+      return 0;
    }
 
    if(isTiff(filename))
@@ -56,7 +56,7 @@ ossimTiffProjectionFactory::createProjection(const ossimFilename& filename,
       }
    }
    
-   return NULL;
+   return 0;
 }
 
 //*****************************************************************************
@@ -64,19 +64,19 @@ ossimTiffProjectionFactory::createProjection(const ossimFilename& filename,
 //  
 //*****************************************************************************
 ossimProjection*
-ossimTiffProjectionFactory::createProjection(const ossimKeywordlist &keywordList,
-                                            const char *prefix) const
+ossimTiffProjectionFactory::createProjection(const ossimKeywordlist& /* keywordList */,
+                                             const char* /* prefix */) const
 {
-   return NULL;
+   return 0;
 }
 
 //*****************************************************************************
 //  METHOD: ossimSensorModelFactory::create(projection_name)
 //  
 //*****************************************************************************
-ossimProjection* ossimTiffProjectionFactory::createProjection(const ossimString &name) const
+ossimProjection* ossimTiffProjectionFactory::createProjection(const ossimString& /* name */) const
 {
-   return NULL;
+   return 0;
 }
 
 ossimProjection* ossimTiffProjectionFactory::createProjection(ossimImageHandler* handler)const
@@ -111,9 +111,8 @@ ossimObject* ossimTiffProjectionFactory::createObject(const ossimKeywordlist& kw
    return createProjection(kwl, prefix);
 }
 
-void ossimTiffProjectionFactory::getTypeNameList(std::vector<ossimString>& typeList)const
+void ossimTiffProjectionFactory::getTypeNameList(std::vector<ossimString>& /* typeList */)const
 {
-   
 }
 
 bool ossimTiffProjectionFactory::isTiff(const ossimFilename& filename)const

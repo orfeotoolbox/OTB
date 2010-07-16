@@ -27,17 +27,18 @@ namespace otb
 namespace Functor
 {
 /**
-   * \class GAndRIndexBase
+ * \class GAndRIndexBase
+ *
  * \brief Base class for Green And Red channels of Spot Images
-*  XS1 corresponds to the green channel
-*  XS2 corresponds to the red channel
-*  XS3 corresponds to the Nir channel
-*  XS4 corresponds to the Mir channel (for Spot 4 & 5)
-*  Implement operators for UnaryFunctorImageFilter templated with a
-*  VectorImage and BinaryFunctorImageFilter templated with single
-*  images.
-*  Subclasses should NOT overload operators, they must  re-implement
-*  the Evaluate() method.
+ *  XS1 corresponds to the green channel
+ *  XS2 corresponds to the red channel
+ *  XS3 corresponds to the Nir channel
+ *  XS4 corresponds to the Mir channel (for Spot 4 & 5)
+ *  Implement operators for UnaryFunctorImageFilter templated with a
+ *  VectorImage and BinaryFunctorImageFilter templated with single
+ *  images.
+ *  Subclasses should NOT overload operators, they must  re-implement
+ *  the Evaluate() method.
  *
  * \ingroup Radiometry
 */

@@ -26,7 +26,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  ******************************************************************************
- * $Id: ossimDdffield.cpp 11347 2007-07-23 13:01:59Z gpotts $
+ * $Id: ossimDdffield.cpp 17170 2010-04-20 13:51:55Z gpotts $
  */
 
 #include <ossim/imaging/ossimIso8211.h>
@@ -35,7 +35,7 @@
 
 // #include "cpl_conv.h"
 
-// CPL_CVSID("$Id: ossimDdffield.cpp 11347 2007-07-23 13:01:59Z gpotts $");
+// CPL_CVSID("$Id: ossimDdffield.cpp 17170 2010-04-20 13:51:55Z gpotts $");
 
 // Note, we implement no constructor for this class to make instantiation
 // cheaper.  It is required that the Initialize() be called before anything
@@ -303,7 +303,7 @@ const char *ossimDDFField::GetInstanceData( int nInstance,
 /*      Get a pointer to the start of the existing data for this        */
 /*      iteration of the field.                                         */
 /* -------------------------------------------------------------------- */
-    int         nBytesRemaining1, nBytesRemaining2;
+    int         nBytesRemaining1=0, nBytesRemaining2=0;
     ossimDDFSubfieldDefn *poFirstSubfield;
 
     poFirstSubfield = poDefn->GetSubfield(0);

@@ -74,7 +74,7 @@ public:
   }
 
   /** Get the comment for the watcher. */
-  std::string GetComment()
+  std::string GetComment() const
   {
     return m_Comment;
   }

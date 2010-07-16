@@ -1,8 +1,19 @@
+//----------------------------------------------------------------------------
+//
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
+// 
+//----------------------------------------------------------------------------
+// $Id: ossimNitfFileHeaderV2_X.h 16997 2010-04-12 18:53:48Z dburken $
+
 #ifndef ossimNitfFileHeaderV2_X_HEADER
 #define ossimNitfFileHeaderV2_X_HEADER
 #include <ossim/base/ossimConstants.h>
 #include <ossim/support_data/ossimNitfFileHeader.h>
-#include <ossim/base/ossimDate.h>
+
+
+class ossimLocalTm;
 
 class OSSIM_DLL ossimNitfFileHeaderV2_X : public ossimNitfFileHeader
 {
@@ -32,8 +43,36 @@ public:
    void setComplexityLevel(const ossimString& level);
    void setSystemType(const ossimString& systemType);
    void setOriginatingStationId(const ossimString& originationId);
+
+   /**
+    * @brief Sets field FDT.
+    *
+    * Version 2.0 format: DDHHMMSSZMONYY
+    * Version 2.1 format: CCYYMMDDhhmmss
+    *
+    * @param ossimLocalTm Local time.  Note that this will be converted to
+    * GMT(ZULU).
+    */
    void setDate(const ossimLocalTm& d);
+
+   
+   /**
+    * @brief Sets field FDT.
+    *
+    * @param d Date string to copy to FDT field.
+    *
+    * @note No conversions performed. 
+    */
    void setDate(const ossimString& d);
+
+   /**
+    * @brief Sets field FDT to current time converted to GMT(ZULU).
+    *
+    * Version 2.0 format: DDHHMMSSZMONYY
+    * Version 2.1 format: CCYYMMDDhhmmss
+    */
+   virtual void setDate();
+
    void setTitle(const ossimString& title);
    void setFileSecurityClassification(const ossimString& securityClassification);
    void setCopyNumber(const ossimString& copyNumber);
@@ -54,7 +93,8 @@ public:
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
 
    /**
-    * Properties of a NITF 2.x Header file. See MIL-STD-2500A or MIL-STD-2500B for details.
+    * Properties of a NITF 2.x Header file. See MIL-STD-2500A or
+    * MIL-STD-2500B for details.
     *
     * To access these, pass the constant to getProperty().
     */
@@ -76,6 +116,7 @@ public:
    static const ossimString ENCRYP_KW;
    static const ossimString ONAME_KW;
    static const ossimString OPHONE_KW;
+
 protected:
 
    /**

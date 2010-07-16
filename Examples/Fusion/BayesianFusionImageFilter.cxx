@@ -22,10 +22,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#ifdef __BORLANDC__
-#define ITK_LEAN_AND_MEAN
-#endif
-
 //  Software Guide : BeginCommandLineArgs
 //  INPUTS: {multiSpect.tif} , {multiSpectInterp.tif}, {panchro.tif}
 //  OUTPUTS: {BayesianFusion_0.9999.tif} , {pretty_BayesianFusion_0.9999.png} , {pretty_multiSpect_0.9999.png} , {pretty_multiSpectInterp_0.9999.png} , {pretty_panchro_0.9999.png}

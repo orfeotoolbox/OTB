@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfRegisteredTag.cpp 14241 2009-04-07 19:59:23Z dburken $
+// $Id: ossimNitfRegisteredTag.cpp 17206 2010-04-25 23:20:40Z dburken $
 
 #include <ostream>
 #include <string>
@@ -27,16 +27,16 @@ ossimNitfRegisteredTag::ossimNitfRegisteredTag()
 ossimNitfRegisteredTag::~ossimNitfRegisteredTag()
 {}
 
-void ossimNitfRegisteredTag::setProperty(ossimRefPtr<ossimProperty> property)
+void ossimNitfRegisteredTag::setProperty(ossimRefPtr<ossimProperty> /* property */)
 {
 }
 
-ossimRefPtr<ossimProperty> ossimNitfRegisteredTag::getProperty(const ossimString& name)const
+ossimRefPtr<ossimProperty> ossimNitfRegisteredTag::getProperty(const ossimString& /* name */)const
 {
    return 0;
 }
 
-void ossimNitfRegisteredTag::getPropertyNames(std::vector<ossimString>& propertyNames)const
+void ossimNitfRegisteredTag::getPropertyNames(std::vector<ossimString>& /* propertyNames */)const
 {
 }
 

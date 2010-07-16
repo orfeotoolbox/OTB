@@ -11,7 +11,7 @@
 // Description: This class defines a DEM profile.
 //
 //********************************************************************
-// $Id: ossimDemProfile.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimDemProfile.cpp 17206 2010-04-25 23:20:40Z dburken $
 
 #include <cstdlib>
 #include <iostream>
@@ -147,8 +147,7 @@ operator>>(std::istream& s, ossimDemProfile& demp)
 }
 
 
-std::ostream&
-operator<<(std::ostream& s, ossimDemProfile& demp)
+std::ostream& operator<<(std::ostream& s, ossimDemProfile& /* demp */)
 {
    return s;
 }

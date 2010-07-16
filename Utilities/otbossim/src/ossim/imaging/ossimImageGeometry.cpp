@@ -71,83 +71,78 @@ ossimImageGeometry::~ossimImageGeometry()
    // Nothing to do
 }
 
-
-void ossimImageGeometry::rnToLocal(const ossimDpt& rnPt, ossim_uint32 resolutionLevel, ossimDpt& localPt)
+void ossimImageGeometry::rnToRn(const ossimDpt& inRnPt, ossim_uint32 inResolutionLevel,
+                                ossim_uint32 outResolutionLevel, ossimDpt& outRnPt) const
 {
-   if(resolutionLevel != 0)
+   if (inResolutionLevel != outResolutionLevel)
    {
-      ossimDpt decimation = decimationFactor(resolutionLevel);
-      localPt.makeNan();
-      if(!decimation.hasNans())
-      {
-         localPt.x = rnPt.x*(1.0/decimation.x);
-         localPt.y = rnPt.y*(1.0/decimation.y);
-      }
+      // Back out the decimation.
+      ossimDpt pt;
+      undecimatePoint(inRnPt, inResolutionLevel, pt);
+
+      // Decimate to new level.
+      decimatePoint(pt, outResolutionLevel, outRnPt);
    }
    else
    {
-      localPt = rnPt;
+      outRnPt = inRnPt; // No transform required.
    }
 }
 
-void ossimImageGeometry::rnToFull(const ossimDpt& rnPt, ossim_uint32 resolutionLevel, ossimDpt& fullPt)
+void ossimImageGeometry::rnToFull(const ossimDpt& rnPt,
+                                  ossim_uint32 resolutionLevel,
+                                  ossimDpt& fullPt) const
 {
+   // Back out the decimation.
    ossimDpt localPt;
-   rnToLocal(rnPt, resolutionLevel, localPt);
-   localToFullImage(localPt, fullPt);
+   undecimatePoint(rnPt, resolutionLevel, localPt);
+
+   // Remove any shift/rotation.
+   if ( m_transform.valid() && !localPt.hasNans() )
+   {
+      m_transform->forward(localPt, fullPt);
+   }
+   else
+   {
+      fullPt = localPt; // No transform (shift/rotation)
+   }
 }
 
-void ossimImageGeometry::rnToWorld(const ossimDpt& rnPt, ossim_uint32 resolutionLevel, ossimGpt& wpt)
+void ossimImageGeometry::fullToRn(const ossimDpt& fullPt,
+                                  ossim_uint32 resolutionLevel,
+                                  ossimDpt& rnPt) const
+{
+   // Apply shift/rotation.
+   ossimDpt localPt;
+   if (m_transform.valid())
+   {
+      m_transform->inverse(fullPt, localPt);
+   }
+   else
+   {
+      localPt = fullPt; // No transform (shift/rotation)
+   }
+
+   // Apply the decimation.
+   decimatePoint(localPt, resolutionLevel, rnPt);
+}
+
+void ossimImageGeometry::rnToWorld(const ossimDpt& rnPt,
+                                   ossim_uint32 resolutionLevel,
+                                   ossimGpt& wpt) const
 {
    ossimDpt localPt;
-   rnToLocal(rnPt, resolutionLevel, localPt);
+   rnToRn(rnPt, resolutionLevel, 0, localPt);
    localToWorld(localPt, wpt);
 }
 
-void ossimImageGeometry::worldToRn(const ossimGpt& wpt, ossim_uint32 resolutionLevel, ossimDpt& rnPt)
+void ossimImageGeometry::worldToRn(const ossimGpt& wpt,
+                                   ossim_uint32 resolutionLevel,
+                                   ossimDpt& rnPt) const
 {   
    ossimDpt localPt;
    worldToLocal(wpt, localPt);
-   
-   if(resolutionLevel != 0)
-   {
-      ossimDpt decimation = decimationFactor(resolutionLevel);
-      if(!decimation.hasNans())
-      {
-         rnPt.x = localPt.x*decimation.x;
-         rnPt.y = localPt.y*decimation.y;
-      }
-   }
-   else
-   {
-      rnPt = localPt;
-   }
-}
-
-//**************************************************************************************************
-//! Exposes the 2D functionality that transforms from local (file) x,y pixel to full-image
-//! X,Y coordinates
-//**************************************************************************************************
-void ossimImageGeometry::localToFullImage(const ossimDpt& local_pt, ossimDpt& full_pt) const
-{
-    // Perform forward transform if available, otherwise assume identity:
-    if (m_transform.valid())
-        m_transform->forward(local_pt, full_pt);
-    else
-        full_pt = local_pt;
-}
-
-//**************************************************************************************************
-//! Exposes the 2D functionality that transforms from full-image X,Y coordinates to 
-//! local (file) x,y pixel coordinates
-//**************************************************************************************************
-void ossimImageGeometry::fullToLocalImage(const ossimDpt& full_pt, ossimDpt& local_pt) const
-{
-    // Perform inverse transform if available, otherwise assume identity:
-    if (m_transform.valid())
-        m_transform->inverse(full_pt, local_pt);
-    else
-        local_pt = full_pt;
+   rnToRn(localPt, 0, resolutionLevel, rnPt);
 }
 
 //**************************************************************************************************
@@ -166,9 +161,8 @@ bool ossimImageGeometry::localToWorld(const ossimDpt& local_pt, ossimGpt& world_
     }
 
     // First transform local pixel to full-image pixel:
-    ossimDpt full_image_pt (local_pt);
-    if (m_transform.valid())
-        m_transform->forward(local_pt, full_image_pt);
+    ossimDpt full_image_pt;
+    rnToFull(local_pt, 0, full_image_pt);
 
     // Perform projection to world coordinates:
     m_projection->lineSampleToWorld(full_image_pt, world_pt);
@@ -182,13 +176,13 @@ bool ossimImageGeometry::localToWorld(const ossimDpt& local_pt, ossimGpt& world_
 //**************************************************************************************************
 bool ossimImageGeometry::worldToLocal(const ossimGpt& world_pt, ossimDpt& local_pt) const
 {
-    //! Return a NAN point of no projection is defined:
-    if (!m_projection.valid())
-    {
-        local_pt.makeNan();
-        return false;
-    }
-
+   //! Return a NAN point of no projection is defined:
+   if (!m_projection.valid())
+   {
+      local_pt.makeNan();
+      return false;
+   }
+   
    ossimGpt copyPt(world_pt);
    if(isAffectedByElevation())
    {
@@ -197,17 +191,15 @@ bool ossimImageGeometry::worldToLocal(const ossimGpt& world_pt, ossimDpt& local_
          copyPt.hgt = ossimElevManager::instance()->getHeightAboveEllipsoid(copyPt);
       }
    }
-    // First Perform projection from world coordinates to full-image space:
-    ossimDpt full_image_pt;
-    m_projection->worldToLineSample(copyPt, full_image_pt);
+   
+   // First Perform projection from world coordinates to full-image space:
+   ossimDpt full_image_pt;
+   m_projection->worldToLineSample(copyPt, full_image_pt);
 
-    // Then transform to local space:
-    if (m_transform.valid())
-        m_transform->inverse(full_image_pt, local_pt);
-    else
-        local_pt = full_image_pt;
-
-    return true;
+   // Then transform to local space:
+   fullToRn(full_image_pt, 0, local_pt);
+   
+   return true;
 }
 
 //**************************************************************************************************
@@ -262,30 +254,40 @@ const ossimDpt& ossimImageGeometry::getMetersPerPixel() const
 //**************************************************************************************************
 void ossimImageGeometry::computeGsd()const
 {
-   if (!m_projection.valid())
+   //---
+   // We need to do the local-to-world but eliminating elevation effects,
+   // hence the complication:
+   //
+   // Note that by doing the rnToFull the tranform and decimation are account for.
+   //---
+
+   if (m_projection.valid())
+   {
+      // Get three points in full image space.
+      ossimDpt pL0(0,0);
+      ossimDpt pLx(1,0);
+      ossimDpt pLy(0,1);
+      ossimDpt pF0;
+      ossimDpt pFx;
+      ossimDpt pFy;
+      rnToFull(pL0, 0, pF0);
+      rnToFull(pLx, 0, pFx);
+      rnToFull(pLy, 0, pFy);
+      
+      ossimGpt g0, gx, gy;
+      
+      m_projection->lineSampleToWorld(pF0, g0);
+      m_projection->lineSampleHeightToWorld(pFx, g0.height(), gx);
+      m_projection->lineSampleHeightToWorld(pFy, g0.height(), gy);
+      
+      // Compute horizontal distance for one pixel:
+      m_gsd.x = g0.distanceTo(gx);
+      m_gsd.y = g0.distanceTo(gy);
+   }
+   else
    {
       m_gsd.makeNan();
-      return;
    }
-   ossimDpt pL0 (0,0);
-   if (m_transform.valid())
-      pL0 = m_transform->getOrigin();
-
-   ossimDpt pLx (pL0.x+1.0, pL0.y    );
-   ossimDpt pLy (pL0.x    , pL0.y+1.0);
-
-   // We need to do the local-to-world but eliminating elevation effects, hence the complication:
-   ossimGpt g0, gx, gy;
-   ossimDpt pFx, pFy;
-   localToWorld(pL0, g0);
-   localToFullImage(pLx, pFx);
-   localToFullImage(pLy, pFy);
-   m_projection->lineSampleHeightToWorld(pFx, g0.height(), gx);
-   m_projection->lineSampleHeightToWorld(pFy, g0.height(), gy);
-
-   // Compute horizontal distance for one pixel:
-   m_gsd.x = g0.distanceTo(gx);
-   m_gsd.y = g0.distanceTo(gy);
 }
 
 //**************************************************************************************************
@@ -322,7 +324,8 @@ std::ostream& ossimImageGeometry::print(std::ostream& out) const
 //**************************************************************************************************
 bool ossimImageGeometry::operator==(const ossimImageGeometry& other) const
 {
-    return ((m_transform == other.m_transform) && (m_projection == other.m_projection));
+    return ((m_transform == other.m_transform) && (m_projection == other.m_projection) &&
+            (decimationFactor(0) == other.decimationFactor(0)) );
 }
 
 //**************************************************************************************************
@@ -456,7 +459,7 @@ bool ossimImageGeometry::loadState(const ossimKeywordlist& kwl,
          setProjection(projection);
       } 
    }
-
+   
    return true;
 }
 
@@ -521,4 +524,63 @@ const ossimImageGeometry& ossimImageGeometry::operator=(const ossimImageGeometry
       m_gsd = copy_this.m_gsd;
    }
    return *this;
+}
+
+void ossimImageGeometry::undecimatePoint(const ossimDpt& rnPt,
+                                         ossim_uint32 resolutionLevel,
+                                         ossimDpt& outPt) const
+{
+   // Back out the decimation.
+   ossimDpt decimation = decimationFactor(resolutionLevel);
+   
+   //---
+   // If no nans and one or both of the factors is not 1.0 decimation should
+   // be applied.
+   //---
+   if ( (decimation.x != 1.0) || (decimation.y != 1.0) ) 
+   {
+      if ( !decimation.hasNans() && !rnPt.hasNans() )
+      {
+         outPt.x = rnPt.x * (1.0/decimation.x);
+         outPt.y = rnPt.y * (1.0/decimation.y);
+      }
+      else
+      {
+         outPt.makeNan();
+      }
+   }
+   else
+   {
+      outPt = rnPt; // No decimation.
+   }
+}
+
+void ossimImageGeometry::decimatePoint(const ossimDpt& inPt,
+                                       ossim_uint32 resolutionLevel,
+                                       ossimDpt& rnPt) const
+{
+   
+   // Apply the decimation.
+   ossimDpt decimation = decimationFactor(resolutionLevel);
+
+   //---
+   // If no nans and one or both of the factors is not 1.0 decimation should
+   // be applied.
+   //---
+   if ( (decimation.x != 1.0) || (decimation.y != 1.0) ) 
+   {
+      if ( !decimation.hasNans() && !inPt.hasNans() )
+      {
+         rnPt.x = inPt.x * decimation.x;
+         rnPt.y = inPt.y * decimation.y;
+      }
+      else
+      {
+        rnPt.makeNan(); 
+      }
+   }
+   else
+   {
+      rnPt = inPt; // No decimation.
+   }
 }
