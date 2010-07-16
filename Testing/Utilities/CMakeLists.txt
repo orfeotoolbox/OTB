@@ -461,6 +461,13 @@ ADD_TEST( utTvClassifyKNN2   ${UTILITIES_TESTS}
         4
         )
 
+# ------- GreyLevelRunLengthMatrixTextureCoefficientsCalculator from Insight Journal  --------------------
+ADD_TEST( ijTuGreyLevelRunLengthMatrixTextureCoefficientsCalculator ${UTILITIES_TESTS}
+          ijGreyLevelRunLengthMatrixTextureCoefficientsCalculatorTest
+          ${INPUTDATA}/Textures/1.1.02.png )
+          
+
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(UtilitiesTests_SRCS
 ossimIntegrationTest.cxx
@@ -500,6 +507,7 @@ kmlsimplifylines.cc
 kmlsortplacemarks.cc
 siftfast.cpp
 ijObjectLabelAttributeValuesTest.cxx
+ijGreyLevelRunLengthMatrixTextureCoefficientsCalculatorTest.cxx
 classifyKNN2.cxx
 )
 
@@ -550,9 +558,7 @@ IF(NOT BUILD_SHARED_LIBS)
 ENDIF(NOT BUILD_SHARED_LIBS)
 
 ADD_EXECUTABLE(otbUtilitiesTests otbUtilitiesTests.cxx ${UtilitiesTests_SRCS})
-# TARGET_LINK_LIBRARIES(otbUtilitiesTests OTBIO OTBCommon ${GDAL_LIBRARY} ITKAlgorithms ITKStatistics otbossim otbsvm otb6S tinyXML otbkml otbsiftfast)
 TARGET_LINK_LIBRARIES(otbUtilitiesTests OTBIO OTBCommon OTBTesting otbsvm otb6S tinyXML otbkml otbsiftfast)
-
 
 IF(OTB_COMPILE_JPEG2000)
   TARGET_LINK_LIBRARIES(otbUtilitiesTests otbopenjpeg)
@@ -580,7 +586,6 @@ ENDIF(UNIX)
 #ENDFOREACH(loop_var)
 
 
-
 # Original 6S main executable in C
 #     ADD_EXECUTABLE(otb6SMain 6SMainTest.cxx )
 #     TARGET_LINK_LIBRARIES(otb6SMain OTBCommon otb6S)
@@ -594,8 +599,5 @@ ENDIF(UNIX)
 #     IF(UNIX)
 #         TARGET_LINK_LIBRARIES (otb6SMainWithCallFunction m)
 #     ENDIF(UNIX)
-
-#--- ijObjectLabel --#
-
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
