@@ -26,8 +26,10 @@
 // Optical sensors
 #include "otbIkonosImageMetadataInterfaceFactory.h"
 #include "otbSpotImageMetadataInterfaceFactory.h"
+#include "otbFormosatImageMetadataInterfaceFactory.h"
 #include "otbQuickBirdImageMetadataInterfaceFactory.h"
 #include "otbWorldView2ImageMetadataInterfaceFactory.h"
+
 // SAR Sensors
 //#include "otbTerraSarImageMetadataInterfaceFactory.h"
 
@@ -88,6 +90,7 @@ ImageMetadataInterfaceFactory
       {
       itk::ObjectFactoryBase::RegisterFactory(IkonosImageMetadataInterfaceFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(SpotImageMetadataInterfaceFactory::New());
+      itk::ObjectFactoryBase::RegisterFactory(FormosatImageMetadataInterfaceFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(QuickBirdImageMetadataInterfaceFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(WorldView2ImageMetadataInterfaceFactory::New());
       //itk::ObjectFactoryBase::RegisterFactory( TerraSarImageMetadataInterfaceFactory::New() );
