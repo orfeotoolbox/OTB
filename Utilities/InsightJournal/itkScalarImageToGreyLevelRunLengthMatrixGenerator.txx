@@ -72,26 +72,49 @@ namespace itk {
 
       this->m_Output->Initialize(size, this->m_LowerBound, this->m_UpperBound);
 
+      // Next, find the minimum radius that encloses all the offsets.
+      unsigned int minRadius = 0;
+      typename OffsetVector::ConstIterator offsets;
+      for(offsets = m_Offsets->Begin(); offsets != m_Offsets->End(); offsets++)
+        {
+        for(unsigned int i = 0; i < offsets.Value().GetOffsetDimension(); i++)
+          {
+          unsigned int distance = vnl_math_abs(offsets.Value()[i]);
+          if(distance > minRadius)
+            {
+            minRadius = distance;
+            }
+          }
+        }
+
+      RadiusType radius;
+      radius.Fill(minRadius);
+
       // Now fill in the histogram
-      this->FillHistogram();
+      this->FillHistogram(radius, m_Input->GetRequestedRegion());
       }
 
     template< class TImageType, class THistogramFrequencyContainer >
     void
     ScalarImageToGreyLevelRunLengthMatrixGenerator< TImageType,
     THistogramFrequencyContainer >::
-    FillHistogram()
+    FillHistogram( RadiusType radius, RegionType region )
       {
 
       // Iterate over all of those pixels and offsets, adding each
       // co-occurrence pair to the histogram
-
+/*
       typedef ConstNeighborhoodIterator<ImageType> NeighborhoodIteratorType;
       typename NeighborhoodIteratorType::RadiusType radius;
       radius.Fill( 1 );
       NeighborhoodIteratorType neighborIt( radius,
         this->m_Input, this->m_Input->GetRequestedRegion() );
-        
+*/
+
+      typedef ConstNeighborhoodIterator<ImageType> NeighborhoodIteratorType;
+      NeighborhoodIteratorType neighborIt;
+      neighborIt = NeighborhoodIteratorType( radius, this->m_Input, region );
+
       typename OffsetVector::ConstIterator offsets;
       for( offsets = this->GetOffsets()->Begin(); 
         offsets != this->GetOffsets()->End(); offsets++ )

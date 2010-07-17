@@ -38,23 +38,28 @@ namespace itk {
     void
     MaskedScalarImageToGreyLevelRunLengthMatrixGenerator< TImageType,
     THistogramFrequencyContainer >::
-    FillHistogram()
+    FillHistogram( RadiusType radius, RegionType region )
       {
       if ( this->m_ImageMask.IsNull() )
         {
         // If there's no mask set, just use the (faster) superclass method
-        Superclass::FillHistogram();
+        Superclass::FillHistogram( radius, region );
         return;
         }
 
       // Iterate over all of those pixels and offsets, adding each
       // co-occurrence pair to the histogram
-
+/*
       typedef ConstNeighborhoodIterator<ImageType> NeighborhoodIteratorType;
       typename NeighborhoodIteratorType::RadiusType radius;
       radius.Fill( 1 );
       NeighborhoodIteratorType neighborIt( radius,
         this->GetInput(), this->GetInput()->GetRequestedRegion() );
+*/
+      typedef ConstNeighborhoodIterator<ImageType> NeighborhoodIteratorType;
+      NeighborhoodIteratorType neighborIt, maskNeighborIt;
+      neighborIt = NeighborhoodIteratorType( radius, this->m_Input, region );
+      maskNeighborIt = NeighborhoodIteratorType( radius, this->m_ImageMask, region );
 
       typename OffsetVector::ConstIterator offsets;
       for( offsets = this->GetOffsets()->Begin(); 
@@ -74,7 +79,12 @@ namespace itk {
 
         for ( neighborIt.GoToBegin(); !neighborIt.IsAtEnd(); ++neighborIt )
           {
-          PixelType centerPixelIntensity = neighborIt.GetCenterPixel();
+          if ( maskNeighborIt.GetCenterPixel() != this->m_InsidePixelValue )
+            {
+            continue; // Go to the next loop if we're not in the mask
+            }
+
+          const PixelType centerPixelIntensity = neighborIt.GetCenterPixel();
           IndexType centerIndex = neighborIt.GetIndex();
 
           if ( centerPixelIntensity < this->GetMin() ||

@@ -1841,6 +1841,40 @@ ADD_TEST(feTvScalarImageToAdvancedTexturesFilter ${FEATUREEXTRACTION_TESTS15}
         ${INPUTDATA}/Mire_Cosinus_500_500.png
         ${TEMP}/feTvScalarImageToAdvancedTexturesFilterOutput
         8 5 1 1)
+        
+
+ADD_TEST(feTuScalarImageToHigherOrderTexturesFilterNew ${FEATUREEXTRACTION_TESTS15}
+        otbScalarImageToHigherOrderTexturesFilterNew
+)
+
+ADD_TEST(feTvScalarImageToHigherOrderTexturesFilter ${FEATUREEXTRACTION_TESTS15}
+        --compare-n-images ${EPSILON_8} 11   
+            ${BASELINE}/feTvScalarImageToHigherOrderTexturesFilterOutputShortRunEmphasis.tif
+            ${TEMP}/feTvScalarImageToHigherOrderTexturesFilterOutputShortRunEmphasis.tif
+            ${BASELINE}/feTvScalarImageToHigherOrderTexturesFilterOutputLongRunEmphasis.tif
+            ${TEMP}/feTvScalarImageToHigherOrderTexturesFilterOutputLongRunEmphasis.tif
+            ${BASELINE}/feTvScalarImageToHigherOrderTexturesFilterOutputGreyLevelNonuniformity.tif
+            ${TEMP}/feTvScalarImageToHigherOrderTexturesFilterOutputGreyLevelNonuniformity.tif
+            ${BASELINE}/feTvScalarImageToHigherOrderTexturesFilterOutputRunLengthNonuniformity.tif
+            ${TEMP}/feTvScalarImageToHigherOrderTexturesFilterOutputRunLengthNonuniformity.tif
+            ${BASELINE}/feTvScalarImageToHigherOrderTexturesFilterOutputRunPercentage.tif
+            ${TEMP}/feTvScalarImageToHigherOrderTexturesFilterOutputRunPercentage.tif
+            ${BASELINE}/feTvScalarImageToHigherOrderTexturesFilterOutputLowGreyLevelRunEmphasis.tif
+            ${TEMP}/feTvScalarImageToHigherOrderTexturesFilterOutputLowGreyLevelRunEmphasis.tif
+            ${BASELINE}/feTvScalarImageToHigherOrderTexturesFilterOutputHighGreyLevelRunEmphasis.tif
+            ${TEMP}/feTvScalarImageToHigherOrderTexturesFilterOutputHighGreyLevelRunEmphasis.tif
+            ${BASELINE}/feTvScalarImageToHigherOrderTexturesFilterOutputShortRunLowGreyLevelEmphasis.tif
+            ${TEMP}/feTvScalarImageToHigherOrderTexturesFilterOutputShortRunLowGreyLevelEmphasis.tif
+            ${BASELINE}/feTvScalarImageToHigherOrderTexturesFilterOutputShortRunHighGreyLevelEmphasis.tif
+            ${TEMP}/feTvScalarImageToHigherOrderTexturesFilterOutputShortRunHighGreyLevelEmphasis.tif
+            ${BASELINE}/feTvScalarImageToHigherOrderTexturesFilterOutputLongRunLowGreyLevelEmphasis.tif
+            ${TEMP}/feTvScalarImageToHigherOrderTexturesFilterOutputLongRunLowGreyLevelEmphasis.tif
+            ${BASELINE}/feTvScalarImageToHigherOrderTexturesFilterOutputLongRunHighGreyLevelEmphasis.tif
+            ${TEMP}/feTvScalarImageToHigherOrderTexturesFilterOutputLongRunHighGreyLevelEmphasis.tif
+        otbScalarImageToHigherOrderTexturesFilter
+        ${INPUTDATA}/Mire_Cosinus_500_500.png
+        ${TEMP}/feTvScalarImageToHigherOrderTexturesFilterOutput
+        8 5 1 1)
 
 ADD_TEST(feTuScalarImageToPanTexTextureFilterNew ${FEATUREEXTRACTION_TESTS15}
         otbScalarImageToPanTexTextureFilterNew
@@ -2041,6 +2075,8 @@ otbScalarImageToAdvancedTexturesFilterNew.cxx
 otbScalarImageToAdvancedTexturesFilter.cxx
 otbScalarImageToPanTexTextureFilterNew.cxx
 otbScalarImageToPanTexTextureFilter.cxx
+otbScalarImageToHigherOrderTexturesFilterNew.cxx
+otbScalarImageToHigherOrderTexturesFilter.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbFeatureExtractionTests1 "${BasicFeatureExtraction_SRCS1}" "OTBFeatureExtraction;OTBIO;OTBTesting")

@@ -53,6 +53,7 @@ class MaskedScalarImageToGreyLevelRunLengthMatrixGenerator :
     typedef typename ImageType::IndexType                   IndexType;
     typedef typename ImageType::RegionType                  RegionType;
     typedef typename ImageType::OffsetType                  OffsetType;
+    typedef typename ImageType::SizeType                    RadiusType;
     typedef VectorContainer<unsigned char, OffsetType>      OffsetVector;
     typedef typename OffsetVector::Pointer                  OffsetVectorPointer;
     typedef typename OffsetVector::ConstPointer             OffsetVectorConstPointer;
@@ -84,7 +85,7 @@ class MaskedScalarImageToGreyLevelRunLengthMatrixGenerator :
     MaskedScalarImageToGreyLevelRunLengthMatrixGenerator();
     virtual ~MaskedScalarImageToGreyLevelRunLengthMatrixGenerator() {};
     void PrintSelf(std::ostream& os, Indent indent) const;
-    virtual void FillHistogram();
+    virtual void FillHistogram(RadiusType radius, RegionType region);
         
    private:
     ImageConstPointer m_ImageMask;

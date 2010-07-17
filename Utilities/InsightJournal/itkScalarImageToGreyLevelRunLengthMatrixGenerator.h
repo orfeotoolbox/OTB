@@ -55,6 +55,7 @@ class ScalarImageToGreyLevelRunLengthMatrixGenerator : public Object
     typedef typename ImageType::IndexType                   IndexType;
     typedef typename ImageType::RegionType                  RegionType;
     typedef typename ImageType::OffsetType                  OffsetType;
+    typedef typename ImageType::SizeType                    RadiusType;
     typedef VectorContainer<unsigned char, OffsetType>      OffsetVector;
     typedef typename OffsetVector::Pointer                  OffsetVectorPointer;
     typedef typename ImageType::PointType                   PointType;
@@ -131,11 +132,12 @@ class ScalarImageToGreyLevelRunLengthMatrixGenerator : public Object
     ScalarImageToGreyLevelRunLengthMatrixGenerator();
     virtual ~ScalarImageToGreyLevelRunLengthMatrixGenerator() {};
     void PrintSelf(std::ostream& os, Indent indent) const;
-    virtual void FillHistogram();
+    virtual void FillHistogram(RadiusType radius, RegionType region);
+
+    ImageConstPointer        m_Input;
         
    private:
   
-    ImageConstPointer        m_Input;
     HistogramPointer         m_Output;
     OffsetVectorPointer      m_Offsets;
     PixelType                m_Min, m_Max;

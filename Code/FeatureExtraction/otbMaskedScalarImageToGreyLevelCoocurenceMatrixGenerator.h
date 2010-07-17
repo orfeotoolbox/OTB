@@ -29,7 +29,7 @@ namespace otb
  *  This class compute the co-occurence matrix over a given region of the image. The region can be set
  *  using the SetRegion()/GetRegion() methods.
  *
- *  \sa itk::MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator
+ *  \sa itk::Statistics::MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator
  */
 template <class TImage, class THistogramFrequencyContainer = itk::Statistics::DenseFrequencyContainer>
 class MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator
@@ -49,7 +49,7 @@ public:
 
   /** RTTI */
   itkTypeMacro(MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator,
-               itk::MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator);
+               itk::Statistics::MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator);
 
   /** Superclass typedefs */
   typedef TImage                          ImageType;
