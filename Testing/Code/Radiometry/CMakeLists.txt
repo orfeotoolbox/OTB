@@ -1143,7 +1143,7 @@ ADD_TEST(raTvTerraSarCalibrationImageComplexFilterTestTORONTODb ${RADIOMETRY_TES
 
 ADD_TEST(raTvTerraSarCalibrationImageComplexFilterTestPANGKALANBUUNUsingXmlFileCoarse ${RADIOMETRY_TESTS9}
         otbTerraSarCalibrationImageComplexFilterTest
-                ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/TTSX1_SAR__SSC______SM_D_SRA_20080313T221955_20080313T222003.xml
+                ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/TSX1_SAR__SSC______SM_D_SRA_20080313T221955_20080313T222003.xml
 		${TEMP}/raTvTerraSarCalibrationImageComplexFilterTest_PANGHALANBUUNUCoarse.tif
 		1 # No fast calibration
 		0 # Results in logarithmic scale
@@ -1151,7 +1151,7 @@ ADD_TEST(raTvTerraSarCalibrationImageComplexFilterTestPANGKALANBUUNUsingXmlFileC
 )
 ADD_TEST(raTvTerraSarCalibrationImageComplexFilterTestPANGKALANBUUNUsingXmlFileCoarseLog ${RADIOMETRY_TESTS9}
         otbTerraSarCalibrationImageComplexFilterTest
-                ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/TTSX1_SAR__SSC______SM_D_SRA_20080313T221955_20080313T222003.xml
+                ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/TSX1_SAR__SSC______SM_D_SRA_20080313T221955_20080313T222003.xml
 		${TEMP}/raTvTerraSarCalibrationImageComplexFilterTest_PANGHALANBUUNUCoarseLog.tif
 		1 # No fast calibration
 		1 # Results in logarithmic scale
@@ -1159,7 +1159,7 @@ ADD_TEST(raTvTerraSarCalibrationImageComplexFilterTestPANGKALANBUUNUsingXmlFileC
 )
 ADD_TEST(raTvTerraSarCalibrationImageComplexFilterTestPANGKALANBUUNUsingXmlFile ${RADIOMETRY_TESTS9}
         otbTerraSarCalibrationImageComplexFilterTest
-                ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/TTSX1_SAR__SSC______SM_D_SRA_20080313T221955_20080313T222003.xml
+                ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/TSX1_SAR__SSC______SM_D_SRA_20080313T221955_20080313T222003.xml
 		${TEMP}/raTvTerraSarCalibrationImageComplexFilterTest_PANGHALANBUUNU.tif
 		0 # No fast calibration
 		0 # Results in logarithmic scale
@@ -1167,7 +1167,7 @@ ADD_TEST(raTvTerraSarCalibrationImageComplexFilterTestPANGKALANBUUNUsingXmlFile 
 )
 ADD_TEST(raTvTerraSarCalibrationImageComplexFilterTestPANGKALANBUUNUsingXmlFileb ${RADIOMETRY_TESTS9}
         otbTerraSarCalibrationImageComplexFilterTest
-                ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/TTSX1_SAR__SSC______SM_D_SRA_20080313T221955_20080313T222003.xml
+                ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/TSX1_SAR__SSC______SM_D_SRA_20080313T221955_20080313T222003.xml
 		${TEMP}/raTvTerraSarCalibrationImageComplexFilterTest_PANGHALANBUUNUb.tif
 		0 # No fast calibration
 		1 # Results in logarithmic scale

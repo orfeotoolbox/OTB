@@ -2285,7 +2285,7 @@ ADD_TEST(ioTvImageKeywordlistTerraSarX_Toronto ${IO_TESTS18}
 
 ADD_TEST(ioTuImageKeywordlistTerraSarX_PANGKALANBUUNUsingXmlFile ${IO_TESTS18}
     otbImageKeywordlist
-         ${LARGEDATA}/TERRASARX/PANGKALANBUUN/TTSX1_SAR__SSC______SM_D_SRA_20080313T221955_20080313T222003.xml
+         ${LARGEDATA}/TERRASARX/PANGKALANBUUN/TSX1_SAR__SSC______SM_D_SRA_20080313T221955_20080313T222003.xml
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun.txt
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun_saveState_loadState.txt
 )
