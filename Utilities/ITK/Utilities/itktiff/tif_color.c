@@ -1,4 +1,4 @@
-/* $Id: tif_color.c,v 1.1 2006-09-28 15:30:39 king Exp $ */
+/* $Id: tif_color.c,v 1.2 2010-05-08 19:55:40 ibanez Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -121,37 +121,37 @@ TIFFCIELabToRGBInit(TIFFCIELabToRGB* cielab,
         TIFFDisplay *display, float *refWhite)
 {
   int i;
-  double gamma;
+  double gammavalue;
 
   cielab->range = CIELABTORGB_TABLE_RANGE;
 
   _TIFFmemcpy(&cielab->display, display, sizeof(TIFFDisplay));
 
   /* Red */
-  gamma = 1.0 / cielab->display.d_gammaR ;
+  gammavalue = 1.0 / cielab->display.d_gammaR ;
   cielab->rstep =
     (cielab->display.d_YCR - cielab->display.d_Y0R)  / cielab->range;
   for(i = 0; i <= cielab->range; i++) {
     cielab->Yr2r[i] = cielab->display.d_Vrwr
-        * ((float)pow((double)i / cielab->range, gamma));
+        * ((float)pow((double)i / cielab->range, gammavalue));
   }
 
   /* Green */
-  gamma = 1.0 / cielab->display.d_gammaG ;
+  gammavalue = 1.0 / cielab->display.d_gammaG ;
   cielab->gstep =
       (cielab->display.d_YCR - cielab->display.d_Y0R) / cielab->range;
   for(i = 0; i <= cielab->range; i++) {
     cielab->Yg2g[i] = cielab->display.d_Vrwg
-        * ((float)pow((double)i / cielab->range, gamma));
+        * ((float)pow((double)i / cielab->range, gammavalue));
   }
 
   /* Blue */
-  gamma = 1.0 / cielab->display.d_gammaB ;
+  gammavalue = 1.0 / cielab->display.d_gammaB ;
   cielab->bstep =
       (cielab->display.d_YCR - cielab->display.d_Y0R) / cielab->range;
   for(i = 0; i <= cielab->range; i++) {
     cielab->Yb2b[i] = cielab->display.d_Vrwb
-        * ((float)pow((double)i / cielab->range, gamma));
+        * ((float)pow((double)i / cielab->range, gammavalue));
   }
 
   /* Init reference white point */

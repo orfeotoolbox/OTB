@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkBloxCoreAtomPixel.h,v $
 Language:  C++
-Date:      $Date: 2007-04-06 12:50:58 $
-Version:   $Revision: 1.24 $
+Date:      $Date: 2010-07-06 12:24:07 $
+Version:   $Revision: 1.25 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -107,9 +107,6 @@ public:
    * it.
    */
   void CalcWeightedCoreAtomLocation(double weight_factor, Self * votingPixel);
-
-  /** Calculate mean intensity os the pixel based on its core atoms. */
-  void CalcMeanCoreAtomIntensity();
 
   /** Returns the calculated voted location */
   PositionType GetVotedLocation();

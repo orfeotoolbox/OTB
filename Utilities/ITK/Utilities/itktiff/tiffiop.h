@@ -1,4 +1,4 @@
-/* $Id: tiffiop.h,v 1.1 2006-09-28 15:30:39 king Exp $ */
+/* $Id: tiffiop.h,v 1.2 2010-05-08 19:55:40 ibanez Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -292,11 +292,8 @@ extern  int TIFFInitPixarLog(TIFF*, int);
 #ifdef LOGLUV_SUPPORT
 extern  int TIFFInitSGILog(TIFF*, int);
 #endif
-#ifdef VMS
+
 extern  const TIFFCodec _TIFFBuiltinCODECS[];
-#else
-extern  TIFFCodec _TIFFBuiltinCODECS[];
-#endif
 
 #if defined(__cplusplus)
 }

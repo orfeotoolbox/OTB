@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAutoCropLabelMapFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-07-20 23:34:02 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2010-07-07 12:31:09 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.

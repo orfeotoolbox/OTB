@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdge.h,v $
   Language:  C++
-  Date:      $Date: 2009-09-08 20:00:56 $
-  Version:   $Revision: 1.20 $
+  Date:      $Date: 2010-06-14 15:03:58 $
+  Version:   $Revision: 1.21 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -52,6 +52,7 @@
  * @param st Superclass type.
  * @param pt Primal edge type.
  * @param dt Dual edge type.
+ * \todo Should this macro be added to doxygen macros?
  */
 #define itkQEAccessorsMacro( st, pt, dt )                               \
    pt* GetOnext()                                                       \
@@ -401,8 +402,8 @@ public:
   unsigned int GetOrder() const;
 
 private: 
-  Self* m_Onext; /// Onext ring
-  Self* m_Rot;   /// Rot ring
+  Self* m_Onext; /**< Onext ring */
+  Self* m_Rot;   /**< Rot ring */
 };
 
 } 

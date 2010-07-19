@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVoronoiDiagram2DGenerator.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-23 03:53:37 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2010-07-12 17:21:56 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -127,6 +127,16 @@ private:
   /** \class FortuneSite
    * Small data structures for Fortune's Method
    * and some public variables/methods not for external access. */ 
+  class FortuneSite;
+  class FortuneEdge;
+  class FortuneHalfEdge;
+  
+  /** All private nested classes must be friend classes to work with SunOS-CC compiler.
+   * If not, the private nested classes will not be able to access each other. */
+  friend class FortuneSite;
+  friend class FortuneEdge;
+  friend class FortuneHalfEdge;
+  
   class FortuneSite
     {
     public:

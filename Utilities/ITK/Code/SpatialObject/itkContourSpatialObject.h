@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkContourSpatialObject.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-07 14:33:56 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2010-06-10 17:54:44 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -133,7 +133,10 @@ public:
   itkGetConstMacro(AttachedToSlice,int);
 
   /** Returns true if the Contour is evaluable at the requested point, 
-   *  false otherwise. */
+   *  false otherwise. 
+   *
+   * Note: For this class, this will always return false. -GH
+   */
   bool IsEvaluableAt( const PointType & point, 
                       unsigned int depth=0, char *name = NULL ) const;
 

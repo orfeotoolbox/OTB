@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAnalyzeImageIO.cxx,v $
   Language:  C++
-  Date:      $Date: 2010-02-08 19:48:02 $
-  Version:   $Revision: 1.104 $
+  Date:      $Date: 2010-05-28 11:09:30 $
+  Version:   $Revision: 1.105 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -1182,7 +1182,7 @@ void AnalyzeImageIO::ReadImageInformation()
      std::string(this->m_Hdr.hist.exp_date,10));
   itk::EncapsulateMetaData<std::string>
     (thisDic,ITK_ExperimentTime,
-     std::string(this->m_Hdr.hist.exp_date,10));
+     std::string(this->m_Hdr.hist.exp_time,10));
 
   itk::EncapsulateMetaData<int>
     (thisDic,ANALYZE_O_MAX,
@@ -1386,7 +1386,7 @@ AnalyzeImageIO
 
   if(itk::ExposeMetaData<std::string>(thisDic,ITK_ExperimentTime,temp))
     {
-    strncpy(this->m_Hdr.hist.exp_date,temp.c_str(),10);
+    strncpy(this->m_Hdr.hist.exp_time,temp.c_str(),10);
     }
 
   itk::ExposeMetaData<int>(thisDic,ANALYZE_O_MAX,this->m_Hdr.hist.omax);

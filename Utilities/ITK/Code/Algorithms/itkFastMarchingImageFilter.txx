@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFastMarchingImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2010-01-13 14:19:09 $
-  Version:   $Revision: 1.53 $
+  Date:      $Date: 2010-07-02 13:28:09 $
+  Version:   $Revision: 1.54 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -304,6 +304,7 @@ FastMarchingImageFilter<TLevelSet,TSpeedImage>
 
     if ( currentValue > m_StoppingValue )
       {
+      this->UpdateProgress( 1.0 );
       break;
       }
 

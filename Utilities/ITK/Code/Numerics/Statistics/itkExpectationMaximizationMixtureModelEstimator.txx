@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkExpectationMaximizationMixtureModelEstimator.txx,v $
   Language:  C++
-  Date:      $Date: 2009-09-19 19:39:36 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2010-06-07 20:04:21 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -28,6 +28,8 @@ ExpectationMaximizationMixtureModelEstimator< TSample >
 ::ExpectationMaximizationMixtureModelEstimator()
 {
   m_TerminationCode = NOT_CONVERGED;
+  m_MaxIteration = 10; 
+  m_CurrentIteration = 0;
 }
  
 template< class TSample >
@@ -36,6 +38,9 @@ ExpectationMaximizationMixtureModelEstimator< TSample >
 ::PrintSelf(std::ostream& os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
+  os << "Maximum number of iterations = " << m_MaxIteration << std::endl;
+  os << "Termination code = " << m_TerminationCode << std::endl;
+  os << "Current iteration = " << m_CurrentIteration << std::endl;
 }
 
 

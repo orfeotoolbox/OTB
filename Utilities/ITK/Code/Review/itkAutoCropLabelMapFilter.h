@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAutoCropLabelMapFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-07-20 23:05:58 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2010-07-07 12:31:09 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -90,6 +90,9 @@ public:
    */
   itkSetMacro(CropBorder, SizeType);
   itkGetConstReferenceMacro(CropBorder, SizeType);
+  
+  itkGetConstReferenceMacro(MinIndex, IndexType);
+  itkGetConstReferenceMacro(MaxIndex, IndexType);
 
 protected:
   AutoCropLabelMapFilter();
@@ -111,6 +114,8 @@ private:
 
   IndexType     m_MinIndex;
   IndexType     m_MaxIndex;
+  
+  InputImageRegionType m_CropRegion;
 };
 
 } // end namespace itk

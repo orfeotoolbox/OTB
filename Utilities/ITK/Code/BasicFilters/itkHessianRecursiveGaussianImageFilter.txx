@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkHessianRecursiveGaussianImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-02-26 21:34:54 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2010-04-23 07:09:41 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -109,12 +109,6 @@ HessianRecursiveGaussianImageFilter<TInputImage,TOutputImage>
 
   m_NormalizeAcrossScale = normalize;
 
-  unsigned int numberOfSmoothingFilters = NumberOfSmoothingFilters;
-
-  for( unsigned int i = 0; i<numberOfSmoothingFilters; i++ )
-    {
-    m_SmoothingFilters[ i ]->SetNormalizeAcrossScale( normalize );
-    }
   m_DerivativeFilterA->SetNormalizeAcrossScale( normalize );
   m_DerivativeFilterB->SetNormalizeAcrossScale( normalize );
 

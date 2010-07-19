@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageIOFactory.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-02-25 02:41:03 $
-  Version:   $Revision: 1.37 $
+  Date:      $Date: 2010-07-10 04:05:39 $
+  Version:   $Revision: 1.38 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -99,12 +99,12 @@ ImageIOFactory::RegisterBuiltInFactories()
     MutexLockHolder<SimpleMutexLock> mutexHolder( mutex );
     if( firstTime )
       {
+      ObjectFactoryBase::RegisterFactory( BioRadImageIOFactory::New() ); //should be before GDCM
       ObjectFactoryBase::RegisterFactory( GDCMImageIOFactory::New() );
       ObjectFactoryBase::RegisterFactory( MetaImageIOFactory::New() );
       ObjectFactoryBase::RegisterFactory( PNGImageIOFactory::New() );
       ObjectFactoryBase::RegisterFactory( VTKImageIOFactory::New() );
       ObjectFactoryBase::RegisterFactory( GiplImageIOFactory::New() );
-      ObjectFactoryBase::RegisterFactory( BioRadImageIOFactory::New() );
       ObjectFactoryBase::RegisterFactory( LSMImageIOFactory::New()); //should be before TIFF
       // ITK Teleconference 2008-02-22 determined that
       // AnalyzeImageIOFactory MUST be the default for reading all

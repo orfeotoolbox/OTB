@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itk_hashtable.h,v $
   Language:  C++
-  Date:      $Date: 2009-08-16 20:30:38 $
-  Version:   $Revision: 1.34 $
+  Date:      $Date: 2010-04-26 14:31:25 $
+  Version:   $Revision: 1.35 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -1146,18 +1146,21 @@ void hashtable_base<Value, Alloc>::copy_from(const hashtable_base<Value, Alloc>&
 
 // A few compatability fixes.  Placed here for automatic include in
 // both the hash_set and the hash_map sources.
-
-# if defined (_MSC_VER) || defined(__BORLANDC__) || ((defined(__ICC)||defined(__ECC)) && defined(linux))
+# if (defined (_MSC_VER)&&(_MSC_VER < 1600 )) || defined(__BORLANDC__) || ((defined(__ICC)||defined(__ECC)) && defined(linux))
+// This should be replaced with a try_compile that tests the availability of std::identity. FIXME
 namespace std
 {
-#if _MSC_VER != 1600
 template <class T>
 struct identity : public std::unary_function<T, T> {
 public:
   const T& operator()(const T& x) const { return x; }
 };
-#endif
 }
+
+#endif
+
+# if defined (_MSC_VER) || defined(__BORLANDC__) || ((defined(__ICC)||defined(__ECC)) && defined(linux))
+// This should be replaced with a try_compile that tests the availability of std::select*. FIXME
 
 template <class _Pair>
 struct itk_Select1st : public std::unary_function<_Pair, typename _Pair::first_type> {

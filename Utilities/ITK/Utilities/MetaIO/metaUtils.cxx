@@ -1,19 +1,14 @@
-/*=========================================================================
+/*============================================================================
+  MetaIO
+  Copyright 2000-2010 Insight Software Consortium
 
-  Program:   MetaIO
-  Module:    $RCSfile: metaUtils.cxx,v $
-  Language:  C++
-  Date:      $Date: 2010-03-10 21:54:04 $
-  Version:   $Revision: 1.62 $
+  Distributed under the OSI-approved BSD License (the "License");
+  see accompanying file Copyright.txt for details.
 
-  Copyright (c) Insight Software Consortium. All rights reserved.
-  See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
-
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.  See the above copyright notices for more information.
-
-=========================================================================*/
+  This software is distributed WITHOUT ANY WARRANTY; without even the
+  implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  See the License for more information.
+============================================================================*/
 #ifdef _MSC_VER
 #pragma warning(disable:4702)
 #pragma warning(disable:4996)
@@ -1053,11 +1048,11 @@ bool MET_Read(METAIO_STREAM::istream &fp,
     i = 0;
     c = fp.get();
     while(!fp.eof() && c != MET_SeperatorChar && c != ':'
-          && (c == '\n' || isspace(c)))
+          && (c == '\r' || c == '\n' || isspace(c)))
       {
       c = fp.get();
       }
-    while(!fp.eof() && c != MET_SeperatorChar && c != ':' && c != '\n' && i<500)
+    while(!fp.eof() && c != MET_SeperatorChar && c != ':' && c != '\r' && c != '\n' && i<500)
       {
       s[i++] = c;
       c = fp.get();

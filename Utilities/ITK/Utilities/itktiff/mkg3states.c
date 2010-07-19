@@ -1,4 +1,4 @@
-/* "$Id: mkg3states.c,v 1.1 2006-09-28 15:30:39 king Exp $ */
+/* "$Id: mkg3states.c,v 1.2 2010-05-08 19:55:40 ibanez Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -332,31 +332,31 @@ FillTable(TIFFFaxTabEnt *T, int Size, struct proto *P, int State)
     }
 }
 
-static  char* storage_class = "";
-static  char* const_class = "";
+static  const char* storage_class = "";
+static  const char* const_class = "";
 static  int packoutput = 1;
-static  char* prebrace = "{";
-static  char* postbrace = "}";
+static  const char* prebrace = "{";
+static  const char* postbrace = "}";
 
 void
 WriteTable(FILE* fd, const TIFFFaxTabEnt* T, int Size, const char* name)
 {
     int i;
-    char* sep;
+    const char* sep;
 
     fprintf(fd, "%s %s TIFFFaxTabEnt %s[%d] = {",
-  storage_class, const_class, name, Size);
+      storage_class, const_class, name, Size);
     if (packoutput) {
-  sep = "\n";
-  for (i = 0; i < Size; i++) {
-      fprintf(fd, "%s%s%d,%d,%d%s",
-    sep, prebrace, T->State, T->Width, (int) T->Param, postbrace);
-      if (((i+1) % 10) == 0)
-        sep = ",\n";
-      else
-        sep = ",";
-      T++;
-  }
+      sep = "\n";
+      for (i = 0; i < Size; i++) {
+          fprintf(fd, "%s%s%d,%d,%d%s",
+          sep, prebrace, T->State, T->Width, (int) T->Param, postbrace);
+          if (((i+1) % 10) == 0)
+            sep = ",\n";
+          else
+            sep = ",";
+          T++;
+      }
     } else {
   sep = "\n ";
   for (i = 0; i < Size; i++) {
@@ -377,7 +377,7 @@ int
 main(int argc, char* argv[])
 {
     FILE* fd;
-    char* outputfile;
+    const char* outputfile;
     int c;
     extern int optind;
     extern char* optarg;

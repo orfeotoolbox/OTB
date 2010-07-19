@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMultiScaleHessianBasedMeasureImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-08-26 19:09:35 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2010-06-16 00:52:50 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -175,6 +175,19 @@ MultiScaleHessianBasedMeasureImageFilter
 
   this->m_HessianFilter->SetNormalizeAcrossScale(true);
 
+  // Create a process accumulator for tracking the progress of this
+  // minipipeline
+  ProgressAccumulator::Pointer progress = ProgressAccumulator::New();
+  progress = ProgressAccumulator::New();
+  progress->SetMiniPipelineFilter(this);
+
+  // prevent a divide by zero
+  if ( m_NumberOfSigmaSteps > 0 )
+    {
+    progress->RegisterInternalFilter( this->m_HessianFilter, .5/m_NumberOfSigmaSteps  );
+    progress->RegisterInternalFilter( this->m_HessianToMeasureFilter, .5/m_NumberOfSigmaSteps );
+    }
+
   double sigma = m_SigmaMinimum;
 
   int scaleLevel = 1;
@@ -199,6 +212,11 @@ MultiScaleHessianBasedMeasureImageFilter
     sigma  = this->ComputeSigmaValue( scaleLevel );
 
     scaleLevel++;
+
+    // reset the progress accumulator after each pass to continue
+    // addtion of progress for the next pass
+    progress->ResetFilterProgressAndKeepAccumulatedProgress();
+
 
     if ( m_NumberOfSigmaSteps == 1 )
       {

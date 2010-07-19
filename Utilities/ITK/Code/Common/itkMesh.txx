@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMesh.txx,v $
   Language:  C++
-  Date:      $Date: 2009-09-17 11:14:56 $
-  Version:   $Revision: 1.104 $
+  Date:      $Date: 2010-04-26 17:51:51 $
+  Version:   $Revision: 1.105 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -24,6 +24,7 @@
 #include "itkObjectFactory.h"
 #include "itkProcessObject.h"
 #include <algorithm>
+#include <iterator>
 
 namespace itk
 {

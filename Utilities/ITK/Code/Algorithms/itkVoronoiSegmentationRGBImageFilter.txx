@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkVoronoiSegmentationRGBImageFilter.txx,v $
 Language:  C++
-Date:      $Date: 2009-01-27 19:30:17 $
-Version:   $Revision: 1.36 $
+Date:      $Date: 2010-07-07 12:21:43 $
+Version:   $Revision: 1.37 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -144,8 +144,15 @@ VoronoiSegmentationRGBImageFilter <TInputImage,TOutputImage>
     L = 116*Y - 16;
     a = 500*(X - Y);
     b = 200*(Y - Z);
-  
-    wpixel[3] = vcl_atan(b/a);     //H
+
+    if (b != 0.0)
+      {
+      wpixel[3] = vcl_atan2(b,a);     //H
+      }
+    else
+      {
+      wpixel[3] = 0;
+      }
     wpixel[4] = vcl_sqrt(a*a+b*b); //C
     wpixel[5] = L;             //V 
     wit.Set(wpixel);

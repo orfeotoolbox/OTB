@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageIOBase.cxx,v $
   Language:  C++
-  Date:      $Date: 2010-02-24 14:40:36 $
-  Version:   $Revision: 1.89 $
+  Date:      $Date: 2010-06-14 18:55:23 $
+  Version:   $Revision: 1.90 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -345,6 +345,13 @@ itkSetPixelType(ImageIOBase *This,
     {
     This->SetNumberOfComponents(4);
     This->SetPixelType(ImageIOBase::FIXEDARRAY);
+    This->SetComponentType(ntype);
+    return true;
+    }
+  else if ( ptype == typeid(SymmetricSecondRankTensor<T,2>) )
+    {
+    This->SetNumberOfComponents(3);
+    This->SetPixelType(ImageIOBase::SYMMETRICSECONDRANKTENSOR);
     This->SetComponentType(ntype);
     return true;
     }
