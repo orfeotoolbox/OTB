@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimHistogramWriter.cpp 13312 2008-07-27 01:26:52Z gpotts $
+// $Id: ossimHistogramWriter.cpp 17194 2010-04-23 15:05:19Z dburken $
 #include <ossim/base/ossimProcessListener.h>
 #include <ossim/imaging/ossimHistogramWriter.h>
 #include <ossim/imaging/ossimImageSource.h>
@@ -253,21 +253,21 @@ void ossimHistogramWriter::writeHistogram()
    {
       ossimKeywordlist kwl;
       histo->saveState(kwl);
-		if(!isOpen())
-		{
-			open();
-			if(!isOpen())
-			{
-				if(traceDebug())
-				{
-					ossimNotify(ossimNotifyLevel_WARN) << "unable to open file " << theFilename << endl;
-				}
-			}
-		}
-		if(isOpen())
-		{
-			kwl.writeToStream(*theFileStream);
-		}
+      if(!isOpen())
+      {
+         open();
+         if(!isOpen())
+         {
+            if(traceDebug())
+            {
+               ossimNotify(ossimNotifyLevel_WARN) << "unable to open file " << theFilename << endl;
+            }
+         }
+      }
+      if(isOpen())
+      {
+         kwl.writeToStream(*theFileStream);
+      }
    }
    histoSource->removeListener(theProcessListener);
    

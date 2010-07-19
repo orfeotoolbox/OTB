@@ -1,17 +1,7 @@
 #include <ossim/elevation/ossimElevationDatabase.h>
 
 RTTI_DEF1(ossimElevationDatabase, "ossimElevationDatabase", ossimObject);
-void ossimElevationDatabase::getOpenCellList(std::vector<ossimFilename>& list) const
-{
-   CellMap::const_iterator iter = m_cacheMap.begin();
-   
-   while(iter!=m_cacheMap.end())
-   {
-      list.push_back(iter->second->m_handler->getFilename());
-      ++iter;
-   }
-   
-}
+RTTI_DEF1(ossimElevationCellDatabase, "ossimElevationCellDatabase", ossimElevationDatabase);
 
 double ossimElevationDatabase::getOffsetFromEllipsoid(const ossimGpt& gpt)const
 {
@@ -45,6 +35,74 @@ bool ossimElevationDatabase::loadState(const ossimKeywordlist& kwl, const char* 
       //
       m_connectionString = kwl.find(prefix, ossimKeywordNames::FILENAME_KW);
    }
+   if(!geoidType.empty())
+   {
+      m_geoid = ossimGeoidManager::instance()->findGeoidByShortName(geoidType);
+   }
+   return ossimObject::loadState(kwl, prefix);
+}
+
+bool ossimElevationDatabase::saveState(ossimKeywordlist& kwl, const char* prefix)const
+{
+   kwl.add(prefix, "connection_string", m_connectionString, true);
+   
+   if(m_geoid.valid())
+   {
+      kwl.add(prefix, "geoid.type", m_geoid->getShortName(), true);
+   }
+   
+   return ossimObject::saveState(kwl, prefix);
+}
+
+void ossimElevationCellDatabase::getOpenCellList(std::vector<ossimFilename>& list) const
+{
+   CellMap::const_iterator iter = m_cacheMap.begin();
+
+   while(iter!=m_cacheMap.end())
+   {
+      list.push_back(iter->second->m_handler->getFilename());
+      ++iter;
+   }
+
+}
+
+ossimRefPtr<ossimElevCellHandler> ossimElevationCellDatabase::getOrCreateCellHandler(const ossimGpt& gpt)
+{
+  ossimRefPtr<ossimElevCellHandler> result = 0;
+  ossim_uint64 id = createId(gpt);
+  m_cacheMapMutex.lock();
+  CellMap::iterator iter = m_cacheMap.find(id);
+
+  if(iter != m_cacheMap.end())
+  {
+     iter->second->updateTimestamp();
+     result = iter->second->m_handler.get();
+     m_cacheMapMutex.unlock();
+     return result.get();
+  }
+  m_cacheMapMutex.unlock();
+
+  result = createCell(gpt);
+  m_cacheMapMutex.lock();
+  if(result.valid())
+  {
+    m_cacheMap.insert(std::make_pair(id, new CellInfo(id, result.get())));
+  }
+  if(m_cacheMap.size() > m_maxOpenCells)
+  {
+     flushCacheToMinOpenCells();
+  }
+  m_cacheMapMutex.unlock();
+
+  return result;
+
+}
+
+bool ossimElevationCellDatabase::loadState(const ossimKeywordlist& kwl, const char* prefix)
+{
+   ossimString minOpenCells = kwl.find(prefix, "min_open_cells");
+   ossimString maxOpenCells = kwl.find(prefix, "max_open_cells");
+   ossimString geoidType    = kwl.find(prefix, "geoid.type");
    if(!minOpenCells.empty()&&
       !maxOpenCells.empty())
    {
@@ -60,24 +118,22 @@ bool ossimElevationDatabase::loadState(const ossimKeywordlist& kwl, const char* 
    {
       m_memoryMapCellsFlag  = memoryMapCellsFlag.toBool();
    }
-   if(!geoidType.empty())
-   {
-      m_geoid = ossimGeoidManager::instance()->findGeoidByShortName(geoidType);
-   }
-   return ossimObject::loadState(kwl, prefix);
+   return ossimElevationCellDatabase::loadState(kwl, prefix);
 }
 
-bool ossimElevationDatabase::saveState(ossimKeywordlist& kwl, const char* prefix)const
+bool ossimElevationCellDatabase::saveState(ossimKeywordlist& kwl, const char* prefix)const
 {
-   kwl.add(prefix, "connection_string", m_connectionString, true);
    kwl.add(prefix, "memory_map_cells", m_memoryMapCellsFlag, true);
    kwl.add(prefix, "min_open_cells", m_minOpenCells, true);
    kwl.add(prefix, "max_open_cells", m_maxOpenCells, true);
-   
+
    if(m_geoid.valid())
    {
       kwl.add(prefix, "geoid.type", m_geoid->getShortName(), true);
    }
-   
-   return ossimObject::saveState(kwl, prefix);
+
+   return ossimElevationDatabase::saveState(kwl, prefix);
 }
+
+
+

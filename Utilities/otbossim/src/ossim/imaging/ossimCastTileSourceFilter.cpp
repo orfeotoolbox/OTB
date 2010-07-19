@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimCastTileSourceFilter.cpp 11347 2007-07-23 13:01:59Z gpotts $
+// $Id: ossimCastTileSourceFilter.cpp 17195 2010-04-23 17:32:18Z dburken $
 #include <ossim/imaging/ossimCastTileSourceFilter.h>
 #include <ossim/imaging/ossimU8ImageData.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
@@ -626,11 +626,11 @@ void ossimCastTileSourceFilter::allocate(const ossimRefPtr<ossimImageData> input
    theTile->setOrigin(inputTile->getOrigin());
 }
 
-void ossimCastTileSourceFilter::propertyEvent(ossimPropertyEvent& event)
+void ossimCastTileSourceFilter::propertyEvent(ossimPropertyEvent& /* event */)
 {
 }
 
-void ossimCastTileSourceFilter::refreshEvent(ossimRefreshEvent& event)
+void ossimCastTileSourceFilter::refreshEvent(ossimRefreshEvent& /* event */)
 {
 }
 

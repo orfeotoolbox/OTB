@@ -7,7 +7,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimConvolutionSource.cpp 12912 2008-05-28 15:05:54Z gpotts $
+//  $Id: ossimConvolutionSource.cpp 17206 2010-04-25 23:20:40Z dburken $
 
 #include <ossim/imaging/ossimConvolutionSource.h>
 #include <ossim/imaging/ossimImageData.h>
@@ -262,7 +262,7 @@ ossimRefPtr<ossimImageData> ossimConvolutionSource::getTile(
 }
    
 template <class T>
-void ossimConvolutionSource::convolve(T dummyVariable,
+void ossimConvolutionSource::convolve(T /* dummyVariable */,
                                       ossimRefPtr<ossimImageData> inputTile,
                                       ossimDiscreteConvolutionKernel* kernel)
 {

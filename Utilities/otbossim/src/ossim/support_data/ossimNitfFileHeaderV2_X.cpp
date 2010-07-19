@@ -1,11 +1,18 @@
+//----------------------------------------------------------------------------
+//
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
+// 
+//----------------------------------------------------------------------------
+// $Id: ossimNitfFileHeaderV2_X.cpp 16997 2010-04-12 18:53:48Z dburken $
+
 #include <ossim/support_data/ossimNitfFileHeaderV2_X.h>
 #include <ossim/support_data/ossimNitfCommon.h>
 
-#ifndef NULL
-#include <stddef.h>
-#endif
 #include <iomanip>
 #include <sstream>
+#include <ossim/base/ossimDate.h> /* for ossimLocalTm */
 #include <ossim/base/ossimDateProperty.h>
 #include <ossim/base/ossimNumericProperty.h>
 #include <ossim/base/ossimStringProperty.h>
@@ -55,48 +62,51 @@ void ossimNitfFileHeaderV2_X::setOriginatingStationId(const ossimString& origina
 ossimString ossimNitfFileHeaderV2_X::formatDate(const ossimString& version,
                                                 const ossimLocalTm& d)
 {
+   // Convert to ZULU as per spec for both versions.
+   ossimLocalTm d1 = d.convertToGmt();
+   
    std::ostringstream out;
 
    if(version.contains("2.1"))
    {
       out << std::setw(4)
       << std::setfill('0')
-      << d.getYear()
+      << d1.getYear()
       << std::setw(2)
       << std::setfill('0')
-      << d.getMonth()
+      << d1.getMonth()
       << std::setw(2)
       << std::setfill('0')
-      << d.getDay()
+      << d1.getDay()
       << std::setw(2)
       << std::setfill('0')
-      << d.getHour()
+      << d1.getHour()
       << std::setw(2)
       << std::setfill('0')
-      << d.getMin()
+      << d1.getMin()
       << std::setw(2)
       << std::setfill('0')
-      << d.getSec();
+      << d1.getSec();
    }
    else
    {
       out  << std::setw(2)
       << std::setfill('0')
-      << d.getDay()
+      << d1.getDay()
       << std::setw(2)
       << std::setfill('0')
-      << d.getHour()
+      << d1.getHour()
       << std::setw(2)
       << std::setfill('0')
-      << d.getMin()
+      << d1.getMin()
       << std::setw(2)
       << std::setfill('0')
-      << d.getSec()
+      << d1.getSec()
       << "Z"
-      <<monthConversionTable[d.getMonth()]
+      <<monthConversionTable[d1.getMonth()]
       << std::setw(2)
       << std::setfill('0')
-      <<d.getShortYear();
+      <<d1.getShortYear();
       
    }
       
@@ -115,6 +125,11 @@ void ossimNitfFileHeaderV2_X::setDate(const ossimString& d)
       memcpy(theDateTime, d.c_str(), 14);
    }
 }
+
+void ossimNitfFileHeaderV2_X::setDate()
+{
+   setDate(ossimLocalTm(0));
+}  
 
 void ossimNitfFileHeaderV2_X::setTitle(const ossimString& title)
 {

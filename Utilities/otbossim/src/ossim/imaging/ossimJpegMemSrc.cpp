@@ -65,7 +65,7 @@ typedef ossimJpegSourceMgr* ossimJpegSourceMgrPtr;
  * before any data is actually read.
  */
 
-void init_source (j_decompress_ptr cinfo)
+void init_source (j_decompress_ptr /* cinfo */)
 {
   /* No work, since jpeg_memory_src set up the buffer pointer and count.
    * Indeed, if we want to read multiple JPEG images from one buffer,
@@ -146,7 +146,7 @@ void skip_input_data (j_decompress_ptr cinfo, long num_bytes)
  * application must deal with any cleanup that should happen even
  * for error exit.
  */
-void term_source (j_decompress_ptr cinfo)
+void term_source (j_decompress_ptr /* cinfo */)
 {
   /* no work necessary here */
 }

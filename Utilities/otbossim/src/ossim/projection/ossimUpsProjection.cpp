@@ -6,7 +6,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimUpsProjection.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimUpsProjection.cpp 17206 2010-04-25 23:20:40Z dburken $
 #include <ossim/projection/ossimUpsProjection.h>
 #include <ossim/projection/ossimPolarst.h>
 
@@ -190,7 +190,7 @@ void ossimUpsProjection::Get_UPS_Parameters( double *a,
 
 long ossimUpsProjection::Convert_Geodetic_To_UPS ( double Latitude,
                                                    double Longitude,
-                                                   char   *Hemisphere,
+                                                   char   * /* Hemisphere */,
                                                    double *Easting,
                                                    double *Northing)const
 {

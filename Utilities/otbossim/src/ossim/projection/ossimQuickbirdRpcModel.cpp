@@ -10,10 +10,12 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimQuickbirdRpcModel.cpp 16891 2010-03-19 20:00:57Z dburken $
+//  $Id: ossimQuickbirdRpcModel.cpp 17652 2010-06-30 19:03:38Z gpotts $
 
 #include <ossim/projection/ossimQuickbirdRpcModel.h>
 #include <ossim/base/ossimException.h>
+#include <ossim/base/ossimNotify.h>
+#include <ossim/base/ossimTrace.h>
 #include <ossim/support_data/ossimQuickbirdRpcHeader.h>
 #include <ossim/support_data/ossimQuickbirdTile.h>
 #include <ossim/support_data/ossimNitfFile.h>
@@ -29,18 +31,22 @@ static const char* RPC00B_TAG = "RPC00B";
 static const char* PIAIMC_TAG = "PIAIMC";
 static const char* USE00A_TAG = "USE00A";
 
+static ossimTrace traceDebug("ossimQuickbirdRpcModel:debug");
+
 RTTI_DEF1(ossimQuickbirdRpcModel, "ossimQuickbirdRpcModel", ossimRpcModel);
 
 
 ossimQuickbirdRpcModel::ossimQuickbirdRpcModel()
-      :ossimRpcModel(),
-      theSupportData(0)
+   :ossimRpcModel(),
+    theSupportData(0)
 {
    theSupportData = new ossimQuickbirdMetaData();
 }
 
-ossimQuickbirdRpcModel::ossimQuickbirdRpcModel(const ossimQuickbirdRpcModel& rhs)
-      : ossimRpcModel(rhs)
+ossimQuickbirdRpcModel::ossimQuickbirdRpcModel(
+   const ossimQuickbirdRpcModel& rhs)
+   : ossimRpcModel(rhs),
+     theSupportData(0)
 {
 //   if (theSupportData)
 //    {
@@ -151,6 +157,33 @@ bool ossimQuickbirdRpcModel::parseNitfFile(const ossimFilename& file)
       return false;
    }
 
+   // Check for IMD file:
+   if ( !theSupportData )
+   {
+      theSupportData = new ossimQuickbirdMetaData();
+   }
+   metadataFile = metadataFile.setExtension("IMD");
+   if(!theSupportData->open(metadataFile))
+   {
+      metadataFile = metadataFile.setExtension("imd");
+      if(!theSupportData->open(tileFile))
+      {
+         theSupportData = 0; // ossimRefPtr
+         
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
+               << "ossimQuickbirdRpcModel::parseNitfFile WARNING:"
+               << "\nCould not open IMD file.  Sensor ID unknown."
+               << std::endl;
+         }
+      }
+   }
+   if (theSupportData.valid())
+   {
+      theSensorID = theSupportData->getSatID();
+   }
+   
    ossimIrect imageRect = ih->getImageRect();
    ossim_uint32 w = imageRect.width();
    ossim_uint32 h = imageRect.height();
@@ -425,6 +458,30 @@ bool ossimQuickbirdRpcModel::parseTiffFile(const ossimFilename& file)
       return false;
    }
 
+   // Check for IMD file:
+   if ( !theSupportData )
+   {
+      theSupportData = new ossimQuickbirdMetaData();
+   }
+   metadataFile = metadataFile.setExtension("IMD");
+   if(!theSupportData->open(metadataFile))
+   {
+      metadataFile = metadataFile.setExtension("imd");
+      if(!theSupportData->open(tileFile))
+      {
+         theSupportData = 0; // ossimRefPtr
+         
+         ossimNotify(ossimNotifyLevel_WARN)
+            << "ossimQuickbirdRpcModel::parseTiffFile WARNING:"
+            << "\nCould not open IMD file.  Sensor ID unknown."
+            << std::endl;
+      }
+   }
+   if (theSupportData.valid())
+   {
+      theSensorID = theSupportData->getSatID();
+   }
+   
    ossim_uint32 w = imageRect.width();
    ossim_uint32 h = imageRect.height();
    
@@ -543,7 +600,7 @@ bool ossimQuickbirdRpcModel::parseTiffFile(const ossimFilename& file)
 bool ossimQuickbirdRpcModel::saveState(ossimKeywordlist& kwl,
                                        const char* prefix) const
 {
- if(theSupportData.valid())
+   if(theSupportData.valid())
    {
       ossimString supportPrefix = ossimString(prefix) + "support_data.";
       theSupportData->saveState(kwl, supportPrefix);

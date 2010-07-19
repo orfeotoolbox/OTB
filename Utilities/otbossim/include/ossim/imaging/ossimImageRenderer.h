@@ -8,16 +8,16 @@
 // Author: Garrett Potts
 //
 //*******************************************************************
-// $Id: ossimImageRenderer.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimImageRenderer.h 17716 2010-07-09 20:15:16Z dburken $
 
 #ifndef ossimImageRenderer_HEADER
 #define ossimImageRenderer_HEADER
 #include <ossim/imaging/ossimImageSourceFilter.h>
+#include <ossim/projection/ossimImageViewTransform.h>
 #include <ossim/base/ossimDrect.h>
 #include <ossim/base/ossimViewInterface.h>
 #include <ossim/base/ossimRationalNumber.h>
 
-class ossimImageViewTransform;
 class ossimImageData;
 class ossimDiscreteConvolutionKernel;
 class ossimFilterResampler;
@@ -69,7 +69,7 @@ public:
                           const char* prefix=0);
 
    void setImageViewTransform(ossimImageViewTransform* transform);
-   ossimImageViewTransform* getImageViewTransform() { return m_ImageViewTransform; }
+   ossimImageViewTransform* getImageViewTransform() { return m_ImageViewTransform.get(); }
 
    //! Returns instance to the input image geometry. This may be a NULL pointer.
    //! This is only valid if the IVT is a projection type IVT (IVPT) 
@@ -254,7 +254,7 @@ private:
     * from the right.
     */
    ossim_uint32             m_StartingResLevel;
-   ossimImageViewTransform *m_ImageViewTransform;
+   ossimRefPtr<ossimImageViewTransform> m_ImageViewTransform;
    mutable ossimIrect       m_BoundingRect;
    mutable ossimIrect       m_BoundingViewRect;
    ossim_uint32             m_MaxRecursionLevel;

@@ -5,7 +5,7 @@
 // Author: Garrett Potts (gpotts@imagelinks.com)
 //
 //*************************************************************************
-// $Id: ossimMatrixProperty.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimMatrixProperty.h 17074 2010-04-14 18:49:11Z dburken $
 #ifndef ossimMatrixProperty_HEADER
 #define ossimMatrixProperty_HEADER
 #include <vector>
@@ -43,27 +43,26 @@ public:
    void clearConstraints();
    
    /*!
-    * If any of the contraints are set to something < 0 then it means there
+    * If any of the constraints are set to something < 0 then it means there
     * isn't a constraint for that value.  So if you give a min value of -1
     * and a max value of 10 then the column can grow from 10 downto 0.
     */
-   void setColContraints(int minNumberOfColumns,
-                         int maxNumberOfColumns);
+   void setColConstraints(int minNumberOfColumns,
+                          int maxNumberOfColumns);
 
    /*!
     * If any of the contraints are set to something < 0 then it means there
     * isn't a constraint for that value.  So if you give a min value of -1
     * and a max value of 10 then the row can grow from 10 downto 0.
     */
-   void setRowContraints(int minNumberOfRows,
-                         int maxNumberOfRows);
+   void setRowConstraints(int minNumberOfRows,
+                          int maxNumberOfRows);
 
-   void getColContraints(int& minNumberOfColumns,
-                         int& maxNumberOfColumns);
+   void getColConstraints(int& minNumberOfColumns,
+                          int& maxNumberOfColumns) const;
    
-   void getRowContraints(int& minNumberOfRows,
-                         int& maxNumberOfRows);
-
+   void getRowConstraints(int& minNumberOfRows,
+                          int& maxNumberOfRows) const;
 
    void normalize();
    void zero();

@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeaderV2_1.cpp 16314 2010-01-10 18:25:28Z dburken $
+// $Id: ossimNitfImageHeaderV2_1.cpp 17598 2010-06-19 15:37:46Z dburken $
 #include <sstream>
 #include <iomanip>
 #include <cstring> // for memset
@@ -907,36 +907,6 @@ ossim_int32 ossimNitfImageHeaderV2_1::getNumberOfPixelsPerBlockVert()const
       rval = getNumberOfRows();
    }
    return rval;
-}
-
-ossimDrect ossimNitfImageHeaderV2_1::getImageRect()const
-{
-   ossimDpt ul(ossimString((char*)(&theImageLocation[5])).toDouble(),
-               ossimString((char*)theImageLocation,
-                           (char*)(&theImageLocation[5])).toDouble());
-   
-    double rows = ossimString(theSignificantRows).toDouble();
-    double cols = ossimString(theSignificantCols).toDouble();
-
-    ossimDpt lr(ul.x + cols-1,
-                ul.y + rows-1);
-   
-    return ossimDrect(ul, lr);
-}
-
-ossimDrect ossimNitfImageHeaderV2_1::getBlockImageRect()const
-{
-   ossimDpt ul(ossimString((char*)(&theImageLocation[5])).toDouble(),
-               ossimString((char*)theImageLocation,
-                           (char*)(&theImageLocation[5])).toDouble());
-   
-   double rows = getNumberOfPixelsPerBlockVert()*getNumberOfBlocksPerCol();
-   double cols = getNumberOfPixelsPerBlockHoriz()*getNumberOfBlocksPerRow();;
-   
-   ossimDpt lr(ul.x + cols-1,
-               ul.y + rows-1);
-   
-    return ossimDrect(ul, lr);
 }
 
 ossimString ossimNitfImageHeaderV2_1::getPixelValueType()const

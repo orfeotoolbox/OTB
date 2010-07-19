@@ -3,8 +3,8 @@
   Program:   gdcm
   Module:    $RCSfile: gdcmDocument.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-11-21 20:00:35 $
-  Version:   $Revision: 1.33 $
+  Date:      $Date: 2010-06-23 20:51:23 $
+  Version:   $Revision: 1.35 $
                                                                                 
   Copyright (c) CREATIS (Centre de Recherche et d'Applications en Traitement de
   l'Image). All rights reserved. See Doc/License.txt or
@@ -1596,9 +1596,7 @@ void Document::LoadDocEntry(DocEntry *entry, bool forceLoad)
    }
    else
    {
-      gdcmWarningMacro("Should have a ValEntry, here ! " << valEntry->GetKey() 
-                          << " lgt : " << valEntry->GetReadLength() 
-                          << " at " << std::hex << valEntry->GetOffset());
+      gdcmWarningMacro("Should have a ValEntry, here !");
    }
 }
 
@@ -2363,8 +2361,21 @@ DocEntry *Document::ReadNextDocEntry()
    if ( HasDCMPreamble )
       HandleOutOfGroup0002(group, elem);
 
-   std::string vr = FindDocEntryVR();
-   std::string realVR = vr;
+   std::string vr, realVR;
+   if (group == 0xfffe && (elem == 0xe000 || elem == 0xe00d || elem == 0xe0dd))
+   {
+      // DICOM PS 3.6-2009, page 117 states:
+      // The VR for Data Elements, Item (FFFE,E000), Item Delimitation 
+      // Item (FFFE,E00D), and Sequence Delimitation Item (FFFE,E0DD) 
+      // do not exist. See PS 3.5 for explanation.
+      vr = GDCM_UNKNOWN;
+      realVR = GDCM_UNKNOWN;
+   }
+   else
+   {
+      vr = FindDocEntryVR();
+      realVR = vr;
+   }
 
    if ( vr == GDCM_UNKNOWN )
    {

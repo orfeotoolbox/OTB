@@ -14,16 +14,16 @@
 #include <ossim/elevation/ossimSrtmHandler.h>
 #include <OpenThreads/Mutex>
 
-class OSSIM_DLL ossimSrtmElevationDatabase : public ossimElevationDatabase
+class OSSIM_DLL ossimSrtmElevationDatabase : public ossimElevationCellDatabase
 {
 public:
    typedef std::vector<ossimRefPtr<CellInfo> > DirectMap; // 360x180 cell grid
    ossimSrtmElevationDatabase()
-   :ossimElevationDatabase()   
+   :ossimElevationCellDatabase()
    {
    }
    ossimSrtmElevationDatabase(const ossimSrtmElevationDatabase& rhs)
-   :ossimElevationDatabase(rhs)
+   :ossimElevationCellDatabase(rhs)
    {
    }
    virtual ~ossimSrtmElevationDatabase()
@@ -37,7 +37,7 @@ public:
    virtual bool pointHasCoverage(const ossimGpt& gpt) const
    {
       ossimFilename filename;
-      createRelativePath(filename, gpt);
+      createFullPath(filename, gpt);
       
       return filename.exists();
    }
@@ -46,12 +46,12 @@ public:
     * Returns the vertical and horizontal accuracy (90% confidence) in the
     * region of gpt:
     */
-   virtual double getAccuracyLE90(const ossimGpt& gpt) const
+   virtual double getAccuracyLE90(const ossimGpt& /* gpt */) const
    {
       std::cout << "ossimSrtmDatabase::getAccuracyLE90 \n";
       return 0.0;
    }
-   virtual double getAccuracyCE90(const ossimGpt& gpt) const
+   virtual double getAccuracyCE90(const ossimGpt& /* gpt */) const
    {
       std::cout << "ossimSrtmDatabase::getAccuracyCE90 \n";
       return 0.0;
@@ -85,7 +85,7 @@ protected:
       file = ossimFilename(m_connectionString).dirCat(relativeFile);
    }
 
-   ossimRefPtr<ossimElevCellHandler> getOrCreateHandler(const ossimGpt& gpt);
+   ossimRefPtr<ossimElevCellHandler> createCell(const ossimGpt& gpt);
 
    TYPE_DATA
 };

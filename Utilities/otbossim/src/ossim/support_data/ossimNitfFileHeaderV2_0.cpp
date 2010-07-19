@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFileHeaderV2_0.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
+// $Id: ossimNitfFileHeaderV2_0.cpp 17598 2010-06-19 15:37:46Z dburken $
 
 
 #include <sstream>
@@ -25,7 +25,9 @@
 #include <ossim/support_data/ossimNitfTextHeaderV2_0.h>
 #include <ossim/support_data/ossimNitfDataExtensionSegmentV2_0.h>
 
+#include <ossim/base/ossimDrect.h>
 #include <ossim/base/ossimException.h>
+#include <ossim/base/ossimIrect.h>
 #include <ossim/base/ossimNotify.h>
 #include <ossim/base/ossimString.h>
 #include <ossim/base/ossimTrace.h>
@@ -519,9 +521,14 @@ void ossimNitfFileHeaderV2_0::writeStream(std::ostream &out)
       
       out.write(theExtendedHeaderDataLength, 5);
       
+      // for now we hard code te 000 for we do not currently support writing to the DES if the total tag length is
+      // larger than supported
+      //
+      memset(theExtendedHeaderOverflow, '0', 3);
       if(totalLength > 0)
       {
          ossim_uint32 i = 0;
+         out.write(theExtendedHeaderOverflow, 3);
          
          for(i = 0; i < theTagList.size(); ++i)
          {

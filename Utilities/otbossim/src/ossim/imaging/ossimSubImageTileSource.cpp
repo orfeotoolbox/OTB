@@ -17,7 +17,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimSubImageTileSource.cpp 13330 2008-07-28 18:04:40Z dburken $
+//  $Id: ossimSubImageTileSource.cpp 17206 2010-04-25 23:20:40Z dburken $
 
 #include <ossim/imaging/ossimSubImageTileSource.h>
 #include <ossim/base/ossimDrect.h>
@@ -158,7 +158,7 @@ ossimIrect ossimSubImageTileSource::getBoundingRect(ossim_uint32 resLevel) const
 //*****************************************************************************
 void ossimSubImageTileSource::getValidImageVertices(vector<ossimIpt>& vertices,
                                                     ossimVertexOrdering ordering,
-                                                    ossim_uint32 resLevel) const
+                                                    ossim_uint32 /* resLevel */) const
 {
    if(!theInputConnection)
    {

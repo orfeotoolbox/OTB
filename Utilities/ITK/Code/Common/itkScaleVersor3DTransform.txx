@@ -3,7 +3,7 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkScaleVersor3DTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2009-08-09 16:35:47 $
+  Date:      $Date: 2010-05-20 19:58:51 $
   Version:   $Revision: 1.1 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
@@ -29,6 +29,14 @@ ScaleVersor3DTransform<TScalarType>
 ::ScaleVersor3DTransform() : Superclass(OutputSpaceDimension, ParametersDimension)
 {
   m_Scale.Fill( 1.0 );
+}
+
+// Destructor 
+template <class TScalarType>
+ScaleVersor3DTransform<TScalarType>
+::~ScaleVersor3DTransform()
+{
+
 }
 
 
@@ -231,7 +239,7 @@ ScaleVersor3DTransform<TScalarType>
 {
   Superclass::PrintSelf(os,indent);
 
-  os << indent << "Scale:       " << m_Scale        << std::endl;
+  os << indent << "Scales:       " << m_Scale        << std::endl;
 }
 
 

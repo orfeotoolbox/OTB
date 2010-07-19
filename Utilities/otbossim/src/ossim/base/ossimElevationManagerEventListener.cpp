@@ -25,7 +25,7 @@ void ossimElevationManagerEventListener::processEvent( ossimEvent& event )
    }
 }
 
-void ossimElevationManagerEventListener::processEvent( ossimElevationManagerEvent& event )
+void ossimElevationManagerEventListener::processEvent( ossimElevationManagerEvent& /* event */)
 {
 
 }

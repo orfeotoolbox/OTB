@@ -9,7 +9,7 @@
 //
 // Contains class definition for ossimNitfProjectionFactory.
 //
-// $Id: ossimNitfProjectionFactory.cpp 16430 2010-01-27 20:14:02Z dburken $
+// $Id: ossimNitfProjectionFactory.cpp 17206 2010-04-25 23:20:40Z dburken $
 //----------------------------------------------------------------------------
 
 #include <fstream>
@@ -32,9 +32,6 @@
 #include <ossim/base/ossimGpt.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/projection/ossimProjection.h>
-#include <ossim/projection/ossimIkonosRpcModel.h>
-#include <ossim/projection/ossimNitfRpcModel.h>
-#include <ossim/projection/ossimQuickbirdRpcModel.h>
 #include <ossim/support_data/ossimNitfFile.h>
 #include <ossim/support_data/ossimNitfImageHeader.h>
 
@@ -45,7 +42,7 @@
 #include <ossim/base/ossimTrace.h>
 static ossimTrace traceDebug = ossimTrace("ossimNitfProjectionFactory:debug");
 
-ossimNitfProjectionFactory* ossimNitfProjectionFactory::theInstance = NULL;
+ossimNitfProjectionFactory* ossimNitfProjectionFactory::theInstance = 0;
 
 ossimNitfProjectionFactory::ossimNitfProjectionFactory()
 {
@@ -128,16 +125,16 @@ ossimNitfProjectionFactory::createProjection(const ossimFilename& filename,
 
 
 ossimProjection*
-ossimNitfProjectionFactory::createProjection(const ossimKeywordlist& kwl,
-                                             const char *prefix) const
+ossimNitfProjectionFactory::createProjection(const ossimKeywordlist& /* kwl */,
+                                             const char* /* prefix */) const
 {
-   return NULL;
+   return 0;
 }
 
 ossimProjection*
-ossimNitfProjectionFactory::createProjection(const ossimString &name) const
+ossimNitfProjectionFactory::createProjection(const ossimString& /* name */) const
 {
-   return NULL;
+   return 0;
 }
 
 ossimObject*
@@ -153,7 +150,7 @@ ossimNitfProjectionFactory::createObject(const ossimKeywordlist& kwl,
    return createProjection(kwl, prefix);
 }
 
-void ossimNitfProjectionFactory::getTypeNameList(std::vector<ossimString>& typeList)const
+void ossimNitfProjectionFactory::getTypeNameList(std::vector<ossimString>& /* typeList */)const
 {
    
 }
@@ -164,8 +161,6 @@ ossimProjection* ossimNitfProjectionFactory::createProjection(ossimImageHandler*
    ossimProjection* result = 0;
    if(nitfTileSource)
    {
-      result = createModel(nitfTileSource);
-      
       if(!result)
       {
          ossimNitfImageHeader* imageHeader = nitfTileSource->getCurrentImageHeader();
@@ -201,25 +196,6 @@ bool ossimNitfProjectionFactory::isNitf(const ossimFilename& filename)const
    return false;
 }
 
-ossimProjection* ossimNitfProjectionFactory::createModel(ossimNitfTileSource* nitf)const
-{
-   ossimRefPtr<ossimProjection> result;
-   if(nitf)
-   {
-      if(nitf->getCurrentImageHeader())
-      {
-         ossimNitfRpcModel* model = new ossimNitfRpcModel;
-         result = model;
-         if(!model->parseImageHeader(nitf->getCurrentImageHeader()))
-         {
-            result = 0;
-         }
-      }
-   }
-   
-   return result.release();
-}
-
 ossimProjection* ossimNitfProjectionFactory::createProjectionFromHeaders(ossimNitfFileHeader* fileHeader,
                                                                          ossimNitfImageHeader* imageHeader)const
 {
@@ -244,7 +220,7 @@ ossimProjection* ossimNitfProjectionFactory::makeGeographic(
    const ossimNitfImageHeader* hdr,
    const ossimString& coordinateSysetm) const
 {
-   ossimProjection* proj = NULL;
+   ossimProjection* proj = 0;
    if (!hdr)
    {
       return proj;
@@ -330,7 +306,7 @@ ossimProjection* ossimNitfProjectionFactory::makeUtm(
    const ossimNitfImageHeader* hdr,
    const ossimString& coordinateSystem) const
 {
-   ossimUtmProjection* proj = NULL;
+   ossimUtmProjection* proj = 0;
    if (!hdr)
    {
       return proj;
@@ -453,7 +429,7 @@ ossimProjection* ossimNitfProjectionFactory::makeEuiDistant(
    const ossimNitfImageHeader* hdr,
    const std::vector<ossimGpt>& gpts) const
 {
-   ossimEquDistCylProjection* proj = NULL;
+   ossimEquDistCylProjection* proj = 0;
 
    // Get the scale.
    ossimDpt scale;

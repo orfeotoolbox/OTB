@@ -10,7 +10,7 @@
 // Description: implementation for image generator
 //
 //*************************************************************************
-// $Id: ossimTiling.cpp 16598 2010-02-12 19:38:23Z gpotts $
+// $Id: ossimTiling.cpp 17170 2010-04-20 13:51:55Z gpotts $
 
 #include <sstream>
 #include <iomanip>
@@ -193,8 +193,8 @@ bool ossimTiling::next(ossimRefPtr<ossimMapProjection>& resultProjection,
    if(theTileId < theTotalTiles)
    {
       ossimDpt origin;
-      ossim_int64 row;
-      ossim_int64 col;
+      ossim_int64 row=0;
+      ossim_int64 col=0;
 
       getRowCol(row, col, theTileId);
 
@@ -233,16 +233,16 @@ bool ossimTiling::next(ossimRefPtr<ossimMapProjection>& resultProjection,
 
          if(theMapProjection->isGeographic())
          {
-            theMapProjection->setUlTiePoints(ossimGpt(origin.lat,
-                                                origin.lon,
-                                                0.0,
-                                                theMapProjection->origin().datum()));
+            theMapProjection->setUlTiePoints(
+               ossimGpt(origin.lat,
+                        origin.lon,
+                        0.0,
+                        theMapProjection->origin().datum()));
             theMapProjection->setDecimalDegreesPerPixel(deltaPerPixel);
          }
          else
          {
-            theMapProjection->setUlTiePoints(ossimDpt(origin.x,
-                                                            origin.y));
+            theMapProjection->setUlTiePoints(ossimDpt(origin.x, origin.y));
             theMapProjection->setMetersPerPixel(deltaPerPixel);
          }
          resultingBounds = ossimIrect(-(ossim_int32)thePaddingSizeInPixels.x,
@@ -479,8 +479,8 @@ bool ossimTiling::getRowCol(ossim_int64& row,
 bool ossimTiling::getOrigin(ossimDpt& origin,
                             ossim_int64 tileId)const
 {
-   ossim_int64 row;
-   ossim_int64 col;
+   ossim_int64 row=0;
+   ossim_int64 col=0;
    
    bool result = getRowCol(row, col, tileId);
    if(result)

@@ -9,7 +9,7 @@
 // Description: This class extends the stl's string class.
 //
 //********************************************************************
-// $Id: ossimString.h 16308 2010-01-09 02:45:54Z eshirschorn $
+// $Id: ossimString.h 17586 2010-06-17 14:40:07Z dburken $
 #ifndef ossimString_HEADER
 #define ossimString_HEADER 1
 
@@ -283,9 +283,13 @@ public:
     */
    bool                 toBool()const;
    static bool          toBool(const ossimString& aString);
+
+   ossim_uint8          toUInt8()const;
+   static ossim_uint8   toUInt8(const ossimString& aString);
+
    int                  toInt()const;
    static int           toInt(const ossimString& aString);
-   
+
    ossim_int16          toInt16()const;
    static ossim_int16   toInt16(const ossimString& aString);
    ossim_uint16         toUInt16()const;
@@ -399,7 +403,7 @@ public:
 
    /**
     * If OSSIM_ID_ENABLED returns the OSSIM_ID which currently is the
-    * expanded cvs $Id: ossimString.h 16308 2010-01-09 02:45:54Z eshirschorn $ macro; else, an empty string.
+    * expanded cvs $Id: ossimString.h 17586 2010-06-17 14:40:07Z dburken $ macro; else, an empty string.
     */
    ossimString getOssimId() const;
 };

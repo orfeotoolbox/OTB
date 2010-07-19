@@ -17,6 +17,7 @@
 #include <ossim/support_data/ossimNitfRegisteredTag.h>
 #include <ossim/support_data/ossimNitfIchipbTag.h>
 #include <ossim/support_data/ossimNitfStdidcTag.h>
+#include <ossim/projection/ossimSensorModel.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
 #include <ossim/base/ossim2dTo2dTransformRegistry.h>
 
@@ -66,7 +67,7 @@ ossimImageGeometry* ossimImageGeometryFactory::createGeometry(
 }
 
 ossimImageGeometry* ossimImageGeometryFactory::createGeometry(
-   const ossimFilename& filename, ossim_uint32 entryIdx)const
+   const ossimFilename& /* filename */, ossim_uint32 /* entryIdx */)const
 {
    // currently don't support this option just yet by this factory
    return 0;
@@ -77,6 +78,7 @@ bool ossimImageGeometryFactory::extendGeometry(ossimImageHandler* handler)const
    bool result = true;
    if (handler)
    {
+      bool add2D = true;
       ossimRefPtr<ossimImageGeometry> geom = handler->getImageGeometry();
       if(geom.valid())
       {
@@ -85,7 +87,14 @@ bool ossimImageGeometryFactory::extendGeometry(ossimImageHandler* handler)const
             geom->setProjection(createProjection(handler));
             result&=geom->hasProjection();
          }
-         if(!geom->getTransform())
+         if(geom->getProjection())
+         {
+            if( !(dynamic_cast<ossimSensorModel*>(geom->getProjection())))
+            {
+               add2D = false;
+            }
+         }
+         if(!geom->getTransform()&&add2D)
          {
             geom->setTransform(createTransform(handler));
             result&=geom->hasTransform();

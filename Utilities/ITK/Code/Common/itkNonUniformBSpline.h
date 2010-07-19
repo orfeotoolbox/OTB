@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNonUniformBSpline.h,v $
   Language:  C++
-  Date:      $Date: 2010-03-25 14:57:49 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2010-04-30 17:00:49 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -26,6 +26,7 @@
 
 #include "itkPoint.h"
 #include "itkObject.h"
+#include "itkObjectFactory.h"
 #include "itkArray.h"
 
 namespace itk {
@@ -80,7 +81,7 @@ public:
   /**
    * Get the points the spline is trying to interpolate.
    */
-  itkGetConstReferenceMacro( Points, PointListType );
+  const PointListType & GetPoints() const;
 
   /**
    * Set the knot vector. Knots may be nonuniformly spaced.
@@ -91,7 +92,7 @@ public:
   /**
    * Get the knot vector.
    */
-  KnotListType& GetKnots();
+  const KnotListType & GetKnots() const;
 
   /**
    * Computes the chord lengths based on the points.
@@ -118,7 +119,7 @@ public:
   /**
    * Get the control points for the spline
    */
-  itkGetConstReferenceMacro( ControlPoints, ControlPointListType );
+  const ControlPointListType & GetControlPoints() const;
 
   /**
    * Evaluate the basis functions directly. 

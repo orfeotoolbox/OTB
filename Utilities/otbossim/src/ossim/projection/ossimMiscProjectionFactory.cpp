@@ -12,7 +12,7 @@
 //              Initial coding.
 //<
 //*****************************************************************************
-//  $Id: ossimMiscProjectionFactory.cpp 12082 2007-11-26 21:46:44Z dburken $
+//  $Id: ossimMiscProjectionFactory.cpp 17623 2010-06-25 15:03:42Z gpotts $
 
 #include <ossim/projection/ossimMiscProjectionFactory.h>
 #include <ossim/base/ossimKeywordlist.h>
@@ -27,6 +27,7 @@
 // ADD_PROJECTION: Include all map projection headers here:
 //***
 
+#include <ossim/projection/ossimSonomaSensor.h>
 #include <ossim/projection/ossimAffineProjection.h>
 #include <ossim/projection/ossimBilinearProjection.h>
 #include <ossim/projection/ossimQuadProjection.h>
@@ -116,6 +117,10 @@ ossimMiscProjectionFactory::createProjection(const ossimString &name) const
    //***
    // ADD_PROJECTION: Test for each map projection here:
    //***
+   if(name == STATIC_TYPE_NAME(ossimSonomaSensor))
+   {
+      return new ossimSonomaSensor;
+   }
    if(name == STATIC_TYPE_NAME(ossimAffineProjection))
    {
       return new ossimAffineProjection;
@@ -168,6 +173,7 @@ ossimMiscProjectionFactory::createObject(const ossimKeywordlist& kwl,
 //*****************************************************************************
 void ossimMiscProjectionFactory::getTypeNameList(std::vector<ossimString>& typeList)const
 {
+   typeList.push_back(ossimString(STATIC_TYPE_NAME(ossimSonomaSensor)));
    typeList.push_back(ossimString(STATIC_TYPE_NAME(ossimAffineProjection)));
    typeList.push_back(ossimString(STATIC_TYPE_NAME(ossimBilinearProjection)));
    typeList.push_back(ossimString(STATIC_TYPE_NAME(ossimRpcProjection)));

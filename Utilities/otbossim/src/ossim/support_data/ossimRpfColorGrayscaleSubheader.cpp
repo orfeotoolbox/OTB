@@ -15,7 +15,7 @@ ossimRpfColorGrayscaleSubheader::ossimRpfColorGrayscaleSubheader()
 }
 
 ossimErrorCode ossimRpfColorGrayscaleSubheader::parseStream(istream& in,
-                                                            ossimByteOrder byteOrder)
+                                                            ossimByteOrder /* byteOrder */)
 {
    if(in)
    {

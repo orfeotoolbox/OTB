@@ -11,6 +11,8 @@
 
 #include <cmath>
 #include <cstdio>
+#include <iostream>
+#include <sstream>
 
 #include <ossimTerraSarModel.h>
 #include <ossimPluginCommon.h>
@@ -21,6 +23,9 @@
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimXmlDocument.h>
 #include <ossim/base/ossimXmlNode.h>
+#include <ossim/base/ossimNotifyContext.h>
+#include <ossim/base/ossimTrace.h>
+
 #include <otb/GalileanEphemeris.h>
 #include <otb/GeographicEphemeris.h>
 #include <otb/GMSTDateTime.h>
@@ -28,6 +33,7 @@
 #include <otb/SensorParams.h>
 #include <otb/RefPoint.h>
 #include <otb/SarSensor.h>
+
 
 
 // Keyword constants:
@@ -52,6 +58,7 @@ static const char SENSOR[] = "sensor";
 static const char LOOK_DIRECTION[] = "lookDirection";
 static const char POLARISATION_MODE[] = "polarisationMode";
 static const char POL_LAYER[] = "polLayer";
+static const char NUMBER_LAYERS[] = "numberOfLayers";
 
 
 static const char CALIBRATION_CALFACTOR[] = "calibration.calibrationConstant.calFactor";
@@ -89,10 +96,11 @@ ossimplugins::ossimTerraSarModel::ossimTerraSarModel()
      _incidenceAngles(0),
      _calFactor(0.),
      _radarFrequency(0.),
+     _numberOfLayers(0),
      _azStartTime(),
      _azStopTime(),
      _generationTime(),
-     theProductXmlFile()
+     theProductXmlFile(ossimFilename::NIL)
 {
 }
 
@@ -116,6 +124,7 @@ ossimplugins::ossimTerraSarModel::ossimTerraSarModel(
      _incidenceAngles(rhs._incidenceAngles),
      _calFactor(rhs._calFactor),
      _radarFrequency(rhs._radarFrequency),
+     _numberOfLayers(rhs._numberOfLayers),
      _azStartTime(rhs._azStartTime),
      _azStopTime(rhs._azStopTime),
      _generationTime(rhs._generationTime),
@@ -125,10 +134,14 @@ ossimplugins::ossimTerraSarModel::ossimTerraSarModel(
 
 ossimplugins::ossimTerraSarModel::~ossimTerraSarModel()
 {
-   if (_noise != 0)
+   _noise.clear();
+   
+/*
+ *    if (_noise != 0)
    {
       delete _noise;
    }
+ */
    if (_incidenceAngles != 0)
    {
      delete _incidenceAngles;
@@ -160,6 +173,7 @@ double ossimplugins::ossimTerraSarModel::getSlantRangeFromGeoreferenced(double c
 bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
 {
    static const char MODULE[] = "ossimplugins::ossimTerraSarModel::open";
+   ossimString     s;
   
    if (traceDebug())
    {
@@ -170,256 +184,321 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
    
    bool result = false;
    ossimFilename xmlfile;
+   
    bool findMeatadataFile = findTSXLeader(file, xmlfile);
-   
-   if(findMeatadataFile)
+   if(findMeatadataFile == false)
    {
-      //---
-      // Instantiate the XML parser:
-      //---
-      ossimRefPtr<ossimXmlDocument> xdoc = new ossimXmlDocument();
-      if ( xdoc->openFile(xmlfile) )
+   	  if(traceDebug())
       {
-         ossimTerraSarProductDoc tsDoc;
-	 
-         result = tsDoc.isTerraSarX(xdoc.get());
-         if (traceDebug())
-         {
-            ossimNotify(ossimNotifyLevel_DEBUG)
-               << "result of IsTSX " << result << "\n";
-         }
-         
-         if (result)
-         {
-            ossimString s;
-            if ( tsDoc.getProjection(xdoc.get(), s) )
-            {
-               s.upcase();
-               if ( s == "MAP" )
-               {
-                  result = false;
-                  if (traceDebug())
-                  {
-                     ossimNotify(ossimNotifyLevel_DEBUG)
-                        << "Map projected image, returning false...\n";
-                  }
-               }
-            }
-
-            if (result)
-            {
-               // Set the base class number of lines and samples
-               result = tsDoc.initImageSize(xdoc.get(), theImageSize);
-            }
-	    
-            if (traceDebug())
-            {
-               ossimNotify(ossimNotifyLevel_DEBUG)
-                  << "result of initImageSize" << result << "\n";
-            }
-	    
-            if (result)
-            {
-               // Set the base class clip rect.
-               theImageClipRect = ossimDrect(0, 0, theImageSize.x-1, theImageSize.y-1);
-	    
-               // Set the sub image offset. tmp hard coded (drb).
-               theSubImageOffset.x = 0.0;
-               theSubImageOffset.y = 0.0;
-               
-               
-               // Set the image ID to the scene ID.
-               result = tsDoc.getSceneId(xdoc.get(), theImageID);
-               
-               if (traceDebug())
-               {
-                  ossimNotify(ossimNotifyLevel_DEBUG)
-                     << "result of getting SceneID" << result << "\n";
-               }
-               
-               // Set the sensor ID to the mission ID.
-               if (result)
-               {
-		  result = tsDoc.getMission(xdoc.get(), theSensorID);
-		  
-		  if (traceDebug())
-                  {
-                     ossimNotify(ossimNotifyLevel_DEBUG)
-                        << "result of getting MissionID...." << result << "\n";
-                  }
-                  
-                  // Set the base class gsd:
-                  result = tsDoc.initGsd(xdoc.get(), theGSD);
-                  
-                  if (traceDebug())
-                  {
-                     ossimNotify(ossimNotifyLevel_DEBUG)
-                        << "result of getting GSD...." << result << "\n";
-                  }
-                  
-                  if (result)
-                  {
-                     theMeanGSD = (theGSD.x + theGSD.y)/2.0;
-
-                     /*result = */initSRGR(xdoc.get(), tsDoc);
-                     
-                     if (traceDebug())
-                     {
-                        ossimNotify(ossimNotifyLevel_DEBUG)
-                           << "result of initSRGR.... " << result << "\n";
-                     }
-                     
-                     if (result)
-                     {
-                        result = initPlatformPosition(xdoc.get(), tsDoc);
-                        
-                        if (traceDebug())
-                        {
-                           ossimNotify(ossimNotifyLevel_DEBUG)
-                              << "result of initPlatformPosition.... " << result << "\n";
-                        }
-                        
-                        if (result)
-                        {
-                           result = initSensorParams(xdoc.get(), tsDoc);
-                           
-                           if (traceDebug())
-                           {
-                              ossimNotify(ossimNotifyLevel_DEBUG)
-                                 << "result of initSensorParams.... " << result << "\n";
-                           }
-                           
-                           if (result)
-                           {
-                              result = initRefPoint(xdoc.get(), tsDoc);
-
-                              if (traceDebug())
-                              {
-                                 ossimNotify(ossimNotifyLevel_DEBUG)
-                                    << "result of initRefPoint.... " << result << "\n";
-                              }
-                              
-                              if (result)
-                              {
-                                 result = tsDoc.getProductType(xdoc.get(), _productType);
-                                 
-                                 if (result)
-                                 {
-                                    result = tsDoc.getRadiometricCorrection(xdoc.get(), _radiometricCorrection);
-                                    if (result)
-                                    {
-                                       result = initAcquisitionInfo(xdoc.get(), tsDoc);
-
-                                       if (result)
-                                       {
-                                          result = initNoise(xdoc.get(), tsDoc);
-                                          if (result)
-                                          {
-                                             ossimString s;
-                                             result = tsDoc.getCalFactor(xdoc.get(), s);
-
-                                             if (result)
-                                             {
-                                                _calFactor = s.toFloat64();
-
-                                                result = tsDoc.getRadarFrequency(xdoc.get(), s);
-
-                                                if (result)
-                                                {
-                                                   _radarFrequency= s.toFloat64();
-
-                                                   result = tsDoc.getAzimuthStartTime(xdoc.get(), _azStartTime);
-
-                                                   if (result)
-                                                   {
-                                                      result = tsDoc.getAzimuthStopTime(xdoc.get(), _azStopTime);
-
-                                                      if (result)
-                                                      {
-                                                         result = tsDoc.getGenerationTime(xdoc.get(), _generationTime);
-                                                         
-                                                         if (result)
-                                                         {
-                                                            result = initIncidenceAngles(xdoc.get(), tsDoc);
-                                                         }
-                                                      }
-                                                   }
-                                                }
-                                             }
-                                          }
-                                       }
-                                    }
-                                 }
-                              }
-                           }
-                        }
-                     }
-                  }
-               }
-
-            }
-         }
-         
-      } // matches: if ( xdoc->openFile(file) )
-         
-      xdoc = 0;
-         
-   } // matches: if (findMeatadataFile)
+         ossimNotify(ossimNotifyLevel_FATAL)
+            << MODULE << " DEBUG:"
+            << "ossimTerraSarModel::open:"
+            << "\nUnable to open TerraSarX Leader file " << std::endl;
+      }
+      setErrorStatus();
+      return false;
+   }
+   
+   //---
+   // Instantiate the XML parser:
+   //---
+   ossimRefPtr<ossimXmlDocument> xdoc = new ossimXmlDocument();
+   result = xdoc->openFile(xmlfile);
+   if ( result == false )
+   {
+   	  if (traceDebug())
+      {
+      	    ossimNotify(ossimNotifyLevel_DEBUG)
+           	   << "unable to open Xml file \n";
+      }   
+      setErrorStatus();
+      return false;
+   }
    
    
+   ossimTerraSarProductDoc tsDoc;
+   result = tsDoc.isTerraSarX(xdoc.get());
+   if ( result == false )
+   {
+   	  if (traceDebug())
+      {
+      	    ossimNotify(ossimNotifyLevel_DEBUG)
+           	   << "Not a TSX-1 sensor \n";
+      }   
+      setErrorStatus();
+      return false;
+   }
+
+   result = initAcquisitionInfo(xdoc.get(), tsDoc);
+   if ( result == false )
+   {
+   	  if (traceDebug())
+      {
+      	    ossimNotify(ossimNotifyLevel_DEBUG)
+           	   << "unable to init AcquisitionInfo \n";
+      }   
+      setErrorStatus();
+      return false;
+   }
+
+
+   result = tsDoc.getProjection(xdoc.get(), s);	
+   if ( result == false )
+   {
+     s.upcase();
+     if ( s == "MAP" )
+     {
+   	  	if (traceDebug())
+      	{
+      	    ossimNotify(ossimNotifyLevel_DEBUG)
+           	   << "Map projected image, returning false... \n";
+      	}   
+      	setErrorStatus();
+      	return false;
+     }
+   }
+
+   // Set the base class number of lines and samples
+   result = tsDoc.initImageSize(xdoc.get(), theImageSize);
+   if ( result == false )
+   {
+   	  if (traceDebug())
+      {
+      	    ossimNotify(ossimNotifyLevel_DEBUG)
+           	   << "unable to get theImageSize file \n";
+      }   
+      setErrorStatus();
+      return false;
+   }
+
+   // Set the base class clip rect.
+   theImageClipRect = ossimDrect(0, 0, theImageSize.x-1, theImageSize.y-1);
+	    
+   // Set the sub image offset. tmp hard coded (drb).
+   theSubImageOffset.x = 0.0;
+   theSubImageOffset.y = 0.0;
+               
+               
+   // Set the ImageID
+   result = tsDoc.getSceneId(xdoc.get(), theImageID);
+   if ( result == false )
+   {
+   	  if (traceDebug())
+      {
+      	    ossimNotify(ossimNotifyLevel_DEBUG)
+           	   << "unable to get theSceneId \n";
+      }   
+      setErrorStatus();
+      return false;
+   }
+
+   // Set the base class gsd:
+   result = tsDoc.initGsd(xdoc.get(), theGSD);
+   if ( result == false )
+   {
+   	  if (traceDebug())
+      {
+      	    ossimNotify(ossimNotifyLevel_DEBUG)
+           	   << "unable to get theGSD \n";
+      }   
+      setErrorStatus();
+      return false;
+   }
+   
+   theMeanGSD = (theGSD.x + theGSD.y)/2.0;
+   /*result = */ initSRGR(xdoc.get(), tsDoc);
    if (traceDebug())
    {
+       ossimNotify(ossimNotifyLevel_DEBUG)
+                    << "result of initSRGR.... " << result << "\n";
+   }
+
+   result = initPlatformPosition(xdoc.get(), tsDoc);
+   if ( result == false )
+   {
+   	  if (traceDebug())
+      {
+      	    ossimNotify(ossimNotifyLevel_DEBUG)
+           	   << "unable to initPlatformPosition \n";
+      }   
+      setErrorStatus();
+      return false;
+   }
+
+   result = initSensorParams(xdoc.get(), tsDoc);
+   if ( result == false )
+   {
+   	  if (traceDebug())
+      {
+      	    ossimNotify(ossimNotifyLevel_DEBUG)
+           	   << "unable to initSensorParams \n";
+      }   
+      setErrorStatus();
+      return false;
+   }
+                        
+   result = initRefPoint(xdoc.get(), tsDoc);
+   if ( result == false )
+   {
+   	  if (traceDebug())
+      {
+      	    ossimNotify(ossimNotifyLevel_DEBUG)
+           	   << "unable to initRefPoint \n";
+      }   
+      setErrorStatus();
+      return false;
+   }
+
+   result = tsDoc.getProductType(xdoc.get(), _productType);
+   if ( result == false )
+   {
+   	  if (traceDebug())
+      {
+      	    ossimNotify(ossimNotifyLevel_DEBUG)
+           	   << "unable to get ProductType \n";
+      }   
+      setErrorStatus();
+      return false;
+   }
+
+   result = tsDoc.getRadiometricCorrection(xdoc.get(), _radiometricCorrection);
+   if ( result == false )
+   {
+   	  if (traceDebug())
+      {
+      	    ossimNotify(ossimNotifyLevel_DEBUG)
+           	   << "unable to get RadiometricCorrection \n";
+      }   
+      setErrorStatus();
+      return false;
+   }
+
+
+   result = initNoise(xdoc.get(), tsDoc);
+   if ( result == false )
+   {
+   	  if (traceDebug())
+      {
+      	    ossimNotify(ossimNotifyLevel_DEBUG)
+           	   << "unable to init Noise \n";
+      }   
+      setErrorStatus();
+      return false;
+   }
+   
+   result = initCalibration(xdoc.get(), tsDoc);
+   if ( result == false )
+   {
+   	  if (traceDebug())
+      {
+      	    ossimNotify(ossimNotifyLevel_DEBUG)
+           	   << "unable to init Calibration \n";
+      }   
+      setErrorStatus();
+      return false;
+   }
+
+
+   result = tsDoc.getRadarFrequency(xdoc.get(), s);
+   if ( result == false )
+   {
+   	  if (traceDebug())
+      {
+      	    ossimNotify(ossimNotifyLevel_DEBUG)
+           	   << "unable to get RadarFrequency \n";
+      }   
+      setErrorStatus();
+      return false;
+   }
+   _radarFrequency= s.toFloat64();
+
+   result = tsDoc.getAzimuthStartTime(xdoc.get(), _azStartTime);
+   if ( result == false )
+   {
+   	  if (traceDebug())
+      {
+      	    ossimNotify(ossimNotifyLevel_DEBUG)
+           	   << "unable to get AzimuthStartTime \n";
+      }   
+      setErrorStatus();
+      return false;
+   }
+
+   result = tsDoc.getAzimuthStopTime(xdoc.get(), _azStopTime);
+   if ( result == false )
+   {
+   	  if (traceDebug())
+      {
+      	    ossimNotify(ossimNotifyLevel_DEBUG)
+           	   << "unable to get AzimuthStopTime \n";
+      }   
+      setErrorStatus();
+      return false;
+   }
+   
+   result = tsDoc.getGenerationTime(xdoc.get(), _generationTime);
+   if ( result == false )
+   {
+   	  if (traceDebug())
+      {
+      	    ossimNotify(ossimNotifyLevel_DEBUG)
+           	   << "unable to get GenerationTime \n";
+      }   
+      setErrorStatus();
+      return false;
+   }
+   
+   result = initIncidenceAngles(xdoc.get(), tsDoc);
+   if ( result == false )
+   {
+   	  if (traceDebug())
+      {
+      	    ossimNotify(ossimNotifyLevel_DEBUG)
+           	   << "unable to initIncidenceAngles \n";
+      }   
+      setErrorStatus();
+      return false;
+   }
+
+   /*
+    *  Initialize values
+    */ 
+    if (traceDebug())
+    {
       ossimNotify(ossimNotifyLevel_DEBUG)
          << "Initialized values...." << "\n";
-   }
+    }
    
-   if (result)
-   {
-      theProductXmlFile = xmlfile;
+    theProductXmlFile = xmlfile;
       
-      if (traceDebug())
-      {
+    if (traceDebug())
+    {
          ossimNotify(ossimNotifyLevel_DEBUG)
             << "theProductXmlFile : " << xmlfile << "\n";
-      }
+    }
          
-      // Assign the ossimSensorModel::theBoundGndPolygon
-      ossimGpt ul;
-      ossimGpt ur;
-      ossimGpt lr;
-      ossimGpt ll;
-      lineSampleToWorld(theImageClipRect.ul(), ul);
-      lineSampleToWorld(theImageClipRect.ur(), ur);
-      lineSampleToWorld(theImageClipRect.lr(), lr);
-      lineSampleToWorld(theImageClipRect.ll(), ll);
-      
-      if (traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "4 corners from Projection: " << "\n"
-            << ul << ", " << ur << ", " << lr << ", " << ll << "\n";
-      }
-      
-      setGroundRect(ul, ur, lr, ll);  // ossimSensorModel method.
-   }
-   else
-   {
-      theProductXmlFile = ossimFilename::NIL;
-   }
-   
-   if (traceDebug())
-   {
-      if (result)
-      {
-         this->print(ossimNotify(ossimNotifyLevel_DEBUG));
-      }
-      
+    // Assign the ossimSensorModel::theBoundGndPolygon
+    ossimGpt ul;
+    ossimGpt ur;
+    ossimGpt lr;
+    ossimGpt ll;
+    lineSampleToWorld(theImageClipRect.ul(), ul);
+    lineSampleToWorld(theImageClipRect.ur(), ur);
+    lineSampleToWorld(theImageClipRect.lr(), lr);
+    lineSampleToWorld(theImageClipRect.ll(), ll);
+            
+    setGroundRect(ul, ur, lr, ll);  // ossimSensorModel method.
+
+    if (traceDebug())
+    {
+      printInfo(ossimNotify(ossimNotifyLevel_DEBUG));
+
       ossimNotify(ossimNotifyLevel_DEBUG)
-         << MODULE << " exit status = " << (result?"true":"false\n")
+         << MODULE << " DEBUG: leaving..."
          << std::endl;
-   }
+    }
    
-   return result;
+    return result;
    
 } // End of: bool ossimTerraSarModel::open(const ossimFilename& file)
 
@@ -491,13 +570,22 @@ bool ossimplugins::ossimTerraSarModel::saveState(ossimKeywordlist& kwl,
    kw2 = kw + POLARISATION_MODE;
    kwl.add(prefix, kw2, _polarisationMode.c_str());
    kw2 = kw + POL_LAYER;
-   kwl.add(prefix, kw2, _polLayer.c_str());
+   for(ossim_uint32 i = 0; i < _numberOfLayers; ++i)
+   {	
+   		kwl.add(prefix, kw2, _polLayer[i].c_str());
+   }
 
 
-   _noise->saveState(kwl,prefix);
+   for(ossim_uint32 i = 0; i < _numberOfLayers; ++i)
+   {	
+   		_noise[0]->saveState(kwl,prefix);
+   }
    _incidenceAngles->saveState(kwl,prefix);
    
-   kwl.add(prefix, CALIBRATION_CALFACTOR, ossimString::toString(_calFactor).c_str());
+   for(ossim_uint32 i = 0; i < _numberOfLayers; ++i)
+   {	
+   		kwl.add(prefix, CALIBRATION_CALFACTOR, ossimString::toString(_calFactor[i]).c_str());
+   }
    kwl.add(prefix, RADAR_FREQUENCY, ossimString::toString(_radarFrequency).c_str());
    kwl.add(prefix, AZ_START_TIME, _azStartTime.c_str());
    kwl.add(prefix, AZ_STOP_TIME, _azStopTime.c_str());
@@ -775,6 +863,10 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
    } // matches: if (result)
 
    // Load the base class.
+	/*
+	 * TODO correct loadState
+	 */
+#if 0
    if ( !_noise)
    {
       _noise = new Noise();
@@ -789,6 +881,7 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
       }
       result = false;
    }
+#endif
 
 
    // Load the base class.
@@ -810,8 +903,14 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
       lookup = kwl.find(prefix, CALIBRATION_CALFACTOR);
       if (lookup)
       {
-          s = lookup;
-         _calFactor = s.toDouble();
+      		std::istringstream in(lookup);
+      		ossimString tempValue;
+      		for(ossim_uint32 idx = 0; idx < _numberOfLayers; ++idx)
+      		{
+         		in >> tempValue;
+         		_calFactor[idx] = tempValue.toDouble();
+      		
+      		}
       }
       else
       {
@@ -945,15 +1044,6 @@ std::ostream& ossimplugins::ossimTerraSarModel::print(std::ostream& out) const
    
    ossimGeometricSarSensorModel::print(out);
    
-   if ( _noise->print(out) == false )
-   {
-      if (traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_WARN)
-            << MODULE
-            << "\n_noise->print failed!\n";
-      }
-   }
    if ( _incidenceAngles->print(out) == false )
    {
      if (traceDebug())
@@ -964,7 +1054,11 @@ std::ostream& ossimplugins::ossimTerraSarModel::print(std::ostream& out) const
      }
    }
 
-   out << CALIBRATION_CALFACTOR <<  ": " << _calFactor << "\n";
+   out << NUMBER_LAYERS <<  ": " << _numberOfLayers << "\n";
+   for(ossim_uint32 idx = 0; idx < _numberOfLayers; ++idx)
+   {
+   	out << CALIBRATION_CALFACTOR << "["<< idx << "]: " << _calFactor[idx] << "\n";
+   }
    out << RADAR_FREQUENCY <<  ": " << _radarFrequency<< "\n";
    out << AZ_START_TIME <<  ": " << _azStartTime << "\n";
    out << AZ_STOP_TIME <<  ": " << _azStopTime << "\n";
@@ -981,9 +1075,21 @@ std::ostream& ossimplugins::ossimTerraSarModel::print(std::ostream& out) const
    out << kw2<<  ": " <<  _lookDirection.c_str()<< "\n";
    kw2 = kw + POLARISATION_MODE;
    out << kw2<<  ": " <<  _polarisationMode.c_str()<< "\n";
-   kw2 = kw + POL_LAYER;
-   out << kw2<<  ": " <<  _polLayer.c_str()<< "\n";
-
+/*   kw2 = kw + POL_LAYER;
+   for(ossim_uint32 i = 0; i < _numberOfLayers; ++i)
+   {	
+   		out << kw2 <<  "["<< i <<"] : " <<  _polLayer[i].c_str()<< "\n";
+   		if ( _noise[i]->print(out) == false )
+   		{
+      		if (traceDebug())
+      		{
+         		ossimNotify(ossimNotifyLevel_WARN)
+            		<< MODULE
+            		<< "\n_noise->print failed!\n";
+      		}
+   		}
+   }
+*/
 
 
    out.setf(f);
@@ -1805,40 +1911,101 @@ bool ossimplugins::ossimTerraSarModel::initRefPoint(
 bool ossimplugins::ossimTerraSarModel::initAcquisitionInfo(
    const ossimXmlDocument* xdoc, const ossimTerraSarProductDoc& tsDoc)
 {
-  static const char MODULE[] = "ossimplugins::ossimTerraSarModel::initAcquisitionInfo";
+   static const char MODULE[] = "ossimplugins::ossimTerraSarModel::initAcquisitionInfo";
+   bool result;
+   ossimString     s;
 
-  if (traceDebug())
-  {
-      ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entered...\n";
-  }   
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entering...\n";
+   }   
    
-   
-  bool result = tsDoc.getImagingMode(xdoc, _imagingMode);
-
-  if( result )
-  {
-    result = tsDoc.getAcquisitionSensor(xdoc, _acquisitionSensor);
-    if( result )
-    {
-      result = tsDoc.getLookDirection(xdoc, _lookDirection);
-      if( result )
+   result = tsDoc.geNumberOfLayers(xdoc, s);
+   if ( result == false )
+   {
+   	  if (traceDebug())
       {
-        result = tsDoc.getPolarisationMode(xdoc, _polarisationMode);
-        if( result )
-        {
-          result = tsDoc.getPolLayer(xdoc, _polLayer);
-        }
-      }
-    }
-  }
+      	    ossimNotify(ossimNotifyLevel_DEBUG)
+           	   << "unable to get Number Of Layers \n";
+      }   
+      setErrorStatus();
+      return false;
+   }
+	_numberOfLayers = ossimString(s).toUInt32();
 
+   result = tsDoc.getMission(xdoc, theSensorID);
+   if ( result == false )
+   {
+   	  if (traceDebug())
+      {
+      	    ossimNotify(ossimNotifyLevel_DEBUG)
+           	   << "unable to get theSensorID \n";
+      }   
+      setErrorStatus();
+      return false;
+   }
+   
+   result = tsDoc.getImagingMode(xdoc, _imagingMode);
+   if ( result == false )
+   {
+   	  if (traceDebug())
+      {
+      	    ossimNotify(ossimNotifyLevel_DEBUG)
+           	   << "unable to get Imaging Mode \n";
+      }   
+      setErrorStatus();
+      return false;
+   }
 
-  if (traceDebug())
-  {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << MODULE << " exit status = " << (result?"true":"false\n")
-         << std::endl;
-  }
+   result = tsDoc.getAcquisitionSensor(xdoc, _acquisitionSensor);
+   if ( result == false )
+   {
+   	  if (traceDebug())
+      {
+      	    ossimNotify(ossimNotifyLevel_DEBUG)
+           	   << "unable to get Acquisition Sensor \n";
+      }   
+      setErrorStatus();
+      return false;
+   }
+   result = tsDoc.getLookDirection(xdoc, _lookDirection);
+   if ( result == false )
+   {
+   	  if (traceDebug())
+      {
+      	    ossimNotify(ossimNotifyLevel_DEBUG)
+           	   << "unable to get Look direction \n";
+      }   
+      setErrorStatus();
+      return false;
+   }
+   result = tsDoc.getPolarisationMode(xdoc, _polarisationMode);
+   if ( result == false )
+   {
+   	  if (traceDebug())
+      {
+      	    ossimNotify(ossimNotifyLevel_DEBUG)
+           	   << "unable to get Polarisation Mode \n";
+      }   
+      setErrorStatus();
+      return false;
+   }
+   result = tsDoc.getPolLayer(xdoc, _polLayer);
+   if ( result == false )
+   {
+   	  if (traceDebug())
+      {
+      	    ossimNotify(ossimNotifyLevel_DEBUG)
+           	   << "unable to get Polarisation Layer list \n";
+      }   
+      setErrorStatus();
+      return false;
+   }
+
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " leaving...\n";
+   }   
 
    return result;
 }
@@ -1872,36 +2039,402 @@ bool ossimplugins::ossimTerraSarModel::initIncidenceAngles(
   return result;
 }
 
-
-bool ossimplugins::ossimTerraSarModel::initNoise(
-   const ossimXmlDocument* xdoc, const ossimTerraSarProductDoc& tsDoc)
+bool ossimplugins::ossimTerraSarModel::getNoiseAtGivenNode(
+   const ossimRefPtr<ossimXmlNode> xmlDocument, ossimplugins::Noise* noise)
 {
-   static const char MODULE[] = "ossimplugins::ossimTerraSarModel::initNoise";
+   ossimString xpath;
+   std::vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
+   std::vector<ossimRefPtr<ossimXmlNode> > sub_nodes;
+   std::vector<ossimRefPtr<ossimXmlNode> >::iterator node;
+
+   std::vector<ImageNoise> tabImageNoise;
+   ImageNoise              ev;
+   tabImageNoise.clear();
+ 
+   static const char MODULE[] = "ossimplugins::ossimTerraSarModel::getNoise";
 
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entered...\n";
-   }   
-   
-   // Initialize the platform position interpolator.
-   if (_noise)
+   }  
+
+   bool result = true;
+
+   if ( !xmlDocument || !noise )
    {
-      delete _noise;
+      	setErrorStatus();
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << MODULE << " DEBUG: one of the getNoise parameter of the method is NULL" << std::endl;
+         }
+      	return false;	
    }
-   
-   _noise = new Noise();
-   
-   bool result = tsDoc.initNoise(xdoc, _noise);
+
+   xml_nodes.clear();
+   xpath = "numberOfNoiseRecords";
+   xmlDocument->findChildNodes(xpath, xml_nodes);
+   if(xml_nodes.size() == 0)
+   {
+     setErrorStatus();
+     if(traceDebug())
+     {
+  	    ossimNotify(ossimNotifyLevel_DEBUG)
+    		      	<< MODULE << " DEBUG:"
+            	  	<< "\nCould not find: " << xpath
+               		<< std::endl;
+      }
+      return false;
+   }
+    
+   noise->set_numberOfNoiseRecords( xml_nodes[0]->getText().toInt32() );
+
+
+   xml_nodes.clear();
+   xpath = "imageNoise";
+   xmlDocument->findChildNodes(xpath, xml_nodes);
+   if(xml_nodes.size() == 0)
+   {
+     setErrorStatus();
+     if(traceDebug())
+     {
+  	    ossimNotify(ossimNotifyLevel_DEBUG)
+    		      	<< MODULE << " DEBUG:"
+            	  	<< "\nCould not find: " << xpath
+               		<< std::endl;
+      }
+      return false;
+   }
+
+   node = xml_nodes.begin();
+   while (node != xml_nodes.end())
+   {
+    sub_nodes.clear();
+    xpath = "timeUTC";
+    (*node)->findChildNodes(xpath, sub_nodes);
+    if (sub_nodes.size() == 0)
+    {
+      	setErrorStatus();
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << MODULE << " DEBUG:"
+               << "\nCould not find: " << xpath
+               << std::endl;
+         }
+      	return false;
+    }
+    ev.set_timeUTC(sub_nodes[0]->getText());
+    
+    sub_nodes.clear();
+    xpath = "noiseEstimate/validityRangeMin";
+    (*node)->findChildNodes(xpath, sub_nodes);
+    if (sub_nodes.size() == 0)
+    {
+      	setErrorStatus();
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << MODULE << " DEBUG:"
+               << "\nCould not find: " << xpath
+               << std::endl;
+         }
+      	return false;
+    }
+    ev.set_validityRangeMin( sub_nodes[0]->getText().toDouble() );
+
+    sub_nodes.clear();
+    xpath = "noiseEstimate/validityRangeMax";
+    (*node)->findChildNodes(xpath, sub_nodes);
+    if (sub_nodes.size() == 0)
+    {
+      	setErrorStatus();
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << MODULE << " DEBUG:"
+               << "\nCould not find: " << xpath
+               << std::endl;
+         }
+      	return false;
+    }
+    ev.set_validityRangeMax( sub_nodes[0]->getText().toDouble() );
+
+    sub_nodes.clear();
+    xpath = "noiseEstimate/referencePoint";
+    (*node)->findChildNodes(xpath, sub_nodes);
+    if (sub_nodes.size() == 0)
+    {
+      	setErrorStatus();
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << MODULE << " DEBUG:"
+               << "\nCould not find: " << xpath
+               << std::endl;
+         }
+      	return false;
+    }
+    ev.set_referencePoint( sub_nodes[0]->getText().toDouble() );
+
+    sub_nodes.clear();
+    xpath = "noiseEstimate/polynomialDegree";
+    (*node)->findChildNodes(xpath, sub_nodes);
+    if (sub_nodes.size() == 0)
+    {
+      	setErrorStatus();
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << MODULE << " DEBUG:"
+               << "\nCould not find: " << xpath
+               << std::endl;
+         }
+      	return false;
+    }
+    ev.set_polynomialDegree( sub_nodes[0]->getText().toInt32() );
+
+    sub_nodes.clear();
+    ossimXmlNode::ChildListType nodelist;
+    (*node)->findChildNodes("noiseEstimate/coefficient",nodelist);
+    ossimXmlNode::ChildListType::const_iterator child_iter = nodelist.begin();
+    std::vector<double> polynomialCoefficients;
+    while(child_iter != nodelist.end())
+    {
+    	double coefficient = ((*child_iter)->getText()).toDouble() ;
+        polynomialCoefficients.push_back(coefficient);
+        ++child_iter;
+    }                  
+    ev.set_polynomialCoefficients( polynomialCoefficients );
+ 
+    tabImageNoise.push_back(ev);
+
+    ++node;
+   }
+
+   noise->set_imageNoise(tabImageNoise);
+ 
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " leaving...\n";
+   }   
+
+   return true;
+}
+
+
+bool ossimplugins::ossimTerraSarModel::initNoise(
+   const ossimXmlDocument* xmlDocument, const ossimTerraSarProductDoc& tsDoc)
+{
+   ossimString xpath;
+   ossimString polLayerName;
+   std::vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
+   std::vector<ossimRefPtr<ossimXmlNode> > sub_nodes;
+   std::vector<ossimRefPtr<ossimXmlNode> >::iterator node;
+   bool result;
+
+   static const char MODULE[] = "ossimplugins::ossimTerraSarModel::initNoise";
 
    if (traceDebug())
    {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << MODULE << " exit status = " << (result?"true":"false\n")
-         << std::endl;
+      ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entering...\n";
+   }   
+
+   _noise.resize(_numberOfLayers);
+      
+   xml_nodes.clear();
+   xpath = "/level1Product/noise";
+
+   xmlDocument->findNodes(xpath, xml_nodes);
+   if(xml_nodes.size() == 0)
+   {
+     setErrorStatus();
+     if(traceDebug())
+     {
+  	    ossimNotify(ossimNotifyLevel_DEBUG)
+    		      	<< MODULE << " DEBUG:"
+            	  	<< "\nCould not find: " << xpath
+               		<< std::endl;
+      }
+      return false;
+  }
+
+  node = xml_nodes.begin();
+  while (node != xml_nodes.end())
+  {
+    sub_nodes.clear();
+    xpath = "polLayer";
+    (*node)->findChildNodes(xpath, sub_nodes);
+    if (sub_nodes.size() == 0)
+    {
+      	setErrorStatus();
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << MODULE << " DEBUG:"
+               << "\nCould not find: " << xpath
+               << std::endl;
+         }
+      	return false;
+    }
+    
+    polLayerName = sub_nodes[0]->getText();
+
+    ossim_uint32 polLayerIdx = -1;
+    
+    for(ossim_uint32 idx = 0 ; idx < _polLayer.size(); ++idx)
+    {
+		if(_polLayer[idx] == polLayerName)
+		{
+			polLayerIdx = idx;
+		}    
+    }  
+
+	if(polLayerIdx < 0)
+	{
+      	setErrorStatus();
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << MODULE << " DEBUG: Unable to found polLayer in polLayer List" << std::endl;
+         }
+      	return false;	
+	}
+	
+	sub_nodes.clear();
+
+   _noise[polLayerIdx] = new Noise();
+   
+   result = getNoiseAtGivenNode( (*node), _noise[polLayerIdx]);
+   if(polLayerIdx < 0)
+   {
+      	setErrorStatus();
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << MODULE << " DEBUG: Unable to getNoise for the "<< polLayerName <<" layer image"<< std::endl;
+         }
+      	return false;	
+	}
+
+   
+    ++node;
    }
 
-   return result;
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " leaving...\n";
+   }   
+
+   return true;
 }
+
+
+bool ossimplugins::ossimTerraSarModel::initCalibration(
+   const ossimXmlDocument* xmlDocument, const ossimTerraSarProductDoc& tsDoc)
+{
+   ossimString xpath;
+   ossimString polLayerName;
+   std::vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
+   std::vector<ossimRefPtr<ossimXmlNode> > sub_nodes;
+   std::vector<ossimRefPtr<ossimXmlNode> >::iterator node;
+   bool result;
+
+   static const char MODULE[] = "ossimplugins::ossimTerraSarModel::initCalibration";
+
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entering...\n";
+   }   
+
+   _calFactor.resize(_numberOfLayers);
+      
+   xml_nodes.clear();
+   xpath = "/level1Product/calibration/calibrationConstant";
+
+   xmlDocument->findNodes(xpath, xml_nodes);
+   if(xml_nodes.size() == 0)
+   {
+     setErrorStatus();
+     if(traceDebug())
+     {
+  	    ossimNotify(ossimNotifyLevel_DEBUG)
+    		      	<< MODULE << " DEBUG:"
+            	  	<< "\nCould not find: " << xpath
+               		<< std::endl;
+      }
+      return false;
+  }
+
+  node = xml_nodes.begin();
+  while (node != xml_nodes.end())
+  {
+    sub_nodes.clear();
+    xpath = "polLayer";
+    (*node)->findChildNodes(xpath, sub_nodes);
+    if (sub_nodes.size() == 0)
+    {
+      	setErrorStatus();
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << MODULE << " DEBUG:"
+               << "\nCould not find: " << xpath
+               << std::endl;
+         }
+      	return false;
+    }
+    
+    polLayerName = sub_nodes[0]->getText();
+
+    ossim_uint32 polLayerIdx = -1;
+    
+    for(ossim_uint32 idx = 0 ; idx < _polLayer.size(); ++idx)
+    {
+		if(_polLayer[idx] == polLayerName)
+		{
+			polLayerIdx = idx;
+		}    
+    }  
+
+	if(polLayerIdx < 0)
+	{
+      	setErrorStatus();
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << MODULE << " DEBUG: Unable to found polLayer in polLayer List" << std::endl;
+         }
+      	return false;	
+	}
+	
+	sub_nodes.clear();
+    xpath = "calFactor";
+    (*node)->findChildNodes(xpath, sub_nodes);
+    if (sub_nodes.size() == 0)
+    {
+    	 setErrorStatus();
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << MODULE << " DEBUG:"
+               << "\nCould not find: " << xpath
+               << std::endl;
+         }
+    	return false;
+    }
+    _calFactor[polLayerIdx] = sub_nodes[0]->getText().toDouble();
+    ++node;
+   }
+
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " leaving...\n";
+   }   
+
+   return true;
+}
+
 
 bool ossimplugins::ossimTerraSarModel::findTSXLeader(const ossimFilename& file,
                                                      ossimFilename& metadataFile)
@@ -1962,5 +2495,29 @@ bool ossimplugins::ossimTerraSarModel::findTSXLeader(const ossimFilename& file,
    }
 
    return res;
+}
+
+
+void ossimplugins::ossimTerraSarModel::printInfo(ostream& os) const
+{
+   os << "\n----------------- General Info on TSX-1 Image -------------------"
+      << "\n  "
+      << "\n  Sensor ID :               			" << theSensorID
+      << "\n  Imaging Mode :               			" << _imagingMode
+      << "\n  Acquisition Sensor :        			" << _acquisitionSensor
+      << "\n  Look direction :          			" << _lookDirection
+      << "\n  Polarisation Mode :          			" << _polarisationMode
+      << "\n  Number of Layers :           			" << _numberOfLayers
+      << "\n  Polarisation List Size :     			" << _polLayer.size()
+      << "\n"
+      << "\n------------------------------------------------------------------";
+      for(ossim_uint32 idx = 0 ; idx < _polLayer.size(); ++idx)
+      {
+   			os << "\n----------------- Info on " << _polLayer[idx] <<" Layer Image -------------------"
+               << "\n calFactor :                                  " << _calFactor[idx]
+//               << "\n Image Noise  size :                          " << _noise[idx].get_imageNoise().size()
+                << "\n------------------------------------------------------------";
+      }  
+   os << std::endl;	
 }
 

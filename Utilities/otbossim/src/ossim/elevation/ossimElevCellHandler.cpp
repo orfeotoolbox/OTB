@@ -15,7 +15,7 @@
 //              Initial coding.
 //<
 //*****************************************************************************
-// $Id: ossimElevCellHandler.cpp 12054 2007-11-15 20:53:13Z dburken $
+// $Id: ossimElevCellHandler.cpp 17195 2010-04-23 17:32:18Z dburken $
 
 #include <ossim/elevation/ossimElevCellHandler.h>
 #include <ossim/base/ossimKeyword.h>
@@ -100,8 +100,8 @@ double ossimElevCellHandler::getAccuracyCE90(const ossimGpt&) const
 }
 
 bool ossimElevCellHandler::canConnectMyInputTo(
-   ossim_int32 inputIndex,
-   const ossimConnectableObject* object) const
+   ossim_int32 /* inputIndex */,
+   const ossimConnectableObject* /* object */) const
 {         
    return false;
 }

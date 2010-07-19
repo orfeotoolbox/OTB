@@ -12,7 +12,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimAtbController.cpp 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimAtbController.cpp 17195 2010-04-23 17:32:18Z dburken $
 
 #include <ossim/imaging/ossimAtbController.h>
 
@@ -412,7 +412,7 @@ void ossimAtbController::abort()
 //  METHOD: ossimAtbController::saveState()
 //  
 //*****************************************************************************
-bool ossimAtbController::saveState(ossimKeywordlist& kwl) const
+bool ossimAtbController::saveState(ossimKeywordlist& /* kwl */) const
 {
    static const char MODULE[] = "ossimAtbController::saveState()";
    if (traceExec())  CLOG << "entering..." << endl;
@@ -427,7 +427,7 @@ bool ossimAtbController::saveState(ossimKeywordlist& kwl) const
 //  METHOD: ossimAtbController::loadState()
 //  
 //*****************************************************************************
-bool ossimAtbController::loadState(const ossimKeywordlist& kwl)
+bool ossimAtbController::loadState(const ossimKeywordlist& /* kwl */)
 {
    static const char MODULE[] = "ossimAtbController::loadState()";
    if (traceExec())  CLOG << "entering..." << endl;
@@ -561,8 +561,8 @@ void ossimAtbController::setGridRemapEngine(ossimGridRemapEngine* engine)
 //  METHOD: ossimAtbController::canConnectMyInputTo()
 //  
 //*****************************************************************************
-bool ossimAtbController::canConnectMyInputTo(ossim_int32 myInputIndex,
-                                    const ossimConnectableObject* object) const
+bool ossimAtbController::canConnectMyInputTo(ossim_int32 /* myInputIndex */,
+                                             const ossimConnectableObject* object) const
 {
    return (object&& PTR_CAST(ossimGridRemapSource, object));
 }

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkContourSpatialObject.txx,v $
   Language:  C++
-  Date:      $Date: 2009-01-28 20:10:27 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2010-06-11 12:51:22 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -200,63 +200,25 @@ ContourSpatialObject< TDimension >
 
 /** Test whether a point is inside or outside the object 
  *  For computational speed purposes, it is faster if the method does not
- *  check the name of the class and the current depth */ 
+ *  check the name of the class and the current depth. Since a contour is
+ *  considered to be a 1D object, IsInside will always return false. */ 
 template< unsigned int TDimension >
 bool
 ContourSpatialObject< TDimension >
 ::IsInside( const PointType & itkNotUsed(point) ) const
 {
-  /*
-  typename ControlPointListType::const_iterator it = m_ControlPoints.begin();
-  typename ControlPointListType::const_iterator itEnd = m_ControlPoints.end();
-    
-  if( !this->SetInternalInverseTransformToWorldToIndexTransform() )
-    {
-    return false;
-    }
-
-  PointType transformedPoint = 
-    this->GetInternalInverseTransform()->TransformPoint(point);
-
-  if( this->GetBounds()->IsInside(transformedPoint) )
-    {
-    while(it != itEnd)
-      {
-      if((*it).GetPosition() == transformedPoint)
-        {
-        return true;
-        }
-      it++;
-      }
-    }*/
   return false;
 }
 
-/** Test if the given point is inside the blob
- *  Note: ComputeBoundingBox should be called before. */
+/** Test if the given point is inside the blob. Since a contour is
+ *  considered to be a 1D object, IsInside will always return false.
+ *  Note: removed names of arguments since they are no longer used. */
 template< unsigned int TDimension >
 bool 
 ContourSpatialObject< TDimension >  
-::IsInside( const PointType & point, unsigned int depth, char * name ) const
-{
-  itkDebugMacro( "Checking the point [" << point << "] is inside the blob" );
- 
-  if(name == NULL)
-    {
-    if(IsInside(point))
-      {
-      return true;
-      }
-    }
-  else if(strstr(typeid(Self).name(), name))
-    {
-    if(IsInside(point))
-      {
-      return true;
-      }
-    }
-  
-  return Superclass::IsInside(point, depth, name);
+::IsInside( const PointType &, unsigned int, char * ) const
+{ 
+  return false;
 } 
 
 /** Return true if the blob is evaluable at a given point 
@@ -272,32 +234,21 @@ ContourSpatialObject< TDimension >
 }
 
 
-/** Return 1 if the point is in the points list */
+/** Return 1 if the point is in the points list 
+ *  Note: removed names of third parameter since it is no
+ *  longer used.  It was "depth" */
 template< unsigned int TDimension >
 bool
 ContourSpatialObject< TDimension > 
-::ValueAt( const PointType & point, double & value, unsigned int depth,
+::ValueAt( const PointType & point, double & value, unsigned int,
            char * name ) const
 {
   itkDebugMacro( "Getting the value of the blob at " << point );
-  if( IsInside(point, 0, name) )
-    {
-    value = this->GetDefaultInsideValue();
-    return true;
-    }
-  else
-    {
-    if( Superclass::IsEvaluableAt(point, depth, name) )
-      {
-      Superclass::ValueAt(point, value, depth, name);
-      return true;
-      }
-    else
-      {
-      value = this->GetDefaultOutsideValue();
-      return false;
-      }
-    }
+  
+  
+  value = this->GetDefaultOutsideValue(); // cannot be inside of a 1d contour
+  return IsInside(point,0,name);          // so will always return false
+  
 }
 
 } // end namespace itk 

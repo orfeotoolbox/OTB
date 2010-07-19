@@ -11,7 +11,7 @@
 //
 // Contains class declaration of ossimDtedElevationImageSource.
 //
-// $Id: ossimDtedElevationImageSource.cpp 16599 2010-02-12 19:44:23Z gpotts $
+// $Id: ossimDtedElevationImageSource.cpp 17206 2010-04-25 23:20:40Z dburken $
 //----------------------------------------------------------------------------
 
 #include <vector>
@@ -386,10 +386,10 @@ void ossimDtedElevationImageSource::resampleCellBilinear(
 }
 
 void ossimDtedElevationImageSource::resampleCellNearestNeighbor(
-   const ossimGrect& rect,
+   const ossimGrect& /* rect */,
    const ossimFilename& dtedFile,
-   ossimImageData& id,
-   const ossimDpt& requestedPostSpacing) const
+   ossimImageData& /* id */,
+   const ossimDpt& /* requestedPostSpacing */) const
 {
    // Open the cell.
    ossimRefPtr<ossimImageHandler> dts = new ossimDtedTileSource();

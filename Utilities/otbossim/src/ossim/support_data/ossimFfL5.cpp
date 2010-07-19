@@ -7,15 +7,17 @@
 // Description: Container class for LandSat7 Fast Format header files.
 //
 // ********************************************************************
-// $Id: ossimFfL5.cpp 10384 2007-01-26 20:32:12Z gpotts $
+// $Id: ossimFfL5.cpp 17501 2010-06-02 11:14:55Z dburken $
 //
+
+#include <cstdio>
 #include <cstdlib>
+#include <ctime>
 #include <fstream>
 #include <sstream>
 #include <string>
 #include <iomanip>
 using namespace std;
-#include <time.h>
 
 #include <ossim/base/ossimString.h>
 #include <ossim/base/ossimDate.h>

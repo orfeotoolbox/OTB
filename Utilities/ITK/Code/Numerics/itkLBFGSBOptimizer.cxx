@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLBFGSBOptimizer.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-10-08 15:14:25 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2010-05-12 19:38:30 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -76,7 +76,6 @@ LBFGSBOptimizer
   m_MaximumNumberOfEvaluations      = 500;
   m_MaximumNumberOfCorrections      = 5;
   m_CurrentIteration                = 0;
-  m_Value                           = 0.0;
   m_InfinityNormOfProjectedGradient = 0.0;
   m_StopConditionDescription.str("");
  
@@ -133,7 +132,7 @@ LBFGSBOptimizer
     m_CurrentIteration << std::endl;
 
   os << indent << "Value: " <<
-    m_Value << std::endl;
+    this->GetValue() << std::endl;
 
   os << indent << "InfinityNormOfProjectedGradient: " <<
     m_InfinityNormOfProjectedGradient << std::endl;
@@ -194,6 +193,16 @@ LBFGSBOptimizer
 {
   return m_LowerBound;
 } 
+
+/** 
+ * Return Current Value
+ */
+LBFGSBOptimizer::MeasureType
+LBFGSBOptimizer
+::GetValue() const
+{
+  return this->GetCachedValue();
+}
 
 /**
  * Set upper bound

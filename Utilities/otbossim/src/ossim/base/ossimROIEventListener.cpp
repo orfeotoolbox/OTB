@@ -36,14 +36,14 @@ void ossimROIEventListener::processEvent(ossimEvent& event)
    }
 }
 
-void ossimROIEventListener::handleRectangleROIEvent( ossimROIEvent& event )
+void ossimROIEventListener::handleRectangleROIEvent( ossimROIEvent& /* event */)
 {
 }
 
-void ossimROIEventListener::handlePolygonROIEvent( ossimROIEvent& event )
+void ossimROIEventListener::handlePolygonROIEvent( ossimROIEvent& /* event */)
 {
 }
 
-void ossimROIEventListener::handlePolylineROIEvent( ossimROIEvent& event )
+void ossimROIEventListener::handlePolylineROIEvent( ossimROIEvent& /* event */)
 {
 }

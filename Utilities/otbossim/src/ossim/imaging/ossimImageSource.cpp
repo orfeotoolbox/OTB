@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageSource.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimImageSource.cpp 17638 2010-06-29 16:56:29Z gpotts $
 
 #include <ossim/imaging/ossimImageSource.h>
 #include <ossim/imaging/ossimImageData.h>
@@ -271,11 +271,11 @@ ossimImageGeometry*  ossimImageSource::getImageGeometry()
 //**************************************************************************************************
 //! Default implementation sets geometry of the first input to the geometry specified.
 //**************************************************************************************************
-void ossimImageSource::setImageGeometry(const ossimImageGeometry* geom)
+void ossimImageSource::setImageGeometry(ossimImageGeometry* geom)
 {
    ossimImageSource* inter = PTR_CAST(ossimImageSource, getInput(0));
    if (inter)
-      setImageGeometry(geom);
+      inter->setImageGeometry(geom);
 }
 
 void ossimImageSource::saveImageGeometry() const
@@ -344,7 +344,7 @@ void ossimImageSource::getPropertyNames(std::vector<ossimString>& propertyNames)
 }
 
 // Protected to hide from use...
-ossimImageSource::ossimImageSource (const ossimImageSource& rhs)
+ossimImageSource::ossimImageSource (const ossimImageSource& /* rhs */)
    :ossimSource() 
 {}
 

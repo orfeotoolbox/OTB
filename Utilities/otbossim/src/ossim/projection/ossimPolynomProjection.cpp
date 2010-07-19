@@ -563,7 +563,7 @@ ossimPolynomProjection::setupDesiredExponents(int horizonal_ord, int vertical_or
 }
 
 double
-ossimPolynomProjection::optimizeFit(const ossimTieGptSet& tieSet, double* targetVariance)
+ossimPolynomProjection::optimizeFit(const ossimTieGptSet& tieSet, double* /* targetVariance */)
 {
    //NOTE: ignore targetVariance
 

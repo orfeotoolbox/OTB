@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshTraits.h,v $
   Language:  C++
-  Date:      $Date: 2008-02-07 15:58:06 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2010-06-14 15:03:36 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -72,8 +72,8 @@ public:
                         PrimalDataType, DualDataType > QEPrimal;
   //typedef QEPrimal QEType;
   typedef typename QEPrimal::DualType             QEDual;
-  /// FOR LEO typedef typename QEPrimal::Superclass     QEType;
-  /// FOR LEO typedef typename QEPrimal::Dual           QEDual;
+  // FOR LEO typedef typename QEPrimal::Superclass     QEType;
+  // FOR LEO typedef typename QEPrimal::Dual           QEDual;
   typedef typename QEPrimal::OriginRefType     VertexRefType;
   typedef typename QEPrimal::DualOriginRefType FaceRefType;
 

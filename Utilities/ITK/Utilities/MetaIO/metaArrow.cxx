@@ -1,19 +1,14 @@
-/*=========================================================================
+/*============================================================================
+  MetaIO
+  Copyright 2000-2010 Insight Software Consortium
 
-  Program:   MetaIO
-  Module:    $RCSfile: metaArrow.cxx,v $
-  Language:  C++
-  Date:      $Date: 2008-04-09 01:44:29 $
-  Version:   $Revision: 1.9 $
+  Distributed under the OSI-approved BSD License (the "License");
+  see accompanying file Copyright.txt for details.
 
-  Copyright (c) Insight Software Consortium. All rights reserved.
-  See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
-
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
-
-=========================================================================*/
+  This software is distributed WITHOUT ANY WARRANTY; without even the
+  implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  See the License for more information.
+============================================================================*/
 #include "metaArrow.h"
 
 #ifdef _MSC_VER
@@ -65,6 +60,7 @@ MetaArrow(unsigned int dim)
 {
   if(META_DEBUG) METAIO_STREAM::cout << "MetaArrow()" << METAIO_STREAM::endl;
   Clear();
+  m_NDims = dim;
 }
 
 //
@@ -80,6 +76,12 @@ PrintInfo() const
 {
   MetaObject::PrintInfo();
   METAIO_STREAM::cout << "Length = " << M_Length << METAIO_STREAM::endl;
+  METAIO_STREAM::cout << "Direction = ";
+  for (int i = 0; i < m_NDims; i++)
+    {
+    METAIO_STREAM::cout << M_Direction[i] << " ";
+    }
+  METAIO_STREAM::cout << METAIO_STREAM::endl;
 }
 
 void MetaArrow::
@@ -101,6 +103,11 @@ CopyInfo(const MetaObject * _object)
     if( arrow )
       {
       M_Length = arrow->Length();
+      const double* direction = arrow->Direction();
+      for (int i = 0; i < m_NDims; i++)
+        {
+        M_Direction[i] = direction[i];
+        }
       }
     }
   }
@@ -108,15 +115,30 @@ CopyInfo(const MetaObject * _object)
 
 void  MetaArrow::
 Length(float length)
-{
+ {
   M_Length = length;
-}
+ }
 
 float  MetaArrow::
 Length(void) const 
-{
+ {
   return M_Length;
-}
+ }
+
+void  MetaArrow::
+Direction(const double *direction)
+ {
+  for (int i = 0; i < m_NDims; i++)
+    {
+    M_Direction[i] = direction[i];
+    }
+ }
+
+const double * MetaArrow::
+Direction(void) const
+ {
+  return M_Direction;
+ }
   
 /** Clear Arrow information */
 void MetaArrow::
@@ -125,6 +147,10 @@ Clear(void)
   if(META_DEBUG) METAIO_STREAM::cout << "MetaArrow: Clear" << METAIO_STREAM::endl;
   MetaObject::Clear();
   M_Length = 1;
+  
+  // zero out direction then set to (1,0,0)
+  memset(M_Direction, 0, 10*sizeof(double));
+  M_Direction[0] = 1.0;
 }
         
 /** Destroy Arrow information */
@@ -143,9 +169,16 @@ M_SetupReadFields(void)
   MetaObject::M_SetupReadFields();
 
   MET_FieldRecordType * mF;
-
-  mF = new MET_FieldRecordType;
+  
+  mF= new MET_FieldRecordType;
   MET_InitReadField(mF, "Length", MET_FLOAT, true);
+  mF->terminateRead = false;
+  m_Fields.push_back(mF);
+  
+  int nDimsRecordNumber = MET_GetFieldRecordNumber("NDims", &m_Fields);
+  
+  mF= new MET_FieldRecordType;
+  MET_InitReadField(mF, "Direction", MET_DOUBLE_ARRAY, true, nDimsRecordNumber);
   mF->terminateRead = true;
   m_Fields.push_back(mF);
 }
@@ -157,9 +190,13 @@ M_SetupWriteFields(void)
   MetaObject::M_SetupWriteFields();
 
   MET_FieldRecordType * mF;
-
+  
   mF = new MET_FieldRecordType;
   MET_InitWriteField(mF, "Length", MET_FLOAT, M_Length);
+  m_Fields.push_back(mF);
+  
+  mF = new MET_FieldRecordType;
+  MET_InitWriteField(mF, "Direction", MET_DOUBLE_ARRAY, m_NDims, M_Direction);
   m_Fields.push_back(mF);
 }
 
@@ -177,12 +214,21 @@ M_Read(void)
 
   if(META_DEBUG) METAIO_STREAM::cout << "MetaArrow: M_Read: Parsing Header" << METAIO_STREAM::endl;
  
-  MET_FieldRecordType * mF;
- 
-  mF = MET_GetFieldRecord("Length", &m_Fields);
-  if(mF->defined)
+  MET_FieldRecordType * mF_length;
+  mF_length = MET_GetFieldRecord("Length", &m_Fields);
+  if(mF_length->defined)
     {
-    M_Length= (float)mF->value[0];
+    M_Length= (float)mF_length->value[0];
+    }
+  
+  MET_FieldRecordType * mF_direction;
+  mF_direction = MET_GetFieldRecord("Direction", &m_Fields);
+  if(mF_direction->defined)
+    {
+    for (int i = 0; i < m_NDims; i++)
+      {
+      M_Direction[i] = (double)mF_direction->value[i];
+      }
     }
 
   return true;
@@ -191,4 +237,3 @@ M_Read(void)
 #if (METAIO_USE_NAMESPACE)
 };
 #endif
-

@@ -81,7 +81,7 @@ bool ossimImageStatisticsSource::canConnectMyInputTo(ossim_int32 inputIndex,
 }
 
 template <class T>
-void ossimImageStatisticsSource::computeStatisticsTemplate(T dummyVariable)
+void ossimImageStatisticsSource::computeStatisticsTemplate(T /* dummyVariable */)
 {
    ossimRefPtr<ossimImageSourceSequencer> sequencer = new ossimImageSourceSequencer;
 

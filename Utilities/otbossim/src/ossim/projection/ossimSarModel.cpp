@@ -15,7 +15,7 @@
 //                    21 Mar 2006, paragraph E.3.8, SAR MPDSR
 //
 //----------------------------------------------------------------------------
-// $Id: ossimSarModel.cpp 11949 2007-10-31 14:33:29Z gpotts $
+// $Id: ossimSarModel.cpp 17206 2010-04-25 23:20:40Z dburken $
 
 #include <ossim/elevation/ossimHgtRef.h>
 #include <ossim/projection/ossimSarModel.h>
@@ -31,7 +31,7 @@ static ossimTrace traceExec (ossimString("ossimSarModel:exec"));
 static ossimTrace traceDebug(ossimString("ossimSarModel:debug"));
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimSarModel.cpp 11949 2007-10-31 14:33:29Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimSarModel.cpp 17206 2010-04-25 23:20:40Z dburken $";
 #endif
 
 static const char ACQ_MODE_KW[]         = "acq_mode";
@@ -705,7 +705,7 @@ void ossimSarModel::imagingRay(const ossimDpt& image_point,
 //
 //*****************************************************************************
 ossimSensorModel::CovMatStatus ossimSarModel::getObsCovMat(
-   const ossimDpt& ipos, NEWMAT::SymmetricMatrix& Cov)
+   const ossimDpt& /* ipos */, NEWMAT::SymmetricMatrix& Cov)
 {
    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    // Mensuration error contribution

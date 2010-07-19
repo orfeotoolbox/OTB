@@ -40,7 +40,7 @@ ossimRpfColorGrayscaleTable::~ossimRpfColorGrayscaleTable()
 }
 
 ossimErrorCode ossimRpfColorGrayscaleTable::parseStream(istream& in,
-                                                        ossimByteOrder byteOrder)
+                                                        ossimByteOrder /* byteOrder */)
 {
    if(in)
    {

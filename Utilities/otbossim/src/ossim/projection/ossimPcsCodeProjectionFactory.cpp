@@ -14,8 +14,9 @@
 // http://www.remotesensing.org/geotiff/spec/geotiff6.html#6.3.3.1
 // 
 //----------------------------------------------------------------------------
-//  $Id: ossimPcsCodeProjectionFactory.cpp 16470 2010-02-01 19:50:13Z gpotts $
+//  $Id: ossimPcsCodeProjectionFactory.cpp 17502 2010-06-02 11:15:43Z dburken $
 
+#include <cctype>
 #include <fstream>
 #include <sstream>
 
@@ -39,7 +40,7 @@ static const ossimTrace
 traceDebug(ossimString("ossimPcsCodeProjectionFactory:debug"));
 
 #if OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimPcsCodeProjectionFactory.cpp 16470 2010-02-01 19:50:13Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimPcsCodeProjectionFactory.cpp 17502 2010-06-02 11:15:43Z dburken $";
 #endif
 
 #ifndef ABS
@@ -72,7 +73,7 @@ ossimPcsCodeProjectionFactory::ossimPcsCodeProjectionFactory()
 #endif
    }
 
-   ossimString regExpression =  ossimString("pcs_csv");
+   ossimString regExpression =  ossimString("ossim_pcs");
 
    std::vector<ossimString> keys = ossimPreferences::instance()->
      preferencesKWL().getSubstringKeyList( regExpression );
@@ -162,8 +163,7 @@ ossimProjection* ossimPcsCodeProjectionFactory::createProjection(
    return result;
 }
 
-ossimProjection* ossimPcsCodeProjectionFactory::createProjection(
-   const ossimString &name) const
+ossimProjection* ossimPcsCodeProjectionFactory::createProjection( const ossimString &name) const
 {
    if (traceDebug())
    {
@@ -171,24 +171,18 @@ ossimProjection* ossimPcsCodeProjectionFactory::createProjection(
          << "ossimPcsCodeProjectionFactory::createProjection entered..."
          << "\nname:  " << name << endl;
    }
-   if(name.empty())
-   {
+   if(name.empty() || isalpha(*name.begin()))
       return 0;
-   }
-   ossimProjection* result = NULL;
-   if(isalpha(*name.begin()))
-   {
-      return 0;
-   }
-   ossim_int32 code = name.toInt32();
 
    //---
    // Divide the code by 100. Then check for a known type.  If it is a
    // utm projection the last two digits represent the zone.
    //---
+   ossim_int32 code = name.toInt32();
    int type = code/100;
    int zone = code%100;
    
+   ossimUtmProjection* proj = NULL;
    switch (type)
    {
       case 322:
@@ -199,15 +193,10 @@ ossimProjection* ossimPcsCodeProjectionFactory::createProjection(
          //---
          if ( (zone > 0 ) && (zone < 61) )
          {
-            ossimUtmProjection* proj =
-               new ossimUtmProjection(*(ossimDatumFactory::instance()->
-                                        wgs72()->ellipsoid()));
-            proj->setDatum(ossimDatumFactory::instance()->
-                           wgs72());
+            proj = new ossimUtmProjection(*(ossimDatumFactory::instance()->wgs72()->ellipsoid()));
+            proj->setDatum(ossimDatumFactory::instance()->wgs72());
             proj->setZone(zone);
             proj->setHemisphere('N');
-            result = proj;
-            return result;
          }
          break;
       }
@@ -220,15 +209,10 @@ ossimProjection* ossimPcsCodeProjectionFactory::createProjection(
          //---
          if ( (zone > 0) && (zone < 61) )
          {
-            ossimUtmProjection* proj =
-               new ossimUtmProjection(*(ossimDatumFactory::instance()->
-                                        wgs72()->ellipsoid()));
-            proj->setDatum(ossimDatumFactory::instance()->
-                           wgs72());
+            proj = new ossimUtmProjection(*(ossimDatumFactory::instance()->wgs72()->ellipsoid()));
+            proj->setDatum(ossimDatumFactory::instance()->wgs72());
             proj->setZone(zone);
             proj->setHemisphere('S');
-            result = proj;
-            return result;
          }
          break;
       }
@@ -241,15 +225,10 @@ ossimProjection* ossimPcsCodeProjectionFactory::createProjection(
          //---
          if ( (zone > 0) && (zone < 61) )
          {
-            ossimUtmProjection* proj =
-               new ossimUtmProjection(*(ossimDatumFactory::instance()->
-                                        wgs84()->ellipsoid()));
-            proj->setDatum(ossimDatumFactory::instance()->
-                           wgs84());
+            proj = new ossimUtmProjection(*(ossimDatumFactory::instance()->wgs84()->ellipsoid()));
+            proj->setDatum(ossimDatumFactory::instance()->wgs84());
             proj->setZone(zone);
             proj->setHemisphere('N');
-            result = proj;
-            return result;
          }
          break;
       }
@@ -262,15 +241,10 @@ ossimProjection* ossimPcsCodeProjectionFactory::createProjection(
          //---
          if ( (zone > 0) && (zone < 61) )
          {
-            ossimUtmProjection* proj =
-               new ossimUtmProjection(*(ossimDatumFactory::instance()->
-                                        wgs84()->ellipsoid()));
-            proj->setDatum(ossimDatumFactory::instance()->
-                           wgs84());
+            proj = new ossimUtmProjection(*(ossimDatumFactory::instance()->wgs84()->ellipsoid()));
+            proj->setDatum(ossimDatumFactory::instance()->wgs84());
             proj->setZone(zone);
             proj->setHemisphere('S');
-            result = proj;
-            return result;
          }
          break;
       }
@@ -284,16 +258,11 @@ ossimProjection* ossimPcsCodeProjectionFactory::createProjection(
          //---
          if ( (code > 26702) && (code < 26723) )
          {
-            ossimUtmProjection* proj =
-               new ossimUtmProjection(*(ossimDatumFactory::instance()->
-                                        create(ossimString("NAS-C"))->
-                                        ellipsoid()));
-            proj->setDatum(ossimDatumFactory::instance()->
-                           create(ossimString("NAS-C")));
+            proj = new ossimUtmProjection(*(ossimDatumFactory::instance()->
+               create(ossimString("NAS-C"))->ellipsoid()));
+            proj->setDatum(ossimDatumFactory::instance()->create(ossimString("NAS-C")));
             proj->setZone(zone);
             proj->setHemisphere('N');
-            result = proj;
-            return result;
          }
          break;
       }
@@ -308,16 +277,11 @@ ossimProjection* ossimPcsCodeProjectionFactory::createProjection(
          //---
          if ( (code > 26902) && (code < 26924) )
          {
-            ossimUtmProjection* proj =
-               new ossimUtmProjection(*(ossimDatumFactory::instance()->
-                                        create(ossimString("NAR-C"))->
-                                        ellipsoid()));
-            proj->setDatum(ossimDatumFactory::instance()->
-                           create(ossimString("NAR-C")));
+            proj = new ossimUtmProjection(*(ossimDatumFactory::instance()->
+               create(ossimString("NAR-C"))->ellipsoid()));
+            proj->setDatum(ossimDatumFactory::instance()->create(ossimString("NAR-C")));
             proj->setZone(zone);
             proj->setHemisphere('N');
-            result = proj;
-            return result;
          }
          break;
       }
@@ -330,13 +294,9 @@ ossimProjection* ossimPcsCodeProjectionFactory::createProjection(
          //---
          if ( (code > 24817) && (code < 24881) )
          {
-            ossimUtmProjection* proj =
-               new ossimUtmProjection(*(ossimDatumFactory::instance()->
-                                        create(ossimString("PRB-M"))->
-                                        ellipsoid()));
-            
-            proj->setDatum(ossimDatumFactory::instance()->
-                           create(ossimString("PRB-M")));
+            proj = new ossimUtmProjection(*(ossimDatumFactory::instance()->
+               create(ossimString("PRB-M"))->ellipsoid()));
+            proj->setDatum(ossimDatumFactory::instance()->create(ossimString("PRB-M")));
             if (zone > 60)
             {
                proj->setZone(zone - 60);
@@ -347,15 +307,18 @@ ossimProjection* ossimPcsCodeProjectionFactory::createProjection(
                proj->setZone(zone);
                proj->setHemisphere('N');
             }
-            result = proj;
-            return result;
          }
          break;
       }
       
    } // End of switch on code.
 
-   return result;
+   if (proj)
+   {
+      proj->setPcsCode(code);
+   }
+
+   return proj;
 }
 
 ossimObject* ossimPcsCodeProjectionFactory::createObject(

@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageData.cpp 16258 2010-01-04 16:16:04Z dburken $
+// $Id: ossimImageData.cpp 17195 2010-04-23 17:32:18Z dburken $
 
 #include <iterator>
 #include <ostream>
@@ -2311,7 +2311,7 @@ void ossimImageData::setMaxPix(ossim_float64 max_pix, ossim_uint32 band)
 }
 
 void ossimImageData::setMaxPix(const ossim_float64* maxPixArray,
-                               ossim_uint32 numberOfValues)
+                               ossim_uint32 /* numberOfValues */)
 {
    if(!maxPixArray || !m_numberOfDataComponents )
    {
@@ -3369,7 +3369,7 @@ void ossimImageData::computeMinMaxPix(vector<ossim_float64>& minBands,
 }
 
 template <class T>
-void ossimImageData::computeMinMaxPix(T dummyValue,
+void ossimImageData::computeMinMaxPix(T /* dummyValue */,
                                       vector<ossim_float64>& minBands,
                                       vector<ossim_float64>& maxBands)
 {
@@ -4843,6 +4843,7 @@ ossimImageData::unloadBandToBsqTemplate(T,  // dummy template arg...
             switch( ow_type )
             {
                case COLOR_DISCREPANCY:
+               case COLOR_DISCREPANCY_OF_ANY_FROM_DEST:
                {
                   T d_dest_band = d[d_dest_band_pixel_offset];
 
@@ -4850,12 +4851,76 @@ ossimImageData::unloadBandToBsqTemplate(T,  // dummy template arg...
                   {
                      T d_other_band = d[d_pixel_offset + (band * d_band_offset)];
 
-                     // test for the color discrepancy
+                     // test for color discrepancy
                      if ( d_other_band != d_dest_band )
                      {
                         d[d_dest_band_pixel_offset] = s[src_band][i];
                         break;
                      }
+                  }
+               }
+               break;
+
+               case COLOR_DISCREPANCY_OF_ALL_FROM_DEST:
+               {
+                  T d_dest_band = d[d_dest_band_pixel_offset];
+
+                  bool bFoundSameValue = false;
+                  for ( band=0; band<num_bands && band!=dest_band; ++band )
+                  {
+                     T d_other_band = d[d_pixel_offset + (band * d_band_offset)];
+
+                     // test for color sameness
+                     if ( d_other_band == d_dest_band )
+                     {
+                        bFoundSameValue = true;
+                        break;
+                     }
+                  }
+                  if ( bFoundSameValue == false )
+                  {
+                     d[d_dest_band_pixel_offset] = s[src_band][i];
+                  }
+               }
+               break;
+
+               case COLOR_EQUALITY_OF_ANY_TO_SRC:
+               {
+                  T d_src_band = s[src_band][i];
+
+                  for ( band=0; band<num_bands && band!=dest_band; ++band )
+                  {
+                     T d_other_band = d[d_pixel_offset + (band * d_band_offset)];
+
+                     // test for color discrepancy
+                     if ( d_other_band == d_src_band )
+                     {
+                        d[d_dest_band_pixel_offset] = s[src_band][i];
+                        break;
+                     }
+                  }
+               }
+               break;
+
+               case COLOR_EQUALITY_OF_ALL_TO_SRC:
+               {
+                  T d_src_band = s[src_band][i];
+
+                  bool bFoundDifferentValue = false;
+                  for ( band=0; band<num_bands && band!=dest_band; ++band )
+                  {
+                     T d_other_band = d[d_pixel_offset + (band * d_band_offset)];
+
+                     // test for color discrepancy
+                     if ( d_other_band != d_src_band )
+                     {
+                        bFoundDifferentValue = true;
+                        break;
+                     }
+                  }
+                  if ( bFoundDifferentValue == false )
+                  {
+                     d[d_dest_band_pixel_offset] = s[src_band][i];
                   }
                }
                break;
@@ -5007,7 +5072,7 @@ void ossimImageData::copyTileToNormalizedBuffer(ossim_float64* buf)const
 }
 
 template <class T>
-void ossimImageData::copyTileToNormalizedBuffer(T dummyTemplate,
+void ossimImageData::copyTileToNormalizedBuffer(T /* dummyTemplate */,
                                                 ossim_float64* buf) const
 {
    const ossim_uint32 SIZE  = getSizePerBand();
@@ -5046,7 +5111,7 @@ void ossimImageData::copyTileToNormalizedBuffer(T dummyTemplate,
 }
 
 template <class T>
-void ossimImageData::copyTileToNormalizedBuffer(T dummyTemplate,
+void ossimImageData::copyTileToNormalizedBuffer(T /* dummyTemplate */,
                                                 ossim_float32* buf) const
 {
    const ossim_uint32 SIZE  = getSizePerBand();
@@ -5085,7 +5150,7 @@ void ossimImageData::copyTileToNormalizedBuffer(T dummyTemplate,
 }
 
 template <class T>
-void ossimImageData::copyTileToNormalizedBuffer(T dummyTemplate,
+void ossimImageData::copyTileToNormalizedBuffer(T /* dummyTemplate */,
                                                 ossim_uint32 band,
                                                 ossim_float64* buf) const
 {
@@ -5120,7 +5185,7 @@ void ossimImageData::copyTileToNormalizedBuffer(T dummyTemplate,
 }
 
 template <class T>
-void ossimImageData::copyTileToNormalizedBuffer(T dummyTemplate,
+void ossimImageData::copyTileToNormalizedBuffer(T /* dummyTemplate */,
                                                 ossim_uint32 band,
                                                 ossim_float32* buf) const
 {
@@ -5155,7 +5220,7 @@ void ossimImageData::copyTileToNormalizedBuffer(T dummyTemplate,
 }
 
 template <class T>
-void ossimImageData::copyNormalizedBufferToTile(T dummyTemplate,
+void ossimImageData::copyNormalizedBufferToTile(T /* dummyTemplate */,
                                                 ossim_float64* buf)
 {
    const ossim_uint32 SIZE  = getSizePerBand();
@@ -5187,7 +5252,7 @@ void ossimImageData::copyNormalizedBufferToTile(T dummyTemplate,
 }
 
 template <class T>
-void ossimImageData::copyNormalizedBufferToTile(T dummyTemplate,
+void ossimImageData::copyNormalizedBufferToTile(T /* dummyTemplate */,
                                                 ossim_float32* buf)
 {
    const ossim_uint32 SIZE  = getSizePerBand();
@@ -5221,7 +5286,7 @@ void ossimImageData::copyNormalizedBufferToTile(T dummyTemplate,
 }
 
 template <class T>
-void ossimImageData::copyNormalizedBufferToTile(T dummyTemplate,
+void ossimImageData::copyNormalizedBufferToTile(T /* dummyTemplate */,
                                                 ossim_uint32 band,
                                                 ossim_float64* buf)
 {
@@ -5251,7 +5316,7 @@ void ossimImageData::copyNormalizedBufferToTile(T dummyTemplate,
 }
 
 template <class T>
-void ossimImageData::copyNormalizedBufferToTile(T dummyTemplate,
+void ossimImageData::copyNormalizedBufferToTile(T /* dummyTemplate */,
                                                 ossim_uint32 band,
                                                 ossim_float32* buf)
 {
@@ -6033,7 +6098,7 @@ Invalid scalar type:  %d",
    }
 }
 
-template <class T> void ossimImageData::stretchMinMax(T dummyTemplate)
+template <class T> void ossimImageData::stretchMinMax(T /* dummyTemplate */)
 {
    const ossim_uint32 BANDS  = getNumberOfBands();
    const ossim_uint32 SPB    = getSizePerBand();
@@ -6149,7 +6214,7 @@ Invalid scalar type:  %d",
    }
 }
 
-template <class T> void ossimImageData::computeAlphaChannel(T dummyTemplate)
+template <class T> void ossimImageData::computeAlphaChannel(T /* dummyTemplate */)
 {
    const ossim_uint32 SPB = getSizePerBand();
    const ossim_uint8  ANP = 0;   // Alpha Null Pixel

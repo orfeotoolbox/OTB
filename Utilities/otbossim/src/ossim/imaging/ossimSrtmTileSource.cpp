@@ -9,18 +9,17 @@
 // Image handler class for a Shuttle Radar Topography Mission (SRTM) file.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimSrtmTileSource.cpp 16075 2009-12-10 15:46:43Z gpotts $
+// $Id: ossimSrtmTileSource.cpp 17602 2010-06-20 19:12:24Z dburken $
 
 #include <ossim/imaging/ossimSrtmTileSource.h>
 #include <ossim/base/ossimDirectory.h>
 #include <ossim/base/ossimStringProperty.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/support_data/ossimSrtmSupportData.h>
-#include <ossim/projection/ossimProjectionFactoryRegistry.h>
 
 RTTI_DEF1(ossimSrtmTileSource,
-               "ossimSrtmTileSource",
-               ossimGeneralRasterTileSource)
+          "ossimSrtmTileSource",
+          ossimGeneralRasterTileSource)
 
 static ossimTrace traceDebug("ossimSrtmTileSource:debug");
 
@@ -83,28 +82,20 @@ bool ossimSrtmTileSource::open()
    return result;
 }
    
-//**************************************************************************************************
+//************************************************************************************************
 //! Returns the image geometry object associated with this tile source or NULL if non defined.
 //! The geometry contains full-to-local image transform as well as projection (image-to-world)
-//**************************************************************************************************
-ossimImageGeometry* ossimSrtmTileSource::getInternalImageGeometry()
+//************************************************************************************************
+ossimImageGeometry* ossimSrtmTileSource::getImageGeometry()
 {
-   // Check for override for an external geometry file, or a previous save.
    if(!theGeometry.valid())
-      theGeometry = new ossimImageGeometry();
-   ossimKeywordlist kwl;
-   if (m_SrtmSupportData.getImageGeometry(kwl))
    {
-      // Capture for next time.
-      ossimProjection* proj = ossimProjectionFactoryRegistry::instance()->createProjection(kwl);
-      if (proj)
-      {
-         theGeometry->setProjection(proj);
-         return theGeometry.get();
-      }
-   }
+      // First time through set the projection.
+      theGeometry = new ossimImageGeometry();
 
-   return 0;
+      theGeometry->setProjection( m_SrtmSupportData.getProjection().get() );
+   }
+   return theGeometry.get();
 }
 
 bool ossimSrtmTileSource::saveState(ossimKeywordlist& kwl,

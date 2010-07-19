@@ -352,7 +352,7 @@ long int VpfRead ( void *to, VpfDataType type, long int count, FILE *from )
  *    This module should be ANSI C compatible.
  *E
  *************************************************************************/
-char *read_text_defstr ( FILE *infile, FILE *outerr )
+char *read_text_defstr ( FILE *infile, FILE * outerr )
 {
   char *definition ;
 
@@ -372,7 +372,7 @@ char *read_text_defstr ( FILE *infile, FILE *outerr )
  * currently being used by converter routines, not by vpfview
  * routines
  */
-int add_null_values ( char *name, vpf_table_type table, FILE *fpout )
+int add_null_values ( char *name, vpf_table_type table, FILE * fpout )
 {
   FILE *nullfp;
   long int  i , ptr ;

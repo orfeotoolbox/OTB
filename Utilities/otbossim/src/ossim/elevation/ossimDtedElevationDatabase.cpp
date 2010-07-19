@@ -8,12 +8,12 @@
 #include <cstdlib> /* for abs(int) */
 
 static ossimTrace traceDebug("ossimDtedElevationDatabase:debug");
-RTTI_DEF1(ossimDtedElevationDatabase, "ossimDtedElevationDatabase", ossimElevationDatabase);
+RTTI_DEF1(ossimDtedElevationDatabase, "ossimDtedElevationDatabase", ossimElevationCellDatabase);
 
 double ossimDtedElevationDatabase::getHeightAboveMSL(const ossimGpt& gpt)
 {
    if(!isSourceEnabled()) return ossim::nan();
-   ossimRefPtr<ossimElevCellHandler> handler = getOrCreateHandler(gpt);
+   ossimRefPtr<ossimElevCellHandler> handler = getOrCreateCellHandler(gpt);
    if(handler.valid())
    {
       return handler->getHeightAboveMSL(gpt); // still need to shift
@@ -168,6 +168,22 @@ void ossimDtedElevationDatabase::createRelativePath(ossimFilename& file, const o
    lat += s2.str().c_str();
    
    file = lon.dirCat(lat+m_extension);
+}
+ossimRefPtr<ossimElevCellHandler> ossimDtedElevationDatabase::createCell(const ossimGpt& gpt)
+{
+  ossimRefPtr<ossimElevCellHandler> result = 0;
+  ossimFilename f;
+  createFullPath(f, gpt);
+  if(f.exists())
+  {
+     ossimRefPtr<ossimDtedHandler> h = new ossimDtedHandler(f, m_memoryMapCellsFlag);
+     if (!(h->getErrorStatus()))
+     {
+        result = h.get();
+     }
+  }
+
+  return result;
 }
 
 bool ossimDtedElevationDatabase::loadState(const ossimKeywordlist& kwl, const char* prefix )

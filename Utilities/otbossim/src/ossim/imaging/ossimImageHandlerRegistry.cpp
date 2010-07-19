@@ -9,7 +9,7 @@
 // Contains class definition for ImageHandlerRegistry.
 //
 //*******************************************************************
-//  $Id: ossimImageHandlerRegistry.cpp 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimImageHandlerRegistry.cpp 17206 2010-04-25 23:20:40Z dburken $
 #include <algorithm>
 #include <ossim/imaging/ossimImageHandlerRegistry.h>
 #include <ossim/imaging/ossimImageHandlerFactory.h>
@@ -186,7 +186,7 @@ void ossimImageHandlerRegistry::clear()
    theFactoryList.clear();
 }
 
-ossimImageHandlerRegistry::ossimImageHandlerRegistry(const ossimImageHandlerRegistry& rhs)
+ossimImageHandlerRegistry::ossimImageHandlerRegistry(const ossimImageHandlerRegistry& /* rhs */)
    :  ossimObjectFactory()
 {}
 

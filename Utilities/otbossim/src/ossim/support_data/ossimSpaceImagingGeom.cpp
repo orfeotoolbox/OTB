@@ -6,7 +6,7 @@
 // Description: This class extends the stl's string class.
 //
 //********************************************************************
-//  $Id: ossimSpaceImagingGeom.cpp 9963 2006-11-28 21:11:01Z gpotts $
+//  $Id: ossimSpaceImagingGeom.cpp 17206 2010-04-25 23:20:40Z dburken $
 #include <ossim/support_data/ossimSpaceImagingGeom.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimNotifyContext.h>
@@ -125,8 +125,9 @@ ossimString ossimSpaceImagingGeom::spaceImagingToOssimKeyword(const ossimString&
    return ossimString("");
 }
 
-ossimString ossimSpaceImagingGeom::spaceImagingToOssimValue(const ossimString& spaceImagingKeyword,
-                                                            const ossimString& spaceImagingValue)const
+ossimString ossimSpaceImagingGeom::spaceImagingToOssimValue(
+   const ossimString& spaceImagingKeyword,
+   const ossimString& /* spaceImagingValue */)const
 {
    const char* value = theSpaceImagingGeometry.find(thePrefix.c_str(),
                                                     spaceImagingKeyword.c_str());

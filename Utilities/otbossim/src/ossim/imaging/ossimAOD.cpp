@@ -14,7 +14,7 @@
 // 
 //
 //*************************************************************************
-// $Id: ossimAOD.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimAOD.cpp 17206 2010-04-25 23:20:40Z dburken $
 
 #include <math.h>
 #include <ossim/imaging/ossimAOD.h>
@@ -176,8 +176,7 @@ void ossimAOD::allocate()
    verifyEnabled();
 }
 
-bool ossimAOD::loadState(const ossimKeywordlist& kwl,
-                                 const char* prefix)
+bool ossimAOD::loadState(const ossimKeywordlist& /* kwl */, const char* /* prefix */)
 {
    static const char MODULE[] = "ossimAOD::loadState()";
 
@@ -228,7 +227,7 @@ ostream& operator<<(ostream& os, const ossimAOD& hr)
    return hr.print(os);
 }
 
-void ossimAOD::writeTemplate(ostream& os)
+void ossimAOD::writeTemplate(ostream& /* os */)
 {
 }
 

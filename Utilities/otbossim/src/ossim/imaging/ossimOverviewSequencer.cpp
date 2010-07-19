@@ -7,21 +7,22 @@
 // Description: Sequencer for building overview files.
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimOverviewSequencer.cpp 16081 2009-12-10 20:56:36Z eshirschorn $
+// $Id: ossimOverviewSequencer.cpp 17194 2010-04-23 15:05:19Z dburken $
 
 #include <ossim/imaging/ossimOverviewSequencer.h>
+#include <ossim/base/ossimIpt.h>
+#include <ossim/base/ossimIrect.h>
+#include <ossim/base/ossimMultiResLevelHistogram.h>
 #include <ossim/base/ossimNotify.h>
 #include <ossim/base/ossimTrace.h>
-#include <ossim/base/ossimIrect.h>
-#include <ossim/base/ossimIpt.h>
-#include <ossim/imaging/ossimImageHandler.h>
 #include <ossim/imaging/ossimImageData.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
+#include <ossim/imaging/ossimImageHandler.h>
 #include <ossim/parallel/ossimMpi.h>
 
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimOverviewSequencer.cpp 16081 2009-12-10 20:56:36Z eshirschorn $";
+static const char OSSIM_ID[] = "$Id: ossimOverviewSequencer.cpp 17194 2010-04-23 15:05:19Z dburken $";
 #endif
 
 static ossimTrace traceDebug("ossimOverviewSequencer:debug");
@@ -29,19 +30,22 @@ static ossimTrace traceDebug("ossimOverviewSequencer:debug");
 ossimOverviewSequencer::ossimOverviewSequencer()
    :
    ossimReferenced(),
-   theImageHandler(0),
-   theTile(),
-   theAreaOfInterest(),
-   theTileSize(OSSIM_DEFAULT_TILE_WIDTH, OSSIM_DEFAULT_TILE_HEIGHT),
-   theNumberOfTilesHorizontal(0),
-   theNumberOfTilesVertical(0),
-   theCurrentTileNumber(0),
-   theSourceResLevel(0),
-   theDirtyFlag(true),
-   theDecimationFactor(2),
-   theResampleType(ossimFilterResampler::ossimFilterResampler_BOX)
+   m_imageHandler(0),
+   m_tile(),
+   m_areaOfInterest(),
+   m_tileSize(OSSIM_DEFAULT_TILE_WIDTH, OSSIM_DEFAULT_TILE_HEIGHT),
+   m_numberOfTilesHorizontal(0),
+   m_numberOfTilesVertical(0),
+   m_currentTileNumber(0),
+   m_sourceResLevel(0),
+   m_dirtyFlag(true),
+   m_decimationFactor(2),
+   m_resampleType(ossimFilterResampler::ossimFilterResampler_BOX),
+   m_histogram(0),
+   m_histoMode(OSSIM_HISTO_MODE_UNKNOWN),
+   m_histoTileIndex(1)
 {
-   theAreaOfInterest.makeNan();
+   m_areaOfInterest.makeNan();
 
    if (traceDebug())
    {
@@ -58,7 +62,8 @@ ossimOverviewSequencer::ossimOverviewSequencer()
 
 ossimOverviewSequencer::~ossimOverviewSequencer()
 {
-   theImageHandler = 0;
+   m_imageHandler = 0;
+   m_histogram    = 0;
 
    if (traceDebug())
    {
@@ -71,29 +76,29 @@ ossimOverviewSequencer::~ossimOverviewSequencer()
 
 ossim_uint32 ossimOverviewSequencer::getNumberOfTiles() const
 {
-   return (theNumberOfTilesHorizontal*theNumberOfTilesVertical);
+   return (m_numberOfTilesHorizontal*m_numberOfTilesVertical);
 }
 
 ossim_uint32 ossimOverviewSequencer::getNumberOfTilesHorizontal()const
 {
-   return theNumberOfTilesHorizontal;
+   return m_numberOfTilesHorizontal;
 }
 
 ossim_uint32 ossimOverviewSequencer::getNumberOfTilesVertical()const
 {
-   return theNumberOfTilesVertical;
+   return m_numberOfTilesVertical;
 }
 
 void ossimOverviewSequencer::getOutputImageRectangle(ossimIrect& rect) const
 {
-   if (theAreaOfInterest.hasNans())
+   if (m_areaOfInterest.hasNans())
    {
       rect.makeNan(); // not initialized...
    }
    else
    {
-      ossim_int32 width  = theAreaOfInterest.width()  / theDecimationFactor;
-      ossim_int32 height = theAreaOfInterest.height() / theDecimationFactor;
+      ossim_int32 width  = m_areaOfInterest.width()  / m_decimationFactor;
+      ossim_int32 height = m_areaOfInterest.height() / m_decimationFactor;
 
       //---
       // NOTE:
@@ -101,11 +106,11 @@ void ossimOverviewSequencer::getOutputImageRectangle(ossimIrect& rect) const
       // 1025 / 2 = 512 will then become 513.  It will be up to the resample
       // tile method to fill the extra sample correctly.
       //---
-      if (theAreaOfInterest.width() % theDecimationFactor)
+      if (m_areaOfInterest.width() % m_decimationFactor)
       {
          ++width;
       }
-      if (theAreaOfInterest.height() % theDecimationFactor)
+      if (m_areaOfInterest.height() % m_decimationFactor)
       {
          ++height;
       }
@@ -116,85 +121,158 @@ void ossimOverviewSequencer::getOutputImageRectangle(ossimIrect& rect) const
 
 void ossimOverviewSequencer::setImageHandler(ossimImageHandler* input)
 {
-   theImageHandler = input;
-   theAreaOfInterest.makeNan();
-   theDirtyFlag = true;
+   m_imageHandler = input;
+   m_areaOfInterest.makeNan();
+   m_dirtyFlag = true;
 }
 
 void ossimOverviewSequencer::setSourceLevel(ossim_uint32 level)
 {
-   theSourceResLevel = level;
-   theAreaOfInterest.makeNan();
-   theDirtyFlag = true;
+   m_sourceResLevel = level;
+   m_areaOfInterest.makeNan();
+   m_dirtyFlag = true;
+}
+
+ossimHistogramMode ossimOverviewSequencer::getHistogramMode() const
+{
+   return m_histoMode;
+}
+
+void ossimOverviewSequencer::setHistogramMode(ossimHistogramMode mode)
+{
+   m_histoMode = mode;
+   m_dirtyFlag = true;
+}
+
+void ossimOverviewSequencer::writeHistogram()
+{
+   if ( m_histogram.valid() && m_imageHandler )
+   {
+      writeHistogram( m_imageHandler->getFilenameWithThisExtension("his") );
+   }
+}
+
+void ossimOverviewSequencer::writeHistogram(const ossimFilename& file)
+{
+   if ( m_histogram.valid() )
+   {
+      ossimRefPtr<ossimMultiResLevelHistogram> histo = new ossimMultiResLevelHistogram;
+      histo->addHistogram( m_histogram.get() );
+      ossimKeywordlist kwl;
+      histo->saveState(kwl);
+      kwl.write(file.c_str());
+   }
 }
 
 void ossimOverviewSequencer::initialize()
 {
-   if ( theDirtyFlag == false )
+   if ( m_dirtyFlag == false )
    {
       return; // Already initialized.
    }
    
-   if ( !theImageHandler )
+   if ( !m_imageHandler )
    {
       return;
    }
 
    // Check the area of interest and set from image if needed.
-   if ( theAreaOfInterest.hasNans() )
+   if ( m_areaOfInterest.hasNans() )
    {
-      theAreaOfInterest =
-         theImageHandler->getImageRectangle(theSourceResLevel);
+      m_areaOfInterest =
+         m_imageHandler->getImageRectangle(m_sourceResLevel);
    }
 
    // Check the tile size and set from image if needed.
-   if ( theTileSize.hasNans() )
+   if ( m_tileSize.hasNans() )
    {
-      theTileSize.x = theImageHandler->getTileWidth();
-      theTileSize.y = theImageHandler->getTileHeight();
+      m_tileSize.x = m_imageHandler->getTileWidth();
+      m_tileSize.y = m_imageHandler->getTileHeight();
    }
 
-   // Update theNumberOfTilesHorizontal and theNumberOfTilesVertical.
+   // Update m_numberOfTilesHorizontal and m_numberOfTilesVertical.
    updateTileDimensions();
 
    // Start on first tile.
-   theCurrentTileNumber = 0;
+   m_currentTileNumber = 0;
       
-   theTile  = ossimImageDataFactory::instance()->
-      create( theImageHandler,
-              theImageHandler->getOutputScalarType(),
-              theImageHandler->getNumberOfOutputBands(),
-              static_cast<ossim_uint32>(theTileSize.x),
-              static_cast<ossim_uint32>(theTileSize.y) );
-   if(theTile.valid())
+   m_tile  = ossimImageDataFactory::instance()->
+      create( m_imageHandler,
+              m_imageHandler->getOutputScalarType(),
+              m_imageHandler->getNumberOfOutputBands(),
+              static_cast<ossim_uint32>(m_tileSize.x),
+              static_cast<ossim_uint32>(m_tileSize.y) );
+   if(m_tile.valid())
    {
-      theTile->initialize();
+      m_tile->initialize();
    }
 
-   theDirtyFlag = false;
+   if (m_histoMode != OSSIM_HISTO_MODE_UNKNOWN)
+   {
+      m_histogram = new ossimMultiBandHistogram;
+      
+      m_histogram->create(m_imageHandler);
+
+      if (m_histoMode == OSSIM_HISTO_MODE_NORMAL)
+      {
+         m_histoTileIndex = 1; // Sample every tile.
+      }
+      else
+      {
+         const ossim_float64 PIXEL_TO_SAMPLE = 100.0 * 256.0 * 256.0; // 100 256x256 tiles.
+         ossim_float64 pixels = m_tileSize.x * m_tileSize.y * getNumberOfTiles();
+
+         if (traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << "pixels: " << pixels << "\n"
+               << "PIXEL_TO_SAMPLE: " << PIXEL_TO_SAMPLE << "\n";
+         }
+         
+         if (pixels > PIXEL_TO_SAMPLE)
+         {
+            m_histoTileIndex = ossim::round<ossim_uint32>(pixels/PIXEL_TO_SAMPLE);
+         }
+         else
+         {
+            m_histoTileIndex = 1; // Sample every tile.
+         }
+      }
+   }
+   else
+   {
+      m_histogram = 0;
+   }
+   
+   m_dirtyFlag = false;
 
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
-         << "aoi:                  " << theAreaOfInterest
-         << "\ntile size:          " << theTileSize
-         << "\ntiles wide:         " << theNumberOfTilesHorizontal
-         << "\ntiles high:         " << theNumberOfTilesVertical
-         << "\nsource rlevel:      " << theSourceResLevel
-         << "\ndecimation factor:  " << theDecimationFactor
-         << "\nresamp type:          " << theResampleType
-         << std::endl;
+         << "aoi:                  " << m_areaOfInterest
+         << "\ntile size:          " << m_tileSize
+         << "\ntiles wide:         " << m_numberOfTilesHorizontal
+         << "\ntiles high:         " << m_numberOfTilesVertical
+         << "\nsource rlevel:      " << m_sourceResLevel
+         << "\ndecimation factor:  " << m_decimationFactor
+         << "\nresamp type:        " << m_resampleType
+         << "\nhisto mode:         " << m_histoMode << "\n";
+      if (m_histoMode != OSSIM_HISTO_MODE_UNKNOWN)
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "Sampling every " << m_histoTileIndex << " tile(s) for histogram.\n";
+      }
    }
 }
 
 void ossimOverviewSequencer::setToStartOfSequence()
 {
-   theCurrentTileNumber = 0;
+   m_currentTileNumber = 0;
 }
 
 ossimRefPtr<ossimImageData> ossimOverviewSequencer::getNextTile()
 {
-   if ( theDirtyFlag )
+   if ( m_dirtyFlag )
    {
       return ossimRefPtr<ossimImageData>();
    }
@@ -208,20 +286,33 @@ ossimRefPtr<ossimImageData> ossimOverviewSequencer::getNextTile()
    getOutputTileRectangle(outputRect);
 
    // Capture the output rectangle.
-   theTile->setImageRectangle(outputRect);
+   m_tile->setImageRectangle(outputRect);
 
    // Start with a blank tile.
-   theTile->makeBlank();
+   m_tile->makeBlank();
 
    // Grab the input tile.
    ossimRefPtr<ossimImageData> inputTile =
-      theImageHandler->getTile(inputRect, theSourceResLevel);
+      m_imageHandler->getTile(inputRect, m_sourceResLevel);
    if (inputTile.valid() == false)
    {
       ossimNotify(ossimNotifyLevel_WARN)
          << "ossimOverviewSequencer::getNextTile DEBUG:"
          << "\nRequest failed for input rect: " << inputRect
-         << "\nRes level:  " << theSourceResLevel << std::endl;
+         << "\nRes level:  " << m_sourceResLevel << std::endl;
+   }
+
+   if ( ( m_histoMode != OSSIM_HISTO_MODE_UNKNOWN ) &&
+        ( (m_currentTileNumber % m_histoTileIndex) == 0 ) )
+   {
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "ossimOverviewSequencer::getNextTile DEBUG:"
+            << "\npopulating histogram for tile: " << m_currentTileNumber
+            << "\n";
+      }
+      inputTile->populateHistogram(m_histogram);
    }
 
    if ( (inputTile->getDataObjectStatus() == OSSIM_PARTIAL) ||
@@ -231,13 +322,13 @@ ossimRefPtr<ossimImageData> ossimOverviewSequencer::getNextTile()
       resampleTile(inputTile.get());
 
       // Set the tile status.
-      theTile->validate();
+      m_tile->validate();
    }
 
    // Increment the tile index.
-   ++theCurrentTileNumber;
+   ++m_currentTileNumber;
 
-   return theTile;
+   return m_tile;
 }
 
 void ossimOverviewSequencer::slaveProcessTiles()
@@ -251,28 +342,28 @@ bool ossimOverviewSequencer::isMaster() const
 
 ossimIpt ossimOverviewSequencer::getTileSize() const
 {
-   return theTileSize;
+   return m_tileSize;
 }
 
 void ossimOverviewSequencer::setTileSize(const ossimIpt& tileSize)
 {
-   theTileSize = tileSize;
+   m_tileSize = tileSize;
    updateTileDimensions();
-   theDirtyFlag = true;
+   m_dirtyFlag = true;
 }
 
 void ossimOverviewSequencer::setResampleType(
    ossimFilterResampler::ossimFilterResamplerType resampleType)
 {
-   theResampleType = resampleType;
+   m_resampleType = resampleType;
 }
 
 void ossimOverviewSequencer::getInputTileRectangle(ossimIrect& inputRect) const
 {
-   if (!theImageHandler) return;
+   if (!m_imageHandler) return;
    
    getOutputTileRectangle(inputRect);
-   inputRect = inputRect * theDecimationFactor;
+   inputRect = inputRect * m_decimationFactor;
    inputRect = inputRect;
 
 #if 0
@@ -289,19 +380,19 @@ void ossimOverviewSequencer::getOutputTileRectangle(
    ossimIrect& outputRect) const
 {
    // Get the row and column.
-   ossim_int32 row = theCurrentTileNumber / theNumberOfTilesHorizontal;
-   ossim_int32 col = theCurrentTileNumber % theNumberOfTilesHorizontal;
+   ossim_int32 row = m_currentTileNumber / m_numberOfTilesHorizontal;
+   ossim_int32 col = m_currentTileNumber % m_numberOfTilesHorizontal;
 
    ossimIpt pt;
 
    // Set the upper left.
-   pt.y = row * theTileSize.y;
-   pt.x = col * theTileSize.x;
+   pt.y = row * m_tileSize.y;
+   pt.x = col * m_tileSize.x;
    outputRect.set_ul(pt);
 
    // Set the lower right.
-   pt.y = pt.y + theTileSize.y - 1;
-   pt.x = pt.x + theTileSize.x - 1;   
+   pt.y = pt.y + m_tileSize.y - 1;
+   pt.x = pt.x + m_tileSize.x - 1;   
    outputRect.set_lr(pt);
 
 #if 0
@@ -316,11 +407,11 @@ void ossimOverviewSequencer::getOutputTileRectangle(
 
 void ossimOverviewSequencer::updateTileDimensions()
 {
-   if( theAreaOfInterest.hasNans() || theTileSize.hasNans() )
+   if( m_areaOfInterest.hasNans() || m_tileSize.hasNans() )
    {
-      theNumberOfTilesHorizontal = 0;
-      theNumberOfTilesVertical   = 0;
-      theDirtyFlag = true;
+      m_numberOfTilesHorizontal = 0;
+      m_numberOfTilesVertical   = 0;
+      m_dirtyFlag = true;
    }
    else
    {
@@ -328,25 +419,25 @@ void ossimOverviewSequencer::updateTileDimensions()
       ossimIrect rect;
       getOutputImageRectangle(rect);
       
-      theNumberOfTilesHorizontal =
-         static_cast<ossim_uint32>( rect.width()  / theTileSize.x );
-      theNumberOfTilesVertical =
-         static_cast<ossim_uint32>( rect.height() / theTileSize.y );
+      m_numberOfTilesHorizontal =
+         static_cast<ossim_uint32>( rect.width()  / m_tileSize.x );
+      m_numberOfTilesVertical =
+         static_cast<ossim_uint32>( rect.height() / m_tileSize.y );
 
-      if (rect.width()  % theTileSize.x)
+      if (rect.width()  % m_tileSize.x)
       {
-         ++theNumberOfTilesHorizontal;
+         ++m_numberOfTilesHorizontal;
       }
-      if (rect.height() % theTileSize.y)
+      if (rect.height() % m_tileSize.y)
       {
-         ++theNumberOfTilesVertical;
+         ++m_numberOfTilesVertical;
       }
    }
 }
 
 void ossimOverviewSequencer::resampleTile(const ossimImageData* inputTile)
 {
-   switch(theImageHandler->getOutputScalarType())
+   switch(m_imageHandler->getOutputScalarType())
    {
       case OSSIM_UINT8:
       {
@@ -390,7 +481,7 @@ void ossimOverviewSequencer::resampleTile(const ossimImageData* inputTile)
             << std::endl;
          return;
          
-   } // End of "switch(theImageHandler->getOutputScalarType())"
+   } // End of "switch(m_imageHandler->getOutputScalarType())"
 }
 
 template <class T>
@@ -401,30 +492,29 @@ void  ossimOverviewSequencer::resampleTile(const ossimImageData* inputTile, T  /
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
          << "ossimOverviewSequencer::resampleTile DEBUG: "
-         << "\ncurrent tile: " << theCurrentTileNumber
+         << "\ncurrent tile: " << m_currentTileNumber
          << "\ninput tile:\n" << *inputTile
-         << "output tile:\n" << *(theTile.get())
+         << "output tile:\n" << *(m_tile.get())
          << endl;
    }
 #endif
    
-   const ossim_uint32 BANDS = theTile->getNumberOfBands();
-   const ossim_uint32 LINES = theTile->getHeight();
-   const ossim_uint32 SAMPS = theTile->getWidth();
-   const ossim_uint32 INPUT_WIDTH = theDecimationFactor*theTileSize.x;
+   const ossim_uint32 BANDS = m_tile->getNumberOfBands();
+   const ossim_uint32 LINES = m_tile->getHeight();
+   const ossim_uint32 SAMPS = m_tile->getWidth();
+   const ossim_uint32 INPUT_WIDTH = m_decimationFactor*m_tileSize.x;
    
    T nullPixel              = 0;
    ossim_float64 weight     = 0.0;
    ossim_float64 value      = 0.0;
    ossim_uint32 sampOffset  = 0;
    
-   if (theResampleType ==
-       ossimFilterResampler::ossimFilterResampler_NEAREST_NEIGHBOR)
+   if (m_resampleType == ossimFilterResampler::ossimFilterResampler_NEAREST_NEIGHBOR)
    {
       for (ossim_uint32 band=0; band<BANDS; ++band)
       {
          const T* s = static_cast<const T*>(inputTile->getBuf(band)); // source
-         T*       d = static_cast<T*>(theTile->getBuf(band)); // destination
+         T*       d = static_cast<T*>(m_tile->getBuf(band)); // destination
          
          nullPixel = static_cast<T>(inputTile->getNullPix(band));
          weight = 0.0;
@@ -434,10 +524,10 @@ void  ossimOverviewSequencer::resampleTile(const ossimImageData* inputTile, T  /
          {
             for (ossim_uint32 j=0; j<SAMPS; ++j)
             {
-               sampOffset = j*theDecimationFactor;
+               sampOffset = j*m_decimationFactor;
                
                weight = 1.0;
-               value  = *(s + i*theDecimationFactor*INPUT_WIDTH + sampOffset);
+               value  = *(s + i*m_decimationFactor*INPUT_WIDTH + sampOffset);
                
                if(weight)
                {
@@ -450,7 +540,7 @@ void  ossimOverviewSequencer::resampleTile(const ossimImageData* inputTile, T  /
                
             } // End of sample loop.
             
-            d += theTileSize.x;
+            d += m_tileSize.x;
             
          } // End of line loop.
          
@@ -469,7 +559,7 @@ void  ossimOverviewSequencer::resampleTile(const ossimImageData* inputTile, T  /
       for (ossim_uint32 band=0; band<BANDS; ++band)
       {
          const T* s = static_cast<const T*>(inputTile->getBuf(band)); // source
-         T*       d = static_cast<T*>(theTile->getBuf(band)); // destination
+         T*       d = static_cast<T*>(m_tile->getBuf(band)); // destination
 
          nullPixel = static_cast<T>(inputTile->getNullPix(band));
          weight = 0.0;
@@ -477,12 +567,12 @@ void  ossimOverviewSequencer::resampleTile(const ossimImageData* inputTile, T  /
          
          for (ossim_uint32 i=0; i<LINES; ++i)
          {
-            lineOffset1 = i*theDecimationFactor*INPUT_WIDTH;
-            lineOffset2 = (i*theDecimationFactor+1)*INPUT_WIDTH;
+            lineOffset1 = i*m_decimationFactor*INPUT_WIDTH;
+            lineOffset2 = (i*m_decimationFactor+1)*INPUT_WIDTH;
             
             for (ossim_uint32 j=0; j<SAMPS; ++j)
             {
-               sampOffset = j*theDecimationFactor;
+               sampOffset = j*m_decimationFactor;
                
                weight = 0.0;
                value  = 0.0;
@@ -528,7 +618,7 @@ void  ossimOverviewSequencer::resampleTile(const ossimImageData* inputTile, T  /
             
             } // End of sample loop.
             
-            d += theTileSize.x;
+            d += m_tileSize.x;
             
          } // End of line loop.
          

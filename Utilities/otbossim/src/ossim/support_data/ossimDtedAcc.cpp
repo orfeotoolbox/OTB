@@ -8,7 +8,7 @@
 //               (ACC) of a DTED Level 1 file.
 //
 //********************************************************************
-// $Id: ossimDtedAcc.cpp 16104 2009-12-17 18:09:59Z gpotts $
+// $Id: ossimDtedAcc.cpp 17206 2010-04-25 23:20:40Z dburken $
 
 #include <cstdlib>
 #include <iostream>
@@ -276,7 +276,7 @@ std::ostream& operator<<( std::ostream& os, const ossimDtedAcc& acc)
    return acc.print(os, prefix);
 }
 
-ossimDtedAcc::ossimDtedAcc(const ossimDtedAcc& source)
+ossimDtedAcc::ossimDtedAcc(const ossimDtedAcc& /* source */)
 {}
 
 const ossimDtedAcc& ossimDtedAcc::operator=(const ossimDtedAcc& rhs)

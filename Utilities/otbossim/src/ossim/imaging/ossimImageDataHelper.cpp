@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageDataHelper.cpp 11347 2007-07-23 13:01:59Z gpotts $
+// $Id: ossimImageDataHelper.cpp 17195 2010-04-23 17:32:18Z dburken $
 #include <ossim/imaging/ossimImageDataHelper.h>
 #include <ossim/base/ossimPolyArea2d.h>
 #include <ossim/base/ossimLine.h>
@@ -479,7 +479,7 @@ void ossimImageDataHelper::fill(T dummyVariable,
 }
 
 template <class T>
-void ossimImageDataHelper::fill(T dummyVariable,
+void ossimImageDataHelper::fill(T /* dummyVariable */,
                                 const double* values,
                                 const ossimPolygon& region)
 {
@@ -567,7 +567,7 @@ void ossimImageDataHelper::fill(T dummyVariable,
 }
 
 template <class T>
-void ossimImageDataHelper::fill(T dummyVariable,
+void ossimImageDataHelper::fill(T /* dummyVariable */,
                                 const double* values,
                                 const ossimIrect& region)
 {

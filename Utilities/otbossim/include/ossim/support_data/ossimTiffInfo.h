@@ -70,7 +70,7 @@ public:
       OTIFFTAG_PLANARCONFIG               = 284,
       OTIFFTAG_RESOLUTIONUNIT             = 296,
       OTIFFTAG_SOFTWARE                   = 305,
-      OTIFFTAG_DATETIME                   = 306,
+      OTIFFTAG_DATETIME                   = 306,  // FORMAT is YYYY:MM:DD HH:MM:SS
       OTIFFTAG_TILEWIDTH                  = 322,
       OTIFFTAG_TILELENGTH                 = 323,
       OTIFFTAG_TILEOFFSETS                = 324,
@@ -134,7 +134,8 @@ public:
       OTIFFTAG_PHOTOSHOP                  = 34377,
       OGEO_KEY_DIRECTORY_TAG              = 34735,
       OGEO_DOUBLE_PARAMS_TAG              = 34736,
-      OGEO_ASCII_PARAMS_TAG               = 34737
+      OGEO_ASCII_PARAMS_TAG               = 34737,
+      OGDAL_METADATA_TAG                  = 42112
    };
 
    enum CompressType
@@ -335,6 +336,10 @@ private:
                             ossim_uint16 type,
                             ossim_uint64 count,
                             ossim_uint8* valueArray) const;
+   std::ostream& printGdalMetadata(std::ostream& out,
+                                   const std::string& prefix,
+                                   ossim_uint64 count,
+                                   ossim_uint8* valueArray) const;
    
    /** @brief Prints geo keys. */
    std::ostream& printGeoKeys(std::ostream& out,
@@ -586,8 +591,8 @@ private:
                              ossim_uint32 width,
                              ossim_uint32 height) const;
    
-   ossimFilename  theFile;
-   ossimEndian*   theEndian;
+   ossimFilename          theFile;
+   mutable ossimEndian*   theEndian;
 };
 
 #endif /* End of "#ifndef ossimTiffInfo_HEADER" */

@@ -9,7 +9,7 @@
 // Description:  Base class for overview builders.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimOverviewBuilderBase.h 16081 2009-12-10 20:56:36Z eshirschorn $
+// $Id: ossimOverviewBuilderBase.h 17194 2010-04-23 15:05:19Z dburken $
 #ifndef ossimOverviewBuilderBase_HEADER
 #define ossimOverviewBuilderBase_HEADER
 
@@ -45,8 +45,7 @@ public:
     * 
     * @return True on successful initialization, false on error.
     */
-   virtual bool setOutputWriter(ossimImageFileWriter* outputWriter)
-   { return false; }
+   virtual bool setOutputWriter(ossimImageFileWriter* outputWriter);
 
    /**
     * @brief Sets the input to the builder. (pure virtual)
@@ -122,6 +121,18 @@ public:
     * @param dim The overview stop dimension
     */
    virtual void setOverviewStopDimension(ossim_uint32 dim);
+
+   /**
+    * @brief Gets the histogram accumulation mode.
+    * @return mode NONE, NORMAL or FAST.
+    */
+   ossimHistogramMode getHistogramMode() const;
+
+   /**
+    * @brief Sets the histogram accumulation mode.
+    * @param mode NONE, NORMAL or FAST.
+    */
+   void setHistogramMode(ossimHistogramMode mode);
  
    /**
     * @brief Builds the overviews. (pure virtual)
@@ -157,8 +168,9 @@ protected:
     */
    ossim_uint32 getDefaultStopDimension() const;
    
-   ossim_uint32 theOverviewStopDimension;
-   
+   ossim_uint32 m_overviewStopDimension;
+
+   ossimHistogramMode m_histoMode;   
 
    /** for rtti stuff */
    TYPE_DATA

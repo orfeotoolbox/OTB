@@ -13,7 +13,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimIkonosRpcModel.cpp 16814 2010-03-06 20:04:22Z dburken $
+//  $Id: ossimIkonosRpcModel.cpp 16867 2010-03-16 03:29:40Z gpotts $
 
 #include <cstdlib>
 #include <ossim/projection/ossimIkonosRpcModel.h>
@@ -701,10 +701,10 @@ void ossimIkonosRpcModel::parseRpcData(const ossimFilename& data_file)
       return;
    }
    else
-     {
-       // copy ossimIkonosMetada-sensor into ossimIkonosRpcModel-sensorId
-       theSensorID = theSupportData->getSensorID();
-     }
+   {
+      // copy ossimIkonosMetada-sensor into ossimIkonosRpcModel-sensorId
+      theSensorID = theSupportData->getSensorID();
+   }
    
 
    theLatScale = atof(buf);

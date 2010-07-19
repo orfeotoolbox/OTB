@@ -8,10 +8,9 @@
 // Description: Container class for LandSat7 Fast Format header files.
 //
 //********************************************************************
-// $Id: ossimFfL7.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
+// $Id: ossimFfL7.cpp 17501 2010-06-02 11:14:55Z dburken $
 
-  // #include <cstdlib>
-
+#include <cstdio>
 #include <fstream>
 #include <sstream>
 #include <string>

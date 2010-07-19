@@ -14,7 +14,7 @@
 //   elevations relative to the ellipsoid.
 //
 //*****************************************************************************
-//  $Id: ossimCoarseGridModel.cpp 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimCoarseGridModel.cpp 17417 2010-05-20 14:33:16Z dburken $
 
 #include <ossim/projection/ossimCoarseGridModel.h>
 
@@ -251,7 +251,7 @@ void ossimCoarseGridModel::buildGrid(const ossimDrect& imageBounds,
                  h += heightDelta;
               }
               ossimDpt fullPt;
-              geom->localToFullImage(pt, fullPt);
+              geom->rnToFull(pt, 0, fullPt);
               geom->getProjection()->lineSampleHeightToWorld(fullPt, h, gpt2);
               gpt.changeDatum(targetDatum);
               gpt2.changeDatum(targetDatum);
@@ -379,7 +379,7 @@ void ossimCoarseGridModel::buildGrid(const ossimDrect& imageBounds,
                           ossimDpt pt(imageOrigin.x + norm.x*(imageSize.x-1),
                                       imageOrigin.y + norm.y*(imageSize.y-1));
                           ossimDpt fullPt;
-                          geom->localToFullImage(pt, fullPt);
+                          geom->rnToFull(pt, 0, fullPt);
                           geom->getProjection()->lineSampleHeightToWorld(fullPt, 0.0, gpt);
 
                           gpt.changeDatum(targetDatum);

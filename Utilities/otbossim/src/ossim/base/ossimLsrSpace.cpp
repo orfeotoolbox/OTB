@@ -12,7 +12,7 @@
 //              Initial coding.
 //
 //*****************************************************************************
-//  $Id: ossimLsrSpace.cpp 12790 2008-05-05 13:41:33Z dburken $
+//  $Id: ossimLsrSpace.cpp 17593 2010-06-17 19:07:26Z dburken $
 
 #include <ossim/base/ossimLsrSpace.h>
 #include <ossim/base/ossimCommon.h>
@@ -31,7 +31,7 @@
 ossimLsrSpace::ossimLsrSpace(const ossimEcefPoint&  origin,
                              const ossimEcefVector& x_dir_ecf_vec,
                              const ossimEcefVector& y_dir_ecf_vec,
-                             int   z_not_provided_space_holder)
+                             int   /* z_not_provided_space_holder */)
    : theOrigin (origin)
 {
    //***
@@ -58,7 +58,7 @@ ossimLsrSpace::ossimLsrSpace(const ossimEcefPoint&  origin,
 //*****************************************************************************
 ossimLsrSpace::ossimLsrSpace(const ossimEcefPoint&  origin,
                              const ossimEcefVector& x_dir_ecf_vec,
-                             int   y_not_provided_space_holder,
+                             int   /* y_not_provided_space_holder */,
                              const ossimEcefVector& z_dir_ecf_vec)
    : theOrigin (origin)
 {
@@ -85,7 +85,7 @@ ossimLsrSpace::ossimLsrSpace(const ossimEcefPoint&  origin,
 //  
 //*****************************************************************************
 ossimLsrSpace::ossimLsrSpace(const ossimEcefPoint&  origin,
-                             int   x_not_provided_space_holder,
+                             int   /* x_not_provided_space_holder */,
                              const ossimEcefVector& y_dir_ecf_vec,
                              const ossimEcefVector& z_dir_ecf_vec)
    : theOrigin (origin)
@@ -203,7 +203,7 @@ ostream& ossimLsrSpace::lsrSpaceErrorMessage(ostream& os)
    os<<"ossimLsrSpace ERROR: An operation was attempted between two LSR \n"
      <<"  objects with differing LSR spaces. This is an illegal condition.\n"
      <<"  Please check the data and/or report the error to OSSIM development."
-     <<endl;
+     << std::endl;
 
    return os;
 }
@@ -218,6 +218,6 @@ void ossimLsrSpace::print(ostream& stream) const
 {
    stream << "(ossimLsrSpace)"
           << "\n   theOrigin = " << theOrigin
-          << "\n   theLsrToEcefRotMatrix = \n" << theLsrToEcefRotMatrix;
+          << "\n   theLsrToEcefRotMatrix = \n" << theLsrToEcefRotMatrix << std::endl;
 }
    

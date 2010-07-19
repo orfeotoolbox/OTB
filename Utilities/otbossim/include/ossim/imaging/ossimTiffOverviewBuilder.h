@@ -11,7 +11,7 @@
 // Contains class declaration for TiffOverviewBuilder.
 //
 //*******************************************************************
-//  $Id: ossimTiffOverviewBuilder.h 15833 2009-10-29 01:41:53Z eshirschorn $
+//  $Id: ossimTiffOverviewBuilder.h 17194 2010-04-23 15:05:19Z dburken $
 
 #ifndef ossimTiffOverviewBuilder_HEADER
 #define ossimTiffOverviewBuilder_HEADER
@@ -26,9 +26,10 @@
 
 #include <tiffio.h>
 
-class ossimImageHandler;
-class ossimFilename;
 class ossimConnectableObject;
+class ossimFilename;
+class ossimImageGeometry;
+class ossimImageHandler;
 
 class OSSIM_DLL ossimTiffOverviewBuilder
    :
@@ -219,10 +220,14 @@ private:
 
    /**
     *  Write reduced resolution data set to the tif file.
+    *
+    *  @param firstRestLevel used to tell method that if a histogram is needed, do it on
+    *  that res level.
     */
    bool writeRn(ossimImageHandler* imageHandler,
                 TIFF* tif,
-                ossim_uint32 resLevel);
+                ossim_uint32 resLevel,
+                bool firstResLevel);
    
    /**
     *  Set the tiff tags for the appropriate resLevel.  Level zero is the
@@ -236,6 +241,19 @@ private:
                 const ossimIrect& outputRect,
                 ossim_int32 resLevel) const;
 
+   /**
+    *  Writes geotiff tags.
+    *  @param geom
+    *  @param boundingRect
+    *  @param resLevel Zero base, 0 being full res.
+    *  @param tif
+    *  @return true on success, false on error.
+    */
+   bool setGeotiffTags(const ossimImageGeometry* geom,
+                       const ossimDrect& boundingRect,
+                       ossim_uint32 resLevel,
+                       TIFF* tif);
+
    TIFF* openTiff(const ossimString& filename,
                   const ossimString& openMode);
 
@@ -245,22 +263,22 @@ private:
    ossimTiffOverviewBuilder(const ossimTiffOverviewBuilder& source);
    ossimTiffOverviewBuilder& operator=(const ossimTiffOverviewBuilder& rhs); 
 
-   ossimRefPtr<ossimImageHandler>                 theImageHandler;
-   ossimFilename                                  theOutputFile;
-   std::vector<ossim_uint8>                       theNullDataBuffer;
-   ossim_int32                                    theBytesPerPixel;
-   ossim_int32                                    theBitsPerSample;
-   ossim_int32                                    theTileWidth;
-   ossim_int32                                    theTileHeight;
-   ossim_int32                                    theTileSizeInBytes;
-   ossim_int32                                    theSampleFormat;
-   ossim_int32                                    theCurrentTiffDir;
-   ossim_uint16                                   theTiffCompressType;
-   ossim_int32                                    theJpegCompressQuality;
-   ossimFilterResampler::ossimFilterResamplerType theResampleType;
-   std::vector<double>                            theNullPixelValues;
-   bool                                           theCopyAllFlag;
-   bool                                           theOutputTileSizeSetFlag;
+   ossimRefPtr<ossimImageHandler>                 m_imageHandler;
+   ossimFilename                                  m_outputFile;
+   std::vector<ossim_uint8>                       m_nullDataBuffer;
+   ossim_int32                                    m_bytesPerPixel;
+   ossim_int32                                    m_bitsPerSample;
+   ossim_int32                                    m_tileWidth;
+   ossim_int32                                    m_tileHeight;
+   ossim_int32                                    m_tileSizeInBytes;
+   ossim_int32                                    m_sampleFormat;
+   ossim_int32                                    m_currentTiffDir;
+   ossim_uint16                                   m_tiffCompressType;
+   ossim_int32                                    m_jpegCompressQuality;
+   ossimFilterResampler::ossimFilterResamplerType m_resampleType;
+   std::vector<double>                            m_nullPixelValues;
+   bool                                           m_copyAllFlag;
+   bool                                           m_outputTileSizeSetFlag;
 
 TYPE_DATA   
 };

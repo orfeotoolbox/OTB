@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimHsiToRgbSource.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimHsiToRgbSource.cpp 17206 2010-04-25 23:20:40Z dburken $
 #include <ossim/imaging/ossimHsiToRgbSource.h>
 #include <ossim/imaging/ossimImageData.h>
 #include <ossim/base/ossimConstants.h>
@@ -136,12 +136,12 @@ double ossimHsiToRgbSource::getNullPixelValue()const
    return 0.0;
 }
 
-double ossimHsiToRgbSource::getMinPixelValue(ossim_uint32 band)const
+double ossimHsiToRgbSource::getMinPixelValue(ossim_uint32 /* band */)const
 {
    return OSSIM_DEFAULT_MIN_PIX_UCHAR;
 }
 
-double ossimHsiToRgbSource::getMaxPixelValue(ossim_uint32 band)const
+double ossimHsiToRgbSource::getMaxPixelValue(ossim_uint32 /* band */)const
 {
    return OSSIM_DEFAULT_MAX_PIX_UCHAR;
 }

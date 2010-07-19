@@ -7,9 +7,10 @@
 // Author: Garrett Potts
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimDate.cpp 15853 2009-11-04 19:37:46Z gpotts $
+// $Id: ossimDate.cpp 17503 2010-06-02 11:18:49Z dburken $
 
 #include <ossim/base/ossimDate.h>
+#include <cctype> /* for isdigit */
 #include <iomanip>
 #include <sstream>
 #include <iostream>
@@ -791,7 +792,7 @@ bool ossimLocalTm::setIso8601(const std::string& timeString, bool shiftToGmtOffs
          setHour(hours);
          
          // now check for separator
-         if(!isdigit(timeString[pos]))
+         if(!std::isdigit(timeString[pos]))
          {
             ++pos; // skip separator if present
          }
@@ -812,7 +813,7 @@ bool ossimLocalTm::setIso8601(const std::string& timeString, bool shiftToGmtOffs
                                        pos))
             {
                double fractionalSeconds = 0.0;
-               if(!isdigit(timeString[pos]))
+               if(!std::isdigit(timeString[pos]))
                {
                   ++pos;
                }
@@ -853,7 +854,7 @@ bool ossimLocalTm::setIso8601(const std::string& timeString, bool shiftToGmtOffs
          return false;
       }
    }
-   else if(isdigit(timeString[pos]))
+   else if(std::isdigit(timeString[pos]))
    {
       ossim_int32 hours=0, minutes=0;
       
@@ -865,7 +866,7 @@ bool ossimLocalTm::setIso8601(const std::string& timeString, bool shiftToGmtOffs
          setHour(hours);
          
          // now check for separator
-         if(!isdigit(timeString[pos]))
+         if(!std::isdigit(timeString[pos]))
          {
             ++pos; // skip separator if present
          }
@@ -881,7 +882,7 @@ bool ossimLocalTm::setIso8601(const std::string& timeString, bool shiftToGmtOffs
                                   pos))
             {
                double fractionalSeconds = 0.0;
-               if(!isdigit(timeString[pos]))
+               if(!std::isdigit(timeString[pos]))
                {
                   ++pos;
                }

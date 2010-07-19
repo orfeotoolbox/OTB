@@ -18,13 +18,13 @@
 
 static ossimTrace traceDebug("ossimSrtmElevationDatabase:debug");
 
-RTTI_DEF1(ossimSrtmElevationDatabase, "ossimSrtmElevationDatabase", ossimElevationDatabase);
+RTTI_DEF1(ossimSrtmElevationDatabase, "ossimSrtmElevationDatabase", ossimElevationCellDatabase);
 
 double ossimSrtmElevationDatabase::getHeightAboveMSL(const ossimGpt& gpt)
 {
    if(isSourceEnabled())
    {
-      ossimRefPtr<ossimElevCellHandler> handler = getOrCreateHandler(gpt);
+      ossimRefPtr<ossimElevCellHandler> handler = getOrCreateCellHandler(gpt);
       if(handler.valid())
       {
          return handler->getHeightAboveMSL(gpt); // still need to shift
@@ -187,8 +187,25 @@ bool ossimSrtmElevationDatabase::saveState(ossimKeywordlist& kwl, const char* pr
 }
 
 ossimRefPtr<ossimElevCellHandler>
-ossimSrtmElevationDatabase::getOrCreateHandler(const ossimGpt& gpt)
+ossimSrtmElevationDatabase::createCell(const ossimGpt& gpt)
 {
+
+  ossimRefPtr<ossimElevCellHandler> result = 0;
+  ossimFilename f;
+  createFullPath(f, gpt);
+
+  if(f.exists())
+  {
+     ossimRefPtr<ossimSrtmHandler> h = new ossimSrtmHandler();
+     if (h->open(f, m_memoryMapCellsFlag))
+     {
+        result = h.get();
+     }
+  }
+
+  return result;
+
+#if 0
    ossimRefPtr<ossimElevCellHandler> result = 0;
    ossim_uint64 id = createId(gpt);
    m_cacheMapMutex.lock();
@@ -221,4 +238,5 @@ ossimSrtmElevationDatabase::getOrCreateHandler(const ossimGpt& gpt)
    m_cacheMapMutex.unlock();
    
    return result;
+#endif
 }

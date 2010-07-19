@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimIndexToRgbLutFilter.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimIndexToRgbLutFilter.cpp 17206 2010-04-25 23:20:40Z dburken $
 #include <ossim/imaging/ossimIndexToRgbLutFilter.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
 #include <ossim/base/ossimRgbVector.h>
@@ -605,12 +605,12 @@ double ossimIndexToRgbLutFilter::getNullPixelValue()const
    return 0.0;
 }
 
-double ossimIndexToRgbLutFilter::getMinPixelValue(ossim_uint32 band)const
+double ossimIndexToRgbLutFilter::getMinPixelValue(ossim_uint32 /* band */)const
 {
    return 1.0;
 }
 
-double ossimIndexToRgbLutFilter::getMaxPixelValue(ossim_uint32 band)const
+double ossimIndexToRgbLutFilter::getMaxPixelValue(ossim_uint32 /* band */)const
 {
    return 255.0;
 }

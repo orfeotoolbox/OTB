@@ -7,7 +7,7 @@
 // Description:  Interface class for overview builders.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimOverviewBuilderBase.cpp 15980 2009-11-21 19:24:00Z dburken $
+// $Id: ossimOverviewBuilderBase.cpp 17194 2010-04-23 15:05:19Z dburken $
 
 #include <ossim/imaging/ossimOverviewBuilderBase.h>
 #include <ossim/base/ossimIpt.h>
@@ -22,13 +22,19 @@ RTTI_DEF3(ossimOverviewBuilderBase,
           ossimConnectableObjectListener)
    
 ossimOverviewBuilderBase::ossimOverviewBuilderBase()
-   : theOverviewStopDimension(0)
+   : m_overviewStopDimension(0),
+     m_histoMode(OSSIM_HISTO_MODE_UNKNOWN) 
 {
-   theOverviewStopDimension = getDefaultStopDimension();
+   m_overviewStopDimension = getDefaultStopDimension();
 }
 
 ossimOverviewBuilderBase::~ossimOverviewBuilderBase()
 {
+}
+
+bool ossimOverviewBuilderBase::setOutputWriter(ossimImageFileWriter* /* outputWriter */)
+{
+   return false;
 }
 
 bool ossimOverviewBuilderBase::hasOverviewType(const ossimString& type) const
@@ -62,7 +68,7 @@ ossim_uint32 ossimOverviewBuilderBase::getRequiredResLevels(
          ih->getNumberOfSamples(0) :
          ih->getNumberOfLines(0);
 
-      while(largestImageDimension > theOverviewStopDimension)
+      while(largestImageDimension > m_overviewStopDimension)
       {
          largestImageDimension /= 2;
          ++result;
@@ -73,12 +79,22 @@ ossim_uint32 ossimOverviewBuilderBase::getRequiredResLevels(
 
 ossim_uint32 ossimOverviewBuilderBase::getOverviewStopDimension() const
 {
-   return theOverviewStopDimension;
+   return m_overviewStopDimension;
 }
 
 void ossimOverviewBuilderBase::setOverviewStopDimension(ossim_uint32 dim)
 {
-   theOverviewStopDimension = dim;
+   m_overviewStopDimension = dim;
+}
+
+ossimHistogramMode ossimOverviewBuilderBase::getHistogramMode() const
+{
+   return m_histoMode;
+}
+
+void ossimOverviewBuilderBase::setHistogramMode(ossimHistogramMode mode)
+{
+   m_histoMode = mode;
 }
 
 ossim_uint32 ossimOverviewBuilderBase::getDefaultStopDimension() const

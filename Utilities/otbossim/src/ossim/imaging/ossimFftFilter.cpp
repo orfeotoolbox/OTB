@@ -8,7 +8,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimFftFilter.cpp 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimFftFilter.cpp 17206 2010-04-25 23:20:40Z dburken $
 
 #include <ossim/imaging/ossimFftFilter.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
@@ -303,7 +303,7 @@ void ossimFftFilter::getPropertyNames(std::vector<ossimString>& propertyNames)co
 
 
 template <class T>
-void ossimFftFilter::runFft(T dummy,
+void ossimFftFilter::runFft(T /* dummy */,
                             ossimRefPtr<ossimImageData>& input,
                             ossimRefPtr<ossimImageData>& output)
 {

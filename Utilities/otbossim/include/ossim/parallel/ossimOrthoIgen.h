@@ -1,14 +1,23 @@
-// $Id: ossimOrthoIgen.h 16473 2010-02-01 19:52:59Z gpotts $
+// $Id: ossimOrthoIgen.h 17543 2010-06-07 21:26:25Z dburken $
 #ifndef ossimOrthoIgen_HEADER
 #define ossimOrthoIgen_HEADER
 #include <ossim/base/ossimObject.h>
+#include <ossim/base/ossimConnectableContainer.h>
 #include <ossim/base/ossimArgumentParser.h>
 #include <ossim/base/ossimApplicationUsage.h>
 #include <ossim/base/ossimRefPtr.h>
 #include <ossim/base/ossimDpt.h>
 #include <ossim/base/ossimFilename.h>
+#include <ossim/imaging/ossimImageChain.h>
+#include <ossim/projection/ossimMapProjection.h>
+#include <ossim/base/ossimKeywordlist.h>
 #include <map>
+
 class ossimConnectableObject;
+class ossimMapProjection;
+class ossimImageSource;
+class ossimImageHandler;
+
 class OSSIM_DLL ossimOrthoIgen : public ossimReferenced
 {
 public:
@@ -89,36 +98,14 @@ public:
    bool execute();
    void setDefaultValues();
 
-   void setCombinerType(const ossimString& combinerName);
-   
-   void setProjectionName(const ossimString& proj);
-   void setResamplerType(const ossimString& resamplerType);
-
-   
-   void setCutCenter(const ossimDpt& dpt,
-                     ossimUnitType unit = OSSIM_DEGREES);
-   void setCutDxDy(const ossimDpt& dpt,
-                   ossimUnitType unit = OSSIM_METERS);
-   void setMetersPerPixel(const ossimDpt& mpp);
-   void setThumbnailResolution(const ossimIpt& res);
-   void setThumbnailFlag(bool flag);
-
-   /**
-    * @brief Sets up the igen keyword list for the process.
-    *
-    * This throws ossimException on error.
-    */
-   void setupIgenKwl(ossimKeywordlist& kwl);
-   
 protected:
-   ossimString theThumbnailRes;
-   bool        theThumbnailFlag;
+   ossimString   theThumbnailRes;
+   bool          theThumbnailFlag;
    ossimUnitType theDeltaPerPixelUnit;
-   ossimDpt    theDeltaPerPixelOverride;
+   ossimDpt      theDeltaPerPixelOverride;
    ossimOrthoIgenProjectionType theProjectionType;
-   ossimString                  theProjectionName;
-   ossimString                  theSrsName;
-   ossimString                  theSrsString;
+   ossimString   theProjectionName;
+   ossimString   theSrsString;
    ossim_float64 theGeographicOriginOfLatitude;
    ossimString   theCombinerType;
    ossimString   theResamplerType;
@@ -132,57 +119,89 @@ protected:
    ossimFilename theWriterTemplate;
    ossimFilename theSupplementaryDirectory;
    ossimString   theSlaveBuffers;
-   ossimOrthoIgen::OriginType theCutOriginType;
+   OriginType    theCutOriginType;
    ossimDpt      theCutOrigin;
    ossimDpt      theCutDxDy;
    ossimUnitType theCutOriginUnit;
    ossimUnitType theCutDxDyUnit;
    ossim_float64 theLowPercentClip;
    ossim_float64 theHighPercentClip;
+   ossim_int32   theStdDevClip;
    bool          theUseAutoMinMaxFlag;
    bool          theScaleToEightBitFlag;
-   // ossimString   theSrsCode;
    bool          theStdoutFlag;
    PropertyMap   theWriterProperties;
-   
-   
+   bool          theCutRectSpecIsConsolidated;
+   ossimFilename theTargetHistoFileName;
+   ossimRefPtr<ossimConnectableContainer> theContainer;
+   ossimRefPtr<ossimMapProjection>  theProductProjection;
+   ossimRefPtr<ossimImageChain>  theProductChain;
+   ossimKeywordlist theKwl;
    std::vector<ossimOrthoIgenFilename> theFilenames;
+  
+   /**
+    * @brief Sets up the igen keyword list for the process.
+    *
+    * This throws ossimException on error.
+    */
+   void setupIgenKwl();
    
-   bool setupTiling(ossimKeywordlist& kwl);
+   bool setupTiling();
+   void setupCutter();
    
-   ossimRefPtr<ossimConnectableObject> setupCutter(ossimKeywordlist& kwl,
-                                                   ossimConnectableObject* input);
-
    /**
     * @brief Set up the writer for the process.
     *
     * This throws ossimException on error.
     */
-   void setupWriter(ossimKeywordlist& kwl,
-                    ossimConnectableObject* input);
-
+   void setupWriter();
+   
    /**
     * @brief Set up the view for the process.
     *
     * This throws ossimException on error.
     */
-   void setupView(ossimKeywordlist& kwl);
-
+   void setupView();
+   
    /**
     * Sets up any annotation from --annotate option.
-    *
-    * @param kwl Main keyword list to save to.
-    *
-    * @param input Input connection of the annotation filter.
-    *
     * @note This must be called after "setupView" as it needs a projection.
     */
-   ossimRefPtr<ossimConnectableObject> setupAnnotation(
-      ossimKeywordlist& kwl,
-      ossimConnectableObject* input) const;
-
-   void addFiles(ossimString fileInfoStr, std::vector<ossimString> fileInfos,
-     bool withEncodedEntry);
+   void setupAnnotation();
+   
+   void addFiles(ossimString fileInfoStr, 
+                 std::vector<ossimString> fileInfos,
+                 bool withEncodedEntry);
+   
+   /**
+    * Implemented to fix the misalignment between the input projection and the product. This was
+    * due to an UL corner in the product that was not an integral distance (in pixels) from the UL
+    * corner of the input image (assuming single input). OLK 3/10
+    *
+    * @param inproj Input source map projection.
+    *
+    * @param outproj Product projection that will receive adjusted tiepoint (UL corner).
+    */
+   void snapTiePointToInputProj(ossimMapProjection* inproj);
+   
+   /**
+    * Consolidates specification of bounding rect given various ways of specifying on the command
+    * line. This avoids multiple, redundant checks scattered throughout the code.
+    */
+   void consolidateCutRectSpec();
+   
+   /**
+    * Called when histogram operation is requested. Sets up additional filters in image chain
+    * for performing matching, stretching or clipping. If chain=0,
+    * this implies that the target histogram is being enabled for the output mosaic. */
+   void setupHistogram(ossimImageChain* chain=0, ossimImageHandler* handler=0);
+   
+   /**
+    * @brief Adds cache to the left of resampler.
+    * @param chain The chain to add to.
+    */
+   void addChainCache(ossimImageChain* chain) const;
+   
 };
 
 #endif

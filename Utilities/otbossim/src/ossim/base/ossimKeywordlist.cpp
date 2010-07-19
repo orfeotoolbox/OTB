@@ -5,7 +5,7 @@
 // Description: This class provides capabilities for keywordlists.
 //
 //********************************************************************
-// $Id: ossimKeywordlist.cpp 16563 2010-02-08 22:50:27Z eshirschorn $
+// $Id: ossimKeywordlist.cpp 17195 2010-04-23 17:32:18Z dburken $
 #include <algorithm>
 #include <fstream>
 #include <list>
@@ -27,7 +27,7 @@ static const char NULL_KEY_NOTICE[]
 
 #ifdef OSSIM_ID_ENABLED
 static const bool TRACE = false;
-static const char OSSIM_ID[] = "$Id: ossimKeywordlist.cpp 16563 2010-02-08 22:50:27Z eshirschorn $";
+static const char OSSIM_ID[] = "$Id: ossimKeywordlist.cpp 17195 2010-04-23 17:32:18Z dburken $";
 #endif
 
 ossimKeywordlist::ossimKeywordlist(char delimiter, 
@@ -912,8 +912,12 @@ bool ossimKeywordlist::parseFile(const ossimFilename& file,
    return result;
 }
 
-bool ossimKeywordlist::parseStream(std::istream& is,
-                                   bool ignoreBinaryChars)
+bool ossimKeywordlist::parseStream(std::istream& is, bool /* ignoreBinaryChars */)
+{
+   return parseStream(is);
+}
+
+bool ossimKeywordlist::parseStream(std::istream& is)
 {
    if (!is) // Check stream state.
    {

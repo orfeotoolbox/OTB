@@ -8,7 +8,7 @@
 //
 // Contains class declaration for ossimImageWriter
 //*******************************************************************
-//  $Id: ossimImageFileWriter.h 16081 2009-12-10 20:56:36Z eshirschorn $
+//  $Id: ossimImageFileWriter.h 17227 2010-04-27 19:01:03Z dburken $
 
 #ifndef ossimImageFileWriter_HEADER
 #define ossimImageFileWriter_HEADER
@@ -169,10 +169,28 @@ public:
    virtual bool writeReadmeFile() ;
 
    /**
-    * Will write a readme file.  If "theFilename" is "foo.tif"
+    * Will write a world file.  If "theFilename" is "foo.tif"
     * then this will write out "foo.tfw".
     */
    virtual bool writeTiffWorldFile() ;
+
+   /**
+    * Will write a world file.  The extension will be derived from the
+    * image extension.
+    *
+    * Currently handles the following image extentions:
+    * 
+    * "tif" or "tiff" -> "tfw"
+    * "jpg" of "jpeg" -> "jpw"
+    * "png" -> "pgw"
+    * "sid" -> "sdw"
+    *
+    * If extension does not match one of the above no file will be written
+    * and false will be returned.
+    *
+    * @return true on success false on error.
+    */
+   virtual bool writeWorldFile() ;
 
    /**
     * Convenience method that calls meta data write methods that are flagged
@@ -283,12 +301,13 @@ public:
    virtual bool         getScaleToEightBitFlag()       const;
 
    virtual bool         getWriteEnviHeaderFlag()       const;
-   virtual bool         getWriteErsHeaderFlag()              const;   
+   virtual bool         getWriteErsHeaderFlag()        const;   
    virtual bool         getWriteExternalGeometryFlag() const;
    virtual bool         getWriteFgdcFlag()             const;
    virtual bool         getWriteJpegWorldFileFlag()    const;
    virtual bool         getWriteReadmeFlag()           const;
    virtual bool         getWriteTiffWorldFileFlag()    const;
+   virtual bool         getWriteWorldFileFlag()        const;
 
    virtual void         setWriteImageFlag(bool flag);
    virtual void         setWriteOverviewFlag(bool flag);
@@ -302,6 +321,7 @@ public:
    virtual void         setWriteJpegWorldFile(bool flag);
    virtual void         setWriteReadme(bool flag);
    virtual void         setWriteTiffWorldFile(bool flag);
+   virtual void         setWriteWorldFile(bool flag);
    
    virtual ossim_uint16 getOverviewCompressType() const;
    virtual ossim_int32  getOverviewJpegCompressQuality() const;
@@ -439,6 +459,8 @@ protected:
    bool                       theWriteJpegWorldFileFlag;
    bool                       theWriteReadmeFlag;
    bool                       theWriteTiffWorldFileFlag;
+   bool                       theWriteWorldFileFlag;
+   
 
    /**
     * If not a geographic projection this allows the user to set the linear

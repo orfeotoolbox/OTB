@@ -10,7 +10,7 @@
 //               (UHL) of a DTED Level 1 file.
 //
 //********************************************************************
-// $Id: ossimDtedUhl.cpp 16104 2009-12-17 18:09:59Z gpotts $
+// $Id: ossimDtedUhl.cpp 17206 2010-04-25 23:20:40Z dburken $
 
 #include <cstdlib>
 #include <iostream>
@@ -167,7 +167,7 @@ void ossimDtedUhl::parse(std::istream& in)
 }
 
 ossimRefPtr<ossimProperty> ossimDtedUhl::getProperty(
-   const ossimString& name) const
+   const ossimString& /* name */) const
 {
    ossimRefPtr<ossimProperty> result = 0;
    return result;
@@ -319,7 +319,7 @@ std::ostream& ossimDtedUhl::print(std::ostream& out,
    return out;
 }
 
-ossimDtedUhl::ossimDtedUhl(const ossimDtedUhl& source)
+ossimDtedUhl::ossimDtedUhl(const ossimDtedUhl& /* source */)
 {
 }
 

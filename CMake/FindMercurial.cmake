@@ -28,19 +28,19 @@ IF(Mercurial_HG_EXECUTABLE)
     EXECUTE_PROCESS(COMMAND ${Mercurial_HG_EXECUTABLE} version
       WORKING_DIRECTORY ${dir}
       OUTPUT_VARIABLE Mercurial_VERSION_HG
-      OUTPUT_STRIP_TRAILING_WHITESPACE)
+      OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET)
 
     EXECUTE_PROCESS(COMMAND ${Mercurial_HG_EXECUTABLE} identify ${dir}
       OUTPUT_VARIABLE ${prefix}_WC_IDENTIFY
-      ERROR_VARIABLE Mercurial_hg_identify_error
-      RESULT_VARIABLE Mercurial_hg_identify_result
-      OUTPUT_STRIP_TRAILING_WHITESPACE)
+#      ERROR_VARIABLE Mercurial_hg_identify_error
+#      RESULT_VARIABLE Mercurial_hg_identify_result
+      OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET)
 
     EXECUTE_PROCESS(COMMAND ${Mercurial_HG_EXECUTABLE} status -m ${dir}
       OUTPUT_VARIABLE ${prefix}_WC_STATUS
-      ERROR_VARIABLE Mercurial_hg_status_error
-      RESULT_VARIABLE Mercurial_hg_status_result
-      OUTPUT_STRIP_TRAILING_WHITESPACE)
+#      ERROR_VARIABLE Mercurial_hg_status_error
+#      RESULT_VARIABLE Mercurial_hg_status_result
+      OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET)
 
     IF(NOT ${Mercurial_hg_identify_result} EQUAL 0)
       MESSAGE(SEND_ERROR "Command \"${Mercurial_HG_EXECUTABLE} identify ${dir}\" failed with output:\n${Mercurial_hg_identify_error}")

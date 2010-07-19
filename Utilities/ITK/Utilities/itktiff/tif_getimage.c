@@ -1,4 +1,4 @@
-/* $Id: tif_getimage.c,v 1.1 2006-09-28 15:30:39 king Exp $ */
+/* $Id: tif_getimage.c,v 1.2 2010-05-08 19:55:40 ibanez Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -1533,24 +1533,24 @@ DECLARESepPutFunc(putRGBUAseparate16bittile)
 
     (void) img; (void) y;
     while (h-- > 0) {
-  uint32 r,g,b,a;
-  /*
-   * We shift alpha down four bits just in case unsigned
-   * arithmetic doesn't handle the full range.
-   * We still have plenty of accuracy, since the output is 8 bits.
-   * So we have (r * 0xffff) * (a * 0xfff)) = r*a * (0xffff*0xfff)
-   * Since we want r*a * 0xff for eight bit output,
-   * we divide by (0xffff * 0xfff) / 0xff == 0x10eff.
-   */
-  for (x = w; x-- > 0;) {
-      a = *wa++ >> 4; 
-      r = (*wr++ * a) / 0x10eff;
-      g = (*wg++ * a) / 0x10eff;
-      b = (*wb++ * a) / 0x10eff;
-      *cp++ = PACK4(r,g,b,a);
-  }
-  SKEW4(wr, wg, wb, wa, fromskew);
-  cp += toskew;
+      uint32 r2,g2,b2,a2;
+      /*
+       * We shift alpha down four bits just in case unsigned
+       * arithmetic doesn't handle the full range.
+       * We still have plenty of accuracy, since the output is 8 bits.
+       * So we have (r * 0xffff) * (a * 0xfff)) = r*a * (0xffff*0xfff)
+       * Since we want r*a * 0xff for eight bit output,
+       * we divide by (0xffff * 0xfff) / 0xff == 0x10eff.
+       */
+      for (x = w; x-- > 0;) {
+          a2 = *wa++ >> 4; 
+          r2 = (*wr++ * a2) / 0x10eff;
+          g2 = (*wg++ * a2) / 0x10eff;
+          b2 = (*wb++ * a2) / 0x10eff;
+          *cp++ = PACK4(r2,g2,b2,a2);
+        }
+      SKEW4(wr, wg, wb, wa, fromskew);
+      cp += toskew;
     }
 }
 

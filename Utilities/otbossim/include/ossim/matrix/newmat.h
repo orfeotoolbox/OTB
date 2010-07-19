@@ -272,7 +272,7 @@ class GenericMatrix;
 //static MatrixType MatrixTypeUnSp(MatrixType::US);
 //						// AT&T needs this
 
-class OSSIM_DLL BaseMatrix : public Janitor               // base of all matrix classes
+class OSSIM_DLL BaseMatrix : public RBD_COMMON::Janitor               // base of all matrix classes
 {
 protected:
    virtual int search(const BaseMatrix*) const = 0;
@@ -1582,7 +1582,7 @@ public:
 // A minimal array class to imitate a C style array but giving dynamic storage
 // mostly intended for internal use by newmat
 
-class OSSIM_DLL SimpleIntArray : public Janitor
+class OSSIM_DLL SimpleIntArray : public RBD_COMMON::Janitor
 {
 protected:
    int* a;                    // pointer to the array

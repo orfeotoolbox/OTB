@@ -185,7 +185,9 @@ public:
   bool empty() const { return rep.empty(); }
   void swap(self& hs) { rep.swap(hs.rep); }
 
+#if _MSC_VER != 1600
   friend bool operator==ITK_FRIEND_TEMPLATE_FUNCTION_ARGUMENT(self)(const self &, const self &);
+#endif
 
   iterator begin() { return rep.begin(); }
   iterator end() { return rep.end(); }
@@ -289,7 +291,9 @@ public:
   bool empty() const { return rep.empty(); }
   void swap(self& hs) { rep.swap(hs.rep); }
 
+#if _MSC_VER != 1600
   friend bool operator==ITK_FRIEND_TEMPLATE_FUNCTION_ARGUMENT(self)(const self &, const self &);
+#endif
 
   iterator begin() { return rep.begin(); }
   iterator end() { return rep.end(); }

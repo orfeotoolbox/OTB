@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshPoint.h,v $
   Language:  C++
-  Date:      $Date: 2010-02-19 19:42:45 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2010-06-14 15:02:46 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -90,7 +90,7 @@ protected:
   void Initialize();
 
 protected:
-  TQuadEdge * m_Edge; /// Entry edge for this point into an Onext ring
+  TQuadEdge * m_Edge; /**< Entry edge for this point into an Onext ring */
 };
 
 } // end namespace itk

@@ -80,6 +80,11 @@ public:
    /** @brief Method to clear all fields including null terminating. */
    virtual void clearFields();
 
+   ossimString getFocalLength()const;
+   ossimString getColumnSpacing()const;
+   ossimString getColumnSpacingUnits()const;
+   ossimString getRowSpacing()const;
+   ossimString getRowSpacingUnits()const;
    /**
     * @brief Print method that outputs a key/value type format
     * adding prefix to keys.

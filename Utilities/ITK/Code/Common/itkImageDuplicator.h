@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageDuplicator.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-17 13:35:26 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2010-04-22 02:21:14 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -30,6 +30,7 @@ namespace itk
  * is not intended to be used in a pipeline. Instead, the typical use will be like
  * it is illustrated in the following code:
  *
+ * \code
  *     medianFilter->Update();
  *     ImageType::Pointer image = medianFilter->GetOutput();
  *     typedef ImageDuplicator< ImageType > DuplicatorType;
@@ -37,6 +38,7 @@ namespace itk
  *     duplicator->SetInput();
  *     duplicator->Update();
  *     ImageType::Pointer clonedImage = duplicator->GetOutput();
+ * \endcode
  *
  * Note that the Update() method must be called explicitly in the filter
  * that provides the input to the ImageDuplicator object. This is needed

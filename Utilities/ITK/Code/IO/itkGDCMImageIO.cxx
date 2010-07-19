@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGDCMImageIO.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-12-03 14:09:13 $
-  Version:   $Revision: 1.170 $
+  Date:      $Date: 2010-07-09 16:09:39 $
+  Version:   $Revision: 1.171 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -343,8 +343,10 @@ bool GDCMImageIO::CanReadFile(const char* filename)
   bool preamble;
   if( gdcm::Document::CanReadFile(file, preamble) )
     {
-    // By default only support DICOM with preamble (DICM magic number):
-    return preamble;
+    itkWarningMacro(<< "The DICOM file: "
+                    << filename
+                    << " does not have a preamble.");
+    return true;
     }
 #else
   gdcm::ImageReader reader;

@@ -95,7 +95,7 @@ ossimRefPtr<ossimImageData> ossimNullPixelFlip::getTile(const ossimIrect& tile_r
 }
 
 template <class T>
-void ossimNullPixelFlip::flipPixels(T dummy,
+void ossimNullPixelFlip::flipPixels(T /* dummy */,
                                    ossimImageData* inputTile,
                                    ossim_uint32 resLevel)
 {

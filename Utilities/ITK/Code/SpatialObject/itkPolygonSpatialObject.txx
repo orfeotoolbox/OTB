@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkPolygonSpatialObject.txx,v $
 Language:  C++
-Date:      $Date: 2009-12-03 06:15:25 $
-Version:   $Revision: 1.29 $
+Date:      $Date: 2010-07-07 15:53:07 $
+Version:   $Revision: 1.30 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -320,6 +320,10 @@ bool
 PolygonSpatialObject<TDimension>
 ::ReplacePoint( const PointType & oldpoint, const PointType & newPoint )
 {
+  if (oldpoint == newPoint)
+    {
+    return true;
+    }
   PointListType &points = this->GetPoints();
   typename PointListType::iterator it = points.begin();
   typename PointListType::iterator itend = points.end();

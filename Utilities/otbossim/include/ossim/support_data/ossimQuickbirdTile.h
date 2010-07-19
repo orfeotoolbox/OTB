@@ -7,7 +7,7 @@
 // Description:
 //
 //*******************************************************************
-//  $Id: ossimQuickbirdTile.h 11415 2007-07-27 15:19:25Z dburken $
+//  $Id: ossimQuickbirdTile.h 17195 2010-04-23 17:32:18Z dburken $
 #ifndef ossimQuickbirdTil_HEADER
 #define ossimQuickbirdTil_HEADER
 #include <map>
@@ -20,10 +20,10 @@
 class ossimQuickbirdTileInfo
 {
 public:
-   friend std::ostream& operator << (std::ostream& out, const ossimQuickbirdTileInfo& rhs)
-      {
-		return out;
-      }
+   friend std::ostream& operator << (std::ostream& out, const ossimQuickbirdTileInfo& /* rhs */)
+   {
+      return out;
+   }
    bool operator ==(const ossimString& rhs)const
       {
          return theFilename == rhs;

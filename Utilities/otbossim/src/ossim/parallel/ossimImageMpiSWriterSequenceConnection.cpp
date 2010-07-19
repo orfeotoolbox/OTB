@@ -3,7 +3,7 @@
 //
 // Author:  Garrett Potts
 //
-// $Id: ossimImageMpiSWriterSequenceConnection.cpp 12157 2007-12-10 17:06:22Z dburken $
+// $Id: ossimImageMpiSWriterSequenceConnection.cpp 17206 2010-04-25 23:20:40Z dburken $
 //----------------------------------------------------------------------------
 
 #include <ossim/ossimConfig.h> /* To pick up OSSIM_HAS_MPI. */
@@ -339,7 +339,8 @@ void ossimImageMpiSWriterSequenceConnection::slaveProcessTiles()
 }
 
 
-ossimRefPtr<ossimImageData> ossimImageMpiSWriterSequenceConnection::getNextTile(ossim_uint32 resLevel)
+ossimRefPtr<ossimImageData> ossimImageMpiSWriterSequenceConnection::getNextTile(
+   ossim_uint32 /* resLevel */)
 {
    ossimNotify(ossimNotifyLevel_FATAL)
       << "FATAL ossimImageMpiSWriterSequenceConnection::getNextTile(): "

@@ -27,7 +27,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimSensorModel.cpp 16308 2010-01-09 02:45:54Z eshirschorn $
+//  $Id: ossimSensorModel.cpp 17206 2010-04-25 23:20:40Z dburken $
 #include <iostream>
 #include <sstream>
 using namespace std;
@@ -1191,7 +1191,7 @@ ossimSensorModel::degreesOfFreedom()const
 }
 
 double
-ossimSensorModel::optimizeFit(const ossimTieGptSet& tieSet, double* targetVariance)
+ossimSensorModel::optimizeFit(const ossimTieGptSet& tieSet, double* /* targetVariance */)
 {
    //use a simple Levenberg-Marquardt non-linear optimization
    //note : please limit the number of tie points

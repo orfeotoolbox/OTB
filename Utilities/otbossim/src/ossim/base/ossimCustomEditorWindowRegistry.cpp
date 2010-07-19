@@ -6,7 +6,7 @@
 // Description:
 //
 //*************************************************************************
-// $Id: ossimCustomEditorWindowRegistry.cpp 9966 2006-11-29 02:01:07Z gpotts $
+// $Id: ossimCustomEditorWindowRegistry.cpp 17108 2010-04-15 21:08:06Z dburken $
 #include <ossim/base/ossimCustomEditorWindowRegistry.h>
 #include <ossim/base/ossimString.h>
 #include <ossim/base/ossimCustomEditorWindowFactoryBase.h>
@@ -16,7 +16,7 @@ RTTI_DEF(ossimCustomEditorWindowRegistry, "ossimCustomEditorWindowRegistry");
 
 ossimCustomEditorWindowRegistry::~ossimCustomEditorWindowRegistry()
 {
-   theInstance = NULL;
+   theInstance = 0;
 }
 
 ossimCustomEditorWindowRegistry* ossimCustomEditorWindowRegistry::instance()
@@ -44,7 +44,7 @@ bool ossimCustomEditorWindowRegistry::registerFactory(ossimCustomEditorWindowFac
 ossimCustomEditorWindow* ossimCustomEditorWindowRegistry::createCustomEditor(ossimObject* obj,
                                                                              void* parent)const
 {
-   ossimCustomEditorWindow* result = NULL;
+   ossimCustomEditorWindow* result = 0;
    int i = 0;
 
    for(i = 0; (i < (int)theFactoryList.size())&&(!result); ++i)
@@ -57,7 +57,7 @@ ossimCustomEditorWindow* ossimCustomEditorWindowRegistry::createCustomEditor(oss
 ossimCustomEditorWindow* ossimCustomEditorWindowRegistry::createCustomEditor(const ossimString& classType,
                                                                              void* parent)const
 {
-   ossimCustomEditorWindow* result = NULL;
+   ossimCustomEditorWindow* result = 0;
    int i = 0;
 
    for(i = 0; (i < (int)theFactoryList.size())&&(!result); ++i)
@@ -70,7 +70,7 @@ ossimCustomEditorWindow* ossimCustomEditorWindowRegistry::createCustomEditor(con
 
 ossimObject* ossimCustomEditorWindowRegistry::createObject(const ossimString& typeName)const
 {
-   ossimObject* result = NULL;
+   ossimObject* result = 0;
    unsigned long index = 0;
    
    while((index < theFactoryList.size()) &&(!result))
@@ -84,7 +84,7 @@ ossimObject* ossimCustomEditorWindowRegistry::createObject(const ossimString& ty
 ossimObject* ossimCustomEditorWindowRegistry::createObject(const ossimKeywordlist& kwl,
                                                            const char* prefix)const
 {
-   ossimObject* result = NULL;
+   ossimObject* result = 0;
    unsigned long index = 0;
 
    while((index < theFactoryList.size()) &&(!result))
@@ -100,7 +100,7 @@ ossimObject* ossimCustomEditorWindowRegistry::createObject(const ossimKeywordlis
 void* ossimCustomEditorWindowRegistry::createPopupEditor(ossimObject* obj,
                                                          void* parent)const
 {
-   void* result = NULL;
+   void* result = 0;
    unsigned long index = 0;
 
    while((index < theFactoryList.size()) &&(!result))
@@ -116,7 +116,7 @@ void* ossimCustomEditorWindowRegistry::createPopupEditor(ossimObject* obj,
 void* ossimCustomEditorWindowRegistry::createPanelEditor(ossimObject* obj,
                                                          void* parent)const
 {
-   void* result = NULL;
+   void* result = 0;
    unsigned long index = 0;
 
    while((index < theFactoryList.size()) &&(!result))

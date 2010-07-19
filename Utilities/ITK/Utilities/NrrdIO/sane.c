@@ -34,9 +34,9 @@
 */
 int
 airSanity(void) {
-  double nan, pinf, ninf;
+  double nanValue, pinf, ninf;
   float nanF, pinfF, ninfF;
-  unsigned int sign, exp, mant;
+  unsigned int sign, expvalue, mant;
   int tmpI, size;
   char endian;
   unsigned char uc0, uc1;
@@ -87,14 +87,14 @@ airSanity(void) {
   if (AIR_EXISTS(ninf)) {
     return airInsane_nInfExists;
   }
-  nan = pinf / pinf;
-  if (AIR_EXISTS(nan)) {
+  nanValue = pinf / pinf;
+  if (AIR_EXISTS(nanValue)) {
     return airInsane_NaNExists;
   }
-  nanF = (float)nan;
+  nanF = (float)nanValue;
   pinfF = (float)pinf;
   ninfF = (float)ninf;
-  airFPValToParts_f(&sign, &exp, &mant, nanF);
+  airFPValToParts_f(&sign, &expvalue, &mant, nanF);
   mant >>= 22;
   if (AIR_QNANHIBIT != (int)mant) {
     return airInsane_QNaNHiBit;
@@ -102,8 +102,16 @@ airSanity(void) {
 
   if (!( airFP_QNAN == airFPClass_f(AIR_NAN)
          && airFP_QNAN == airFPClass_f(AIR_QNAN)
+/*
+  Exclude the following platforms from the airFP_SNAN test.
 
-#if !defined(__APPLE__) && ( defined(_MSC_VER) || _MSC_VER < 1400 ) /* VS2005 converts SNAN to QNAN */
+ 1) APPLE builds due to a cross-compilation problem, and
+ 2) Visual Studio builds for version newer than 2005 (not included)
+ when building in 32bits. */
+
+#if defined(__APPLE__) || ( defined(_MSC_VER) && _MSC_VER >= 1400 ) 
+         /* don't compare airFP_SNAN */
+#else
          && airFP_SNAN == airFPClass_f(AIR_SNAN) 
 #endif
          && airFP_QNAN == airFPClass_d(AIR_NAN)

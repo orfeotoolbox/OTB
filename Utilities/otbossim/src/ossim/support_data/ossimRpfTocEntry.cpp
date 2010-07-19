@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimRpfTocEntry.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
+// $Id: ossimRpfTocEntry.cpp 16997 2010-04-12 18:53:48Z dburken $
 
 #include <istream>
 #include <ostream>
@@ -48,7 +48,7 @@ std::ostream& ossimRpfTocEntry::print(std::ostream& out,
 {
    theBoundaryInformation.print(out, prefix);
 
-   vector< vector<ossimRpfFrameEntry> >::const_iterator frameEntry =
+   std::vector< std::vector<ossimRpfFrameEntry> >::const_iterator frameEntry =
       theFrameEntryArray.begin();
 
    while( frameEntry != theFrameEntryArray.end() )

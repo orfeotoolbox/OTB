@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 // 
 //********************************************************************
-// $Id: ossimFreeTypeFontFactory.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimFreeTypeFontFactory.h 17108 2010-04-15 21:08:06Z dburken $
 #ifndef ossimFreeTypeFontFactory_HEADER
 #define ossimFreeTypeFontFactory_HEADER
 #include <ossim/font/ossimFontFactoryBase.h>
@@ -42,8 +42,8 @@ protected:
 
    void initializeDefaults();
 private:
-   ossimFreeTypeFontFactory(const ossimFreeTypeFontFactory& rhs){}
-   void operator =(const ossimFreeTypeFontFactory& rhs){}
+   ossimFreeTypeFontFactory(const ossimFreeTypeFontFactory& /*rhs*/){}
+   void operator =(const ossimFreeTypeFontFactory& /*rhs*/){}
    
 };
 

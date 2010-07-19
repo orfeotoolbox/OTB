@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNonUniformBSpline.txx,v $
   Language:  C++
-  Date:      $Date: 2009-02-06 20:53:13 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2010-05-01 23:44:19 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -26,7 +26,8 @@
 
 #include "vnl/vnl_vector.h"
 #include "vnl/vnl_matrix.h"
-#include "vnl/algo/vnl_matrix_inverse.h"
+#include "vnl/algo/vnl_lsqr.h"
+#include "vnl/vnl_linear_system.h"
 
 
 // #define DEBUG_SPLINE
@@ -242,6 +243,34 @@ NonUniformBSpline< TDimension >
   this->Modified();
 }
 
+
+template< unsigned int TDimension >
+const typename
+NonUniformBSpline< TDimension >::ControlPointListType &
+NonUniformBSpline< TDimension >::GetControlPoints() const
+{
+  return this->m_ControlPoints;
+}
+
+
+template< unsigned int TDimension >
+const typename
+NonUniformBSpline< TDimension >::KnotListType &
+NonUniformBSpline< TDimension >::GetKnots() const
+{
+  return this->m_Knots;
+}
+
+
+template< unsigned int TDimension >
+const typename
+NonUniformBSpline< TDimension >::PointListType &
+NonUniformBSpline< TDimension >::GetPoints() const
+{
+  return this->m_Points;
+}
+
+
 template< unsigned int TDimension >
 void
 NonUniformBSpline< TDimension >::ComputeControlPoints() 
@@ -266,7 +295,7 @@ NonUniformBSpline< TDimension >::ComputeControlPoints()
        iter++)
     {
     PointType pt = (*iter);
-    for (int i = 0; i < dim; i++)
+    for (unsigned int i = 0; i < dim; i++)
       {
       data_matrix(rr, i) = pt.GetVnlVector()[i];
       }
@@ -310,7 +339,15 @@ NonUniformBSpline< TDimension >::ComputeControlPoints()
   std::cout << N_matrix << std::endl;
 #endif
 
-  vnl_matrix<double> B = vnl_matrix_inverse<double>(N_matrix.transpose() * N_matrix) * N_matrix.transpose() * data_matrix;
+//FIXME: Use the LSQR linear solver here:
+  vnl_matrix<double> B;
+
+// = vnl_matrix_inverse<double>(N_matrix.transpose() * N_matrix) * N_matrix.transpose() * data_matrix;
+
+//  vnl_linear_system ls( N_matrix.rows(), N_matrix.cols() );
+
+//  vnl_lsqr solver( ls );
+
 
 //#ifdef DEBUG_SPLINE
   std::cout << "Control point matrix : " << std::endl;
@@ -319,14 +356,13 @@ NonUniformBSpline< TDimension >::ComputeControlPoints()
 
   m_ControlPoints.clear();
 
-  int j = 0;
-  for (j = 0; j < B.rows(); j++)
+  for ( unsigned int j = 0; j < B.rows(); j++ )
     {
     vnl_vector<double> v = B.get_row(j);
     itk::Vector<double> iv;
     iv.SetVnlVector(v);
     itk::Point<double, TDimension> pt;
-    for (int d = 0; d < dim; d++)
+    for ( unsigned int d = 0; d < dim; d++ )
       {
       pt[d] = v(d);
       }
@@ -350,8 +386,6 @@ typename NonUniformBSpline<TDimension>::PointType
 NonUniformBSpline< TDimension >
 ::EvaluateSpline(double t) const
 {
-  double N = 0.0;
-
   int i = 0;
 
   vnl_vector<double> result(TDimension);
@@ -364,14 +398,18 @@ NonUniformBSpline< TDimension >
     ControlPointType pt = *cpiter;
     vnl_vector<double> v = pt.GetVnlVector();
 
-    N =  this->NonUniformBSplineFunctionRecursive(m_SplineOrder, i, t);
-    result = result + N * v;
+    const double N =  this->NonUniformBSplineFunctionRecursive(m_SplineOrder, i, t);
+
+    for( unsigned j = 0; j < TDimension; j++ )
+      {
+      result[j] += N * v[j];
+      }
 
     i++;
     }
 
   double array[TDimension];
-  for (int d = 0; d < TDimension; d++)
+  for ( unsigned int d = 0; d < TDimension; d++ )
     {
     array[d] = result[d];
     }

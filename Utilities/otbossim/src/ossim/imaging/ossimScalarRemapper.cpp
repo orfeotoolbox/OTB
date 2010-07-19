@@ -11,7 +11,7 @@
 // This class is used to remap image data from one scalar type to another.
 //
 //*******************************************************************
-//  $Id: ossimScalarRemapper.cpp 16308 2010-01-09 02:45:54Z eshirschorn $
+//  $Id: ossimScalarRemapper.cpp 17495 2010-06-01 23:21:42Z gpotts $
 
 #include <iostream>
 
@@ -227,10 +227,13 @@ void ossimScalarRemapper::setOutputScalarType(ossimScalarType scalarType)
 {
    if (scalarType == OSSIM_SCALAR_UNKNOWN)
    {
-      ossimNotify(ossimNotifyLevel_WARN)
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_WARN)
          << "ossimScalarRemapper::setOutputScalarType WARN:\n"
          << "OSSIM_SCALAR_UNKNOWN passed to method.  No action taken..."
          << std::endl;
+      }
       return;
    }
    
@@ -266,9 +269,12 @@ void ossimScalarRemapper::setOutputScalarType(ossimString scalarType)
    }
    else
    {
-      ossimNotify(ossimNotifyLevel_WARN)
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_WARN)
          << "ossimScalarRemapper ERROR:"
          << "\nUnknown scalar type:  " << scalarType.c_str() << std::endl;
+      }
    }
 }
 
@@ -437,10 +443,13 @@ bool ossimScalarRemapper::loadState(const ossimKeywordlist& kwl,
 
    if (kwl.getErrorStatus() == ossimErrorCodes::OSSIM_ERROR)
    {
-      ossimNotify(ossimNotifyLevel_WARN)
-         << "ossimScalarRemapper::loadState\n"
-         << " ERROR detected in keyword list!  State not loaded."
-         << std::endl;
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_WARN)
+            << "ossimScalarRemapper::loadState\n"
+            << " ERROR detected in keyword list!  State not loaded."
+            << std::endl;
+      }
       return false;
    }
 

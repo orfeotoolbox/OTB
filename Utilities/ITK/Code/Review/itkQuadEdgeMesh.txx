@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMesh.txx,v $
   Language:  C++
-  Date:      $Date: 2009-07-13 22:57:53 $
-  Version:   $Revision: 1.55 $
+  Date:      $Date: 2010-06-15 15:30:32 $
+  Version:   $Revision: 1.56 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -838,7 +838,9 @@ QuadEdgeMesh< TPixel, VDimension, TTraits >
     }
   
   // now delete the edge in the edge container
+  CellType * edgeCellToDelete = this->GetEdgeCells()->ElementAt( e->GetIdent() );
   this->GetEdgeCells()->DeleteIndex( e->GetIdent() );
+  delete edgeCellToDelete;
   --m_NumberOfEdges;
 
   // Now, disconnect it and let the garbage collector do the rest

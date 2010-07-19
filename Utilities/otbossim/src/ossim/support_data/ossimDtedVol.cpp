@@ -8,7 +8,7 @@
 //               (VOL) of a DTED Level 1 file.
 //
 //********************************************************************
-// $Id: ossimDtedVol.cpp 16104 2009-12-17 18:09:59Z gpotts $
+// $Id: ossimDtedVol.cpp 17501 2010-06-02 11:14:55Z dburken $
 
 #include <iostream>
 #include <fstream>
@@ -24,14 +24,6 @@
 ossimDtedVol::ossimDtedVol(const ossimFilename& dted_file,
                            ossim_int32 offset)
    :
-      theRecSen(),
-      theField2(),
-      theReelNumber(),
-      theField4(),
-      theField5(),
-      theAccountNumber(),
-      theField7(),
-      theField8(),
       theStartOffset(0),
       theStopOffset(0)
 {
@@ -79,9 +71,6 @@ ossimDtedVol::ossimDtedVol(const ossimFilename& dted_file,
 //**************************************************************************
 ossimDtedVol::ossimDtedVol(std::istream& in)
    :
-      theRecSen(),
-      theReelNumber(),
-      theAccountNumber(),
       theStartOffset(0),
       theStopOffset(0)
 {
@@ -137,7 +126,7 @@ void ossimDtedVol::parse(std::istream& in)
 }
 
 ossimRefPtr<ossimProperty> ossimDtedVol::getProperty(
-   const ossimString& name) const
+   const ossimString& /* name */) const
 {
    ossimRefPtr<ossimProperty> result = 0;
    return result;
@@ -201,7 +190,7 @@ std::ostream& operator<<( std::ostream& out, const ossimDtedVol& vol)
    return vol.print(out, prefix);
 }
 
-ossimDtedVol::ossimDtedVol(const ossimDtedVol& source)
+ossimDtedVol::ossimDtedVol(const ossimDtedVol& /* source */)
 {
 }
 

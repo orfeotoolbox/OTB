@@ -11,7 +11,7 @@
 //         David A. Horner (DAH) http://dave.thehorners.com
 //
 //*************************************************************************
-// $Id: ossimFilterResampler.cpp 12245 2008-01-03 19:40:37Z dburken $
+// $Id: ossimFilterResampler.cpp 17195 2010-04-23 17:32:18Z dburken $
 
 #include <ossim/imaging/ossimFilterResampler.h>
 #include <ossim/base/ossimCommon.h>
@@ -303,7 +303,7 @@ void ossimFilterResampler::setScaleFactor(const ossimDpt& scale)
 }
 
 template <class T> void ossimFilterResampler::resampleBilinearTile(
-   T dummy,
+   T /* dummy */,
    const ossimRefPtr<ossimImageData>& input,
    ossimRefPtr<ossimImageData>& output,
    const ossimIrect& outputSubRect,

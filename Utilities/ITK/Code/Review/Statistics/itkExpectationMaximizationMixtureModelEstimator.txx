@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkExpectationMaximizationMixtureModelEstimator.txx,v $
   Language:  C++
-  Date:      $Date: 2009-05-12 14:27:58 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2010-05-20 19:26:58 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -212,7 +212,10 @@ ExpectationMaximizationMixtureModelEstimator< TSample >
            componentIndex++)
         {
         temp = tempWeights[componentIndex];
-        temp /= densitySum;
+        if (densitySum != 0)
+          {
+          temp /= densitySum;
+          }
         m_ComponentVector[componentIndex]->SetWeight(measurementVectorIndex,
                                                      temp); 
         }

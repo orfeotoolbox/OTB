@@ -5,10 +5,11 @@
 // Author:  Frank Warmerdam (warmerda@home.com)
 //
 //*******************************************************************
-//  $Id: ossimTiffWriter.cpp 16081 2009-12-10 20:56:36Z eshirschorn $
+//  $Id: ossimTiffWriter.cpp 17355 2010-05-13 18:55:17Z gpotts $
 
 #include <algorithm>
 #include <sstream>
+#include <tiffio.h>
 
 #include <ossim/ossimConfig.h>
 
@@ -54,7 +55,7 @@ static const long  DEFAULT_JPEG_QUALITY = 75;
 RTTI_DEF1(ossimTiffWriter, "ossimTiffWriter", ossimImageFileWriter);
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimTiffWriter.cpp 16081 2009-12-10 20:56:36Z eshirschorn $";
+static const char OSSIM_ID[] = "$Id: ossimTiffWriter.cpp 17355 2010-05-13 18:55:17Z gpotts $";
 #endif
 
 ossimTiffWriter::ossimTiffWriter()
@@ -101,12 +102,12 @@ bool ossimTiffWriter::openTiff()
       
 #ifdef OSSIM_HAS_GEOTIFF
 #  if OSSIM_HAS_GEOTIFF 
-      XTIFFClose( theTif );
+      XTIFFClose( (TIFF*)theTif );
 #  else
-      TIFFClose( theTif );
+      TIFFClose( (TIFF*)theTif );
 #  endif
 #else
-      TIFFClose( theTif );   
+      TIFFClose( (TIFF*)theTif );   
 #endif
 
    }
@@ -156,12 +157,12 @@ bool ossimTiffWriter::closeTiff()
    {
 #ifdef OSSIM_HAS_GEOTIFF
 #  if OSSIM_HAS_GEOTIFF
-      XTIFFClose( theTif );
+      XTIFFClose( (TIFF*)theTif );
 #  else
-      TIFFClose( theTif );
+      TIFFClose( (TIFF*)theTif );
 #  endif
 #else
-      TIFFClose( theTif );
+      TIFFClose( (TIFF*)theTif );
 #endif
       theTif = NULL;
    }
@@ -172,8 +173,8 @@ bool ossimTiffWriter::closeTiff()
 bool ossimTiffWriter::writeTiffTags()
 {
    static const char MODULE[] = "ossimTiffWriter::writeTiffTags";
-
-   if (!theTif)
+   TIFF* tiffPtr = (TIFF*)theTif;
+   if (!tiffPtr)
    {
       setErrorStatus(); // base class
       ossimSetError(getClassName().c_str(),
@@ -230,24 +231,24 @@ Call setFilename method.\n",
    }
 
    // Set the pixel type.
-   TIFFSetField( theTif, TIFFTAG_BITSPERSAMPLE, bitsPerSample );
-   TIFFSetField( theTif, TIFFTAG_SAMPLEFORMAT, sampleFormat );
+   TIFFSetField( (TIFF*)tiffPtr, TIFFTAG_BITSPERSAMPLE, bitsPerSample );
+   TIFFSetField( (TIFF*)tiffPtr, TIFFTAG_SAMPLEFORMAT, sampleFormat );
 
    // Set the image dimensions.
    ossim_uint32  width  = theAreaOfInterest.width();
    ossim_uint32  height = theAreaOfInterest.height();
-   TIFFSetField( theTif, TIFFTAG_IMAGEWIDTH, width);
-   TIFFSetField( theTif, TIFFTAG_IMAGELENGTH, height);
+   TIFFSetField( tiffPtr, TIFFTAG_IMAGEWIDTH, width);
+   TIFFSetField( tiffPtr, TIFFTAG_IMAGELENGTH, height);
    if (isTiled())
    {
       ossim_uint32 tileXSize = theOutputTileSize.x;
       ossim_uint32 tileYSize = theOutputTileSize.y;
-      TIFFSetField(theTif, TIFFTAG_TILEWIDTH,  tileXSize);
-      TIFFSetField(theTif, TIFFTAG_TILELENGTH, tileYSize);
+      TIFFSetField(tiffPtr, TIFFTAG_TILEWIDTH,  tileXSize);
+      TIFFSetField(tiffPtr, TIFFTAG_TILELENGTH, tileYSize);
    }
    else
    {
-      TIFFSetField(theTif, TIFFTAG_ROWSPERSTRIP, ossim_uint32(1));
+      TIFFSetField(tiffPtr, TIFFTAG_ROWSPERSTRIP, ossim_uint32(1));
    }
 
    ossim_uint32 numberOfBands = theInputConnection->getNumberOfOutputBands();
@@ -271,11 +272,11 @@ Call setFilename method.\n",
         (theOutputImageType == "image/gtif") ||
         (theOutputImageType == "image/gtiff") )
    {
-      TIFFSetField( theTif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
+      TIFFSetField( tiffPtr, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
    }
    else
    {
-      TIFFSetField( theTif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_SEPARATE);
+      TIFFSetField( tiffPtr, TIFFTAG_PLANARCONFIG, PLANARCONFIG_SEPARATE);
    }
 
    // Set the compression type:
@@ -286,7 +287,7 @@ Call setFilename method.\n",
       tiffCompressType  = COMPRESSION_JPEG;
 
       // Set the jpeg quality.
-      TIFFSetField( theTif, TIFFTAG_JPEGQUALITY,  theJpegQuality);
+      TIFFSetField( tiffPtr, TIFFTAG_JPEGQUALITY,  theJpegQuality);
    }
    else if(theCompressionType == "packbits")
    {
@@ -297,8 +298,8 @@ Call setFilename method.\n",
    {
       tiffCompressType  = COMPRESSION_DEFLATE;
    }
-   TIFFSetField( theTif, TIFFTAG_COMPRESSION, tiffCompressType);
-   TIFFSetField(theTif, TIFFTAG_SAMPLESPERPIXEL, (int)theInputConnection->getNumberOfOutputBands());
+   TIFFSetField( tiffPtr, TIFFTAG_COMPRESSION, tiffCompressType);
+   TIFFSetField(tiffPtr, TIFFTAG_SAMPLESPERPIXEL, (int)theInputConnection->getNumberOfOutputBands());
 
    ossimScalarType scalarType = theInputConnection->getOutputScalarType();
    bool lutEnabled = (theColorLutFlag&&
@@ -309,8 +310,8 @@ Call setFilename method.\n",
                       (theInputConnection->getNumberOfOutputBands() == 1));
    if(lutEnabled)
    {
-      TIFFSetField( theTif, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_PALETTE );
-      TIFFSetField( theTif, TIFFTAG_INDEXED, (ossim_uint16)1);
+      TIFFSetField( tiffPtr, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_PALETTE );
+      TIFFSetField( tiffPtr, TIFFTAG_INDEXED, (ossim_uint16)1);
 
       if(scalarType == OSSIM_UINT8)
       {
@@ -326,7 +327,7 @@ Call setFilename method.\n",
             g[i] = (ossim_uint16) (((*theColorLut)[i][1]/255.0)*65535);
             b[i] = (ossim_uint16) (((*theColorLut)[i][2]/255.0)*65535);
          }
-         TIFFSetField(theTif, TIFFTAG_COLORMAP, r, g ,b);
+         TIFFSetField(tiffPtr, TIFFTAG_COLORMAP, r, g ,b);
       }
       else
       {
@@ -341,7 +342,7 @@ Call setFilename method.\n",
             g[i] = (ossim_uint16) ((*theColorLut)[i][1]);
             b[i] = (ossim_uint16) ((*theColorLut)[i][2]);
          }
-         TIFFSetField(theTif, TIFFTAG_COLORMAP, r, g ,b);
+         TIFFSetField(tiffPtr, TIFFTAG_COLORMAP, r, g ,b);
       }
    }
    else if( (theInputConnection->getNumberOfOutputBands() == 3 ||
@@ -349,11 +350,11 @@ Call setFilename method.\n",
              (thePhotoMetric == "rgb"))&&
             (scalarType == OSSIM_UCHAR))
    {
-      TIFFSetField( theTif, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB );
+      TIFFSetField( tiffPtr, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB );
    }
    else
    {
-      TIFFSetField( theTif, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_MINISBLACK );
+      TIFFSetField( tiffPtr, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_MINISBLACK );
    }
 
    return true;
@@ -362,8 +363,9 @@ Call setFilename method.\n",
 bool ossimTiffWriter::writeGeotiffTags(ossimRefPtr<ossimMapProjectionInfo> projectionInfo)
 {
    static const char MODULE[] = "ossimTiffWriter::writeGeotiffTags";
+   TIFF* tiffPtr = (TIFF*)theTif;
 	
-   if (!theTif)
+   if (!tiffPtr)
    {
       setErrorStatus(); // base class
       ossimSetError(getClassName().c_str(),
@@ -380,13 +382,13 @@ Call setFilename method.\n",
    {
       return false;
    }
-   return ossimGeoTiff::writeTags(theTif,
+   return ossimGeoTiff::writeTags(tiffPtr,
                                   projectionInfo,
                                   theImagineNad27Flag);
 // #ifdef OSSIM_HAS_GEOTIFF
 // #  if OSSIM_HAS_GEOTIFF
 #if 0
-   GTIF* gtif = GTIFNew(theTif);
+   GTIF* gtif = GTIFNew(tiffPtr);
    
    // Get a pointer to the projection.
    const ossimMapProjection* proj = projectionInfo->getProjection();
@@ -560,8 +562,8 @@ Call setFilename method.\n",
          
    } // End of "switch (units)"
    
-   TIFFSetField( theTif, TIFFTAG_GEOTIEPOINTS, 6, tiePoints );
-   TIFFSetField( theTif, TIFFTAG_GEOPIXELSCALE, 3, pixScale );
+   TIFFSetField( tiffPtr, TIFFTAG_GEOTIEPOINTS, 6, tiePoints );
+   TIFFSetField( tiffPtr, TIFFTAG_GEOPIXELSCALE, 3, pixScale );
 
    
    ossimString datumCode = "WGE";
@@ -614,7 +616,7 @@ Call setFilename method.\n",
       gcs = USER_DEFINED;
 
       std::ostringstream os;
-      os << "IMAGINE GeoTIFF Support\nCopyright 1991 -  2001 by ERDAS, Inc. All Rights Reserved\n@(#)$RCSfile$ $Revision: 16081 $ $Date: 2009-12-11 04:56:36 +0800 (Fri, 11 Dec 2009) $\nUnable to match Ellipsoid (Datum) to a GeographicTypeGeoKey value\nEllipsoid = Clarke 1866\nDatum = NAD27 (CONUS)";
+      os << "IMAGINE GeoTIFF Support\nCopyright 1991 -  2001 by ERDAS, Inc. All Rights Reserved\n@(#)$RCSfile$ $Revision: 17355 $ $Date: 2010-05-14 02:55:17 +0800 (Fri, 14 May 2010) $\nUnable to match Ellipsoid (Datum) to a GeographicTypeGeoKey value\nEllipsoid = Clarke 1866\nDatum = NAD27 (CONUS)";
 
       GTIFKeySet(gtif,
                  GeogCitationGeoKey,
@@ -1380,6 +1382,7 @@ bool ossimTiffWriter::isTiled() const
 bool ossimTiffWriter::writeToTiles()
 {
    static const char* const MODULE = "ossimTiffWriter::writeToTiles";
+   TIFF* tiffPtr = (TIFF*)theTif;
 
    if (traceDebug()) CLOG << " Entered." << std::endl;
 
@@ -1433,7 +1436,7 @@ bool ossimTiffWriter::writeToTiles()
          }
 
          ossimDataObjectStatus  tileStatus      = id->getDataObjectStatus();
-	 ossim_uint32           tileSizeInBytes = id->getSizeInBytes();
+         ossim_uint32           tileSizeInBytes = id->getSizeInBytes();
          if (tileStatus != OSSIM_FULL)
          {
             // Clear out the buffer since it won't be filled all the way.
@@ -1458,7 +1461,7 @@ bool ossimTiffWriter::writeToTiles()
          // Write the tile to disk.
          //---
          ossim_uint32 bytesWritten = 0;
-         bytesWritten = TIFFWriteTile(theTif,
+         bytesWritten = TIFFWriteTile(tiffPtr,
                                       tempTile->getBuf(),
                                       origin.x,
                                       origin.y,
@@ -1503,7 +1506,7 @@ bool ossimTiffWriter::writeToTiles()
 bool ossimTiffWriter::writeToTilesBandSep()
 {
    static const char* const MODULE = "ossimTiffWriter::writeToTilesBandSep";
-
+   TIFF* tiffPtr = (TIFF*)theTif;
    if (traceDebug()) CLOG << " Entered." << std::endl;
 
    // Start the sequence at the first tile.
@@ -1573,7 +1576,7 @@ bool ossimTiffWriter::writeToTilesBandSep()
             tsize_t bytesWritten = 0;
 			if(data)
 			{
-				bytesWritten = TIFFWriteTile(theTif,
+				bytesWritten = TIFFWriteTile(tiffPtr,
                                              data,
                                              (ossim_uint32)origin.x,
                                              (ossim_uint32)origin.y,
@@ -1624,6 +1627,7 @@ bool ossimTiffWriter::writeToTilesBandSep()
 bool ossimTiffWriter::writeToStrips()
 {
    static const char* const MODULE = "ossimTiffWriter::writeToStrips";
+   TIFF* tiffPtr = (TIFF*)theTif;
 
    if (traceDebug()) CLOG << " Entered." << std::endl;
 
@@ -1693,7 +1697,7 @@ bool ossimTiffWriter::writeToStrips()
       ossim_uint8* buf = buffer;
       for (ossim_uint32 ii=0; ((ii<linesToWrite)&&(!needsAborting())); ++ii)
       {
-        ossim_int32 status = TIFFWriteScanline(theTif,
+        ossim_int32 status = TIFFWriteScanline(tiffPtr,
                                                buf,
                                                row,
                                                0);
@@ -1739,6 +1743,7 @@ bool ossimTiffWriter::writeToStrips()
 bool ossimTiffWriter::writeToStripsBandSep()
 {
    static const char* const MODULE = "ossimTiffWriter::writeToStripsBandSep";
+   TIFF* tiffPtr = (TIFF*)theTif;
 
    if (traceDebug()) CLOG << " Entered." << std::endl;
 
@@ -1812,7 +1817,7 @@ bool ossimTiffWriter::writeToStripsBandSep()
       {
          for (ossim_uint32 band =0; ((band<bands)&&(!needsAborting())); ++band)
          {
-           ossim_int32 status = TIFFWriteScanline(theTif,
+           ossim_int32 status = TIFFWriteScanline(tiffPtr,
                                                   buf,
                                                   row,
                                                   band);
@@ -1875,6 +1880,7 @@ void ossimTiffWriter::setTileSize(const ossimIpt& tileSize)
 void ossimTiffWriter::writeMinMaxTags(const vector<ossim_float64>& minBand,
                                       const vector<ossim_float64>& maxBand)
 {
+   TIFF* tiffPtr = (TIFF*)theTif;
    if(minBand.size() && maxBand.size())
    {
       ossim_float64 minValue =
@@ -1895,18 +1901,18 @@ void ossimTiffWriter::writeMinMaxTags(const vector<ossim_float64>& minBand,
       {
          case OSSIM_USHORT11:
          {
-            TIFFSetField( theTif, TIFFTAG_MINSAMPLEVALUE,
+            TIFFSetField( tiffPtr, TIFFTAG_MINSAMPLEVALUE,
                           static_cast<ossim_sint16>(0) );
-            TIFFSetField( theTif, TIFFTAG_MAXSAMPLEVALUE,
+            TIFFSetField( tiffPtr, TIFFTAG_MAXSAMPLEVALUE,
                           static_cast<ossim_sint16>(2047) );
             break;
          }
          case OSSIM_UINT8:
          case OSSIM_UINT16:
          {
-            TIFFSetField( theTif, TIFFTAG_MINSAMPLEVALUE,
+            TIFFSetField( tiffPtr, TIFFTAG_MINSAMPLEVALUE,
                           static_cast<ossim_sint16>(minValue) );
-            TIFFSetField( theTif, TIFFTAG_MAXSAMPLEVALUE,
+            TIFFSetField( tiffPtr, TIFFTAG_MAXSAMPLEVALUE,
                           static_cast<ossim_sint16>(maxValue) );
             break;
          }
@@ -1918,9 +1924,9 @@ void ossimTiffWriter::writeMinMaxTags(const vector<ossim_float64>& minBand,
          case OSSIM_NORMALIZED_FLOAT:
          case OSSIM_NORMALIZED_DOUBLE:
          {
-            TIFFSetField( theTif, TIFFTAG_SMINSAMPLEVALUE,
+            TIFFSetField( tiffPtr, TIFFTAG_SMINSAMPLEVALUE,
                           static_cast<ossim_float32>(minValue) );
-            TIFFSetField( theTif, TIFFTAG_SMAXSAMPLEVALUE,
+            TIFFSetField( tiffPtr, TIFFTAG_SMAXSAMPLEVALUE,
                           static_cast<ossim_float32>(maxValue) );
             break;
          }

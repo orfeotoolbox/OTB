@@ -11,7 +11,7 @@
 // Remaps a tile based on mode and histogram clip points.
 //
 //*************************************************************************
-// $Id: ossimHistogramRemapper.cpp 15986 2009-11-23 13:03:36Z gpotts $
+// $Id: ossimHistogramRemapper.cpp 17495 2010-06-01 23:21:42Z gpotts $
 
 #include <cstdlib>
 #include <ossim/imaging/ossimHistogramRemapper.h>
@@ -42,7 +42,7 @@ static const char STRETCH_MODE_KW[] = "stretch_mode";
 static const char HISTOGRAM_FILENAME_KW[] = "histogram_filename";
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimHistogramRemapper.cpp 15986 2009-11-23 13:03:36Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimHistogramRemapper.cpp 17495 2010-06-01 23:21:42Z gpotts $";
 #endif
 
 ossimHistogramRemapper::ossimHistogramRemapper()
@@ -1089,10 +1089,13 @@ void ossimHistogramRemapper::buildLinearTable()
       case OSSIM_SCALAR_UNKNOWN:
       default:
       {
+         if(traceDebug())
+         {
          // Shouldn't hit this.
-         ossimNotify(ossimNotifyLevel_WARN)
-            << "ossimTableRemapper::buildTable OSSIM_SCALAR_UNKNOWN!"
-            << endl;
+            ossimNotify(ossimNotifyLevel_WARN)
+               << "ossimTableRemapper::buildTable OSSIM_SCALAR_UNKNOWN!"
+               << endl;
+         }
          break;
       }
 			
@@ -1139,10 +1142,13 @@ void ossimHistogramRemapper::buildAutoLinearMinMaxTable()
       case OSSIM_SCALAR_UNKNOWN:
       default:
       {
+         if(traceDebug())
+         {
          // Shouldn't hit this.
-         ossimNotify(ossimNotifyLevel_WARN)
-            << "ossimTableRemapper::buildTable OSSIM_SCALAR_UNKNOWN!"
-            << endl;
+            ossimNotify(ossimNotifyLevel_WARN)
+               << "ossimTableRemapper::buildTable OSSIM_SCALAR_UNKNOWN!"
+               << endl;
+         }
          break;
       }
 			

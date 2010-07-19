@@ -9,7 +9,7 @@
 // Base class for all map projections.
 // 
 //*******************************************************************
-//  $Id: ossimMapProjection.cpp 16428 2010-01-27 20:11:39Z dburken $
+//  $Id: ossimMapProjection.cpp 17721 2010-07-10 17:19:32Z dburken $
 
 #include <iostream>
 #include <cstdlib>
@@ -92,17 +92,22 @@ ossimGpt ossimMapProjection::origin()const
 
 void ossimMapProjection::setPcsCode(ossim_uint16 pcsCode)
 {
-  thePcsCode = pcsCode;
+   thePcsCode = pcsCode;
+}
+
+void ossimMapProjection::setGcsCode(ossim_uint16 gcsCode)
+{
+   theGcsCode = gcsCode;
 }
 
 ossim_uint16 ossimMapProjection::getPcsCode()const
 {
-  return thePcsCode;
+   return thePcsCode;
 }
 
 ossim_uint16 ossimMapProjection::getGcsCode()const
 {
-  return theGcsCode;
+   return theGcsCode;
 }
 
 ossimString ossimMapProjection::getProjectionName() const
@@ -237,18 +242,16 @@ void ossimMapProjection::update()
    }
    // compute the tie points if not already computed
    //
-   if( (ossim::isnan(theUlGpt.latd())) ||
-       (ossim::isnan(theUlGpt.lond())) )
+   // The tiepoint was specified either as easting/northing or lat/lon. Need to initialize the one
+   // that has not been assigned yet:
+   if (theUlEastingNorthing.hasNans() && !theUlGpt.hasNans())
+      theUlEastingNorthing = forward(theUlGpt);
+   else if (theUlGpt.hasNans() && !theUlEastingNorthing.hasNans())
+      theUlGpt = inverse(theUlEastingNorthing);
+   else if (theUlGpt.hasNans() && theUlEastingNorthing.hasNans())
    {
       theUlGpt = theOrigin;
-   }
-   if(theUlEastingNorthing.hasNans())
-   {
-      if((ossim::isnan(theUlGpt.latd()) == false) &&
-         (ossim::isnan(theUlGpt.lond()) == false))
-      {
-         theUlEastingNorthing = forward(theUlGpt);
-      }
+      theUlEastingNorthing = forward(theUlGpt);
    }
 
    //---
@@ -359,59 +362,14 @@ void ossimMapProjection::updateFromTransform()
 void ossimMapProjection::applyScale(const ossimDpt& scale,
                                     bool recenterTiePoint)
 {
-   if (!recenterTiePoint)
+   theDegreesPerPixel.x *= scale.x;
+   theDegreesPerPixel.y *= scale.y;
+   theMetersPerPixel.x  *= scale.x;
+   theMetersPerPixel.y  *= scale.y;
+
+   if ( recenterTiePoint )
    {
-      theDegreesPerPixel.x *= scale.x;
-      theDegreesPerPixel.y *= scale.y;
-      theMetersPerPixel.x *= scale.x;
-      theMetersPerPixel.y *= scale.y;
-   }
-   else
-   {
-      if (isGeographic())
-      {
-         // Get the current tie.
-         ossimGpt tie = getUlGpt();
-         
-         // Shift it to the upper left edge of the pixel.
-         tie.lond( tie.lond() - theDegreesPerPixel.x/2.0);
-         tie.latd( tie.latd() + theDegreesPerPixel.y/2.0);
-         
-         // Apply the scale.
-         theDegreesPerPixel.x *= scale.x;
-         theDegreesPerPixel.y *= scale.y;
-         theMetersPerPixel.x *= scale.x;
-         theMetersPerPixel.y *= scale.y;
-         
-         // Now shift it back to center of the new tie.
-         tie.lond( tie.lond() + theDegreesPerPixel.x/2.0);
-         tie.latd( tie.latd() - theDegreesPerPixel.y/2.0);
-         
-         // Set the tie to new point.
-         setUlGpt(tie);
-      }
-      else
-      {
-         // Get the current tie point.
-         ossimDpt tie = getUlEastingNorthing();
-         
-         // Shift it to the upper left edge of the pixel.
-         tie.x -= theMetersPerPixel.x/2.0;
-         tie.y += theMetersPerPixel.y/2.0;
-         
-         // Apply the scale.
-         theMetersPerPixel.x *= scale.x;
-         theMetersPerPixel.y *= scale.y;
-         theDegreesPerPixel.x *= scale.x;
-         theDegreesPerPixel.y *= scale.y;
-         
-         // Now shift it back to center of the new tie.
-         tie.x += theMetersPerPixel.x/2.0;
-         tie.y -= theMetersPerPixel.y/2.0;
-         
-         // Set the tie to new point.
-         setUlEastingNorthing(tie);
-      }
+      snapTiePointToOrigin();
    }
 
    if (theModelTransformUnitType != OSSIM_UNIT_UNKNOWN)
@@ -1388,7 +1346,8 @@ bool ossimMapProjection::loadState(const ossimKeywordlist& kwl, const char* pref
             theModelTransformUnitType = OSSIM_UNIT_UNKNOWN;   
          }
       }
-  }
+   }
+
    //---
    // Set the datum of the origin and tie point.
    // Use method that does NOT perform a shift.
@@ -1616,7 +1575,7 @@ double ossimMapProjection::getStandardParallel2() const
 }
 
 void ossimMapProjection::snapTiePointTo(ossim_float64 multiple,
-                                         ossimUnitType unitType)
+                                        ossimUnitType unitType)
 {
    ossim_float64 convertedMultiple = multiple;
    
@@ -1670,21 +1629,22 @@ void ossimMapProjection::snapTiePointTo(ossim_float64 multiple,
    }
 }
 
-
 void ossimMapProjection::snapTiePointToOrigin()
 {
    // Convert the tie point.
    if (isGeographic())
    {
+      // Note the origin may not be 0.0, 0.0:
+      
       // Snap the latitude.
-      ossim_float64 d = theUlGpt.latd();
+      ossim_float64 d = theUlGpt.latd() - origin().latd();
       d = ossim::round<int>(d / theDegreesPerPixel.y) * theDegreesPerPixel.y;
-      theUlGpt.latd(d);
+      theUlGpt.latd(d + origin().latd());
 
       // Snap the longitude.
-      d = theUlGpt.lond();
+      d = theUlGpt.lond() - origin().lond();
       d = ossim::round<int>(d / theDegreesPerPixel.x) * theDegreesPerPixel.x;
-      theUlGpt.lond(d);
+      theUlGpt.lond(d + origin().lond());
 
       // Adjust the stored easting / northing.
       theUlEastingNorthing = forward(theUlGpt);
@@ -1715,7 +1675,6 @@ bool ossimMapProjection::getElevationLookupFlag()const
 {
    return theElevationLookupFlag;
 }
-   
 
 bool ossimMapProjection::verifyPcsCodeMatches() const
 {
@@ -1734,10 +1693,6 @@ bool ossimMapProjection::verifyPcsCodeMatches() const
             result = true;
          }
       }
-//      else
-//      {
-//        result = true; //projection is not state plane
-//      }
    }
    return result;
 }

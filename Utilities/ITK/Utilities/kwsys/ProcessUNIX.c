@@ -720,6 +720,14 @@ void kwsysProcess_Execute(kwsysProcess* cp)
     return;
     }
 
+  /* Make sure we have something to run.  */
+  if(cp->NumberOfCommands < 1)
+    {
+    strcpy(cp->ErrorMessage, "No command");
+    cp->State = kwsysProcess_State_Error;
+    return;
+    }
+
   /* Initialize the control structure for a new process.  */
   if(!kwsysProcessInitialize(cp))
     {
@@ -2374,8 +2382,11 @@ static pid_t kwsysProcessFork(kwsysProcess* cp,
    corresponding parsing format string.  The parsing format should
    have two integers to store: the pid and then the ppid.  */
 #if defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) \
-   || defined(__FreeBSD_kernel__)
+   || defined(__OpenBSD__) || defined(__GLIBC__) || defined(__GNU__)
 # define KWSYSPE_PS_COMMAND "ps axo pid,ppid"
+# define KWSYSPE_PS_FORMAT  "%d %d\n"
+#elif defined(__sun) && (defined(__SVR4) || defined(__svr4__)) /* Solaris */
+# define KWSYSPE_PS_COMMAND "ps -e -o pid,ppid"
 # define KWSYSPE_PS_FORMAT  "%d %d\n"
 #elif defined(__hpux) || defined(__sun__) || defined(__sgi) || defined(_AIX) \
    || defined(__sparc)

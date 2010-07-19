@@ -22,10 +22,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#ifdef __BORLANDC__
-#define ITK_LEAN_AND_MEAN
-#endif
-
 //  Software Guide : BeginCommandLineArgs
 //  INPUTS: {ROI_QB_MUL_3.tif}
 //  OUTPUTS: {WatershedSegmentation1Output1.png}

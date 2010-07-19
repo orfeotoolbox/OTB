@@ -9,12 +9,13 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFileHeaderV2_0.h 14662 2009-06-07 16:15:23Z dburken $
+// $Id: ossimNitfFileHeaderV2_0.h 16997 2010-04-12 18:53:48Z dburken $
 #ifndef ossimNitfFileHeaderV2_0_HEADER
 #define ossimNitfFileHeaderV2_0_HEADER
 
 #include <iosfwd>
 #include <ossim/support_data/ossimNitfFileHeaderV2_X.h>
+#include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimString.h>
 #include <ossim/support_data/ossimNitfTagInformation.h>
 

@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 // 
 //********************************************************************
-// $Id: ossimBilinearProjection.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimBilinearProjection.h 17497 2010-06-02 01:43:43Z gpotts $
 #ifndef ossimBilinearProjection_HEADER
 #define ossimBilinearProjection_HEADER
 
@@ -123,6 +123,7 @@ protected:
    ossimLeastSquaresBilin theYFit;
 
    bool theInterpolationPointsHaveNanFlag;
+   bool theInverseSupportedFlag;
 
 TYPE_DATA   
 };

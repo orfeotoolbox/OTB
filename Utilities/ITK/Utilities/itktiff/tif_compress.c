@@ -1,4 +1,4 @@
-/* $Id: tif_compress.c,v 1.2 2007-01-04 16:46:32 ibanez Exp $ */
+/* $Id: tif_compress.c,v 1.3 2010-05-08 19:55:40 ibanez Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -32,7 +32,7 @@
 #include "tiffiop.h"
 
 static int
-TIFFNoEncode(TIFF* tif, char* method)
+TIFFNoEncode(TIFF* tif, const char* method)
 {
   const TIFFCodec* c = TIFFFindCODEC(tif->tif_dir.td_compression);
 
@@ -69,7 +69,7 @@ _TIFFNoTileEncode(TIFF* tif, tidata_t pp, tsize_t cc, tsample_t s)
 }
 
 static int
-TIFFNoDecode(TIFF* tif, char* method)
+TIFFNoDecode(TIFF* tif, const char* method)
 {
   const TIFFCodec* c = TIFFFindCODEC(tif->tif_dir.td_compression);
 

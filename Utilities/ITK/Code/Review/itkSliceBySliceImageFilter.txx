@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSliceBySliceImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-12-04 18:37:10 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2010-06-23 19:30:28 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -19,6 +19,7 @@
 #define __itkSliceBySliceImageFilter_txx
 
 #include "itkSliceBySliceImageFilter.h"
+#include "itkImageRegionIterator.h"
 #include "itkProgressReporter.h"
 
 namespace itk

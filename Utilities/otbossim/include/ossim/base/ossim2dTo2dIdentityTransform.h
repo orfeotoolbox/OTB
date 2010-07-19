@@ -29,7 +29,7 @@ public:
    /**
     * forward transform nothing is modified on the input point.
     */
-   virtual void forward(ossimDpt&  modify_this) const
+   virtual void forward(ossimDpt&  /* modify_this */) const
    {
       // do nothing this is identity
    }
@@ -46,7 +46,7 @@ public:
    /**
     * inverse transform nothing is modified on the input point.
     */
-   virtual void inverse(ossimDpt&  modify_this) const
+   virtual void inverse(ossimDpt&  /* modify_this */) const
    {
       // do nothing this is identity
    }
