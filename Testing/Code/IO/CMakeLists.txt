@@ -2141,7 +2141,7 @@ ADD_TEST(ioTuTerraSarImageMetadataInterface_PANGKALANBUUNUsingVVCosFile ${IO_TES
 
 ADD_TEST(ioTuTerraSarImageMetadataInterface_PANGKALANBUUNUsingXmlFile ${IO_TESTS18}
         otbTerraSarImageMetadataInterface
-        ${LARGEDATA}/TERRASARX/PANGKALANBUUN/TSX1_SAR__SSC_SM.xml
+        ${LARGEDATA}/TERRASARX/PANGKALANBUUN/TSX1_SAR__SSC______SM_D_SRA_20080313T221955_20080313T222003.xml
         ${TEMP}/ioTvTerraSarImageMetadataInterface_PangkalanbuunuUsingXmlFile.txt
 )
 
@@ -2282,12 +2282,27 @@ ADD_TEST(ioTvImageKeywordlistTerraSarX_Toronto ${IO_TESTS18}
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Toronto.txt
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Toronto_saveState_loadState.txt
 )
-ADD_TEST(ioTuImageKeywordlistTerraSarX_PANGKALANBUUN ${IO_TESTS18}
+
+ADD_TEST(ioTuImageKeywordlistTerraSarX_PANGKALANBUUNUsingXmlFile ${IO_TESTS18}
     otbImageKeywordlist
-         ${LARGEDATA}/TERRASARX/PANGKALANBUUN/TSX1_SAR__SSC_SM.xml
+         ${LARGEDATA}/TERRASARX/PANGKALANBUUN/TTSX1_SAR__SSC______SM_D_SRA_20080313T221955_20080313T222003.xml
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun.txt
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun_saveState_loadState.txt
 )
+ADD_TEST(ioTuImageKeywordlistTerraSarX_PANGKALANBUUNUsingHHFile ${IO_TESTS18}
+    otbImageKeywordlist
+         ${LARGEDATA}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+         ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun.txt
+         ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun_saveState_loadState.txt
+)
+ADD_TEST(ioTuImageKeywordlistTerraSarX_PANGKALANBUUNUsingVVFile ${IO_TESTS18}
+    otbImageKeywordlist
+         ${LARGEDATA}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_VV_SRA_stripFar_008.cos
+         ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun.txt
+         ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun_saveState_loadState.txt
+)
+
+
 
 ADD_TEST(ioTvImageKeywordlistErs ${IO_TESTS18}
   --ignore-order --compare-n-ascii ${NOTOL} 2
