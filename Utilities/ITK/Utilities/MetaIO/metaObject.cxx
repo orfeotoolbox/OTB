@@ -1,19 +1,14 @@
-/*=========================================================================
+/*============================================================================
+  MetaIO
+  Copyright 2000-2010 Insight Software Consortium
 
-  Program:   MetaIO
-  Module:    $RCSfile: metaObject.cxx,v $
-  Language:  C++
-  Date:      $Date: 2009-11-21 18:59:39 $
-  Version:   $Revision: 1.53 $
+  Distributed under the OSI-approved BSD License (the "License");
+  see accompanying file Copyright.txt for details.
 
-  Copyright (c) Insight Software Consortium. All rights reserved.
-  See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
-
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
-
-=========================================================================*/
+  This software is distributed WITHOUT ANY WARRANTY; without even the
+  implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  See the License for more information.
+============================================================================*/
 #include "metaObject.h"
 
 #include <stdlib.h>
@@ -987,6 +982,7 @@ AcquisitionDate(const char * _acquisitionDate)
     {
     m_AcquisitionDate[i] = _acquisitionDate[i];
     }
+  m_AcquisitionDate[strlen( _acquisitionDate )] = '\0';
   }
       
 const char * MetaObject::AcquisitionDate(void) const
@@ -1334,6 +1330,7 @@ M_SetupWriteFields(void)
     mF = new MET_FieldRecordType;
     MET_InitWriteField(mF, "AcquisitionDate", MET_STRING,
                        strlen(m_AcquisitionDate), m_AcquisitionDate);
+    m_Fields.push_back(mF);
     }
 
   bool valSet = false;
@@ -1534,6 +1531,7 @@ M_Read(void)
       {
       m_AcquisitionDate[i] = ((char *)mF->value)[i];
       }
+    m_AcquisitionDate[strlen((char *)mF->value)] = '\0';
     }
 
   mF = MET_GetFieldRecord("CompressedData",  &m_Fields);

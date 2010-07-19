@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkTriangleMeshToSimplexMeshFilter.txx,v $
 Language:  C++
-Date:      $Date: 2009-09-17 11:14:56 $
-Version:   $Revision: 1.6 $
+Date:      $Date: 2010-05-31 12:12:10 $
+Version:   $Revision: 1.7 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -94,7 +94,7 @@ void TriangleMeshToSimplexMeshFilter<TInputMesh, TOutputMesh>
       }
     if (!input->GetPoint( tp[2],&v3 ))
       {
-      itkExceptionMacro ("Point with id " << tp[0] <<
+      itkExceptionMacro ("Point with id " << tp[2] <<
                          " does not exist in the input mesh");
       }
     

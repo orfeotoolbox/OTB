@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFFTComplexConjugateToRealImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2010-02-27 00:09:41 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2010-06-04 13:01:22 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -25,7 +25,7 @@
 namespace itk
 {
 /** \class FFTComplexConjugateToRealImageFilter
- * \brief 
+ * \brief TODO
  *
  * \ingroup 
  */

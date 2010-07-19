@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNiftiImageIO.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-11-22 13:33:11 $
-  Version:   $Revision: 1.87 $
+  Date:      $Date: 2010-07-12 16:02:48 $
+  Version:   $Revision: 1.88 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -456,7 +456,11 @@ void NiftiImageIO::Read(void* buffer)
     // sizes = x y z t vecsize
     _size[4] = numComponents;
     }
-
+  // Free memory if any was occupied already (incase of re-using the IO filter).
+  if (this->m_NiftiImage != NULL)
+    {
+      nifti_image_free(this->m_NiftiImage);
+    }
   //
   // allocate nifti image...
   this->m_NiftiImage = nifti_image_read(this->GetFileName(),false);

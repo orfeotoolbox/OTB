@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshBaseIterator.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-10 05:07:49 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2010-06-14 15:01:33 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -210,10 +210,10 @@ protected:
     }
   
 protected:
-  QuadEdgeType * m_StartEdge; /// Start edge
-  QuadEdgeType * m_Iterator;  /// Current iteration position
-  int            m_OpType;    /// Operation type
-  bool           m_Start;     /// Indicates iteration has just started
+  QuadEdgeType * m_StartEdge; /**< Start edge */
+  QuadEdgeType * m_Iterator;  /**< Current iteration position */
+  int            m_OpType;    /**< Operation type */
+  bool           m_Start;     /**< Indicates iteration has just started */
 };
 
 /**

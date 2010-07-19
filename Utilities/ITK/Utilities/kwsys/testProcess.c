@@ -94,7 +94,11 @@ int test4(int argc, const char* argv[])
   fprintf(stderr, "Output before crash on stderr from crash test.\n");  
   fflush(stdout);
   fflush(stderr);
+#if defined(__clang__)
+  *(int*)1 = 0; /* Clang warns about 0-ptr; undefined behavior.  */
+#else
   *(int*)0 = 0;
+#endif
   fprintf(stdout, "Output after crash on stdout from crash test.\n");
   fprintf(stderr, "Output after crash on stderr from crash test.\n");
   return 0;

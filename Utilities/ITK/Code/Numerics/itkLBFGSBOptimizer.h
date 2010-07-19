@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLBFGSBOptimizer.h,v $
   Language:  C++
-  Date:      $Date: 2009-10-08 15:14:26 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2010-05-12 19:38:30 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -160,7 +160,7 @@ public:
   itkGetConstReferenceMacro( CurrentIteration, unsigned int );
 
   /** Get the current cost function value. */
-  itkGetConstReferenceMacro( Value, MeasureType );
+  MeasureType GetValue() const;
 
   /** Get the current infinity norm of the project gradient of the cost
    * function. */
@@ -199,7 +199,6 @@ private:
   unsigned int             m_MaximumNumberOfCorrections;
 
   unsigned int             m_CurrentIteration;
-  MeasureType              m_Value;
   double                   m_InfinityNormOfProjectedGradient;
 
 };

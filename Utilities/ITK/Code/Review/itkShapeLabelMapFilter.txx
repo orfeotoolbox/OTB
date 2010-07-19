@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkShapeLabelMapFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-11-06 22:22:47 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2010-06-04 13:00:41 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -129,10 +129,10 @@ ShapeLabelMapFilter<TImage, TLabelImage>
     // First, update the axes that are not 0
     for( int i=1; i<ImageDimension; i++ )
       {
-      centroid[i] += length * idx[i];
+      centroid[i] += (long)length * idx[i];
       }
     // Then, update the axis 0
-    centroid[0] += idx[0] * length + ( length * ( length - 1 ) ) / 2.0;
+    centroid[0] += idx[0] * (long)length + ( length * ( length - 1 ) ) / 2.0;
 
     // Update the mins and maxs
     for( int i=0; i<ImageDimension; i++)

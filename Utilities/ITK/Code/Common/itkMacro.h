@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMacro.h,v $
   Language:  C++
-  Date:      $Date: 2009-10-28 16:05:57 $
-  Version:   $Revision: 1.100 $
+  Date:      $Date: 2010-04-26 14:32:50 $
+  Version:   $Revision: 1.101 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -756,6 +756,14 @@ private:
 #define ITK_FRIEND_TEMPLATE_FUNCTION_ARGUMENT(T)  <T>
 #endif
 #endif
+#endif
+// THIS IS A TEMPORARY PATCH FOR Visual Studio 10. The correct solution must
+// be implemented in Insight/CMake/itkTestFriendTemplatedFunction.cxx
+#if ( defined (_MSC_VER) && ( _MSC_VER >= 1600 ) )
+#ifdef  ITK_FRIEND_TEMPLATE_FUNCTION_ARGUMENT
+#undef  ITK_FRIEND_TEMPLATE_FUNCTION_ARGUMENT
+#endif
+#define ITK_FRIEND_TEMPLATE_FUNCTION_ARGUMENT(T)
 #endif
 
 

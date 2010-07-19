@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTransformIOBase.cxx,v $
   Language:  C++
-  Date:      $Date: 2007-08-10 15:40:36 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2010-06-22 17:29:12 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -62,7 +62,7 @@ CreateTransform(TransformPointer &ptr,
 
 void 
 TransformIOBase
-::OpenStream(std::ofstream &out, bool binary)
+::OpenStream(std::ofstream &outputStream, bool binary)
 {
 #ifdef __sgi
   // Create the file. This is required on some older sgi's
@@ -86,7 +86,14 @@ TransformIOBase
     {
     mode |= std::ios::app; 
     }
-  out.open(m_FileName.c_str(), mode);
+
+  outputStream.open(m_FileName.c_str(), mode);
+
+  if( outputStream.fail() )
+    {
+    outputStream.close();
+    itkExceptionMacro("Failed opening file" << m_FileName );
+    }
 }
 
 void TransformIOBase::SetTransformList(ConstTransformListType &transformList)

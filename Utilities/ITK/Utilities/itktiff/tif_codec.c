@@ -1,4 +1,4 @@
-/* $Header: /cvsroot/Insight/Insight/Utilities/itktiff/tif_codec.c,v 1.1 2006-09-28 15:30:39 king Exp $ */
+/* $Header: /cvsroot/Insight/Insight/Utilities/itktiff/tif_codec.c,v 1.2 2010-05-08 19:55:40 ibanez Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -73,11 +73,7 @@ static  int NotConfigured(TIFF*, int);
 /*
  * Compression schemes statically built into the library.
  */
-#ifdef VMS
 const TIFFCodec _TIFFBuiltinCODECS[] = {
-#else
-TIFFCodec _TIFFBuiltinCODECS[] = {
-#endif
     { "None",    COMPRESSION_NONE,  TIFFInitDumpMode },
     { "LZW",    COMPRESSION_LZW,  TIFFInitLZW },
     { "PackBits",  COMPRESSION_PACKBITS,  TIFFInitPackBits },
