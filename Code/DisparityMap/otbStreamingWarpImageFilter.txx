@@ -90,6 +90,9 @@ StreamingWarpImageFilter<TInputImage, TOutputImage, TDeformationField>
   deformationRequestedRegion.SetIndex(defRequestedIndex);
   deformationRequestedRegion.SetSize(defRequestedSize);
 
+  // Avoid extrapolation
+  deformationRequestedRegion.PadByRadius(1);
+
   // crop the input requested region at the input's largest possible region
   if (deformationRequestedRegion.Crop(deformationPtr->GetLargestPossibleRegion()))
     {
@@ -171,15 +174,12 @@ StreamingWarpImageFilter<TInputImage, TOutputImage, TDeformationField>
   inputRequestedRegion.SetIndex(inputFinalIndex);
   inputRequestedRegion.SetSize(inputFinalSize);
 
-  // Compute the security margin radius
-  typename InputImageType::SizeType    radius;
-
   // Compute the padding due to the interpolator
   unsigned int interpolatorRadius =
       StreamingTraits<typename Superclass::InputImageType>::CalculateNeededRadiusForInterpolator(this->GetInterpolator());
 
   // pad the input requested region by the operator radius
-  inputRequestedRegion.PadByRadius(radius);
+  inputRequestedRegion.PadByRadius(interpolatorRadius);
 
   // crop the input requested region at the input's largest possible region
   if (inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()))
