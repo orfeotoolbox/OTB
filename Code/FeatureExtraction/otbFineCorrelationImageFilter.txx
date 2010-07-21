@@ -467,7 +467,7 @@ FineCorrelationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFiel
 	offset[1]=j;
 
 	// compute correlation
-	double correl = this->Correlation(fixedN,movingN,offset,1);
+	double correl = this->Correlation(fixedN,movingN,offset);
 
         // Store in the map (for further refinenement)
 	correlationMap[offset]=correl;
