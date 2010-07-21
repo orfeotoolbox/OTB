@@ -25,6 +25,7 @@
 #include "itkProgressReporter.h"
 #include "itkLinearInterpolateImageFunction.h"
 #include "itkImageRegionIteratorWithIndex.h"
+#include <algorithm>
 
 namespace otb
 {
@@ -188,7 +189,7 @@ FineCorrelationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFiel
 template <class TInputImage, class TOutputCorrelation, class TOutputDeformationField>
 inline double
 FineCorrelationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationField>
-::Correlation(const NeighborhoodType & fixed, const NeighborhoodType & moving, const OffsetType & offset, unsigned int scale = 1) const
+::Correlation(const NeighborhoodType & fixed, const NeighborhoodType & moving, const OffsetType & offset, unsigned int scale) const
 {
   double crossProductSum = 0;
   double fSquareSum = 0;
@@ -341,7 +342,7 @@ FineCorrelationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFiel
       {
       invert = mat.GetInverse();
       }
-    catch( itk::ExceptionObject & err )
+    catch( itk::ExceptionObject & )
       {
       // Matrix is not invertible
       value[0]=maxPos[0];
