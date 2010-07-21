@@ -31,7 +31,7 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
   m_Offset(),
   m_NumberOfBinsPerAxis(8),
   m_InputImageMinimum(0),
-  m_InputImageMaximum(256)
+  m_InputImageMaximum(255)
 {
   // There are 11 outputs corresponding to the 8 textures indices
   this->SetNumberOfOutputs(11);
@@ -283,6 +283,13 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
   runlengthMatrixGenerator->SetNumberOfBinsPerAxis(m_NumberOfBinsPerAxis);
   runlengthMatrixGenerator->SetPixelValueMinMax(m_InputImageMinimum, m_InputImageMaximum);
 
+  // Compute the max possible run length (in physical unit)
+  typename InputImageType::PointType  topLeftPoint;
+  typename InputImageType::PointType  bottomRightPoint;
+  inputPtr->TransformIndexToPhysicalPoint( outputImagesIterators[0].GetIndex() - m_Radius, topLeftPoint );
+  inputPtr->TransformIndexToPhysicalPoint( outputImagesIterators[0].GetIndex() + m_Radius, bottomRightPoint );
+  runlengthMatrixGenerator->SetDistanceValueMinMax(0, topLeftPoint.EuclideanDistanceTo(bottomRightPoint));
+
   // Build the texture calculator
   TextureCoefficientsCalculatorPointerType texturesCalculator = TextureCoefficientsCalculatorType::New();
 
@@ -292,7 +299,7 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
   // Iterate on outputs to compute textures
   while ( !outputImagesIterators[0].IsAtEnd() )
     {
-    // Compute the region on which co-occurence will be estimated
+    // Compute the region on which run-length matrix will be estimated
     typename InputRegionType::IndexType inputIndex = outputImagesIterators[0].GetIndex() - m_Radius;
     typename InputRegionType::SizeType  inputSize;
 
@@ -307,7 +314,7 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
     inputRegion.SetIndex(inputIndex);
     inputRegion.SetSize(inputSize);
 
-    // Compute the runlength matrix
+    // Compute the run-length matrix
     runlengthMatrixGenerator->SetRegion(inputRegion);
     //runlengthMatrixGenerator->SetNormalize(true);
     runlengthMatrixGenerator->Compute();
