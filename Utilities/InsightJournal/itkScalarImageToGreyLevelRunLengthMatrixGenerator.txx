@@ -77,6 +77,7 @@ namespace itk {
       typename OffsetVector::ConstIterator offsets;
       for(offsets = m_Offsets->Begin(); offsets != m_Offsets->End(); offsets++)
         {
+
         for(unsigned int i = 0; i < offsets.Value().GetOffsetDimension(); i++)
           {
           unsigned int distance = vnl_math_abs(offsets.Value()[i]);
@@ -103,14 +104,6 @@ namespace itk {
 
       // Iterate over all of those pixels and offsets, adding each
       // co-occurrence pair to the histogram
-/*
-      typedef ConstNeighborhoodIterator<ImageType> NeighborhoodIteratorType;
-      typename NeighborhoodIteratorType::RadiusType radius;
-      radius.Fill( 1 );
-      NeighborhoodIteratorType neighborIt( radius,
-        this->m_Input, this->m_Input->GetRequestedRegion() );
-*/
-
       typedef ConstNeighborhoodIterator<ImageType> NeighborhoodIteratorType;
       NeighborhoodIteratorType neighborIt;
       neighborIt = NeighborhoodIteratorType( radius, this->m_Input, region );
@@ -129,6 +122,8 @@ namespace itk {
 
         neighborIt.GoToBegin();
         OffsetType offset = offsets.Value();
+        offset[0] = -offset[0];
+        offset[1] = -offset[1];
 
         for ( neighborIt.GoToBegin(); !neighborIt.IsAtEnd(); ++neighborIt )
           {
