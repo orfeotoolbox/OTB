@@ -69,7 +69,7 @@ int otbScalarImageToHigherOrderTexturesFilter(int argc, char * argv[])
   otb::StandardFilterWatcher watcher(filter, "Textures filter");
 
   filter->SetInputImageMinimum(0);
-  filter->SetInputImageMaximum(255);
+  filter->SetInputImageMaximum(256);
 
   // Write outputs
   itk::OStringStream oss;
