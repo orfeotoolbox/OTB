@@ -20,10 +20,12 @@ namespace ossimplugins
 {
 static const char NOISE[] = "noise";
 static const char NUMBER_OF_NOISE_RECORDS_KW[] = "numberOfNoiseRecords"; 
+static const char NAME_OF_NOISE_POLARISATION_KW[] = "nameOfOfNoisePolarisation"; 
 
 Noise::Noise():
   _numberOfNoiseRecords(0),
-  _tabImageNoise()
+  _tabImageNoise(),
+  _polarisation("UNDEFINED")
 {
 }
 
@@ -34,7 +36,8 @@ Noise::~Noise()
 
 Noise::Noise(const Noise& rhs):
   _numberOfNoiseRecords(rhs._numberOfNoiseRecords),
-  _tabImageNoise(rhs._tabImageNoise)
+  _tabImageNoise(rhs._tabImageNoise),
+  _polarisation(rhs._polarisation)
 {
 }
 
@@ -42,6 +45,7 @@ Noise& Noise::operator=(const Noise& rhs)
 {
   _numberOfNoiseRecords = rhs._numberOfNoiseRecords;
   _tabImageNoise = rhs._tabImageNoise;
+  _polarisation = rhs._polarisation;
   return *this;
 }
 
@@ -53,8 +57,14 @@ bool Noise::saveState(ossimKeywordlist& kwl, const char* prefix) const
       pfx = prefix;
    }
    pfx += NOISE;
-   std::string s = pfx + "." + NUMBER_OF_NOISE_RECORDS_KW;
+   
+
+   std::string s = pfx + "." + NAME_OF_NOISE_POLARISATION_KW;
+   kwl.add(prefix, s.c_str(), _polarisation);
+   
+   s = pfx + "." + NUMBER_OF_NOISE_RECORDS_KW;
    kwl.add(prefix, s.c_str(), _numberOfNoiseRecords);
+   
    for (unsigned int i = 0; i < _tabImageNoise.size(); ++i)
    {
       std::string s2 = pfx + "[" + ossimString::toString(i) + "]";
@@ -80,6 +90,18 @@ bool Noise::loadState(const ossimKeywordlist& kwl, const char* prefix)
    ossimString s;
    const char* lookup = 0;
    std::string s1 = pfx + ".";
+
+  lookup = kwl.find(s1.c_str(), NAME_OF_NOISE_POLARISATION_KW);
+  if (lookup)
+  {
+    _polarisation = lookup;
+  }
+  else
+  {
+    ossimNotify(ossimNotifyLevel_WARN)
+         << MODULE << " Keyword not found: " << NAME_OF_NOISE_POLARISATION_KW << "\n";
+    result = false;
+  }
 
   lookup = kwl.find(s1.c_str(), NUMBER_OF_NOISE_RECORDS_KW);
   if (lookup)
@@ -122,6 +144,8 @@ std::ostream& Noise::print(std::ostream& out) const
    pfx += NOISE;
    std::string s = pfx + "." + NUMBER_OF_NOISE_RECORDS_KW;
    kwl.add(prefix, s.c_str(), _numberOfNoiseRecords);
+   s = pfx + "." + NAME_OF_NOISE_POLARISATION_KW;
+   kwl.add(prefix, s.c_str(), _polarisation);
    for (unsigned int i = 0; i < _tabImageNoise.size(); ++i)
    {
       std::string s2 = pfx + "[" + ossimString::toString(i) + "]";

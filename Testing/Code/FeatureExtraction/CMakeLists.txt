@@ -34,6 +34,7 @@ SET(FEATUREEXTRACTION_TESTS12 ${CXX_TEST_PATH}/otbFeatureExtractionTests12)
 SET(FEATUREEXTRACTION_TESTS13 ${CXX_TEST_PATH}/otbFeatureExtractionTests13)
 SET(FEATUREEXTRACTION_TESTS14 ${CXX_TEST_PATH}/otbFeatureExtractionTests14)
 SET(FEATUREEXTRACTION_TESTS15 ${CXX_TEST_PATH}/otbFeatureExtractionTests15)
+SET(FEATUREEXTRACTION_TESTS16 ${CXX_TEST_PATH}/otbFeatureExtractionTests16)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFeatureExtractionTests1 ~~~~~~~~~~~~~~~~~~~~~
@@ -1889,6 +1890,86 @@ ADD_TEST(feTvScalarImageToPanTexTextureFilter ${FEATUREEXTRACTION_TESTS15}
         ${TEMP}/feTvScalarImageToPanTexTextureFilterOutput
         8 5)
 
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFeatureExtractionTests16 ~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ADD_TEST(feTuFineCorrelationImageFilterNew ${FEATUREEXTRACTION_TESTS16}
+        otbFineCorrelationImageFilterNew
+)
+
+
+ADD_TEST(feTuFineCorrelationImageFilterTest_Coarse ${FEATUREEXTRACTION_TESTS16}
+     --compare-n-images ${EPSILON_8} 2
+        ${BASELINE}/feTvFineCorrelationImageFilterTest_Coarse_Correl.tif
+        ${TEMP}/feTvFineCorrelationImageFilterTest_Coarse_Correl.tif
+        ${BASELINE}/feTvFineCorrelationImageFilterTest_Coarse_Field.tif
+        ${TEMP}/feTvFineCorrelationImageFilterTest_Coarse_Field.tif
+        otbFineCorrelationImageFilterTest
+	${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif  # fixedFileName
+	${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub_warped_translation.tif # movingFileName
+	${TEMP}/feTvFineCorrelationImageFilterTest_Coarse_Correl.tif # output correlFileName
+        ${TEMP}/feTvFineCorrelationImageFilterTest_Coarse_Field.tif  # output fieldFileName
+        7 # radius
+	2 # sradius
+	0 # refine : Coarse
+	10 # precision
+)
+
+ADD_TEST(feTuFineCorrelationImageFilterTest_LSQR ${FEATUREEXTRACTION_TESTS16}
+     --compare-n-images ${EPSILON_8} 2
+        ${BASELINE}/feTvFineCorrelationImageFilterTest_LSQR_Correl.tif
+        ${TEMP}/feTvFineCorrelationImageFilterTest_LSQR_Correl.tif
+        ${BASELINE}/feTvFineCorrelationImageFilterTest_LSQR_Field.tif
+        ${TEMP}/feTvFineCorrelationImageFilterTest_LSQR_Field.tif
+        otbFineCorrelationImageFilterTest
+	${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif  # fixedFileName
+	${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub_warped_translation.tif # movingFileName
+	${TEMP}/feTvFineCorrelationImageFilterTest_LSQR_Correl.tif # output correlFileName
+        ${TEMP}/feTvFineCorrelationImageFilterTest_LSQR_Field.tif  # output fieldFileName
+        7 # radius
+	2 # sradius
+	1 # refine : LSQR
+	10 # precision
+)
+
+
+ADD_TEST(feTuFineCorrelationImageFilterTest_SUBPIX ${FEATUREEXTRACTION_TESTS16}
+     --compare-n-images ${EPSILON_8} 2
+        ${BASELINE}/feTvFineCorrelationImageFilterTest_SUBPIX_Correl.tif
+        ${TEMP}/feTvFineCorrelationImageFilterTest_SUBPIX_Correl.tif
+        ${BASELINE}/feTvFineCorrelationImageFilterTest_SUBPIX_Field.tif
+        ${TEMP}/feTvFineCorrelationImageFilterTest_SUBPIX_Field.tif
+        otbFineCorrelationImageFilterTest
+	${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif  # fixedFileName
+	${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub_warped_translation.tif # movingFileName
+	${TEMP}/feTvFineCorrelationImageFilterTest_SUBPIX_Correl.tif # output correlFileName
+        ${TEMP}/feTvFineCorrelationImageFilterTest_SUBPIX_Field.tif  # output fieldFileName
+        7 # radius
+	2 # sradius
+	2 # refine : SUBPIX
+	10 # precision
+)
+
+ADD_TEST(feTuFineCorrelationImageFilterTest_LSQR ${FEATUREEXTRACTION_TESTS16}
+     --compare-n-images ${EPSILON_8} 2
+        ${BASELINE}/feTvFineCorrelationImageFilterTest_LSQR_Correl.tif
+        ${TEMP}/feTvFineCorrelationImageFilterTest_LSQR_Correl.tif
+        ${BASELINE}/feTvFineCorrelationImageFilterTest_LSQR_Field.tif
+        ${TEMP}/feTvFineCorrelationImageFilterTest_LSQR_Field.tif
+        otbFineCorrelationImageFilterTest
+	${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif  # fixedFileName
+	${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub_warped_translation.tif # movingFileName
+	${TEMP}/feTvFineCorrelationImageFilterTest_LSQR_Correl.tif # output correlFileName
+        ${TEMP}/feTvFineCorrelationImageFilterTest_LSQR_Field.tif  # output fieldFileName
+        7 # radius
+	2 # sradius
+	1 # refine : LSQR
+	10 # precision
+)
+
+
 # A enrichir
 SET(BasicFeatureExtraction_SRCS1
 otbFeatureExtractionTests1.cxx
@@ -2079,6 +2160,13 @@ otbScalarImageToHigherOrderTexturesFilterNew.cxx
 otbScalarImageToHigherOrderTexturesFilter.cxx
 )
 
+SET(BasicFeatureExtraction_SRCS16
+otbFeatureExtractionTests16.cxx
+otbFineCorrelationImageFilterNew.cxx
+otbFineCorrelationImageFilterTest.cxx
+)
+
+
 OTB_ADD_EXECUTABLE(otbFeatureExtractionTests1 "${BasicFeatureExtraction_SRCS1}" "OTBFeatureExtraction;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbFeatureExtractionTests2 "${BasicFeatureExtraction_SRCS2}" "OTBFeatureExtraction;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbFeatureExtractionTests3 "${BasicFeatureExtraction_SRCS3}" "OTBFeatureExtraction;OTBIO;OTBTesting")
@@ -2094,6 +2182,7 @@ OTB_ADD_EXECUTABLE(otbFeatureExtractionTests12 "${BasicFeatureExtraction_SRCS12}
 OTB_ADD_EXECUTABLE(otbFeatureExtractionTests13 "${BasicFeatureExtraction_SRCS13}" "OTBFeatureExtraction;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbFeatureExtractionTests14 "${BasicFeatureExtraction_SRCS14}" "OTBFeatureExtraction;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbFeatureExtractionTests15 "${BasicFeatureExtraction_SRCS15}" "OTBFeatureExtraction;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbFeatureExtractionTests16 "${BasicFeatureExtraction_SRCS16}" "OTBFeatureExtraction;OTBIO;OTBTesting")
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 

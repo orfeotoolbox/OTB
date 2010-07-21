@@ -218,7 +218,7 @@ namespace ossimplugins
                                     ossimString& s) const;
       bool getPolarisationMode(const ossimXmlDocument* xdoc,
                                      ossimString& s) const;
-      bool getPolLayer(const ossimXmlDocument* xdoc,
+      bool getPolLayerList(const ossimXmlDocument* xdoc,
                                     std::vector<ossimString>& s) const;
       bool getCalFactor(const ossimXmlDocument* xdoc,
                                     std::vector<ossimString>& s) const;

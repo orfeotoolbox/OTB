@@ -57,7 +57,7 @@ static const char IMAGING_MODE[] = "imagingMode";
 static const char SENSOR[] = "sensor";
 static const char LOOK_DIRECTION[] = "lookDirection";
 static const char POLARISATION_MODE[] = "polarisationMode";
-static const char POL_LAYER[] = "polLayer";
+static const char POLARISATION_LIST[] = "polarisationList";
 static const char NUMBER_LAYERS[] = "numberOfLayers";
 
 
@@ -91,7 +91,8 @@ ossimplugins::ossimTerraSarModel::ossimTerraSarModel()
      _acquisitionSensor(),
      _lookDirection(),
      _polarisationMode(),
-     _polLayer(),
+     _polLayer("UNDEFINED"),
+     _polLayerList(),
      _noise(0),
      _incidenceAngles(0),
      _calFactor(0.),
@@ -120,6 +121,7 @@ ossimplugins::ossimTerraSarModel::ossimTerraSarModel(
      _lookDirection(rhs._lookDirection),
      _polarisationMode(rhs._polarisationMode),
      _polLayer(rhs._polLayer),
+     _polLayerList(rhs._polLayerList),
      _noise(rhs._noise),
      _incidenceAngles(rhs._incidenceAngles),
      _calFactor(rhs._calFactor),
@@ -386,6 +388,20 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
       return false;
    }
    
+   
+   result = getPolLayerFromImageFile(xdoc.get(), file);
+   if ( result == false )
+   {
+   	  if (traceDebug())
+      {
+      	    ossimNotify(ossimNotifyLevel_DEBUG)
+           	   << "unable to getPolLayerFromImageFile() \n";
+      }   
+      setErrorStatus();
+      return false;
+   }
+
+
    result = initCalibration(xdoc.get(), tsDoc);
    if ( result == false )
    {
@@ -569,18 +585,37 @@ bool ossimplugins::ossimTerraSarModel::saveState(ossimKeywordlist& kwl,
    kwl.add(prefix, kw2, _lookDirection.c_str());
    kw2 = kw + POLARISATION_MODE;
    kwl.add(prefix, kw2, _polarisationMode.c_str());
-   kw2 = kw + POL_LAYER;
+   kw2 = kw + POLARISATION_LIST;
    for(ossim_uint32 i = 0; i < _numberOfLayers; ++i)
    {	
-   		kwl.add(prefix, kw2, _polLayer[i].c_str());
+         ossimString iStr = ossimString::toString(i)+"]";
+         ossimString kw3 = kw2+"[";
+         kw3 += iStr;  		
+         kwl.add(prefix, kw3, _polLayerList[i].c_str());
    }
 
-
-   for(ossim_uint32 i = 0; i < _numberOfLayers; ++i)
-   {	
-   		_noise[0]->saveState(kwl,prefix);
+   if( _polLayer !="UNDEFINED")
+   {
+		ossim_uint32 polLayerIdx = 0;
+		for(ossim_uint32 idx = 0 ; idx < _polLayerList.size(); ++idx)
+    	{
+			if(_polLayerList[idx] == _polLayer)
+			{
+				polLayerIdx = idx;
+			}    
+    	}  
+		_noise[polLayerIdx].saveState(kwl,prefix);
    }
+   else
+   {
+   		for(ossim_uint32 i = 0; i < _numberOfLayers; ++i)
+   		{	
+   				_noise[i].saveState(kwl,prefix);
+   		}
+   }		
    _incidenceAngles->saveState(kwl,prefix);
+   
+   
    
    for(ossim_uint32 i = 0; i < _numberOfLayers; ++i)
    {	
@@ -1075,7 +1110,7 @@ std::ostream& ossimplugins::ossimTerraSarModel::print(std::ostream& out) const
    out << kw2<<  ": " <<  _lookDirection.c_str()<< "\n";
    kw2 = kw + POLARISATION_MODE;
    out << kw2<<  ": " <<  _polarisationMode.c_str()<< "\n";
-/*   kw2 = kw + POL_LAYER;
+/*   kw2 = kw + POLARISATION_LIST;
    for(ossim_uint32 i = 0; i < _numberOfLayers; ++i)
    {	
    		out << kw2 <<  "["<< i <<"] : " <<  _polLayer[i].c_str()<< "\n";
@@ -1990,7 +2025,7 @@ bool ossimplugins::ossimTerraSarModel::initAcquisitionInfo(
       setErrorStatus();
       return false;
    }
-   result = tsDoc.getPolLayer(xdoc, _polLayer);
+   result = tsDoc.getPolLayerList(xdoc, _polLayerList);
    if ( result == false )
    {
    	  if (traceDebug())
@@ -2040,7 +2075,7 @@ bool ossimplugins::ossimTerraSarModel::initIncidenceAngles(
 }
 
 bool ossimplugins::ossimTerraSarModel::getNoiseAtGivenNode(
-   const ossimRefPtr<ossimXmlNode> xmlDocument, ossimplugins::Noise* noise)
+   const ossimRefPtr<ossimXmlNode> xmlDocument, ossimplugins::Noise& noise)
 {
    ossimString xpath;
    std::vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
@@ -2060,7 +2095,7 @@ bool ossimplugins::ossimTerraSarModel::getNoiseAtGivenNode(
 
    bool result = true;
 
-   if ( !xmlDocument || !noise )
+   if ( !xmlDocument )
    {
       	setErrorStatus();
          if(traceDebug())
@@ -2087,7 +2122,7 @@ bool ossimplugins::ossimTerraSarModel::getNoiseAtGivenNode(
       return false;
    }
     
-   noise->set_numberOfNoiseRecords( xml_nodes[0]->getText().toInt32() );
+   noise.set_numberOfNoiseRecords( xml_nodes[0]->getText().toInt32() );
 
 
    xml_nodes.clear();
@@ -2212,7 +2247,7 @@ bool ossimplugins::ossimTerraSarModel::getNoiseAtGivenNode(
     ++node;
    }
 
-   noise->set_imageNoise(tabImageNoise);
+   noise.set_imageNoise(tabImageNoise);
  
    if (traceDebug())
    {
@@ -2282,9 +2317,9 @@ bool ossimplugins::ossimTerraSarModel::initNoise(
 
     ossim_uint32 polLayerIdx = -1;
     
-    for(ossim_uint32 idx = 0 ; idx < _polLayer.size(); ++idx)
+    for(ossim_uint32 idx = 0 ; idx < _polLayerList.size(); ++idx)
     {
-		if(_polLayer[idx] == polLayerName)
+		if(_polLayerList[idx] == polLayerName)
 		{
 			polLayerIdx = idx;
 		}    
@@ -2303,9 +2338,10 @@ bool ossimplugins::ossimTerraSarModel::initNoise(
 	
 	sub_nodes.clear();
 
-   _noise[polLayerIdx] = new Noise();
+   //_noise[polLayerIdx] = new Noise();
+   _noise[polLayerIdx].set_imagePolarisation(polLayerName);
    
-   result = getNoiseAtGivenNode( (*node), _noise[polLayerIdx]);
+   result = getNoiseAtGivenNode( (*node),_noise[polLayerIdx]);
    if(polLayerIdx < 0)
    {
       	setErrorStatus();
@@ -2326,6 +2362,93 @@ bool ossimplugins::ossimTerraSarModel::initNoise(
       ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " leaving...\n";
    }   
 
+   return true;
+}
+
+
+bool ossimplugins::ossimTerraSarModel::getPolLayerFromImageFile(
+   const ossimXmlDocument* xmlDocument, const ossimFilename& imageFilename)
+{
+   ossimString xpath;
+   ossimString polLayerName;
+   ossimString polLayerFileName;
+   std::vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
+   std::vector<ossimRefPtr<ossimXmlNode> > sub_nodes;
+   std::vector<ossimRefPtr<ossimXmlNode> >::iterator node;
+
+   static const char MODULE[] = "ossimplugins::ossimTerraSarModel::getPolLayerFromImageFile";
+
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entering...\n";
+   }   
+   
+    xml_nodes.clear();
+   xpath = "/level1Product/productComponents/imageData";
+
+   xmlDocument->findNodes(xpath, xml_nodes);
+   if(xml_nodes.size() == 0)
+   {
+     setErrorStatus();
+     if(traceDebug())
+     {
+  	    ossimNotify(ossimNotifyLevel_DEBUG)
+    		      	<< MODULE << " DEBUG:"
+            	  	<< "\nCould not find: " << xpath
+               		<< std::endl;
+      }
+      return false;
+  }
+
+  node = xml_nodes.begin();
+  while (node != xml_nodes.end())
+  {
+    sub_nodes.clear();
+    xpath = "polLayer";
+    (*node)->findChildNodes(xpath, sub_nodes);
+    if (sub_nodes.size() == 0)
+    {
+      	setErrorStatus();
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << MODULE << " DEBUG:"
+               << "\nCould not find: " << xpath
+               << std::endl;
+         }
+      	return false;
+    }
+    polLayerName = sub_nodes[0]->getText();
+	
+	sub_nodes.clear();
+    xpath = "file/location/filename";
+    (*node)->findChildNodes(xpath, sub_nodes);
+    if (sub_nodes.size() == 0)
+    {
+      	setErrorStatus();
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << MODULE << " DEBUG:"
+               << "\nCould not find: " << xpath
+               << std::endl;
+         }
+      	return false;
+    }
+    polLayerFileName = sub_nodes[0]->getText();
+
+	if(polLayerFileName == imageFilename.file())
+	{
+               _polLayer = polLayerName;
+	}
+    ++node;
+   }
+   
+   
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " leaving...\n";
+   }   
    return true;
 }
 
@@ -2389,9 +2512,9 @@ bool ossimplugins::ossimTerraSarModel::initCalibration(
 
     ossim_uint32 polLayerIdx = -1;
     
-    for(ossim_uint32 idx = 0 ; idx < _polLayer.size(); ++idx)
+    for(ossim_uint32 idx = 0 ; idx < _polLayerList.size(); ++idx)
     {
-		if(_polLayer[idx] == polLayerName)
+		if(_polLayerList[idx] == polLayerName)
 		{
 			polLayerIdx = idx;
 		}    
@@ -2508,12 +2631,12 @@ void ossimplugins::ossimTerraSarModel::printInfo(ostream& os) const
       << "\n  Look direction :          			" << _lookDirection
       << "\n  Polarisation Mode :          			" << _polarisationMode
       << "\n  Number of Layers :           			" << _numberOfLayers
-      << "\n  Polarisation List Size :     			" << _polLayer.size()
+      << "\n  Polarisation List Size :     			" << _polLayerList.size()
       << "\n"
       << "\n------------------------------------------------------------------";
-      for(ossim_uint32 idx = 0 ; idx < _polLayer.size(); ++idx)
+      for(ossim_uint32 idx = 0 ; idx < _polLayerList.size(); ++idx)
       {
-   			os << "\n----------------- Info on " << _polLayer[idx] <<" Layer Image -------------------"
+   			os << "\n----------------- Info on " << _polLayerList[idx] <<" Layer Image -------------------"
                << "\n calFactor :                                  " << _calFactor[idx]
 //               << "\n Image Noise  size :                          " << _noise[idx].get_imageNoise().size()
                 << "\n------------------------------------------------------------";
