@@ -185,7 +185,7 @@ namespace ossimplugins
        * @param xdoc Opened product xml file.
        * @return true on success, false on error.
        */
-      bool getNoiseAtGivenNode( const ossimRefPtr<ossimXmlNode> xmlDocument, ossimplugins::Noise* noise);
+      bool getNoiseAtGivenNode( const ossimRefPtr<ossimXmlNode> xmlDocument, ossimplugins::Noise& noise);
 
       /**
        * @brief Method to find the metadata file
@@ -195,6 +195,15 @@ namespace ossimplugins
        * @return ture if mateadata found, false otherwise.
        */
       bool findTSXLeader(const ossimFilename& file, ossimFilename& metadataFile);
+
+
+      /**
+       * @brief Method to find the polLayer from the image file
+       * @param xdoc Opened product xml file.
+       * @param file image or metadata path.
+       * @return true on success, false on error.
+       */
+       bool getPolLayerFromImageFile( const ossimXmlDocument* xmlDocument, const ossimFilename& imageFilename);
 
       /**
        * @brief Slant Range TO Ground Range Projection reference point
@@ -258,12 +267,13 @@ namespace ossimplugins
       /**
        * @brief PolLayer (AcquisitionInfo node).
        */
-      std::vector<ossimString> _polLayer;
+      ossimString _polLayer;      
+      std::vector<ossimString> _polLayerList;
 
       /**
        * @brief Noise (Noise node).
        */
-      std::vector<Noise *>  _noise;
+      std::vector<Noise>  _noise;
       
       /**
        * @brief IncidenceAngle (SceneInfo node)

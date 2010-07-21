@@ -1055,7 +1055,7 @@ bool ossimplugins::ossimTerraSarProductDoc::getPolarisationMode(
       "/level1Product/productInfo/acquisitionInfo/polarisationMode";
    return ossim::getPath(path, xdoc, s);
 }
-bool ossimplugins::ossimTerraSarProductDoc::getPolLayer(
+bool ossimplugins::ossimTerraSarProductDoc::getPolLayerList(
    const ossimXmlDocument* xdoc, std::vector<ossimString>& s) const
 {
    ossimString path =
