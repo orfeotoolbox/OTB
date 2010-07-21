@@ -32,6 +32,9 @@ IF(OTB_USE_PQXX)
   SET(COMMON_TESTS10 ${CXX_TEST_PATH}/otbCommonTests10)
 ENDIF(OTB_USE_PQXX)
 SET(COMMON_TESTS11 ${CXX_TEST_PATH}/otbCommonTests11)
+IF(OTB_COMPILE_MUPARSER)
+SET(COMMON_TESTS12 ${CXX_TEST_PATH}/otbCommonTests12)
+ENDIF(OTB_COMPILE_MUPARSER)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbCommonTests1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -984,6 +987,19 @@ otbVectorDataToLabelMapFilter
         ${TEMP}/vectordataToLabelMap.png
 )
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbCommonTests12 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# ----------------  otbParser  ---------------------#
+IF(OTB_COMPILE_MUPARSER)
+
+  ADD_TEST(coTuParser ${COMMON_TESTS12}
+    otbParserTest
+    )
+ENDIF(OTB_COMPILE_MUPARSER)
+
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS1
 otbCommonTests1.cxx
@@ -1146,6 +1162,13 @@ otbLabelObjectMapVectorizer.cxx
 )
 
 
+IF(OTB_COMPILE_MUPARSER)
+SET(BasicCommon_SRCS12
+otbCommonTests12.cxx
+otbParserTest.cxx
+)
+ENDIF(OTB_COMPILE_MUPARSER)
+
 OTB_ADD_EXECUTABLE(otbCommonTests1 "${BasicCommon_SRCS1}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbCommonTests2 "${BasicCommon_SRCS2}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbCommonTests3 "${BasicCommon_SRCS3}" "OTBIO;OTBTesting")
@@ -1162,8 +1185,10 @@ IF(OTB_USE_PQXX)
 OTB_ADD_EXECUTABLE(otbCommonTests10 "${BasicCommon_SRCS10}" "OTBIO;OTBTesting")
 TARGET_LINK_LIBRARIES(otbCommonTests10 OTBIO  OTBTesting OTBGeospatialAnalysis pq pqxx)
 ENDIF(OTB_USE_PQXX)
-
 ADD_EXECUTABLE(otbCommonTests11 otbCommonTests11.cxx ${BasicCommon_SRCS11})
 TARGET_LINK_LIBRARIES(otbCommonTests11 OTBIO  OTBTesting itkvcl)
+IF(OTB_COMPILE_MUPARSER)
+  OTB_ADD_EXECUTABLE(otbCommonTests12 "${BasicCommon_SRCS12}" "OTBIO;OTBTesting")
+ENDIF(OTB_COMPILE_MUPARSER)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

@@ -143,6 +143,12 @@ MARK_AS_ADVANCED(OTB_USE_DEPRECATED)
 OPTION(OTB_USE_JPEG2000 "Use to support jpeg2000 image file format." ON)
 
 #-----------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
+
+# Use the muparser library.
+OPTION(OTB_COMPILE_MUPARSER "Use to enable muParser fonctionalities." OFF)
+
+#-----------------------------------------------------------------------------
 
 # Use the liblas library (do not link on solaris)
 OPTION(OTB_USE_LIBLAS "Use liblas library to support Lidar data format." ON)
