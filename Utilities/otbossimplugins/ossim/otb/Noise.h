@@ -81,6 +81,18 @@ public:
   {
     return _tabImageNoise;
   }
+  void set_imagePolarisation(const ossimString&  polarisation)
+  {
+    _polarisation = polarisation;
+  }
+  
+  const ossimString & get_imagePolarisation() const
+  {
+    return _polarisation;
+  }
+
+
+
 
 protected:
 
@@ -92,6 +104,12 @@ protected:
        * @brief Image Noise.
        */
       std::vector<ImageNoise> _tabImageNoise;
+      
+      /**
+       * @brief Noise Polarisation Layer.
+       */
+      ossimString _polarisation;      
+      
   
 private:
 };
