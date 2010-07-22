@@ -21,6 +21,7 @@
 #include "itkInterpolateImageFunction.h"
 #include "itkConstNeighborhoodIterator.h"
 #include "itkConstantBoundaryCondition.h"
+#include "itkZeroFluxNeumannBoundaryCondition.h"
 
 namespace otb
 {
@@ -35,7 +36,7 @@ namespace otb
  *
  * \ingroup ImageFunctions ImageInterpolators
  */
-template <class TInputImage, class TFunction, class TBoundaryCondition = itk::ConstantBoundaryCondition<TInputImage>,
+template <class TInputImage, class TFunction, class TBoundaryCondition = itk::ZeroFluxNeumannBoundaryCondition<TInputImage>,
     class TCoordRep = double>
 class ITK_EXPORT GenericInterpolateImageFunction :
   public itk::InterpolateImageFunction<TInputImage, TCoordRep>
