@@ -22,6 +22,7 @@
 #include <list>
 
 #include <otb/CivilDateTime.h>
+#include <otb/RadarSat2NoiseLevel.h>
 
 class ossimFilename;
 class ossimString;
@@ -113,6 +114,10 @@ private:
    virtual bool InitRefPoint(const ossimKeywordlist &kwl,
                              const char *prefix);
 
+   virtual bool InitRefNoiseLevel(const ossimXmlDocument* xmlDocument);
+   virtual bool InitLut( const ossimXmlDocument* xmlDocument,
+   						 RadarSat2NoiseLevel& noise);
+
    /**
     * @brief Initializes the Slant Range to Ground Range data sets :
     * _srgr_update,_SrGr_R0,_SrGr_coeffs_number,_SrGr_coeffs,_nbCol,
@@ -177,6 +182,12 @@ private:
     * @brief Slant Range FOR EACH Ground Range Projection coefficients
     */
    std::vector< std::vector<double> > _SrGr_coeffs ;
+
+   /**
+    * @brief noise level values
+    */
+   std::vector< RadarSat2NoiseLevel > _noiseLevel ;
+
 
    ossimFilename theProductXmlFile;
 

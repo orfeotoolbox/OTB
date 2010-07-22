@@ -152,8 +152,12 @@ bool ossimRadarSat2Model::open(const ossimFilename& file)
          << "product xml file: " << xmlFile << "\n";
    }
 
+   theProductXmlFile = ossimFilename::NIL;
+
    if ( xmlFile.exists() )
    {
+      theProductXmlFile = xmlFile;
+
       //---
       // Instantiate the XML parser:
       //---
@@ -232,6 +236,11 @@ bool ossimRadarSat2Model::open(const ossimFilename& file)
                      if (result)
                      {
                         result = initRefPoint(xdoc, rsDoc);
+                     
+                     	if (result)
+                     	{
+	   						result = InitRefNoiseLevel(xdoc);
+   						}
                      }
                   }
                }
@@ -245,23 +254,6 @@ bool ossimRadarSat2Model::open(const ossimFilename& file)
 
    } // matches: if ( xmlFile.exists() )
 
-   if (result)
-   {
-      theProductXmlFile = xmlFile;
-   }
-   else
-   {
-      theProductXmlFile = ossimFilename::NIL;
-   }
-
-   if (result)
-   {
-      theProductXmlFile = xmlFile;
-   }
-   else
-   {
-      theProductXmlFile = ossimFilename::NIL;
-   }
 
    if (result)
    {
@@ -341,6 +333,7 @@ std::ostream& ossimRadarSat2Model::print(std::ostream& out) const
    }
 
    ossimGeometricSarSensorModel::print(out);
+   
 
    // Reset flags.
    out.setf(f);
@@ -825,6 +818,7 @@ bool ossimRadarSat2Model::initSensorParams(
    return result;
 }
 
+
 bool ossimRadarSat2Model::initRefPoint(const ossimXmlDocument* xdoc,
                                        const ossimRadarSat2ProductDoc& rsDoc)
 {
@@ -980,6 +974,247 @@ bool ossimRadarSat2Model::initRefPoint(const ossimXmlDocument* xdoc,
    return true;
 }
 
+
+bool ossimRadarSat2Model::InitLut( const ossimXmlDocument* xmlDocument,
+   			RadarSat2NoiseLevel& noise)
+{
+   static const char MODULE[] = "ossimRadarSat2Model::initLut";
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entered...\n";
+   }
+
+   ossimString xpath;
+   ossimString incidenceAngleCorrectionName;
+   std::vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
+   std::vector<ossimRefPtr<ossimXmlNode> >::iterator node;
+   ossimFilename  lutXmlFile;
+      
+   incidenceAngleCorrectionName = noise.get_incidenceAngleCorrectionName();     
+
+   xpath = "/product/imageAttributes/lookupTable";
+   xml_nodes.clear();
+   xmlDocument->findNodes(xpath, xml_nodes);
+   if(xml_nodes.size() == 0)
+   {
+     setErrorStatus();
+     if(traceDebug())
+     {
+  	    ossimNotify(ossimNotifyLevel_DEBUG)
+    		      	<< MODULE << " DEBUG:"
+            	  	<< "\nCould not find: " << xpath
+               		<< std::endl;
+      }
+      return false;
+   }  
+        
+   node = xml_nodes.begin();
+   while (node != xml_nodes.end())
+   {
+		if( (*node)->getAttributeValue("incidenceAngleCorrection") == incidenceAngleCorrectionName )
+		{
+			// Get the xml file.
+			lutXmlFile = theProductXmlFile.expand().path().dirCat((*node)->getText());
+
+   			if ( lutXmlFile.exists() )
+   			{
+      			//---
+      			// Instantiate the XML parser:
+      			//---
+      			ossimXmlDocument* xmlLutDocument = new ossimXmlDocument();
+      			if ( xmlLutDocument->openFile(lutXmlFile) )
+      			{
+   					std::vector<ossimRefPtr<ossimXmlNode> > xml_lutNodes;
+   					ossimString s;
+   					
+   					xpath = "/lut/offset";
+   					xml_lutNodes.clear();
+   					xmlLutDocument->findNodes(xpath, xml_lutNodes);   					
+   					if(xml_lutNodes.size() == 0)
+   					{
+     					setErrorStatus();
+     					if(traceDebug())
+     					{
+  	    					ossimNotify(ossimNotifyLevel_DEBUG)
+    		      					<< MODULE << " DEBUG:"
+            	  					<< "\nCould not find: " << xpath
+               						<< std::endl;
+      					}
+      					return false;
+   					}
+   					ossim_float64 offset = xml_lutNodes[0]->getText().toFloat64();  
+					noise.set_offset(offset);				
+								
+   					xpath = "/lut/gains";
+   					xml_lutNodes.clear();
+   					xmlLutDocument->findNodes(xpath, xml_lutNodes);   					
+   					if(xml_lutNodes.size() == 0)
+   					{
+     					setErrorStatus();
+     					if(traceDebug())
+     					{
+  	    					ossimNotify(ossimNotifyLevel_DEBUG)
+    		      					<< MODULE << " DEBUG:"
+            	  					<< "\nCould not find: " << xpath
+               						<< std::endl;
+      					}
+      					return false;
+   					}  
+					noise.set_gain(xml_lutNodes[0]->getText());	
+				}
+   			}
+		}
+    	++node;	
+   }
+
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " leaving...\n";
+   }   
+
+   return true;
+}
+
+bool ossimRadarSat2Model::InitRefNoiseLevel(
+   const ossimXmlDocument* xmlDocument)
+{
+   static const char MODULE[] = "ossimRadarSat2Model::initRefNoiseLevel";
+
+   ossimString xpath;
+   std::vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
+   std::vector<ossimRefPtr<ossimXmlNode> > sub_nodes;
+   std::vector<ossimRefPtr<ossimXmlNode> >::iterator node;
+   RadarSat2NoiseLevel ev;
+
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entered...\n";
+   }
+
+   _noiseLevel.clear();
+   
+   
+   xpath = "/product/sourceAttributes/radarParameters/referenceNoiseLevel";
+   xml_nodes.clear();
+   xmlDocument->findNodes(xpath, xml_nodes);
+   if(xml_nodes.size() == 0)
+   {
+     setErrorStatus();
+     if(traceDebug())
+     {
+  	    ossimNotify(ossimNotifyLevel_DEBUG)
+    		      	<< MODULE << " DEBUG:"
+            	  	<< "\nCould not find: " << xpath
+               		<< std::endl;
+      }
+      return false;
+   }  
+        
+   node = xml_nodes.begin();
+   while (node != xml_nodes.end())
+   {
+   	
+   	ev.set_incidenceAngleCorrectionName( (*node)->getAttributeValue("incidenceAngleCorrection") ); 
+   	
+    sub_nodes.clear();
+    xpath = "pixelFirstNoiseValue";
+    (*node)->findChildNodes(xpath, sub_nodes);
+    if (sub_nodes.size() == 0)
+    {
+      	setErrorStatus();
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << MODULE << " DEBUG:"
+               << "\nCould not find: " << xpath
+               << std::endl;
+         }
+      	return false;
+    }
+    ev.set_pixelFirstNoiseValue(sub_nodes[0]->getText().toUInt32());
+
+    sub_nodes.clear();
+    xpath = "stepSize";
+    (*node)->findChildNodes(xpath, sub_nodes);
+    if (sub_nodes.size() == 0)
+    {
+      	setErrorStatus();
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << MODULE << " DEBUG:"
+               << "\nCould not find: " << xpath
+               << std::endl;
+         }
+      	return false;
+    }
+    ev.set_stepSize(sub_nodes[0]->getText().toUInt32());
+
+    sub_nodes.clear();
+    xpath = "numberOfNoiseLevelValues";
+    (*node)->findChildNodes(xpath, sub_nodes);
+    if (sub_nodes.size() == 0)
+    {
+      	setErrorStatus();
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << MODULE << " DEBUG:"
+               << "\nCould not find: " << xpath
+               << std::endl;
+         }
+      	return false;
+    }
+    ev.set_numberOfNoiseLevelValues(sub_nodes[0]->getText().toUInt32());
+
+    sub_nodes.clear();
+    xpath = "noiseLevelValues";
+    (*node)->findChildNodes(xpath, sub_nodes);
+    if (sub_nodes.size() == 0)
+    {
+      	setErrorStatus();
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << MODULE << " DEBUG:"
+               << "\nCould not find: " << xpath
+               << std::endl;
+         }
+      	return false;
+    }
+   	ev.set_units( sub_nodes[0]->getAttributeValue("units") ); 
+
+
+    std::vector<ossimString> s2;      
+    std::vector<ossim_float64> noiseLevelValues;
+    s2.clear();
+    noiseLevelValues.clear();
+    s2 = sub_nodes[0]->getText().split(" ");
+	for(ossim_uint32 i = 0; i < s2.size(); ++i)
+	{
+		noiseLevelValues.push_back( s2[i].toFloat64() );
+	}
+   	ev.set_noiseLevelValues( noiseLevelValues ); 
+
+	InitLut(xmlDocument, ev);
+
+
+    _noiseLevel.push_back(ev);
+
+    ++node;
+   }
+ 
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " leaving...\n";
+   }   
+
+   return true;
+}
+
+
+
+
 bool ossimRadarSat2Model::saveState(ossimKeywordlist& kwl,
                                     const char* prefix) const
 {
@@ -1039,6 +1274,15 @@ bool ossimRadarSat2Model::saveState(ossimKeywordlist& kwl,
    {
       // Call base save state:
       result = ossimGeometricSarSensorModel::saveState(kwl, prefix);
+   }
+
+   if (result)
+   {
+      	for(ossim_uint32 i = 0; i < _noiseLevel.size(); ++i)
+   		{	
+   				_noiseLevel[i].saveState(kwl, prefix);
+   		}
+       
    }
 
    //---
@@ -1234,6 +1478,14 @@ bool ossimRadarSat2Model::loadState (const ossimKeywordlist &kwl,
       }
 
    } // matches: if (result)
+
+	if(result)
+	{
+      	for(ossim_uint32 i = 0; i < _noiseLevel.size(); ++i)
+   		{	
+   				_noiseLevel[i].loadState(kwl, prefix);
+   		}		
+	}
 
    if (traceDebug())
    {
