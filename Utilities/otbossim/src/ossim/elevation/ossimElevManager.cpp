@@ -59,7 +59,7 @@ ossimElevManager::~ossimElevManager()
 
 double ossimElevManager::getHeightAboveEllipsoid(const ossimGpt& gpt)
 {
-   m_mutex.readLock();
+   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_mutex);
    if(!isSourceEnabled()) return ossim::nan();
 
    double result = ossim::nan();
@@ -80,13 +80,12 @@ double ossimElevManager::getHeightAboveEllipsoid(const ossimGpt& gpt)
    {
       result += m_elevationOffset;
    }
-   m_mutex.readUnlock();
    return result;
 }
 
 double ossimElevManager::getHeightAboveMSL(const ossimGpt& gpt)
 {
-   m_mutex.readLock();
+  OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_mutex);
    if(!isSourceEnabled()) return ossim::nan();
    double result = ossim::nan();
    ossim_uint32 idx = 0;
@@ -106,7 +105,6 @@ double ossimElevManager::getHeightAboveMSL(const ossimGpt& gpt)
    {
       result += m_elevationOffset;
    }
-   m_mutex.readUnlock();
    return result;
 }
 
@@ -191,11 +189,9 @@ void ossimElevManager::getOpenCellList(std::vector<ossimFilename>& list) const
 
 void ossimElevManager::clear()
 {
-  m_mutex.writeLock();
+  OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_mutex);
 
   m_elevationDatabaseList.clear();
-
-  m_mutex.writeUnlock();
 }
 
 bool ossimElevManager::saveState(ossimKeywordlist& kwl,
@@ -301,13 +297,12 @@ void ossimElevManager::addDatabase(ossimElevationDatabase* database)
 {
    if(!database) return;
    ossimRefPtr<ossimElevationDatabase> tempDb = database;
-   m_mutex.writeLock();
+  OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_mutex);
    if(std::find(m_elevationDatabaseList.begin(), 
                 m_elevationDatabaseList.end(),
                 database) == m_elevationDatabaseList.end())
    {
       m_elevationDatabaseList.push_back(database);
    }
-   m_mutex.writeUnlock();
 }
 

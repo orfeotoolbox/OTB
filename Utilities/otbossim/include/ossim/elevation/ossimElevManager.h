@@ -124,7 +124,7 @@ protected:
    //
    bool          m_useGeoidIfNullFlag;  
 
-   OpenThreads::ReadWriteMutex m_mutex;
+   OpenThreads::Mutex m_mutex;
 };
 
 #endif

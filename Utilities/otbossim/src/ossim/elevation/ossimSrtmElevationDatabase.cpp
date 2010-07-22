@@ -208,7 +208,7 @@ ossimSrtmElevationDatabase::createCell(const ossimGpt& gpt)
 #if 0
    ossimRefPtr<ossimElevCellHandler> result = 0;
    ossim_uint64 id = createId(gpt);
-   m_cacheMapMutex.lock();
+   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_cacheMapMutex);
    CellMap::iterator iter = m_cacheMap.find(id);
    
    if(iter != m_cacheMap.end())
@@ -235,7 +235,6 @@ ossimSrtmElevationDatabase::createCell(const ossimGpt& gpt)
          }
       }
    }
-   m_cacheMapMutex.unlock();
    
    return result;
 #endif

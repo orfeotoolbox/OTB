@@ -70,29 +70,32 @@ ossimRefPtr<ossimElevCellHandler> ossimElevationCellDatabase::getOrCreateCellHan
 {
   ossimRefPtr<ossimElevCellHandler> result = 0;
   ossim_uint64 id = createId(gpt);
-  m_cacheMapMutex.lock();
-  CellMap::iterator iter = m_cacheMap.find(id);
-
-  if(iter != m_cacheMap.end())
+  
   {
-     iter->second->updateTimestamp();
-     result = iter->second->m_handler.get();
-     m_cacheMapMutex.unlock();
-     return result.get();
+    OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_cacheMapMutex);
+    CellMap::iterator iter = m_cacheMap.find(id);
+    if(iter != m_cacheMap.end())
+    {
+      iter->second->updateTimestamp();
+      result = iter->second->m_handler.get();
+      
+      return result.get();
+    }
   }
-  m_cacheMapMutex.unlock();
-
+  
   result = createCell(gpt);
-  m_cacheMapMutex.lock();
-  if(result.valid())
+  
   {
-    m_cacheMap.insert(std::make_pair(id, new CellInfo(id, result.get())));
+    OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_cacheMapMutex);
+    if(result.valid())
+    {
+      m_cacheMap.insert(std::make_pair(id, new CellInfo(id, result.get())));
+    }
+    if(m_cacheMap.size() > m_maxOpenCells)
+    {
+      flushCacheToMinOpenCells();
+    }
   }
-  if(m_cacheMap.size() > m_maxOpenCells)
-  {
-     flushCacheToMinOpenCells();
-  }
-  m_cacheMapMutex.unlock();
 
   return result;
 
