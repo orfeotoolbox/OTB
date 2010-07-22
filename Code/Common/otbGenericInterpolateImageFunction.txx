@@ -20,6 +20,8 @@
 #include "otbGenericInterpolateImageFunction.h"
 #include "vnl/vnl_math.h"
 
+#include "itkPixelBuilder.h"
+
 namespace otb
 {
 
@@ -289,14 +291,15 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
 
   // Iterate over the neighborhood, taking the correct set
   // of weights in each dimension
-  double xPixelValue = 0.0;
+  RealType xPixelValue;
+  itk::PixelBuilder<RealType>::Zero(xPixelValue,this->GetInputImage()->GetNumberOfComponentsPerPixel());
   for (unsigned int j = 0; j < m_OffsetTableSize; ++j)
     {
     // Get the offset for this neighbor
     unsigned int off = m_OffsetTable[j];
 
     // Get the intensity value at the pixel
-    double xVal = nit.GetPixel(off);
+    RealType xVal = nit.GetPixel(off);
 
     // Multiply the intensity by each of the weights. Gotta hope
     // that the compiler will unwrap this loop and pipeline this!

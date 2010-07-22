@@ -132,7 +132,7 @@ namespace otb
  * \ingroup ImageFunctionBases ImageInterpolators
  */
 template<class TInputImage, class TWindowFunction, class TBoundaryCondition =
-      itk::ConstantBoundaryCondition<TInputImage>, class TCoordRep = double>
+      itk::ZeroFluxNeumannBoundaryCondition<TInputImage>, class TCoordRep = double>
 class ITK_EXPORT WindowedSincInterpolateImageFunctionBase :
   public GenericInterpolateImageFunction<TInputImage,
       TWindowFunction,

@@ -18,7 +18,7 @@
 #define __itkOptLinearInterpolateImageFunction_txx
 
 #include "itkOptLinearInterpolateImageFunction.h"
-
+#include "itkPixelBuilder.h"
 #include "vnl/vnl_math.h"
 
 namespace itk
@@ -89,7 +89,8 @@ LinearInterpolateImageFunction< TInputImage, TCoordRep >
    * neighbors. The weight for each neighbor is the fraction overlap
    * of the neighbor pixel with respect to a pixel centered on point.
    */
-  RealType value = NumericTraits<RealType>::Zero;
+  RealType value;
+  PixelBuilder<RealType>::Zero(value,this->GetInputImage()->GetNumberOfComponentsPerPixel());
 
   typedef typename NumericTraits<InputPixelType>::ScalarRealType ScalarRealType;
   ScalarRealType totalOverlap = NumericTraits<ScalarRealType>::Zero;

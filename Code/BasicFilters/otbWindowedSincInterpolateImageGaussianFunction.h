@@ -79,7 +79,7 @@ private:
  * \sa Function::BlackmanWindowFunction
  * \ingroup ImageFunctionBases ImageInterpolators
  */
-template<class TInputImage, class TBoundaryCondition = itk::ConstantBoundaryCondition<TInputImage>, class TCoordRep =
+template<class TInputImage, class TBoundaryCondition = itk::ZeroFluxNeumannBoundaryCondition<TInputImage>, class TCoordRep =
       double, class TInputInterpolator = double, class TOutputInterpolator = double>
 class ITK_EXPORT WindowedSincInterpolateImageGaussianFunction :
   public WindowedSincInterpolateImageFunctionBase<TInputImage,
