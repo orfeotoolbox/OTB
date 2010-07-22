@@ -2093,8 +2093,6 @@ bool ossimplugins::ossimTerraSarModel::getNoiseAtGivenNode(
       ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entered...\n";
    }  
 
-   bool result = true;
-
    if ( !xmlDocument )
    {
       	setErrorStatus();
@@ -2461,7 +2459,6 @@ bool ossimplugins::ossimTerraSarModel::initCalibration(
    std::vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
    std::vector<ossimRefPtr<ossimXmlNode> > sub_nodes;
    std::vector<ossimRefPtr<ossimXmlNode> >::iterator node;
-   bool result;
 
    static const char MODULE[] = "ossimplugins::ossimTerraSarModel::initCalibration";
 

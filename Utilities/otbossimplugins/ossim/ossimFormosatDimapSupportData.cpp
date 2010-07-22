@@ -1631,7 +1631,7 @@ bool ossimFormosatDimapSupportData::parsePart2(
    std::vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
    std::vector<ossimRefPtr<ossimXmlNode> > sub_nodes;
    std::vector<ossimRefPtr<ossimXmlNode> >::iterator node;
-   unsigned int band_index;
+   ossim_int32 band_index;
 
    //---
    // Fetch the LineSamplingPeriod:
