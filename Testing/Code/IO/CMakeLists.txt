@@ -573,6 +573,14 @@ ADD_TEST(ioTuGDALImageIOCanRead_SPOT4 ${IO_TESTS5} otbGDALImageIOTestCanRead
 #        ${LARGEDATA}/SPOT4/RIO_DE_JANEIRO/ )
         ${LARGEDATA}/SPOT4/RIO_DE_JANEIRO/IMAG_01.DAT )
 
+ADD_TEST(ioTuGDALImageIOCanRead_IKONOS_NIR ${IO_TESTS5} otbGDALImageIOTestCanRead
+        ${LARGEDATA}/IKONOS/PARIS/po_79039_nir_0000000.tif)
+
+ADD_TEST(ioTuGDALImageIOCanRead_FORMOSAT2 ${IO_TESTS5} otbGDALImageIOTestCanRead
+        ${LARGEDATA}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF)
+
+
+
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 ADD_TEST(ioTuGDALImageIOCanRead_SPOT5TIF ${IO_TESTS5} otbGDALImageIOTestCanRead
@@ -1081,6 +1089,13 @@ ADD_TEST(ioTvOtbVectorImageTestSpot5 ${IO_TESTS9}
         otbVectorImageTest
         ${LARGEDATA}/SPOT5/TEHERAN/
         ${TEMP}/ioOtbVectorImageTestSpot5.txt)
+
+ADD_TEST(ioTvOtbVectorImageTestFORMOSAT2 ${IO_TESTS9}
+   --compare-ascii ${EPS}  ${BASELINE_FILES}/ioOtbVectorImageTestFORMOSAT2.txt
+                     ${TEMP}/ioOtbVectorImageTestFORMOSAT2.txt
+        otbVectorImageTest
+        ${LARGEDATA}/FORMOSAT/Sudouest_20071013_MS_fmsat/
+        ${TEMP}/ioOtbVectorImageTestFORMOSAT2.txt)
 
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
@@ -2032,6 +2047,10 @@ ADD_TEST(ioTuSpotImageMetadataInterfaceNew ${IO_TESTS18}
         otbSpotImageMetadataInterfaceNew
 )
 
+ADD_TEST(ioTuFormosatImageMetadataInterfaceNew ${IO_TESTS18}
+        otbFormosatImageMetadataInterfaceNew
+)
+
 ADD_TEST(ioTuIkonosImageMetadataInterfaceNew ${IO_TESTS18}
         otbIkonosImageMetadataInterfaceNew
 )
@@ -2157,6 +2176,20 @@ ADD_TEST(ioTvImageKeywordlistSPOT5 ${IO_TESTS18}
          ${TEMP}/ioTvImageKeywordlistSpot5.txt
          ${TEMP}/ioTvImageKeywordlistSpot5_saveState_loadState.txt
 )
+
+ADD_TEST(ioTvImageKeywordlistFORMOSAT2 ${IO_TESTS18}
+  --ignore-order --compare-n-ascii ${NOTOL} 2
+         ${BASELINE_FILES}/ioTvImageKeywordlistFORMOSAT2.txt
+         ${TEMP}/ioTvImageKeywordlistFORMOSAT2.txt
+         ${BASELINE_FILES}/ioTvImageKeywordlistFORMOSAT2.txt
+         ${TEMP}/ioTvImageKeywordlistFORMOSAT2_saveState_loadState.txt
+         --ignore-lines-with 3 support_data.metadata_file meters_per_pixel_x meters_per_pixel_y
+    otbImageKeywordlist
+         ${LARGEDATA}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF
+         ${TEMP}/ioTvImageKeywordlistFORMOSAT2.txt
+         ${TEMP}/ioTvImageKeywordlistFORMOSAT2_saveState_loadState.txt
+)
+
 
 ADD_TEST(ioTvImageKeywordlistQuickbird ${IO_TESTS18}
   --ignore-order --compare-n-ascii ${NOTOL} 2
@@ -2597,6 +2630,7 @@ otbIOTests18.cxx
 otbImageKeywordlist.cxx
 otbTerraSarImageMetadataInterface.cxx
 otbSpotImageMetadataInterfaceNew.cxx
+otbFormosatImageMetadataInterfaceNew.cxx
 otbQuickBirdImageMetadataInterfaceNew.cxx
 otbWorldView2ImageMetadataInterfaceNew.cxx
 otbIkonosImageMetadataInterfaceNew.cxx

@@ -112,6 +112,17 @@ ADD_TEST(prTvSensorModelSPOT5 ${PROJECTIONS_TESTS1}
          ${TEMP}/prTvSensorModelSpot5.txt
 )
 
+ADD_TEST(prTvSensorModelFORMOSAT2 ${PROJECTIONS_TESTS1}
+#  --ignore-order --compare-ascii ${NOTOL}
+#         ${BASELINE_FILES}/prTvSensorModelSpot5.txt
+#         ${TEMP}/prTvSensorModelSpot5.txt
+#--ignore-lines-with 3 support_data.metadata_file meters_per_pixel_x meters_per_pixel_y
+    otbSensorModel
+         ${LARGEINPUT}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF
+         ${TEMP}/prTvSensorModelFORMOSAT2.txt
+)
+
+
 ADD_TEST(prTvSensorModelQuickbird ${PROJECTIONS_TESTS1}
   --ignore-order --compare-ascii ${NOTOL}
          ${BASELINE_FILES}/prTvSensorModelQuickbird.txt

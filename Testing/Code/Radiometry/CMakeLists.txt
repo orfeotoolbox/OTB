@@ -343,6 +343,13 @@ ADD_TEST(raTvImageToReflectanceImageFilterAuto ${RADIOMETRY_TESTS2}
 	${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
 	${TEMP}/raTvImageToReflectanceImageFilterAuto.tif
          )
+
+ADD_TEST(raTuImageToReflectanceImageFilterAutoFORMOSAT2 ${RADIOMETRY_TESTS2}
+        otbImageToReflectanceImageFilterAuto
+		${LARGEINPUT}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF
+		${TEMP}/raTvImageToReflectanceImageFilterAutoFORMOSAT2.tif
+         )
+         
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
