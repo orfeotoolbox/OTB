@@ -26,6 +26,7 @@
 #include "vnl/vnl_math.h"
 
 #include "itkVariableLengthVector.h"
+#include "itkPixelBuilder.h"
 
 namespace itk
 {
@@ -45,7 +46,7 @@ WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
   m_OutputOrigin.Fill( 0.0 );
   m_OutputDirection.SetIdentity();
   m_OutputSize.Fill(0);
-  m_EdgePaddingValue = NumericTraits<PixelType>::Zero;
+  PixelBuilder<PixelType>::Zero(m_EdgePaddingValue,1);
   m_OutputStartIndex.Fill(0);
   // Setup default interpolator
   typename DefaultInterpolatorType::Pointer interp =

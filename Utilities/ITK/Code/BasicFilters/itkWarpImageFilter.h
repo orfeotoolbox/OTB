@@ -223,8 +223,8 @@ public:
     (Concept::SameDimension<ImageDimension, InputImageDimension>));
   itkConceptMacro(SameDimensionCheck2,
     (Concept::SameDimension<ImageDimension, DeformationFieldDimension>));
-  itkConceptMacro(InputHasNumericTraitsCheck,
-    (Concept::HasNumericTraits<typename TInputImage::PixelType>));
+  /** itkConceptMacro(InputHasNumericTraitsCheck,
+    (Concept::HasNumericTraits<typename TInputImage::PixelType>));*/
   itkConceptMacro(DeformationFieldHasNumericTraitsCheck,
     (Concept::HasNumericTraits<typename TDeformationField::PixelType::ValueType>));
   /** End concept checking */
