@@ -20,7 +20,7 @@ namespace ossimplugins
 {
 static const char NOISE[] = "noise";
 static const char NUMBER_OF_NOISE_RECORDS_KW[] = "numberOfNoiseRecords"; 
-static const char NAME_OF_NOISE_POLARISATION_KW[] = "nameOfOfNoisePolarisation"; 
+static const char NAME_OF_NOISE_POLARISATION_KW[] = "nameOfNoisePolarisation"; 
 
 Noise::Noise():
   _numberOfNoiseRecords(0),
