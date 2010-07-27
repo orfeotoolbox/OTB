@@ -101,7 +101,6 @@ FunctionToImageFilter<TInputImage, TOutputImage, TFunction>
     outputIt.Set(static_cast<OutputImagePixelType>(m_PixelFunction->EvaluateAtIndex(inputIt.GetIndex())));
     ++inputIt;
     ++outputIt;
-
     progress.CompletedPixel(); // potential exception thrown here
     }
 }

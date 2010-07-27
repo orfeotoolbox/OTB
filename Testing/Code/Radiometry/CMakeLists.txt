@@ -1318,6 +1318,48 @@ ADD_TEST(raTvTerraSarBrightnessImageComplexFilterTORONTO ${RADIOMETRY_TESTS9}
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
+# -------            SarRadiometricCalibrationFunctor   ------------------------------
+ADD_TEST(raTuSarRadiometricCalibrationFunctor ${RADIOMETRY_TESTS9}
+        otbSarRadiometricCalibrationFunctor
+)
+# -------            SarRadiometricCalibrationFunction   ------------------------------
+ADD_TEST(raTvSarRadiometricCalibrationFunction ${RADIOMETRY_TESTS9}
+#--compare-ascii ${NOTOL}
+#	    ${BASELINE_FILES}/bfTvBinaryImageDensityFunctionOutputAscii.txt
+#	    ${TEMP}/bfTvBinaryImageDensityFunctionOutputAscii.txt
+        otbSarRadiometricCalibrationFunction
+	 	${INPUTDATA}/scene.png
+	 	${TEMP}/raTvSarRadiometricCalibrationFunctionOutputAscii.txt
+)
+
+# -------            SarRadiometricCalibrationFunction   ------------------------------
+ADD_TEST(raTuSarParametricMapFunction ${RADIOMETRY_TESTS9}
+#--compare-ascii ${NOTOL}
+#	    ${BASELINE_FILES}/bfTvBinaryImageDensityFunctionOutputAscii.txt
+#	    ${TEMP}/bfTvBinaryImageDensityFunctionOutputAscii.txt
+        otbSarParametricMapFunctionTest
+	 	${INPUTDATA}/scene.png
+	 	${TEMP}/raTvSarParametricMapFunctionOutputAscii.txt
+)
+ADD_TEST(raTvSarParametricMapFunctionToImageFilter  ${RADIOMETRY_TESTS9}
+#	--compare-image ${EPSILON_7}
+#	    ${BASELINE}/bfTvFunctionToImageFilterTest.tif
+#	    ${TEMP}/bfTvFunctionToImageFilterTest.tif
+        otbSarParametricMapFunctionToImageFilter
+	    ${INPUTDATA}/poupees_1canal.hd
+	    ${TEMP}/raTvSarParametricMapFunctionToImageFilter.tif
+)
+ADD_TEST(raTvSarRadiometricCalibrationToImageFilter  ${RADIOMETRY_TESTS9}
+#	--compare-image ${EPSILON_7}
+#	    ${BASELINE}/bfTvFunctionToImageFilterTest.tif
+#	    ${TEMP}/bfTvFunctionToImageFilterTest.tif
+        otbSarRadiometricCalibrationToImageFilterTest
+	    ${INPUTDATA}/ExtractIMAGE_HH_SRA_spot_074.tif
+	    ${TEMP}/raTvSarRadiometricCalibrationToImageFilter.tif
+)
+
+
+
 
 # A enrichir
 SET(Radiometry_SRCS1
@@ -1421,6 +1463,11 @@ otbTerraSarBrightnessFunctor.cxx
 otbTerraSarBrightnessImageFilterNew.cxx
 otbTerraSarBrightnessImageFilterTest.cxx
 otbTerraSarBrightnessImageComplexFilterTest.cxx
+otbSarRadiometricCalibrationFunctor.cxx
+otbSarRadiometricCalibrationFunction.cxx
+otbSarParametricMapFunctionTest.cxx
+otbSarParametricMapFunctionToImageFilter.cxx
+otbSarRadiometricCalibrationToImageFilterTest.cxx
 )
 
 
