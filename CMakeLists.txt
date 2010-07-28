@@ -146,7 +146,7 @@ OPTION(OTB_USE_JPEG2000 "Use to support jpeg2000 image file format." ON)
 #-----------------------------------------------------------------------------
 
 # Use the muparser library.
-OPTION(OTB_COMPILE_MUPARSER "Use to enable muParser fonctionalities." OFF)
+OPTION(OTB_COMPILE_MUPARSER "Use to enable muParser fonctionalities." ON)
 
 #-----------------------------------------------------------------------------
 

@@ -44,12 +44,12 @@ public:
 
   virtual void InitConst();
   virtual void InitFun();
+  
   virtual void SetExpr(const std::string & Expression);
   ValueType Eval();
   void DefineVar(const std::string &sName, ValueType *fVar);
   void ClearVar();
-
-
+  const std::string& GetExpr() const;
 
   typedef mu::Parser::exception_type               ExceptionType;
   virtual void ExceptionHandler(ExceptionType &e);
@@ -57,7 +57,7 @@ public:
   
 protected:
   Parser();
-  virtual ~Parser() {}
+  virtual ~Parser();
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 
@@ -65,7 +65,7 @@ private:
   Parser(const Self &);             //purposely not implemented
   void operator =(const Self &);    //purposely not implemented
 
-  mu::Parser                 m_Parser;
+  mu::Parser                  m_InternalParser;
   
   //----------  User Defined Functions  ----------//BEGIN
 
