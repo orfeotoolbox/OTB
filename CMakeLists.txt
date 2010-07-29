@@ -961,7 +961,7 @@ MARK_AS_ADVANCED(OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING)
 
 #-----------------------------------------------------------------------------
 # Option for generate Patented examples  !!!
-OPTION(OTB_USE_PATENTED "Build patented examples. ITK must be genereted whith patented option (ITK_USE_PATENTED = ON)." OFF)
+OPTION(OTB_USE_PATENTED "Build patented examples. ITK must be generated whith patented option (ITK_USE_PATENTED = ON)." OFF)
 MARK_AS_ADVANCED(OTB_USE_PATENTED)
 
 IF(OTB_USE_VISU_GUI)
