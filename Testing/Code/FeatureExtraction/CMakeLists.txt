@@ -1149,31 +1149,6 @@ ADD_TEST(feTvLineSpatialObjectListToRightAnglePointSetFilterBySteps ${FEATUREEXT
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFeatureExtractionTests14 ~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# -------    otb::PanTexTextureImageFilter   -------------
-ADD_TEST(feTuPanTexTextureImageFilterNew ${FEATUREEXTRACTION_TESTS14}
-    otbPanTexTextureImageFilterNew)
-
-ADD_TEST(feTvPanTexTextureImageFilter ${FEATUREEXTRACTION_TESTS14}
---compare-image ${EPSILON_3}
-                ${BASELINE}/feTvPanTexTextureImageFilter.tif
-                ${TEMP}/feTvPanTexTextureImageFilter.tif
-   otbPanTexTextureImageFilter
-    ${INPUTDATA}/poupees_sub.png
-    ${TEMP}/feTvPanTexTextureImageFilter.tif
-)
-
-ADD_TEST(feTuPanTexTextureImageFunctionFilterNew ${FEATUREEXTRACTION_TESTS14}
-    otbPanTexTextureImageFunctionFilterNew)
-
-ADD_TEST(feTvPanTexTextureImageFunctionFilter ${FEATUREEXTRACTION_TESTS14}
---compare-image ${EPSILON_3}
-                ${BASELINE}/feTvPanTexTextureImageFunctionFilter.tif
-                ${TEMP}/feTvPanTexTextureImageFunctionFilter.tif
-   otbPanTexTextureImageFunctionFilter
-    ${INPUTDATA}/poupees_sub_c1.png
-    ${TEMP}/feTvPanTexTextureImageFunctionFilter.tif
-)
-
 # -------    otb::SFSTexturesImageFilter   -------------
 ADD_TEST(feTuSFSTexturesImageFilterNew ${FEATUREEXTRACTION_TESTS14}
     otbSFSTexturesImageFilterNew)
@@ -1610,10 +1585,6 @@ otbLineSpatialObjectListToRightAnglePointSetFilterByStepsOutputAscii.cxx
 
 SET(BasicFeatureExtraction_SRCS14
 otbFeatureExtractionTests14.cxx
-otbPanTexTextureImageFilterNew.cxx
-otbPanTexTextureImageFilter.cxx
-otbPanTexTextureImageFunctionFilterNew.cxx
-otbPanTexTextureImageFunctionFilter.cxx
 otbSFSTexturesImageFilterNew.cxx
 otbSFSTexturesImageFilterTest.cxx
 otbUrbanAreaDetectionImageFilterNew.cxx
