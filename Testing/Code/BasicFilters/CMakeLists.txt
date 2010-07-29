@@ -29,7 +29,7 @@ SET(BASICFILTERS_TESTS10 ${CXX_TEST_PATH}/otbBasicFiltersTests10)
 SET(BASICFILTERS_TESTS11 ${CXX_TEST_PATH}/otbBasicFiltersTests11)
 SET(BASICFILTERS_TESTS12 ${CXX_TEST_PATH}/otbBasicFiltersTests12)
 IF(OTB_COMPILE_MUPARSER)
-#  SET(BASICFILTERS_TESTS13 ${CXX_TEST_PATH}/otbBasicFiltersTests13)
+  SET(BASICFILTERS_TESTS13 ${CXX_TEST_PATH}/otbBasicFiltersTests13)
 ENDIF(OTB_COMPILE_MUPARSER)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1631,8 +1631,8 @@ ADD_TEST(bfTvImageAndVectorImageOperationFilterTest ${BASICFILTERS_TESTS12}
 # ----------------------------     otbNaryParserFunctorImageFilter   ----------------------------
 IF(OTB_COMPILE_MUPARSER)
 
-#ADD_TEST(bfTuNaryParserImageFilter ${BASICFILTERS_TESTS13}
-#  otbNaryParserImageFilter)
+ADD_TEST(bfTuNaryParserImageFilter ${BASICFILTERS_TESTS13}
+  otbNaryParserImageFilter)
 
 ENDIF(OTB_COMPILE_MUPARSER)
 
@@ -1867,10 +1867,10 @@ otbImageAndVectorImageOperationFilterTest.cxx
 
 IF(OTB_COMPILE_MUPARSER)
 # A enrichir
-#SET(BasicFilters_SRCS13
-#otbBasicFiltersTests13.cxx
-#otbNaryParserImageFilter.cxx
-#)
+SET(BasicFilters_SRCS13
+otbBasicFiltersTests13.cxx
+otbNaryParserImageFilter.cxx
+)
 ENDIF(OTB_COMPILE_MUPARSER)
 
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests1 "${BasicFilters_SRCS1}" "OTBBasicFilters;OTBIO;OTBTesting")
@@ -1886,7 +1886,7 @@ OTB_ADD_EXECUTABLE(otbBasicFiltersTests10 "${BasicFilters_SRCS10}" "OTBBasicFilt
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests11 "${BasicFilters_SRCS11}" "OTBBasicFilters;ITKAlgorithms;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests12 "${BasicFilters_SRCS12}" "OTBBasicFilters;ITKAlgorithms;OTBIO;OTBTesting")
 IF(OTB_COMPILE_MUPARSER)
-# OTB_ADD_EXECUTABLE(otbBasicFiltersTests13 "${BasicFilters_SRCS13}" "OTBBasicFilters;OTBIO;OTBTesting")
+ OTB_ADD_EXECUTABLE(otbBasicFiltersTests13 "${BasicFilters_SRCS13}" "OTBBasicFilters;OTBIO;OTBTesting")
 ENDIF(OTB_COMPILE_MUPARSER)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
