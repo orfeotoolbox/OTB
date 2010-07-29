@@ -26,6 +26,5 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbBinaryParserImageFilterNew);
-  REGISTER_TEST(otbBinaryParserImageFilter);
+  //REGISTER_TEST(otbNaryParserImageFilter);
 }
