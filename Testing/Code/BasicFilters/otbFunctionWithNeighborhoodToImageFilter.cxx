@@ -21,12 +21,10 @@
 #include "itkVarianceImageFunction.h"
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
-#include "otbTextureFunctorBase.h"
 #include "otbTextureImageFunction.h"
 
 template <class TScalarInput, class TScalarOutput>
-class ITK_EXPORT FunctorTest :
-  public otb::Functor::TextureFunctorBase<TScalarInput, TScalarOutput>
+class ITK_EXPORT FunctorTest
 {
 public:
   /** Return the texture name */
