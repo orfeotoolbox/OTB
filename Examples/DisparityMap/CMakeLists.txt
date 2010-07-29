@@ -9,13 +9,6 @@ ADD_EXECUTABLE(NCCRegistrationFilterExample NCCRegistrationFilterExample.cxx )
 TARGET_LINK_LIBRARIES(NCCRegistrationFilterExample OTBFeatureExtraction OTBCommon OTBIO
 ITKIO)
 
-ADD_EXECUTABLE(SIFTDisparityMapEstimation SIFTDisparityMapEstimation.cxx )
-TARGET_LINK_LIBRARIES(SIFTDisparityMapEstimation OTBFeatureExtraction OTBCommon OTBIO
-ITKIO)
-
-ADD_EXECUTABLE(EstimateAffineTransformationExample EstimateAffineTransformationExample.cxx )
-TARGET_LINK_LIBRARIES(EstimateAffineTransformationExample OTBFeatureExtraction OTBCommon OTBIO OTBProjections
-ITKIO)
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
@@ -43,28 +36,6 @@ ADD_TEST(dmTeSimpleDisparityMapEstimationExampleTest ${EXE_TESTS}
  ${TEMP}/deformationFieldOutput.png
  ${TEMP}/resampledMovingOutput.png
  100 10 15 10 10 250 0.9
-)
-
-ADD_TEST(dmTeEstimateAffineTransformationExampleTest ${EXE_TESTS}
-   --compare-image ${TOL} 
-         ${BASELINE}/EstimateAffineTransformationOutput.png
-         ${TEMP}/AffineTransformationOutput.png
-         EstimateAffineTransformationExampleTest
-	 ${INPUTDATA}/QB_Suburb.png
-         ${INPUTDATA}/QB_SuburbR10X13Y17.png
-         ${TEMP}/AffineTransformationOutput.png
-         ${TEMP}/AffineTransformationTxtOutput.txt
-	 2 3 0 0 0.5 1	 
-)
-
-ADD_TEST(dmTeSIFTDisparityMapEstimationTest ${EXE_TESTS}
-  --compare-image ${TOL}
-   ${BASELINE}/SIFTdeformationFieldOutput.png
-   ${TEMP}/SIFTdeformationFieldOutput.png
-SIFTDisparityMapEstimationTest
-   ${INPUTDATA}/ROISpot5.png
-   ${INPUTDATA}/ROISpot5Warped.png
-   ${TEMP}/SIFTdeformationFieldOutput.png
 )
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)

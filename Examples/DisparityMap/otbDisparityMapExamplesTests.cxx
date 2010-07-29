@@ -26,18 +26,8 @@
 void RegisterTests()
 {
   REGISTER_TEST(SimpleDisparityMapEstimationExampleTest);
-  REGISTER_TEST(EstimateAffineTransformationExampleTest);
-  REGISTER_TEST(SIFTDisparityMapEstimationTest);
 }
 
 #undef main
 #define main SimpleDisparityMapEstimationExampleTest
 #include "SimpleDisparityMapEstimationExample.cxx"
-
-#undef main
-#define main EstimateAffineTransformationExampleTest
-#include "EstimateAffineTransformationExample.cxx"
-
-#undef main
-#define main SIFTDisparityMapEstimationTest
-#include "SIFTDisparityMapEstimation.cxx"
