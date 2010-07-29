@@ -29,10 +29,8 @@ void RegisterTests()
   REGISTER_TEST(ExtractRoadExampleTest);
   REGISTER_TEST(SeamCarvingExampleTest);
   REGISTER_TEST(SeamCarvingOtherExampleTest);
-  REGISTER_TEST(ScaleInvariantFeatureImageFilterTest);
   REGISTER_TEST(CloudDetectionExampleTest);
   REGISTER_TEST(RightAngleDetectionExample);
-  REGISTER_TEST(SIFTFastExampleTest);
 }
 
 #undef main
@@ -50,14 +48,6 @@ void RegisterTests()
 #undef main
 #define main SeamCarvingOtherExampleTest
 #include "SeamCarvingOtherExample.cxx"
-
-#undef main
-#define main ScaleInvariantFeatureImageFilterTest
-#include "ScaleInvariantFeatureImageFilter.cxx"
-
-#undef main
-#define main SIFTFastExampleTest
-#include "SIFTFastExample.cxx"
 
 #undef main
 #define main CloudDetectionExampleTest

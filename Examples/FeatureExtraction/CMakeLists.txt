@@ -76,13 +76,6 @@ ADD_EXECUTABLE(ThresholdToPointSetExample ThresholdToPointSetExample.cxx)
 TARGET_LINK_LIBRARIES(ThresholdToPointSetExample OTBIO OTBCommon OTBFeatureExtraction
 ITKCommon ITKBasicFilters)
 
-ADD_EXECUTABLE(SIFTExample SIFTExample.cxx)
-TARGET_LINK_LIBRARIES(SIFTExample OTBIO OTBCommon OTBFeatureExtraction
-ITKCommon ITKBasicFilters)
-
-ADD_EXECUTABLE(SIFTFastExample SIFTFastExample.cxx)
-TARGET_LINK_LIBRARIES(SIFTFastExample OTBIO OTBCommon OTBFeatureExtraction
-ITKCommon ITKBasicFilters)
 
 ADD_EXECUTABLE(SURFExample SURFExample.cxx)
 TARGET_LINK_LIBRARIES(SURFExample OTBIO OTBCommon OTBFeatureExtraction
@@ -108,9 +101,6 @@ TARGET_LINK_LIBRARIES(SFSExample OTBIO OTBCommon OTBFeatureExtraction ITKCommon 
 
 ADD_EXECUTABLE(EdgeDensityExample EdgeDensityExample.cxx)
 TARGET_LINK_LIBRARIES(EdgeDensityExample OTBIO OTBCommon OTBBasicFilters ITKCommon ITKBasicFilters)
-
-ADD_EXECUTABLE(SIFTDensityExample SIFTDensityExample.cxx)
-TARGET_LINK_LIBRARIES(SIFTDensityExample OTBIO OTBCommon OTBBasicFilters ITKCommon ITKBasicFilters)
 
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
@@ -302,37 +292,6 @@ ADD_TEST(feTeSeamCarvingOtherExampleTest ${EXE_TESTS2}
 #	6 3 0.08 10
 #)
 
-ADD_TEST(feTeScaleInvariantFeatureImageFilterTest ${EXE_TESTS2}
-        --compare-n-images ${TOL} 4
-        ${BASELINE}/ScaleInvariantFeatureImageFilterOutput1.png
-        ${TEMP}/ScaleInvariantFeatureImageFilterOutput1.png
-	${BASELINE}/ScaleInvariantFeatureImageFilterOutput2.png
-        ${TEMP}/ScaleInvariantFeatureImageFilterOutput2.png
-	${BASELINE}/ScaleInvariantFeatureImageFilterOutputKeys1.png
-        ${TEMP}/ScaleInvariantFeatureImageFilterOutputKeys1.png
-	${BASELINE}/ScaleInvariantFeatureImageFilterOutputKeys2.png
-        ${TEMP}/ScaleInvariantFeatureImageFilterOutputKeys2.png
-
-        ScaleInvariantFeatureImageFilterTest
-
-        ${INPUTDATA}/Scene.png
-        ${TEMP}/ScaleInvariantFeatureImageFilterOutput1.png
-        ${TEMP}/ScaleInvariantFeatureImageFilterOutput2.png
-        ${TEMP}/ScaleInvariantFeatureImageFilterOutputKeys1.png
-        ${TEMP}/ScaleInvariantFeatureImageFilterOutputKeys2.png
-	1 10 0.5 0
-)
-
-
-ADD_TEST(feTeSIFTFastExampleTest ${EXE_TESTS2}
-  --compare-image ${TOL}
-   ${BASELINE}/ROISpot5SiftFast.png
-   ${TEMP}/ROISpot5SiftFast.png
-  SIFTFastExampleTest
-   ${INPUTDATA}/ROISpot5.png
-   ${TEMP}/ROISpot5SiftFast.png
-   3
-)
 
 # ------- CloudDetectionExampleTest----------
 
