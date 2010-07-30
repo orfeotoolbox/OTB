@@ -20,9 +20,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include <typeinfo>
-#include <cassert>
-
 #include "otbMacro.h"
 
 #include "otbSpotImageMetadataInterface.h"
@@ -38,17 +35,18 @@ SpotImageMetadataInterface
 }
 
 bool
-SpotImageMetadataInterface::CanRead(const MetaDataDictionaryType& dict) const
+SpotImageMetadataInterface::CanRead() const
 {
-  std::string sensorID = GetSensorID(dict);
+  std::string sensorID = GetSensorID();
   if (sensorID.find("Spot") != std::string::npos) return true;
   else return false;
 }
 
 std::string
-SpotImageMetadataInterface::GetInstrument(const MetaDataDictionaryType& dict) const
+SpotImageMetadataInterface::GetInstrument() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Spot Image");
     }
@@ -70,9 +68,10 @@ SpotImageMetadataInterface::GetInstrument(const MetaDataDictionaryType& dict) co
 }
 
 unsigned int
-SpotImageMetadataInterface::GetInstrumentIndex(const MetaDataDictionaryType& dict) const
+SpotImageMetadataInterface::GetInstrumentIndex() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Spot Image");
     }
@@ -94,9 +93,10 @@ SpotImageMetadataInterface::GetInstrumentIndex(const MetaDataDictionaryType& dic
 }
 
 SpotImageMetadataInterface::VariableLengthVectorType
-SpotImageMetadataInterface::GetSolarIrradiance(const MetaDataDictionaryType& dict) const
+SpotImageMetadataInterface::GetSolarIrradiance() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Spot Image");
     }
@@ -150,9 +150,10 @@ SpotImageMetadataInterface::GetSolarIrradiance(const MetaDataDictionaryType& dic
 }
 
 int
-SpotImageMetadataInterface::GetDay(const MetaDataDictionaryType& dict) const
+SpotImageMetadataInterface::GetDay() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Spot Image");
     }
@@ -183,9 +184,10 @@ SpotImageMetadataInterface::GetDay(const MetaDataDictionaryType& dict) const
 }
 
 int
-SpotImageMetadataInterface::GetMonth(const MetaDataDictionaryType& dict) const
+SpotImageMetadataInterface::GetMonth() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Spot Image");
     }
@@ -216,9 +218,10 @@ SpotImageMetadataInterface::GetMonth(const MetaDataDictionaryType& dict) const
 }
 
 int
-SpotImageMetadataInterface::GetYear(const MetaDataDictionaryType& dict) const
+SpotImageMetadataInterface::GetYear() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Spot Image");
     }
@@ -248,9 +251,10 @@ SpotImageMetadataInterface::GetYear(const MetaDataDictionaryType& dict) const
 }
 
 int
-SpotImageMetadataInterface::GetHour(const MetaDataDictionaryType& dict) const
+SpotImageMetadataInterface::GetHour() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Spot Image");
     }
@@ -281,9 +285,10 @@ SpotImageMetadataInterface::GetHour(const MetaDataDictionaryType& dict) const
 }
 
 int
-SpotImageMetadataInterface::GetMinute(const MetaDataDictionaryType& dict) const
+SpotImageMetadataInterface::GetMinute() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Spot Image");
     }
@@ -313,9 +318,10 @@ SpotImageMetadataInterface::GetMinute(const MetaDataDictionaryType& dict) const
 }
 
 int
-SpotImageMetadataInterface::GetProductionDay(const MetaDataDictionaryType& dict) const
+SpotImageMetadataInterface::GetProductionDay() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Spot Image");
     }
@@ -346,9 +352,10 @@ SpotImageMetadataInterface::GetProductionDay(const MetaDataDictionaryType& dict)
 }
 
 int
-SpotImageMetadataInterface::GetProductionMonth(const MetaDataDictionaryType& dict) const
+SpotImageMetadataInterface::GetProductionMonth() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Spot Image");
     }
@@ -379,9 +386,10 @@ SpotImageMetadataInterface::GetProductionMonth(const MetaDataDictionaryType& dic
 }
 
 int
-SpotImageMetadataInterface::GetProductionYear(const MetaDataDictionaryType& dict) const
+SpotImageMetadataInterface::GetProductionYear() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Spot Image");
     }
@@ -413,9 +421,10 @@ SpotImageMetadataInterface::GetProductionYear(const MetaDataDictionaryType& dict
 
 SpotImageMetadataInterface::VariableLengthVectorType
 SpotImageMetadataInterface
-::GetPhysicalBias(const MetaDataDictionaryType& dict) const
+::GetPhysicalBias() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Spot Image");
     }
@@ -470,9 +479,10 @@ SpotImageMetadataInterface
 
 SpotImageMetadataInterface::VariableLengthVectorType
 SpotImageMetadataInterface
-::GetPhysicalGain(const MetaDataDictionaryType& dict) const
+::GetPhysicalGain() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Spot Image");
     }
@@ -526,9 +536,10 @@ SpotImageMetadataInterface
 }
 
 double
-SpotImageMetadataInterface::GetSatElevation(const MetaDataDictionaryType& dict) const
+SpotImageMetadataInterface::GetSatElevation() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Spot Image");
     }
@@ -549,9 +560,10 @@ SpotImageMetadataInterface::GetSatElevation(const MetaDataDictionaryType& dict) 
 }
 
 double
-SpotImageMetadataInterface::GetSatAzimuth(const MetaDataDictionaryType& dict) const
+SpotImageMetadataInterface::GetSatAzimuth() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Spot Image");
     }
@@ -584,9 +596,10 @@ SpotImageMetadataInterface::GetSatAzimuth(const MetaDataDictionaryType& dict) co
 
 SpotImageMetadataInterface::VariableLengthVectorType
 SpotImageMetadataInterface
-::GetFirstWavelengths(const MetaDataDictionaryType& dict) const
+::GetFirstWavelengths() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Spot Image");
     }
@@ -605,7 +618,7 @@ SpotImageMetadataInterface
   imageKeywordlist.convertToOSSIMKeywordlist(kwl);
   std::string key = "support_data.number_bands";
   int         nbBands = ossimString(kwl.find(key.c_str())).toInt();
-  std::string sensorId = this->GetSensorID(dict);
+  std::string sensorId = this->GetSensorID();
 
   // Panchromatic case
   if (nbBands == 1)
@@ -631,9 +644,10 @@ SpotImageMetadataInterface
 
 SpotImageMetadataInterface::VariableLengthVectorType
 SpotImageMetadataInterface
-::GetLastWavelengths(const MetaDataDictionaryType& dict) const
+::GetLastWavelengths() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Spot Image");
     }
@@ -652,7 +666,7 @@ SpotImageMetadataInterface
   imageKeywordlist.convertToOSSIMKeywordlist(kwl);
   std::string key = "support_data.number_bands";
   int         nbBands = ossimString(kwl.find(key.c_str())).toInt();
-  std::string sensorId = this->GetSensorID(dict);
+  std::string sensorId = this->GetSensorID();
 
   // Panchromatic case
   if (nbBands == 1)

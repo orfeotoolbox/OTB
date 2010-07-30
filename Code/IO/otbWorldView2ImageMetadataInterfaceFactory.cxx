@@ -37,7 +37,7 @@ namespace otb
 WorldView2ImageMetadataInterfaceFactory
 ::WorldView2ImageMetadataInterfaceFactory()
 {
-  this->RegisterOverride("ImageMetadataInterfaceBase",
+  this->RegisterOverride("OpticalImageMetadataInterface",
                          "otbWorldView2ImageMetadataInterface",
                          "WorldView2 Metadata Interface",
                          1,

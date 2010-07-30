@@ -22,7 +22,7 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include "otbImageMetadataInterfaceBase.h"
+#include "otbOpticalImageMetadataInterface.h"
 
 namespace otb
 {
@@ -31,12 +31,12 @@ namespace otb
  * \brief Creation of an "otb" SpotImageMetadataInterface that gets metadata.
  *
  */
-class ITK_EXPORT SpotImageMetadataInterface : public ImageMetadataInterfaceBase
+class ITK_EXPORT SpotImageMetadataInterface : public OpticalImageMetadataInterface
 {
 public:
 
   typedef SpotImageMetadataInterface    Self;
-  typedef ImageMetadataInterfaceBase    Superclass;
+  typedef OpticalImageMetadataInterface    Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -44,7 +44,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(SpotImageMetadataInterface, ImageMetadataInterfaceBase);
+  itkTypeMacro(SpotImageMetadataInterface, OpticalImageMetadataInterface);
 
   typedef Superclass::ImageType                ImageType;
   typedef Superclass::MetaDataDictionaryType   MetaDataDictionaryType;
@@ -53,55 +53,55 @@ public:
   typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
 
   /** Get the radiometric bias from the ossim metadata */
-  VariableLengthVectorType GetPhysicalBias(const MetaDataDictionaryType& dict) const;
+  VariableLengthVectorType GetPhysicalBias() const;
 
   /** Get the radiometric gain from the ossim metadata */
-  VariableLengthVectorType GetPhysicalGain(const MetaDataDictionaryType& dict) const;
+  VariableLengthVectorType GetPhysicalGain() const;
 
   /** Get the solar irradiance from the ossim metadata */
-  VariableLengthVectorType GetSolarIrradiance(const MetaDataDictionaryType& dict) const;
+  VariableLengthVectorType GetSolarIrradiance() const;
 
   /** Get the imaging acquisition day from the ossim metadata : IMAGING_DATE metadata variable */
-  int GetDay(const MetaDataDictionaryType& dict) const;
+  int GetDay() const;
 
   /** Get the imaging acquisition month from the ossim metadata : IMAGING_DATE metadata variable */
-  int GetMonth(const MetaDataDictionaryType& dict) const;
+  int GetMonth() const;
 
   /** Get the imaging acquisition year from the ossim metadata : IMAGING_DATE metadata variable */
-  int GetYear(const MetaDataDictionaryType& dict) const;
+  int GetYear() const;
 
   /** Get the imaging acquisition hour from the ossim metadata : IMAGING_DATE metadata variable */
-  int GetHour(const MetaDataDictionaryType& dict) const;
+  int GetHour() const;
 
   /** Get the imaging acquisition year from the ossim metadata : IMAGING_DATE metadata variable */
-  int GetMinute(const MetaDataDictionaryType& dict) const;
+  int GetMinute() const;
 
   /** Get the imaging production day from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable */
-  int GetProductionDay(const MetaDataDictionaryType& dict) const;
+  int GetProductionDay() const;
 
   /** Get the imaging production month from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable */
-  int GetProductionMonth(const MetaDataDictionaryType& dict) const;
+  int GetProductionMonth() const;
 
   /** Get the imaging production year from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable */
-  int GetProductionYear(const MetaDataDictionaryType& dict) const;
+  int GetProductionYear() const;
 
   /** Get the sat elevation from the ossim metadata */
-  double GetSatElevation(const MetaDataDictionaryType& dict) const;
+  double GetSatElevation() const;
 
   /** Get the sat azimuth from the ossim metadata */
-  double GetSatAzimuth(const MetaDataDictionaryType& dict) const;
+  double GetSatAzimuth() const;
 
   /** Get the first wavelength for the spectral band definition */
-  VariableLengthVectorType GetFirstWavelengths(const MetaDataDictionaryType& dict) const;
+  VariableLengthVectorType GetFirstWavelengths() const;
 
   /** Get the last wavelength for the spectral band definition */
-  VariableLengthVectorType GetLastWavelengths(const MetaDataDictionaryType& dict) const;
+  VariableLengthVectorType GetLastWavelengths() const;
 
   /** Get Instrument */
-  std::string GetInstrument(const MetaDataDictionaryType& dict) const;
+  std::string GetInstrument() const;
 
   /** Get Instrument Index */
-  unsigned int GetInstrumentIndex(const MetaDataDictionaryType& dict) const;
+  unsigned int GetInstrumentIndex() const;
 
   /** This method is to handle the permutation of the spectral band by some image provider
    * in most cases, this method won't change the value, but for SPOT data, the bands are set up as
@@ -117,7 +117,7 @@ public:
 
   unsigned int GetDefaultBBand() const;
 
-  bool CanRead(const MetaDataDictionaryType& dict) const;
+  bool CanRead() const;
 
 protected:
   SpotImageMetadataInterface();

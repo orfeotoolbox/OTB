@@ -53,43 +53,28 @@ int otbTerraSarImageMetadataInterface(int argc, char* argv[])
 
   std::ofstream file;
   file.open(outputFilename);
-  file << "GetSensorID:             " << lImageMetadata->GetSensorID(reader->GetOutput()->GetMetaDataDictionary()) <<
-  std::endl;
-  file << "GetMinute:               " << lImageMetadata->GetMinute(reader->GetOutput()->GetMetaDataDictionary()) <<
-  std::endl;
-  file << "GetHour:                 " << lImageMetadata->GetHour(reader->GetOutput()->GetMetaDataDictionary()) <<
-  std::endl;
-  file << "GetDay:                  " << lImageMetadata->GetDay(reader->GetOutput()->GetMetaDataDictionary()) <<
-  std::endl;
-  file << "GetMonth:                " << lImageMetadata->GetMonth(reader->GetOutput()->GetMetaDataDictionary()) <<
-  std::endl;
-  file << "GetYear:                 " << lImageMetadata->GetYear(reader->GetOutput()->GetMetaDataDictionary()) <<
-  std::endl;
-  file << "GetProductionDay:        " <<
-  lImageMetadata->GetProductionDay(reader->GetOutput()->GetMetaDataDictionary()) << std::endl;
-  file << "GetProductionMonth:      " <<
-  lImageMetadata->GetProductionMonth(reader->GetOutput()->GetMetaDataDictionary()) << std::endl;
-  file << "GetProductionYear:       " <<
-  lImageMetadata->GetProductionYear(reader->GetOutput()->GetMetaDataDictionary()) << std::endl;
-  file << "GetCalibrationFactor:    " << lImageMetadata->GetCalibrationFactor(
-    reader->GetOutput()->GetMetaDataDictionary()) << std::endl;
-  file << "GetRadarFrequency:       " <<
-  lImageMetadata->GetRadarFrequency(reader->GetOutput()->GetMetaDataDictionary()) << std::endl;
-  file << "GetPRF:                  " << lImageMetadata->GetPRF(reader->GetOutput()->GetMetaDataDictionary()) <<
-  std::endl;
+  file << "GetSensorID:             " << lImageMetadata->GetSensorID() << std::endl;
+  file << "GetMinute:               " << lImageMetadata->GetMinute() << std::endl;
+  file << "GetHour:                 " << lImageMetadata->GetHour() <<  std::endl;
+  file << "GetDay:                  " << lImageMetadata->GetDay() <<  std::endl;
+  file << "GetMonth:                " << lImageMetadata->GetMonth() << std::endl;
+  file << "GetYear:                 " << lImageMetadata->GetYear() << std::endl;
+  file << "GetProductionDay:        " << lImageMetadata->GetProductionDay() << std::endl;
+  file << "GetProductionMonth:      " << lImageMetadata->GetProductionMonth() << std::endl;
+  file << "GetProductionYear:       " << lImageMetadata->GetProductionYear() << std::endl;
+  file << "GetCalibrationFactor:    " << lImageMetadata->GetCalibrationFactor() << std::endl;
+  file << "GetRadarFrequency:       " << lImageMetadata->GetRadarFrequency() << std::endl;
+  file << "GetPRF:                  " << lImageMetadata->GetPRF() << std::endl;
   file << std::endl;
+
   file << "Noise attributs: " << std::endl;
-  UIntVectorType         deg    = lImageMetadata->GetNoisePolynomialDegrees(reader->GetOutput()->GetMetaDataDictionary());
-  DoubleVectorVectorType coeffs = lImageMetadata->GetNoisePolynomialCoefficientsList(
-    reader->GetOutput()->GetMetaDataDictionary());
-  DoubleVectorType mins   = lImageMetadata->GetNoiseValidityRangeMinList(
-    reader->GetOutput()->GetMetaDataDictionary());
-  DoubleVectorType maxs   = lImageMetadata->GetNoiseValidityRangeMaxList(
-    reader->GetOutput()->GetMetaDataDictionary());
-  DoubleVectorType ref    = lImageMetadata->GetNoiseReferencePointList(reader->GetOutput()->GetMetaDataDictionary());
-  DoubleVectorType time   = lImageMetadata->GetNoiseTimeUTCList(reader->GetOutput()->GetMetaDataDictionary());
-  file << "GetNumberOfNoiseRecords: " << lImageMetadata->GetNumberOfNoiseRecords(
-    reader->GetOutput()->GetMetaDataDictionary()) << std::endl;
+  UIntVectorType         deg    = lImageMetadata->GetNoisePolynomialDegrees();
+  DoubleVectorVectorType coeffs = lImageMetadata->GetNoisePolynomialCoefficientsList();
+  DoubleVectorType mins   = lImageMetadata->GetNoiseValidityRangeMinList();
+  DoubleVectorType maxs   = lImageMetadata->GetNoiseValidityRangeMaxList();
+  DoubleVectorType ref    = lImageMetadata->GetNoiseReferencePointList();
+  DoubleVectorType time   = lImageMetadata->GetNoiseTimeUTCList();
+  file << "GetNumberOfNoiseRecords: " << lImageMetadata->GetNumberOfNoiseRecords() << std::endl;
   for (unsigned int i = 0; i < deg.size(); i++)
     {
     file << "Noise Polynom " << i << " ( degree: " << deg[i] << ")" << std::endl;
@@ -105,24 +90,19 @@ int otbTerraSarImageMetadataInterface(int argc, char* argv[])
     file << "Time UTC:           " << time[i] << std::endl;
     }
   file << "Incidence Angles attributs: " << std::endl;
-  IndexType centerIndexType = lImageMetadata->GetCenterIncidenceAngleIndex(reader->GetOutput()->GetMetaDataDictionary());
-  file << "GetCenterIncidenceAngle: Value: " << lImageMetadata->GetCenterIncidenceAngle(
-    reader->GetOutput()->GetMetaDataDictionary());
+  IndexType centerIndexType = lImageMetadata->GetCenterIncidenceAngleIndex();
+  file << "GetCenterIncidenceAngle: Value: " << lImageMetadata->GetCenterIncidenceAngle();
   file << " Index: Row: " << centerIndexType[0] << " Column: " << centerIndexType[1] << std::endl;
-  file << "GetNumberOfCornerIncidenceAngles: " << lImageMetadata->GetNumberOfCornerIncidenceAngles(
-    reader->GetOutput()->GetMetaDataDictionary()) << std::endl;
-  DoubleVectorType cornerIncidenceAngles = lImageMetadata->GetCornersIncidenceAngles(
-    reader->GetOutput()->GetMetaDataDictionary());
-  std::vector<IndexType> tabIndex = lImageMetadata->GetCornersIncidenceAnglesIndex(
-    reader->GetOutput()->GetMetaDataDictionary());
+  file << "GetNumberOfCornerIncidenceAngles: " << lImageMetadata->GetNumberOfCornerIncidenceAngles() << std::endl;
+  DoubleVectorType cornerIncidenceAngles = lImageMetadata->GetCornersIncidenceAngles();
+  std::vector<IndexType> tabIndex = lImageMetadata->GetCornersIncidenceAnglesIndex();
   file << "GetCornerIncidenceAngles: " << std::endl;
   for (unsigned int i = 0; i < cornerIncidenceAngles.size(); i++)
     {
     file << "Incidence Angle " << i << ": Value: " << cornerIncidenceAngles[i] << " Index: Row: " << tabIndex[i][0] <<
     " Column: " << tabIndex[i][1] << std::endl;
     }
-  file << "GetMeanIncidenceAngles: " << lImageMetadata->GetMeanIncidenceAngles(
-    reader->GetOutput()->GetMetaDataDictionary()) << std::endl;
+  file << "GetMeanIncidenceAngles: " << lImageMetadata->GetMeanIncidenceAngles() << std::endl;
   file.close();
 
   return EXIT_SUCCESS;

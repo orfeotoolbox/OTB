@@ -23,8 +23,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include "itkObject.h"
-
 #include "itkMetaDataDictionary.h"
 #include "otbMetaDataKey.h"
 #include "otbImageKeywordlist.h"
@@ -32,6 +30,8 @@
 #include <otb/Noise.h>
 #include <otb/IncidenceAngles.h>
 #include <string>
+#include "itkPointSet.h"
+#include "otbSarImageMetadataInterface.h"
 
 namespace otb
 {
@@ -40,12 +40,12 @@ namespace otb
  * \brief Creation of an "otb" TerraSarImageMetadataInterface that gets metadata.
  *
  */
-class ITK_EXPORT TerraSarImageMetadataInterface : public itk::Object
+class ITK_EXPORT TerraSarImageMetadataInterface : public SarImageMetadataInterface
 {
 public:
 
   typedef TerraSarImageMetadataInterface Self;
-  typedef itk::Object                    Superclass;
+  typedef SarImageMetadataInterface      Superclass;
   typedef itk::SmartPointer<Self>        Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
 
@@ -53,7 +53,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(TerraSarImageMetadataInterface, itk::Object);
+  itkTypeMacro(TerraSarImageMetadataInterface, otbSarImageMetadataInterface);
 
   typedef itk::ImageBase<2>                     ImageType;
   typedef ImageType::IndexType                  IndexType;
@@ -66,95 +66,113 @@ public:
   typedef std::vector<DoubleVectorType>         DoubleVectorVectorType;
   typedef std::vector<unsigned int>             UIntVectorType;
 
+  typedef Superclass::PointSetType              PointSetType;
+  typedef Superclass::PointSetPointer           PointSetPointer;
+
+
   /** Set the image used to get the metadata */
   itkSetObjectMacro(Image, ImageType);
 
   /** Get the sensor ID from the ossim metadata */
-  std::string GetSensorID(const MetaDataDictionaryType& dict) const;
+  std::string GetSensorID() const;
 
   /** Get the imaging start acquisition day from the ossim metadata */
-  int GetDay(const MetaDataDictionaryType&) const;
+  int GetDay() const;
 
   /** Get the imaging start acquisition month from the ossim metadata */
-  int GetMonth(const MetaDataDictionaryType&) const;
+  int GetMonth() const;
 
   /** Get the imaging start acquisition year from the ossim metadata */
-  int GetYear(const MetaDataDictionaryType&) const;
+  int GetYear() const;
 
   /** Get the imaging start acquisition hour from the ossim metadata */
-  int GetHour(const MetaDataDictionaryType&) const;
+  int GetHour() const;
 
   /** Get the imaging start acquisition minute from the ossim metadata */
-  int GetMinute(const MetaDataDictionaryType&) const;
+  int GetMinute() const;
 
   /** Get the imaging production day from the ossim metadata : generationTime variable */
-  int GetProductionDay(const MetaDataDictionaryType&) const;
+  int GetProductionDay() const;
 
   /** Get the imaging production month from the ossim metadata : generationTime variable */
-  int GetProductionMonth(const MetaDataDictionaryType&) const;
+  int GetProductionMonth() const;
 
   /** Get the imaging production year from the ossim metadata : generationTime variable */
-  int GetProductionYear(const MetaDataDictionaryType&) const;
+  int GetProductionYear() const;
 
   /** Get the calibration.calFactor : generationTime variable */
-  double GetCalibrationFactor(const MetaDataDictionaryType&) const;
+  double GetCalibrationFactor() const;
 
   /** Get the noise structure */
-  ossimplugins::Noise * GetNoise(const MetaDataDictionaryType&) const;
+  ossimplugins::Noise * GetNoise() const;
 
   /** Get the number of noise records */
-  unsigned int GetNumberOfNoiseRecords(const MetaDataDictionaryType&) const;
+  unsigned int GetNumberOfNoiseRecords() const;
 
   /** Get the polynomial degree list */
-  UIntVectorType GetNoisePolynomialDegrees(const MetaDataDictionaryType&) const;
+  UIntVectorType GetNoisePolynomialDegrees() const;
 
   /** Get the polynomial coefficient list */
-  DoubleVectorVectorType GetNoisePolynomialCoefficientsList(const MetaDataDictionaryType&) const;
+  DoubleVectorVectorType GetNoisePolynomialCoefficientsList() const;
 
   /** Get timeUTC noise acquisition list in Julian day */
-  DoubleVectorType GetNoiseTimeUTCList(const MetaDataDictionaryType&) const;
+  DoubleVectorType GetNoiseTimeUTCList() const;
 
   /** Get noise minimum validity range list */
-  DoubleVectorType GetNoiseValidityRangeMinList(const MetaDataDictionaryType&) const;
+  DoubleVectorType GetNoiseValidityRangeMinList() const;
 
   /** Get noise maximum validity range list */
-  DoubleVectorType GetNoiseValidityRangeMaxList(const MetaDataDictionaryType&) const;
+  DoubleVectorType GetNoiseValidityRangeMaxList() const;
 
   /** Get noise reference point list */
-  DoubleVectorType GetNoiseReferencePointList(const MetaDataDictionaryType&) const;
+  DoubleVectorType GetNoiseReferencePointList() const;
 
   /** Get the radar frequency */
-  double GetRadarFrequency(const MetaDataDictionaryType&) const;
+  double GetRadarFrequency() const;
 
   /** Get the PRF */
-  double GetPRF(const MetaDataDictionaryType&) const;
+  double GetPRF() const;
 
   /** Get the incidence angles structure */
-  ossimplugins::IncidenceAngles* GetIncidenceAngles(const MetaDataDictionaryType&) const;
+  ossimplugins::IncidenceAngles* GetIncidenceAngles() const;
 
   /** Get the number of corner incidence angles */
-  unsigned int GetNumberOfCornerIncidenceAngles(const MetaDataDictionaryType&) const;
+  unsigned int GetNumberOfCornerIncidenceAngles() const;
 
   /** Get the Mean Incidence angles */
-  double GetMeanIncidenceAngles(const MetaDataDictionaryType&) const;
+  double GetMeanIncidenceAngles() const;
 
   /** Get the center incidence angle */
-  double GetCenterIncidenceAngle(const MetaDataDictionaryType&) const;
+  double GetCenterIncidenceAngle() const;
 
   /** Get the center index */
-  IndexType GetCenterIncidenceAngleIndex(const MetaDataDictionaryType&) const;
+  IndexType GetCenterIncidenceAngleIndex() const;
 
   /** Get the corners incidence angles */
-  DoubleVectorType GetCornersIncidenceAngles(const MetaDataDictionaryType&) const;
+  DoubleVectorType GetCornersIncidenceAngles() const;
 
   /** Get the corners index */
-  IndexVectorType GetCornersIncidenceAnglesIndex(const MetaDataDictionaryType&) const;
+  IndexVectorType GetCornersIncidenceAnglesIndex() const;
 
-  bool CanRead(const MetaDataDictionaryType&) const;
+  bool CanRead() const;
+
+  PointSetPointer GetIncidenceAngle() const;
+
+  /** GetIncidenceAnglePointSet */
+  PointSetPointer GetIncidenceAnglePointSet() const;
+  
+  /** Get the R, G, B channel */
+  virtual unsigned int GetDefaultRBand() const;
+  virtual unsigned int GetDefaultGBand() const;
+  virtual unsigned int GetDefaultBBand() const;
+  
+  void PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType& dict) const;
 
 protected:
   TerraSarImageMetadataInterface();
   virtual ~TerraSarImageMetadataInterface() {}
+
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
   TerraSarImageMetadataInterface(const Self &); //purposely not implemented

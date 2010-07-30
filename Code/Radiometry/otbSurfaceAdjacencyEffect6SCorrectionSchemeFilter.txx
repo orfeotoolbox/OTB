@@ -35,8 +35,8 @@
 #include "otbImage.h"
 #include "otbSIXSTraits.h"
 #include "otbMath.h"
-#include "otbImageMetadataInterfaceFactory.h"
-#include "otbImageMetadataInterfaceBase.h"
+#include "otbOpticalImageMetadataInterfaceFactory.h"
+#include "otbOpticalImageMetadataInterface.h"
 
 namespace otb
 {
@@ -94,49 +94,49 @@ SurfaceAdjacencyEffect6SCorrectionSchemeFilter<TInputImage, TOutputImage>
 {
   MetaDataDictionaryType dict = this->GetInput()->GetMetaDataDictionary();
 
-  ImageMetadataInterfaceBase::Pointer imageMetadataInterface = ImageMetadataInterfaceFactory::CreateIMI(dict);
+  OpticalImageMetadataInterface::Pointer imageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(dict);
 
   if ((m_CorrectionParameters->GetDay() == 0))
     {
-    m_CorrectionParameters->SetDay(imageMetadataInterface->GetDay(dict));
+    m_CorrectionParameters->SetDay(imageMetadataInterface->GetDay());
     }
 
   if ((m_CorrectionParameters->GetMonth() == 0))
     {
-    m_CorrectionParameters->SetMonth(imageMetadataInterface->GetMonth(dict));
+    m_CorrectionParameters->SetMonth(imageMetadataInterface->GetMonth());
     }
 
   if ((m_CorrectionParameters->GetSolarZenithalAngle() == 361.))
     {
-    m_CorrectionParameters->SetSolarZenithalAngle(90. - imageMetadataInterface->GetSunElevation(dict));
+    m_CorrectionParameters->SetSolarZenithalAngle(90. - imageMetadataInterface->GetSunElevation());
     }
 
   if ((m_CorrectionParameters->GetSolarAzimutalAngle() == 361.))
     {
-    m_CorrectionParameters->SetSolarAzimutalAngle(imageMetadataInterface->GetSunAzimuth(dict));
+    m_CorrectionParameters->SetSolarAzimutalAngle(imageMetadataInterface->GetSunAzimuth());
     }
 
   if ((m_CorrectionParameters->GetViewingZenithalAngle() == 361.))
     {
-    m_CorrectionParameters->SetViewingZenithalAngle(90. - imageMetadataInterface->GetSatElevation(dict));
+    m_CorrectionParameters->SetViewingZenithalAngle(90. - imageMetadataInterface->GetSatElevation());
     }
 
   if (m_ZenithalViewingAngle == 361.)
     {
-    this->SetZenithalViewingAngle(90. - imageMetadataInterface->GetSatElevation(dict));
+    this->SetZenithalViewingAngle(90. - imageMetadataInterface->GetSatElevation());
     }
 
   if ((m_CorrectionParameters->GetViewingAzimutalAngle() == 361.))
     {
-    m_CorrectionParameters->SetViewingAzimutalAngle(imageMetadataInterface->GetSatAzimuth(dict));
+    m_CorrectionParameters->SetViewingAzimutalAngle(imageMetadataInterface->GetSatAzimuth());
     }
 
   if (m_AeronetFileName != "")
     {
     m_CorrectionParameters->UpdateAeronetData(m_AeronetFileName,
-                                              imageMetadataInterface->GetYear(dict),
-                                              imageMetadataInterface->GetHour(dict),
-                                              imageMetadataInterface->GetMinute(dict));
+                                              imageMetadataInterface->GetYear(),
+                                              imageMetadataInterface->GetHour(),
+                                              imageMetadataInterface->GetMinute());
     }
 
   // load filter function values
@@ -155,8 +155,8 @@ SurfaceAdjacencyEffect6SCorrectionSchemeFilter<TInputImage, TOutputImage>
       {
       FilterFunctionValuesType::Pointer functionValues = FilterFunctionValuesType::New();
       functionValues->SetFilterFunctionValues(m_FilterFunctionCoef[i]);
-      functionValues->SetMinSpectralValue(imageMetadataInterface->GetFirstWavelengths(dict)[i]);
-      functionValues->SetMaxSpectralValue(imageMetadataInterface->GetLastWavelengths(dict)[i]);
+      functionValues->SetMinSpectralValue(imageMetadataInterface->GetFirstWavelengths()[i]);
+      functionValues->SetMaxSpectralValue(imageMetadataInterface->GetLastWavelengths()[i]);
 
       m_CorrectionParameters->SetWavelengthSpectralBandWithIndex(i, functionValues);
       }

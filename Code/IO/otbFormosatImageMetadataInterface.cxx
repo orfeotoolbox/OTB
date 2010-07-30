@@ -20,9 +20,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include <typeinfo>
-#include <cassert>
-
 #include "otbMacro.h"
 
 #include "otbFormosatImageMetadataInterface.h"
@@ -38,17 +35,18 @@ FormosatImageMetadataInterface
 }
 
 bool
-FormosatImageMetadataInterface::CanRead(const MetaDataDictionaryType& dict) const
+FormosatImageMetadataInterface::CanRead() const
 {
-  std::string sensorID = GetSensorID(dict);
+  std::string sensorID = GetSensorID();
   if (sensorID.find("Formosat") != std::string::npos) return true;
   else return false;
 }
 
 std::string
-FormosatImageMetadataInterface::GetInstrument(const MetaDataDictionaryType& dict) const
+FormosatImageMetadataInterface::GetInstrument() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Formosat Image");
     }
@@ -70,9 +68,10 @@ FormosatImageMetadataInterface::GetInstrument(const MetaDataDictionaryType& dict
 }
 
 unsigned int
-FormosatImageMetadataInterface::GetInstrumentIndex(const MetaDataDictionaryType& dict) const
+FormosatImageMetadataInterface::GetInstrumentIndex() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Formosat Image");
     }
@@ -94,9 +93,10 @@ FormosatImageMetadataInterface::GetInstrumentIndex(const MetaDataDictionaryType&
 }
 
 FormosatImageMetadataInterface::VariableLengthVectorType
-FormosatImageMetadataInterface::GetSolarIrradiance(const MetaDataDictionaryType& dict) const
+FormosatImageMetadataInterface::GetSolarIrradiance() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Formosat Image");
     }
@@ -150,9 +150,10 @@ FormosatImageMetadataInterface::GetSolarIrradiance(const MetaDataDictionaryType&
 }
 
 int
-FormosatImageMetadataInterface::GetDay(const MetaDataDictionaryType& dict) const
+FormosatImageMetadataInterface::GetDay() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Formosat Image");
     }
@@ -183,9 +184,10 @@ FormosatImageMetadataInterface::GetDay(const MetaDataDictionaryType& dict) const
 }
 
 int
-FormosatImageMetadataInterface::GetMonth(const MetaDataDictionaryType& dict) const
+FormosatImageMetadataInterface::GetMonth() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Formosat Image");
     }
@@ -216,9 +218,10 @@ FormosatImageMetadataInterface::GetMonth(const MetaDataDictionaryType& dict) con
 }
 
 int
-FormosatImageMetadataInterface::GetYear(const MetaDataDictionaryType& dict) const
+FormosatImageMetadataInterface::GetYear() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Formosat Image");
     }
@@ -248,9 +251,10 @@ FormosatImageMetadataInterface::GetYear(const MetaDataDictionaryType& dict) cons
 }
 
 int
-FormosatImageMetadataInterface::GetHour(const MetaDataDictionaryType& dict) const
+FormosatImageMetadataInterface::GetHour() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Formosat Image");
     }
@@ -281,9 +285,10 @@ FormosatImageMetadataInterface::GetHour(const MetaDataDictionaryType& dict) cons
 }
 
 int
-FormosatImageMetadataInterface::GetMinute(const MetaDataDictionaryType& dict) const
+FormosatImageMetadataInterface::GetMinute() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Formosat Image");
     }
@@ -313,9 +318,10 @@ FormosatImageMetadataInterface::GetMinute(const MetaDataDictionaryType& dict) co
 }
 
 int
-FormosatImageMetadataInterface::GetProductionDay(const MetaDataDictionaryType& dict) const
+FormosatImageMetadataInterface::GetProductionDay() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Formosat Image");
     }
@@ -346,9 +352,10 @@ FormosatImageMetadataInterface::GetProductionDay(const MetaDataDictionaryType& d
 }
 
 int
-FormosatImageMetadataInterface::GetProductionMonth(const MetaDataDictionaryType& dict) const
+FormosatImageMetadataInterface::GetProductionMonth() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Formosat Image");
     }
@@ -379,9 +386,10 @@ FormosatImageMetadataInterface::GetProductionMonth(const MetaDataDictionaryType&
 }
 
 int
-FormosatImageMetadataInterface::GetProductionYear(const MetaDataDictionaryType& dict) const
+FormosatImageMetadataInterface::GetProductionYear() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Formosat Image");
     }
@@ -413,9 +421,10 @@ FormosatImageMetadataInterface::GetProductionYear(const MetaDataDictionaryType& 
 
 FormosatImageMetadataInterface::VariableLengthVectorType
 FormosatImageMetadataInterface
-::GetPhysicalBias(const MetaDataDictionaryType& dict) const
+::GetPhysicalBias() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Formosat Image");
     }
@@ -470,9 +479,10 @@ FormosatImageMetadataInterface
 
 FormosatImageMetadataInterface::VariableLengthVectorType
 FormosatImageMetadataInterface
-::GetPhysicalGain(const MetaDataDictionaryType& dict) const
+::GetPhysicalGain() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Formosat Image");
     }
@@ -526,9 +536,10 @@ FormosatImageMetadataInterface
 }
 
 double
-FormosatImageMetadataInterface::GetSatElevation(const MetaDataDictionaryType& dict) const
+FormosatImageMetadataInterface::GetSatElevation() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Formosat Image");
     }
@@ -549,9 +560,10 @@ FormosatImageMetadataInterface::GetSatElevation(const MetaDataDictionaryType& di
 }
 
 double
-FormosatImageMetadataInterface::GetSatAzimuth(const MetaDataDictionaryType& dict) const
+FormosatImageMetadataInterface::GetSatAzimuth() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Formosat Image");
     }
@@ -584,9 +596,10 @@ FormosatImageMetadataInterface::GetSatAzimuth(const MetaDataDictionaryType& dict
 
 FormosatImageMetadataInterface::VariableLengthVectorType
 FormosatImageMetadataInterface
-::GetFirstWavelengths(const MetaDataDictionaryType& dict) const
+::GetFirstWavelengths() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Formosat Image");
     }
@@ -605,7 +618,7 @@ FormosatImageMetadataInterface
   imageKeywordlist.convertToOSSIMKeywordlist(kwl);
   std::string key = "support_data.number_bands";
   int         nbBands = ossimString(kwl.find(key.c_str())).toInt();
-  std::string sensorId = this->GetSensorID(dict);
+  std::string sensorId = this->GetSensorID();
 
   // Panchromatic case
   if (nbBands == 1)
@@ -631,9 +644,10 @@ FormosatImageMetadataInterface
 
 FormosatImageMetadataInterface::VariableLengthVectorType
 FormosatImageMetadataInterface
-::GetLastWavelengths(const MetaDataDictionaryType& dict) const
+::GetLastWavelengths() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Formosat Image");
     }
@@ -652,7 +666,7 @@ FormosatImageMetadataInterface
   imageKeywordlist.convertToOSSIMKeywordlist(kwl);
   std::string key = "support_data.number_bands";
   int         nbBands = ossimString(kwl.find(key.c_str())).toInt();
-  std::string sensorId = this->GetSensorID(dict);
+  std::string sensorId = this->GetSensorID();
 
   // Panchromatic case
   if (nbBands == 1)
@@ -680,7 +694,7 @@ unsigned int
 FormosatImageMetadataInterface
 ::BandIndexToWavelengthPosition(unsigned int i) const
 {
-  otbMsgDevMacro(<< "SPOT detected: band 0 and 2 inverted");
+  otbMsgDevMacro(<< "Formosat detected: band 0 and 2 inverted");
   if (i == 0) return 2;
   if (i == 2) return 0;
   return i;

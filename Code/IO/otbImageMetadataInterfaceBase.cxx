@@ -40,9 +40,10 @@ ImageMetadataInterfaceBase
 }
 
 std::string
-ImageMetadataInterfaceBase::GetProjectionRef(const MetaDataDictionaryType& dict) const
+ImageMetadataInterfaceBase::GetProjectionRef() const
 {
   std::string metadata;
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
   if (dict.HasKey(MetaDataKey::ProjectionRefKey))
     {
@@ -53,9 +54,10 @@ ImageMetadataInterfaceBase::GetProjectionRef(const MetaDataDictionaryType& dict)
 }
 
 std::string
-ImageMetadataInterfaceBase::GetGCPProjection(const MetaDataDictionaryType& dict) const
+ImageMetadataInterfaceBase::GetGCPProjection() const
 {
   std::string metadata;
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
   if (dict.HasKey(MetaDataKey::GCPProjectionKey))
     {
@@ -66,9 +68,10 @@ ImageMetadataInterfaceBase::GetGCPProjection(const MetaDataDictionaryType& dict)
 }
 
 unsigned int
-ImageMetadataInterfaceBase::GetGCPCount(const MetaDataDictionaryType& dict) const
+ImageMetadataInterfaceBase::GetGCPCount() const
 {
   unsigned int GCPCount = 0;
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
   if (dict.HasKey(MetaDataKey::GCPCountKey))
     {
@@ -79,9 +82,10 @@ ImageMetadataInterfaceBase::GetGCPCount(const MetaDataDictionaryType& dict) cons
 }
 
 OTB_GCP&
-ImageMetadataInterfaceBase::GetGCPs(MetaDataDictionaryType& dict, unsigned int GCPnum)
+ImageMetadataInterfaceBase::GetGCPs(unsigned int GCPnum)
 {
   std::string key;
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
   ::itk::OStringStream lStream;
   lStream << MetaDataKey::GCPParametersKey << GCPnum;
@@ -96,9 +100,10 @@ ImageMetadataInterfaceBase::GetGCPs(MetaDataDictionaryType& dict, unsigned int G
 }
 
 std::string
-ImageMetadataInterfaceBase::GetGCPId(const MetaDataDictionaryType& dict, unsigned int GCPnum) const
+ImageMetadataInterfaceBase::GetGCPId(unsigned int GCPnum) const
 {
   std::string key;
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
   ::itk::OStringStream lStream;
   lStream << MetaDataKey::GCPParametersKey << GCPnum;
@@ -114,9 +119,10 @@ ImageMetadataInterfaceBase::GetGCPId(const MetaDataDictionaryType& dict, unsigne
 }
 
 std::string
-ImageMetadataInterfaceBase::GetGCPInfo(const MetaDataDictionaryType& dict, unsigned int GCPnum) const
+ImageMetadataInterfaceBase::GetGCPInfo(unsigned int GCPnum) const
 {
   std::string key;
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
   ::itk::OStringStream lStream;
   lStream << MetaDataKey::GCPParametersKey << GCPnum;
@@ -132,9 +138,10 @@ ImageMetadataInterfaceBase::GetGCPInfo(const MetaDataDictionaryType& dict, unsig
 }
 
 double
-ImageMetadataInterfaceBase::GetGCPRow(const MetaDataDictionaryType& dict, unsigned int GCPnum) const
+ImageMetadataInterfaceBase::GetGCPRow(unsigned int GCPnum) const
 {
   std::string key;
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
   ::itk::OStringStream lStream;
   lStream << MetaDataKey::GCPParametersKey << GCPnum;
@@ -150,9 +157,10 @@ ImageMetadataInterfaceBase::GetGCPRow(const MetaDataDictionaryType& dict, unsign
 }
 
 double
-ImageMetadataInterfaceBase::GetGCPCol(const MetaDataDictionaryType& dict, unsigned int GCPnum) const
+ImageMetadataInterfaceBase::GetGCPCol(unsigned int GCPnum) const
 {
   std::string key;
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
   ::itk::OStringStream lStream;
   lStream << MetaDataKey::GCPParametersKey << GCPnum;
@@ -168,9 +176,10 @@ ImageMetadataInterfaceBase::GetGCPCol(const MetaDataDictionaryType& dict, unsign
 }
 
 double
-ImageMetadataInterfaceBase::GetGCPX(const MetaDataDictionaryType& dict, unsigned int GCPnum) const
+ImageMetadataInterfaceBase::GetGCPX(unsigned int GCPnum) const
 {
   std::string key;
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
   ::itk::OStringStream lStream;
   lStream << MetaDataKey::GCPParametersKey << GCPnum;
@@ -186,9 +195,10 @@ ImageMetadataInterfaceBase::GetGCPX(const MetaDataDictionaryType& dict, unsigned
 }
 
 double
-ImageMetadataInterfaceBase::GetGCPY(const MetaDataDictionaryType& dict, unsigned int GCPnum) const
+ImageMetadataInterfaceBase::GetGCPY(unsigned int GCPnum) const
 {
   std::string key;
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
   ::itk::OStringStream lStream;
   lStream << MetaDataKey::GCPParametersKey << GCPnum;
@@ -204,9 +214,10 @@ ImageMetadataInterfaceBase::GetGCPY(const MetaDataDictionaryType& dict, unsigned
 }
 
 double
-ImageMetadataInterfaceBase::GetGCPZ(const MetaDataDictionaryType& dict, unsigned int GCPnum) const
+ImageMetadataInterfaceBase::GetGCPZ(unsigned int GCPnum) const
 {
   std::string key;
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
   ::itk::OStringStream lStream;
   lStream << MetaDataKey::GCPParametersKey << GCPnum;
@@ -222,9 +233,10 @@ ImageMetadataInterfaceBase::GetGCPZ(const MetaDataDictionaryType& dict, unsigned
 }
 
 ImageMetadataInterfaceBase::VectorType
-ImageMetadataInterfaceBase::GetGeoTransform(const MetaDataDictionaryType& dict) const
+ImageMetadataInterfaceBase::GetGeoTransform() const
 {
   VectorType adfGeoTransform;
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
   if (dict.HasKey(MetaDataKey::GeoTransformKey))
     {
@@ -234,9 +246,10 @@ ImageMetadataInterfaceBase::GetGeoTransform(const MetaDataDictionaryType& dict) 
 }
 
 ImageMetadataInterfaceBase::VectorType
-ImageMetadataInterfaceBase::GetUpperLeftCorner(const MetaDataDictionaryType& dict) const
+ImageMetadataInterfaceBase::GetUpperLeftCorner() const
 {
   VectorType UpperLeftCorner;
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
   if (dict.HasKey(MetaDataKey::UpperLeftCornerKey))
     {
@@ -246,9 +259,10 @@ ImageMetadataInterfaceBase::GetUpperLeftCorner(const MetaDataDictionaryType& dic
 }
 
 ImageMetadataInterfaceBase::VectorType
-ImageMetadataInterfaceBase::GetUpperRightCorner(const MetaDataDictionaryType& dict) const
+ImageMetadataInterfaceBase::GetUpperRightCorner() const
 {
   VectorType UpperRightCorner;
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
   if (dict.HasKey(MetaDataKey::UpperRightCornerKey))
     {
@@ -258,9 +272,10 @@ ImageMetadataInterfaceBase::GetUpperRightCorner(const MetaDataDictionaryType& di
 }
 
 ImageMetadataInterfaceBase::VectorType
-ImageMetadataInterfaceBase::GetLowerLeftCorner(const MetaDataDictionaryType& dict) const
+ImageMetadataInterfaceBase::GetLowerLeftCorner() const
 {
   VectorType LowerLeftCorner;
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
   if (dict.HasKey(MetaDataKey::LowerLeftCornerKey))
     {
@@ -270,9 +285,10 @@ ImageMetadataInterfaceBase::GetLowerLeftCorner(const MetaDataDictionaryType& dic
 }
 
 ImageMetadataInterfaceBase::VectorType
-ImageMetadataInterfaceBase::GetLowerRightCorner(const MetaDataDictionaryType& dict) const
+ImageMetadataInterfaceBase::GetLowerRightCorner() const
 {
   VectorType LowerRightCorner;
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
   if (dict.HasKey(MetaDataKey::LowerRightCornerKey))
     {
@@ -282,9 +298,10 @@ ImageMetadataInterfaceBase::GetLowerRightCorner(const MetaDataDictionaryType& di
 }
 
 ImageMetadataInterfaceBase::ImageKeywordlistType
-ImageMetadataInterfaceBase::GetImageKeywordlist(MetaDataDictionaryType& dict)
+ImageMetadataInterfaceBase::GetImageKeywordlist()
 {
   ImageKeywordlistType ImageKeywordlist;
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
     {
@@ -294,9 +311,10 @@ ImageMetadataInterfaceBase::GetImageKeywordlist(MetaDataDictionaryType& dict)
 }
 
 const ImageMetadataInterfaceBase::ImageKeywordlistType
-ImageMetadataInterfaceBase::GetImageKeywordlist(const MetaDataDictionaryType& dict) const
+ImageMetadataInterfaceBase::GetImageKeywordlist() const
 {
   ImageKeywordlistType ImageKeywordlist;
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
     {
@@ -305,46 +323,13 @@ ImageMetadataInterfaceBase::GetImageKeywordlist(const MetaDataDictionaryType& di
   return (ImageKeywordlist);
 }
 
-double
-ImageMetadataInterfaceBase::GetSunElevation(const MetaDataDictionaryType& dict) const
-{
-  ImageKeywordlistType imageKeywordlist;
 
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-    {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-    }
-
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::string key = "support_data.elevation_angle";
-  ossimString keywordString = kwl.find(key.c_str());
-
-  return keywordString.toDouble();
-}
-
-double
-ImageMetadataInterfaceBase::GetSunAzimuth(const MetaDataDictionaryType& dict) const
-{
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-    {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-    }
-
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::string key = "support_data.azimuth_angle";
-  ossimString keywordString = kwl.find(key.c_str());
-
-  return keywordString.toDouble();
-}
 
 std::string
-ImageMetadataInterfaceBase::GetSensorID(const MetaDataDictionaryType& dict) const
+ImageMetadataInterfaceBase::GetSensorID() const
 {
   ImageKeywordlistType ImageKeywordlist;
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
     {
@@ -360,9 +345,10 @@ ImageMetadataInterfaceBase::GetSensorID(const MetaDataDictionaryType& dict) cons
 }
 
 unsigned int
-ImageMetadataInterfaceBase::GetNumberOfBands(const MetaDataDictionaryType& dict) const
+ImageMetadataInterfaceBase::GetNumberOfBands() const
 {
   ImageKeywordlistType ImageKeywordlist;
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
     {
@@ -376,9 +362,10 @@ ImageMetadataInterfaceBase::GetNumberOfBands(const MetaDataDictionaryType& dict)
 }
 
 std::vector<std::string>
-ImageMetadataInterfaceBase::GetBandName(const MetaDataDictionaryType& dict) const
+ImageMetadataInterfaceBase::GetBandName() const
 {
   ImageKeywordlistType ImageKeywordlist;
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
     {
@@ -403,9 +390,10 @@ ImageMetadataInterfaceBase::GetBandName(const MetaDataDictionaryType& dict) cons
 }
 
 double
-ImageMetadataInterfaceBase::GetXPixelSpacing(const MetaDataDictionaryType& dict) const
+ImageMetadataInterfaceBase::GetXPixelSpacing() const
 {
   ImageKeywordlistType imageKeywordlist;
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
     {
@@ -421,9 +409,10 @@ ImageMetadataInterfaceBase::GetXPixelSpacing(const MetaDataDictionaryType& dict)
 }
 
 double
-ImageMetadataInterfaceBase::GetYPixelSpacing(const MetaDataDictionaryType& dict) const
+ImageMetadataInterfaceBase::GetYPixelSpacing() const
 {
   ImageKeywordlistType imageKeywordlist;
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
     {
@@ -438,11 +427,6 @@ ImageMetadataInterfaceBase::GetYPixelSpacing(const MetaDataDictionaryType& dict)
   return keywordString.toDouble();
 }
 
-unsigned int
-ImageMetadataInterfaceBase::BandIndexToWavelengthPosition(unsigned int i) const
-{
-  return i;
-}
 
 void
 ImageMetadataInterfaceBase::PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType& dict) const
@@ -518,7 +502,47 @@ ImageMetadataInterfaceBase::PrintSelf(std::ostream& os, itk::Indent indent, cons
       }
 
     }
+}
+
+
+void
+ImageMetadataInterfaceBase
+::PrintSelf(std::ostream& os, itk::Indent indent) const
+{
+  this->Superclass::PrintSelf(os, indent);
+  os << indent << "DefaultRBand :      "  << this->GetDefaultRBand() << std::endl;
+  os << indent << "DefaultGBand :      "  << this->GetDefaultGBand() << std::endl;
+  os << indent << "DefaultBBand :      "  << this->GetDefaultBBand() << std::endl;
+  os << indent << "GetProjectionRef:   " <<  this->GetProjectionRef() << std::endl;
+  os << indent << "GetGCPProjection:   " << this->GetGCPProjection( ) << std::endl;
+  os << indent << "GetGCPCount:        " << this->GetGCPCount( ) << std::endl;
+  for(unsigned int gcpIdx = 0 ; gcpIdx  < this->GetGCPCount() ; ++ gcpIdx)
+  {
+	  //os << indent << "GetGCPs:            " << this->GetGCPs(gcpIdx) << std::endl;
+	  os << indent << "GetGCPId:           " << this->GetGCPId(gcpIdx) << std::endl;
+	  os << indent << "GetGCPInfo:         " << this->GetGCPInfo(gcpIdx) << std::endl;
+  }
+  //os << indent << "GetGeoTransform:    " << this->GetGeoTransform( ) << std::endl;
+  //os << indent << "GetUpperLeftCorner: " << this->GetUpperLeftCorner( ) << std::endl;
+  //os << indent << "GetUpperRightCorner:" << this->GetUpperRightCorner( ) << std::endl;
+  //os << indent << "GetLowerLeftCorner: " << this->GetLowerLeftCorner( ) << std::endl;
+  //os << indent << "GetLowerRightCorner:" << this->GetLowerRightCorner( ) << std::endl;
+  //os << indent << "GetImageKeywordlist:" << this->GetImageKeywordlist( ) << std::endl;
+  os << indent << "GetSensorID:        " << this->GetSensorID( ) << std::endl;
+  os << indent << "GetNumberOfBands:   " << this->GetNumberOfBands( ) << std::endl;
+  //os << indent << "GetBandName:        " << this->GetBandName( ) << std::endl;
+  os << indent << "GetXPixelSpacing:   " << this->GetXPixelSpacing( ) << std::endl;
+  os << indent << "GetYPixelSpacing:   " << this->GetYPixelSpacing( ) << std::endl;
+  os << indent << "GetDay:             " << this->GetDay( ) << std::endl;
+  os << indent << "GetMonth:           " << this->GetMonth( ) << std::endl;
+  os << indent << "GetYear:            " << this->GetYear( ) << std::endl;
+  os << indent << "GetHour:            " << this->GetHour( ) << std::endl;
+  os << indent << "GetMinute:          " << this->GetMinute( ) << std::endl;
+  os << indent << "GetProductionDay:   " << this->GetProductionDay( ) << std::endl;
+  os << indent << "GetProductionMonth: " << this->GetProductionMonth( ) << std::endl;
+  os << indent << "GetProductionYear:  " << this->GetProductionYear( ) << std::endl;
 
 }
+
 
 } // end namespace otb

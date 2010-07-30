@@ -149,7 +149,8 @@ TerraSarCalibrationImageFilter<TInputImage, TOutputImage>
   TerraSarImageMetadataInterface::Pointer lImageMetadata = otb::TerraSarImageMetadataInterface::New();
 
   // Check availability
-  bool mdIsAvailable = lImageMetadata->CanRead(this->GetInput()->GetMetaDataDictionary());
+  lImageMetadata->SetMetaDataDictionary(this->GetInput()->GetMetaDataDictionary());
+  bool mdIsAvailable = lImageMetadata->CanRead();
 
   // If the user did not set the data AND the metadata is available, set the data
 
@@ -158,7 +159,7 @@ TerraSarCalibrationImageFilter<TInputImage, TOutputImage>
     {
     if (mdIsAvailable)
       {
-      m_CalibrationFactor = lImageMetadata->GetCalibrationFactor(this->GetInput()->GetMetaDataDictionary());
+      m_CalibrationFactor = lImageMetadata->GetCalibrationFactor();
       }
     else
       {
@@ -172,13 +173,13 @@ TerraSarCalibrationImageFilter<TInputImage, TOutputImage>
     if (mdIsAvailable)
       {
       // Retrieve the number of noise records
-      unsigned int nbNoiseRecords = lImageMetadata->GetNumberOfNoiseRecords(this->GetInput()->GetMetaDataDictionary());
+      unsigned int nbNoiseRecords = lImageMetadata->GetNumberOfNoiseRecords();
 
       // Retrieve the noise records
-      ossimplugins::Noise * noiseRecords = lImageMetadata->GetNoise(this->GetInput()->GetMetaDataDictionary());
+      ossimplugins::Noise * noiseRecords = lImageMetadata->GetNoise();
 
       // Retrieve corresponding times
-      std::vector<double> noiseTimes = lImageMetadata->GetNoiseTimeUTCList(this->GetInput()->GetMetaDataDictionary());
+      std::vector<double> noiseTimes = lImageMetadata->GetNoiseTimeUTCList();
 
       if (!m_UseFastCalibration && (noiseTimes.empty() || nbNoiseRecords == 0))
         {
@@ -205,7 +206,7 @@ TerraSarCalibrationImageFilter<TInputImage, TOutputImage>
     {
     if (mdIsAvailable)
       {
-      m_PRF = lImageMetadata->GetPRF(this->GetInput()->GetMetaDataDictionary());
+      m_PRF = lImageMetadata->GetPRF();
       }
     else
       {
@@ -219,15 +220,13 @@ TerraSarCalibrationImageFilter<TInputImage, TOutputImage>
     if (mdIsAvailable)
       {
       // Retrieve center incidence angle
-      double    centerAngle = lImageMetadata->GetCenterIncidenceAngle(this->GetInput()->GetMetaDataDictionary());
-      IndexType centerIndex = lImageMetadata->GetCenterIncidenceAngleIndex(this->GetInput()->GetMetaDataDictionary());
+      double    centerAngle = lImageMetadata->GetCenterIncidenceAngle();
+      IndexType centerIndex = lImageMetadata->GetCenterIncidenceAngleIndex();
       this->AddIncidenceAngleRecord(centerIndex, centerAngle);
 
       // Retrieve corners incidence angle
-      std::vector<double> cangles = lImageMetadata->GetCornersIncidenceAngles(
-        this->GetInput()->GetMetaDataDictionary());
-      std::vector<IndexType> cindex = lImageMetadata->GetCornersIncidenceAnglesIndex(
-        this->GetInput()->GetMetaDataDictionary());
+      std::vector<double> cangles = lImageMetadata->GetCornersIncidenceAngles();
+      std::vector<IndexType> cindex = lImageMetadata->GetCornersIncidenceAnglesIndex();
 
       std::vector<double>::const_iterator             angIt = cangles.begin();
       typename std::vector<IndexType>::const_iterator indIt = cindex.begin();

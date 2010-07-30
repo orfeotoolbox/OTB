@@ -2068,57 +2068,199 @@ ADD_TEST(ioTuTerraSarImageMetadataInterfaceNew ${IO_TESTS18}
 )
 
 IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(ioTvImageMetadataInterfaceQBTest ${IO_TESTS18}
-         --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceQB.txt
-                         ${TEMP}/ioTvImageMetadataInterfaceQB.txt
-        otbImageMetadataInterfaceTest
+
+#------------ ImageMetadataInterfaceBaseTest ---------------
+
+ADD_TEST(ioTvImageMetadataInterfaceBaseTest_QB ${IO_TESTS18}
+#         --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_QB.txt
+#                         ${TEMP}/ioTvImageMetadataInterfaceBase_QB.txt
+        otbImageMetadataInterfaceBaseTest
         ${LARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
-        ${TEMP}/ioTvImageMetadataInterfaceQB.txt
-)
-ADD_TEST(ioTvImageMetadataInterfaceQBCevennesTest ${IO_TESTS18}
-         --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceQBCevennes.txt
-                         ${TEMP}/ioTvImageMetadataInterfaceQBCevennes.txt
-        otbImageMetadataInterfaceTest
+        ${TEMP}/ioTvImageMetadataInterfaceBase_QB.txt
+)        
+ADD_TEST(ioTvImageMetadataInterfaceBaseTest_QBCevennes ${IO_TESTS18}
+#         --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_QBCevennes.txt
+#                         ${TEMP}/ioTvImageMetadataInterfaceBase_QBCevennes.txt
+        otbImageMetadataInterfaceBaseTest
         ${LARGEDATA}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
-        ${TEMP}/ioTvImageMetadataInterfaceQBCevennes.txt
+        ${TEMP}/ioTvImageMetadataInterfaceBase_QBCevennes.txt
 )
-ADD_TEST(ioTvImageMetadataInterfaceQBMULTest ${IO_TESTS18}
-         --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceQBMUL.txt
-                         ${TEMP}/ioTvImageMetadataInterfaceQBMUL.txt
-        otbImageMetadataInterfaceTest
+ADD_TEST(ioTvImageMetadataInterfaceBaseTest_QBMUL ${IO_TESTS18}
+#         --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_QBMUL.txt
+#                         ${TEMP}/ioTvImageMetadataInterfaceBase_QBMUL.txt
+        otbImageMetadataInterfaceBaseTest
         ${LARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
-        ${TEMP}/ioTvImageMetadataInterfaceQBMUL.txt
+        ${TEMP}/ioTvImageMetadataInterfaceBase_QBMUL.txt
 )
-ADD_TEST(ioTvImageMetadataInterfaceWV2PanTest ${IO_TESTS18}
-#         --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceWV2RomePan.txt
-#                         ${TEMP}/ioTvImageMetadataInterfaceWV2RomePan.txt
-        otbImageMetadataInterfaceTest2
+ADD_TEST(ioTvImageMetadataInterfaceBaseTest_WV2Pan ${IO_TESTS18}
+#         --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_WV2RomePan.txt
+#                         ${TEMP}/ioTvImageMetadataInterfaceBase_WV2RomePan.txt
+        otbImageMetadataInterfaceBaseTest
         ${LARGEDATA}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF
-        ${TEMP}/ioTvImageMetadataInterfaceWV2RomePan.txt
+        ${TEMP}/ioTvImageMetadataInterfaceBase_WV2RomePan.txt
 )
-
-ADD_TEST(ioTvImageMetadataInterfaceWV2MulTest ${IO_TESTS18}
-#         --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceWV2RomeMul.txt
-#                         ${TEMP}/ioTvImageMetadataInterfaceWV2RomeMul.txt
-        otbImageMetadataInterfaceTest2
+ADD_TEST(ioTvImageMetadataInterfaceBaseTest_WV2Mul ${IO_TESTS18}
+#         --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_WV2RomeMul.txt
+#                         ${TEMP}/ioTvImageMetadataInterfaceBase_WV2RomeMul.txt
+        otbImageMetadataInterfaceBaseTest
         ${LARGEDATA}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL/09DEC10103019-M2AS-052298844010_01_P001.TIF
-        ${TEMP}/ioTvImageMetadataInterfaceWV2RomeMul.txt
+        ${TEMP}/ioTvImageMetadataInterfaceBase_WV2RomeMul.txt
+)
+ADD_TEST(ioTvImageMetadataInterfaceBaseTest_IKONOS ${IO_TESTS18}
+#         --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_IKONOS.txt
+#                         ${TEMP}/ioTvImageMetadataInterfaceBase_IKONOS.txt
+        otbImageMetadataInterfaceBaseTest
+        ${LARGEDATA}/IKONOS/BLOSSEVILLE/po_2619900_blu_0000000.tif
+        ${TEMP}/ioTvImageMetadataInterfaceBase_IKONOS.txt
+)
+ADD_TEST(ioTvImageMetadataInterfaceBaseTest_SPOT ${IO_TESTS18}
+#         --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_SPOT.txt
+#                         ${TEMP}/ioTvImageMetadataInterfaceBase_SPOT.txt
+        otbImageMetadataInterfaceBaseTest
+        ${LARGEDATA}/SPOT5/TEHERAN/IMAGERY.TIF
+        ${TEMP}/ioTvImageMetadataInterfaceBase_SPOT.txt
+)
+ADD_TEST(ioTvImageMetadataInterfaceBaseTest_FORMOSAT2 ${IO_TESTS18}
+#         --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_FORMOSAT2.txt
+#                         ${TEMP}/ioTvImageMetadataInterfaceBase_FORMOSAT2.txt
+        otbImageMetadataInterfaceBaseTest
+        ${LARGEDATA}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF
+        ${TEMP}/ioTvImageMetadataInterfaceBase_FORMOSAT2.txt
+)
+ADD_TEST(ioTvTImageMetadataInterfaceBaseTest_TSX1dims ${IO_TESTS18}
+#         --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_TSX1dims.txt
+#                         ${TEMP}/ioTvImageMetadataInterfaceBase_TSX1dims.txt
+        otbImageMetadataInterfaceBaseTest
+        ${LARGEDATA}/TERRASARX/dims/TSX-1.SAR.L1B/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_strip_011.cos
+        ${TEMP}/ioTvTImageMetadataInterfaceBase_TSX1dims.txt
+)
+ADD_TEST(ioTvImageMetadataInterfaceBaseTest_TSX1TORONTO ${IO_TESTS18}
+#         --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_TSX1TORONTO.txt
+#                         ${TEMP}/ioTvImageMetadataInterfaceBase_TSX1TORONTO.txt
+        otbImageMetadataInterfaceBaseTest
+        ${LARGEDATA}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
+        ${TEMP}/ioTvImageMetadataInterfaceBase_TSX1TORONTO.txt
+)
+ADD_TEST(ioTvImageMetadataInterfaceBaseTest_TSX1PANGKALANBUUNUsingHHCosFile ${IO_TESTS18}
+#         --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_TSX1PANGKALANBUUNUsingHHCosFile.txt
+#                         ${TEMP}/ioTvImageMetadataInterfaceBase_TSX1PANGKALANBUUNUsingHHCosFile.txt
+        otbImageMetadataInterfaceBaseTest
+        ${LARGEDATA}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+        ${TEMP}/ioTvImageMetadataInterfaceBase_TSX1PANGKALANBUUNUsingHHCosFile.txt
+)
+ADD_TEST(ioTvImageMetadataInterfaceBaseTest_TSX1PANGKALANBUUNUsingVVCosFile ${IO_TESTS18}
+#         --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_TSX1PANGKALANBUUNUsingVVCosFile.txt
+#                         ${TEMP}/ioTvImageMetadataInterfaceBase_TSX1PANGKALANBUUNUsingVVCosFile.txt
+        otbImageMetadataInterfaceBaseTest
+        ${LARGEDATA}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_VV_SRA_stripFar_008.cos
+        ${TEMP}/ioTvImageMetadataInterfaceBase_TSX1PANGKALANBUUNUsingVVCosFile.txt
+)
+ADD_TEST(ioTvImageMetadataInterfaceBaseTest_TSX1PANGKALANBUUNUsingXmlFile ${IO_TESTS18}
+#         --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_TSX1PangkalanbuunuUsingXmlFile.txt
+#                         ${TEMP}/ioTvImageMetadataInterfaceBase_TSX1PangkalanbuunuUsingXmlFile.txt
+        otbImageMetadataInterfaceBaseTest
+        ${LARGEDATA}/TERRASARX/PANGKALANBUUN/TSX1_SAR__SSC______SM_D_SRA_20080313T221955_20080313T222003.xml
+        ${TEMP}/ioTvImageMetadataInterfaceBase_TSX1PangkalanbuunuUsingXmlFile.txt
 )
 
-ADD_TEST(ioTvImageMetadataInterfaceIKONOSTest ${IO_TESTS18}
-         --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceIKONOS.txt
-                         ${TEMP}/ioTvImageMetadataInterfaceIKONOS.txt
-        otbImageMetadataInterfaceTest
+
+#------------ OpticalImageMetadataInterfaceTest ---------------
+
+ADD_TEST(ioTvOpticalImageMetadataInterfaceTest_QB ${IO_TESTS18}
+#         --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_QB.txt
+#                         ${TEMP}/ioTvOpticalImageMetadataInterface_QB.txt
+        otbOpticalImageMetadataInterfaceTest
+        ${LARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${TEMP}/ioTvOpticalImageMetadataInterface_QB.txt
+)
+ADD_TEST(ioTvOpticalImageMetadataInterfaceTest_QBCevennes ${IO_TESTS18}
+#         --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_QBCevennes.txt
+#                         ${TEMP}/ioTvOpticalImageMetadataInterface_QBCevennes.txt
+        otbOpticalImageMetadataInterfaceTest
+        ${LARGEDATA}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
+        ${TEMP}/ioTvOpticalImageMetadataInterface_QBCevennes.txt
+)
+ADD_TEST(ioTvOpticalImageMetadataInterfaceTest_QBMUL ${IO_TESTS18}
+#         --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_QBMUL.txt
+#                         ${TEMP}/ioTvOpticalImageMetadataInterface_QBMUL.txt
+        otbOpticalImageMetadataInterfaceTest
+        ${LARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+        ${TEMP}/ioTvOpticalImageMetadataInterface_QBMUL.txt
+)
+ADD_TEST(ioTvOpticalImageMetadataInterfaceTest_WV2Pan ${IO_TESTS18}
+#         --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_WV2RomePan.txt
+#                         ${TEMP}/ioTvOpticalImageMetadataInterface_WV2RomePan.txt
+        otbOpticalImageMetadataInterfaceTest
+        ${LARGEDATA}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF
+        ${TEMP}/ioTvOpticalImageMetadataInterface_WV2RomePan.txt
+)
+ADD_TEST(ioTvOpticalImageMetadataInterfaceTest_WV2Mul ${IO_TESTS18}
+#         --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_WV2RomeMul.txt
+#                         ${TEMP}/ioTvImageMetadataInterfaceWV2Base_RomeMul.txt
+        otbOpticalImageMetadataInterfaceTest
+        ${LARGEDATA}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL/09DEC10103019-M2AS-052298844010_01_P001.TIF
+        ${TEMP}/ioTvOpticalImageMetadataInterface_WV2RomeMul.txt
+)
+ADD_TEST(ioTvOpticalImageMetadataInterfaceTest_IKONOS ${IO_TESTS18}
+#         --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_IKONOS.txt
+#                         ${TEMP}/ioTvOpticalImageMetadataInterface_IKONOS.txt
+        otbOpticalImageMetadataInterfaceTest
         ${LARGEDATA}/IKONOS/BLOSSEVILLE/po_2619900_blu_0000000.tif
-        ${TEMP}/ioTvImageMetadataInterfaceIKONOS.txt
+        ${TEMP}/ioTvOpticalImageMetadataInterface_IKONOS.txt
 )
-ADD_TEST(ioTvImageMetadataInterfaceSPOTTest ${IO_TESTS18}
-         --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceSPOT.txt
-                         ${TEMP}/ioTvImageMetadataInterfaceSPOT.txt
-        otbImageMetadataInterfaceTest
+ADD_TEST(ioTvOpticalImageMetadataInterfaceTest_SPOT ${IO_TESTS18}
+#         --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_SPOT.txt
+#                         ${TEMP}/ioTvOpticalImageMetadataInterface_SPOT.txt
+        otbOpticalImageMetadataInterfaceTest
         ${LARGEDATA}/SPOT5/TEHERAN/IMAGERY.TIF
-        ${TEMP}/ioTvImageMetadataInterfaceSPOT.txt
+        ${TEMP}/ioTvOpticalImageMetadataInterface_SPOT.txt
 )
+ADD_TEST(ioTvOpticalImageMetadataInterfaceTest_FORMOSAT2 ${IO_TESTS18}
+#         --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_FORMOSAT2.txt
+#                         ${TEMP}/ioTvOpticalImageMetadataInterface_FORMOSAT2.txt
+        otbOpticalImageMetadataInterfaceTest
+        ${LARGEDATA}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF
+        ${TEMP}/ioTvOpticalImageMetadataInterface_FORMOSAT2.txt
+)
+
+#------------ SarImageMetadataInterfaceTest ---------------
+ADD_TEST(ioTvTSarImageMetadataInterfaceTest_TSX1dims ${IO_TESTS18}
+#         --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvSarImageMetadataInterface_TSX1dims.txt
+#                         ${TEMP}/ioTvSarImageMetadataInterface_TSX1dims.txt
+        otbSarImageMetadataInterfaceTest
+        ${LARGEDATA}/TERRASARX/dims/TSX-1.SAR.L1B/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_strip_011.cos
+        ${TEMP}/ioTvTSarImageMetadataInterface_TSX1dims.txt
+)
+ADD_TEST(ioTvSarImageMetadataInterfaceTest_TSX1TORONTO ${IO_TESTS18}
+#         --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvSarImageMetadataInterface_TSX1TORONTO.txt
+#                         ${TEMP}/ioTvSarImageMetadataInterface_TSX1TORONTO.txt
+        otbSarImageMetadataInterfaceTest
+        ${LARGEDATA}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
+        ${TEMP}/ioTvSarImageMetadataInterface_TSX1TORONTO.txt
+)
+ADD_TEST(ioTvSarImageMetadataInterfaceTest_TSX1PANGKALANBUUNUsingHHCosFile ${IO_TESTS18}
+#         --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvSarImageMetadataInterface_TSX1PANGKALANBUUNUsingHHCosFile.txt
+#                         ${TEMP}/ioTvSarImageMetadataInterface_TSX1PANGKALANBUUNUsingHHCosFile.txt
+        otbSarImageMetadataInterfaceTest
+        ${LARGEDATA}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+        ${TEMP}/ioTvSarImageMetadataInterface_TSX1PANGKALANBUUNUsingHHCosFile.txt
+)
+ADD_TEST(ioTvSarImageMetadataInterfaceTest_TSX1PANGKALANBUUNUsingVVCosFile ${IO_TESTS18}
+#         --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvSarImageMetadataInterface_TSX1PANGKALANBUUNUsingVVCosFile.txt
+#                         ${TEMP}/ioTvSarImageMetadataInterface_TSX1PANGKALANBUUNUsingVVCosFile.txt
+        otbSarImageMetadataInterfaceTest
+        ${LARGEDATA}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_VV_SRA_stripFar_008.cos
+        ${TEMP}/ioTvSarImageMetadataInterface_TSX1PANGKALANBUUNUsingVVCosFile.txt
+)
+ADD_TEST(ioTvSarImageMetadataInterfaceTest_TSX1PANGKALANBUUNUsingXmlFile ${IO_TESTS18}
+#         --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvSarImageMetadataInterface_TSX1PangkalanbuunuUsingXmlFile.txt
+#                         ${TEMP}/ioTvSarImageMetadataInterface_TSX1PangkalanbuunuUsingXmlFile.txt
+        otbSarImageMetadataInterfaceTest
+        ${LARGEDATA}/TERRASARX/PANGKALANBUUN/TSX1_SAR__SSC______SM_D_SRA_20080313T221955_20080313T222003.xml
+        ${TEMP}/ioTvSarImageMetadataInterface_TSX1PangkalanbuunuUsingXmlFile.txt
+)
+
+
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 ADD_TEST(ioTvImageMetadataInterfaceTest ${IO_TESTS18}
@@ -2131,38 +2273,6 @@ ADD_TEST(ioTvImageMetadataInterfaceTest ${IO_TESTS18}
 
 
 IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(ioTvTerraSarImageMetadataInterface_dims ${IO_TESTS18}
-         --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvTerraSarImageMetadataInterface_dims.txt
-                         ${TEMP}/ioTvTerraSarImageMetadataInterface_dims.txt
-        otbTerraSarImageMetadataInterface
-        ${LARGEDATA}/TERRASARX/dims/TSX-1.SAR.L1B/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_strip_011.cos
-        ${TEMP}/ioTvTerraSarImageMetadataInterface_dims.txt
-)
-ADD_TEST(ioTvTerraSarImageMetadataInterface_TORONTO ${IO_TESTS18}
-         --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvTerraSarImageMetadataInterface_TORONTO.txt
-                         ${TEMP}/ioTvTerraSarImageMetadataInterface_TORONTO.txt
-        otbTerraSarImageMetadataInterface
-        ${LARGEDATA}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
-        ${TEMP}/ioTvTerraSarImageMetadataInterface_TORONTO.txt
-)
-
-ADD_TEST(ioTuTerraSarImageMetadataInterface_PANGKALANBUUNUsingHHCosFile ${IO_TESTS18}
-        otbTerraSarImageMetadataInterface
-        ${LARGEDATA}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
-        ${TEMP}/ioTvTerraSarImageMetadataInterface_PANGKALANBUUNUsingHHCosFile.txt
-)
-
-ADD_TEST(ioTuTerraSarImageMetadataInterface_PANGKALANBUUNUsingVVCosFile ${IO_TESTS18}
-        otbTerraSarImageMetadataInterface
-        ${LARGEDATA}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_VV_SRA_stripFar_008.cos
-        ${TEMP}/ioTvTerraSarImageMetadataInterface_PANGKALANBUUNUsingVVCosFile.txt
-)
-
-ADD_TEST(ioTuTerraSarImageMetadataInterface_PANGKALANBUUNUsingXmlFile ${IO_TESTS18}
-        otbTerraSarImageMetadataInterface
-        ${LARGEDATA}/TERRASARX/PANGKALANBUUN/TSX1_SAR__SSC______SM_D_SRA_20080313T221955_20080313T222003.xml
-        ${TEMP}/ioTvTerraSarImageMetadataInterface_PangkalanbuunuUsingXmlFile.txt
-)
 
 ADD_TEST(ioTvImageKeywordlistSPOT5 ${IO_TESTS18}
   --ignore-order --compare-n-ascii ${NOTOL} 2
@@ -2635,7 +2745,9 @@ otbQuickBirdImageMetadataInterfaceNew.cxx
 otbWorldView2ImageMetadataInterfaceNew.cxx
 otbIkonosImageMetadataInterfaceNew.cxx
 otbTerraSarImageMetadataInterfaceNew.cxx
-otbImageMetadataInterfaceTest.cxx
+otbImageMetadataInterfaceBaseTest.cxx
+otbOpticalImageMetadataInterfaceTest.cxx
+otbSarImageMetadataInterfaceTest.cxx
 otbImageMetadataInterfaceTest2.cxx
 otbOssimJpegFileRessourceLeakTest.cxx
 )

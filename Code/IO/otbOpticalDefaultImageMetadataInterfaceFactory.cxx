@@ -20,13 +20,10 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include <typeinfo>
-#include <cassert>
-
 #include "otbMacro.h"
 
-#include "otbQuickBirdImageMetadataInterfaceFactory.h"
-#include "otbQuickBirdImageMetadataInterface.h"
+#include "otbOpticalDefaultImageMetadataInterfaceFactory.h"
+#include "otbOpticalDefaultImageMetadataInterface.h"
 
 #include "itkCreateObjectFunction.h"
 #include "itkVersion.h"
@@ -34,31 +31,31 @@
 namespace otb
 {
 
-QuickBirdImageMetadataInterfaceFactory
-::QuickBirdImageMetadataInterfaceFactory()
+OpticalDefaultImageMetadataInterfaceFactory
+::OpticalDefaultImageMetadataInterfaceFactory()
 {
   this->RegisterOverride("OpticalImageMetadataInterface",
-                          "otbQuickBirdImageMetadataInterface",
-                          "QuickBird Metadata Interface",
-                          1,
-                          itk::CreateObjectFunction<QuickBirdImageMetadataInterface>::New());
+                         "otbOpticalDefaultImageMetadataInterface",
+                         "Default Metadata Interface",
+                         1,
+                         itk::CreateObjectFunction<OpticalDefaultImageMetadataInterface>::New());
 }
 
-QuickBirdImageMetadataInterfaceFactory
-::~QuickBirdImageMetadataInterfaceFactory()
+OpticalDefaultImageMetadataInterfaceFactory
+::~OpticalDefaultImageMetadataInterfaceFactory()
 {
 }
 
 const char*
-QuickBirdImageMetadataInterfaceFactory::GetITKSourceVersion(void) const
+OpticalDefaultImageMetadataInterfaceFactory::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
 
 const char*
-QuickBirdImageMetadataInterfaceFactory::GetDescription() const
+OpticalDefaultImageMetadataInterfaceFactory::GetDescription() const
 {
-  return "QuickBird Metadata Interface Factory, handle QuickBird metadata in OTB";
+  return "Optical Default Metadata Interface Factory, handle Default Optical metadata in OTB";
 }
 
 } // end namespace otb

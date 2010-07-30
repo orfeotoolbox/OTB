@@ -77,7 +77,7 @@ SpectralSensitivityReader
   try
     {
     SpotImageMetadataInterface::Pointer lImageMetadata = SpotImageMetadataInterface::New();
-    sensor = ossimString(lImageMetadata->GetSensorID(m_Image->GetMetaDataDictionary()));
+    sensor = ossimString(lImageMetadata->GetSensorID());
     sensor.upcase();
     // Suppress spaces
     for (unsigned int i = 0; i < sensor.size() - 1; i++)
@@ -90,8 +90,8 @@ SpectralSensitivityReader
       }
 
     oss.str("");
-    oss << lImageMetadata->GetInstrument(m_Image->GetMetaDataDictionary());
-    oss << lImageMetadata->GetInstrumentIndex(m_Image->GetMetaDataDictionary());
+    oss << lImageMetadata->GetInstrument();
+    oss << lImageMetadata->GetInstrumentIndex();
     }
   catch (itk::ExceptionObject& err)
     {

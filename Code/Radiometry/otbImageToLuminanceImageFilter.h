@@ -28,8 +28,8 @@
 #include "itkNumericTraits.h"
 #include "itkVariableLengthVector.h"
 #include "otbMacro.h"
-#include "otbImageMetadataInterfaceBase.h"
-#include "otbImageMetadataInterfaceFactory.h"
+#include "otbOpticalImageMetadataInterface.h"
+#include "otbOpticalImageMetadataInterfaceFactory.h"
 
 #include <fstream>
 
@@ -176,16 +176,16 @@ protected:
   /** Update the functor list and input parameters */
   virtual void BeforeThreadedGenerateData(void)
   {
-    ImageMetadataInterfaceBase::Pointer imageMetadataInterface = ImageMetadataInterfaceFactory::CreateIMI(
+    OpticalImageMetadataInterface::Pointer imageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(
       this->GetInput()->GetMetaDataDictionary());
     if (m_Alpha.GetSize() == 0)
       {
-      m_Alpha = imageMetadataInterface->GetPhysicalGain(this->GetInput()->GetMetaDataDictionary());
+      m_Alpha = imageMetadataInterface->GetPhysicalGain();
       }
 
     if (m_Beta.GetSize() == 0)
       {
-      m_Beta = imageMetadataInterface->GetPhysicalBias(this->GetInput()->GetMetaDataDictionary());
+      m_Beta = imageMetadataInterface->GetPhysicalBias();
       }
 
     otbMsgDevMacro(<< "Dimension: ");

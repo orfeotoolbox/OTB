@@ -20,9 +20,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include <typeinfo>
-#include <cassert>
-
 #include "otbMacro.h"
 
 #include "otbFormosatImageMetadataInterfaceFactory.h"
@@ -36,7 +33,7 @@ namespace otb
 FormosatImageMetadataInterfaceFactory
 ::FormosatImageMetadataInterfaceFactory()
 {
-  this->RegisterOverride("ImageMetadataInterfaceBase",
+  this->RegisterOverride("OpticalImageMetadataInterface",
                          "otbFormosatImageMetadataInterface",
                          "Formosat Metadata Interface",
                          1,

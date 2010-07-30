@@ -20,9 +20,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include <typeinfo>
-#include <cassert>
-
 #include "otbMacro.h"
 
 #include "otbWorldView2ImageMetadataInterface.h"
@@ -38,17 +35,18 @@ WorldView2ImageMetadataInterface
 }
 
 bool
-WorldView2ImageMetadataInterface::CanRead(const MetaDataDictionaryType& dict) const
+WorldView2ImageMetadataInterface::CanRead() const
 {
-  std::string sensorID = GetSensorID(dict);
+  std::string sensorID = GetSensorID();
   if (sensorID.find("WV02") != std::string::npos) return true;
   else return false;
 }
 
 WorldView2ImageMetadataInterface::VariableLengthVectorType
-WorldView2ImageMetadataInterface::GetSolarIrradiance(const MetaDataDictionaryType& dict) const
+WorldView2ImageMetadataInterface::GetSolarIrradiance() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no WorldView2 Image");
     }
@@ -88,9 +86,10 @@ WorldView2ImageMetadataInterface::GetSolarIrradiance(const MetaDataDictionaryTyp
 }
 
 int
-WorldView2ImageMetadataInterface::GetDay(const MetaDataDictionaryType& dict) const
+WorldView2ImageMetadataInterface::GetDay() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no WorldView2 Image");
     }
@@ -113,6 +112,8 @@ WorldView2ImageMetadataInterface::GetDay(const MetaDataDictionaryType& dict) con
   ossimString              keywordString = kwl.find(key.c_str());
   std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
 
+  std::cout << "WorldView2ImageMetadataInterface::GetDay" << keywordString << std::endl;
+
   if (keywordStrings.size() <= 2) itkExceptionMacro(<< "Invalid Day");
 
   ossimString day = keywordStrings[2];
@@ -121,9 +122,10 @@ WorldView2ImageMetadataInterface::GetDay(const MetaDataDictionaryType& dict) con
 }
 
 int
-WorldView2ImageMetadataInterface::GetMonth(const MetaDataDictionaryType& dict) const
+WorldView2ImageMetadataInterface::GetMonth() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no WorldView2 Image");
     }
@@ -154,9 +156,10 @@ WorldView2ImageMetadataInterface::GetMonth(const MetaDataDictionaryType& dict) c
 }
 
 int
-WorldView2ImageMetadataInterface::GetYear(const MetaDataDictionaryType& dict) const
+WorldView2ImageMetadataInterface::GetYear() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no WorldView2 Image");
     }
@@ -187,9 +190,10 @@ WorldView2ImageMetadataInterface::GetYear(const MetaDataDictionaryType& dict) co
 }
 
 int
-WorldView2ImageMetadataInterface::GetHour(const MetaDataDictionaryType& dict) const
+WorldView2ImageMetadataInterface::GetHour() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no WorldView2 Image");
     }
@@ -220,9 +224,10 @@ WorldView2ImageMetadataInterface::GetHour(const MetaDataDictionaryType& dict) co
 }
 
 int
-WorldView2ImageMetadataInterface::GetMinute(const MetaDataDictionaryType& dict) const
+WorldView2ImageMetadataInterface::GetMinute() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no WorldView2 Image");
     }
@@ -258,9 +263,10 @@ WorldView2ImageMetadataInterface::GetMinute(const MetaDataDictionaryType& dict) 
 }
 
 int
-WorldView2ImageMetadataInterface::GetProductionDay(const MetaDataDictionaryType& dict) const
+WorldView2ImageMetadataInterface::GetProductionDay() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no WorldView2 Image");
     }
@@ -291,9 +297,10 @@ WorldView2ImageMetadataInterface::GetProductionDay(const MetaDataDictionaryType&
 }
 
 int
-WorldView2ImageMetadataInterface::GetProductionMonth(const MetaDataDictionaryType& dict) const
+WorldView2ImageMetadataInterface::GetProductionMonth() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no WorldView2 Image");
     }
@@ -324,9 +331,10 @@ WorldView2ImageMetadataInterface::GetProductionMonth(const MetaDataDictionaryTyp
 }
 
 int
-WorldView2ImageMetadataInterface::GetProductionYear(const MetaDataDictionaryType& dict) const
+WorldView2ImageMetadataInterface::GetProductionYear() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no WorldView2 Image");
     }
@@ -358,9 +366,10 @@ WorldView2ImageMetadataInterface::GetProductionYear(const MetaDataDictionaryType
 
 WorldView2ImageMetadataInterface::VariableLengthVectorType
 WorldView2ImageMetadataInterface
-::GetPhysicalBias(const MetaDataDictionaryType& dict) const
+::GetPhysicalBias() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no WorldView2 Image");
     }
@@ -396,9 +405,10 @@ WorldView2ImageMetadataInterface
 
 WorldView2ImageMetadataInterface::VariableLengthVectorType
 WorldView2ImageMetadataInterface
-::GetPhysicalGain(const MetaDataDictionaryType& dict) const
+::GetPhysicalGain() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no WorldView2 Image");
     }
@@ -472,9 +482,10 @@ WorldView2ImageMetadataInterface
 }
 
 double
-WorldView2ImageMetadataInterface::GetSatElevation(const MetaDataDictionaryType& dict) const
+WorldView2ImageMetadataInterface::GetSatElevation() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no WorldView2 Image");
     }
@@ -495,9 +506,10 @@ WorldView2ImageMetadataInterface::GetSatElevation(const MetaDataDictionaryType& 
 }
 
 double
-WorldView2ImageMetadataInterface::GetSatAzimuth(const MetaDataDictionaryType& dict) const
+WorldView2ImageMetadataInterface::GetSatAzimuth() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no WorldView2 Image");
     }
@@ -519,9 +531,10 @@ WorldView2ImageMetadataInterface::GetSatAzimuth(const MetaDataDictionaryType& di
 
 WorldView2ImageMetadataInterface::VariableLengthVectorType
 WorldView2ImageMetadataInterface
-::GetFirstWavelengths(const MetaDataDictionaryType& dict) const
+::GetFirstWavelengths() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no WorldView2 Image");
     }
@@ -566,9 +579,10 @@ WorldView2ImageMetadataInterface
 
 WorldView2ImageMetadataInterface::VariableLengthVectorType
 WorldView2ImageMetadataInterface
-::GetLastWavelengths(const MetaDataDictionaryType& dict) const
+::GetLastWavelengths() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no WorldView2 Image");
     }

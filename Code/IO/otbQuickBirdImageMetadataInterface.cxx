@@ -20,9 +20,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include <typeinfo>
-#include <cassert>
-
 #include "otbMacro.h"
 
 #include "otbQuickBirdImageMetadataInterface.h"
@@ -38,17 +35,18 @@ QuickBirdImageMetadataInterface
 }
 
 bool
-QuickBirdImageMetadataInterface::CanRead(const MetaDataDictionaryType& dict) const
+QuickBirdImageMetadataInterface::CanRead() const
 {
-  std::string sensorID = GetSensorID(dict);
+  std::string sensorID = GetSensorID();
   if (sensorID.find("QB02") != std::string::npos) return true;
   else return false;
 }
 
 QuickBirdImageMetadataInterface::VariableLengthVectorType
-QuickBirdImageMetadataInterface::GetSolarIrradiance(const MetaDataDictionaryType& dict) const
+QuickBirdImageMetadataInterface::GetSolarIrradiance() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no QuickBird Image");
     }
@@ -88,9 +86,10 @@ QuickBirdImageMetadataInterface::GetSolarIrradiance(const MetaDataDictionaryType
 }
 
 int
-QuickBirdImageMetadataInterface::GetDay(const MetaDataDictionaryType& dict) const
+QuickBirdImageMetadataInterface::GetDay() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no QuickBird Image");
     }
@@ -121,9 +120,10 @@ QuickBirdImageMetadataInterface::GetDay(const MetaDataDictionaryType& dict) cons
 }
 
 int
-QuickBirdImageMetadataInterface::GetMonth(const MetaDataDictionaryType& dict) const
+QuickBirdImageMetadataInterface::GetMonth() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no QuickBird Image");
     }
@@ -154,9 +154,10 @@ QuickBirdImageMetadataInterface::GetMonth(const MetaDataDictionaryType& dict) co
 }
 
 int
-QuickBirdImageMetadataInterface::GetYear(const MetaDataDictionaryType& dict) const
+QuickBirdImageMetadataInterface::GetYear() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no QuickBird Image");
     }
@@ -187,9 +188,10 @@ QuickBirdImageMetadataInterface::GetYear(const MetaDataDictionaryType& dict) con
 }
 
 int
-QuickBirdImageMetadataInterface::GetHour(const MetaDataDictionaryType& dict) const
+QuickBirdImageMetadataInterface::GetHour() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no QuickBird Image");
     }
@@ -220,9 +222,10 @@ QuickBirdImageMetadataInterface::GetHour(const MetaDataDictionaryType& dict) con
 }
 
 int
-QuickBirdImageMetadataInterface::GetMinute(const MetaDataDictionaryType& dict) const
+QuickBirdImageMetadataInterface::GetMinute() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no QuickBird Image");
     }
@@ -253,9 +256,10 @@ QuickBirdImageMetadataInterface::GetMinute(const MetaDataDictionaryType& dict) c
 }
 
 int
-QuickBirdImageMetadataInterface::GetProductionDay(const MetaDataDictionaryType& dict) const
+QuickBirdImageMetadataInterface::GetProductionDay() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no QuickBird Image");
     }
@@ -286,9 +290,10 @@ QuickBirdImageMetadataInterface::GetProductionDay(const MetaDataDictionaryType& 
 }
 
 int
-QuickBirdImageMetadataInterface::GetProductionMonth(const MetaDataDictionaryType& dict) const
+QuickBirdImageMetadataInterface::GetProductionMonth() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no QuickBird Image");
     }
@@ -319,9 +324,10 @@ QuickBirdImageMetadataInterface::GetProductionMonth(const MetaDataDictionaryType
 }
 
 int
-QuickBirdImageMetadataInterface::GetProductionYear(const MetaDataDictionaryType& dict) const
+QuickBirdImageMetadataInterface::GetProductionYear() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no QuickBird Image");
     }
@@ -353,9 +359,10 @@ QuickBirdImageMetadataInterface::GetProductionYear(const MetaDataDictionaryType&
 
 QuickBirdImageMetadataInterface::VariableLengthVectorType
 QuickBirdImageMetadataInterface
-::GetPhysicalBias(const MetaDataDictionaryType& dict) const
+::GetPhysicalBias() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no QuickBird Image");
     }
@@ -392,9 +399,10 @@ QuickBirdImageMetadataInterface
 
 QuickBirdImageMetadataInterface::VariableLengthVectorType
 QuickBirdImageMetadataInterface
-::GetPhysicalGain(const MetaDataDictionaryType& dict) const
+::GetPhysicalGain() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no QuickBird Image");
     }
@@ -419,9 +427,9 @@ QuickBirdImageMetadataInterface
 //     itkGenericExceptionMacro(<<"Could not retrieve the production date for Ikonos");
 //   }
 
-  int  productionYear = this->GetProductionYear(dict); //keywordStrings[0].toInt();
-  int  productionMonth = this->GetProductionMonth(dict); //keywordStrings[1].toInt();
-  int  productionDay = this->GetProductionDay(dict); //keywordStrings[2].toInt();
+  int  productionYear = this->GetProductionYear(); //keywordStrings[0].toInt();
+  int  productionMonth = this->GetProductionMonth(); //keywordStrings[1].toInt();
+  int  productionDay = this->GetProductionDay(); //keywordStrings[2].toInt();
   bool isPost20030606 = false;
   if (productionYear > 2003) isPost20030606 = true;
   else
@@ -547,9 +555,10 @@ QuickBirdImageMetadataInterface
 }
 
 double
-QuickBirdImageMetadataInterface::GetSatElevation(const MetaDataDictionaryType& dict) const
+QuickBirdImageMetadataInterface::GetSatElevation() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no QuickBird Image");
     }
@@ -570,9 +579,10 @@ QuickBirdImageMetadataInterface::GetSatElevation(const MetaDataDictionaryType& d
 }
 
 double
-QuickBirdImageMetadataInterface::GetSatAzimuth(const MetaDataDictionaryType& dict) const
+QuickBirdImageMetadataInterface::GetSatAzimuth() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no QuickBird Image");
     }
@@ -594,9 +604,10 @@ QuickBirdImageMetadataInterface::GetSatAzimuth(const MetaDataDictionaryType& dic
 
 QuickBirdImageMetadataInterface::VariableLengthVectorType
 QuickBirdImageMetadataInterface
-::GetFirstWavelengths(const MetaDataDictionaryType& dict) const
+::GetFirstWavelengths() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no QuickBird Image");
     }
@@ -641,9 +652,10 @@ QuickBirdImageMetadataInterface
 
 QuickBirdImageMetadataInterface::VariableLengthVectorType
 QuickBirdImageMetadataInterface
-::GetLastWavelengths(const MetaDataDictionaryType& dict) const
+::GetLastWavelengths() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no QuickBird Image");
     }

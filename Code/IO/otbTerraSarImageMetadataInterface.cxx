@@ -20,9 +20,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include <typeinfo>
-#include <cassert>
-
 #include "otbMacro.h"
 
 #include "otbTerraSarImageMetadataInterface.h"
@@ -41,8 +38,9 @@ TerraSarImageMetadataInterface
 }
 
 std::string
-TerraSarImageMetadataInterface::GetSensorID(const MetaDataDictionaryType& dict) const
+TerraSarImageMetadataInterface::GetSensorID() const
 {
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
   ImageKeywordlistType ImageKeywordlist;
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
     {
@@ -60,17 +58,18 @@ TerraSarImageMetadataInterface::GetSensorID(const MetaDataDictionaryType& dict) 
 }
 
 bool
-TerraSarImageMetadataInterface::CanRead(const MetaDataDictionaryType& dict) const
+TerraSarImageMetadataInterface::CanRead() const
 {
-  std::string sensorID = GetSensorID(dict);
+  std::string sensorID = GetSensorID();
   if (sensorID.find("TSX") != std::string::npos) return true;
   else return false;
 }
 
 int
-TerraSarImageMetadataInterface::GetDay(const MetaDataDictionaryType& dict) const
+TerraSarImageMetadataInterface::GetDay() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
     }
@@ -101,9 +100,10 @@ TerraSarImageMetadataInterface::GetDay(const MetaDataDictionaryType& dict) const
 }
 
 int
-TerraSarImageMetadataInterface::GetMonth(const MetaDataDictionaryType& dict) const
+TerraSarImageMetadataInterface::GetMonth() const
 {
-  if (!this->CanRead(dict))
+ const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
     }
@@ -134,9 +134,10 @@ TerraSarImageMetadataInterface::GetMonth(const MetaDataDictionaryType& dict) con
 }
 
 int
-TerraSarImageMetadataInterface::GetYear(const MetaDataDictionaryType& dict) const
+TerraSarImageMetadataInterface::GetYear() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
     }
@@ -168,9 +169,10 @@ TerraSarImageMetadataInterface::GetYear(const MetaDataDictionaryType& dict) cons
 }
 
 int
-TerraSarImageMetadataInterface::GetHour(const MetaDataDictionaryType& dict) const
+TerraSarImageMetadataInterface::GetHour() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
     }
@@ -201,9 +203,10 @@ TerraSarImageMetadataInterface::GetHour(const MetaDataDictionaryType& dict) cons
 }
 
 int
-TerraSarImageMetadataInterface::GetMinute(const MetaDataDictionaryType& dict) const
+TerraSarImageMetadataInterface::GetMinute() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
     }
@@ -233,9 +236,10 @@ TerraSarImageMetadataInterface::GetMinute(const MetaDataDictionaryType& dict) co
 }
 
 int
-TerraSarImageMetadataInterface::GetProductionDay(const MetaDataDictionaryType& dict) const
+TerraSarImageMetadataInterface::GetProductionDay() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
     }
@@ -266,9 +270,10 @@ TerraSarImageMetadataInterface::GetProductionDay(const MetaDataDictionaryType& d
 }
 
 int
-TerraSarImageMetadataInterface::GetProductionMonth(const MetaDataDictionaryType& dict) const
+TerraSarImageMetadataInterface::GetProductionMonth() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
     }
@@ -299,9 +304,10 @@ TerraSarImageMetadataInterface::GetProductionMonth(const MetaDataDictionaryType&
 }
 
 int
-TerraSarImageMetadataInterface::GetProductionYear(const MetaDataDictionaryType& dict) const
+TerraSarImageMetadataInterface::GetProductionYear() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
     }
@@ -332,9 +338,10 @@ TerraSarImageMetadataInterface::GetProductionYear(const MetaDataDictionaryType& 
 }
 
 double
-TerraSarImageMetadataInterface::GetCalibrationFactor(const MetaDataDictionaryType& dict) const
+TerraSarImageMetadataInterface::GetCalibrationFactor() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
     }
@@ -356,9 +363,10 @@ TerraSarImageMetadataInterface::GetCalibrationFactor(const MetaDataDictionaryTyp
 }
 
 ossimplugins::Noise *
-TerraSarImageMetadataInterface::GetNoise(const MetaDataDictionaryType& dict) const
+TerraSarImageMetadataInterface::GetNoise() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
     }
@@ -380,9 +388,10 @@ TerraSarImageMetadataInterface::GetNoise(const MetaDataDictionaryType& dict) con
 }
 
 unsigned int
-TerraSarImageMetadataInterface::GetNumberOfNoiseRecords(const MetaDataDictionaryType& dict) const
+TerraSarImageMetadataInterface::GetNumberOfNoiseRecords() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
     }
@@ -403,9 +412,10 @@ TerraSarImageMetadataInterface::GetNumberOfNoiseRecords(const MetaDataDictionary
 }
 
 TerraSarImageMetadataInterface::UIntVectorType
-TerraSarImageMetadataInterface::GetNoisePolynomialDegrees(const MetaDataDictionaryType& dict) const
+TerraSarImageMetadataInterface::GetNoisePolynomialDegrees() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
     }
@@ -423,7 +433,7 @@ TerraSarImageMetadataInterface::GetNoisePolynomialDegrees(const MetaDataDictiona
   UIntVectorType     polDeg;
   itk::OStringStream oss;
 
-  unsigned int nbRec = this->GetNumberOfNoiseRecords(dict);
+  unsigned int nbRec = this->GetNumberOfNoiseRecords();
   for (unsigned int i = 0; i < nbRec; i++)
     {
     oss.str("");
@@ -436,9 +446,10 @@ TerraSarImageMetadataInterface::GetNoisePolynomialDegrees(const MetaDataDictiona
 }
 
 TerraSarImageMetadataInterface::DoubleVectorVectorType
-TerraSarImageMetadataInterface::GetNoisePolynomialCoefficientsList(const MetaDataDictionaryType& dict) const
+TerraSarImageMetadataInterface::GetNoisePolynomialCoefficientsList() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
     }
@@ -453,8 +464,8 @@ TerraSarImageMetadataInterface::GetNoisePolynomialCoefficientsList(const MetaDat
   ossimKeywordlist kwl;
   imageKeywordlist.convertToOSSIMKeywordlist(kwl);
 
-  unsigned int   nbRec = this->GetNumberOfNoiseRecords(dict);
-  UIntVectorType polDegs = this->GetNoisePolynomialDegrees(dict);
+  unsigned int   nbRec = this->GetNumberOfNoiseRecords();
+  UIntVectorType polDegs = this->GetNoisePolynomialDegrees();
 
   DoubleVectorVectorType polCoefList;
   DoubleVectorType       polCoef;
@@ -478,9 +489,10 @@ TerraSarImageMetadataInterface::GetNoisePolynomialCoefficientsList(const MetaDat
 }
 
 TerraSarImageMetadataInterface::DoubleVectorType
-TerraSarImageMetadataInterface::GetNoiseTimeUTCList(const MetaDataDictionaryType& dict) const
+TerraSarImageMetadataInterface::GetNoiseTimeUTCList() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
     }
@@ -502,7 +514,7 @@ TerraSarImageMetadataInterface::GetNoiseTimeUTCList(const MetaDataDictionaryType
 
   int          year, month, day, hour, minu, sec;
   double       secDec, julianDay;
-  unsigned int nbRec = this->GetNumberOfNoiseRecords(dict);
+  unsigned int nbRec = this->GetNumberOfNoiseRecords();
   for (unsigned int i = 0; i < nbRec; i++)
     {
     oss.str("");
@@ -536,9 +548,10 @@ TerraSarImageMetadataInterface::GetNoiseTimeUTCList(const MetaDataDictionaryType
 }
 
 TerraSarImageMetadataInterface::DoubleVectorType
-TerraSarImageMetadataInterface::GetNoiseValidityRangeMaxList(const MetaDataDictionaryType& dict) const
+TerraSarImageMetadataInterface::GetNoiseValidityRangeMaxList() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
     }
@@ -556,7 +569,7 @@ TerraSarImageMetadataInterface::GetNoiseValidityRangeMaxList(const MetaDataDicti
   DoubleVectorType   maxList;
   itk::OStringStream oss;
 
-  unsigned int nbRec = this->GetNumberOfNoiseRecords(dict);
+  unsigned int nbRec = this->GetNumberOfNoiseRecords();
   for (unsigned int i = 0; i < nbRec; i++)
     {
     oss.str("");
@@ -569,9 +582,10 @@ TerraSarImageMetadataInterface::GetNoiseValidityRangeMaxList(const MetaDataDicti
 }
 
 TerraSarImageMetadataInterface::DoubleVectorType
-TerraSarImageMetadataInterface::GetNoiseValidityRangeMinList(const MetaDataDictionaryType& dict) const
+TerraSarImageMetadataInterface::GetNoiseValidityRangeMinList() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
     }
@@ -589,7 +603,7 @@ TerraSarImageMetadataInterface::GetNoiseValidityRangeMinList(const MetaDataDicti
   DoubleVectorType   minList;
   itk::OStringStream oss;
 
-  unsigned int nbRec = this->GetNumberOfNoiseRecords(dict);
+  unsigned int nbRec = this->GetNumberOfNoiseRecords();
   for (unsigned int i = 0; i < nbRec; i++)
     {
     oss.str("");
@@ -603,9 +617,10 @@ TerraSarImageMetadataInterface::GetNoiseValidityRangeMinList(const MetaDataDicti
 }
 
 TerraSarImageMetadataInterface::DoubleVectorType
-TerraSarImageMetadataInterface::GetNoiseReferencePointList(const MetaDataDictionaryType& dict) const
+TerraSarImageMetadataInterface::GetNoiseReferencePointList() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
     }
@@ -623,7 +638,7 @@ TerraSarImageMetadataInterface::GetNoiseReferencePointList(const MetaDataDiction
   DoubleVectorType   refPointList;
   itk::OStringStream oss;
 
-  unsigned int nbRec = this->GetNumberOfNoiseRecords(dict);
+  unsigned int nbRec = this->GetNumberOfNoiseRecords();
   for (unsigned int i = 0; i < nbRec; i++)
     {
     oss.str("");
@@ -637,9 +652,10 @@ TerraSarImageMetadataInterface::GetNoiseReferencePointList(const MetaDataDiction
 }
 
 double
-TerraSarImageMetadataInterface::GetRadarFrequency(const MetaDataDictionaryType& dict) const
+TerraSarImageMetadataInterface::GetRadarFrequency() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
     }
@@ -661,9 +677,10 @@ TerraSarImageMetadataInterface::GetRadarFrequency(const MetaDataDictionaryType& 
 }
 
 double
-TerraSarImageMetadataInterface::GetPRF(const MetaDataDictionaryType& dict) const
+TerraSarImageMetadataInterface::GetPRF() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
     }
@@ -685,9 +702,10 @@ TerraSarImageMetadataInterface::GetPRF(const MetaDataDictionaryType& dict) const
 }
 
 ossimplugins::IncidenceAngles*
-TerraSarImageMetadataInterface::GetIncidenceAngles(const MetaDataDictionaryType& dict) const
+TerraSarImageMetadataInterface::GetIncidenceAngles() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
     }
@@ -709,9 +727,10 @@ TerraSarImageMetadataInterface::GetIncidenceAngles(const MetaDataDictionaryType&
 }
 
 unsigned int
-TerraSarImageMetadataInterface::GetNumberOfCornerIncidenceAngles(const MetaDataDictionaryType& dict) const
+TerraSarImageMetadataInterface::GetNumberOfCornerIncidenceAngles() const
 {
-  ossimplugins::IncidenceAngles * ia = this->GetIncidenceAngles(dict);
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  ossimplugins::IncidenceAngles * ia = this->GetIncidenceAngles();
 
   ImageKeywordlistType imageKeywordlist;
 
@@ -731,9 +750,10 @@ TerraSarImageMetadataInterface::GetNumberOfCornerIncidenceAngles(const MetaDataD
 }
 
 double
-TerraSarImageMetadataInterface::GetMeanIncidenceAngles(const MetaDataDictionaryType& dict) const
+TerraSarImageMetadataInterface::GetMeanIncidenceAngles() const
 {
-  ossimplugins::IncidenceAngles * ia = this->GetIncidenceAngles(dict);
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  ossimplugins::IncidenceAngles * ia = this->GetIncidenceAngles();
 
   ImageKeywordlistType imageKeywordlist;
 
@@ -754,7 +774,7 @@ TerraSarImageMetadataInterface::GetMeanIncidenceAngles(const MetaDataDictionaryT
 
   sum += centerIncidenceAngle.toDouble();
 
-  unsigned int nbAngles = this->GetNumberOfCornerIncidenceAngles(dict);
+  unsigned int nbAngles = this->GetNumberOfCornerIncidenceAngles();
   for (unsigned int i = 0; i < nbAngles; i++)
     {
     oss.str("");
@@ -770,9 +790,10 @@ TerraSarImageMetadataInterface::GetMeanIncidenceAngles(const MetaDataDictionaryT
 }
 
 double
-TerraSarImageMetadataInterface::GetCenterIncidenceAngle(const MetaDataDictionaryType& dict) const
+TerraSarImageMetadataInterface::GetCenterIncidenceAngle() const
 {
-  ossimplugins::IncidenceAngles * ia = this->GetIncidenceAngles(dict);
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  ossimplugins::IncidenceAngles * ia = this->GetIncidenceAngles();
 
   ImageKeywordlistType imageKeywordlist;
 
@@ -792,9 +813,10 @@ TerraSarImageMetadataInterface::GetCenterIncidenceAngle(const MetaDataDictionary
 }
 
 TerraSarImageMetadataInterface::IndexType
-TerraSarImageMetadataInterface::GetCenterIncidenceAngleIndex(const MetaDataDictionaryType& dict) const
+TerraSarImageMetadataInterface::GetCenterIncidenceAngleIndex() const
 {
-  ossimplugins::IncidenceAngles * ia = this->GetIncidenceAngles(dict);
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  ossimplugins::IncidenceAngles * ia = this->GetIncidenceAngles();
 
   TerraSarImageMetadataInterface::IndexType it;
 
@@ -823,9 +845,10 @@ TerraSarImageMetadataInterface::GetCenterIncidenceAngleIndex(const MetaDataDicti
 }
 
 TerraSarImageMetadataInterface::DoubleVectorType
-TerraSarImageMetadataInterface::GetCornersIncidenceAngles(const MetaDataDictionaryType& dict) const
+TerraSarImageMetadataInterface::GetCornersIncidenceAngles() const
 {
-  ossimplugins::IncidenceAngles * ia = this->GetIncidenceAngles(dict);
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  ossimplugins::IncidenceAngles * ia = this->GetIncidenceAngles();
 
   ImageKeywordlistType imageKeywordlist;
 
@@ -841,7 +864,7 @@ TerraSarImageMetadataInterface::GetCornersIncidenceAngles(const MetaDataDictiona
 
   itk::OStringStream oss;
 
-  unsigned int nbAngles = this->GetNumberOfCornerIncidenceAngles(dict);
+  unsigned int nbAngles = this->GetNumberOfCornerIncidenceAngles();
   for (unsigned int i = 0; i < nbAngles; i++)
     {
     oss.str("");
@@ -857,9 +880,10 @@ TerraSarImageMetadataInterface::GetCornersIncidenceAngles(const MetaDataDictiona
 }
 
 TerraSarImageMetadataInterface::IndexVectorType
-TerraSarImageMetadataInterface::GetCornersIncidenceAnglesIndex(const MetaDataDictionaryType& dict) const
+TerraSarImageMetadataInterface::GetCornersIncidenceAnglesIndex() const
 {
-  ossimplugins::IncidenceAngles * ia = this->GetIncidenceAngles(dict);
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  ossimplugins::IncidenceAngles * ia = this->GetIncidenceAngles();
 
   ImageKeywordlistType imageKeywordlist;
 
@@ -876,7 +900,7 @@ TerraSarImageMetadataInterface::GetCornersIncidenceAnglesIndex(const MetaDataDic
   itk::OStringStream oss;
   itk::OStringStream oss2;
 
-  unsigned int nbAngles = this->GetNumberOfCornerIncidenceAngles(dict);
+  unsigned int nbAngles = this->GetNumberOfCornerIncidenceAngles();
   for (unsigned int i = 0; i < nbAngles; i++)
     {
     TerraSarImageMetadataInterface::IndexType it;
@@ -901,5 +925,58 @@ TerraSarImageMetadataInterface::GetCornersIncidenceAnglesIndex(const MetaDataDic
   return iv;
 
 }
+
+TerraSarImageMetadataInterface::PointSetPointer
+TerraSarImageMetadataInterface::GetIncidenceAngle() const
+{
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+
+  PointSetPointer points = PointSetType::New();
+  
+  return points;
+}
+
+
+TerraSarImageMetadataInterface::PointSetPointer 
+TerraSarImageMetadataInterface::GetIncidenceAnglePointSet() const
+{
+  PointSetPointer points = PointSetType::New();
+  
+  return points;   
+}
+  
+  /** Get the R, G, B channel */
+unsigned int 
+TerraSarImageMetadataInterface::GetDefaultRBand() const
+{
+	return 0;
+}
+
+unsigned int 
+TerraSarImageMetadataInterface::GetDefaultGBand() const
+{
+	return 0;
+}
+
+unsigned int 
+TerraSarImageMetadataInterface::GetDefaultBBand() const
+{
+	return 0;
+}
+
+void 
+TerraSarImageMetadataInterface
+::PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType& dict) const
+{
+	//Superclass::PrintSelf(os, indent, dict);
+}
+
+void
+TerraSarImageMetadataInterface
+::PrintSelf(std::ostream& os, itk::Indent indent) const
+{
+	Superclass::PrintSelf(os, indent);
+}
+
 
 } // end namespace otb

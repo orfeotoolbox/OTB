@@ -20,9 +20,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include <typeinfo>
-#include <cassert>
-
 #include "otbMacro.h"
 
 #include "otbIkonosImageMetadataInterface.h"
@@ -38,17 +35,18 @@ IkonosImageMetadataInterface
 }
 
 bool
-IkonosImageMetadataInterface::CanRead(const MetaDataDictionaryType& dict) const
+IkonosImageMetadataInterface::CanRead() const
 {
-  std::string sensorID = GetSensorID(dict);
+  std::string sensorID = GetSensorID();
   if (sensorID.find("IKONOS-2") != std::string::npos) return true;
   else return false;
 }
 
 IkonosImageMetadataInterface::VariableLengthVectorType
-IkonosImageMetadataInterface::GetSolarIrradiance(const MetaDataDictionaryType& dict) const
+IkonosImageMetadataInterface::GetSolarIrradiance() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Ikonos Image");
     }
@@ -93,9 +91,10 @@ IkonosImageMetadataInterface::GetSolarIrradiance(const MetaDataDictionaryType& d
 }
 
 int
-IkonosImageMetadataInterface::GetDay(const MetaDataDictionaryType& dict) const
+IkonosImageMetadataInterface::GetDay() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Ikonos Image");
     }
@@ -128,9 +127,10 @@ IkonosImageMetadataInterface::GetDay(const MetaDataDictionaryType& dict) const
 }
 
 int
-IkonosImageMetadataInterface::GetMonth(const MetaDataDictionaryType& dict) const
+IkonosImageMetadataInterface::GetMonth() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Ikonos Image");
     }
@@ -162,9 +162,10 @@ IkonosImageMetadataInterface::GetMonth(const MetaDataDictionaryType& dict) const
 }
 
 int
-IkonosImageMetadataInterface::GetHour(const MetaDataDictionaryType& dict) const
+IkonosImageMetadataInterface::GetHour() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Ikonos Image");
     }
@@ -196,9 +197,10 @@ IkonosImageMetadataInterface::GetHour(const MetaDataDictionaryType& dict) const
 }
 
 int
-IkonosImageMetadataInterface::GetMinute(const MetaDataDictionaryType& dict) const
+IkonosImageMetadataInterface::GetMinute() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Ikonos Image");
     }
@@ -230,9 +232,10 @@ IkonosImageMetadataInterface::GetMinute(const MetaDataDictionaryType& dict) cons
 }
 
 int
-IkonosImageMetadataInterface::GetYear(const MetaDataDictionaryType& dict) const
+IkonosImageMetadataInterface::GetYear() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Ikonos Image");
     }
@@ -265,9 +268,10 @@ IkonosImageMetadataInterface::GetYear(const MetaDataDictionaryType& dict) const
 }
 
 int
-IkonosImageMetadataInterface::GetProductionDay(const MetaDataDictionaryType& dict) const
+IkonosImageMetadataInterface::GetProductionDay() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Ikonos Image");
     }
@@ -300,9 +304,10 @@ IkonosImageMetadataInterface::GetProductionDay(const MetaDataDictionaryType& dic
 }
 
 int
-IkonosImageMetadataInterface::GetProductionMonth(const MetaDataDictionaryType& dict) const
+IkonosImageMetadataInterface::GetProductionMonth() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Ikonos Image");
     }
@@ -334,9 +339,10 @@ IkonosImageMetadataInterface::GetProductionMonth(const MetaDataDictionaryType& d
 }
 
 int
-IkonosImageMetadataInterface::GetProductionYear(const MetaDataDictionaryType& dict) const
+IkonosImageMetadataInterface::GetProductionYear() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Ikonos Image");
     }
@@ -373,15 +379,16 @@ IkonosImageMetadataInterface::GetProductionYear(const MetaDataDictionaryType& di
 
 IkonosImageMetadataInterface::VariableLengthVectorType
 IkonosImageMetadataInterface
-::GetPhysicalBias(const MetaDataDictionaryType& dict) const
+::GetPhysicalBias() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Ikonos Image");
     }
 
   VariableLengthVectorType outputValuesVariableLengthVector;
-  outputValuesVariableLengthVector.SetSize(GetNumberOfBands(dict));
+  outputValuesVariableLengthVector.SetSize(GetNumberOfBands());
   outputValuesVariableLengthVector.Fill(0.0);
 
   return outputValuesVariableLengthVector;
@@ -389,16 +396,17 @@ IkonosImageMetadataInterface
 
 IkonosImageMetadataInterface::VariableLengthVectorType
 IkonosImageMetadataInterface
-::GetPhysicalGain(const MetaDataDictionaryType& dict) const
+::GetPhysicalGain() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Ikonos Image");
     }
 
-  int  productionYear = this->GetProductionYear(dict);
-  int  productionMonth = this->GetProductionMonth(dict);
-  int  productionDay = this->GetProductionDay(dict);
+  int  productionYear = this->GetProductionYear();
+  int  productionMonth = this->GetProductionMonth();
+  int  productionDay = this->GetProductionDay();
   bool isPost20010122 = false;
   if ((productionYear > 2) || (productionYear < 99)) isPost20010122 = true;
   else
@@ -433,10 +441,10 @@ IkonosImageMetadataInterface
     gain[4] = 7.11684; //NIR
     }
 
-  std::vector<std::string> bandName = GetBandName(dict);
+  std::vector<std::string> bandName = GetBandName();
 
   VariableLengthVectorType outputValuesVariableLengthVector;
-  unsigned int             numBands = GetNumberOfBands(dict);
+  unsigned int             numBands = GetNumberOfBands();
 
   /** Tests if the number of bands in metadata are the same as bandName size*/
   if (numBands != bandName.size())
@@ -458,9 +466,10 @@ IkonosImageMetadataInterface
 }
 
 double
-IkonosImageMetadataInterface::GetSatElevation(const MetaDataDictionaryType& dict) const
+IkonosImageMetadataInterface::GetSatElevation() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Ikonos Image");
     }
@@ -481,9 +490,10 @@ IkonosImageMetadataInterface::GetSatElevation(const MetaDataDictionaryType& dict
 }
 
 double
-IkonosImageMetadataInterface::GetSatAzimuth(const MetaDataDictionaryType& dict) const
+IkonosImageMetadataInterface::GetSatAzimuth() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Ikonos Image");
     }
@@ -505,9 +515,10 @@ IkonosImageMetadataInterface::GetSatAzimuth(const MetaDataDictionaryType& dict) 
 
 IkonosImageMetadataInterface::VariableLengthVectorType
 IkonosImageMetadataInterface
-::GetFirstWavelengths(const MetaDataDictionaryType& dict) const
+::GetFirstWavelengths() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Ikonos Image");
     }
@@ -548,9 +559,10 @@ IkonosImageMetadataInterface
 
 IkonosImageMetadataInterface::VariableLengthVectorType
 IkonosImageMetadataInterface
-::GetLastWavelengths(const MetaDataDictionaryType& dict) const
+::GetLastWavelengths() const
 {
-  if (!this->CanRead(dict))
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Ikonos Image");
     }

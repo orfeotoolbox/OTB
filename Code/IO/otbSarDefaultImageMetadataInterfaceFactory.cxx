@@ -20,44 +20,42 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include <typeinfo>
-#include <cassert>
-
 #include "otbMacro.h"
 
-#include "otbSpotImageMetadataInterfaceFactory.h"
-#include "otbSpotImageMetadataInterface.h"
+#include "otbSarDefaultImageMetadataInterfaceFactory.h"
+#include "otbSarDefaultImageMetadataInterface.h"
 
 #include "itkCreateObjectFunction.h"
 #include "itkVersion.h"
 
 namespace otb
 {
-SpotImageMetadataInterfaceFactory
-::SpotImageMetadataInterfaceFactory()
+
+SarDefaultImageMetadataInterfaceFactory
+::SarDefaultImageMetadataInterfaceFactory()
 {
-  this->RegisterOverride("OpticalImageMetadataInterface",
-                         "otbSpotImageMetadataInterface",
-                         "Spot Metadata Interface",
+  this->RegisterOverride("SarImageMetadataInterface",
+                         "otbSarDefaultImageMetadataInterface",
+                         "Default Sar Metadata Interface",
                          1,
-                         itk::CreateObjectFunction<SpotImageMetadataInterface>::New());
+                         itk::CreateObjectFunction<SarDefaultImageMetadataInterface>::New());
 }
 
-SpotImageMetadataInterfaceFactory
-::~SpotImageMetadataInterfaceFactory()
+SarDefaultImageMetadataInterfaceFactory
+::~SarDefaultImageMetadataInterfaceFactory()
 {
 }
 
 const char*
-SpotImageMetadataInterfaceFactory::GetITKSourceVersion(void) const
+SarDefaultImageMetadataInterfaceFactory::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
 
 const char*
-SpotImageMetadataInterfaceFactory::GetDescription() const
+SarDefaultImageMetadataInterfaceFactory::GetDescription() const
 {
-  return "Spot Metadata Interface Factory, handle Spot metadata in OTB";
+  return "Default Sar Metadata Interface Factory, handle Default Sar metadata in OTB";
 }
 
 } // end namespace otb

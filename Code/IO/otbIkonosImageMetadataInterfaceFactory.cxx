@@ -39,7 +39,7 @@ namespace otb
 IkonosImageMetadataInterfaceFactory
 ::IkonosImageMetadataInterfaceFactory()
 {
-  this->RegisterOverride("ImageMetadataInterfaceBase",
+  this->RegisterOverride("OpticalImageMetadataInterface",
                          "otbIkonosImageMetadataInterface",
                          "Ikonos Metadata Interface",
                          1,

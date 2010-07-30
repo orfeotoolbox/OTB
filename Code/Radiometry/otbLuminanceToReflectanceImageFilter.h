@@ -29,8 +29,8 @@
 #include "itkNumericTraits.h"
 #include "itkVariableLengthVector.h"
 #include "otbMacro.h"
-#include "otbImageMetadataInterfaceBase.h"
-#include "otbImageMetadataInterfaceFactory.h"
+#include "otbOpticalImageMetadataInterface.h"
+#include "otbOpticalImageMetadataInterfaceFactory.h"
 #include <iomanip>
 
 namespace otb
@@ -232,27 +232,27 @@ protected:
   /** Update the functor list and input parameters */
   virtual void BeforeThreadedGenerateData(void)
   {
-    ImageMetadataInterfaceBase::Pointer imageMetadataInterface = ImageMetadataInterfaceFactory::CreateIMI(
+    OpticalImageMetadataInterface::Pointer imageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(
       this->GetInput()->GetMetaDataDictionary());
     if ((m_Day == 0) && (!m_IsSetFluxNormalizationCoefficient))
       {
-      m_Day = imageMetadataInterface->GetDay(this->GetInput()->GetMetaDataDictionary());
+      m_Day = imageMetadataInterface->GetDay();
       }
 
     if ((m_Month == 0) && (!m_IsSetFluxNormalizationCoefficient))
       {
-      m_Month = imageMetadataInterface->GetMonth(this->GetInput()->GetMetaDataDictionary());
+      m_Month = imageMetadataInterface->GetMonth();
       }
 
     if (m_SolarIllumination.GetSize() == 0)
       {
-      m_SolarIllumination = imageMetadataInterface->GetSolarIrradiance(this->GetInput()->GetMetaDataDictionary());
+      m_SolarIllumination = imageMetadataInterface->GetSolarIrradiance();
       }
 
     if (m_ZenithalSolarAngle == 120.0)
       {
       //the zenithal angle is the complementary of the elevation angle
-      m_ZenithalSolarAngle = 90.0 - imageMetadataInterface->GetSunElevation(this->GetInput()->GetMetaDataDictionary());
+      m_ZenithalSolarAngle = 90.0 - imageMetadataInterface->GetSunElevation();
       }
 
     otbMsgDevMacro(<< "Using correction parameters: ");

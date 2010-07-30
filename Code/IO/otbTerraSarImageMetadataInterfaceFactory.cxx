@@ -20,44 +20,42 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include <typeinfo>
-#include <cassert>
-
 #include "otbMacro.h"
 
-#include "otbSpotImageMetadataInterfaceFactory.h"
-#include "otbSpotImageMetadataInterface.h"
+#include "otbTerraSarImageMetadataInterfaceFactory.h"
+#include "otbTerraSarImageMetadataInterface.h"
 
 #include "itkCreateObjectFunction.h"
 #include "itkVersion.h"
 
 namespace otb
 {
-SpotImageMetadataInterfaceFactory
-::SpotImageMetadataInterfaceFactory()
+TerraSarImageMetadataInterfaceFactory
+::TerraSarImageMetadataInterfaceFactory()
 {
-  this->RegisterOverride("OpticalImageMetadataInterface",
-                         "otbSpotImageMetadataInterface",
-                         "Spot Metadata Interface",
+
+  this->RegisterOverride("SarImageMetadataInterface",
+                         "otbTerraSarImageMetadataInterface",
+                         "TerraSar Metadata Interface",
                          1,
-                         itk::CreateObjectFunction<SpotImageMetadataInterface>::New());
+                         itk::CreateObjectFunction<TerraSarImageMetadataInterface>::New());
 }
 
-SpotImageMetadataInterfaceFactory
-::~SpotImageMetadataInterfaceFactory()
+TerraSarImageMetadataInterfaceFactory
+::~TerraSarImageMetadataInterfaceFactory()
 {
 }
 
 const char*
-SpotImageMetadataInterfaceFactory::GetITKSourceVersion(void) const
+TerraSarImageMetadataInterfaceFactory::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
 
 const char*
-SpotImageMetadataInterfaceFactory::GetDescription() const
+TerraSarImageMetadataInterfaceFactory::GetDescription() const
 {
-  return "Spot Metadata Interface Factory, handle Spot metadata in OTB";
+  return "TerraSar Metadata Interface Factory, handle TerraSar metadata in OTB";
 }
 
 } // end namespace otb

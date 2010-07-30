@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDefaultImageMetadataInterface_h
-#define __otbDefaultImageMetadataInterface_h
+#ifndef __otbOpticalDefaultImageMetadataInterface_h
+#define __otbOpticalDefaultImageMetadataInterface_h
 
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
@@ -24,29 +24,29 @@
 
 #include "otbMacro.h"
 
-#include "otbImageMetadataInterfaceBase.h"
+#include "otbOpticalImageMetadataInterface.h"
 
 namespace otb
 {
-/** \class DefaultImageMetadataInterface
+/** \class OpticalDefaultImageMetadataInterface
  *
  * \brief Creation of an "otb" DefaultImageMetadataInterface that gets metadata.
  *
  */
-class ITK_EXPORT DefaultImageMetadataInterface : public ImageMetadataInterfaceBase
+class ITK_EXPORT OpticalDefaultImageMetadataInterface : public OpticalImageMetadataInterface
 {
 public:
 
-  typedef DefaultImageMetadataInterface Self;
-  typedef ImageMetadataInterfaceBase    Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef OpticalDefaultImageMetadataInterface Self;
+  typedef OpticalImageMetadataInterface        Superclass;
+  typedef itk::SmartPointer<Self>              Pointer;
+  typedef itk::SmartPointer<const Self>        ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(DefaultImageMetadataInterface, ImageMetadataInterfaceBase);
+  itkTypeMacro(OpticalDefaultImageMetadataInterface, OpticalImageMetadataInterface);
 
   typedef Superclass::ImageType                ImageType;
   typedef Superclass::MetaDataDictionaryType   MetaDataDictionaryType;
@@ -57,91 +57,91 @@ public:
   /** Get the radiometric bias from the ossim metadata */
   VariableLengthVectorType GetPhysicalBias() const
   {
-    itkExceptionMacro("GetPhysicalBias not implemented in DefaultImageMetadataInterface, no captor type found");
+    itkExceptionMacro("GetPhysicalBias not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the radiometric gain from the ossim metadata */
   VariableLengthVectorType GetPhysicalGain() const
   {
-    itkExceptionMacro("GetPhysicalGain not implemented in DefaultImageMetadataInterface, no captor type found");
+    itkExceptionMacro("GetPhysicalGain not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the solar irradiance from the ossim metadata */
   VariableLengthVectorType GetSolarIrradiance() const
   {
-    itkExceptionMacro("GetSolarIrradiance not implemented in DefaultImageMetadataInterface, no captor type found");
+    itkExceptionMacro("GetSolarIrradiance not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the imaging acquisition day from the ossim metadata */
   int GetDay() const
   {
-    itkExceptionMacro("GetDay not implemented in DefaultImageMetadataInterface, no captor type found");
+    itkExceptionMacro("GetDay not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the imaging acquisition month from the ossim metadata */
   int GetMonth() const
   {
-    itkExceptionMacro("GetMonth not implemented in DefaultImageMetadataInterface, no captor type found");
+    itkExceptionMacro("GetMonth not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the imaging acquisition year from the ossim metadata */
   int GetYear() const
   {
-    itkExceptionMacro("GetYear not implemented in DefaultImageMetadataInterface, no captor type found");
+    itkExceptionMacro("GetYear not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the imaging acquisition hour from the ossim metadata */
   int GetHour() const
   {
-    itkExceptionMacro("GetHour not implemented in DefaultImageMetadataInterface, no captor type found");
+    itkExceptionMacro("GetHour not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the imaging acquisition minute from the ossim metadata */
   int GetMinute() const
   {
-    itkExceptionMacro("GetMinute not implemented in DefaultImageMetadataInterface, no captor type found");
+    itkExceptionMacro("GetMinute not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the imaging production day from the ossim metadata */
   int GetProductionDay() const
   {
-    itkExceptionMacro("GetProductionDay not implemented in DefaultImageMetadataInterface, no captor type found");
+    itkExceptionMacro("GetProductionDay not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the imaging production month from the ossim metadata */
   int GetProductionMonth() const
   {
-    itkExceptionMacro("GetProductionMonth not implemented in DefaultImageMetadataInterface, no captor type found");
+    itkExceptionMacro("GetProductionMonth not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the imaging production year from the ossim metadata */
   int GetProductionYear() const
   {
-    itkExceptionMacro("GetProductionYear not implemented in DefaultImageMetadataInterface, no captor type found");
+    itkExceptionMacro("GetProductionYear not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the sat elevation from the ossim metadata */
   double GetSatElevation() const
   {
-    itkExceptionMacro("GetSatElevation not implemented in DefaultImageMetadataInterface, no captor type found");
+    itkExceptionMacro("GetSatElevation not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the sat azimuth from the ossim metadata */
   double GetSatAzimuth() const
   {
-    itkExceptionMacro("GetSatElevation not implemented in DefaultImageMetadataInterface, no captor type found");
+    itkExceptionMacro("GetSatElevation not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the first wavelength for the spectral band definition */
   VariableLengthVectorType GetFirstWavelengths() const
   {
-    itkExceptionMacro("GetFirstWavelengths not implemented in DefaultImageMetadataInterface, no captor type found");
+    itkExceptionMacro("GetFirstWavelengths not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the last wavelength for the spectral band definition */
   VariableLengthVectorType GetLastWavelengths() const
   {
-    itkExceptionMacro("GetLastWavelengths not implemented in DefaultImageMetadataInterface, no captor type found");
+    itkExceptionMacro("GetLastWavelengths not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
   bool CanRead() const
@@ -166,12 +166,12 @@ public:
   }
 
 protected:
-  DefaultImageMetadataInterface(){};
-  virtual ~DefaultImageMetadataInterface() {}
+  OpticalDefaultImageMetadataInterface(){};
+  virtual ~OpticalDefaultImageMetadataInterface() {}
 
 private:
 
-  DefaultImageMetadataInterface(const Self &); //purposely not implemented
+  OpticalDefaultImageMetadataInterface(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
 };

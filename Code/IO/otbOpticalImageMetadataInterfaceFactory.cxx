@@ -20,9 +20,8 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include "otbImageMetadataInterfaceFactory.h"
-
-#include "otbDefaultImageMetadataInterface.h"
+#include "otbOpticalImageMetadataInterfaceFactory.h"
+#include "otbOpticalDefaultImageMetadataInterface.h"
 
 // Optical sensors
 #include "otbIkonosImageMetadataInterfaceFactory.h"
@@ -31,8 +30,6 @@
 #include "otbQuickBirdImageMetadataInterfaceFactory.h"
 #include "otbWorldView2ImageMetadataInterfaceFactory.h"
 
-// SAR Sensors
-#include "otbTerraSarImageMetadataInterfaceFactory.h"
 
 #include "itkObjectFactoryBase.h"
 #include "itkMutexLock.h"
@@ -40,53 +37,45 @@
 
 namespace otb
 {
-ImageMetadataInterfaceFactory::ImageMetadataInterfaceBasePointerType
-ImageMetadataInterfaceFactory
+OpticalImageMetadataInterfaceFactory::OpticalImageMetadataInterfacePointerType
+OpticalImageMetadataInterfaceFactory
 ::CreateIMI(const MetaDataDictionaryType& dict)
 {
   RegisterBuiltInFactories();
 
-  std::list<ImageMetadataInterfaceBasePointerType> possibleIMI;
-  std::list<itk::LightObject::Pointer>             allOpticalObjects =
+  std::list<OpticalImageMetadataInterfacePointerType> possibleIMI;
+  std::list<itk::LightObject::Pointer>             allobjects =
     itk::ObjectFactoryBase::CreateAllInstance("OpticalImageMetadataInterface");
-  std::list<itk::LightObject::Pointer>             allSarObjects =
-    itk::ObjectFactoryBase::CreateAllInstance("SarImageMetadataInterface");
-  std::list<itk::LightObject::Pointer>             allObjects;
-
-  std::copy(allOpticalObjects.begin(), allOpticalObjects.end(), std::back_inserter(allObjects) );
-  std::copy(allSarObjects.begin(), allSarObjects.end(), std::back_inserter(allObjects) );
-
-
-  for (std::list<itk::LightObject::Pointer>::iterator i = allObjects.begin();
-       i != allObjects.end(); ++i)
+  for (std::list<itk::LightObject::Pointer>::iterator i = allobjects.begin();
+       i != allobjects.end(); ++i)
     {
-    ImageMetadataInterfaceBase * io = dynamic_cast<ImageMetadataInterfaceBase*>(i->GetPointer());
+    OpticalImageMetadataInterface * io = dynamic_cast<OpticalImageMetadataInterface*>(i->GetPointer());
     if (io)
       {
       possibleIMI.push_back(io);
       }
     else
       {
-      itkGenericExceptionMacro(<< "Error ImageMetadataInterface factory did not return an ImageMetadataInterfaceBase: "
+      itkGenericExceptionMacro(<< "Error OpticalImageMetadataInterface factory did not return an OpticalImageMetadataInterface: "
                                << (*i)->GetNameOfClass());
       }
     }
-  for (std::list<ImageMetadataInterfaceBasePointerType>::iterator k = possibleIMI.begin();
+  for (std::list<OpticalImageMetadataInterfacePointerType>::iterator k = possibleIMI.begin();
        k != possibleIMI.end(); ++k)
     {
-  	(*k)->SetMetaDataDictionary(dict);
+ 	(*k)->SetMetaDataDictionary(dict);
     if ((*k)->CanRead())
       {
     	return *k;
       }
     }
 
-  DefaultImageMetadataInterface::Pointer defaultIMI = DefaultImageMetadataInterface::New();
-  return dynamic_cast<ImageMetadataInterfaceBase*>(static_cast<DefaultImageMetadataInterface*>(defaultIMI));
+  OpticalDefaultImageMetadataInterface::Pointer defaultIMI = OpticalDefaultImageMetadataInterface::New();
+  return dynamic_cast<OpticalImageMetadataInterface*>(static_cast<OpticalDefaultImageMetadataInterface*>(defaultIMI));
 }
 
 void
-ImageMetadataInterfaceFactory
+OpticalImageMetadataInterfaceFactory
 ::RegisterBuiltInFactories()
 {
   static bool firstTime = true;
@@ -103,7 +92,6 @@ ImageMetadataInterfaceFactory
       itk::ObjectFactoryBase::RegisterFactory(FormosatImageMetadataInterfaceFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(QuickBirdImageMetadataInterfaceFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(WorldView2ImageMetadataInterfaceFactory::New());
-      itk::ObjectFactoryBase::RegisterFactory( TerraSarImageMetadataInterfaceFactory::New() );
       firstTime = false;
       }
     }
