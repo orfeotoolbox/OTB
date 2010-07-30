@@ -27,8 +27,28 @@
 void RegisterTests()
 {
   REGISTER_TEST(HybridSegmentationFuzzyVoronoiTest);
+  REGISTER_TEST(EstimateAffineTransformationExampleTest);
+  REGISTER_TEST(SIFTDisparityMapEstimationTest);
+  REGISTER_TEST(SIFTFastExampleTest);
+  REGISTER_TEST(ScaleInvariantFeatureImageFilterTest);
 }
 
 #undef main
 #define main HybridSegmentationFuzzyVoronoiTest
 #include "HybridSegmentationFuzzyVoronoi.cxx"
+
+#undef main
+#define main EstimateAffineTransformationExampleTest
+#include "EstimateAffineTransformationExample.cxx"
+
+#undef main
+#define main SIFTDisparityMapEstimationTest
+#include "SIFTDisparityMapEstimation.cxx"
+
+#undef main
+#define main ScaleInvariantFeatureImageFilterTest
+#include "ScaleInvariantFeatureImageFilter.cxx"
+
+#undef main
+#define main SIFTFastExampleTest
+#include "SIFTFastExample.cxx"

@@ -22,9 +22,7 @@
 namespace otb
 {
 
-void
-Parser
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void Parser::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }
@@ -50,25 +48,30 @@ Parser::Parser()
   InitConst();
 }
 
+Parser::~Parser()
+{
+
+}
+
 void Parser::InitConst()
 {
- m_Parser.DefineConst( "e",      CONST_E );
- m_Parser.DefineConst( "log2e",  CONST_LOG2E );
- m_Parser.DefineConst( "log10e", CONST_LOG10E );
- m_Parser.DefineConst( "ln2",    CONST_LN2 );
- m_Parser.DefineConst( "ln10",   CONST_LN10 );
- m_Parser.DefineConst( "pi",     CONST_PI );
- m_Parser.DefineConst( "euler",  CONST_EULER );
+ m_InternalParser.DefineConst( "e",      CONST_E );
+ m_InternalParser.DefineConst( "log2e",  CONST_LOG2E );
+ m_InternalParser.DefineConst( "log10e", CONST_LOG10E );
+ m_InternalParser.DefineConst( "ln2",    CONST_LN2 );
+ m_InternalParser.DefineConst( "ln10",   CONST_LN10 );
+ m_InternalParser.DefineConst( "pi",     CONST_PI );
+ m_InternalParser.DefineConst( "euler",  CONST_EULER );
 } 
 
 void Parser::InitFun()
 {
-  m_Parser.DefineFun("ndvi", NDVI);
+  m_InternalParser.DefineFun("ndvi", NDVI);
 }
 
 void Parser::SetExpr(const std::string & Expression)
 {
-  m_Parser.SetExpr(Expression);
+  m_InternalParser.SetExpr(Expression);
 }
 
 Parser::ValueType Parser::Eval()
@@ -76,7 +79,7 @@ Parser::ValueType Parser::Eval()
   Parser::ValueType result;
   try
     {
-    result = m_Parser.Eval();
+    result = m_InternalParser.Eval();
     }
   catch(ParserType::ExceptionType &e)
     {
@@ -89,7 +92,7 @@ void Parser::DefineVar(const std::string &sName, Parser::ValueType *fVar)
 {
   try
     {
-    m_Parser.DefineVar(sName, fVar);
+    m_InternalParser.DefineVar(sName, fVar);
     }
   catch(ParserType::ExceptionType &e)
     {
@@ -99,7 +102,12 @@ void Parser::DefineVar(const std::string &sName, Parser::ValueType *fVar)
 
 void Parser::ClearVar()
 {
-  m_Parser.ClearVar();
+  m_InternalParser.ClearVar();
+}
+
+const std::string& Parser::GetExpr() const
+{
+  return m_InternalParser.GetExpr();
 }
 
 void Parser::ExceptionHandler(ParserType::ExceptionType &e)
