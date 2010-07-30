@@ -40,7 +40,6 @@ void RegisterTests()
   REGISTER_TEST(otbKeyPointDensityImageFilterTest);
   REGISTER_TEST(otbImagePCAShapeModelEstimatorTest);
   REGISTER_TEST(otbFunctionWithNeighborhoodToImageFilterNew);
-  REGISTER_TEST(otbFunctionWithNeighborhoodToImageFilter);
   REGISTER_TEST(otbStreamingInnerProductVectorImageFilterNew);
   REGISTER_TEST(otbStreamingInnerProductVectorImageFilter);
   REGISTER_TEST(otbEstimateInnerProductPCAImageFilterNew);

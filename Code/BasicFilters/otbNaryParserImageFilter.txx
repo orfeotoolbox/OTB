@@ -123,8 +123,8 @@ void NaryParserImageFilter<TImage>
 {
   typename std::vector<ParserType::Pointer>::iterator        itParser;
   typename std::vector< std::vector<PixelType> >::iterator   itVImage;
-  int nbThreads = this->GetNumberOfThreads();
-  int nbInputImages = this->GetNumberOfInputs();
+  unsigned int nbThreads = this->GetNumberOfThreads();
+  unsigned int nbInputImages = this->GetNumberOfInputs();
   unsigned int i, j;
   
   //Allocate and initialize the thread temporaries
@@ -151,13 +151,14 @@ template< typename TImage >
 void NaryParserImageFilter<TImage>
 ::AfterThreadedGenerateData()
 {
-  int nbThreads = this->GetNumberOfThreads();
-
+  unsigned int nbThreads = this->GetNumberOfThreads();
+  unsigned int i;
+  
   m_UnderflowCount = 0;
   m_OverflowCount = 0;
 
   // Accumulate counts for each thread
-  for( int i = 0; i < nbThreads; i++)
+  for(i = 0; i < nbThreads; i++)
     {
     m_UnderflowCount += m_ThreadUnderflow[i];
     m_OverflowCount += m_ThreadOverflow[i];
@@ -181,7 +182,7 @@ void NaryParserImageFilter<TImage>
 {
   PixelType value; 
   unsigned int j;
-  int nbInputImages = this->GetNumberOfInputs();
+  unsigned int nbInputImages = this->GetNumberOfInputs();
   
   typedef itk::ImageRegionConstIterator<TImage> ImageRegionConstIteratorType;
   
