@@ -37,14 +37,14 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
 ::SarRadiometricCalibrationFunction():
   m_Offset(0.0),
   m_Scale(1.0),
-  m_IncidenceAngle(ParametricFunctionType::New()),
   m_AntennaPatternNewGain(ParametricFunctionType::New()),
   m_AntennaPatternOldGain(ParametricFunctionType::New()),
+  m_IncidenceAngle(ParametricFunctionType::New()),
   m_RangeSpreadLoss(ParametricFunctionType::New())
 {
-  m_IncidenceAngle->SetConstantValue(90.0);
   m_AntennaPatternNewGain->SetConstantValue(1.0);
   m_AntennaPatternOldGain->SetConstantValue(1.0);
+  m_IncidenceAngle->SetConstantValue(90.0);
   m_RangeSpreadLoss->SetConstantValue(1.0);
 }
 
@@ -57,11 +57,11 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
 ::SetInputImage(
   const InputImageType * ptr )
 {
-	Superclass::SetInputImage(ptr);
-    m_IncidenceAngle->SetInputImage(ptr);
-    m_AntennaPatternNewGain->SetInputImage(ptr);
-    m_AntennaPatternOldGain->SetInputImage(ptr);
-    m_RangeSpreadLoss->SetInputImage(ptr);
+  Superclass::SetInputImage(ptr);
+  m_IncidenceAngle->SetInputImage(ptr);
+  m_AntennaPatternNewGain->SetInputImage(ptr);
+  m_AntennaPatternOldGain->SetInputImage(ptr);
+  m_RangeSpreadLoss->SetInputImage(ptr);
 }
 
 /**
