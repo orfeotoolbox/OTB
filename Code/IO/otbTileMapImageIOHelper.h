@@ -34,7 +34,7 @@ class TileMapImageIOHelper
 {
 public:
   /** Correspondance between depth and scale for the quad tree paradigm*/
-  virtual const std::string ConvertDepthToScale(const unsigned int depth) const;
+  const std::string ConvertDepthToScale(const unsigned int depth) const;
 }; // end class TileMapImageIOHelper
 
 } // end namespace otb
