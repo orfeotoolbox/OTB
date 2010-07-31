@@ -36,7 +36,7 @@ public:
   /**
    * @brief Destructor
    */
-  ~AlosPalsarMapProjectionData();
+  virtual ~AlosPalsarMapProjectionData();
 
   /**
    * @brief This function write the AlosPalsarMapProjectionData in a stream

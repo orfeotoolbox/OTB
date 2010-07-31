@@ -35,7 +35,7 @@ public:
   /**
    * @brief Destructor
    */
-  ~AlosPalsarRecord();
+  virtual ~AlosPalsarRecord();
 
   /**
    * @brief Copy constructor

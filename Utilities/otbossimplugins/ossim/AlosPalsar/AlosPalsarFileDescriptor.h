@@ -37,7 +37,7 @@ public:
   /**
    * @brief Destructor
    */
-  ~AlosPalsarFileDescriptor();
+  virtual ~AlosPalsarFileDescriptor();
 
   /**
    * @brief This function write the AlosPalsarFileDescriptor in a stream

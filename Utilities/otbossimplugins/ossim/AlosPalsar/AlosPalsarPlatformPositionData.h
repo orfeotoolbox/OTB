@@ -37,7 +37,7 @@ public:
   /**
    * @brief Destructor
    */
-  ~AlosPalsarPlatformPositionData();
+  virtual ~AlosPalsarPlatformPositionData();
 
   /**
    * @brief Copy constructor

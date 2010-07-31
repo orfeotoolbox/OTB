@@ -47,7 +47,7 @@ public:
   /**
    * @brief Destructor
    */
-  ~AlosPalsarLeader();
+  virtual ~AlosPalsarLeader();
 
   /**
    * @brief This function write the AlosPalsarLeader in a stream

@@ -36,7 +36,7 @@ public:
   /**
    * @brief Destructor
    */
-  ~AlosPalsarDataSetSummary();
+  virtual ~AlosPalsarDataSetSummary();
 
   /**
    * @brief This function write the AlosPalsarDataSetSummary in a stream
