@@ -157,6 +157,8 @@ Image<TPixel, VImageDimension>
 //   this->itk::Object::SetMetaDataDictionary(data->GetMetaDataDictionary());
   itk::MetaDataDictionary dict = data->GetMetaDataDictionary();
   this->itk::Object::SetMetaDataDictionary(dict);
+  m_ImageMetadataInterface->SetMetaDataDictionary(dict);
+
 }
 
 template <class TPixel, unsigned int VImageDimension>
