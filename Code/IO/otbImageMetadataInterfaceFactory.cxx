@@ -38,6 +38,10 @@
 #include "itkMutexLock.h"
 #include "itkMutexLockHolder.h"
 
+#include <iostream>
+#include <iterator>
+#include <vector>
+
 namespace otb
 {
 ImageMetadataInterfaceFactory::ImageMetadataInterfaceBasePointerType
