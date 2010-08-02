@@ -65,11 +65,8 @@ public:
   {
 	  this->SetMetaDataDictionary(image->GetMetaDataDictionary());
   }
+
   /** Set the MetadataDictionary  */
-  void SetMetaDataDictionary(MetaDataDictionaryType& dict)
-  {
-	  m_MetaDataDictionary = dict;
-  }
   void SetMetaDataDictionary(const MetaDataDictionaryType& dict)
   {
 	  m_MetaDataDictionary = dict;
@@ -80,7 +77,6 @@ public:
   {
 	  return m_MetaDataDictionary;
   }
-
 
   /** Get the projection coordinate system of the image. */
   std::string GetProjectionRef() const;

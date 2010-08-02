@@ -86,6 +86,7 @@ ImageMetadataInterfaceFactory
     }
 
   DefaultImageMetadataInterface::Pointer defaultIMI = DefaultImageMetadataInterface::New();
+  defaultIMI->SetMetaDataDictionary(dict);
   return dynamic_cast<ImageMetadataInterfaceBase*>(static_cast<DefaultImageMetadataInterface*>(defaultIMI));
 }
 

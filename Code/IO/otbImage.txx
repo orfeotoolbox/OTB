@@ -23,6 +23,7 @@
 #endif
 
 #include "otbImage.h"
+#include "otbImageMetadataInterfaceFactory.h"
 
 namespace otb
 {
@@ -30,122 +31,121 @@ namespace otb
 template <class TPixel, unsigned int VImageDimension>
 Image<TPixel, VImageDimension>::Image()
 {
-  m_ImageMetadataInterface = DefaultImageMetadataInterface::New();
 }
 
 template <class TPixel, unsigned int VImageDimension>
 std::string Image<TPixel, VImageDimension>::GetProjectionRef(void) const
 {
-  return (m_ImageMetadataInterface->GetProjectionRef());
+  return (this->GetMetaDataInterface()->GetProjectionRef());
 }
 
 template <class TPixel, unsigned int VImageDimension>
 std::string Image<TPixel, VImageDimension>::GetGCPProjection(void) const
 {
-  return (m_ImageMetadataInterface->GetGCPProjection());
+  return (this->GetMetaDataInterface()->GetGCPProjection());
 }
 
 template <class TPixel, unsigned int VImageDimension>
 unsigned int Image<TPixel, VImageDimension>::GetGCPCount(void) const
 {
-  return (m_ImageMetadataInterface->GetGCPCount());
+  return (this->GetMetaDataInterface()->GetGCPCount());
 }
 
 template <class TPixel, unsigned int VImageDimension>
 OTB_GCP& Image<TPixel, VImageDimension>::GetGCPs(unsigned int GCPnum)
 {
-  return (m_ImageMetadataInterface->GetGCPs(GCPnum));
+  return (this->GetMetaDataInterface()->GetGCPs(GCPnum));
 }
 
 template <class TPixel, unsigned int VImageDimension>
 std::string Image<TPixel, VImageDimension>::GetGCPId(unsigned int GCPnum) const
 {
-  return (m_ImageMetadataInterface->GetGCPId(GCPnum));
+  return (this->GetMetaDataInterface()->GetGCPId(GCPnum));
 }
 
 template <class TPixel, unsigned int VImageDimension>
 std::string Image<TPixel, VImageDimension>::GetGCPInfo(unsigned int GCPnum) const
 {
-  return (m_ImageMetadataInterface->GetGCPInfo(GCPnum));
+  return (this->GetMetaDataInterface()->GetGCPInfo(GCPnum));
 }
 
 template <class TPixel, unsigned int VImageDimension>
 double Image<TPixel, VImageDimension>::GetGCPRow(unsigned int GCPnum) const
 {
-  return (m_ImageMetadataInterface->GetGCPRow(GCPnum));
+  return (this->GetMetaDataInterface()->GetGCPRow(GCPnum));
 }
 
 template <class TPixel, unsigned int VImageDimension>
 double Image<TPixel, VImageDimension>::GetGCPCol(unsigned int GCPnum) const
 {
-  return (m_ImageMetadataInterface->GetGCPCol(GCPnum));
+  return (this->GetMetaDataInterface()->GetGCPCol(GCPnum));
 }
 
 template <class TPixel, unsigned int VImageDimension>
 double Image<TPixel, VImageDimension>::GetGCPX(unsigned int GCPnum) const
 {
-  return (m_ImageMetadataInterface->GetGCPX(GCPnum));
+  return (this->GetMetaDataInterface()->GetGCPX(GCPnum));
 }
 
 template <class TPixel, unsigned int VImageDimension>
 double Image<TPixel, VImageDimension>::GetGCPY(unsigned int GCPnum) const
 {
-  return (m_ImageMetadataInterface->GetGCPY(GCPnum));
+  return (this->GetMetaDataInterface()->GetGCPY(GCPnum));
 }
 
 template <class TPixel, unsigned int VImageDimension>
 double Image<TPixel, VImageDimension>::GetGCPZ(unsigned int GCPnum) const
 {
-  return (m_ImageMetadataInterface->GetGCPZ(GCPnum));
+  return (this->GetMetaDataInterface()->GetGCPZ(GCPnum));
 }
 
 template <class TPixel, unsigned int VImageDimension>
 typename Image<TPixel, VImageDimension>::VectorType
 Image<TPixel, VImageDimension>::GetGeoTransform(void) const
 {
-  return (m_ImageMetadataInterface->GetGeoTransform());
+  return (this->GetMetaDataInterface()->GetGeoTransform());
 }
 
 template <class TPixel, unsigned int VImageDimension>
 typename Image<TPixel, VImageDimension>::VectorType
 Image<TPixel, VImageDimension>::GetUpperLeftCorner(void) const
 {
-  return (m_ImageMetadataInterface->GetUpperLeftCorner());
+  return (this->GetMetaDataInterface()->GetUpperLeftCorner());
 }
 
 template <class TPixel, unsigned int VImageDimension>
 typename Image<TPixel, VImageDimension>::VectorType
 Image<TPixel, VImageDimension>::GetUpperRightCorner(void) const
 {
-  return (m_ImageMetadataInterface->GetUpperRightCorner());
+  return (this->GetMetaDataInterface()->GetUpperRightCorner());
 }
 
 template <class TPixel, unsigned int VImageDimension>
 typename Image<TPixel, VImageDimension>::VectorType
 Image<TPixel, VImageDimension>::GetLowerLeftCorner(void) const
 {
-  return (m_ImageMetadataInterface->GetLowerLeftCorner());
+  return (this->GetMetaDataInterface()->GetLowerLeftCorner());
 }
 
 template <class TPixel, unsigned int VImageDimension>
 typename Image<TPixel, VImageDimension>::VectorType
 Image<TPixel, VImageDimension>::GetLowerRightCorner(void) const
 {
-  return (m_ImageMetadataInterface->GetLowerRightCorner());
+  return (this->GetMetaDataInterface()->GetLowerRightCorner());
 }
 
 template <class TPixel, unsigned int VImageDimension>
 typename Image<TPixel, VImageDimension>::ImageKeywordlistType
 Image<TPixel, VImageDimension>::GetImageKeywordlist(void)
 {
-  return (m_ImageMetadataInterface->GetImageKeywordlist());
+  return (this->GetMetaDataInterface()->GetImageKeywordlist());
 }
 
 template <class TPixel, unsigned int VImageDimension>
 const typename Image<TPixel, VImageDimension>::ImageKeywordlistType
 Image<TPixel, VImageDimension>::GetImageKeywordlist(void) const
 {
-  return (m_ImageMetadataInterface->GetImageKeywordlist());
+  return (this->GetMetaDataInterface()->GetImageKeywordlist());
 }
 
 template <class TPixel, unsigned int VImageDimension>
@@ -154,11 +154,17 @@ Image<TPixel, VImageDimension>
 ::CopyInformation(const itk::DataObject * data)
 {
   Superclass::CopyInformation(data);
-//   this->itk::Object::SetMetaDataDictionary(data->GetMetaDataDictionary());
-  itk::MetaDataDictionary dict = data->GetMetaDataDictionary();
-  this->itk::Object::SetMetaDataDictionary(dict);
-  m_ImageMetadataInterface->SetMetaDataDictionary(dict);
+  this->itk::Object::SetMetaDataDictionary(data->GetMetaDataDictionary());
+}
 
+template <class TPixel, unsigned int VImageDimension>
+typename Image<TPixel, VImageDimension>::ImageMetadataInterfacePointerType
+Image<TPixel, VImageDimension>
+::GetMetaDataInterface() const
+{
+  if (m_ImageMetadataInterface.IsNull())
+    m_ImageMetadataInterface = ImageMetadataInterfaceFactory::CreateIMI(this->GetMetaDataDictionary());
+  return m_ImageMetadataInterface;
 }
 
 template <class TPixel, unsigned int VImageDimension>
@@ -166,9 +172,7 @@ void
 Image<TPixel, VImageDimension>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-
-  m_ImageMetadataInterface->PrintSelf(os, indent, this->GetMetaDataDictionary());
-
+  this->GetMetaDataInterface()->PrintSelf(os, indent, this->GetMetaDataDictionary());
 }
 
 } // end namespace otb
