@@ -169,6 +169,14 @@ public:
   itkSetStringMacro(Label);
   itkGetStringMacro(Label);
 
+/** Set center*/
+  void SetCenter(typename ImageType::IndexType index)
+  {
+    m_RenderingModel->SetExtractRegionCenter(index);
+    m_RenderingModel->SetScaledExtractRegionCenter(index);
+    m_RenderingModel->Update();
+  }
+
   /** Update and show the widget (you should call Fl::run() to hold to
    * display */
   void Update();
