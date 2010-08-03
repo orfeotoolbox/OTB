@@ -1247,6 +1247,10 @@ ADD_TEST(feTuScalarImageToTexturesFilterNew ${FEATUREEXTRACTION_TESTS15}
         otbScalarImageToTexturesFilterNew
 )
 
+ADD_TEST(feTuMaskedScalarImageToGreyLevelRunLengthMatrixGeneratorNew ${FEATUREEXTRACTION_TESTS15}
+        otbMaskedScalarImageToGreyLevelRunLengthMatrixGeneratorNew
+)
+
 ADD_TEST(feTvScalarImageToTexturesFilter ${FEATUREEXTRACTION_TESTS15}
         --compare-n-images ${EPSILON_8} 8   
             ${BASELINE}/feTvScalarImageToTexturesFilterOutputEnergy.tif
@@ -1598,6 +1602,7 @@ otbFeatureExtractionTests15.cxx
 otbImageToLineSegmentVectorDataNew.cxx
 otbImageToLineSegmentVectorData.cxx
 otbSqrtSpectralAngleImageFilter.cxx
+otbMaskedScalarImageToGreyLevelRunLengthMatrixGeneratorNew.cxx
 otbScalarImageToTexturesFilterNew.cxx
 otbScalarImageToTexturesFilter.cxx
 otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculatorNew.cxx
