@@ -130,8 +130,8 @@ VectorRescaleIntensityImageFilter<TInputImage, TOutputImage>
       typename HistogramGeneratorType::Pointer generator = HistogramGeneratorType::New();
       generator->SetListSample(sl->GetNthElement(i));
       typename HistogramGeneratorType::HistogramType::SizeType size;
-      size.Fill(static_cast<unsigned int>(vcl_ceil(1 / m_ClampThreshold) * 10));
-//      size.Fill(256);
+      //size.Fill(static_cast<unsigned int>(vcl_ceil(1 / m_ClampThreshold) * 10));
+      size.Fill(256);
       generator->SetNumberOfBins(size);
       generator->Update();
       m_InputMinimum[i] =
