@@ -62,6 +62,8 @@ public:
 
   std::string GetExpression() const;
 
+  std::string GetNthInputName(unsigned int idx) const;
+
 protected :
   NaryParserImageFilter();
   virtual ~NaryParserImageFilter();
@@ -77,7 +79,7 @@ private :
 
   std::string                           m_Expression; 
   std::vector<ParserType::Pointer>      m_VParser;
-  std::vector< std::vector<PixelType> > m_AImage;
+  std::vector< std::vector<double> >    m_AImage;
   std::vector< std::string >            m_VVarName;
 
   long                                  m_UnderflowCount;

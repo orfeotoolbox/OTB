@@ -30,11 +30,13 @@
 int otbNaryParserImageFilter( int argc, char* argv[])
 {
   typedef double                                            PixelType;
+  //typedef float                                             PixelType;
   typedef otb::Image<PixelType, 2>                          ImageType;
   typedef otb::NaryParserImageFilter<ImageType>             FilterType;
   
   unsigned int i;
   const unsigned int N = 100;
+  unsigned int FAIL_FLAG = 0;
 
   ImageType::SizeType size;
   size.Fill(N);
@@ -104,35 +106,45 @@ int otbNaryParserImageFilter( int argc, char* argv[])
     ImageType::IndexType i1 = it1.GetIndex();
     ImageType::IndexType i2 = it2.GetIndex();
     ImageType::IndexType i3 = it3.GetIndex();
-    double px1 = ( i1[0] + i1[1] -50 );
-    double px2 = ( i2[0] * i2[1] );
-    double px3 = ( i3[0] + i3[1] * i3[1] );
-    double result = it.Get();
-    double ndvi_expected;
+    PixelType px1 = ( i1[0] + i1[1] -50 );
+    PixelType px2 = ( i2[0] * i2[1] );
+    PixelType px3 = ( i3[0] + i3[1] * i3[1] );
+    PixelType result = it.Get();
+    PixelType ndvi_expected;
+    PixelType error;
     
     if ( vcl_abs( px1 + px2) < 1E-6 )
       ndvi_expected = 0.0;
     else 
       ndvi_expected = (px2-px1)/(px2+px1);
     
-    double expected = vcl_cos( 2 * otb::CONST_PI * px1 ) / ( 2 * otb::CONST_PI * px2 + 1E-3 ) * vcl_sin( otb::CONST_PI * px3 )
-      + ndvi_expected * vcl_sqrt(double(2)) * px3;
+    PixelType expected = vcl_cos( 2 * otb::CONST_PI * px1 ) / ( 2 * otb::CONST_PI * px2 + 1E-3 ) * vcl_sin( otb::CONST_PI * px3 )
+      + ndvi_expected * vcl_sqrt(PixelType(2)) * px3;
     
     /*
     std::cout << "Pixel_1 =  " << it1.Get() << "     Pixel_2 =  " << it2.Get() << "     Pixel_3 =  " << it3.Get() 
 	      << "     Result =  " << it.Get() << "     Expected =  " << expected << std::endl;  
     */
     
-    if ( vcl_abs( result - expected ) > 1E-10 )
+    error = (result - expected) * (result - expected) / (result + expected);
+    if ( error > 1E-9 )
       {
       itkGenericExceptionMacro(  <<std::endl 
-				 << "Error > 1E-10 -> Test Failled" << std::endl 
-				 << "Pixel_1 =  "     << it1.Get()  << "     Pixel_2 =  "  << it2.Get() 
-				 << "Pixel_3 =  "     << it3.Get()
-				 << "     Result =  " << it.Get()   << "     Expected =  " << expected 
-				 << std::endl );
+				 << "Error = " << error << "  > 1E-9     -> TEST FAILLED" << std::endl 
+				 << "Pixel_1 =  "       << it1.Get()  
+				 << "     Pixel_2 =  "  << it2.Get() 
+				 << "     Pixel_3 =  "  << it3.Get()
+				 << "     Result =  "   << it.Get()   
+				 << "     Expected =  " << expected     << std::endl );
+      FAIL_FLAG++;
       }
   }
+  if(!FAIL_FLAG)
+    std::cout << "[PASSED]" << std::endl;
+  else
+    std::cout << "[FAILLED]" << std::endl;
+  FAIL_FLAG = 0;
+  
 
 
   /** Edge Effect Handling */

@@ -118,6 +118,13 @@ std::string NaryParserImageFilter<TImage>
 }
 
 template< typename TImage >
+std::string NaryParserImageFilter<TImage>
+::GetNthInputName(unsigned int idx) const
+{
+  return m_VVarName.at(idx);
+}
+
+template< typename TImage >
 void NaryParserImageFilter<TImage>
 ::BeforeThreadedGenerateData()
 {
@@ -180,7 +187,7 @@ void NaryParserImageFilter<TImage>
 ::ThreadedGenerateData(const ImageRegionType& outputRegionForThread,
 		       int threadId)
 {
-  PixelType value; 
+  double value; 
   unsigned int j;
   unsigned int nbInputImages = this->GetNumberOfInputs();
   
@@ -199,9 +206,9 @@ void NaryParserImageFilter<TImage>
   while (!(Vit.at(0).IsAtEnd()))
     {
     for(j=0; j < nbInputImages; j++)
-      m_AImage.at(threadId).at(j) = Vit.at(j).Get();
+      m_AImage.at(threadId).at(j) = static_cast<double>(Vit.at(j).Get());
    
-    value = static_cast<double>(m_VParser.at(threadId)->Eval());
+    value = m_VParser.at(threadId)->Eval();
      
     if (value < itk::NumericTraits<PixelType>::NonpositiveMin())
       {
