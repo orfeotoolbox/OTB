@@ -77,6 +77,7 @@ SpectralSensitivityReader
   try
     {
     SpotImageMetadataInterface::Pointer lImageMetadata = SpotImageMetadataInterface::New();
+    lImageMetadata->SetMetaDataDictionary(m_Image->GetMetaDataDictionary());
     sensor = ossimString(lImageMetadata->GetSensorID());
     sensor.upcase();
     // Suppress spaces
