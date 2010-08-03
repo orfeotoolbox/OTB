@@ -36,152 +36,116 @@ VectorImage<TPixel, VImageDimension>::VectorImage()
 template <class TPixel, unsigned int VImageDimension>
 std::string VectorImage<TPixel, VImageDimension>::GetProjectionRef(void) const
 {
-  if (m_ImageMetadataInterface.IsNull())
-    itkExceptionMacro("No metadata currently available");
-  return (m_ImageMetadataInterface->GetProjectionRef());
+  return (this->GetMetaDataInterface()->GetProjectionRef());
 }
 
 template <class TPixel, unsigned int VImageDimension>
 std::string VectorImage<TPixel, VImageDimension>::GetGCPProjection(void) const
 {
-  if (m_ImageMetadataInterface.IsNull())
-    itkExceptionMacro("No metadata currently available");
-  return (m_ImageMetadataInterface->GetGCPProjection());
+  return (this->GetMetaDataInterface()->GetGCPProjection());
 }
 
 template <class TPixel, unsigned int VImageDimension>
 unsigned int VectorImage<TPixel, VImageDimension>::GetGCPCount(void) const
 {
-  if (m_ImageMetadataInterface.IsNull())
-    itkExceptionMacro("No metadata currently available");
-  return (m_ImageMetadataInterface->GetGCPCount());
+  return (this->GetMetaDataInterface()->GetGCPCount());
 }
 
 template <class TPixel, unsigned int VImageDimension>
 OTB_GCP& VectorImage<TPixel, VImageDimension>::GetGCPs(unsigned int GCPnum)
 {
-  if (m_ImageMetadataInterface.IsNull())
-    itkExceptionMacro("No metadata currently available");
-  return (m_ImageMetadataInterface->GetGCPs(GCPnum));
+  return (this->GetMetaDataInterface()->GetGCPs(GCPnum));
 }
 
 template <class TPixel, unsigned int VImageDimension>
 std::string VectorImage<TPixel, VImageDimension>::GetGCPId(unsigned int GCPnum) const
 {
-  if (m_ImageMetadataInterface.IsNull())
-    itkExceptionMacro("No metadata currently available");
-  return (m_ImageMetadataInterface->GetGCPId(GCPnum));
+  return (this->GetMetaDataInterface()->GetGCPId(GCPnum));
 }
 
 template <class TPixel, unsigned int VImageDimension>
 std::string VectorImage<TPixel, VImageDimension>::GetGCPInfo(unsigned int GCPnum) const
 {
-  if (m_ImageMetadataInterface.IsNull())
-    itkExceptionMacro("No metadata currently available");
-  return (m_ImageMetadataInterface->GetGCPInfo(GCPnum));
+  return (this->GetMetaDataInterface()->GetGCPInfo(GCPnum));
 }
 
 template <class TPixel, unsigned int VImageDimension>
 double VectorImage<TPixel, VImageDimension>::GetGCPRow(unsigned int GCPnum) const
 {
-  if (m_ImageMetadataInterface.IsNull())
-    itkExceptionMacro("No metadata currently available");
-  return (m_ImageMetadataInterface->GetGCPRow(GCPnum));
+  return (this->GetMetaDataInterface()->GetGCPRow(GCPnum));
 }
 
 template <class TPixel, unsigned int VImageDimension>
 double VectorImage<TPixel, VImageDimension>::GetGCPCol(unsigned int GCPnum) const
 {
-  if (m_ImageMetadataInterface.IsNull())
-    itkExceptionMacro("No metadata currently available");
-  return (m_ImageMetadataInterface->GetGCPCol(GCPnum));
+  return (this->GetMetaDataInterface()->GetGCPCol(GCPnum));
 }
 
 template <class TPixel, unsigned int VImageDimension>
 double VectorImage<TPixel, VImageDimension>::GetGCPX(unsigned int GCPnum) const
 {
-  if (m_ImageMetadataInterface.IsNull())
-    itkExceptionMacro("No metadata currently available");
-  return (m_ImageMetadataInterface->GetGCPX(GCPnum));
+  return (this->GetMetaDataInterface()->GetGCPX(GCPnum));
 }
 
 template <class TPixel, unsigned int VImageDimension>
 double VectorImage<TPixel, VImageDimension>::GetGCPY(unsigned int GCPnum) const
 {
-  if (m_ImageMetadataInterface.IsNull())
-    itkExceptionMacro("No metadata currently available");
-  return (m_ImageMetadataInterface->GetGCPY(GCPnum));
+  return (this->GetMetaDataInterface()->GetGCPY(GCPnum));
 }
 
 template <class TPixel, unsigned int VImageDimension>
 double VectorImage<TPixel, VImageDimension>::GetGCPZ(unsigned int GCPnum) const
 {
-  if (m_ImageMetadataInterface.IsNull())
-    itkExceptionMacro("No metadata currently available");
-  return (m_ImageMetadataInterface->GetGCPZ(GCPnum));
+  return (this->GetMetaDataInterface()->GetGCPZ(GCPnum));
 }
 
 template <class TPixel, unsigned int VImageDimension>
 typename VectorImage<TPixel, VImageDimension>::VectorType
 VectorImage<TPixel, VImageDimension>::GetGeoTransform(void) const
 {
-  if (m_ImageMetadataInterface.IsNull())
-    itkExceptionMacro("No metadata currently available");
-  return (m_ImageMetadataInterface->GetGeoTransform());
+  return (this->GetMetaDataInterface()->GetGeoTransform());
 }
 
 template <class TPixel, unsigned int VImageDimension>
 typename VectorImage<TPixel, VImageDimension>::VectorType
 VectorImage<TPixel, VImageDimension>::GetUpperLeftCorner(void) const
 {
-  if (m_ImageMetadataInterface.IsNull())
-    itkExceptionMacro("No metadata currently available");
-  return (m_ImageMetadataInterface->GetUpperLeftCorner());
+  return (this->GetMetaDataInterface()->GetUpperLeftCorner());
 }
 
 template <class TPixel, unsigned int VImageDimension>
 typename VectorImage<TPixel, VImageDimension>::VectorType
 VectorImage<TPixel, VImageDimension>::GetUpperRightCorner(void) const
 {
-  if (m_ImageMetadataInterface.IsNull())
-    itkExceptionMacro("No metadata currently available");
-  return (m_ImageMetadataInterface->GetUpperRightCorner());
+  return (this->GetMetaDataInterface()->GetUpperRightCorner());
 }
 
 template <class TPixel, unsigned int VImageDimension>
 typename VectorImage<TPixel, VImageDimension>::VectorType
 VectorImage<TPixel, VImageDimension>::GetLowerLeftCorner(void) const
 {
-  if (m_ImageMetadataInterface.IsNull())
-    itkExceptionMacro("No metadata currently available");
-  return (m_ImageMetadataInterface->GetLowerLeftCorner());
+  return (this->GetMetaDataInterface()->GetLowerLeftCorner());
 }
 
 template <class TPixel, unsigned int VImageDimension>
 typename VectorImage<TPixel, VImageDimension>::VectorType
 VectorImage<TPixel, VImageDimension>::GetLowerRightCorner(void) const
 {
-  if (m_ImageMetadataInterface.IsNull())
-    itkExceptionMacro("No metadata currently available");
-  return (m_ImageMetadataInterface->GetLowerRightCorner());
+  return (this->GetMetaDataInterface()->GetLowerRightCorner());
 }
 
 template <class TPixel, unsigned int VImageDimension>
 typename VectorImage<TPixel, VImageDimension>::ImageKeywordlistType
 VectorImage<TPixel, VImageDimension>::GetImageKeywordlist(void)
 {
-  if (m_ImageMetadataInterface.IsNull())
-    itkExceptionMacro("No metadata currently available");
-  return (m_ImageMetadataInterface->GetImageKeywordlist());
+  return (this->GetMetaDataInterface()->GetImageKeywordlist());
 }
 
 template <class TPixel, unsigned int VImageDimension>
 const typename VectorImage<TPixel, VImageDimension>::ImageKeywordlistType
 VectorImage<TPixel, VImageDimension>::GetImageKeywordlist(void) const
 {
-  if (m_ImageMetadataInterface.IsNull())
-    itkExceptionMacro("No metadata currently available");
-  return (m_ImageMetadataInterface->GetImageKeywordlist());
+  return (this->GetMetaDataInterface()->GetImageKeywordlist());
 }
 
 template <class TPixel, unsigned int VImageDimension>
@@ -208,7 +172,7 @@ void
 VectorImage<TPixel, VImageDimension>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  m_ImageMetadataInterface->PrintSelf(os, indent, this->GetMetaDataDictionary());
+  this->GetMetaDataInterface()->PrintSelf(os, indent, this->GetMetaDataDictionary());
 }
 
 } // end namespace otb
