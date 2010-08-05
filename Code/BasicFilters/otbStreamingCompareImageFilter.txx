@@ -282,7 +282,7 @@ PersistentCompareImageFilter<TInputImage>
   //compute psnr
   RealType minimum = std::min(minimum1, minimum2);
   RealType maximum = std::max(maximum1, maximum2);
-  std::cout <<"max -min " << maximum - minimum << std::endl;
+
   psnr = (vcl_abs(mse) > 0.0000000001 && (maximum - minimum) > 0.0000000001 ) ? 10. * vcl_log10( ( ( maximum - minimum) * ( maximum - minimum) ) / mse ) : 0.;
   // Set the outputs
   this->GetMSEOutput()->Set(mse);

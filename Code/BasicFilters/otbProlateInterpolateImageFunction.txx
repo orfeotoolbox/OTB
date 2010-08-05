@@ -196,8 +196,6 @@ ProlateFunction<TInput, TOutput>
     totalEnergy += std::abs(resampledProfile[j]) * std::abs(resampledProfile[j]);
     }
 
-  std::cout << "SampleNb: " << sampleNb << ", energy: " << energy << ", total energy: " << totalEnergy << std::endl;
-
   return std::sqrt(energy) / std::sqrt(totalEnergy);
 }
 
