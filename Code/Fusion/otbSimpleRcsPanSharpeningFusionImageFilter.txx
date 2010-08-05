@@ -35,6 +35,7 @@ SimpleRcsPanSharpeningFusionImageFilter
   m_ConvolutionFilter->NormalizeFilterOn();
   m_DivideFilter = DivideFilterType::New();
   m_MultiplyFilter = MultiplyFilterType::New();
+  m_CastFilter = CastFilterType::New();
 
   m_Radius.Fill(3);
   m_Filter.SetSize(7 * 7);
@@ -43,6 +44,12 @@ SimpleRcsPanSharpeningFusionImageFilter
   m_DivideFilter->SetInput2(m_ConvolutionFilter->GetOutput());
   m_MultiplyFilter->SetInput1(m_DivideFilter->GetOutput());
 
+  // Set-up progress reporting
+    m_ProgressAccumulator = itk::ProgressAccumulator::New();
+    m_ProgressAccumulator->SetMiniPipelineFilter(this);
+    m_ProgressAccumulator->RegisterInternalFilter(m_ConvolutionFilter,0.9);
+    m_ProgressAccumulator->RegisterInternalFilter(m_DivideFilter,0.05);
+    m_ProgressAccumulator->RegisterInternalFilter(m_MultiplyFilter,0.05);
 }
 
 template <class TPanImageType, class TXsImageType, class TOutputImageType>
@@ -109,7 +116,6 @@ SimpleRcsPanSharpeningFusionImageFilter
 <TPanImageType, TXsImageType, TOutputImageType>
 ::GenerateData()
 {
-
   //Check if size is correct
   typename InternalImageType::SizeType       sizePan;
   typename InternalVectorImageType::SizeType sizeXs;
@@ -125,7 +131,8 @@ SimpleRcsPanSharpeningFusionImageFilter
   m_ConvolutionFilter->SetRadius(this->m_Radius);
   m_ConvolutionFilter->SetFilter(this->m_Filter);
 
-  m_DivideFilter->SetInput1(this->GetXsInput());
+  m_CastFilter->SetInput(this->GetXsInput());
+  m_DivideFilter->SetInput1(m_CastFilter->GetOutput());
 
   m_MultiplyFilter->SetInput2(this->GetPanInput());
 

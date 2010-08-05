@@ -25,6 +25,10 @@
 #include "otbConvolutionImageFilter.h"
 #include "itkDivideImageFilter.h"
 #include "itkMultiplyImageFilter.h"
+#include "itkCastImageFilter.h"
+
+#include "itkProgressAccumulator.h"
+
 
 namespace otb
 {
@@ -100,10 +104,11 @@ protected:
   typedef otb::ConvolutionImageFilter
   <TPanImageType, InternalImageType> ConvolutionFilterType;
   typedef itk::DivideImageFilter
-  <TXsImageType, InternalImageType,
+  <InternalVectorImageType, InternalImageType,
       InternalVectorImageType> DivideFilterType;
   typedef itk::MultiplyImageFilter
   <InternalVectorImageType, TPanImageType, TOutputImageType> MultiplyFilterType;
+  typedef itk::CastImageFilter<TXsImageType,InternalVectorImageType> CastFilterType;
 
 //  Software Guide : EndCodeSnippet
 
@@ -117,9 +122,11 @@ private:
   typename ConvolutionFilterType::Pointer m_ConvolutionFilter;
   typename DivideFilterType::Pointer m_DivideFilter;
   typename MultiplyFilterType::Pointer m_MultiplyFilter;
+  typename CastFilterType::Pointer     m_CastFilter;
 
   RadiusType m_Radius;
   ArrayType  m_Filter;
+  typename itk::ProgressAccumulator::Pointer m_ProgressAccumulator;
 
 };
 
