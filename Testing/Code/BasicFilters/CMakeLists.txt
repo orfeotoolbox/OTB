@@ -418,6 +418,19 @@ ADD_TEST(bfTvStreamingStatisticsImageFilter ${BASICFILTERS_TESTS4}
                 ${INPUTDATA}/small_poupees_1canal.hd
 		${TEMP}/bfStreamingStatisticsImageFilterResults.txt)
 
+# -------            otb::StreamingCompareImageFilter   ----------------------------
+
+ADD_TEST(bfTuStreamingCompareImageFilterNew ${BASICFILTERS_TESTS4}
+         otbStreamingCompareImageFilterNew)
+
+ADD_TEST(bfTvStreamingCompareImageFilter ${BASICFILTERS_TESTS4}
+	--compare-ascii ${NOTOL}
+ 		   ${BASELINE_FILES}/bfStreamingCompareImageFilterResults.txt
+ 		   ${TEMP}/bfStreamingCompareImageFilterResults.txt
+         otbStreamingCompareImageFilter
+                ${INPUTDATA}/small_poupees_1canal.hd
+                ${TEMP}/bfStreamingCompareImageFilterResults.txt)
+
 # -------            otb::VectorImageTo3DScalarImageFilter   ----------------------------
 
 ADD_TEST(bfTuVectorImageTo3DScalarImageFilterNew ${BASICFILTERS_TESTS4}
@@ -497,7 +510,6 @@ ADD_TEST(bfTvStreamingStatisticsVectorImageFilter ${BASICFILTERS_TESTS5}
 		${INPUTDATA}/couleurs_extrait.png
 		${TEMP}/bfTvStreamingStatisticsVectorImageFilterResults.txt
 		)
-
 
 # -------            otb::MatrixTransposeMatrixImageFilter   ----------------------------
 
@@ -1690,6 +1702,8 @@ otbPerBandVectorImageFilterWithMeanFilter.cxx
 otbPerBandVectorImageFilterWithSobelFilter.cxx
 otbStreamingStatisticsImageFilterNew.cxx
 otbStreamingStatisticsImageFilter.cxx
+otbStreamingCompareImageFilterNew.cxx
+otbStreamingCompareImageFilter.cxx
 otbVectorImageTo3DScalarImageFilterNew.cxx
 otbVectorImageTo3DScalarImageFilter.cxx
 )
