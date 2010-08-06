@@ -206,27 +206,6 @@ PersistentCompareImageFilter<TInputImage>
 template<class TInputImage>
 void
 PersistentCompareImageFilter<TInputImage>
-::GenerateInputRequestedRegion()
-{
-  // call the superclass' implementation of this method
-  Superclass::GenerateInputRequestedRegion();
-
-  // get pointers to the input and output
-  TInputImage * inpuPtr1 =  const_cast< TInputImage * >( this->GetInput1());
-  TInputImage * inpuPtr2 = const_cast< TInputImage * >( this->GetInput2());
-  
-  if ( !inpuPtr1 || !inpuPtr2 )
-    {
-    return;
-    }
-
-  inpuPtr2->SetRequestedRegion( inpuPtr1->GetRequestedRegion() );
-  
-  return;
-}
-template<class TInputImage>
-void
-PersistentCompareImageFilter<TInputImage>
 ::Synthetize()
 {
   int      i;
