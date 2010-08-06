@@ -59,9 +59,9 @@ int main(int argc, char* argv[])
 
   typedef double PixelType;
 
-  typedef otb::VectorImage<PixelType, 2>          ImageType;
-  typedef otb::ImageFileReader<ImageType>         ReaderType;
-  typedef otb::MultiToMonoChannelExtractROI<PixelType, PixelType> ExtractROIMonoFilterType;
+  typedef otb::VectorImage<PixelType, 2>                                              ImageType;
+  typedef otb::ImageFileReader<ImageType>                                             ReaderType;
+  typedef otb::MultiToMonoChannelExtractROI<PixelType, PixelType>                     ExtractROIMonoFilterType;
   typedef otb::StreamingCompareImageFilter<ExtractROIMonoFilterType::OutputImageType> StreamingCompareImageFilterType;
 
   // Read input images information
