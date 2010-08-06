@@ -143,9 +143,6 @@ protected:
                              outputRegionForThread,
                              int threadId);
 
-  /** Generate the input requested regions  */
-  virtual void GenerateInputRequestedRegion(void);
-
 private:
   PersistentCompareImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
