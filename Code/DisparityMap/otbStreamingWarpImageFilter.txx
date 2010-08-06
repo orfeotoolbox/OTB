@@ -188,10 +188,6 @@ StreamingWarpImageFilter<TInputImage, TOutputImage, TDeformationField>
     }
   else
     {
-    // Couldn't crop the region (requested region is outside the largest
-    // possible region).  Throw an exception.
-    std::cout<<"Requested region: "<<inputRequestedRegion<<std::endl;
-    std::cout<<"Largest region"<<inputPtr->GetLargestPossibleRegion()<<std::endl;
 
     inputFinalSize.Fill(0);
     inputRequestedRegion.SetSize(inputFinalSize);
