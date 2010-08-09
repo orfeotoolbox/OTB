@@ -430,6 +430,28 @@ OTB\_USE\_LIBLAS option to OFF.
 
 It seems to be fine with the more recent release of Open Solaris.
 
+\subsubsection{Debian Linux / Ubuntu}
+
+On some Debian / Ubuntu versions, the system gdal library might conflict with the system Tiff library. This is most likely the case if you get odd segmentation fault whenever trying to open a tiff image.
+
+Here is an outline of the issue: to be able to handler big Tiff files (e.g. more than 4 Gb) the Tiff library has to be compiled with some specific options. This is not the case for most distrib Tiff packages. Therefore, Gdal is often compiled with an internal Tiff version using the appropriate options. In this case, the Gdal shared library might expose the internal Tiff symbols, so that these symbols will be found when linking against the Gdal library. But Gdal offers the Tiff symbols without offering the headers in its include directory, so that one ends up compiling some code using Tiff system headers and Tiff Gdal symbols. This might cause Tiff version conflicts and lead to segmentation fault.
+
+Now, here is the workaround: Build your own Gdal library (you probably want to have the most up-to-date Gdal anyway) using the following options during configuration:
+\begin{verbatim}
+	./configure --prefix=INSTALL_DIR --with-png=internal --with-libtiff=internal
+	--with-jpeg=internal
+\end{verbatim}
+
+Then make and (sudo) make install. Then, do:
+
+\begin{verbatim}
+	sudo cp frmts/gtiff/libgeotiff/*.h   INSTALL_DIR/include/
+	sudo cp frmts/gtiff/libgeotiff/*.inc INSTALL_DIR/include/
+	sudo cp frmts/gtiff/libtiff/*.h      INSTALL_DIR/include/ 
+\end{verbatim}
+
+This will add the missing headers to the the Gdal include directory, so that your Gdal installation now provide a full Tiff support (headers and symbols). During OTB configuration, be careful to use Gdal include directory as TIFF_INCLUDE_DIRS and GEOTIFF_INCLUDE_DIRS.
+
 \section{Using OTB}
 
 \subsection{Where to start ?}
