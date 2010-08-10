@@ -407,9 +407,9 @@ bool ossimQuickbirdRpcModel::parseTiffFile(const ossimFilename& file)
    ossimFilename rpcFile = file;
    ossimFilename metadataFile = file;
 
-   tileFile = tileFile.replaceAllThatMatch("_R[0-9]+C[0-9]+");
-   rpcFile  = rpcFile.replaceAllThatMatch("_R[0-9]+C[0-9]+");
-   metadataFile = metadataFile.replaceAllThatMatch("_R[0-9]+C[0-9]+");
+//   tileFile = tileFile.replaceAllThatMatch("_R[0-9]+C[0-9]+");
+//   rpcFile  = rpcFile.replaceAllThatMatch("_R[0-9]+C[0-9]+");
+//   metadataFile = metadataFile.replaceAllThatMatch("_R[0-9]+C[0-9]+");
 
    if ( !theSupportData )
    {
@@ -422,9 +422,18 @@ bool ossimQuickbirdRpcModel::parseTiffFile(const ossimFilename& file)
       metadataFile = metadataFile.setExtension("imd");
       if(!theSupportData->open(tileFile))
       {
-         return false;
-      }
-   }
+        metadataFile = metadataFile.replaceAllThatMatch("_R[0-9]+C[0-9]+");
+        metadataFile = metadataFile.setExtension("IMD");
+        if(!theSupportData->open(metadataFile))
+           {
+              metadataFile = metadataFile.setExtension("imd");
+              if(!theSupportData->open(tileFile))
+              {
+                return false;
+              }
+           }
+        }
+     }
 
    theSensorID = theSupportData->getSatID();
 
@@ -436,10 +445,19 @@ bool ossimQuickbirdRpcModel::parseTiffFile(const ossimFilename& file)
          rpcFile = rpcFile.setExtension("rpb");
          if(!hdr.open(rpcFile))
          {
-            return false;
-         }
-      }
-   }
+           rpcFile  = rpcFile.replaceAllThatMatch("_R[0-9]+C[0-9]+");
+           rpcFile = rpcFile.setExtension("RPB");
+           if(!hdr.open(rpcFile))
+             {
+             rpcFile = rpcFile.setExtension("rpb");
+             if(!hdr.open(rpcFile))
+               {
+               return false;
+               }
+             }
+           }
+        }
+     }
    
    tileFile = tileFile.setExtension("TIL");
    if(!tileHdr.open(tileFile))
@@ -447,7 +465,16 @@ bool ossimQuickbirdRpcModel::parseTiffFile(const ossimFilename& file)
       tileFile = tileFile.setExtension("til");
       if(!tileHdr.open(tileFile))
       {
-         return false;
+        tileFile = tileFile.replaceAllThatMatch("_R[0-9]+C[0-9]+");
+        tileFile = tileFile.setExtension("TIL");
+        if(!tileHdr.open(tileFile))
+          {
+             tileFile = tileFile.setExtension("til");
+             if(!tileHdr.open(tileFile))
+             {
+               return false;
+             }
+          }
       }
    }
 
