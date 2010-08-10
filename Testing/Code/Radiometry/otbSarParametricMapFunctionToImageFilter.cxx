@@ -35,7 +35,7 @@ int otbSarParametricMapFunctionToImageFilter(int argc, char * argv[])
   typedef otb::StreamingImageFileWriter<OutputImageType>                            WriterType;
   typedef otb::SarParametricMapFunction<InputImageType>                             FunctionType;
   typedef otb::FunctionToImageFilter<InputImageType, OutputImageType, FunctionType> FilterType;
-  typedef itk::PointSet<PixelType, 2>                                               PointSetType;
+  typedef FunctionType::PointSetType                                                PointSetType;
 
   // Instantiating object
   FilterType::Pointer filter = FilterType::New();

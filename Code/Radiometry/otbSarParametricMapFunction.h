@@ -23,7 +23,7 @@
 #include "itkNumericTraits.h"
 #include "itkImageFunction.h"
 #include "itkPointSet.h"
-
+#include "itkPoint.h"
 
 namespace otb
 {
@@ -38,13 +38,13 @@ namespace otb
  
 template <class TInputImage, class TCoordRep = float>
 class ITK_EXPORT SarParametricMapFunction :
-  public itk::ImageFunction<TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::RealType,
+  public itk::ImageFunction<TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::ScalarRealType,
       TCoordRep>
 {
 public:
   /** Standard class typedefs. */
   typedef SarParametricMapFunction Self;
-  typedef itk::ImageFunction<TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::RealType,
+  typedef itk::ImageFunction<TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::ScalarRealType,
       TCoordRep>                                          Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -61,16 +61,18 @@ public:
   typedef typename Superclass::OutputType          OutputType;
   typedef typename Superclass::IndexType           IndexType;
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
-  typedef typename Superclass::PointType           PointType;
 
   itkStaticConstMacro(ImageDimension, unsigned int, InputImageType::ImageDimension);
 
-  typedef itk::PointSet<InputPixelType, ImageDimension>  PointSetType;
-  typedef typename PointSetType::Pointer PointSetPointer;
+  typedef itk::PointSet<OutputType, ImageDimension>      PointSetType;
+  typedef typename PointSetType::Pointer                 PointSetPointer;
+  typedef typename PointSetType::ConstPointer            PointSetConstPointer;
+  typedef typename PointSetType::PointType               PointType;
+
 //  typedef typename PointSetType::PointType PointType;
 
   /** Datatype used for the evaluation */
-  typedef typename itk::NumericTraits<InputPixelType>::RealType                       RealType;
+  typedef typename itk::NumericTraits<InputPixelType>::ScalarRealType                       RealType;
 
   /** Evalulate the function at specified index */
   virtual RealType EvaluateAtIndex(const IndexType& index) const;
@@ -94,7 +96,7 @@ public:
   /** Get/Set the PointSet pointer*/
 //  itkSetMacro(PointSet, PointSetPointer);
   itkGetConstReferenceMacro(PointSet, PointSetPointer);
-  void SetPointSet(const PointSetPointer val)
+  void SetPointSet(PointSetPointer val)
   {
     m_IsInitialize = false;
     m_PointSet = val;

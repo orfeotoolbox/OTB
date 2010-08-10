@@ -35,16 +35,17 @@ namespace otb
 template <class TInputImage, class TCoordRep>
 SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
 ::SarRadiometricCalibrationFunction():
-  m_Offset(0.0),
   m_Scale(1.0),
+  m_Noise(ParametricFunctionType::New()),
   m_AntennaPatternNewGain(ParametricFunctionType::New()),
   m_AntennaPatternOldGain(ParametricFunctionType::New()),
   m_IncidenceAngle(ParametricFunctionType::New()),
   m_RangeSpreadLoss(ParametricFunctionType::New())
 {
+  m_Noise->SetConstantValue(0.0);
   m_AntennaPatternNewGain->SetConstantValue(1.0);
   m_AntennaPatternOldGain->SetConstantValue(1.0);
-  m_IncidenceAngle->SetConstantValue(90.0);
+  m_IncidenceAngle->SetConstantValue(M_PI/2.);
   m_RangeSpreadLoss->SetConstantValue(1.0);
 }
 
@@ -58,6 +59,7 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
   const InputImageType * ptr )
 {
   Superclass::SetInputImage(ptr);
+  m_Noise->SetInputImage(ptr);
   m_IncidenceAngle->SetInputImage(ptr);
   m_AntennaPatternNewGain->SetInputImage(ptr);
   m_AntennaPatternOldGain->SetInputImage(ptr);
@@ -80,7 +82,7 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
  */
 template <class TInputImage, class TCoordRep>
 typename SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
-::RealType
+::OutputType
 SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
@@ -98,28 +100,30 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
     return (itk::NumericTraits<RealType>::max());
     }
 
+  FunctorRealType Noise;
   FunctorRealType AntennaPatternNewGain;
   FunctorRealType AntennaPatternOldGain;
   FunctorRealType IncidenceAngle; 
   FunctorRealType RangeSpreadLoss;
 
-  AntennaPatternNewGain = m_AntennaPatternNewGain->EvaluateAtIndex(index);
-  AntennaPatternOldGain = m_AntennaPatternOldGain->EvaluateAtIndex(index);
-  IncidenceAngle = m_IncidenceAngle->EvaluateAtIndex(index);
-  RangeSpreadLoss = m_RangeSpreadLoss->EvaluateAtIndex(index);
+  Noise = static_cast<FunctorRealType>(m_Noise->EvaluateAtIndex(index));
+  AntennaPatternNewGain = static_cast<FunctorRealType>(m_AntennaPatternNewGain->EvaluateAtIndex(index));
+  AntennaPatternOldGain = static_cast<FunctorRealType>(m_AntennaPatternOldGain->EvaluateAtIndex(index));
+  IncidenceAngle = static_cast<FunctorRealType>(m_IncidenceAngle->EvaluateAtIndex(index));
+  RangeSpreadLoss = static_cast<FunctorRealType>(m_RangeSpreadLoss->EvaluateAtIndex(index));
    
   FunctorType functor;
-  functor.SetOffset(m_Offset);
+  functor.SetNoise(Noise);
   functor.SetScale(m_Scale);
   functor.SetAntennaPatternNewGain(AntennaPatternNewGain);
   functor.SetAntennaPatternOldGain(AntennaPatternOldGain);
   functor.SetIncidenceAngle(IncidenceAngle);
   functor.SetRangeSpreadLoss(RangeSpreadLoss);
 
-  const RealType value = static_cast<RealType>(this->GetInputImage()->GetPixel(index));
+  const RealType value = static_cast<RealType>(vcl_abs(this->GetInputImage()->GetPixel(index)));
   result = functor.operator ()( value);
 
-  return result;
+  return static_cast<OutputType>(result);
 }
 
 } // end namespace otb

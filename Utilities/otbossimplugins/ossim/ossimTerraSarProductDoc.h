@@ -36,7 +36,7 @@ namespace ossimplugins
    class RefPoint;
    class SensorParams;
    class Noise;
-   class IncidenceAngles;
+   class SceneCoord;
 
    /** @brief Class to encapsulate parsing TerraSAR product xml file. */
    class ossimTerraSarProductDoc
@@ -181,6 +181,12 @@ namespace ossimplugins
       bool getAzimuthStopTime(const ossimXmlDocument* xdoc,
                               ossimString& s) const;
       
+      bool getRangeFirstPixelTime(const ossimXmlDocument* xdoc,
+                              ossimString& s) const;
+
+      bool getRangeLastPixelTime(const ossimXmlDocument* xdoc,
+                              ossimString& s) const;
+
       bool getCommonPrf(const ossimXmlDocument* xdoc, ossimString& s) const;
       
       /** range sampling rate */
@@ -236,8 +242,8 @@ namespace ossimplugins
        * @param pos Pointer to PlatformPosition object.
        * @return true on success, false on error.
 	     */
-      bool initIncidenceAngles(const ossimXmlDocument* xdoc,
-			       IncidenceAngles* pos) const;
+      bool initSceneCoord(const ossimXmlDocument* xdoc,
+			      SceneCoord* pos) const;
       
       /**
        * @brief Method to initialize Noise object from

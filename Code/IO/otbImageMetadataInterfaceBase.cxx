@@ -20,9 +20,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include <typeinfo>
-#include <cassert>
-
 #include "otbMacro.h"
 
 #include "otbImageMetadataInterfaceBase.h"
@@ -337,6 +334,7 @@ ImageMetadataInterfaceBase::GetSensorID() const
     }
   ossimKeywordlist kwl;
   ImageKeywordlist.convertToOSSIMKeywordlist(kwl);
+
   std::string key = "sensor";
   ossimString keywordString = kwl.find(key.c_str());
   std::string output(keywordString.chars());

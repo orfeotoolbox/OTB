@@ -27,8 +27,8 @@ int otbSarRadiometricCalibrationFunctor(int argc, char * argv[])
 
   FunctorType funct;
 
-  funct.SetOffset( 10.0);
-  if( abs(funct.GetOffset() -10.0) > 0.0)
+  funct.SetNoise( 10.0);
+  if( abs(funct.GetNoise() -10.0) > 0.0)
   {
   	return false;
   }	

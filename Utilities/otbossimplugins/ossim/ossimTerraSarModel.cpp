@@ -50,6 +50,9 @@ static const char PRODUCT_TYPE[] = "product_type";
 static const char RADIOMETRIC_CORRECTION[] = "radiometricCorrection";
 static const char AZ_START_TIME[] = "azimuth_start_time";
 static const char AZ_STOP_TIME[] = "azimuth_stop_time";
+static const char RG_FIRST_TIME[] = "range_first_time";
+static const char RG_LAST_TIME[] = "range_last_time";
+
 static const char GENERATION_TIME[] = "generation_time";
 
 static const char ACQUISITION_INFO[] = "acquisitionInfo.";
@@ -94,12 +97,14 @@ ossimplugins::ossimTerraSarModel::ossimTerraSarModel()
      _polLayer("UNDEFINED"),
      _polLayerList(),
      _noise(0),
-     _incidenceAngles(0),
+     _sceneCoord(),
      _calFactor(0.),
      _radarFrequency(0.),
      _numberOfLayers(0),
      _azStartTime(),
      _azStopTime(),
+     _rgFirstPixelTime(),
+     _rgLastPixelTime(),
      _generationTime(),
      theProductXmlFile(ossimFilename::NIL)
 {
@@ -123,12 +128,14 @@ ossimplugins::ossimTerraSarModel::ossimTerraSarModel(
      _polLayer(rhs._polLayer),
      _polLayerList(rhs._polLayerList),
      _noise(rhs._noise),
-     _incidenceAngles(rhs._incidenceAngles),
+     _sceneCoord(rhs._sceneCoord),
      _calFactor(rhs._calFactor),
      _radarFrequency(rhs._radarFrequency),
      _numberOfLayers(rhs._numberOfLayers),
      _azStartTime(rhs._azStartTime),
      _azStopTime(rhs._azStopTime),
+     _rgFirstPixelTime(rhs._rgFirstPixelTime),
+     _rgLastPixelTime(rhs._rgLastPixelTime),
      _generationTime(rhs._generationTime),
     theProductXmlFile(rhs.theProductXmlFile)
 {
@@ -144,9 +151,9 @@ ossimplugins::ossimTerraSarModel::~ossimTerraSarModel()
       delete _noise;
    }
  */
-   if (_incidenceAngles != 0)
+   if (_sceneCoord != 0)
    {
-     delete _incidenceAngles;
+     delete _sceneCoord;
    }
 }
 
@@ -451,6 +458,31 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
       setErrorStatus();
       return false;
    }
+
+   result = tsDoc.getRangeFirstPixelTime(xdoc.get(), _rgFirstPixelTime);
+   if ( result == false )
+   {
+   	  if (traceDebug())
+      {
+      	    ossimNotify(ossimNotifyLevel_DEBUG)
+           	   << "unable to get FirstPixelTime in Range Direction\n";
+      }
+      setErrorStatus();
+      return false;
+   }
+
+   result = tsDoc.getRangeLastPixelTime(xdoc.get(), _rgLastPixelTime);
+   if ( result == false )
+   {
+   	  if (traceDebug())
+      {
+      	    ossimNotify(ossimNotifyLevel_DEBUG)
+           	   << "unable to get LastPixelTime in Range Direction\n";
+      }
+      setErrorStatus();
+      return false;
+   }
+
    
    result = tsDoc.getGenerationTime(xdoc.get(), _generationTime);
    if ( result == false )
@@ -464,7 +496,7 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
       return false;
    }
    
-   result = initIncidenceAngles(xdoc.get(), tsDoc);
+   result = initSceneCoord(xdoc.get(), tsDoc);
    if ( result == false )
    {
    	  if (traceDebug())
@@ -613,7 +645,7 @@ bool ossimplugins::ossimTerraSarModel::saveState(ossimKeywordlist& kwl,
    				_noise[i].saveState(kwl,prefix);
    		}
    }		
-   _incidenceAngles->saveState(kwl,prefix);
+   _sceneCoord->saveState(kwl,prefix);
    
    
    
@@ -624,6 +656,9 @@ bool ossimplugins::ossimTerraSarModel::saveState(ossimKeywordlist& kwl,
    kwl.add(prefix, RADAR_FREQUENCY, ossimString::toString(_radarFrequency).c_str());
    kwl.add(prefix, AZ_START_TIME, _azStartTime.c_str());
    kwl.add(prefix, AZ_STOP_TIME, _azStopTime.c_str());
+   kwl.add(prefix, RG_FIRST_TIME, _rgFirstPixelTime.c_str());
+   kwl.add(prefix, RG_LAST_TIME, _rgLastPixelTime.c_str());
+
    kwl.add(prefix, GENERATION_TIME, _generationTime.c_str());
 
    if (traceDebug())
@@ -920,17 +955,18 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
 
 
    // Load the base class.
-   if ( !_incidenceAngles)
+   if ( !_sceneCoord)
    {
-      _incidenceAngles = new IncidenceAngles();
-   }  
-   if ( _incidenceAngles->loadState(kwl,prefix) == false )
+	   _sceneCoord = new SceneCoord();
+   }
+
+   if ( _sceneCoord->loadState(kwl,prefix) == false )
    {
      if (traceDebug())
      {
        ossimNotify(ossimNotifyLevel_WARN)
 	   << MODULE
-	   << "\n_incidenceAngles->loadState failed!\n";
+	   << "\n__sceneCoord->loadState failed!\n";
      }
      result = false;
    }
@@ -1011,6 +1047,41 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
          result = false;
       }
 
+      lookup = kwl.find(prefix, RG_FIRST_TIME);
+       if (lookup)
+       {
+    	   _rgFirstPixelTime = lookup;
+       }
+       else
+       {
+          if (traceDebug())
+          {
+             ossimNotify(ossimNotifyLevel_WARN)
+                << MODULE
+                << "\nRequired keyword not found: "
+                << RG_FIRST_TIME << "\n";
+          }
+          result = false;
+       }
+
+       lookup = kwl.find(prefix, RG_LAST_TIME);
+        if (lookup)
+        {
+     	   _rgLastPixelTime = lookup;
+        }
+        else
+        {
+           if (traceDebug())
+           {
+              ossimNotify(ossimNotifyLevel_WARN)
+                 << MODULE
+                 << "\nRequired keyword not found: "
+                 << RG_LAST_TIME << "\n";
+           }
+           result = false;
+        }
+
+
       lookup = kwl.find(prefix, GENERATION_TIME);
       if (lookup)
       {
@@ -1079,13 +1150,13 @@ std::ostream& ossimplugins::ossimTerraSarModel::print(std::ostream& out) const
    
    ossimGeometricSarSensorModel::print(out);
    
-   if ( _incidenceAngles->print(out) == false )
+   if ( _sceneCoord->print(out) == false )
    {
      if (traceDebug())
      {
        ossimNotify(ossimNotifyLevel_WARN)
 	   << MODULE
-	   << "\n_incidenceAngles->print failed!\n";
+	   << "\n_sceneCoord->print failed!\n";
      }
    }
 
@@ -1097,6 +1168,8 @@ std::ostream& ossimplugins::ossimTerraSarModel::print(std::ostream& out) const
    out << RADAR_FREQUENCY <<  ": " << _radarFrequency<< "\n";
    out << AZ_START_TIME <<  ": " << _azStartTime << "\n";
    out << AZ_STOP_TIME <<  ": " << _azStopTime << "\n";
+   out << RG_FIRST_TIME <<  ": " << _rgFirstPixelTime << "\n";
+   out << RG_LAST_TIME <<  ": " << _rgLastPixelTime << "\n";
    out << GENERATION_TIME <<  ": " << _generationTime << "\n";
 
    // Reset flags.
@@ -2045,24 +2118,24 @@ bool ossimplugins::ossimTerraSarModel::initAcquisitionInfo(
    return result;
 }
 
-bool ossimplugins::ossimTerraSarModel::initIncidenceAngles(
+bool ossimplugins::ossimTerraSarModel::initSceneCoord(
     const ossimXmlDocument* xdoc, const ossimTerraSarProductDoc& tsDoc)
 {
-  static const char MODULE[] = "ossimplugins::ossimTerraSarModel::initIncidenceAngles";
+  static const char MODULE[] = "ossimplugins::ossimTerraSarModel::initSceneCoord";
 
   if (traceDebug())
   {
     ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entered...\n";
   }   
    
-  if (_incidenceAngles)
+  if (_sceneCoord)
   {
-    delete _incidenceAngles;
+    delete _sceneCoord;
   }
    
-  _incidenceAngles = new IncidenceAngles();
+  _sceneCoord = new SceneCoord();
    
-  bool result = tsDoc.initIncidenceAngles(xdoc, _incidenceAngles);
+  bool result = tsDoc.initSceneCoord(xdoc, _sceneCoord);
 
   if (traceDebug())
   {

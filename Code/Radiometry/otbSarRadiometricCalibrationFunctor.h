@@ -40,26 +40,35 @@ public:
   typedef TInput                           InputType;
   typedef TOutput                          OutputType;
 //  typedef double                           RealType;
-  typedef typename itk::NumericTraits<InputType>::RealType   RealType;
-    
+  typedef typename itk::NumericTraits<InputType>::AbsType   RealType;
+
   SarRadiometricCalibrationFunctor():
-   		m_offset(0.0),
-   		m_scale(1.0)
+   		m_noise(0.0),
+   		m_scale(1.0),
+   		m_incidenceAngle(M_PI/2.),
+        m_antennaPatternOldGain(1.0),
+        m_antennaPatternNewGain(1.0),
+        m_rangeSpreadLoss(1.0)
     {
     };
 
   ~SarRadiometricCalibrationFunctor(){};
 
-  inline TOutput operator ()(const TInput& amplitude) const
+  inline TOutput operator ()(const TInput& value) const
   {
 	RealType sigma;
 	RealType digitalNumber;
-	digitalNumber = static_cast<RealType> (amplitude);
-	sigma  = m_scale * (digitalNumber * digitalNumber) + m_offset;
-	sigma *= sin(m_incidenceAngle);
+	digitalNumber = static_cast<RealType> (value);
+	digitalNumber = vcl_abs(digitalNumber);
+	sigma  = m_scale * (digitalNumber * digitalNumber) - m_noise;
+	sigma *= vcl_sin(m_incidenceAngle);
 	sigma *= m_antennaPatternOldGain;
 	sigma /= m_antennaPatternNewGain;
 	sigma *= m_rangeSpreadLoss;  
+	if(sigma < 0.0 )
+	{
+		sigma = 0.0;
+	}
 
 	OutputType result;
 	result = static_cast<OutputType>(sigma); 
@@ -67,15 +76,15 @@ public:
   }
 
   /** Set offset method */
-  void SetOffset(RealType value)
+  void SetNoise(RealType value)
   {
-  	m_offset = value;
+  	m_noise = value;
   }
 
   /** Get offset method */
-  RealType GetOffset() const
+  RealType GetNoise() const
   {
-  	return m_offset;
+  	return m_noise;
   }
 
   /** Set scale method */
@@ -139,7 +148,7 @@ public:
   }
 
 private:
-  RealType   m_offset;
+  RealType   m_noise;
   RealType   m_scale;
   RealType   m_antennaPatternNewGain;
   RealType   m_antennaPatternOldGain;

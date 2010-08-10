@@ -25,6 +25,7 @@
 #include "otbSarRadiometricCalibrationFunctor.h"
 #include "otbSarParametricMapFunction.h"
 
+
 namespace otb
 {
 
@@ -45,13 +46,13 @@ namespace otb
  
 template <class TInputImage, class TCoordRep = float>
 class ITK_EXPORT SarRadiometricCalibrationFunction :
-  public itk::ImageFunction<TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::RealType,
+  public itk::ImageFunction<TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::AbsType,
       TCoordRep>
 {
 public:
   /** Standard class typedefs. */
   typedef SarRadiometricCalibrationFunction Self;
-  typedef itk::ImageFunction<TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::RealType,
+  typedef itk::ImageFunction<TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::AbsType,
       TCoordRep>                                          Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -74,24 +75,25 @@ public:
 
 
   /** Datatype used for the evaluation */
-  typedef typename itk::NumericTraits<InputPixelType>::RealType                       RealType;
-  typedef otb::Functor::SarRadiometricCalibrationFunctor<InputPixelType,RealType>     FunctorType;
+  typedef double                       												  RealType;
+  typedef otb::Functor::SarRadiometricCalibrationFunctor<RealType,RealType>           FunctorType;
   typedef typename FunctorType::RealType											  FunctorRealType;
 
   typedef otb::SarParametricMapFunction<InputImageType>               ParametricFunctionType;
   typedef typename ParametricFunctionType::Pointer                    ParametricFunctionPointer;  
+  typedef typename ParametricFunctionType::ConstPointer               ParametricFunctionConstPointer;
 
   /** Evalulate the function at specified index */
-  virtual RealType EvaluateAtIndex(const IndexType& index) const;
+  virtual OutputType EvaluateAtIndex(const IndexType& index) const;
 
   /** Evaluate the function at non-integer positions */
-  virtual RealType Evaluate(const PointType& point) const
+  virtual OutputType Evaluate(const PointType& point) const
   {
     IndexType index;
     this->ConvertPointToNearestIndex(point, index);
     return this->EvaluateAtIndex(index);
   }
-  virtual RealType EvaluateAtContinuousIndex(
+  virtual OutputType EvaluateAtContinuousIndex(
     const ContinuousIndexType& cindex) const
   {
     IndexType index;
@@ -106,13 +108,14 @@ public:
   virtual void SetInputImage( const InputImageType * ptr );
 
 
-  /** Get/Set the Offset value */
-  itkSetMacro(Offset, FunctorRealType);
-  itkGetConstReferenceMacro(Offset, FunctorRealType);
 
   /** Get/Set the Scale value */
   itkSetMacro(Scale, FunctorRealType);
   itkGetConstReferenceMacro(Scale, FunctorRealType);
+
+  /** Get/Set the Offset value */
+  itkSetMacro(Noise, ParametricFunctionPointer);
+  itkGetConstReferenceMacro(Noise, ParametricFunctionPointer);
 
   /** Get/Set the AntennaPatternNewGain value */
   itkSetMacro(AntennaPatternNewGain, ParametricFunctionPointer);
@@ -139,8 +142,8 @@ private:
   SarRadiometricCalibrationFunction(const Self &);  //purposely not implemented
   void operator =(const Self&);  //purposely not implemented
 
-  FunctorRealType   m_Offset;
   FunctorRealType   m_Scale;
+  ParametricFunctionPointer   m_Noise;
   ParametricFunctionPointer   m_AntennaPatternNewGain;
   ParametricFunctionPointer   m_AntennaPatternOldGain;
   ParametricFunctionPointer   m_IncidenceAngle;

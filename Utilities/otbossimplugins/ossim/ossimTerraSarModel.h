@@ -25,7 +25,7 @@
 
 #include <otb/CivilDateTime.h>
 #include <otb/Noise.h>
-#include <otb/IncidenceAngles.h>
+#include <otb/SceneCoord.h>
 
 // Forward class declarations outside of namespace ossimplugins.
 class ossimXmlDocument;
@@ -168,7 +168,7 @@ namespace ossimplugins
        * @param xdoc Opened product xml file.
        * @return true on success, false on error.
        */
-      bool initIncidenceAngles(
+      bool initSceneCoord(
 		     const ossimXmlDocument* xdoc, const ossimTerraSarProductDoc& tsDoc);
 
       /**
@@ -276,9 +276,9 @@ namespace ossimplugins
       std::vector<Noise>  _noise;
       
       /**
-       * @brief IncidenceAngle (SceneInfo node)
+       * @brief SceneCoord (SceneInfo node)
        */
-      IncidenceAngles *_incidenceAngles;
+      SceneCoord *_sceneCoord;
       
       /**
        * @brief CalFactor (Calibration node).
@@ -305,7 +305,18 @@ namespace ossimplugins
        */
       ossimString _azStopTime;
 
-       /**
+      /**
+       * @brief First pixel Range Time (Start acquisition time in range direction).
+       */
+      ossimString _rgFirstPixelTime;
+
+      /**
+       * @brief Last pixel Range Time (Start acquisition time in range direction).
+       */
+      ossimString _rgLastPixelTime;
+
+
+      /**
        * @brief Generation time.
        */
        ossimString _generationTime;

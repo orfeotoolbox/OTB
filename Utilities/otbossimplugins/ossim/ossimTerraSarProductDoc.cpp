@@ -22,8 +22,8 @@
 #include <otb/RefPoint.h>
 #include <otb/Noise.h>
 #include <otb/ImageNoise.h>
-#include <otb/IncidenceAngles.h>
-#include <otb/InfoIncidenceAngle.h>
+#include <otb/SceneCoord.h>
+#include <otb/InfoSceneCoord.h>
 #include <ossim/base/ossimDpt.h>
 #include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimGpt.h>
@@ -902,6 +902,30 @@ bool ossimplugins::ossimTerraSarProductDoc::getAzimuthStopTime(
 
 }
 
+bool ossimplugins::ossimTerraSarProductDoc::getRangeFirstPixelTime(
+   const ossimXmlDocument* xdoc, ossimString& s) const
+{
+  ossimString path =
+    "/level1Product/productInfo/sceneInfo/rangeTime/firstPixel";
+
+  bool res = ossim::getPath(path, xdoc, s);
+
+  return res;
+}
+
+bool ossimplugins::ossimTerraSarProductDoc::getRangeLastPixelTime(
+   const ossimXmlDocument* xdoc, ossimString& s) const
+{
+  ossimString path =
+    "/level1Product/productInfo/sceneInfo/rangeTime/lastPixel";
+
+  bool res = ossim::getPath(path, xdoc, s);
+
+  return res;
+}
+
+
+
 bool ossimplugins::ossimTerraSarProductDoc::getCommonPrf(
    const ossimXmlDocument* xdoc, ossimString& s) const
 {
@@ -1143,11 +1167,9 @@ bool ossimplugins::ossimTerraSarProductDoc::getCornerIncidenceAngles(
   
   return result;
 }*/
-bool ossimplugins::ossimTerraSarProductDoc::initIncidenceAngles(
-    const ossimXmlDocument* xdoc, ossimplugins::IncidenceAngles* iangles) const
+bool ossimplugins::ossimTerraSarProductDoc::initSceneCoord(const ossimXmlDocument* xdoc, ossimplugins::SceneCoord* sceneCoord) const
 {
-  static const char MODULE[] =
-      "ossimplugins::ossimTerraSarProductDoc::initIncidenceAngles";
+  static const char MODULE[] = "ossimplugins::ossimTerraSarProductDoc::initSceneCoord";
   if (traceDebug())
   {
     ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entered...\n";
@@ -1155,7 +1177,7 @@ bool ossimplugins::ossimTerraSarProductDoc::initIncidenceAngles(
 
   bool result = true;
 
-  if ( xdoc && iangles )
+  if ( xdoc && sceneCoord )
   {
     ossimString stmp;
 
@@ -1165,16 +1187,24 @@ bool ossimplugins::ossimTerraSarProductDoc::initIncidenceAngles(
 	
     if ( (xnodes.size() == 1) && (xnodes[0].valid()) )
     {
-      InfoIncidenceAngle iaa;
+      InfoSceneCoord isc;
       
       result = ossim::findFirstNode(ossimString("refRow"), xnodes[0], stmp);
-      iaa.set_refRow( stmp.toUInt32() );
+      isc.set_refRow( stmp.toUInt32() );
       result = ossim::findFirstNode(ossimString("refColumn"), xnodes[0], stmp);
-      iaa.set_refColumn( stmp.toUInt32() );
+      isc.set_refColumn( stmp.toUInt32() );
+      result = ossim::findFirstNode(ossimString("lat"), xnodes[0], stmp);
+      isc.set_lat( stmp.toDouble() );
+      result = ossim::findFirstNode(ossimString("lon"), xnodes[0], stmp);
+      isc.set_lon( stmp.toDouble() );
+      result = ossim::findFirstNode(ossimString("azimuthTimeUTC"), xnodes[0], stmp);
+      isc.set_azimuthTimeUTC( stmp );
+      result = ossim::findFirstNode(ossimString("rangeTime"), xnodes[0], stmp);
+      isc.set_rangeTime( stmp.toDouble() );
       result = ossim::findFirstNode(ossimString("incidenceAngle"), xnodes[0], stmp);
-      iaa.set_incidenceAngle( stmp.toDouble() );
+      isc.set_incidenceAngle( stmp.toDouble() );
 	
-      iangles->set_centerInfoIncidenceAngle(iaa);
+      sceneCoord->set_centerSceneCoord(isc);
       
       ossimString path2 = "/level1Product/productInfo/sceneInfo/sceneCornerCoord";
       std::vector<ossimRefPtr<ossimXmlNode> > xnodes2;
@@ -1182,27 +1212,35 @@ bool ossimplugins::ossimTerraSarProductDoc::initIncidenceAngles(
       xdoc->findNodes(path2, xnodes2);
       if ( xnodes2.size() )
       {
-	std::vector<InfoIncidenceAngle> tabIaa;
+	std::vector<InfoSceneCoord> tabIsc;
 	
 	for (ossim_uint32 i = 0; i < xnodes2.size(); ++i)
 	{
 	  if (xnodes2[i].valid())
 	  {
-	    InfoIncidenceAngle iaa2;
+	    InfoSceneCoord isc2;
 	    
 	    result = ossim::findFirstNode(ossimString("refRow"), xnodes2[i], stmp);
-	    iaa2.set_refRow( stmp.toUInt32() );
+	    isc2.set_refRow( stmp.toUInt32() );
 	    result = ossim::findFirstNode(ossimString("refColumn"), xnodes2[i], stmp);
-	    iaa2.set_refColumn( stmp.toUInt32() );
+	    isc2.set_refColumn( stmp.toUInt32() );
+	    result = ossim::findFirstNode(ossimString("lat"), xnodes[0], stmp);
+	    isc2.set_lat( stmp.toDouble() );
+	    result = ossim::findFirstNode(ossimString("lon"), xnodes[0], stmp);
+	    isc2.set_lon( stmp.toDouble() );
+	    result = ossim::findFirstNode(ossimString("azimuthTimeUTC"), xnodes[0], stmp);
+	    isc2.set_azimuthTimeUTC( stmp );
+	    result = ossim::findFirstNode(ossimString("rangeTime"), xnodes[0], stmp);
+	    isc2.set_rangeTime( stmp.toDouble() );
 	    result = ossim::findFirstNode(ossimString("incidenceAngle"), xnodes2[i], stmp);
-	    iaa2.set_incidenceAngle( stmp.toDouble() );
+	    isc2.set_incidenceAngle( stmp.toDouble() );
 
-	    tabIaa.push_back(iaa2);
+	    tabIsc.push_back(isc2);
 	  }
 	}
 	
-	iangles->set_cornersInfoIncidenceAngle( tabIaa );
-	iangles->set_numberOfCornerIncidenceAngles( tabIaa.size() );	
+	sceneCoord->set_cornersSceneCoord( tabIsc );
+	sceneCoord->set_numberOfSceneCoord( tabIsc.size() );
       }
     }
     else

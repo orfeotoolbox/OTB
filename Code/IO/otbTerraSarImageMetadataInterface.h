@@ -28,10 +28,11 @@
 #include "otbImageKeywordlist.h"
 #include "itkImageBase.h"
 #include <otb/Noise.h>
-#include <otb/IncidenceAngles.h>
+#include <otb/SceneCoord.h>
 #include <string>
 #include "itkPointSet.h"
 #include "otbSarImageMetadataInterface.h"
+
 
 namespace otb
 {
@@ -68,10 +69,9 @@ public:
 
   typedef Superclass::PointSetType              PointSetType;
   typedef Superclass::PointSetPointer           PointSetPointer;
+  typedef double                                RealType;
 
-
-  /** Set the image used to get the metadata */
-  itkSetObjectMacro(Image, ImageType);
+  typedef ossimplugins::CivilDateTime           CivilDateTimeType;
 
   /** Get the sensor ID from the ossim metadata */
   std::string GetSensorID() const;
@@ -134,13 +134,16 @@ public:
   double GetPRF() const;
 
   /** Get the incidence angles structure */
-  ossimplugins::IncidenceAngles* GetIncidenceAngles() const;
+  //ossimplugins::SceneCoord* GetIncidenceAngles() const;
 
   /** Get the number of corner incidence angles */
   unsigned int GetNumberOfCornerIncidenceAngles() const;
 
   /** Get the Mean Incidence angles */
   double GetMeanIncidenceAngles() const;
+
+  /** Get the incidence angles structure */
+  ossimplugins::SceneCoord* GetSceneCoord() const;
 
   /** Get the center incidence angle */
   double GetCenterIncidenceAngle() const;
@@ -154,12 +157,16 @@ public:
   /** Get the corners index */
   IndexVectorType GetCornersIncidenceAnglesIndex() const;
 
+
+  PointSetPointer GetRadiometricCalibrationNoise() const;
+  IndexType GetRadiometricCalibrationNoisePolynomialDegree() const;
+
+  PointSetPointer GetRadiometricCalibrationAntennaPatternOldGain() const;
+  PointSetPointer GetRadiometricCalibrationIncidenceAngle() const;
+  IndexType GetRadiometricCalibrationIncidenceAnglePolynomialDegree() const;
+
   bool CanRead() const;
 
-  PointSetPointer GetIncidenceAngle() const;
-
-  /** GetIncidenceAnglePointSet */
-  PointSetPointer GetIncidenceAnglePointSet() const;
   
   /** Get the R, G, B channel */
   virtual unsigned int GetDefaultRBand() const;
@@ -173,13 +180,35 @@ protected:
   virtual ~TerraSarImageMetadataInterface() {}
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  /** Evaluate polynom with Horner scheme*/
+
+  inline double Horner(std::vector<double>& coefficients, const double tauMinusTauRef) const;
+
+  double GetStartTimeUTC() const;
+  double GetStopTimeUTC() const;
+  RealType GetRangeTimeFirstPixel() const;
+
+  RealType GetRangeTimeLastPixel() const;
+
+  /** convert a TimeUTC string to a julian day */
+  double ConvertStringTimeUTCToJulianDay(ossimString& value) const;
+
+  /** Get the polynomial degree for a given noise record */
+  unsigned int GetNoisePolynomialDegrees(unsigned int noiseRecord) const;
+
+  /** Get the polynomial coefficient for a given noise record */
+  DoubleVectorType GetNoisePolynomialCoefficients(unsigned int noiseRecord) const;
+
+  /** Get timeUTC noise acquisition in Julian day for a given noise record*/
+  double GetNoiseTimeUTC(unsigned int noiseRecord) const;
+
+  /** Get noise reference point for a given noise record */
+  double GetNoiseReferencePoint(unsigned int noiseRecord) const;
+
 
 private:
   TerraSarImageMetadataInterface(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
-
-  OTB_GCP            m_GCP;
-  ImageType::Pointer m_Image;
 
 };
 

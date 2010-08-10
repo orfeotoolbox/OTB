@@ -52,19 +52,39 @@ public:
   itkTypeMacro(SarImageMetadataInterface, ImageMetadataInterfaceBase);
 
   typedef Superclass::ImageType                      ImageType;
+  typedef ImageType::IndexType                       IndexType;
   typedef Superclass::MetaDataDictionaryType         MetaDataDictionaryType;
   typedef Superclass::VectorType                     VectorType;
   typedef Superclass::VariableLengthVectorType       VariableLengthVectorType;
   typedef Superclass::ImageKeywordlistType           ImageKeywordlistType;
   typedef itk::PointSet<double, 2>                   PointSetType;
   typedef PointSetType::Pointer                      PointSetPointer;
+  typedef double                                     RealType;
+  typedef PointSetType::PointType                    PointType;
 
-  /** GetIncidenceAnglePointSet */
-  virtual PointSetPointer GetIncidenceAnglePointSet() const = 0;
+
+
+  virtual RealType   GetRadiometricCalibrationScale() const;
+
+  virtual PointSetPointer GetRadiometricCalibrationAntennaPatternNewGain() const;
+  virtual PointSetPointer GetRadiometricCalibrationAntennaPatternOldGain() const;
+  virtual PointSetPointer GetRadiometricCalibrationIncidenceAngle() const;
+  virtual PointSetPointer GetRadiometricCalibrationRangeSpreadLoss() const;
+  virtual PointSetPointer GetRadiometricCalibrationNoise() const;
+
+  virtual IndexType GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree() const;
+  virtual IndexType GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree() const;
+  virtual IndexType GetRadiometricCalibrationIncidenceAnglePolynomialDegree() const;
+  virtual IndexType GetRadiometricCalibrationRangeSpreadLossPolynomialDegree() const;
+  virtual IndexType GetRadiometricCalibrationNoisePolynomialDegree() const;
+
 
 protected:
   SarImageMetadataInterface();
   virtual ~SarImageMetadataInterface() {}
+
+  PointSetPointer GetConstantValuePointSet(const RealType& value) const;
+  IndexType GetConstantPolynomialDegree() const;
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

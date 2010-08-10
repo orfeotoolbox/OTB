@@ -65,14 +65,21 @@ public:
   typedef typename Superclass::OutputImageRegionType    OutputImageRegionType;
   typedef typename Superclass::OutputImagePixelType     OutputImagePixelType;
   /** Type of function. */
-  typedef typename Superclass::FunctionType          FunctionType;
-  typedef typename Superclass::FunctionValueType     FunctionValueType;
-  typedef typename Superclass::FunctionPositionType  FunctionPositionType;
 
- protected:
+  typedef typename Superclass::FunctionType                     FunctionType;
+  typedef typename Superclass::FunctionPointer                  FunctionPointer;
+  typedef typename Superclass::FunctionValueType                FunctionValueType;
+  typedef typename Superclass::FunctionPositionType             FunctionPositionType;
+  typedef typename FunctionType::ParametricFunctionPointer      ParametricFunctionPointer;
+  typedef typename FunctionType::ParametricFunctionConstPointer ParametricFunctionConstPointer;
+  typedef typename FunctionType::ParametricFunctionType         ParametricFunctionType;
+
+protected:
   SarRadiometricCalibrationToImageFilter();
   virtual ~SarRadiometricCalibrationToImageFilter() {}
 
+  /** Update the function list and input parameters*/
+  void BeforeThreadedGenerateData();
 private:
   SarRadiometricCalibrationToImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented

@@ -38,7 +38,7 @@ int otbSarParametricMapFunctionTest(int argc, char* argv[])
   typedef otb::ImageFileReader<InputImageType>            ReaderType;
   typedef otb::SarParametricMapFunction<InputImageType>   FunctionType;
   typedef FunctionType::PointType                         PointType;
-  typedef itk::PointSet<InputPixelType, 2>                PointSetType;
+  typedef FunctionType::PointSetType                      PointSetType;
 
   /**Instantiation ofa Smart Pointer*/
   FunctionType::Pointer filter = FunctionType::New();

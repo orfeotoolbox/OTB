@@ -1354,8 +1354,8 @@ ADD_TEST(raTvSarRadiometricCalibrationToImageFilter  ${RADIOMETRY_TESTS9}
 #	    ${BASELINE}/bfTvFunctionToImageFilterTest.tif
 #	    ${TEMP}/bfTvFunctionToImageFilterTest.tif
         otbSarRadiometricCalibrationToImageFilterTest
-	    ${INPUTDATA}/ExtractIMAGE_HH_SRA_spot_074.tif
-	    ${TEMP}/raTvSarRadiometricCalibrationToImageFilter.tif
+	    ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+	    ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_PANGKALANBUUN_HH.tif
 )
 
 
