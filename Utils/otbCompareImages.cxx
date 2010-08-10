@@ -35,7 +35,11 @@ int main(int argc, char* argv[])
   parser->AddOption("--Input2","The first input image","-in2", 1,true);
   parser->AddOption("--NumBandImage1","Layer number to compare in the input image 1 (between 1 and number of layers)","-layer1",1,true);
   parser->AddOption("--NumBandImage2","Layer number to compare in the input image 2 (between 1 and number of layers)","-layer2",1,true);
-
+  parser->AddOption("--StartX", "first point in x-axis ", "-x0", 1, false);
+  parser->AddOption("--StartY", "first point in y-axis ", "-y0", 1, false);
+  parser->AddOption("--SizeX", "size in x-axis ", "-Nx", 1, false);
+  parser->AddOption("--SizeY", "size in y-axis ", "-Ny", 1, false);
+  
   typedef otb::CommandLineArgumentParseResult ParserResultType;
   ParserResultType::Pointer  parseResult = ParserResultType::New();
 
@@ -63,7 +67,7 @@ int main(int argc, char* argv[])
   typedef otb::ImageFileReader<ImageType>                                             ReaderType;
   typedef otb::MultiToMonoChannelExtractROI<PixelType, PixelType>                     ExtractROIMonoFilterType;
   typedef otb::StreamingCompareImageFilter<ExtractROIMonoFilterType::OutputImageType> StreamingCompareImageFilterType;
-
+  //typedef otb::StreamingStatisticsImageFilter<ExtractROIMonoFilterType::OutputImageType> StreamingCompareImageFilterType;
   // Read input images information
   ReaderType::Pointer reader1= ReaderType::New();
   reader1->SetFileName(parseResult->GetParameterString("--Input1"));
@@ -76,6 +80,9 @@ int main(int argc, char* argv[])
   unsigned int layer1 = parseResult->GetParameterUInt("--NumBandImage1");
   unsigned int layer2 = parseResult->GetParameterUInt("--NumBandImage2");
 
+  
+  
+ 
   ExtractROIMonoFilterType::Pointer extractROIMonoFilter1= ExtractROIMonoFilterType::New();
   extractROIMonoFilter1->SetInput(reader1->GetOutput());
   extractROIMonoFilter1->SetChannel( layer1 );
@@ -84,6 +91,28 @@ int main(int argc, char* argv[])
   extractROIMonoFilter2->SetInput(reader2->GetOutput());
   extractROIMonoFilter2->SetChannel( layer2 );
 
+  if (parseResult->IsOptionPresent("--StartX")) 
+    {
+    extractROIMonoFilter1->SetStartX(parseResult->GetParameterULong("--StartX"));
+    extractROIMonoFilter2->SetStartX(parseResult->GetParameterULong("--StartX"));
+    }
+  if (parseResult->IsOptionPresent("--StartY")) 
+    {
+    extractROIMonoFilter1->SetStartY(parseResult->GetParameterULong("--StartY"));
+    extractROIMonoFilter2->SetStartY(parseResult->GetParameterULong("--StartY"));
+    }
+
+  if (parseResult->IsOptionPresent("--SizeX"))
+    {
+    extractROIMonoFilter1->SetSizeX(parseResult->GetParameterULong("--SizeX"));
+    extractROIMonoFilter2->SetSizeX(parseResult->GetParameterULong("--SizeX"));
+    }
+  if (parseResult->IsOptionPresent("--SizeY"))
+    {
+    extractROIMonoFilter1->SetSizeY(parseResult->GetParameterULong("--SizeY"));
+    extractROIMonoFilter2->SetSizeY(parseResult->GetParameterULong("--SizeY"));
+    }
+    
   StreamingCompareImageFilterType::Pointer filter = StreamingCompareImageFilterType::New();
 
   filter->SetInput1(extractROIMonoFilter1->GetOutput());
