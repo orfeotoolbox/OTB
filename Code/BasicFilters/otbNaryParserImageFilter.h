@@ -57,12 +57,12 @@ public:
   
   void SetNthInput( unsigned int idx, const ImageType * image);
   void SetNthInput( unsigned int idx, const ImageType * image, const std::string& varName);
-  ImageType * GetNthInput(unsigned int idx);
+  void SetNthInputName(unsigned int idx, const std::string& expression);
   void SetExpression(const std::string& expression);
 
   std::string GetExpression() const;
-
   std::string GetNthInputName(unsigned int idx) const;
+  ImageType * GetNthInput(unsigned int idx);
 
 protected :
   NaryParserImageFilter();

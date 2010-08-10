@@ -81,7 +81,7 @@ void NaryParserImageFilter<TImage>
   unsigned int nbInput = this->GetNumberOfInputs();
   m_VVarName.resize(nbInput);
   std::ostringstream varName; 
-  varName << "band" << nbInput;
+  varName << "b" << nbInput;
   m_VVarName[idx] = varName.str();  
 }
 
@@ -93,6 +93,14 @@ void NaryParserImageFilter<TImage>
   m_VVarName.resize(this->GetNumberOfInputs());
   m_VVarName[idx] = varName;
 }
+
+template <class TImage>
+void NaryParserImageFilter<TImage>
+::SetNthInputName(unsigned int idx, const std::string& varName)
+{
+  m_VVarName[idx] = varName;
+}
+
 
 template <typename TImage>
 TImage * NaryParserImageFilter<TImage>

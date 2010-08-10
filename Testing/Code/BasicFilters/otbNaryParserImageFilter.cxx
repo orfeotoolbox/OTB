@@ -90,7 +90,7 @@ int otbNaryParserImageFilter( int argc, char* argv[])
   filter->SetNthInput(1, image2);
   filter->SetNthInput(2, image3, "canal3");
 
-  filter->SetExpression("cos(2 * pi * band1)/(2 * pi * band2 + 1E-3)*sin(pi * canal3) + ndvi(band1,band2) * sqrt(2) * canal3");
+  filter->SetExpression("cos(2 * pi * b1)/(2 * pi * b2 + 1E-3)*sin(pi * canal3) + ndvi(b1,b2) * sqrt(2) * canal3");
   filter->Update();
 
   std::cout << std::endl;
@@ -151,7 +151,7 @@ int otbNaryParserImageFilter( int argc, char* argv[])
   std::cout << std::endl;
   std::cout << "--- Edge Effect Handling" << std::endl;
   std::cout << "- +/-inf section"         << std::endl;
-  filter->SetExpression("band1 / band2");
+  filter->SetExpression("b1 / b2");
   filter->Update();
 
   std::cout << "- nan section" << std::endl;
