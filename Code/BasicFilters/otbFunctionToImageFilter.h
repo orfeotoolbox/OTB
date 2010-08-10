@@ -78,6 +78,7 @@ public:
   typedef typename OutputImageType::PixelType   OutputImagePixelType;
   /** Type of function. */
   typedef TFunction                         FunctionType;
+  typedef typename FunctionType::Pointer    FunctionPointer;
   typedef typename FunctionType::OutputType FunctionValueType;
   typedef typename FunctionType::InputType  FunctionPositionType;
 
