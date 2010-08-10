@@ -149,16 +149,20 @@ void NaryParserImageFilter<TImage>
   m_ThreadOverflow.Fill(0);
   m_VParser.resize(nbThreads);
   m_AImage.resize(nbThreads);
-
+  
   for(itParser = m_VParser.begin(); itParser < m_VParser.end(); itParser++)
+    { 
     *itParser = ParserType::New();
+    }
 
   for(i = 0; i < nbThreads; i++)
     {
     m_AImage.at(i).resize(nbInputImages);
     m_VParser.at(i)->SetExpr(m_Expression);
     for(j=0; j < nbInputImages; j++)
+      {
       m_VParser.at(i)->DefineVar(m_VVarName.at(j), &(m_AImage.at(i).at(j)));
+      }
     }
 }
 
@@ -204,8 +208,10 @@ void NaryParserImageFilter<TImage>
   std::vector< ImageRegionConstIteratorType > Vit;
   Vit.resize(nbInputImages);
   for(j=0; j < nbInputImages; j++)
+    {
     Vit[j] = ImageRegionConstIteratorType (this->GetNthInput(j), outputRegionForThread);
- 
+    }
+  
   itk::ImageRegionIterator<TImage> ot (this->GetOutput(), outputRegionForThread);
   
   // support progress methods/callbacks
@@ -214,16 +220,22 @@ void NaryParserImageFilter<TImage>
   while (!(Vit.at(0).IsAtEnd()))
     {
     for(j=0; j < nbInputImages; j++)
+      {
       m_AImage.at(threadId).at(j) = static_cast<double>(Vit.at(j).Get());
-   
+      }
+
     value = m_VParser.at(threadId)->Eval();
-     
-    if (value < itk::NumericTraits<PixelType>::NonpositiveMin())
+    
+    // Case value is equal to -inf or inferior to the minimum value
+    // allowed by the pixelType cast
+    if (value < double(itk::NumericTraits<PixelType>::NonpositiveMin()))
       {
       ot.Set(itk::NumericTraits<PixelType>::NonpositiveMin());
       m_ThreadUnderflow[threadId]++;
       }
-    else if (value > itk::NumericTraits<PixelType>::max())
+    // Case value is equal to inf or superior to the maximum value
+    // allowed by the pixelType cast
+    else if (value > double(itk::NumericTraits<PixelType>::max()))
       {
       ot.Set(itk::NumericTraits<PixelType>::max());
       m_ThreadOverflow[threadId]++;
@@ -232,9 +244,12 @@ void NaryParserImageFilter<TImage>
       {
       ot.Set(static_cast<PixelType>(value));
       }
+
     for(j=0; j < nbInputImages; j++)
+      {
       ++(Vit.at(j));
-   
+      }
+
     ++ot;
 
     progress.CompletedPixel();
