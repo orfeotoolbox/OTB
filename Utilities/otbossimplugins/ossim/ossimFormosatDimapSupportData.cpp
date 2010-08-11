@@ -2094,12 +2094,10 @@ bool ossimFormosatDimapSupportData::parsePart3(
       sub_nodes.clear();
       xpath = "TIE_POINT_CRS_Z";
       (*node)->findChildNodes(xpath, sub_nodes);
-      if (sub_nodes.size() == 0)
+      if (sub_nodes.size() != 0)
       {
-         setErrorStatus();
-         return false;
+          gpt.hgt = sub_nodes[0]->getText().toDouble();
       }
-      gpt.hgt = sub_nodes[0]->getText().toDouble();
 
       theGeoPosImagePoints.push_back(ipt);
       theGeoPosGroundPoints.push_back(gpt);
