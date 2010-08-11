@@ -191,9 +191,18 @@ public:
 
   /** Those methodes are to retrieve the spectral band corresponding
    * to the R, G, B or A chanel */
-  virtual unsigned int GetDefaultRBand() const = 0;
-  virtual unsigned int GetDefaultGBand() const = 0;
-  virtual unsigned int GetDefaultBBand() const = 0;
+  virtual unsigned int GetDefaultRBand() const
+    {
+      return 0;
+    };
+  virtual unsigned int GetDefaultGBand() const
+    {
+      return 1;
+    };
+  virtual unsigned int GetDefaultBBand() const
+    {
+      return 2;
+    };
 
 
   virtual bool CanRead() const = 0;
