@@ -45,7 +45,7 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
   m_Noise->SetConstantValue(0.0);
   m_AntennaPatternNewGain->SetConstantValue(1.0);
   m_AntennaPatternOldGain->SetConstantValue(1.0);
-  m_IncidenceAngle->SetConstantValue(M_PI/2.);
+  m_IncidenceAngle->SetConstantValue(CONST_PI_2);
   m_RangeSpreadLoss->SetConstantValue(1.0);
 }
 

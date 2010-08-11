@@ -45,7 +45,7 @@ public:
   SarRadiometricCalibrationFunctor():
    		m_noise(0.0),
    		m_scale(1.0),
-   		m_incidenceAngle(M_PI/2.),
+   		m_incidenceAngle(CONST_PI_2),
         m_antennaPatternOldGain(1.0),
         m_antennaPatternNewGain(1.0),
         m_rangeSpreadLoss(1.0)
