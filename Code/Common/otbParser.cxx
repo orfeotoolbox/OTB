@@ -67,6 +67,7 @@ void Parser::InitConst()
 void Parser::InitFun()
 {
   m_InternalParser.DefineFun("ndvi", NDVI);
+  m_InternalParser.DefineFun("NDVI", NDVI);
 }
 
 void Parser::SetExpr(const std::string & Expression)
