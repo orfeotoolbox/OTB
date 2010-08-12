@@ -27,6 +27,7 @@
 #include "itkNumericTraits.h"
 #include "itkProgressReporter.h"
 #include "otbMacro.h"
+#include "itkMacro.h"
 
 #include <iostream>
 #include <string>
@@ -190,8 +191,7 @@ void NaryParserImageFilter<TImage>
 		    << "Generated " << m_UnderflowCount << " Underflow(s) " 
 		    << "And " << m_OverflowCount        << " Overflow(s) "   << std::endl
 		    << "The Parsed Expression, The Inputs And The Output "  
-		    << "Type May Be Incompatible !");
-		    
+		    << "Type May Be Incompatible !");		    
 }
 
 template< typename TImage >
@@ -224,7 +224,14 @@ void NaryParserImageFilter<TImage>
       m_AImage.at(threadId).at(j) = static_cast<double>(Vit.at(j).Get());
       }
 
-    value = m_VParser.at(threadId)->Eval();
+    try
+      {
+      value = m_VParser.at(threadId)->Eval();
+      }
+    catch(itk::ExceptionObject& err)
+      {
+      itkExceptionMacro(<< err);
+      }
     
     // Case value is equal to -inf or inferior to the minimum value
     // allowed by the pixelType cast
