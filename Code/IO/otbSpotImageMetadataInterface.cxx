@@ -704,7 +704,7 @@ unsigned int
 SpotImageMetadataInterface
 ::GetDefaultRBand() const
 {
-  return 0;
+  return 2;
 }
 
 unsigned int
@@ -718,7 +718,7 @@ unsigned int
 SpotImageMetadataInterface
 ::GetDefaultBBand() const
 {
-  return 2;
+  return 0;
 }
 
 } // end namespace otb
