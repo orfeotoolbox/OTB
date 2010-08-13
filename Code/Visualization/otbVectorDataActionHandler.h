@@ -78,7 +78,7 @@ public:
 
       //Left click
       if (sourceWidget
-          && event == FL_PUSH && Fl::event_button() == 1)
+          && event == FL_PUSH && Fl::event_button() == m_AddMouseButton)
         {
         otbMsgDevMacro(
           << "VectorDataActionHandler::HandleWidgetEvent(): left click handling (" << widgetId << ", " << event << ")");
@@ -111,7 +111,7 @@ public:
         }
       //Right click
       if (sourceWidget
-          && event == FL_PUSH && Fl::event_button() == 3)
+          && event == FL_PUSH && Fl::event_button() == m_EndMouseButton)
         {
         otbMsgDevMacro(
           << "VectorDataActionHandler::HandleWidgetEvent(): right click handling (" << widgetId << ", " << event << ")");
@@ -176,10 +176,18 @@ public:
   itkSetMacro(Offset, OffsetType);
   itkGetMacro(Offset, OffsetType);
 
+  /** Set/Get End polygon Mouse butto */
+  itkSetMacro(EndMouseButton, unsigned int);
+  itkGetMacro(EndMouseButton, unsigned int);
+
+  /** Set/Get Add polygon Mouse butto */
+  itkSetMacro(AddMouseButton, unsigned int);
+  itkGetMacro(AddMouseButton, unsigned int);
+
 protected:
   /** Constructor */
   VectorDataActionHandler() :
-    m_Offset(), m_View(), m_Model()
+    m_Offset(), m_View(), m_Model(), m_EndMouseButton(3), m_AddMouseButton(1)
   {
   }
 
@@ -205,6 +213,12 @@ private:
 
   // Pointer to the model
   ModelPointerType m_Model;
+
+  /// End polygon Mouse button
+  int m_EndMouseButton;
+  
+  /// Add polygon Mouse button
+  int m_AddMouseButton;  
 
 }; // end class
 } // end namespace otb

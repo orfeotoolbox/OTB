@@ -44,6 +44,7 @@ void VectorDataModel::Update(void)
 
 void VectorDataModel::AddPointToGeometry(VertexType& vertex)
 {
+  std::cout<<"AddPointToGeometry"<<std::endl;
   VertexType newPoint;
   newPoint[0] = m_Origin[0] + vertex[0] / m_Spacing[0];
   newPoint[1] = m_Origin[1] + vertex[1] / m_Spacing[1];
@@ -56,6 +57,7 @@ void VectorDataModel::AddPointToGeometry(VertexType& vertex)
 
   if  (m_CurrentNodeType == FEATURE_POINT)
     {
+      std::cout<<"Creating and adding new point"<<std::endl;
     otbMsgDevMacro(<< "VectorDataModel::AddPointToGeometry: Creating and adding new point");
     if (m_CurrentGeometry.IsNull())
       {
@@ -74,6 +76,7 @@ void VectorDataModel::AddPointToGeometry(VertexType& vertex)
     }
   else if (m_CurrentNodeType == FEATURE_POLYGON)
     {
+ std::cout<<"Creating and adding new FEATURE_POLYGON"<<std::endl;
     if (m_CurrentGeometry.IsNull())
       {
       otbMsgDevMacro(<< "VectorDataModel::AddPointToGeometry: Creating new polygon");
@@ -229,7 +232,7 @@ VectorDataModel::DataNodeType::Pointer VectorDataModel::GetNthDataNode(int n)
 }
 
 void VectorDataModel::SetSelectedGeometry(int n)
-{
+{ 
   m_SelectedGeometry = GetNthDataNode(n);
 }
 
