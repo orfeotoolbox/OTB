@@ -993,8 +993,11 @@ otbVectorDataToLabelMapFilter
 
 # ----------------  otbParser  ---------------------#
 IF(OTB_COMPILE_MUPARSER)
-
   ADD_TEST(coTuParser ${COMMON_TESTS12}
+    otbParserTestNew
+    )
+  
+  ADD_TEST(coTvParser ${COMMON_TESTS12}
     otbParserTest
     )
 ENDIF(OTB_COMPILE_MUPARSER)

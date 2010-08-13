@@ -120,6 +120,7 @@ private:
    ossim_float64 theSatElevation;
    int           theTDILevel;
    std::vector<double> theAbsCalFactors;
+   ossimString    theBandNameList;
    
    /*ossim_uint32  theNumBands;*/
    /*ossimString   theBandName;*/

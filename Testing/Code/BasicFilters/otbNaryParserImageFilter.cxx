@@ -27,6 +27,18 @@
 #include "otbImage.h"
 #include "otbNaryParserImageFilter.h"
 
+int otbNaryParserImageFilterNew( int argc, char* argv[])
+{
+  typedef double                                            PixelType;
+  //typedef float                                             PixelType;
+  typedef otb::Image<PixelType, 2>                          ImageType;
+  typedef otb::NaryParserImageFilter<ImageType>             FilterType;
+
+   FilterType::Pointer         filter       = FilterType::New();
+
+   return EXIT_SUCCESS;
+}
+
 int otbNaryParserImageFilter( int argc, char* argv[])
 {
   typedef double                                            PixelType;

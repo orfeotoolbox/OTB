@@ -1635,6 +1635,9 @@ ADD_TEST(bfTvImageAndVectorImageOperationFilterTest ${BASICFILTERS_TESTS12}
 IF(OTB_COMPILE_MUPARSER)
 
 ADD_TEST(bfTuNaryParserImageFilter ${BASICFILTERS_TESTS13}
+  otbNaryParserImageFilterNew)
+
+ADD_TEST(bfTvNaryParserImageFilter ${BASICFILTERS_TESTS13}
   otbNaryParserImageFilter)
 
 ENDIF(OTB_COMPILE_MUPARSER)

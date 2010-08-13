@@ -26,5 +26,6 @@
 
 void RegisterTests()
 {
+  REGISTER_TEST(otbParserTestNew);
   REGISTER_TEST(otbParserTest);
 }
