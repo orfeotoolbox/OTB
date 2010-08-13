@@ -40,7 +40,8 @@ ossimQuickbirdMetaData::ossimQuickbirdMetaData()
    theSatAzimuth(0.0),
    theSatElevation(0.0),
    theTDILevel(0),
-   theAbsCalFactors()
+   theAbsCalFactors(),
+   theBandNameList("Unknown")
 {
    //theBitsPerPixel = ossim_0;
    //theTDILevel = 0;
@@ -90,6 +91,8 @@ void ossimQuickbirdMetaData::clearFields()
    theSatElevation = 0.0;
    theTDILevel = 0;
    theAbsCalFactors.clear();
+   theBandNameList = "Unknown";
+
 }
 
 std::ostream& ossimQuickbirdMetaData::print(std::ostream& out) const
@@ -97,16 +100,17 @@ std::ostream& ossimQuickbirdMetaData::print(std::ostream& out) const
 
    out << "\n----------------- Info on Quickbird Image -------------------"
        << "\n  "
-       << "\n  Generation date:   " << theGenerationDate
-       << "\n  Band Id:   " << theBandId
-       << "\n  Bits per pixel: " << theBitsPerPixel
-       << "\n  Sat Id:   " << theSatID
-       << "\n  TLC date:   " << theTLCDate
-       << "\n  Sun Azimuth:    " << theSunAzimuth
-       << "\n  Sun Elevation:   " << theSunElevation
-       << "\n  Sat Azimuth:    " << theSatAzimuth
-       << "\n  Sat Elevation:   " << theSatElevation
-       << "\n  TDI Level: " << theTDILevel
+       << "\n  Generation date :   " << theGenerationDate
+       << "\n  Band Id:            " << theBandId
+       << "\n  Bits per pixel:     " << theBitsPerPixel
+       << "\n  Sat Id:             " << theSatID
+       << "\n  TLC date:           " << theTLCDate
+       << "\n  Sun Azimuth:        " << theSunAzimuth
+       << "\n  Sun Elevation:      " << theSunElevation
+       << "\n  Sat Azimuth:        " << theSatAzimuth
+       << "\n  Sat Elevation:      " << theSatElevation
+       << "\n  Band name list   :  " << theBandNameList
+       << "\n  TDI Level:          " << theTDILevel
        << "\n  abs Calibration Factors:   " 
        << std::endl;
    for(unsigned int i=0; i<theAbsCalFactors.size(); i++)
@@ -176,25 +180,21 @@ bool ossimQuickbirdMetaData::saveState(ossimKeywordlist& kwl,
            "TDI_level",
            theTDILevel,
            true);
+   kwl.add(prefix,
+           "band_name_list",
+           theBandNameList,
+           true);
 
-   if( (theBandId=="Multi") && (theAbsCalFactors.size() >= 4) )
+   if( theBandId=="Multi" )
    {
-      kwl.add(prefix,
-              "B_band_absCalFactor",
-              theAbsCalFactors[0],
-              true);
-      kwl.add(prefix,
-              "G_band_absCalFactor",
-              theAbsCalFactors[1],
-              true);
-      kwl.add(prefix,
-              "R_band_absCalFactor",
-              theAbsCalFactors[2],
-              true);                        
-      kwl.add(prefix,
-              "N_band_absCalFactor",
-              theAbsCalFactors[3],
-              true);  
+	   std::vector<ossimString> bandNameList = theBandNameList.split(" ");
+	   for(unsigned int i = 0 ; i < bandNameList.size(); ++i)
+	   {
+			  kwl.add(prefix,
+				   bandNameList[i] + "_band_absCalFactor",
+	              theAbsCalFactors[i],
+	              true);
+	   }
    }
    else
    {
@@ -290,34 +290,26 @@ bool ossimQuickbirdMetaData::loadState(const ossimKeywordlist& kwl,
       s = lookup;
       theSatElevation = s.toFloat64();
    }
-    
+
+   lookup = kwl.find(prefix, "band_name_list");
+   if (lookup)
+   {
+	   theBandNameList= lookup;
+   }
+
    if(theBandId=="Multi")
    {
-      theAbsCalFactors = std::vector<double>(4, 1.);
-      lookup = kwl.find(prefix, "B_band_absCalFactor");
-      if (lookup)
-      {
-         s = lookup;
-         theAbsCalFactors[0] = s.toDouble();
-      }
-      lookup = kwl.find(prefix, "G_band_absCalFactor");
-      if (lookup)
-      {
-         s = lookup;
-         theAbsCalFactors[1] = s.toDouble();
-      }
-      lookup = kwl.find(prefix, "R_band_absCalFactor");
-      if (lookup)
-      {
-         s = lookup;
-         theAbsCalFactors[2] = s.toDouble();
-      }
-      lookup = kwl.find(prefix, "N_band_absCalFactor");
-      if (lookup)
-      {
-         s = lookup;
-         theAbsCalFactors[3] = s.toDouble();
-      }
+	   std::vector<ossimString> bandNameList = theBandNameList.split(" ");
+	  theAbsCalFactors = std::vector<double>(bandNameList.size(), 1.);
+	  for(unsigned int i = 0 ; i < bandNameList.size() ; ++i)
+	  {
+		  lookup = kwl.find(prefix, bandNameList[i] + "_band_absCalFactor");
+	      if (lookup)
+	      {
+	         s = lookup;
+	         theAbsCalFactors[i] = s.toDouble();
+	      }
+	  }
    }
    else if (theBandId=="P")
    {
@@ -329,8 +321,6 @@ bool ossimQuickbirdMetaData::loadState(const ossimKeywordlist& kwl,
          theAbsCalFactors[0] = s.toDouble();
       }	
    }
-
-
    return true;
 }
 
@@ -438,14 +428,27 @@ bool ossimQuickbirdMetaData::parseMetaData(const ossimFilename& data_file)
    //---
    // absCalFactors:
    //---
+
+   char *iter = (char *)filebuf;
+   unsigned int nbBand = 0;
+   theBandNameList = "";
+   for(iter = strstr(iter, "BEGIN_GROUP = BAND_"); iter ; iter = strstr(iter, "BEGIN_GROUP = BAND_"))
+   {
+	   ++nbBand;
+       char dummy[80], nameChar[80];
+       sscanf(iter, "%19c %s", dummy, nameChar);
+       ossimString bandCur = ossimString(nameChar).before("\n");
+       theBandNameList = theBandNameList + bandCur + " ";
+       ++iter;
+   }
+   theBandNameList.trim();
+
    //--- Multispectral
    if(theBandId=="Multi")
    {
-      theAbsCalFactors = std::vector<double>(4, 1.);
-      std::vector<ossimString> bandList(4, "B");
-      bandList[1] = "G";
-      bandList[2] = "R";
-      bandList[3] = "N";
+	  std::vector<ossimString> bandList;
+	  bandList = theBandNameList.split(" ");
+      theAbsCalFactors = std::vector<double>(bandList.size(), 1.);
       for(unsigned int j=0; j<bandList.size(); j++)
       {
          ossimString begin_group = "BEGIN_GROUP = BAND_" + bandList[j];
@@ -529,18 +532,22 @@ bool ossimQuickbirdMetaData::parseMetaData(const ossimFilename& data_file)
    // TLCTime:
    //---
    if(getEndOfLine( strptr, ossimString("\n\tTLCTime ="), "%11c %s", temp))
-      theTLCDate = ossimString(temp).before("\";");
+	   theTLCDate = ossimString(temp).before("\";");
    else
    {
-      if(traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_FATAL)
-	    << "FATAL ossimQuickbirdRpcModel::parseMetaData(data_file): "
-	    << "\n\tAborting construction. Error encountered parsing "
-	    << "presumed meta-data file." << std::endl;
-
-         delete [] filebuf;
-         return false;
+	   if(getEndOfLine( strptr, ossimString("\n\tfirstLineTime ="), "%17c %s", temp))
+		   theTLCDate = ossimString(temp).before("\";");
+	   else
+	   {
+		   if(traceDebug())
+		   {
+			   ossimNotify(ossimNotifyLevel_FATAL)
+	    				<< "FATAL ossimQuickbirdRpcModel::parseMetaData(data_file): "
+	    				<< "\n\tAborting construction. Error encountered parsing "
+	    				<< "presumed meta-data file." << std::endl;
+			   delete [] filebuf;
+			   return false;
+		   }
       }
    }
 
