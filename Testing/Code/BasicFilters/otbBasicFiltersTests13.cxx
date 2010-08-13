@@ -26,5 +26,6 @@
 
 void RegisterTests()
 {
+  REGISTER_TEST(otbNaryParserImageFilterNew);
   REGISTER_TEST(otbNaryParserImageFilter);
 }
