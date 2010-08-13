@@ -76,6 +76,12 @@ public:
    */
   inline PolygonType * operator ()(const LabelObjectType * labelObject);
 
+  /** Get  name of class. */
+  const char * GetNameOfClass()
+    {
+      return "LabelObjectToPolygonFunctor";
+    }
+
   /** Set the start index of the underlying image */
   void SetStartIndex(const RegionIndexType& index)
   {
