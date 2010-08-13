@@ -443,10 +443,11 @@ WorldView2ImageMetadataInterface
     itkExceptionMacro(<< "Invalid TDILevel " << TDILevel);
     }
 
+  ossimString keywordStringBandNameList = kwl.find("support_data.band_name_list");
+  std::vector<ossimString> bandNameList = keywordStringBandNameList.split(" ");
+
   VariableLengthVectorType outputValuesVariableLengthVector;
-  if (keywordStringBId == ossimString("P")) outputValuesVariableLengthVector.SetSize(1);
-  else outputValuesVariableLengthVector.SetSize(4);
-  outputValuesVariableLengthVector.Fill(1.);
+  outputValuesVariableLengthVector.SetSize(bandNameList.size());
 
   if (keywordStringBId == ossimString("P"))
     {
@@ -455,15 +456,12 @@ WorldView2ImageMetadataInterface
     }
   else
     {
-//       ossimString keywordStringAbsCalFactor = kwl.find("support_data.B_band_absCalFactor");
-    ossimString keywordStringAbsCalFactor = kwl.find("band_C.abscalfactor");
-    outputValuesVariableLengthVector[0] = keywordStringAbsCalFactor.toDouble();
-    keywordStringAbsCalFactor = kwl.find("support_data.G_band_absCalFactor");
-    outputValuesVariableLengthVector[1] = keywordStringAbsCalFactor.toDouble();
-    keywordStringAbsCalFactor = kwl.find("support_data.N_band_absCalFactor");
-    outputValuesVariableLengthVector[2] = keywordStringAbsCalFactor.toDouble();
-    keywordStringAbsCalFactor = kwl.find("support_data.R_band_absCalFactor");
-    outputValuesVariableLengthVector[3] = keywordStringAbsCalFactor.toDouble();
+	  for(unsigned int i = 0 ; i < bandNameList.size(); ++i)
+	  {
+		  ossimString keywordString = "band_"+bandNameList[i]+".abscalfactor";
+		  ossimString keywordStringAbsCalFactor = kwl.find(keywordString);
+		  outputValuesVariableLengthVector[i] = keywordStringAbsCalFactor.toDouble();
+	  }
     }
 
 /* PIO : To be confirmed !!!
