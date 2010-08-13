@@ -21,6 +21,16 @@
 
 #include "otbParser.h"
 
+int otbParserTestNew(int argc, char * argv[])
+{
+  typedef otb::Parser                                 ParserType;
+  
+  // Instantiating object
+  ParserType::Pointer parser = ParserType::New();
+
+  return EXIT_SUCCESS;
+}
+
 int otbParserTest(int argc, char * argv[])
 {
   double result;
@@ -107,7 +117,7 @@ int otbParserTest(int argc, char * argv[])
 
   if(error > 10E-5)
     { 
-    itkGenericExceptionMacro(  << "Cumulated Error > 10E-3 -> Test Failled" << std::endl );
+    itkGenericExceptionMacro(  << "Cumulated Error > 10E-5 -> Test Failled" << std::endl );
     }
 
   /* Exception Tests */
