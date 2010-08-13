@@ -18,6 +18,7 @@
 #ifndef __otbLabelObjectToPolygonFunctor_txx
 #define __otbLabelObjectToPolygonFunctor_txx
 
+
 #include "otbLabelObjectToPolygonFunctor.h"
 
 namespace otb
@@ -476,11 +477,11 @@ LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
            PolygonType * polygon,
            const StateType state)
 {
-  if( vcl_abs(static_cast<long int>(line + m_LineOffset - endPoint[1])) <= 1 )
-    {
-      itkExceptionMacro("End point not with +/-1 line from line");
-    }
-  
+   if( vcl_abs(static_cast<long int>(line + m_LineOffset - endPoint[1])) > 1 )
+     {
+       itkExceptionMacro("End point not with +/-1 line from line")
+     }
+
   typename PolygonType::VertexType::VectorType offset;
 
   switch (state)
@@ -549,8 +550,11 @@ LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
             PolygonType * polygon,
             const StateType state)
 {
-  assert(vcl_abs(static_cast<long int>(
-                   line + m_LineOffset - endPoint[1])) <= 1 && "End point not with +/-1 line from line");
+  
+   if( vcl_abs(static_cast<long int>(line + m_LineOffset - endPoint[1])) > 1 )
+     {
+       itkExceptionMacro("End point not with +/-1 line from line")
+     }
 
   typename PolygonType::VertexType::VectorType offset;
 
