@@ -437,7 +437,8 @@ WorldView2ImageMetadataInterface
 
   ossimString keywordStringTDILevel = kwl.find("support_data.TDI_level");
   int         TDILevel = keywordStringTDILevel.toInt();
-  if (keywordStringBId == ossimString("P") && TDILevel != 24)
+  if ( (keywordStringBId == ossimString("P") && TDILevel >64) ||
+		  (keywordStringBId == ossimString("P") && TDILevel < 8) )
     {
     itkExceptionMacro(<< "Invalid TDILevel " << TDILevel);
     }
