@@ -34,7 +34,7 @@ namespace otb
 template<class TInputImage>
 PersistentCompareImageFilter<TInputImage>
 ::PersistentCompareImageFilter() : m_SquareOfDifferences(1), m_AbsoluteValueOfDifferences(1),  
- m_ThreadMin1(1), m_ThreadMin2(1), m_ThreadMax1(1), m_ThreadMax2(1), m_Count(1)
+ m_ThreadMinRef(1), m_ThreadMaxRef(1), m_Count(1)
 {
 	this->SetNumberOfRequiredInputs( 2 );
 	// first output is a copy of the image, DataObject created by
@@ -212,11 +212,9 @@ PersistentCompareImageFilter<TInputImage>
   long     count;
   RealType squareOfDifferences, absoluteValueOfDifferences;
   
-
   int numberOfThreads = this->GetNumberOfThreads();
 
-  PixelType minimum1,  minimum2;
-  PixelType maximum1, maximum2;
+  PixelType minimumRef,  maximumRef;
   RealType  mse;
   RealType  mae;
   RealType  psnr;
@@ -225,8 +223,8 @@ PersistentCompareImageFilter<TInputImage>
   count = 0;
 
   // Find min/max and the accumulate count and difference of squares over all threads
-  minimum1 = minimum2 = itk::NumericTraits<PixelType>::max();
-  maximum1 = maximum2 = itk::NumericTraits<PixelType>::NonpositiveMin();
+  minimumRef = itk::NumericTraits<PixelType>::max();
+  maximumRef = itk::NumericTraits<PixelType>::NonpositiveMin();
   
   for (i = 0; i < numberOfThreads; ++i)
     {
@@ -234,22 +232,13 @@ PersistentCompareImageFilter<TInputImage>
     squareOfDifferences += m_SquareOfDifferences[i];
     absoluteValueOfDifferences += m_AbsoluteValueOfDifferences[i];
     
-    if (m_ThreadMin1[i] < minimum1)
+    if (m_ThreadMinRef[i] < minimumRef)
       {
-      minimum1 = m_ThreadMin1[i];
+      minimumRef = m_ThreadMinRef[i];
       }
-    if (m_ThreadMax1[i] > maximum1)
+    if (m_ThreadMaxRef[i] > maximumRef)
       {
-      maximum1 = m_ThreadMax1[i];
-      }
-    
-    if (m_ThreadMin2[i] < minimum2)
-      {
-      minimum2 = m_ThreadMin2[i];
-      }
-    if (m_ThreadMax2[i] > maximum2)
-      {
-      maximum2 = m_ThreadMax2[i];
+      maximumRef = m_ThreadMaxRef[i];
       }
     }
   
@@ -259,10 +248,7 @@ PersistentCompareImageFilter<TInputImage>
   mae = (count != 0) ? absoluteValueOfDifferences / static_cast<RealType>(count) : 0.;
   
   //compute psnr
-  RealType minimum = std::min(minimum1, minimum2);
-  RealType maximum = std::max(maximum1, maximum2);
-
-  psnr = (vcl_abs(mse) > 0.0000000001 && (maximum - minimum) > 0.0000000001 ) ? 10. * vcl_log10( ( ( maximum - minimum) * ( maximum - minimum) ) / mse ) : 0.;
+  psnr = (vcl_abs(mse) > 0.0000000001 && (maximumRef - minimumRef) > 0.0000000001 ) ? 10. * vcl_log10( ( ( maximumRef - minimumRef ) * ( maximumRef - minimumRef ) ) / mse ) : 0.;
   // Set the outputs
   this->GetMSEOutput()->Set(mse);
   this->GetMAEOutput()->Set(mae);
@@ -281,19 +267,15 @@ PersistentCompareImageFilter<TInputImage>
   m_SquareOfDifferences.SetSize(numberOfThreads);
   m_AbsoluteValueOfDifferences.SetSize(numberOfThreads);
 
-  m_ThreadMin1.SetSize(numberOfThreads);
-  m_ThreadMax1.SetSize(numberOfThreads);
-  m_ThreadMin2.SetSize(numberOfThreads);
-  m_ThreadMax2.SetSize(numberOfThreads);
+  m_ThreadMinRef.SetSize(numberOfThreads);
+  m_ThreadMaxRef.SetSize(numberOfThreads);
   
   // Initialize the temporaries
   m_Count.Fill(itk::NumericTraits<long>::Zero);
   m_SquareOfDifferences.Fill(itk::NumericTraits<RealType>::Zero);
   m_AbsoluteValueOfDifferences.Fill(itk::NumericTraits<RealType>::Zero);
-  m_ThreadMin1.Fill(itk::NumericTraits<PixelType>::max());
-  m_ThreadMax1.Fill(itk::NumericTraits<PixelType>::NonpositiveMin());
-  m_ThreadMin2.Fill(itk::NumericTraits<PixelType>::max());
-  m_ThreadMax2.Fill(itk::NumericTraits<PixelType>::NonpositiveMin());
+  m_ThreadMinRef.Fill(itk::NumericTraits<PixelType>::max());
+  m_ThreadMaxRef.Fill(itk::NumericTraits<PixelType>::NonpositiveMin());
 }
 
 template<class TInputImage>
@@ -328,24 +310,15 @@ PersistentCompareImageFilter<TInputImage>
     value2 = it2.Get();
     realValue2 = static_cast<RealType>(value2);
 
-    if (value1 < m_ThreadMin1[threadId])
+    if (value1 < m_ThreadMinRef[threadId])
       {
-      m_ThreadMin1[threadId] = value1;
+      m_ThreadMinRef[threadId] = value1;
       }
-    if (value1 > m_ThreadMax1[threadId])
+    if (value1 > m_ThreadMaxRef[threadId])
       {
-      m_ThreadMax1[threadId] = value1;
+      m_ThreadMaxRef[threadId] = value1;
       }
-
-    if (value2 < m_ThreadMin2[threadId])
-      {
-      m_ThreadMin2[threadId] = value2;
-      }
-    if (value2 > m_ThreadMax2[threadId])
-      {
-      m_ThreadMax2[threadId] = value2;
-      }
-   
+    
     m_SquareOfDifferences[threadId] += ( realValue1 - realValue2 ) * ( realValue1 - realValue2 );
     m_AbsoluteValueOfDifferences[threadId] += vcl_abs( realValue1 - realValue2 );
     m_Count[threadId]++;
