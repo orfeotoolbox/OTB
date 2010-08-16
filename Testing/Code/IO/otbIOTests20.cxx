@@ -27,4 +27,5 @@
 void RegisterTests()
 {
   REGISTER_TEST(otbImageFileReaderTestSensorPixelValue);
+  REGISTER_TEST(otbDefaultImageMetadataInterfaceFactoryNew);
 }

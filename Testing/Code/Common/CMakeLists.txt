@@ -912,7 +912,7 @@ Bidfeud0
 
 
 # ----------------  otbGISTableSource  ---------------------#
-ADD_TEST(coTuLabelMapSourceNew ${COMMON_TESTS10}
+ADD_TEST(coTuGISTableSourceNew ${COMMON_TESTS10}
 otbGISTableSourceNew
 )
 
