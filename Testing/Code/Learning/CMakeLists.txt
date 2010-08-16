@@ -307,7 +307,7 @@ ADD_TEST(leTuSVMImageClassificationWithRuleFilterNew ${LEARNING_TESTS3}
           otbSVMImageClassificationWithRuleFilterNew) 
 
 ADD_TEST(leTvSVMModelGenericKernelsTest ${LEARNING_TESTS3}
-    --compare-n-ascii ${NOTOL} 13
+    --compare-n-ascii ${NOTOL} 16
         ${BASELINE_FILES}/leTvSVMModelGenericKernelsTest1.txt
         ${TEMP}/leTvSVMModelGenericKernelsTest1.txt
         ${BASELINE_FILES}/leTvSVMModelGenericKernelsTest2.txt
@@ -334,6 +334,12 @@ ADD_TEST(leTvSVMModelGenericKernelsTest ${LEARNING_TESTS3}
         ${TEMP}/leTvSVMModelGenericKernelsTest12.txt
         ${BASELINE_FILES}/leTvSVMModelGenericKernelsTest13.txt
         ${TEMP}/leTvSVMModelGenericKernelsTest13.txt
+        ${BASELINE_FILES}/leTvSVMModelGenericKernelsTest14.txt
+        ${TEMP}/leTvSVMModelGenericKernelsTest14.txt
+        ${BASELINE_FILES}/leTvSVMModelGenericKernelsTest15.txt
+        ${TEMP}/leTvSVMModelGenericKernelsTest15.txt
+        ${BASELINE_FILES}/leTvSVMModelGenericKernelsTest16.txt
+        ${TEMP}/leTvSVMModelGenericKernelsTest16.txt
 	otbSVMModelGenericKernelsTest
         ${TEMP}/leTvSVMModelGenericKernelsTest1.txt
         ${TEMP}/leTvSVMModelGenericKernelsTest2.txt
@@ -348,6 +354,9 @@ ADD_TEST(leTvSVMModelGenericKernelsTest ${LEARNING_TESTS3}
         ${TEMP}/leTvSVMModelGenericKernelsTest11.txt
         ${TEMP}/leTvSVMModelGenericKernelsTest12.txt
         ${TEMP}/leTvSVMModelGenericKernelsTest13.txt
+	${TEMP}/leTvSVMModelGenericKernelsTest14.txt
+	${TEMP}/leTvSVMModelGenericKernelsTest15.txt
+	${TEMP}/leTvSVMModelGenericKernelsTest16.txt
     )
 
 

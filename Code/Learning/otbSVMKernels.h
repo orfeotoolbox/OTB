@@ -21,6 +21,11 @@
 #include "itkNumericTraits.h"
 #include "itkImageRegionIterator.h"
 
+// Existing kernels
+#include "otbSpectralAngleKernelFunctor.h"
+#include "otbChangeProfileKernelFunctor.h"
+#include "otbNonGaussianRBFKernelFunctor.h"
+
 #include "svm.h"
 #include <vector>
 
