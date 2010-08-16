@@ -16,19 +16,20 @@
 
 =========================================================================*/
 
-// this file defines the otbCommonTest for the test driver
-// and all it expects is that you have a function called RegisterTests
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
 #endif
 
-#include "otbTestMain.h"
+#include "itkExceptionObject.h"
 
-void RegisterTests()
+#include "otbDefaultImageMetadataInterfaceFactory.h"
+
+int otbDefaultImageMetadataInterfaceFactoryNew(int argc, char* argv[])
 {
-  REGISTER_TEST(otbImageFileReaderTestSensorPixelValue);
-  REGISTER_TEST(otbDefaultImageMetadataInterfaceFactoryNew);
-  REGISTER_TEST(otbOpticalDefaultImageMetadataInterfaceFactoryNew);
-  REGISTER_TEST(otbSarDefaultImageMetadataInterfaceFactoryNew);
-  REGISTER_TEST(otbSarDefaultImageMetadataInterfaceNew);
+  typedef otb::DefaultImageMetadataInterfaceFactory ObjectType;
+
+  ObjectType::Pointer obj = ObjectType::New();
+
+  return EXIT_SUCCESS;
+
 }
