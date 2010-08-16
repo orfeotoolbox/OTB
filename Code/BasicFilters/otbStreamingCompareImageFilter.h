@@ -149,10 +149,8 @@ private:
 
   itk::Array<RealType>  m_SquareOfDifferences;
   itk::Array<RealType>  m_AbsoluteValueOfDifferences;
-  itk::Array<PixelType> m_ThreadMin1;
-  itk::Array<PixelType> m_ThreadMin2;
-  itk::Array<PixelType> m_ThreadMax1;
-  itk::Array<PixelType> m_ThreadMax2;
+  itk::Array<PixelType> m_ThreadMinRef;
+  itk::Array<PixelType> m_ThreadMaxRef;
   itk::Array<long>      m_Count;
 }; // end of class PersistentCompareImageFilter
 
