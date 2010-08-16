@@ -31,10 +31,10 @@ int main(int argc, char* argv[])
   ParserType::Pointer parser = ParserType::New();
 
   parser->SetProgramDescription("Estimator between 2 images");
-  parser->AddOption("--Input1","The first input image","-in1", 1,true);
-  parser->AddOption("--Input2","The first input image","-in2", 1,true);
-  parser->AddOption("--NumBandImage1","Layer number to compare in the input image 1 (between 1 and number of layers)","-layer1",1,true);
-  parser->AddOption("--NumBandImage2","Layer number to compare in the input image 2 (between 1 and number of layers)","-layer2",1,true);
+  parser->AddOption("--ReferenceImage","The reference image","-refIn", 1,true);
+  parser->AddOption("--MeasuredImage","The measured image","-meaIn", 1,true);
+  parser->AddOption("--NumBandRefImage","The layer number to compare in the reference image (between 1 and number of layers)","-layerRef",1,true);
+  parser->AddOption("--NumBandMeasuredImage","The layer number to compare in the measured image (between 1 and number of layers)","-layerMea",1,true);
   parser->AddOption("--StartX", "first point in x-axis ", "-x0", 1, false);
   parser->AddOption("--StartY", "first point in y-axis ", "-y0", 1, false);
   parser->AddOption("--SizeX", "size in x-axis ", "-Nx", 1, false);
@@ -70,15 +70,15 @@ int main(int argc, char* argv[])
   //typedef otb::StreamingStatisticsImageFilter<ExtractROIMonoFilterType::OutputImageType> StreamingCompareImageFilterType;
   // Read input images information
   ReaderType::Pointer reader1= ReaderType::New();
-  reader1->SetFileName(parseResult->GetParameterString("--Input1"));
+  reader1->SetFileName(parseResult->GetParameterString("--ReferenceImage"));
   reader1->GenerateOutputInformation();
 
   ReaderType::Pointer reader2= ReaderType::New();
-  reader2->SetFileName(parseResult->GetParameterString("--Input2"));
+  reader2->SetFileName(parseResult->GetParameterString("--MeasuredImage"));
   reader2->GenerateOutputInformation();
 
-  unsigned int layer1 = parseResult->GetParameterUInt("--NumBandImage1");
-  unsigned int layer2 = parseResult->GetParameterUInt("--NumBandImage2");
+  unsigned int layer1 = parseResult->GetParameterUInt("--NumBandRefImage");
+  unsigned int layer2 = parseResult->GetParameterUInt("--NumBandMeasuredImage");
 
   
   
