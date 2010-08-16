@@ -64,22 +64,55 @@ WorldView2ImageMetadataInterface::GetSolarIrradiance() const
 
   std::string keyBId = "support_data.band_id";
   ossimString keywordStringBId = kwl.find(keyBId.c_str());
+
   if (keywordStringBId == ossimString("P"))
     {
-    outputValuesVariableLengthVector.SetSize(1);
-    outputValuesVariableLengthVector.Fill(1381.79);
-    }
-  else if (keywordStringBId == ossimString("Multi"))
-    {
-    outputValuesVariableLengthVector.SetSize(4);
-    outputValuesVariableLengthVector[0] = 1924.59;
-    outputValuesVariableLengthVector[1] = 1843.08;
-    outputValuesVariableLengthVector[2] = 1574.77;
-    outputValuesVariableLengthVector[3] = 1113.71;
+	    outputValuesVariableLengthVector.SetSize(1);
+	    outputValuesVariableLengthVector.Fill(1603.40);
     }
   else
     {
-    itkExceptionMacro(<< "Invalid bandID " << keywordStringBId);
+	  ossimString keywordStringBandNameList = kwl.find("support_data.band_name_list");
+	  std::vector<ossimString> bandNameList = keywordStringBandNameList.split(" ");
+
+	  outputValuesVariableLengthVector.SetSize(bandNameList.size());
+	  for(unsigned int i = 0 ; i < bandNameList.size(); ++i)
+	  {
+		  double SolarIrradianceValue = 0.0;
+		  if(bandNameList[i] == "C")
+		  {
+			  SolarIrradianceValue = 1777.10;
+		  }
+		  else if(bandNameList[i] == "B")
+		  {
+			  SolarIrradianceValue = 2015.68;
+		  }
+		  else if(bandNameList[i] == "G")
+		  {
+			  SolarIrradianceValue = 1829.06;
+		  }
+		  else if(bandNameList[i] == "Y")
+		  {
+			  SolarIrradianceValue = 1701.80;
+		  }
+		  else if(bandNameList[i] == "R")
+		  {
+			  SolarIrradianceValue = 1539.54;
+		  }
+		  else if(bandNameList[i] == "RE")
+		  {
+			  SolarIrradianceValue = 1345.03;
+		  }
+		  else if(bandNameList[i] == "N")
+		  {
+			  SolarIrradianceValue = 1045.50;
+		  }
+		  else if(bandNameList[i] == "N2")
+		  {
+			  SolarIrradianceValue = 883.20;
+		  }
+		  outputValuesVariableLengthVector[i] = SolarIrradianceValue;
+	  }
     }
 
   return outputValuesVariableLengthVector;
@@ -461,26 +494,25 @@ WorldView2ImageMetadataInterface
     {
 	  for(unsigned int i = 0 ; i < bandNameList.size(); ++i)
 	  {
-		  ossimString keywordString = "band_"+bandNameList[i]+".abscalfactor";
+		  ossimString keywordString = "support_data." + bandNameList[i] + "_band_absCalFactor";
 		  ossimString keywordStringAbsCalFactor = kwl.find(keywordString);
 		  outputValuesVariableLengthVector[i] = keywordStringAbsCalFactor.toDouble();
 	  }
     }
 
-/* PIO : To be confirmed !!!
  if (keywordStringBId == ossimString("P"))
     {
     outputValuesVariableLengthVector[0] = 1.0 / outputValuesVariableLengthVector[0];
     }
   else
     {
-    outputValuesVariableLengthVector[0] = 1.000 / outputValuesVariableLengthVector[0];
-    outputValuesVariableLengthVector[1] = 1.000 / outputValuesVariableLengthVector[1];
-    outputValuesVariableLengthVector[2] = 1.000 / outputValuesVariableLengthVector[2];
-    outputValuesVariableLengthVector[3] = 1.000 / outputValuesVariableLengthVector[3];
+	  for(unsigned int i = 0 ; i < bandNameList.size(); ++i)
+	  {
+		  outputValuesVariableLengthVector[i] = 1.000 / outputValuesVariableLengthVector[i];
+	  }
     }
-*/
-  return outputValuesVariableLengthVector;
+
+ return outputValuesVariableLengthVector;
 }
 
 double
@@ -592,6 +624,10 @@ WorldView2ImageMetadataInterface
 		  {
 			  waveValue = 0.588;
 		  }
+		  else if(bandNameList[i] == "R")
+		  {
+			  waveValue = 0.629;
+		  }
 		  else if(bandNameList[i] == "RE")
 		  {
 			  waveValue = 0.704;
@@ -671,6 +707,10 @@ WorldView2ImageMetadataInterface
 		  else if(bandNameList[i] == "Y")
 		  {
 			  waveValue = 0.627;
+		  }
+		  else if(bandNameList[i] == "R")
+		  {
+			  waveValue = 0.689;
 		  }
 		  else if(bandNameList[i] == "RE")
 		  {

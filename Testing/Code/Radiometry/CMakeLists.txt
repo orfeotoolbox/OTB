@@ -196,9 +196,7 @@ ADD_TEST(raTvImageToLuminanceImageFilterAutoSpot5 ${RADIOMETRY_TESTS2}
 	${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
 	${TEMP}/raTvImageToLuminanceImageFilterAutoSpot5.tif
          )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
 
-IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(raTvImageToLuminanceImageFilterAutoIkonos ${RADIOMETRY_TESTS2}
   --compare-image ${EPSILON}  ${BASELINE}/raTvImageToLuminanceImageFilterAutoIkonos.tif
                           ${TEMP}/raTvImageToLuminanceImageFilterAutoIkonos.tif
@@ -206,17 +204,59 @@ ADD_TEST(raTvImageToLuminanceImageFilterAutoIkonos ${RADIOMETRY_TESTS2}
 	${LARGEINPUT}/IKONOS/BLOSSEVILLE/po_2619900_pan_0000000.tif
 	${TEMP}/raTvImageToLuminanceImageFilterAutoIkonos.tif
          )
+
+ADD_TEST(raTvImageToLuminanceImageFilterAutoWV2PAN ${RADIOMETRY_TESTS2}
+   --compare-image ${EPSILON}  ${BASELINE}/raTvImageToLuminanceImageFilterAutoWV2PAN.tif
+                       ${TEMP}/raTvImageToLuminanceImageFilterAutoWV2PAN.tif
+        otbImageToLuminanceImageFilterAuto
+        ${LARGEINPUT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF
+        ${TEMP}/raTvImageToLuminanceImageFilterAutoWV2PAN.tif
+         )
+
+ADD_TEST(raTvImageToLuminanceImageFilterAutoWV2MULTI ${RADIOMETRY_TESTS2}
+   --compare-image ${EPSILON}  ${BASELINE}/raTvImageToLuminanceImageFilterAutoWV2Multi.tif
+                       ${TEMP}/raTvImageToLuminanceImageFilterAutoWV2Multi.tif
+        otbImageToLuminanceImageFilterAuto
+        ${LARGEINPUT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL/09DEC10103019-M2AS-052298844010_01_P001.TIF
+        ${TEMP}/raTvImageToLuminanceImageFilterAutoWV2Multi.tif
+         )
+
+ADD_TEST(raTvImageToLuminanceImageFilterAutoQuickbirdPAN ${RADIOMETRY_TESTS2}
+   --compare-image ${EPSILON}  ${BASELINE}/raTvImageToLuminanceImageFilterAutoQuickbirdPAN.tif
+                       ${TEMP}/raTvImageToLuminanceImageFilterAutoQuickbirdPAN.tif
+        otbImageToLuminanceImageFilterAuto
+        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${TEMP}/raTvImageToLuminanceImageFilterAutoQuickbirdPAN.tif
+         )
+
+ADD_TEST(raTvImageToLuminanceImageFilterAutoQuickbirdXS ${RADIOMETRY_TESTS2}
+   --compare-image ${EPSILON}  ${BASELINE}/raTvImageToLuminanceImageFilterAutoQuickbirdXS.tif
+                       ${TEMP}/raTvImageToLuminanceImageFilterAutoQuickbirdXS.tif
+        otbImageToLuminanceImageFilterAuto
+        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+        ${TEMP}/raTvImageToLuminanceImageFilterAutoQuickbirdXS.tif
+         )
+
+ADD_TEST(raTvImageToLuminanceImageFilterAutoQuickbirdXS ${RADIOMETRY_TESTS2}
+   --compare-image ${EPSILON}  ${BASELINE}/raTvImageToLuminanceImageFilterAutoQuickbirdXS.tif
+                       ${TEMP}/raTvImageToLuminanceImageFilterAutoQuickbirdXS.tif
+        otbImageToLuminanceImageFilterAuto
+        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+        ${TEMP}/raTvImageToLuminanceImageFilterAutoQuickbirdXS.tif
+         )
+
+ADD_TEST(raTvImageToLuminanceImageFilterAutoFORMOSAT ${RADIOMETRY_TESTS2}
+   --compare-image ${EPSILON}  ${BASELINE}/raTvImageToLuminanceImageFilterAutoFormosat.tif
+                       ${TEMP}/raTvImageToLuminanceImageFilterAutoFormosat.tif
+        otbImageToLuminanceImageFilterAuto
+        ${LARGEINPUT}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF
+        ${TEMP}/raTvImageToLuminanceImageFilterAutoFormosat.tif
+         )
+
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
-#IF(OTB_DATA_USE_LARGEINPUT)
-#ADD_TEST(raTvImageToLuminanceImageFilterAutoWV2 ${RADIOMETRY_TESTS2}
-#  #--compare-image ${EPSILON}  ${BASELINE}/raTvImageToLuminanceImageFilterAutoIkonos.tif
-#   #                       ${TEMP}/raTvImageToLuminanceImageFilterAutoIkonos.tif
-#        otbImageToLuminanceImageFilterAuto
-#        ${LARGEINPUT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL/09DEC10103019-M2AS-052298844010_01_P001.TIF
-#        ${TEMP}/raTvImageToLuminanceImageFilterAutoWV2.tif
-#         )
-#ENDIF(OTB_DATA_USE_LARGEINPUT)
+
+
 
 # -------            otb::LuminanceToReflectanceImageFilter   ------------------------------
 ADD_TEST(raTuLuminanceToReflectanceImageFilterNew ${RADIOMETRY_TESTS2}
@@ -253,13 +293,73 @@ ADD_TEST(raTvLuminanceToReflectanceImageFilterDayMonth ${RADIOMETRY_TESTS2}
         )
 
 IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(raTvLuminanceToReflectanceImageFilterAuto ${RADIOMETRY_TESTS2}
-  --compare-image ${EPSILON}  ${BASELINE}/raTvLuminanceToReflectanceImageFilterAuto.tif
-                          ${TEMP}/raTvLuminanceToReflectanceImageFilterAuto.tif
+
+ADD_TEST(raTvLuminanceToReflectanceImageFilterAutoSpot5 ${RADIOMETRY_TESTS2}
+  --compare-image ${EPSILON}  ${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoSpot5.tif
+                          ${TEMP}/raTvLuminanceToReflectanceImageFilterAutoSpot5.tif
         otbLuminanceToReflectanceImageFilterAuto
 	${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
-	${TEMP}/raTvLuminanceToReflectanceImageFilterAuto.tif
+	${TEMP}/raTvLuminanceToReflectanceImageFilterAutoSpot5.tif
          )
+
+ADD_TEST(raTvLuminanceToReflectanceImageFilterAutoIkonos ${RADIOMETRY_TESTS2}
+  --compare-image ${EPSILON}  ${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoIkonos.tif
+                          ${TEMP}/raTvLuminanceToReflectanceImageFilterAutoIkonos.tif
+        otbLuminanceToReflectanceImageFilterAuto
+	${LARGEINPUT}/IKONOS/BLOSSEVILLE/po_2619900_pan_0000000.tif
+	${TEMP}/raTvLuminanceToReflectanceImageFilterAutoIkonos.tif
+         )
+
+ADD_TEST(raTvLuminanceToReflectanceImageFilterAutoWV2PAN ${RADIOMETRY_TESTS2}
+   --compare-image ${EPSILON}  ${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoWV2PAN.tif
+                       ${TEMP}/raTvLuminanceToReflectanceImageFilterAutoWV2PAN.tif
+        otbLuminanceToReflectanceImageFilterAuto
+        ${LARGEINPUT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF
+        ${TEMP}/raTvLuminanceToReflectanceImageFilterAutoWV2PAN.tif
+         )
+
+ADD_TEST(raTvLuminanceToReflectanceImageFilterAutoWV2MULTI ${RADIOMETRY_TESTS2}
+   --compare-image ${EPSILON}  ${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoWV2Multi.tif
+                       ${TEMP}/raTvLuminanceToReflectanceImageFilterAutoWV2Multi.tif
+        otbLuminanceToReflectanceImageFilterAuto
+        ${LARGEINPUT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL/09DEC10103019-M2AS-052298844010_01_P001.TIF
+        ${TEMP}/raTvLuminanceToReflectanceImageFilterAutoWV2Multi.tif
+         )
+
+ADD_TEST(raTvLuminanceToReflectanceImageFilterAutoQuickbirdPAN ${RADIOMETRY_TESTS2}
+   --compare-image ${EPSILON}  ${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoQuickbirdPAN.tif
+                       ${TEMP}/raTvLuminanceToReflectanceImageFilterAutoQuickbirdPAN.tif
+        otbLuminanceToReflectanceImageFilterAuto
+        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${TEMP}/raTvLuminanceToReflectanceImageFilterAutoQuickbirdPAN.tif
+         )
+
+ADD_TEST(raTvLuminanceToReflectanceImageFilterAutoQuickbirdXS ${RADIOMETRY_TESTS2}
+   --compare-image ${EPSILON}  ${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoQuickbirdXS.tif
+                       ${TEMP}/raTvLuminanceToReflectanceImageFilterAutoQuickbirdXS.tif
+        otbLuminanceToReflectanceImageFilterAuto
+        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+        ${TEMP}/raTvLuminanceToReflectanceImageFilterAutoQuickbirdXS.tif
+         )
+
+ADD_TEST(raTvLuminanceToReflectanceImageFilterAutoQuickbirdXS ${RADIOMETRY_TESTS2}
+   --compare-image ${EPSILON}  ${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoQuickbirdXS.tif
+                       ${TEMP}/raTvLuminanceToReflectanceImageFilterAutoQuickbirdXS.tif
+        otbLuminanceToReflectanceImageFilterAuto
+        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+        ${TEMP}/raTvLuminanceToReflectanceImageFilterAutoQuickbirdXS.tif
+         )
+
+ADD_TEST(raTvLuminanceToReflectanceImageFilterAutoFORMOSAT ${RADIOMETRY_TESTS2}
+   --compare-image ${EPSILON}  ${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoFormosat.tif
+                       ${TEMP}/raTvLuminanceToReflectanceImageFilterAutoFormosat.tif
+        otbLuminanceToReflectanceImageFilterAuto
+        ${LARGEINPUT}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF
+        ${TEMP}/raTvLuminanceToReflectanceImageFilterAutoFormosat.tif
+         )
+         
+         
+         
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # -------            otb::ImageToReflectanceImageFilter   ------------------------------
