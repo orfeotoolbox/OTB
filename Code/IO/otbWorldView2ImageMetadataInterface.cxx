@@ -574,38 +574,42 @@ WorldView2ImageMetadataInterface
 
 	  wavel.SetSize(bandNameList.size());
 	  for(unsigned int i = 0 ; i < bandNameList.size(); ++i)
-	  {
-		  double waveValue = 0.0;
-		  if(bandNameList[i] == "C")
-		  {
-			  waveValue = 0.401;
-		  }
-		  else if(bandNameList[i] == "B")
-		  {
-			  waveValue = 0.447;
-		  }
-		  else if(bandNameList[i] == "G")
-		  {
-			  waveValue = 0.511;
-		  }
-		  else if(bandNameList[i] == "Y")
-		  {
-			  waveValue = 0.588;
-		  }
-		  else if(bandNameList[i] == "RE")
-		  {
-			  waveValue = 0.704;
-		  }
-		  else if(bandNameList[i] == "N")
-		  {
-			  waveValue = 0.772;
-		  }
-		  else if(bandNameList[i] == "N2")
-		  {
-			  waveValue = 0.862;
-		  }
-		  wavel[i] = waveValue;
-	  }
+	    {
+	    double waveValue = 0.0;
+	    if(bandNameList[i] == "C")
+	      {
+	      waveValue = 0.401;
+	      }
+	    else if(bandNameList[i] == "B")
+	      {
+	      waveValue = 0.447;
+	      }
+	    else if(bandNameList[i] == "G")
+	      {
+	      waveValue = 0.511;
+	      }
+	    else if(bandNameList[i] == "Y")
+	      {
+	      waveValue = 0.588;
+	      }
+	    else if(bandNameList[i] == "R")
+	      {
+	      waveValue=0.630;
+	      }
+	    else if(bandNameList[i] == "RE")
+	      {
+	      waveValue = 0.704;
+	      }
+	    else if(bandNameList[i] == "N")
+	      {
+	      waveValue = 0.772;
+	      }
+	    else if(bandNameList[i] == "N2")
+	      {
+	      waveValue = 0.862;
+	      }
+	    wavel[i] = waveValue;
+	    }
     }
 
   return wavel;
@@ -654,38 +658,42 @@ WorldView2ImageMetadataInterface
 
 	  wavel.SetSize(bandNameList.size());
 	  for(unsigned int i = 0 ; i < bandNameList.size(); ++i)
-	  {
-		  double waveValue = 0.0;
-		  if(bandNameList[i] == "C")
-		  {
-			  waveValue = 0.453;
-		  }
-		  else if(bandNameList[i] == "B")
-		  {
-			  waveValue = 0.581;
-		  }
-		  else if(bandNameList[i] == "G")
-		  {
-			  waveValue = 0.581;
-		  }
-		  else if(bandNameList[i] == "Y")
-		  {
-			  waveValue = 0.627;
-		  }
-		  else if(bandNameList[i] == "RE")
-		  {
-			  waveValue = 0.744;
-		  }
-		  else if(bandNameList[i] == "N")
-		  {
-			  waveValue = 0.890;
-		  }
-		  else if(bandNameList[i] == "N2")
-		  {
-			  waveValue = 0.954;
-		  }
-		  wavel[i] = waveValue;
-	  }
+	    {
+	    double waveValue = 0.0;
+	    if(bandNameList[i] == "C")
+	      {
+	      waveValue = 0.453;
+	      }
+	    else if(bandNameList[i] == "B")
+	      {
+	      waveValue = 0.581;
+	      }
+	    else if(bandNameList[i] == "G")
+	      {
+	      waveValue = 0.581;
+	      }
+	    else if(bandNameList[i] == "Y")
+	      {
+	      waveValue = 0.627;
+	      }
+	    else if(bandNameList[i]="R")
+	      {
+	      waveValue=0.690;
+	      }
+	    else if(bandNameList[i] == "RE")
+	      {
+	      waveValue = 0.744;
+	      }
+	    else if(bandNameList[i] == "N")
+	      {
+	      waveValue = 0.890;
+	      }
+	    else if(bandNameList[i] == "N2")
+	      {
+	      waveValue = 0.954;
+	      }
+	    wavel[i] = waveValue;
+	    }
     }
 
   return wavel;
