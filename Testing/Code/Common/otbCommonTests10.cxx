@@ -39,4 +39,5 @@ void RegisterTests()
   REGISTER_TEST(otbGISTableToLabelMapFilterNew);
   REGISTER_TEST(otbLabelMapToGISTableFilter);
   REGISTER_TEST(otbGISTableToVectorDataFilter);
+  REGISTER_TEST(otbGISTableSourceNew);
 }

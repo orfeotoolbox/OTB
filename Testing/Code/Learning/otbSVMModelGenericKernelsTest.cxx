@@ -49,6 +49,9 @@ int otbSVMModelGenericKernelsTest(int argc, char* argv[])
   otb::CustomLinearKernelFunctor         customLinearFunctor;
   otb::GroupedRBFKernelFunctor           groupedRBFFunctor;
   otb::GroupingAdaptiveKernelFunctor     groupingAdaptiveFunctor;
+  otb::SpectralAngleKernelFunctor        spectAngleFunctor; 
+  otb::NonGaussianRBFKernelFunctor       nonGaussRBFFunctor;
+  otb::ChangeProfileKernelFunctor        changeProFunctor;
 
   invMultiQuadricFunctor.SetValue<double>("const_coef", 2.);
   invMultiQuadraticSAMFunctor.SetValue<double>("const_coef", 3.);
@@ -59,6 +62,13 @@ int otbSVMModelGenericKernelsTest(int argc, char* argv[])
   polyRBFSAMFunctor.SetValue<double>("lin_coef", 1.2);
   groupingAdaptiveFunctor.SetValue<double>("const_coef", 8.2);
   groupingAdaptiveFunctor.SetValue<double>("lin_coef", 5.2);
+  spectAngleFunctor.SetValue<double>("Coef", 2.5);
+  nonGaussRBFFunctor.SetValue<double>("Alpha", 1.1);
+  nonGaussRBFFunctor.SetValue<double>("Beta", 2.1);
+  nonGaussRBFFunctor.SetValue<double>("Gamma", 1.1);
+  changeProFunctor.SetValue<double>("Coef", 0.1);
+  changeProFunctor.SetValue<double>("Degree", 1.1);
+  changeProFunctor.SetValue<double>("Gamma", 1.1);
 
   struct svm_model *model;
   model = new struct svm_model;
@@ -188,6 +198,15 @@ int otbSVMModelGenericKernelsTest(int argc, char* argv[])
   model->param.kernel_generic = &groupingAdaptiveFunctor;
   svmModel->SetModel(model);
   svmModel->SaveModel(argv[13]);
+  model->param.kernel_generic = &spectAngleFunctor;
+  svmModel->SetModel(model);
+  svmModel->SaveModel(argv[14]);
+  model->param.kernel_generic = &nonGaussRBFFunctor;
+  svmModel->SetModel(model);
+  svmModel->SaveModel(argv[15]);
+  model->param.kernel_generic = &changeProFunctor;
+  svmModel->SetModel(model);
+  svmModel->SaveModel(argv[16]);
 
   return EXIT_SUCCESS;
 }

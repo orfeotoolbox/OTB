@@ -2570,6 +2570,18 @@ otbImageFileReaderTestSensorPixelValue
 
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
+ADD_TEST(ioTuDefaultImageMetadataInterfaceFactoryNew ${IO_TESTS20}
+        otbDefaultImageMetadataInterfaceFactoryNew )
+
+ADD_TEST(ioTuopticalDefaultImageMetadataInterfaceFactoryNew ${IO_TESTS20}
+        otbOpticalDefaultImageMetadataInterfaceFactoryNew )
+
+ADD_TEST(ioTuSarDefaultImageMetadataInterfaceFactoryNew ${IO_TESTS20}
+        otbSarDefaultImageMetadataInterfaceFactoryNew )
+
+ADD_TEST(ioTubSarDefaultImageMetadataInterfaceNew ${IO_TESTS20}
+        otbSarDefaultImageMetadataInterfaceNew )
+
 
 #----------------------------------------------------------------------------------
 SET(BasicIO_SRCS1
@@ -2768,7 +2780,12 @@ ENDIF(OTB_USE_CURL)
 SET(BasicIO_SRCS20
 otbIOTests20.cxx
 otbImageFileReaderTestSensorPixelValue.cxx
+otbDefaultImageMetadataInterfaceFactoryNew.cxx
+otbOpticalDefaultImageMetadataInterfaceFactoryNew.cxx
+otbSarDefaultImageMetadataInterfaceFactoryNew.cxx
+otbSarDefaultImageMetadataInterfaceNew.cxx
 )
+
 
 OTB_ADD_EXECUTABLE(otbIOTests1 "${BasicIO_SRCS1}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbIOTests2 "${BasicIO_SRCS2}" "OTBIO;OTBTesting")

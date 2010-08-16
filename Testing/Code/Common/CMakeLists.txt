@@ -35,6 +35,7 @@ SET(COMMON_TESTS11 ${CXX_TEST_PATH}/otbCommonTests11)
 IF(OTB_COMPILE_MUPARSER)
 SET(COMMON_TESTS12 ${CXX_TEST_PATH}/otbCommonTests12)
 ENDIF(OTB_COMPILE_MUPARSER)
+SET(COMMON_TESTS8 ${CXX_TEST_PATH}/otbCommonTests13)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbCommonTests1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -910,6 +911,12 @@ Bidfeud0
 )
 
 
+# ----------------  otbGISTableSource  ---------------------#
+ADD_TEST(coTuGISTableSourceNew ${COMMON_TESTS10}
+otbGISTableSourceNew
+)
+
+
 ENDIF(OTB_USE_PQXX)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1001,6 +1008,14 @@ IF(OTB_COMPILE_MUPARSER)
     otbParserTest
     )
 ENDIF(OTB_COMPILE_MUPARSER)
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbCommonTests13 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
 
 
 # -------       Fichiers sources CXX -----------------------------------
@@ -1143,6 +1158,7 @@ otbGISTableToLabelMapFilterNew.cxx
 otbGISTableToVectorDataFilterNew.cxx
 otbLabelMapToGISTableFilter.cxx
 otbGISTableToVectorDataFilter.cxx
+otbGISTableSourceNew.cxx
 )
 ENDIF(OTB_USE_PQXX)
 
@@ -1172,6 +1188,11 @@ otbParserTest.cxx
 )
 ENDIF(OTB_COMPILE_MUPARSER)
 
+
+SET(BasicCommon_SRCS13
+otbCommonTests13.cxx
+)
+
 OTB_ADD_EXECUTABLE(otbCommonTests1 "${BasicCommon_SRCS1}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbCommonTests2 "${BasicCommon_SRCS2}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbCommonTests3 "${BasicCommon_SRCS3}" "OTBIO;OTBTesting")
@@ -1193,5 +1214,7 @@ TARGET_LINK_LIBRARIES(otbCommonTests11 OTBIO  OTBTesting itkvcl)
 IF(OTB_COMPILE_MUPARSER)
   OTB_ADD_EXECUTABLE(otbCommonTests12 "${BasicCommon_SRCS12}" "OTBIO;OTBTesting")
 ENDIF(OTB_COMPILE_MUPARSER)
+
+OTB_ADD_EXECUTABLE(otbCommonTests13 "${BasicCommon_SRCS13}" "OTBIO;OTBTesting")
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

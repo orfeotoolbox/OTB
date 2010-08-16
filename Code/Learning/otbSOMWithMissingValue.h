@@ -75,9 +75,9 @@ public:
 
 protected:
   /** Constructor */
-  SOMWithMissingValue () {}
+  SOMWithMissingValue ();
   /** Destructor */
-  virtual ~SOMWithMissingValue() {}
+  virtual ~SOMWithMissingValue();
   /** Output information redefinition */
   virtual void GenerateOutputInformation()
   {
@@ -104,10 +104,8 @@ protected:
     Superclass::Step(currentIteration);
   }
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const
-  {
-    Superclass::PrintSelf(os, indent);
-  }
+void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  
 
 private:
   SOMWithMissingValue (const Self &);    // purposely not implemented

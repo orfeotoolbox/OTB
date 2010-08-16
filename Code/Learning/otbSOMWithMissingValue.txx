@@ -32,6 +32,20 @@
 
 namespace otb
 {
+template <class TListSample, class TMap,
+    class TSOMLearningBehaviorFunctor,
+    class TSOMNeighborhoodBehaviorFunctor>
+SOMWithMissingValue <TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighborhoodBehaviorFunctor>
+::SOMWithMissingValue(void)
+{}
+
+template <class TListSample, class TMap,
+    class TSOMLearningBehaviorFunctor,
+    class TSOMNeighborhoodBehaviorFunctor>
+SOMWithMissingValue <TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighborhoodBehaviorFunctor>
+::~SOMWithMissingValue(void)
+{}
+
 /**
  * Update the output map with a new sample by including the case when some
  * components of this new sample may be missing.
@@ -102,6 +116,17 @@ SOMWithMissingValue<TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighbor
       }
     }
 }
+
+template <class TListSample, class TMap,
+    class TSOMLearningBehaviorFunctor,
+    class TSOMNeighborhoodBehaviorFunctor>
+void
+SOMWithMissingValue<TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighborhoodBehaviorFunctor>
+::PrintSelf(std::ostream& os, itk::Indent indent) const
+{
+  Superclass::PrintSelf(os, indent);
+
+} // end PrintSelf
 
 } // end iof namespace otb
 

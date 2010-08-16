@@ -19,7 +19,8 @@
 #include "otbImage.h"
 #include "otbSarRadiometricCalibrationToImageFilter.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
+#include "itkExtractImageFilter.h"
 
 int otbSarRadiometricCalibrationToImageFilterTest(int argc, char * argv[])
 {
@@ -29,20 +30,32 @@ int otbSarRadiometricCalibrationToImageFilterTest(int argc, char * argv[])
   typedef otb::Image<PixelType, Dimension>                                             InputImageType;
   typedef otb::Image<RealType, Dimension>                                              OutputImageType;
   typedef otb::ImageFileReader<InputImageType>                                         ReaderType;
-  typedef otb::StreamingImageFileWriter<OutputImageType>                               WriterType;
+  typedef otb::ImageFileWriter<OutputImageType>                                        WriterType;
   typedef otb::SarRadiometricCalibrationToImageFilter<InputImageType, OutputImageType> FilterType;
+  typedef itk::ExtractImageFilter<OutputImageType, OutputImageType>                    ExtractorType;
 
   // Instantiating object
   FilterType::Pointer filter = FilterType::New();
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
+  ExtractorType::Pointer extractor = ExtractorType::New();
 
   reader->SetFileName(argv[1]);
   writer->SetFileName(argv[2]);
   filter->SetInput(reader->GetOutput());
 
-  writer->SetInput(filter->GetOutput());
-  writer->SetNumberOfStreamDivisions(2);
+  // Generate an extract from the large input
+  OutputImageType::RegionType region;
+  OutputImageType::IndexType  id;
+  id[0] = atoi(argv[3]);   id[1] = atoi(argv[4]);
+  OutputImageType::SizeType size;
+  size[0] = atoi(argv[5]);   size[1] = atoi(argv[6]);
+  region.SetIndex(id);
+  region.SetSize(size);
+  extractor->SetExtractionRegion(region);
+
+  extractor->SetInput(filter->GetOutput());
+  writer->SetInput(extractor->GetOutput());
   writer->Update();
 
   return EXIT_SUCCESS;
