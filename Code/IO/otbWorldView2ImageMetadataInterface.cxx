@@ -695,21 +695,97 @@ unsigned int
 WorldView2ImageMetadataInterface
 ::GetDefaultRBand() const
 {
-  return 2;
+  // Handle both 4 bands and 8 bands wv2 products
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
+    {
+    itkExceptionMacro(<< "Invalid Metadata, no WorldView2 Image");
+    }
+
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+    {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+    }
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+
+  ossimString keywordStringBandNameList = kwl.find("support_data.band_name_list");
+  std::vector<ossimString> bandNameList = keywordStringBandNameList.split(" ");
+  if(bandNameList.size()>4)
+    {
+    return 4;
+    }
+  else
+    {
+    return 2;
+    }
 }
 
 unsigned int
 WorldView2ImageMetadataInterface
 ::GetDefaultGBand() const
 {
-  return 1;
+  // Handle both 4 bands and 8 bands wv2 products
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
+    {
+    itkExceptionMacro(<< "Invalid Metadata, no WorldView2 Image");
+    }
+
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+    {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+    }
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+
+  ossimString keywordStringBandNameList = kwl.find("support_data.band_name_list");
+  std::vector<ossimString> bandNameList = keywordStringBandNameList.split(" ");
+  if(bandNameList.size()>4)
+    {
+    return 2;
+    }
+  else
+    {
+    return 1;
+    }
 }
 
 unsigned int
 WorldView2ImageMetadataInterface
 ::GetDefaultBBand() const
 {
-  return 0;
+  // Handle both 4 bands and 8 bands wv2 products
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
+    {
+    itkExceptionMacro(<< "Invalid Metadata, no WorldView2 Image");
+    }
+
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+    {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+    }
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+
+
+  ossimString keywordStringBandNameList = kwl.find("support_data.band_name_list");
+  std::vector<ossimString> bandNameList = keywordStringBandNameList.split(" ");
+  if(bandNameList.size()>4)
+    {
+    return 1;
+    }
+  else
+    {
+    return 0;
+    }
 }
 
 } // end namespace otb
