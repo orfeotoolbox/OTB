@@ -38,7 +38,7 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT SarRadiometricCalibrationToImageFilter :
   public FunctionToImageFilter<TInputImage, TOutputImage, 
-							   SarRadiometricCalibrationFunction<TInputImage> >
+                 SarRadiometricCalibrationFunction<TInputImage> >
 {
 public:
   /** Standard class typedefs. */

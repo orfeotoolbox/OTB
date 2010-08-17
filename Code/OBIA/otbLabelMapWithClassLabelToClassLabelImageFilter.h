@@ -77,7 +77,7 @@ private:
   LabelMapWithClassLabelToClassLabelImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-} ; // end of class
+}; // end of class
 
 } // end namespace otb
   

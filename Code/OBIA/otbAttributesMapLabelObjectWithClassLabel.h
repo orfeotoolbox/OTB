@@ -52,7 +52,7 @@ public:
   /** Standard class typedefs */
   typedef AttributesMapLabelObjectWithClassLabel      Self;
   typedef AttributesMapLabelObject<TLabel, 
-		  VImageDimension, TAttributesValue>  Superclass;
+      VImageDimension, TAttributesValue>  Superclass;
   typedef itk::LabelObject<TLabel,VImageDimension>    LabelObjectType;
   typedef itk::SmartPointer<Self>                     Pointer;
   typedef itk::SmartPointer<const Self>               ConstPointer;
@@ -127,13 +127,13 @@ protected:
     {
       Superclass::PrintSelf( os, indent );
       if(m_HasClassLabel)
-	{
-	os<<indent<<"Class Label: "<<m_ClassLabel<<std::endl;
-	}
+  {
+  os<<indent<<"Class Label: "<<m_ClassLabel<<std::endl;
+  }
       else
-	{
-	os<<indent<<"No class label available."<<std::endl;
-	}
+  {
+  os<<indent<<"No class label available."<<std::endl;
+  }
     }
 
 private:

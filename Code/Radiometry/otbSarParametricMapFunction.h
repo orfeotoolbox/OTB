@@ -102,7 +102,7 @@ public:
     m_PointSet = val;
     EvaluateParametricCoefficient();
     this->Modified();
-  }	
+  }  
 
   /** Get/Set the Coeff pointer*/
   itkSetMacro(Coeff, PointSetPointer);

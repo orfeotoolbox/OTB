@@ -135,19 +135,19 @@ int otbNaryParserImageFilter( int argc, char* argv[])
     
     /*
     std::cout << "Pixel_1 =  " << it1.Get() << "     Pixel_2 =  " << it2.Get() << "     Pixel_3 =  " << it3.Get() 
-	      << "     Result =  " << it.Get() << "     Expected =  " << expected << std::endl;  
+        << "     Result =  " << it.Get() << "     Expected =  " << expected << std::endl;  
     */
     
     error = (result - expected) * (result - expected) / (result + expected);
     if ( error > 1E-9 )
       {
       itkGenericExceptionMacro(  <<std::endl 
-				 << "Error = " << error << "  > 1E-9     -> TEST FAILLED" << std::endl 
-				 << "Pixel_1 =  "       << it1.Get()  
-				 << "     Pixel_2 =  "  << it2.Get() 
-				 << "     Pixel_3 =  "  << it3.Get()
-				 << "     Result =  "   << it.Get()   
-				 << "     Expected =  " << expected     << std::endl );
+         << "Error = " << error << "  > 1E-9     -> TEST FAILLED" << std::endl 
+         << "Pixel_1 =  "       << it1.Get()  
+         << "     Pixel_2 =  "  << it2.Get() 
+         << "     Pixel_3 =  "  << it3.Get()
+         << "     Result =  "   << it.Get()   
+         << "     Expected =  " << expected     << std::endl );
       FAIL_FLAG++;
       }
   }
@@ -173,9 +173,9 @@ int otbNaryParserImageFilter( int argc, char* argv[])
     std::cout << "Pixel_1 =  " << it1.Get() << "     Pixel_2 =  " << it2.Get() << "     Result =  " << it.Get() << "     Expected =  nan" << std::endl;
   else
     itkGenericExceptionMacro(  << std::endl 
-			       << "Error > Bad Edge Effect Handling -> Test Failled" << std::endl 
-			       << "Pixel_1 =  "     << it1.Get()  << "     Pixel_2 =  "  << it2.Get() 
-			       << "     Result =  " << it.Get()   << "     Expected =  nan" << std::endl );
+             << "Error > Bad Edge Effect Handling -> Test Failled" << std::endl 
+             << "Pixel_1 =  "     << it1.Get()  << "     Pixel_2 =  "  << it2.Get() 
+             << "     Result =  " << it.Get()   << "     Expected =  nan" << std::endl );
   std::cout << std::endl;
 
   return EXIT_SUCCESS;

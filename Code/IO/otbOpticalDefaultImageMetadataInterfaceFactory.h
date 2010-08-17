@@ -52,7 +52,7 @@ public:
   /** Register one factory of this type  */
   static void RegisterOneFactory(void)
   {
-	  OpticalDefaultImageMetadataInterfaceFactory::Pointer DefaultIMIFactory = OpticalDefaultImageMetadataInterfaceFactory::New();
+    OpticalDefaultImageMetadataInterfaceFactory::Pointer DefaultIMIFactory = OpticalDefaultImageMetadataInterfaceFactory::New();
     itk::ObjectFactoryBase::RegisterFactory(DefaultIMIFactory);
   }
 

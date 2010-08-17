@@ -41,10 +41,10 @@ template <class TInputImage, class TCoordRep>
 SarParametricMapFunction<TInputImage, TCoordRep>
 ::SarParametricMapFunction()
 {
-	m_PointSet = PointSetType::New();
-	m_Coeff    = PointSetType::New();
-	m_IsInitialize = false;
-	m_UsingClosestPointMethod = false;
+  m_PointSet = PointSetType::New();
+  m_Coeff    = PointSetType::New();
+  m_IsInitialize = false;
+  m_UsingClosestPointMethod = false;
 }
 
 template <class TInputImage, class TCoordRep>
@@ -55,13 +55,13 @@ SarParametricMapFunction<TInputImage, TCoordRep>
     PointType  p0;
 
     m_IsInitialize = false;
-    m_PointSet->Initialize();	 
-  	p0[0] = static_cast<unsigned int>(0);
-  	p0[1] = static_cast<unsigned int>(0);
-	m_PointSet->SetPoint(0, p0);
-  	m_PointSet->SetPointData(0, value);
+    m_PointSet->Initialize();   
+    p0[0] = static_cast<unsigned int>(0);
+    p0[1] = static_cast<unsigned int>(0);
+  m_PointSet->SetPoint(0, p0);
+    m_PointSet->SetPointData(0, value);
     EvaluateParametricCoefficient();
-    this->Modified();	
+    this->Modified();  
 }
 
 
@@ -70,24 +70,24 @@ void
 SarParametricMapFunction<TInputImage, TCoordRep>
 ::SetPolynomalSize(const IndexType PolynomalSize)
 {
-  	unsigned int pointId = 0;
-  	PointType  coef;
+    unsigned int pointId = 0;
+    PointType  coef;
 
-  	m_IsInitialize = false;
-   	for(unsigned int i = 0 ; i <= PolynomalSize[0] ; ++i)
-  	{
-  		coef[0] = i;	
-		for(unsigned int j = 0 ; j <= PolynomalSize[1] ; ++j)
-  		{
-  			coef[1] = j;
-  			m_Coeff->SetPoint(pointId,coef);
-  			++pointId;
-  		}	  
-  	}
-  	if(m_PointSet->GetNumberOfPoints() > 0)
-  	{
-  		EvaluateParametricCoefficient();
-  	}	  	
+    m_IsInitialize = false;
+     for(unsigned int i = 0; i <= PolynomalSize[0]; ++i)
+    {
+      coef[0] = i;  
+    for(unsigned int j = 0; j <= PolynomalSize[1]; ++j)
+      {
+        coef[1] = j;
+        m_Coeff->SetPoint(pointId,coef);
+        ++pointId;
+      }    
+    }
+    if(m_PointSet->GetNumberOfPoints() > 0)
+    {
+      EvaluateParametricCoefficient();
+    }      
     this->Modified(); 
 }
 
@@ -102,7 +102,7 @@ SarParametricMapFunction<TInputImage, TCoordRep>
    
   if (pointSet->GetNumberOfPoints() == 0)
   {
-    	itkExceptionMacro(<< "PointSet must be set before evaluating the parametric coefficient (at least one value)");
+      itkExceptionMacro(<< "PointSet must be set before evaluating the parametric coefficient (at least one value)");
   }
 
   PointType  coef;
@@ -110,8 +110,8 @@ SarParametricMapFunction<TInputImage, TCoordRep>
   typename PointSetType::PixelType pointValue;
   if(pointSet->GetNumberOfPoints() == 1)
   {
-	coef[0] = 0;
-	coef[1] = 0;
+  coef[0] = 0;
+  coef[1] = 0;
     m_Coeff->SetPoint(0,coef);
     pointSet->GetPointData(0, &pointValue);
     m_Coeff->SetPointData(0,pointValue);
@@ -131,12 +131,12 @@ SarParametricMapFunction<TInputImage, TCoordRep>
     this->GetPointSet()->GetPointData(i, &pointValue);
     b(i)  = pointValue;
     
-  	for(unsigned int pointId = 0 ; pointId < nbCoef ; ++pointId)
-  	{
-  		PointType  powerCoef;
-  		this->GetCoeff()->GetPoint(pointId, &powerCoef);
-  		a(i,pointId)  = vcl_pow(point[0],powerCoef[0]);
-  		a(i,pointId) *= vcl_pow(point[1],powerCoef[1]);   	
+    for(unsigned int pointId = 0; pointId < nbCoef; ++pointId)
+    {
+      PointType  powerCoef;
+      this->GetCoeff()->GetPoint(pointId, &powerCoef);
+      a(i,pointId)  = vcl_pow(point[0],powerCoef[0]);
+      a(i,pointId) *= vcl_pow(point[1],powerCoef[1]);     
     }
   }
   
@@ -147,13 +147,12 @@ SarParametricMapFunction<TInputImage, TCoordRep>
   // And solve it
   linearSystemSolver.minimize(bestParams);
 
-  for(unsigned int pointId = 0 ; pointId < nbCoef ; ++pointId)
+  for(unsigned int pointId = 0; pointId < nbCoef; ++pointId)
   {
-	this->GetCoeff()->SetPointData(pointId,bestParams[pointId]);
+  this->GetCoeff()->SetPointData(pointId,bestParams[pointId]);
   }
   m_IsInitialize = true;
 }
-
 
 
 /**
@@ -183,36 +182,35 @@ SarParametricMapFunction<TInputImage, TCoordRep>
 
   if (m_IsInitialize == false )
   {
-  	    	itkExceptionMacro(<< "must estimate parameters before evaluating ");
+          itkExceptionMacro(<< "must estimate parameters before evaluating ");
   }
 
   if(m_UsingClosestPointMethod == false )
   {
-  	
-  	for(unsigned int pointId = 0 ; pointId < m_Coeff->GetNumberOfPoints() ; ++pointId)
-  	{
-  		PointType  powerCoef;
-  		
-  		this->GetCoeff()->GetPoint(pointId, &powerCoef);
-  		this->GetCoeff()->GetPointData(pointId, &pointValue);
-  	
-  		result += pointValue * vcl_pow(index[0],powerCoef[0]) * vcl_pow(index[1],powerCoef[1]);
+    
+    for(unsigned int pointId = 0; pointId < m_Coeff->GetNumberOfPoints(); ++pointId)
+    {
+      PointType  powerCoef;
+      
+      this->GetCoeff()->GetPoint(pointId, &powerCoef);
+      this->GetCoeff()->GetPointData(pointId, &pointValue);
+    
+      result += pointValue * vcl_pow(index[0],powerCoef[0]) * vcl_pow(index[1],powerCoef[1]);
     }
   }  
   else
   {
-		bool isFound;
-		typename PointSetType::CoordRepType coord;
-		
-		//isFound = this->GetPointSet()->FindClosestPoint(&coord, &pointId);
-		//this->GetPointSet()->GetPointData(pointId, &pointValue);
-		//result = pointValue;
+    bool isFound;
+    typename PointSetType::CoordRepType coord;
+    
+    //isFound = this->GetPointSet()->FindClosestPoint(&coord, &pointId);
+    //this->GetPointSet()->GetPointData(pointId, &pointValue);
+    //result = pointValue;
   }
 
 
   return result;
 }
-
 
 
 /**
@@ -228,11 +226,11 @@ SarParametricMapFunction<TInputImage, TCoordRep>
   
   this->Superclass::PrintSelf(os, indent);
   
-  for(unsigned int i = 0 ; i < m_Coeff->GetNumberOfPoints() ; ++i)
+  for(unsigned int i = 0; i < m_Coeff->GetNumberOfPoints(); ++i)
   {
-	  m_Coeff->GetPoint(i,&point);
-	  m_Coeff->GetPointData(i,&pointValue);
-  	  os << indent << "Polynom coefficient: "  << point <<" with value : "<< pointValue << std::endl;
+    m_Coeff->GetPoint(i,&point);
+    m_Coeff->GetPointData(i,&pointValue);
+      os << indent << "Polynom coefficient: "  << point <<" with value : "<< pointValue << std::endl;
   } 
   
 }

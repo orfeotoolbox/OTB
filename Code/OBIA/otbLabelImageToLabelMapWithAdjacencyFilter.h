@@ -115,7 +115,7 @@ protected:
   /** LabelImageToLabelMapWithAdjacencyFilter needs the entire input be
    * available. Thus, it needs to provide an implementation of
    * GenerateInputRequestedRegion(). */
-  void GenerateInputRequestedRegion() ;
+  void GenerateInputRequestedRegion();
 
   /** LabelImageToLabelMapWithAdjacencyFilter will produce the entire output. */
   void EnlargeOutputRequestedRegion(itk::DataObject *itkNotUsed(output));
@@ -145,7 +145,7 @@ private:
   typename std::vector< OutputImagePointer > m_TemporaryImages;
   typename std::vector<AdjacencyMapType>     m_TemporaryAdjacencyMaps;
 
-} ; // end of class
+}; // end of class
 
 } // end namespace otb
   

@@ -63,7 +63,6 @@ public:
   typedef PointSetType::PointType                    PointType;
 
 
-
   virtual RealType   GetRadiometricCalibrationScale() const;
 
   virtual PointSetPointer GetRadiometricCalibrationAntennaPatternNewGain() const;

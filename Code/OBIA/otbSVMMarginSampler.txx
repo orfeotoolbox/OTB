@@ -49,7 +49,6 @@ SVMMarginSampler< TSample, TModel >
 }
 
 
-
 template< class TSample, class TModel >
 void
 SVMMarginSampler< TSample, TModel >
@@ -129,9 +128,9 @@ SVMMarginSampler< TSample, TModel >
     for(unsigned int i = 1; i<hdistances.Size();++i)
       {
       if(vcl_abs(hdistances[i])<minDistance)
-	{
-	minDistance = vcl_abs(hdistances[i]);
-	}
+  {
+  minDistance = vcl_abs(hdistances[i]);
+  }
       }
     // Keep index and min distance
     IndexAndDistanceType value(iter.GetInstanceIdentifier(),minDistance);

@@ -30,33 +30,33 @@ int otbSarRadiometricCalibrationFunctor(int argc, char * argv[])
   funct.SetNoise( 10.0);
   if( abs(funct.GetNoise() -10.0) > 0.0)
   {
-  	return false;
-  }	
+    return false;
+  }  
   funct.SetScale( 10.0);
   if( abs(funct.GetScale() -10.0) > 0.0)
   {
-  	return false;
-  }	
+    return false;
+  }  
   funct.SetAntennaPatternNewGain( 10.0);
   if( abs(funct.GetAntennaPatternNewGain() -10.0) > 0.0)
   {
-  	return false;
-  }	
+    return false;
+  }  
   funct.SetAntennaPatternOldGain( 10.0);
   if( abs(funct.GetAntennaPatternOldGain() -10.0) > 0.0)
   {
-  	return false;
-  }	
+    return false;
+  }  
   funct.SetIncidenceAngle( 10.0);
   if( abs(funct.GetIncidenceAngle() -10.0) > 0.0)
   {
-  	return false;
-  }	
+    return false;
+  }  
   funct.SetRangeSpreadLoss( 10.0);
   if( abs(funct.GetRangeSpreadLoss() -10.0) > 0.0)
   {
-  	return false;
-  }	
+    return false;
+  }  
   std::cout << "First  sigma : " << funct.operator ()( 0.) << std::endl;
   std::cout << "Second sigma : " << funct.operator ()( 1.) << std::endl;
 

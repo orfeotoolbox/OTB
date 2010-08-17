@@ -41,32 +41,32 @@ SarImageMetadataInterface::RealType
 SarImageMetadataInterface
 ::GetRadiometricCalibrationScale() const
 {
-	return static_cast<SarImageMetadataInterface::RealType>(1.0);
+  return static_cast<SarImageMetadataInterface::RealType>(1.0);
 }
 
 SarImageMetadataInterface::PointSetPointer
 SarImageMetadataInterface
 ::GetConstantValuePointSet(const RealType& value) const
 {
-	PointSetPointer pointSet  = PointSetType::New();
+  PointSetPointer pointSet  = PointSetType::New();
 
-	PointType  p0;
+  PointType  p0;
 
-	pointSet->Initialize();
+  pointSet->Initialize();
 
-	p0[0] = static_cast<unsigned int>(0);
-	p0[1] = static_cast<unsigned int>(0);
-	pointSet->SetPoint(0, p0);
-	pointSet->SetPointData(0, value);
+  p0[0] = static_cast<unsigned int>(0);
+  p0[1] = static_cast<unsigned int>(0);
+  pointSet->SetPoint(0, p0);
+  pointSet->SetPointData(0, value);
 
-	return pointSet;
+  return pointSet;
 }
 
 SarImageMetadataInterface::PointSetPointer
 SarImageMetadataInterface
 ::GetRadiometricCalibrationNoise() const
 {
-	return SarImageMetadataInterface::GetConstantValuePointSet(0.0);
+  return SarImageMetadataInterface::GetConstantValuePointSet(0.0);
 }
 
 
@@ -74,7 +74,7 @@ SarImageMetadataInterface::PointSetPointer
 SarImageMetadataInterface
 ::GetRadiometricCalibrationAntennaPatternNewGain() const
 {
-	return SarImageMetadataInterface::GetConstantValuePointSet(1.0);
+  return SarImageMetadataInterface::GetConstantValuePointSet(1.0);
 }
 
 
@@ -82,7 +82,7 @@ SarImageMetadataInterface::PointSetPointer
 SarImageMetadataInterface
 ::GetRadiometricCalibrationAntennaPatternOldGain() const
 {
-	return SarImageMetadataInterface::GetConstantValuePointSet(1.0);
+  return SarImageMetadataInterface::GetConstantValuePointSet(1.0);
 }
 
 
@@ -90,7 +90,7 @@ SarImageMetadataInterface::PointSetPointer
 SarImageMetadataInterface
 ::GetRadiometricCalibrationIncidenceAngle() const
 {
-	return SarImageMetadataInterface::GetConstantValuePointSet(CONST_PI_2);
+  return SarImageMetadataInterface::GetConstantValuePointSet(CONST_PI_2);
 }
 
 
@@ -98,7 +98,7 @@ SarImageMetadataInterface::PointSetPointer
 SarImageMetadataInterface
 ::GetRadiometricCalibrationRangeSpreadLoss() const
 {
-	return SarImageMetadataInterface::GetConstantValuePointSet(1.0);
+  return SarImageMetadataInterface::GetConstantValuePointSet(1.0);
 }
 
 
@@ -106,31 +106,31 @@ SarImageMetadataInterface::IndexType
 SarImageMetadataInterface
 ::GetConstantPolynomialDegree() const
 {
-	IndexType polynomialDegree;
-	polynomialDegree[0] = 0;
-	polynomialDegree[1] = 0;
-	return polynomialDegree;
+  IndexType polynomialDegree;
+  polynomialDegree[0] = 0;
+  polynomialDegree[1] = 0;
+  return polynomialDegree;
 }
 
 SarImageMetadataInterface::IndexType
 SarImageMetadataInterface
 ::GetRadiometricCalibrationNoisePolynomialDegree() const
 {
-	 return SarImageMetadataInterface::GetConstantPolynomialDegree();
+   return SarImageMetadataInterface::GetConstantPolynomialDegree();
 }
 
 SarImageMetadataInterface::IndexType
 SarImageMetadataInterface
 ::GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree() const
 {
-	 return SarImageMetadataInterface::GetConstantPolynomialDegree();
+   return SarImageMetadataInterface::GetConstantPolynomialDegree();
 }
 
 SarImageMetadataInterface::IndexType
 SarImageMetadataInterface
 ::GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree() const
 {
-	 return SarImageMetadataInterface::GetConstantPolynomialDegree();
+   return SarImageMetadataInterface::GetConstantPolynomialDegree();
 }
 
 
@@ -138,7 +138,7 @@ SarImageMetadataInterface::IndexType
 SarImageMetadataInterface
 ::GetRadiometricCalibrationIncidenceAnglePolynomialDegree() const
 {
-	 return SarImageMetadataInterface::GetConstantPolynomialDegree();
+   return SarImageMetadataInterface::GetConstantPolynomialDegree();
 }
 
 
@@ -146,9 +146,8 @@ SarImageMetadataInterface::IndexType
 SarImageMetadataInterface
 ::GetRadiometricCalibrationRangeSpreadLossPolynomialDegree() const
 {
-	 return SarImageMetadataInterface::GetConstantPolynomialDegree();
+   return SarImageMetadataInterface::GetConstantPolynomialDegree();
 }
-
 
 
 void
@@ -169,7 +168,6 @@ SarImageMetadataInterface
   os << indent << "GetRadiometricCalibrationIncidenceAnglePolynomialDegree:        " << this->GetRadiometricCalibrationIncidenceAnglePolynomialDegree() << std::endl;
   os << indent << "GetRadiometricCalibrationRangeSpreadLossPolynomialDegree:       " << this->GetRadiometricCalibrationRangeSpreadLossPolynomialDegree() << std::endl;
 }
-
 
 
 } // end namespace otb

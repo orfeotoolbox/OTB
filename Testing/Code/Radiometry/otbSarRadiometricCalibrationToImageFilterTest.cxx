@@ -25,7 +25,7 @@
 int otbSarRadiometricCalibrationToImageFilterTest(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef double                                                         			   RealType;
+  typedef double                                                                  RealType;
   typedef std::complex<RealType>                                                       PixelType;
   typedef otb::Image<PixelType, Dimension>                                             InputImageType;
   typedef otb::Image<RealType, Dimension>                                              OutputImageType;

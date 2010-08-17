@@ -76,7 +76,7 @@ WorldView2ImageMetadataInterface::GetSolarIrradiance() const
     std::vector<ossimString> bandNameList = keywordStringBandNameList.split(" ");
 
     outputValuesVariableLengthVector.SetSize(bandNameList.size());
-    for(unsigned int i = 0 ; i < bandNameList.size(); ++i)
+    for(unsigned int i = 0; i < bandNameList.size(); ++i)
       {
       double SolarIrradianceValue = 0.0;
       if(bandNameList[i] == "C")
@@ -492,7 +492,7 @@ WorldView2ImageMetadataInterface
     }
   else
     {
-    for(unsigned int i = 0 ; i < bandNameList.size(); ++i)
+    for(unsigned int i = 0; i < bandNameList.size(); ++i)
       {
       ossimString keywordString = "support_data." + bandNameList[i] + "_band_absCalFactor";
       ossimString keywordStringAbsCalFactor = kwl.find(keywordString);
@@ -506,7 +506,7 @@ WorldView2ImageMetadataInterface
     }
   else
     {
-    for(unsigned int i = 0 ; i < bandNameList.size(); ++i)
+    for(unsigned int i = 0; i < bandNameList.size(); ++i)
       {
       outputValuesVariableLengthVector[i] = 1.000 / outputValuesVariableLengthVector[i];
       }
@@ -605,7 +605,7 @@ WorldView2ImageMetadataInterface
     std::vector<ossimString> bandNameList = keywordStringBandNameList.split(" ");
 
     wavel.SetSize(bandNameList.size());
-    for(unsigned int i = 0 ; i < bandNameList.size(); ++i)
+    for(unsigned int i = 0; i < bandNameList.size(); ++i)
       {
       double waveValue = 0.0;
       if(bandNameList[i] == "C")
@@ -689,7 +689,7 @@ WorldView2ImageMetadataInterface
     std::vector<ossimString> bandNameList = keywordStringBandNameList.split(" ");
 
     wavel.SetSize(bandNameList.size());
-    for(unsigned int i = 0 ; i < bandNameList.size(); ++i)
+    for(unsigned int i = 0; i < bandNameList.size(); ++i)
       {
       double waveValue = 0.0;
       if(bandNameList[i] == "C")

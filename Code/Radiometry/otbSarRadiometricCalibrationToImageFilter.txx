@@ -44,12 +44,12 @@ SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>
 ::BeforeThreadedGenerateData()
 {
 
-	SarImageMetadataInterface::Pointer imageMetadataInterface = SarImageMetadataInterfaceFactory::CreateIMI(
+  SarImageMetadataInterface::Pointer imageMetadataInterface = SarImageMetadataInterfaceFactory::CreateIMI(
       this->GetInput()->GetMetaDataDictionary());
 
-	FunctionPointer function = FunctionType::New();
+  FunctionPointer function = FunctionType::New();
 
-	function->SetScale(imageMetadataInterface->GetRadiometricCalibrationScale());
+  function->SetScale(imageMetadataInterface->GetRadiometricCalibrationScale());
 
     ParametricFunctionPointer   noise;
     ParametricFunctionPointer   antennaPatternNewGain;

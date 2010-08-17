@@ -75,9 +75,9 @@ public:
 
 
   /** Datatype used for the evaluation */
-  typedef double                       												  RealType;
+  typedef double                                                 RealType;
   typedef otb::Functor::SarRadiometricCalibrationFunctor<RealType,RealType>           FunctorType;
-  typedef typename FunctorType::RealType											  FunctorRealType;
+  typedef typename FunctorType::RealType                        FunctorRealType;
 
   typedef otb::SarParametricMapFunction<InputImageType>               ParametricFunctionType;
   typedef typename ParametricFunctionType::Pointer                    ParametricFunctionPointer;  
@@ -106,7 +106,6 @@ public:
    * If the BufferedRegion has changed, user must call
    * SetInputImage again to update cached values. */
   virtual void SetInputImage( const InputImageType * ptr );
-
 
 
   /** Get/Set the Scale value */

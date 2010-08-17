@@ -52,7 +52,7 @@ public:
   /** Register one factory of this type  */
   static void RegisterOneFactory(void)
   {
-	  SarDefaultImageMetadataInterfaceFactory::Pointer DefaultIMIFactory = SarDefaultImageMetadataInterfaceFactory::New();
+    SarDefaultImageMetadataInterfaceFactory::Pointer DefaultIMIFactory = SarDefaultImageMetadataInterfaceFactory::New();
     itk::ObjectFactoryBase::RegisterFactory(DefaultIMIFactory);
   }
 

@@ -71,7 +71,7 @@ void NaryParserImageFilter<TImage>
   os << indent << "itk::NumericTraits<PixelType>::NonpositiveMin()  :  " 
                << itk::NumericTraits<PixelType>::NonpositiveMin()      << std::endl;
   os << indent << "itk::NumericTraits<PixelType>::max()  :             " 
-	       << itk::NumericTraits<PixelType>::max()                 << std::endl;
+         << itk::NumericTraits<PixelType>::max()                 << std::endl;
 }
 
 template <class TImage>
@@ -186,18 +186,18 @@ void NaryParserImageFilter<TImage>
 
   if((m_UnderflowCount != 0) || (m_OverflowCount!=0))
     otbWarningMacro(<< std::endl 
-		    << "The Following Parsed Expression  :  "
-		    << this->GetExpression()                                 << std::endl
-		    << "Generated " << m_UnderflowCount << " Underflow(s) " 
-		    << "And " << m_OverflowCount        << " Overflow(s) "   << std::endl
-		    << "The Parsed Expression, The Inputs And The Output "  
-		    << "Type May Be Incompatible !");		    
+        << "The Following Parsed Expression  :  "
+        << this->GetExpression()                                 << std::endl
+        << "Generated " << m_UnderflowCount << " Underflow(s) " 
+        << "And " << m_OverflowCount        << " Overflow(s) "   << std::endl
+        << "The Parsed Expression, The Inputs And The Output "  
+        << "Type May Be Incompatible !");        
 }
 
 template< typename TImage >
 void NaryParserImageFilter<TImage>
 ::ThreadedGenerateData(const ImageRegionType& outputRegionForThread,
-		       int threadId)
+           int threadId)
 {
   double value; 
   unsigned int j;

@@ -200,19 +200,19 @@ FineCorrelationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFiel
   for(int i=-(int)m_Radius[0];i<=(int)m_Radius[0];++i)
       {
       for(int j=-(int)m_Radius[1]; j<=(int)m_Radius[1];++j)
-	{
-	currentOffset[0]=i;
-	currentOffset[1]=j;
-	currentMovingOffset[0] = i * (int)scale;
-	currentMovingOffset[1] = j * (int)scale;
+  {
+  currentOffset[0]=i;
+  currentOffset[1]=j;
+  currentMovingOffset[0] = i * (int)scale;
+  currentMovingOffset[1] = j * (int)scale;
 
-	double vfixed = fixed[currentOffset];
-	double vmoving = moving[currentMovingOffset+offset];
+  double vfixed = fixed[currentOffset];
+  double vmoving = moving[currentMovingOffset+offset];
 
-	crossProductSum+=vfixed*vmoving;
-	fSquareSum += vfixed*vfixed;
-	mSquareSum += vmoving*vmoving;
-	}
+  crossProductSum+=vfixed*vmoving;
+  fSquareSum += vfixed*vfixed;
+  mSquareSum += vmoving*vmoving;
+  }
       }
 
   double res = 0;
@@ -289,16 +289,16 @@ FineCorrelationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFiel
       {
       // Avoid being out of bound
       if( (i>=-(int)m_SearchRadius[0] && i<=(int)m_SearchRadius[0])
-	  && (j>=-(int)m_SearchRadius[1] && i<=(int)m_SearchRadius[1]))
-	{
-	
-	// Update offset
-	offset[0]=i;
-	offset[1]=j;
-	
-	PairType p(correlMap[offset],offset);
-	pairVector.push_back(p);
-	}
+    && (j>=-(int)m_SearchRadius[1] && i<=(int)m_SearchRadius[1]))
+  {
+  
+  // Update offset
+  offset[0]=i;
+  offset[1]=j;
+  
+  PairType p(correlMap[offset],offset);
+  pairVector.push_back(p);
+  }
       }
     }
 
@@ -461,24 +461,24 @@ FineCorrelationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFiel
     for(int i =-(int)m_SearchRadius[0]; i<=(int)m_SearchRadius[0];++i)
       {
       for(int j=-(int)m_SearchRadius[1]; j<=(int)m_SearchRadius[1];++j)
-	{
-	// Update offset
-	offset[0]=i;
-	offset[1]=j;
+  {
+  // Update offset
+  offset[0]=i;
+  offset[1]=j;
 
-	// compute correlation
-	double correl = this->Correlation(fixedN,movingN,offset);
+  // compute correlation
+  double correl = this->Correlation(fixedN,movingN,offset);
 
         // Store in the map (for further refinenement)
-	correlationMap[offset]=correl;
+  correlationMap[offset]=correl;
 
-	// Check for maximum
-	if(correl > maxCorrel)
-	  {
-	  maxCorrel = correl;
-	  maxOffset = offset;
-	  }
-	}
+  // Check for maximum
+  if(correl > maxCorrel)
+    {
+    maxCorrel = correl;
+    maxOffset = offset;
+    }
+  }
       }
   
     // Perform LSQR QUADFIT refinement
@@ -498,25 +498,25 @@ FineCorrelationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFiel
 
       // Compute the correlation at each fine location
       for(int i =-(int)m_SubPixelPrecision+1; i<(int)m_SubPixelPrecision;++i)
-	{
-	for(int j=-(int)m_SubPixelPrecision+1; j<(int)m_SubPixelPrecision;++j)
-	  {
-	  // Update the fine offset
-	  fineOffset[0] = i;
-	  fineOffset[1] = j;
+  {
+  for(int j=-(int)m_SubPixelPrecision+1; j<(int)m_SubPixelPrecision;++j)
+    {
+    // Update the fine offset
+    fineOffset[0] = i;
+    fineOffset[1] = j;
 
-	  // Compute the correlation
-	  double correl = this->Correlation(fixedN,subPixelN,fineOffset,m_SubPixelPrecision);
-	  
-	  // If correlation is better
-	  if(correl > maxCorrel)
-	    {
-	    // Update values
-	    maxCorrel = correl;
-	    maxFineOffset = fineOffset;
-	    }
-	  }
-	}
+    // Compute the correlation
+    double correl = this->Correlation(fixedN,subPixelN,fineOffset,m_SubPixelPrecision);
+    
+    // If correlation is better
+    if(correl > maxCorrel)
+      {
+      // Update values
+      maxCorrel = correl;
+      maxFineOffset = fineOffset;
+      }
+    }
+  }
  
       // Finally, update deformation values
       deformationValue[0]=maxOffset[0] + (double)maxFineOffset[0]/(double)m_SubPixelPrecision;

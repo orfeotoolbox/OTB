@@ -32,7 +32,6 @@
 #include <string>
 
 
-
 namespace otb
 {
 /** \class ImageMetadataInterfaceBase
@@ -63,19 +62,19 @@ public:
   /** Set the image used to get the metadata */
   void SetImage (ImageType* image)
   {
-	  this->SetMetaDataDictionary(image->GetMetaDataDictionary());
+    this->SetMetaDataDictionary(image->GetMetaDataDictionary());
   }
 
   /** Set the MetadataDictionary  */
   void SetMetaDataDictionary(const MetaDataDictionaryType& dict)
   {
-	  m_MetaDataDictionary = dict;
+    m_MetaDataDictionary = dict;
   }
 
   /** Get the MetadataDictionary  */
   const MetaDataDictionaryType&  GetMetaDataDictionary() const
   {
-	  return m_MetaDataDictionary;
+    return m_MetaDataDictionary;
   }
 
   /** Get the projection coordinate system of the image. */

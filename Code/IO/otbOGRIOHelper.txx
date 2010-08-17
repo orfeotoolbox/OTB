@@ -608,15 +608,33 @@ unsigned int OGRIOHelper<TVectorData>
   //unsigned int m_Kept = 0;
   // Get the children list from the input node
   ChildrenListType children = source->GetChildrenList();
-//   std::cout << "Found " <<  children.size() << " children" << std::endl;
 
   // For each child
   for (typename ChildrenListType::iterator it = children.begin(); it != children.end(); ++it)
     {
     DataNodePointerType dataNode = (*it)->Get();
-//     std::cout << "Processing " << dataNode->GetNodeType() << " with Id: " << dataNode->GetNodeId() << std::endl;
     otbGenericMsgDebugMacro(<< "Type of node " << dataNode->GetNodeType() << " id" << dataNode->GetNodeId());
     ++m_Kept;
+
+    // Get the kwl
+    otb::VectorDataKeywordlist kwl;
+    itk::ExposeMetaData<VectorDataKeywordlist>(dataNode->GetMetaDataDictionary(),
+					       MetaDataKey::VectorDataKeywordlistKey,
+					       kwl);
+    // Create the field once
+    if(ogrCurrentLayer != NULL && ogrCurrentLayer->GetFeatureCount() == 0) 
+      {
+      // Take into account the fields stored in the 
+      // vectordatakeywordlist
+      for(unsigned int fieldIdx  = 0 ; fieldIdx < kwl.GetNumberOfFields(); fieldIdx++)
+	{
+	if( ogrCurrentLayer->CreateField(kwl.GetNthField(fieldIdx).first) != OGRERR_NONE )
+	  {
+	  exit( 1 );
+	  }
+	}
+      }
+
     switch (dataNode->GetNodeType())
       {
       case ROOT:
@@ -631,12 +649,13 @@ unsigned int OGRIOHelper<TVectorData>
           //itkExceptionMacro(<<"Failed to create layer "<<dataNode->GetNodeId());
           std::cout << "Failed to create layer " << dataNode->GetNodeId() << std::endl;
           }
+	std::cout <<"DOCUMENT ogrCurrentLayer->GetFeatureCount() " <<ogrCurrentLayer->GetFeatureCount() << std::endl;
         ProcessNodeWrite(*it, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
         break;
         }
       case FOLDER:
         {
-
+	std::cout <<"FOLDER ogrCurrentLayer->GetFeatureCount() " <<ogrCurrentLayer->GetFeatureCount() << std::endl;
         ProcessNodeWrite(*it, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
         break;
         }
@@ -656,15 +675,24 @@ unsigned int OGRIOHelper<TVectorData>
         if (ogrCollection == NULL)
           {
           OGRFeature *ogrFeature;
-
           ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
+	  
+	  // Add the fields to the features
+	  for(unsigned int i  = 0 ; i < kwl.GetNumberOfFields(); i++)
+	    {
+	    // Get the key of the Nth OGRFieldRefn 
+	    const char * key = kwl.GetNthField(i).first->GetNameRef();
+	    // Edit the value of the field and add it to the current feature
+	    ogrFeature->SetField(ogrFeature->GetFieldIndex(key) , kwl.GetFieldAsString(key).c_str());
+	    }
+	  
           ogrFeature->SetField("Name", dataNode->GetNodeId());
           ogrFeature->SetGeometry(&ogrPoint);
 
           if (ogrCurrentLayer->CreateFeature(ogrFeature) != OGRERR_NONE)
             {
             itkExceptionMacro(<< "Failed to create feature in shapefile.");
-//             std::cout << "Failed to create feature in shapefile."
+	    //std::cout << "Failed to create feature in shapefile."
             }
 
           OGRFeature::DestroyFeature(ogrFeature);
@@ -701,8 +729,17 @@ unsigned int OGRIOHelper<TVectorData>
         if (ogrCollection == NULL)
           {
           OGRFeature *ogrFeature;
-
           ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
+
+	  // Add the fields to the features
+	  for(unsigned int i  = 0 ; i < kwl.GetNumberOfFields(); i++)
+	    {
+	    // Get the key of the Nth OGRFieldRefn 
+	    const char * key = kwl.GetNthField(i).first->GetNameRef();
+	    // Edit the value of the field and add it to the current feature
+	    ogrFeature->SetField(ogrFeature->GetFieldIndex(key) , kwl.GetFieldAsString(key).c_str());
+	    }
+	  
           ogrFeature->SetField("Name", dataNode->GetNodeId());
           ogrFeature->SetGeometry(&ogrLine);
 
@@ -775,20 +812,27 @@ unsigned int OGRIOHelper<TVectorData>
 
         //Save it in the structure
         if (ogrCollection == NULL)
-          {
+          {	 
           OGRFeature *ogrFeature;
-
           ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
-          ogrFeature->SetField("Name", dataNode->GetNodeId());
+	  
+	  // Add the fields to the features
+	  for(unsigned int i  = 0 ; i < kwl.GetNumberOfFields(); i++)
+	    {
+	    // Get the key of the Nth OGRFieldRefn 
+	    const char * key = kwl.GetNthField(i).first->GetNameRef();
+	    // Edit the value of the field and add it to the current feature
+	    ogrFeature->SetField(ogrFeature->GetFieldIndex(key) , kwl.GetFieldAsString(key).c_str());
+	    }
+	  
           ogrFeature->SetGeometry(ogrPolygon);
-
+	  
           if (ogrCurrentLayer->CreateFeature(ogrFeature) != OGRERR_NONE)
             {
             itkExceptionMacro(<< "Failed to create feature in shapefile.");
             }
-
+	  
           OGRFeature::DestroyFeature(ogrFeature);
-
           }
         else
           {
@@ -799,7 +843,7 @@ unsigned int OGRIOHelper<TVectorData>
         break;
         }
       case FEATURE_MULTIPOINT:
-        {
+      {
         if (ogrCollection != NULL)
           {
           itkExceptionMacro(<< "Problem while creating multipoint.");
@@ -899,7 +943,6 @@ unsigned int OGRIOHelper<TVectorData>
 
   return m_Kept;
 }
-
 } // end namespace otb
 
 #endif
