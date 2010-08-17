@@ -67,52 +67,52 @@ WorldView2ImageMetadataInterface::GetSolarIrradiance() const
 
   if (keywordStringBId == ossimString("P"))
     {
-	    outputValuesVariableLengthVector.SetSize(1);
-	    outputValuesVariableLengthVector.Fill(1603.40);
+    outputValuesVariableLengthVector.SetSize(1);
+    outputValuesVariableLengthVector.Fill(1603.40);
     }
   else
     {
-	  ossimString keywordStringBandNameList = kwl.find("support_data.band_name_list");
-	  std::vector<ossimString> bandNameList = keywordStringBandNameList.split(" ");
+    ossimString keywordStringBandNameList = kwl.find("support_data.band_name_list");
+    std::vector<ossimString> bandNameList = keywordStringBandNameList.split(" ");
 
-	  outputValuesVariableLengthVector.SetSize(bandNameList.size());
-	  for(unsigned int i = 0 ; i < bandNameList.size(); ++i)
-	  {
-		  double SolarIrradianceValue = 0.0;
-		  if(bandNameList[i] == "C")
-		  {
-			  SolarIrradianceValue = 1777.10;
-		  }
-		  else if(bandNameList[i] == "B")
-		  {
-			  SolarIrradianceValue = 2015.68;
-		  }
-		  else if(bandNameList[i] == "G")
-		  {
-			  SolarIrradianceValue = 1829.06;
-		  }
-		  else if(bandNameList[i] == "Y")
-		  {
-			  SolarIrradianceValue = 1701.80;
-		  }
-		  else if(bandNameList[i] == "R")
-		  {
-			  SolarIrradianceValue = 1539.54;
-		  }
-		  else if(bandNameList[i] == "RE")
-		  {
-			  SolarIrradianceValue = 1345.03;
-		  }
-		  else if(bandNameList[i] == "N")
-		  {
-			  SolarIrradianceValue = 1045.50;
-		  }
-		  else if(bandNameList[i] == "N2")
-		  {
-			  SolarIrradianceValue = 883.20;
-		  }
-		  outputValuesVariableLengthVector[i] = SolarIrradianceValue;
-	  }
+    outputValuesVariableLengthVector.SetSize(bandNameList.size());
+    for(unsigned int i = 0 ; i < bandNameList.size(); ++i)
+      {
+      double SolarIrradianceValue = 0.0;
+      if(bandNameList[i] == "C")
+        {
+        SolarIrradianceValue = 1777.10;
+        }
+      else if(bandNameList[i] == "B")
+        {
+        SolarIrradianceValue = 2015.68;
+        }
+      else if(bandNameList[i] == "G")
+        {
+        SolarIrradianceValue = 1829.06;
+        }
+      else if(bandNameList[i] == "Y")
+        {
+        SolarIrradianceValue = 1701.80;
+        }
+      else if(bandNameList[i] == "R")
+        {
+        SolarIrradianceValue = 1539.54;
+        }
+      else if(bandNameList[i] == "RE")
+        {
+        SolarIrradianceValue = 1345.03;
+        }
+      else if(bandNameList[i] == "N")
+        {
+        SolarIrradianceValue = 1045.50;
+        }
+      else if(bandNameList[i] == "N2")
+        {
+        SolarIrradianceValue = 883.20;
+        }
+      outputValuesVariableLengthVector[i] = SolarIrradianceValue;
+      }
     }
 
   return outputValuesVariableLengthVector;
@@ -425,11 +425,11 @@ WorldView2ImageMetadataInterface
     }
   else if (keywordStringBId == ossimString("Multi"))
     {
-	  ossimString keywordStringBandNameList = kwl.find("support_data.band_name_list");
-	  std::vector<ossimString> bandNameList = keywordStringBandNameList.split(" ");
+    ossimString keywordStringBandNameList = kwl.find("support_data.band_name_list");
+    std::vector<ossimString> bandNameList = keywordStringBandNameList.split(" ");
 
-	  outputValuesVariableLengthVector.SetSize(bandNameList.size());
-	  outputValuesVariableLengthVector.Fill(0.0);
+    outputValuesVariableLengthVector.SetSize(bandNameList.size());
+    outputValuesVariableLengthVector.Fill(0.0);
     }
   else
     {
@@ -474,7 +474,7 @@ WorldView2ImageMetadataInterface
   ossimString keywordStringTDILevel = kwl.find("support_data.TDI_level");
   int         TDILevel = keywordStringTDILevel.toInt();
   if ( (keywordStringBId == ossimString("P") && TDILevel >64) ||
-		  (keywordStringBId == ossimString("P") && TDILevel < 8) )
+      (keywordStringBId == ossimString("P") && TDILevel < 8) )
     {
     itkExceptionMacro(<< "Invalid TDILevel " << TDILevel);
     }
@@ -492,27 +492,27 @@ WorldView2ImageMetadataInterface
     }
   else
     {
-	  for(unsigned int i = 0 ; i < bandNameList.size(); ++i)
-	  {
-		  ossimString keywordString = "support_data." + bandNameList[i] + "_band_absCalFactor";
-		  ossimString keywordStringAbsCalFactor = kwl.find(keywordString);
-		  outputValuesVariableLengthVector[i] = keywordStringAbsCalFactor.toDouble();
-	  }
+    for(unsigned int i = 0 ; i < bandNameList.size(); ++i)
+      {
+      ossimString keywordString = "support_data." + bandNameList[i] + "_band_absCalFactor";
+      ossimString keywordStringAbsCalFactor = kwl.find(keywordString);
+      outputValuesVariableLengthVector[i] = keywordStringAbsCalFactor.toDouble();
+      }
     }
 
- if (keywordStringBId == ossimString("P"))
+  if (keywordStringBId == ossimString("P"))
     {
     outputValuesVariableLengthVector[0] = 1.0 / outputValuesVariableLengthVector[0];
     }
   else
     {
-	  for(unsigned int i = 0 ; i < bandNameList.size(); ++i)
-	  {
-		  outputValuesVariableLengthVector[i] = 1.000 / outputValuesVariableLengthVector[i];
-	  }
+    for(unsigned int i = 0 ; i < bandNameList.size(); ++i)
+      {
+      outputValuesVariableLengthVector[i] = 1.000 / outputValuesVariableLengthVector[i];
+      }
     }
 
- return outputValuesVariableLengthVector;
+  return outputValuesVariableLengthVector;
 }
 
 double
@@ -601,47 +601,47 @@ WorldView2ImageMetadataInterface
     }
   else
     {
-	  ossimString keywordStringBandNameList = kwl.find("support_data.band_name_list");
-	  std::vector<ossimString> bandNameList = keywordStringBandNameList.split(" ");
+    ossimString keywordStringBandNameList = kwl.find("support_data.band_name_list");
+    std::vector<ossimString> bandNameList = keywordStringBandNameList.split(" ");
 
-	  wavel.SetSize(bandNameList.size());
-	  for(unsigned int i = 0 ; i < bandNameList.size(); ++i)
-	    {
-	    double waveValue = 0.0;
-	    if(bandNameList[i] == "C")
-	      {
-	      waveValue = 0.401;
-	      }
-	    else if(bandNameList[i] == "B")
-	      {
-	      waveValue = 0.447;
-	      }
-	    else if(bandNameList[i] == "G")
-	      {
-	      waveValue = 0.511;
-	      }
-	    else if(bandNameList[i] == "Y")
-	      {
-	      waveValue = 0.588;
-	      }
-		  else if(bandNameList[i] == "R")
-		  {
-			  waveValue = 0.629;
-		  }
-	    else if(bandNameList[i] == "RE")
-	      {
-	      waveValue = 0.704;
-	      }
-	    else if(bandNameList[i] == "N")
-	      {
-	      waveValue = 0.772;
-	      }
-	    else if(bandNameList[i] == "N2")
-	      {
-	      waveValue = 0.862;
-	      }
-	    wavel[i] = waveValue;
-	    }
+    wavel.SetSize(bandNameList.size());
+    for(unsigned int i = 0 ; i < bandNameList.size(); ++i)
+      {
+      double waveValue = 0.0;
+      if(bandNameList[i] == "C")
+        {
+        waveValue = 0.401;
+        }
+      else if(bandNameList[i] == "B")
+        {
+        waveValue = 0.447;
+        }
+      else if(bandNameList[i] == "G")
+        {
+        waveValue = 0.511;
+        }
+      else if(bandNameList[i] == "Y")
+        {
+        waveValue = 0.588;
+        }
+      else if(bandNameList[i] == "R")
+        {
+        waveValue = 0.629;
+        }
+      else if(bandNameList[i] == "RE")
+        {
+        waveValue = 0.704;
+        }
+      else if(bandNameList[i] == "N")
+        {
+        waveValue = 0.772;
+        }
+      else if(bandNameList[i] == "N2")
+        {
+        waveValue = 0.862;
+        }
+      wavel[i] = waveValue;
+      }
     }
 
   return wavel;
@@ -685,64 +685,48 @@ WorldView2ImageMetadataInterface
     }
   else
     {
-	  ossimString keywordStringBandNameList = kwl.find("support_data.band_name_list");
-	  std::vector<ossimString> bandNameList = keywordStringBandNameList.split(" ");
+    ossimString keywordStringBandNameList = kwl.find("support_data.band_name_list");
+    std::vector<ossimString> bandNameList = keywordStringBandNameList.split(" ");
 
-	  wavel.SetSize(bandNameList.size());
-	  for(unsigned int i = 0 ; i < bandNameList.size(); ++i)
-	    {
-	    double waveValue = 0.0;
-	    if(bandNameList[i] == "C")
-	      {
-	      waveValue = 0.453;
-	      }
-	    else if(bandNameList[i] == "B")
-	      {
-	      waveValue = 0.581;
-	      }
-	    else if(bandNameList[i] == "G")
-	      {
-	      waveValue = 0.581;
-	      }
-	    else if(bandNameList[i] == "Y")
-	      {
-	      waveValue = 0.627;
-		  }
-		  else if(bandNameList[i] == "R")
-		  {
-			  waveValue = 0.689;
-	      }
-	    else if(bandNameList[i] == "RE")
-	      {
-	      waveValue = 0.744;
-	      }
-	    else if(bandNameList[i] == "N")
-	      {
-	      waveValue = 0.890;
-	      }
-	    else if(bandNameList[i] == "N2")
-	      {
-	      waveValue = 0.954;
-	      }
-	    wavel[i] = waveValue;
-	    }
-		  }
-		  else if(bandNameList[i] == "RE")
-		  {
-			  waveValue = 0.744;
-		  }
-		  else if(bandNameList[i] == "N")
-		  {
-			  waveValue = 0.890;
-		  }
-		  else if(bandNameList[i] == "N2")
-		  {
-			  waveValue = 0.954;
-		  }
-		  wavel[i] = waveValue;
-	  }
+    wavel.SetSize(bandNameList.size());
+    for(unsigned int i = 0 ; i < bandNameList.size(); ++i)
+      {
+      double waveValue = 0.0;
+      if(bandNameList[i] == "C")
+        {
+        waveValue = 0.453;
+        }
+      else if(bandNameList[i] == "B")
+        {
+        waveValue = 0.581;
+        }
+      else if(bandNameList[i] == "G")
+        {
+        waveValue = 0.581;
+        }
+      else if(bandNameList[i] == "Y")
+        {
+        waveValue = 0.627;
+        }
+      else if(bandNameList[i] == "R")
+        {
+        waveValue = 0.689;
+        }
+      else if(bandNameList[i] == "RE")
+        {
+        waveValue = 0.744;
+        }
+      else if(bandNameList[i] == "N")
+        {
+        waveValue = 0.890;
+        }
+      else if(bandNameList[i] == "N2")
+        {
+        waveValue = 0.954;
+        }
+      wavel[i] = waveValue;
+      }
     }
-
   return wavel;
 }
 
