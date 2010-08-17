@@ -36,24 +36,24 @@ PersistentCompareImageFilter<TInputImage>
 ::PersistentCompareImageFilter() : m_SquareOfDifferences(1), m_AbsoluteValueOfDifferences(1),  
  m_ThreadMinRef(1), m_ThreadMaxRef(1), m_Count(1)
 {
-	this->SetNumberOfRequiredInputs( 2 );
-	// first output is a copy of the image, DataObject created by
-	// superclass
+  this->SetNumberOfRequiredInputs( 2 );
+  // first output is a copy of the image, DataObject created by
+  // superclass
 
-	// allocate the data objects for the outputs which are
-	// just decorators around real types
-	for (int i = 1; i < 4; ++i)
-	{
-		typename RealObjectType::Pointer output
-		= static_cast<RealObjectType*>(this->MakeOutput(i).GetPointer());
-		this->itk::ProcessObject::SetNthOutput(i, output.GetPointer());
-	}
+  // allocate the data objects for the outputs which are
+  // just decorators around real types
+  for (int i = 1; i < 4; ++i)
+  {
+    typename RealObjectType::Pointer output
+    = static_cast<RealObjectType*>(this->MakeOutput(i).GetPointer());
+    this->itk::ProcessObject::SetNthOutput(i, output.GetPointer());
+  }
 
-	this->GetPSNROutput()->Set(itk::NumericTraits<RealType>::max());
-	this->GetMSEOutput()->Set(itk::NumericTraits<RealType>::max());
-	this->GetMAEOutput()->Set(itk::NumericTraits<RealType>::max());
+  this->GetPSNROutput()->Set(itk::NumericTraits<RealType>::max());
+  this->GetMSEOutput()->Set(itk::NumericTraits<RealType>::max());
+  this->GetMAEOutput()->Set(itk::NumericTraits<RealType>::max());
 
-	this->Reset();
+  this->Reset();
 }
 
 /**
