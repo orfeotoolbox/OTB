@@ -42,7 +42,7 @@ SVMModel<TValue, TLabel>::SVMModel()
   this->SetC(1);
   this->SetEpsilon(1e-3);
   this->SetP(0.1);
-  this->DoShrinking(1);
+  this->DoShrinking(true);
   this->DoProbabilityEstimates(true);
 
   m_Parameters.kernel_generic = NULL;
@@ -354,19 +354,11 @@ SVMModel<TValue, TLabel>::EvaluateLabel(const MeasurementType& measure) const
     }
 
   // Check probability prediction
-  bool predict_probability = 1;
+  bool predict_probability = svm_check_probability_model(m_Model);
 
-  if (svm_check_probability_model(m_Model) == 0)
+  if (this->GetSVMType() == ONE_CLASS)
     {
-    if (this->GetSVMType() == ONE_CLASS)
-      {
-      predict_probability = 0;
-      }
-    else
-      {
-      throw itk::ExceptionObject(__FILE__, __LINE__,
-                                 "Model does not support probabiliy estimates", ITK_LOCATION);
-      }
+    predict_probability = 0;
     }
 
   // Get type and number of classes
