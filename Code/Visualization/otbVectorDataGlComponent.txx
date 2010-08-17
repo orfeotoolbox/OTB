@@ -141,10 +141,10 @@ VectorDataGlComponent<TVectorData>
     {
     // Take into account pixel spacing and origin
     PointType spacePoint = vIt.Value();
-    spacePoint[0] *= m_Spacing[0];
-    spacePoint[1] *= m_Spacing[1];
-    spacePoint[0] += m_Origin[0];
-    spacePoint[1] += m_Origin[1];
+    spacePoint[0] -= m_Origin[0];
+    spacePoint[1] -= m_Origin[1];
+    spacePoint[0] /= m_Spacing[0];
+    spacePoint[1] /= m_Spacing[1];
 
     // Transform to a screen point
     PointType screenPoint = transform->TransformPoint(spacePoint);
@@ -180,12 +180,12 @@ VectorDataGlComponent<TVectorData>
   while (vIt != extRing->GetVertexList()->End())
     {
     // Take into account pixel spacing and origin
-    PointType spacePoint = vIt.Value();
-    spacePoint[0] *= m_Spacing[0];
-    spacePoint[1] *= m_Spacing[1];
-    spacePoint[0] += m_Origin[0];
-    spacePoint[1] += m_Origin[1];
 
+    PointType spacePoint = vIt.Value();
+    spacePoint[0] -= m_Origin[0];
+    spacePoint[1] -= m_Origin[1];
+    spacePoint[0] /= m_Spacing[0];
+    spacePoint[1] /= m_Spacing[1];
     // Transform to a screen point
     PointType screenPoint = transform->TransformPoint(spacePoint);
 
@@ -220,10 +220,10 @@ VectorDataGlComponent<TVectorData>
       {
       // Take into account pixel spacing and origin
       PointType spacePoint = vIt.Value();
-      spacePoint[0] *= m_Spacing[0];
-      spacePoint[1] *= m_Spacing[1];
-      spacePoint[0] += m_Origin[0];
-      spacePoint[1] += m_Origin[1];
+      spacePoint[0] -= m_Origin[0];
+      spacePoint[1] -= m_Origin[1];
+      spacePoint[0] /= m_Spacing[0];
+      spacePoint[1] /= m_Spacing[1];
 
       // Transform to a screen point
       PointType screenPoint = transform->TransformPoint(spacePoint);

@@ -454,7 +454,7 @@ FormosatImageMetadataInterface
   VariableLengthVectorType outputValuesVariableLengthVector;
   outputValuesVariableLengthVector.SetSize(outputValues.size());
   outputValuesVariableLengthVector.Fill(0);
-  //In the case of SPOT, the bands are in a different order:
+  //In the case of FORMOSAT-2, the bands are in a different order:
   // XS3, XS2. XS1, SWIR in the tif file.
 
   if (outputValues.size() == 1)
