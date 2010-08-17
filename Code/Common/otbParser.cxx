@@ -28,7 +28,6 @@ void Parser::PrintSelf(std::ostream& os, itk::Indent indent) const
 }
 
 
-
 //----------  User Defined Function Definitions  ----------//BEGIN
 Parser::ValueType Parser::NDVI(Parser::ValueType r, Parser::ValueType niri)
 {
@@ -39,7 +38,6 @@ Parser::ValueType Parser::NDVI(Parser::ValueType r, Parser::ValueType niri)
   return (niri-r)/(niri+r);
 }
 //----------  User Defined Function Definitions  ----------//END
-
 
 
 Parser::Parser()
@@ -114,12 +112,12 @@ const std::string& Parser::GetExpr() const
 void Parser::ExceptionHandler(ParserType::ExceptionType &e)
 {
   itkExceptionMacro(                                     << std::endl
-		    << "Message:     "   << e.GetMsg()   << std::endl
-		    << "Formula:     "   << e.GetExpr()  << std::endl
-		    << "Token:       "   << e.GetToken() << std::endl
-		    << "Position:    "   << e.GetPos()   << std::endl
-							 << std::endl);
-//		    << "Errc:        "   << e.GetCode()  << std::endl);
+        << "Message:     "   << e.GetMsg()   << std::endl
+        << "Formula:     "   << e.GetExpr()  << std::endl
+        << "Token:       "   << e.GetToken() << std::endl
+        << "Position:    "   << e.GetPos()   << std::endl
+               << std::endl);
+//        << "Errc:        "   << e.GetCode()  << std::endl);
 }
 
 

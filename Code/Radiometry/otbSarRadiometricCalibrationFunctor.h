@@ -46,95 +46,95 @@ public:
 
   inline TOutput operator ()(const TInput& value) const
   {
-	RealType sigma;
-	RealType digitalNumber;
-	digitalNumber = static_cast<RealType> (value);
-	digitalNumber = vcl_abs(digitalNumber);
-	sigma  = m_Scale * (digitalNumber * digitalNumber) - m_Noise;
-	sigma *= vcl_sin(m_IncidenceAngle);
-	sigma *= m_AntennaPatternOldGain;
-	sigma /= m_AntennaPatternNewGain;
-	sigma *= m_RangeSpreadLoss;
-	if(sigma < 0.0 )
-	{
-		sigma = 0.0;
-	}
+  RealType sigma;
+  RealType digitalNumber;
+  digitalNumber = static_cast<RealType> (value);
+  digitalNumber = vcl_abs(digitalNumber);
+  sigma  = m_Scale * (digitalNumber * digitalNumber) - m_Noise;
+  sigma *= vcl_sin(m_IncidenceAngle);
+  sigma *= m_AntennaPatternOldGain;
+  sigma /= m_AntennaPatternNewGain;
+  sigma *= m_RangeSpreadLoss;
+  if(sigma < 0.0 )
+  {
+    sigma = 0.0;
+  }
 
-	OutputType result;
-	result = static_cast<OutputType>(sigma); 
+  OutputType result;
+  result = static_cast<OutputType>(sigma); 
     return result;
   }
 
   /** Set offset method */
   void SetNoise(RealType value)
   {
-  	m_Noise = value;
+    m_Noise = value;
   }
 
   /** Get offset method */
   RealType GetNoise() const
   {
-  	return m_Noise;
+    return m_Noise;
   }
 
   /** Set scale method */
   void SetScale(RealType value)
   {
-  	m_Scale = value;
+    m_Scale = value;
   }
 
   /** Get scale method */
   RealType GetScale() const
   {
-  	return m_Scale;
+    return m_Scale;
   }
 
   /** Set antennaPatternNewGain method */
   void SetAntennaPatternNewGain(RealType value)
   {
-  	m_AntennaPatternNewGain = value;
+    m_AntennaPatternNewGain = value;
   }
 
   /** Get antennaPatternNewGain method */
   RealType GetAntennaPatternNewGain() const
   {
-  	return m_AntennaPatternNewGain;
+    return m_AntennaPatternNewGain;
   }
 
   /** Set antennaPatternOldGain method */
   void SetAntennaPatternOldGain(RealType value)
   {
-  	m_AntennaPatternOldGain = value;
+    m_AntennaPatternOldGain = value;
   }
 
   /** Get antennaPatternOldGain method */
   RealType GetAntennaPatternOldGain() const
   {
-  	return m_AntennaPatternOldGain;
+    return m_AntennaPatternOldGain;
   }
   
   /** Set incidenceAngle method */
   void SetIncidenceAngle(RealType value)
   {
-  	m_IncidenceAngle = value;
+    m_IncidenceAngle = value;
   }
 
   /** Get incidenceAngle method */
   RealType GetIncidenceAngle() const
   {
-  	return m_IncidenceAngle;
+    return m_IncidenceAngle;
   }
 
   /** Set rangeSpreadLoss method */
   void SetRangeSpreadLoss(RealType value)
   {
-  	m_RangeSpreadLoss = value;
+    m_RangeSpreadLoss = value;
   }
 
   /** Get scale method */
   RealType GetRangeSpreadLoss() const
   {
-  	return m_RangeSpreadLoss;
+    return m_RangeSpreadLoss;
   }
 
 private:
@@ -149,9 +149,9 @@ private:
 template<class TInput, class TOutput>
 SarRadiometricCalibrationFunctor<TInput,TOutput>
 ::SarRadiometricCalibrationFunctor():
- 		m_Noise(0.0),
- 		m_Scale(1.0),
- 		m_IncidenceAngle(CONST_PI_2),
+     m_Noise(0.0),
+     m_Scale(1.0),
+     m_IncidenceAngle(CONST_PI_2),
       m_AntennaPatternOldGain(1.0),
       m_AntennaPatternNewGain(1.0),
       m_RangeSpreadLoss(1.0)

@@ -63,10 +63,10 @@ OpticalImageMetadataInterfaceFactory
   for (std::list<OpticalImageMetadataInterfacePointerType>::iterator k = possibleIMI.begin();
        k != possibleIMI.end(); ++k)
     {
- 	(*k)->SetMetaDataDictionary(dict);
+   (*k)->SetMetaDataDictionary(dict);
     if ((*k)->CanRead())
       {
-    	return *k;
+      return *k;
       }
     }
 

@@ -321,7 +321,6 @@ ImageMetadataInterfaceBase::GetImageKeywordlist() const
 }
 
 
-
 std::string
 ImageMetadataInterfaceBase::GetSensorID() const
 {
@@ -514,11 +513,11 @@ ImageMetadataInterfaceBase
   os << indent << "GetProjectionRef:   " <<  this->GetProjectionRef() << std::endl;
   os << indent << "GetGCPProjection:   " << this->GetGCPProjection( ) << std::endl;
   os << indent << "GetGCPCount:        " << this->GetGCPCount( ) << std::endl;
-  for(unsigned int gcpIdx = 0 ; gcpIdx  < this->GetGCPCount() ; ++ gcpIdx)
+  for(unsigned int gcpIdx = 0; gcpIdx  < this->GetGCPCount(); ++ gcpIdx)
   {
-	  //os << indent << "GetGCPs:            " << this->GetGCPs(gcpIdx) << std::endl;
-	  os << indent << "GetGCPId:           " << this->GetGCPId(gcpIdx) << std::endl;
-	  os << indent << "GetGCPInfo:         " << this->GetGCPInfo(gcpIdx) << std::endl;
+    //os << indent << "GetGCPs:            " << this->GetGCPs(gcpIdx) << std::endl;
+    os << indent << "GetGCPId:           " << this->GetGCPId(gcpIdx) << std::endl;
+    os << indent << "GetGCPInfo:         " << this->GetGCPInfo(gcpIdx) << std::endl;
   }
   //os << indent << "GetGeoTransform:    " << this->GetGeoTransform( ) << std::endl;
   //os << indent << "GetUpperLeftCorner: " << this->GetUpperLeftCorner( ) << std::endl;

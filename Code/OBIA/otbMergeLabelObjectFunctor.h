@@ -83,19 +83,19 @@ public:
       {
       // Test if next line overlaps with current
       if(LinesOverlap(linesOut2.back(),*lit))
- 	{
- 	// Merge lines
- 	LineType mline = MergesLines(linesOut2.back(),*lit);
-	
- 	// Replace the last line by the merged line
- 	linesOut2.pop_back();
- 	linesOut2.push_back(mline);
-	}
+   {
+   // Merge lines
+   LineType mline = MergesLines(linesOut2.back(),*lit);
+  
+   // Replace the last line by the merged line
+   linesOut2.pop_back();
+   linesOut2.push_back(mline);
+  }
       else
- 	{
+   {
         // Push back the new line
-	linesOut2.push_back(*lit);
- 	}
+  linesOut2.push_back(*lit);
+   }
       
       // fetch next line
       ++lit;

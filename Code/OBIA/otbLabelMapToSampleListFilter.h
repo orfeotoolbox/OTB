@@ -96,8 +96,8 @@ private:
  */
 
 template <class TInputLabelMap, class TOutputSampleList, 
-	  class TMeasurementFunctor = Functor::AttributesMapMeasurementFunctor
-	  <typename TInputLabelMap::LabelObjectType, typename TOutputSampleList::MeasurementVectorType > >
+    class TMeasurementFunctor = Functor::AttributesMapMeasurementFunctor
+    <typename TInputLabelMap::LabelObjectType, typename TOutputSampleList::MeasurementVectorType > >
 class ITK_EXPORT LabelMapToSampleListFilter : public itk::Object
 {
 public:

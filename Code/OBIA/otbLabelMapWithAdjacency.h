@@ -167,14 +167,14 @@ public:
       {
       // Check if label2 is in the adjacent labels
       if(it->second.count(label2))
-	{
- 	//std::cout<<"label "<<label2<<" found in adjancecy table of label "<<it->first<<", replacing by label "<<label1<<std::endl;
-	it->second.erase(label2);
-	it->second.insert(label1);
-	m_AdjacencyMap[label1].insert(it->first);
- 	//std::cout<<"Checking new occurences of label "<<label2<<": "<<it->second.count(label2)<<std::endl;
- 	//std::cout<<"Checking new occurences of label "<<label1<<": "<<it->second.count(label1)<<std::endl;
-	}
+  {
+   //std::cout<<"label "<<label2<<" found in adjancecy table of label "<<it->first<<", replacing by label "<<label1<<std::endl;
+  it->second.erase(label2);
+  it->second.insert(label1);
+  m_AdjacencyMap[label1].insert(it->first);
+   //std::cout<<"Checking new occurences of label "<<label2<<": "<<it->second.count(label2)<<std::endl;
+   //std::cout<<"Checking new occurences of label "<<label1<<": "<<it->second.count(label1)<<std::endl;
+  }
       }
     
     // Remove label object corresponding to label2
@@ -201,16 +201,16 @@ public:
 
       // Update the remaining label pairs
       for(lpit2 = lpit1+1; lpit2 != internalLabelPairs.end();++lpit2)
-	{
-	if(lpit2->first == lpit1->second)
-	  {
-	  lpit2->first = lpit1->first;
-	  }
-	if(lpit2->second == lpit1->second)
-	  {
-	  lpit2->second = lpit1->first;
-	  }
-	}
+  {
+  if(lpit2->first == lpit1->second)
+    {
+    lpit2->first = lpit1->first;
+    }
+  if(lpit2->second == lpit1->second)
+    {
+    lpit2->second = lpit1->first;
+    }
+  }
       }    
   }
 

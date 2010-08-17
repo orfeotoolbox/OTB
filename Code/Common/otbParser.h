@@ -98,7 +98,6 @@ private:
   //----------  User Defined Functions  ----------//END
 
 
-
 };// end class
 
 }//end namespace otb
