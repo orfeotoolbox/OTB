@@ -500,10 +500,11 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
 
   // Set the attributes
   PolygonFunctorType polygonFunctor;
+  SimplifyPolygonFunctorType simplifyFunctor;
   polygonFunctor.SetStartIndex(m_LabelImage->GetLargestPossibleRegion().GetIndex());
   polygonFunctor.SetOrigin(m_LabelImage->GetOrigin());
   polygonFunctor.SetSpacing(m_LabelImage->GetSpacing());
-  typename PolygonType::Pointer polygon = polygonFunctor(lo);
+  typename PolygonType::Pointer polygon = simplifyFunctor(polygonFunctor(lo));
   lo->SetPolygon(polygon);
 
   // Physical size

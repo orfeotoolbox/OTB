@@ -27,6 +27,8 @@
 #include "otbPolygon.h"
 #include "otbLabelObjectToPolygonFunctor.h"
 #include "otbFlusserPathFunction.h"
+#include "otbSimplifyPathFunctor.h"
+
 
 namespace otb
 {
@@ -54,8 +56,10 @@ public:
   /** Flusser moments typedef */
   typedef typename TLabelObject::PolygonType PolygonType;
   typedef Functor::LabelObjectToPolygonFunctor
-  <LabelObjectType, PolygonType>              PolygonFunctorType;
+  <LabelObjectType, PolygonType>           PolygonFunctorType;
   typedef FlusserPathFunction<PolygonType> FlusserPathFunctionType;
+  typedef SimplifyPathFunctor<PolygonType,
+                              PolygonType> SimplifyPolygonFunctorType;
 
   /** Perimeter calculator */
   typedef itk::LabelPerimeterEstimationCalculator
