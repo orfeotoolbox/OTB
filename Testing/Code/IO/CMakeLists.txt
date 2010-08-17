@@ -2573,13 +2573,13 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(ioTuDefaultImageMetadataInterfaceFactoryNew ${IO_TESTS20}
         otbDefaultImageMetadataInterfaceFactoryNew )
 
-ADD_TEST(ioTuopticalDefaultImageMetadataInterfaceFactoryNew ${IO_TESTS20}
+ADD_TEST(ioTuOpticalDefaultImageMetadataInterfaceFactoryNew ${IO_TESTS20}
         otbOpticalDefaultImageMetadataInterfaceFactoryNew )
 
 ADD_TEST(ioTuSarDefaultImageMetadataInterfaceFactoryNew ${IO_TESTS20}
         otbSarDefaultImageMetadataInterfaceFactoryNew )
 
-ADD_TEST(ioTubSarDefaultImageMetadataInterfaceNew ${IO_TESTS20}
+ADD_TEST(ioTuSarDefaultImageMetadataInterfaceNew ${IO_TESTS20}
         otbSarDefaultImageMetadataInterfaceNew )
 
 
