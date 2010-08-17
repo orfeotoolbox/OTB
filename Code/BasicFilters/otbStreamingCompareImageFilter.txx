@@ -9,13 +9,10 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-Some parts of this code are derived from ITK. See ITKCopyright.txt
-for details.
 
-
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.  See the above copyright notices for more information.
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+  PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #ifndef __otbStreamingCompareImageFilter_txx
@@ -248,8 +245,8 @@ PersistentCompareImageFilter<TInputImage>
   mae = (count != 0) ? absoluteValueOfDifferences / static_cast<RealType>(count) : 0.;
   
   //compute psnr
-  psnr = (vcl_abs(mse) > 0.0000000001 && (maximumRef - minimumRef) > 0.0000000001 ) ? 10. * vcl_log10( ( ( maximumRef - minimumRef ) * ( maximumRef - minimumRef ) ) / mse ) : 0.;
-  // Set the outputs
+  psnr = (vcl_abs(mse)>0.0000000001 && (maximumRef-minimumRef)>0.0000000001) ? 10.*vcl_log10(((maximumRef-minimumRef)*(maximumRef-minimumRef))/mse):0.;
+  // Set the output
   this->GetMSEOutput()->Set(mse);
   this->GetMAEOutput()->Set(mae);
   this->GetPSNROutput()->Set(psnr);
@@ -294,7 +291,7 @@ PersistentCompareImageFilter<TInputImage>
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   RealType  realValue1, realValue2;
-  PixelType value1,value2 ;
+  PixelType value1,value2;
   
   itk::ImageRegionConstIterator<TInputImage> it1(inputPtr1, outputRegionForThread);
   itk::ImageRegionConstIterator<TInputImage> it2(inputPtr2, outputRegionForThread);
