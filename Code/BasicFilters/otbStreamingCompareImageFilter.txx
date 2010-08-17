@@ -9,13 +9,10 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-Some parts of this code are derived from ITK. See ITKCopyright.txt
-for details.
 
-
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.  See the above copyright notices for more information.
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+  PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #ifndef __otbStreamingCompareImageFilter_txx
@@ -36,24 +33,24 @@ PersistentCompareImageFilter<TInputImage>
 ::PersistentCompareImageFilter() : m_SquareOfDifferences(1), m_AbsoluteValueOfDifferences(1),  
  m_ThreadMinRef(1), m_ThreadMaxRef(1), m_Count(1)
 {
-	this->SetNumberOfRequiredInputs( 2 );
-	// first output is a copy of the image, DataObject created by
-	// superclass
+  this->SetNumberOfRequiredInputs( 2 );
+  // first output is a copy of the image, DataObject created by
+  // superclass
 
-	// allocate the data objects for the outputs which are
-	// just decorators around real types
-	for (int i = 1; i < 4; ++i)
-	{
-		typename RealObjectType::Pointer output
-		= static_cast<RealObjectType*>(this->MakeOutput(i).GetPointer());
-		this->itk::ProcessObject::SetNthOutput(i, output.GetPointer());
-	}
+  // allocate the data objects for the outputs which are
+  // just decorators around real types
+  for (int i = 1; i < 4; ++i)
+  {
+    typename RealObjectType::Pointer output
+    = static_cast<RealObjectType*>(this->MakeOutput(i).GetPointer());
+    this->itk::ProcessObject::SetNthOutput(i, output.GetPointer());
+  }
 
-	this->GetPSNROutput()->Set(itk::NumericTraits<RealType>::max());
-	this->GetMSEOutput()->Set(itk::NumericTraits<RealType>::max());
-	this->GetMAEOutput()->Set(itk::NumericTraits<RealType>::max());
+  this->GetPSNROutput()->Set(itk::NumericTraits<RealType>::max());
+  this->GetMSEOutput()->Set(itk::NumericTraits<RealType>::max());
+  this->GetMAEOutput()->Set(itk::NumericTraits<RealType>::max());
 
-	this->Reset();
+  this->Reset();
 }
 
 /**
@@ -248,8 +245,8 @@ PersistentCompareImageFilter<TInputImage>
   mae = (count != 0) ? absoluteValueOfDifferences / static_cast<RealType>(count) : 0.;
   
   //compute psnr
-  psnr = (vcl_abs(mse) > 0.0000000001 && (maximumRef - minimumRef) > 0.0000000001 ) ? 10. * vcl_log10( ( ( maximumRef - minimumRef ) * ( maximumRef - minimumRef ) ) / mse ) : 0.;
-  // Set the outputs
+  psnr = (vcl_abs(mse)>0.0000000001 && (maximumRef-minimumRef)>0.0000000001) ? 10.*vcl_log10(((maximumRef-minimumRef)*(maximumRef-minimumRef))/mse):0.;
+  // Set the output
   this->GetMSEOutput()->Set(mse);
   this->GetMAEOutput()->Set(mae);
   this->GetPSNROutput()->Set(psnr);
@@ -294,7 +291,7 @@ PersistentCompareImageFilter<TInputImage>
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   RealType  realValue1, realValue2;
-  PixelType value1,value2 ;
+  PixelType value1,value2;
   
   itk::ImageRegionConstIterator<TInputImage> it1(inputPtr1, outputRegionForThread);
   itk::ImageRegionConstIterator<TInputImage> it2(inputPtr2, outputRegionForThread);
