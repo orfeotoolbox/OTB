@@ -213,6 +213,9 @@ IF(OTB_USE_EXTERNAL_ITK)
         MESSAGE(FATAL_ERROR
                   "Cannot build OTB project without ITK.  Please set ITK_DIR or set OTB_USE_EXTERNAL_ITK OFF to use INTERNAL ITK set on OTB/Utilities repository.")
   ENDIF(ITK_FOUND)
+  #Build shared libraries for otb
+  #By default, if otb use an external itk import the option from the ITK configuration
+  SET(BUILD_SHARED_LIBS ${ITK_BUILD_SHARED})
 ELSE(OTB_USE_EXTERNAL_ITK)
 # Required to have proper itk headers at first run
 SET(ITK_SOURCE_DIR ${OTB_SOURCE_DIR}/Utilities/ITK)
