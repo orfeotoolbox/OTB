@@ -2196,10 +2196,10 @@ ADD_TEST(ioTvOpticalImageMetadataInterfaceTest_WV2Pan ${IO_TESTS18}
 )
 ADD_TEST(ioTvOpticalImageMetadataInterfaceTest_WV2Mul ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_WV2RomeMul.txt
-                         ${TEMP}/ioTvImageMetadataInterfaceWV2Base_RomeMul.txt
+                         ${TEMP}/ioTvOpticalImageMetadataInterface_WV2Mul.txt
         otbOpticalImageMetadataInterfaceTest
         ${LARGEDATA}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL/09DEC10103019-M2AS-052298844010_01_P001.TIF
-        ${TEMP}/ioTvOpticalImageMetadataInterface_WV2RomeMul.txt
+        ${TEMP}/ioTvOpticalImageMetadataInterface_WV2Mul.txt
 )
 ADD_TEST(ioTvOpticalImageMetadataInterfaceTest_IKONOS ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_IKONOS.txt
