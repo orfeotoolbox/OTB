@@ -622,13 +622,13 @@ unsigned int OGRIOHelper<TVectorData>
                                                MetaDataKey::VectorDataKeywordlistKey,
                                                kwl);
     // Create the field once
-    if  (ogrCurrentLayer != NULL && ogrCurrentLayer->GetFeatureCount() == 0) 
+    if (ogrCurrentLayer != NULL && ogrCurrentLayer->GetFeatureCount() == 0) 
       {
       // Take into account the fields stored in the 
       // vectordatakeywordlist
-      for(unsigned int fieldIdx  = 0 ; fieldIdx < kwl.GetNumberOfFields(); fieldIdx++)
-	{
-	if( ogrCurrentLayer->CreateField(kwl.GetNthField(fieldIdx).first) != OGRERR_NONE )
+      for (unsigned int fieldIdx  = 0 ; fieldIdx < kwl.GetNumberOfFields(); fieldIdx++)
+        {
+	if (ogrCurrentLayer->CreateField(kwl.GetNthField(fieldIdx).first) != OGRERR_NONE )
 	  {
 	  itkExceptionMacro(<< "Failed to create Field "<<kwl.GetNthField(fieldIdx).first->GetNameRef());
 	  }
@@ -676,7 +676,7 @@ unsigned int OGRIOHelper<TVectorData>
         ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
 	  
         // Add the fields to the features
-        for(unsigned int i  = 0 ; i < kwl.GetNumberOfFields(); i++)
+        for (unsigned int i  = 0 ; i < kwl.GetNumberOfFields(); i++)
           {
           // Get the key of the Nth OGRFieldRefn 
           const char * key = kwl.GetNthField(i).first->GetNameRef();
@@ -730,7 +730,7 @@ unsigned int OGRIOHelper<TVectorData>
         ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
 
         // Add the fields to the features
-        for(unsigned int i  = 0 ; i < kwl.GetNumberOfFields(); i++)
+        for (unsigned int i  = 0 ; i < kwl.GetNumberOfFields(); i++)
           {
           // Get the key of the Nth OGRFieldRefn 
           const char * key = kwl.GetNthField(i).first->GetNameRef();
@@ -815,7 +815,7 @@ unsigned int OGRIOHelper<TVectorData>
         ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
 	  
         // Add the fields to the features
-        for(unsigned int i  = 0 ; i < kwl.GetNumberOfFields(); i++)
+        for (unsigned int i  = 0 ; i < kwl.GetNumberOfFields(); i++)
           {
           // Get the key of the Nth OGRFieldRefn 
           const char * key = kwl.GetNthField(i).first->GetNameRef();
