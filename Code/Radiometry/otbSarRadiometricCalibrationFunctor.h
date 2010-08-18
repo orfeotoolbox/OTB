@@ -41,7 +41,16 @@ public:
   typedef TOutput                                           OutputType;
   typedef typename itk::NumericTraits<InputType>::AbsType   RealType;
 
-  SarRadiometricCalibrationFunctor();
+  SarRadiometricCalibrationFunctor()
+  {
+    m_Noise = 0.0;
+    m_Scale = 1.0;
+    m_IncidenceAngle = CONST_PI_2;
+    m_AntennaPatternOldGain = 1.0;
+    m_AntennaPatternNewGain = 1.0;
+    m_RangeSpreadLoss = 1.0;
+  };
+
   ~SarRadiometricCalibrationFunctor(){};
 
   inline TOutput operator ()(const TInput& value) const
@@ -145,20 +154,6 @@ private:
   RealType   m_IncidenceAngle;
   RealType   m_RangeSpreadLoss;
 };
-
-template<class TInput, class TOutput>
-SarRadiometricCalibrationFunctor<TInput,TOutput>
-::SarRadiometricCalibrationFunctor():
-     m_Noise(0.0),
-     m_Scale(1.0),
-     m_IncidenceAngle(CONST_PI_2),
-      m_AntennaPatternOldGain(1.0),
-      m_AntennaPatternNewGain(1.0),
-      m_RangeSpreadLoss(1.0)
-  {
-  };
-
-
 }
 
 }
