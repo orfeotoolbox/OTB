@@ -96,6 +96,7 @@ public:
     return m_PixelFunction;
   }
 
+
   /** Image dimensions */
   itkStaticConstMacro(InputImageDimension, unsigned int,
                       TInputImage::ImageDimension);
@@ -108,7 +109,7 @@ protected:
 
   /** Validate the presence of all three inputs. If one or more inputs
    * are missing, throw an exception. */
-  void BeforeThreadedGenerateData();
+  virtual void BeforeThreadedGenerateData();
 
   /** SpatialFunctionImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
@@ -120,7 +121,7 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
+  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                             int threadId);
 
 private:
@@ -128,7 +129,7 @@ private:
   void operator =(const Self&); //purposely not implemented
 
   /** The function that will be evaluated over the image */
-  FunctionType * m_PixelFunction;
+  FunctionPointer m_PixelFunction;
 };
 
 } // end namespace otb

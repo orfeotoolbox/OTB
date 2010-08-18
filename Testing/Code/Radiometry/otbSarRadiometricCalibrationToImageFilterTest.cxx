@@ -43,7 +43,7 @@ int otbSarRadiometricCalibrationToImageFilterTest(int argc, char * argv[])
   reader->SetFileName(argv[1]);
   writer->SetFileName(argv[2]);
   filter->SetInput(reader->GetOutput());
-
+  filter->SetNumberOfThreads(1);
   // Generate an extract from the large input
   OutputImageType::RegionType region;
   OutputImageType::IndexType  id;

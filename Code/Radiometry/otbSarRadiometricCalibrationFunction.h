@@ -110,27 +110,33 @@ public:
 
   /** Get/Set the Scale value */
   itkSetMacro(Scale, FunctorRealType);
-  itkGetConstReferenceMacro(Scale, FunctorRealType);
+  itkGetMacro(Scale, FunctorRealType);
 
   /** Get/Set the Offset value */
-  itkSetMacro(Noise, ParametricFunctionPointer);
-  itkGetConstReferenceMacro(Noise, ParametricFunctionPointer);
+  itkSetObjectMacro(Noise, ParametricFunctionType);
+  itkGetConstObjectMacro(Noise, ParametricFunctionType);
+  itkGetObjectMacro(Noise, ParametricFunctionType);
 
   /** Get/Set the AntennaPatternNewGain value */
-  itkSetMacro(AntennaPatternNewGain, ParametricFunctionPointer);
-  itkGetConstReferenceMacro(AntennaPatternNewGain, ParametricFunctionPointer);
+  itkSetObjectMacro(AntennaPatternNewGain, ParametricFunctionType);
+  itkGetConstObjectMacro(AntennaPatternNewGain, ParametricFunctionType);
+  itkGetObjectMacro(AntennaPatternNewGain, ParametricFunctionType);
 
   /** Get/Set the AntennaPatternOldGain value */
-  itkSetMacro(AntennaPatternOldGain, ParametricFunctionPointer);
-  itkGetConstReferenceMacro(AntennaPatternOldGain, ParametricFunctionPointer);
+  itkSetObjectMacro(AntennaPatternOldGain, ParametricFunctionType);
+  itkGetObjectMacro(AntennaPatternOldGain, ParametricFunctionType);
+  itkGetConstObjectMacro(AntennaPatternOldGain, ParametricFunctionType);
 
   /** Get/Set the IncidenceAngle value */
-  itkSetMacro(IncidenceAngle, ParametricFunctionPointer);
-  itkGetConstReferenceMacro(IncidenceAngle, ParametricFunctionPointer);
+  itkSetObjectMacro(IncidenceAngle, ParametricFunctionType);
+  itkGetConstObjectMacro(IncidenceAngle, ParametricFunctionType);
+  itkGetObjectMacro(IncidenceAngle, ParametricFunctionType);
 
   /** Get/Set the RangeSpreadLoss value */
-  itkSetMacro(RangeSpreadLoss, ParametricFunctionPointer);
-  itkGetConstReferenceMacro(RangeSpreadLoss, ParametricFunctionPointer);
+  itkSetObjectMacro(RangeSpreadLoss, ParametricFunctionType);
+  itkGetConstObjectMacro(RangeSpreadLoss, ParametricFunctionType);
+  itkGetObjectMacro(RangeSpreadLoss, ParametricFunctionType);
+
 
 protected:
   SarRadiometricCalibrationFunction();
@@ -156,3 +162,5 @@ private:
 #endif
 
 #endif
+
+

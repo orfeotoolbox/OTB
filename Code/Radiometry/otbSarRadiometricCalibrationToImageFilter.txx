@@ -43,48 +43,46 @@ void
 SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>
 ::BeforeThreadedGenerateData()
 {
-
   SarImageMetadataInterface::Pointer imageMetadataInterface = SarImageMetadataInterfaceFactory::CreateIMI(
       this->GetInput()->GetMetaDataDictionary());
 
   FunctionPointer function = FunctionType::New();
 
   function->SetScale(imageMetadataInterface->GetRadiometricCalibrationScale());
-
-    ParametricFunctionPointer   noise;
-    ParametricFunctionPointer   antennaPatternNewGain;
-    ParametricFunctionPointer   antennaPatternOldGain;
-    ParametricFunctionPointer   incidenceAngle;
-    ParametricFunctionPointer   rangeSpreadLoss;
-
-    noise = function->GetNoise();
-    noise->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationNoise());
-    noise->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationNoisePolynomialDegree());
-    function->SetNoise(noise);
-
-    antennaPatternNewGain = function->GetAntennaPatternNewGain();
-    antennaPatternNewGain->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationAntennaPatternNewGain());
-    antennaPatternNewGain->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree());
-    function->SetAntennaPatternNewGain(antennaPatternNewGain);
-
-    antennaPatternOldGain = function->GetAntennaPatternOldGain();
-    antennaPatternOldGain->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationAntennaPatternOldGain());
-    antennaPatternOldGain->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree());
-    function->SetAntennaPatternNewGain(antennaPatternOldGain);
-
-    incidenceAngle = function->GetIncidenceAngle();
-    incidenceAngle->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationIncidenceAngle());
-    incidenceAngle->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationIncidenceAnglePolynomialDegree());
-    function->SetAntennaPatternNewGain(incidenceAngle);
-
-    rangeSpreadLoss = function->GetRangeSpreadLoss();
-    rangeSpreadLoss->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationRangeSpreadLoss());
-    rangeSpreadLoss->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationRangeSpreadLossPolynomialDegree());
-    function->SetAntennaPatternNewGain(rangeSpreadLoss);
-
-    this->SetFunction(function);
-
-    Superclass::BeforeThreadedGenerateData();
+  
+  ParametricFunctionPointer   noise;
+  ParametricFunctionPointer   antennaPatternNewGain;
+  ParametricFunctionPointer   antennaPatternOldGain;
+  ParametricFunctionPointer   incidenceAngle;
+  ParametricFunctionPointer   rangeSpreadLoss;
+  
+  noise = function->GetNoise();
+  noise->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationNoise());
+  noise->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationNoisePolynomialDegree());
+  function->SetNoise(noise);
+  
+  antennaPatternNewGain = function->GetAntennaPatternNewGain();
+  antennaPatternNewGain->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationAntennaPatternNewGain());
+  antennaPatternNewGain->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree());
+  function->SetAntennaPatternNewGain(antennaPatternNewGain);
+  
+  antennaPatternOldGain = function->GetAntennaPatternOldGain();
+  antennaPatternOldGain->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationAntennaPatternOldGain());
+  antennaPatternOldGain->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree());
+  function->SetAntennaPatternNewGain(antennaPatternOldGain);
+  
+  incidenceAngle = function->GetIncidenceAngle();
+  incidenceAngle->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationIncidenceAngle());
+  incidenceAngle->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationIncidenceAnglePolynomialDegree());
+  function->SetAntennaPatternNewGain(incidenceAngle);
+  
+  rangeSpreadLoss = function->GetRangeSpreadLoss();
+  rangeSpreadLoss->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationRangeSpreadLoss());
+  rangeSpreadLoss->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationRangeSpreadLossPolynomialDegree());
+  function->SetAntennaPatternNewGain(rangeSpreadLoss);
+  
+  this->SetFunction(function);
+  Superclass::BeforeThreadedGenerateData();
 }
 
 

@@ -35,13 +35,14 @@ namespace otb
 template <class TInputImage, class TCoordRep>
 SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
 ::SarRadiometricCalibrationFunction():
-  m_Scale(1.0),
-  m_Noise(ParametricFunctionType::New()),
-  m_AntennaPatternNewGain(ParametricFunctionType::New()),
-  m_AntennaPatternOldGain(ParametricFunctionType::New()),
-  m_IncidenceAngle(ParametricFunctionType::New()),
-  m_RangeSpreadLoss(ParametricFunctionType::New())
+  m_Scale(1.0)
 {
+  m_Noise = ParametricFunctionType::New();
+  m_AntennaPatternNewGain = ParametricFunctionType::New();
+  m_AntennaPatternOldGain = ParametricFunctionType::New();
+  m_IncidenceAngle = ParametricFunctionType::New();
+  m_RangeSpreadLoss = ParametricFunctionType::New();
+
   m_Noise->SetConstantValue(0.0);
   m_AntennaPatternNewGain->SetConstantValue(1.0);
   m_AntennaPatternOldGain->SetConstantValue(1.0);
@@ -87,7 +88,6 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
   RealType result;
-
   result = itk::NumericTraits<RealType>::Zero;
 
   if (!this->GetInputImage())
@@ -99,6 +99,7 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
     {
     return (itk::NumericTraits<RealType>::max());
     }
+
 
   FunctorRealType Noise;
   FunctorRealType AntennaPatternNewGain;
@@ -119,6 +120,7 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
   functor.SetAntennaPatternOldGain(AntennaPatternOldGain);
   functor.SetIncidenceAngle(IncidenceAngle);
   functor.SetRangeSpreadLoss(RangeSpreadLoss);
+
 
   const RealType value = static_cast<RealType>(vcl_abs(this->GetInputImage()->GetPixel(index)));
   result = functor.operator ()( value);

@@ -38,7 +38,7 @@ FunctionToImageFilter<TInputImage, TOutputImage, TFunction>
 ::FunctionToImageFilter()
 {
   this->InPlaceOff();
-  this->m_PixelFunction = 0;
+  m_PixelFunction = FunctionType::New();
 }
 
 /**
@@ -96,12 +96,13 @@ FunctionToImageFilter<TInputImage, TOutputImage, TFunction>
   inputIt.GoToBegin();
   outputIt.GoToBegin();
 
+
   while (!inputIt.IsAtEnd())
     {
-    outputIt.Set(static_cast<OutputImagePixelType>(m_PixelFunction->EvaluateAtIndex(inputIt.GetIndex())));
-    ++inputIt;
-    ++outputIt;
-    progress.CompletedPixel(); // potential exception thrown here
+      outputIt.Set(static_cast<OutputImagePixelType>(m_PixelFunction->EvaluateAtIndex(inputIt.GetIndex())));
+      ++inputIt;
+      ++outputIt;
+      progress.CompletedPixel(); // potential exception thrown here
     }
 }
 } // end namespace otb

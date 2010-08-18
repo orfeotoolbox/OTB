@@ -95,7 +95,8 @@ public:
 
   /** Get/Set the PointSet pointer*/
 //  itkSetMacro(PointSet, PointSetPointer);
-  itkGetConstReferenceMacro(PointSet, PointSetPointer);
+  itkGetObjectMacro(PointSet, PointSetType);
+  itkGetConstObjectMacro(PointSet, PointSetType);
   void SetPointSet(PointSetPointer val)
   {
     m_IsInitialize = false;
@@ -105,8 +106,9 @@ public:
   }  
 
   /** Get/Set the Coeff pointer*/
-  itkSetMacro(Coeff, PointSetPointer);
-  itkGetConstReferenceMacro(Coeff, PointSetPointer);
+  itkSetObjectMacro(Coeff, PointSetType);
+  itkGetObjectMacro(Coeff, PointSetType);
+  itkGetConstObjectMacro(Coeff, PointSetType);
 
   /** Get/Set the Coeff pointer*/
   itkSetMacro(IsInitialize, bool);

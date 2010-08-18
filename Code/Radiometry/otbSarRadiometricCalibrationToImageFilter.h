@@ -79,7 +79,7 @@ protected:
   virtual ~SarRadiometricCalibrationToImageFilter() {}
 
   /** Update the function list and input parameters*/
-  void BeforeThreadedGenerateData();
+  virtual void BeforeThreadedGenerateData();
 private:
   SarRadiometricCalibrationToImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
