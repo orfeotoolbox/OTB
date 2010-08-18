@@ -730,15 +730,14 @@ WorldView2ImageMetadataInterface
   return wavel;
 }
 
-unsigned int
-WorldView2ImageMetadataInterface
-::GetDefaultRBand() const
+std::vector<unsigned int>
+WorldView2ImageMetadataInterface::GetDefaultDisplay() const
 {
   // Handle both 4 bands and 8 bands wv2 products
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
   if (!this->CanRead())
     {
-    itkExceptionMacro(<< "Invalid Metadata, no WorldView2 Image");
+    itkExceptionMacro(<< "Invalid Metadata, not a WorldView2 Image");
     }
 
   ImageKeywordlistType imageKeywordlist;
@@ -752,79 +751,20 @@ WorldView2ImageMetadataInterface
 
   ossimString keywordStringBandNameList = kwl.find("support_data.band_name_list");
   std::vector<ossimString> bandNameList = keywordStringBandNameList.split(" ");
-  if(bandNameList.size()>4)
+  std::vector<unsigned int> rgb(3);
+  if(bandNameList.size() > 4)
     {
-    return 4;
+    rgb[0] = 4;
+    rgb[1] = 2;
+    rgb[2] = 1;
     }
   else
     {
-    return 2;
+    rgb[0] = 2;
+    rgb[1] = 1;
+    rgb[2] = 0;
     }
-}
-
-unsigned int
-WorldView2ImageMetadataInterface
-::GetDefaultGBand() const
-{
-  // Handle both 4 bands and 8 bands wv2 products
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-    {
-    itkExceptionMacro(<< "Invalid Metadata, no WorldView2 Image");
-    }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-    {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-    }
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-
-  ossimString keywordStringBandNameList = kwl.find("support_data.band_name_list");
-  std::vector<ossimString> bandNameList = keywordStringBandNameList.split(" ");
-  if(bandNameList.size()>4)
-    {
-    return 2;
-    }
-  else
-    {
-    return 1;
-    }
-}
-
-unsigned int
-WorldView2ImageMetadataInterface
-::GetDefaultBBand() const
-{
-  // Handle both 4 bands and 8 bands wv2 products
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-    {
-    itkExceptionMacro(<< "Invalid Metadata, no WorldView2 Image");
-    }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-    {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-    }
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-
-
-  ossimString keywordStringBandNameList = kwl.find("support_data.band_name_list");
-  std::vector<ossimString> bandNameList = keywordStringBandNameList.split(" ");
-  if(bandNameList.size()>4)
-    {
-    return 1;
-    }
-  else
-    {
-    return 0;
-    }
+  return rgb;
 }
 
 } // end namespace otb

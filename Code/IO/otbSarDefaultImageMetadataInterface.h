@@ -115,19 +115,15 @@ public:
     return true;
   }
 
-  unsigned int GetDefaultRBand() const
+  /** Get the 3 spectral band numbers corresponding to the default display for visualization,
+   *  in the order R, G, B */
+    std::vector<unsigned int> GetDefaultDisplay() const
   {
-    return 0;
-  }
-
-  unsigned int GetDefaultGBand() const
-  {
-    return 1;
-  }
-
-  unsigned int GetDefaultBBand() const
-  {
-    return 2;
+    std::vector<unsigned int> rgb(3);
+    rgb[0] = 0;
+    rgb[1] = 0;
+    rgb[2] = 0;
+    return rgb;
   }
 
 protected:

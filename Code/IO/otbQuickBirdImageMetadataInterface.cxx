@@ -698,25 +698,15 @@ QuickBirdImageMetadataInterface
   return wavel;
 }
 
-unsigned int
+std::vector<unsigned int>
 QuickBirdImageMetadataInterface
-::GetDefaultRBand() const
+::GetDefaultDisplay() const
 {
-  return 2;
-}
-
-unsigned int
-QuickBirdImageMetadataInterface
-::GetDefaultGBand() const
-{
-  return 1;
-}
-
-unsigned int
-QuickBirdImageMetadataInterface
-::GetDefaultBBand() const
-{
-  return 0;
+  std::vector<unsigned int> rgb(3);
+  rgb[0] = 2;
+  rgb[1] = 1;
+  rgb[2] = 0;
+  return rgb;
 }
 
 } // end namespace otb

@@ -109,13 +109,9 @@ public:
    *  proper band. */
   virtual unsigned int BandIndexToWavelengthPosition(unsigned int i) const;
 
-  /** Those methodes are to retrieve the spectral band corresponding
-   * to the R, G, B or A chanel */
-  unsigned int GetDefaultRBand() const;
-
-  unsigned int GetDefaultGBand() const;
-
-  unsigned int GetDefaultBBand() const;
+  /** Get the 3 spectral band numbers corresponding to the default display for visualization,
+   *  in the order R, G, B */
+  std::vector<unsigned int> GetDefaultDisplay() const;
 
   bool CanRead() const;
 

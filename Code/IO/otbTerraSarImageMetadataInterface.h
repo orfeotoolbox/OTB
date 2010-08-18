@@ -167,11 +167,9 @@ public:
 
   bool CanRead() const;
 
-  
-  /** Get the R, G, B channel */
-  virtual unsigned int GetDefaultRBand() const;
-  virtual unsigned int GetDefaultGBand() const;
-  virtual unsigned int GetDefaultBBand() const;
+  /** Get the 3 spectral band numbers corresponding to the default display for visualization,
+   *  in the order R, G, B */
+  std::vector<unsigned int> GetDefaultDisplay() const;
   
   void PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType& dict) const;
 

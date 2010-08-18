@@ -187,13 +187,9 @@ public:
   virtual int GetProductionYear() const = 0;
   //otbMetadataGetMacro(ProductionYear, int);
 
-
-  /** Those methodes are to retrieve the spectral band corresponding
-   * to the R, G, B or A chanel */
-  virtual unsigned int GetDefaultRBand() const = 0;
-  virtual unsigned int GetDefaultGBand() const = 0;
-  virtual unsigned int GetDefaultBBand() const = 0;
-
+  /** Get the 3 spectral band numbers corresponding to the default display for visualization,
+   *  in the order R, G, B */
+  virtual std::vector<unsigned int> GetDefaultDisplay() const = 0;
 
   virtual bool CanRead() const = 0;
 
