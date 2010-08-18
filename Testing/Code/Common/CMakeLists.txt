@@ -35,7 +35,7 @@ SET(COMMON_TESTS11 ${CXX_TEST_PATH}/otbCommonTests11)
 IF(OTB_COMPILE_MUPARSER)
 SET(COMMON_TESTS12 ${CXX_TEST_PATH}/otbCommonTests12)
 ENDIF(OTB_COMPILE_MUPARSER)
-SET(COMMON_TESTS8 ${CXX_TEST_PATH}/otbCommonTests13)
+SET(COMMON_TESTS13 ${CXX_TEST_PATH}/otbCommonTests13)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbCommonTests1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
