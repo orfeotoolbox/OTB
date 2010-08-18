@@ -201,9 +201,10 @@ public:
             typedef otb::ImageMetadataInterfaceBase ImageMetadataInterfaceType;
             ImageMetadataInterfaceType::Pointer metadataInterface = ImageMetadataInterfaceFactory::CreateIMI(
               metadatadictionary);
-            m_PixelRepresentationFunction->SetRedChannelIndex(metadataInterface->GetDefaultRBand());
-            m_PixelRepresentationFunction->SetGreenChannelIndex(metadataInterface->GetDefaultGBand());
-            m_PixelRepresentationFunction->SetBlueChannelIndex(metadataInterface->GetDefaultBBand());
+            std::vector<unsigned int> defaultDisplay = metadataInterface->GetDefaultDisplay();
+            m_PixelRepresentationFunction->SetRedChannelIndex(defaultDisplay[0]);
+            m_PixelRepresentationFunction->SetGreenChannelIndex(defaultDisplay[1]);
+            m_PixelRepresentationFunction->SetBlueChannelIndex(defaultDisplay[2]);
             }
           }
         }

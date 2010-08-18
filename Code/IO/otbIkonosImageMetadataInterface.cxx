@@ -601,25 +601,14 @@ IkonosImageMetadataInterface
   return wavel;
 }
 
-unsigned int
-IkonosImageMetadataInterface
-::GetDefaultRBand() const
+std::vector<unsigned int>
+IkonosImageMetadataInterface::GetDefaultDisplay() const
 {
-  return 2;
-}
-
-unsigned int
-IkonosImageMetadataInterface
-::GetDefaultGBand() const
-{
-  return 1;
-}
-
-unsigned int
-IkonosImageMetadataInterface
-::GetDefaultBBand() const
-{
-  return 0;
+  std::vector<unsigned int> rgb(3);
+  rgb[0] = 2;
+  rgb[1] = 1;
+  rgb[2] = 0;
+  return rgb;
 }
 
 } // end namespace otb

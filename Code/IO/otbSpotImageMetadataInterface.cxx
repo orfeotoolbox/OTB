@@ -700,25 +700,15 @@ SpotImageMetadataInterface
   return i;
 }
 
-unsigned int
+std::vector<unsigned int>
 SpotImageMetadataInterface
-::GetDefaultRBand() const
+::GetDefaultDisplay() const
 {
-  return 0;
-}
-
-unsigned int
-SpotImageMetadataInterface
-::GetDefaultGBand() const
-{
-  return 1;
-}
-
-unsigned int
-SpotImageMetadataInterface
-::GetDefaultBBand() const
-{
-  return 2;
+  std::vector<unsigned int> rgb(3);
+  rgb[0] = 0;
+  rgb[1] = 1;
+  rgb[2] = 2;
+  return rgb;
 }
 
 } // end namespace otb

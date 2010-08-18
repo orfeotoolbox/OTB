@@ -700,25 +700,14 @@ FormosatImageMetadataInterface
   return i;
 }
 
-unsigned int
-FormosatImageMetadataInterface
-::GetDefaultRBand() const
+std::vector<unsigned int>
+FormosatImageMetadataInterface::GetDefaultDisplay() const
 {
-  return 0;
-}
-
-unsigned int
-FormosatImageMetadataInterface
-::GetDefaultGBand() const
-{
-  return 1;
-}
-
-unsigned int
-FormosatImageMetadataInterface
-::GetDefaultBBand() const
-{
-  return 2;
+  std::vector<unsigned int> rgb(3);
+  rgb[0] = 0;
+  rgb[1] = 1;
+  rgb[2] = 2;
+  return rgb;
 }
 
 } // end namespace otb

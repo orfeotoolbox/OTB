@@ -1363,22 +1363,15 @@ TerraSarImageMetadataInterface
 
 
   /** Get the R, G, B channel */
-unsigned int 
-TerraSarImageMetadataInterface::GetDefaultRBand() const
+std::vector<unsigned int>
+TerraSarImageMetadataInterface
+::GetDefaultDisplay() const
 {
-  return 0;
-}
-
-unsigned int 
-TerraSarImageMetadataInterface::GetDefaultGBand() const
-{
-  return 0;
-}
-
-unsigned int 
-TerraSarImageMetadataInterface::GetDefaultBBand() const
-{
-  return 0;
+  std::vector<unsigned int> rgb(3);
+  rgb[0] = 0;
+  rgb[1] = 0;
+  rgb[2] = 0;
+  return rgb;
 }
 
 void 
@@ -1393,7 +1386,6 @@ TerraSarImageMetadataInterface
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-
 }
 
 

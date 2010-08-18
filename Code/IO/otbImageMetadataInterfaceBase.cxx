@@ -507,37 +507,40 @@ ImageMetadataInterfaceBase
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os, indent);
-  os << indent << "DefaultRBand :      "  << this->GetDefaultRBand() << std::endl;
-  os << indent << "DefaultGBand :      "  << this->GetDefaultGBand() << std::endl;
-  os << indent << "DefaultBBand :      "  << this->GetDefaultBBand() << std::endl;
-  os << indent << "GetProjectionRef:   " <<  this->GetProjectionRef() << std::endl;
-  os << indent << "GetGCPProjection:   " << this->GetGCPProjection( ) << std::endl;
-  os << indent << "GetGCPCount:        " << this->GetGCPCount( ) << std::endl;
+
+  std::vector<unsigned int> defaultDisplay = this->GetDefaultDisplay();
+  os << indent << "Default RGB Display: ["
+               << defaultDisplay[0] << ", "
+               << defaultDisplay[1] << ", "
+               << defaultDisplay[2] << "]" << std::endl;
+  os << indent << "ProjectionRef:   " <<  this->GetProjectionRef() << std::endl;
+  os << indent << "GCPProjection:   " << this->GetGCPProjection( ) << std::endl;
+  os << indent << "GCPCount:        " << this->GetGCPCount( ) << std::endl;
   for(unsigned int gcpIdx = 0; gcpIdx  < this->GetGCPCount(); ++ gcpIdx)
   {
-    //os << indent << "GetGCPs:            " << this->GetGCPs(gcpIdx) << std::endl;
-    os << indent << "GetGCPId:           " << this->GetGCPId(gcpIdx) << std::endl;
-    os << indent << "GetGCPInfo:         " << this->GetGCPInfo(gcpIdx) << std::endl;
+    //os << indent << "GCPs:            " << this->GetGCPs(gcpIdx) << std::endl;
+    os << indent << "GCPId:           " << this->GetGCPId(gcpIdx) << std::endl;
+    os << indent << "GCPInfo:         " << this->GetGCPInfo(gcpIdx) << std::endl;
   }
-  //os << indent << "GetGeoTransform:    " << this->GetGeoTransform( ) << std::endl;
-  //os << indent << "GetUpperLeftCorner: " << this->GetUpperLeftCorner( ) << std::endl;
-  //os << indent << "GetUpperRightCorner:" << this->GetUpperRightCorner( ) << std::endl;
-  //os << indent << "GetLowerLeftCorner: " << this->GetLowerLeftCorner( ) << std::endl;
-  //os << indent << "GetLowerRightCorner:" << this->GetLowerRightCorner( ) << std::endl;
-  //os << indent << "GetImageKeywordlist:" << this->GetImageKeywordlist( ) << std::endl;
-  os << indent << "GetSensorID:        " << this->GetSensorID( ) << std::endl;
-  os << indent << "GetNumberOfBands:   " << this->GetNumberOfBands( ) << std::endl;
-  //os << indent << "GetBandName:        " << this->GetBandName( ) << std::endl;
-  os << indent << "GetXPixelSpacing:   " << this->GetXPixelSpacing( ) << std::endl;
-  os << indent << "GetYPixelSpacing:   " << this->GetYPixelSpacing( ) << std::endl;
-  os << indent << "GetDay:             " << this->GetDay( ) << std::endl;
-  os << indent << "GetMonth:           " << this->GetMonth( ) << std::endl;
-  os << indent << "GetYear:            " << this->GetYear( ) << std::endl;
-  os << indent << "GetHour:            " << this->GetHour( ) << std::endl;
-  os << indent << "GetMinute:          " << this->GetMinute( ) << std::endl;
-  os << indent << "GetProductionDay:   " << this->GetProductionDay( ) << std::endl;
-  os << indent << "GetProductionMonth: " << this->GetProductionMonth( ) << std::endl;
-  os << indent << "GetProductionYear:  " << this->GetProductionYear( ) << std::endl;
+  //os << indent << "GeoTransform:    " << this->GetGeoTransform( ) << std::endl;
+  //os << indent << "UpperLeftCorner: " << this->GetUpperLeftCorner( ) << std::endl;
+  //os << indent << "UpperRightCorner:" << this->GetUpperRightCorner( ) << std::endl;
+  //os << indent << "LowerLeftCorner: " << this->GetLowerLeftCorner( ) << std::endl;
+  //os << indent << "LowerRightCorner:" << this->GetLowerRightCorner( ) << std::endl;
+  //os << indent << "ImageKeywordlist:" << this->GetImageKeywordlist( ) << std::endl;
+  os << indent << "SensorID:        " << this->GetSensorID( ) << std::endl;
+  os << indent << "NumberOfBands:   " << this->GetNumberOfBands( ) << std::endl;
+  //os << indent << "BandName:        " << this->GetBandName( ) << std::endl;
+  os << indent << "XPixelSpacing:   " << this->GetXPixelSpacing( ) << std::endl;
+  os << indent << "YPixelSpacing:   " << this->GetYPixelSpacing( ) << std::endl;
+  os << indent << "Day:             " << this->GetDay( ) << std::endl;
+  os << indent << "Month:           " << this->GetMonth( ) << std::endl;
+  os << indent << "Year:            " << this->GetYear( ) << std::endl;
+  os << indent << "Hour:            " << this->GetHour( ) << std::endl;
+  os << indent << "Minute:          " << this->GetMinute( ) << std::endl;
+  os << indent << "ProductionDay:   " << this->GetProductionDay( ) << std::endl;
+  os << indent << "ProductionMonth: " << this->GetProductionMonth( ) << std::endl;
+  os << indent << "ProductionYear:  " << this->GetProductionYear( ) << std::endl;
 
 }
 
