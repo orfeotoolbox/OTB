@@ -622,7 +622,7 @@ unsigned int OGRIOHelper<TVectorData>
 					       MetaDataKey::VectorDataKeywordlistKey,
 					       kwl);
     // Create the field once
-    if(ogrCurrentLayer != NULL && ogrCurrentLayer->GetFeatureCount() == 0) 
+    if  (ogrCurrentLayer != NULL && ogrCurrentLayer->GetFeatureCount() == 0) 
       {
       // Take into account the fields stored in the 
       // vectordatakeywordlist
@@ -630,7 +630,7 @@ unsigned int OGRIOHelper<TVectorData>
 	{
 	if( ogrCurrentLayer->CreateField(kwl.GetNthField(fieldIdx).first) != OGRERR_NONE )
 	  {
-	  exit( 1 );
+	  itkExceptionMacro(<< "Failed to create Field "<<kwl.GetNthField(fieldIdx).first->GetNameRef());
 	  }
 	}
       }
@@ -649,13 +649,11 @@ unsigned int OGRIOHelper<TVectorData>
           //itkExceptionMacro(<<"Failed to create layer "<<dataNode->GetNodeId());
           std::cout << "Failed to create layer " << dataNode->GetNodeId() << std::endl;
           }
-	std::cout <<"DOCUMENT ogrCurrentLayer->GetFeatureCount() " <<ogrCurrentLayer->GetFeatureCount() << std::endl;
         ProcessNodeWrite(*it, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
         break;
         }
       case FOLDER:
         {
-	std::cout <<"FOLDER ogrCurrentLayer->GetFeatureCount() " <<ogrCurrentLayer->GetFeatureCount() << std::endl;
         ProcessNodeWrite(*it, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
         break;
         }
