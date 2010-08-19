@@ -177,12 +177,12 @@ public:
   itkGetMacro(Offset, OffsetType);
 
   /** Set/Get End polygon Mouse butto */
-  itkSetMacro(EndMouseButton, unsigned int);
-  itkGetMacro(EndMouseButton, unsigned int);
+  itkSetMacro(EndMouseButton, int);
+  itkGetMacro(EndMouseButton, int);
 
   /** Set/Get Add polygon Mouse butto */
-  itkSetMacro(AddMouseButton, unsigned int);
-  itkGetMacro(AddMouseButton, unsigned int);
+  itkSetMacro(AddMouseButton, int);
+  itkGetMacro(AddMouseButton, int);
 
 protected:
   /** Constructor */
