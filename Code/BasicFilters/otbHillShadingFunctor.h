@@ -147,18 +147,17 @@ public:
 //    const typename IteratorType::OffsetType CENTER ={{0,0}};
 
     float xSlope =
-      ((makeValid(it.GetPixel(LEFTUP)) + 2 * makeValid(it.GetPixel(LEFT)) + makeValid(it.GetPixel(RIGHTDOWN)))
-       - (makeValid(it.GetPixel(RIGHTUP)) + 2 * makeValid(it.GetPixel(RIGHT)) +
-          makeValid(it.GetPixel(RIGHTDOWN))))
+      ((makeValid(it.GetPixel(LEFTUP)) + 2 * makeValid(it.GetPixel(LEFT)) + makeValid(it.GetPixel(LEFTDOWN)))
+       - (makeValid(it.GetPixel(RIGHTUP)) + 2 * makeValid(it.GetPixel(RIGHT)) + makeValid(it.GetPixel(RIGHTDOWN))))
       / (m_XRes * m_Scale);
     // - as the azimuth is given compared to y axis pointing up
     float ySlope = -((makeValid(it.GetPixel(LEFTUP)) + 2 * makeValid(it.GetPixel(UP)) + makeValid(it.GetPixel(RIGHTUP)))
-                     - (makeValid(it.GetPixel(LEFTDOWN)) + 2 * makeValid(it.GetPixel(DOWN)) +
-                        makeValid(it.GetPixel(RIGHTDOWN))))
+                     - (makeValid(it.GetPixel(LEFTDOWN)) + 2 * makeValid(it.GetPixel(DOWN)) + makeValid(it.GetPixel(RIGHTDOWN)))
+                     )
                    / (m_YRes * m_Scale);
 
     // permutation between x and y as the azimuth angle is given compared to the north-south axis
-    float lambertian = ((m_SinElev * m_CosAz * ySlope) + (m_SinElev * m_SinAz * xSlope) + m_CosElev)
+    float lambertian = ((m_CosElev * m_CosAz * ySlope) + (m_CosElev * m_SinAz * xSlope) + m_SinElev)
                        / vcl_sqrt(xSlope * xSlope + ySlope * ySlope + 1);
 
     return (lambertian + 1) / 2; //normalize between 0 and 1
