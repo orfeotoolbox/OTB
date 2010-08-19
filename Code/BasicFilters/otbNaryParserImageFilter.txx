@@ -202,6 +202,7 @@ void NaryParserImageFilter<TImage>
   double value; 
   unsigned int j;
   unsigned int nbInputImages = this->GetNumberOfInputs();
+  bool run = true;
   
   typedef itk::ImageRegionConstIterator<TImage> ImageRegionConstIteratorType;
   
@@ -216,11 +217,18 @@ void NaryParserImageFilter<TImage>
   
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-          
-  while (!(Vit.at(0).IsAtEnd()))
+  
+  for(j=0; j < nbInputImages; j++)
     {
+    run *= !Vit.at(j).IsAtEnd();
+    }  
+
+  while (run)
+    {
+    run = true;
     for(j=0; j < nbInputImages; j++)
       {
+      run *= !Vit.at(j).IsAtEnd();
       m_AImage.at(threadId).at(j) = static_cast<double>(Vit.at(j).Get());
       }
 
