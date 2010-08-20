@@ -27,4 +27,5 @@
 void RegisterTests()
 {
   REGISTER_TEST(otbMapFileProductWriterNew);
+  REGISTER_TEST(otbMapFileProductWriter);
 }
