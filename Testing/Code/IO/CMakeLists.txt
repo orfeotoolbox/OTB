@@ -2594,7 +2594,7 @@ ADD_TEST(ioTuMapFileProductWriterNew ${IO_TESTS21}
 
 ADD_TEST(ioTvMapFileProductWriter ${IO_TESTS21}
   otbMapFileProductWriter
-  ${INPUTDATA}/prison_toulouse.tif #toulouse_Extract_1500_1500_2000_2000.tif
+  ${INPUTDATA}/ExtrZoneNuageuse.tif
   ${TEMP}/mapserver/toulouseExtract.map
   256
 )
