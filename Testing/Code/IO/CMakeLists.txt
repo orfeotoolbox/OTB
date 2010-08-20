@@ -2592,6 +2592,13 @@ ADD_TEST(ioTuMapFileProductWriterNew ${IO_TESTS21}
   otbMapFileProductWriterNew
 )
 
+ADD_TEST(ioTvMapFileProductWriter ${IO_TESTS21}
+  otbMapFileProductWriter
+  ${INPUTDATA}/ExtrZoneNuageuse.tif
+  ${TEMP}/mapserver/toulouseExtract.map
+  256
+)
+
 #----------------------------------------------------------------------------------
 SET(BasicIO_SRCS1
 otbIOTests1.cxx
@@ -2797,6 +2804,7 @@ otbSarDefaultImageMetadataInterfaceNew.cxx
 SET(BasicIO_SRCS21
 otbIOTests21.cxx
 otbMapFileProductWriterNew
+otbMapFileProductWriter
 )
 
 
@@ -2844,4 +2852,3 @@ OTB_ADD_EXECUTABLE(otbIOTests20 "${BasicIO_SRCS20}" "OTBIO;OTBTesting")
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 OTB_ADD_EXECUTABLE(otbIOTests21 "${BasicIO_SRCS21}" "OTBIO;OTBTesting")
-
