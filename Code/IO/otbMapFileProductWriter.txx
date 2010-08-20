@@ -97,6 +97,7 @@ MapFileProductWriter<TInputImage>
 {
   // Get the input Image
   m_VectorImage = const_cast<TInputImage *>(this->GetInput());
+  m_VectorImage->UpdateOuptputInformation();
   
   // Initialize the filename, the vectordatas
   this->Initialize();
