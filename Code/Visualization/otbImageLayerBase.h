@@ -34,7 +34,7 @@ namespace otb
 *  \ingroup Visualization
  */
 
-template <class TOutputImage = Image<itk::RGBAPixel<unsigned char>, 2> >
+template <class TOutputImage = Image<itk::RGBAPixel<unsigned char>, 2>, class TValue = double>
 class ImageLayerBase
   : public itk::Object
 {
@@ -60,11 +60,16 @@ public:
   typedef Function::BlendingFunction<OutputPixelType> BlendingFunctionType;
   typedef typename BlendingFunctionType::Pointer      BlendingFunctionPointerType;
 
+  typedef itk::VariableLengthVector<TValue>           LayerValueType;
+
   /** Actually render the layer */
   virtual void Render() = 0;
 
   /** Get the pixel description */
   virtual std::string GetPixelDescription(const IndexType& index) = 0;
+
+  /** Get the pixel value in TValue type */
+  virtual LayerValueType GetValueAtIndex(const IndexType& index) = 0;
 
   itkGetObjectMacro(RenderedQuicklook,     OutputImageType);
   itkGetObjectMacro(RenderedExtract,       OutputImageType);
@@ -116,6 +121,12 @@ public:
 
   itkSetObjectMacro(BlendingFunction, BlendingFunctionType);
   itkGetObjectMacro(BlendingFunction, BlendingFunctionType);
+
+  itkSetMacro(MaxValues, LayerValueType);
+  itkGetMacro(MaxValues, LayerValueType);
+
+  itkSetMacro(MinValues, LayerValueType);
+  itkGetMacro(MinValues, LayerValueType);
 
 protected:
   /** Constructor */
@@ -177,6 +188,8 @@ private:
   /** Pointer to the blending function */
   BlendingFunctionPointerType m_BlendingFunction;
 
+  LayerValueType m_MaxValues;
+  LayerValueType m_MinValues;
 }; // end class
 } // end namespace otb
 

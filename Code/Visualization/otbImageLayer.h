@@ -95,6 +95,8 @@ public:
   typedef ObjectList<HistogramType>           HistogramListType;
   typedef typename HistogramListType::Pointer HistogramListPointerType;
 
+  typedef typename Superclass::LayerValueType LayerValueType;
+
   /** Rendering part */
   typedef RenderingImageFilter<TImage, TOutputImage>          RenderingFilterType;
   typedef typename RenderingFilterType::Pointer               RenderingFilterPointerType;
@@ -221,6 +223,8 @@ protected:
   unsigned int PixelSize(ImagePointerType image, VectorPixelType* v) const;
   unsigned int PixelSize(ImagePointerType image, RGBPixelType* v) const;
   unsigned int PixelSize(ImagePointerType image, RGBAPixelType* v) const;
+
+  LayerValueType GetValueAtIndex(const IndexType& index);
 
 private:
   ImageLayer(const Self&);     // purposely not implemented
