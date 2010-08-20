@@ -55,6 +55,7 @@ IF(OTB_USE_CURL)
 ENDIF(OTB_USE_CURL)
 
 SET(IO_TESTS20    ${CXX_TEST_PATH}/otbIOTests20)
+SET(IO_TESTS21    ${CXX_TEST_PATH}/otbIOTests21)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ COMMON_TESTS3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2583,6 +2584,14 @@ ADD_TEST(ioTuSarDefaultImageMetadataInterfaceNew ${IO_TESTS20}
         otbSarDefaultImageMetadataInterfaceNew )
 
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS21 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ADD_TEST(ioTuMapFileProductWriterNew ${IO_TESTS21}
+  otbMapFileProductWriterNew
+)
+
 #----------------------------------------------------------------------------------
 SET(BasicIO_SRCS1
 otbIOTests1.cxx
@@ -2750,7 +2759,6 @@ otbPointSetFileReader2.cxx
 SET(BasicIO_SRCS18
 otbIOTests18.cxx
 otbImageKeywordlist.cxx
-otbTerraSarImageMetadataInterface.cxx
 otbSpotImageMetadataInterfaceNew.cxx
 otbFormosatImageMetadataInterfaceNew.cxx
 otbQuickBirdImageMetadataInterfaceNew.cxx
@@ -2785,6 +2793,12 @@ otbOpticalDefaultImageMetadataInterfaceFactoryNew.cxx
 otbSarDefaultImageMetadataInterfaceFactoryNew.cxx
 otbSarDefaultImageMetadataInterfaceNew.cxx
 )
+
+SET(BasicIO_SRCS21
+otbIOTests21.cxx
+otbMapFileProductWriterNew
+)
+
 
 
 OTB_ADD_EXECUTABLE(otbIOTests1 "${BasicIO_SRCS1}" "OTBIO;OTBTesting")
@@ -2828,4 +2842,6 @@ ENDIF(OTB_USE_CURL)
 OTB_ADD_EXECUTABLE(otbIOTests20 "${BasicIO_SRCS20}" "OTBIO;OTBTesting")
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+
+OTB_ADD_EXECUTABLE(otbIOTests21 "${BasicIO_SRCS21}" "OTBIO;OTBTesting")
 

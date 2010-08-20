@@ -687,11 +687,12 @@ ADD_TEST(coTvUnaryFunctorNeighborhoodWithOffsetImageFilter ${COMMON_TESTS7}
 ADD_TEST(coTuRemoteSensingRegionNew ${COMMON_TESTS7}
                      otbRemoteSensingRegionNew )
 
-ADD_TEST(ioTvRemoteSensingRegion ${COMMON_TESTS7}
+ADD_TEST(coTvRemoteSensingRegion ${COMMON_TESTS7}
 	 otbRemoteSensingRegion
 	 1.21 2.33 58.47 59.49  #size et index of the region
 	 0. 0.                  # Point to check
  )
+
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
