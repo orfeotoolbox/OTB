@@ -25,7 +25,7 @@ namespace otb
 {
 template <class TInputImage>
 MapFileProductWriter<TInputImage>
-::MapFileProductWriter():  m_TileSize(256),m_UseExtendMode(true),m_Polygon(),m_Folder()
+::MapFileProductWriter():  m_UseExtendMode(true), m_TileSize(256)
 {
   // Modify superclass default values, can be overridden by subclasses
   this->SetNumberOfRequiredInputs(1);
@@ -97,7 +97,7 @@ MapFileProductWriter<TInputImage>
 {
   // Get the input Image
   m_VectorImage = const_cast<TInputImage *>(this->GetInput());
-  m_VectorImage->UpdateOuptputInformation();
+  m_VectorImage->UpdateOutputInformation();
   
   // Initialize the filename, the vectordatas
   this->Initialize();
@@ -183,13 +183,13 @@ MapFileProductWriter<TInputImage>
   SizeType size;
   size = m_VectorImage->GetLargestPossibleRegion().GetSize();
 
-  int sizeX = size[0];
-  int sizeY = size[1];
+  unsigned int sizeX = size[0];
+  unsigned int sizeY = size[1];
 
   // Compute max depth
-  int maxDepth =
-    static_cast<int>(max(vcl_ceil(vcl_log(static_cast<float>(sizeX) / static_cast<float>(m_TileSize)) / vcl_log(2.0)),
-                         vcl_ceil(vcl_log(static_cast<float>(sizeY) / static_cast<float>(m_TileSize)) / vcl_log(2.0))));
+  unsigned int maxDepth =
+    static_cast<unsigned int>(max(vcl_ceil(vcl_log(static_cast<float>(sizeX) / static_cast<float>(m_TileSize)) / vcl_log(2.0)),
+                                  vcl_ceil(vcl_log(static_cast<float>(sizeY) / static_cast<float>(m_TileSize)) / vcl_log(2.0))));
   
 //   // Compute nbTile : Keep this for progress Bar ?
 //   int nbTile = 0;
@@ -206,7 +206,7 @@ MapFileProductWriter<TInputImage>
 
   std::cout << "maxDepth " << maxDepth<< std::endl;
  
-  for (int depth = 0; depth <= maxDepth; depth++)
+  for (unsigned int depth = 0; depth <= maxDepth; depth++)
     {
 
     // update the attribute value Current Depth
@@ -265,13 +265,13 @@ MapFileProductWriter<TInputImage>
     sizeX = size[0];
     sizeY = size[1];
 
-    int x = 0;
-    int y = 0;
+    unsigned int x = 0;
+    unsigned int y = 0;
 
     // Tiling resample image
-    for (int tx = 0; tx < sizeX; tx += m_TileSize)
+    for (unsigned int tx = 0; tx < sizeX; tx += m_TileSize)
       {
-      for (int ty = 0; ty < sizeY; ty += m_TileSize)
+      for (unsigned int ty = 0; ty < sizeY; ty += m_TileSize)
         {
         if ((tx + m_TileSize) >= sizeX)
           {
@@ -332,7 +332,7 @@ MapFileProductWriter<TInputImage>
         m_VectorWriter = VectorWriterType::New();
         m_VectorWriter->SetFileName(ossFileName.str().c_str());
         m_VectorWriter->SetInput(m_VectorImageExtractROIFilter->GetOutput());
-	m_VectorWriter->WriteGeomFileOn();
+        m_VectorWriter->WriteGeomFileOn();
         m_VectorWriter->Update();
 
         /** TODO : Generate KML for this tile */
