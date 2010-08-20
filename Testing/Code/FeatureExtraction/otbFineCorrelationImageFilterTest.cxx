@@ -81,7 +81,6 @@ int otbFineCorrelationImageFilterTest( int argc, char * argv[] )
     }
 
   correlation->SetSubPixelPrecision(precision);
-  correlation->SetNumberOfThreads(1);
   //  otb::StandardFilterWatcher watcher(correlation,"Correlation");
   itk::TimeProbe chrono;
   chrono.Start();
