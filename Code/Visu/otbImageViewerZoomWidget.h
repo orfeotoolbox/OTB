@@ -18,6 +18,8 @@
 #ifndef __otbImageViewerZoomWidget_h
 #define __otbImageViewerZoomWidget_h
 
+#include "vcl_deprecated_header.h"
+
 #include "otbZoomableImageWidget.h"
 #include "otbImageWidgetRectangleForm.h"
 #include "otbImageWidgetBoxForm.h"

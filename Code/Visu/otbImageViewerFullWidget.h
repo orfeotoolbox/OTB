@@ -18,6 +18,8 @@
 #ifndef __otbImageViewerFullWidget_h
 #define __otbImageViewerFullWidget_h
 
+#include "vcl_deprecated_header.h"
+
 #include "otbFullResolutionImageWidget.h"
 #include "otbImageViewerFullResolutionEventsInterface.h"
 #include "otbImageWidgetBoxForm.h"

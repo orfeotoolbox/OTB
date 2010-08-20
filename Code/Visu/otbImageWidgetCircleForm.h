@@ -18,6 +18,8 @@
 #ifndef __otbImageWidgetCircleForm_h
 #define __otbImageWidgetCircleForm_h
 
+#include "vcl_deprecated_header.h"
+
 #include "itkSize.h"
 #include "itkIndex.h"
 #include "otbImageWidgetFormBase.h"

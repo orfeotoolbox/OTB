@@ -18,6 +18,8 @@
 #ifndef __otbGluPolygonDrawingHelper_h
 #define __otbGluPolygonDrawingHelper_h
 
+#include "vcl_deprecated_header.h"
+
 #include <FL/gl.h>
 #  ifdef __APPLE__
 #    include <OpenGL/glu.h>

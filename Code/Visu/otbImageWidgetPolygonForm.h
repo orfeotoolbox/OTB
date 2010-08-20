@@ -18,6 +18,8 @@
 #ifndef __otbImageWidgetPolygonForm_h
 #define __otbImageWidgetPolygonForm_h
 
+#include "vcl_deprecated_header.h"
+
 #include "itkSize.h"
 #include "itkIndex.h"
 #include "otbImageWidgetFormBase.h"

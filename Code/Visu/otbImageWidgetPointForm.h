@@ -18,6 +18,8 @@
 #ifndef __otbImageWidgetPointForm_h
 #define __otbImageWidgetPointForm_h
 
+#include "vcl_deprecated_header.h"
+
 #include "itkIndex.h"
 #include "otbImageWidgetFormBase.h"
 

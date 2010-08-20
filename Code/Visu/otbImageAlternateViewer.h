@@ -18,6 +18,8 @@
 #ifndef __otbImageAlternateViewer_h
 #define __otbImageAlternateViewer_h
 
+#include "vcl_deprecated_header.h"
+
 #include "FL/Fl_Gl_Window.H"
 #include "itkObject.h"
 #include "otbImageList.h"

@@ -18,6 +18,8 @@
 #ifndef __otbImageViewer_h
 #define __otbImageViewer_h
 
+#include "vcl_deprecated_header.h"
+
 #include "otbImageViewerBase.h"
 #include <FL/Fl_Multiline_Output.H>
 

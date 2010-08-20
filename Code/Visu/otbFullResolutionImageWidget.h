@@ -18,6 +18,8 @@
 #ifndef __otbFullResolutionImageWidget_h
 #define __otbFullResolutionImageWidget_h
 
+#include "vcl_deprecated_header.h"
+
 #include "otbImageWidgetBase.h"
 
 namespace otb

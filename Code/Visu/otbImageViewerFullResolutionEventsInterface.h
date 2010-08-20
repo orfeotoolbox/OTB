@@ -18,6 +18,8 @@
 #ifndef __otbImageViewerFullResolutionEventsInterface_h
 #define __otbImageViewerFullResolutionEventsInterface_h
 
+#include "vcl_deprecated_header.h"
+
 #include "itkObject.h"
 #include "itkImageRegion.h"
 #include "otbMacro.h"

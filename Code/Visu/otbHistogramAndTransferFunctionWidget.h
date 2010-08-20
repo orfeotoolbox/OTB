@@ -18,6 +18,8 @@
 #ifndef __otbHistogramAndTransferFunctionWidget_h
 #define __otbHistogramAndTransferFunctionWidget_h
 
+#include "vcl_deprecated_header.h"
+
 #include "itkProcessObject.h"
 #include "itkFixedArray.h"
 #include "otbImageWidgetTransferFunction.h"

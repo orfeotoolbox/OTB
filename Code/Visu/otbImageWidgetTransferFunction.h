@@ -18,6 +18,8 @@
 #ifndef __otbImageWidgetTransferFunction_h
 #define __otbImageWidgetTransferFunction_h
 
+#include "vcl_deprecated_header.h"
+
 #include "itkProcessObject.h"
 #include "itkMacro.h"
 #include "otbMath.h"

@@ -18,6 +18,8 @@
 #ifndef __otbImageWidgetRectangleForm_h
 #define __otbImageWidgetRectangleForm_h
 
+#include "vcl_deprecated_header.h"
+
 #include "otbImageWidgetFormBase.h"
 #include "otbMacro.h"
 

@@ -18,6 +18,8 @@
 #ifndef __otbImageWidgetFormBase_h
 #define __otbImageWidgetFormBase_h
 
+#include "vcl_deprecated_header.h"
+
 #include "itkDataObject.h"
 #include "itkObjectFactory.h"
 #include "itkFixedArray.h"
