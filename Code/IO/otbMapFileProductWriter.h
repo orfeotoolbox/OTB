@@ -88,7 +88,7 @@ public:
 
   // Intensity Rescale
   typedef VectorRescaleIntensityImageFilter<InputImageType,
-					    InputImageType>          VectorRescaleIntensityImageFilterType;
+                                            InputImageType>          VectorRescaleIntensityImageFilterType;
 
   // Transformer
   typedef GenericRSTransform<>           TransformType;

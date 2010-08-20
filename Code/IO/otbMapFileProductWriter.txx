@@ -301,11 +301,11 @@ MapFileProductWriter<TInputImage>
         ossimFilename cachingDir(path.str());
         cachingDir.createDirectory();
         
-	// Generate Tile filename
+        // Generate Tile filename
         std::ostringstream ossFileName;
         ossFileName << m_Path<<"/";
         ossFileName << "tiles/tile_";
-	ossFileName << m_CurrentDepth<<"_";        
+        ossFileName << m_CurrentDepth<<"_";        
         ossFileName << x<<"_";
         ossFileName << y;
         ossFileName << ".tif";
@@ -320,9 +320,9 @@ MapFileProductWriter<TInputImage>
         m_VectorImageExtractROIFilter->SetSizeY(extractSize[1]);
 
         // Set Channel to extract
-        m_VectorImageExtractROIFilter->SetChannel(1);        
-	m_VectorImageExtractROIFilter->SetChannel(2);        
-	m_VectorImageExtractROIFilter->SetChannel(3);
+        m_VectorImageExtractROIFilter->SetChannel(1);
+        m_VectorImageExtractROIFilter->SetChannel(2);
+        m_VectorImageExtractROIFilter->SetChannel(3);
 
         // Set extract roi input
         m_VectorImageExtractROIFilter->SetInput(m_ResampleVectorImage);
