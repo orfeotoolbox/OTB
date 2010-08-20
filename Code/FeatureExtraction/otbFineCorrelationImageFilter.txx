@@ -43,7 +43,7 @@ FineCorrelationImageFilter<TInputImage,T0utputCorrelation,TOutputDeformationFiel
   m_Radius.Fill(2);
   m_SearchRadius.Fill(4);
   m_RefinementMode = SUBPIXEL;
-  m_SubPixelPrecision = 100;
+  m_SubPixelPrecision = 10;
 
   // Default interpolator
   m_Interpolator = itk::LinearInterpolateImageFunction<TInputImage,double>::New();
