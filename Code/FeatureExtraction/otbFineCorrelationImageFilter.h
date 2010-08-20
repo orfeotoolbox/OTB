@@ -172,10 +172,15 @@ private:
   void operator=(const Self&); //purposely not implemented
 
  /** Compute correlation from offset */
-  inline double Correlation(const NeighborhoodType & fixed, const NeighborhoodType & moving, const OffsetType & offset, unsigned int scale=1) const;
+  inline double Correlation(const NeighborhoodType & fixed,
+                            const NeighborhoodType & moving,
+                            const OffsetType & offset,
+                            unsigned int scale=1) const;
 
   /** Refine the location of the correlation maximum */
-  inline double RefineLocation(const NeighborhoodType & correlMap,const OffsetType & maxPos, DeformationValueType & value) const;
+  inline double RefineLocation(const NeighborhoodType & correlMap,
+                               const OffsetType & maxPos,
+                               DeformationValueType & value) const;
 
   /** Compute subpixel neighborhood */
   const NeighborhoodType ComputeSubPixelNeighborhood(const IndexType & location, unsigned int scale) const;

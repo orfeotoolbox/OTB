@@ -35,7 +35,7 @@ namespace otb
 template <class TInputImage, class T0utputCorrelation, class TOutputDeformationField>
 FineCorrelationImageFilter<TInputImage,T0utputCorrelation,TOutputDeformationField>
 ::FineCorrelationImageFilter()
-{
+ {
   this->SetNumberOfRequiredInputs( 2 );
   this->SetNumberOfOutputs(2);
   this->SetNthOutput(1,TOutputDeformationField::New());
@@ -49,68 +49,68 @@ FineCorrelationImageFilter<TInputImage,T0utputCorrelation,TOutputDeformationFiel
 
   // Epsilon in correlation formula set to e-10
   m_Epsilon = 0.0000000001;
-}
+ }
 
 template <class TInputImage, class T0utputCorrelation, class TOutputDeformationField>
 void
 FineCorrelationImageFilter<TInputImage,T0utputCorrelation,TOutputDeformationField>
 ::SetFixedInput( const TInputImage * image )
-{
+ {
   // Process object is not const-correct so the const casting is required.
   SetNthInput(0, const_cast<TInputImage *>( image ));
-}
+ }
 
 template <class TInputImage, class T0utputCorrelation, class TOutputDeformationField>
 void
 FineCorrelationImageFilter<TInputImage,T0utputCorrelation,TOutputDeformationField>
 ::SetMovingInput( const TInputImage * image)
-{
+ {
   // Process object is not const-correct so the const casting is required.
   SetNthInput(1, const_cast<TInputImage *>( image ));
-}
+ }
 
 template <class TInputImage, class T0utputCorrelation, class TOutputDeformationField>
 const TInputImage *
 FineCorrelationImageFilter<TInputImage,T0utputCorrelation,TOutputDeformationField>
 ::GetFixedInput()
-{
+ {
   if (this->GetNumberOfInputs()<1)
-  {
+    {
     return 0;
-  }
+    }
   return static_cast<const TInputImage *>(this->itk::ProcessObject::GetInput(0));
-}
+ }
 
 template <class TInputImage, class T0utputCorrelation, class TOutputDeformationField>
 const TInputImage *
 FineCorrelationImageFilter<TInputImage,T0utputCorrelation,TOutputDeformationField>
 ::GetMovingInput()
-{
+ {
   if (this->GetNumberOfInputs()<2)
-  {
+    {
     return 0;
-  }
+    }
   return static_cast<const TInputImage *>(this->itk::ProcessObject::GetInput(1));
-}
+ }
 
 template <class TInputImage, class T0utputCorrelation, class TOutputDeformationField>
 TOutputDeformationField *
 FineCorrelationImageFilter<TInputImage,T0utputCorrelation,TOutputDeformationField>
 ::GetOutputDeformationField()
-{
+ {
   if (this->GetNumberOfOutputs()<2)
-  {
+    {
     return 0;
-  }
+    }
   return static_cast<TOutputDeformationField *>(this->itk::ProcessObject::GetOutput(1));
-}
+ }
 
 
 template <class TInputImage, class TOutputCorrelation, class TOutputDeformationField>
 void
 FineCorrelationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationField>
 ::GenerateInputRequestedRegion()
-{
+ {
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();
 
@@ -121,9 +121,9 @@ FineCorrelationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFiel
   TOutputCorrelation * outputPtr = this->GetOutput();
 
   if ( !fixedPtr || !movingPtr || !outputPtr )
-  {
+    {
     return;
-  }
+    }
 
   // get a copy of the fixed requested region (should equal the output
   // requested region)
@@ -141,11 +141,11 @@ FineCorrelationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFiel
 
   // crop the fixed region at the fixed's largest possible region
   if ( fixedRequestedRegion.Crop(fixedPtr->GetLargestPossibleRegion()))
-  {
+    {
     fixedPtr->SetRequestedRegion( fixedRequestedRegion );
-  }
+    }
   else
-  {
+    {
     // Couldn't crop the region (requested region is outside the largest
     // possible region).  Throw an exception.
     // store what we tried to request (prior to trying to crop)
@@ -155,20 +155,20 @@ FineCorrelationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFiel
     itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
     itk::OStringStream msg;
     msg << this->GetNameOfClass()
-    << "::GenerateInputRequestedRegion()";
+        << "::GenerateInputRequestedRegion()";
     e.SetLocation(msg.str().c_str());
     e.SetDescription("Requested region is (at least partially) outside the largest possible region of image 1.");
     e.SetDataObject(fixedPtr);
     throw e;
-  }
+    }
 
   // crop the moving region at the moving's largest possible region
   if ( movingRequestedRegion.Crop(movingPtr->GetLargestPossibleRegion()))
-  {
+    {
     movingPtr->SetRequestedRegion( movingRequestedRegion );
-  }
+    }
   else
-  {
+    {
     // Couldn't crop the region (requested region is outside the largest
     // possible region).  Throw an exception.
     // store what we tried to request (prior to trying to crop)
@@ -178,21 +178,24 @@ FineCorrelationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFiel
     itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
     itk::OStringStream msg;
     msg << this->GetNameOfClass()
-    << "::GenerateInputRequestedRegion()";
+        << "::GenerateInputRequestedRegion()";
     e.SetLocation(msg.str().c_str());
     e.SetDescription("Requested region is (at least partially) outside the largest possible region of image 1.");
     e.SetDataObject(movingPtr);
     throw e;
-  }
+    }
 
   return;
-}
+ }
 
 template <class TInputImage, class TOutputCorrelation, class TOutputDeformationField>
 inline double
 FineCorrelationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationField>
-::Correlation(const NeighborhoodType & fixed, const NeighborhoodType & moving, const OffsetType & offset, unsigned int scale) const
-{
+::Correlation(const NeighborhoodType & fixed,
+    const NeighborhoodType & moving,
+    const OffsetType & offset,
+    unsigned int scale) const
+    {
   double crossProductSum = 0;
   double fSquareSum = 0;
   double mSquareSum = 0;
@@ -200,42 +203,42 @@ FineCorrelationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFiel
   OffsetType currentOffset, currentMovingOffset;
 
   for(int i=-(int)m_Radius[0];i<=(int)m_Radius[0];++i)
+    {
+    for(int j=-(int)m_Radius[1]; j<=(int)m_Radius[1];++j)
       {
-      for(int j=-(int)m_Radius[1]; j<=(int)m_Radius[1];++j)
-  {
-  currentOffset[0]=i;
-  currentOffset[1]=j;
-  currentMovingOffset[0] = i * (int)scale;
-  currentMovingOffset[1] = j * (int)scale;
+      currentOffset[0] = i;
+      currentOffset[1] = j;
+      currentMovingOffset[0] = i * (int)scale;
+      currentMovingOffset[1] = j * (int)scale;
 
-  double vfixed = fixed[currentOffset];
-  double vmoving = moving[currentMovingOffset+offset];
+      double vfixed = fixed[currentOffset];
+      double vmoving = moving[currentMovingOffset+offset];
 
-  crossProductSum+=vfixed*vmoving;
-  fSquareSum += vfixed*vfixed;
-  mSquareSum += vmoving*vmoving;
-  }
+      crossProductSum+=vfixed*vmoving;
+      fSquareSum+=vfixed*vfixed;
+      mSquareSum+=vmoving*vmoving;
       }
+    }
 
   double res = 0;
   double denom = fSquareSum*mSquareSum;
 
   if( denom < m_Epsilon)
     {
-      res = 0;
+    res = 0;
     }
   else
     res = crossProductSum/vcl_sqrt(denom);
 
   return res;
-}
+    }
 
 template <class TInputImage, class TOutputCorrelation, class TOutputDeformationField>
 const typename FineCorrelationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationField>
 ::NeighborhoodType
-FineCorrelationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationField>
+ FineCorrelationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationField>
 ::ComputeSubPixelNeighborhood(const IndexType & location, unsigned int scale) const
-{
+ {
   // First, create the neighborhood to return
   NeighborhoodType subPixelNeighborhood;
 
@@ -243,7 +246,7 @@ FineCorrelationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFiel
   RadiusType subPixelRadius;
   subPixelRadius[0] = (m_Radius[0]+1) * scale;
   subPixelRadius[1] = (m_Radius[1]+1) * scale;
-  
+
   // Initialize the neighborhood
   subPixelNeighborhood.SetRadius(subPixelRadius);
 
@@ -272,14 +275,14 @@ FineCorrelationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFiel
     }
   // Finally, return the neighborhood
   return subPixelNeighborhood;
-}
+ }
 
 
 template <class TInputImage, class TOutputCorrelation, class TOutputDeformationField>
 inline double
 FineCorrelationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationField>
 ::RefineLocation(const NeighborhoodType& correlMap, const OffsetType & maxPos, DeformationValueType & value) const
-{
+ {
   // 1ST: Find the 6 highest correlation values
   PairVectorType pairVector;
 
@@ -293,123 +296,123 @@ FineCorrelationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFiel
       {
       // Avoid being out of bound
       if( (i>=-(int)m_SearchRadius[0] && i<=(int)m_SearchRadius[0])
-    && (j>=-(int)m_SearchRadius[1] && i<=(int)m_SearchRadius[1]))
-  {
-  
-  // Update offset
-  offset[0]=i;
-  offset[1]=j;
-  
-  PairType p(correlMap[offset],offset);
-  pairVector.push_back(p);
-  }
+          && (j>=-(int)m_SearchRadius[1] && i<=(int)m_SearchRadius[1]))
+        {
+
+        // Update offset
+        offset[0]=i;
+        offset[1]=j;
+
+        PairType p(correlMap[offset],offset);
+        pairVector.push_back(p);
+        }
       }
     }
 
-    // Check if we have enough values for quadric fitting
-    if(pairVector.size()<6)
-      {
-      value[0]=maxPos[0];
-      value[1]=maxPos[1];
-      return correlMap[maxPos];
-      }
+  // Check if we have enough values for quadric fitting
+  if(pairVector.size()<6)
+    {
+    value[0]=maxPos[0];
+    value[1]=maxPos[1];
+    return correlMap[maxPos];
+    }
 
 
-    // Sort the map by highest correlation values
-    std::sort(pairVector.begin(),pairVector.end(),&CompPairs);
+  // Sort the map by highest correlation values
+  std::sort(pairVector.begin(),pairVector.end(),&CompPairs);
 
 
-    // 2ND: Fill the linear system: f(x,y) = Ax²+ By² + Cx + Dy + Exy + F
-    
-    itk::Matrix<double,6,6> mat,invert;
-    itk::Vector<double,6>   correlValues,coefs;
+  // 2ND: Fill the linear system: f(x,y) = Ax²+ By² + Cx + Dy + Exy + F
 
-    for(unsigned int i = 0;i<6;++i)
-      {
-      // Fill the matrix
-      offset = pairVector[i].second;
-      mat(i,0) = (double)(offset[0]*offset[0]);
-      mat(i,1) = (double)(offset[1]*offset[1]);
-      mat(i,2) = (double)(offset[0]);
-      mat(i,3) = (double)(offset[1]);
-      mat(i,4) = (double)(offset[0]*offset[1]);
-      mat(i,5) = 1.;
+  itk::Matrix<double,6,6> mat,invert;
+  itk::Vector<double,6>   correlValues,coefs;
 
-      // Fill the correl values vector
-      correlValues[i] = pairVector[i].first;      
-      }
+  for(unsigned int i = 0;i<6;++i)
+    {
+    // Fill the matrix
+    offset = pairVector[i].second;
+    mat(i,0) = (double)(offset[0]*offset[0]);
+    mat(i,1) = (double)(offset[1]*offset[1]);
+    mat(i,2) = (double)(offset[0]);
+    mat(i,3) = (double)(offset[1]);
+    mat(i,4) = (double)(offset[0]*offset[1]);
+    mat(i,5) = 1.;
 
-    // 3RD: Solve the linear system
+    // Fill the correl values vector
+    correlValues[i] = pairVector[i].first;
+    }
 
-    // We try to invert the matrix
-    try
-      {
-      invert = mat.GetInverse();
-      }
-    catch( itk::ExceptionObject & )
-      {
-      // Matrix is not invertible
-      value[0]=maxPos[0];
-      value[1]=maxPos[1];
+  // 3RD: Solve the linear system
 
-      return correlMap[maxPos];
-      }
+  // We try to invert the matrix
+  try
+  {
+    invert = mat.GetInverse();
+  }
+  catch( itk::ExceptionObject & )
+  {
+    // Matrix is not invertible
+    value[0]=maxPos[0];
+    value[1]=maxPos[1];
 
-    // If are here, the inversion did succeed
-    coefs = invert * correlValues;
-    // 4TH: Look for a maximum
+    return correlMap[maxPos];
+  }
 
-    // Check if there is a maximum (sign of 4 AB - E²)
-    double det = 4*coefs[0]*coefs[1] - coefs[4]*coefs[4];
+  // If are here, the inversion did succeed
+  coefs = invert * correlValues;
+  // 4TH: Look for a maximum
 
-    if(det<=1e-6)//0)
-      {
-      // Quadric has no maximum values
-      value[0]=maxPos[0];
-      value[1]=maxPos[1];
+  // Check if there is a maximum (sign of 4 AB - E²)
+  double det = 4*coefs[0]*coefs[1] - coefs[4]*coefs[4];
 
-      return correlMap[maxPos];
-      }
-    
-    // Xmax = - (2BC - DE)/det
-    value[0] = - (2*coefs[1]*coefs[2] - coefs[3]*coefs[4])/det;
+  if(det<=1e-6)//0)
+    {
+    // Quadric has no maximum values
+    value[0]=maxPos[0];
+    value[1]=maxPos[1];
 
-    // Ymax = - (2AD - CE)/det
-    value[1] = - (2*coefs[0]*coefs[3] - coefs[2]*coefs[4])/det;
+    return correlMap[maxPos];
+    }
 
-    // Apply f to get the maximum correlation value
+  // Xmax = - (2BC - DE)/det
+  value[0] = - (2*coefs[1]*coefs[2] - coefs[3]*coefs[4])/det;
 
-    double maxCorrel = coefs[0] * value[0]*value[0] + coefs[1] * value[1]*value[1]
-      + coefs[2] * value[0] + coefs[3] * value[1] + coefs[4] * value[0] * value[1] + coefs[5];
+  // Ymax = - (2AD - CE)/det
+  value[1] = - (2*coefs[0]*coefs[3] - coefs[2]*coefs[4])/det;
 
-    // Check for a consistent maxima. If not, do not use the values
-    // TODO: Check this
-    //if(maxCorrel > 1 || maxCorrel < 0 || vnl_math_isnan(maxCorrel))
-    if( ((maxCorrel-1.) > 1e-6) || maxCorrel < 1e-6 || vnl_math_isnan(maxCorrel))
-      {
-      value[0]=maxPos[0];
-      value[1]=maxPos[1];
+  // Apply f to get the maximum correlation value
 
-      return correlMap[maxPos];
-      }
+  double maxCorrel = coefs[0] * value[0]*value[0] + coefs[1] * value[1]*value[1]
+                                                                              + coefs[2] * value[0] + coefs[3] * value[1] + coefs[4] * value[0] * value[1] + coefs[5];
 
-    return maxCorrel;
-}
+  // Check for a consistent maxima. If not, do not use the values
+  // TODO: Check this
+  //if(maxCorrel > 1 || maxCorrel < 0 || vnl_math_isnan(maxCorrel))
+  if( ((maxCorrel-1.) > 1e-6) || maxCorrel < 1e-6 || vnl_math_isnan(maxCorrel))
+    {
+    value[0]=maxPos[0];
+    value[1]=maxPos[1];
+
+    return correlMap[maxPos];
+    }
+
+  return maxCorrel;
+ }
 
 template <class TInputImage, class TOutputCorrelation, class TOutputDeformationField>
 void
 FineCorrelationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationField>
 ::BeforeThreadedGenerateData()
-{
+ {
   m_Interpolator->SetInputImage(this->GetMovingInput());
-}
+ }
 
 template <class TInputImage, class TOutputCorrelation, class TOutputDeformationField>
 void
 FineCorrelationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationField>
 ::ThreadedGenerateData( const OutputImageRegionType &outputRegionForThread,
-                        int threadId)
-{
+    int threadId)
+    {
   // Get the image pointers
   const TInputImage * fixedPtr = this->GetFixedInput();
   const TInputImage * movingPtr = this->GetMovingInput();
@@ -421,13 +424,13 @@ FineCorrelationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFiel
   NeighborhoodIteratorType movingIt(m_SearchRadius + m_Radius,movingPtr,outputRegionForThread);
   itk::ImageRegionIteratorWithIndex<TOutputCorrelation> outputIt(outputPtr,outputRegionForThread);
   itk::ImageRegionIterator<TOutputDeformationField> outputDfIt(outputDfPtr,outputRegionForThread);
-  
+
   // Boundary conditions
   itk::ZeroFluxNeumannBoundaryCondition<TInputImage> fixedNbc;
   itk::ZeroFluxNeumannBoundaryCondition<TInputImage> movingNbc;
   fixedIt.OverrideBoundaryCondition(&fixedNbc);
   movingIt.OverrideBoundaryCondition(&movingNbc);
- 
+
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
@@ -443,13 +446,13 @@ FineCorrelationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFiel
 
   // Offset
   OffsetType offset;
-  
+
   // Correl, max correl, maxPosition
   double correl, maxCorrel;
   OffsetType maxOffset;
 
-// Walk the images
-    while (!fixedIt.IsAtEnd() && !movingIt.IsAtEnd() && !outputIt.IsAtEnd() && !outputDfIt.IsAtEnd() )
+  // Walk the images
+  while (!fixedIt.IsAtEnd() && !movingIt.IsAtEnd() && !outputIt.IsAtEnd() && !outputDfIt.IsAtEnd() )
     {
     // Initialize
     correl = 0;
@@ -465,26 +468,26 @@ FineCorrelationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFiel
     for(int i =-(int)m_SearchRadius[0]; i<=(int)m_SearchRadius[0];++i)
       {
       for(int j=-(int)m_SearchRadius[1]; j<=(int)m_SearchRadius[1];++j)
-  {
-  // Update offset
-  offset[0]=i;
-  offset[1]=j;
+        {
+        // Update offset
+        offset[0]=i;
+        offset[1]=j;
 
-  // compute correlation
-  double correl = this->Correlation(fixedN,movingN,offset);
+        // compute correlation
+        double correl = this->Correlation(fixedN,movingN,offset);
 
         // Store in the map (for further refinenement)
-  correlationMap[offset]=correl;
+        correlationMap[offset]=correl;
 
-  // Check for maximum
-  if(correl > maxCorrel)
-    {
-    maxCorrel = correl;
-    maxOffset = offset;
-    }
-  }
+        // Check for maximum
+        if(correl > maxCorrel)
+          {
+          maxCorrel = correl;
+          maxOffset = offset;
+          }
+        }
       }
-  
+
     // Perform LSQR QUADFIT refinement
     if(m_RefinementMode == LSQR_QUADFIT)
       {
@@ -502,29 +505,29 @@ FineCorrelationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFiel
 
       // Compute the correlation at each fine location
       for(int i =-(int)m_SubPixelPrecision+1; i<(int)m_SubPixelPrecision;++i)
-  {
-  for(int j=-(int)m_SubPixelPrecision+1; j<(int)m_SubPixelPrecision;++j)
-    {
-    // Update the fine offset
-    fineOffset[0] = i;
-    fineOffset[1] = j;
+        {
+        for(int j=-(int)m_SubPixelPrecision+1; j<(int)m_SubPixelPrecision;++j)
+          {
+          // Update the fine offset
+          fineOffset[0] = i;
+          fineOffset[1] = j;
 
-    // Compute the correlation
-    double correl = this->Correlation(fixedN,subPixelN,fineOffset,m_SubPixelPrecision);
-    
-    // If correlation is better
-    if(correl > maxCorrel)
-      {
-      // Update values
-      maxCorrel = correl;
-      maxFineOffset = fineOffset;
-      }
-    }
-  }
- 
+          // Compute the correlation
+          double correl = this->Correlation(fixedN,subPixelN,fineOffset,m_SubPixelPrecision);
+
+          // If correlation is better
+          if(correl > maxCorrel)
+            {
+            // Update values
+            maxCorrel = correl;
+            maxFineOffset = fineOffset;
+            }
+          }
+        }
+
       // Finally, update deformation values
       deformationValue[0]=maxOffset[0] + (double)maxFineOffset[0]/(double)m_SubPixelPrecision;
-      deformationValue[1]=maxOffset[1] + (double)maxFineOffset[1]/(double)m_SubPixelPrecision;;
+      deformationValue[1]=maxOffset[1] + (double)maxFineOffset[1]/(double)m_SubPixelPrecision;
 
       }
     // Default and COARSE case
@@ -542,11 +545,11 @@ FineCorrelationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFiel
     ++movingIt;
     ++outputIt;
     ++outputDfIt;
-   
+
     // Update progress
     progress.CompletedPixel();
     }
-}
+    }
 
 } // end namespace otb
 
