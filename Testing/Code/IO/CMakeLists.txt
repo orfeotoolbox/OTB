@@ -2759,7 +2759,6 @@ otbPointSetFileReader2.cxx
 SET(BasicIO_SRCS18
 otbIOTests18.cxx
 otbImageKeywordlist.cxx
-otbTerraSarImageMetadataInterface.cxx
 otbSpotImageMetadataInterfaceNew.cxx
 otbFormosatImageMetadataInterfaceNew.cxx
 otbQuickBirdImageMetadataInterfaceNew.cxx
