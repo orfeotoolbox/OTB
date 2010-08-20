@@ -2127,12 +2127,12 @@ ADD_TEST(ioTvImageMetadataInterfaceBaseTest_FORMOSAT2 ${IO_TESTS18}
         ${LARGEDATA}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF
         ${TEMP}/ioTvImageMetadataInterfaceBase_FORMOSAT2.txt
 )
-ADD_TEST(ioTvTImageMetadataInterfaceBaseTest_TSX1dims ${IO_TESTS18}
+ADD_TEST(ioTvImageMetadataInterfaceBaseTest_TSX1dims ${IO_TESTS18}
          --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_TSX1dims.txt
                          ${TEMP}/ioTvImageMetadataInterfaceBase_TSX1dims.txt
         otbImageMetadataInterfaceBaseTest
         ${LARGEDATA}/TERRASARX/dims/TSX-1.SAR.L1B/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_strip_011.cos
-        ${TEMP}/ioTvTImageMetadataInterfaceBase_TSX1dims.txt
+        ${TEMP}/ioTvImageMetadataInterfaceBase_TSX1dims.txt
 )
 ADD_TEST(ioTvImageMetadataInterfaceBaseTest_TSX1TORONTO ${IO_TESTS18}
          --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_TSX1TORONTO.txt
@@ -2224,12 +2224,12 @@ ADD_TEST(ioTvOpticalImageMetadataInterfaceTest_FORMOSAT2 ${IO_TESTS18}
 )
 
 #------------ SarImageMetadataInterfaceTest ---------------
-ADD_TEST(ioTvTSarImageMetadataInterfaceTest_TSX1dims ${IO_TESTS18}
+ADD_TEST(ioTvSarImageMetadataInterfaceTest_TSX1dims ${IO_TESTS18}
          --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvSarImageMetadataInterface_TSX1dims.txt
                          ${TEMP}/ioTvSarImageMetadataInterface_TSX1dims.txt
         otbSarImageMetadataInterfaceTest
         ${LARGEDATA}/TERRASARX/dims/TSX-1.SAR.L1B/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_strip_011.cos
-        ${TEMP}/ioTvTSarImageMetadataInterface_TSX1dims.txt
+        ${TEMP}/ioTvSarImageMetadataInterface_TSX1dims.txt
 )
 ADD_TEST(ioTvSarImageMetadataInterfaceTest_TSX1TORONTO ${IO_TESTS18}
          --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvSarImageMetadataInterface_TSX1TORONTO.txt
