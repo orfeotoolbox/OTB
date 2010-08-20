@@ -29,4 +29,3 @@ int otbMapFileProductWriterNew(int argc, char* argv[])
   
   return EXIT_SUCCESS;
 }
-

@@ -48,7 +48,7 @@ class ITK_EXPORT MapFileProductWriter : public itk::ProcessObject
 {
 public:
   /** Standard class typedefs. */
-  typedef MapFileProductWriter                  Self;
+  typedef MapFileProductWriter              Self;
   typedef itk::ProcessObject                Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
@@ -60,35 +60,35 @@ public:
   itkTypeMacro(MapFileProductWriter, itk::ProcessObject);
 
   /** Some convenient typedefs. */
-  typedef TInputImage                          InputImageType;
+  typedef TInputImage                                  InputImageType;
   typedef typename InputImageType::InternalPixelType   InternalPixelType;
-  typedef typename InputImageType::SizeType    SizeType;
-  typedef typename InputImageType::IndexType   IndexType;
-  typedef unsigned char                        OutputPixelType;
-  typedef typename InputImageType::Pointer     InputImagePointer;
-  typedef typename InputImageType::RegionType  InputImageRegionType;
-  typedef typename InputImageType::PixelType   InputImagePixelType;
+  typedef typename InputImageType::SizeType            SizeType;
+  typedef typename InputImageType::IndexType           IndexType;
+  typedef unsigned char                                OutputPixelType;
+  typedef typename InputImageType::Pointer             InputImagePointer;
+  typedef typename InputImageType::RegionType          InputImageRegionType;
+  typedef typename InputImageType::PixelType           InputImagePixelType;
 
-  typedef VectorData<double,2>                    VectorDataType;
-  typedef typename VectorDataType::DataNodeType   DataNodeType;
-  typedef typename DataNodeType::PolygonType      PolygonType;
-  typedef typename PolygonType::VertexType        VertexType;
+  typedef VectorData<double,2>                         VectorDataType;
+  typedef typename VectorDataType::DataNodeType        DataNodeType;
+  typedef typename DataNodeType::PolygonType           PolygonType;
+  typedef typename PolygonType::VertexType             VertexType;
   
-  typedef VectorDataFileWriter<VectorDataType>    VectorDataFileWriterType;
+  typedef VectorDataFileWriter<VectorDataType>         VectorDataFileWriterType;
   
 
   /// Multi channels Extract ROI filter
   typedef MultiChannelExtractROI<InternalPixelType, OutputPixelType> VectorImageExtractROIFilterType;
 
   // Writer
-  typedef ImageFileWriter< VectorImage<OutputPixelType> >     VectorWriterType;
-
+  typedef ImageFileWriter< VectorImage<OutputPixelType> >            VectorWriterType;
+  
   // Resampler
   typedef StreamingShrinkImageFilter<InputImageType,InputImageType > StreamingShrinkImageFilterType;
 
   // Intensity Rescale
   typedef VectorRescaleIntensityImageFilter<InputImageType,
-					    InputImageType> VectorRescaleIntensityImageFilterType;
+					    InputImageType>          VectorRescaleIntensityImageFilterType;
 
   // Transformer
   typedef GenericRSTransform<>           TransformType;

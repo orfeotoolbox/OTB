@@ -123,7 +123,8 @@ MapFileProductWriter<TInputImage>
   // check that the right extension is given : expected .map
   if (itksys::SystemTools::GetFilenameLastExtension(m_FileName) != ".map")
     {
-    itkExceptionMacro(<<itksys::SystemTools::GetFilenameLastExtension(m_Path)<<" is a wrong Extension FileName : Expected .map");
+    itkExceptionMacro(<<itksys::SystemTools::GetFilenameLastExtension(m_Path)
+                      <<" is a wrong Extension FileName : Expected .map");
     }
   
   // the path to the directory where the mapfile will be written
@@ -221,7 +222,7 @@ MapFileProductWriter<TInputImage>
       m_StreamingShrinkImageFilter->SetInput(m_VectorImage);
 
       m_VectorRescaleIntensityImageFilter = VectorRescaleIntensityImageFilterType::New();
-      m_VectorRescaleIntensityImageFilter->SetInput(m_StreamingShrinkImageFilter->GetOutput()); //m_ResampleVectorImage);
+      m_VectorRescaleIntensityImageFilter->SetInput(m_StreamingShrinkImageFilter->GetOutput());
       m_VectorRescaleIntensityImageFilter->SetOutputMinimum(outMin);
       m_VectorRescaleIntensityImageFilter->SetOutputMaximum(outMax);
 
@@ -296,7 +297,7 @@ MapFileProductWriter<TInputImage>
         // Create directory where to store generated tiles
         std::ostringstream path;
         path << m_Path<<"/tiles";
-
+        
         ossimFilename cachingDir(path.str());
         cachingDir.createDirectory();
         
@@ -304,7 +305,7 @@ MapFileProductWriter<TInputImage>
         std::ostringstream ossFileName;
         ossFileName << m_Path<<"/";
         ossFileName << "tiles/tile_";
-	ossFileName << m_CurrentDepth<<"_";
+	ossFileName << m_CurrentDepth<<"_";        
         ossFileName << x<<"_";
         ossFileName << y;
         ossFileName << ".tif";
@@ -319,8 +320,8 @@ MapFileProductWriter<TInputImage>
         m_VectorImageExtractROIFilter->SetSizeY(extractSize[1]);
 
         // Set Channel to extract
-        m_VectorImageExtractROIFilter->SetChannel(1);
-	m_VectorImageExtractROIFilter->SetChannel(2);
+        m_VectorImageExtractROIFilter->SetChannel(1);        
+	m_VectorImageExtractROIFilter->SetChannel(2);        
 	m_VectorImageExtractROIFilter->SetChannel(3);
 
         // Set extract roi input
