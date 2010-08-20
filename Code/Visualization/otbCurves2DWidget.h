@@ -126,6 +126,12 @@ public:
     return m_SpaceToScreenTransform->TransformPoint(spacePoint);
   }
 
+  /** Remove curve by ID instead of index */
+  void RemoveCurveByItsID(unsigned int id);
+
+  /** Get curve by ID instead of index */
+  CurvePointerType GetCurveByItsId(unsigned int id);
+
 protected:
   /** Constructor */
   Curves2DWidget();

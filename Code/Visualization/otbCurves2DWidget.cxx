@@ -66,6 +66,34 @@ void Curves2DWidget::RemoveCurve(unsigned int idx)
   m_Curves->Erase(idx);
 }
 
+void Curves2DWidget::RemoveCurveByItsID(unsigned int id)
+{
+  unsigned int size = m_Curves->Size();
+
+  for (unsigned int j = 0; j < size; j++)
+    {
+    if (m_Curves->GetNthElement(j)->GetId() == id)
+      {
+      m_Curves->Erase(j);
+      break;
+      }
+    }
+}
+
+Curves2DWidget::CurvePointerType
+Curves2DWidget::GetCurveByItsId(unsigned int id)
+{
+  for (unsigned int j = 0; j < m_Curves->Size(); j++)
+    {
+    if (m_Curves->GetNthElement(j)->GetId() == id)
+      {
+      return m_Curves->GetNthElement(j);
+      }
+    }
+
+  itkExceptionMacro(<< "No curve found with ID " << id);
+}
+
 void Curves2DWidget::ClearAllCurves()
 {
   m_Curves->Clear();
@@ -248,6 +276,38 @@ void Curves2DWidget::RenderGrid()
     }
 
   glEnd();
+
+  // Display the vertical grid index (Y axis)
+  pos = screenGridOrigin[1];
+  int scale = 0;
+  std::ostringstream oss;
+  gl_font(FL_COURIER_BOLD,8);
+  glColor4d(0, 0, 0, 0.5);
+
+  while(pos <= this->h()-m_Margins[1])
+    {
+    oss<<scale;
+
+    gl_draw(oss.str().c_str(),(float)m_Margins[0]-20,(float)pos);
+    pos+=screenGridSpacing[1];
+    scale += m_GridSpacing[1];
+    oss.str("");
+    }
+
+     // Display the vertical grid index (X axis)
+    scale = m_GridOrigin[0];
+    pos = screenGridOrigin[0];
+    while(pos <= this->w()-m_Margins[0])
+    {
+    oss<<scale;
+
+    gl_draw(oss.str().c_str(),(float)pos, m_Margins[1]-5);
+    pos+=screenGridSpacing[0];
+    scale += m_GridSpacing[0];
+    oss.str("");
+    }
+
+
 }
 
 void Curves2DWidget::RenderCurves()
