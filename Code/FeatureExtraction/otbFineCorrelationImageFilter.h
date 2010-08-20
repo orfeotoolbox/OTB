@@ -204,6 +204,8 @@ private:
   /** Precision used in subpixel mode */
   unsigned int            m_SubPixelPrecision;
 
+  double                  m_Epsilon;
+
 };
 
 } // end namespace otb

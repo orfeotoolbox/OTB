@@ -29,7 +29,6 @@
 
 namespace otb
 {
-
 /**
  * Constructor
  */
@@ -47,6 +46,9 @@ FineCorrelationImageFilter<TInputImage,T0utputCorrelation,TOutputDeformationFiel
 
   // Default interpolator
   m_Interpolator = itk::LinearInterpolateImageFunction<TInputImage,double>::New();
+
+  // Epsilon in correlation formula set to e-10
+  m_Epsilon = 0.0000000001;
 }
 
 template <class TInputImage, class T0utputCorrelation, class TOutputDeformationField>
@@ -216,12 +218,14 @@ FineCorrelationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFiel
       }
 
   double res = 0;
-  if( fSquareSum == 0. || mSquareSum == 0. )
+  double denom = fSquareSum*mSquareSum;
+
+  if( denom < m_Epsilon)
     {
-      res = itk::NumericTraits<double>::max();
+      res = 0;
     }
   else
-    res = crossProductSum/vcl_sqrt(fSquareSum*mSquareSum);
+    res = crossProductSum/vcl_sqrt(denom);
 
   return res;
 }
