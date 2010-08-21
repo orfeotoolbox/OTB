@@ -213,7 +213,8 @@ MapFileProductWriter<TInputImage>
     m_CurrentDepth = depth;
 
     // Resample image to the max Depth
-    int sampleRatioValue = static_cast<int>(vcl_pow(2., (maxDepth - depth)));
+//    int sampleRatioValue = static_cast<int>(vcl_pow(2., (maxDepth - depth)));
+    int sampleRatioValue = 1 << (maxDepth - depth); // 2^(maxDepth - depth)
 
     if (sampleRatioValue > 1)
       {
