@@ -38,7 +38,20 @@ namespace otb
 {
 
 /** \class MapFileProductWriter
- * \brief This class writes  Map Product file format (MapFile and MapFiles)
+ * \brief This class produces Map file product ie a file .map,
+ *        the tiles to draw in a mapserver, and finally
+ *        a shapefile wich describe the tiles and where to find them
+ *        on the disk.
+ *       
+ * This filter begins by tiling the input image. An accessor
+ * SetTileSize allows to set the tiles size. For each tile generated,
+ * an entry is added to the shapefile to store the location where the
+ * file is saved on the disk.
+ * The product generated are a mapfile wich is the configuration file
+ * for mapservers, a tile index and finally the tiles.
+ *
+ * NOTE : The user must edit the *.map file generated to put the right
+ * informations concerning the field 'wms_onlineresource'.
  *
  * \ingroup IO
  *
