@@ -18,7 +18,6 @@
 #ifndef __otbUtmMapProjection_h
 #define __otbUtmMapProjection_h
 
-#include "projection/ossimMapProjection.h"
 #include "projection/ossimUtmProjection.h"
 #include "otbMapProjection.h"
 
@@ -26,18 +25,20 @@ namespace otb
 {
 /** \class UtmMapProjection
  *  \brief This class implements the UTM map projection.
+ *
  * It converts coordinates in longitude,latitude (WGS84) to UTM map coordinates.
+ *
  */
-template <InverseOrForwardTransformationEnum transform>
-class ITK_EXPORT UtmMapProjection : public MapProjection<ossimUtmProjection, transform>
+template <InverseOrForwardTransformationEnum TTransform>
+class ITK_EXPORT UtmMapProjection : public MapProjection<ossimUtmProjection, TTransform>
 {
 public:
 
   /** Standard class typedefs. */
-  typedef UtmMapProjection                             Self;
-  typedef MapProjection<ossimUtmProjection, transform> Superclass;
-  typedef itk::SmartPointer<Self>                      Pointer;
-  typedef itk::SmartPointer<const Self>                ConstPointer;
+  typedef UtmMapProjection                              Self;
+  typedef MapProjection<ossimUtmProjection, TTransform> Superclass;
+  typedef itk::SmartPointer<Self>                       Pointer;
+  typedef itk::SmartPointer<const Self>                 ConstPointer;
 
   typedef typename Superclass::ScalarType ScalarType;
   typedef itk::Point<ScalarType, 2>       InputPointType;
@@ -50,20 +51,16 @@ public:
   itkTypeMacro(UtmMapProjection, MapProjection);
 
   virtual void SetZone(long zone);
-  virtual void SetZone(const InputPointType& ground);
   virtual void SetHemisphere(char hemisphere);
-  virtual long GetZone();
+  virtual int GetZone() const;
   virtual const char GetHemisphere() const;
 
   virtual void SetZoneAndHemisphereFromGeoPoint(const InputPointType& geoPoint);
-//      virtual void SetZoneAndHemisphereFromCartoPoint(const OutputPointType &cartoPoint);
-  virtual int GetZoneFromGeoPoint(const InputPointType& geoPoint);
-
-//      virtual void Initialize(const InputPointType& middlePoint);
+  virtual int GetZoneFromGeoPoint(const InputPointType& geoPoint) const;
 
 protected:
-  UtmMapProjection();
-  virtual ~UtmMapProjection();
+  UtmMapProjection() {};
+  virtual ~UtmMapProjection() {};
 
 private:
   UtmMapProjection(const Self &); //purposely not implemented
