@@ -68,6 +68,7 @@ int otbVectorDataKeywordlist(int argc, char * argv[])
     if (it.Get()->GetMetaDataDictionary().HasKey(otb::MetaDataKey::VectorDataKeywordlistKey))
       {
       otb::VectorDataKeywordlist kwl;
+      kwl.GetNameOfClass();
       itk::ExposeMetaData<otb::VectorDataKeywordlist>(it.Get()->GetMetaDataDictionary(),
                                                       otb::MetaDataKey::VectorDataKeywordlistKey,
                                                       kwl);
