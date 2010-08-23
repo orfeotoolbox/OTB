@@ -42,7 +42,7 @@ void VectorDataModel::Update(void)
   this->NotifyAll();
 }
 
-void VectorDataModel::AddPointToGeometry(VertexType& vertex)
+void VectorDataModel::AddPointToGeometry(VertexType& vertex, bool callUpdate)
 {
   VertexType newPoint;
   newPoint[0] = m_Origin[0] + vertex[0] / m_Spacing[0];
@@ -106,7 +106,11 @@ void VectorDataModel::AddPointToGeometry(VertexType& vertex)
     {
     itkExceptionMacro(<< "Node type not (yet) supported: " << m_CurrentNodeType);
     }
-  this->Update();
+
+  if(callUpdate == true)
+    {
+      this->Update();
+    }
 }
 
 void VectorDataModel::EndGeometry(void)
@@ -241,6 +245,7 @@ VectorDataModel::AddVectorData( VectorDataPointer vData )
   DataTreeType::Pointer tree = vData->GetDataTree();
   TreeNodeType * root = const_cast<TreeNodeType *>(tree->GetRoot());
   this->AddNode( root );
+  this->Update();
 }
 
  
@@ -258,7 +263,7 @@ VectorDataModel::AddNode( TreeNodeType * node )
 	VertexType vertex;
 	vertex[0] = point[0];
 	vertex[1] = point[1];
-	this->AddPointToGeometry(vertex);
+	this->AddPointToGeometry(vertex, false);
 	this->EndGeometry();
 	break;
       }
@@ -274,7 +279,7 @@ VectorDataModel::AddNode( TreeNodeType * node )
 	    VertexType vertex;
 	    vertex[0] = point[0];
 	    vertex[1] = point[1];
-	    this->AddPointToGeometry(vertex);
+	    this->AddPointToGeometry(vertex, false);
 	  }
 	this->EndGeometry();
 	break;
@@ -291,7 +296,7 @@ VectorDataModel::AddNode( TreeNodeType * node )
 	    VertexType vertex;
 	    vertex[0] = point[0];
 	    vertex[1] = point[1];
-	    this->AddPointToGeometry(vertex);
+	    this->AddPointToGeometry(vertex, false);
 	    vIt++;
 	  }
 	this->EndGeometry();

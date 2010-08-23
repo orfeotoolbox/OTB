@@ -80,7 +80,7 @@ public:
   template <typename TImage> void AddVectorData( VectorDataPointer vData, TImage * image );
   template <typename TImage> void AddNode( TreeNodeType * node, TImage * image );
 
-  void AddPointToGeometry(VertexType& vertex);
+  void AddPointToGeometry(VertexType& vertex, bool callUpdate = true);
   void EndGeometry(void);
   void DeleteGeometry(void);
 

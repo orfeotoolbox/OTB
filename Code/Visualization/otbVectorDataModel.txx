@@ -35,6 +35,7 @@ VectorDataModel::AddVectorData( VectorDataPointer vData, TImage * image  )
   DataTreeType::Pointer tree = vData->GetDataTree();
   TreeNodeType * root = const_cast<TreeNodeType *>(tree->GetRoot());
   this->AddNode( root, image );
+  this->Update();
 }
 
 
@@ -56,7 +57,7 @@ VectorDataModel::AddNode( TreeNodeType * node, TImage * image )
  	VertexType vertex;
 	vertex[0] = id[0];
 	vertex[1] = id[1];
-	this->AddPointToGeometry(vertex);
+	this->AddPointToGeometry(vertex, false);
 
 	this->EndGeometry();
 	break;
@@ -76,7 +77,7 @@ VectorDataModel::AddNode( TreeNodeType * node, TImage * image )
  	    VertexType vertex;
 	    vertex[0] = id[0];
 	    vertex[1] = id[1];
-	    this->AddPointToGeometry(vertex);
+	    this->AddPointToGeometry(vertex, false );
 	  }
 	this->EndGeometry();
 	break;
@@ -96,7 +97,7 @@ VectorDataModel::AddNode( TreeNodeType * node, TImage * image )
 	    VertexType vertex;
 	    vertex[0] = id[0];
 	    vertex[1] = id[1];
-	    this->AddPointToGeometry(vertex);
+	    this->AddPointToGeometry(vertex, false);
 	    vIt++;
 	  }
 	this->EndGeometry();
