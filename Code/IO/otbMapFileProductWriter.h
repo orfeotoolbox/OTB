@@ -169,12 +169,12 @@ private:
   typename DataNodeType::Pointer                   m_Folder;
   
   // Tile size
-  int                    m_TileSize;
-  int                    m_CurrentDepth;
+  unsigned int m_TileSize;
+  unsigned int m_CurrentDepth;
 
   // File and path name
-  std::string            m_FileName;
-  std::string            m_IndexShapeFileName;
+  std::string m_FileName;
+  std::string m_IndexShapeFileName;
 };
 
 } // end namespace otb
