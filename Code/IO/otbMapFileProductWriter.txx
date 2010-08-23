@@ -98,7 +98,7 @@ MapFileProductWriter<TInputImage>
   // Get the input Image
   m_VectorImage = const_cast<TInputImage *>(this->GetInput());
   m_VectorImage->UpdateOutputInformation();
-  
+
   // Initialize the filename, the vectordatas
   this->Initialize();
   
@@ -307,7 +307,7 @@ MapFileProductWriter<TInputImage>
         std::ostringstream ossFileName;
         ossFileName << m_Path<<"/";
         ossFileName << "tiles/tile_";
-        ossFileName << m_CurrentDepth<<"_";        
+        ossFileName << m_CurrentDepth<<"_";
         ossFileName << x<<"_";
         ossFileName << y;
         ossFileName << ".tif";
@@ -382,9 +382,9 @@ MapFileProductWriter<TInputImage>
 	
 	// Build The indexTile
 	this->AddBBoxToIndexTile(lowerLeftCorner,
-				 lowerRightCorner,
-				 upperRightCorner,
-				 upperLeftCorner,x,y);
+                                 lowerRightCorner,
+                                 upperRightCorner,
+                                 upperLeftCorner,x,y);
 
         /** END GX LAT LON */
         y++;
@@ -521,7 +521,7 @@ MapFileProductWriter<TInputImage>
   file <<"      PROJECTION" << std::endl;
   file <<"      \"init=epsg:4326\"" << std::endl;
   file <<"      END" << std::endl;
-  file <<"    	MINSCALE 250000" << std::endl;
+  file <<"    	#MINSCALE 250000" << std::endl;
   file <<"  END" << std::endl;
   file <<"END" << std::endl;
 
