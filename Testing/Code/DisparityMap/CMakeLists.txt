@@ -319,7 +319,7 @@ ADD_TEST(feTuFineRegistrationImageFilterNew ${DISPARITYMAP_TESTS3}
 )
 
 ADD_TEST(feTvFineRegistrationImageFilterTestWithCorrelation ${DISPARITYMAP_TESTS3}
-     --compare-n-images ${EPSILON_8} 2
+     --compare-n-images ${EPSILON_10} 2
         ${BASELINE}/feTvFineRegistrationImageFilterTestWithCorrelationMetric.tif
         ${TEMP}/feTvFineRegistrationImageFilterTestWithCorrelationMetric.tif
         ${BASELINE}/feTvFineRegistrationImageFilterTestWithCorrelationField.tif
@@ -336,7 +336,7 @@ ADD_TEST(feTvFineRegistrationImageFilterTestWithCorrelation ${DISPARITYMAP_TESTS
 )
 
 ADD_TEST(feTvFineRegistrationImageFilterTestWithNormalizedCorrelation ${DISPARITYMAP_TESTS3}
-     --compare-n-images ${EPSILON_8} 2
+     --compare-n-images ${EPSILON_10} 2
         ${BASELINE}/feTvFineRegistrationImageFilterTestWithNormalizedCorrelationMetric.tif
         ${TEMP}/feTvFineRegistrationImageFilterTestWithNormalizedCorrelationMetric.tif
         ${BASELINE}/feTvFineRegistrationImageFilterTestWithNormalizedCorrelationField.tif
@@ -353,7 +353,7 @@ ADD_TEST(feTvFineRegistrationImageFilterTestWithNormalizedCorrelation ${DISPARIT
 )
 
 ADD_TEST(feTvFineRegistrationImageFilterTestWithMeanSquare ${DISPARITYMAP_TESTS3}
-     --compare-n-images ${EPSILON_8} 2
+     --compare-n-images ${EPSILON_10} 2
         ${BASELINE}/feTvFineRegistrationImageFilterTestWithMeanSquareMetric.tif
         ${TEMP}/feTvFineRegistrationImageFilterTestWithMeanSquareMetric.tif
         ${BASELINE}/feTvFineRegistrationImageFilterTestWithMeanSquareField.tif
@@ -370,7 +370,7 @@ ADD_TEST(feTvFineRegistrationImageFilterTestWithMeanSquare ${DISPARITYMAP_TESTS3
 )
 
 ADD_TEST(feTvFineRegistrationImageFilterTestWithMeanReciprocalDifference ${DISPARITYMAP_TESTS3}
-     --compare-n-images ${EPSILON_8} 2
+     --compare-n-images ${EPSILON_10} 2
         ${BASELINE}/feTvFineRegistrationImageFilterTestWithMeanReciprocalDifferenceMetric.tif
         ${TEMP}/feTvFineRegistrationImageFilterTestWithMeanReciprocalDifferenceMetric.tif
         ${BASELINE}/feTvFineRegistrationImageFilterTestWithMeanReciprocalDifferenceField.tif
