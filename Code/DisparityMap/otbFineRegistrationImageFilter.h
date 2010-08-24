@@ -60,9 +60,10 @@ namespace otb
  *
  * The FineRegistrationImageFilter allows to use the full range of itk::ImageToImageMetric provided by itk.
  *
+ * \example DisparityMap/FineRegistrationImageFilterExample.cxx
+ *
  * \sa      FastCorrelationImageFilter
  * \ingroup IntensityImageFilters, Streamed
- *
  */
 template <class TInputImage, class T0utputCorrelation, class TOutputDeformationField>
 class ITK_EXPORT FineRegistrationImageFilter : public itk::ImageToImageFilter<TInputImage,T0utputCorrelation>
