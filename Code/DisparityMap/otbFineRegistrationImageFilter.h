@@ -45,7 +45,7 @@ namespace otb
  * The filter proposes two outputs: GetOutput() return the image of the metric optimum at each location, and
  * the GetOutputDeformationField() method returns the corresponding offset.
  *
- * If the UseImageSapcingOn() flag is used, the output deformation field takes the input image spacing into account.
+ * If the UseSpacingOn() flag is used, the output deformation field takes the input image spacing into account.
  * otherwise, the deformation field is expressed in pixels.
  *
  * This filter provides similar functionality to the otb::FastCorrelationImageFilter.
