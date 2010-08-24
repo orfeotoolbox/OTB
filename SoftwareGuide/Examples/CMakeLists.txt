@@ -287,8 +287,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Projections/EstimateRPCSensorModelExample.cxx
   ${OTB_SOURCE_DIR}/Examples/DisparityMap/SimpleDisparityMapEstimationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/DisparityMap/NCCRegistrationFilterExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/DisparityMap/SIFTDisparityMapEstimation.cxx
-  ${OTB_SOURCE_DIR}/Examples/DisparityMap/EstimateAffineTransformationExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/DisparityMap/FineRegistrationImageFilterExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/InnerProductPCAExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/TextureExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/PanTexExample.cxx
@@ -305,7 +304,6 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/ParallelLineDetectionExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/TouziEdgeDetectorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/HarrisExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/SIFTFastExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/SURFExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/ComplexMomentImageExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/ComplexMomentPathExample.cxx
@@ -318,7 +316,6 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/ThresholdToPointSetExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/CloudDetectionExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/EdgeDensityExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/SIFTDensityExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Segmentation/ConnectedThresholdImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/Segmentation/OtsuThresholdImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/Segmentation/OtsuMultipleThresholdImageFilter.cxx
@@ -399,7 +396,14 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Tutorials/Multispectral.cxx
 )
 
-
+IF(${OTB_USE_PATENTED})
+SET( OTB_EXAMPLES_SRCS ${OTB_EXAMPLES_SRCS}
+  ${OTB_SOURCE_DIR}/Examples/DisparityMap/SIFTDisparityMapEstimation.cxx
+  ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/SIFTFastExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/DisparityMap/EstimateAffineTransformationExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/SIFTDensityExample.cxx
+   )
+ENDIF(${OTB_USE_PATENTED})
 
 # It is recommended that the user build the figures from the OTB executables
 # to generate the guide to ensure consistency.
