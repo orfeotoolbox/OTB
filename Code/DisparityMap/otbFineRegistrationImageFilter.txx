@@ -338,8 +338,16 @@ FineRegistrationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFie
 
     // Store the offset and the correlation value
     outputIt.Set(optMetric);
-    deformationValue[0] = optParams[0];
-    deformationValue[1] = optParams[1];
+    if(m_UseSpacing)
+      {
+      deformationValue[0] = optParams[0];
+      deformationValue[1] = optParams[1];
+      }
+    else
+      {
+      deformationValue[0] = optParams[0]/fixedSpacing[0];
+      deformationValue[1] = optParams[1]/FixedSpacing[1];
+      }
     outputDfIt.Set(deformationValue);
     // Update iterators
     ++outputIt;
