@@ -18,6 +18,8 @@ SET(EPSILON 0.000001)
 SET(VISU_TESTS1 ${CXX_TEST_PATH}/otbVisuTests1)
 SET(VISU_TESTS2 ${CXX_TEST_PATH}/otbVisuTests2)
 
+IF (OTB_USE_DEPRECATED)
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbVISU_Tests1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -220,5 +222,7 @@ otbImageViewerWithOverlay.cxx
 
 OTB_ADD_EXECUTABLE(otbVisuTests1 "${BasicVisu_SRCS1}" "OTBVisu;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbVisuTests2 "${BasicVisu_SRCS2}" "OTBVisu;OTBIO;OTBTesting")
+
+ENDIF (OTB_USE_DEPRECATED)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

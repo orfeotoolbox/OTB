@@ -23,6 +23,10 @@
 
 namespace otb
 {
+
+/** 
+ * Constructor
+ */
 template <class TInputImage>
 MapFileProductWriter<TInputImage>
 ::MapFileProductWriter():  m_UseExtendMode(true), m_TileSize(256)
@@ -31,6 +35,10 @@ MapFileProductWriter<TInputImage>
   this->SetNumberOfRequiredInputs(1);
 }
 
+
+/** 
+ * Desctructor
+ */
 template <class TInputImage>
 MapFileProductWriter<TInputImage>
 ::~MapFileProductWriter()
@@ -79,7 +87,7 @@ MapFileProductWriter<TInputImage>
 }
   
 /**
- *
+ *  Get the idx input
  */
 template <class TInputImage>
 const typename MapFileProductWriter<TInputImage>::InputImageType *
@@ -90,6 +98,11 @@ MapFileProductWriter<TInputImage>
     (this->ProcessObject::GetInput(idx));
 }
 
+
+/**
+ * Write lauch the tiling and the mapFile generation and write on the
+ * disk the indexfile as a shapefile
+ */
 template <class TInputImage>
 void
 MapFileProductWriter<TInputImage>
@@ -115,7 +128,10 @@ MapFileProductWriter<TInputImage>
   writer->Update();
 }
 
-
+/**
+ * Initialize the path, the filename, the vectordata used to store
+ * each bounding box of a tile as a feature
+ */
 template <class TInputImage>
 void
 MapFileProductWriter<TInputImage>
@@ -155,7 +171,9 @@ MapFileProductWriter<TInputImage>
   m_VectorDataIndexTile->GetDataTree()->Add(m_Folder, document);
 }
 
-
+/**
+ *  Do the tiling 
+ */
 template <class TInputImage>
 void
 MapFileProductWriter<TInputImage>
@@ -358,7 +376,7 @@ MapFileProductWriter<TInputImage>
         m_ResampleVectorImage->TransformIndexToPhysicalPoint(indexTile, inputPoint);
         outputPoint = m_Transform->TransformPoint(inputPoint);
         OutputPointType lowerLeftCorner = outputPoint;
-	
+        
         // Compute lower right corner
         indexTile[0] = extractIndex[0] + sizeTile[0];
         indexTile[1] = extractIndex[1] + sizeTile[1];
@@ -381,10 +399,10 @@ MapFileProductWriter<TInputImage>
         OutputPointType upperLeftCorner = outputPoint;
 	
 	// Build The indexTile
-	this->AddBBoxToIndexTile(lowerLeftCorner,
-                                 lowerRightCorner,
-                                 upperRightCorner,
-                                 upperLeftCorner,x,y);
+        this->AddBBoxToIndexTile(lowerLeftCorner, 
+                                 lowerRightCorner, 
+                                 upperRightCorner, 
+                                 upperLeftCorner, x, y);
 
         /** END GX LAT LON */
         y++;
@@ -396,15 +414,16 @@ MapFileProductWriter<TInputImage>
 }
 
 /**
-*/
-
+ *  Add the bounding box and the location of the generated tile as
+ *  field of the vectordata
+ */
 template <class TInputImage>
 void
 MapFileProductWriter<TInputImage>
-::AddBBoxToIndexTile(OutputPointType lowerLeftCorner,
-		     OutputPointType lowerRightCorner,
-		     OutputPointType upperRightCorner,
-		     OutputPointType upperLeftCorner,
+::AddBBoxToIndexTile(OutputPointType lowerLeftCorner, 
+                     OutputPointType lowerRightCorner, 
+                     OutputPointType upperRightCorner, 
+                     OutputPointType upperLeftCorner, 
                      unsigned int x, unsigned int y)
 {
   // From PointType to VertexType
@@ -448,6 +467,7 @@ MapFileProductWriter<TInputImage>
 }
 
 /**
+ * Write the mapFile on the disk
  */
 template <class TInputImage>
 void
@@ -458,71 +478,72 @@ MapFileProductWriter<TInputImage>
   file << fixed << setprecision(6);
   
   file <<"MAP" << std::endl;
-  file <<"  NAME Level0" << std::endl;
-  file <<"  # Map image size" << std::endl;
-  file <<"  SIZE "<< m_TileSize <<" "<< m_TileSize << std::endl;
-  file <<"  UNITS dd" << std::endl<<std::endl;
-  file <<"  EXTENT -180 -90 180 90" << std::endl;
-  file <<"  PROJECTION" << std::endl;
-  file <<"  \"init=epsg:4326\"" << std::endl;
-  file <<"  END" << std::endl;
+  file <<"\tNAME Level0" << std::endl;
+  file <<"\t# Map image size" << std::endl;
+  file <<"\tSIZE "<< m_TileSize <<" "<< m_TileSize << std::endl;
+  file <<"\tUNITS dd" << std::endl<<std::endl;
+  file <<"\tEXTENT -180 -90 180 90" << std::endl;
+  file <<"\tPROJECTION" << std::endl;
+  file <<"\t \"init=epsg:4326\"" << std::endl;
+  file <<"\tEND" << std::endl;
 
-  file <<"  # Background color for the map canvas -- change as desired" << std::endl;
-  file <<"  IMAGECOLOR 192 192 192" << std::endl;
-  file <<"  IMAGEQUALITY 95" << std::endl;
-  file <<"  IMAGETYPE PNG" << std::endl;
-  file <<"  OUTPUTFORMAT" << std::endl;
-  file <<"    NAME PNG" << std::endl;
-  file <<"    DRIVER 'GD/PNG'" << std::endl;
-  file <<"    MIMETYPE 'image/png'" << std::endl;
-  file <<"    IMAGEMODE RGB" << std::endl;
-  file <<"    FORMATOPTION INTERLACE=OFF" << std::endl;
-  file <<"    EXTENSION 'png'" << std::endl;
-  file <<"  END" << std::endl;
+  file <<"\t# Background color for the map canvas -- change as desired" << std::endl;
+  file <<"\tIMAGECOLOR 192 192 192" << std::endl;
+  file <<"\tIMAGEQUALITY 95" << std::endl;
+  file <<"\tIMAGETYPE PNG" << std::endl;
+  file <<"\tOUTPUTFORMAT" << std::endl;
+  file <<"\t\tNAME PNG" << std::endl;
+  file <<"\t\tDRIVER 'GD/PNG'" << std::endl;
+  file <<"\t\tMIMETYPE 'image/png'" << std::endl;
+  file <<"\t\tIMAGEMODE RGB" << std::endl;
+  file <<"\t\tFORMATOPTION INTERLACE=OFF" << std::endl;
+  file <<"\t\tEXTENSION 'png'" << std::endl;
+  file <<"\tEND" << std::endl;
 
 
-  file <<"  # Web interface definition. Only the template parameter" << std::endl;
-  file <<"  # is required to display a map. See MapServer documentation" << std::endl;
-  file <<"  WEB" << std::endl;
-  file <<"    # Set IMAGEPATH to the path where MapServer should" << std::endl;
-  file <<"    # write its output." << std::endl;
-  //file <<"    #IMAGEPATH \'D:\OSGeo4W_bis2/tmp/ms_tmp/\'" << std::endl;
+  file <<"\t# Web interface definition. Only the template parameter" << std::endl;
+  file <<"\t# is required to display a map. See MapServer documentation" << std::endl;
+  file <<"\tWEB" << std::endl;
+  file <<"\t\t# Set IMAGEPATH to the path where MapServer should" << std::endl;
+  file <<"\t\t# write its output." << std::endl;
+  //file <<"#IMAGEPATH \'D:\OSGeo4W_bis2/tmp/ms_tmp/\'" << std::endl;
 
-  file <<"    # Set IMAGEURL to the url that points to IMAGEPATH" << std::endl;
-  file <<"    # as defined in your web server configuration" << std::endl;
-  file <<"    #IMAGEURL '/ms_tmp/'" << std::endl;
+  file <<"\t\t# Set IMAGEURL to the url that points to IMAGEPATH" << std::endl;
+  file <<"\t\t# as defined in your web server configuration" << std::endl;
+  file <<"\t\t#IMAGEURL '/ms_tmp/'" << std::endl;
 
-  file <<"    # WMS server settings" << std::endl;
-  file <<"    METADATA" << std::endl;
-  file <<"      'wms_title'           'Level0'" << std::endl;
-  // XXXX Set the path to this file
-  file <<"      \'wms_onlineresource\'  \'http://127.0.0.1/cgi-bin/mapserv.exe?map=D:\\PARTAGE\\testsmapserver2\\niveau1_raster.map&\'" << std::endl;
-  file <<"      \'wms_srs\'             \'EPSG:4326\'" << std::endl;
-  file <<"    END" << std::endl;
-  file <<"  END" << std::endl;
+  file <<"\t\t# WMS server settings" << std::endl;
+  file <<"\t\t# NOTE : the user must change the path to the mapserver excecutable in the "<<std::endl;
+  file <<"\t\t  wms_onlineresource field"<<std::endl;
+  file <<"\t\tMETADATA" << std::endl;
+  file <<"\t\t 'wms_title'           'Level0'" << std::endl;
+  file <<"\t\t \'wms_onlineresource\'  \'http://127.0.0.1/cgi-bin/mapserv.exe?map="<<m_FileName<<"&\'" << std::endl;
+  file <<"\t\t \'wms_srs\'             \'EPSG:4326\'" << std::endl;
+  file <<"\t\tEND" << std::endl;
+  file <<"\tEND" << std::endl;
   
   // Get the name of the layer
   std::ostringstream tempIndexShapeName;
   tempIndexShapeName << itksys::SystemTools::GetFilenameWithoutExtension(m_FileName);
 
-  file <<"  LAYER" << std::endl;
-  file <<"      NAME '"<<tempIndexShapeName.str()<<"'" << std::endl;
-  file <<"      #GROUP 'earthsat'" << std::endl;	
-  file <<"      TYPE RASTER" << std::endl;
-  file <<"      TILEITEM 'LOCATION'" << std::endl;
-  file <<"      TILEINDEX \'"<<m_IndexShapeFileName<<"\'" << std::endl;
-  file <<"      METADATA" << std::endl;
-  file <<"        'wms_title' 'earthsat'" << std::endl;
-  file <<"        'wms_name' 'earthsat'" << std::endl;
-  file <<"      END" << std::endl;
-  file <<"    	PROCESSING \"RESAMPLE=AVERAGE\"" << std::endl;
-  file <<"      STATUS OFF" << std::endl;
-  file <<"      TRANSPARENCY 100" << std::endl;
-  file <<"      PROJECTION" << std::endl;
-  file <<"      \"init=epsg:4326\"" << std::endl;
-  file <<"      END" << std::endl;
-  file <<"    	#MINSCALE 250000" << std::endl;
-  file <<"  END" << std::endl;
+  file <<"\tLAYER" << std::endl;
+  file <<"\t\tNAME '"<<tempIndexShapeName.str()<<"'"<< std::endl;
+  file <<"\t\t\t#GROUP 'earthsat'"<< std::endl;	
+  file <<"\t\t\tTYPE RASTER" << std::endl;
+  file <<"\t\t\tTILEITEM 'LOCATION'" << std::endl;
+  file <<"\t\t\tTILEINDEX \'"<<m_IndexShapeFileName<<"\'" << std::endl;
+  file <<"\t\t\tMETADATA" << std::endl;
+  file <<"\t\t\t 'wms_title' 'earthsat'" << std::endl;
+  file <<"\t\t\t 'wms_name' 'earthsat'" << std::endl;
+  file <<"\t\t\tEND" << std::endl;
+  file <<"\t\t\tPROCESSING \"RESAMPLE=AVERAGE\"" << std::endl;
+  file <<"\t\t\tSTATUS OFF" << std::endl;
+  file <<"\t\t\tTRANSPARENCY 100" << std::endl;
+  file <<"\t\t\tPROJECTION" << std::endl;
+  file <<"\t\t\t \"init=epsg:4326\"" << std::endl;
+  file <<"\t\t\tEND" << std::endl;
+  file <<"\t\t#MINSCALE 250000" << std::endl;
+  file <<"\tEND" << std::endl;
   file <<"END" << std::endl;
 
   file.close();
