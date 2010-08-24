@@ -198,7 +198,8 @@ int main(int argc, char** argv)
   if(argc > 11)
       {
       // Software Guide : BeginCodeSnippet
-      typedef itk::MeanReciprocalSquareDifferenceImageToImageMetric<InputImageType,InputImageType> MRSDMetricType;
+      typedef itk::MeanReciprocalSquareDifferenceImageToImageMetric
+        <InputImageType,InputImageType> MRSDMetricType;
       MRSDMetricType::Pointer mrsdMetric = MRSDMetricType::New();
       registrator->SetMetric(mrsdMetric);
       // Software Guide : EndCodeSnippet
