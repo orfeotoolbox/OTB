@@ -67,18 +67,14 @@ StreamingWarpImageFilter<TInputImage, TOutputImage, TDeformationField>
   typename OutputImageType::PointType outPointStart,outPointEnd;
   outputPtr->TransformIndexToPhysicalPoint(outIndexStart,outPointStart);
   outputPtr->TransformIndexToPhysicalPoint(outIndexEnd,outPointEnd);
-  // Here min/max allows for inverted spacing in deformation field
-  typename DeformationFieldType::PointType defPointStart, defPointEnd;
-  for(unsigned int dim = 0; dim<OutputImageType::ImageDimension;++dim)
-    {
-    defPointStart[dim] = std::min(outPointStart[dim], outPointEnd[dim]);
-    defPointEnd[dim] = std::max(outPointStart[dim],outPointEnd[dim]);
-    }
+
   typename DeformationFieldType::IndexType defIndexStart,defIndexEnd;
-  deformationPtr->TransformPhysicalPointToIndex(defPointStart,defIndexStart);
-  deformationPtr->TransformPhysicalPointToIndex(defPointEnd,defIndexEnd);
+  deformationPtr->TransformPhysicalPointToIndex(outPointStart,defIndexStart);
+  deformationPtr->TransformPhysicalPointToIndex(outPointEnd,defIndexEnd);
+
   typename DeformationFieldType::SizeType defRequestedSize;
   typename DeformationFieldType::IndexType defRequestedIndex;
+
   for(unsigned int dim = 0; dim<OutputImageType::ImageDimension;++dim)
     {
     defRequestedIndex[dim] = std::min(defIndexStart[dim],defIndexEnd[dim]);
@@ -109,7 +105,7 @@ StreamingWarpImageFilter<TInputImage, TOutputImage, TDeformationField>
     // build an exception
     itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
     e.SetLocation(ITK_LOCATION);
-    e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
+    e.SetDescription("Requested region is (at least partially) outside the largest possible region of the deformation field.");
     e.SetDataObject(inputPtr);
     throw e;
     }
