@@ -355,6 +355,13 @@ ${LARGEINPUTDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
+ADD_TEST(vrTvVectorDataModelAddVectorDataTest ${VISUREFAC_TESTS1}
+otbVectorDataModelAddVectorDataTest
+${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+200 500 200 0
+${INPUTDATA}/Capitole-Shadows.shp
+)
+
 # Testing srcs
 SET(Visualization_SRCS1
 otbVisualizationTests1.cxx
@@ -404,6 +411,7 @@ otbSplittedWidgetManagerNew.cxx
 otbVerticalAsymptoteCurveNew.cxx
 otbVectorDataModelNew.cxx
 otbVectorDataModelTest.cxx
+otbVectorDataModelAddVectorDataTest.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbVisualizationTests1 "${Visualization_SRCS1}" "OTBVisualization;OTBIO;OTBTesting")

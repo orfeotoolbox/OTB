@@ -38,7 +38,20 @@ namespace otb
 {
 
 /** \class MapFileProductWriter
- * \brief This class writes  Map Product file format (MapFile and MapFiles)
+ * \brief This class produces Map file product ie a file .map,
+ *        the tiles to draw in a mapserver, and finally
+ *        a shapefile wich describe the tiles and where to find them
+ *        on the disk.
+ *       
+ * This filter begins by tiling the input image. An accessor
+ * SetTileSize allows to set the size of each tile. For each tile
+ * generated, an entry is added to the shapefile to store the location
+ * where the file is saved on the disk.
+ * The product generated are a mapfile wich is the configuration file
+ * for mapservers, a tile index and finally the tiles.
+ *
+ * NOTE : The user must edit the *.map file generated to put the right
+ * informations concerning the field 'wms_onlineresource'.
  *
  * \ingroup IO
  *
@@ -104,12 +117,14 @@ public:
   const InputImageType * GetInput(void);
   const InputImageType * GetInput(unsigned int idx);
 
-  // Accessors macros
+  /** Method to set the filename of the mapfile generated */
   itkSetStringMacro(FileName);
+  
+  /** Set/Get the size of each tile*/
   itkSetMacro(TileSize,unsigned int);
   itkGetMacro(TileSize,unsigned int);
   
-  /** Update Method */
+  /** Update Method : Call a porotected Write method */
   virtual void Update()
   {
     this->Write();
