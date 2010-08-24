@@ -44,9 +44,9 @@ namespace otb
  *        on the disk.
  *       
  * This filter begins by tiling the input image. An accessor
- * SetTileSize allows to set the tiles size. For each tile generated,
- * an entry is added to the shapefile to store the location where the
- * file is saved on the disk.
+ * SetTileSize allows to set the size of each tile. For each tile
+ * generated, an entry is added to the shapefile to store the location
+ * where the file is saved on the disk.
  * The product generated are a mapfile wich is the configuration file
  * for mapservers, a tile index and finally the tiles.
  *
@@ -117,12 +117,14 @@ public:
   const InputImageType * GetInput(void);
   const InputImageType * GetInput(unsigned int idx);
 
-  // Accessors macros
+  /** Method to set the filename of the mapfile generated */
   itkSetStringMacro(FileName);
+  
+  /** Set/Get the size of each tile*/
   itkSetMacro(TileSize,unsigned int);
   itkGetMacro(TileSize,unsigned int);
   
-  /** Update Method */
+  /** Update Method : Call a porotected Write method */
   virtual void Update()
   {
     this->Write();

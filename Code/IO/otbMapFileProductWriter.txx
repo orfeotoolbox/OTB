@@ -23,6 +23,10 @@
 
 namespace otb
 {
+
+/** 
+ * Constructor
+ */
 template <class TInputImage>
 MapFileProductWriter<TInputImage>
 ::MapFileProductWriter():  m_UseExtendMode(true), m_TileSize(256)
@@ -31,6 +35,10 @@ MapFileProductWriter<TInputImage>
   this->SetNumberOfRequiredInputs(1);
 }
 
+
+/** 
+ * Desctructor
+ */
 template <class TInputImage>
 MapFileProductWriter<TInputImage>
 ::~MapFileProductWriter()
@@ -79,7 +87,7 @@ MapFileProductWriter<TInputImage>
 }
   
 /**
- *
+ *  Get the idx input
  */
 template <class TInputImage>
 const typename MapFileProductWriter<TInputImage>::InputImageType *
@@ -90,6 +98,11 @@ MapFileProductWriter<TInputImage>
     (this->ProcessObject::GetInput(idx));
 }
 
+
+/**
+ * Write lauch the tiling and the mapFile generation and write on the
+ * disk the indexfile as a shapefile
+ */
 template <class TInputImage>
 void
 MapFileProductWriter<TInputImage>
@@ -115,7 +128,10 @@ MapFileProductWriter<TInputImage>
   writer->Update();
 }
 
-
+/**
+ * Initialize the path, the filename, the vectordata used to store
+ * each bounding box of a tile as a feature
+ */
 template <class TInputImage>
 void
 MapFileProductWriter<TInputImage>
@@ -155,7 +171,9 @@ MapFileProductWriter<TInputImage>
   m_VectorDataIndexTile->GetDataTree()->Add(m_Folder, document);
 }
 
-
+/**
+ *  Do the tiling 
+ */
 template <class TInputImage>
 void
 MapFileProductWriter<TInputImage>
@@ -396,8 +414,9 @@ MapFileProductWriter<TInputImage>
 }
 
 /**
-*/
-
+ *  Add the bounding box and the location of the generated tile as
+ *  field of the vectordata
+ */
 template <class TInputImage>
 void
 MapFileProductWriter<TInputImage>
@@ -448,6 +467,7 @@ MapFileProductWriter<TInputImage>
 }
 
 /**
+ * Write the mapFile on the disk
  */
 template <class TInputImage>
 void
