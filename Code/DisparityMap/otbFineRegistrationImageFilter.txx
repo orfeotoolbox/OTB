@@ -221,8 +221,8 @@ FineRegistrationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFie
    fixedPtr->TransformIndexToPhysicalPoint(ulIndex,ulPoint);
 
    // Apply default offset
-   lrPoint+=m_InitialOffset;
-   ulPoint+=m_InitialOffset;
+   lrPoint += m_InitialOffset;
+   ulPoint += m_InitialOffset;
 
    // Transform back into moving region index space
    IndexType movingIndex1, movingIndex2, movingIndex;
