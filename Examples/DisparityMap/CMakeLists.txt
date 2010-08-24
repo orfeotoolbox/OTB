@@ -9,8 +9,8 @@ ADD_EXECUTABLE(NCCRegistrationFilterExample NCCRegistrationFilterExample.cxx )
 TARGET_LINK_LIBRARIES(NCCRegistrationFilterExample OTBFeatureExtraction OTBCommon OTBIO
 ITKIO)
 
-ADD_EXECUTABLE(FineCorrelationImageFilterExample FineCorrelationImageFilterExample.cxx )
-TARGET_LINK_LIBRARIES(FineCorrelationImageFilterExample OTBFeatureExtraction OTBCommon OTBIO
+ADD_EXECUTABLE(FineRegistrationImageFilterExample FineRegistrationImageFilterExample.cxx )
+TARGET_LINK_LIBRARIES(FineRegistrationImageFilterExample OTBFeatureExtraction OTBCommon OTBIO
 ITKIO)
 
 
