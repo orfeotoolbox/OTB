@@ -29,34 +29,34 @@ namespace otb
 {
 
 /** \class FineRegistrationImageFilter
- * \brief Computes a deformation field between two images
+ * \brief Computes a deformation field between two images using a given metric.
  *
- * This class compute a correlation field and the associated
- * deformation field between two images.
+ * This filter tries to find at each location of the fixed image the corresponding best matching
+ * patch of radius set by SetRadius() method in the moving image within a search windows whose radius
+ * is defined by SetSearchRadius() method.
  *
- * The m_Radius parameter defines the size of the window to compute
- * the normalized correlation.
+ * To do so, it optimizes a metric set using the SetMetric() method, which accepts any itk metric
+ * deriving from the itk::ImageToImageMetric. The MinimizeOn()/MinimizeOff() flag allow to search for
+ * minimum or maximum depending on the metric.
  *
- * The m_SearchRadius parameter defines the size of the area where to
- * search for a correlation peak in the moving image.
+ * Once a coarse (pixel wise) offset has been found, this match is further refined using dichotomic search
+ * until sub-pixel accuracy given by the SetSubPixelAccuracy() is reached.
  *
- * Once the correlation peak has been found, it can be further refined
- * by trying to fit a quadric surface in the premises of the
- * maxima, thus obtaining sub-pixel precision. This option is
- * activated by setting m_RefineLocation to true.
+ * The filter proposes two outputs: GetOutput() return the image of the metric optimum at each location, and
+ * the GetOutputDeformationField() method returns the corresponding offset.
  *
- * TOutputCorrelation is supposed to be a scalar image with floating
- * point precision.
+ * If the UseImageSapcingOn() flag is used, the output deformation field takes the input image spacing into account.
+ * otherwise, the deformation field is expressed in pixels.
  *
- * TOutputDeformationField is supposed to be an image whose pixel is a
- * fixed size vector of size 2, with floating point precision.
+ * This filter provides similar functionality to the otb::FastCorrelationImageFilter.
+ * The otb::FastCorrelationImageFilter provides an optimized implementation of fine registration for correlation
+ * metric. It is faster but less flexible: images should have the same size, and the metric can not be changed.
  *
- * Images spacing is ignored during computation and in the output
- * deformation field.
+ * The FineRegistrationImageFilter allows to use the full range of itk::ImageToImageMetric provided by itk, and allows
+ * to perform registration between images of different sizes and resolution.
  *
- * All computation are done in double precision.
- * 
- * \ingroup IntensityImageFilters   Multithreaded, Streamed
+ * \sa      FastCorrelationImageFilter
+ * \ingroup IntensityImageFilters, Streamed
  *
  */
 template <class TInputImage, class T0utputCorrelation, class TOutputDeformationField>
