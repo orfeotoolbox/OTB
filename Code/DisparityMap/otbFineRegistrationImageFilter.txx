@@ -323,6 +323,8 @@ FineRegistrationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFie
 
   // Final deformation value
   DeformationValueType deformationValue;
+  deformationValue[0] = m_InitialOffset[0];
+  deformationValue[1] = m_InitialOffset[1];
 
   // Get fixed image spacing
   SpacingType fixedSpacing = fixedPtr->GetSpacing();
