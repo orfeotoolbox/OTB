@@ -33,10 +33,11 @@
 
 int otbFineRegistrationImageFilterTest( int argc, char * argv[] )
 {
-  if(argc!=9)
+  if(argc!=12)
     {
     std::cerr<<"Usage: "<<argv[0]<<" fixed_fname moving_fname output_correl output_field radius search_radius ";
-    std::cerr<<"subpixPrecision metric(0=CC,1=NCC,2=MeanSquare,3=Mean reciprocal square difference)"<<std::endl;
+    std::cerr<<"subpixPrecision metric(0=CC,1=NCC,2=MeanSquare,3=Mean reciprocal square difference) ";
+    std::cerr<<"gridStep offsetX offsetY"<<std::endl;
     return EXIT_FAILURE;
     }
   const char * fixedFileName  = argv[1];
@@ -47,6 +48,9 @@ int otbFineRegistrationImageFilterTest( int argc, char * argv[] )
   const unsigned int sradius  = atoi(argv[6]);
   const double      precision = atof(argv[7]);
   const unsigned int metric   = atoi(argv[8]);
+  const unsigned int gridStep = atoi(argv[9]);
+  const double       offsetx  = atof(argv[10]);
+  const double       offsety  = atof(argv[11]);
 
   typedef double      PixelType;
   const unsigned int  Dimension = 2;
@@ -73,6 +77,13 @@ int otbFineRegistrationImageFilterTest( int argc, char * argv[] )
   registration->SetRadius(radius);
   registration->SetSearchRadius(sradius);
   registration->SetSubPixelAccuracy(precision);
+  registration->SetGridStep(gridStep);
+
+  RegistrationFilterType::SpacingType offset;
+  offset[0] = offsetx;
+  offset[1] = offsety;
+
+  registration->SetInitialOffset(offset);
 
   switch(metric)
   {

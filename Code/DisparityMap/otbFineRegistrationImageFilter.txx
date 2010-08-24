@@ -59,6 +59,12 @@ FineRegistrationImageFilter<TInputImage,T0utputCorrelation,TOutputDeformationFie
 
   // Translation
   m_Translation = TranslationType::New();
+
+  // Grid Step
+  m_GridStep.Fill(1);
+
+  // Default offset
+  m_InitialOffset.Fill(0);
  }
 
 template <class TInputImage, class T0utputCorrelation, class TOutputDeformationField>
@@ -115,6 +121,41 @@ FineRegistrationImageFilter<TInputImage,T0utputCorrelation,TOutputDeformationFie
   return static_cast<TOutputDeformationField *>(this->itk::ProcessObject::GetOutput(1));
  }
 
+template <class TInputImage, class TOutputCorrelation, class TOutputDeformationField>
+void
+FineRegistrationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationField>
+::GenerateOutputInformation()
+ {
+  // Call superclass implementation
+  Superclass::GenerateOutputInformation();
+
+  // Retrieve output pointers
+  TOutputCorrelation * outputPtr = this->GetOutput();
+  TOutputDeformationField *outputFieldPtr = this->GetOutputDeformationField();
+
+  // Update size and spacing according to grid step
+  InputImageRegionType largestRegion  = outputPtr->GetLargestPossibleRegion();
+  SizeType outputSize       = largestRegion.GetSize();
+  SpacingType outputSpacing = outputPtr->GetSpacing();
+
+  for(unsigned int dim = 0; dim < TOutputCorrelation::ImageDimension;++dim)
+    {
+    outputSize[dim] /= m_GridStep[dim];
+    outputSpacing[dim] *= m_GridStep[dim];
+    }
+
+  // Set spacing
+  outputPtr->SetSpacing(outputSpacing);
+  outputFieldPtr->SetSpacing(outputSpacing);
+
+  // Set largest region size
+  largestRegion.SetSize(outputSize);
+  outputPtr->SetLargestPossibleRegion(largestRegion);
+  outputFieldPtr->SetLargestPossibleRegion(largestRegion);
+
+  std::cout<<"Output region: "<<largestRegion<<std::endl;
+  std::cout<<"Output spacing:"<<outputSpacing<<std::endl;
+ }
 
 template <class TInputImage, class TOutputCorrelation, class TOutputDeformationField>
 void
@@ -137,17 +178,68 @@ FineRegistrationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFie
 
   // get a copy of the fixed requested region (should equal the output
   // requested region)
-  typename TInputImage::RegionType fixedRequestedRegion;
+  InputImageRegionType fixedRequestedRegion, movingRequestedRegion;
   fixedRequestedRegion = fixedPtr->GetRequestedRegion();
+
+  // Apply grid step
+  SizeType fixedRequestedSize = fixedRequestedRegion.GetSize();
+  IndexType fixedRequestedIndex = fixedRequestedRegion.GetIndex();
+
+  for(unsigned int dim = 0; dim < TOutputCorrelation::ImageDimension;++dim)
+      {
+      fixedRequestedSize [dim] *= m_GridStep[dim];
+      fixedRequestedIndex[dim] *= m_GridStep[dim];
+      }
+
+  fixedRequestedRegion.SetSize(fixedRequestedSize);
+  fixedRequestedRegion.SetIndex(fixedRequestedIndex);
+
   // pad the input requested region by the operator radius
   fixedRequestedRegion.PadByRadius( m_Radius );
 
+  std::cout<<"Fixed requested region: "<<fixedRequestedRegion<<std::endl;
+
   // get a copy of the moving requested region (should equal the output
   // requested region)
-  typename TInputImage::RegionType movingRequestedRegion;
-  movingRequestedRegion = movingPtr->GetRequestedRegion();
-  // pad the input requested region by the operator radius
-  movingRequestedRegion.PadByRadius( m_SearchRadius + m_Radius );
+  InputImageRegionType searchFixedRequestedRegion = fixedRequestedRegion;
+  searchFixedRequestedRegion.PadByRadius(m_Radius);
+
+
+  // Find corners of the search window
+   IndexType ulIndex = searchFixedRequestedRegion.GetIndex();
+
+   IndexType lrIndex;
+   for(unsigned int dim = 0; dim < TInputImage::ImageDimension;++dim)
+     {
+     lrIndex[dim]= searchFixedRequestedRegion.GetIndex()[dim]
+                 + searchFixedRequestedRegion.GetSize()[dim]-1;
+     }
+
+   // Transform to physical space
+   PointType ulPoint, lrPoint;
+   fixedPtr->TransformIndexToPhysicalPoint(lrIndex,lrPoint);
+   fixedPtr->TransformIndexToPhysicalPoint(ulIndex,ulPoint);
+
+   // Apply default offset
+   lrPoint+=m_InitialOffset;
+   ulPoint+=m_InitialOffset;
+
+   // Transform back into moving region index space
+   IndexType movingIndex1, movingIndex2, movingIndex;
+   movingPtr->TransformPhysicalPointToIndex(ulPoint,movingIndex1);
+   movingPtr->TransformPhysicalPointToIndex(lrPoint,movingIndex2);
+
+   // Find requested region
+   SizeType movingSize;
+
+   for(unsigned int dim = 0; dim < TInputImage::ImageDimension;++dim)
+     {
+       movingIndex[dim] = std::min(movingIndex1[dim],movingIndex2[dim]);
+       movingSize[dim] = std::max(movingIndex1[dim],movingIndex2[dim]) - movingIndex[dim] + 1;
+     }
+
+   movingRequestedRegion.SetIndex(movingIndex);
+   movingRequestedRegion.SetSize(movingSize);
 
   // crop the fixed region at the fixed's largest possible region
   if ( fixedRequestedRegion.Crop(fixedPtr->GetLargestPossibleRegion()))
@@ -180,21 +272,16 @@ FineRegistrationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFie
   else
     {
     // Couldn't crop the region (requested region is outside the largest
-    // possible region).  Throw an exception.
+    // possible region). This case might happen so we do not throw any exception but
+    // request a null region instead
+    movingSize.Fill(0);
+    movingRequestedRegion.SetSize(movingSize);
+    movingIndex.Fill(0);
+    movingRequestedRegion.SetIndex(movingIndex);
+
     // store what we tried to request (prior to trying to crop)
-    movingPtr->SetRequestedRegion( movingRequestedRegion );
-
-    // build an exception
-    itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
-    itk::OStringStream msg;
-    msg << this->GetNameOfClass()
-                << "::GenerateInputRequestedRegion()";
-    e.SetLocation(msg.str().c_str());
-    e.SetDescription("Requested region is (at least partially) outside the largest possible region of image 1.");
-    e.SetDataObject(movingPtr);
-    throw e;
+    movingPtr->SetRequestedRegion(movingRequestedRegion);
     }
-
   return;
  }
 
@@ -261,7 +348,14 @@ FineRegistrationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFie
 
     // Build the region on which to compute the currentMetric
     InputImageRegionType currentMetricRegion;
-    currentMetricRegion.SetIndex(outputIt.GetIndex());
+
+    // Apply grid step
+    IndexType currentIndex = outputIt.GetIndex();
+    for(unsigned int dim = 0; dim < TInputImage::ImageDimension;++dim)
+      {
+      currentIndex[dim] *= m_GridStep[dim];
+      }
+    currentMetricRegion.SetIndex(currentIndex);
     SizeType size;
     size.Fill(1);
     currentMetricRegion.SetSize(size);
@@ -275,8 +369,8 @@ FineRegistrationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFie
       {
       for(int j=-(int)m_SearchRadius[1]; j<=(int)m_SearchRadius[1];++j)
         {
-        params[0]=static_cast<double>(i*fixedSpacing[0]);
-        params[1]=static_cast<double>(j*fixedSpacing[1]);
+        params[0]=m_InitialOffset[0] + static_cast<double>(i*fixedSpacing[0]);
+        params[1]=m_InitialOffset[0] + static_cast<double>(j*fixedSpacing[1]);
 
         try
         {
@@ -346,7 +440,7 @@ FineRegistrationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFie
     else
       {
       deformationValue[0] = optParams[0]/fixedSpacing[0];
-      deformationValue[1] = optParams[1]/FixedSpacing[1];
+      deformationValue[1] = optParams[1]/fixedSpacing[1];
       }
     outputDfIt.Set(deformationValue);
     // Update iterators

@@ -37,7 +37,7 @@ namespace otb
  *
  * To do so, it optimizes a metric set using the SetMetric() method, which accepts any itk metric
  * deriving from the itk::ImageToImageMetric. The MinimizeOn()/MinimizeOff() flag allow to search for
- * minimum or maximum depending on the metric.
+ * minimum or maximum depending on the metric (default is On).
  *
  * Once a coarse (pixel wise) offset has been found, this match is further refined using dichotomic search
  * until sub-pixel accuracy given by the SetSubPixelAccuracy() is reached.
@@ -46,11 +46,17 @@ namespace otb
  * the GetOutputDeformationField() method returns the corresponding offset.
  *
  * If the UseSpacingOn() flag is used, the output deformation field takes the input image spacing into account.
- * otherwise, the deformation field is expressed in pixels.
+ * otherwise, the deformation field is expressed in pixels (default ins On).
  *
- * This filter provides similar functionality to the otb::FastCorrelationImageFilter.
- * The otb::FastCorrelationImageFilter provides an optimized implementation of fine registration for correlation
- * metric. It is faster but less flexible: images should have the same size, and the metric can not be changed.
+ * This filter accepts fixed and moving images with different sizes and spacing. Metric and search windows radius
+ * are expressed in terms of number of pixels in the fixed image.
+ *
+ * An initial offset can be used to reduce computation time in case of input and moving images with a significant
+ * offset. This offset is taken into account in the output deformation field.
+ *
+ * It is possible to generate an output metric map and deformation field at a coarser resolution by setting
+ * grid step to value higher than 1 (grid step is expressed in terms of number of fixed image pixels).
+ * Default value is 1.
  *
  * The FineRegistrationImageFilter allows to use the full range of itk::ImageToImageMetric provided by itk.
  *
@@ -82,6 +88,8 @@ public:
   typedef typename TInputImage::SizeType                          SizeType;
   typedef typename TInputImage::IndexType                         IndexType;
   typedef typename TInputImage::SpacingType                       SpacingType;
+  typedef typename TInputImage::PointType                         PointType;
+  typedef typename TInputImage::OffsetType                        OffsetType;
   typedef typename itk::InterpolateImageFunction
   <TInputImage, double>                                           InterpolatorType;
   typedef typename InterpolatorType::Pointer                      InterpolatorPointerType;
@@ -133,16 +141,30 @@ public:
   itkSetMacro(UseSpacing,bool);
   itkBooleanMacro(UseSpacing);
 
+  /** Set default offset between the two images */
+  itkSetMacro(InitialOffset,SpacingType);
+  itkGetConstReferenceMacro(InitialOffset,SpacingType);
+
+  /** Set the grid step */
+  itkSetMacro(GridStep,OffsetType);
+  itkGetConstReferenceMacro(GridStep,OffsetType);
+
   /** Set unsigned int radius */
   void SetRadius(unsigned int radius)
   {
     m_Radius.Fill(radius);
   }
   
-/** Set unsigned int radius */
+ /** Set unsigned int radius */
   void SetSearchRadius(unsigned int radius)
   {
     m_SearchRadius.Fill(radius);
+  }
+
+  /** Set unsigned int grid step */
+  void SetGridStep(unsigned int step)
+  {
+    m_GridStep.Fill(step);
   }
 
 protected:
@@ -156,6 +178,9 @@ protected:
 
   /** Generate the input requested regions  */
   virtual void GenerateInputRequestedRegion(void);
+
+  /** Generate output information */
+  virtual void GenerateOutputInformation(void);
 
 private:
   FineRegistrationImageFilter(const Self&); //purposely not implemented
@@ -184,6 +209,12 @@ private:
 
   /** The translation */
   TranslationPointerType        m_Translation;
+
+  /** Default offset */
+  SpacingType                   m_InitialOffset;
+
+  /** Grid step */
+  OffsetType                    m_GridStep;
 
 };
 

@@ -333,6 +333,9 @@ ADD_TEST(feTvFineRegistrationImageFilterTestWithCorrelation ${DISPARITYMAP_TESTS
 	    2 # sradius
 	    0.1 # precision
 	    0 # Correlation
+	    1 # Grid step
+	    0 # Initial offset x
+	    0 # Initial offset y
 )
 
 ADD_TEST(feTvFineRegistrationImageFilterTestWithNormalizedCorrelation ${DISPARITYMAP_TESTS3}
@@ -349,7 +352,10 @@ ADD_TEST(feTvFineRegistrationImageFilterTestWithNormalizedCorrelation ${DISPARIT
         3 # radius
 	    2 # sradius
 	    0.1 # precision
-	    1 # Normalized Correlation
+	    1 # Normalized Correlation    
+	    1 # Grid step
+	    0 # Initial offset x
+	    0 # Initial offset y
 )
 
 ADD_TEST(feTvFineRegistrationImageFilterTestWithMeanSquare ${DISPARITYMAP_TESTS3}
@@ -367,6 +373,9 @@ ADD_TEST(feTvFineRegistrationImageFilterTestWithMeanSquare ${DISPARITYMAP_TESTS3
 	    2 # sradius
 	    0.1 # precision
 	    2 # Mean square
+	    1 # Grid step
+	    0 # Initial offset x
+	    0 # Initial offset y
 )
 
 ADD_TEST(feTvFineRegistrationImageFilterTestWithMeanReciprocalDifference ${DISPARITYMAP_TESTS3}
@@ -384,6 +393,9 @@ ADD_TEST(feTvFineRegistrationImageFilterTestWithMeanReciprocalDifference ${DISPA
 	    2 # sradius
 	    0.1 # precision
 	    3 # Mean reciprocal difference
+	    1 # Grid step
+	    0 # Initial offset x
+	    0 # Initial offset y
 )
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
