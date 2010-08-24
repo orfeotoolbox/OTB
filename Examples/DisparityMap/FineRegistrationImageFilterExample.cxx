@@ -22,20 +22,19 @@
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {StereoFixed.png}, {StereoMoving.png}
 //    OUTPUTS: {fcDeformationFieldOutput-horizontal.png}, {fcDeformationFieldOutput-vertical.png}, {fcCorrelFieldOutput.png}, {fcDResampledOutput2.png}
-//    1.0 5 3 10
+//    1.0 5 3 0.1
+//  Software Guide : EndCommandLineArgs
+
+//  Software Guide : BeginCommandLineArgs
+//    INPUTS: {StereoFixed.png}, {StereoMoving.png}
+//    OUTPUTS: {fcMRSDDeformationFieldOutput-horizontal.png}, {fcMRSDDeformationFieldOutput-vertical.png}, {fcMRSDCorrelFieldOutput.png}, {fcMRSDDResampledOutput2.png}
+//    1.0 5 3 0.1 mrsd
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
 //
-// This example demonstrates the use of the \doxygen{otb}{FineCorrelationImageFilter}. This filter performs deformation estimation
-// using the classical maximum of correlation look-up in a search window. Three modes are available corresponding to different
-// tradeoffs between accuracy and execution time :
-// \begin{itemize}
-// \item the \emph{coarse} mode estimates only pixel-wise (integer) offsets,
-// \item the \emph{lsqr} mode uses a quadric regression to interpolate the position of the sub-pixel maximum,
-// \item the \emph{subpixel} mode up-samples the neighborhood of the coarse maximum up to a given factor and
-// search for subpixel maximum in the up-sampled neighborhood. This is the slowest but most accurate mode.
-// \end{itemize}
+// This example demonstrates the use of the \doxygen{otb}{FineRegistrationImageFilter}. This filter performs deformation estimation
+// using the classical extrema of image-to-image metric look-up in a search window.
 //
 // The first step toward the use of these filters is to include the proper header files.
 //
@@ -46,9 +45,10 @@
 #include "otbImageFileReader.h"
 #include "itkRecursiveGaussianImageFilter.h"
 #include "itkWarpImageFilter.h"
+#include "itkMeanReciprocalSquareDifferenceImageToImageMetric.h"
 
 // Software Guide : BeginCodeSnippet
-#include "otbFineCorrelationImageFilter.h"
+#include "otbFineRegistrationImageFilter.h"
 // Software Guide : EndCodeSnippet
 
 #include "otbImageOfVectorsToMonoChannelExtractROI.h"
@@ -60,7 +60,7 @@
 int main(int argc, char** argv)
 {
 
-  if (argc != 11)
+  if (argc < 11)
     {
     std::cerr << "Usage: " << argv[0];
     std::cerr <<
@@ -132,7 +132,7 @@ int main(int argc, char** argv)
 
   //Create the filter
   // Software Guide : BeginCodeSnippet
-  typedef otb::FineCorrelationImageFilter<InputImageType,
+  typedef otb::FineRegistrationImageFilter<InputImageType,
       CorrelationImageType,
       DeformationFieldType>
   RegistrationFilterType;
@@ -152,7 +152,7 @@ int main(int argc, char** argv)
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef RegistrationFilterType::RadiusType RadiusType;
+  typedef RegistrationFilterType::SizeType RadiusType;
 
   RadiusType searchRadius;
 
@@ -166,7 +166,7 @@ int main(int argc, char** argv)
 
   // Software Guide : BeginLatex
   //
-  // \item The window used to compute the local correlation. This window is also defined by its radius:
+  // \item The window used to compute the local metric. This window is also defined by its radius:
   //
   // Software Guide : EndLatex
 
@@ -180,20 +180,34 @@ int main(int argc, char** argv)
 
   std::cout << "Correlation radius " << registrator->GetRadius() << std::endl;
 
+  // Software Guide : BeginLatex
+  //
+  // We need to set the sub-pixel accuracy we want to obtain:
+  //
+  // Software Guide : EndLatex
+  registrator->SetSubPixelAccuracy(atof(argv[10]));
 
   // Software Guide : BeginLatex
   //
-  // In this example we will be using the subpixel mode. To do so, we need to set the given
-  // mode flag as well as the subpixel precision we want to obtain:
+  // The default matching metric used by the \doxygen{FineRegistrationImageFilter} is standard correlation.
+  // However, we may also use any other image-to-image metric provided by ITK. For instance, here is how we
+  // would use the \doxygen{itk}{MutualInformationImageToImageMetric} (do not forget to include the proper header).
   //
   // Software Guide : EndLatex
-  registrator->SetRefinementModeToSubPixel();
-  registrator->SetSubPixelPrecision(atoi(argv[10]));
+
+  if(argc > 11)
+      {
+  // Software Guide : BeginCodeSnippet
+      typedef itk::MeanReciprocalSquareDifferenceImageToImageMetric<InputImageType,InputImageType> MRSDMetricType;
+      MRSDMetricType::Pointer mrsdMetric = MRSDMetricType::New();
+      registrator->SetMetric(mrsdMetric);
+  // Software Guide : EndCodeSnippet
+      }
 
   // Software Guide : BeginLatex
   //
   // \end{itemize}
-  // The execution of the \doxygen{otb}{FineCorrelationImageFilter} will be triggered by
+  // The execution of the \doxygen{otb}{FineRegistrationImageFilter} will be triggered by
   // the \code{Update()} call on the writer at the end of the
   // pipeline. Make sure to use a
   // \doxygen{otb}{StreamingImageFileWriter} if you want to benefit
@@ -271,15 +285,23 @@ int main(int argc, char** argv)
   //
   // \begin{figure}
   // \center
-  // \includegraphics[width=0.30\textwidth]{StereoFixed.eps}
-  // \includegraphics[width=0.30\textwidth]{StereoMoving.eps}
-  // \includegraphics[width=0.30\textwidth]{fcDResampledOutput2.eps}
-  // \includegraphics[width=0.30\textwidth]{fcCorrelFieldOutput.eps}
-  // \includegraphics[width=0.30\textwidth]{fcDeformationFieldOutput-horizontal.eps}
-  // \includegraphics[width=0.30\textwidth]{fcDeformationFieldOutput-vertical.eps}
+  // \includegraphics[width=0.40\textwidth]{StereoFixed.eps}
+  // \includegraphics[width=0.40\textwidth]{StereoMoving.eps}
+  // \includegraphics[width=0.40\textwidth]{fcDeformationFieldOutput-horizontal.eps}
+  // \includegraphics[width=0.40\textwidth]{fcDeformationFieldOutput-vertical.eps}
+  // \includegraphics[width=0.40\textwidth]{fcCorrelFieldOutput.eps}
+  // \includegraphics[width=0.40\textwidth]{fcDResampledOutput2.eps}
+  // \includegraphics[width=0.40\textwidth]{fcMRSDDeformationFieldOutput-horizontal.eps}
+  // \includegraphics[width=0.40\textwidth]{fcMRSDDeformationFieldOutput-vertical.eps}
+  // \includegraphics[width=0.40\textwidth]{fcMRSDCorrelFieldOutput.eps}
+  // \includegraphics[width=0.40\textwidth]{fcMRSDDResampledOutput2.eps}
   // \itkcaption[Deformation field and resampling from fine correlation registration]{From left
-  // to right and top to bottom: fixed input image, moving image with a low stereo angle, resampled image,
-  // correlation field, estimated deformation field in the horizontal direction, estimated deformation field in the vertical direction.}
+  // to right and top to bottom: fixed input image, moving image with a low stereo angle,
+  //  estimated deformation fields in both direction using correlation,
+  // local correlation field, resampled image based on correlation,
+  // estimated deformation fields in both direction using mean reciprocal square difference,
+  // local mean reciprocal square difference field, resampled image based on mean reciprocal square difference.
+  // }
   // \label{fig:FineCorrelationImageFilterOUTPUT}
   // \end{figure}
   //
