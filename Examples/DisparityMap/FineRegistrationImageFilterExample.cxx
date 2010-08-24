@@ -197,12 +197,26 @@ int main(int argc, char** argv)
 
   if(argc > 11)
       {
-  // Software Guide : BeginCodeSnippet
+      // Software Guide : BeginCodeSnippet
       typedef itk::MeanReciprocalSquareDifferenceImageToImageMetric<InputImageType,InputImageType> MRSDMetricType;
       MRSDMetricType::Pointer mrsdMetric = MRSDMetricType::New();
       registrator->SetMetric(mrsdMetric);
-  // Software Guide : EndCodeSnippet
+      // Software Guide : EndCodeSnippet
+
+      // Software Guide : BeginLatex
+      //
+      // The \doxygen{itk}{MutualInformationImageToImageMetric} produces low value for poor matches, therefore, the filter has
+      // to maximize the metric :
+      //
+      // Software Guide : EndLatex
+
+      // Software Guide : BeginCodeSnippet
+      registrator->MinimizeOff();
+      // Software Guide : EndCodeSnippet
       }
+
+
+
 
   // Software Guide : BeginLatex
   //
@@ -285,16 +299,16 @@ int main(int argc, char** argv)
   //
   // \begin{figure}
   // \center
-  // \includegraphics[width=0.40\textwidth]{StereoFixed.eps}
-  // \includegraphics[width=0.40\textwidth]{StereoMoving.eps}
-  // \includegraphics[width=0.40\textwidth]{fcDeformationFieldOutput-horizontal.eps}
-  // \includegraphics[width=0.40\textwidth]{fcDeformationFieldOutput-vertical.eps}
-  // \includegraphics[width=0.40\textwidth]{fcCorrelFieldOutput.eps}
-  // \includegraphics[width=0.40\textwidth]{fcDResampledOutput2.eps}
-  // \includegraphics[width=0.40\textwidth]{fcMRSDDeformationFieldOutput-horizontal.eps}
-  // \includegraphics[width=0.40\textwidth]{fcMRSDDeformationFieldOutput-vertical.eps}
-  // \includegraphics[width=0.40\textwidth]{fcMRSDCorrelFieldOutput.eps}
-  // \includegraphics[width=0.40\textwidth]{fcMRSDDResampledOutput2.eps}
+  // \includegraphics[width=0.30\textwidth]{StereoFixed.eps}
+  // \includegraphics[width=0.30\textwidth]{StereoMoving.eps}\\
+  // \includegraphics[width=0.30\textwidth]{fcDeformationFieldOutput-horizontal.eps}
+  // \includegraphics[width=0.30\textwidth]{fcDeformationFieldOutput-vertical.eps}\\
+  // \includegraphics[width=0.30\textwidth]{fcCorrelFieldOutput.eps}
+  // \includegraphics[width=0.30\textwidth]{fcDResampledOutput2.eps}\\
+  // \includegraphics[width=0.30\textwidth]{fcMRSDDeformationFieldOutput-horizontal.eps}
+  // \includegraphics[width=0.30\textwidth]{fcMRSDDeformationFieldOutput-vertical.eps}\\
+  // \includegraphics[width=0.30\textwidth]{fcMRSDCorrelFieldOutput.eps}
+  // \includegraphics[width=0.30\textwidth]{fcMRSDDResampledOutput2.eps}
   // \itkcaption[Deformation field and resampling from fine correlation registration]{From left
   // to right and top to bottom: fixed input image, moving image with a low stereo angle,
   //  estimated deformation fields in both direction using correlation,
