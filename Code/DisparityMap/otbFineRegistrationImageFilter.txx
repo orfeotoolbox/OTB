@@ -24,6 +24,7 @@
 #include "itkLinearInterpolateImageFunction.h"
 #include "itkImageRegionIteratorWithIndex.h"
 #include "itkNormalizedCorrelationImageToImageMetric.h"
+#include "itkExceptionObject.h"
 
 namespace otb
 {
@@ -164,7 +165,7 @@ FineRegistrationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFie
     itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
     itk::OStringStream msg;
     msg << this->GetNameOfClass()
-            << "::GenerateInputRequestedRegion()";
+                << "::GenerateInputRequestedRegion()";
     e.SetLocation(msg.str().c_str());
     e.SetDescription("Requested region is (at least partially) outside the largest possible region of image 1.");
     e.SetDataObject(fixedPtr);
@@ -187,7 +188,7 @@ FineRegistrationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFie
     itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
     itk::OStringStream msg;
     msg << this->GetNameOfClass()
-            << "::GenerateInputRequestedRegion()";
+                << "::GenerateInputRequestedRegion()";
     e.SetLocation(msg.str().c_str());
     e.SetDescription("Requested region is (at least partially) outside the largest possible region of image 1.");
     e.SetDataObject(movingPtr);
@@ -277,38 +278,24 @@ FineRegistrationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFie
         params[0]=static_cast<double>(i*fixedSpacing[0]);
         params[1]=static_cast<double>(j*fixedSpacing[1]);
 
-        // compute currentMetric
-        currentMetric = m_Metric->GetValue(params);
+        try
+        {
+          // compute currentMetric
+          currentMetric = m_Metric->GetValue(params);
 
-        // Check for maximum
-        if((m_Minimize && (currentMetric < optMetric)) || (!m_Minimize && (currentMetric > optMetric)))
-          {
-          optMetric = currentMetric;
-          optParams = params;
-          }
+          // Check for maximum
+          if((m_Minimize && (currentMetric < optMetric)) || (!m_Minimize && (currentMetric > optMetric)))
+            {
+            optMetric = currentMetric;
+            optParams = params;
+            }
+        }
+        catch(itk::ExceptionObject& err)
+        {
+          itkWarningMacro(<<err.GetDescription());
+        }
         }
       }
-
-//      // Exhaustive sub-pixel
-//      tmpOptParams = optParams;
-//      for(double dx = -vcl_abs(fixedSpacing[0]);dx<vcl_abs(fixedSpacing[0]);dx+=m_SubPixelAccuracy)
-//        {
-//        for(double dy = -vcl_abs(fixedSpacing[1]);dy<vcl_abs(fixedSpacing[1]);dy+=m_SubPixelAccuracy)
-//          {
-//          params[0] = tmpOptParams[0]+dx;
-//          params[1] = tmpOptParams[1]+dy;
-//
-//          // compute currentMetric
-//          currentMetric = m_Metric->GetValue(params);
-//
-//          // Check for maximum
-//          if((m_Minimize && (currentMetric < optMetric)) || (!m_Minimize && (currentMetric > optMetric)))
-//            {
-//            optMetric = currentMetric;
-//            optParams = params;
-//            }
-//          }
-//        }
 
     // Dichotomic sub-pixel
     SpacingType subPixelSpacing = fixedSpacing;
@@ -328,15 +315,23 @@ FineRegistrationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFie
           params[0]+=static_cast<double>(i*subPixelSpacing[0]);
           params[1]+=static_cast<double>(j*subPixelSpacing[1]);
 
-          // compute currentMetric
-          currentMetric = m_Metric->GetValue(params);
+          try
+          {
+            // compute currentMetric
+            currentMetric = m_Metric->GetValue(params);
 
-          // Check for maximum
-          if((m_Minimize && (currentMetric < optMetric)) || (!m_Minimize && (currentMetric > optMetric)))
-            {
-            optMetric = currentMetric;
-            optParams = params;
-            }
+            // Check for maximum
+            if((m_Minimize && (currentMetric < optMetric)) || (!m_Minimize && (currentMetric > optMetric)))
+              {
+              optMetric = currentMetric;
+              optParams = params;
+              }
+          }
+          catch(itk::ExceptionObject& err)
+          {
+            itkWarningMacro(<<err.GetDescription());
+
+          }
           }
         }
       }
@@ -353,7 +348,7 @@ FineRegistrationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFie
     // Update progress
     progress.CompletedPixel();
     }
-  }
+ }
 } // end namespace otb
 
 #endif
