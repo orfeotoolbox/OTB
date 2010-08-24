@@ -302,7 +302,7 @@ FineRegistrationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFie
     while(subPixelSpacing[0]> m_SubPixelAccuracy || subPixelSpacing[1]> m_SubPixelAccuracy)
       {
       // Perform 1 step of dichotomic search
-      subPixelSpacing/=2.;
+      subPixelSpacing /= 2.;
 
       // Store last opt params
       tmpOptParams = optParams;
@@ -312,8 +312,8 @@ FineRegistrationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFie
         for(int j=-1; j<=1;j+=2)
           {
           params = tmpOptParams;
-          params[0]+=static_cast<double>(i*subPixelSpacing[0]);
-          params[1]+=static_cast<double>(j*subPixelSpacing[1]);
+          params[0] += static_cast<double>(i*subPixelSpacing[0]);
+          params[1] += static_cast<double>(j*subPixelSpacing[1]);
 
           try
           {

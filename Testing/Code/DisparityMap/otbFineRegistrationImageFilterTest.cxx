@@ -35,7 +35,8 @@ int otbFineRegistrationImageFilterTest( int argc, char * argv[] )
 {
   if(argc!=9)
     {
-    std::cerr<<"Usage: "<<argv[0]<<" fixed_fname moving_fname output_correl output_field radius search_radius subpixPrecision metric(0=CC,1=NCC,2=MeanSquare,3=Mean reciprocal square difference)"<<std::endl;
+    std::cerr<<"Usage: "<<argv[0]<<" fixed_fname moving_fname output_correl output_field radius search_radius ";
+    std::cerr<<"subpixPrecision metric(0=CC,1=NCC,2=MeanSquare,3=Mean reciprocal square difference)"<<std::endl;
     return EXIT_FAILURE;
     }
   const char * fixedFileName  = argv[1];

@@ -63,7 +63,7 @@ class ITK_EXPORT FineRegistrationImageFilter : public itk::ImageToImageFilter<TI
 {
 public:
   /** Standard class typedefs. */
-  typedef FineRegistrationImageFilter                              Self;
+  typedef FineRegistrationImageFilter                             Self;
   typedef itk::ImageToImageFilter<TInputImage,T0utputCorrelation> Superclass;
   typedef itk::SmartPointer<Self>                                 Pointer;
   typedef itk::SmartPointer<const Self>                           ConstPointer;
