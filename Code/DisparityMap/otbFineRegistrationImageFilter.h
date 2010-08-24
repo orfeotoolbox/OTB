@@ -52,8 +52,7 @@ namespace otb
  * The otb::FastCorrelationImageFilter provides an optimized implementation of fine registration for correlation
  * metric. It is faster but less flexible: images should have the same size, and the metric can not be changed.
  *
- * The FineRegistrationImageFilter allows to use the full range of itk::ImageToImageMetric provided by itk, and allows
- * to perform registration between images of different sizes and resolution.
+ * The FineRegistrationImageFilter allows to use the full range of itk::ImageToImageMetric provided by itk.
  *
  * \sa      FastCorrelationImageFilter
  * \ingroup IntensityImageFilters, Streamed
