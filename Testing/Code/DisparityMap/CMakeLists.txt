@@ -5,6 +5,7 @@ SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
 SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
 SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
 SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
+SET(EXAMPLEDATA ${OTB_DATA_ROOT}/Examples)
 
 # Tolerance for pixel difference
 SET(NOTOL 0.0)
@@ -311,6 +312,79 @@ ADD_TEST(dmTvStreamingWarpImageFilter ${DISPARITYMAP_TESTS3}
 	5
 )
 
+# ------- otb::FineRegistrationImageFilter ----------
+
+ADD_TEST(feTuFineRegistrationImageFilterNew ${DISPARITYMAP_TESTS3}
+        otbFineRegistrationImageFilterNew
+)
+
+ADD_TEST(feTvFineRegistrationImageFilterTestWithCorrelation ${DISPARITYMAP_TESTS3}
+     --compare-n-images ${EPSILON_8} 2
+        ${BASELINE}/feTvFineRegistrationImageFilterTestWithCorrelationMetric.tif
+        ${TEMP}/feTvFineRegistrationImageFilterTestWithCorrelationMetric.tif
+        ${BASELINE}/feTvFineRegistrationImageFilterTestWithCorrelationField.tif
+        ${TEMP}/feTvFineRegistrationImageFilterTestWithCorrelationField.tif
+        otbFineRegistrationImageFilterTest
+	    ${EXAMPLEDATA}/StereoFixed.png # fixedFileName
+	    ${EXAMPLEDATA}/StereoMoving.png # movingFileName
+	    ${TEMP}/feTvFineRegistrationImageFilterTestWithCorrelationMetric.tif # output correlFileName
+        ${TEMP}/feTvFineRegistrationImageFilterTestWithCorrelationField.tif  # output fieldFileName
+        3 # radius
+	    2 # sradius
+	    0.1 # precision
+	    0 # Correlation
+)
+
+ADD_TEST(feTvFineRegistrationImageFilterTestWithNormalizedCorrelation ${DISPARITYMAP_TESTS3}
+     --compare-n-images ${EPSILON_8} 2
+        ${BASELINE}/feTvFineRegistrationImageFilterTestWithNormalizedCorrelationMetric.tif
+        ${TEMP}/feTvFineRegistrationImageFilterTestWithNormalizedCorrelationMetric.tif
+        ${BASELINE}/feTvFineRegistrationImageFilterTestWithNormalizedCorrelationField.tif
+        ${TEMP}/feTvFineRegistrationImageFilterTestWithNormalizedCorrelationField.tif
+        otbFineRegistrationImageFilterTest
+	    ${EXAMPLEDATA}/StereoFixed.png # fixedFileName
+	    ${EXAMPLEDATA}/StereoMoving.png # movingFileName
+	    ${TEMP}/feTvFineRegistrationImageFilterTestWithNormalizedCorrelationMetric.tif # output correlFileName
+        ${TEMP}/feTvFineRegistrationImageFilterTestWithNormalizedCorrelationField.tif  # output fieldFileName
+        3 # radius
+	    2 # sradius
+	    0.1 # precision
+	    1 # Normalized Correlation
+)
+
+ADD_TEST(feTvFineRegistrationImageFilterTestWithMeanSquare ${DISPARITYMAP_TESTS3}
+     --compare-n-images ${EPSILON_8} 2
+        ${BASELINE}/feTvFineRegistrationImageFilterTestWithMeanSquareMetric.tif
+        ${TEMP}/feTvFineRegistrationImageFilterTestWithMeanSquareMetric.tif
+        ${BASELINE}/feTvFineRegistrationImageFilterTestWithMeanSquareField.tif
+        ${TEMP}/feTvFineRegistrationImageFilterTestWithMeanSquareField.tif
+        otbFineRegistrationImageFilterTest
+	    ${EXAMPLEDATA}/StereoFixed.png # fixedFileName
+	    ${EXAMPLEDATA}/StereoMoving.png # movingFileName
+	    ${TEMP}/feTvFineRegistrationImageFilterTestWithMeanSquareMetric.tif # output correlFileName
+        ${TEMP}/feTvFineRegistrationImageFilterTestWithMeanSquareField.tif  # output fieldFileName
+        3 # radius
+	    2 # sradius
+	    0.1 # precision
+	    2 # Mean square
+)
+
+ADD_TEST(feTvFineRegistrationImageFilterTestWithMeanReciprocalDifference ${DISPARITYMAP_TESTS3}
+     --compare-n-images ${EPSILON_8} 2
+        ${BASELINE}/feTvFineRegistrationImageFilterTestWithMeanReciprocalDifferenceMetric.tif
+        ${TEMP}/feTvFineRegistrationImageFilterTestWithMeanReciprocalDifferenceMetric.tif
+        ${BASELINE}/feTvFineRegistrationImageFilterTestWithMeanReciprocalDifferenceField.tif
+        ${TEMP}/feTvFineRegistrationImageFilterTestWithMeanReciprocalDifferenceField.tif
+        otbFineRegistrationImageFilterTest
+	    ${EXAMPLEDATA}/StereoFixed.png # fixedFileName
+	    ${EXAMPLEDATA}/StereoMoving.png # movingFileName
+	    ${TEMP}/feTvFineRegistrationImageFilterTestWithMeanReciprocalDifferenceMetric.tif # output correlFileName
+        ${TEMP}/feTvFineRegistrationImageFilterTestWithMeanReciprocalDifferenceField.tif  # output fieldFileName
+        3 # radius
+	    2 # sradius
+	    0.1 # precision
+	    3 # Mean reciprocal difference
+)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbDisparityMapTests3 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -349,6 +423,8 @@ SET(BasicDisparityMap_SRCS3
 otbDisparityMapTests3.cxx
 otbStreamingWarpImageFilterNew.cxx
 otbStreamingWarpImageFilter.cxx
+otbFineRegistrationImageFilterNew.cxx
+otbFineRegistrationImageFilterTest.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbDisparityMapTests1 "${BasicDisparityMap_SRCS1}" "OTBDisparityMap;OTBIO;OTBTesting")
