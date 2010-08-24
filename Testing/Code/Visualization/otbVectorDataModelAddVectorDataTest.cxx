@@ -41,6 +41,8 @@
 #include "otbVectorDataModel.h"
 #include "otbVectorDataActionHandler.h"
 #include "otbVectorDataFileReader.h"
+#include "otbVectorDataProjectionFilter.h"
+
 
 int otbVectorDataModelAddVectorDataTest(int argc, char * argv[])
 {
@@ -210,7 +212,26 @@ int otbVectorDataModelAddVectorDataTest(int argc, char * argv[])
   VectorDataReaderType::Pointer vdReader = VectorDataReaderType::New();
   vdReader->SetFileName(vdataName);
   vdReader->Update();
-  vdModel->AddVectorData(vdReader->GetOutput(), reader->GetOutput());
+    typedef otb::VectorDataProjectionFilter<VectorDataType,VectorDataType> ProjectionFilterType;
+  ProjectionFilterType::Pointer vectorDataProjection = ProjectionFilterType::New();
+  vectorDataProjection->SetInput(vdReader->GetOutput());
+
+  ImageType::PointType lNewOrigin;
+  // polygons are recorded with a 0.5 shift...
+  lNewOrigin[0] = reader->GetOutput()->GetOrigin()[0]+0.5;
+  lNewOrigin[1] = reader->GetOutput()->GetOrigin()[1]+0.5;
+
+  vectorDataProjection->SetOutputOrigin(lNewOrigin);
+  vectorDataProjection->SetOutputSpacing(reader->GetOutput()->GetSpacing());
+
+  std::string projectionRef;
+  itk::ExposeMetaData<std::string>(reader->GetOutput()->GetMetaDataDictionary(),
+                                   otb::MetaDataKey::ProjectionRefKey, projectionRef );
+  vectorDataProjection->SetOutputProjectionRef(projectionRef);
+  vectorDataProjection->SetOutputKeywordList(reader->GetOutput()->GetImageKeywordlist());
+  vectorDataProjection->Update();
+
+  vdModel->AddVectorData(vectorDataProjection->GetOutput());
 
   if (run)
     {
