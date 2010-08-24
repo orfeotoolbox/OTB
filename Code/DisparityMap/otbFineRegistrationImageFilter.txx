@@ -152,9 +152,6 @@ FineRegistrationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFie
   largestRegion.SetSize(outputSize);
   outputPtr->SetLargestPossibleRegion(largestRegion);
   outputFieldPtr->SetLargestPossibleRegion(largestRegion);
-
-  std::cout<<"Output region: "<<largestRegion<<std::endl;
-  std::cout<<"Output spacing:"<<outputSpacing<<std::endl;
  }
 
 template <class TInputImage, class TOutputCorrelation, class TOutputDeformationField>
@@ -197,12 +194,10 @@ FineRegistrationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFie
   // pad the input requested region by the operator radius
   fixedRequestedRegion.PadByRadius( m_Radius );
 
-  std::cout<<"Fixed requested region: "<<fixedRequestedRegion<<std::endl;
-
   // get a copy of the moving requested region (should equal the output
   // requested region)
   InputImageRegionType searchFixedRequestedRegion = fixedRequestedRegion;
-  searchFixedRequestedRegion.PadByRadius(m_Radius);
+  searchFixedRequestedRegion.PadByRadius(m_SearchRadius);
 
 
   // Find corners of the search window
@@ -303,8 +298,8 @@ FineRegistrationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFie
   m_Interpolator->SetInputImage(this->GetMovingInput());
   m_Metric->SetTransform(m_Translation);
   m_Metric->SetInterpolator(m_Interpolator);
-  m_Metric->SetFixedImage(this->GetFixedInput());
-  m_Metric->SetMovingImage(this->GetMovingInput());
+  m_Metric->SetFixedImage(fixedPtr);
+  m_Metric->SetMovingImage(movingPtr);
   m_Metric->SetComputeGradient(false);
 
   /** Output iterators */
