@@ -299,22 +299,20 @@ int main(int argc, char** argv)
   //
   // \begin{figure}
   // \center
-  // \includegraphics[width=0.30\textwidth]{StereoFixed.eps}
-  // \includegraphics[width=0.30\textwidth]{StereoMoving.eps}\\
-  // \includegraphics[width=0.30\textwidth]{fcDeformationFieldOutput-horizontal.eps}
-  // \includegraphics[width=0.30\textwidth]{fcDeformationFieldOutput-vertical.eps}\\
-  // \includegraphics[width=0.30\textwidth]{fcCorrelFieldOutput.eps}
-  // \includegraphics[width=0.30\textwidth]{fcDResampledOutput2.eps}\\
-  // \includegraphics[width=0.30\textwidth]{fcMRSDDeformationFieldOutput-horizontal.eps}
-  // \includegraphics[width=0.30\textwidth]{fcMRSDDeformationFieldOutput-vertical.eps}\\
-  // \includegraphics[width=0.30\textwidth]{fcMRSDCorrelFieldOutput.eps}
-  // \includegraphics[width=0.30\textwidth]{fcMRSDDResampledOutput2.eps}
-  // \itkcaption[Deformation field and resampling from fine correlation registration]{From left
+  // \includegraphics[width=0.2\textwidth]{StereoFixed.eps}
+  // \includegraphics[width=0.2\textwidth]{StereoMoving.eps}
+  // \includegraphics[width=0.2\textwidth]{fcCorrelFieldOutput.eps}
+  // \includegraphics[width=0.2\textwidth]{fcMRSDCorrelFieldOutput.eps}
+  // \includegraphics[width=0.2\textwidth]{fcDResampledOutput2.eps}
+  // \includegraphics[width=0.2\textwidth]{fcMRSDDResampledOutput2.eps}
+  // \includegraphics[width=0.2\textwidth]{fcDeformationFieldOutput-horizontal.eps}
+  // \includegraphics[width=0.2\textwidth]{fcMRSDDeformationFieldOutput-horizontal.eps}
+  // \itkcaption[Deformation field and resampling from fine registration]{From left
   // to right and top to bottom: fixed input image, moving image with a low stereo angle,
-  //  estimated deformation fields in both direction using correlation,
-  // local correlation field, resampled image based on correlation,
-  // estimated deformation fields in both direction using mean reciprocal square difference,
-  // local mean reciprocal square difference field, resampled image based on mean reciprocal square difference.
+  // local correlation field, local mean reciprocal square difference field,
+  // resampled image based on correlation, resampled image based on mean reciprocal square difference,
+  //  estimated epipolar deformation using on correlation,
+  // estimated epipolar deformation using mean reciprocal square difference.
   // }
   // \label{fig:FineCorrelationImageFilterOUTPUT}
   // \end{figure}
