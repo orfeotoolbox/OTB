@@ -28,4 +28,6 @@ void RegisterTests()
 {
   REGISTER_TEST(otbStreamingWarpImageFilterNew);
   REGISTER_TEST(otbStreamingWarpImageFilter);
+  REGISTER_TEST(otbFineRegistrationImageFilterNew);
+  REGISTER_TEST(otbFineRegistrationImageFilterTest);
 }
