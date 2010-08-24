@@ -399,10 +399,10 @@ MapFileProductWriter<TInputImage>
         OutputPointType upperLeftCorner = outputPoint;
 	
 	// Build The indexTile
-	this->AddBBoxToIndexTile(lowerLeftCorner,
-                                 lowerRightCorner,
-                                 upperRightCorner,
-                                 upperLeftCorner,x,y);
+        this->AddBBoxToIndexTile(lowerLeftCorner, 
+                                 lowerRightCorner, 
+                                 upperRightCorner, 
+                                 upperLeftCorner, x, y);
 
         /** END GX LAT LON */
         y++;
@@ -420,10 +420,10 @@ MapFileProductWriter<TInputImage>
 template <class TInputImage>
 void
 MapFileProductWriter<TInputImage>
-::AddBBoxToIndexTile(OutputPointType lowerLeftCorner,
-		     OutputPointType lowerRightCorner,
-		     OutputPointType upperRightCorner,
-		     OutputPointType upperLeftCorner,
+::AddBBoxToIndexTile(OutputPointType lowerLeftCorner, 
+                     OutputPointType lowerRightCorner, 
+                     OutputPointType upperRightCorner, 
+                     OutputPointType upperLeftCorner, 
                      unsigned int x, unsigned int y)
 {
   // From PointType to VertexType
@@ -506,7 +506,7 @@ MapFileProductWriter<TInputImage>
   file <<"\tWEB" << std::endl;
   file <<"\t\t# Set IMAGEPATH to the path where MapServer should" << std::endl;
   file <<"\t\t# write its output." << std::endl;
-  //file <<"    #IMAGEPATH \'D:\OSGeo4W_bis2/tmp/ms_tmp/\'" << std::endl;
+  //file <<"#IMAGEPATH \'D:\OSGeo4W_bis2/tmp/ms_tmp/\'" << std::endl;
 
   file <<"\t\t# Set IMAGEURL to the url that points to IMAGEPATH" << std::endl;
   file <<"\t\t# as defined in your web server configuration" << std::endl;
@@ -527,8 +527,8 @@ MapFileProductWriter<TInputImage>
   tempIndexShapeName << itksys::SystemTools::GetFilenameWithoutExtension(m_FileName);
 
   file <<"\tLAYER" << std::endl;
-  file <<"\t\tNAME '"<<tempIndexShapeName.str()<<"'" << std::endl;
-  file <<"\t\t\t#GROUP 'earthsat'" << std::endl;	
+  file <<"\t\tNAME '"<<tempIndexShapeName.str()<<"'"<< std::endl;
+  file <<"\t\t\t#GROUP 'earthsat'"<< std::endl;	
   file <<"\t\t\tTYPE RASTER" << std::endl;
   file <<"\t\t\tTILEITEM 'LOCATION'" << std::endl;
   file <<"\t\t\tTILEINDEX \'"<<m_IndexShapeFileName<<"\'" << std::endl;
