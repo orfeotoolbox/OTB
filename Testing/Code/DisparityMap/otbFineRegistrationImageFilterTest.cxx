@@ -120,7 +120,7 @@ int otbFineRegistrationImageFilterTest( int argc, char * argv[] )
     }
   }
 
-  otb::StandardFilterWatcher watcher(registration,"Registration");
+  //otb::StandardFilterWatcher watcher(registration,"Registration");
   itk::TimeProbe chrono;
   chrono.Start();
   registration->Update();
