@@ -76,8 +76,14 @@ public:
   void AddVectorData( VectorDataPointer vData );
   void AddNode( TreeNodeType * node );
   
+  /** Add vertex to the vector data representation. 
+   * If callUpdate is set to true il will update the full vector data display.
+   */
   void AddPointToGeometry(VertexType& vertex, bool callUpdate = true);
-  void EndGeometry(void);
+  /** End the current vector data representation. 
+   * If callUpdate is set to true il will update the full vector data display.
+   */
+  void EndGeometry(bool callUpdate = true);
   void DeleteGeometry(void);
 
   /** return the Nth data node without counting the Root/Document/Folder*/
