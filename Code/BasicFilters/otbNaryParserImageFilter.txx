@@ -89,7 +89,7 @@ void NaryParserImageFilter<TImage>
 template <class TImage>
 void NaryParserImageFilter<TImage>
 ::SetNthInput(unsigned int idx, const ImageType * image, const std::string& varName)
-{  
+{
   this->SetInput(idx, const_cast<TImage *>( image ));
   m_VVarName.resize(this->GetNumberOfInputs());
   m_VVarName[idx] = varName;
@@ -202,7 +202,6 @@ void NaryParserImageFilter<TImage>
   double value; 
   unsigned int j;
   unsigned int nbInputImages = this->GetNumberOfInputs();
-  bool run = true;
   
   typedef itk::ImageRegionConstIterator<TImage> ImageRegionConstIteratorType;
   
@@ -217,18 +216,11 @@ void NaryParserImageFilter<TImage>
   
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-  
-  for(j=0; j < nbInputImages; j++)
-    {
-    run = run && !Vit.at(j).IsAtEnd();
-    }  
 
-  while (run)
+  while(!Vit.at(0).IsAtEnd())
     {
-    run = true;
     for(j=0; j < nbInputImages; j++)
       {
-      run = run && !Vit.at(j).IsAtEnd();
       m_AImage.at(threadId).at(j) = static_cast<double>(Vit.at(j).Get());
       }
 
