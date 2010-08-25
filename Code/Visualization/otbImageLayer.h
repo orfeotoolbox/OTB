@@ -201,6 +201,8 @@ public:
     m_RenderingFunction->SetListSample(m_ListSample);
   }
 
+  virtual LayerValueType GetValueAtIndex(const IndexType& index);
+
 protected:
   /** Constructor */
   ImageLayer();
@@ -223,8 +225,6 @@ protected:
   unsigned int PixelSize(ImagePointerType image, VectorPixelType* v) const;
   unsigned int PixelSize(ImagePointerType image, RGBPixelType* v) const;
   unsigned int PixelSize(ImagePointerType image, RGBAPixelType* v) const;
-
-  LayerValueType GetValueAtIndex(const IndexType& index);
 
 private:
   ImageLayer(const Self&);     // purposely not implemented
