@@ -220,7 +220,7 @@ void NaryParserImageFilter<TImage>
   
   for(j=0; j < nbInputImages; j++)
     {
-    run *= !Vit.at(j).IsAtEnd();
+    run = run && !Vit.at(j).IsAtEnd();
     }  
 
   while (run)
@@ -228,7 +228,7 @@ void NaryParserImageFilter<TImage>
     run = true;
     for(j=0; j < nbInputImages; j++)
       {
-      run *= !Vit.at(j).IsAtEnd();
+      run = run && !Vit.at(j).IsAtEnd();
       m_AImage.at(threadId).at(j) = static_cast<double>(Vit.at(j).Get());
       }
 
