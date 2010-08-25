@@ -64,8 +64,8 @@ int main(int argc, char** argv)
     {
     std::cerr << "Usage: " << argv[0];
     std::cerr <<
-    " fixedFileName movingFileName fieldOutNameHorizontal fieldOutNameVertical fieldCorrelation warped ";
-    std::cerr << "smoothingSigma correlationRadius explorationRadius subpixelPrecision";
+    " fixedFileName movingFileName fieldOutNameHorizontal fieldOutNameVertical fieldMetric warped ";
+    std::cerr << "smoothingSigma metricRadius explorationRadius subpixelPrecision";
 
     return EXIT_FAILURE;
     }
@@ -82,7 +82,7 @@ int main(int argc, char** argv)
 
   // Software Guide : BeginLatex
   //
-  // Several type of \doxygen{otb}{Image} are required to represent the input image, the correlation field,
+  // Several type of \doxygen{otb}{Image} are required to represent the input image, the metric field,
   // and the deformation field.
   //
   // Software Guide : EndLatex
@@ -90,7 +90,7 @@ int main(int argc, char** argv)
   //Allocate Images
   // Software Guide : BeginCodeSnippet
   typedef otb::Image<PixelType, ImageDimension> InputImageType;
-  typedef otb::Image<PixelType, ImageDimension> CorrelationImageType;
+  typedef otb::Image<PixelType, ImageDimension> MetricImageType;
   typedef otb::Image<DeformationPixelType,
       ImageDimension>                           DeformationFieldType;
   // Software Guide : EndCodeSnippet
@@ -104,7 +104,7 @@ int main(int argc, char** argv)
 
   // Software Guide : BeginLatex
   //
-  // To make the correlation estimation more robust, the first
+  // To make the metric estimation more robust, the first
   // required step is to blur the input images. This is done using the
   // \doxygen{itk}{RecursiveGaussianImageFilter}:
   //
@@ -133,7 +133,7 @@ int main(int argc, char** argv)
   //Create the filter
   // Software Guide : BeginCodeSnippet
   typedef otb::FineRegistrationImageFilter<InputImageType,
-      CorrelationImageType,
+      MetricImageType,
       DeformationFieldType>
   RegistrationFilterType;
 
@@ -171,14 +171,14 @@ int main(int argc, char** argv)
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  RadiusType correlationRadius;
-  correlationRadius[0] = atoi(argv[9]);
-  correlationRadius[1] = atoi(argv[9]);
+  RadiusType metricRadius;
+  metricRadius[0] = atoi(argv[9]);
+  metricRadius[1] = atoi(argv[9]);
 
-  registrator->SetRadius(correlationRadius);
+  registrator->SetRadius(metricRadius);
 // Software Guide : EndCodeSnippet
 
-  std::cout << "Correlation radius " << registrator->GetRadius() << std::endl;
+  std::cout << "Metric radius " << registrator->GetRadius() << std::endl;
 
   // Software Guide : BeginLatex
   //
@@ -268,18 +268,18 @@ int main(int argc, char** argv)
   warper->SetDeformationField(registrator->GetOutputDeformationField());
   warper->SetEdgePaddingValue(padValue);
 
-  typedef itk::RescaleIntensityImageFilter<CorrelationImageType,
-        OutputImageType> CorrelationRescalerType;
+  typedef itk::RescaleIntensityImageFilter<MetricImageType,
+        OutputImageType> MetricRescalerType;
 
-  CorrelationRescalerType::Pointer correlationRescaler = CorrelationRescalerType::New();
-  correlationRescaler->SetInput(registrator->GetOutput());
-  correlationRescaler->SetOutputMinimum(0);
-  correlationRescaler->SetOutputMaximum(255);
+  MetricRescalerType::Pointer metricRescaler = MetricRescalerType::New();
+  metricRescaler->SetInput(registrator->GetOutput());
+  metricRescaler->SetOutputMinimum(0);
+  metricRescaler->SetOutputMaximum(255);
 
   typedef otb::StreamingImageFileWriter<OutputImageType> WriterType;
 
   WriterType::Pointer writer1 = WriterType::New();
-  writer1->SetInput(correlationRescaler->GetOutput());
+  writer1->SetInput(metricRescaler->GetOutput());
   writer1->SetFileName(argv[5]);
   writer1->Update();
 
@@ -296,7 +296,7 @@ int main(int argc, char** argv)
   // Software Guide : BeginLatex
   //
   // Figure~\ref{fig:FineCorrelationImageFilterOUTPUT} shows the result of
-  // applying the \doxygen{otb}{FineCorrelationImageFilter}.
+  // applying the \doxygen{otb}{FineRegistrationImageFilter}.
   //
   // \begin{figure}
   // \center
