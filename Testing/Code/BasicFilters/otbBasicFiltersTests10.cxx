@@ -26,10 +26,12 @@
 
 void RegisterTests()
 {
+#if defined(OTB_USE_DEPRECATED)
   REGISTER_TEST(otbScalarImageTextureFunctorNew);
   REGISTER_TEST(otbScalarImageTextureFunctor);
   REGISTER_TEST(otbScalarVectorImageTextureFunctorNew);
   REGISTER_TEST(otbScalarVectorImageTextureFunctor);
+#endif
   REGISTER_TEST(otbGaborFilterGeneratorNew);
   REGISTER_TEST(otbGaborFilterGenerator);
 #if defined(USE_FFTWD)

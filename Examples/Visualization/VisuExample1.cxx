@@ -25,14 +25,14 @@
 
 // Software Guide : BeginLatex
 //
-// This example shows the use of the \doxygen{otb}{ImageViewer}
+// This example shows the use of the \doxygen{otb}{StandardImageViewer}
 // class for image visualization. As usual, we start by
 // including the header file for the class.
 //
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-#include "otbImageViewer.h"
+#include "otbStandardImageViewer.h"
 // Software Guide : EndCodeSnippet
 
 int main(int argc, char * argv[])
@@ -41,6 +41,7 @@ int main(int argc, char * argv[])
   if (argc != 2)
     {
     std::cout << " Usage : InputImage" << std::endl;
+    return EXIT_FAILURE;
     }
 
   const char * inputFilename  = argv[1];
@@ -55,10 +56,10 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef int                             PixelType;
-  typedef otb::VectorImage<PixelType, 2>  ImageType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::ImageViewer<PixelType>     ViewerType;
+  typedef int                                 PixelType;
+  typedef otb::VectorImage<PixelType, 2>      ImageType;
+  typedef otb::ImageFileReader<ImageType>     ReaderType;
+  typedef otb::StandardImageViewer<ImageType> ViewerType;
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -71,7 +72,7 @@ int main(int argc, char * argv[])
   ViewerType::Pointer lViewer = ViewerType::New();
   ReaderType::Pointer lReader = ReaderType::New();
   lReader->SetFileName(inputFilename);
-  lReader->Update();
+  lReader->UpdateOutputInformation();
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -94,13 +95,13 @@ int main(int argc, char * argv[])
   // Software Guide : BeginCodeSnippet
   lViewer->SetImage(lReader->GetOutput());
 
-  lViewer->Show();
+  lViewer->Update();
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
   //
   // The last step consists in starting the GUI event loop by calling
-  // the appropiate FLTK method.
+  // the appropriate FLTK method.
   //
   // Software Guide : EndLatex
 
@@ -111,7 +112,7 @@ int main(int argc, char * argv[])
   //
   // \begin{figure}
   // \center
-  // \includegraphics[width=.8\textwidth]{VisuGrey.eps}
+  // \includegraphics[width=.8\textwidth]{VisualizationAll.eps}
   // \itkcaption[Image visualization.]{Example of image visualization.}
   // \label{fig:Visu1}
   // \end{figure}

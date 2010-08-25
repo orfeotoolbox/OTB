@@ -244,7 +244,6 @@ void VectorDataModel::SetSelectedGeometry(int n)
 void
 VectorDataModel::AddVectorData( VectorDataPointer vData )
 {
-  std::cout<<"Element in vector data: "<<vData->Size()<<std::endl;
   this->EndGeometry(false);
   DataTreeType::Pointer tree = vData->GetDataTree();
   TreeNodeType * root = const_cast<TreeNodeType *>(tree->GetRoot());
@@ -252,13 +251,10 @@ VectorDataModel::AddVectorData( VectorDataPointer vData )
   this->Update();
 }
 
-int count = 0;
- 
+
 void
 VectorDataModel::AddNode( TreeNodeType * node )
 {
-  std::cout<<count<<" node id:"<<node->Get()->GetNodeType()<<std::endl;
-  count++;
   switch (node->Get()->GetNodeType())
     {
     case FEATURE_POINT:
@@ -298,14 +294,13 @@ VectorDataModel::AddNode( TreeNodeType * node )
         while (vIt != extRing->GetVertexList()->End())
 	  {
 	    PointType point = vIt.Value();
-	    std::cout<<point<<"   ";
 	    VertexType vertex;
 	    vertex[0] = point[0];
 	    vertex[1] = point[1];
 	    this->AddPointToGeometry(vertex, false);
 	    vIt++;
 	  }
-	std::cout<<std::endl;
+
 	this->EndGeometry(false);
 	break;
       }

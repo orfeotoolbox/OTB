@@ -1122,6 +1122,7 @@ ADD_TEST(bfTvEdgeDensityImageFilter ${BASICFILTERS_TESTS9}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests10 ~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+IF (OTB_USE_DEPRECATED)
 ADD_TEST(bfTuScalarImageTextureFunctorNew ${BASICFILTERS_TESTS10}
         otbScalarImageTextureFunctorNew )
 ADD_TEST(bfTvScalarImageTextureFunctor ${BASICFILTERS_TESTS10}
@@ -1146,7 +1147,7 @@ ADD_TEST(bfTvScalarVectorImageTextureFunctor ${BASICFILTERS_TESTS10}
 	    ${TEMP}/bfScalarVectorImageTextureFunctorTest.tif
 	    2 # radius
 )
-
+ENDIF (OTB_USE_DEPRECATED)
 
 # -------            otb::GaborFilterGenerator   ----------------------------
 
@@ -1809,10 +1810,6 @@ otbEdgeDensityImageFilter.cxx
 # A enrichir
 SET(BasicFilters_SRCS10
 otbBasicFiltersTests10.cxx
-otbScalarImageTextureFunctorNew.cxx
-otbScalarImageTextureFunctor.cxx
-otbScalarVectorImageTextureFunctorNew.cxx
-otbScalarVectorImageTextureFunctor.cxx
 otbGaborFilterGeneratorNew.cxx
 otbGaborFilterGenerator.cxx
 otbPolygonCompacityFunctor.cxx
@@ -1821,6 +1818,16 @@ otbClosePathFunctor.cxx
 otbPersistentVectorizationFilterNew.cxx
 otbPersistentVectorizationFilter.cxx
 )
+
+IF (OTB_USE_DEPRECATED)
+SET(BasicFilters_SRCS10
+${BasicFilters_SRCS10}
+otbScalarImageTextureFunctorNew.cxx
+otbScalarImageTextureFunctor.cxx
+otbScalarVectorImageTextureFunctorNew.cxx
+otbScalarVectorImageTextureFunctor.cxx
+)
+ENDIF (OTB_USE_DEPRECATED)
 
 IF(USE_FFTWD)
 SET(BasicFilters_SRCS10
