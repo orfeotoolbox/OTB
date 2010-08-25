@@ -1364,61 +1364,7 @@ ADD_TEST(feTvScalarImageToPanTexTextureFilter ${FEATUREEXTRACTION_TESTS15}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFeatureExtractionTests16 ~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-ADD_TEST(feTuFineCorrelationImageFilterNew ${FEATUREEXTRACTION_TESTS16}
-        otbFineCorrelationImageFilterNew
-)
 
-ADD_TEST(feTvFineCorrelationImageFilterTest_Coarse ${FEATUREEXTRACTION_TESTS16}
-     --compare-n-images ${EPSILON_8} 2
-        ${BASELINE}/feTvFineCorrelationImageFilterTest_Coarse_Correl.tif
-        ${TEMP}/feTvFineCorrelationImageFilterTest_Coarse_Correl.tif
-        ${BASELINE}/feTvFineCorrelationImageFilterTest_Coarse_Field.tif
-        ${TEMP}/feTvFineCorrelationImageFilterTest_Coarse_Field.tif
-        otbFineCorrelationImageFilterTest
-	    ${EXAMPLEDATA}/StereoFixed.png # fixedFileName
-	    ${EXAMPLEDATA}/StereoMoving.png # movingFileName
-	    ${TEMP}/feTvFineCorrelationImageFilterTest_Coarse_Correl.tif # output correlFileName
-        ${TEMP}/feTvFineCorrelationImageFilterTest_Coarse_Field.tif  # output fieldFileName
-        3 # radius
-	    2 # sradius
-	    0 # refine : Coarse
-	    10 # precision
-)
-
-ADD_TEST(feTvFineCorrelationImageFilterTest_LSQR ${FEATUREEXTRACTION_TESTS16}
-     --compare-n-images ${EPSILON_8} 2
-        ${BASELINE}/feTvFineCorrelationImageFilterTest_LSQR_Correl.tif
-        ${TEMP}/feTvFineCorrelationImageFilterTest_LSQR_Correl.tif
-        ${BASELINE}/feTvFineCorrelationImageFilterTest_LSQR_Field.tif
-        ${TEMP}/feTvFineCorrelationImageFilterTest_LSQR_Field.tif
-        otbFineCorrelationImageFilterTest
-	    ${EXAMPLEDATA}/StereoFixed.png # fixedFileName
-	    ${EXAMPLEDATA}/StereoMoving.png # movingFileName
-	    ${TEMP}/feTvFineCorrelationImageFilterTest_LSQR_Correl.tif # output correlFileName
-        ${TEMP}/feTvFineCorrelationImageFilterTest_LSQR_Field.tif  # output fieldFileName
-        3 # radius
-	    2 # sradius
-	    1 # refine : LSQR
-	    10 # precision (half-pixel)
-)
-
-
-ADD_TEST(feTvFineCorrelationImageFilterTest_SUBPIX ${FEATUREEXTRACTION_TESTS16}
-     --compare-n-images ${EPSILON_8} 2
-        ${BASELINE}/feTvFineCorrelationImageFilterTest_SUBPIX_Correl.tif
-        ${TEMP}/feTvFineCorrelationImageFilterTest_SUBPIX_Correl.tif
-        ${BASELINE}/feTvFineCorrelationImageFilterTest_SUBPIX_Field.tif
-        ${TEMP}/feTvFineCorrelationImageFilterTest_SUBPIX_Field.tif
-        otbFineCorrelationImageFilterTest
-	    ${EXAMPLEDATA}/StereoFixed.png # fixedFileName
-	    ${EXAMPLEDATA}/StereoMoving.png # movingFileName
-	    ${TEMP}/feTvFineCorrelationImageFilterTest_SUBPIX_Correl.tif # output correlFileName
-        ${TEMP}/feTvFineCorrelationImageFilterTest_SUBPIX_Field.tif  # output fieldFileName
-        3 # radius
-	    2 # sradius
-	    2 # refine : SUBPIX
-	    2 # precision
-)
 
 # A enrichir
 SET(BasicFeatureExtraction_SRCS1
@@ -1599,8 +1545,6 @@ otbScalarImageToHigherOrderTexturesFilter.cxx
 
 SET(BasicFeatureExtraction_SRCS16
 otbFeatureExtractionTests16.cxx
-otbFineCorrelationImageFilterNew.cxx
-otbFineCorrelationImageFilterTest.cxx
 )
 
 

@@ -25,7 +25,4 @@
 #include "otbTestMain.h"
 
 void RegisterTests()
-{
-  REGISTER_TEST(otbFineCorrelationImageFilterNew);
-  REGISTER_TEST(otbFineCorrelationImageFilterTest);
-}
+{}
