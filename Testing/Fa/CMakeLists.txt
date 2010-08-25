@@ -161,12 +161,14 @@ ADD_TEST(FA-00013-io_WriteImageTIFF_bis ${COMMON_TESTS}
          ${TEMP}/FA-00013-io_WriteImageTIFF_sbuv_NB_c1_extrait.tif
          -startX 0 -startY 0 -sizeX 60 -sizeY 488 )
 
+IF (OTB_USE_DEPRECATED)
 # ---  FA 00052 : Floating point exception lecture ROI_QB_MUL_1.png  ---
 ADD_TEST(FA-00052-vi_Floating_Point_Exception ${VISU_TESTS}
 	otbImageViewer
 	${EXAMPLES_DATA}/ROI_QB_MUL_1.png
 	3
          )
+ENDIF (OTB_USE_DEPRECATED)
 
 # ---  FA 00060 : Pb Map activation  ---
 ADD_TEST(FA-00060-le_Map_Activation ${CXX_TEST_PATH}/MapActivation
