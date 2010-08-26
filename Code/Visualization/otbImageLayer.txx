@@ -376,7 +376,7 @@ ImageLayer<TImage, TOutputImage>
   //FIXME only if necessary
   this->UpdateListSample();
 
-  LayerValueType returnValue;
+  PixelType      pixel;
   unsigned int   sampleSize;
 
   // Ensure rendering function intialization
@@ -385,7 +385,7 @@ ImageLayer<TImage, TOutputImage>
   // If we are inside the buffered region
   if (m_Image->GetBufferedRegion().IsInside(index))
     {
-    returnValue = m_Image->GetPixel(index);
+    pixel = m_Image->GetPixel(index);
     }
   else
     {
@@ -395,8 +395,8 @@ ImageLayer<TImage, TOutputImage>
       indexOrigin[0] = 0;
       indexOrigin[1] = 0;
 
-      sampleSize = VisualizationPixelTraits::PixelSize(m_Quicklook->GetPixel(indexOrigin));
-      returnValue.SetSize(sampleSize);
+//      sampleSize = VisualizationPixelTraits::PixelSize(m_Quicklook->GetPixel(indexOrigin));
+//      returnValue.SetSize(sampleSize);
 
       IndexType ssindex = index;
       ssindex[0] /= this->GetQuicklookSubsamplingRate();
@@ -404,14 +404,16 @@ ImageLayer<TImage, TOutputImage>
 
       if (m_Quicklook->GetBufferedRegion().IsInside(ssindex))
         {
-        returnValue = m_Quicklook->GetPixel(ssindex);
+        pixel = m_Quicklook->GetPixel(ssindex);
         }
       else
         {
-        returnValue = m_Quicklook->GetPixel(indexOrigin);
+        pixel = m_Quicklook->GetPixel(indexOrigin);
         }
       }
     }
+
+  LayerValueType returnValue = LayerValueGenerator<PixelType, LayerValueType>::Convert(pixel);
   return returnValue;
 }
 
