@@ -18,6 +18,8 @@
 #ifndef __otbZoomableImageWidget_h
 #define __otbZoomableImageWidget_h
 
+#include "vcl_deprecated_header.h"
+
 #include "otbImageWidgetBase.h"
 
 namespace otb

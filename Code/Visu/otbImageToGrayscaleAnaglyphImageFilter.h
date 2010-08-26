@@ -18,6 +18,8 @@
 #ifndef __otbImageToGrayscaleAnaglyphImageFilter_h
 #define __otbImageToGrayscaleAnaglyphImageFilter_h
 
+#include "vcl_deprecated_header.h"
+
 #include "itkBinaryFunctorImageFilter.h"
 #include "itkNumericTraits.h"
 

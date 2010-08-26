@@ -18,6 +18,8 @@
 #ifndef __otbImageViewerScrollWidget_h
 #define __otbImageViewerScrollWidget_h
 
+#include "vcl_deprecated_header.h"
+
 #include "otbFixedSizeFullImageWidget.h"
 #include "otbImageWidgetRectangleForm.h"
 #include "otbImageWidgetBoxForm.h"

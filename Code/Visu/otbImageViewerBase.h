@@ -18,6 +18,8 @@
 #ifndef __otbImageViewerBase_h
 #define __otbImageViewerBase_h
 
+#include "vcl_deprecated_header.h"
+
 #include <string>
 #include "itkObject.h"
 #include "otbImageViewerScrollWidget.h"

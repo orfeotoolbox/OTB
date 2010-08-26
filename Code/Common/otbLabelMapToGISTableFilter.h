@@ -18,14 +18,10 @@
 #ifndef __otbLabelMapToGISTableFilter_h
 #define __otbLabelMapToGISTableFilter_h
 
-//#include "itkImageToImageFilter.h"
-//#include "itkAttributeLabelObject.h"
 #include "otbGISTableSource.h"
 #include "otbGISConnectionImplementation.h"
 #include "otbLabelObjectToPolygonFunctor.h"
 
-// #include "otbSimplifyPathFunctor.h"
-// #include "otbClosePathFunctor.h"
 #include "otbCorrectPolygonFunctor.h"
 #include "itkLabelMap.h"
 #include <iostream>
@@ -55,9 +51,8 @@ class ITK_EXPORT LabelMapToGISTableFilter :
 {
 public:
   /** Standard class typedefs. */
-  typedef LabelMapToGISTableFilter Self;
-  typedef GISTableSource<TGISTable>
-  Superclass;
+  typedef LabelMapToGISTableFilter      Self;
+  typedef GISTableSource<TGISTable>     Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 

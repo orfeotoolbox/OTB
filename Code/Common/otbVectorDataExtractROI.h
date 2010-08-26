@@ -68,6 +68,7 @@ public:
   typedef typename VectorDataType::DataTreeType     DataTreeType;
   typedef typename DataNodeType::PolygonPointerType PolygonPointerType;
   typedef typename DataNodeType::PolygonType        PolygonType;
+  typedef typename DataNodeType::LineType           LineType;
   typedef typename DataNodeType::LinePointerType    LinePointerType;
   typedef typename DataNodeType::PointType          PointType;
 

@@ -71,4 +71,5 @@ void RegisterTests()
   REGISTER_TEST(otbVerticalAsymptoteCurveNew);
   REGISTER_TEST(otbVectorDataModelNew);
   REGISTER_TEST(otbVectorDataModelTest);
+  REGISTER_TEST(otbVectorDataModelAddVectorDataTest);
 }

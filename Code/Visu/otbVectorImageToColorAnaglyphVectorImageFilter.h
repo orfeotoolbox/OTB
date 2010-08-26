@@ -18,6 +18,8 @@
 #ifndef __otbVectorImageToColorAnaglyphVectorImageFilter_h
 #define __otbVectorImageToColorAnaglyphVectorImageFilter_h
 
+#include "vcl_deprecated_header.h"
+
 #include "itkBinaryFunctorImageFilter.h"
 #include "itkNumericTraits.h"
 

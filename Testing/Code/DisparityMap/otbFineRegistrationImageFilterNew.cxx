@@ -21,19 +21,19 @@
 
 #include "otbImage.h"
 #include "itkFixedArray.h"
-#include "otbFineCorrelationImageFilter.h"
+#include "otbFineRegistrationImageFilter.h"
 
 
-int otbFineCorrelationImageFilterNew( int argc, char * argv[] )
+int otbFineRegistrationImageFilterNew( int argc, char * argv[] )
 {
   typedef double      PixelType;
 
   typedef itk::FixedArray<PixelType>                                          DeformationValueType;
   typedef otb::Image< PixelType>                                              ImageType;
   typedef otb::Image<DeformationValueType,2>                                  FieldImageType;
-  typedef otb::FineCorrelationImageFilter<ImageType,ImageType,FieldImageType> CorrelationFilterType;
+  typedef otb::FineRegistrationImageFilter<ImageType,ImageType,FieldImageType> RegistrationFilterType;
   
-  CorrelationFilterType::Pointer correlation = CorrelationFilterType::New();
+  RegistrationFilterType::Pointer Registration = RegistrationFilterType::New();
 
   return EXIT_SUCCESS;
 }

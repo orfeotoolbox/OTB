@@ -22,6 +22,17 @@
 
 int otbOGRVectorDataIOTestCanRead(int argc, char* argv[])
 {
+  if (argc != 2)
+    {
+    std::cerr << "Usage: " << argv[0]
+              << "<vectorData>" << std::endl;
+    std::cerr << "Called here with " << argc << " arguments\n";
+    for (int i = 1; i < argc; ++i)
+      {
+      std::cerr << " - " << argv[i] << "\n";
+      }
+    return EXIT_FAILURE;
+    }
   typedef otb::VectorData<>                    VectorDataType;
   typedef otb::OGRVectorDataIO<VectorDataType> OGRVectorDataIOType;
   OGRVectorDataIOType::Pointer object = OGRVectorDataIOType::New();

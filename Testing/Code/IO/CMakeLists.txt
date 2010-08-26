@@ -55,6 +55,7 @@ IF(OTB_USE_CURL)
 ENDIF(OTB_USE_CURL)
 
 SET(IO_TESTS20    ${CXX_TEST_PATH}/otbIOTests20)
+SET(IO_TESTS21    ${CXX_TEST_PATH}/otbIOTests21)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ COMMON_TESTS3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1864,9 +1865,12 @@ ADD_TEST(ioTuOGRVectorDataIOTestCanReadMapInfo ${IO_TESTS15}
 
 # CanRead OGR PostGIS()
 IF(OTB_USE_PQXX)
+#The original string is PG:"dbname='orfeotoolbox_test' host='localhost' port='5432' user='orfeotoolbox_test_user' password='Bidfeud0'"
+#but we need to work with cmake/ctest escaping
+SET(CONNSTRING "PG:dbname=orfeotoolbox_test\ host=localhost\ port=5432\ user=orfeotoolbox_test_user\ password=Bidfeud0")
 ADD_TEST(ioTuOGRVectorDataIOTestCanReadPostGIS ${IO_TESTS15}
         otbOGRVectorDataIOTestCanRead
-        PG:"dbname='orfeotoolbox_test' host='localhost' port='5432' user='orfeotoolbox_test_user' password='Bidfeud0'")
+        ${CONNSTRING})
 ENDIF(OTB_USE_PQXX)
 
 # CanWrite OGR GML()
@@ -2127,12 +2131,12 @@ ADD_TEST(ioTvImageMetadataInterfaceBaseTest_FORMOSAT2 ${IO_TESTS18}
         ${LARGEDATA}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF
         ${TEMP}/ioTvImageMetadataInterfaceBase_FORMOSAT2.txt
 )
-ADD_TEST(ioTvTImageMetadataInterfaceBaseTest_TSX1dims ${IO_TESTS18}
+ADD_TEST(ioTvImageMetadataInterfaceBaseTest_TSX1dims ${IO_TESTS18}
          --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_TSX1dims.txt
                          ${TEMP}/ioTvImageMetadataInterfaceBase_TSX1dims.txt
         otbImageMetadataInterfaceBaseTest
         ${LARGEDATA}/TERRASARX/dims/TSX-1.SAR.L1B/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_strip_011.cos
-        ${TEMP}/ioTvTImageMetadataInterfaceBase_TSX1dims.txt
+        ${TEMP}/ioTvImageMetadataInterfaceBase_TSX1dims.txt
 )
 ADD_TEST(ioTvImageMetadataInterfaceBaseTest_TSX1TORONTO ${IO_TESTS18}
          --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_TSX1TORONTO.txt
@@ -2224,12 +2228,12 @@ ADD_TEST(ioTvOpticalImageMetadataInterfaceTest_FORMOSAT2 ${IO_TESTS18}
 )
 
 #------------ SarImageMetadataInterfaceTest ---------------
-ADD_TEST(ioTvTSarImageMetadataInterfaceTest_TSX1dims ${IO_TESTS18}
+ADD_TEST(ioTvSarImageMetadataInterfaceTest_TSX1dims ${IO_TESTS18}
          --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvSarImageMetadataInterface_TSX1dims.txt
                          ${TEMP}/ioTvSarImageMetadataInterface_TSX1dims.txt
         otbSarImageMetadataInterfaceTest
         ${LARGEDATA}/TERRASARX/dims/TSX-1.SAR.L1B/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_strip_011.cos
-        ${TEMP}/ioTvTSarImageMetadataInterface_TSX1dims.txt
+        ${TEMP}/ioTvSarImageMetadataInterface_TSX1dims.txt
 )
 ADD_TEST(ioTvSarImageMetadataInterfaceTest_TSX1TORONTO ${IO_TESTS18}
          --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvSarImageMetadataInterface_TSX1TORONTO.txt
@@ -2583,6 +2587,21 @@ ADD_TEST(ioTuSarDefaultImageMetadataInterfaceNew ${IO_TESTS20}
         otbSarDefaultImageMetadataInterfaceNew )
 
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS21 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ADD_TEST(ioTuMapFileProductWriterNew ${IO_TESTS21}
+  otbMapFileProductWriterNew
+)
+
+ADD_TEST(ioTvMapFileProductWriter ${IO_TESTS21}
+  otbMapFileProductWriter
+  ${INPUTDATA}/ExtrZoneNuageuse.tif
+  ${TEMP}/mapserver/toulouseExtract.map
+  256
+)
+
 #----------------------------------------------------------------------------------
 SET(BasicIO_SRCS1
 otbIOTests1.cxx
@@ -2750,7 +2769,6 @@ otbPointSetFileReader2.cxx
 SET(BasicIO_SRCS18
 otbIOTests18.cxx
 otbImageKeywordlist.cxx
-otbTerraSarImageMetadataInterface.cxx
 otbSpotImageMetadataInterfaceNew.cxx
 otbFormosatImageMetadataInterfaceNew.cxx
 otbQuickBirdImageMetadataInterfaceNew.cxx
@@ -2785,6 +2803,13 @@ otbOpticalDefaultImageMetadataInterfaceFactoryNew.cxx
 otbSarDefaultImageMetadataInterfaceFactoryNew.cxx
 otbSarDefaultImageMetadataInterfaceNew.cxx
 )
+
+SET(BasicIO_SRCS21
+otbIOTests21.cxx
+otbMapFileProductWriterNew
+otbMapFileProductWriter
+)
+
 
 
 OTB_ADD_EXECUTABLE(otbIOTests1 "${BasicIO_SRCS1}" "OTBIO;OTBTesting")
@@ -2829,3 +2854,4 @@ OTB_ADD_EXECUTABLE(otbIOTests20 "${BasicIO_SRCS20}" "OTBIO;OTBTesting")
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
+OTB_ADD_EXECUTABLE(otbIOTests21 "${BasicIO_SRCS21}" "OTBIO;OTBTesting")

@@ -18,6 +18,8 @@
 #ifndef __otbImageWidgetBase_h
 #define __otbImageWidgetBase_h
 
+#include "vcl_deprecated_header.h"
+
 #include <FL/gl.h>
 #include "FL/Fl_Gl_Window.H"
 #include "otbVectorImage.h"

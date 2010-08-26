@@ -18,6 +18,8 @@
 #ifndef __otbImageViewerHistogramAndTransferFunctionWidget_h
 #define __otbImageViewerHistogramAndTransferFunctionWidget_h
 
+#include "vcl_deprecated_header.h"
+
 #include "otbHistogramAndTransferFunctionWidget.h"
 
 namespace otb

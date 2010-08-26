@@ -1,3 +1,14 @@
+OTB-v.3.6.0 - Changes since version 3.4.0 (2010/??/??)
+-----------------------------------------
+
+* Applications
+
+* Library
+  * Some classes are marked as deprecated and are available for one release. A migration guide to help the transition is available at http://wiki.orfeo-toolbox.org/index.php/Migration_guide
+
+* System
+
+
 OTB-v.3.4.0 - Changes since version 3.2.0 (2010/06/30)
 -----------------------------------------
 

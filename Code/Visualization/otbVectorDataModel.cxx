@@ -42,9 +42,8 @@ void VectorDataModel::Update(void)
   this->NotifyAll();
 }
 
-void VectorDataModel::AddPointToGeometry(VertexType& vertex)
+void VectorDataModel::AddPointToGeometry(VertexType& vertex, bool callUpdate)
 {
-  std::cout<<"AddPointToGeometry"<<std::endl;
   VertexType newPoint;
   newPoint[0] = m_Origin[0] + vertex[0] / m_Spacing[0];
   newPoint[1] = m_Origin[1] + vertex[1] / m_Spacing[1];
@@ -57,7 +56,6 @@ void VectorDataModel::AddPointToGeometry(VertexType& vertex)
 
   if  (m_CurrentNodeType == FEATURE_POINT)
     {
-      std::cout<<"Creating and adding new point"<<std::endl;
     otbMsgDevMacro(<< "VectorDataModel::AddPointToGeometry: Creating and adding new point");
     if (m_CurrentGeometry.IsNull())
       {
@@ -76,7 +74,6 @@ void VectorDataModel::AddPointToGeometry(VertexType& vertex)
     }
   else if (m_CurrentNodeType == FEATURE_POLYGON)
     {
- std::cout<<"Creating and adding new FEATURE_POLYGON"<<std::endl;
     if (m_CurrentGeometry.IsNull())
       {
       otbMsgDevMacro(<< "VectorDataModel::AddPointToGeometry: Creating new polygon");
@@ -109,10 +106,14 @@ void VectorDataModel::AddPointToGeometry(VertexType& vertex)
     {
     itkExceptionMacro(<< "Node type not (yet) supported: " << m_CurrentNodeType);
     }
-  this->Update();
+
+  if(callUpdate == true)
+    {
+      this->Update();
+    }
 }
 
-void VectorDataModel::EndGeometry(void)
+void VectorDataModel::EndGeometry(bool callUpdate)
 {
   // Avoid multiple endings
   if (!m_CurrentGeometry)
@@ -151,7 +152,10 @@ void VectorDataModel::EndGeometry(void)
     itkExceptionMacro(<< "Node type not (yet) supported: " << m_CurrentNodeType);
     }
   this->Modified();
-  this->Update();
+  if(callUpdate == true)
+    {
+      this->Update();
+    }
 }
 
 void VectorDataModel::DeleteGeometry(void)
@@ -234,6 +238,89 @@ VectorDataModel::DataNodeType::Pointer VectorDataModel::GetNthDataNode(int n)
 void VectorDataModel::SetSelectedGeometry(int n)
 { 
   m_SelectedGeometry = GetNthDataNode(n);
+}
+
+
+void
+VectorDataModel::AddVectorData( VectorDataPointer vData )
+{
+  this->EndGeometry(false);
+  DataTreeType::Pointer tree = vData->GetDataTree();
+  TreeNodeType * root = const_cast<TreeNodeType *>(tree->GetRoot());
+  this->AddNode( root );
+  this->Update();
+}
+
+
+void
+VectorDataModel::AddNode( TreeNodeType * node )
+{
+  switch (node->Get()->GetNodeType())
+    {
+    case FEATURE_POINT:
+      {
+	m_CurrentNodeType = FEATURE_POINT;
+	PointType point = node->Get()->GetPoint();
+	VertexType vertex;
+	vertex[0] = point[0];
+	vertex[1] = point[1];
+	this->AddPointToGeometry(vertex, false);
+	this->EndGeometry(false);
+	break;
+      }
+    case FEATURE_LINE:
+      {
+	m_CurrentNodeType = FEATURE_LINE;
+	const LineType * line = node->Get()->GetLine();
+	LineType::VertexListType::ConstIterator vIt = line->GetVertexList()->Begin();
+	
+	while (vIt != line->GetVertexList()->End())
+	  {
+	    PointType point = vIt.Value();
+	    VertexType vertex;
+	    vertex[0] = point[0];
+	    vertex[1] = point[1];
+	    this->AddPointToGeometry(vertex, false);
+	  }
+	this->EndGeometry(false);
+	break;
+      }
+    case FEATURE_POLYGON:
+      {
+  	m_CurrentNodeType = FEATURE_POLYGON;
+        const PolygonType *     extRing = node->Get()->GetPolygonExteriorRing();
+        PolygonType::VertexListType::ConstIterator vIt = extRing->GetVertexList()->Begin();
+
+        while (vIt != extRing->GetVertexList()->End())
+	  {
+	    PointType point = vIt.Value();
+	    VertexType vertex;
+	    vertex[0] = point[0];
+	    vertex[1] = point[1];
+	    this->AddPointToGeometry(vertex, false);
+	    vIt++;
+	  }
+
+	this->EndGeometry(false);
+	break;
+      }
+    default:
+      {
+	// discard
+	break;
+      }
+    }
+
+  // Get the children list from the input node
+  ChildrenListType children = node->GetChildrenList();
+
+  // Render each child
+  ChildrenListType::iterator it = children.begin();
+  while ( it != children.end() )
+    {
+      this->AddNode(*it);
+      ++it;
+    }
 }
 
 }

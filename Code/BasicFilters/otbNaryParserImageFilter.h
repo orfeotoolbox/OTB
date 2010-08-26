@@ -32,10 +32,33 @@ namespace otb
 {
 /** \class NaryParserImageFilter
  * \brief Performs a mathematical operation on the input images
- * according to the formula specified by the user
+ * according to the formula specified by the user.
+ * 
+ * This filter is based on the mathematical parser library muParser.
+ * The built in functions and operators list is available at:
+ * http://muparser.sourceforge.net/mup_features.html#idDef2
+ * 
+ * OTB additional functions:
+ * ndvi(r, niri)
+ * 
+ * OTB additional contants:
+ * e - log2e - log10e - ln2 - ln10 - pi - euler
  *
+ * In order to use this filter, at least one input image is to be
+ * set. An associated variable name can be specified or not by using
+ * the corresponding SetNthInput method. For the nth input image, if
+ * no associated variable name has been spefified, a default variable
+ * name is given by concatenating the letter "b" (for band) and the
+ * coresponding input index.
+ * Next step is to set the expression according to the variable
+ * names. For example, in the default case with three input images the
+ * following expression is valid :
+ * "ndvi(b1,b2)*b3"
+ * 
  * \sa Parser
- *
+ * 
+ * \ingroup Streamed
+ * \ingroup Threaded
  */
 
 template< class TImage >

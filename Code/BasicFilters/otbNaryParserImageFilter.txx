@@ -89,7 +89,7 @@ void NaryParserImageFilter<TImage>
 template <class TImage>
 void NaryParserImageFilter<TImage>
 ::SetNthInput(unsigned int idx, const ImageType * image, const std::string& varName)
-{  
+{
   this->SetInput(idx, const_cast<TImage *>( image ));
   m_VVarName.resize(this->GetNumberOfInputs());
   m_VVarName[idx] = varName;
@@ -142,6 +142,24 @@ void NaryParserImageFilter<TImage>
   unsigned int nbThreads = this->GetNumberOfThreads();
   unsigned int nbInputImages = this->GetNumberOfInputs();
   unsigned int i, j;
+  unsigned int inputSize[2];
+  
+  // Check if input image dimensions matches
+  inputSize[0] = this->GetNthInput(0)->GetLargestPossibleRegion().GetSize(0);
+  inputSize[1] = this->GetNthInput(0)->GetLargestPossibleRegion().GetSize(1);
+      
+  for(unsigned int p = 1; p < nbInputImages; p++)
+    {
+    if((inputSize[0] != this->GetNthInput(p)->GetLargestPossibleRegion().GetSize(0))
+       || (inputSize[1] != this->GetNthInput(p)->GetLargestPossibleRegion().GetSize(1)))
+      {
+      itkExceptionMacro(<< "Input images must have the same dimensions." << std::endl
+                        << "band #1 is [" << inputSize[0] << ";" << inputSize[1] << "]" << std::endl
+                        << "band #" << p+1 << " is [" 
+                        << this->GetNthInput(p)->GetLargestPossibleRegion().GetSize(0) << ";" 
+                        << this->GetNthInput(p)->GetLargestPossibleRegion().GetSize(1) << "]");
+      }
+    }
   
   //Allocate and initialize the thread temporaries
   m_ThreadUnderflow.SetSize(nbThreads);
@@ -216,8 +234,8 @@ void NaryParserImageFilter<TImage>
   
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-          
-  while (!(Vit.at(0).IsAtEnd()))
+
+  while(!Vit.at(0).IsAtEnd())
     {
     for(j=0; j < nbInputImages; j++)
       {

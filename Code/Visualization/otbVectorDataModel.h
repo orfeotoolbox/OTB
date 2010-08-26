@@ -45,7 +45,11 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   typedef otb::VectorData<double, 2>   VectorDataType;
+  typedef VectorDataType::Pointer      VectorDataPointer;
   typedef VectorDataType::DataNodeType DataNodeType;
+  typedef VectorDataType::DataTreeType DataTreeType;
+  typedef DataTreeType::TreeNodeType   TreeNodeType;
+  typedef TreeNodeType::ChildrenListType ChildrenListType;
   typedef VectorDataType::PointType    PointType;
   typedef VectorDataType::SpacingType  SpacingType;
   typedef VectorDataType::PolygonType  PolygonType;
@@ -67,9 +71,19 @@ public:
 
   /** Return a pointer to the vector data */
   itkGetObjectMacro(VectorData, VectorDataType);
-
-  void AddPointToGeometry(VertexType& vertex);
-  void EndGeometry(void);
+  
+  /** Load a vector data. */
+  void AddVectorData( VectorDataPointer vData );
+  void AddNode( TreeNodeType * node );
+  
+  /** Add vertex to the vector data representation. 
+   * If callUpdate is set to true il will update the full vector data display.
+   */
+  void AddPointToGeometry(VertexType& vertex, bool callUpdate = true);
+  /** End the current vector data representation. 
+   * If callUpdate is set to true il will update the full vector data display.
+   */
+  void EndGeometry(bool callUpdate = true);
   void DeleteGeometry(void);
 
   /** return the Nth data node without counting the Root/Document/Folder*/
@@ -94,8 +108,8 @@ private:
   VectorDataModel(const Self &);
   void operator =(const Self&);
 
-  VectorDataType::Pointer m_VectorData;
-  NodeType                m_CurrentNodeType;
+  VectorDataPointer m_VectorData;
+  NodeType          m_CurrentNodeType;
 
   /** Node where the next geometry should be attached */
   DataNodeType::Pointer m_CurrentRootNode;

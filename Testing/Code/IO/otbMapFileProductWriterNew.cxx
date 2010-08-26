@@ -16,13 +16,16 @@
 
 =========================================================================*/
 
-// this file defines the otbCommonTest for the test driver
-// and all it expects is that you have a function called RegisterTests
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
+#include "otbMapFileProductWriter.h"
+#include "otbVectorImage.h"
 
-#include "otbTestMain.h"
-
-void RegisterTests()
-{}
+int otbMapFileProductWriterNew(int argc, char* argv[])
+{
+  
+  typedef otb::VectorImage<double>               ImageType;
+  typedef otb::MapFileProductWriter<ImageType>   MapFileProductWriterType;
+  
+  MapFileProductWriterType::Pointer    mapWriter  = MapFileProductWriterType::New();
+  
+  return EXIT_SUCCESS;
+}

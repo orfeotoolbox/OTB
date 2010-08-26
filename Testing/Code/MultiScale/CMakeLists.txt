@@ -402,24 +402,200 @@ ADD_TEST(msTuWaveletTransformNew ${MULTISCALE_TESTS4}
 ADD_TEST(msTuWaveletInverseTransformNew ${MULTISCALE_TESTS4}
          otbWaveletInverseTransformNew)
 
-ADD_TEST(msTvWaveletTransform ${MULTISCALE_TESTS4}
+ADD_TEST(msTvWaveletTransformHaar ${MULTISCALE_TESTS4}
         --compare-image ${EPSILON6}
 			  ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
-              ${TEMP}/ROI_IKO_PAN_LesHalles_Wvlt.tif
+              ${TEMP}/ROI_IKO_PAN_LesHalles_WvltHaar.tif
          otbWaveletTransform
           ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+          ${TEMP}/ROI_IKO_PAN_LesHalles_WvltHaar.tif
           2 2
-		  ${TEMP}/ROI_IKO_PAN_LesHalles_Wvlt.tif
+          0 #Haar
 )
 
-ADD_TEST(msTvWaveletMultiScaleTransform ${MULTISCALE_TESTS4}
+ADD_TEST(msTvWaveletMultiScaleTransformHaar ${MULTISCALE_TESTS4}
         --compare-image ${NOTOL}
 			  ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
-              ${TEMP}/ROI_IKO_PAN_LesHalles_WvltMultiScale.tif
+              ${TEMP}/ROI_IKO_PAN_LesHalles_WvltMultiScaleHaar.tif
          otbWaveletTransform
           ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+          ${TEMP}/ROI_IKO_PAN_LesHalles_WvltMultiScaleHaar.tif
           2 1
-		  ${TEMP}/ROI_IKO_PAN_LesHalles_WvltMultiScale.tif
+          0 #Haar
+)
+
+ADD_TEST(msTvWaveletTransformDB4 ${MULTISCALE_TESTS4}
+        --compare-image ${EPSILON6}
+              ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+              ${TEMP}/ROI_IKO_PAN_LesHalles_WvltDB4.tif
+         otbWaveletTransform
+          ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+          ${TEMP}/ROI_IKO_PAN_LesHalles_WvltDB4.tif
+          2 2
+          1 #DB4
+)
+
+ADD_TEST(msTvWaveletMultiScaleTransformDB4 ${MULTISCALE_TESTS4}
+        --compare-image ${NOTOL}
+              ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+              ${TEMP}/ROI_IKO_PAN_LesHalles_WvltMultiScaleDB4.tif
+         otbWaveletTransform
+          ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+          ${TEMP}/ROI_IKO_PAN_LesHalles_WvltMultiScaleDB4.tif
+          2 1
+          1 #DB4
+)
+
+ADD_TEST(msTvWaveletTransformDB6 ${MULTISCALE_TESTS4}
+        --compare-image ${EPSILON6}
+              ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+              ${TEMP}/ROI_IKO_PAN_LesHalles_WvltDB6.tif
+         otbWaveletTransform
+          ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+          ${TEMP}/ROI_IKO_PAN_LesHalles_WvltDB6.tif
+          2 2
+          2 #DB6
+)
+
+ADD_TEST(msTvWaveletMultiScaleTransformDB6 ${MULTISCALE_TESTS4}
+        --compare-image ${NOTOL}
+              ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+              ${TEMP}/ROI_IKO_PAN_LesHalles_WvltMultiScaleDB6.tif
+         otbWaveletTransform
+          ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+          ${TEMP}/ROI_IKO_PAN_LesHalles_WvltMultiScaleDB6.tif
+          2 1
+          2 #DB6
+)
+
+ADD_TEST(msTvWaveletTransformDB8 ${MULTISCALE_TESTS4}
+        --compare-image ${EPSILON6}
+              ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+              ${TEMP}/ROI_IKO_PAN_LesHalles_WvltDB8.tif
+         otbWaveletTransform
+          ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+          ${TEMP}/ROI_IKO_PAN_LesHalles_WvltDB8.tif
+          2 2
+          3 #DB8
+)
+
+ADD_TEST(msTvWaveletMultiScaleTransformDB8 ${MULTISCALE_TESTS4}
+        --compare-image ${NOTOL}
+              ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+              ${TEMP}/ROI_IKO_PAN_LesHalles_WvltMultiScaleDB8.tif
+         otbWaveletTransform
+          ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+          ${TEMP}/ROI_IKO_PAN_LesHalles_WvltMultiScaleDB8.tif
+          2 1
+          3 #DB8
+)
+
+ADD_TEST(msTvWaveletTransformDB12 ${MULTISCALE_TESTS4}
+        --compare-image ${EPSILON6}
+              ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+              ${TEMP}/ROI_IKO_PAN_LesHalles_WvltDB12.tif
+         otbWaveletTransform
+          ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+          ${TEMP}/ROI_IKO_PAN_LesHalles_WvltDB12.tif
+          2 2
+          4 #DB12
+)
+
+ADD_TEST(msTvWaveletMultiScaleTransformDB12 ${MULTISCALE_TESTS4}
+        --compare-image ${NOTOL}
+              ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+              ${TEMP}/ROI_IKO_PAN_LesHalles_WvltMultiScaleDB12.tif
+         otbWaveletTransform
+          ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+          ${TEMP}/ROI_IKO_PAN_LesHalles_WvltMultiScaleDB12.tif
+          2 1
+          4 #DB12
+)
+
+ADD_TEST(msTvWaveletTransformDB20 ${MULTISCALE_TESTS4}
+        --compare-image ${EPSILON6}
+              ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+              ${TEMP}/ROI_IKO_PAN_LesHalles_WvltDB20.tif
+         otbWaveletTransform
+          ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+          ${TEMP}/ROI_IKO_PAN_LesHalles_WvltDB20.tif
+          2 2
+          5 #DB20
+)
+
+ADD_TEST(msTvWaveletMultiScaleTransformDB20 ${MULTISCALE_TESTS4}
+        --compare-image ${NOTOL}
+              ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+              ${TEMP}/ROI_IKO_PAN_LesHalles_WvltMultiScaleDB20.tif
+         otbWaveletTransform
+          ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+          ${TEMP}/ROI_IKO_PAN_LesHalles_WvltMultiScaleDB20.tif
+          2 1
+          5 #DB20
+)
+
+ADD_TEST(msTvWaveletTransformSPLINE_BIORTHOGONAL_2_4 ${MULTISCALE_TESTS4}
+        --compare-image ${EPSILON6}
+              ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+              ${TEMP}/ROI_IKO_PAN_LesHalles_WvltSPLINE_BIORTHOGONAL_2_4.tif
+         otbWaveletTransform
+          ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+          ${TEMP}/ROI_IKO_PAN_LesHalles_WvltSPLINE_BIORTHOGONAL_2_4.tif
+          2 2
+          6 #SPLINE_BIORTHOGONAL_2_4
+)
+
+ADD_TEST(msTvWaveletMultiScaleTransformSPLINE_BIORTHOGONAL_2_4 ${MULTISCALE_TESTS4}
+        --compare-image ${NOTOL}
+              ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+              ${TEMP}/ROI_IKO_PAN_LesHalles_WvltMultiScaleSPLINE_BIORTHOGONAL_2_4.tif
+         otbWaveletTransform
+          ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+          ${TEMP}/ROI_IKO_PAN_LesHalles_WvltMultiScaleSPLINE_BIORTHOGONAL_2_4.tif
+          2 1
+          6 #SPLINE_BIORTHOGONAL_2_4
+)
+ADD_TEST(msTvWaveletTransformSPLINE_BIORTHOGONAL_4_4 ${MULTISCALE_TESTS4}
+        --compare-image ${EPSILON6}
+              ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+              ${TEMP}/ROI_IKO_PAN_LesHalles_WvltSPLINE_BIORTHOGONAL_4_4.tif
+         otbWaveletTransform
+          ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+          ${TEMP}/ROI_IKO_PAN_LesHalles_WvltSPLINE_BIORTHOGONAL_4_4.tif
+          2 2
+          7 #SPLINE_BIORTHOGONAL_4_4
+)
+
+ADD_TEST(msTvWaveletMultiScaleTransformSPLINE_BIORTHOGONAL_4_4 ${MULTISCALE_TESTS4}
+        --compare-image ${NOTOL}
+              ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+              ${TEMP}/ROI_IKO_PAN_LesHalles_WvltMultiScaleSPLINE_BIORTHOGONAL_4_4.tif
+         otbWaveletTransform
+          ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+          ${TEMP}/ROI_IKO_PAN_LesHalles_WvltMultiScaleSPLINE_BIORTHOGONAL_4_4.tif
+          2 1
+          7 #SPLINE_BIORTHOGONAL_4_4
+)
+ADD_TEST(msTvWaveletTransformSYMLET8 ${MULTISCALE_TESTS4}
+        --compare-image ${EPSILON6}
+              ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+              ${TEMP}/ROI_IKO_PAN_LesHalles_WvltSYMLET8.tif
+         otbWaveletTransform
+          ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+          ${TEMP}/ROI_IKO_PAN_LesHalles_WvltSYMLET8.tif
+          2 2
+          8 #SYMLET8
+)
+
+ADD_TEST(msTvWaveletMultiScaleTransformSYMLET8 ${MULTISCALE_TESTS4}
+        --compare-image ${NOTOL}
+              ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+              ${TEMP}/ROI_IKO_PAN_LesHalles_WvltMultiScaleSYMLET8.tif
+         otbWaveletTransform
+          ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+          ${TEMP}/ROI_IKO_PAN_LesHalles_WvltMultiScaleSYMLET8.tif
+          2 1
+          8 #SYMLET8
 )
 
 # -------            otb::WaveletPacketTransform   ----------

@@ -18,6 +18,8 @@
 #ifndef __otbScalarImageTextureFunctor_h
 #define __otbScalarImageTextureFunctor_h
 
+#include "vcl_deprecated_header.h"
+
 #include "itkScalarImageTextureCalculator.h"
 #include "itkImageRegionIterator.h"
 namespace otb

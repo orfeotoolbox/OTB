@@ -1449,6 +1449,9 @@ ADD_TEST(raTvSarParametricMapFunctionToImageFilter  ${RADIOMETRY_TESTS9}
 	    ${INPUTDATA}/poupees_1canal.hd
 	    ${TEMP}/raTvSarParametricMapFunctionToImageFilter.tif
 )
+
+IF(OTB_DATA_USE_LARGEINPUT)
+
 ADD_TEST(raTvSarRadiometricCalibrationToImageFilter  ${RADIOMETRY_TESTS9}
 #	--compare-image ${EPSILON_7}
 #	    ${BASELINE}/bfTvFunctionToImageFilterTest.tif
@@ -1459,7 +1462,7 @@ ADD_TEST(raTvSarRadiometricCalibrationToImageFilter  ${RADIOMETRY_TESTS9}
 	    1000 1000 250 250 # Extract
 )
 
-
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 
 # A enrichir
