@@ -1865,9 +1865,12 @@ ADD_TEST(ioTuOGRVectorDataIOTestCanReadMapInfo ${IO_TESTS15}
 
 # CanRead OGR PostGIS()
 IF(OTB_USE_PQXX)
+#The original string is PG:"dbname='orfeotoolbox_test' host='localhost' port='5432' user='orfeotoolbox_test_user' password='Bidfeud0'"
+#but we need to work with cmake/ctest escaping
+SET(CONNSTRING "PG:dbname=orfeotoolbox_test\ host=localhost\ port=5432\ user=orfeotoolbox_test_user\ password=Bidfeud0")
 ADD_TEST(ioTuOGRVectorDataIOTestCanReadPostGIS ${IO_TESTS15}
         otbOGRVectorDataIOTestCanRead
-        PG:"dbname='orfeotoolbox_test' host='localhost' port='5432' user='orfeotoolbox_test_user' password='Bidfeud0'")
+        ${CONNSTRING})
 ENDIF(OTB_USE_PQXX)
 
 # CanWrite OGR GML()
