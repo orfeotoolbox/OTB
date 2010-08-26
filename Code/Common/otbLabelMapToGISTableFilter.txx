@@ -19,10 +19,6 @@
 #define __otbLabelMapToGISTableFilter_txx
 
 #include "otbLabelMapToGISTableFilter.h"
-//#include "itkNumericTraits.h"
-//#include "itkProgressReporter.h"
-//#include "itkImageRegionConstIteratorWithIndex.h"
-//#include "otbGISTable.h"
 #include "itkProgressReporter.h"
 
 namespace otb {
@@ -126,12 +122,11 @@ LabelMapToGISTableFilter<TLabelMap, TGISTable>
   //Connection to the database
   output->GetConnection()->ConnectToDB();
 
-  //Name of the table is settedd automaticcaly to "vector_data_to_gis"
+  //Name of the table is set automatically to "vector_data_to_gis"
   output->SetTableName (this->GetGISTableName());
 
   //Create the PostgreSQL table
   output->CreateTable(m_DropExistingGISTable);
-
   FunctorType functor;
 //   SimplifyFunctorType simplifyFunctor;
 //   simplifyFunctor.SetTolerance (0.0);

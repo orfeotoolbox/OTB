@@ -56,7 +56,7 @@ void PostGISCreateTableTransactor::operator ()(pqxx::nontransaction& T)
     std::stringstream dropCommand;
 
     //dropCommand << "DROP TABLE " << m_TableName;
-    dropCommand << "DROP TABLE IF EXISTS " << m_TableName;
+    dropCommand << "DROP TABLE IF EXISTS " << m_TableName << " CASCADE";
 
     otbGenericMsgDebugMacro(<< "Drop Command " << dropCommand.str());
 
@@ -78,15 +78,18 @@ void PostGISCreateTableTransactor::operator ()(pqxx::nontransaction& T)
 
   m_Result = T.exec(addGeometryCommand.str());
 
+
+
   /** creation index GIST */
-  std::stringstream addGISTIndexCommand;
-
-  addGISTIndexCommand << "CREATE INDEX idx_" << m_TableName << "_the_geom ON " << m_TableName <<
-  " USING gist( the_geom );";
-
-  otbGenericMsgDebugMacro(<< "Create Command " << addGISTIndexCommand.str());
-
-  m_Result = T.exec(addGISTIndexCommand.str());
+  //FIXME not working yet
+//  std::stringstream addGISTIndexCommand;
+//
+//  addGISTIndexCommand << "CREATE INDEX idx_" << m_TableName << "_the_geom ON " << m_TableName <<
+//  " USING gist( the_geom );";
+//
+//  otbGenericMsgDebugMacro(<< "Create Command " << addGISTIndexCommand.str());
+//
+//  m_Result = T.exec(addGISTIndexCommand.str());
 }
 
 void PostGISCreateTableTransactor::on_commit()
