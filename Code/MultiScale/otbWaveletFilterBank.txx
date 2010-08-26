@@ -113,7 +113,7 @@ throw (itk::InvalidRequestedRegionError)
 
   if (radius < highPassOperator.GetRadius()[0]) radius = highPassOperator.GetRadius()[0];
 
-  // Get the requested regionand pad it
+  // Get the requested region and pad it
   InputImagePointerType input = const_cast<InputImageType*>(this->GetInput());
   InputImageRegionType  inputRegion = input->GetRequestedRegion();
   inputRegion.PadByRadius(radius);
@@ -408,9 +408,6 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD>
   typedef itk::ConstNeighborhoodIterator<InputImageType>                                    NeighborhoodIteratorType;
   typedef itk::NeighborhoodInnerProduct<InputImageType>                                     InnerProductType;
   typedef itk::ImageRegionIterator<OutputImageType>                                         IteratorType;
-  typedef typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType> FaceCalculatorType;
-  typedef typename FaceCalculatorType::FaceListType                                         FaceListType;
-  typedef typename FaceListType::iterator                                                   FaceListIterator;
 
   // Prepare the subsampling image factor, if any.
   typedef SubsampledImageRegionConstIterator<InputImageType> SubsampleIteratorType;
@@ -527,10 +524,6 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD>
   typedef itk::ConstNeighborhoodIterator<OutputImageType> NeighborhoodIteratorType;
   typedef itk::NeighborhoodInnerProduct<OutputImageType>  InnerProductType;
   typedef itk::ImageRegionIterator<OutputImageType>       IteratorType;
-  typedef typename itk::NeighborhoodAlgorithm
-  ::ImageBoundaryFacesCalculator<OutputImageType> FaceCalculatorType;
-  typedef typename FaceCalculatorType::FaceListType FaceListType;
-  typedef typename FaceListType::iterator           FaceListIterator;
 
   // Prepare the subsampling image factor, if any.
   typedef SubsampledImageRegionConstIterator<InputImageType> SubsampleIteratorType;
@@ -973,9 +966,6 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>
   typedef itk::ConstNeighborhoodIterator<OutputImageType>                                    NeighborhoodIteratorType;
   typedef itk::NeighborhoodInnerProduct<OutputImageType>                                     InnerProductType;
   typedef itk::ImageRegionIterator<OutputImageType>                                          IteratorType;
-  typedef typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<OutputImageType> FaceCalculatorType;
-  typedef typename FaceCalculatorType::FaceListType                                          FaceListType;
-  typedef typename FaceListType::iterator                                                    FaceListIterator;
 
   // Faces iterations
   typename NeighborhoodIteratorType::RadiusType radiusMax;
@@ -1087,22 +1077,16 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>
         outputImage = m_InternalImages[0][i / 2];
         }
 
-      FaceCalculatorType faceCalculator;
-      FaceListType       faceList;
-      faceList = faceCalculator(imgLowPass, imgLowPass->GetRequestedRegion(), radiusMax);
-
       InnerProductType innerProduct;
 
-      for (FaceListIterator faceIt = faceList.begin(); faceIt != faceList.end(); ++faceIt)
-        {
-        itk::ImageRegionIterator<OutputImageType> out(outputImage, *faceIt);
+      itk::ImageRegionIterator<OutputImageType> out(outputImage, imgLowPass->GetRequestedRegion());
 
-        NeighborhoodIteratorType lowIter(lowPassOperator.GetRadius(), imgLowPass, *faceIt);
+      NeighborhoodIteratorType lowIter(lowPassOperator.GetRadius(), imgLowPass, imgLowPass->GetRequestedRegion());
         itk::PeriodicBoundaryCondition<OutputImageType> boundaryCondition;
         //otb::MirrorBoundaryCondition< OutputImageType > boundaryCondition;
         lowIter.OverrideBoundaryCondition(&boundaryCondition);
 
-        NeighborhoodIteratorType highIter(highPassOperator.GetRadius(), imgHighPass, *faceIt);
+        NeighborhoodIteratorType highIter(highPassOperator.GetRadius(), imgHighPass, imgLowPass->GetRequestedRegion());
         highIter.OverrideBoundaryCondition(&boundaryCondition);
 
         lowIter.GoToBegin();
@@ -1120,7 +1104,6 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>
 
           reporter.CompletedPixel();
           }
-        }
       } // end for each imgLowPass/imghighPass pair of entry
     } // end multiscale case
 
@@ -1162,9 +1145,6 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>
   typedef itk::ConstNeighborhoodIterator<OutputImageType>                                    NeighborhoodIteratorType;
   typedef itk::NeighborhoodInnerProduct<OutputImageType>                                     InnerProductType;
   typedef itk::ImageRegionIterator<OutputImageType>                                          IteratorType;
-  typedef typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<OutputImageType> FaceCalculatorType;
-  typedef typename FaceCalculatorType::FaceListType                                          FaceListType;
-  typedef typename FaceListType::iterator                                                    FaceListIterator;
 
   // Faces iterations
   typename NeighborhoodIteratorType::RadiusType radiusMax;
@@ -1279,20 +1259,15 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>
         }
 
       InnerProductType   innerProduct;
-      FaceCalculatorType faceCalculator;
-      FaceListType       faceList;
-      faceList = faceCalculator(imgLowPass, imgLowPass->GetRequestedRegion(), radiusMax);
 
-      for (FaceListIterator faceIt = faceList.begin(); faceIt != faceList.end(); ++faceIt)
-        {
-        itk::ImageRegionIterator<OutputImageType> out(outputImage, *faceIt);
+      itk::ImageRegionIterator<OutputImageType> out(outputImage, imgLowPass->GetRequestedRegion());
 
-        NeighborhoodIteratorType lowIter(lowPassOperator.GetRadius(), imgLowPass, *faceIt);
+      NeighborhoodIteratorType lowIter(lowPassOperator.GetRadius(), imgLowPass, imgLowPass->GetRequestedRegion());
         itk::PeriodicBoundaryCondition<OutputImageType> boundaryCondition;
         //otb::MirrorBoundaryCondition< OutputImageType > boundaryCondition;
         lowIter.OverrideBoundaryCondition(&boundaryCondition);
 
-        NeighborhoodIteratorType highIter(highPassOperator.GetRadius(), imgHighPass, *faceIt);
+        NeighborhoodIteratorType highIter(highPassOperator.GetRadius(), imgHighPass, imgLowPass->GetRequestedRegion());
         highIter.OverrideBoundaryCondition(&boundaryCondition);
 
         lowIter.GoToBegin();
@@ -1310,7 +1285,6 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>
 
           reporter.CompletedPixel();
           }
-        }
       } // end for each imgLowPass/imghighPass pair of entry
     }
 

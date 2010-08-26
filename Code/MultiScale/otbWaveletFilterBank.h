@@ -105,7 +105,7 @@ private:
 }; // end of class
 
 /** \class WaveletFilterBank
- * \brief Template specialization of FilterBank for forward transformaiton
+ * \brief Template specialization of FilterBank for forward transformation
  *
  * This implementation performs a low-pass / high-pass wavelet transformation
  * of an image. The wavelet transformation is defined by a inner product
