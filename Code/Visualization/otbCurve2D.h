@@ -71,8 +71,8 @@ public:
   itkGetConstReferenceMacro(LabelColor, ColorType);
 
   /// Get/Set the Id
-  itkGetMacro(Id, int);
-  itkSetMacro(Id, int);
+  itkGetMacro(Id, unsigned int);
+  itkSetMacro(Id, unsigned int);
 
 protected:
   /** Constructor */
@@ -100,7 +100,7 @@ private:
   ColorType m_LabelColor;
 
   /// id of the curve
-  int m_Id;
+  unsigned int m_Id;
 }; // end class
 } // end namespace otb
 
