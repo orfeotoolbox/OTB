@@ -159,48 +159,6 @@ public:
         m_MapParameters[std::string(option)] = lValeur;
   }
 
-  /* FOR VISUAL 6 COMPILATION (visual 6 doesn't consider template)******************
-#define otbGetValueMacro(name,type)                                                 \
-  virtual type GetValue##name (const char *option) const                            \
-  {                                                                                 \
-        std::string Value = m_MapParameters.find(std::string(option))->second;      \
-        type lValeur;                                                               \
-        ::otb::StringStream flux;                                                   \
-        flux << Value;                                                              \
-        flux >> lValeur;                                                            \
-        return lValeur;                                                             \
-  }
-
-  otbGetValueMacro(String,std::string);
-  otbGetValueMacro(Short,short);
-  otbGetValueMacro(UShort,unsigned short);
-  otbGetValueMacro(Int,int);
-  otbGetValueMacro(UInt,unsigned int);
-  otbGetValueMacro(Long,long);
-  otbGetValueMacro(ULong,unsigned long);
-  otbGetValueMacro(Float,float);
-  otbGetValueMacro(Double,double);
-
-#define otbSetValueMacro(name,type)                                                 \
-  virtual void SetValue##name (const char *option, const type & value)              \
-  {                                                                                 \
-        std::string lValeur;                                                        \
-        ::otb::StringStream flux;                                                   \
-        flux << value;                                                              \
-        flux >> lValeur;                                                            \
-        m_MapParameters[std::string(option)] = lValeur;\
-  }
-
-  otbSetValueMacro(String,std::string);
-  otbSetValueMacro(Short,short);
-  otbSetValueMacro(UShort,unsigned short);
-  otbSetValueMacro(Int,int);
-  otbSetValueMacro(UInt,unsigned int);
-  otbSetValueMacro(Long,long);
-  otbSetValueMacro(ULong,unsigned long);
-  otbSetValueMacro(Float,float);
-  otbSetValueMacro(Double,double);
-*/
 
   virtual double operator()(const svm_node * /*x*/, const svm_node * /*y*/, const svm_parameter& /*param*/)const
     {
@@ -209,7 +167,7 @@ public:
     }
 
   /** Used for Taylor classification*/
-  // degree is the developement degree
+  // degree is the development degree
   // index is the current value
   // isAtEnd to indicate that it's the last possible derivation
   // baseValue is the constant of the formula
