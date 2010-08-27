@@ -129,6 +129,16 @@ ADD_TEST(leTvSVMPointSetModelEstimatorTrain ${LEARNING_TESTS2}
 ADD_TEST(leTuSVMSampleListModelEstimatorNew ${LEARNING_TESTS2}
         otbSVMSampleListModelEstimatorNew)   
 
+ADD_TEST(leTvSVMSampleListModelEstimatorTest ${LEARNING_TESTS2}
+ --compare-ascii ${NOTOL}
+    ${BASELINE_FILES}/leTvSVMSampleListModelEstimatorModel.txt
+    ${TEMP}/leTvSVMSampleListModelEstimatorModel.txt
+        otbSVMSampleListModelEstimatorTest
+    ${EXAMPLEDATA}/qb_RoadExtract.tif
+    ${EXAMPLEDATA}/qb_RoadExtract_easyClassification.shp
+    ${TEMP}/leTvSVMSampleListModelEstimatorModel.txt
+)
+
 # -------            otb::SVMClassifier   -----------------------------
 
 ADD_TEST(leTuSVMClassifierNew ${LEARNING_TESTS2}
@@ -505,7 +515,7 @@ SET(BasicLearning_SRCS2
 otbLearningTests2.cxx
 otbSVMPointSetModelEstimatorNew.cxx
 otbSVMPointSetModelEstimatorTrain.cxx
-otbSVMSampleListModelEstimatorNew.cxx
+otbSVMSampleListModelEstimatorTest.cxx
 otbSVMClassifierNew.cxx
 otbSVMClassifierImage.cxx
 otbSVMClassifierPointSet.cxx
