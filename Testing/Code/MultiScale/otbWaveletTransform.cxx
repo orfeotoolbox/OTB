@@ -87,7 +87,7 @@ int otbWaveletTransform(int argc, char * argv[])
   if (argc != 6)
     {
     std::cerr << "Usage: " << argv[0]
-              << "<InputImage> <OutputImage>  <level> <decimFactor> <waveletType>" << std::endl;
+              << "<InputImage> <OutputImage> <level> <decimFactor> <waveletType>" << std::endl;
     return EXIT_FAILURE;
     }
   int waveletType = atoi(argv[5]);
