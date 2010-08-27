@@ -16,7 +16,7 @@ SET(EPSILON 0.0000000001)
 SET(EPSILON_3 0.001)
 SET(EPSILON_4 0.0001)
 SET(EPSILON_5 0.00001)
-
+SET(EPSILON_9 0.000000001)
 
 SET(LEARNING_TESTS1 ${CXX_TEST_PATH}/otbLearningTests1)
 SET(LEARNING_TESTS2 ${CXX_TEST_PATH}/otbLearningTests2)
@@ -130,9 +130,10 @@ ADD_TEST(leTuSVMSampleListModelEstimatorNew ${LEARNING_TESTS2}
         otbSVMSampleListModelEstimatorNew)   
 
 ADD_TEST(leTvSVMSampleListModelEstimatorTest ${LEARNING_TESTS2}
- --compare-ascii ${NOTOL}
+ --compare-ascii ${EPSILON_9}
     ${BASELINE_FILES}/leTvSVMSampleListModelEstimatorModel.txt
     ${TEMP}/leTvSVMSampleListModelEstimatorModel.txt
+ --ignore-lines-with 2 probA probB
         otbSVMSampleListModelEstimatorTest
     ${EXAMPLEDATA}/qb_RoadExtract.tif
     ${EXAMPLEDATA}/qb_RoadExtract_easyClassification.shp
