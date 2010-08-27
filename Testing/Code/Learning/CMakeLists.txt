@@ -547,7 +547,7 @@ otbROIdataConversionNew.cxx
 otbROIdataConversion.cxx
 otbSVMCrossValidationCostFunctionNew.cxx
 otbExhaustiveExponentialOptimizerNew.cxx
-otbListSampleGenerator.cxx
+otbListSampleGeneratorTest.cxx
 otbConfusionMatrixCalculatorTest.cxx
 )
 
