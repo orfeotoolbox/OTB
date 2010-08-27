@@ -213,7 +213,7 @@ WaveletGenerator<Wavelet::DAUBECHIES8>
   coeff.push_back(0.);
   coeff.push_back(0.2303778133090);
   coeff.push_back(0.7148465705530);
-  coeff.push_back(0.6308807667930);
+  coeff.push_back(0.630880767930);
   coeff.push_back(-0.0279837694170);
   coeff.push_back(-0.1870348117190);
   coeff.push_back(0.0308413818360);
@@ -233,7 +233,7 @@ WaveletGenerator<Wavelet::DAUBECHIES8>
   coeff.push_back(-0.0308413818360);
   coeff.push_back(-0.1870348117190);
   coeff.push_back(0.0279837694170);
-  coeff.push_back(0.6308807667930);
+  coeff.push_back(0.630880767930);
   coeff.push_back(-0.7148465705530);
   coeff.push_back(0.2303778133090);
   coeff.resize(9);
