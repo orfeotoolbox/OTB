@@ -27,6 +27,15 @@
 #include "otbSVMModel.h"
 #include "otbSVMKernels.h"
 
+//For second test
+#include "otbSVMSampleListModelEstimator.h"
+#include "otbSVMKernels.h"
+#include "otbVectorImage.h"
+#include "otbImageFileReader.h"
+#include "otbVectorData.h"
+#include "otbVectorDataFileReader.h"
+#include "otbListSampleGenerator.h"
+
 int otbSVMModelGenericKernelsTest(int argc, char* argv[])
 {
   typedef unsigned char InputPixelType;
@@ -209,4 +218,132 @@ int otbSVMModelGenericKernelsTest(int argc, char* argv[])
   svmModel->SaveModel(argv[16]);
 
   return EXIT_SUCCESS;
+}
+
+
+
+template<class KernelType>
+int otbSVMKernelsTest_generic(int argc, char* argv[])
+{
+  std::string imageFilename = argv[1];
+  std::string vectorDataFilename = argv[2];
+  std::string outputModelFileName= argv[3];
+  int         maxTrainingSize = 500;
+  int         maxValidationSize = 500;
+  double      validationTrainingProportion = 0.5;
+
+  std::string classKey = "Class";
+
+  typedef double                          PixelType;
+  typedef int                             LabeledPixelType;
+  typedef otb::VectorImage<PixelType, 2>  ImageType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+
+  ReaderType::Pointer reader = ReaderType::New();
+  reader->SetFileName(imageFilename);
+  reader->UpdateOutputInformation();
+
+  typedef otb::VectorData<float, 2>                 VectorDataType;
+  typedef otb::VectorDataFileReader<VectorDataType> VectorDataReaderType;
+
+  VectorDataReaderType::Pointer vectorReader = VectorDataReaderType::New();
+  vectorReader->SetFileName(vectorDataFilename);
+  vectorReader->Update();
+
+  typedef otb::ListSampleGenerator<ImageType, VectorDataType> ListSampleGeneratorType;
+  ListSampleGeneratorType::Pointer generator = ListSampleGeneratorType::New();
+  generator->SetMaxTrainingSize(maxTrainingSize);
+  generator->SetMaxValidationSize(maxValidationSize);
+  generator->SetValidationTrainingProportion(validationTrainingProportion);
+
+  generator->SetInput(reader->GetOutput());
+  generator->SetInputVectorData(vectorReader->GetOutput());
+
+  generator->Update();
+  std::cout << generator << std::endl;
+
+  typedef ListSampleGeneratorType::ListSampleType ListSampleType;
+  typedef ListSampleGeneratorType::ListLabelType TrainingListSampleType;
+  typedef otb::SVMSampleListModelEstimator<ListSampleType, TrainingListSampleType> EstimatorType;
+
+  EstimatorType::Pointer estimator = EstimatorType::New();
+  estimator->SetInputSampleList(generator->GetTrainingListSample());
+  estimator->SetTrainingSampleList(generator->GetTrainingListLabel());
+  estimator->SetNumberOfClasses(generator->GetNumberOfClasses());
+
+
+//  KernelType::Pointer kernel = KernelType::New();
+  KernelType kernel;
+  std::cout << "Kernel: " << kernel.GetName() << std::endl;
+  estimator->SetKernelFunctor(&kernel);
+  estimator->SetKernelType(GENERIC);
+
+  estimator->Update();
+
+  estimator->GetModel()->SaveModel(outputModelFileName);
+
+  return EXIT_SUCCESS;
+}
+
+int otbSVMKernelsTest(int argc, char* argv[])
+{
+  if (argc != 5)
+    {
+    std::cerr << "Usage: " << argv[0] << " inputImage inputVectorData outputModelFileName kernelType"
+              << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  int kernelType = atoi(argv[4]);
+  switch (kernelType)
+    {
+    case 0:
+      return otbSVMKernelsTest_generic<otb::CustomKernelFunctor>(argc, argv);
+      break;
+    case 1:
+      return otbSVMKernelsTest_generic<otb::InvMultiQuadricKernelFunctor>(argc, argv);
+      break;
+    case 2:
+      return otbSVMKernelsTest_generic<otb::KModKernelFunctor>(argc, argv);
+      break;
+    case 3:
+      return otbSVMKernelsTest_generic<otb::SAMKernelFunctor>(argc, argv);
+      break;
+    case 4:
+      return otbSVMKernelsTest_generic<otb::RadialSAMKernelFunctor>(argc, argv);
+      break;
+    case 5:
+      return otbSVMKernelsTest_generic<otb::InverseCosSAMKernelFunctor>(argc, argv);
+      break;
+    case 6:
+      return otbSVMKernelsTest_generic<otb::InvMultiQuadraticSAMKernelFunctor>(argc, argv);
+      break;
+    case 7:
+      return otbSVMKernelsTest_generic<otb::KModSAMKernelFunctor>(argc, argv);
+      break;
+    case 8:
+      return otbSVMKernelsTest_generic<otb::RBFKernelFunctor>(argc, argv);
+      break;
+    case 9:
+      return otbSVMKernelsTest_generic<otb::RBFRBFSAMKernelFunctor>(argc, argv);
+      break;
+    case 10:
+      return otbSVMKernelsTest_generic<otb::PolyRBFSAMKernelFunctor>(argc, argv);
+      break;
+    case 11:
+      return otbSVMKernelsTest_generic<otb::RBFDiffKernelFunctor>(argc, argv);
+      break;
+    case 12:
+      return otbSVMKernelsTest_generic<otb::CustomLinearKernelFunctor>(argc, argv);
+      break;
+    case 13:
+      return otbSVMKernelsTest_generic<otb::GroupedRBFKernelFunctor>(argc, argv);
+      break;
+    case 14:
+      return otbSVMKernelsTest_generic<otb::GroupingAdaptiveKernelFunctor>(argc, argv);
+      break;
+    default:
+       std::cerr << "No more kernel available\n";
+       return EXIT_FAILURE;
+    }
 }

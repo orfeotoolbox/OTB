@@ -35,6 +35,7 @@ void RegisterTests()
   REGISTER_TEST(otbSVMImageClassificationFilter);
   REGISTER_TEST(otbSVMImageClassificationWithRuleFilterNew);
   REGISTER_TEST(otbSVMModelGenericKernelsTest);
+  REGISTER_TEST(otbSVMKernelsTest);
   REGISTER_TEST(otbSVMModelCopyTest);
   REGISTER_TEST(otbSVMModelCopyGenericKernelTest);
   REGISTER_TEST(otbSVMModelCopyComposedKernelTest);

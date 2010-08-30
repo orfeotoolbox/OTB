@@ -371,6 +371,20 @@ ADD_TEST(leTvSVMModelGenericKernelsTest ${LEARNING_TESTS3}
     )
 
 
+FOREACH(kernelType RANGE 0 14)
+  ADD_TEST(leTvSVMKernelTest${kernelType} ${LEARNING_TESTS3}
+   --compare-ascii ${EPSILON_9}
+      ${BASELINE_FILES}/leTvSVMKernelTest${kernelType}.txt
+      ${TEMP}/leTvSVMKernelTest${kernelType}.txt
+   --ignore-lines-with 2 probA probB
+        otbSVMKernelsTest
+      ${EXAMPLEDATA}/qb_RoadExtract.tif
+      ${EXAMPLEDATA}/qb_RoadExtract_easyClassification.shp
+      ${TEMP}/leTvSVMKernelTest${kernelType}.txt
+      ${kernelType}
+  )
+ENDFOREACH(kernelType)
+
 ADD_TEST(leTvSVMModelCopy ${LEARNING_TESTS3}
 --compare-ascii ${NOTOL}  ${INPUTDATA}/svm_model
                         ${TEMP}/svmcopymodel_test
@@ -403,6 +417,8 @@ ADD_TEST(leTlSVMInverseCosSpectralAngleKernelFunctorImageClassificationTest ${LE
 	${INPUTDATA}/ROI_QB_MUL_4.tif
 	${INPUTDATA}/ROI_QB_MUL_4_train_one_class.tif
 	${TEMP}/leTvsvm_model_image_one_class)
+
+
 
 
 
