@@ -95,6 +95,8 @@ public:
   typedef ObjectList<HistogramType>           HistogramListType;
   typedef typename HistogramListType::Pointer HistogramListPointerType;
 
+  typedef typename Superclass::LayerValueType LayerValueType;
+
   /** Rendering part */
   typedef RenderingImageFilter<TImage, TOutputImage>          RenderingFilterType;
   typedef typename RenderingFilterType::Pointer               RenderingFilterPointerType;
@@ -198,6 +200,8 @@ public:
     m_ListSampleProvided = true;
     m_RenderingFunction->SetListSample(m_ListSample);
   }
+
+  virtual LayerValueType GetValueAtIndex(const IndexType& index);
 
 protected:
   /** Constructor */

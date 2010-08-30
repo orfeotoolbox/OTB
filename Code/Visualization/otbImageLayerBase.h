@@ -20,6 +20,8 @@
 
 #include "itkObject.h"
 #include "otbImage.h"
+#include "itkVariableLengthVector.h"
+#include "itkRGBPixel.h"
 #include "itkRGBAPixel.h"
 #include "otbBlendingFunction.h"
 #include "otbUniformAlphaBlendingFunction.h"
@@ -34,7 +36,7 @@ namespace otb
 *  \ingroup Visualization
  */
 
-template <class TOutputImage = Image<itk::RGBAPixel<unsigned char>, 2> >
+template <class TOutputImage = Image<itk::RGBAPixel<unsigned char>, 2>, class TLayerValuePrecision = double>
 class ImageLayerBase
   : public itk::Object
 {
@@ -60,11 +62,17 @@ public:
   typedef Function::BlendingFunction<OutputPixelType> BlendingFunctionType;
   typedef typename BlendingFunctionType::Pointer      BlendingFunctionPointerType;
 
+  typedef TLayerValuePrecision                               LayerValuePrecisionType;
+  typedef itk::VariableLengthVector<LayerValuePrecisionType> LayerValueType;
+
   /** Actually render the layer */
   virtual void Render() = 0;
 
   /** Get the pixel description */
   virtual std::string GetPixelDescription(const IndexType& index) = 0;
+
+  /** Get the pixel value in TLayerValuePrecision type */
+  virtual LayerValueType GetValueAtIndex(const IndexType& index) = 0;
 
   itkGetObjectMacro(RenderedQuicklook,     OutputImageType);
   itkGetObjectMacro(RenderedExtract,       OutputImageType);
@@ -116,6 +124,12 @@ public:
 
   itkSetObjectMacro(BlendingFunction, BlendingFunctionType);
   itkGetObjectMacro(BlendingFunction, BlendingFunctionType);
+
+  itkSetMacro(MaxValues, LayerValueType);
+  itkGetMacro(MaxValues, LayerValueType);
+
+  itkSetMacro(MinValues, LayerValueType);
+  itkGetMacro(MinValues, LayerValueType);
 
 protected:
   /** Constructor */
@@ -177,7 +191,91 @@ private:
   /** Pointer to the blending function */
   BlendingFunctionPointerType m_BlendingFunction;
 
+  LayerValueType m_MaxValues;
+  LayerValueType m_MinValues;
 }; // end class
+
+// default impl, assuming scalar
+template <class TInputPixelType, class TLayerValueType>
+class LayerValueGenerator
+{
+public:
+  typedef TInputPixelType PixelType;
+  typedef TLayerValueType LayerValueType;
+  typedef typename LayerValueType::ValueType LayerValueInternalType;
+
+  static LayerValueType Convert(const PixelType& pixel)
+  {
+    LayerValueType layerVal;
+    layerVal.SetSize(1);
+    layerVal[0] = static_cast<LayerValueInternalType>(pixel);
+    return layerVal;
+  }
+};
+
+// VariableLengthVector<T> partial specialization
+template <class TInputInternalPixelType, class TLayerValueType>
+class LayerValueGenerator<itk::VariableLengthVector<TInputInternalPixelType>, TLayerValueType>
+{
+public:
+  typedef itk::VariableLengthVector<TInputInternalPixelType> PixelType;
+  typedef TLayerValueType                                    LayerValueType;
+  typedef typename LayerValueType::ValueType                 LayerValueInternalType;
+
+  static LayerValueType Convert(const PixelType& pixel)
+  {
+    LayerValueType layerVal;
+    layerVal.SetSize(pixel.GetSize());
+    for (unsigned int i = 0; i < pixel.GetSize(); ++i)
+      {
+      layerVal[i] = static_cast<LayerValueInternalType>(pixel[i]);
+      }
+    return layerVal;
+  }
+};
+
+// itk::RGBPixel<T> partial specialization
+template <class TInputInternalPixelType, class TLayerValueType>
+class LayerValueGenerator<itk::RGBPixel<TInputInternalPixelType>, TLayerValueType>
+{
+public:
+  typedef itk::RGBPixel<TInputInternalPixelType>          PixelType;
+  typedef TLayerValueType                                 LayerValueType;
+  typedef typename LayerValueType::ValueType              LayerValueInternalType;
+
+  static LayerValueType Convert(const PixelType& pixel)
+  {
+    LayerValueType layerVal;
+    layerVal.SetSize(3);
+    layerVal[0] = pixel[0];
+    layerVal[1] = pixel[1];
+    layerVal[2] = pixel[2];
+    return layerVal;
+  }
+};
+
+// itk::RGBAPixel<T> partial specialization
+template <class TInputInternalPixelType, class TLayerValueType>
+class LayerValueGenerator<itk::RGBAPixel<TInputInternalPixelType>, TLayerValueType>
+{
+public:
+  typedef itk::RGBPixel<TInputInternalPixelType>          PixelType;
+  typedef TLayerValueType                                 LayerValueType;
+  typedef typename LayerValueType::ValueType              LayerValueInternalType;
+
+  static LayerValueType Convert(const PixelType& pixel)
+  {
+    LayerValueType layerVal;
+    layerVal.SetSize(4);
+    layerVal[0] = pixel[0];
+    layerVal[1] = pixel[1];
+    layerVal[2] = pixel[2];
+    layerVal[3] = pixel[3];
+    return layerVal;
+  }
+};
+
+
 } // end namespace otb
 
 #endif

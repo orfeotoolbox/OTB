@@ -20,7 +20,10 @@
 
 #ifndef __otbWaveletOperatorBase_txx
 #define __otbWaveletOperatorBase_txx
+
 #include "otbWaveletOperatorBase.h"
+
+#include <cassert>
 
 namespace otb {
 
@@ -168,6 +171,7 @@ WaveletOperatorBase<TMotherWaveletOperator, TPixel, VDimension, TAllocator>
 
   while (coeff[0] == coeff[coeff.size() - 1])
     {
+    assert(coeff.size() > 1);
     ReduceFilterLength(coeff);
     }
 }
@@ -179,6 +183,7 @@ WaveletOperatorBase<TMotherWaveletOperator, TPixel, VDimension, TAllocator>
 ::ReduceFilterLength(CoefficientVector& coeff)
 {
   const unsigned int length = coeff.size();
+  assert(length >= 2);
   CoefficientVector newFilter(length - 2);
   for (unsigned int i = 0; i < newFilter.size(); i++)
     {

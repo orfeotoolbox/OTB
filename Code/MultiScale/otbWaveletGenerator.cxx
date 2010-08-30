@@ -130,7 +130,7 @@ WaveletGenerator<Wavelet::DAUBECHIES4>
 {
   static const double sqrt2 = ::vcl_sqrt(2.);
   static const double sqrt3 = ::vcl_sqrt(3.);
-
+  coeff.clear();
   coeff.push_back(0.);
   coeff.push_back((1 + sqrt3) / 8.0 * sqrt2);
   coeff.push_back((3 + sqrt3) / 8.0 * sqrt2);
@@ -146,7 +146,7 @@ WaveletGenerator<Wavelet::DAUBECHIES4>
 {
   static const double sqrt2 = ::vcl_sqrt(2.);
   static const double sqrt3 = ::vcl_sqrt(3.);
-
+  coeff.clear();
   coeff.push_back(0);
   coeff.push_back(-(1 - sqrt3) / 8.0 * sqrt2);
   coeff.push_back((3 - sqrt3) / 8.0 * sqrt2);
@@ -170,6 +170,7 @@ void
 WaveletGenerator<Wavelet::DAUBECHIES6>
 ::GetLowPassCoefficientVector(CoefficientVector& coeff) const
 {
+  coeff.clear();
   coeff.push_back(0.);
   coeff.push_back(0.332670552950);
   coeff.push_back(0.806891509311);
@@ -185,6 +186,7 @@ void
 WaveletGenerator<Wavelet::DAUBECHIES6>
 ::GetHighPassCoefficientVector(CoefficientVector& coeff) const
 {
+  coeff.clear();
   coeff.push_back(0.);
   coeff.push_back(-0.035226291882);
   coeff.push_back(-0.085441273882);
@@ -210,10 +212,11 @@ void
 WaveletGenerator<Wavelet::DAUBECHIES8>
 ::GetLowPassCoefficientVector(CoefficientVector& coeff) const
 {
+  coeff.clear();
   coeff.push_back(0.);
   coeff.push_back(0.2303778133090);
   coeff.push_back(0.7148465705530);
-  coeff.push_back(0.6308807667930);
+  coeff.push_back(0.630880767930);
   coeff.push_back(-0.0279837694170);
   coeff.push_back(-0.1870348117190);
   coeff.push_back(0.0308413818360);
@@ -227,13 +230,14 @@ void
 WaveletGenerator<Wavelet::DAUBECHIES8>
 ::GetHighPassCoefficientVector(CoefficientVector& coeff) const
 {
+  coeff.clear();
   coeff.push_back(0.);
   coeff.push_back(0.0105974017850);
   coeff.push_back(0.0328830116670);
   coeff.push_back(-0.0308413818360);
   coeff.push_back(-0.1870348117190);
   coeff.push_back(0.0279837694170);
-  coeff.push_back(0.6308807667930);
+  coeff.push_back(0.630880767930);
   coeff.push_back(-0.7148465705530);
   coeff.push_back(0.2303778133090);
   coeff.resize(9);
@@ -254,6 +258,7 @@ void
 WaveletGenerator<Wavelet::DAUBECHIES12>
 ::GetLowPassCoefficientVector(CoefficientVector& coeff) const
 {
+  coeff.clear();
   coeff.push_back(0.);
   coeff.push_back(0.1115407433501095);
   coeff.push_back(0.4946238903984533);
@@ -275,6 +280,7 @@ void
 WaveletGenerator<Wavelet::DAUBECHIES12>
 ::GetHighPassCoefficientVector(CoefficientVector& coeff) const
 {
+  coeff.clear();
   coeff.push_back(0.);
   coeff.push_back(0.0010773010853085);
   coeff.push_back(0.0047772575119455);
@@ -306,6 +312,7 @@ void
 WaveletGenerator<Wavelet::DAUBECHIES20>
 ::GetLowPassCoefficientVector(CoefficientVector& coeff) const
 {
+  coeff.clear();
   coeff.push_back(0.);
   coeff.push_back(0.026670057901);
   coeff.push_back(0.188176800078);
@@ -335,6 +342,7 @@ void
 WaveletGenerator<Wavelet::DAUBECHIES20>
 ::GetHighPassCoefficientVector(CoefficientVector& coeff) const
 {
+  coeff.clear();
   coeff.push_back(0.);
   coeff.push_back(0.000013264203);
   coeff.push_back(0.000093588670);
@@ -380,7 +388,7 @@ WaveletGenerator<Wavelet::SPLINE_BIORTHOGONAL_2_4>
 ::GetLowPassCoefficientVector(CoefficientVector& coeff) const
 {
   static const double sqrt2 = ::vcl_sqrt(2.0);
-
+  coeff.clear();
   coeff.push_back(3.0 / 128.0 * sqrt2);
   coeff.push_back(-3.0 /  64.0 * sqrt2);
   coeff.push_back(-1.0 /   8.0 * sqrt2);
@@ -400,7 +408,7 @@ WaveletGenerator<Wavelet::SPLINE_BIORTHOGONAL_2_4>
 ::GetHighPassCoefficientVector(CoefficientVector& coeff) const
 {
   static const double sqrt2 = ::vcl_sqrt(2.0);
-
+  coeff.clear();
   coeff.push_back(-1.0 / 4.0 * sqrt2);
   coeff.push_back(1.0 / 2.0 * sqrt2);
   coeff.push_back(-1.0 / 4.0 * sqrt2);
@@ -435,7 +443,7 @@ WaveletGenerator<Wavelet::SPLINE_BIORTHOGONAL_4_4>
 ::GetLowPassCoefficientVector(CoefficientVector& coeff) const
 {
   static const double sqrt2 = ::vcl_sqrt(2.0);
-
+  coeff.clear();
   coeff.push_back(0.026748757411 * sqrt2);
   coeff.push_back(-0.016864118443 * sqrt2);
   coeff.push_back(-0.078223266529 * sqrt2);
@@ -454,7 +462,7 @@ WaveletGenerator<Wavelet::SPLINE_BIORTHOGONAL_4_4>
 ::GetHighPassCoefficientVector(CoefficientVector& coeff) const
 {
   static const double sqrt2 = ::vcl_sqrt(2.0);
-
+  coeff.clear();
   coeff.push_back(0.045635881557 * sqrt2);
   coeff.push_back(-0.028771763114 * sqrt2);
   coeff.push_back(-0.295635881557 * sqrt2);
@@ -482,6 +490,7 @@ void
 WaveletGenerator<Wavelet::SYMLET8>
 ::GetLowPassCoefficientVector(CoefficientVector& coeff) const
 {
+  coeff.clear();
   coeff.push_back(0.);
   coeff.push_back(-0.075765714789273);
   coeff.push_back(-0.029635527645999);
@@ -499,6 +508,7 @@ void
 WaveletGenerator<Wavelet::SYMLET8>
 ::GetHighPassCoefficientVector(CoefficientVector& coeff) const
 {
+  coeff.clear();
   coeff.push_back(0.);
   coeff.push_back(-0.032223100604043);
   coeff.push_back(-0.012603967262038);

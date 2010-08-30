@@ -366,6 +366,57 @@ ImageLayer<TImage, TOutputImage>
 
 }
 
+
+template <class TImage, class TOutputImage>
+typename ImageLayer<TImage, TOutputImage>::LayerValueType
+ImageLayer<TImage, TOutputImage>
+::GetValueAtIndex(const IndexType& index)
+{
+
+  //FIXME only if necessary
+  this->UpdateListSample();
+
+  PixelType      pixel;
+  unsigned int   sampleSize;
+
+  // Ensure rendering function intialization
+  m_RenderingFunction->Initialize(m_Image->GetMetaDataDictionary()); //FIXME check, but the call must be done in the generator. To be moved to the layer?
+
+  // If we are inside the buffered region
+  if (m_Image->GetBufferedRegion().IsInside(index))
+    {
+    pixel = m_Image->GetPixel(index);
+    }
+  else
+    {
+    if (m_Quicklook.IsNotNull())
+      {
+      IndexType indexOrigin = index;
+      indexOrigin[0] = 0;
+      indexOrigin[1] = 0;
+
+//      sampleSize = VisualizationPixelTraits::PixelSize(m_Quicklook->GetPixel(indexOrigin));
+//      returnValue.SetSize(sampleSize);
+
+      IndexType ssindex = index;
+      ssindex[0] /= this->GetQuicklookSubsamplingRate();
+      ssindex[1] /= this->GetQuicklookSubsamplingRate();
+
+      if (m_Quicklook->GetBufferedRegion().IsInside(ssindex))
+        {
+        pixel = m_Quicklook->GetPixel(ssindex);
+        }
+      else
+        {
+        pixel = m_Quicklook->GetPixel(indexOrigin);
+        }
+      }
+    }
+
+  LayerValueType returnValue = LayerValueGenerator<PixelType, LayerValueType>::Convert(pixel);
+  return returnValue;
+}
+
 }
 
 #endif

@@ -70,9 +70,13 @@ public:
   itkSetMacro(LabelColor, ColorType);
   itkGetConstReferenceMacro(LabelColor, ColorType);
 
+  /// Get/Set the Id
+  itkGetMacro(Id, unsigned int);
+  itkSetMacro(Id, unsigned int);
+
 protected:
   /** Constructor */
-  Curve2D() : m_Label("Curve"), m_LabelColor()
+  Curve2D() : m_Label("Curve"), m_LabelColor(), m_Id(0)
   {
     // Default color
     m_LabelColor.Fill(1);
@@ -95,6 +99,8 @@ private:
   /// The curve label color
   ColorType m_LabelColor;
 
+  /// id of the curve
+  unsigned int m_Id;
 }; // end class
 } // end namespace otb
 
