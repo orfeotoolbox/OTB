@@ -25,6 +25,7 @@
 #include <iostream>
 
 #include "otbSVMSampleListModelEstimator.h"
+#include "otbSVMKernels.h"
 
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
@@ -113,4 +114,3 @@ int otbSVMSampleListModelEstimatorTest(int argc, char* argv[])
 
   return EXIT_SUCCESS;
 }
-
