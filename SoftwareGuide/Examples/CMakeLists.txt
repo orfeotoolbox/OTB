@@ -359,7 +359,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Learning/SEMModelEstimatorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMGenericKernelImageClassificationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMGenericKernelImageModelEstimatorExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/Visu/VisuExample1.cxx
+  ${OTB_SOURCE_DIR}/Examples/Visualization/VisuExample1.cxx
   ${OTB_SOURCE_DIR}/Examples/OBIA/ImageToLabelToImage.cxx
   ${OTB_SOURCE_DIR}/Examples/OBIA/ShapeAttributeComputation.cxx
   ${OTB_SOURCE_DIR}/Examples/OBIA/KeepNObjects.cxx
@@ -396,14 +396,14 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Tutorials/Multispectral.cxx
 )
 
-IF(${OTB_USE_PATENTED})
-SET( OTB_EXAMPLES_SRCS ${OTB_EXAMPLES_SRCS}
-  ${OTB_SOURCE_DIR}/Examples/DisparityMap/SIFTDisparityMapEstimation.cxx
-  ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/SIFTFastExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/DisparityMap/EstimateAffineTransformationExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/SIFTDensityExample.cxx
+IF(OTB_USE_PATENTED)
+SET(OTB_EXAMPLES_SRCS ${OTB_EXAMPLES_SRCS}
+  ${OTB_SOURCE_DIR}/Examples/Patented/SIFTDisparityMapEstimation.cxx
+  ${OTB_SOURCE_DIR}/Examples/Patented/SIFTFastExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/Patented/EstimateAffineTransformationExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/Patented/SIFTDensityExample.cxx
    )
-ENDIF(${OTB_USE_PATENTED})
+ENDIF(OTB_USE_PATENTED)
 
 # It is recommended that the user build the figures from the OTB executables
 # to generate the guide to ensure consistency.
