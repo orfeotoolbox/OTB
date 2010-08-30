@@ -1271,7 +1271,7 @@ ADD_TEST(feTvScalarImageToTexturesFilter ${FEATUREEXTRACTION_TESTS15}
             ${BASELINE}/feTvScalarImageToTexturesFilterOutputHaralickCorrelation.tif
             ${TEMP}/feTvScalarImageToTexturesFilterOutputHaralickCorrelation.tif
         otbScalarImageToTexturesFilter
-            ${INPUTDATA}/Mire_Cosinus_500_500.png
+            ${INPUTDATA}/Mire_Cosinus.png
             ${TEMP}/feTvScalarImageToTexturesFilterOutput
             8 3 2 2)
 
@@ -1308,7 +1308,7 @@ ADD_TEST(feTvScalarImageToAdvancedTexturesFilter ${FEATUREEXTRACTION_TESTS15}
             ${BASELINE}/feTvScalarImageToAdvancedTexturesFilterOutputIC2.tif
             ${TEMP}/feTvScalarImageToAdvancedTexturesFilterOutputIC2.tif
         otbScalarImageToAdvancedTexturesFilter
-        ${INPUTDATA}/Mire_Cosinus_500_500.png
+        ${INPUTDATA}/Mire_Cosinus.png
         ${TEMP}/feTvScalarImageToAdvancedTexturesFilterOutput
         8 5 1 1)
         
@@ -1342,7 +1342,7 @@ ADD_TEST(feTvScalarImageToHigherOrderTexturesFilter ${FEATUREEXTRACTION_TESTS15}
             ${BASELINE}/feTvScalarImageToHigherOrderTexturesFilterOutputLongRunHighGreyLevelEmphasis.tif
             ${TEMP}/feTvScalarImageToHigherOrderTexturesFilterOutputLongRunHighGreyLevelEmphasis.tif
         otbScalarImageToHigherOrderTexturesFilter
-        ${INPUTDATA}/Mire_Cosinus_500_500.png
+        ${INPUTDATA}/Mire_Cosinus.png
         ${TEMP}/feTvScalarImageToHigherOrderTexturesFilterOutput
         8 5 1 1)
 
@@ -1355,7 +1355,7 @@ ADD_TEST(feTvScalarImageToPanTexTextureFilter ${FEATUREEXTRACTION_TESTS15}
             ${BASELINE}/feTvScalarImageToPanTexTextureFilterOutputPanTex.tif
             ${TEMP}/feTvScalarImageToPanTexTextureFilterOutputPanTex.tif
         otbScalarImageToPanTexTextureFilter
-        ${INPUTDATA}/Mire_Cosinus_500_500.png
+        ${INPUTDATA}/Mire_Cosinus.png
         ${TEMP}/feTvScalarImageToPanTexTextureFilterOutput
         8 5)
 
