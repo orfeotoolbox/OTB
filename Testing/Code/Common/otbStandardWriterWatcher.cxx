@@ -51,6 +51,13 @@ int otbStandardWriterWatcher(int argc, char * argv[])
   writer1->SetFileName(outfname);
 
   otb::StandardWriterWatcher watcher1(writer1, "Gradient (streaming)");
+
+  otb::StandardWriterWatcher watcher3(writer1, gradient, "Gradient");
+
+  otb::StandardWriterWatcher watcher4(watcher1);
+
+  otb::StandardWriterWatcher watcher5 = watcher1;
+
   writer1->Update();
 
   WriterType::Pointer writer2 = WriterType::New();
