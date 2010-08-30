@@ -106,12 +106,16 @@ SET( Tex_SRCS
   SystemOverview.tex
   Transforms.tex
   Visualization.tex
-  Wrapping.tex
   Watersheds.tex
   Fusion.tex
   Radiometry.tex
   ReleaseNotes.tex
 )
+
+IF(GENERATE_WRAPPING_DOC)
+  SET(Tex_SRCS   ${Tex_SRCS} Wrapping.tex)
+ENDIF(GENERATE_WRAPPING_DOC)
+  
 
 
 FOREACH( file ${Tex_SRCS})
@@ -137,7 +141,7 @@ IF(LATEX_COMPILER)
 
   IF (NOT UNIX)
     #SET(ITK_TEXINPUTS ${SoftwareGuide_SOURCE_DIR}/../Latex;${SoftwareGuide_SOURCE_DIR};${SoftwareGuide_SOURCE_DIR}/Latex;${SoftwareGuide_SOURCE_DIR}/Art;${SoftwareGuide_BINARY_DIR};${SoftwareGuide_BINARY_DIR}/Examples;${SoftwareGuide_BINARY_DIR}/Wrappings/Java;${SoftwareGuide_BINARY_DIR}/Art;${SoftwareGuide_BINARY_DIR}/Latex)
-
+    
     SET(ITK_TEXINPUTS ${SoftwareGuide_SOURCE_DIR}/../Latex;${SoftwareGuide_SOURCE_DIR};${SoftwareGuide_SOURCE_DIR}/Latex;${SoftwareGuide_SOURCE_DIR}/Art;${SoftwareGuide_BINARY_DIR};${SoftwareGuide_BINARY_DIR}/Examples;${SoftwareGuide_BINARY_DIR}/Art;${SoftwareGuide_BINARY_DIR}/Latex;${SoftwareGuide_BINARY_DIR}/Wrappings/Java;${SoftwareGuide_BINARY_DIR}/Wrappings/Python)
 
     CONFIGURE_FILE(${SoftwareGuide_SOURCE_DIR}/LaTeXWrapper.bat.in
