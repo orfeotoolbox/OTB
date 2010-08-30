@@ -220,8 +220,6 @@ int otbSVMModelGenericKernelsTest(int argc, char* argv[])
   return EXIT_SUCCESS;
 }
 
-
-
 template<class KernelType>
 int otbSVMKernelsTest_generic(int argc, char* argv[])
 {
@@ -262,8 +260,8 @@ int otbSVMKernelsTest_generic(int argc, char* argv[])
   generator->Update();
   std::cout << generator << std::endl;
 
-  typedef ListSampleGeneratorType::ListSampleType ListSampleType;
-  typedef ListSampleGeneratorType::ListLabelType TrainingListSampleType;
+  typedef ListSampleGeneratorType::ListSampleType                                  ListSampleType;
+  typedef ListSampleGeneratorType::ListLabelType                                   TrainingListSampleType;
   typedef otb::SVMSampleListModelEstimator<ListSampleType, TrainingListSampleType> EstimatorType;
 
   EstimatorType::Pointer estimator = EstimatorType::New();

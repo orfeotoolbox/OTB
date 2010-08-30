@@ -99,8 +99,8 @@ int otbSVMSampleListModelEstimatorTest(int argc, char* argv[])
   generator->Update();
   std::cout << generator << std::endl;
 
-  typedef ListSampleGeneratorType::ListSampleType ListSampleType;
-  typedef ListSampleGeneratorType::ListLabelType TrainingListSampleType;
+  typedef ListSampleGeneratorType::ListSampleType                                  ListSampleType;
+  typedef ListSampleGeneratorType::ListLabelType                                   TrainingListSampleType;
   typedef otb::SVMSampleListModelEstimator<ListSampleType, TrainingListSampleType> EstimatorType;
 
   EstimatorType::Pointer estimator = EstimatorType::New();
