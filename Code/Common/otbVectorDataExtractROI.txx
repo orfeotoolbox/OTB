@@ -341,6 +341,86 @@ VectorDataExtractROI<TVectorData>
   return false;
 }
 
+
+template <class TVectorData>
+bool
+VectorDataExtractROI<TVectorData>
+::IsSegementIntersectSegment(LinePointerType segmentLineAB, LinePointerType segmentLineCD)
+{
+
+  PointType vertexA,vertexB, vertexC, vertexD;
+
+  vertexA  = segmentLineAB->GetVertexList()->GetElement(0);
+  vertexB = segmentLineAB->GetVertexList()->GetElement(1);
+  vertexC  = segmentLineCD->GetVertexList()->GetElement(0);
+  vertexD = segmentLineCD->GetVertexList()->GetElement(1);
+
+  int CounterClockWiseValueWithC = CounterClockWise(vertexA, vertexB, vertexC);
+  int CounterClockWiseValueWithD = CounterClockWise(vertexA, vertexB, vertexD);
+
+  if(CounterClockWiseValueWithC == CounterClockWiseValueWithD)
+    {
+      return false;
+    }
+  int CounterClockWiseValueWithA = CounterClockWise(vertexC, vertexD, vertexA);
+  int CounterClockWiseValueWithB = CounterClockWise(vertexC, vertexD, vertexB);
+
+  if(CounterClockWiseValueWithA == CounterClockWiseValueWithB)
+    {
+      return false;
+    }
+
+  return true;
+
+}
+
+template <class TVectorData>
+int
+VectorDataExtractROI<TVectorData>
+::CounterClockWise(PointType firstPoint,PointType secondPoint,PointType thirdPoint)
+{
+  PointType  SecondMinusFirstPoint;
+  PointType  ThirdMinusFirstPoint;
+
+  SecondMinusFirstPoint = secondPoint - firstPoint;
+  ThirdMinusFirstPoint  = thirdPoint - firstPoint;
+
+  double dX1dY2MinusdY1dX2;
+  dX1dY2MinusdY1dX2 = static_cast<double>(  SecondMinusFirstPoint[0]*ThirdMinusFirstPoint[1]
+                                          - SecondMinusFirstPoint[1]*ThirdMinusFirstPoint[0]);
+  if( dX1dY2MinusdY1dX2 > 0.0)
+    {
+      return 1;
+    }
+  if( dX1dY2MinusdY1dX2 < 0.0)
+    {
+      return -1;
+    }
+
+  double dX1dX2;
+  double dY1dY2;
+  dX1dX2 = static_cast<double>(SecondMinusFirstPoint[0] * ThirdMinusFirstPoint[0]);
+  dY1dY2 = static_cast<double>(SecondMinusFirstPoint[1] * ThirdMinusFirstPoint[1]);
+  if( (dX1dX2 < 0.0) || (dY1dY2 < 0.0) )
+    {
+      return -1;
+    }
+
+  double dX1dX1, dX2dX2, dY1dY1, dY2dY2;
+  dX1dX1 = static_cast<double>(SecondMinusFirstPoint[0] * SecondMinusFirstPoint[0]);
+  dX2dX2 = static_cast<double>(ThirdMinusFirstPoint[0] * ThirdMinusFirstPoint[0]);
+  dY1dY1 = static_cast<double>(SecondMinusFirstPoint[1] * SecondMinusFirstPoint[1]);
+  dY2dY2 = static_cast<double>(ThirdMinusFirstPoint[1] * ThirdMinusFirstPoint[1]);
+
+  if( (dX1dX1+dY1dY1) < (dX2dX2 + dY2dY2) )
+    {
+      return 1;
+    }
+
+  return 0;
+}
+
+
 /**
  * CompareInputAndRegionProjection
  */
