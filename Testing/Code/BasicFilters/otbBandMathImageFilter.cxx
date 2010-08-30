@@ -25,26 +25,26 @@
 
 #include "otbMath.h"
 #include "otbImage.h"
-#include "otbNaryParserImageFilter.h"
+#include "otbBandMathImageFilter.h"
 
-int otbNaryParserImageFilterNew( int argc, char* argv[])
+int otbBandMathImageFilterNew( int argc, char* argv[])
 {
   typedef double                                            PixelType;
   //typedef float                                             PixelType;
   typedef otb::Image<PixelType, 2>                          ImageType;
-  typedef otb::NaryParserImageFilter<ImageType>             FilterType;
+  typedef otb::BandMathImageFilter<ImageType>               FilterType;
 
    FilterType::Pointer         filter       = FilterType::New();
 
    return EXIT_SUCCESS;
 }
 
-int otbNaryParserImageFilter( int argc, char* argv[])
+int otbBandMathImageFilter( int argc, char* argv[])
 {
   typedef double                                            PixelType;
   //typedef float                                             PixelType;
   typedef otb::Image<PixelType, 2>                          ImageType;
-  typedef otb::NaryParserImageFilter<ImageType>             FilterType;
+  typedef otb::BandMathImageFilter<ImageType>               FilterType;
   
   unsigned int i;
   const unsigned int N = 100;

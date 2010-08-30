@@ -19,8 +19,8 @@
 
 =========================================================================*/
 
-#ifndef __otbNaryParserImageFilter_h
-#define __otbNaryParserImageFilter_h
+#ifndef __otbBandMathImageFilter_h
+#define __otbBandMathImageFilter_h
 
 #include "itkInPlaceImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
@@ -30,7 +30,7 @@
 
 namespace otb
 {
-/** \class NaryParserImageFilter
+/** \class BandMathImageFilter
  * \brief Performs a mathematical operation on the input images
  * according to the formula specified by the user.
  * 
@@ -62,21 +62,21 @@ namespace otb
  */
 
 template< class TImage >
-class ITK_EXPORT NaryParserImageFilter 
+class ITK_EXPORT BandMathImageFilter 
   : public itk::InPlaceImageFilter< TImage >
 {
 public:
   /** Standard class typedefs. */
-  typedef NaryParserImageFilter< TImage >                                               Self;
-  typedef itk::InPlaceImageFilter< TImage >                                             Superclass;
-  typedef itk::SmartPointer< Self >                                                     Pointer;
-  typedef itk::SmartPointer< const Self >                                               ConstPointer;
+  typedef BandMathImageFilter< TImage >                 Self;
+  typedef itk::InPlaceImageFilter< TImage >             Superclass;
+  typedef itk::SmartPointer< Self >                     Pointer;
+  typedef itk::SmartPointer< const Self >               ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
   
   /** Run-time type information (and related methods). */
-  itkTypeMacro(NaryParserImageFilter, InPlaceImageFilter);
+  itkTypeMacro(BandMathImageFilter, InPlaceImageFilter);
 
   /** Some convenient typedefs. */
   typedef TImage                                  ImageType;
@@ -105,8 +105,8 @@ public:
   ImageType * GetNthInput(unsigned int idx);
 
 protected :
-  NaryParserImageFilter();
-  virtual ~NaryParserImageFilter();
+  BandMathImageFilter();
+  virtual ~BandMathImageFilter();
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
  
   void BeforeThreadedGenerateData();
@@ -114,7 +114,7 @@ protected :
   void AfterThreadedGenerateData();
 
 private :
-  NaryParserImageFilter(const Self&); //purposely not implemented
+  BandMathImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   std::string                           m_Expression; 
@@ -131,7 +131,7 @@ private :
 }//end namespace otb
 
 #ifndef ITK_MANUAL_INSTANTIATION
-#include "otbNaryParserImageFilter.txx"
+#include "otbBandMathImageFilter.txx"
 #endif
 
 #endif

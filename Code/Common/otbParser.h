@@ -30,7 +30,7 @@ namespace otb
  * \brief  Definition of the standard floating point parser.
  * Standard implementation of the mathematical expressions parser. 
  *
- * \sa NaryParserImageFilter
+ * \sa BandMathImageFilter
  *
  */
 

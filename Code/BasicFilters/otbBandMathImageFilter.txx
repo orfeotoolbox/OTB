@@ -18,9 +18,9 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbNaryParserImageFilter_txx
-#define __otbNaryParserImageFilter_txx
-#include "otbNaryParserImageFilter.h"
+#ifndef __otbBandMathImageFilter_txx
+#define __otbBandMathImageFilter_txx
+#include "otbBandMathImageFilter.h"
 
 #include "itkImageRegionIterator.h"
 #include "itkImageRegionConstIterator.h"
@@ -37,8 +37,8 @@ namespace otb
 
 /** Constructor */
 template <class TImage>
-NaryParserImageFilter<TImage>
-::NaryParserImageFilter()
+BandMathImageFilter<TImage>
+::BandMathImageFilter()
 {
   //This number will be incremented each time an image
   //is added over the one minimumrequired
@@ -53,13 +53,13 @@ NaryParserImageFilter<TImage>
 
 /** Destructor */
 template <class TImage>
-NaryParserImageFilter<TImage>
-::~NaryParserImageFilter()
+BandMathImageFilter<TImage>
+::~BandMathImageFilter()
 {
 }
 
 template <class TImage>
-void NaryParserImageFilter<TImage>
+void BandMathImageFilter<TImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
@@ -75,7 +75,7 @@ void NaryParserImageFilter<TImage>
 }
 
 template <class TImage>
-void NaryParserImageFilter<TImage>
+void BandMathImageFilter<TImage>
 ::SetNthInput(unsigned int idx, const ImageType * image)
 {  
   this->SetInput(idx, const_cast<TImage *>( image ));
@@ -87,7 +87,7 @@ void NaryParserImageFilter<TImage>
 }
 
 template <class TImage>
-void NaryParserImageFilter<TImage>
+void BandMathImageFilter<TImage>
 ::SetNthInput(unsigned int idx, const ImageType * image, const std::string& varName)
 {
   this->SetInput(idx, const_cast<TImage *>( image ));
@@ -96,7 +96,7 @@ void NaryParserImageFilter<TImage>
 }
 
 template <class TImage>
-void NaryParserImageFilter<TImage>
+void BandMathImageFilter<TImage>
 ::SetNthInputName(unsigned int idx, const std::string& varName)
 {
   m_VVarName[idx] = varName;
@@ -104,14 +104,14 @@ void NaryParserImageFilter<TImage>
 
 
 template <typename TImage>
-TImage * NaryParserImageFilter<TImage>
+TImage * BandMathImageFilter<TImage>
 ::GetNthInput(unsigned int idx)
 {
   return const_cast<TImage *>(this->GetInput(idx));
 }
 
 template< typename TImage >
-void NaryParserImageFilter<TImage>
+void BandMathImageFilter<TImage>
 ::SetExpression(const std::string& expression)
 {
   if (m_Expression != expression)
@@ -120,21 +120,21 @@ void NaryParserImageFilter<TImage>
 }
 
 template< typename TImage >
-std::string NaryParserImageFilter<TImage>
+std::string BandMathImageFilter<TImage>
 ::GetExpression() const
 {
   return m_Expression;
 }
 
 template< typename TImage >
-std::string NaryParserImageFilter<TImage>
+std::string BandMathImageFilter<TImage>
 ::GetNthInputName(unsigned int idx) const
 {
   return m_VVarName.at(idx);
 }
 
 template< typename TImage >
-void NaryParserImageFilter<TImage>
+void BandMathImageFilter<TImage>
 ::BeforeThreadedGenerateData()
 {
   typename std::vector<ParserType::Pointer>::iterator        itParser;
@@ -186,7 +186,7 @@ void NaryParserImageFilter<TImage>
 }
 
 template< typename TImage >
-void NaryParserImageFilter<TImage>
+void BandMathImageFilter<TImage>
 ::AfterThreadedGenerateData()
 {
   unsigned int nbThreads = this->GetNumberOfThreads();
@@ -213,7 +213,7 @@ void NaryParserImageFilter<TImage>
 }
 
 template< typename TImage >
-void NaryParserImageFilter<TImage>
+void BandMathImageFilter<TImage>
 ::ThreadedGenerateData(const ImageRegionType& outputRegionForThread,
            int threadId)
 {
