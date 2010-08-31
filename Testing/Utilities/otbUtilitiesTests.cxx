@@ -31,6 +31,7 @@ REGISTER_TEST(ossimKeywordlistTest);
 REGISTER_TEST(ossimElevManagerTest);
 REGISTER_TEST(ossimXmlDocumentTest);
 REGISTER_TEST(ossimTileMapModelTest);
+REGISTER_TEST(ossimpluginsHermiteInterpolationTest);
 REGISTER_TEST(svmGenericKernelFunctor);
 REGISTER_TEST(svmTest);
 REGISTER_TEST(svmGenericKernelTest);

@@ -1,0 +1,81 @@
+
+#include <cstdlib>
+#include <iostream>
+#include <iomanip>
+
+#include "otb/HermiteInterpolator.h"
+
+int ossimpluginsHermiteInterpolationTest(int argc, char * argv[])
+{
+  double xref[11];
+  xref[0] = 56640.0;
+  xref[1] = 56700.0;
+  xref[2] = 56760.0;
+  xref[3] = 56820.0;
+  xref[4] = 56880.0;
+  xref[5] = 56940.0;
+  xref[6] = 57000.0;
+  xref[7] = 57060.0;
+  xref[8] = 57120.0;
+  xref[9] = 57180.0;
+  xref[10] = 57240.0;
+
+  double yref[11];
+
+  yref[0] = -1556122.3685;
+  yref[1] = -1489827.1436;
+  yref[2] = -1416422.8137;
+  yref[3] = -1336447.1933;
+  yref[4] = -1250469.0644;
+  yref[5] = -1159084.8222;
+  yref[6] = -1062914.9785;
+  yref[7] = -962600.5575;
+  yref[8] = -858799.3885;
+  yref[9] = -752182.3142;
+  yref[10] = -643429.3481;
+
+  double dyref[11];
+
+  dyref[0] = 1042.82980;
+  dyref[1] = 1165.61122;
+  dyref[2] = 1279.70506;
+  dyref[3] = 1384.56817;
+  dyref[4] = 1479.71193;
+  dyref[5] = 1564.70493;
+  dyref[6] = 1639.17497;
+  dyref[7] = 1702.81080;
+  dyref[8] = 1755.36374;
+  dyref[9] = 1796.64883;
+  dyref[10] = 1826.54539;
+
+
+  double x = 56942.862208;
+
+  ossimplugins::HermiteInterpolator* interp = new ossimplugins::HermiteInterpolator(11, xref, yref, dyref);
+
+  double y = 0;
+  double dy = 0;
+  interp->Interpolate(x, y, dy);
+
+  std::cout << std::setprecision(15) << "Value at " << x << " : " << y << " (derivative " << dy << ")\n";
+  std::cout << "- Should be :           -1154600.87561283 (derivative 1568.49913322402)" << std::endl;
+
+
+  //Performance test
+  int nTest = 1000000;
+  timespec startClock, endClock;
+  clock_gettime(CLOCK_REALTIME, &startClock);
+
+  for (int i = 0; i < nTest; ++i)
+    {
+    double x2 = x + 200./nTest;
+    interp->Interpolate(x2, y, dy);
+    }
+
+  clock_gettime(CLOCK_REALTIME, &endClock);
+  std::cout << "Computation time: " << std::setprecision(15)
+            << (endClock.tv_sec-startClock.tv_sec) + (endClock.tv_nsec-startClock.tv_nsec)/1000000000. << std::endl;
+
+
+  return EXIT_SUCCESS;
+}
