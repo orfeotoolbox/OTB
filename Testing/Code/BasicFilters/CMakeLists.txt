@@ -28,9 +28,7 @@ SET(BASICFILTERS_TESTS9 ${CXX_TEST_PATH}/otbBasicFiltersTests9)
 SET(BASICFILTERS_TESTS10 ${CXX_TEST_PATH}/otbBasicFiltersTests10)
 SET(BASICFILTERS_TESTS11 ${CXX_TEST_PATH}/otbBasicFiltersTests11)
 SET(BASICFILTERS_TESTS12 ${CXX_TEST_PATH}/otbBasicFiltersTests12)
-IF(OTB_COMPILE_MUPARSER)
-  SET(BASICFILTERS_TESTS13 ${CXX_TEST_PATH}/otbBasicFiltersTests13)
-ENDIF(OTB_COMPILE_MUPARSER)
+SET(BASICFILTERS_TESTS13 ${CXX_TEST_PATH}/otbBasicFiltersTests13)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests1 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1633,15 +1631,11 @@ ADD_TEST(bfTvImageAndVectorImageOperationFilterTest ${BASICFILTERS_TESTS12}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # ----------------------------     otbNaryParserFunctorImageFilter   ----------------------------
-IF(OTB_COMPILE_MUPARSER)
-
 ADD_TEST(bfTuBandMathImageFilter ${BASICFILTERS_TESTS13}
   otbBandMathImageFilterNew)
 
 ADD_TEST(bfTvBandMathImageFilter ${BASICFILTERS_TESTS13}
   otbBandMathImageFilter)
-
-ENDIF(OTB_COMPILE_MUPARSER)
 
 
 # A enrichir
@@ -1878,13 +1872,11 @@ otbImageAndVectorImageOperationFilterNew.cxx
 otbImageAndVectorImageOperationFilterTest.cxx
 )
 
-IF(OTB_COMPILE_MUPARSER)
-# A enrichir
 SET(BasicFilters_SRCS13
 otbBasicFiltersTests13.cxx
 otbBandMathImageFilter.cxx
 )
-ENDIF(OTB_COMPILE_MUPARSER)
+
 
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests1 "${BasicFilters_SRCS1}" "OTBBasicFilters;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests2 "${BasicFilters_SRCS2}" "OTBBasicFilters;OTBIO;OTBTesting")
@@ -1898,8 +1890,6 @@ OTB_ADD_EXECUTABLE(otbBasicFiltersTests9 "${BasicFilters_SRCS9}" "OTBBasicFilter
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests10 "${BasicFilters_SRCS10}" "OTBBasicFilters;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests11 "${BasicFilters_SRCS11}" "OTBBasicFilters;ITKAlgorithms;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests12 "${BasicFilters_SRCS12}" "OTBBasicFilters;ITKAlgorithms;OTBIO;OTBTesting")
-IF(OTB_COMPILE_MUPARSER)
- OTB_ADD_EXECUTABLE(otbBasicFiltersTests13 "${BasicFilters_SRCS13}" "OTBBasicFilters;OTBIO;OTBTesting")
-ENDIF(OTB_COMPILE_MUPARSER)
+OTB_ADD_EXECUTABLE(otbBasicFiltersTests13 "${BasicFilters_SRCS13}" "OTBBasicFilters;OTBIO;OTBTesting")
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

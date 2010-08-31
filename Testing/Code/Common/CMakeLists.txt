@@ -32,9 +32,7 @@ IF(OTB_USE_PQXX)
   SET(COMMON_TESTS10 ${CXX_TEST_PATH}/otbCommonTests10)
 ENDIF(OTB_USE_PQXX)
 SET(COMMON_TESTS11 ${CXX_TEST_PATH}/otbCommonTests11)
-IF(OTB_COMPILE_MUPARSER)
 SET(COMMON_TESTS12 ${CXX_TEST_PATH}/otbCommonTests12)
-ENDIF(OTB_COMPILE_MUPARSER)
 SET(COMMON_TESTS13 ${CXX_TEST_PATH}/otbCommonTests13)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1000,7 +998,6 @@ otbVectorDataToLabelMapFilter
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # ----------------  otbParser  ---------------------#
-IF(OTB_COMPILE_MUPARSER)
   ADD_TEST(coTuParser ${COMMON_TESTS12}
     otbParserTestNew
     )
@@ -1008,7 +1005,6 @@ IF(OTB_COMPILE_MUPARSER)
   ADD_TEST(coTvParser ${COMMON_TESTS12}
     otbParserTest
     )
-ENDIF(OTB_COMPILE_MUPARSER)
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1182,12 +1178,10 @@ otbLabelObjectMapVectorizer.cxx
 )
 
 
-IF(OTB_COMPILE_MUPARSER)
 SET(BasicCommon_SRCS12
 otbCommonTests12.cxx
 otbParserTest.cxx
 )
-ENDIF(OTB_COMPILE_MUPARSER)
 
 
 SET(BasicCommon_SRCS13
@@ -1212,10 +1206,8 @@ TARGET_LINK_LIBRARIES(otbCommonTests10 OTBIO  OTBTesting OTBGeospatialAnalysis p
 ENDIF(OTB_USE_PQXX)
 ADD_EXECUTABLE(otbCommonTests11 otbCommonTests11.cxx ${BasicCommon_SRCS11})
 TARGET_LINK_LIBRARIES(otbCommonTests11 OTBIO  OTBTesting itkvcl)
-IF(OTB_COMPILE_MUPARSER)
-  OTB_ADD_EXECUTABLE(otbCommonTests12 "${BasicCommon_SRCS12}" "OTBIO;OTBTesting")
-ENDIF(OTB_COMPILE_MUPARSER)
 
+OTB_ADD_EXECUTABLE(otbCommonTests12 "${BasicCommon_SRCS12}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbCommonTests13 "${BasicCommon_SRCS13}" "OTBIO;OTBTesting")
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
