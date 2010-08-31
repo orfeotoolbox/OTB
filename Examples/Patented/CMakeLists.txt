@@ -80,7 +80,7 @@ SIFTDisparityMapEstimationTest
 )
 
 
-ADD_TEST(feTeScaleInvariantFeatureImageFilterTest ${EXE_TESTS2}
+ADD_TEST(feTeScaleInvariantFeatureImageFilterTest ${EXE_TESTS}
         --compare-n-images ${TOL} 4
         ${BASELINE}/ScaleInvariantFeatureImageFilterOutput1.png
         ${TEMP}/ScaleInvariantFeatureImageFilterOutput1.png
@@ -102,7 +102,7 @@ ADD_TEST(feTeScaleInvariantFeatureImageFilterTest ${EXE_TESTS2}
 )
 
 
-ADD_TEST(feTeSIFTFastExampleTest ${EXE_TESTS2}
+ADD_TEST(feTeSIFTFastExampleTest ${EXE_TESTS}
   --compare-image ${TOL}
    ${BASELINE}/ROISpot5SiftFast.png
    ${TEMP}/ROISpot5SiftFast.png
