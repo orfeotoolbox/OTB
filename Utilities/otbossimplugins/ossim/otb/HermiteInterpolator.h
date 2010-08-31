@@ -59,7 +59,7 @@ public:
     * @param dy [out] value of the differential coefficient at abscissa x
     * @return Different of 0 if an error occurs
     */
-   int Interpolate(const double x, double& y, double& dy);
+   int Interpolate(const double x, double& y, double& dy) const;
 protected:
 
    void Clear();

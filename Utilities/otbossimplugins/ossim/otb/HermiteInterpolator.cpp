@@ -12,6 +12,7 @@
 #include <otb/HermiteInterpolator.h>
 
 #include <string>
+#include <cassert>
 
 namespace ossimplugins
 {
@@ -65,6 +66,20 @@ HermiteInterpolator::HermiteInterpolator(int nbrPoints, double* x, double* y, do
   else
   {
     _dy = NULL;
+  }
+
+  for (int i = 1 ; i < _nbrPoints ; i++)
+  {
+    /**
+     * @todo Verifier que l'interpolateur n'ai pas besoin ques les abscisses soitent strictement croissantes
+     */
+
+    /*
+     * Les abscisses ne sont pas croissantes
+     */
+//    if (_x[i] <= _x[i-1])
+//      std::cerr << "WARNING: Hermite interpolation assumes increasing x values" << std::endl;
+    assert(_x[i] > _x[i-1]);
   }
 }
 
@@ -163,8 +178,10 @@ HermiteInterpolator& HermiteInterpolator::operator =(const HermiteInterpolator& 
 }
 
 
-int HermiteInterpolator::Interpolate(const double x, double& y, double& dy)
+int HermiteInterpolator::Interpolate(const double x, double& y, double& dy) const
 {
+  //NOTE assume that x is increasing
+
   int k1, k2 ;
   double f, d, p, q, r, s, t, p2 ;
   /*
@@ -172,20 +189,8 @@ int HermiteInterpolator::Interpolate(const double x, double& y, double& dy)
    */
   if (_nbrPoints < 2)
     return -1;
-  else
-  {
-    for (int i = 1 ; i < _nbrPoints ; i++)
-    {
-      /**
-       * @todo Verifier que l'interpolateur n'ai pas besoin ques les abscisses soitent strictement croissantes
-       */
 
-      /*
-       * Les abscisses ne sont pas croissantes
-       */
-      if (_x[i] <= _x[i-1])
-        return -2;
-    }
+
 
     y = 0.0 ;
     dy = 0.0 ;
@@ -238,7 +243,6 @@ int HermiteInterpolator::Interpolate(const double x, double& y, double& dy)
       dy = dy + f * _y[i] + d * _dy[i] ;
     }
 
-  }
   return 0;
 }
 
