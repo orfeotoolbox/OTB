@@ -75,7 +75,7 @@ ADD_TEST(sarTvHHnHVPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
 ADD_TEST(sarTvVHnVVPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
   --compare-image ${EPSILON_12}   ${BASELINE}/sarTvPolarimetricSynthesis_VH_VV.tif
                     ${TEMP}/resPolarimetricSynthesis_VH_VV.tif
-        otbHHnHVPolarimetricSynthesisFilter
+        otbVHnVVPolarimetricSynthesisFilter
         ${INPUTDATA}/RSAT_imagery_VH.tif
         ${INPUTDATA}/RSAT_imagery_VV.tif
         ${TEMP}/resPolarimetricSynthesis_VH_VV.tif

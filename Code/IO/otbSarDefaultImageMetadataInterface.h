@@ -48,12 +48,72 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(SarDefaultImageMetadataInterface, SarImageMetadataInterface);
 
-  typedef Superclass::ImageType                ImageType;
-  typedef Superclass::MetaDataDictionaryType   MetaDataDictionaryType;
-  typedef Superclass::VectorType               VectorType;
-  typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
-  typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
+  typedef Superclass::ImageType                      ImageType;
+  typedef ImageType::IndexType                       IndexType;
+  typedef Superclass::MetaDataDictionaryType         MetaDataDictionaryType;
+  typedef Superclass::VectorType                     VectorType;
+  typedef Superclass::VariableLengthVectorType       VariableLengthVectorType;
+  typedef Superclass::ImageKeywordlistType           ImageKeywordlistType;
+  typedef itk::PointSet<double, 2>                   PointSetType;
+  typedef PointSetType::Pointer                      PointSetPointer;
+  typedef double                                     RealType;
+  typedef PointSetType::PointType                    PointType;
 
+
+  RealType   GetRadiometricCalibrationScale() const
+  {
+    itkExceptionMacro("GetRadiometricCalibrationScale() not implemented in SarDefaultImageMetadataInterface, no captor type found");
+  }
+
+  PointSetPointer GetRadiometricCalibrationAntennaPatternNewGain() const
+  {
+    itkExceptionMacro("GetRadiometricCalibrationAntennaPatternNewGain() not implemented in SarDefaultImageMetadataInterface, no captor type found");
+  }
+
+  PointSetPointer GetRadiometricCalibrationAntennaPatternOldGain() const
+  {
+    itkExceptionMacro("GetRadiometricCalibrationAntennaPatternOldGain() not implemented in SarDefaultImageMetadataInterface, no captor type found");
+  }
+
+  PointSetPointer GetRadiometricCalibrationIncidenceAngle() const
+  {
+    itkExceptionMacro("GetRadiometricCalibrationIncidenceAngle() not implemented in SarDefaultImageMetadataInterface, no captor type found");
+  }
+
+  PointSetPointer GetRadiometricCalibrationRangeSpreadLoss() const
+  {
+    itkExceptionMacro("GetRadiometricCalibrationRangeSpreadLoss() not implemented in SarDefaultImageMetadataInterface, no captor type found");
+  }
+
+  PointSetPointer GetRadiometricCalibrationNoise() const
+  {
+    itkExceptionMacro("GetRadiometricCalibrationNoise() not implemented in SarDefaultImageMetadataInterface, no captor type found");
+  }
+
+  IndexType GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree() const
+  {
+    itkExceptionMacro("GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree() not implemented in SarDefaultImageMetadataInterface, no captor type found");
+  }
+
+  IndexType GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree() const
+  {
+    itkExceptionMacro("GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree() not implemented in SarDefaultImageMetadataInterface, no captor type found");
+  }
+
+  IndexType GetRadiometricCalibrationIncidenceAnglePolynomialDegree() const
+  {
+    itkExceptionMacro("GetRadiometricCalibrationIncidenceAnglePolynomialDegree() not implemented in SarDefaultImageMetadataInterface, no captor type found");
+  }
+
+  IndexType GetRadiometricCalibrationRangeSpreadLossPolynomialDegree() const
+  {
+    itkExceptionMacro("GetRadiometricCalibrationRangeSpreadLossPolynomialDegree() not implemented in SarDefaultImageMetadataInterface, no captor type found");
+  }
+
+  IndexType GetRadiometricCalibrationNoisePolynomialDegree() const
+  {
+    itkExceptionMacro("GetRadiometricCalibrationNoisePolynomialDegree() not implemented in SarDefaultImageMetadataInterface, no captor type found");
+  }
 
   /** Get the imaging acquisition day from the ossim metadata */
   int GetDay() const
@@ -103,16 +163,11 @@ public:
     itkExceptionMacro("GetProductionYear not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
-  /** Get Incidence Angle  from the ossim metadata*/
-  PointSetPointer GetIncidenceAnglePointSet() const
-  {
-    itkExceptionMacro("GetIncidenceAnglePointSet not implemented in SarDefaultImageMetadataInterface, no captor type found");
-  }
 
   bool CanRead() const
   {
     // This clas is the default one, it has to be able to call every metadata
-    return true;
+    return false;
   }
 
   /** Get the 3 spectral band numbers corresponding to the default display for visualization,

@@ -2580,11 +2580,20 @@ ADD_TEST(ioTuDefaultImageMetadataInterfaceFactoryNew ${IO_TESTS20}
 ADD_TEST(ioTuOpticalDefaultImageMetadataInterfaceFactoryNew ${IO_TESTS20}
         otbOpticalDefaultImageMetadataInterfaceFactoryNew )
 
+ADD_TEST(ioTuOpticalDefaultImageMetadataInterfaceNew ${IO_TESTS20}
+        otbOpticalDefaultImageMetadataInterfaceNew )
+
+ADD_TEST(ioTuOpticalDefaultImageMetadataInterface ${IO_TESTS20}
+        otbOpticalDefaultImageMetadataInterface )
+
 ADD_TEST(ioTuSarDefaultImageMetadataInterfaceFactoryNew ${IO_TESTS20}
         otbSarDefaultImageMetadataInterfaceFactoryNew )
 
 ADD_TEST(ioTuSarDefaultImageMetadataInterfaceNew ${IO_TESTS20}
         otbSarDefaultImageMetadataInterfaceNew )
+
+ADD_TEST(ioTuSarDefaultImageMetadataInterface ${IO_TESTS20}
+        otbSarDefaultImageMetadataInterface )
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2800,8 +2809,11 @@ otbIOTests20.cxx
 otbImageFileReaderTestSensorPixelValue.cxx
 otbDefaultImageMetadataInterfaceFactoryNew.cxx
 otbOpticalDefaultImageMetadataInterfaceFactoryNew.cxx
+otbOpticalDefaultImageMetadataInterfaceNew.cxx
+otbOpticalDefaultImageMetadataInterface.cxx
 otbSarDefaultImageMetadataInterfaceFactoryNew.cxx
 otbSarDefaultImageMetadataInterfaceNew.cxx
+otbSarDefaultImageMetadataInterface.cxx
 )
 
 SET(BasicIO_SRCS21

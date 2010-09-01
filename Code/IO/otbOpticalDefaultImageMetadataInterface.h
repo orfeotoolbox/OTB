@@ -147,7 +147,7 @@ public:
   bool CanRead() const
   {
     // This clas is the default one, it has to be able to call every metadata
-    return true;
+    return false;
   }
 
   /** Get the 3 spectral band numbers corresponding to the default display for visualization,
