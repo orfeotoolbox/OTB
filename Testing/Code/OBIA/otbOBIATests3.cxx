@@ -36,4 +36,6 @@ REGISTER_TEST(otbLabelMapToSampleListFilterNew);
 REGISTER_TEST(otbLabelMapToSampleListFilter);
 REGISTER_TEST(otbLabelMapWithClassLabelToLabeledSampleListFilterNew);
 REGISTER_TEST(otbLabelMapWithClassLabelToLabeledSampleListFilter);
+REGISTER_TEST(otbImageToLabelMapWithAttributesFilterNew);
+REGISTER_TEST(otbImageToLabelMapWithAttributesFilter);
 }
