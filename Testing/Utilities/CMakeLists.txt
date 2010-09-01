@@ -68,6 +68,9 @@ ADD_TEST(utTvOssimTileMapModelTestToulouse ${UTILITIES_TESTS}
 	1.44295
 	${TEMP}/utOssimTileMapModelToulouse.txt
 	)
+	
+ADD_TEST(utTvOssimpluginsHermiteInterpolationTest ${UTILITIES_TESTS}
+     ossimpluginsHermiteInterpolationTest)
 
 # -------            lib otbsvm   ------------------------------
 
@@ -475,6 +478,7 @@ ossimKeywordlistTest.cxx
 ossimElevManagerTest.cxx
 ossimXmlDocumentTest.cxx
 ossimTileMapModelTest.cxx
+ossimpluginsHermiteInterpolation.cxx
 svmGenericKernelFunctor.cxx
 svmTest.cxx
 svmGenericKernelTest.cxx

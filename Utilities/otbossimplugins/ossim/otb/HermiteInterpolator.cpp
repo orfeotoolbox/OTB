@@ -12,59 +12,80 @@
 #include <otb/HermiteInterpolator.h>
 
 #include <string>
+#include <cassert>
+#include <iostream> //tmp
+#include <iomanip> //tmp
 
 namespace ossimplugins
 {
 
 
 HermiteInterpolator::HermiteInterpolator():
-  _nbrPoints(0),
-  _x(NULL),
-  _y(NULL),
-  _dy(NULL)
+  theNPointsAvailable(0),
+  theXValues(NULL),
+  theYValues(NULL),
+  thedYValues(NULL),
+  prodC(NULL),
+  sumC(NULL),
+  isComputed(false)
 {
 }
 
 HermiteInterpolator::HermiteInterpolator(int nbrPoints, double* x, double* y, double* dy):
-  _nbrPoints(nbrPoints)
+  theNPointsAvailable(nbrPoints),
+  isComputed(false)
 {
   if(x != NULL)
   {
-    _x = new double[_nbrPoints];
-    for (int i=0;i<_nbrPoints;i++)
+    theXValues = new double[theNPointsAvailable];
+    for (int i=0;i<theNPointsAvailable;i++)
     {
-      _x[i] = x[i];
+      theXValues[i] = x[i];
     }
   }
   else
   {
-    _x = NULL;
+    theXValues = NULL;
   }
 
   if(y != NULL)
   {
-    _y = new double[_nbrPoints];
-    for (int i=0;i<_nbrPoints;i++)
+    theYValues = new double[theNPointsAvailable];
+    for (int i=0;i<theNPointsAvailable;i++)
     {
-      _y[i] = y[i];
+      theYValues[i] = y[i];
     }
   }
   else
   {
-    _y = NULL;
+    theYValues = NULL;
   }
 
   if(dy != NULL)
   {
-    _dy = new double[_nbrPoints];
-    for (int i=0;i<_nbrPoints;i++)
+    thedYValues = new double[theNPointsAvailable];
+    for (int i=0;i<theNPointsAvailable;i++)
     {
-      _dy[i] = dy[i];
+      thedYValues[i] = dy[i];
     }
   }
   else
   {
-    _dy = NULL;
+    thedYValues = NULL;
+  }
+
+  for (int i = 1 ; i < theNPointsAvailable ; i++)
+  {
+    /**
+     * @todo Verifier que l'interpolateur n'ai pas besoin ques les abscisses soitent strictement croissantes
+     */
+
+    /*
+     * Les abscisses ne sont pas croissantes
+     */
+//    if (theXValues[i] <= theXValues[i-1])
+//      std::cerr << "WARNING: Hermite interpolation assumes increasing x values" << std::endl;
+    assert(theXValues[i] > theXValues[i-1]);
   }
 }
 
@@ -74,194 +95,244 @@ HermiteInterpolator::~HermiteInterpolator()
 }
 
 HermiteInterpolator::HermiteInterpolator(const HermiteInterpolator& rhs):
-  _nbrPoints(rhs._nbrPoints)
+  theNPointsAvailable(rhs.theNPointsAvailable),
+  isComputed(false)
 {
-  if(rhs._x != NULL)
+  if(rhs.theXValues != NULL)
   {
-    _x = new double[_nbrPoints];
-    for (int i=0;i<_nbrPoints;i++)
+    theXValues = new double[theNPointsAvailable];
+    for (int i=0;i<theNPointsAvailable;i++)
     {
-      _x[i] = rhs._x[i];
+      theXValues[i] = rhs.theXValues[i];
     }
   }
   else
   {
-    _x = NULL;
+    theXValues = NULL;
   }
 
-  if(rhs._y != NULL)
+  if(rhs.theYValues != NULL)
   {
-    _y = new double[_nbrPoints];
-    for (int i=0;i<_nbrPoints;i++)
+    theYValues = new double[theNPointsAvailable];
+    for (int i=0;i<theNPointsAvailable;i++)
     {
-      _y[i] = rhs._y[i];
+      theYValues[i] = rhs.theYValues[i];
     }
   }
   else
   {
-    _y = NULL;
+    theYValues = NULL;
   }
 
-  if(rhs._dy != NULL)
+  if(rhs.thedYValues != NULL)
   {
-    _dy = new double[_nbrPoints];
-    for (int i=0;i<_nbrPoints;i++)
+    thedYValues = new double[theNPointsAvailable];
+    for (int i=0;i<theNPointsAvailable;i++)
     {
-      _dy[i] = rhs._dy[i];
+      thedYValues[i] = rhs.thedYValues[i];
     }
   }
   else
   {
-    _dy = NULL;
+    thedYValues = NULL;
   }
 }
 
 HermiteInterpolator& HermiteInterpolator::operator =(const HermiteInterpolator& rhs)
 {
   Clear();
-  _nbrPoints = rhs._nbrPoints;
-  if(rhs._x != NULL)
+  theNPointsAvailable = rhs.theNPointsAvailable;
+  isComputed = false;
+  if(rhs.theXValues != NULL)
   {
-    _x = new double[_nbrPoints];
-    for (int i=0;i<_nbrPoints;i++)
+    theXValues = new double[theNPointsAvailable];
+    for (int i=0;i<theNPointsAvailable;i++)
     {
-      _x[i] = rhs._x[i];
+      theXValues[i] = rhs.theXValues[i];
     }
   }
   else
   {
-    _x = NULL;
+    theXValues = NULL;
   }
 
-  if(rhs._y != NULL)
+  if(rhs.theYValues != NULL)
   {
-    _y = new double[_nbrPoints];
-    for (int i=0;i<_nbrPoints;i++)
+    theYValues = new double[theNPointsAvailable];
+    for (int i=0;i<theNPointsAvailable;i++)
     {
-      _y[i] = rhs._y[i];
+      theYValues[i] = rhs.theYValues[i];
     }
   }
   else
   {
-    _y = NULL;
+    theYValues = NULL;
   }
 
-  if(rhs._dy != NULL)
+  if(rhs.thedYValues != NULL)
   {
-    _dy = new double[_nbrPoints];
-    for (int i=0;i<_nbrPoints;i++)
+    thedYValues = new double[theNPointsAvailable];
+    for (int i=0;i<theNPointsAvailable;i++)
     {
-      _dy[i] = rhs._dy[i];
+      thedYValues[i] = rhs.thedYValues[i];
     }
   }
   else
   {
-    _dy = NULL;
+    thedYValues = NULL;
   }
 
   return *this;
 }
 
-
-int HermiteInterpolator::Interpolate(const double x, double& y, double& dy)
+// Interpolation method for the value and the derivative
+int HermiteInterpolator::Interpolate(double x, double& y, double& dy) const
 {
-  int k1, k2 ;
-  double f, d, p, q, r, s, t, p2 ;
-  /*
-   * Il n'y a pas assez de points pour faire l'interpolation
-   */
-  if (_nbrPoints < 2)
-    return -1;
-  else
+  //NOTE assume that x is increasing
+
+  // Not enough points to interpolate
+  if (theNPointsAvailable < 2) return -1;
+
+  y = 0.0;
+  dy = 0.0;
+
+  //Precompute useful value if they are not available
+  if (!isComputed)
   {
-    for (int i = 1 ; i < _nbrPoints ; i++)
+    Precompute();
+  }
+
+  for (int i = 0; i < theNPointsAvailable; i++)
+  {
+    double si = 0.0;
+    double hi = 1.0;
+    double ui = 0; //derivative computation
+    double r = x - theXValues[i];
+
+    for (int j = 0; j < theNPointsAvailable; j++)
     {
-      /**
-       * @todo Verifier que l'interpolateur n'ai pas besoin ques les abscisses soitent strictement croissantes
-       */
-
-      /*
-       * Les abscisses ne sont pas croissantes
-       */
-      if (_x[i] <= _x[i-1])
-        return -2;
-    }
-
-    y = 0.0 ;
-    dy = 0.0 ;
-    for (int i = 0 ; i < _nbrPoints ; i++)
-    {
-      p = 1.0 ;
-      q = 0.0 ;
-      s = 0.0 ;
-      for (int j = 0 ; j < i ; j++)
+      if (j != i)
       {
-        r  = _x[i] - _x[j] ;
-        p  = p * ((x - _x[j]) / r) ;
-        q  = q + 1.0 / r ;
-        k1 = (i<j) ? i : j ;
-        k2 = (i<j) ? j : i ;
-        t  = 1.0 ;
-        for (int k = 0 ; k < k1 ; k++)
-          t = t * (x - _x[k]) / (_x[i] - _x[k]) ;
-        for (int k = k1+1 ; k < k2 ; k++)
-          t = t * (x - _x[k]) / (_x[i] - _x[k]) ;
-        for (int k = k2+1 ; k < _nbrPoints ; k++)
-          t = t * (x-_x[k]) / (_x[i]-_x[k]) ;
-        s = s + t / r ;
+        hi = hi * (x - theXValues[j]);
+        ui = ui + 1 / (x - theXValues[j]);//derivative computation
       }
-
-      for (int j = i+1 ; j < _nbrPoints ; j++)
-      {
-        r  = _x[i] - _x[j] ;
-        p  = p * ((x - _x[j]) / r) ;
-        q  = q + 1.0 / r ;
-        k1 = (i < j) ? i : j ;
-        k2 = (i < j) ? j : i ;
-        t  = 1.0 ;
-        for (int k = 0 ; k < k1 ; k++)
-          t = t * (x - _x[k]) / (_x[i] - _x[k]) ;
-        for (int k = k1+1 ; k < k2 ; k++)
-          t = t * (x - _x[k]) / (_x[i] - _x[k]) ;
-        for (int k = k2+1 ; k < _nbrPoints ; k++)
-          t = t * (x - _x[k]) / (_x[i] - _x[k]) ;
-        s = s + t / r ;
-      }
-
-      r  = x - _x[i] ;
-      p2 = p * p ;
-      f  = p2 * (1.0 - 2. * q * r) ;
-      d  = p2 * r ;
-      y = y + f * _y[i] + d * _dy[i] ;
-      f  = 2.0 * p * (s * (1.0 - 2.0 * q * r) - p * q) ;
-      d  = p * (p + 2.0 * r * s) ;
-      dy = dy + f * _y[i] + d * _dy[i] ;
     }
+    hi *= prodC[i];
+    si = sumC[i];
+
+    double f = 1.0 - 2.0 * r * si;
+
+    y += (theYValues[i] * f + thedYValues[i] * r) * hi * hi;
+
+    ui *= hi;//derivative computation
+
+    double fp = 2.0 * hi * (ui * (1.0 - 2.0 * si * r) - hi * si);//derivative computation
+    double d = hi * (hi + 2.0 * r * ui);//derivative computation
+
+    dy += fp * theYValues[i] + d * thedYValues[i];//derivative computation
 
   }
+
   return 0;
+}
+
+// Interpolation method for the value only
+// this is about 5 times faster and should be used when time
+// is a constraint.
+int HermiteInterpolator::Interpolate(double x, double& y) const
+{
+  //NOTE assume that x is increasing
+
+  // Not enough points to interpolate
+  if (theNPointsAvailable < 2) return -1;
+
+  y = 0.0;
+
+  //Precompute useful value if they are not available
+  if (!isComputed)
+  {
+    Precompute();
+  }
+
+  for (int i = 0; i < theNPointsAvailable; i++)
+  {
+    double si = 0.0;
+    double hi = 1.0;
+    double r = x - theXValues[i];
+
+    for (int j = 0; j < theNPointsAvailable; j++)
+    {
+      if (j != i)
+      {
+        hi = hi * (x - theXValues[j]);
+      }
+    }
+    hi *= prodC[i];
+    si = sumC[i];
+
+    double f = 1.0 - 2.0 * r * si;
+
+    y += (theYValues[i] * f + thedYValues[i] * r) * hi * hi;
+
+  }
+
+  return 0;
+}
+
+int HermiteInterpolator::Precompute() const
+{
+  prodC = new double[theNPointsAvailable];
+  sumC= new double[theNPointsAvailable];
+
+  for (int i = 0; i < theNPointsAvailable; i++)
+  {
+    prodC[i] = 1;
+    sumC[i] = 0;
+    for (int j = 0; j < theNPointsAvailable; j++)
+    {
+      if (j != i)
+      {
+        double v = 1.0 / (theXValues[i] - theXValues[j]);
+        prodC[i] *= v;
+        sumC[i]  += v;
+      }
+    }
+  }
+  isComputed = true;
 }
 
 void HermiteInterpolator::Clear()
 {
-  if (_x != NULL)
+  if (theXValues != NULL)
   {
-    delete[] _x;
-    _x = NULL;
+    delete[] theXValues;
+    theXValues = NULL;
   }
 
-  if (_y != NULL)
+  if (theYValues != NULL)
   {
-    delete[] _y;
-    _y = NULL;
+    delete[] theYValues;
+    theYValues = NULL;
   }
 
-  if (_dy != NULL)
+  if (thedYValues != NULL)
   {
-    delete[] _dy;
-    _dy = NULL;
+    delete[] thedYValues;
+    thedYValues = NULL;
   }
 
-  _nbrPoints = 0;
+  if (prodC != NULL)
+  {
+    delete[] prodC;
+    prodC = NULL;
+  }
+
+  if (sumC != NULL)
+  {
+    delete[] sumC;
+    prodC = NULL;
+  }
+  isComputed = false;
+  theNPointsAvailable = 0;
 }
 }

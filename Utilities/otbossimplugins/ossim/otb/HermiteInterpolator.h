@@ -52,6 +52,7 @@ public:
     * @brief Affectation operator
     */
    HermiteInterpolator& operator =(const HermiteInterpolator& rhs);
+
    /**
     * @brief This function performs the interpolation for the abscissa x
     * @param x Abscissa of the interpolation
@@ -59,14 +60,31 @@ public:
     * @param dy [out] value of the differential coefficient at abscissa x
     * @return Different of 0 if an error occurs
     */
-   int Interpolate(const double x, double& y, double& dy);
+   int Interpolate(double x, double& y, double& dy) const;
+
+   /**
+    * @brief This function performs the interpolation for the abscissa x
+    * @param x Abscissa of the interpolation
+    * @param y [out] value of the point at the abscissa x
+    * @return Different of 0 if an error occurs
+    */
+   int Interpolate(double x, double& y) const;
+
 protected:
 
    void Clear();
-   int _nbrPoints;
-   double* _x;
-   double* _y;
-   double* _dy;
+   int theNPointsAvailable;
+   double* theXValues;
+   double* theYValues;
+   double* thedYValues;
+
+   mutable double* prodC;
+   mutable double* sumC;
+   mutable bool isComputed;
+
+   int Precompute() const; // const in a semantic way
+
+
 private:
 };
 }
