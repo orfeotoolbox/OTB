@@ -63,10 +63,18 @@ public:
 protected:
 
    void Clear();
-   int _nbrPoints;
-   double* _x;
-   double* _y;
-   double* _dy;
+   int theNPointsAvailable;
+   double* theXValues;
+   double* theYValues;
+   double* thedYValues;
+
+   mutable double* prodC;
+   mutable double* sumC;
+   mutable bool isComputed;
+
+   int Precompute() const; // const in a semantic way
+
+
 private:
 };
 }
