@@ -51,6 +51,7 @@ int ossimpluginsHermiteInterpolationTest(int argc, char * argv[])
 
   double x = 56942.862208;
 
+  std::cout << " *** Test y and dy ***"  << std::endl;
   ossimplugins::HermiteInterpolator* interp = new ossimplugins::HermiteInterpolator(11, xref, yref, dyref);
 
   double y = 0;
@@ -76,6 +77,29 @@ int ossimpluginsHermiteInterpolationTest(int argc, char * argv[])
   std::cout << "Computation time: " << std::setprecision(15)
             << (endClock.tv_sec-startClock.tv_sec) + (endClock.tv_nsec-startClock.tv_nsec)/1000000000. << std::endl;
 
+
+  std::cout << " *** Test y only ***"  << std::endl;
+  ossimplugins::HermiteInterpolator* interp2 = new ossimplugins::HermiteInterpolator(11, xref, yref, dyref);
+
+  double y2 = 0;
+  interp2->Interpolate(x, y2);
+
+   std::cout << std::setprecision(15) << "Value at " << x << " : " << y2 << "\n";
+   std::cout << "- Should be :           -1154600.87561283" << std::endl;
+
+
+   //Performance test
+   clock_gettime(CLOCK_REALTIME, &startClock);
+
+   for (int i = 0; i < nTest; ++i)
+     {
+     double x2 = x + 200./nTest;
+     interp2->Interpolate(x2, y2);
+     }
+
+   clock_gettime(CLOCK_REALTIME, &endClock);
+   std::cout << "Computation time: " << std::setprecision(15)
+             << (endClock.tv_sec-startClock.tv_sec) + (endClock.tv_nsec-startClock.tv_nsec)/1000000000. << std::endl;
 
   return EXIT_SUCCESS;
 }

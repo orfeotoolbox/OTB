@@ -185,13 +185,10 @@ HermiteInterpolator& HermiteInterpolator::operator =(const HermiteInterpolator& 
   return *this;
 }
 
-
-int HermiteInterpolator::Interpolate(const double x, double& y, double& dy) const
+// Interpolation method for the value and the derivative
+int HermiteInterpolator::Interpolate(double x, double& y, double& dy) const
 {
-
   //NOTE assume that x is increasing
-  int k1, k2 ;
-  double f, d, p, q, r, s, t, p2 ;
 
   // Not enough points to interpolate
   if (theNPointsAvailable < 2) return -1;
@@ -201,25 +198,25 @@ int HermiteInterpolator::Interpolate(const double x, double& y, double& dy) cons
 
   //Precompute useful value if they are not available
   if (!isComputed)
-    {
+  {
     Precompute();
-    }
+  }
 
   for (int i = 0; i < theNPointsAvailable; i++)
-    {
+  {
     double si = 0.0;
     double hi = 1.0;
     double ui = 0; //derivative computation
     double r = x - theXValues[i];
 
     for (int j = 0; j < theNPointsAvailable; j++)
-      {
+    {
       if (j != i)
-        {
+      {
         hi = hi * (x - theXValues[j]);
         ui = ui + 1 / (x - theXValues[j]);//derivative computation
-        }
       }
+    }
     hi *= prodC[i];
     si = sumC[i];
 
@@ -234,7 +231,50 @@ int HermiteInterpolator::Interpolate(const double x, double& y, double& dy) cons
 
     dy += fp * theYValues[i] + d * thedYValues[i];//derivative computation
 
+  }
+
+  return 0;
+}
+
+// Interpolation method for the value only
+// this is about 5 times faster and should be used when time
+// is a constraint.
+int HermiteInterpolator::Interpolate(double x, double& y) const
+{
+  //NOTE assume that x is increasing
+
+  // Not enough points to interpolate
+  if (theNPointsAvailable < 2) return -1;
+
+  y = 0.0;
+
+  //Precompute useful value if they are not available
+  if (!isComputed)
+  {
+    Precompute();
+  }
+
+  for (int i = 0; i < theNPointsAvailable; i++)
+  {
+    double si = 0.0;
+    double hi = 1.0;
+    double r = x - theXValues[i];
+
+    for (int j = 0; j < theNPointsAvailable; j++)
+    {
+      if (j != i)
+      {
+        hi = hi * (x - theXValues[j]);
+      }
     }
+    hi *= prodC[i];
+    si = sumC[i];
+
+    double f = 1.0 - 2.0 * r * si;
+
+    y += (theYValues[i] * f + thedYValues[i] * r) * hi * hi;
+
+  }
 
   return 0;
 }
@@ -245,19 +285,19 @@ int HermiteInterpolator::Precompute() const
   sumC= new double[theNPointsAvailable];
 
   for (int i = 0; i < theNPointsAvailable; i++)
-    {
+  {
     prodC[i] = 1;
     sumC[i] = 0;
     for (int j = 0; j < theNPointsAvailable; j++)
-      {
+    {
       if (j != i)
-        {
+      {
         double v = 1.0 / (theXValues[i] - theXValues[j]);
         prodC[i] *= v;
         sumC[i]  += v;
-        }
       }
     }
+  }
   isComputed = true;
 }
 
