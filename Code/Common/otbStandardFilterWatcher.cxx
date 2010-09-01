@@ -40,7 +40,7 @@ StandardFilterWatcher
 }
 
 StandardFilterWatcher
-::StandardFilterWatcher(const StandardFilterWatcher& watch)
+::StandardFilterWatcher(const StandardFilterWatcher& watch) : FilterWatcherBase(watch)
 {
   // Initialize state
   m_StarsCount = watch.m_StarsCount;
@@ -51,6 +51,7 @@ StandardFilterWatcher
 ::operator =(const StandardFilterWatcher& watch)
 {
   // Initialize state
+  FilterWatcherBase::operator=(watch);
   m_StarsCount = watch.m_StarsCount;
 }
 
