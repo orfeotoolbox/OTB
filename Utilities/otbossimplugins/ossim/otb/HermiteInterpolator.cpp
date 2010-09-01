@@ -297,6 +297,7 @@ int HermiteInterpolator::Precompute() const
     }
   }
   isComputed = true;
+  return 0;
 }
 
 void HermiteInterpolator::Clear()
