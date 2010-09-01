@@ -66,6 +66,11 @@ public:
   /** Destructor. */
   virtual ~WriterWatcherBase();
 
+  const char *GetNameOfClass()
+    {
+    return (m_Process.GetPointer() ? m_Process->GetNameOfClass() : "None");
+    }
+
   /** Methods to access member data */
   /** Get a pointer to the process object being watched. */
   itk::ProcessObject *GetProcess()

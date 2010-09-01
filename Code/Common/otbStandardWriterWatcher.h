@@ -62,6 +62,9 @@ public:
   StandardWriterWatcher(itk::ProcessObject* process, itk::ProcessObject * source,
                         const std::string& comment = "");
 
+  /** Default constructor */
+  StandardWriterWatcher() : m_StarsCount(0) {};
+
   /** Copy constructor */
   StandardWriterWatcher(const StandardWriterWatcher&);
 

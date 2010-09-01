@@ -56,7 +56,7 @@ StandardWriterWatcher
 }
 
 StandardWriterWatcher
-::StandardWriterWatcher(const StandardWriterWatcher& watch)
+::StandardWriterWatcher(const StandardWriterWatcher& watch)  : WriterWatcherBase(watch)
 {
   // Initialize state
   m_StarsCount = watch.m_StarsCount;
@@ -67,6 +67,7 @@ StandardWriterWatcher
 ::operator =(const StandardWriterWatcher& watch)
 {
   // Initialize state
+  WriterWatcherBase::operator=(watch);
   m_StarsCount = watch.m_StarsCount;
 }
 
