@@ -47,8 +47,36 @@ int otbImageMetadataInterfaceBaseTest(int argc, char* argv[])
 
   std::ofstream file;
   file.open(outputFilename);
-  file << lImageMetadata << std::endl;
+
+  std::vector<unsigned int> defaultDisplay = lImageMetadata->GetDefaultDisplay();
+  file << "Default RGB Display: ["
+               << defaultDisplay[0] << ", "
+               << defaultDisplay[1] << ", "
+               << defaultDisplay[2] << "]" << std::endl;
+  file << "ProjectionRef:   " <<  lImageMetadata->GetProjectionRef() << std::endl;
+  file << "GCPProjection:   " << lImageMetadata->GetGCPProjection( ) << std::endl;
+  file << "GCPCount:        " << lImageMetadata->GetGCPCount( ) << std::endl;
+  for(unsigned int gcpIdx = 0; gcpIdx  < lImageMetadata->GetGCPCount(); ++ gcpIdx)
+  {
+    file << "GCPId:           " << lImageMetadata->GetGCPId(gcpIdx) << std::endl;
+    file << "GCPInfo:         " << lImageMetadata->GetGCPInfo(gcpIdx) << std::endl;
+  }
+  file << "SensorID:        " << lImageMetadata->GetSensorID( ) << std::endl;
+  file << "NumberOfBands:   " << lImageMetadata->GetNumberOfBands( ) << std::endl;
+  file << "XPixelSpacing:   " << lImageMetadata->GetXPixelSpacing( ) << std::endl;
+  file << "YPixelSpacing:   " << lImageMetadata->GetYPixelSpacing( ) << std::endl;
+  file << "Day:             " << lImageMetadata->GetDay( ) << std::endl;
+  file << "Month:           " << lImageMetadata->GetMonth( ) << std::endl;
+  file << "Year:            " << lImageMetadata->GetYear( ) << std::endl;
+  file << "Hour:            " << lImageMetadata->GetHour( ) << std::endl;
+  file << "Minute:          " << lImageMetadata->GetMinute( ) << std::endl;
+  file << "ProductionDay:   " << lImageMetadata->GetProductionDay( ) << std::endl;
+  file << "ProductionMonth: " << lImageMetadata->GetProductionMonth( ) << std::endl;
+  file << "ProductionYear:  " << lImageMetadata->GetProductionYear( ) << std::endl;
+
   file.close();
+
+  std::cout << lImageMetadata << std::endl;
 
   return EXIT_SUCCESS;
 
