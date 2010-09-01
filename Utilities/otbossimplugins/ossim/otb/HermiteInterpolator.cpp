@@ -13,8 +13,6 @@
 
 #include <string>
 #include <cassert>
-#include <iostream> //tmp
-#include <iomanip> //tmp
 
 namespace ossimplugins
 {
