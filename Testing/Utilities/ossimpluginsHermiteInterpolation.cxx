@@ -108,6 +108,8 @@ int ossimpluginsHermiteInterpolationTest(int argc, char * argv[])
   if ( std::isnan(y) ||  ( (y - yExpected)/yExpected  > epsilon)) return EXIT_FAILURE;
   if ( std::isnan(dy) || ( (dy - dyExpected)/dyExpected  > epsilon)) return EXIT_FAILURE;
 
+  x = 56942.862208;
+
   //Performance test
   int nTest = 1000000;
   timespec startClock, endClock;
@@ -121,7 +123,7 @@ int ossimpluginsHermiteInterpolationTest(int argc, char * argv[])
 
   clock_gettime(CLOCK_REALTIME, &endClock);
   std::cout << "Computation time: " << std::setprecision(15)
-            << (endClock.tv_sec-startClock.tv_sec) + (endClock.tv_nsec-startClock.tv_nsec)/1000000000. << std::endl;
+            << (endClock.tv_sec-startClock.tv_sec) + (endClock.tv_nsec-startClock.tv_nsec)/1000000000. << " s" << std::endl;
 
 
   std::cout << " *** Test y only ***"  << std::endl;
