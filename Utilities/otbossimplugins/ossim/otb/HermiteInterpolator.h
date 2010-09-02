@@ -30,7 +30,7 @@ public:
    HermiteInterpolator();
 
    /**
-    * @brief Constructor with initialisations
+    * @brief Constructor with initializations
     * @param nbrPoints Number of points used to perform the interpolation
     * @param x Values of the points abscissa
     * @param y Values of the points

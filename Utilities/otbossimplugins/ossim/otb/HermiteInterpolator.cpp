@@ -13,6 +13,7 @@
 
 #include <string>
 #include <cassert>
+#include <cmath>
 
 namespace ossimplugins
 {
@@ -194,6 +195,8 @@ int HermiteInterpolator::Interpolate(double x, double& y, double& dy) const
   y = 0.0;
   dy = 0.0;
 
+  double epsilon = 0.0000000000001;
+
   //Precompute useful value if they are not available
   if (!isComputed)
   {
@@ -206,6 +209,14 @@ int HermiteInterpolator::Interpolate(double x, double& y, double& dy) const
     double hi = 1.0;
     double ui = 0; //derivative computation
     double r = x - theXValues[i];
+
+    // check if the point is on the list
+    if ( std::abs(r) < epsilon )
+    {
+      y = theYValues[i];
+      dy = thedYValues[i];
+      return 0;
+    }
 
     for (int j = 0; j < theNPointsAvailable; j++)
     {

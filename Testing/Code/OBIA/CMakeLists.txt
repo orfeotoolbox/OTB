@@ -189,40 +189,50 @@ ENDIF(MOVED_FROM_COMMON)
 
 # ------------------ OBIA_TESTS 3 -----------
 
-ADD_TEST(AttributesMapLabelObjectNew ${OBIA_TESTS3} 
+ADD_TEST(obTuAttributesMapLabelObjectNew ${OBIA_TESTS3} 
 	otbAttributesMapLabelObjectNew)
 
-ADD_TEST(AttributesMapLabelObjectWithClassLabelNew ${OBIA_TESTS3} 
+ADD_TEST(obTuAttributesMapLabelObjectWithClassLabelNew ${OBIA_TESTS3} 
 	otbAttributesMapLabelObjectWithClassLabelNew)
 
-ADD_TEST(ShapeAttributesLabelMapFilterNew ${OBIA_TESTS3} 
+ADD_TEST(obTuShapeAttributesLabelMapFilterNew ${OBIA_TESTS3} 
 	otbShapeAttributesLabelMapFilterNew)
 
-ADD_TEST(StatisticsAttributesLabelMapFilterNew ${OBIA_TESTS3} 
+ADD_TEST(obTuStatisticsAttributesLabelMapFilterNew ${OBIA_TESTS3} 
 	otbStatisticsAttributesLabelMapFilterNew)
 
-ADD_TEST(AttributesMapOpeningLabelMapFilterNew ${OBIA_TESTS3} 
+ADD_TEST(obTuAttributesMapOpeningLabelMapFilterNew ${OBIA_TESTS3} 
 	otbAttributesMapOpeningLabelMapFilterNew)
 
-ADD_TEST(LabelMapToSampleListFilterNew ${OBIA_TESTS3} 
+ADD_TEST(obTuLabelMapToSampleListFilterNew ${OBIA_TESTS3} 
 	otbLabelMapToSampleListFilterNew)
 
-ADD_TEST(LabelMapToSampleListFilter ${OBIA_TESTS3} 
+ADD_TEST(obTvLabelMapToSampleListFilter ${OBIA_TESTS3} 
 	otbLabelMapToSampleListFilter
 	${OTB_DATA_ROOT}/Input/rcc8_mire1.png
 	SHAPE::Flusser01  SHAPE::Flusser02  SHAPE::Flusser03 SHAPE::Flusser04
         SHAPE::Flusser05  SHAPE::Flusser06  SHAPE::Flusser07 SHAPE::Flusser08
 	 SHAPE::Flusser09 SHAPE::Flusser10  SHAPE::Flusser11)
 
-ADD_TEST(LabelMapWithClassLabelToLabeledSampleListFilterNew ${OBIA_TESTS3} 
+ADD_TEST(obTuLabelMapWithClassLabelToLabeledSampleListFilterNew ${OBIA_TESTS3} 
 	otbLabelMapWithClassLabelToLabeledSampleListFilterNew)
 
-ADD_TEST(LabelMapWithClassLabelToLabeledSampleListFilter ${OBIA_TESTS3} 
+ADD_TEST(obTvLabelMapWithClassLabelToLabeledSampleListFilter ${OBIA_TESTS3} 
 	otbLabelMapWithClassLabelToLabeledSampleListFilter
 	${OTB_DATA_ROOT}/Input/rcc8_mire1.png
 	SHAPE::Flusser01  SHAPE::Flusser02  SHAPE::Flusser03 SHAPE::Flusser04
         SHAPE::Flusser05  SHAPE::Flusser06  SHAPE::Flusser07 SHAPE::Flusser08
 	 SHAPE::Flusser09 SHAPE::Flusser10  SHAPE::Flusser11)
+
+
+ADD_TEST(obTuImageToLabelMapWithAttributesFilterNew ${OBIA_TESTS3} 
+	otbImageToLabelMapWithAttributesFilterNew)
+
+ADD_TEST(obTvImageToLabelMapWithAttributesFilter ${OBIA_TESTS3} 
+	otbImageToLabelMapWithAttributesFilter
+        ${INPUTDATA}/calanques.tif
+        ${INPUTDATA}/cala_labelled.tif
+)
 
 
 # -------       Fichiers sources CXX -----------------------------------
@@ -277,6 +287,8 @@ otbLabelMapToSampleListFilterNew.cxx
 otbLabelMapToSampleListFilter.cxx
 otbLabelMapWithClassLabelToLabeledSampleListFilterNew.cxx
 otbLabelMapWithClassLabelToLabeledSampleListFilter.cxx
+otbImageToLabelMapWithAttributesFilterNew.cxx
+otbImageToLabelMapWithAttributesFilter.cxx
 )
 
 

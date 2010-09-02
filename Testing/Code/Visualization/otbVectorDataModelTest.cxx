@@ -159,6 +159,8 @@ int otbVectorDataModelTest(int argc, char * argv[])
   vdHandler->SetModel(vdModel);
   controller->AddActionHandler(vdHandler);
 
+  vdModel->DeleteGeometry();
+
   // Build a pixel description view
   PixelDescriptionViewType::Pointer pixelView = PixelDescriptionViewType::New();
   pixelView->SetModel(pixelModel);

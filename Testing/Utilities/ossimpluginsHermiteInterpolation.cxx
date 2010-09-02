@@ -1,12 +1,32 @@
+/*=========================================================================
+
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
+
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
 
 #include <cstdlib>
 #include <iostream>
 #include <iomanip>
+#include <cmath>
 
 #include "otb/HermiteInterpolator.h"
 
 int ossimpluginsHermiteInterpolationTest(int argc, char * argv[])
 {
+  double epsilon = 0.0000001;
+
   double xref[11];
   xref[0] = 56640.0;
   xref[1] = 56700.0;
@@ -54,13 +74,41 @@ int ossimpluginsHermiteInterpolationTest(int argc, char * argv[])
   std::cout << " *** Test y and dy ***"  << std::endl;
   ossimplugins::HermiteInterpolator* interp = new ossimplugins::HermiteInterpolator(11, xref, yref, dyref);
 
+  double yExpected = -1154600.87561283;
+  double dyExpected = 1568.49913322402;
   double y = 0;
   double dy = 0;
   interp->Interpolate(x, y, dy);
 
-  std::cout << std::setprecision(15) << "Value at " << x << " : " << y << " (derivative " << dy << ")\n";
-  std::cout << "- Should be :           -1154600.87561283 (derivative 1568.49913322402)" << std::endl;
 
+  std::cout << std::setprecision(15) << "Value at " << x << " : " << y << " (derivative " << dy << ")\n";
+  std::cout << "- Should be :           " << yExpected << " (derivative " << dyExpected << ")" << std::endl;
+
+  if ( std::isnan(y) || ( (y - yExpected)/yExpected  > epsilon)) return EXIT_FAILURE;
+  if ( std::isnan(dy) ||  ( (dy - dyExpected)/dyExpected  > epsilon)) return EXIT_FAILURE;
+
+  //Test limit situation
+  x = 56640.0;
+  yExpected = -1556122.3685;
+  dyExpected = 1042.82980;
+  interp->Interpolate(x, y, dy);
+  std::cout << std::setprecision(15) << "Value at " << x << " : " << y << " (derivative " << dy << ")\n";
+  std::cout << "- Should be :    " << yExpected << " (derivative " << dyExpected << ")" << std::endl;
+
+  if ( std::isnan(y) || ( (y - yExpected)/yExpected  > epsilon)) return EXIT_FAILURE;
+  if ( std::isnan(dy) || ( (dy - dyExpected)/dyExpected  > epsilon)) return EXIT_FAILURE;
+
+  x = 56700.0;
+  yExpected = -1489827.1436;
+  dyExpected = 1165.61122;
+  interp->Interpolate(x, y, dy);
+  std::cout << std::setprecision(15) << "Value at " << x << " : " << y << " (derivative " << dy << ")\n";
+  std::cout << "- Should be :    " << yExpected << " (derivative " << dyExpected << ")" << std::endl;
+
+  if ( std::isnan(y) ||  ( (y - yExpected)/yExpected  > epsilon)) return EXIT_FAILURE;
+  if ( std::isnan(dy) || ( (dy - dyExpected)/dyExpected  > epsilon)) return EXIT_FAILURE;
+
+  x = 56942.862208;
 
   //Performance test
   int nTest = 1000000;
@@ -75,7 +123,7 @@ int ossimpluginsHermiteInterpolationTest(int argc, char * argv[])
 
   clock_gettime(CLOCK_REALTIME, &endClock);
   std::cout << "Computation time: " << std::setprecision(15)
-            << (endClock.tv_sec-startClock.tv_sec) + (endClock.tv_nsec-startClock.tv_nsec)/1000000000. << std::endl;
+            << (endClock.tv_sec-startClock.tv_sec) + (endClock.tv_nsec-startClock.tv_nsec)/1000000000. << " s" << std::endl;
 
 
   std::cout << " *** Test y only ***"  << std::endl;
@@ -86,7 +134,6 @@ int ossimpluginsHermiteInterpolationTest(int argc, char * argv[])
 
    std::cout << std::setprecision(15) << "Value at " << x << " : " << y2 << "\n";
    std::cout << "- Should be :           -1154600.87561283" << std::endl;
-
 
    //Performance test
    clock_gettime(CLOCK_REALTIME, &startClock);

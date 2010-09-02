@@ -493,6 +493,33 @@ ADD_TEST(bfTvResampleSLCImage ${BASICFILTERS_TESTS5}
                 ${TEMP}/bfTvResampleSLCImage.tif
 )
 
+# -------            otb::StreamingMinMaxImageFilter   ----------------------------
+
+ADD_TEST(bfTuStreamingMinMaxImageFilterNew ${BASICFILTERS_TESTS5}
+         otbStreamingMinMaxImageFilterNew)
+
+ADD_TEST(bfTvStreamingMinMaxImageFilter ${BASICFILTERS_TESTS5}
+    --compare-ascii ${NOTOL}
+           ${BASELINE_FILES}/bfTvStreamingMinMaxImageFilterResults.txt
+           ${TEMP}/bfTvStreamingMinMaxImageFilterResults.txt
+         otbStreamingMinMaxImageFilter
+        ${INPUTDATA}/couleurs_extrait.png
+        ${TEMP}/bfTvStreamingMinMaxImageFilterResults.txt
+        )
+
+# -------            otb::StreamingMinMaxVectorImageFilter   ----------------------------
+
+ADD_TEST(bfTuStreamingMinMaxVectorImageFilterNew ${BASICFILTERS_TESTS5}
+         otbStreamingMinMaxVectorImageFilterNew)
+
+ADD_TEST(bfTvStreamingMinMaxVectorImageFilter ${BASICFILTERS_TESTS5}
+    --compare-ascii ${NOTOL}
+           ${BASELINE_FILES}/bfTvStreamingMinMaxVectorImageFilterResults.txt
+           ${TEMP}/bfTvStreamingMinMaxVectorImageFilterResults.txt
+         otbStreamingMinMaxVectorImageFilter
+        ${INPUTDATA}/couleurs_extrait.png
+        ${TEMP}/bfTvStreamingMinMaxVectorImageFilterResults.txt
+        )
 
 # -------            otb::StreamingStatisticsVectorImageFilter   ----------------------------
 
@@ -1712,6 +1739,10 @@ otbStreamingResampleImageFilterNew.cxx
 otbStreamingResampleImageFilter.cxx
 otbStreamingResampleImageFilterCompareWithITK.cxx
 otbResampleSLCImage.cxx
+otbStreamingMinMaxImageFilterNew.cxx
+otbStreamingMinMaxImageFilter.cxx
+otbStreamingMinMaxVectorImageFilterNew.cxx
+otbStreamingMinMaxVectorImageFilter.cxx
 otbStreamingStatisticsVectorImageFilterNew.cxx
 otbStreamingStatisticsVectorImageFilter.cxx
 otbMatrixTransposeMatrixImageFilterNew.cxx

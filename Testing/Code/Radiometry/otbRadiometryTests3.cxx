@@ -34,7 +34,8 @@ void RegisterTests()
   REGISTER_TEST(otbSIXSTraitsComputeAtmosphericParametersTest);
   REGISTER_TEST(otbAtmosphericRadiativeTermsNew);
   REGISTER_TEST(otbReflectanceToSurfaceReflectanceImageFilterNew);
-  REGISTER_TEST(otbReflectanceToSurfaceReflectanceImageFilter);
+  REGISTER_TEST(otbReflectanceToSurfaceReflectanceImageFilterTest);
+  REGISTER_TEST(otbReflectanceToSurfaceReflectanceImageFilterTest2);
   REGISTER_TEST(otbSurfaceAdjacencyEffect6SCorrectionSchemeFilterNew);
   REGISTER_TEST(otbSurfaceAdjacencyEffect6SCorrectionSchemeFilter);
   REGISTER_TEST(otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter);

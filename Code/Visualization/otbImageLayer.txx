@@ -377,9 +377,8 @@ ImageLayer<TImage, TOutputImage>
   this->UpdateListSample();
 
   PixelType      pixel;
-  unsigned int   sampleSize;
 
-  // Ensure rendering function intialization
+  // Ensure rendering function initialization
   m_RenderingFunction->Initialize(m_Image->GetMetaDataDictionary()); //FIXME check, but the call must be done in the generator. To be moved to the layer?
 
   // If we are inside the buffered region
