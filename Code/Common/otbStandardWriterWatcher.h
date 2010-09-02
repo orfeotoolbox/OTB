@@ -76,7 +76,7 @@ public:
   {
     m_StarsCount = count;
   }
-  const int& GetStars() const
+  const unsigned int& GetStars() const
   {
     return m_StarsCount;
   }
@@ -107,7 +107,7 @@ protected:
 private:
 
   /** Stars coutning */
-  int m_StarsCount;
+  unsigned int m_StarsCount;
 };
 
 } // end namespace otb

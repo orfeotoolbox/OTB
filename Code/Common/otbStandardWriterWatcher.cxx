@@ -97,8 +97,14 @@ StandardWriterWatcher
     {
     double      progress = m_SourceProcess->GetProgress();
     int         progressPercent = static_cast<int>(progress * 100);
-    std::string stars(static_cast<int>(progress * m_StarsCount), '*');
-    std::string blanks(m_StarsCount - stars.length(), ' ');
+    unsigned int nbStars = static_cast<int>(progress * m_StarsCount);
+    if(nbStars>m_StarsCount)
+      {
+      nbStars = m_StarsCount;
+      }
+
+    std::string stars(nbStars, '*');
+    std::string blanks(m_StarsCount - nbStars, ' ');
     oss << "Current Tile: ";
     if (progressPercent < 10)
       {
@@ -115,8 +121,13 @@ StandardWriterWatcher
     {
     double      progress = m_Process->GetProgress();
     int         progressPercent = static_cast<int>(progress * 100);
-    std::string stars(static_cast<int>(progress * m_StarsCount), '*');
-    std::string blanks(m_StarsCount - stars.length(), ' ');
+    unsigned int nbStars = static_cast<int>(progress * m_StarsCount);
+    if(nbStars>m_StarsCount)
+      {
+      nbStars = m_StarsCount;
+      }
+    std::string stars(nbStars, '*');
+    std::string blanks(m_StarsCount - nbStars, ' ');
     oss << "Writing: ";
     if (progressPercent < 10)
       {
