@@ -176,7 +176,7 @@ FineRegistrationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFie
   // get a copy of the fixed requested region (should equal the output
   // requested region)
   InputImageRegionType fixedRequestedRegion, movingRequestedRegion;
-  fixedRequestedRegion = fixedPtr->GetRequestedRegion();
+  fixedRequestedRegion = outputPtr->GetRequestedRegion();
 
   // Apply grid step
   SizeType fixedRequestedSize = fixedRequestedRegion.GetSize();
@@ -193,6 +193,7 @@ FineRegistrationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFie
 
   // pad the input requested region by the operator radius
   fixedRequestedRegion.PadByRadius( m_Radius );
+
 
   // get a copy of the moving requested region (should equal the output
   // requested region)
@@ -367,7 +368,7 @@ FineRegistrationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFie
       for(int j=-(int)m_SearchRadius[1]; j<=(int)m_SearchRadius[1];++j)
         {
         params[0]=m_InitialOffset[0] + static_cast<double>(i*fixedSpacing[0]);
-        params[1]=m_InitialOffset[0] + static_cast<double>(j*fixedSpacing[1]);
+        params[1]=m_InitialOffset[1] + static_cast<double>(j*fixedSpacing[1]);
 
         try
         {
