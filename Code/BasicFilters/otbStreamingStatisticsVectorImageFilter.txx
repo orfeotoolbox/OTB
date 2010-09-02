@@ -215,7 +215,7 @@ PersistentStatisticsVectorImageFilter<TInputImage>
   // Variable Initialization
   PixelType tempPixel;
   tempPixel.SetSize(numberOfComponent);
-  tempPixel.Fill(itk::NumericTraits<InternalPixelType>::Zero);
+  tempPixel.Fill(itk::NumericTraits<InternalPixelType>::NonpositiveMin());
   this->GetMaximumOutput()->Set(tempPixel);
 
   tempPixel.Fill(itk::NumericTraits<InternalPixelType>::max());
@@ -242,7 +242,7 @@ PersistentStatisticsVectorImageFilter<TInputImage>
   tempTemporiesPixel.Fill(itk::NumericTraits<InternalPixelType>::max());
   m_ThreadMin = ArrayPixelType(numberOfThreads, tempTemporiesPixel);
 
-  tempTemporiesPixel.Fill(itk::NumericTraits<InternalPixelType>::Zero);
+  tempTemporiesPixel.Fill(itk::NumericTraits<InternalPixelType>::NonpositiveMin());
   m_ThreadMax = ArrayPixelType(numberOfThreads, tempTemporiesPixel);
 
   RealPixelType tempTemporiesRealPixel;
