@@ -142,11 +142,13 @@ int otbFineRegistrationImageFilterTest( int argc, char * argv[] )
   CorrelWriterType::Pointer correlWriter = CorrelWriterType::New();
   correlWriter->SetFileName(correlFileName);
   correlWriter->SetInput(registration->GetOutput());
+  correlWriter->SetNumberOfStreamDivisions(2);
   correlWriter->Update();
 
   FieldWriterType::Pointer fieldWriter = FieldWriterType::New();
   fieldWriter->SetFileName(fieldFileName);
   fieldWriter->SetInput(registration->GetOutputDeformationField());
+  fieldWriter->SetNumberOfStreamDivisions(2);
   fieldWriter->Update();
 
   return EXIT_SUCCESS;
