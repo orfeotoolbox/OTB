@@ -211,7 +211,7 @@ int HermiteInterpolator::Interpolate(double x, double& y, double& dy) const
     double r = x - theXValues[i];
 
     // check if the point is on the list
-    if ( std::abs(r/x) < epsilon )
+    if ( std::abs(r) < epsilon )
     {
       y = theYValues[i];
       dy = thedYValues[i];
