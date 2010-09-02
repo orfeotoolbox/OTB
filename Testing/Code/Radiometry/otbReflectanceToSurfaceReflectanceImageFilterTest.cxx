@@ -23,7 +23,23 @@
 #include "otbImageFileWriter.h"
 #include "otbAtmosphericRadiativeTerms.h"
 
-int otbReflectanceToSurfaceReflectanceImageFilter(int argc, char * argv[])
+int otbReflectanceToSurfaceReflectanceImageFilterNew(int argc, char * argv[])
+{
+  const unsigned int Dimension = 2;
+  typedef double                                 PixelType;
+  typedef otb::VectorImage<PixelType, Dimension> InputImageType;
+
+  typedef otb::ReflectanceToSurfaceReflectanceImageFilter<InputImageType,
+      InputImageType>
+  ReflectanceToSurfaceReflectanceImageFilterType;
+
+  // Instantiating object
+  ReflectanceToSurfaceReflectanceImageFilterType::Pointer filter = ReflectanceToSurfaceReflectanceImageFilterType::New();
+
+  return EXIT_SUCCESS;
+}
+
+int otbReflectanceToSurfaceReflectanceImageFilterTest(int argc, char * argv[])
 {
   const char * inputFileName  = argv[1];
   const char * outputFileName = argv[2];

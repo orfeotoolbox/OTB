@@ -532,7 +532,7 @@ ADD_TEST(raTuReflectanceToSurfaceReflectanceImageFilterNew ${RADIOMETRY_TESTS3}
 ADD_TEST(raTvReflectanceToSurfaceReflectanceImageFilter ${RADIOMETRY_TESTS3}
   --compare-image ${EPSILON}  ${BASELINE}/raTvReflectanceToSurfaceReflectanceImageFilter.tif
                               ${TEMP}/raTvReflectanceToSurfaceReflectanceImageFilter.tif
-        otbReflectanceToSurfaceReflectanceImageFilter
+        otbReflectanceToSurfaceReflectanceImageFilterTest
 	${INPUTDATA}/verySmallFSATSW.tif
 	${TEMP}/raTvReflectanceToSurfaceReflectanceImageFilter.tif
 	# SAME VALUE FOR EACH CHANNEL
@@ -1496,8 +1496,7 @@ otbFilterFunctionValues.cxx
 otbSIXSTraitsTest.cxx
 otbSIXSTraitsComputeAtmosphericParameters.cxx
 otbAtmosphericRadiativeTermsNew.cxx
-otbReflectanceToSurfaceReflectanceImageFilterNew.cxx
-otbReflectanceToSurfaceReflectanceImageFilter.cxx
+otbReflectanceToSurfaceReflectanceImageFilterTest.cxx
 otbSurfaceAdjacencyEffect6SCorrectionSchemeFilterNew.cxx
 otbSurfaceAdjacencyEffect6SCorrectionSchemeFilter.cxx
 otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter.cxx
