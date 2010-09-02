@@ -18,6 +18,8 @@
 #ifndef __otbRAndBAndNIRVegetationIndexImageFilter_h
 #define __otbRAndBAndNIRVegetationIndexImageFilter_h
 
+#include "vcl_deprecated_header.h"
+
 #include "otbRAndBAndNIRIndexImageFilter.h"
 
 namespace otb
