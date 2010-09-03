@@ -21,6 +21,7 @@
 #include <iomanip>
 #include <cmath>
 
+#include "ossim/base/ossimCommon.h"
 #include "otb/HermiteInterpolator.h"
 #include "itkTimeProbe.h"
 
