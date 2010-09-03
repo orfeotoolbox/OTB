@@ -22,9 +22,12 @@
 #include <cmath>
 
 #include "otb/HermiteInterpolator.h"
+#include "itkTimeProbe.h"
+
 
 int ossimpluginsHermiteInterpolationTest(int argc, char * argv[])
 {
+  itk::TimeProbe chrono;
   double epsilon = 0.0000001;
 
   double xref[11];
@@ -112,18 +115,15 @@ int ossimpluginsHermiteInterpolationTest(int argc, char * argv[])
 
   //Performance test
   int nTest = 1000000;
-  timespec startClock, endClock;
-  clock_gettime(CLOCK_REALTIME, &startClock);
-
+  chrono.Start();
   for (int i = 0; i < nTest; ++i)
     {
     double x2 = x + 200./nTest;
     interp->Interpolate(x2, y, dy);
     }
 
-  clock_gettime(CLOCK_REALTIME, &endClock);
-  std::cout << "Computation time: " << std::setprecision(15)
-            << (endClock.tv_sec-startClock.tv_sec) + (endClock.tv_nsec-startClock.tv_nsec)/1000000000. << " s" << std::endl;
+  chrono.Stop();
+  std::cout << "Computation time: " << chrono.GetMeanTime() <<  " s" << std::endl;
 
 
   std::cout << " *** Test y only ***"  << std::endl;
@@ -136,7 +136,7 @@ int ossimpluginsHermiteInterpolationTest(int argc, char * argv[])
    std::cout << "- Should be :           -1154600.87561283" << std::endl;
 
    //Performance test
-   clock_gettime(CLOCK_REALTIME, &startClock);
+   chrono.Start();
 
    for (int i = 0; i < nTest; ++i)
      {
@@ -144,9 +144,8 @@ int ossimpluginsHermiteInterpolationTest(int argc, char * argv[])
      interp2->Interpolate(x2, y2);
      }
 
-   clock_gettime(CLOCK_REALTIME, &endClock);
-   std::cout << "Computation time: " << std::setprecision(15)
-             << (endClock.tv_sec-startClock.tv_sec) + (endClock.tv_nsec-startClock.tv_nsec)/1000000000. << std::endl;
+   chrono.Stop();
+   std::cout << chrono.GetMeanTime() << " s" << std::endl;
 
   return EXIT_SUCCESS;
 }
