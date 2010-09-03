@@ -36,7 +36,8 @@ int otbReflectanceToSurfaceReflectanceImageFilterNew(int argc, char * argv[])
   ReflectanceToSurfaceReflectanceImageFilterType;
 
   // Instantiating object
-  ReflectanceToSurfaceReflectanceImageFilterType::Pointer filter = ReflectanceToSurfaceReflectanceImageFilterType::New();
+  ReflectanceToSurfaceReflectanceImageFilterType::Pointer filter
+      = ReflectanceToSurfaceReflectanceImageFilterType::New();
 
   return EXIT_SUCCESS;
 }
@@ -88,7 +89,8 @@ int otbReflectanceToSurfaceReflectanceImageFilterTest(int argc, char * argv[])
   atmo->SetUpwardTransmittances(upTrans);
 
   // Instantiating object
-  ReflectanceToSurfaceReflectanceImageFilterType::Pointer filter = ReflectanceToSurfaceReflectanceImageFilterType::New();
+  ReflectanceToSurfaceReflectanceImageFilterType::Pointer filter
+      = ReflectanceToSurfaceReflectanceImageFilterType::New();
   filter->SetAtmosphericRadiativeTerms(atmo);
   filter->SetInput(reader->GetOutput());
   writer->SetInput(filter->GetOutput());
@@ -98,6 +100,7 @@ int otbReflectanceToSurfaceReflectanceImageFilterTest(int argc, char * argv[])
   return EXIT_SUCCESS;
 }
 
+//Check the correct generation of the atmospheric parameters
 int otbReflectanceToSurfaceReflectanceImageFilterTest2(int argc, char * argv[])
 {
   const char * inputFileName  = argv[1];
@@ -121,14 +124,14 @@ int otbReflectanceToSurfaceReflectanceImageFilterTest2(int argc, char * argv[])
   reader->UpdateOutputInformation();
 
   // Instantiating object
-  ReflectanceToSurfaceReflectanceImageFilterType::Pointer filter = ReflectanceToSurfaceReflectanceImageFilterType::New();
+  ReflectanceToSurfaceReflectanceImageFilterType::Pointer filter
+      = ReflectanceToSurfaceReflectanceImageFilterType::New();
   filter->SetInput(reader->GetOutput());
-//  filter->UpdateAtmosphericRadiativeTerms();
+  filter->GenerateParameters();
+  otb::AtmosphericRadiativeTerms::Pointer terms = filter->GetAtmosphericRadiativeTerms();
 
   std::ofstream fout (outputFileName);
-  fout << filter->GetAtmosphericRadiativeTerms();
-  fout << "\n";
-  fout << filter;
+  fout << terms;
   fout.close();
 
   return EXIT_SUCCESS;
