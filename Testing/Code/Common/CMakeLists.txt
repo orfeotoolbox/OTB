@@ -924,50 +924,6 @@ ENDIF(OTB_USE_PQXX)
 
 # ----------------  AttributesMapLabelObject ---------------------#
 
-ADD_TEST(coTuAttributesMapLabelObjectNew ${COMMON_TESTS11}
-otbAttributesMapLabelObjectNew
-)
-
-ADD_TEST(coTuLabelObjectToPolygonFunctorNew ${COMMON_TESTS11}
-otbLabelObjectToPolygonFunctorNew
-)
-
-ADD_TEST(coTuRadiometricAttributesLabelMapFilterNew ${COMMON_TESTS11}
-otbRadiometricAttributesLabelMapFilterNew
-)
-
- ADD_TEST(coTuShapeAttributesLabelMapFilterNew ${COMMON_TESTS11}
- otbShapeAttributesLabelMapFilterNew
- )
-
-ADD_TEST(coTuStatisticsAttributesLabelMapFilterNew ${COMMON_TESTS11}
-otbStatisticsAttributesLabelMapFilterNew
-)
-
-ADD_TEST(coTuAttributesMapOpeningLabelMapFilterNew ${COMMON_TESTS11}
-otbAttributesMapOpeningLabelMapFilterNew
-)
-
-ADD_TEST(coTuLabelMapToVectorDataFilterNew ${COMMON_TESTS11}
-otbLabelMapToVectorDataFilterNew
-)
-
-ADD_TEST(coTuVectorDataToLabelMapFilterNew ${COMMON_TESTS11}
-otbVectorDataToLabelMapFilterNew
-)
-
-ADD_TEST(coTuLabelMapSourceNew ${COMMON_TESTS11}
-otbLabelMapSourceNew
-)
-
-
-
-ADD_TEST(otbLabelObjectMapVectorizer ${COMMON_TESTS11}
-        otbLabelObjectMapVectorizer
-        ${INPUTDATA}/rcc8_mire1.png
-        rcc8_mire1_label_vectorizer.gml
-)
-
 ADD_TEST(coTuUnaryFunctorWithIndexImageFilterNew ${COMMON_TESTS11}
 otbUnaryFunctorWithIndexImageFilterNew
 )
@@ -979,18 +935,6 @@ ADD_TEST(coTvUnaryFunctorWithIndexImageFilter ${COMMON_TESTS11}
 otbUnaryFunctorWithIndexImageFilter
        ${INPUTDATA}/poupees.tif
        ${TEMP}/coTvUnaryFunctorWithIndexImageFilter.tif
-)
-
-ADD_TEST(coTvLabelMapToVectorDataFilter ${COMMON_TESTS11}
-otbLabelMapToVectorDataFilter
-        ${INPUTDATA}/rcc8_mire1.png
-        ${TEMP}/rcc8_mire2_vectorizer.shp
-)
-
-ADD_TEST(coTvVectorDataToLabelMapFilter ${COMMON_TESTS11}
-otbVectorDataToLabelMapFilter
-        ${INPUTDATA}/vectorIOexample_gis_to_vec.shp
-        ${TEMP}/vectordataToLabelMap.png
 )
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1161,20 +1105,8 @@ ENDIF(OTB_USE_PQXX)
 
 
 SET(BasicCommon_SRCS11
-otbAttributesMapLabelObjectNew.cxx
-otbLabelObjectToPolygonFunctorNew.cxx
-otbRadiometricAttributesLabelMapFilterNew.cxx
-otbShapeAttributesLabelMapFilterNew.cxx
-otbStatisticsAttributesLabelMapFilterNew.cxx
-otbAttributesMapOpeningLabelMapFilterNew.cxx
-otbLabelMapToVectorDataFilterNew.cxx
-otbLabelMapToVectorDataFilter.cxx
-otbLabelMapSourceNew.cxx
-otbVectorDataToLabelMapFilterNew.cxx
-otbVectorDataToLabelMapFilter.cxx
 otbUnaryFunctorWithIndexImageFilterNew.cxx
 otbUnaryFunctorWithIndexImageFilter.cxx
-otbLabelObjectMapVectorizer.cxx
 )
 
 

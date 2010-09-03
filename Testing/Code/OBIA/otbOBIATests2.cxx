@@ -22,10 +22,12 @@
 #pragma warning ( disable : 4786 )
 #endif
 
+//
 #include "otbTestMain.h"
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbUnaryFunctorWithIndexImageFilterNew);
-  REGISTER_TEST(otbUnaryFunctorWithIndexImageFilter);
+  REGISTER_TEST(otbLabelMapToGISTableFilter);
+  REGISTER_TEST(otbLabelMapToGISTableFilterNew);
+  REGISTER_TEST(otbGISTableToLabelMapFilterNew);
 }
