@@ -14,21 +14,21 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 SET(NOTOL 0.0)
 
 # Test programs
-SET(VISUREFAC_TESTS1 ${CXX_TEST_PATH}/otbVisualizationTests1)
+SET(VISUALIZATION_TESTS1 ${CXX_TEST_PATH}/otbVisualizationTests1)
 
 #------------ otb::ImageWidget -------------------------
 
-ADD_TEST(vrTuImageWidgetNew ${VISUREFAC_TESTS1}
+ADD_TEST(vrTuImageWidgetNew ${VISUALIZATION_TESTS1}
 otbImageWidgetNew
 )
 
-ADD_TEST(vrTvImageWidgetWithoutGlAcceleration ${VISUREFAC_TESTS1}
+ADD_TEST(vrTvImageWidgetWithoutGlAcceleration ${VISUALIZATION_TESTS1}
 otbImageWidget
 ${INPUTDATA}/poupees.png 0
 )
 
 IF(OTB_GL_USE_ACCEL)
-ADD_TEST(vrTvImageWidgetWithGlAcceleration ${VISUREFAC_TESTS1}
+ADD_TEST(vrTvImageWidgetWithGlAcceleration ${VISUALIZATION_TESTS1}
 otbImageWidget
 ${INPUTDATA}/poupees.png 1
 )
@@ -36,27 +36,27 @@ ENDIF(OTB_GL_USE_ACCEL)
 
 #------------ otb::ImageWidgetActionHandler -------------
 
-ADD_TEST(vrTuImageWidgetActionHandlerNew ${VISUREFAC_TESTS1}
+ADD_TEST(vrTuImageWidgetActionHandlerNew ${VISUALIZATION_TESTS1}
 otbImageWidgetActionHandlerNew
 )
 
 #------------ otb::ImageWidgetController ----------------
 
-ADD_TEST(vrTuImageWidgetControllerNew ${VISUREFAC_TESTS1}
+ADD_TEST(vrTuImageWidgetControllerNew ${VISUALIZATION_TESTS1}
 otbImageWidgetControllerNew
 )
 
-ADD_TEST(vrTvImageWidgetController ${VISUREFAC_TESTS1}
+ADD_TEST(vrTvImageWidgetController ${VISUALIZATION_TESTS1}
 otbImageWidgetController
 )
 
 #------------ otb::ImageLayer ----------------------------
 
-ADD_TEST(vrTuImageLayerNew ${VISUREFAC_TESTS1}
+ADD_TEST(vrTuImageLayerNew ${VISUALIZATION_TESTS1}
 otbImageLayerNew
 )
 
-ADD_TEST(vrTvImageLayerScalar ${VISUREFAC_TESTS1}
+ADD_TEST(vrTvImageLayerScalar ${VISUALIZATION_TESTS1}
 --compare-n-images ${NOTOL} 3
 ${BASELINE}/vrTvImageLayerScalarQuicklookOutput.png
 ${TEMP}/vrTvImageLayerScalarQuicklookOutput.png
@@ -72,7 +72,7 @@ ${TEMP}/vrTvImageLayerScalarScaledExtractOutput.png
 2 127 417
 )
 
-ADD_TEST(vrTvImageLayerVector ${VISUREFAC_TESTS1}
+ADD_TEST(vrTvImageLayerVector ${VISUALIZATION_TESTS1}
 --compare-n-images ${NOTOL} 3
 ${BASELINE}/vrTvImageLayerVectorQuicklookOutput.png
 ${TEMP}/vrTvImageLayerVectorQuicklookOutput.png
@@ -93,17 +93,17 @@ ${TEMP}/vrTvImageLayerVectorScaledExtractOutput.png
 
 #------------ otb::StandardRenderingFunction ------------
 
-ADD_TEST(vrTuStandardRenderingFunctionNew ${VISUREFAC_TESTS1}
+ADD_TEST(vrTuStandardRenderingFunctionNew ${VISUALIZATION_TESTS1}
 otbStandardRenderingFunctionNew
 )
 
 #------------ otb::RenderingImageFilter ------------
 
-ADD_TEST(vrTuRenderingImageFilterNew ${VISUREFAC_TESTS1}
+ADD_TEST(vrTuRenderingImageFilterNew ${VISUALIZATION_TESTS1}
 otbRenderingImageFilterNew
 )
 
-ADD_TEST(vrTvRenderingImageFilterScalar ${VISUREFAC_TESTS1}
+ADD_TEST(vrTvRenderingImageFilterScalar ${VISUALIZATION_TESTS1}
 --compare-image ${NOTOL}
 ${BASELINE}/vrTvRenderingImageFilterScalarOutput.png
 ${TEMP}/vrTvRenderingImageFilterScalarOutput.png
@@ -113,7 +113,7 @@ ${TEMP}/vrTvRenderingImageFilterScalarOutput.png
 127 417
 )
 
-ADD_TEST(vrTvRenderingImageFilterVector ${VISUREFAC_TESTS1}
+ADD_TEST(vrTvRenderingImageFilterVector ${VISUALIZATION_TESTS1}
 --compare-image ${NOTOL}
 ${BASELINE}/vrTvRenderingImageFilterVectorOutput.png
 ${TEMP}/vrTvRenderingImageFilterVectorOutput.png
@@ -126,7 +126,7 @@ ${TEMP}/vrTvRenderingImageFilterVectorOutput.png
 190 287 #min max
 )
 
-ADD_TEST(vrTvRenderingImageFilterVectorWithExpNegativeTransfer ${VISUREFAC_TESTS1}
+ADD_TEST(vrTvRenderingImageFilterVectorWithExpNegativeTransfer ${VISUALIZATION_TESTS1}
 --compare-image ${NOTOL}
 ${BASELINE}/vrTvRenderingImageFilterVectorWithExpNegativeTransferOutput.png
 ${TEMP}/vrTvRenderingImageFilterVectorWithExpNegativeTransferOutput.png
@@ -140,7 +140,7 @@ ${TEMP}/vrTvRenderingImageFilterVectorWithExpNegativeTransferOutput.png
 200 700 #min max
 )
 
-ADD_TEST(vrTvRenderingImageFilterAmplitude ${VISUREFAC_TESTS1}
+ADD_TEST(vrTvRenderingImageFilterAmplitude ${VISUALIZATION_TESTS1}
 --compare-image ${NOTOL}
 ${BASELINE}/vrTvRenderingImageFilterAmplitudeOutput.png
 ${TEMP}/vrTvRenderingImageFilterAmplitudeOutput.png
@@ -151,7 +151,7 @@ ${TEMP}/vrTvRenderingImageFilterAmplitudeOutput.png
 50 800
 )
 
-ADD_TEST(vrTvRenderingImageFilterPhase ${VISUREFAC_TESTS1}
+ADD_TEST(vrTvRenderingImageFilterPhase ${VISUALIZATION_TESTS1}
 --compare-image ${NOTOL}
 ${BASELINE}/vrTvRenderingImageFilterPhaseOutput.png
 ${TEMP}/vrTvRenderingImageFilterPhaseOutput.png
@@ -163,23 +163,23 @@ ${TEMP}/vrTvRenderingImageFilterPhaseOutput.png
 )
 #------------ otb::UniformAlphaBlendingFunction ------------
 
-ADD_TEST(vrTuUniformAlphaBlendingFunctionNew ${VISUREFAC_TESTS1}
+ADD_TEST(vrTuUniformAlphaBlendingFunctionNew ${VISUALIZATION_TESTS1}
 otbUniformAlphaBlendingFunctionNew
 )
 
 #------------ otb::MultiplyBlendingFunction ------------
 
-ADD_TEST(vrTuMultiplyBlendingFunctionNew ${VISUREFAC_TESTS1}
+ADD_TEST(vrTuMultiplyBlendingFunctionNew ${VISUALIZATION_TESTS1}
 otbMultiplyBlendingFunctionNew
 )
 
 #------------ otb::BlendingImageFilter ----------------------
 
-ADD_TEST(vrTuBlendingImageFilterNew ${VISUREFAC_TESTS1}
+ADD_TEST(vrTuBlendingImageFilterNew ${VISUALIZATION_TESTS1}
 otbBlendingImageFilterNew
 )
 
-ADD_TEST(vrTvBlendingImageFilter ${VISUREFAC_TESTS1}
+ADD_TEST(vrTvBlendingImageFilter ${VISUALIZATION_TESTS1}
 otbBlendingImageFilter
 ${EXAMPLESDATA}/SpotBefore.png
 ${EXAMPLESDATA}/SpotAfter.png
@@ -188,17 +188,17 @@ ${TEMP}/vrTvBlendingImageFilterOutput.png
 
 #------------ otb::LayerBasedModel ------------
 
-ADD_TEST(vrTuLayerBasedModelNew ${VISUREFAC_TESTS1}
+ADD_TEST(vrTuLayerBasedModelNew ${VISUALIZATION_TESTS1}
 otbLayerBasedModelNew
 )
 
 #------------ otb::ImageLayerRenderingModel ------------
 
-ADD_TEST(vrTuImageLayerRenderingModelNew ${VISUREFAC_TESTS1}
+ADD_TEST(vrTuImageLayerRenderingModelNew ${VISUALIZATION_TESTS1}
 otbImageLayerRenderingModelNew
 )
 
-ADD_TEST(vrTvImageLayerRenderingModelSingleLayer ${VISUREFAC_TESTS1}
+ADD_TEST(vrTvImageLayerRenderingModelSingleLayer ${VISUALIZATION_TESTS1}
 --compare-n-images ${NOTOL} 3
 ${BASELINE}/vrTvImageLayerRenderingModelSingleLayerQuicklookOutput.png
 ${TEMP}/vrTvImageLayerRenderingModelSingleLayerQuicklookOutput.png
@@ -216,38 +216,38 @@ ${TEMP}/vrTvImageLayerRenderingModelSingleLayerScaledExtractOutput.png
 
 #------------ otb::ImageLayerGenerator ------------
 
-ADD_TEST(vrTuImageLayerGeneratorNew ${VISUREFAC_TESTS1}
+ADD_TEST(vrTuImageLayerGeneratorNew ${VISUALIZATION_TESTS1}
 otbImageLayerGeneratorNew
 )
 
-ADD_TEST(vrTvImageLayerGeneratorScalar ${VISUREFAC_TESTS1}
+ADD_TEST(vrTvImageLayerGeneratorScalar ${VISUALIZATION_TESTS1}
 otbImageLayerGeneratorScalar
 ${INPUTDATA}/couleurs.tif
 1
 )
 
-ADD_TEST(vrTvImageLayerGeneratorVector ${VISUREFAC_TESTS1}
+ADD_TEST(vrTvImageLayerGeneratorVector ${VISUALIZATION_TESTS1}
 otbImageLayerGeneratorVector
 ${INPUTDATA}/couleurs.tif
 1
 )
 #------------ otb::ImageView ------------
-ADD_TEST(vrTuImageViewNew ${VISUREFAC_TESTS1}
+ADD_TEST(vrTuImageViewNew ${VISUALIZATION_TESTS1}
 otbImageViewNew
 )
 
-ADD_TEST(vrTvImageViewerEndToEndSingleLayer ${VISUREFAC_TESTS1}
+ADD_TEST(vrTvImageViewerEndToEndSingleLayer ${VISUALIZATION_TESTS1}
 otbImageViewerEndToEndSingleLayer
 ${INPUTDATA}/couleurs.tif
 200 500 200 0
 )
-ADD_TEST(vrTvImageViewerEndToEndSingleLayerWithSelectAreaHandler ${VISUREFAC_TESTS1}
+ADD_TEST(vrTvImageViewerEndToEndSingleLayerWithSelectAreaHandler ${VISUALIZATION_TESTS1}
 otbImageViewerEndToEndSingleLayerWithSelectAreaHandler
 ${INPUTDATA}/couleurs.tif
 200 500 200 0
 )
 
-ADD_TEST(vrTvImageViewerEndToEndTwoLayers ${VISUREFAC_TESTS1}
+ADD_TEST(vrTvImageViewerEndToEndTwoLayers ${VISUALIZATION_TESTS1}
 otbImageViewerEndToEndTwoLayers
 ${INPUTDATA}/couleurs.tif
 200 500 200 0
@@ -255,50 +255,50 @@ ${INPUTDATA}/couleurs.tif
 
 #------------ otb::PixelDescriptionModel ------------
 
-ADD_TEST(vrTuPixelDescriptionModelNew ${VISUREFAC_TESTS1}
+ADD_TEST(vrTuPixelDescriptionModelNew ${VISUALIZATION_TESTS1}
 otbPixelDescriptionModelNew
 )
 
-ADD_TEST(vrTvPixelDescriptionModelSingleLayer ${VISUREFAC_TESTS1}
+ADD_TEST(vrTvPixelDescriptionModelSingleLayer ${VISUALIZATION_TESTS1}
 otbPixelDescriptionModelSingleLayer
 ${INPUTDATA}/couleurs.tif
 )
 
 #------------ otb::HistogramCurve ------------
 
-ADD_TEST(vrTuHistogramCurveNew ${VISUREFAC_TESTS1}
+ADD_TEST(vrTuHistogramCurveNew ${VISUALIZATION_TESTS1}
 otbHistogramCurveNew
 )
 
 #------------ otb::Curves2DWidget ------------
 
-ADD_TEST(vrTuCurves2DWidgetNew ${VISUREFAC_TESTS1}
+ADD_TEST(vrTuCurves2DWidgetNew ${VISUALIZATION_TESTS1}
 otbCurves2DWidgetNew
 )
 
-ADD_TEST(vrTvCurves2DWidget ${VISUREFAC_TESTS1}
+ADD_TEST(vrTvCurves2DWidget ${VISUALIZATION_TESTS1}
 otbCurves2DWidget 0 0 100 200 0 0 10 10 0
 )
 
-ADD_TEST(vrTvCurves2DWidgetWithHistogram ${VISUREFAC_TESTS1}
+ADD_TEST(vrTvCurves2DWidgetWithHistogram ${VISUALIZATION_TESTS1}
 otbCurves2DWidgetWithHistogram
 ${INPUTDATA}/poupees.png
 0
 )
 
 #------------ otb::VectorDataGlComponent ------------
-ADD_TEST(vrTuVectorDataGlComponentNew ${VISUREFAC_TESTS1}
+ADD_TEST(vrTuVectorDataGlComponentNew ${VISUALIZATION_TESTS1}
 otbVectorDataGlComponentNew
 )
 
-ADD_TEST(vrTvImageWidgetWithVectorDataGlComponent ${VISUREFAC_TESTS1}
+ADD_TEST(vrTvImageWidgetWithVectorDataGlComponent ${VISUALIZATION_TESTS1}
 otbImageWidgetWithVectorDataGlComponent
 ${INPUTDATA}/poupees.png 0
 )
 
 IF(OTB_DATA_USE_LARGEINPUT)
 
-ADD_TEST(vrTvImageViewerEndToEndWithVectorData ${VISUREFAC_TESTS1}
+ADD_TEST(vrTvImageViewerEndToEndWithVectorData ${VISUALIZATION_TESTS1}
 otbImageViewerEndToEndWithVectorData
 ${LARGEINPUTDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
 ${INPUTDATA}/ToulouseRoad-examples.shp
@@ -308,18 +308,29 @@ ${INPUTDATA}/DEM/srtm_directory
 
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
+#------------ otb::CircleGlComponent ------------
+ADD_TEST(vrTuCircleGlComponentNew ${VISUALIZATION_TESTS1}
+otbCircleGlComponentNew
+)
+
+#------------ otb::CrossGlComponent ------------
+ADD_TEST(vrTuCrossGlComponentNew ${VISUALIZATION_TESTS1}
+otbCrossGlComponentNew
+)
+
+
 #------------ otb::StandardImageViewer ------------
-ADD_TEST(vrTuStandardImageViewerNew ${VISUREFAC_TESTS1}
+ADD_TEST(vrTuStandardImageViewerNew ${VISUALIZATION_TESTS1}
 otbStandardImageViewerNew
 )
 
-ADD_TEST(vrTvStandardImageViewer ${VISUREFAC_TESTS1}
+ADD_TEST(vrTvStandardImageViewer ${VISUALIZATION_TESTS1}
 otbStandardImageViewer
 ${INPUTDATA}/couleurs.tif 0
 )
 
 IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(vrTvStandardImageViewerToulouseWithWaterwaysShp ${VISUREFAC_TESTS1}
+ADD_TEST(vrTvStandardImageViewerToulouseWithWaterwaysShp ${VISUALIZATION_TESTS1}
 otbStandardImageViewer
 ${LARGEINPUTDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
 0
@@ -329,33 +340,33 @@ ${INPUTDATA}/DEM/srtm_directory
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 #---------- otb::WidgetManager and Sons--------
-ADD_TEST(vrTuPackedWidgetManagerNew ${VISUREFAC_TESTS1}
+ADD_TEST(vrTuPackedWidgetManagerNew ${VISUALIZATION_TESTS1}
 otbPackedWidgetManagerNew
 )
 
-ADD_TEST(vrTuSplittedWidgetManagerNew ${VISUREFAC_TESTS1}
+ADD_TEST(vrTuSplittedWidgetManagerNew ${VISUALIZATION_TESTS1}
 otbSplittedWidgetManagerNew
 )
 
 #---------- otb::VerticalAsymptote --------
-ADD_TEST(vrTuVerticalAsymptoteCurveNew ${VISUREFAC_TESTS1}
+ADD_TEST(vrTuVerticalAsymptoteCurveNew ${VISUALIZATION_TESTS1}
 otbVerticalAsymptoteCurveNew
 )
 
 #---------- otb::VectorDataModel ----------
-ADD_TEST(vrTuVectorDataModelNew ${VISUREFAC_TESTS1}
+ADD_TEST(vrTuVectorDataModelNew ${VISUALIZATION_TESTS1}
 otbVectorDataModelNew
 )
 
 IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(vrTvVectorDataModelTest ${VISUREFAC_TESTS1}
+ADD_TEST(vrTvVectorDataModelTest ${VISUALIZATION_TESTS1}
 otbVectorDataModelTest
 ${LARGEINPUTDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
 200 500 200 0
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
-ADD_TEST(vrTvVectorDataModelAddVectorDataTest ${VISUREFAC_TESTS1}
+ADD_TEST(vrTvVectorDataModelAddVectorDataTest ${VISUALIZATION_TESTS1}
 otbVectorDataModelAddVectorDataTest
 ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
 200 500 200 0
@@ -402,6 +413,8 @@ otbHistogramCurveNew.cxx
 otbCurves2DWidgetWithHistogram.cxx
 otbVectorDataGlComponentNew.cxx
 otbImageWidgetWithVectorDataGlComponent.cxx
+otbCircleGlComponentTest.cxx
+otbCrossGlComponentTest.cxx
 otbImageViewerEndToEndWithVectorData.cxx
 otbStandardImageViewerNew.cxx
 otbStandardImageViewerRGBNew.cxx
