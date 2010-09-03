@@ -257,94 +257,126 @@ RadiometricAttributesLabelMapFilter<TImage, TFeatureImage>
   // First call superclass implementation
   Superclass::BeforeThreadedGenerateData();
 
+  unsigned long nbComponents = this->GetFeatureImage()->GetNumberOfComponentsPerPixel();
+
+  /*
+   * Two cases here, depending on the number of components :*
+   *
+   * - For 4 band images, we compute Radiometric indices (NDVI,...),
+   *   using m_RedChannelIndex, m_GreenChannelIndex, ... to set the correct band name
+   * - For any other number of bands, we compute only the statistics of the band independently
+   *   and the feature are called "Band1", "Band2", ...
+   */
+
   // Clear any previous feature
   this->GetFunctor().ClearAllFeatures();
 
-  // Gemi
-  GEMIFilterPointerType gemi = GEMIFilterType::New();
-  gemi->SetRedIndex(m_RedChannelIndex + 1);
-  gemi->SetNIRIndex(m_NIRChannelIndex + 1);
-  gemi->SetInput(this->GetFeatureImage());
-  gemi->GetOutput()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
-  gemi->Update();
-  this->GetFunctor().AddFeature("Gemi", gemi->GetOutput());
+  if (nbComponents == 4)
+    {
 
-  // Ndvi
-  NDVIFilterPointerType ndvi = NDVIFilterType::New();
-  ndvi->SetRedIndex(m_RedChannelIndex + 1);
-  ndvi->SetNIRIndex(m_NIRChannelIndex + 1);
-  ndvi->SetInput(this->GetFeatureImage());
-  ndvi->GetOutput()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
-  ndvi->Update();
-  this->GetFunctor().AddFeature("Ndvi", ndvi->GetOutput());
+    // Red
+    ChannelFilterPointerType red = ChannelFilterType::New();
+    red->SetChannel(m_RedChannelIndex + 1);
+    red->SetInput(this->GetFeatureImage());
+    red->GetOutput()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
+    red->Update();
+    this->GetFunctor().AddFeature("Red", red->GetOutput());
 
-  // IR
-  IRFilterPointerType ir = IRFilterType::New();
-  ir->SetGreenIndex(m_GreenChannelIndex + 1);
-  ir->SetRedIndex(m_RedChannelIndex + 1);
-  ir->SetInput(this->GetFeatureImage());
-  ir->GetOutput()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
-  ir->Update();
-  this->GetFunctor().AddFeature("Redness", ir->GetOutput());
+    // Green
+    ChannelFilterPointerType green = ChannelFilterType::New();
+    green->SetChannel(m_GreenChannelIndex + 1);
+    green->SetInput(this->GetFeatureImage());
+    green->GetOutput()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
+    green->Update();
+    this->GetFunctor().AddFeature("Green", green->GetOutput());
 
-  // IC
-  ICFilterPointerType ic = ICFilterType::New();
-  ic->SetGreenIndex(m_GreenChannelIndex + 1);
-  ic->SetRedIndex(m_RedChannelIndex + 1);
-  ic->SetInput(this->GetFeatureImage());
-  ic->GetOutput()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
-  ic->Update();
-  this->GetFunctor().AddFeature("Color", ic->GetOutput());
+    // Blue
+    ChannelFilterPointerType blue = ChannelFilterType::New();
+    blue->SetChannel(m_BlueChannelIndex + 1);
+    blue->SetInput(this->GetFeatureImage());
+    blue->GetOutput()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
+    blue->Update();
+    this->GetFunctor().AddFeature("Blue", blue->GetOutput());
 
-  // IB
-  IBFilterPointerType ib = IBFilterType::New();
-  ib->SetGreenIndex(m_GreenChannelIndex + 1);
-  ib->SetRedIndex(m_RedChannelIndex + 1);
-  ib->SetInput(this->GetFeatureImage());
-  ib->GetOutput()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
-  ib->Update();
-  this->GetFunctor().AddFeature("Brightness", ib->GetOutput());
+    // Nir
+    ChannelFilterPointerType nir = ChannelFilterType::New();
+    nir->SetChannel(m_NIRChannelIndex + 1);
+    nir->SetInput(this->GetFeatureImage());
+    nir->GetOutput()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
+    nir->Update();
+    this->GetFunctor().AddFeature("NIR", nir->GetOutput());
 
-  // NDWI2
-  NDWI2FilterPointerType ndwi2 = NDWI2FilterType::New();
-  ndwi2->GetFunctor().SetGIndex(m_GreenChannelIndex + 1);
-  ndwi2->GetFunctor().SetNIRIndex(m_NIRChannelIndex + 1);
-  ndwi2->SetInput(this->GetFeatureImage());
-  ndwi2->GetOutput()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
-  ndwi2->Update();
-  this->GetFunctor().AddFeature("Ndwi2", ndwi2->GetOutput());
 
-  // Red
-  ChannelFilterPointerType red = ChannelFilterType::New();
-  red->SetChannel(m_RedChannelIndex + 1);
-  red->SetInput(this->GetFeatureImage());
-  red->GetOutput()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
-  red->Update();
-  this->GetFunctor().AddFeature("Red", red->GetOutput());
+    // Gemi
+    GEMIFilterPointerType gemi = GEMIFilterType::New();
+    gemi->SetRedIndex(m_RedChannelIndex + 1);
+    gemi->SetNIRIndex(m_NIRChannelIndex + 1);
+    gemi->SetInput(this->GetFeatureImage());
+    gemi->GetOutput()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
+    gemi->Update();
+    this->GetFunctor().AddFeature("Gemi", gemi->GetOutput());
 
-  // Green
-  ChannelFilterPointerType green = ChannelFilterType::New();
-  green->SetChannel(m_GreenChannelIndex + 1);
-  green->SetInput(this->GetFeatureImage());
-  green->GetOutput()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
-  green->Update();
-  this->GetFunctor().AddFeature("Green", green->GetOutput());
+    // Ndvi
+    NDVIFilterPointerType ndvi = NDVIFilterType::New();
+    ndvi->SetRedIndex(m_RedChannelIndex + 1);
+    ndvi->SetNIRIndex(m_NIRChannelIndex + 1);
+    ndvi->SetInput(this->GetFeatureImage());
+    ndvi->GetOutput()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
+    ndvi->Update();
+    this->GetFunctor().AddFeature("Ndvi", ndvi->GetOutput());
 
-  // Blue
-  ChannelFilterPointerType blue = ChannelFilterType::New();
-  blue->SetChannel(m_BlueChannelIndex + 1);
-  blue->SetInput(this->GetFeatureImage());
-  blue->GetOutput()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
-  blue->Update();
-  this->GetFunctor().AddFeature("Blue", blue->GetOutput());
+    // IR
+    IRFilterPointerType ir = IRFilterType::New();
+    ir->SetGreenIndex(m_GreenChannelIndex + 1);
+    ir->SetRedIndex(m_RedChannelIndex + 1);
+    ir->SetInput(this->GetFeatureImage());
+    ir->GetOutput()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
+    ir->Update();
+    this->GetFunctor().AddFeature("Redness", ir->GetOutput());
 
-  // Nir
-  ChannelFilterPointerType nir = ChannelFilterType::New();
-  nir->SetChannel(m_NIRChannelIndex + 1);
-  nir->SetInput(this->GetFeatureImage());
-  nir->GetOutput()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
-  nir->Update();
-  this->GetFunctor().AddFeature("NIR", nir->GetOutput());
+    // IC
+    ICFilterPointerType ic = ICFilterType::New();
+    ic->SetGreenIndex(m_GreenChannelIndex + 1);
+    ic->SetRedIndex(m_RedChannelIndex + 1);
+    ic->SetInput(this->GetFeatureImage());
+    ic->GetOutput()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
+    ic->Update();
+    this->GetFunctor().AddFeature("Color", ic->GetOutput());
+
+    // IB
+    IBFilterPointerType ib = IBFilterType::New();
+    ib->SetGreenIndex(m_GreenChannelIndex + 1);
+    ib->SetRedIndex(m_RedChannelIndex + 1);
+    ib->SetInput(this->GetFeatureImage());
+    ib->GetOutput()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
+    ib->Update();
+    this->GetFunctor().AddFeature("Brightness", ib->GetOutput());
+
+    // NDWI2
+    NDWI2FilterPointerType ndwi2 = NDWI2FilterType::New();
+    ndwi2->GetFunctor().SetGIndex(m_GreenChannelIndex + 1);
+    ndwi2->GetFunctor().SetNIRIndex(m_NIRChannelIndex + 1);
+    ndwi2->SetInput(this->GetFeatureImage());
+    ndwi2->GetOutput()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
+    ndwi2->Update();
+    this->GetFunctor().AddFeature("Ndwi2", ndwi2->GetOutput());
+    }
+  else
+    {
+    for (unsigned int i = 0; i < nbComponents; ++i)
+      {
+      ChannelFilterPointerType band = ChannelFilterType::New();
+      band->SetChannel(i + 1);
+      band->SetInput(this->GetFeatureImage());
+      band->GetOutput()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
+      band->Update();
+      std::ostringstream oss;
+      oss << "Band" << i;
+      this->GetFunctor().AddFeature(oss.str(), band->GetOutput());
+      }
+
+
+    }
 }
 
 template <class TImage, class TFeatureImage>
