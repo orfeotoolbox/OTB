@@ -55,7 +55,7 @@ TerraSarCalibrationFunctor<TInput, TOutput>
 template <class TInput, class TOutput>
 double
 TerraSarCalibrationFunctor<TInput, TOutput>
-::ComputeNoiseEquivalentBetaNaught(double range) const
+::ComputeNoiseEquivalentBetaNought(double range) const
 {
   // Formula: NEBN = Ks * SUM( coef_i * (tau - tau_ref)^i)
 
@@ -117,7 +117,7 @@ TerraSarCalibrationFunctor<TInput, TOutput>
     double currentRange = this->ComputeRangePosition(index);
 
     // Compute the NEBN
-    double NEBN = this->ComputeNoiseEquivalentBetaNaught(currentRange);
+    double NEBN = this->ComputeNoiseEquivalentBetaNought(currentRange);
 
     // Last, apply formula
     sigma = (beta0 - NEBN) * vcl_sin(angle);

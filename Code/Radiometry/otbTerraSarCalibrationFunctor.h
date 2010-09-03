@@ -158,7 +158,7 @@ private:
   inline double ComputeRangePosition(const IndexType& index) const;
 
   /** Return the current NEBN value */
-  inline double ComputeNoiseEquivalentBetaNaught(double range) const;
+  inline double ComputeNoiseEquivalentBetaNought(double range) const;
 
   /** Evaluate polynom with Horner scheme*/
   inline double Horner(std::vector<double>& coefficients, const double nebn) const;
