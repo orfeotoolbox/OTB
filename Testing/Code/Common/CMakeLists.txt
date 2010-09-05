@@ -877,27 +877,9 @@ ADD_TEST(coTuGISTableToGISTableFilterNew ${COMMON_TESTS10}
 )
 
 
-ADD_TEST(coTuLabelMapToGISTableFilterNew ${COMMON_TESTS10}
-  otbLabelMapToGISTableFilterNew
-)
-
-ADD_TEST(coTuGISTableToLabelMapFilterNew ${COMMON_TESTS10}
-  otbGISTableToLabelMapFilterNew
-)
-
 ADD_TEST(coTuGISTableToVectorDataFilterNew ${COMMON_TESTS10}
   otbGISTableToVectorDataFilterNew
 )
-
-ADD_TEST(coTvLabelMapToGISTableFilter ${COMMON_TESTS10}
-  otbLabelMapToGISTableFilter
-    ${INPUTDATA}/rcc8_mire1.png
-    orfeotoolbox_test
-    labelmaptogis_test_table
-    orfeotoolbox_test_user
-    Bidfeud0
-)
-
 
 #need gdal 1.6 for POSTGIS tables connection via OGR string
 ADD_TEST(coTvGISTableToVectorDataFilter ${COMMON_TESTS10}
@@ -1094,10 +1076,7 @@ otbPostGISTableNew.cxx
 otbVectorDataToGISTableFilterNew.cxx
 # otbVectorDataToGISTableFilter.cxx
 otbGISTableToGISTableFilterNew.cxx
-otbLabelMapToGISTableFilterNew.cxx
-otbGISTableToLabelMapFilterNew.cxx
 otbGISTableToVectorDataFilterNew.cxx
-otbLabelMapToGISTableFilter.cxx
 otbGISTableToVectorDataFilter.cxx
 otbGISTableSourceNew.cxx
 )

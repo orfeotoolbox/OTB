@@ -117,10 +117,13 @@ otbVectorDataToLabelMapFilter
 
 # OBIATests2 (need PQXX)
 IF(OTB_USE_PQXX)
-ADD_TEST(obTuLabelMapToGISTableFilterNew ${OBIA_TESTS1}
+ADD_TEST(obTuLabelMapToGISTableFilterNew ${OBIA_TESTS2}
   otbLabelMapToGISTableFilterNew)
 
-ADD_TEST(obTvLabelMapToGISTableFilter ${OBIA_TESTS1}
+ADD_TEST(obTuGISTableToLabelMapFilterNew ${OBIA_TESTS2}
+  otbGISTableToLabelMapFilterNew)
+
+ADD_TEST(obTvLabelMapToGISTableFilter ${OBIA_TESTS2}
   otbLabelMapToGISTableFilter
     ${INPUTDATA}/rcc8_mire1.png
     orfeotoolbox_test
@@ -153,9 +156,9 @@ otbVectorDataToLabelMapFilterNew.cxx
 
 IF(OTB_USE_PQXX)
 SET(BasicOBIA_SRCS2
-otbLabelMapToGISTableFilter.cxx
 otbLabelMapToGISTableFilterNew.cxx
 otbGISTableToLabelMapFilterNew.cxx
+otbLabelMapToGISTableFilter.cxx
 )
 ENDIF(OTB_USE_PQXX)
 
@@ -164,7 +167,7 @@ TARGET_LINK_LIBRARIES(otbOBIATests1 OTBIO OTBOBIA  OTBTesting)
 
 IF(OTB_USE_PQXX)
 ADD_EXECUTABLE(otbOBIATests2 otbOBIATests2.cxx ${BasicOBIA_SRCS2})
-TARGET_LINK_LIBRARIES(otbOBIATests2 OTBIO OTBOBIA OTBTesting)
+TARGET_LINK_LIBRARIES(otbOBIATests2 OTBIO OTBOBIA OTBTesting OTBGeospatialAnalysis pq pqxx)
 ENDIF(OTB_USE_PQXX)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
