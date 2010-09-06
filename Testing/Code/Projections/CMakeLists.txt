@@ -18,6 +18,7 @@ SET(EPSILON_6 0.000001)
 SET(PROJECTIONS_TESTS1 ${CXX_TEST_PATH}/otbProjectionsTests1)
 SET(PROJECTIONS_TESTS2 ${CXX_TEST_PATH}/otbProjectionsTests2)
 SET(PROJECTIONS_TESTS3 ${CXX_TEST_PATH}/otbProjectionsTests3)
+SET(PROJECTIONS_TESTS4 ${CXX_TEST_PATH}/otbProjectionsTests4)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbPROJECTIONS_TESTS1 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -578,6 +579,23 @@ ADD_TEST(prTvVectorDataExtractROIandProjection ${PROJECTIONS_TESTS3}
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbPROJECTIONS_TESTS4 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ADD_TEST(prTuOptResampleImageFilterNew ${PROJECTIONS_TESTS4}
+  otbOptResampleImageFilterNew
+  )
+
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(prTvOptResampleImageFilter ${PROJECTIONS_TESTS4}
+  otbOptResampleImageFilter
+  ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+  500
+  ${TEMP}/prTvotbOptResampledImage.tif
+  )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
 
 
 
@@ -627,8 +645,15 @@ otbVectorDataExtractROIandProjection.cxx
 )
 
 
+SET(Projections_SRCS4
+otbProjectionsTests4.cxx
+otbOptResampleImageFilterNew.cxx
+otbOptResampleImageFilter.cxx
+)
+
 OTB_ADD_EXECUTABLE(otbProjectionsTests1 "${Projections_SRCS1}" "OTBProjections;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbProjectionsTests2 "${Projections_SRCS2}" "OTBProjections;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbProjectionsTests3 "${Projections_SRCS3}" "OTBProjections;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbProjectionsTests4 "${Projections_SRCS4}" "OTBProjections;OTBIO;OTBTesting")
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
