@@ -94,8 +94,7 @@ int otbOptResampleImageFilter(int argc, char* argv[])
   typedef otb::StreamingImageFileWriter<ImageType>    WriterType;
   WriterType::Pointer writer= WriterType::New();
   writer->SetTilingStreamDivisions();
-  // TODO : implement the WriteGeomFile in StreamingImageFileWriter
-  //writer->WriteGeomFileOn();
+  writer->WriteGeomFileOn();
   writer->SetFileName(outfname);
   writer->SetInput(resampler->GetOutput());
   writer->Update();
