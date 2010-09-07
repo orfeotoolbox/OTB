@@ -598,6 +598,20 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 
 
+ADD_TEST(prTuPhysicalToRPCSensorModelImageFilter ${PROJECTIONS_TESTS4}
+  otbPhysicalToRPCSensorModelImageFilterNew
+  )
+
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(prTvPhysicalToRPCSensorModelImageFilter ${PROJECTIONS_TESTS4}
+  otbPhysicalToRPCSensorModelImageFilter
+  ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+  1000
+  ${TEMP}/prTvotbPhysicalToRPCSensorModelImageFilter.tif
+  )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
+
 
 #=======================================================================================
 SET(Projections_SRCS1
@@ -649,6 +663,8 @@ SET(Projections_SRCS4
 otbProjectionsTests4.cxx
 otbOptResampleImageFilterNew.cxx
 otbOptResampleImageFilter.cxx
+otbPhysicalToRPCSensorModelImageFilterNew.cxx
+otbPhysicalToRPCSensorModelImageFilter.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbProjectionsTests1 "${Projections_SRCS1}" "OTBProjections;OTBIO;OTBTesting")

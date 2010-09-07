@@ -16,18 +16,20 @@
 
 =========================================================================*/
 
-// this file defines the otbProjectionsTest for the test driver
-// and all it expects is that you have a function called RegisterTests
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
+#include "otbPhysicalToRPCSensorModelImageFilter.h"
+#include "otbVectorImage.h"
 
-#include "otbTestMain.h"
-
-void RegisterTests()
+int otbPhysicalToRPCSensorModelImageFilterNew(int argc, char* argv[])
 {
-  REGISTER_TEST(otbOptResampleImageFilterNew);
-  REGISTER_TEST(otbOptResampleImageFilter);
-  REGISTER_TEST(otbPhysicalToRPCSensorModelImageFilterNew);
-  REGISTER_TEST(otbPhysicalToRPCSensorModelImageFilter);
+  // Images definition
+  const unsigned int Dimension = 2;
+  typedef double                                      PixelType;
+  typedef otb::VectorImage<PixelType, Dimension>      ImageType;
+  
+  typedef otb::PhysicalToRPCSensorModelImageFilter<ImageType> PhysicalToSensorModelType;
+
+  // Instanciation of the filter
+  PhysicalToSensorModelType::Pointer resampler = PhysicalToSensorModelType::New();
+  
+  return 0;
 }
