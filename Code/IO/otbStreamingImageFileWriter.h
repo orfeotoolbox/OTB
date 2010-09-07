@@ -169,6 +169,13 @@ public:
   /** Type use to define number of divisions */
   typedef StreamingMode CalculationDivisionEnumType;
 
+  /**
+   * Enable/disable writing of a .geom file with the ossim keyword list along with the written image
+   */
+  itkSetMacro(WriteGeomFile, bool);
+  itkGetMacro(WriteGeomFile, bool);
+  itkBooleanMacro(WriteGeomFile);
+
 protected:
   StreamingImageFileWriter();
   virtual ~StreamingImageFileWriter();
@@ -209,8 +216,11 @@ private:
   //track whether the region is user specified
   bool m_FactorySpecifiedImageIO; //track whether the factory mechanism set the ImageIO
   bool m_UseCompression;
-  bool m_UseInputMetaDataDictionary; // whether to use the MetaDataDictionary from the input or not.
-
+  bool m_UseInputMetaDataDictionary; // whether to use the
+                                     // MetaDataDictionary from the
+                                     // input or not.
+  
+  bool m_WriteGeomFile;              // Write a geom file to store the kwl
 };
 
 } // end namespace otb
