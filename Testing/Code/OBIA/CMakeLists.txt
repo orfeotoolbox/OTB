@@ -94,6 +94,15 @@ ADD_TEST(obTuLabelObjectToPolygonFunctorNew ${OBIA_TESTS1}
 otbLabelObjectToPolygonFunctorNew
 )
 
+ADD_TEST(obTuMinMaxAttributesLabelMapFilterNew ${OBIA_TESTS1}
+otbMinMaxAttributesLabelMapFilterNew
+)
+
+ADD_TEST(obTvMinMaxAttributesLabelMapFilter ${OBIA_TESTS1}
+         otbMinMaxAttributesLabelMapFilter
+         ${INPUTDATA}/calanques.tif
+         ${INPUTDATA}/cala_labelled.tif)
+
 ADD_TEST(obTuRadiometricAttributesLabelMapFilterNew ${OBIA_TESTS1}
 otbRadiometricAttributesLabelMapFilterNew
 )
@@ -147,6 +156,7 @@ otbLabelMapWithClassLabelToLabeledSampleListFilter.cxx
 otbLabelMapWithClassLabelToLabeledSampleListFilterNew.cxx
 otbLabelObjectMapVectorizer.cxx
 otbLabelObjectToPolygonFunctorNew.cxx
+otbMinMaxAttributesLabelMapFilter.cxx
 otbRadiometricAttributesLabelMapFilterNew.cxx
 otbShapeAttributesLabelMapFilterNew.cxx
 otbStatisticsAttributesLabelMapFilterNew.cxx
