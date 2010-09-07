@@ -28,44 +28,28 @@ namespace otb {
 /** \class PhysicalToRPCSensorModelImageFilter
  * \brief This filter estimates a RPC sensor models from a physical model.
  *
- * This filters estimates an RPC sensor model from a list of user
- * defined GCPs. Internally, it uses an ossimRpcSolver, which performs
- * the estimation using the well known least-square method.
+ * This filters estimates an RPC sensor model from a list of points
+ * homologous point in the physical coordinate system and the WGS84
+ * CS.
+ * 
+ * The number of points used to estimate the rpc sensor model is
+ * defined by the GridSpacing, note that at least 16 points are needed
+ * to estimate a proper RPC sensor model, there are no warning when
+ * the model estimated is inaccurate.
  *
  * The UseImageGCPs flag allows to import GCPs from the image
- * metadata, if any.
+ * metadata, if any.(TODO)
  *
  * GCPs can be passed to the filter using one of the AddGCP method
- * implementation.
+ * implementation.(TODO)
  *
- * The first implementation takes geographic points with elevation (3D
- * points).
- *
- * The second implementation accepts geographic points without the
- * elevation information. In this case, either the mean elevation or
- * an elevation fetch from a SRT directory is used, depending on the
- * value of the UseDEM flag.
- *
- * If UseDEM is set to true, the DEMHandler is used to retrieve the
- * elevation information. The user can either set its own DEMHandler
- * using the appropriate setter, or configure the existing internal
- * DEMHandler using the Getter.
- *
- * The RMS (root mean square) ground error is available through the
- * appropriate getter.
- *
- * Please note that GCPs are infered to be given in physical
- * coordinates. This is seamless in most cases.
- *
- * Please note that at least 16 GCPs are required to estimate a proper
- * RPC sensor model, although no warning will be reported to the user
- * if the number of GCPs is lower than 16.
+ * Depending on the value of the DEMDirectory, an elevation fetched
+ * from the SRT directory is used. 
  *
  * This filter does not modify the image buffer, but only the
  * metadata. Therefore, it is implemented as an InPlaceImageFilter.
  *
- * The output image can be given to the OrthorectificationFilter.
- *
+ * \ingroup Projections
  */
 template <class TImage>
 class ITK_EXPORT PhysicalToRPCSensorModelImageFilter :
