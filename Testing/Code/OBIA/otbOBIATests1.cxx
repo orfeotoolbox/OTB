@@ -41,6 +41,8 @@ REGISTER_TEST(otbLabelMapWithClassLabelToLabeledSampleListFilterNew);
 REGISTER_TEST(otbLabelMapWithClassLabelToLabeledSampleListFilter);
 REGISTER_TEST(otbLabelObjectMapVectorizer);
 REGISTER_TEST(otbLabelObjectToPolygonFunctorNew);
+REGISTER_TEST(otbMinMaxAttributesLabelMapFilterNew);
+REGISTER_TEST(otbMinMaxAttributesLabelMapFilter);
 REGISTER_TEST(otbRadiometricAttributesLabelMapFilterNew);
 REGISTER_TEST(otbShapeAttributesLabelMapFilterNew);
 REGISTER_TEST(otbStatisticsAttributesLabelMapFilterNew);
