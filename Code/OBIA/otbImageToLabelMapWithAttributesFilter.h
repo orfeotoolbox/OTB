@@ -32,10 +32,20 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 
-template <class TInputImage, class TLabeledImage, class TLabel, class TObjectLabel >
+/** \class LabelImageToLabelMapWithAdjacencyFilter
+ * \brief Convert a labeled image to a label map with adjacency information
+ *        and computes feature attributes for each LabelObject
+ *
+ * Convert a labeled image and its associated vector image
+ * to a label map with adjacency information, and computes shape and
+ * radiometric attributes for each LabelObject.
+ *
+ * It is suitable to be used with otb::LabelMapWithAdjacency<otb::AttributesMapLabelObject>
+ */
+template <class TInputImage, class TLabeledImage, class TLabel, class TLabelObject >
 class ITK_EXPORT ImageToLabelMapWithAttributesFilter
-  : public itk::LabelMapFilter< LabelMapWithAdjacency<TObjectLabel  >,
-                                LabelMapWithAdjacency< TObjectLabel > >
+  : public itk::LabelMapFilter< LabelMapWithAdjacency<TLabelObject>,
+                                LabelMapWithAdjacency<TLabelObject> >
 {
 
 public:
@@ -43,8 +53,8 @@ public:
   typedef ImageToLabelMapWithAttributesFilter      Self;
   typedef itk::SmartPointer<Self>                  Pointer;
   typedef itk::SmartPointer<const Self>            ConstPointer;
-  typedef itk::LabelMapFilter< LabelMapWithAdjacency<TObjectLabel  >,
-                               LabelMapWithAdjacency< TObjectLabel > > Superclass;
+  typedef itk::LabelMapFilter< LabelMapWithAdjacency<TLabelObject >,
+                               LabelMapWithAdjacency<TLabelObject > > Superclass;
   /** Standard type macro */
   itkTypeMacro(ImageToLabelMapWithAttributesFilter,itk::LabelMapFilter);
 
@@ -53,11 +63,9 @@ public:
   
   typedef TInputImage                 InputImageType;
   typedef TLabeledImage               LabeledImageType;
-  typedef TLabel                      LabelType;
+  typedef TLabelObject                LabelObjectType;
 
-  /** Algorithms typedef */
-  typedef TObjectLabel      LabelObjectType;
-  //typedef AttributesMapLabelObjectWithClassLabel<LabelType,2,double,LabelType> LabelObjectType;
+  typedef typename LabelObjectType::LabelType                                  LabelType;
   typedef LabelMapWithAdjacency<LabelObjectType>                               LabelMapType;
   typedef typename LabelMapType::AdjacentLabelsContainerType                   AdjacentLabelsContainerType;
   

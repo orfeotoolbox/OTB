@@ -38,7 +38,6 @@ int otbImageToLabelMapWithAttributesFilter(int argc, char* argv[])
   typedef otb::Image<unsigned int,2>                           LabeledImageType;
 
   typedef otb::AttributesMapLabelObjectWithClassLabel<double,2,double,double> LabelObjectType;
-  //typedef otb::AttributesMapLabelObjectWithClassLabel<unsigned int,2,double,unsigned int> LabelObjectType;
 
   typedef otb::ImageToLabelMapWithAttributesFilter<ImageType,  
     LabeledImageType,unsigned int, LabelObjectType>                            FilterType;
@@ -53,8 +52,6 @@ int otbImageToLabelMapWithAttributesFilter(int argc, char* argv[])
   // Inputs
   reader->SetFileName(infname);
   reader->UpdateOutputInformation();
-  
-
   
   labeledReader->SetFileName(lfname);
   labeledReader->UpdateOutputInformation();
