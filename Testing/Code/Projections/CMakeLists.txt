@@ -602,15 +602,27 @@ ADD_TEST(prTuPhysicalToRPCSensorModelImageFilter ${PROJECTIONS_TESTS4}
   otbPhysicalToRPCSensorModelImageFilterNew
   )
 
-IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(prTvPhysicalToRPCSensorModelImageFilter ${PROJECTIONS_TESTS4}
   otbPhysicalToRPCSensorModelImageFilter
-  ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
-  1000
+  ${INPUTDATA}/ToulouseExtract_WithGeom.tif 
+  15
   ${TEMP}/prTvotbPhysicalToRPCSensorModelImageFilter.tif
   )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
 
+ADD_TEST(prTuotbGenericRSResampleImageFilter ${PROJECTIONS_TESTS4}
+  otbGenericRSResampleImageFilterNew
+  )
+IF(OTB_DATA_USE_LARGEINPUT)
+
+
+ADD_TEST(prTvotbGenericRSResampleImageFilter ${PROJECTIONS_TESTS4}
+  otbGenericRSResampleImageFilter
+  ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+  1000
+  15
+  ${TEMP}/prTvotbGenericRSResampleImageFilterOutput.tif
+  )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 
 #=======================================================================================
@@ -665,6 +677,8 @@ otbOptResampleImageFilterNew.cxx
 otbOptResampleImageFilter.cxx
 otbPhysicalToRPCSensorModelImageFilterNew.cxx
 otbPhysicalToRPCSensorModelImageFilter.cxx
+otbGenericRSResampleImageFilterNew.cxx
+otbGenericRSResampleImageFilter.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbProjectionsTests1 "${Projections_SRCS1}" "OTBProjections;OTBIO;OTBTesting")
