@@ -55,8 +55,11 @@ int otbGenericRSResampleImageFilter(int argc, char* argv[])
   SizeType      size;
   size.Fill(isize);
 
+  // 
   OriginType  origin;
-  origin.Fill(1500);
+  origin[0] = 367340;
+  origin[1] = 4.83467e+06;
+    
 
   // Build the ouput projection ref : Lambert II ref
   OGRSpatialReference    oSRS;
@@ -101,7 +104,7 @@ int otbGenericRSResampleImageFilter(int argc, char* argv[])
   // Write the resampled image
   typedef otb::StreamingImageFileWriter<ImageType>    WriterType;
   WriterType::Pointer writer= WriterType::New();
-  writer->SetTilingStreamDivisions();
+  writer->SetTilingStreamDivisions(4);
   writer->WriteGeomFileOn();
   writer->SetFileName(outfname);
   writer->SetInput(resampler->GetOutput());
