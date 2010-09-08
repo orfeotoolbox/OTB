@@ -81,33 +81,45 @@ public:
   
   /** Public Method prototypes */
   virtual void GenerateData();
-  
-  /** Accessors to internal filters parameters */
-  itkSetObjectMacro(Transform,GenericRSTransformType);
-  itkGetObjectMacro(Transform,GenericRSTransformType);
-
+    
   /** The Deformation field spacing & size */
-  itkSetMacro(DeformationFieldSpacing,SpacingType);
+  void SetDeformationFieldSpacing(const SpacingType & spacing)
+  {
+    m_Resampler->SetDeformationFieldSpacing(spacing);
+    this->Modified();
+  }
+  otbGetObjectMemberConstReferenceMacro(Resampler,DeformationFieldSpacing,SpacingType);
   
   /** The resampled image parameters */
   // Output Origin
-  itkSetMacro(OutputOrigin,OriginType);
-  itkGetMacro(OutputOrigin,OriginType);
-  // Output Start index
-  itkSetMacro(OutputIndex,IndexType);
-  itkGetMacro(OutputIndex,IndexType);
-  // Output Size
-  itkSetMacro(OutputSize,SizeType);
-  itkGetMacro(OutputSize,SizeType);
-  // Output Spacing
-  itkSetMacro(OutputSpacing,SpacingType);
-  itkGetMacro(OutputSpacing,SpacingType);
+  void SetOutputOrigin(const OriginType & origin)
+  {
+    m_Resampler->SetOutputOrigin(origin);
+    this->Modified();
+  }
+  otbGetObjectMemberConstReferenceMacro(Resampler,OutputOrigin,OriginType);
   
+  // Output Start index
+  otbSetObjectMemberMacro(Resampler,OutputStartIndex,IndexType);
+  otbGetObjectMemberConstReferenceMacro(Resampler,OutputStartIndex,IndexType);
+  
+  // Output Size
+  otbSetObjectMemberMacro(Resampler,OutputSize,SizeType);
+  otbGetObjectMemberConstReferenceMacro(Resampler,OutputSize,SizeType);
+  
+  // Output Spacing
+  otbSetObjectMemberMacro(Resampler,OutputSpacing,SpacingType);
+  otbGetObjectMemberConstReferenceMacro(Resampler,OutputSpacing,SpacingType);
+  
+
   /** Methods to Set/Get the interpolator */
-  itkSetObjectMacro( Interpolator, InterpolatorType );
-  itkGetObjectMacro( Interpolator, InterpolatorType );
-
-
+  void SetInterpolator(InterpolatorType * interpolator)
+  {
+    m_Resampler->SetInterpolator(interpolator);
+    this->Modified();
+  }
+  otbGetObjectMemberConstMacro(Resampler, Interpolator, const InterpolatorType *);
+  
   /** Set/Get for input and output projections.  */
   itkSetStringMacro(InputProjectionRef);
   itkGetStringMacro(InputProjectionRef);
@@ -115,31 +127,30 @@ public:
   itkSetStringMacro(OutputProjectionRef);
   itkGetStringMacro(OutputProjectionRef);
 
-  /** Set/Get Keywordlist*/
-  itkGetMacro(InputKeywordList, ImageKeywordlist);
+  /** Set/Get Input Keywordlist*/
   void SetInputKeywordList(const ImageKeywordlist& kwl)
   {
-    this->m_InputKeywordList = kwl;
+    m_Transform->SetOutputKeywordList(kwl);
     this->Modified();
   }
-
-  itkGetMacro(OutputKeywordList, ImageKeywordlist);
+  otbGetObjectMemberConstMacro(Transform,InputKeywordList,ImageKeywordlist);
+  
+  /** Set/Get output Keywordlist*/
   void SetOutputKeywordList(const ImageKeywordlist& kwl)
   {
-    this->m_OutputKeywordList = kwl;
+    m_Transform->SetInputKeywordList(kwl);
     this->Modified();
   }
+  otbGetObjectMemberConstMacro(Transform,OutputKeywordList,ImageKeywordlist);
   
-  itkSetStringMacro(DEMDirectory);
-  itkGetStringMacro(DEMDirectory);
+  /** Set/Get the DEMDirectory*/
+    void SetDEMDirectory(const std::string&  dem)
+  {
+    m_Transform->SetDEMDirectory(dem);
+    this->Modified();
+  }
+  otbGetObjectMemberConstMacro(Transform,DEMDirectory,std::string);
   
-  itkSetMacro(AverageElevation, double);
-  itkGetMacro(AverageElevation, double);
-
-  virtual void GenerateOutputInformation();
-  
-  virtual void GenerateInputRequestedRegion();
-
   void SetOutputParametersFromImage(const InputImageType * image);
   
 protected:
@@ -147,8 +158,11 @@ protected:
   /** Destructor */
   virtual ~GenericRSResampleImageFilter() {};
 
-  // called in the GenerateInputRequestedRegion cause the transform
-  // is needed there and have to be set once.
+  virtual void GenerateOutputInformation();
+  
+  virtual void GenerateInputRequestedRegion();
+
+  // Method to instanciate the Generic RS transform
   void UpdateTransform();
 
 private:
@@ -156,28 +170,12 @@ private:
   void operator =(const Self&); //purposely not implemented
 
   // GenericRSTransform Parameters
-  ImageKeywordlist     m_InputKeywordList;
-  ImageKeywordlist     m_OutputKeywordList;
   std::string          m_InputProjectionRef;
   std::string          m_OutputProjectionRef;
-  std::string          m_DEMDirectory;
-  double               m_AverageElevation;
-  unsigned int         m_InterpolatorNeighborhoodRadius;
 
-  unsigned int        m_AddedRadius ;
   // Filters pointers
   ResamplerPointerType                   m_Resampler;
   GenericRSTransformPointerType          m_Transform;
-
-  // Output parameters
-  SpacingType                            m_DeformationFieldSpacing;
-  SizeType                               m_OutputSize;
-  OriginType                             m_OutputOrigin;
-  IndexType                              m_OutputIndex;
-  SpacingType                            m_OutputSpacing;
-  
-  // smartPointer on the interpolator
-  typename InterpolatorType::Pointer     m_Interpolator;
 };
 
 } // namespace otb
