@@ -73,7 +73,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
   // resampler output parameters
   m_Resampler->SetOutputSize(m_OutputSize);
   m_Resampler->SetOutputSpacing(m_OutputSpacing);
-  m_Resampler->SetOutputIndex(m_OutputIndex);
+  m_Resampler->SetOutputStartIndex(m_OutputIndex);
   m_Resampler->SetOutputOrigin(m_OutputOrigin);
 
   // expose the metadata to the output of the resample filter 

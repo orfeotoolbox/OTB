@@ -25,6 +25,8 @@
 #include "itkInterpolateImageFunction.h"
 #include "itkVector.h"
 
+#include "otbMacro.h"
+
 namespace otb
 {
 
@@ -92,59 +94,73 @@ public:
   virtual void GenerateData();
   
   /** Accessors to internal filters parameters */
-  itkSetObjectMacro(Transform,TransformType);
+  void SetTransform(TransformType * transform)
+  {
+    m_DeformationFilter->SetTransform(transform);
+    this->Modified();
+  }
+  otbGetObjectMemberConstMacro(DeformationFilter,Transform,const TransformType*);
 
   /** The Deformation field spacing & size */
-  itkSetMacro(DeformationFieldSpacing,SpacingType);
-  
+  void SetDeformationFieldSpacing(const SpacingType & spacing)
+  {
+    m_DeformationFilter->SetOutputSpacing(spacing);
+    this->Modified();
+  }
+  const SpacingType & GetDeformationFieldSpacing() const
+  {
+   return m_DeformationFilter->GetOutputSpacing();
+  }
+
   /** The resampled image parameters */
   // Output Origin
-  itkSetMacro(OutputOrigin,OriginType);
-  itkGetMacro(OutputOrigin,OriginType);
-  // Output Start index
-  itkSetMacro(OutputIndex,IndexType);
-  itkGetMacro(OutputIndex,IndexType);
-  // Output Size
-  itkSetMacro(OutputSize,SizeType);
-  itkGetMacro(OutputSize,SizeType);
-  // Output Spacing
-  itkSetMacro(OutputSpacing,SpacingType);
-  itkGetMacro(OutputSpacing,SpacingType);
+  void SetOutputOrigin(const OriginType & origin)
+  {
+    m_DeformationFilter->SetOutputOrigin(origin);
+    m_WarpFilter->SetOutputOrigin(origin);
+    this->Modified();
+  }
+  otbGetObjectMemberConstReferenceMacro(WarpFilter,OutputOrigin,OriginType);
 
-  /** Get the deformation grid generated */
-  virtual DeformationFieldType * GetDeformationField();
+  // Output Start index
+  otbSetObjectMemberMacro(WarpFilter,OutputStartIndex,IndexType);
+  otbGetObjectMemberConstReferenceMacro(WarpFilter,OutputStartIndex,IndexType);
+
+  // Output Size
+  otbSetObjectMemberMacro(WarpFilter,OutputSize,SizeType);
+  otbGetObjectMemberConstReferenceMacro(WarpFilter,OutputSize,SizeType);
+
+  // Output Spacing
+  otbSetObjectMemberMacro(WarpFilter,OutputSpacing,SpacingType);
+  otbGetObjectMemberConstReferenceMacro(WarpFilter,OutputSpacing,SpacingType);
   
   /** Methods to Set/Get the interpolator */
-  itkSetObjectMacro( Interpolator, InterpolatorType );
-  itkGetObjectMacro( Interpolator, InterpolatorType );
+  void SetInterpolator(InterpolatorType * interpolator)
+  {
+    m_WarpFilter->SetInterpolator(interpolator);
+    this->Modified();
+  }
+  otbGetObjectMemberConstMacro(WarpFilter, Interpolator, const InterpolatorType *);
 
-  virtual void GenerateOutputInformation();
-  
-  virtual void GenerateInputRequestedRegion();
-
+  /** Import output parameters from a given image */
   void SetOutputParametersFromImage(const InputImageType * image);
   
 protected:
   OptResampleImageFilter();
+
   /** Destructor */
   virtual ~OptResampleImageFilter() {};
+
+  virtual void GenerateOutputInformation();
+
+  virtual void GenerateInputRequestedRegion();
 
 private:
   OptResampleImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
   DeformationFieldGeneratorPointerType   m_DeformationFilter;
-  typename TransformType::Pointer        m_Transform;
-
-  SizeType                               m_DeformationGridSize;
-  SpacingType                            m_DeformationFieldSpacing;
-  SizeType                               m_OutputSize;
-  OriginType                             m_OutputOrigin;
-  IndexType                              m_OutputIndex;
-  SpacingType                            m_OutputSpacing;
-  
   typename WarpImageFilterType::Pointer  m_WarpFilter;
-  InterpolatorPointerType                m_Interpolator;
 };
 
 } // namespace otb

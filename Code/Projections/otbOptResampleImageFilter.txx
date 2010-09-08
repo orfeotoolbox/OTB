@@ -31,84 +31,25 @@ template <class TInputImage, class TOutputImage, class TDeformationField>
 OptResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
 ::OptResampleImageFilter() 
 {
-  // default values for DeformationGrid
-  m_DeformationGridSize.Fill(1);
-  m_DeformationFieldSpacing.Fill(2);
-  
-  // default values for Resampled Image
-  m_OutputSize.Fill(1);
-  m_OutputOrigin.Fill(0);
-  m_OutputIndex.Fill(0);
-  m_OutputSpacing.Fill(1);
-  
   // internal filters instanciation
   m_DeformationFilter = DeformationFieldGeneratorType::New();
   m_WarpFilter        = WarpImageFilterType::New();
 
-  // default identity transform
-  m_Transform = itk::IdentityTransform<double ,InputImageType::ImageDimension >::New();
-  
-  // Setup default interpolator
-  typename DefaultInterpolatorType::Pointer interp =  DefaultInterpolatorType::New();
-  m_Interpolator = static_cast<InterpolatorType*>( interp.GetPointer() );
+  // Wire minipipeline
+  m_WarpFilter->SetDeformationField(m_DeformationFilter->GetOutput());
 }
-
-template <class TInputImage, class TOutputImage, class TDeformationField>
-typename OptResampleImageFilter<TInputImage, TOutputImage, TDeformationField>::DeformationFieldType*
-OptResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
-::GetDeformationField()
-{
-  return m_DeformationFilter->GetOutput();
-}
-
 
 template <class TInputImage, class TOutputImage, class TDeformationField>
 void
 OptResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
 ::GenerateData()
 {
-  // Get the input image 
-  typename InputImageType::Pointer  input  = const_cast<InputImageType *>(this->GetInput());
-  typename OutputImageType::Pointer output = this->GetOutput();
-  
-  
-  // Build the deformation field
-  m_DeformationFilter->SetTransform(m_Transform);
-  m_DeformationFilter->SetOutputIndex(output->GetLargestPossibleRegion().GetIndex());
-  m_DeformationFilter->SetOutputOrigin(output->GetOrigin());
-  m_DeformationFilter->SetOutputSpacing(m_DeformationFieldSpacing);
-
-  // Build the deformation field size following the
-  // m_DeformationFieldSpacing set by the user
-  SizeType    size    = output->GetLargestPossibleRegion().GetSize();
-  SpacingType spacing = output->GetSpacing();
-  
-  for (unsigned int dim = 0; dim < InputImageType::ImageDimension;++dim)
-    {
-    m_DeformationGridSize[dim] = static_cast<unsigned long>(size[dim]*vcl_abs(spacing[dim]/m_DeformationFieldSpacing[dim]));
-    }
-  m_DeformationFilter->SetOutputSize(m_DeformationGridSize); 
-  
-  // Apply the streamed warp filter to the input image using the
-  // deformation field generated before
-  m_WarpFilter->SetInput(input);
-  m_WarpFilter->SetOutputOrigin(m_OutputOrigin);
-  m_WarpFilter->SetOutputSpacing(m_OutputSpacing);
-  m_WarpFilter->SetOutputSize(m_OutputSize);
-  m_WarpFilter->SetOutputStartIndex(m_OutputIndex);
-  
-  // Set the deformation field and the interpolator
-  m_WarpFilter->SetDeformationField(m_DeformationFilter->GetOutput());
-  m_WarpFilter->SetInterpolator(m_Interpolator);
-  
   m_WarpFilter->GraftOutput(this->GetOutput());
   m_WarpFilter->Update();
   this->GraftOutput(m_WarpFilter->GetOutput());
 }
 
-
 /**
- *  
  *
  */
 template <class TInputImage, class TOutputImage, class TDeformationField>
@@ -121,12 +62,12 @@ OptResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
   
   typename OutputImageType::Pointer outputPtr = this->GetOutput();
 
-  outputPtr->SetSpacing( m_OutputSpacing );
-  outputPtr->SetOrigin( m_OutputOrigin );
+  outputPtr->SetSpacing( this->GetOutputSpacing() );
+  outputPtr->SetOrigin(  this->GetOutputOrigin() );
   
   typename OutputImageType::RegionType region;
-  region.SetSize(m_OutputSize);
-  region.SetIndex(m_OutputIndex);
+  region.SetSize( this->GetOutputSize() );
+  region.SetIndex(this->GetOutputStartIndex() );
 
   outputPtr->SetLargestPossibleRegion(region);
   
@@ -142,45 +83,33 @@ void
 OptResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
 ::GenerateInputRequestedRegion()
 {
-  // call the superclass's implementation
-  Superclass::GenerateInputRequestedRegion();
-  
-  // Load Input
-  typename InputImageType::Pointer inputPtr = const_cast<InputImageType*>(this->GetInput());
-  // Load Output
-  typename OutputImageType::Pointer outputPtr = this->GetOutput();
+  // Retrieve output pointer
+  OutputImageType * outputPtr = this->GetOutput();
 
-  // Compute the subsampling rate
-  SizeType  inputSize  = inputPtr->GetLargestPossibleRegion().GetSize();
-  SizeType  outputSize  = outputPtr->GetLargestPossibleRegion().GetSize();
+  // Retrieve input pointer
+  const InputImageType * inputPtr = this->GetInput();
 
-  SpacingType  spacing = inputPtr->GetSpacing();
-  
-  std::vector<double>   rate(0.);
-  rate[0] = static_cast<double>(inputSize[0])/static_cast<double>(outputSize[0]);
-  rate[1] = static_cast<double>(inputSize[1])/static_cast<double>(outputSize[1]);
+  // Retrieve output requested region
+  RegionType requestedRegion = outputPtr->GetRequestedRegion();
+  SizeType largestSize       = outputPtr->GetLargestPossibleRegion().GetSize();
 
-  // Get the output dimensions
-  SizeType  lOutputSize  = outputPtr->GetRequestedRegion().GetSize();
-  IndexType lOutputIndex = outputPtr->GetRequestedRegion().GetIndex();
-  
-  // Compute the input informations
-  SizeType lInputSize;
-  IndexType lInputIndex;
-  for (unsigned int i=0; i<InputImageType::ImageDimension ;i ++)
+  // Set up deformation field filter
+  SizeType deformationFieldLargestSize;
+  for(unsigned int dim = 0; dim < InputImageType::ImageDimension;++dim)
     {
-    lInputSize[i] = static_cast<unsigned int>(vcl_ceil( lOutputSize[i] * rate[i]) );
-    lInputIndex[i] = static_cast<unsigned int>(vcl_ceil( lOutputIndex[i] * rate[i]) );
+    deformationFieldLargestSize[dim] = static_cast<unsigned long>(largestSize[dim]
+                                       *vcl_abs(this->GetDeformationFieldSpacing()[dim]
+                                       /this->GetOutputSpacing()[dim]));
     }
-  
-  RegionType lInputRegion;
-  lInputRegion.SetSize(lInputSize);
-  lInputRegion.SetIndex(lInputIndex);
-  
-  lInputRegion.Crop(outputPtr->GetLargestPossibleRegion());
 
-  // Set input resolution input regions
-  inputPtr->SetRequestedRegion(lInputRegion);
+  m_DeformationFilter->SetOutputSize(deformationFieldLargestSize);
+  m_DeformationFilter->SetOutputIndex(this->GetOutputStartIndex());
+
+  // Generate input requested region
+  m_WarpFilter->SetInput(inputPtr);
+  m_WarpFilter->GetOutput()->UpdateOutputInformation();
+  m_WarpFilter->GetOutput()->SetRequestedRegion(requestedRegion);
+  m_WarpFilter->GetOutput()->PropagateRequestedRegion();
 }
 
 /**
@@ -194,7 +123,7 @@ OptResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
 {
   this->SetOutputOrigin ( image->GetOrigin() );
   this->SetOutputSpacing ( image->GetSpacing() );
-  this->SetOutputIndex ( image->GetLargestPossibleRegion().GetIndex() );
+  this->SetOutputStartIndex ( image->GetLargestPossibleRegion().GetIndex() );
   this->SetOutputSize ( image->GetLargestPossibleRegion().GetSize() );
 }
 
