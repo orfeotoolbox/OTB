@@ -43,7 +43,7 @@ class ITK_EXPORT GenericRSResampleImageFilter :
 {
 public:
   /** Standard class typedefs. */
-  typedef GenericRSResampleImageFilter                                Self;
+  typedef GenericRSResampleImageFilter                          Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputImage>    Superclass;
   typedef itk::SmartPointer<Self>                               Pointer;
   typedef itk::SmartPointer<const Self>                         ConstPointer;
