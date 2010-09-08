@@ -84,6 +84,7 @@ int otbOptResampleImageFilter(int argc, char* argv[])
   
   /** Set the OptResampler Parameters*/
   resampler->SetInput(reader->GetOutput());
+  resampler->SetOutputParametersFromImage(reader->GetOutput());
   resampler->SetTransform(affineTransform);
   resampler->SetDeformationFieldSpacing(5.); // TODO : add the spacing
                                              // it to the
