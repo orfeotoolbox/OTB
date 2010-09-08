@@ -23,6 +23,7 @@
 #include "itkTransformToDeformationFieldSource.h"
 #include "itkLinearInterpolateImageFunction.h"
 #include "itkInterpolateImageFunction.h"
+#include "itkVector.h"
 
 namespace otb
 {
@@ -95,7 +96,6 @@ public:
 
   /** The Deformation field spacing & size */
   itkSetMacro(DeformationFieldSpacing,SpacingType);
-  itkSetMacro(DeformationGridSize,SizeType);
   
   /** The resampled image parameters */
   // Output Origin
