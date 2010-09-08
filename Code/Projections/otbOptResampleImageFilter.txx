@@ -130,11 +130,11 @@ OptResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
 
   outputPtr->SetLargestPossibleRegion(region);
   
-  // Expose the input metadata to the output
-  itk::MetaDataDictionary& dict = const_cast<InputImageType *>(this->GetInput())->GetMetaDataDictionary();
-  std::string              projectionRef = this->GetInput()->GetProjectionRef();
-  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projectionRef);
-  outputPtr->SetMetaDataDictionary(dict);
+//   // Expose the input metadata to the output
+//   itk::MetaDataDictionary& dict = const_cast<InputImageType *>(this->GetInput())->GetMetaDataDictionary();
+//   std::string              projectionRef = this->GetInput()->GetProjectionRef();
+//   itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projectionRef);
+//   outputPtr->SetMetaDataDictionary(dict);
 }
 
 template <class TInputImage, class TOutputImage, class TDeformationField>
@@ -194,8 +194,7 @@ OptResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
 {
   this->SetOutputOrigin ( image->GetOrigin() );
   this->SetOutputSpacing ( image->GetSpacing() );
-  this->SetOutputDirection ( image->GetDirection() );
-  this->SetOutputStartIndex ( image->GetLargestPossibleRegion().GetIndex() );
+  this->SetOutputIndex ( image->GetLargestPossibleRegion().GetIndex() );
   this->SetOutputSize ( image->GetLargestPossibleRegion().GetSize() );
 }
 
