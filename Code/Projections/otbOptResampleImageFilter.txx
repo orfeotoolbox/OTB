@@ -70,12 +70,6 @@ OptResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
   region.SetIndex(this->GetOutputStartIndex() );
 
   outputPtr->SetLargestPossibleRegion(region);
-  
-//   // Expose the input metadata to the output
-//   itk::MetaDataDictionary& dict = const_cast<InputImageType *>(this->GetInput())->GetMetaDataDictionary();
-//   std::string              projectionRef = this->GetInput()->GetProjectionRef();
-//   itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projectionRef);
-//   outputPtr->SetMetaDataDictionary(dict);
 }
 
 template <class TInputImage, class TOutputImage, class TDeformationField>
@@ -98,13 +92,12 @@ OptResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
   for(unsigned int dim = 0; dim < InputImageType::ImageDimension;++dim)
     {
     deformationFieldLargestSize[dim] = static_cast<unsigned long>(largestSize[dim]
-                                       *vcl_abs(this->GetDeformationFieldSpacing()[dim]
-                                       /this->GetOutputSpacing()[dim]));
+                                       *vcl_abs(this->GetOutputSpacing()[dim]
+                                       /this->GetDeformationFieldSpacing()[dim]));
     }
-
   m_DeformationFilter->SetOutputSize(deformationFieldLargestSize);
   m_DeformationFilter->SetOutputIndex(this->GetOutputStartIndex());
-
+  
   // Generate input requested region
   m_WarpFilter->SetInput(inputPtr);
   m_WarpFilter->GetOutput()->UpdateOutputInformation();
