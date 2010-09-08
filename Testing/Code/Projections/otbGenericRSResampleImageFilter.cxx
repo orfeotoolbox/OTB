@@ -45,7 +45,7 @@ int otbGenericRSResampleImageFilter(int argc, char* argv[])
   typedef otb::GenericRSResampleImageFilter<ImageType, ImageType, DeformationFieldType> ImageResamplerType;
   typedef ImageResamplerType::OriginType               OriginType;
   typedef ImageResamplerType::SpacingType              SpacingType;
-  typedef otb::ImageFileReader<ImageType>             ReaderType;
+  typedef otb::ImageFileReader<ImageType>              ReaderType;
   
   // SmartPointer instanciation
   ReaderType::Pointer         reader    = ReaderType::New();
