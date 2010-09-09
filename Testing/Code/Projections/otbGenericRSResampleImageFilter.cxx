@@ -49,10 +49,11 @@ int otbGenericRSResampleImageFilter(int argc, char* argv[])
   if (argc > 1)
     {
     const char * infname = argv[1];
-    const char * outfname = argv[5];
+    const char * outfname = argv[6];
     unsigned int isize    = atoi(argv[2]);
     double iGridSpacing    = atof(argv[3]);
-    int    useRpc          = atoi(argv[4]);
+    int    useInRpc          = atoi(argv[4]);
+    int    useOutRpc          = atoi(argv[5]);
     
     typedef otb::ImageFileReader<ImageType>              ReaderType;
     ReaderType::Pointer         reader    = ReaderType::New();
@@ -95,12 +96,18 @@ int otbGenericRSResampleImageFilter(int argc, char* argv[])
     resampler->SetOutputProjectionRef(utmRef);
     resampler->SetInputProjectionRef(reader->GetOutput()->GetProjectionRef());
     resampler->SetInputKeywordList(reader->GetOutput()->GetImageKeywordlist());
-    if (useRpc)
+    if (useInRpc)
       {
-      resampler->SetGridSpacing(1000);
+      resampler->SetInputGridSpacing(1000);
       resampler->EstimateInputRpcModelOn();
       }
-  
+    
+    if (useOutRpc)
+      {
+      resampler->SetOutputGridSpacing(50);
+      resampler->EstimateOutputRpcModelOn();
+      }
+    
     // Write the resampled image
     typedef otb::StreamingImageFileWriter<ImageType>    WriterType;
     WriterType::Pointer writer= WriterType::New();

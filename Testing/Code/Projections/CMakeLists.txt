@@ -621,6 +621,7 @@ ADD_TEST(prTvotbGenericRSResampleImageFilter ${PROJECTIONS_TESTS4}
   1000
   15
   0
+  1
   ${TEMP}/prTvotbGenericRSResampleImageFilterOutput.tif
   )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
