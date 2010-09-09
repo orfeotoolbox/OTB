@@ -87,7 +87,8 @@ PhysicalToRPCSensorModelImageFilter<TImage>
   
   // Encapsulate the keywordlist
   itk::MetaDataDictionary& dict = this->GetOutput()->GetMetaDataDictionary();
-  itk::EncapsulateMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, m_GCPsToSensorModelFilter->GetKeywordlist());
+  itk::EncapsulateMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, 
+                                             m_GCPsToSensorModelFilter->GetKeywordlist());
 }
 
 template <class TImage>
