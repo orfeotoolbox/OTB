@@ -26,7 +26,7 @@
 namespace otb
 {
 
-/** \class GenericRSResampleImageFilter
+/** \class GenericRSResampleImageFilter 
  *  \brief This class is a composite filter 
  *
  * 
@@ -59,7 +59,8 @@ public:
   typedef TDeormationField                   DeformationFieldType;
   
   /** Internal filters typedefs*/
-  typedef OptResampleImageFilter<InputImageType,OutputImageType,DeformationFieldType >    ResamplerType;
+  typedef OptResampleImageFilter<InputImageType,OutputImageType,
+                                 DeformationFieldType >          ResamplerType;
   typedef typename ResamplerType::Pointer             ResamplerPointerType;
   typedef typename ResamplerType::TransformType       TransformType;
   typedef typename ResamplerType::SizeType            SizeType;
@@ -84,7 +85,9 @@ public:
     m_Resampler->SetDeformationFieldSpacing(spacing);
     this->Modified();
   }
-  otbGetObjectMemberConstReferenceMacro(Resampler,DeformationFieldSpacing,SpacingType);
+  otbGetObjectMemberConstReferenceMacro(Resampler,
+                                        DeformationFieldSpacing,
+                                        SpacingType);
   
   /** The resampled image parameters */
   // Output Origin

@@ -57,7 +57,8 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
 
 
 /**
- *  
+ *  Generate the right output requested region following the
+ *  parameters set by the user
  *
  */
 template <class TInputImage, class TOutputImage, class TDeformationField>
@@ -81,10 +82,18 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
   
   // Expose the input metadata to the output
   itk::MetaDataDictionary& dict = this->GetOutput()->GetMetaDataDictionary();
-  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, this->GetInputProjectionRef());
+  // GetInputProjectionRef is used here cause the RS transform is
+  // inversed : Output -> Input
+  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, 
+                                        this->GetInputProjectionRef());
   outputPtr->SetMetaDataDictionary(dict);
 }
 
+
+/**
+ * Generate Input requested region does only propagate the output
+ * requested region. 
+ */
 template <class TInputImage, class TOutputImage, class TDeformationField>
 void
 GenericRSResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
