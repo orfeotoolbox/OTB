@@ -30,7 +30,8 @@ namespace otb
 template <class TInputImage, class TOutputImage, class TDeformationField>
 GenericRSResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
 ::GenericRSResampleImageFilter():m_EstimateInputRpcModel(false),
-                                 m_EstimateOutputRpcModel(false)
+                                 m_EstimateOutputRpcModel(false),
+                                 m_rpcEstimationUpdated(false)
 {  
   // internal filters instanciation
   m_Resampler         = ResamplerType::New();
@@ -66,7 +67,6 @@ void
 GenericRSResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
 ::GenerateOutputInformation()
 {
-  std::cout <<"GenerateOutputInformation" << std::endl;
   // call the superclass's implementation of this method
   Superclass::GenerateOutputInformation();
   
@@ -142,11 +142,13 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
 {
   if(m_EstimateInputRpcModel)
     {
+    //std::cout <<"m_InputRpcEstimator->GetOutput()->GetImageKeywordlist() "<< m_InputRpcEstimator->GetOutput()->GetImageKeywordlist()  << std::endl;
     m_Transform->SetOutputKeywordList( m_InputRpcEstimator->GetOutput()->GetImageKeywordlist());
     }
 
   if(m_EstimateOutputRpcModel)
     {
+    //std::cout <<"m_OutputRpcEstimator->GetOutput()->GetImageKeywordlist() "<< m_OutputRpcEstimator->GetOutput()->GetImageKeywordlist()   << std::endl;
     m_Transform->SetInputKeywordList( m_OutputRpcEstimator->GetOutput()->GetImageKeywordlist());
     }
   
@@ -173,24 +175,56 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
   RegionType requestedRegion = outputPtr->GetRequestedRegion();
   
   // Generate input requested region
-  if (m_EstimateInputRpcModel)
+  if (m_EstimateInputRpcModel && !m_rpcEstimationUpdated)
     {
-    m_InputRpcEstimator->SetInput(this->GetInput());
-    m_Resampler->SetInput(m_InputRpcEstimator->GetOutput());
-    }
-  else
-    {
-    m_Resampler->SetInput(this->GetInput());
+    this->EstimateInputRpcModel();
     }
   
   // Instanciate the RS transform 
   this->UpdateTransform();
-  
+  m_Resampler->SetInput(this->GetInput());
   m_Resampler->SetTransform(m_Transform);
   m_Resampler->SetDeformationFieldSpacing(this->GetDeformationFieldSpacing());
   m_Resampler->GetOutput()->UpdateOutputInformation();
   m_Resampler->GetOutput()->SetRequestedRegion(requestedRegion);
   m_Resampler->GetOutput()->PropagateRequestedRegion();
+}
+
+
+/**
+ * Method to estimate the rpc model of the output using a temporary image
+ */
+template <class TInputImage, class TOutputImage, class TDeformationField>
+void
+GenericRSResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
+::EstimateInputRpcModel()
+{
+  // Get the output dictionary
+  itk::MetaDataDictionary& dict = const_cast<InputImageType*>(this->GetInput())->GetMetaDataDictionary();
+  
+  // Temp image : not allocated but with the sampe metadata as the
+  // output 
+  typename InputImageType::Pointer tempPtr = InputImageType::New();
+  tempPtr->SetRegions(this->GetInput()->GetLargestPossibleRegion());
+
+  // Encapsulate the output metadata in the temp image
+  itk::MetaDataDictionary& tempDict = tempPtr->GetMetaDataDictionary();
+  itk::EncapsulateMetaData<std::string>(tempDict, MetaDataKey::ProjectionRefKey, 
+                                        this->GetInputProjectionRef() );
+  itk::EncapsulateMetaData<ImageKeywordlist>(tempDict, MetaDataKey::OSSIMKeywordlistKey, 
+                                             this->GetInputKeywordList());
+  
+  // Estimate the rpc model from the temp image
+  m_InputRpcEstimator->SetInput(tempPtr);
+  m_InputRpcEstimator->GenerateOutputInformation();
+  
+  // Encapsulate the estimated rpc model in the output
+  if(m_InputRpcEstimator->GetInput()->GetImageKeywordlist().GetSize() > 0)
+    itk::EncapsulateMetaData<ImageKeywordlist>(dict,
+                                               MetaDataKey::OSSIMKeywordlistKey,  
+                                               m_InputRpcEstimator->GetOutput()->GetImageKeywordlist());
+  //Update the flag for input rpcEstimation
+  m_rpcEstimationUpdated = true;
 }
 
 /**

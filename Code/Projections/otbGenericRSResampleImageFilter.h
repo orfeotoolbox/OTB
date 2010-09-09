@@ -243,12 +243,15 @@ private:
   GenericRSResampleImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  // Method to estimate the output rpc model
+  // Method to estimate the input & output rpc model
   void EstimateOutputRpcModel();
+  void EstimateInputRpcModel();
   
   // boolean that allow the estimation of the input rpc model
   bool                              m_EstimateInputRpcModel;
   bool                              m_EstimateOutputRpcModel;
+
+  bool                              m_rpcEstimationUpdated;
   
   // Filters pointers
   ResamplerPointerType              m_Resampler;
