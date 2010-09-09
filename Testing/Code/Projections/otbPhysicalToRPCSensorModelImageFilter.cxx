@@ -23,37 +23,46 @@
 
 int otbPhysicalToRPCSensorModelImageFilter(int argc, char* argv[])
 {
-  const char * infname  = argv[1];
-  unsigned int gridSpacing = atoi(argv[2]);
-  const char * outfname  = argv[3];
-  
   // Images definition
   const unsigned int Dimension = 2;
   typedef double                                      PixelType;
   typedef otb::VectorImage<PixelType, Dimension>      ImageType;
-  typedef otb::ImageFileReader<ImageType>             ReaderType;
-  
   typedef otb::PhysicalToRPCSensorModelImageFilter<ImageType> PhysicalToSensorModelType;
 
   // Object instanciation
   PhysicalToSensorModelType::Pointer estimator = PhysicalToSensorModelType::New();
-  ReaderType::Pointer                reader    = ReaderType::New();
-  
-  // Set the fileName
-  reader->SetFileName(infname);
-  reader->UpdateOutputInformation();
-  
-  estimator->SetInput(reader->GetOutput());
-  estimator->SetGridSpacing(gridSpacing);
 
-  // Write the resampled image
-  typedef otb::StreamingImageFileWriter<ImageType>    WriterType;
-  WriterType::Pointer writer= WriterType::New();
-  writer->SetTilingStreamDivisions();
-  writer->WriteGeomFileOn();
-  writer->SetFileName(outfname);
-  writer->SetInput(estimator->GetOutput());
-  writer->Update();
+  if(argc>1)
+    {
+    const char * infname  = argv[1];
+    unsigned int gridSpacing = atoi(argv[2]);
+    const char * outfname  = argv[3];
+    
+    // Reader 
+    typedef otb::ImageFileReader<ImageType>             ReaderType;
+    ReaderType::Pointer                reader    = ReaderType::New();
+  
+    // Set the fileName
+    reader->SetFileName(infname);
+    reader->UpdateOutputInformation();
+    
+    // wire the filter
+    estimator->SetInput(reader->GetOutput());
+    estimator->SetGridSpacing(gridSpacing);
+
+    // Write the resampled image
+    typedef otb::StreamingImageFileWriter<ImageType>    WriterType;
+    WriterType::Pointer writer= WriterType::New();
+    writer->SetTilingStreamDivisions();
+    writer->WriteGeomFileOn();
+    writer->SetFileName(outfname);
+    writer->SetInput(estimator->GetOutput());
+    writer->Update();
+    }
+  else
+    {
+    std::cout <<"Unit Test" << std::endl;
+    }
   
   return 0;
 }
