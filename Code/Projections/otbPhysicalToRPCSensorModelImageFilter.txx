@@ -76,7 +76,6 @@ PhysicalToRPCSensorModelImageFilter<TImage>
       inputPoint[0]+= (px * m_GridSpacing + 0.5) * input->GetSpacing()[0];
       inputPoint[1]+= (py * m_GridSpacing + 0.5) * input->GetSpacing()[1];
       PointType outputPoint = rsTransform->TransformPoint(inputPoint);
-      //std::cout<<"Adding gcp "<<inputPoint<<" -> "<<outputPoint<<std::endl;
       m_GCPsToSensorModelFilter->AddGCP(inputPoint,outputPoint);
       }
     }
