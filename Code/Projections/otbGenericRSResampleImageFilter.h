@@ -20,7 +20,6 @@
 
 #include "itkImageToImageFilter.h"
 #include "otbOptResampleImageFilter.h"
-#include "itkLinearInterpolateImageFunction.h"
 
 #include "otbGenericRSTransform.h"
 
@@ -56,7 +55,6 @@ public:
 
   /** Typedef parameters*/
   typedef TInputImage                        InputImageType;
-  typedef typename InputImageType::PointType PointType;
   typedef TOutputImage                       OutputImageType;
   typedef TDeormationField                   DeformationFieldType;
   
@@ -70,9 +68,7 @@ public:
   typedef typename ResamplerType::IndexType           IndexType;
   typedef typename ResamplerType::RegionType          RegionType;
   typedef typename ResamplerType::InterpolatorType    InterpolatorType;
-  typedef typename ResamplerType::DefaultInterpolatorType    DefaultInterpolatorType;
   
-
   /** Specialisation of OptResampleFilter with a remote 
     * sensing  transform 
     */
@@ -121,12 +117,20 @@ public:
   otbGetObjectMemberConstMacro(Resampler, Interpolator, const InterpolatorType *);
   
   /** Set/Get for input and output projections.  */
-  itkSetStringMacro(InputProjectionRef);
-  itkGetStringMacro(InputProjectionRef);
+  void SetInputProjectionRef(const std::string&  ref)
+  {
+    m_Transform->SetOutputProjectionRef(ref);
+    this->Modified();
+  }
+  otbGetObjectMemberMacro(Transform,InputProjectionRef,std::string);
   
-  itkSetStringMacro(OutputProjectionRef);
-  itkGetStringMacro(OutputProjectionRef);
-
+  void SetOutputProjectionRef(const std::string&  ref)
+  {
+  m_Transform->SetInputProjectionRef(ref);
+  this->Modified();
+  }
+  otbGetObjectMemberMacro(Transform,OutputProjectionRef,std::string);
+  
   /** Set/Get Input Keywordlist*/
   void SetInputKeywordList(const ImageKeywordlist& kwl)
   {
@@ -161,18 +165,11 @@ protected:
   virtual void GenerateOutputInformation();
   
   virtual void GenerateInputRequestedRegion();
-
-  // Method to instanciate the Generic RS transform
-  void UpdateTransform();
-
+  
 private:
   GenericRSResampleImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
-
-  // GenericRSTransform Parameters
-  std::string          m_InputProjectionRef;
-  std::string          m_OutputProjectionRef;
-
+  
   // Filters pointers
   ResamplerPointerType                   m_Resampler;
   GenericRSTransformPointerType          m_Transform;

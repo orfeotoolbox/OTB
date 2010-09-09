@@ -81,24 +81,8 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
   
   // Expose the input metadata to the output
   itk::MetaDataDictionary& dict = this->GetOutput()->GetMetaDataDictionary();
-  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, m_OutputProjectionRef);
+  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, this->GetInputProjectionRef());
   outputPtr->SetMetaDataDictionary(dict);
-}
-
-template <class TInputImage, class TOutputImage, class TDeformationField>
-void
-GenericRSResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
-::UpdateTransform()
-{
-  // Get the input image 
-  const InputImageType* input  = this->GetInput();
-  
-  // Instanciate the RS Transform
-  m_Transform->SetOutputProjectionRef(input->GetProjectionRef());
-  m_Transform->SetInputProjectionRef(m_OutputProjectionRef);
-  m_Transform->SetOutputKeywordList(input->GetImageKeywordlist());
-  m_Transform->SetInputKeywordList(this->GetOutputKeywordList());
-  m_Transform->InstanciateTransform();
 }
 
 template <class TInputImage, class TOutputImage, class TDeformationField>
@@ -116,7 +100,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
   RegionType requestedRegion = outputPtr->GetRequestedRegion();
   
   // Instanciate the RS transform 
-  this->UpdateTransform();
+  m_Transform->InstanciateTransform();
   
   // Generate input requested region
   m_Resampler->SetInput(inputPtr);
