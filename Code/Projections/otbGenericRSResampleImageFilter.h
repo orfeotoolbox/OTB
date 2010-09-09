@@ -23,7 +23,6 @@
 #include "otbPhysicalToRPCSensorModelImageFilter.h"
 #include "otbGenericRSTransform.h"
 
-
 namespace otb
 {
 
@@ -195,14 +194,39 @@ public:
   /** Useful to set the output parameters from an existing image*/
   void SetOutputParametersFromImage(const InputImageType * image);
   
-  /** Macro to Set/Get the grid spacing for rpc estimator*/
-  otbSetObjectMemberMacro(InputRpcEstimator,GridSpacing,unsigned int);
-  otbGetObjectMemberConstMacro(InputRpcEstimator,GridSpacing,unsigned int);
+  /** Set/Get the grid spacing for rpc estimator*/
+  void SetInputGridSpacing(unsigned int gridSize)
+  {
+    m_InputRpcEstimator->SetGridSpacing(gridSize);
+    this->Modified();
+  }
 
+  unsigned int GetInputGridSpacing()
+  {
+    return m_InputRpcEstimator->GetGridSpacing();
+  }
+  
   // Macro to tune the EstimateInputRpcModel flag
   itkSetMacro(EstimateInputRpcModel, bool);
   itkGetMacro(EstimateInputRpcModel, bool);
   itkBooleanMacro(EstimateInputRpcModel);
+  
+  /** Macro to Set/Get the grid spacing for rpc estimator*/
+  void SetOutputGridSpacing(unsigned int gridSize)
+  {
+    m_OutputRpcEstimator->SetGridSpacing(gridSize);
+    this->Modified();
+  }
+
+  unsigned int GetOutputGridSpacing()
+  {
+    return m_OutputRpcEstimator->GetGridSpacing();
+  }
+
+  // Macro to tune the EstimateOutputRpcModel flag
+  itkSetMacro(EstimateOutputRpcModel, bool);
+  itkGetMacro(EstimateOutputRpcModel, bool);
+  itkBooleanMacro(EstimateOutputRpcModel);
   
 protected:
   GenericRSResampleImageFilter();
@@ -212,17 +236,24 @@ protected:
   virtual void GenerateOutputInformation();
   
   virtual void GenerateInputRequestedRegion();
+
+  virtual void UpdateTransform();
   
 private:
   GenericRSResampleImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
+
+  // Method to estimate the output rpc model
+  void EstimateOutputRpcModel();
   
   // boolean that allow the estimation of the input rpc model
   bool                              m_EstimateInputRpcModel;
+  bool                              m_EstimateOutputRpcModel;
   
   // Filters pointers
   ResamplerPointerType              m_Resampler;
   RpcModelEstimatorPointerType      m_InputRpcEstimator;
+  RpcModelEstimatorPointerType      m_OutputRpcEstimator;
   GenericRSTransformPointerType     m_Transform;
 };
 
