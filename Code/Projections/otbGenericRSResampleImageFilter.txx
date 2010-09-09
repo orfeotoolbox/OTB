@@ -30,20 +30,19 @@ namespace otb
 
 template <class TInputImage, class TOutputImage, class TDeformationField>
 GenericRSResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
-::GenericRSResampleImageFilter() 
+::GenericRSResampleImageFilter():m_EstimateInputRpcModel(false)
 {  
   // internal filters instanciation
-  m_Resampler  = ResamplerType::New();
-  m_Transform = GenericRSTransformType::New();
-
+  m_Resampler         = ResamplerType::New();
+  m_InputRpcEstimator = RpcModelEstimatorType::New();
+  m_Transform         = GenericRSTransformType::New();
+  
   // Initialize the deformation field spacing 
   SpacingType   initSpacing;
   initSpacing[0]= 2.;
   initSpacing[1]=-2.;
   this->SetDeformationFieldSpacing(initSpacing);
 }
-
-
 
 template <class TInputImage, class TOutputImage, class TDeformationField>
 void
@@ -80,12 +79,16 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
 
   outputPtr->SetLargestPossibleRegion(region);
   
-  // Expose the input metadata to the output
+  // Encapsulate the output  metadata 
   itk::MetaDataDictionary& dict = this->GetOutput()->GetMetaDataDictionary();
-  // GetInputProjectionRef is used here cause the RS transform is
-  // inversed : Output -> Input
   itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, 
-                                        this->GetInputProjectionRef());
+                                        this->GetOutputProjectionRef());
+  
+  if(this->GetOutputKeywordList().GetSize() > 0)
+    {
+    itk::EncapsulateMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, 
+                                               this->GetOutputKeywordList());
+    }
   outputPtr->SetMetaDataDictionary(dict);
 }
 
@@ -112,7 +115,15 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
   m_Transform->InstanciateTransform();
   
   // Generate input requested region
-  m_Resampler->SetInput(inputPtr);
+  if (m_EstimateInputRpcModel)
+    {
+    m_InputRpcEstimator->SetInput(this->GetInput());
+    m_Resampler->SetInput(m_InputRpcEstimator->GetOutput());
+    }
+  else
+    {
+    m_Resampler->SetInput(this->GetInput());
+    }
   m_Resampler->SetTransform(m_Transform);
   m_Resampler->SetDeformationFieldSpacing(this->GetDeformationFieldSpacing());
   m_Resampler->GetOutput()->UpdateOutputInformation();

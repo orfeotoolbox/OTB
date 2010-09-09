@@ -20,17 +20,28 @@
 
 #include "itkImageToImageFilter.h"
 #include "otbOptResampleImageFilter.h"
-
+#include "otbPhysicalToRPCSensorModelImageFilter.h"
 #include "otbGenericRSTransform.h"
+
 
 namespace otb
 {
 
 /** \class GenericRSResampleImageFilter 
- *  \brief This class is a composite filter 
- *
+ *  \brief This class is a composite filter that allows you to project 
+ *  an input image from any  coordinate system to any other one. The
+ *  coordinate systems can be  defined by their projection reference,
+ *  the keyword list or a meta data dictionary.
  * 
- *
+ *  This class uses the otb::StreamingResampleImageFilter. It defines
+ *  and uses a otb::GenericRSTransform using the input/output coordinate
+ *  system informations listed below. This class can resample the input to an
+ *  output image with the Size/Origin/Spacing/StartIndex defined by
+ *  the user. Note that there are no default values for all the
+ *  parmeters, so it is mandatory to set correct parameters to have a
+ *  correct result.
+ * 
+ *  
  *
  * \ingroup Projection
  *
@@ -69,6 +80,10 @@ public:
   typedef typename ResamplerType::IndexType           IndexType;
   typedef typename ResamplerType::RegionType          RegionType;
   typedef typename ResamplerType::InterpolatorType    InterpolatorType;
+
+  /** Estimate the rpc model */
+  typedef PhysicalToRPCSensorModelImageFilter<InputImageType>   RpcModelEstimatorType;
+  typedef typename RpcModelEstimatorType::Pointer               RpcModelEstimatorPointerType;
   
   /** Specialisation of OptResampleFilter with a remote 
     * sensing  transform 
@@ -110,7 +125,6 @@ public:
   otbSetObjectMemberMacro(Resampler,OutputSpacing,SpacingType);
   otbGetObjectMemberConstReferenceMacro(Resampler,OutputSpacing,SpacingType);
   
-
   /** Methods to Set/Get the interpolator */
   void SetInterpolator(InterpolatorType * interpolator)
   {
@@ -119,20 +133,33 @@ public:
   }
   otbGetObjectMemberConstMacro(Resampler, Interpolator, const InterpolatorType *);
   
-  /** Set/Get for input and output projections.  */
+  /** 
+   * Set/Get input & output projections. 
+   * Set/Get input & output keywordlist
+   * The macro are not used here cause the input and the output are
+   * inversed. 
+   */
   void SetInputProjectionRef(const std::string&  ref)
   {
     m_Transform->SetOutputProjectionRef(ref);
     this->Modified();
   }
-  otbGetObjectMemberMacro(Transform,InputProjectionRef,std::string);
+  
+  std::string GetInputProjectionRef()
+  {
+    return m_Transform->GetOutputProjectionRef();
+  }
   
   void SetOutputProjectionRef(const std::string&  ref)
   {
   m_Transform->SetInputProjectionRef(ref);
   this->Modified();
   }
-  otbGetObjectMemberMacro(Transform,OutputProjectionRef,std::string);
+  
+  std::string GetOutputProjectionRef()
+  {
+    return m_Transform->GetInputProjectionRef();
+  }
   
   /** Set/Get Input Keywordlist*/
   void SetInputKeywordList(const ImageKeywordlist& kwl)
@@ -140,7 +167,10 @@ public:
     m_Transform->SetOutputKeywordList(kwl);
     this->Modified();
   }
-  otbGetObjectMemberConstMacro(Transform,InputKeywordList,ImageKeywordlist);
+  const ImageKeywordlist GetInputKeywordList()
+  {
+    return m_Transform->GetOutputKeywordList();
+  }
   
   /** Set/Get output Keywordlist*/
   void SetOutputKeywordList(const ImageKeywordlist& kwl)
@@ -148,7 +178,11 @@ public:
     m_Transform->SetInputKeywordList(kwl);
     this->Modified();
   }
-  otbGetObjectMemberConstMacro(Transform,OutputKeywordList,ImageKeywordlist);
+  
+  ImageKeywordlist GetOutputKeywordList()
+  {
+    return m_Transform->GetInputKeywordList();
+  }
   
   /** Set/Get the DEMDirectory*/
     void SetDEMDirectory(const std::string&  dem)
@@ -157,8 +191,18 @@ public:
     this->Modified();
   }
   otbGetObjectMemberConstMacro(Transform,DEMDirectory,std::string);
-  
+
+  /** Useful to set the output parameters from an existing image*/
   void SetOutputParametersFromImage(const InputImageType * image);
+  
+  /** Macro to Set/Get the grid spacing for rpc estimator*/
+  otbSetObjectMemberMacro(InputRpcEstimator,GridSpacing,unsigned int);
+  otbGetObjectMemberConstMacro(InputRpcEstimator,GridSpacing,unsigned int);
+
+  // Macro to tune the EstimateInputRpcModel flag
+  itkSetMacro(EstimateInputRpcModel, bool);
+  itkGetMacro(EstimateInputRpcModel, bool);
+  itkBooleanMacro(EstimateInputRpcModel);
   
 protected:
   GenericRSResampleImageFilter();
@@ -173,9 +217,13 @@ private:
   GenericRSResampleImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
   
+  // boolean that allow the estimation of the input rpc model
+  bool                              m_EstimateInputRpcModel;
+  
   // Filters pointers
-  ResamplerPointerType                   m_Resampler;
-  GenericRSTransformPointerType          m_Transform;
+  ResamplerPointerType              m_Resampler;
+  RpcModelEstimatorPointerType      m_InputRpcEstimator;
+  GenericRSTransformPointerType     m_Transform;
 };
 
 } // namespace otb
