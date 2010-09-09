@@ -15,7 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
 #ifndef __otbGenericRSResampleImageFilter_txx
 #define __otbGenericRSResampleImageFilter_txx
 
@@ -132,8 +131,6 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
                                                MetaDataKey::OSSIMKeywordlistKey,  
                                                m_OutputRpcEstimator->GetOutput()->GetImageKeywordlist());
 }
-
-
 
 /**
  * Use the rpc keywordlist if any rpc model estimated
