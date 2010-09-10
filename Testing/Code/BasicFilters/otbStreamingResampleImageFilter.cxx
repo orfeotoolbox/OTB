@@ -57,7 +57,7 @@ int otbStreamingResampleImageFilter(int argc, char * argv[])
   StreamingResampleImageFilterType::SizeType size;
   size[0] = 600;
   size[1] = 600;
-  resampler->SetSize(size);
+  resampler->SetOutputSize(size);
 
   // Transformation creation
   TransformType::OutputVectorType translation;
