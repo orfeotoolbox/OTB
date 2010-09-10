@@ -121,7 +121,7 @@ int otbRegionProjectionResampler(int argc, char* argv[])
 
   resampler->SetOutputSpacing(spacing);
   resampler->SetOutputOrigin(origin);
-  resampler->SetSize(region.GetSize());
+  resampler->SetOutputSize(region.GetSize());
   resampler->SetOutputStartIndex(start);
 
   //Connect pipeline

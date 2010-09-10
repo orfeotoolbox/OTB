@@ -64,7 +64,7 @@ int otbExtractROIResample(int argc, char* argv[])
   ResampleType::Pointer filterResample = ResampleType::New();
   filterResample->SetInput(reader->GetOutput());
   filterResample->SetTransform(transform);
-  filterResample->SetSize(reader->GetOutput()->GetLargestPossibleRegion().GetSize());
+  filterResample->SetOutputSize(reader->GetOutput()->GetLargestPossibleRegion().GetSize());
 
   typedef otb::ExtractROI<PixelType, PixelType> ExtractROIType;
   ExtractROIType::Pointer filterResampleRoi = ExtractROIType::New();
