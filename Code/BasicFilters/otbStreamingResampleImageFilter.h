@@ -15,89 +15,168 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
 #ifndef __otbStreamingResampleImageFilter_h
 #define __otbStreamingResampleImageFilter_h
 
-#include "itkResampleImageFilter.h"
-#include "otbStreamingTraits.h"
+#include "itkImageToImageFilter.h"
+#include "otbStreamingWarpImageFilter.h"
+#include "itkTransformToDeformationFieldSource.h"
+#include "itkLinearInterpolateImageFunction.h"
+#include "itkInterpolateImageFunction.h"
+#include "otbImage.h"
+#include "itkVector.h"
+
+#include "otbMacro.h"
 
 namespace otb
 {
 
 /** \class StreamingResampleImageFilter
- * \brief Resample image filter
+ *  \brief This class is a composite filter resampling an input image
+ *         by setting a transform. The filter computes a deformation
+ *         grid using the transform set and used it to warp the input.
  *
- * This class add streaming aspect on it::ResampleImageFilter
- */
+ * The otb::StreamingResampleImageFilter allows to resample a
+ * otb::VectorImage using a transformation set with SetTransform()
+ * method. First, a deformation grid, with a spacing m_DeformationGridSpacing
+ * and a size relative to this spacing, is built. Then, the image is
+ * wraped using this deformation grid. The size (SetOuputSize()), the
+ * spacing (SetOuputSpacing()), the start index (SetOutputIndex()) and
+ * the  interpolator (SetInterpolator()) and the origin (SetOrigin())
+ * can be set using the method between brackets.
+ * 
+ *
+ *
+ * \ingroup Projection
+ *
+ **/
 
-template <class TInputImage, class TOutputImage, class TInterpolatorPrecisionType = double>
-class ITK_EXPORT StreamingResampleImageFilter :  public itk::ResampleImageFilter<TInputImage, TOutputImage,
-      TInterpolatorPrecisionType>
+template <class TInputImage, class TOutputImage, 
+          class TInterpolatorPrecisionType = double>
+class ITK_EXPORT StreamingResampleImageFilter :
+    public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
-
   /** Standard class typedefs. */
-  typedef StreamingResampleImageFilter                                                    Self;
-  typedef itk::ResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType> Superclass;
-  typedef itk::SmartPointer<Self>                                                         Pointer;
-  typedef itk::SmartPointer<const Self>                                                   ConstPointer;
-
-  /** Image related typedefs. */
-  typedef typename TInputImage::Pointer  InputImagePointer;
-  typedef typename TOutputImage::Pointer OutputImagePointer;
-
-  typedef typename TInputImage::IndexType IndexType;
-  typedef typename TInputImage::SizeType  SizeType;
+  typedef StreamingResampleImageFilter                                Self;
+  typedef itk::ImageToImageFilter<TInputImage, TOutputImage>    Superclass;
+  typedef itk::SmartPointer<Self>                               Pointer;
+  typedef itk::SmartPointer<const Self>                         ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(StreamingResampleImageFilter, itk::ResampleImageFilter);
+  itkTypeMacro(StreamingResampleImageFilter,itk::ImageToImageFilter);
 
-  /** Type definitions */
-  typedef typename TInputImage::PixelType  InputPixelType;
-  typedef typename TOutputImage::PixelType OutputPixelType;
+  /** Typedef parameters*/
+  typedef TInputImage           InputImageType;
+  typedef TOutputImage          OutputImageType;
+  
+  /** Deformation field used to warp the image*/
+  typedef itk::Vector<typename TOutputImage::InternalPixelType, 
+                      TOutputImage::ImageDimension>             DeformationType;
+  typedef otb::Image<DeformationType>                           DeformationFieldType;
 
-  typedef typename TInputImage::RegionType  InputImageRegionType;
-  typedef typename TOutputImage::RegionType OutputImageRegionType;
+  /** filter warping input image using deformation field */
+  typedef StreamingWarpImageFilter<InputImageType, 
+                                   OutputImageType,
+                                   DeformationFieldType>        WarpImageFilterType;
+  
+  /** Internal filters typedefs*/
+  typedef itk::TransformToDeformationFieldSource<DeformationFieldType, 
+                                                 double>        DeformationFieldGeneratorType;
+  typedef typename DeformationFieldGeneratorType::TransformType TransformType;
+  typedef typename DeformationFieldGeneratorType::SizeType      SizeType;
+  typedef typename DeformationFieldGeneratorType::SpacingType   SpacingType;
+  typedef typename DeformationFieldGeneratorType::OriginType    OriginType;
+  typedef typename DeformationFieldGeneratorType::IndexType     IndexType;
+  typedef typename DeformationFieldGeneratorType::RegionType    RegionType;
 
-  typedef typename Superclass::InterpolatorType InterpolatorType;
-  typedef typename InterpolatorType::PointType  PointType;
+  /** Interpolator type */
+  typedef itk::InterpolateImageFunction<InputImageType, 
+                                        TInterpolatorPrecisionType>       InterpolatorType;
+  typedef typename InterpolatorType::Pointer                              InterpolatorPointerType;
+  typedef itk::LinearInterpolateImageFunction<InputImageType, 
+                                              TInterpolatorPrecisionType> DefaultInterpolatorType;
 
-  itkSetMacro(InterpolatorNeighborhoodRadius, unsigned int);
-  itkGetMacro(InterpolatorNeighborhoodRadius, unsigned int);
+  /** ImageBase typedef */
+  typedef itk::ImageBase<OutputImageType::ImageDimension>     ImageBaseType;
+  
+  
+  /** Accessors to internal filters parameters */
+  void SetTransform(TransformType * transform)
+  {
+    m_DeformationFilter->SetTransform(transform);
+    this->Modified();
+  }
+  otbGetObjectMemberConstMacro(DeformationFilter,Transform,const TransformType*);
 
-  itkSetMacro(AddedRadius, unsigned int);
-  itkGetMacro(AddedRadius, unsigned int);
+  /** The Deformation field spacing & size */
+  void SetDeformationFieldSpacing(const SpacingType & spacing)
+  {
+    m_DeformationFilter->SetOutputSpacing(spacing);
+    this->Modified();
+  }
+  const SpacingType & GetDeformationFieldSpacing() const
+  {
+   return m_DeformationFilter->GetOutputSpacing();
+  }
 
-  /** ResampleImageFilter needs a different input requested region than
-   * the output requested region.  As such, ResampleImageFilter needs
-   * to provide an implementation for GenerateInputRequestedRegion()
-   * in order to inform the pipeline execution model.
-   * \sa ProcessObject::GenerateInputRequestedRegion()
-   */
-  virtual void GenerateInputRequestedRegion();
+  /** The resampled image parameters */
+  // Output Origin
+  void SetOutputOrigin(const OriginType & origin)
+  {
+    m_DeformationFilter->SetOutputOrigin(origin);
+    m_WarpFilter->SetOutputOrigin(origin);
+    this->Modified();
+  }
+  otbGetObjectMemberConstReferenceMacro(WarpFilter,OutputOrigin,OriginType);
 
+  // Output Start index
+  otbSetObjectMemberMacro(WarpFilter,OutputStartIndex,IndexType);
+  otbGetObjectMemberConstReferenceMacro(WarpFilter,OutputStartIndex,IndexType);
+
+  // Output Size
+  otbSetObjectMemberMacro(WarpFilter,OutputSize,SizeType);
+  otbGetObjectMemberConstReferenceMacro(WarpFilter,OutputSize,SizeType);
+
+  // Output Spacing
+  otbSetObjectMemberMacro(WarpFilter,OutputSpacing,SpacingType);
+  otbGetObjectMemberConstReferenceMacro(WarpFilter,OutputSpacing,SpacingType);
+  
+  /** Methods to Set/Get the interpolator */
+  void SetInterpolator(InterpolatorType * interpolator)
+  {
+    m_WarpFilter->SetInterpolator(interpolator);
+    this->Modified();
+  }
+  otbGetObjectMemberConstMacro(WarpFilter, Interpolator, const InterpolatorType *);
+
+  /** Import output parameters from a given image */
+  void SetOutputParametersFromImage(const ImageBaseType * image);
+  
 protected:
   StreamingResampleImageFilter();
-  virtual ~StreamingResampleImageFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+
+  /** Destructor */
+  virtual ~StreamingResampleImageFilter() {};
+
+  virtual void GenerateData();
+
+  virtual void GenerateOutputInformation();
+
+  virtual void GenerateInputRequestedRegion();
 
 private:
   StreamingResampleImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  // Determine size of pad needed for interpolators neighborhood
-  unsigned int m_InterpolatorNeighborhoodRadius;
-
-  // Used to be sure that each final region will be contiguous
-  unsigned int m_AddedRadius;
-
+  typename DeformationFieldGeneratorType::Pointer   m_DeformationFilter;
+  typename WarpImageFilterType::Pointer             m_WarpFilter;
 };
 
-} // end namespace otb
+} // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbStreamingResampleImageFilter.txx"
