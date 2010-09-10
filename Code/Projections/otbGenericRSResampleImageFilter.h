@@ -187,6 +187,8 @@ public:
     void SetDEMDirectory(const std::string&  dem)
   {
     m_Transform->SetDEMDirectory(dem);
+    m_InputRpcEstimator->SetDEMDirectory(dem);
+    m_OutputRpcEstimator->SetDEMDirectory(dem);
     this->Modified();
   }
   otbGetObjectMemberConstMacro(Transform,DEMDirectory,std::string);

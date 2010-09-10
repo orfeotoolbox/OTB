@@ -83,7 +83,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
   
   // Get the Output MetaData Dictionary
   itk::MetaDataDictionary& dict = outputPtr->GetMetaDataDictionary();
-  // Encapsulate the output  metadata 
+  // Encapsulate the   metadata set by the user
   itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, 
                                         this->GetOutputProjectionRef());
   
@@ -93,7 +93,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
                                                this->GetOutputKeywordList());
     }
   
-  // Estimate the rpc Model 
+  // Estimate the output rpc Model if needed
   if (m_EstimateOutputRpcModel)
     this->EstimateOutputRpcModel();
 }
@@ -174,7 +174,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
   // Retrieve output requested region
   RegionType requestedRegion = outputPtr->GetRequestedRegion();
   
-  // Generate input requested region
+  // Estimate the input rpc model if it is needed
   if (m_EstimateInputRpcModel && !m_rpcEstimationUpdated)
     {
     this->EstimateInputRpcModel();
@@ -182,6 +182,8 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
   
   // Instanciate the RS transform 
   this->UpdateTransform();
+  
+  // Generate input requested region
   m_Resampler->SetInput(this->GetInput());
   m_Resampler->SetTransform(m_Transform);
   m_Resampler->SetDeformationFieldSpacing(this->GetDeformationFieldSpacing());
@@ -214,7 +216,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
   itk::EncapsulateMetaData<ImageKeywordlist>(tempDict, MetaDataKey::OSSIMKeywordlistKey, 
                                              this->GetInputKeywordList());
   
-  // Estimate the rpc model from the temp image
+  // Estimate the rpc model with the temp image
   m_InputRpcEstimator->SetInput(tempPtr);
   m_InputRpcEstimator->GenerateOutputInformation();
   
