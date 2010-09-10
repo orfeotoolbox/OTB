@@ -18,7 +18,7 @@ PURPOSE.  See the above copyright notices for more information.
 #ifndef __otbMinMaxAttributesLabelMapFilter_h
 #define __otbMinMaxAttributesLabelMapFilter_h
 
-#include "itkLabelMapFilter.h"
+#include "itkInPlaceLabelMapFilter.h"
 #include "itkSimpleDataObjectDecorator.h"
 
 namespace otb {
@@ -26,32 +26,24 @@ namespace otb {
 /** \class MinMaxAttributesLabelMapFilter
  * \brief Computes the min/max of all attributes of a itk::LabelMap<otb::AttributesMapLabelObject>
  */
-template<class TInputImage, class TOutputImage>
+template<class TInputImage>
 class ITK_EXPORT MinMaxAttributesLabelMapFilter :
-    public itk::LabelMapFilter<TInputImage, TOutputImage>
+    public itk::InPlaceLabelMapFilter<TInputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef MinMaxAttributesLabelMapFilter Self;
-  typedef itk::LabelMapFilter<TInputImage, TOutputImage>
-  Superclass;
-  typedef itk::SmartPointer<Self>        Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef MinMaxAttributesLabelMapFilter          Self;
+  typedef itk::InPlaceLabelMapFilter<TInputImage> Superclass;
+  typedef itk::SmartPointer<Self>                 Pointer;
+  typedef itk::SmartPointer<const Self>           ConstPointer;
 
   /** Some convenient typedefs. */
   typedef TInputImage InputImageType;
-  typedef TOutputImage OutputImageType;
   typedef typename InputImageType::Pointer         InputImagePointer;
   typedef typename InputImageType::ConstPointer    InputImageConstPointer;
   typedef typename InputImageType::RegionType      InputImageRegionType;
   typedef typename InputImageType::PixelType       InputImagePixelType;
   typedef typename InputImageType::LabelObjectType LabelObjectType;
-  
-  typedef typename OutputImageType::Pointer        OutputImagePointer;
-  typedef typename OutputImageType::ConstPointer   OutputImageConstPointer;
-  typedef typename OutputImageType::RegionType     OutputImageRegionType;
-  typedef typename OutputImageType::PixelType      OutputImagePixelType;
-  typedef typename OutputImageType::IndexType      IndexType;
   
   typedef typename LabelObjectType::AttributesValueType     AttributesValueType;
   typedef typename LabelObjectType::AttributesMapType       AttributesMapType;
@@ -60,8 +52,6 @@ public:
   /** ImageDimension constants */
   itkStaticConstMacro(InputImageDimension, unsigned int,
                       TInputImage::ImageDimension);
-  itkStaticConstMacro(OutputImageDimension, unsigned int,
-                      TOutputImage::ImageDimension);
 
   /** Standard New method. */
   itkNewMacro(Self);  
