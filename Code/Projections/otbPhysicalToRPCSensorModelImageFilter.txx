@@ -58,7 +58,12 @@ PhysicalToRPCSensorModelImageFilter<TImage>
     {
     // Set the DEM to the Remote Sensing Transform
     rsTransform->SetDEMDirectory(m_DEMDirectory);
+    
+    // Generate DEMHandler & set it to the GCP2sensorModel
+    typename DEMHandler::Pointer demHandler = DEMHandler::New();
+    demHandler->OpenDEMDirectory(m_DEMDirectory.c_str());
     m_GCPsToSensorModelFilter->SetUseDEM(true);
+    m_GCPsToSensorModelFilter->SetDEMHandler(demHandler);
     }
 
   rsTransform->InstanciateTransform();
