@@ -37,9 +37,10 @@ int otbGenericRSResampleImageFilter(int argc, char* argv[])
   typedef itk::Vector<PixelType, 2>                   DeformationValueType;
   typedef otb::Image<DeformationValueType, Dimension> DeformationFieldType;
   
-  typedef otb::GenericRSResampleImageFilter<ImageType, ImageType, DeformationFieldType> ImageResamplerType;
-  typedef ImageResamplerType::OriginType               OriginType;
-  typedef ImageResamplerType::SpacingType              SpacingType;
+  typedef otb::GenericRSResampleImageFilter<ImageType, 
+    ImageType>                                        ImageResamplerType;
+  typedef ImageResamplerType::OriginType              OriginType;
+  typedef ImageResamplerType::SpacingType             SpacingType;
 
   
   // SmartPointer instanciation

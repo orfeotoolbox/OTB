@@ -27,11 +27,11 @@
 namespace otb
 {
 
-template <class TInputImage, class TOutputImage, class TDeformationField>
-GenericRSResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
+template <class TInputImage, class TOutputImage>
+GenericRSResampleImageFilter<TInputImage, TOutputImage>
 ::GenericRSResampleImageFilter():m_EstimateInputRpcModel(false),
                                  m_EstimateOutputRpcModel(false),
-                                 m_rpcEstimationUpdated(false)
+                                 m_RpcEstimationUpdated(false)
 {  
   // internal filters instanciation
   m_Resampler         = ResamplerType::New();
@@ -46,9 +46,9 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
   this->SetDeformationFieldSpacing(initSpacing);
 }
 
-template <class TInputImage, class TOutputImage, class TDeformationField>
+template <class TInputImage, class TOutputImage>
 void
-GenericRSResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
+GenericRSResampleImageFilter<TInputImage, TOutputImage>
 ::GenerateData()
 {
   m_Resampler->GraftOutput(this->GetOutput());
@@ -62,9 +62,9 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
  *  parameters set by the user
  *
  */
-template <class TInputImage, class TOutputImage, class TDeformationField>
+template <class TInputImage, class TOutputImage>
 void
-GenericRSResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
+GenericRSResampleImageFilter<TInputImage, TOutputImage>
 ::GenerateOutputInformation()
 {
   // call the superclass's implementation of this method
@@ -101,9 +101,9 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
 /**
  * Method to estimate the rpc model of the output using a temporary image
  */
-template <class TInputImage, class TOutputImage, class TDeformationField>
+template <class TInputImage, class TOutputImage>
 void
-GenericRSResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
+GenericRSResampleImageFilter<TInputImage, TOutputImage>
 ::EstimateOutputRpcModel()
 {
   // Get the output dictionary
@@ -135,9 +135,9 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
 /**
  * Use the rpc keywordlist if any rpc model estimated
  */
-template <class TInputImage, class TOutputImage, class TDeformationField>
+template <class TInputImage, class TOutputImage>
 void
-GenericRSResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
+GenericRSResampleImageFilter<TInputImage, TOutputImage>
 ::UpdateTransform()
 {
   if(m_EstimateInputRpcModel)
@@ -160,9 +160,9 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
  * Generate Input requested region does only propagate the output
  * requested region. 
  */
-template <class TInputImage, class TOutputImage, class TDeformationField>
+template <class TInputImage, class TOutputImage>
 void
-GenericRSResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
+GenericRSResampleImageFilter<TInputImage, TOutputImage>
 ::GenerateInputRequestedRegion()
 {
   // Retrieve output pointer
@@ -175,7 +175,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
   RegionType requestedRegion = outputPtr->GetRequestedRegion();
   
   // Estimate the input rpc model if it is needed
-  if (m_EstimateInputRpcModel && !m_rpcEstimationUpdated)
+  if (m_EstimateInputRpcModel && !m_RpcEstimationUpdated)
     {
     this->EstimateInputRpcModel();
     }
@@ -196,9 +196,9 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
 /**
  * Method to estimate the rpc model of the output using a temporary image
  */
-template <class TInputImage, class TOutputImage, class TDeformationField>
+template <class TInputImage, class TOutputImage>
 void
-GenericRSResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
+GenericRSResampleImageFilter<TInputImage, TOutputImage>
 ::EstimateInputRpcModel()
 {
   // Get the output dictionary
@@ -226,16 +226,16 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
                                                MetaDataKey::OSSIMKeywordlistKey,  
                                                m_InputRpcEstimator->GetOutput()->GetImageKeywordlist());
   //Update the flag for input rpcEstimation
-  m_rpcEstimationUpdated = true;
+  m_RpcEstimationUpdated = true;
 }
 
 /**
  * Method used to copy the parameters of the input image
  * 
  */
-template <class TInputImage, class TOutputImage, class TDeformationField>
+template <class TInputImage, class TOutputImage>
 void
-GenericRSResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
+GenericRSResampleImageFilter<TInputImage, TOutputImage>
 ::SetOutputParametersFromImage(const InputImageType * image)
 {
   this->SetOutputOrigin ( image->GetOrigin() );
