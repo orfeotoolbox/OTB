@@ -34,9 +34,7 @@ int otbOptResampleImageFilter(int argc, char* argv[])
   const unsigned int Dimension = 2;
   typedef double                                      PixelType;
   typedef otb::VectorImage<PixelType, Dimension>      ImageType;
-  typedef itk::Vector<PixelType, 2>                   DeformationValueType;
-  typedef otb::Image<DeformationValueType, Dimension> DeformationFieldType; 
-  typedef otb::OptResampleImageFilter<ImageType, ImageType, DeformationFieldType> ImageResamplerType;
+  typedef otb::OptResampleImageFilter<ImageType, ImageType> ImageResamplerType;
 
   // Istantiate a Resampler
   ImageResamplerType::Pointer resampler = ImageResamplerType::New();
