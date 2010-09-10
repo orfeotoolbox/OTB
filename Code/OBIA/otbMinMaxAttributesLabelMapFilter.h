@@ -18,7 +18,6 @@ PURPOSE.  See the above copyright notices for more information.
 #ifndef __otbMinMaxAttributesLabelMapFilter_h
 #define __otbMinMaxAttributesLabelMapFilter_h
 
-#include <vector>
 #include "itkLabelMapFilter.h"
 #include "itkSimpleDataObjectDecorator.h"
 
@@ -54,9 +53,9 @@ public:
   typedef typename OutputImageType::PixelType      OutputImagePixelType;
   typedef typename OutputImageType::IndexType      IndexType;
   
-  typedef typename LabelObjectType::AttributesValueType             AttributesValueType;
-  typedef std::vector<AttributesValueType>                          AttributesValueVectorType;
-  typedef itk::SimpleDataObjectDecorator<AttributesValueVectorType> AttributesValueVectorObjectType;
+  typedef typename LabelObjectType::AttributesValueType     AttributesValueType;
+  typedef typename LabelObjectType::AttributesMapType       AttributesMapType;
+  typedef itk::SimpleDataObjectDecorator<AttributesMapType> AttributesMapObjectType;
 
   /** ImageDimension constants */
   itkStaticConstMacro(InputImageDimension, unsigned int,
@@ -73,20 +72,20 @@ public:
 
 
   /** Return the computed Minimum. */
-  AttributesValueVectorType GetMinimum() const
+  AttributesMapType GetMinimum() const
   {
     return this->GetMinimumOutput()->Get();
   }
-  AttributesValueVectorObjectType* GetMinimumOutput();
-  const AttributesValueVectorObjectType* GetMinimumOutput() const;
+  AttributesMapObjectType* GetMinimumOutput();
+  const AttributesMapObjectType* GetMinimumOutput() const;
 
   /** Return the computed Maximum. */
-  AttributesValueVectorType GetMaximum() const
+  AttributesMapType GetMaximum() const
   {
     return this->GetMaximumOutput()->Get();
   }
-  AttributesValueVectorObjectType* GetMaximumOutput();
-  const AttributesValueVectorObjectType* GetMaximumOutput() const;
+  AttributesMapObjectType* GetMaximumOutput();
+  const AttributesMapObjectType* GetMaximumOutput() const;
 
 
 protected:
