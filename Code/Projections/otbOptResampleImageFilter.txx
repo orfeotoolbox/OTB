@@ -27,8 +27,8 @@
 namespace otb
 {
 
-template <class TInputImage, class TOutputImage, class TDeformationField>
-OptResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
+template <class TInputImage, class TOutputImage, class TInterpolatorPrecisionType>
+OptResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType>
 ::OptResampleImageFilter() 
 {
   // internal filters instanciation
@@ -39,9 +39,9 @@ OptResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
   m_WarpFilter->SetDeformationField(m_DeformationFilter->GetOutput());
 }
 
-template <class TInputImage, class TOutputImage, class TDeformationField>
+template <class TInputImage, class TOutputImage, class TInterpolatorPrecisionType>
 void
-OptResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
+OptResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType>
 ::GenerateData()
 {
   m_WarpFilter->GraftOutput(this->GetOutput());
@@ -52,9 +52,9 @@ OptResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
 /**
  *
  */
-template <class TInputImage, class TOutputImage, class TDeformationField>
+template <class TInputImage, class TOutputImage, class TInterpolatorPrecisionType>
 void
-OptResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
+OptResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType>
 ::GenerateOutputInformation()
 {
   // call the superclass's implementation of this method
@@ -72,9 +72,9 @@ OptResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
   outputPtr->SetLargestPossibleRegion(region);
 }
 
-template <class TInputImage, class TOutputImage, class TDeformationField>
+template <class TInputImage, class TOutputImage, class TInterpolatorPrecisionType>
 void
-OptResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
+OptResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType>
 ::GenerateInputRequestedRegion()
 {
   // Retrieve output pointer
@@ -109,9 +109,9 @@ OptResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
  * Method used to copy the parameters of the input image
  * 
  */
-template <class TInputImage, class TOutputImage, class TDeformationField>
+template <class TInputImage, class TOutputImage, class TInterpolatorPrecisionType>
 void
-OptResampleImageFilter<TInputImage, TOutputImage, TDeformationField>
+OptResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType>
 ::SetOutputParametersFromImage(const InputImageType * image)
 {
   this->SetOutputOrigin ( image->GetOrigin() );

@@ -23,6 +23,7 @@
 #include "itkTransformToDeformationFieldSource.h"
 #include "itkLinearInterpolateImageFunction.h"
 #include "itkInterpolateImageFunction.h"
+#include "otbImage.h"
 #include "itkVector.h"
 
 #include "otbMacro.h"
@@ -50,7 +51,8 @@ namespace otb
  *
  **/
 
-template <class TInputImage, class TOutputImage, class TDeformationField>
+template <class TInputImage, class TOutputImage, 
+          class TInterpolatorPrecisionType = double>
 class ITK_EXPORT OptResampleImageFilter :
     public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
@@ -70,28 +72,34 @@ public:
   /** Typedef parameters*/
   typedef TInputImage           InputImageType;
   typedef TOutputImage          OutputImageType;
-  typedef TDeformationField     DeformationFieldType;
+  
+  /** Deformation field used to warp the image*/
+  typedef itk::Vector<typename TOutputImage::InternalPixelType, 
+                      TOutputImage::ImageDimension>             DeformationType;
+  typedef otb::Image<DeformationType>                           DeformationFieldType;
 
   /** filter warping input image using deformation field */
-  typedef StreamingWarpImageFilter<InputImageType, OutputImageType, DeformationFieldType>  WarpImageFilterType;
+  typedef StreamingWarpImageFilter<InputImageType, 
+                                   OutputImageType,
+                                   DeformationFieldType>        WarpImageFilterType;
   
   /** Internal filters typedefs*/
-  typedef itk::TransformToDeformationFieldSource<DeformationFieldType, double>      DeformationFieldGeneratorType;
-  typedef typename DeformationFieldGeneratorType::Pointer             DeformationFieldGeneratorPointerType;
-  typedef typename DeformationFieldGeneratorType::TransformType       TransformType;
-  typedef typename DeformationFieldGeneratorType::SizeType            SizeType;
-  typedef typename DeformationFieldGeneratorType::SpacingType         SpacingType;
-  typedef typename DeformationFieldGeneratorType::OriginType          OriginType;
-  typedef typename DeformationFieldGeneratorType::IndexType           IndexType;
-  typedef typename DeformationFieldGeneratorType::RegionType          RegionType;
+  typedef itk::TransformToDeformationFieldSource<DeformationFieldType, 
+                                                 double>        DeformationFieldGeneratorType;
+  typedef typename DeformationFieldGeneratorType::TransformType TransformType;
+  typedef typename DeformationFieldGeneratorType::SizeType      SizeType;
+  typedef typename DeformationFieldGeneratorType::SpacingType   SpacingType;
+  typedef typename DeformationFieldGeneratorType::OriginType    OriginType;
+  typedef typename DeformationFieldGeneratorType::IndexType     IndexType;
+  typedef typename DeformationFieldGeneratorType::RegionType    RegionType;
 
   /** Interpolator type */
-  typedef itk::InterpolateImageFunction<InputImageType,double>         InterpolatorType;
-  typedef typename InterpolatorType::Pointer                           InterpolatorPointerType;
-  typedef itk::LinearInterpolateImageFunction<InputImageType,double>   DefaultInterpolatorType;
+  typedef itk::InterpolateImageFunction<InputImageType, 
+                                        TInterpolatorPrecisionType>       InterpolatorType;
+  typedef typename InterpolatorType::Pointer                              InterpolatorPointerType;
+  typedef itk::LinearInterpolateImageFunction<InputImageType, 
+                                              TInterpolatorPrecisionType> DefaultInterpolatorType;
   
-  /** Public Method prototypes */
-  virtual void GenerateData();
   
   /** Accessors to internal filters parameters */
   void SetTransform(TransformType * transform)
@@ -151,6 +159,8 @@ protected:
   /** Destructor */
   virtual ~OptResampleImageFilter() {};
 
+  virtual void GenerateData();
+
   virtual void GenerateOutputInformation();
 
   virtual void GenerateInputRequestedRegion();
@@ -159,8 +169,8 @@ private:
   OptResampleImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  DeformationFieldGeneratorPointerType   m_DeformationFilter;
-  typename WarpImageFilterType::Pointer  m_WarpFilter;
+  typename DeformationFieldGeneratorType::Pointer   m_DeformationFilter;
+  typename WarpImageFilterType::Pointer             m_WarpFilter;
 };
 
 } // namespace otb
