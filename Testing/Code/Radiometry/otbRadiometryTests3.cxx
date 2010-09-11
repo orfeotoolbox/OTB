@@ -33,6 +33,7 @@ void RegisterTests()
   REGISTER_TEST(otbSIXSTraitsTest);
   REGISTER_TEST(otbSIXSTraitsComputeAtmosphericParametersTest);
   REGISTER_TEST(otbAtmosphericRadiativeTermsNew);
+  REGISTER_TEST(otbAtmosphericRadiativeTermsSingleChannelNew);
   REGISTER_TEST(otbReflectanceToSurfaceReflectanceImageFilterNew);
   REGISTER_TEST(otbReflectanceToSurfaceReflectanceImageFilterTest);
   REGISTER_TEST(otbReflectanceToSurfaceReflectanceImageFilterTest2);

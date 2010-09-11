@@ -524,6 +524,10 @@ ADD_TEST(raTuAtmosphericRadiativeTermsNew ${RADIOMETRY_TESTS3}
         otbAtmosphericRadiativeTermsNew
 )
 
+ADD_TEST(raTuAtmosphericRadiativeTermsSingleChannelNew ${RADIOMETRY_TESTS3}
+        otbAtmosphericRadiativeTermsSingleChannelNew
+)
+
 
 # -------            otb::ReflectanceToSurfaceReflectanceImageFilter   ------------------------------
 ADD_TEST(raTuReflectanceToSurfaceReflectanceImageFilterNew ${RADIOMETRY_TESTS3}
