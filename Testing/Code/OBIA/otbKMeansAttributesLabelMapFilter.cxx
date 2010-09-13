@@ -28,6 +28,7 @@
 #include "itkLabelImageToLabelMapFilter.h"
 #include "otbImageToLabelMapWithAttributesFilter.h"
 #include "otbKMeansAttributesLabelMapFilter.h"
+#include "otbShapeAttributesLabelMapFilter.h"
 
 const unsigned int Dimension = 2;
 typedef unsigned short LabelType;

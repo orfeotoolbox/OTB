@@ -19,7 +19,6 @@ PURPOSE.  See the above copyright notices for more information.
 #define __otbKMeansAttributesLabelMapFilter_h
 
 #include "itkLabelMapFilter.h"
-#include "itkSimpleDataObjectDecorator.h"
 #include "otbLabelMapWithClassLabelToLabeledSampleListFilter.h"
 #include "itkListSample.h"
 #include "itkEuclideanDistance.h"
@@ -54,10 +53,6 @@ public:
 
   // LabelObject attributes
   typedef typename LabelObjectType::AttributesValueType     AttributesValueType;
-  typedef typename LabelObjectType::AttributesMapType       AttributesMapType;
-  typedef itk::SimpleDataObjectDecorator<AttributesMapType> AttributesMapObjectType;
-  typedef typename InputImageType::LabelObjectContainerType LabelObjectContainerType;
-  typedef typename LabelObjectContainerType::const_iterator LabelObjectContainerConstIterator;
   typedef typename LabelObjectType::ClassLabelType          ClassLabelType;
 
   // LabelMapToSampleList
@@ -78,7 +73,6 @@ public:
   typedef itk::Statistics::KdTreeBasedKmeansEstimator<TreeType>                    EstimatorType;
   typedef itk::Statistics::EuclideanDistance<VectorType>                           DistanceType;
   typedef std::vector<VectorType>                                                  CentroidsVectorType;
-  typedef itk::SimpleDataObjectDecorator<CentroidsVectorType>                      CentroidsVectorObjectType;
 
   /** ImageDimension constants */
   itkStaticConstMacro(InputImageDimension, unsigned int,
@@ -89,7 +83,7 @@ public:
 
   /** Runtime information support. */
   itkTypeMacro(KMeansAttributesLabelMapFilter,
-               LabelMapFilter);
+               itk::Object);
 
   /** Return the centroids resulting from the KMeans */
   CentroidsVectorType& GetCentroids()
