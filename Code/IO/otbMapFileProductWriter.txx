@@ -180,7 +180,6 @@ MapFileProductWriter<TInputImage>
 ::Tiling()
 {
   unsigned int numberOfChannel = m_VectorImage->GetNumberOfComponentsPerPixel();
-  unsigned int curIdx = 0;
   
   /** Image statistics*/
   typename InputImageType::PixelType inMin(numberOfChannel), inMax(numberOfChannel), outMin(numberOfChannel), outMax(
@@ -365,8 +364,8 @@ MapFileProductWriter<TInputImage>
         InputPointType  inputPoint;
         OutputPointType outputPoint;
         IndexType       indexTile;
-        SizeType        sizeTile, demiSizeTile;
-
+        SizeType        sizeTile;
+        
         sizeTile = extractSize;
  
         /** GX LAT LON **/
