@@ -27,12 +27,30 @@ template <class TInputImage>
 MinMaxAttributesLabelMapFilter<TInputImage>
 ::MinMaxAttributesLabelMapFilter()
 {
-  typename AttributesMapObjectType::Pointer min = AttributesMapObjectType::New();
-  typename AttributesMapObjectType::Pointer max = AttributesMapObjectType::New();
-
-  this->itk::ProcessObject::SetNthOutput(1, min.GetPointer());
-  this->itk::ProcessObject::SetNthOutput(2, max.GetPointer());
+  this->Superclass::SetNumberOfRequiredOutputs(3);
+  this->itk::ProcessObject::SetNthOutput(1, this->MakeOutput(1).GetPointer());
+  this->itk::ProcessObject::SetNthOutput(2, this->MakeOutput(2).GetPointer());
 }
+
+template<class TInputImage>
+typename MinMaxAttributesLabelMapFilter<TInputImage>::DataObjectPointerType
+MinMaxAttributesLabelMapFilter<TInputImage>
+::MakeOutput(unsigned int i)
+{
+  DataObjectPointerType ret;
+  switch (i)
+  {
+    case 0:
+      ret = InputImageType::New();
+      break;
+    case 1:
+    case 2:
+      ret = AttributesMapObjectType::New();
+      break;
+  }
+  return ret;
+}
+
 
 template<class TInputImage>
 typename MinMaxAttributesLabelMapFilter<TInputImage>::AttributesMapObjectType*

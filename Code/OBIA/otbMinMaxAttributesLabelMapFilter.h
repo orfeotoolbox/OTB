@@ -18,7 +18,7 @@ PURPOSE.  See the above copyright notices for more information.
 #ifndef __otbMinMaxAttributesLabelMapFilter_h
 #define __otbMinMaxAttributesLabelMapFilter_h
 
-#include "itkInPlaceLabelMapFilter.h"
+#include "itkLabelMapFilter.h"
 #include "itkSimpleDataObjectDecorator.h"
 
 namespace otb {
@@ -28,26 +28,29 @@ namespace otb {
  */
 template<class TInputImage>
 class ITK_EXPORT MinMaxAttributesLabelMapFilter :
-    public itk::InPlaceLabelMapFilter<TInputImage>
+    public itk::LabelMapFilter<TInputImage,TInputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef MinMaxAttributesLabelMapFilter          Self;
-  typedef itk::InPlaceLabelMapFilter<TInputImage> Superclass;
-  typedef itk::SmartPointer<Self>                 Pointer;
-  typedef itk::SmartPointer<const Self>           ConstPointer;
+  typedef MinMaxAttributesLabelMapFilter               Self;
+  typedef itk::LabelMapFilter<TInputImage,TInputImage> Superclass;
+  typedef itk::SmartPointer<Self>                      Pointer;
+  typedef itk::SmartPointer<const Self>                ConstPointer;
 
   /** Some convenient typedefs. */
   typedef TInputImage InputImageType;
-  typedef typename InputImageType::Pointer         InputImagePointer;
-  typedef typename InputImageType::ConstPointer    InputImageConstPointer;
-  typedef typename InputImageType::RegionType      InputImageRegionType;
-  typedef typename InputImageType::PixelType       InputImagePixelType;
-  typedef typename InputImageType::LabelObjectType LabelObjectType;
+  typedef typename InputImageType::Pointer             InputImagePointer;
+  typedef typename InputImageType::ConstPointer        InputImageConstPointer;
+  typedef typename InputImageType::RegionType          InputImageRegionType;
+  typedef typename InputImageType::PixelType           InputImagePixelType;
+  typedef typename InputImageType::LabelObjectType     LabelObjectType;
   
   typedef typename LabelObjectType::AttributesValueType     AttributesValueType;
   typedef typename LabelObjectType::AttributesMapType       AttributesMapType;
   typedef itk::SimpleDataObjectDecorator<AttributesMapType> AttributesMapObjectType;
+
+  typedef itk::DataObject         DataObjectType;
+  typedef DataObjectType::Pointer DataObjectPointerType;
 
   /** ImageDimension constants */
   itkStaticConstMacro(InputImageDimension, unsigned int,
@@ -77,6 +80,7 @@ public:
   AttributesMapObjectType* GetMaximumOutput();
   const AttributesMapObjectType* GetMaximumOutput() const;
 
+  virtual DataObjectPointerType MakeOutput(unsigned int idx);
 
 protected:
   MinMaxAttributesLabelMapFilter();
