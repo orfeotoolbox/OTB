@@ -1,9 +1,9 @@
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
-SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
+SET(BASELINE       ${OTB_DATA_ROOT}/Baseline/OTB/Images)
 SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
-SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
-SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
+SET(INPUTDATA      ${OTB_DATA_ROOT}/Input)
+SET(TEMP           ${OTBTesting_BINARY_DIR}/Temporary)
 
 #Remote sensing images (large images )
 IF(OTB_DATA_USE_LARGEINPUT)
@@ -39,21 +39,21 @@ ADD_TEST(obTuImageToLabelMapWithAttributesFilterNew ${OBIA_TESTS1}
 
 ADD_TEST(obTvImageToLabelMapWithAttributesFilter ${OBIA_TESTS1} 
     otbImageToLabelMapWithAttributesFilter
-        ${INPUTDATA}/calanques.tif
-        ${INPUTDATA}/cala_labelled.tif)
+    ${INPUTDATA}/maur.tif
+    ${INPUTDATA}/maur_labelled.tif)
 
 ADD_TEST(obTuLabelMapSourceNew ${OBIA_TESTS1}
-         otbLabelMapSourceNew)
+    otbLabelMapSourceNew)
 
 ADD_TEST(obTvLabelMapToVectorDataFilter ${OBIA_TESTS1}
     otbLabelMapToVectorDataFilter
-        ${INPUTDATA}/rcc8_mire1.png
-        ${TEMP}/rcc8_mire2_vectorizer.shp)
+    ${INPUTDATA}/rcc8_mire1.png
+    ${TEMP}/rcc8_mire2_vectorizer.shp)
 
 ADD_TEST(obTvVectorDataToLabelMapFilter ${OBIA_TESTS1}
     otbVectorDataToLabelMapFilter
-        ${INPUTDATA}/vectorIOexample_gis_to_vec.shp
-        ${TEMP}/vectordataToLabelMap.png)
+    ${INPUTDATA}/vectorIOexample_gis_to_vec.shp
+    ${TEMP}/vectordataToLabelMap.png)
 
 ADD_TEST(obTuLabelMapToSampleListFilterNew ${OBIA_TESTS1}
     otbLabelMapToSampleListFilterNew)
@@ -66,14 +66,12 @@ ADD_TEST(obTvLabelMapToSampleListFilter ${OBIA_TESTS1}
     SHAPE::Flusser09 SHAPE::Flusser10 SHAPE::Flusser11)
 
 ADD_TEST(obTuLabelMapToVectorDataFilterNew ${OBIA_TESTS1}
-otbLabelMapToVectorDataFilterNew
-)
+    otbLabelMapToVectorDataFilterNew)
 
 ADD_TEST(obTvLabelMapToVectorDataFilter ${OBIA_TESTS1}
-otbLabelMapToVectorDataFilter
-        ${INPUTDATA}/rcc8_mire1.png
-        ${TEMP}/rcc8_mire2_vectorizer.shp
-)
+    otbLabelMapToVectorDataFilter
+    ${INPUTDATA}/rcc8_mire1.png
+    ${TEMP}/rcc8_mire2_vectorizer.shp)
 
 ADD_TEST(obTuLabelMapWithClassLabelToLabeledSampleListFilterNew ${OBIA_TESTS1}
     otbLabelMapWithClassLabelToLabeledSampleListFilterNew)
@@ -86,46 +84,42 @@ ADD_TEST(obTvLabelMapWithClassLabelToLabeledSampleListFilter ${OBIA_TESTS1}
     SHAPE::Flusser09 SHAPE::Flusser10  SHAPE::Flusser11)
 
 ADD_TEST(otbLabelObjectMapVectorizer ${OBIA_TESTS1}
-        otbLabelObjectMapVectorizer
-        ${INPUTDATA}/rcc8_mire1.png
-        rcc8_mire1_label_vectorizer.gml)
+    otbLabelObjectMapVectorizer
+    ${INPUTDATA}/rcc8_mire1.png
+    rcc8_mire1_label_vectorizer.gml)
 
 ADD_TEST(obTuLabelObjectToPolygonFunctorNew ${OBIA_TESTS1}
-otbLabelObjectToPolygonFunctorNew
-)
+    otbLabelObjectToPolygonFunctorNew)
 
 ADD_TEST(obTuMinMaxAttributesLabelMapFilterNew ${OBIA_TESTS1}
-otbMinMaxAttributesLabelMapFilterNew
-)
+    otbMinMaxAttributesLabelMapFilterNew)
 
 ADD_TEST(obTvMinMaxAttributesLabelMapFilter ${OBIA_TESTS1}
-         otbMinMaxAttributesLabelMapFilter
-         ${INPUTDATA}/calanques.tif
-         ${INPUTDATA}/cala_labelled.tif
-         ${TEMP}/obTvMinMaxAttributesLabelMapFilter.txt)
+    otbMinMaxAttributesLabelMapFilter
+    ${INPUTDATA}/calanques.tif
+    ${INPUTDATA}/cala_labelled.tif
+    ${TEMP}/obTvMinMaxAttributesLabelMapFilter.txt)
 
 ADD_TEST(obTuNormalizeAttributesLabelMapFilterNew ${OBIA_TESTS1}
-         otbNormalizeAttributesLabelMapFilterNew
-)
+    otbNormalizeAttributesLabelMapFilterNew)
 
 ADD_TEST(obTvNormalizeAttributesLabelMapFilter ${OBIA_TESTS1}
-         otbNormalizeAttributesLabelMapFilter
-         ${INPUTDATA}/calanques.tif
-         ${INPUTDATA}/cala_labelled.tif
-         ${TEMP}/obTvNormalizeAttributesLabelMapFilter.txt)
+    otbNormalizeAttributesLabelMapFilter
+    ${INPUTDATA}/calanques.tif
+    ${INPUTDATA}/cala_labelled.tif
+    ${TEMP}/obTvNormalizeAttributesLabelMapFilter.txt)
 
 ADD_TEST(obTuKMeansAttributesLabelMapFilterNew ${OBIA_TESTS1}
-         otbKMeansAttributesLabelMapFilterNew)
+    otbKMeansAttributesLabelMapFilterNew)
 
 ADD_TEST(obTvKMeansAttributesLabelMapFilter ${OBIA_TESTS1}
-         otbKMeansAttributesLabelMapFilter
-         ${INPUTDATA}/calanques.tif
-         ${INPUTDATA}/cala_labelled.tif
-         ${TEMP}/obTvKMeansAttributesLabelMapFilter.txt)
+    otbKMeansAttributesLabelMapFilter
+    ${INPUTDATA}/calanques.tif
+    ${INPUTDATA}/cala_labelled.tif
+    ${TEMP}/obTvKMeansAttributesLabelMapFilter.txt)
 
 ADD_TEST(obTuRadiometricAttributesLabelMapFilterNew ${OBIA_TESTS1}
-otbRadiometricAttributesLabelMapFilterNew
-)
+    otbRadiometricAttributesLabelMapFilterNew)
 
 ADD_TEST(obTuShapeAttributesLabelMapFilterNew ${OBIA_TESTS1}
 	otbShapeAttributesLabelMapFilterNew)
@@ -134,26 +128,24 @@ ADD_TEST(obTuStatisticsAttributesLabelMapFilterNew ${OBIA_TESTS1}
 	otbStatisticsAttributesLabelMapFilterNew)
 
 ADD_TEST(obTuVectorDataToLabelMapFilterNew ${OBIA_TESTS1}
-otbVectorDataToLabelMapFilterNew
-)
+    otbVectorDataToLabelMapFilterNew)
 
 ADD_TEST(obTvVectorDataToLabelMapFilter ${OBIA_TESTS1}
-otbVectorDataToLabelMapFilter
-        ${INPUTDATA}/vectorIOexample_gis_to_vec.shp
-        ${TEMP}/vectordataToLabelMap.png
-)
+    otbVectorDataToLabelMapFilter
+    ${INPUTDATA}/vectorIOexample_gis_to_vec.shp
+    ${TEMP}/vectordataToLabelMap.png)
 
 
 # OBIATests2 (need PQXX)
-IF(OTB_USE_PQXX)
+IF(TB_USE_PQXX)
 ADD_TEST(obTuLabelMapToGISTableFilterNew ${OBIA_TESTS2}
-  otbLabelMapToGISTableFilterNew)
+    otbLabelMapToGISTableFilterNew)
 
 ADD_TEST(obTuGISTableToLabelMapFilterNew ${OBIA_TESTS2}
-  otbGISTableToLabelMapFilterNew)
+    otbGISTableToLabelMapFilterNew)
 
 ADD_TEST(obTvLabelMapToGISTableFilter ${OBIA_TESTS2}
-  otbLabelMapToGISTableFilter
+    otbLabelMapToGISTableFilter
     ${INPUTDATA}/rcc8_mire1.png
     orfeotoolbox_test
     labelmaptogis_test_table
