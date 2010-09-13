@@ -39,7 +39,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
   // internal filters instanciation
   m_Resampler         = ResamplerType::New();
   m_InputRpcEstimator = RpcModelEstimatorType::New();
-  m_OutputRpcEstimator = RpcModelEstimatorType::New();
+  m_OutputRpcEstimator= RpcModelEstimatorType::New();
   m_Transform         = GenericRSTransformType::New();
 }
 
@@ -80,6 +80,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
   
   // Get the Output MetaData Dictionary
   itk::MetaDataDictionary& dict = outputPtr->GetMetaDataDictionary();
+  
   // Encapsulate the   metadata set by the user
   itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, 
                                         this->GetOutputProjectionRef());
@@ -123,31 +124,15 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
   m_OutputRpcEstimator->UpdateOutputInformation();
   
   // Encapsulate the estimated rpc model in the output
-  if(m_OutputRpcEstimator->GetOutput()->GetImageKeywordlist().GetSize() > 0)
+  if (m_OutputRpcEstimator->GetOutput()->GetImageKeywordlist().GetSize() > 0)
+    {
+    // Fill the output dict
     itk::EncapsulateMetaData<ImageKeywordlist>(dict,
                                                MetaDataKey::OSSIMKeywordlistKey,  
                                                m_OutputRpcEstimator->GetOutput()->GetImageKeywordlist());
-}
-
-/**
- * Use the rpc keywordlist if any rpc model estimated
- */
-template <class TInputImage, class TOutputImage>
-void
-GenericRSResampleImageFilter<TInputImage, TOutputImage>
-::UpdateTransform()
-{
-  if(m_EstimateInputRpcModel)
-    {
-    m_Transform->SetOutputKeywordList( m_InputRpcEstimator->GetOutput()->GetImageKeywordlist());
-    }
-
-  if(m_EstimateOutputRpcModel)
-    {
+    // Fill the transform with the right kwl
     m_Transform->SetInputKeywordList( m_OutputRpcEstimator->GetOutput()->GetImageKeywordlist());
     }
-  
-  m_Transform->InstanciateTransform();
 }
 
 
@@ -176,7 +161,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
     }
   
   // Instanciate the RS transform 
-  this->UpdateTransform();
+  m_Transform->InstanciateTransform();
   
   // Generate input requested region
   m_Resampler->SetInput(inputPtr);
@@ -196,31 +181,23 @@ void
 GenericRSResampleImageFilter<TInputImage, TOutputImage>
 ::EstimateInputRpcModel()
 {
-  // Get the output dictionary
-  itk::MetaDataDictionary& dict = const_cast<InputImageType*>(this->GetInput())->GetMetaDataDictionary();
-  
   // Temp image : not allocated but with the sampe metadata as the
   // output 
   typename InputImageType::Pointer tempPtr = InputImageType::New();
   tempPtr->SetRegions(this->GetInput()->GetLargestPossibleRegion());
-
-  // Encapsulate the output metadata in the temp image
-  itk::MetaDataDictionary& tempDict = tempPtr->GetMetaDataDictionary();
-  itk::EncapsulateMetaData<std::string>(tempDict, MetaDataKey::ProjectionRefKey, 
-                                        this->GetInputProjectionRef() );
-  itk::EncapsulateMetaData<ImageKeywordlist>(tempDict, MetaDataKey::OSSIMKeywordlistKey, 
-                                             this->GetInputKeywordList());
+  tempPtr->CopyInformation(this->GetInput());
   
   // Estimate the rpc model with the temp image
   m_InputRpcEstimator->SetInput(tempPtr);
   m_InputRpcEstimator->UpdateOutputInformation();
   
-  // Encapsulate the estimated rpc model in the output
+  // No need to override the input kwl, just setup the 
+  // transform with the kwl estimated
   if(m_InputRpcEstimator->GetInput()->GetImageKeywordlist().GetSize() > 0)
-    itk::EncapsulateMetaData<ImageKeywordlist>(dict,
-                                               MetaDataKey::OSSIMKeywordlistKey,  
-                                               m_InputRpcEstimator->GetOutput()->GetImageKeywordlist());
-  //Update the flag for input rpcEstimation
+    m_Transform->SetOutputKeywordList(m_InputRpcEstimator->GetOutput()->GetImageKeywordlist());
+  
+  // Update the flag for input rpcEstimation in order to not compute
+  // the rpc model for each stream
   m_RpcEstimationUpdated = true;
 }
 
