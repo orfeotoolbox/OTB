@@ -95,6 +95,7 @@ int otbMinMaxAttributesLabelMapFilter(int argc, char * argv[])
     outfile << "  " << (*it).first << " : " << (*it).second << std::endl;
     }
   outfile << std::endl;
+  outfile.close();
 
   return EXIT_SUCCESS;
 }
