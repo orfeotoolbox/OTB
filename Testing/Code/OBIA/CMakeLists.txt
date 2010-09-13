@@ -96,8 +96,8 @@ ADD_TEST(obTuMinMaxAttributesLabelMapFilterNew ${OBIA_TESTS1}
 
 ADD_TEST(obTvMinMaxAttributesLabelMapFilter ${OBIA_TESTS1}
     otbMinMaxAttributesLabelMapFilter
-    ${INPUTDATA}/calanques.tif
-    ${INPUTDATA}/cala_labelled.tif
+    ${INPUTDATA}/maur.tif
+    ${INPUTDATA}/maur_labelled.tif
     ${TEMP}/obTvMinMaxAttributesLabelMapFilter.txt)
 
 ADD_TEST(obTuNormalizeAttributesLabelMapFilterNew ${OBIA_TESTS1}
@@ -105,8 +105,8 @@ ADD_TEST(obTuNormalizeAttributesLabelMapFilterNew ${OBIA_TESTS1}
 
 ADD_TEST(obTvNormalizeAttributesLabelMapFilter ${OBIA_TESTS1}
     otbNormalizeAttributesLabelMapFilter
-    ${INPUTDATA}/calanques.tif
-    ${INPUTDATA}/cala_labelled.tif
+    ${INPUTDATA}/maur.tif
+    ${INPUTDATA}/maur_labelled.tif
     ${TEMP}/obTvNormalizeAttributesLabelMapFilter.txt)
 
 ADD_TEST(obTuKMeansAttributesLabelMapFilterNew ${OBIA_TESTS1}
@@ -114,8 +114,8 @@ ADD_TEST(obTuKMeansAttributesLabelMapFilterNew ${OBIA_TESTS1}
 
 ADD_TEST(obTvKMeansAttributesLabelMapFilter ${OBIA_TESTS1}
     otbKMeansAttributesLabelMapFilter
-    ${INPUTDATA}/calanques.tif
-    ${INPUTDATA}/cala_labelled.tif
+    ${INPUTDATA}/maur.tif
+    ${INPUTDATA}/maur_labelled.tif
     ${TEMP}/obTvKMeansAttributesLabelMapFilter.txt)
 
 ADD_TEST(obTuRadiometricAttributesLabelMapFilterNew ${OBIA_TESTS1}
