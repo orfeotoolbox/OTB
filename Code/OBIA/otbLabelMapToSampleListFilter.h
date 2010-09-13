@@ -21,71 +21,10 @@
 #include <algorithm>
 
 #include "itkObject.h"
+#include "otbAttributesMapLabelObject.h"
 
 namespace otb
 {
-namespace Functor
-{
-/** \class AttributesMapMeasurementFunctor
-*   \brief This class allows to build a measurement vector from an AttributesMapLabelObject
-*    
-*    It Allows to select only a subset of the available attributes.
-*/
-template<class TLabelObject,class TMeasurementVector>
-class AttributesMapMeasurementFunctor
-{
-public:
-  typedef std::vector<std::string> AttributesListType;
-
-  inline TMeasurementVector operator()(const TLabelObject * object) const
-  {
-    TMeasurementVector newSample(m_Attributes.size());
-    newSample.Fill(0);
-
-    unsigned int attrIndex = 0;
-    typename AttributesListType::const_iterator attrIt = m_Attributes.begin();
-    while(attrIt != m_Attributes.end())
-      {
-      newSample[attrIndex] = object->GetAttribute(attrIt->c_str());
-      ++attrIt;
-      ++attrIndex;
-      }
-    return newSample;
-  }
-
-  /** Add an attribute to the exported attributes list */
-  void AddAttribute(const char * attr)
-  {
-    m_Attributes.push_back(attr);
-  }
-  
-  /** Remove an attribute from the exported attributes list */
-  void RemoveAttribute(const char * attr)
-  {
-    AttributesListType::iterator elt = std::find(m_Attributes.begin(),m_Attributes.end(),attr);
-    if(elt!=m_Attributes.end())
-      {
-      m_Attributes.erase(elt);
-      }
-  }
-  
-  /** Remove all attributes from the exported attributes list */
-  void ClearAttributes()
-  {
-    m_Attributes.clear();
-  }
-  
-  /** Get The number of exported attributes */
-  unsigned int GetNumberOfAttributes()
-  {
-    return m_Attributes.size();
-  }
-
-private:
-  AttributesListType m_Attributes;
-};
-}
-
 /** \class LabelMapToSampleListFilter
  * \brief This class converts a LabelObjectMap to a SampleList for
  * learning and classification.
