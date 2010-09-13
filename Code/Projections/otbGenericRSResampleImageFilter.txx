@@ -29,21 +29,18 @@ namespace otb
 
 template <class TInputImage, class TOutputImage>
 GenericRSResampleImageFilter<TInputImage, TOutputImage>
-::GenericRSResampleImageFilter():m_EstimateInputRpcModel(false),
-                                 m_EstimateOutputRpcModel(false),
-                                 m_RpcEstimationUpdated(false)
+::GenericRSResampleImageFilter():
 {  
+  // flags initialization
+  m_EstimateInputRpcModel  = false;
+  m_EstimateOutputRpcModel = false;
+  m_RpcEstimationUpdated   = false;
+
   // internal filters instanciation
   m_Resampler         = ResamplerType::New();
   m_InputRpcEstimator = RpcModelEstimatorType::New();
   m_OutputRpcEstimator = RpcModelEstimatorType::New();
   m_Transform         = GenericRSTransformType::New();
-  
-  // Initialize the deformation field spacing 
-  SpacingType   initSpacing;
-  initSpacing[0]= 2.;
-  initSpacing[1]=-2.;
-  this->SetDeformationFieldSpacing(initSpacing);
 }
 
 template <class TInputImage, class TOutputImage>
