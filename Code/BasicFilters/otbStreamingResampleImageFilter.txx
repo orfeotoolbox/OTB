@@ -19,11 +19,6 @@
 #ifndef __otbOptResampleImageFilter_txx
 #define __otbOptResampleImageFilter_txx
 
-#include "itkMetaDataDictionary.h"
-#include "itkMetaDataObject.h"
-#include "otbMetaDataKey.h"
-#include "itkIdentityTransform.h"
-
 namespace otb
 {
 
