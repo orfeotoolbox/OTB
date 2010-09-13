@@ -50,7 +50,7 @@ int otbGenericRSResampleImageFilter(int argc, char* argv[])
   ImageResamplerType::Pointer resampler = ImageResamplerType::New();
   
   // Check if it's a unit test.
-  if (argc > 1)
+  if (argc == 7 )
     {
     const char * infname = argv[1];
     const char * outfname = argv[6];

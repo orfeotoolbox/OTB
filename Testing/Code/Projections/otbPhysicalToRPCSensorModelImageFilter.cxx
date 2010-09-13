@@ -33,7 +33,7 @@ int otbPhysicalToRPCSensorModelImageFilter(int argc, char* argv[])
   // Object instanciation
   PhysicalToSensorModelType::Pointer estimator = PhysicalToSensorModelType::New();
 
-  if(argc>1)
+  if(argc == 4)
     {
     const char * infname  = argv[1];
     unsigned int gridSize = atoi(argv[2]);

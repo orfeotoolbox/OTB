@@ -42,7 +42,7 @@ int otbStreamingResampleImageFilterWithAffineTransform(int argc, char* argv[])
   // Istantiate a Resampler
   ImageResamplerType::Pointer resampler = ImageResamplerType::New();
 
-  if (argc>1)
+  if (argc== 4)
     {
     const char * infname = argv[1];
     const char * outfname = argv[3];
