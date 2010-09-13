@@ -94,6 +94,10 @@ public:
   itkSetStringMacro(DEMDirectory);
   itkGetStringMacro(DEMDirectory);
 
+  /** Set/Get the AverageElevation*/
+  itkSetMacro(AverageElevation, double);
+  itkGetMacro(AverageElevation, double);
+  
   /** Set Grid size with an unsigned int parmeter*/
   void SetGridSize(unsigned int inSize)
   {
@@ -123,7 +127,9 @@ private:
   GCPsToSensorModelPointerType       m_GCPsToSensorModelFilter;
   
   std::string                        m_DEMDirectory;
+  double                             m_AverageElevation;
   SizeType                           m_GridSize;
+
 };
 } // end of namespace otb
 

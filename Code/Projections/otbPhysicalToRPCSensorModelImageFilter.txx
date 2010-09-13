@@ -32,6 +32,10 @@ PhysicalToRPCSensorModelImageFilter<TImage>
   
   // Initialize the DEMDirectory
   m_DEMDirectory = "";
+  
+  // Initialize the average elevation used
+  //  0. or -32768.0 ???
+  m_AverageElevation = 0.;
 
   // Initialize the gridSize
   m_GridSize.Fill(1);
@@ -60,8 +64,9 @@ PhysicalToRPCSensorModelImageFilter<TImage>
   
   if(!m_DEMDirectory.empty())
     {
-    // Set the DEM to the Remote Sensing Transform
+    // Set the DEM & Average Elevation to the Remote Sensing Transform
     rsTransform->SetDEMDirectory(m_DEMDirectory);
+    rsTransform->SetAverageElevation(m_AverageElevation);
     
     // Generate DEMHandler & set it to the GCP2sensorModel
     typename DEMHandler::Pointer demHandler = DEMHandler::New();

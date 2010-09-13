@@ -184,7 +184,7 @@ public:
   }
   
   /** Set/Get the DEMDirectory*/
-    void SetDEMDirectory(const std::string&  dem)
+  void SetDEMDirectory(const std::string&  dem)
   {
     m_Transform->SetDEMDirectory(dem);
     m_InputRpcEstimator->SetDEMDirectory(dem);
@@ -193,25 +193,36 @@ public:
   }
   otbGetObjectMemberConstMacro(Transform,DEMDirectory,std::string);
 
+  /** Method to Set the Average Elevation used */
+  void SetAverageElevation(double elevation)
+  {
+    m_Transform->SetAverageElevation(elevation);
+    m_InputRpcEstimator->SetAverageElevation(elevation);
+    m_OutputRpcEstimator->SetAverageElevation(elevation);
+    this->Modified();
+  }
+  otbGetObjectMemberConstMacro(Transform,AverageElevation,double);
+  
+
   /** Useful to set the output parameters from an existing image*/
   void SetOutputParametersFromImage(const ImageBaseType * image);
   
-  /** Set/Get the grid spacing for rpc estimator*/
+  /** Set/Get the grid size for rpc estimator*/
   void SetInputRpcGridSize(SizeType gridSize)
   {
     m_InputRpcEstimator->SetGridSize(gridSize);
     this->Modified();
   }
-  /** unsigned int as parmater */
+  /** unsigned int as paramater */
   void SetInputRpcGridSize(unsigned int gridSize)
   {
     m_InputRpcEstimator->SetGridSize(gridSize);
     this->Modified();
   }
-
+  // Get the input rpc model estimator  grid size used
   SizeType GetInputRpcGridSize()
   {
-    return m_InputRpcEstimator->GetGridSpacing();
+    return m_InputRpcEstimator->GetGridSize();
   }
   
   // Macro to tune the EstimateInputRpcModel flag
@@ -219,19 +230,19 @@ public:
   itkGetMacro(EstimateInputRpcModel, bool);
   itkBooleanMacro(EstimateInputRpcModel);
   
-  /** Macro to Set/Get the grid spacing for rpc estimator*/
+  /** Macro to Set/Get the grid size for rpc estimator*/
   void SetOutputRpcGridSize(SizeType gridSize)
   {
     m_OutputRpcEstimator->SetGridSize(gridSize);
     this->Modified();
   }
-  /** unsigned int as parmater*/
+  /** unsigned int as paramater */
   void SetOutputRpcGridSize(unsigned int gridSize)
   {
     m_OutputRpcEstimator->SetGridSize(gridSize);
     this->Modified();
   }
-
+  // Get the output rpc model estimator grid size used
   SizeType GetOutputRpcGridSize()
   {
     return m_OutputRpcEstimator->GetGridSize();
