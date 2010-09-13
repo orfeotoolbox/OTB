@@ -103,6 +103,9 @@ public:
   {
     m_GridSize.Fill(inSize);
   }
+
+  /** Reimplement the method Modified() */
+  virtual void Modified();
   
 protected:
   /** Constructor */
@@ -129,6 +132,7 @@ private:
   std::string                        m_DEMDirectory;
   double                             m_AverageElevation;
   SizeType                           m_GridSize;
+  bool                               m_OutputInformationGenerated;
 
 };
 } // end of namespace otb
