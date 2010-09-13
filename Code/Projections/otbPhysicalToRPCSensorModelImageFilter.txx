@@ -37,8 +37,9 @@ PhysicalToRPCSensorModelImageFilter<TImage>
   //  0. or -32768.0 ???
   m_AverageElevation = 0.;
 
-  // Initialize the gridSize
-  m_GridSize.Fill(1);
+  // Initialize the gridSize : 16 points to have a correct estimation
+  // of the model
+  m_GridSize.Fill(4);
 }
 
 template <class TImage>
