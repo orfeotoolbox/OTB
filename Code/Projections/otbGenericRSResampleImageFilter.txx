@@ -29,7 +29,7 @@ namespace otb
 
 template <class TInputImage, class TOutputImage>
 GenericRSResampleImageFilter<TInputImage, TOutputImage>
-::GenericRSResampleImageFilter():
+::GenericRSResampleImageFilter()
 {  
   // flags initialization
   m_EstimateInputRpcModel  = false;
@@ -120,7 +120,8 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
   
   // Estimate the rpc model from the temp image
   m_OutputRpcEstimator->SetInput(tempPtr);
-  m_OutputRpcEstimator->GenerateOutputInformation();
+  m_OutputRpcEstimator->Update();
+  //m_OutputRpcEstimator->GenerateOutputInformation();
   
   // Encapsulate the estimated rpc model in the output
   if(m_OutputRpcEstimator->GetOutput()->GetImageKeywordlist().GetSize() > 0)
@@ -181,7 +182,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
   this->UpdateTransform();
   
   // Generate input requested region
-  m_Resampler->SetInput(this->GetInput());
+  m_Resampler->SetInput(inputPtr);
   m_Resampler->SetTransform(m_Transform);
   m_Resampler->SetDeformationFieldSpacing(this->GetDeformationFieldSpacing());
   m_Resampler->GetOutput()->UpdateOutputInformation();
@@ -215,7 +216,9 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
   
   // Estimate the rpc model with the temp image
   m_InputRpcEstimator->SetInput(tempPtr);
-  m_InputRpcEstimator->GenerateOutputInformation();
+  m_InputRpcEstimator->Update();
+  //m_InputRpcEstimator->GenerateOutputInformation();
+
   
   // Encapsulate the estimated rpc model in the output
   if(m_InputRpcEstimator->GetInput()->GetImageKeywordlist().GetSize() > 0)
@@ -233,7 +236,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 GenericRSResampleImageFilter<TInputImage, TOutputImage>
-::SetOutputParametersFromImage(const InputImageType * image)
+::SetOutputParametersFromImage(const ImageBaseType * image)
 {
   this->SetOutputOrigin ( image->GetOrigin() );
   this->SetOutputSpacing ( image->GetSpacing() );

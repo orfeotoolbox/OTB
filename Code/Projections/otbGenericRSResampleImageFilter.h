@@ -91,6 +91,8 @@ public:
   typedef GenericRSTransform<>                       GenericRSTransformType;
   typedef typename GenericRSTransformType::Pointer   GenericRSTransformPointerType;
   
+  typedef itk::ImageBase<OutputImageType::ImageDimension>      ImageBaseType;
+  
   /** The Deformation field spacing & size */
   void SetDeformationFieldSpacing(const SpacingType & spacing)
   {
@@ -192,7 +194,7 @@ public:
   otbGetObjectMemberConstMacro(Transform,DEMDirectory,std::string);
 
   /** Useful to set the output parameters from an existing image*/
-  void SetOutputParametersFromImage(const InputImageType * image);
+  void SetOutputParametersFromImage(const ImageBaseType * image);
   
   /** Set/Get the grid spacing for rpc estimator*/
   void SetInputGridSize(SizeType gridSize)
