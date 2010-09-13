@@ -55,7 +55,6 @@ LabelMapWithClassLabelToLabeledSampleListFilter<TInputLabelMap,TOutputListSample
     if(it->second->HasClassLabel())
       {
       label[0]=static_cast<typename TraningVectorType::ValueType>(it->second->GetClassLabel());
-
       }
     else
       {

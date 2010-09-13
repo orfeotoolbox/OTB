@@ -167,7 +167,7 @@ int main(int argc, char* argv[])
   orthoRectifPAN->SetInput(readerPAN->GetOutput());
 
   orthoRectifPAN->SetOutputStartIndex(start);
-  orthoRectifPAN->SetSize(size);
+  orthoRectifPAN->SetOutputSize(size);
   orthoRectifPAN->SetOutputSpacing(spacing);
   orthoRectifPAN->SetOutputOrigin(origin);
   // Software Guide : EndCodeSnippet
@@ -209,7 +209,7 @@ int main(int argc, char* argv[])
   orthoRectifXSVector->SetInput(readerXS->GetOutput());
 
   orthoRectifXS->SetOutputStartIndex(start);
-  orthoRectifXS->SetSize(size);
+  orthoRectifXS->SetOutputSize(size);
   orthoRectifXS->SetOutputSpacing(spacing);
   orthoRectifXS->SetOutputOrigin(origin);
   // Software Guide : EndCodeSnippet

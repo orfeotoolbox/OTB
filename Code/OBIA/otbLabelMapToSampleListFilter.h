@@ -127,7 +127,7 @@ public:
   typedef TMeasurementFunctor                         MeasurementFunctorType;
 
   /** Set/Get the input label map  */
-  itkSetObjectMacro(InputLabelMap,InputLabelMapType);
+  itkSetConstObjectMacro(InputLabelMap,InputLabelMapType);
   itkGetConstObjectMacro(InputLabelMap,InputLabelMapType);
   itkGetObjectMacro(OutputSampleList,OutputSampleListType);
 

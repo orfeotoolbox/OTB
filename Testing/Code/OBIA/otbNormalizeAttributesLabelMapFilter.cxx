@@ -42,7 +42,7 @@ typedef otb::ImageFileReader<VectorImageType>                                   
 typedef otb::ImageFileReader<LabeledImageType>                                  LabeledReaderType;
 typedef otb::LabelImageToLabelMapWithAdjacencyFilter<LabeledImageType,LabelMapType> LabelMapFilterType;
 typedef otb::ShapeAttributesLabelMapFilter<LabelMapType>                        ShapeFilterType;
-typedef otb::MinMaxAttributesLabelMapFilter<LabelMapType, VectorImageType>      MinMaxAttributesLabelMapFilterType;
+typedef otb::MinMaxAttributesLabelMapFilter<LabelMapType>                       MinMaxAttributesLabelMapFilterType;
 typedef otb::NormalizeAttributesLabelMapFilter<LabelMapType>                    NormalizeAttributesLabelMapFilterType;
 
 int otbNormalizeAttributesLabelMapFilterNew(int argc, char * argv[])
@@ -128,6 +128,7 @@ int otbNormalizeAttributesLabelMapFilter(int argc, char * argv[])
     }
   outfile << std::endl;
   }
+  outfile.close();
 
   return EXIT_SUCCESS;
 }
