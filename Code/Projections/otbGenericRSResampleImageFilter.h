@@ -271,6 +271,8 @@ protected:
   virtual void GenerateOutputInformation();
   
   virtual void GenerateInputRequestedRegion();
+
+  virtual void UpdateTransform();
   
 private:
   GenericRSResampleImageFilter(const Self &); //purposely not implemented

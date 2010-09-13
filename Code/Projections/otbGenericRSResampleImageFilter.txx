@@ -135,68 +135,82 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
     }
 }
 
-
-/**
- * Generate Input requested region does only propagate the output
- * requested region. 
- */
+/** 
+  * Fill with the default dict of the input and the output
+  * and instanciate the transform
+  */
 template <class TInputImage, class TOutputImage>
 void
 GenericRSResampleImageFilter<TInputImage, TOutputImage>
-::GenerateInputRequestedRegion()
+::UpdateTransform()
 {
-  // Retrieve output pointer
-  OutputImageType * outputPtr = this->GetOutput();
-
-  // Retrieve input pointer
-  const InputImageType * inputPtr = this->GetInput();
-  
-  // Retrieve output requested region
-  RegionType requestedRegion = outputPtr->GetRequestedRegion();
-  
-  // Estimate the input rpc model if it is needed
-  if (m_EstimateInputRpcModel && !m_RpcEstimationUpdated)
-    {
-    this->EstimateInputRpcModel();
-    }
-  
-  // Instanciate the RS transform 
+  m_Transform->SetOutputDictionary(this->GetInput()->GetMetaDataDictionary());
+  m_Transform->SetOutputProjectionRef(this->GetInput()->GetProjectionRef());
+  m_Transform->SetOutputKeywordList(this->GetInput()->GetImageKeywordlist());
   m_Transform->InstanciateTransform();
-  
-  // Generate input requested region
-  m_Resampler->SetInput(inputPtr);
-  m_Resampler->SetTransform(m_Transform);
-  m_Resampler->SetDeformationFieldSpacing(this->GetDeformationFieldSpacing());
-  m_Resampler->GetOutput()->UpdateOutputInformation();
-  m_Resampler->GetOutput()->SetRequestedRegion(requestedRegion);
-  m_Resampler->GetOutput()->PropagateRequestedRegion();
-}
+ }
+
+ /**
+  * Generate Input requested region does only propagate the output
+  * requested region. 
+  */
+ template <class TInputImage, class TOutputImage>
+ void
+ GenericRSResampleImageFilter<TInputImage, TOutputImage>
+ ::GenerateInputRequestedRegion()
+ {
+   // Retrieve output pointer
+   OutputImageType * outputPtr = this->GetOutput();
+
+   // Retrieve input pointer
+   const InputImageType * inputPtr = this->GetInput();
+
+   // Retrieve output requested region
+   RegionType requestedRegion = outputPtr->GetRequestedRegion();
+
+   // Estimate the input rpc model if it is needed
+   if (m_EstimateInputRpcModel && !m_RpcEstimationUpdated)
+     {
+     this->EstimateInputRpcModel();
+     }
+
+   // Instanciate the RS transform 
+   this->UpdateTransform();
+
+   // Generate input requested region
+   m_Resampler->SetInput(inputPtr);
+   m_Resampler->SetTransform(m_Transform);
+   m_Resampler->SetDeformationFieldSpacing(this->GetDeformationFieldSpacing());
+   m_Resampler->GetOutput()->UpdateOutputInformation();
+   m_Resampler->GetOutput()->SetRequestedRegion(requestedRegion);
+   m_Resampler->GetOutput()->PropagateRequestedRegion();
+ }
 
 
-/**
- * Method to estimate the rpc model of the input using a temporary
- * image to avoid adding this rpc estimator filter in the minipipeline.
- * 
- */
-template <class TInputImage, class TOutputImage>
-void
-GenericRSResampleImageFilter<TInputImage, TOutputImage>
-::EstimateInputRpcModel()
-{
-  // Temp image : not allocated but with the sampe metadata as the
-  // output 
-  typename InputImageType::Pointer tempPtr = InputImageType::New();
-  tempPtr->SetRegions(this->GetInput()->GetLargestPossibleRegion());
-  tempPtr->CopyInformation(this->GetInput());
-  
-  // Estimate the rpc model with the temp image
-  m_InputRpcEstimator->SetInput(tempPtr);
-  m_InputRpcEstimator->UpdateOutputInformation();
-  
-  // No need to override the input kwl, just setup the 
-  // transform with the kwl estimated
-  if(m_InputRpcEstimator->GetInput()->GetImageKeywordlist().GetSize() > 0)
-    m_Transform->SetOutputKeywordList(m_InputRpcEstimator->GetOutput()->GetImageKeywordlist());
+ /**
+  * Method to estimate the rpc model of the input using a temporary
+  * image to avoid adding this rpc estimator filter in the minipipeline.
+  * 
+  */
+ template <class TInputImage, class TOutputImage>
+ void
+ GenericRSResampleImageFilter<TInputImage, TOutputImage>
+ ::EstimateInputRpcModel()
+ {
+   // Temp image : not allocated but with the sampe metadata as the
+   // output 
+   typename InputImageType::Pointer tempPtr = InputImageType::New();
+   tempPtr->SetRegions(this->GetInput()->GetLargestPossibleRegion());
+   tempPtr->CopyInformation(this->GetInput());
+
+   // Estimate the rpc model with the temp image
+   m_InputRpcEstimator->SetInput(tempPtr);
+   m_InputRpcEstimator->UpdateOutputInformation();
+
+   // No need to override the input kwl, just setup the 
+   // transform with the kwl estimated
+   if(m_InputRpcEstimator->GetInput()->GetImageKeywordlist().GetSize() > 0)
+     m_Transform->SetOutputKeywordList(m_InputRpcEstimator->GetOutput()->GetImageKeywordlist());
   
   // Update the flag for input rpcEstimation in order to not compute
   // the rpc model for each stream

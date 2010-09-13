@@ -103,8 +103,8 @@ int otbGenericRSResampleImageFilter(int argc, char* argv[])
     resampler->SetOutputSize(size);
     resampler->SetOutputSpacing(spacing);
     resampler->SetOutputProjectionRef(utmRef);
-    resampler->SetInputProjectionRef(reader->GetOutput()->GetProjectionRef());
-    resampler->SetInputKeywordList(reader->GetOutput()->GetImageKeywordlist());
+//     resampler->SetInputProjectionRef(reader->GetOutput()->GetProjectionRef());
+//     resampler->SetInputKeywordList(reader->GetOutput()->GetImageKeywordlist());
     resampler->SetEdgePaddingValue(defaultValue);
     if (useInRpc)
       {
