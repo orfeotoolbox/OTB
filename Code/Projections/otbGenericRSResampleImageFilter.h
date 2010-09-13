@@ -197,19 +197,19 @@ public:
   void SetOutputParametersFromImage(const ImageBaseType * image);
   
   /** Set/Get the grid spacing for rpc estimator*/
-  void SetInputGridSize(SizeType gridSize)
+  void SetInputRpcGridSize(SizeType gridSize)
   {
     m_InputRpcEstimator->SetGridSize(gridSize);
     this->Modified();
   }
   /** unsigned int as parmater */
-  void SetInputGridSize(unsigned int gridSize)
+  void SetInputRpcGridSize(unsigned int gridSize)
   {
     m_InputRpcEstimator->SetGridSize(gridSize);
     this->Modified();
   }
 
-  SizeType GetInputGridSize()
+  SizeType GetInputRpcGridSize()
   {
     return m_InputRpcEstimator->GetGridSpacing();
   }
@@ -220,19 +220,19 @@ public:
   itkBooleanMacro(EstimateInputRpcModel);
   
   /** Macro to Set/Get the grid spacing for rpc estimator*/
-  void SetOutputGridSize(SizeType gridSize)
+  void SetOutputRpcGridSize(SizeType gridSize)
   {
     m_OutputRpcEstimator->SetGridSize(gridSize);
     this->Modified();
   }
   /** unsigned int as parmater*/
-  void SetOutputGridSize(unsigned int gridSize)
+  void SetOutputRpcGridSize(unsigned int gridSize)
   {
     m_OutputRpcEstimator->SetGridSize(gridSize);
     this->Modified();
   }
 
-  SizeType GetOutputGridSize()
+  SizeType GetOutputRpcGridSize()
   {
     return m_OutputRpcEstimator->GetGridSize();
   }
