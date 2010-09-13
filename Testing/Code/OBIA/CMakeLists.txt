@@ -42,7 +42,7 @@ ADD_TEST(obTvImageToLabelMapWithAttributesFilter ${OBIA_TESTS1}
         ${INPUTDATA}/cala_labelled.tif)
 
 ADD_TEST(obTuLabelMapSourceNew ${OBIA_TESTS1}
-    otbLabelMapSourceNew)
+         otbLabelMapSourceNew)
 
 ADD_TEST(obTvLabelMapToVectorDataFilter ${OBIA_TESTS1}
     otbLabelMapToVectorDataFilter
@@ -53,7 +53,6 @@ ADD_TEST(obTvVectorDataToLabelMapFilter ${OBIA_TESTS1}
     otbVectorDataToLabelMapFilter
         ${INPUTDATA}/vectorIOexample_gis_to_vec.shp
         ${TEMP}/vectordataToLabelMap.png)
-
 
 ADD_TEST(obTuLabelMapToSampleListFilterNew ${OBIA_TESTS1}
     otbLabelMapToSampleListFilterNew)
@@ -114,6 +113,14 @@ ADD_TEST(obTvNormalizeAttributesLabelMapFilter ${OBIA_TESTS1}
          ${INPUTDATA}/cala_labelled.tif
          ${TEMP}/obTvNormalizeAttributesLabelMapFilter.txt)
 
+ADD_TEST(obTuKMeansAttributesLabelMapFilterNew ${OBIA_TESTS1}
+         otbKMeansAttributesLabelMapFilterNew)
+
+ADD_TEST(obTvKMeansAttributesLabelMapFilter ${OBIA_TESTS1}
+         otbKMeansAttributesLabelMapFilter
+         ${INPUTDATA}/calanques.tif
+         ${INPUTDATA}/cala_labelled.tif
+         ${TEMP}/obTvKMeansAttributesLabelMapFilter.txt)
 
 ADD_TEST(obTuRadiometricAttributesLabelMapFilterNew ${OBIA_TESTS1}
 otbRadiometricAttributesLabelMapFilterNew
@@ -170,6 +177,7 @@ otbLabelObjectMapVectorizer.cxx
 otbLabelObjectToPolygonFunctorNew.cxx
 otbMinMaxAttributesLabelMapFilter.cxx
 otbNormalizeAttributesLabelMapFilter.cxx
+otbKMeansAttributesLabelMapFilter.cxx
 otbRadiometricAttributesLabelMapFilterNew.cxx
 otbShapeAttributesLabelMapFilterNew.cxx
 otbStatisticsAttributesLabelMapFilterNew.cxx

@@ -23,52 +23,70 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb {
 
-template <class TInputImage, class TOutputImage>
-MinMaxAttributesLabelMapFilter<TInputImage, TOutputImage>
+template <class TInputImage>
+MinMaxAttributesLabelMapFilter<TInputImage>
 ::MinMaxAttributesLabelMapFilter()
 {
-  typename AttributesMapObjectType::Pointer min = AttributesMapObjectType::New();
-  typename AttributesMapObjectType::Pointer max = AttributesMapObjectType::New();
-
-  this->itk::ProcessObject::SetNthOutput(1, min.GetPointer());
-  this->itk::ProcessObject::SetNthOutput(2, max.GetPointer());
+  this->Superclass::SetNumberOfRequiredOutputs(3);
+  this->itk::ProcessObject::SetNthOutput(1, this->MakeOutput(1).GetPointer());
+  this->itk::ProcessObject::SetNthOutput(2, this->MakeOutput(2).GetPointer());
 }
 
-template<class TInputImage, class TOutputImage>
-typename MinMaxAttributesLabelMapFilter<TInputImage,TOutputImage>::AttributesMapObjectType*
-MinMaxAttributesLabelMapFilter<TInputImage,TOutputImage>
+template<class TInputImage>
+typename MinMaxAttributesLabelMapFilter<TInputImage>::DataObjectPointerType
+MinMaxAttributesLabelMapFilter<TInputImage>
+::MakeOutput(unsigned int i)
+{
+  DataObjectPointerType ret;
+  switch (i)
+  {
+    case 0:
+      ret = InputImageType::New();
+      break;
+    case 1:
+    case 2:
+      ret = AttributesMapObjectType::New();
+      break;
+  }
+  return ret;
+}
+
+
+template<class TInputImage>
+typename MinMaxAttributesLabelMapFilter<TInputImage>::AttributesMapObjectType*
+MinMaxAttributesLabelMapFilter<TInputImage>
 ::GetMinimumOutput()
 {
   return static_cast<AttributesMapObjectType*>(this->itk::ProcessObject::GetOutput(1));
 }
 
-template<class TInputImage, class TOutputImage>
-const typename MinMaxAttributesLabelMapFilter<TInputImage,TOutputImage>::AttributesMapObjectType*
-MinMaxAttributesLabelMapFilter<TInputImage,TOutputImage>
+template<class TInputImage>
+const typename MinMaxAttributesLabelMapFilter<TInputImage>::AttributesMapObjectType*
+MinMaxAttributesLabelMapFilter<TInputImage>
 ::GetMinimumOutput() const
 {
   return static_cast<const AttributesMapObjectType*>(this->itk::ProcessObject::GetOutput(1));
 }
 
-template<class TInputImage, class TOutputImage>
-typename MinMaxAttributesLabelMapFilter<TInputImage,TOutputImage>::AttributesMapObjectType*
-MinMaxAttributesLabelMapFilter<TInputImage,TOutputImage>
+template<class TInputImage>
+typename MinMaxAttributesLabelMapFilter<TInputImage>::AttributesMapObjectType*
+MinMaxAttributesLabelMapFilter<TInputImage>
 ::GetMaximumOutput()
 {
   return static_cast<AttributesMapObjectType*>(this->itk::ProcessObject::GetOutput(2));
 }
 
-template<class TInputImage, class TOutputImage>
-const typename MinMaxAttributesLabelMapFilter<TInputImage,TOutputImage>::AttributesMapObjectType*
-MinMaxAttributesLabelMapFilter<TInputImage,TOutputImage>
+template<class TInputImage>
+const typename MinMaxAttributesLabelMapFilter<TInputImage>::AttributesMapObjectType*
+MinMaxAttributesLabelMapFilter<TInputImage>
 ::GetMaximumOutput() const
 {
   return static_cast<const AttributesMapObjectType*>(this->itk::ProcessObject::GetOutput(2));
 }
 
-template<class TInputImage, class TOutputImage>
+template<class TInputImage>
 void
-MinMaxAttributesLabelMapFilter<TInputImage, TOutputImage>
+MinMaxAttributesLabelMapFilter<TInputImage>
 ::GenerateData()
 {
   unsigned int nbAttr = this->GetLabelMap()->GetLabelObject(0)->GetNumberOfAttributes();
