@@ -128,6 +128,7 @@ int otbNormalizeAttributesLabelMapFilter(int argc, char * argv[])
     }
   outfile << std::endl;
   }
+  outfile.close();
 
   return EXIT_SUCCESS;
 }
