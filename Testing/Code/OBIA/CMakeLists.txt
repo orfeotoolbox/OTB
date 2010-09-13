@@ -17,13 +17,14 @@ SET(EPSILON_9 0.000000001)
 #Tolerance sur la difference des valeurs numeriques dans le --compare-ascii
 SET(EPSILON_3 0.001)
 
+# Common generic tests
 SET(OBIA_TESTS1 ${CXX_TEST_PATH}/otbOBIATests1)
+# Tests involving PostGIS interface
 SET(OBIA_TESTS2 ${CXX_TEST_PATH}/otbOBIATests2)
-
-
+# Tests involving learning
+SET(OBIA_TESTS3 ${CXX_TEST_PATH}/otbOBIATests3)
 
 # OBIATests1
-
 ADD_TEST(obTuAttributesMapLabelObjectNew ${OBIA_TESTS1} 
 	otbAttributesMapLabelObjectNew)
 
@@ -160,6 +161,18 @@ ADD_TEST(obTvLabelMapToGISTableFilter ${OBIA_TESTS2}
     Bidfeud0)
 ENDIF(OTB_USE_PQXX)
 
+
+# OBIATests3 (need Learning)
+ADD_TEST(obTuLabelMapSVMClassifierNew ${OBIA_TESTS3}
+    otbLabelMapSVMClassifierNew)
+
+ADD_TEST(obTvLabelMapSVMClassifier ${OBIA_TESTS3}
+    otbLabelMapSVMClassifier
+    ${INPUTDATA}/maur.tif
+    ${INPUTDATA}/maur_labelled.tif
+    ${TEMP}/obTvLabelMapSVMClassifierLabeledOutput.tif)
+
+
 SET(BasicOBIA_SRCS1
 otbAttributesMapLabelObjectNew.cxx
 otbAttributesMapLabelObjectWithClassLabelNew.cxx
@@ -193,6 +206,10 @@ otbLabelMapToGISTableFilter.cxx
 )
 ENDIF(OTB_USE_PQXX)
 
+SET(BasicOBIA_SRCS3
+otbLabelMapSVMClassifier.cxx
+)
+
 ADD_EXECUTABLE(otbOBIATests1 otbOBIATests1.cxx ${BasicOBIA_SRCS1})
 TARGET_LINK_LIBRARIES(otbOBIATests1 OTBIO OTBOBIA  OTBTesting)
 
@@ -200,5 +217,9 @@ IF(OTB_USE_PQXX)
 ADD_EXECUTABLE(otbOBIATests2 otbOBIATests2.cxx ${BasicOBIA_SRCS2})
 TARGET_LINK_LIBRARIES(otbOBIATests2 OTBIO OTBOBIA OTBTesting OTBGeospatialAnalysis pq pqxx)
 ENDIF(OTB_USE_PQXX)
+
+ADD_EXECUTABLE(otbOBIATests3 otbOBIATests3.cxx ${BasicOBIA_SRCS3})
+TARGET_LINK_LIBRARIES(otbOBIATests3 OTBIO OTBOBIA OTBLearning OTBTesting)
+
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
