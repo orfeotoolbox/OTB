@@ -29,12 +29,12 @@ PhysicalToRPCSensorModelImageFilter<TImage>
 {
   // Initialize the rpc estimator
   m_GCPsToSensorModelFilter = GCPsToSensorModelType::New();
-
-  // Initialize the gridSize
-  m_GridSize.Fill(1);
   
   // Initialize the DEMDirectory
   m_DEMDirectory = "";
+
+  // Initialize the gridSize
+  m_GridSize.Fill(1);
 }
 
 template <class TImage>
@@ -42,7 +42,6 @@ PhysicalToRPCSensorModelImageFilter<TImage>
 ::~PhysicalToRPCSensorModelImageFilter() 
 {
 }
-
 
 template <class TImage>
 void

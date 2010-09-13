@@ -33,7 +33,7 @@ namespace otb {
  * CS.
  * 
  * The number of points used to estimate the rpc sensor model is
- * defined by the GridSpacing, note that at least 16 points are needed
+ * defined by the GridSize, note that at least 16 points are needed
  * to estimate a proper RPC sensor model, there are no warning when
  * the model estimated is inaccurate.
  *
@@ -44,7 +44,7 @@ namespace otb {
  * implementation.(TODO)
  *
  * Depending on the value of the DEMDirectory, an elevation fetched
- * from the SRT directory is used. 
+ * from the SRT directory is used.(TODO) 
  *
  * This filter does not modify the image buffer, but only the
  * metadata. Therefore, it is implemented as an InPlaceImageFilter.
