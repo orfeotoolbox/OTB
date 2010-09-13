@@ -524,6 +524,10 @@ ADD_TEST(raTuAtmosphericRadiativeTermsNew ${RADIOMETRY_TESTS3}
         otbAtmosphericRadiativeTermsNew
 )
 
+ADD_TEST(raTuAtmosphericRadiativeTermsSingleChannelNew ${RADIOMETRY_TESTS3}
+        otbAtmosphericRadiativeTermsSingleChannelNew
+)
+
 
 # -------            otb::ReflectanceToSurfaceReflectanceImageFilter   ------------------------------
 ADD_TEST(raTuReflectanceToSurfaceReflectanceImageFilterNew ${RADIOMETRY_TESTS3}
@@ -1505,7 +1509,7 @@ otbAtmosphericCorrectionParametersNew.cxx
 otbFilterFunctionValues.cxx
 otbSIXSTraitsTest.cxx
 otbSIXSTraitsComputeAtmosphericParameters.cxx
-otbAtmosphericRadiativeTermsNew.cxx
+otbAtmosphericRadiativeTermsTest.cxx
 otbReflectanceToSurfaceReflectanceImageFilterTest.cxx
 otbSurfaceAdjacencyEffect6SCorrectionSchemeFilterNew.cxx
 otbSurfaceAdjacencyEffect6SCorrectionSchemeFilter.cxx

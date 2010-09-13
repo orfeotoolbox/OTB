@@ -32,3 +32,14 @@ int otbAtmosphericRadiativeTermsNew(int argc, char * argv[])
 
   return EXIT_SUCCESS;
 }
+
+int otbAtmosphericRadiativeTermsSingleChannelNew(int argc, char * argv[])
+{
+  typedef otb::AtmosphericRadiativeTermsSingleChannel AtmosphericRadiativeTermsType;
+
+  // Instantiating object
+  AtmosphericRadiativeTermsType::Pointer object = AtmosphericRadiativeTermsType::New();
+
+  return EXIT_SUCCESS;
+}
+
