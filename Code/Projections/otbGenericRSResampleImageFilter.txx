@@ -29,7 +29,7 @@ namespace otb
 
 template <class TInputImage, class TOutputImage>
 GenericRSResampleImageFilter<TInputImage, TOutputImage>
-::GenericRSResampleImageFilter():
+::GenericRSResampleImageFilter()
 {  
   // flags initialization
   m_EstimateInputRpcModel  = false;
