@@ -58,9 +58,9 @@ class ITK_EXPORT PhysicalToRPCSensorModelImageFilter :
 public:
   /** Standard class typedefs. */
   typedef PhysicalToRPCSensorModelImageFilter Self;
-  typedef itk::InPlaceImageFilter<TImage> Superclass;
-  typedef itk::SmartPointer<Self>         Pointer;
-  typedef itk::SmartPointer<const Self>   ConstPointer;
+  typedef itk::InPlaceImageFilter<TImage>     Superclass;
+  typedef itk::SmartPointer<Self>             Pointer;
+  typedef itk::SmartPointer<const Self>       ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -71,6 +71,7 @@ public:
   /** template parameters typedef */
   typedef TImage                          ImageType;
   typedef typename ImageType::PointType   PointType;
+  typedef typename ImageType::SizeType    SizeType;
   
   /** GCPsToSensor model filter */
   typedef GCPsToRPCSensorModelImageFilter<ImageType>          GCPsToSensorModelType;
@@ -89,12 +90,18 @@ public:
   virtual void GenerateOutputInformation();//GenerateData();
   
   /** Set/Get the grid size*/
-  itkSetMacro(GridSpacing, unsigned int);
-  itkGetMacro(GridSpacing, unsigned int);
+  itkSetMacro(GridSize, SizeType);
+  itkGetMacro(GridSize, SizeType);
 
   /** Set/Get the DEM directory*/
   itkSetStringMacro(DEMDirectory);
   itkGetStringMacro(DEMDirectory);
+
+  /** Set Grid size with an unsigned int parmeter*/
+  void SetGridSize(unsigned int inSize)
+  {
+    m_GridSize.Fill(inSize);
+  }
   
 protected:
   /** Constructor */
@@ -116,7 +123,7 @@ private:
   GCPsToSensorModelPointerType       m_GCPsToSensorModelFilter;
   
   std::string                        m_DEMDirectory;
-  unsigned int                       m_GridSpacing;
+  SizeType                           m_GridSize;
 };
 } // end of namespace otb
 

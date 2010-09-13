@@ -28,6 +28,7 @@ int otbPhysicalToRPCSensorModelImageFilter(int argc, char* argv[])
   typedef double                                      PixelType;
   typedef otb::VectorImage<PixelType, Dimension>      ImageType;
   typedef otb::PhysicalToRPCSensorModelImageFilter<ImageType> PhysicalToSensorModelType;
+  typedef PhysicalToSensorModelType::SizeType         SizeType;
 
   // Object instanciation
   PhysicalToSensorModelType::Pointer estimator = PhysicalToSensorModelType::New();
@@ -35,7 +36,7 @@ int otbPhysicalToRPCSensorModelImageFilter(int argc, char* argv[])
   if(argc>1)
     {
     const char * infname  = argv[1];
-    unsigned int gridSpacing = atoi(argv[2]);
+    unsigned int gridSize = atoi(argv[2]);
     const char * outfname  = argv[3];
     
     // Reader 
@@ -48,7 +49,7 @@ int otbPhysicalToRPCSensorModelImageFilter(int argc, char* argv[])
     
     // wire the filter
     estimator->SetInput(reader->GetOutput());
-    estimator->SetGridSpacing(gridSpacing);
+    estimator->SetGridSize(gridSize);
 
     // Write the resampled image
     typedef otb::StreamingImageFileWriter<ImageType>    WriterType;

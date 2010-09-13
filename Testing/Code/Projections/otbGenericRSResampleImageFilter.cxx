@@ -99,13 +99,13 @@ int otbGenericRSResampleImageFilter(int argc, char* argv[])
     resampler->SetInputKeywordList(reader->GetOutput()->GetImageKeywordlist());
     if (useInRpc)
       {
-      resampler->SetInputGridSpacing(1000);
+      resampler->SetInputGridSize(1000);
       resampler->EstimateInputRpcModelOn();
       }
     
     if (useOutRpc)
       {
-      resampler->SetOutputGridSpacing(50);
+      resampler->SetOutputGridSize(50);
       resampler->EstimateOutputRpcModelOn();
       }
     

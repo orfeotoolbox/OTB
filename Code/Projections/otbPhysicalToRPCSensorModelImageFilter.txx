@@ -25,10 +25,16 @@ namespace otb {
 
 template <class TImage>
 PhysicalToRPCSensorModelImageFilter<TImage>
-::PhysicalToRPCSensorModelImageFilter(): m_GridSpacing(2),m_DEMDirectory("") 
+::PhysicalToRPCSensorModelImageFilter()
 {
   // Initialize the rpc estimator
   m_GCPsToSensorModelFilter = GCPsToSensorModelType::New();
+
+  // Initialize the gridSize
+  m_GridSize.Fill(1);
+  
+  // Initialize the DEMDirectory
+  m_DEMDirectory = "";
 }
 
 template <class TImage>
@@ -70,16 +76,16 @@ PhysicalToRPCSensorModelImageFilter<TImage>
   
   // Compute the size of the grid 
   typename ImageType::SizeType  size = input->GetLargestPossibleRegion().GetSize();
-  unsigned int gridSizeX = static_cast<unsigned int>(size[0]/m_GridSpacing);
-  unsigned int gridSizeY = static_cast<unsigned int>(size[1]/m_GridSpacing);
+  double gridSpacingX = size[0]/m_GridSize[0];
+  double gridSpacingY = size[1]/m_GridSize[1];
 
-  for(unsigned int px = 0; px<gridSizeX;++px)
+  for(unsigned int px = 0; px<m_GridSize[0];++px)
     {
-    for(unsigned int py = 0; py<gridSizeY;++py)
+    for(unsigned int py = 0; py<m_GridSize[1];++py)
       {
       PointType inputPoint =  input->GetOrigin();
-      inputPoint[0]+= (px * m_GridSpacing + 0.5) * input->GetSpacing()[0];
-      inputPoint[1]+= (py * m_GridSpacing + 0.5) * input->GetSpacing()[1];
+      inputPoint[0]+= (px * gridSpacingX + 0.5) * input->GetSpacing()[0];
+      inputPoint[1]+= (py * gridSpacingX + 0.5) * input->GetSpacing()[1];
       PointType outputPoint = rsTransform->TransformPoint(inputPoint);
       m_GCPsToSensorModelFilter->AddGCP(inputPoint,outputPoint);
       }
