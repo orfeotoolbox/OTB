@@ -94,8 +94,8 @@ PhysicalToRPCSensorModelImageFilter<TImage>
       for(unsigned int py = 0; py<m_GridSize[1];++py)
         {
         PointType inputPoint =  input->GetOrigin();
-        inputPoint[0]+= (px * gridSpacingX + 0.5) * input->GetSpacing()[0];
-        inputPoint[1]+= (py * gridSpacingY + 0.5) * input->GetSpacing()[1];
+        inputPoint[0] += (px * gridSpacingX + 0.5) * input->GetSpacing()[0];
+        inputPoint[1] += (py * gridSpacingY + 0.5) * input->GetSpacing()[1];
         PointType outputPoint = rsTransform->TransformPoint(inputPoint);
         m_GCPsToSensorModelFilter->AddGCP(inputPoint,outputPoint);
         }
