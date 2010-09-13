@@ -94,25 +94,25 @@ int otbLabelMapSVMClassifier(int argc, char * argv[])
   RadiometricFilterType::Pointer radiometricFilter = RadiometricFilterType::New();
   ClassifierType::Pointer     classifier = ClassifierType::New();
 
-  // Inputs
+  // Read inputs
   reader->SetFileName(infname);
   labeledReader->SetFileName(lfname);
 
-  // Filter
+  // Make a LabelMap out of it
   filter->SetInput(labeledReader->GetOutput());
   filter->SetBackgroundValue(itk::NumericTraits<LabelType>::max());
 
+  //Compute shape and radimometric attributes
   shapeFilter->SetInput(filter->GetOutput());
-
   radiometricFilter->SetInput(shapeFilter->GetOutput());
   radiometricFilter->SetFeatureImage(reader->GetOutput());
   radiometricFilter->Update();
 
-  // Build training samples
+  // Build a sub-LabelMap with class-labeled LabelObject
   LabelMapType::Pointer labelMap = radiometricFilter->GetOutput();
   LabelMapType::Pointer trainingLabelMap = LabelMapType::New();
 
-  // The following is specific to the input specified in CMakeLists
+  // The following is very specific to the input specified in CMakeLists
   // water
   trainingLabelMap->PushLabelObject(makeTrainingSample(labelMap, 13, 0));
   // road
@@ -132,6 +132,7 @@ int otbLabelMapSVMClassifier(int argc, char * argv[])
   trainingLabelMap->PushLabelObject(makeTrainingSample(labelMap, 161, 4));
   trainingLabelMap->PushLabelObject(makeTrainingSample(labelMap, 46, 4));
 
+  // Make a ListSample out of trainingLabelMap
   LabelMap2ListSampleFilterType::Pointer labelMap2SampleList = LabelMap2ListSampleFilterType::New();
   labelMap2SampleList->SetInputLabelMap(trainingLabelMap);
 
@@ -144,6 +145,7 @@ int otbLabelMapSVMClassifier(int argc, char * argv[])
 
   labelMap2SampleList->Update();
 
+  // Estimate SVM model
   SVMEstimatorType::Pointer svmEstim = SVMEstimatorType::New();
   svmEstim->SetInputSampleList(labelMap2SampleList->GetOutputSampleList());
   svmEstim->SetTrainingSampleList(labelMap2SampleList->GetOutputTrainingSampleList());
@@ -151,6 +153,7 @@ int otbLabelMapSVMClassifier(int argc, char * argv[])
   svmEstim->Modified();
   svmEstim->Update();
 
+  // Classify using the whole LabelMap with estimated model
   classifier->SetInput(labelMap);
   classifier->SetModel(svmEstim->GetModel());
 
@@ -161,6 +164,7 @@ int otbLabelMapSVMClassifier(int argc, char * argv[])
 
   classifier->Update();
 
+  // Make a labeled image with the classification result
   LabelMapWithClassLabelToClassLabelImageFilterType::Pointer imGenerator = LabelMapWithClassLabelToClassLabelImageFilterType::New();
   imGenerator->SetInput(classifier->GetOutput());
 
