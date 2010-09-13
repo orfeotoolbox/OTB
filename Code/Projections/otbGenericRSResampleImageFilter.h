@@ -104,7 +104,7 @@ public:
                                         SpacingType);
   
   /** The resampled image parameters */
-  // Output Origin
+  /** Output Origin */
   void SetOutputOrigin(const OriginType & origin)
   {
     m_Resampler->SetOutputOrigin(origin);
@@ -112,15 +112,15 @@ public:
   }
   otbGetObjectMemberConstReferenceMacro(Resampler,OutputOrigin,OriginType);
   
-  // Output Start index
+  /** Output Start index */
   otbSetObjectMemberMacro(Resampler,OutputStartIndex,IndexType);
   otbGetObjectMemberConstReferenceMacro(Resampler,OutputStartIndex,IndexType);
   
-  // Output Size
+  /** Output Size */
   otbSetObjectMemberMacro(Resampler,OutputSize,SizeType);
   otbGetObjectMemberConstReferenceMacro(Resampler,OutputSize,SizeType);
   
-  // Output Spacing
+  /** Output Spacing */
   otbSetObjectMemberMacro(Resampler,OutputSpacing,SpacingType);
   otbGetObjectMemberConstReferenceMacro(Resampler,OutputSpacing,SpacingType);
   
@@ -131,6 +131,14 @@ public:
     this->Modified();
   }
   otbGetObjectMemberConstMacro(Resampler, Interpolator, const InterpolatorType *);
+
+  /** Default Edge padding value */  
+  otbSetObjectMemberMacro(Resampler,
+                          EdgePaddingValue,
+                          typename OutputImageType::PixelType);
+  otbGetObjectMemberMacro(Resampler, 
+                          EdgePaddingValue, 
+                          typename OutputImageType::PixelType);
   
   /** 
    * Set/Get input & output projections. 
@@ -219,13 +227,13 @@ public:
     m_InputRpcEstimator->SetGridSize(gridSize);
     this->Modified();
   }
-  // Get the input rpc model estimator  grid size used
+  /** Get the input rpc model estimator  grid size used */
   SizeType GetInputRpcGridSize()
   {
     return m_InputRpcEstimator->GetGridSize();
   }
   
-  // Macro to tune the EstimateInputRpcModel flag
+  /** Macro to tune the EstimateInputRpcModel flag */
   itkSetMacro(EstimateInputRpcModel, bool);
   itkGetMacro(EstimateInputRpcModel, bool);
   itkBooleanMacro(EstimateInputRpcModel);
@@ -242,13 +250,13 @@ public:
     m_OutputRpcEstimator->SetGridSize(gridSize);
     this->Modified();
   }
-  // Get the output rpc model estimator grid size used
+  /** Get the output rpc model estimator grid size used */
   SizeType GetOutputRpcGridSize()
   {
     return m_OutputRpcEstimator->GetGridSize();
   }
 
-  // Macro to tune the EstimateOutputRpcModel flag
+  /** Macro to tune the EstimateOutputRpcModel flag */
   itkSetMacro(EstimateOutputRpcModel, bool);
   itkGetMacro(EstimateOutputRpcModel, bool);
   itkBooleanMacro(EstimateOutputRpcModel);

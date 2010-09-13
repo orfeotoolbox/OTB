@@ -26,6 +26,9 @@
 
 #include <ogr_spatialref.h>
 
+// Default value
+#include "itkPixelBuilder.h"
+
 int otbGenericRSResampleImageFilter(int argc, char* argv[])
 {
   // Images definition
@@ -87,7 +90,12 @@ int otbGenericRSResampleImageFilter(int argc, char* argv[])
     SpacingType  gridSpacing;
     gridSpacing[0] = iGridSpacing;
     gridSpacing[1] = -iGridSpacing;
-  
+
+    // Default value builder
+    ImageType::PixelType defaultValue;
+    itk::PixelBuilder<ImageType::PixelType>::Zero(defaultValue,
+                                                  reader->GetOutput()->GetNumberOfComponentsPerPixel());
+    
     // Set the Resampler Parameters
     resampler->SetInput(reader->GetOutput());
     resampler->SetDeformationFieldSpacing(gridSpacing); 
@@ -97,6 +105,7 @@ int otbGenericRSResampleImageFilter(int argc, char* argv[])
     resampler->SetOutputProjectionRef(utmRef);
     resampler->SetInputProjectionRef(reader->GetOutput()->GetProjectionRef());
     resampler->SetInputKeywordList(reader->GetOutput()->GetImageKeywordlist());
+    resampler->SetEdgePaddingValue(defaultValue);
     if (useInRpc)
       {
       resampler->SetInputRpcGridSize(20);

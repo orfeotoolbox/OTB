@@ -174,7 +174,9 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
 
 
 /**
- * Method to estimate the rpc model of the output using a temporary image
+ * Method to estimate the rpc model of the input using a temporary
+ * image to avoid adding this rpc estimator filter in the minipipeline.
+ * 
  */
 template <class TInputImage, class TOutputImage>
 void

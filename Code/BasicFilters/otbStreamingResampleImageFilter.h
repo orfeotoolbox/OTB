@@ -70,8 +70,8 @@ public:
   itkTypeMacro(StreamingResampleImageFilter,itk::ImageToImageFilter);
 
   /** Typedef parameters*/
-  typedef TInputImage           InputImageType;
-  typedef TOutputImage          OutputImageType;
+  typedef TInputImage                InputImageType;
+  typedef TOutputImage               OutputImageType;
   
   /** Deformation field used to warp the image*/
   typedef itk::Vector<typename TOutputImage::InternalPixelType, 
@@ -153,9 +153,17 @@ public:
   }
   otbGetObjectMemberConstMacro(WarpFilter, Interpolator, const InterpolatorType *);
 
+  /** Default Edge padding value */  
+  otbSetObjectMemberMacro(WarpFilter,
+                          EdgePaddingValue,
+                          typename OutputImageType::PixelType);
+  otbGetObjectMemberMacro(WarpFilter, 
+                                        EdgePaddingValue, 
+                                        typename OutputImageType::PixelType);
+
   /** Import output parameters from a given image */
   void SetOutputParametersFromImage(const ImageBaseType * image);
-  
+
 protected:
   StreamingResampleImageFilter();
 

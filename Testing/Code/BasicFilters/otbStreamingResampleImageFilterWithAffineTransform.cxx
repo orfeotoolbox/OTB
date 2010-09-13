@@ -28,6 +28,9 @@
 #include "itkTransform.h"
 #include "itkAffineTransform.h"
 
+// Default value
+#include "itkPixelBuilder.h"
+
 int otbStreamingResampleImageFilterWithAffineTransform(int argc, char* argv[])
 {
   // Images definition
@@ -80,16 +83,19 @@ int otbStreamingResampleImageFilterWithAffineTransform(int argc, char* argv[])
     // Get the size specified by the user
     ImageType::SizeType   size;
     size.Fill(isize);
-  
+
+    // Default value builder
+    ImageType::PixelType defaultValue;
+    itk::PixelBuilder<ImageType::PixelType>::Zero(defaultValue,reader->GetOutput()->GetNumberOfComponentsPerPixel());
+    
     /** Set the OptResampler Parameters*/
     resampler->SetInput(reader->GetOutput());
     resampler->SetOutputParametersFromImage(reader->GetOutput());
     resampler->SetTransform(affineTransform);
-    resampler->SetDeformationFieldSpacing(5.); // TODO : add the spacing
-    // it to the
-    // command line
+    resampler->SetDeformationFieldSpacing(5.); 
     resampler->SetOutputSize(size);
-  
+    resampler->SetEdgePaddingValue(defaultValue);
+    
     // Write the resampled image
     typedef otb::StreamingImageFileWriter<ImageType>    WriterType;
     WriterType::Pointer writer= WriterType::New();
