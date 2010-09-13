@@ -46,13 +46,12 @@ PhysicalToRPCSensorModelImageFilter<TImage>
 template <class TImage>
 void
 PhysicalToRPCSensorModelImageFilter<TImage>
-::GenerateOutputInformation()//GenerateData() 
+::GenerateOutputInformation() 
 {
   Superclass::GenerateOutputInformation();
 
   // Get the input 
   ImageType * input = const_cast<ImageType*>(this->GetInput());
-  input->UpdateOutputInformation();
 
   // Build the grid 
   // Generate GCPs from physical sensor model
@@ -77,14 +76,14 @@ PhysicalToRPCSensorModelImageFilter<TImage>
   typename ImageType::SizeType  size = input->GetLargestPossibleRegion().GetSize();
   double gridSpacingX = size[0]/m_GridSize[0];
   double gridSpacingY = size[1]/m_GridSize[1];
-
+  
   for(unsigned int px = 0; px<m_GridSize[0];++px)
     {
     for(unsigned int py = 0; py<m_GridSize[1];++py)
       {
       PointType inputPoint =  input->GetOrigin();
       inputPoint[0]+= (px * gridSpacingX + 0.5) * input->GetSpacing()[0];
-      inputPoint[1]+= (py * gridSpacingX + 0.5) * input->GetSpacing()[1];
+      inputPoint[1]+= (py * gridSpacingY + 0.5) * input->GetSpacing()[1];
       PointType outputPoint = rsTransform->TransformPoint(inputPoint);
       m_GCPsToSensorModelFilter->AddGCP(inputPoint,outputPoint);
       }

@@ -85,9 +85,6 @@ public:
   /** Remote Sensing Transform */
   typedef GenericRSTransform<>                                RSTransformType;
   typedef typename RSTransformType::Pointer                   RSTransformPointerType;
-
-  /** launch the process */
-  virtual void GenerateOutputInformation();//GenerateData();
   
   /** Set/Get the grid size*/
   itkSetMacro(GridSize, SizeType);
@@ -112,8 +109,11 @@ protected:
   /** The PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  /**  */
+  /** Necessary but empty */
   virtual void ThreadedGenerateData(const typename TImage::RegionType&, int) {}
+
+  /** Generate the Output image information*/
+  virtual void GenerateOutputInformation();
   
 private:
   PhysicalToRPCSensorModelImageFilter(const Self &);   // purposely not implemented

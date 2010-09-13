@@ -120,8 +120,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
   
   // Estimate the rpc model from the temp image
   m_OutputRpcEstimator->SetInput(tempPtr);
-  m_OutputRpcEstimator->Update();
-  //m_OutputRpcEstimator->GenerateOutputInformation();
+  m_OutputRpcEstimator->UpdateOutputInformation();
   
   // Encapsulate the estimated rpc model in the output
   if(m_OutputRpcEstimator->GetOutput()->GetImageKeywordlist().GetSize() > 0)
@@ -140,13 +139,11 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
 {
   if(m_EstimateInputRpcModel)
     {
-    //std::cout <<"m_InputRpcEstimator->GetOutput()->GetImageKeywordlist() "<< m_InputRpcEstimator->GetOutput()->GetImageKeywordlist()  << std::endl;
     m_Transform->SetOutputKeywordList( m_InputRpcEstimator->GetOutput()->GetImageKeywordlist());
     }
 
   if(m_EstimateOutputRpcModel)
     {
-    //std::cout <<"m_OutputRpcEstimator->GetOutput()->GetImageKeywordlist() "<< m_OutputRpcEstimator->GetOutput()->GetImageKeywordlist()   << std::endl;
     m_Transform->SetInputKeywordList( m_OutputRpcEstimator->GetOutput()->GetImageKeywordlist());
     }
   
@@ -216,9 +213,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
   
   // Estimate the rpc model with the temp image
   m_InputRpcEstimator->SetInput(tempPtr);
-  m_InputRpcEstimator->Update();
-  //m_InputRpcEstimator->GenerateOutputInformation();
-
+  m_InputRpcEstimator->UpdateOutputInformation();
   
   // Encapsulate the estimated rpc model in the output
   if(m_InputRpcEstimator->GetInput()->GetImageKeywordlist().GetSize() > 0)
