@@ -28,6 +28,7 @@ void RegisterTests()
 {
   REGISTER_TEST(otbStreamingResampleImageFilterNew);
   REGISTER_TEST(otbStreamingResampleImageFilter);
+  REGISTER_TEST(otbStreamingResampleImageFilterWithAffineTransform);
   REGISTER_TEST(otbStreamingResampleImageFilterCompareWithITK);
   REGISTER_TEST(otbResampleSLCImage);
   REGISTER_TEST(otbStreamingMinMaxImageFilterNew);

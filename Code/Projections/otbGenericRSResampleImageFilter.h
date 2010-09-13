@@ -19,7 +19,7 @@
 #define __otbGenericRSResampleImageFilter_h
 
 #include "itkImageToImageFilter.h"
-#include "otbOptResampleImageFilter.h"
+#include "otbStreamingResampleImageFilter.h"
 #include "otbPhysicalToRPCSensorModelImageFilter.h"
 #include "otbGenericRSTransform.h"
 
@@ -69,7 +69,7 @@ public:
   typedef typename OutputImageType::InternalPixelType     OutputInternalPixelType;
   
   /** Internal filters typedefs*/
-  typedef OptResampleImageFilter<InputImageType,
+  typedef StreamingResampleImageFilter<InputImageType,
                                  OutputImageType,
                                  OutputInternalPixelType>  ResamplerType;
   typedef typename ResamplerType::Pointer                  ResamplerPointerType;

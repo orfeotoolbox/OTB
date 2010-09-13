@@ -16,7 +16,7 @@
 
 =========================================================================*/
 
-#include "otbOptResampleImageFilter.h"
+#include "otbStreamingResampleImageFilter.h"
 #include "otbVectorImage.h"
 #include "itkVector.h"
 #include "otbImageFileReader.h"
@@ -28,13 +28,13 @@
 #include "itkTransform.h"
 #include "itkAffineTransform.h"
 
-int otbOptResampleImageFilter(int argc, char* argv[])
+int otbStreamingResampleImageFilterWithAffineTransform(int argc, char* argv[])
 {
   // Images definition
   const unsigned int Dimension = 2;
   typedef double                                      PixelType;
   typedef otb::VectorImage<PixelType, Dimension>      ImageType;
-  typedef otb::OptResampleImageFilter<ImageType, ImageType> ImageResamplerType;
+  typedef otb::StreamingResampleImageFilter<ImageType, ImageType> ImageResamplerType;
 
   // Istantiate a Resampler
   ImageResamplerType::Pointer resampler = ImageResamplerType::New();
