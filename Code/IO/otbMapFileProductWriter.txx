@@ -205,8 +205,10 @@ MapFileProductWriter<TInputImage>
 
   // Compute max depth
   unsigned int maxDepth =
-    static_cast<unsigned int>(max(vcl_ceil(vcl_log(static_cast<float>(sizeX) / static_cast<float>(m_TileSize)) / vcl_log(2.0)),
-                                  vcl_ceil(vcl_log(static_cast<float>(sizeY) / static_cast<float>(m_TileSize)) / vcl_log(2.0))));
+    static_cast<unsigned int>(max(
+                                vcl_ceil(vcl_log(static_cast<float>(sizeX) / static_cast<float>(m_TileSize)) / vcl_log(2.0)),
+                                vcl_ceil(vcl_log(static_cast<float>(sizeY) / static_cast<float>(m_TileSize)) / vcl_log(2.0))
+                                );
   
 //   // Compute nbTile : Keep this for progress Bar ?
 //   int nbTile = 0;
