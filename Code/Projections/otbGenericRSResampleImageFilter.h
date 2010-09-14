@@ -70,8 +70,7 @@ public:
   
   /** Internal filters typedefs*/
   typedef StreamingResampleImageFilter<InputImageType,
-                                 OutputImageType,
-                                 OutputInternalPixelType>  ResamplerType;
+                                 OutputImageType>          ResamplerType;
   typedef typename ResamplerType::Pointer                  ResamplerPointerType;
   typedef typename ResamplerType::TransformType            TransformType;
   typedef typename ResamplerType::SizeType                 SizeType;
