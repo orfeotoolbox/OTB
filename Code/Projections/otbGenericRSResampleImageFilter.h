@@ -185,7 +185,7 @@ public:
     this->Modified();
   }
   
-  ImageKeywordlist GetOutputKeywordList()
+  const ImageKeywordlist& GetOutputKeywordList()
   {
     return m_Transform->GetInputKeywordList();
   }
@@ -215,7 +215,7 @@ public:
   void SetOutputParametersFromImage(const ImageBaseType * image);
   
   /** Set/Get the grid size for rpc estimator*/
-  void SetInputRpcGridSize(SizeType gridSize)
+  void SetInputRpcGridSize(const SizeType& gridSize)
   {
     m_InputRpcEstimator->SetGridSize(gridSize);
     this->Modified();
@@ -227,7 +227,7 @@ public:
     this->Modified();
   }
   /** Get the input rpc model estimator  grid size used */
-  SizeType GetInputRpcGridSize()
+  const SizeType & GetInputRpcGridSize() const
   {
     return m_InputRpcEstimator->GetGridSize();
   }
@@ -238,7 +238,7 @@ public:
   itkBooleanMacro(EstimateInputRpcModel);
   
   /** Macro to Set/Get the grid size for rpc estimator*/
-  void SetOutputRpcGridSize(SizeType gridSize)
+  void SetOutputRpcGridSize(const SizeType& gridSize)
   {
     m_OutputRpcEstimator->SetGridSize(gridSize);
     this->Modified();
@@ -250,7 +250,7 @@ public:
     this->Modified();
   }
   /** Get the output rpc model estimator grid size used */
-  SizeType GetOutputRpcGridSize()
+  const SizeType & GetOutputRpcGridSize() const
   {
     return m_OutputRpcEstimator->GetGridSize();
   }
