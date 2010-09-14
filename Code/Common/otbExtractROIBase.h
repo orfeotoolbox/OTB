@@ -143,8 +143,8 @@ protected:
 
 //  ATTENTION bizarre
 
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            int threadId)
+  void ThreadedGenerateData(const OutputImageRegionType& /*outputRegionForThread*/,
+                            int /*threadId*/)
 
   {
 
