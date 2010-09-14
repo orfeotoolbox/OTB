@@ -15,20 +15,18 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+
+// this file defines the otbCommonTest for the test driver
+// and all it expects is that you have a function called RegisterTests
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
 #endif
 
-#include "itkExceptionObject.h"
-#include "otbAtmosphericRadiativeTerms.h"
-#include <cstdlib>
+//
+#include "otbTestMain.h"
 
-int otbAtmosphericRadiativeTermsNew(int argc, char * argv[])
+void RegisterTests()
 {
-  typedef otb::AtmosphericRadiativeTerms AtmosphericRadiativeTermsType;
-
-  // Instantiating object
-  AtmosphericRadiativeTermsType::Pointer object = AtmosphericRadiativeTermsType::New();
-
-  return EXIT_SUCCESS;
+  REGISTER_TEST(otbLabelMapSVMClassifierNew);
+  REGISTER_TEST(otbLabelMapSVMClassifier);
 }

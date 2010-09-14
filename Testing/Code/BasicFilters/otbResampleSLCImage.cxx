@@ -22,6 +22,7 @@
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
 #include "itkTranslationTransform.h"
+#include "itkResampleImageFilter.h"
 
 int otbResampleSLCImage(int argc, char * argv[])
 {

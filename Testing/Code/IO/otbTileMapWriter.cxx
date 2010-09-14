@@ -120,7 +120,7 @@ int otbTileMapWriter(int argc, char *argv[])
   orthoRectifXSVector->SetInput(readerXS->GetOutput());
 
   orthoRectifXS->SetOutputStartIndex(start);
-  orthoRectifXS->SetSize(size);
+  orthoRectifXS->SetOutputSize(size);
   orthoRectifXS->SetOutputSpacing(spacing);
   orthoRectifXS->SetOutputOrigin(pointULexact);
   orthoRectifXS->SetDEMDirectory(argv[2]);

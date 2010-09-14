@@ -26,6 +26,8 @@
 #include "itkTranslationTransform.h"
 #include "itkNearestNeighborInterpolateImageFunction.h"
 #include "otbStreamingTraits.h"
+#include "itkResampleImageFilter.h"
+
 
 int otbStreamingResampleImageFilterCompareWithITK(int argc, char * argv[])
 {
@@ -81,7 +83,7 @@ int otbStreamingResampleImageFilterCompareWithITK(int argc, char * argv[])
   size[0] = sizeXOutputImage;
   size[1] = sizeYOutputImage;
   resamplerITK->SetSize(size);
-  resamplerOTB->SetSize(size);
+  resamplerOTB->SetOutputSize(size);
 
   // Set Interpolation
   NNInterpolatorType::Pointer interpolator = NNInterpolatorType::New();

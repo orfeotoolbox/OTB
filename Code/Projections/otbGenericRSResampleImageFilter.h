@@ -19,7 +19,7 @@
 #define __otbGenericRSResampleImageFilter_h
 
 #include "itkImageToImageFilter.h"
-#include "otbOptResampleImageFilter.h"
+#include "otbStreamingResampleImageFilter.h"
 #include "otbPhysicalToRPCSensorModelImageFilter.h"
 #include "otbGenericRSTransform.h"
 
@@ -46,7 +46,7 @@ namespace otb
  *
  **/
 
-template <class TInputImage, class TOutputImage, class TDeormationField>
+template <class TInputImage, class TOutputImage>
 class ITK_EXPORT GenericRSResampleImageFilter :
     public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
@@ -64,21 +64,22 @@ public:
   itkTypeMacro(GenericRSResampleImageFilter,itk::ImageToImageFilter);
 
   /** Typedef parameters*/
-  typedef TInputImage                        InputImageType;
-  typedef TOutputImage                       OutputImageType;
-  typedef TDeormationField                   DeformationFieldType;
+  typedef TInputImage                                     InputImageType;
+  typedef TOutputImage                                    OutputImageType;
+  typedef typename OutputImageType::InternalPixelType     OutputInternalPixelType;
   
   /** Internal filters typedefs*/
-  typedef OptResampleImageFilter<InputImageType,OutputImageType,
-                                 DeformationFieldType >          ResamplerType;
-  typedef typename ResamplerType::Pointer             ResamplerPointerType;
-  typedef typename ResamplerType::TransformType       TransformType;
-  typedef typename ResamplerType::SizeType            SizeType;
-  typedef typename ResamplerType::SpacingType         SpacingType;
-  typedef typename ResamplerType::OriginType          OriginType;
-  typedef typename ResamplerType::IndexType           IndexType;
-  typedef typename ResamplerType::RegionType          RegionType;
-  typedef typename ResamplerType::InterpolatorType    InterpolatorType;
+  typedef StreamingResampleImageFilter<InputImageType,
+                                 OutputImageType,
+                                 OutputInternalPixelType>  ResamplerType;
+  typedef typename ResamplerType::Pointer                  ResamplerPointerType;
+  typedef typename ResamplerType::TransformType            TransformType;
+  typedef typename ResamplerType::SizeType                 SizeType;
+  typedef typename ResamplerType::SpacingType              SpacingType;
+  typedef typename ResamplerType::OriginType               OriginType;
+  typedef typename ResamplerType::IndexType                IndexType;
+  typedef typename ResamplerType::RegionType               RegionType;
+  typedef typename ResamplerType::InterpolatorType         InterpolatorType;
 
   /** Estimate the rpc model */
   typedef PhysicalToRPCSensorModelImageFilter<InputImageType>   RpcModelEstimatorType;
@@ -90,9 +91,8 @@ public:
   typedef GenericRSTransform<>                       GenericRSTransformType;
   typedef typename GenericRSTransformType::Pointer   GenericRSTransformPointerType;
   
-  /** Public Method prototypes */
-  virtual void GenerateData();
-    
+  typedef itk::ImageBase<OutputImageType::ImageDimension>      ImageBaseType;
+  
   /** The Deformation field spacing & size */
   void SetDeformationFieldSpacing(const SpacingType & spacing)
   {
@@ -104,7 +104,7 @@ public:
                                         SpacingType);
   
   /** The resampled image parameters */
-  // Output Origin
+  /** Output Origin */
   void SetOutputOrigin(const OriginType & origin)
   {
     m_Resampler->SetOutputOrigin(origin);
@@ -112,15 +112,15 @@ public:
   }
   otbGetObjectMemberConstReferenceMacro(Resampler,OutputOrigin,OriginType);
   
-  // Output Start index
+  /** Output Start index */
   otbSetObjectMemberMacro(Resampler,OutputStartIndex,IndexType);
   otbGetObjectMemberConstReferenceMacro(Resampler,OutputStartIndex,IndexType);
   
-  // Output Size
+  /** Output Size */
   otbSetObjectMemberMacro(Resampler,OutputSize,SizeType);
   otbGetObjectMemberConstReferenceMacro(Resampler,OutputSize,SizeType);
   
-  // Output Spacing
+  /** Output Spacing */
   otbSetObjectMemberMacro(Resampler,OutputSpacing,SpacingType);
   otbGetObjectMemberConstReferenceMacro(Resampler,OutputSpacing,SpacingType);
   
@@ -131,6 +131,14 @@ public:
     this->Modified();
   }
   otbGetObjectMemberConstMacro(Resampler, Interpolator, const InterpolatorType *);
+
+  /** Default Edge padding value */  
+  otbSetObjectMemberMacro(Resampler,
+                          EdgePaddingValue,
+                          typename OutputImageType::PixelType);
+  otbGetObjectMemberMacro(Resampler, 
+                          EdgePaddingValue, 
+                          typename OutputImageType::PixelType);
   
   /** 
    * Set/Get input & output projections. 
@@ -184,7 +192,7 @@ public:
   }
   
   /** Set/Get the DEMDirectory*/
-    void SetDEMDirectory(const std::string&  dem)
+  void SetDEMDirectory(const std::string&  dem)
   {
     m_Transform->SetDEMDirectory(dem);
     m_InputRpcEstimator->SetDEMDirectory(dem);
@@ -193,39 +201,62 @@ public:
   }
   otbGetObjectMemberConstMacro(Transform,DEMDirectory,std::string);
 
-  /** Useful to set the output parameters from an existing image*/
-  void SetOutputParametersFromImage(const InputImageType * image);
-  
-  /** Set/Get the grid spacing for rpc estimator*/
-  void SetInputGridSpacing(unsigned int gridSize)
+  /** Method to Set the Average Elevation used */
+  void SetAverageElevation(double elevation)
   {
-    m_InputRpcEstimator->SetGridSpacing(gridSize);
+    m_Transform->SetAverageElevation(elevation);
+    m_InputRpcEstimator->SetAverageElevation(elevation);
+    m_OutputRpcEstimator->SetAverageElevation(elevation);
     this->Modified();
   }
+  otbGetObjectMemberConstMacro(Transform,AverageElevation,double);
+  
 
-  unsigned int GetInputGridSpacing()
+  /** Useful to set the output parameters from an existing image*/
+  void SetOutputParametersFromImage(const ImageBaseType * image);
+  
+  /** Set/Get the grid size for rpc estimator*/
+  void SetInputRpcGridSize(SizeType gridSize)
   {
-    return m_InputRpcEstimator->GetGridSpacing();
+    m_InputRpcEstimator->SetGridSize(gridSize);
+    this->Modified();
+  }
+  /** unsigned int as paramater */
+  void SetInputRpcGridSize(unsigned int gridSize)
+  {
+    m_InputRpcEstimator->SetGridSize(gridSize);
+    this->Modified();
+  }
+  /** Get the input rpc model estimator  grid size used */
+  SizeType GetInputRpcGridSize()
+  {
+    return m_InputRpcEstimator->GetGridSize();
   }
   
-  // Macro to tune the EstimateInputRpcModel flag
+  /** Macro to tune the EstimateInputRpcModel flag */
   itkSetMacro(EstimateInputRpcModel, bool);
   itkGetMacro(EstimateInputRpcModel, bool);
   itkBooleanMacro(EstimateInputRpcModel);
   
-  /** Macro to Set/Get the grid spacing for rpc estimator*/
-  void SetOutputGridSpacing(unsigned int gridSize)
+  /** Macro to Set/Get the grid size for rpc estimator*/
+  void SetOutputRpcGridSize(SizeType gridSize)
   {
-    m_OutputRpcEstimator->SetGridSpacing(gridSize);
+    m_OutputRpcEstimator->SetGridSize(gridSize);
     this->Modified();
   }
-
-  unsigned int GetOutputGridSpacing()
+  /** unsigned int as paramater */
+  void SetOutputRpcGridSize(unsigned int gridSize)
   {
-    return m_OutputRpcEstimator->GetGridSpacing();
+    m_OutputRpcEstimator->SetGridSize(gridSize);
+    this->Modified();
+  }
+  /** Get the output rpc model estimator grid size used */
+  SizeType GetOutputRpcGridSize()
+  {
+    return m_OutputRpcEstimator->GetGridSize();
   }
 
-  // Macro to tune the EstimateOutputRpcModel flag
+  /** Macro to tune the EstimateOutputRpcModel flag */
   itkSetMacro(EstimateOutputRpcModel, bool);
   itkGetMacro(EstimateOutputRpcModel, bool);
   itkBooleanMacro(EstimateOutputRpcModel);
@@ -234,6 +265,8 @@ protected:
   GenericRSResampleImageFilter();
   /** Destructor */
   virtual ~GenericRSResampleImageFilter() {};
+
+  virtual void GenerateData();
 
   virtual void GenerateOutputInformation();
   
@@ -252,8 +285,7 @@ private:
   // boolean that allow the estimation of the input rpc model
   bool                              m_EstimateInputRpcModel;
   bool                              m_EstimateOutputRpcModel;
-
-  bool                              m_rpcEstimationUpdated;
+  bool                              m_RpcEstimationUpdated;
   
   // Filters pointers
   ResamplerPointerType              m_Resampler;

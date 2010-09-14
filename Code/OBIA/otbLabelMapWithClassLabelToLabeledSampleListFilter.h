@@ -61,16 +61,16 @@ public:
   ::MeasurementVectorType                             MeasurementVectorType;
   
   /** Output training sample list */
-  typedef TOutputTrainingSampleList                   OutputTrainingSampleListType;
+  typedef TOutputTrainingSampleList                      OutputTrainingSampleListType;
   typedef typename OutputTrainingSampleListType::Pointer OutputTrainingSampleListPointerType;
   typedef typename OutputTrainingSampleListType
-  ::MeasurementVectorType                             TraningVectorType;
+  ::MeasurementVectorType                                TraningVectorType;
 
   /** Measurement functor */
   typedef TMeasurementFunctor                         MeasurementFunctorType;
 
   /** Set/Get the input label map  */
-  itkSetObjectMacro(InputLabelMap,InputLabelMapType);
+  itkSetConstObjectMacro(InputLabelMap,InputLabelMapType);
   itkGetConstObjectMacro(InputLabelMap,InputLabelMapType);
   itkGetObjectMacro(OutputSampleList,OutputSampleListType);
   itkGetObjectMacro(OutputTrainingSampleList,OutputTrainingSampleListType);

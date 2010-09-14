@@ -149,7 +149,7 @@ int main(int argc, char* argv[])
   ImageType::SizeType size;
   size[0] = atoi(argv[7]);
   size[1] = atoi(argv[8]);
-  orthoRectifFilter->SetSize(size);
+  orthoRectifFilter->SetOutputSize(size);
 
   ImageType::SpacingType spacing;
   spacing[0] = atof(argv[9]);

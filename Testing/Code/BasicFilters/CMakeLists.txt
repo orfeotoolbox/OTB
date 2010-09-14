@@ -449,6 +449,20 @@ ADD_TEST(bfTvVectorImageTo3DScalarImageFilter ${BASICFILTERS_TESTS4}
 
 # -------            otb::StreamingResampleImageFilter   ----------------------------
 
+ADD_TEST(bfTuStreamingResampleImageFilterWithAffineTransformNew ${BASICFILTERS_TESTS5}
+  otbStreamingResampleImageFilterWithAffineTransform
+  )
+
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(bfTvStreamingResampleImageFilterWithAffineTransform ${BASICFILTERS_TESTS5}
+  otbStreamingResampleImageFilterWithAffineTransform
+  ${IMAGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+  500
+  ${TEMP}/bfTvotbStreamingResampledImageWithAffineTransform.tif
+  )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
+
 ADD_TEST(bfTuStreamingResampleImageFilterNew ${BASICFILTERS_TESTS5}
          otbStreamingResampleImageFilterNew)
 
@@ -1737,6 +1751,7 @@ SET(BasicFilters_SRCS5
 otbBasicFiltersTests5.cxx
 otbStreamingResampleImageFilterNew.cxx
 otbStreamingResampleImageFilter.cxx
+otbStreamingResampleImageFilterWithAffineTransform.cxx
 otbStreamingResampleImageFilterCompareWithITK.cxx
 otbResampleSLCImage.cxx
 otbStreamingMinMaxImageFilterNew.cxx
@@ -1753,6 +1768,7 @@ otbUnaryFunctorImageFilterNew.cxx
 otbPrintableImageFilterNew.cxx
 otbPrintableImageFilter.cxx
 otbPrintableImageFilterWithMask.cxx
+
 )
 
 # A enrichir

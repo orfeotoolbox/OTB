@@ -71,7 +71,7 @@ int otbProlateValidationTest(int argc, char * argv[])
   StreamingResampleImageFilterType::SizeType size;
   size[0] = atoi(argv[5]);
   size[1] = atoi(argv[5]);
-  proresampler->SetSize(size);
+  proresampler->SetOutputSize(size);
   proresampler->SetOutputOrigin(origin);
   proresampler->SetOutputSpacing(newSpacing);
 

@@ -33,7 +33,7 @@ namespace otb {
  * CS.
  * 
  * The number of points used to estimate the rpc sensor model is
- * defined by the GridSpacing, note that at least 16 points are needed
+ * defined by the GridSize, note that at least 16 points are needed
  * to estimate a proper RPC sensor model, there are no warning when
  * the model estimated is inaccurate.
  *
@@ -44,7 +44,7 @@ namespace otb {
  * implementation.(TODO)
  *
  * Depending on the value of the DEMDirectory, an elevation fetched
- * from the SRT directory is used. 
+ * from the SRT directory is used.(TODO) 
  *
  * This filter does not modify the image buffer, but only the
  * metadata. Therefore, it is implemented as an InPlaceImageFilter.
@@ -58,9 +58,9 @@ class ITK_EXPORT PhysicalToRPCSensorModelImageFilter :
 public:
   /** Standard class typedefs. */
   typedef PhysicalToRPCSensorModelImageFilter Self;
-  typedef itk::InPlaceImageFilter<TImage> Superclass;
-  typedef itk::SmartPointer<Self>         Pointer;
-  typedef itk::SmartPointer<const Self>   ConstPointer;
+  typedef itk::InPlaceImageFilter<TImage>     Superclass;
+  typedef itk::SmartPointer<Self>             Pointer;
+  typedef itk::SmartPointer<const Self>       ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -71,6 +71,7 @@ public:
   /** template parameters typedef */
   typedef TImage                          ImageType;
   typedef typename ImageType::PointType   PointType;
+  typedef typename ImageType::SizeType    SizeType;
   
   /** GCPsToSensor model filter */
   typedef GCPsToRPCSensorModelImageFilter<ImageType>          GCPsToSensorModelType;
@@ -84,17 +85,34 @@ public:
   /** Remote Sensing Transform */
   typedef GenericRSTransform<>                                RSTransformType;
   typedef typename RSTransformType::Pointer                   RSTransformPointerType;
-
-  /** launch the process */
-  virtual void GenerateOutputInformation();//GenerateData();
   
   /** Set/Get the grid size*/
-  itkSetMacro(GridSpacing, unsigned int);
-  itkGetMacro(GridSpacing, unsigned int);
+  itkSetMacro(GridSize, SizeType);
+  itkGetMacro(GridSize, SizeType);
 
   /** Set/Get the DEM directory*/
   itkSetStringMacro(DEMDirectory);
   itkGetStringMacro(DEMDirectory);
+
+  /** Set/Get the AverageElevation*/
+  itkSetMacro(AverageElevation, double);
+  itkGetMacro(AverageElevation, double);
+  
+  /** Set Grid size with an unsigned int parmeter*/
+  void SetGridSize(unsigned int inSize)
+  {
+    SizeType iSize;
+    iSize.Fill(inSize);
+    
+    if(m_GridSize != iSize)
+      {
+      m_GridSize = iSize;
+      this->Modified();
+      }
+  }
+
+  /** Reimplement the method Modified() */
+  virtual void Modified();
   
 protected:
   /** Constructor */
@@ -105,8 +123,11 @@ protected:
   /** The PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  /**  */
+  /** Necessary but empty */
   virtual void ThreadedGenerateData(const typename TImage::RegionType&, int) {}
+
+  /** Generate the Output image information*/
+  virtual void GenerateOutputInformation();
   
 private:
   PhysicalToRPCSensorModelImageFilter(const Self &);   // purposely not implemented
@@ -116,7 +137,10 @@ private:
   GCPsToSensorModelPointerType       m_GCPsToSensorModelFilter;
   
   std::string                        m_DEMDirectory;
-  unsigned int                       m_GridSpacing;
+  double                             m_AverageElevation;
+  SizeType                           m_GridSize;
+  bool                               m_OutputInformationGenerated;
+
 };
 } // end of namespace otb
 

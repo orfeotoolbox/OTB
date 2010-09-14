@@ -16,7 +16,7 @@
 
 =========================================================================*/
 
-#include "otbOptResampleImageFilter.h"
+#include "otbStreamingResampleImageFilter.h"
 #include "otbVectorImage.h"
 #include "itkVector.h"
 #include "otbImageFileReader.h"
@@ -28,20 +28,21 @@
 #include "itkTransform.h"
 #include "itkAffineTransform.h"
 
-int otbOptResampleImageFilter(int argc, char* argv[])
+// Default value
+#include "itkPixelBuilder.h"
+
+int otbStreamingResampleImageFilterWithAffineTransform(int argc, char* argv[])
 {
   // Images definition
   const unsigned int Dimension = 2;
   typedef double                                      PixelType;
   typedef otb::VectorImage<PixelType, Dimension>      ImageType;
-  typedef itk::Vector<PixelType, 2>                   DeformationValueType;
-  typedef otb::Image<DeformationValueType, Dimension> DeformationFieldType; 
-  typedef otb::OptResampleImageFilter<ImageType, ImageType, DeformationFieldType> ImageResamplerType;
+  typedef otb::StreamingResampleImageFilter<ImageType, ImageType> ImageResamplerType;
 
   // Istantiate a Resampler
   ImageResamplerType::Pointer resampler = ImageResamplerType::New();
 
-  if (argc>1)
+  if (argc== 4)
     {
     const char * infname = argv[1];
     const char * outfname = argv[3];
@@ -82,16 +83,19 @@ int otbOptResampleImageFilter(int argc, char* argv[])
     // Get the size specified by the user
     ImageType::SizeType   size;
     size.Fill(isize);
-  
+
+    // Default value builder
+    ImageType::PixelType defaultValue;
+    itk::PixelBuilder<ImageType::PixelType>::Zero(defaultValue,reader->GetOutput()->GetNumberOfComponentsPerPixel());
+    
     /** Set the OptResampler Parameters*/
     resampler->SetInput(reader->GetOutput());
     resampler->SetOutputParametersFromImage(reader->GetOutput());
     resampler->SetTransform(affineTransform);
-    resampler->SetDeformationFieldSpacing(5.); // TODO : add the spacing
-    // it to the
-    // command line
+    resampler->SetDeformationFieldSpacing(5.); 
     resampler->SetOutputSize(size);
-  
+    resampler->SetEdgePaddingValue(defaultValue);
+    
     // Write the resampled image
     typedef otb::StreamingImageFileWriter<ImageType>    WriterType;
     WriterType::Pointer writer= WriterType::New();

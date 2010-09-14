@@ -25,7 +25,6 @@
 #include "otbWaterIndicesFunctor.h"
 #include "otbMultiChannelRAndNIRIndexImageFilter.h"
 #include "otbMultiChannelGAndRIndexImageFilter.h"
-#include "otbMultiChannelRAndGAndNIRVegetationIndexImageFilter.h"
 #include "otbVectorImageToIntensityImageFilter.h"
 #include "otbMultiToMonoChannelExtractROI.h"
 
