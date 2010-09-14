@@ -265,6 +265,10 @@ VectorDataModel::AddNode( TreeNodeType * node )
 	vertex[0] = point[0];
 	vertex[1] = point[1];
 	this->AddPointToGeometry(vertex, false);
+
+        //Add Other Fields
+        CopyFileds( node );
+
 	this->EndGeometry(false);
 	break;
       }
@@ -282,6 +286,10 @@ VectorDataModel::AddNode( TreeNodeType * node )
 	    vertex[1] = point[1];
 	    this->AddPointToGeometry(vertex, false);
 	  }
+
+        //Add Other Fields
+        CopyFileds( node );
+
 	this->EndGeometry(false);
 	break;
       }
@@ -301,6 +309,9 @@ VectorDataModel::AddNode( TreeNodeType * node )
 	    vIt++;
 	  }
 
+        //Add Other Fields
+        CopyFileds( node );
+      
 	this->EndGeometry(false);
 	break;
       }
@@ -320,6 +331,17 @@ VectorDataModel::AddNode( TreeNodeType * node )
     {
       this->AddNode(*it);
       ++it;
+    }
+}
+
+void
+VectorDataModel::CopyFileds( TreeNodeType * node )
+{
+  std::vector< std::string > fieldList = node->Get()->GetFieldList();
+  unsigned int i;
+  for (i=0; i < fieldList.size(); i++)
+    {
+    m_CurrentGeometry->SetFieldAsString(fieldList.at(i), node->Get()->GetFieldAsString(fieldList.at(i)));
     }
 }
 
