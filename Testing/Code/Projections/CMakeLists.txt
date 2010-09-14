@@ -258,6 +258,7 @@ ADD_TEST(prTvOrthoRectificationToulouse ${PROJECTIONS_TESTS2}
         -0.5
         31
         N
+        4 # Spacing of the deformation field
         )
 
 ADD_TEST(prTvOrthoRectificationToulouseXS ${PROJECTIONS_TESTS2}
@@ -266,7 +267,7 @@ ADD_TEST(prTvOrthoRectificationToulouseXS ${PROJECTIONS_TESTS2}
         otbOrthoRectificationFilter
         ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
         ${TEMP}/prTvOrthoRectificationToulouseXS_UTM.tif
-	367319 4835740 300 300 2.5608 -2.8452 31 N
+	367319 4835740 300 300 2.5608 -2.8452 31 N 4
         )
 
 ADD_TEST(prTvOrthoRectificationCevennes ${PROJECTIONS_TESTS2}
@@ -284,6 +285,7 @@ ADD_TEST(prTvOrthoRectificationCevennes ${PROJECTIONS_TESTS2}
         -0.5
         31
         N
+        4
         )
 
 ADD_TEST(prTvOrthoRectificationToulouseWithDEM ${PROJECTIONS_TESTS2}
@@ -343,6 +345,7 @@ ADD_TEST(prTlOrthoRectificationSPOT5 ${PROJECTIONS_TESTS2}
         -5
         39
         N
+        5
         )
 
  ADD_TEST(prTlOrthoRectificationMonoThreadSPOT5 ${PROJECTIONS_TESTS2}
