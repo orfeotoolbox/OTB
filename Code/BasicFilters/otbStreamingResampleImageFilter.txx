@@ -86,9 +86,14 @@ StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionTy
   SizeType deformationFieldLargestSize;
   for(unsigned int dim = 0; dim < InputImageType::ImageDimension;++dim)
     {
-    deformationFieldLargestSize[dim] = static_cast<unsigned long>(largestSize[dim]
-                                       *vcl_abs(this->GetOutputSpacing()[dim]
-                                       /this->GetDeformationFieldSpacing()[dim]));
+    // vcl_ceil to avoid numerical problems due to division of
+    // spacings 
+    // + 1 :  We need to enlarge the deformation field size cause
+    // itk::WarpImageFilter::EvaluateDeformationAtPhysicalPoint needs
+    // 4 neighbors and in the edges we can need 2 mores
+    deformationFieldLargestSize[dim] = static_cast<unsigned int>(vcl_ceil( largestSize[dim]* 
+                                                                           vcl_abs(this->GetOutputSpacing()[dim] / 
+                                                                                   this->GetDeformationFieldSpacing()[dim]))) + 1 ;
     }
   m_DeformationFilter->SetOutputSize(deformationFieldLargestSize);
   m_DeformationFilter->SetOutputIndex(this->GetOutputStartIndex());
