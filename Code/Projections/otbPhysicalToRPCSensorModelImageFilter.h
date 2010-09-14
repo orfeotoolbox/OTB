@@ -101,7 +101,14 @@ public:
   /** Set Grid size with an unsigned int parmeter*/
   void SetGridSize(unsigned int inSize)
   {
-    m_GridSize.Fill(inSize);
+    SizeType iSize;
+    iSize.Fill(inSize);
+    
+    if(m_GridSize != iSize)
+      {
+      m_GridSize = iSize;
+      this->Modified();
+      }
   }
 
   /** Reimplement the method Modified() */
