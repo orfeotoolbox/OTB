@@ -38,7 +38,7 @@
 int otbOrthoRectificationMonoThreadFilter(int argc, char* argv[])
 {
   ossimInit::instance()->initialize(argc, argv);
-  if (argc != 11)
+  if (argc != 12)
     {
     std::cout << argv[0] <<
     " <input filename> <output filename> <origin easting> <origin northing> <x size> <y size> <x spacing> <y spacing> <UTM zone <UTM hemisphere>"
@@ -93,8 +93,13 @@ int otbOrthoRectificationMonoThreadFilter(int argc, char* argv[])
   utmMapProjection->SetHemisphere(argv[10][0]);
   orthoRectifFilter->SetMapProjection(utmMapProjection);
 
+  // Deformation Field spacing
+  ImageType::SpacingType  gridSpacing;
+  gridSpacing[0] = atof(argv[11]);
+  gridSpacing[1] = -atof(argv[11]);
+  orthoRectifFilter->SetDeformationFieldSpacing(gridSpacing);
+  
   writer->SetInput(orthoRectifFilter->GetOutput());
-
   writer->SetTilingStreamDivisions();
   writer->SetNumberOfThreads(1);
   writer->Update();

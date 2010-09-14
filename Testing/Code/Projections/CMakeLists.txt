@@ -304,6 +304,7 @@ ADD_TEST(prTvOrthoRectificationToulouseWithDEM ${PROJECTIONS_TESTS2}
         31
         N
         ${INPUTDATA}/DEM/srtm_directory/
+        4
 #         ${TEMP}/prTvOrthoRectificationToulouseWithDEM_UTM.tif
         )
 
@@ -323,6 +324,7 @@ ADD_TEST(prTvOrthoRectificationCevennesWithDEM ${PROJECTIONS_TESTS2}
         31
         N
         ${INPUTDATA}/DEM/srtm_directory/
+        4
 #         ${TEMP}/prTvOrthoRectificationCevennesWithDEM_UTM.tif
         )
 
