@@ -137,7 +137,7 @@ ADD_TEST(obTvVectorDataToLabelMapFilter ${OBIA_TESTS1}
 
 
 # OBIATests2 (need PQXX)
-IF(TB_USE_PQXX)
+IF(OTB_USE_PQXX)
 ADD_TEST(obTuLabelMapToGISTableFilterNew ${OBIA_TESTS2}
     otbLabelMapToGISTableFilterNew)
 
