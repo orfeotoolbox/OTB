@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbOptResampleImageFilter_txx
-#define __otbOptResampleImageFilter_txx
+#ifndef __otbStreamingResampleImageFilter_txx
+#define __otbStreamingResampleImageFilter_txx
 
 namespace otb
 {
@@ -90,10 +90,12 @@ StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionTy
     // spacings 
     // + 1 :  We need to enlarge the deformation field size cause
     // itk::WarpImageFilter::EvaluateDeformationAtPhysicalPoint needs
-    // 4 neighbors and in the edges we can need 2 mores
-    deformationFieldLargestSize[dim] = static_cast<unsigned int>(vcl_ceil( largestSize[dim]* 
-                                                                           vcl_abs(this->GetOutputSpacing()[dim] / 
-                                                                                   this->GetDeformationFieldSpacing()[dim]))) + 1 ;
+    // 4 neighbors and in the edges we can need 1 neighbor pixel
+    // outside the field
+    deformationFieldLargestSize[dim] = static_cast<unsigned int>(
+      vcl_ceil( largestSize[dim]* 
+                vcl_abs(this->GetOutputSpacing()[dim] / 
+                        this->GetDeformationFieldSpacing()[dim]))) + 1 ;
     }
   m_DeformationFilter->SetOutputSize(deformationFieldLargestSize);
   m_DeformationFilter->SetOutputIndex(this->GetOutputStartIndex());
