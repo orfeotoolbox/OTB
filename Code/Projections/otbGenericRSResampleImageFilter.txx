@@ -21,8 +21,9 @@
 #include "itkMetaDataDictionary.h"
 #include "itkMetaDataObject.h"
 #include "otbMetaDataKey.h"
-#include "itkIdentityTransform.h"
-#include "itkContinuousIndex.h"
+
+#include "projection/ossimUtmProjection.h"
+#include "itkPoint.h"
 
 namespace otb
 {
@@ -230,6 +231,148 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
   this->SetOutputSpacing ( image->GetSpacing() );
   this->SetOutputStartIndex ( image->GetLargestPossibleRegion().GetIndex() );
   this->SetOutputSize ( image->GetLargestPossibleRegion().GetSize() );
+  this->SetOutputProjectionRef(image->GetProjectionRef());
+  this->SetOutputKeywordList(image->GetImageKeywordlist());
+}
+/**
+ * Method used to copy the parameters of the input image
+ * 
+ */
+template <class TInputImage, class TOutputImage>
+void
+GenericRSResampleImageFilter<TInputImage, TOutputImage>
+::SetOutputParametersFromMap(const std::string map)
+{
+  // Get the input Image
+  const InputImageType* input = this->GetInput();
+  
+  // Update the transform with input information 
+  // Done here because the transform is not instanciated 
+  // yet
+  this->UpdateTransform();
+  
+  // The inverse transform is need here
+  GenericRSTransformPointerType invTransform = GenericRSTransformType::New();
+  m_Transform->GetInverse(invTransform);
+  
+  // Build the UTM transform : Need the zone & the hemisphere
+  // For this we us the geographic coordinate of the input UL corner
+  typedef ossimRefPtr<ossimUtmProjection>       OssimMapProjectionPointerType;
+  typedef itk::Point<double,2>                  GeoPointType;
+  
+  // instanciate the projection to get the utm zone
+  OssimMapProjectionPointerType  utmMapProjection =  new ossimUtmProjection();
+  
+  // get the utm zone and hemisphere using the input UL corner
+  // geographic coordinates
+  typename InputImageType::PointType  pSrc;
+  IndexType      index;
+  GeoPointType   geoPoint;
+  index[0] = input->GetLargestPossibleRegion().GetIndex()[0];
+  index[1] = input->GetLargestPossibleRegion().GetIndex()[1];
+  input->TransformIndexToPhysicalPoint(index,pSrc);
+  
+  // The first transform of the inverse transform : input -> WGS84
+  geoPoint = invTransform->GetTransform()->GetFirstTransform()->TransformPoint(pSrc);
+  
+  // Guess the zone and the hemisphere
+  ossimGpt point(geoPoint[1],  geoPoint[0]);
+  int zone = utmMapProjection->computeZone(point);
+  bool hem = (geoPoint[1]>1e-10)?true:false;
+  
+  // Build the output UTM projection ref 
+  OGRSpatialReference oSRS;
+  oSRS.SetProjCS("UTM");
+  oSRS.SetWellKnownGeogCS("WGS84");
+  oSRS.SetUTM(zone, hem);
+  
+  char * utmRef = NULL;
+  oSRS.exportToWkt(&utmRef);
+    
+  // Update the transform
+  this->SetOutputProjectionRef(utmRef);
+  this->UpdateTransform();
+
+  // Get the inverse transform again : used later
+  m_Transform->GetInverse(invTransform);
+  
+  // Compute the 4 corners in the cartographic coordinate system
+  std::vector<IndexType>       vindex;
+  std::vector<OutputPointType> voutput;
+  
+  IndexType index1, index2, index3, index4;
+  SizeType  size;
+
+  // Image size
+  size = input->GetLargestPossibleRegion().GetSize();
+
+  // project the 4 corners
+  index1 = input->GetLargestPossibleRegion().GetIndex();
+  index2 = input->GetLargestPossibleRegion().GetIndex();
+  index3 = input->GetLargestPossibleRegion().GetIndex();
+  index4 = input->GetLargestPossibleRegion().GetIndex();
+
+  index2[0] += size[0] - 1;
+  index3[0] += size[0] - 1;
+  index3[1] += size[1] - 1;
+  index4[1] += size[1] - 1;
+
+  vindex.push_back(index1);
+  vindex.push_back(index2);
+  vindex.push_back(index3);
+  vindex.push_back(index4);
+
+  for (unsigned int i = 0; i < vindex.size(); i++)
+    {
+    OutputPointType physicalPoint;
+    this->GetInput()->TransformIndexToPhysicalPoint(vindex[i], physicalPoint);
+    voutput.push_back(invTransform->TransformPoint(physicalPoint));
+    }
+
+  // Compute the boundaries
+  double minX = voutput[0][0];
+  double maxX = voutput[0][0];
+  double minY = voutput[0][1];
+  double maxY = voutput[0][1];
+
+  for (unsigned int i = 0; i < voutput.size(); i++)
+    {
+    // Origins
+    if (minX > voutput[i][0])
+      minX = voutput[i][0];
+    if (minY > voutput[i][1])
+      minY = voutput[i][1];
+
+    // Sizes
+    if (maxX < voutput[i][0])
+      maxX = voutput[i][0];
+
+    if (maxY < voutput[i][1])
+      maxY = voutput[i][1];
+    }
+  
+  // Compute the output size
+  double sizeCartoX = vcl_abs(maxX - minX);
+  double sizeCartoY = vcl_abs(minY - maxY);
+
+  // Set the output orgin in carto 
+  // projection
+  OriginType   origin;
+  origin[0] = minX;
+  origin[1] = maxY;
+  this->SetOutputOrigin(origin);
+  
+  // Evaluate output size
+  SizeType outputSize;
+  outputSize[0] = static_cast<unsigned int>(vcl_floor(vcl_abs(sizeCartoX / this->GetOutputSpacing()[0])));
+  outputSize[1] = static_cast<unsigned int>(vcl_floor(vcl_abs(sizeCartoY / this->GetOutputSpacing()[1])));
+  this->SetOutputSize(outputSize);
+  
+  std::cout <<"Output Image params :"
+            << " \n OutputSize "   << outputSize 
+            << " \n OutputOrigin " << origin 
+            << " \n OutputSpacing "<< this->GetOutputSpacing()
+            << std::endl;
 }
 
 }
