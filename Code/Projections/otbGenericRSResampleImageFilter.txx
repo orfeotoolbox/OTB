@@ -38,8 +38,8 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
 
   // internal filters instanciation
   m_Resampler         = ResamplerType::New();
-  m_InputRpcEstimator = RpcModelEstimatorType::New();
-  m_OutputRpcEstimator= RpcModelEstimatorType::New();
+  m_InputRpcEstimator = InputRpcModelEstimatorType::New();
+  m_OutputRpcEstimator= OutputRpcModelEstimatorType::New();
   m_Transform         = GenericRSTransformType::New();
 }
 

@@ -81,8 +81,12 @@ public:
   typedef typename ResamplerType::InterpolatorType         InterpolatorType;
 
   /** Estimate the rpc model */
-  typedef PhysicalToRPCSensorModelImageFilter<InputImageType>   RpcModelEstimatorType;
-  typedef typename RpcModelEstimatorType::Pointer               RpcModelEstimatorPointerType;
+  typedef PhysicalToRPCSensorModelImageFilter<InputImageType>  InputRpcModelEstimatorType;
+  typedef typename InputRpcModelEstimatorType::Pointer         InputRpcModelEstimatorPointerType;
+  
+  typedef PhysicalToRPCSensorModelImageFilter<OutputImageType>  OutputRpcModelEstimatorType;
+  typedef typename OutputRpcModelEstimatorType::Pointer         OutputRpcModelEstimatorPointerType;
+  
   
   /** Specialisation of OptResampleFilter with a remote 
     * sensing  transform 
@@ -185,7 +189,7 @@ public:
     this->Modified();
   }
   
-  const ImageKeywordlist& GetOutputKeywordList()
+  const ImageKeywordlist GetOutputKeywordList()
   {
     return m_Transform->GetInputKeywordList();
   }
@@ -282,15 +286,15 @@ private:
   void EstimateInputRpcModel();
   
   // boolean that allow the estimation of the input rpc model
-  bool                              m_EstimateInputRpcModel;
-  bool                              m_EstimateOutputRpcModel;
-  bool                              m_RpcEstimationUpdated;
+  bool                               m_EstimateInputRpcModel;
+  bool                               m_EstimateOutputRpcModel;
+  bool                               m_RpcEstimationUpdated;
   
   // Filters pointers
-  ResamplerPointerType              m_Resampler;
-  RpcModelEstimatorPointerType      m_InputRpcEstimator;
-  RpcModelEstimatorPointerType      m_OutputRpcEstimator;
-  GenericRSTransformPointerType     m_Transform;
+  ResamplerPointerType               m_Resampler;
+  InputRpcModelEstimatorPointerType  m_InputRpcEstimator;
+  OutputRpcModelEstimatorPointerType m_OutputRpcEstimator;
+  GenericRSTransformPointerType      m_Transform;
 };
 
 } // namespace otb
