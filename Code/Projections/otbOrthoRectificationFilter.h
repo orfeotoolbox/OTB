@@ -59,8 +59,16 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
+  /** types definitions */
+  typedef typename TInputImage::IndexType   IndexType;
+  typedef typename TInputImage::SizeType    SizeType;
+  typedef typename TInputImage::SpacingType SpacingType;
+  typedef typename TInputImage::PointType   PointType;
+  typedef typename TInputImage::RegionType  RegionType;
+ 
   typedef typename TOutputImage::PixelType OutputPixelType;
-
+  
+  /** output map projection */
   typedef TMapProjection                   MapProjectionType;
   typedef typename TMapProjection::Pointer MapProjectionPointerType;
   
