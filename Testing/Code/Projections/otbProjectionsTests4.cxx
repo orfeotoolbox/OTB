@@ -27,5 +27,7 @@
 void RegisterTests()
 {
   REGISTER_TEST(otbPhysicalToRPCSensorModelImageFilter);
+  REGISTER_TEST(otbGenericRSResampleImageFilterNew);
   REGISTER_TEST(otbGenericRSResampleImageFilter);
+  REGISTER_TEST(otbGenericRSResampleImageFilterFromMap);
 }
