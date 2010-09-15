@@ -49,7 +49,7 @@ public:
     }
   inline TOutput operator()( const TInput & A ) const
     {
-    return (TOutput)( A.real()*A.real() + A.imag()*A.imag() );
+    return static_cast<TOutput>( A.real()*A.real() + A.imag()*A.imag() );
     }
 };
 }
