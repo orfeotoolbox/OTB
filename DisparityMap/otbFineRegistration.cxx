@@ -54,7 +54,7 @@ int main(int argc, char * argv[])
   parser->AddOption("--SecondaryGaussianSmoothing","(optional) Perform a gaussian smoothing of the secondary image. Parameters are gaussian sigma (in pixels) in each direction. Default is no smoothing.","-sgs",2,false);
   parser->AddOption("--Metric","(optional) Choose the metric used for block matching. Available metrics are cross-correlation (CC), cross-correlation with subtracted mean (CCSM), mean-square difference (MSD), mean reciprocal square difference (MRSD) and mutual information (MI). Default is cross-correlation","-m",1,false);
   parser->AddOption("--SubPixelAccuracy","(optional) Metric extrema location will be refined up to the given accuracy. Default is 0.01","-spa",1,false);
-  parser->AddOption("--ValidityMask","(optional) Threshold to obtain a validity mask. Params are lowerThan or greaterThan and a threshold","-vm",2,true);
+  parser->AddOption("--ValidityMask","(optional) Threshold to obtain a validity mask. Params are lowerThan or greaterThan and a threshold","-vm",2,false);
 
   typedef otb::CommandLineArgumentParseResult ParserResultType;
   ParserResultType::Pointer  parseResult = ParserResultType::New();
