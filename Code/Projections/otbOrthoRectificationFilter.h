@@ -89,6 +89,12 @@ public:
       }
   }
   itkGetObjectMacro(MapProjection, MapProjectionType);
+  
+  /** 
+    * Set the output size. This method is deprecated and is
+    * maintained for backward compatibility only 
+    */
+  itkLegacyMacro(void SetSize(const SizeType& size){this->SetOutputSize(size);});
 
 protected:
   OrthoRectificationFilter();

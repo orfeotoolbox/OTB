@@ -76,7 +76,7 @@ int otbOrthoRectificationFilter(int argc, char* argv[])
   ImageType::SizeType size;
   size[0] = atoi(argv[5]);      // X size
   size[1] = atoi(argv[6]);            //Y size
-  orthoRectifFilter->SetOutputSize(size);
+  orthoRectifFilter->SetSize(size);
 
   ImageType::SpacingType spacing;
   spacing[0] = atof(argv[7]);
@@ -91,7 +91,7 @@ int otbOrthoRectificationFilter(int argc, char* argv[])
   utmMapProjection->SetZone(atoi(argv[9]));
   utmMapProjection->SetHemisphere(argv[10][0]);
   orthoRectifFilter->SetMapProjection(utmMapProjection);
-  
+ 
   // Deformation Field spacing
   ImageType::SpacingType  gridSpacing;
   gridSpacing[0] = atof(argv[11]);
