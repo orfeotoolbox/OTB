@@ -258,11 +258,12 @@ ImageLayer<TImage, TOutputImage>
   // The ouptut stringstream
   itk::OStringStream oss;
   oss << otbGetTextMacro("Layer") << ": " << this->GetName();
-  oss << std::endl << otbGetTextMacro("Image size") << ": " << m_Image->GetLargestPossibleRegion().GetSize();
+  oss << std::endl << otbGetTextMacro("Image size") << ": " << m_Image->GetLargestPossibleRegion().GetSize() << std::endl;
+
   // If we are inside the buffered region
   if (m_Image->GetBufferedRegion().IsInside(index))
     {
-    oss << std::endl << m_RenderingFunction->Describe(m_Image->GetPixel(index));
+    oss << m_RenderingFunction->Describe(m_Image->GetPixel(index));
     }
   else if (m_Quicklook.IsNotNull())
   // Else we extrapolate the value from the quicklook
