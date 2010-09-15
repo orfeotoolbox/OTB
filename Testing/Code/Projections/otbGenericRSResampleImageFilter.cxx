@@ -186,8 +186,7 @@ int otbGenericRSResampleImageFilterFromMap(int argc, char* argv[])
   // Set the Resampler Parameters
   resampler->SetInput(extractor->GetOutput());
   resampler->SetDeformationFieldSpacing(gridSpacing); 
-  resampler->SetOutputSpacing(spacing);
-  resampler->SetOutputParametersFromMap("UTM");
+  resampler->SetOutputParametersFromMap("UTM",spacing);
   
   if (useInRpc)
     {

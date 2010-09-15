@@ -241,7 +241,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 GenericRSResampleImageFilter<TInputImage, TOutputImage>
-::SetOutputParametersFromMap(const std::string map)
+::SetOutputParametersFromMap(const std::string map, const SpacingType& spacing)
 {
   // Get the input Image
   const InputImageType* input = this->GetInput();
@@ -291,6 +291,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
     
   // Update the transform
   this->SetOutputProjectionRef(utmRef);
+  this->SetOutputSpacing(spacing);
   this->UpdateTransform();
 
   // Get the inverse transform again : used later

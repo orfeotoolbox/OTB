@@ -219,7 +219,7 @@ public:
   void SetOutputParametersFromImage(const ImageBaseType * image);
 
   /** Useful to set the output parameters from an existing image*/
-  void SetOutputParametersFromMap(const std::string map);
+  void SetOutputParametersFromMap(const std::string map, const SpacingType& spacing);
   
   /** Set/Get the grid size for rpc estimator*/
   void SetInputRpcGridSize(const SizeType& gridSize)
