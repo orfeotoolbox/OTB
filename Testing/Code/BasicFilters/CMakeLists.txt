@@ -1678,6 +1678,9 @@ ADD_TEST(bfTuBandMathImageFilter ${BASICFILTERS_TESTS13}
 ADD_TEST(bfTvBandMathImageFilter ${BASICFILTERS_TESTS13}
   otbBandMathImageFilter)
 
+ADD_TEST(bfTvComplexToIntensityFilterTest ${BASICFILTERS_TESTS13} 
+  otbComplexToIntensityFilterTest)
+
 
 # A enrichir
 SET(BasicFilters_SRCS1
@@ -1922,6 +1925,7 @@ otbImageAndVectorImageOperationFilterTest.cxx
 SET(BasicFilters_SRCS13
 otbBasicFiltersTests13.cxx
 otbBandMathImageFilter.cxx
+otbComplexToIntensityFilterTest.cxx
 )
 
 
