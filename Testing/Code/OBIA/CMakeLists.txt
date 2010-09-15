@@ -121,6 +121,15 @@ ADD_TEST(obTvKMeansAttributesLabelMapFilter ${OBIA_TESTS1}
 ADD_TEST(obTuRadiometricAttributesLabelMapFilterNew ${OBIA_TESTS1}
     otbRadiometricAttributesLabelMapFilterNew)
 
+ADD_TEST(obTuBandsStatisticsAttributesLabelMapFilterNew ${OBIA_TESTS1}
+    otbBandsStatisticsAttributesLabelMapFilterNew)
+    
+ADD_TEST(obTvBandsStatisticsAttributesLabelMapFilter ${OBIA_TESTS1}
+    otbBandsStatisticsAttributesLabelMapFilter
+    ${INPUTDATA}/maur.tif
+    ${INPUTDATA}/maur_labelled.tif
+    ${TEMP}/obTvBandsStatisticsAttributesLabelMapFilter.txt)
+    
 ADD_TEST(obTuShapeAttributesLabelMapFilterNew ${OBIA_TESTS1}
 	otbShapeAttributesLabelMapFilterNew)
 
@@ -184,6 +193,7 @@ otbMinMaxAttributesLabelMapFilter.cxx
 otbNormalizeAttributesLabelMapFilter.cxx
 otbKMeansAttributesLabelMapFilter.cxx
 otbRadiometricAttributesLabelMapFilterNew.cxx
+otbBandsStatisticsAttributesLabelMapFilter.cxx
 otbShapeAttributesLabelMapFilterNew.cxx
 otbStatisticsAttributesLabelMapFilterNew.cxx
 otbVectorDataToLabelMapFilter.cxx
