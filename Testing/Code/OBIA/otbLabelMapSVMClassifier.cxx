@@ -57,14 +57,16 @@ typedef itk::FixedArray<LabelType,1>                           TrainingVectorTyp
 typedef itk::Statistics::ListSample<VectorType>                ListSampleType;
 typedef itk::Statistics::ListSample<TrainingVectorType>        TrainingListSampleType;
 typedef otb::LabelMapWithClassLabelToLabeledSampleListFilter<LabelMapType,ListSampleType,TrainingListSampleType>
-                                                               LabelMap2ListSampleFilterType;
+                                                               ListSampleFilterType;
 
 typedef otb::Functor::VariableLengthVectorToMeasurementVectorFunctor<VectorType> MeasurementVectorFunctorType;
 typedef otb::SVMSampleListModelEstimator<ListSampleType,TrainingListSampleType,
   MeasurementVectorFunctorType>                                                  SVMEstimatorType;
 
 typedef otb::LabelMapSVMClassifier<LabelMapType>                                ClassifierType;
-typedef otb::LabelMapWithClassLabelToClassLabelImageFilter<LabelMapType,LabeledImageType> LabelMapWithClassLabelToClassLabelImageFilterType;
+typedef otb::LabelMapWithClassLabelToClassLabelImageFilter
+          <LabelMapType,LabeledImageType>                                       ClassifImageGeneratorType;
+
 
 LabelObjectType::Pointer makeTrainingSample(LabelMapType* labelMap, LabelType labelObjectId, LabelType classLabel)
 {
@@ -86,33 +88,37 @@ int otbLabelMapSVMClassifier(int argc, char * argv[])
   const char * lfname   = argv[2];
   const char * outfname = argv[3];
 
-  // SmartPointer instanciation
-  ReaderType::Pointer         reader = ReaderType::New();
-  LabeledReaderType::Pointer  labeledReader = LabeledReaderType::New();
-  LabelMapFilterType::Pointer filter = LabelMapFilterType::New();
-  ShapeFilterType::Pointer    shapeFilter = ShapeFilterType::New();
-  RadiometricFilterType::Pointer radiometricFilter = RadiometricFilterType::New();
-  ClassifierType::Pointer     classifier = ClassifierType::New();
+  // Filters instanciation
+  ReaderType::Pointer                reader              = ReaderType::New();
+  LabeledReaderType::Pointer         labeledReader       = LabeledReaderType::New();
+  LabelMapFilterType::Pointer        filter              = LabelMapFilterType::New();
+  ShapeFilterType::Pointer           shapeFilter         = ShapeFilterType::New();
+  RadiometricFilterType::Pointer     radiometricFilter   = RadiometricFilterType::New();
+  LabelMapType::Pointer              trainingLabelMap    = LabelMapType::New();
+  ListSampleFilterType::Pointer      labelMap2SampleList = ListSampleFilterType::New();
+  SVMEstimatorType::Pointer          svmEstim            = SVMEstimatorType::New();
+  ClassifierType::Pointer            classifier          = ClassifierType::New();
+  ClassifImageGeneratorType::Pointer imGenerator         = ClassifImageGeneratorType::New();
+  LabeledWriterType::Pointer         writer              = LabeledWriterType::New();
 
-  // Inputs
+  // Read inputs
   reader->SetFileName(infname);
   labeledReader->SetFileName(lfname);
 
-  // Filter
+  // Make a LabelMap out of it
   filter->SetInput(labeledReader->GetOutput());
   filter->SetBackgroundValue(itk::NumericTraits<LabelType>::max());
 
+  //Compute shape and radimometric attributes
   shapeFilter->SetInput(filter->GetOutput());
-
   radiometricFilter->SetInput(shapeFilter->GetOutput());
   radiometricFilter->SetFeatureImage(reader->GetOutput());
   radiometricFilter->Update();
 
-  // Build training samples
+  // Build a sub-LabelMap with class-labeled LabelObject
   LabelMapType::Pointer labelMap = radiometricFilter->GetOutput();
-  LabelMapType::Pointer trainingLabelMap = LabelMapType::New();
 
-  // The following is specific to the input specified in CMakeLists
+  // The following is very specific to the input specified in CMakeLists
   // water
   trainingLabelMap->PushLabelObject(makeTrainingSample(labelMap, 13, 0));
   // road
@@ -132,7 +138,7 @@ int otbLabelMapSVMClassifier(int argc, char * argv[])
   trainingLabelMap->PushLabelObject(makeTrainingSample(labelMap, 161, 4));
   trainingLabelMap->PushLabelObject(makeTrainingSample(labelMap, 46, 4));
 
-  LabelMap2ListSampleFilterType::Pointer labelMap2SampleList = LabelMap2ListSampleFilterType::New();
+  // Make a ListSample out of trainingLabelMap
   labelMap2SampleList->SetInputLabelMap(trainingLabelMap);
 
   std::vector<std::string> attributes = labelMap->GetLabelObject(0)->GetAvailableAttributes();
@@ -144,13 +150,14 @@ int otbLabelMapSVMClassifier(int argc, char * argv[])
 
   labelMap2SampleList->Update();
 
-  SVMEstimatorType::Pointer svmEstim = SVMEstimatorType::New();
+  // Estimate SVM model
   svmEstim->SetInputSampleList(labelMap2SampleList->GetOutputSampleList());
   svmEstim->SetTrainingSampleList(labelMap2SampleList->GetOutputTrainingSampleList());
   svmEstim->SetNumberOfClasses(5);
   svmEstim->Modified();
   svmEstim->Update();
 
+  // Classify using the whole LabelMap with estimated model
   classifier->SetInput(labelMap);
   classifier->SetModel(svmEstim->GetModel());
 
@@ -161,10 +168,9 @@ int otbLabelMapSVMClassifier(int argc, char * argv[])
 
   classifier->Update();
 
-  LabelMapWithClassLabelToClassLabelImageFilterType::Pointer imGenerator = LabelMapWithClassLabelToClassLabelImageFilterType::New();
+  // Make a labeled image with the classification result
   imGenerator->SetInput(classifier->GetOutput());
 
-  LabeledWriterType::Pointer writer = LabeledWriterType::New();
   writer->SetInput(imGenerator->GetOutput());
   writer->SetFileName(outfname);
   writer->Update();
