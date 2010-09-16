@@ -72,6 +72,14 @@ ADD_TEST(utTvOssimTileMapModelTestToulouse ${UTILITIES_TESTS}
 ADD_TEST(utTvOssimpluginsHermiteInterpolationTest ${UTILITIES_TESTS}
      ossimpluginsHermiteInterpolationTest)
 
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(utTvOssimpluginsHermiteInterpolationPlateformPositionRadarSat2Test ${UTILITIES_TESTS}
+	ossimpluginsHermiteInterpolationPlateformPositionTest
+	${IMAGEDATA}/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/product.xml
+    )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
+
 # -------            lib otbsvm   ------------------------------
 
 ADD_TEST(utTuSvmKernelFunctorTest ${UTILITIES_TESTS}
@@ -479,6 +487,7 @@ ossimElevManagerTest.cxx
 ossimXmlDocumentTest.cxx
 ossimTileMapModelTest.cxx
 ossimpluginsHermiteInterpolation.cxx
+ossimpluginsHermiteInterpolationPlateformPosition.cxx
 svmGenericKernelFunctor.cxx
 svmTest.cxx
 svmGenericKernelTest.cxx
