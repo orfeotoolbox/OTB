@@ -20,7 +20,7 @@
 
 namespace otb
 {
-/*********************************** AtmosphericRadiativeTermsSingleChannel***********************************************/
+/************** AtmosphericRadiativeTermsSingleChannel******************/
 /** Constructor */
 AtmosphericRadiativeTermsSingleChannel::AtmosphericRadiativeTermsSingleChannel() :
   m_IntrinsicAtmosphericReflectance(0.04),
@@ -53,7 +53,7 @@ AtmosphericRadiativeTermsSingleChannel
   os << indent << "Upward Diffuse Transmittance for aerosols: " << m_UpwardDiffuseTransmittanceForAerosol << std::endl;
 }
 
-/*********************************** AtmosphericRadiativeTerms **********************************************************/
+/***************** AtmosphericRadiativeTerms **************************/
 /**CONSTRUCTOR. */
 AtmosphericRadiativeTerms
 ::AtmosphericRadiativeTerms()
@@ -217,7 +217,7 @@ AtmosphericRadiativeTerms
     {
     if (m_Values.size() < id + 1)
       {
-      for (unsigned int j = 0; j < (id + 1 - m_Values.size()); ++j)
+      while (id >=  m_Values.size())
         {
         ValueType temp = AtmosphericRadiativeTermsSingleChannel::New();
         m_Values.push_back(temp);
@@ -236,7 +236,7 @@ AtmosphericRadiativeTerms
 {
   if (m_Values.size() < id + 1)
     {
-    for (unsigned int j = 0; j < (id + 1 - m_Values.size()); ++j)
+    while (id >=  m_Values.size())
       {
       ValueType temp = AtmosphericRadiativeTermsSingleChannel::New();
       m_Values.push_back(temp);
@@ -250,7 +250,7 @@ AtmosphericRadiativeTerms
 {
   if (m_Values.size() < id + 1)
     {
-    for (unsigned int j = 0; j < (id + 1 - m_Values.size()); ++j)
+    while (id >=  m_Values.size())
       {
       ValueType temp = AtmosphericRadiativeTermsSingleChannel::New();
       m_Values.push_back(temp);
@@ -264,7 +264,7 @@ AtmosphericRadiativeTerms
 {
   if (m_Values.size() < id + 1)
     {
-    for (unsigned int j = 0; j < (id + 1 - m_Values.size()); ++j)
+    while (id >=  m_Values.size())
       {
       ValueType temp = AtmosphericRadiativeTermsSingleChannel::New();
       m_Values.push_back(temp);
@@ -278,7 +278,7 @@ AtmosphericRadiativeTerms
 {
   if (m_Values.size() < id + 1)
     {
-    for (unsigned int j = 0; j < (id + 1 - m_Values.size()); ++j)
+    while (id >=  m_Values.size())
       {
       ValueType temp = AtmosphericRadiativeTermsSingleChannel::New();
       m_Values.push_back(temp);
@@ -292,7 +292,7 @@ AtmosphericRadiativeTerms
 {
   if (m_Values.size() < id + 1)
     {
-    for (unsigned int j = 0; j < (id + 1 - m_Values.size()); ++j)
+    while (id >=  m_Values.size())
       {
       ValueType temp = AtmosphericRadiativeTermsSingleChannel::New();
       m_Values.push_back(temp);
@@ -306,7 +306,7 @@ AtmosphericRadiativeTerms
 {
   if (m_Values.size() < id + 1)
     {
-    for (unsigned int j = 0; j < (id + 1 - m_Values.size()); ++j)
+    while (id >=  m_Values.size())
       {
       ValueType temp = AtmosphericRadiativeTermsSingleChannel::New();
       m_Values.push_back(temp);
@@ -320,7 +320,7 @@ AtmosphericRadiativeTerms
 {
   if (m_Values.size() < id + 1)
     {
-    for (unsigned int j = 0; j < (id + 1 - m_Values.size()); ++j)
+    while (id >=  m_Values.size())
       {
       ValueType temp = AtmosphericRadiativeTermsSingleChannel::New();
       m_Values.push_back(temp);
@@ -334,7 +334,7 @@ AtmosphericRadiativeTerms
 {
   if (m_Values.size() < id + 1)
     {
-    for (unsigned int j = 0; j < (id + 1 - m_Values.size()); ++j)
+    while (id >=  m_Values.size())
       {
       ValueType temp = AtmosphericRadiativeTermsSingleChannel::New();
       m_Values.push_back(temp);
@@ -348,7 +348,7 @@ AtmosphericRadiativeTerms
 {
   if (m_Values.size() < id + 1)
     {
-    for (unsigned int j = 0; j < (id + 1 - m_Values.size()); ++j)
+    while (id >=  m_Values.size())
       {
       ValueType temp = AtmosphericRadiativeTermsSingleChannel::New();
       m_Values.push_back(temp);
@@ -362,7 +362,7 @@ AtmosphericRadiativeTerms
 {
   if (m_Values.size() < id + 1)
     {
-    for (unsigned int j = 0; j < (id + 1 - m_Values.size()); ++j)
+    while (id >=  m_Values.size())
       {
       ValueType temp = AtmosphericRadiativeTermsSingleChannel::New();
       m_Values.push_back(temp);
@@ -488,60 +488,80 @@ double
 AtmosphericRadiativeTerms
 ::GetIntrinsicAtmosphericReflectance(unsigned int id) const
 {
+  if (id >= m_Values.size()) itkExceptionMacro(<< " band index out of bounds: " << id
+                                               << " for " << m_Values.size() << " bands.");
   return m_Values[id]->GetIntrinsicAtmosphericReflectance();
 }
 double
 AtmosphericRadiativeTerms
 ::GetSphericalAlbedo(unsigned int id) const
 {
+  if (id >= m_Values.size()) itkExceptionMacro(<< " band index out of bounds: " << id
+                                               << " for " << m_Values.size() << " bands.");
   return m_Values[id]->GetSphericalAlbedo();
 }
 double
 AtmosphericRadiativeTerms
 ::GetTotalGaseousTransmission(unsigned int id) const
 {
+  if (id >= m_Values.size()) itkExceptionMacro(<< " band index out of bounds: " << id
+                                               << " for " << m_Values.size() << " bands.");
   return m_Values[id]->GetTotalGaseousTransmission();
 }
 double
 AtmosphericRadiativeTerms
 ::GetDownwardTransmittance(unsigned int id) const
 {
+  if (id >= m_Values.size()) itkExceptionMacro(<< " band index out of bounds: " << id
+                                               << " for " << m_Values.size() << " bands.");
   return m_Values[id]->GetDownwardTransmittance();
 }
 double
 AtmosphericRadiativeTerms
 ::GetUpwardTransmittance(unsigned int id) const
 {
+  if (id >= m_Values.size()) itkExceptionMacro(<< " band index out of bounds: " << id
+                                               << " for " << m_Values.size() << " bands.");
   return m_Values[id]->GetUpwardTransmittance();
 }
 double
 AtmosphericRadiativeTerms
 ::GetUpwardDiffuseTransmittance(unsigned int id) const
 {
+  if (id >= m_Values.size()) itkExceptionMacro(<< " band index out of bounds: " << id
+                                               << " for " << m_Values.size() << " bands.");
   return m_Values[id]->GetUpwardDiffuseTransmittance();
 }
 double
 AtmosphericRadiativeTerms
 ::GetUpwardDirectTransmittance(unsigned int id) const
 {
+  if (id >= m_Values.size()) itkExceptionMacro(<< " band index out of bounds: " << id
+                                               << " for " << m_Values.size() << " bands.");
   return m_Values[id]->GetUpwardDirectTransmittance();
 }
 double
 AtmosphericRadiativeTerms
 ::GetUpwardDiffuseTransmittanceForRayleigh(unsigned int id) const
 {
+  if (id >= m_Values.size()) itkExceptionMacro(<< " band index out of bounds: " << id
+                                               << " for " << m_Values.size() << " bands.");
   return m_Values[id]->GetUpwardDiffuseTransmittanceForRayleigh();
 }
 double
 AtmosphericRadiativeTerms
 ::GetUpwardDiffuseTransmittanceForAerosol(unsigned int id) const
 {
+  if (id >= m_Values.size()) itkExceptionMacro(<< " band index out of bounds: " << id
+                                               << " for " << m_Values.size() << " bands.");
   return m_Values[id]->GetUpwardDiffuseTransmittanceForAerosol();
 }
 double
 AtmosphericRadiativeTerms
 ::GetWavelengthSpectralBand(unsigned int id) const
 {
+  if (id >= m_Values.size()) itkExceptionMacro(<< " band index out of bounds: " << id
+                                               << " for " << m_Values.size() << " bands.");
   return m_Values[id]->GetWavelengthSpectralBand();
 }
 
@@ -549,6 +569,8 @@ const AtmosphericRadiativeTerms::ValueType
 AtmosphericRadiativeTerms
 ::GetValueByIndex(unsigned int id) const
 {
+  if (id >= m_Values.size()) itkExceptionMacro(<< " band index out of bounds: " << id
+                                               << " for " << m_Values.size() << " bands.");
   return m_Values[id];
 }
 
