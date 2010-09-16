@@ -85,6 +85,9 @@ protected:
 
   virtual void ThreadedProcessLabelObject( LabelObjectType * labelObject );
 
+  virtual void ReleaseInputs();
+
+
 private:
   LabelMapSVMClassifier(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
