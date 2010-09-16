@@ -36,6 +36,14 @@ LabelMapSVMClassifier<TInputImage>
 template<class TInputImage>
 void
 LabelMapSVMClassifier<TInputImage>
+::ReleaseInputs( )
+{
+  this->itk::LabelMapFilter<TInputImage, TInputImage>::ReleaseInputs();
+}
+
+template<class TInputImage>
+void
+LabelMapSVMClassifier<TInputImage>
 ::ThreadedProcessLabelObject( LabelObjectType * labelObject )
 {
   ClassLabelType classLabel = m_Model->EvaluateLabel(m_MeasurementFunctor(labelObject));
