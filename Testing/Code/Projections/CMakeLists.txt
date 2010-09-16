@@ -364,6 +364,7 @@ ADD_TEST(prTlOrthoRectificationSPOT5 ${PROJECTIONS_TESTS2}
         -5
         39
         N
+        5
         )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
@@ -601,7 +602,7 @@ ADD_TEST(prTvPhysicalToRPCSensorModelImageFilter ${PROJECTIONS_TESTS4}
   )
 
 ADD_TEST(prTuotbGenericRSResampleImageFilterNew ${PROJECTIONS_TESTS4}
-  otbGenericRSResampleImageFilter
+  otbGenericRSResampleImageFilterNew
   )
 IF(OTB_DATA_USE_LARGEINPUT)
 
@@ -615,6 +616,33 @@ ADD_TEST(prTvotbGenericRSResampleImageFilter ${PROJECTIONS_TESTS4}
   1
   ${TEMP}/prTvotbGenericRSResampleImageFilterOutput.tif
   )
+
+
+# Experimental : Set a variable with the several sensors image 
+# paths
+# TODO : parse it with a cmake file in OTB-Data-LargeInput directory
+# Done here for the moment
+
+SET(SENSOR_TYPES 
+  "QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF"
+  "GEOEYE/LES_ROCHES/po_350134_bgrn_0000000.tif"
+  "WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL/09DEC10103019-M2AS-052298844010_01_P001.TIF"
+)
+
+FOREACH( file ${SENSOR_TYPES})
+  # Get the sensor name 
+  SET(sharp_regexp "([0-9A-Za-z_]*)[ ]*/[ ]*(.*)")
+  STRING(REGEX REPLACE "${sharp_regexp}" "\\1" sensor_name "${file}")
+  # Tests
+  ADD_TEST(prTvotbGenericRSResampleImageFilterFromMap_${sensor_name} ${PROJECTIONS_TESTS4}
+    otbGenericRSResampleImageFilterFromMap
+    ${LARGEINPUT}/${file}
+    15
+    0
+    ${TEMP}/prTvotbGenericRSResampleImageFilterOutputFromMap_${sensor_name}.tif
+    )
+ENDFOREACH( file ${SENSOR_TYPES})
+
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 

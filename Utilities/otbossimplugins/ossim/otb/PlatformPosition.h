@@ -71,7 +71,9 @@ public:
    };
 
    void setData(Ephemeris** data, int nbrData);
+   Ephemeris* getData(int noData) const;
 
+   int getNbrData() const;
    /**
     * @brief Method to save object state to a keyword list.
     * @param kwl Keyword list to save to.

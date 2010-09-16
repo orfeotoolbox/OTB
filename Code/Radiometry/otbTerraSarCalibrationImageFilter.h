@@ -22,6 +22,9 @@
 #ifndef __otbTerraSarCalibrationImageFilter_h
 #define __otbTerraSarCalibrationImageFilter_h
 
+
+#include "vcl_deprecated_header.h"
+
 #include "itkImageToImageFilter.h"
 #include "otbTerraSarCalibrationFunctor.h"
 #include "itkMetaDataDictionary.h"

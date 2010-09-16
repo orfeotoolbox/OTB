@@ -70,25 +70,26 @@ void
 SarParametricMapFunction<TInputImage, TCoordRep>
 ::SetPolynomalSize(const IndexType PolynomalSize)
 {
-    unsigned int pointId = 0;
-    PointType  coef;
+  typedef typename IndexType::IndexValueType IndexValueType;
+  IndexValueType pointId = 0;
+  PointType coef;
 
-    m_IsInitialize = false;
-     for(unsigned int i = 0; i <= PolynomalSize[0]; ++i)
+  m_IsInitialize = false;
+  for (IndexValueType i = 0; i <= PolynomalSize[0]; ++i)
     {
-      coef[0] = i;  
-    for(unsigned int j = 0; j <= PolynomalSize[1]; ++j)
+    coef[0] = i;
+    for (IndexValueType j = 0; j <= PolynomalSize[1]; ++j)
       {
-        coef[1] = j;
-        m_Coeff->SetPoint(pointId,coef);
-        ++pointId;
-      }    
+      coef[1] = j;
+      m_Coeff->SetPoint(pointId, coef);
+      ++pointId;
+      }
     }
-    if(m_PointSet->GetNumberOfPoints() > 0)
+  if (m_PointSet->GetNumberOfPoints() > 0)
     {
-      EvaluateParametricCoefficient();
+    EvaluateParametricCoefficient();
     }      
-    this->Modified(); 
+  this->Modified();
 }
 
 template <class TInputImage, class TCoordRep>

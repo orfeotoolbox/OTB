@@ -528,6 +528,12 @@ ADD_TEST(raTuAtmosphericRadiativeTermsSingleChannelNew ${RADIOMETRY_TESTS3}
         otbAtmosphericRadiativeTermsSingleChannelNew
 )
 
+ADD_TEST(raTvAtmosphericRadiativeTermsTest ${RADIOMETRY_TESTS3}
+         --compare-ascii ${NOTOL}  ${BASELINE_FILES}/raTvAtmosphericRadiativeTermsTest.txt
+                                   ${TEMP}/raTvAtmosphericRadiativeTermsTest.txt
+        otbAtmosphericRadiativeTermsTest
+                                   ${TEMP}/raTvAtmosphericRadiativeTermsTest.txt
+)
 
 # -------            otb::ReflectanceToSurfaceReflectanceImageFilter   ------------------------------
 ADD_TEST(raTuReflectanceToSurfaceReflectanceImageFilterNew ${RADIOMETRY_TESTS3}

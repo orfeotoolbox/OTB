@@ -39,11 +39,8 @@ LabelMapWithClassLabelToClassLabelImageFilter<TInputImage, TOutputImage>
 {
   OutputImageType * output = this->GetOutput();
   const InputImageType * input = this->GetInput();
-
   output->FillBuffer( input->GetBackgroundValue() );
-    
   Superclass::BeforeThreadedGenerateData();
-    
 }
 
 
@@ -53,7 +50,6 @@ LabelMapWithClassLabelToClassLabelImageFilter<TInputImage, TOutputImage>
 ::ThreadedProcessLabelObject( LabelObjectType * labelObject )
 {
   typename LabelObjectType::ClassLabelType label = itk::NumericTraits<typename LabelObjectType::ClassLabelType>::max();
-
   if(labelObject->HasClassLabel())
     {
      label = labelObject->GetClassLabel();

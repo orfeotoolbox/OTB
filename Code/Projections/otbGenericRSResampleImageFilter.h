@@ -67,6 +67,7 @@ public:
   typedef TInputImage                                     InputImageType;
   typedef TOutputImage                                    OutputImageType;
   typedef typename OutputImageType::InternalPixelType     OutputInternalPixelType;
+  typedef typename OutputImageType::PointType             OutputPointType;
   
   /** Internal filters typedefs*/
   typedef StreamingResampleImageFilter<InputImageType,
@@ -79,13 +80,13 @@ public:
   typedef typename ResamplerType::IndexType                IndexType;
   typedef typename ResamplerType::RegionType               RegionType;
   typedef typename ResamplerType::InterpolatorType         InterpolatorType;
-
+  
   /** Estimate the rpc model */
   typedef PhysicalToRPCSensorModelImageFilter<InputImageType>  InputRpcModelEstimatorType;
   typedef typename InputRpcModelEstimatorType::Pointer         InputRpcModelEstimatorPointerType;
   
-  typedef PhysicalToRPCSensorModelImageFilter<OutputImageType>  OutputRpcModelEstimatorType;
-  typedef typename OutputRpcModelEstimatorType::Pointer         OutputRpcModelEstimatorPointerType;
+  typedef PhysicalToRPCSensorModelImageFilter<OutputImageType> OutputRpcModelEstimatorType;
+  typedef typename OutputRpcModelEstimatorType::Pointer        OutputRpcModelEstimatorPointerType;
   
   
   /** Specialisation of OptResampleFilter with a remote 
@@ -155,7 +156,7 @@ public:
     this->Modified();
   }
   
-  std::string GetInputProjectionRef()
+  std::string GetInputProjectionRef() const
   {
     return m_Transform->GetOutputProjectionRef();
   }
@@ -166,7 +167,7 @@ public:
   this->Modified();
   }
   
-  std::string GetOutputProjectionRef()
+  std::string GetOutputProjectionRef() const
   {
     return m_Transform->GetInputProjectionRef();
   }
@@ -214,9 +215,11 @@ public:
   }
   otbGetObjectMemberConstMacro(Transform,AverageElevation,double);
   
-
   /** Useful to set the output parameters from an existing image*/
   void SetOutputParametersFromImage(const ImageBaseType * image);
+
+  /** Useful to set the output parameters from an existing image*/
+  void SetOutputParametersFromMap(const std::string map, const SpacingType& spacing);
   
   /** Set/Get the grid size for rpc estimator*/
   void SetInputRpcGridSize(const SizeType& gridSize)

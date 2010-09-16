@@ -105,7 +105,6 @@ Ephemeris* PlatformPosition::Interpolate(JSDDateTime date)
       double * y = new double[_nbrData];
       double * yd = new double[_nbrData];
       double dt = 0.0;
-      bool echIrreg = false;
       double d;
 
       x[0] = 0.0 ;
@@ -115,24 +114,6 @@ Ephemeris* PlatformPosition::Interpolate(JSDDateTime date)
             * JOURCIVIL_LENGTH
             + _data[i]->get_date().get_second()   - _data[0]->get_date().get_second()
             + _data[i]->get_date().get_decimal()     - _data[0]->get_date().get_decimal();
-         d = x[i] - x[i-1] ;
-
-         /*
-          * Non increasing time
-          */
-         if (d <= 0.0)/* Non increasing time */
-         {
-            delete ephem;
-            ephem = NULL;
-         }
-         else if (i == 1)
-         {
-            dt = d ;
-         }
-         else if (fabs (d-dt) >= 1.0e-4) /* Irregular sampling */
-         {
-            echIrreg = true;
-         }
       }
 
       if (ephem != NULL)
@@ -142,10 +123,6 @@ Ephemeris* PlatformPosition::Interpolate(JSDDateTime date)
          dt =  (date.get_day0hTU().get_julianDate() - _data[0]->get_date().get_day0hTU().get_julianDate()) * JOURCIVIL_LENGTH
             + date.get_second()   - _data[0]->get_date().get_second()
             + date.get_decimal()     - _data[0]->get_date().get_decimal();
-
-         /* If nPts odd or if the searched date is not situated in the middle of the ephemeris list -> Lagrange */
-         d = (dt - x[_nbrData/2-1]) / (x[_nbrData/2] - x[_nbrData/2-1]) ;
-
 
          /* Computation by Everett  */
          /*---------------------*/
@@ -160,7 +137,6 @@ Ephemeris* PlatformPosition::Interpolate(JSDDateTime date)
             }
             HermiteInterpolator interpolator(_nbrData,x,y,yd);
             interpolator.Interpolate(dt, pos[j], vit[j]);
-
          }
          ephem->set_position(pos);
          ephem->set_vitesse(vit);
@@ -181,6 +157,21 @@ void PlatformPosition::setData(Ephemeris** data, int nbrData)
    _data = data;
    _nbrData = nbrData;
 }
+
+Ephemeris* PlatformPosition::getData(int noData) const
+{
+   if(noData >=0 && noData < _nbrData)
+     {
+       return _data[noData];
+     }
+   return NULL;
+}
+
+int PlatformPosition::getNbrData() const
+{
+     return _nbrData;
+}
+
 
 bool PlatformPosition::saveState(ossimKeywordlist& kwl,
                                  const char* prefix) const
