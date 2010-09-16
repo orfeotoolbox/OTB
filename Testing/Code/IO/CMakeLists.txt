@@ -2512,20 +2512,6 @@ ADD_TEST(ioTuTileMapImageSourceNew ${IO_TESTS19}
 #		${TEMP}/ioTileMapImageSourceToulouse.png
 #		256)
 
-ADD_TEST(ioTuTileMapFetcherNew ${IO_TESTS19}
-        otbTileMapFetcherNew )
-
-ADD_TEST(ioTvTileMapFetcherTest ${IO_TESTS19}
-	otbTileMapFetcherTest
-		132122
-		95719
-		18
-		http://tile.openstreetmap.org/
-                #http://andy.sandbox.cloudmade.com/tiles/cycle/
-		${TEMP}/
-		2
-		${TEMP}/)
-
 # We do not perform regression testing here because images on server might change
 ADD_TEST(ioTvTileMapImageIOFile ${IO_TESTS19}
   otbTileMapImageIOTest
@@ -2811,8 +2797,6 @@ otbIOTests19.cxx
 otbImageFileReaderServerName.cxx
 otbTileMapImageSourceNew.cxx
 otbTileMapImageSource.cxx
-otbTileMapFetcherNew.cxx
-otbTileMapFetcherTest.cxx
 otbTileMapImageIOTest.cxx
 otbTileMapWriter.cxx
 )
