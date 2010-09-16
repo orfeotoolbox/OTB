@@ -22,6 +22,8 @@
 #ifndef __otbTerraSarCalibrationFunctor_h
 #define __otbTerraSarCalibrationFunctor_h
 
+#include "vcl_deprecated_header.h"
+
 #include "otbMath.h"
 #include "otbTerraSarBrightnessFunctor.h"
 
