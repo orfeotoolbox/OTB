@@ -26,6 +26,7 @@
 namespace otb
 {
 /** \class LabelMapToSampleListFilter
+ *
  * \brief This class converts a LabelObjectMap to a SampleList for
  * learning and classification.
  *
@@ -81,8 +82,8 @@ public:
     return m_MeasurementFunctor;
   }
 
-  /** Update */
-  virtual void Update();
+  /** Launch computation (this filter is not a itk::ProcessObject) */
+  virtual void Compute();
 
 protected:
   LabelMapToSampleListFilter();

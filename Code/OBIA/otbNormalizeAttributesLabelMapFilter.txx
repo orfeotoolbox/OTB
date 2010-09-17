@@ -48,13 +48,9 @@ bool
 NormalizeAttributesLabelObjectFunctor<TLabelObject>
 ::operator == (const Self &self)
   {
-  // Call the != implementation
   return !(this != self);
   }
 
-/** This is the functor implementation
- *  Calling the functor on a label object
- *  will update its shape attributes */
 template <class TLabelObject>
 void
 NormalizeAttributesLabelObjectFunctor<TLabelObject>

@@ -24,6 +24,7 @@
 #include "itkInPlaceLabelMapFilter.h"
 
 namespace otb {
+
 /** \class LabelMapFeaturesFunctorImageFilter
  *  \brief This class applies a functor to compute new features
  *
@@ -39,6 +40,7 @@ namespace otb {
  * \sa otb::StatisticsAttributesLabelMapFilter
  * \sa otb::ShapeAttributesLabelMapFilter
  * \sa otb::RadiometricAttributesLabelMapFilter
+ * \sa otb::BandsStatisticsAttributesLabelMapFilter
  * \sa itk::InPlaceLabelMapFilter
  *
  * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters

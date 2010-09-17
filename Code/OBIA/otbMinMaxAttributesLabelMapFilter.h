@@ -24,7 +24,9 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb {
 
 /** \class MinMaxAttributesLabelMapFilter
- * \brief Computes the min/max of all attributes of a itk::LabelMap<otb::AttributesMapLabelObject>
+ * \brief Computes the min/max of all attributes of a LabelMap
+ *        where LabelObject type is compatible with otb::AttributesMapLabelObject
+ *
  */
 template<class TInputImage>
 class ITK_EXPORT MinMaxAttributesLabelMapFilter :

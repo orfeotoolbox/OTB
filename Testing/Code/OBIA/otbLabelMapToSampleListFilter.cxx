@@ -83,7 +83,7 @@ int otbLabelMapToSampleListFilter(int argc, char* argv[])
    
    std::cout<<"Number of attributes: "<<filter->GetMeasurementFunctor().GetNumberOfAttributes()<<std::endl;
 
-   filter->Update();
+   filter->Compute();
 
   return EXIT_SUCCESS;
 }

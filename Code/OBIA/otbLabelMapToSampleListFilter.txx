@@ -27,21 +27,20 @@ template <class TInputLabelMap, class TOutputListSample, class TMeasurementFunct
 LabelMapToSampleListFilter<TInputLabelMap,TOutputListSample,TMeasurementFunctor>
 ::LabelMapToSampleListFilter()
 {
-  m_OutputSampleList = OutputSampleListType::New();
 }
 
 template <class TInputLabelMap, class TOutputListSample, class TMeasurementFunctor>
 LabelMapToSampleListFilter<TInputLabelMap,TOutputListSample,TMeasurementFunctor>
 ::~LabelMapToSampleListFilter()
-{}
+{
+}
 
 template <class TInputLabelMap, class TOutputListSample, class TMeasurementFunctor>
 void 
 LabelMapToSampleListFilter<TInputLabelMap,TOutputListSample,TMeasurementFunctor>
-::Update()
+::Compute()
 {
-  // Clear output sample list
-  m_OutputSampleList->Clear();
+  m_OutputSampleList = OutputSampleListType::New();
   
   typename InputLabelMapType::LabelObjectContainerType::const_iterator it 
     = m_InputLabelMap->GetLabelObjectContainer().begin();

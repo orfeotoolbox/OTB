@@ -23,7 +23,8 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb {
 
 /** \class LabelMapWithClassLabelToClassLabelImageFilter
- * \brief 
+ * \brief Converts a LabelMap<LabelObjectWithClassLabel> to an image
+ *        of class labels
  */
 template<class TInputImage, class TOutputImage>
 class ITK_EXPORT LabelMapWithClassLabelToClassLabelImageFilter : 

@@ -36,7 +36,7 @@ namespace otb {
    *
    * LabelMapToVectorDataFilter converts a LabelMap to a
    * VectorData where all the pixels get the attribute value of the label object they belong.
-   * It uses the class otbLabelObjectToPolygonFunctor wich follows a finite states machine described in
+   * It uses the class otbLabelObjectToPolygonFunctor which follows a finite states machine described in
    *
    * "An algorithm for the rapid computation of boundaries of run-length
    * encoded regions", Francis K. H. Queck, in Pattern Recognition 33

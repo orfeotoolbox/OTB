@@ -25,7 +25,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbLabelImageToLabelMapWithAdjacencyFilter.h"
 #include "otbLabelMapWithAdjacency.h"
 #include "otbShapeAttributesLabelMapFilter.h"
-#include "otbRadiometricAttributesLabelMapFilter.h"
+#include "otbBandsStatisticsAttributesLabelMapFilter.h"
 #include "otbLabelMapWithClassLabelToClassLabelImageFilter.h"
 
 
@@ -71,7 +71,7 @@ public:
   
   typedef LabelImageToLabelMapWithAdjacencyFilter<LabeledImageType,LabelMapType> LabelMapFilterType;
   typedef ShapeAttributesLabelMapFilter<LabelMapType>                            ShapeLabelMapFilterType;
-  typedef RadiometricAttributesLabelMapFilter<LabelMapType,InputImageType>       RadiometricLabelMapFilterType;
+  typedef BandsStatisticsAttributesLabelMapFilter<LabelMapType,InputImageType>   BandStatisticsLabelMapFilterType;
 
   virtual void SetInput( const InputImageType *image);
   virtual void SetLabeledImage( const LabeledImageType * image);

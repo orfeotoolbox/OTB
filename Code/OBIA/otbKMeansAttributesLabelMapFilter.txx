@@ -38,7 +38,7 @@ KMeansAttributesLabelMapFilter<TInputImage>
 ::Compute()
 {
   m_LabelMapToSampleListFilter->SetInputLabelMap(m_InputLabelMap);
-  m_LabelMapToSampleListFilter->Update();
+  m_LabelMapToSampleListFilter->Compute();
 
   typename ListSampleType::Pointer listSamples = m_LabelMapToSampleListFilter->GetOutputSampleList();
   typename TrainingListSampleType::Pointer trainingSamples = m_LabelMapToSampleListFilter->GetOutputTrainingSampleList();
