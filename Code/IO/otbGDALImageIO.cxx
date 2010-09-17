@@ -1110,6 +1110,7 @@ std::string GDALImageIO::TypeConversion(std::string name)
 //Pas JPEG car BUG !!
 //  else if ((extension=="jpg")||(extension=="JPG")||(extension=="jpeg")||(extension=="JPEG"))
 //      extGDAL="JPEG";
+  else if ((extension=="pix")||(extension=="PIX")) extGDAL="PCIDSK";
   else extGDAL = "NOT-FOUND";
   return extGDAL;
 }
