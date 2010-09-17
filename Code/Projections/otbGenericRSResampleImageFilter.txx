@@ -149,7 +149,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
   m_Transform->SetOutputProjectionRef(this->GetInput()->GetProjectionRef());
   m_Transform->SetOutputKeywordList(this->GetInput()->GetImageKeywordlist());
   m_Transform->InstanciateTransform();
- }
+}
 
  /**
   * Generate Input requested region does only propagate the output
@@ -227,12 +227,14 @@ void
 GenericRSResampleImageFilter<TInputImage, TOutputImage>
 ::SetOutputParametersFromImage(const ImageBaseType * image)
 {
-  this->SetOutputOrigin ( image->GetOrigin() );
-  this->SetOutputSpacing ( image->GetSpacing() );
-  this->SetOutputStartIndex ( image->GetLargestPossibleRegion().GetIndex() );
-  this->SetOutputSize ( image->GetLargestPossibleRegion().GetSize() );
-  this->SetOutputProjectionRef(image->GetProjectionRef());
-  this->SetOutputKeywordList(image->GetImageKeywordlist());
+  const InputImageType * src = dynamic_cast<const InputImageType*>(image);
+  
+  this->SetOutputOrigin ( src->GetOrigin() );
+  this->SetOutputSpacing ( src->GetSpacing() );
+  this->SetOutputStartIndex ( src->GetLargestPossibleRegion().GetIndex() );
+  this->SetOutputSize ( src->GetLargestPossibleRegion().GetSize() );
+  this->SetOutputProjectionRef(src->GetProjectionRef());
+  this->SetOutputKeywordList(src->GetImageKeywordlist());
 }
 /**
  * Method used to copy the parameters of the input image
