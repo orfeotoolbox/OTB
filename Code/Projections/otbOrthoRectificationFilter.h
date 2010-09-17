@@ -76,7 +76,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(OrthoRectificationFilter, StreamingResampleImageFilter);
+  itkTypeMacro(OrthoRectificationFilter, GenericRSResampleImageFilter);
 
   /** Accessors */
   virtual void SetMapProjection(MapProjectionType* arg)
@@ -84,7 +84,6 @@ public:
     if (this->m_MapProjection != arg)
       {
       this->m_MapProjection = arg;
-      m_IsComputed = false;
       this->Modified();
       }
   }
@@ -100,19 +99,13 @@ protected:
   OrthoRectificationFilter();
   virtual ~OrthoRectificationFilter();
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-
+  
   virtual void GenerateInputRequestedRegion();
   virtual void GenerateOutputInformation(void);
 
 private:
   OrthoRectificationFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
-
-  /** Calculate transformation model from sensor model and map projection  composition */
-  void ComputeResampleTransformationModel();
-
-  /** Boolean used to know if transformation model computation is needed */
-  bool m_IsComputed;
   
   /** Map Projection used to transform cartographic coordinates in geographic  coordinates */
   MapProjectionPointerType m_MapProjection;

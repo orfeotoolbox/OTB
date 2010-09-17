@@ -26,17 +26,13 @@ namespace otb
 
 template <class TInputImage, class TOutputImage, class TMapProjection, class TInterpolatorPrecision>
 OrthoRectificationFilter<TInputImage, TOutputImage, TMapProjection, TInterpolatorPrecision>
-::OrthoRectificationFilter()
-{
-  m_MapProjection = MapProjectionType::New();
-  m_IsComputed = false;
-}
+::OrthoRectificationFilter(): m_MapProjection(NULL)
+{}
 
 template <class TInputImage, class TOutputImage, class TMapProjection, class TInterpolatorPrecision>
 OrthoRectificationFilter<TInputImage, TOutputImage, TMapProjection, TInterpolatorPrecision>
 ::~OrthoRectificationFilter()
-{
-}
+{}
 
 template <class TInputImage, class TOutputImage, class TMapProjection, class TInterpolatorPrecision>
 void OrthoRectificationFilter<TInputImage, TOutputImage, TMapProjection, TInterpolatorPrecision>
@@ -51,7 +47,6 @@ void
 OrthoRectificationFilter<TInputImage, TOutputImage, TMapProjection, TInterpolatorPrecision>
 ::GenerateInputRequestedRegion()
 {
-  this->ComputeResampleTransformationModel();
   Superclass::GenerateInputRequestedRegion();
 }
 
@@ -62,25 +57,16 @@ OrthoRectificationFilter<TInputImage, TOutputImage, TMapProjection, TInterpolato
 {
   // call the superclass' implementation of this method
   Superclass::GenerateOutputInformation();
-
-  // fill up the metadata information for ProjectionRef
-  itk::MetaDataDictionary&  dict          = this->GetOutput()->GetMetaDataDictionary();
-  std::string               projectionRef = m_MapProjection->GetWkt();
-  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projectionRef);
-
-  // Fill the GenericRSTransform with those information
-  this->SetOutputProjectionRef(projectionRef);
-}
-
-template <class TInputImage, class TOutputImage, class TMapProjection, class TInterpolatorPrecision>
-void
-OrthoRectificationFilter<TInputImage, TOutputImage, TMapProjection, TInterpolatorPrecision>
-::ComputeResampleTransformationModel()
-{
-  if (m_IsComputed == false)
+  
+  if(!m_MapProjection.IsNull()  && !m_MapProjection->GetWkt().empty())
     {
-    this->SetInputKeywordList(this->GetInput()->GetImageKeywordlist());
-    m_IsComputed = true;
+    // fill up the metadata information for ProjectionRef
+    itk::MetaDataDictionary&  dict          = this->GetOutput()->GetMetaDataDictionary();
+    std::string               projectionRef = m_MapProjection->GetWkt();
+    itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projectionRef);
+
+    // Fill the GenericRSTransform with those information
+    this->SetOutputProjectionRef(projectionRef);
     }
 }
 
