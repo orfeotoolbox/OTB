@@ -86,8 +86,8 @@ int ossimpluginsHermiteInterpolationPlateformPositionTest(int argc, char * argv[
   unsigned int platform_positions_count = atoi(platform_positions_count_str);
   std::cout << "plateform_positions_count :" << platform_positions_count << std::endl;
 
-  ossimplugins::PlatformPosition * platform_position;
-  hasMetaData = platform_position->loadState(geom);
+  ossimplugins::PlatformPosition platform_position ;
+  hasMetaData = platform_position.loadState(geom);
 
   if (!hasMetaData)
   {
@@ -95,14 +95,14 @@ int ossimpluginsHermiteInterpolationPlateformPositionTest(int argc, char * argv[
     return EXIT_FAILURE;
   }
 
-  for(unsigned int i = 0 ; i < platform_position->getNbrData() ; ++i)
+  for(unsigned int i = 0 ; i < platform_position.getNbrData() ; ++i)
     {
-      ossimplugins::Ephemeris * ephemeris = platform_position->getData(i);
+      ossimplugins::Ephemeris * ephemeris = platform_position.getData(i);
       double * position = ephemeris->get_position();
       double * velocity = ephemeris->get_vitesse();
       ossimplugins::JSDDateTime date = ephemeris->get_date();
 
-      ossimplugins::Ephemeris * interpolateEphemeris = platform_position->Interpolate(date);
+      ossimplugins::Ephemeris * interpolateEphemeris = platform_position.Interpolate(date);
 
       double * interpolatePosition = interpolateEphemeris->get_position();
       double * interpolateVelocity = interpolateEphemeris->get_vitesse();
