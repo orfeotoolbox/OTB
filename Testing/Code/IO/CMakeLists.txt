@@ -221,14 +221,20 @@ ADD_TEST(ioTvImageFileReaderTIF2MW ${IO_TESTS1}
 
 
 # We use the original file as a baseline for the comparison        
- ADD_TEST(ioTvImageFileReaderPCI2JPG ${IO_TESTS1}
+ ADD_TEST(ioTvImageFileReaderPCI2TIF ${IO_TESTS1}
   --compare-image ${EPSILON_9}   ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
-                    ${TEMP}/ioImageFileReaderPCI2JPG.tif
+                    ${TEMP}/ioImageFileReaderPCI2TIF.tif
         otbImageFileReaderTestFloat
         ${INPUTDATA}/QB_Toulouse_Ortho_PAN.pix
-        ${TEMP}/ioImageFileReaderPCI2JPG.tif )
+        ${TEMP}/ioImageFileReaderPCI2TIF.tif )
         
-
+ ADD_TEST(ioTvImageFileReaderTIF2PCI ${IO_TESTS1}
+  --compare-image ${EPSILON_9}   ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+                    ${TEMP}/ioImageFileReaderTIF2PCI.pix
+        otbImageFileReaderTestFloat
+        ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+        ${TEMP}/ioImageFileReaderTIF2PCI.pix )
+        
 #-------------  otbImageIOFactoryNew
 ADD_TEST(ioTuImageIOFactoryNew ${IO_TESTS1}
         otbImageIOFactoryNew )
