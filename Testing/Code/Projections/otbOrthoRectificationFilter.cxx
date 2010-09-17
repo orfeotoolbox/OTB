@@ -27,7 +27,7 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
-#include "otbInverseSensorModel.h"
+#include "otbMapProjections.h"
 
 #include "otbOrthoRectificationFilter.h"
 #include "otbMapProjections.h"
