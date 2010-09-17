@@ -30,8 +30,7 @@
 namespace otb
 {
 /** \class LabelMapSource
- * \brief Filter hierarchy for generating LabelMap
- *
+ * \brief Base class for filter that output LabelMap
  *
  * \ingroup IO
  *

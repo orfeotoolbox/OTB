@@ -24,11 +24,14 @@ namespace otb
 {
 /** \class LabelMapWithClassLabelToLabeledSampleListFilter
  * \brief This class converts a LabelObjectMap with some class labeled
- * objets to  a SampleList and a TrainingSampleList suitable for supervised learning.
+ * objets to a SampleList and a TrainingSampleList suitable for supervised learning,
+ * and compatible with otb::SVMSampleListModelEstimator
  *
  * The conversion from label object to measurement vector is made
  * through a functor. This allows to support any kind of LabelObject
  * via proper redefinition of the functor.
+ *
+ * \sa otb::SVMSampleListModelEstimator
  */
 
 template <class TInputLabelMap, class TOutputSampleList,class TOutputTrainingSampleList,
@@ -86,8 +89,8 @@ public:
     return m_MeasurementFunctor;
   }
 
-  /** Update */
-  virtual void Update();
+  /** Update data (WRG: this filter is not pipeline-ready as it does not derive from itk::ProcessObject) */
+  virtual void Compute();
 
 protected:
   LabelMapWithClassLabelToLabeledSampleListFilter();

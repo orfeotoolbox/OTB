@@ -23,14 +23,11 @@
 
 namespace otb
 {
-/**
- *   Constructor
- */
+
 template <class TOutputLabelMap>
 LabelMapSource<TOutputLabelMap>
 ::LabelMapSource()
 {
-  //std::cout <<"labelsource constructor"<<std::endl;
   this->Superclass::SetNumberOfRequiredOutputs(1);
   this->Superclass::SetNthOutput(0, OutputLabelMapType::New().GetPointer());
 }
@@ -58,10 +55,6 @@ LabelMapSource<TOutputLabelMap>
     }
 }
 
-/**
- * Get the output LabelMap
- * \return The LabelMap produced.
- */
 template <class TOutputLabelMap>
 typename LabelMapSource<TOutputLabelMap>::OutputLabelMapType *
 LabelMapSource<TOutputLabelMap>
@@ -71,7 +64,6 @@ LabelMapSource<TOutputLabelMap>
     {
     return 0;
     }
-  //std::cout << "labelsource: get output..." <<std::endl;
   return static_cast<OutputLabelMapType *> (this->ProcessObject::GetOutput(0));
 }
 
@@ -84,9 +76,6 @@ LabelMapSource<TOutputLabelMap>
            (this->Superclass::GetOutput(idx));
 }
 
-/**
- * PrintSelf Method
- */
 template<class TOutputLabelMap>
 void
 LabelMapSource<TOutputLabelMap>

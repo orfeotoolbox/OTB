@@ -28,11 +28,8 @@ ImageToLabelMapWithAttributesFilter<TInputImage, TLabeledImage, TOutputLabel, TO
 ::ImageToLabelMapWithAttributesFilter()
 {
   m_Output = LabelMapType::New();
-  
-  this->itk::ProcessObject::SetNumberOfRequiredOutputs(2);
-
+  this->itk::ProcessObject::SetNumberOfRequiredInputs(2);
 }
-
 
 template <class TInputImage, class TLabeledImage, class TOutputLabel, class TObjectLabel>
 void
@@ -42,7 +39,6 @@ ImageToLabelMapWithAttributesFilter<TInputImage, TLabeledImage, TOutputLabel, TO
   // Process object is not const-correct so the const_cast is required here
   this->itk::ProcessObject::SetNthInput(0, 
                     const_cast< InputImageType * >( image ) );
-  
 }
 
 template <class TInputImage, class TLabeledImage, class TOutputLabel, class TObjectLabel>
@@ -102,7 +98,6 @@ void
 ImageToLabelMapWithAttributesFilter<TInputImage, TLabeledImage, TOutputLabel, TObjectLabel>
 ::GenerateData()
 {
-  std::cout <<"############# ImageToLabelMapWithAttributesFilter::GenerateData #########" << std::endl;
   typename InputImageType::Pointer inputImage    = const_cast<InputImageType *>(this->GetInput());
   typename LabeledImageType::Pointer labeldImage = const_cast<LabeledImageType *>(this->GetLabeledImage());
   
@@ -116,27 +111,19 @@ ImageToLabelMapWithAttributesFilter<TInputImage, TLabeledImage, TOutputLabel, TO
   shapeLabelMapFilter->SetInput(lfilter->GetOutput());
 
   // Compute radiometric attributes
-  typename RadiometricLabelMapFilterType::Pointer radiometricLabelMapFilter = RadiometricLabelMapFilterType::New();
-  radiometricLabelMapFilter->SetInput1(shapeLabelMapFilter->GetOutput());
-  radiometricLabelMapFilter->SetInput2(inputImage);
+  typename BandStatisticsLabelMapFilterType::Pointer bandStatsLabelMapFilter = BandStatisticsLabelMapFilterType::New();
+  bandStatsLabelMapFilter->SetInput(shapeLabelMapFilter->GetOutput());
+  bandStatsLabelMapFilter->SetFeatureImage(inputImage);
 
-//   if(m_VectorImage->GetNumberOfComponentsPerPixel()==3)
-//     {
-// //     radiometricLabelMapFilter->SetRedChannelIndex(0);
-// //     radiometricLabelMapFilter->SetGreenChannelIndex(1);
-// //     radiometricLabelMapFilter->SetBlueChannelIndex(2);
-// //     radiometricLabelMapFilter->SetNIRChannelIndex(m_BandId[3]);
-//     }
-  
   // Get the label map
-  radiometricLabelMapFilter->GetOutput()->SetAdjacencyMap(lfilter->GetOutput()->GetAdjacencyMap());
-  radiometricLabelMapFilter->GraftOutput( this->GetOutput() );
+  bandStatsLabelMapFilter->GetOutput()->SetAdjacencyMap(lfilter->GetOutput()->GetAdjacencyMap());
+  bandStatsLabelMapFilter->GraftOutput( this->GetOutput() );
 
   // execute the mini-pipeline
-  radiometricLabelMapFilter->Update();
+  bandStatsLabelMapFilter->Update();
 
   // graft the mini-pipeline output back onto this filter's output.
-  this->GraftOutput( radiometricLabelMapFilter->GetOutput() );
+  this->GraftOutput( bandStatsLabelMapFilter->GetOutput() );
 }
 
 

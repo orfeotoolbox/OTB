@@ -24,7 +24,7 @@ namespace otb
 {
 
 /** \class AttributesMapLabelObjectWithClassLabel
- *  \brief An AttributesMapLabelObject with an optionnal class label.
+ *  \brief An AttributesMapLabelObject with an optional class label.
  * 
  *  The label type is defined by the template parameter TClassLabel and
  *  accessible using the ClassLabelType typedef.

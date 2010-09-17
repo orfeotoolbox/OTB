@@ -27,8 +27,6 @@ template <class TInputLabelMap, class TOutputListSample, class TOutputTrainingLi
 LabelMapWithClassLabelToLabeledSampleListFilter<TInputLabelMap,TOutputListSample,TOutputTrainingListSample,TMeasurementFunctor>
 ::LabelMapWithClassLabelToLabeledSampleListFilter()
 {
-  m_OutputSampleList = OutputSampleListType::New();
-  m_OutputTrainingSampleList = OutputTrainingSampleListType::New();
 }
 
 template <class TInputLabelMap, class TOutputListSample, class TOutputTrainingListSample, class TMeasurementFunctor>
@@ -39,11 +37,11 @@ LabelMapWithClassLabelToLabeledSampleListFilter<TInputLabelMap,TOutputListSample
 template <class TInputLabelMap, class TOutputListSample, class TOutputTrainingListSample, class TMeasurementFunctor>
 void 
 LabelMapWithClassLabelToLabeledSampleListFilter<TInputLabelMap,TOutputListSample,TOutputTrainingListSample,TMeasurementFunctor>
-::Update()
+::Compute()
 {
   // Clear output sample list
-  m_OutputSampleList->Clear();
-  m_OutputTrainingSampleList->Clear();
+  m_OutputSampleList = OutputSampleListType::New();
+  m_OutputTrainingSampleList = OutputTrainingSampleListType::New();
   
   typename InputLabelMapType::LabelObjectContainerType::const_iterator it 
     = m_InputLabelMap->GetLabelObjectContainer().begin();

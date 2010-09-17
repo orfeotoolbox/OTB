@@ -26,10 +26,11 @@ namespace otb
 namespace Functor
 {
 /** \class BandStatsAttributesLabelObjectFunctor
-*   \brief Functor to compute multiple statistics attributes.
+*   \brief Functor to compute bands statistics attributes.
 *
 * For one label object, this functors applies the
-* StatisticsAttributesLabelObjectFunctor for each feature
+* StatisticsAttributesLabelObjectFunctor one each feature image
+* provided through AddFeature()
 *
 * As such, it allows to compute in one pass statistics related to
 * multiple features. It is used in the
@@ -115,7 +116,7 @@ private:
  * Images are supposed to be compatible with otb::VectorImage
  *
  * This filter internally applies the
- * StatisticsAttributesLabelMapFilter each channel independently
+ * StatisticsAttributesLabelMapFilter on each channel independently
  *
  * The feature name is constructed as:
  * 'STATS' + '::' + 'Band' + #BandIndex + '::' + StatisticName

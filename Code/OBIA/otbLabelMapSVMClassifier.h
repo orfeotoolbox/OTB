@@ -27,6 +27,10 @@ namespace otb {
 
 /** \class LabelMapSVMClassifier
  * \brief Classify each LabelObject of the input LabelMap in place
+ *
+ * \sa otb::AttributesMapLabelObject
+ * \sa otb::SVMModel
+ * \sa itk::InPlaceLabelMapFilter
  */
 template<class TInputLabelMap>
 class ITK_EXPORT LabelMapSVMClassifier :

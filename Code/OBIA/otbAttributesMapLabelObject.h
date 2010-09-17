@@ -147,7 +147,7 @@ private:
  *
  * As such it allows to store any custom attributes as necessary.
  *
- *\sa LabelObject, ShapeLabelObject, StatisticsLabelObject
+ * \sa LabelObject, ShapeLabelObject, StatisticsLabelObject
  *
  * \ingroup DataRepresentation
  */
