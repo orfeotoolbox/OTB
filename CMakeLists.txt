@@ -137,6 +137,23 @@ ENDIF(WIN32)
 OPTION(OTB_USE_DEPRECATED "Turn on the use and test of deprecated classes" OFF)
 MARK_AS_ADVANCED(OTB_USE_DEPRECATED)
 
+
+#-----------------------------------------------------------------------------
+# Output directories.
+
+#       IF(NOT LIBRARY_OUTPUT_PATH)
+SET (LIBRARY_OUTPUT_PATH ${OTB_BINARY_DIR}/bin CACHE INTERNAL "Single output directory for building all libraries.")
+#       ENDIF(NOT LIBRARY_OUTPUT_PATH)
+IF(NOT EXECUTABLE_OUTPUT_PATH)
+   SET (EXECUTABLE_OUTPUT_PATH ${OTB_BINARY_DIR}/bin CACHE INTERNAL "Single output directory for building all executables.")
+ENDIF(NOT EXECUTABLE_OUTPUT_PATH)
+
+MARK_AS_ADVANCED(LIBRARY_OUTPUT_PATH EXECUTABLE_OUTPUT_PATH)
+
+SET(OTB_LIBRARY_PATH "${LIBRARY_OUTPUT_PATH}")
+SET(OTB_EXECUTABLE_PATH "${EXECUTABLE_OUTPUT_PATH}")
+SET(CXX_TEST_PATH ${EXECUTABLE_OUTPUT_PATH})
+
 #-----------------------------------------------------------------------------
 
 # Use the openjpeg library.
@@ -847,16 +864,8 @@ IF(BUILD_TESTING)
 ENDIF(BUILD_TESTING)
 
 
-#-----------------------------------------------------------------------------
-# Output directories.
 
-
-#       IF(NOT LIBRARY_OUTPUT_PATH)
-SET (LIBRARY_OUTPUT_PATH ${OTB_BINARY_DIR}/bin CACHE INTERNAL "Single output directory for building all libraries.")
-#       ENDIF(NOT LIBRARY_OUTPUT_PATH)
-IF(NOT EXECUTABLE_OUTPUT_PATH)
-   SET (EXECUTABLE_OUTPUT_PATH ${OTB_BINARY_DIR}/bin CACHE INTERNAL "Single output directory for building all executables.")
-ENDIF(NOT EXECUTABLE_OUTPUT_PATH)
+INCLUDE_DIRECTORIES( ${OTB_LIBRARY_PATH} )
 
 IF(NOT OTB_NO_LIBRARY_VERSION)
    # This setting of SOVERSION assumes that any API change
@@ -866,16 +875,6 @@ IF(NOT OTB_NO_LIBRARY_VERSION)
        SOVERSION "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
 ENDIF(NOT OTB_NO_LIBRARY_VERSION)
 
-
-
-
-MARK_AS_ADVANCED(LIBRARY_OUTPUT_PATH EXECUTABLE_OUTPUT_PATH)
-
-SET(OTB_LIBRARY_PATH "${LIBRARY_OUTPUT_PATH}")
-SET(OTB_EXECUTABLE_PATH "${EXECUTABLE_OUTPUT_PATH}")
-SET(CXX_TEST_PATH ${EXECUTABLE_OUTPUT_PATH})
-
-INCLUDE_DIRECTORIES( ${OTB_LIBRARY_PATH} )
 
 #-----------------------------------------------------------------------------
 # Option for display all developpment message !!!
