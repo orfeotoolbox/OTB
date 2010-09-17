@@ -51,6 +51,21 @@ int otbMapProjection(int argc, char* argv[])
   otb::MercatorForwardProjection::Pointer lMercatorProjection2 = otb::MercatorForwardProjection::New();
   file << lMercatorProjection2->GetWkt() << std::endl << std::endl;
 
+  file << "\n\n *** Test accessors *** \n\n";
+  file << std::setprecision(15);
+  file << "Origin: \t" << lUtmProjection->Origin() << std::endl;
+  file << "False northing: \t" << lUtmProjection->GetFalseNorthing() << std::endl;
+  file << "False easting: \t" << lUtmProjection->GetFalseEasting() << std::endl;
+  file << "Parallel 1: \t" << lUtmProjection->GetStandardParallel1() << std::endl;
+  file << "Parallel 2: \t" << lUtmProjection->GetStandardParallel2() << std::endl;
+  file << "Name: \t" << lUtmProjection->GetProjectionName() << std::endl;
+  file << "Geo: \t" << lUtmProjection->IsGeographic() << std::endl;
+  file << "A: \t" << lUtmProjection->GetA() << std::endl;
+  file << "B: \t" << lUtmProjection->GetB() << std::endl;
+  file << "F: \t" << lUtmProjection->GetF() << std::endl;
+  file << "m per pix: \t" << lUtmProjection->GetMetersPerPixel() << std::endl;
+  file << "degree per pix: \t" << lUtmProjection->GetDecimalDegreesPerPixel() << std::endl;
+
   file.close();
   return EXIT_SUCCESS;
 
