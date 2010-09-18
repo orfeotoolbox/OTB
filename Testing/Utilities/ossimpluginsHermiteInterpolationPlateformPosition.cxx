@@ -95,7 +95,7 @@ int ossimpluginsHermiteInterpolationPlateformPositionTest(int argc, char * argv[
     return EXIT_FAILURE;
   }
 
-  for(unsigned int i = 0 ; i < platform_position.getNbrData() ; ++i)
+  for(int i = 0 ; i < platform_position.getNbrData() ; ++i)
     {
       ossimplugins::Ephemeris * ephemeris = platform_position.getData(i);
       double * position = ephemeris->get_position();
