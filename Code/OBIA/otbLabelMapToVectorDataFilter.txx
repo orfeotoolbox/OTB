@@ -22,16 +22,16 @@
 
 namespace otb {
 
-template<class TLabelMap, class TVectorData>
-LabelMapToVectorDataFilter<TLabelMap, TVectorData>
+template<class TLabelMap, class TVectorData, class TFieldsFunctor>
+LabelMapToVectorDataFilter<TLabelMap, TVectorData, TFieldsFunctor>
 ::LabelMapToVectorDataFilter()
 { /*
   m_BackgroundValue = NumericTraits<OutputImagePixelType>::NonpositiveMin();*/
 }
 
-template<class TLabelMap, class TVectorData>
+template<class TLabelMap, class TVectorData, class TFieldsFunctor>
 void
-LabelMapToVectorDataFilter<TLabelMap, TVectorData>
+LabelMapToVectorDataFilter<TLabelMap, TVectorData, TFieldsFunctor>
 ::SetInput(const InputLabelMapType *input)
 {
 // Process object is not const-correct so the const_cast is required here
@@ -39,9 +39,9 @@ LabelMapToVectorDataFilter<TLabelMap, TVectorData>
                                         const_cast<InputLabelMapType *>(input));
 }
 
-template<class TLabelMap, class TVectorData>
+template<class TLabelMap, class TVectorData, class TFieldsFunctor>
 void
-LabelMapToVectorDataFilter<TLabelMap, TVectorData>
+LabelMapToVectorDataFilter<TLabelMap, TVectorData, TFieldsFunctor>
 ::SetInput(unsigned int idx, const InputLabelMapType *input)
 {
   // Process object is not const-correct so the const_cast is required here
@@ -49,9 +49,9 @@ LabelMapToVectorDataFilter<TLabelMap, TVectorData>
                                         const_cast<InputLabelMapType *>(input));
 }
 
-template<class TLabelMap, class TVectorData>
-const typename LabelMapToVectorDataFilter<TLabelMap, TVectorData>::InputLabelMapType *
-LabelMapToVectorDataFilter<TLabelMap, TVectorData>
+template<class TLabelMap, class TVectorData, class TFieldsFunctor>
+const typename LabelMapToVectorDataFilter<TLabelMap, TVectorData, TFieldsFunctor>::InputLabelMapType *
+LabelMapToVectorDataFilter<TLabelMap, TVectorData, TFieldsFunctor>
 ::GetInput(void)
 {
   if (this->GetNumberOfInputs() < 1)
@@ -63,57 +63,26 @@ LabelMapToVectorDataFilter<TLabelMap, TVectorData>
            (this->itk::ProcessObject::GetInput(0));
 }
 
-template<class TLabelMap, class TVectorData>
-const typename LabelMapToVectorDataFilter<TLabelMap, TVectorData>::InputLabelMapType *
-LabelMapToVectorDataFilter<TLabelMap, TVectorData>
+template<class TLabelMap, class TVectorData, class TFieldsFunctor>
+const typename LabelMapToVectorDataFilter<TLabelMap, TVectorData, TFieldsFunctor>::InputLabelMapType *
+LabelMapToVectorDataFilter<TLabelMap, TVectorData, TFieldsFunctor>
 ::GetInput(unsigned int idx)
 {
   return static_cast<const TLabelMap *>
            (this->itk::ProcessObject::GetInput(idx));
 }
 
-template<class TLabelMap, class TVectorData>
+template<class TLabelMap, class TVectorData, class TFieldsFunctor>
 void
-LabelMapToVectorDataFilter<TLabelMap, TVectorData>
-::GenerateInputRequestedRegion()
-{ /*
-  // call the superclass' implementation of this method
-  Superclass::GenerateInputRequestedRegion();
-
-  // We need all the input.
-  InputImagePointer input = const_cast<InputImageType *>(this->GetInput());
-  if ( !input )
-    { return; }
-  input->SetRequestedRegion( input->GetLargestPossibleRegion() );*/
-}
-
-/*
-template<class TInputImage, class TVectorData >
-void
-LabelMapToVectorDataFilter<TInputImage, TVectorData>
-::EnlargeOutputRequestedRegion(DataObject *)
-{
-  this->GetOutput()
-    ->SetRequestedRegion( this->GetOutput()->GetLargestPossibleRegion() );
-}
-*/
-
-template<class TLabelMap, class TVectorData>
-void
-LabelMapToVectorDataFilter<TLabelMap, TVectorData>
+LabelMapToVectorDataFilter<TLabelMap, TVectorData, TFieldsFunctor>
 ::GenerateData()
 {
-//   std::cout << "ICI" << std::endl;
-/**Allocate the output*/
-//   this->AllocateOutputs();
-//   std::cout << "ICI" << std::endl;
   OutputVectorDataType *    output = this->GetOutput();
   const InputLabelMapType * input = this->GetInput();
-  /**create functors */
+
   FunctorType functor;
-//   SimplifyFunctorType simplifyFunctor;
-//   CloseFunctorType closeFunctor;
   CorrectFunctorType correctFunctor;
+
   /**Create usual root elements of the output vectordata*/
   DataNodePointerType document = DataNodeType::New();
   DataNodePointerType folder1 = DataNodeType::New();
@@ -130,24 +99,14 @@ LabelMapToVectorDataFilter<TLabelMap, TVectorData>
   const typename InputLabelMapType::LabelObjectContainerType& labelObjectContainer = input->GetLabelObjectContainer();
   for (it = labelObjectContainer.begin(); it != labelObjectContainer.end(); it++)
     {
-    // the label is there if we need it, but it can also be found at labelObject->GetLabel().
-    // const PType & label = it->first;
-
     /**the label object*/
     LabelObjectType * labelObject = it->second;
 
     /**Get the polygon image of the labelobject using the functor*/
     typename PolygonType::Pointer polygon = functor(labelObject);
 
-    /** Erase aligned points*/
-//     PolygonPointerType simplifyPolygon = simplifyFunctor(polygon);
-
-    /**Close polygon if necessary*/
-//     PolygonPointerType closePolygon = closeFunctor(simplifyPolygon);
-
     /**correct polygon if necessary*/
     PolygonPointerType correctPolygon = correctFunctor(polygon);
-//     std::cout << "correct polygon : " << correctPolygon << std::endl;
     DataNodePointerType node = DataNodeType::New();
     node->SetNodeType(otb::FEATURE_POLYGON);
 
@@ -158,14 +117,22 @@ LabelMapToVectorDataFilter<TLabelMap, TVectorData>
     //TODO hole in the polygon are not handle yet by the functor
     node->SetPolygonExteriorRing(correctPolygon);
 
+    /** Store additionnal fields given by functor */
+    std::map<std::string, std::string> fields = m_FieldsFunctor(labelObject);
+    std::map<std::string, std::string>::const_iterator it;
+    for ( it = fields.begin(); it != fields.end(); ++it )
+      {
+      node->SetFieldAsString(it->first, it->second);
+      }
+
     /**Add the polygon to the VectorData*/
     output->GetDataTree()->Add(node, folder1);
     }
 }
 
-template<class TLabelMap, class TVectorData>
+template<class TLabelMap, class TVectorData, class TFieldsFunctor>
 void
-LabelMapToVectorDataFilter<TLabelMap, TVectorData>
+LabelMapToVectorDataFilter<TLabelMap, TVectorData, TFieldsFunctor>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
