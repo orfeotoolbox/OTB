@@ -18,7 +18,7 @@
 #ifndef __otbGCPsToRPCSensorModelImageFilter_h
 #define __otbGCPsToRPCSensorModelImageFilter_h
 
-#include "itkInPlaceImageFilter.h"
+#include "itkCastImageFilter.h"
 #include "otbDEMHandler.h"
 
 #include "projection/ossimRpcProjection.h"
@@ -63,21 +63,23 @@ namespace otb {
  * if the number of GCPs is lower than 16.
  *
  * This filter does not modify the image buffer, but only the
- * metadata. Therefore, it is implemented as an InPlaceImageFilter.
+ * metadata. Therefore, it provides in-place support, which is
+ * enabled by default. Call SetInPlace(false) to change the default
+ * behavior.
  *
  * The output image can be given to the OrthorectificationFilter.
  *
  */
 template <class TImage>
 class ITK_EXPORT GCPsToRPCSensorModelImageFilter :
-  public itk::InPlaceImageFilter<TImage>
+  public itk::CastImageFilter<TImage,TImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef GCPsToRPCSensorModelImageFilter Self;
-  typedef itk::InPlaceImageFilter<TImage> Superclass;
-  typedef itk::SmartPointer<Self>         Pointer;
-  typedef itk::SmartPointer<const Self>   ConstPointer;
+  typedef GCPsToRPCSensorModelImageFilter      Self;
+  typedef itk::CastImageFilter<TImage, TImage> Superclass;
+  typedef itk::SmartPointer<Self>              Pointer;
+  typedef itk::SmartPointer<const Self>        ConstPointer;
 
   /** GCPs typedefs */
   typedef itk::Point<double, 2>               Point2DType;
@@ -97,7 +99,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GCPsToRPCSensorModelImageFilter, InPlaceImageFilter);
+  itkTypeMacro(GCPsToRPCSensorModelImageFilter, CastImageFilter);
 
   /** Extract dimension from input and output image. */
   itkStaticConstMacro(ImageDimension, unsigned int,
@@ -174,8 +176,6 @@ protected:
   /** Actual estimation of the sensor model takes place in the
    * GenerateOutputInformation() method */
   virtual void GenerateOutputInformation();
-
-  virtual void ThreadedGenerateData(const typename TImage::RegionType&, int) {}
 
 private:
   GCPsToRPCSensorModelImageFilter (const Self &);   // purposely not implemented
