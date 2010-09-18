@@ -35,6 +35,8 @@
 
 #include "otbProlateInterpolateImageFunction.h"
 
+#include "otbVectorImage.h"
+
 namespace otb
 {
 
@@ -42,59 +44,42 @@ namespace otb
  * this enum defines the different streaming mode available in OTB.
    */
 typedef enum
-  {
+{
   SET_NUMBER_OF_STREAM_DIVISIONS = 1,
   SET_BUFFER_MEMORY_SIZE = 2,
   SET_BUFFER_NUMBER_OF_LINES = 3,
   SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS = 4,
   SET_TILING_WITH_SET_NUMBER_OF_STREAM_DIVISIONS = 5,
   SET_TILING_WITH_SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS = 6
-  } StreamingMode;
+} StreamingMode;
 
-/** \class StreamingTraits
- *  \brief This class is a helper class for terminal streaming filter implementation.
+/** \class StreamingTraitsBase
+ *  \brief This class is the base class for StreamingTraits
+ *
+ *  It provides common definitions to all StreamingTraits specializations
+ *
  * \sa StreamingImageFileWriter
  * \sa StreamingStatisticsImageFilter
+ * \sa StreamingResampleImageFilter
  */
-template <class TImage>
-class ITK_EXPORT StreamingTraits
+template<class TImage>
+class ITK_EXPORT StreamingTraitsBase
 {
 public:
   /** Standard class typedefs. */
-  typedef StreamingTraits Self;
+  typedef StreamingTraitsBase Self;
 
-  typedef TImage                                ImageType;
-  typedef typename ImageType::Pointer           ImagePointerType;
-  typedef typename ImageType::RegionType        RegionType;
-  typedef typename ImageType::InternalPixelType PixelType;
+  typedef TImage                                 ImageType;
+  typedef typename ImageType::Pointer            ImagePointerType;
+  typedef typename ImageType::RegionType         RegionType;
+  typedef typename ImageType::InternalPixelType  PixelType;
 
   typedef StreamingMode StreamingModeType;
 
   /** Dimension of input image. */
-  itkStaticConstMacro(ImageDimension, unsigned int,
-                      ImageType::ImageDimension);
+  itkStaticConstMacro(ImageDimension, unsigned int, ImageType::ImageDimension);
 
   typedef itk::ImageRegionSplitter<itkGetStaticConstMacro(ImageDimension)> SplitterType;
-  // ITK Interpolators
-  typedef itk::InterpolateImageFunction<TImage, double>                InterpolationType;
-  typedef itk::BSplineInterpolateImageFunction<TImage, double>         BSplineInterpolationType;
-  typedef itk::LinearInterpolateImageFunction<TImage, double>          LinearInterpolationType;
-  typedef itk::NearestNeighborInterpolateImageFunction<TImage, double> NearestNeighborInterpolationType;
-  // OTB Interpolators
-  // Gaussian Interpolators
-  typedef WindowedSincInterpolateImageGaussianFunction<ImageType> GaussianInterpolationType;
-  // Cosine Interpolators
-  typedef WindowedSincInterpolateImageCosineFunction<ImageType> CosineInterpolationType;
-  // Hamming Interpolators
-  typedef WindowedSincInterpolateImageHammingFunction<ImageType> HammingInterpolationType;
-  // Welch
-  typedef WindowedSincInterpolateImageWelchFunction<ImageType> WelchInterpolationType;
-  // Lanczos
-  typedef WindowedSincInterpolateImageLanczosFunction<ImageType> LanczosInterpolationType;
-  // Blackman
-  typedef WindowedSincInterpolateImageBlackmanFunction<ImageType> BlackmanInterpolationType;
-  // Prolate
-  typedef otb::ProlateInterpolateImageFunction<ImageType> ProlateInterpolationType;
 
   /**
    * This method computes the number of streaming divisions, based on
@@ -117,11 +102,110 @@ public:
                                                         unsigned long bufferMemorySize,
                                                         unsigned long bufferNumberOfLinesDivisions);
 
-  static unsigned int CalculateNeededRadiusForInterpolator(const InterpolationType* interpolator);
-
   static std::string GetMethodUseToCalculateNumberOfStreamDivisions(StreamingModeType mode);
 
 };
+
+/** \class StreamingTraits
+ *  \brief This class provides internal information for streamable filters
+ *
+ *  \note
+ *  This class is specialized for otb::VectorImage because VectorImage support less interpolator types
+ *
+ * \sa StreamingImageFileWriter
+ * \sa StreamingStatisticsImageFilter
+ * \sa StreamingResampleImageFilter
+ */
+template <class TImage>
+class ITK_EXPORT StreamingTraits
+ : public StreamingTraitsBase<TImage>
+{
+public:
+  /** Standard class typedefs. */
+  typedef StreamingTraits             Self;
+  typedef StreamingTraitsBase<TImage> Superclass;
+
+  typedef typename Superclass::ImageType         ImageType;
+  typedef typename Superclass::ImagePointerType  ImagePointerType;
+  typedef typename Superclass::RegionType        RegionType;
+  typedef typename Superclass::PixelType         PixelType;
+  typedef typename Superclass::StreamingModeType StreamingModeType;
+
+  /** Dimension of input image. */
+  itkStaticConstMacro(ImageDimension, unsigned int,
+                      ImageType::ImageDimension);
+
+  typedef typename Superclass::SplitterType     SplitterType;
+
+  // ITK Interpolators
+  typedef itk::InterpolateImageFunction<ImageType, double>                InterpolationType;
+  typedef itk::BSplineInterpolateImageFunction<ImageType, double>         BSplineInterpolationType;
+  typedef itk::LinearInterpolateImageFunction<ImageType, double>          LinearInterpolationType;
+  typedef itk::NearestNeighborInterpolateImageFunction<ImageType, double> NearestNeighborInterpolationType;
+
+  // OTB Interpolators (supported for otb::Image)
+  typedef WindowedSincInterpolateImageGaussianFunction<ImageType>         GaussianInterpolationType;
+  typedef WindowedSincInterpolateImageCosineFunction<ImageType>           CosineInterpolationType;
+  typedef WindowedSincInterpolateImageHammingFunction<ImageType>          HammingInterpolationType;
+  typedef WindowedSincInterpolateImageWelchFunction<ImageType>            WelchInterpolationType;
+  typedef WindowedSincInterpolateImageLanczosFunction<ImageType>          LanczosInterpolationType;
+  typedef WindowedSincInterpolateImageBlackmanFunction<ImageType>         BlackmanInterpolationType;
+  typedef ProlateInterpolateImageFunction<ImageType>                      ProlateInterpolationType;
+
+  static unsigned int CalculateNeededRadiusForInterpolator(const InterpolationType* interpolator);
+};
+
+ /** \class StreamingTraits
+  *  \brief This class provides internal information for streamable filters
+  *
+  *  \note
+  *  This class is specialized for otb::VectorImage because VectorImage support less interpolator types
+  *
+  * \sa StreamingImageFileWriter
+  * \sa StreamingStatisticsImageFilter
+  * \sa StreamingResampleImageFilter
+  */
+template <typename TPixel, unsigned int VImageDimension>
+class ITK_EXPORT StreamingTraits< otb::VectorImage<TPixel,VImageDimension> >
+ : public StreamingTraitsBase<otb::VectorImage<TPixel,VImageDimension> >
+{
+public:
+  /** Standard class typedefs. */
+  typedef StreamingTraits                          Self;
+  typedef StreamingTraitsBase
+      < otb::VectorImage<TPixel,VImageDimension> > Superclass;
+
+  typedef typename Superclass::ImageType         ImageType;
+  typedef typename Superclass::ImagePointerType  ImagePointerType;
+  typedef typename Superclass::RegionType        RegionType;
+  typedef typename Superclass::PixelType         PixelType;
+  typedef typename Superclass::StreamingModeType StreamingModeType;
+
+  /** Dimension of input image. */
+  itkStaticConstMacro(ImageDimension, unsigned int,
+                      ImageType::ImageDimension);
+
+  typedef typename Superclass::SplitterType     SplitterType;
+
+  // ITK Interpolators
+  typedef itk::InterpolateImageFunction<ImageType, double>                InterpolationType;
+  //typedef itk::BSplineInterpolateImageFunction<ImageType, double>         BSplineInterpolationType;
+  typedef itk::LinearInterpolateImageFunction<ImageType, double>          LinearInterpolationType;
+  typedef itk::NearestNeighborInterpolateImageFunction<ImageType, double> NearestNeighborInterpolationType;
+
+  // OTB Interpolators (supported for otb::VectorImage)
+  typedef WindowedSincInterpolateImageGaussianFunction<ImageType>         GaussianInterpolationType;
+  //typedef WindowedSincInterpolateImageCosineFunction<ImageType>        CosineInterpolationType;
+  //typedef WindowedSincInterpolateImageHammingFunction<ImageType>       HammingInterpolationType;
+  //typedef WindowedSincInterpolateImageWelchFunction<ImageType>         WelchInterpolationType;
+  //typedef WindowedSincInterpolateImageLanczosFunction<ImageType>       LanczosInterpolationType;
+  //typedef WindowedSincInterpolateImageBlackmanFunction<ImageType>      BlackmanInterpolationType;
+  //typedef ProlateInterpolateImageFunction<ImageType>                   ProlateInterpolationType;
+
+  static unsigned int CalculateNeededRadiusForInterpolator(const InterpolationType* interpolator);
+};
+
+
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION

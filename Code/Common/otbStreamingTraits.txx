@@ -32,7 +32,7 @@ namespace otb
 {
 
 template <class TImage>
-unsigned long StreamingTraits<TImage>
+unsigned long StreamingTraitsBase<TImage>
 ::CalculateNumberOfStreamDivisions(const TImage * image,
                                    RegionType region,
                                    SplitterType * splitter,
@@ -198,6 +198,39 @@ unsigned long StreamingTraits<TImage>
   return (numDivisions);
 }
 
+
+template <class TImage>
+std::string StreamingTraitsBase<TImage>
+::GetMethodUseToCalculateNumberOfStreamDivisions(StreamingModeType mode)
+{
+  switch (mode)
+    {
+    case SET_NUMBER_OF_STREAM_DIVISIONS:
+      return "CalculationDivisionEnumType::SET_NUMBER_OF_STREAM_DIVISIONS";
+      break;
+    case SET_BUFFER_MEMORY_SIZE:
+      return "CalculationDivisionEnumType::SET_BUFFER_MEMORY_SIZE";
+      break;
+    case SET_BUFFER_NUMBER_OF_LINES:
+      return "CalculationDivisionEnumType::SET_BUFFER_NUMBER_OF_LINES";
+      break;
+    case SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS:
+      return "CalculationDivisionEnumType::SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS";
+      break;
+    case SET_TILING_WITH_SET_NUMBER_OF_STREAM_DIVISIONS:
+      return "CalculationDivisionEnumType::SET_TILING_WITH_SET_NUMBER_OF_STREAM_DIVISIONS";
+      break;
+    case SET_TILING_WITH_SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS:
+      return "CalculationDivisionEnumType::SET_TILING_WITH_SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS";
+      break;
+    default:
+      return "unknown";
+      break;
+    }
+
+}
+
+
 template <class TImage>
 unsigned int StreamingTraits<TImage>
 ::CalculateNeededRadiusForInterpolator(const InterpolationType* interpolator)
@@ -219,7 +252,7 @@ unsigned int StreamingTraits<TImage>
     }
   else if (className == "BSplineInterpolateImageFunction")
     {
-    otbMsgDevMacro(<< "Nearest Neighbor Interpolator");
+    otbMsgDevMacro(<< "BSpline Interpolator");
     neededRadius = 2;
     }
   else if (className == "ProlateInterpolateImageFunction")
@@ -272,35 +305,48 @@ unsigned int StreamingTraits<TImage>
   return neededRadius;
 }
 
-template <class TImage>
-std::string StreamingTraits<TImage>
-::GetMethodUseToCalculateNumberOfStreamDivisions(StreamingModeType mode)
+template <typename TPixel, unsigned int VImageDimension>
+unsigned int StreamingTraits< otb::VectorImage<TPixel,VImageDimension> >
+::CalculateNeededRadiusForInterpolator(const InterpolationType* interpolator)
 {
-  switch (mode)
+  unsigned int neededRadius = 0;
+  std::string  className;
+
+  className = interpolator->GetNameOfClass();
+
+  if (className == "LinearInterpolateImageFunction")
     {
-    case SET_NUMBER_OF_STREAM_DIVISIONS:
-      return "CalculationDivisionEnumType::SET_NUMBER_OF_STREAM_DIVISIONS";
-      break;
-    case SET_BUFFER_MEMORY_SIZE:
-      return "CalculationDivisionEnumType::SET_BUFFER_MEMORY_SIZE";
-      break;
-    case SET_BUFFER_NUMBER_OF_LINES:
-      return "CalculationDivisionEnumType::SET_BUFFER_NUMBER_OF_LINES";
-      break;
-    case SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS:
-      return "CalculationDivisionEnumType::SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS";
-      break;
-    case SET_TILING_WITH_SET_NUMBER_OF_STREAM_DIVISIONS:
-      return "CalculationDivisionEnumType::SET_TILING_WITH_SET_NUMBER_OF_STREAM_DIVISIONS";
-      break;
-    case SET_TILING_WITH_SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS:
-      return "CalculationDivisionEnumType::SET_TILING_WITH_SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS";
-      break;
-    default:
-      return "unknown";
-      break;
+    otbMsgDevMacro(<< "Linear Interpolator");
+    neededRadius = 1;
+    }
+  else if (className == "NearestNeighborInterpolateImageFunction")
+    {
+    otbMsgDevMacro(<< "Nearest Neighbor Interpolator");
+    neededRadius = 1;
+    }
+  else if (className == "BSplineInterpolateImageFunction")
+    {
+    otbMsgDevMacro(<< "BSpline Interpolator");
+    neededRadius = 2;
+    }
+  else if (className == "WindowedSincInterpolateImageGaussianFunction")
+    {
+    otbMsgDevMacro(<< "Gaussian Windowed Interpolator");
+    neededRadius = dynamic_cast<const GaussianInterpolationType *>(interpolator)->GetRadius();
     }
 
+  /*else if (className == "WindowedSincInterpolateImageFunction")
+  {
+  itkGenericExceptionMacro(<< "Windowed Sinc Interpolator not supported yet in resample");
+  otbMsgDevMacro(<<"Windowed Sinc Interpolator not supported yet in resample");
+  //                dynamic_cast<typename itk::WindowedSincInterpolateImageFunction*>(interpolator);
+  }
+  else
+  {
+  itkGenericExceptionMacro(<< "Interpolator not recognized, please choose another type !");
+  }        */
+
+  return neededRadius;
 }
 
 } // End namespace otb

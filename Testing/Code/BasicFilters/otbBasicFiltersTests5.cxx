@@ -26,6 +26,8 @@
 
 void RegisterTests()
 {
+  REGISTER_TEST(otbStreamingTraitsImage);
+  REGISTER_TEST(otbStreamingTraitsVectorImage);
   REGISTER_TEST(otbStreamingResampleImageFilterNew);
   REGISTER_TEST(otbStreamingResampleImageFilter);
   REGISTER_TEST(otbStreamingResampleImageFilterWithAffineTransform);

@@ -449,6 +449,14 @@ ADD_TEST(bfTvVectorImageTo3DScalarImageFilter ${BASICFILTERS_TESTS4}
 
 # -------            otb::StreamingResampleImageFilter   ----------------------------
 
+ADD_TEST(bfTuStreamingTraitsImage ${BASICFILTERS_TESTS5}
+  otbStreamingTraitsImage
+  )
+
+ADD_TEST(bfTuStreamingTraitsVectorImage ${BASICFILTERS_TESTS5}
+  otbStreamingTraitsVectorImage
+  )
+
 ADD_TEST(bfTuStreamingResampleImageFilterWithAffineTransformNew ${BASICFILTERS_TESTS5}
   otbStreamingResampleImageFilterWithAffineTransform
   )
@@ -1752,6 +1760,7 @@ otbVectorImageTo3DScalarImageFilter.cxx
 # A enrichir
 SET(BasicFilters_SRCS5
 otbBasicFiltersTests5.cxx
+otbStreamingTraits.cxx
 otbStreamingResampleImageFilterNew.cxx
 otbStreamingResampleImageFilter.cxx
 otbStreamingResampleImageFilterWithAffineTransform.cxx
