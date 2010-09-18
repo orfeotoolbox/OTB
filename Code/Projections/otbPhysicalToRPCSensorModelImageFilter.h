@@ -18,7 +18,7 @@
 #ifndef __otbPhysicalToRPCSensorModelImageFilter_h
 #define __otbPhysicalToRPCSensorModelImageFilter_h
 
-#include "itkInPlaceImageFilter.h"
+#include "itkCastImageFilter.h"
 #include "otbGCPsToRPCSensorModelImageFilter.h"
 #include "otbGenericRSTransform.h"
 
@@ -47,18 +47,20 @@ namespace otb {
  * from the SRT directory is used.(TODO) 
  *
  * This filter does not modify the image buffer, but only the
- * metadata. Therefore, it is implemented as an InPlaceImageFilter.
+ * metadata. Therefore, it provides in-place support, which is
+ * enabled by default. Call InPlaceOff() to change the default
+ * behavior.
  *
  * \ingroup Projections
  */
 template <class TImage>
 class ITK_EXPORT PhysicalToRPCSensorModelImageFilter :
-  public itk::InPlaceImageFilter<TImage>
+  public itk::CastImageFilter<TImage,TImage>
 {
 public:
   /** Standard class typedefs. */
   typedef PhysicalToRPCSensorModelImageFilter Self;
-  typedef itk::InPlaceImageFilter<TImage>     Superclass;
+  typedef itk::CastImageFilter<TImage,TImage> Superclass;
   typedef itk::SmartPointer<Self>             Pointer;
   typedef itk::SmartPointer<const Self>       ConstPointer;
 
@@ -66,7 +68,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(PhysicalToRPCSensorModelImageFilter, InPlaceImageFilter);
+  itkTypeMacro(PhysicalToRPCSensorModelImageFilter, CastImageFilter);
 
   /** template parameters typedef */
   typedef TImage                          ImageType;
@@ -122,9 +124,6 @@ protected:
 
   /** The PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
-
-  /** Necessary but empty */
-  virtual void ThreadedGenerateData(const typename TImage::RegionType&, int) {}
 
   /** Generate the Output image information*/
   virtual void GenerateOutputInformation();

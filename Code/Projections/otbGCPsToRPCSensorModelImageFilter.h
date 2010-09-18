@@ -64,7 +64,7 @@ namespace otb {
  *
  * This filter does not modify the image buffer, but only the
  * metadata. Therefore, it provides in-place support, which is
- * enabled by default. Call SetInPlace(false) to change the default
+ * enabled by default. Call InPlaceOff() to change the default
  * behavior.
  *
  * The output image can be given to the OrthorectificationFilter.
