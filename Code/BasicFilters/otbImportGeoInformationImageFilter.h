@@ -26,8 +26,10 @@ namespace otb
  *  \brief This filter is a helper class to import metadata
  *  from an existing image into a non-georeferenced image.
  *
- *  It derives from itk::InPlaceImageFilter since it overwrites
- *  its output if possible. This class has been written as a workaround
+ *  It derives from itk::CastImageFilter since it overwrites
+ *  its output if possible. Default behavior is InPlaceOn as
+ *  the other filters which only modify metadata information
+ *  This class has been written as a workaround
  *  for the bug http://public.kitware.com/Bug/bug.php?op=show&bugid=4625&pos=0.
  *  There should be no needs for this filter in a standard pipeline.
  *
@@ -80,8 +82,7 @@ protected:
   virtual void GenerateInputRequestedRegion(void);
   /** Generate output information */
   virtual void GenerateOutputInformation(void);
-  /*   /\** Generate data *\/ */
-  /*   virtual void GenerateData(void); */
+
 private:
   ImportGeoInformationImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented

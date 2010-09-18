@@ -41,7 +41,8 @@ GCPsToRPCSensorModelImageFilter<TImage>
 {
   // This filter does not modify the image buffer, but only its
   // metadata.Therefore, it can be run inplace to reduce memory print.
-  this->SetInPlace(true);
+  // CastImageFilter has InPlaceOff by default (see UnaryFunctorImgeFilter constructor)
+  this->InPlaceOn();
 
   // Clear the GCPs container
   this->ClearGCPs();
@@ -368,14 +369,6 @@ GCPsToRPCSensorModelImageFilter<TImage>
   // Encapsulate it
   itk::MetaDataDictionary& dict = imagePtr->GetMetaDataDictionary();
   itk::EncapsulateMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
-}
-
-template <class TImage>
-void
-GCPsToRPCSensorModelImageFilter<TImage>
-::GenerateData()
-{
-  Superclass::GenerateData();
 }
 
 template <class TImage>

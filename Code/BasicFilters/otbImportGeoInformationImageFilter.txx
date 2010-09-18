@@ -33,6 +33,7 @@ template <class TImage, class TSourceImage>
 ImportGeoInformationImageFilter<TImage, TSourceImage>
 ::ImportGeoInformationImageFilter()
 {
+  this->InPlaceOn();
   this->SetNumberOfRequiredInputs(2);
 }
 

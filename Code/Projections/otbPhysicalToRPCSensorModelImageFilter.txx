@@ -27,6 +27,11 @@ template <class TImage>
 PhysicalToRPCSensorModelImageFilter<TImage>
 ::PhysicalToRPCSensorModelImageFilter()
 {
+  // This filter does not modify the image buffer, but only its
+  // metadata.Therefore, it can be run inplace to reduce memory print.
+  // CastImageFilter has InPlaceOff by default (see UnaryFunctorImgeFilter constructor)
+  this->InPlaceOn();
+
   // Initialize the rpc estimator
   m_GCPsToSensorModelFilter = GCPsToSensorModelType::New();
   
