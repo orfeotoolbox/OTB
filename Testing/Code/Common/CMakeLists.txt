@@ -1003,7 +1003,7 @@ otbImageToVectorImageCastFilter.cxx
 otbImageToPathFilterNew.cxx
 otbSpatialObjectSourceNew.cxx
 otbLineSpatialObjectNew.cxx
-otbArcSpatialObjectNew.cxx
+otbArcSpatialObjectTest.cxx
 otbPathListToPathListFilterNew.cxx
 )
 SET(BasicCommon_SRCS6
