@@ -175,7 +175,7 @@ protected:
    * GenerateOutputInformation() method */
   virtual void GenerateOutputInformation();
 
-  virtual void GenerateData();
+  virtual void ThreadedGenerateData(const typename TImage::RegionType&, int) {}
 
 private:
   GCPsToRPCSensorModelImageFilter (const Self &);   // purposely not implemented
