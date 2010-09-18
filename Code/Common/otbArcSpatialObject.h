@@ -25,7 +25,7 @@
 namespace otb
 {
 /** \class ArcSpatialObject
- *  \brief
+ *  \brief TODO
  *
  */
 template <unsigned int VDimension = 2>
