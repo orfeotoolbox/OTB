@@ -22,7 +22,6 @@
 #include "itkInterpolateImageFunction.h"
 #include "itkContinuousIndex.h"
 
-#include "itkTransform.h"
 #include "itkTranslationTransform.h"
 #include "itkImageToImageMetric.txx"
 
@@ -52,8 +51,8 @@ namespace otb
  * This filter accepts fixed and moving images with different sizes and spacing. Metric and search windows radius
  * are expressed in terms of number of pixels in the fixed image.
  *
- * An initial transform can be used to reduce computation time in case of input and moving images with a significant
- * offset. This transform is taken into account in the output deformation field.
+ * An initial offset can be used to reduce computation time in case of input and moving images with a significant
+ * offset. This offset is taken into account in the output deformation field.
  *
  * It is possible to generate an output metric map and deformation field at a coarser resolution by setting
  * grid step to value higher than 1 (grid step is expressed in terms of number of fixed image pixels).
@@ -99,9 +98,8 @@ public:
   typedef typename itk::ImageToImageMetric<TInputImage,
                                            TInputImage>           MetricType;
   typedef typename MetricType::Pointer                            MetricPointerType;
-  typedef typename itk::Transform<double,2,2>                     TransformType;
-  typedef typename TransformType::Pointer                         TransformPointerType;
-  typedef typename itk::TranslationTransform<double,2>            TranslationTransformType;
+  typedef typename itk::TranslationTransform<double,2>            TranslationType;
+  typedef typename TranslationType::Pointer                       TranslationPointerType;
 
   /** Set/Get the Metric used to compare images */
   itkSetObjectMacro(Metric,MetricType);
@@ -143,10 +141,6 @@ public:
   /** True if deformation field takes spacing into account. False otherwise */
   itkSetMacro(UseSpacing,bool);
   itkBooleanMacro(UseSpacing);
-
-  /** Set default transform between the two images */
-  itkSetObjectMacro(Transform, TransformType);
-  itkGetConstObjectMacro(Transform, TransformType);
 
   /** Set default offset between the two images */
   itkSetMacro(InitialOffset,SpacingType);
@@ -215,7 +209,7 @@ private:
   MetricPointerType             m_Metric;
 
   /** The translation */
-  TransformPointerType          m_Transform;
+  TranslationPointerType        m_Translation;
 
   /** Default offset */
   SpacingType                   m_InitialOffset;

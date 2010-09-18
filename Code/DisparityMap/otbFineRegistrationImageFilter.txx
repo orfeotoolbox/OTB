@@ -57,8 +57,8 @@ FineRegistrationImageFilter<TInputImage,T0utputCorrelation,TOutputDeformationFie
   // Default interpolator
   m_Interpolator = itk::LinearInterpolateImageFunction<TInputImage,double>::New();
 
-  // Transform: default on a translation
-  m_Transform = TranslationTransformType::New();
+  // Translation
+  m_Translation = TranslationType::New();
 
   // Grid Step
   m_GridStep.Fill(1);
@@ -297,7 +297,7 @@ FineRegistrationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFie
 
   // Wire currentMetric
   m_Interpolator->SetInputImage(this->GetMovingInput());
-  m_Metric->SetTransform(m_Transform);
+  m_Metric->SetTransform(m_Translation);
   m_Metric->SetInterpolator(m_Interpolator);
   m_Metric->SetFixedImage(fixedPtr);
   m_Metric->SetMovingImage(movingPtr);
@@ -320,7 +320,7 @@ FineRegistrationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFie
   double currentMetric, optMetric;
 
   // Optimal translation parameters
-  typename TransformType::ParametersType params(2), optParams(2), tmpOptParams(2);
+  typename TranslationType::ParametersType params(2), optParams(2), tmpOptParams(2);
 
   // Final deformation value
   DeformationValueType deformationValue;
