@@ -101,8 +101,6 @@ int getFloatString(int numFloats, const char *flts, float *tgts)
 }
 
 int classifyKNN2( int argc, char *argv[] ){
- struct timeval start;
- struct timeval end;
   if( argc!= 6 ){
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << " Prototypes Ch1ImageFile Ch2ImageFile OutputFile K" << std::endl;
@@ -124,6 +122,8 @@ int classifyKNN2( int argc, char *argv[] ){
 #ifdef WIN32
   double startWin = GetTickCount()/1000.0f; 
 #else
+  struct timeval start;
+  struct timeval end;
   gettimeofday(&start,NULL);
 #endif
 
