@@ -473,10 +473,6 @@ ADD_TEST(coTuSpatialObjectSourceNew ${COMMON_TESTS5}
 ADD_TEST(coTuLineSpatialObjectNew ${COMMON_TESTS5}
          otbLineSpatialObjectNew)
 
-# -------            otb::ArcSpatialObject -------------------------------------------
-ADD_TEST(coTuArcSpatialObjectNew ${COMMON_TESTS5}
-         otbArcSpatialObjectNew)
-
 # -------  otb::PathListToPathListFilter -------------------------------------------
 ADD_TEST(coTuPathListToPathListFilterNew ${COMMON_TESTS5}
          otbPathListToPathListFilterNew)
@@ -1003,7 +999,6 @@ otbImageToVectorImageCastFilter.cxx
 otbImageToPathFilterNew.cxx
 otbSpatialObjectSourceNew.cxx
 otbLineSpatialObjectNew.cxx
-otbArcSpatialObjectTest.cxx
 otbPathListToPathListFilterNew.cxx
 )
 SET(BasicCommon_SRCS6
