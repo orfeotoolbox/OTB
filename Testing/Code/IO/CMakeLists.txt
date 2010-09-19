@@ -2504,20 +2504,6 @@ ADD_TEST(ioTvImageFileReaderServerNameOTBTest ${IO_TESTS19}
 	otbImageFileReaderServerName
 	${OTB_DATA_ROOT}/Examples/osmfile.otb)
 
-ADD_TEST(ioTuTileMapImageSourceNew ${IO_TESTS19}
-        otbTileMapImageSourceNew )
-
-#ADD_TEST(ioTvTileMapImageSource ${IO_TESTS19}
-#        --compare-image ${NOTOL}
-#                ${BASELINE}/ioTileMapImageSourceToulouse.png
-#                ${TEMP}/ioTileMapImageSourceToulouse.png
-#        otbTileMapImageSource
-#                43.6044
-#                1.44295
-#                http://tile.openstreetmap.org
-#		${TEMP}/ioTileMapImageSourceToulouse.png
-#		256)
-
 # We do not perform regression testing here because images on server might change
 ADD_TEST(ioTvTileMapImageIOFile ${IO_TESTS19}
   otbTileMapImageIOTest
@@ -2812,8 +2798,6 @@ IF(OTB_USE_CURL)
 SET(BasicIO_SRCS19
 otbIOTests19.cxx
 otbImageFileReaderServerName.cxx
-otbTileMapImageSourceNew.cxx
-otbTileMapImageSource.cxx
 otbTileMapImageIOTest.cxx
 otbTileMapWriter.cxx
 )
