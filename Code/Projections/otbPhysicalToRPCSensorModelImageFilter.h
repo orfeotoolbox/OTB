@@ -90,7 +90,7 @@ public:
   
   /** Set/Get the grid size*/
   itkSetMacro(GridSize, SizeType);
-  itkGetMacro(GridSize, SizeType);
+  itkGetConstReferenceMacro(GridSize, SizeType);
 
   /** Set/Get the DEM directory*/
   itkSetStringMacro(DEMDirectory);
