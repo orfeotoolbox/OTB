@@ -76,7 +76,7 @@ int otbOrthoRectificationFilter(int argc, char* argv[])
   ImageType::SizeType size;
   size[0] = atoi(argv[5]);      // X size
   size[1] = atoi(argv[6]);            //Y size
-  orthoRectifFilter->SetSize(size);
+  orthoRectifFilter->SetOutputSize(size);
 
   ImageType::SpacingType spacing;
   spacing[0] = atof(argv[7]);
