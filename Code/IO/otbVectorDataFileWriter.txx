@@ -21,7 +21,6 @@
 
 #include "otbMacro.h"
 #include "otbVectorDataFileWriter.h"
-#include "otbFileName.h"
 #include "otbVectorDataIOFactory.h"
 
 namespace otb

@@ -27,7 +27,6 @@
 #include "otbSystem.h"
 #include "otbDataNode.h"
 #include "otbMetaDataKey.h"
-#include "otbFileName.h"
 #include "itkTimeProbe.h"
 #include "otbVectorDataKeywordlist.h"
 
