@@ -28,7 +28,6 @@
 #include "itkLandmarkSpatialObject.h"
 #include "otbLineSpatialObject.h"
 #include "itkLineSpatialObjectPoint.h"
-#include "otbArcSpatialObject.h"
 
 namespace otb
 {
@@ -64,8 +63,6 @@ public:
   typedef typename LineType::Pointer                                   LinePointer;
   typedef itk::LineSpatialObjectPoint<TSpatialObject::ObjectDimension> LinePointType;
   typedef typename LineType::PointListType                             LineListType;
-  typedef otb::ArcSpatialObject<TSpatialObject::ObjectDimension>       ArcType;
-  typedef typename ArcType::Pointer                                    ArcPointer;
   typedef itk::EllipseSpatialObject<TSpatialObject::ObjectDimension>   EllipseType;
   typedef typename EllipseType::Pointer                                EllipsePointer;
   typedef std::vector<LinePointType>                                   PointListType;
