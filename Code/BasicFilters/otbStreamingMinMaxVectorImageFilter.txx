@@ -165,7 +165,6 @@ PersistentMinMaxVectorImageFilter<TInputImage>
 ::Synthetize()
 {
   int  i;
-  long count;
 
   int          numberOfThreads = this->GetNumberOfThreads();
   unsigned int numberOfComponent = this->GetInput()->GetNumberOfComponentsPerPixel();

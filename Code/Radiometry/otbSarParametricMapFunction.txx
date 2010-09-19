@@ -183,7 +183,7 @@ SarParametricMapFunction<TInputImage, TCoordRep>
 
   if (m_IsInitialize == false )
   {
-          itkExceptionMacro(<< "must estimate parameters before evaluating ");
+    itkExceptionMacro(<< "must estimate parameters before evaluating ");
   }
 
   if(m_UsingClosestPointMethod == false )
@@ -199,16 +199,6 @@ SarParametricMapFunction<TInputImage, TCoordRep>
       result += pointValue * vcl_pow(index[0],powerCoef[0]) * vcl_pow(index[1],powerCoef[1]);
     }
   }  
-  else
-  {
-    bool isFound;
-    typename PointSetType::CoordRepType coord;
-    
-    //isFound = this->GetPointSet()->FindClosestPoint(&coord, &pointId);
-    //this->GetPointSet()->GetPointData(pointId, &pointValue);
-    //result = pointValue;
-  }
-
 
   return result;
 }

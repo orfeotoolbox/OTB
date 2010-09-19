@@ -91,7 +91,7 @@ SIXSTraits::ComputeAtmosphericParameters(
     {
 
     // 6S official tab size Wavelength Spectral
-    const unsigned int S_6S_SIZE = 1501;
+    const otb_6s_integer S_6S_SIZE = 1501;
     // Generate WavelengthSpectralBand  in 6S compatible buffer s[1501]
     wlinf = static_cast<otb_6s_doublereal>(WavelengthSpectralBand->GetMinSpectralValue());
     wlsup = static_cast<otb_6s_doublereal>(WavelengthSpectralBand->GetMaxSpectralValue());

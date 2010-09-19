@@ -51,9 +51,7 @@ int otbSarParametricMapFunctionToImageFilter(int argc, char * argv[])
   function->SetInputImage(reader->GetOutput());
 
   /** Test on some indexes and some physical coordinates*/
-  InputImageType::SizeType size;
   FunctionType::PointType  p0;
-  IndexType                index;  
   PixelType                value;
  
   p0[0] = static_cast<unsigned int>(0);
