@@ -18,7 +18,6 @@ See OTBCopyright.txt for details.
 #include <FL/Fl_Text_Buffer.H>
 #include "otbImageViewerManagerViewGUI.h"
 #include "otbMacro.h"
-#include "otbFileName.h"
 
 #include "base/ossimFilename.h"
 #include "base/ossimDirectory.h"
