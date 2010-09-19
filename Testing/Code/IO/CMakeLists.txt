@@ -2617,6 +2617,17 @@ ADD_TEST(ioTvMapFileProductWriter ${IO_TESTS21}
   256
 )
 
+ADD_TEST(ioTuTileMapImageIOHelperNew ${IO_TESTS21}
+  otbTileMapImageIOHelperNew
+)
+
+ADD_TEST(ioTvTileMapImageIOHelperTest ${IO_TESTS21}
+         --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvTileMapImageIOHelperTest.txt
+                         ${TEMP}/ioTvTileMapImageIOHelperTest.txt
+         otbTileMapImageIOHelperTest
+              ${TEMP}/ioTvTileMapImageIOHelperTest.txt
+)
+
 #----------------------------------------------------------------------------------
 SET(BasicIO_SRCS1
 otbIOTests1.cxx
@@ -2822,8 +2833,9 @@ otbSarDefaultImageMetadataInterface.cxx
 
 SET(BasicIO_SRCS21
 otbIOTests21.cxx
-otbMapFileProductWriterNew
-otbMapFileProductWriter
+otbMapFileProductWriterNew.cxx
+otbMapFileProductWriter.cxx
+otbTileMapImageIOHelperTest.cxx
 )
 
 
