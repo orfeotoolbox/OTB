@@ -28,6 +28,7 @@ void RegisterTests()
 {
   REGISTER_TEST(otbProjectionBaseNew);
   REGISTER_TEST(otbMapProjectionsNew);
+  REGISTER_TEST(otbMapProjectionsTest);
   REGISTER_TEST(otbMapProjection);
   REGISTER_TEST(otbUtmMapProjection);
   REGISTER_TEST(otbSensorModelsNew);
