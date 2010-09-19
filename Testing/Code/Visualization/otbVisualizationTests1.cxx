@@ -68,6 +68,7 @@ void RegisterTests()
   REGISTER_TEST(otbImageViewerEndToEndWithVectorData);
   REGISTER_TEST(otbStandardImageViewerNew);
   REGISTER_TEST(otbStandardImageViewer);
+  REGISTER_TEST(otbStandardImageViewerSplitted);
   REGISTER_TEST(otbPackedWidgetManagerNew);
   REGISTER_TEST(otbSplittedWidgetManagerNew);
   REGISTER_TEST(otbVerticalAsymptoteCurveNew);

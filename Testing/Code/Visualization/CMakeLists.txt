@@ -329,6 +329,12 @@ otbStandardImageViewer
 ${INPUTDATA}/couleurs.tif 0
 )
 
+ADD_TEST(vrTvStandardImageViewerSplitted ${VISUALIZATION_TESTS1}
+otbStandardImageViewerSplitted
+${INPUTDATA}/couleurs.tif 0
+)
+
+
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(vrTvStandardImageViewerToulouseWithWaterwaysShp ${VISUALIZATION_TESTS1}
 otbStandardImageViewer
