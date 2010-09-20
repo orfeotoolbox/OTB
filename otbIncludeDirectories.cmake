@@ -181,15 +181,15 @@ ELSE(OTB_USE_EXTERNAL_ITK)
         )
 ENDIF(OTB_USE_EXTERNAL_ITK)
 
-#For  header file
+#For FLTK header file
 IF(OTB_USE_EXTERNAL_FLTK)
         SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
-      		${FLTK_INCLUDE_DIRS} )
+      ${FLTK_INCLUDE_DIRS} )
 ELSE(OTB_USE_EXTERNAL_FLTK)
         SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
-                ${FLTK_SOURCE_DIR}
-            	${FLTK_SOURCE_DIR}/src
-            	${FLTK_BINARY_DIR} )
+                ${OTB_SOURCE_DIR}/Utilities/FLTK
+            ${OTB_SOURCE_DIR}/Utilities/FLTK/src
+            ${OTB_BINARY_DIR}/Utilities/FLTK )
 ENDIF(OTB_USE_EXTERNAL_FLTK)
 
 #-----------------------------------------------------------------------------
