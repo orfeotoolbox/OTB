@@ -163,7 +163,7 @@ FineRegistrationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFie
   Superclass::GenerateInputRequestedRegion();
 
   // get pointers to the input and output
-  TInputImage * fixedPtr =  const_cast< TInputImage * >( this->GetFixedInput());
+  TInputImage * fixedPtr  = const_cast< TInputImage * >( this->GetFixedInput());
   TInputImage * movingPtr = const_cast< TInputImage * >( this->GetMovingInput());
 
   TOutputCorrelation * outputPtr = this->GetOutput();
@@ -349,7 +349,7 @@ FineRegistrationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFie
 
     // Apply grid step
     IndexType currentIndex = outputIt.GetIndex();
-    for(unsigned int dim = 0; dim < TInputImage::ImageDimension;++dim)
+    for(unsigned int dim = 0; dim < TInputImage::ImageDimension; ++dim)
       {
       currentIndex[dim] *= m_GridStep[dim];
       }
@@ -363,12 +363,12 @@ FineRegistrationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFie
     m_Metric->Initialize();
 
     // Compute the correlation at each location
-    for(int i =-(int)m_SearchRadius[0]; i<=(int)m_SearchRadius[0];++i)
+    for(int i = -static_cast<int>(m_SearchRadius[0]); i <= static_cast<int>(m_SearchRadius[0]); ++i)
       {
-      for(int j=-(int)m_SearchRadius[1]; j<=(int)m_SearchRadius[1];++j)
+      for(int j = -static_cast<int>(m_SearchRadius[1]); j <= static_cast<int>(m_SearchRadius[1]); ++j)
         {
-        params[0]=m_InitialOffset[0] + static_cast<double>(i*fixedSpacing[0]);
-        params[1]=m_InitialOffset[1] + static_cast<double>(j*fixedSpacing[1]);
+        params[0] = m_InitialOffset[0] + static_cast<double>(i*fixedSpacing[0]);
+        params[1] = m_InitialOffset[1] + static_cast<double>(j*fixedSpacing[1]);
 
         try
         {
@@ -391,7 +391,7 @@ FineRegistrationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFie
 
     // Dichotomic sub-pixel
     SpacingType subPixelSpacing = fixedSpacing;
-    while(subPixelSpacing[0]> m_SubPixelAccuracy || subPixelSpacing[1]> m_SubPixelAccuracy)
+    while(subPixelSpacing[0] > m_SubPixelAccuracy || subPixelSpacing[1] > m_SubPixelAccuracy)
       {
       // Perform 1 step of dichotomic search
       subPixelSpacing /= 2.;
@@ -399,9 +399,9 @@ FineRegistrationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFie
       // Store last opt params
       tmpOptParams = optParams;
 
-      for(int i =-1; i<=1;i+=2)
+      for(int i = -1; i <= 1; i+=2)
         {
-        for(int j=-1; j<=1;j+=2)
+        for(int j = -1; j <= 1; j+=2)
           {
           params = tmpOptParams;
           params[0] += static_cast<double>(i*subPixelSpacing[0]);
