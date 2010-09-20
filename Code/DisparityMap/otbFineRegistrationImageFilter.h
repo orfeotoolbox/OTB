@@ -105,7 +105,7 @@ public:
   itkSetObjectMacro(Metric,MetricType);
   itkGetObjectMacro(Metric,MetricType);
 
-  /** Set/Get the interpolator used to inpterolate moving image at non-grid positions */
+  /** Set/Get the interpolator used to interpolate moving image at non-grid positions */
   itkSetObjectMacro(Interpolator,InterpolatorType);
   itkGetObjectMacro(Interpolator,InterpolatorType);
 

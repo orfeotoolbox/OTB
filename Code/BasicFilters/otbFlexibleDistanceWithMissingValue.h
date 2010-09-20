@@ -111,7 +111,7 @@ double FlexibleDistanceWithMissingValue<TVector>::Beta = 2.0;
 
 } // end namespace otb
 
-#ifndef ITK_MANUAL_INSTANTIATION
+#ifndef OTB_MANUAL_INSTANTIATION
 #include "otbFlexibleDistanceWithMissingValue.txx"
 #endif
 
