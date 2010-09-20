@@ -13,8 +13,12 @@
 #include <string.h>
 #include "BgDefaults.h"
 // !!! only MSV
+#ifdef __FreeBSD__
+#include <sys/time.h>
+#else
 #include <sys/timeb.h>
 #include <time.h>
+#endif
 
 double bgSign(double x)
 {

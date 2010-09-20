@@ -406,7 +406,7 @@ void vpf_display_record( row_type row,
 		  fputs(" - ",fp);
 		  fputs(table.header[i].description,fp);
 		  fputs(": ",fp);
-#if !defined(__APPLE__)
+#if !defined(__APPLE__) && !defined(__FreeBSD__)
 		  gcvt(f,6,num);
 #endif
 		  fputs(num,fp);
@@ -422,7 +422,7 @@ void vpf_display_record( row_type row,
 		  if (is_vpf_null_float(fptr[j])) {
 		     fputs("(null)",fp);
 		  } else {
-#if !defined(__APPLE__)
+#if !defined(__APPLE__) && !defined(__FreeBSD__)
 		     gcvt(fptr[j],6,num);
 #endif
 		     fputs(num,fp);
