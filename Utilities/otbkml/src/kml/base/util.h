@@ -37,8 +37,9 @@
   void operator=(const TypeName&)
 
 typedef unsigned int uint;
-// MSVC has no header for C99 typedefs.
+// MSVC has no header for C99 typedefs. (MSVC 2010 has it)
 #ifdef _MSC_VER
+#if _MSC_VER < 1600
 typedef __int8  int8_t;
 typedef __int16 int16_t;
 typedef __int32 int32_t;
@@ -47,6 +48,7 @@ typedef unsigned __int8  uint8_t;
 typedef unsigned __int16 uint16_t;
 typedef unsigned __int32 uint32_t;
 typedef unsigned __int64 uint64_t;
+#endif // _MSC_VER < 1600
 #endif  // _MSC_VER
 
 #include <string>
