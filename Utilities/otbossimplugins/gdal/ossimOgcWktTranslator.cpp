@@ -601,7 +601,7 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
    // Several UNIT nodes can be present in the tree, but only the one
    // necessary for the PROJCS is required.
    const char* units = NULL;
-   OGR_SRSNode* node = ((OGRSpatialReference *)hSRS)->GetAttrNode("PROJCS");
+   OGR_SRSNode* node = ((OGRSpatialReference *)hSRS)->GetRoot();
    int nbChild  = node->GetChildCount();
    for (int i = 0; i < nbChild; i++)
    {
@@ -905,6 +905,7 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
     // extract out the datum
     //
     const char *datum = OSRGetAttrValue( hSRS, "DATUM", 0 );
+
     ossimString oDatum = "WGE";
     
     if( datum )
@@ -949,6 +950,8 @@ void ossimOgcWktTranslator::initializeDatumTable()
                                                   ossimString("WGS_1984")));
    theWktToOssimDatumTranslation.insert(make_pair(ossimString("OSGB_1936"),
                                                   ossimString("OGB-B"))); 
+   theWktToOssimDatumTranslation.insert(make_pair(ossimString("Nouvelle_Triangulation_Francaise"),
+                                                  ossimString("NTF")));
 }
 
 void ossimOgcWktTranslator::initializeProjectionTable()
@@ -1009,6 +1012,10 @@ ossimString ossimOgcWktTranslator::wktToOssimDatum(const ossimString& datum)cons
    if(datum.contains("OSGD"))
    {
       return "OGB-D";
+   }
+ if(datum.contains("Nouvelle_Triangulation_Francaise"))
+   {
+      return "NTF";
    }
    
    return "";
