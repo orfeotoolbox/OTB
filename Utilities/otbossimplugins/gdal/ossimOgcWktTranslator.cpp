@@ -568,12 +568,13 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
    
    // Translate the WKT into an OGRSpatialReference. 
    hSRS = OSRNewSpatialReference(NULL);
+
    if( OSRImportFromWkt( hSRS, (char **) &wkt ) != OGRERR_NONE )
    {
       OSRDestroySpatialReference( hSRS );
       return false;
    }
-   
+
    // Determine if State Plane Coordinate System
    ossimString ossimProj = "";
    const ossimStatePlaneProjectionInfo* spi = NULL;
@@ -595,7 +596,22 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
    // ESH 11/2008: Check for geographic system when setting default units. 
    // If geographic, use degrees.
    //---
-   const char* units = OSRGetAttrValue( hSRS, "UNIT", 0 );
+   
+   // Actually search only the "UNIT" child of the node PROJCS
+   // Several UNIT nodes can be present in the tree, but only the one
+   // necessary for the PROJCS is required.
+   const char* units = NULL;
+   OGR_SRSNode* node = ((OGRSpatialReference *)hSRS)->GetAttrNode("PROJCS");
+   int nbChild  = node->GetChildCount();
+   for (int i = 0; i < nbChild; i++)
+   {
+       OGR_SRSNode* curChild = node->GetChild(i);
+       if (strcmp(curChild->GetValue(), "UNIT") == 0)
+       {
+          units = curChild->GetChild(0)->GetValue();
+       }
+   }
+   
    ossimString ossim_units;
    bool bGeog = OSRIsGeographic(hSRS);
    if ( bGeog == false )
