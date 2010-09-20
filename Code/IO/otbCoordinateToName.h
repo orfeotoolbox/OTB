@@ -118,6 +118,8 @@ protected:
 
   virtual void DoEvaluate();
 
+  bool IsLonLatValid() const;
+
   static ITK_THREAD_RETURN_TYPE ThreadFunction(void*);
 
 private:

@@ -168,7 +168,7 @@ public:
     m_GridStep.Fill(step);
   }
 
-  /** Set the transform for the initial offset */
+  /** Set/Get the transform for the initial offset */
   itkSetObjectMacro(Transform, TransformType);
   itkGetConstObjectMacro(Transform, TransformType);
 

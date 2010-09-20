@@ -93,19 +93,28 @@ CoordinateToName::ThreadFunction(void *arg)
 
 void CoordinateToName::DoEvaluate()
 {
-  std::ostringstream urlStream;
-  urlStream << "http://ws.geonames.org/findNearbyPlaceName?lat=";
-  urlStream << m_Lat;
-  urlStream << "&lng=";
-  urlStream << m_Lon;
-  otbMsgDevMacro("CoordinateToName: retrieve url " << urlStream.str());
-  RetrieveXML(urlStream);
-  std::string placeName = "";
-  std::string countryName = "";
-  ParseXMLGeonames(placeName, countryName);
-  m_PlaceName = placeName;
-  m_CountryName = countryName;
-  m_IsValid = true;
+  if (IsLonLatValid())
+    {
+    std::ostringstream urlStream;
+    urlStream << "http://ws.geonames.org/findNearbyPlaceName?lat=";
+    urlStream << m_Lat;
+    urlStream << "&lng=";
+    urlStream << m_Lon;
+    otbMsgDevMacro("CoordinateToName: retrieve url " << urlStream.str());
+    RetrieveXML(urlStream);
+    std::string placeName = "";
+    std::string countryName = "";
+    ParseXMLGeonames(placeName, countryName);
+    m_PlaceName = placeName;
+    m_CountryName = countryName;
+    m_IsValid = true;
+    }
+  else
+    {
+    m_PlaceName = "";
+    m_CountryName = "";
+    m_IsValid = false;
+    }
 }
 
 void CoordinateToName::RetrieveXML(const std::ostringstream& urlStream) const
@@ -136,6 +145,15 @@ void CoordinateToName::ParseXMLGeonames(std::string& placeName, std::string& cou
     otbMsgDevMacro(<< "Near " << placeName << " in " << countryName);
     remove(m_TempFileName.c_str());
     }
+}
+
+bool CoordinateToName::IsLonLatValid() const
+{
+  if (m_Lon < -180.0) return false;
+  if (m_Lon > 180.0) return false;
+  if (m_Lat < -90.0) return false;
+  if (m_Lat > 90.0) return false;
+  return true;
 }
 
 } // namespace otb
