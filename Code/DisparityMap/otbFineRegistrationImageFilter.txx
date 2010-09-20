@@ -65,6 +65,8 @@ FineRegistrationImageFilter<TInputImage,T0utputCorrelation,TOutputDeformationFie
 
   // Default offset
   m_InitialOffset.Fill(0);
+
+  m_Transform = NULL;
  }
 
 template <class TInputImage, class T0utputCorrelation, class TOutputDeformationField>
@@ -327,6 +329,9 @@ FineRegistrationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFie
   deformationValue[0] = m_InitialOffset[0];
   deformationValue[1] = m_InitialOffset[1];
 
+  // Local initial offset: enable the possibility of a different initial offset for each pixel
+  SpacingType localOffset = m_InitialOffset;
+
   // Get fixed image spacing
   SpacingType fixedSpacing = fixedPtr->GetSpacing();
 
@@ -362,13 +367,28 @@ FineRegistrationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFie
     m_Metric->SetFixedImageRegion(currentMetricRegion);
     m_Metric->Initialize();
 
+    // Compute the local offset if required (and the transform was specified)
+    if (m_Transform.IsNotNull())
+      {
+      PointType inputPoint, outputPoint;
+      for(unsigned int dim = 0; dim < TInputImage::ImageDimension; ++dim)
+        {
+        inputPoint[dim] = currentIndex[dim];
+        }
+      outputPoint = m_Transform->TransformPoint(inputPoint);
+      for(unsigned int dim = 0; dim < TInputImage::ImageDimension; ++dim)
+        {
+        localOffset[dim] = outputPoint[dim] - inputPoint[dim];//FIXME check the direction
+        }
+      }
+
     // Compute the correlation at each location
     for(int i = -static_cast<int>(m_SearchRadius[0]); i <= static_cast<int>(m_SearchRadius[0]); ++i)
       {
       for(int j = -static_cast<int>(m_SearchRadius[1]); j <= static_cast<int>(m_SearchRadius[1]); ++j)
         {
-        params[0] = m_InitialOffset[0] + static_cast<double>(i*fixedSpacing[0]);
-        params[1] = m_InitialOffset[1] + static_cast<double>(j*fixedSpacing[1]);
+        params[0] = localOffset[0] + static_cast<double>(i*fixedSpacing[0]);
+        params[1] = localOffset[1] + static_cast<double>(j*fixedSpacing[1]);
 
         try
         {

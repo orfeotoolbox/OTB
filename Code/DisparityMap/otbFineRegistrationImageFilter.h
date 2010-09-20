@@ -91,15 +91,15 @@ public:
   typedef typename TInputImage::SpacingType                       SpacingType;
   typedef typename TInputImage::PointType                         PointType;
   typedef typename TInputImage::OffsetType                        OffsetType;
-  typedef typename itk::InterpolateImageFunction
-  <TInputImage, double>                                           InterpolatorType;
+  typedef itk::InterpolateImageFunction<TInputImage, double>      InterpolatorType;
   typedef typename InterpolatorType::Pointer                      InterpolatorPointerType;
-  typedef typename itk::ContinuousIndex<double, 2>                ContinuousIndexType;
-  typedef typename itk::ImageToImageMetric<TInputImage,
-                                           TInputImage>           MetricType;
+  typedef itk::ContinuousIndex<double, 2>                         ContinuousIndexType;
+  typedef itk::ImageToImageMetric<TInputImage, TInputImage>       MetricType;
   typedef typename MetricType::Pointer                            MetricPointerType;
-  typedef typename itk::TranslationTransform<double,2>            TranslationType;
+  typedef itk::TranslationTransform<double,2>                     TranslationType;
   typedef typename TranslationType::Pointer                       TranslationPointerType;
+  typedef typename itk::Transform<double,2,2>                     TransformType;
+  typedef typename TransformType::Pointer                         TransformPointerType;
 
   /** Set/Get the Metric used to compare images */
   itkSetObjectMacro(Metric,MetricType);
@@ -168,6 +168,10 @@ public:
     m_GridStep.Fill(step);
   }
 
+  /** Set the transform for the initial offset */
+  itkSetObjectMacro(Transform, TransformType);
+  itkGetConstObjectMacro(Transform, TransformType);
+
 protected:
   /** Constructor */
   FineRegistrationImageFilter();
@@ -216,6 +220,9 @@ private:
 
   /** Grid step */
   OffsetType                    m_GridStep;
+
+  /** Transform for initial offset */
+  TransformPointerType          m_Transform;
 
 };
 
