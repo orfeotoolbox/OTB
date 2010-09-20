@@ -37,4 +37,6 @@ void RegisterTests()
   REGISTER_TEST(otbWindowedSincInterpolateImageGaussianFunction);
   REGISTER_TEST(otbWindowedSincInterpolateImageHammingFunctionNew);
   REGISTER_TEST(otbWindowedSincInterpolateImageHammingFunction);
+  REGISTER_TEST(otbBCOInterpolateImageFunctionNew);
+  REGISTER_TEST(otbBCOInterpolateImageFunction);
 }
