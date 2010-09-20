@@ -22,7 +22,7 @@
  *    None
  *E
  **************************************************************************/
-#if defined(__CYGWIN__) || defined(__APPLE__)|| defined(_WIN32)
+#if defined(__CYGWIN__) || defined(__APPLE__)|| defined(_WIN32) || defined(__FreeBSD__)
 #  include "ossim/vpfutil/values.h"
 #else
 #  include <values.h>
@@ -48,7 +48,9 @@
 #    endif
 #    define MAXLONG  LONG_MAX
 #  else
-#    include <malloc.h>
+#    ifndef __FreeBSD__
+#      include <malloc.h>
+#    endif
 #  endif
 #endif
 #ifdef _MSC_VER

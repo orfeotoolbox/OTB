@@ -47,8 +47,10 @@
 #include <sys/types.h>
 #include <sys/malloc.h>
 #else
+#ifndef __FreeBSD__
 #include <malloc.h>
 #include <string.h>
+#endif
 #endif
 #endif
 #include <stdlib.h>
