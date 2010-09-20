@@ -338,21 +338,50 @@ IF(OTB_USE_VISU_GUI)
         #-------------------------------
         # FLTK Library
         #-------------------------------
-        OPTION(OTB_USE_EXTERNAL_FLTK "Use an outside build of FLTK." OFF)
+        
+        #OPTION(OTB_USE_EXTERNAL_FLTK "Use an outside build of FLTK." OFF)
+        
+        FIND_PACKAGE(FLTK)
 
-	IF(OTB_USE_EXTERNAL_FLTK)
-        	FIND_PACKAGE(FLTK)
-		IF(NOT FLTK_FOUND)
-			MESSAGE(FATAL_ERROR
-                  "Cannot build OTB project without FLTK. Please set FLTK_DIR or set OTB_USE_EXTERNAL_FLTK OFF to use INTERNAL FLTK.")
-		ENDIF(NOT FLTK_FOUND)
-	ELSE(OTB_USE_EXTERNAL_FLTK)
-		# Same Set as ITK
-		SET(FLTK_SOURCE_DIR ${OTB_SOURCE_DIR}/Utilities/FLTK)
-		SET(FLTK_BINARY_DIR ${OTB_BINARY_DIR}/Utilities/FLTK)
-		# Additionnal variables needed by OTB_VISU_GUI_LIBRARIES and FLTK_FLUID_EXECUTABLE
-		SET(FLTK_LIBRARIES "fltk_images;fltk;fltk_gl;fltk_forms")
-		SET(FLUID_COMMAND ${EXECUTABLE_OUTPUT_PATH}/fluid)
+	# If an external fltk is found, do not provide the internal fltk choice
+	IF(FLTK_FOUND)
+       OPTION(OTB_USE_EXTERNAL_FLTK "Use an outside build of FLTK." ON)
+	ELSE(FLTK_FOUND)
+	   OPTION(OTB_USE_EXTERNAL_FLTK "Use an outside build of FLTK." OFF)
+	ENDIF(FLTK_FOUND)
+                         
+#        IF(FLTK_FOUND)
+#           SET(OTB_USE_EXTERNAL_FLTK ON)
+#        ELSE(FLTK_FOUND)
+#           SET(OTB_USE_EXTERNAL_FLTK OFF)
+#        ENDIF(FLTK_FOUND)
+
+        # Option for internal/external FLTK
+        MARK_AS_ADVANCED(OTB_USE_EXTERNAL_FLTK)
+
+        IF(OTB_USE_EXTERNAL_FLTK)
+
+                # Mingw Option doesn't exist in the FindFLTK.cmake default configuration file in CMake installationj directory.
+                # Copy  FLTK_PLATFORM_DEPENDENT_LIBS from FLTK CmakeList.txt
+                IF(MINGW)
+                    ADD_DEFINITIONS(-DWIN32)
+                    SET( FLTK_PLATFORM_DEPENDENT_LIBS ole32 uuid wsock32 gdi32 comdlg32)
+                ENDIF(MINGW)
+
+                IF(FLTK_FOUND)
+                    INCLUDE_DIRECTORIES(${FLTK_INCLUDE_DIR})
+                ELSE(FLTK_FOUND)
+                    MESSAGE(FATAL_ERROR
+	                        "Cannot build OTB project without FLTK.  Please set FLTK_DIR  or  set OTB_USE_VISU to OFF  or  set OTB_USE_EXTERNAL_FLTK OFF to use INTERNAL FLTK set on OTB/Utilities repository.")
+                ENDIF(FLTK_FOUND)
+
+        ELSE(OTB_USE_EXTERNAL_FLTK)
+                SET(FLTK_INCLUDE_DIR "")
+                SET(FLTK_LIBRARIES "")
+                
+                SET( FLTK_PLATFORM_DEPENDENT_LIBS "")
+                INCLUDE(${OTB_BINARY_DIR}/Utilities/FLTK/FLTKConfig.cmake)
+
         ENDIF(OTB_USE_EXTERNAL_FLTK)
 
         SET(OTB_VISU_GUI_LIBRARIES "${FLTK_LIBRARIES};${OPENGL_LIBRARIES} ")
