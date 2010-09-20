@@ -75,7 +75,7 @@ int fl_filename_list(const char *d, dirent ***list,
   // prototype, most likely so that it can be passed to qsort without any
   // changes:
 
-#if ( defined(__GLIBC__) && __GLIBC_PREREQ(2, 10) )
+#if ( defined(__GLIBC__) && __GLIBC_PREREQ(2, 10) ) || ( defined(__FreeBSD__) )
   int n = scandir(d, list, 0, (int(*)(const dirent **, const dirent **))sort);
 #else
   int n = scandir(d, list, 0, (int(*)(const void*, const void*))sort);

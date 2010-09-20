@@ -31,8 +31,10 @@
 #    include <sys/types.h>
 #    include <sys/malloc.h>
 #  else
-#    include <malloc.h>
-#    include <string.h>
+#    ifndef __FreeBSD__
+#      include <malloc.h>
+#      include <string.h>
+#    endif
 #  endif
 #endif
 
