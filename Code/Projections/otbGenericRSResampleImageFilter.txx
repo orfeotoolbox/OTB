@@ -24,6 +24,7 @@
 
 #include "projection/ossimUtmProjection.h"
 #include "itkPoint.h"
+#include "itkNumericTraits.h"
 
 namespace otb
 {
@@ -42,6 +43,10 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
   m_InputRpcEstimator = InputRpcModelEstimatorType::New();
   m_OutputRpcEstimator= OutputRpcModelEstimatorType::New();
   m_Transform         = GenericRSTransformType::New();
+
+  // Initialize the deformation field spacing to zero : inconsistant
+  // value 
+  this->SetDeformationFieldSpacing(itk::NumericTraits<SpacingType>::Zero);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -49,6 +54,11 @@ void
 GenericRSResampleImageFilter<TInputImage, TOutputImage>
 ::GenerateData()
 {
+  // check the output spacing of the deformation field
+  // if 0 put an initial value
+  if(this->GetDeformationFieldSpacing() == itk::NumericTraits<SpacingType>::Zero )
+    this->SetDeformationFieldSpacing(2.*this->GetOutputSpacing());
+
   m_Resampler->GraftOutput(this->GetOutput());
   m_Resampler->Update();
   this->GraftOutput(m_Resampler->GetOutput());
