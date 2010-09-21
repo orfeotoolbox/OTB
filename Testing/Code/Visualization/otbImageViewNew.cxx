@@ -28,7 +28,7 @@ int otbImageViewNew(int argc, char * argv[])
   typedef otb::ImageView<ModelType>                ViewType;
 
   // Instantiation
-  ViewType::Pointer model = ViewType::New();
+  ViewType::Pointer view = ViewType::New();
 
   return EXIT_SUCCESS;
 }

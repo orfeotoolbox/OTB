@@ -241,6 +241,7 @@ otbImageViewerEndToEndSingleLayer
 ${INPUTDATA}/couleurs.tif
 200 500 200 0
 )
+
 ADD_TEST(vrTvImageViewerEndToEndSingleLayerWithSelectAreaHandler ${VISUALIZATION_TESTS1}
 otbImageViewerEndToEndSingleLayerWithSelectAreaHandler
 ${INPUTDATA}/couleurs.tif
@@ -249,6 +250,12 @@ ${INPUTDATA}/couleurs.tif
 
 ADD_TEST(vrTvImageViewerEndToEndTwoLayers ${VISUALIZATION_TESTS1}
 otbImageViewerEndToEndTwoLayers
+${INPUTDATA}/couleurs.tif
+200 500 200 0
+)
+
+ADD_TEST(vrTvImageViewerEndToEndGlComponent ${VISUALIZATION_TESTS1}
+otbImageViewerEndToEndGlComponent
 ${INPUTDATA}/couleurs.tif
 200 500 200 0
 )
@@ -411,6 +418,7 @@ otbImageViewNew.cxx
 otbImageViewerEndToEndSingleLayer.cxx
 otbImageViewerEndToEndSingleLayerWithSelectAreaHandler.cxx
 otbImageViewerEndToEndTwoLayers.cxx
+otbImageViewerEndToEndGlComponent.cxx
 otbPixelDescriptionModelNew.cxx
 otbPixelDescriptionModelSingleLayer.cxx
 otbCurves2DWidgetNew.cxx
