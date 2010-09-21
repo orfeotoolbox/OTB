@@ -43,7 +43,7 @@ public:
   {
     TOutput result;
 
-    result = static_cast<TOutput>(m_Coef * static_cast<double>(value));
+    result = static_cast<TOutput>(m_Coef * value);
 
     return result;
   }
