@@ -19,6 +19,8 @@
 #ifndef __otbStreamingResampleImageFilter_txx
 #define __otbStreamingResampleImageFilter_txx
 
+#include "itkNumericTraits.h"
+
 namespace otb
 {
 
@@ -29,6 +31,12 @@ StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionTy
   // internal filters instanciation
   m_DeformationFilter = DeformationFieldGeneratorType::New();
   m_WarpFilter        = WarpImageFilterType::New();
+
+  // Initialize the deformation field spacing to zero : inconsistant
+  // value 
+  SpacingType     nullDeformationFieldSpacing;
+  nullDeformationFieldSpacing.Fill(0.);
+  m_DeformationFilter->SetOutputSpacing(nullDeformationFieldSpacing);
 
   // Wire minipipeline
   m_WarpFilter->SetDeformationField(m_DeformationFilter->GetOutput());
@@ -65,6 +73,11 @@ StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionTy
   region.SetIndex(this->GetOutputStartIndex() );
 
   outputPtr->SetLargestPossibleRegion(region);
+
+  // check the output spacing of the deformation field
+  // if 0 put an initial value
+  if(m_DeformationFilter->GetOutputSpacing() == itk::NumericTraits<SpacingType>::Zero )
+    m_DeformationFilter->SetOutputSpacing(2.*this->GetOutputSpacing());
 }
 
 template <class TInputImage, class TOutputImage, class TInterpolatorPrecisionType>
@@ -84,6 +97,7 @@ StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionTy
 
   // Set up deformation field filter
   SizeType deformationFieldLargestSize;
+  std::cout <<"DeformationField Spacing" <<m_DeformationFilter->GetOutputSpacing()  << std::endl;
   for(unsigned int dim = 0; dim < InputImageType::ImageDimension;++dim)
     {
     // vcl_ceil to avoid numerical problems due to division of
