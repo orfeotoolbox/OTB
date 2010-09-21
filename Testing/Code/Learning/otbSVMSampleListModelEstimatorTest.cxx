@@ -106,7 +106,6 @@ int otbSVMSampleListModelEstimatorTest(int argc, char* argv[])
   EstimatorType::Pointer estimator = EstimatorType::New();
   estimator->SetInputSampleList(generator->GetTrainingListSample());
   estimator->SetTrainingSampleList(generator->GetTrainingListLabel());
-  estimator->SetNumberOfClasses(generator->GetNumberOfClasses());
 
   estimator->Update();
 

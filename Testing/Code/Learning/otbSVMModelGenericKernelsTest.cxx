@@ -267,7 +267,6 @@ int otbSVMKernelsTest_generic(int argc, char* argv[])
   EstimatorType::Pointer estimator = EstimatorType::New();
   estimator->SetInputSampleList(generator->GetTrainingListSample());
   estimator->SetTrainingSampleList(generator->GetTrainingListLabel());
-  estimator->SetNumberOfClasses(generator->GetNumberOfClasses());
 
 
 //  KernelType::Pointer kernel = KernelType::New();
