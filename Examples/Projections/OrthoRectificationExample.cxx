@@ -151,8 +151,8 @@ int main(int argc, char* argv[])
   orthoRectifFilter->SetOutputSpacing(spacing);
 
   ImageType::SpacingType gridSpacing;
-  gridSpacing[0] = atof(2 * argv[9]);
-  gridSpacing[1] = atof(2 * argv[10]);
+  gridSpacing[0] = 2.*atof(argv[9]);
+  gridSpacing[1] = 2.*-atof(argv[10]);
   orthoRectifFilter->SetDeformationFieldSpacing(gridSpacing);
 
   ImageType::PointType origin;
