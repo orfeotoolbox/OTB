@@ -92,12 +92,12 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
 
   if (!this->GetInputImage())
     {
-    return (itk::NumericTraits<RealType>::max());
+    return (itk::NumericTraits<OutputType>::max());
     }
 
   if (!this->IsInsideBuffer(index))
     {
-    return (itk::NumericTraits<RealType>::max());
+    return (itk::NumericTraits<OutputType>::max());
     }
 
 
@@ -123,7 +123,7 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
 
 
   const RealType value = static_cast<RealType>(vcl_abs(this->GetInputImage()->GetPixel(index)));
-  result = functor.operator ()( value);
+  result = functor(value);
 
   return static_cast<OutputType>(result);
 }
