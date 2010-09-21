@@ -97,7 +97,7 @@ StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionTy
 
   // Set up deformation field filter
   SizeType deformationFieldLargestSize;
-  std::cout <<"DeformationField Spacing" <<m_DeformationFilter->GetOutputSpacing()  << std::endl;
+  
   for(unsigned int dim = 0; dim < InputImageType::ImageDimension;++dim)
     {
     // vcl_ceil to avoid numerical problems due to division of
