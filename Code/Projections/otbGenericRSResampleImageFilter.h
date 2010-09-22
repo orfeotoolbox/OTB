@@ -98,11 +98,8 @@ public:
   typedef itk::ImageBase<OutputImageType::ImageDimension>      ImageBaseType;
   
   /** The Deformation field spacing & size */
-  void SetDeformationFieldSpacing(const SpacingType & spacing)
-  {
-    m_Resampler->SetDeformationFieldSpacing(spacing);
-    this->Modified();
-  }
+  otbSetObjectMemberMacro(Resampler,DeformationFieldSpacing, SpacingType);
+
   otbGetObjectMemberConstReferenceMacro(Resampler,
                                         DeformationFieldSpacing,
                                         SpacingType);
