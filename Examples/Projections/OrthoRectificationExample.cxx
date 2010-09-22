@@ -152,7 +152,7 @@ int main(int argc, char* argv[])
 
   ImageType::SpacingType gridSpacing;
   gridSpacing[0] = 2.*atof(argv[9]);
-  gridSpacing[1] = 2.*-atof(argv[10]);
+  gridSpacing[1] = 2.*atof(argv[10]);
   orthoRectifFilter->SetDeformationFieldSpacing(gridSpacing);
 
   ImageType::PointType origin;
