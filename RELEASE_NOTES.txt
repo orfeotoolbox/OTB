@@ -2,17 +2,35 @@ OTB-v.3.6.0 - Changes since version 3.4.0 (2010/??/??)
 -----------------------------------------
 
 * Applications
- * otbFastOrthoRectif
- * otbActiveLearning
- * otbCompareImages
- * otbFineRegistration
- * Old GUI applications removed (now in Monteverdi):  OrthoRectif, OrthoFusion, Classif, ChangeDetection, RadiometricCorrections
+  * otbFastOrthoRectif: fast orthorectification based on grid subsampling
+  * otbActiveLearning: architecture to enable active learning application (put your own algorithms in the middle)
+  * otbCompareImages: image comparison
+  * otbFineRegistration: produces disparity maps between 2 images
+  * Old GUI applications removed (now in Monteverdi):  OrthoRectif, OrthoFusion, Classif, ChangeDetection, RadiometricCorrections
 
 * Library
   * Some classes are marked as deprecated and are available for one release. A migration guide to help the transition is available at http://wiki.orfeo-toolbox.org/index.php/Migration_guide
+  * Add filter to perform arbitrary mathematical operation on image bands (BandMathImageFilter)
+  * Add class to parse mathematical expression (Parser)
+  * Add interpolation function (BCOInterpolateImageFunction)
+  * Add filter to compute the intensity of a complex image (ComplexToIntensityImageFilter)
+  * Add filter to compare two big images (StreamingCompareImageFilter)
+  * Add filters to compute extrema of big images (StreamingMinMaxImageFilter and StreamingMinMaxVectorImageFilter)
+  * Add filter to perform fine registration between images (FineRegistrationImageFilter)
+  * Add filter for higher order texture computation (ScalarImageToHigherOrderTexturesFilter and MaskedScalarImageToGreyLevelRunLengthMatrixGenerator)
+  * Removal of the old textures: http://wiki.orfeo-toolbox.org/index.php/Textures
+  * Add support for Formosat and Worldview2 data
+  * Add margin sampler for SVM (SVMMarginSampler)
+  * Add generic resample filter that reproject in any arbitrary projection: cartographic, sensor model (GenericRSResampleImageFilter)
+  * Add class to produce a RPC model from a physical model (PhysicalToRPCSensorModelImageFilter)
+  * Add classes related to SAR calibration (SarParametricMapFunction, SarRadiometricCalibrationFunction, SarRadiometricCalibrationFunctor, SarRadiometricCalibrationToImageFilter)
+  * Add an action handler for the visualization enabling dragging (DragFullWindowActionHandler)
 
 * System
- * Internal ITK updated to 3.20.0 + OTB Patches
+  * Internal ITK updated to 3.20.0 + OTB Patches
+  * Internal OSSIM updated to svn revision 17734 + OTB patches
+  * Enable the use of an external build of libLAS
+  * Fix internal libkml for MSVC 2010
 
 OTB-v.3.4.0 - Changes since version 3.2.0 (2010/06/30)
 -----------------------------------------
