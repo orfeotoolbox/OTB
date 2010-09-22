@@ -215,7 +215,8 @@ bool ossimBilinearProjection::saveState(ossimKeywordlist& kwl,
 bool ossimBilinearProjection::loadState(const ossimKeywordlist& kwl,
                                         const char* prefix)
 {
-   // Load the base class.
+  std::cout << "ossimBilinearProjection::loadState() BEGIN" << std::endl;
+  // Load the base class.
    ossimProjection::loadState(kwl, prefix);
 
    // Start with clear lists.
@@ -279,6 +280,7 @@ bool ossimBilinearProjection::loadState(const ossimKeywordlist& kwl,
    }
    
    initializeBilinear();
+   std::cout << "ossimBilinearProjection::loadState() END" << std::endl;
 
    return true;
 }

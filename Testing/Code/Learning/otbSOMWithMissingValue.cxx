@@ -18,15 +18,19 @@
 #include "itkExceptionObject.h"
 #include "otbVectorImage.h"
 #include "otbSOMMap.h"
-#include "otbPeriodicSOM.h"
 #include "itkRGBPixel.h"
-#include "itkEuclideanDistance.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "itkListSample.h"
 #include "itkImageRegionIterator.h"
 
-int otbPeriodicSOMTest(int argc, char* argv[])
+#include "itkVariableLengthVector.h"
+#include "otbSOMWithMissingValue.h"
+#include "otbFlexibleDistanceWithMissingValue.h"
+
+
+
+int otbSOMWithMissingValueTest(int argc, char* argv[])
 {
   const unsigned int Dimension = 2;
   char *             inputFileName = argv[1];
@@ -40,22 +44,27 @@ int otbPeriodicSOMTest(int argc, char* argv[])
   double             betaEnd = atof(argv[9]);
   double             initValue = atof(argv[10]);
 
-  typedef double                                          ComponentType;
-  typedef itk::VariableLengthVector<ComponentType>        PixelType;
-  typedef itk::Statistics::EuclideanDistance<PixelType>   DistanceType;
-  typedef otb::SOMMap<PixelType, DistanceType, Dimension> MapType;
-  typedef otb::VectorImage<ComponentType, Dimension>      ImageType;
-  typedef otb::ImageFileReader<ImageType>                 ReaderType;
-  typedef itk::Statistics::ListSample<PixelType>          ListSampleType;
 
-  typedef otb::PeriodicSOM<ListSampleType, MapType> SOMType;
-  typedef otb::ImageFileWriter<MapType>             WriterType;
+  typedef double                                 PixelType;
+  typedef otb::VectorImage<PixelType, Dimension> ImageType;
+  typedef ImageType::PixelType                   VectorType;
+
+  typedef otb::Statistics::FlexibleDistanceWithMissingValue<VectorType> DistanceType;
+  typedef otb::SOMMap<VectorType, DistanceType, Dimension>  MapType;
+  typedef itk::Statistics::ListSample<VectorType>           SampleListType;
+  typedef otb::Functor::CzihoSOMLearningBehaviorFunctor     LearningBehaviorFunctorType;
+  typedef otb::Functor::CzihoSOMNeighborhoodBehaviorFunctor NeighborhoodBehaviorFunctorType;
+  typedef otb::SOMWithMissingValue<SampleListType, MapType,
+      LearningBehaviorFunctorType, NeighborhoodBehaviorFunctorType> SOMType;
+
+  typedef otb::ImageFileReader<ImageType>                 ReaderType;
+  typedef otb::ImageFileWriter<MapType>                   WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(inputFileName);
   reader->Update();
 
-  ListSampleType::Pointer listSample = ListSampleType::New();
+  SampleListType::Pointer listSample = SampleListType::New();
 
   itk::ImageRegionIterator<ImageType> it(reader->GetOutput(), reader->GetOutput()->GetLargestPossibleRegion());
 
