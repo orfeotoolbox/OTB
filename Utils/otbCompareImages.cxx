@@ -33,8 +33,8 @@ int main(int argc, char* argv[])
   parser->SetProgramDescription("Estimator between 2 images");
   parser->AddOption("--InputReference","The reference image","-inR", 1, true);
   parser->AddOption("--InputMeasured","The measured image","-inM", 1, true);
-  parser->AddOption("--NumBandRefImage","The channel number to compare in the reference image (between 1 and number of channels)","-chR", 1, true);
-  parser->AddOption("--NumBandMeasuredImage","The channel number to compare in the measured image (between 1 and number of channels)","-chM", 1, true);
+  parser->AddOption("--NumBandRefImage","The channel number to compare in the reference image (between 1 and number of channels)","-chR", 1, false);
+  parser->AddOption("--NumBandMeasuredImage","The channel number to compare in the measured image (between 1 and number of channels)","-chM", 1, false);
   parser->AddOption("--StartX", "first point in x-axis ", "-x0", 1, false);
   parser->AddOption("--StartY", "first point in y-axis ", "-y0", 1, false);
   parser->AddOption("--SizeX", "size in x-axis ", "-Nx", 1, false);
@@ -77,11 +77,18 @@ int main(int argc, char* argv[])
   reader2->SetFileName(parseResult->GetParameterString("--InputMeasured"));
   reader2->GenerateOutputInformation();
 
-  unsigned int layer1 = parseResult->GetParameterUInt("--NumBandRefImage");
-  unsigned int layer2 = parseResult->GetParameterUInt("--NumBandMeasuredImage");
+  unsigned int layer1 = 1;
+  unsigned int layer2 = 1;
 
+  if (parseResult->IsOptionPresent("--NumBandRefImage")) 
+    {
+    layer1 = parseResult->GetParameterUInt("--NumBandRefImage");
+    }
   
-  
+  if (parseResult->IsOptionPresent("--NumBandMeasuredImage")) 
+    {
+    layer2 = parseResult->GetParameterUInt("--NumBandMeasuredImage");
+    }
  
   ExtractROIMonoFilterType::Pointer extractROIMonoFilter1= ExtractROIMonoFilterType::New();
   extractROIMonoFilter1->SetInput(reader1->GetOutput());
