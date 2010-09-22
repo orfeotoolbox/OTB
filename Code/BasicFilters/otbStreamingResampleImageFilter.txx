@@ -30,6 +30,10 @@ StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionTy
   m_DeformationFilter = DeformationFieldGeneratorType::New();
   m_WarpFilter        = WarpImageFilterType::New();
 
+  // Initialize the deformation field spacing to zero : inconsistant
+  // value 
+  this->SetDeformationFieldSpacing(itk::NumericTraits<SpacingType>::Zero);
+
   // Wire minipipeline
   m_WarpFilter->SetDeformationField(m_DeformationFilter->GetOutput());
 }
@@ -65,6 +69,12 @@ StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionTy
   region.SetIndex(this->GetOutputStartIndex() );
 
   outputPtr->SetLargestPossibleRegion(region);
+
+  // check the output spacing of the deformation field
+  if(this->GetDeformationFieldSpacing()== itk::NumericTraits<SpacingType>::Zero)
+    {
+    this->SetDeformationFieldSpacing(2.*this->GetOutputSpacing());
+    }
 }
 
 template <class TInputImage, class TOutputImage, class TInterpolatorPrecisionType>
