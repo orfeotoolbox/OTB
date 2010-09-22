@@ -74,7 +74,7 @@ public:
   typedef TOutputImage               OutputImageType;
   
   /** Deformation field used to warp the image*/
-  typedef itk::Vector<typename TOutputImage::InternalPixelType, 
+  typedef itk::Vector<double, 
                       TOutputImage::ImageDimension>             DeformationType;
   typedef otb::Image<DeformationType>                           DeformationFieldType;
 
