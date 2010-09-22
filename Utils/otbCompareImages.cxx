@@ -31,10 +31,10 @@ int main(int argc, char* argv[])
   ParserType::Pointer parser = ParserType::New();
 
   parser->SetProgramDescription("Estimator between 2 images");
-  parser->AddOption("--ReferenceImage","The reference image","-refIn", 1,true);
-  parser->AddOption("--MeasuredImage","The measured image","-meaIn", 1,true);
-  parser->AddOption("--NumBandRefImage","The layer number to compare in the reference image (between 1 and number of layers)","-layerRef",1,true);
-  parser->AddOption("--NumBandMeasuredImage","The layer number to compare in the measured image (between 1 and number of layers)","-layerMea",1,true);
+  parser->AddOption("--InputReference","The reference image","-inR", 1, true);
+  parser->AddOption("--InputMeasured","The measured image","-inM", 1, true);
+  parser->AddOption("--NumBandRefImage","The channel number to compare in the reference image (between 1 and number of channels)","-chR", 1, true);
+  parser->AddOption("--NumBandMeasuredImage","The channel number to compare in the measured image (between 1 and number of channels)","-chM", 1, true);
   parser->AddOption("--StartX", "first point in x-axis ", "-x0", 1, false);
   parser->AddOption("--StartY", "first point in y-axis ", "-y0", 1, false);
   parser->AddOption("--SizeX", "size in x-axis ", "-Nx", 1, false);
@@ -70,11 +70,11 @@ int main(int argc, char* argv[])
   //typedef otb::StreamingStatisticsImageFilter<ExtractROIMonoFilterType::OutputImageType> StreamingCompareImageFilterType;
   // Read input images information
   ReaderType::Pointer reader1= ReaderType::New();
-  reader1->SetFileName(parseResult->GetParameterString("--ReferenceImage"));
+  reader1->SetFileName(parseResult->GetParameterString("--InputReference"));
   reader1->GenerateOutputInformation();
 
   ReaderType::Pointer reader2= ReaderType::New();
-  reader2->SetFileName(parseResult->GetParameterString("--MeasuredImage"));
+  reader2->SetFileName(parseResult->GetParameterString("--InputMeasured"));
   reader2->GenerateOutputInformation();
 
   unsigned int layer1 = parseResult->GetParameterUInt("--NumBandRefImage");
