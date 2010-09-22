@@ -21,44 +21,31 @@
 #include "itkInterpolateImageFunction.h"
 #include "vnl/vnl_vector.h"
 
+
+#include "otbVectorImage.h"
+
 namespace otb
 {
-
 /** \class 
- * \brief 
+ *  \brief 
  *
- * 
- * 
- * 
- * 
- *
- * 
- *
- * \warning 
- * 
+ *  
  *
  * \sa 
- *
- * \ingroup ImageFunctions ImageInterpolators 
+ * \sa 
+ * \sa 
  */
-template <
-  class TInputImage, 
-  class TCoordRep = double>
-class ITK_EXPORT BCOInterpolateImageFunction : 
-  public itk::InterpolateImageFunction<TInputImage,TCoordRep> 
+template< class TInputImage, class TCoordRep = double >
+class ITK_EXPORT BCOInterpolateImageFunctionBase : 
+  public itk::InterpolateImageFunction<TInputImage,TCoordRep>
 {
 public:
   /** Standard class typedefs. */
-  typedef BCOInterpolateImageFunction                          Self;
+  typedef BCOInterpolateImageFunctionBase                      Self;
   typedef itk::InterpolateImageFunction<TInputImage,TCoordRep> Superclass;
-  typedef itk::SmartPointer<Self>                              Pointer;
-  typedef itk::SmartPointer<const Self>                        ConstPointer;
   
   /** Run-time type information (and related methods). */
-  itkTypeMacro(BCOInterpolateImageFunction, InterpolateImageFunction);
-
-  /** Method for creation through the object factory. */
-  itkNewMacro(Self);  
+  itkTypeMacro(BCOInterpolateImageFunctionBase, InterpolateImageFunction);
 
   /** OutputType typedef support. */
   typedef typename Superclass::OutputType OutputType;
@@ -70,9 +57,8 @@ public:
   typedef typename Superclass::InputPixelType InputPixelType;
   
   /** RealType typedef support. */
-  //typedef typename Superclass::RealType RealType;
-  typedef typename itk::NumericTraits<typename TInputImage::PixelType>::RealType RealType;
-
+  typedef typename Superclass::RealType RealType;
+  
   /** Dimension underlying input image. */
   itkStaticConstMacro(ImageDimension, unsigned int,Superclass::ImageDimension);
 
@@ -89,36 +75,6 @@ public:
   /** Coeficients container type.*/
   typedef vnl_vector<double> CoefContainerType;
 
-  /** Interpolate the image at a point position
-   *
-   * Returns the interpolated image intensity at a 
-   * specified point position. No bounds checking is done.
-   * The point is assume to lie within the image buffer.
-   *
-   * ImageFunction::IsInsideBuffer() can be used to check bounds before
-   * calling the method. */
-  //virtual OutputType Evaluate( const PointType& point ) const;//////////////////////////////////////////////////
- 
-  /** Evaluate the function at a ContinuousIndex position
-   *
-   * Returns the linearly interpolated image intensity at a 
-   * specified point position. No bounds checking is done.
-   * The point is assume to lie within the image buffer.
-   *
-   * ImageFunction::IsInsideBuffer() can be used to check bounds before
-   * calling the method. */
-  virtual OutputType EvaluateAtContinuousIndex( const ContinuousIndexType & index ) const;/////////////////////
-  
-  /** Interpolate the image at an index position.
-   *
-   * Simply returns the image value at the
-   * specified index position. No bounds checking is done.
-   * The point is assume to lie within the image buffer.
-   *
-   * ImageFunction::IsInsideBuffer() can be used to check bounds before
-   * calling the method. */
-  //virtual OutputType EvaluateAtIndex( const IndexType & index ) const;//////////////////////////////////////////
-
   /** Set/Get the window radius */
   virtual void SetRadius(unsigned int radius);
   virtual unsigned int GetRadius() const;
@@ -127,16 +83,27 @@ public:
   virtual void SetAlpha(double alpha);
   virtual double GetAlpha() const;
 
-  /** Compute the BCO coefficients. */
-  void EvaluateCoef();
+  /** Evaluate the function at a ContinuousIndex position
+   *
+   * Returns the linearly interpolated image intensity at a 
+   * specified point position. No bounds checking is done.
+   * The point is assume to lie within the image buffer.
+   *
+   * ImageFunction::IsInsideBuffer() can be used to check bounds before
+   * calling the method. */
+  //virtual OutputType EvaluateAtContinuousIndex( const ContinuousIndexType & index ) const = 0;
 
 protected:
-  BCOInterpolateImageFunction();
-  ~BCOInterpolateImageFunction();
+  BCOInterpolateImageFunctionBase();
+  ~BCOInterpolateImageFunctionBase();
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
+ /** Compute the BCO coefficients. */
+  virtual void EvaluateCoef();
+  virtual double GetBCOCoef(unsigned int idx) const;
+
 
 private:
-  BCOInterpolateImageFunction( const Self& ); //purposely not implemented
+  BCOInterpolateImageFunctionBase( const Self& ); //purposely not implemented
   void operator=( const Self& ); //purposely not implemented
 
   /** Used radius for the BCO */
@@ -147,6 +114,82 @@ private:
   CoefContainerType      m_BCOCoef;
 };
 
+
+template < class TInputImage, class TCoordRep = double >
+class ITK_EXPORT BCOInterpolateImageFunction : 
+    public otb::BCOInterpolateImageFunctionBase< TInputImage, TCoordRep > 
+{
+public:
+  /** Standard class typedefs. */
+  typedef BCOInterpolateImageFunction                              Self;
+  typedef BCOInterpolateImageFunctionBase<TInputImage,TCoordRep>   Superclass;
+  typedef itk::SmartPointer<Self>                                  Pointer;
+  typedef itk::SmartPointer<const Self>                            ConstPointer;
+  
+  itkTypeMacro(BCOInterpolateImageFunction, BCOInterpolateImageFunctionBase);
+  itkNewMacro(Self);  
+  itkStaticConstMacro(ImageDimension, unsigned int,Superclass::ImageDimension);
+
+  typedef typename Superclass::OutputType            OutputType;
+  typedef typename Superclass::InputImageType        InputImageType;
+  typedef typename Superclass::InputPixelType        InputPixelType;
+  typedef typename Superclass::RealType              RealType;
+  typedef typename Superclass::IndexType             IndexType;
+  typedef typename Superclass::IndexValueType        IndexValueType;
+  typedef typename Superclass::PointType             PointType;
+  typedef typename Superclass::ContinuousIndexType   ContinuousIndexType;
+  typedef typename Superclass::CoefContainerType     CoefContainerType;
+
+  virtual OutputType EvaluateAtContinuousIndex( const ContinuousIndexType & index ) const;
+
+protected:
+  BCOInterpolateImageFunction();
+   ~BCOInterpolateImageFunction();
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+
+private:
+  BCOInterpolateImageFunction( const Self& ); //purposely not implemented
+  void operator=( const Self& ); //purposely not implemented
+};
+
+
+template < typename TPixel, unsigned int VImageDimension, class TCoordRep >
+class ITK_EXPORT BCOInterpolateImageFunction< otb::VectorImage<TPixel,VImageDimension> , TCoordRep > : 
+    public otb::BCOInterpolateImageFunctionBase< otb::VectorImage<TPixel,VImageDimension> , TCoordRep > 
+{
+public:
+  /** Standard class typedefs.*/ 
+  typedef BCOInterpolateImageFunction                              Self;
+  typedef BCOInterpolateImageFunctionBase
+      < otb::VectorImage<TPixel,VImageDimension>, TCoordRep >      Superclass;
+  typedef itk::SmartPointer<Self>                                  Pointer;
+  typedef itk::SmartPointer<const Self>                            ConstPointer;
+  
+  itkTypeMacro(BCOInterpolateImageFunction, BCOInterpolateImageFunctionBase);
+  itkNewMacro(Self);  
+  itkStaticConstMacro(ImageDimension, unsigned int,Superclass::ImageDimension);
+
+  typedef typename Superclass::OutputType            OutputType;
+  typedef typename Superclass::InputImageType        InputImageType;
+  typedef typename Superclass::InputPixelType        InputPixelType;
+  typedef typename Superclass::RealType              RealType;
+  typedef typename Superclass::IndexType             IndexType;
+  typedef typename Superclass::IndexValueType        IndexValueType;
+  typedef typename Superclass::PointType             PointType;
+  typedef typename Superclass::ContinuousIndexType   ContinuousIndexType;
+  typedef typename Superclass::CoefContainerType     CoefContainerType;
+
+  virtual OutputType EvaluateAtContinuousIndex( const ContinuousIndexType & index ) const;
+
+protected:
+  BCOInterpolateImageFunction();
+  ~BCOInterpolateImageFunction();
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+
+private:
+  BCOInterpolateImageFunction( const Self& ); //purposely not implemented
+  void operator=( const Self& ); //purposely not implemented
+};
 
 } // end namespace otb
 
