@@ -2,7 +2,7 @@
 
   Program:   ORFEO Toolbox
   Language:  C++
-  Date:          $Date$
+  Date:      $Date$
   Version:   $Revision$
 
 
@@ -42,6 +42,8 @@ int otbImageSeriesFileReader(int argc, char* argv[])
   ImageReader::Pointer reader = ImageReader::New();
   reader->SetFileName(enviMetaFile);
   reader->Update();
+
+  std::cout << reader << std::endl;
 
   ossimFilename outputFilenameBase(outputFile);
 
