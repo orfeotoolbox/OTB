@@ -195,11 +195,11 @@ public:
   typedef typename StatFilterType::PixelObjectType     PixelObjectType;
   typedef typename StatFilterType::MatrixObjectType    MatrixObjectType;
 
-  void SetInput(TInputImage * input)
+  void SetInput(InputImageType * input)
   {
     this->GetFilter()->SetInput(input);
   }
-  TInputImage * GetInput()
+  const InputImageType * GetInput()
   {
     return this->GetFilter()->GetInput();
   }

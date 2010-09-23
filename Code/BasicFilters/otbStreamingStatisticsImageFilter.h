@@ -230,6 +230,10 @@ public:
   {
     this->GetFilter()->SetInput(input);
   }
+  const InputImageType * GetInput()
+  {
+    return this->GetFilter()->GetInput();
+  }
 
   /** Return the computed Minimum. */
   PixelType GetMinimum() const
