@@ -253,11 +253,11 @@ public:
   }
   PixelObjectType* GetMaximumOutput()
   {
-    return this->GetFilter()->MaximumOutput();
+    return this->GetFilter()->GetMaximumOutput();
   }
   const PixelObjectType* GetMaximumOutput() const
   {
-    return this->GetFilter()->MaximumOutput();
+    return this->GetFilter()->GetMaximumOutput();
   }
 
   /** Return the computed Mean. */
