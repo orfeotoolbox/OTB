@@ -205,7 +205,7 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
    		 ossimRefPtr<ossimFormosatModel> model = new ossimFormosatModel(meta.get());
          if(!model->getErrorStatus())
          {
-            result = model.get();
+            projection = model.get();
          }
          model = 0;
       }

@@ -275,7 +275,7 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimKeywordlist& kwl,
 
       if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying TileMap...";
       result = new ossimTileMapTileSource();
-      if (result->loadState(copyFilename))  break;
+      if (result->loadState(kwl, prefix))  break;
 
       result = 0;
       break;
@@ -703,7 +703,7 @@ ossimObject* ossimImageHandlerFactory::createObject(const ossimKeywordlist& kwl,
          }
       }
    }
-   if(STATIC_TYPE_NAME(ossimTileMapTileSource) == typeName)
+   if(ossimString(type).trim() == STATIC_TYPE_NAME(ossimTileMapTileSource))
    {
       return new ossimTileMapTileSource();
    }

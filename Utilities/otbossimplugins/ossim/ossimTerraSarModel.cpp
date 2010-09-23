@@ -226,8 +226,9 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
       if (!initNoise(xdoc.get(), tsDoc)) break;
       if (!initCalibration(xdoc.get(), tsDoc)) break;
 
-      if (!tsDoc.getCalFactor(xdoc.get(), s)) break;
-      _calFactor = s.toFloat64();
+//      replaced by OTB by the initCalibration above
+//      if (!tsDoc.getCalFactor(xdoc.get(), s)) break;
+//      _calFactor = s.toFloat64();
 
       if (!tsDoc.getRadarFrequency(xdoc.get(), s)) break;
       _radarFrequency= s.toFloat64();
@@ -235,8 +236,8 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
       if (!tsDoc.getAzimuthStartTime(xdoc.get(), _azStartTime)) break;
       if (!tsDoc.getAzimuthStopTime(xdoc.get(), _azStopTime)) break;
       if (!tsDoc.getGenerationTime(xdoc.get(), _generationTime)) break;
-
-      if (!initIncidenceAngles(xdoc.get(), tsDoc)) break;
+//      removed by OTB
+//      if (!initIncidenceAngles(xdoc.get(), tsDoc)) break;
       xdoc = 0;
 
       _productXmlFile = xmlfile;
