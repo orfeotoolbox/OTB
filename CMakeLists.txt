@@ -508,6 +508,7 @@ ENDIF(OTB_USE_PQXX)
 #-------------------------------
 # Boost Library
 #-------------------------------
+SET (Boost_MINOR_VERSION 0)
 FIND_PACKAGE(Boost)
 IF(Boost_FOUND)
   IF (NOT (${Boost_MINOR_VERSION} EQUAL 40))
