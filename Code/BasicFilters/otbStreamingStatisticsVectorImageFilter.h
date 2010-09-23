@@ -239,11 +239,11 @@ public:
   }
   PixelObjectType* GetMinimumOutput()
   {
-    return this->GetFilter()->MinimumOutput();
+    return this->GetFilter()->GetMinimumOutput();
   }
   const PixelObjectType* GetMinimumOutput() const
   {
-    return this->GetFilter()->MinimumOutput();
+    return this->GetFilter()->GetMinimumOutput();
   }
 
   /** Return the computed Maximum. */
