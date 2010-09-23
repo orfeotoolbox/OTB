@@ -50,7 +50,7 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
    const ossimFilename& filename, ossim_uint32 /*entryIdx*/)const
 {
    static const char MODULE[] = "ossimPluginProjectionFactory::createProjection(ossimFilename& filename)";
-   ossimRefPtr<ossimProjection> result = 0;
+   ossimRefPtr<ossimProjection> projection = 0;
 
    if(traceDebug())
    {
@@ -59,12 +59,17 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
    }
 
    
-   if ( !result )
+   if ( !projection )
    {
       ossimRefPtr<ossimRadarSat2Model> model = new ossimRadarSat2Model();
       if ( model->open(filename) )
       {
-         result = model.get();
+         // Check if a coarse grid was generated, and use it instead:
+         projection = model->getReplacementOcgModel().get();
+         if (projection.valid())
+            model = 0; // Have OCG, don't need this one anymore
+         else
+            projection = model.get();
       }
       else
       {
@@ -78,13 +83,18 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
         	   << MODULE << " DEBUG: testing ossimTerraSarModel" << std::endl;
     }
 
-   if ( !result )
+   if ( !projection )
    {
       ossimRefPtr<ossimTerraSarModel> model = new ossimTerraSarModel();
 
      if ( model->open(filename) )
       {
-         result = model.get();
+         // Check if a coarse grid was generated, and use it instead:
+         projection = model->getReplacementOcgModel().get();
+         if (projection.valid())
+            model = 0; // Have OCG, don't need this one anymore
+         else
+            projection = model.get();
       }
       else
       {
@@ -98,12 +108,12 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
         	   << MODULE << " DEBUG: testing ossimErsSarModel" << std::endl;
    }
 
-   if ( !result )
+   if ( !projection )
    {
       ossimRefPtr<ossimErsSarModel> model = new ossimErsSarModel();
       if ( model->open(filename) )
       {
-         result = model.get();
+         projection = model.get();
       }
       else
       {
@@ -117,12 +127,12 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
         	   << MODULE << " DEBUG: testing ossimEnvisatSarModel" << std::endl;
    }
 
-   if (!result)
+   if (!projection)
    {
      ossimRefPtr<ossimEnvisatAsarModel> model = new ossimEnvisatAsarModel();
      if (model->open(filename))
      {
-       result = model.get();
+       projection = model.get();
      }
      else
      {
@@ -136,12 +146,12 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
         	   << MODULE << " DEBUG: testing ossimRadarSatModel" << std::endl;
    }
 
-   if (!result)
+   if (!projection)
    {
      ossimRefPtr<ossimRadarSatModel> model = new ossimRadarSatModel();
      if (model->open(filename))
      {
-       result = model.get();
+       projection = model.get();
      }
      else
      {
@@ -155,12 +165,12 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
         	   << MODULE << " DEBUG: testing ossimAlosPalsarModel" << std::endl;
    }
 
-   if (!result)
+   if (!projection)
    {
      ossimRefPtr<ossimAlosPalsarModel> model = new ossimAlosPalsarModel();
      if (model->open(filename))
      {
-       result = model.get();
+       projection = model.get();
      }
      else
      {
@@ -201,7 +211,7 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
       }
    }
 
-   return result.release();
+   return projection.release();
 }
 
 ossimProjection* ossimPluginProjectionFactory::createProjection(
@@ -237,7 +247,7 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
    }
    else if (name == STATIC_TYPE_NAME(ossimRadarSatModel))
    {
-     return new ossimRadarSatModel;
+     return new ossimAlosPalsarModel;
    }
    else if (name == STATIC_TYPE_NAME(ossimAlosPalsarModel))
    {

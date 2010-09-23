@@ -189,8 +189,6 @@ private:
    std::vector< RadarSat2NoiseLevel > _noiseLevel ;
 
 
-   ossimFilename theProductXmlFile;
-
 TYPE_DATA
 
 };

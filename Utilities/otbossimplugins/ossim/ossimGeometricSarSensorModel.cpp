@@ -14,14 +14,13 @@
 #include <otb/GalileanEphemeris.h>
 #include <otb/GeographicEphemeris.h>
 #include <otb/GMSTDateTime.h>
-
 #include <otb/PlatformPosition.h>
 #include <otb/SensorParams.h>
 #include <otb/RefPoint.h>
 #include <otb/SarSensor.h>
-
 #include <ossim/base/ossimTrace.h>
-
+#include <ossim/base/ossimPreferences.h>
+#include <ossim/projection/ossimCoarseGridModel.h>
 #include <cmath>
 #include <string>
 
@@ -29,13 +28,13 @@ namespace ossimplugins
 {
 
 
-static const char PRODUCT_GEOREFERENCED_FLAG_KW[] =
-   "product_georeferenced_flag";
+static const char PRODUCT_GEOREFERENCED_FLAG_KW[] = "product_georeferenced_flag";
 static const char OPTIMIZATION_FACTOR_X_KW[] = "optimization_factor_x";
 static const char OPTIMIZATION_FACTOR_Y_KW[] = "optimization_factor_y";
 static const char OPTIMIZATION_BIAS_X_KW[] = "optimization_bias_x";
 static const char OPTIMIZATION_BIAS_Y_KW[] = "optimization_bias_y";
 
+const char* ossimGeometricSarSensorModel::CREATE_OCG_PREF_KW = "geometric_sar_sensor_model.create_ocg";
 
 RTTI_DEF1(ossimGeometricSarSensorModel, "ossimGeometricSarSensorModel", ossimSensorModel);
 
@@ -59,14 +58,16 @@ ossimGeometricSarSensorModel::ossimGeometricSarSensorModel(
    const ossimGeometricSarSensorModel& rhs)
    :
    ossimSensorModel(rhs),
-   _platformPosition(rhs._platformPosition),
-   _sensor(rhs._sensor),
-   _refPoint(rhs._refPoint),
+   _platformPosition(rhs._platformPosition?rhs._platformPosition->Clone():(PlatformPosition*)0),
+   _sensor(rhs._sensor?rhs._sensor->Clone():(SensorParams*)0),
+   _refPoint(rhs._refPoint?rhs._refPoint->Clone():( RefPoint *)0),
    _isProductGeoreferenced(rhs._isProductGeoreferenced),
    _optimizationFactorX(rhs._optimizationFactorX),
    _optimizationFactorY(rhs._optimizationFactorY),
    _optimizationBiasX(rhs._optimizationBiasX),
-   _optimizationBiasY(rhs._optimizationBiasY)
+   _optimizationBiasY(rhs._optimizationBiasY),
+   _productXmlFile(rhs._productXmlFile),
+   _imageFilename(rhs._imageFilename)
 {
 }
 
@@ -75,16 +76,19 @@ ossimGeometricSarSensorModel::~ossimGeometricSarSensorModel()
    if (_platformPosition != 0)
    {
       delete _platformPosition;
+      _platformPosition = 0;
    }
 
    if(_sensor != 0)
    {
       delete _sensor;
+      _sensor = 0;
    }
 
    if(_refPoint != 0)
    {
       delete _refPoint;
+      _refPoint = 0;
    }
 }
 
@@ -574,4 +578,33 @@ std::ostream& ossimGeometricSarSensorModel::print(std::ostream& out) const
 
    return ossimSensorModel::print(out);
 }
+
+//*************************************************************************************************
+// Creates replacement coarse grid model if user requested via ossim preferences keyword.
+// Returns true if load OK, false on error
+//*************************************************************************************************
+bool ossimGeometricSarSensorModel::createReplacementOCG()
+{
+   // Read the preferences to determine if we need to do this:
+   ossimString str (ossimPreferences::instance()->findPreference(CREATE_OCG_PREF_KW));
+   if (!str.toBool())
+      return true; // this is not an error condition
+
+   // Compute the coarse grid:
+   _replacementOcgModel = new ossimCoarseGridModel;
+   _replacementOcgModel->setInterpolationError(0.1);
+   _replacementOcgModel->setMinGridSpacing(50);
+   
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_NOTICE)<<"\nComputing coarse grid..."<<endl;
+   }
+   _replacementOcgModel->buildGrid(theImageClipRect, this, 500.00, true, false);
+
+   // Save the coarse grid to appropriate location given image filename:
+   bool status = _replacementOcgModel->saveCoarseGrid(_imageFilename); // this saves geom file as well
+
+   return status;
+}
+
 }
