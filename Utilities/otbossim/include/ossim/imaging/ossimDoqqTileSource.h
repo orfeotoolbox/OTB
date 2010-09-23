@@ -8,7 +8,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimDoqqTileSource.h 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimDoqqTileSource.h 17932 2010-08-19 20:34:35Z dburken $
 #ifndef ossimDoqqTileSource_HEADER
 #define ossimDoqqTileSource_HEADER
 #include <ossim/imaging/ossimGeneralRasterTileSource.h>
@@ -27,7 +27,7 @@ public:
    
    //! Returns the image geometry object associated with this tile source or NULL if non defined.
    //! The geometry contains full-to-local image transform as well as projection (image-to-world)
-   virtual ossimImageGeometry* getImageGeometry();
+   virtual ossimRefPtr<ossimImageGeometry> getImageGeometry();
 
    bool open(const ossimFilename& filename);
    bool open(const ossimGeneralRasterInfo& info);

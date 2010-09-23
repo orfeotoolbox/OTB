@@ -10,7 +10,7 @@
 // Description: Class declaration for image generator.
 //
 //*************************************************************************
-// $Id: ossimIgen.h 17024 2010-04-13 15:26:40Z dburken $
+// $Id: ossimIgen.h 17815 2010-08-03 13:23:14Z dburken $
 #ifndef ossimIgen_HEADER
 #define ossimIgen_HEADER
 
@@ -26,7 +26,7 @@
 
 class ossimImageChain;
 class ossimImageFileWriter;
-class ossimProjection;
+class ossimMapProjection;
 class ossimImageViewTransform;
 class ossimImageSource;
 class ossimImageMpiMWriterSequenceConnection;
@@ -34,16 +34,16 @@ class ossimImageMpiSWriterSequenceConnection;
 class ossimObject;
 class ossimArgumentParser;
 
-class OSSIM_DLL ossimIgen
+class OSSIM_DLL ossimIgen : public ossimReferenced
 {
 public:
    ossimIgen();
-   virtual ~ossimIgen();
 
    virtual void initialize(const ossimKeywordlist& kwl);
    virtual void outputProduct();
    
 protected:
+   virtual ~ossimIgen();
    void initializeAttributes();
    void slaveSetup();
    bool loadProductSpec();
@@ -53,7 +53,7 @@ protected:
    bool writeToFile(ossimImageFileWriter* writer);
 
    ossimRefPtr<ossimConnectableContainer> theContainer;
-   ossimRefPtr<ossimProjection>  theProductProjection;
+   ossimRefPtr<ossimMapProjection>  theProductProjection;
    ossimRefPtr<ossimImageChain>  theProductChain;
    ossimDrect        theOutputRect;
    bool              theBuildThumbnailFlag;
@@ -63,7 +63,8 @@ protected:
    bool              theTilingEnabled;
    ossimTiling       theTiling;
    bool              theProgressFlag;
-   
+   bool              theStdoutFlag;
+
 };
 
 #endif

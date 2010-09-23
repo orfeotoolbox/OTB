@@ -9,7 +9,7 @@
 // Description: Container class for a tile of image data.
 //
 //*******************************************************************
-// $Id: ossimImageData.h 17003 2010-04-12 20:04:07Z dburken $
+// $Id: ossimImageData.h 18078 2010-09-14 14:43:09Z dburken $
 #ifndef ossimImageData_HEADER
 #define ossimImageData_HEADER
 
@@ -534,11 +534,11 @@ public:
     * BSQ format.  Currently does not support converting to BIP or BIL
     * or byte swapping but probably should add at some point.
     *
-    * @param os The output stream write to.
+    * @param f File to write.
     *
     * @return true on success, false on error.
     */
-   virtual bool write(std::ostream& os) const;
+   virtual bool write(const ossimFilename& f) const;
 
    /**
     * Copies entire tile to buf passed in.  Data put in buf is normalized.
@@ -803,11 +803,52 @@ public:
     * else, 0.
     */
    virtual void computeAlphaChannel();
+
+   /**
+    * @brief Method to copy a single line to the tile.
+    *
+    * This will copy a line to the tile.  It is assumed that all bands are in
+    * the buffer "src".  Only pixels within the tile rect will be copied.
+    * Note that all coordinates are relative to the tile coordinates.
+    * Clipping will be performed on pixels outside of the tile rectangle.
+    * No fill is added if a partial tile line is copied so callers
+    * should do a ossimImageData::makeBlank if the whole tile is not to be
+    * stuffed.  ossimImageData::validate should be called after all lines
+    * are copied if in doubt of a full tile.
+    *
+    * @param src The source buffer or line to copy containing all bands.
+    *
+    * @param lineNumber Line number to copy.
+    *
+    * @param lineStartSample The start sample of the source buffer relative
+    * to tile coordinates.
+    *
+    * @param lineStopSample The stop sample of the source buffer relative
+    * to tile coordinates.
+    *
+    * @param lineInterleave Interleave of src buffer.  If OSSIM_BIP assumed
+    * rgbrgbrgb; else, red row, green row, blue row.
+    *
+    * Usage example in method: ossimTiffTileSource::loadFromScanLine
+    */
+   virtual void copyLine(const void* src,
+                         ossim_int32 lineNumber,
+                         ossim_int32 lineStartSample,
+                         ossim_int32 lineStopSample,
+                         ossimInterleaveType lineInterleave);
    
 protected:
 
    ossimImageData();
 
+   /** @brief Templated copy line method. */
+   template <class T> void copyLineTemplate(T dummyTemplate,
+                                            const void* src,
+                                            ossim_int32 lineNumber,
+                                            ossim_int32 lineStartSample,
+                                            ossim_int32 lineStopSample,
+                                            ossimInterleaveType lineInterleave);
+   
    /**
     * @brief Templated stretch method.
     *

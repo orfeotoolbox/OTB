@@ -7,14 +7,14 @@
 // Description:
 //
 //*******************************************************************
-//  $Id: ossimObliqueMercatorProjection.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimObliqueMercatorProjection.h 17815 2010-08-03 13:23:14Z dburken $
 
 #ifndef ossimObliqueMercatorProjection_HEADER
 #define ossimObliqueMercatorProjection_HEADER
 
 #include <ossim/projection/ossimMapProjection.h>
 
-class ossimObliqueMercatorProjection : public ossimMapProjection
+class OSSIMDLLEXPORT ossimObliqueMercatorProjection : public ossimMapProjection
 {
 public:   
    ossimObliqueMercatorProjection(const ossimEllipsoid& ellipsoid = ossimEllipsoid(),
@@ -89,6 +89,10 @@ public:
     */
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix=0);
+
+   //! Returns TRUE if principal parameters are within epsilon tolerance.
+   virtual bool operator==(const ossimProjection& projection) const;
+
 protected:
 
    ossimGpt theCentralPoint1;

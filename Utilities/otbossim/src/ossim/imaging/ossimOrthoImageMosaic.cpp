@@ -5,7 +5,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimOrthoImageMosaic.cpp 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimOrthoImageMosaic.cpp 17932 2010-08-19 20:34:35Z dburken $
 #include <ossim/imaging/ossimOrthoImageMosaic.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimTrace.h>
@@ -103,27 +103,25 @@ void ossimOrthoImageMosaic::getOverlappingImages(std::vector<ossim_uint32>& resu
 //**************************************************************************************************
 // Returns the image geometry for the complete mosaic
 //**************************************************************************************************
-ossimImageGeometry* ossimOrthoImageMosaic::getImageGeometry()
+ossimRefPtr<ossimImageGeometry> ossimOrthoImageMosaic::getImageGeometry()
 {
-   // If we already have a geometry object, return it:
-   if (m_Geometry.valid())
-      return m_Geometry.get();
-
-   // The geometry (projection) associated with this mosaic is necessarily the same for all
-   // single-image objects feeding into this combiner, So we will copy the first image source's
-   // geometry, and modify our copy to reflect the mosaic-specific items.
-   ossimImageSource* interface = PTR_CAST(ossimImageSource, getInput(0));
-   if(interface)
+   if ( !m_Geometry.valid() )
    {
-      const ossimImageGeometry* inputGeom = interface->getImageGeometry();
-      if (inputGeom)
+      // The geometry (projection) associated with this mosaic is necessarily the same for all
+      // single-image objects feeding into this combiner, So we will copy the first image source's
+      // geometry, and modify our copy to reflect the mosaic-specific items.
+      ossimImageSource* interface = PTR_CAST(ossimImageSource, getInput(0));
+      if(interface)
       {
-         m_Geometry = new ossimImageGeometry(*inputGeom);
-         updateGeometry();
+         ossimRefPtr<ossimImageGeometry> inputGeom = interface->getImageGeometry();
+         if ( inputGeom.valid() )
+         {
+            m_Geometry = new ossimImageGeometry(*inputGeom);
+            updateGeometry();
+         }
       }
-      return m_Geometry.get();
    }
-   return 0;
+   return m_Geometry;
 }
 
 //**************************************************************************************************
@@ -200,8 +198,8 @@ void ossimOrthoImageMosaic::initialize()
          m_InputTiePoints[i].makeNan();
          if(interface)
          {
-            const ossimImageGeometry* geom = interface->getImageGeometry();
-            if(geom)
+            ossimRefPtr<ossimImageGeometry> geom = interface->getImageGeometry();
+            if( geom.valid() )
             {
                const ossimMapProjection* mapPrj = PTR_CAST(ossimMapProjection, geom->getProjection());
                if(mapPrj)

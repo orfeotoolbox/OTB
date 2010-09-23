@@ -8,14 +8,14 @@
 //
 // Calls Geotrans Miller projection code.  
 //*******************************************************************
-//  $Id: ossimMillerProjection.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimMillerProjection.h 17815 2010-08-03 13:23:14Z dburken $
 
 #ifndef ossimMillerProjection_HEADER
 #define ossimMillerProjection_HEADER
 
 #include <ossim/projection/ossimMapProjection.h>
 
-class ossimMillerProjection : public ossimMapProjection
+class OSSIMDLLEXPORT ossimMillerProjection : public ossimMapProjection
 {
 public:
    ossimMillerProjection(const ossimEllipsoid& ellipsoid = ossimEllipsoid(),
@@ -53,6 +53,8 @@ public:
    void setFalseEastingNorthing(double falseEasting, double falseNorthing);
 
    void setDefaults();
+
+   void setCentralMeridian(double centralMeridian);
 
    double getFalseEasting()const{return Mill_False_Easting;}
    double getFalseNorthing()const{return Mill_False_Northing;}

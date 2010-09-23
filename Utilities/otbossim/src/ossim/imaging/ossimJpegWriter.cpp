@@ -5,7 +5,7 @@
 // Author:  David Burken
 //
 //*******************************************************************
-//  $Id: ossimJpegWriter.cpp 16597 2010-02-12 15:10:53Z dburken $
+//  $Id: ossimJpegWriter.cpp 17815 2010-08-03 13:23:14Z dburken $
 
 #include <cstdlib>
 #include <cstdio>
@@ -186,7 +186,7 @@ bool ossimJpegWriter::writeFile()
       {
          cinfo.in_color_space = JCS_GRAYSCALE;
       }
-      
+
       jpeg_set_defaults(&cinfo);
       jpeg_set_quality(&cinfo, theQuality, TRUE); //limit to baseline-JPEG values 
       jpeg_start_compress(&cinfo, TRUE);
@@ -430,23 +430,18 @@ bool ossimJpegWriter::hasImageType(const ossimString& imageType) const
 
 void ossimJpegWriter::setProperty(ossimRefPtr<ossimProperty> property)
 {
-   if (!property)
+   if ( property.valid() )
    {
-      return;
-   }
-   
-   if(property->getName() == ossimKeywordNames::COMPRESSION_QUALITY_KW)
-   {
-      ossimNumericProperty* numericProperty = PTR_CAST(ossimNumericProperty,
-                                                       property.get());
-      if (numericProperty)
+      if(property->getName() == ossimKeywordNames::COMPRESSION_QUALITY_KW)
       {
-         setQuality( numericProperty->asInt32() );
+         ossimString stringValue;
+         property->valueToString(stringValue);
+         setQuality( stringValue.toInt32() );
       }
-   }
-   else
-   {
-      ossimImageFileWriter::setProperty(property);
+      else
+      {
+         ossimImageFileWriter::setProperty(property);
+      }
    }
 }
 

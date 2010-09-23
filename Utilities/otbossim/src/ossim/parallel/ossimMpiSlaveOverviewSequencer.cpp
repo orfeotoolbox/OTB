@@ -8,7 +8,7 @@
 // overview files.
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimMpiSlaveOverviewSequencer.cpp 17208 2010-04-26 14:03:48Z dburken $
+// $Id: ossimMpiSlaveOverviewSequencer.cpp 17870 2010-08-12 13:12:32Z sbortman $
 
 #include <ossim/parallel/ossimMpiSlaveOverviewSequencer.h>
 #include <ossim/ossimConfig.h>        /* To pick up OSSIM_HAS_MPI. */
@@ -92,7 +92,7 @@ void ossimMpiSlaveOverviewSequencer::slaveProcessTiles()
    // use the endian pointer itself as a flag to swap.
    //---
    ossimEndian* endian = 0;
-   if (m_imageHandler)
+   if (m_imageHandler.valid())
    {
       if (m_imageHandler->getOutputScalarType() != OSSIM_UINT8)
       {

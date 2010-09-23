@@ -8,7 +8,7 @@
 // Author:  Kenneth Melero (kmelero@sanz.com)
 //
 //*******************************************************************
-//  $Id: ossimReadmeFileWriter.cpp 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimReadmeFileWriter.cpp 17932 2010-08-19 20:34:35Z dburken $
 
 #include <iostream>
 using namespace std;
@@ -72,8 +72,8 @@ bool ossimReadmeFileWriter::writeFile()
 
    // Fetch the map projection of the input image if it exists:
    const ossimMapProjection* mapProj = 0;
-   const ossimImageGeometry* imgGeom = theInputConnection->getImageGeometry();
-   if (imgGeom)
+   ossimRefPtr<ossimImageGeometry> imgGeom = theInputConnection->getImageGeometry();
+   if ( imgGeom.valid() )
    {
       const ossimProjection* proj = imgGeom->getProjection();
       mapProj = PTR_CAST(ossimMapProjection, proj);

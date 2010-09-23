@@ -7,7 +7,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimCadrgProjection.h 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimCadrgProjection.h 17815 2010-08-03 13:23:14Z dburken $
 #ifndef ossimCadrgProjection_HEADER
 #define ossimCadrgProjection_HEADER
 #include <ossim/projection/ossimMapProjection.h>
@@ -51,6 +51,9 @@ public:
          return getClassName();
       }
       
+   //! Returns TRUE if principal parameters are within epsilon tolerance.
+   virtual bool operator==(const ossimProjection& projection) const;
+
 protected:
    virtual ~ossimCadrgProjection();
    /*

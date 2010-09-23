@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimScaleFilter.cpp 17195 2010-04-23 17:32:18Z dburken $
+// $Id: ossimScaleFilter.cpp 17932 2010-08-19 20:34:35Z dburken $
 #include <ossim/imaging/ossimScaleFilter.h>
 #include <ossim/imaging/ossimFilter.h>
 #include <ossim/imaging/ossimDiscreteConvolutionKernel.h>
@@ -656,35 +656,34 @@ void ossimScaleFilter::allocate()
 // Returns a pointer reference to the active image geometry at this filter. The input source
 // geometry is modified, so we need to maintain our own geometry object as a data member.
 //**************************************************************************************************
-ossimImageGeometry* ossimScaleFilter::getImageGeometry()
+ossimRefPtr<ossimImageGeometry> ossimScaleFilter::getImageGeometry()
 {
    // Have we already defined our own geometry? Return it if so:
-   if (m_ScaledGeometry.valid())
-      return m_ScaledGeometry.get();
+   if (m_ScaledGeometry.valid()) return m_ScaledGeometry;
 
    // Otherwise we'll need to establish a geometry based on the input connection:
    if(theInputConnection)
    {
       // Fetch the map projection of the input image if it exists:
-      ossimImageGeometry* inputGeom = theInputConnection->getImageGeometry();
+      ossimRefPtr<ossimImageGeometry> inputGeom = theInputConnection->getImageGeometry();
 
       // If trivial case of identity scale, just pass along the input connection's geometry:
       if ((m_ScaleFactor.x == 1.0) && (m_ScaleFactor.y == 1.0))
          return inputGeom;
 
       // Need to create a copy of the input geom and modify it as our own, then pass that:
-      if (inputGeom)
+      if ( inputGeom.valid() )
       {
          m_ScaledGeometry = new ossimImageGeometry(*inputGeom);
          updateGeometry();
 
          // Return the modified geometry:
-         return m_ScaledGeometry.get();
+         return m_ScaledGeometry;
       }
    }
 
    // No geometry defined, return NULL pointer:
-   return 0;
+   return ossimRefPtr<ossimImageGeometry>();
 }
 
 //**************************************************************************************************

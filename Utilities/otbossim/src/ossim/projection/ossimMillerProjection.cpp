@@ -9,7 +9,7 @@
 //
 // Calls Geotrans Miller projection code.  
 //*******************************************************************
-//  $Id: ossimMillerProjection.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimMillerProjection.cpp 17815 2010-08-03 13:23:14Z dburken $
 
 #include <math.h>
 #include <ossim/projection/ossimMillerProjection.h>
@@ -98,6 +98,12 @@ void ossimMillerProjection::setDefaults()
    Mill_Delta_Northing = 14675058.0;
    Mill_Max_Easting    = 20015110.0;
    Mill_Min_Easting    = -20015110.0;
+}
+
+void ossimMillerProjection::setCentralMeridian(double centralMeridian)
+{
+  Mill_Origin_Long = centralMeridian;
+  update();
 }
 
 void ossimMillerProjection::setFalseEastingNorthing(double falseEasting,

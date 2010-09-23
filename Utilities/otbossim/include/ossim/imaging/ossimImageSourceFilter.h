@@ -10,7 +10,7 @@
 // Description:
 //
 //*******************************************************************
-//  $Id: ossimImageSourceFilter.h 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimImageSourceFilter.h 17932 2010-08-19 20:34:35Z dburken $
 #ifndef ossimImageSourceFilter_HEADER
 #define ossimImageSourceFilter_HEADER
 #include <ossim/imaging/ossimImageSource.h>
@@ -26,12 +26,6 @@ public:
    ossimImageSourceFilter(ossimObject* owner,
                           ossimImageSource* inputSource);
 
-   virtual ossimIrect getBoundingRect(ossim_uint32 resLevel=0)const;
-   virtual void getDecimationFactor(ossim_uint32 resLevel,
-                                    ossimDpt& result)const;
-   virtual void getDecimationFactors(vector<ossimDpt>& decimations)const;
-   virtual ossim_uint32 getNumberOfDecimationLevels()const;
-
    /*!
     * Returns the input connection's output band list.
     * If not connected calls ossimImageSource::getOutputBandList.
@@ -43,28 +37,6 @@ public:
     */
    virtual ossim_uint32 getNumberOfInputBands()const;   
 
-   virtual ossimScalarType getOutputScalarType() const;
-   
-   virtual ossimRefPtr<ossimImageData> getTile(const ossimIrect& rect,
-                                               ossim_uint32 resLevel=0);
-
-   /*!
-    * ordering specifies how the vertices should be arranged.
-    * valid image vertices is basically the tightly fit convex hull
-    * of the image.  Usually an image has NULL values and are
-    * internally not upright rectangular.  This can cause
-    * problems some spatial filters.
-    *
-    * The default implementation is to return the bounding rect.
-    */
-   virtual void getValidImageVertices(vector<ossimIpt>& validVertices,
-                                      ossimVertexOrdering ordering=OSSIM_CLOCKWISE_ORDER,
-                                      ossim_uint32 resLevel=0)const;
-   
-   virtual ossim_uint32 getTileWidth() const;
-   
-   virtual ossim_uint32 getTileHeight() const;
-
    virtual void initialize();
 
    virtual bool loadState(const ossimKeywordlist& kwl,
@@ -72,27 +44,6 @@ public:
 
    virtual bool saveState(ossimKeywordlist& kwl,
                           const char* prefix=0)const;
-
-   /*!
-    * getNullPixelValue
-    * Returns the null pixel value of input connection if connected.
-    * Returns OSSIM_DBL_NAN if not connected.
-    */
-   virtual double getNullPixelValue(ossim_uint32 band=0)const;
-
-   /*!
-    * getMinPixelValue
-    * Returns the null pixel value of input connection if connected.
-    * Returns OSSIM_DBL_NAN if not connected.
-    */
-   virtual double getMinPixelValue(ossim_uint32 band=0)const;
-
-   /*!
-    * getMaxPixelValue
-    * Returns the null pixel value of input connection if connected.
-    * Returns OSSIM_DBL_NAN if not connected.
-    */
-   virtual double getMaxPixelValue(ossim_uint32 band=0)const;
 
    bool canConnectMyInputTo(ossim_int32 inputIndex,
                             const ossimConnectableObject* object)const;

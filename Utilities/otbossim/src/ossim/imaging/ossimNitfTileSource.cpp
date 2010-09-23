@@ -9,8 +9,9 @@
 // Description:  Contains class definition for ossimNitfTileSource.
 // 
 //*******************************************************************
-//  $Id: ossimNitfTileSource.cpp 17598 2010-06-19 15:37:46Z dburken $
+//  $Id: ossimNitfTileSource.cpp 17978 2010-08-24 16:17:00Z dburken $
 #include <jerror.h>
+#include <fstream>
 
 #include <algorithm> /* for std::fill */
 
@@ -32,6 +33,7 @@
 #include <ossim/imaging/ossimImageDataFactory.h>
 #include <ossim/imaging/ossimJpegMemSrc.h>
 #include <ossim/imaging/ossimTiffTileSource.h>
+#include <ossim/imaging/ossimJpegDefaultTable.h>
 #include <ossim/base/ossim2dTo2dShiftTransform.h>
 #include <ossim/base/ossimContainerProperty.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
@@ -41,11 +43,14 @@
 #include <ossim/support_data/ossimNitfStdidcTag.h>
 #include <ossim/support_data/ossimNitfVqCompressionHeader.h>
 
+#if defined(JPEG_DUAL_MODE_8_12)
+#include <ossim/imaging/ossimNitfTileSource_12.h>
+#endif
 
 RTTI_DEF1_INST(ossimNitfTileSource, "ossimNitfTileSource", ossimImageHandler)
 
 #ifdef OSSIM_ID_ENABLED
-   static const char OSSIM_ID[] = "$Id: ossimNitfTileSource.cpp 17598 2010-06-19 15:37:46Z dburken $";
+   static const char OSSIM_ID[] = "$Id: ossimNitfTileSource.cpp 17978 2010-08-24 16:17:00Z dburken $";
 #endif
    
 //---
@@ -95,10 +100,9 @@ ossimNitfTileSource::ossimNitfTileSource()
       theCacheId(-1),
       thePackedBitsFlag(false),
       theCompressedBuf(0),
-      theDecimationFactor(1.0),
-      theDecimationFactors(),
       theNitfBlockOffset(0),
-      theNitfBlockSize(0)
+      theNitfBlockSize(0),
+      m_isJpeg12Bit(false)
 {
    if (traceDebug())
    {
@@ -152,7 +156,19 @@ bool ossimNitfTileSource::open()
    }
    
    theErrorStatus = ossimErrorCodes::OSSIM_OK;
-   
+
+   // *** HACK *** 
+   //To get around 2 GB Files. Send "false" if file size over 2GB. 
+   //That way GDAL plugin handles the file, which is working. 
+   //TODO: Fix OSSIM to handle over 2 GB files for windows 32bit
+#if defined(WIN32)
+   const ossim_int64 TWO_GIG_MAX = 2147483647; // (2^31)-1
+   if ( theImageFile.fileSize() > TWO_GIG_MAX )
+   {
+      return false;
+   }
+#endif
+  
    if ( parseFile() )
    {
       result = allocate();
@@ -160,12 +176,6 @@ bool ossimNitfTileSource::open()
    if (result)
    {
       completeOpen();
-
-      //---
-      // computeDecimationFactors must be called after completeOpen so that the
-      // overviews are picked up.
-      //---
-      result = computeDecimationFactors();
    }
    
    return result;
@@ -293,10 +303,13 @@ bool ossimNitfTileSource::parseFile()
    {
       return false;
    }
-   if(theEntryList.size()>0)
-   {
-      theCurrentEntry = theEntryList[0];
-   }
+
+   //### WHY IS THIS HERE? THIS CAUSED A BUG BECAUSE theCurrentEntry was previously initialized 
+   //### in loadState() according to a KWL. Any entry index in the KWL was being ignored.
+   //if(theEntryList.size()>0)
+   //{
+   //   theCurrentEntry = theEntryList[0];
+   //}
 
    theNumberOfImages = (ossim_uint32)theNitfImageHeader.size();
    
@@ -393,7 +406,7 @@ bool ossimNitfTileSource::allocate()
    }
 
    // Set the decimation factor.
-   initializeDecimationFactor();
+   //establishDecimationFactors(); <-- THIS SHOULD HAVE BEEN DONE IN ossimImageHandler::completOpen()
    
    // Initialize the image rectangle. before the cache size is done
    if (initializeImageRect() == false)
@@ -468,6 +481,12 @@ bool ossimNitfTileSource::canUncompress(const ossimNitfImageHeader* hdr) const
          if (hdr->getBitsPerPixelPerBand() == 8)
          {
             result = true;
+            m_isJpeg12Bit = false;
+         }
+         else if (hdr->getBitsPerPixelPerBand() == 12)
+         {
+           result = true;
+           m_isJpeg12Bit = true;
          }
          else
          {
@@ -614,11 +633,14 @@ void ossimNitfTileSource::initializeScalarType()
       }
       case 32:
       {
-         if(pixelValueType == "R")
+         if(pixelValueType == "SI")
+         {
+            theScalarType = OSSIM_SINT32;
+         }
+         else if(pixelValueType == "R")
          {
             theScalarType = OSSIM_FLOAT32;
          }
-         
          break;
       }
       case 64:
@@ -839,18 +861,28 @@ bool ossimNitfTileSource::initializeBlockSize()
    return true;
 }
 
-void ossimNitfTileSource::initializeDecimationFactor()
+//*************************************************************************************************
+// Virtual method determines the decimation factors at each resolution level. 
+// This implementation derives the R0 decimation from the image metadata if available, then hands
+// off the computation of remaining R-levels to the base class implementation.
+//*************************************************************************************************
+void ossimNitfTileSource::establishDecimationFactors()
 {
+   theDecimationFactors.clear();
    const ossimNitfImageHeader* hdr = getCurrentImageHeader();
    if (hdr)
    {
-      hdr->getDecimationFactor(theDecimationFactor);
+      double decimation;
+      hdr->getDecimationFactor(decimation);
+      if ((decimation != 0.0) && !ossim::isnan(decimation))
+      {
+         ossimDpt dec_2d (decimation, decimation);
+         theDecimationFactors.push_back(dec_2d);
+      }
    }
 
-   if ( !hdr || ossim::isnan(theDecimationFactor) )
-   {
-      theDecimationFactor = 1.0;
-   }
+   // Just needed to set the first R level here, the base class can do the rest:
+   ossimImageHandler::establishDecimationFactors();
 }
 
 #if 0
@@ -2209,7 +2241,6 @@ void ossimNitfTileSource::getEntryList(std::vector<ossim_uint32>& entryList)cons
 bool ossimNitfTileSource::setCurrentEntry(ossim_uint32 entryIdx)
 {
    bool result = true;
-   
    if (theCurrentEntry != entryIdx)
    {
       if ( isOpen() )
@@ -2232,13 +2263,6 @@ bool ossimNitfTileSource::setCurrentEntry(ossim_uint32 entryIdx)
             if (result)
             {
                completeOpen();
-
-               //---
-               // computeDecimationFactors must be called after completeOpen
-               // so that the
-               // overviews are picked up.
-               //---
-               result = computeDecimationFactors();
             }
          }
          else
@@ -2336,89 +2360,6 @@ ossimNitfImageHeader* ossimNitfTileSource::getCurrentImageHeader()
    }
    
    return 0;
-}
-
-void ossimNitfTileSource::getDecimationFactor(ossim_uint32 resLevel,
-                                              ossimDpt& result) const
-{
-   if (resLevel < theDecimationFactors.size())
-   {
-      result.x = theDecimationFactors[resLevel].x;
-      result.y = theDecimationFactors[resLevel].y;
-   }
-   else
-   {
-      result.makeNan();
-   }
-}
-
-bool ossimNitfTileSource::computeDecimationFactors()
-{
-   bool result = true;
-   
-   theDecimationFactors.clear();
-   
-   const ossim_uint32 LEVELS = getNumberOfDecimationLevels();
-
-   for (ossim_uint32 level = 0; level < LEVELS; ++level)
-   {
-      ossimDpt pt;
-      
-      if (level == 0)
-      {
-         pt.x = theDecimationFactor;
-         pt.y = theDecimationFactor;
-      }
-      else
-      {
-         /* 
-            ESH 02/2009 -- No longer assume powers of 2 reduction 
-            in linear size from resLevel 0 (Tickets # 467,529).
-         */
-         
-         // Get the sample decimation.
-         ossim_float64 r0 = getNumberOfSamples(0);
-         ossim_float64 rL = getNumberOfSamples(level);
-         if ( (r0 > 0.0) && (rL > 0.0) )
-         {
-            pt.x = theDecimationFactor * rL / r0;
-         }
-         else
-         {
-            result = false;
-            break;
-         }
-
-         // Get the line decimation.
-         r0 = getNumberOfLines(0);
-         rL = getNumberOfLines(level);
-         if ( (r0 > 0.0) && (rL > 0.0) )
-         {
-            pt.y = theDecimationFactor * rL / r0;
-         }
-         else
-         {
-            result = false;
-            break;
-         }
-      }
-
-      theDecimationFactors.push_back(pt);
-   }
-
-   if (traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "ossimNitfTileSource::computeDecimationFactors DEBUG\n";
-      for (ossim_uint32 i = 0; i < theDecimationFactors.size(); ++i)
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "decimation[" << i << "]: " << theDecimationFactors[i]
-            << std::endl;
-      }
-   }
-   
-   return result;
 }
 
 void ossimNitfTileSource::setBoundingRectangle(const ossimIrect& imageRect)
@@ -2824,8 +2765,6 @@ void ossimNitfTileSource::vqUncompressM4(
 
 bool ossimNitfTileSource::scanForJpegBlockOffsets()
 {
-   // return false;
-   
    const ossimNitfImageHeader* hdr = getCurrentImageHeader();
 
    if ( !hdr || (theReadMode != READ_JPEG_BLOCK) || !theFileStr )
@@ -2994,6 +2933,15 @@ bool ossimNitfTileSource::uncompressJpegBlock(ossim_uint32 x, ossim_uint32 y)
       return false;
    }
 
+   if (m_isJpeg12Bit)
+   {
+#if defined(JPEG_DUAL_MODE_8_12)
+     return ossimNitfTileSource_12::uncompressJpeg12Block(x,y,theCacheTile, 
+       getCurrentImageHeader(), theCacheSize, compressedBuf, theReadBlockSizeInBytes, 
+       theNumberOfOutputBands);
+#endif  
+   }
+
    //---
    // Most of comments below from jpeg-6b "example.c" file.
    //---
@@ -3013,6 +2961,7 @@ bool ossimNitfTileSource::uncompressJpegBlock(ossim_uint32 x, ossim_uint32 y)
    
    /* We set up the normal JPEG error routines, then override error_exit. */
    cinfo.err = jpeg_std_error(&jerr.pub);
+ 
    jerr.pub.error_exit = ossimJpegErrorExit;
 
    /* Establish the setjmp return context for my_error_exit to use. */
@@ -3026,8 +2975,8 @@ bool ossimNitfTileSource::uncompressJpegBlock(ossim_uint32 x, ossim_uint32 y)
    }
 
    /* Now we can initialize the JPEG decompression object. */
-   jpeg_create_decompress(&cinfo);
-
+   jpeg_CreateDecompress(&cinfo, JPEG_LIB_VERSION, sizeof(cinfo));
+   
    //---
    // Step 2: specify data source.  In this case we will uncompress from
    // memory so we will use "ossimJpegMemorySrc" in place of " jpeg_stdio_src".
@@ -3038,15 +2987,15 @@ bool ossimNitfTileSource::uncompressJpegBlock(ossim_uint32 x, ossim_uint32 y)
 
    /* Step 3: read file parameters with jpeg_read_header() */
    jpeg_read_header(&cinfo, TRUE);
-
+  
    // Check for Quantization tables.
    if (cinfo.quant_tbl_ptrs[0] == NULL)
    {
       // This will load table specified in COMRAT field.
       if (loadJpegQuantizationTables(cinfo) == false)
       {
-         jpeg_destroy_decompress(&cinfo);
-         return false;
+        jpeg_destroy_decompress(&cinfo);
+        return false;
       }
    }
 
@@ -3056,8 +3005,8 @@ bool ossimNitfTileSource::uncompressJpegBlock(ossim_uint32 x, ossim_uint32 y)
       // This will load default huffman tables into .
       if (loadJpegHuffmanTables(cinfo) == false)
       {
-         jpeg_destroy_decompress(&cinfo);
-         return false;
+        jpeg_destroy_decompress(&cinfo);
+        return false;
       }
    }
 
@@ -3107,59 +3056,58 @@ bool ossimNitfTileSource::uncompressJpegBlock(ossim_uint32 x, ossim_uint32 y)
    if ( (SAMPLES > theCacheTile->getWidth()) ||
         (LINES_TO_READ > theCacheTile->getHeight()) )
    {
-      // Error...
-      jpeg_finish_decompress(&cinfo);
-      jpeg_destroy_decompress(&cinfo);
-      return false;
-   }
-   
-   // Get pointers to the cache tile buffers.
-   std::vector<ossim_uint8*> destinationBuffer(theNumberOfInputBands);
-   ossim_uint32 band = 0;
-   for (band = 0; band < theNumberOfInputBands; ++band)
-   {
-      destinationBuffer[band] = theCacheTile->getUcharBuf(band);
+     // Error...
+     jpeg_finish_decompress(&cinfo);
+     jpeg_destroy_decompress(&cinfo);
+     return false;
    }
 
-   // Make a temp line buffer
+   // Get pointers to the cache tile buffers.
+   std::vector<ossim_uint8*> destinationBuffer(theNumberOfInputBands);
+   for (ossim_uint32 band = 0; band < theNumberOfInputBands; ++band)
+   {
+     destinationBuffer[band] = theCacheTile->getUcharBuf(band);
+   }
+
    std::vector<ossim_uint8> lineBuffer(ROW_STRIDE);
    JSAMPROW jbuf[1];
    jbuf[0] = (JSAMPROW) &(lineBuffer.front());
 
    while (cinfo.output_scanline < LINES_TO_READ)
    {
-      // Read a line from the jpeg file.
-      jpeg_read_scanlines(&cinfo, jbuf, 1);
-      
-      //---
-      // Copy the line which if band interleaved by pixel the the band
-      // separate buffers.
-      //
-      // Note:
-      // Not sure if IMODE of 'B' is interleaved the same as image with
-      // IMODE of 'P'.
-      //
-      // This works with all samples with IMODE of B and P but I only have
-      // one band 'B' and three band 'P'.  So if we ever get a three band
-      // 'B' it could be wrong here. (drb - 20090615)
-      //---
-      ossim_uint32 index = 0;
-      for (ossim_uint32 sample = 0; sample < SAMPLES; ++sample)         
-      {
-         for (band = 0; band < theNumberOfInputBands; ++band)
-         {
-            destinationBuffer[band][sample] = lineBuffer[index];
-            ++index;
-         }
-      }
-      
-      for (band = 0; band < theNumberOfInputBands; ++band)
-      {
-         destinationBuffer[band] += theCacheSize.x;         
-      }
+     // Read a line from the jpeg file.
+     jpeg_read_scanlines(&cinfo, jbuf, 1);
+
+     //---
+     // Copy the line which if band interleaved by pixel the the band
+     // separate buffers.
+     //
+     // Note:
+     // Not sure if IMODE of 'B' is interleaved the same as image with
+     // IMODE of 'P'.
+     //
+     // This works with all samples with IMODE of B and P but I only have
+     // one band 'B' and three band 'P'.  So if we ever get a three band
+     // 'B' it could be wrong here. (drb - 20090615)
+     //---
+     ossim_uint32 index = 0;
+     for (ossim_uint32 sample = 0; sample < SAMPLES; ++sample)         
+     {
+       for (ossim_uint32 band = 0; band < theNumberOfInputBands; ++band)
+       {
+         destinationBuffer[band][sample] = lineBuffer[index];
+         ++index;
+       }
+     }
+
+     for (ossim_uint32 band = 0; band < theNumberOfInputBands; ++band)
+     {
+       destinationBuffer[band] += theCacheSize.x;         
+     }
    }
 
    // clean up...
+
    jpeg_finish_decompress(&cinfo);
    jpeg_destroy_decompress(&cinfo);
 
@@ -3170,68 +3118,6 @@ bool ossimNitfTileSource::uncompressJpegBlock(ossim_uint32 x, ossim_uint32 y)
 // Default JPEG quantization tables
 // Values from: MIL-STD-188-198, APPENDIX A
 //---
-const static int Q1table[64] = 
-{
-   8,    72,  72,  72,  72,  72,  72,  72, // 0 - 7
-   72,   72,  78,  74,  76,  74,  78,  89, // 8 - 15
-   81,   84,  84,  81,  89, 106,  93,  94, // 16 - 23
-   99,   94,  93, 106, 129, 111, 108, 116, // 24 - 31
-   116, 108, 111, 129, 135, 128, 136, 145, // 32 - 39
-   136, 128, 135, 155, 160, 177, 177, 160, // 40 - 47
-   155, 193, 213, 228, 213, 193, 255, 255, // 48 - 55
-   255, 255, 255, 255, 255, 255, 255, 255  // 56 - 63
-};
-
-const static int Q2table[64] = 
-{ 
-   8,   36,  36,  36,  36,  36,  36,  36, // 0 - 7
-   36,   36,  39,  37,  38,  37,  39,  45, // 8 - 15
-   41,   42,  42,  41,  45,  53,  47,  47, // 16 -23
-   50,   47,  47,  53,  65,  56,  54,  59, // 24 - 31
-   59,   54,  56,  65,  68,  64,  69,  73, // 32 - 39
-   69,   64,  68,  78,  81,  89,  89,  81, // 40 - 47
-   78,   98, 108, 115, 108,  98, 130, 144, // 48 - 55
-   144, 130, 178, 190, 178, 243, 243, 255  // 56 - 63
-};
-
-const static int Q3table[64] = 
-{ 
-   8,  10, 10, 10, 10, 10, 10, 10,  // 0 - 7
-   10, 10, 11, 10, 11, 10, 11, 13,  // 8 - 15
-   11, 12, 12, 11, 13, 15, 13, 13,  // 16 - 23
-   14, 13, 13, 15, 18, 16, 15, 16,  // 24 - 31
-   16, 15, 16, 18, 19, 18, 19, 21,  // 32 - 39
-   19, 18, 19, 22, 23, 25, 25, 23,  // 40 - 47
-   22, 27, 30, 32, 30, 27, 36, 40,  // 48 - 56
-   40, 36, 50, 53, 50, 68, 68, 91   // 57 - 63
-};
-
-const static int Q4table[64] = 
-{
-   8,   7,  7,  7,  7,  7,  7,  7, // 0 - 7
-   7,   7,  8,  7,  8,  7,  8,  9, // 8 - 15
-   8,   8,  8,  8,  9, 11,  9,  9, // 16 - 23
-   10,  9,  9, 11, 13, 11, 11, 12, // 24 - 31
-   12, 11, 11, 13, 14, 13, 14, 15, // 32 - 39
-   14, 13, 14, 16, 16, 18, 18, 16, // 40 - 47
-   16, 20, 22, 23, 22, 20, 26, 29, // 48 - 55
-   29, 26, 36, 38, 36, 49, 49, 65  // 56 - 63
-};
-
-const static int Q5table[64] = 
-{
-   4,   4,  4,  4,  4,  4,  4,  4, // 0 - 7
-   4,   4,  4,  4,  4,  4,  4,  5, // 8 - 15
-   5,   5,  5,  5,  5,  6,  5,  5, // 16 - 23
-   6,   5,  5,  6,  7,  6,  6,  6, // 24 - 31
-   6,   6,  6,  7,  8,  7,  8,  8, // 32 - 39
-   8,   7,  8,  9,  9, 10, 10,  9, // 40 - 47
-   9,  11, 12, 13, 12, 11, 14, 16, // 48 - 55
-   16, 14, 20, 21, 20, 27, 27, 36  // 56 - 63
-};
-
-const static int* QTABLE_ARRAY[5]={Q1table,Q2table,Q3table,Q4table,Q5table};
-
 bool ossimNitfTileSource::loadJpegQuantizationTables(
    jpeg_decompress_struct& cinfo) const
 {
@@ -3277,7 +3163,7 @@ bool ossimNitfTileSource::loadJpegQuantizationTables(
    }
 
    cinfo.quant_tbl_ptrs[0] = jpeg_alloc_quant_table((j_common_ptr) &cinfo);
-   
+ 
    JQUANT_TBL* quant_ptr = cinfo.quant_tbl_ptrs[0]; // quant_ptr is JQUANT_TBL*
 
    for (ossim_int32 i = 0; i < 64; ++i)
@@ -3292,88 +3178,6 @@ bool ossimNitfTileSource::loadJpegQuantizationTables(
 // Default JPEG Huffman tables
 // Values from: MIL-STD-188-198, APPENDIX B
 //---
-static const int AC_BITS[16] = 
-{
-   0, 2, 1, 3, 3, 2, 4, 3, 5, 5, 4, 4, 0, 0, 1, 125
-};
-
-static const int DC_BITS[16] = 
-{
-   0, 1, 5, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0
-};
-
-static const int AC_HUFFVAL[256] =
-{
-   0x01, 0x02, 0x03, 0x00, 0x04, 0x11, 0x05, 0x12,          
-   0x21, 0x31, 0x41, 0x06, 0x13, 0x51, 0x61, 0x07,
-   0x22, 0x71, 0x14, 0x32, 0x81, 0x91, 0xA1, 0x08,
-   0x23, 0x42, 0xB1, 0xC1, 0x15, 0x52, 0xD1, 0xF0,
-   0x24, 0x33, 0x62, 0x72, 0x82, 0x09, 0x0A, 0x16,
-   0x17, 0x18, 0x19, 0x1A, 0x25, 0x26, 0x27, 0x28,
-   0x29, 0x2A, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39,
-   0x3A, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49,
-   0x4A, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59,
-   0x5A, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69,
-   0x6A, 0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79,
-   0x7A, 0x83, 0x84, 0x85, 0x86, 0x87, 0x88, 0x89,
-   0x8A, 0x92, 0x93, 0x94, 0x95, 0x96, 0x97, 0x98,
-   0x99, 0x9A, 0xA2, 0xA3, 0xA4, 0xA5, 0xA6, 0xA7,
-   0xA8, 0xA9, 0xAA, 0xB2, 0xB3, 0xB4, 0xB5, 0xB6,
-   0xB7, 0xB8, 0xB9, 0xBA, 0xC2, 0xC3, 0xC4, 0xC5,
-   0xC6, 0xC7, 0xC8, 0xC9, 0xCA, 0xD2, 0xD3, 0xD4,
-   0xD5, 0xD6, 0xD7, 0xD8, 0xD9, 0xDA, 0xE1, 0xE2,
-   0xE3, 0xE4, 0xE5, 0xE6, 0xE7, 0xE8, 0xE9, 0xEA,
-   0xF1, 0xF2, 0xF3, 0xF4, 0xF5, 0xF6, 0xF7, 0xF8,
-   0xF9, 0xFA, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,   
-   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-};
-
-static const int DC_HUFFVAL[256] =
-{
-   0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
-   0x08, 0x09, 0x0A, 0x0B, 0x00, 0x00, 0x00, 0x00, 
-   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-};
-
 bool ossimNitfTileSource::loadJpegHuffmanTables(
    jpeg_decompress_struct& cinfo) const
 {
@@ -3385,7 +3189,7 @@ bool ossimNitfTileSource::loadJpegHuffmanTables(
 
    cinfo.ac_huff_tbl_ptrs[0] = jpeg_alloc_huff_table((j_common_ptr)&cinfo);
    cinfo.dc_huff_tbl_ptrs[0] = jpeg_alloc_huff_table((j_common_ptr)&cinfo);
-   
+
    ossim_int32 i;
    JHUFF_TBL* huff_ptr;
    

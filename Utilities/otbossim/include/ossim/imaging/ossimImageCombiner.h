@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageCombiner.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimImageCombiner.h 17932 2010-08-19 20:34:35Z dburken $
 #ifndef ossimImageCombiner_HEADER
 #define ossimImageCombiner_HEADER
 #include <vector>
@@ -31,14 +31,7 @@ public:
    
    ossimImageCombiner(ossimConnectableObject::ConnectableObjectList& inputSources);
 
-   virtual void getDecimationFactor(ossim_uint32 resLevel,
-                                    ossimDpt& result) const;
-   virtual void getDecimationFactors(vector<ossimDpt>& decimations) const;
-   virtual ossim_uint32 getNumberOfDecimationLevels() const;
-
    virtual ossimIrect getBoundingRect(ossim_uint32 resLevel=0) const;
-
-   virtual ossimImageGeometry* getImageGeometry();
 
    virtual void initialize();
    virtual bool loadState(const ossimKeywordlist& kwl, const char* prefix=NULL);

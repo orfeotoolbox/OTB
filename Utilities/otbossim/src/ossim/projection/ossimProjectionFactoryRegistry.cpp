@@ -4,16 +4,13 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimProjectionFactoryRegistry.cpp 16938 2010-03-28 21:51:55Z dburken $
+// $Id: ossimProjectionFactoryRegistry.cpp 17815 2010-08-03 13:23:14Z dburken $
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
 #include <ossim/projection/ossimProjectionFactoryBase.h>
-#include <ossim/projection/ossimSrsProjectionFactory.h>
+#include <ossim/projection/ossimEpsgProjectionFactory.h>
 #include <ossim/projection/ossimMapProjectionFactory.h>
 #include <ossim/projection/ossimTiffProjectionFactory.h>
 #include <ossim/projection/ossimNitfProjectionFactory.h>
-#include <ossim/projection/ossimPcsCodeProjectionFactory.h>
-#include <ossim/projection/ossimGcsCodeProjectionFactory.h>
-#include <ossim/projection/ossimStatePlaneProjectionFactory.h>
 #include <ossim/projection/ossimSensorModelFactory.h>
 #include <ossim/projection/ossimMiscProjectionFactory.h>
 #include <ossim/projection/ossimProjection.h>
@@ -144,11 +141,14 @@ void ossimProjectionFactoryRegistry::initializeDefaults()
    registerFactory(ossimNitfProjectionFactory::instance());
    registerFactory(ossimTiffProjectionFactory::instance());
    registerFactory(ossimMapProjectionFactory::instance());
-   registerFactory(ossimSrsProjectionFactory::instance());
-   registerFactory(ossimPcsCodeProjectionFactory::instance());   
-   registerFactory(ossimGcsCodeProjectionFactory::instance());   
-   registerFactory(ossimStatePlaneProjectionFactory::instance());
    registerFactory(ossimMiscProjectionFactory::instance());
+
+   // KEEP THIS LAST PLEASE!
+   // This factory costructs map projections from EPSG codes. An infinite loop will occur if this
+   // is placed before the explicit (non-coded) factories, since this factory will invoke the above
+   // factories via this registry after populating a KWL which includes a PCS code. If this factory
+   // sees that request before the others, it will be caught in a loop.
+   registerFactory(ossimEpsgProjectionFactory::instance()); 
 }
 
 extern "C"

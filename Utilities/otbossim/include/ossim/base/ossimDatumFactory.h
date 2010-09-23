@@ -9,7 +9,7 @@
 // This is the DatumFactory class.  You give it a code and it will
 // construct a Datum class.  It returns NULL if no code was found.
 //*******************************************************************
-//  $Id: ossimDatumFactory.h 13302 2008-07-25 19:10:39Z gpotts $
+//  $Id: ossimDatumFactory.h 17815 2010-08-03 13:23:14Z dburken $
 
 #ifndef ossimDatumFactory_HEADER
 #define ossimDatumFactory_HEADER
@@ -39,6 +39,7 @@ public:
     * @return const pointer to a datum.
     */
    virtual const ossimDatum* create(const ossimString &code)const;
+   virtual const ossimDatum* create(const ossimKeywordlist& kwl, const char *prefix=0)const;
 
    const ossimDatum* create(const ossimDatum* copy) const;
 
@@ -52,19 +53,14 @@ protected:
    static ossimDatumFactory*       theInstance;
    const ossimDatum*               theWgs84Datum;
    const ossimDatum*               theWgs72Datum;
-   static std::map<ossimString, ossimDatum*> theDatumTable;
+   std::map<ossimString, const ossimDatum*> theDatumTable;
    
 
    ossimDatumFactory()
-      :ossimDatumFactoryInterface(),
-       theWgs84Datum(0),
+      :theWgs84Datum(0),
        theWgs72Datum(0)
        {}
-   ossimDatumFactory(const ossimDatumFactory&)
-      :ossimDatumFactoryInterface(),
-       theWgs84Datum(0),
-       theWgs72Datum(0)
-       {}
+
    void deleteAll();
    void initializeDefaults();
 };

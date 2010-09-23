@@ -7,12 +7,12 @@
 // Description:
 //
 //*******************************************************************
-//  $Id: ossimUpsProjection.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimUpsProjection.h 17815 2010-08-03 13:23:14Z dburken $
 #ifndef ossimUpsProjection_HEADER
 #define ossimUpsProjection_HEADER
 #include <ossim/projection/ossimMapProjection.h>
 
-class ossimUpsProjection : public ossimMapProjection
+class OSSIMDLLEXPORT ossimUpsProjection : public ossimMapProjection
 {
 public:
    ossimUpsProjection(const ossimEllipsoid& ellipsoid = ossimEllipsoid(),
@@ -42,7 +42,12 @@ public:
 
    double getFalseEasting()const{return UPS_False_Easting;}
    double getFalseNorthing()const{return UPS_False_Northing;}
+
+   void setHemisphere(char hemisphere); 
    
+   //! Returns TRUE if principal parameters are within epsilon tolerance.
+   virtual bool operator==(const ossimProjection& projection) const;
+
 protected:
    mutable char theHemisphere;
 

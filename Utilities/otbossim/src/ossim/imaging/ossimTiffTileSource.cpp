@@ -12,17 +12,19 @@
 // Contains class definition for TiffTileSource.
 //
 //*******************************************************************
-//  $Id: ossimTiffTileSource.cpp 16435 2010-01-27 23:15:51Z dburken $
+//  $Id: ossimTiffTileSource.cpp 18079 2010-09-14 14:46:17Z dburken $
 
 #include <cstdlib> /* for abs(int) */
 #include <ossim/imaging/ossimTiffTileSource.h>
 #include <ossim/support_data/ossimGeoTiff.h>
+#include <ossim/support_data/ossimTiffInfo.h>
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimCommon.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimIpt.h>
 #include <ossim/base/ossimDpt.h>
 #include <ossim/base/ossimFilename.h>
+#include <ossim/base/ossimIoStream.h> /* for ossimIOMemoryStream */
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimEllipsoid.h>
 #include <ossim/base/ossimDatum.h>
@@ -41,6 +43,19 @@ static ossimTrace traceDebug("ossimTiffTileSource:debug");
 #define OSSIM_TIFF_UNPACK_B4(value) ( ((value)>>16)&0x000000FF)
 #define OSSIM_TIFF_UNPACK_A4(value) ( ((value)>>24)&0x000000FF)
 
+//---
+// OSSIM_BUFFER_SCAN_LINE_READS:
+// If set to 1 ossimTiffTileSource::loadFromScanLine method will buffer image
+// width by tile height.  If set to 0 one line will be read at a time which
+// conserves memory on wide images or tall tiles.
+//
+// Buffered read is faster but uses more memory. Non-buffered slower less
+// memory.
+//
+// Only affects reading strip tiffs.
+//---
+#define OSSIM_BUFFER_SCAN_LINE_READS 1
+
 //*******************************************************************
 // Public Constructor:
 //*******************************************************************
@@ -58,8 +73,9 @@ ossimTiffTileSource::ossimTiffTileSource()
       theSamplesPerPixel(0),
       theBitsPerSample(0),
       theSampleFormatUnit(0),
-      theMaxSampleValue(0),
-      theMinSampleValue(0),
+      theMaxSampleValue(ossim::nan()),
+      theMinSampleValue(ossim::nan()),
+      theNullSampleValue(ossim::nan()),
       theNumberOfDirectories(0),
       theCurrentDirectory(0),
       theR0isFullRes(false),
@@ -600,6 +616,9 @@ bool ossimTiffTileSource::open()
 
       if (theSampleFormatUnit == SAMPLEFORMAT_INT)
       {
+         // this is currently causing pixel problems.  I am going to comment this out until we figure out a better solution
+         //
+#if 0         
          if (theMinSampleValue == 0) //  && (theMaxSampleValue > 36535) )
          {
             //---
@@ -613,6 +632,10 @@ bool ossimTiffTileSource::open()
          {
             theScalarType = OSSIM_SINT16;
          }
+#else
+         theScalarType = OSSIM_SINT16;
+#endif
+
       }
       else if (theSampleFormatUnit == SAMPLEFORMAT_UINT)
       {
@@ -629,7 +652,13 @@ bool ossimTiffTileSource::open()
       }
       else
       {
-         theScalarType = OSSIM_UINT16; // Default to unsigned...
+         if (theMaxSampleValue <= 2047) // 2^11-1
+         {
+            // 11 bit EO, i.e. Ikonos, QuickBird, WorldView, GeoEye.
+            theScalarType = OSSIM_USHORT11; // IKONOS probably...
+         }
+         else
+            theScalarType = OSSIM_UINT16; // Default to unsigned...
       }
    }
    else if ( (theBitsPerSample == 32) &&
@@ -671,19 +700,13 @@ bool ossimTiffTileSource::open()
       return false;
    }
 
-   // Make sure nan and min are not the same...
-   validateMinMax();
+   // Sanity check for min, max and null values.
+   validateMinMaxNull();
    
    setReadMethod();
    
-   // Check for an overview file...
-   if (theOverview == NULL)
-   {
-      openOverview();
-   }
-
-   openValidVertices();
-   loadMetaData();
+   // Let base-class finish the rest:
+   completeOpen();
 
    // ESH 05/2009 -- If memory allocations failed, then
    // let's bail out of this driver and hope another one
@@ -858,6 +881,7 @@ bool ossimTiffTileSource::loadTile(const ossimIrect& tile_rect,
 bool ossimTiffTileSource::loadFromScanLine(const ossimIrect& clip_rect,
                                            ossimImageData* result)
 {
+#if OSSIM_BUFFER_SCAN_LINE_READS
    ossimInterleaveType type =
       (thePlanarConfig[theCurrentDirectory] == PLANARCONFIG_CONTIG) ?
        OSSIM_BIP : OSSIM_BIL;
@@ -910,18 +934,41 @@ bool ossimTiffTileSource::loadFromScanLine(const ossimIrect& clip_rect,
    // "clip_rect" before passing to
    // theTile->loadTile method.
    //---
-   
-   // WE ARE REMOVING THE NEED FOR SUB IMAGES
-//   ossimIpt subImageOffset =
-//      getSubImageOffset(theBufferRLevel+theStartingResLevel);
-   
-//   ossimIrect bufRectWithOffset  = theBufferRect + subImageOffset;
-//   ossimIrect clipRectWithOffset = clip_rect     + subImageOffset;
-   result->loadTile(theBuffer,
-                   theBufferRect,
-                   clip_rect,
-                   type);
+   result->loadTile(theBuffer, theBufferRect, clip_rect, type);
    return true;
+
+#else
+   ossimInterleaveType type =
+      (thePlanarConfig[theCurrentDirectory] == PLANARCONFIG_CONTIG) ? OSSIM_BIP : OSSIM_BIL;
+
+   ossim_int32 startLine = clip_rect.ul().y;
+   ossim_int32 stopLine  = clip_rect.lr().y;
+   ossim_int32 stopSamp  = static_cast<ossim_int32>(getNumberOfSamples(theBufferRLevel)-1);
+   
+   if (thePlanarConfig[theCurrentDirectory] == PLANARCONFIG_CONTIG)
+   {
+      for (ossim_int32 line = startLine; line <= stopLine; ++line)
+      {
+         TIFFReadScanline(theTiffPtr, (void*)theBuffer, line, 0);
+         result->copyLine((void*)theBuffer, line, 0, stopSamp, type);
+      }
+   }
+   else
+   {
+      ossim_uint32 lineSizeInBytes = getNumberOfSamples(theBufferRLevel) * theBytesPerPixel;
+      for (ossim_int32 line = startLine; line <= stopLine; ++line)
+      {
+         ossim_uint8* buf = theBuffer;
+         for (ossim_uint32 band = 0; band < theSamplesPerPixel; ++band)
+         {
+            TIFFReadScanline(theTiffPtr, (void*)buf, line, band);
+            buf += lineSizeInBytes;
+         }
+         result->copyLine((void*)theBuffer, line, 0, stopSamp, type);
+      }
+   }
+   return true;
+#endif /* #if OSSIM_BUFFER_SCAN_LINE_READS #else - Non buffered scan line reads. */
 }
 
 bool ossimTiffTileSource::loadFromTile(const ossimIrect& clip_rect,
@@ -1602,10 +1649,16 @@ bool ossimTiffTileSource::allocateBuffer()
          break;
          
       case READ_SCAN_LINE:
+      {
+#if OSSIM_BUFFER_SCAN_LINE_READS
+         // Buffer a image width by tile height.
          buffer_size = theImageWidth[0] * theBytesPerPixel *
             theSamplesPerPixel * theCurrentTileHeight;
+#else
+         buffer_size = theImageWidth[0] * theBytesPerPixel * theSamplesPerPixel;
+#endif
          break;
-         
+      }
       default:
          ossimNotify(ossimNotifyLevel_WARN)
             << "Unknown read method!" << endl;
@@ -1642,12 +1695,7 @@ bool ossimTiffTileSource::allocateBuffer()
       }
       catch(...)
       {
-         if (theBuffer)
-         {
-            delete [] theBuffer;
-            theBuffer = 0;
-         }
-
+         theBuffer = 0;
          bSuccess = false;
          if (traceDebug())
          {
@@ -1767,6 +1815,7 @@ std::ostream& ossimTiffTileSource::print(std::ostream& os) const
       << "\nsample_format_unit:          " << theSampleFormatUnit
       << "\nmin_sample_value:            " << theMinSampleValue
       << "\nmax_sample_value:            " << theMaxSampleValue
+      << "\nnull_sample_value:           " << theNullSampleValue
       << "\ntheNumberOfDirectories:      " << theNumberOfDirectories
       << "\nr0_is_full_res:              " << theR0isFullRes;
 
@@ -1830,7 +1879,7 @@ bool ossimTiffTileSource::hasR0() const
    return theR0isFullRes;
 }
 
-double ossimTiffTileSource::getMinPixelValue(ossim_uint32 band)const
+ossim_float64 ossimTiffTileSource::getMinPixelValue(ossim_uint32 band)const
 {
    if(theMetaData.getNumberOfBands())
    {
@@ -1839,13 +1888,22 @@ double ossimTiffTileSource::getMinPixelValue(ossim_uint32 band)const
    return theMinSampleValue;
 }
 
-double ossimTiffTileSource::getMaxPixelValue(ossim_uint32 band)const
+ossim_float64 ossimTiffTileSource::getMaxPixelValue(ossim_uint32 band)const
 {
    if(theMetaData.getNumberOfBands())
    {
       return ossimImageHandler::getMaxPixelValue(band);
    }
    return theMaxSampleValue;
+}
+
+ossim_float64 ossimTiffTileSource::getNullPixelValue(ossim_uint32 band)const
+{
+   if(theMetaData.getNumberOfBands())
+   {
+      return ossimImageHandler::getNullPixelValue(band);
+   }
+   return theNullSampleValue;
 }
 
 bool ossimTiffTileSource::isColorMapped() const
@@ -2048,11 +2106,11 @@ void ossimTiffTileSource::populateLut()
    }
 }
 
-void ossimTiffTileSource::validateMinMax()
+void ossimTiffTileSource::validateMinMaxNull()
 {
-   double tempNull = ossim::defaultNull(theScalarType);
-   double tempMax  = ossim::defaultMax(theScalarType);
-   double tempMin  = ossim::defaultMin(theScalarType);
+   ossim_float64 tempNull = ossim::defaultNull(theScalarType);
+   ossim_float64 tempMax  = ossim::defaultMax(theScalarType);
+   ossim_float64 tempMin  = ossim::defaultMin(theScalarType);
    
    if( (theMinSampleValue == tempNull) || ossim::isnan(theMinSampleValue) ) 
    {
@@ -2061,6 +2119,112 @@ void ossimTiffTileSource::validateMinMax()
    if( (theMaxSampleValue == tempNull) || ossim::isnan(theMaxSampleValue) )
    {
       theMaxSampleValue = tempMax;
+   }
+   if ( ossim::isnan(theNullSampleValue) )
+   {
+      theNullSampleValue = tempNull;
+   }
+
+   if (theScalarType == OSSIM_FLOAT32)
+   {
+      std::ifstream inStr(theImageFile, std::ios::in|std::ios::binary);
+      if ( inStr.good() )
+      {   
+         // Do a print to a memory stream in key:value format.
+         ossimTiffInfo ti;
+         ossimIOMemoryStream memStr;
+         ti.print(inStr, memStr);
+
+         // Make keywordlist with all the tags.
+         ossimKeywordlist gtiffKwl;
+         if ( gtiffKwl.parseStream(memStr) )
+         {
+#if 0 /* Please keep for debug. (drb) */
+            if ( traceDebug() )
+            {
+               ossimNotify(ossimNotifyLevel_DEBUG)
+                  << "ossimTiffTileSource::validateMinMaxNull kwl:\n" << gtiffKwl
+                  << endl;
+            }
+#endif
+            const char* lookup;
+
+            lookup = gtiffKwl.find("tiff.image0.gdal_nodata");
+            bool nullFound = false;
+            if ( lookup )
+            {
+               ossimString os = lookup;
+               theNullSampleValue = os.toFloat32();
+               nullFound = true;
+            }
+            lookup = gtiffKwl.find("tiff.image0.vertical_citation");
+            if ( lookup )
+            {     
+               //---
+               // Format of string this handles:
+               // "Null: -9999.000000, Non-Null Min: 12.428605, 
+               // Non-Null Avg: 88.944082, Non-Null Max: 165.459558|"
+               ossimString citation = lookup;
+               std::vector<ossimString> array;
+               citation.split( array, ossimString(",") );
+               if ( array.size() == 4 )
+               {
+                  std::vector<ossimString> array2;
+
+                  if ( !nullFound )
+                  {
+                     // null
+                     array[0].split( array2, ossimString(":") );
+                     if ( array2.size() == 2 )
+                     {
+                        ossimString os = array2[0].downcase();
+                        if ( os.contains( ossimString("null") ) )
+                        {
+                           if ( array2[1].size() )
+                           {
+                              theNullSampleValue = array2[1].toFloat64(); 
+                              nullFound = true;
+                           }
+                        }
+                     }
+                  }
+
+                  // min
+                  array2.clear();
+                  array[1].split( array2, ossimString(":") );
+                  if ( array2.size() == 2 )
+                  {  
+                     ossimString os = array2[0].downcase();
+                     if ( os.contains( ossimString("min") ) )
+                     {
+                        if ( array2[1].size() )
+                        {
+                           theMinSampleValue = array2[1].toFloat64();
+                        }
+                     }
+                  }
+
+                  // Skipping average.
+
+                  // max
+                  array2.clear();
+                  array[3].split( array2, ossimString(":") );
+                  if ( array2.size() == 2 )
+                  {
+                     ossimString os = array2[0].downcase();
+                     if ( os.contains( ossimString("max") ) )
+                     {
+                        if ( array2[1].size() )
+                        {
+                           array2[1].trim( ossimString("|") );
+                           theMaxSampleValue = array2[1].toFloat64();   
+                        }
+                     }
+                  }
+               }
+            }
+         }
+      }
    }
 }
 

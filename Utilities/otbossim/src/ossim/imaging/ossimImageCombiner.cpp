@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageCombiner.cpp 17206 2010-04-25 23:20:40Z dburken $
+// $Id: ossimImageCombiner.cpp 17932 2010-08-19 20:34:35Z dburken $
 #include <ossim/imaging/ossimImageCombiner.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimIrect.h>
@@ -78,54 +78,6 @@ ossimImageCombiner::ossimImageCombiner(ossimConnectableObject::ConnectableObject
 ossimImageCombiner::~ossimImageCombiner()
 {
    removeListener((ossimConnectableObjectListener*)this);
-}
-
-void ossimImageCombiner::getDecimationFactor(ossim_uint32 resLevel,
-                                             ossimDpt& result) const
-{
-   if(getInput(0))
-   {
-      ossimImageSource* temp = PTR_CAST(ossimImageSource, getInput(0));
-      if(temp)
-      {
-         temp->getDecimationFactor(resLevel, result);
-      }     
-   }
-   else
-   {
-      result.x = 1;
-      result.y = 1;
-   }
-}
-
-void ossimImageCombiner::getDecimationFactors(vector<ossimDpt>& decimations) const
-{
-   if(getInput(0))
-   {
-      ossimImageSource* temp = PTR_CAST(ossimImageSource, getInput(0));
-      if(temp)
-      {
-         temp->getDecimationFactors(decimations);
-      }     
-   }
-   else
-   {
-      decimations.push_back(ossimDpt(1,1));
-   }
-}
-
-ossim_uint32 ossimImageCombiner::getNumberOfDecimationLevels()const
-{
-   if(getInput(0))
-   {
-      ossimImageSource* temp = PTR_CAST(ossimImageSource, getInput(0));
-      if(temp)
-      {
-         return temp->getNumberOfDecimationLevels();
-      }     
-   }
-   
-   return 1;
 }
 
 ossimIrect ossimImageCombiner::getBoundingRect(ossim_uint32 resLevel)const
@@ -648,18 +600,6 @@ void ossimImageCombiner::refreshEvent(ossimRefreshEvent& /* event */)
 bool ossimImageCombiner::hasDifferentInputs()const
 {
    return theHasDifferentInputs;
-}
-
-ossimImageGeometry* ossimImageCombiner::getImageGeometry()
-{
-   if(getInput(0))
-   {
-      ossimImageSource* inter = PTR_CAST(ossimImageSource, getInput(0));
-      if(inter)
-         return inter->getImageGeometry();
-   }
-   
-   return false;
 }
 
 bool ossimImageCombiner::saveState(ossimKeywordlist& kwl,

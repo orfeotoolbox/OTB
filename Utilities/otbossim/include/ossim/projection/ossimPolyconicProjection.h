@@ -8,14 +8,14 @@
 //
 // Calls Geotrans Polyconic  projection code.  
 //*******************************************************************
-//  $Id: ossimPolyconicProjection.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimPolyconicProjection.h 17815 2010-08-03 13:23:14Z dburken $
 
 #ifndef ossimPolyconicProjection_HEADER
 #define ossimPolyconicProjection_HEADER
 
 #include <ossim/projection/ossimMapProjection.h>
 
-class ossimPolyconicProjection : public ossimMapProjection
+class OSSIMDLLEXPORT ossimPolyconicProjection : public ossimMapProjection
 {
 public:   
    ossimPolyconicProjection(const ossimEllipsoid& ellipsoid = ossimEllipsoid(),

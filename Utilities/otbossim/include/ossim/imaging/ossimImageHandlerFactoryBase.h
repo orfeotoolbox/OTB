@@ -5,7 +5,7 @@
 // Author:  Garrett Potts (gpotts@imagelinks.com)
 //
 //*******************************************************************
-//  $Id: ossimImageHandlerFactoryBase.h 10109 2006-12-14 17:17:36Z dburken $
+//  $Id: ossimImageHandlerFactoryBase.h 18011 2010-08-31 12:48:56Z dburken $
 
 #ifndef ossimImageHandlerFactoryBase_HEADER
 #define ossimImageHandlerFactoryBase_HEADER
@@ -13,9 +13,10 @@
 #include <algorithm>
 
 #include <ossim/base/ossimString.h>
+#include <ossim/base/ossimRefPtr.h>
+#include <ossim/imaging/ossimImageHandler.h>
 #include <ossim/base/ossimObjectFactory.h>
 
-class ossimImageHandler;
 class ossimFilename;
 class ossimKeywordlist;
 
@@ -56,10 +57,17 @@ public:
    };
    
    typedef UniqueList<ossimString> UniqueStringList;
+   typedef std::vector<ossimRefPtr<ossimImageHandler> > ImageHandlerList;
    
    virtual ossimImageHandler* open(const ossimFilename& fileName)const = 0;
    virtual ossimImageHandler* open(const ossimKeywordlist& kwl,
                                    const char* prefix=0)const = 0;
+
+   virtual void getImageHandlersBySuffix(ImageHandlerList& result,
+                                         const ossimString& ext)const;
+
+   virtual void getImageHandlersByMimeType(ImageHandlerList& result,
+                                           const ossimString& mimeType)const;
 
    virtual void getSupportedExtensions(ossimImageHandlerFactoryBase::UniqueStringList& extensionList)const=0;
    

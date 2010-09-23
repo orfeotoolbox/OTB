@@ -11,7 +11,7 @@
 // Contains class declaration for NitfTileSource.
 //
 //*******************************************************************
-//  $Id: ossimNitfTileSource.h 16876 2010-03-17 20:57:26Z dburken $
+//  $Id: ossimNitfTileSource.h 17932 2010-08-19 20:34:35Z dburken $
 #ifndef ossimNitfTileSource_HEADER
 #define ossimNitfTileSource_HEADER
 
@@ -215,44 +215,9 @@ public:
    const ossimNitfImageHeader* getCurrentImageHeader() const;
    ossimNitfImageHeader* getCurrentImageHeader();
 
-   /**
-    * @brief Gets the decimation factor.
-    * 
-    * @param resLevel Reduced resolution set for requested decimation.
-    *
-    * @param result ossimDpt to initialize with requested decimation.
-    * 
-    * @note Initialized "result" with the decimation factor for the passed in
-    * resLevel.
-    *
-    * Most of the time the returned factor is a square decimation along x
-    * and y indicated by result.x and .y  = 1.0/(resLevel^2) where ^
-    * means rasing to the power of.  If the resLevel is 1 then the return
-    * decimation .5, .5. this is not the decimation to each resolution
-    * level but the total decimation from res level 0.
-    * So if resLevel is 2 then the return is .25, .25.
-    *
-    * @note Derived classes should override if the decimation is anything other
-    * than a power of two change in each direction per res level.
-    */
-   virtual void getDecimationFactor(ossim_uint32 resLevel,
-                                    ossimDpt& result) const;
-   
-   
-//   virtual ossimImageGeometry* getImageGeometry();
 protected:
    virtual ~ossimNitfTileSource();
 
-   /**
-    * @brief Initiailizes theDecimationFactors.
-    *
-    * To any derived classes that override this should be called after
-    * completeOpen() so that the overviews are picked up.
-    *
-    * @return true on success false on error.
-    */
-   virtual bool computeDecimationFactors();
-   
    /**
     * @param imageRect The full resolution image rectangle.
     *
@@ -332,14 +297,6 @@ protected:
     * @return true on success, false on error.
     */
    bool initializeBlockSize();
-
-   /**
-    * @brief Sets theDecimation from the NITF IMAG tag.
-    * 
-    * Initializes the data member "theDecimation" from the current entries
-    * NITF image header IMAG tag...
-    */
-   void initializeDecimationFactor();
 
    /**
     * Initializes the data members "theImageRect" and "theBlockRect"
@@ -507,6 +464,12 @@ protected:
     */
    bool loadJpegHuffmanTables(jpeg_decompress_struct& cinfo) const;
    
+   /**
+   * @brief Virtual method determines the decimation factors at each resolution level. 
+   * This method derives the decimations from the image metadata.
+   */
+   virtual void establishDecimationFactors();
+
    ossimRefPtr<ossimImageData>   theTile;
    ossimRefPtr<ossimImageData>   theCacheTile;
    ossimRefPtr<ossimNitfFile>    theNitfFile;
@@ -531,8 +494,6 @@ protected:
    bool                          thePackedBitsFlag;
    ossimIrect                    theBlockImageRect;
    std::vector<ossim_uint8>      theCompressedBuf;
-   ossim_float64                 theDecimationFactor;
-   std::vector<ossimDpt>         theDecimationFactors;
 
    //---
    // Have compressed jpeg blocks of variable length so we must scan and
@@ -540,6 +501,7 @@ protected:
    //---
    std::vector<std::streamoff>   theNitfBlockOffset;
    std::vector<ossim_uint32>     theNitfBlockSize;
+   mutable bool                  m_isJpeg12Bit;
    
 TYPE_DATA
 };

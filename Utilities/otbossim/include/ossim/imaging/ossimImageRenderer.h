@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*******************************************************************
-// $Id: ossimImageRenderer.h 17716 2010-07-09 20:15:16Z dburken $
+// $Id: ossimImageRenderer.h 17932 2010-08-19 20:34:35Z dburken $
 
 #ifndef ossimImageRenderer_HEADER
 #define ossimImageRenderer_HEADER
@@ -73,7 +73,7 @@ public:
 
    //! Returns instance to the input image geometry. This may be a NULL pointer.
    //! This is only valid if the IVT is a projection type IVT (IVPT) 
-   virtual ossimImageGeometry* getImageGeometry();
+   virtual ossimRefPtr<ossimImageGeometry> getImageGeometry();
 
    virtual bool setView(ossimObject* baseObject);
    ossimFilterResampler* getResampler() { return m_Resampler; }

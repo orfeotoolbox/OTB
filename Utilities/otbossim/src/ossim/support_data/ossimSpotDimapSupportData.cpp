@@ -9,7 +9,7 @@
 // Contains definition of class ossimSpotDimapSupportData.
 //
 //*****************************************************************************
-// $Id: ossimSpotDimapSupportData.cpp 17501 2010-06-02 11:14:55Z dburken $
+// $Id: ossimSpotDimapSupportData.cpp 17814 2010-08-03 12:44:02Z dburken $
 
 
 #include <iostream>
@@ -625,7 +625,7 @@ void ossimSpotDimapSupportData::getAttitude(const ossim_float64& time,
    if ((time <  theAttSampTimes.front()) ||
        (time >= theAttSampTimes.back() ))
    {
-      at.makeNan();
+      extrapolateAttitude(time, at);
       return;
    }
 
@@ -645,6 +645,37 @@ void ossimSpotDimapSupportData::getAttitude(const ossim_float64& time,
    ossim_float64 dt    = theAttSampTimes[i+1] - theAttSampTimes[i];
 
    at = (theAttitudeSamples[i+1]*dt1 + theAttitudeSamples[i]*dt0)/dt;
+}
+
+void ossimSpotDimapSupportData::extrapolateAttitude(const ossim_float64& time, ossimDpt3d& at) const
+{
+   at.makeNan();
+   int last_samp = (int) theAttSampTimes.size() - 1;
+   if (last_samp < 1)
+      return;
+
+   ossimDpt3d dAtt, dAtt_dt;
+   double dt, delta_t;
+
+   // Determine whether extrapolating at the front or the back of the range:
+   if (time < theAttSampTimes.front())
+   {
+      dt = theAttSampTimes[1] - theAttSampTimes[0];
+      dAtt = theAttitudeSamples[1] - theAttitudeSamples[0];
+      dAtt_dt = dAtt/dt;
+      delta_t = time - theAttSampTimes[0];
+      at = theAttitudeSamples[0] + (dAtt_dt*delta_t);
+   }
+   else if (time >= theAttSampTimes.back())
+   {
+      dt = theAttSampTimes[last_samp] - theAttSampTimes[last_samp-1];
+      dAtt = theAttitudeSamples[last_samp] - theAttitudeSamples[last_samp-1];
+      dAtt_dt = dAtt/dt;
+      delta_t = time - theAttSampTimes[last_samp];
+      at = theAttitudeSamples[last_samp] + (dAtt_dt*delta_t);
+   }
+
+   return;
 }
 
 void ossimSpotDimapSupportData::getAttSampTime(ossim_uint32 sample, ossim_float64& at)  const

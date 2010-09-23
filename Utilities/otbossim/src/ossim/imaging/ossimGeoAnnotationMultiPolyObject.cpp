@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimGeoAnnotationMultiPolyObject.cpp 17195 2010-04-23 17:32:18Z dburken $
+// $Id: ossimGeoAnnotationMultiPolyObject.cpp 17815 2010-08-03 13:23:14Z dburken $
 
 #include <ossim/imaging/ossimGeoAnnotationMultiPolyObject.h>
 #include <ossim/imaging/ossimAnnotationMultiPolyObject.h>
@@ -104,13 +104,13 @@ void ossimGeoAnnotationMultiPolyObject::transform(ossimImageGeometry* projection
           ++pointI)
       {
          projection->worldToLocal(theMultiPolygon[polyI][pointI],
-                                       temp);
+                                  temp);
          if(!temp.hasNans())
          {
             polygon.addPoint(temp);
          }
       }
-      theProjectedPolyObject->addPolygon(polygon);
+      theProjectedPolyObject->addPolygon(polyI, polygon);
    }
    
    //---
@@ -155,7 +155,15 @@ void ossimGeoAnnotationMultiPolyObject::draw(ossimRgbImage& anImage)const
 
 void ossimGeoAnnotationMultiPolyObject::getBoundingRect(ossimDrect& rect)const
 {
+   //---
+   // Should we make non const and call computeBoundingRect if theBoundingRect
+   // is nan? (drb - 20100728)
+   //---
    rect = theBoundingRect;
+   if (rect.isNan())
+   {
+     theProjectedPolyObject->getBoundingRect(rect);
+   }
 }
 
 void ossimGeoAnnotationMultiPolyObject::addPoint(ossim_uint32 polygonIndex,

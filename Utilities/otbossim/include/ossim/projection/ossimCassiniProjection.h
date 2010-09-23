@@ -8,14 +8,14 @@
 //
 // Calls Geotrans Cassini projection code.  
 //*******************************************************************
-//  $Id: ossimCassiniProjection.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimCassiniProjection.h 17815 2010-08-03 13:23:14Z dburken $
 
 #ifndef ossimCassiniProjection_HEADER
 #define ossimCassiniProjection_HEADER
 
 #include <ossim/projection/ossimMapProjection.h>
 
-class ossimCassiniProjection : public ossimMapProjection
+class OSSIMDLLEXPORT ossimCassiniProjection : public ossimMapProjection
 {
 public:
    ossimCassiniProjection(const ossimEllipsoid& ellipsoid = ossimEllipsoid(),

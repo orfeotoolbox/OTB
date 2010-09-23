@@ -10,7 +10,7 @@
 // Description:
 //
 //*******************************************************************
-//  $Id: ossimQuickbirdNitfTileSource.cpp 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimQuickbirdNitfTileSource.cpp 17932 2010-08-19 20:34:35Z dburken $
 #include <ossim/imaging/ossimQuickbirdNitfTileSource.h>
 #include <ossim/support_data/ossimQuickbirdTile.h>
 #include <ossim/base/ossimDrect.h>
@@ -139,17 +139,15 @@ bool ossimQuickbirdNitfTileSource::open()
    return openedTileFile;
 }
 
-ossimImageGeometry* ossimQuickbirdNitfTileSource::getImageGeometry()
+ossimRefPtr<ossimImageGeometry> ossimQuickbirdNitfTileSource::getImageGeometry()
 {
-   ossimImageGeometry* result = ossimImageHandler::getImageGeometry();
-   
-   if(result)
+   ossimRefPtr<ossimImageGeometry> result = ossimImageHandler::getImageGeometry();
+   if( result.valid() )
    {
       if(!result->getTransform())
       {
          result->setTransform(m_transform.get());
       }
    }
-   
    return result;
 }

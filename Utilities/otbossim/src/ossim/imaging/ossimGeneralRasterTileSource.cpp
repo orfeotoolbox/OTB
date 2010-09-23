@@ -10,7 +10,7 @@
 //
 // Contains class definition for ossimGeneralRasterTileSource.
 //*******************************************************************
-//  $Id: ossimGeneralRasterTileSource.cpp 17711 2010-07-09 15:06:04Z dburken $
+//  $Id: ossimGeneralRasterTileSource.cpp 17815 2010-08-03 13:23:14Z dburken $
 
 #include <ossim/imaging/ossimGeneralRasterTileSource.h>
 #include <ossim/base/ossimConstants.h>
@@ -965,9 +965,9 @@ bool ossimGeneralRasterTileSource::initializeHandler()
       theFileStrList.push_back(is); // Add it to the list...
    }
 
-   if(aList.size()==1)
+   if ((aList.size()==1) && theImageFile.empty())
    {
-      theImageFile  = aList[0];
+      theImageFile = aList[0];
    }
    
    //***
@@ -1155,3 +1155,4 @@ ossim_uint32 ossimGeneralRasterTileSource::getNumberOfOutputBands() const
 {
    return getNumberOfInputBands();
 }
+

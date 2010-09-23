@@ -6,7 +6,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimUpsProjection.cpp 17206 2010-04-25 23:20:40Z dburken $
+//  $Id: ossimUpsProjection.cpp 17815 2010-08-03 13:23:14Z dburken $
 #include <ossim/projection/ossimUpsProjection.h>
 #include <ossim/projection/ossimPolarst.h>
 
@@ -60,6 +60,12 @@ void ossimUpsProjection::setDefaults()
    UPS_Origin_Longitude = 0.0;
    theOrigin            = ossimGpt(UPS_Origin_Latitude*DEG_PER_RAD,
                                    0.0,0.0);
+}
+
+void ossimUpsProjection::setHemisphere(char hemisphere)
+{ 
+  theHemisphere = hemisphere; 
+  update();
 }
 
 ossimGpt ossimUpsProjection::inverse(const ossimDpt &eastingNorthing)const
@@ -321,3 +327,18 @@ long ossimUpsProjection::Convert_UPS_To_Geodetic(char   Hemisphere,
   return (Error_Code);
 }  /*  END OF Convert_UPS_To_Geodetic  */ 
 
+//*************************************************************************************************
+//! Returns TRUE if principal parameters are within epsilon tolerance.
+//*************************************************************************************************
+bool ossimUpsProjection::operator==(const ossimProjection& proj) const
+{
+   if (!ossimMapProjection::operator==(proj))
+      return false;
+
+   ossimUpsProjection* p = PTR_CAST(ossimUpsProjection, &proj);
+   if (!p) return false;
+
+   if (theHemisphere != p->theHemisphere) return false;
+
+   return true;
+}

@@ -6,7 +6,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimBngProjection.cpp 17502 2010-06-02 11:15:43Z dburken $
+//  $Id: ossimBngProjection.cpp 17815 2010-08-03 13:23:14Z dburken $
 #include <ossim/projection/ossimBngProjection.h>
 #include <ossim/projection/ossimTranmerc.h>
 #include <ossim/base/ossimDatumFactory.h>
@@ -14,9 +14,8 @@
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/elevation/ossimElevManager.h>
 
-#include <cctype>
-#include <cstring>
-#include <cstdio>
+#include <string.h>
+#include <stdio.h>
 
 #define BNG_NO_ERROR           0x0000
 #define BNG_LAT_ERROR          0x0001
@@ -49,10 +48,11 @@ RTTI_DEF1(ossimBngProjection, "ossimBngProjection", ossimMapProjection);
 
 ossimBngProjection::ossimBngProjection()
    :ossimMapProjection(*ossimEllipsoidFactory::instance()->create("AA"),
-                       ossimGpt(49.0, -2.0, ossim::nan(), ossimDatumFactory::instance()->create("OGB-M")))
+                       ossimGpt(49.0, -2.0, ossim::nan(), 
+                       ossimDatumFactory::instance()->create(ossimString("OGB-M"))))
 {
    string_Broken = 0;
-   theDatum = ossimDatumFactory::instance()->create("OGB-M");
+   theDatum = ossimDatumFactory::instance()->create(ossimString("OGB-M"));
    update();
 }
 

@@ -68,10 +68,12 @@ public:
    //! See note below on these data members.
    const ossimFilename& getOverviewPath()  const { return m_overviewPath; }
    const ossimFilename& getHistogramPath() const { return m_histogramPath; }
+   const ossimFilename& getMaskPath() const { return m_maskPath; }
 
    void setFilename(const ossimFilename& f)          { m_filename = f; }
    void setEntryIndex(ossim_int32 i)                 { m_entryIndex = i; }
    void setOverview(const ossimFilename& f)          { m_overviewPath = f; }
+   void setMask(const ossimFilename& f)              { m_maskPath = f; }
    void setHistogram(const ossimFilename& f)         { m_histogramPath = f; }
    void setHistogramOp(const ossimString& s)         { m_histogramOp = s; }
    void setBands(const std::vector<ossim_uint32>& v) { m_bandList = v; }
@@ -92,6 +94,7 @@ private:
    //! order to support legacy systems where paths to OVR, thumbnails and histogram files
    ossimFilename m_overviewPath;
    ossimFilename m_histogramPath;
+   ossimFilename m_maskPath;
 };
 
 #endif

@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageChain.cpp 17206 2010-04-25 23:20:40Z dburken $
+// $Id: ossimImageChain.cpp 17932 2010-08-19 20:34:35Z dburken $
 #include <algorithm>
 #include <iostream>
 #include <iterator>
@@ -1161,12 +1161,12 @@ void ossimImageChain::getValidImageVertices(vector<ossimIpt>& validVertices,
    }
 }
 
-ossimImageGeometry*  ossimImageChain::getImageGeometry()
+ossimRefPtr<ossimImageGeometry> ossimImageChain::getImageGeometry()
 {
    if((theImageChainList.size() > 0)&&(isSourceEnabled()))
    {
       ossimImageSource* interface = PTR_CAST(ossimImageSource, theImageChainList[0].get());
-      if(interface)
+      if( interface )
       {
          return interface->getImageGeometry();
       }
@@ -1181,9 +1181,8 @@ ossimImageGeometry*  ossimImageChain::getImageGeometry()
             return interface->getImageGeometry();
          }
       }
-      
    }
-   return 0;
+   return ossimRefPtr<ossimImageGeometry>();
 }
 
 void ossimImageChain::getDecimationFactor(ossim_uint32 resLevel,

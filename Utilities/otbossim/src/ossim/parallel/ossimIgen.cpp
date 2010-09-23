@@ -7,7 +7,7 @@
 // Description: implementation for image generator
 //
 //*************************************************************************
-// $Id: ossimIgen.cpp 17043 2010-04-13 19:00:47Z gpotts $
+// $Id: ossimIgen.cpp 17815 2010-08-03 13:23:14Z dburken $
 
 #include <iterator>
 #include <sstream>
@@ -47,7 +47,8 @@ theNumberOfTilesToBuffer(2),
 theKwl(),
 theTilingEnabled(false),
 theTiling(),
-theProgressFlag(true)
+theProgressFlag(true),
+theStdoutFlag(false)
 {
    theOutputRect.makeNan();
 }
@@ -332,18 +333,15 @@ bool ossimIgen::loadProductSpec()
 
    // The output projection is specified separately in the KWL:
    ossimString prefix = "product.projection.";
-   theProductProjection = ossimProjectionFactoryRegistry::instance()->createProjection(theKwl, prefix);
-   if(theProductProjection.valid())
-   {
-      // Update the chain with the product view specified:
-      setView();
+   theProductProjection = PTR_CAST(ossimMapProjection, 
+      ossimProjectionFactoryRegistry::instance()->createProjection(theKwl, prefix));
 
-      // if it's a thumbnail then adjust the GSD and reset the view proj to the chain.
-      if(theBuildThumbnailFlag)
-         initThumbnailProjection();
+   const char* lookup = theKwl.find("igen.write_to_stdout");
+   if (lookup && ossimString(lookup).toBool())
+   {
+      theStdoutFlag = true;
    }
 
-   initializeChain();
    return true;
 }
 
@@ -365,6 +363,14 @@ void ossimIgen::outputProduct()
          " been established. Nothing to output!";
       throw(ossimException(err));
    }
+
+   // Update the chain with the product view specified:
+   setView();
+   initializeChain();
+
+   // if it's a thumbnail then adjust the GSD and reset the view proj to the chain.
+   if(theBuildThumbnailFlag)
+      initThumbnailProjection();
 
    ossimRefPtr<ossimImageSourceSequencer> sequencer = 0;
 
@@ -398,11 +404,10 @@ void ossimIgen::outputProduct()
    writer = PTR_CAST(ossimImageFileWriter, imageWriters[0].get());
    writer->changeSequencer(sequencer.get());
    writer->connectMyInputTo(theProductChain.get());
-
+   
    // Check for writing to standard output flag. Not all writers support this so check and 
    // throw an error if not supported.
-   const char* lookup = theKwl.find("igen.write_to_stdout");
-   if (lookup && ossimString(lookup).toBool())
+   if (theStdoutFlag)
    {
       if ( writer->setOutputStream(std::cout) == false )
       {
@@ -414,10 +419,9 @@ void ossimIgen::outputProduct()
    writer->initialize();
 
    // If multi-file tiled output is not desired perform simple output, handle special:
-   ossimRefPtr<ossimMapProjection> mapProj = PTR_CAST(ossimMapProjection, theProductProjection.get());
-   if(theTilingEnabled && mapProj.valid())
+   if(theTilingEnabled && theProductProjection.valid())
    {
-      theTiling.initialize(*mapProj, theOutputRect);
+      theTiling.initialize(*(theProductProjection.get()), theOutputRect);
       ossimRectangleCutFilter* cut = new ossimRectangleCutFilter;
       theProductChain->addFirst(cut);
       
@@ -430,7 +434,7 @@ void ossimIgen::outputProduct()
 
       // 'next' method modifies the mapProj which is the same instance as theProductProjection,
       // so this data member is modified here, then later accessed by setView:
-      while(theTiling.next(mapProj, clipRect, tileName))
+      while(theTiling.next(theProductProjection, clipRect, tileName))
       {
          setView();
          cut->setRectangle(clipRect);
@@ -532,9 +536,6 @@ void ossimIgen::setView()
 //*************************************************************************************************
 void ossimIgen::initThumbnailProjection()
 {
-   // Set the full product's rect first:
-   initializeChain();
-
    double thumb_size = ossim::max(theThumbnailSize.x, theThumbnailSize.y);
    ossimMapProjection* mapProj = PTR_CAST (ossimMapProjection, theProductProjection.get());
 
@@ -548,6 +549,7 @@ void ossimIgen::initThumbnailProjection()
 
    // Need to change the view in the product chain:
    setView();
+   initializeChain();
 }
 
 //*************************************************************************************************

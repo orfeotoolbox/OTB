@@ -8,7 +8,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimDoqqTileSource.cpp 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimDoqqTileSource.cpp 17932 2010-08-19 20:34:35Z dburken $
 #include <ossim/imaging/ossimDoqqTileSource.h>
 #include <ossim/support_data/ossimDoqq.h>
 #include <ossim/imaging/ossimGeneralRasterInfo.h>
@@ -67,16 +67,15 @@ bool ossimDoqqTileSource::open(const ossimFilename& filename)
    }
 
    return result;
-}
+} 
 
 //**************************************************************************************************
 //! Returns the image geometry object associated with this tile source or NULL if non defined.
 //! The geometry contains full-to-local image transform as well as projection (image-to-world)
 //**************************************************************************************************
-ossimImageGeometry* ossimDoqqTileSource::getImageGeometry()
+ossimRefPtr<ossimImageGeometry> ossimDoqqTileSource::getImageGeometry()
 {
-   if (theGeometry.valid())
-      return theGeometry.get();
+   if (theGeometry.valid()) return theGeometry;
    
    if(theHeaderInformation.valid())
    {
@@ -99,7 +98,7 @@ ossimImageGeometry* ossimDoqqTileSource::getImageGeometry()
       }
       else
       {
-         return false;
+         return ossimRefPtr<ossimImageGeometry>();
       }
 
       if(datum == ossimString("NAR") || datum == ossimString("4"))
@@ -132,7 +131,7 @@ ossimImageGeometry* ossimDoqqTileSource::getImageGeometry()
       }
       else
       {
-         return false;
+         return ossimRefPtr<ossimImageGeometry>();
       }
 
       kwl.add(prefix,
@@ -159,9 +158,13 @@ ossimImageGeometry* ossimDoqqTileSource::getImageGeometry()
       // Capture this for next time.
       theGeometry = new ossimImageGeometry;
       theGeometry->loadState(kwl, prefix);
-      return theGeometry.get();
+
+      // Set image things the geometry object should know about.
+      initImageParameters( theGeometry.get() );
+      
+      return theGeometry;
    }
-   return 0;
+   return ossimRefPtr<ossimImageGeometry>();
 }
 
 ossimRefPtr<ossimProperty> ossimDoqqTileSource::getProperty(const ossimString& name)const

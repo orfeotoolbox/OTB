@@ -17,6 +17,7 @@
 // Forward class declarations:
 class ossimString;
 class ossimDatum;
+class ossimKeywordlist;
 
 class OSSIM_DLL ossimDatumFactoryInterface
 {
@@ -29,11 +30,12 @@ public:
    virtual ~ossimDatumFactoryInterface(){}
 
    /**
-    * Pure virtual create method.
-    *
-    * @return const pointer to a datum.
-    */
+   * Pure virtual create method.
+   *
+   * @return const pointer to a datum.
+   */
    virtual const ossimDatum* create(const ossimString& code) const = 0;
+   virtual const ossimDatum* create(const ossimKeywordlist& kwl, const char *prefix=0) const = 0;
 
    /**
     * Pure virtual getList method.

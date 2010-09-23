@@ -6,7 +6,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimCadrgProjection.cpp 17206 2010-04-25 23:20:40Z dburken $
+//  $Id: ossimCadrgProjection.cpp 17815 2010-08-03 13:23:14Z dburken $
 #include <ossim/projection/ossimCadrgProjection.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimKeywordlist.h>
@@ -397,6 +397,28 @@ bool ossimCadrgProjection::loadState(const ossimKeywordlist& kwl,
    }
 
    computeParameters();
+
+   return true;
+}
+
+//*************************************************************************************************
+//! Returns TRUE if principal parameters are within epsilon tolerance.
+//*************************************************************************************************
+bool ossimCadrgProjection::operator==(const ossimProjection& proj) const
+{
+   if (!ossimMapProjection::operator==(proj))
+      return false;
+
+   ossimCadrgProjection* p = PTR_CAST(ossimCadrgProjection, &proj);
+   if (!p) return false;
+
+   if (theUlGpt != p->theUlGpt) return false;
+   if (theLlGpt != p->theLlGpt) return false;
+   if (theLrGpt != p->theLrGpt) return false;
+   if (theUrGpt != p->theUrGpt) return false;
+   if (!ossim::almostEqual(theWidth,p->theWidth)) return false;
+   if (!ossim::almostEqual(theHeight,p->theHeight)) return false;
+   if (theCadrgZone != p->theCadrgZone) return false;
 
    return true;
 }

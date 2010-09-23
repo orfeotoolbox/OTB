@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimRLevelFilter.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimRLevelFilter.cpp 17932 2010-08-19 20:34:35Z dburken $
 #include <ossim/imaging/ossimRLevelFilter.h>
 #include <ossim/projection/ossimMapProjection.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
@@ -76,17 +76,15 @@ ossim_uint32 ossimRLevelFilter::getCurrentRLevel()const
 // Returns a pointer reference to the active image geometry at this filter. The input source
 // geometry is modified, so we need to maintain our own geometry object as a data member.
 //**************************************************************************************************
-ossimImageGeometry* ossimRLevelFilter::getImageGeometry()
+ossimRefPtr<ossimImageGeometry> ossimRLevelFilter::getImageGeometry()
 {
    // Have we already defined our own geometry? Return it if so:
-   if (m_ScaledGeometry.valid())
-      return m_ScaledGeometry.get();
+   if (m_ScaledGeometry.valid()) return m_ScaledGeometry;
 
-   if (!theInputConnection)
-      return 0;
+   if (!theInputConnection) return ossimRefPtr<ossimImageGeometry>();
 
    ossim_uint32 rlevel = getCurrentRLevel();
-   ossimImageGeometry* inputGeom = theInputConnection->getImageGeometry();
+   ossimRefPtr<ossimImageGeometry> inputGeom = theInputConnection->getImageGeometry();
 
    // If no scaling is happening, just return the input image geometry:
    if ((!inputGeom) || (rlevel == 0) || (getEnableFlag() == false))
@@ -97,7 +95,7 @@ ossimImageGeometry* ossimRLevelFilter::getImageGeometry()
    updateGeometry();
 
    // Return our version of the image geometry:
-   return m_ScaledGeometry.get();
+   return m_ScaledGeometry;
 }
 
 //**************************************************************************************************

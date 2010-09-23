@@ -27,7 +27,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimSensorModel.cpp 17206 2010-04-25 23:20:40Z dburken $
+//  $Id: ossimSensorModel.cpp 17767 2010-07-16 12:20:24Z dburken $
 #include <iostream>
 #include <sstream>
 using namespace std;
@@ -1041,12 +1041,7 @@ ossimSensorModel::CovMatStatus ossimSensorModel::getObsCovMat(
    return ossimSensorModel::COV_INVALID;
 }
 
-#if defined(_WIN32)
-void ossimSensorModel::computeGsd() //throw (...)
-#else
-void ossimSensorModel::computeGsd() throw (ossimException)
-#endif
-
+void ossimSensorModel::computeGsd()
 {
    static const char MODULE[] = "ossimSensorModel::computeGsd";
 
@@ -1058,64 +1053,100 @@ void ossimSensorModel::computeGsd() throw (ossimException)
    }
 
    //---
-   // Upper left:
+   // Compute gsd in the x direction from left to right points across the middle of image.
+   // Compute gsd in the y direction from top to bottom points across the middle of image.
+   //---
+
+   ossim_float64 midLine = 0.0;
+   ossim_float64 midSamp = 0.0;
+   ossim_float64 endLine = 1.0;
+   ossim_float64 endSamp = 1.0;
+   if (theImageSize.x > 2)
+   {
+      midSamp = (theImageSize.x-1)/2.0;
+      endSamp = theImageSize.x-1;
+         
+   }
+   if (theImageSize.y > 2)
+   {
+      midLine = (theImageSize.y-1)/2.0;
+      endLine = theImageSize.y-1;
+   }
+   
+   ossimDpt leftDpt  (0.0,     midLine);
+   ossimDpt rightDpt (endSamp, midLine);
+   ossimDpt topDpt   (midSamp, 0.0);
+   ossimDpt bottomDpt(midSamp, endLine);
+   
+   ossimGpt leftGpt;
+   ossimGpt rightGpt;
+   ossimGpt topGpt;
+   ossimGpt bottomGpt;
+
+   //---
+   // Left point.
    // For the first point use lineSampleToWorld to get the height.
    //---
-   ossimDpt upperLeftDpt(0.0, 0.0);
-   ossimGpt upperLeftGpt;
-   lineSampleToWorld(upperLeftDpt, upperLeftGpt);
-   if (upperLeftGpt.hasNans())
+   lineSampleToWorld(leftDpt, leftGpt);
+   if (leftGpt.hasNans())
    {
       std::string e = MODULE;
-      e += "Error upperLeftGpt has nans!";
+      e += "Error leftGpt has nans!";
       throw ossimException(e);
    }
 
    //---
-   // Upper right:
-   // Use lineSampleHeightToWorld using the upper left height since we want
-   // the horizontal distance.
+   // Right point:
+   // Use lineSampleHeightToWorld using the left height since we want the horizontal distance.
    //---
-   ossimDpt upperRightDpt(theImageSize.x-1, 0.0);
-   ossimGpt upperRightGpt;
-   lineSampleHeightToWorld(upperRightDpt,
-                           upperLeftGpt.hgt,
-                           upperRightGpt);
-   if (upperLeftGpt.hasNans())
+   lineSampleHeightToWorld(rightDpt, leftGpt.hgt, rightGpt);
+   if (rightGpt.hasNans())
    {
       std::string e = MODULE;
-      e += "Error upperRightGpt has nans!";
+      e += "Error rightGpt has nans!";
       throw ossimException(e);
    }
 
    //---
-   // Lower left:
-   // Use lineSampleHeightToWorld using the upper left height since we want
-   // the horizontal distance.
+   // Top point:
+   // Use lineSampleHeightToWorld using the left height since we want the horizontal distance.
    //---
-   ossimDpt lowerLeftDpt(0.0, theImageSize.y-1);
-   ossimGpt lowerLeftGpt;
-   lineSampleHeightToWorld(lowerLeftDpt,
-                           upperLeftGpt.hgt,
-                           lowerLeftGpt);
-   if (upperLeftGpt.hasNans())
+   lineSampleHeightToWorld(topDpt, leftGpt.hgt, topGpt);
+   if (topGpt.hasNans())
    {
       std::string e = MODULE;
-      e += "Error lowerLeftGpt has nans!";
+      e += "Error topGpt has nans!";
+      throw ossimException(e);
+   }
+   
+   //---
+   // Bottom point:
+   // Use lineSampleHeightToWorld using the left height since we want the horizontal distance.
+   //---
+   lineSampleHeightToWorld(bottomDpt, leftGpt.hgt, bottomGpt);
+   if (bottomGpt.hasNans())
+   {
+      std::string e = MODULE;
+      e += "Error bottomGpt has nans!";
       throw ossimException(e);
    }
 
 #if 0 /* Please leave for debug. (drb) */
    ossimNotify(ossimNotifyLevel_DEBUG)
       << "image size:    " << theImageSize
-      << "\nupperLeftGpt:  " << upperLeftGpt
-      << "\nupperRightGpt: " << upperRightGpt
-      << "\nlowerLeftGpt:  " << lowerLeftGpt
+      << "\nleftDpt:   " << leftDpt
+      << "\nrightDpt:  " << rightDpt
+      << "\ntopDpt:    " << topDpt
+      << "\nbottomDpt: " << bottomDpt      
+      << "\nleftGpt:   " << leftGpt
+      << "\nrightGpt:  " << rightGpt
+      << "\ntopGpt:    " << topGpt
+      << "\nbottomGpt: " << bottomGpt      
       << "\n";
 #endif
       
-   theGSD.x   = upperLeftGpt.distanceTo(upperRightGpt)/(theImageSize.x-1);
-   theGSD.y   = upperLeftGpt.distanceTo(lowerLeftGpt)/(theImageSize.y-1);
+   theGSD.x   = leftGpt.distanceTo(rightGpt)/(rightDpt.x-leftDpt.x);
+   theGSD.y   = topGpt.distanceTo(bottomGpt)/(bottomDpt.y-topDpt.y);
    theMeanGSD = (theGSD.x + theGSD.y)/2.0;
 
    if (traceDebug())

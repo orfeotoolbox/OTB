@@ -6,7 +6,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimSpaceObliqueMercatorProjection.cpp 11428 2007-07-27 18:44:18Z gpotts $
+//  $Id: ossimSpaceObliqueMercatorProjection.cpp 17815 2010-08-03 13:23:14Z dburken $
 #include <ossim/projection/ossimSpaceObliqueMercatorProjection.h>
 #include <math.h>
 #include <ossim/base/ossimConstants.h>
@@ -392,4 +392,21 @@ bool ossimSpaceObliqueMercatorProjection::loadState(const ossimKeywordlist& kwl,
    }
 
    return result;
+}
+
+//*************************************************************************************************
+//! Returns TRUE if principal parameters are within epsilon tolerance.
+//*************************************************************************************************
+bool ossimSpaceObliqueMercatorProjection::operator==(const ossimProjection& proj) const
+{
+   if (!ossimMapProjection::operator==(proj))
+      return false;
+
+   ossimSpaceObliqueMercatorProjection* p = PTR_CAST(ossimSpaceObliqueMercatorProjection, &proj);
+   if (!p) return false;
+
+   if (theSatelliteType != p->theSatelliteType) return false;
+   if (!ossim::almostEqual(thePath,p->thePath)) return false;
+
+   return true;
 }

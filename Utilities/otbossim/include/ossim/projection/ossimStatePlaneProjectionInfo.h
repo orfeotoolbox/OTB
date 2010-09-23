@@ -4,7 +4,7 @@
 //
 // Author: Garrett Potts
 //*******************************************************************
-//  $Id: ossimStatePlaneProjectionInfo.h 13399 2008-08-07 18:06:05Z dburken $
+//  $Id: ossimStatePlaneProjectionInfo.h 17815 2010-08-03 13:23:14Z dburken $
 #ifndef ossimStatePlaneProjectionInfo_HEADER
 #define ossimStatePlaneProjectionInfo_HEADER
 
@@ -37,7 +37,7 @@ public:
                                  double              falseEast,
                                  double              falseNorth,
                                  const std::string&  units,
-                                 const ossimDatum*   datum=0);
+                                 const std::string&  datumName);
   
    int                code()                  const;
    const ossimString& name()                  const;

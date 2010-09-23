@@ -13,7 +13,7 @@
 // Height is relative to the ellipsoid in meters.
 //
 //*******************************************************************
-//  $Id: ossimGpt.h 15900 2009-11-12 00:31:35Z okramer $
+//  $Id: ossimGpt.h 17815 2010-08-03 13:23:14Z dburken $
 
 #ifndef gpt_HEADER
 #define gpt_HEADER
@@ -207,12 +207,14 @@ public:
    const ossimGpt& operator = (const ossimGpt &aPt);
    bool operator ==(const ossimGpt& gpt)const
       {
-         return ( (lat == gpt.lat)&&
-                  (lon == gpt.lon)&&
-                  (hgt == gpt.hgt)&&
+         return ( ossim::almostEqual(lat, gpt.lat)&&
+                  ossim::almostEqual(lon, gpt.lon)&&
+                  ossim::almostEqual(hgt, gpt.hgt)&&
                   (theDatum == gpt.theDatum));
       }
 
+   bool operator != (const ossimGpt& gpt) const { return !(*this == gpt); }
+   
    /**
     * METHOD: limitLonTo180()
     * Converts the lon data member to a value between -180 and +180:

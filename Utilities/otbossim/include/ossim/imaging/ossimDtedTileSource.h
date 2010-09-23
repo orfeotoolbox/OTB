@@ -13,7 +13,7 @@
 // handler for DTED files.
 //
 //********************************************************************
-// $Id: ossimDtedTileSource.h 17599 2010-06-20 13:52:34Z dburken $
+// $Id: ossimDtedTileSource.h 17932 2010-08-19 20:34:35Z dburken $
 
 #ifndef ossimDtedTileSource_HEADER
 #define ossimDtedTileSource_HEADER
@@ -118,7 +118,7 @@ public:
    
    //! Returns the image geometry object associated with this tile source or NULL if not defined.
    //! The geometry contains full-to-local image transform as well as projection (image-to-world)
-   virtual ossimImageGeometry* getImageGeometry();
+   virtual ossimRefPtr<ossimImageGeometry> getImageGeometry();
    
    /**
     * Returns the output pixel type of the tile source.

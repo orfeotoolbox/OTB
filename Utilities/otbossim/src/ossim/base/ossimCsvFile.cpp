@@ -244,6 +244,13 @@ ossimRefPtr<ossimCsvFile::Record> ossimCsvFile::nextRecord()
 {
    if(!theOpenFlag) return ossimRefPtr<ossimCsvFile::Record>(0);
    
+   if(theFieldHeaderList.empty())
+   {
+      if(!readHeader())
+      {
+         return ossimRefPtr<ossimCsvFile::Record>();
+      }
+   }
    if(!readCsvLine(*theInputStream,  theRecordBuffer->values()))
    {
       return ossimRefPtr<ossimCsvFile::Record>();

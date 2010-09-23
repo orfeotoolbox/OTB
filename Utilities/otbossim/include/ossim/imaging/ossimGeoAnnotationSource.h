@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*******************************************************************
-// $Id: ossimGeoAnnotationSource.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimGeoAnnotationSource.h 17932 2010-08-19 20:34:35Z dburken $
 #ifndef ossimGeoAnnotationSource_HEADER
 #define ossimGeoAnnotationSource_HEADER
 
@@ -42,7 +42,7 @@ public:
    virtual void transformObjects(ossimImageGeometry* geom=0);
    virtual void setGeometry(ossimImageGeometry* projection);
    virtual bool setView(ossimObject* baseObject);
-   virtual ossimImageGeometry*  getImageGeometry();
+   virtual ossimRefPtr<ossimImageGeometry> getImageGeometry();
   
    virtual ossimObject*       getView();
    virtual const ossimObject* getView()const;

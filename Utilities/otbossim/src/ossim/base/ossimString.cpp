@@ -9,7 +9,7 @@
 // Description: This class extends the stl's string class.
 // 
 //********************************************************************
-// $Id: ossimString.cpp 17586 2010-06-17 14:40:07Z dburken $
+// $Id: ossimString.cpp 17999 2010-08-30 18:00:08Z gpotts $
 
 #include <cctype> /* for toupper */
 #include <cstdlib> /* for getenv() */
@@ -28,7 +28,7 @@
 static ossimTrace traceDebug("ossimString:debug");
 
 #ifdef OSSIM_ID_ENABLED
-static char OSSIM_ID[] = "$Id: ossimString.cpp 17586 2010-06-17 14:40:07Z dburken $";
+static char OSSIM_ID[] = "$Id: ossimString.cpp 17999 2010-08-30 18:00:08Z gpotts $";
 #endif
 
 ossimString ossimString::upcase(const ossimString& aString)
@@ -71,6 +71,13 @@ ossimString& ossimString::upcase()
    return *this;
 }
 
+ossimString ossimString::upcase()const
+{
+   ossimString result(*this);
+   result.upcase();
+   return result;
+}
+
 ossimString& ossimString::downcase()
 {
    ossimString::iterator eachCharacter=begin();
@@ -79,8 +86,15 @@ ossimString& ossimString::downcase()
       *eachCharacter = tolower(*eachCharacter);
       eachCharacter++;
    }
-
+   
    return *this;
+}
+
+ossimString ossimString::downcase()const
+{
+   ossimString result(*this);
+   result.downcase();
+   return result;
 }
 
 char* ossimString::stringDup()const

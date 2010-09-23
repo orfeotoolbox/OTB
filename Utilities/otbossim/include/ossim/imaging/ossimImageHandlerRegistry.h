@@ -8,7 +8,7 @@
 //               ImageHandlerRegistry.
 //
 //*******************************************************************
-//  $Id: ossimImageHandlerRegistry.h 13508 2008-08-27 15:51:38Z gpotts $
+//  $Id: ossimImageHandlerRegistry.h 18002 2010-08-30 18:01:10Z gpotts $
 
 #ifndef ossimImageHandlerRegistry_HEADER
 #define ossimImageHandlerRegistry_HEADER
@@ -45,7 +45,7 @@ public:
    void unregisterFactory(ossimImageHandlerFactoryBase* factory);
    bool findFactory(ossimImageHandlerFactoryBase* factory)const;
    
-   ossimImageHandler* open(const ossimFilename& fileName)const;
+   ossimImageHandler* open(const ossimFilename& fileName, bool trySuffixFirst=true)const;
 
    
    /*!
@@ -64,6 +64,31 @@ public:
     */
    virtual ossimObject* createObject(const ossimKeywordlist& kwl,
                                      const char* prefix=0)const;
+
+   /**
+    * openBySuffix will call the mthod getImageHandlersBySuffix and go through each handler to try and open the file.
+    * This should be a faster open for we do not have to do a magic number compare on all prior files and keep opening and
+    * closing files.
+    *
+    * 
+    */
+   virtual ossimRefPtr<ossimImageHandler> openBySuffix(const ossimFilename& file)const; 
+   
+   /**
+    *
+    * Will add to the result list any handler that supports the passed in extensions
+    *
+    */
+   virtual void getImageHandlersBySuffix(ossimImageHandlerFactoryBase::ImageHandlerList& result,
+                                         const ossimString& ext)const;
+   /**
+    *
+    * Will add to the result list and handler that supports the passed in mime type
+    *
+    */
+   virtual void getImageHandlersByMimeType(ossimImageHandlerFactoryBase::ImageHandlerList& result,
+                                           const ossimString& mimeType)const;
+   
    
    /*!
     * This should return the type name of all objects in all factories.

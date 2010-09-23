@@ -9,7 +9,7 @@
 // Base class for all map projections.
 // 
 //*******************************************************************
-//  $Id: ossimMapProjection.h 17019 2010-04-13 14:43:41Z dburken $
+//  $Id: ossimMapProjection.h 17815 2010-08-03 13:23:14Z dburken $
 
 #ifndef ossimMapProjection_HEADER
 #define ossimMapProjection_HEADER
@@ -99,10 +99,13 @@ public:
    
    virtual void update();
 
-   virtual void setPcsCode(ossim_uint16 pcsCode);
-   virtual void setGcsCode(ossim_uint16 pcsCode);
-   virtual ossim_uint16 getPcsCode()const;
-   virtual ossim_uint16 getGcsCode()const;
+   virtual void setPcsCode(ossim_uint32 pcsCode);
+   virtual void setGcsCode(ossim_uint32 pcsCode);
+
+   //! Returns the EPSG PCS code or 32767 if the projection is a custom (non-EPSG) projection
+   virtual ossim_uint32 getPcsCode()const;
+
+   virtual ossim_uint32 getGcsCode()const;
    
    /**
     *  Returns the projection name.
@@ -196,6 +199,10 @@ public:
     */
    virtual std::ostream& print(std::ostream& out) const;
 
+   //! Compares this to arg projection and returns TRUE if the same. 
+   //! NOTE: As currently implemented in OSSIM, map projections also contain image geometry 
+   //! information like tiepoint and scale. This operator is only concerned with the map 
+   //! specification and ignores image geometry differences.
    virtual bool operator==(const ossimProjection& projection) const;
 
    /**
@@ -287,6 +294,9 @@ public:
     */
    virtual bool isAffectedByElevation() const { return false; }
    
+   void setProjectionUnits(ossimUnitType units) { theProjectionUnits = units; }
+   ossimUnitType getProjectionUnits() const { return theProjectionUnits; }
+
 protected:
    
    virtual ~ossimMapProjection();
@@ -306,7 +316,7 @@ protected:
     *
     * @return true if match, false if not.
     */
-   bool verifyPcsCodeMatches() const;
+   //bool verifyPcsCodeMatches() const;
    
    ossimEllipsoid   theEllipsoid;
    ossimGpt         theOrigin;
@@ -347,11 +357,14 @@ protected:
     */
    ossimDpt          theFalseEastingNorthing;
 
-   /** Projection Coordinate System(PCS) code. */
-   ossim_uint16      thePcsCode;
+   //! Projection Coordinate System(PCS) code. Mutable because they may update automatically
+   //! after the projection is initialized, even in a const method. Normally set to 0 until the
+   //! corresponding EPSG code can be determined. If the projection is NOT represented by any
+   //! EPSG code, then the PCS is set to 32767.
+   mutable ossim_uint32      thePcsCode;
 
-   /** Projection Coordinate System(EPSG) code. */
-   ossim_uint16      theGcsCode;
+   /** Datum code (EPSG). */
+   mutable ossim_uint32      theGcsCode;
 
    bool              theElevationLookupFlag;
 
@@ -365,6 +378,10 @@ protected:
    // Output Units of the transform
    //
    ossimUnitType theModelTransformUnitType;
+
+   //! Linear units of the projection as indicated in the projection's specification:
+   ossimUnitType theProjectionUnits;
+
 TYPE_DATA
 };
 

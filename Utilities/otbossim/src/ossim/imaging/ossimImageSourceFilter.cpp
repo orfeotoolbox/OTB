@@ -11,7 +11,7 @@
 // Description:
 //
 //*******************************************************************
-//  $Id: ossimImageSourceFilter.cpp 17206 2010-04-25 23:20:40Z dburken $
+//  $Id: ossimImageSourceFilter.cpp 17932 2010-08-19 20:34:35Z dburken $
 
 #include <ossim/imaging/ossimImageSourceFilter.h>
 #include <ossim/base/ossimTrace.h>
@@ -71,109 +71,11 @@ ossimImageSourceFilter::~ossimImageSourceFilter()
    theInputConnection = NULL;
 }
 
-ossimRefPtr<ossimImageData> ossimImageSourceFilter::getTile(
-   const ossimIrect& rect,
-   ossim_uint32 resLevel)
-{
-   if(theInputConnection)
-   {
-      return theInputConnection->getTile(rect, resLevel);
-   }
-   
-   return ossimRefPtr<ossimImageData>(NULL);
-}
-
-ossimIrect ossimImageSourceFilter::getBoundingRect(ossim_uint32 resLevel) const
-{
-   if(theInputConnection)
-   {
-      return theInputConnection->getBoundingRect(resLevel);
-   }
-   ossimIrect rect;
-   rect.makeNan();
-   
-   return rect;
-}
-
-void ossimImageSourceFilter::getDecimationFactor(ossim_uint32 resLevel,
-                                                 ossimDpt& result) const
-{
-   if(theInputConnection)
-   {
-      theInputConnection->getDecimationFactor(resLevel,
-                                              result);
-   }
-   else // Ok assume square and powers of 2
-   {
-      double dec = 1.0/pow((double)2.0,(double)resLevel);
-      result.x = dec;
-      result.y = dec;
-   }
-}
-
-void ossimImageSourceFilter::getDecimationFactors(vector<ossimDpt>& decimations) const
-{
-   if(theInputConnection)
-   {
-      theInputConnection->getDecimationFactors(decimations);
-   }   
-}
-
-ossim_uint32 ossimImageSourceFilter::getNumberOfDecimationLevels()const
-{
-   if(theInputConnection)
-   {
-      return theInputConnection->getNumberOfDecimationLevels();
-   }
-
-   return 0;
-}
-
 ossim_uint32 ossimImageSourceFilter::getNumberOfInputBands()const
 {
    if(theInputConnection)
    {
       return theInputConnection->getNumberOfOutputBands();
-   }
-
-   return 0;
-}
-
-ossimScalarType ossimImageSourceFilter::getOutputScalarType() const
-{
-   if(theInputConnection)
-   {
-      return theInputConnection->getOutputScalarType();
-   }
-
-   return OSSIM_SCALAR_UNKNOWN;
-}
-
-void ossimImageSourceFilter::getValidImageVertices(vector<ossimIpt>& validVertices,
-                                                   ossimVertexOrdering ordering,
-                                                   ossim_uint32 resLevel)const
-{
-   if(theInputConnection)
-   {
-      theInputConnection->getValidImageVertices(validVertices, ordering, resLevel);
-   }
-}
-
-ossim_uint32 ossimImageSourceFilter::getTileWidth() const
-{
-   if(theInputConnection)
-   {
-      return theInputConnection->getTileWidth();
-   }
-   
-   return 0;
-}
-
-ossim_uint32 ossimImageSourceFilter::getTileHeight() const
-{
-   if(theInputConnection)
-   {
-      return theInputConnection->getTileHeight();
    }
 
    return 0;
@@ -284,33 +186,6 @@ void ossimImageSourceFilter::refreshEvent(ossimRefreshEvent& /* event */)
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << "ossimImageSourceFilter::refreshEvent " << std::endl;
    }
-}
-
-double ossimImageSourceFilter::getNullPixelValue(ossim_uint32 band)const
-{
-   if(theInputConnection)
-   {
-      return theInputConnection->getNullPixelValue(band);
-   }
-   return ossimImageSource::getNullPixelValue(band);
-}
-
-double ossimImageSourceFilter::getMinPixelValue(ossim_uint32 band)const
-{
-   if(theInputConnection)
-   {
-      return theInputConnection->getMinPixelValue(band);
-   }
-   return ossimImageSource::getMinPixelValue(band);
-}
-
-double ossimImageSourceFilter::getMaxPixelValue(ossim_uint32 band)const
-{
-   if(theInputConnection)
-   {
-      return theInputConnection->getMaxPixelValue(band);
-   }
-   return ossimImageSource::getMaxPixelValue(band);
 }
 
 void ossimImageSourceFilter::getOutputBandList(std::vector<ossim_uint32>& bandList) const

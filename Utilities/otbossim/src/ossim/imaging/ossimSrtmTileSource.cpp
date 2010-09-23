@@ -9,7 +9,7 @@
 // Image handler class for a Shuttle Radar Topography Mission (SRTM) file.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimSrtmTileSource.cpp 17602 2010-06-20 19:12:24Z dburken $
+// $Id: ossimSrtmTileSource.cpp 17932 2010-08-19 20:34:35Z dburken $
 
 #include <ossim/imaging/ossimSrtmTileSource.h>
 #include <ossim/base/ossimDirectory.h>
@@ -86,7 +86,7 @@ bool ossimSrtmTileSource::open()
 //! Returns the image geometry object associated with this tile source or NULL if non defined.
 //! The geometry contains full-to-local image transform as well as projection (image-to-world)
 //************************************************************************************************
-ossimImageGeometry* ossimSrtmTileSource::getImageGeometry()
+ossimRefPtr<ossimImageGeometry> ossimSrtmTileSource::getImageGeometry()
 {
    if(!theGeometry.valid())
    {
@@ -94,8 +94,11 @@ ossimImageGeometry* ossimSrtmTileSource::getImageGeometry()
       theGeometry = new ossimImageGeometry();
 
       theGeometry->setProjection( m_SrtmSupportData.getProjection().get() );
+
+      // Set image things the geometry object should know about.
+      initImageParameters( theGeometry.get() );
    }
-   return theGeometry.get();
+   return theGeometry;
 }
 
 bool ossimSrtmTileSource::saveState(ossimKeywordlist& kwl,

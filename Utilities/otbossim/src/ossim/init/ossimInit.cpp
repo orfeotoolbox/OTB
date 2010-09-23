@@ -16,7 +16,7 @@
 //   24Apr2001  Oscar Kramer
 //              Initial coding.
 //*****************************************************************************
-// $Id: ossimInit.cpp 16636 2010-02-22 19:02:00Z dburken $
+// $Id: ossimInit.cpp 17895 2010-08-17 17:27:12Z dburken $
 
 
 #include <ossim/init/ossimInit.h>
@@ -99,7 +99,7 @@ void ossimInit::addOptions(ossimArgumentParser& parser)
    
    parser.getApplicationUsage()->addCommandLineOption("--ossim-logfile", "takes a logfile as an argument.  All output messages are redirected to the specified log file.  By default there is no log file and all messages are enabled.");
    parser.getApplicationUsage()->addCommandLineOption("--disable-notify", "Takes an argument. Arguments are ALL, WARN, NOTICE, INFO, FATAL, DEBUG.  If you want multiple disables then just do multiple --disable-notify on the command line.  All argument are case insensitive.  Default is all are enabled.");
-   
+   parser.getApplicationUsage()->addCommandLineOption("-V or --version", "Display version information.");
 }
 
 /*!****************************************************************************
@@ -135,7 +135,7 @@ void ossimInit::initialize(ossimArgumentParser& parser)
    theInstance->parseNotifyOption(parser);
    theInstance->thePreferences = ossimPreferences::instance();
       
-    //Parse the command line:
+   //Parse the command line:
    theInstance->parseOptions(parser);
 
    theInstance->initializeDefaultFactories();
@@ -233,6 +233,7 @@ void ossimInit::usage()
       << "\n"
       << "\n  -S<session_filename> -- Allows user to specify a session file"
       << "\n    to load."
+      << "\n  -V or --version -- Outputs version information."
       << std::endl;
    return;
 }
@@ -349,6 +350,11 @@ void ossimInit::parseOptions(ossimArgumentParser& parser)
    if(parser.read("--disable-plugin"))
    {
       thePluginLoaderEnabledFlag = false;
+   }
+   if (parser.read("--version") || parser.read("-V")) 
+   {
+      ossimNotify(ossimNotifyLevel_NOTICE)
+         << "\n" << parser.getApplicationName().c_str() << " " << version() << std::endl;
    }
 }
 

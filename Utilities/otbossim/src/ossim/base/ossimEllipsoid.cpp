@@ -13,10 +13,10 @@
 //              Initial coding.
 //<
 //*****************************************************************************
-//  $Id: ossimEllipsoid.cpp 13864 2008-11-14 13:24:37Z gpotts $
+//  $Id: ossimEllipsoid.cpp 17941 2010-08-19 22:39:13Z dburken $
 
 #include <ossim/base/ossimEllipsoid.h>
-
+#include <ossim/base/ossimEllipsoidFactory.h>
 #include <ossim/base/ossimEcefRay.h>
 #include <ossim/base/ossimEcefPoint.h>
 #include <ossim/base/ossimEcefVector.h>
@@ -47,6 +47,7 @@ ossimEllipsoid::ossimEllipsoid(const ossimEllipsoid &ellipsoid)
       theB_squared(ellipsoid.theB_squared),
       theEccentricitySquared(ellipsoid.theEccentricitySquared)
 {
+   theEpsgCode = ossimEllipsoidFactory::instance()->findEpsgCode(theCode);
 }
 
 //*****************************************************************************
@@ -65,8 +66,9 @@ ossimEllipsoid::ossimEllipsoid(const ossimString &name,
       theA_squared(a*a),
       theB_squared(b*b)
 {
-   computeFlattening();
-   
+   theEpsgCode = ossimEllipsoidFactory::instance()->findEpsgCode(theCode);
+
+   computeFlattening();   
    theEccentricitySquared = 2*theFlattening - theFlattening*theFlattening;
 }
 
@@ -86,6 +88,7 @@ ossimEllipsoid::ossimEllipsoid(const double &a,
    :
       theName(""), // initialize to empty
       theCode(""),
+      theEpsgCode(0),
       theA(a),
       theB(b),
       theA_squared(a*a),
@@ -281,12 +284,11 @@ ossimEllipsoid::gradient(const ossimEcefPoint &location)const
 bool ossimEllipsoid::loadState(const ossimKeywordlist& kwl,
                                const char* prefix)
 {
-   const char* code = kwl.find(prefix,
-                               ossimKeywordNames::ELLIPSE_CODE_KW);
+   const char* lookup = kwl.find(prefix, ossimKeywordNames::ELLIPSE_CODE_KW);
    bool foundCode = false;
-   if(code)
+   if(lookup)
    {
-      const ossimEllipsoid* ellipse = ossimEllipsoidFactory::instance()->create(ossimString(code));
+      const ossimEllipsoid* ellipse = ossimEllipsoidFactory::instance()->create(ossimString(lookup));
 
       if(ellipse)
       {
@@ -294,6 +296,13 @@ bool ossimEllipsoid::loadState(const ossimKeywordlist& kwl,
          *this = *ellipse;
       }
    }
+
+   lookup = kwl.find(prefix, ossimKeywordNames::ELLIPSE_EPSG_CODE_KW);
+   if (lookup)
+   {
+      theEpsgCode = ossimString(lookup).toUInt32();
+   }
+
    if(!foundCode)
    {     
       const char* majorAxis = kwl.find(prefix,
@@ -338,6 +347,11 @@ bool ossimEllipsoid::saveState(ossimKeywordlist& kwl,
               theName.c_str(),
               true);
    }
+   if (theEpsgCode)
+   {
+      kwl.add(prefix, ossimKeywordNames::ELLIPSE_EPSG_CODE_KW, theEpsgCode, true);
+   }
+
    kwl.add(prefix,
            ossimKeywordNames::MAJOR_AXIS_KW,
            theA,
@@ -583,4 +597,11 @@ void ossimEllipsoid::computeLocalToWorldTransformFromXYZ(double x, double y, dou
     m[1][2] = y;
     m[2][2] = z;
    
+}
+
+ossim_uint32 ossimEllipsoid::getEpsgCode() const
+{
+   if (!theCode.empty() && (theEpsgCode == 0))
+      theEpsgCode = ossimEllipsoidFactory::instance()->findEpsgCode(theCode);
+   return theEpsgCode;
 }

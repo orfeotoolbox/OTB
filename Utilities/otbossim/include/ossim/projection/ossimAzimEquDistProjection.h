@@ -8,14 +8,14 @@
 //
 // Calls Geotrans Equidistant Cylinder projection code.  
 //*******************************************************************
-//  $Id: ossimAzimEquDistProjection.h 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimAzimEquDistProjection.h 17815 2010-08-03 13:23:14Z dburken $
 
 #ifndef ossimAzimEquDistProjection_HEADER
 #define ossimAzimEquDistProjection_HEADER
 
 #include <ossim/projection/ossimMapProjection.h>
 
-class ossimAzimEquDistProjection : public ossimMapProjection
+class OSSIMDLLEXPORT ossimAzimEquDistProjection : public ossimMapProjection
 {
 public:
    ossimAzimEquDistProjection(const ossimEllipsoid& ellipsoid = ossimEllipsoid(),
@@ -66,7 +66,7 @@ public:
     * update for pre-computations.
     */
    void setDefaults();
-   
+
    /*!
     * Method to save the state of an object to a keyword list.
     * Return true if ok or false on error.
@@ -80,6 +80,7 @@ public:
     */
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix=0);
+
 protected:   
    virtual ~ossimAzimEquDistProjection(){}
    

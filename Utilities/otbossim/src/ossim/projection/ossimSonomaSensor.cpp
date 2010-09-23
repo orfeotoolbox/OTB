@@ -34,8 +34,8 @@ ossimSonomaSensor::ossimSonomaSensor()
    theSensorID = "Sonoma";
 }
 
-void ossimSonomaSensor::imagingRay(const ossimDpt& image_point,
-                                         ossimEcefRay&   image_ray) const
+void ossimSonomaSensor::imagingRay(const ossimDpt& /* image_point */,
+                                   ossimEcefRay&   /* image_ray */) const
 {
 #if 0
    ossimColumnVector3d v(image_point.x,image_point.y,1.0);
@@ -128,7 +128,7 @@ void ossimSonomaSensor::lineSampleToWorld(const ossimDpt& image_point,
                            v[2]-origin[2]);
    rayDirection = rayDirection/rayDirection.length();
    ossimDpt3d result;
-   ossim_uint32 iterIdx = 0;
+   // ossim_uint32 iterIdx = 0;
    intersectRay(*(m_utmProjection.get()), result, rayOrigin, rayDirection);
    gpt = m_utmProjection->inverse(ossimDpt(result.x, result.y));
    gpt.height(result.z);
@@ -568,7 +568,7 @@ bool ossimSonomaSensor::intersectRay(const ossimMapProjection& proj, ossimDpt3d&
    return intersected;
 }
 
-bool ossimSonomaSensor::intersectRayWithHeight(const ossimMapProjection& proj, ossimDpt3d& result, ossimDpt3d& origin, ossimDpt3d& dir, double h)const
+bool ossimSonomaSensor::intersectRayWithHeight(const ossimMapProjection& /* proj */, ossimDpt3d& result, ossimDpt3d& origin, ossimDpt3d& dir, double h)const
 {
    ossimPlane plane(0.0, 0.0, 1.0, -h);
    bool intersected = plane.intersect(result, origin, dir);

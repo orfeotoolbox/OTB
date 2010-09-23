@@ -7,7 +7,7 @@
 // Description:
 //
 //*******************************************************************
-//  $Id: ossimSpaceObliqueMercatorProjection.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimSpaceObliqueMercatorProjection.h 17815 2010-08-03 13:23:14Z dburken $
 #ifndef ossimSpaceObliqueMercatorProjection_HEADER
 #define ossimSpaceObliqueMercatorProjection_HEADER
 #include <ossim/projection/ossimMapProjection.h>
@@ -63,6 +63,10 @@ public:
                               double path);
    
    virtual void update();
+
+   //! Returns TRUE if principal parameters are within epsilon tolerance.
+   virtual bool operator==(const ossimProjection& projection) const;
+
 protected:
 
    // proj 4 parameters that I bridge to.

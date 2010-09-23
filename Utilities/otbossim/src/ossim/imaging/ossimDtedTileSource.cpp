@@ -11,7 +11,7 @@
 // Contains class declaration for ossimDtedTileSource.
 //
 //********************************************************************
-// $Id: ossimDtedTileSource.cpp 17601 2010-06-20 18:07:11Z dburken $
+// $Id: ossimDtedTileSource.cpp 17941 2010-08-19 22:39:13Z dburken $
 
 #include <cstdlib>
 #include <iostream>
@@ -397,10 +397,8 @@ bool ossimDtedTileSource::loadState(const ossimKeywordlist& kwl,
 // Returns the image geometry object associated with this tile source or NULL if not defined.
 // The geometry contains full-to-local image transform as well as projection (image-to-world)
 //**************************************************************************************************
-ossimImageGeometry* ossimDtedTileSource::getImageGeometry()
+ossimRefPtr<ossimImageGeometry> ossimDtedTileSource::getImageGeometry()
 {
-   static const char* MODULE = "ossimDtedTileSource::getImageGeometry() -- ";
-
    if ( !theGeometry.valid() )
    {
       //---
@@ -426,6 +424,9 @@ ossimImageGeometry* ossimDtedTileSource::getImageGeometry()
       // Set the scale:
       ossimDpt gsd(m_uhl.lonInterval(), m_uhl.latInterval());
       eq->setDecimalDegreesPerPixel(gsd);
+
+      // Set the pcs code. Was determined that 4326 was preferred over 6326 (OLK 08/2010)
+      eq->setPcsCode(4326); // used to be 6326
       
       // Give it to the geometry object.
       ossimRefPtr<ossimProjection> proj = eq.get();
@@ -435,9 +436,12 @@ ossimImageGeometry* ossimDtedTileSource::getImageGeometry()
       
       // Set the projection.
       theGeometry->setProjection( proj.get() );
+
+      // Set image things the geometry object should know about.
+      initImageParameters( theGeometry.get() );
    }
    
-   return theGeometry.get();
+   return theGeometry;
 }
 
 ossimScalarType ossimDtedTileSource::getOutputScalarType() const

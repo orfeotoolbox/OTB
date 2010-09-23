@@ -4,14 +4,14 @@
 //
 // Author: Garrett Potts
 //*******************************************************************
-//  $Id: ossimStatePlaneProjectionInfo.cpp 13400 2008-08-07 18:06:54Z dburken $
+//  $Id: ossimStatePlaneProjectionInfo.cpp 17815 2010-08-03 13:23:14Z dburken $
 
 #include <ossim/projection/ossimStatePlaneProjectionInfo.h>
 #include <ossim/projection/ossimTransMercatorProjection.h>
 #include <ossim/projection/ossimLambertConformalConicProjection.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimKeywordlist.h>
-#include <ossim/base/ossimDatumFactory.h>
+#include <ossim/base/ossimDatumFactoryRegistry.h>
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimNotify.h>
 #include <ossim/base/ossimUnitTypeLut.h>
@@ -27,12 +27,12 @@ ossimStatePlaneProjectionInfo::ossimStatePlaneProjectionInfo(
    double              falseEast,
    double              falseNorth,
    const std::string&  units,
-   const ossimDatum*   datum)
+   const std::string&  datumName)
    :
       thePcsCode        (pcsCode),
       theName           (name),
       theProjectionName (projName),
-      theDatum          (datum),
+      theDatum          (0),
       theOriginLat      (param1),
       theOriginLon      (param2),
       theOrigin         (),
@@ -81,18 +81,12 @@ ossimStatePlaneProjectionInfo::ossimStatePlaneProjectionInfo(
          << projName << std::endl;
    }
 
+   theDatum = ossimDatumFactoryRegistry::instance()->create(datumName);
    if (!theDatum)
    {
-      if(theName.contains("NAD27"))
-      {
-         // NAD 1927
-         theDatum = ossimDatumFactory::instance()->create("NAS-C"); 
-      }
-      else
-      {
-         // NAD 1983
-         theDatum = ossimDatumFactory::instance()->create("NAR-C");  
-      }
+      ossimNotify(ossimNotifyLevel_WARN)
+         << "ossimStatePlaneProjectionInfo unhandled datum type: "
+         << datumName << std::endl;
    }
 
    theOrigin = ossimGpt(theOriginLat.getDegrees(),
@@ -253,10 +247,12 @@ void ossimStatePlaneProjectionInfo::populateProjectionKeywords(
            ossimKeywordNames::CENTRAL_MERIDIAN_KW,
            origin().lond(),
            true);
+   
    kwl.add(prefix,
-           ossimKeywordNames::TYPE_KW,
-           projName(),
-           true);
+      ossimKeywordNames::TYPE_KW,
+      projName(),
+      true);
+   
    if(theDatum)
    {
       

@@ -8,13 +8,13 @@
 //
 // Calls Geotrans Bonne projection code.  
 //*******************************************************************
-//  $Id: ossimBonneProjection.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimBonneProjection.h 17815 2010-08-03 13:23:14Z dburken $
 #ifndef ossimBonneProjection_HEADER
 #define ossimBonneProjection_HEADER
 
 #include <ossim/projection/ossimMapProjection.h>
 
-class ossimBonneProjection : public ossimMapProjection
+class OSSIMDLLEXPORT ossimBonneProjection : public ossimMapProjection
 {
 public:
    
@@ -73,7 +73,8 @@ public:
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix=0);
    
-
+   //! Returns TRUE if principal parameters are within epsilon tolerance.
+   virtual bool operator==(const ossimProjection& projection) const;
    
 private:
 

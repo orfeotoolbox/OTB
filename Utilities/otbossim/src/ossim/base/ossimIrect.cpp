@@ -10,7 +10,7 @@
 // Contains class definition for ossimIrect.
 // 
 //*******************************************************************
-//  $Id: ossimIrect.cpp 14353 2009-04-20 19:35:15Z gpotts $
+//  $Id: ossimIrect.cpp 17866 2010-08-11 20:15:05Z dburken $
 
 #include <ostream>
 #include <ossim/base/ossimIrect.h>
@@ -348,10 +348,10 @@ ossimIrect ossimIrect::clipToRect(const ossimIrect& rect)const
    if(!this->intersects(rect))
    {
       return ossimIrect(OSSIM_INT_NAN,
-                        OSSIM_INT_NAN,
-                        OSSIM_INT_NAN,
-                        OSSIM_INT_NAN);
-                        
+         OSSIM_INT_NAN,
+         OSSIM_INT_NAN,
+         OSSIM_INT_NAN);
+
    }
    if (theOrientMode == OSSIM_LEFT_HANDED)
    {
@@ -373,6 +373,41 @@ ossimIrect ossimIrect::clipToRect(const ossimIrect& rect)const
       else
          return ossimIrect(x0, y1, x1, y0, theOrientMode);
    }
+}
+
+//*******************************************************************
+//  Returns the minimum bounding rect that includes this and arg rect.
+//*******************************************************************
+ossimIrect ossimIrect::combine(const ossimIrect& rect) const
+{   
+   // If any rect has NANs, it is assumed uninitialized, so assign the result to just the other
+   if (hasNans()) 
+      return rect;
+   if(rect.hasNans())
+      return *this;
+
+   if (theOrientMode != rect.theOrientMode)
+      return(*this);
+
+   ossimIpt ulCombine;
+   ossimIpt lrCombine;
+
+   if(theOrientMode == OSSIM_LEFT_HANDED)
+   {
+      ulCombine.x = ((ul().x <= rect.ul().x)?ul().x:rect.ul().x);
+      ulCombine.y = ((ul().y <= rect.ul().y)?ul().y:rect.ul().y);
+      lrCombine.x = ((lr().x >= rect.lr().x)?lr().x:rect.lr().x);
+      lrCombine.y = ((lr().y >= rect.lr().y)?lr().y:rect.lr().y);
+   }
+   else
+   {
+      ulCombine.x = ((ul().x <= rect.ul().x)?ul().x:rect.ul().x);
+      ulCombine.y = ((ul().y >= rect.ul().y)?ul().y:rect.ul().y);
+      lrCombine.x = ((lr().x >= rect.lr().x)?lr().x:rect.lr().x);
+      lrCombine.y = ((lr().y <= rect.lr().y)?lr().y:rect.lr().y);
+   }
+
+   return ossimIrect(ulCombine, lrCombine, theOrientMode);
 }
 
 //*******************************************************************

@@ -9,7 +9,7 @@
 //
 // Calls Geotrans Albers projection code.  
 //*******************************************************************
-//  $Id: ossimAlbersProjection.h 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimAlbersProjection.h 17815 2010-08-03 13:23:14Z dburken $
 
 #ifndef ossimAlbersProjection_HEADER
 #define ossimAlbersProjection_HEADER
@@ -22,11 +22,20 @@
  *  http://everest.hunter.cuny.edu/mp/pbander/albers.gif
  */
 
-class ossimAlbersProjection : public ossimMapProjection
+class OSSIMDLLEXPORT ossimAlbersProjection : public ossimMapProjection
 {
 public:
    ossimAlbersProjection(const ossimEllipsoid& ellipsoid = ossimEllipsoid(),
                          const ossimGpt& origin = ossimGpt());
+   
+   /**
+   * @param ellipsoid
+   * @param origin latitude longitude in decimal degrees.
+   * @param stdParallel1 First parallel in DEGREES.
+   * @param stdParallel2 Second parallel in DEGREES.
+   * @param falseEasting False easting in meters.
+   * @param falseNorthing False northing in meters.
+   */
    ossimAlbersProjection(const ossimEllipsoid& ellipsoid,
                          const ossimGpt& origin,
                          double stdParallel1,
@@ -94,6 +103,7 @@ public:
    virtual double getStandardParallel2() const;
    
    void setDefaults();
+
    /*!
     * Method to save the state of an object to a keyword list.
     * Return true if ok or false on error.
@@ -107,6 +117,10 @@ public:
     */
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix=0);
+
+   //! Returns TRUE if principal parameters are within epsilon tolerance.
+   virtual bool operator==(const ossimProjection& projection) const;
+
 protected:
    virtual ~ossimAlbersProjection();
 
