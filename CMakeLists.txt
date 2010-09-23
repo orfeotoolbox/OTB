@@ -509,11 +509,11 @@ ENDIF(OTB_USE_PQXX)
 # Boost Library
 #-------------------------------
 FIND_PACKAGE(Boost)
-IF(Boost_FOUND)
+IF(Boost_FOUND AND ( NOT (${Boost_MINOR_VERSION} EQUAL 40)))
   OPTION(OTB_USE_EXTERNAL_BOOST "Use an outside build of Boost." ON)
-ELSE(Boost_FOUND)
+ELSE(Boost_FOUND AND ( NOT (${Boost_MINOR_VERSION} EQUAL 40)))
   OPTION(OTB_USE_EXTERNAL_BOOST "Use an outside build of Boost." OFF)
-ENDIF(Boost_FOUND)
+ENDIF(Boost_FOUND AND ( NOT (${Boost_MINOR_VERSION} EQUAL 40)))
 # Option for internal/external BOOST
 MARK_AS_ADVANCED(OTB_USE_EXTERNAL_BOOST)
 
