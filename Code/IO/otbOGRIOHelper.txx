@@ -626,13 +626,13 @@ unsigned int OGRIOHelper<TVectorData>
       {
       // Take into account the fields stored in the 
       // vectordatakeywordlist
-      for (unsigned int fieldIdx  = 0 ; fieldIdx < kwl.GetNumberOfFields(); fieldIdx++)
+      for (unsigned int fieldIdx  = 0; fieldIdx < kwl.GetNumberOfFields(); fieldIdx++)
         {
-	if (ogrCurrentLayer->CreateField(kwl.GetNthField(fieldIdx).first) != OGRERR_NONE )
-	  {
-	  itkExceptionMacro(<< "Failed to create Field "<<kwl.GetNthField(fieldIdx).first->GetNameRef());
-	  }
-	}
+  if (ogrCurrentLayer->CreateField(kwl.GetNthField(fieldIdx).first) != OGRERR_NONE )
+    {
+    itkExceptionMacro(<< "Failed to create Field "<<kwl.GetNthField(fieldIdx).first->GetNameRef());
+    }
+  }
       }
 
     switch (dataNode->GetNodeType())
@@ -674,16 +674,16 @@ unsigned int OGRIOHelper<TVectorData>
         {
         OGRFeature *ogrFeature;
         ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
-	  
+    
         // Add the fields to the features
-        for (unsigned int i  = 0 ; i < kwl.GetNumberOfFields(); i++)
+        for (unsigned int i  = 0; i < kwl.GetNumberOfFields(); i++)
           {
           // Get the key of the Nth OGRFieldRefn 
           const char * key = kwl.GetNthField(i).first->GetNameRef();
           // Edit the value of the field and add it to the current feature
           ogrFeature->SetField(ogrFeature->GetFieldIndex(key) , kwl.GetFieldAsString(key).c_str());
           }
-	  
+    
         ogrFeature->SetField("Name", dataNode->GetNodeId());
         ogrFeature->SetGeometry(&ogrPoint);
 
@@ -730,14 +730,14 @@ unsigned int OGRIOHelper<TVectorData>
         ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
 
         // Add the fields to the features
-        for (unsigned int i  = 0 ; i < kwl.GetNumberOfFields(); i++)
+        for (unsigned int i  = 0; i < kwl.GetNumberOfFields(); i++)
           {
           // Get the key of the Nth OGRFieldRefn 
           const char * key = kwl.GetNthField(i).first->GetNameRef();
           // Edit the value of the field and add it to the current feature
           ogrFeature->SetField(ogrFeature->GetFieldIndex(key) , kwl.GetFieldAsString(key).c_str());
           }
-	  
+    
         ogrFeature->SetField("Name", dataNode->GetNodeId());
         ogrFeature->SetGeometry(&ogrLine);
 
@@ -810,26 +810,26 @@ unsigned int OGRIOHelper<TVectorData>
 
       //Save it in the structure
       if (ogrCollection == NULL)
-        {	 
+        {   
         OGRFeature *ogrFeature;
         ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
-	  
+    
         // Add the fields to the features
-        for (unsigned int i  = 0 ; i < kwl.GetNumberOfFields(); i++)
+        for (unsigned int i  = 0; i < kwl.GetNumberOfFields(); i++)
           {
           // Get the key of the Nth OGRFieldRefn 
           const char * key = kwl.GetNthField(i).first->GetNameRef();
           // Edit the value of the field and add it to the current feature
           ogrFeature->SetField(ogrFeature->GetFieldIndex(key) , kwl.GetFieldAsString(key).c_str());
           }
-	  
+    
         ogrFeature->SetGeometry(ogrPolygon);
-	  
+    
         if (ogrCurrentLayer->CreateFeature(ogrFeature) != OGRERR_NONE)
           {
           itkExceptionMacro(<< "Failed to create feature in shapefile.");
           }
-	  
+    
         OGRFeature::DestroyFeature(ogrFeature);
         }
       else

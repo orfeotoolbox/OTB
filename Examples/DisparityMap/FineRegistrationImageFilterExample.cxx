@@ -218,7 +218,6 @@ int main(int argc, char** argv)
 
 
 
-
   // Software Guide : BeginLatex
   //
   // \end{itemize}

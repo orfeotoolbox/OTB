@@ -124,7 +124,7 @@ BCOInterpolateImageFunction<TInputImage, TCoordRep>
     // Proceed column
     BCOCoefIndex = static_cast<int>(counter - floor(counter/(2*m_Radius+1))*(2*m_Radius+1));
     lineRes[BCOCoefIndex] = lineRes[BCOCoefIndex]
-      + static_cast<RealType>( this->GetInputImage()->GetPixel( neighIndex ) ) * m_BCOCoef(BCOCoefIndex) ;
+      + static_cast<RealType>( this->GetInputImage()->GetPixel( neighIndex ) ) * m_BCOCoef(BCOCoefIndex);
     }
   
   //Proceed line
@@ -136,7 +136,6 @@ BCOInterpolateImageFunction<TInputImage, TCoordRep>
   std::cout << "Fin  " << value /  (2*m_Radius * 2*m_Radius) << std::endl;
   return ( static_cast<OutputType>( value / (2*m_Radius * 2*m_Radius) ) );
 }
-
 
 
 template <class TInputImage, class TCoordRep>

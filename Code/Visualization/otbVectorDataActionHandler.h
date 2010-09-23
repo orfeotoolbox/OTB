@@ -41,11 +41,11 @@ public:
 
   /** Method for creation through the object factory */
   itkNewMacro(Self)
- ;
+;
 
   /** Runtime information */
   itkTypeMacro(VectorDataActionHandler, ImageWidgetActionHandler)
- ;
+;
 
   /** Model typedefs */
   typedef TModel                      ModelType;

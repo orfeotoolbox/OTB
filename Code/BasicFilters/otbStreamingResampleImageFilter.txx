@@ -106,7 +106,7 @@ StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionTy
     deformationFieldLargestSize[dim] = static_cast<unsigned int>(
       vcl_ceil( largestSize[dim]* 
                 vcl_abs(this->GetOutputSpacing()[dim] / 
-                        this->GetDeformationFieldSpacing()[dim]))) + 1 ;
+                        this->GetDeformationFieldSpacing()[dim]))) + 1;
     }
   m_DeformationFilter->SetOutputSize(deformationFieldLargestSize);
   m_DeformationFilter->SetOutputIndex(this->GetOutputStartIndex());

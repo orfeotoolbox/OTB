@@ -90,7 +90,6 @@ int main(int argc, char** argv)
   typedef otb::ObjectList<ImageReaderType> ReaderListType;
 
   ReaderListType::Pointer readerList = ReaderListType::New();
-
 // Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex
@@ -106,7 +105,6 @@ int main(int argc, char** argv)
   typedef otb::ImageList<InputImageType> ImageListType;
 
   ImageListType::Pointer imageList = ImageListType::New();
-
 // Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex
@@ -133,7 +131,6 @@ int main(int argc, char** argv)
     readerList->PushBack(imageReader);
 
     }
-
 // Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex
@@ -153,7 +150,6 @@ int main(int argc, char** argv)
 
   ImageListToVectorImageFilterType::Pointer iL2VI =
     ImageListToVectorImageFilterType::New();
-
 // Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex
@@ -173,7 +169,6 @@ int main(int argc, char** argv)
   ImageWriterType::Pointer imageWriter = ImageWriterType::New();
 
   imageWriter->SetFileName(argv[1]);
-
 // Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex
@@ -185,7 +180,6 @@ int main(int argc, char** argv)
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   unsigned long size = (10000 * 10000 * sizeof(PixelType)) / NbImages;
 
   std::cout << "Streaming size: " << size << std::endl;
@@ -195,7 +189,6 @@ int main(int argc, char** argv)
   imageWriter->SetInput(iL2VI->GetOutput());
 
   imageWriter->Update();
-
 // Software Guide : EndCodeSnippet
 
   return EXIT_SUCCESS;
