@@ -224,6 +224,7 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
       if (!tsDoc.getRadiometricCorrection(xdoc.get(), _radiometricCorrection)) break;
       if (!initAcquisitionInfo(xdoc.get(), tsDoc)) break;
       if (!initNoise(xdoc.get(), tsDoc)) break;
+      if (!getPolLayerFromImageFile(xdoc.get(), file)) break;
       if (!initCalibration(xdoc.get(), tsDoc)) break;
 
 //      replaced by OTB by the initCalibration above
@@ -235,9 +236,13 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
 
       if (!tsDoc.getAzimuthStartTime(xdoc.get(), _azStartTime)) break;
       if (!tsDoc.getAzimuthStopTime(xdoc.get(), _azStopTime)) break;
+      if (!tsDoc.getRangeFirstPixelTime(xdoc.get(), _rgFirstPixelTime)) break;
+      if (!tsDoc.getRangeLastPixelTime(xdoc.get(), _rgLastPixelTime)) break;
       if (!tsDoc.getGenerationTime(xdoc.get(), _generationTime)) break;
 //      removed by OTB
 //      if (!initIncidenceAngles(xdoc.get(), tsDoc)) break;
+      if (!initSceneCoord(xdoc.get(), tsDoc)) break;
+
       xdoc = 0;
 
       _productXmlFile = xmlfile;
@@ -369,8 +374,6 @@ bool ossimplugins::ossimTerraSarModel::saveState(ossimKeywordlist& kwl,
    		}
    }		
    _sceneCoord->saveState(kwl,prefix);
-   
-   
    
    for(ossim_uint32 i = 0; i < _numberOfLayers; ++i)
    {	
@@ -656,9 +659,9 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
    } // matches: if (result)
 
    // Load the base class.
-	/*
-	 * TODO correct loadState
-	 */
+   /*
+     * TODO correct loadState
+     */
 #if 0
    if ( !_noise)
    {
@@ -872,7 +875,19 @@ std::ostream& ossimplugins::ossimTerraSarModel::print(std::ostream& out) const
        << PRODUCT_XML_FILE_KW << ": " << _productXmlFile.c_str() << "\n";
    
    ossimGeometricSarSensorModel::print(out);
-   
+   for(ossim_uint32 i = 0; i < _numberOfLayers; ++i)
+   {
+     if ( _noise[i].print(out) == false )
+     {
+        if (traceDebug())
+        {
+           ossimNotify(ossimNotifyLevel_WARN)
+              << MODULE
+              << "\n_noise->print failed!\n";
+        }
+     }
+   }
+
    if ( _sceneCoord->print(out) == false )
    {
      if (traceDebug())
