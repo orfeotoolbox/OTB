@@ -237,6 +237,35 @@ ADD_TEST(prTvSensorModelErs ${PROJECTIONS_TESTS1}
          ${TEMP}/prTvSensorModelErs.txt
 )
 
+
+SET(SARSENSORMODEL_TYPES 
+  "RADARSAT1/GOMA/SCENE01/"
+  "RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/product.xml"
+  "ENVISAT_ASAR_SCENE01/ASA_APS_1PNDPA20030821_7713.N1"
+  "PALSAR/200801280007/l1data/VOL-ALPSRP037120700-H1.1__A"
+  "TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos"
+)
+
+FOREACH( file ${SARSENSORMODEL_TYPES})
+  # Get the sensor name 
+  SET(sharp_regexp "([0-9A-Za-z_]*)[ ]*/[ ]*(.*)")
+  STRING(REGEX REPLACE "${sharp_regexp}" "\\1" sensor_name "${file}")
+  # Tests
+	ADD_TEST(prTvSensorModelGrid_${sensor_name} ${PROJECTIONS_TESTS1}
+	  --compare-n-images ${NOTOL} 2
+	         ${BASELINE}/prTvSensorModelGridDeltaX_${sensor_name}.tif
+	         ${TEMP}/prTvSensorModelGridDeltaX_${sensor_name}.tif
+	         ${BASELINE}/prTvSensorModelGridDeltaY_${sensor_name}.tif
+	         ${TEMP}/prTvSensorModelGridDeltaY_${sensor_name}.tif
+    	otbSensorModelGrid
+    		${LARGEINPUT}/${file}
+         	${TEMP}/prTvSensorModelGridDeltaX_${sensor_name}.tif
+         	${TEMP}/prTvSensorModelGridDeltaY_${sensor_name}.tif
+         	10 10
+		)
+ENDFOREACH( file ${SARSENSORMODEL_TYPES})
+
+
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -667,7 +696,9 @@ otbCreateProjectionWithOTB.cxx
 otbCreateInverseForwardSensorModel.cxx
 otbRegionProjectionResampler.cxx
 otbSensorModel.cxx
+otbSensorModelGrid.cxx
 )
+
 SET(Projections_SRCS2
 otbProjectionsTests2.cxx
 otbOrthoRectificationFilterNew.cxx
