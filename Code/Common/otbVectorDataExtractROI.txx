@@ -252,7 +252,7 @@ VectorDataExtractROI<TVectorData>
   // Get the VertexList 
   // -2 cause we don't want the last point 
   // wich is the same as the first one (closed Ring) 
-  for (unsigned int i = 0 ; i<polygon->GetVertexList()->Size() - 2 ; i++ ) 
+  for (unsigned int i = 0; i<polygon->GetVertexList()->Size() - 2; i++ ) 
     {
     // Get the components of the polygon 2 by 2
     VertexType firstVertex;
@@ -291,7 +291,7 @@ VectorDataExtractROI<TVectorData>
   else
     {
     // Get the VertexList 
-    for (unsigned int i = 0 ; i<line->GetVertexList()->Size() -1 ; i++ ) 
+    for (unsigned int i = 0; i<line->GetVertexList()->Size() -1; i++ ) 
       {
       // Get the components of the line 2 by 2
       VertexType firstVertex;

@@ -41,11 +41,9 @@
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
 #include "otbPolyLineParametricPathWithValue.h"
 #include "otbRoadExtractionFilter.h"
 #include "otbDrawPathListFilter.h"
-
 // Software Guide : EndCodeSnippet
 
 #include "otbImage.h"
@@ -85,10 +83,8 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef double        InputPixelType;
   typedef unsigned char OutputPixelType;
-
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -100,11 +96,9 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef otb::VectorImage<InputPixelType, Dimension> InputVectorImageType;
   typedef otb::Image<InputPixelType, Dimension>       InputImageType;
   typedef otb::Image<OutputPixelType, Dimension>      OutputImageType;
-
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -117,10 +111,8 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex
 
   //  Software Guide : BeginCodeSnippet
-
   typedef otb::PolyLineParametricPathWithValue<InputPixelType,
       Dimension> PathType;
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -131,10 +123,8 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef otb::RoadExtractionFilter<InputVectorImageType,
       PathType> RoadExtractionFilterType;
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -145,10 +135,8 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef otb::DrawPathListFilter<InputImageType, PathType,
       InputImageType> DrawPathFilterType;
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -160,10 +148,8 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef itk::RescaleIntensityImageFilter<InputImageType,
       OutputImageType> RescalerType;
-
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -175,10 +161,8 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef otb::ImageFileReader<InputVectorImageType> ReaderType;
   typedef otb::ImageFileWriter<OutputImageType>      WriterType;
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -189,14 +173,12 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   ReaderType::Pointer               reader = ReaderType::New();
   RoadExtractionFilterType::Pointer roadExtractionFilter
     = RoadExtractionFilterType::New();
   DrawPathFilterType::Pointer drawingFilter = DrawPathFilterType::New();
   RescalerType::Pointer       rescaleFilter = RescalerType::New();
   WriterType::Pointer         writer = WriterType::New();
-
   // Software Guide : EndCodeSnippet
 
   reader->SetFileName(argv[1]);
@@ -211,7 +193,6 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   InputVectorImageType::PixelType ReferencePixel;
   ReferencePixel.SetSize(4);
   ReferencePixel.SetElement(0, ::atof(argv[3]));
@@ -219,7 +200,6 @@ int main(int argc, char * argv[])
   ReferencePixel.SetElement(2, ::atof(argv[5]));
   ReferencePixel.SetElement(3, ::atof(argv[6]));
   roadExtractionFilter->SetReferencePixel(ReferencePixel);
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -230,9 +210,7 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   roadExtractionFilter->SetAlpha(atof(argv[7]));
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -246,9 +224,7 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   roadExtractionFilter->SetAmplitudeThreshold(atof(argv[8]));
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -259,9 +235,7 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   roadExtractionFilter->SetTolerance(atof(argv[9]));
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -272,10 +246,8 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   roadExtractionFilter->SetMaxAngle(atof(argv[10]));
   roadExtractionFilter->SetAngularThreshold(atof(argv[10]));
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -289,10 +261,8 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   roadExtractionFilter->SetFirstMeanDistanceThreshold(atof(argv[11]));
   roadExtractionFilter->SetSecondMeanDistanceThreshold(atof(argv[12]));
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -304,9 +274,7 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   roadExtractionFilter->SetDistanceThreshold(atof(argv[13]));
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -318,13 +286,11 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   reader->GenerateOutputInformation();
   InputImageType::Pointer blackBackground = InputImageType::New();
   blackBackground->SetRegions(reader->GetOutput()->GetLargestPossibleRegion());
   blackBackground->Allocate();
   blackBackground->FillBuffer(0);
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide  : BeginLatex
@@ -362,12 +328,10 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   roadExtractionFilter->SetInput(reader->GetOutput());
   drawingFilter->SetInput(blackBackground);
   drawingFilter->SetInputPath(roadExtractionFilter->GetOutput());
   rescaleFilter->SetInput(drawingFilter->GetOutput());
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -378,9 +342,7 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
 
   //  Software Guide : BeginCodeSnippet
-
   rescaleFilter->Update();
-
   // Software Guide : EndCodeSnippet
 
   // output image enhancement
