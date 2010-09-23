@@ -63,14 +63,15 @@ int otbAlignImageToPath(int argc, char * argv[])
   typedef otb::ImageFileReader<InputImageType> ReaderType;
 
   typedef otb::ImageToPathListAlignFilter<InputImageType, PathType> ListAlignFilterType;
+  typedef ListAlignFilterType::ValueType                            ValueType;
+  typedef ListAlignFilterType::SizeType                             SizeType;
   typedef itk::ImageFileWriter<OutputImageType>                     WriterType;
 
   ReaderType::Pointer     reader = ReaderType::New();
   WriterType::Pointer     writer = WriterType::New();
   InputImageType::Pointer ImageIn = InputImageType::New();
 
-  typedef otb::ImageToPathListAlignFilter<InputImageType, PathType> TestType;
-  TestType::Pointer testList = TestType::New();
+  ListAlignFilterType::Pointer testList = ListAlignFilterType::New();
 
   reader->SetFileName(inputFilename);
 
@@ -82,6 +83,39 @@ int otbAlignImageToPath(int argc, char * argv[])
   otbGenericMsgDebugMacro(<< "Before update");
   testList->Update();
   otbGenericMsgDebugMacro(<< "After update");
+
+  ValueType pathValue;
+  pathValue = testList->GetPathValue();
+  testList->SetPathValue(pathValue);
+
+  ValueType  backgroundValue;
+  backgroundValue = testList->GetBackgroundValue();
+  testList->SetBackgroundValue(backgroundValue);
+
+  SizeType   size;
+  size = testList->GetSize();
+  testList->SetSize(size);
+
+  bool isMeaningfulSegment;
+  isMeaningfulSegment = testList->GetisMeaningfulSegment();
+  testList->SetisMeaningfulSegment(isMeaningfulSegment);
+
+  int NbGradDirection;
+  NbGradDirection = testList->GetNbGradDirection();
+  testList->SetNbGradDirection(NbGradDirection);
+
+  int NbLineDirection;
+  NbLineDirection = testList->GetNbLineDirection();
+  testList->SetNbLineDirection(NbLineDirection);
+
+  double MinGradNorm;
+  MinGradNorm = testList->GetMinGradNorm();
+  testList->SetMinGradNorm(MinGradNorm);
+
+  double Eps;
+  Eps = testList->GetEps();
+  testList->SetEps(Eps);
+
   ListAlignFilterOutputPathListType * sortiePath = testList->GetOutput();
 
   otbGenericMsgDebugMacro(<< "Writing :");
