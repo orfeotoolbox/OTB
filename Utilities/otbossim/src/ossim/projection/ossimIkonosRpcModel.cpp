@@ -701,10 +701,10 @@ void ossimIkonosRpcModel::parseRpcData(const ossimFilename& data_file)
       return;
    }
    else
-   {
-      // copy ossimIkonosMetada-sensor into ossimIkonosRpcModel-sensorId
-      theSensorID = theSupportData->getSensorID();
-   }
+     {
+       // copy ossimIkonosMetada-sensor into ossimIkonosRpcModel-sensorId
+       theSensorID = theSupportData->getSensorID();
+     }
    
 
    theLatScale = atof(buf);
