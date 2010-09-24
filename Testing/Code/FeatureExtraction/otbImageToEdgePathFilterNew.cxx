@@ -29,7 +29,9 @@ int otbImageToEdgePathFilterNew(int argc, char * argv[])
 
   typedef otb::ImageToEdgePathFilter<ImageType, PathType> ImageToEdgePathFilterType;
 
-  ImageToEdgePathFilterType::Pointer pathFilter = ImageToEdgePathFilterType::New();
+  ImageToEdgePathFilterType::Pointer filter = ImageToEdgePathFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

@@ -31,5 +31,7 @@ int otbSFSTexturesImageFilterNew(int argc, char * argv[])
   typedef otb::SFSTexturesImageFilter<ImageType, ImageType> FilterType;
   FilterType::Pointer filter = FilterType::New();
 
+  std::cout << filter << std::endl;
+
   return EXIT_SUCCESS;
 }

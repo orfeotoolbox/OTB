@@ -25,5 +25,7 @@ int otbPointSetFileReaderNew(int argc, char * argv[])
   typedef otb::PointSetFileReader<PointSetType> PointSetFileReaderType;
   PointSetFileReaderType::Pointer object = PointSetFileReaderType::New();
 
+  std::cout << object << std::endl;
+
   return EXIT_SUCCESS;
 }

@@ -36,7 +36,9 @@ int otbLineDetectorBaseNew(int argc, char* argv[])
 
   typedef otb::LineDetectorImageFilterBase<InputImageType, OutputImageType> FilterType;
 
-  FilterType::Pointer FilterLine = FilterType::New();
+  FilterType::Pointer filter = FilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

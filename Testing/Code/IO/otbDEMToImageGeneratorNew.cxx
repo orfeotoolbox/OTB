@@ -29,5 +29,7 @@ int otbDEMToImageGeneratorNew(int argc, char * argv[])
   // Instantiating object
   DEMToImageGeneratorType::Pointer object = DEMToImageGeneratorType::New();
 
+  std::cout << object << std::endl;
+
   return EXIT_SUCCESS;
 }

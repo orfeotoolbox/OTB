@@ -28,9 +28,9 @@
 
 int otbWorldView2ImageMetadataInterfaceNew(int argc, char* argv[])
 {
+  otb::WorldView2ImageMetadataInterface::Pointer object = otb::WorldView2ImageMetadataInterface::New();
 
-  otb::WorldView2ImageMetadataInterface::Pointer lImageMetadata = otb::WorldView2ImageMetadataInterface::New();
+  std::cout << object << std::endl;
 
   return EXIT_SUCCESS;
-
 }

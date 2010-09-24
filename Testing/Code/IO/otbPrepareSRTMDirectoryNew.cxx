@@ -25,5 +25,7 @@ int otbPrepareSRTMDirectoryNew(int argc, char * argv[])
 
   PrepareSRTMDirectoryType::Pointer prepareSRTM = PrepareSRTMDirectoryType::New();
 
+  std::cout << prepareSRTM << std::endl;
+
   return EXIT_SUCCESS;
 }

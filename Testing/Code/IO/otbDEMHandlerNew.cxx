@@ -29,5 +29,7 @@ int otbDEMHandlerNew(int argc, char * argv[])
   // Instantiating object
   DEMHandlerType::Pointer object = DEMHandlerType::New();
 
+  std::cout << object << std::endl;
+
   return EXIT_SUCCESS;
 }

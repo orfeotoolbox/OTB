@@ -42,12 +42,14 @@ int otbModulusAndDirectionImageFiltersNew(int argc, char* argv[])
   typedef otb::ImageToModulusAndDirectionImageFilter<InputImageType, OutputImageType,
       OutputImageDirectionType> Filter2Type;
 
-  FilterType::Pointer  Filter = FilterType::New();
-  Filter2Type::Pointer Filter2 = Filter2Type::New();
+  FilterType::Pointer  filter = FilterType::New();
+  Filter2Type::Pointer filter2 = Filter2Type::New();
 
   typedef otb::ModulusAndDirectionImageToImageFilter<InputImageType, InputImageDirectionType,
       OutputImageType> Filter3Type;
-  Filter3Type::Pointer Filter3 = Filter3Type::New();
+  Filter3Type::Pointer filter3 = Filter3Type::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

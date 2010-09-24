@@ -28,7 +28,9 @@ int otbRemoveTortuousPathListFilterNew(int argc, char * argv[])
   typedef otb::RemoveTortuousPathListFilter<PathType> RemoveTortuousPathListFilterType;
 
   // Instantiating object
-  RemoveTortuousPathListFilterType::Pointer object = RemoveTortuousPathListFilterType::New();
+  RemoveTortuousPathListFilterType::Pointer filter = RemoveTortuousPathListFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

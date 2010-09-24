@@ -30,7 +30,9 @@ int otbNeighborhoodScalarProductFilterNew(int argc, char * argv[])
   typedef otb::NeighborhoodScalarProductFilter<InputImageType, OutputImageType, OutputImageType> FilterType;
 
   // Instantiating object
-  FilterType::Pointer object = FilterType::New();
+  FilterType::Pointer filter = FilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

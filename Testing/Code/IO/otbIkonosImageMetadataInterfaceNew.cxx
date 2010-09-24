@@ -28,9 +28,9 @@
 
 int otbIkonosImageMetadataInterfaceNew(int argc, char* argv[])
 {
+  otb::IkonosImageMetadataInterface::Pointer object = otb::IkonosImageMetadataInterface::New();
 
-  otb::IkonosImageMetadataInterface::Pointer lImageMetadata = otb::IkonosImageMetadataInterface::New();
+  std::cout << object << std::endl;
 
   return EXIT_SUCCESS;
-
 }
