@@ -42,5 +42,7 @@ int otbAmplitudePhaseToRGBFunctorNew(int argc, char * argv[])
   colormapper->GetFunctor().SetMaximum(150);
   colormapper->GetFunctor().SetMinimum(70);
 
+  std::cout << colormapper << std::endl;
+
   return EXIT_SUCCESS;
 }

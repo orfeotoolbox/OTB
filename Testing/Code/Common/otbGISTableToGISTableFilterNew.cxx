@@ -31,5 +31,7 @@ int otbGISTableToGISTableFilterNew(int argc, char * argv[])
   //Instantiation
   GISFilterType::Pointer data = GISFilterType::New();
 
+  std::cout << data << std::endl;
+
   return EXIT_SUCCESS;
 }

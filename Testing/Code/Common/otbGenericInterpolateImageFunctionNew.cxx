@@ -60,5 +60,7 @@ int otbGenericInterpolateImageFunctionNew(int argc, char * argv[])
   // Instantiating object
   GenericFunctionType::Pointer generic = GenericFunctionType::New();
 
+  std::cout << generic << std::endl;
+
   return EXIT_SUCCESS;
 }

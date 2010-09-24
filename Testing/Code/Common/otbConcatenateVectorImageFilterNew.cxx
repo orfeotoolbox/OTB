@@ -30,5 +30,7 @@ int otbConcatenateVectorImageFilterNew(int argc, char * argv[])
   // Instantiating adaptor object
   FilterType::Pointer filter = FilterType::New();
 
+  std::cout << filter << std::endl;
+
   return EXIT_SUCCESS;
 }

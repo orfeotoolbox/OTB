@@ -33,5 +33,7 @@ int otbDisparityMapEstimationMethodNew(int argc, char* argv[])
   // Instantiation
   DMEstimationType::Pointer dmestimator = DMEstimationType::New();
 
+  std::cout << dmestimator << std::endl;
+
   return EXIT_SUCCESS;
 }

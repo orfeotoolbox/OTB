@@ -30,5 +30,7 @@ int otbPostGISTableNew(int argc, char * argv[])
   //Instantiation
   PostGISTableType::Pointer data = PostGISTableType::New();
 
+  std::cout << data << std::endl;
+
   return EXIT_SUCCESS;
 }

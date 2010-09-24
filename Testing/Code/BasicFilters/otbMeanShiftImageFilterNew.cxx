@@ -27,6 +27,9 @@ int otbMeanShiftImageFilterNew(int argc, char * argv[])
   typedef otb::MeanShiftImageFilter<ImageType, ImageType> FilterType;
 
   // Instantiating object
-  FilterType::Pointer object = FilterType::New();
+  FilterType::Pointer filter = FilterType::New();
+
+  std::cout << filter << std::endl;
+
   return EXIT_SUCCESS;
 }

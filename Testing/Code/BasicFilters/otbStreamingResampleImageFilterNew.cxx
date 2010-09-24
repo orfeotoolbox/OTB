@@ -33,7 +33,9 @@ int otbStreamingResampleImageFilterNew(int argc, char * argv[])
       InterpolatorPrecisionType> StreamingResampleImageFilterType;
 
   // Instantiating object
-  StreamingResampleImageFilterType::Pointer object = StreamingResampleImageFilterType::New();
+  StreamingResampleImageFilterType::Pointer filter = StreamingResampleImageFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

@@ -28,7 +28,9 @@ int otbImportGeoInformationImageFilterNew(int argc, char * argv[])
   typedef otb::ImportGeoInformationImageFilter<ImageType, ImageType> ImportGeoInformationImageFilterType;
 
   // Instantiating object
-  ImportGeoInformationImageFilterType::Pointer object = ImportGeoInformationImageFilterType::New();
+  ImportGeoInformationImageFilterType::Pointer filter = ImportGeoInformationImageFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

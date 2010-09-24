@@ -33,6 +33,7 @@ int otbChangeLabelImageFilterNew(int argc, char * argv[])
 
   FilterType::Pointer filter = FilterType::New();
 
-  return EXIT_SUCCESS;
+  std::cout << filter << std::endl;
 
+  return EXIT_SUCCESS;
 }

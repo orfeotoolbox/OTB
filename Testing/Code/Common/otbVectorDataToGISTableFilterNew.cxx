@@ -35,5 +35,7 @@ int otbVectorDataToGISTableFilterNew(int argc, char * argv[])
 
   VectorDataToGISTableFilterType::Pointer vectorData = VectorDataToGISTableFilterType::New();
 
+  std::cout << vectorData << std::endl;
+
   return EXIT_SUCCESS;
 }

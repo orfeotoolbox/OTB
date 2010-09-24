@@ -28,5 +28,7 @@ int otbBSplineInterpolateImageFunctionNew(int argc, char * argv[])
   // Instantiating object
   InterpolatorType::Pointer filter = InterpolatorType::New();
 
+  std::cout << filter << std::endl;
+
   return EXIT_SUCCESS;
 }

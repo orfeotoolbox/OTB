@@ -38,7 +38,9 @@ int otbScalarImageTextureFunctorNew(int argc, char * argv[])
       FunctorType> UnaryFunctorNeighborhoodImageFilterType;
 
   // Instantiating object
-  UnaryFunctorNeighborhoodImageFilterType::Pointer object = UnaryFunctorNeighborhoodImageFilterType::New();
+  UnaryFunctorNeighborhoodImageFilterType::Pointer filter = UnaryFunctorNeighborhoodImageFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

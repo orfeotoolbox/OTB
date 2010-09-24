@@ -28,5 +28,7 @@ int otbPostGISConnectionImplementationNew(int argc, char * argv[])
   //Instantiation
   GISConnectionType::Pointer data = GISConnectionType::New();
 
+  std::cout << data << std::endl;
+
   return EXIT_SUCCESS;
 }

@@ -34,5 +34,7 @@ int otbConvolutionImageFilterNew(int argc, char * argv[])
 
   FilterType::Pointer conv = FilterType::New();
 
+  std::cout << conv << std::endl;
+
   return EXIT_SUCCESS;
 }

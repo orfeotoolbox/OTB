@@ -35,5 +35,7 @@ int otbPathListToHistogramGeneratorNew(int argc, char* argv[])
 
   GeneratorType::Pointer histogram = GeneratorType::New();
 
+  std::cout << histogram << std::endl;
+
   return EXIT_SUCCESS;
 }

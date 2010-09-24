@@ -26,5 +26,7 @@ int otbLogPolarTransformNew(int argc, char* argv[])
   // Instantiation
   LogPolarTransformType::Pointer transform = LogPolarTransformType::New();
 
+  std::cout << transform << std::endl;
+
   return EXIT_SUCCESS;
 }

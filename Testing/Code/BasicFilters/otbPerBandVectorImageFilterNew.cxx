@@ -34,7 +34,9 @@ int otbPerBandVectorImageFilterNew(int argc, char * argv[])
   PerBandVectorImageFilterType;
 
   // Instantiating object
-  PerBandVectorImageFilterType::Pointer object = PerBandVectorImageFilterType::New();
+  PerBandVectorImageFilterType::Pointer filter = PerBandVectorImageFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

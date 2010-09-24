@@ -30,5 +30,7 @@ int otbEdgeDetectorImageFilterNew(int, char*[])
   /**Instantiation of an object*/
   FilterType::Pointer filter = FilterType::New();
 
+  std::cout << filter << std::endl;
+
   return EXIT_SUCCESS;
 }

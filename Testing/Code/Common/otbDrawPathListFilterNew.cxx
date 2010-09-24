@@ -30,7 +30,9 @@ int otbDrawPathListFilterNew(int argc, char * argv[])
   typedef otb::DrawPathListFilter<ImageType, PathType, ImageType> DrawPathListFilterType;
 
   // Instantiating object
-  DrawPathListFilterType::Pointer object = DrawPathListFilterType::New();
+  DrawPathListFilterType::Pointer filter = DrawPathListFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

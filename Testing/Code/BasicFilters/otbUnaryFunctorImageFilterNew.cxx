@@ -33,5 +33,7 @@ int otbUnaryFunctorImageFilterNew(int argc, char * argv[])
       FunctorType> FilterType;
   FilterType::Pointer filter = FilterType::New();
 
+  std::cout << filter << std::endl;
+
   return EXIT_SUCCESS;
 }

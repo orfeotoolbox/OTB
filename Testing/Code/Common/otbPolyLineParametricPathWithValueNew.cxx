@@ -30,5 +30,7 @@ int otbPolyLineParametricPathWithValueNew(int argc, char * argv[])
   PolyLineParametricPathWithValueType::Pointer object = PolyLineParametricPathWithValueType::New();
   object->SetValue(0);
 
+  std::cout << object << std::endl;
+
   return EXIT_SUCCESS;
 }

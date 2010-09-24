@@ -37,5 +37,7 @@ int otbEdgeDensityImageFilterNew(int, char*[])
   /**Instantiation of an object*/
   EdgeDensityFilterType::Pointer filter =      EdgeDensityFilterType::New();
 
+  std::cout << filter << std::endl;
+
   return EXIT_SUCCESS;
 }

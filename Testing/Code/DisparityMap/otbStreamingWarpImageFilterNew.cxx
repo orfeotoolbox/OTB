@@ -34,5 +34,7 @@ int otbStreamingWarpImageFilterNew(int argc, char* argv[])
   // Objects creation
   ImageWarperType::Pointer warper = ImageWarperType::New();
 
+  std::cout << warper << std::endl;
+
   return EXIT_SUCCESS;
 }

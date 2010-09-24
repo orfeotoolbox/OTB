@@ -26,5 +26,7 @@ int otbRemoteSensingRegionNew(int argc, char * argv[])
 
   TypedRegion Cartoregion;
 
+  std::cout << Cartoregion << std::endl;
+
   return EXIT_SUCCESS;
 }

@@ -53,5 +53,7 @@ int otbWindowedSincInterpolateImageFunctionBaseNew(int argc, char * argv[])
   // Instantiating object
   WindowedSincInterpolatorType::Pointer winInterp = WindowedSincInterpolatorType::New();
 
+  std::cout << winInterp << std::endl;
+
   return EXIT_SUCCESS;
 }

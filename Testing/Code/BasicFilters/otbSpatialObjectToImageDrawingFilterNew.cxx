@@ -29,7 +29,9 @@ int otbSpatialObjectToImageDrawingFilterNew(int argc, char * argv[])
   typedef itk::GroupSpatialObject<Dimension>                                   SpatialObjectType;
   typedef otb::SpatialObjectToImageDrawingFilter<SpatialObjectType, ImageType> SpatialObjectToImageDrawingFilterType;
   // Instantiating object
-  SpatialObjectToImageDrawingFilterType::Pointer object = SpatialObjectToImageDrawingFilterType::New();
+  SpatialObjectToImageDrawingFilterType::Pointer filter = SpatialObjectToImageDrawingFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

@@ -25,5 +25,7 @@ int otbRectangleNew(int argc, char * argv[])
   //Instantiating object
   RectangleType::Pointer polygon = RectangleType::New();
 
+  std::cout << polygon << std::endl;
+
   return EXIT_SUCCESS;
 }

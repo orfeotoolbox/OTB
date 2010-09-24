@@ -30,5 +30,7 @@ int otbGISTableNew(int argc, char * argv[])
   //Instantiation
   GISTableType::Pointer data = GISTableType::New();
 
+  std::cout << data << std::endl;
+
   return EXIT_SUCCESS;
 }
