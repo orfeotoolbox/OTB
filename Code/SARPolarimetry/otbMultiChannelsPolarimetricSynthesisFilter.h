@@ -28,7 +28,7 @@ namespace otb
 {
 
 /** \class MultiChannelsPolarimetricSynthesisFilter
- * \brief
+ * \brief TODO
  *
  *
  *
@@ -182,8 +182,6 @@ protected:
   void VerifyAndForceInputs();
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-
-  void Print();
 
 private:
   MultiChannelsPolarimetricSynthesisFilter(const Self &); //purposely not implemented

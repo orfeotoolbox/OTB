@@ -371,16 +371,6 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage, TOutputImage, TFunction>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os, indent);
-}
-
-/**
- * Print
- */
-template <class TInputImage, class TOutputImage, class TFunction>
-void
-MultiChannelsPolarimetricSynthesisFilter<TInputImage, TOutputImage, TFunction>
-::Print()
-{
   std::cout << "PsiI: " << m_PsiI << std::endl;
   std::cout << "KhiI: " << m_KhiI << std::endl;
   std::cout << "PsiR: " << m_PsiR << std::endl;
