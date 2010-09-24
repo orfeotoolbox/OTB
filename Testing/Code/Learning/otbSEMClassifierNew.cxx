@@ -44,5 +44,7 @@ int otbSEMClassifierNew(int argc, char* argv[])
   ClassifType::Pointer   classifier = ClassifType::New();
   ComponentType::Pointer component = ComponentType::New();
 
+  std::cout << classifier << std::endl;
+
   return EXIT_SUCCESS;
 }

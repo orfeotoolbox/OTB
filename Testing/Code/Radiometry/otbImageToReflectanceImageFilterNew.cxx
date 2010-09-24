@@ -31,5 +31,7 @@ int otbImageToReflectanceImageFilterNew(int argc, char * argv[])
   // Instantiating object
   ImageToReflectanceImageFilterType::Pointer filter = ImageToReflectanceImageFilterType::New();
 
+  std::cout << filter << std::endl;
+
   return EXIT_SUCCESS;
 }

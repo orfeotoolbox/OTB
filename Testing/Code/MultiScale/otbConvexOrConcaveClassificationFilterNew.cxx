@@ -28,5 +28,7 @@ int otbConvexOrConcaveClassificationFilterNew(int argc, char * argv[])
   // Instantiating object
   ClassificationFilterType::Pointer filter = ClassificationFilterType::New();
 
+  std::cout << filter << std::endl;
+
   return EXIT_SUCCESS;
 }

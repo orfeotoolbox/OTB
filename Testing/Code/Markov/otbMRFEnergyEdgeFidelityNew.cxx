@@ -33,5 +33,7 @@ int otbMRFEnergyEdgeFidelityNew(int argc, char * argv[])
 
   MRFEnergyType::Pointer object  = MRFEnergyType::New();
 
+  std::cout << object << std::endl;
+
   return EXIT_SUCCESS;
 }

@@ -22,7 +22,9 @@ int otbPackedWidgetManagerNew(int argc, char * argv[])
 
   typedef otb::PackedWidgetManager PackedWidgetManagerType;
 
-  PackedWidgetManagerType::Pointer WidgetManager = PackedWidgetManagerType::New();
+  PackedWidgetManagerType::Pointer widget = PackedWidgetManagerType::New();
+
+  std::cout << widget << std::endl;
 
   return EXIT_SUCCESS;
 }

@@ -33,5 +33,7 @@ int otbROIdataConversionNew(int argc, char* argv[])
 
   ConvertorType::Pointer convertor = ConvertorType::New();
 
+  std::cout << convertor << std::endl;
+
   return EXIT_SUCCESS;
 }

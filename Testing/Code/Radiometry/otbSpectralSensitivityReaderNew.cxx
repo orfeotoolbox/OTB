@@ -25,5 +25,7 @@ int otbSpectralSensitivityReaderNew(int argc, char* argv[])
 
   SpectralSensitivityReader::Pointer spectSen = SpectralSensitivityReader::New();
 
+  std::cout << spectSen << std::endl;
+
   return EXIT_SUCCESS;
 }

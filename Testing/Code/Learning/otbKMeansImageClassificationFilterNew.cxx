@@ -31,7 +31,9 @@ int otbKMeansImageClassificationFilterNew(int argc, char * argv[])
   typedef otb::KMeansImageClassificationFilter<ImageType, LabeledImageType> ClassificationFilterType;
 
   // Instantiating object
-  ClassificationFilterType::Pointer object = ClassificationFilterType::New();
+  ClassificationFilterType::Pointer filter = ClassificationFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

@@ -34,5 +34,7 @@ int otbMorphologicalPyramidResamplerNew(int argc, char * argv[])
   // Instantiation
   ResamplerType::Pointer resampler = ResamplerType::New();
 
+  std::cout << resampler << std::endl;
+
   return EXIT_SUCCESS;
 }

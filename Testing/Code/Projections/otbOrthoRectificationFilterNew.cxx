@@ -27,8 +27,9 @@ int otbOrthoRectificationFilterNew(int argc, char* argv[])
   typedef otb::UtmInverseProjection                                                 UtmMapProjectionType;
   typedef otb::OrthoRectificationFilter<ImageType, ImageType, UtmMapProjectionType> OrthoRectifFilterType;
 
-  OrthoRectifFilterType::Pointer orthoRectifFilter = OrthoRectifFilterType::New();
+  OrthoRectifFilterType::Pointer filter = OrthoRectifFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
-
 }

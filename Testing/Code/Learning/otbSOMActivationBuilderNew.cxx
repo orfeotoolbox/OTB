@@ -42,5 +42,7 @@ int otbSOMActivationBuilderNew(int argc, char* argv[])
   // Instantiation
   SOMActivationBuilderType::Pointer somAct = SOMActivationBuilderType::New();
 
+  std::cout << somAct << std::endl;
+
   return EXIT_SUCCESS;
 }

@@ -31,5 +31,7 @@ int otbGenericRSTransformNew(int argc, char* argv[])
   typedef otb::GenericRSTransform<> TransformType;
   TransformType::Pointer transform = TransformType::New();
 
+  std::cout << transform << std::endl;
+
   return EXIT_SUCCESS;
 }

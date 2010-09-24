@@ -31,5 +31,7 @@ int otbSOMMapNew(int argc, char* argv[])
   // Instantiation
   SOMMapType::Pointer somMap = SOMMapType::New();
 
+  std::cout << somMap << std::endl;
+
   return EXIT_SUCCESS;
 }

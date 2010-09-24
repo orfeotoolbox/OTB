@@ -35,7 +35,9 @@ int otbLabelMapToGISTableFilterNew(int argc, char * argv[])
 
   typedef otb::LabelMapToGISTableFilter<LabelMapType, GISTableType> LabelMapToGISTableFilterType;
 
-  LabelMapToGISTableFilterType::Pointer MyFilter = LabelMapToGISTableFilterType::New();
+  LabelMapToGISTableFilterType::Pointer filter = LabelMapToGISTableFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

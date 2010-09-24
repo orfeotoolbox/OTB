@@ -41,5 +41,7 @@ int otbSOMClassifierNew(int argc, char* argv[])
 
   ClassifierType::Pointer classifier = ClassifierType::New();
 
+  std::cout << classifier << std::endl;
+
   return EXIT_SUCCESS;
 }

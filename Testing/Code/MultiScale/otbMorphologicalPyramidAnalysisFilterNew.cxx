@@ -36,5 +36,7 @@ int otbMorphologicalPyramidAnalysisFilterNew(int argc, char * argv[])
   // Instantiation
   PyramidFilterType::Pointer pyramid = PyramidFilterType::New();
 
+  std::cout << pyramid << std::endl;
+
   return EXIT_SUCCESS;
 }

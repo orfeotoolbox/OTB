@@ -30,5 +30,7 @@ int otbLayerBasedModelNew(int argc, char * argv[])
   // Instantiation
   ModelType::Pointer model = ModelType::New();
 
+  std::cout << model << std::endl;
+
   return EXIT_SUCCESS;
 }

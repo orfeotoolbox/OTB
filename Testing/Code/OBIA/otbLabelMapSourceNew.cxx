@@ -32,7 +32,9 @@ int otbLabelMapSourceNew(int argc, char * argv[])
   typedef otb::LabelMapSource<InputLabelMapType> LabelMapSourceType;
 
   // Instantiating LabelMapSource object
-  LabelMapSourceType::Pointer LabelMap = LabelMapSourceType::New();
+  LabelMapSourceType::Pointer labelMap = LabelMapSourceType::New();
 
+  std::cout << labelMap << std::endl;
+  
   return EXIT_SUCCESS;
 }

@@ -30,5 +30,7 @@ int otbMRFEnergyGaussianClassificationNew(int argc, char * argv[])
 
   MRFGaussianType::Pointer object = MRFGaussianType::New();
 
+  std::cout << object << std::endl;
+
   return EXIT_SUCCESS;
 }

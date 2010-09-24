@@ -32,5 +32,8 @@ int otbAtmosphericCorrectionParametersNew(int argc, char * argv[])
   AtmosphericCorrectionParametersType::Pointer objectAtmo = AtmosphericCorrectionParametersType::New();
   FilterFunctionValuesType::Pointer            objectFilter = FilterFunctionValuesType::New();
 
+  std::cout << objectAtmo << std::endl;
+  std::cout << objectFilter << std::endl;
+
   return EXIT_SUCCESS;
 }

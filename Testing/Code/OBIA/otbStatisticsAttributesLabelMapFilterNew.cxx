@@ -32,7 +32,9 @@ int otbStatisticsAttributesLabelMapFilterNew(int argc, char* argv[])
   typedef otb::StatisticsAttributesLabelMapFilter<LabelMapType,ImageType> LabelMapFilterType;
 
   // instantiation
-  LabelMapFilterType::Pointer object = LabelMapFilterType::New();
+  LabelMapFilterType::Pointer filter = LabelMapFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

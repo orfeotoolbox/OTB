@@ -26,5 +26,7 @@ int otbStandardRenderingFunctionNew(int argc, char * argv[])
   <PixelType, RGBPixelType> StandardRenderingFunctionType;
   StandardRenderingFunctionType::Pointer function = StandardRenderingFunctionType::New();
 
+  std::cout << function << std::endl;
+
   return EXIT_SUCCESS;
 }

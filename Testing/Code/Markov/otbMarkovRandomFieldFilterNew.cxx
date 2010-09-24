@@ -30,5 +30,7 @@ int otbMarkovRandomFieldFilterNew(int argc, char * argv[])
 
   MarkovRandomFieldFilterType::Pointer object = MarkovRandomFieldFilterType::New();
 
+  std::cout << object << std::endl;
+
   return EXIT_SUCCESS;
 }

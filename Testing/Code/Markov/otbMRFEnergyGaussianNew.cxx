@@ -30,5 +30,7 @@ int otbMRFEnergyGaussianNew(int argc, char * argv[])
 
   MRFEnergyGaussianType::Pointer object = MRFEnergyGaussianType::New();
 
+  std::cout << object << std::endl;
+
   return EXIT_SUCCESS;
 }

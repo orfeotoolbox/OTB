@@ -36,7 +36,9 @@ int otbGAndRIndexImageFilterNew(int argc, char * argv[])
   typedef otb::GAndRIndexImageFilter<InputGImageType, InputRImageType, OutputImageType> GAndRIndexImageFilterType;
 
   // Instantiating object
-  GAndRIndexImageFilterType::Pointer object = GAndRIndexImageFilterType::New();
+  GAndRIndexImageFilterType::Pointer filter = GAndRIndexImageFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

@@ -28,6 +28,7 @@ int otbLeastSquareAffineTransformEstimatorNew(int argc, char* argv[])
   // instantiation
   EstimatorType::Pointer estimator = EstimatorType::New();
 
-  return EXIT_SUCCESS;
+  std::cout << estimator << std::endl;
 
+  return EXIT_SUCCESS;
 }

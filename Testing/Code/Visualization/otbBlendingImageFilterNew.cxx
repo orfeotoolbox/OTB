@@ -28,5 +28,7 @@ int otbBlendingImageFilterNew(int argc, char * argv[])
 
   BlendingFilterType::Pointer rendering = BlendingFilterType::New();
 
+  std::cout << rendering << std::endl;
+
   return EXIT_SUCCESS;
 }

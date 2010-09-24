@@ -33,7 +33,9 @@ int otbCompositeTransformNew(int argc, char* argv[])
   typedef otb::InverseSensorModel<double> SensorModelType;
 
   typedef otb::CompositeTransform<MapProjectionType, SensorModelType> CompositeTransformType;
-  CompositeTransformType::Pointer compositeTransform = CompositeTransformType::New();
+  CompositeTransformType::Pointer transform = CompositeTransformType::New();
+
+  std::cout << transform << std::endl;
 
   return EXIT_SUCCESS;
 }

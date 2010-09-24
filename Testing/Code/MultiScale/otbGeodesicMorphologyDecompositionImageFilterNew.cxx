@@ -30,5 +30,8 @@ int otbGeodesicMorphologyDecompositionImageFilterNew(int argc, char * argv[])
 
   // Instantiating object
   GeodesicMorphologyDecompositionImageFilterType::Pointer filter = GeodesicMorphologyDecompositionImageFilterType::New();
+
+  std::cout << filter << std::endl;
+
   return EXIT_SUCCESS;
 }

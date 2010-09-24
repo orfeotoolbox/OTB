@@ -35,7 +35,9 @@ int otbMorphologicalClosingProfileFilterNew(int argc, char * argv[])
   ClosingProfileFilterType;
 
   // Instantiation
-  ClosingProfileFilterType::Pointer profileFilter = ClosingProfileFilterType::New();
+  ClosingProfileFilterType::Pointer filter = ClosingProfileFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

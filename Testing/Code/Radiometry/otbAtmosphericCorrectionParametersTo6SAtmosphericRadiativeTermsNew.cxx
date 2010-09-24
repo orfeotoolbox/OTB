@@ -27,5 +27,7 @@ int otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsNew(int argc,
   AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsType::Pointer object =
     AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsType::New();
 
+  std::cout << object << std::endl;
+
   return EXIT_SUCCESS;
 }

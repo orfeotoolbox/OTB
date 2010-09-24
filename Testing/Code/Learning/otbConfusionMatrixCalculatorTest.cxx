@@ -31,6 +31,8 @@ int otbConfusionMatrixCalculatorNew(int argc, char* argv[])
 
   CalculatorType::Pointer calculator = CalculatorType::New();
 
+  std::cout << calculator << std::endl;
+
   return EXIT_SUCCESS;
 }
 

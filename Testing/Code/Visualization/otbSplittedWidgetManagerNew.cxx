@@ -22,7 +22,9 @@ int otbSplittedWidgetManagerNew(int argc, char * argv[])
 
   typedef otb::SplittedWidgetManager SplittedWidgetManagerType;
 
-  SplittedWidgetManagerType::Pointer widgetManager = SplittedWidgetManagerType::New();
+  SplittedWidgetManagerType::Pointer widget = SplittedWidgetManagerType::New();
+
+  std::cout << widget << std::endl;
 
   return EXIT_SUCCESS;
 }

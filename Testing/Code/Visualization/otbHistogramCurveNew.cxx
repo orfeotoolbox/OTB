@@ -26,5 +26,7 @@ int otbHistogramCurveNew(int argc, char * argv[])
   typedef otb::HistogramCurve<HistogramType> HistogramCurveType;
   HistogramCurveType::Pointer curve = HistogramCurveType::New();
 
+  std::cout << curve << std::endl;
+
   return EXIT_SUCCESS;
 }

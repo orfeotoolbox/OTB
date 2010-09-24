@@ -27,5 +27,7 @@ int otbRCC8VertexBaseNew(int argc, char* argv[])
   // Instantiation
   RCC8VertexType::Pointer rcc8Vertex = RCC8VertexType::New();
 
+  std::cout << rcc8Vertex << std::endl;
+
   return EXIT_SUCCESS;
 }

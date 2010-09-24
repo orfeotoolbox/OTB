@@ -31,5 +31,7 @@ int otbRCC8GraphFileWriterNew(int argc, char* argv[])
   // Instantiation
   RCC8GraphFileWriterType::Pointer rcc8GraphWriter = RCC8GraphFileWriterType::New();
 
+  std::cout << rcc8GraphWriter << std::endl;
+
   return EXIT_SUCCESS;
 }

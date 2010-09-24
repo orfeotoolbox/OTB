@@ -36,5 +36,7 @@ int otbSOMNew(int argc, char* argv[])
   // Instantiation
   SOMType::Pointer som = SOMType::New();
 
+  std::cout << som << std::endl;
+
   return EXIT_SUCCESS;
 }

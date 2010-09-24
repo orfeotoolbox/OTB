@@ -28,5 +28,7 @@ int otbAttributesMapLabelObjectWithClassLabelNew(int argc, char* argv[])
   // instantiation
   LabelObjectType::Pointer object = LabelObjectType::New();
 
+  std::cout << object << std::endl;
+
   return EXIT_SUCCESS;
 }

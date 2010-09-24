@@ -33,5 +33,7 @@ int otbMorphologicalPyramidMRToMSConverterNew(int argc, char * argv[])
   // Instantiation
   MRToMSConverterType::Pointer mrtoms = MRToMSConverterType::New();
 
+  std::cout << mrtoms << std::endl;
+
   return EXIT_SUCCESS;
 }

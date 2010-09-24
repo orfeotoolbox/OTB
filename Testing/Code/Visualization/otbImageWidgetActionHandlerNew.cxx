@@ -22,5 +22,7 @@ int otbImageWidgetActionHandlerNew(int argc, char * argv[])
   typedef otb::ImageWidgetActionHandler HandlerType;
   HandlerType::Pointer handler = HandlerType::New();
 
+  std::cout << handler << std::endl;
+
   return EXIT_SUCCESS;
 }

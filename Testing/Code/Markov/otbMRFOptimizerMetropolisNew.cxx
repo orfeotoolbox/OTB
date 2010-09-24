@@ -28,5 +28,7 @@ int otbMRFOptimizerMetropolisNew(int argc, char * argv[])
 
   MRFOptimizerType::Pointer object = MRFOptimizerType::New();
 
+  std::cout << object << std::endl;
+
   return EXIT_SUCCESS;
 }

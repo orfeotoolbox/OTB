@@ -29,5 +29,7 @@ int otbStandardImageViewerRGBNew(int argc, char * argv[])
   ViewerType::Pointer viewer = ViewerType::New();
   viewer->Update();
 
+  std::cout << viewer << std::endl;
+
   return EXIT_SUCCESS;
 }

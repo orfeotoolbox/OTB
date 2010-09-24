@@ -30,7 +30,9 @@ int otbAttributesMapOpeningLabelMapFilterNew(int argc, char* argv[])
   typedef otb::AttributesMapOpeningLabelMapFilter<LabelMapType>  LabelMapFilterType;
 
   // instantiation
-  LabelMapFilterType::Pointer object = LabelMapFilterType::New();
+  LabelMapFilterType::Pointer filter = LabelMapFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

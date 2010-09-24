@@ -36,5 +36,7 @@ int otbImageListToRCC8GraphFilterNew(int argc, char* argv[])
   // Instantiation
   ImageListToRCC8GraphFilterType::Pointer filter = ImageListToRCC8GraphFilterType::New();
 
+  std::cout << filter << std::endl;
+
   return EXIT_SUCCESS;
 }

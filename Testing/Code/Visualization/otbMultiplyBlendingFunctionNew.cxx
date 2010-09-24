@@ -25,5 +25,7 @@ int otbMultiplyBlendingFunctionNew(int argc, char * argv[])
   <RGBPixelType> BlendingFunctionType;
   BlendingFunctionType::Pointer function = BlendingFunctionType::New();
 
+  std::cout << function << std::endl;
+
   return EXIT_SUCCESS;
 }

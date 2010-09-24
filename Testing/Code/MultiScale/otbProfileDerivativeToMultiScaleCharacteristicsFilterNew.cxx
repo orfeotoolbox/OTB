@@ -33,7 +33,9 @@ int otbProfileDerivativeToMultiScaleCharacteristicsFilterNew(int argc, char * ar
   typedef otb::ProfileDerivativeToMultiScaleCharacteristicsFilter<InputImageType, OutputImageType, LabeledImageType>
   MultiScaleCharacteristicsFilterType;
 
-  MultiScaleCharacteristicsFilterType::Pointer msCharFilter = MultiScaleCharacteristicsFilterType::New();
+  MultiScaleCharacteristicsFilterType::Pointer filter = MultiScaleCharacteristicsFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

@@ -38,5 +38,7 @@ int otbSOMbasedImageFilterNew(int argc, char * argv[])
   FilterType;
   FilterType::Pointer somFilter = FilterType::New();
 
+  std::cout << somFilter << std::endl;
+
   return EXIT_SUCCESS;
 }

@@ -30,5 +30,7 @@ int otbImageViewNew(int argc, char * argv[])
   // Instantiation
   ViewType::Pointer view = ViewType::New();
 
+  std::cout << view << std::endl;
+
   return EXIT_SUCCESS;
 }
