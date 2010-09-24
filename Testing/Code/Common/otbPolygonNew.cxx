@@ -27,5 +27,7 @@ int otbPolygonNew(int argc, char * argv[])
   // Instantiating object
   PolygonType::Pointer polygon = PolygonType::New();
 
+  std::cout << polygon << std::endl;
+
   return EXIT_SUCCESS;
 }

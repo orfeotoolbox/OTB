@@ -33,5 +33,7 @@ int otbGISTableSourceNew(int argc, char * argv[])
   //Instantiation
   GISTableSourceType::Pointer object = GISTableSourceType::New();
 
+  std::cout << object << std::endl;
+
   return EXIT_SUCCESS;
 }

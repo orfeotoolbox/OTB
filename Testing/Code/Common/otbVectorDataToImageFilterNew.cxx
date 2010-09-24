@@ -31,5 +31,7 @@ int otbVectorDataToImageFilterNew(int argc, char * argv[])
   typedef otb::VectorDataToImageFilter<VectorDataType, ImageType> VectorDataToImageFilterType;
   VectorDataToImageFilterType::Pointer vectorDataRendering = VectorDataToImageFilterType::New();
 
+  std::cout << vectorDataRendering << std::endl;
+
   return EXIT_SUCCESS;
 }

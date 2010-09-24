@@ -29,7 +29,9 @@ int otbStreamingMinMaxVectorImageFilterNew(int argc, char * argv[])
   typedef otb::StreamingMinMaxVectorImageFilter<ImageType> StreamingMinMaxVectorImageFilterType;
 
   // Instantiating object
-  StreamingMinMaxVectorImageFilterType::Pointer object = StreamingMinMaxVectorImageFilterType::New();
+  StreamingMinMaxVectorImageFilterType::Pointer filter = StreamingMinMaxVectorImageFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

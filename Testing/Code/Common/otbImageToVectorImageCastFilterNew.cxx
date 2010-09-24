@@ -33,5 +33,7 @@ int otbImageToVectorImageCastFilterNew(int argc, char * argv[])
   // Instantiation
   VectorImageCastFilterType::Pointer caster = VectorImageCastFilterType::New();
 
+  std::cout << caster << std::endl;
+
   return EXIT_SUCCESS;
 }

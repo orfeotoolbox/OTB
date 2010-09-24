@@ -28,5 +28,7 @@ int otbVectorDataNew(int argc, char * argv[])
   //Instantiation
   VectorDataType::Pointer data = VectorDataType::New();
 
+  std::cout << data << std::endl;
+
   return EXIT_SUCCESS;
 }

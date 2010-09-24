@@ -31,5 +31,7 @@ int otbImageToPathFilterNew(int argc, char * argv[])
 
   ImageToPathFilterType::Pointer pathFilter = ImageToPathFilterType::New();
 
+  std::cout << pathFilter << std::endl;
+
   return EXIT_SUCCESS;
 }

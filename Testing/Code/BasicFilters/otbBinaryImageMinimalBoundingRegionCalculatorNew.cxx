@@ -31,5 +31,7 @@ int otbBinaryImageMinimalBoundingRegionCalculatorNew(int argc, char* argv[])
   //Instantiation
   BoundingRegionCalculatorType::Pointer brct = BoundingRegionCalculatorType::New();
 
+  std::cout << brct << std::endl;
+
   return EXIT_SUCCESS;
 }

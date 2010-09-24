@@ -29,7 +29,9 @@ int otbStreamingStatisticsImageFilterNew(int argc, char * argv[])
   typedef otb::StreamingStatisticsImageFilter<ImageType> StreamingStatisticsImageFilterType;
 
   // Instantiating object
-  StreamingStatisticsImageFilterType::Pointer object = StreamingStatisticsImageFilterType::New();
+  StreamingStatisticsImageFilterType::Pointer filter = StreamingStatisticsImageFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

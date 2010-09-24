@@ -31,5 +31,7 @@ int otbEuclideanDistanceWithMissingValueNew(int argc, char * argv[])
 
   DistanceType::Pointer dist = DistanceType::New();
 
+  std::cout << dist << std::endl;
+
   return EXIT_SUCCESS;
 }

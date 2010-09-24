@@ -35,5 +35,7 @@ int otbOpeningClosingMorphologicalFilterNew(int argc, char * argv[])
   // instantiating the opening closing filter
   OpeningClosingFilterType::Pointer openingClosing = OpeningClosingFilterType::New();
 
+  std::cout << openingClosing << std::endl;
+
   return EXIT_SUCCESS;
 }

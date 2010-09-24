@@ -30,7 +30,9 @@ int otbVectorRescaleIntensityImageFilterNew(int argc, char * argv[])
   typedef otb::VectorRescaleIntensityImageFilter<InputImageType, OutputImageType> VectorRescaleIntensityImageFilterType;
 
   // Instantiating object
-  VectorRescaleIntensityImageFilterType::Pointer object = VectorRescaleIntensityImageFilterType::New();
+  VectorRescaleIntensityImageFilterType::Pointer filter = VectorRescaleIntensityImageFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

@@ -37,5 +37,7 @@ int otbPointSetToDensityImageFilterNew(int, char*[])
 
   FunctionType::Pointer filter = FunctionType::New();
 
+  std::cout << filter << std::endl;
+
   return EXIT_SUCCESS;
 }

@@ -29,5 +29,7 @@ int otbSpatialObjectSourceNew(int argc, char* argv[])
   // Instantiation
   SpatialObjectSourceType::Pointer source = SpatialObjectSourceType::New();
 
+  std::cout << source << std::endl;
+
   return EXIT_SUCCESS;
 }

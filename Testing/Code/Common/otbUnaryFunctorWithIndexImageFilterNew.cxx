@@ -48,7 +48,9 @@ int otbUnaryFunctorWithIndexImageFilterNew(int argc, char * argv[])
       FunctorType>      UnaryFunctorWithIndexImageFilterType;
 
   // Instantiating object
-  UnaryFunctorWithIndexImageFilterType::Pointer object = UnaryFunctorWithIndexImageFilterType::New();
+  UnaryFunctorWithIndexImageFilterType::Pointer filter = UnaryFunctorWithIndexImageFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

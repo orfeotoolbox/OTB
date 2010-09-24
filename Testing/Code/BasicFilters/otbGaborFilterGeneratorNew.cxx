@@ -26,5 +26,7 @@ int otbGaborFilterGeneratorNew(int argc, char * argv[])
   // Instantiating object
   GaborGeneratorType::Pointer gabor = GaborGeneratorType::New();
 
+  std::cout << gabor << std::endl;
+
   return EXIT_SUCCESS;
 }

@@ -35,5 +35,7 @@ int otbMatrixTransposeMatrixImageFilterNew(int argc, char * argv[])
   // Instantiation
   MatrixTransposeMatrixImageFilterType::Pointer filter = MatrixTransposeMatrixImageFilterType::New();
 
+  std::cout << filter << std::endl;
+
   return EXIT_SUCCESS;
 }

@@ -26,7 +26,9 @@ int otbStreamingShrinkImageFilterNew(int argc, char * argv[])
   typedef otb::VectorImage<PixelType, Dimension>                ImageType;
   typedef otb::StreamingShrinkImageFilter<ImageType, ImageType> ShrinkType;
 
-  ShrinkType::Pointer shrink = ShrinkType::New();
+  ShrinkType::Pointer filter = ShrinkType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

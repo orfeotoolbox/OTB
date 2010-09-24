@@ -38,5 +38,7 @@ int otbBinaryImageToDensityImageFilterNew(int, char*[])
   /**Instantiation of a Smart Pointer*/
   FilterType::Pointer filter = FilterType::New();
 
+  std::cout << filter << std::endl;
+
   return EXIT_SUCCESS;
 }

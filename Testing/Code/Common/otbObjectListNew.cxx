@@ -28,5 +28,7 @@ int otbObjectListNew(int argc, char * argv[])
 
   ImageListType::Pointer imageList = ImageListType::New();
 
+  std::cout << imageList << std::endl;
+
   return EXIT_SUCCESS;
 }
