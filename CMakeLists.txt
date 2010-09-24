@@ -425,16 +425,22 @@ ENDIF(OTB_USE_PQXX)
 # Boost Library
 #-------------------------------
 SET (Boost_MINOR_VERSION 0)
-FIND_PACKAGE(Boost)
-IF(Boost_FOUND)
-  IF(NOT ${Boost_MINOR_VERSION} EQUAL 40)
-    OPTION(OTB_USE_EXTERNAL_BOOST "Use an outside build of Boost." ON)
-  ELSE(NOT ${Boost_MINOR_VERSION} EQUAL 40)
-    OPTION(OTB_USE_EXTERNAL_BOOST "Use an outside build of Boost." OFF)
-  ENDIF(NOT ${Boost_MINOR_VERSION} EQUAL 40)
-ELSE(Boost_FOUND)
-  OPTION(OTB_USE_EXTERNAL_BOOST "Use an outside build of Boost." OFF)
-ENDIF(Boost_FOUND)
+
+OPTION(OTB_USE_EXTERNAL_BOOST "Use an outside build of Boost." OFF)
+
+IF(OTB_USE_EXTERNAL_BOOST)
+  FIND_PACKAGE(Boost)
+  IF(Boost_FOUND)
+    IF( ${Boost_MINOR_VERSION} EQUAL 40)
+      MESSAGE(WARNING "Boost 1.40 not supported. Disabling OTB_USE_EXTERNAL_BOOST")
+      SET(OTB_USE_EXTERNAL_BOOST  OFF)
+    ENDIF(${Boost_MINOR_VERSION} EQUAL 40)
+  ELSE(Boost_FOUND)
+    MESSAGE(FATAL_ERROR
+                  "Cannot build OTB project without boost library.  Please set Boost directories or set OTB_USE_EXTERNAL_BOOST to OFF to use INTERNAL Boost set on OTB/Utilities repository.")
+  ENDIF(Boost_FOUND)
+ENDIF(OTB_USE_EXTERNAL_BOOST)
+
 # Option for internal/external BOOST
 MARK_AS_ADVANCED(OTB_USE_EXTERNAL_BOOST)
 
@@ -445,7 +451,6 @@ IF (OTB_USE_MAPNIK)
 ENDIF(OTB_USE_MAPNIK)
 
 IF(OTB_USE_EXTERNAL_BOOST)
-  FIND_PACKAGE(Boost)
 
   TRY_COMPILE(BOOST_IS_COMPLETE
   ${CMAKE_CURRENT_BINARY_DIR}/CMake
@@ -459,8 +464,6 @@ IF(OTB_USE_EXTERNAL_BOOST)
     MESSAGE(STATUS "Force the OTB_USE_EXTERNAL_BOOST value to OFF.")
     SET(OTB_USE_EXTERNAL_BOOST OFF CACHE BOOL  "Use an outside build of Boost." FORCE )
   ENDIF(BOOST_IS_COMPLETE)
-
-  INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
 ENDIF(OTB_USE_EXTERNAL_BOOST)
 
 #-------------------------------
