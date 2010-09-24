@@ -575,7 +575,21 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
    // ESH 11/2008: Check for geographic system when setting default units. 
    // If geographic, use degrees.
    //---
-   const char* units = OSRGetAttrValue( hSRS, "UNIT", 0 );
+
+   // Actually search only the "UNIT" child of the node PROJCS
+   // Several UNIT nodes can be present in the tree, but only the one
+   // necessary for the PROJCS is required.
+   const char* units = NULL;
+   OGR_SRSNode* node = ((OGRSpatialReference *)hSRS)->GetRoot();
+   int nbChild  = node->GetChildCount();
+   for (int i = 0; i < nbChild; i++)
+   {
+      OGR_SRSNode* curChild = node->GetChild(i);
+      if (strcmp(curChild->GetValue(), "UNIT") == 0)
+      {
+        units = curChild->GetChild(0)->GetValue();
+      }
+   }
 
    if(traceDebug())
    {
