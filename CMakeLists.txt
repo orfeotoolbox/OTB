@@ -378,7 +378,7 @@ IF(OTB_USE_VISU_GUI)
         ELSE(OTB_USE_EXTERNAL_FLTK)
                 SET(FLTK_INCLUDE_DIR "")
                 SET(FLTK_LIBRARIES "")
-                
+                SET(JPEG_INCLUDE_DIR ${JPEG_INCLUDE_DIRS})
                 SET( FLTK_PLATFORM_DEPENDENT_LIBS "")
                 INCLUDE(${OTB_BINARY_DIR}/Utilities/FLTK/FLTKConfig.cmake)
 
