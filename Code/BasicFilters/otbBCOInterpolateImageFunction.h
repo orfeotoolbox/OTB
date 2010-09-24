@@ -20,20 +20,32 @@
 
 #include "itkInterpolateImageFunction.h"
 #include "vnl/vnl_vector.h"
-
+#include "otbMath.h"
 
 #include "otbVectorImage.h"
 
 namespace otb
 {
-/** \class 
- *  \brief 
+/** \class BCOInterpolateImageFunction
+ *  \brief Interpolate an image at specified positions using bicubic interpolation.
+ * 
+ * BCOInterpolateImageFunction interpolates image intensity at
+ * a non-integer pixel position. This class is templated
+ * over the input image type and the coordinate representation type 
+ * (e.g. float or double).
  *
- *  
+ * This function works for 2-dimensional images.
+ * 
+ * This function works with both Images and VectorImages.
+ * 
+ * Parameters are the interpolation window radius and the bicubic
+ * optimisation coefficient alpha.
+ * Alpha is usually set to -0.5, -0.75 or -1 (-0.5 by default). 
+ * The case alpha = -0.5 (which corresponds to the cubic Hermite
+ * spline) is known to produce the best approximation of the original
+ * function.
  *
- * \sa 
- * \sa 
- * \sa 
+ * \ingroup ImageFunctions ImageInterpolators
  */
 template< class TInputImage, class TCoordRep = double >
 class ITK_EXPORT BCOInterpolateImageFunctionBase : 
@@ -91,16 +103,16 @@ public:
    *
    * ImageFunction::IsInsideBuffer() can be used to check bounds before
    * calling the method. */
-  //virtual OutputType EvaluateAtContinuousIndex( const ContinuousIndexType & index ) const = 0;
-
+  virtual OutputType EvaluateAtContinuousIndex( const ContinuousIndexType & index ) const = 0;
+  
 protected:
   BCOInterpolateImageFunctionBase();
   ~BCOInterpolateImageFunctionBase();
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
- /** Compute the BCO coefficients. */
-  virtual void EvaluateCoef();
-  virtual double GetBCOCoef(unsigned int idx) const;
-
+  /** Compute the BCO coefficients. */
+  virtual void EvaluateCoef( const ContinuousIndexType & index );
+  virtual double GetBCOCoefX(unsigned int idx) const;
+  virtual double GetBCOCoefY(unsigned int idx) const;
 
 private:
   BCOInterpolateImageFunctionBase( const Self& ); //purposely not implemented
@@ -111,7 +123,8 @@ private:
   /** Optimisation Coefficient */
   double                 m_Alpha;
   /** Used BCO coefficiet */   
-  CoefContainerType      m_BCOCoef;
+  CoefContainerType      m_BCOCoefX;
+  CoefContainerType      m_BCOCoefY;
 };
 
 

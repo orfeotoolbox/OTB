@@ -25,6 +25,7 @@
 #include "otbStreamingImageFileWriter.h"
 #include "otbStreamingResampleImageFilter.h"
 
+
 int otbBCOInterpolateImageFunctionNew(int argc, char * argv[])
 {
   typedef otb::Image<double, 2>                                           ImageType;
