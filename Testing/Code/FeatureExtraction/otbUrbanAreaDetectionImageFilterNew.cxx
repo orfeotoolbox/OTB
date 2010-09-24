@@ -34,5 +34,7 @@ int otbUrbanAreaDetectionImageFilterNew(int argc, char * argv[])
   // Instantiating objects
   UrbanAreaDetectionFilterType::Pointer filter = UrbanAreaDetectionFilterType::New();
 
+  std::cout << filter << std::endl;
+
   return EXIT_SUCCESS;
 }

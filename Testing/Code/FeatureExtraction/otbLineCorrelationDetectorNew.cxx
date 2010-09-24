@@ -36,7 +36,9 @@ int otbLineCorrelationDetectorNew(int argc, char* argv[])
 
   typedef otb::LineCorrelationDetectorImageFilter<InputImageType, OutputImageType> FilterType;
 
-  FilterType::Pointer FilterLineCorr = FilterType::New();
+  FilterType::Pointer filter = FilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

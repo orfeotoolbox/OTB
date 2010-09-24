@@ -29,5 +29,7 @@ int otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculatorNew(int a
 
   FilterType::Pointer filter = FilterType::New();
 
+  std::cout << filter << std::endl;
+
   return EXIT_SUCCESS;
 }

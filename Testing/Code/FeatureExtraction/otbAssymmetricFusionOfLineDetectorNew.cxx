@@ -47,7 +47,9 @@ int otbAssymmetricFusionOfLineDetectorNew(int argc, char * argv[])
   typedef otb::AssymmetricFusionOfLineDetectorImageFilter<InputImageType, OutputImageType, OutputImageDirectionType,
       InterpolatorType> FilterType;
 
-  FilterType::Pointer FilterAssSymSum = FilterType::New();
+  FilterType::Pointer filter = FilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

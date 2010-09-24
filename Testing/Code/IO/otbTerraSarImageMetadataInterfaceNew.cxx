@@ -30,9 +30,9 @@
 
 int otbTerraSarImageMetadataInterfaceNew(int argc, char* argv[])
 {
+  otb::TerraSarImageMetadataInterface::Pointer object = otb::TerraSarImageMetadataInterface::New();
 
-  otb::TerraSarImageMetadataInterface::Pointer lImageMetadata = otb::TerraSarImageMetadataInterface::New();
+  std::cout << object << std::endl;
 
   return EXIT_SUCCESS;
-
 }

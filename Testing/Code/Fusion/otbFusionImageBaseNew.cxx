@@ -62,5 +62,7 @@ int otbFusionImageBaseNew(int argc, char * argv[])
   // Instantiation
   FusionImageBaseType::Pointer base = FusionImageBaseType::New();
 
+  std::cout << base << std::endl;
+
   return EXIT_SUCCESS;
 }

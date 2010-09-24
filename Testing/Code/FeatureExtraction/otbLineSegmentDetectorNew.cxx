@@ -32,7 +32,9 @@ int otbLineSegmentDetectorNew(int argc, char * argv[])
   typedef otb::Image<InputPixelType,  Dimension>                   InputImageType;
   typedef otb::LineSegmentDetector<InputImageType, InputPixelType> lsdFilterType;
 
-  lsdFilterType::Pointer lsdFilter = lsdFilterType::New();
+  lsdFilterType::Pointer filter = lsdFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

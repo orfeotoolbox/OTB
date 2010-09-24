@@ -37,7 +37,9 @@ int otbThresholdImageToPointSetFilterNew(int argc, char* argv[])
 
   typedef otb::ThresholdImageToPointSetFilter<ImageType, PointSetType> FilterThresholdType;
 
-  FilterThresholdType::Pointer filterThreshold = FilterThresholdType::New();
+  FilterThresholdType::Pointer filter = FilterThresholdType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

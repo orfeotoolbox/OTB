@@ -37,7 +37,9 @@ int otbFourierMellinImageFilterNew(int argc, char* argv[])
   typedef otb::ForwardFourierMellinTransformImageFilter<PixelType,
       InterpolatorType, Dimension>       FourierMellinTransformType;
 
-  FourierMellinTransformType::Pointer fourierMellinTransform = FourierMellinTransformType::New();
+  FourierMellinTransformType::Pointer filter = FourierMellinTransformType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

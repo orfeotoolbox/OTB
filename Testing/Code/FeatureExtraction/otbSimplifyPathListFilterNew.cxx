@@ -28,7 +28,9 @@ int otbSimplifyPathListFilterNew(int argc, char * argv[])
   typedef otb::SimplifyPathListFilter<PathType>  SimplifyPathListFilterType;
 
   // Instantiating object
-  SimplifyPathListFilterType::Pointer object = SimplifyPathListFilterType::New();
+  SimplifyPathListFilterType::Pointer filter = SimplifyPathListFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

@@ -28,5 +28,7 @@ int otbVectorDataFileWriterNew(int argc, char * argv[])
   //Instantiation
   WriterType::Pointer writer = WriterType::New();
 
+  std::cout << writer << std::endl;
+
   return EXIT_SUCCESS;
 }

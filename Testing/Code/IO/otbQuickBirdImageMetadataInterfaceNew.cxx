@@ -28,9 +28,9 @@
 
 int otbQuickBirdImageMetadataInterfaceNew(int argc, char* argv[])
 {
+  otb::QuickBirdImageMetadataInterface::Pointer object = otb::QuickBirdImageMetadataInterface::New();
 
-  otb::QuickBirdImageMetadataInterface::Pointer lImageMetadata = otb::QuickBirdImageMetadataInterface::New();
+  std::cout << object << std::endl;
 
   return EXIT_SUCCESS;
-
 }

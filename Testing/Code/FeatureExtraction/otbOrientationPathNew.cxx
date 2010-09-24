@@ -33,5 +33,7 @@ int otbOrientationPathNew(int argc, char * argv[])
 
   FunctionType::Pointer function = FunctionType::New();
 
+  std::cout << function << std::endl;
+
   return EXIT_SUCCESS;
 }

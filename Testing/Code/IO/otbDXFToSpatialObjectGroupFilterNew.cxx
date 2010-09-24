@@ -29,5 +29,7 @@ int otbDXFToSpatialObjectGroupFilterNew(int argc, char * argv[])
   // Instantiating object
   DXFToSpatialObjectGroupFilterType::Pointer object = DXFToSpatialObjectGroupFilterType::New();
 
+  std::cout << object << std::endl;
+
   return EXIT_SUCCESS;
 }
