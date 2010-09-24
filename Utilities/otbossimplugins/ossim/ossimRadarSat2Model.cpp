@@ -227,10 +227,10 @@ bool ossimRadarSat2Model::open(const ossimFilename& file)
                      {
                         result = initRefPoint(xdoc, rsDoc);
                      
-                     	if (result)
-                     	{
-	   						result = InitRefNoiseLevel(xdoc);
-   						}
+                     	  if (result)
+                        {
+                        result = InitRefNoiseLevel(xdoc);
+                        }
                      }
                   }
                }

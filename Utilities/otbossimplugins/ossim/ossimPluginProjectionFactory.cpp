@@ -247,11 +247,11 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
    }
    else if (name == STATIC_TYPE_NAME(ossimRadarSatModel))
    {
-     return new ossimAlosPalsarModel;
+     return new ossimRadarSatModel;
    }
    else if (name == STATIC_TYPE_NAME(ossimAlosPalsarModel))
    {
-     return new ossimRadarSatModel;
+     return new ossimAlosPalsarModel;
    }
    else if (name == STATIC_TYPE_NAME(ossimFormosatModel))
    {
