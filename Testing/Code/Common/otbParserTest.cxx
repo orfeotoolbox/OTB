@@ -28,6 +28,8 @@ int otbParserTestNew(int argc, char * argv[])
   // Instantiating object
   ParserType::Pointer parser = ParserType::New();
 
+  std::cout << parser << std::endl;
+
   return EXIT_SUCCESS;
 }
 

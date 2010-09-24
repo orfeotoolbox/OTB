@@ -32,5 +32,7 @@ int otbImageToImageListFilterNew(int argc, char * argv[])
   // Instantiating ImageListSource object
   ImageToImageListFilterType::Pointer imageList = ImageToImageListFilterType::New();
 
+  std::cout << imageList << std::endl;
+
   return EXIT_SUCCESS;
 }

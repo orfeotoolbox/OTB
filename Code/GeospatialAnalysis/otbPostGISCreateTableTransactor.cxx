@@ -79,7 +79,6 @@ void PostGISCreateTableTransactor::operator ()(pqxx::nontransaction& T)
   m_Result = T.exec(addGeometryCommand.str());
 
 
-
   /** creation index GIST */
   //FIXME not working yet
 //  std::stringstream addGISTIndexCommand;

@@ -32,7 +32,9 @@ int otbBCOInterpolateImageFunctionNew(int argc, char * argv[])
   typedef otb::BCOInterpolateImageFunction<ImageType, double>             InterpolatorType;
 
   // Instantiating object
-  InterpolatorType::Pointer filter = InterpolatorType::New();
+  InterpolatorType::Pointer interp = InterpolatorType::New();
+
+  std::cout << interp << std::endl;
 
   return EXIT_SUCCESS;
 }

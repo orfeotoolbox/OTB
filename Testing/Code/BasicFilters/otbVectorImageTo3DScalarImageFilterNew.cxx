@@ -33,7 +33,9 @@ int otbVectorImageTo3DScalarImageFilterNew(int argc, char * argv[])
   typedef otb::VectorImageTo3DScalarImageFilter<VectorImageType, ImageType> FilterType;
 
   // Instantiating object
-  FilterType::Pointer object = FilterType::New();
+  FilterType::Pointer filter = FilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

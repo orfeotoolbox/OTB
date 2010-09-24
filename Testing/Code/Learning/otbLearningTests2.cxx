@@ -38,9 +38,11 @@ void RegisterTests()
   REGISTER_TEST(otbSOMNew);
   REGISTER_TEST(otbSOM);
   REGISTER_TEST(otbPeriodicSOMNew);
-  REGISTER_TEST(otbPeriodicSOM);
+  REGISTER_TEST(otbPeriodicSOMTest);
   REGISTER_TEST(otbSOMActivationBuilderNew);
   REGISTER_TEST(otbSOMActivationBuilder);
   REGISTER_TEST(otbSOMbasedImageFilterNew);
+  REGISTER_TEST(otbSOMbasedImageFilterTest);
   REGISTER_TEST(otbSOMWithMissingValueNew);
+  REGISTER_TEST(otbSOMWithMissingValueTest);
 }

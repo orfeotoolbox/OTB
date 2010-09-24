@@ -34,7 +34,9 @@ int otbImageListToImageListApplyFilterNew(int argc, char * argv[])
   ImageListToImageListApplyFilterType;
 
   // Instantiating object
-  ImageListToImageListApplyFilterType::Pointer object = ImageListToImageListApplyFilterType::New();
+  ImageListToImageListApplyFilterType::Pointer filter = ImageListToImageListApplyFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

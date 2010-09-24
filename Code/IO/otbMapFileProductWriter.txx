@@ -396,8 +396,8 @@ MapFileProductWriter<TInputImage>
         m_ResampleVectorImage->TransformIndexToPhysicalPoint(indexTile, inputPoint);
         outputPoint = m_Transform->TransformPoint(inputPoint);
         OutputPointType upperLeftCorner = outputPoint;
-	
-	// Build The indexTile
+  
+  // Build The indexTile
         this->AddBBoxToIndexTile(lowerLeftCorner, 
                                  lowerRightCorner, 
                                  upperRightCorner, 
@@ -527,7 +527,7 @@ MapFileProductWriter<TInputImage>
 
   file <<"\tLAYER" << std::endl;
   file <<"\t\tNAME '"<<tempIndexShapeName.str()<<"'"<< std::endl;
-  file <<"\t\t\t#GROUP 'earthsat'"<< std::endl;	
+  file <<"\t\t\t#GROUP 'earthsat'"<< std::endl;  
   file <<"\t\t\tTYPE RASTER" << std::endl;
   file <<"\t\t\tTILEITEM 'LOCATION'" << std::endl;
   file <<"\t\t\tTILEINDEX \'"<<m_IndexShapeFileName<<"\'" << std::endl;

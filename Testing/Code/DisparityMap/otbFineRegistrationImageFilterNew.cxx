@@ -34,7 +34,9 @@ int otbFineRegistrationImageFilterNew( int argc, char * argv[] )
   typedef otb::Image<DeformationValueType,2>                                   FieldImageType;
   typedef otb::FineRegistrationImageFilter<ImageType,ImageType,FieldImageType> RegistrationFilterType;
   
-  RegistrationFilterType::Pointer Registration = RegistrationFilterType::New();
+  RegistrationFilterType::Pointer filter = RegistrationFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

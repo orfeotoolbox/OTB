@@ -33,7 +33,9 @@ int otbStreamingCompareImageFilterNew(int argc, char * argv[])
   typedef otb::StreamingCompareImageFilter<ImageType> StreamingCompareImageFilterType;
 
   // Instantiating object
-  StreamingCompareImageFilterType::Pointer object = StreamingCompareImageFilterType::New();
+  StreamingCompareImageFilterType::Pointer filter = StreamingCompareImageFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

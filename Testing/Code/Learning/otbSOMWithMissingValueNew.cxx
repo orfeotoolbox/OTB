@@ -24,7 +24,7 @@
 #include "itkListSample.h"
 
 #include "otbSOMMap.h"
-#include "otbPeriodicSOM.h"
+//#include "otbPeriodicSOM.h"
 #include "otbSOMWithMissingValue.h"
 
 #include "otbFlexibleDistanceWithMissingValue.h"

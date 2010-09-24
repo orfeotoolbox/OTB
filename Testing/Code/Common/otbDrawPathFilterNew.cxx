@@ -32,5 +32,7 @@ int otbDrawPathFilterNew(int argc, char * argv[])
 
   DrawPathFilterType::Pointer filter = DrawPathFilterType::New();
 
+  std::cout << filter << std::endl;
+
   return EXIT_SUCCESS;
 }

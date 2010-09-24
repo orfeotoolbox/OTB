@@ -31,5 +31,7 @@ int otbImageOfVectorsToMonoChannelExtractROINew(int argc, char * argv[])
   // Instantiating object
   FilterType::Pointer object = FilterType::New();
 
+  std::cout << object << std::endl;
+
   return EXIT_SUCCESS;
 }

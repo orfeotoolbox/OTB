@@ -34,7 +34,9 @@ int otbImageListToVectorImageFilterNew(int argc, char * argv[])
   typedef otb::ImageListToVectorImageFilter<ImageListType, VectorImageType> ImageListToVectorImageFilterType;
 
   // Instantiating object
-  ImageListToVectorImageFilterType::Pointer object = ImageListToVectorImageFilterType::New();
+  ImageListToVectorImageFilterType::Pointer filter = ImageListToVectorImageFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

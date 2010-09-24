@@ -32,5 +32,7 @@ int otbNNearestPointsLinearInterpolateDeformationFieldGeneratorNew(int argc, cha
   // Instantiating object
   FilterType::Pointer filter = FilterType::New();
 
+  std::cout << filter << std::endl;
+
   return EXIT_SUCCESS;
 }

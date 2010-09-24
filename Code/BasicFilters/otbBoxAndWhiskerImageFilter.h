@@ -72,7 +72,7 @@ public:
   typedef typename Superclass::InputImagePixelType    InputImagePixelType;
 
   typedef typename InputImageType::PixelType  PixelType;
-  typedef typename PixelType::ValueType       ValueType;
+  typedef typename InputImageType::InternalPixelType   ValueType;
   typedef typename InputImageType::SizeType   SizeType;
   typedef typename InputImageType::RegionType RegionType;
 
@@ -81,6 +81,7 @@ public:
   itkStaticConstMacro(OutputImageDimension, unsigned int, OutputImageType::ImageDimension);
 
   /** Get the Radius (all to 1) */
+  itkSetMacro(Radius, SizeType);
   itkGetConstReferenceMacro(Radius, SizeType);
 
   /** Fix the whisker */

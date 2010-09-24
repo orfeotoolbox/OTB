@@ -35,5 +35,7 @@ int otbPrintableImageFilterNew(int argc, char * argv[])
 
   FilterType::Pointer printableImage = FilterType::New();
 
+  std::cout << printableImage << std::endl;
+
   return EXIT_SUCCESS;
 }

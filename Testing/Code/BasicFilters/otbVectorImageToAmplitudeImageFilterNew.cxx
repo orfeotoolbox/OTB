@@ -29,7 +29,9 @@ int otbVectorImageToAmplitudeImageFilterNew(int argc, char * argv[])
   typedef otb::VectorImageToAmplitudeImageFilter<VectorImageType, ImageType> FilterType;
 
   // Instantiating object
-  FilterType::Pointer object = FilterType::New();
+  FilterType::Pointer filter = FilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

@@ -37,5 +37,7 @@ int otbLabelizeConfidenceConnectedImageFilterNew(int argc, char * argv[])
 
   LabelizeFilterPointerType filter = LabelizeFilterType::New();
 
+  std::cout << filter << std::endl;
+
   return EXIT_SUCCESS;
 }

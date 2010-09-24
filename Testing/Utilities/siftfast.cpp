@@ -19,7 +19,11 @@
 
 #include <iostream>
 
-#include <sys/timeb.h>    // ftime(), struct timeb
+#ifdef __FreeBSD__
+#  include <sys/time.h>
+#else
+#  include <sys/timeb.h>    // ftime(), struct timeb
+#endif
 
 #ifdef _WIN32
 #include <io.h>
@@ -38,15 +42,26 @@ typedef unsigned long long u64;
 
 inline u32 timeGetTime()
 {
+  u32 millisec = 0;
 #ifdef _WIN32
     _timeb t;
     _ftime(&t);
+    millisec = (u32)(t.time*1000+t.millitm);
 #else
+#  ifdef __FreeBSD__
+    // tv_sec is multiplied by 1000 to maintain same result as above
+    // tv_usec is in micro-seconds, so multiply by 1000 to maintain same
+    // result as above
+    timeval t;
+    gettimeofday(&t, NULL);
+    millisec = (u32)(t.tv_sec*1000+t.tv_usec/1000);
+#  else
     timeb t;
     ftime(&t);
+    millisec = (u32)(t.time*1000+t.millitm);
+#  endif
 #endif
-
-    return (u32)(t.time*1000+t.millitm);
+  return millisec;
 }
 
 // code from david lowe

@@ -259,66 +259,66 @@ VectorDataModel::AddNode( TreeNodeType * node )
     {
     case FEATURE_POINT:
       {
-	m_CurrentNodeType = FEATURE_POINT;
-	PointType point = node->Get()->GetPoint();
-	VertexType vertex;
-	vertex[0] = point[0];
-	vertex[1] = point[1];
-	this->AddPointToGeometry(vertex, false);
+  m_CurrentNodeType = FEATURE_POINT;
+  PointType point = node->Get()->GetPoint();
+  VertexType vertex;
+  vertex[0] = point[0];
+  vertex[1] = point[1];
+  this->AddPointToGeometry(vertex, false);
 
         //Add Other Fields
         CopyFileds( node );
 
-	this->EndGeometry(false);
-	break;
+  this->EndGeometry(false);
+  break;
       }
     case FEATURE_LINE:
       {
-	m_CurrentNodeType = FEATURE_LINE;
-	const LineType * line = node->Get()->GetLine();
-	LineType::VertexListType::ConstIterator vIt = line->GetVertexList()->Begin();
-	
-	while (vIt != line->GetVertexList()->End())
-	  {
-	    PointType point = vIt.Value();
-	    VertexType vertex;
-	    vertex[0] = point[0];
-	    vertex[1] = point[1];
-	    this->AddPointToGeometry(vertex, false);
-	  }
+  m_CurrentNodeType = FEATURE_LINE;
+  const LineType * line = node->Get()->GetLine();
+  LineType::VertexListType::ConstIterator vIt = line->GetVertexList()->Begin();
+  
+  while (vIt != line->GetVertexList()->End())
+    {
+      PointType point = vIt.Value();
+      VertexType vertex;
+      vertex[0] = point[0];
+      vertex[1] = point[1];
+      this->AddPointToGeometry(vertex, false);
+    }
 
         //Add Other Fields
         CopyFileds( node );
 
-	this->EndGeometry(false);
-	break;
+  this->EndGeometry(false);
+  break;
       }
     case FEATURE_POLYGON:
       {
-  	m_CurrentNodeType = FEATURE_POLYGON;
+    m_CurrentNodeType = FEATURE_POLYGON;
         const PolygonType *     extRing = node->Get()->GetPolygonExteriorRing();
         PolygonType::VertexListType::ConstIterator vIt = extRing->GetVertexList()->Begin();
 
         while (vIt != extRing->GetVertexList()->End())
-	  {
-	    PointType point = vIt.Value();
-	    VertexType vertex;
-	    vertex[0] = point[0];
-	    vertex[1] = point[1];
-	    this->AddPointToGeometry(vertex, false);
-	    vIt++;
-	  }
+    {
+      PointType point = vIt.Value();
+      VertexType vertex;
+      vertex[0] = point[0];
+      vertex[1] = point[1];
+      this->AddPointToGeometry(vertex, false);
+      vIt++;
+    }
 
         //Add Other Fields
         CopyFileds( node );
       
-	this->EndGeometry(false);
-	break;
+  this->EndGeometry(false);
+  break;
       }
     default:
       {
-	// discard
-	break;
+  // discard
+  break;
       }
     }
 

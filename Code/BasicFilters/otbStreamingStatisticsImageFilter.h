@@ -230,6 +230,10 @@ public:
   {
     this->GetFilter()->SetInput(input);
   }
+  const InputImageType * GetInput()
+  {
+    return this->GetFilter()->GetInput();
+  }
 
   /** Return the computed Minimum. */
   PixelType GetMinimum() const
@@ -238,11 +242,11 @@ public:
   }
   PixelObjectType* GetMinimumOutput()
   {
-    return this->GetFilter()->MinimumOutput();
+    return this->GetFilter()->GetMinimumOutput();
   }
   const PixelObjectType* GetMinimumOutput() const
   {
-    return this->GetFilter()->MinimumOutput();
+    return this->GetFilter()->GetMinimumOutput();
   }
   /** Return the computed Maximum. */
   PixelType GetMaximum() const

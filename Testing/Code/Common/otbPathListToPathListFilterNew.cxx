@@ -30,5 +30,7 @@ int otbPathListToPathListFilterNew(int argc, char * argv[])
   // Instantiating object
   FilterType::Pointer filter = FilterType::New();
 
+  std::cout << filter << std::endl;
+
   return EXIT_SUCCESS;
 }

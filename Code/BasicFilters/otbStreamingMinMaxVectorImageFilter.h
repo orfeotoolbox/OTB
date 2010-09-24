@@ -195,11 +195,11 @@ public:
   typedef typename StatFilterType::PixelObjectType     PixelObjectType;
   typedef typename StatFilterType::MatrixObjectType    MatrixObjectType;
 
-  void SetInput(TInputImage * input)
+  void SetInput(InputImageType * input)
   {
     this->GetFilter()->SetInput(input);
   }
-  TInputImage * GetInput()
+  const InputImageType * GetInput()
   {
     return this->GetFilter()->GetInput();
   }
@@ -211,11 +211,11 @@ public:
   }
   PixelObjectType* GetMinimumOutput()
   {
-    return this->GetFilter()->MinimumOutput();
+    return this->GetFilter()->GetMinimumOutput();
   }
   const PixelObjectType* GetMinimumOutput() const
   {
-    return this->GetFilter()->MinimumOutput();
+    return this->GetFilter()->GetMinimumOutput();
   }
 
   /** Return the computed Maximum. */
@@ -225,11 +225,11 @@ public:
   }
   PixelObjectType* GetMaximumOutput()
   {
-    return this->GetFilter()->MaximumOutput();
+    return this->GetFilter()->GetMaximumOutput();
   }
   const PixelObjectType* GetMaximumOutput() const
   {
-    return this->GetFilter()->MaximumOutput();
+    return this->GetFilter()->GetMaximumOutput();
   }
 
 protected:

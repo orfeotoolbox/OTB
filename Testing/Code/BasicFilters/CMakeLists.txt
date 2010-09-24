@@ -1064,8 +1064,18 @@ ADD_TEST(bfTvVarianceImageFilter ${BASICFILTERS_TESTS8}
 
 # ------             otb::BoxAndWhiskerImageFilter -------------
 
-ADD_TEST(bfTuBoxAndWhiskerImageFilter ${BASICFILTERS_TESTS8}
+ADD_TEST(bfTuBoxAndWhiskerImageFilterNew ${BASICFILTERS_TESTS8}
          otbBoxAndWhiskerImageFilterNew )
+         
+ADD_TEST(bfTvBoxAndWhiskerImageFilter ${BASICFILTERS_TESTS8}
+  --compare-image ${EPSILON_7}  
+  		${BASELINE}/bfBoxAndWhiskerImageFilter_05_05.tif
+        ${TEMP}/bfBoxAndWhiskerImageFilter_05_05.tif
+    	otbBoxAndWhiskerImageFilter
+     	${INPUTDATA}/poupees.tif
+		${TEMP}/bfBoxAndWhiskerImageFilter_05_05.tif
+		05 05)
+         
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests9 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1459,6 +1469,17 @@ ADD_TEST(bfTvKeyPointDensityImageFilterOutputImage ${BASICFILTERS_TESTS11}
 ADD_TEST(bfTvFunctionWithNeighborhoodToImageFilterNew ${BASICFILTERS_TESTS11}
         otbFunctionWithNeighborhoodToImageFilterNew
 )
+
+ADD_TEST(bfTvFunctionWithNeighborhoodToImageFilter ${BASICFILTERS_TESTS11}
+	--compare-image ${EPSILON_7}
+	    ${BASELINE}/bfTvFunctionWithNeighborhoodToImageFilterTest.tif
+	    ${TEMP}/bfTvFunctionWithNeighborhoodToImageFilterTest.tif
+        otbFunctionWithNeighborhoodToImageFilter
+	    ${INPUTDATA}/poupees_1canal.hd
+	    ${TEMP}/bfTvFunctionWithNeighborhoodToImageFilterTest.tif
+	    2 # radius
+)
+
 
 ADD_TEST(bfTuStreamingInnerProductVectorImageFilterNew ${BASICFILTERS_TESTS11}
         otbStreamingInnerProductVectorImageFilterNew
@@ -1896,6 +1917,7 @@ otbAmplitudePhaseToRGBFunctor.cxx
 otbVarianceImageFilterNew.cxx
 otbVarianceImageFilter.cxx
 otbBoxAndWhiskerImageFilterNew.cxx
+otbBoxAndWhiskerImageFilter.cxx
 otbFlexibleDistanceWithMissingValueNew.cxx
 otbFlexibleDistanceWithMissingValue.cxx
 )
@@ -1966,6 +1988,7 @@ otbKeyPointDensityImageFilterNew.cxx
 otbKeyPointDensityImageFilterTest.cxx
 otbImagePCAShapeModelEstimatorTest.cxx
 otbFunctionWithNeighborhoodToImageFilterNew.cxx
+otbFunctionWithNeighborhoodToImageFilter.cxx
 otbStreamingInnerProductVectorImageFilterNew.cxx
 otbStreamingInnerProductVectorImageFilter.cxx
 otbEstimateInnerProductPCAImageFilterNew.cxx

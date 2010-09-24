@@ -277,7 +277,7 @@ IF(OTB_COMPILE_JPEG2000)
 ENDIF(OTB_COMPILE_JPEG2000)
 
 #-----------------------------------------------------------------------------
-# Option for OpenThreads (necessary because used by the new version of OSSIM library
+# Option for OpenThreads (necessary because used by the new version of OSSIM library)
 # Find OpenThread library
 IF(EXISTS "${CMAKE_ROOT}/Modules/FindOpenThreads.cmake")
         FIND_PACKAGE(OpenThreads)
@@ -508,9 +508,14 @@ ENDIF(OTB_USE_PQXX)
 #-------------------------------
 # Boost Library
 #-------------------------------
+SET (Boost_MINOR_VERSION 0)
 FIND_PACKAGE(Boost)
 IF(Boost_FOUND)
-  OPTION(OTB_USE_EXTERNAL_BOOST "Use an outside build of Boost." ON)
+  IF(NOT ${Boost_MINOR_VERSION} EQUAL 40)
+    OPTION(OTB_USE_EXTERNAL_BOOST "Use an outside build of Boost." ON)
+  ELSE(NOT ${Boost_MINOR_VERSION} EQUAL 40)
+    OPTION(OTB_USE_EXTERNAL_BOOST "Use an outside build of Boost." OFF)
+  ENDIF(NOT ${Boost_MINOR_VERSION} EQUAL 40)
 ELSE(Boost_FOUND)
   OPTION(OTB_USE_EXTERNAL_BOOST "Use an outside build of Boost." OFF)
 ENDIF(Boost_FOUND)

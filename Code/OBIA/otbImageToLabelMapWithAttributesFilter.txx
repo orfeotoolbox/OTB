@@ -92,7 +92,6 @@ ImageToLabelMapWithAttributesFilter<TInputImage, TLabeledImage, TOutputLabel, TO
 }
 
 
-
 template <class TInputImage, class TLabeledImage, class TOutputLabel, class TObjectLabel>
 void
 ImageToLabelMapWithAttributesFilter<TInputImage, TLabeledImage, TOutputLabel, TObjectLabel>
@@ -125,7 +124,6 @@ ImageToLabelMapWithAttributesFilter<TInputImage, TLabeledImage, TOutputLabel, TO
   // graft the mini-pipeline output back onto this filter's output.
   this->GraftOutput( bandStatsLabelMapFilter->GetOutput() );
 }
-
 
 
 }

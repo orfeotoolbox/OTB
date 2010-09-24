@@ -32,5 +32,7 @@ int otbListSampleToVariableDimensionHistogramGeneratorNew(int argc, char * argv[
   // Instantiation
   HistogramGeneratorType::Pointer generator = HistogramGeneratorType::New();
 
+  std::cout << generator << std::endl;
+
   return EXIT_SUCCESS;
 }

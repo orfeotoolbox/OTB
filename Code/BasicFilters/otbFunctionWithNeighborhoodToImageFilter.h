@@ -81,12 +81,27 @@ public:
   typedef typename FunctionType::OutputType FunctionValueType;
   typedef typename FunctionType::InputType  FunctionPositionType;
 
-  itkGetObjectMacro(Function, FunctionType);
+//  itkGetObjectMacro(Function, FunctionType);
+
+  /** Set the internal spatial function. */
+  void SetFunction(FunctionPointerType function)
+  {
+    m_Function = function;
+    this->Modified();
+  }
+  FunctionPointerType GetFunction()
+  {
+    return m_Function;
+  }
+
+
   /** Image dimensions */
   itkStaticConstMacro(InputImageDimension, unsigned int,
                       TInputImage::ImageDimension);
   itkStaticConstMacro(OutputImageDimension, unsigned int,
                       TOutputImage::ImageDimension);
+
+
 
   /** Accessors */
   itkGetMacro(Radius, InputImageSizeType);

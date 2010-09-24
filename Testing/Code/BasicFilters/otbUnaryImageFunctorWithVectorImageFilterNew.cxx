@@ -36,5 +36,7 @@ int otbUnaryImageFunctorWithVectorImageFilterNew(int argc, char * argv[])
   // Instantiating object
   UnaryImageFunctorWithVectorImageFilterType::Pointer filter = UnaryImageFunctorWithVectorImageFilterType::New();
 
+  std::cout << filter << std::endl;
+
   return EXIT_SUCCESS;
 }

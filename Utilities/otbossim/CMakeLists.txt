@@ -53,72 +53,26 @@ IF(NOT OTB_DISABLE_UTILITIES_COMPILATION)
   # Removing sources not in use any more (switched to ossim plugins)
   LIST(REMOVE_ITEM ossim_projection_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/src/ossim/projection/ossimCosmoSkymedModel.cpp")
 
-  # Adjust the compiler flags to avoid problems with ossim code.
-#  IF(CMAKE_COMPILER_IS_GNUCXX)
-#    FOREACH(f      ${ossim_base_SRCS} ${ossim_elevation_SRCS} ${ossim_font_SRCS} ${ossim_imaging_SRCS} ${ossim_matrix_SRCS}
-#                  ${ossim_parallel_SRCS} ${ossim_projection_SRCS} ${ossim_support_data_SRCS}
-#                  ${ossim_vec_SRCS} ${ossim_vpfutil_SRCS} ${ossim_plugin_SRCS} ${ossim_init_SRCS}
-#                  ${ossim_kbool_SRCS} ${ossim_dll_main_SRCS} )
-#          SET_SOURCE_FILES_PROPERTIES( ${f} PROPERTIES COMPILE_FLAGS -w )
-#    ENDFOREACH(f)
-#  ELSE(CMAKE_COMPILER_IS_GNUCXX)
-#    IF(NOT BORLAND)
-#      IF(NOT CYGWIN)
-#        IF(NOT MINGW)
-#          FOREACH(f       ${ossim_base_SRCS} ${ossim_elevation_SRCS} ${ossim_font_SRCS} ${ossim_imaging_SRCS} ${ossim_matrix_SRCS}
-#                          ${ossim_parallel_SRCS} ${ossim_projection_SRCS} ${ossim_support_data_SRCS}
-#                          ${ossim_vec_SRCS} ${ossim_vpfutil_SRCS} ${ossim_plugin_SRCS} ${ossim_init_SRCS}
-#                          ${ossim_kbool_SRCS} ${ossim_dll_main_SRCS} )
-#                  SET_SOURCE_FILES_PROPERTIES( ${f} PROPERTIES COMPILE_FLAGS /W0 )
-#          ENDFOREACH(f)
-#        ENDIF(NOT MINGW)
-#      ENDIF(NOT CYGWIN)
-#    ENDIF(NOT BORLAND)
-#  ENDIF(CMAKE_COMPILER_IS_GNUCXX)
-#
 
-IF(NOT OTB_BUILD_SHARED_LIB)
-  IF(WIN32)
-    IF(NOT BORLAND)
+  IF(NOT OTB_BUILD_SHARED_LIB)
+    IF(WIN32)
       IF(NOT CYGWIN)
         IF(NOT MINGW)
         SET(ossim_init_SRCS ${ossim_init_SRCS} ${ossim_dll_main_SRCS})
         ENDIF(NOT MINGW)
       ENDIF(NOT CYGWIN)
-    ENDIF(NOT BORLAND)
-  ENDIF(WIN32)
-ENDIF(NOT OTB_BUILD_SHARED_LIB)
+    ENDIF(WIN32)
+  ENDIF(NOT OTB_BUILD_SHARED_LIB)
 
 
   ADD_EXECUTABLE(version-config src/ossim/version-config.cpp)
-  #FIND_PROGRAM( VERSION_CONFIG_PROGRAM
-  #              NAMES version-config
-  #              PATHS  ${EXECUTABLE_OUTPUT_PATH}
-  #                     ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_BUILD_TYPE}
-  #                     ${EXECUTABLE_OUTPUT_PATH}/Release
-  #                     ${EXECUTABLE_OUTPUT_PATH}/Debug
-  #                     ${EXECUTABLE_OUTPUT_PATH}/MinSizeRel
-  #                     ${EXECUTABLE_OUTPUT_PATH}/RelWithDebInfo
-  #              NO_DEFAULT_PATH )
 
-
-  IF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" MATCHES "^2\\.4$")
-      ADD_CUSTOM_COMMAND(
-          OUTPUT ${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimVersion.h
-          COMMAND ${OTB_BINARY_DIR}/bin/version-config
-          ARGS "${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimVersion.h" "${OSSIM_VERSION}"
-          DEPENDS version-config
-          COMMENT "Generating ossimVersion.h" )
-  ELSE("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" MATCHES "^2\\.4$")
-      ADD_CUSTOM_COMMAND(
+  ADD_CUSTOM_COMMAND(
           OUTPUT ${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimVersion.h
           COMMAND version-config
           ARGS "${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimVersion.h" "${OSSIM_VERSION}"
           DEPENDS version-config
           COMMENT "Generating ossimVersion.h" )
-  ENDIF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" MATCHES "^2\\.4$")
-
-
 
   SET_SOURCE_FILES_PROPERTIES(
       src/ossim/init/ossimInit.cpp PROPERTIES

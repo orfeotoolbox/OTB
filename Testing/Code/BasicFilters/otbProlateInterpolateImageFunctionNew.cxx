@@ -28,5 +28,7 @@ int otbProlateInterpolateImageFunctionNew(int argc, char * argv[])
   // Instantiating object
   ProlateInterpolatorType::Pointer prolate = ProlateInterpolatorType::New();
 
+  std::cout << prolate << std::endl;
+
   return EXIT_SUCCESS;
 }

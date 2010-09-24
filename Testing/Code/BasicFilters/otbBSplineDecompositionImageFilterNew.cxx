@@ -28,5 +28,6 @@ int otbBSplineDecompositionImageFilterNew(int argc, char * argv[])
   // Instantiating object
   BSplineDecompositionImageFilterType::Pointer filter = BSplineDecompositionImageFilterType::New();
 
+  std::cout << filter << std::endl;
   return EXIT_SUCCESS;
 }

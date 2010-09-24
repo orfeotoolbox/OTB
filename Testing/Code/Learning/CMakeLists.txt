@@ -209,7 +209,7 @@ ADD_TEST(leTvPeriodicSOM ${LEARNING_TESTS2}
         --compare-image ${EPSILON}
 	${BASELINE}/lePeriodicSOMPoupeesSubOutputMap1.hdr
 	${TEMP}/lePeriodicSOMPoupeesSubOutputMap1.hdr
-	otbSOM
+	otbPeriodicSOMTest
 	${INPUTDATA}/poupees_sub.png
 	${TEMP}/lePeriodicSOMPoupeesSubOutputMap1.hdr
 	32 32 10 10 5 1.0 0.1 0)
@@ -234,11 +234,30 @@ ADD_TEST(leTvSOMActivationBuilder ${LEARNING_TESTS2}
 ADD_TEST(leTuSOMbasedImageFilterNew ${LEARNING_TESTS2}
          otbSOMbasedImageFilterNew )
 
+ADD_TEST(leTvSOMbasedImageFilter ${LEARNING_TESTS2}
+        --compare-image ${NOTOL}
+	${BASELINE}/leSOMbasedImageFilterOuptut.hdr
+	${TEMP}/leSOMbasedImageFilterOuptut.hdr
+	otbSOMbasedImageFilterTest
+	${INPUTDATA}/poupees_sub.png
+	${BASELINE}/leSOMPoupeesSubOutputMap1.hdr
+	${TEMP}/leSOMbasedImageFilterOuptut.hdr
+	)
+
 
 # ------             otb::SOMWithMissingValue -----------------------------------
 
 ADD_TEST(leTuSOMWithMissingValueNew ${LEARNING_TESTS2}
          otbSOMWithMissingValueNew )
+
+ADD_TEST(leTvSOMWithMissingValue ${LEARNING_TESTS2}
+        --compare-image ${EPSILON}
+	${BASELINE}/leSOMWithMissingValue.hdr
+	${TEMP}/leSOMWithMissingValue.hdr
+	otbSOMWithMissingValueTest
+	${INPUTDATA}/poupees_sub.png
+	${TEMP}/leSOMWithMissingValue.hdr
+	32 32 10 10 5 1.0 0.1 0)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbLearningTESTS3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -316,6 +335,17 @@ ADD_TEST(leTvSVMImageClassificationFilter ${LEARNING_TESTS3}
 
 ADD_TEST(leTuSVMImageClassificationWithRuleFilterNew ${LEARNING_TESTS3}
           otbSVMImageClassificationWithRuleFilterNew) 
+
+ADD_TEST(leTvSVMImageClassificationWithRuleFilter ${LEARNING_TESTS3}
+	--compare-image ${NOTOL}
+	${BASELINE}/leSVMImageClassificationWithRuleFilterOutput.tif
+	${TEMP}/leSVMImageClassificationWithRuleFilterOutput.tif
+	otbSVMImageClassificationWithRuleFilter
+	${INPUTDATA}/ROI_QB_MUL_4.tif
+	${INPUTDATA}/svm_model_image
+	${TEMP}/leSVMImageClassificationWithRuleFilterOutput.tif)
+
+
 
 ADD_TEST(leTvSVMModelGenericKernelsTest ${LEARNING_TESTS3}
     --compare-n-ascii ${NOTOL} 16
@@ -545,7 +575,9 @@ otbPeriodicSOM.cxx
 otbSOMActivationBuilderNew.cxx
 otbSOMActivationBuilder.cxx
 otbSOMbasedImageFilterNew.cxx
+otbSOMbasedImageFilter.cxx
 otbSOMWithMissingValueNew.cxx
+otbSOMWithMissingValue.cxx
 )
 SET(BasicLearning_SRCS3
 otbLearningTests3.cxx
@@ -559,6 +591,7 @@ otbSEMClassifierNew.cxx
 otbSVMImageClassificationFilterNew.cxx
 otbSVMImageClassificationFilter.cxx
 otbSVMImageClassificationWithRuleFilterNew.cxx
+otbSVMImageClassificationWithRuleFilter.cxx
 otbSVMModelGenericKernelsTest.cxx
 otbSVMModelCopyTest.cxx
 otbSVMModelCopyGenericKernelTest.cxx

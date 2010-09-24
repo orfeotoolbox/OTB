@@ -51,5 +51,7 @@ int otbUnaryFunctorNeighborhoodImageFilterNew(int argc, char * argv[])
   // Instantiating object
   UnaryFunctorNeighborhoodImageFilterType::Pointer object = UnaryFunctorNeighborhoodImageFilterType::New();
 
+  std::cout << object << std::endl;
+
   return EXIT_SUCCESS;
 }

@@ -28,7 +28,9 @@ int otbVectorDataSourceNew(int argc, char * argv[])
   typedef otb::VectorDataSource<InputVectorDataType> VectorDataSourceType;
 
   // Instantiating VectorDataSource object
-  VectorDataSourceType::Pointer VectorData = VectorDataSourceType::New();
+  VectorDataSourceType::Pointer vectorData = VectorDataSourceType::New();
+
+  std::cout << vectorData << std::endl;
 
   return EXIT_SUCCESS;
 }

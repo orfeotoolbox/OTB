@@ -150,9 +150,9 @@ private:
 
   /**MapFile  IndexTule build*/
   virtual void AddBBoxToIndexTile(OutputPointType lowerLeftCorner,
-				  OutputPointType lowerRightCorner,
-				  OutputPointType upperRightCorner,
-				  OutputPointType upperLeftCorner,
+          OutputPointType lowerRightCorner,
+          OutputPointType upperRightCorner,
+          OutputPointType upperLeftCorner,
                                   unsigned int x, unsigned int y);
 
   /** Method To Generate the mapFile*/

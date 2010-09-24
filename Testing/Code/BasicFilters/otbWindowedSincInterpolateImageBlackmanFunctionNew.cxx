@@ -28,5 +28,7 @@ int otbWindowedSincInterpolateImageBlackmanFunctionNew(int argc, char * argv[])
   // Instantiating objects
   InterpolatorType::Pointer interp    = InterpolatorType::New();
 
+  std::cout << interp << std::endl;
+
   return EXIT_SUCCESS;
 }

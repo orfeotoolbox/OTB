@@ -40,7 +40,9 @@ int otbNCCRegistrationFilterNew(int argc, char* argv[])
   RegistrationFilterType;
 
   // Instantiation
-  RegistrationFilterType::Pointer registrator = RegistrationFilterType::New();
+  RegistrationFilterType::Pointer filter = RegistrationFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

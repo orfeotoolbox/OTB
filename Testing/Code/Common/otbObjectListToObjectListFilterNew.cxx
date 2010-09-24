@@ -34,5 +34,7 @@ int otbObjectListToObjectListFilterNew(int argc, char * argv[])
 
   ObjectListFilterType::Pointer objectList = ObjectListFilterType::New();
 
+  std::cout << objectList << std::endl;
+
   return EXIT_SUCCESS;
 }

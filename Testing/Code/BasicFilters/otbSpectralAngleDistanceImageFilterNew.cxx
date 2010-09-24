@@ -29,7 +29,9 @@ int otbSpectralAngleDistanceImageFilterNew(int argc, char * argv[])
   typedef otb::SpectralAngleDistanceImageFilter<InputImageType, OutputImageType> DistanceFilterType;
 
   // Instantiating object
-  DistanceFilterType::Pointer object = DistanceFilterType::New();
+  DistanceFilterType::Pointer filter = DistanceFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

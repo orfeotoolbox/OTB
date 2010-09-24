@@ -79,8 +79,10 @@ int otbUnaryFunctorNeighborhoodWithOffsetImageFilterNew(int argc, char * argv[])
   UnaryFunctorNeighborhoodWithOffsetImageFilterType;
 
   // Instantiating object
-  UnaryFunctorNeighborhoodWithOffsetImageFilterType::Pointer object =
+  UnaryFunctorNeighborhoodWithOffsetImageFilterType::Pointer filter =
     UnaryFunctorNeighborhoodWithOffsetImageFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

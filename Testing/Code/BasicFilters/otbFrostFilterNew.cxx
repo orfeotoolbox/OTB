@@ -41,5 +41,7 @@ int otbFrostFilterNew(int argc, char * argv[])
 
   FilterType::Pointer frost = FilterType::New();
 
+  std::cout << frost << std::endl;
+
   return EXIT_SUCCESS;
 }

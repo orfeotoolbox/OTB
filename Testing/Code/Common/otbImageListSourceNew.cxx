@@ -30,5 +30,7 @@ int otbImageListSourceNew(int argc, char * argv[])
   // Instantiating ImageListSource object
   ImageListSourceType::Pointer imageList = ImageListSourceType::New();
 
+  std::cout << imageList << std::endl;
+
   return EXIT_SUCCESS;
 }

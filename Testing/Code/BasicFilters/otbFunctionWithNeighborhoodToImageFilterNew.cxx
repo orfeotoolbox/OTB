@@ -68,7 +68,9 @@ int otbFunctionWithNeighborhoodToImageFilterNew(int argc, char * argv[])
   typedef otb::FunctionWithNeighborhoodToImageFilter<ImageType, ImageType, FunctionType> FilterType;
 
   // Instantiating object
-  FilterType::Pointer object = FilterType::New();
+  FilterType::Pointer filter = FilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

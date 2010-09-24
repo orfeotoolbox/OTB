@@ -36,9 +36,11 @@ int otbGISTableToVectorDataFilterNew(int argc, char * argv[])
 
   typedef otb::GISTableToVectorDataFilter<GISTableType, VectorDataType> GISTableToVectorDataFilter;
 
-  GISTableToVectorDataFilter::Pointer MyFilter = GISTableToVectorDataFilter::New();
+  GISTableToVectorDataFilter::Pointer filter = GISTableToVectorDataFilter::New();
 
   //data->itkGetObjectMacro ( )
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }
