@@ -305,7 +305,8 @@ BCOInterpolateImageFunction<TInputImage, TCoordRep>
     value += lineRes[i+radius]*BCOCoefX(i+radius);
     }
   
-  norma = (vcl_log(radius)/vcl_log(2)) * (vcl_log(radius)/vcl_log(2));
+  norma = (vcl_log(radius)/vcl_log(2.0));
+  norma = norma * norma;
 
   return ( static_cast<OutputType>( value/norma ) );
 }
@@ -472,7 +473,8 @@ BCOInterpolateImageFunction< otb::VectorImage<TPixel,VImageDimension> , TCoordRe
       }
     }
   
-  norma = (vcl_log(radius)/vcl_log(2)) * (vcl_log(radius)/vcl_log(2));
+  norma = (vcl_log(radius)/vcl_log(2.0));
+  norma = norma * norma;
 
   for( unsigned int k = 0; k<componentNumber; k++)
     {
