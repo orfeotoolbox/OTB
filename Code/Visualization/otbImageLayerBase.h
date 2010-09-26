@@ -196,6 +196,12 @@ private:
 }; // end class
 
 // default impl, assuming scalar
+
+/**
+ * \class LayerValueGenerator
+ * \brief TODO
+ */
+
 template <class TInputPixelType, class TLayerValueType>
 class LayerValueGenerator
 {

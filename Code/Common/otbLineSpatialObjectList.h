@@ -30,6 +30,7 @@
 namespace otb
 {
 /** \class LineSpatialObjectList
+ * \brief TODO
  */
 
 class ITK_EXPORT LineSpatialObjectList :        public std::list<itk::LineSpatialObject<2>::Pointer>,

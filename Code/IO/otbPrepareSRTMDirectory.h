@@ -18,6 +18,8 @@
 #ifndef __otbPrepareSRTMDirectory_h
 #define __otbPrepareSRTMDirectory_h
 
+#include "vcl_deprecated_header.h"
+
 #include "itkObject.h"
 #include "itkObjectFactory.h"
 #include "base/ossimFilename.h"

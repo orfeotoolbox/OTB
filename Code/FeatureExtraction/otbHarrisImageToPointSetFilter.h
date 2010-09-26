@@ -26,7 +26,7 @@ namespace otb
 {
 
 /** \class HarrisImageToPointSetFilter
- *
+ * \brief TODO
  */
 
 template <class TInputImage,

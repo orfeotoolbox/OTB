@@ -25,7 +25,7 @@
 namespace otb
 {
 
-/** \class PointSetSource
+/** \class RandomPointSetSource
  *  \brief This class generate a random point set
  *
  * A point set with a specific number of points is generated as an output

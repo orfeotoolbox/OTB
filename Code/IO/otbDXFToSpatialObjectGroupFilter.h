@@ -32,7 +32,7 @@
 namespace otb
 {
 /** \class DXFToSpatialObjectGroupFilter
- *  \brief
+ *  \brief TODO
  *
  */
 template <class TSpatialObject>

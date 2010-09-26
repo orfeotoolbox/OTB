@@ -33,7 +33,7 @@
 namespace otb
 {
 
-/** \class StreamingStatisticsVectorImageFilter
+/** \class PersistentStatisticsVectorImageFilter
  * \brief Compute min. max, covariance of a large image using streaming
  *
  *  This filter persists its temporary data. It means that if you Update it n times on n different

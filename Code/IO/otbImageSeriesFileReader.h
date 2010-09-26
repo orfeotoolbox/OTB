@@ -34,7 +34,7 @@
 namespace otb {
 
 /**
-  * \class ImagerSeriesFileReader
+  * \class ImageSeriesFileReader
   * \brief Reader class dedicated to image series reading
   *
   * Actually, this class is mostly dedicated to read ENVI META FILE. Specializations

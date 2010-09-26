@@ -31,6 +31,10 @@
 
 namespace otb
 {
+/**
+ * \class TestHelper
+ * \brief Helper class to perform the baseline comparisons during the tests
+ */
 class /*ITK_EXPORT*/ TestHelper
 {
 public:

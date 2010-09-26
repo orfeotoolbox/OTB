@@ -34,7 +34,7 @@
 namespace otb
 {
 
-/** \class StreamingInnerProductVectorImageFilter
+/** \class PersistentInnerProductVectorImageFilter
  * \brief Compute the inner product of a large image using streaming
  *
  *  This filter persists its temporary data. It means that if you Update it n times on n different

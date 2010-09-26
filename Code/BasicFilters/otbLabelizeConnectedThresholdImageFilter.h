@@ -25,7 +25,7 @@ namespace otb
 {
 
 /** \class LabelizeConnectedThresholdImageFilter
- *  \brief
+ *  \brief TODO
  *
  */
 template <class TInputImage, class TOutputImage>

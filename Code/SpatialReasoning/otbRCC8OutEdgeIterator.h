@@ -23,7 +23,7 @@
 namespace otb
 {
 /**
- * \class OutEdgeIterator
+ * \class RCC8OutEdgeIterator
  * \brief Iterates on the graph out edges from a vertex.
  */
 template <class TGraph>
