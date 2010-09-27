@@ -32,7 +32,9 @@ int otbRadiometricAttributesLabelMapFilterNew(int argc, char * argv[])
   typedef otb::RadiometricAttributesLabelMapFilter<LabelMapType, VectorImageType> RadiometricLabelMapFilterType;
 
   // Instantiation
-  RadiometricLabelMapFilterType::Pointer radiometricLabelMapFilter = RadiometricLabelMapFilterType::New();
+  RadiometricLabelMapFilterType::Pointer filter = RadiometricLabelMapFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

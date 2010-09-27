@@ -28,7 +28,9 @@ int otbCloudDetectionFilterNew(int argc, char * argv[])
   typedef otb::CloudDetectionFilter<VectorImageType, ImageType> CloudDetectionFilterType;
 
   // Instantiating object
-  CloudDetectionFilterType::Pointer cloudDetection = CloudDetectionFilterType::New();
+  CloudDetectionFilterType::Pointer filter = CloudDetectionFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

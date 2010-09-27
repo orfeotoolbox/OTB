@@ -31,8 +31,9 @@ int otbRegionImageToRectangularPathListFilterNew(int argc, char * argv[])
   typedef otb::RegionImageToRectangularPathListFilter<InputImageType, PathType>
   RectangleListFilterType;
 
-  RectangleListFilterType::Pointer rectangleFilter =
-    RectangleListFilterType::New();
+  RectangleListFilterType::Pointer filter = RectangleListFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

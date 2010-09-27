@@ -27,7 +27,9 @@ int otbBreakAngularPathListFilterNew(int argc, char * argv[])
   typedef otb::BreakAngularPathListFilter<PathType> BreakAngularPathListFilterType;
 
   // Instantiating object
-  BreakAngularPathListFilterType::Pointer object = BreakAngularPathListFilterType::New();
+  BreakAngularPathListFilterType::Pointer filter = BreakAngularPathListFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

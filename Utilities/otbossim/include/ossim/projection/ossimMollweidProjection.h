@@ -8,14 +8,14 @@
 //
 // Calls Geotrans Mollweid projection code.  
 //*******************************************************************
-//  $Id: ossimMollweidProjection.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimMollweidProjection.h 17815 2010-08-03 13:23:14Z dburken $
 
 #ifndef ossimMollweidProojection_HEADER
 #define ossimMollweidProojection_HEADER
 
 #include <ossim/projection/ossimMapProjection.h>
 
-class ossimMollweidProjection : public ossimMapProjection
+class OSSIMDLLEXPORT ossimMollweidProjection : public ossimMapProjection
 {
 public:   
    ossimMollweidProjection(const ossimEllipsoid& ellipsoid = ossimEllipsoid(),
@@ -54,6 +54,8 @@ public:
 
    void setDefaults();
 
+   void setCentralMeridian(double centralMeridian);
+
    double getFalseEasting()const{return Moll_False_Easting;}
    double getFalseNorthing()const{return Moll_False_Northing;}
 
@@ -71,6 +73,9 @@ public:
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix=0);
    
+   //! Returns TRUE if principal parameters are within epsilon tolerance.
+   virtual bool operator==(const ossimProjection& projection) const;
+
 private:
 
    //__________________GEOTRANS______________________

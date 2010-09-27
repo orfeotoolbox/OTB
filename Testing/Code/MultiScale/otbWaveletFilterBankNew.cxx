@@ -35,5 +35,7 @@ int otbWaveletFilterBankNew(int argc, char * argv[])
   FilterType;
   FilterType::Pointer filter = FilterType::New();
 
+  std::cout << filter << std::endl;
+
   return EXIT_SUCCESS;
 }

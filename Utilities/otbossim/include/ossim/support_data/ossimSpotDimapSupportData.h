@@ -10,7 +10,7 @@
 // Contains declaration of class ossimSpotDimapSupportData.
 //
 //*****************************************************************************
-// $Id: ossimSpotDimapSupportData.h 16866 2010-03-16 03:04:13Z gpotts $
+// $Id: ossimSpotDimapSupportData.h 17814 2010-08-03 12:44:02Z dburken $
 #ifndef ossimSpotDimapSupportData_HEADER
 #define ossimSpotDimapSupportData_HEADER
 
@@ -220,6 +220,10 @@ private:
     * @return true on success, false if not found.
     */
    bool initFramePoints(ossimRefPtr<ossimXmlDocument> xmlDocument);
+
+   // Extrapolates the attitude for imaging times outside the defined range:
+   void extrapolateAttitude(const ossim_float64& time, ossimDpt3d& at) const;
+
 
    ossimString                 theSensorID;
    ossimSpotMetadataVersion    theMetadataVersion;

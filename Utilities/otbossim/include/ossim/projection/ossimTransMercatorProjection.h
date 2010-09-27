@@ -8,14 +8,14 @@
 //
 // Calls Geotrans Transverse Mercator  projection code.  
 //*******************************************************************
-//  $Id: ossimTransMercatorProjection.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimTransMercatorProjection.h 17815 2010-08-03 13:23:14Z dburken $
 
 #ifndef ossimTransMercatorProjection_HEADER
 #define ossimTransMercatorProjection_HEADER
 
 #include <ossim/projection/ossimMapProjection.h>
 
-class ossimTransMercatorProjection : public ossimMapProjection
+class OSSIMDLLEXPORT ossimTransMercatorProjection : public ossimMapProjection
 {
 public:
    ossimTransMercatorProjection(const ossimEllipsoid& ellipsoid = ossimEllipsoid(6378137, 6356752.3142),
@@ -84,6 +84,9 @@ public:
     */
    virtual std::ostream& print(std::ostream& out) const;
    
+   //! Returns TRUE if principal parameters are within epsilon tolerance.
+   virtual bool operator==(const ossimProjection& projection) const;
+
 protected:
 
    //_____________GEOTRANS_______________

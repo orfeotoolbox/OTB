@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimBumpShadeTileSource.cpp 17603 2010-06-21 11:39:37Z gpotts $
+// $Id: ossimBumpShadeTileSource.cpp 17932 2010-08-19 20:34:35Z dburken $
 
 #include <ossim/imaging/ossimBumpShadeTileSource.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
@@ -272,75 +272,6 @@ void ossimBumpShadeTileSource::computeColor(ossim_uint8& r,
       g = 1;
       b = 1;
    }
-}
-
-ossimIrect ossimBumpShadeTileSource::getBoundingRect(ossim_uint32 resLevel)const
-{
-   ossimImageSource* source = PTR_CAST(ossimImageSource, getInput(0));
-   if(source)
-   {
-      return source->getBoundingRect(resLevel);
-   }
-   ossimDrect rect;
-   rect.makeNan();
-   return rect;
-}
-
-
-void ossimBumpShadeTileSource::getDecimationFactor(ossim_uint32 resLevel,
-                                                   ossimDpt& result) const
-{
-   ossimImageSource* source = PTR_CAST(ossimImageSource, getInput(0));
-   if(source)
-   {
-      return source->getDecimationFactor(resLevel, result);
-   }
-   
-   result.makeNan();
-}
-
-void ossimBumpShadeTileSource::getDecimationFactors(vector<ossimDpt>& decimations) const
-{
-   ossimImageSource* source = PTR_CAST(ossimImageSource, getInput(0));
-   
-   if(source)
-   {
-      return source->getDecimationFactors(decimations);
-   }
-}
-
-ossim_uint32 ossimBumpShadeTileSource::getNumberOfDecimationLevels()const
-{
-   ossimImageSource* source = PTR_CAST(ossimImageSource, getInput(0));
-   
-   if(source)
-   {
-      return source->getNumberOfDecimationLevels();
-   }
-   
-   return 0;
-}
-
-ossim_uint32 ossimBumpShadeTileSource::getTileWidth()const
-{
-   ossimImageSource* source = PTR_CAST(ossimImageSource, getInput(0));
-   if(source)
-   {
-      return source->getTileWidth();
-   }
-   
-   return 128;
-}
-
-ossim_uint32 ossimBumpShadeTileSource::getTileHeight()const
-{
-   ossimImageSource* source = PTR_CAST(ossimImageSource, getInput(0));
-   if(source)
-   {
-      return source->getTileHeight();
-   }
-   
-   return 128;
 }
 
 void ossimBumpShadeTileSource::initialize()

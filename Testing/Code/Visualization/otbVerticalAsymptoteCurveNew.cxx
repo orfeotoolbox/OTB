@@ -24,5 +24,7 @@ int otbVerticalAsymptoteCurveNew(int argc, char * argv[])
 
   VerticalAsymptoteCurveType::Pointer vaCurve = VerticalAsymptoteCurveType::New();
 
+  std::cout << vaCurve << std::endl;
+
   return EXIT_SUCCESS;
 }

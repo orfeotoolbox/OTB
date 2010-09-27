@@ -6,13 +6,13 @@
 // AUTHOR: Garrett Potts
 //
 //*****************************************************************************
-//  $Id: ossimGeoPolygon.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
+//  $Id: ossimGeoPolygon.cpp 17815 2010-08-03 13:23:14Z dburken $
 
 #include <ostream>
 #include <sstream>
 #include <algorithm>
 #include <ossim/base/ossimGeoPolygon.h>
-#include <ossim/base/ossimDatumFactory.h>
+#include <ossim/base/ossimDatumFactoryRegistry.h>
 #include <ossim/base/ossimDatum.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimKeywordNames.h>
@@ -313,8 +313,8 @@ bool ossimGeoPolygon::loadState(const ossimKeywordlist& kwl,
                                 const char* prefix)
 {
    const char* number_vertices = kwl.find(prefix, NUMBER_VERTICES_KW);
-   const char* datumStr = kwl.find(prefix, ossimKeywordNames::DATUM_KW);
-   const ossimDatum* datum = ossimDatumFactory::instance()->create(datumStr);
+   ossimString datumStr = kwl.find(prefix, ossimKeywordNames::DATUM_KW);
+   const ossimDatum* datum = ossimDatumFactoryRegistry::instance()->create(datumStr);
    
    theVertexList.clear();
    int i = 0;

@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageChain.h 15798 2009-10-23 19:15:20Z gpotts $
+// $Id: ossimImageChain.h 17932 2010-08-19 20:34:35Z dburken $
 #ifndef ossimImageChain_HEADER
 #define ossimImageChain_HEADER
 #include <vector>
@@ -176,7 +176,7 @@ public:
                                       ossimVertexOrdering ordering=OSSIM_CLOCKWISE_ORDER,
                                       ossim_uint32 resLevel=0)const;
    
-   virtual ossimImageGeometry* getImageGeometry();
+   virtual ossimRefPtr<ossimImageGeometry> getImageGeometry();
 
    virtual void getDecimationFactor(ossim_uint32 resLevel,
                                     ossimDpt& result) const;

@@ -8,9 +8,8 @@
 //
 // Calls Geotrans Utm projection code.  
 //*******************************************************************
-//  $Id: ossimUtmProjection.cpp 17502 2010-06-02 11:15:43Z dburken $
+//  $Id: ossimUtmProjection.cpp 17815 2010-08-03 13:23:14Z dburken $
 
-#include <cctype>
 #include <cstdlib>
 #include <cmath>
 using namespace std;
@@ -341,21 +340,6 @@ ossim_int32 ossimUtmProjection::computeZone(const ossimGpt& ground)
 double ossimUtmProjection::computeZoneMeridian(ossim_int32 zone)
 {
    return (6.0 * zone - 183.0);;
-}
-
-bool ossimUtmProjection::operator==(const ossimProjection& projection) const
-{
-   if(ossimMapProjection::operator==(projection))
-   {
-      ossimUtmProjection* utm = PTR_CAST(ossimUtmProjection, &projection);
-      if(utm)
-      {
-         return ((theZone == utm->theZone)&&
-                 (theHemisphere == utm->theHemisphere));
-      }
-   }
-
-   return false;
 }
 
 bool ossimUtmProjection::loadState(const ossimKeywordlist& kwl,
@@ -910,4 +894,21 @@ double ossimUtmProjection::getFalseEasting() const
 double ossimUtmProjection::getFalseNorthing() const
 {
    return theTranMerc_False_Northing;
+}
+
+//*************************************************************************************************
+//! Returns TRUE if principal parameters are within epsilon tolerance.
+//*************************************************************************************************
+bool ossimUtmProjection::operator==(const ossimProjection& proj) const
+{
+   if (!ossimMapProjection::operator==(proj))
+      return false;
+
+   ossimUtmProjection* p = PTR_CAST(ossimUtmProjection, &proj);
+   if (!p) return false;
+
+   if (theZone != p->theZone) return false;
+   if (theHemisphere != p->theHemisphere) return false;
+
+   return true;
 }

@@ -10,7 +10,7 @@
 // Calls Geotrans Transverse Cylindrical Equal Area
 // projection code.  
 //*******************************************************************
-//  $Id: ossimTransCylEquAreaProjection.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimTransCylEquAreaProjection.cpp 17815 2010-08-03 13:23:14Z dburken $
 
 #include <math.h>
 #include <ossim/projection/ossimTransCylEquAreaProjection.h>
@@ -579,3 +579,19 @@ long ossimTransCylEquAreaProjection::Convert_Trans_Cyl_Eq_Area_To_Geodetic(doubl
   }
   return (Error_Code);
 } /* END OF Convert_Trans_Cyl_Eq_Area_To_Geodetic */
+
+//*************************************************************************************************
+//! Returns TRUE if principal parameters are within epsilon tolerance.
+//*************************************************************************************************
+bool ossimTransCylEquAreaProjection::operator==(const ossimProjection& proj) const
+{
+   if (!ossimMapProjection::operator==(proj))
+      return false;
+
+   ossimTransCylEquAreaProjection* p = PTR_CAST(ossimTransCylEquAreaProjection, &proj);
+   if (!p) return false;
+
+   if (!ossim::almostEqual(Tcea_Scale_Factor,p->Tcea_Scale_Factor)) return false;
+
+   return true;
+}

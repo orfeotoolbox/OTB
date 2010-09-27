@@ -9,7 +9,7 @@
 //
 // Calls Geotrans Mercator projection code.  
 //*******************************************************************
-//  $Id: ossimMercatorProjection.cpp 16437 2010-01-28 12:09:44Z gpotts $
+//  $Id: ossimMercatorProjection.cpp 17815 2010-08-03 13:23:14Z dburken $
 
 #include <math.h>
 #include <ossim/projection/ossimMercatorProjection.h>
@@ -474,3 +474,19 @@ long ossimMercatorProjection::Convert_Mercator_To_Geodetic(double Easting,
   }
   return (Error_Code);
 } /* END OF Convert_Mercator_To_Geodetic */
+
+//*************************************************************************************************
+//! Returns TRUE if principal parameters are within epsilon tolerance.
+//*************************************************************************************************
+bool ossimMercatorProjection::operator==(const ossimProjection& proj) const
+{
+   if (!ossimMapProjection::operator==(proj))
+      return false;
+
+   ossimMercatorProjection* p = PTR_CAST(ossimMercatorProjection, &proj);
+   if (!p) return false;
+
+   if (!ossim::almostEqual(Merc_Scale_Factor,p->Merc_Scale_Factor)) return false;
+
+   return true;
+}

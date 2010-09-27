@@ -34,5 +34,7 @@ int otbMorphologicalPyramidSegmenterNew(int argc, char * argv[])
   // Instantiation
   SegmenterType::Pointer segmenter = SegmenterType::New();
 
+  std::cout << segmenter << std::endl;
+
   return EXIT_SUCCESS;
 }

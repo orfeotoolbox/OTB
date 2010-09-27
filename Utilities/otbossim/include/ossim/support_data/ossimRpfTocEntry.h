@@ -9,7 +9,7 @@
 // Description: Rpf support class
 // 
 //********************************************************************
-// $Id: ossimRpfTocEntry.h 14241 2009-04-07 19:59:23Z dburken $
+// $Id: ossimRpfTocEntry.h 18118 2010-09-22 20:25:39Z dburken $
 #ifndef ossimRpfTocEntry_HEADER
 #define ossimRpfTocEntry_HEADER
 
@@ -19,9 +19,12 @@
 #include <ossim/support_data/ossimRpfBoundaryRectRecord.h>
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimErrorContext.h>
+#include <ossim/imaging/ossimImageGeometry.h>
 #include <ossim/support_data/ossimRpfFrameEntry.h>
 
-class ossimRpfTocEntry
+class ossimIrect;
+
+class OSSIM_DLL ossimRpfTocEntry
 {
 public:
    friend std::ostream& operator <<(std::ostream& out,
@@ -49,7 +52,8 @@ public:
                  long col,
                  ossimRpfFrameEntry& result)const;
 
-   ossimString getProductType()const{return theBoundaryInformation.getProductType();}
+   ossimString getProductType() const;
+   
    /*!
     * returns how many subimges or frames exist in the horizontal
     * direction.
@@ -62,17 +66,38 @@ public:
     */
    ossim_uint32 getNumberOfFramesVertical()const;
 
+   /** @return The number of lines (frames vertical * 1536). */
+   ossim_uint32 getNumberOfLines() const;
+
+   /** @return The number of samples (frames horizontal * 1536). */
+   ossim_uint32 getNumberOfSamples() const;
+
+   /** @return Number of bands. */
+   ossim_uint32 getNumberOfBands() const;
    
-   const ossimRpfBoundaryRectRecord& getBoundaryInformation()const
-   {
-      return theBoundaryInformation;
-   }
+   /**
+    * @brief Get the bounding rect of entry.
+    * @param rect Gets initialized with rect.
+    */
+   void getBoundingRect(ossimIrect& rect) const;
+   
+   const ossimRpfBoundaryRectRecord& getBoundaryInformation()const;
 
    /*!
     * If there is an entry and all the files don't exist we will return
     * true.
     */
    bool isEmpty()const;
+
+   /**
+    * Returns the image geometry object associated with this tile source or
+    * NULL if non defined.  The geometry contains full-to-local image
+    * transform as well as projection (image-to-world).
+    */
+   ossimRefPtr<ossimImageGeometry> getImageGeometry() const;
+
+   /** @brief Get the scale in decimal degrees per pixel. */
+   void getScale(ossimDpt& scale) const;
    
 private:
    void allocateFrameEntryArray();

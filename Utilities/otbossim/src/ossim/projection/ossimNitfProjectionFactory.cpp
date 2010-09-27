@@ -9,7 +9,7 @@
 //
 // Contains class definition for ossimNitfProjectionFactory.
 //
-// $Id: ossimNitfProjectionFactory.cpp 17206 2010-04-25 23:20:40Z dburken $
+// $Id: ossimNitfProjectionFactory.cpp 17932 2010-08-19 20:34:35Z dburken $
 //----------------------------------------------------------------------------
 
 #include <fstream>
@@ -208,10 +208,7 @@ ossimProjection* ossimNitfProjectionFactory::createProjectionFromHeaders(ossimNi
    }
    else if(coordinateSystem == "N" || coordinateSystem == "S")
    {
-      if((coordinateSystem == 'N') && (version.toDouble() > 2.0))
-      {
-         result = makeUtm(imageHeader, coordinateSystem);
-      }
+      result = makeUtm(imageHeader, coordinateSystem);
    }
    return result;
 }

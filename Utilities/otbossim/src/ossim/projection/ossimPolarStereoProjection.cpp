@@ -9,7 +9,7 @@
 //
 // Calls Geotrans Polar Stereographic  projection code.  
 //*******************************************************************
-//  $Id: ossimPolarStereoProjection.cpp 17206 2010-04-25 23:20:40Z dburken $
+//  $Id: ossimPolarStereoProjection.cpp 17815 2010-08-03 13:23:14Z dburken $
 
 #include <math.h>
 #include <ossim/projection/ossimPolarStereoProjection.h>
@@ -530,6 +530,5 @@ long ossimPolarStereoProjection::Convert_Polar_Stereographic_To_Geodetic (double
   }
   return (Error_Code);
 } /* END OF Convert_Polar_Stereographic_To_Geodetic */
-
 
 

@@ -9,7 +9,7 @@
 // LATITUDE AND LONGITUDE VALUES ARE IN DEGREES.
 //
 //*******************************************************************
-//  $Id: ossimGpt.cpp 16101 2009-12-16 08:36:28Z okramer $
+//  $Id: ossimGpt.cpp 17815 2010-08-03 13:23:14Z dburken $
 
 #include <iostream>
 #include <sstream>
@@ -19,6 +19,8 @@
 #include <ossim/base/ossimEcefVector.h>
 #include <ossim/base/ossimDms.h>
 #include <ossim/base/ossimDatum.h>
+#include <ossim/base/ossimDatumFactory.h>
+#include <ossim/base/ossimDatumFactoryRegistry.h>
 #include <ossim/base/ossimGeoidManager.h>
 #include <ossim/base/ossimEllipsoid.h>
 #include <ossim/base/ossimGeocent.h>
@@ -239,7 +241,7 @@ std::istream& operator>>(std::istream& is, ossimGpt &pt)
    os = buf;
    os.trim(); // Just in case datum factory doesn't handle spaces.
    
-   const ossimDatum* datum = ossimDatumFactory::instance()->create(os);
+   const ossimDatum* datum = ossimDatumFactoryRegistry::instance()->create(os);
    if (datum)
    {
       pt.datum(datum);

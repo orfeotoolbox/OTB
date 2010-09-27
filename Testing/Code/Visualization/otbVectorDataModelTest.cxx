@@ -77,7 +77,12 @@ int otbVectorDataModelTest(int argc, char * argv[])
   typedef otb::VectorDataActionHandler
   <otb::VectorDataModel, ViewType>                      VectorDataActionHandlerType;
   // VectorData
-  typedef otb::VectorDataModel::VectorDataType      VectorDataType;
+  typedef otb::VectorDataModel::VectorDataType VectorDataType;
+  typedef otb::VectorDataModel::PointType      PointType;
+  typedef otb::VectorDataModel::LineType       LineType;
+  typedef otb::VectorDataModel::PolygonType    PolygonType;
+  typedef otb::VectorDataModel::VertexType     VertexType;
+
   typedef otb::VectorDataFileReader<VectorDataType> VectorDataFileReaderType;
   typedef otb::VectorDataProjectionFilter<VectorDataType,
       VectorDataType>
@@ -159,6 +164,77 @@ int otbVectorDataModelTest(int argc, char * argv[])
   vdHandler->SetModel(vdModel);
   controller->AddActionHandler(vdHandler);
 
+  // Exercise the model
+
+  // polygons are recorded with a 0.5 shift...
+  PointType newOrigin;
+  newOrigin[0] = reader->GetOutput()->GetOrigin()[0] + 0.5;
+  newOrigin[1] = reader->GetOutput()->GetOrigin()[1] + 0.5;
+  vdModel->SetOrigin(newOrigin);
+  vdModel->SetSpacing(reader->GetOutput()->GetSpacing());
+
+  std::cout << "Origin : "          << vdModel->GetOrigin() << std::endl;
+  std::cout << "Spacing : "         << vdModel->GetSpacing() << std::endl;
+  std::cout << "CurrentNodeType : " << vdModel->GetCurrentNodeType() << std::endl;
+
+  // Add a polygon
+  VertexType point;
+  point[0] = 2;
+  point[1] = 2;
+  vdModel->AddPointToGeometry(point);
+  point[0] = 30;
+  point[1] = 7;
+  vdModel->AddPointToGeometry(point);
+  point[0] = 40;
+  point[1] = 40;
+  vdModel->AddPointToGeometry(point);
+  point[0] = 20;
+  point[1] = 30;
+  vdModel->AddPointToGeometry(point);
+
+  // Add another polygon
+  vdModel->EndGeometry();
+  point[0] = 100;
+  point[1] = 100;
+  vdModel->AddPointToGeometry(point);
+  point[0] = 130;
+  point[1] = 107;
+  vdModel->AddPointToGeometry(point);
+  point[0] = 140;
+  point[1] = 140;
+  vdModel->AddPointToGeometry(point);
+  point[0] = 120;
+  point[1] = 130;
+  vdModel->AddPointToGeometry(point);
+
+  // Add a point
+  vdModel->EndGeometry();
+  vdModel->SetCurrentNodeType(otb::FEATURE_POINT);
+  point[0] = 50;
+  point[1] = 50;
+  vdModel->AddPointToGeometry(point);
+
+  // Add another point withour ending geometry
+  vdModel->EndGeometry();
+  point[0] = 10;
+  point[1] = 100;
+  vdModel->AddPointToGeometry(point);
+
+  // Add a line (without ending previous geometry)
+  vdModel->SetCurrentNodeType(otb::FEATURE_LINE);
+  point[0] = 100;
+  point[1] = 10;
+  vdModel->AddPointToGeometry(point);
+  point[0] = 90;
+  point[1] = 20;
+  vdModel->AddPointToGeometry(point);
+  point[0] = 110;
+  point[1] = 30;
+  vdModel->AddPointToGeometry(point);
+  vdModel->EndGeometry();
+
+  vdModel->DeleteGeometry();
+  vdModel->SetSelectedGeometry(1);
   vdModel->DeleteGeometry();
 
   // Build a pixel description view

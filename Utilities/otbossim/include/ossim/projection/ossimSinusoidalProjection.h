@@ -8,14 +8,14 @@
 //
 // Calls Geotrans Sinusoidal projection code.  
 //*******************************************************************
-//  $Id: ossimSinusoidalProjection.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimSinusoidalProjection.h 17815 2010-08-03 13:23:14Z dburken $
 
 #ifndef ossimSinusoidalProjection_HEADER
 #define ossimSinusoidalProjection_HEADER
 
 #include <ossim/projection/ossimMapProjection.h>
 
-class ossimSinusoidalProjection : public ossimMapProjection
+class OSSIMDLLEXPORT ossimSinusoidalProjection : public ossimMapProjection
 {
 public:
    ossimSinusoidalProjection(const ossimEllipsoid& ellipsoid = ossimEllipsoid(),
@@ -56,6 +56,8 @@ public:
 
    void setDefaults();
 
+   void setCentralMeridian(double centralMeridian);
+
    double getFalseEasting()const{return  Sinu_False_Easting;}
    double getFalseNorthing()const{return Sinu_False_Northing;}
 
@@ -73,6 +75,9 @@ public:
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix=0);
    
+   //! Returns TRUE if principal parameters are within epsilon tolerance.
+   virtual bool operator==(const ossimProjection& projection) const;
+
 private:
 
    //_______________________GEOTRANS________________________

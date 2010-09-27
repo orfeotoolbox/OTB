@@ -37,7 +37,9 @@ int otbLineRatioDetectorNew(int argc, char* argv[])
 
   typedef otb::LineRatioDetectorImageFilter<InputImageType, OutputImageType> FilterType;
 
-  FilterType::Pointer FilterLineRatio = FilterType::New();
+  FilterType::Pointer filter = FilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

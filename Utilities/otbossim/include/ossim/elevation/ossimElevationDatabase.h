@@ -58,7 +58,7 @@ public:
    {
       return m_connectionString;
    }
-   virtual void getOpenCellList(std::vector<ossimFilename>& list) const
+   virtual void getOpenCellList(std::vector<ossimFilename>& /* list */) const
    {
    }
 
@@ -173,13 +173,13 @@ public:
      m_memoryMapCellsFlag = flag;
   }
   virtual void getOpenCellList(std::vector<ossimFilename>& list) const;
-  virtual ossim_uint64 createId(const ossimGpt& pt)const
+  virtual ossim_uint64 createId(const ossimGpt& /* pt */)const
   {
     return 0;
   }
   virtual ossimRefPtr<ossimElevCellHandler> getOrCreateCellHandler(const ossimGpt& gpt);
  protected:
-  virtual ossimRefPtr<ossimElevCellHandler> createCell(const ossimGpt& gpt)
+  virtual ossimRefPtr<ossimElevCellHandler> createCell(const ossimGpt& /* gpt */)
   {
     return 0;
   }

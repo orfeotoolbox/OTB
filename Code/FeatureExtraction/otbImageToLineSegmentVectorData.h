@@ -31,7 +31,7 @@
 namespace otb
 {
 
-/** \class PersistentLineDetector
+/** \class PersistentLineSegmentDetector
  *  \brief Perform line segment computation in a persistent way.
  *
  * This filter allows find and store the segment from a mono channel image.

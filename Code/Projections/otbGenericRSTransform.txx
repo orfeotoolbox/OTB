@@ -346,15 +346,26 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
   return inverseTransform;
 }
 
-//TODO
-// template<class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
-// void
-// GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
-// ::PrintSelf() const
-// {
-//
-//   std::cout << m_Transform->print(std::cout);
-// }
+template<class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+void
+GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
+::PrintSelf(std::ostream& os, itk::Indent indent) const
+{
+  Superclass::PrintSelf(os, indent);
+  os << indent << "Up to date: " << m_TransformUpToDate << std::endl;
+  if (m_TransformUpToDate)
+    {
+    os << indent << "Input transform: "<< std::endl;
+    m_InputTransform->Print(os, indent.GetNextIndent());
+    os << indent << "Output transform: " << std::endl;
+    m_OutputTransform->Print(os, indent.GetNextIndent());
+    }
+  else
+    {
+    os << indent << "Input transform: NULL" << std::endl;
+    os << indent << "Output transform: NULL" << std::endl;
+    }
+}
 
 } // namespace otb
 

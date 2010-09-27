@@ -9,7 +9,7 @@
 // Contains class declaration for TiffWriter.
 //
 //*******************************************************************
-//  $Id: ossimTiffWriter.h 17355 2010-05-13 18:55:17Z gpotts $
+//  $Id: ossimTiffWriter.h 18047 2010-09-06 14:25:27Z dburken $
 #ifndef ossimTiffWriter_HEADER
 #define ossimTiffWriter_HEADER
 
@@ -144,6 +144,9 @@ public:
 
    bool hasImageType(const ossimString& imageType) const;
    
+   //! Will take an ossimIMageData tile and write it to disk as a general raster file.
+   static void dumpTileToFile(ossimRefPtr<ossimImageData> t,  const ossimFilename& f);
+
 protected:
    virtual ~ossimTiffWriter();
    
@@ -208,6 +211,8 @@ protected:
    UnitType getUnitType(ossim_int32 pcsCode,
                         const ossimString& projName) const;
    UnitType getPcsUnitType(ossim_int32 pcsCode) const;
+
+   void checkColorLut();
    
    void*                   theTif;
    ossimString             theCompressionType;

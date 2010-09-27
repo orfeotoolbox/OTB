@@ -29,5 +29,7 @@ int otbSpatialObjectDXFReaderNew(int argc, char * argv[])
   // Instantiating object
   SpatialObjectDXFReaderType::Pointer object = SpatialObjectDXFReaderType::New();
 
+  std::cout << object << std::endl;
+
   return EXIT_SUCCESS;
 }

@@ -371,12 +371,24 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
   outputSize[0] = static_cast<unsigned int>(vcl_floor(vcl_abs(sizeCartoX / this->GetOutputSpacing()[0])));
   outputSize[1] = static_cast<unsigned int>(vcl_floor(vcl_abs(sizeCartoY / this->GetOutputSpacing()[1])));
   this->SetOutputSize(outputSize);
-  
-  std::cout <<"Output Image params :"
-            << " \n OutputSize "   << outputSize 
-            << " \n OutputOrigin " << origin 
-            << " \n OutputSpacing "<< this->GetOutputSpacing()
-            << std::endl;
+}
+
+
+template <class TInputImage, class TOutputImage>
+void
+GenericRSResampleImageFilter<TInputImage, TOutputImage>
+::PrintSelf(std::ostream& os, itk::Indent indent) const
+{
+  Superclass::PrintSelf(os, indent);
+  os << indent << "EstimateInputRpcModel:"  << (m_EstimateInputRpcModel ? "On" : "Off") << std::endl;
+  os << indent << "EstimateOutputRpcModel:" << (m_EstimateOutputRpcModel ? "On" : "Off") << std::endl;
+  os << indent << "RpcEstimationUpdated:"   << (m_RpcEstimationUpdated ? "True" : "False") << std::endl;
+  os << indent << "OutputOrigin: " << m_Resampler->GetOutputOrigin() << std::endl;
+  os << indent << "OutputSpacing: " << m_Resampler->GetOutputSpacing() << std::endl;
+  os << indent << "OutputStartIndex: " << m_Resampler->GetOutputStartIndex() << std::endl;
+  os << indent << "OutputSize: " << m_Resampler->GetOutputSize() << std::endl;
+  os << indent << "GenericRSTransform: " << std::endl;
+  m_Transform->Print(os, indent.GetNextIndent());
 }
 
 }

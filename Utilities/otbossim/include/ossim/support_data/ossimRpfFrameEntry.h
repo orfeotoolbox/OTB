@@ -9,7 +9,7 @@
 // Description: Rpf support class
 // 
 //********************************************************************
-// $Id: ossimRpfFrameEntry.h 14241 2009-04-07 19:59:23Z dburken $
+// $Id: ossimRpfFrameEntry.h 18052 2010-09-06 14:33:08Z dburken $
 #ifndef ossimRpfFrameEntry_HEADER
 #define ossimRpfFrameEntry_HEADER
 
@@ -23,8 +23,13 @@ public:
                                    const ossimRpfFrameEntry& data);
    ossimRpfFrameEntry(const ossimFilename& rootDirectory=ossimFilename(""),
                       const ossimFilename& pathToFrameFileFromRoot=ossimFilename(""));
-   ossimRpfFrameEntry(const ossimRpfFrameEntry& rhs);
 
+   /** @brief copy constructor */
+   ossimRpfFrameEntry(const ossimRpfFrameEntry& obj);
+
+   /** @brief operator= */
+   const ossimRpfFrameEntry& operator=(const ossimRpfFrameEntry& rhs);
+   
    /**
     * @brief print method that outputs a key/value type format adding prefix
     * to keys.
@@ -37,26 +42,20 @@ public:
    std::ostream& print(std::ostream& out,
                        const std::string& prefix=std::string()) const;  
 
-   bool exists()const{return theExists;}
+   bool exists() const;
    
    void setEntry(const ossimFilename& rootDirectory,
                  const ossimFilename& pathToFrameFileFromRoot);
    
-   const ossimFilename& getFullPath()const{return theFullValidPath;}
-   const ossimString&   getRootDirectory()const{return theRootDirectory;}
-   const ossimString    getPathToFrameFileFromRoot()const
-      {
-         return thePathToFrameFileFromRoot;
-      }
+   const ossimFilename& getFullPath() const;
+   const ossimString&   getRootDirectory() const;
+   const ossimString    getPathToFrameFileFromRoot() const;
    
 private:
-   bool theExists;
-
-   ossimFilename theRootDirectory;
-
-   ossimFilename thePathToFrameFileFromRoot;
-
-   ossimFilename theFullValidPath;
+   bool          m_exists;
+   ossimFilename m_rootDirectory;
+   ossimFilename m_pathToFrameFileFromRoot;
+   ossimFilename m_fullValidPath;
 };
 
 #endif

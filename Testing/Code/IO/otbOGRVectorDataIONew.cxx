@@ -25,5 +25,7 @@ int otbOGRVectorDataIONew(int argc, char * argv[])
   typedef otb::OGRVectorDataIO<VectorDataType> OGRVectorDataIOType;
   OGRVectorDataIOType::Pointer object = OGRVectorDataIOType::New();
 
+  std::cout << object << std::endl;
+
   return EXIT_SUCCESS;
 }

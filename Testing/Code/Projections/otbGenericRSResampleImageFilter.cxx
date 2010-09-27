@@ -48,6 +48,7 @@ int otbGenericRSResampleImageFilterNew(int argc, char* argv[])
 {
   // SmartPointer instanciation
   ImageResamplerType::Pointer resampler = ImageResamplerType::New();
+  std::cout << resampler << std::endl;
   return EXIT_SUCCESS;
 }
 
@@ -120,6 +121,7 @@ int otbGenericRSResampleImageFilter(int argc, char* argv[])
     resampler->SetOutputRpcGridSize(20);
     resampler->EstimateOutputRpcModelOn();
     }
+
     
   // Write the resampled image
   WriterType::Pointer writer= WriterType::New();
@@ -128,6 +130,8 @@ int otbGenericRSResampleImageFilter(int argc, char* argv[])
   writer->SetInput(resampler->GetOutput());
   writer->Update();
   
+  std::cout << resampler << std::endl;
+
   return EXIT_SUCCESS;
 }
 
@@ -192,8 +196,8 @@ int otbGenericRSResampleImageFilterFromMap(int argc, char* argv[])
     {
     resampler->SetInputRpcGridSize(20);
     resampler->EstimateInputRpcModelOn();
-    }   
-    
+    }
+
   // Write the resampled image
   typedef otb::StreamingImageFileWriter<ImageType>    WriterType;
   WriterType::Pointer writer= WriterType::New();
@@ -201,6 +205,8 @@ int otbGenericRSResampleImageFilterFromMap(int argc, char* argv[])
   writer->SetFileName(outfname);
   writer->SetInput(resampler->GetOutput());
   writer->Update();
+
+  std::cout << resampler << std::endl;
 
   return EXIT_SUCCESS;
 }

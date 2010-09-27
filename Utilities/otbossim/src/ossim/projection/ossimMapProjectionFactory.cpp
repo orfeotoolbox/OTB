@@ -12,7 +12,7 @@
 //              Initial coding.
 //<
 //*****************************************************************************
-//  $Id: ossimMapProjectionFactory.cpp 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimMapProjectionFactory.cpp 17815 2010-08-03 13:23:14Z dburken $
 
 #include <ossim/projection/ossimMapProjectionFactory.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
@@ -110,7 +110,7 @@ ossimMapProjectionFactory::createProjection(const ossimFilename& filename,
 }
 
 //*****************************************************************************
-//  METHOD: ossimSensorModelFactory::create(kwl, prefix)
+//  METHOD: ossimMapProjectionFactory::create(kwl, prefix)
 //  
 //*****************************************************************************
 ossimProjection* ossimMapProjectionFactory::createProjection(const ossimKeywordlist &keywordList,
@@ -174,7 +174,7 @@ ossimProjection* ossimMapProjectionFactory::createProjection(const ossimKeywordl
 }
 
 //*****************************************************************************
-//  METHOD: ossimSensorModelFactory::create(projection_name)
+//  METHOD: ossimMapProjectionFactory::create(projection_name)
 //*****************************************************************************
 ossimProjection* ossimMapProjectionFactory::createProjection(const ossimString &name) const
 {
@@ -236,9 +236,7 @@ ossimProjection* ossimMapProjectionFactory::createProjection(const ossimString &
    if(name == STATIC_TYPE_NAME(ossimVanDerGrintenProjection))
       return new ossimVanDerGrintenProjection;
    if(name == STATIC_TYPE_NAME(ossimSpaceObliqueMercatorProjection))
-   {
       return new ossimSpaceObliqueMercatorProjection;
-   }
    return NULL;
 }
 

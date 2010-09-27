@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimScaleFilter.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimScaleFilter.h 17932 2010-08-19 20:34:35Z dburken $
 #ifndef ossimScaleFilter_HEADER
 #define ossimScaleFilter_HEADER
 #include <vector>
@@ -50,7 +50,7 @@ public:
    
    virtual ossimIrect getBoundingRect(ossim_uint32 resLevel=0)const;
 
-   virtual ossimImageGeometry* getImageGeometry();
+   virtual ossimRefPtr<ossimImageGeometry> getImageGeometry();
    virtual void initialize();
    virtual void getDecimationFactor(ossim_uint32 resLevel,
                                     ossimDpt& result)const

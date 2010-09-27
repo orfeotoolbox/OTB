@@ -7,7 +7,7 @@
 // Description: Base class for all projections (2D-to-3D transform)
 //
 //*******************************************************************
-//  $Id: ossimProjection.h 16104 2009-12-17 18:09:59Z gpotts $
+//  $Id: ossimProjection.h 17815 2010-08-03 13:23:14Z dburken $
 #ifndef ossimProjection_HEADER
 #define ossimProjection_HEADER
 #include <iostream>
@@ -91,9 +91,10 @@ public:
 
    /*!
     * OPERATOR: ==
-    * Compares this instance with arg projection. NOT IMPLEMENTED.
+    * Compares this instance with arg projection.
     */
    virtual bool operator==(const ossimProjection& projection) const=0;
+   virtual bool operator!=(const ossimProjection& projection) const {return !(*this == projection);}
 
    /*!
     * ACCESS METHODS: 

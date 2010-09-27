@@ -10,7 +10,7 @@
 // Description:
 //
 //*******************************************************************
-//  $Id: ossimQuickbirdNitfTileSource.h 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimQuickbirdNitfTileSource.h 17932 2010-08-19 20:34:35Z dburken $
 #ifndef ossimQuickbirdNitfTileSource_HEADER
 #define ossimQuickbirdNitfTileSource_HEADER
 #include <ossim/imaging/ossimNitfTileSource.h>
@@ -21,7 +21,7 @@ class ossimQuickbirdNitfTileSource : public ossimNitfTileSource
 public:
    virtual bool open();
 
-   virtual ossimImageGeometry* getImageGeometry();
+   virtual ossimRefPtr<ossimImageGeometry> getImageGeometry();
    
 protected:
    ossimRefPtr<ossim2dTo2dTransform> m_transform;

@@ -29,8 +29,9 @@ int otbParallelLinePathListFilterNew(int argc, char * argv[])
   typedef otb::ParallelLinePathListFilter<PathType> ParallelLinePathType;
 
   // Instantiating object
-  ParallelLinePathType::Pointer parallelLinePathListFilter =
-    ParallelLinePathType::New();
+  ParallelLinePathType::Pointer filter = ParallelLinePathType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

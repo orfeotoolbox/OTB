@@ -43,5 +43,7 @@ int otbSVMImageModelEstimatorNew(int argc, char* argv[])
 
   EstimatorType::Pointer svmModel = EstimatorType::New();
 
+  std::cout << svmModel << std::endl;
+
   return EXIT_SUCCESS;
 }

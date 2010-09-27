@@ -7,7 +7,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimImageRenderer.cpp 17716 2010-07-09 20:15:16Z dburken $
+//  $Id: ossimImageRenderer.cpp 18022 2010-09-01 12:11:29Z gpotts $
 
 #include <iostream>
 using namespace std;
@@ -39,7 +39,7 @@ using namespace std;
 #include <ossim/projection/ossimEquDistCylProjection.h>
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimImageRenderer.cpp 17716 2010-07-09 20:15:16Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimImageRenderer.cpp 18022 2010-09-01 12:11:29Z gpotts $";
 #endif
 
 static ossimTrace traceDebug("ossimImageRenderer:debug");
@@ -1164,8 +1164,6 @@ void ossimImageRenderer::initialize()
    if (theInputConnection)
       m_BoundingRect = theInputConnection->getBoundingRect();
 
-   if (m_ImageViewTransform.valid() && !m_ImageViewTransform->isValid())
-      checkIVT();
 
    if (m_Resampler)
    {
@@ -1175,6 +1173,9 @@ void ossimImageRenderer::initialize()
    m_InputDecimationFactors.clear();
 
    deallocate();
+   // we will only do this if we are enabled for this could be expensive
+   if (m_ImageViewTransform.valid() && !m_ImageViewTransform->isValid()&&isSourceEnabled())
+      checkIVT();
 //    if (theInputConnection && m_Tile.valid())
 //    {
 //       if ( theInputConnection->getNumberOfOutputBands() !=
@@ -1368,7 +1369,7 @@ void ossimImageRenderer::getValidImageVertices(vector<ossimIpt>& validVertices,
 // Returns the geometry associated with the image being served out of the renderer. This corresponds
 // To the view geometry defined in theIVT.
 //**************************************************************************************************
-ossimImageGeometry* ossimImageRenderer::getImageGeometry()
+ossimRefPtr<ossimImageGeometry> ossimImageRenderer::getImageGeometry()
 {
    // Make sure the IVT was properly initialized
    if (m_ImageViewTransform.valid() && !m_ImageViewTransform->isValid())
@@ -1382,7 +1383,7 @@ ossimImageGeometry* ossimImageRenderer::getImageGeometry()
       return ivpt->getViewGeometry();
    }
 
-   return 0;
+   return ossimRefPtr<ossimImageGeometry>();
 }
 
 //**************************************************************************************************
@@ -1521,12 +1522,12 @@ void ossimImageRenderer::checkIVT()
       return; // nothing to do here yet.
 
    // Fetch the input image geometry from the IVPT to see if one needs to be established:
-   ossimImageGeometry* inputGeom = ivpt->getImageGeometry();
-   if (!inputGeom)
+   ossimRefPtr<ossimImageGeometry> inputGeom = ivpt->getImageGeometry();
+   if ( !inputGeom )
    {
       // Ask the input source for a geometry:
       inputGeom = inputSrc->getImageGeometry();
-      if (!inputGeom)
+      if ( !inputGeom )
       {
          if(traceDebug())
          {
@@ -1535,14 +1536,14 @@ void ossimImageRenderer::checkIVT()
          }
          return;
       }
-      ivpt->setImageGeometry(inputGeom);
+      ivpt->setImageGeometry( inputGeom.get() );
    }
 
    // Now check the output view geometry:
-   ossimImageGeometry* outputGeom = ivpt->getViewGeometry();
+   ossimRefPtr<ossimImageGeometry> outputGeom = ivpt->getViewGeometry();
    if (!outputGeom)
    {
-      ossimImageGeometry* myOutGeom = new ossimImageGeometry;
+      ossimRefPtr<ossimImageGeometry> myOutGeom = new ossimImageGeometry;
 
       //---
       // If the input geometry sports a map projection instead of a 3D
@@ -1577,7 +1578,7 @@ void ossimImageRenderer::checkIVT()
       }
       
       // Set up our IVT with the new output geometry:
-      ivpt->setViewGeometry(myOutGeom);
+      ivpt->setViewGeometry(myOutGeom.get());
    }
 }
 

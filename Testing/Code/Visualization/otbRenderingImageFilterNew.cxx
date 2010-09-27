@@ -29,5 +29,9 @@ int otbRenderingImageFilterNew(int argc, char * argv[])
 
   RenderingFilterType::Pointer       rendering = RenderingFilterType::New();
   VectorRenderingFilterType::Pointer vrendering = VectorRenderingFilterType::New();
+
+  std::cout << rendering << std::endl;
+  std::cout << vrendering << std::endl;
+
   return EXIT_SUCCESS;
 }

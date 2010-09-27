@@ -28,5 +28,7 @@ int otbImageLayerGeneratorNew(int argc, char * argv[])
 
   GeneratorType::Pointer generator = GeneratorType::New();
 
+  std::cout << generator << std::endl;
+
   return EXIT_SUCCESS;
 }

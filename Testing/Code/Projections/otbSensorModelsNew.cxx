@@ -32,11 +32,17 @@ int otbSensorModelsNew(int argc, char* argv[])
   typedef otb::SensorModelBase<double> SensorModelBaseType;
   SensorModelBaseType::Pointer lSensorModelBase = SensorModelBaseType::New();
 
+  std::cout << lSensorModelBase << std::endl;
+
   typedef otb::InverseSensorModel<double> InverseSensorModelType;
   InverseSensorModelType::Pointer lInverseSensorModel = InverseSensorModelType::New();
 
+  std::cout << lInverseSensorModel << std::endl;
+
   typedef otb::ForwardSensorModel<double> ForwardSensorModelType;
   ForwardSensorModelType::Pointer lForwardSensorModel = ForwardSensorModelType::New();
+
+  std::cout << lForwardSensorModel << std::endl;
 
   return EXIT_SUCCESS;
 }

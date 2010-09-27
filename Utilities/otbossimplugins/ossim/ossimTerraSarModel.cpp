@@ -9,8 +9,6 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <cmath>
-#include <cstdio>
 #include <iostream>
 #include <sstream>
 
@@ -33,8 +31,9 @@
 #include <otb/SensorParams.h>
 #include <otb/RefPoint.h>
 #include <otb/SarSensor.h>
-
-
+#include <ossim/base/ossimEnvironmentUtility.h>
+#include <ossim/support_data/ossimSupportFilesList.h>
+#include <cmath>
 
 // Keyword constants:
 static const char NUMBER_SRGR_COEFFICIENTS_KW[] = "sr_gr_coeffs_count";
@@ -52,9 +51,7 @@ static const char AZ_START_TIME[] = "azimuth_start_time";
 static const char AZ_STOP_TIME[] = "azimuth_stop_time";
 static const char RG_FIRST_TIME[] = "range_first_time";
 static const char RG_LAST_TIME[] = "range_last_time";
-
 static const char GENERATION_TIME[] = "generation_time";
-
 static const char ACQUISITION_INFO[] = "acquisitionInfo.";
 static const char IMAGING_MODE[] = "imagingMode";
 static const char SENSOR[] = "sensor";
@@ -62,8 +59,6 @@ static const char LOOK_DIRECTION[] = "lookDirection";
 static const char POLARISATION_MODE[] = "polarisationMode";
 static const char POLARISATION_LIST[] = "polarisationList";
 static const char NUMBER_LAYERS[] = "numberOfLayers";
-
-
 static const char CALIBRATION_CALFACTOR[] = "calibration.calibrationConstant.calFactor";
 static const char RADAR_FREQUENCY[] = "radarFrequency";
 
@@ -105,8 +100,7 @@ ossimplugins::ossimTerraSarModel::ossimTerraSarModel()
      _azStopTime(),
      _rgFirstPixelTime(),
      _rgLastPixelTime(),
-     _generationTime(),
-     theProductXmlFile(ossimFilename::NIL)
+     _generationTime()
 {
 }
 
@@ -136,8 +130,7 @@ ossimplugins::ossimTerraSarModel::ossimTerraSarModel(
      _azStopTime(rhs._azStopTime),
      _rgFirstPixelTime(rhs._rgFirstPixelTime),
      _rgLastPixelTime(rhs._rgLastPixelTime),
-     _generationTime(rhs._generationTime),
-    theProductXmlFile(rhs.theProductXmlFile)
+     _generationTime(rhs._generationTime)
 {
 }
 
@@ -181,373 +174,108 @@ double ossimplugins::ossimTerraSarModel::getSlantRangeFromGeoreferenced(double c
 
 bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
 {
-   static const char MODULE[] = "ossimplugins::ossimTerraSarModel::open";
-   ossimString     s;
+   static const char MODULE[] = "ossimplugins::ossimTerraSarModel::open() -- ";
   
-   if (traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << MODULE << " entered...\n"
-         << "file: " << file << "\n";
-   }
-   
-   bool result = false;
+   _imageFilename = file.expand();
+   _productXmlFile = ossimFilename::NIL;
    ossimFilename xmlfile;
-   
-   bool findMeatadataFile = findTSXLeader(file, xmlfile);
-   if(findMeatadataFile == false)
+   bool foundMetadataFile = findTSXLeader(file, xmlfile);
+   while (foundMetadataFile) // use of while allows use of "break"
    {
-   	  if(traceDebug())
+      //---
+      // Instantiate the XML parser:
+      //---
+      ossimRefPtr<ossimXmlDocument> xdoc = new ossimXmlDocument();
+      if ( !xdoc->openFile(xmlfile) ) break;
+
+      ossimTerraSarProductDoc tsDoc;
+      if (!tsDoc.isTerraSarX(xdoc.get())) break;
+
+      ossimString s;
+      if ( tsDoc.getProjection(xdoc.get(), s) )
       {
-         ossimNotify(ossimNotifyLevel_FATAL)
-            << MODULE << " DEBUG:"
-            << "ossimTerraSarModel::open:"
-            << "\nUnable to open TerraSarX Leader file " << std::endl;
+         if ( s.upcase() == "MAP" ) break;
       }
-      setErrorStatus();
-      return false;
-   }
-   
-   //---
-   // Instantiate the XML parser:
-   //---
-   ossimRefPtr<ossimXmlDocument> xdoc = new ossimXmlDocument();
-   result = xdoc->openFile(xmlfile);
-   if ( result == false )
-   {
-   	  if (traceDebug())
+
+      // Set the base class number of lines and samples
+      // Set the base class clip rect.
+      // Set the sub image offset. tmp hard coded (drb).
+      if (!tsDoc.initImageSize(xdoc.get(), theImageSize)) break;
+      theImageClipRect = ossimDrect(0, 0, theImageSize.x-1, theImageSize.y-1);
+      theSubImageOffset.x = 0.0;
+      theSubImageOffset.y = 0.0;
+
+      // Set the image ID to the scene ID.
+      if (!tsDoc.getSceneId(xdoc.get(), theImageID)) break;
+
+      // Set the sensor ID to the mission ID.
+      if (!tsDoc.getMission(xdoc.get(), theSensorID)) break;
+
+      // Set the base class gsd:
+      if (!tsDoc.initGsd(xdoc.get(), theGSD)) break;
+      theMeanGSD = (theGSD.x + theGSD.y)/2.0;
+
+      initSRGR(xdoc.get(), tsDoc);
+
+      if (!initPlatformPosition(xdoc.get(), tsDoc)) break;
+      if (!initSensorParams(xdoc.get(), tsDoc)) break;
+      if (!initRefPoint(xdoc.get(), tsDoc)) break;
+      if (!tsDoc.getProductType(xdoc.get(), _productType)) break;
+      if (!tsDoc.getRadiometricCorrection(xdoc.get(), _radiometricCorrection)) break;
+      if (!initAcquisitionInfo(xdoc.get(), tsDoc)) break;
+      if (!initNoise(xdoc.get(), tsDoc)) break;
+      if (!getPolLayerFromImageFile(xdoc.get(), file)) break;
+      if (!initCalibration(xdoc.get(), tsDoc)) break;
+
+//      replaced by OTB by the initCalibration above
+//      if (!tsDoc.getCalFactor(xdoc.get(), s)) break;
+//      _calFactor = s.toFloat64();
+
+      if (!tsDoc.getRadarFrequency(xdoc.get(), s)) break;
+      _radarFrequency= s.toFloat64();
+
+      if (!tsDoc.getAzimuthStartTime(xdoc.get(), _azStartTime)) break;
+      if (!tsDoc.getAzimuthStopTime(xdoc.get(), _azStopTime)) break;
+      if (!tsDoc.getRangeFirstPixelTime(xdoc.get(), _rgFirstPixelTime)) break;
+      if (!tsDoc.getRangeLastPixelTime(xdoc.get(), _rgLastPixelTime)) break;
+      if (!tsDoc.getGenerationTime(xdoc.get(), _generationTime)) break;
+//      removed by OTB
+//      if (!initIncidenceAngles(xdoc.get(), tsDoc)) break;
+      if (!initSceneCoord(xdoc.get(), tsDoc)) break;
+
+      xdoc = 0;
+
+      _productXmlFile = xmlfile;
+      ossimSupportFilesList::instance()->add(_productXmlFile);
+
+      // Assign the ossimSensorModel::theBoundGndPolygon
+      ossimGpt ul;
+      ossimGpt ur;
+      ossimGpt lr;
+      ossimGpt ll;
+      lineSampleToWorld(theImageClipRect.ul(), ul);
+      lineSampleToWorld(theImageClipRect.ur(), ur);
+      lineSampleToWorld(theImageClipRect.lr(), lr);
+      lineSampleToWorld(theImageClipRect.ll(), ll);
+      setGroundRect(ul, ur, lr, ll);  // ossimSensorModel method.
+      if (traceDebug())
       {
-      	    ossimNotify(ossimNotifyLevel_DEBUG)
-           	   << "unable to open Xml file \n";
-      }   
-      setErrorStatus();
-      return false;
-   }
-   
-   
-   ossimTerraSarProductDoc tsDoc;
-   result = tsDoc.isTerraSarX(xdoc.get());
-   if ( result == false )
-   {
-   	  if (traceDebug())
-      {
-      	    ossimNotify(ossimNotifyLevel_DEBUG)
-           	   << "Not a TSX-1 sensor \n";
-      }   
-      setErrorStatus();
-      return false;
-   }
+         ossimNotify(ossimNotifyLevel_NOTICE) << MODULE << "Loaded support data file <"<<xmlfile
+            <<"> for image <"<<file<<">."<<std::endl;
 
-   result = initAcquisitionInfo(xdoc.get(), tsDoc);
-   if ( result == false )
-   {
-   	  if (traceDebug())
-      {
-      	    ossimNotify(ossimNotifyLevel_DEBUG)
-           	   << "unable to init AcquisitionInfo \n";
-      }   
-      setErrorStatus();
-      return false;
-   }
-
-
-   result = tsDoc.getProjection(xdoc.get(), s);	
-   if ( result == false )
-   {
-     s.upcase();
-     if ( s == "MAP" )
-     {
-   	  	if (traceDebug())
-      	{
-      	    ossimNotify(ossimNotifyLevel_DEBUG)
-           	   << "Map projected image, returning false... \n";
-      	}   
-      	setErrorStatus();
-      	return false;
-     }
-   }
-
-   // Set the base class number of lines and samples
-   result = tsDoc.initImageSize(xdoc.get(), theImageSize);
-   if ( result == false )
-   {
-   	  if (traceDebug())
-      {
-      	    ossimNotify(ossimNotifyLevel_DEBUG)
-           	   << "unable to get theImageSize file \n";
-      }   
-      setErrorStatus();
-      return false;
-   }
-
-   // Set the base class clip rect.
-   theImageClipRect = ossimDrect(0, 0, theImageSize.x-1, theImageSize.y-1);
-	    
-   // Set the sub image offset. tmp hard coded (drb).
-   theSubImageOffset.x = 0.0;
-   theSubImageOffset.y = 0.0;
-               
-               
-   // Set the ImageID
-   result = tsDoc.getSceneId(xdoc.get(), theImageID);
-   if ( result == false )
-   {
-   	  if (traceDebug())
-      {
-      	    ossimNotify(ossimNotifyLevel_DEBUG)
-           	   << "unable to get theSceneId \n";
-      }   
-      setErrorStatus();
-      return false;
-   }
-
-   // Set the base class gsd:
-   result = tsDoc.initGsd(xdoc.get(), theGSD);
-   if ( result == false )
-   {
-   	  if (traceDebug())
-      {
-      	    ossimNotify(ossimNotifyLevel_DEBUG)
-           	   << "unable to get theGSD \n";
-      }   
-      setErrorStatus();
-      return false;
-   }
-   
-   theMeanGSD = (theGSD.x + theGSD.y)/2.0;
-   /*result = */ initSRGR(xdoc.get(), tsDoc);
-   if (traceDebug())
-   {
-       ossimNotify(ossimNotifyLevel_DEBUG)
-                    << "result of initSRGR.... " << result << "\n";
-   }
-
-   result = initPlatformPosition(xdoc.get(), tsDoc);
-   if ( result == false )
-   {
-   	  if (traceDebug())
-      {
-      	    ossimNotify(ossimNotifyLevel_DEBUG)
-           	   << "unable to initPlatformPosition \n";
-      }   
-      setErrorStatus();
-      return false;
-   }
-
-   result = initSensorParams(xdoc.get(), tsDoc);
-   if ( result == false )
-   {
-   	  if (traceDebug())
-      {
-      	    ossimNotify(ossimNotifyLevel_DEBUG)
-           	   << "unable to initSensorParams \n";
-      }   
-      setErrorStatus();
-      return false;
-   }
-                        
-   result = initRefPoint(xdoc.get(), tsDoc);
-   if ( result == false )
-   {
-   	  if (traceDebug())
-      {
-      	    ossimNotify(ossimNotifyLevel_DEBUG)
-           	   << "unable to initRefPoint \n";
-      }   
-      setErrorStatus();
-      return false;
-   }
-
-   result = tsDoc.getProductType(xdoc.get(), _productType);
-   if ( result == false )
-   {
-   	  if (traceDebug())
-      {
-      	    ossimNotify(ossimNotifyLevel_DEBUG)
-           	   << "unable to get ProductType \n";
-      }   
-      setErrorStatus();
-      return false;
-   }
-
-   result = tsDoc.getRadiometricCorrection(xdoc.get(), _radiometricCorrection);
-   if ( result == false )
-   {
-   	  if (traceDebug())
-      {
-      	    ossimNotify(ossimNotifyLevel_DEBUG)
-           	   << "unable to get RadiometricCorrection \n";
-      }   
-      setErrorStatus();
-      return false;
-   }
-
-
-   result = initNoise(xdoc.get(), tsDoc);
-   if ( result == false )
-   {
-   	  if (traceDebug())
-      {
-      	    ossimNotify(ossimNotifyLevel_DEBUG)
-           	   << "unable to init Noise \n";
-      }   
-      setErrorStatus();
-      return false;
-   }
-   
-   
-   result = getPolLayerFromImageFile(xdoc.get(), file);
-   if ( result == false )
-   {
-   	  if (traceDebug())
-      {
-      	    ossimNotify(ossimNotifyLevel_DEBUG)
-           	   << "unable to getPolLayerFromImageFile() \n";
-      }   
-      setErrorStatus();
-      return false;
-   }
-
-
-   result = initCalibration(xdoc.get(), tsDoc);
-   if ( result == false )
-   {
-   	  if (traceDebug())
-      {
-      	    ossimNotify(ossimNotifyLevel_DEBUG)
-           	   << "unable to init Calibration \n";
-      }   
-      setErrorStatus();
-      return false;
-   }
-
-
-   result = tsDoc.getRadarFrequency(xdoc.get(), s);
-   if ( result == false )
-   {
-   	  if (traceDebug())
-      {
-      	    ossimNotify(ossimNotifyLevel_DEBUG)
-           	   << "unable to get RadarFrequency \n";
-      }   
-      setErrorStatus();
-      return false;
-   }
-   _radarFrequency= s.toFloat64();
-
-   result = tsDoc.getAzimuthStartTime(xdoc.get(), _azStartTime);
-   if ( result == false )
-   {
-   	  if (traceDebug())
-      {
-      	    ossimNotify(ossimNotifyLevel_DEBUG)
-           	   << "unable to get AzimuthStartTime \n";
-      }   
-      setErrorStatus();
-      return false;
-   }
-
-   result = tsDoc.getAzimuthStopTime(xdoc.get(), _azStopTime);
-   if ( result == false )
-   {
-   	  if (traceDebug())
-      {
-      	    ossimNotify(ossimNotifyLevel_DEBUG)
-           	   << "unable to get AzimuthStopTime \n";
-      }   
-      setErrorStatus();
-      return false;
-   }
-
-   result = tsDoc.getRangeFirstPixelTime(xdoc.get(), _rgFirstPixelTime);
-   if ( result == false )
-   {
-   	  if (traceDebug())
-      {
-      	    ossimNotify(ossimNotifyLevel_DEBUG)
-           	   << "unable to get FirstPixelTime in Range Direction\n";
+         ossimNotify(ossimNotifyLevel_DEBUG) <<MODULE
+            << "4 corners from Projection: " << "\n"
+            << ul << ", " << ur << ", " << lr << ", " << ll << "\n";
       }
-      setErrorStatus();
-      return false;
-   }
 
-   result = tsDoc.getRangeLastPixelTime(xdoc.get(), _rgLastPixelTime);
-   if ( result == false )
-   {
-   	  if (traceDebug())
-      {
-      	    ossimNotify(ossimNotifyLevel_DEBUG)
-           	   << "unable to get LastPixelTime in Range Direction\n";
-      }
-      setErrorStatus();
-      return false;
-   }
-
-   
-   result = tsDoc.getGenerationTime(xdoc.get(), _generationTime);
-   if ( result == false )
-   {
-   	  if (traceDebug())
-      {
-      	    ossimNotify(ossimNotifyLevel_DEBUG)
-           	   << "unable to get GenerationTime \n";
-      }   
-      setErrorStatus();
-      return false;
+      // OSSIM preferences specifies whether a coarse grid needs to be generated:
+      if (!createReplacementOCG()) break;
+      return true;
    }
    
-   result = initSceneCoord(xdoc.get(), tsDoc);
-   if ( result == false )
-   {
-   	  if (traceDebug())
-      {
-      	    ossimNotify(ossimNotifyLevel_DEBUG)
-           	   << "unable to initIncidenceAngles \n";
-      }   
-      setErrorStatus();
-      return false;
-   }
+   // If we broke out of the while, something happened...
+   return false;
 
-   /*
-    *  Initialize values
-    */ 
-    if (traceDebug())
-    {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "Initialized values...." << "\n";
-    }
-   
-    theProductXmlFile = xmlfile;
-      
-    if (traceDebug())
-    {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "theProductXmlFile : " << xmlfile << "\n";
-    }
-         
-    // Assign the ossimSensorModel::theBoundGndPolygon
-    ossimGpt ul;
-    ossimGpt ur;
-    ossimGpt lr;
-    ossimGpt ll;
-    lineSampleToWorld(theImageClipRect.ul(), ul);
-    lineSampleToWorld(theImageClipRect.ur(), ur);
-    lineSampleToWorld(theImageClipRect.lr(), lr);
-    lineSampleToWorld(theImageClipRect.ll(), ll);
-            
-    setGroundRect(ul, ur, lr, ll);  // ossimSensorModel method.
-
-    if (traceDebug())
-    {
-      printInfo(ossimNotify(ossimNotifyLevel_DEBUG));
-
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << MODULE << " DEBUG: leaving..."
-         << std::endl;
-    }
-   
-    return result;
-   
 } // End of: bool ossimTerraSarModel::open(const ossimFilename& file)
 
 bool ossimplugins::ossimTerraSarModel::saveState(ossimKeywordlist& kwl,
@@ -590,7 +318,7 @@ bool ossimplugins::ossimTerraSarModel::saveState(ossimKeywordlist& kwl,
       kwl.add(prefix, ALT_SR_GR_COEFFICIENT0_KW,  _alt_srgr_coefset[0]);
       kwl.add(prefix, ALT_SR_GR_COEFFICIENT1_KW,  _alt_srgr_coefset[1]);
       kwl.add(prefix, ALT_SR_GR_COEFFICIENT2_KW,  _alt_srgr_coefset[2]);
-      kwl.add(prefix, PRODUCT_XML_FILE_KW, theProductXmlFile.c_str());   
+      kwl.add(prefix, PRODUCT_XML_FILE_KW, _productXmlFile.c_str());   
 
       // Call base save state:
       result = ossimGeometricSarSensorModel::saveState(kwl, prefix);
@@ -647,8 +375,6 @@ bool ossimplugins::ossimTerraSarModel::saveState(ossimKeywordlist& kwl,
    }		
    _sceneCoord->saveState(kwl,prefix);
    
-   
-   
    for(ossim_uint32 i = 0; i < _numberOfLayers; ++i)
    {	
    		kwl.add(prefix, CALIBRATION_CALFACTOR, ossimString::toString(_calFactor[i]).c_str());
@@ -700,7 +426,7 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
 
    if (lookup)
    {
-      theProductXmlFile = lookup;
+      _productXmlFile = lookup;
 
       // See if caller wants to load from xml vice keyword list.
       lookup = kwl.find(prefix, LOAD_FROM_PRODUCT_FILE_KW);
@@ -710,7 +436,7 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
          if ( s.toBool() )
          {
             // Loading from product.xml file.
-            return open(theProductXmlFile);
+            return open(_productXmlFile);
          }
       }
    }
@@ -916,7 +642,7 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
       lookup = kwl.find(prefix, PRODUCT_XML_FILE_KW);
       if (lookup)
       {
-         theProductXmlFile = lookup;
+         _productXmlFile = lookup;
       }
       else
       {
@@ -933,9 +659,9 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
    } // matches: if (result)
 
    // Load the base class.
-	/*
-	 * TODO correct loadState
-	 */
+   /*
+     * TODO correct loadState
+     */
 #if 0
    if ( !_noise)
    {
@@ -1146,10 +872,22 @@ std::ostream& ossimplugins::ossimTerraSarModel::print(std::ostream& out) const
        << ALT_SR_GR_COEFFICIENT0_KW << ": " << _alt_srgr_coefset[0] << "\n"
        << ALT_SR_GR_COEFFICIENT1_KW << ": " <<_alt_srgr_coefset[1] << "\n"
        << ALT_SR_GR_COEFFICIENT2_KW << ": " <<_alt_srgr_coefset[2] << "\n"
-       << PRODUCT_XML_FILE_KW << ": " << theProductXmlFile.c_str() << "\n";
+       << PRODUCT_XML_FILE_KW << ": " << _productXmlFile.c_str() << "\n";
    
    ossimGeometricSarSensorModel::print(out);
-   
+   for(ossim_uint32 i = 0; i < _numberOfLayers; ++i)
+   {
+     if ( _noise[i].print(out) == false )
+     {
+        if (traceDebug())
+        {
+           ossimNotify(ossimNotifyLevel_WARN)
+              << MODULE
+              << "\n_noise->print failed!\n";
+        }
+     }
+   }
+
    if ( _sceneCoord->print(out) == false )
    {
      if (traceDebug())
@@ -2641,15 +2379,10 @@ bool ossimplugins::ossimTerraSarModel::findTSXLeader(const ossimFilename& file,
    }
    else
    {
-     ossimFilename filePath = ossimFilename(file.path());
-     if(!filePath.exists())
-     {
-     res = false;
-     }
-     else
-     {
-      ossimDirectory directory = ossimDirectory(filePath.path());
-     
+      ossimFilename imagePath = file.path();
+      if (imagePath.empty())
+         imagePath = ossimEnvironmentUtility::instance()->getCurrentWorkingDir();
+      ossimDirectory directory = ossimDirectory(imagePath.path());
       std::vector<ossimFilename> vectName;
       ossimString reg = ".xml";
       directory.findAllFilesThatMatch( vectName, reg, 1 );
@@ -2684,7 +2417,6 @@ bool ossimplugins::ossimTerraSarModel::findTSXLeader(const ossimFilename& file,
                << std::endl;
          }
       }
-     }
    }
 
    return res;

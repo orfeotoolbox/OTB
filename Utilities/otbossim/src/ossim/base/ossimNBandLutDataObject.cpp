@@ -6,7 +6,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimNBandLutDataObject.cpp 13710 2008-10-14 16:27:57Z gpotts $
+//  $Id: ossimNBandLutDataObject.cpp 17815 2010-08-03 13:23:14Z dburken $
 
 #include <iostream>
 #include <sstream>
@@ -65,10 +65,10 @@ ossimNBandLutDataObject::ossimNBandLutDataObject(const ossimNBandLutDataObject& 
     theNumberOfEntries(lut.theNumberOfEntries),
     theNumberOfBands(lut.theNumberOfBands),
     theBandScalarType(lut.theBandScalarType),
-    theNullPixelIndex(lut.theNullPixelIndex)
+    theNullPixelIndex(lut.theNullPixelIndex),
+    m_entryLabels(lut.m_entryLabels)
 {
    *this = lut;
-   
 }
 
 ossimNBandLutDataObject::~ossimNBandLutDataObject()
@@ -80,6 +80,7 @@ ossimNBandLutDataObject::~ossimNBandLutDataObject()
    }
    theNumberOfEntries = 0;
    theNumberOfBands   = 0;
+   m_entryLabels.clear();
 }
 
 void ossimNBandLutDataObject::create(ossim_uint32 numberOfEntries,
@@ -342,4 +343,19 @@ bool ossimNBandLutDataObject::loadState(const ossimKeywordlist& kwl, const char*
    }
    
    return true;
+}
+
+std::vector<ossimString> ossimNBandLutDataObject::getEntryLabels(ossim_uint32 band)
+{
+   std::map<ossim_uint32, std::vector<ossimString> >::iterator it = m_entryLabels.find(band);
+   if (it != m_entryLabels.end())
+   {
+      return it->second;
+   }
+   return std::vector<ossimString>();
+}
+
+void ossimNBandLutDataObject::setEntryLables(ossim_uint32 band, std::vector<ossimString> entryLabels)
+{
+   m_entryLabels[band] = entryLabels;
 }

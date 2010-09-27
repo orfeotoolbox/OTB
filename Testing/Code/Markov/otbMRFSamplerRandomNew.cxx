@@ -30,5 +30,7 @@ int otbMRFSamplerRandomNew(int argc, char * argv[])
 
   MRFSamplerRandomType::Pointer object = MRFSamplerRandomType::New();
 
+  std::cout << object << std::endl;
+
   return EXIT_SUCCESS;
 }

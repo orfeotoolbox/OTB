@@ -36,7 +36,9 @@ int otbRemoveCarvingPathFilterNew(int argc, char* argv[])
   typedef otb::RemoveCarvingPathFilter<InputImageType, PathType,
       OutputImageType>   RemoveCarvingPathFilterType;
 
-  RemoveCarvingPathFilterType::Pointer addCarvingPathFilter = RemoveCarvingPathFilterType::New();
+  RemoveCarvingPathFilterType::Pointer filter = RemoveCarvingPathFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

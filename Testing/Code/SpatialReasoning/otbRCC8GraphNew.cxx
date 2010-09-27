@@ -29,5 +29,7 @@ int otbRCC8GraphNew(int argc, char* argv[])
   // Instantiation
   RCC8GraphType::Pointer rcc8Graph = RCC8GraphType::New();
 
+  std::cout << rcc8Graph << std::endl;
+
   return EXIT_SUCCESS;
 }

@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimGeoAnnotationSource.cpp 17195 2010-04-23 17:32:18Z dburken $
+// $Id: ossimGeoAnnotationSource.cpp 17932 2010-08-19 20:34:35Z dburken $
 
 #include <ossim/imaging/ossimGeoAnnotationSource.h>
 #include <ossim/imaging/ossimGeoAnnotationObject.h>
@@ -157,14 +157,13 @@ void ossimGeoAnnotationSource::transformObjects(ossimImageGeometry* geom)
    computeBoundingRect();
 }
 
-ossimImageGeometry* ossimGeoAnnotationSource::getImageGeometry()
+ossimRefPtr<ossimImageGeometry> ossimGeoAnnotationSource::getImageGeometry()
 {
    if(!m_geometry.valid())
    {
       return ossimImageSource::getImageGeometry();
    }
-   
-   return m_geometry.get();
+   return m_geometry;
 }
 
 bool ossimGeoAnnotationSource::saveState(ossimKeywordlist& kwl,

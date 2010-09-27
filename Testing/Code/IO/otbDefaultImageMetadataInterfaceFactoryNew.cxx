@@ -28,8 +28,9 @@ int otbDefaultImageMetadataInterfaceFactoryNew(int argc, char* argv[])
 {
   typedef otb::DefaultImageMetadataInterfaceFactory ObjectType;
 
-  ObjectType::Pointer obj = ObjectType::New();
+  ObjectType::Pointer object = ObjectType::New();
+
+  std::cout << object << std::endl;
 
   return EXIT_SUCCESS;
-
 }

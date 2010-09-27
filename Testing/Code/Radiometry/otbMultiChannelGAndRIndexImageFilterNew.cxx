@@ -29,7 +29,9 @@ int otbMultiChannelGAndRIndexImageFilterNew(int argc, char * argv[])
   typedef otb::MultiChannelGAndRIndexImageFilter<InputImageType, OutputImageType> MultiChannelGAndRIndexImageFilterType;
 
   // Instantiating object
-  MultiChannelGAndRIndexImageFilterType::Pointer object = MultiChannelGAndRIndexImageFilterType::New();
+  MultiChannelGAndRIndexImageFilterType::Pointer filter = MultiChannelGAndRIndexImageFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

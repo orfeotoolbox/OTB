@@ -28,7 +28,9 @@ int otbCloudEstimatorFilterNew(int argc, char * argv[])
   typedef otb::CloudEstimatorFilter<VectorImageType, ImageType> CloudEstimatorFilterType;
 
   // Instantiating object
-  CloudEstimatorFilterType::Pointer cloudEstimator = CloudEstimatorFilterType::New();
+  CloudEstimatorFilterType::Pointer filter = CloudEstimatorFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

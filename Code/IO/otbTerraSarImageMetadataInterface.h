@@ -171,8 +171,6 @@ public:
    *  in the order R, G, B */
   std::vector<unsigned int> GetDefaultDisplay() const;
   
-  void PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType& dict) const;
-
 protected:
   TerraSarImageMetadataInterface();
   virtual ~TerraSarImageMetadataInterface() {}

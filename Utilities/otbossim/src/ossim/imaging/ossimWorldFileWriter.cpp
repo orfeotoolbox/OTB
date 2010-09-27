@@ -6,7 +6,7 @@
 // Author:  Kenneth Melero (kmelero@sanz.com)
 //
 //*******************************************************************
-//  $Id: ossimWorldFileWriter.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
+//  $Id: ossimWorldFileWriter.cpp 17932 2010-08-19 20:34:35Z dburken $
 
 #include <ossim/imaging/ossimWorldFileWriter.h>
 #include <ossim/base/ossimKeywordNames.h>
@@ -16,7 +16,7 @@
 #include <ossim/projection/ossimMapProjectionInfo.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
 #include <ossim/projection/ossimStatePlaneProjectionInfo.h>
-#include <ossim/projection/ossimStatePlaneProjectionFactory.h>
+// #include <ossim/projection/ossimStatePlaneProjectionFactory.h>
 #include <ossim/base/ossimUnitConversionTool.h>
 #include <ossim/base/ossimUnitTypeLut.h>
 #include <ossim/imaging/ossimImageSource.h>
@@ -71,8 +71,8 @@ bool ossimWorldFileWriter::writeFile()
    
    // Fetch the map projection of the input image if it exists:
    const ossimMapProjection* mapProj = 0;
-   const ossimImageGeometry* imgGeom = theInputConnection->getImageGeometry();
-   if (imgGeom)
+   ossimRefPtr<ossimImageGeometry> imgGeom = theInputConnection->getImageGeometry();
+   if( imgGeom.valid() )
    {
       const ossimProjection* proj = imgGeom->getProjection();
       mapProj = PTR_CAST(ossimMapProjection, proj);
@@ -89,17 +89,7 @@ bool ossimWorldFileWriter::writeFile()
 
    // ESH 05/2008 -- If the pcs code has been given, we
    // make use of the implied units.
-   ossim_uint16 pcsCode = mapProj->getPcsCode();
-   if ( pcsCode > 0 )
-   {
-      const ossimStatePlaneProjectionInfo* info =
-         ossimStatePlaneProjectionFactory::instance()->getInfo(pcsCode);
-      if (info)
-      {
-         theUnits = info->getUnitType();
-      }
-   }
-
+   theUnits = mapProj->getProjectionUnits();
    if (theUnits == OSSIM_FEET)
    {
       gsd.x = ossimUnitConversionTool(gsd.x, OSSIM_METERS).getFeet();

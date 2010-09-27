@@ -31,7 +31,9 @@ int otbImageToSIFTKeyPointSetFilterNew(int argc, char * argv[])
   typedef otb::ImageToSIFTKeyPointSetFilter<ImageType, PointSetType> ImageToSIFTKeyPointSetFilterType;
 
   // Instantiating object
-  ImageToSIFTKeyPointSetFilterType::Pointer object = ImageToSIFTKeyPointSetFilterType::New();
+  ImageToSIFTKeyPointSetFilterType::Pointer filter = ImageToSIFTKeyPointSetFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

@@ -26,5 +26,7 @@ int otbImageLayerNew(int argc, char * argv[])
 
   LayerType::Pointer layer = LayerType::New();
 
+  std::cout << layer << std::endl;
+
   return EXIT_SUCCESS;
 }

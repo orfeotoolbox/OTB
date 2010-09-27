@@ -36,5 +36,7 @@ int otbGeodesicMorphologyIterativeDecompositionImageFilterNew(int argc, char * a
   // Instantiation
   DecompositionFilterType::Pointer decomposition = DecompositionFilterType::New();
 
+  std::cout << decomposition << std::endl;
+
   return EXIT_SUCCESS;
 }

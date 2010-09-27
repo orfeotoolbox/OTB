@@ -30,7 +30,9 @@ int otbLikelihoodPathListFilterNew(int argc, char * argv[])
   typedef otb::LikelihoodPathListFilter<PathType, ImageType>      LinkPathListFilterType;
 
   // Instantiating object
-  LinkPathListFilterType::Pointer object = LinkPathListFilterType::New();
+  LinkPathListFilterType::Pointer filter = LinkPathListFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

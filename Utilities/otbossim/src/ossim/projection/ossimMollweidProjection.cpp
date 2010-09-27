@@ -9,7 +9,7 @@
 //
 // Calls Geotrans Mollweid projection code.  
 //*******************************************************************
-//  $Id: ossimMollweidProjection.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimMollweidProjection.cpp 17815 2010-08-03 13:23:14Z dburken $
 #include <math.h>
 #include <ossim/projection/ossimMollweidProjection.h>
 #include <ossim/base/ossimKeywordNames.h>
@@ -105,6 +105,12 @@ void ossimMollweidProjection::setFalseEastingNorthing(double falseEasting,
    Moll_False_Northing = falseNorthing;
    
    update();
+}
+
+void ossimMollweidProjection::setCentralMeridian(double centralMeridian)
+{
+  Moll_Origin_Long = centralMeridian;
+  update();
 }
 
 ossimGpt ossimMollweidProjection::inverse(const ossimDpt &eastingNorthing)const
@@ -424,3 +430,19 @@ long ossimMollweidProjection::Convert_Mollweide_To_Geodetic(double Easting,
   return (Error_Code);
 
 } /* End Convert_Mollweide_To_Geodetic */
+
+//*************************************************************************************************
+//! Returns TRUE if principal parameters are within epsilon tolerance.
+//*************************************************************************************************
+bool ossimMollweidProjection::operator==(const ossimProjection& proj) const
+{
+   if (!ossimMapProjection::operator==(proj))
+      return false;
+
+   ossimMollweidProjection* p = PTR_CAST(ossimMollweidProjection, &proj);
+   if (!p) return false;
+
+   if (!ossim::almostEqual(Moll_Origin_Long,p->Moll_Origin_Long)) return false;
+
+   return true;
+}

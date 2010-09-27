@@ -37,5 +37,7 @@ int otbSubsampleImageFilterNew(int argc, char * argv[])
 
   FilterType::Pointer filter = FilterType::New();
 
+  std::cout << filter << std::endl;
+
   return EXIT_SUCCESS;
 }

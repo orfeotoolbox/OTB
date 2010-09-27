@@ -33,5 +33,7 @@ int otbLandmarkNew(int argc, char* argv[])
   // instantiation
   LandmarkType::Pointer landmark = LandmarkType::New();
 
+  std::cout << landmark << std::endl;
+
   return EXIT_SUCCESS;
 }

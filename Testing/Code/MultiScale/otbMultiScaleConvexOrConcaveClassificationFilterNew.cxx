@@ -35,7 +35,9 @@ int otbMultiScaleConvexOrConcaveClassificationFilterNew(int argc, char * argv[])
       LabeledImageType> MultiScaleClassificationFilterType;
 
   // Instantiation
-  MultiScaleClassificationFilterType::Pointer classificationFilter = MultiScaleClassificationFilterType::New();
+  MultiScaleClassificationFilterType::Pointer filter = MultiScaleClassificationFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

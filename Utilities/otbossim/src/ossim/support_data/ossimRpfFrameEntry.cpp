@@ -9,36 +9,45 @@
 // Description: Rpf support class
 // 
 //********************************************************************
-// $Id: ossimRpfFrameEntry.cpp 14241 2009-04-07 19:59:23Z dburken $
+// $Id: ossimRpfFrameEntry.cpp 18052 2010-09-06 14:33:08Z dburken $
 
 #include <ostream>
 #include <ossim/support_data/ossimRpfFrameEntry.h>
 
-std::ostream& operator<<(std::ostream& out,
-                         const ossimRpfFrameEntry& data)
+std::ostream& operator<<(std::ostream& out, const ossimRpfFrameEntry& data)
 {
-   data.print(out);
-
-   return out;
+   return data.print(out);
 }
 
 ossimRpfFrameEntry::ossimRpfFrameEntry(const ossimFilename& rootDirectory,
                                        const ossimFilename& pathToFrameFileFromRoot)
-   :theExists(false),
-    theRootDirectory(rootDirectory),
-    thePathToFrameFileFromRoot(pathToFrameFileFromRoot),
-    theFullValidPath()
+   :m_exists(false),
+    m_rootDirectory(rootDirectory),
+    m_pathToFrameFileFromRoot(pathToFrameFileFromRoot),
+    m_fullValidPath()
 {
    setEntry(rootDirectory,
             pathToFrameFileFromRoot);
 }
 
-ossimRpfFrameEntry::ossimRpfFrameEntry(const ossimRpfFrameEntry& rhs)
-   :theExists(rhs.theExists),
-    theRootDirectory(rhs.theRootDirectory),
-    thePathToFrameFileFromRoot(rhs.thePathToFrameFileFromRoot),
-    theFullValidPath(rhs.theFullValidPath)
+ossimRpfFrameEntry::ossimRpfFrameEntry(const ossimRpfFrameEntry& obj)
+   :m_exists(obj.m_exists),
+    m_rootDirectory(obj.m_rootDirectory),
+    m_pathToFrameFileFromRoot(obj.m_pathToFrameFileFromRoot),
+    m_fullValidPath(obj.m_fullValidPath)
 {}
+
+const ossimRpfFrameEntry& ossimRpfFrameEntry::operator=(const ossimRpfFrameEntry& rhs)
+{
+   if (this != &rhs)
+   {
+      m_exists                  = rhs.m_exists;
+      m_rootDirectory           = rhs.m_rootDirectory;
+      m_pathToFrameFileFromRoot = rhs.m_pathToFrameFileFromRoot;
+      m_fullValidPath           = rhs.m_fullValidPath;
+   }
+   return *this;
+}
 
 void ossimRpfFrameEntry::setEntry(const ossimFilename& rootDirectory,
                                   const ossimFilename& pathToFrameFileFromRoot)
@@ -46,39 +55,39 @@ void ossimRpfFrameEntry::setEntry(const ossimFilename& rootDirectory,
    //---
    // We must check for case combinations:
    //---
-   theRootDirectory           = rootDirectory;
-   thePathToFrameFileFromRoot = pathToFrameFileFromRoot;
-   theFullValidPath = theRootDirectory.dirCat(thePathToFrameFileFromRoot);
+   m_rootDirectory           = rootDirectory;
+   m_pathToFrameFileFromRoot = pathToFrameFileFromRoot;
+   m_fullValidPath = m_rootDirectory.dirCat(m_pathToFrameFileFromRoot);
 
    // Check as supplied:
-   if(theFullValidPath.exists())
+   if(m_fullValidPath.exists())
    {
-      theExists = true;
+      m_exists = true;
    }
    else // Check root/downcased_path
    {
-      thePathToFrameFileFromRoot = thePathToFrameFileFromRoot.downcase();
-      theFullValidPath = theRootDirectory.dirCat(thePathToFrameFileFromRoot);
+      m_pathToFrameFileFromRoot = m_pathToFrameFileFromRoot.downcase();
+      m_fullValidPath = m_rootDirectory.dirCat(m_pathToFrameFileFromRoot);
 
-      if(theFullValidPath.exists())
+      if(m_fullValidPath.exists())
       {
-         theExists = true;
+         m_exists = true;
       }
       else // Check root/upcased_path
       {
-         thePathToFrameFileFromRoot = thePathToFrameFileFromRoot.upcase();
-         theFullValidPath =
-            theRootDirectory.dirCat(thePathToFrameFileFromRoot);
-         if(theFullValidPath.exists())
+         m_pathToFrameFileFromRoot = m_pathToFrameFileFromRoot.upcase();
+         m_fullValidPath =
+            m_rootDirectory.dirCat(m_pathToFrameFileFromRoot);
+         if(m_fullValidPath.exists())
          {
-            theExists = true;
+            m_exists = true;
          }
          else
          {
-            thePathToFrameFileFromRoot = pathToFrameFileFromRoot;
-            theFullValidPath =
-               theRootDirectory.dirCat(thePathToFrameFileFromRoot);
-            theExists = false;
+            m_pathToFrameFileFromRoot = pathToFrameFileFromRoot;
+            m_fullValidPath =
+               m_rootDirectory.dirCat(m_pathToFrameFileFromRoot);
+            m_exists = false;
          }
       }
    }
@@ -86,11 +95,31 @@ void ossimRpfFrameEntry::setEntry(const ossimFilename& rootDirectory,
 std::ostream& ossimRpfFrameEntry::print(
    std::ostream& out, const std::string& prefix) const
 {
-   out << prefix << "exists:       " << theExists << "\n"
-       << prefix << "root_directory: " << theRootDirectory << "\n"
+   out << prefix << "exists:       " << m_exists << "\n"
+       << prefix << "root_directory: " << m_rootDirectory << "\n"
        << prefix << "relative_path: "
-       << thePathToFrameFileFromRoot << "\n"
-       << prefix << "full_path:     " << theFullValidPath << "\n";
+       << m_pathToFrameFileFromRoot << "\n"
+       << prefix << "full_path:     " << m_fullValidPath << "\n";
 
    return out;
+}
+
+bool ossimRpfFrameEntry::exists() const
+{
+   return m_exists;
+}
+
+const ossimFilename& ossimRpfFrameEntry::getFullPath() const
+{
+   return m_fullValidPath;
+}
+
+const ossimString& ossimRpfFrameEntry::getRootDirectory() const
+{
+   return m_rootDirectory;
+}
+
+const ossimString ossimRpfFrameEntry::getPathToFrameFileFromRoot() const
+{
+   return m_pathToFrameFileFromRoot;
 }

@@ -1374,13 +1374,6 @@ TerraSarImageMetadataInterface
   return rgb;
 }
 
-void 
-TerraSarImageMetadataInterface
-::PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType& dict) const
-{
-  //Superclass::PrintSelf(os, indent, dict);
-}
-
 void
 TerraSarImageMetadataInterface
 ::PrintSelf(std::ostream& os, itk::Indent indent) const

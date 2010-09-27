@@ -7,7 +7,7 @@
 // Description: Class definition for sequencer for building overview files.
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimOverviewSequencer.h 17194 2010-04-23 15:05:19Z dburken $
+// $Id: ossimOverviewSequencer.h 17864 2010-08-11 20:10:39Z dburken $
 #ifndef ossimOverviewSequencer_HEADER
 #define ossimOverviewSequencer_HEADER
 
@@ -190,22 +190,22 @@ protected:
 
    template <class T> void  resampleTile(const ossimImageData* inputTile, T dummy);
 
-   ossimImageHandler*          m_imageHandler;
-   ossimRefPtr<ossimImageData> m_tile;
-   ossimIrect                  m_areaOfInterest;
-   ossimIpt                    m_tileSize;
-   ossim_uint32                m_numberOfTilesHorizontal;
-   ossim_uint32                m_numberOfTilesVertical;
-   ossim_uint32                m_currentTileNumber;
+   ossimRefPtr<ossimImageHandler> m_imageHandler;
+   ossimRefPtr<ossimImageData>    m_tile;
+   ossimIrect                     m_areaOfInterest;
+   ossimIpt                       m_tileSize;
+   ossim_uint32                   m_numberOfTilesHorizontal;
+   ossim_uint32                   m_numberOfTilesVertical;
+   ossim_uint32                   m_currentTileNumber;
 
    /** This is the resolution level to build overviews from. */
-   ossim_uint32                m_sourceResLevel;
+   ossim_uint32                   m_sourceResLevel;
 
    /** Dirty flag - if true, this object is not initialized. */
-   bool                        m_dirtyFlag;
+   bool                           m_dirtyFlag;
 
    /** TODO make this handle any decimation.  Right now hard coded to two. */
-   ossim_int32                 m_decimationFactor;
+   ossim_int32                    m_decimationFactor;
 
    /** Currently only handles NEAREST_NEIGHBOR and BOX (default = BOX) */
    ossimFilterResampler::ossimFilterResamplerType m_resampleType;

@@ -28,7 +28,9 @@ int otbNonMaxRemovalByDirectionFilterNew(int argc, char * argv[])
   typedef otb::NonMaxRemovalByDirectionFilter<ImageType, ImageType, ImageType> NonMaxRemovalByDirectionFilterType;
 
   // Instantiating object
-  NonMaxRemovalByDirectionFilterType::Pointer object = NonMaxRemovalByDirectionFilterType::New();
+  NonMaxRemovalByDirectionFilterType::Pointer filter = NonMaxRemovalByDirectionFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

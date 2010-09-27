@@ -31,5 +31,7 @@ int otbRCC8GraphFileReaderNew(int argc, char* argv[])
   // Instantiation
   RCC8GraphFileReaderType::Pointer rcc8GraphReader = RCC8GraphFileReaderType::New();
 
+  std::cout << rcc8GraphReader << std::endl;
+
   return EXIT_SUCCESS;
 }

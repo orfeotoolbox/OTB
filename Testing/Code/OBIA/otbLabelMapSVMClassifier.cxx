@@ -27,7 +27,7 @@
 #include "otbAttributesMapLabelObjectWithClassLabel.h"
 #include "itkLabelImageToLabelMapFilter.h"
 #include "otbShapeAttributesLabelMapFilter.h"
-#include "otbRadiometricAttributesLabelMapFilter.h"
+#include "otbBandsStatisticsAttributesLabelMapFilter.h"
 #include "otbLabelMapWithClassLabelToLabeledSampleListFilter.h"
 #include "otbSVMSampleListModelEstimator.h"
 #include "otbLabelMapSVMClassifier.h"
@@ -49,7 +49,7 @@ typedef otb::ImageFileWriter<LabeledImageType>                                  
 
 typedef itk::LabelImageToLabelMapFilter<LabeledImageType,LabelMapType>          LabelMapFilterType;
 typedef otb::ShapeAttributesLabelMapFilter<LabelMapType>                        ShapeFilterType;
-typedef otb::RadiometricAttributesLabelMapFilter<LabelMapType,VectorImageType>  RadiometricFilterType;
+typedef otb::BandsStatisticsAttributesLabelMapFilter<LabelMapType,VectorImageType>  BandsStatisticsFilterType;
 
 // SVM model estimation
 typedef itk::VariableLengthVector<double>                      VectorType;
@@ -93,7 +93,7 @@ int otbLabelMapSVMClassifier(int argc, char * argv[])
   LabeledReaderType::Pointer         labeledReader       = LabeledReaderType::New();
   LabelMapFilterType::Pointer        filter              = LabelMapFilterType::New();
   ShapeFilterType::Pointer           shapeFilter         = ShapeFilterType::New();
-  RadiometricFilterType::Pointer     radiometricFilter   = RadiometricFilterType::New();
+  BandsStatisticsFilterType::Pointer radiometricFilter   = BandsStatisticsFilterType::New();
   LabelMapType::Pointer              trainingLabelMap    = LabelMapType::New();
   ListSampleFilterType::Pointer      labelMap2SampleList = ListSampleFilterType::New();
   SVMEstimatorType::Pointer          svmEstim            = SVMEstimatorType::New();

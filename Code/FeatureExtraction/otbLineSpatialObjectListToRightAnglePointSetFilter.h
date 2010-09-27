@@ -26,12 +26,13 @@
 #include "otbMath.h"
 #include "itkVariableSizeMatrix.h"
 
-/** \class LineSpatialObjectListToRightAnglePointSetFilter
-
- */
-
 namespace otb
 {
+
+/** \class LineSpatialObjectListToRightAnglePointSetFilter
+ * \brief TODO
+ */
+
 template <class TImage, class TLinesList, class TPointSet>
 class ITK_EXPORT LineSpatialObjectListToRightAnglePointSetFilter
   : public otb::LineSpatialObjectListToPointSetFilter <TLinesList, TPointSet>

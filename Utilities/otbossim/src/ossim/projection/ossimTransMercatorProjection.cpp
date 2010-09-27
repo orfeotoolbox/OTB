@@ -9,7 +9,7 @@
 //
 // Calls Geotrans Transverse Mercator  projection code.  
 //*******************************************************************
-//  $Id: ossimTransMercatorProjection.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimTransMercatorProjection.cpp 17815 2010-08-03 13:23:14Z dburken $
 #include <cmath>
 using namespace std;
 
@@ -714,4 +714,20 @@ std::ostream& ossimTransMercatorProjection::print(std::ostream& out) const
        << ossimKeywordNames::SCALE_FACTOR_KW << ":  " << TranMerc_Scale_Factor
        << endl;
    return ossimMapProjection::print(out);
+}
+
+//*************************************************************************************************
+//! Returns TRUE if principal parameters are within epsilon tolerance.
+//*************************************************************************************************
+bool ossimTransMercatorProjection::operator==(const ossimProjection& proj) const
+{
+   if (!ossimMapProjection::operator==(proj))
+      return false;
+
+   ossimTransMercatorProjection* p = PTR_CAST(ossimTransMercatorProjection, &proj);
+   if (!p) return false;
+
+   if (!ossim::almostEqual(TranMerc_Scale_Factor,p->TranMerc_Scale_Factor)) return false;
+
+   return true;
 }

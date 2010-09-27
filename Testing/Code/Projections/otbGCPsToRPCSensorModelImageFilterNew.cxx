@@ -28,6 +28,7 @@ int otbGCPsToRPCSensorModelImageFilterNew(int argc, char* argv[])
   // Instantiation
   GCPToSensorModelFilterType::Pointer filter = GCPToSensorModelFilterType::New();
 
-  return EXIT_SUCCESS;
+  std::cout << filter << std::endl;
 
+  return EXIT_SUCCESS;
 }

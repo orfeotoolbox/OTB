@@ -25,7 +25,7 @@
 #include <iostream>
 #include <list>
 #include <cstdlib>
-
+#include <ossim/projection/ossimCoarseGridModel.h>
 #include <otb/CivilDateTime.h>
 
 namespace ossimplugins
@@ -34,6 +34,7 @@ namespace ossimplugins
 class PlatformPosition;
 class SensorParams;
 class RefPoint;
+
 /**
  * @brief This class allows for direct localisation and indirect localisation
  * using the geometric model of SAR sensors.
@@ -42,6 +43,7 @@ class RefPoint;
 class ossimGeometricSarSensorModel : public ossimSensorModel
 {
 public:
+   static const char* CREATE_OCG_PREF_KW;
 
    /** @brief default constructor */
    ossimGeometricSarSensorModel();
@@ -158,7 +160,15 @@ public:
    double get_optimizationBiasX()   const { return _optimizationBiasX; }
    double get_optimizationBiasY()   const { return _optimizationBiasY; }
 
+   ossimRefPtr<ossimCoarseGridModel> getReplacementOcgModel() { return _replacementOcgModel; }
+
 protected:
+   /**
+    * @brief Creates replacement coarse grid model if user requested via ossim preferences 
+    * keyword "geometric_sar_sensor_model.create_ocg: <bool>"
+    * @return true if load OK, false on error
+    */
+   bool createReplacementOCG();
 
    /**
     * @brief Handle the position of the platform
@@ -186,6 +196,11 @@ protected:
    double _optimizationBiasX ;
    double _optimizationBiasY ;
 
+   ossimFilename _imageFilename; 
+   ossimFilename _productXmlFile;
+
+   ossimRefPtr<ossimCoarseGridModel> _replacementOcgModel;
+
 private:
    /**
     * @brief Initializes the Platform Position from a projection keywordlist
@@ -203,6 +218,7 @@ private:
     * @brief Initializes the Slant Range to/for each Ground Range data sets from a projection keywordlist
     */
    virtual bool InitSRGR(const ossimKeywordlist &kwl, const char *prefix)=0;
+
 
 TYPE_DATA
 

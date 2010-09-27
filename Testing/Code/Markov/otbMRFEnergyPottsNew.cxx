@@ -30,5 +30,7 @@ int otbMRFEnergyPottsNew(int argc, char * argv[])
 
   MRFEnergyPottsType::Pointer object = MRFEnergyPottsType::New();
 
+  std::cout << object << std::endl;
+
   return EXIT_SUCCESS;
 }

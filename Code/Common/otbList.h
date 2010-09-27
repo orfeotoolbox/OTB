@@ -18,6 +18,8 @@
 #ifndef __otbList_h
 #define __otbList_h
 
+#include "vcl_deprecated_header.h"
+
 namespace otb
 {
 //For backward compatibility only

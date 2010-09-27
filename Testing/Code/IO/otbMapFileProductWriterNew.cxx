@@ -25,7 +25,9 @@ int otbMapFileProductWriterNew(int argc, char* argv[])
   typedef otb::VectorImage<double>               ImageType;
   typedef otb::MapFileProductWriter<ImageType>   MapFileProductWriterType;
   
-  MapFileProductWriterType::Pointer    mapWriter  = MapFileProductWriterType::New();
+  MapFileProductWriterType::Pointer object = MapFileProductWriterType::New();
+
+  std::cout << object << std::endl;
   
   return EXIT_SUCCESS;
 }

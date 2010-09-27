@@ -107,7 +107,13 @@ DEMToOrthoImageGenerator<TDEMImage, TMapProjection>
 ::PrintSelf(std::ostream& os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "Map projection:" <<  m_MapProjection->GetWkt() << std::endl;
+  if (m_MapProjection.IsNull())
+    os << indent << "Map projection: NULL" << std::endl;
+  else
+    {
+    os << indent << "Map projection:" << std::endl;
+    m_MapProjection->Print(os, indent.GetNextIndent());
+    }
 }
 
 } // namespace otb

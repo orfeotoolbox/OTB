@@ -28,7 +28,9 @@ int otbRemoveWrongDirectionFilterNew(int argc, char * argv[])
   typedef otb::RemoveWrongDirectionFilter<ImageType, ImageType, ImageType> RemoveWrongDirectionFilterType;
 
   // Instantiating object
-  RemoveWrongDirectionFilterType::Pointer object = RemoveWrongDirectionFilterType::New();
+  RemoveWrongDirectionFilterType::Pointer filter = RemoveWrongDirectionFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

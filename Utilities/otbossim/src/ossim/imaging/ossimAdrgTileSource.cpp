@@ -9,7 +9,7 @@
 //              ADRG file.
 //
 //********************************************************************
-// $Id: ossimAdrgTileSource.cpp 17195 2010-04-23 17:32:18Z dburken $
+// $Id: ossimAdrgTileSource.cpp 17932 2010-08-19 20:34:35Z dburken $
 
 #include <iostream>
 
@@ -395,177 +395,175 @@ bool ossimAdrgTileSource::loadState(const ossimKeywordlist& kwl,
 //*******************************************************************
 // Public method:
 //*******************************************************************
-ossimImageGeometry*  ossimAdrgTileSource::getImageGeometry()
+ossimRefPtr<ossimImageGeometry> ossimAdrgTileSource::getImageGeometry()
 {
-   ossimImageHandler::getImageGeometry();
-   if(!theGeometry.valid())
+   if ( !theGeometry )
    {
-      theGeometry = new ossimImageGeometry;
-   }
-   if (theGeometry->hasProjection())
-      return theGeometry.get();
+      // Check for external geom:
+      theGeometry = getExternalImageGeometry();
+      
+      if ( !theGeometry )
+      {
+         // origin of latitude
+         ossim_float64 originLatitude = (m_AdrgHeader->maxLatitude() +
+                                         m_AdrgHeader->minLatitude()) / 2.0;
+         
+         // central meridian.
+         ossim_float64 centralMeridian = (m_AdrgHeader->maxLongitude() +
+                                          m_AdrgHeader->minLongitude()) / 2.0;
+         
+         //---
+         // Compute the pixel size in latitude and longitude direction.  This will
+         // be full image extents divided by full image lines and samples.
+         //---
+         
+         // Samples in full image (used to compute degPerPixelX).
+         ossim_float64 samples = m_AdrgHeader->samples();
+         
+         // Lines in full image (used to compute degPerPixelX).
+         ossim_float64 lines = m_AdrgHeader->lines();
+         
+         // Degrees in latitude direction of the full image.
+         ossim_float64 degrees_in_lat_dir = m_AdrgHeader->maxLatitude() -
+            m_AdrgHeader->minLatitude();
+         
+         // Degrees in longitude direction of the full image.
+         ossim_float64 degrees_in_lon_dir = m_AdrgHeader->maxLongitude() -
+            m_AdrgHeader->minLongitude();
+         
+         ossim_float64 degPerPixelY = degrees_in_lat_dir / lines;
+         ossim_float64 degPerPixelX = degrees_in_lon_dir / samples;
+         
+         //---
+         // The tie is determined with the following assumptions that need to be
+         // verified:
+         // 1) Rows and columns start at 1.
+         // 2) The min / max latitudes longitudes go to the edge of the pixel.
+         // 3) Latitude decreases by degPerPixelY with each line.
+         // 4) Longitude increases by degPerPixelX with each sample.
+         //---
+         ossim_float64 ul_lat = (m_AdrgHeader->maxLatitude() - 
+                                 ( (m_AdrgHeader->startRow() - 1) *
+                                   degPerPixelY ) - ( degPerPixelY * 0.5 ) );
+         ossim_float64 ul_lon = (m_AdrgHeader->minLongitude() +
+                                 ( (m_AdrgHeader->startCol() -1) *
+                                   degPerPixelX ) +  ( degPerPixelX * 0.5 ) );
+         
+         // projection type
+         ossimKeywordlist kwl;
+         const char* prefix = 0;
+         kwl.add(prefix,
+                 ossimKeywordNames::TYPE_KW,
+                 "ossimEquDistCylProjection",
+                 true);
+         
+         // datum.
+         kwl.add(prefix,
+                 ossimKeywordNames::DATUM_KW,
+                 "WGE",
+                 true);
+         
+         // origin latitude
+         kwl.add(prefix,
+                 ossimKeywordNames::ORIGIN_LATITUDE_KW,
+                 originLatitude,
+                 true);
 
-   // origin of latitude
-   ossim_float64 originLatitude = (m_AdrgHeader->maxLatitude() +
-                                   m_AdrgHeader->minLatitude()) / 2.0;
+         // central meridin
+         kwl.add(prefix,
+                 ossimKeywordNames::CENTRAL_MERIDIAN_KW,
+                 centralMeridian,
+                 true);
+
+         // Save the tie point.
+         kwl.add(prefix,
+                 ossimKeywordNames::TIE_POINT_XY_KW,
+                 ossimDpt(ul_lon, ul_lat).toString().c_str(),
+                 true);
+         kwl.add(prefix,
+                 ossimKeywordNames::TIE_POINT_UNITS_KW,
+                 ossimUnitTypeLut::instance()->getEntryString(OSSIM_DEGREES),
+                 true);
+
+         // Save the scale.
+         kwl.add(prefix,
+                 ossimKeywordNames::TIE_POINT_LAT_KW,
+                 ul_lat,
+                 true);
    
-   // central meridian.
-   ossim_float64 centralMeridian = (m_AdrgHeader->maxLongitude() +
-                                    m_AdrgHeader->minLongitude()) / 2.0;
+         kwl.add(prefix,
+                 ossimKeywordNames::TIE_POINT_LON_KW,
+                 ul_lon,
+                 true);
 
-   //---
-   // Compute the pixel size in latitude and longitude direction.  This will
-   // be full image extents divided by full image lines and samples.
-   //---
+         // Save the scale.
+         kwl.add(prefix,
+                 ossimKeywordNames::PIXEL_SCALE_XY_KW,
+                 ossimDpt(degPerPixelX, degPerPixelY).toString().c_str(),
+                 true);
+         kwl.add(prefix,
+                 ossimKeywordNames::PIXEL_SCALE_UNITS_KW,
+                 ossimUnitTypeLut::instance()->getEntryString(OSSIM_DEGREES),
+                 true);  
+
+         // lines
+         kwl.add(prefix,
+                 ossimKeywordNames::NUMBER_LINES_KW,
+                 getNumberOfLines());
+
+         // samples
+         kwl.add(prefix,
+                 ossimKeywordNames::NUMBER_SAMPLES_KW,
+                 getNumberOfSamples());
+
+         // res sets
+         kwl.add(prefix,
+                 ossimKeywordNames::NUMBER_REDUCED_RES_SETS_KW,
+                 getNumberOfDecimationLevels());
+
+         // bands
+         kwl.add(prefix,
+                 ossimKeywordNames::NUMBER_INPUT_BANDS_KW,
+                 getNumberOfInputBands());
+
+         // bands
+         kwl.add(prefix,
+                 ossimKeywordNames::NUMBER_OUTPUT_BANDS_KW,
+                 getNumberOfOutputBands());
    
-   // Samples in full image (used to compute degPerPixelX).
-   ossim_float64 samples = m_AdrgHeader->samples();
-   
-   // Lines in full image (used to compute degPerPixelX).
-   ossim_float64 lines = m_AdrgHeader->lines();
+         if (traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << "\nminLon:             " << m_AdrgHeader->minLon()
+               << "\nminLond:            " << m_AdrgHeader->minLongitude() 
+               << "\nminLat:             " << m_AdrgHeader->minLat()
+               << "\nminLatd:            " << m_AdrgHeader->minLatitude()
+               << "\nmaxLon:             " << m_AdrgHeader->maxLon()
+               << "\nmaxLond:            " << m_AdrgHeader->maxLongitude()
+               << "\nmaxLat:             " << m_AdrgHeader->maxLat()
+               << "\nmaxLatd:            " << m_AdrgHeader->maxLatitude()
+               << "\nstartRow:           " << m_AdrgHeader->startRow()
+               << "\nstartCol:           " << m_AdrgHeader->startCol()
+               << "\nstopRow:            " << m_AdrgHeader->stopRow()
+               << "\nstopCol:            " << m_AdrgHeader->stopCol()
+               << "\nfull image lines:   " << lines
+               << "\nfull image samples: " << samples
+               << "\nkwl:\n"               << kwl
+               << std::endl;
+         }
 
-   // Degrees in latitude direction of the full image.
-   ossim_float64 degrees_in_lat_dir = m_AdrgHeader->maxLatitude() -
-      m_AdrgHeader->minLatitude();
+         ossimProjection* new_proj = ossimProjectionFactoryRegistry::instance()->createProjection(kwl);
+         theGeometry = new ossimImageGeometry;
+         theGeometry->setProjection(new_proj);  // assumes management of projection instance
+         
+      } // matches (after getExternalImageGeometry()):  if ( !theGeometry ) 
+      
+      // Set image things the geometry object should know about.
+      initImageParameters( theGeometry.get() );
+      
+   } // matches: if ( !theGeometry )
 
-   // Degrees in longitude direction of the full image.
-   ossim_float64 degrees_in_lon_dir = m_AdrgHeader->maxLongitude() -
-      m_AdrgHeader->minLongitude();
-   
-   ossim_float64 degPerPixelY = degrees_in_lat_dir / lines;
-   ossim_float64 degPerPixelX = degrees_in_lon_dir / samples;
-   
-   //---
-   // The tie is determined with the following assumptions that need to be
-   // verified:
-   // 1) Rows and columns start at 1.
-   // 2) The min / max latitudes longitudes go to the edge of the pixel.
-   // 3) Latitude decreases by degPerPixelY with each line.
-   // 4) Longitude increases by degPerPixelX with each sample.
-   //---
-
-   // OLD:
-   //    double ul_lat = (m_AdrgHeader->maxLatitude() + 
-   //                     m_AdrgHeader->startRow()*degPerPixelY) - (degPerPixelY*.5);
-   //    double ul_lon = (m_AdrgHeader->minLongitude() -
-   //                     m_AdrgHeader->startCol()*degPerPixelX) +  (degPerPixelX*.5); 
-   
-   ossim_float64 ul_lat = (m_AdrgHeader->maxLatitude() - 
-                    ( (m_AdrgHeader->startRow() - 1) *
-                      degPerPixelY ) - ( degPerPixelY * 0.5 ) );
-   ossim_float64 ul_lon = (m_AdrgHeader->minLongitude() +
-                    ( (m_AdrgHeader->startCol() -1) *
-                      degPerPixelX ) +  ( degPerPixelX * 0.5 ) );
-   
-   // projection type
-   ossimKeywordlist kwl;
-   const char* prefix = 0;
-   kwl.add(prefix,
-           ossimKeywordNames::TYPE_KW,
-           "ossimEquDistCylProjection",
-           true);
-
-   // datum.
-   kwl.add(prefix,
-           ossimKeywordNames::DATUM_KW,
-           "WGE",
-           true);
-
-   // origin latitude
-   kwl.add(prefix,
-           ossimKeywordNames::ORIGIN_LATITUDE_KW,
-           originLatitude,
-           true);
-
-   // central meridin
-   kwl.add(prefix,
-           ossimKeywordNames::CENTRAL_MERIDIAN_KW,
-           centralMeridian,
-           true);
-
-   // Save the tie point.
-   kwl.add(prefix,
-           ossimKeywordNames::TIE_POINT_XY_KW,
-           ossimDpt(ul_lon, ul_lat).toString().c_str(),
-           true);
-   kwl.add(prefix,
-           ossimKeywordNames::TIE_POINT_UNITS_KW,
-           ossimUnitTypeLut::instance()->getEntryString(OSSIM_DEGREES),
-           true);
-
-   // Save the scale.
-   kwl.add(prefix,
-           ossimKeywordNames::TIE_POINT_LAT_KW,
-           ul_lat,
-           true);
-   
-   kwl.add(prefix,
-           ossimKeywordNames::TIE_POINT_LON_KW,
-           ul_lon,
-           true);
-
-   // Save the scale.
-   kwl.add(prefix,
-           ossimKeywordNames::PIXEL_SCALE_XY_KW,
-           ossimDpt(degPerPixelX, degPerPixelY).toString().c_str(),
-           true);
-   kwl.add(prefix,
-           ossimKeywordNames::PIXEL_SCALE_UNITS_KW,
-           ossimUnitTypeLut::instance()->getEntryString(OSSIM_DEGREES),
-           true);  
-
-   // lines
-   kwl.add(prefix,
-           ossimKeywordNames::NUMBER_LINES_KW,
-           getNumberOfLines());
-
-   // samples
-   kwl.add(prefix,
-           ossimKeywordNames::NUMBER_SAMPLES_KW,
-           getNumberOfSamples());
-
-   // res sets
-   kwl.add(prefix,
-           ossimKeywordNames::NUMBER_REDUCED_RES_SETS_KW,
-           getNumberOfDecimationLevels());
-
-   // bands
-   kwl.add(prefix,
-           ossimKeywordNames::NUMBER_INPUT_BANDS_KW,
-           getNumberOfInputBands());
-
-   // bands
-   kwl.add(prefix,
-           ossimKeywordNames::NUMBER_OUTPUT_BANDS_KW,
-           getNumberOfOutputBands());
-
-   
-   if (traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "\nminLon:             " << m_AdrgHeader->minLon()
-         << "\nminLond:            " << m_AdrgHeader->minLongitude() 
-         << "\nminLat:             " << m_AdrgHeader->minLat()
-         << "\nminLatd:            " << m_AdrgHeader->minLatitude()
-         << "\nmaxLon:             " << m_AdrgHeader->maxLon()
-         << "\nmaxLond:            " << m_AdrgHeader->maxLongitude()
-         << "\nmaxLat:             " << m_AdrgHeader->maxLat()
-         << "\nmaxLatd:            " << m_AdrgHeader->maxLatitude()
-         << "\nstartRow:           " << m_AdrgHeader->startRow()
-         << "\nstartCol:           " << m_AdrgHeader->startCol()
-         << "\nstopRow:            " << m_AdrgHeader->stopRow()
-         << "\nstopCol:            " << m_AdrgHeader->stopCol()
-         << "\nfull image lines:   " << lines
-         << "\nfull image samples: " << samples
-         << "\nkwl:\n"               << kwl
-         << std::endl;
-   }
-
-   ossimProjection* new_proj = ossimProjectionFactoryRegistry::instance()->createProjection(kwl);
-   theGeometry = new ossimImageGeometry;
-   theGeometry->setProjection(new_proj);  // assumes management of projection instance
-
-   return theGeometry.get();
+   return theGeometry;
 }
 
 //*******************************************************************

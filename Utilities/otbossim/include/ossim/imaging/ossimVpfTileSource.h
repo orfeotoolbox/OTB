@@ -7,7 +7,7 @@
 //
 // Author:  Garrett Potts
 //
-// $Id: ossimVpfTileSource.h 15812 2009-10-25 13:09:24Z dburken $
+// $Id: ossimVpfTileSource.h 17932 2010-08-19 20:34:35Z dburken $
 //----------------------------------------------------------------------------
 #ifndef ossimVpfTileSource_HEADER
 #define ossimVpfTileSource_HEADER
@@ -98,7 +98,7 @@ public:
                           const char* prefix);
    
    //! Returns the image geometry object associated with this tile source or NULL if non defined.
-   virtual ossimImageGeometry* getImageGeometry();
+   virtual ossimRefPtr<ossimImageGeometry> getImageGeometry();
 
    /*!
     * Returns the output pixel type of the tile source.

@@ -42,5 +42,7 @@ int otbWaveletInverseTransformNew(int argc, char * argv[])
 
   InvFilterType::Pointer invFilter = InvFilterType::New();
 
+  std::cout << invFilter << std::endl;
+
   return EXIT_SUCCESS;
 }

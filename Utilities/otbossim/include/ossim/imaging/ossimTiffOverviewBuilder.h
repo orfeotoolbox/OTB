@@ -11,7 +11,7 @@
 // Contains class declaration for TiffOverviewBuilder.
 //
 //*******************************************************************
-//  $Id: ossimTiffOverviewBuilder.h 17194 2010-04-23 15:05:19Z dburken $
+//  $Id: ossimTiffOverviewBuilder.h 18073 2010-09-13 15:55:48Z dburken $
 
 #ifndef ossimTiffOverviewBuilder_HEADER
 #define ossimTiffOverviewBuilder_HEADER
@@ -259,26 +259,33 @@ private:
 
    void closeTiff(TIFF* tif);
 
+   bool openMaskFile();
+   bool writeMaskStrip();
+   bool closeMaskFile();
+   void packAlphaValues(ossim_uint8* alphaValues, ossimIrect rect, ossim_uint32 maskWidth);
+
    // Disallow these...
    ossimTiffOverviewBuilder(const ossimTiffOverviewBuilder& source);
    ossimTiffOverviewBuilder& operator=(const ossimTiffOverviewBuilder& rhs); 
 
-   ossimRefPtr<ossimImageHandler>                 m_imageHandler;
-   ossimFilename                                  m_outputFile;
-   std::vector<ossim_uint8>                       m_nullDataBuffer;
-   ossim_int32                                    m_bytesPerPixel;
-   ossim_int32                                    m_bitsPerSample;
-   ossim_int32                                    m_tileWidth;
-   ossim_int32                                    m_tileHeight;
-   ossim_int32                                    m_tileSizeInBytes;
-   ossim_int32                                    m_sampleFormat;
-   ossim_int32                                    m_currentTiffDir;
-   ossim_uint16                                   m_tiffCompressType;
-   ossim_int32                                    m_jpegCompressQuality;
-   ossimFilterResampler::ossimFilterResamplerType m_resampleType;
-   std::vector<double>                            m_nullPixelValues;
-   bool                                           m_copyAllFlag;
-   bool                                           m_outputTileSizeSetFlag;
+   ossimRefPtr<ossimImageHandler>                     m_imageHandler;
+   ossimFilename                                      m_outputFile;
+   std::vector<ossim_uint8>                           m_nullDataBuffer;
+   ossim_int32                                        m_bytesPerPixel;
+   ossim_int32                                        m_bitsPerSample;
+   ossim_int32                                        m_tileWidth;
+   ossim_int32                                        m_tileHeight;
+   ossim_int32                                        m_tileSizeInBytes;
+   ossim_int32                                        m_sampleFormat;
+   ossim_int32                                        m_currentTiffDir;
+   ossim_uint16                                       m_tiffCompressType;
+   ossim_int32                                        m_jpegCompressQuality;
+   ossimFilterResampler::ossimFilterResamplerType     m_resampleType;
+   std::vector<double>                                m_nullPixelValues;
+   bool                                               m_copyAllFlag;
+   bool                                               m_outputTileSizeSetFlag;
+   std::map<ossim_uint32, std::vector<ossim_uint8> >  m_alphaMask;
+   std::ofstream                                      m_maskFileStream;
 
 TYPE_DATA   
 };

@@ -28,7 +28,9 @@ int otbRemoveIsolatedByDirectionFilterNew(int argc, char * argv[])
   typedef otb::RemoveIsolatedByDirectionFilter<ImageType, ImageType, ImageType> RemoveIsolatedByDirectionFilterType;
 
   // Instantiating object
-  RemoveIsolatedByDirectionFilterType::Pointer object = RemoveIsolatedByDirectionFilterType::New();
+  RemoveIsolatedByDirectionFilterType::Pointer filter = RemoveIsolatedByDirectionFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

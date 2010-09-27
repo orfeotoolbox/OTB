@@ -2,7 +2,7 @@
 
   Program:   ORFEO Toolbox
   Language:  C++
-  Date:          $Date$
+  Date:      $Date$
   Version:   $Revision$
 
 
@@ -34,7 +34,7 @@
 namespace otb {
 
 /**
-  * \class ImagerSeriesFileReader
+  * \class ImageSeriesFileReader
   * \brief Reader class dedicated to image series reading
   *
   * Actually, this class is mostly dedicated to read ENVI META FILE. Specializations
@@ -142,7 +142,7 @@ private:
 }; // end of class
 
 /**
- * \class ImagerSeriesFileReader
+ * \class ImageSeriesFileReader
  * \brief Specific definition for template Images
  *
  * In the case where TImage and TInternalImage stand for otb::Image, the
@@ -150,7 +150,7 @@ private:
  *
  * GenerateData and TestBandSelection methods are specialised.
  *
- * \see ImagerSeriesFileReader
+ * \see ImageSeriesFileReader
  */
 template <class TPixel, class TInternalPixel>
 class ITK_EXPORT ImageSeriesFileReader<Image<TPixel, 2>, Image<TInternalPixel, 2> >
@@ -243,7 +243,7 @@ private:
   void operator =(const Self&);
 }; // end of class specialized for image
 
-/** ImagerSeriesFileReader
+/** \class ImageSeriesFileReader
  * \brief Specific definition for VectorImage in reading and Image type for output
  *
  * In the case where TImage stands for an otb::Image while TInternalImage stands for otb::VectorImage, the
@@ -251,7 +251,7 @@ private:
  *
  * GenerateData and TestBandSelection methods are specialised.
  *
- * \see ImagerSeriesFileReader
+ * \see ImageSeriesFileReader
  */
 template <class TPixel, class TInternalPixel>
 class ITK_EXPORT ImageSeriesFileReader<Image<TPixel, 2>, VectorImage<TInternalPixel, 2> >
@@ -345,7 +345,7 @@ private:
 
 }; // end of class specialized for Image and VectorImage
 
-/** ImagerSeriesFileReader
+/** \class ImageSeriesFileReader
  * \brief Specific definition for VectorImage in reading and output
  *
  * In the case where TImage stands for an otb::VectorImage as well as TInternalImage, the
@@ -353,7 +353,7 @@ private:
  *
  * GenerateData method is specialised.
  *
- * \see ImagerSeriesFileReader
+ * \see ImageSeriesFileReader
  */
 template <class TPixel, class TInternalPixel>
 class ITK_EXPORT ImageSeriesFileReader<VectorImage<TPixel, 2>, VectorImage<TInternalPixel, 2> >

@@ -27,5 +27,7 @@ int otbPolygonToPolygonRCC8CalculatorNew(int argc, char* argv[])
   //Instantiation
   CalculatorType::Pointer calc = CalculatorType::New();
 
+  std::cout << calc << std::endl;
+
   return EXIT_SUCCESS;
 }

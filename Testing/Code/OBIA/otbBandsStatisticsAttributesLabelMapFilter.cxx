@@ -25,7 +25,6 @@
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
-#include "otbImageFileWriter.h"
 #include "otbAttributesMapLabelObject.h"
 #include "itkLabelImageToLabelMapFilter.h"
 #include "otbBandsStatisticsAttributesLabelMapFilter.h"
@@ -44,8 +43,6 @@ typedef LabelObjectContainerType::const_iterator LabelObjectIterator;
 
 typedef otb::ImageFileReader<VectorImageType>                                      ReaderType;
 typedef otb::ImageFileReader<LabeledImageType>                                     LabeledReaderType;
-typedef otb::ImageFileWriter<VectorImageType>                                      WriterType;
-typedef otb::ImageFileWriter<LabeledImageType>                                     LabeledWriterType;
 
 typedef itk::LabelImageToLabelMapFilter<LabeledImageType,LabelMapType>             LabelMapFilterType;
 typedef otb::BandsStatisticsAttributesLabelMapFilter<LabelMapType,VectorImageType> BandsStatisticsFilterType;

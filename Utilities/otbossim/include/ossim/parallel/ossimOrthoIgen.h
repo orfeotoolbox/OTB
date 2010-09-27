@@ -1,6 +1,21 @@
-// $Id: ossimOrthoIgen.h 17543 2010-06-07 21:26:25Z dburken $
+//*******************************************************************
+// Copyright (C) 2000 ImageLinks Inc. 
+//
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
+//
+// Author: Garrett Potts
+// 
+// Description: Class declaration for ortho-image generator.
+//
+//*************************************************************************
+// $Id: ossimOrthoIgen.h 17815 2010-08-03 13:23:14Z dburken $
+
 #ifndef ossimOrthoIgen_HEADER
 #define ossimOrthoIgen_HEADER
+
+#include <ossim/parallel/ossimIgen.h>
 #include <ossim/base/ossimObject.h>
 #include <ossim/base/ossimConnectableContainer.h>
 #include <ossim/base/ossimArgumentParser.h>
@@ -11,6 +26,7 @@
 #include <ossim/imaging/ossimImageChain.h>
 #include <ossim/projection/ossimMapProjection.h>
 #include <ossim/base/ossimKeywordlist.h>
+#include <ossim/support_data/ossimSrcRecord.h>
 #include <map>
 
 class ossimConnectableObject;
@@ -18,13 +34,14 @@ class ossimMapProjection;
 class ossimImageSource;
 class ossimImageHandler;
 
-class OSSIM_DLL ossimOrthoIgen : public ossimReferenced
+class OSSIM_DLL ossimOrthoIgen : public ossimIgen
 {
 public:
    enum ossimOrthoIgenProjectionType
    {
       OSSIM_UNKNOWN_PROJECTION = 0,
       OSSIM_UTM_PROJECTION,
+      OSSIM_SRS_PROJECTION,
       OSSIM_GEO_PROJECTION,
       OSSIM_INPUT_PROJECTION,
       OSSIM_EXTERNAL_PROJECTION
@@ -33,31 +50,6 @@ public:
    {
       OSSIM_CENTER_ORIGIN     = 0,
       OSSIM_UPPER_LEFT_ORIGIN = 1
-   };
-   class ossimOrthoIgenFilename
-   {
-   public:
-      ossimOrthoIgenFilename()
-         :theFilename(""),
-          theEntry(-1),
-          theSupplementaryDir(""),
-          theBands()
-         {}
-      ossimOrthoIgenFilename(const ossimFilename& file, bool decodeEntry);
-      ossimOrthoIgenFilename(const ossimFilename& file, ossim_int32 entryNumber)
-         :theFilename(file),
-          theEntry(entryNumber),
-          theSupplementaryDir(),
-          theBands()
-      {
-      }
-      void setFilenameWithDecoding(const ossimFilename& file);
-      void setFilenameAndEntry(const ossimFilename& file,
-                               ossim_int32 entry);
-      ossimFilename theFilename;
-      ossim_int32   theEntry;
-      ossimFilename theSupplementaryDir;
-      std::vector<ossim_uint32> theBands;
    };
    typedef std::map<ossimString,ossimString> PropertyMap;
    
@@ -88,24 +80,33 @@ public:
     *
     */ 
    void addArguments(ossimArgumentParser& argumentParser);
-   void initialize(ossimArgumentParser& argumentParser);
+   virtual void initialize(ossimArgumentParser& argumentParser);
    void addFiles(ossimArgumentParser& argumentParser,
                  bool withDecoding,
                  ossim_uint32 startIdx = 1);
    void clearFilenameList();
-   void addFile(const ossimFilename& file, bool withDecoding=false);
-   void addFile(const ossimString& fileName, bool withDecoding=false);
+
+   //! Parses the .src file specified in the command line. These contain an alternate specification
+   //! of input file and associated attributes as a KWL.
+   void addSrcFile(const ossimFilename& fileName);
+
    bool execute();
    void setDefaultValues();
 
 protected:
-   ossimString   theThumbnailRes;
-   bool          theThumbnailFlag;
+   //! Used to parse command line filename specs with piped switches (in lieu of *.src file).
+   //! Returns TRUE if successful.
+   bool parseFilename(const ossimString& file_spec, bool decodeEntry);
+
+   //! Determines the UL corner tiepoint of the product projection as the overall UL corner of the
+   //! mosaic.
+   void establishMosaicTiePoint();
+
    ossimUnitType theDeltaPerPixelUnit;
    ossimDpt      theDeltaPerPixelOverride;
    ossimOrthoIgenProjectionType theProjectionType;
    ossimString   theProjectionName;
-   ossimString   theSrsString;
+   ossimString   theCrsString;
    ossim_float64 theGeographicOriginOfLatitude;
    ossimString   theCombinerType;
    ossimString   theResamplerType;
@@ -129,79 +130,78 @@ protected:
    ossim_int32   theStdDevClip;
    bool          theUseAutoMinMaxFlag;
    bool          theScaleToEightBitFlag;
-   bool          theStdoutFlag;
    PropertyMap   theWriterProperties;
    bool          theCutRectSpecIsConsolidated;
    ossimFilename theTargetHistoFileName;
-   ossimRefPtr<ossimConnectableContainer> theContainer;
-   ossimRefPtr<ossimMapProjection>  theProductProjection;
-   ossimRefPtr<ossimImageChain>  theProductChain;
-   ossimKeywordlist theKwl;
-   std::vector<ossimOrthoIgenFilename> theFilenames;
+   std::vector<ossimSrcRecord> theSrcRecords;
+   ossimFilename theProductFilename;
+   ossimRefPtr<ossimProjection> theReferenceProj;
   
    /**
-    * @brief Sets up the igen keyword list for the process.
-    *
-    * This throws ossimException on error.
-    */
-   void setupIgenKwl();
-   
+   * @brief Sets up the igen keyword list for the process.
+   *
+   * This throws ossimException on error.
+   */
+   void setupIgenChain();
+
    bool setupTiling();
    void setupCutter();
-   
+
    /**
     * @brief Set up the writer for the process.
-    *
     * This throws ossimException on error.
     */
    void setupWriter();
-   
+
    /**
-    * @brief Set up the view for the process.
-    *
+    * @brief Set up the output projection for the process.
     * This throws ossimException on error.
     */
-   void setupView();
-   
+   void setupProjection();
+
    /**
     * Sets up any annotation from --annotate option.
     * @note This must be called after "setupView" as it needs a projection.
     */
    void setupAnnotation();
-   
+
    void addFiles(ossimString fileInfoStr, 
                  std::vector<ossimString> fileInfos,
                  bool withEncodedEntry);
-   
+
    /**
-    * Implemented to fix the misalignment between the input projection and the product. This was
-    * due to an UL corner in the product that was not an integral distance (in pixels) from the UL
-    * corner of the input image (assuming single input). OLK 3/10
-    *
-    * @param inproj Input source map projection.
-    *
-    * @param outproj Product projection that will receive adjusted tiepoint (UL corner).
-    */
-   void snapTiePointToInputProj(ossimMapProjection* inproj);
-   
+   * Implemented to fix the misalignment between the input projection and the product. This was
+   * due to an UL corner in the product that was not an integral distance (in pixels) from the UL
+   * corner of the input image (assuming single input). OLK 3/10
+   */
+   void snapTiePointToRefProj();
+
    /**
-    * Consolidates specification of bounding rect given various ways of specifying on the command
-    * line. This avoids multiple, redundant checks scattered throughout the code.
-    */
+   * Consolidates specification of bounding rect given various ways of specifying on the command
+   * line. This avoids multiple, redundant checks scattered throughout the code.
+   */
    void consolidateCutRectSpec();
-   
+
    /**
-    * Called when histogram operation is requested. Sets up additional filters in image chain
-    * for performing matching, stretching or clipping. If chain=0,
-    * this implies that the target histogram is being enabled for the output mosaic. */
-   void setupHistogram(ossimImageChain* chain=0, ossimImageHandler* handler=0);
-   
+   * Called when histogram operation is requested. Sets up additional filters in image chain
+   * for performing matching, stretching or clipping. If chain=0,
+   * this implies that the target histogram is being enabled for the output mosaic. */
+   void setupHistogram(ossimImageChain* chain=0, const ossimSrcRecord& src_record=ossimSrcRecord());
+
+   //! Utility method for creating a histogram for an input image. Returns TRUE if successful.
+   bool createHistogram(ossimImageChain* chain, const ossimFilename& histo_filename);
+
    /**
     * @brief Adds cache to the left of resampler.
     * @param chain The chain to add to.
     */
    void addChainCache(ossimImageChain* chain) const;
+
+   /**
+   * @brief Generates a log KWL file that could be fed directly to Igen. Used for verifying chain.
+   */
+   void generateLog();
+  
    
 };
-
 #endif

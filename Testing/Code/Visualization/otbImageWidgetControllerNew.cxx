@@ -22,5 +22,7 @@ int otbImageWidgetControllerNew(int argc, char * argv[])
   typedef otb::ImageWidgetController ControllerType;
   ControllerType::Pointer controller = ControllerType::New();
 
+  std::cout << controller << std::endl;
+
   return EXIT_SUCCESS;
 }

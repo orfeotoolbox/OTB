@@ -25,7 +25,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimSensorModel.h 17008 2010-04-13 00:59:13Z gpotts $
+//  $Id: ossimSensorModel.h 17767 2010-07-16 12:20:24Z dburken $
 
 #ifndef ossimSensorModel_HEADER
 #define ossimSensorModel_HEADER
@@ -245,15 +245,11 @@ public:
    /**
     * This method computes the ground sample distance(gsd) and sets class
     * attributes theGSD and theMeanGSD by doing a lineSampleHeightToWorld on
-    * three points and calculating the distance from them.
+    * four points and calculating the distance from them.
     *
     * @return Nothing but throws ossimException on error.
     */
-#if defined(_WIN32)
-   void computeGsd();// throw();
-#else
-   void computeGsd() throw(ossimException);
-#endif
+   void computeGsd();
 
 protected:
    virtual ~ossimSensorModel();

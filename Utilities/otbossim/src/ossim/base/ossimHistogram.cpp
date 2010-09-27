@@ -15,7 +15,7 @@
 // frequency counts for each of these buckets.
 //
 //********************************************************************
-// $Id: ossimHistogram.cpp 16422 2010-01-27 18:25:17Z dburken $
+// $Id: ossimHistogram.cpp 17765 2010-07-15 19:08:35Z gpotts $
 //
 
 #include <stdio.h>
@@ -1344,8 +1344,26 @@ bool ossimHistogram::loadState(const ossimKeywordlist& kwl,
          {
             maxValue = (ossim_float32)ossimString(max_value).toDouble();
          }
-         // create the bins
+         ossimKeywordlist binsKwl;
+         ossim_uint32 offset = (ossim_uint32)(ossimString(prefix)+"bin").size();
+         ossimString regExpression =  ossimString("^(") + ossimString(prefix) + "bin[0-9]+)";
+         kwl.extractKeysThatMatch(binsKwl,regExpression);
+         const ossimKeywordlist::KeywordMap& kwlMap = binsKwl.getMap();
+         ossimKeywordlist::KeywordMap::const_iterator iter = kwlMap.begin();
          create(bins, minValue, maxValue);
+         float* countsPtr = GetCounts();
+         memset(countsPtr, '\0', bins*sizeof(float));
+         while(iter != kwlMap.end())
+         {
+            ossimString numberStr(iter->first.begin() + offset,
+                                  iter->first.end());
+            countsPtr[numberStr.toUInt32()] = ossimString(iter->second).toDouble();
+            ++iter;
+         }
+         
+         return true;
+#if 0
+         // create the bins
          ossimString binNumber = "";
          ossimString regExpression =  ossimString("^(") + ossimString(prefix) + "bin[0-9]+)";
          vector<ossimString> keys = kwl.getSubstringKeyList( regExpression );
@@ -1369,6 +1387,7 @@ bool ossimHistogram::loadState(const ossimKeywordlist& kwl,
             const char* binCount = kwl.find(prefix, ossimString("bin") + ossimString::toString(theNumberList[idx]));
             countsPtr[theNumberList[idx]] = (float)ossimString(binCount).toDouble();
          }
+#endif
       }
    }
    return true;

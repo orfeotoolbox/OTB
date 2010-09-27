@@ -14,7 +14,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimQuickbirdRpcModel.h 16878 2010-03-18 00:10:32Z gpotts $
+//  $Id: ossimQuickbirdRpcModel.h 17932 2010-08-19 20:34:35Z dburken $
 #ifndef ossimQuickbirdRpcModel_HEADER
 #define ossimQuickbirdRpcModel_HEADER
 
@@ -23,6 +23,7 @@
 
 class ossimFilename;
 class ossimQuickbirdMetaData;
+class ossimQbTileFilesHandler;
 
 /*!****************************************************************************
  *
@@ -34,6 +35,9 @@ class ossimQuickbirdRpcModel : public ossimRpcModel
 public:
    ossimQuickbirdRpcModel();
    ossimQuickbirdRpcModel(const ossimQuickbirdRpcModel& rhs);
+
+   //! Initializes
+   ossimQuickbirdRpcModel(const ossimQbTileFilesHandler* handler);
    ~ossimQuickbirdRpcModel();
 
    virtual ossimObject* dup() const;
@@ -58,18 +62,21 @@ public:
       return theSupportData.get();
    }
 protected:
-   //void finishConstruction();
-   void parseMetaData(const ossimFilename& metadata);
-   void parseRpcData (const ossimFilename& rpcdata);
-
    bool parseNitfFile(const ossimFilename& file);
    bool parseTiffFile(const ossimFilename& file);
-/*
-  ossimQuickbirdMetaData* getTheSupportData()
-  {
-    return theSupportData;
-  }
-*/
+   bool parseMetaData(const ossimFilename& file);
+   bool parseRpcData (const ossimFilename& file);
+   bool parseTileData(const ossimFilename& file);
+
+   //! Given an initial filename with case-agnostic extension, this method searches first for an
+   //! image-specific instance of that file (i.e., with _R*C* in the filename) before considering
+   //! the mosaic-global support file (_R*C* removed). If a file is found, the argument is modified 
+   //! to match the actual filename and TRUE is returned. Otherwise, argument filename is left 
+   //! unchanged and FALSE is returned.
+   bool findSupportFile(ossimFilename& file) const;
+
+void finishConstruction();
+
    ossimRefPtr<ossimQuickbirdMetaData> theSupportData;
 
 TYPE_DATA

@@ -32,7 +32,9 @@ int otbProjectionBaseNew(int argc, char* argv[])
   otb::AzimEquDistForwardProjection::Pointer lAzimEquDistProjection = otb::AzimEquDistForwardProjection::New();
   typedef otb::MapToMapProjection<otb::AlbersInverseProjection,
       otb::AzimEquDistForwardProjection> MapToMapProjectionType;
-  MapToMapProjectionType::Pointer lMapToMapProjection = MapToMapProjectionType::New();
+  MapToMapProjectionType::Pointer projection = MapToMapProjectionType::New();
+
+  std::cout << projection << std::endl;
 
   return EXIT_SUCCESS;
 }

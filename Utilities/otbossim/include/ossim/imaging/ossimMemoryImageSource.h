@@ -62,9 +62,9 @@ public:
    //! The geometry contains full-to-local image transform as well as projection (image-to-world)
    //! Default implementation returns the image geometry object associated with the next  
    //! (left) input source (if any) connected to this source in the chain, or NULL.
-   virtual ossimImageGeometry* getImageGeometry()
+   virtual ossimRefPtr<ossimImageGeometry> getImageGeometry()
    {
-      return m_geometry.get();
+      return m_geometry;
    }
    
    //! Default implementation sets geometry of the first input to the geometry specified.
@@ -76,7 +76,7 @@ protected:
    ossimRefPtr<ossimImageData> m_image;
    ossimRefPtr<ossimImageData> m_result;
    ossimRefPtr<ossimImageGeometry> m_geometry;
-	ossimIrect m_boundingRect;
+   ossimIrect m_boundingRect;
    TYPE_DATA
 };
 

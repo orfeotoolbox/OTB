@@ -50,6 +50,8 @@ int otbSVMSampleListModelEstimatorNew(int argc, char* argv[])
 
   EstimatorType::Pointer estimator = EstimatorType::New();
 
+  std::cout << estimator << std::endl;
+
   return EXIT_SUCCESS;
 }
 

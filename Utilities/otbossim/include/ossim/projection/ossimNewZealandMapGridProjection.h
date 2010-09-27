@@ -7,14 +7,14 @@
 // Description:
 //
 //*******************************************************************
-//  $Id: ossimNewZealandMapGridProjection.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimNewZealandMapGridProjection.h 17815 2010-08-03 13:23:14Z dburken $
 #ifndef ossimNewZealandMapGridProjection_HEADER
 #define ossimNewZealandMapGridProjection_HEADER
 
 #include <ossim/projection/ossimMapProjection.h>
 
 
-class ossimNewZealandMapGridProjection : public ossimMapProjection
+class OSSIMDLLEXPORT ossimNewZealandMapGridProjection : public ossimMapProjection
 {
 public:
    ossimNewZealandMapGridProjection();

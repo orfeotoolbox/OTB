@@ -166,7 +166,8 @@ void VectorDataModel::DeleteGeometry(void)
     VectorDataType::DataTreeType::PreOrderIteratorType it(m_VectorData->GetDataTree(),
                                                           m_VectorData->GetDataTree()->GetRoot());
     it.GoToBegin();
-    while (!it.IsAtEnd() || ((it.GetNode())->Get() != m_SelectedGeometry))
+    while ( !it.IsAtEnd()
+            && it.GetNode()->Get() != m_SelectedGeometry )
       {
       ++it;
       }

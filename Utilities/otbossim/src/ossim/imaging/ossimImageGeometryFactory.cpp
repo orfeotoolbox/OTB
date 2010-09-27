@@ -85,7 +85,7 @@ bool ossimImageGeometryFactory::extendGeometry(ossimImageHandler* handler)const
          if(!geom->getProjection())
          {
             geom->setProjection(createProjection(handler));
-            result&=geom->hasProjection();
+            result = geom->hasProjection();
          }
          if(geom->getProjection())
          {
@@ -97,11 +97,10 @@ bool ossimImageGeometryFactory::extendGeometry(ossimImageHandler* handler)const
          if(!geom->getTransform()&&add2D)
          {
             geom->setTransform(createTransform(handler));
-            result&=geom->hasTransform();
+            result |= geom->hasTransform();
         }
       }
    }
-   
    return result;
 }
 

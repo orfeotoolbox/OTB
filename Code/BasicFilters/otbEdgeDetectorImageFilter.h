@@ -23,6 +23,9 @@
 #include "itkImageToImageFilter.h"
 #include "itkBinaryThresholdImageFilter.h"
 
+namespace otb
+{
+
 /** \class EdgeDetectorImageFilter
  *  \brief This composite filter binaries a edge detection image output.
  *  The used edge detection filter is given as template of the class.
@@ -30,8 +33,6 @@
  *
  */
 
-namespace otb
-{
 template <class TInputImage, class TOutputImage, class TEdgeDetection>
 class ITK_EXPORT EdgeDetectorImageFilter
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>

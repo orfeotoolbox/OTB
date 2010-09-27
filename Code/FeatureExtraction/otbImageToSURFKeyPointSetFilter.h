@@ -31,6 +31,9 @@
 
 #include "otbMath.h"
 
+namespace otb
+{
+
 /** \class ImageToSURFKeyPointSetFilter
  *  \brief This class extracts key points from an image through a pyramidal gaussian based decomposition
  *
@@ -54,8 +57,6 @@
  *  \sa otb::ImageToDeterminantHessianImage
  */
 
-namespace otb
-{
 template <class TInputImage, class TOutputPointSet>
 class ITK_EXPORT ImageToSURFKeyPointSetFilter
   : public ImageToPointSetFilter<TInputImage, TOutputPointSet>

@@ -32,7 +32,6 @@ namespace otb
 {
 
 /** \class RegionImageToRectangularPathListFilter
- * \class ImageToPathListAlignFilter
  * \brief Base class used to implement filter to model regions by rectangles.
  *
  */

@@ -9,7 +9,7 @@
 //
 // Calls Geotrans Eckert6 projection code.  
 //*******************************************************************
-//  $Id: ossimEckert6Projection.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimEckert6Projection.cpp 17815 2010-08-03 13:23:14Z dburken $
 
 /***************************************************************************/
 /*
@@ -117,6 +117,7 @@ ossimDpt ossimEckert6Projection::forward(const ossimGpt &latLon)const
    
    return ossimDpt(easting, northing);
 }
+
 void ossimEckert6Projection::setFalseEasting(double falseEasting)
 {
    Eck6_False_Easting = falseEasting;
@@ -146,6 +147,12 @@ void ossimEckert6Projection::setDefaults()
    Eck6_False_Northing  = 0.0;
    
    update();
+}
+
+void ossimEckert6Projection::setCentralMeridian(double centralMeridian)
+{
+  Eck6_Origin_Long = centralMeridian;
+  update();
 }
 
 bool ossimEckert6Projection::saveState(ossimKeywordlist& kwl, const char* prefix) const

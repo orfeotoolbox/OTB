@@ -8,7 +8,7 @@
 //
 // Calls Lamberts Conformal Conic projection code.  
 //*******************************************************************
-//  $Id: ossimLambertConformalConicProjection.cpp 12508 2008-02-25 18:38:09Z dburken $
+//  $Id: ossimLambertConformalConicProjection.cpp 17815 2010-08-03 13:23:14Z dburken $
 
 #include <iostream>
 #include <iomanip>
@@ -70,8 +70,8 @@ ossimLambertConformalConicProjection::ossimLambertConformalConicProjection(const
                                                                            double falseNorthing)
    :ossimMapProjection(ellipsoid, origin)
 {
-   Lambert_Std_Parallel_1 = stdParallel1;
-   Lambert_Std_Parallel_2 = stdParallel2;
+   Lambert_Std_Parallel_1 = stdParallel1*RAD_PER_DEG;
+   Lambert_Std_Parallel_2 = stdParallel2*RAD_PER_DEG;
    Lambert_False_Easting  = falseEasting;
    Lambert_False_Northing = falseNorthing;
    
@@ -627,4 +627,20 @@ double ossimLambertConformalConicProjection::getStandardParallel1()const
 double ossimLambertConformalConicProjection::getStandardParallel2()const
 {
    return  Lambert_Std_Parallel_2/RAD_PER_DEG;
+}
+
+//*************************************************************************************************
+//! Returns TRUE if principal parameters are within epsilon tolerance.
+//*************************************************************************************************
+bool ossimLambertConformalConicProjection::operator==(const ossimProjection& proj) const
+{
+   if (!ossimMapProjection::operator==(proj)) return false;
+
+   ossimLambertConformalConicProjection* p = PTR_CAST(ossimLambertConformalConicProjection, &proj);
+   if (!p) return false;
+
+   if (!ossim::almostEqual(Lambert_Std_Parallel_1,p->Lambert_Std_Parallel_1)) return false;
+   if (!ossim::almostEqual(Lambert_Std_Parallel_2,p->Lambert_Std_Parallel_2)) return false;
+
+   return true;
 }

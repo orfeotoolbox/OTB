@@ -106,6 +106,9 @@ public:
 protected:
   GenericMapProjection();
   virtual ~GenericMapProjection();
+
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+
   OssimMapProjectionType* m_MapProjection;
   std::string             m_ProjectionRefWkt;
 

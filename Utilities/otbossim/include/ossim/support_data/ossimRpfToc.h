@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimRpfToc.h 17050 2010-04-13 19:56:37Z dburken $
+// $Id: ossimRpfToc.h 18044 2010-09-06 14:20:52Z dburken $
 #ifndef osimRpfToc_HEADER
 #define osimRpfToc_HEADER
 
@@ -53,14 +53,11 @@ public:
     * @param outputDir Directory to write a.toc file and rpf frames to.
     *
     * @see ossim-rpf application usage for dotRpfFile format.
+    *
+    * @note Throws ossimException on error.
     */
-#if defined(_WIN32)
    void createTocAndCopyFrames( const ossimFilename& dotRpfFile,
-                                const ossimFilename& outputDir) throw(...);
-#else
-   void createTocAndCopyFrames( const ossimFilename& dotRpfFile,
-                                const ossimFilename& outputDir) throw(ossimException);
-#endif
+                                const ossimFilename& outputDir);
 
    /**
     * @brief print method that outputs a key/value type format adding prefix

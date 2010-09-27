@@ -30,6 +30,7 @@ m_transform (0),
 m_projection(0)
 {
    m_gsd.makeNan();
+   m_imageSize.makeNan();
 }
 
 //**************************************************************************************************
@@ -54,6 +55,7 @@ ossimImageGeometry::ossimImageGeometry(ossim2dTo2dTransform* transform, ossimPro
    m_transform(transform),
    m_projection(proj)
 {
+   m_imageSize.makeNan();
    m_gsd.makeNan();
    if(m_projection.valid())
    {
@@ -400,6 +402,12 @@ bool ossimImageGeometry::loadState(const ossimKeywordlist& kwl,
    {
       ossimString decimations   = kwl.find(prefix, "decimations");
       ossimString gsd           = kwl.find(prefix, "gsd");
+      ossimString imageSize     = kwl.find(prefix, "image_size");
+      
+      if(!imageSize.empty())
+      {
+         m_imageSize.toPoint(imageSize);
+      }
       if ( ossimString(lookup) == STATIC_TYPE_NAME(ossimImageGeometry) )
       {
          ossimObject::loadState(kwl, prefix);
@@ -496,8 +504,13 @@ bool ossimImageGeometry::saveState(ossimKeywordlist& kwl, const char* prefix) co
          kwl.add(prefix, "decimations", resultPoints, true);
       }
    }
+   
    ossimDpt mpp = getMetersPerPixel();
-   kwl.add(prefix, "gsd", mpp.toString(), true);
+   if (!mpp.hasNans())
+      kwl.add(prefix, "gsd", mpp.toString(), true);
+   
+   if (!m_imageSize.hasNans())
+      kwl.add(prefix, "image_size", m_imageSize.toString(), true);
    
    return good_save;
 }

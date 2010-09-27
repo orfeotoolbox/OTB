@@ -115,6 +115,10 @@ public:
       OPROJ_CENTER_LONG_GEO_KEY           = 3088,
       OPROJ_CENTER_LAT_GEO_KEY            = 3089,
       OPROJ_SCALE_AT_NAT_ORIGIN_GEO_KEY   = 3092,
+      OVERTICAL_Cs_TYPE_GEO_KEY           = 4096,
+      OVERTICAL_CITATION_GEO_KEY          = 4097,
+      OVERTICAL_DATUM_GEO_KEY             = 4098,
+      OVERTICAL_UNITS_GEO_KEY             = 4099,
       OLINEAR_METER                       = 9001,
       OLINEAR_FOOT                        = 9002,
       OLINEAR_FOOT_US_SURVEY              = 9003,
@@ -135,7 +139,8 @@ public:
       OGEO_KEY_DIRECTORY_TAG              = 34735,
       OGEO_DOUBLE_PARAMS_TAG              = 34736,
       OGEO_ASCII_PARAMS_TAG               = 34737,
-      OGDAL_METADATA_TAG                  = 42112
+      OGDAL_METADATA_TAG                  = 42112,
+      OGDAL_NODATA                        = 42113
    };
 
    enum CompressType
@@ -336,6 +341,7 @@ private:
                             ossim_uint16 type,
                             ossim_uint64 count,
                             ossim_uint8* valueArray) const;
+   
    std::ostream& printGdalMetadata(std::ostream& out,
                                    const std::string& prefix,
                                    ossim_uint64 count,
@@ -372,9 +378,10 @@ private:
                                   const std::string& prefix,
                                   ossim_uint16 code) const;
 
-   /** @brief Prints key 3076 */
+   /** @brief Prints key from code from section 6.3.1.3 */
    std::ostream& printLinearUnits(std::ostream& out,
                                   const std::string& prefix,
+                                  const std::string& key,
                                   ossim_uint16 code) const;
 
    /** @brief Prints tag 274 */

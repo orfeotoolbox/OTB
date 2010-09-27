@@ -32,5 +32,7 @@ int otbMRFSamplerMAPNew(int argc, char * argv[])
 
   MRFSamplerType::Pointer object = MRFSamplerType::New();
 
+  std::cout << object << std::endl;
+
   return EXIT_SUCCESS;
 }

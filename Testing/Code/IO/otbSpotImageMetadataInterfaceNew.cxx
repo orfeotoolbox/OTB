@@ -28,9 +28,9 @@
 
 int otbSpotImageMetadataInterfaceNew(int argc, char* argv[])
 {
+  otb::SpotImageMetadataInterface::Pointer object = otb::SpotImageMetadataInterface::New();
 
-  otb::SpotImageMetadataInterface::Pointer lImageMetadata = otb::SpotImageMetadataInterface::New();
+  std::cout << object << std::endl;
 
   return EXIT_SUCCESS;
-
 }

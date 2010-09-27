@@ -29,7 +29,9 @@ int otbVectorizationPathListFilterNew(int argc, char * argv[])
   typedef otb::VectorizationPathListFilter<ImageType, ImageType, PathType> VectorizationPathListFilterType;
 
   // Instantiating object
-  VectorizationPathListFilterType::Pointer object = VectorizationPathListFilterType::New();
+  VectorizationPathListFilterType::Pointer filter = VectorizationPathListFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

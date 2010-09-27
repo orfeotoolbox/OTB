@@ -27,8 +27,8 @@ namespace otb
 *   \brief Base class for widget action handler.
 *   This class is a base class for all image widget action handlers.
 *   To implement a new action handler, derive this class and implement
-*   the ListenTo*() and the HandleWidget*() methods. Then register an
-*   instance of your handler in the ImageWidgetController.
+*   the HandleWidget*() methods. Then register an instance of your
+*   handler in the ImageWidgetController.
 *
 *   \sa ImageWidgetController
 *   \sa ImageWidget
@@ -56,7 +56,7 @@ public:
    * \param event The event
    * \return true if the event is handled
    */
-  virtual bool HandleWidgetEvent(std::string /*widgetId*/, int /*event*/)
+  virtual bool HandleWidgetEvent(std::string itkNotUsed(widgetId), int itkNotUsed(event))
   {
     return false;
   }
@@ -67,7 +67,7 @@ public:
    * \param y new y location
    * \return true if the event is handled
    */
-  virtual bool HandleWidgetMove(std::string /*widgetId*/, int /*x*/, int /*y*/)
+  virtual bool HandleWidgetMove(std::string itkNotUsed(widgetId), int itkNotUsed(x), int itkNotUsed(y))
   {
     return false;
   }
@@ -78,7 +78,7 @@ public:
     * \param h new height
     * \return true if the event is handled
     */
-  virtual bool HandleWidgetResize(std::string /*widgetId*/, int /*w*/, int /*h*/)
+  virtual bool HandleWidgetResize(std::string itkNotUsed(widgetId), int itkNotUsed(w), int itkNotUsed(h))
   {
     return false;
   }

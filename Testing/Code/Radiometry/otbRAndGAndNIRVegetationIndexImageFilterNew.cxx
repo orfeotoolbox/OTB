@@ -37,7 +37,9 @@ int otbRAndGAndNIRVegetationIndexImageFilterNew(int argc, char * argv[])
       OutputImageType> RAndGAndNIRIndexImageFilterType;
 
   // Instantiating object
-  RAndGAndNIRIndexImageFilterType::Pointer object = RAndGAndNIRIndexImageFilterType::New();
+  RAndGAndNIRIndexImageFilterType::Pointer filter = RAndGAndNIRIndexImageFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

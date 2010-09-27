@@ -33,7 +33,9 @@ int otbLabelMapToVectorDataFilterNew(int argc, char * argv[])
 
   typedef otb::LabelMapToVectorDataFilter<LabelMapType, VectorDataType> LabelMapToVectorDataFilterType;
 
-  LabelMapToVectorDataFilterType::Pointer MyFilter = LabelMapToVectorDataFilterType::New();
+  LabelMapToVectorDataFilterType::Pointer filter = LabelMapToVectorDataFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

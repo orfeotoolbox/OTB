@@ -8,18 +8,17 @@
 // Author:  Frank Warmerdam (warmerda@home.com)
 //
 //*******************************************************************
-//  $Id: ossimImageWriterFactoryRegistry.h 15898 2009-11-11 19:11:28Z dburken $
+//  $Id: ossimImageWriterFactoryRegistry.h 18004 2010-08-30 18:11:59Z gpotts $
 
 #ifndef ossimImageWriterFactoryRegistry_HEADER
 #define ossimImageWriterFactoryRegistry_HEADER
 #include <ossim/base/ossimObjectFactory.h>
-
+#include <ossim/imaging/ossimImageWriterFactoryBase.h>
 #include <vector>
 #include <iosfwd>
 #include <ossim/base/ossimCommon.h>
 
 class ossimImageFileWriter;
-class ossimImageWriterFactoryBase;
 class ossimKeywordlist;
 
 class OSSIMDLLEXPORT ossimImageWriterFactoryRegistry : public ossimObjectFactory
@@ -31,6 +30,7 @@ public:
    void unregisterFactory(ossimImageWriterFactoryBase* factory);
    bool findFactory(ossimImageWriterFactoryBase* factory)const;
 
+   ossimImageFileWriter *createWriter(const ossimFilename& filename)const;
    ossimImageFileWriter *createWriterFromExtension(const ossimString& fileExtension)const;
    ossimImageFileWriter *createWriter(const ossimKeywordlist &kwl,
                                       const char *prefix=0)const;
@@ -57,12 +57,23 @@ public:
     */
    virtual void getImageTypeList(std::vector<ossimString>& imageTypeList)const;
 
+   virtual void getImageFileWritersBySuffix(ossimImageWriterFactoryBase::ImageFileWriterList& result,
+                                            const ossimString& ext)const;
+   virtual void getImageFileWritersByMimeType(ossimImageWriterFactoryBase::ImageFileWriterList& result,
+                                              const ossimString& mimeType)const;
    /**
     * @brief Prints list of writers from getImageTypeList.
     * @param  out Stream to print to.
     * @return std::ostream&
     */
    std::ostream& printImageTypeList(std::ostream& out)const;
+
+   /**
+    * @brief Prints list of writers from getImageTypeList.
+    * @param  out Stream to print to.
+    * @return std::ostream&
+    */
+   std::ostream& printWriterProps(std::ostream& out)const;
    
 protected:
    ossimImageWriterFactoryRegistry();

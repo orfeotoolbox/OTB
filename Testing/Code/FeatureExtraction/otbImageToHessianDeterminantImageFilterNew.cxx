@@ -28,7 +28,9 @@ int otbImageToHessianDeterminantImageFilterNew(int argc, char * argv[])
   typedef otb::ImageToHessianDeterminantImageFilter<ImageType, ImageType> FilterType;
 
   // Instantiating object
-  FilterType::Pointer object = FilterType::New();
+  FilterType::Pointer filter = FilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

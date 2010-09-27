@@ -32,7 +32,9 @@ int otbMorphologicalPyramidSegmentationFilterNew(int argc, char * argv[])
   SegmentationFilterType;
 
   // Instantiation
-  SegmentationFilterType::Pointer segmentation = SegmentationFilterType::New();
+  SegmentationFilterType::Pointer filter = SegmentationFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

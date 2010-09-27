@@ -25,6 +25,10 @@
 
 namespace otb
 {
+/**
+ * \class ScalarImageToAdvancedTexturesFilter
+ * \brief TODO
+ */
 template<class TInpuImage, class TOutputImage>
 class ScalarImageToAdvancedTexturesFilter : public itk::ImageToImageFilter
   <TInpuImage, TOutputImage>

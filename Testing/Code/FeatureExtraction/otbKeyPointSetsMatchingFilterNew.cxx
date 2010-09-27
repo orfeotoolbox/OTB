@@ -29,7 +29,9 @@ int otbKeyPointSetsMatchingFilterNew(int argc, char * argv[])
   typedef otb::KeyPointSetsMatchingFilter<PointSetType> EuclideanDistanceMatchingFilterType;
 
   // Instantiating object
-  EuclideanDistanceMatchingFilterType::Pointer object = EuclideanDistanceMatchingFilterType::New();
+  EuclideanDistanceMatchingFilterType::Pointer filter = EuclideanDistanceMatchingFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

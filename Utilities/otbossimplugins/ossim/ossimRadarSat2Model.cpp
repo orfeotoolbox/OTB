@@ -24,11 +24,10 @@
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimXmlDocument.h>
 #include <ossim/base/ossimXmlNode.h>
-
+#include <ossim/support_data/ossimSupportFilesList.h>
 #include <otb/GalileanEphemeris.h>
 #include <otb/GeographicEphemeris.h>
 #include <otb/GMSTDateTime.h>
-
 #include <otb/PlatformPosition.h>
 #include <otb/SensorParams.h>
 #include <otb/RefPoint.h>
@@ -36,8 +35,6 @@
 
 namespace ossimplugins
 {
-
-
 // Keyword constants:
 static const char NUMBER_SRGR_COEFFICIENTS_KW[] = "sr_gr_coeffs_count";
 static const char LOAD_FROM_PRODUCT_FILE_KW[] = "load_from_product_file_flag";
@@ -45,9 +42,6 @@ static const char PRODUCT_XML_FILE_KW[] = "product_xml_filename";
 
 // Static trace for debugging
 static ossimTrace traceDebug("ossimRadarSat2Model:debug");
-
-
-
 
 RTTI_DEF1(ossimRadarSat2Model, "ossimRadarSat2Model", ossimGeometricSarSensorModel);
 
@@ -57,8 +51,7 @@ ossimRadarSat2Model::ossimRadarSat2Model()
    ossimGeometricSarSensorModel(),
    _n_srgr(0),
    _srgr_update(),
-   _SrGr_R0(),
-   theProductXmlFile(ossimFilename::NIL)
+   _SrGr_R0()
 {
 }
 
@@ -67,8 +60,7 @@ ossimRadarSat2Model::ossimRadarSat2Model(const ossimRadarSat2Model& rhs)
    ossimGeometricSarSensorModel(rhs),
    _n_srgr(rhs._n_srgr),
    _srgr_update(rhs._srgr_update),
-   _SrGr_R0(rhs._SrGr_R0),
-   theProductXmlFile(rhs.theProductXmlFile)
+   _SrGr_R0(rhs._SrGr_R0)
 {
 }
 
@@ -136,6 +128,7 @@ bool ossimRadarSat2Model::open(const ossimFilename& file)
 
    // Get the xml file.
    ossimFilename xmlFile;
+   _imageFilename = file.expand();
 
    if (file.ext().downcase() == "xml")
    {
@@ -152,11 +145,8 @@ bool ossimRadarSat2Model::open(const ossimFilename& file)
          << "product xml file: " << xmlFile << "\n";
    }
 
-   theProductXmlFile = ossimFilename::NIL;
-
    if ( xmlFile.exists() )
    {
-      theProductXmlFile = xmlFile;
 
       //---
       // Instantiate the XML parser:
@@ -237,10 +227,10 @@ bool ossimRadarSat2Model::open(const ossimFilename& file)
                      {
                         result = initRefPoint(xdoc, rsDoc);
                      
-                     	if (result)
-                     	{
-	   						result = InitRefNoiseLevel(xdoc);
-   						}
+                     	  if (result)
+                        {
+                        result = InitRefNoiseLevel(xdoc);
+                        }
                      }
                   }
                }
@@ -254,6 +244,15 @@ bool ossimRadarSat2Model::open(const ossimFilename& file)
 
    } // matches: if ( xmlFile.exists() )
 
+   if (result)
+   {
+      _productXmlFile = xmlFile;
+      ossimSupportFilesList::instance()->add(_productXmlFile);
+   }
+   else
+   {
+      _productXmlFile = ossimFilename::NIL;
+   }
 
    if (result)
    {
@@ -276,6 +275,10 @@ bool ossimRadarSat2Model::open(const ossimFilename& file)
       }
       
       setGroundRect(ul, ur, lr, ll);  // ossimSensorModel method.
+
+      // OSSIM preferences specifies whether a coarse grid needs to be generated:
+      if (!createReplacementOCG())
+         result = false;
    }
 
    if (traceDebug())
@@ -1014,7 +1017,7 @@ bool ossimRadarSat2Model::InitLut( const ossimXmlDocument* xmlDocument,
 		if( (*node)->getAttributeValue("incidenceAngleCorrection") == incidenceAngleCorrectionName )
 		{
 			// Get the xml file.
-			lutXmlFile = theProductXmlFile.expand().path().dirCat((*node)->getText());
+			lutXmlFile = _productXmlFile.expand().path().dirCat((*node)->getText());
 
    			if ( lutXmlFile.exists() )
    			{
@@ -1228,7 +1231,7 @@ bool ossimRadarSat2Model::saveState(ossimKeywordlist& kwl,
    bool result = true;
 
    // Save our state:
-   kwl.add(prefix, PRODUCT_XML_FILE_KW, theProductXmlFile.c_str());
+   kwl.add(prefix, PRODUCT_XML_FILE_KW, _productXmlFile.c_str());
    kwl.add(prefix, NUMBER_SRGR_COEFFICIENTS_KW, _n_srgr);
 
    // Make sure all the arrays are equal in size.
@@ -1331,7 +1334,7 @@ bool ossimRadarSat2Model::loadState (const ossimKeywordlist &kwl,
    lookup = kwl.find(prefix, PRODUCT_XML_FILE_KW);
    if (lookup)
    {
-      theProductXmlFile = lookup;
+      _productXmlFile = lookup;
 
       // See if caller wants to load from xml vice keyword list.
       lookup = kwl.find(prefix, LOAD_FROM_PRODUCT_FILE_KW);
@@ -1341,7 +1344,7 @@ bool ossimRadarSat2Model::loadState (const ossimKeywordlist &kwl,
          if ( s.toBool() )
          {
             // Loading from product.xml file.
-            return open(theProductXmlFile);
+            return open(_productXmlFile);
          }
       }
    }

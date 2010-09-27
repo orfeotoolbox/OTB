@@ -25,14 +25,16 @@
 #include "itkProcessObject.h"
 #include "itkNumericTraits.h"
 
+
+namespace otb
+{
+
 /** \class EdgeDensityImageFilter
  *  \brief This composite filter computes the density of the edges around a pixel.
  *
  *
  */
 
-namespace otb
-{
 template <class TInputImage, class TOutputImage, class TEdgeDetector, class TDensityCount>
 class ITK_EXPORT EdgeDensityImageFilter
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>

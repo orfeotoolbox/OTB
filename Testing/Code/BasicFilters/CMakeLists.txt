@@ -786,7 +786,7 @@ ADD_TEST(bfTvBCOInterpolateImageFunctionVectorImageTest ${BASICFILTERS_TESTS6}
   otbBCOInterpolateImageFunctionVectorImageTest
   ${INPUTDATA}/poupees.tif
   ${TEMP}/bfBCOInterpolateImageFunctionVectorImageTest.tif
-  8 # radius
+  4 # radius
   -0.5 # optimised bicubic
   )
 

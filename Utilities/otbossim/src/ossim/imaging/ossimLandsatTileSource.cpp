@@ -9,7 +9,7 @@
 // Contains class implementaiton for the class "ossim LandsatTileSource".
 //
 //*******************************************************************
-//  $Id: ossimLandsatTileSource.cpp 16075 2009-12-10 15:46:43Z gpotts $
+//  $Id: ossimLandsatTileSource.cpp 17932 2010-08-19 20:34:35Z dburken $
 
 #include <ossim/imaging/ossimLandsatTileSource.h>
 #include <ossim/base/ossimDirectory.h>
@@ -18,6 +18,7 @@
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimStringProperty.h>
 #include <ossim/base/ossimContainerProperty.h>
+#include <ossim/imaging/ossimImageGeometryRegistry.h>
 #include <ossim/support_data/ossimFfL7.h>
 #include <ossim/support_data/ossimFfL5.h>
 #include <ossim/projection/ossimLandSatModel.h>
@@ -315,23 +316,48 @@ void ossimLandsatTileSource::openHeader(const ossimFilename& file)
 #endif
 }
    
-ossimImageGeometry*  ossimLandsatTileSource::getImageGeometry()
+ossimRefPtr<ossimImageGeometry>  ossimLandsatTileSource::getImageGeometry()
 {
-   ossimImageGeometry* result = ossimImageHandler::getImageGeometry();
-   if (result->getProjection())
-      return theGeometry.get();
+   if ( !theGeometry )
+   {
+      // Check for external geom:
+      theGeometry = getExternalImageGeometry();
+      
+      if ( !theGeometry )
+      {
+         theGeometry = new ossimImageGeometry();
 
-   if (!theFfHdr) return result;
+         if ( theFfHdr.valid() )
+         {
+            // Make a model
+            ossimLandSatModel* model = new ossimLandSatModel (*theFfHdr);
+            if (model->getErrorStatus() == ossimErrorCodes::OSSIM_OK)
+            {
+               //initialize the image geometry object with the model
+               theGeometry->setProjection(model);
+            }
+         }
 
-   // Make a model
-   ossimLandSatModel* model = new ossimLandSatModel (*theFfHdr);
+         //---
+         // WARNING:
+         // Must create/set the geometry at this point or the next call to
+         // ossimImageGeometryRegistry::extendGeometry will put us in an infinite loop
+         // as it does a recursive call back to ossimImageHandler::getImageGeometry().
+         //---         
+         
+         // Check for set projection.
+         if ( !theGeometry->getProjection() )
+         {
+            // Try factories for projection.
+            ossimImageGeometryRegistry::instance()->extendGeometry(this);
+         }
+      }
 
-   if (model->getErrorStatus() != ossimErrorCodes::OSSIM_OK)
-      return false;
-
-   //initialize the image geometry object with the model
-   result->setProjection(model);
-   return result;
+      // Set image things the geometry object should know about.
+      initImageParameters( theGeometry.get() );
+   }
+   
+   return theGeometry;
 }
 
 bool ossimLandsatTileSource::loadState(const ossimKeywordlist& kwl,

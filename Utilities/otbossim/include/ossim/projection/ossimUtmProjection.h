@@ -8,7 +8,7 @@
 //
 // Calls Geotrans Utm projection code.  
 //*******************************************************************
-//  $Id: ossimUtmProjection.h 13825 2008-10-31 17:29:51Z dburken $
+//  $Id: ossimUtmProjection.h 17815 2010-08-03 13:23:14Z dburken $
 #ifndef ossimUtmProjection_HEADER
 #define ossimUtmProjection_HEADER
 #include <ossim/projection/ossimMapProjection.h>
@@ -54,7 +54,6 @@ public:
    ossim_int32 getZone()const;
 
    char getHemisphere()const;
-   virtual bool operator==(const ossimProjection& projection) const;
 
    /**
     * Method to save the state of an object to a keyword list.
@@ -84,6 +83,9 @@ public:
     * @return The false northing.
     */
    virtual double getFalseNorthing() const;
+
+   //! Returns TRUE if principal parameters are within epsilon tolerance.
+   virtual bool operator==(const ossimProjection& projection) const;
 
 private:
    /*_____________GEOTRANS_______________*/

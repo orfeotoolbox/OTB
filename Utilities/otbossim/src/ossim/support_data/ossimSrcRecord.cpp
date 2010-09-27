@@ -69,6 +69,16 @@ bool ossimSrcRecord::loadState(const ossimKeywordlist& kwl, const char* prefix)
       m_overviewPath.clear();
    }
 
+   lookup = kwl.find(prefix, "mask");
+   if (lookup) 
+   {
+      m_maskPath = ossimFilename(lookup);
+   }
+   else
+   {
+      m_maskPath.clear();
+   }
+
    // Histogram operation for this image:
    lookup = kwl.find(prefix, "hist");
    if (lookup) 
@@ -140,4 +150,6 @@ void ossimSrcRecord::setSupportDir(const ossimFilename& f)
       m_overviewPath = m_supportDir;
    if (m_histogramPath.empty())
       m_histogramPath = m_supportDir;
+   if (m_maskPath.empty())
+      m_maskPath = m_supportDir;
 }

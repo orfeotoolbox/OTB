@@ -31,6 +31,8 @@ int otbListSampleGeneratorNew(int argc, char* argv[])
   typedef otb::ListSampleGenerator<ImageType, VectorDataType> ListSampleGeneratorType;
   ListSampleGeneratorType::Pointer generator = ListSampleGeneratorType::New();
 
+  std::cout << generator << std::endl;
+
   return EXIT_SUCCESS;
 }
 

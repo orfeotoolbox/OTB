@@ -27,7 +27,9 @@ int otbLinkPathListFilterNew(int argc, char * argv[])
   typedef otb::LinkPathListFilter<PathType>      LinkPathListFilterType;
 
   // Instantiating object
-  LinkPathListFilterType::Pointer object = LinkPathListFilterType::New();
+  LinkPathListFilterType::Pointer filter = LinkPathListFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

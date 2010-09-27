@@ -9,7 +9,7 @@
 //              CADRG file.
 //
 //-----------------------------------------------------------------------
-//$Id: ossimCibCadrgTileSource.h 17066 2010-04-14 18:11:13Z dburken $
+//$Id: ossimCibCadrgTileSource.h 17954 2010-08-21 20:39:47Z dburken $
 #ifndef ossimCibCadrgTileSource_HEADER
 #define ossimCibCadrgTileSource_HEADER 1
 #include <ossim/imaging/ossimImageHandler.h>
@@ -248,7 +248,7 @@ public:
     *  @endverbatim
     *  @see ossimImageSource for further code example on using the geometry.
     */
-   virtual ossimImageGeometry* getImageGeometry();
+   virtual ossimRefPtr<ossimImageGeometry> getImageGeometry();
    
    /**
     * This method allows you to query the scalar type of the output data.
@@ -401,8 +401,8 @@ protected:
     */
    virtual ~ossimCibCadrgTileSource();
    
-   
-	void updatePropertiesToFirstValidFrame();
+   void updatePropertiesToFirstValidFrame();
+
    /**
     * Sets the entry to be renderer.  The entry within the table
     * of contents are stored in an Toc entry object.

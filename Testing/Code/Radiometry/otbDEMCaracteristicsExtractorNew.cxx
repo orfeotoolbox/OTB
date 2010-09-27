@@ -29,5 +29,7 @@ int otbDEMCaracteristicsExtractorNew(int argc, char * argv[])
 
   DEMCaracteristicsExtractorType::Pointer filter = DEMCaracteristicsExtractorType::New();
 
+  std::cout << filter << std::endl;
+
   return EXIT_SUCCESS;
 }

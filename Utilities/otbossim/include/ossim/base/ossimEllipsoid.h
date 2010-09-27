@@ -67,13 +67,15 @@ public:
    void setA(double a){theA = a;computeFlattening();}
    void setB(double b){theB = b;computeFlattening();}
    void setAB(double a, double b){theA = a; theB = b; computeFlattening();}
-
+   void setEpsgCode(ossim_uint32 code) {theEpsgCode = code;}
    double eccentricitySquared() const { return theEccentricitySquared; }
    
    double flattening()const { return theFlattening; }
    
    double eccentricity()const { return std::sqrt(theEccentricitySquared); }
    
+   ossim_uint32 getEpsgCode() const;
+
    /*!
     * METHOD: nearestIntersection()
     * Returns the point of nearest intersection of the ray with the ellipsoid.
@@ -163,6 +165,7 @@ protected:
    
    ossimString theName;
    ossimString theCode;
+   mutable ossim_uint32 theEpsgCode;
    double    theA;           //semi-major axis in meters
    double    theB;           //semi-minor axis in meters
    double    theFlattening;

@@ -157,6 +157,12 @@ protected:
 
   }
 
+  virtual void PrintSelf( std::ostream& os, itk::Indent indent ) const
+  {
+    Superclass::PrintSelf(os, indent);
+    os << indent << "Wkt : " << this->GetWkt() << std::endl;
+  }
+
 private:
   MapProjection(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented

@@ -6,7 +6,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimObliqueMercatorProjection.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimObliqueMercatorProjection.cpp 17815 2010-08-03 13:23:14Z dburken $
 #include <ossim/projection/ossimObliqueMercatorProjection.h>
 #include <ossim/base/ossimKeywordNames.h>
 
@@ -704,3 +704,21 @@ long ossimObliqueMercatorProjection::Convert_Oblique_Mercator_To_Geodetic(double
   }
   return (Error_Code);
 } /* End Convert_Oblique_Mercator_To_Geodetic */
+
+//*************************************************************************************************
+//! Returns TRUE if principal parameters are within epsilon tolerance.
+//*************************************************************************************************
+bool ossimObliqueMercatorProjection::operator==(const ossimProjection& proj) const
+{
+   if (!ossimMapProjection::operator==(proj))
+      return false;
+
+   ossimObliqueMercatorProjection* p = PTR_CAST(ossimObliqueMercatorProjection, &proj);
+   if (!p) return false;
+
+   if (theCentralPoint1 != p->theCentralPoint1) return false;
+   if (theCentralPoint2 != p->theCentralPoint2) return false;
+   if (!ossim::almostEqual(OMerc_Scale_Factor,p->OMerc_Scale_Factor)) return false;
+
+   return true;
+}

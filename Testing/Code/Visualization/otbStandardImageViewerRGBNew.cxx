@@ -27,7 +27,8 @@ int otbStandardImageViewerRGBNew(int argc, char * argv[])
   typedef otb::Image<itk::RGBPixel<unsigned char>, 2> ImageType;
   typedef otb::StandardImageViewer<ImageType>         ViewerType;
   ViewerType::Pointer viewer = ViewerType::New();
-  viewer->Update();
+
+  std::cout << viewer << std::endl;
 
   return EXIT_SUCCESS;
 }

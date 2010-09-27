@@ -35,7 +35,9 @@ int otbLabelMapToSampleListFilterNew(int argc, char* argv[])
                                           ListSampleType>        LabelMapFilterType;
 
   // instantiation
-  LabelMapFilterType::Pointer object = LabelMapFilterType::New();
+  LabelMapFilterType::Pointer filter = LabelMapFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

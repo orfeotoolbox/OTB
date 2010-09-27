@@ -31,5 +31,7 @@ int otbRCC8GraphSourceNew(int argc, char* argv[])
   // Instantiation
   RCC8GraphSourceType::Pointer rcc8GraphSource = RCC8GraphSourceType::New();
 
+  std::cout << rcc8GraphSource << std::endl;
+
   return EXIT_SUCCESS;
 }

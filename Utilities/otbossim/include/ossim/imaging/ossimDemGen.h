@@ -83,7 +83,7 @@ public:
     * @note A throw with an error message of "usage" is used to get out when
     * a usage is printed.
     */
-   void initialize(ossimArgumentParser& ap);
+   bool initialize(ossimArgumentParser& ap);
 
    /**
     * @brief Initial method to be ran prior to execute.

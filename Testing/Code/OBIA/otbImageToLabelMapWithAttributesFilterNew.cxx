@@ -35,6 +35,8 @@ int otbImageToLabelMapWithAttributesFilterNew(int argc, char* argv[])
   typedef otb::ImageToLabelMapWithAttributesFilter<ImageType,LabeledImageType,unsigned int ,LabelObjectType>   FilterType;
 
   FilterType::Pointer   filter = FilterType::New();
+
+  std::cout << filter << std::endl;
   
   return EXIT_SUCCESS;
 }

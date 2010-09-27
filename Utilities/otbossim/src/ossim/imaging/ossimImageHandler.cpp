@@ -12,12 +12,12 @@
 // derive from.
 //
 //*******************************************************************
-//  $Id: ossimImageHandler.cpp 17108 2010-04-15 21:08:06Z dburken $
+//  $Id: ossimImageHandler.cpp 18046 2010-09-06 14:23:47Z dburken $
 
 #include <algorithm>
 
 #include <ossim/imaging/ossimImageHandler.h>
-
+#include <ossim/base/ossimException.h>
 #include <ossim/base/ossimContainerEvent.h>
 #include <ossim/base/ossimEventIds.h>
 #include <ossim/base/ossimFilename.h>
@@ -29,8 +29,9 @@
 #include <ossim/base/ossimStdOutProgress.h>
 #include <ossim/base/ossimStringProperty.h>
 #include <ossim/base/ossimTrace.h>
-
+#include <ossim/base/ossimCommon.h>
 #include <ossim/imaging/ossimHistogramWriter.h>
+#include <ossim/imaging/ossimImageGeometryRegistry.h>
 #include <ossim/imaging/ossimImageHandlerRegistry.h>
 #include <ossim/imaging/ossimImageHistogramSource.h>
 #include <ossim/imaging/ossimTiffTileSource.h>
@@ -38,7 +39,9 @@
 
 #include <ossim/projection/ossimProjection.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
-#include <ossim/imaging/ossimImageGeometryRegistry.h>
+
+#include <ossim/support_data/ossimSupportFilesList.h>
+
 RTTI_DEF1(ossimImageHandler, "ossimImageHandler", ossimImageSource)
 
 //***
@@ -50,7 +53,7 @@ static ossimTrace traceDebug("ossimImageHandler:debug");
 static const char SUPPLEMENTARY_DIRECTORY_KW[] = "supplementary_directory";
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimImageHandler.cpp 17108 2010-04-15 21:08:06Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimImageHandler.cpp 18046 2010-09-06 14:23:47Z dburken $";
 #endif
 
 // GARRETT! All of the decimation factors are scattered throughout. We want to fold that into 
@@ -135,7 +138,7 @@ bool ossimImageHandler::loadState(const ossimKeywordlist& kwl,
                                   const char* prefix)
 {
    static const char MODULE[] = "ossimImageHandler::loadState(kwl, prefix)";
-   
+   theDecimationFactors.clear();
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -376,44 +379,94 @@ ossimIrect ossimImageHandler::getBoundingRect(ossim_uint32 resLevel) const
 }
 
 
-void ossimImageHandler::getDecimationFactor(ossim_uint32 resLevel,
-                                            ossimDpt& result) const
+void ossimImageHandler::getDecimationFactor(ossim_uint32 resLevel, ossimDpt& result) const
 {
-   if (resLevel == 0)
-   {
-      result.x = 1.0;
-      result.y = 1.0;
-   }
+   if (resLevel < theDecimationFactors.size())
+      result = theDecimationFactors[resLevel];
    else
-   {
-      /*
-         ESH 02/2009 -- No longer assume powers of 2 reduction
-         in linear size from resLevel 0 (Tickets # 467,529).
-      */
-      ossim_int32 x  = getNumberOfLines(resLevel);
-      ossim_int32 x0 = getNumberOfLines(0);
-
-      if ( x > 0 && x0 > 0 ) 
-      {
-         result.x = ((double)x) / x0; 
-      }
-      else 
-      {
-         result.x = 1.0 / (1<<resLevel);
-      }
-      result.y = result.x;
-   }
+      result.makeNan();
 }
 
 void ossimImageHandler::getDecimationFactors(vector<ossimDpt>& decimations) const
 {
-   const ossim_uint32 LEVELS = getNumberOfDecimationLevels();
-   decimations.resize(LEVELS);
-   for (ossim_uint32 level = 0; level < LEVELS; ++level)
+   decimations = theDecimationFactors;
+}
+
+//*************************************************************************************************
+// Method determines the decimation factors at each resolution level. This
+// base class implementation computes the decimation by considering the ratios in image size
+// between resolution levels, with fuzzy logic for rounding ratios to the nearest power of 2
+// if possible. Derived classes need to override this method if the decimations are provided
+// as part of the image metadata. In some cases (cf. ossimNitfTileSource), the derived class can
+// set the first R-level (R0) decimation in the case that it is not unity, and then invoke this
+// base class implementation to compute remaining R-levels, respecting the R0 decimation previously
+// set by derived class.
+//*************************************************************************************************
+void ossimImageHandler::establishDecimationFactors() 
+{
+   double line_decimation, samp_decimation, decimation, ratio;
+   ossim_uint32 num_lines, num_samps;
+   
+   // The error margin here is effectively the percent error tolerated between ideal number of 
+   // pixels for given power-of-2 decimation, and the actual number of pixels found at this 
+   // decimation level. Typically, the last level will have fewer pixels than expected, hence the 
+   // need for this logic...
+   static const double ERROR_MARGIN = 1.1;  // 10% allowance
+
+   // NOTE -- Until the end of this method, all decimation values are actually inverse quantities,
+   // i.e., a decimation of 0.5 typical for rlevel 1 is represented here as 2. This facilitates the
+   // fuzzy logic for recognizing powers of 2 (as integers)
+
+   // Default implementation assumes R0 is not decimated. Check for R0 defined by derived class
+   // however, in case this is not the case:
+   ossimDpt decimation_r0 (1.0, 1.0);
+   if (theDecimationFactors.size() > 0)
    {
-      getDecimationFactor(level, decimations[level]);
+      decimation_r0.x = 1.0/theDecimationFactors[0].x; // note use of inverse decimation
+      decimation_r0.y = 1.0/theDecimationFactors[0].y; 
+   }
+   else
+      theDecimationFactors.push_back(decimation_r0);
+
+   // Variables used in loop below:
+   ossim_uint32 num_lines_r0 = getNumberOfLines(0);
+   ossim_uint32 num_samps_r0 = getNumberOfSamples(0);
+   ossim_uint32 power_of_2_decimation = (ossim_uint32) decimation_r0.x;
+
+   // Remaining res levels are computed as a ratio of image size at R0 to image size at Rn:
+   ossim_uint32 nRlevels = getNumberOfDecimationLevels();
+   for(ossim_uint32 res_level = 1; res_level < nRlevels; ++res_level)
+   {
+      num_lines = getNumberOfLines(res_level);
+      num_samps = getNumberOfSamples(res_level);
+      
+      if ((num_lines < 2) || (num_samps < 2)) 
+         break;
+
+      line_decimation = decimation_r0.y * num_lines_r0 / (double)num_lines;
+      samp_decimation = decimation_r0.x * num_samps_r0 / (double)num_samps;
+      decimation = line_decimation<samp_decimation ? line_decimation:samp_decimation;
+
+      // Check for possible error due to inexact ratios.
+      // Loop until reasonable effort was made to establish the corresponding power-of-2 decimation.
+      // If close match is found, the exact integer value is assigned:
+      do 
+      {
+         power_of_2_decimation *= 2;
+         ratio = (double)power_of_2_decimation / decimation;
+         if (ratio < 1.0)
+            ratio = 1.0/ratio;
+         if (ratio < ERROR_MARGIN)
+            decimation = (double) power_of_2_decimation;
+
+      } while ((double) power_of_2_decimation < decimation);
+
+      // Convert the computed decimation back to fractional form before saving in the factors list:
+      decimation = 1.0/decimation;
+      theDecimationFactors.push_back(ossimDpt(decimation, decimation));
    }
 }
+
 
 bool ossimImageHandler::buildHistogram(int numberOfRLevels)
 {
@@ -575,81 +628,82 @@ bool ossimImageHandler::buildOverview(const ossimFilename& filename,
 //! The geometry contains full-to-local image transform as well as projection
 //! (image-to-world).
 //*****************************************************************************
-ossimImageGeometry* ossimImageHandler::getImageGeometry()
+ossimRefPtr<ossimImageGeometry> ossimImageHandler::getImageGeometry()
 {
-   if (theGeometry.valid())
+   if ( !theGeometry )
    {
-      if(getNumberOfDecimationLevels() !=
-         theGeometry->getNumberOfDecimations())
+      //---
+      // Check factory for external geom:
+      //---
+      theGeometry = getExternalImageGeometry();
+
+      if ( !theGeometry )
       {
-         std::vector<ossimDpt> decimationList;
-         getDecimationFactors(decimationList);
-         theGeometry->setDiscreteDecimation(decimationList);
+         //---
+         // WARNING:
+         // Must create/set the geometry at this point or the next call to
+         // ossimImageGeometryRegistry::extendGeometry will put us in an infinite loop
+         // as it does a recursive call back to ossimImageHandler::getImageGeometry().
+         //---
+         theGeometry = new ossimImageGeometry();
+
+         //---
+         // And finally allow factories to extend the internal geometry.
+         // This allows plugins for tagged formats with tags not know in the base
+         // to extend the internal geometry.
+         //
+         // Plugins can do handler->getImageGeometry() then modify/extend.
+         //---
+         if(!ossimImageGeometryRegistry::instance()->extendGeometry( this ))
+         {
+            //---
+            // Check for internal, for geotiff, nitf and so on as last resort for getting some
+            // kind of geometry loaded
+            //---
+            theGeometry = getInternalImageGeometry();
+         }
       }
-      return theGeometry.get();
+
+      // Set image things the geometry object should know about.
+      initImageParameters( theGeometry.get() );
    }
-   
-   //---
-   // Check factory for external geom:
-   //---
-   theGeometry = getExternalImageGeometry();
-   if (theGeometry.valid())
-   {
-      return theGeometry.get();  // We should return here.
-   }
-   // ok,  now let's start with an empty geometry and then call the extension plugins.
-   //
-   theGeometry = new ossimImageGeometry();
-   
-   //---
-   // And finally allow factories to extend the internal geometry.
-   // This allows plugins for tagged formats with tags not know in the base
-   // to extend the internal geometry.
-   //
-   // Plugins can do handler->getImageGeometry() then modify/extend.
-   //---
-   if(!ossimImageGeometryRegistry::instance()->extendGeometry( this ))
-   {
-      // Check for internal, for geotiff, nitf and so on as last resort for getting some kind of geometry
-      // loaded
-      //
-      theGeometry = getInternalImageGeometry();
-   }
-   
-   return theGeometry.get();
+   return theGeometry;
 }
 
-ossimImageGeometry* ossimImageHandler::getExternalImageGeometry()
+ossimRefPtr<ossimImageGeometry> ossimImageHandler::getExternalImageGeometry() const
 {
-   // If already defined, return it:
-   if (theGeometry.valid())
-   {
-      return theGeometry.get();
-   }
+   ossimRefPtr<ossimImageGeometry> geom = 0;
 
-   //---
    // No geometry object has been set up yet. Check for external geometry file.
-   //---
    // Try "foo.geom" if image is "foo.tif":
-   //
    ossimFilename filename = getFilenameWithThisExtension(ossimString(".geom"), false);
-   
    if(!filename.exists())
    {
       // Try "foo_e0.tif" if image is "foo.tif" where "e0" is entry index.
       filename = getFilenameWithThisExtension(ossimString(".geom"), true);
    }
-   ossimRefPtr<ossimImageGeometry> geom = 0;
-   
+   if(!filename.exists())
+   {
+      // Try supplementary data directory for remote geometry:
+      filename = getFilenameWithThisExtension(ossimString(".geom"), false);
+      filename = theSupplementaryDirectory.dirCat(filename.file());
+   }
+   if(!filename.exists())
+   {
+      // Try supplementary data directory for remote geometry with entry index:
+      filename = getFilenameWithThisExtension(ossimString(".geom"), true);
+      filename = theSupplementaryDirectory.dirCat(filename.file());
+   }
+
    if(filename.exists())
    {
       // Open the geom file as a KWL and initialize our geometry object:
+      filename = filename.expand();
       ossimKeywordlist geomKwl(filename);
       
-      ossimString prefix = "";
       // Try loadState with no prefix.
-      const char* lookup = geomKwl.find(prefix.c_str(),
-                                        ossimKeywordNames::TYPE_KW);
+      ossimString prefix = "";
+      const char* lookup = geomKwl.find(prefix.c_str(), ossimKeywordNames::TYPE_KW);
 
       if (!lookup)
       {
@@ -661,39 +715,26 @@ ossimImageGeometry* ossimImageHandler::getExternalImageGeometry()
       if (lookup)
       {
          geom = new ossimImageGeometry;
-         if(!geom->loadState(geomKwl, prefix.c_str()))
+         if(geom->loadState(geomKwl, prefix.c_str()))
+         {
+            // add the geom file to the support data list:
+            ossimSupportFilesList::instance()->add(filename);
+         }
+         else
          {
             geom = 0;
          }
-#if 0
-         ossimString type = lookup;
-         if(type == "ossimImageGeometry")
-         {
-            // Try it with no prefix.
-            geom = new ossimImageGeometry;
-            if(!geom->loadState(geomKwl, prefix.c_str()))
-            {
-               geom = 0;
-            }
-         }
-#endif
       }
    }
    
-   theGeometry = geom.get();
-   return theGeometry.get();
+   return geom;
 }
 
-ossimImageGeometry* ossimImageHandler::getInternalImageGeometry()
+ossimRefPtr<ossimImageGeometry> ossimImageHandler::getInternalImageGeometry() const
 {
    // Default, derived classes should override.
-   if ( !theGeometry )
-   {
-      // allocate an empty geometry if nothing present
-      theGeometry = new ossimImageGeometry();
-   }
-   
-   return theGeometry.get();
+   ossimRefPtr<ossimImageGeometry> geom = new ossimImageGeometry();
+   return geom;
 }
 
 void ossimImageHandler::setImageGeometry( ossimImageGeometry* geom)
@@ -754,11 +795,31 @@ bool ossimImageHandler::openOverview(const ossimFilename& overview_file)
 
       if (theOverview.valid())
       {
+         //---
+         // Set the owner in case the overview reader needs to get something
+         // from the it like min/max/null.
+         //---
+         theOverview->changeOwner(this);
+         
          // Set the starting res level of the overview.
          theOverview->setStartingResLevel(overviewStartingResLevel);
          
          // Capture the file name.
          theOverviewFile = overview_file;
+
+         //---
+         // Some overview handlers cannot store what the null is.  Like dted
+         // null is -32767 not default -32768 so this allows passing this to the
+         // overview reader provided it overrides setMin/Max/NullPixel value
+         // methods. (drb)
+         //---
+         const ossim_uint32 BANDS = getNumberOfOutputBands();
+         for (ossim_uint32 band = 0; band < BANDS; ++band)
+         {
+            theOverview->setMinPixelValue(band, getMinPixelValue(band));
+            theOverview->setMaxPixelValue(band, getMaxPixelValue(band));
+            theOverview->setNullPixelValue(band, getNullPixelValue(band));
+         }
 
          if (traceDebug())
          {
@@ -777,8 +838,6 @@ bool ossimImageHandler::openOverview(const ossimFilename& overview_file)
                                    theOverview.get(),
                                    OSSIM_EVENT_ADD_OBJECT_ID);
          fireEvent(event);
-         
-
       }
    }
    
@@ -1004,6 +1063,7 @@ void ossimImageHandler::close()
    theOverview = 0;
    theGeometry = 0;
    theValidImageVertices.clear();
+   theDecimationFactors.clear();
 }
 
 bool ossimImageHandler::isBandSelector() const
@@ -1135,24 +1195,8 @@ void ossimImageHandler::completeOpen()
 {
    loadMetaData();
    openOverview();
+   establishDecimationFactors();
    openValidVertices();
-
-   if ( theOverview.valid() )
-   {
-      //---
-      // Some overview handlers cannot store what the null is.  Like dted
-      // null is -32767 not default -32768 so this allows passing this to the
-      // overview reader provided it overrides setMin/Max/NullPixel value
-      // methods. (drb)
-      //---
-      const ossim_uint32 BANDS = getNumberOfOutputBands();
-      for (ossim_uint32 band = 0; band < BANDS; ++band)
-      {
-         theOverview->setMinPixelValue(band, getMinPixelValue(band));
-         theOverview->setMaxPixelValue(band, getMaxPixelValue(band));
-         theOverview->setNullPixelValue(band, getNullPixelValue(band));
-      }
-   }
 }
 
 bool ossimImageHandler::canConnectMyInputTo(ossim_int32 /* inputIndex */,
@@ -1178,7 +1222,15 @@ const ossimFilename& ossimImageHandler::getFilename()const
 
 void ossimImageHandler::setSupplementaryDirectory(const ossimFilename& dir)
 {
-   theSupplementaryDirectory = dir;
+   if (dir.isDir())
+      theSupplementaryDirectory = dir;
+   else
+      theSupplementaryDirectory = dir.path();
+
+   // A change in supplementary directory presents an opportunity to find the OVR that could not be
+   // opened previously, as well as other support data items:
+   if (!theOverview.valid())
+      completeOpen();
 }
 
 const ossimFilename& ossimImageHandler::getSupplementaryDirectory()const
@@ -1405,4 +1457,22 @@ void ossimImageHandler::setStartingResLevel(ossim_uint32 level)
    theStartingResLevel = level;
 }
 
-   
+void ossimImageHandler::initImageParameters(ossimImageGeometry* geom) const
+{
+   if ( geom )
+   {
+      // Set decimation levels
+      ossim_uint32 num_levels = getNumberOfDecimationLevels();
+      if ((num_levels > 0) && (num_levels != geom->getNumberOfDecimations()))
+      {
+         geom->setDiscreteDecimation(theDecimationFactors);
+      }
+
+      // Set image size.
+      if(geom->getImageSize().hasNans())
+      {
+         ossimIrect rect = getBoundingRect();
+         geom->setImageSize(ossimIpt(rect.width(), rect.height()));
+      } 
+   }
+}

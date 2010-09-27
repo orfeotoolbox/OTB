@@ -31,5 +31,7 @@ int otbImageToLineSegmentVectorDataNew(int argc, char * argv[])
 
   PersistentLSDFilterType::Pointer lsdFilter = PersistentLSDFilterType::New();
 
+  std::cout << lsdFilter << std::endl;
+
   return EXIT_SUCCESS;
 }

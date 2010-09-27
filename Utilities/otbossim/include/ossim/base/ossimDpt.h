@@ -10,7 +10,7 @@
 // Used to represent an double point containing an x and y data member.
 // 
 //*******************************************************************
-//  $Id: ossimDpt.h 14789 2009-06-29 16:48:14Z dburken $
+//  $Id: ossimDpt.h 17815 2010-08-03 13:23:14Z dburken $
 #ifndef ossimDpt_HEADER
 #define ossimDpt_HEADER
 
@@ -55,10 +55,10 @@ public:
    const ossimDpt& operator=(const ossimGpt&); // assigns lat, lon only
 
    bool operator==(const ossimDpt& pt) const
-   { return ( (x == pt.x) && (y == pt.y) ); } 
+   { return ( ossim::almostEqual(x, pt.x) && ossim::almostEqual(y, pt.y) ); } 
 
    bool operator!=(const ossimDpt& pt) const
-   { return ( (x != pt.x) || (y != pt.y) ); }
+   { return !(*this == pt ); }
 
    void makeNan(){x = ossim::nan(); y=ossim::nan();}
    

@@ -31,5 +31,8 @@ int otbTerraSarBrightnessImageFilterNew(int argc, char * argv[])
   FilterType::Pointer        filter = FilterType::New();
   ComplexFilterType::Pointer complexFilter = ComplexFilterType::New();
 
+  std::cout << filter << std::endl;
+  std::cout << complexFilter << std::endl;
+
   return EXIT_SUCCESS;
 }

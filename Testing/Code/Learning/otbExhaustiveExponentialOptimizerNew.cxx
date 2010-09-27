@@ -28,5 +28,7 @@ int otbExhaustiveExponentialOptimizerNew(int argc, char* argv[])
 {
   otb::ExhaustiveExponentialOptimizer::Pointer opt = otb::ExhaustiveExponentialOptimizer::New();
 
+  std::cout << opt << std::endl;
+
   return EXIT_SUCCESS;
 }

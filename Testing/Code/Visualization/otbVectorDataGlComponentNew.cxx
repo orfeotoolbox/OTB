@@ -26,5 +26,7 @@ int otbVectorDataGlComponentNew(int argc, char * argv[])
   // Instantiation
   VectorDataGlComponentType::Pointer comp = VectorDataGlComponentType::New();
 
+  std::cout << comp << std::endl;
+
   return EXIT_SUCCESS;
 }

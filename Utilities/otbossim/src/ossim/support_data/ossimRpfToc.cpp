@@ -9,7 +9,7 @@
 // Description: Rpf support class
 // 
 //********************************************************************
-// $Id: ossimRpfToc.cpp 17053 2010-04-13 20:29:45Z dburken $
+// $Id: ossimRpfToc.cpp 18044 2010-09-06 14:20:52Z dburken $
 
 #include <iostream>
 #include <fstream>
@@ -163,17 +163,8 @@ ossimErrorCode ossimRpfToc::parseFile(const ossimFilename &fileName, bool keepFi
    return ossimErrorCodes::OSSIM_OK;
 }
 
-// void ossimRpfToc::writeStream(const ossimKeywordlist& properties,
-//                               const ossimFilename& outputDir,
-//                               std::ifstream& dotRpfFileStr,
-//                               std::ofstream& aDotTocFileStr)
-#if defined(_WIN32)
 void ossimRpfToc::createTocAndCopyFrames( const ossimFilename& dotRpfFile,
-                                          const ossimFilename& outputDir ) throw(...)
-#else
-void ossimRpfToc::createTocAndCopyFrames( const ossimFilename& dotRpfFile,
-                                          const ossimFilename& outputDir ) throw(ossimException)
-#endif
+                                          const ossimFilename& outputDir )
 {
    static const char MODULE[] = "ossimRpfToc::createTocAndCopyFrames";
 
@@ -655,7 +646,7 @@ std::ostream& ossimRpfToc::print(std::ostream& out,
             {
                std::string entryPrefix = prefix;
                entryPrefix += "image";
-               entryPrefix += ossimString::toString(prefixIndex++);
+               entryPrefix += ossimString::toString(prefixIndex);
                entryPrefix += ".";
                REC.print(out, entryPrefix);
 
@@ -677,6 +668,7 @@ std::ostream& ossimRpfToc::print(std::ostream& out,
                }
             }
          }
+         ++prefixIndex;
          ++tocEntry;
       }
    }

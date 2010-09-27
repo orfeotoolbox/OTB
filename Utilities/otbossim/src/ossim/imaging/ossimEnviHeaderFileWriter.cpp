@@ -13,7 +13,7 @@
 // writing an ENVI (The Environment for Visualizing Images) header file.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimEnviHeaderFileWriter.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimEnviHeaderFileWriter.cpp 17932 2010-08-19 20:34:35Z dburken $
 
 #include <ossim/imaging/ossimEnviHeaderFileWriter.h>
 #include <ossim/base/ossimKeywordlist.h>
@@ -68,9 +68,8 @@ bool ossimEnviHeaderFileWriter::writeFile()
    // Get the geometry from the input.
    // Get the geometry from the input.
    ossimMapProjection* mapProj = 0;
-   const ossimImageGeometry* inputGeom = theInputConnection->getImageGeometry();
-   if (inputGeom)
-      mapProj = PTR_CAST(ossimMapProjection, inputGeom->getProjection());
+   ossimRefPtr<ossimImageGeometry> inputGeom = theInputConnection->getImageGeometry();
+   if ( inputGeom.valid() ) mapProj = PTR_CAST(ossimMapProjection, inputGeom->getProjection());
    if (mapProj)
    {
       // Create the projection info.

@@ -122,8 +122,14 @@ protected:
    
    // if an elevation is returned that's null for ellipsoid then use the geoid manager to calculate a shift
    //
-   bool          m_useGeoidIfNullFlag;  
-
+   bool          m_useGeoidIfNullFlag; 
+   
+   
+   /**
+    * I have tried the readwrite lock interfaces but have found it unstable.  I am using the standard Mutex
+    * and it seems to be much more stable across all platforms.  More testing needs to occur for the ReadWriteMutex.
+    * For now we will use Mutex.
+    */
    OpenThreads::Mutex m_mutex;
 };
 

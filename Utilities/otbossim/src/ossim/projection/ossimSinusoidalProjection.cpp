@@ -9,7 +9,7 @@
 //
 // Calls Geotrans Sinusoidal projection code.  
 //*******************************************************************
-//  $Id: ossimSinusoidalProjection.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimSinusoidalProjection.cpp 17815 2010-08-03 13:23:14Z dburken $
 
 #include <math.h>
 #include <ossim/projection/ossimSinusoidalProjection.h>
@@ -104,6 +104,12 @@ void ossimSinusoidalProjection::setDefaults()
    Sinu_Delta_Northing = 10001966.0;
    Sinu_False_Easting  = 0.0;
    Sinu_False_Northing = 0.0;
+}
+
+void ossimSinusoidalProjection::setCentralMeridian(double centralMeridian)
+{
+  Sinu_Origin_Long = centralMeridian;
+  update();
 }
 
 void ossimSinusoidalProjection::setFalseEastingNorthing(double falseEasting,
@@ -426,3 +432,19 @@ long ossimSinusoidalProjection::Convert_Sinusoidal_To_Geodetic(double Easting,
   }
   return (Error_Code);
 } /* END OF Convert_Sinusoidal_To_Geodetic */
+
+//*************************************************************************************************
+//! Returns TRUE if principal parameters are within epsilon tolerance.
+//*************************************************************************************************
+bool ossimSinusoidalProjection::operator==(const ossimProjection& proj) const
+{
+   if (!ossimMapProjection::operator==(proj))
+      return false;
+
+   ossimSinusoidalProjection* p = PTR_CAST(ossimSinusoidalProjection, &proj);
+   if (!p) return false;
+
+   if (!ossim::almostEqual(Sinu_Origin_Long,p->Sinu_Origin_Long)) return false;
+
+   return true;
+}

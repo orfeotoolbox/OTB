@@ -35,7 +35,9 @@ int otbLineSpatialObjectListToRightAnglePointSetFilterNew(int argc, char * argv[
   typedef otb::LineSpatialObjectListToRightAnglePointSetFilter<ImageType, LinesListType,
       PointSetType>    RightAngleFilterType;
 
-  RightAngleFilterType::Pointer rightAngleFilter  = RightAngleFilterType::New();
+  RightAngleFilterType::Pointer filter  = RightAngleFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

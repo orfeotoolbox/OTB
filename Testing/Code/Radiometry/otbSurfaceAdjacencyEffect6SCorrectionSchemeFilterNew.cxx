@@ -34,5 +34,7 @@ int otbSurfaceAdjacencyEffect6SCorrectionSchemeFilterNew(int argc, char * argv[]
   SurfaceAdjacencyEffect6SCorrectionSchemeFilterType::Pointer filter =
     SurfaceAdjacencyEffect6SCorrectionSchemeFilterType::New();
 
+  std::cout << filter << std::endl;
+
   return EXIT_SUCCESS;
 }

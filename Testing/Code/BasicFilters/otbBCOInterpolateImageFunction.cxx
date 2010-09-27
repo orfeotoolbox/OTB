@@ -82,7 +82,7 @@ int otbBCOInterpolateImageFunction(int argc, char * argv[])
   std::cout << "Radius Checking : " << std::endl << filter->GetRadius() << std::endl;
   filter->SetRadius(radius);
   std::cout << filter->GetRadius() << std::endl;
-
+  
   filter->SetInputImage(reader->GetOutput());
   
   std::ofstream file;
@@ -244,10 +244,10 @@ int otbBCOInterpolateImageFunctionVectorImageTest(int argc, char * argv[])
   resampler->SetInput(reader->GetOutput());
   resampler->SetInterpolator(interpolator);
   StreamingResampleImageFilterType::SizeType size;
-  size[0] = 171;
-  size[1] = 171;
+  size[0] = 256;
+  size[1] = 256;
   resampler->SetOutputSize(size);
-  resampler->SetOutputSpacing(3);
+  resampler->SetOutputSpacing(2);
   resampler->Update();
   // Result of resampler is written
   writer->SetInput(resampler->GetOutput());

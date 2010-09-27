@@ -30,7 +30,9 @@ int otbProfileToProfileDerivativeFilterNew(int argc, char * argv[])
   typedef otb::Image<OutputPixelType, Dimension>                                 OutputImageType;
   typedef otb::ProfileToProfileDerivativeFilter<InputImageType, OutputImageType> DerivativeFilterType;
 
-  DerivativeFilterType::Pointer derivativeFilter = DerivativeFilterType::New();
+  DerivativeFilterType::Pointer filter = DerivativeFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

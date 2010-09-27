@@ -30,7 +30,9 @@ int otbRoadExtractionFilterNew(int argc, char * argv[])
   typedef otb::RoadExtractionFilter<InputImageType, PathType> RoadExtractionFilterType;
 
   // Instantiating object
-  RoadExtractionFilterType::Pointer object = RoadExtractionFilterType::New();
+  RoadExtractionFilterType::Pointer filter = RoadExtractionFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

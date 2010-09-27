@@ -30,7 +30,9 @@ int otbMultiChannelRAndNIRVegetationIndexImageFilterNew(int argc, char * argv[])
       OutputImageType> MultiChannelRAndNIRIndexImageFilterType;
 
   // Instantiating object
-  MultiChannelRAndNIRIndexImageFilterType::Pointer object = MultiChannelRAndNIRIndexImageFilterType::New();
+  MultiChannelRAndNIRIndexImageFilterType::Pointer filter = MultiChannelRAndNIRIndexImageFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

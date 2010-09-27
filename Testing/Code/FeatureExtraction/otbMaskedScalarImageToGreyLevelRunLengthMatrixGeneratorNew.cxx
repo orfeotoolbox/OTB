@@ -37,7 +37,9 @@ int otbMaskedScalarImageToGreyLevelRunLengthMatrixGeneratorNew(int argc, char* a
 
   typedef otb::MaskedScalarImageToGreyLevelRunLengthMatrixGenerator<InputImageType> FilterType;
 
-  FilterType::Pointer FilterMatrixGenerator = FilterType::New();
+  FilterType::Pointer matrixGenerator = FilterType::New();
+
+  std::cout << matrixGenerator << std::endl;
 
   return EXIT_SUCCESS;
 }

@@ -7,7 +7,7 @@
 // Description: Sequencer for building overview files.
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimOverviewSequencer.cpp 17194 2010-04-23 15:05:19Z dburken $
+// $Id: ossimOverviewSequencer.cpp 17928 2010-08-19 18:43:53Z gpotts $
 
 #include <ossim/imaging/ossimOverviewSequencer.h>
 #include <ossim/base/ossimIpt.h>
@@ -22,7 +22,7 @@
 
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimOverviewSequencer.cpp 17194 2010-04-23 15:05:19Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimOverviewSequencer.cpp 17928 2010-08-19 18:43:53Z gpotts $";
 #endif
 
 static ossimTrace traceDebug("ossimOverviewSequencer:debug");
@@ -31,7 +31,7 @@ ossimOverviewSequencer::ossimOverviewSequencer()
    :
    ossimReferenced(),
    m_imageHandler(0),
-   m_tile(),
+   m_tile(0),
    m_areaOfInterest(),
    m_tileSize(OSSIM_DEFAULT_TILE_WIDTH, OSSIM_DEFAULT_TILE_HEIGHT),
    m_numberOfTilesHorizontal(0),
@@ -63,6 +63,7 @@ ossimOverviewSequencer::ossimOverviewSequencer()
 ossimOverviewSequencer::~ossimOverviewSequencer()
 {
    m_imageHandler = 0;
+   m_tile         = 0;
    m_histogram    = 0;
 
    if (traceDebug())
@@ -146,7 +147,7 @@ void ossimOverviewSequencer::setHistogramMode(ossimHistogramMode mode)
 
 void ossimOverviewSequencer::writeHistogram()
 {
-   if ( m_histogram.valid() && m_imageHandler )
+   if ( m_histogram.valid() && m_imageHandler.valid() )
    {
       writeHistogram( m_imageHandler->getFilenameWithThisExtension("his") );
    }
@@ -179,8 +180,7 @@ void ossimOverviewSequencer::initialize()
    // Check the area of interest and set from image if needed.
    if ( m_areaOfInterest.hasNans() )
    {
-      m_areaOfInterest =
-         m_imageHandler->getImageRectangle(m_sourceResLevel);
+      m_areaOfInterest = m_imageHandler->getImageRectangle(m_sourceResLevel);
    }
 
    // Check the tile size and set from image if needed.
@@ -195,15 +195,17 @@ void ossimOverviewSequencer::initialize()
 
    // Start on first tile.
    m_currentTileNumber = 0;
-      
-   m_tile  = ossimImageDataFactory::instance()->
-      create( m_imageHandler,
-              m_imageHandler->getOutputScalarType(),
-              m_imageHandler->getNumberOfOutputBands(),
-              static_cast<ossim_uint32>(m_tileSize.x),
-              static_cast<ossim_uint32>(m_tileSize.y) );
+
+   // Use this factory constructor as it copies the min/max/nulls from the image handler.
+   m_tile = ossimImageDataFactory::instance()->
+      create( 0, m_imageHandler->getNumberOfOutputBands(), m_imageHandler.get());
+   
    if(m_tile.valid())
    {
+      // Set the width and height.
+      m_tile->setWidthHeight(static_cast<ossim_uint32>(m_tileSize.x),
+                             static_cast<ossim_uint32>(m_tileSize.y) );
+      // Initialize tile buffer.
       m_tile->initialize();
    }
 
@@ -211,7 +213,7 @@ void ossimOverviewSequencer::initialize()
    {
       m_histogram = new ossimMultiBandHistogram;
       
-      m_histogram->create(m_imageHandler);
+      m_histogram->create(m_imageHandler.get());
 
       if (m_histoMode == OSSIM_HISTO_MODE_NORMAL)
       {
@@ -462,7 +464,13 @@ void ossimOverviewSequencer::resampleTile(const ossimImageData* inputTile)
          resampleTile(inputTile, ossim_uint32(0));
          break;
       }
-      
+         
+      case OSSIM_SINT32:
+      {
+         resampleTile(inputTile, ossim_sint32(0));
+         break;
+      }
+         
       case OSSIM_FLOAT32:
       {
          resampleTile(inputTile, ossim_float32(0.0));

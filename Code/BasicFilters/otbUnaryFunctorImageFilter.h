@@ -23,7 +23,7 @@
 namespace otb
 {
 /**
- * \class UnaryFunctorImage
+ * \class UnaryFunctorImageFilter
  * \brief Implements pixel-wise generic operation on one image.
  *
  * Add the capability to change the number of channel when operation on

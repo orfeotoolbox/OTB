@@ -34,6 +34,7 @@
 #include <ossim/imaging/ossimBumpShadeTileSource.h>
 #include <ossim/imaging/ossimFilterResampler.h>
 #include <ossim/imaging/ossimImageFileWriter.h>
+#include <ossim/imaging/ossimImageHandler.h>
 #include <ossim/imaging/ossimImageMosaic.h>
 #include <ossim/imaging/ossimImageRenderer.h>
 #include <ossim/imaging/ossimImageSource.h>
@@ -106,67 +107,67 @@ void ossimDemGen::addArguments(ossimArgumentParser& ap)
    ossimString usageString = ap.getApplicationName();
    usageString += " [option]... [input-option]... <input-file(s)> <output-file>\nNote at least one input is required either from one of the input options, e.g. --input-dem <my-dem.hgt> or adding to command line in front of the output file in which case the code will try to ascertain what type of input it is.\n\nAvailable traces:\n-T \"ossimDemGen:debug\"   - General debug trace to standard out.\n-T \"ossimDemGen:log\"     - Writes a log file to output-file.log.\n-T \"ossimDemGen:options\" - Writes the options to output-file-options.kwl.";
 
-   ap.getApplicationUsage()->setCommandLineUsage(usageString);
+   ossimApplicationUsage* appuse = ap.getApplicationUsage();
    
-   ap.getApplicationUsage()->setDescription(ap.getApplicationName()+" Utility application for generating elevation products from dem data.");
+   appuse->setCommandLineUsage(usageString);
    
-   ap.getApplicationUsage()->addCommandLineOption("--azimuth", "<azimuth>\nhillshade option - Light source azimuth angle for bump shade.\nRange: 0 to 360, Default = 180.0");
-
-   ap.getApplicationUsage()->addCommandLineOption("--central-meridian","<central_meridian_in_decimal_degrees>\nNote if set this will be used for the central meridian of the projection.  This can be used to lock the utm zone.");
-
-   ap.getApplicationUsage()->addCommandLineOption("--color","<r> <g> <b>\nhillshade option - Set the red, green and blue color values to be used with hillshade.\nThis option can be used with or without an image source for color.\nRange 0 to 255, Defualt r=255, g=255, b=255");
-
-   ap.getApplicationUsage()->addCommandLineOption("--color-table","<color-table.kwl>\nhillshade or color-relief option - Keyword list containing color table for color-relief option.");
-
-   ap.getApplicationUsage()->addCommandLineOption("--cut-bbox-ll", "<min_lat> <min_lon> <max_lat> <max_lon>\nSpecify a bounding box with the minimum latitude/longitude and max latitude/longitude in decimal degrees.");
+   appuse->setDescription(ap.getApplicationName()+" Utility application for generating elevation products from dem data.");
    
-   ap.getApplicationUsage()->addCommandLineOption("--cut-center-llwh","<latitude> <longitude> <width> <height>\nSpecify the center cut in latitude longitude space with width and height in pixels.");
+   appuse->addCommandLineOption("--azimuth", "<azimuth>\nhillshade option - Light source azimuth angle for bump shade.\nRange: 0 to 360, Default = 180.0");
 
-   ap.getApplicationUsage()->addCommandLineOption("--elevation", "<elevation>\nhillshade option - Light source elevation angle for bumb shade.\nRange: 0 to 90, Default = 45.0");
+   appuse->addCommandLineOption("--central-meridian","<central_meridian_in_decimal_degrees>\nNote if set this will be used for the central meridian of the projection.  This can be used to lock the utm zone.");
+
+   appuse->addCommandLineOption("--color","<r> <g> <b>\nhillshade option - Set the red, green and blue color values to be used with hillshade.\nThis option can be used with or without an image source for color.\nRange 0 to 255, Defualt r=255, g=255, b=255");
+
+   appuse->addCommandLineOption("--color-table","<color-table.kwl>\nhillshade or color-relief option - Keyword list containing color table for color-relief option.");
+
+   appuse->addCommandLineOption("--cut-bbox-ll", "<min_lat> <min_lon> <max_lat> <max_lon>\nSpecify a bounding box with the minimum latitude/longitude and max latitude/longitude in decimal degrees.");
    
-   ap.getApplicationUsage()->addCommandLineOption("--exaggeration", "<exageration>\nExaggeration for image to plane noraml filter.\nRange: .0001 to 50000, Default = 1.0");
+   appuse->addCommandLineOption("--cut-center-llwh","<latitude> <longitude> <width> <height>\nSpecify the center cut in latitude longitude space with width and height in pixels.");
 
-   ap.getApplicationUsage()->addCommandLineOption("-h or --help", "Display this help and exit.");
-
-   ap.getApplicationUsage()->addCommandLineOption("--histogram-op", "<operation>\nHistogram operation to perform. Valid operations are \"auto-minmax\", \"std-stretch-1\", \"std-stretch-2\" and \"std-stretch-3\".");
-
-   ap.getApplicationUsage()->addCommandLineOption("--input-dem", "<dem> Input dem to process.");
-
-   ap.getApplicationUsage()->addCommandLineOption("--input-img", "<image> Input image to process.");
+   appuse->addCommandLineOption("--elevation", "<elevation>\nhillshade option - Light source elevation angle for bumb shade.\nRange: 0 to 90, Default = 45.0");
    
-   ap.getApplicationUsage()->addCommandLineOption("--input-src","<file.src> Input source file list keyword list with list of dems or images or both to process.");
+   appuse->addCommandLineOption("--exaggeration", "<exageration>\nExaggeration for image to plane noraml filter.\nRange: .0001 to 50000, Default = 1.0");
+
+   appuse->addCommandLineOption("-h or --help", "Display this help and exit.");
+
+   appuse->addCommandLineOption("--histogram-op", "<operation>\nHistogram operation to perform. Valid operations are \"auto-minmax\", \"std-stretch-1\", \"std-stretch-2\" and \"std-stretch-3\".");
+
+   appuse->addCommandLineOption("--input-dem", "<dem> Input dem to process.");
+
+   appuse->addCommandLineOption("--input-img", "<image> Input image to process.");
    
-   ap.getApplicationUsage()->addCommandLineOption("--meters", "<meters>\nSpecifies an override for the meters per pixel");
+   appuse->addCommandLineOption("--input-src","<file.src> Input source file list keyword list with list of dems or images or both to process.");
+   
+   appuse->addCommandLineOption("--meters", "<meters>\nSpecifies an override for the meters per pixel");
       
-   ap.getApplicationUsage()->addCommandLineOption("--op","<operation>\nOperation to perform. Valid operations are \"color-relief\", \"hillshade\" and \"ortho\".");
+   appuse->addCommandLineOption("--op","<operation>\nOperation to perform. Valid operations are \"color-relief\", \"hillshade\" and \"ortho\".");
 
-   ap.getApplicationUsage()->addCommandLineOption("--options-keyword-list","<options.kwl>  This can be all or part of the application options.  To get a template you can turn on trace to the ossimDemGen class by adding \"-T ossimDemGen\" to your command.");
+   appuse->addCommandLineOption("--options-keyword-list","<options.kwl>  This can be all or part of the application options.  To get a template you can turn on trace to the ossimDemGen class by adding \"-T ossimDemGen\" to your command.");
 
-   ap.getApplicationUsage()->addCommandLineOption("--origin-latitude","<latidude_in_decimal_degrees>\nNote if set this will be used for the origin latitude of the projection.  Setting this to something other than 0.0 with a geographic projection creates a scaled geographic projection.");
+   appuse->addCommandLineOption("--origin-latitude","<latidude_in_decimal_degrees>\nNote if set this will be used for the origin latitude of the projection.  Setting this to something other than 0.0 with a geographic projection creates a scaled geographic projection.");
 
-   ap.getApplicationUsage()->addCommandLineOption("--projection", "<output_projection> Can be input, geo, geo-scaled, or utm.\nIf input and multiple sources the projection of the first image will be used.\nIf geo-scaled the origin of latitude will be set to scene center.\nIf utm the zone will be set from the scene center.\nIf --srs is used it takes precident over this option.");
+   appuse->addCommandLineOption("--projection", "<output_projection> Can be input, geo, geo-scaled, or utm.\nIf input and multiple sources the projection of the first image will be used.\nIf geo-scaled the origin of latitude will be set to scene center.\nIf utm the zone will be set from the scene center.\nIf --srs is used it takes precident over this option.");
    
-   ap.getApplicationUsage()->addCommandLineOption(
+   appuse->addCommandLineOption(
       "--resample-filter","<type>\nSpecify what resampler filter to use, e.g. nearest neighbor, bilinear, cubic.\nSee ossim-info ----resampler-filters"); 
 
-   ap.getApplicationUsage()->addCommandLineOption("--scale-to-8-bit","Scales output to eight bits if not already.");
+   appuse->addCommandLineOption("--scale-to-8-bit","Scales output to eight bits if not already.");
    
-   ap.getApplicationUsage()->addCommandLineOption("--smoothness-factor","<factor>\nhillshade operation - Smoothness factor for image to plane noraml filter.\nRange: .0001 to 40, Default = 1.0");
+   appuse->addCommandLineOption("--smoothness-factor","<factor>\nhillshade operation - Smoothness factor for image to plane noraml filter.\nRange: .0001 to 40, Default = 1.0");
 
-   ap.getApplicationUsage()->addCommandLineOption("--srs","<src_code>\nSpecify an output reference frame/projection. Example: --srs EPSG:4326");
+   appuse->addCommandLineOption("--srs","<src_code>\nSpecify an output reference frame/projection. Example: --srs EPSG:4326");
 
-   ap.getApplicationUsage()->addCommandLineOption("-t or --thumbnail", "<max_dimension>\nSpecify a thumbnail resolution.\nScale will be adjusted so the maximum dimension = argument given.");
+   appuse->addCommandLineOption("-t or --thumbnail", "<max_dimension>\nSpecify a thumbnail resolution.\nScale will be adjusted so the maximum dimension = argument given.");
    
-   ap.getApplicationUsage()->addCommandLineOption(
+   appuse->addCommandLineOption(
       "-w or --writer","<writer>\nSpecifies the output writer.  Default uses output file extension to "
       "determine writer.");
    
-   ap.getApplicationUsage()->addCommandLineOption("--writer-prop", "<writer-property>\nPasses a name=value pair to the writer for setting it's property. Any number of these can appear on the line.");
-   
-   ap.getApplicationUsage()->addCommandLineOption("--version", "Outputs version information.");
+   appuse->addCommandLineOption("--writer-prop", "<writer-property>\nPasses a name=value pair to the writer for setting it's property. Any number of these can appear on the line.");
 }
 
-void ossimDemGen::initialize(ossimArgumentParser& ap)
+bool ossimDemGen::initialize(ossimArgumentParser& ap)
 {
    static const char MODULE[] = "ossimDemGen::initialize(ossimArgumentParser&)";
 
@@ -201,18 +202,8 @@ void ossimDemGen::initialize(ossimArgumentParser& ap)
          printImageTypeList( ossimNotify(ossimNotifyLevel_NOTICE) );
       
       std::string errMsg = "usage";
-      throw ossimException(errMsg);
+      return false; // indicates process should be terminated
    }   
-
-   if ( ap.read("--version") )
-   {
-      ossimNotify(ossimNotifyLevel_NOTICE)
-         << ap.getApplicationName().c_str() << " " 
-         << ossimInit::instance()->instance()->version().c_str()
-         << std::endl;
-      std::string errMsg = "version...";
-      throw ossimException(errMsg);
-   }
 
    //---
    // Extract optional arguments.
@@ -468,6 +459,7 @@ void ossimDemGen::initialize(ossimArgumentParser& ap)
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " exited..." << std::endl;
    }  
+   return true;
    
 } // End: void ossimDemGen::initialize(ossimArgumentParser& ap)
 
@@ -498,17 +490,7 @@ void ossimDemGen::initialize()
       }
       else if ( s == "color-relief" )
       {
-         if ( hasLutFile() )
-         {
-            m_operation = OSSIM_DEM_OP_COLOR_RELIEF;
-         }
-         else
-         {
-            // Note at some point we may want to add a default lut in the code.
-            std::string errMsg = "ERROR: Must supply a lut file!\n";
-            errMsg += "Use --color-table <color-table.kwl> option.";
-            throw ossimException(errMsg);
-         }
+         m_operation = OSSIM_DEM_OP_COLOR_RELIEF;
       }
       else if ( s == "ortho" )
       {
@@ -540,9 +522,6 @@ void ossimDemGen::initialize()
 
    // Create chains for any image sources.
    addImgSources();
-
-   //---
-   // Create chains from src file
 
    // Create the output projection.
    createOutputProjection();
@@ -698,17 +677,15 @@ void ossimDemGen::execute()
    }
    else if ( m_operation == OSSIM_DEM_OP_COLOR_RELIEF )
    {
+      source = combineLayers();
       if ( hasLutFile() )
       {
-         source = combineLayers();
          source = addIndexToRgbLutFilter( source );
       }
       else
       {
-         // Note at some point we may want to add a default lut in the code.
-         std::string errMsg = "ERROR: Must supply a lut file!\n";
-         errMsg += "Use --color-table <color-table.kwl> option.";
-         throw ossimException(errMsg);
+         // No LUT file provided, so doing the default 8-bit linear stretch:
+         source = addScalarRemapper( source );
       }
    }
    else if ( m_operation == OSSIM_DEM_OP_ORTHO )
@@ -718,9 +695,7 @@ void ossimDemGen::execute()
 
    if ( source.valid() )
    {
-      //---
       // This is conditional.  May be set at the ossimSingleImageChain level.
-      //---
       if ( scaleToEightBit() && ( source->getOutputScalarType() != OSSIM_UINT8 ) )
       {
          source = addScalarRemapper( source );
@@ -988,7 +963,7 @@ ossimRefPtr<ossimSingleImageChain> ossimDemGen::createChain(const ossimFilename&
          {
             //---
             // If multiple inputs and scaleToEightBit do it at the end of the processing
-            // chain to alleviate un-even strectes between inputs.
+            // chain to alleviate un-even stretches between inputs.
             //---
             bool scaleFlag = ( scaleToEightBit() && ( getNumberOfInputs() == 1) );
             ic->setRemapToEightBitFlag( scaleFlag );
@@ -1132,7 +1107,7 @@ void ossimDemGen::createOutputProjection()
          << "\nTaking " << srs << " over " << op << "\n";
    }
    
-   ossimString projString;
+   bool usingInput = false;
    
    // If an srs code use that first.
    if (srs)
@@ -1141,8 +1116,8 @@ void ossimDemGen::createOutputProjection()
    }
    else if (op)
    {
-      projString = op;
-      ossimString os = projString;
+      ossimString projString = op;
+      ossimString os = op;
       os.downcase();
       
       if ( (os == "utm") || (projString == "ossimUtmProjection") )
@@ -1152,6 +1127,7 @@ void ossimDemGen::createOutputProjection()
       else if ( os == "input" )
       {
          m_outputProjection = getFirstInputProjection();
+         usingInput = true;
       }
       else if (os == "geo")
       {
@@ -1165,25 +1141,47 @@ void ossimDemGen::createOutputProjection()
    
    if ( !m_outputProjection.valid() )
    {
-      if ( traceDebug() )
+      // Try first input. If map projected use that.
+      m_outputProjection = getFirstInputProjection();
+      if ( m_outputProjection.valid() )
       {
-         ossimNotify(ossimNotifyLevel_WARN)
-            << "WARNING: No projection set!"
-            << "\nDefaulting to scaled geographic at scene center.\n";
+         usingInput = true;
+         if ( traceDebug() )
+         {
+            
+            ossimNotify(ossimNotifyLevel_WARN)
+               << "WARNING: No projection set!"
+               << "\nDefaulting to first input's projection.\n";
+         }
       }
-      
-      m_outputProjection = getNewGeoScaledProjection(); 
+      else
+      {
+         m_outputProjection = getNewGeoScaledProjection();
+         if ( traceDebug() )
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
+               << "WARNING: No projection set!"
+               << "\nDefaulting to scaled geographic at scene center.\n";
+         }
+      }
    }
-   
-   // Set the scale.
-   initializeProjectionGsd();
 
-   // Set the tie.
-   intiailizeProjectionTiePoint();
+   //---
+   // If the input is the same as output projection do not modify; else, set
+   // the gsd to user selected "METERS_KW" or the best resolution of the inputs,
+   // set the tie and then snap it to the projection origin.
+   //---
+   if ( !usingInput || m_kwl->find(METERS_KW) )
+   {
+      // Set the scale.
+      initializeProjectionGsd();
+      
+      // Set the tie.
+      intiailizeProjectionTiePoint();
 
-   // Adjust the projection tie and origin.
-   m_outputProjection->snapTiePointToOrigin();
-   
+      // Adjust the projection tie and origin.
+      m_outputProjection->snapTiePointToOrigin();
+   }
    
    if ( traceDebug() )
    {
@@ -1364,8 +1362,8 @@ void ossimDemGen::getTiePoint(ossimSingleImageChain* chain, ossimGpt& tie)
    
    if (chain)
    {
-      ossimImageGeometry* geom = chain->getImageGeometry();
-      if (geom)
+      ossimRefPtr<ossimImageGeometry> geom = chain->getImageGeometry();
+      if ( geom.valid() )
       {
          ossimIrect boundingRect = chain->getBoundingRect();
          ossimDpt ulPt = boundingRect.ul();
@@ -1460,8 +1458,8 @@ void ossimDemGen::getMetersPerPixel(ossimSingleImageChain* chain, ossimDpt& gsd)
 
    if (chain)
    {
-      ossimImageGeometry* geom = chain->getImageGeometry();
-      if (geom)
+      ossimRefPtr<ossimImageGeometry> geom = chain->getImageGeometry();
+      if ( geom.valid() )
       {
          gsd = geom->getMetersPerPixel();
          
@@ -1698,35 +1696,51 @@ ossimRefPtr<ossimMapProjection> ossimDemGen::getFirstInputProjection()
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
    }
-   
+
+   ossimRefPtr<ossimImageHandler>  ih     = 0;
    ossimRefPtr<ossimMapProjection> result = 0;
-   ossimRefPtr<ossimProjection>    proj   = 0;
-   ossimRefPtr<ossimImageGeometry> geom   = 0;
-   
+
+   // Get the first image handler.
    if ( m_demLayer.size() )
    {
-      geom = m_demLayer[0]->getImageGeometry();
+      ih = m_demLayer[0]->getImageHandler();
    }
    else if ( m_imgLayer.size() )
    {
-      geom = m_imgLayer[0]->getImageGeometry();
+      ih = m_imgLayer[0]->getImageHandler();
    }
-
-   if ( geom.valid() )
+   
+   if ( ih.valid() )
    {
-      proj = geom->getProjection();
-      if ( proj.valid() )
+      // Get the geometry from the first image handler.      
+      ossimRefPtr<ossimImageGeometry> geom = ih->getImageGeometry();
+      if ( geom.valid() )
       {
-         result = PTR_CAST( ossimMapProjection, proj.get() );
-         if ( !result.valid() )
+         // Get the image projection.
+         ossimRefPtr<ossimProjection> proj = geom->getProjection();
+         if ( proj.valid() )
          {
-            ossimNotify(ossimNotifyLevel_WARN) << "Could not cast to map projection.\n";
+            // Cast and assign to result.
+            ossimMapProjection* mapProj = PTR_CAST( ossimMapProjection, proj.get() );
+            if (mapProj)
+            {
+               // Must duplicate in case the output projection gets modified.
+               result = (ossimMapProjection*) mapProj->dup();
+            }
+            if ( !result.valid() && traceDebug() )
+            {
+               ossimNotify(ossimNotifyLevel_WARN) << "Could not cast to map projection.\n";
+            }
+         }
+         else if ( traceDebug() )
+         {
+            ossimNotify(ossimNotifyLevel_WARN) << "No projection in first chain...\n";
          }
       }
-      else
-      {
-         ossimNotify(ossimNotifyLevel_WARN) << "No projection in first chain...\n";
-      }
+   }
+   else if ( traceDebug() )
+   {
+      ossimNotify(ossimNotifyLevel_WARN) << "No image handler in first chain...\n";
    }
    
    if ( traceDebug() )
@@ -2319,6 +2333,11 @@ void ossimDemGen::initializeThumbnailProjection(const ossimIrect& originalRect,
       ossimNotify(ossimNotifyLevel_DEBUG)
          << MODULE << " entered...\n"
          << "origial rect:  " << originalRect << "\n";
+
+      if (m_outputProjection.valid())
+      {
+         m_outputProjection->print(ossimNotify(ossimNotifyLevel_DEBUG));
+      }
    }
 
    if ( !originalRect.hasNans() && m_outputProjection.valid() )
@@ -2332,6 +2351,7 @@ void ossimDemGen::initializeThumbnailProjection(const ossimIrect& originalRect,
          ossim_float64 thumbSize = ossimString(thumbRes).toFloat64();
          ossim_float64 maxRectDimension =
             ossim::max( originalRect.width(), originalRect.height() );
+         
          if ( maxRectDimension > thumbSize )
          {
             // Need to adjust scale:
@@ -2339,8 +2359,10 @@ void ossimDemGen::initializeThumbnailProjection(const ossimIrect& originalRect,
             // Get the corners:
             ossimGpt ulGpt;
             ossimGpt lrGpt;
-            m_outputProjection->lineSampleToWorld(ossimDpt(adjustedRect.ul()), ulGpt);
-            m_outputProjection->lineSampleToWorld(ossimDpt(adjustedRect.lr()), lrGpt);         
+            ossimDpt dpt;
+            
+            m_outputProjection->lineSampleToWorld(ossimDpt(originalRect.ul()), ulGpt);
+            m_outputProjection->lineSampleToWorld(ossimDpt(originalRect.lr()), lrGpt);         
             
             ossim_float64 scale = maxRectDimension / thumbSize;
 
@@ -2351,16 +2373,16 @@ void ossimDemGen::initializeThumbnailProjection(const ossimIrect& originalRect,
             m_outputProjection->applyScale(ossimDpt(scale, scale), true);
             
             // Get the new upper left in view space.
-            ossimDpt dpt; 
             m_outputProjection->worldToLineSample(ulGpt, dpt);
             ossimIpt ul(dpt);
             
             // Get the new lower right in view space.
             m_outputProjection->worldToLineSample(lrGpt, dpt);
             ossimIpt lr(dpt);
-            
+
             // Clamp to thumbnail bounds.
             ossim_int32 ts = thumbSize;
+
             if ( (lr.x - ul.x + 1) > ts )
             {
                lr.x = ul.x + ts - 1;
@@ -2392,9 +2414,12 @@ void ossimDemGen::initializeThumbnailProjection(const ossimIrect& originalRect,
    
    if ( traceDebug() )
    {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "\nadjusted rect: " << adjustedRect << "\n"         
-         << MODULE << " exited...\n";
+      ossimNotify(ossimNotifyLevel_DEBUG) << "\nadjusted rect: " << adjustedRect << "\n";
+      if (m_outputProjection.valid())
+      {
+         m_outputProjection->print(ossimNotify(ossimNotifyLevel_DEBUG));
+      }
+      ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " exited...\n";
    }
 }
 
@@ -2478,7 +2503,11 @@ bool ossimDemGen::isSrcFile(const ossimFilename& file) const
 bool ossimDemGen::scaleToEightBit() const
 {
    bool result = false;
-   if ( m_kwl.valid() )
+   if ( m_operation == OSSIM_DEM_OP_COLOR_RELIEF ) // Always 8 bit...
+   {
+      result = true;
+   }
+   else if ( m_kwl.valid() )
    {
       const char* lookup = m_kwl->find(SCALE_2_8_BIT_KW);
       if ( lookup )

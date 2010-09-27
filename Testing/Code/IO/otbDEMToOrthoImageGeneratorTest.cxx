@@ -72,6 +72,9 @@ int otbDEMToOrthoImageGeneratorTest(int argc, char * argv[])
   object->SetOutputSize(size);
   object->SetOutputSpacing(spacing);
   object->SetMapProjection(mapProj);
+
+  std::cout << object << std::endl;
+
   otb::StandardFilterWatcher watcher(object, "DEM to ortho image generator");
 
   writer->SetFileName(outputName);

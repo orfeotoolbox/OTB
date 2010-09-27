@@ -31,7 +31,9 @@ int otbSVMImageClassificationWithRuleFilterNew(int argc, char * argv[])
   typedef otb::SVMImageClassificationWithRuleFilter<ImageType, LabeledImageType> ClassificationWithRuleFilterType;
 
   // Instantiating object
-  ClassificationWithRuleFilterType::Pointer object = ClassificationWithRuleFilterType::New();
+  ClassificationWithRuleFilterType::Pointer filter = ClassificationWithRuleFilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

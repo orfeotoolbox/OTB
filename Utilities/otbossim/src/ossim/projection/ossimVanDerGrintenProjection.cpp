@@ -9,7 +9,7 @@
 //
 // Calls Grinten projection code.  
 //*******************************************************************
-//  $Id: ossimVanDerGrintenProjection.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimVanDerGrintenProjection.cpp 17815 2010-08-03 13:23:14Z dburken $
 #include <ossim/projection/ossimVanDerGrintenProjection.h>
 #include <ossim/base/ossimKeywordNames.h>
 
@@ -103,6 +103,12 @@ void ossimVanDerGrintenProjection::setDefaults()
 {
    Grin_False_Easting  = 0.0;
    Grin_False_Northing = 0.0;
+}
+
+void ossimVanDerGrintenProjection::setCentralMeridian(double centralMeridian)
+{
+  Grin_Origin_Long = centralMeridian;
+  update();
 }
 
 void ossimVanDerGrintenProjection::setFalseEastingNorthing(double falseEasting,
@@ -500,3 +506,19 @@ long ossimVanDerGrintenProjection::Convert_Van_der_Grinten_To_Geodetic(double Ea
   return (Error_Code);
 
 } /* END OF Convert_Van_der_Grinten_To_Geodetic */
+
+//*************************************************************************************************
+//! Returns TRUE if principal parameters are within epsilon tolerance.
+//*************************************************************************************************
+bool ossimVanDerGrintenProjection::operator==(const ossimProjection& proj) const
+{
+   if (!ossimMapProjection::operator==(proj))
+      return false;
+
+   ossimVanDerGrintenProjection* p = PTR_CAST(ossimVanDerGrintenProjection, &proj);
+   if (!p) return false;
+
+   if (!ossim::almostEqual(Grin_Origin_Long,p->Grin_Origin_Long)) return false;
+
+   return true;
+}

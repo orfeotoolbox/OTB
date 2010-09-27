@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimBumpShadeTileSource.h 17587 2010-06-17 14:42:39Z dburken $
+// $Id: ossimBumpShadeTileSource.h 17932 2010-08-19 20:34:35Z dburken $
 #ifndef ossimBumpShadeTileSource_HEADER
 #define ossimBumpShadeTileSource_HEADER
 #include <ossim/imaging/ossimImageCombiner.h>
@@ -110,17 +110,6 @@ public:
                                        ossim_uint32 resLevel=0);
 
    /**
-    * Since the input bump souce is not used for bounding rect computation
-    * this call is passed on to theColorInputSource.
-    */
-   virtual ossimIrect getBoundingRect(ossim_uint32 resLevel=0)const;
-
-   virtual void getDecimationFactor(ossim_uint32 resLevel,
-                                    ossimDpt& result) const;
-   virtual void getDecimationFactors(vector<ossimDpt>& decimations) const;
-   virtual ossim_uint32 getNumberOfDecimationLevels()const;
-   
-   /**
     * This should always return 3
     */
    virtual ossim_uint32 getNumberOfOutputBands() const;
@@ -150,18 +139,6 @@ public:
     *
     */
    virtual double getMaxPixelValue(ossim_uint32 band=0)const;
-
-   /**
-    * Returns the current tile width.  This is passed to first input.
-    * \return Returns the tile width.
-    */
-   virtual ossim_uint32 getTileWidth()const;
-
-   /**
-    * Returns the current tile height.  This is passed to first input.
-    * \return Returns the tile height..
-    */
-   virtual ossim_uint32 getTileHeight()const;
 
    /**
     * \return Returns the rotation of the incident vector..

@@ -29,5 +29,7 @@ int otbVectorDataProjectionFilterNew(int argc, char * argv[])
 
   VectorDataFilterType::Pointer vectorData = VectorDataFilterType::New();
 
+  std::cout << vectorData << std::endl;
+
   return EXIT_SUCCESS;
 }

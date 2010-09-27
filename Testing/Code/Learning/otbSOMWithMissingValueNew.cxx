@@ -47,5 +47,7 @@ int otbSOMWithMissingValueNew(int argc, char * argv[])
 
   SOMType::Pointer som = SOMType::New();
 
+  std::cout << som << std::endl;
+
   return EXIT_SUCCESS;
 }

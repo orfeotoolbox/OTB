@@ -37,5 +37,7 @@ int otbSVMModelNew(int argc, char* argv[])
 
   ModelType::Pointer svmModel = ModelType::New();
 
+  std::cout << svmModel << std::endl;
+
   return EXIT_SUCCESS;
 }

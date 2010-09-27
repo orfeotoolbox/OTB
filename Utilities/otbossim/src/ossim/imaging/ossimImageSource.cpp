@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageSource.cpp 17638 2010-06-29 16:56:29Z gpotts $
+// $Id: ossimImageSource.cpp 17932 2010-08-19 20:34:35Z dburken $
 
 #include <ossim/imaging/ossimImageSource.h>
 #include <ossim/imaging/ossimImageData.h>
@@ -257,44 +257,47 @@ double ossimImageSource::getMaxPixelValue(ossim_uint32 band)const
 // Default implementation returns the image geometry object associated with the first input source 
 // (if any) connected to this source, or NULL.
 //**************************************************************************************************
-ossimImageGeometry*  ossimImageSource::getImageGeometry()
+ossimRefPtr<ossimImageGeometry> ossimImageSource::getImageGeometry()
 {
-   if (getNumberOfInputs())
+   ossimRefPtr<ossimImageGeometry> result = 0;
+   if ( getInput(0) )
    {
-      ossimImageSource* interface = PTR_CAST(ossimImageSource, getInput(0));
-      if(interface)
-         return interface->getImageGeometry();
+      ossimImageSource* inter = PTR_CAST(ossimImageSource, getInput(0));
+      if( inter )
+      {
+         result = inter->getImageGeometry();
+      }
    }
-   return 0;
+   return result;
 }
 
 //**************************************************************************************************
 //! Default implementation sets geometry of the first input to the geometry specified.
 //**************************************************************************************************
-void ossimImageSource::setImageGeometry(ossimImageGeometry* geom)
+void ossimImageSource::setImageGeometry(const ossimImageGeometry* geom)
 {
    ossimImageSource* inter = PTR_CAST(ossimImageSource, getInput(0));
    if (inter)
+   {
       inter->setImageGeometry(geom);
+   }
 }
 
 void ossimImageSource::saveImageGeometry() const
 {
-   ossimImageSource* inter = PTR_CAST(ossimImageSource,
-                                               getInput(0));
+   ossimImageSource* inter = PTR_CAST(ossimImageSource, getInput(0));
    if (inter)
    {
-      saveImageGeometry();
+      inter->saveImageGeometry();
    }
 }
 
 void ossimImageSource::saveImageGeometry(const ossimFilename& geometry_file) const
 {
-   ossimImageSource* inter = PTR_CAST(ossimImageSource,
-                                               getInput(0));
+   ossimImageSource* inter = PTR_CAST(ossimImageSource, getInput(0));
    if (inter)
    {
-      saveImageGeometry(geometry_file);
+      inter->saveImageGeometry(geometry_file);
    }
 }
 

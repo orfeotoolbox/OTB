@@ -25,5 +25,7 @@ int otbStandardImageViewerNew(int argc, char * argv[])
 
   ViewerType::Pointer layer = ViewerType::New();
 
+  std::cout << layer << std::endl;
+
   return EXIT_SUCCESS;
 }

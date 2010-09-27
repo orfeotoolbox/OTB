@@ -8,7 +8,7 @@
 //
 // Contains class declaration for ossimImageHandlerFactoryMaker.
 //*******************************************************************
-//  $Id: ossimImageHandlerFactory.h 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimImageHandlerFactory.h 18002 2010-08-30 18:01:10Z gpotts $
 
 #ifndef ossimImageHandlerFactory_HEADER
 #define ossimImageHandlerFactory_HEADER
@@ -48,7 +48,9 @@ public:
     */
    virtual void getTypeNameList(std::vector<ossimString>& typeList)const;
    virtual void getSupportedExtensions(ossimImageHandlerFactoryBase::UniqueStringList& extensionList)const;
-
+   virtual void getImageHandlersBySuffix(ossimImageHandlerFactoryBase::ImageHandlerList& result, const ossimString& ext)const;
+   virtual void getImageHandlersByMimeType(ossimImageHandlerFactoryBase::ImageHandlerList& result, const ossimString& mimeType)const;
+   
 protected:
 
    /**
@@ -62,8 +64,8 @@ protected:
     * 
     * @return Pointer to image handler or null if nothing opened.
     */
-   virtual ossimImageHandler* openFromExtension(
-      const ossimFilename& fileName) const;
+//   virtual ossimImageHandler* openFromExtension(
+//      const ossimFilename& fileName) const;
   
    ossimImageHandlerFactory(){}
    ossimImageHandlerFactory(const ossimImageHandlerFactory&){}

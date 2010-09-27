@@ -15,7 +15,7 @@
 //----------------------------------------------------------------------------
 
 #include <ctime>
-#include <fstream>   
+#include <fstream>
 #include <string>
 #include <iostream>
 

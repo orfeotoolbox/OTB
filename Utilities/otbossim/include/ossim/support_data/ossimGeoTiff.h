@@ -9,7 +9,7 @@
 // information.
 //
 //***************************************************************************
-// $Id: ossimGeoTiff.h 17108 2010-04-15 21:08:06Z dburken $
+// $Id: ossimGeoTiff.h 17815 2010-08-03 13:23:14Z dburken $
 
 #ifndef ossimGeoTiff_HEADER
 #define ossimGeoTiff_HEADER 1
@@ -98,7 +98,6 @@ public:
 /*       PHOTO_YCBCR       = 6,   // !CCIR 601  */
 /*       PHOTO_CIELAB      = 8    // !1976 CIE L*a*b* */
 /*    }; */
-#if 0
    enum ModelType
    {
       UNKNOWN               = 0,
@@ -106,7 +105,7 @@ public:
       MODEL_TYPE_GEOGRAPHIC = 2,  // Geographic latitude-longitude System 
       MODEL_TYPE_GEOCENTRIC = 3
    };
-#endif
+
    static int getPcsUnitType(ossim_int32 pcsCode);
 
    static bool writeTags(TIFF* tiffOut,
@@ -208,18 +207,15 @@ public:
 private:
 
    // Disallow ...
-   ossimGeoTiff(const ossimGeoTiff* /* rhs */) {}
-   ossimGeoTiff& operator=(const ossimGeoTiff& /* rhs */) { return *this; }
+   ossimGeoTiff(const ossimGeoTiff* /* rhs */ ) {}
+   ossimGeoTiff& operator=(const ossimGeoTiff& /*rhs*/) { return *this; }
 
-   /**
-    *  Attempts to parse the pcs code (3072).
-    */
-   void parsePcsCode(int code);
+   //! Initializes data members given a projection code. Returns TRUE if valid PCS code specified.
+   //! Resets the PCS code to 0 if invalid.
+   bool  parsePcsCode();
 
-   /**
-    *  Attempts to parse the projection geo key (3074).
-    */
-   void parseProjGeoCode(int code);
+   //! Initializes data members given a projection. Returns TRUE if successful.
+   bool parseProjection(ossimMapProjection* map_proj);
 
    /**
     *  Converts double passed in to meters if needed.  The conversion is
@@ -231,7 +227,7 @@ private:
     * @return true if conditions are present to use model transform; false
     * if not.
     */
-   bool getModelTransformFlag() const;
+   bool usingModelTransform() const;
 
    /**
     * Initializes tieSet from theTiePoints.  Has logic to shift one based
@@ -272,9 +268,7 @@ private:
    ossim_uint16          theDatumCode;                     // key 2050
    ossim_uint16          theAngularUnits;                  // key 2054
    ossim_uint32          thePcsCode;                       // key 3072
-   bool                  theSavePcsCodeFlag;
    ossimString           thePcsCitation;                   // key 3073
-   ossim_uint16          theProjGeoCode;                   // key 3074
    ossim_uint16          theCoorTransGeoCode;              // key 3075
    ossim_uint16          theLinearUnitsCode;               // key 3076
    double                theStdPar1;                       // key 3078 
