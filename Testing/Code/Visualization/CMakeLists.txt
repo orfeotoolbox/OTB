@@ -331,6 +331,11 @@ ADD_TEST(vrTuStandardImageViewerNew ${VISUALIZATION_TESTS1}
 otbStandardImageViewerNew
 )
 
+#------------ otb::StandardImageViewer ------------
+ADD_TEST(vrTuStandardImageViewerRGBNew ${VISUALIZATION_TESTS1}
+otbStandardImageViewerRGBNew
+)
+
 ADD_TEST(vrTvStandardImageViewer ${VISUALIZATION_TESTS1}
 otbStandardImageViewer
 ${INPUTDATA}/couleurs.tif 0
