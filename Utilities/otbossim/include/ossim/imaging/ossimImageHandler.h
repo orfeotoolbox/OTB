@@ -12,7 +12,7 @@
 // derive from.
 //
 //********************************************************************
-// $Id: ossimImageHandler.h 17599 2010-06-20 13:52:34Z dburken $
+// $Id: ossimImageHandler.h 18048 2010-09-06 14:26:28Z dburken $
 #ifndef ossimImageHandler_HEADER
 #define ossimImageHandler_HEADER
 
@@ -22,6 +22,7 @@
 #include <ossim/base/ossimNBandLutDataObject.h>
 #include <ossim/base/ossimIrect.h>
 #include <ossim/base/ossimFilename.h>
+#include <ossim/base/ossimRefPtr.h>
 #include <ossim/imaging/ossimFilterResampler.h>
 
 /**
@@ -254,19 +255,7 @@ public:
     * NULL if non defined.  The geometry contains full-to-local image
     * transform as well as projection (image-to-world).
     */
-   virtual ossimImageGeometry* getImageGeometry();
-
-   /**
-    * Returns the image geometry object associated with this tile source or
-    * NULL if non defined.  The geometry contains full-to-local image
-    * transform as well as projection (image-to-world).
-    *
-    * This method just looks for external .geom style override only.
-    * If you want to go through a registry then call getImageGeometry().
-    */
-   virtual ossimImageGeometry* getExternalImageGeometry();
-   
-   virtual ossimImageGeometry* getInternalImageGeometry();
+   virtual ossimRefPtr<ossimImageGeometry> getImageGeometry();
    
    /**
     * Sets the image geometry object.
@@ -341,8 +330,7 @@ public:
     * @note Derived classes should override if the decimation is anything other
     * than a power of two change in each direction per res level.
     */
-   virtual void getDecimationFactor(ossim_uint32 resLevel,
-                                    ossimDpt& result) const;
+   virtual void getDecimationFactor(ossim_uint32 resLevel, ossimDpt& result) const;
 
    /**
     * This returns all decimation for all levels.
@@ -354,7 +342,7 @@ public:
     * note that res level 0 or full resolution is included in the list and has
     * decimation values 1.0, 1.0
     */
-   virtual ossim_uint32 getNumberOfDecimationLevels()const;
+   virtual ossim_uint32 getNumberOfDecimationLevels() const;
 
    /**
     * This method is obsolete.  Please use getNumberOfDecimationLevels.
@@ -591,56 +579,80 @@ public:
    ossim_uint32 getStartingResLevel() const;
    
    void setStartingResLevel(ossim_uint32 level);
-
-  /**
-   * Sets the supplementary directory
-   */
-  virtual void setSupplementaryDirectory(const ossimFilename& dir);
-
-  /**
-   * Returns the supplementary directory
-   */
-  virtual const ossimFilename& getSupplementaryDirectory()const;
-
+   
+   /**
+    * Sets the supplementary directory
+    */
+   virtual void setSupplementaryDirectory(const ossimFilename& dir);
+   
+   /**
+    * Returns the supplementary directory
+    */
+   virtual const ossimFilename& getSupplementaryDirectory()const;
+   
 protected:
    
+   /**
+    * Returns the image geometry object associated with this tile source or
+    * NULL if non defined.  The geometry contains full-to-local image
+    * transform as well as projection (image-to-world).
+    *
+    * This method just looks for external .geom style override only.
+    * If you want to go through a registry then call getImageGeometry().
+    */
+   virtual ossimRefPtr<ossimImageGeometry> getExternalImageGeometry() const;
    
-  // void setStartingResLevel(ossim_uint32 level);
-
-  /**
-   * @brief Method to get an overview tile.  Derived classes should override if
-   * they have built in overviews or something different than the standard
-   * external overview file.  Image handlers can call this method from getTile
-   * in place of inlining code or if derived class needs to override this
-   * method.
-   *
-   * @param resLevel The resolution level to pull from with resLevel 0 being
-   * full res.
-   * 
-   * @param result The tile to stuff. 
-   * passing. 
-   *
-   * @return true on success false on error.  Typically this will return false
-   * if resLevel==0 unless the overview has r0.  If return is false, result
-   * is undefined so caller should handle appropriately with makeBlank or
-   * whatever.
-   */
-  virtual bool getOverviewTile(ossim_uint32 resLevel,
-                               ossimImageData* result);  
-  
+   virtual ossimRefPtr<ossimImageGeometry> getInternalImageGeometry() const;
+   
+   /**
+    * @brief Method to get an overview tile.  Derived classes should override if
+    * they have built in overviews or something different than the standard
+    * external overview file.  Image handlers can call this method from getTile
+    * in place of inlining code or if derived class needs to override this
+    * method.
+    *
+    * @param resLevel The resolution level to pull from with resLevel 0 being
+    * full res.
+    * 
+    * @param result The tile to stuff. 
+    * passing. 
+    *
+    * @return true on success false on error.  Typically this will return false
+    * if resLevel==0 unless the overview has r0.  If return is false, result
+    * is undefined so caller should handle appropriately with makeBlank or
+    * whatever.
+    */
+   virtual bool getOverviewTile(ossim_uint32 resLevel, ossimImageData* result);  
+   
    /**
     *  Opens file and attempts to initialize the valid image vertices.
     *  Returns true on success, false on error.
     */
-  bool initVertices(const char* file);
-  
-  /**
-   * Will complete the opening process.  
-   * If there are overviews it will open them. 
-   * If there is meta data it will open that and if there
-   * is valid vertices it will open that.
+   bool initVertices(const char* file);
+   
+   /**
+    * Will complete the opening process.  
+    * If there are overviews it will open them. 
+    * If there is meta data it will open that and if there
+    * is valid vertices it will open that.
+    */
+   virtual void completeOpen();
+   
+   /**
+   * @brief Convenience method to set things needed in the image geometry from
+   * the image handler.  At time of writing sets the decimation and image size.
+   * @param geom ossimImageGeometry to initiale.
    */
-  void completeOpen();
+   void initImageParameters(ossimImageGeometry* geom) const;
+
+   /**
+   * @brief Virtual method determines the decimation factors at each resolution level. This
+   * base class implementation computes the decimation by considering the ratios in image size
+   * between resolution levels, with fuzzy logic for rounding ratios to the nearest power of 2
+   * if possible. Derived classes need to override this method if the decimations are provided
+   * as part of the image metadata.
+   */
+   virtual void establishDecimationFactors();
 
    ossimFilename        theImageFile;
    ossimFilename        theOverviewFile;
@@ -650,6 +662,7 @@ protected:
    ossimImageMetaData   theMetaData;
    mutable ossimRefPtr<ossimImageGeometry> theGeometry;
    ossimRefPtr<ossimNBandLutDataObject> theLut;
+   std::vector<ossimDpt>  theDecimationFactors;
 
    /**
     * theStartingResLevel If set to something other than zero(default) this is

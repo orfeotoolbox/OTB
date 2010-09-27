@@ -11,7 +11,7 @@
 // is intended to be an image handler for USGS dem files.
 //
 //********************************************************************
-// $Id: ossimUsgsDemTileSource.h 16075 2009-12-10 15:46:43Z gpotts $
+// $Id: ossimUsgsDemTileSource.h 17932 2010-08-19 20:34:35Z dburken $
 
 #ifndef ossimUsgsDemTileSource_HEADER
 #define ossimUsgsDemTileSource_HEADER
@@ -26,7 +26,6 @@ class OSSIM_DLL ossimUsgsDemTileSource : public ossimImageHandler
 public:
       
    ossimUsgsDemTileSource();
-   
 
    virtual ossimString getShortName() const;
    virtual ossimString getLongName()  const;
@@ -108,16 +107,6 @@ public:
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix=0);
    
-   /**
-    * @brief Initializes theGeometry from USGS DEM header.
-    *
-    * This is called by base ossimImageHandler::getImageGeometry if
-    * theGeometry is not set.  External callers should not go through this
-    * method but call "getImageGeometry" instead for efficiency reasons.
-    * 
-    * @return Pointer to geometry or null if header not found.
-    */
-   virtual ossimImageGeometry* getInternalImageGeometry();
    
    /**
     * Returns the output pixel type of the tile source.
@@ -153,6 +142,18 @@ public:
    virtual bool isOpen()const;
    
 protected:
+
+   /**
+    * @brief Initializes theGeometry from USGS DEM header.
+    *
+    * This is called by base ossimImageHandler::getImageGeometry if
+    * theGeometry is not set.  External callers should not go through this
+    * method but call "getImageGeometry" instead for efficiency reasons.
+    * 
+    * @return Pointer to geometry or null if header not found.
+    */
+   virtual ossimRefPtr<ossimImageGeometry> getInternalImageGeometry() const;
+   
    virtual ~ossimUsgsDemTileSource();
    // Disallow operator= and copy constrution...
    const ossimUsgsDemTileSource& operator=(const  ossimUsgsDemTileSource& rhs);

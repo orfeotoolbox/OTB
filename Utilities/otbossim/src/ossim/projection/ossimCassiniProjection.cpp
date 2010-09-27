@@ -9,7 +9,7 @@
 //
 // Calls Geotrans Cassini projection code.  
 //*******************************************************************
-//  $Id: ossimCassiniProjection.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimCassiniProjection.cpp 17815 2010-08-03 13:23:14Z dburken $
 
 #include <math.h>
 #include <ossim/projection/ossimCassiniProjection.h>
@@ -518,3 +518,4 @@ long ossimCassiniProjection::Convert_Cassini_To_Geodetic(double Easting,
   }
   return (Error_Code);
 } /* End Convert_Cassini_To_Geodetic */
+

@@ -8,14 +8,14 @@
 //
 // Calls Geotrans Mercator projection code.  
 //*******************************************************************
-//  $Id: ossimMercatorProjection.h 16427 2010-01-27 20:11:31Z gpotts $
+//  $Id: ossimMercatorProjection.h 17815 2010-08-03 13:23:14Z dburken $
 
 #ifndef ossimMercatorProjection_HEADER
 #define ossimMercatorProjection_HEADER
 
 #include <ossim/projection/ossimMapProjection.h>
 
-class ossimMercatorProjection : public ossimMapProjection
+class OSSIMDLLEXPORT ossimMercatorProjection : public ossimMapProjection
 {
 public:
    
@@ -66,7 +66,7 @@ public:
                       double falseNorthing,
                       double scaleFactor);  
    void setDefaults();
-   
+  
    double getFalseEasting()const{return Merc_False_Easting;}
    double getFalseNorthing()const{return Merc_False_Northing;}
    double getScaleFactor()const{return Merc_Scale_Factor;}
@@ -85,6 +85,9 @@ public:
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix=0);
    
+   //! Returns TRUE if principal parameters are within epsilon tolerance.
+   virtual bool operator==(const ossimProjection& projection) const;
+
 private:
    //_________________GEOTRANS STUFF____________________________
 

@@ -9,7 +9,7 @@
 // information.
 //
 //***************************************************************************
-// $Id: ossimGeoTiff.cpp 16865 2010-03-16 02:23:13Z gpotts $
+// $Id: ossimGeoTiff.cpp 17839 2010-08-04 17:36:57Z gpotts $
 
 #include <ossim/support_data/ossimGeoTiff.h>
 #include <ossim/base/ossimTrace.h>
@@ -25,8 +25,10 @@
 #include <ossim/projection/ossimMapProjection.h>
 #include <ossim/projection/ossimProjection.h>
 #include <ossim/projection/ossimUtmProjection.h>
-#include <ossim/projection/ossimPcsCodeProjectionFactory.h>
-#include <ossim/projection/ossimStatePlaneProjectionFactory.h>
+#include <ossim/projection/ossimTransMercatorProjection.h>
+#include <ossim/projection/ossimLambertConformalConicProjection.h>
+#include <ossim/projection/ossimEpsgProjectionFactory.h>
+#include <ossim/projection/ossimEpsgProjectionDatabase.h>
 #include <ossim/projection/ossimStatePlaneProjectionInfo.h>
 #include <ossim/projection/ossimPolynomProjection.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
@@ -46,13 +48,12 @@
 #include <sstream>
 #include <cstdlib>
 
-
 static const ossimGeoTiffCoordTransformsLut COORD_TRANS_LUT;
 static const ossimGeoTiffDatumLut DATUM_LUT;
 OpenThreads::Mutex ossimGeoTiff::theMutex;
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimGeoTiff.cpp 16865 2010-03-16 02:23:13Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimGeoTiff.cpp 17839 2010-08-04 17:36:57Z gpotts $";
 #endif
 
 //---
@@ -60,6 +61,12 @@ static const char OSSIM_ID[] = "$Id: ossimGeoTiff.cpp 16865 2010-03-16 02:23:13Z
 //---
 static ossimTrace traceDebug("ossimGeoTiff:debug");
 
+// Prototype, defined at bottom of this file. ArcMAP 9.2 bug workaround.
+ossim_uint16 getMetersEquivalentHarnCode(ossim_uint16 feet_harn_code);
+
+//*************************************************************************************************
+// CONSTRUCTOR
+//*************************************************************************************************
 ossimGeoTiff::ossimGeoTiff()
    :
       theTiffPtr(0),
@@ -82,9 +89,7 @@ ossimGeoTiff::ossimGeoTiff()
       theDatumCode(0),
       theAngularUnits(0),
       thePcsCode(0),
-      theSavePcsCodeFlag(false),
       thePcsCitation(),
-      theProjGeoCode(0),
       theCoorTransGeoCode(0),
       theLinearUnitsCode(UNDEFINED),
       theStdPar1(0.0),
@@ -98,7 +103,9 @@ ossimGeoTiff::ossimGeoTiff()
 {
 }
 
-
+//*************************************************************************************************
+// CONSTRUCTOR
+//*************************************************************************************************
 ossimGeoTiff::ossimGeoTiff(const ossimFilename& file, ossim_uint32 entryIdx)
    :
       theTiffPtr(0),
@@ -121,9 +128,7 @@ ossimGeoTiff::ossimGeoTiff(const ossimFilename& file, ossim_uint32 entryIdx)
       theDatumCode(0),
       theAngularUnits(0),
       thePcsCode(0),
-      theSavePcsCodeFlag(false),
       thePcsCitation(),
-      theProjGeoCode(0),
       theCoorTransGeoCode(0),
       theLinearUnitsCode(UNDEFINED),
       theStdPar1(0.0),
@@ -185,31 +190,29 @@ ossimGeoTiff::~ossimGeoTiff()
 int ossimGeoTiff::getPcsUnitType(ossim_int32 pcsCode) 
 {
    int pcsUnits = ossimGeoTiff::UNDEFINED;
+   ossimUnitType units = OSSIM_UNIT_UNKNOWN; // default
+
+   // Need to instantiate a projection given the pcs code:
+   ossimMapProjection* proj = PTR_CAST(ossimMapProjection, 
+      ossimEpsgProjectionDatabase::instance()->findProjection(pcsCode));
+   if (proj)
+      units = proj->getProjectionUnits();
+   else   
+      return ossimGeoTiff::UNDEFINED;
    
-   if (!pcsCode)
+   switch (units)
    {
-      return pcsUnits;
-   }
-   
-   const ossimStatePlaneProjectionInfo* info =
-      ossimStatePlaneProjectionFactory::instance()->getInfo(pcsCode);
-   if (info)
-   {
-      ossimUnitType type = info->getUnitType();
-      switch (type)
-      {
-         case OSSIM_METERS:
-            pcsUnits = ossimGeoTiff::LINEAR_METER;
-            break;
-         case OSSIM_FEET:
-            pcsUnits = ossimGeoTiff::LINEAR_FOOT;
-            break;
-         case OSSIM_US_SURVEY_FEET:
-            pcsUnits = ossimGeoTiff::LINEAR_FOOT_US_SURVEY;
-            break;
-         default:
-            break; // Unhandled units!
-      }
+      case OSSIM_METERS:
+         pcsUnits = ossimGeoTiff::LINEAR_METER;
+         break;
+      case OSSIM_FEET:
+         pcsUnits = ossimGeoTiff::LINEAR_FOOT;
+         break;
+      case OSSIM_US_SURVEY_FEET:
+         pcsUnits = ossimGeoTiff::LINEAR_FOOT_US_SURVEY;
+         break;
+      default:
+         break;
    }
 
    return pcsUnits;
@@ -244,18 +247,7 @@ bool ossimGeoTiff::writeTags(TIFF* tifPtr,
    //---
    // Since using a pcs code is the easiest way to go, look for that first.
    //---
-   bool isStatePlane = false;
    ossim_int16 pcsCode = mapProj->getPcsCode();
-   if (pcsCode)
-   {
-      isStatePlane = true;
-   }
-   else // Make pcs code from utm.
-   {
-      // Look in the pcs factory.
-      pcsCode = ossimPcsCodeProjectionFactory::instance()->
-         getPcsCodeFromProjection(mapProj);
-   }
 
    //---
    // Get the units now.  If user has overriden pcs units then go user defined
@@ -264,70 +256,38 @@ bool ossimGeoTiff::writeTags(TIFF* tifPtr,
    ossimString projName = mapProj->getClassName();
    
    int units = ossimGeoTiff::UNDEFINED;
-
    if(mapProj->isGeographic())
-   {
       units = ossimGeoTiff::ANGULAR_DEGREE;
-   }
    else
-   {
       units = getPcsUnitType(pcsCode);
-   }
-
    if (units == UNDEFINED)
-   {
       units = LINEAR_METER;
-   }
 
    if (pcsCode)
    {
-      const ossimStatePlaneProjectionInfo* info =
-         ossimStatePlaneProjectionFactory::instance()->getInfo(pcsCode);
-      if (info)
+      if ((units==LINEAR_FOOT_US_SURVEY) || (units==LINEAR_FOOT))
       {
-         // ESH 05/2008 -- ArcMap 9.2 compatibility hack
-         // If the PCS code is for a HARN state plane and the implied pcs 
-         // code's units is feet (us or intl), we find the equivalent code 
-         // for units of meters.  We're doing this because ArcMap (9.2 and 
-         // less) doesn't understand the non-meters HARN codes.  However, 
-         // the units are left unchanged in this process, so the units can 
-         // be different than the user-specified pcs code. ArcMap 9.2 
-         // seems to understand the mixed definition just fine.
-         int unitType = getPcsUnitType(pcsCode);
-         if (unitType == LINEAR_FOOT_US_SURVEY || unitType == LINEAR_FOOT)
-         {
-            const ossimString& pcsCodeName = info->name();
-            if ( pcsCodeName.empty() == false )
-            {
-               if ( pcsCodeName.contains("HARN")  == true && 
-                    pcsCodeName.contains("_Feet") == true )
-               {
-                  ossimString feetStr("_Feet");
-                  ossimString newPcsCodeName( pcsCodeName.before(feetStr).c_str() );
-                  if ( newPcsCodeName.empty() == false )
-                  {
-                     info = ossimStatePlaneProjectionFactory::instance()->getInfo(newPcsCodeName);
-                     if ( info != NULL )
-                     {
-                        // pcs code for equivalent HARN/meters definition
-                        ossimString newPcsCode( ossimString::toString( info->code() ) );
-
-                        // Make sure the code can be used in the tiff file. 
-                        // It has to fit into an unsigned short.
-                        if ( info->code() < EPSG_CODE_MAX ) 
-                           pcsCode = static_cast<ossim_uint16>( info->code() );
-                     }
-                  }
-               }
-            }
-         }
-         // End pcs code switch hack
+         // ArcMap 9.2 bug workaround (originally implemented by ESH 2008, reworked by OLK 04/2010
+         ossim_uint16 meter_pcs = getMetersEquivalentHarnCode(pcsCode);
+         if (meter_pcs)
+            pcsCode = meter_pcs;
       }
 
-      GTIFKeySet(gtif, GeographicTypeGeoKey,    TYPE_SHORT, 1, USER_DEFINED);
-      GTIFKeySet(gtif, GeogGeodeticDatumGeoKey, TYPE_SHORT, 1, USER_DEFINED);
-      GTIFKeySet(gtif, ProjectionGeoKey ,       TYPE_SHORT, 1, USER_DEFINED);
-      GTIFKeySet(gtif, GeogEllipsoidGeoKey,     TYPE_SHORT, 1, USER_DEFINED);
+      int gcs_code = mapProj->getGcsCode();
+      int datum_code = USER_DEFINED;
+      int ellipsoid_code = USER_DEFINED;
+      const ossimDatum* datum = mapProj->getDatum();
+      if (datum)
+      {
+         datum_code = (int) datum->epsgGcsCode();
+         const ossimEllipsoid* ellipsoid = datum->ellipsoid();
+         if (ellipsoid)
+            ellipsoid_code = ellipsoid->getEpsgCode();
+      }
+      GTIFKeySet(gtif, GeographicTypeGeoKey,    TYPE_SHORT, 1, gcs_code);
+      GTIFKeySet(gtif, GeogGeodeticDatumGeoKey, TYPE_SHORT, 1, datum_code);
+      GTIFKeySet(gtif, ProjectionGeoKey ,       TYPE_SHORT, 1, pcsCode);
+      GTIFKeySet(gtif, GeogEllipsoidGeoKey,     TYPE_SHORT, 1, ellipsoid_code);
       GTIFKeySet(gtif, ProjectedCSTypeGeoKey,   TYPE_SHORT, 1, pcsCode);
    }
    else
@@ -383,7 +343,7 @@ bool ossimGeoTiff::writeTags(TIFF* tifPtr,
          gcs = USER_DEFINED;
 
          std::ostringstream os;
-         os << "IMAGINE GeoTIFF Support\nCopyright 1991 -  2001 by ERDAS, Inc. All Rights Reserved\n@(#)$RCSfile$ $Revision: 16865 $ $Date: 2010-03-16 10:23:13 +0800 (Tue, 16 Mar 2010) $\nUnable to match Ellipsoid (Datum) to a GeographicTypeGeoKey value\nEllipsoid = Clarke 1866\nDatum = NAD27 (CONUS)";
+         os << "IMAGINE GeoTIFF Support\nCopyright 1991 -  2001 by ERDAS, Inc. All Rights Reserved\n@(#)$RCSfile$ $Revision: 17839 $ $Date: 2010-08-05 01:36:57 +0800 (Thu, 05 Aug 2010) $\nUnable to match Ellipsoid (Datum) to a GeographicTypeGeoKey value\nEllipsoid = Clarke 1866\nDatum = NAD27 (CONUS)";
 
          GTIFKeySet(gtif,
                     GeogCitationGeoKey,
@@ -1040,10 +1000,25 @@ bool ossimGeoTiff::readTags(
    theScaleFactor     = 0.0;
    theModelType       = theNormalizedDefinitions->Model;
    theGcsCode         = theNormalizedDefinitions->GCS;
+   thePcsCode         = theNormalizedDefinitions->PCS;
    theDatumCode       = theNormalizedDefinitions->Datum;
    theAngularUnits    = theNormalizedDefinitions->UOMAngle;
-   theProjGeoCode     = theNormalizedDefinitions->ProjCode;
    theLinearUnitsCode = theNormalizedDefinitions->UOMLength;
+
+   if (theAngularUnits == ANGULAR_DMS_HEMISPHERE)
+   {
+      //---
+      // Hack for bug, where the libgeotiff funtion GTIFGetDefn sets the angular units 
+      // incorrectly to ANGULAR_DMS_HEMISPHERE:
+      if ( traceDebug() )
+      {
+         ossimNotify(ossimNotifyLevel_WARN)
+            << " WARNING ossimGeoTiff::addImageGeometry:"           
+            << "The angular units (key 2054) is set to ANGULAR_DMS_HEMISPHERE!"  
+            << "\nAssuming \"Angular_Degree\"..." << std::endl;
+      }
+      theAngularUnits = ANGULAR_DEGREE;  
+   }
    
 #if 0
    ossim_uint16 modelType;
@@ -1068,20 +1043,12 @@ bool ossimGeoTiff::readTags(
    }
 #endif
    
-   theSavePcsCodeFlag = false;
-   if(GTIFKeyGet(gtif, ProjectedCSTypeGeoKey, &thePcsCode, 0, 1))
-   {
-      const ossimStatePlaneProjectionInfo* info =
-         ossimStatePlaneProjectionFactory::instance()->getInfo(thePcsCode);
-      if (info)
-      {
-         theSavePcsCodeFlag = true;
-      }
-      parsePcsCode(thePcsCode);
-   }
+   if (GTIFKeyGet(gtif, ProjectedCSTypeGeoKey, &thePcsCode, 0, 1))
+      parsePcsCode();
+   
    //---
-   // ESH 2/2008 -- Handle geotiff's with state plane coordinate systems
-   // produced by ERDAS.
+   // ESH 2/2008 -- Handle geotiff's with state plane coordinate systems produced by ERDAS.
+   // They use the citation filed to specify the geometry (complete HACK by Erdas)
    //---
    else
    {
@@ -1099,16 +1066,10 @@ bool ossimGeoTiff::readTags(
          ossimString projStr  = projStrTemp.beforeRegExp( "\n" );
          if ( projStr.empty() == false )
          {
-            // Determine the pcs code, etc from the state plane string
-            const ossimStatePlaneProjectionInfo* info =
-               ossimStatePlaneProjectionFactory::instance()->getInfo(
-                  projStr);
-            if (info)
-            {
-               theSavePcsCodeFlag = true;
-               thePcsCode = info->code();
-               parsePcsCode(thePcsCode);
-            }
+            ossimEpsgProjectionFactory* f = ossimEpsgProjectionFactory::instance();
+            ossimProjection* proj = f->createProjection(projStr);
+            ossimMapProjection* map_proj = PTR_CAST(ossimMapProjection, proj);
+            parseProjection(map_proj);
          }
       }  // End of "if(GTIFKeyGet(gtif, GTCitationGeoKey..."
    }
@@ -1120,7 +1081,6 @@ bool ossimGeoTiff::readTags(
    {
       thePcsCitation = ossimString(buf);
    }
-   parseProjGeoCode(theProjGeoCode);
    GTIFKeyGet(gtif, ProjCoordTransGeoKey , &theCoorTransGeoCode, 0, 1);
    for(idx = 0; idx < (ossim_uint32)theNormalizedDefinitions->nParms; ++idx)
    {
@@ -1379,8 +1339,7 @@ bool ossimGeoTiff::readTags(
    return true;
 }
 
-bool ossimGeoTiff::addImageGeometry(ossimKeywordlist& kwl,
-                                    const char* prefix) const
+bool ossimGeoTiff::addImageGeometry(ossimKeywordlist& kwl, const char* prefix) const
 {
    if(traceDebug())
    {
@@ -1389,21 +1348,26 @@ bool ossimGeoTiff::addImageGeometry(ossimKeywordlist& kwl,
          << std::endl;
    }
 
-   if(theGcsCode == 3785)
+   // NOT SURE THIS IS A GOOD IDEA HERE. KEPT FOR LEGACY SAKE. (OLK 5/10)
+   else if(theGcsCode == 3785)
    {
-      ossimRefPtr<ossimProjection> proj = ossimProjectionFactoryRegistry::instance()->createProjection(ossimString("EPSG:3785"));
-      proj->saveState(kwl, prefix);
+      ossimRefPtr<ossimProjection> proj = 
+         ossimProjectionFactoryRegistry::instance()->createProjection(ossimString("EPSG:3785"));
+      if(proj.valid())
+      {
+         proj->saveState(kwl, prefix);
+      }
    }
+
    //---
    // Sanity check...
    // NOTE: It takes six doubles to make one tie point ie:
    // x,y,z,longitude,latitude,height or x,y,z,easting,northing,height
    //---
-   bool modelTransformFlag = getModelTransformFlag();
    if (theErrorStatus ||
-       (!modelTransformFlag &&
-        ( (getScale().size() < 2) && // no scale
-          (getTiePoint().size() < 24) ) ) )//need at least 3 ties if no scale.
+       (!usingModelTransform() &&
+        ( (theScale.size() < 2) && // no scale
+          ( theTiePoint.size() < 24) ) ) )//need at least 3 ties if no scale.
    {
       if(traceDebug())
       {
@@ -1415,10 +1379,10 @@ bool ossimGeoTiff::addImageGeometry(ossimKeywordlist& kwl,
             ossimNotify(ossimNotifyLevel_DEBUG)
                << "for error status" << std::endl;
          }
-         else if(getTiePoint().size()<5)
+         else if( theTiePoint.size()<5)
          {
             ossimNotify(ossimNotifyLevel_DEBUG)
-               << "for tie points, size = " << getTiePoint().size()
+               << "for tie points, size = " <<  theTiePoint.size()
                << std::endl;
          }
          else
@@ -1428,7 +1392,7 @@ bool ossimGeoTiff::addImageGeometry(ossimKeywordlist& kwl,
       }
       return false;
    }
-   ossimString copyPrefix(prefix);
+
    double x_tie_point = 0.0;
    double y_tie_point = 0.0;
    ossim_uint32 tieCount = (ossim_uint32)theTiePoint.size()/6;
@@ -1484,8 +1448,7 @@ bool ossimGeoTiff::addImageGeometry(ossimKeywordlist& kwl,
             // Should we check the model type (drb)
             // if (theModelType == ModelTypeGeographic)
             
-            ossimRefPtr<ossimBilinearProjection> proj =
-               new ossimBilinearProjection;
+            ossimRefPtr<ossimBilinearProjection> proj = new ossimBilinearProjection;
             proj->optimizeFit(tieSet);
             proj->saveState(kwl, prefix);
             
@@ -1507,7 +1470,7 @@ bool ossimGeoTiff::addImageGeometry(ossimKeywordlist& kwl,
          return false;
       }
    }
-   else if(theModelTransformation.size() == 16)
+   else if (usingModelTransform())
    {
       if(traceDebug())
       {
@@ -1516,337 +1479,168 @@ bool ossimGeoTiff::addImageGeometry(ossimKeywordlist& kwl,
             << "map models yet.  You should provide the image as a sample "
             << "and we will fix it" << std::endl;
       }
-      
-//       return false;
    }
   
-   if ((theRasterType == OSSIM_PIXEL_IS_AREA)&&
-       (!modelTransformFlag))
+   if ((theRasterType == OSSIM_PIXEL_IS_AREA))
    {
      //---
       // Since the internal pixel representation is "point", shift the
       // tie point to be relative to the center of the pixel.
       //---
-      x_tie_point += (getScale()[0])/2.0;
-      y_tie_point -= (getScale()[1])/2.0;
-   }
-
-   if(theSavePcsCodeFlag)
-   {
-      
-      kwl.add(prefix,
-              ossimKeywordNames::PCS_CODE_KW,
-              thePcsCode,
-              true);
-      if(!modelTransformFlag)
+      if (theScale.size() > 1)
       {
-         kwl.add(copyPrefix.c_str(),
-                 ossimKeywordNames::TIE_POINT_XY_KW,
-                 ossimDpt(convert2meters(x_tie_point),convert2meters(y_tie_point)).toString(),
-                 true);
-         kwl.add(copyPrefix.c_str(),
-                 ossimKeywordNames::TIE_POINT_UNITS_KW,
-                 "meters",
-                 true);
-#if 0
-         // tie point
-         kwl.add(copyPrefix.c_str(),
-                 ossimKeywordNames::TIE_POINT_EASTING_KW,
-                 convert2meters(x_tie_point));
-         kwl.add(copyPrefix.c_str(),
-                 ossimKeywordNames::TIE_POINT_NORTHING_KW,
-                 convert2meters(y_tie_point));
-#endif
-         // scale or gsd
-         kwl.add(copyPrefix.c_str(),
-                 ossimKeywordNames::PIXEL_SCALE_XY_KW,
-                 ossimDpt(convert2meters(getScale()[0]),
-                          convert2meters(getScale()[1])).toString(),
-                 true);
-         kwl.add(copyPrefix.c_str(),
-                 ossimKeywordNames::PIXEL_SCALE_UNITS_KW,
-                 "meters",
-                 true);
-         
-#if 0
-         kwl.add(copyPrefix.c_str(),
-                 ossimKeywordNames::METERS_PER_PIXEL_X_KW,
-                 convert2meters(getScale()[0]));
-         kwl.add(copyPrefix.c_str(),
-                 ossimKeywordNames::METERS_PER_PIXEL_Y_KW,
-                 convert2meters(getScale()[1]));
-#endif
+         x_tie_point += (theScale[0])/2.0;
+         y_tie_point -= (theScale[1])/2.0;
       }
-      return true;
    }
 
-   //---
-   // Get the projection type.  If unknown no point going on, so get out.
-   //---
-   if (getOssimProjectionName() == "unknown")
+   if( thePcsCode && (thePcsCode != USER_DEFINED) )
    {
+      ossimString epsg_spec ("EPSG:");
+      epsg_spec += ossimString::toString(thePcsCode);
+      ossimRefPtr<ossimProjection> proj = 
+         ossimEpsgProjectionFactory::instance()->createProjection(epsg_spec);
+      if (proj.valid())
+      {
+         proj->saveState(kwl, prefix);
+      }
+      // Should be some else "WARNING" here maybe. (drb)
+   }
+   else if (getOssimProjectionName() == "unknown")
+   {
+      //---
+      // Get the projection type.  If unknown no point going on, so get out.
+      //---
       return false;
-   }
-
-   // Add these for all projections.
-   kwl.add(copyPrefix.c_str(),
-           ossimKeywordNames::TYPE_KW,
-           getOssimProjectionName().c_str());
-   
-   kwl.add(copyPrefix.c_str(),
-           ossimKeywordNames::DATUM_KW,
-           getOssimDatumName().c_str());
-
-   //---
-   // Add the tie point and scale.  Convert to either meters or decimal
-   // degrees if needed.
-   //---
-   if (theModelType == ModelTypeGeographic)
-   {
-      if (!theAngularUnits && traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_WARN)
-            << " WARNING ossimGeoTiff::addImageGeometry:"
-            << "The GeogAngularUnitsGeoKey (key 2054) is not set!"
-            << "\nAssuming \"Angular_Degree\"..." << std::endl;
-      }
-      
-      switch (theAngularUnits)
-      {
-         case ANGULAR_ARC_MINUTE:
-         case ANGULAR_ARC_SECOND:
-         case ANGULAR_GRAD:
-         case ANGULAR_GON:
-         case ANGULAR_DMS:
-         case ANGULAR_DMS_HEMISPHERE:
-         {
-            ossimNotify(ossimNotifyLevel_WARN)
-               << "WARNING ossimGeoTiff::addImageGeometry:"
-               << "\nNot coded yet for unit type:  "
-               << theAngularUnits << endl;
-            return false;
-         }
-         case ANGULAR_DEGREE:
-         default:
-         {
-            if(!modelTransformFlag)
-            {
-//               kwl.add(copyPrefix.c_str(),
-//                       ossimKeywordNames::TIE_POINT_LON_KW,
-//                       x_tie_point);
-//               kwl.add(copyPrefix.c_str(),
-//                       ossimKeywordNames::TIE_POINT_LAT_KW,
-//                       y_tie_point);
-//               kwl.add(copyPrefix.c_str(),
-//                       ossimKeywordNames::DECIMAL_DEGREES_PER_PIXEL_LON,
-//                       getScale()[0]);
-//               kwl.add(copyPrefix.c_str(),
-//                       ossimKeywordNames::DECIMAL_DEGREES_PER_PIXEL_LAT,
-//                       getScale()[1]);
-               kwl.add(copyPrefix.c_str(),
-                       ossimKeywordNames::TIE_POINT_XY_KW,
-                       ossimDpt(x_tie_point,y_tie_point).toString(),
-                       true);
-               kwl.add(copyPrefix.c_str(),
-                       ossimKeywordNames::TIE_POINT_UNITS_KW,
-                       "degrees",
-                       true);
-               kwl.add(copyPrefix.c_str(),
-                       ossimKeywordNames::PIXEL_SCALE_XY_KW,
-                       ossimDpt(getScale()[0],
-                                getScale()[1]).toString(),
-                       true);
-               kwl.add(copyPrefix.c_str(),
-                       ossimKeywordNames::PIXEL_SCALE_UNITS_KW,
-                       "degrees",
-                       true);
-               
-            }
-            
-            if(ossim::isnan(theOriginLat))
-            {
-               //theOriginLat = 0.0;
-            }
-            if(ossim::isnan(theOriginLon))
-            {
-               //theOriginLon = 0.0;
-            }
-            double olat = theOriginLat;
-            double olon = theOriginLon;
-            if(!modelTransformFlag)
-            {
-               if((theOriginLat == 0.0)&&
-                  (theOriginLon == 0.0)&&
-                  (getScale()[0] !=
-                   getScale()[1] ))
-               {
-                  double centerX = theWidth/2.0;
-                  double centerY = theLength/2.0;
-                  
-                  olat = getScale()[1]*centerY + y_tie_point;
-                  olon = getScale()[0]*centerX + x_tie_point;
-                  
-               }
-            }
-            // origin
-            kwl.add(copyPrefix.c_str(),
-                    ossimKeywordNames::ORIGIN_LATITUDE_KW,
-                    olat,
-                    true);
-            
-            kwl.add(copyPrefix.c_str(),
-                    ossimKeywordNames::CENTRAL_MERIDIAN_KW,
-                    olon,
-                    true);
-         }
-      }  // End of switch on theAngularUnits.
-   }
-   else if (theModelType == ModelTypeProjected)
-   {
-      if(!modelTransformFlag)
-      {
-         kwl.add(copyPrefix.c_str(),
-                 ossimKeywordNames::TIE_POINT_XY_KW,
-                 ossimDpt(convert2meters(x_tie_point),convert2meters(y_tie_point)).toString(),
-                 true);
-         kwl.add(copyPrefix.c_str(),
-                 ossimKeywordNames::TIE_POINT_UNITS_KW,
-                 "meters",
-                 true);
-         
-#if 0
-         // tie point
-         kwl.add(copyPrefix.c_str(),
-                 ossimKeywordNames::TIE_POINT_EASTING_KW,
-                 convert2meters(x_tie_point),
-                 true);
-         kwl.add(copyPrefix.c_str(),
-                 ossimKeywordNames::TIE_POINT_NORTHING_KW,
-                 convert2meters(y_tie_point),
-                 true);
-#endif
-         kwl.add(copyPrefix.c_str(),
-                 ossimKeywordNames::PIXEL_SCALE_XY_KW,
-                 ossimDpt(convert2meters(getScale()[0]),
-                          convert2meters(getScale()[1])).toString(),
-                 true);
-         kwl.add(copyPrefix.c_str(),
-                 ossimKeywordNames::PIXEL_SCALE_UNITS_KW,
-                 "meters",true);
-#if 0
-         // scale or gsd
-         kwl.add(copyPrefix.c_str(),
-                 ossimKeywordNames::METERS_PER_PIXEL_X_KW,
-                 convert2meters(getScale()[0]),
-                 true);
-         kwl.add(copyPrefix.c_str(),
-                 ossimKeywordNames::METERS_PER_PIXEL_Y_KW,
-                 convert2meters(getScale()[1]),
-                 true);
-#endif
-     }
-      if(ossim::isnan(theOriginLat) == false)
-      {
-         // origin
-         kwl.add(copyPrefix.c_str(),
-                 ossimKeywordNames::ORIGIN_LATITUDE_KW,
-                 theOriginLat);
-      }
-      if(ossim::isnan(theOriginLon) == false)
-      {
-         kwl.add(copyPrefix.c_str(),
-                 ossimKeywordNames::CENTRAL_MERIDIAN_KW,
-                 theOriginLon);
-      }
-      // std paralles for conical projections
-      kwl.add(copyPrefix.c_str(),
-              ossimKeywordNames::STD_PARALLEL_1_KW,
-              theStdPar1);
-      kwl.add(copyPrefix.c_str(),
-              ossimKeywordNames::STD_PARALLEL_2_KW,
-              theStdPar2);
-      
-      // false easting and northing.
-      kwl.add(copyPrefix.c_str(),
-              ossimKeywordNames::FALSE_EASTING_KW,
-              convert2meters(theFalseEasting));
-      kwl.add(copyPrefix.c_str(),
-              ossimKeywordNames::FALSE_NORTHING_KW,
-              convert2meters(theFalseNorthing));
    }
    else
    {
-      ossimNotify(ossimNotifyLevel_WARN)
-         << "WARNING ossimGeoTiff::addImageGeometry:"
-         << " Unsupported model type..." << std::endl;
-      return false;
+      // No PCS code but we do have a projection name
+      // Add these for all projections.
+      kwl.add(prefix, ossimKeywordNames::TYPE_KW, getOssimProjectionName());
+      kwl.add(prefix, ossimKeywordNames::DATUM_KW, getOssimDatumName());
    }
-   //---
-   // Based on projection type, override/add the appropriate info.
-   //---
-   if (getOssimProjectionName() == "ossimUtmProjection")
+
+   // Now set the image-specific projection info (scale and image tiepoint):
+   if (theModelType == MODEL_TYPE_GEOGRAPHIC)
    {
-      // Check the zone before adding...
-      if (theZone > 0 && theZone < 61)
+      if (theAngularUnits != ANGULAR_DEGREE)
       {
-         kwl.add(copyPrefix.c_str(),
-                 ossimKeywordNames::ZONE_KW,
-                 theZone);
-      }
-      else
-      {
-         ossimNotify(ossimNotifyLevel_FATAL)
-            << "FATAL ossimGeoTiff::addImageGeometry: "
-            << "UTM zone " << theZone << " out of range!\n"
-            << "Valid range:  1 to 60" << endl;
+         ossimNotify(ossimNotifyLevel_WARN)
+            << "WARNING ossimGeoTiff::addImageGeometry:"
+            << "\nNot coded yet for unit type:  "
+            << theAngularUnits << endl;
          return false;
       }
 
-      // Check the hemisphere before adding.
-      if (theHemisphere == "N" || theHemisphere == "S")
+      // Tiepoint
+      ossimDpt tiepoint (x_tie_point,y_tie_point);
+      kwl.add(prefix, ossimKeywordNames::TIE_POINT_XY_KW, tiepoint.toString(), true);
+      kwl.add(prefix, ossimKeywordNames::TIE_POINT_UNITS_KW, "degrees", true);
+
+      // scale or gsd
+      if (theScale.size() > 1)
       {
-         kwl.add(copyPrefix.c_str(),
-                 ossimKeywordNames::HEMISPHERE_KW,
-                 theHemisphere);
-      }
-      else
-      {
-         ossimNotify(ossimNotifyLevel_FATAL)
-            << "FATAL ossimGeoTiff::addImageGeometry: "
-            << "UTM hemisphere " << theHemisphere << " is invalid!\n"
-            << "Valid hemisphere:  N or S" << std::endl;
-         return false;
+         ossimDpt scale (theScale[0], theScale[1]);
+         kwl.add(prefix, ossimKeywordNames::PIXEL_SCALE_XY_KW, scale.toString(), true);
+         kwl.add(prefix, ossimKeywordNames::PIXEL_SCALE_UNITS_KW, "degrees", true);
+
+         // origin
+         if (ossim::isnan(theOriginLat) || ossim::isnan(theOriginLon))
+         {
+            double centerX = theWidth/2.0;
+            double centerY = theLength/2.0;
+            theOriginLat = theScale[1]*centerY + y_tie_point;
+            theOriginLon = theScale[0]*centerX + x_tie_point;
+         }
       }
 
-      //---
-      // Must set the central meridian even though the zone should do it.
-      // (in decimal degrees)
-      //---
-      double central_meridian = ( 6.0 * abs(theZone) ) - 183.0;
-      kwl.add(copyPrefix.c_str(),
-              ossimKeywordNames::CENTRAL_MERIDIAN_KW,
-              central_meridian,
-              true);  // overwrite keyword if previously added...
+      if (!(ossim::isnan(theOriginLat) || ossim::isnan(theOriginLon)))
+      {
+         kwl.add(prefix, ossimKeywordNames::ORIGIN_LATITUDE_KW,  theOriginLat, true);
+         kwl.add(prefix, ossimKeywordNames::CENTRAL_MERIDIAN_KW, theOriginLon, true);
+      }
+
+   }
+   else // Projected
+   {
+      // Tiepoint
+      ossimDpt tiepoint (convert2meters(x_tie_point),convert2meters(y_tie_point));
+      kwl.add(prefix, ossimKeywordNames::TIE_POINT_XY_KW, tiepoint.toString(), true);
+      kwl.add(prefix, ossimKeywordNames::TIE_POINT_UNITS_KW, "meters", true);
+
+      // scale or gsd
+      if (theScale.size() > 1)
+      {
+         ossimDpt scale (convert2meters(theScale[0]), convert2meters(theScale[1]));
+         kwl.add(prefix, ossimKeywordNames::PIXEL_SCALE_XY_KW, scale.toString(), true);
+         kwl.add(prefix, ossimKeywordNames::PIXEL_SCALE_UNITS_KW, "meters", true);
+      }
       
-      kwl.add(copyPrefix.c_str(),
-              ossimKeywordNames::ORIGIN_LATITUDE_KW,
-              0.0,
-              true);  // overwrite keyword if previously added...
- 
-   } // End of "if (UTM)"
+      // origin
+      if(!ossim::isnan(theOriginLat))
+         kwl.add(prefix, ossimKeywordNames::ORIGIN_LATITUDE_KW, theOriginLat);
+      if(!ossim::isnan(theOriginLon))
+         kwl.add(prefix, ossimKeywordNames::CENTRAL_MERIDIAN_KW, theOriginLon);
 
-   else if (getOssimProjectionName() == "ossimTransMercatorProjection")
-   {
-      kwl.add(copyPrefix.c_str(),
-              ossimKeywordNames::SCALE_FACTOR_KW,
-              theScaleFactor,
-              true);  // overwrite keyword if previously added...
-   }
+      // std paralles for conical projections
+      kwl.add(prefix, ossimKeywordNames::STD_PARALLEL_1_KW, theStdPar1);
+      kwl.add(prefix, ossimKeywordNames::STD_PARALLEL_2_KW, theStdPar2);
+      
+      // false easting and northing.
+      kwl.add(prefix, ossimKeywordNames::FALSE_EASTING_KW, convert2meters(theFalseEasting));
+      kwl.add(prefix, ossimKeywordNames::FALSE_NORTHING_KW, convert2meters(theFalseNorthing));
+
+      // Based on projection type, override/add the appropriate info.
+      if (getOssimProjectionName() == "ossimUtmProjection")
+      {
+         // Check the zone before adding...
+         if (theZone > 0 && theZone < 61)
+         {
+            kwl.add(prefix, ossimKeywordNames::ZONE_KW, theZone);
+         }
+         else
+         {
+            ossimNotify(ossimNotifyLevel_FATAL)
+               << "FATAL ossimGeoTiff::addImageGeometry: "
+               << "UTM zone " << theZone << " out of range!\n"
+               << "Valid range:  1 to 60" << endl;
+            return false;
+         }
+
+         // Check the hemisphere before adding.
+         if (theHemisphere == "N" || theHemisphere == "S")
+         {
+            kwl.add(prefix, ossimKeywordNames::HEMISPHERE_KW, theHemisphere);
+         }
+         else
+         {
+            ossimNotify(ossimNotifyLevel_FATAL)
+               << "FATAL ossimGeoTiff::addImageGeometry: "
+               << "UTM hemisphere " << theHemisphere << " is invalid!\n"
+               << "Valid hemisphere:  N or S" << std::endl;
+            return false;
+         }
+
+         //---
+         // Must set the central meridian even though the zone should do it.
+         // (in decimal degrees)
+         //---
+         double central_meridian = ( 6.0 * abs(theZone) ) - 183.0;
+         kwl.add(prefix, ossimKeywordNames::CENTRAL_MERIDIAN_KW, central_meridian, true);
+         kwl.add(prefix, ossimKeywordNames::ORIGIN_LATITUDE_KW, 0.0, true);
+
+      } // End of "if (UTM)"
+
+      else if (getOssimProjectionName() == "ossimTransMercatorProjection")
+         kwl.add(prefix, ossimKeywordNames::SCALE_FACTOR_KW, theScaleFactor, true); 
+
+   } // end of projected CS
+
    //---
    // Get the model transformation info if it's present.
    //---
-   if ((getModelTransformation().size() == 16)&&
-       modelTransformFlag)
+   if (usingModelTransform())
    {
       std::vector<double> v = getModelTransformation();
       std::ostringstream out;
@@ -1856,29 +1650,23 @@ bool ossimGeoTiff::addImageGeometry(ossimKeywordlist& kwl,
       {
          out << v[idx] << " ";
       }
-      kwl.add(copyPrefix, ossimKeywordNames::IMAGE_MODEL_TRANSFORM_MATRIX_KW, out.str().c_str(), true);
+      kwl.add(prefix, ossimKeywordNames::IMAGE_MODEL_TRANSFORM_MATRIX_KW, out.str().c_str(), true);
       ossimUnitType modelTransformUnitType = OSSIM_UNIT_UNKNOWN;
       if(theModelType == ModelTypeGeographic)
       {
          switch(theAngularUnits)
          {
             case ANGULAR_DEGREE:
-            {
                modelTransformUnitType = OSSIM_DEGREES;
                break;
-            }
             case ANGULAR_ARC_MINUTE:
-            {
                modelTransformUnitType = OSSIM_MINUTES;
-            }
-            case ANGULAR_ARC_SECOND:
-            {
-               modelTransformUnitType = OSSIM_SECONDS;
-            }
-            default:
-            {
                break;
-            }
+            case ANGULAR_ARC_SECOND:
+               modelTransformUnitType = OSSIM_SECONDS;
+               break;
+            default:
+               return false;
          }
       }
       else if(theModelType == ModelTypeProjected)
@@ -1886,33 +1674,21 @@ bool ossimGeoTiff::addImageGeometry(ossimKeywordlist& kwl,
          switch(theLinearUnitsCode)
          {
             case LINEAR_METER:
-            {
                modelTransformUnitType = OSSIM_METERS;
-            }
-            default:
-            {
                break;
-            }
+            default:
+               return false;
          }
       }
-      if(modelTransformUnitType == OSSIM_UNIT_UNKNOWN)
-      {
-         return false;
-      }
-      kwl.add(prefix,
-              ossimKeywordNames::IMAGE_MODEL_TRANSFORM_UNIT_KW,
-              ossimUnitTypeLut::instance()->getEntryString(modelTransformUnitType),
-              true);
-
-   } // End of "if (gt.getModelTransformation().size() == 16)"
+      kwl.add(prefix, ossimKeywordNames::IMAGE_MODEL_TRANSFORM_UNIT_KW,
+              ossimUnitTypeLut::instance()->getEntryString(modelTransformUnitType), true);
+   } 
 
    if(theScaleFactor > 0.0)
    {
-      kwl.add(copyPrefix.c_str(),
-              ossimKeywordNames::SCALE_FACTOR_KW,
-              theScaleFactor,
-              true);
-   }      
+      kwl.add(prefix, ossimKeywordNames::SCALE_FACTOR_KW, theScaleFactor, true);
+   }
+
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -2027,25 +1803,74 @@ void ossimGeoTiff::setOssimDatumName()
    } 
 }
 
-void ossimGeoTiff::parsePcsCode(int code)
+//*************************************************************************************************
+//! Initializes data members given a projection code. Returns TRUE if valid PCS code specified.
+//*************************************************************************************************
+bool ossimGeoTiff::parsePcsCode()
 {
    // key 3072 Section 6.3.3.1 codes
-   
-   if (code == USER_DEFINED)
-   {
-      if (traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "DEBUG ossimGeoTiff::parsePcsCode: "
-            << "Projection coordinate system is user defined."
-            << std::endl;
-      }
-      return;
-   }
+   ossimString epsg_spec (ossimString("EPSG:") + ossimString::toString(thePcsCode));
+   ossimRefPtr<ossimProjection> proj = 
+      ossimEpsgProjectionFactory::instance()->createProjection(epsg_spec);
+   ossimMapProjection* map_proj = PTR_CAST(ossimMapProjection, proj.get());
+   if (!parseProjection(map_proj))
+      thePcsCode = 0;
 
-   if(code == PCS_BRITISH_NATIONAL_GRID)
+   return (thePcsCode != 0);
+}
+
+//*************************************************************************************************
+//! Initializes data members given a projection.
+//*************************************************************************************************
+bool ossimGeoTiff::parseProjection(ossimMapProjection* map_proj)
+{
+   if (map_proj == NULL)
+      return false;
+
+   // Initialize parameters from base-class ossimMapProjection:
+   if (map_proj->isGeographic())
    {
-      theProjectionName = "ossimBngProjection";
+      theModelType = ModelTypeGeographic;
+      theAngularUnits = ANGULAR_DEGREE;
+      theLinearUnitsCode = ANGULAR_DEGREE;
+   }
+   else
+      theModelType = ModelTypeProjected;
+
+   if (map_proj->getProjectionName() == "ossimEquDistCylProjection")
+   theProjectionName = map_proj->getProjectionName();
+   theFalseEasting   = map_proj->getFalseEasting();
+   theFalseNorthing  = map_proj->getFalseNorthing();
+   theStdPar1        = map_proj->getStandardParallel1();
+   theStdPar2        = map_proj->getStandardParallel2();
+   thePcsCode        = map_proj->getPcsCode();
+   theGcsCode        = map_proj->getGcsCode();
+   theDatumCode      = theGcsCode;
+   
+   ossimGpt origin (map_proj->origin());
+   theOriginLat      = origin.lat;
+   theOriginLon      = origin.lon;
+   
+   const ossimDatum* datum = map_proj->getDatum();
+   if (datum)
+      theDatumName  = datum->name();
+   
+   // Now intercept a select few that have additional parameters specific to their derived type:
+   if (theProjectionName == "ossimUtmProjection")
+   {
+      ossimUtmProjection* utm_proj = PTR_CAST(ossimUtmProjection, map_proj);
+      theHemisphere = utm_proj->getHemisphere();
+      theScaleFactor = 0.9996; // UTM fixed
+      theZone = utm_proj->getZone();
+   }
+   else if (theProjectionName == "ossimTransMercatorProjection")
+   {
+      ossimTransMercatorProjection* tm_proj = PTR_CAST(ossimTransMercatorProjection, map_proj);
+      theScaleFactor = tm_proj->getScaleFactor();
+   }
+   else if (theProjectionName == "ossimBngProjection")
+   {
+      // ### LEGACY HACK ###
       theDatumName = "OGB-M";
       theFalseEasting = 400000.0;
       theFalseNorthing = -100000.0;
@@ -2053,203 +1878,9 @@ void ossimGeoTiff::parsePcsCode(int code)
       theOriginLat     = 49.0;
       theOriginLon     = -2.0;
       theHemisphere    = "N";
-      return;
    }
 
-   //---
-   // Divide the code by 100. Then check for a known type.  If it is a
-   // utm projection the last two digits represent the zone.
-   //---
-   int type = code/100;
-   int zone = code%100;
-
-   switch (type)
-   {
-      case 322:
-         //---
-         // utm, WGS72 (WGD), northern hemisphere
-         // All 60 zones handled.
-         //---
-         theProjectionName = "ossimUtmProjection";
-         theZone           = zone;
-         theHemisphere     = "N";
-         theDatumName      = "WGD";
-         break;
-         
-      case 323:
-         //---
-         // utm, WGS72 (WGD), southern hemisphere
-         // All 60 zones handled.
-         //---
-         theProjectionName = "ossimUtmProjection";
-         theZone           = zone;
-         theHemisphere     = "S";
-         theDatumName      = "WGD";
-         break;
-         
-      case 326:
-         //---
-         // utm, WGS84 (WGE), northern hemisphere
-         // All 60 zones hadled.
-         //---
-         theProjectionName = "ossimUtmProjection";
-         theZone           = zone;
-         theHemisphere     = "N";
-         theDatumName      = "WGE";
-         break;
-         
-      case 327:
-         //---
-         // utm, WGS84 (WGE), southern hemisphere
-         // All 60 zones handled.
-         //---
-         theProjectionName = "ossimUtmProjection";
-         theZone           = zone;
-         theHemisphere     = "S";
-         theDatumName      = "WGE";
-         break;
-         
-      case 267:
-         //---
-         // utm, "NAS-C", northern hemisphere
-         // Only UTM NAD27 North zones 3 to 22 are in the 267xx range...
-         // 26729 through 26803 handled by state plane factory.
-         //---
-         if ( (code > 26702) && (code < 26723) )
-         {
-            theProjectionName = "ossimUtmProjection";
-            theZone           = zone;
-            theHemisphere     = "N";
-            theDatumName      = "NAS-C";
-         }
-         break;
-         
-      case 269: // utm, "NAR-C", northern hemisphere
-         //---
-         // Only UTM NAD83 North zones 3 to 23 are in the 269xx range...
-         // 26929 through 26998 handled by state plane factory.
-         //---
-         if ( (code > 26902) && (code < 26924) )
-         {
-            theProjectionName = "ossimUtmProjection";
-            theZone           = zone;
-            theHemisphere     = "N";
-            theDatumName      = "NAR-C";
-         }
-         break;
-         
-      case 248:
-         //---
-         // Provisional S. American 1956
-         // 24818 through 24880
-         //---
-         if ( (code > 24817) && (code < 24881) )
-         {
-            theProjectionName = "ossimUtmProjection";
-            if (zone > 60)
-            {
-               theZone = (zone - 60);
-               theHemisphere     = "S";
-            }
-            else
-            {
-               theZone = zone;
-               theHemisphere     = "N";
-            }
-            theDatumName = "PRP-M";
-         }
-         break;
-   }
-
-   if (traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "DEBUG ossimGeoTiff::parsePcsCode:"
-         << "\nprojection type:  " << theProjectionName
-         << "\nzone number:      " << theZone
-         << "\nhemisphere:       " << theHemisphere
-         << "\ndatum:            " << theDatumName
-         << std::endl;
-   }
-
-// Duplicated prior to this method call (parsePcsCode()) drb.   
-//    //---
-//    // See if the ossimStatePlaneProjectionFactory can handle this pcs code.
-//    //---
-//    const ossimStatePlaneProjectionInfo* info =
-//       ossimStatePlaneProjectionFactory::instance()->getInfo(code);
-//    if (info)
-//    {
-//       theSavePcsCodeFlag = true;
-//    }
-
-   if ( (theSavePcsCodeFlag == true) &&
-        (theProjectionName == "ossimUtmProjection") )
-   {
-      //---
-      // Setting theSavePcsCodeFlag to true causes the getImageGeometry to
-      // return just the pcs code and the tie point.  Since the
-      // ossimStatePlaneProjectionFactory is used to return a projection
-      // from the pcs code and it does NOT handle utm, set the 
-      // theSavePcsCodeFlag back to false to avoid this.
-      //---
-      theSavePcsCodeFlag = false;
-   }
-}
-
-void ossimGeoTiff::parseProjGeoCode(int code)
-{
-   //---
-   // Currently only handles UTM 160xx and 161xx.
-   // Note: No datum with this!
-   //---
-   
-   if (code == USER_DEFINED)
-   {
-      if (traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "DEBUG ossimGeoTiff::parseProjGeoCode: "
-            << "Projection Geo Key is user defined."
-            << std::endl;
-      }
-      return;
-   }
-
-   //---
-   // Divide the code by 100. Then check for a known type.  If it is a
-   // utm projection the last two digits represent the zone.
-   //---
-   int type = code/100;
-   int zone = code%100;
-
-   switch (type)
-   {
-      case 160: // utm, northern hemisphere
-         theProjectionName = "ossimUtmProjection";
-         theZone           = zone;
-         theHemisphere     = "N";
-         break;
-         
-      case 161: // utm, "WGD", southern hemisphere
-         theProjectionName = "ossimUtmProjection";
-         theZone           = zone;
-         theHemisphere     = "S";
-         break;
-
-      default:
-         break;
-   }
-
-   if (traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "DEBUG ossimGeoTiff::parseProjGeoCode:"
-         << "\nprojection type:  " << theProjectionName
-         << "\nzone number:      " << theZone
-         << "\nhemisphere:       " << theHemisphere
-         << std::endl;
-   }
+   return true;
 }
 
 int ossimGeoTiff::mapZone() const
@@ -2361,7 +1992,7 @@ std::ostream& ossimGeoTiff::print(std::ostream& out) const
 }
 
 
-bool ossimGeoTiff::getModelTransformFlag() const
+bool ossimGeoTiff::usingModelTransform() const
 {
    //---
    // If we have 16 model points do we always use them? (drb)
@@ -2455,3 +2086,44 @@ bool ossimGeoTiff::hasOneBasedTiePoints() const
    
    return result;
 }
+
+//*************************************************************************************************
+// ArcMAP 9.2 bug workaround.
+// ESH 05/2008 -- ArcMap 9.2 compatibility hack
+// If the PCS code is for a HARN state plane and the implied pcs 
+// code's units is feet (us or intl), we find the equivalent code 
+// for units of meters.  We're doing this because ArcMap (9.2 and 
+// less) doesn't understand the non-meters HARN codes.  However, 
+// the units are left unchanged in this process, so the units can 
+// be different than the user-specified pcs code. ArcMap 9.2 
+// seems to understand the mixed definition just fine.
+// OLK 04/2010 -- Converted to vector<pair> scheme after refactoring EPSG factory. 
+//*************************************************************************************************
+ossim_uint16 getMetersEquivalentHarnCode(ossim_uint16 feet_harn_code)
+{
+   static const ossim_uint16 harn_feet[] =
+   {
+      2867, 2868, 2869, 2870, 2871, 2872, 2873, 2874, 2875, 2876, 2877, 2878, 2879, 2880, 2881, 2882, 
+      2883, 2884, 2885, 2886, 2887, 2888, 2891, 2892, 2893, 2894, 2895, 2896, 2897, 2898, 2899, 2900, 
+      2901, 2902, 2903, 2904, 2905, 2906, 2907, 2908, 2909, 2910, 2911, 2912, 2913, 2914, 2915, 2916, 
+      2917, 2918, 2919, 2920, 2921, 2922, 2923, 2924, 2925, 2926, 2927, 2928, 2929, 2930, 2967, 2968
+   };
+   static const ossim_uint16 harn_meters[] =
+   {
+      2761, 2762, 2763, 2766, 2767, 2768, 2769, 2770, 2771, 2772, 2773, 2774, 2775, 2776, 2777, 2778, 
+      2779, 2780, 2781, 2787, 2788, 2789, 2798, 2799, 2804, 2805, 2806, 2807, 2808, 2809, 2813, 2814, 
+      2818, 2825, 2826, 2827, 2828, 2829, 2830, 2831, 2832, 2833, 2836, 2837, 2838, 2839, 2843, 2844, 
+      2845, 2846, 2847, 2848, 2849, 2850, 2851, 2853, 2854, 2855, 2856, 2859, 2860, 2861, 2792, 2793
+   };
+
+   ossim_uint16 result = 0;
+   int index = 0;
+   while ((result == 0) && (index < 64))
+   {
+      if (harn_feet[index] == feet_harn_code)
+         result = harn_meters[index];
+      ++index;
+   }
+   return result;
+};
+

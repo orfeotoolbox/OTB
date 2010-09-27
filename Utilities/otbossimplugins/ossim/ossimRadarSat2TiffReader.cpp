@@ -198,23 +198,28 @@ void ossimplugins::ossimRadarSat2TiffReader::close()
    ossimTiffTileSource::close();
 }
 
-ossimImageGeometry* ossimplugins::ossimRadarSat2TiffReader::getImageGeometry()
+ossimRefPtr<ossimImageGeometry> ossimplugins::ossimRadarSat2TiffReader::getImageGeometry()
 {
-   if ( !theGeometry.valid() )
+   if ( !theGeometry )
    {
       //---
       // Check for external geom:
       //---
-      getExternalImageGeometry();
+      theGeometry = getExternalImageGeometry();
       
-      if ( !theGeometry.valid() )
+      if ( !theGeometry )
       {
-         //---
          // Check the internal geometry first to avoid a factory call.
-         //---
-         getInternalImageGeometry();
+         theGeometry = getInternalImageGeometry();
 
          // At this point it is assured theGeometry is set.
+         
+         //---
+         // WARNING:
+         // Must create/set theGeometry at this point or the next call to
+         // ossimImageGeometryRegistry::extendGeometry will put us in an infinite loop
+         // as it does a recursive call back to ossimImageHandler::getImageGeometry().
+         //---         
 
          // Check for set projection.
          if ( !theGeometry->getProjection() )
@@ -223,35 +228,24 @@ ossimImageGeometry* ossimplugins::ossimRadarSat2TiffReader::getImageGeometry()
             ossimImageGeometryRegistry::instance()->extendGeometry(this);
          }
       }
-   }
-   
-   // Lastly check for set decimation levels.  First time through...
-   if( getNumberOfDecimationLevels() != theGeometry->getNumberOfDecimations() )
-   {
-      std::vector<ossimDpt> decimationList;
-      getDecimationFactors(decimationList);
-      theGeometry->setDiscreteDecimation(decimationList);
+
+      // Set image things the geometry object should know about.
+      initImageParameters( theGeometry.get() );
    }
 
-   return theGeometry.get();
+   return theGeometry;
 }
 
-ossimImageGeometry*
-ossimplugins::ossimRadarSat2TiffReader::getInternalImageGeometry()
+ossimRefPtr<ossimImageGeometry>
+ossimplugins::ossimRadarSat2TiffReader::getInternalImageGeometry() const
 {
-   static const char MODULE[] =
-      "ossimplugins::ossimRadarSat2TiffReader::getInternalImageGeometry";
-   
+   static const char MODULE[] = "ossimplugins::ossimRadarSat2TiffReader::getInternalImageGeometry";
    if (traceDebug())
    {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << MODULE << " entered...\n";
+      ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
    }
 
-   if ( !theGeometry )
-   {
-      theGeometry = new ossimImageGeometry();
-   }
+   ossimRefPtr<ossimImageGeometry> geom = new ossimImageGeometry();
    
    ossimXmlDocument* xdoc = new ossimXmlDocument();
    if ( xdoc->openFile(theProductXmlFile) )
@@ -261,14 +255,13 @@ ossimplugins::ossimRadarSat2TiffReader::getInternalImageGeometry()
       if ( model->open(theProductXmlFile) )
       {     
          // Assign the model to our ossimImageGeometry object.        
-         theGeometry->setProjection( model.get() );      
+         geom->setProjection( model.get() );      
       } 
       else    
       {       
          if (traceDebug())    
          {
-            ossimNotify(ossimNotifyLevel_DEBUG)
-               << "WARNING: Unhandled projection: " << std::endl;        
+            ossimNotify(ossimNotifyLevel_DEBUG) << "WARNING: Unhandled projection: " << std::endl;
          }
       }
    } // matches: if ( xdoc->openFile(theProductXmlFile) )
@@ -278,11 +271,10 @@ ossimplugins::ossimRadarSat2TiffReader::getInternalImageGeometry()
 
    if (traceDebug())
    {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << MODULE << " exited..." << std::endl;
+      ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " exited..." << std::endl;
    }
    
-   return theGeometry.get();
+   return geom;
 }
 
 bool ossimplugins::ossimRadarSat2TiffReader::isRadarSat2ProductFile(

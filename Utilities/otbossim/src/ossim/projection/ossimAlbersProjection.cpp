@@ -9,7 +9,7 @@
 //
 // Calls Geotrans Albers projection code.  
 //*******************************************************************
-//  $Id: ossimAlbersProjection.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimAlbersProjection.cpp 17815 2010-08-03 13:23:14Z dburken $
 
 #include <ossim/projection/ossimAlbersProjection.h>
 
@@ -621,3 +621,21 @@ long ossimAlbersProjection::Convert_Albers_To_Geodetic(double Easting,
   }
   return (Error_Code);
 } /* END OF Convert_Albers_To_Geodetic */
+
+//*************************************************************************************************
+//! Returns TRUE if principal parameters are within epsilon tolerance.
+//*************************************************************************************************
+bool ossimAlbersProjection::operator==(const ossimProjection& proj) const
+{
+   if (!ossimMapProjection::operator==(proj)) return false;
+
+   ossimAlbersProjection* p = PTR_CAST(ossimAlbersProjection, &proj);
+   if (!p) return false;
+
+   if (!ossim::almostEqual(Albers_Std_Parallel_1,p->Albers_Std_Parallel_1)) return false;
+   if (!ossim::almostEqual(Albers_Std_Parallel_2,p->Albers_Std_Parallel_2)) return false;
+   if (!ossim::almostEqual(Albers_Delta_Northing,p->Albers_Delta_Northing)) return false;
+   if (!ossim::almostEqual(Albers_Delta_Easting, p->Albers_Delta_Easting) ) return false;
+
+   return true;
+}

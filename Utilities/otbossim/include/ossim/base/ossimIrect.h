@@ -10,7 +10,7 @@
 // Container class for four integer points representing a rectangle.
 //
 //*******************************************************************
-//  $Id: ossimIrect.h 14789 2009-06-29 16:48:14Z dburken $
+//  $Id: ossimIrect.h 17815 2010-08-03 13:23:14Z dburken $
 
 #ifndef ossimIrect_HEADER
 #define ossimIrect_HEADER 1
@@ -711,60 +711,6 @@ inline ossimIpt ossimIrect::midPoint()const
    
    return ossimIpt(ossim::round<int>(x),
                    ossim::round<int>(y));
-}
-
-//*******************************************************************
-// Inline Method: ossimIrect::combine
-//*******************************************************************
-inline ossimIrect ossimIrect::combine(const ossimIrect& rect)const
-{
-   if(rect.hasNans() || hasNans())
-   {
-      ossimIrect result;
-
-      result.makeNan();
-
-      return result;
-   }
-   if (theOrientMode != rect.theOrientMode)
-      return(*this);
-   
-   ossimIpt ulCombine;
-   ossimIpt lrCombine;
-
-   if(theOrientMode == OSSIM_LEFT_HANDED)
-   {
-      ulCombine.x = ((ul().x <= rect.ul().x)?ul().x:rect.ul().x);
-      ulCombine.y = ((ul().y <= rect.ul().y)?ul().y:rect.ul().y);
-      lrCombine.x = ((lr().x >= rect.lr().x)?lr().x:rect.lr().x);
-      lrCombine.y = ((lr().y >= rect.lr().y)?lr().y:rect.lr().y);
-   }
-   else
-   {
-      ulCombine.x = ((ul().x <= rect.ul().x)?ul().x:rect.ul().x);
-      ulCombine.y = ((ul().y >= rect.ul().y)?ul().y:rect.ul().y);
-      lrCombine.x = ((lr().x >= rect.lr().x)?lr().x:rect.lr().x);
-      lrCombine.y = ((lr().y <= rect.lr().y)?lr().y:rect.lr().y);
-   }
-
-   return ossimIrect(ulCombine, lrCombine, theOrientMode);
-/*    if(rect.hasNans() || hasNans()) */
-/*    { */
-/*       ossimIrect result; */
-
-/*       result.makeNan(); */
-
-/*       return result; */
-/*    } */
-/*    if (theOrientMode != rect.theOrientMode) */
-/*       return(*this); */
-   
-/*    int ulx = ((ul().x <= rect.ul().x)?ul().x:rect.ul().x); */
-/*    int uly = ((ul().y <= rect.ul().y)?ul().y:rect.ul().y); */
-/*    int lrx = ((lr().x >= rect.lr().x)?lr().x:rect.lr().x); */
-/*    int lry = ((lr().y >= rect.lr().y)?lr().y:rect.lr().y); */
-
-/*    return ossimIrect(ulx, uly, lrx, lry, theOrientMode); */
 }
 
 #endif

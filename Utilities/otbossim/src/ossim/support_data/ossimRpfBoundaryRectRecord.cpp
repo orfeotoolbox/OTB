@@ -6,7 +6,7 @@
 // Description: Rpf support class
 // 
 //********************************************************************
-// $Id: ossimRpfBoundaryRectRecord.cpp 17455 2010-05-24 18:53:52Z dburken $
+// $Id: ossimRpfBoundaryRectRecord.cpp 17815 2010-08-03 13:23:14Z dburken $
 
 #include <cstring> /* for memset/memcpy */
 #include <iomanip>
@@ -76,6 +76,26 @@ ossimErrorCode ossimRpfBoundaryRectRecord::parseStream(std::istream& in, ossimBy
       in.read((char*)&m_scale, 12);
       in.read((char*)&m_zone, 1);
       in.read((char*)&m_producer, 5);
+
+      ossimString tmpScale(m_scale);
+      tmpScale.trim();
+      if (!tmpScale.empty())
+      {
+        if (tmpScale.beforePos(2) != "1:")
+        {
+          if (tmpScale.afterPos(tmpScale.size()-2)!="M" && 
+            tmpScale.afterPos(tmpScale.size()-2)!="K")
+          {
+            int tmpScaleValue = tmpScale.toInt();
+            if (tmpScaleValue > 0)
+            {
+              tmpScale = ossimString("1:" + tmpScale);
+              memset(m_scale, ' ', 12);
+              memcpy(m_scale, tmpScale.c_str(), 12);
+            }
+          }
+        }
+      }
       
       m_coverage.parseStream(in, byteOrder);
       

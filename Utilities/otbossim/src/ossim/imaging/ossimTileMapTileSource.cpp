@@ -16,6 +16,7 @@
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimNotifyContext.h>
 #include <ossim/base/ossimKeywordNames.h>
+#include <ossim/imaging/ossimImageGeometryRegistry.h>
 #include <ossim/projection/ossimTileMapModel.h>
 
 RTTI_DEF1_INST(ossimTileMapTileSource,
@@ -75,24 +76,45 @@ bool ossimTileMapTileSource::open()
    return false;
 }
 
-ossimImageGeometry* ossimTileMapTileSource::getImageGeometry()
+ossimRefPtr<ossimImageGeometry> ossimTileMapTileSource::getImageGeometry()
 {
+  if ( !theGeometry )
+  {
+     // Check for external geom:
+     theGeometry = getExternalImageGeometry();
 
-   ossimImageGeometry* result = ossimImageHandler::getImageGeometry();
-   if (result->getProjection())
-      return theGeometry.get();
+     if ( !theGeometry )
+     {
+        theGeometry = new ossimImageGeometry();
 
-//   if (!theFfHdr) return result;
+        // Make a model
+        ossimTileMapModel* model = new ossimTileMapModel ();
+        if (model->getErrorStatus() == ossimErrorCodes::OSSIM_OK)
+        {
+           //initialize the image geometry object with the model
+           theGeometry->setProjection(model);
+        }
 
-   // Make a model
-   ossimTileMapModel* model = new ossimTileMapModel ();
+        //---
+        // WARNING:
+        // Must create/set the geometry at this point or the next call to
+        // ossimImageGeometryRegistry::extendGeometry will put us in an infinite loop
+        // as it does a recursive call back to ossimImageHandler::getImageGeometry().
+        //---
 
-   if (model->getErrorStatus() != ossimErrorCodes::OSSIM_OK)
-      return false;
+        // Check for set projection.
+        if ( !theGeometry->getProjection() )
+        {
+           // Try factories for projection.
+           ossimImageGeometryRegistry::instance()->extendGeometry(this);
+        }
+     }
 
-   //initialize the image geometry object with the model
-   result->setProjection(model);
-   return result;
+     // Set image things the geometry object should know about.
+     initImageParameters( theGeometry.get() );
+  }
+
+  return theGeometry;
 }
 
 bool ossimTileMapTileSource::loadState(const ossimKeywordlist& kwl,

@@ -7,7 +7,7 @@
 // Description:  Interface class for overview builders.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimOverviewBuilderBase.cpp 17194 2010-04-23 15:05:19Z dburken $
+// $Id: ossimOverviewBuilderBase.cpp 17932 2010-08-19 20:34:35Z dburken $
 
 #include <ossim/imaging/ossimOverviewBuilderBase.h>
 #include <ossim/base/ossimIpt.h>
@@ -23,7 +23,8 @@ RTTI_DEF3(ossimOverviewBuilderBase,
    
 ossimOverviewBuilderBase::ossimOverviewBuilderBase()
    : m_overviewStopDimension(0),
-     m_histoMode(OSSIM_HISTO_MODE_UNKNOWN) 
+     m_histoMode(OSSIM_HISTO_MODE_UNKNOWN),
+     m_maskBuildFlag(false)
 {
    m_overviewStopDimension = getDefaultStopDimension();
 }

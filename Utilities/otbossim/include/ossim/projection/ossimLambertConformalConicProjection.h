@@ -8,7 +8,7 @@
 //
 // Calls Lamberts Conformal Conic projection code.  
 //*******************************************************************
-//  $Id: ossimLambertConformalConicProjection.h 12508 2008-02-25 18:38:09Z dburken $
+//  $Id: ossimLambertConformalConicProjection.h 17815 2010-08-03 13:23:14Z dburken $
 
 #ifndef ossimLambertConformalConicProjection_HEADER
 #define ossimLambertConformalConicProjection_HEADER
@@ -16,7 +16,7 @@
 #include <iosfwd>
 #include <ossim/projection/ossimMapProjection.h>
 
-class ossimLambertConformalConicProjection : public ossimMapProjection
+class OSSIMDLLEXPORT ossimLambertConformalConicProjection : public ossimMapProjection
 {
 public:
    ossimLambertConformalConicProjection(const ossimEllipsoid& ellipsoid = ossimEllipsoid(),
@@ -25,8 +25,8 @@ public:
    /**
     * @param ellipsoid
     * @param origin latitude longitude in decimal degrees.
-    * @param stdParallel1 First parallel in radians.
-    * @param stdParallel2 Second parallel in radian.
+    * @param stdParallel1 First parallel in DEGREES.
+    * @param stdParallel2 Second parallel in DEGREES.
     * @param falseEasting False easting in meters.
     * @param falseNorthing False northing in meters.
     */
@@ -121,6 +121,9 @@ public:
    * @brief Prints data members to stream.  Returns stream&.
    */
    virtual std::ostream& print(std::ostream& out) const;
+
+   //! Returns TRUE if principal parameters are within epsilon tolerance.
+   virtual bool operator==(const ossimProjection& projection) const;
 
 private:
 

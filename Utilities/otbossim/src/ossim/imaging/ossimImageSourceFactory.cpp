@@ -13,7 +13,7 @@
 //              and image handlers (image readers)
 //
 //*************************************************************************
-// $Id: ossimImageSourceFactory.cpp 15971 2009-11-20 02:42:07Z gpotts $
+// $Id: ossimImageSourceFactory.cpp 17873 2010-08-12 17:41:31Z bwatkins $
 
 #include <ossim/imaging/ossimImageSourceFactory.h>
 #include <ossim/imaging/ossimConvolutionFilter1D.h>
@@ -48,6 +48,7 @@
 #include <ossim/imaging/ossimHistogramMatchFilter.h>
 #include <ossim/imaging/ossimHistogramThreshholdFilter.h>
 #include <ossim/imaging/ossimConvolutionSource.h>
+#include <ossim/imaging/ossimSICDToDetectedImage.h>
 #include <ossim/imaging/ossimBrightnessContrastSource.h>
 #include <ossim/imaging/ossimBrightnessMatch.h>
 #include <ossim/imaging/ossimScalarRemapper.h>
@@ -242,6 +243,10 @@ ossimObject* ossimImageSourceFactory::createObject(const ossimString& name)const
    else if(name == STATIC_TYPE_NAME(ossimConvolutionSource))
    {
       return new ossimConvolutionSource;
+   }
+   else if(name == STATIC_TYPE_NAME(ossimSICDToDetectedImage))
+   {
+	   return new ossimSICDToDetectedImage;
    }
    else if(name == STATIC_TYPE_NAME(ossimBrightnessContrastSource))
    {
@@ -500,6 +505,7 @@ void ossimImageSourceFactory::getTypeNameList(std::vector<ossimString>& typeList
    typeList.push_back(STATIC_TYPE_NAME(ossimHistogramThreshholdFilter));
    typeList.push_back(STATIC_TYPE_NAME(ossimGeoAnnotationSource));
    typeList.push_back(STATIC_TYPE_NAME(ossimConvolutionSource));
+   typeList.push_back(STATIC_TYPE_NAME(ossimSICDToDetectedImage));
    typeList.push_back(STATIC_TYPE_NAME(ossimBrightnessContrastSource));
    typeList.push_back(STATIC_TYPE_NAME(ossimBrightnessMatch));
    typeList.push_back(STATIC_TYPE_NAME(ossimScalarRemapper));

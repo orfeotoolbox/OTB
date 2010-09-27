@@ -6,7 +6,7 @@
 // Description:
 //
 //*************************************************************************
-// $Id: ossimAnnotationMultiPolyObject.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimAnnotationMultiPolyObject.h 17815 2010-08-03 13:23:14Z dburken $
 #ifndef ossimAnnotationMultiPolyObject_HEADER
 #define ossimAnnotationMultiPolyObject_HEADER
 #include <ossim/imaging/ossimAnnotationObject.h>
@@ -44,9 +44,13 @@ public:
    virtual std::ostream& print(std::ostream& out)const;
    virtual void getBoundingRect(ossimDrect& rect)const;
    virtual void clear();
-   virtual void addPolygon(const ossimPolygon& poly)
+   virtual void addPolygon(ossim_uint32 polygonIndex,
+                           const ossimPolygon& poly)
       {
-         theMultiPolygon.push_back(poly);
+         if(polygonIndex < theMultiPolygon.size())
+         {
+             theMultiPolygon[polygonIndex] = poly;
+         }
       }
    virtual void addPoint(ossim_uint32 polygonIndex,
                          const ossimDpt& pt)

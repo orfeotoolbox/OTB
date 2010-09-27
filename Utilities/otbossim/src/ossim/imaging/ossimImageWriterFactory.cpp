@@ -8,7 +8,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimImageWriterFactory.cpp 16943 2010-03-30 15:44:22Z dburken $
+//  $Id: ossimImageWriterFactory.cpp 18002 2010-08-30 18:01:10Z gpotts $
 
 #include <ossim/imaging/ossimImageWriterFactory.h>
 #include <ossim/imaging/ossimImageWriterFactoryRegistry.h>
@@ -278,6 +278,37 @@ void ossimImageWriterFactory::getTypeNameList(std::vector<ossimString>& typeList
    typeList.push_back(STATIC_TYPE_NAME(ossimGeneralRasterWriter));
    typeList.push_back(STATIC_TYPE_NAME(ossimNitfWriter));
    typeList.push_back(STATIC_TYPE_NAME(ossimNitf20Writer));
+}
+
+void ossimImageWriterFactory::getImageFileWritersBySuffix(ossimImageWriterFactoryBase::ImageFileWriterList& result,
+                                                          const ossimString& ext)const
+{
+   ossimString testExt = ext.downcase();
+   if(testExt == "tiff" || testExt == "tif")
+   {
+      result.push_back(new ossimTiffWriter);
+   }
+   else if(testExt == "ntf" || testExt == "nitf")
+   {
+      result.push_back(new ossimNitfWriter);
+   }
+   else if(testExt == "jpg" || testExt == "jpeg")
+   {
+      result.push_back(new ossimJpegWriter);
+   }
+   else if(testExt == "ras" || testExt == "bsq" || testExt == "bil" || testExt == "bip")
+   {
+      result.push_back(new ossimGeneralRasterWriter);
+   }
+}
+
+void ossimImageWriterFactory::getImageFileWritersByMimeType(ossimImageWriterFactoryBase::ImageFileWriterList& result,
+                                                            const ossimString& mimeType)const
+{
+   ossimString testExt = mimeType.downcase();
+   testExt = ossimString(testExt.begin()+6, testExt.end());
+   
+   getImageFileWritersBySuffix(result, testExt);
 }
 
 void ossimImageWriterFactory::getImageTypeList(std::vector<ossimString>& imageTypeList)const

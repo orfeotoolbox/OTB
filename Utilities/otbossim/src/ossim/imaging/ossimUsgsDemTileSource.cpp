@@ -9,7 +9,7 @@
 // Contains class declaration for ossimUsgsDemTileSource.
 //
 //********************************************************************
-// $Id: ossimUsgsDemTileSource.cpp 17195 2010-04-23 17:32:18Z dburken $
+// $Id: ossimUsgsDemTileSource.cpp 17932 2010-08-19 20:34:35Z dburken $
 
 #include <iostream>
 #include <fstream>
@@ -365,12 +365,9 @@ bool ossimUsgsDemTileSource::loadState(const ossimKeywordlist& kwl,
    return false;
 }
 
-ossimImageGeometry* ossimUsgsDemTileSource::getInternalImageGeometry()
+ossimRefPtr<ossimImageGeometry> ossimUsgsDemTileSource::getInternalImageGeometry() const
 {
-   if ( !theGeometry )
-   {
-      theGeometry = new ossimImageGeometry();
-   }
+   ossimRefPtr<ossimImageGeometry> geom = new ossimImageGeometry();
    
    if (theDem)
    {
@@ -378,7 +375,7 @@ ossimImageGeometry* ossimUsgsDemTileSource::getInternalImageGeometry()
       if (traceDebug())
       {
          ossimNotify(ossimNotifyLevel_DEBUG)
-            << "ossimUsgsDemTileSource::getImageGeometry DEBUG:"
+            << "ossimUsgsDemTileSource::getInternalImageGeometry DEBUG:"
             << "\nDEM Header:"
             << std::endl;
          HDR.print(ossimNotify(ossimNotifyLevel_DEBUG));
@@ -391,7 +388,7 @@ ossimImageGeometry* ossimUsgsDemTileSource::getInternalImageGeometry()
          if (traceDebug())
          {
             ossimNotify(ossimNotifyLevel_DEBUG)
-               << "ossimUsgsDemTileSource::getImageGeometry DEBUG:"
+               << "ossimUsgsDemTileSource::getInternalImageGeometry DEBUG:"
                << "keyword list:\n" << proj_kwl
                << std::endl;
          }
@@ -402,12 +399,12 @@ ossimImageGeometry* ossimUsgsDemTileSource::getInternalImageGeometry()
             createProjection(proj_kwl);
          if ( proj.valid() )
          {
-            theGeometry->setProjection(proj.get());
+            geom->setProjection(proj.get());
          }
       }
    }
    
-   return theGeometry.get();
+   return geom;
 }
 
 ossimScalarType ossimUsgsDemTileSource::getOutputScalarType() const

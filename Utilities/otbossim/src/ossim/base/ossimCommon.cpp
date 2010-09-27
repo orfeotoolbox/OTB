@@ -9,7 +9,7 @@
 // Description: Common file for global functions.
 //
 //*************************************************************************
-// $Id: ossimCommon.cpp 17496 2010-06-01 23:21:55Z gpotts $
+// $Id: ossimCommon.cpp 17978 2010-08-24 16:17:00Z dburken $
 
 #include <sstream>
 
@@ -352,6 +352,8 @@ ossim_uint32 ossim::getActualBitsPerPixel(ossimScalarType scalarType)
          actualBitsPerPixel = 16;
          break;
       }
+      case OSSIM_UINT32:
+      case OSSIM_SINT32:
       case OSSIM_FLOAT32:
       case OSSIM_NORMALIZED_FLOAT:
       {
@@ -400,6 +402,8 @@ ossim_uint32 ossim::getBitsPerPixel(ossimScalarType scalarType)
          bitsPerPixel = 16;
          break;
       }
+      case OSSIM_UINT32:
+      case OSSIM_SINT32:
       case OSSIM_FLOAT32:
       case OSSIM_NORMALIZED_FLOAT:
       {
@@ -480,19 +484,14 @@ std::string ossim::convertHtmlSpecialCharactersToNormalCharacter(const std::stri
    ossimString result = src;
    std::string::size_type pos = 0;
    pos = result.find("&");
-
+   
    while(pos != std::string::npos)
    {
       std::string::size_type size = result.size();
-//       std::cout << "FOUND &" << std::endl;
       std::string test1(&result[pos], ossim::min(6, (int)(size-pos)));
-      //result.begin() + ossim::min(size, pos + 7));
       std::string test2(&result[pos], ossim::min(5, (int)(size-pos)));
       std::string test3(&result[pos], ossim::min(4, (int)(size-pos)));
       
-//       std::cout << "test1 " << test1 << std::endl;
-//       std::cout << "test2 " << test2 << std::endl;
-//       std::cout << "test3 " << test3 << std::endl;
       if(test1 == "&apos;")
       {
          result = result.substitute(test1, "'");
@@ -500,7 +499,7 @@ std::string ossim::convertHtmlSpecialCharactersToNormalCharacter(const std::stri
       else if(test1 == "&quot;")
       {
          result = result.substitute(test1, "\"");
-     }
+      }
       else if(test2 == "&amp;")
       {
          result = result.substitute(test2, "&");

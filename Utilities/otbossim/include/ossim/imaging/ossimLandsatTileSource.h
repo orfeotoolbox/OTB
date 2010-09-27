@@ -11,7 +11,7 @@
 // TileSource.
 //
 //*******************************************************************
-//  $Id: ossimLandsatTileSource.h 16075 2009-12-10 15:46:43Z gpotts $
+//  $Id: ossimLandsatTileSource.h 17932 2010-08-19 20:34:35Z dburken $
 
 #ifndef ossimLandsatTileSource_HEADER
 #define ossimLandsatTileSource_HEADER
@@ -54,7 +54,7 @@ public:
    
    //! Returns the image geometry object associated with this tile source or NULL if non defined.
    //! The geometry contains full-to-local image transform as well as projection (image-to-world)
-   virtual ossimImageGeometry* getImageGeometry();
+   virtual ossimRefPtr<ossimImageGeometry> getImageGeometry();
 
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix = NULL);

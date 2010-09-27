@@ -8,7 +8,7 @@
 // Author:  Frank Warmerdam (warmerda@home.com)
 //
 //*******************************************************************
-//  $Id: ossimImageWriterFactory.h 13206 2008-07-22 19:48:02Z gpotts $
+//  $Id: ossimImageWriterFactory.h 18002 2010-08-30 18:01:10Z gpotts $
 
 #ifndef ossimImageWriterFactory_HEADER
 #define ossimImageWriterFactory_HEADER
@@ -47,6 +47,10 @@ public:
     */
    virtual void getImageTypeList(std::vector<ossimString>& imageTypeList)const;
    
+   virtual void getImageFileWritersBySuffix(ossimImageWriterFactoryBase::ImageFileWriterList& result,
+                                            const ossimString& ext)const;
+   virtual void getImageFileWritersByMimeType(ossimImageWriterFactoryBase::ImageFileWriterList& result,
+                                              const ossimString& mimeType)const;
 protected:
    ossimImageWriterFactory() {}
 

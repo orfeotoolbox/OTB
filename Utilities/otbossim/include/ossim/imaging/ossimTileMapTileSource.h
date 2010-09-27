@@ -43,7 +43,7 @@ public:
 
    //! Returns the image geometry object associated with this tile source or NULL if non defined.
    //! The geometry contains full-to-local image transform as well as projection (image-to-world)
-   virtual ossimImageGeometry* getImageGeometry();
+   virtual ossimRefPtr<ossimImageGeometry> getImageGeometry();
 
 
 

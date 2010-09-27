@@ -9,7 +9,7 @@
 //
 // Calls Geotrans Equidistant Cylinder projection code.  
 //*******************************************************************
-//  $Id: ossimEquDistCylProjection.cpp 16414 2010-01-26 18:10:18Z gpotts $
+//  $Id: ossimEquDistCylProjection.cpp 17815 2010-08-03 13:23:14Z dburken $
 
 #include <ossim/projection/ossimEquDistCylProjection.h>
 #include <ossim/base/ossimKeywordNames.h>
@@ -90,6 +90,15 @@ void ossimEquDistCylProjection::update()
    theFalseEastingNorthing.y = Eqcy_False_Northing;
 
    ossimMapProjection::update();
+
+   // EPSG Platte Carree codes are the same as datum + 2000:
+   if (thePcsCode == 0) 
+   {
+      if (theGcsCode == 4326)
+         thePcsCode = 4326;
+      else if (theGcsCode != 0)
+         thePcsCode = theGcsCode + 2000; 
+   }
 }
 
 void ossimEquDistCylProjection::setFalseEasting(double falseEasting)

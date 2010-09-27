@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageSharpenFilter.cpp 15927 2009-11-16 17:30:08Z dburken $
+// $Id: ossimImageSharpenFilter.cpp 18021 2010-09-01 12:11:05Z gpotts $
 #include <cstdlib> /* for abs() */
 #include <ossim/imaging/ossimImageSharpenFilter.h>
 #include <ossim/base/ossimIrect.h>
@@ -38,6 +38,7 @@ void ossimImageSharpenFilter::setWidthAndSigma(ossim_uint32 w, ossim_float64 sig
    theWidth |= 1;
    if(theWidth < 3) theWidth = 3;
    theSigma = sigma;
+   buildConvolutionMatrix();
 }
 
 ossimRefPtr<ossimImageData> ossimImageSharpenFilter::getTile(

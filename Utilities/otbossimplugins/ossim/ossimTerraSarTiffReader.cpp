@@ -205,23 +205,26 @@ void ossimplugins::ossimTerraSarTiffReader::close()
    ossimTiffTileSource::close();
 }
 
-ossimImageGeometry* ossimplugins::ossimTerraSarTiffReader::getImageGeometry()
+ossimRefPtr<ossimImageGeometry> ossimplugins::ossimTerraSarTiffReader::getImageGeometry()
 {
-   if ( !theGeometry.valid() )
+   if ( !theGeometry )
    {
-      //---
       // Check for external geom:
-      //---
-      getExternalImageGeometry();
+      theGeometry = getExternalImageGeometry();
       
-      if ( !theGeometry.valid() )
+      if ( !theGeometry )
       {
-         //---
          // Check the internal geometry first to avoid a factory call.
-         //---
-         getInternalImageGeometry();
+         theGeometry = getInternalImageGeometry();
 
          // At this point it is assured theGeometry is set.
+
+         //---
+         // WARNING:
+         // Must create/set theGeometry at this point or the next call to
+         // ossimImageGeometryRegistry::extendGeometry will put us in an infinite loop
+         // as it does a recursive call back to ossimImageHandler::getImageGeometry().
+         //---         
 
          // Check for set projection.
          if ( !theGeometry->getProjection() )
@@ -230,35 +233,24 @@ ossimImageGeometry* ossimplugins::ossimTerraSarTiffReader::getImageGeometry()
             ossimImageGeometryRegistry::instance()->extendGeometry(this);
          }
       }
+
+      // Set image things the geometry object should know about.
+      initImageParameters( theGeometry.get() );
    }
    
-   // Lastly check for set decimation levels.  First time through...
-   if( getNumberOfDecimationLevels() != theGeometry->getNumberOfDecimations() )
-   {
-      std::vector<ossimDpt> decimationList;
-      getDecimationFactors(decimationList);
-      theGeometry->setDiscreteDecimation(decimationList);
-   }
-
-   return theGeometry.get();
+   return theGeometry;
 }
 
-ossimImageGeometry*
-ossimplugins::ossimTerraSarTiffReader::getInternalImageGeometry()
+ossimRefPtr<ossimImageGeometry>
+ossimplugins::ossimTerraSarTiffReader::getInternalImageGeometry() const
 {
-   static const char MODULE[] =
-      "ossimplugins::ossimTerraSarTiffReader::getInternalImageGeometry";
-   
+   static const char MODULE[] = "ossimplugins::ossimTerraSarTiffReader::getInternalImageGeometry";
    if (traceDebug())
    {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << MODULE << " entered...\n";
+      ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
    }
 
-   if ( !theGeometry )
-   {
-      theGeometry = new ossimImageGeometry();
-   }
+   ossimRefPtr<ossimImageGeometry> geom = new ossimImageGeometry();
    
    ossimXmlDocument* xdoc = new ossimXmlDocument();
    if ( xdoc->openFile(theProductXmlFile) )
@@ -275,7 +267,7 @@ ossimplugins::ossimTerraSarTiffReader::getInternalImageGeometry()
             if ( model->open(theProductXmlFile) )
             {
                // Assign the model to our ossimImageGeometry object.
-               theGeometry->setProjection( model.get() );
+               geom->setProjection( model.get() );
             }
          }
          else if ( (s == "MAP") && theTiffPtr )
@@ -297,7 +289,7 @@ ossimplugins::ossimTerraSarTiffReader::getInternalImageGeometry()
                if ( proj.valid() )
                {
                   // Assign projection to our ossimImageGeometry object.
-                  theGeometry->setProjection( proj.get() );
+                  geom->setProjection( proj.get() );
                }
             }
          }
@@ -319,11 +311,10 @@ ossimplugins::ossimTerraSarTiffReader::getInternalImageGeometry()
 
    if (traceDebug())
    {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << MODULE << " exited..." << std::endl;
+      ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " exited..." << std::endl;
    }
    
-   return theGeometry.get();
+   return geom;
 }
 
 bool ossimplugins::ossimTerraSarTiffReader::isTerraSarProductFile(

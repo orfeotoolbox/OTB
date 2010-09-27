@@ -9,13 +9,13 @@
 // Calls Geotrans Transverse Cylindrical Equal Area
 // projection code.  
 //*******************************************************************
-//  $Id: ossimTransCylEquAreaProjection.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimTransCylEquAreaProjection.h 17815 2010-08-03 13:23:14Z dburken $
 #ifndef ossimTransCylEquAreaProjection_HEADER
 #define ossimTransCylEquAreaProjection_HEADER
 
 #include <ossim/projection/ossimMapProjection.h>
 
-class ossimTransCylEquAreaProjection : public ossimMapProjection
+class OSSIMDLLEXPORT ossimTransCylEquAreaProjection : public ossimMapProjection
 {
 public:   
    ossimTransCylEquAreaProjection(const ossimEllipsoid& ellipsoid = ossimEllipsoid(6378137, 6356752.3142),
@@ -81,6 +81,9 @@ public:
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix=0);
    
+   //! Returns TRUE if principal parameters are within epsilon tolerance.
+   virtual bool operator==(const ossimProjection& projection) const;
+
 private:
    
    mutable double Tcea_a;                /* Semi-major axis of ellipsoid in meters */

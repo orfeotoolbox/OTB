@@ -14,6 +14,7 @@
 
 #include <vector>
 #include <ossim/base/ossimConstants.h> /* for OSSIM_DLL macro */
+#include <ossim/base/ossimDatumFactoryInterface.h> 
 #include <OpenThreads/ReadWriteMutex>
 
 // Forward class declarations.
@@ -21,7 +22,7 @@ class ossimDatumFactoryInterface;
 class ossimString;
 class ossimDatum;
 
-class OSSIM_DLL ossimDatumFactoryRegistry
+class OSSIM_DLL ossimDatumFactoryRegistry : public ossimDatumFactoryInterface
 {
 public:
    
@@ -48,7 +49,8 @@ public:
     *
     * @return const pointer to a datum.
     */
-   const ossimDatum* create(const ossimString& code)const;
+   virtual const ossimDatum* create(const ossimString& code)const;
+   virtual const ossimDatum* create(const ossimKeywordlist& kwl, const char *prefix=0) const;
 
    /**
     * getList method to return a combined list of all datums from registered
@@ -56,22 +58,15 @@ public:
     *
     * @param list The list to add to.
     */
-   void getList(std::vector<ossimString>& list) const;
+   virtual void getList(std::vector<ossimString>& list) const;
    
 protected:
 
    /** hidden from use default constructor */
    ossimDatumFactoryRegistry();
 
-   /** hidden from use copy constructor */
-   ossimDatumFactoryRegistry(const ossimDatumFactoryRegistry& obj);
-
-   /** hidden from use assignment operator */
-   const ossimDatumFactoryRegistry& operator=(
-      const ossimDatumFactoryRegistry& rhs);
-
    /** Single static instance of this class. */
-   //static ossimDatumFactoryRegistry* theInstance;
+   static ossimDatumFactoryRegistry* theInstance;
 
 	mutable OpenThreads::ReadWriteMutex theFactoryListMutex;
    std::vector<ossimDatumFactoryInterface*> theFactoryList;

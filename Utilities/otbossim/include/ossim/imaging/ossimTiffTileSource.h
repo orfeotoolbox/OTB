@@ -13,7 +13,7 @@
 // ossimTiffTileSource  is derived from ImageHandler which is derived from
 // TileSource.
 //*******************************************************************
-//  $Id: ossimTiffTileSource.h 15833 2009-10-29 01:41:53Z eshirschorn $
+//  $Id: ossimTiffTileSource.h 17844 2010-08-05 14:50:09Z dburken $
 
 #ifndef ossimTiffTileSource_HEADER
 #define ossimTiffTileSource_HEADER
@@ -146,8 +146,9 @@ public:
     */
    bool hasR0() const;
   
-   virtual double getMinPixelValue(ossim_uint32 band=0)const;
-   virtual double getMaxPixelValue(ossim_uint32 band=0)const;
+   virtual ossim_float64 getMinPixelValue(ossim_uint32 band=0)const;
+   virtual ossim_float64 getMaxPixelValue(ossim_uint32 band=0)const;
+   virtual ossim_float64 getNullPixelValue(ossim_uint32 band=0)const;
    
    virtual bool isValidRLevel(ossim_uint32 resLevel) const;
 
@@ -264,10 +265,10 @@ private:
    void populateLut();
 
    /**
-    * @brief validateMinNax Checks min and max to make sure they are not equal
+    * @brief validateMinMaxNull Checks min, max and null to make sure they are not equal
     * to the scalar type nan or double nan; sets to default min max if so.
     */
-   void validateMinMax();
+   void validateMinMaxNull();
    
    ossimRefPtr<ossimImageData> theTile;
    
@@ -281,8 +282,11 @@ private:
    ossim_uint16         theSamplesPerPixel;
    ossim_uint16         theBitsPerSample;
    ossim_uint16         theSampleFormatUnit;
-   double               theMaxSampleValue;
-   double               theMinSampleValue;
+
+   ossim_float64        theMaxSampleValue;
+   ossim_float64        theMinSampleValue;
+   ossim_float64        theNullSampleValue;
+
    ossim_uint16         theNumberOfDirectories;
    ossim_uint16         theCurrentDirectory;
    bool                 theR0isFullRes;

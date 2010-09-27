@@ -8,14 +8,14 @@
 //
 // Calls Geotrans Cylinder Equal Area  projection code.  
 //*******************************************************************
-//  $Id: ossimCylEquAreaProjection.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimCylEquAreaProjection.h 17815 2010-08-03 13:23:14Z dburken $
 
 #ifndef ossimCylEquAreaProjection_HEADER
 #define ossimCylEquAreaProjection_HEADER
 
 #include <ossim/projection/ossimMapProjection.h>
 
-class ossimCylEquAreaProjection : public ossimMapProjection
+class OSSIMDLLEXPORT ossimCylEquAreaProjection : public ossimMapProjection
 {
 public: 
    ossimCylEquAreaProjection(const ossimEllipsoid& ellipsoid = ossimEllipsoid(),

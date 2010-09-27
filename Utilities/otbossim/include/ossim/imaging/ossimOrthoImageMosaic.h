@@ -8,7 +8,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimOrthoImageMosaic.h 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimOrthoImageMosaic.h 17932 2010-08-19 20:34:35Z dburken $
 #ifndef ossimOrthoImageMosaic_HEADER
 #define ossimOrthoImageMosaic_HEADER
 
@@ -24,7 +24,7 @@ public:
 
    //! Returns the geometry associated with the full mosaic. This object maintains it's own 
    //! geometry instance.
-   virtual ossimImageGeometry* getImageGeometry();
+   virtual ossimRefPtr<ossimImageGeometry> getImageGeometry();
 
    //! Used to retrieve the number of overlapping images withint the given rect.
    virtual ossim_uint32 getNumberOfOverlappingImages(const ossimIrect& rect, ossim_uint32 resLevel=0)const;

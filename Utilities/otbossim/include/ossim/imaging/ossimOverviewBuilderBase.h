@@ -9,7 +9,7 @@
 // Description:  Base class for overview builders.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimOverviewBuilderBase.h 17194 2010-04-23 15:05:19Z dburken $
+// $Id: ossimOverviewBuilderBase.h 17932 2010-08-19 20:34:35Z dburken $
 #ifndef ossimOverviewBuilderBase_HEADER
 #define ossimOverviewBuilderBase_HEADER
 
@@ -141,6 +141,12 @@ public:
     */
    virtual bool execute()=0;
 
+    /**
+    * @brief Sets the histogram accumulation mode.
+    * @param mode NONE, NORMAL or FAST.
+    */
+   void setMaskBuildFlag(bool maskBuildFlag) { m_maskBuildFlag = maskBuildFlag; }
+
 protected:
    /** virtual destructor */
    virtual ~ossimOverviewBuilderBase();
@@ -169,8 +175,9 @@ protected:
    ossim_uint32 getDefaultStopDimension() const;
    
    ossim_uint32 m_overviewStopDimension;
-
    ossimHistogramMode m_histoMode;   
+
+   bool m_maskBuildFlag;
 
    /** for rtti stuff */
    TYPE_DATA

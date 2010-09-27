@@ -6,7 +6,7 @@
 //
 // Description: 
 //
-// $Id: ossimVpfTileSource.cpp 15812 2009-10-25 13:09:24Z dburken $
+// $Id: ossimVpfTileSource.cpp 17932 2010-08-19 20:34:35Z dburken $
 //----------------------------------------------------------------------------
 #include <ossim/imaging/ossimVpfTileSource.h>
 
@@ -106,19 +106,22 @@ ossimIrect ossimVpfTileSource::getImageRectangle(ossim_uint32 /* reduced_res_lev
 //**************************************************************************************************
 // Returns the image geometry object associated with this tile source or NULL if non defined.
 //**************************************************************************************************
-ossimImageGeometry* ossimVpfTileSource::getImageGeometry()
+ossimRefPtr<ossimImageGeometry> ossimVpfTileSource::getImageGeometry()
 {
-   if (theGeometry.valid())
-      return theGeometry.get();
+   if (theGeometry.valid()) return theGeometry;
    
-   const ossimImageGeometry* annotGeom = m_AnnotationSource->getImageGeometry();
-   if (annotGeom)
+   ossimRefPtr<ossimImageGeometry> annotGeom = m_AnnotationSource->getImageGeometry();
+   if ( annotGeom.valid() )
    {
       // Copy the annotation source's geometry as our own:
       theGeometry = new ossimImageGeometry(*annotGeom);
-      return theGeometry.get();
+
+      // Set image things the geometry object should know about.
+      initImageParameters( theGeometry.get() );
+      
+      return theGeometry;
    }
-   return 0;
+   return ossimRefPtr<ossimImageGeometry>();
 }
 
 ossimScalarType ossimVpfTileSource::getOutputScalarType() const

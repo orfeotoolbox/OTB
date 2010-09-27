@@ -71,13 +71,13 @@ namespace ossimplugins
        * NULL if non defined.  The geometry contains full-to-local image
        * transform as well as projection (image-to-world).
        */
-      virtual ossimImageGeometry* getImageGeometry();
+      virtual ossimRefPtr<ossimImageGeometry> getImageGeometry();
 
       /**
        * @param Method to get geometry from the xml file or internal geotiff
        * tags.
        */
-      virtual ossimImageGeometry* getInternalImageGeometry();
+      virtual ossimRefPtr<ossimImageGeometry> getInternalImageGeometry() const;
       
    private:
       

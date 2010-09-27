@@ -11,7 +11,7 @@
 // Committe (FGDC) format.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimFgdcFileWriter.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimFgdcFileWriter.cpp 17932 2010-08-19 20:34:35Z dburken $
 
 #include <fstream>
 using namespace std;
@@ -70,10 +70,8 @@ bool ossimFgdcFileWriter::writeFile()
 
    // Get the geometry from the input.
    ossimMapProjection* mapProj = 0;
-   const ossimImageGeometry* inputGeom = theInputConnection->getImageGeometry();
-   if (inputGeom)
-      mapProj = PTR_CAST(ossimMapProjection, inputGeom->getProjection());
-   
+   ossimRefPtr<ossimImageGeometry> inputGeom = theInputConnection->getImageGeometry();
+   if ( inputGeom.valid() ) mapProj = PTR_CAST(ossimMapProjection, inputGeom->getProjection());
    if (!mapProj)
    {
       ossimNotify(ossimNotifyLevel_WARN)

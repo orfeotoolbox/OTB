@@ -21,6 +21,7 @@
 #include <ossim/base/ossimErrorContext.h>
 #include <ossim/base/ossimProperty.h>
 #include <ossim/base/ossimContainerProperty.h>
+#include <ossim/base/ossimRegExp.h>
 
 
 ossimDtedInfo::ossimDtedInfo()
@@ -36,26 +37,33 @@ bool ossimDtedInfo::open(const ossimFilename& file)
 {
    bool result = false;
 
-   ossimDtedVol vol(file, 0);
-   ossimDtedHdr hdr(file, vol.stopOffset());
-   ossimDtedUhl uhl(file, hdr.stopOffset());
-   ossimDtedDsi dsi(file, uhl.stopOffset());
-   ossimDtedAcc acc(file, dsi.stopOffset());
-
-   //---
-   // Check for errors.  Must have uhl, dsi and acc records.  vol and hdr
-   // are for magnetic tape only; hence, may or may not be there.
-   //---
-   if ( (uhl.getErrorStatus() == ossimErrorCodes::OSSIM_OK) &&
-        (dsi.getErrorStatus() == ossimErrorCodes::OSSIM_OK) &&
-        (acc.getErrorStatus() == ossimErrorCodes::OSSIM_OK) )
+   // Test for extension, like dt0, dt1...
+   ossimString ext = file.ext();
+   ossimRegExp regExp("^[d|D][t|T][0-9]");
+   
+   if ( regExp.find( ext.c_str() ) )
    {
-      theFile = file;
-      result = true;
-   }
-   else
-   {
-      theFile.clear();
+      ossimDtedVol vol(file, 0);
+      ossimDtedHdr hdr(file, vol.stopOffset());
+      ossimDtedUhl uhl(file, hdr.stopOffset());
+      ossimDtedDsi dsi(file, uhl.stopOffset());
+      ossimDtedAcc acc(file, dsi.stopOffset());
+      
+      //---
+      // Check for errors.  Must have uhl, dsi and acc records.  vol and hdr
+      // are for magnetic tape only; hence, may or may not be there.
+      //---
+      if ( (uhl.getErrorStatus() == ossimErrorCodes::OSSIM_OK) &&
+           (dsi.getErrorStatus() == ossimErrorCodes::OSSIM_OK) &&
+           (acc.getErrorStatus() == ossimErrorCodes::OSSIM_OK) )
+      {
+         theFile = file;
+         result = true;
+      }
+      else
+      {
+         theFile.clear();
+      }
    }
 
    return result;

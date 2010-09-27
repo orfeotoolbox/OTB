@@ -9,7 +9,7 @@
 // Contains class definition for ImageHandlerRegistry.
 //
 //*******************************************************************
-//  $Id: ossimImageHandlerRegistry.cpp 17206 2010-04-25 23:20:40Z dburken $
+//  $Id: ossimImageHandlerRegistry.cpp 18002 2010-08-30 18:01:10Z gpotts $
 #include <algorithm>
 #include <ossim/imaging/ossimImageHandlerRegistry.h>
 #include <ossim/imaging/ossimImageHandlerFactory.h>
@@ -118,6 +118,69 @@ ossimObject* ossimImageHandlerRegistry::createObject(const ossimKeywordlist& kwl
    return result;
 }
 
+ossimRefPtr<ossimImageHandler> ossimImageHandlerRegistry::openBySuffix(const ossimFilename& file)const
+{
+   std::vector<ossimRefPtr<ossimImageHandler> > handlers;
+   
+   getImageHandlersBySuffix(handlers, file.ext());
+   ossim_uint32 idx = 0;
+   ossim_uint32 size = handlers.size();
+   
+   for(idx = 0; idx < size; ++idx)
+   {
+      if(handlers[idx]->open(file))
+      {
+         return handlers[idx];
+      }
+   }
+   
+   return ossimRefPtr<ossimImageHandler>(0);
+}
+
+void ossimImageHandlerRegistry::getImageHandlersBySuffix(ossimImageHandlerFactoryBase::ImageHandlerList& result,
+                                                         const ossimString& ext)const
+{
+   vector<ossimImageHandlerFactoryBase*>::const_iterator iter = theFactoryList.begin();
+   ossimImageHandlerFactoryBase::ImageHandlerList temp;
+   while(iter != theFactoryList.end())
+   {
+      temp.clear();
+      (*iter)->getImageHandlersBySuffix(temp, ext);
+      
+      if(!temp.empty())
+      {
+         
+         // now append to the end of the typeList.
+         result.insert(result.end(),
+                       temp.begin(),
+                       temp.end());
+      }
+      ++iter;
+   }
+}
+
+void ossimImageHandlerRegistry::getImageHandlersByMimeType(ossimImageHandlerFactoryBase::ImageHandlerList& result,
+                                                           const ossimString& mimeType)const
+{
+   vector<ossimImageHandlerFactoryBase*>::const_iterator iter = theFactoryList.begin();
+   ossimImageHandlerFactoryBase::ImageHandlerList temp;
+   while(iter != theFactoryList.end())
+   {
+      temp.clear();
+      (*iter)->getImageHandlersByMimeType(temp, mimeType);
+      
+      if(!temp.empty())
+      {
+         
+         // now append to the end of the typeList.
+         result.insert(result.end(),
+                       temp.begin(),
+                       temp.end());
+      }
+      ++iter;
+   }
+}
+
 void ossimImageHandlerRegistry::getTypeNameList(std::vector<ossimString>& typeList)const
 {
    vector<ossimString> result;
@@ -150,8 +213,19 @@ void ossimImageHandlerRegistry::getSupportedExtensions(ossimImageHandlerFactoryB
    
 }
 
-ossimImageHandler* ossimImageHandlerRegistry::open(const ossimFilename& fileName)const
+ossimImageHandler* ossimImageHandlerRegistry::open(const ossimFilename& fileName, bool trySuffixFirst)const
 {
+   if(trySuffixFirst)
+   {
+      ossimRefPtr<ossimImageHandler> h = openBySuffix(fileName);
+      if(h.valid())
+      {
+         return h.release();
+      }
+   }
+   
+   // now try magic number opens
+   //
    ossimImageHandler*                   result = NULL;
    vector<ossimImageHandlerFactoryBase*>::const_iterator factory;
 

@@ -9,7 +9,7 @@
 // Description: Utility class for global nitf methods.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimNitfCommon.cpp 15410 2009-09-11 19:45:38Z dburken $
+// $Id: ossimNitfCommon.cpp 17978 2010-08-24 16:17:00Z dburken $
 
 #include <cstring> /* for memcpy */
 #include <sstream>
@@ -467,14 +467,16 @@ ossimString ossimNitfCommon::getNitfPixelType(ossimScalarType scalarType)
    ossimString pixelType;
    switch(scalarType)
    {
-      case OSSIM_UCHAR:
+      case OSSIM_UINT8:
       case OSSIM_USHORT11:
-      case OSSIM_USHORT16:
+      case OSSIM_UINT16:
+      case OSSIM_UINT32:
       {
          pixelType = "INT";
          break;
       }
-      case OSSIM_SSHORT16:
+      case OSSIM_SINT16:
+      case OSSIM_SINT32:
       {
          pixelType    = "SI";
          break;

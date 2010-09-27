@@ -9,7 +9,7 @@
 // Support data class for a Shuttle Radar Topography Mission (SRTM) file.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimSrtmSupportData.cpp 17602 2010-06-20 19:12:24Z dburken $
+// $Id: ossimSrtmSupportData.cpp 17815 2010-08-03 13:23:14Z dburken $
 
 #include <cmath>
 #include <fstream>
@@ -273,8 +273,10 @@ ossimRefPtr<ossimProjection> ossimSrtmSupportData::getProjection() const
    
    // Set the scale:
    eq->setDecimalDegreesPerPixel( ossimDpt(theLonSpacing, theLatSpacing) );
-   
-   // Give it to the geometry object.
+
+   // Set the pcs code.
+   eq->setPcsCode(6326);   
+
    ossimRefPtr<ossimProjection> proj = eq.get();
 
    return proj;

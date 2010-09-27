@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimMapCompositionSource.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimMapCompositionSource.cpp 17932 2010-08-19 20:34:35Z dburken $
 
 #include <ossim/imaging/ossimMapCompositionSource.h>
 #include <ossim/imaging/ossimU8ImageData.h>
@@ -3790,7 +3790,7 @@ const ossimMapProjection* ossimMapCompositionSource::inputMapProjection() const
    if (!theInputConnection)
       return 0;
 
-   const ossimImageGeometry* inputGeom = theInputConnection->getImageGeometry();
+   ossimRefPtr<ossimImageGeometry> inputGeom = theInputConnection->getImageGeometry();
    if (!inputGeom)
       return 0;
 

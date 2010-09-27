@@ -8,14 +8,14 @@
 //
 // Calls Geotrans Eckert6 projection code.  
 //*******************************************************************
-//  $Id: ossimEckert6Projection.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimEckert6Projection.h 17815 2010-08-03 13:23:14Z dburken $
 
 #ifndef ossimEckert6Projection_HEADER
 #define ossimEckert6Projection_HEADER
 
 #include <ossim/projection/ossimMapProjection.h>
 
-class ossimEckert6Projection : public ossimMapProjection
+class OSSIMDLLEXPORT ossimEckert6Projection : public ossimMapProjection
 {
 public:   
    ossimEckert6Projection(const ossimEllipsoid& ellipsoid = ossimEllipsoid(),
@@ -58,6 +58,8 @@ public:
     * pre-computations.
     */
    void setDefaults();
+
+   void setCentralMeridian(double centralMeridian);
 
    /*!
     * Method to save the state of an object to a keyword list.

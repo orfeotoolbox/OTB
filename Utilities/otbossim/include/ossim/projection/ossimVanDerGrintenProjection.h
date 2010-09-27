@@ -8,13 +8,13 @@
 //
 // Calls Grinten projection code.  
 //*******************************************************************
-//  $Id: ossimVanDerGrintenProjection.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimVanDerGrintenProjection.h 17815 2010-08-03 13:23:14Z dburken $
 #ifndef ossimVanDerGrintenProjection_HEADER
 #define ossimVanDerGrintenProjection_HEADER
 
 #include <ossim/projection/ossimMapProjection.h>
 
-class ossimVanDerGrintenProjection : public ossimMapProjection
+class OSSIMDLLEXPORT ossimVanDerGrintenProjection : public ossimMapProjection
 {
 public:
    ossimVanDerGrintenProjection(const ossimEllipsoid& ellipsoid = ossimEllipsoid(),
@@ -55,6 +55,8 @@ public:
 
    void setDefaults();
 
+   void setCentralMeridian(double centralMeridian);
+
    double getFalseEasting()const{return  Grin_False_Easting;}
    double getFalseNorthing()const{return Grin_False_Northing;}
    
@@ -71,6 +73,9 @@ public:
     */
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix=0);
+
+   //! Returns TRUE if principal parameters are within epsilon tolerance.
+   virtual bool operator==(const ossimProjection& projection) const;
 
 protected:
 

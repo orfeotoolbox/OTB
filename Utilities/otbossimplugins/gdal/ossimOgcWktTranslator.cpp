@@ -15,7 +15,7 @@
 // accomplish the translation. 
 //
 //*******************************************************************
-//  $Id: ossimOgcWktTranslator.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
+//  $Id: ossimOgcWktTranslator.cpp 18120 2010-09-24 11:08:17Z gpotts $
 
 #include <cstdio>
 #include <gdal.h>
@@ -27,17 +27,16 @@
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimKeyword.h>
 #include <ossim/base/ossimKeywordlist.h>
-#include <ossim/projection/ossimStatePlaneProjectionInfo.h>
 #include <ossim/projection/ossimAlbersProjection.h>
 #include <ossim/projection/ossimCylEquAreaProjection.h>
 #include <ossim/projection/ossimTransMercatorProjection.h>
 #include <ossim/projection/ossimUtmProjection.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
-#include <ossim/projection/ossimStatePlaneProjectionFactory.h>
+#include <ossim/projection/ossimEpsgProjectionDatabase.h>
+#include <ossim/projection/ossimEpsgProjectionFactory.h>
 #include <ossim/base/ossimUnitConversionTool.h>
 #include <ossim/base/ossimUnitTypeLut.h>
 
-   
 static const double SEMI_MAJOR_AXIS_WGS84 = 6378137.0;
 static const double SEMI_MINOR_AXIS_WGS84 = 6356752.3142;
 
@@ -158,35 +157,17 @@ ossimString ossimOgcWktTranslator::fromOssimKwl(const ossimKeywordlist &kwl,
       // non-meters HARN codes.  However, the units are left unchanged in this 
       // process, so the units can be different than the user-specified pcs code. 
       // ArcMap 9.2 seems to understand the mixed definition just fine.
-      const ossimStatePlaneProjectionInfo* info =
-         ossimStatePlaneProjectionFactory::instance()->getInfo(pcsCodeVal);
-      if (info)
+      ossimEpsgProjectionDatabase* proj_db = ossimEpsgProjectionDatabase::instance();
+      ossimString pcsCodeName = proj_db->findProjectionName(pcsCodeVal);
+      if ( pcsCodeName.contains("HARN") && pcsCodeName.contains("_Feet") )
       {
-         const ossimString& pcsCodeName = info->name();
-         if ( pcsCodeName.empty() == false )
-         {
-            if ( pcsCodeName.contains("HARN") == true && pcsCodeName.contains("_Feet") == true )
-            {
-               ossimString feetStr("_Feet");
-               ossimString newPcsCodeName( pcsCodeName.before(feetStr).c_str() );
-               if ( newPcsCodeName.empty() == false )
-               {
-                  info = ossimStatePlaneProjectionFactory::instance()->getInfo(newPcsCodeName);
-                  if ( info != NULL )
-                  {
-                     // pcs code for equivalent HARN/meters definition
-                     ossimString newPcsCode( ossimString::toString( info->code() ) );
-
-                     // Make sure the code can be used in the tiff file. 
-                     // It has to fit into an unsigned short.
-                     if ( info->code() < EPSG_CODE_MAX ) 
-                        pcsCodeVal = info->code();
-                  }
-               }
-            }
-         }
+         ossimString feetStr("_Feet");
+         ossimString newPcsCodeName( pcsCodeName.before(feetStr).c_str() );
+         ossimString epsg_spec = proj_db->findProjectionCode(newPcsCodeName);
+         ossim_uint32 new_code = epsg_spec.after(":").toUInt32();
+         if (new_code)
+          pcsCodeVal = new_code;
       }
-
       oSRS.importFromEPSG( pcsCodeVal );
    }
    else if(projType == "ossimUtmProjection")
@@ -560,6 +541,11 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
 
 {
    static const char MODULE[] = "ossimOgcWktTranslator::toOssimKwl";
+
+   if(traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
+   }
    
    const char* wkt = wktString.c_str();
    
@@ -568,48 +554,44 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
    
    // Translate the WKT into an OGRSpatialReference. 
    hSRS = OSRNewSpatialReference(NULL);
-
    if( OSRImportFromWkt( hSRS, (char **) &wkt ) != OGRERR_NONE )
    {
       OSRDestroySpatialReference( hSRS );
       return false;
    }
-
+   
    // Determine if State Plane Coordinate System
    ossimString ossimProj = "";
-   const ossimStatePlaneProjectionInfo* spi = NULL;
    const char* epsg_code = OSRGetAttrValue( hSRS, "AUTHORITY", 1 );
-   if(epsg_code)
-   {
-      ossimStatePlaneProjectionFactory* spf =
-         ossimStatePlaneProjectionFactory::instance();
-      spi = spf->getInfo(ossimString::toInt(epsg_code));
-      
-      if(spi)
-      {
-         ossimProj = "ossimStatePlaneProjection";
-      }
-    }
 
+   if(traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "epsg_code: " << (epsg_code?epsg_code:"null") << "\n";
+   }
+   
    //---
    // Extract Units 
    // ESH 11/2008: Check for geographic system when setting default units. 
    // If geographic, use degrees.
    //---
-   
-   // Actually search only the "UNIT" child of the node PROJCS
-   // Several UNIT nodes can be present in the tree, but only the one
-   // necessary for the PROJCS is required.
+//   const char* units = OSRGetAttrValue( hSRS, "UNIT", 0 );
    const char* units = NULL;
    OGR_SRSNode* node = ((OGRSpatialReference *)hSRS)->GetRoot();
    int nbChild  = node->GetChildCount();
    for (int i = 0; i < nbChild; i++)
    {
-       OGR_SRSNode* curChild = node->GetChild(i);
-       if (strcmp(curChild->GetValue(), "UNIT") == 0)
-       {
-          units = curChild->GetChild(0)->GetValue();
-       }
+      OGR_SRSNode* curChild = node->GetChild(i);
+      if (strcmp(curChild->GetValue(), "UNIT") == 0)
+      {
+         units = curChild->GetChild(0)->GetValue();
+      }
+   }
+
+   if(traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "units: " << (units?units:"null") << "\n";
    }
    
    ossimString ossim_units;
@@ -619,16 +601,25 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
       ossim_units = "meters";
       if ( units != NULL )
       {
-         if(ossimString(units) == ossimString("U.S. Foot"))
+         // Down case to avoid case mismatch.
+         ossimString s = units;
+         s.downcase();
+         
+         if( ( s == ossimString("us survey foot") ) ||
+             ( s == ossimString("u.s. foot") ) ||
+             ( s == ossimString("foot_us") ) )
+         {
             ossim_units = "us_survey_feet";
-         else if(ossimString(units) == ossimString("US survey foot"))
-            ossim_units = "us_survey_feet";
-         else if(ossimString(units) == ossimString("degree"))
+         }
+         else if( s == ossimString("degree") )
+         {
             ossim_units = "degrees";
-         else if(ossimString(units) == ossimString("Meter"))
+         }
+         else if( ( s == ossimString("meter") ) ||
+                  ( s == ossimString("metre") ) )
+         {
             ossim_units = "meters";
-         else if(ossimString(units) == ossimString("metre"))
-            ossim_units = "meters";
+         }
       }
    }
    else
@@ -636,8 +627,26 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
       ossim_units = "degrees";
    }
 
-   bool bModified = false;
-   if(ossimProj == "") // Not State Plane Projection
+   if(traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "ossim_units: " << ossim_units << "\n";
+   }
+
+   // OLK 05/2010 -- ossimProj string was never being set to projection type (except state plane
+   // which is not even a projection type)! This was a bug. Using EPSG factory to attempt to get 
+   // proper projection:
+   if (epsg_code)
+   {
+      ossimString epsg_spec ("EPSG:"); 
+      epsg_spec += ossimString::toString(epsg_code);
+      ossimProjection* proj = ossimEpsgProjectionFactory::instance()->createProjection(epsg_spec);
+      if (proj)
+         ossimProj = proj->getClassName();
+      delete proj;
+   }
+
+   if(ossimProj == "") 
    {
       // Determine which other Projection System is represented.
       const char* pszProjection = OSRGetAttrValue( hSRS, "PROJECTION", 0 );
@@ -659,19 +668,12 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
             ossimProj = "ossimEquDistCylProjection";
          }
       }
-
-      if ( ossimProj != "" )
-      {
-         bModified = true;
-      }
    }
 
    // ESH 11/2008: Ticket #479, if we've got a geographic coordsys 
    // make sure the units are set to degrees.
-   if( bModified == true && ossimProj == "ossimEquDistCylProjection" )
-   {
+   if(ossimProj == "ossimEquDistCylProjection" )
       ossim_units = "degrees";
-   }
 
    // ESH 11/2008: Ticket #479, don't set units until we've checked
    // whether or not the projection was updated.
@@ -688,11 +690,11 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
 
    falseEastingNorthing.x = OSRGetProjParm(hSRS, SRS_PP_FALSE_EASTING, 0.0, NULL);
    falseEastingNorthing.y = OSRGetProjParm(hSRS, SRS_PP_FALSE_NORTHING, 0.0, NULL);
-   if (ossimProj == "ossimStatePlaneProjection")
+   if (epsg_code)
    {
       kwl.add(prefix, ossimKeywordNames::PCS_CODE_KW, epsg_code, true);
    }
-   else if(ossimProj == "ossimBngProjection")
+   if(ossimProj == "ossimBngProjection")
    {
       kwl.add(prefix,
               ossimKeywordNames::TYPE_KW,
@@ -864,7 +866,7 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
          kwl.add(prefix,
                  ossimKeywordNames::TYPE_KW,
                  "ossimTransMercatorProjection",
-                   true);
+                 true);
          kwl.add(prefix,
                  ossimKeywordNames::SCALE_FACTOR_KW,
                  OSRGetProjParm(hSRS, SRS_PP_SCALE_FACTOR, 1.0, NULL),
@@ -891,38 +893,43 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
    else
    {
       if (traceDebug())
-       {
-          ossimNotify(ossimNotifyLevel_DEBUG)
-             << "ossimOgcWktTranslator::toOssimKwl DEBUG:\n"
-             << "Projection conversion to OSSIM not supported !!!!!!!!!\n"
-             << "Please send the following string to the development staff\n" 
-             << "to be added to the transaltion to OSSIM\n"
-             << wkt << endl;
-       }
-	  return false;
-    }
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "ossimOgcWktTranslator::toOssimKwl DEBUG:\n"
+            << "Projection conversion to OSSIM not supported !!!!!!!!!\n"
+            << "Please send the following string to the development staff\n" 
+            << "to be added to the transaltion to OSSIM\n"
+            << wkt << endl;
+      }
+      return false;
+   }
 
-    // extract out the datum
-    //
-    const char *datum = OSRGetAttrValue( hSRS, "DATUM", 0 );
-
-    ossimString oDatum = "WGE";
+   // extract out the datum
+   //
+   const char *datum = OSRGetAttrValue( hSRS, "DATUM", 0 );
+   ossimString oDatum = "WGE";
     
-    if( datum )
-    {
-       oDatum = wktToOssimDatum(datum);
-       if(oDatum == "")
-       {
-          oDatum = "WGE";
-       }
-    }
+   if( datum )
+   {
+      oDatum = wktToOssimDatum(datum);
+      if(oDatum == "")
+      {
+         oDatum = "WGE";
+      }
+   }
        
-    kwl.add(prefix, ossimKeywordNames::DATUM_KW, oDatum, true);
-
+   kwl.add(prefix, ossimKeywordNames::DATUM_KW, oDatum, true);
      
-    OSRDestroySpatialReference( hSRS );
-    
-    return true;
+   OSRDestroySpatialReference( hSRS );
+
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << MODULE << " exit status = true"
+         << std::endl;
+   }    
+      
+   return true;
 }
 
 
@@ -1013,7 +1020,7 @@ ossimString ossimOgcWktTranslator::wktToOssimDatum(const ossimString& datum)cons
    {
       return "OGB-D";
    }
- if(datum.contains("Nouvelle_Triangulation_Francaise"))
+   if(datum.contains("Nouvelle_Triangulation_Francaise"))
    {
       return "NTF";
    }

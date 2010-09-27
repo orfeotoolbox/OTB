@@ -4,7 +4,7 @@
 // OSSIM.
 //
 //-------------------------------------------------------------------------
-// $Id: ossimArgumentParser.cpp 12953 2008-06-01 16:24:05Z dburken $
+// $Id: ossimArgumentParser.cpp 17815 2010-08-03 13:23:14Z dburken $
 
 #include <cstring>
 #include <set>
@@ -214,11 +214,25 @@ bool ossimArgumentParser::match(int pos, const std::string& str) const
 
 bool ossimArgumentParser::containsOptions() const
 {
-    for(int pos=1;pos<*theArgc;++pos)
-    {
-        if (isOption(pos)) return true;
-    }
-    return false;
+   for(int pos=1;pos<*theArgc;++pos)
+   {
+      if (isOption(pos)) return true;
+   }
+   return false;
+}
+
+
+int ossimArgumentParser::numberOfParams(const std::string& str, ossimParameter param) const
+{
+   int pos=find(str);
+   if (pos<=0) 
+      return -1;
+
+   ++pos;
+   int num_params = 0;
+   while (param.valid(theArgv[pos+num_params]))
+      ++num_params;
+   return num_params;
 }
 
 
@@ -314,8 +328,8 @@ bool ossimArgumentParser::read(const std::string& str, ossimParameter value1, os
 }
 
 
-/** if the argument value at the psotion pos matches specified string, and subsequent
-  * paramters are also matched then set the paramter values and remove the from the list of arguments.*/
+/** if the argument value at the posotion pos matches specified string, and subsequent
+  * parameters are also matched then set the paramter values and remove the from the list of arguments.*/
 bool ossimArgumentParser::read(int pos, const std::string& str)
 {
     if (match(pos,str))

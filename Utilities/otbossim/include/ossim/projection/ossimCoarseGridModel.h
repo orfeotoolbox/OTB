@@ -14,7 +14,7 @@
 //   implementation of an interpolation sensor model.
 //
 //*****************************************************************************
-//  $Id: ossimCoarseGridModel.h 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimCoarseGridModel.h 17815 2010-08-03 13:23:14Z dburken $
 
 #ifndef ossimCoarseGridModel_HEADER
 #define ossimCoarseGridModel_HEADER
@@ -25,6 +25,7 @@
 #include <ossim/base/ossimFilename.h>
 
 class ossimImageGeometry;
+
 /******************************************************************************
  *
  * CLASS:  ossimCoarseGridModel
@@ -110,26 +111,12 @@ public:
       { return new ossimCoarseGridModel(*this); }
    
    /**
-    * METHOD: loadGeomFile()
-    * Since there are tweo geometry file formats supported (native KWL and MET
-    * ECG), this method determines which parser method to invoke.
-    */
-   bool loadGeomFile(const ossimFilename& geom_file);
-   
-   /**
     * METHOD: saveCoarseGrid(), loadCoarseGrid()
     * Saves/loads the coarse grid to/from the specified file. Returns true if
     * successful.
     */
    bool saveCoarseGrid(const ossimFilename& cgFileName) const;
    bool loadCoarseGrid(const ossimFilename& cgFileName);
-
-   /**
-    * METHOD: loadMetEcgGeom()
-    * Service to initialize this object from a MET ECG geom and grid files. 
-    */
-   bool loadMetEcgGeom(const ossimFilename& ecgGeomFile,
-                       const ossimFilename& ecgGridFile);
 
    virtual void imagingRay(const ossimDpt& image_point,
                            ossimEcefRay&   image_ray) const;

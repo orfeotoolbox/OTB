@@ -121,7 +121,7 @@ bool ossimElevationCellDatabase::loadState(const ossimKeywordlist& kwl, const ch
    {
       m_memoryMapCellsFlag  = memoryMapCellsFlag.toBool();
    }
-   return ossimElevationCellDatabase::loadState(kwl, prefix);
+   return ossimElevationDatabase::loadState(kwl, prefix);
 }
 
 bool ossimElevationCellDatabase::saveState(ossimKeywordlist& kwl, const char* prefix)const

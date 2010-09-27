@@ -6,7 +6,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimNewZealandMapGridProjection.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimNewZealandMapGridProjection.cpp 17815 2010-08-03 13:23:14Z dburken $
 #include <ossim/projection/ossimNewZealandMapGridProjection.h>
 #include <ossim/base/ossimEllipsoidFactory.h>
 #include <ossim/base/ossimDatumFactory.h>
@@ -163,7 +163,7 @@ void ossimNewZealandMapGridProjection::update()
    theOrigin = ossimGpt(-41, 173);
 
    // create the new zealand datum.
-   theDatum     = ossimDatumFactory::instance()->create("GEO");
+   theDatum     = ossimDatumFactory::instance()->create(ossimString("GEO"));
 
    if(theDatum)
    {

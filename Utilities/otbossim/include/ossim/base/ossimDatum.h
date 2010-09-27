@@ -10,7 +10,7 @@
 // for Geotrans datum.  For more thorough description of each function
 // look at the datum.h file.
 //*******************************************************************
-//  $Id: ossimDatum.h 13560 2008-09-10 11:42:57Z gpotts $
+//  $Id: ossimDatum.h 17932 2010-08-19 20:34:35Z dburken $
 #ifndef ossimDatum_HEADER
 #define ossimDatum_HEADER
 #include <ossim/base/ossimConstants.h>
@@ -20,9 +20,11 @@
 
 class OSSIMDLLEXPORT ossimDatum
 {
+   friend class ossimDatumFactory;
+
 public:
    /**
-    *   @param code           new datum code.                               (input)
+    *   @param alpha_code     new OSSIM/Geotrans datum code.                (input)
     *   @param name           Name of the new datum                         (input)
     *   @param SigmaX         Standard error in X in meters                 (input)
     *   @param SigmaY         Standard error in Y in meters                 (input)
@@ -32,23 +34,11 @@ public:
     *   @param westLongitude  Western edge of validity rectangle in radians (input)
     *   @param eastLongitude  Eastern edge of validity rectangle in radians (input)
     */
-    ossimDatum(const ossimString &code, const ossimString &name,
+    ossimDatum(const ossimString &alpha_code, const ossimString &name,
               const ossimEllipsoid* anEllipsoid,
               ossim_float64 sigmaX, ossim_float64 sigmaY, ossim_float64 sigmaZ,
               ossim_float64 westLongitude, ossim_float64 eastLongitude,
-              ossim_float64 southLatitude, ossim_float64 northLatitude)
-      :theCode(code),
-       theName(name),
-       theEllipsoid(anEllipsoid),
-       theSigmaX(sigmaX),
-       theSigmaY(sigmaY),
-       theSigmaZ(sigmaZ),
-       theWestLongitude(westLongitude),
-       theEastLongitude(eastLongitude),
-       theSouthLatitude(southLatitude),
-       theNorthLatitude(northLatitude)
-      {};
-   virtual ~ossimDatum(){};
+              ossim_float64 southLatitude, ossim_float64 northLatitude);
 
    // Argument holds the source point and datum.  Returns another
    // point with this datum.
@@ -65,6 +55,7 @@ public:
       {return this == aDatum;}
    virtual const ossimString& code()const{return theCode;}
    virtual const ossimString& name()const{return theName;}
+   virtual ossim_uint32 epsgGcsCode()const{return theEpsgGcsCode;}
    virtual const ossimEllipsoid* ellipsoid()const{return theEllipsoid;}
    virtual ossim_float64 sigmaX()const{return theSigmaX;}
    virtual ossim_float64 sigmaY()const{return theSigmaY;}
@@ -105,7 +96,9 @@ public:
                   (theNorthLatitude == rhs.theNorthLatitude));
       }
 protected:
-   
+   //! Only friend ossimDatumFactory is permitted to delete
+   virtual ~ossimDatum(){};
+
    /*!
     * This is directly from Geotrans:
     * Begin Molodensky_Shift
@@ -141,6 +134,7 @@ protected:
 
 private:
    ossimString           theCode;
+   ossim_uint32          theEpsgGcsCode;
    ossimString           theName;
    const ossimEllipsoid *theEllipsoid;
    

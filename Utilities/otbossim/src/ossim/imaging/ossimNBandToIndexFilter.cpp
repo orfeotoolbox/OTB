@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimNBandToIndexFilter.cpp 17206 2010-04-25 23:20:40Z dburken $
+// $Id: ossimNBandToIndexFilter.cpp 17815 2010-08-03 13:23:14Z dburken $
 
 #include <ossim/imaging/ossimNBandToIndexFilter.h>
 #include <ossim/imaging/ossimImageData.h>
@@ -448,7 +448,6 @@ double ossimNBandToIndexFilter::getNullPixelValue(ossim_uint32 band)const
    {
       if(theLut->getNullPixelIndex() >= 0)
       {
-         std::cout << "RETURNING NULL" << std::endl;
          return theLut->getNullPixelIndex();
       }
    }

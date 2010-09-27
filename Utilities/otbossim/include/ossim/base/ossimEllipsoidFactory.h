@@ -9,7 +9,7 @@
 //
 // Thie file contains the ossimEllipsoidFactory.
 //*******************************************************************
-//  $Id: ossimEllipsoidFactory.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimEllipsoidFactory.h 17815 2010-08-03 13:23:14Z dburken $
 
 #ifndef ossimEllipsoidFactory_HEADER
 #define ossimEllipsoidFactory_HEADER
@@ -24,19 +24,26 @@ class ossimWgs72Ellipsoid;
 class OSSIMDLLEXPORT ossimEllipsoidFactory
 {
 public:
-   typedef std::map<ossimString, ossimEllipsoid*> TableType;
    virtual ~ossimEllipsoidFactory();
    const ossimEllipsoid* create(const ossimString &code)const;
    const ossimEllipsoid* wgs84()const{return theWgs84Ellipsoid;}
    const ossimEllipsoid* wgs72()const{return theWgs72Ellipsoid;}
 
+   //! Given an alpha code (for example "WE" for WGS84), returns the corresponding EPSG code or 0
+   //! if not found.
+   ossim_uint32 findEpsgCode(const ossimString &alpha_code) const;
+
    static ossimEllipsoidFactory* instance();
    
 private:
+   typedef std::map<ossimString, ossimEllipsoid*> TableType;
+   typedef std::map<ossim_uint32, ossimString> EpsgTableType;
+
    static ossimEllipsoidFactory*     theInstance;
    ossimEllipsoid*       theWgs84Ellipsoid;
    ossimEllipsoid*       theWgs72Ellipsoid;
    TableType             theEllipsoidTable;
+   EpsgTableType         theEpsgTable;
    ossimEllipsoidFactory();
    void initializeTable();
    void deleteAll();

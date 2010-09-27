@@ -7,10 +7,31 @@
 // Description:
 //
 //*******************************************************************
-//  $Id: ossimDatum.cpp 11408 2007-07-27 13:43:00Z dburken $
+//  $Id: ossimDatum.cpp 17815 2010-08-03 13:23:14Z dburken $
 #include <ossim/base/ossimDatum.h>
 #include <ossim/base/ossimGpt.h>
 #include <ossim/base/ossimEllipsoid.h>
+#include <ossim/base/ossimEpsgDatumFactory.h> // For accessing the EPSG codes
+
+ossimDatum::ossimDatum(const ossimString &alpha_code, const ossimString &name,
+                       const ossimEllipsoid* anEllipsoid,
+                       ossim_float64 sigmaX, ossim_float64 sigmaY, ossim_float64 sigmaZ,
+                       ossim_float64 westLongitude, ossim_float64 eastLongitude,
+                       ossim_float64 southLatitude, ossim_float64 northLatitude)
+:
+theCode(alpha_code),
+theName(name),
+theEllipsoid(anEllipsoid),
+theSigmaX(sigmaX),
+theSigmaY(sigmaY),
+theSigmaZ(sigmaZ),
+theWestLongitude(westLongitude),
+theEastLongitude(eastLongitude),
+theSouthLatitude(southLatitude),
+theNorthLatitude(northLatitude)
+{
+   theEpsgGcsCode = ossimEpsgDatumFactory::instance()->findEpsgCode(alpha_code);
+};
 
 void ossimDatum::molodenskyShift(double a,
                                  double da,

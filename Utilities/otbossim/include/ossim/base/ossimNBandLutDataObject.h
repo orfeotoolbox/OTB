@@ -6,12 +6,13 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimNBandLutDataObject.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimNBandLutDataObject.h 17815 2010-08-03 13:23:14Z dburken $
 #ifndef ossimNBandLutDataObject_HEADER
 #define ossimNBandLutDataObject_HEADER
 #include <ossim/base/ossimObject.h>
 #include <ossim/base/ossimFilename.h>
 #include <iostream>
+#include <map>
 
 /**
  * class ossimNBandLutDataObject
@@ -438,6 +439,10 @@ public:
     */ 
    virtual bool saveState(ossimKeywordlist& kwl, const char* prefix=0)const;
 
+   std::vector<ossimString> getEntryLabels(ossim_uint32 band);
+
+   void setEntryLables(ossim_uint32 band, std::vector<ossimString> entryLabels);
+
    
    /**
     * Loads the state of the object by reading in the keywords listed in the save state.
@@ -454,6 +459,7 @@ protected:
    ossim_uint32    theNumberOfBands;
    ossimScalarType theBandScalarType;
    ossim_int32     theNullPixelIndex;
+   std::map<ossim_uint32, std::vector<ossimString> >  m_entryLabels;
    
 TYPE_DATA
 };

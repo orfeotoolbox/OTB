@@ -10,7 +10,7 @@
 //              ADRG file.
 //
 //********************************************************************
-// $Id: ossimAdrgTileSource.h 16075 2009-12-10 15:46:43Z gpotts $
+// $Id: ossimAdrgTileSource.h 17932 2010-08-19 20:34:35Z dburken $
 
 #ifndef ossimAdrgTileSource_HEADER
 #define ossimAdrgTileSource_HEADER
@@ -121,7 +121,7 @@ public:
    /**
     *  Returns the image geometry object associated with this tile source or NULL if non defined.
     */
-   virtual ossimImageGeometry* getImageGeometry();
+   virtual ossimRefPtr<ossimImageGeometry> getImageGeometry();
    
    /**
     * Returns the output pixel type of the tile source.

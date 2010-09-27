@@ -7,13 +7,14 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageSource.h 17638 2010-06-29 16:56:29Z gpotts $
+// $Id: ossimImageSource.h 17932 2010-08-19 20:34:35Z dburken $
 #ifndef ossimImageSource_HEADER
 #define ossimImageSource_HEADER
 
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimSource.h>
 #include <ossim/base/ossimIrect.h>
+#include <ossim/base/ossimRefPtr.h>
 #include <ossim/imaging/ossimImageData.h>
 #include <ossim/imaging/ossimImageGeometry.h>
 
@@ -184,10 +185,10 @@ public:
    //! The geometry contains full-to-local image transform as well as projection (image-to-world)
    //! Default implementation returns the image geometry object associated with the next  
    //! (left) input source (if any) connected to this source in the chain, or NULL.
-   virtual ossimImageGeometry* getImageGeometry();
+   virtual ossimRefPtr<ossimImageGeometry> getImageGeometry();
 
    //! Default implementation sets geometry of the first input to the geometry specified.
-   virtual void setImageGeometry(ossimImageGeometry* geom);
+   virtual void setImageGeometry(const ossimImageGeometry* geom);
 
    /**
     * Default method to call input's saveImageGeometry.

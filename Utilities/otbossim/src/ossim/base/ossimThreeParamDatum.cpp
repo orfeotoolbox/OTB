@@ -6,7 +6,7 @@
 //
 // Description:
 //*******************************************************************
-//  $Id: ossimThreeParamDatum.cpp 16426 2010-01-27 20:09:49Z gpotts $
+//  $Id: ossimThreeParamDatum.cpp 17815 2010-08-03 13:23:14Z dburken $
 
 #include <cmath>
 

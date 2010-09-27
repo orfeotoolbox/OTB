@@ -9,7 +9,7 @@
 // Description: This class extends the stl's string class.
 //
 //********************************************************************
-// $Id: ossimString.h 17586 2010-06-17 14:40:07Z dburken $
+// $Id: ossimString.h 17999 2010-08-30 18:00:08Z gpotts $
 #ifndef ossimString_HEADER
 #define ossimString_HEADER 1
 
@@ -249,6 +249,7 @@ public:
     * @return Reference to this.
     */
    ossimString& upcase();
+   ossimString upcase()const;
    
    /**
     * Downcases this string.
@@ -256,6 +257,7 @@ public:
     * @return Reference to this.
     */
    ossimString& downcase();
+   ossimString downcase()const;
 
    operator const char*()const{return c_str();}
    const char* chars()const{return c_str();}
@@ -403,7 +405,7 @@ public:
 
    /**
     * If OSSIM_ID_ENABLED returns the OSSIM_ID which currently is the
-    * expanded cvs $Id: ossimString.h 17586 2010-06-17 14:40:07Z dburken $ macro; else, an empty string.
+    * expanded cvs $Id: ossimString.h 17999 2010-08-30 18:00:08Z gpotts $ macro; else, an empty string.
     */
    ossimString getOssimId() const;
 };

@@ -10,7 +10,7 @@
 // writing an ERS header file.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimERSFileWriter.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimERSFileWriter.cpp 17932 2010-08-19 20:34:35Z dburken $
 
 #include <ossim/imaging/ossimERSFileWriter.h>
 #include <ossim/base/ossimKeywordlist.h>
@@ -68,9 +68,8 @@ bool ossimERSFileWriter::writeFile()
    
    // Get the geometry from the input.
    ossimMapProjection* mapProj = 0;
-   const ossimImageGeometry* inputGeom = theInputConnection->getImageGeometry();
-   if (inputGeom)
-      mapProj = PTR_CAST(ossimMapProjection, inputGeom->getProjection());
+   ossimRefPtr<ossimImageGeometry> inputGeom = theInputConnection->getImageGeometry();
+   if ( inputGeom.valid() ) mapProj = PTR_CAST(ossimMapProjection, inputGeom->getProjection());
    if (mapProj)
    {
       // Create the projection info.

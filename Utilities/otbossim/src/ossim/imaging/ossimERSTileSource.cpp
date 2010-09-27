@@ -15,7 +15,7 @@
 // as the raster file but with an .ers extension.
 //
 //*******************************************************************
-//  $Id: ossimERSTileSource.cpp 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimERSTileSource.cpp 17932 2010-08-19 20:34:35Z dburken $
 
 #include <ossim/imaging/ossimERSTileSource.h>
 #include <ossim/support_data/ossimERS.h>
@@ -23,7 +23,7 @@
 #include <ossim/base/ossimDirectory.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimKeywordNames.h>
-
+#include <ossim/imaging/ossimImageGeometryRegistry.h>
 
 RTTI_DEF1(ossimERSTileSource, "ossimERSTileSource", ossimGeneralRasterTileSource);
 
@@ -141,24 +141,48 @@ bool ossimERSTileSource::open(const ossimFilename& fileName)
 }
    
 
-ossimImageGeometry* ossimERSTileSource::getImageGeometry()
+ossimRefPtr<ossimImageGeometry> ossimERSTileSource::getImageGeometry()
 {
-   if (theGeometry.valid())
-      return theGeometry.get();
-
-   if(theHdr)
+   if ( !theGeometry )
    {
-      ossimKeywordlist kwl;
-      bool result = theHdr->toOssimProjectionGeom(kwl);
-      if (result == true)
+      // Check for external geom:
+      theGeometry = getExternalImageGeometry();
+      
+      if ( !theGeometry )
       {
+         
          theGeometry = new ossimImageGeometry;
-         theGeometry->loadState(kwl);
-         return theGeometry.get();
-      }
-   }
 
-   return 0;
+         if(theHdr)
+         {
+            ossimKeywordlist kwl;
+            if ( theHdr->toOssimProjectionGeom(kwl) )
+            {
+               theGeometry->loadState(kwl);  
+            }
+         }
+
+         // At this point it is assured theGeometry is set.
+         
+         //---
+         // WARNING:
+         // Must create/set the geometry at this point or the next call to
+         // ossimImageGeometryRegistry::extendGeometry will put us in an infinite loop
+         // as it does a recursive call back to ossimImageHandler::getImageGeometry().
+         //---         
+         
+         // Check for set projection.
+         if ( !theGeometry->getProjection() )
+         {
+            // Try factories for projection.
+            ossimImageGeometryRegistry::instance()->extendGeometry(this);
+         }
+      }
+
+      // Set image things the geometry object should know about.
+      initImageParameters( theGeometry.get() );
+   }
+   return theGeometry;
 }
 
 bool ossimERSTileSource::loadState(const ossimKeywordlist& kwl,

@@ -8,12 +8,12 @@
 //
 // Calls Geotrans Eckert4 projection code.  
 //*******************************************************************
-//  $Id: ossimEckert4Projection.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimEckert4Projection.h 17815 2010-08-03 13:23:14Z dburken $
 #ifndef ossimEcker4Projection_HEADER
 #define ossimEcker4Projection_HEADER
 #include <ossim/projection/ossimMapProjection.h>
 
-class ossimEckert4Projection : public ossimMapProjection
+class OSSIMDLLEXPORT ossimEckert4Projection : public ossimMapProjection
 {
 public:
     

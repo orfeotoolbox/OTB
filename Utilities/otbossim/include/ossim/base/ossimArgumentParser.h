@@ -4,7 +4,7 @@
 // OSSIM.
 //
 //-------------------------------------------------------------------------
-// $Id: ossimArgumentParser.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimArgumentParser.h 17815 2010-08-03 13:23:14Z dburken $
 #ifndef ossimArgumentParser_HEADER
 #define ossimArgumentParser_HEADER 1
 #include <ossim/base/ossimConstants.h>
@@ -109,7 +109,7 @@ public:
    /** return the application name, as specified by argv[0] */
    std::string getApplicationName() const;
    
-   /** return the position of an occurance of a string in the argument list.
+   /** return the position of an occurence of a string in the argument list.
     * return -1 when no string is found.*/      
    int find(const std::string& str) const;
    
@@ -138,6 +138,9 @@ public:
    bool read(const std::string& str, ossimParameter value1, ossimParameter value2, ossimParameter value3);
    bool read(const std::string& str, ossimParameter value1, ossimParameter value2, ossimParameter value3, ossimParameter value4);
    
+   /** Returns the number of parameters of type value associated with specified option, 
+    *  or -1 if option not found */
+   int numberOfParams(const std::string& str, ossimParameter value) const;
    
    /** if the argument value at the position pos matches specified string, and subsequent
     * paramters are also matched then set the paramter values and remove the from the list of arguments.*/

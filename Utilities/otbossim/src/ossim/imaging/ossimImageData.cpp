@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageData.cpp 17195 2010-04-23 17:32:18Z dburken $
+// $Id: ossimImageData.cpp 18078 2010-09-14 14:43:09Z dburken $
 
 #include <iterator>
 #include <ostream>
@@ -1254,15 +1254,54 @@ void ossimImageData::initialize()
    }
 }
 
-bool ossimImageData::write(std::ostream& os) const
+// Write the tile out to disk with a general raster header file.
+bool ossimImageData::write(const ossimFilename& f) const
 {
    bool result = false;
+
+   std::ofstream os;
+   os.open(f.c_str(), ios::out | ios::binary);
    if (os.good())
    {
+      // Write the tile out.
       os.write(static_cast<const char*>(getBuf()),
                static_cast<std::streamsize>(getSizeInBytes()));
+      
       result = os.good();
+      if (result)
+      {
+         // Write a header file that we can use to read the tile.
+         os.close();
+         ossimFilename hdrFile = f;
+         hdrFile.setExtension("hdr");
+         os.open(hdrFile.c_str(), ios::out);
+         result = os.good();
+         if (result)
+         {
+            os << "filename: " << f.c_str()
+               << "\nimage_type:  general_raster_bsq"
+               << "\ninterleave_type:  bsq"
+               << "\norigin: " << m_origin
+               << "\nnumber_bands: " << ossimString::toString(getNumberOfBands())
+               << "\nnumber_lines: " << ossimString::toString(getHeight())
+               << "\nnumber_samples: " << ossimString::toString(getWidth())
+               << "\nscalar_type: "
+               << ossimScalarTypeLut::instance()->getEntryString(getScalarType())
+               << "\n";
+            for(ossim_uint32 band=0; band < getNumberOfBands(); ++band)
+            {
+               ossimString bs = "band";
+               bs += ossimString::toString(band+1); 
+               os << bs.c_str() << ".min_value: " << m_minPixelValue[band] << "\n"
+                  << bs.c_str() << ".max_value: " << m_maxPixelValue[band] << "\n"
+                  << bs.c_str() << ".null_value: " << m_nullPixelValue[band]
+                  << std::endl;
+            }
+         }
+      }
    }
+   os.close();
+   
    return result;
 }
 
@@ -3445,7 +3484,7 @@ void ossimImageData::loadTileFromBipTemplate(T, // dummy template variable
       // Set the error...
       ossimSetError(getClassName(),
                     ossimErrorCodes::OSSIM_ERROR,
-                    "%s File %s line %d\nNULL pointer passed to method!",
+                     "%s File %s line %d\nNULL pointer passed to method!",
                     MODULE,
                     __FILE__,
                     __LINE__);
@@ -6313,3 +6352,157 @@ ossim_uint32 ossimImageData::getDataSizeInBytes()const
 {
    return getSizeInBytes();
 }
+
+void ossimImageData::copyLine(const void* src,
+                              ossim_int32 lineNumber,
+                              ossim_int32 lineStartSample,
+                              ossim_int32 lineStopSample,
+                              ossimInterleaveType lineInterleave)
+{
+   switch(m_scalarType)
+   {
+      case OSSIM_UINT8:
+      {
+         copyLineTemplate((ossim_uint8)0, src, lineNumber, lineStartSample,
+                          lineStopSample, lineInterleave);
+         break;
+      }
+      case OSSIM_SINT8:
+      {
+         copyLineTemplate((ossim_sint8)0, src, lineNumber, lineStartSample,
+                          lineStopSample, lineInterleave);
+         break;
+         
+      }
+      case OSSIM_USHORT11:
+      case OSSIM_UINT16:
+      {
+         copyLineTemplate((ossim_uint16)0, src, lineNumber, lineStartSample,
+                          lineStopSample, lineInterleave);
+         break;
+      }
+      case OSSIM_SINT16:
+      {
+         copyLineTemplate((ossim_sint16)0, src, lineNumber, lineStartSample,
+                          lineStopSample, lineInterleave);
+         break;
+      }
+      case OSSIM_UINT32:
+      {
+         copyLineTemplate((ossim_uint32)0, src, lineNumber, lineStartSample,
+                          lineStopSample, lineInterleave);
+         break;
+      }
+      case OSSIM_SINT32:
+      {
+         copyLineTemplate((ossim_sint32)0, src, lineNumber, lineStartSample,
+                          lineStopSample, lineInterleave);
+         break;
+      }
+      case OSSIM_NORMALIZED_FLOAT:
+      case OSSIM_FLOAT32:
+      {
+         copyLineTemplate((ossim_float32)0.0, src, lineNumber, lineStartSample,
+                          lineStopSample, lineInterleave);
+         break;
+      }
+      case OSSIM_NORMALIZED_DOUBLE:
+      case OSSIM_FLOAT64:
+      {
+         copyLineTemplate((ossim_float64)0.0, src, lineNumber, lineStartSample,
+                          lineStopSample, lineInterleave);
+         break;
+      }
+      case OSSIM_SCALAR_UNKNOWN:
+      default:
+      {
+         // Shouldn't hit this.
+         ossimNotify(ossimNotifyLevel_WARN)
+            << "ossimImageData::copyLine Unsupported scalar type!"
+            << std::endl;
+         break;
+      }
+   }
+   
+} // End: void ossimImageData::copyLine
+
+template <class T>
+void ossimImageData::copyLineTemplate(T /* dummyTemplate */,
+                                      const void* src,
+                                      ossim_int32 lineNumber,
+                                      ossim_int32 lineStartSample,
+                                      ossim_int32 lineStopSample,
+                                      ossimInterleaveType lineInterleave)
+{
+   if (src)
+   {
+      const ossimIrect RECT = getImageRectangle();
+
+      // Check for intersect:
+      if ( ( lineNumber       >= RECT.ul().y)     &&
+           ( lineNumber       <= RECT.lr().y)     &&
+           ( lineStartSample  <  lineStopSample)  &&
+           ( lineStartSample  <= RECT.lr().x)     &&
+           ( lineStopSample   >= RECT.ul().x) )
+      {
+         const ossim_int32 BANDS = static_cast<ossim_int32>(m_numberOfDataComponents);
+         const ossim_int32 START_SAMP =
+            (lineStartSample > RECT.ul().x)?lineStartSample:RECT.ul().x;
+         const ossim_int32 STOP_SAMP  =
+            (lineStopSample  < RECT.lr().x)?lineStopSample:RECT.lr().x;
+         const ossim_int32 SAMPS = STOP_SAMP - START_SAMP + 1;
+
+         std::vector<T*> d(BANDS);
+
+         ossim_int32 band;
+         for (band = 0; band < BANDS; ++band)
+         {
+            d[band] = static_cast<T*>(getBuf(band));
+
+            // Position at start sample.
+            d[band] +=  (lineNumber - RECT.ul().y) * RECT.width() + (START_SAMP - RECT.ul().x);
+         }
+         
+         if (lineInterleave == OSSIM_BIP)
+         {
+            const T* S = static_cast<const T*>(src); // Source buffer:
+            
+            // Position at start sample.
+            S += (START_SAMP - lineStartSample) * BANDS;
+            
+            ossim_int32 srcOffset = 0;
+            for (ossim_int32 samp = 0; samp < SAMPS; ++samp)
+            {
+               for (band = 0; band < BANDS; ++band)
+               {
+                  d[band][samp] = S[srcOffset++];
+               }
+            }
+         }
+         else
+         {
+            const ossim_int32 W = lineStopSample - lineStartSample + 1;
+            std::vector<const T*> S(BANDS);
+            for (band = 0; band < BANDS; ++band)
+            {
+               S[band] = static_cast<const T*>(src) + (START_SAMP - lineStartSample);
+               if (band)
+               {
+                  S[band] += band * W; // Move to line.
+               }
+            }
+
+            for (band = 0; band < BANDS; ++band)
+            {
+               for (ossim_int32 samp = 0; samp < SAMPS; ++samp)
+               {
+                  d[band][samp] = S[band][samp];
+               }
+            }
+         }
+         
+      } // intersect check
+      
+   } // if (src)
+   
+} // End: template <class T> void ossimImageData::copyLineTemplate

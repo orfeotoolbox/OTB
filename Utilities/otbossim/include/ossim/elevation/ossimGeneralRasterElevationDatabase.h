@@ -55,7 +55,7 @@ public:
    virtual double getHeightAboveEllipsoid(const ossimGpt& gpt);
    virtual bool loadState(const ossimKeywordlist& kwl, const char* prefix = 0);
    virtual bool saveState(ossimKeywordlist& kwl, const char* prefix = 0)const;
-   virtual ossim_uint64 createId(const ossimGpt& pt)const
+   virtual ossim_uint64 createId(const ossimGpt& /* pt */)const
    {
      return 0;
    }

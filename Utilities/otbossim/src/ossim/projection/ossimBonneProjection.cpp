@@ -9,7 +9,7 @@
 //
 // Calls Geotrans Bonne projection code.  
 //*******************************************************************
-//  $Id: ossimBonneProjection.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimBonneProjection.cpp 17815 2010-08-03 13:23:14Z dburken $
 #include <ossim/projection/ossimBonneProjection.h>
 #include <ossim/projection/ossimSinusoid.h>
 #include <ossim/base/ossimKeywordNames.h>
@@ -514,3 +514,22 @@ long ossimBonneProjection::Convert_Bonne_To_Geodetic(double Easting,
   }
   return (Error_Code);
 } /* End Convert_Bonne_To_Geodetic */
+
+//*************************************************************************************************
+//! Returns TRUE if principal parameters are within epsilon tolerance.
+//*************************************************************************************************
+bool ossimBonneProjection::operator==(const ossimProjection& proj) const
+{
+   if (!ossimMapProjection::operator==(proj))
+      return false;
+
+   ossimBonneProjection* p = PTR_CAST(ossimBonneProjection, &proj);
+   if (!p)
+      return false;
+
+   if (!ossim::almostEqual(Bonn_False_Easting, p->Bonn_False_Easting) ) return false;
+   if (!ossim::almostEqual(Bonn_False_Northing,p->Bonn_False_Northing)) return false;
+   if (!ossim::almostEqual(Bonn_Delta_Northing,p->Bonn_Delta_Northing)) return false;
+
+   return true;
+}

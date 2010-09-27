@@ -41,8 +41,8 @@ void ossimImageProjectionModel::initialize(const ossimImageHandler& ih)
 
    // Fetch the handler's image geometry and see if it has a projection:
    ossimImageHandler* iih = const_cast<ossimImageHandler*>(&ih); // cast away constness
-   ossimImageGeometry* image_geom = iih->getImageGeometry();
-   if (image_geom)
+   ossimRefPtr<ossimImageGeometry> image_geom = iih->getImageGeometry();
+   if ( image_geom.valid() )
    {
       theProjection = image_geom->getProjection();
    }

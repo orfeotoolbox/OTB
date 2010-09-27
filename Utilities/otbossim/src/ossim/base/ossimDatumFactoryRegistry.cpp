@@ -10,12 +10,12 @@
 // $Id$
 
 #include <ossim/base/ossimDatumFactoryRegistry.h>
-#include <ossim/base/ossimDatumFactoryInterface.h>
+#include <ossim/base/ossimDatumFactory.h>
+#include <ossim/base/ossimEpsgDatumFactory.h>
 #include <ossim/base/ossimDatum.h>
 #include <ossim/base/ossimString.h>
-#include <iostream>
 
-//ossimDatumFactoryRegistry* ossimDatumFactoryRegistry::theInstance = 0;
+ossimDatumFactoryRegistry* ossimDatumFactoryRegistry::theInstance = 0;
 
 ossimDatumFactoryRegistry::~ossimDatumFactoryRegistry()
 {
@@ -23,9 +23,11 @@ ossimDatumFactoryRegistry::~ossimDatumFactoryRegistry()
 
 ossimDatumFactoryRegistry* ossimDatumFactoryRegistry::instance()
 {
-   static ossimDatumFactoryRegistry sharedInstance;
-
-   return &sharedInstance;
+   if (!theInstance)
+   {
+      theInstance =  new ossimDatumFactoryRegistry;
+   }
+   return theInstance;
 }
 
 void ossimDatumFactoryRegistry::registerFactory(
@@ -41,7 +43,7 @@ const ossimDatum* ossimDatumFactoryRegistry::create(
    const ossimString &code)const
 {
    const ossimDatum* result = 0;
-   
+
    std::vector<ossimDatumFactoryInterface*>::const_iterator i =
       theFactoryList.begin();
 
@@ -50,8 +52,25 @@ const ossimDatum* ossimDatumFactoryRegistry::create(
       result = (*i)->create(code);
       if (result)
       {
-         return result;
+         break;
       }
+      ++i; // go to next factory
+   }
+   return result;
+}
+
+const ossimDatum* ossimDatumFactoryRegistry::create(const ossimKeywordlist& kwl, 
+                                                    const char *prefix)const
+{
+   const ossimDatum* result = 0;
+   std::vector<ossimDatumFactoryInterface*>::const_iterator i = theFactoryList.begin();
+
+   while (i != theFactoryList.end())
+   {
+      result = (*i)->create(kwl, prefix);
+      if (result)
+         return result;
+
       ++i; // go to next factory
    }
    return result;
@@ -72,18 +91,5 @@ ossimDatumFactoryRegistry::ossimDatumFactoryRegistry()
    : theFactoryList()
 {
    registerFactory(ossimDatumFactory::instance());
-}
-
-ossimDatumFactoryRegistry::ossimDatumFactoryRegistry(
-   const ossimDatumFactoryRegistry& /*obj*/)
-   : theFactoryList()
-{
-   // hidden, never called.
-}
-
-const ossimDatumFactoryRegistry& ossimDatumFactoryRegistry::operator=(
-   const ossimDatumFactoryRegistry& /* rhs */)
-{
-   // hidden, never called.
-   return *this;
+   registerFactory(ossimEpsgDatumFactory::instance());
 }

@@ -7,13 +7,13 @@
 // Description:
 //
 //*******************************************************************
-//  $Id: ossimGnomonicProjection.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimGnomonicProjection.h 17815 2010-08-03 13:23:14Z dburken $
 #ifndef ossimGnomonicProjection_HEADER
 #define ossimGnomonicProjection_HEADER
 
 #include <ossim/projection/ossimMapProjection.h>
 
-class ossimGnomonicProjection : public ossimMapProjection
+class OSSIMDLLEXPORT ossimGnomonicProjection : public ossimMapProjection
 {
 public:
    ossimGnomonicProjection(const ossimEllipsoid& ellipsoid = ossimEllipsoid(),

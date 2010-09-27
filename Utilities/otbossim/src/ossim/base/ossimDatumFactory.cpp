@@ -9,7 +9,8 @@
 //
 // This holds the class definition of DatumFactory.
 //*******************************************************************
-//  $Id: ossimDatumFactory.cpp 17195 2010-04-23 17:32:18Z dburken $
+//  $Id: ossimDatumFactory.cpp 17815 2010-08-03 13:23:14Z dburken $
+
 
 #include <cstring> /* for strlen */
 #include <utility> /* for std::make_pair */
@@ -24,21 +25,21 @@
 #include <ossim/base/ossimNadconNarDatum.h>
 #include <ossim/base/ossimNadconNasDatum.h>
 #include <ossim/base/ossimFilename.h>
+#include <ossim/base/ossimKeywordlist.h>
+#include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimPreferences.h>
 #include "ossimDatumFactory.inc"
 
 ossimDatumFactory* ossimDatumFactory::theInstance = 0;
-std::map<ossimString, ossimDatum*> ossimDatumFactory::theDatumTable;
 
-static const char WGE[] = "WGE";
-static const char WGD[] = "WGD";
+static ossimString WGE = "WGE";
+static ossimString WGD = "WGD";
 
 ossimDatumFactory::~ossimDatumFactory()
 {
    deleteAll();
    theInstance = 0;
 }
-
 
 ossimDatumFactory* ossimDatumFactory::instance()
 {
@@ -56,55 +57,218 @@ ossimDatumFactory* ossimDatumFactory::instance()
    return theInstance; 
 } 
 
+const ossimDatum* ossimDatumFactory::create(const ossimString &code)const
+{
+   if ( code.size() )
+   {
+      std::map<ossimString, const ossimDatum*>::const_iterator datum = theDatumTable.find(code);
+      
+      if(datum != theDatumTable.end())
+      {
+         return (*datum).second;
+      }
 
-void ossimDatumFactory::writeCStructure(const ossimFilename& /* file */)
+      if(code == "NAR") // User did not set "datum_grids" so map to NAR-C.
+      {
+         datum = theDatumTable.find("NAR-C");
+         if(datum != theDatumTable.end())
+         {
+            return (*datum).second;
+         }
+      }
+      else if(code == "NAS") // User did not set "datum_grids" so map to NAS-C."
+      {
+         datum = theDatumTable.find("NAS-C");
+         if(datum != theDatumTable.end())
+         {
+            return (*datum).second;
+         }
+      }
+   }
+   
+   return 0;
+}
+
+const ossimDatum* ossimDatumFactory::create(const ossimKeywordlist& kwl, const char *prefix) const
+{
+   ossimString alpha_code = kwl.find(prefix, ossimKeywordNames::DATUM_KW);
+   if(!alpha_code.empty())
+      return create(alpha_code);
+   return 0;
+}
+
+const ossimDatum* ossimDatumFactory::create(const ossimDatum* aDatum)const
+{
+   if (aDatum)
+      return create (aDatum->code());
+   else
+      return 0;
+}
+
+std::vector<ossimString> ossimDatumFactory::getList()const
+{
+   std::map<ossimString, const ossimDatum*>::const_iterator datum = theDatumTable.begin();
+   std::vector<ossimString> result;
+
+   while(datum != theDatumTable.end())
+   {
+      result.push_back((*datum).first);
+      ++datum;
+   }
+   return result;
+}
+
+void ossimDatumFactory::getList(std::vector<ossimString>& list) const
+{
+   std::map<ossimString, const ossimDatum*>::const_iterator datum =
+      theDatumTable.begin();
+
+   while(datum != theDatumTable.end())
+   {
+      list.push_back((*datum).first);
+      ++datum;
+   }
+}
+
+void ossimDatumFactory::deleteAll()
+{   
+   std::map<ossimString, const ossimDatum*>::iterator datum;
+
+   datum = theDatumTable.begin();
+   while(datum != theDatumTable.end())
+   {
+      delete ((*datum).second);
+
+      ++datum;
+   }
+
+   theDatumTable.clear();
+
+}
+
+void ossimDatumFactory::initializeDefaults()
+{
+   //make the standards
+   theDatumTable.insert(make_pair(ossimString(WGE), new ossimWgs84Datum));
+   theDatumTable.insert(make_pair(ossimString(WGD), new ossimWgs72Datum));
+
+   ossim_uint32 idx = 0;     
+   while( std::strlen(threeParamDatum[idx].theCode) )
+   {
+      if( (threeParamDatum[idx].theCode != ossimString(WGE)) &&
+         (threeParamDatum[idx].theCode != ossimString(WGD)) )
+      {
+         theDatumTable.insert(std::make_pair(threeParamDatum[idx].theCode, 
+            new ossimThreeParamDatum(threeParamDatum[idx].theCode, 
+            threeParamDatum[idx].theName,
+            ossimEllipsoidFactory::instance()->create(ossimString(threeParamDatum[idx].theEllipsoidCode)),
+            threeParamDatum[idx].theSigmaX, 
+            threeParamDatum[idx].theSigmaY, 
+            threeParamDatum[idx].theSigmaZ, 
+            threeParamDatum[idx].theWestLongitude, 
+            threeParamDatum[idx].theEastLongitude, 
+            threeParamDatum[idx].theSouthLatitude, 
+            threeParamDatum[idx].theNorthLatitude, 
+            threeParamDatum[idx].theParam1, 
+            threeParamDatum[idx].theParam2, 
+            threeParamDatum[idx].theParam3)));
+      }
+
+      ++idx;
+   }
+   idx = 0;
+   while( std::strlen(sevenParamDatum[idx].theCode) )
+   {
+      theDatumTable.insert(std::make_pair(sevenParamDatum[idx].theCode, 
+         new ossimSevenParamDatum(sevenParamDatum[idx].theCode, 
+         sevenParamDatum[idx].theName,
+         ossimEllipsoidFactory::instance()->create(ossimString(sevenParamDatum[idx].theEllipsoidCode)),
+         sevenParamDatum[idx].theSigmaX, 
+         sevenParamDatum[idx].theSigmaY, 
+         sevenParamDatum[idx].theSigmaZ, 
+         sevenParamDatum[idx].theWestLongitude, 
+         sevenParamDatum[idx].theEastLongitude, 
+         sevenParamDatum[idx].theSouthLatitude, 
+         sevenParamDatum[idx].theNorthLatitude,
+         sevenParamDatum[idx].theParam1,
+         sevenParamDatum[idx].theParam2, 
+         sevenParamDatum[idx].theParam3,
+         sevenParamDatum[idx].theParam4, 
+         sevenParamDatum[idx].theParam5,
+         sevenParamDatum[idx].theParam6, 
+         sevenParamDatum[idx].theParam7)));
+      ++idx;
+   }
+
+   // Fetch the HARN grid filenames and add these datums to the table:
+   ossimFilename file = ossimPreferences::instance()->findPreference("datum_grids");
+
+   if(file != "")
+   {
+      if(!file.isDir())
+      {
+         file = file.path();
+      }
+
+      ossimFilename fileTest1 = file.dirCat("conus.las");
+      ossimFilename fileTest2 = file.dirCat("conus.los");
+
+      if (fileTest1.exists() && fileTest2.exists())
+      {
+         theDatumTable.insert(std::make_pair(ossimString("NAS"), new ossimNadconNasDatum(file)));
+         theDatumTable.insert(std::make_pair(ossimString("NAR"), new ossimNadconNarDatum(file)));
+      }
+   }
+}
+
+void ossimDatumFactory::writeCStructure(const ossimFilename& /*file*/)
 {
 #if 0
    std::ofstream out(file.c_str());
 
    if(!out) return;
-   
+
    out << "typedef struct ossimSevenParamDatumType" << std::endl
-       << "{" << std::endl
-       << "   ossimString theCode;\n"
-       << "   ossimString theName;\n"
-       << "   ossimString theEllipsoidCode;\n"
-       << "   ossim_float64 theSigmaX;\n"
-       << "   ossim_float64 theSigmaY;\n"
-       << "   ossim_float64 theSigmaZ;\n"
-       << "   ossim_float64 theWestLongitude;\n"
-       << "   ossim_float64 theEastLongitude;\n"
-       << "   ossim_float64 theSouthLatitude;\n"
-       << "   ossim_float64 theNorthLatitude;\n"
-       << "   ossim_float64 theParam1;\n"
-       << "   ossim_float64 theParam2;\n"
-       << "   ossim_float64 theParam3;\n"
-       << "   ossim_float64 theParam4;\n"
-       << "   ossim_float64 theParam5;\n"
-       << "   ossim_float64 theParam6;\n"
-       << "   ossim_float64 theParam7;\n"
-       << "};\n";
+      << "{" << std::endl
+      << "   ossimString theCode;\n"
+      << "   ossimString theName;\n"
+      << "   ossimString theEllipsoidCode;\n"
+      << "   ossim_float64 theSigmaX;\n"
+      << "   ossim_float64 theSigmaY;\n"
+      << "   ossim_float64 theSigmaZ;\n"
+      << "   ossim_float64 theWestLongitude;\n"
+      << "   ossim_float64 theEastLongitude;\n"
+      << "   ossim_float64 theSouthLatitude;\n"
+      << "   ossim_float64 theNorthLatitude;\n"
+      << "   ossim_float64 theParam1;\n"
+      << "   ossim_float64 theParam2;\n"
+      << "   ossim_float64 theParam3;\n"
+      << "   ossim_float64 theParam4;\n"
+      << "   ossim_float64 theParam5;\n"
+      << "   ossim_float64 theParam6;\n"
+      << "   ossim_float64 theParam7;\n"
+      << "};\n";
 
    out << "typedef struct ossimThreeParamDatumType" << std::endl
-       << "{" << std::endl
-       << "   ossimString theCode;\n"
-       << "   ossimString theName;\n"
-       << "   ossimString theEllipsoidCode;\n"
-       << "   ossim_float64 theSigmaX;\n"
-       << "   ossim_float64 theSigmaY;\n"
-       << "   ossim_float64 theSigmaZ;\n"
-       << "   ossim_float64 theWestLongitude;\n"
-       << "   ossim_float64 theEastLongitude;\n"
-       << "   ossim_float64 theSouthLatitude;\n"
-       << "   ossim_float64 theNorthLatitude;\n"
-       << "   ossim_float64 theParam1;\n"
-       << "   ossim_float64 theParam2;\n"
-       << "   ossim_float64 theParam3;\n"
-       << "};\n";
+      << "{" << std::endl
+      << "   ossimString theCode;\n"
+      << "   ossimString theName;\n"
+      << "   ossimString theEllipsoidCode;\n"
+      << "   ossim_float64 theSigmaX;\n"
+      << "   ossim_float64 theSigmaY;\n"
+      << "   ossim_float64 theSigmaZ;\n"
+      << "   ossim_float64 theWestLongitude;\n"
+      << "   ossim_float64 theEastLongitude;\n"
+      << "   ossim_float64 theSouthLatitude;\n"
+      << "   ossim_float64 theNorthLatitude;\n"
+      << "   ossim_float64 theParam1;\n"
+      << "   ossim_float64 theParam2;\n"
+      << "   ossim_float64 theParam3;\n"
+      << "};\n";
    out << "#define NUMBER_OF_SEVEN_PARAM_DATUMS " << 2 << std::endl;
    if(out)
    {
-      std::map<ossimString, ossimDatum*>::iterator datum;
+      std::map<ossimString, const ossimDatum*>::iterator datum;
       out << "static ossimThreeParamDatumType threeParamDatum[] = {\n";
       datum = theDatumTable.begin();
       ossim_uint32 datumCount = 0;
@@ -112,32 +276,32 @@ void ossimDatumFactory::writeCStructure(const ossimFilename& /* file */)
       {
          bool written = false;
          if( ((*datum).first != "NAS") &&
-             ((*datum).first != "NAR")&&
-             ((*datum).first != "EUR-7")&&
-             ((*datum).first != "OGB-7"))
+            ((*datum).first != "NAR")&&
+            ((*datum).first != "EUR-7")&&
+            ((*datum).first != "OGB-7"))
          {
             written = true;
             const ossimDatum* d = (*datum).second;
-            
+
             out << "{\"" << d->code() << "\", "
-                << "\"" << d->name() << "\", "
-                << "\"" << d->ellipsoid()->code() << "\", "
-                << d->sigmaX() << ", "
-                << d->sigmaY() << ", "
-                << d->sigmaZ() << ", "
-                << d->westLongitude()*DEG_PER_RAD << ", "
-                << d->eastLongitude()*DEG_PER_RAD << ", "
-                << d->southLatitude()*DEG_PER_RAD << ", "
-                << d->northLatitude()*DEG_PER_RAD << ", "
-                << d->param1() << ", " 
-                << d->param2() << ", " 
-                << d->param3() << "}";
+               << "\"" << d->name() << "\", "
+               << "\"" << d->ellipsoid()->code() << "\", "
+               << d->sigmaX() << ", "
+               << d->sigmaY() << ", "
+               << d->sigmaZ() << ", "
+               << d->westLongitude()*DEG_PER_RAD << ", "
+               << d->eastLongitude()*DEG_PER_RAD << ", "
+               << d->southLatitude()*DEG_PER_RAD << ", "
+               << d->northLatitude()*DEG_PER_RAD << ", "
+               << d->param1() << ", " 
+               << d->param2() << ", " 
+               << d->param3() << "}";
             ++datumCount;
          }
          ++datum;
          if(datum != theDatumTable.end()&&written)
          {
-            
+
             out << "," << std::endl;
          }
          else if(datum == theDatumTable.end())
@@ -152,196 +316,47 @@ void ossimDatumFactory::writeCStructure(const ossimFilename& /* file */)
       const ossimDatum* d = create("EUR-7");
       if(d)
       {
-            out << "{\"" << d->code() << "\", "
-                << "\"" << d->name() << "\", "
-                << "\"" << d->ellipsoid()->code() << "\", "
-                << d->sigmaX() << ", "
-                << d->sigmaY() << ", "
-                << d->sigmaZ() << ", "
-                << d->westLongitude()*DEG_PER_RAD << ", "
-                << d->eastLongitude()*DEG_PER_RAD << ", "
-                << d->southLatitude()*DEG_PER_RAD << ", "
-                << d->northLatitude()*DEG_PER_RAD << ", "
-                << d->param1() << ", " 
-                << d->param2() << ", " 
-                << d->param3() << ", "
-                << d->param4() << ", "
-                << d->param5() << ", "
-                << d->param6() << ", "
-                << d->param7() << "},\n";
+         out << "{\"" << d->code() << "\", "
+            << "\"" << d->name() << "\", "
+            << "\"" << d->ellipsoid()->code() << "\", "
+            << d->sigmaX() << ", "
+            << d->sigmaY() << ", "
+            << d->sigmaZ() << ", "
+            << d->westLongitude()*DEG_PER_RAD << ", "
+            << d->eastLongitude()*DEG_PER_RAD << ", "
+            << d->southLatitude()*DEG_PER_RAD << ", "
+            << d->northLatitude()*DEG_PER_RAD << ", "
+            << d->param1() << ", " 
+            << d->param2() << ", " 
+            << d->param3() << ", "
+            << d->param4() << ", "
+            << d->param5() << ", "
+            << d->param6() << ", "
+            << d->param7() << "},\n";
       }
       d = create("OGB-7");
       if(d)
       {
          out << "{\"" << d->code() << "\", "
-             << "\"" << d->name() << "\", "
-             << "\"" << d->ellipsoid()->code() << "\", "
-             << d->sigmaX() << ", "
-             << d->sigmaY() << ", "
-             << d->sigmaZ() << ", "
-             << d->westLongitude()*DEG_PER_RAD << ", "
-             << d->eastLongitude()*DEG_PER_RAD << ", "
-             << d->southLatitude()*DEG_PER_RAD << ", "
-             << d->northLatitude()*DEG_PER_RAD << ", "
-             << d->param1() << ", " 
-             << d->param2() << ", " 
-             << d->param3() << ", "
-             << d->param4() << ", "
-             << d->param5() << ", "
-             << d->param6() << ", "
-             << d->param7() << "}\n";
+            << "\"" << d->name() << "\", "
+            << "\"" << d->ellipsoid()->code() << "\", "
+            << d->sigmaX() << ", "
+            << d->sigmaY() << ", "
+            << d->sigmaZ() << ", "
+            << d->westLongitude()*DEG_PER_RAD << ", "
+            << d->eastLongitude()*DEG_PER_RAD << ", "
+            << d->southLatitude()*DEG_PER_RAD << ", "
+            << d->northLatitude()*DEG_PER_RAD << ", "
+            << d->param1() << ", " 
+            << d->param2() << ", " 
+            << d->param3() << ", "
+            << d->param4() << ", "
+            << d->param5() << ", "
+            << d->param6() << ", "
+            << d->param7() << "}\n";
       }
       out << "};" << std::endl;
    }
 #endif
 }
 
-
-const ossimDatum* ossimDatumFactory::create(const ossimString &code)const
-{
-   std::map<ossimString, ossimDatum*>::const_iterator
-      datum = theDatumTable.find(code);
-   
-   if(datum != theDatumTable.end())
-   { 
-      return (*datum).second;
-   }
-   else
-   {
-      if(code == "NAR")
-      {
-	 std::map<ossimString, ossimDatum*>::const_iterator
-            datum = theDatumTable.find("NAR-C");
-	 if(datum != theDatumTable.end())
-         {
-            return (*datum).second;
-         }
-      }
-      else if(code == "NAS")
-      {
-	 std::map<ossimString, ossimDatum*>::const_iterator
-            datum = theDatumTable.find("NAS-C");
-	 if(datum != theDatumTable.end())
-         {
-            return (*datum).second;
-         }
-      }
-      return 0;
-   }
-}
-
-const ossimDatum* ossimDatumFactory::create(const ossimDatum* aDatum)const
-{
-   if (aDatum)
-      return create (aDatum->code());
-   else
-      return 0;
-}
-
-std::vector<ossimString> ossimDatumFactory::getList()const
-{
-   std::map<ossimString, ossimDatum*>::const_iterator datum = theDatumTable.begin();
-   std::vector<ossimString> result;
-   
-   while(datum != theDatumTable.end())
-   {
-      result.push_back((*datum).first);
-      ++datum;
-   }
-   return result;
-}
-
-void ossimDatumFactory::getList(std::vector<ossimString>& list) const
-{
-   std::map<ossimString, ossimDatum*>::const_iterator datum =
-      theDatumTable.begin();
-   
-   while(datum != theDatumTable.end())
-   {
-      list.push_back((*datum).first);
-      ++datum;
-   }
-}
-
-void ossimDatumFactory::deleteAll()
-{   
-   std::map<ossimString, ossimDatum*>::iterator datum;
-   
-   datum = theDatumTable.begin();
-   while(datum != theDatumTable.end())
-   {
-      delete ((*datum).second);
-      
-      ++datum;
-   }
-   
-   theDatumTable.clear();
-
-}
-
-void ossimDatumFactory::initializeDefaults()
-{
-   //make the standards
-   theDatumTable.insert(make_pair(ossimString(WGE),
-                                  (ossimDatum*)new ossimWgs84Datum));
-   theDatumTable.insert(make_pair(ossimString(WGD),
-                                  (ossimDatum*)new ossimWgs72Datum));
-
-   ossim_uint32 idx = 0;     
-   while( std::strlen(threeParamDatum[idx].theCode) )
-   {
-      if( (threeParamDatum[idx].theCode != ossimString(WGE)) &&
-         (threeParamDatum[idx].theCode != ossimString(WGD)) )
-      {
-         theDatumTable.insert(std::make_pair(threeParamDatum[idx].theCode,
-                                             (ossimDatum*)new ossimThreeParamDatum(threeParamDatum[idx].theCode, threeParamDatum[idx].theName,
-                                                                                   ossimEllipsoidFactory::instance()->create(ossimString(threeParamDatum[idx].theEllipsoidCode)),
-                                                                                   threeParamDatum[idx].theSigmaX, threeParamDatum[idx].theSigmaY, threeParamDatum[idx].theSigmaZ, 
-                                                                                   threeParamDatum[idx].theWestLongitude, threeParamDatum[idx].theEastLongitude, threeParamDatum[idx].theSouthLatitude, 
-                                                                                   threeParamDatum[idx].theNorthLatitude, threeParamDatum[idx].theParam1, threeParamDatum[idx].theParam2, 
-                                                                                   threeParamDatum[idx].theParam3)));
-      }
-      
-      ++idx;
-   }
-   idx = 0;
-   while( std::strlen(sevenParamDatum[idx].theCode) )
-   {
-      
-      theDatumTable.insert(std::make_pair(sevenParamDatum[idx].theCode,
-                                          (ossimDatum*)new ossimSevenParamDatum(sevenParamDatum[idx].theCode, sevenParamDatum[idx].theName,
-                                                                                ossimEllipsoidFactory::instance()->create(ossimString(sevenParamDatum[idx].theEllipsoidCode)),
-                                                                                sevenParamDatum[idx].theSigmaX, sevenParamDatum[idx].theSigmaY, sevenParamDatum[idx].theSigmaZ, 
-                                                                                sevenParamDatum[idx].theWestLongitude, sevenParamDatum[idx].theEastLongitude, sevenParamDatum[idx].theSouthLatitude, 
-                                                                                sevenParamDatum[idx].theNorthLatitude,
-                                                                                sevenParamDatum[idx].theParam1,
-                                                                                sevenParamDatum[idx].theParam2, 
-                                                                                sevenParamDatum[idx].theParam3,
-                                                                                sevenParamDatum[idx].theParam4, 
-                                                                                sevenParamDatum[idx].theParam5,
-                                                                                sevenParamDatum[idx].theParam6, 
-                                                                                sevenParamDatum[idx].theParam7)));
-      ++idx;
-   }
-   ossimFilename file = ossimPreferences::instance()->findPreference("datum_grids");
-   
-   if(file != "")
-   {
-      if(!file.isDir())
-      {
-         file = file.path();
-      }
-      
-      ossimFilename fileTest1 = file.dirCat("conus.las");
-      ossimFilename fileTest2 = file.dirCat("conus.los");
-      
-      if(fileTest1.exists()&&
-         fileTest2.exists())
-      {
-         theDatumTable.insert(std::make_pair(ossimString("NAS"),
-                                             (ossimDatum*)new ossimNadconNasDatum(file)));
-         theDatumTable.insert(std::make_pair(ossimString("NAR"),
-                                             (ossimDatum*)new ossimNadconNarDatum(file)));
-      }
-   }
-}

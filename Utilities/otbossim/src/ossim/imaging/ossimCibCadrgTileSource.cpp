@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 //
 //********************************************************************
-// $Id: ossimCibCadrgTileSource.cpp 17709 2010-07-08 20:21:14Z dburken $
+// $Id: ossimCibCadrgTileSource.cpp 18052 2010-09-06 14:33:08Z dburken $
 #include <algorithm>
 
 #include <ossim/imaging/ossimCibCadrgTileSource.h>
@@ -33,13 +33,14 @@
 #include <ossim/imaging/ossimImageDataFactory.h>
 #include <ossim/projection/ossimEquDistCylProjection.h>
 #include <ossim/projection/ossimCylEquAreaProjection.h>
+#include <ossim/projection/ossimProjectionFactoryRegistry.h>
 #include <ossim/base/ossimEndian.h>
 #include <ossim/base/ossimTrace.h>
 
 static ossimTrace traceDebug = ossimTrace("ossimCibCadrgTileSource:debug");
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimCibCadrgTileSource.cpp 17709 2010-07-08 20:21:14Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimCibCadrgTileSource.cpp 18052 2010-09-06 14:33:08Z dburken $";
 #endif
 
 RTTI_DEF1(ossimCibCadrgTileSource, "ossimCibCadrgTileSource", ossimImageHandler)
@@ -116,6 +117,7 @@ ossimString ossimCibCadrgTileSource::getLongName()const
 void ossimCibCadrgTileSource::close()
 {
    deleteAll();
+   ossimImageHandler::close();
 }
 
 bool ossimCibCadrgTileSource::isOpen()const
@@ -150,7 +152,8 @@ bool ossimCibCadrgTileSource::open()
             vector<ossimString> scaleList = getProductScaleList();
             if(scaleList.size() > 0)
             {
-               vector<ossim_int32>  entryList = getProductEntryList(scaleList[0]);
+               std::vector<ossim_uint32> entryList;
+               getEntryList(entryList);
                if(entryList.size() > 0)
                {
                   setCurrentEntry(entryList[0]);
@@ -389,175 +392,23 @@ ossimIrect ossimCibCadrgTileSource::getImageRectangle(ossim_uint32 reduced_res_l
                      getNumberOfLines(reduced_res_level)   - 1); // lower right y                     
 }
    
-ossimImageGeometry* ossimCibCadrgTileSource::getImageGeometry()
+ossimRefPtr<ossimImageGeometry> ossimCibCadrgTileSource::getImageGeometry()
 {
-   if(!theEntryToRender)
+   if ( !theGeometry )
    {
-      return false;
+      // Check for external geom:
+      theGeometry = getExternalImageGeometry();
+      
+      if ( !theGeometry && theEntryToRender )
+      {
+         theGeometry = theEntryToRender->getImageGeometry();
+      }
+
+      // Set image things the geometry object should know about.
+      initImageParameters( theGeometry.get() );
    }
 
-   if (theGeometry.valid())
-   {
-      return theGeometry.get();
-   }
-
-   ossimRpfBoundaryRectRecord boundaryInfo = theEntryToRender->getBoundaryInformation();
-
-   ossimGpt ul(boundaryInfo.getCoverage().getUlLat(),
-               boundaryInfo.getCoverage().getUlLon());
-
-   double latInterval = boundaryInfo.getCoverage().getVerticalInterval();
-   double lonInterval = boundaryInfo.getCoverage().getHorizontalInterval();
-
-   // Pixel scale:
-   ossimDpt scale(lonInterval, latInterval);
-   
-   // Tie point - Shifted to point:
-   ossimDpt tie( (ul.lond() + (scale.x/2.0)), (ul.latd() - (scale.y/2.0)) );
-
-   // Origin - Use the center of the image aligning to tie point.
-   // ossimGpt origin((ul.latd()+lr.latd())*.5, (ul.lond()+lr.lond())*.5, 0.0);
-   ossimGpt origin( tie.y - ((theNumberOfLines/2)*scale.y),
-                    tie.x + ((theNumberOfSamples/2)*scale.x) );
-   
-   ossimKeywordlist kwl;
-   const char* projectionPrefix = "projection."; 
-   const char* prefix = 0; // legacy
-
-   kwl.add(prefix, ossimKeywordNames::TYPE_KW, "ossimImageGeometry", true);
-   
-   // Not affected by elevation (map projected).
-   kwl.add(projectionPrefix, ossimKeywordNames::ELEVATION_LOOKUP_FLAG_KW, "false", true);
-   
-   // Datum WGS 84
-   kwl.add(projectionPrefix, ossimKeywordNames::DATUM_KW, "WGE", true);
-
-   // Origin - Use the center of image:
-   kwl.add(projectionPrefix, ossimKeywordNames::ORIGIN_LATITUDE_KW, origin.latd(), true);
-
-   // Central Meridian - Use the center of the image.
-   kwl.add(projectionPrefix, ossimKeywordNames::CENTRAL_MERIDIAN_KW, origin.lond(), true);
-
-   // Pixel scale units:
-   kwl.add(projectionPrefix, ossimKeywordNames::PIXEL_SCALE_UNITS_KW, "degrees", true);
-
-   // Pixel scale:
-   kwl.add(projectionPrefix, ossimKeywordNames::PIXEL_SCALE_XY_KW, scale.toString().c_str(), true);
-
-   // Tie point units:
-   kwl.add(projectionPrefix, ossimKeywordNames::TIE_POINT_UNITS_KW, "degrees", true);
-
-   // Tie point:
-   kwl.add(projectionPrefix, ossimKeywordNames::TIE_POINT_XY_KW, tie.toString().c_str(), true);
-
-   int z = boundaryInfo.getZone();
-   
-   if (z == 74) z--; // Fix J to a zone.
-   if (z > 64) z -= 64; // Below the equator
-   else z -= 48; // Above the equator
-   
-   kwl.add(prefix, ossimKeywordNames::ZONE_KW, z, true);
-
-    if(z!=9)
-    {
-       kwl.add(projectionPrefix, ossimKeywordNames::TYPE_KW, "ossimEquDistCylProjection", true);
-    }
-    else
-    {
-       kwl.add(projectionPrefix, ossimKeywordNames::TYPE_KW, "ossimAzimEquDistProjection", true);
-    }
-    
-    if(theProductType == OSSIM_PRODUCT_TYPE_CADRG)
-    {
-       
-       ossimString scale = boundaryInfo.getScale();
-       scale = scale.after(":").upcase();
-       scale = scale.trim();
-
-       double scaleValue = 1000000;
-       if(scale == "5M")
-       {
-          scaleValue = 5000000;
-       }
-       else if(scale == "2M")
-       {
-          scaleValue = 2000000;
-       }
-       else if(scale == "1M")
-       {
-          scaleValue = 1000000;
-       }
-       else if(scale == "500K")
-       {
-          scaleValue = 500000;
-       }
-       else if(scale == "250K")
-       {
-          scaleValue = 250000; 
-       }
-       else if(scale == "200K")
-       {
-          scaleValue = 200000;
-       }
-       else if(scale == "100K")
-       {
-          scaleValue = 100000; 
-       }
-       else if(scale == "50K")
-       {
-          scaleValue = 50000;
-       }
-       else if(scale == "25K")
-       {
-          scaleValue = 25000;
-       }
-       else if(scale == "20K")
-       {
-          scaleValue = 20000;
-       }
-       else if(scale == "15K")
-       {
-          scaleValue = 15000;
-       }
-       else if(scale == "12,500")
-       {
-          scaleValue = 12500;
-       }
-       else if(scale == "10K")
-       {
-          scaleValue = 10000;
-       }
-       else
-       {
-          ossimNotify(ossimNotifyLevel_NOTICE)
-             << "ossimCibCadrgTileSource::getImageGeometry: scale not "
-             << "supported for projection --> " << scale << endl;
-       }
-       
-       kwl.add(prefix, "map_scale", scaleValue, true);        
-    }
-    else if(theProductType ==  OSSIM_PRODUCT_TYPE_CIB)
-    {
-       ossimString scale = boundaryInfo.getScale();
-       scale = scale.upcase();
-       scale = scale.trim('M');
-
-       // from the CIB spec the scale is equivalent to
-       // a CADRG by the following formula
-       //
-       // 100*10^-6/<meter product>
-       //
-       // where <meter product is 10, 5 ....etc
-       //
-       double scaleValue = 1.0/((100.0/1000000.0) / scale.toDouble());
-
-       kwl.add(prefix, "map_scale", scaleValue, true);        
-    }
-
-    // Capture this for next time.
-    theGeometry = new ossimImageGeometry;
-    theGeometry->loadState(kwl, prefix);
-    return theGeometry.get();
+   return theGeometry;
 }
    
 ossimScalarType ossimCibCadrgTileSource::getOutputScalarType() const
@@ -584,6 +435,8 @@ bool ossimCibCadrgTileSource::setCurrentEntry(ossim_uint32 entryIdx)
 {
    bool result = false;
 
+   theDecimationFactors.clear();
+   
    // Clear the geometry.
    theGeometry = 0;
    
@@ -1467,12 +1320,12 @@ void ossimCibCadrgTileSource::updatePropertiesToFirstValidFrame()
             }
          }
       }
-		if(found)
-		{
-			if(aFrame.parseFile(tempEntry.getFullPath()) == ossimErrorCodes::OSSIM_OK)
-			{
-				
-			}
-		}	
-	}
+      if(found)
+      {
+         if(aFrame.parseFile(tempEntry.getFullPath()) == ossimErrorCodes::OSSIM_OK)
+         {
+            
+         }
+      }	
+   }
 }

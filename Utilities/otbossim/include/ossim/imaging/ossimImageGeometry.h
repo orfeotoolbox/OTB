@@ -18,6 +18,7 @@
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimObject.h>
 #include <ossim/base/ossimDpt.h>
+#include <ossim/base/ossimIpt.h>
 #include <ossim/base/ossimRtti.h>
 #include <ossim/base/ossimRefPtr.h>
 #include <ossim/projection/ossimProjection.h>
@@ -199,6 +200,14 @@ public:
    {
       return (ossim_uint32)m_decimationFactors.size();
    }
+   void setImageSize(const ossimIpt& size)
+   {
+      m_imageSize = size;
+   }
+   const ossimIpt& getImageSize()const
+   {
+      return m_imageSize;
+   }
    //! Creates a new instance of ossimImageGeometry with the same transform and projection.
    //! Overrides base-class version requiring loadState() and saveState() (not implemented yet)
    virtual ossimObject* dup() const { return new ossimImageGeometry(*this); }
@@ -235,6 +244,7 @@ protected:
    ossimRefPtr<ossimProjection>      m_projection;  //!< Maintains full_image-to-world_space transformation
    mutable ossimDpt                  m_gsd;         //!< meters per pixel
    std::vector<ossimDpt>             m_decimationFactors; //!< List of decimation factors for R-levels
+   ossimIpt                          m_imageSize; // Image width and height
 
    TYPE_DATA
 };

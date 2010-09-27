@@ -7,14 +7,14 @@
 // Description:
 //
 //*******************************************************************
-//  $Id: ossimStereographicProjection.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimStereographicProjection.h 17815 2010-08-03 13:23:14Z dburken $
 
 #ifndef ossimStereographicProjection_HEADER
 #define ossimStereographicProjection_HEADER
 
 #include <ossim/projection/ossimMapProjection.h>
 
-class ossimStereographicProjection : public ossimMapProjection
+class OSSIMDLLEXPORT ossimStereographicProjection : public ossimMapProjection
 {
 public:   
    ossimStereographicProjection(const ossimEllipsoid& ellipsoid = ossimEllipsoid(),

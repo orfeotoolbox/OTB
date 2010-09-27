@@ -25,7 +25,7 @@ ossimTimer* ossimTimer::instance()
    return m_instance;
 }
 
-#ifdef WIN32
+#if defined(WIN32) || defined(WIN64)
 
 #include <sys/types.h>
 #include <fcntl.h>

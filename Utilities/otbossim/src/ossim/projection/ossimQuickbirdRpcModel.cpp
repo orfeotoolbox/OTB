@@ -10,12 +10,11 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimQuickbirdRpcModel.cpp 17652 2010-06-30 19:03:38Z gpotts $
+//  $Id: ossimQuickbirdRpcModel.cpp 17932 2010-08-19 20:34:35Z dburken $
 
 #include <ossim/projection/ossimQuickbirdRpcModel.h>
 #include <ossim/base/ossimException.h>
 #include <ossim/base/ossimNotify.h>
-#include <ossim/base/ossimTrace.h>
 #include <ossim/support_data/ossimQuickbirdRpcHeader.h>
 #include <ossim/support_data/ossimQuickbirdTile.h>
 #include <ossim/support_data/ossimNitfFile.h>
@@ -25,46 +24,79 @@
 #include <ossim/support_data/ossimNitfUse00aTag.h>
 #include <ossim/support_data/ossimNitfPiaimcTag.h>
 #include <ossim/imaging/ossimTiffTileSource.h>
+#include <ossim/imaging/ossimQbTileFilesHandler.h>
 
 static const char* RPC00A_TAG = "RPC00A";
 static const char* RPC00B_TAG = "RPC00B";
 static const char* PIAIMC_TAG = "PIAIMC";
 static const char* USE00A_TAG = "USE00A";
 
-static ossimTrace traceDebug("ossimQuickbirdRpcModel:debug");
-
 RTTI_DEF1(ossimQuickbirdRpcModel, "ossimQuickbirdRpcModel", ossimRpcModel);
 
 
+//*************************************************************************************************
+// Constructor
+//*************************************************************************************************
 ossimQuickbirdRpcModel::ossimQuickbirdRpcModel()
    :ossimRpcModel(),
     theSupportData(0)
 {
-   theSupportData = new ossimQuickbirdMetaData();
 }
 
-ossimQuickbirdRpcModel::ossimQuickbirdRpcModel(
-   const ossimQuickbirdRpcModel& rhs)
+//*************************************************************************************************
+// Constructor
+//*************************************************************************************************
+ossimQuickbirdRpcModel::ossimQuickbirdRpcModel(const ossimQuickbirdRpcModel& rhs)
    : ossimRpcModel(rhs),
      theSupportData(0)
 {
-//   if (theSupportData)
-//    {
-//       delete theSupportData;
-//   }
-//   *(theSupportData) = *(rhs.getTheSupportData());
 }
 
+//*************************************************************************************************
+//! Constructor for multiple tile-files sharing common RPC model initializes given pointer
+//! to multi-tile-files handler.
+//*************************************************************************************************
+ossimQuickbirdRpcModel::ossimQuickbirdRpcModel(const ossimQbTileFilesHandler* handler)
+:  ossimRpcModel(),
+   theSupportData(0)
+{
+   setErrorStatus();
+   if (!handler)
+      return;
+
+   // Make the gsd nan so it gets computed.
+   theGSD.makeNan();
+
+   theImageClipRect = handler->getImageRectangle();
+
+   ossimFilename imageFile = handler->getFilename();
+   if (!parseRpcData(imageFile))
+      return;
+
+   finishConstruction();
+   clearErrorStatus();
+   return;
+}
+
+//*************************************************************************************************
+// Destructor
+//*************************************************************************************************
 ossimQuickbirdRpcModel::~ossimQuickbirdRpcModel()
 {
    theSupportData = 0;
 }
 
+//*************************************************************************************************
+// Infamous DUP 
+//*************************************************************************************************
 ossimObject* ossimQuickbirdRpcModel::dup() const
 {
    return new ossimQuickbirdRpcModel(*this);
 }
 
+//*************************************************************************************************
+//! Public method for parsing generic image file.
+//*************************************************************************************************
 bool ossimQuickbirdRpcModel::parseFile(const ossimFilename& file)
 {
    if (!parseNitfFile(file))
@@ -74,8 +106,12 @@ bool ossimQuickbirdRpcModel::parseFile(const ossimFilename& file)
    return true;
 }
 
+//*************************************************************************************************
+//! Parses a NITF image file for RPC info. Returns TRUE if successful.
+//*************************************************************************************************
 bool ossimQuickbirdRpcModel::parseNitfFile(const ossimFilename& file)
 {
+   setErrorStatus();
    ossimFilename nitfFile = file;
    
    ossimRefPtr<ossimNitfFile> nitfFilePtr = new ossimNitfFile;
@@ -87,139 +123,26 @@ bool ossimQuickbirdRpcModel::parseNitfFile(const ossimFilename& file)
       {
          nitfFile = nitfFile.setExtension("ntf");
          if(!nitfFilePtr->parseFile(nitfFile))
-         {
             return false;
-         }
       }
    }
    
    ossimRefPtr<ossimNitfImageHeader> ih = nitfFilePtr->getNewImageHeader(0);
    if (!ih)
-   {
       return false;
-   }
+
+   theImageClipRect = ih->getImageRect();
  
-   ossimQuickbirdRpcHeader hdr;
-   ossimQuickbirdTile tileHdr;
-   ossimFilename tileFile = file;
-   ossimFilename rpcFile = file;
-   ossimFilename metadataFile = file;
-
-   tileFile = tileFile.replaceAllThatMatch("_R[0-9]+C[0-9]+");
-   rpcFile  = rpcFile.replaceAllThatMatch("_R[0-9]+C[0-9]+");
-   metadataFile = metadataFile.replaceAllThatMatch("_R[0-9]+C[0-9]+");
+   // Give preference to external RPC data file:
    bool useInternalRpcTags = false;
+   if(!parseRpcData(file))
+      useInternalRpcTags = true;
    
-   if ( !theSupportData )
-   {
-      theSupportData = new ossimQuickbirdMetaData();
-   }
-
-   metadataFile = metadataFile.setExtension("IMD");
-   if(!theSupportData->open(metadataFile))
-   {
-      metadataFile = metadataFile.setExtension("imd");
-      if(!theSupportData->open(tileFile))
-      {
-         return false;
-      }
-   }
-   
-   theSensorID = theSupportData->getSatID();
-
-   if(!hdr.open(rpcFile))
-   {
-      rpcFile = rpcFile.setExtension("RPB");
-      if(!hdr.open(rpcFile))
-      {
-         rpcFile = rpcFile.setExtension("rpb");
-         if(!hdr.open(rpcFile))
-         {
-            useInternalRpcTags = true;
-         }
-      }
-   }
-   
-   tileFile = tileFile.setExtension("TIL");
-   if(!tileHdr.open(tileFile))
-   {
-      tileFile = tileFile.setExtension("til");
-      if(!tileHdr.open(tileFile))
-      {
-         return false;
-      }
-   }
-  
-   ossimQuickbirdTileInfo info;
-   
-   if(!tileHdr.getInfo(info, nitfFile.file()))
-   {
+   if (!parseTileData(file))
       return false;
-   }
-
-   // Check for IMD file:
-   if ( !theSupportData )
-   {
-      theSupportData = new ossimQuickbirdMetaData();
-   }
-   metadataFile = metadataFile.setExtension("IMD");
-   if(!theSupportData->open(metadataFile))
-   {
-      metadataFile = metadataFile.setExtension("imd");
-      if(!theSupportData->open(tileFile))
-      {
-         theSupportData = 0; // ossimRefPtr
-         
-         if(traceDebug())
-         {
-            ossimNotify(ossimNotifyLevel_WARN)
-               << "ossimQuickbirdRpcModel::parseNitfFile WARNING:"
-               << "\nCould not open IMD file.  Sensor ID unknown."
-               << std::endl;
-         }
-      }
-   }
-   if (theSupportData.valid())
-   {
-      theSensorID = theSupportData->getSatID();
-   }
-   
-   ossimIrect imageRect = ih->getImageRect();
-   ossim_uint32 w = imageRect.width();
-   ossim_uint32 h = imageRect.height();
-   
-   if(w < 1) w = 1;
-   if(h < 1) h = 1;
-   
-   if((info.theUlXOffset != OSSIM_INT_NAN) &&
-      (info.theUlYOffset != OSSIM_INT_NAN) &&
-      (info.theLrXOffset != OSSIM_INT_NAN) &&
-      (info.theLrYOffset != OSSIM_INT_NAN) &&
-      (info.theLlXOffset != OSSIM_INT_NAN) &&
-      (info.theLlYOffset != OSSIM_INT_NAN) &&
-      (info.theUrXOffset != OSSIM_INT_NAN) &&
-      (info.theUrYOffset != OSSIM_INT_NAN))
-   {
-      imageRect = ossimIrect(ossimIpt(info.theUlXOffset,
-                                      info.theUlYOffset),
-                             ossimIpt(info.theUrXOffset,
-                                      info.theUrYOffset),
-                             ossimIpt(info.theLrXOffset,
-                                      info.theLrYOffset),
-                             ossimIpt(info.theLlXOffset,
-                                      info.theLlYOffset));
-   }
-   else if((info.theUlXOffset != OSSIM_INT_NAN)&&
-           (info.theUlYOffset != OSSIM_INT_NAN))
-   {
-      imageRect = ossimIrect(info.theUlXOffset,
-                             info.theUlYOffset,
-                             info.theUlXOffset + (w-1),
-                             info.theUlYOffset + (h-1));
-   }
-
-   // char charbuf[128];
-   // std::ifstream in(nitfFile.c_str());
+  
+   // Check for IMD (metadata) file:
+   parseMetaData(file);
 
    // Get the gsd.
    theGSD.line = ossim::nan();
@@ -250,7 +173,9 @@ bool ossimQuickbirdRpcModel::parseNitfFile(const ossimFilename& file)
       }
    }
 
-   if(useInternalRpcTags)
+   // If external RPC data file was correctly parsed, then we can bypass this code block. Otherwise
+   // need to parse internal NITF tags for RPC data:
+   if (useInternalRpcTags)
    {
       // Get the the RPC tag:
       ossimNitfRpcBase* rpcTag = NULL;
@@ -258,35 +183,24 @@ bool ossimQuickbirdRpcModel::parseNitfFile(const ossimFilename& file)
       // Look for the RPC00B tag first.
       tag = ih->getTagData(RPC00B_TAG);
       if (tag.valid())
-      {
          rpcTag = PTR_CAST(ossimNitfRpcBase, tag.get());
-      }
       
-      if (!rpcTag)
+      if (!tag.valid())
       {
          // Look for RPC00A tag.
          tag = ih->getTagData(RPC00A_TAG);
          if (tag.valid())
-         {
             rpcTag = PTR_CAST(ossimNitfRpcBase, tag.get());
-         }
       }
       
       if (!rpcTag)
-      {
-         ++theErrorStatus;
          return false;
-      }
       
       // Set the polynomial type.
       if (rpcTag->getRegisterTagName() == "RPC00B")
-      {
          thePolyType = B;
-      }
       else
-      {
          thePolyType = A;
-      }
 
       // Parse coefficients:
       for (ossim_uint32 i=0; i<20; ++i)
@@ -296,294 +210,184 @@ bool ossimQuickbirdRpcModel::parseNitfFile(const ossimFilename& file)
          theSampNumCoef[i] = rpcTag->getSampleNumeratorCoeff(i).toFloat64();
          theSampDenCoef[i] = rpcTag->getSampleDenominatorCoeff(i).toFloat64();
       }
-   }
-   else
-   {
-      if(hdr.isAPolynomial())
-      {
-         thePolyType = A;
-      }
-      else
-      {
-         thePolyType = B;
-      }
-      
-      std::copy(hdr.theLineNumCoeff.begin(),
-                hdr.theLineNumCoeff.end(),
-                theLineNumCoef);
-      std::copy(hdr.theLineDenCoeff.begin(),
-                hdr.theLineDenCoeff.end(),
-                theLineDenCoef);
-      std::copy(hdr.theSampNumCoeff.begin(),
-                hdr.theSampNumCoeff.end(),
-                theSampNumCoef);
-      std::copy(hdr.theSampDenCoeff.begin(),
-                hdr.theSampDenCoeff.end(),
-                theSampDenCoef);
+
+      // Initialize other items in tags:
+      theLineScale  = rpcTag->getLineScale().toFloat64();
+      theSampScale  = rpcTag->getSampleScale().toFloat64();
+      theLatScale   = rpcTag->getGeodeticLatScale().toFloat64();
+      theLonScale   = rpcTag->getGeodeticLonScale().toFloat64();
+      theHgtScale   = rpcTag->getGeodeticHeightScale().toFloat64();
+      theLineOffset = rpcTag->getLineOffset().toFloat64();
+      theSampOffset = rpcTag->getSampleOffset().toFloat64();
+      theLatOffset  = rpcTag->getGeodeticLatOffset().toFloat64();
+      theLonOffset  = rpcTag->getGeodeticLonOffset().toFloat64();
+      theHgtOffset  = rpcTag->getGeodeticHeightOffset().toFloat64();
+      theImageID    = ih->getImageId();
    }
 
-   
-   theLineScale = hdr.theLineScale;
-   theSampScale = hdr.theSampScale;
-   theLatScale  = hdr.theLatScale;
-   theLonScale  = hdr.theLonScale;
-   theHgtScale  = hdr.theHeightScale;
-   theLineOffset = hdr.theLineOffset;
-   theSampOffset = hdr.theSampOffset;
-   theLatOffset  = hdr.theLatOffset;
-   theLonOffset  = hdr.theLonOffset;
-   theHgtOffset = hdr.theHeightOffset;
-   theImageSize.line = imageRect.height();
-   theImageSize.samp = imageRect.width();
-   theRefImgPt.line = imageRect.midPoint().y;
-   theRefImgPt.samp = imageRect.midPoint().x;
-   theRefGndPt.lat = theLatOffset;
-   theRefGndPt.lon = theLonOffset;
-   theRefGndPt.hgt = theHgtOffset;
-//    theImageClipRect = ossimIrect(0,
-//                                  0,
-//                                  theImageSize.samp-1,
-//                                  theImageSize.line-1);
-   theImageClipRect = imageRect;
-   theImageID = hdr.theSatId;
-
-   //---
-   // NOTE:  We must call "updateModel()" to set parameter used by base
-   // ossimRpcModel prior to calling lineSampleHeightToWorld or all
-   // the world points will be same.
-   //---
-   updateModel();
-
-   ossimGpt v0, v1, v2, v3;
-   lineSampleHeightToWorld(imageRect.ul(), theHgtOffset, v0);
-   lineSampleHeightToWorld(imageRect.ur(), theHgtOffset, v1);
-   lineSampleHeightToWorld(imageRect.lr(), theHgtOffset, v2);
-   lineSampleHeightToWorld(imageRect.ll(), theHgtOffset, v3);
-   
-   theBoundGndPolygon
-      = ossimPolygon (ossimDpt(v0), ossimDpt(v1), ossimDpt(v2), ossimDpt(v3));
-
-   // Set the ground reference point using the model.
-   lineSampleHeightToWorld(theRefImgPt, theHgtOffset, theRefGndPt);
-
-   if( theGSD.hasNans() )
-   {
-      try
-      {
-         // This will set theGSD and theMeanGSD. Method throws ossimException.
-         computeGsd();
-      }
-      catch (const ossimException& e)
-      {
-         ossimNotify(ossimNotifyLevel_WARN)
-            << "ossimNitfRpcModel::ossimNitfRpcModel Caught Exception:\n"
-            << e.what() << std::endl;
-      }
-   }
-
+   finishConstruction();
+   clearErrorStatus();
    return true;
 }
 
+//*************************************************************************************************
+//! Parses a tagged TIFF image file for RPC info. Returns TRUE if successful.
+//*************************************************************************************************
 bool ossimQuickbirdRpcModel::parseTiffFile(const ossimFilename& file)
 {
+   setErrorStatus();
+
    // Make the gsd nan so it gets computed.
    theGSD.makeNan();
-   
+
    ossimFilename tiffFile = file;
-
    ossimRefPtr<ossimTiffTileSource> tiff = new ossimTiffTileSource();
-
    if (!tiff->open(file))
    {
       return false;
    }
 
-   ossimIrect imageRect = tiff->getImageRectangle();
-   
-   ossimQuickbirdRpcHeader hdr;
-   ossimQuickbirdTile tileHdr;
+   theImageClipRect = tiff->getImageRectangle();
 
-   ossimFilename tileFile = file;
-   ossimFilename rpcFile = file;
-   ossimFilename metadataFile = file;
+   parseMetaData(file);
 
-//   tileFile = tileFile.replaceAllThatMatch("_R[0-9]+C[0-9]+");
-//   rpcFile  = rpcFile.replaceAllThatMatch("_R[0-9]+C[0-9]+");
-//   metadataFile = metadataFile.replaceAllThatMatch("_R[0-9]+C[0-9]+");
-
-   if ( !theSupportData )
-   {
-      theSupportData = new ossimQuickbirdMetaData();
-   }
-
-   metadataFile = metadataFile.setExtension("IMD");
-   if(!theSupportData->open(metadataFile))
-   {
-      metadataFile = metadataFile.setExtension("imd");
-      if(!theSupportData->open(tileFile))
-      {
-        metadataFile = metadataFile.replaceAllThatMatch("_R[0-9]+C[0-9]+");
-        metadataFile = metadataFile.setExtension("IMD");
-        if(!theSupportData->open(metadataFile))
-           {
-              metadataFile = metadataFile.setExtension("imd");
-              if(!theSupportData->open(tileFile))
-              {
-                return false;
-              }
-           }
-        }
-     }
-
-   theSensorID = theSupportData->getSatID();
-
-   if(!hdr.open(rpcFile))
-   {
-      rpcFile = rpcFile.setExtension("RPB");
-      if(!hdr.open(rpcFile))
-      {
-         rpcFile = rpcFile.setExtension("rpb");
-         if(!hdr.open(rpcFile))
-         {
-           rpcFile  = rpcFile.replaceAllThatMatch("_R[0-9]+C[0-9]+");
-           rpcFile = rpcFile.setExtension("RPB");
-           if(!hdr.open(rpcFile))
-             {
-             rpcFile = rpcFile.setExtension("rpb");
-             if(!hdr.open(rpcFile))
-               {
-               return false;
-               }
-             }
-           }
-        }
-     }
-   
-   tileFile = tileFile.setExtension("TIL");
-   if(!tileHdr.open(tileFile))
-   {
-      tileFile = tileFile.setExtension("til");
-      if(!tileHdr.open(tileFile))
-      {
-        tileFile = tileFile.replaceAllThatMatch("_R[0-9]+C[0-9]+");
-        tileFile = tileFile.setExtension("TIL");
-        if(!tileHdr.open(tileFile))
-          {
-             tileFile = tileFile.setExtension("til");
-             if(!tileHdr.open(tileFile))
-             {
-               return false;
-             }
-          }
-      }
-   }
-
-   ossimQuickbirdTileInfo info;
-   
-   if(!tileHdr.getInfo(info, file.file()))
-   {
+   if (!parseRpcData(file))
       return false;
+
+   if (!parseTileData(file))
+      return false;
+
+   finishConstruction();
+   clearErrorStatus();
+   return true;
+}
+
+//*************************************************************************************************
+//! Given some base name for the image data, parses the associated RPC data file. Returns TRUE
+//! if successful
+//*************************************************************************************************
+bool ossimQuickbirdRpcModel::parseRpcData(const ossimFilename& base_name)
+{
+   ossimFilename rpcFile (base_name);
+
+   // There are two possibilities for RPC data files: either each image file has its own RPC data
+   // file, or a single RPC file is provided for a multi-tile scene.
+   rpcFile.setExtension("RPB");
+   if (!findSupportFile(rpcFile))
+   {
+      rpcFile.setExtension("RPA");
+      if (!findSupportFile(rpcFile))
+         return false;
    }
 
-   // Check for IMD file:
-   if ( !theSupportData )
-   {
-      theSupportData = new ossimQuickbirdMetaData();
-   }
-   metadataFile = metadataFile.setExtension("IMD");
-   if(!theSupportData->open(metadataFile))
-   {
-      metadataFile = metadataFile.setExtension("imd");
-      if(!theSupportData->open(tileFile))
-      {
-         theSupportData = 0; // ossimRefPtr
-         
-         ossimNotify(ossimNotifyLevel_WARN)
-            << "ossimQuickbirdRpcModel::parseTiffFile WARNING:"
-            << "\nCould not open IMD file.  Sensor ID unknown."
-            << std::endl;
-      }
-   }
-   if (theSupportData.valid())
-   {
-      theSensorID = theSupportData->getSatID();
-   }
-   
-   ossim_uint32 w = imageRect.width();
-   ossim_uint32 h = imageRect.height();
-   
-   if(w < 1) w = 1;
-   if(h < 1) h = 1;
-   
-   if((info.theUlXOffset != OSSIM_INT_NAN) &&
-      (info.theUlYOffset != OSSIM_INT_NAN) &&
-      (info.theLrXOffset != OSSIM_INT_NAN) &&
-      (info.theLrYOffset != OSSIM_INT_NAN) &&
-      (info.theLlXOffset != OSSIM_INT_NAN) &&
-      (info.theLlYOffset != OSSIM_INT_NAN) &&
-      (info.theUrXOffset != OSSIM_INT_NAN) &&
-      (info.theUrYOffset != OSSIM_INT_NAN))
-   {
-      imageRect = ossimIrect(ossimIpt(info.theUlXOffset,
-                                      info.theUlYOffset),
-                             ossimIpt(info.theUrXOffset,
-                                      info.theUrYOffset),
-                             ossimIpt(info.theLrXOffset,
-                                      info.theLrYOffset),
-                             ossimIpt(info.theLlXOffset,
-                                      info.theLlYOffset));
-   }
-   else if((info.theUlXOffset != OSSIM_INT_NAN)&&
-           (info.theUlYOffset != OSSIM_INT_NAN))
-   {
-      imageRect = ossimIrect(info.theUlXOffset,
-                             info.theUlYOffset,
-                             info.theUlXOffset + (w-1),
-                             info.theUlYOffset + (h-1));
-   }
+   // An RPC file was located, open it:
+   ossimQuickbirdRpcHeader hdr;
+   if(!hdr.open(rpcFile))
+      return false;
 
    if(hdr.isAPolynomial())
-   {
       thePolyType = A;
-   }
    else
-   {
       thePolyType = B;
-   }
-   
-   std::copy(hdr.theLineNumCoeff.begin(),
-             hdr.theLineNumCoeff.end(),
-             theLineNumCoef);
-   std::copy(hdr.theLineDenCoeff.begin(),
-             hdr.theLineDenCoeff.end(),
-             theLineDenCoef);
-   std::copy(hdr.theSampNumCoeff.begin(),
-             hdr.theSampNumCoeff.end(),
-             theSampNumCoef);
-   std::copy(hdr.theSampDenCoeff.begin(),
-             hdr.theSampDenCoeff.end(),
-             theSampDenCoef);
 
-   
-   theLineScale = hdr.theLineScale;
-   theSampScale = hdr.theSampScale;
-   theLatScale  = hdr.theLatScale;
-   theLonScale  = hdr.theLonScale;
-   theHgtScale  = hdr.theHeightScale;
+   std::copy(hdr.theLineNumCoeff.begin(), hdr.theLineNumCoeff.end(), theLineNumCoef);
+   std::copy(hdr.theLineDenCoeff.begin(), hdr.theLineDenCoeff.end(), theLineDenCoef);
+   std::copy(hdr.theSampNumCoeff.begin(), hdr.theSampNumCoeff.end(), theSampNumCoef);
+   std::copy(hdr.theSampDenCoeff.begin(), hdr.theSampDenCoeff.end(), theSampDenCoef);
+
+   theLineScale  = hdr.theLineScale;
+   theSampScale  = hdr.theSampScale;
+   theLatScale   = hdr.theLatScale;
+   theLonScale   = hdr.theLonScale;
+   theHgtScale   = hdr.theHeightScale;
    theLineOffset = hdr.theLineOffset;
    theSampOffset = hdr.theSampOffset;
    theLatOffset  = hdr.theLatOffset;
    theLonOffset  = hdr.theLonOffset;
-   theHgtOffset = hdr.theHeightOffset;
-   theImageSize.line = imageRect.height();
-   theImageSize.samp = imageRect.width();
-   theRefImgPt.line = imageRect.midPoint().y;
-   theRefImgPt.samp = imageRect.midPoint().x;
+   theHgtOffset  = hdr.theHeightOffset;
+   theImageID    = rpcFile.fileNoExtension();
+
+   return true;
+}
+
+
+//*************************************************************************************************
+//! Initializes the support data member with metadata file info. Returns TRUE if successful
+//*************************************************************************************************
+bool ossimQuickbirdRpcModel::parseMetaData(const ossimFilename& base_name)
+{
+
+   ossimFilename metadataFile (base_name);
+   metadataFile.setExtension("IMD");
+   if (!findSupportFile(metadataFile))
+      return false;
+
+   if ( !theSupportData.valid() )
+      theSupportData = new ossimQuickbirdMetaData();
+
+   if(!theSupportData->open(metadataFile))
+   {
+      theSupportData = 0; // ossimRefPtr
+      ossimNotify(ossimNotifyLevel_WARN) << "ossimQuickbirdRpcModel::parseNitfFile WARNING:"
+         << "\nCould not open IMD file.  Sensor ID unknown." << std::endl;
+      return false;
+   }
+
+   theSensorID = theSupportData->getSatID();
+   return true;
+}
+
+//*************************************************************************************************
+//! Reads the TIL file for pertinent info. Returns TRUE if successful
+//*************************************************************************************************
+bool ossimQuickbirdRpcModel::parseTileData(const ossimFilename& image_file)
+{
+   ossimFilename tileFile (image_file);
+   tileFile.setExtension("TIL");
+   if (!findSupportFile(tileFile))
+      return false;
+
+   ossimQuickbirdTile tileHdr;
+   if(!tileHdr.open(tileFile))
+      return false;
+
+   ossimQuickbirdTileInfo info;
+   if(!tileHdr.getInfo(info, image_file.file()))
+      return false;
+
+   if((info.theUlXOffset != OSSIM_INT_NAN) && (info.theUlYOffset != OSSIM_INT_NAN) &&
+      (info.theLrXOffset != OSSIM_INT_NAN) && (info.theLrYOffset != OSSIM_INT_NAN) &&
+      (info.theLlXOffset != OSSIM_INT_NAN) && (info.theLlYOffset != OSSIM_INT_NAN) &&
+      (info.theUrXOffset != OSSIM_INT_NAN) && (info.theUrYOffset != OSSIM_INT_NAN))
+   {
+      theImageClipRect = ossimIrect(ossimIpt(info.theUlXOffset, info.theUlYOffset),
+                                    ossimIpt(info.theUrXOffset, info.theUrYOffset),
+                                    ossimIpt(info.theLrXOffset, info.theLrYOffset),
+                                    ossimIpt(info.theLlXOffset, info.theLlYOffset));
+   }
+   else if ((info.theUlXOffset != OSSIM_INT_NAN) && (info.theUlYOffset != OSSIM_INT_NAN) &&
+      (theImageClipRect.width() != OSSIM_INT_NAN) && (theImageClipRect.height() != OSSIM_INT_NAN))
+   {
+      theImageClipRect = ossimIrect(info.theUlXOffset, info.theUlYOffset,
+                                    info.theUlXOffset+theImageClipRect.width()-1, 
+                                    info.theUlYOffset+theImageClipRect.height()-1);
+   }
+
+   return true;
+}
+
+//*************************************************************************************************
+//! Collects common code among all parsers
+//*************************************************************************************************
+void ossimQuickbirdRpcModel::finishConstruction()
+{
+   theImageSize.line = theImageClipRect.height();
+   theImageSize.samp = theImageClipRect.width();
+   theRefImgPt.line = theImageClipRect.midPoint().y;
+   theRefImgPt.samp = theImageClipRect.midPoint().x;
    theRefGndPt.lat = theLatOffset;
    theRefGndPt.lon = theLonOffset;
    theRefGndPt.hgt = theHgtOffset;
-   theImageClipRect = imageRect;
-   theImageID = hdr.theSatId;
 
    //---
    // NOTE:  We must call "updateModel()" to set parameter used by base
@@ -591,22 +395,20 @@ bool ossimQuickbirdRpcModel::parseTiffFile(const ossimFilename& file)
    // the world points will be same.
    //---
    updateModel();
-   
+
    ossimGpt v0, v1, v2, v3;
-   lineSampleHeightToWorld(imageRect.ul(), theHgtOffset, v0);
-   lineSampleHeightToWorld(imageRect.ur(), theHgtOffset, v1);
-   lineSampleHeightToWorld(imageRect.lr(), theHgtOffset, v2);
-   lineSampleHeightToWorld(imageRect.ll(), theHgtOffset, v3);
-   
-   theBoundGndPolygon
-      = ossimPolygon (ossimDpt(v0), ossimDpt(v1), ossimDpt(v2), ossimDpt(v3));
+   lineSampleHeightToWorld(theImageClipRect.ul(), theHgtOffset, v0);
+   lineSampleHeightToWorld(theImageClipRect.ur(), theHgtOffset, v1);
+   lineSampleHeightToWorld(theImageClipRect.lr(), theHgtOffset, v2);
+   lineSampleHeightToWorld(theImageClipRect.ll(), theHgtOffset, v3);
+
+   theBoundGndPolygon = ossimPolygon (ossimDpt(v0), ossimDpt(v1), ossimDpt(v2), ossimDpt(v3));
 
    // Set the ground reference point using the model.
    lineSampleHeightToWorld(theRefImgPt, theHgtOffset, theRefGndPt);
 
    if( theGSD.hasNans() )
    {
-      // Call the base class method to compute.
       try
       {
          // This will set theGSD and theMeanGSD. Method throws ossimException.
@@ -615,13 +417,10 @@ bool ossimQuickbirdRpcModel::parseTiffFile(const ossimFilename& file)
       catch (const ossimException& e)
       {
          ossimNotify(ossimNotifyLevel_WARN)
-            << "ossimQuickbirdRpcModel::ossimQuickbirdRpcModel Caught"
-            << " Exception:\n"
+            << "ossimQuickbirdRpcModel::finishConstruction -- caught exception:\n"
             << e.what() << std::endl;
       }
    }
-   
-   return true;
 }
 
 bool ossimQuickbirdRpcModel::saveState(ossimKeywordlist& kwl,
@@ -646,4 +445,45 @@ bool ossimQuickbirdRpcModel::loadState(const ossimKeywordlist& kwl,
    }
 
    return ossimRpcModel::loadState(kwl, prefix);
+}
+
+//*************************************************************************************************
+// Given an initial filename with case-agnostic extension, this method searches first for an
+// image-specific instance of that file (i.e., with R*C* in the filename) before considering
+// the mosaic-global support file (R*C* removed). If a file is found, the argument is modified to
+// match the actual filename and TRUE is returned. Otherwise, argument filename is left unchanged
+// and FALSE is returned.
+//*************************************************************************************************
+bool ossimQuickbirdRpcModel::findSupportFile(ossimFilename& filename) const
+{
+   ossimFilename f (filename);
+   ossimString extension = f.ext();
+   while (true)
+   {
+      // Search for support file with same basename as image:
+      extension.upcase();
+      f.setExtension(extension);
+      if (f.exists())  
+         break;
+      extension.downcase();
+      f.setExtension(extension);
+      if (f.exists())  
+         break;
+
+      // None found so far, search for mosaic-global support file:
+      f = f.replaceAllThatMatch("_R[0-9]+C[0-9]+");
+      if (f.exists())  
+         break;
+      extension.upcase();
+      f.setExtension(extension);
+      if (f.exists())  
+         break;
+
+      // Nothing found:
+      return false;
+   }
+
+   // Modify argument to match good filename:
+   filename = f;
+   return true;
 }

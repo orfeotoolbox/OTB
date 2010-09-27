@@ -8,7 +8,7 @@
 // overview files.
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimMpiMasterOverviewSequencer.cpp 17208 2010-04-26 14:03:48Z dburken $
+// $Id: ossimMpiMasterOverviewSequencer.cpp 17870 2010-08-12 13:12:32Z sbortman $
 
 #include <ossim/parallel/ossimMpiMasterOverviewSequencer.h>
 #include <ossim/ossimConfig.h> /* To pick up OSSIM_HAS_MPI. */
@@ -71,7 +71,7 @@ ossimRefPtr<ossimImageData> ossimMpiMasterOverviewSequencer::getNextTile()
    // little endian. We will use the endian pointer itself as a flag to swap.
    //---
    ossimEndian* endian = 0;
-   if (m_imageHandler)
+   if (m_imageHandler.valid())
    {
       if (m_imageHandler->getOutputScalarType() != OSSIM_UINT8)
       {

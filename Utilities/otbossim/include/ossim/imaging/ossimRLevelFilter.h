@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimRLevelFilter.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimRLevelFilter.h 17932 2010-08-19 20:34:35Z dburken $
 #ifndef ossimRLevelFilter_HEADER
 #define ossimRLevelFilter_HEADER
 
@@ -37,7 +37,7 @@ public:
 
    //! Returns a pointer reference to the active image geometry at this filter. The input source
    //! geometry is modified, so we need to maintain our own geometry object as a data member.
-   ossimImageGeometry* getImageGeometry();
+   ossimRefPtr<ossimImageGeometry> getImageGeometry();
 
    virtual void setCurrentRLevel(ossim_uint32 rlevel);
 
