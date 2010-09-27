@@ -25,7 +25,6 @@
 #include "itkMetaDataObject.h"
 
 //TODO OTB wrapper around the WKT/ossimProjection/isGeographic, etc.
-#include "ogr_spatialref.h"
 
 namespace otb
 {

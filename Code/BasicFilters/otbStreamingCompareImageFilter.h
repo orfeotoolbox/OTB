@@ -201,10 +201,10 @@ public:
   /** Creation through object factory macro */
   itkTypeMacro(StreamingCompareImageFilter, PersistentFilterStreamingDecorator);
 
-  typedef typename Superclass::FilterType    StatFilterType;
-  typedef typename StatFilterType::PixelType PixelType;
-  typedef typename StatFilterType::RealType  RealType;
-  typedef TInputImage                        InputImageType;
+  typedef typename Superclass::FilterType       CompareFilterType;
+  typedef typename CompareFilterType::PixelType PixelType;
+  typedef typename CompareFilterType::RealType  RealType;
+  typedef TInputImage                           InputImageType;
 
   /** Type of DataObjects used for scalar outputs */
   typedef itk::SimpleDataObjectDecorator<RealType>  RealObjectType;

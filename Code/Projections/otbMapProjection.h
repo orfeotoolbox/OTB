@@ -33,6 +33,7 @@
 #include "base/ossimString.h"
 #include "gdal/ossimOgcWktTranslator.h"
 #include "otbGenericMapProjection.h"
+#include "ogr_spatialref.h"
 
 namespace otb
 {
@@ -139,6 +140,26 @@ public:
 
   /** Instanciate the projection according to the Wkt specification*/
   virtual void SetWkt(std::string projectionRefWkt);
+
+  /** Instanciate the projection according to the epsg srid number*/
+  virtual void SetSRID(int srid)
+  {
+    // Build the srs from the epsg number
+    OGRSpatialReferenceH hSRS = NULL;
+    hSRS = OSRNewSpatialReference(NULL);
+    
+    if (OSRImportFromEPSG(hSRS,srid ) == OGRERR_NONE)
+      {
+      // Get the wkt 
+      char * inputWkt = NULL;
+      if ( OSRExportToWkt(hSRS, &inputWkt) == OGRERR_NONE)
+        {
+        this->m_ProjectionRefWkt = inputWkt;
+        this->Modified();
+        OSRDestroySpatialReference(hSRS);
+        }
+      }
+  }
 
   virtual void PrintMap() const;
 

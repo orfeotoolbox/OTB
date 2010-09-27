@@ -26,6 +26,7 @@
 #include "itkExceptionObject.h"
 #include "itkMacro.h"
 #include "otbCompositeTransform.h"
+#include "ogr_spatialref.h"
 
 namespace otb
 {
@@ -179,6 +180,45 @@ public:
   // Get inverse methods
   bool GetInverse(Self * inverseTransform) const;
   virtual InverseTransformBasePointer GetInverseTransform() const;
+
+  /** Set the input projection ref using the SRID or the EPSG number */
+  virtual void SetInputSRID(int srid)
+  {
+    // Build the srs from the epsg number
+    OGRSpatialReferenceH hSRS = NULL;
+    hSRS = OSRNewSpatialReference(NULL);
+    
+    if (OSRImportFromEPSG(hSRS,srid ) == OGRERR_NONE)
+      {
+      // Get the wkt 
+      char * inputWkt = NULL;
+      if ( OSRExportToWkt(hSRS, &inputWkt) == OGRERR_NONE)
+        {
+        this->SetInputProjectionRef(inputWkt);
+        OSRDestroySpatialReference(hSRS);
+        }
+      }
+  }
+  
+  /** Set the output projection ref using the SRID or the EPSG number */
+  virtual void SetOutputSRID(int srid)
+  {
+    // Build the srs from the epsg number
+    OGRSpatialReferenceH hSRS = NULL;
+    hSRS = OSRNewSpatialReference(NULL);
+    
+    if (OSRImportFromEPSG(hSRS,srid ) == OGRERR_NONE)
+      {
+      // Get the wkt 
+      char * outputWkt = NULL;
+      if ( OSRExportToWkt(hSRS, &outputWkt) == OGRERR_NONE)
+        {
+        this->SetOutputProjectionRef(outputWkt);
+        OSRDestroySpatialReference(hSRS);
+        }
+      }
+  }
+
 
 protected:
   GenericRSTransform();
