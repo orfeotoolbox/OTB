@@ -7,10 +7,10 @@
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-See OTBCopyright.txt for details.
+  See OTBCopyright.txt for details.
 
 
-    This software is distributed WITHOUT ANY WARRANTY; without even
+     This software is distributed WITHOUT ANY WARRANTY; without even
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE,  See the above copyright notices for more information.
 
@@ -20,11 +20,6 @@ See OTBCopyright.txt for details.
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
 #endif
-
-#ifdef __BORLANDC__
-#define ITK_LEAN_AND_MEAN
-#endif
-
 
 #include <iostream>
 #include <iomanip>
