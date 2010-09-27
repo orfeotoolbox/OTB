@@ -64,6 +64,9 @@ int otbDEMToImageGeneratorTest(int argc, char * argv[])
   object->SetOutputOrigin(origin);
   object->SetOutputSize(size);
   object->SetOutputSpacing(spacing);
+
+  std::cout << object << std::endl;
+
   otb::StandardFilterWatcher watcher(object, "DEM to image generator");
 
   writer->SetFileName(outputName);
