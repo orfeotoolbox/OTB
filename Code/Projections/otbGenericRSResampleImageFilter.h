@@ -277,6 +277,8 @@ protected:
 
   virtual void UpdateTransform();
   
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+
 private:
   GenericRSResampleImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented

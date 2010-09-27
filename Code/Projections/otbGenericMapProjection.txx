@@ -212,6 +212,17 @@ GenericMapProjection<Transform, TScalarType, NInputDimensions, NOutputDimensions
   std::cout << m_MapProjection->print(std::cout);
 }
 
+
+template<InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions,
+    unsigned int NOutputDimensions>
+void
+GenericMapProjection<Transform, TScalarType, NInputDimensions, NOutputDimensions>
+::PrintSelf(std::ostream& os, itk::Indent indent) const
+{
+  Superclass::PrintSelf(os, indent);
+  os << indent << "ProjectionRefWkt: " << m_ProjectionRefWkt << std::endl;
+}
+
 } // namespace otb
 
 #endif

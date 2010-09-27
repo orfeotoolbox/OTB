@@ -190,13 +190,7 @@ protected:
     m_TransformUpToDate = false;
   }
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const
-  {
-    Superclass::PrintSelf(os, indent);
-    os << indent << "Up to date: " << m_TransformUpToDate << std::endl;
-    os << indent << "Input transform: " << m_InputTransform << std::endl;
-    os << indent << "Output transform: " << m_OutputTransform << std::endl;
-  }
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
   GenericRSTransform(const Self &);    //purposely not implemented

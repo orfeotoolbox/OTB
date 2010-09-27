@@ -176,6 +176,8 @@ protected:
 
   virtual void GenerateInputRequestedRegion();
 
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+
 private:
   StreamingResampleImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented

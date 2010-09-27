@@ -133,5 +133,19 @@ StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionTy
   this->SetOutputSize ( image->GetLargestPossibleRegion().GetSize() );
 }
 
+
+template <class TInputImage, class TOutputImage, class TInterpolatorPrecisionType>
+void
+StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType>
+::PrintSelf(std::ostream& os, itk::Indent indent) const
+{
+  Superclass::PrintSelf(os, indent);
+  os << indent << "OutputOrigin: " << this->GetOutputOrigin() << std::endl;
+  os << indent << "OutputSpacing: " << this->GetOutputSpacing() << std::endl;
+  os << indent << "OutputStartIndex: " << this->GetOutputStartIndex() << std::endl;
+  os << indent << "OutputSize: " << this->GetOutputSize() << std::endl;
+}
+
+
 }
 #endif
