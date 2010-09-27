@@ -195,7 +195,6 @@ public:
       if ( OSRExportToWkt(hSRS, &inputWkt) == OGRERR_NONE)
         {
         this->SetInputProjectionRef(inputWkt);
-        this->Modified();
         OSRDestroySpatialReference(hSRS);
         }
       }
@@ -215,7 +214,6 @@ public:
       if ( OSRExportToWkt(hSRS, &outputWkt) == OGRERR_NONE)
         {
         this->SetOutputProjectionRef(outputWkt);
-        this->Modified();
         OSRDestroySpatialReference(hSRS);
         }
       }
