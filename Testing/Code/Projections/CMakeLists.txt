@@ -317,7 +317,6 @@ ADD_TEST(prTvOrthoRectificationCevennes ${PROJECTIONS_TESTS2}
         4.881e+06
         500
         500
-#         220
         0.5
         -0.5
         31
@@ -335,14 +334,12 @@ ADD_TEST(prTvOrthoRectificationToulouseWithDEM ${PROJECTIONS_TESTS2}
         4829184.8
         500
         500
-# 				220
         0.5
         -0.5
         31
         N
         ${INPUTDATA}/DEM/srtm_directory/
-        4
-#         ${TEMP}/prTvOrthoRectificationToulouseWithDEM_UTM.tif
+        0.5
         )
 
 ADD_TEST(prTvOrthoRectificationCevennesWithDEM ${PROJECTIONS_TESTS2}
@@ -355,18 +352,13 @@ ADD_TEST(prTvOrthoRectificationCevennesWithDEM ${PROJECTIONS_TESTS2}
         4.881e+06
         500
         500
-#         200
         0.5
         -0.5
         31
         N
         ${INPUTDATA}/DEM/srtm_directory/
-        4
-#         ${TEMP}/prTvOrthoRectificationCevennesWithDEM_UTM.tif
+        0.5
         )
-
-
-
 
 #========================= Ortho rectif SPOT5 ===============================
 
@@ -530,6 +522,17 @@ ADD_TEST(prTvGenericRSTransform ${PROJECTIONS_TESTS3}
 	     43.4876035537
 	     ${TEMP}/prTvGenericRSTransform.txt
 )
+
+ADD_TEST(prTvGenericRSTransformWithSRID ${PROJECTIONS_TESTS3} 
+         --compare-ascii ${EPSILON_4}
+	     ${BASELINE_FILES}/prTvGenericRSTransform.txt
+	     ${TEMP}/prTvGenericRSTransform_WithSRID.txt
+	 otbGenericRSTransformWithSRID
+	     1.35617289802566
+	     43.4876035537
+	     ${TEMP}/prTvGenericRSTransform_WithSRID.txt
+)
+
 
 ADD_TEST(prTuVectorDataProjectionFilterNew ${PROJECTIONS_TESTS3}  otbVectorDataProjectionFilterNew )
 
@@ -719,6 +722,7 @@ otbGenericMapProjectionNew.cxx
 otbGenericMapProjection.cxx
 otbGenericRSTransformNew.cxx
 otbGenericRSTransform.cxx
+otbGenericRSTransformWithSRID.cxx
 otbVectorDataProjectionFilterNew.cxx
 otbVectorDataProjectionFilter.cxx
 otbVectorDataProjectionFilterFromMapToSensor.cxx
