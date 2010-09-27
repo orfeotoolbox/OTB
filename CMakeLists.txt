@@ -304,90 +304,6 @@ IF(NOT BUILD_SHARED_LIBS)
   ADD_DEFINITIONS(-DOSSIM_STATIC)
 ENDIF(NOT BUILD_SHARED_LIBS)
 
-
-#-----------------------------------------------------------------------------
-# Option for generate Visu tools !!!
-OPTION(OTB_USE_VISU_GUI "Generate Gui/Visu tools directory. If ON, find OpenGL and FLTK packages." ON)
-MARK_AS_ADVANCED(OTB_USE_VISU_GUI)
-
-SET(OTB_GLU_INCLUDE_PATH "")
-IF(OTB_USE_VISU_GUI)
-
-        #-------------------------------
-        # OpenGL Library
-        #-------------------------------
-        FIND_PACKAGE(OpenGL)
-
-        IF( NOT OPENGL_FOUND )
-                MESSAGE(FATAL_ERROR "Impossible to find OpenGL on your system.\nCannot build OTB Visu module without OpenGL library.\nInstall OpenGL on your system OR set OTB_USE_VISU_GUI to OFF to disable OTB Visu module generation !")
-	    ENDIF( NOT OPENGL_FOUND )
-        IF( NOT OPENGL_GLU_FOUND )
-                MESSAGE(FATAL_ERROR "Impossible to find GLU library on your system.\nCannot build OTB Visu module without GLU library.\nInstall GLU library on your system OR set OTB_USE_VISU_GUI to OFF to disable OTB Visu module generation !")
-        ENDIF( NOT OPENGL_GLU_FOUND )
-
-        IF(OPENGL_INCLUDE_DIR)
-                INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_DIR})
-        ENDIF(OPENGL_INCLUDE_DIR)
-
-	#-------------------------------
-        # Display images using textures using video card acceleration
-        #-------------------------------
-	OPTION(OTB_GL_USE_ACCEL "Use video card acceleration." OFF)
-	MARK_AS_ADVANCED(OTB_GL_USE_ACCEL)
-
-        #-------------------------------
-        # FLTK Library
-        #-------------------------------
-        
-        #OPTION(OTB_USE_EXTERNAL_FLTK "Use an outside build of FLTK." OFF)
-        
-        FIND_PACKAGE(FLTK)
-
-	# If an external fltk is found, do not provide the internal fltk choice
-	IF(FLTK_FOUND)
-       OPTION(OTB_USE_EXTERNAL_FLTK "Use an outside build of FLTK." ON)
-	ELSE(FLTK_FOUND)
-	   OPTION(OTB_USE_EXTERNAL_FLTK "Use an outside build of FLTK." OFF)
-	ENDIF(FLTK_FOUND)
-                         
-#        IF(FLTK_FOUND)
-#           SET(OTB_USE_EXTERNAL_FLTK ON)
-#        ELSE(FLTK_FOUND)
-#           SET(OTB_USE_EXTERNAL_FLTK OFF)
-#        ENDIF(FLTK_FOUND)
-
-        # Option for internal/external FLTK
-        MARK_AS_ADVANCED(OTB_USE_EXTERNAL_FLTK)
-
-        IF(OTB_USE_EXTERNAL_FLTK)
-
-                # Mingw Option doesn't exist in the FindFLTK.cmake default configuration file in CMake installationj directory.
-                # Copy  FLTK_PLATFORM_DEPENDENT_LIBS from FLTK CmakeList.txt
-                IF(MINGW)
-                    ADD_DEFINITIONS(-DWIN32)
-                    SET( FLTK_PLATFORM_DEPENDENT_LIBS ole32 uuid wsock32 gdi32 comdlg32)
-                ENDIF(MINGW)
-
-                IF(FLTK_FOUND)
-                    INCLUDE_DIRECTORIES(${FLTK_INCLUDE_DIR})
-                ELSE(FLTK_FOUND)
-                    MESSAGE(FATAL_ERROR
-	                        "Cannot build OTB project without FLTK.  Please set FLTK_DIR  or  set OTB_USE_VISU to OFF  or  set OTB_USE_EXTERNAL_FLTK OFF to use INTERNAL FLTK set on OTB/Utilities repository.")
-                ENDIF(FLTK_FOUND)
-
-        ELSE(OTB_USE_EXTERNAL_FLTK)
-                SET(FLTK_INCLUDE_DIR "")
-                SET(FLTK_LIBRARIES "")
-                SET(JPEG_INCLUDE_DIR ${JPEG_INCLUDE_DIRS})
-                SET( FLTK_PLATFORM_DEPENDENT_LIBS "")
-                INCLUDE(${OTB_BINARY_DIR}/Utilities/FLTK/FLTKConfig.cmake)
-
-        ENDIF(OTB_USE_EXTERNAL_FLTK)
-
-        SET(OTB_VISU_GUI_LIBRARIES "${FLTK_LIBRARIES};${OPENGL_LIBRARIES} ")
-        SET(FLTK_FLUID_EXECUTABLE ${FLUID_COMMAND})
-ENDIF(OTB_USE_VISU_GUI)
-
 #-------------------------------
 # CURL Library
 #-------------------------------
@@ -509,16 +425,22 @@ ENDIF(OTB_USE_PQXX)
 # Boost Library
 #-------------------------------
 SET (Boost_MINOR_VERSION 0)
-FIND_PACKAGE(Boost)
-IF(Boost_FOUND)
-  IF(NOT ${Boost_MINOR_VERSION} EQUAL 40)
-    OPTION(OTB_USE_EXTERNAL_BOOST "Use an outside build of Boost." ON)
-  ELSE(NOT ${Boost_MINOR_VERSION} EQUAL 40)
-    OPTION(OTB_USE_EXTERNAL_BOOST "Use an outside build of Boost." OFF)
-  ENDIF(NOT ${Boost_MINOR_VERSION} EQUAL 40)
-ELSE(Boost_FOUND)
-  OPTION(OTB_USE_EXTERNAL_BOOST "Use an outside build of Boost." OFF)
-ENDIF(Boost_FOUND)
+
+OPTION(OTB_USE_EXTERNAL_BOOST "Use an outside build of Boost." OFF)
+
+IF(OTB_USE_EXTERNAL_BOOST)
+  FIND_PACKAGE(Boost)
+  IF(Boost_FOUND)
+    IF( ${Boost_MINOR_VERSION} EQUAL 40)
+      MESSAGE(WARNING "Boost 1.40 not supported. Disabling OTB_USE_EXTERNAL_BOOST")
+      SET(OTB_USE_EXTERNAL_BOOST  OFF)
+    ENDIF(${Boost_MINOR_VERSION} EQUAL 40)
+  ELSE(Boost_FOUND)
+    MESSAGE(FATAL_ERROR
+                  "Cannot build OTB project without boost library.  Please set Boost directories or set OTB_USE_EXTERNAL_BOOST to OFF to use INTERNAL Boost set on OTB/Utilities repository.")
+  ENDIF(Boost_FOUND)
+ENDIF(OTB_USE_EXTERNAL_BOOST)
+
 # Option for internal/external BOOST
 MARK_AS_ADVANCED(OTB_USE_EXTERNAL_BOOST)
 
@@ -529,7 +451,6 @@ IF (OTB_USE_MAPNIK)
 ENDIF(OTB_USE_MAPNIK)
 
 IF(OTB_USE_EXTERNAL_BOOST)
-  FIND_PACKAGE(Boost)
 
   TRY_COMPILE(BOOST_IS_COMPLETE
   ${CMAKE_CURRENT_BINARY_DIR}/CMake
@@ -543,8 +464,6 @@ IF(OTB_USE_EXTERNAL_BOOST)
     MESSAGE(STATUS "Force the OTB_USE_EXTERNAL_BOOST value to OFF.")
     SET(OTB_USE_EXTERNAL_BOOST OFF CACHE BOOL  "Use an outside build of Boost." FORCE )
   ENDIF(BOOST_IS_COMPLETE)
-
-  INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
 ENDIF(OTB_USE_EXTERNAL_BOOST)
 
 #-------------------------------
@@ -697,6 +616,63 @@ IF(OTB_USE_EXTERNAL_GDAL)
   ENDIF(GDAL_HAS_OGR)
 ELSE(OTB_USE_EXTERNAL_GDAL)
 ENDIF(OTB_USE_EXTERNAL_GDAL)
+
+#-----------------------------------------------------------------------------
+# Option for generate Visu tools !!!
+OPTION(OTB_USE_VISU_GUI "Generate Gui/Visu tools directory. If ON, find OpenGL and FLTK packages." ON)
+MARK_AS_ADVANCED(OTB_USE_VISU_GUI)
+
+SET(OTB_GLU_INCLUDE_PATH "")
+IF(OTB_USE_VISU_GUI)
+
+        #-------------------------------
+        # OpenGL Library
+        #-------------------------------
+        FIND_PACKAGE(OpenGL)
+
+        IF( NOT OPENGL_FOUND )
+                MESSAGE(FATAL_ERROR "Impossible to find OpenGL on your system.\nCannot build OTB Visu module without OpenGL library.\nInstall OpenGL on your system OR set OTB_USE_VISU_GUI to OFF to disable OTB Visu module generation !")
+	    ENDIF( NOT OPENGL_FOUND )
+        IF( NOT OPENGL_GLU_FOUND )
+                MESSAGE(FATAL_ERROR "Impossible to find GLU library on your system.\nCannot build OTB Visu module without GLU library.\nInstall GLU library on your system OR set OTB_USE_VISU_GUI to OFF to disable OTB Visu module generation !")
+        ENDIF( NOT OPENGL_GLU_FOUND )
+
+        IF(OPENGL_INCLUDE_DIR)
+                INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_DIR})
+        ENDIF(OPENGL_INCLUDE_DIR)
+
+	#-------------------------------
+        # Display images using textures using video card acceleration
+        #-------------------------------
+	OPTION(OTB_GL_USE_ACCEL "Use video card acceleration." OFF)
+	MARK_AS_ADVANCED(OTB_GL_USE_ACCEL)
+
+        #-------------------------------
+        # FLTK Library
+        #-------------------------------
+        OPTION(OTB_USE_EXTERNAL_FLTK "Use an outside build of FLTK." OFF)
+
+	IF(OTB_USE_EXTERNAL_FLTK)
+        	FIND_PACKAGE(FLTK)
+		IF(NOT FLTK_FOUND)
+			MESSAGE(FATAL_ERROR
+                  "Cannot build OTB project without FLTK. Please set FLTK_DIR or set OTB_USE_EXTERNAL_FLTK OFF to use INTERNAL FLTK.")
+		ENDIF(NOT FLTK_FOUND)
+	ELSE(OTB_USE_EXTERNAL_FLTK)
+		# Same Set as ITK
+		SET(FLTK_SOURCE_DIR ${OTB_SOURCE_DIR}/Utilities/FLTK)
+		SET(FLTK_BINARY_DIR ${OTB_BINARY_DIR}/Utilities/FLTK)
+		# Additionnal variables needed by OTB_VISU_GUI_LIBRARIES and FLTK_FLUID_EXECUTABLE
+		SET(FLTK_LIBRARIES "fltk_images;fltk;fltk_gl;fltk_forms")
+		SET(FLUID_COMMAND fluid)
+		# FLTK CMake needs a variable called JPEG_INCLUDE_DIR
+		SET(JPEG_INCLUDE_DIR ${JPEG_INCLUDE_DIRS})
+        ENDIF(OTB_USE_EXTERNAL_FLTK)
+
+        SET(OTB_VISU_GUI_LIBRARIES "${FLTK_LIBRARIES};${OPENGL_LIBRARIES} ")
+        SET(FLTK_FLUID_EXECUTABLE ${FLUID_COMMAND})
+ENDIF(OTB_USE_VISU_GUI)
+
 
 #Experimental
 OPTION(OTB_USE_GETTEXT "Get Text Library." ON)

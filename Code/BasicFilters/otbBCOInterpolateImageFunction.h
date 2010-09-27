@@ -105,15 +105,14 @@ public:
    * calling the method. */
   virtual OutputType EvaluateAtContinuousIndex( const ContinuousIndexType & index ) const = 0;
   
+  /** Compute the BCO coefficients. */
+  virtual void EvaluateCoef( const ContinuousIndexType & index ) const;
+
 protected:
   BCOInterpolateImageFunctionBase();
   ~BCOInterpolateImageFunctionBase();
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  /** Compute the BCO coefficients. */
-  virtual void EvaluateCoef( const ContinuousIndexType & index );
-  virtual double GetBCOCoefX(unsigned int idx) const;
-  virtual double GetBCOCoefY(unsigned int idx) const;
-
+  
 private:
   BCOInterpolateImageFunctionBase( const Self& ); //purposely not implemented
   void operator=( const Self& ); //purposely not implemented
@@ -121,10 +120,7 @@ private:
   /** Used radius for the BCO */
   double                 m_Radius;
   /** Optimisation Coefficient */
-  double                 m_Alpha;
-  /** Used BCO coefficiet */   
-  CoefContainerType      m_BCOCoefX;
-  CoefContainerType      m_BCOCoefY;
+  double                 m_Alpha; 
 };
 
 
