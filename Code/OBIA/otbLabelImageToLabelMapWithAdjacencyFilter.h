@@ -22,7 +22,7 @@
 #define __otbLabelImageToLabelMapWithAdjacencyFilter_h
 
 #include "itkImageToImageFilter.h"
-#include "itkLabelMap.h"
+#include "otbLabelMapWithAdjacency.h"
 #include "itkLabelObject.h"
 
 namespace otb {
@@ -31,7 +31,7 @@ namespace otb {
  * \brief convert a labeled image to a label map with adjacency information.
  *
  */
-template<class TInputImage, class TOutputImage=itk::LabelMap< itk::LabelObject< typename TInputImage::PixelType, TInputImage::ImageDimension > > >
+template<class TInputImage, class TOutputImage=otb::LabelMapWithAdjacency< itk::LabelObject< typename TInputImage::PixelType, TInputImage::ImageDimension > > >
 class ITK_EXPORT LabelImageToLabelMapWithAdjacencyFilter : 
     public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
