@@ -50,6 +50,7 @@ int otbStreamingTraitsImage(int argc, char* argv[])
   TestInstanciate<StreamingTraits::LanczosInterpolationType>();
   TestInstanciate<StreamingTraits::BlackmanInterpolationType>();
   TestInstanciate<StreamingTraits::ProlateInterpolationType>();
+  TestInstanciate<StreamingTraits::BCOInterpolationType>();
 
   return EXIT_SUCCESS;
 }
@@ -64,6 +65,7 @@ int otbStreamingTraitsVectorImage(int argc, char* argv[])
   TestInstanciate<StreamingTraits::NearestNeighborInterpolationType>();
   TestInstanciate<StreamingTraits::LinearInterpolationType>();
   TestInstanciate<StreamingTraits::GaussianInterpolationType>();
+  TestInstanciate<StreamingTraits::BCOInterpolationType>();
 
   return EXIT_SUCCESS;
 }
