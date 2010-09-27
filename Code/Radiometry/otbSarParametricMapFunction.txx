@@ -166,7 +166,6 @@ SarParametricMapFunction<TInputImage, TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
   RealType result;
-  unsigned int pointId = 0;
   typename PointSetType::PixelType pointValue;
   
   result = itk::NumericTraits<RealType>::Zero;
