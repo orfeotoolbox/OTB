@@ -15,7 +15,7 @@
 // accomplish the translation. 
 //
 //*******************************************************************
-//  $Id: ossimOgcWktTranslator.cpp 18111 2010-09-22 11:55:37Z gpotts $
+//  $Id: ossimOgcWktTranslator.cpp 18120 2010-09-24 11:08:17Z gpotts $
 
 #include <cstdio>
 #include <gdal.h>
@@ -575,10 +575,7 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
    // ESH 11/2008: Check for geographic system when setting default units. 
    // If geographic, use degrees.
    //---
-
-   // Actually search only the "UNIT" child of the node PROJCS
-   // Several UNIT nodes can be present in the tree, but only the one
-   // necessary for the PROJCS is required.
+//   const char* units = OSRGetAttrValue( hSRS, "UNIT", 0 );
    const char* units = NULL;
    OGR_SRSNode* node = ((OGRSpatialReference *)hSRS)->GetRoot();
    int nbChild  = node->GetChildCount();
@@ -587,7 +584,7 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
       OGR_SRSNode* curChild = node->GetChild(i);
       if (strcmp(curChild->GetValue(), "UNIT") == 0)
       {
-        units = curChild->GetChild(0)->GetValue();
+         units = curChild->GetChild(0)->GetValue();
       }
    }
 
