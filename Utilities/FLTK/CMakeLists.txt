@@ -16,15 +16,6 @@ SET(FLTK_VERSION_FULL "${FLTK_VERSION}.${FLTK_VERSION_PATCH}")
 
 SET(FLTK_LIBRARIES "fltk_images;fltk;fltk_gl;fltk_forms" CACHE INTERNAL "Variable used by OTB to link against FLTK")
 
-# Executables and libraries should just go to bin
-#OTB Modifications
-SET(EXECUTABLE_OUTPUT_PATH "${OTB_BINARY_DIR}/bin" CACHE INTERNAL 
-  "Where to put the executables for FLTK"
-  )
-SET(LIBRARY_OUTPUT_PATH "${OTB_BINARY_DIR}/bin" CACHE INTERNAL 
-  "Where to put the libraries for FLTK"
-  )
-
 # Allow building shared libraries
 OPTION(BUILD_SHARED_LIBS "Build FLTK as a shared library" OFF)
 
