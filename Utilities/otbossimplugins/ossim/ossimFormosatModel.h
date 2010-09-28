@@ -17,6 +17,7 @@
 #include <iostream>
 using namespace std;
 
+#include <ossimPluginConstants.h>
 #include <ossim/projection/ossimSensorModel.h>
 #include <ossim/base/ossimIpt.h>
 #include <ossim/base/ossimFilename.h>
@@ -28,7 +29,9 @@ using namespace std;
 
 class ossimFormosatDimapSupportData;
 
-class OSSIMDLLEXPORT ossimFormosatModel : public ossimSensorModel
+namespace ossimplugins
+{
+class OSSIM_PLUGINS_DLL ossimFormosatModel : public ossimSensorModel
 {
 public:
    /*!
@@ -157,5 +160,5 @@ protected:
 
 TYPE_DATA
 };
-
+}
 #endif /* #ifndef ossimFormosatModel_HEADER */

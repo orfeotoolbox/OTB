@@ -170,18 +170,20 @@ ossim2dTo2dTransform* ossimImageGeometryFactory::createTransformFromNitf(ossimNi
       ossimNitfIchipbTag* ichipb = PTR_CAST(ossimNitfIchipbTag, tag.get());
       if (ichipb)
       {
-         const ossimRefPtr<ossimNitfRegisteredTag> blocka =
-         hdr->getTagData(ossimString("BLOCKA"));
-         const ossimRefPtr<ossimNitfRegisteredTag> rpc00a =
-         hdr->getTagData(ossimString("RPC00A"));              
-         const ossimRefPtr<ossimNitfRegisteredTag> rpc00b =
-         hdr->getTagData(ossimString("RPC00B"));
+//         const ossimRefPtr<ossimNitfRegisteredTag> blocka =
+//         hdr->getTagData(ossimString("BLOCKA"));
+//         const ossimRefPtr<ossimNitfRegisteredTag> rpc00a =
+//         hdr->getTagData(ossimString("RPC00A"));              
+//         const ossimRefPtr<ossimNitfRegisteredTag> rpc00b =
+//         hdr->getTagData(ossimString("RPC00B"));
          
          //---
          // If any of these tags are present we will use the sub image from
          // the ichipb tag.
          //---
-         if ( blocka.get() || rpc00a.get() || rpc00b.get() )
+//         if ( blocka.get() || rpc00a.get() || rpc00b.get() )
+         
+         // ************************* THERE ARE PROBLEMS NOT SETTING THIS AT SITE.  GO AHEAD AND ALWAYS INIT THE SHIFT
          {
             result = ichipb->newTransform();
          }

@@ -9,7 +9,7 @@
 // Contains definition of class ossimSpotDimapSupportData.
 //
 //*****************************************************************************
-// $Id: ossimSpotDimapSupportData.cpp 17814 2010-08-03 12:44:02Z dburken $
+// $Id: ossimSpotDimapSupportData.cpp 18140 2010-09-27 11:17:57Z gpotts $
 
 
 #include <iostream>

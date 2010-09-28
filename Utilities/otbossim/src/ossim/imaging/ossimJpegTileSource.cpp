@@ -8,13 +8,15 @@
 //
 // Contains class definition for JpegTileSource.
 //*******************************************************************
-//  $Id: ossimJpegTileSource.cpp 16860 2010-03-11 15:28:09Z gpotts $
+//  $Id: ossimJpegTileSource.cpp 18145 2010-09-27 14:22:32Z dburken $
+
 #if defined(__BORLANDC__)
-#include <iostream>
+#  include <iostream>
 using std::size_t;
-#include <stdlib.h>
-#include <stdio.h>
+#  include <stdlib.h>
+#  include <stdio.h>
 #endif
+
 extern "C"
 {
 #include <stdio.h>
@@ -49,58 +51,59 @@ static ossimTrace traceDebug("ossimJpegTileSource:degug");
 class ossimJpegTileSource::PrivateData
 {
 public:
-	PrivateData()
-		:theCinfo(),
-		theJerr()
-	{
-
-	}
-	virtual ~PrivateData()
-	{
-		clear();
-	}
-	void clear()
-	{
-		jpeg_destroy_decompress( &theCinfo );
-	}
+   PrivateData()
+      :theCinfo(),
+       theJerr()
+   {
+      
+   }
+   virtual ~PrivateData()
+   {
+      clear();
+   }
+   void clear()
+   {
+      jpeg_destroy_decompress( &theCinfo );
+   }
    struct jpeg_decompress_struct theCinfo;
    struct jpeg_error_mgr         theJerr;
 };
+
 //*******************************************************************
 // Public Constructor:
 //*******************************************************************
 ossimJpegTileSource::ossimJpegTileSource()
    :
       ossimImageHandler(),
-      theTile(NULL),
-      theCacheTile(NULL),
-      theLineBuffer(NULL),
+      theTile(0),
+      theCacheTile(0),
+      theLineBuffer(0),
       theFilePtr(0),
       theBufferRect(0, 0, 0, 0),
       theImageRect(0, 0, 0, 0),
       theNumberOfBands(0),
       theCacheSize	(0),
-	  thePrivateData(0),
+      thePrivateData(0),
       theCacheId(-1)
 {
 }
 
 //*******************************************************************
-// Public Constructor:
-//*******************************************************************
-ossimJpegTileSource::ossimJpegTileSource(const ossimKeywordlist& kwl,
-                               const char* prefix)
+  // Public Constructor:
+  //*******************************************************************
+  ossimJpegTileSource::ossimJpegTileSource(const ossimKeywordlist& kwl,
+                                           const char* prefix)
    :
       ossimImageHandler(),
-      theTile(NULL),
-      theCacheTile(NULL),
-      theLineBuffer(NULL),
+      theTile(0),
+      theCacheTile(0),
+      theLineBuffer(0),
       theFilePtr(0),
       theBufferRect(0, 0, 0, 0),
       theImageRect(0, 0, 0, 0),
       theNumberOfBands(0),
       theCacheSize	(0),
-	  thePrivateData(0),
+      thePrivateData(0),
       theCacheId(-1)
 {
    if (loadState(kwl, prefix) == false)
@@ -115,15 +118,15 @@ ossimJpegTileSource::ossimJpegTileSource(const ossimKeywordlist& kwl,
 ossimJpegTileSource::ossimJpegTileSource(const char* jpeg_file)
    :
       ossimImageHandler(),
-      theTile(NULL),
-      theCacheTile(NULL),
-      theLineBuffer(NULL),
+      theTile(0),
+      theCacheTile(0),
+      theLineBuffer(0),
       theFilePtr(0),
       theBufferRect(0, 0, 0, 0),
       theImageRect(0, 0, 0, 0),
       theNumberOfBands(0),
       theCacheSize(0),
-	  thePrivateData(0),
+      thePrivateData(0),
       theCacheId(-1)
 {
    static const char MODULE[]
@@ -152,13 +155,13 @@ void ossimJpegTileSource::destroy()
 {
    ossimAppFixedTileCache::instance()->deleteCache(theCacheId);
 
-   theTile      = NULL;
-   theCacheTile = NULL;
+   theTile      = 0;
+   theCacheTile = 0;
 
    if (theLineBuffer)
    {
       delete [] theLineBuffer;
-      theLineBuffer = NULL;
+      theLineBuffer = 0;
    }
    if (theFilePtr)
    {
@@ -167,8 +170,8 @@ void ossimJpegTileSource::destroy()
    }
    if(thePrivateData)
    {
-	   delete thePrivateData;
-	   thePrivateData = 0;
+      delete thePrivateData;
+      thePrivateData = 0;
    }
 }
 

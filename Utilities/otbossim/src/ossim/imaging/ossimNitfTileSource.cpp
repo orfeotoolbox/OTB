@@ -9,7 +9,7 @@
 // Description:  Contains class definition for ossimNitfTileSource.
 // 
 //*******************************************************************
-//  $Id: ossimNitfTileSource.cpp 17978 2010-08-24 16:17:00Z dburken $
+//  $Id: ossimNitfTileSource.cpp 18148 2010-09-27 15:24:28Z gpotts $
 #include <jerror.h>
 #include <fstream>
 
@@ -50,7 +50,7 @@
 RTTI_DEF1_INST(ossimNitfTileSource, "ossimNitfTileSource", ossimImageHandler)
 
 #ifdef OSSIM_ID_ENABLED
-   static const char OSSIM_ID[] = "$Id: ossimNitfTileSource.cpp 17978 2010-08-24 16:17:00Z dburken $";
+   static const char OSSIM_ID[] = "$Id: ossimNitfTileSource.cpp 18148 2010-09-27 15:24:28Z gpotts $";
 #endif
    
 //---
@@ -929,18 +929,19 @@ ossimImageGeometry* ossimNitfTileSource::getImageGeometry()
                   PTR_CAST(ossimNitfIchipbTag, tag.get());
                if (ichipb)
                {
-                  const ossimRefPtr<ossimNitfRegisteredTag> blocka =
-                     hdr->getTagData(ossimString("BLOCKA"));
-                  const ossimRefPtr<ossimNitfRegisteredTag> rpc00a =
-                     hdr->getTagData(ossimString("RPC00A"));              
-                  const ossimRefPtr<ossimNitfRegisteredTag> rpc00b =
-                     hdr->getTagData(ossimString("RPC00B"));
+//                  const ossimRefPtr<ossimNitfRegisteredTag> blocka =
+//                     hdr->getTagData(ossimString("BLOCKA"));
+//                  const ossimRefPtr<ossimNitfRegisteredTag> rpc00a =
+//                     hdr->getTagData(ossimString("RPC00A"));              
+//                  const ossimRefPtr<ossimNitfRegisteredTag> rpc00b =
+//                     hdr->getTagData(ossimString("RPC00B"));
                   
                   //---
                   // If any of these tags are present we will use the sub
                   // image from the ichipb tag.
                   //---
-                  if ( blocka.get() || rpc00a.get() || rpc00b.get() )
+//                  if ( blocka.get() || rpc00a.get() || rpc00b.get() )
+                  // ************************* THERE ARE PROBLEMS NOT SETTING THIS AT SITE.  GO AHEAD AND ALWAYS INIT THE SHIFT
                   {
                      transform = ichipb->newTransform();
                   }

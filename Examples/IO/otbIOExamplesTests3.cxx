@@ -26,14 +26,13 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(ExtractROITest);
-  REGISTER_TEST(DEMToImageGeneratorTest);
+#if defined(ITK_USE_REVIEW)
+  REGISTER_TEST(LidarToImageExampleTest);
+#endif
 }
 
+#if defined(ITK_USE_REVIEW)
 #undef main
-#define main ExtractROITest
-#include "ExtractROI.cxx"
-
-#undef main
-#define main DEMToImageGeneratorTest
-#include "DEMToImageGenerator.cxx"
+#define main LidarToImageExampleTest
+#include "LidarToImageExample.cxx"
+#endif

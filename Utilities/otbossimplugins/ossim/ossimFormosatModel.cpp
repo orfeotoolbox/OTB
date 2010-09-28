@@ -29,8 +29,10 @@ using namespace std;
 
 #include <ossimFormosatDimapSupportData.h>
 
+namespace ossimplugins
+{
 RTTI_DEF1(ossimFormosatModel, "ossimFormosatModel", ossimSensorModel);
-
+}
 
 //---
 // Define Trace flags for use within this file:
@@ -65,7 +67,7 @@ static const ossim_float64 SIGMA[] = { 0.0001,   // degrees
                                        0.00005,  // delta degrees
                                        0.0001 }; // percent
 
-ossimFormosatModel::ossimFormosatModel()
+ossimplugins::ossimFormosatModel::ossimFormosatModel()
    :
    ossimSensorModel      (),
    theSupportData        (NULL),
@@ -89,7 +91,7 @@ ossimFormosatModel::ossimFormosatModel()
    initAdjustableParameters();
 }
 
-ossimFormosatModel::ossimFormosatModel(ossimFormosatDimapSupportData* sd)
+ossimplugins::ossimFormosatModel::ossimFormosatModel(ossimFormosatDimapSupportData* sd)
    :
    ossimSensorModel      (),
    theSupportData        (sd),
@@ -136,7 +138,7 @@ ossimFormosatModel::ossimFormosatModel(ossimFormosatDimapSupportData* sd)
 //  DESTRUCTOR: ~ossimFormosatModel()
 //
 //*****************************************************************************
-ossimFormosatModel::~ossimFormosatModel()
+ossimplugins::ossimFormosatModel::~ossimFormosatModel()
 {
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG DESTRUCTOR: ~ossimFormosatModel(): entering..." << std::endl;
 
@@ -145,7 +147,7 @@ ossimFormosatModel::~ossimFormosatModel()
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG DESTRUCTOR: ~ossimFormosatModel(): returning..." << std::endl;
 }
 
-ossimFormosatModel::ossimFormosatModel(const ossimFormosatModel& rhs)
+ossimplugins::ossimFormosatModel::ossimFormosatModel(const ossimFormosatModel& rhs)
    :ossimSensorModel(rhs)
 {
    if(rhs.theSupportData.valid())
@@ -157,7 +159,7 @@ ossimFormosatModel::ossimFormosatModel(const ossimFormosatModel& rhs)
 }
 
 
-void ossimFormosatModel::computeSatToOrbRotation(NEWMAT::Matrix& result, ossim_float64 t)const
+void ossimplugins::ossimFormosatModel::computeSatToOrbRotation(NEWMAT::Matrix& result, ossim_float64 t)const
 {
    if (traceExec())
    {
@@ -205,7 +207,7 @@ void ossimFormosatModel::computeSatToOrbRotation(NEWMAT::Matrix& result, ossim_f
 //*****************************************************************************
 //  METHOD
 //*****************************************************************************
-void ossimFormosatModel::computeSatToOrbRotation(ossim_float64 t)const
+void ossimplugins::ossimFormosatModel::computeSatToOrbRotation(ossim_float64 t)const
 {
    if (traceExec())
    {
@@ -257,7 +259,7 @@ void ossimFormosatModel::computeSatToOrbRotation(ossim_float64 t)const
 //  array.
 //
 //*****************************************************************************
-void ossimFormosatModel::updateModel()
+void ossimplugins::ossimFormosatModel::updateModel()
 {
    clearErrorStatus();
 
@@ -308,7 +310,7 @@ void ossimFormosatModel::updateModel()
    }
 }
 
-void ossimFormosatModel::initAdjustableParameters()
+void ossimplugins::ossimFormosatModel::initAdjustableParameters()
 {
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimFormosatModel::initAdjustableParameters(): entering..." << std::endl;
 
@@ -333,7 +335,7 @@ void ossimFormosatModel::initAdjustableParameters()
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimFormosatModel::initAdjustableParameters(): returning..." << std::endl;
 }
 
-void ossimFormosatModel::loadSupportData()
+void ossimplugins::ossimFormosatModel::loadSupportData()
 {
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "ossimFormosatModel::loadSupportData(): entering..." << std::endl;
 
@@ -439,12 +441,12 @@ void ossimFormosatModel::loadSupportData()
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimFormosatModel::loadSupportData(): returning..." << std::endl;
 }
 
-ossimObject* ossimFormosatModel::dup() const
+ossimObject* ossimplugins::ossimFormosatModel::dup() const
 {
    return new ossimFormosatModel(*this);
 }
 
-std::ostream& ossimFormosatModel::print(std::ostream& out) const
+std::ostream& ossimplugins::ossimFormosatModel::print(std::ostream& out) const
 {
    // Capture stream flags since we are going to mess with them.
    std::ios_base::fmtflags f = out.flags();
@@ -479,7 +481,7 @@ std::ostream& ossimFormosatModel::print(std::ostream& out) const
    return ossimSensorModel::print(out);
 }
 
-bool ossimFormosatModel::saveState(ossimKeywordlist& kwl,
+bool ossimplugins::ossimFormosatModel::saveState(ossimKeywordlist& kwl,
                           const char* prefix) const
 {
   if(theSupportData.valid())
@@ -495,7 +497,7 @@ bool ossimFormosatModel::saveState(ossimKeywordlist& kwl,
    return ossimSensorModel::saveState(kwl, prefix);
 }
 
-bool ossimFormosatModel::loadState(const ossimKeywordlist& kwl,
+bool ossimplugins::ossimFormosatModel::loadState(const ossimKeywordlist& kwl,
                                 const char* prefix)
 {
    ossimString supportPrefix = ossimString(prefix) + "support_data.";
@@ -523,7 +525,7 @@ bool ossimFormosatModel::loadState(const ossimKeywordlist& kwl,
    return (getErrorStatus()==ossimErrorCodes::OSSIM_OK);
 }
 
-void ossimFormosatModel::imagingRay(const ossimDpt& image_point,
+void ossimplugins::ossimFormosatModel::imagingRay(const ossimDpt& image_point,
                                  ossimEcefRay&   image_ray) const
 {
    bool runtime_dbflag = 0;
@@ -639,7 +641,7 @@ void ossimFormosatModel::imagingRay(const ossimDpt& image_point,
     }
 }
 
-void ossimFormosatModel::lineSampleHeightToWorld(const ossimDpt& image_point,
+void ossimplugins::ossimFormosatModel::lineSampleHeightToWorld(const ossimDpt& image_point,
                                               const ossim_float64& heightEllipsoid,
                                               ossimGpt& worldPoint) const
 {
@@ -666,7 +668,7 @@ void ossimFormosatModel::lineSampleHeightToWorld(const ossimDpt& image_point,
    worldPoint = ossimGpt(Pecf);
 }
 
-// ossimDpt ossimFormosatModel::extrapolate (const ossimGpt& gp) const
+// ossimDpt ossimplugins::ossimFormosatModel::extrapolate (const ossimGpt& gp) const
 // {
 //     ossimDpt temp;
 
@@ -682,7 +684,7 @@ void ossimFormosatModel::lineSampleHeightToWorld(const ossimDpt& image_point,
 
 // }
 
-// ossimGpt ossimFormosatModel::extrapolate (const ossimDpt& ip,
+// ossimGpt ossimplugins::ossimFormosatModel::extrapolate (const ossimDpt& ip,
 // 				       const double& height) const
 // {
 //   return ossimGpt(ossim::nan(), ossim::nan(), ossim::nan(), 0);
@@ -696,7 +698,7 @@ void ossimFormosatModel::lineSampleHeightToWorld(const ossimDpt& image_point,
 // }
 
 bool
-ossimFormosatModel::setupOptimizer(const ossimString& init_file)
+ossimplugins::ossimFormosatModel::setupOptimizer(const ossimString& init_file)
 {
    ossimFilename FormosatTest = init_file;
    ossimFilename geomFile = init_file;
@@ -747,7 +749,7 @@ ossimFormosatModel::setupOptimizer(const ossimString& init_file)
 }
 
 bool
-ossimFormosatModel::initFromMetadata(ossimFormosatDimapSupportData* sd)
+ossimplugins::ossimFormosatModel::initFromMetadata(ossimFormosatDimapSupportData* sd)
 {
    // init parms
    theSupportData        = sd;
@@ -773,7 +775,7 @@ ossimFormosatModel::initFromMetadata(ossimFormosatDimapSupportData* sd)
    loadSupportData();
    if (getErrorStatus() != ossimErrorCodes::OSSIM_OK)
    {
-      if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimFormosatModel::initFromMetadata(dimap_file): returning with error..." << std::endl;
+      if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimplugins::ossimFormosatModel::initFromMetadata(dimap_file): returning with error..." << std::endl;
       return false;
    }
 

@@ -226,4 +226,122 @@ std::ostream& ossimNitfCsexraTag::print(
    return out;
 }
 
-  
+ossimString ossimNitfCsexraTag::getSensor() const
+{
+   return ossimString(theSensor);
+}
+   
+ossimString ossimNitfCsexraTag::getTimeFirstLineImage() const
+{
+   return ossimString(theTileFirstLine);
+}
+   
+ossimString ossimNitfCsexraTag::getTimeImageDuration() const
+{
+   return ossimString(theImageTimeDuration);
+}
+   
+ossimString ossimNitfCsexraTag::getMaxGsd() const
+{
+   return ossimString(theMaxGsd);
+}
+   
+ossimString ossimNitfCsexraTag::getAlongScanGsd() const
+{
+   return ossimString(theAlongScanGsd);
+}
+   
+ossimString ossimNitfCsexraTag::getCrossScanGsd() const
+{
+   return ossimString(theCrossScanGsd);
+}
+   
+ossimString ossimNitfCsexraTag::getGeoMeanGsd() const
+{
+   return ossimString(theGeoMeanGsd);
+}
+   
+ossimString ossimNitfCsexraTag::getAlongScanVerticalGsd() const
+{
+   return ossimString(theAlongScanVertGsd);
+}
+   
+ossimString ossimNitfCsexraTag::getCrossScanVerticalGsd() const
+{
+   return ossimString(theCrossScanVertGsd);
+}
+
+ossimString ossimNitfCsexraTag::getGeoMeanVerticalGsd() const
+{
+   return ossimString(theGeoMeanVertGsd);
+}
+
+ossimString ossimNitfCsexraTag::getGeoBetaAngle() const
+{
+   return ossimString(theGeoBetaAngle);
+}
+
+ossimString ossimNitfCsexraTag::getDynamicRange() const
+{
+   return ossimString(theDynamicRange);
+}
+   
+ossimString ossimNitfCsexraTag::getNumLines() const
+{
+   return ossimString(theLine);
+}
+   
+ossimString ossimNitfCsexraTag::getNumSamples() const
+{
+   return ossimString(theSamples);
+}
+   
+ossimString ossimNitfCsexraTag::getAngleToNorth() const
+{
+   return ossimString(theAngleToNorth);
+}
+
+ossimString ossimNitfCsexraTag::getObliquityAngle() const
+{
+   return ossimString(theObliquityAngle);
+}
+
+ossimString ossimNitfCsexraTag::getAzimuthOfObliquity() const
+{
+   return ossimString(theAzOfObliquity);
+}
+   
+ossimString ossimNitfCsexraTag::getGroundCover() const
+{
+   return ossimString(theGrdCover);
+}
+
+ossimString ossimNitfCsexraTag::getSnowDepth() const
+{
+   return ossimString(theSnowDepthCategory);
+}
+   
+ossimString ossimNitfCsexraTag::getSunAzimuth() const
+{
+   return ossimString(theSunAzimuth);
+}
+
+ossimString ossimNitfCsexraTag::getSunElevation() const
+{
+   return ossimString(theSunElevation);
+}
+
+ossimString ossimNitfCsexraTag::getPredictedNiirs() const
+{
+   return ossimString(thePredictedNiirs);
+}
+   
+ossimString ossimNitfCsexraTag::getCE90() const
+{
+   return ossimString(theCircularError);
+}
+
+ossimString ossimNitfCsexraTag::getLE90() const
+{
+   return ossimString(theLinearError);
+}
