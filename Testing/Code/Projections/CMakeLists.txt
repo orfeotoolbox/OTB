@@ -251,6 +251,26 @@ FOREACH( file ${SARSENSORMODEL_TYPES})
   SET(sharp_regexp "([0-9A-Za-z_]*)[ ]*/[ ]*(.*)")
   STRING(REGEX REPLACE "${sharp_regexp}" "\\1" sensor_name "${file}")
   # Tests
+	ADD_TEST(prTvForwardSensorModel_${sensor_name} ${PROJECTIONS_TESTS1}
+	  --compare-n-images ${NOTOL} 2
+	         ${BASELINE}/prTvForwardSensorModelGridX_${sensor_name}.tif
+	         ${TEMP}/prTvForwardSensorModelGridX_${sensor_name}.tif
+	         ${BASELINE}/prTvForwardSensorModelGridY_${sensor_name}.tif
+	         ${TEMP}/prTvForwardSensorModelGridY_${sensor_name}.tif
+    	otbForwardSensorModelGrid
+    		${LARGEINPUT}/${file}
+         	${TEMP}/prTvForwardSensorModelGridX_${sensor_name}.tif
+         	${TEMP}/prTvForwardSensorModelGridY_${sensor_name}.tif
+         	10 10
+		)
+ENDFOREACH( file ${SARSENSORMODEL_TYPES})
+
+
+FOREACH( file ${SARSENSORMODEL_TYPES})
+  # Get the sensor name 
+  SET(sharp_regexp "([0-9A-Za-z_]*)[ ]*/[ ]*(.*)")
+  STRING(REGEX REPLACE "${sharp_regexp}" "\\1" sensor_name "${file}")
+  # Tests
 	ADD_TEST(prTvSensorModelGrid_${sensor_name} ${PROJECTIONS_TESTS1}
 	  --compare-n-images ${NOTOL} 2
 	         ${BASELINE}/prTvSensorModelGridDeltaX_${sensor_name}.tif
@@ -700,6 +720,7 @@ otbCreateInverseForwardSensorModel.cxx
 otbRegionProjectionResampler.cxx
 otbSensorModel.cxx
 otbSensorModelGrid.cxx
+otbForwardSensorModelGrid.cxx
 )
 
 SET(Projections_SRCS2

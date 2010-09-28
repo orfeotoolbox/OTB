@@ -38,4 +38,5 @@ void RegisterTests()
   REGISTER_TEST(otbRegionProjectionResampler);
   REGISTER_TEST(otbSensorModel);
   REGISTER_TEST(otbSensorModelGrid);
+  REGISTER_TEST(otbForwardSensorModelGrid);
 }
