@@ -290,6 +290,12 @@ unsigned int StreamingTraits<TImage>
     otbMsgDevMacro(<< "Blackman Windowed Interpolator");
     neededRadius = dynamic_cast<const BlackmanInterpolationType *>(interpolator)->GetRadius();
     }
+  else if (className == "BCOInterpolateImageFunction")
+    {
+    otbMsgDevMacro(<< "BCO Interpolator");
+    neededRadius = dynamic_cast<const BCOInterpolationType *>(interpolator)->GetRadius();
+    }
+ 
 
   /*else if (className == "WindowedSincInterpolateImageFunction")
   {
@@ -333,6 +339,11 @@ unsigned int StreamingTraits< otb::VectorImage<TPixel,VImageDimension> >
     {
     otbMsgDevMacro(<< "Gaussian Windowed Interpolator");
     neededRadius = dynamic_cast<const GaussianInterpolationType *>(interpolator)->GetRadius();
+    }
+  else if (className == "BCOInterpolateImageFunction")
+    {
+    otbMsgDevMacro(<< "BCO Interpolator");
+    neededRadius = dynamic_cast<const BCOInterpolationType *>(interpolator)->GetRadius();
     }
 
   /*else if (className == "WindowedSincInterpolateImageFunction")

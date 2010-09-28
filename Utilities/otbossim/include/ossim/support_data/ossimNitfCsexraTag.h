@@ -55,6 +55,151 @@ public:
    virtual std::ostream& print(std::ostream& out,
                                const std::string& prefix) const;
    
+   /**
+    * @brief Get the SENSOR field.
+    * @return The SENSOR field as a string.
+    */
+   ossimString getSensor() const;
+   
+   /**
+    * @brief Get the TIME_FIRST_LINE_IMAGE field.
+    * @return The TIME_FIRST_LINE_IMAGE field as a string.
+    */
+   ossimString getTimeFirstLineImage() const;
+   
+   /**
+    * @brief Get the TIME_IMAGE_DURATION field.
+    * @return The TIME_IMAGE_DURATION field as a string.
+    */
+   ossimString getTimeImageDuration() const;
+   
+   /**
+    * @brief Get the MAX_GSDfield.
+    * @return The MAX_GSD field as a string.
+    */
+   ossimString getMaxGsd() const;
+   
+   /**
+    * @brief Get the ALONG_SCAN_GSD field.
+    * @return The ALONG_SCAN_GSD field as a string.
+    */
+   ossimString getAlongScanGsd() const;
+   
+   /**
+    * @brief Get the CROSS_SCAN_GSD field.
+    * @return TheCROSS_SCAN_GSD field as a string.
+    */
+   ossimString getCrossScanGsd() const;
+   
+   /**
+    * @brief Get the GEO_MEAN_GSD field.
+    * @return The GEO_MEAN_GSD field as a string.
+    */
+   ossimString getGeoMeanGsd() const;
+   
+   /**
+    * @brief Get the A_S_VERT_GSD field.
+    * @return The A_S_VERT_GSD field as a string.
+    */
+   ossimString getAlongScanVerticalGsd() const;
+   
+   /**
+    * @brief Get the C_S_VERT_GSD field.
+    * @return The C_S_VERT_GSD field as a string.
+    */
+   ossimString getCrossScanVerticalGsd() const;
+
+   /**
+    * @brief Get the GEO_MEAN_VERT_GSD field.
+    * @return The GEO_MEAN_VERT_GSD field as a string.
+    */
+   ossimString getGeoMeanVerticalGsd() const;
+   
+   /**
+    * @brief Get the GEO_BETA_ANGLEfield.
+    * @return The GEO_BETA_ANGLE field as a string.
+    */
+   ossimString getGeoBetaAngle() const;
+
+   /**
+    * @brief Get the DYNAMIC_RANGE field.
+    * @return The DYNAMIC_RANGE field as a string.
+    */
+   ossimString getDynamicRange() const;
+   
+   /**
+    * @brief Get the NUM_LINES field.
+    * @return The NUM_LINES field as a string.
+    */
+   ossimString getNumLines() const;
+   
+   
+   /**
+    * @brief Get the NUM_SAMPLES field.
+    * @return The NUM_SAMPLES field as a string.
+    */
+   ossimString getNumSamples() const;
+   
+   /**
+    * @brief Get the ANGLE_TO_NORTH field.
+    * @return The ANGLE_TO_NORTH field as a string.
+    */
+   ossimString getAngleToNorth() const;
+   
+   /**
+    * @brief Get the OBLIQUITY_ANGLE field.
+    * @return The OBLIQUITY_ANGLE field as a string.
+    */
+   ossimString getObliquityAngle() const;
+
+   /**
+    * @brief Get the AZ_OF_OBLIQUITY field.
+    * @return The AZ_OF_OBLIQUITY field as a string.
+    */
+   ossimString getAzimuthOfObliquity() const;
+   
+   /**
+    * @brief Get the GRD_COVER field.
+    * @return The GRD_COVER field as a string.
+    */
+   ossimString getGroundCover() const;
+
+   /**
+    * @brief Get the SNOW_DEPTH_CAT field.
+    * @return The SNOW_DEPTH_CAT field as a string.
+    */
+   ossimString getSnowDepth() const;
+   
+   /**
+    * @brief Get the SUN_AZIMUTH field.
+    * @return The SUN_AZIMUTH field as a string.
+    */
+   ossimString getSunAzimuth() const;
+
+   /**
+    * @brief Get the SUN_ELEVATION field.
+    * @return The SUN_ELEVATION field as a string.
+    */
+   ossimString getSunElevation() const;
+
+   /**
+    * @brief Get the PREDICTED_NIIRS field.
+    * @return The PREDICTED_NIIRS field as a string.
+    */
+   ossimString getPredictedNiirs() const;
+   
+   /**
+    * @brief Get the CIRCL_ERR field.
+    * @return The CIRCL_ERR field as a string.
+    */
+   ossimString getCE90() const;
+
+   /**
+    * @brief Get the LINEAR_ERR field.
+    * @return The LINEAR_ERR field as a string.
+    */
+   ossimString getLE90() const;
+
 protected:
 
    /**

@@ -32,6 +32,7 @@
 #include "otbWindowedSincInterpolateImageWelchFunction.h"
 #include "otbWindowedSincInterpolateImageLanczosFunction.h"
 #include "otbWindowedSincInterpolateImageBlackmanFunction.h"
+#include "otbBCOInterpolateImageFunction.h"
 
 #include "otbProlateInterpolateImageFunction.h"
 
@@ -151,6 +152,7 @@ public:
   typedef WindowedSincInterpolateImageLanczosFunction<ImageType>          LanczosInterpolationType;
   typedef WindowedSincInterpolateImageBlackmanFunction<ImageType>         BlackmanInterpolationType;
   typedef ProlateInterpolateImageFunction<ImageType>                      ProlateInterpolationType;
+  typedef BCOInterpolateImageFunction<ImageType>                          BCOInterpolationType;
 
   static unsigned int CalculateNeededRadiusForInterpolator(const InterpolationType* interpolator);
 };
@@ -195,6 +197,8 @@ public:
 
   // OTB Interpolators (supported for otb::VectorImage)
   typedef WindowedSincInterpolateImageGaussianFunction<ImageType>         GaussianInterpolationType;
+  typedef BCOInterpolateImageFunction<ImageType>                          BCOInterpolationType;
+
   //typedef WindowedSincInterpolateImageCosineFunction<ImageType>        CosineInterpolationType;
   //typedef WindowedSincInterpolateImageHammingFunction<ImageType>       HammingInterpolationType;
   //typedef WindowedSincInterpolateImageWelchFunction<ImageType>         WelchInterpolationType;

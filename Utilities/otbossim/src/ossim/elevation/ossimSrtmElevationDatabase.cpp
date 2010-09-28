@@ -204,38 +204,4 @@ ossimSrtmElevationDatabase::createCell(const ossimGpt& gpt)
   }
 
   return result;
-
-#if 0
-   ossimRefPtr<ossimElevCellHandler> result = 0;
-   ossim_uint64 id = createId(gpt);
-   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_cacheMapMutex);
-   CellMap::iterator iter = m_cacheMap.find(id);
-   
-   if(iter != m_cacheMap.end())
-   {
-      iter->second->updateTimestamp();
-      result = iter->second->m_handler.get();
-   }
-   else
-   {
-      ossimFilename f;
-      createFullPath(f, gpt);
-
-      if(f.exists())
-      {
-         ossimRefPtr<ossimSrtmHandler> h = new ossimSrtmHandler();
-         if (h->open(f, m_memoryMapCellsFlag))
-         {
-            m_cacheMap.insert(std::make_pair(id, new CellInfo(createId(gpt), h.get())));
-            result = h.get();
-            if(m_cacheMap.size() > m_maxOpenCells)
-            {
-               flushCacheToMinOpenCells();
-            }
-         }
-      }
-   }
-   
-   return result;
-#endif
 }
