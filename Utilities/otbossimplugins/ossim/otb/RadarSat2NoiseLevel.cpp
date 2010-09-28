@@ -134,6 +134,7 @@ bool RadarSat2NoiseLevel::loadState(const ossimKeywordlist& kwl, const char* pre
 {
    static const char MODULE[] = "RadarSat2NoiseLevel::loadState";
 
+   bool         result = true;
    ossimString  s;
    const char*  lookup = 0;
 
@@ -302,7 +303,7 @@ std::ostream& RadarSat2NoiseLevel::print(std::ostream& out) const
        << "\n RadarSat2NoiseLevel class data members:\n";
 
    const char* prefix = 0;
-   //ossimKeywordlist kwl;
+   ossimKeywordlist kwl;
    ossimString pfx;
 
    /* TODO Add print method*/
