@@ -305,6 +305,214 @@ IF(NOT BUILD_SHARED_LIBS)
 ENDIF(NOT BUILD_SHARED_LIBS)
 
 #-------------------------------
+# GDAL Library
+#-------------------------------
+
+# Option for internal/external GDAL
+OPTION(OTB_USE_EXTERNAL_GDAL "Use an outside build of GDAL. (OFF is NOT IMPLEMENTED)" ON)
+MARK_AS_ADVANCED(OTB_USE_EXTERNAL_GDAL)
+
+IF(OTB_USE_EXTERNAL_GDAL)
+
+  FIND_PACKAGE(GDAL)
+
+  IF (NOT GDAL_FOUND)
+    FIND_PATH(GDAL_INCLUDE_DIR gdal.h $ENV{GDAL_INCLUDE_DIR} /usr/include/gdal)
+    FIND_LIBRARY(GDAL_LIBRARY NAMES gdal gdal1.5.0 gdal1.4.0 gdal1.3.2 PATHS /usr/lib/gdal)
+  ENDIF(NOT GDAL_FOUND)
+
+  IF (NOT GDAL_INCLUDE_DIR)
+  MESSAGE(FATAL_ERROR
+           "Cannot find GDAL include directory. Please set GDAL_INCLUDE_DIR.")
+  ENDIF (NOT GDAL_INCLUDE_DIR)
+
+  INCLUDE_DIRECTORIES(${GDAL_INCLUDE_DIR})
+
+  IF (NOT GDAL_LIBRARY)
+  MESSAGE(FATAL_ERROR
+           "Cannot find GDAL library. Please set GDAL_LIBRARY.")
+  ENDIF (NOT GDAL_LIBRARY)
+  MESSAGE(STATUS "GDAL library found: ${GDAL_LIBRARY}")
+
+  # Find gdal version
+  FIND_PROGRAM(GDALCONFIG_EXECUTABLE gdal-config)
+  IF (GDALCONFIG_EXECUTABLE)
+      EXECUTE_PROCESS(COMMAND ${GDALCONFIG_EXECUTABLE} --version
+      OUTPUT_VARIABLE GDAL_VERSION
+      OUTPUT_STRIP_TRAILING_WHITESPACE)
+      MESSAGE(STATUS "GDAL version is " ${GDAL_VERSION})
+      SET(GDAL_VERSION ${GDAL_VERSION} CACHE STRING "GDAL version" FORCE)
+      MARK_AS_ADVANCED(GDAL_VERSION)
+  ELSE (GDALCONFIG_EXECUTABLE)    
+      MESSAGE(STATUS "gdal-config not found")
+  ENDIF (GDALCONFIG_EXECUTABLE)
+  
+
+  # Find geotiff headers
+  FIND_PATH(GEOTIFF_INCLUDE_DIRS geotiff.h $ENV{GDAL_INCLUDE_DIR} ${GDAL_INCLUDE_DIR} /usr/include/geotiff)
+  IF (NOT GEOTIFF_INCLUDE_DIRS)
+  MESSAGE(FATAL_ERROR
+           "Cannot find geotiff headers. Please set GEOTIFF_INCLUDE_DIRS.")
+  ENDIF (NOT GEOTIFF_INCLUDE_DIRS)
+#  INCLUDE_DIRECTORIES(${GEOTIFF_INCLUDE_DIRS})
+
+  # Find tiff headers
+  FIND_PATH(TIFF_INCLUDE_DIRS tiffio.h $ENV{GDAL_INCLUDE_DIR} ${GDAL_INCLUDE_DIR} /usr/include)
+  IF (NOT TIFF_INCLUDE_DIRS)
+  MESSAGE(FATAL_ERROR
+           "Cannot find libtiff headers. Please set TIFF_INCLUDE_DIRS.")
+  ENDIF (NOT TIFF_INCLUDE_DIRS)
+#  INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIRS})
+
+  # Find jpeg headers
+  FIND_PATH(JPEG_INCLUDE_DIRS jpeglib.h $ENV{GDAL_INCLUDE_DIR} ${GDAL_INCLUDE_DIR} /usr/include)
+  IF (NOT JPEG_INCLUDE_DIRS)
+  MESSAGE(FATAL_ERROR
+           "Cannot find jpeg headers. Please set JPEG_INCLUDE_DIRS.")
+  ENDIF (NOT JPEG_INCLUDE_DIRS)
+  INCLUDE_DIRECTORIES(${JPEG_INCLUDE_DIRS})
+
+  # Find ogr headers
+  FIND_PATH(OGR_INCLUDE_DIRS ogrsf_frmts.h  $ENV{GDAL_INCLUDE_DIR} ${GDAL_INCLUDE_DIR} /usr/include)
+  IF (NOT OGR_INCLUDE_DIRS)
+  MESSAGE(FATAL_ERROR
+           "Cannot find ogr headers. Please set OGR_INCLUDE_DIRS.")
+  ENDIF (NOT OGR_INCLUDE_DIRS)
+  INCLUDE_DIRECTORIES(${OGR_INCLUDE_DIRS})
+
+  # Check if ${GDAL_LIBRARY} has tiff library
+  TRY_COMPILE(GDAL_HAS_TIFF
+  ${CMAKE_CURRENT_BINARY_DIR}/CMake
+  ${CMAKE_CURRENT_SOURCE_DIR}/CMake/TestGDALHasTiff.cxx
+  CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${TIFF_INCLUDE_DIRS};${GDAL_INCLUDE_DIR}" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}"
+  OUTPUT_VARIABLE OUTPUT)
+  IF(GDAL_HAS_TIFF)
+  MESSAGE(STATUS "Testing if GDAL has tiff    -- yes")
+  SET(TIFF_LIBRARY ${GDAL_LIBRARY})
+  ELSE(GDAL_HAS_TIFF)
+  MESSAGE(STATUS "Testing if GDAL has tiff    -- no")
+  FIND_LIBRARY(TIFF_LIBRARY tiff PATHS)
+  IF (NOT TIFF_LIBRARY)
+  MESSAGE(FATAL_ERROR
+           "Cannot find tiff library. Please set TIFF_LIBRARY.")
+  ENDIF (NOT TIFF_LIBRARY)
+  ENDIF(GDAL_HAS_TIFF)
+
+  # Check if ${GDAL_LIBRARY} has geotiff library
+  TRY_COMPILE(GDAL_HAS_GEOTIFF
+  ${CMAKE_CURRENT_BINARY_DIR}/CMake
+  ${CMAKE_CURRENT_SOURCE_DIR}/CMake/TestGDALHasGeoTiff.cxx
+  CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${GEOTIFF_INCLUDE_DIRS};${GDAL_INCLUDE_DIR}" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}"
+  OUTPUT_VARIABLE OUTPUT)
+  IF(GDAL_HAS_GEOTIFF)
+  MESSAGE(STATUS "Testing if GDAL has geotiff -- yes")
+  SET(GEOTIFF_LIBRARY ${GDAL_LIBRARY})
+  ELSE(GDAL_HAS_GEOTIFF)
+  MESSAGE(STATUS "Testing if GDAL has geotiff -- no")
+  FIND_LIBRARY(GEOTIFF_LIBRARY geotiff PATHS)
+  IF (NOT GEOTIFF_LIBRARY)
+  MESSAGE(FATAL_ERROR
+           "Cannot find geotiff library. Please set GEOTIFF_LIBRARY.")
+  ENDIF (NOT GEOTIFF_LIBRARY)
+  ENDIF(GDAL_HAS_GEOTIFF)
+
+  # Check if ${GDAL_LIBRARY} has jpeg library
+  TRY_COMPILE(GDAL_HAS_JPEG
+  ${CMAKE_CURRENT_BINARY_DIR}/CMake
+  ${CMAKE_CURRENT_SOURCE_DIR}/CMake/TestGDALHasJpeg.cxx
+  CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${JPEG_INCLUDE_DIRS};${GDAL_INCLUDE_DIR}" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}"
+  OUTPUT_VARIABLE OUTPUT)
+  IF(GDAL_HAS_JPEG)
+  MESSAGE(STATUS "Testing if GDAL has jpeg    -- yes")
+  SET(JPEG_LIBRARY ${GDAL_LIBRARY})
+  ELSE(GDAL_HAS_JPEG)
+  MESSAGE(STATUS "Testing if GDAL has jpeg    -- no")
+  FIND_LIBRARY(JPEG_LIBRARY jpeg PATHS)
+  IF (NOT JPEG_LIBRARY)
+  MESSAGE(FATAL_ERROR
+           "Cannot find jpeg library. Please set JPEG_LIBRARY.")
+  ENDIF (NOT JPEG_LIBRARY)
+  ENDIF(GDAL_HAS_JPEG)
+
+  # Check if ${GDAL_LIBRARY} has ogr library
+  TRY_COMPILE(GDAL_HAS_OGR
+  ${CMAKE_CURRENT_BINARY_DIR}/CMake
+  ${CMAKE_CURRENT_SOURCE_DIR}/CMake/TestGDALHasOGR.cxx
+  CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${OGR_INCLUDE_DIRS};${GDAL_INCLUDE_DIR}" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}"
+  OUTPUT_VARIABLE OUTPUT)
+  IF(GDAL_HAS_OGR)
+  MESSAGE(STATUS "Testing if GDAL has OGR     -- yes")
+  SET(OGR_LIBRARY ${GDAL_LIBRARY})
+  ELSE(GDAL_HAS_OGR)
+  MESSAGE(STATUS "Testing if GDAL has OGR     -- no")
+  MESSAGE(FATAL_ERROR "OGR MESSAGE: ${OUTPUT}")
+  FIND_LIBRARY(OGR_LIBRARY ogr PATHS)
+  IF (NOT OGR_LIBRARY)
+  MESSAGE(FATAL_ERROR
+           "Cannot find ogr library. Please set OGR_LIBRARY.")
+  ENDIF (NOT OGR_LIBRARY)
+  ENDIF(GDAL_HAS_OGR)
+ELSE(OTB_USE_EXTERNAL_GDAL)
+ENDIF(OTB_USE_EXTERNAL_GDAL)
+
+#-----------------------------------------------------------------------------
+# Option to generate Visu tools
+OPTION(OTB_USE_VISU_GUI "Generate Gui/Visu tools directory. If ON, find OpenGL and FLTK packages." ON)
+MARK_AS_ADVANCED(OTB_USE_VISU_GUI)
+
+SET(OTB_GLU_INCLUDE_PATH "")
+IF(OTB_USE_VISU_GUI)
+
+        #-------------------------------
+        # OpenGL Library
+        #-------------------------------
+        FIND_PACKAGE(OpenGL)
+
+        IF( NOT OPENGL_FOUND )
+                MESSAGE(FATAL_ERROR "Impossible to find OpenGL on your system.\nCannot build OTB Visu module without OpenGL library.\nInstall OpenGL on your system OR set OTB_USE_VISU_GUI to OFF to disable OTB Visu module generation !")
+	    ENDIF( NOT OPENGL_FOUND )
+        IF( NOT OPENGL_GLU_FOUND )
+                MESSAGE(FATAL_ERROR "Impossible to find GLU library on your system.\nCannot build OTB Visu module without GLU library.\nInstall GLU library on your system OR set OTB_USE_VISU_GUI to OFF to disable OTB Visu module generation !")
+        ENDIF( NOT OPENGL_GLU_FOUND )
+
+        IF(OPENGL_INCLUDE_DIR)
+                INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_DIR})
+        ENDIF(OPENGL_INCLUDE_DIR)
+
+        #-------------------------------
+        # Display images using textures using video card acceleration
+        #-------------------------------
+        OPTION(OTB_GL_USE_ACCEL "Use video card acceleration." OFF)
+        MARK_AS_ADVANCED(OTB_GL_USE_ACCEL)
+
+        #-------------------------------
+        # FLTK Library
+        #-------------------------------
+        OPTION(OTB_USE_EXTERNAL_FLTK "Use an outside build of FLTK." OFF)
+
+        IF(OTB_USE_EXTERNAL_FLTK)
+          FIND_PACKAGE(FLTK)
+          IF(NOT FLTK_FOUND)
+            MESSAGE(FATAL_ERROR
+                  "Cannot build OTB project without FLTK. Please set FLTK_DIR or set OTB_USE_EXTERNAL_FLTK OFF to use INTERNAL FLTK.")
+          ENDIF(NOT FLTK_FOUND)
+        ELSE(OTB_USE_EXTERNAL_FLTK)
+          # Same Set as ITK
+          SET(FLTK_SOURCE_DIR ${OTB_SOURCE_DIR}/Utilities/FLTK)
+          SET(FLTK_BINARY_DIR ${OTB_BINARY_DIR}/Utilities/FLTK)
+          # Additionnal variables needed by OTB_VISU_GUI_LIBRARIES and FLTK_FLUID_EXECUTABLE
+          SET(FLTK_LIBRARIES "fltk_images;fltk;fltk_gl;fltk_forms")
+          SET(FLUID_COMMAND fluid)
+          # FLTK CMake needs a variable called JPEG_INCLUDE_DIR
+          SET(JPEG_INCLUDE_DIR ${JPEG_INCLUDE_DIRS})
+        ENDIF(OTB_USE_EXTERNAL_FLTK)
+
+        SET(OTB_VISU_GUI_LIBRARIES "${FLTK_LIBRARIES};${OPENGL_LIBRARIES} ")
+        SET(FLTK_FLUID_EXECUTABLE ${FLUID_COMMAND})
+ENDIF(OTB_USE_VISU_GUI)
+
+
+#-------------------------------
 # CURL Library
 #-------------------------------
 FIND_PACKAGE(CURL)
@@ -466,212 +674,6 @@ IF(OTB_USE_EXTERNAL_BOOST)
   ENDIF(BOOST_IS_COMPLETE)
 ENDIF(OTB_USE_EXTERNAL_BOOST)
 
-#-------------------------------
-# GDAL Library
-#-------------------------------
-
-# Option for internal/external GDAL
-OPTION(OTB_USE_EXTERNAL_GDAL "Use an outside build of GDAL. (OFF is NOT IMPLEMENTED)" ON)
-MARK_AS_ADVANCED(OTB_USE_EXTERNAL_GDAL)
-
-IF(OTB_USE_EXTERNAL_GDAL)
-
-  FIND_PACKAGE(GDAL)
-
-  IF (NOT GDAL_FOUND)
-    FIND_PATH(GDAL_INCLUDE_DIR gdal.h $ENV{GDAL_INCLUDE_DIR} /usr/include/gdal)
-    FIND_LIBRARY(GDAL_LIBRARY NAMES gdal gdal1.5.0 gdal1.4.0 gdal1.3.2 PATHS /usr/lib/gdal)
-  ENDIF(NOT GDAL_FOUND)
-
-  IF (NOT GDAL_INCLUDE_DIR)
-  MESSAGE(FATAL_ERROR
-           "Cannot find GDAL include directory. Please set GDAL_INCLUDE_DIR.")
-  ENDIF (NOT GDAL_INCLUDE_DIR)
-
-  INCLUDE_DIRECTORIES(${GDAL_INCLUDE_DIR})
-
-  IF (NOT GDAL_LIBRARY)
-  MESSAGE(FATAL_ERROR
-           "Cannot find GDAL library. Please set GDAL_LIBRARY.")
-  ENDIF (NOT GDAL_LIBRARY)
-  MESSAGE(STATUS "GDAL library found: ${GDAL_LIBRARY}")
-
-  # Find gdal version
-  FIND_PROGRAM(GDALCONFIG_EXECUTABLE gdal-config)
-  IF (GDALCONFIG_EXECUTABLE)
-      EXECUTE_PROCESS(COMMAND ${GDALCONFIG_EXECUTABLE} --version
-      OUTPUT_VARIABLE GDAL_VERSION
-      OUTPUT_STRIP_TRAILING_WHITESPACE)
-      MESSAGE(STATUS "GDAL version is " ${GDAL_VERSION})
-      SET(GDAL_VERSION ${GDAL_VERSION} CACHE STRING "GDAL version" FORCE)
-      MARK_AS_ADVANCED(GDAL_VERSION)
-  ELSE (GDALCONFIG_EXECUTABLE)    
-      MESSAGE(STATUS "gdal-config not found")
-  ENDIF (GDALCONFIG_EXECUTABLE)
-  
-
-  # Find geotiff headers
-  FIND_PATH(GEOTIFF_INCLUDE_DIRS geotiff.h $ENV{GDAL_INCLUDE_DIR} ${GDAL_INCLUDE_DIR} /usr/include/geotiff)
-  IF (NOT GEOTIFF_INCLUDE_DIRS)
-  MESSAGE(FATAL_ERROR
-           "Cannot find geotiff headers. Please set GEOTIFF_INCLUDE_DIRS.")
-  ENDIF (NOT GEOTIFF_INCLUDE_DIRS)
-#  INCLUDE_DIRECTORIES(${GEOTIFF_INCLUDE_DIRS})
-
-  # Find tiff headers
-  FIND_PATH(TIFF_INCLUDE_DIRS tiffio.h $ENV{GDAL_INCLUDE_DIR} ${GDAL_INCLUDE_DIR} /usr/include)
-  IF (NOT TIFF_INCLUDE_DIRS)
-  MESSAGE(FATAL_ERROR
-           "Cannot find libtiff headers. Please set TIFF_INCLUDE_DIRS.")
-  ENDIF (NOT TIFF_INCLUDE_DIRS)
-#  INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIRS})
-
-  # Find jpeg headers
-  FIND_PATH(JPEG_INCLUDE_DIRS jpeglib.h $ENV{GDAL_INCLUDE_DIR} ${GDAL_INCLUDE_DIR} /usr/include)
-  IF (NOT JPEG_INCLUDE_DIRS)
-  MESSAGE(FATAL_ERROR
-           "Cannot find jpeg headers. Please set JPEG_INCLUDE_DIRS.")
-  ENDIF (NOT JPEG_INCLUDE_DIRS)
-  INCLUDE_DIRECTORIES(${JPEG_INCLUDE_DIRS})
-
-  # Find ogr headers
-  FIND_PATH(OGR_INCLUDE_DIRS ogrsf_frmts.h  $ENV{GDAL_INCLUDE_DIR} ${GDAL_INCLUDE_DIR} /usr/include)
-  IF (NOT OGR_INCLUDE_DIRS)
-  MESSAGE(FATAL_ERROR
-           "Cannot find ogr headers. Please set OGR_INCLUDE_DIRS.")
-  ENDIF (NOT OGR_INCLUDE_DIRS)
-  INCLUDE_DIRECTORIES(${OGR_INCLUDE_DIRS})
-
-  # Check if ${GDAL_LIBRARY} has tiff library
-  TRY_COMPILE(GDAL_HAS_TIFF
-  ${CMAKE_CURRENT_BINARY_DIR}/CMake
-  ${CMAKE_CURRENT_SOURCE_DIR}/CMake/TestGDALHasTiff.cxx
-  CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${TIFF_INCLUDE_DIRS};${GDAL_INCLUDE_DIR}" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}"
-  OUTPUT_VARIABLE OUTPUT)
-  IF(GDAL_HAS_TIFF)
-  MESSAGE(STATUS "Testing if GDAL has tiff    -- yes")
-  SET(TIFF_LIBRARY ${GDAL_LIBRARY})
-  ELSE(GDAL_HAS_TIFF)
-  MESSAGE(STATUS "Testing if GDAL has tiff    -- no")
-  FIND_LIBRARY(TIFF_LIBRARY tiff PATHS)
-  IF (NOT TIFF_LIBRARY)
-  MESSAGE(FATAL_ERROR
-           "Cannot find tiff library. Please set TIFF_LIBRARY.")
-  ENDIF (NOT TIFF_LIBRARY)
-  ENDIF(GDAL_HAS_TIFF)
-
-  # Check if ${GDAL_LIBRARY} has geotiff library
-  TRY_COMPILE(GDAL_HAS_GEOTIFF
-  ${CMAKE_CURRENT_BINARY_DIR}/CMake
-  ${CMAKE_CURRENT_SOURCE_DIR}/CMake/TestGDALHasGeoTiff.cxx
-  CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${GEOTIFF_INCLUDE_DIRS};${GDAL_INCLUDE_DIR}" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}"
-  OUTPUT_VARIABLE OUTPUT)
-  IF(GDAL_HAS_GEOTIFF)
-  MESSAGE(STATUS "Testing if GDAL has geotiff -- yes")
-  SET(GEOTIFF_LIBRARY ${GDAL_LIBRARY})
-  ELSE(GDAL_HAS_GEOTIFF)
-  MESSAGE(STATUS "Testing if GDAL has geotiff -- no")
-  FIND_LIBRARY(GEOTIFF_LIBRARY geotiff PATHS)
-  IF (NOT GEOTIFF_LIBRARY)
-  MESSAGE(FATAL_ERROR
-           "Cannot find geotiff library. Please set GEOTIFF_LIBRARY.")
-  ENDIF (NOT GEOTIFF_LIBRARY)
-  ENDIF(GDAL_HAS_GEOTIFF)
-
-  # Check if ${GDAL_LIBRARY} has jpeg library
-  TRY_COMPILE(GDAL_HAS_JPEG
-  ${CMAKE_CURRENT_BINARY_DIR}/CMake
-  ${CMAKE_CURRENT_SOURCE_DIR}/CMake/TestGDALHasJpeg.cxx
-  CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${JPEG_INCLUDE_DIRS};${GDAL_INCLUDE_DIR}" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}"
-  OUTPUT_VARIABLE OUTPUT)
-  IF(GDAL_HAS_JPEG)
-  MESSAGE(STATUS "Testing if GDAL has jpeg    -- yes")
-  SET(JPEG_LIBRARY ${GDAL_LIBRARY})
-  ELSE(GDAL_HAS_JPEG)
-  MESSAGE(STATUS "Testing if GDAL has jpeg    -- no")
-  FIND_LIBRARY(JPEG_LIBRARY jpeg PATHS)
-  IF (NOT JPEG_LIBRARY)
-  MESSAGE(FATAL_ERROR
-           "Cannot find jpeg library. Please set JPEG_LIBRARY.")
-  ENDIF (NOT JPEG_LIBRARY)
-  ENDIF(GDAL_HAS_JPEG)
-
-  # Check if ${GDAL_LIBRARY} has ogr library
-  TRY_COMPILE(GDAL_HAS_OGR
-  ${CMAKE_CURRENT_BINARY_DIR}/CMake
-  ${CMAKE_CURRENT_SOURCE_DIR}/CMake/TestGDALHasOGR.cxx
-  CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${OGR_INCLUDE_DIRS};${GDAL_INCLUDE_DIR}" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}"
-  OUTPUT_VARIABLE OUTPUT)
-  IF(GDAL_HAS_OGR)
-  MESSAGE(STATUS "Testing if GDAL has OGR     -- yes")
-  SET(OGR_LIBRARY ${GDAL_LIBRARY})
-  ELSE(GDAL_HAS_OGR)
-  MESSAGE(STATUS "Testing if GDAL has OGR     -- no")
-  MESSAGE(FATAL_ERROR "OGR MESSAGE: ${OUTPUT}")
-  FIND_LIBRARY(OGR_LIBRARY ogr PATHS)
-  IF (NOT OGR_LIBRARY)
-  MESSAGE(FATAL_ERROR
-           "Cannot find ogr library. Please set OGR_LIBRARY.")
-  ENDIF (NOT OGR_LIBRARY)
-  ENDIF(GDAL_HAS_OGR)
-ELSE(OTB_USE_EXTERNAL_GDAL)
-ENDIF(OTB_USE_EXTERNAL_GDAL)
-
-#-----------------------------------------------------------------------------
-# Option for generate Visu tools !!!
-OPTION(OTB_USE_VISU_GUI "Generate Gui/Visu tools directory. If ON, find OpenGL and FLTK packages." ON)
-MARK_AS_ADVANCED(OTB_USE_VISU_GUI)
-
-SET(OTB_GLU_INCLUDE_PATH "")
-IF(OTB_USE_VISU_GUI)
-
-        #-------------------------------
-        # OpenGL Library
-        #-------------------------------
-        FIND_PACKAGE(OpenGL)
-
-        IF( NOT OPENGL_FOUND )
-                MESSAGE(FATAL_ERROR "Impossible to find OpenGL on your system.\nCannot build OTB Visu module without OpenGL library.\nInstall OpenGL on your system OR set OTB_USE_VISU_GUI to OFF to disable OTB Visu module generation !")
-	    ENDIF( NOT OPENGL_FOUND )
-        IF( NOT OPENGL_GLU_FOUND )
-                MESSAGE(FATAL_ERROR "Impossible to find GLU library on your system.\nCannot build OTB Visu module without GLU library.\nInstall GLU library on your system OR set OTB_USE_VISU_GUI to OFF to disable OTB Visu module generation !")
-        ENDIF( NOT OPENGL_GLU_FOUND )
-
-        IF(OPENGL_INCLUDE_DIR)
-                INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_DIR})
-        ENDIF(OPENGL_INCLUDE_DIR)
-
-	#-------------------------------
-        # Display images using textures using video card acceleration
-        #-------------------------------
-	OPTION(OTB_GL_USE_ACCEL "Use video card acceleration." OFF)
-	MARK_AS_ADVANCED(OTB_GL_USE_ACCEL)
-
-        #-------------------------------
-        # FLTK Library
-        #-------------------------------
-        OPTION(OTB_USE_EXTERNAL_FLTK "Use an outside build of FLTK." OFF)
-
-	IF(OTB_USE_EXTERNAL_FLTK)
-        	FIND_PACKAGE(FLTK)
-		IF(NOT FLTK_FOUND)
-			MESSAGE(FATAL_ERROR
-                  "Cannot build OTB project without FLTK. Please set FLTK_DIR or set OTB_USE_EXTERNAL_FLTK OFF to use INTERNAL FLTK.")
-		ENDIF(NOT FLTK_FOUND)
-	ELSE(OTB_USE_EXTERNAL_FLTK)
-		# Same Set as ITK
-		SET(FLTK_SOURCE_DIR ${OTB_SOURCE_DIR}/Utilities/FLTK)
-		SET(FLTK_BINARY_DIR ${OTB_BINARY_DIR}/Utilities/FLTK)
-		# Additionnal variables needed by OTB_VISU_GUI_LIBRARIES and FLTK_FLUID_EXECUTABLE
-		SET(FLTK_LIBRARIES "fltk_images;fltk;fltk_gl;fltk_forms")
-		SET(FLUID_COMMAND fluid)
-		# FLTK CMake needs a variable called JPEG_INCLUDE_DIR
-		SET(JPEG_INCLUDE_DIR ${JPEG_INCLUDE_DIRS})
-        ENDIF(OTB_USE_EXTERNAL_FLTK)
-
-        SET(OTB_VISU_GUI_LIBRARIES "${FLTK_LIBRARIES};${OPENGL_LIBRARIES} ")
-        SET(FLTK_FLUID_EXECUTABLE ${FLUID_COMMAND})
-ENDIF(OTB_USE_VISU_GUI)
 
 
 #Experimental
@@ -713,7 +715,7 @@ ENDIF(GETTEXT_FOUND)
 ENDIF(OTB_USE_GETTEXT)
 
 #-------------------------------
-# End connections whith external libraries
+# End connections with external libraries
 #-------------------------------
 
 #-----------------------------------------------------------------------------
