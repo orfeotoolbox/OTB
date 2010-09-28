@@ -20,6 +20,7 @@
 #endif
 
 #include "otbGenericRSTransform.h"
+#include "otbGeoInformationConversion.h"
 #include <ogr_spatialref.h>
 #include <fstream>
 
@@ -64,15 +65,15 @@ int otbGenericRSTransformWithSRID(int argc, char* argv[])
   oSRS.exportToWkt(&tmtRef);
 
   TransformType::Pointer wgs2utm        = TransformType::New();
-  wgs2utm->SetInputSRID(4326);   // WGS 84
-  wgs2utm->SetOutputSRID(32631); // UTM 31 N
+  wgs2utm->SetInputProjectionRef(otb::GeoInformationConversion::ToWKT(4326));   // WGS 84
+  wgs2utm->SetOutputProjectionRef(otb::GeoInformationConversion::ToWKT(32631)); // UTM 31 N
   wgs2utm->InstanciateTransform();
 
   TransformType::Pointer utm2wgs        = TransformType::New();
   wgs2utm->GetInverse(utm2wgs);
 
   TransformType::Pointer wgs2lambert    = TransformType::New();
-  wgs2lambert->SetInputSRID(4326);   // WGS 84
+  wgs2lambert->SetInputProjectionRef(otb::GeoInformationConversion::ToWKT(4326));   // WGS 84
   wgs2lambert->SetOutputProjectionRef(lambertRef);
 
   wgs2lambert->InstanciateTransform();
@@ -81,7 +82,7 @@ int otbGenericRSTransformWithSRID(int argc, char* argv[])
   wgs2lambert->GetInverse(lambert2wgs);
 
   TransformType::Pointer wgs2tmt        = TransformType::New();
-  wgs2tmt->SetInputSRID(4326);   // WGS 84
+  wgs2tmt->SetInputProjectionRef(otb::GeoInformationConversion::ToWKT(4326));   // WGS 84
   wgs2tmt->SetOutputProjectionRef(tmtRef);
 
   wgs2tmt->InstanciateTransform();
@@ -90,13 +91,13 @@ int otbGenericRSTransformWithSRID(int argc, char* argv[])
   wgs2tmt->GetInverse(tmt2wgs);
 
   TransformType::Pointer wgs2wgs        = TransformType::New();
-  wgs2wgs->SetInputSRID(4326);   // WGS 84
-  wgs2wgs->SetOutputSRID(4326);  // WGS 84
+  wgs2wgs->SetInputProjectionRef(otb::GeoInformationConversion::ToWKT(4326));   // WGS 84
+  wgs2wgs->SetOutputProjectionRef(otb::GeoInformationConversion::ToWKT(4326));  // WGS 84
   wgs2wgs->InstanciateTransform();
 
   TransformType::Pointer utm2utm        = TransformType::New();
-  utm2utm->SetInputSRID(32631);   // UTM 31 N
-  utm2utm->SetOutputSRID(32631);  // UTM 31 N
+  utm2utm->SetInputProjectionRef(otb::GeoInformationConversion::ToWKT(32631));   // UTM 31 N
+  utm2utm->SetOutputProjectionRef(otb::GeoInformationConversion::ToWKT(32631));  // UTM 31 N
   utm2utm->InstanciateTransform();
 
   TransformType::Pointer lambert2lambert = TransformType::New();
@@ -111,7 +112,7 @@ int otbGenericRSTransformWithSRID(int argc, char* argv[])
   tmt2tmt->InstanciateTransform();
 
   TransformType::Pointer utm2lambert    = TransformType::New();
-  utm2lambert->SetInputSRID(32631);  // UTM
+  utm2lambert->SetInputProjectionRef(otb::GeoInformationConversion::ToWKT(32631));  // UTM
   utm2lambert->SetOutputProjectionRef(lambertRef);
   
   utm2lambert->InstanciateTransform();
@@ -120,7 +121,7 @@ int otbGenericRSTransformWithSRID(int argc, char* argv[])
   utm2lambert->GetInverse(lambert2utm);
 
   TransformType::Pointer utm2tmt        = TransformType::New();
-  utm2tmt->SetInputSRID(32631);
+  utm2tmt->SetInputProjectionRef(otb::GeoInformationConversion::ToWKT(32631));
   utm2tmt->SetOutputProjectionRef(tmtRef);
   utm2tmt->InstanciateTransform();
 
