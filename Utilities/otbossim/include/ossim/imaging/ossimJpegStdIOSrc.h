@@ -17,13 +17,13 @@ extern "C"
 #include <cstdio>                      /** for size_t  */
 #include <csetjmp>                     /** for jmp_buf */
 #include <jpeglib.h>                   /** for jpeg stuff */
-//#include <jinclude.h>
-//#include <jerror.h>
-/**
- * @brief Method which uses memory instead of a FILE* to read from.
- * @note Used in place of "jpeg_stdio_src(&cinfo, infile)".
- */
-OSSIM_DLL void ossimJpegStdIOSrc ( j_decompress_ptr cinfo,
-                                   FILE* infile);
+   //#include <jinclude.h>
+   //#include <jerror.h>
+   /**
+    * @brief Method which uses memory instead of a FILE* to read from.
+    * @note Used in place of "jpeg_stdio_src(&cinfo, infile)".
+    */
+   OSSIM_DLL void ossimJpegStdIOSrc ( j_decompress_ptr cinfo,
+                                     FILE* infile);
 }
 #endif /* #ifndef ossimJpegMemSrc_HEADER */
