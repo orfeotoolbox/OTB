@@ -86,15 +86,19 @@ OpticalImageMetadataInterface
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os, indent);
-  os << indent << "GetSunElevation:     " << this->GetSunElevation() << std::endl;
-  os << indent << "GetSunAzimuth:       " << this->GetSunAzimuth() << std::endl;
-  os << indent << "GetSatElevation:     " << this->GetSatElevation() << std::endl;
-  os << indent << "GetSatAzimuth:       " << this->GetSatAzimuth() << std::endl;
-  os << indent << "GetPhysicalBias:     " << this->GetPhysicalBias() << std::endl;
-  os << indent << "GetPhysicalGain:     " << this->GetPhysicalGain() << std::endl;
-  os << indent << "GetSolarIrradiance:  " << this->GetSolarIrradiance() << std::endl;
-  os << indent << "GetFirstWavelengths: " << this->GetFirstWavelengths() << std::endl;
-  os << indent << "GetLastWavelengths:  " << this->GetLastWavelengths() << std::endl;
+
+  if (this->CanRead())
+    {
+    os << indent << "GetSunElevation:     " << this->GetSunElevation() << std::endl;
+    os << indent << "GetSunAzimuth:       " << this->GetSunAzimuth() << std::endl;
+    os << indent << "GetSatElevation:     " << this->GetSatElevation() << std::endl;
+    os << indent << "GetSatAzimuth:       " << this->GetSatAzimuth() << std::endl;
+    os << indent << "GetPhysicalBias:     " << this->GetPhysicalBias() << std::endl;
+    os << indent << "GetPhysicalGain:     " << this->GetPhysicalGain() << std::endl;
+    os << indent << "GetSolarIrradiance:  " << this->GetSolarIrradiance() << std::endl;
+    os << indent << "GetFirstWavelengths: " << this->GetFirstWavelengths() << std::endl;
+    os << indent << "GetLastWavelengths:  " << this->GetLastWavelengths() << std::endl;
+    }
 }
 
 

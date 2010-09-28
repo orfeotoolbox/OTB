@@ -191,19 +191,6 @@ public:
   {
     return m_Transform->GetInputKeywordList();
   }
-
-  /** Set the input SRID to get the input projection ref */
-  void SetInputSRID(int srid)
-  {
-    m_Transform->SetOutputSRID(srid);
-    this->Modified();
-  }
-  /** Set the output srid to get the output projection ref*/
-  void SetOutputSRID(int srid)
-  {
-    m_Transform->SetInputSRID(srid);
-    this->Modified();
-  }
   
   /** Set/Get the DEMDirectory*/
   void SetDEMDirectory(const std::string&  dem)
