@@ -1,6 +1,12 @@
 OTB-v.3.6.0 - Changes since version 3.4.0 (2010/??/??)
 -----------------------------------------
 
+* Monteverdi
+  * New Vectorization module: creates vector data (polygons, lines and points) from image
+  * New BandMath module: mathematical operation on image bands
+  * New SpectralViewer module: designed to display hyperspectral images. also computes spectral angle
+  * New ObjectLabeling module: object based image analysis module, with SVM classification based on object features
+
 * Applications
   * otbFastOrthoRectif: fast orthorectification based on grid subsampling
   * otbActiveLearning: architecture to enable active learning application (put your own algorithms in the middle)
@@ -19,7 +25,7 @@ OTB-v.3.6.0 - Changes since version 3.4.0 (2010/??/??)
   * Add filter to perform fine registration between images (FineRegistrationImageFilter)
   * Add filter for higher order texture computation (ScalarImageToHigherOrderTexturesFilter and MaskedScalarImageToGreyLevelRunLengthMatrixGenerator)
   * Removal of the old textures: http://wiki.orfeo-toolbox.org/index.php/Textures
-  * Add support for Formosat and Worldview2 data
+  * Add support for Worldview2 data
   * Add margin sampler for SVM (SVMMarginSampler)
   * Add generic resample filter that reproject in any arbitrary projection: cartographic, sensor model (GenericRSResampleImageFilter)
   * Add class to produce a RPC model from a physical model (PhysicalToRPCSensorModelImageFilter)
@@ -31,6 +37,9 @@ OTB-v.3.6.0 - Changes since version 3.4.0 (2010/??/??)
   * Internal OSSIM and ossim plugins updated to svn revision 18162 + OTB patches (almost none left)
   * Enable the use of an external build of libLAS
   * Fix internal libkml for MSVC 2010
+  * Better handling of FLTK configuration
+  * Support compilation of Monteverdi on linux 32 bits systems with official FLTK package
+  * Lots of coverage improvements
 
 OTB-v.3.4.0 - Changes since version 3.2.0 (2010/06/30)
 -----------------------------------------
