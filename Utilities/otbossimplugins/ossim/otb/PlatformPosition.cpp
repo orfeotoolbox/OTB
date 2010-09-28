@@ -105,7 +105,7 @@ Ephemeris* PlatformPosition::Interpolate(JSDDateTime date)
       double * y = new double[_nbrData];
       double * yd = new double[_nbrData];
       double dt = 0.0;
-      double d;
+      //double d;
 
       x[0] = 0.0 ;
       for (int i = 1 ; i < _nbrData ; i++)
