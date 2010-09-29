@@ -174,7 +174,8 @@ In order to install OTB on your system follow these steps (in the
 given order):
 \begin{enumerate}
   \item Install CMake (binary packages are available for most platforms).
-  \item Install GDAL (binary packages are available for most platforms, some are available on \url{http://www.orfeo-toolbox.org/packages}).
+  \item Install GDAL (binary packages are available for most platforms,
+        on windows, look for osgeo4w \url{}http://trac.osgeo.org/osgeo4w/}).
   \item Install OTB using CMake for the configuration.
 \end{enumerate}
 
@@ -197,10 +198,10 @@ packages, you can skip to step 4.
 \item Install GDAL (or \textbf{use your distribution package})
   \begin{verbatim}
       cd INSTALL_DIR
-      gunzip gdal.1.5.2.tar.gz
-      tar xvf gdal.1.5.2.tar
-      cd gdal.1.5.2
-      ./configure --prefix=INSTALL_DIR
+      gunzip gdal.1.7.2.tar.gz
+      tar xvf gdal.1.7.2.tar
+      cd gdal.1.7.2
+      ./configure --prefix=INSTALL_DIR --with-png=internal --with-libtiff=internal --with-geotiff=internal --with-jpeg=internal
       make
       make install
   \end{verbatim}
@@ -214,9 +215,9 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
 \item Install CMake (or \textbf{use your distribution package})
   \begin{verbatim}
       cd INSTALL_DIR
-      gunzip cmake-2.6.0.tar.gz
-      tar xvf cmake-2.6.0.tar
-      cd cmake-2.6.0
+      gunzip cmake-2.8.2.tar.gz
+      tar xvf cmake-2.8.2.tar
+      cd cmake-2.8.2
       ./configure --prefix=INSTALL_DIR
       make
       make install
@@ -439,7 +440,7 @@ Here is an outline of the issue: to be able to handler big Tiff files (e.g. more
 Now, here is the workaround: Build your own Gdal library (you probably want to have the most up-to-date Gdal anyway) using the following options during configuration:
 \begin{verbatim}
 	./configure --prefix=INSTALL_DIR --with-png=internal --with-libtiff=internal
-	--with-jpeg=internal
+	--with-jpeg=internal --with-geotiff=internal
 \end{verbatim}
 
 Then make and (sudo) make install. Then, do:
