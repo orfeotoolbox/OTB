@@ -349,7 +349,7 @@ IF(OTB_USE_EXTERNAL_GDAL)
   
 
   # Find geotiff headers
-  FIND_PATH(GEOTIFF_INCLUDE_DIRS geotiff.h $ENV{GDAL_INCLUDE_DIR} ${GDAL_INCLUDE_DIR} /usr/include/geotiff)
+  FIND_PATH(GEOTIFF_INCLUDE_DIRS geotiff.h $ENV{GDAL_INCLUDE_DIR} ${GDAL_INCLUDE_DIR} /usr/include/geotiff /usr/include/libgeotiff)
   IF (NOT GEOTIFF_INCLUDE_DIRS)
   MESSAGE(FATAL_ERROR
            "Cannot find geotiff headers. Please set GEOTIFF_INCLUDE_DIRS.")
