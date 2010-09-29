@@ -232,7 +232,7 @@ public:
 
 protected:
   WarpImageFilter();
-  ~WarpImageFilter() {};
+  virtual ~WarpImageFilter() {};
   void PrintSelf(std::ostream& os, Indent indent) const;
 
   /** WarpImageFilter is implemented as a multi-threaded filter.
