@@ -45,6 +45,8 @@ namespace otb
  *
  *  This class is derived from the MAECENAS code provided by Jordi Inglada,
  *  from CNES.
+ *
+ *  \sa FineRegistrationImageFilter, FastCorrelationImageFilter
  */
 template <class TFixedImage, class TMovingImage, class TPointSet>
 class ITK_EXPORT DisparityMapEstimationMethod

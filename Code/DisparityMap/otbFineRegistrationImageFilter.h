@@ -62,7 +62,7 @@ namespace otb
  *
  * \example DisparityMap/FineRegistrationImageFilterExample.cxx
  *
- * \sa      FastCorrelationImageFilter
+ * \sa      FastCorrelationImageFilter, DisparityMapEstimationMethod
  * \ingroup IntensityImageFilters, Streamed
  */
 template <class TInputImage, class T0utputCorrelation, class TOutputDeformationField>
