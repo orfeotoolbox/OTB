@@ -2377,11 +2377,16 @@ bool ossimplugins::ossimTerraSarModel::findTSXLeader(const ossimFilename& file,
       metadataFile = file;
       res = true;
    }
+   else if (!file.exists())
+   {
+	  res = false;
+   }
    else
    {
       ossimFilename imagePath = file.path();
       if (imagePath.empty())
          imagePath = ossimEnvironmentUtility::instance()->getCurrentWorkingDir();
+
       ossimDirectory directory = ossimDirectory(imagePath.path());
       std::vector<ossimFilename> vectName;
       ossimString reg = ".xml";
@@ -2417,6 +2422,7 @@ bool ossimplugins::ossimTerraSarModel::findTSXLeader(const ossimFilename& file,
                << std::endl;
          }
       }
+	  
    }
 
    return res;
