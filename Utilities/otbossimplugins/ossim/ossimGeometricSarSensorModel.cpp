@@ -66,8 +66,8 @@ ossimGeometricSarSensorModel::ossimGeometricSarSensorModel(
    _optimizationFactorY(rhs._optimizationFactorY),
    _optimizationBiasX(rhs._optimizationBiasX),
    _optimizationBiasY(rhs._optimizationBiasY),
-   _productXmlFile(rhs._productXmlFile),
-   _imageFilename(rhs._imageFilename)
+   _imageFilename(rhs._imageFilename),
+   _productXmlFile(rhs._productXmlFile)
 {
 }
 
