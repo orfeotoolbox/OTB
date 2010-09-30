@@ -237,34 +237,13 @@ ADD_TEST(prTvSensorModelErs ${PROJECTIONS_TESTS1}
          ${TEMP}/prTvSensorModelErs.txt
 )
 
-
-SET(SARSENSORMODEL_TYPES 
+SET(SARSENSORMODEL_TYPES
   "RADARSAT1/GOMA/SCENE01/"
   "RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/product.xml"
   "ENVISAT_ASAR_SCENE01/ASA_APS_1PNDPA20030821_7713.N1"
   "PALSAR/200801280007/l1data/VOL-ALPSRP037120700-H1.1__A"
   "TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos"
 )
-
-FOREACH( file ${SARSENSORMODEL_TYPES})
-  # Get the sensor name 
-  SET(sharp_regexp "([0-9A-Za-z_]*)[ ]*/[ ]*(.*)")
-  STRING(REGEX REPLACE "${sharp_regexp}" "\\1" sensor_name "${file}")
-  # Tests
-	ADD_TEST(prTvForwardSensorModel_${sensor_name} ${PROJECTIONS_TESTS1}
-	  --compare-n-images ${NOTOL} 2
-	         ${BASELINE}/prTvForwardSensorModelGridX_${sensor_name}.tif
-	         ${TEMP}/prTvForwardSensorModelGridX_${sensor_name}.tif
-	         ${BASELINE}/prTvForwardSensorModelGridY_${sensor_name}.tif
-	         ${TEMP}/prTvForwardSensorModelGridY_${sensor_name}.tif
-    	otbForwardSensorModelGrid
-    		${LARGEINPUT}/${file}
-         	${TEMP}/prTvForwardSensorModelGridX_${sensor_name}.tif
-         	${TEMP}/prTvForwardSensorModelGridY_${sensor_name}.tif
-         	10 10
-		)
-ENDFOREACH( file ${SARSENSORMODEL_TYPES})
-
 
 FOREACH( file ${SARSENSORMODEL_TYPES})
   # Get the sensor name 
@@ -416,6 +395,110 @@ ADD_TEST(prTlOrthoRectificationSPOT5 ${PROJECTIONS_TESTS2}
         5
         )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
+
+
+#========================= Ortho rectif SAR data  ===============================
+
+
+IF(OTB_DATA_USE_LARGEINPUT)
+
+ADD_TEST(prTvOrthoRectificationUTM_RADARDSAT1 ${PROJECTIONS_TESTS2}
+  	--compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationUTM_RADARDSAT1.tif
+                          ${TEMP}/prTvOrthoRectificationUTM_RADARDSAT1.tif
+        otbOrthoRectificationFilter
+    		${LARGEINPUT}/RADARSAT1/GOMA/SCENE01/
+        	${TEMP}/prTvOrthoRectificationUTM_RADARDSAT1.tif
+	        755929.75 9821313.25
+        	200	200 10 -10 35 S 4 
+        )
+
+ADD_TEST(prTvOrthoRectificationUTM_RADARSAT2_XML ${PROJECTIONS_TESTS2}
+  	--compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationUTM_RADARSAT2.tif
+                          ${TEMP}/prTvOrthoRectificationUTM_RADARSAT2.tif
+        otbOrthoRectificationFilter
+    		${LARGEINPUT}/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/product.xml
+        	${TEMP}/prTvOrthoRectificationUTM_RADARSAT2.tif
+	        611000.953075 5439991.842531
+        	200	200 10 -10 14 N 4 
+        )
+ADD_TEST(prTvOrthoRectificationUTM_RADARSAT2_HH ${PROJECTIONS_TESTS2}
+  	--compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationUTM_RADARSAT2_XML.tif
+                          ${TEMP}/prTvOrthoRectificationUTM_RADARSAT2_XML.tif
+        otbOrthoRectificationFilter
+    		${LARGEINPUT}/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/imagery_HH.tif
+        	${TEMP}/prTvOrthoRectificationUTM_RADARSAT2_XML.tif
+	        611000.953075 5439991.842531
+        	200	200 10 -10 14 N 4 
+        )
+ADD_TEST(prTvOrthoRectificationUTM_RADARSAT2_HV ${PROJECTIONS_TESTS2}
+  	--compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationUTM_RADARSAT2_HV.tif
+                          ${TEMP}/prTvOrthoRectificationUTM_RADARSAT2_HV.tif
+        otbOrthoRectificationFilter
+    		${LARGEINPUT}/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/imagery_HV.tif
+        	${TEMP}/prTvOrthoRectificationUTM_RADARSAT2_HV.tif
+	        611000.953075 5439991.842531
+        	200	200 10 -10 14 N 4 
+        )
+ADD_TEST(prTvOrthoRectificationUTM_RADARSAT2_VH ${PROJECTIONS_TESTS2}
+  	--compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationUTM_RADARSAT2_VH.tif
+                          ${TEMP}/prTvOrthoRectificationUTM_RADARSAT2_VH.tif
+        otbOrthoRectificationFilter
+    		${LARGEINPUT}/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/imagery_VH.tif
+        	${TEMP}/prTvOrthoRectificationUTM_RADARSAT2_VH.tif
+	        611000.953075 5439991.842531
+        	200	200 10 -10 14 N 4 
+        )
+ADD_TEST(prTvOrthoRectificationUTM_RADARSAT2_VV ${PROJECTIONS_TESTS2}
+  	--compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationUTM_RADARSAT2_VV.tif
+                          ${TEMP}/prTvOrthoRectificationUTM_RADARSAT2_VV.tif
+        otbOrthoRectificationFilter
+    		${LARGEINPUT}/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/imagery_VV.tif
+        	${TEMP}/prTvOrthoRectificationUTM_RADARSAT2_VV.tif
+	        611000.953075 5439991.842531
+        	200	200 10 -10 14 N 4 
+        )
+
+ADD_TEST(prTvOrthoRectificationUTM_ENVISAT ${PROJECTIONS_TESTS2}
+  	--compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationUTM_ENVISAT.tif
+                          ${TEMP}/prTvOrthoRectificationUTM_ENVISAT.tif
+        otbOrthoRectificationFilter
+    		${LARGEINPUT}/ENVISAT_ASAR_SCENE01/ASA_APS_1PNDPA20030821_7713.N1
+        	${TEMP}/prTvOrthoRectificationUTM_ENVISAT.tif
+	        655696.679130 4906584.046495
+        	200	200 10 -10 30 N 4 
+        )
+
+ADD_TEST(prTvOrthoRectificationUTM_PALSAR ${PROJECTIONS_TESTS2}
+  	--compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationUTM_PALSAR.tif
+                          ${TEMP}/prTvOrthoRectificationUTM_PALSAR.tif
+        otbOrthoRectificationFilter
+    		${LARGEINPUT}/PALSAR/200801280007/l1data/VOL-ALPSRP037120700-H1.1__A
+        	${TEMP}/prTvOrthoRectificationUTM_PALSAR.tif
+	        309298.731439 3909055.130746
+        	200	200 10 -10 54 N 4 
+        )
+
+ADD_TEST(prTvOrthoRectificationUTM_TERRASARX_HH ${PROJECTIONS_TESTS2}
+  	--compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationUTM_TERRASARX_HH.tif
+                          ${TEMP}/prTvOrthoRectificationUTM_TERRASARX_HH.tif
+        otbOrthoRectificationFilter
+    		${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+        	${TEMP}/prTvOrthoRectificationUTM_TERRASARX_HH.tif
+	        591992.001073 9699689.825866
+        	200	200 10 -10 49 S 4 
+        )
+
+ADD_TEST(prTvOrthoRectificationUTM_TERRASARX_VV ${PROJECTIONS_TESTS2}
+  	--compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationUTM_TERRASARX_VV.tif
+                          ${TEMP}/prTvOrthoRectificationUTM_TERRASARX_VV.tif
+        otbOrthoRectificationFilter
+    		${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_VV_SRA_stripFar_008.cos
+        	${TEMP}/prTvOrthoRectificationUTM_TERRASARX_VV.tif
+	        591992.001073 9699689.825866
+        	200	200 10 -10 49 S 4 
+        )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
 
 ADD_TEST(prTuGCPsToRPCSensorModelImageFilterNew ${PROJECTIONS_TESTS2}
          otbGCPsToRPCSensorModelImageFilterNew)

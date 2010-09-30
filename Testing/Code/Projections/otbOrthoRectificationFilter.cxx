@@ -24,7 +24,7 @@
 #include <stdlib.h>
 
 #include "otbMacro.h"
-#include "otbImage.h"
+#include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
 #include "otbMapProjections.h"
@@ -46,7 +46,7 @@ int otbOrthoRectificationFilter(int argc, char* argv[])
     return EXIT_FAILURE;
     }
 
-  typedef otb::Image<double, 2>                                                     ImageType;
+  typedef otb::VectorImage<double, 2>                                               ImageType;
   typedef otb::ImageFileReader<ImageType>                                           ReaderType;
   typedef otb::StreamingImageFileWriter<ImageType>                                  WriterType;
   typedef otb::UtmInverseProjection                                                 UtmMapProjectionType;
