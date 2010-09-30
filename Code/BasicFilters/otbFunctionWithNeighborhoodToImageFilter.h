@@ -102,7 +102,6 @@ public:
                       TOutputImage::ImageDimension);
 
 
-
   /** Accessors */
   itkGetMacro(Radius, InputImageSizeType);
   void SetRadius(InputImageSizeType& rad)
