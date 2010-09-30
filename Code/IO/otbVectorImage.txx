@@ -24,6 +24,8 @@
 
 #include "otbVectorImage.h"
 #include "otbImageMetadataInterfaceFactory.h"
+#include "otbImageKeywordlist.h"
+#include "itkMetaDataObject.h"
 
 namespace otb
 {
@@ -138,14 +140,24 @@ template <class TPixel, unsigned int VImageDimension>
 typename VectorImage<TPixel, VImageDimension>::ImageKeywordlistType
 VectorImage<TPixel, VImageDimension>::GetImageKeywordlist(void)
 {
-  return (this->GetMetaDataInterface()->GetImageKeywordlist());
+  ImageKeywordlist kwl;
+  
+  itk::ExposeMetaData<ImageKeywordlist>(this->GetMetaDataDictionary(),
+                                        MetaDataKey::OSSIMKeywordlistKey, 
+                                        kwl);
+  return  kwl;
 }
 
 template <class TPixel, unsigned int VImageDimension>
 const typename VectorImage<TPixel, VImageDimension>::ImageKeywordlistType
 VectorImage<TPixel, VImageDimension>::GetImageKeywordlist(void) const
 {
-  return (this->GetMetaDataInterface()->GetImageKeywordlist());
+  ImageKeywordlist kwl;
+  
+  itk::ExposeMetaData<ImageKeywordlist>(this->GetMetaDataDictionary(),
+                                        MetaDataKey::OSSIMKeywordlistKey, 
+                                        kwl);
+  return  kwl;
 }
 
 template <class TPixel, unsigned int VImageDimension>
