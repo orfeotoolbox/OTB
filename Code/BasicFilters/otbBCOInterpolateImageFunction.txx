@@ -52,9 +52,9 @@ template <class TInputImage, class TCoordRep>
 void BCOInterpolateImageFunctionBase<TInputImage, TCoordRep>
 ::SetRadius(unsigned int radius)
 {
-  if (radius == 0)
+  if (radius < 2)
     {
-    itkExceptionMacro(<< "Radius Must Be Strictly Superior to 0");
+    itkExceptionMacro(<< "Radius Must Be Strictly Superior to 1");
     }
   else 
     {
