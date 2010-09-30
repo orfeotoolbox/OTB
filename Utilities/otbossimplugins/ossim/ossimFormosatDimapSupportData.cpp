@@ -1752,7 +1752,7 @@ bool ossimFormosatDimapSupportData::parsePart2(
 
 	if(bandIndex == band_index)
 	{
-		sub_nodes.clear();
+  		sub_nodes.clear();
     	xpath = "Polynomial_Look_Angles/XLOS_0";
     	(*node)->findChildNodes(xpath, sub_nodes);
     	if (sub_nodes.size() == 0)
@@ -1762,6 +1762,7 @@ bool ossimFormosatDimapSupportData::parsePart2(
     	}
     	thePolynomialLookAngleX.push_back(sub_nodes[0]->getText().toDouble());
 
+      sub_nodes.clear();
     	xpath = "Polynomial_Look_Angles/XLOS_1";
     	(*node)->findChildNodes(xpath, sub_nodes);
     	if (sub_nodes.size() == 0)
@@ -1771,6 +1772,7 @@ bool ossimFormosatDimapSupportData::parsePart2(
     	}
     	thePolynomialLookAngleX.push_back(sub_nodes[0]->getText().toDouble());
 
+      sub_nodes.clear();
     	xpath = "Polynomial_Look_Angles/XLOS_2";
     	(*node)->findChildNodes(xpath, sub_nodes);
     	if (sub_nodes.size() == 0)
@@ -1780,6 +1782,7 @@ bool ossimFormosatDimapSupportData::parsePart2(
     	}
     	thePolynomialLookAngleX.push_back(sub_nodes[0]->getText().toDouble());
 
+      sub_nodes.clear();
     	xpath = "Polynomial_Look_Angles/XLOS_3";
     	(*node)->findChildNodes(xpath, sub_nodes);
     	if (sub_nodes.size() == 0)
@@ -1789,6 +1792,7 @@ bool ossimFormosatDimapSupportData::parsePart2(
     	}
     	thePolynomialLookAngleX.push_back(sub_nodes[0]->getText().toDouble());
 
+      sub_nodes.clear();
     	xpath = "Polynomial_Look_Angles/YLOS_0";
     	(*node)->findChildNodes(xpath, sub_nodes);
     	if (sub_nodes.size() == 0)
@@ -1798,6 +1802,7 @@ bool ossimFormosatDimapSupportData::parsePart2(
     	}
     	thePolynomialLookAngleY.push_back(sub_nodes[0]->getText().toDouble());
 
+      sub_nodes.clear();
     	xpath = "Polynomial_Look_Angles/YLOS_1";
     	(*node)->findChildNodes(xpath, sub_nodes);
     	if (sub_nodes.size() == 0)
@@ -1807,6 +1812,7 @@ bool ossimFormosatDimapSupportData::parsePart2(
     	}
     	thePolynomialLookAngleY.push_back(sub_nodes[0]->getText().toDouble());
 
+      sub_nodes.clear();
     	xpath = "Polynomial_Look_Angles/YLOS_2";
     	(*node)->findChildNodes(xpath, sub_nodes);
     	if (sub_nodes.size() == 0)
@@ -1816,6 +1822,7 @@ bool ossimFormosatDimapSupportData::parsePart2(
     	}
     	thePolynomialLookAngleY.push_back(sub_nodes[0]->getText().toDouble());
 
+      sub_nodes.clear();
     	xpath = "Polynomial_Look_Angles/YLOS_3";
     	(*node)->findChildNodes(xpath, sub_nodes);
     	if (sub_nodes.size() == 0)
