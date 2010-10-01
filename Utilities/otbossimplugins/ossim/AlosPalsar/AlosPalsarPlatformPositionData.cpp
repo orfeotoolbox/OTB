@@ -152,8 +152,9 @@ std::istream& operator>>(std::istream& is, AlosPalsarPlatformPositionData& data)
     is >> data._pos_vect[i];
   }
 
-  is.seekg(598, std::ios::cur);                      //skip the rest part of PlatformPostion//
-  is.seekg(12495744, std::ios::cur);            //data skip ubtil facility11//
+  is.seekg(598, std::ios::cur);				//skip the rest of the platform position data record
+  is.seekg(8192, std::ios::cur);			//skip to the radiometric data record
+  //is.seekg(12495744, std::ios::cur);		//skip to the 11th facility-related data record
 
   return is;
 }
