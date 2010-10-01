@@ -18,6 +18,7 @@
 #include "AlosPalsar/AlosPalsarDataSetSummary.h"
 #include "AlosPalsar/AlosPalsarMapProjectionData.h"
 #include "AlosPalsar/AlosPalsarPlatformPositionData.h"
+#include "AlosPalsar/AlosPalsarRadiometricData.h"
 #include "AlosPalsar/AlosPalsarFacilityData.h"
 #include <map>
 
@@ -31,6 +32,7 @@ class AlosPalsarMapProjectionData;
 class AlosPalsarDataSetSummary;
 class AlosPalsarFileDescriptor;
 class AlosPalsarFacilityData;
+class AlosPalsarRadiometricData;
 
 /**
  * @ingroup AlosPalsarLeaderFile
@@ -86,6 +88,7 @@ public:
 
 
   const AlosPalsarFacilityData * get_AlosPalsarFacilityData() const;
+  const AlosPalsarRadiometricData * get_AlosPalsarRadiometricData() const;
   const AlosPalsarPlatformPositionData * get_AlosPalsarPlatformPositionData() const;
 //  const AlosPalsarMapProjectionData * get_AlosPalsarMapProjectionData() const;
   const AlosPalsarDataSetSummary * get_AlosPalsarDataSetSummary() const;
@@ -96,6 +99,7 @@ protected:
   RecordType _records;
 
   static const int AlosPalsarFacilityDataID;
+  static const int AlosPalsarRadiometricDataID;
   static const int AlosPalsarPlatformPositionDataID;
 //  static const int AlosPalsarMapProjectionDataID;
   static const int AlosPalsarDataSetSummaryID;

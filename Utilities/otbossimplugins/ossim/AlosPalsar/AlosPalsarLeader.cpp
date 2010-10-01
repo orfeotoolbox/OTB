@@ -29,6 +29,7 @@ namespace ossimplugins
 {
 
 const int AlosPalsarLeader::AlosPalsarFacilityDataID = 17;
+const int AlosPalsarLeader::AlosPalsarRadiometricDataID = 5;
 const int AlosPalsarLeader::AlosPalsarPlatformPositionDataID = 3;
 // const int AlosPalsarLeader::AlosPalsarMapProjectionDataID = 3; //
 const int AlosPalsarLeader::AlosPalsarDataSetSummaryID = 2;
@@ -242,9 +243,21 @@ bool AlosPalsarLeader::saveState(ossimKeywordlist& kwl,
   {
     result = false;
   }
+
+  const AlosPalsarRadiometricData *radiometricdata = get_AlosPalsarRadiometricData();
+  if ((radiometricdata != NULL) && (result == true))
+  {
+    kwl.add(prefix, "calibration_factor", radiometricdata->get_calibration_factor(), true);
+  }
+  else
+  {
+    result = false;
+  }
+
+  // FIXME  Do not handle Palsar facility-related data for now...
+  // The current code corresponds to the ERS facility-related data
+  // which is completely different from that for PALSAR
   /*
-   * Adding metadata necessary to the sensor model in the keywordlist
-   */
   const AlosPalsarFacilityData *facilitydata = get_AlosPalsarFacilityData();
   if ((facilitydata != NULL) && (result == true))
   {
@@ -257,7 +270,7 @@ bool AlosPalsarLeader::saveState(ossimKeywordlist& kwl,
   {
     result = false;
   }
-
+  */
 
   if (traceDebug())
   {
@@ -277,30 +290,33 @@ const AlosPalsarFacilityData * AlosPalsarLeader::get_AlosPalsarFacilityData() co
 //   return dynamic_cast<const AlosPalsarFacilityData*>(it.find(AlosPalsarFacilityDataID));
   return dynamic_cast<const AlosPalsarFacilityData*>(_records.find(AlosPalsarFacilityDataID)->second);
 }
+
+const AlosPalsarRadiometricData * AlosPalsarLeader::get_AlosPalsarRadiometricData() const
+{
+  return dynamic_cast<const AlosPalsarRadiometricData*>(_records.find(AlosPalsarRadiometricDataID)->second);
+}
+
 const AlosPalsarPlatformPositionData * AlosPalsarLeader::get_AlosPalsarPlatformPositionData() const
 {
-//   return (AlosPalsarPlatformPositionData*)_records[AlosPalsarPlatformPositionDataID];
   return dynamic_cast<const AlosPalsarPlatformPositionData*>(_records.find(AlosPalsarPlatformPositionDataID)->second);
 }
-/*const AlosPalsarMapProjectionData * AlosPalsarLeader::get_AlosPalsarMapProjectionData() const
+
+/*
+const AlosPalsarMapProjectionData * AlosPalsarLeader::get_AlosPalsarMapProjectionData() const
 {
 //   return (AlosPalsarMapProjectionData*)_records[AlosPalsarMapProjectionDataID];
   return dynamic_cast<const AlosPalsarMapProjectionData*>(_records.find(AlosPalsarMapProjectionDataID)->second);
 }
-
 */
-
-//no map projection data
+// no map projection data for level 1.1
 
 const AlosPalsarDataSetSummary * AlosPalsarLeader::get_AlosPalsarDataSetSummary() const
 {
-//   return (AlosPalsarDataSetSummary*)_records[AlosPalsarDataSetSummaryID];
   return dynamic_cast<const AlosPalsarDataSetSummary*>(_records.find(AlosPalsarDataSetSummaryID)->second);
 }
 
 const AlosPalsarFileDescriptor * AlosPalsarLeader::get_AlosPalsarFileDescriptor() const
 {
-//   return (AlosPalsarFileDescriptor*)_records[AlosPalsarFileDescriptorID];
   return dynamic_cast<const AlosPalsarFileDescriptor*>(_records.find(AlosPalsarFileDescriptorID)->second);
 }
 

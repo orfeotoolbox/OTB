@@ -15,6 +15,7 @@
 #include <AlosPalsar/AlosPalsarDataSetSummary.h>
 #include <AlosPalsar/AlosPalsarFileDescriptor.h>
 #include <AlosPalsar/AlosPalsarPlatformPositionData.h>
+#include <AlosPalsar/AlosPalsarRadiometricData.h>
 #include <AlosPalsar/AlosPalsarFacilityData.h>
 
 namespace ossimplugins
@@ -23,6 +24,7 @@ namespace ossimplugins
 AlosPalsarLeaderFactory::AlosPalsarLeaderFactory()
 {
   RegisterRecord(17, new AlosPalsarFacilityData());
+  RegisterRecord(5, new AlosPalsarRadiometricData());
   RegisterRecord(3, new AlosPalsarPlatformPositionData());
 //  RegisterRecord(3, new AlosPalsarMapProjectionData());//
   RegisterRecord(2, new AlosPalsarDataSetSummary());
