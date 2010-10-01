@@ -25,6 +25,9 @@ TARGET_LINK_LIBRARIES(MeanShiftVectorImageFilterExample OTBCommon OTBIO OTBBasic
 ADD_EXECUTABLE(HillShadingExample HillShadingExample.cxx )
 TARGET_LINK_LIBRARIES(HillShadingExample OTBCommon OTBIO OTBBasicFilters)
 
+ADD_EXECUTABLE(BandMathFilterExample BandMathFilterExample.cxx )
+TARGET_LINK_LIBRARIES(BandMathFilterExample OTBCommon OTBIO OTBBasicFilters)
+
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/BasicFilters)

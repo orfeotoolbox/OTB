@@ -41,7 +41,7 @@ namespace otb
  * OTB additional functions:
  * ndvi(r, niri)
  * 
- * OTB additional contants:
+ * OTB additional constants:
  * e - log2e - log10e - ln2 - ln10 - pi - euler
  *
  * In order to use this filter, at least one input image is to be
@@ -49,7 +49,7 @@ namespace otb
  * the corresponding SetNthInput method. For the nth input image, if
  * no associated variable name has been spefified, a default variable
  * name is given by concatenating the letter "b" (for band) and the
- * coresponding input index.
+ * corresponding input index.
  * Next step is to set the expression according to the variable
  * names. For example, in the default case with three input images the
  * following expression is valid :

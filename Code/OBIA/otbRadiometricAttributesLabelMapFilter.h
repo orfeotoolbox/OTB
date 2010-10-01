@@ -18,6 +18,8 @@
 #ifndef __otbRadiometricAttributesLabelMapFilter_h
 #define __otbRadiometricAttributesLabelMapFilter_h
 
+#include "vcl_deprecated_header.h"
+
 #include "otbStatisticsAttributesLabelMapFilter.h"
 
 #include "otbVegetationIndicesFunctor.h"
@@ -118,7 +120,7 @@ private:
 } // End namespace Functor
 
 /** \class RadiometricAttributesLabelMapFilter
- *  \brief This filter computes radiometric attributes for each object.
+ *  \brief <b>DEPRECATED</b>: This filter computes radiometric attributes for each object.
  *
  * Images are supposed to be standard 4-bands image (B,G,R,NIR). The
  * index of each channel can be set via the Set***ChannelIndex()
@@ -136,6 +138,8 @@ private:
  *
  * The ReducedAttributesSet flag allows to tell the internal
  * statistics filter to compute only the main attributes.
+ *
+ * \deprecated use the otb::BandsStatisticsImageFilter instead
  *
  * \sa MultiStatsAttributesLabelObjectFunctor AttributesMapLabelObject
  * \sa GEMI NDVI IR IC IB NDWI2

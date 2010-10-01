@@ -92,9 +92,9 @@ int otbSensorModelGrid(int argc, char* argv[])
   double deltaX = static_cast<double>(sizeIn[0]) / static_cast<double>(size_x);
   double deltaY = static_cast<double>(sizeIn[1]) / static_cast<double>(size_y);
 
-  for(unsigned int i = 0 ; i < size_x; ++i)
+  for(unsigned int i = 0; i < size_x; ++i)
     {
-      for(unsigned int j = 0 ; j < size_y; ++j)
+      for(unsigned int j = 0; j < size_y; ++j)
         {
           itk::Point<double, 2> imagePoint;
           imagePoint[0] = deltaX * i;

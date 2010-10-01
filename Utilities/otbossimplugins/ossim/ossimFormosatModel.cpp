@@ -351,8 +351,11 @@ void ossimplugins::ossimFormosatModel::loadSupportData()
       return;
    }
 
+   if (traceExec())
+     {
    ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimFormosatModel::loadSupportData(): theSupportData->getErrorStatus(): " 
                 << theSupportData->getErrorStatus() <<std::endl;
+     }
 
    if (theSupportData->getErrorStatus() != ossimErrorCodes::OSSIM_OK)
    {

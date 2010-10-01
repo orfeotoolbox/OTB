@@ -52,9 +52,9 @@ template <class TInputImage, class TCoordRep>
 void BCOInterpolateImageFunctionBase<TInputImage, TCoordRep>
 ::SetRadius(unsigned int radius)
 {
-  if (radius == 0)
+  if (radius < 2)
     {
-    itkExceptionMacro(<< "Radius Must Be Strictly Superior to 0");
+    itkExceptionMacro(<< "Radius Must Be Strictly Superior to 1");
     }
   else 
     {
@@ -145,7 +145,6 @@ BCOInterpolateImageFunctionBase<TInputImage, TCoordRep>
     position += step;
     }
 }
-
 
 
 /** Constructor */
@@ -247,9 +246,9 @@ BCOInterpolateImageFunction<TInputImage, TCoordRep>
     }
   
   
-  for( int i = -radius ; i <= radius; i++ )
+  for( int i = -radius; i <= radius; i++ )
     {
-    for( int j = -radius ; j <= radius; j++ )
+    for( int j = -radius; j <= radius; j++ )
       {  
       // get neighbor index
       neighIndex[0] = baseIndex[0] + i;
@@ -275,7 +274,7 @@ BCOInterpolateImageFunction<TInputImage, TCoordRep>
 #endif
 
       lineRes[i+radius] = lineRes[i+radius]
-        + static_cast<RealType>( this->GetInputImage()->GetPixel( neighIndex ) ) * BCOCoefY[j+radius] ;
+        + static_cast<RealType>( this->GetInputImage()->GetPixel( neighIndex ) ) * BCOCoefY[j+radius];
       }
     value += lineRes[i+radius]*BCOCoefX[i+radius];
     }
@@ -285,7 +284,6 @@ BCOInterpolateImageFunction<TInputImage, TCoordRep>
 
   return ( static_cast<OutputType>( value/norma ) );
 }
-
 
 
 /** Constructor */
@@ -409,9 +407,9 @@ BCOInterpolateImageFunction< otb::VectorImage<TPixel,VImageDimension> , TCoordRe
     baseIndex[dim] = itk::Math::Floor< IndexValueType >( index[dim]+0.5 );
     }  
   
-  for( int i = -radius ; i <= radius; i++ )
+  for( int i = -radius; i <= radius; i++ )
     {
-    for( int j = -radius ; j <= radius; j++ )
+    for( int j = -radius; j <= radius; j++ )
       {  
       // get neighbor index
       neighIndex[0] = baseIndex[0] + i;
@@ -439,7 +437,7 @@ BCOInterpolateImageFunction< otb::VectorImage<TPixel,VImageDimension> , TCoordRe
       for( unsigned int k = 0; k<componentNumber; k++)
         {
         lineRes[i+radius].at(k) = lineRes[i+radius].at(k)
-          + this->GetInputImage()->GetPixel( neighIndex ).GetElement(k) * BCOCoefY[j+radius] ;
+          + this->GetInputImage()->GetPixel( neighIndex ).GetElement(k) * BCOCoefY[j+radius];
         }
       }
     for( unsigned int k = 0; k<componentNumber; k++)
