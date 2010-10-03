@@ -25,27 +25,13 @@
 namespace otb
 {
 
-/** Constructor */
-template <class TInputImage, class TCoordRep>
-BCOInterpolateImageFunctionBase<TInputImage, TCoordRep>
-::BCOInterpolateImageFunctionBase()
-{
-  m_Radius = 2;
-  m_Alpha  = -0.5;
-}
-
-/** Destructor */
-template <class TInputImage, class TCoordRep>
-BCOInterpolateImageFunctionBase<TInputImage, TCoordRep>
-::~BCOInterpolateImageFunctionBase()
-{
-}
-
 template <class TInputImage, class TCoordRep>
 void BCOInterpolateImageFunctionBase<TInputImage, TCoordRep>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
+  os << indent << "Radius: " << m_Radius << std::endl;
+  os << indent << "Alpha: " << m_Alpha << std::endl;
 }
 
 template <class TInputImage, class TCoordRep>
@@ -54,9 +40,9 @@ void BCOInterpolateImageFunctionBase<TInputImage, TCoordRep>
 {
   if (radius < 2)
     {
-    itkExceptionMacro(<< "Radius Must Be Strictly Superior to 1");
+    itkExceptionMacro(<< "Radius must be strictly greater than 1");
     }
-  else 
+  else
     {
     m_Radius = radius;
     }
@@ -96,22 +82,22 @@ BCOInterpolateImageFunctionBase<TInputImage, TCoordRep>
 
   offsetX = index[0] - itk::Math::Floor<IndexValueType>(index[0]+0.5);
   offsetY = index[1] - itk::Math::Floor<IndexValueType>(index[1]+0.5);
-             
+
   // Compute BCO coefficients
   step = 4./static_cast<double>(2*m_Radius);
   position = - double(m_Radius) * step;
-  
+
   for ( int i = -m_Radius; i <= m_Radius; i++)
     {
     // Compute the BCO coefficients according to alpha.
     distX = vcl_abs(position - offsetX*step);
     distY = vcl_abs(position - offsetY*step);
-     
+
     if( distX <= 2. )
       {
       if (distX <= 1.)
         {
-        BCOCoefX[m_Radius+i] = (m_Alpha + 2.)*vcl_abs(vcl_pow(distX, 3)) 
+        BCOCoefX[m_Radius+i] = (m_Alpha + 2.)*vcl_abs(vcl_pow(distX, 3))
           - (m_Alpha + 3.)*vcl_pow(distX, 2) + 1;
         }
       else
@@ -129,7 +115,7 @@ BCOInterpolateImageFunctionBase<TInputImage, TCoordRep>
       {
       if (distY <= 1.)
         {
-        BCOCoefY[m_Radius+i] = (m_Alpha + 2.)*vcl_abs(vcl_pow(distY, 3)) 
+        BCOCoefY[m_Radius+i] = (m_Alpha + 2.)*vcl_abs(vcl_pow(distY, 3))
           - (m_Alpha + 3.)*vcl_pow(distY, 2) + 1;
         }
       else
@@ -144,21 +130,6 @@ BCOInterpolateImageFunctionBase<TInputImage, TCoordRep>
       }
     position += step;
     }
-}
-
-
-/** Constructor */
-template <class TInputImage, class TCoordRep>
-BCOInterpolateImageFunction<TInputImage, TCoordRep>
-::BCOInterpolateImageFunction()
-{
-}
-
-/** Destructor */
-template <class TInputImage, class TCoordRep>
-BCOInterpolateImageFunction<TInputImage, TCoordRep>
-::~BCOInterpolateImageFunction()
-{
 }
 
 template <class TInputImage, class TCoordRep>
@@ -180,7 +151,7 @@ BCOInterpolateImageFunction<TInputImage, TCoordRep>
   CoefContainerType BCOCoefY = CoefContainerType(winSize, 0.);
   double offsetX, offsetY, distX, distY, position, step, alpha, norma;
   unsigned int dim;
- 
+
   IndexType baseIndex;
   IndexType neighIndex;
 
@@ -195,22 +166,22 @@ BCOInterpolateImageFunction<TInputImage, TCoordRep>
   position = - double(radius) * step;
 
   alpha = this->GetAlpha();
-  
+
   for ( int i = -radius; i <= radius; i++)
     {
     distX = vcl_abs(position - offsetX*step);
     distY = vcl_abs(position - offsetY*step);
-     
+
     if( distX <= 2. )
       {
       if (distX <= 1.)
         {
-        BCOCoefX[radius+i] = (alpha + 2.)*vcl_abs(vcl_pow(distX, 3)) 
+        BCOCoefX[radius+i] = (alpha + 2.)*vcl_abs(vcl_pow(distX, 3))
           - (alpha + 3.)*vcl_pow(distX, 2) + 1;
         }
       else
         {
-        BCOCoefX[radius+i] = alpha*vcl_abs(vcl_pow(distX, 3)) 
+        BCOCoefX[radius+i] = alpha*vcl_abs(vcl_pow(distX, 3))
           - 5*alpha*vcl_pow(distX, 2) + 8*alpha*vcl_abs(distX) - 4*alpha;
         }
       }
@@ -223,7 +194,7 @@ BCOInterpolateImageFunction<TInputImage, TCoordRep>
       {
       if (distY <= 1.)
         {
-        BCOCoefY[radius+i] = (alpha + 2.)*vcl_abs(vcl_pow(distY, 3)) 
+        BCOCoefY[radius+i] = (alpha + 2.)*vcl_abs(vcl_pow(distY, 3))
           - (alpha + 3.)*vcl_pow(distY, 2) + 1;
         }
       else
@@ -238,18 +209,17 @@ BCOInterpolateImageFunction<TInputImage, TCoordRep>
       }
      position += step;
     }
-  
+
   // Compute base index = closet index
   for( dim = 0; dim < ImageDimension; dim++ )
     {
     baseIndex[dim] = itk::Math::Floor< IndexValueType >( index[dim]+0.5 );
     }
-  
-  
+
   for( int i = -radius; i <= radius; i++ )
     {
     for( int j = -radius; j <= radius; j++ )
-      {  
+      {
       // get neighbor index
       neighIndex[0] = baseIndex[0] + i;
       neighIndex[1] = baseIndex[1] + j;
@@ -262,7 +232,6 @@ BCOInterpolateImageFunction<TInputImage, TCoordRep>
         {
         neighIndex[0] = this->m_StartIndex[0];
         }
-      
       if( neighIndex[1] > this->m_EndIndex[1] )
         {
         neighIndex[1] = this->m_EndIndex[1];
@@ -278,26 +247,11 @@ BCOInterpolateImageFunction<TInputImage, TCoordRep>
       }
     value += lineRes[i+radius]*BCOCoefX[i+radius];
     }
-  
+
   norma = (vcl_log(radius)/vcl_log(2.0));
   norma = norma * norma;
 
   return ( static_cast<OutputType>( value/norma ) );
-}
-
-
-/** Constructor */
-template < typename TPixel, unsigned int VImageDimension, class TCoordRep >
-BCOInterpolateImageFunction< otb::VectorImage<TPixel,VImageDimension> , TCoordRep >
-::BCOInterpolateImageFunction()
-{
-}
-
-/** Destructor */
-template < typename TPixel, unsigned int VImageDimension, class TCoordRep >
-BCOInterpolateImageFunction< otb::VectorImage<TPixel,VImageDimension> , TCoordRep >
-::~BCOInterpolateImageFunction()
-{
 }
 
 template < typename TPixel, unsigned int VImageDimension, class TCoordRep >
@@ -322,7 +276,7 @@ BCOInterpolateImageFunction< otb::VectorImage<TPixel,VImageDimension> , TCoordRe
   double offsetX, offsetY, distX, distY, position, step, alpha, norma;
   unsigned int dim;
   unsigned int componentNumber = this->GetInputImage()->GetNumberOfComponentsPerPixel();
- 
+
   IndexType baseIndex;
   IndexType neighIndex;
 
@@ -349,7 +303,7 @@ BCOInterpolateImageFunction< otb::VectorImage<TPixel,VImageDimension> , TCoordRe
   OutputType output;
 
   output.SetSize(componentNumber);
- 
+
   offsetX = index[0] - itk::Math::Floor<IndexValueType>(index[0]+0.5);
   offsetY = index[1] - itk::Math::Floor<IndexValueType>(index[1]+0.5);
 
@@ -357,22 +311,22 @@ BCOInterpolateImageFunction< otb::VectorImage<TPixel,VImageDimension> , TCoordRe
   position = - double(radius) * step;
 
   alpha = this->GetAlpha();
-  
+
   for ( int i = -radius; i <= radius; i++)
     {
     distX = vcl_abs(position - offsetX*step);
     distY = vcl_abs(position - offsetY*step);
-     
+
     if( distX <= 2. )
       {
       if (distX <= 1.)
         {
-        BCOCoefX[radius+i] = (alpha + 2.)*vcl_abs(vcl_pow(distX, 3)) 
+        BCOCoefX[radius+i] = (alpha + 2.)*vcl_abs(vcl_pow(distX, 3))
           - (alpha + 3.)*vcl_pow(distX, 2) + 1;
         }
       else
         {
-        BCOCoefX[radius+i] = alpha*vcl_abs(vcl_pow(distX, 3)) 
+        BCOCoefX[radius+i] = alpha*vcl_abs(vcl_pow(distX, 3))
           - 5*alpha*vcl_pow(distX, 2) + 8*alpha*vcl_abs(distX) - 4*alpha;
         }
       }
@@ -385,7 +339,7 @@ BCOInterpolateImageFunction< otb::VectorImage<TPixel,VImageDimension> , TCoordRe
       {
       if (distY <= 1.)
         {
-        BCOCoefY[radius+i] = (alpha + 2.)*vcl_abs(vcl_pow(distY, 3)) 
+        BCOCoefY[radius+i] = (alpha + 2.)*vcl_abs(vcl_pow(distY, 3))
           - (alpha + 3.)*vcl_pow(distY, 2) + 1;
         }
       else
@@ -405,12 +359,12 @@ BCOInterpolateImageFunction< otb::VectorImage<TPixel,VImageDimension> , TCoordRe
   for( dim = 0; dim < ImageDimension; dim++ )
     {
     baseIndex[dim] = itk::Math::Floor< IndexValueType >( index[dim]+0.5 );
-    }  
-  
+    }
+
   for( int i = -radius; i <= radius; i++ )
     {
     for( int j = -radius; j <= radius; j++ )
-      {  
+      {
       // get neighbor index
       neighIndex[0] = baseIndex[0] + i;
       neighIndex[1] = baseIndex[1] + j;
@@ -423,7 +377,6 @@ BCOInterpolateImageFunction< otb::VectorImage<TPixel,VImageDimension> , TCoordRe
         {
         neighIndex[0] = this->m_StartIndex[0];
         }
-      
       if( neighIndex[1] > this->m_EndIndex[1] )
         {
         neighIndex[1] = this->m_EndIndex[1];
@@ -445,7 +398,7 @@ BCOInterpolateImageFunction< otb::VectorImage<TPixel,VImageDimension> , TCoordRe
       value.at(k) += lineRes[i+radius].at(k)*BCOCoefX[i+radius];
       }
     }
-  
+
   norma = (vcl_log(radius)/vcl_log(2.0));
   norma = norma * norma;
 
@@ -456,7 +409,6 @@ BCOInterpolateImageFunction< otb::VectorImage<TPixel,VImageDimension> , TCoordRe
 
   return ( output );
 }
-
 
 } //namespace otb
 
