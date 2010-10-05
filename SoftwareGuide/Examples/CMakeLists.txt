@@ -274,6 +274,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/DEMToRainbowExample.cxx
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/MeanShiftVectorImageFilterExample.cxx
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/HillShadingExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/BasicFilters/BandMathFilterExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Registration/ImageRegistration1.cxx
   ${OTB_SOURCE_DIR}/Examples/Registration/ImageRegistration2.cxx
   ${OTB_SOURCE_DIR}/Examples/Registration/ImageRegistration5.cxx
