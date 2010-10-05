@@ -36,4 +36,5 @@ void RegisterTests()
   REGISTER_TEST(otbConfusionMatrixCalculatorSetListSamples);
   REGISTER_TEST(otbConfusionMatrixCalculatorWrongSize);
   REGISTER_TEST(otbConfusionMatrixCalculatorUpdate);
+  REGISTER_TEST(otbSVMValidation);
 }
