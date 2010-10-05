@@ -32,6 +32,7 @@ void RegisterTests()
   REGISTER_TEST(otbOrthoRectificationMonoThreadFilter);
   REGISTER_TEST(otbGCPsToRPCSensorModelImageFilterNew);
   REGISTER_TEST(otbGCPsToRPCSensorModelImageFilterWithoutDEM);
+  REGISTER_TEST(otbGCPsToRPCSensorModelImageFilterAndOrtho);
   REGISTER_TEST(otbLeastSquareAffineTransformEstimatorNew);
   REGISTER_TEST(otbLeastSquareAffineTransformEstimator);
 }
