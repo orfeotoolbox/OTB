@@ -43,7 +43,7 @@ SVMModel<TValue, TLabel>::SVMModel()
   this->SetEpsilon(1e-3);
   this->SetP(0.1);
   this->DoShrinking(true);
-  this->DoProbabilityEstimates(true);
+  this->DoProbabilityEstimates(false);
 
   m_Parameters.kernel_generic = NULL;
   m_Parameters.kernel_composed = NULL;
