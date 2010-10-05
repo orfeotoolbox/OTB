@@ -533,7 +533,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 
 ADD_TEST(prTvGCPsToRPCSensorModelImageFilterAndOrtho ${PROJECTIONS_TESTS2}
-  --compare-ascii ${EPSILON_4} 
+  --compare-image ${EPSILON_4} 
          ${BASELINE_FILES}/otbGCPsToRPCSensorModelImageFilterAndOrthoOutput.tif
          ${TEMP}/otbGCPsToRPCSensorModelImageFilterAndOrthoOutput.tif
          otbGCPsToRPCSensorModelImageFilterAndOrtho
