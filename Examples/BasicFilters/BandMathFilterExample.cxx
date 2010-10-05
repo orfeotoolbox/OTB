@@ -31,7 +31,7 @@
 //  to perform mathematical operation on the input images.
 //  This filter is based on the mathematical parser library muParser.
 //  The built in functions and operators list is available at:
-//  http://muparser.sourceforge.net/mup_features.html#idDef2
+//  \ref{http://muparser.sourceforge.net/mup_features.html} \\
 //  In order to use this filter, at least one input image is to be
 // set. An associated variable name can be specified or not by using
 // the corresponding SetNthInput method. For the nth input image, if
