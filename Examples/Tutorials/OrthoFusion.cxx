@@ -37,7 +37,6 @@
 
 #include "otbOrthoRectificationFilter.h"
 #include "otbMapProjections.h"
-#include "otbPerBandVectorImageFilter.h"
 
 #include "otbSimpleRcsPanSharpeningFusionImageFilter.h"
 #include "otbStandardFilterWatcher.h"
@@ -174,39 +173,22 @@ int main(int argc, char* argv[])
 
   //  Software Guide : BeginLatex
   // Now we are able to have the orthorectified area from the PAN image. We just
-  // have to follow a similar process for the XS image. However,
-  // the \doxygen{otb}{OrthoRectificationFilter} is designed to work with one
-  // band images. To be able to process the XS image (which is a
-  // \doxygen{otb}{VectorImage}), we need to use the
-  // \doxygen{otb}{PerBandVectorImageFilter} which is going to apply the filter
-  // set via the method \code{SetFilter()} to all spectral bands.
+  // have to follow a similar process for the XS image.
   //
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::PerBandVectorImageFilter<VectorImageType,
-      DoubleVectorImageType,
-      OrthoRectifFilterType>
+  typedef otb::OrthoRectificationFilter<VectorImageType,
+      DoubleVectorImageType,utmMapProjectionType>
   VectorOrthoRectifFilterType;
 
-  OrthoRectifFilterType::Pointer orthoRectifXS =
-    OrthoRectifFilterType::New();
-  VectorOrthoRectifFilterType::Pointer orthoRectifXSVector =
+
+  VectorOrthoRectifFilterType::Pointer orthoRectifXS =
     VectorOrthoRectifFilterType::New();
-  orthoRectifXSVector->SetFilter(orthoRectifXS);
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
-  //  This is the only difference, the rest of the parameters are provided as
-  // before:
-  //
-  //  Software Guide : EndLatex
-
-  // Software Guide : BeginCodeSnippet
   orthoRectifXS->SetMapProjection(utmMapProjection);
 
-  orthoRectifXSVector->SetInput(readerXS->GetOutput());
+  orthoRectifXS->SetInput(readerXS->GetOutput());
 
   orthoRectifXS->SetOutputStartIndex(start);
   orthoRectifXS->SetOutputSize(size);
@@ -225,7 +207,7 @@ int main(int argc, char* argv[])
   <DoubleImageType, DoubleVectorImageType, VectorImageType> FusionFilterType;
   FusionFilterType::Pointer fusion = FusionFilterType::New();
   fusion->SetPanInput(orthoRectifPAN->GetOutput());
-  fusion->SetXsInput(orthoRectifXSVector->GetOutput());
+  fusion->SetXsInput(orthoRectifXS->GetOutput());
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
