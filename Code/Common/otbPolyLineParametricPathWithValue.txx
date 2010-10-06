@@ -151,6 +151,8 @@ PolyLineParametricPathWithValue<TValue, VDimension>
     y = static_cast<double>(it.Value()[1]);
     index[0] = x;
     index[1] = y;
+    maxId[0] = x;
+    maxId[1] = y;
 
     ++it;
     while (it != this->GetVertexList()->End())
