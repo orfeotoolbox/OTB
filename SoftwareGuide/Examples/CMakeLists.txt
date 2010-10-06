@@ -287,7 +287,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Projections/PlaceNameToLonLatExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Projections/EstimateRPCSensorModelExample.cxx
   ${OTB_SOURCE_DIR}/Examples/DisparityMap/SimpleDisparityMapEstimationExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/DisparityMap/NCCRegistrationFilterExample.cxx
+  #${OTB_SOURCE_DIR}/Examples/DisparityMap/NCCRegistrationFilterExample.cxx
   ${OTB_SOURCE_DIR}/Examples/DisparityMap/FineRegistrationImageFilterExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/InnerProductPCAExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/TextureExample.cxx
@@ -402,7 +402,7 @@ SET(OTB_EXAMPLES_SRCS ${OTB_EXAMPLES_SRCS}
   ${OTB_SOURCE_DIR}/Examples/Patented/SIFTDisparityMapEstimation.cxx
   ${OTB_SOURCE_DIR}/Examples/Patented/SIFTFastExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Patented/EstimateAffineTransformationExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/Patented/SIFTDensityExample.cxx
+  #${OTB_SOURCE_DIR}/Examples/Patented/SIFTDensityExample.cxx
    )
 ENDIF(OTB_USE_PATENTED)
 

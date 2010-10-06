@@ -995,8 +995,15 @@ sharp peak, in order to have a good precision for the shift estimate.\\
 %% measure will be less sharp.\\
 
 
-\section{Disparity Map Estimation Framework}
-\label{sec:DisparityMapEstimationFramework}
+\section{Regular grid disparity map estimation}
+\label{sec:SimpleDisparityMapEstimationDense}
+%% \ifitkFullVersion
+\input{FineRegistrationImageFilterExample.tex}
+%% \fi
+
+\section{Irregular grid disparity map estimation}
+\label{sec:SimpleDisparityMapEstimationSparse}
+
 Taking figure \ref{zones} as a starting point, we can generalize the
 approach by letting the user choose:
 \begin{itemize}
@@ -1012,29 +1019,19 @@ regular vector field which gives the translation to be applied to
 a pixel of the secondary image to be positioned on its homologous
 point of the master image.
 
-\section{Simple Disparity Map Estimation (dense method)}
-\label{sec:SimpleDisparityMapEstimationDense}
-%% \ifitkFullVersion
-\input{FineRegistrationImageFilterExample.tex}
-%% \fi
 
-\section{Simple Disparity Map Estimation (sparse method)}
-\label{sec:SimpleDisparityMapEstimationSparse}
 %% \ifitkFullVersion
 \input{SimpleDisparityMapEstimationExample.tex}
 %% \fi
 
-\section{PDE Estimation}
-\label{sec:PDEEstimation}
-\input{NCCRegistrationFilterExample.tex}
+% These examples are commented since they do not show valuable results
+%\section{Probability Density Estimation (PDE) based disparity map estimation}
+%\label{sec:PDEEstimation}
+%\input{NCCRegistrationFilterExample.tex}
 
-\section{Landmark-based Disparity Map Estimation}
-\label{sec:Landmark-basedDisparityMapEstimation}
-\input{SIFTDisparityMapEstimation.tex}
-
-\section{Affine transformation Estimation}
-\label{sec:EstimateAffineTransformationExample}
-\input{EstimateAffineTransformationExample.tex}
+%\section{Landmark-based Disparity Map Estimation}
+%\label{sec:Landmark-basedDisparityMapEstimation}
+%\input{SIFTDisparityMapEstimation.tex}
 
 
 
