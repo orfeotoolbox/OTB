@@ -69,8 +69,8 @@ int otbSarParametricMapFunctionToImageFilter(int argc, char * argv[])
   p0[0] = static_cast<unsigned int>(100);
   p0[1] = static_cast<unsigned int>(100);
   value = 50.0;
-  points->SetPoint(3, p0);
-  points->SetPointData(1, value);
+  points->SetPoint(2, p0);
+  points->SetPointData(2, value);
 
 
   function->SetPointSet(points);
