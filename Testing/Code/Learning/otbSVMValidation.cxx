@@ -32,6 +32,8 @@
 #include "otbSVMClassifier.h"
 #include "otbConfusionMatrixCalculator.h"
 
+#include "otbMath.h"
+
 #include <fstream>
 
 int otbSVMValidation(int argc, char* argv[])
@@ -83,7 +85,7 @@ int otbSVMValidation(int argc, char* argv[])
   for(unsigned int i =0; i < nbTrainingSamples; ++i)
   {
 	  // Generate a positive sample
-	  double angle = random->GetVariateWithOpenUpperRange(2*M_PI);
+	  double angle = random->GetVariateWithOpenUpperRange( otb::CONST_2PI );
 	  double radius = random->GetUniformVariate(prmin,prmax);
 	  SampleType pSample(2);
 	  pSample[0] = cpx+radius*vcl_sin(angle);
@@ -96,7 +98,7 @@ int otbSVMValidation(int argc, char* argv[])
 //	  training<<"1 1:"<<pSample[0]<<" 2:"<<pSample[1]<<std::endl;
 
 	  // Generate a negative sample
-	  angle = random->GetVariateWithOpenUpperRange(2*M_PI);
+	  angle = random->GetVariateWithOpenUpperRange( otb::CONST_2PI );
 	  radius = random->GetUniformVariate(nrmin,nrmax);
 	  SampleType nSample(2);
 	  nSample[0] = cnx+radius*vcl_sin(angle);
@@ -116,7 +118,7 @@ int otbSVMValidation(int argc, char* argv[])
   for(unsigned int i =0; i < nbValidationSamples; ++i)
     {
   	  // Generate a positive sample
-  	  double angle = random->GetVariateWithOpenUpperRange(2*M_PI);
+  	  double angle = random->GetVariateWithOpenUpperRange( otb::CONST_2PI );
   	  double radius = random->GetUniformVariate(prmin,prmax);
   	  SampleType pSample(2);
   	  pSample[0] = cpx+radius*vcl_sin(angle);
@@ -128,7 +130,7 @@ int otbSVMValidation(int argc, char* argv[])
 //	  validation<<"1 1:"<<pSample[0]<<" 2:"<<pSample[1]<<std::endl;
 
   	  // Generate a negative sample
-  	  angle = random->GetVariateWithOpenUpperRange(2*M_PI);
+  	  angle = random->GetVariateWithOpenUpperRange( otb::CONST_2PI );
   	  radius = random->GetUniformVariate(nrmin,nrmax);
   	  SampleType nSample(2);
   	  nSample[0] = cnx+radius*vcl_sin(angle);
