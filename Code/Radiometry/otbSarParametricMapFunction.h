@@ -68,8 +68,7 @@ public:
   typedef typename PointSetType::Pointer                 PointSetPointer;
   typedef typename PointSetType::ConstPointer            PointSetConstPointer;
   typedef typename PointSetType::PointType               PointType;
-
-//  typedef typename PointSetType::PointType PointType;
+  typedef typename PointSetType::PixelType               PixelType;
 
   /** Datatype used for the evaluation */
   typedef typename itk::NumericTraits<InputPixelType>::ScalarRealType                       RealType;
@@ -92,9 +91,7 @@ public:
     return this->EvaluateAtIndex(index);
   }
 
-
   /** Get/Set the PointSet pointer*/
-//  itkSetMacro(PointSet, PointSetPointer);
   itkGetObjectMacro(PointSet, PointSetType);
   itkGetConstObjectMacro(PointSet, PointSetType);
   void SetPointSet(PointSetPointer val)
@@ -127,7 +124,6 @@ public:
   /** Set constante value for evaluation*/ 
   void SetConstantValue(const RealType& value);
 
-
 protected:
   SarParametricMapFunction();
   virtual ~SarParametricMapFunction(){}
@@ -136,7 +132,6 @@ protected:
 private:
   SarParametricMapFunction(const Self &);  //purposely not implemented
   void operator =(const Self&);  //purposely not implemented
-
 
   PointSetPointer m_PointSet;
   PointSetPointer m_Coeff;
