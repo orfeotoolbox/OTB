@@ -74,7 +74,6 @@ ADD_TEST(leTuSVMImageModelEstimatorNew ${LEARNING_TESTS1}
 ADD_TEST(leTvSVMImageModelEstimatorTrain ${LEARNING_TESTS1}
 --compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/leTvsvm_model_image
                         ${TEMP}/leTvsvm_model_image
---ignore-lines-with 2 probA probB
         otbSVMImageModelEstimatorTrain
 	${INPUTDATA}/ROI_QB_MUL_4.tif
 	${INPUTDATA}/ROI_QB_MUL_4_train.c1.hdr
@@ -84,7 +83,6 @@ ADD_TEST(leTvSVMImageModelEstimatorTrain ${LEARNING_TESTS1}
 ADD_TEST(leTlSVMImageModelEstimatorTrainWithOptimization ${LEARNING_TESTS1}
 --compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/leTvsvm_model_image_opt
                         ${TEMP}/leTvsvm_model_image_opt
---ignore-lines-with 2 probA probB
         otbSVMImageModelEstimatorTrain
 	${INPUTDATA}/ROI_QB_MUL_4.tif
 	${INPUTDATA}/ROI_QB_MUL_4_train.c1.hdr
@@ -120,7 +118,6 @@ ADD_TEST(leTuSVMPointSetModelEstimatorNew ${LEARNING_TESTS2}
 ADD_TEST(leTvSVMPointSetModelEstimatorTrain ${LEARNING_TESTS2}
 --compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/leTvsvm_model_pointset
                         ${TEMP}/leTvsvm_model_pointset
---ignore-lines-with 2 probA probB
         otbSVMPointSetModelEstimatorTrain
 	${TEMP}/leTvsvm_model_pointset)
 
@@ -133,7 +130,6 @@ ADD_TEST(leTvSVMSampleListModelEstimatorTest ${LEARNING_TESTS2}
  --compare-ascii ${EPSILON_9}
     ${BASELINE_FILES}/leTvSVMSampleListModelEstimatorModel.txt
     ${TEMP}/leTvSVMSampleListModelEstimatorModel.txt
- --ignore-lines-with 2 probA probB
         otbSVMSampleListModelEstimatorTest
     ${EXAMPLEDATA}/qb_RoadExtract.tif
     ${EXAMPLEDATA}/qb_RoadExtract_easyClassification.shp
@@ -406,7 +402,6 @@ FOREACH(kernelType RANGE 0 14)
    --compare-ascii ${EPSILON_9}
       ${BASELINE_FILES}/leTvSVMKernelTest${kernelType}.txt
       ${TEMP}/leTvSVMKernelTest${kernelType}.txt
-   --ignore-lines-with 2 probA probB
         otbSVMKernelsTest
       ${EXAMPLEDATA}/qb_RoadExtract.tif
       ${EXAMPLEDATA}/qb_RoadExtract_easyClassification.shp

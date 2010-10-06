@@ -53,8 +53,10 @@ ADD_TEST(bfTvFiltreLee ${BASICFILTERS_TESTS1}
 #
 # Filtre de FROST:
 #
-
-ADD_TEST(bfTvFiltreFrost ${BASICFILTERS_TESTS1}
+ADD_TEST(bfTuFrostFilterNew ${BASICFILTERS_TESTS1}
+         otbFrostFilterNew)
+         
+ADD_TEST(bfTvFrostFilter ${BASICFILTERS_TESTS1}
   --compare-image ${EPSILON_7}  ${BASELINE}/bfFiltreFrost_poupees_05_05_01.tif
                           ${TEMP}/bfFiltreFrost_poupees_05_05_01.tif
         otbFrostFilter

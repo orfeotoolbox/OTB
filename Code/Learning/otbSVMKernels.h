@@ -378,7 +378,7 @@ public:
       {
       if (x->index == y->index)
         {
-        total = total +  vcl_exp(-param.gamma * (x->value - y->value));
+        total = total +  vcl_exp(-param.gamma * vcl_abs(x->value - y->value));
         ++x;
         ++y;
         }

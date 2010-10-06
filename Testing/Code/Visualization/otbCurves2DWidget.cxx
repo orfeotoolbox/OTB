@@ -44,9 +44,88 @@ int otbCurves2DWidget(int argc, char * argv[])
   // Create a widget
   WidgetType::Pointer widget = WidgetType::New();
   widget->SetAxisOrigin(origin);
+  if( origin != widget->GetAxisOrigin())
+    {
+      std::cout << "error with GetAxisOrigin() method ! " << std::endl;
+      return EXIT_FAILURE;
+    }
+
   widget->SetAxisLength(length);
+  if( length != widget->GetAxisLength())
+    {
+      std::cout << "error with GetAxisLength() method ! " << std::endl;
+      return EXIT_FAILURE;
+    }
+
   widget->SetGridOrigin(gridOrigin);
+  if( gridOrigin != widget->GetGridOrigin())
+    {
+      std::cout << "error with GetGridOrigin() method ! " << std::endl;
+      return EXIT_FAILURE;
+    }
+
   widget->SetGridSpacing(gridSpacing);
+  if( gridSpacing != widget->GetGridSpacing())
+    {
+      std::cout << "error with GetGridSpacing() method ! " << std::endl;
+      return EXIT_FAILURE;
+    }
+
+
+  WidgetType::ColorType white;
+  white.Fill(1);
+  if(widget->GetBackgroundColor() != white)
+    {
+    std::cout << "error with GetBackgroundColor() method ! " << std::endl;
+    return EXIT_FAILURE;
+    }
+  widget->SetBackgroundColor(white);
+
+  // Colors
+  WidgetType::ColorType axisColor;
+  WidgetType::ColorType gridColor;
+
+  axisColor.Fill(0.);
+  gridColor.Fill(0.9);
+
+  if(widget->GetAxisColor() != axisColor)
+    {
+    std::cout << "error with GetAxisColor() method ! " << std::endl;
+    return EXIT_FAILURE;
+    }
+  widget->SetAxisColor(axisColor);
+
+  if(widget->GetGridColor() != gridColor)
+    {
+    std::cout << "error with GetGridColor() method ! " << std::endl;
+    return EXIT_FAILURE;
+    }
+  widget->SetGridColor(gridColor);
+
+  // Default margin
+  WidgetType::SizeType margins;
+  margins.Fill(20);
+  if(widget->GetMargins() != margins)
+    {
+    std::cout << "error with GetMargins() method ! " << std::endl;
+    return EXIT_FAILURE;
+    }
+  widget->SetMargins(margins);
+
+  widget->AutoScaleOn();
+  if(widget->GetAutoScale() != true)
+    {
+    std::cout << "error with m_AutoScale value ! " << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  widget->ZeroCrossingAxisOn();
+  if(widget->GetZeroCrossingAxis() != true)
+    {
+    std::cout << "error with m_ZeroCrossingAxis value ! " << std::endl;
+    return EXIT_FAILURE;
+    }
+
 
   // Resize it
   Fl_Window window(500, 500);
