@@ -52,16 +52,16 @@ void
 SarParametricMapFunction<TInputImage, TCoordRep>
 ::SetConstantValue(const RealType& value)
 {
-    PointType  p0;
+  PointType  p0;
 
-    m_IsInitialize = false;
-    m_PointSet->Initialize();   
-    p0[0] = static_cast<unsigned int>(0);
-    p0[1] = static_cast<unsigned int>(0);
+  m_IsInitialize = false;
+  m_PointSet->Initialize();
+  p0[0] = static_cast<unsigned int>(0);
+  p0[1] = static_cast<unsigned int>(0);
   m_PointSet->SetPoint(0, p0);
-    m_PointSet->SetPointData(0, value);
-    EvaluateParametricCoefficient();
-    this->Modified();  
+  m_PointSet->SetPointData(0, value);
+  EvaluateParametricCoefficient();
+  this->Modified();
 }
 
 
@@ -102,21 +102,21 @@ SarParametricMapFunction<TInputImage, TCoordRep>
   pointSet = this->GetPointSet();
    
   if (pointSet->GetNumberOfPoints() == 0)
-  {
-      itkExceptionMacro(<< "PointSet must be set before evaluating the parametric coefficient (at least one value)");
-  }
+    {
+    itkExceptionMacro(<< "PointSet must be set before evaluating the parametric coefficient (at least one value)");
+    }
 
   PointType  coef;
   PointType  point;
   typename PointSetType::PixelType pointValue;
   if(pointSet->GetNumberOfPoints() == 1)
-  {
-  coef[0] = 0;
-  coef[1] = 0;
+    {
+    coef[0] = 0;
+    coef[1] = 0;
     m_Coeff->SetPoint(0,coef);
     pointSet->GetPointData(0, &pointValue);
     m_Coeff->SetPointData(0,pointValue);
-  }
+    }
   
   // Perform the plane least square estimation
   unsigned int nbRecords = pointSet->GetNumberOfPoints();
@@ -127,19 +127,19 @@ SarParametricMapFunction<TInputImage, TCoordRep>
 
   // Fill the linear system
   for (unsigned int i = 0; i < nbRecords; ++i)
-  {
+    {
     this->GetPointSet()->GetPoint(i, &point);
     this->GetPointSet()->GetPointData(i, &pointValue);
     b(i)  = pointValue;
     
     for(unsigned int pointId = 0; pointId < nbCoef; ++pointId)
-    {
+      {
       PointType  powerCoef;
       this->GetCoeff()->GetPoint(pointId, &powerCoef);
       a(i,pointId)  = vcl_pow(point[0],powerCoef[0]);
       a(i,pointId) *= vcl_pow(point[1],powerCoef[1]);     
+      }
     }
-  }
   
   // Create the linear system
   vnl_sparse_matrix_linear_system<double> linearSystem(a, b);
@@ -149,9 +149,9 @@ SarParametricMapFunction<TInputImage, TCoordRep>
   linearSystemSolver.minimize(bestParams);
 
   for(unsigned int pointId = 0; pointId < nbCoef; ++pointId)
-  {
-  this->GetCoeff()->SetPointData(pointId,bestParams[pointId]);
-  }
+    {
+    this->GetCoeff()->SetPointData(pointId,bestParams[pointId]);
+    }
   m_IsInitialize = true;
 }
 
@@ -181,23 +181,22 @@ SarParametricMapFunction<TInputImage, TCoordRep>
     }
 
   if (m_IsInitialize == false )
-  {
+    {
     itkExceptionMacro(<< "must estimate parameters before evaluating ");
-  }
+    }
 
   if(m_UsingClosestPointMethod == false )
-  {
-    
-    for(unsigned int pointId = 0; pointId < m_Coeff->GetNumberOfPoints(); ++pointId)
     {
+    for(unsigned int pointId = 0; pointId < m_Coeff->GetNumberOfPoints(); ++pointId)
+      {
       PointType  powerCoef;
       
       this->GetCoeff()->GetPoint(pointId, &powerCoef);
       this->GetCoeff()->GetPointData(pointId, &pointValue);
-    
+
       result += pointValue * vcl_pow(index[0],powerCoef[0]) * vcl_pow(index[1],powerCoef[1]);
+      }
     }
-  }  
 
   return result;
 }
@@ -220,7 +219,7 @@ SarParametricMapFunction<TInputImage, TCoordRep>
   {
     m_Coeff->GetPoint(i,&point);
     m_Coeff->GetPointData(i,&pointValue);
-      os << indent << "Polynom coefficient: "  << point <<" with value : "<< pointValue << std::endl;
+    os << indent << "Polynom coefficient: "  << point <<" with value : "<< pointValue << std::endl;
   } 
   
 }
