@@ -53,11 +53,9 @@ SarParametricMapFunction<TInputImage, TCoordRep>
 ::SetConstantValue(const RealType& value)
 {
   PointType  p0;
-
+  p0.Fill(0);
   m_IsInitialize = false;
   m_PointSet->Initialize();
-  p0[0] = static_cast<unsigned int>(0);
-  p0[1] = static_cast<unsigned int>(0);
   m_PointSet->SetPoint(0, p0);
   m_PointSet->SetPointData(0, value);
   EvaluateParametricCoefficient();
@@ -73,6 +71,7 @@ SarParametricMapFunction<TInputImage, TCoordRep>
   typedef typename IndexType::IndexValueType IndexValueType;
   IndexValueType pointId = 0;
   PointType coef;
+  coef.Fill(0);
 
   m_IsInitialize = false;
   for (IndexValueType i = 0; i <= PolynomalSize[0]; ++i)
@@ -97,7 +96,6 @@ void
 SarParametricMapFunction<TInputImage, TCoordRep>
 ::EvaluateParametricCoefficient()
 {
-
   PointSetPointer pointSet;
   pointSet = this->GetPointSet();
    
@@ -108,7 +106,12 @@ SarParametricMapFunction<TInputImage, TCoordRep>
 
   PointType  coef;
   PointType  point;
+  coef.Fill(0);
+  point.Fill(0);
+
   typename PointSetType::PixelType pointValue;
+  pointValue = itk::NumericTraits<PixelType>::Zero;
+
   if(pointSet->GetNumberOfPoints() == 1)
     {
     coef[0] = 0;
@@ -135,6 +138,7 @@ SarParametricMapFunction<TInputImage, TCoordRep>
     for(unsigned int pointId = 0; pointId < nbCoef; ++pointId)
       {
       PointType  powerCoef;
+      powerCoef.Fill(0);
       this->GetCoeff()->GetPoint(pointId, &powerCoef);
       a(i,pointId)  = vcl_pow(point[0],powerCoef[0]);
       a(i,pointId) *= vcl_pow(point[1],powerCoef[1]);     
@@ -167,6 +171,7 @@ SarParametricMapFunction<TInputImage, TCoordRep>
 {
   RealType result;
   typename PointSetType::PixelType pointValue;
+  pointValue = itk::NumericTraits<PixelType>::Zero;
   
   result = itk::NumericTraits<RealType>::Zero;
 
@@ -190,6 +195,7 @@ SarParametricMapFunction<TInputImage, TCoordRep>
     for(unsigned int pointId = 0; pointId < m_Coeff->GetNumberOfPoints(); ++pointId)
       {
       PointType  powerCoef;
+      powerCoef.Fill(0);
       
       this->GetCoeff()->GetPoint(pointId, &powerCoef);
       this->GetCoeff()->GetPointData(pointId, &pointValue);
@@ -211,7 +217,9 @@ SarParametricMapFunction<TInputImage, TCoordRep>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   PointType  point;
-  typename PointSetType::PixelType pointValue;
+  point.Fill(0);
+  PixelType pointValue;
+  pointValue = itk::NumericTraits<PixelType>::Zero;
   
   this->Superclass::PrintSelf(os, indent);
   
