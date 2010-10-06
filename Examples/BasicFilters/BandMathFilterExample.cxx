@@ -173,7 +173,8 @@ int main( int argc, char* argv[])
 //  Software Guide : BeginLatex
 //
 // The muParser library offers also the possibility to extended existing built-in functions. For example,
-// you can use the OTB expression "ndvi(b3,b4)" with the filter. The mathematical expression would be in this case \textit{if($ndvi(b3,b4)>0.4$,255,0)}. It will return the same result.
+// you can use the OTB expression "ndvi(b3,b4)" with the filter. The mathematical expression would be in
+// this case \textit{if($ndvi(b3,b4)>0.4$,255,0)}. It will return the same result.
 //
 //  Software Guide : EndLatex
 
