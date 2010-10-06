@@ -141,16 +141,20 @@ SarParametricMapFunction<TInputImage, TCoordRep>
     }
   }
   
+  if(this->GetCoeff()->GetNumberOfPoints()>0)
+  {
   // Create the linear system
   vnl_sparse_matrix_linear_system<double> linearSystem(a, b);
   vnl_lsqr linearSystemSolver(linearSystem);
 
   // And solve it
-  linearSystemSolver.minimize(bestParams);
+  if(this->GetCoeff()->GetNumberOfPoints()>1)
+	linearSystemSolver.minimize(bestParams);
 
   for(unsigned int pointId = 0; pointId < nbCoef; ++pointId)
   {
   this->GetCoeff()->SetPointData(pointId,bestParams[pointId]);
+  }
   }
   m_IsInitialize = true;
 }
