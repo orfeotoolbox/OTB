@@ -67,6 +67,16 @@ OTB.
 %% %\input{SigmoidImageFilter.tex}
 %% \fi
 
+\section{Mathematical operations on images}
+OTB and ITK provide a lot of filters allowing to perform basic operations on image layers (thresholding, ratio, layers combinations...).
+It allows to create a processing chain defining at each step operations and to combine them in the data pipeline.
+But the library offers also the possibility to perform more generic complex mathematical operation on images in a single filter: the
+\doxygen{otb}{BandMathImageFilter}.
+
+\ifitkFullVersion
+\input{BandMathFilterExample.tex}
+\fi
+
 \section{Gradients}
 \label{sec:GradientFiltering}
 
