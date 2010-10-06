@@ -20,9 +20,9 @@
 #endif
 
 //  Software Guide : BeginCommandLineArgs
-//    INPUTS: {ROI_IKO_PAN_LesHalles_pos_spacing.tif}, {ROI_IKO_PAN_LesHalles_warped_pos_spacing.tif}
+//    INPUTS: {StereoFixed.png}, {StereoMoving.png}
 //    OUTPUTS: {deformationFieldOutput.png},{resampledMovingOutput.png}
-//    100 10 15 10 10 250 0.9
+//    5 5 9 7 10 100 0.8
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
@@ -46,7 +46,7 @@
 #include "itkWindowedSincInterpolateImageFunction.h"
 #include "itkZeroFluxNeumannBoundaryCondition.h"
 #include "itkGradientDescentOptimizer.h"
-#include "otbNearestPointDeformationFieldGenerator.h"
+#include "otbBSplinesInterpolateDeformationFieldGenerator.h"
 #include "itkWarpImageFilter.h"
 // Software Guide : EndCodeSnippet
 
@@ -345,7 +345,7 @@ int main(int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::NearestPointDeformationFieldGenerator<PointSetType,
+  typedef otb::BSplinesInterpolateDeformationFieldGenerator<PointSetType,
       DeformationFieldType>
   GeneratorType;
 
@@ -510,18 +510,15 @@ int main(int argc, char* argv[])
 
   // Software Guide : BeginLatex
   //
-  // Figure~\ref{fig:SIMPLEDISPARITYMAPESTIMATIONOUTPUT} shows the result of applying disparity map estimation on
-  // a regular point set, followed by deformation field estimation and fixed image resampling on an Ikonos image.
-  // The moving image is the fixed image warped with a sinusoidal deformation with a 3-pixels amplitude and a 170-pixels
-  // period. Please note that there are more efficient ways to interpolate the deformation field than nearest neighbor,
-  // including BSplines fitting.
+  // Figure~\ref{fig:SIMPLEDISPARITYMAPESTIMATIONOUTPUT} shows the result of applying disparity map estimation on a stereo pair
+  // using a regular point set, followed by deformation field estimation using Splines and fixed image resampling.
   //
   // \begin{figure}
   // \center
-  // \includegraphics[width=0.40\textwidth]{ROI_IKO_PAN_LesHalles_pos_spacing.eps}
-  // \includegraphics[width=0.40\textwidth]{ROI_IKO_PAN_LesHalles_warped_pos_spacing.eps}
-  // \includegraphics[width=0.40\textwidth]{deformationFieldOutput.eps}
-  // \includegraphics[width=0.40\textwidth]{resampledMovingOutput.eps}
+  // \includegraphics[width=0.20\textwidth]{StereoFixed.eps}
+  // \includegraphics[width=0.20\textwidth]{StereoMoving.eps}
+  // \includegraphics[width=0.20\textwidth]{deformationFieldOutput.eps}
+  // \includegraphics[width=0.20\textwidth]{resampledMovingOutput.eps}
   // \itkcaption[Deformation field and resampling from disparity map estimation]{From left
   // to right and top to bottom: fixed input image, moving image with a sinusoid deformation,
   // estimated deformation field in the horizontal direction, resampled moving image.}
