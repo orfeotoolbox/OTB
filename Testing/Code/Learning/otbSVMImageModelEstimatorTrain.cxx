@@ -31,6 +31,11 @@
 
 int otbSVMImageModelEstimatorTrain(int argc, char* argv[])
 {
+  // Force the pseudo-random number generator to always output
+  // the same sequence of random numbers
+  // Done because, in case of optimization, rand() is called by libsvm
+  srand(0);
+
   const char* inputImageFileName = argv[1];
   const char* trainingImageFileName = argv[2];
   const char* outputModelFileName = argv[3];
