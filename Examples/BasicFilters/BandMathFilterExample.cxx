@@ -21,24 +21,21 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {qb_RoadExtract.tif}
-//    OUTPUTS: {RoadExtractBandMath.tif}, {RoadExtractBandMath-pretty.jpg}
+//    OUTPUTS: {RoadExtractBandMath.tif}, {qb_BandMath-pretty.jpg}
 //  Software Guide : EndCommandLineArgs
 
 //  Software Guide : BeginLatex
 //
-//  This example demonstrates the use of the
-//  \doxygen{otb}{BandMathImageFilter} class which allows
-//  to perform mathematical operation on the input images.
 //  This filter is based on the mathematical parser library muParser.
 //  The built in functions and operators list is available at:
-//  \ref{http://muparser.sourceforge.net/mup_features.html} \\
+//  \url{http://muparser.sourceforge.net/mup_features.html} \\
 //  In order to use this filter, at least one input image is to be
 // set. An associated variable name can be specified or not by using
 // the corresponding SetNthInput method. For the nth input image, if
-// no associated variable name has been spefified, a default variable
+// no associated variable name has been specified, a default variable
 // name is given by concatenating the letter "b" (for band) and the
 // corresponding input index. \\
-// Next step is to set the expression according to the variable
+// The next step is to set the expression according to the variable
 // names. For example, in the default case with three input images the
 // following expression is valid : "(b1+b2)*b3".
 //
@@ -48,18 +45,18 @@
 #include <iostream>
 
 #include "otbImage.h"
-#include "otbObjectList.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbMultiToMonoChannelExtractROI.h"
 #include "itkCastImageFilter.h"
+#include "otbVectorImageToImageListFilter.h"
+
 //  Software Guide : BeginLatex
 //
 // We start by including the needed header file.
-// The aim of this example is to compute the NDVI indice
+// The aim of this example is to compute the Normalized Difference Vegetation Index (NDVI)
 // from a multispecral image and perform a threshold on this 
-// indice.
+// indice to extract area containing a dense vegetation canopy.
 //
 //  Software Guide : EndLatex
 
@@ -80,21 +77,22 @@ int main( int argc, char* argv[])
 //  Software Guide : BeginLatex
 //
 //  We start by the classical \code{typedef}s needed for reading and
-//  writing the images.The \doxygen{otb}{BandMathImageFilter} class
+//  writing the images. The \doxygen{otb}{BandMathImageFilter} class
 // works with \doxygen{otb}{Image} as input so we need to define additional 
 // filters to extract each layer of the multispectral image
 //
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef double                                                        PixelType;
-  typedef otb::VectorImage<PixelType, 2>                                InputImageType;
-  typedef otb::Image<PixelType, 2>                                      OutputImageType;
-  typedef OutputImageType::PixelType                                    VPixelType;
-  typedef otb::MultiToMonoChannelExtractROI<VPixelType, VPixelType>     ExtractROIFilterType;
-  typedef otb::ObjectList<ExtractROIFilterType>                         ExtractROIFilterListType;
-  typedef otb::ImageFileReader<InputImageType>                          ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType>                         WriterType;
+  typedef double                                                          PixelType;
+  typedef otb::VectorImage<PixelType, 2>                                  InputImageType;
+  typedef otb::Image<PixelType, 2>                                        OutputImageType;
+  typedef otb::ImageList<OutputImageType>                                 ImageListType;
+  typedef OutputImageType::PixelType                                      VPixelType;
+  typedef otb::VectorImageToImageListFilter<InputImageType,ImageListType>
+  VectorImageToImageListType;
+  typedef otb::ImageFileReader<InputImageType>                            ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType>                           WriterType;
 // Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex
@@ -129,54 +127,38 @@ int main( int argc, char* argv[])
   
 //  Software Guide : BeginLatex
 //
-//  We need now to extract bands from the \doxygen{otb}{VectorImage}, 
-//  it illustrates the use of the \doxygen{otb}{MultiToMonoChannelExtractROI}.
+//  We need now to extract now each band from the input \doxygen{otb}{VectorImage},
+//  it illustrates the use of the \doxygen{otb}{VectorImageToImageList}.
 //  Each extracted layer are inputs of the \doxygen{otb}{BandMathImageFilter}:
 //
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  unsigned int bandId = 0;
-  ExtractROIFilterListType::Pointer ChannelExtractorList = ExtractROIFilterListType::New();
-  
-  for(unsigned int j = 0; j < reader->GetOutput()->GetNumberOfComponentsPerPixel(); ++j)
-    {
-    std::ostringstream tmpParserVarName;
-    tmpParserVarName << "b" << j+1;
+  VectorImageToImageListType::Pointer imageList = VectorImageToImageListType::New();
+  imageList->SetInput(reader->GetOutput());
 
-    ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
-    extractROIFilter->SetInput(reader->GetOutput());
-    extractROIFilter->SetChannel(j+1);
-    extractROIFilter->GetOutput()->UpdateOutputInformation();
-    ChannelExtractorList->PushBack(extractROIFilter);
-    filter->SetNthInput(bandId, ChannelExtractorList->Back()->GetOutput(), tmpParserVarName.str());
-    ++bandId;
-    }
+  imageList->UpdateOutputInformation();
+
+  const unsigned int nbBands = reader->GetOutput()->GetNumberOfComponentsPerPixel();
+
+  for(unsigned int j = 0; j < nbBands; ++j)
+      {
+      filter->SetNthInput(j, imageList->GetOutput()->GetNthElement(j));
+      }
 // Software Guide : EndCodeSnippet
-
-
-  filter->SetExpression("sign(ndvi(b3,b4) - 0.4)");
   
 //  Software Guide : BeginLatex
 //
 //  Now we can define the mathematical expression to perform on the layers (b1, b2,b3,b4).
 //  The filter takes advantage of the parsing capabilities of the muParser library and
 //  allows to set the expression as on a digital calculator. \\
-//  The expression below returns the sign of the ratio $(NIR-RED)/(NIR+RED) - 0,4$.
-//  It uses the built-in function sign(x)  which return -1 if x<0; 1 if x>0:
+//  The expression below returns 255 if the ratio $(NIR-RED)/(NIR+RED)$ is greater than 0.4 and 0 if not.
 //
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  filter->SetExpression("sign((b4-b3)/(b4+b3) - 0.4)");
+  filter->SetExpression("if((b4-b3)/(b4+b3) > 0.4,255,0)");
 // Software Guide : EndCodeSnippet
-
-//  Software Guide : BeginLatex
-//
-// The muParser library offers also the possibility to extended existing built-in functions. For example,
-// you can use the OTB expression "ndvi(b3,b4)" with the filter. It will return the same result. 
-//
-//  Software Guide : EndLatex
 
 //  Software Guide : BeginLatex
 //
@@ -190,12 +172,19 @@ int main( int argc, char* argv[])
 
 //  Software Guide : BeginLatex
 //
+// The muParser library offers also the possibility to extended existing built-in functions. For example,
+// you can use the OTB expression "ndvi(b3,b4)" with the filter. The mathematical expression would be in this case \textit{if($ndvi(b3,b4)>0.4$,255,0)}. It will return the same result.
+//
+//  Software Guide : EndLatex
+
+//  Software Guide : BeginLatex
+//
 // Figure~\ref{fig:BandMathImageFilter} shows the result of the threshold over the NDVI indice
 // to a Quickbird image.
 // \begin{figure}
 // \center
-// \includegraphics[width=0.45\textwidth]{qb_RoadExtract.eps}
-// \includegraphics[width=0.45\textwidth]{RoadExtractBandMath-pretty.eps}
+// \includegraphics[width=0.45\textwidth]{qb_ExtractRoad_pretty.eps}
+// \includegraphics[width=0.45\textwidth]{qb_BandMath-pretty.eps}
 // \itkcaption[Band Math]{From left to right:
 // Original image, thresholded NDVI indice.}
 // \label{fig:BandMathImageFilter}
@@ -204,12 +193,13 @@ int main( int argc, char* argv[])
 // Software Guide : EndLatex
 
   typedef otb::Image<unsigned char, 2>                                      OutputPrettyImageType;
-  typedef otb::ImageFileWriter<OutputPrettyImageType>            StreamingImageFileWriterType;
+  typedef otb::ImageFileWriter<OutputPrettyImageType>            PrettyImageFileWriterType;
   typedef itk::CastImageFilter<OutputImageType, OutputPrettyImageType> CastImageFilterType;
   
-  StreamingImageFileWriterType::Pointer prettyWriter = StreamingImageFileWriterType::New();
+  PrettyImageFileWriterType::Pointer prettyWriter = PrettyImageFileWriterType::New();
   CastImageFilterType::Pointer caster = CastImageFilterType::New();
   caster->SetInput(filter->GetOutput());
+
   prettyWriter->SetInput(caster->GetOutput());
   prettyWriter->SetFileName(argv[3]);
   
