@@ -262,6 +262,20 @@ FOREACH( file ${SARSENSORMODEL_TYPES})
          	${TEMP}/prTvSensorModelGridDeltaY_${sensor_name}.tif
          	10 10
 		)
+
+	ADD_TEST(prTvForwardSensorModelGrid_${sensor_name} ${PROJECTIONS_TESTS1}
+	  --compare-n-images ${NOTOL} 2
+	         ${BASELINE}/prTvForwardSensorModelGridX_${sensor_name}.tif
+	         ${TEMP}/prTvForwardSensorModelGridX_${sensor_name}.tif
+	         ${BASELINE}/prTvForwardSensorModelGridY_${sensor_name}.tif
+	         ${TEMP}/prTvForwardSensorModelGridY_${sensor_name}.tif
+    	otbForwardSensorModelGrid
+    		${LARGEINPUT}/${file}
+         	${TEMP}/prTvForwardSensorModelGridX_${sensor_name}.tif
+         	${TEMP}/prTvForwardSensorModelGridY_${sensor_name}.tif
+         	10 10
+		)
+		
 ENDFOREACH( file ${SARSENSORMODEL_TYPES})
 
 
