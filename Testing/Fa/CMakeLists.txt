@@ -232,8 +232,10 @@ ADD_TEST(FA-0000132-jpg ${CXX_TEST_PATH}/0000132-jpg
 	)
 ENDIF(OTB_USE_VISU_GUI)
 
+IF(USE_FFTWD OR USE_FFTWF)
 ADD_TEST(FA-0000169-fftcomplextocomplex ${CXX_TEST_PATH}/0000169-fftcomplextocomplex 
   )
+ENDIF(USE_FFTWD OR USE_FFTWF)
 
 # -------       Vectorization issue   -----------------------------------
 # FIXME Desactivated until http://bugs.orfeo-toolbox.org/view.php?id=94
