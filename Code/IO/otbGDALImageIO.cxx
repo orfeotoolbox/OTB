@@ -514,17 +514,14 @@ void GDALImageIO::InternalReadImageInformation()
 
   if (m_poDataset->GetProjectionRef() != NULL && !std::string(m_poDataset->GetProjectionRef()).empty())
     {
-    OGRSpatialReferenceH pSR = NULL;
-    pSR = OSRNewSpatialReference(NULL);
+    OGRSpatialReferenceH pSR = OSRNewSpatialReference(NULL);
 
     const char *         pszProjection = NULL;
-
     pszProjection =  m_poDataset->GetProjectionRef();
 
     if (OSRImportFromWkt(pSR,(char **) (&pszProjection)) == OGRERR_NONE)
       {
       char * pszPrettyWkt = NULL;
-	
       OSRExportToPrettyWkt(pSR,&pszPrettyWkt,FALSE);
 
       itk::EncapsulateMetaData<std::string> (dict, MetaDataKey::ProjectionRefKey,

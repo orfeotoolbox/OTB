@@ -110,7 +110,7 @@ OGRVectorDataIO<TData>
     char * projectionRefChar;
     oSRS->exportToWkt(&projectionRefChar);
     std::string projectionRef = projectionRefChar;
-    OGRFree(projectionRefChar);
+    CPLFree(projectionRefChar);
     itk::MetaDataDictionary& dict = data->GetMetaDataDictionary();
     itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projectionRef);
     }
@@ -278,7 +278,7 @@ void OGRVectorDataIO<TData>::Write(const VectorDataConstPointerType data, char *
 
   if (oSRS != NULL)
     {
-    OSRDestroySpatialReference(oSRS);
+    OSRRelease(oSRS);
     }
 
   chrono.Stop();

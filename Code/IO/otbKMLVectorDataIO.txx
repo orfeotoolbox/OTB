@@ -535,15 +535,15 @@ void KMLVectorDataIO<TData>::Write(const VectorDataConstPointerType data, char *
   // Retrieve data required for georeferencing
 
   std::string           projectionRefWkt = data->GetProjectionRef();
-  OGRSpatialReference * oSRS = new OGRSpatialReference(projectionRefWkt.c_str());
-  if (!oSRS->IsGeographic())
+  OGRSpatialReferenceH oSRS = OSRNewSpatialReference(projectionRefWkt.c_str());
+  if (!OSRIsGeographic(oSRS))
     {
     itkWarningMacro(<< "Vector data should be reprojected in geographic coordinates"
                     << " before saving to KML. Please use otbVectorDataProjectionFilter. "
                     << " The projection information is currently: " << projectionRefWkt
                     << "\n We assume that you know what you're doing and proceed to save the KML file.");
     }
-  delete oSRS;
+  OSRRelease(oSRS);
 
   m_Kept = 0;
 

@@ -19,7 +19,7 @@
 #ifndef __otbGeoInformationConversion_h
 #define __otbGeoInformationConversion_h
 
-#include "ogr_spatialref.h"
+#include <string>
 
 namespace otb
 {
@@ -28,41 +28,20 @@ namespace otb
  *  \brief Helper to do the geo informations conversions used
  *         frequently. 
  *  
- *  This class can help to build a WKT from a valid EPSG number using
+ *  This class can help to build a WKT from a  valid EPSG number using
  *  the method ToWKT(int srid).
  *           
  * \sa 
  */
-
 class GeoInformationConversion
 {
 public:
   /** method used to create a wkt from an epsg number  */
-  static const char * ToWKT(int srid)
-  {
-    const char * wkt = NULL;
-    
-    // Build the srs from the epsg number
-    OGRSpatialReferenceH hSRS = NULL;
-    hSRS = OSRNewSpatialReference(NULL);
-    
-    if (OSRImportFromEPSG(hSRS,srid ) == OGRERR_NONE)
-      {
-      // Get the wkt 
-      if ( OSRExportToWkt(hSRS,(char**) &wkt) == OGRERR_NONE)
-        {
-        OSRDestroySpatialReference(hSRS);
-        }
-      }
-    return  wkt;
-  }
+  static std::string ToWKT(int srid);
 
 protected:
-  /** Constructors */
-  GeoInformationConversion();
-
-  /** Destructor */
-  virtual ~GeoInformationConversion();
+  GeoInformationConversion(); // not implemented
+  virtual ~GeoInformationConversion(); // not implemented
 };
 
 

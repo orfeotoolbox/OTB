@@ -188,10 +188,13 @@ MapFileProductWriter<TInputImage>
   outMax.Fill(255);
 
   // Build wgs ref to compute long/lat
-  OGRSpatialReference oSRS;
-  oSRS.SetWellKnownGeogCS("WGS84");
-  char * wgsRef = NULL;
-  oSRS.exportToWkt(&wgsRef);
+  OGRSpatialReferenceH oSRS = OSRNewSpatialReference(NULL);
+  OSRSetWellKnownGeogCS(oSRS, "WGS84");
+  char * wgsRefC = NULL;
+  OSRExportToWkt(oSRS, &wgsRefC);
+  std::string wgsRef = wgsRefC;
+  CPLFree(wgsRefC);
+  OSRRelease(oSRS);
 
   // Update image base information
   m_VectorImage->UpdateOutputInformation();

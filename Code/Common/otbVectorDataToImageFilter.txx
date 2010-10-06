@@ -243,18 +243,17 @@ VectorDataToImageFilter<TVectorData, TImage>
     }
   else
     {
-    OGRSpatialReference oSRS(vectorDataProjectionWKT.c_str());
+    OGRSpatialReferenceH oSRS = OSRNewSpatialReference(projectionRefWkt.c_str());
     char * pszProj4;
-    oSRS.exportToProj4(&pszProj4);
+    OSRExportToProj4(oSRS, &pszProj4);
     m_VectorDataProjectionProj4 = pszProj4;
     CPLFree(pszProj4);
+    OSRRelease(oSRS);
     m_SensorModelFlip =  1;
     otbMsgDevMacro(<< "The output map will be carto/geo geometry");
     }
   std::cout << "Proj.4 -> " << m_VectorDataProjectionProj4 << std::endl;
-
   m_Map.set_srs(m_VectorDataProjectionProj4);
-
 }
 
 /**

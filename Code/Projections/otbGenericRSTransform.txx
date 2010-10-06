@@ -160,24 +160,21 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
     const char * wktString = m_InputProjectionRef.c_str();
     if (OSRImportFromWkt(hSRS, (char **) &wktString) != OGRERR_NONE)
       {
-      OSRDestroySpatialReference(hSRS);
       firstTransformGiveGeo = false;
       otbMsgDevMacro(<< "- Considering that the first transform does not give geo (WKT)")
       }
 
-    else if (static_cast<OGRSpatialReference *>(hSRS)->IsGeographic())
+    else if ( OSRIsGeographic(hSRS) )
       {
-      OSRDestroySpatialReference(hSRS);
       firstTransformGiveGeo = true;
       otbMsgDevMacro(<< "- Considering that the first transform gives geo")
       }
     else
       {
-      OSRDestroySpatialReference(hSRS);
       firstTransformGiveGeo = false;
       otbMsgDevMacro(<< "- Considering that the first transform does not give geo (fallback)")
       }
-
+    OSRRelease(hSRS);
     otbMsgDevMacro(<< "Input projection set to identity")
     }
 

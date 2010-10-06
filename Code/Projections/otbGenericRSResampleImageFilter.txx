@@ -26,6 +26,9 @@
 #include "itkPoint.h"
 #include "itkNumericTraits.h"
 
+#include "ogr_spatialref.h"
+#include "cpl_conv.h"
+
 namespace otb
 {
 
@@ -284,13 +287,16 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
   bool hem = (geoPoint[1]>1e-10)?true:false;
   
   // Build the output UTM projection ref 
-  OGRSpatialReference oSRS;
-  oSRS.SetProjCS("UTM");
-  oSRS.SetWellKnownGeogCS("WGS84");
-  oSRS.SetUTM(zone, hem);
+  OGRSpatialReferenceH oSRS = OSRNewSpatialReference(NULL);
+  OSRSetProjCS(oSRS, "UTM");
+  OSRSetWellKnownGeogCS(oSRS, "WGS84");
+  OSRSetUTM(oSRS, zone, hem);
   
-  char * utmRef = NULL;
-  oSRS.exportToWkt(&utmRef);
+  char * utmRefC = NULL;
+  OSRExportToWkt(oSRS, &utmRefC);
+  std::string utmRef = utmRefC;
+  CPLFree(utmRefC);
+  OSRRelease(oSRS);
     
   // Update the transform
   this->SetOutputProjectionRef(utmRef);
