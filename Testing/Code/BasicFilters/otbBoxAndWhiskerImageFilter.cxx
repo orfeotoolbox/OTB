@@ -24,6 +24,9 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbVectorImage.h"
+#include "otbEuclideanDistanceWithMissingValuePow2.h"
+#include "itkImageRegionConstIterator.h"
+#include "itkImageRegionIterator.h"
 
 int otbBoxAndWhiskerImageFilter(int argc, char * argv[])
 {
@@ -55,11 +58,48 @@ int otbBoxAndWhiskerImageFilter(int argc, char * argv[])
   WriterType::Pointer writer = WriterType::New();
 
   reader->SetFileName(inputFilename);
+  reader->UpdateOutputInformation();
   writer->SetFileName(outputFilename);
 
-  filter->SetInput(reader->GetOutput());
-  writer->SetInput(filter->GetOutput());
+  typedef otb::Statistics::EuclideanDistanceWithMissingValuePow2<ImageType::PixelType>   OutlierType;
 
+  filter->SetInput(reader->GetOutput());
+  filter->Update();
+
+  ImageType::Pointer binaryImage = ImageType::New();
+
+  binaryImage->SetRegions(filter->GetOutput()->GetLargestPossibleRegion());
+  binaryImage->SetNumberOfComponentsPerPixel(filter->GetOutput()->GetNumberOfComponentsPerPixel());
+  binaryImage->Allocate();
+  ImageType::PixelType pixel;
+  pixel.SetSize(filter->GetOutput()->GetNumberOfComponentsPerPixel());
+  pixel.Fill(0.0);
+  binaryImage->FillBuffer(pixel);
+
+  typedef itk :: ImageRegionConstIterator<ImageType > ConstIteratorType;
+  typedef itk :: ImageRegionIterator <ImageType > IteratorType;
+
+
+  ConstIteratorType inputIt (filter->GetOutput(), filter->GetOutput()->GetRequestedRegion());
+  IteratorType outputIt (binaryImage , filter->GetOutput()->GetRequestedRegion());
+
+  for (inputIt .GoToBegin (), outputIt .GoToBegin (); ! inputIt.IsAtEnd ();
+  ++inputIt , ++ outputIt )
+    {
+    const FilterType::PixelType pixel = inputIt.Get();
+    ImageType::PixelType outputPixel = outputIt.Get();
+
+    const unsigned int vectorSize = pixel.Size();
+    for (unsigned i = 0; i < vectorSize; i++)
+      {
+      if ( OutlierType::IsMissingValue(pixel[i]) )
+        {
+        outputPixel[i] = 1.0;
+        }
+      }
+    outputIt.Set(outputPixel);
+    }
+  writer->SetInput(binaryImage );
   writer->Update();
 
   return EXIT_SUCCESS;
