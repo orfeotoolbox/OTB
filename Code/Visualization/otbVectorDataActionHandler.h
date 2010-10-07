@@ -126,6 +126,7 @@ public:
         {
         switch (Fl::event_key())
           {
+          /*
           case FL_Delete:
             {
             m_Model->DeleteGeometry();
@@ -134,6 +135,7 @@ public:
             return true;
             break;
             }
+          */
           case FL_F + 1:
             {
             m_Model->SetCurrentNodeType(FEATURE_POINT);
