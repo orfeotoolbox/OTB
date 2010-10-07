@@ -392,6 +392,15 @@ ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
 ${INPUTDATA}/Capitole-Shadows.shp
 )
 
+#------------ otb::AmplitudeFuntor ----------------------
+
+ADD_TEST(vrTuAmplitudeFunctorTest ${VISUALIZATION_TESTS1}
+	otbAmplitudeFunctorTest
+)
+
+
+
+
 # Testing srcs
 SET(Visualization_SRCS1
 otbVisualizationTests1.cxx
@@ -445,6 +454,7 @@ otbVerticalAsymptoteCurveNew.cxx
 otbVectorDataModelNew.cxx
 otbVectorDataModelTest.cxx
 otbVectorDataModelAddVectorDataTest.cxx
+otbAmplitudeFunctorTest.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbVisualizationTests1 "${Visualization_SRCS1}" "OTBVisualization;OTBIO;OTBTesting")
