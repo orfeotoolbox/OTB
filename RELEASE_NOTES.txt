@@ -36,7 +36,7 @@ OTB-v.3.6.0 - Changes since version 3.4.0 (2010/??/??)
   * Internal ITK updated to 3.20.0 + OTB Patches
   * Internal OSSIM and ossim plugins updated to svn revision 18162 + OTB patches (almost none left)
   * Enable the use of an external build of libLAS
-  * Fix internal libkml for MSVC 2010
+  * Support compilation on MSVC 2010 and Windows Seven
   * Better handling of FLTK configuration
   * Support compilation of Monteverdi on linux 32 bits systems with official FLTK package
   * Lots of coverage improvements
