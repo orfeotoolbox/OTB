@@ -243,7 +243,7 @@ VectorDataToImageFilter<TVectorData, TImage>
     }
   else
     {
-    OGRSpatialReferenceH oSRS = OSRNewSpatialReference(projectionRefWkt.c_str());
+    OGRSpatialReferenceH oSRS = OSRNewSpatialReference(vectorDataProjectionWKT.c_str());
     char * pszProj4;
     OSRExportToProj4(oSRS, &pszProj4);
     m_VectorDataProjectionProj4 = pszProj4;
