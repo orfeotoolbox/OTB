@@ -1,4 +1,4 @@
-OTB-v.3.6.0 - Changes since version 3.4.0 (2010/??/??)
+OTB-v.3.6.0 - Changes since version 3.4.0 (2010/10/07)
 -----------------------------------------
 
 * Monteverdi
