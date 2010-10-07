@@ -38,6 +38,7 @@
 #include "cpl_conv.h"
 #include "cpl_string.h"
 #include "cpl_multiproc.h"
+#include "ogr_api.h"
 
 #define otbPrintDiff(comment, refStr, testStr) \
   std::cout << "   ----    '" << comment << "' checking   ---------------------------" << std::endl; \
@@ -733,8 +734,8 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
 {
   const char *ref_pszDataSource = baselineOgrFilename;
   const char *test_pszDataSource = testOgrFilename;
-  const char *ref_pszWHERE = NULL;
-  const char *test_pszWHERE = NULL;
+  //const char *ref_pszWHERE = NULL;
+  //const char *test_pszWHERE = NULL;
   int         bReadOnly = FALSE;
   int         nbdiff(0);
   /* -------------------------------------------------------------------- */
@@ -742,10 +743,10 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
   /* -------------------------------------------------------------------- */
   OGRDataSource *ref_poDS = NULL;
   OGRSFDriver *  ref_poDriver = NULL;
-  OGRGeometry *  ref_poSpatialFilter = NULL;
+  //OGRGeometry *  ref_poSpatialFilter = NULL;
   OGRDataSource *test_poDS = NULL;
   OGRSFDriver *  test_poDriver = NULL;
-  OGRGeometry *  test_poSpatialFilter = NULL;
+  //OGRGeometry *  test_poSpatialFilter = NULL;
 
   OGRRegisterAll();
 
@@ -844,8 +845,7 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
       }
 
     //Check Layer inforamtion
-    ogrReportOnLayer(ref_poLayer, ref_pszWHERE, ref_poSpatialFilter, test_poLayer, test_pszWHERE, test_poSpatialFilter,
-                     nbdiff);
+    ogrReportOnLayer(ref_poLayer, NULL, NULL, test_poLayer, NULL, NULL, nbdiff);
 
     //If no difference, check the feature
     if (nbdiff == 0)
@@ -876,7 +876,7 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
           itkGenericExceptionMacro(<< "Impossible to create ASCII file <" << ref_filename << ">.");
           }
         DumpOGRFeature(ref_f, ref_poFeature);
-        delete ref_poFeature;
+        OGRFeature::DestroyFeature( ref_poFeature );
         fclose(ref_f);
 
         FILE *test_f(NULL);
@@ -886,7 +886,7 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
           itkGenericExceptionMacro(<< "Impossible to create ASCII file <" << test_filename << ">.");
           }
         DumpOGRFeature(test_f, test_poFeature);
-        delete test_poFeature;
+        OGRFeature::DestroyFeature( test_poFeature );
         fclose(test_f);
 
         //Check ASCII comparaison
@@ -906,24 +906,11 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
   /* -------------------------------------------------------------------- */
   /*      Close down.                                                     */
   /* -------------------------------------------------------------------- */
-  /*    CSLDestroy( papszArgv );
-   CSLDestroy( papszLayers );
-   CSLDestroy( papszOptions );*/
-  delete ref_poDS;
-  if (ref_poSpatialFilter) delete ref_poSpatialFilter;
-  delete test_poDS;
-  if (test_poSpatialFilter) delete test_poSpatialFilter;
-
-  delete OGRSFDriverRegistrar::GetRegistrar();
-
-  OSRCleanup();
-  CPLFinderClean();
-  VSICleanupFileManager();
-  CPLFreeConfig();
-  CPLCleanupTLS();
+  OGRDataSource::DestroyDataSource( ref_poDS );
+  OGRDataSource::DestroyDataSource( test_poDS );
+  OGRCleanupAll();
 
   return (nbdiff != 0) ? 1 : 0;
-
 }
 
 void TestHelper::DumpOGRFeature(FILE* fpOut, OGRFeature* feature, char** papszOptions)
