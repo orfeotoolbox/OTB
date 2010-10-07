@@ -155,6 +155,7 @@ the following platforms:
   \item Windows with Microsoft Visual Studio C++ 9.0 .NET 2008
   \item Windows with Microsoft Visual Express 2005
   \item Windows with Microsoft Visual Express 2008
+  \item Windows with Microsoft Visual Express 2010
   \item Cygwin (\url{http://www.cygwin.com})
   \item MacOS (OSX 10.5, OSX 10.6)
   \item Open Solaris
@@ -296,7 +297,7 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
 
 \end{enumerate}
 
-\subsubsection{Microsoft Visual Studio (7.1 .NET 2003/8.0 .NET 2005/Express 2005/Express 2008)}
+\subsubsection{Microsoft Visual Studio (7.1 .NET 2003/8.0 .NET 2005/Express 2005/Express 2008 2010/Express 2010)}
 Since OTB 3.4, installation of required libraries for OTB compilation on Windows Platform is eased with the  
 OSGeo4W installer. OSGeo4W is a binary distribution of a broad set of open source geospatial software 
 for Win32 environments (Windows XP, Vista, etc).
@@ -340,7 +341,7 @@ for Win32 environments (Windows XP, Vista, etc).
 
 \end{enumerate}
 
-Microsoft Visual Studio 2010 is currently not supported.
+Microsoft Visual Studio 2010 is supported since the version 3.6. 
 
 \subsubsection{Cygwin}
 \begin{enumerate}
@@ -377,12 +378,10 @@ details on the bug characterization.
 The solution is to use the GNU tar command if it is available on your
 system (gtar).
 
-%\subsubsection{Linux Debian/Ubuntu}
-%If you used the official gdal package version 1.4.0, the library is named
-%\texttt{libgdal1.4.0.so} so you have to create a simlink named
-%\texttt{libgdal.so}: \texttt{ln -s /usr/lib/libgdal1.4.0.so /usr/lib/libgdal.so}.
-%This should be fixed in OTB 3.0.0 which is now smart enough to find the correct library.
-%If it does not work for you, let us know!
+\subsubsection{Visual Studio 2010/Express 2010}
+Since Visual Studio 2010, OTB can't compile while using the internal libLAS library : disable the use of the library by setting 
+the following variables in cmake :  \texttt{OTB\_USE\_LIBLAS = OFF}\\
+Then you will be able to configure and build the project as usual.
 
 \subsubsection{Cygwin}
 Due to an unknown bug, Fltk can't compile on some versions of Cygwin (OpenGL problems).
