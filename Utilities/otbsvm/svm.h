@@ -234,12 +234,9 @@ public:
 	    }
 	}
     };
- /** Recopy constructor */
+
+  /** Recopy constructor */
   ComposedKernelFunctor( const ComposedKernelFunctor& copy );
-  /* ComposedKernelFunctor( const ComposedKernelFunctor& c ) : GenericKernelFunctorBase(c),  */
-/*                                                            m_KernelFunctorList(c.m_KernelFunctorList) */
-/*                                                            m_HaveToBeDeletedList(c.m_HaveToBeDeletedList) */
-/*                                                            m_PonderationList(c.m_PonderationList)         {}; */
   ComposedKernelFunctor& operator=(const ComposedKernelFunctor& copy);
 
   typedef std::vector<GenericKernelFunctorBase *> KernelListType;
