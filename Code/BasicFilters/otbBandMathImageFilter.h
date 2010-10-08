@@ -55,6 +55,20 @@ namespace otb
  * following expression is valid :
  * "ndvi(b1,b2)*b3"
  * 
+ * As an additional functionality, the filter also granted access to
+ * indexes information under special virtual bands named idxX, idxY
+ * for the images indexes and idxPhyX,idxPhyY for the physical
+ * indexes.
+ * It allows the user to perform, for example a spatial processing
+ * aiming to suppress a determined area :
+ * "if(sqrt((idxPhyX-105.3)*(idxPhyX-105.3)+
+ *          (idxPhyY-207.1)*(idxPhyY-207.1))>100, b1, 0)"
+ * This expression replace the physical zone around the point of
+ * physical index (105.3;207.1) by a black area
+ * This functionality assumes that all the band involved have the same
+ * spacing and origin.
+ * 
+ * 
  * \sa Parser
  * 
  * \ingroup Streamed
@@ -83,6 +97,9 @@ public:
   typedef typename ImageType::ConstPointer        ImagePointer;
   typedef typename ImageType::RegionType          ImageRegionType; 
   typedef typename ImageType::PixelType           PixelType;
+  typedef typename ImageType::IndexType           IndexType;
+  typedef typename ImageType::PointType           OrigineType;
+  typedef typename ImageType::SpacingType         SpacingType;
   typedef Parser                                  ParserType;
   
   /** Set the nth filter input with or without a specified associated variable name */
@@ -121,6 +138,10 @@ private :
   std::vector<ParserType::Pointer>      m_VParser;
   std::vector< std::vector<double> >    m_AImage;
   std::vector< std::string >            m_VVarName;
+  unsigned int                          m_NbVar;
+
+  SpacingType                           m_Spacing;
+  OrigineType                           m_Origin;
 
   long                                  m_UnderflowCount;
   long                                  m_OverflowCount;

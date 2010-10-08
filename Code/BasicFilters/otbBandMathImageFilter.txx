@@ -80,10 +80,15 @@ void BandMathImageFilter<TImage>
 {  
   this->SetInput(idx, const_cast<TImage *>( image ));
   unsigned int nbInput = this->GetNumberOfInputs();
-  m_VVarName.resize(nbInput);
+  m_VVarName.resize(nbInput+4);
   std::ostringstream varName; 
   varName << "b" << nbInput;
-  m_VVarName[idx] = varName.str();  
+  m_VVarName[idx] = varName.str();
+  
+  m_VVarName[idx+1] = "idxX";
+  m_VVarName[idx+2] = "idxY";
+  m_VVarName[idx+3] = "idxPhyX";
+  m_VVarName[idx+4] = "idxPhyY"; 
 }
 
 template <class TImage>
@@ -91,8 +96,13 @@ void BandMathImageFilter<TImage>
 ::SetNthInput(unsigned int idx, const ImageType * image, const std::string& varName)
 {
   this->SetInput(idx, const_cast<TImage *>( image ));
-  m_VVarName.resize(this->GetNumberOfInputs());
+  m_VVarName.resize(this->GetNumberOfInputs()+4);
   m_VVarName[idx] = varName;
+  
+  m_VVarName[idx+1] = "idxX";
+  m_VVarName[idx+2] = "idxY";
+  m_VVarName[idx+3] = "idxPhyX";
+  m_VVarName[idx+4] = "idxPhyY"; 
 }
 
 template <class TImage>
@@ -101,7 +111,6 @@ void BandMathImageFilter<TImage>
 {
   m_VVarName[idx] = varName;
 }
-
 
 template <typename TImage>
 TImage * BandMathImageFilter<TImage>
@@ -141,13 +150,21 @@ void BandMathImageFilter<TImage>
   typename std::vector< std::vector<PixelType> >::iterator   itVImage;
   unsigned int nbThreads = this->GetNumberOfThreads();
   unsigned int nbInputImages = this->GetNumberOfInputs();
+  unsigned int nbAccessIndex = 4; //to give access to image and physical index 
   unsigned int i, j;
   unsigned int inputSize[2];
-  
+  std::vector< std::string > tmpIdxVarNames;
+
+  tmpIdxVarNames.resize(nbAccessIndex);
+  tmpIdxVarNames.at(0) = "idxX";
+  tmpIdxVarNames.at(1) = "idxY";
+  tmpIdxVarNames.at(2) = "idxPhyX";
+  tmpIdxVarNames.at(3) = "idxPhyY";
+
   // Check if input image dimensions matches
   inputSize[0] = this->GetNthInput(0)->GetLargestPossibleRegion().GetSize(0);
   inputSize[1] = this->GetNthInput(0)->GetLargestPossibleRegion().GetSize(1);
-      
+
   for(unsigned int p = 1; p < nbInputImages; p++)
     {
     if((inputSize[0] != this->GetNthInput(p)->GetLargestPossibleRegion().GetSize(0))
@@ -160,14 +177,20 @@ void BandMathImageFilter<TImage>
                         << this->GetNthInput(p)->GetLargestPossibleRegion().GetSize(1) << "]");
       }
     }
-  
-  //Allocate and initialize the thread temporaries
+
+  // Store images specs
+  m_Spacing = this->GetNthInput(0)->GetSpacing();
+  m_Origin = this->GetNthInput(0)->GetOrigin();
+
+  // Allocate and initialize the thread temporaries
   m_ThreadUnderflow.SetSize(nbThreads);
   m_ThreadUnderflow.Fill(0);
   m_ThreadOverflow.SetSize(nbThreads);
   m_ThreadOverflow.Fill(0);
   m_VParser.resize(nbThreads);
   m_AImage.resize(nbThreads);
+  m_NbVar = nbInputImages+nbAccessIndex;
+  m_VVarName.resize(m_NbVar);
   
   for(itParser = m_VParser.begin(); itParser < m_VParser.end(); itParser++)
     { 
@@ -176,10 +199,17 @@ void BandMathImageFilter<TImage>
 
   for(i = 0; i < nbThreads; i++)
     {
-    m_AImage.at(i).resize(nbInputImages);
+    m_AImage.at(i).resize(m_NbVar);
     m_VParser.at(i)->SetExpr(m_Expression);
+  
     for(j=0; j < nbInputImages; j++)
       {
+      m_VParser.at(i)->DefineVar(m_VVarName.at(j), &(m_AImage.at(i).at(j)));
+      }
+
+    for(j=nbInputImages; j < nbInputImages+nbAccessIndex; j++)
+      {
+      m_VVarName.at(j) = tmpIdxVarNames.at(j-nbInputImages);
       m_VParser.at(i)->DefineVar(m_VVarName.at(j), &(m_AImage.at(i).at(j)));
       }
     }
@@ -240,6 +270,17 @@ void BandMathImageFilter<TImage>
     for(j=0; j < nbInputImages; j++)
       {
       m_AImage.at(threadId).at(j) = static_cast<double>(Vit.at(j).Get());
+      }
+    
+    // Image Indexes
+    for(j=0; j < 2; j++)
+      {
+      m_AImage.at(threadId).at(nbInputImages+j)   = static_cast<double>(Vit.at(0).GetIndex()[j]);
+      }
+    for(j=0; j < 2; j++)
+      {
+      m_AImage.at(threadId).at(nbInputImages+2+j) = static_cast<double>(m_Origin[j])
+        +static_cast<double>(Vit.at(0).GetIndex()[j]) * static_cast<double>(m_Spacing[j]) ;
       }
 
     try
