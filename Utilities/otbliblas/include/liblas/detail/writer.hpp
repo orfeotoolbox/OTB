@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: writer.hpp 813 2008-07-25 21:53:52Z mloskot $
+ * $Id$
  *
  * Project:  libLAS - http://liblas.org - A BSD library for LAS format data.
  * Purpose:  LAS writer implementation for C++ libLAS 
@@ -42,7 +42,15 @@
 #ifndef LIBLAS_DETAIL_WRITER_HPP_INCLUDED
 #define LIBLAS_DETAIL_WRITER_HPP_INCLUDED
 
+#include <liblas/lasspatialreference.hpp>
 #include <liblas/detail/fwd.hpp>
+#include <liblas/detail/utility.hpp>
+
+#ifndef HAVE_GDAL
+    typedef struct OGRCoordinateTransformationHS *OGRCoordinateTransformationH;
+    typedef struct OGRSpatialReferenceHS *OGRSpatialReferenceH;
+#endif
+
 // std
 #include <iosfwd>
 
@@ -52,21 +60,37 @@ class Writer
 {
 public:
 
-    Writer();
+    Writer(std::ostream& ofs);
     virtual ~Writer();
     virtual std::size_t GetVersion() const = 0;
     virtual void WriteHeader(LASHeader& header) = 0;
     virtual void UpdateHeader(LASHeader const& header) = 0;
-    virtual void WritePointRecord(PointRecord const& record) = 0;
-    virtual void WritePointRecord(PointRecord const& record, double const& time) = 0;    
-    virtual void WriteVLR(LASHeader const& header) = 0;
-    virtual std::ostream& GetStream() const = 0;
+    virtual void WritePointRecord(LASPoint const& point, const LASHeader& header) = 0;
+    std::ostream& GetStream() const;
+    uint32_t WriteVLR(LASHeader const& header);
 
+    void SetSRS(const LASSpatialReference& srs);
+    
+protected:
+    PointRecord m_record;
+    std::ostream& m_ofs;
+
+    void FillPointRecord(PointRecord& record, const LASPoint& point, const LASHeader& header);
+
+    void Project(LASPoint& point);      
+    LASSpatialReference m_out_srs;
+    LASSpatialReference m_in_srs;
+    
+    OGRCoordinateTransformationH m_transform;
+    OGRSpatialReferenceH m_in_ref;
+    OGRSpatialReferenceH m_out_ref;
+    
 private:
 
     // Blocked copying operations, declared but not defined.
     Writer(Writer const& other);
     Writer& operator=(Writer const& rhs);
+    
 };
 
 class WriterFactory

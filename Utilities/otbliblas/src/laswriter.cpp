@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: laswriter.cpp 813 2008-07-25 21:53:52Z mloskot $
+ * $Id$
  *
  * Project:  libLAS - http://liblas.org - A BSD library for LAS format data.
  * Purpose:  LAS writer class 
@@ -81,22 +81,7 @@ bool LASWriter::WritePoint(LASPoint const& point)
         return false;
     }
 
-    // TODO: Move composition of point record deep into writer implementation
-    m_record.x = static_cast<uint32_t>((point.GetX() - m_header.GetOffsetX()) / m_header.GetScaleX());
-    m_record.y = static_cast<uint32_t>((point.GetY() - m_header.GetOffsetY()) / m_header.GetScaleY());
-    m_record.z = static_cast<uint32_t>((point.GetZ() - m_header.GetOffsetZ()) / m_header.GetScaleZ());
-    m_record.intensity = point.GetIntensity();
-    m_record.flags = point.GetScanFlags();
-    m_record.classification = point.GetClassification();
-    m_record.scan_angle_rank = point.GetScanAngleRank();
-    m_record.user_data = point.GetUserData();
-    m_record.point_source_id = 0; // TODO: How to handle this in portable way, for LAS 1.0 and 1.1
-
-
-    if (m_header.GetDataFormatId() == LASHeader::ePointFormat0)
-        m_pimpl->WritePointRecord(m_record);
-    else
-        m_pimpl->WritePointRecord(m_record, point.GetTime());
+    m_pimpl->WritePointRecord(point, m_header);
 
     return true;
 }
@@ -111,6 +96,13 @@ void LASWriter::WriteHeader(LASHeader& header)
     m_pimpl->WriteHeader(header);
     m_header = header;
 }
+
+bool LASWriter::SetSRS(const LASSpatialReference& srs)
+{
+    m_pimpl->SetSRS(srs);
+    return true;
+}
+
 
 } // namespace liblas
 

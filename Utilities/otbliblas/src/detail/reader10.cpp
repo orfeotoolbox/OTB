@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: reader10.cpp 831 2008-08-17 04:13:27Z hobu $
+ * $Id$
  *
  * Project:  libLAS - http://liblas.org - A BSD library for LAS format data.
  * Purpose:  LAS 1.0 reader implementation for C++ libLAS 
@@ -41,18 +41,11 @@
 
 #include <liblas/detail/reader10.hpp>
 #include <liblas/detail/utility.hpp>
-#include <liblas/lasrecordheader.hpp>
+#include <liblas/lasvariablerecord.hpp>
 #include <liblas/liblas.hpp>
 #include <liblas/lasheader.hpp>
 #include <liblas/laspoint.hpp>
-// GeoTIFF
-#ifdef HAVE_LIBGEOTIFF
-#include <geotiff.h>
-#include <geo_simpletags.h>
-#include "geo_normalize.h"
-#include "geo_simpletags.h"
-#include "geovalues.h"
-#endif // HAVE_LIBGEOTIFF
+
 // std
 #include <fstream>
 #include <iostream>
@@ -62,7 +55,7 @@
 
 namespace liblas { namespace detail { namespace v10 {
 
-ReaderImpl::ReaderImpl(std::istream& ifs) : Base(), m_ifs(ifs)
+ReaderImpl::ReaderImpl(std::istream& ifs) : Base(ifs)
 {
 }
 
@@ -153,13 +146,22 @@ bool ReaderImpl::ReadHeader(LASHeader& header)
 
     // 16. Point Data Format ID
     read_n(n1, m_ifs, sizeof(n1));
-    if (n1 == LASHeader::ePointFormat0)
+    if (n1 == LASHeader::ePointFormat0) {
         header.SetDataFormatId(LASHeader::ePointFormat0);
-    else if (n1 == LASHeader::ePointFormat1)
+    } 
+    else if (n1 == LASHeader::ePointFormat1) {
         header.SetDataFormatId(LASHeader::ePointFormat1);
-    else
+    }
+    else if (n1 == LASHeader::ePointFormat2) {
+        header.SetDataFormatId(LASHeader::ePointFormat2);
+    }
+    else if (n1 == LASHeader::ePointFormat3) {
+        header.SetDataFormatId(LASHeader::ePointFormat3);
+    }
+    else {
         throw std::domain_error("invalid point data format");
-
+    }
+    
     // 17. Point Data Record Length
     // NOTE: No need to set record length because it's
     // determined on basis of point data format.
@@ -205,114 +207,26 @@ bool ReaderImpl::ReadHeader(LASHeader& header)
     header.SetMax(x1, y1, z1);
     header.SetMin(x2, y2, z2);
 
-    m_offset = header.GetDataOffset();
-    m_size = header.GetPointRecordsCount();
-    m_recordlength = header.GetDataRecordLength();
+    Reset(header);
 
     return true;
 }
 
-bool ReaderImpl::ReadVLR(LASHeader& header)
-{
-    VLRHeader vlrh = { 0 };
-
-    m_ifs.seekg(header.GetHeaderSize(), std::ios::beg);
-    uint32_t count = header.GetRecordsCount();
-    header.SetRecordsCount(0);
-    for (uint32_t i = 0; i < count; ++i)
-    {
-        read_n(vlrh, m_ifs, sizeof(VLRHeader));
-
-        uint16_t length = vlrh.recordLengthAfterHeader;
-        if (length < 1) {
-            throw std::domain_error("VLR record length must be at least 1 byte long");
-        }
-         
-        std::vector<uint8_t> data;
-        data.resize(length);
-
-        read_n(data.front(), m_ifs, length);
-         
-        LASVLR vlr;
-        vlr.SetReserved(vlrh.reserved);
-        vlr.SetUserId(std::string(vlrh.userId));
-        vlr.SetDescription(std::string(vlrh.description));
-        vlr.SetRecordLength(vlrh.recordLengthAfterHeader);
-        vlr.SetRecordId(vlrh.recordId);
-        vlr.SetData(data);
-
-        header.AddVLR(vlr);
-    }
-    
-    return true;
-}
-
-bool ReaderImpl::ReadGeoreference(LASHeader& header)
-{
-#ifndef HAVE_LIBGEOTIFF
-    UNREFERENCED_PARAMETER(header);
-#else
-
-    std::string const uid("LASF_Projection");
-
-    detail::raii_wrapper<ST_TIFF> st(ST_Create(), ST_Destroy);
-
-    for (uint16_t i = 0; i < header.GetRecordsCount(); ++i)
-    {
-        LASVLR record = header.GetVLR(i);
-        std::vector<uint8_t> data = record.GetData();
-        if (uid == record.GetUserId(true).c_str() && 34735 == record.GetRecordId())
-        {
-            int16_t count = data.size()/sizeof(int16_t);
-            ST_SetKey(st.get(), record.GetRecordId(), count, STT_SHORT, &(data[0]));
-        }
-
-        if (uid == record.GetUserId(true).c_str() && 34736 == record.GetRecordId())
-        {
-            int count = data.size() / sizeof(double);
-            ST_SetKey(st.get(), record.GetRecordId(), count, STT_DOUBLE, &(data[0]));
-        }        
-
-        if (uid == record.GetUserId(true).c_str() && 34737 == record.GetRecordId())
-        {
-            uint8_t count = data.size()/sizeof(uint8_t);
-            ST_SetKey(st.get(), record.GetRecordId(), count, STT_ASCII, &(data[0]));
-        }
-    }
-
-    if (st.get()->key_count)
-    {
-        raii_wrapper<GTIF> gtif(GTIFNewSimpleTags(st.get()), GTIFFree);
-
-        GTIFDefn defn;
-        if (GTIFGetDefn(gtif.get(), &defn)) 
-        {
-            char* proj4def = GTIFGetProj4Defn(&defn);
-            std::string tmp(proj4def);
-            std::free(proj4def);
-
-            header.SetProj4(tmp);
-        }
-
-        return true;
-    }
-
-#endif /* def HAVE_LIBGEOTIFF */
-
-    return false;
-}
-
-bool ReaderImpl::ReadNextPoint(detail::PointRecord& record)
+bool ReaderImpl::ReadNextPoint(LASPoint& point, const LASHeader& header)
 {
     // Read point data record format 0
 
     // TODO: Replace with compile-time assert
+    
+    detail::PointRecord record;
+    double t=0;
+    
     assert(LASHeader::ePointSize0 == sizeof(record));
 
     if (0 == m_current)
     {
         m_ifs.clear();
-        m_ifs.seekg(m_offset, std::ios::beg);
+        m_ifs.seekg(header.GetDataOffset(), std::ios::beg);
     }
 
     if (m_current < m_size)
@@ -328,66 +242,46 @@ bool ReaderImpl::ReadNextPoint(detail::PointRecord& record)
             return false;
         }
 
+        Reader::FillPoint(record, point);
+        point.SetCoordinates(header, point.GetX(), point.GetY(), point.GetZ());
+        
+        if (header.GetDataFormatId() == LASHeader::ePointFormat1) {
+            detail::read_n(t, m_ifs, sizeof(double));
+            point.SetTime(t);
+        }
         return true;
     }
 
     return false;
 }
 
-bool ReaderImpl::ReadNextPoint(detail::PointRecord& record, double& time)
-{
-    // Read point data record format 1
-
-    // TODO: Replace with compile-time assert
-    assert(LASHeader::ePointSize1 == sizeof(record) + sizeof(time));
-
-    bool hasData = ReadNextPoint(record);
-    if (hasData)
-    {
-        detail::read_n(time, m_ifs, sizeof(double));
-    }
-
-    return hasData;
-}
-
-bool ReaderImpl::ReadPointAt(std::size_t n, PointRecord& record)
+bool ReaderImpl::ReadPointAt(std::size_t n, LASPoint& point, const LASHeader& header)
 {
     // Read point data record format 0
 
     // TODO: Replace with compile-time assert
+    double t=0;
+    detail::PointRecord record;
     assert(LASHeader::ePointSize0 == sizeof(record));
 
     if (m_size <= n)
         return false;
-    std::streamsize pos = (static_cast<std::streamsize>(n) * m_recordlength) + m_offset;
-
-
+    std::streamsize pos = (static_cast<std::streamsize>(n) * header.GetDataRecordLength()) + header.GetDataOffset();    
+    
     m_ifs.clear();
     m_ifs.seekg(pos, std::ios::beg);
     detail::read_n(record, m_ifs, sizeof(record));
 
-    return true;
-}
+    Reader::FillPoint(record, point);
+    point.SetCoordinates(header, point.GetX(), point.GetY(), point.GetZ());
 
-bool ReaderImpl::ReadPointAt(std::size_t n, PointRecord& record, double& time)
-{
-    // Read point data record format 1
-
-    // TODO: Replace with compile-time assert
-    assert(LASHeader::ePointSize1 == sizeof(record) + sizeof(time));
-
-    bool hasData = ReadPointAt(n, record);
-    if (hasData)
-    {
-        detail::read_n(time, m_ifs, sizeof(double));
+    
+    if (header.GetDataFormatId() == LASHeader::ePointFormat1) {
+        detail::read_n(t, m_ifs, sizeof(double));
+        point.SetTime(t);
     }
 
-    return hasData;
-}
-
-std::istream& ReaderImpl::GetStream() const
-{
-    return m_ifs;
+    return true;
 }
 
 }}} // namespace liblas::detail::v10

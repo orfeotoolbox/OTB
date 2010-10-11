@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: las_config.h 849 2008-08-19 04:11:13Z hobu $
+ * $Id$
  *
  * Project:  libLAS - http://liblas.org - A BSD library for LAS format data.
  * Purpose:  Basic macros for the libLAS C API

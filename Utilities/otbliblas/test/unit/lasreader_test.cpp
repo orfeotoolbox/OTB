@@ -1,4 +1,4 @@
-// $Id: lasreader_test.cpp 759 2008-05-21 23:43:07Z mloskot $
+// $Id$
 //
 // (C) Copyright Mateusz Loskot 2008, mateusz@loskot.net
 // Distributed under the BSD License
@@ -25,45 +25,6 @@ namespace tut
         lasreader_data()
             : file10_(g_test_data_path + "//TO_core_last_clip.las")
         {}
-
-        void test_file10_point1(liblas::LASPoint const& p)
-        {
-            ensure_distance(p.GetX(), double(630262.30), 0.0001);
-            ensure_distance(p.GetY(), double(4834500), 0.0001);
-            ensure_distance(p.GetZ(), double(51.53), 0.0001);
-            ensure_equals(p.GetIntensity(), 670);
-            ensure_equals(p.GetClassification(), liblas::uint8_t(1));
-            ensure_equals(p.GetScanAngleRank(), 0);
-            ensure_equals(p.GetUserData(), 3);
-            ensure_equals(p.GetScanFlags(), 9);
-            ensure_distance(p.GetTime(), double(413665.23360000004), 0.0001);
-        }
-
-        void test_file10_point2(liblas::LASPoint const& p)
-        {
-            ensure_distance(p.GetX(), double(630282.45), 0.0001);
-            ensure_distance(p.GetY(), double(4834500), 0.0001);
-            ensure_distance(p.GetZ(), double(51.63), 0.0001);
-            ensure_equals(p.GetIntensity(), 350);
-            ensure_equals(p.GetClassification(), 1);
-            ensure_equals(p.GetScanAngleRank(), 0);
-            ensure_equals(p.GetUserData(), 3);
-            ensure_equals(p.GetScanFlags(), 9);
-            ensure_distance(p.GetTime(), double(413665.52880000003), 0.0001);
-        }
-
-        void test_file10_point4(liblas::LASPoint const& p)
-        {
-            ensure_distance(p.GetX(), double(630346.83), 0.0001);
-            ensure_distance(p.GetY(), double(4834500), 0.0001);
-            ensure_distance(p.GetZ(), double(50.90), 0.0001);
-            ensure_equals(p.GetIntensity(), 150);
-            ensure_equals(p.GetClassification(), 1);
-            ensure_equals(p.GetScanAngleRank(), 0);
-            ensure_equals(p.GetUserData(), 4);
-            ensure_equals(p.GetScanFlags(), 18);
-            ensure_distance(p.GetTime(), double(414093.84360000002), 0.0001);
-        }
     };
 
     typedef test_group<lasreader_data> tg;

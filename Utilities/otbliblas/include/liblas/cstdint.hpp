@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: cstdint.hpp 838 2008-08-18 21:40:44Z hobu $
+ * $Id$
  *
  * Project:  libLAS - http://liblas.org - A BSD library for LAS format data.
  * Purpose:  Integer types definitions

@@ -41,9 +41,8 @@
  * OF SUCH DAMAGE.
  ****************************************************************************/
 
-#include <liblas/lasrecordheader.hpp>
+#include <liblas/lasvariablerecord.hpp>
 #include <liblas/cstdint.hpp>
-
 // std
 #include <algorithm>
 #include <stdexcept>
@@ -54,7 +53,7 @@
 
 namespace liblas {
 
-LASVLR::LASVLR() :
+LASVariableRecord::LASVariableRecord() :
     m_reserved(0), m_recordId(0), m_recordLength(0)
 {    
     std::memset(m_userId, 0, eUIDSize);
@@ -64,7 +63,7 @@ LASVLR::LASVLR() :
 
 }
 
-LASVLR::LASVLR(LASVLR const& other) :
+LASVariableRecord::LASVariableRecord(LASVariableRecord const& other) :
     m_reserved(other.m_reserved),
     m_recordId(other.m_recordId),
     m_recordLength(other.m_recordLength)
@@ -80,12 +79,12 @@ LASVLR::LASVLR(LASVLR const& other) :
     std::vector<uint8_t>(other.m_data).swap(m_data);
 }
 
-LASVLR::~LASVLR()
+LASVariableRecord::~LASVariableRecord()
 {
 
 }
 
-LASVLR& LASVLR::operator=(LASVLR const& rhs)
+LASVariableRecord& LASVariableRecord::operator=(LASVariableRecord const& rhs)
 {
     void* p = 0;
     if (this != &rhs)
@@ -105,17 +104,17 @@ LASVLR& LASVLR::operator=(LASVLR const& rhs)
     return (*this);
 }
 
-uint16_t LASVLR::GetReserved() const
+uint16_t LASVariableRecord::GetReserved() const
 {
     return m_reserved;
 }
 
-void LASVLR::SetReserved(uint16_t id)
+void LASVariableRecord::SetReserved(uint16_t id)
 {
     m_reserved = id;
 }
 
-std::string LASVLR::GetUserId(bool pad /*= false*/) const
+std::string LASVariableRecord::GetUserId(bool pad /*= false*/) const
 {
     // copy array of chars and trim zeros if smaller than 32 bytes
     std::string tmp(std::string(m_userId, eUIDSize).c_str());
@@ -131,7 +130,7 @@ std::string LASVLR::GetUserId(bool pad /*= false*/) const
     return tmp;
 }
 
-void LASVLR::SetUserId(std::string const& v)
+void LASVariableRecord::SetUserId(std::string const& v)
 {
     if (v.size() > eUIDSize)
         throw std::invalid_argument("user id too long");
@@ -142,25 +141,25 @@ void LASVLR::SetUserId(std::string const& v)
 }
 
 
-uint16_t LASVLR::GetRecordId() const
+uint16_t LASVariableRecord::GetRecordId() const
 {
     return m_recordId;
 }
 
-void LASVLR::SetRecordId(uint16_t v) {
+void LASVariableRecord::SetRecordId(uint16_t v) {
     m_recordId = v;
 }
 
-uint16_t LASVLR::GetRecordLength() const
+uint16_t LASVariableRecord::GetRecordLength() const
 {
     return m_recordLength;
 }
 
-void LASVLR::SetRecordLength(uint16_t v) {
+void LASVariableRecord::SetRecordLength(uint16_t v) {
     m_recordLength = v;
 }
 
-std::string LASVLR::GetDescription(bool pad /*= false*/) const
+std::string LASVariableRecord::GetDescription(bool pad /*= false*/) const
 {
     // copy array of chars and trim zeros if smaller than 32 bytes
     std::string tmp(std::string(m_desc, eDescriptionSize).c_str());
@@ -176,7 +175,7 @@ std::string LASVLR::GetDescription(bool pad /*= false*/) const
     return tmp;
 }
 
-void LASVLR::SetDescription(std::string const& v)
+void LASVariableRecord::SetDescription(std::string const& v)
 {
     if (v.size() > eDescriptionSize)
         throw std::invalid_argument("description is too long");
@@ -187,17 +186,17 @@ void LASVLR::SetDescription(std::string const& v)
 }
 
 
-std::vector<uint8_t> const&  LASVLR::GetData() const
+std::vector<uint8_t> const&  LASVariableRecord::GetData() const
 {
     return m_data;
 }
 
-void LASVLR::SetData(const std::vector<uint8_t>& v) 
+void LASVariableRecord::SetData(const std::vector<uint8_t>& v) 
 {
     m_data = v;
 }
 
-bool LASVLR::equal(LASVLR const& other) const
+bool LASVariableRecord::equal(LASVariableRecord const& other) const
 {
     return (m_recordId == other.m_recordId
             && std::string(m_userId) == std::string(other.m_userId) 
@@ -206,7 +205,7 @@ bool LASVLR::equal(LASVLR const& other) const
             && m_recordLength == other.m_recordLength);
 }
 
-uint32_t LASVLR::GetTotalSize() const
+uint32_t LASVariableRecord::GetTotalSize() const
 {
     // Signature 2 bytes
     // UserID 16 bytes

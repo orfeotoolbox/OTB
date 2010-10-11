@@ -1,6 +1,6 @@
 /***************************************************************************
- * $Id: las2las.c 879 2008-09-25 18:26:15Z hobu $
- * $Date: 2008-09-25 13:26:15 -0500 (Thu, 25 Sep 2008) $
+ * $Id$
+ * $Date$
  *
  * Project: libLAS -- C/C++ read/write library for LAS LIDAR data
  * Purpose: LAS translation with optional configuration
@@ -11,7 +11,7 @@
  * See LICENSE.txt in this source distribution for more information.
  **************************************************************************/
 
-
+#include <assert.h>
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,6 +27,7 @@ void repair_header(FILE *file, LASHeaderH header, LASPointSummary* summary) ;
 
 #define LAS_FORMAT_10 0
 #define LAS_FORMAT_11 1
+#define LAS_FORMAT_12 2
 
 void usage()
 {
@@ -52,7 +53,7 @@ void usage()
     fprintf(stderr,"\n");
 
     fprintf(stderr,"Eliminate intensities below 1000:\n");
-    fprintf(stderr,"  las2las -i in.las -eliminate_intensity_below 1000--stdout > out.las\n");
+    fprintf(stderr,"  las2las -i in.las -eliminate_intensity_below 1000 --stdout > out.las\n");
     fprintf(stderr,"\n");
 
     fprintf(stderr,"Eliminate intensities below 1000 and classifications that equal 2 (ground):\n");
@@ -96,10 +97,11 @@ int main(int argc, char *argv[])
     int elim_scan_angle_above = 0;
     int elim_intensity_below = 0;
     int elim_class = 0;
+    int clsidx = 0;
     int first_only = FALSE;
     int last_only = FALSE;
     int skip_invalid = FALSE;
-    int format = LAS_FORMAT_11;
+    int format = LAS_FORMAT_12;
     
     LASReaderH reader = NULL;
     LASHeaderH header = NULL;
@@ -202,8 +204,11 @@ int main(int argc, char *argv[])
             else if (strcmp(argv[i], "1.1") == 0) {
                 format = LAS_FORMAT_11;
             } 
+            else if (strcmp(argv[i], "1.2") == 0) {
+                format = LAS_FORMAT_12;
+            }
             else {
-                LASError_Print("Format must be specified as 1.0 or 1.1");
+                LASError_Print("Format must be specified as 1.0, 1.1, or 1.2");
             }
 
         }
@@ -268,15 +273,11 @@ int main(int argc, char *argv[])
         {
             remove_extra_header = TRUE;
         }
-        else if (i == argc - 2 && file_name_in == NULL && file_name_out == NULL)
+        else if (file_name_in == NULL && file_name_out == NULL)
         {
             file_name_in = argv[i];
         }
-        else if (i == argc - 1 && file_name_in == NULL && file_name_out == NULL)
-        {
-            file_name_in = argv[i];
-        }
-        else if (i == argc - 1 && file_name_in != NULL && file_name_out == NULL)
+        else if (file_name_in != NULL && file_name_out == NULL)
         {
             file_name_out = argv[i];
         }
@@ -366,12 +367,17 @@ int main(int argc, char *argv[])
             p = LASReader_GetNextPoint(reader);
             continue;
         }
-        if (elim_class && ( elim_class == LASPoint_GetClassification(p)))
+
+        clsidx = LASPoint_GetClassification(p);
+        clsidx = (clsidx & 31); // 31 is max index in classification lookup table
+        assert(clsidx <= 31);
+        if (elim_class && (elim_class == clsidx))
         {
             eliminated_class++;
             p = LASReader_GetNextPoint(reader);
             continue;
-        }        
+        }
+
         if (elim_intensity_below && LASPoint_GetIntensity(p) < elim_intensity_below)
         {
             eliminated_intensity++;
@@ -624,9 +630,12 @@ int main(int argc, char *argv[])
     
     if (format == LAS_FORMAT_10) {
         LASHeader_SetVersionMinor(surviving_header, 0);
-    } else {
+    } else if (format == LAS_FORMAT_11){
         LASHeader_SetVersionMinor(surviving_header, 1);
+    } else if (format == LAS_FORMAT_12) {
+        LASHeader_SetVersionMinor(surviving_header, 2);
     }
+    
 
 /*  if (remove_extra_header) surviving_header.offset_to_point_data = surviving_header.header_size;
 */
@@ -726,7 +735,11 @@ int main(int argc, char *argv[])
             p = LASReader_GetNextPoint(reader);
             continue;
         }
-        if (elim_class && ( elim_class == LASPoint_GetClassification(p)))
+
+        clsidx = LASPoint_GetClassification(p);
+        clsidx = (clsidx & 31); // 31 is max index in classification lookup table
+        assert(clsidx <= 31);
+        if (elim_class && (elim_class == clsidx))
         {
             p = LASReader_GetNextPoint(reader);
             continue;

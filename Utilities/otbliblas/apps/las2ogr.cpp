@@ -1,4 +1,4 @@
-// $Id: las2ogr.cpp 884 2008-09-26 18:04:27Z mloskot $
+// $Id$
 //
 // las2ogr translates LAS file to OGR datasource.
 // Inspired by pylas.py script developed by Matthew Perry and Carl Anderson,

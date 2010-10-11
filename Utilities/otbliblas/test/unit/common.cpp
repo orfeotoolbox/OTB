@@ -1,4 +1,4 @@
-// $Id: common.cpp 812 2008-07-25 21:52:56Z mloskot $
+// $Id$
 //
 // (C) Copyright Mateusz Loskot 2008, mateusz@loskot.net
 // Distributed under the BSD License
@@ -33,7 +33,7 @@ void test_default_header(liblas::LASHeader const& h)
     ensure_equals("wrong default major version",
         h.GetVersionMajor(), 1);
     ensure_equals("wrong default minor version",
-        h.GetVersionMinor(), 1);
+        h.GetVersionMinor(), 2);
 
     ensure_equals("wrong default system id",
         h.GetSystemId(), LASHeader::SystemIdentifier);
@@ -49,7 +49,7 @@ void test_default_header(liblas::LASHeader const& h)
         h.GetHeaderSize(), liblas::uint16_t(227));
     
     liblas::uint32_t offset = 229;
-    if (h.GetVersionMinor() == 1)
+    if (h.GetVersionMinor() == 1 || h.GetVersionMinor() == 2)
     {
         offset = 227;
     }
@@ -103,11 +103,20 @@ void test_default_point(liblas::LASPoint const& p)
         p.GetClassification(), 0);
     ensure_equals("wrong defualt scan angle rank",
         p.GetScanAngleRank(), 0);
-    ensure_equals("wrong defualt user data value",
+    ensure_equals("wrong defualt file marker/user data value",
         p.GetUserData(), 0);
+    ensure_equals("wrong defualt user bit field/point source id value",
+        p.GetPointSourceID(), 0);
     ensure_equals("wrong defualt time",
         p.GetTime(), double(0));
 
+    ensure_equals("invalid default red color",
+        p.GetColor().GetRed(), 0);
+    ensure_equals("invalid default green color",
+        p.GetColor().GetGreen(), 0);
+    ensure_equals("invalid default blue color",
+        p.GetColor().GetBlue(), 0);
+            
     ensure("invalid defualt point record", p.IsValid());
 }
 
@@ -145,6 +154,48 @@ void test_file10_header(liblas::LASHeader const& h)
     ensure_equals(h.GetMaxY(), double(4834500));
     ensure_equals(h.GetMinZ(), double(50.9));
     ensure_equals(h.GetMaxZ(), double(55.26));
+}
+
+void test_file10_point1(liblas::LASPoint const& p)
+{
+    ensure_distance(p.GetX(), double(630262.30), 0.0001);
+    ensure_distance(p.GetY(), double(4834500), 0.0001);
+    ensure_distance(p.GetZ(), double(51.53), 0.0001);
+    ensure_equals(p.GetIntensity(), 670);
+    ensure_equals(p.GetClassification(), liblas::uint8_t(1));
+    ensure_equals(p.GetScanAngleRank(), 0);
+    ensure_equals(p.GetUserData(), 3);
+    ensure_equals(p.GetPointSourceID(), 0);
+    ensure_equals(p.GetScanFlags(), 9);
+    ensure_distance(p.GetTime(), double(413665.23360000004), 0.0001);
+}
+
+void test_file10_point2(liblas::LASPoint const& p)
+{
+    ensure_distance(p.GetX(), double(630282.45), 0.0001);
+    ensure_distance(p.GetY(), double(4834500), 0.0001);
+    ensure_distance(p.GetZ(), double(51.63), 0.0001);
+    ensure_equals(p.GetIntensity(), 350);
+    ensure_equals(p.GetClassification(), 1);
+    ensure_equals(p.GetScanAngleRank(), 0);
+    ensure_equals(p.GetUserData(), 3);
+    ensure_equals(p.GetPointSourceID(), 0);
+    ensure_equals(p.GetScanFlags(), 9);
+    ensure_distance(p.GetTime(), double(413665.52880000003), 0.0001);
+}
+
+void test_file10_point4(liblas::LASPoint const& p)
+{
+    ensure_distance(p.GetX(), double(630346.83), 0.0001);
+    ensure_distance(p.GetY(), double(4834500), 0.0001);
+    ensure_distance(p.GetZ(), double(50.90), 0.0001);
+    ensure_equals(p.GetIntensity(), 150);
+    ensure_equals(p.GetClassification(), 1);
+    ensure_equals(p.GetScanAngleRank(), 0);
+    ensure_equals(p.GetUserData(), 4);
+    ensure_equals(p.GetPointSourceID(), 0);
+    ensure_equals(p.GetScanFlags(), 18);
+    ensure_distance(p.GetTime(), double(414093.84360000002), 0.0001);
 }
 
 }

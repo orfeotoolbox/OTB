@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: endian.hpp 889 2008-09-28 04:17:22Z hobu $
+ * $Id$
  *
  * Project:  libLAS - http://liblas.org - A BSD library for LAS format data.
  * Purpose:  Endian macros
@@ -69,6 +69,12 @@
 #elif defined(_LITTLE_ENDIAN)
 # define LIBLAS_LITTLE_ENDIAN
 # define LIBLAS_BYTE_ORDER 1234
+
+// If they're both defined, we're assuming little for now.  See http://liblas.org/ticket/133
+#elif defined(_LITTLE_ENDIAN) && defined(_BIG_ENDIAN) 
+# define LIBLAS_LITTLE_ENDIAN
+# define LIBLAS_BYTE_ORDER 1234
+
 #elif defined(__sparc) || defined(__sparc__) \
    || defined(_POWER) || defined(__powerpc__) \
    || defined(__ppc__) || defined(__hpux) \

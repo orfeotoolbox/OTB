@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: lasheader.hpp 875 2008-09-20 20:28:41Z hobu $
+ * $Id$
  *
  * Project:  libLAS - http://liblas.org - A BSD library for LAS format data.
  * Purpose:  LAS header class 
@@ -43,10 +43,13 @@
 #ifndef LIBLAS_LASHEADER_HPP_INCLUDED
 #define LIBLAS_LASHEADER_HPP_INCLUDED
 
+#include <liblas/lasvariablerecord.hpp>
+#include <liblas/lasspatialreference.hpp>
 #include <liblas/cstdint.hpp>
 #include <liblas/guid.hpp>
 #include <liblas/detail/utility.hpp>
-#include <liblas/lasrecordheader.hpp>
+#include <liblas/detail/fwd.hpp>
+
 //std
 #include <string>
 #include <vector>
@@ -57,6 +60,10 @@ namespace liblas {
 /// The header contains set of generic data and metadata
 /// describing a family of ASPRS LAS files. The header is stored
 /// at the beginning of every valid ASPRS LAS file.
+///
+/// \todo  TODO (low-priority): replace static-size char arrays as data members
+///        with std::string and return const-reference to string object.
+///
 class LASHeader
 {
 public:
@@ -67,21 +74,27 @@ public:
         eVersionMajorMin = 1, ///< Minimum of major component
         eVersionMajorMax = 1, ///< Maximum of major component
         eVersionMinorMin = 0, ///< Minimum of minor component
-        eVersionMinorMax = 1 ///< Maximum of minor component
+        eVersionMinorMax = 2 ///< Maximum of minor component
     };
 
     /// Versions of point record format.
     enum PointFormat
     {
         ePointFormat0 = 0, ///< Point Data Format \e 0
-        ePointFormat1 = 1  ///< Point Data Format \e 1
+        ePointFormat1 = 1, ///< Point Data Format \e 1
+        ePointFormat2 = 2, ///< Point Data Format \e 2
+        ePointFormat3 = 3 ///< Point Data Format \e 3
+
     };
 
     /// Number of bytes of point record storage in particular format.
     enum PointSize
     {
         ePointSize0 = 20, ///< Size of point record in data format \e 0
-        ePointSize1 = 28  ///< Size of point record in data format \e 1
+        ePointSize1 = 28, ///< Size of point record in data format \e 1
+        ePointSize2 = 26, ///< Size of point record in data format \e 2
+        ePointSize3 = 34  ///< Size of point record in data format \e 3
+
     };
 
     /// Official signature of ASPRS LAS file format, always \b "LASF".
@@ -127,10 +140,14 @@ public:
     /// Set file source identifier.
     /// \param v - should be set to a value between 1 and 65535.
     /// \exception No throw
+    ///
+    /// \todo TODO: Should we warn or throw about type overflow when user passes 65535 + 1 = 0
     void SetFileSourceId(uint16_t v);
 
     /// Get value field reserved by the ASPRS LAS Specification.
     /// \note This field is always filled with 0.
+    ///
+    /// \todo TODO: Should we warn or throw about type overflow when user passes 65535 + 1 = 0
     uint16_t GetReserved() const;
 
     /// Set reserved value for the header identifier.
@@ -189,21 +206,21 @@ public:
     void SetSoftwareId(std::string const& v);
 
     /// Get day of year of file creation date.
-    /// \todo Use full date structure instead of Julian date number.
+    /// \todo TODO: Use full date structure instead of Julian date number.
     uint16_t GetCreationDOY() const;
 
     /// Set day of year of file creation date.
     /// \exception std::out_of_range - given value is higher than number 366.
-    /// \todo Use full date structure instead of Julian date number.
+    /// \todo TODO: Use full date structure instead of Julian date number.
     void SetCreationDOY(uint16_t v);
 
     /// Set year of file creation date.
-    /// \todo Remove if full date structure is used.
+    /// \todo TODO: Remove if full date structure is used.
     uint16_t GetCreationYear() const;
 
     /// Get year of file creation date.
     /// \exception std::out_of_range - given value is higher than number 9999.
-    /// \todo Remove if full date structure is used.
+    /// \todo TODO: Remove if full date structure is used.
     void SetCreationYear(uint16_t v);
 
     /// Get number of bytes of generic verion of public header block storage.
@@ -297,23 +314,23 @@ public:
     void SetMin(double x, double y, double z);
 
     /// Adds a variable length record to the header
-    void AddVLR(LASVLR const& v);
+    void AddVLR(LASVariableRecord const& v);
     
     /// Returns a VLR 
-    LASVLR const& GetVLR(uint32_t index) const;
+    LASVariableRecord const& GetVLR(uint32_t index) const;
 
     /// Removes a VLR from the the header.
     void DeleteVLR(uint32_t index);
 
-    /// Fetch the georeference as a PROJ.4 definition string.
-    std::string GetProj4() const;
-    
-    /// Set the georeference as a proj.4 string
-    void SetProj4(std::string const& v);
-    
-	/// Rewrite variable-length record with georeference infomation, if available.
+    /// Rewrite variable-length record with georeference infomation, if available.
     void SetGeoreference();
     
+    /// Fetch the georeference
+    LASSpatialReference GetSRS() const;
+    
+    /// Set the georeference
+    void SetSRS(LASSpatialReference& srs);
+
 private:
     
     typedef detail::Point<double> PointScales;
@@ -367,8 +384,8 @@ private:
     PointScales m_scales;
     PointOffsets m_offsets;
     PointExtents m_extents;
-    std::vector<LASVLR> m_vlrs;
-    std::string m_proj4;
+    std::vector<LASVariableRecord> m_vlrs;
+    LASSpatialReference m_srs;
 };
 
 } // namespace liblas

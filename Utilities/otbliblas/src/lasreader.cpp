@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: lasreader.cpp 813 2008-07-25 21:53:52Z mloskot $
+ * $Id$
  *
  * Project:  libLAS - http://liblas.org - A BSD library for LAS format data.
  * Purpose:  LAS reader class 
@@ -48,6 +48,7 @@
 #include <string>
 #include <cstring> // std::memset
 #include <cassert>
+#include <iostream>
 
 namespace liblas
 {
@@ -81,37 +82,13 @@ LASPoint const& LASReader::GetPoint() const
 
 bool LASReader::ReadNextPoint()
 {
-    bool ret = false;
-    double time = 0;
-    
-    if (m_header.GetDataFormatId() == LASHeader::ePointFormat0)
-        ret = m_pimpl->ReadNextPoint(m_record);
-    else
-        ret = m_pimpl->ReadNextPoint(m_record, time);
-
-    if (ret)
-    {
-        MakePoint(time);
-    }
-
+    bool ret = m_pimpl->ReadNextPoint(m_point, m_header);
     return ret;
 }
 
 bool LASReader::ReadPointAt(std::size_t n)
 {
-    bool ret = false;
-    double time = 0;
-
-    if (m_header.GetDataFormatId() == LASHeader::ePointFormat0)
-        ret = m_pimpl->ReadPointAt(n, m_record);
-    else
-        ret = m_pimpl->ReadPointAt(n, m_record, time);
-
-    if (ret)
-    {
-        MakePoint(time);
-    }
-
+    bool ret = m_pimpl->ReadPointAt(n, m_point, m_header);
     return ret;
 }
 
@@ -122,62 +99,51 @@ LASPoint const& LASReader::operator[](std::size_t n)
         throw std::out_of_range("point subscript out of range");
     }
 
-    bool ret = false;
-    double time = 0;
-
-    if (m_header.GetDataFormatId() == LASHeader::ePointFormat0)
-        ret = m_pimpl->ReadPointAt(n, m_record);
-    else
-        ret = m_pimpl->ReadPointAt(n, m_record, time);
-
+    bool ret = m_pimpl->ReadPointAt(n, m_point, m_header);
     if (!ret)
     {
         throw std::out_of_range("no point record at given position");
     }
 
-    MakePoint(time);
-
     return m_point;
 }
 
-
 void LASReader::Init()
-{
+{    
     bool ret = m_pimpl->ReadHeader(m_header);
-
     if (!ret)
         throw std::runtime_error("public header block reading failure");
-        
+
     ret = m_pimpl->ReadVLR(m_header);
     if (!ret)
         throw std::runtime_error("public vlr header block reading failure");
-    
+
     m_pimpl->ReadGeoreference(m_header);
-    
-}
+    m_pimpl->Reset(m_header);
 
-void LASReader::MakePoint(double const& time)
-{
-    double const x = m_record.x * m_header.GetScaleX() + m_header.GetOffsetX();
-    double const y = m_record.y * m_header.GetScaleY() + m_header.GetOffsetY();
-    double const z = m_record.z * m_header.GetScaleZ() + m_header.GetOffsetZ();
-
-    m_point.SetCoordinates(x, y, z);
-    m_point.SetIntensity(m_record.intensity);
-    m_point.SetScanFlags(m_record.flags);
-    m_point.SetClassification(m_record.classification);
-    m_point.SetScanAngleRank(m_record.scan_angle_rank);
-    m_point.SetUserData(m_record.user_data);
-    
-    // TODO: Are we going to handle m_record.point_source_id ?
-
-    m_point.SetTime(time);
 }
 
 std::istream& LASReader::GetStream() const
 {
     return m_pimpl->GetStream();
 }
+
+void LASReader::Reset() 
+{
+    Init();
+}
+
+bool LASReader::IsEOF() const
+{
+    return GetStream().eof();
+}
+
+bool LASReader::SetSRS(const LASSpatialReference& srs)
+{
+    m_pimpl->SetSRS(srs);
+    return true;
+}
+
 
 } // namespace liblas
 

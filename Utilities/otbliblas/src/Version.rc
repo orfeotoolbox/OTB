@@ -1,0 +1,100 @@
+/******************************************************************************
+ * $Id$
+ *
+ * Project:  libLAS - http://liblas.org - A BSD library for LAS format data.
+ * Purpose:  libLAS DLL registration information
+ * Author:   Howard Butler, hobu.inc@gmail.com
+ *
+ ******************************************************************************
+ * This script is derived from the GDAL Version.rc script in the GDAL 
+ * source code.  The copyright on the file was as follows:
+
+ * Project:  GDAL Core
+ * Purpose:  GDAL DLL registration information. 
+ * Author:   Martin Daly (Cadcorp)
+ *
+ * Copyright assignment provided by Martin Daly by email, "Be my guest.  Fame!  
+ * At last!  Best not let it go to my head, eh?"
+ *
+ * Copyright (c) 2005, Frank Warmerdam <warmerdam@pobox.com>
+ * 
+ * All rights reserved.
+ * 
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a
+ * copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+ * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ * DEALINGS IN THE SOFTWARE.
+ * 
+ ****************************************************************************/
+
+
+#define APSTUDIO_HIDDEN_SYMBOLS
+#include <windows.h>
+#undef APSTUDIO_HIDDEN_SYMBOLS
+#include <winver.h>
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NEU)
+#ifdef _WIN32
+LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
+#pragma code_page(1252)
+#endif //_WIN32
+
+#include "las_version.h"
+
+#ifndef _MAC
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION LIBLAS_VERSION_MAJOR,LIBLAS_VERSION_MINOR,LIBLAS_VERSION_REV,LIBLAS_VERSION_BUILD
+ PRODUCTVERSION LIBLAS_VERSION_MAJOR,LIBLAS_VERSION_MINOR,LIBLAS_VERSION_REV,LIBLAS_VERSION_BUILD
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "000004b0"
+        BEGIN
+            VALUE "CompanyName", "Hobu, Inc.\0"
+            VALUE "FileDescription", "libLAS - LAS 1.0/1.1 ASPRS LiDAR data translation toolset\0"
+            VALUE "FileVersion", LIBLAS_RELEASE_NAME "\0"
+            VALUE "InternalName", "libLAS\0"
+            VALUE "LegalCopyright", "See LICENSE.TXT"
+            VALUE "ProductName", "libLAS\0"
+            VALUE "ProductVersion", LIBLAS_RELEASE_NAME "\0"
+            VALUE "WebPage", "http://liblas.org/\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0, 1200
+    END
+END
+
+#endif    // !_MAC
+
+#endif    // Neutral resources

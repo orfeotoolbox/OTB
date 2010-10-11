@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: fwd.hpp 813 2008-07-25 21:53:52Z mloskot $
+ * $Id$
  *
  * Project:  libLAS - http://liblas.org - A BSD library for LAS format data.
  * Purpose:  Forward declarations for C++ libLAS 
@@ -49,12 +49,15 @@ class LASHeader;
 class LASPoint;
 class LASReader;
 class LASWriter;
+class LASColor;
+class LASSpatialReference;
 
 namespace detail {
 
 class Reader;
 class Writer;
 struct PointRecord;
+struct Color;
 
 }} // namespace liblas::detail
 
