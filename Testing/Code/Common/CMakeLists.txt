@@ -1103,7 +1103,7 @@ OTB_ADD_EXECUTABLE(otbCommonTests6 "${BasicCommon_SRCS6}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbCommonTests7 "${BasicCommon_SRCS7}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbCommonTests8 "${BasicCommon_SRCS8}" "OTBIO;OTBTesting")
 IF(OTB_USE_MAPNIK)
-  OTB_ADD_EXECUTABLE(otbCommonTests9 "${BasicCommon_SRCS9}" "OTBIO;OTBTesting;${MAPNIK_LIBRARY}")
+  OTB_ADD_EXECUTABLE(otbCommonTests9 "${BasicCommon_SRCS9}" "OTBIO;OTBTesting;${MAPNIK_LIBRARY};${ICUUC_LIBRARY}")
 ENDIF(OTB_USE_MAPNIK)
 IF(OTB_USE_PQXX)
   #TODO this line should be refined when we will like to have this capability with windows
