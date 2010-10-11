@@ -26,6 +26,7 @@
 #include "otbMath.h"
 #include "otbImage.h"
 #include "otbBandMathImageFilter.h"
+#include "otbStreamingImageFileWriter.h"
 
 int otbBandMathImageFilterNew( int argc, char* argv[])
 {
@@ -178,5 +179,101 @@ int otbBandMathImageFilter( int argc, char* argv[])
              << "     Result =  " << it.Get()   << "     Expected =  nan" << std::endl );
   std::cout << std::endl;
 
+  return EXIT_SUCCESS;
+}
+
+
+int otbBandMathImageFilterWithIdx( int argc, char* argv[])
+{
+  const char * outfname1       = argv[1];
+  const char * outfname2       = argv[2];
+
+  typedef double                                            PixelType;
+  //typedef float                                             PixelType;
+  typedef otb::Image<PixelType, 2>                          ImageType;
+  typedef otb::BandMathImageFilter<ImageType>               FilterType;
+  typedef otb::StreamingImageFileWriter<ImageType>          WriterType;
+  
+  unsigned int i;
+  const unsigned int N = 100;
+  unsigned int FAIL_FLAG = 0;
+
+  ImageType::SizeType size;
+  size.Fill(N);
+  ImageType::IndexType index;
+  index.Fill(0);
+  ImageType::RegionType region;
+  region.SetSize(size);
+  region.SetIndex(index);
+  ImageType::PointType origin;
+  origin[0] = -25;
+  origin[1] = -25;
+  ImageType::SpacingType spacing;
+  spacing[0] = 0.5;
+  spacing[1] = 0.5;
+
+  ImageType::Pointer image1 = ImageType::New();
+  ImageType::Pointer image2 = ImageType::New();
+  ImageType::Pointer image3 = ImageType::New();
+
+  image1->SetLargestPossibleRegion( region );
+  image1->SetBufferedRegion( region );
+  image1->SetRequestedRegion( region );
+  image1->Allocate();
+
+  image2->SetLargestPossibleRegion( region );
+  image2->SetBufferedRegion( region );
+  image2->SetRequestedRegion( region );
+  image2->Allocate();
+
+  image3->SetLargestPossibleRegion( region );
+  image3->SetBufferedRegion( region );
+  image3->SetRequestedRegion( region );
+  image3->Allocate();
+
+  typedef itk::ImageRegionIteratorWithIndex<ImageType> IteratorType;
+  IteratorType it1(image1, region);
+  IteratorType it2(image2, region);
+  IteratorType it3(image3, region);
+
+  image1->SetOrigin(origin);
+  image1->SetSpacing(spacing);
+  image2->SetOrigin(origin);
+  image2->SetSpacing(spacing);
+  image3->SetOrigin(origin);
+  image3->SetSpacing(spacing);
+  
+  for (it1.GoToBegin(), it2.GoToBegin(), it3.GoToBegin(); !it1.IsAtEnd(); ++it1, ++it2, ++it3)
+  {
+    ImageType::IndexType i1 = it1.GetIndex();
+    ImageType::IndexType i2 = it2.GetIndex();
+    ImageType::IndexType i3 = it3.GetIndex();
+
+    it1.Set( i1[0] + i1[1] -50 );
+    it2.Set( i2[0] * i2[1] );
+    it3.Set( i3[0] + i3[1] * i3[1] );
+  }
+
+
+  FilterType::Pointer         filter       = FilterType::New();
+  std::cout << "Number Of Threads  :  " << filter->GetNumberOfThreads() << std::endl;
+
+
+  filter->SetNthInput(0, image1);
+  filter->SetNthInput(1, image2);
+  filter->SetNthInput(2, image3);
+
+  filter->SetExpression("if(sqrt(idxX*idxX+idxY*idxY) < 50, b2,b3)");
+  WriterType::Pointer writer = WriterType::New();
+  writer->SetInput(filter->GetOutput());
+  writer->SetFileName(outfname1);
+  writer->Update();
+
+  filter->SetExpression("if(sqrt(idxPhyX*idxPhyX+idxPhyY*idxPhyY) < 25, b2, b3)");
+  WriterType::Pointer writer2 = WriterType::New();
+  writer2->SetInput(filter->GetOutput());
+  writer2->SetFileName(outfname2);
+  writer2->Update();
+  
   return EXIT_SUCCESS;
 }

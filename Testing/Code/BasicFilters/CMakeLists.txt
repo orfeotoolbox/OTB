@@ -1767,6 +1767,12 @@ ADD_TEST(bfTuBandMathImageFilter ${BASICFILTERS_TESTS13}
 ADD_TEST(bfTvBandMathImageFilter ${BASICFILTERS_TESTS13}
   otbBandMathImageFilter)
 
+ADD_TEST(bfTvBandMathImageFilterWithIdx ${BASICFILTERS_TESTS13}
+  otbBandMathImageFilterWithIdx
+  ${TEMP}/bfTvBandMathImageFilterWithIdx1.tif
+  ${TEMP}/bfTvBandMathImageFilterWithIdx2.tif
+)
+
 ADD_TEST(bfTvComplexToIntensityFilterTest ${BASICFILTERS_TESTS13} 
   otbComplexToIntensityFilterTest)
 

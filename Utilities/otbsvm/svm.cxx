@@ -3338,11 +3338,7 @@ int svm_check_probability_model(const svm_model *model)
 
 GenericKernelFunctorBase::GenericKernelFunctorBase(const GenericKernelFunctorBase& copy)
 {
-  if (this != &copy)
-    {
-      this->operator=(copy);
-    }
-  
+  *this = copy;
 }
 
 GenericKernelFunctorBase&
@@ -3644,22 +3640,20 @@ add(const svm_node *px, const svm_node *py) const
 // ****************************************************************************************
 
 ComposedKernelFunctor::ComposedKernelFunctor(const ComposedKernelFunctor& copy)
- {
-   //this->GenericKernelFunctorBase::GenericKernelFunctorBase(copy);
-   Superclass::GenericKernelFunctorBase(static_cast<GenericKernelFunctorBase>(copy));
-   this->m_KernelFunctorList = copy.m_KernelFunctorList;
-   this->m_HaveToBeDeletedList = copy.m_HaveToBeDeletedList;
-   this->m_PonderationList = copy.m_PonderationList;
- }
+{
+  *this = copy;
+}
 
 ComposedKernelFunctor&
 ComposedKernelFunctor::operator=(const ComposedKernelFunctor& copy)
 {
-  //this->GenericKernelFunctorBase::operator=( copy );
-  Superclass::operator=( static_cast<GenericKernelFunctorBase>(copy) );
-  this->m_KernelFunctorList = copy.m_KernelFunctorList;
+  // Call Superclass::operator=
+  static_cast<Superclass&>(*this) = static_cast<const Superclass&>(copy);
+
+  // Copy Self attributes
+  this->m_KernelFunctorList   = copy.m_KernelFunctorList;
   this->m_HaveToBeDeletedList = copy.m_HaveToBeDeletedList;
-  this->m_PonderationList = copy.m_PonderationList;
+  this->m_PonderationList     = copy.m_PonderationList;
   return *this;
 }
 
