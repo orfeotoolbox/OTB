@@ -41,10 +41,11 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
 CONFIG_CLEAN_FILES =
-am_liblas_test_OBJECTS = guid_test.$(OBJEXT) common.$(OBJEXT) \
+am_liblas_test_OBJECTS = common.$(OBJEXT) guid_test.$(OBJEXT) \
 	laserror_test.$(OBJEXT) lasfile_test.$(OBJEXT) \
-	lasheader_test.$(OBJEXT) laspoint_test.$(OBJEXT) \
-	lasreader_test.$(OBJEXT) lasrecordheader_test.$(OBJEXT) \
+	lasheader_test.$(OBJEXT) lasspatialreference_test.$(OBJEXT) \
+	laspoint_test.$(OBJEXT) lasreader_iterator_test.$(OBJEXT) \
+	lasreader_test.$(OBJEXT) lasvariablerecord_test.$(OBJEXT) \
 	laswriter_test.$(OBJEXT) liblas_test_suite.$(OBJEXT)
 liblas_test_OBJECTS = $(am_liblas_test_OBJECTS)
 liblas_test_DEPENDENCIES = $(top_builddir)/src/liblas.la
@@ -84,14 +85,14 @@ CXXFLAGS = @CXXFLAGS@
 CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
-ECHO = @ECHO@
+DSYMUTIL = @DSYMUTIL@
+DUMPBIN = @DUMPBIN@
 ECHO_C = @ECHO_C@
 ECHO_N = @ECHO_N@
 ECHO_T = @ECHO_T@
 EGREP = @EGREP@
 EXEEXT = @EXEEXT@
-F77 = @F77@
-FFLAGS = @FFLAGS@
+FGREP = @FGREP@
 GDAL_INC = @GDAL_INC@
 GDAL_PREFIX = @GDAL_PREFIX@
 GEOTIFF_INC = @GEOTIFF_INC@
@@ -102,15 +103,21 @@ INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
+LD = @LD@
 LDFLAGS = @LDFLAGS@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
 LIBTOOL = @LIBTOOL@
+LIPO = @LIPO@
 LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
 MKDIR_P = @MKDIR_P@
+NM = @NM@
+NMEDIT = @NMEDIT@
 OBJEXT = @OBJEXT@
+OTOOL = @OTOOL@
+OTOOL64 = @OTOOL64@
 PACKAGE = @PACKAGE@
 PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
 PACKAGE_NAME = @PACKAGE_NAME@
@@ -119,6 +126,8 @@ PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 RANLIB = @RANLIB@
+RELEASE_VERSION = @RELEASE_VERSION@
+SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
@@ -129,7 +138,7 @@ abs_top_builddir = @abs_top_builddir@
 abs_top_srcdir = @abs_top_srcdir@
 ac_ct_CC = @ac_ct_CC@
 ac_ct_CXX = @ac_ct_CXX@
-ac_ct_F77 = @ac_ct_F77@
+ac_ct_DUMPBIN = @ac_ct_DUMPBIN@
 am__include = @am__include@
 am__leading_dot = @am__leading_dot@
 am__quote = @am__quote@
@@ -160,6 +169,7 @@ libdir = @libdir@
 libexecdir = @libexecdir@
 localedir = @localedir@
 localstatedir = @localstatedir@
+lt_ECHO = @lt_ECHO@
 mandir = @mandir@
 mkdir_p = @mkdir_p@
 oldincludedir = @oldincludedir@
@@ -174,22 +184,27 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
+@GDAL_IS_CONFIG_TRUE@GDAL_CPPFLAGS = @GDAL_INC@ -DHAVE_GDAL=1
+@GEOTIFF_IS_CONFIG_TRUE@GEOTIFF_CPPFLAGS = @GEOTIFF_INC@ -DHAVE_LIBGEOTIFF=1
+AM_CPPFLAGS = $(GEOTIFF_CPPFLAGS) $(GDAL_CPPFLAGS) -I../include -I../include/detail
 INCLUDES = -I. -I../../include
 liblas_test_LDADD = \
 	$(top_builddir)/src/liblas.la \
 	$(NULL)
 
 liblas_test_SOURCES = \
-	guid_test.cpp \
-	common.cpp \
-	laserror_test.cpp \
-	lasfile_test.cpp \
-	lasheader_test.cpp \
-	laspoint_test.cpp \
-	lasreader_test.cpp \
-	lasrecordheader_test.cpp \
-	laswriter_test.cpp \
-	liblas_test_suite.cpp
+    common.cpp \
+    guid_test.cpp \
+    laserror_test.cpp \
+    lasfile_test.cpp \
+    lasheader_test.cpp \
+    lasspatialreference_test.cpp \
+    laspoint_test.cpp \
+    lasreader_iterator_test.cpp \
+    lasreader_test.cpp \
+    lasvariablerecord_test.cpp \
+    laswriter_test.cpp \
+    liblas_test_suite.cpp
 
 all: all-am
 
@@ -247,8 +262,10 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lasfile_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lasheader_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/laspoint_test.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lasreader_iterator_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lasreader_test.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lasrecordheader_test.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lasspatialreference_test.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lasvariablerecord_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/laswriter_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblas_test_suite.Po@am__quote@
 

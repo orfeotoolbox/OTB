@@ -1,4 +1,4 @@
-// $Id: lasfile_test.cpp 646 2008-05-02 06:01:24Z mloskot $
+// $Id$
 //
 // (C) Copyright Mateusz Loskot 2008, mateusz@loskot.net
 // Distributed under the BSD License

@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: liblas.hpp 813 2008-07-25 21:53:52Z mloskot $
+ * $Id$
  *
  * Project:  libLAS - http://liblas.org - A BSD library for LAS format data.
  * Purpose:  LAS include file
@@ -66,6 +66,7 @@ enum LASFileVersion
 {
     eLASVersion10 = 1 * 100000 + 0, ///< LAS Format 1.0
     eLASVersion11 = 1 * 100000 + 1, ///< LAS Format 1.1
+    eLASVersion12 = 1 * 100000 + 2, ///< LAS Format 1.2
     eLASVersion20 = 2 * 100000 + 0  ///< LAS Format 2.0
 };
 
@@ -95,6 +96,24 @@ inline bool Create(std::ofstream& ofs, std::string const& filename) // throw()
 {
     ofs.open(filename.c_str(), std::ios::out | std::ios::binary);
     return ofs.is_open();
+}
+
+inline bool IsGDALEnabled()
+{
+#ifdef HAVE_GDAL
+    return true;
+#else
+    return false;
+#endif
+}
+
+inline bool IsLibGeoTIFFEnabled()
+{
+#ifdef HAVE_LIBGEOTIFF
+    return true;
+#else
+    return false;
+#endif
 }
 
 } // namespace liblas

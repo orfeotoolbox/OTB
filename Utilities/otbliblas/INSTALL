@@ -23,6 +23,14 @@ Configure libLAS for debugging and install in my home directory:
 ::
 
     ./configure --enable-debug --prefix=/home/hobu/liblas
+
+If you are building directly from subversion, you will need to generate 
+the configure script first.  This will require that your system have
+autotools installed.
+
+::
+
+	./autogen.sh
     
 Windows
 ~~~~~~~~~~~~~~~~~~~

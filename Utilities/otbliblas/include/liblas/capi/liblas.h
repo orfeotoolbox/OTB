@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: liblas.h 888 2008-09-27 23:12:14Z hobu $
+ * $Id$
  *
  * Project:  libLAS - http://liblas.org - A BSD library for LAS format data.
  * Purpose:  Main prototypes for the libLAS C API
@@ -59,6 +59,17 @@ typedef struct LASPointHS *LASPointH;
 typedef struct LASHeaderHS *LASHeaderH;
 typedef struct LASGuidHS *LASGuidH;
 typedef struct LASVLRHS *LASVLRH;
+typedef struct LASColorHS *LASColorH;
+typedef struct LASSRSHS *LASSRSH;
+
+
+/* Fake out the compiler if we don't have libgeotiff */
+#ifndef HAVE_LIBGEOTIFF
+    typedef struct GTIFS * GTIF;
+    typedef struct TIFFS * TIFF;
+#else
+#include <geotiff.h>
+#endif
 
 
 LAS_C_START
@@ -95,6 +106,9 @@ typedef struct  {
     uint16_t numret;
     uint16_t scandir;
     uint16_t fedge;
+    uint16_t red;
+    uint16_t green;
+    uint16_t blue;
     long rgpsum;    
     int number_of_point_records;
     int number_of_points_by_return[8];
@@ -111,7 +125,11 @@ typedef struct  {
 /** Returns the version string for this library.
  *  @return the version string for this library.
 */
-LAS_DLL char* LAS_GetVersion();
+LAS_DLL char* LAS_GetVersion(void);
+
+LAS_DLL int LAS_IsLibGeoTIFFEnabled(void);
+
+LAS_DLL int LAS_IsGDALEnabled(void);
 
 /****************************************************************************/
 /* Error handling                                                           */
@@ -202,6 +220,10 @@ LAS_DLL void LASReader_Destroy(LASReaderH hReader);
  *  in the event of a NULL return.
 */
 LAS_DLL LASHeaderH LASReader_GetHeader(const LASReaderH hReader);
+
+
+LAS_DLL LASError LASReader_SetSRS(LASHeaderH hReader, const LASSRSH hSRS);
+
 
 /****************************************************************************/
 /* Point operations                                                         */
@@ -382,6 +404,19 @@ LAS_DLL int8_t LASPoint_GetScanAngleRank(const LASPointH hPoint);
 */
 LAS_DLL LASError LASPoint_SetScanAngleRank(LASPointH hPoint, int8_t value);
 
+/** Sets the point source id for the point.  No validation is done. 
+ *  @param hPoint LASPointH instance
+ *  @param value the value to set for the point source id
+ *  @return LASError value determine success or failure.
+*/
+LAS_DLL LASError LASPoint_SetPointSourceId(LASPointH hPoint, uint16_t value);
+
+/** Returns the point source id for the point
+ *  @param hPoint LASPointH instance
+ *  @return the scan angle for the point
+*/
+LAS_DLL uint16_t LASPoint_GetPointSourceId(LASPointH hPoint);
+
 /** Returns the arbitrary user data for the point
  *  @param hPoint LASPointH instance
  *  @return the arbitrary user data for the point
@@ -519,6 +554,8 @@ LAS_DLL uint8_t LASHeader_GetVersionMinor(const LASHeaderH hHeader);
  *  @param hHeader LASHeaderH instance
  *  @param value integer value to set the minor version to (only the values 1 or 0 are valid)
  *  @return LASError enum
+ *
+ *  @todo TODO: Maybe this should return fatal error if version out of range -- hobu
 */
 LAS_DLL LASError LASHeader_SetVersionMinor(LASHeaderH hHeader, uint8_t value);
 
@@ -602,6 +639,14 @@ LAS_DLL uint16_t LASHeader_GetHeaderSize(const LASHeaderH hHeader);
  *  @return the type offset to the start of actual point data for the file
 */
 LAS_DLL uint32_t LASHeader_GetDataOffset(const LASHeaderH hHeader);
+
+/** Sets the location in number of bytes to start writing point data.  Any
+ *  space between the end of the LASVLRHs and this value will be written with 0's.
+ *  @param hHeader LASHeaderH instance
+ *  @param value the long integer to set for byte location determining the end of the header
+ *  @return LASError enum
+*/
+ LAS_DLL LASError LASHeader_SetDataOffset(const LASHeaderH hHeader, uint32_t value);
 
 /** Returns the number of variable length records in the header
  *  @param hHeader LASHeaderH instance
@@ -767,21 +812,6 @@ LAS_DLL double LASHeader_GetMaxZ(const LASHeaderH hHeader);
 */
 LAS_DLL LASError LASHeader_SetMax(LASHeaderH hHeader, double x, double y, double z);
 
-/** Returns the proj.4 string describing the spatial reference of the 
- *  header if it is available
- *  @param hHeader LASHeaderH instance
- *  @return the proj.4 string or NULL if none is available.  The caller
- *  owns the string.
-*/
-LAS_DLL char* LASHeader_GetProj4(LASHeaderH hHeader);
-
-/** Sets the proj4 stirng describing the spatial reference of the header.
- *  @param hHeader LASHeaderH instance
- *  @param value the proj4 string to set for the header
- *  @return LASError enum
-*/
-LAS_DLL LASError LASHeader_SetProj4(LASHeaderH hHeader, const char* value);
-
 /** Returns the VLR record for the given index.  Use LASHeader_GetRecordsCount to 
  *  determine the number of VLR records available on the header.
  *  @param hHeader the LASHeaderH instance
@@ -845,6 +875,9 @@ LAS_DLL LASError LASWriter_WriteHeader(const LASWriterH hWriter, const LASHeader
  *  @param hWriter LASWriterH instance to close
 */
 LAS_DLL void LASWriter_Destroy(LASWriterH hWriter);
+
+
+LAS_DLL LASError LASWriter_SetSRS(LASWriterH hWriter, const LASSRSH hSRS);
 
 /****************************************************************************/
 /* GUID Operations                                                          */
@@ -986,6 +1019,97 @@ LAS_DLL LASError LASVLR_GetData(const LASVLRH hVLR, uint8_t* data);
  *  @return LASErrorEnum
 */
 LAS_DLL LASError LASVLR_SetData(const LASVLRH hVLR, uint8_t* data, uint16_t length);
+
+
+/****************************************************************************/
+/* Color Operations                                                           */
+/****************************************************************************/
+
+/** Creates a new Color
+ *  @return a new Color
+*/
+LAS_DLL LASColorH LASColor_Create(void);
+
+/** Destroys a Color and removes it from the heap
+*/
+LAS_DLL void LASColor_Destroy(LASColorH hColor);
+
+/** Returns the red value for the color.
+ *  @return the red value for the color.
+*/
+LAS_DLL uint16_t LASColor_GetRed(const LASColorH hColor);
+
+/** Sets the red value for the color
+ *  @param hColor the opaque pointer to the LASColorH instance
+ *  @param value the value to set the red value to
+ *  @return an error number if an error occured.
+*/
+LAS_DLL LASError LASColor_SetRed(LASColorH hColor, uint16_t value);
+
+/** Returns the green value for the color.
+ *  @return the green value for the color.
+*/
+LAS_DLL uint16_t LASColor_GetGreen(const LASColorH hColor);
+
+/** Sets the green value for the color
+ *  @param hColor the opaque pointer to the LASColorH instance
+ *  @param value the value to set the green value to
+ *  @return an error number if an error occured.
+*/
+LAS_DLL LASError LASColor_SetGreen(LASColorH hColor, uint16_t value);
+
+/** Returns the blue value for the color.
+ *  @return the blue value for the color.
+*/
+LAS_DLL uint16_t LASColor_GetBlue(const LASColorH hColor);
+
+/** Sets the blue value for the color
+ *  @param hColor the opaque pointer to the LASColorH instance
+ *  @param value the value to set the blue value to
+ *  @return an error number if an error occured.
+*/
+LAS_DLL LASError LASColor_SetBlue(LASColorH hColor, uint16_t value);
+
+
+/** Returns the color for the LASPointH
+ *  @return the color for the LASPointH.
+*/
+LAS_DLL LASColorH LASPoint_GetColor(const LASPointH hPoint);
+
+/** Sets the color for the point
+ *  @param hPoint the opaque pointer to the LASPointH instance
+ *  @param hColor the opaque pointer to the LASColorH instance
+ *  @return an error number if an error occured.
+*/
+LAS_DLL LASError LASPoint_SetColor(LASPointH hPoint, const LASColorH hColor);
+
+
+/****************************************************************************/
+/* SRS Operations                                                           */
+/****************************************************************************/
+
+/** Creates a new SRS
+ *  @return a new SRS
+*/
+LAS_DLL LASSRSH LASSRS_Create(void);
+
+
+LAS_DLL const GTIF* LASSRS_GetGTIF(LASSRSH hSRS);
+LAS_DLL char* LASSRS_GetWKT(LASSRSH hSRS);
+LAS_DLL LASError LASSRS_SetWKT(LASSRSH hSRS, const char* value);
+LAS_DLL char* LASSRS_GetProj4(LASSRSH hSRS);
+LAS_DLL LASError LASSRS_SetProj4(LASSRSH hSRS, const char* value);
+LAS_DLL LASSRSH LASHeader_GetSRS(const LASHeaderH hHeader);
+LAS_DLL LASError LASHeader_SetSRS(LASHeaderH hHeader, const LASSRSH hSRS);
+LAS_DLL void LASSRS_Destroy(LASSRSH hSRS);
+LAS_DLL LASVLRH LASSRS_GetVLR(const LASSRSH hSRS, uint32_t i);
+LAS_DLL uint32_t LASSRS_GetVLRCount(const LASSRSH hSRS);
+
+/** Method to ensure that you are freeing char*'s from the 
+ *  correct heap.
+ *  @param string the string to free
+*/
+LAS_DLL void LASString_Free(char* string);
 
 LAS_C_END
 #endif

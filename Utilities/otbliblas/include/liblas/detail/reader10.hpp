@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: reader10.hpp 813 2008-07-25 21:53:52Z mloskot $
+ * $Id$
  *
  * Project:  libLAS - http://liblas.org - A BSD library for LAS format data.
  * Purpose:  LAS 1.0 reader implementation for C++ libLAS 
@@ -58,17 +58,9 @@ public:
     ReaderImpl(std::istream& ifs);
     std::size_t GetVersion() const;
     bool ReadHeader(LASHeader& header);
-    bool ReadNextPoint(PointRecord& record);
-    bool ReadNextPoint(PointRecord& record, double& time);
-    bool ReadPointAt(std::size_t n, PointRecord& record);
-    bool ReadPointAt(std::size_t n, PointRecord& record, double& time);
-    bool ReadVLR(LASHeader& header);
-    bool ReadGeoreference(LASHeader& header); 
-    std::istream& GetStream() const;
+    bool ReadNextPoint(LASPoint& point, const LASHeader& header);
+    bool ReadPointAt(std::size_t n, LASPoint& record, const LASHeader& header);
 
-private:
-
-    std::istream& m_ifs;
 };
 
 }}} // namespace liblas::detail::v10

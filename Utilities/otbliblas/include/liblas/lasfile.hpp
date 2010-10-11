@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: lasfile.hpp 813 2008-07-25 21:53:52Z mloskot $
+ * $Id$
  *
  * Project:  libLAS - http://liblas.org - A BSD library for LAS format data.
  * Purpose:  A composite class to handle read/write operations

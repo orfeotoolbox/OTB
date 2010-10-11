@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: utility.hpp 883 2008-09-26 15:23:11Z hobu $
+ * $Id$
  *
  * Project:  libLAS - http://liblas.org - A BSD library for LAS format data.
  * Purpose:  A grab bucket 'o fun for C++ libLAS 
@@ -83,6 +83,18 @@ public:
         assert(0 != del_);
     }
 
+    // FIXME: ooh, this is really, really bad. - hobu
+    raii_wrapper& operator=(raii_wrapper const& rhs)
+    {
+        if (&rhs != this)
+        {
+            p_ = rhs.p_;
+            del_ = rhs.del_;
+        }
+        return *this;        
+    }
+    
+    
     ~raii_wrapper()
     {
         do_delete(p_);
@@ -104,10 +116,11 @@ public:
         std::swap(p_, other.p_);
     }
 
+    
 private:
 
     raii_wrapper(raii_wrapper const& other);
-    raii_wrapper& operator=(raii_wrapper const& rhs);
+    // raii_wrapper& operator=(raii_wrapper const& rhs);
 
     void do_delete(T* p)
     {
@@ -189,23 +202,34 @@ struct PointRecord
     uint8_t flags; // TODO: Replace with portable std::bitset<8>
     uint8_t classification;
     int8_t scan_angle_rank;
-    uint8_t user_data;
-    uint16_t point_source_id;
+    uint8_t user_data; // 1.0: File Marker / 1.1: User Data
+    uint16_t point_source_id; // 1.0: User Bit field / 1.1: Point Source ID
 };
+
+template <typename T> 
+bool compare_distance(const T& actual, const T& expected);
 
 template <typename T>
 struct Point
 {
-    Point() : x(T()), y(T()), z(T()) {}
-    Point(T const& x, T const& y, T const& z) : x(x), y(y), z(z) {}
-    T x;
-    T y;
-    T z;
+    Point()
+        : x(T()), y(T()), z(T())
+    {}
+    
+    Point(T const& x, T const& y, T const& z)
+        : x(x), y(y), z(z)
+    {}
 
     bool equal(Point<T> const& other) const
     {
-        return ((x == other.x) && (y == other.y) && (z == other.z));
+        return (compare_distance(x, other.x)
+                && compare_distance(y, other.y)
+                && compare_distance(z, other.z));
     }
+
+    T x;
+    T y;
+    T z;
 };
 
 template <typename T>
@@ -223,13 +247,18 @@ bool operator!=(Point<T> const& lhs, Point<T> const& rhs)
 template <typename T>
 struct Extents
 {
-    typename detail::Point < T > min;
-    typename detail::Point < T > max;
+    Extents() {}
+    Extents(detail::Point<T> const& min, detail::Point<T> const& max)
+        : min(min), max(max)
+    {}
 
     bool equal(Extents<T> const& other) const
     {
         return (min == other.min && max == other.max);
     }
+
+    typename detail::Point<T> min;
+    typename detail::Point<T> max;
 };
 
 template <typename T>
@@ -258,7 +287,7 @@ inline T generate_random_byte()
 }
 
 template <typename T> 
-bool compare_doubles(const T& actual, const T& expected) 
+bool compare_distance(const T& actual, const T& expected) 
 { 
     const T epsilon = std::numeric_limits<T>::epsilon();  
     const T diff = actual - expected; 
@@ -309,10 +338,7 @@ inline void check_stream_state(std::basic_ios<C, T>& srtm)
     else if (srtm.bad())
         throw std::runtime_error("fatal I/O error occured");
 #else
-// OTB Modifications for cygwin compilation
-#ifndef __CYGWIN__
     UNREFERENCED_PARAMETER(srtm);
-#endif
 #endif
 }
 

@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: reader.cpp 813 2008-07-25 21:53:52Z mloskot $
+ * $Id$
  *
  * Project:  libLAS - http://liblas.org - A BSD library for LAS format data.
  * Purpose:  Reader implementation for C++ libLAS 
@@ -42,8 +42,22 @@
 #include <liblas/detail/reader.hpp>
 #include <liblas/detail/reader10.hpp>
 #include <liblas/detail/reader11.hpp>
+#include <liblas/detail/reader12.hpp>
 #include <liblas/lasheader.hpp>
 #include <liblas/laspoint.hpp>
+// 
+// // GeoTIFF
+// #ifdef HAVE_LIBGEOTIFF
+// #include <geotiff.h>
+// #include <geo_simpletags.h>
+// #include "geo_normalize.h"
+// #include "geo_simpletags.h"
+// #include "geovalues.h"
+// #endif // HAVE_LIBGEOTIFF
+
+#ifdef HAVE_GDAL
+#include <ogr_srs_api.h>
+#endif
 
 // std
 #include <fstream>
@@ -53,12 +67,173 @@
 
 namespace liblas { namespace detail {
 
-Reader::Reader() : m_offset(0), m_current(0)
+Reader::Reader(std::istream& ifs) :
+    m_ifs(ifs), m_size(0), m_current(0),
+    m_transform(0), m_in_ref(0), m_out_ref(0)
 {
 }
 
 Reader::~Reader()
 {
+#ifdef HAVE_GDAL
+    if (m_transform)
+    {
+        OCTDestroyCoordinateTransformation(m_transform);
+    }
+    if (m_in_ref)
+    {
+        OSRDestroySpatialReference(m_in_ref);
+    }
+    if (m_out_ref)
+    {
+        OSRDestroySpatialReference(m_out_ref);
+    }
+
+#endif
+}
+
+std::istream& Reader::GetStream() const
+{
+    return m_ifs;
+}
+
+void Reader::FillPoint(PointRecord& record, LASPoint& point) 
+{
+    
+    point.SetX(record.x);
+    point.SetY(record.y);
+    point.SetZ(record.z);
+    
+    if (m_transform)
+    {
+        Project(point);
+    }
+
+    point.SetIntensity(record.intensity);
+    point.SetScanFlags(record.flags);
+    point.SetClassification(record.classification);
+    point.SetScanAngleRank(record.scan_angle_rank);
+    point.SetUserData(record.user_data);
+    point.SetPointSourceID(record.point_source_id);
+}
+
+bool Reader::ReadVLR(LASHeader& header)
+{
+    VLRHeader vlrh = { 0 };
+
+    m_ifs.seekg(header.GetHeaderSize(), std::ios::beg);
+    uint32_t count = header.GetRecordsCount();
+    header.SetRecordsCount(0);
+    for (uint32_t i = 0; i < count; ++i)
+    {
+        read_n(vlrh, m_ifs, sizeof(VLRHeader));
+
+        uint16_t length = vlrh.recordLengthAfterHeader;
+        if (length < 1)
+        {
+            throw std::domain_error("VLR record length must be at least 1 byte long");
+        } 
+        std::vector<uint8_t> data;
+        data.resize(length);
+
+        read_n(data.front(), m_ifs, length);
+         
+        LASVariableRecord vlr;
+        vlr.SetReserved(vlrh.reserved);
+        vlr.SetUserId(std::string(vlrh.userId));
+        vlr.SetDescription(std::string(vlrh.description));
+        vlr.SetRecordLength(vlrh.recordLengthAfterHeader);
+        vlr.SetRecordId(vlrh.recordId);
+        vlr.SetData(data);
+
+        header.AddVLR(vlr);
+    }
+    return true;
+}
+
+bool Reader::ReadGeoreference(LASHeader& header)
+{
+    std::vector<LASVariableRecord> vlrs;
+    for (uint16_t i = 0; i < header.GetRecordsCount(); ++i)
+    {
+        LASVariableRecord record = header.GetVLR(i);
+        vlrs.push_back(record);
+    }
+
+    LASSpatialReference srs(vlrs);    
+    header.SetSRS(srs);
+
+    // keep a copy on the reader in case we're going to reproject data 
+    // on the way out.
+    m_in_srs = srs;
+
+    return true;
+}
+
+void Reader::Reset(LASHeader const& header)
+{
+    m_ifs.clear();
+    m_ifs.seekg(0);
+
+    // Reset sizes and set internal cursor to the beginning of file.
+    m_current = 0;
+    m_size = header.GetPointRecordsCount();
+}
+
+void Reader::SetSRS(const LASSpatialReference& srs)
+{
+    m_out_srs = srs;
+#ifdef HAVE_GDAL
+    m_in_ref = OSRNewSpatialReference(0);
+    m_out_ref = OSRNewSpatialReference(0);
+
+    int result = OSRSetFromUserInput(m_in_ref, m_in_srs.GetWKT().c_str());
+    if (result != OGRERR_NONE) 
+    {
+        std::ostringstream msg; 
+        msg << "Could not import input spatial reference for Reader::" << CPLGetLastErrorMsg() << result;
+        std::string message(msg.str());
+        throw std::runtime_error(message);
+    }
+    
+    result = OSRSetFromUserInput(m_out_ref, m_out_srs.GetWKT().c_str());
+    if (result != OGRERR_NONE) 
+    {
+        std::ostringstream msg; 
+        msg << "Could not import output spatial reference for Reader::" << CPLGetLastErrorMsg() << result;
+        std::string message(msg.str());
+        throw std::runtime_error(message);
+    }
+
+    m_transform = OCTNewCoordinateTransformation( m_in_ref, m_out_ref);
+    
+#endif
+}
+
+void Reader::Project(LASPoint& point)
+{
+#ifdef HAVE_GDAL
+    
+    int ret = 0;
+    double x = point.GetX();
+    double y = point.GetY();
+    double z = point.GetZ();
+    
+    ret = OCTTransform(m_transform, 1, &x, &y, &z);    
+    if (!ret)
+    {
+        std::ostringstream msg; 
+        msg << "Could not project point for Reader::" << CPLGetLastErrorMsg() << ret;
+        std::string message(msg.str());
+        throw std::runtime_error(message);
+    }
+
+    point.SetX(x);
+    point.SetY(y);
+    point.SetZ(z);
+#else
+    UNREFERENCED_PARAMETER(point);
+#endif
 }
 
 Reader* ReaderFactory::Create(std::istream& ifs)
@@ -84,6 +259,10 @@ Reader* ReaderFactory::Create(std::istream& ifs)
     {
         return new v11::ReaderImpl(ifs);
     }
+    else if (1 == verMajor && 2 == verMinor)
+    {
+        return new v12::ReaderImpl(ifs);
+    }
     else if (2 == verMajor && 0 == verMinor )
     {
         // TODO: LAS 2.0 read/write support
@@ -92,6 +271,7 @@ Reader* ReaderFactory::Create(std::istream& ifs)
 
     throw std::runtime_error("LAS file of unknown version");
 }
+
 
 void ReaderFactory::Destroy(Reader* p) 
 {

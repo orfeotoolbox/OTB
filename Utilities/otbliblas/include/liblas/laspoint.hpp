@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: laspoint.hpp 813 2008-07-25 21:53:52Z mloskot $
+ * $Id$
  *
  * Project:  libLAS - http://liblas.org - A BSD library for LAS format data.
  * Purpose:  LAS point class 
@@ -44,17 +44,15 @@
 
 #include <liblas/cstdint.hpp>
 #include <liblas/detail/fwd.hpp>
+#include <liblas/detail/utility.hpp>
+#include <liblas/lascolor.hpp>
 // std
 #include <stdexcept> // std::out_of_range
 #include <cstdlib> // std::size_t
 
-#include <iostream>
-
 namespace liblas {
 
-/// Definition of point data record.
-///
-/// \todo TODO: Think about last 1-byte field in record Point Source ID (LAS 1.1)
+/// Point data record composed with X, Y, Z coordinates and attributes.
 class LASPoint
 {
 public:
@@ -112,7 +110,16 @@ public:
     uint16_t GetIntensity() const;
     void SetIntensity(uint16_t const& intensity);
 
+    /// Gets all scanning flags encoded as single byte.
+    /// The flags are (mandatory):
+    /// - Return Number (bits 0, 1, 2);
+    /// - Number of Returns - given pulse (bits 3, 4, 5);
+    /// - Scan Direction Flag (bit 6);
+    /// - Edge of Flight Line (bit 7).
     uint8_t GetScanFlags() const;
+
+    /// Sets all scanning flags passed as a single byte.
+    /// \sa Documentation of GetScanFlags method for flags details.
     void SetScanFlags(uint8_t const& flags);
     
     uint16_t GetReturnNumber() const;
@@ -133,20 +140,45 @@ public:
     int8_t GetScanAngleRank() const;
     void SetScanAngleRank(int8_t const& rank);
 
+    /// Fetch value of File Marker (LAS 1.0) or User Data (LAS 1.1).
     uint8_t GetUserData() const;
+
+    /// Set value of File Marker (LAS 1.0) or User Data (LAS 1.1).
     void SetUserData(uint8_t const& data);
-    
+
+    /// Fetch value of User Bit Field (LAS 1.0) or Point Source ID (LAS 1.1).
+    uint16_t GetPointSourceID() const;
+
+    /// Set value of User Bit Field (LAS 1.0) or Point Source ID (LAS 1.1).
+    void SetPointSourceID(uint16_t const& id);
+
+    /// Fetch color value associated with this point (LAS 1.2)
+    LASColor const& GetColor() const;
+
+    /// Set color value associated with this point (LAS 1.2)
+    void SetColor(LASColor const& value);
+
+                
     double GetTime() const;
     void SetTime(double const& time);
 
+    /// Index operator providing access to XYZ coordinates of point record.
+    /// Valid index values are 0, 1 or 2.
+    /// \exception std::out_of_range if requested index is out of range (> 2).
     double& operator[](std::size_t const& n);
+
+    /// Const version of index operator providing access to XYZ coordinates of point record.
+    /// Valid index values are 0, 1 or 2.
+    /// \exception std::out_of_range if requested index is out of range (> 2).
     double const& operator[](std::size_t const& n) const;
 
+    /// \todo TODO: Should we compare other data members, but not only coordinates?
     bool equal(LASPoint const& other) const;
 
     bool Validate() const;
     bool IsValid() const;
     
+
 private:
 
     static std::size_t const coords_size = 3;
@@ -156,21 +188,25 @@ private:
     uint8_t m_class;
     int8_t m_angleRank;
     uint8_t m_userData;
+    uint16_t m_pointSourceId;
     double m_gpsTime;
-
+    
+    LASColor m_color;
+    detail::PointRecord m_rec;
+    
     void throw_out_of_range() const
     {
         throw std::out_of_range("coordinate subscript out of range");
     }
 };
 
-/// \todo To be documented.
+/// Equal-to operator implemented in terms of LASPoint::equal method.
 inline bool operator==(LASPoint const& lhs, LASPoint const& rhs)
 {
     return lhs.equal(rhs);
 }
 
-/// \todo To be documented.
+/// Not-equal-to operator implemented in terms of LASPoint::equal method.
 inline bool operator!=(LASPoint const& lhs, LASPoint const& rhs)
 {
     return (!(lhs == rhs));
@@ -277,6 +313,16 @@ inline uint8_t LASPoint::GetUserData() const
     return m_userData;
 }
 
+inline uint16_t LASPoint::GetPointSourceID() const
+{
+    return m_pointSourceId;
+}
+
+inline void LASPoint::SetPointSourceID(uint16_t const& id)
+{
+    m_pointSourceId = id;
+}
+
 inline double LASPoint::GetTime() const
 {
     return m_gpsTime;
@@ -286,6 +332,17 @@ inline void LASPoint::SetTime(double const& time)
 {
     m_gpsTime = time;
 }
+
+inline LASColor const& LASPoint::GetColor() const
+{
+    return m_color;
+}
+
+inline void LASPoint::SetColor(LASColor const& value)
+{
+    m_color = value;
+}
+
 
 inline double& LASPoint::operator[](std::size_t const& n)
 {

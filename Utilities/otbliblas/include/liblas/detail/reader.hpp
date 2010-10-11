@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: reader.hpp 813 2008-07-25 21:53:52Z mloskot $
+ * $Id$
  *
  * Project:  libLAS - http://liblas.org - A BSD library for LAS format data.
  * Purpose:  Reader implementation for C++ libLAS 
@@ -43,7 +43,14 @@
 #define LIBLAS_DETAIL_READER_HPP_INCLUDED
 
 #include <liblas/cstdint.hpp>
+#include <liblas/lasspatialreference.hpp>
 #include <liblas/detail/fwd.hpp>
+
+#ifndef HAVE_GDAL
+    typedef struct OGRCoordinateTransformationHS *OGRCoordinateTransformationH;
+    typedef struct OGRSpatialReferenceHS *OGRSpatialReferenceH;
+#endif
+
 // std
 #include <iosfwd>
 
@@ -55,24 +62,32 @@ class Reader
 {
 public:
 
-    Reader();
+    Reader(std::istream& ifs);
     virtual ~Reader();
     virtual std::size_t GetVersion() const = 0;
     virtual bool ReadHeader(LASHeader& header) = 0;
-    virtual bool ReadNextPoint(PointRecord& record) = 0;
-    virtual bool ReadNextPoint(PointRecord& record, double& time) = 0;
-    virtual bool ReadPointAt(std::size_t n, PointRecord& record) = 0;
-    virtual bool ReadPointAt(std::size_t n, PointRecord& record, double& time) = 0;
-    virtual bool ReadVLR(LASHeader& header) = 0;
-    virtual bool ReadGeoreference(LASHeader& header) = 0; 
-    virtual std::istream& GetStream() const = 0;
+    virtual bool ReadNextPoint(LASPoint& point, const LASHeader& header) = 0;
+    virtual bool ReadPointAt(std::size_t n, LASPoint& point, const LASHeader& header) = 0;
+
+    std::istream& GetStream() const;
+    bool ReadVLR(LASHeader& header);
+    bool ReadGeoreference(LASHeader& header);
+    void Reset(LASHeader const& header);
+    void SetSRS(const LASSpatialReference& srs);
     
 protected:
     
-    std::streamoff m_offset;
+    std::istream& m_ifs;
     uint32_t m_size;
     uint32_t m_current;
-    uint32_t m_recordlength;
+    LASSpatialReference m_out_srs;
+    LASSpatialReference m_in_srs;    
+    OGRCoordinateTransformationH m_transform;
+    OGRSpatialReferenceH m_in_ref;
+    OGRSpatialReferenceH m_out_ref;
+
+    void FillPoint(PointRecord& record, LASPoint& point);
+    void Project(LASPoint& point);
 
 private:
 

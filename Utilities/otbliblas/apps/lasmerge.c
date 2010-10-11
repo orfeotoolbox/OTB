@@ -1,6 +1,6 @@
 /***************************************************************************
- * $Id: lasmerge.c 879 2008-09-25 18:26:15Z hobu $
- * $Date: 2008-09-25 13:26:15 -0500 (Thu, 25 Sep 2008) $
+ * $Id$
+ * $Date$
  *
  * Project: libLAS -- C/C++ read/write library for LAS LIDAR data
  * Purpose: LAS file merging
