@@ -110,7 +110,7 @@ ComplexMomentImageFunction<TInput, TOutput, TPrecision, TCoordRep>
     unsigned int q  = m_Q;
     while (q > 0)
       {
-      ValQ *= ComplexPrecisionType(IndexValue[0] - indexPos[0], -IndexValue[1] - indexPos[1]);
+      ValQ *= ComplexPrecisionType(IndexValue[0] - indexPos[0], -(IndexValue[1] - indexPos[1]));
       --q;
       }
 
