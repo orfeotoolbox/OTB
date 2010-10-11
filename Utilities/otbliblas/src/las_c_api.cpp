@@ -744,8 +744,7 @@ LAS_DLL LASErrorEnum LASHeader_SetProjectId(LASHeaderH hHeader, const char* valu
     VALIDATE_LAS_POINTER1(hHeader, "LASHeader_SetProjectId", LE_Failure);
 
     try {
-        liblas::guid id;
-        id = liblas::guid::guid(value);
+        liblas::guid id(value);
         ((LASHeader*) hHeader)->SetProjectId(id);    
     } catch (std::exception const& e)
     {
@@ -1540,9 +1539,9 @@ LAS_DLL LASGuidH LASGuid_Create() {
 
 LAS_DLL LASGuidH LASGuid_CreateFromString(const char* string) {
     VALIDATE_LAS_POINTER1(string, "LASGuid_CreateFromString", NULL);    
-    liblas::guid id;
+
     try {
-        id = liblas::guid::guid(string);
+        liblas::guid id(string);
         return (LASGuidH) new liblas::guid(id);
     }
     catch (std::exception const& e) {
