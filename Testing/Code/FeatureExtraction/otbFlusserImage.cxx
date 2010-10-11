@@ -33,7 +33,6 @@ int otbFlusserImage(int argc, char * argv[])
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename  = argv[2];
-  unsigned int Number = 1;
 
   typedef unsigned char InputPixelType;
   const unsigned int Dimension = 2;
@@ -41,48 +40,30 @@ int otbFlusserImage(int argc, char * argv[])
   typedef itk::Image<InputPixelType,  Dimension>                  InputImageType;
   typedef otb::ImageFileReader<InputImageType>                    ReaderType;
   typedef std::complex<float>                                     ComplexType;
-  typedef float                                                   RealType;
-  typedef otb::FlusserImageFunction<InputImageType, float, float> FunctionType;
-
-  InputImageType::RegionType region;
-  InputImageType::SizeType   size;
-  InputImageType::IndexType  start;
-
-  start.Fill(0);
-  size[0] = 50;
-  size[1] = 50;
+  typedef otb::FlusserImageFunction<InputImageType>               FunctionType;
+  typedef FunctionType::RealType                                  RealType;
 
   ReaderType::Pointer   reader         = ReaderType::New();
-  FunctionType::Pointer function = FunctionType::New();
+  FunctionType::Pointer function       = FunctionType::New();
 
   reader->SetFileName(inputFilename);
-
-  InputImageType::Pointer image = reader->GetOutput();
-
-  region.SetIndex(start);
-  region.SetSize(size);
-
-  image->SetRegions(region);
-  image->Update();
-  function->SetInputImage(image);
+  reader->Update();
+  function->SetInputImage(reader->GetOutput());
 
   InputImageType::IndexType index;
   index[0] = 10;
   index[1] = 10;
 
+  function->SetNeighborhoodRadius(3);  
   RealType Result;
+  Result = function->EvaluateAtIndex(index);
 
   std::ofstream outputStream(outputFilename);
   outputStream << std::setprecision(10) << "Flusser Image moments: [12]" << std::endl;
 
-  for (Number = 1; Number < 12; Number++)
+  for (unsigned int j = 1; j < 12; j++)
     {
-    //OTB-FA-00024-CS
-    function->SetMomentNumber(Number);
-    //OTB-FA-00025-CS
-    function->SetNeighborhoodRadius(3);
-    Result = function->EvaluateAtIndex(index);
-    outputStream << "Flusser(" << Number << ") = " << Result << std::endl;
+    outputStream << "Flusser(" << j << ") = " << Result[j-1] << std::endl;
     }
 
   outputStream.close();

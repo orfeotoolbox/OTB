@@ -19,7 +19,7 @@
 #define __otbFlusserImageFunction_txx
 
 #include "otbFlusserImageFunction.h"
-#include "otbComplexMomentImageFunction.h"
+#include "itkConstNeighborhoodIterator.h"
 #include "itkNumericTraits.h"
 #include "itkMacro.h"
 #include <complex>
@@ -28,203 +28,124 @@ namespace otb
 {
 
 /**
-   * Constructor
-   */
-template <class TInput, class TOutput, class TPrecision, class TCoordRep>
-FlusserImageFunction<TInput, TOutput, TPrecision, TCoordRep>
+ * Constructor
+ */
+template <class TInputImage, class TCoordRep>
+FlusserImageFunction<TInputImage, TCoordRep>
 ::FlusserImageFunction()
 {
-  m_MomentNumber = -1;
+  m_NeighborhoodRadius = 1;
 }
 
-/**
-   *
-   */
-template <class TInput, class TOutput, class TPrecision, class TCoordRep>
+template <class TInputImage, class TCoordRep>
 void
-FlusserImageFunction<TInput, TOutput, TPrecision, TCoordRep>
+FlusserImageFunction<TInputImage, TCoordRep>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os, indent);
-  os << indent << " m_MomentNumber           : "  << m_MomentNumber << std::endl;
 }
 
-template <class TInput, class TOutput, class TPrecision, class TCoordRep>
-typename FlusserImageFunction<TInput, TOutput, TPrecision, TCoordRep>::RealType
-FlusserImageFunction<TInput, TOutput, TPrecision, TCoordRep>
+template <class TInputImage, class TCoordRep>
+typename FlusserImageFunction<TInputImage,TCoordRep>::RealType
+FlusserImageFunction<TInputImage,TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
-
-  RealType                            FlusserValue(itk::NumericTraits<RealType>::Zero);
-  ComplexType                         FlusserValueComplex(itk::NumericTraits<ComplexType>::Zero);
-
-  typedef otb::ComplexMomentImageFunction<InputType, ComplexType> CMType;
-  typename CMType::Pointer function = CMType::New();
-
-  if (!this->GetInputImage())
+  // Build moments vector
+  RealType moments;
+  
+  // Initialize moments
+  moments.Fill( itk::NumericTraits< ScalarRealType >::Zero );
+  
+  // Check for input image
+  if( !this->GetInputImage() )
     {
-    return (itk::NumericTraits<RealType>::max());
+    return moments;
     }
-
-  if (!this->IsInsideBuffer(index))
+  
+  // Check for out of buffer
+  if ( !this->IsInsideBuffer( index ) )
     {
-    return (itk::NumericTraits<RealType>::max());
+    return moments;
     }
-
-  assert(m_MomentNumber > 0);
-  assert(m_MomentNumber < 12);
-
-  function->SetInputImage(this->GetInputImage());
-  function->SetNeighborhoodRadius(this->GetNeighborhoodRadius());
-
-  switch (m_MomentNumber)
+  
+  // Define complex type
+  typedef std::complex<ScalarRealType> ComplexType;
+  
+  // Define and intialize cumulants for complex moments
+  ComplexType c11, c12, c21,c20, c30, c22, c31, c40;
+  c11 = itk::NumericTraits<ComplexType>::Zero;
+  c12 = itk::NumericTraits<ComplexType>::Zero;
+  c21 = itk::NumericTraits<ComplexType>::Zero;
+  c20 = itk::NumericTraits<ComplexType>::Zero;
+  c30 = itk::NumericTraits<ComplexType>::Zero;
+  c22 = itk::NumericTraits<ComplexType>::Zero;
+  c31 = itk::NumericTraits<ComplexType>::Zero;
+  c40 = itk::NumericTraits<ComplexType>::Zero;
+  
+  ScalarRealType c00 = itk::NumericTraits<ScalarRealType>::Zero;
+    
+  // Create an N-d neighborhood kernel, using a zeroflux boundary condition
+  typename InputImageType::SizeType kernelSize;
+  kernelSize.Fill( m_NeighborhoodRadius );
+  
+  itk::ConstNeighborhoodIterator<InputImageType>
+    it(kernelSize, this->GetInputImage(), this->GetInputImage()->GetBufferedRegion());
+  
+  // Set the iterator at the desired location
+  it.SetLocation(index);
+  
+  // Walk the neighborhood
+  const unsigned int size = it.Size();
+  for (unsigned int i = 0; i < size; ++i)
     {
-    case 1:
-      {
-      ComplexType C11;
-      function->SetP(1);
-      function->SetQ(1);
-      C11 = function->EvaluateAtIndex(index);
-      FlusserValue = C11.real();
-      }
-      break;
-    case 2:
-      {
-      ComplexType C21, C12;
-      function->SetP(2);
-      function->SetQ(1);
-      C21 = function->EvaluateAtIndex(index);
-      function->SetP(1);
-      function->SetQ(2);
-      C12 = function->EvaluateAtIndex(index);
-
-      FlusserValue = vcl_abs(C21 * C12);
-      }
-      break;
-    case 3:
-      {
-      ComplexType C20, C12;
-      function->SetP(2);
-      function->SetQ(0);
-      C20 = function->EvaluateAtIndex(index);
-      function->SetP(1);
-      function->SetQ(2);
-      C12 = function->EvaluateAtIndex(index);
-      FlusserValueComplex = C20 * vcl_pow(C12, 2);
-      FlusserValue = FlusserValueComplex.real();
-      }
-      break;
-    case 4:
-      {
-      ComplexType C20, C12;
-      function->SetP(2);
-      function->SetQ(0);
-      C20 = function->EvaluateAtIndex(index);
-      function->SetP(1);
-      function->SetQ(2);
-      C12 = function->EvaluateAtIndex(index);
-      FlusserValueComplex = C20 * vcl_pow(C12, 2);
-      FlusserValue = FlusserValueComplex.imag();
-      }
-      break;
-    case 5:
-      {
-      ComplexType C30, C12;
-      function->SetP(3);
-      function->SetQ(0);
-      C30 = function->EvaluateAtIndex(index);
-      function->SetP(1);
-      function->SetQ(2);
-      C12 = function->EvaluateAtIndex(index);
-
-      FlusserValueComplex = C30 * vcl_pow(C12, 3);
-      FlusserValue = FlusserValueComplex.real();
-      }
-      break;
-    case 6:
-      {
-      ComplexType C30, C12;
-      function->SetP(3);
-      function->SetQ(0);
-      C30 = function->EvaluateAtIndex(index);
-      function->SetP(1);
-      function->SetQ(2);
-      C12 = function->EvaluateAtIndex(index);
-
-      FlusserValueComplex = C30 * vcl_pow(C12, 3);
-      FlusserValue = FlusserValueComplex.imag();
-      }
-      break;
-    case 7:
-      {
-      ComplexType C22;
-      function->SetP(2);
-      function->SetQ(2);
-      C22 = function->EvaluateAtIndex(index);
-      FlusserValue = C22.real();
-      }
-      break;
-    case 8:
-      {
-      ComplexType C31, C12;
-      function->SetP(3);
-      function->SetQ(1);
-      C31 = function->EvaluateAtIndex(index);
-      function->SetP(1);
-      function->SetQ(2);
-      C12 = function->EvaluateAtIndex(index);
-      FlusserValueComplex = C31 * vcl_pow(C12, 2);
-      FlusserValue = FlusserValueComplex.real();
-      }
-      break;
-    case 9:
-      {
-      ComplexType C31, C12;
-      function->SetP(3);
-      function->SetQ(1);
-      C31 = function->EvaluateAtIndex(index);
-      function->SetP(1);
-      function->SetQ(2);
-      C12 = function->EvaluateAtIndex(index);
-      FlusserValueComplex = C31 * vcl_pow(C12, 2);
-      FlusserValue = FlusserValueComplex.imag();
-      }
-      break;
-    case 10:
-      {
-      ComplexType C40, C12;
-      function->SetP(4);
-      function->SetQ(0);
-      C40 = function->EvaluateAtIndex(index);
-      function->SetP(1);
-      function->SetQ(2);
-      C12 = function->EvaluateAtIndex(index);
-      FlusserValueComplex = C40 * vcl_pow(C12, 4);
-      FlusserValue = FlusserValueComplex.real();
-      }
-      break;
-    case 11:
-      {
-      ComplexType C40, C12;
-      function->SetP(4);
-      function->SetQ(0);
-      C40 = function->EvaluateAtIndex(index);
-      function->SetP(1);
-      function->SetQ(2);
-      C12 = function->EvaluateAtIndex(index);
-      FlusserValueComplex = C40 * vcl_pow(C12, 4);
-      FlusserValue = FlusserValueComplex.imag();
-      }
-      break;
-
-    default:
-      itkWarningMacro("Hu's invariant parameters are between 1 and 7");
+    // Retrieve value, and centered-reduced position
+    ScalarRealType value = static_cast<ScalarRealType>(it.GetPixel(i));
+    ScalarRealType x = static_cast<ScalarRealType>(it.GetOffset(i)[0]);
+    ScalarRealType y = static_cast<ScalarRealType>(it.GetOffset(i)[1]);
+    
+    // Build complex value
+    ComplexType xpy(x,y),xmy(x,-y);
+    
+    // Update cumulants
+    c00+=value;
+    c11+=xpy*xmy*value;
+    c12+=xpy*xmy*xmy*value;
+    c21+=xpy*xpy*xmy*value;
+    c20+=xpy*xpy*value;
+    c30+=xpy*xpy*xpy*value;
+    c22+=xpy*xpy*xmy*xmy*value;
+    c31+=xpy*xpy*xpy*xmy*value;
+    c40+=xpy*xpy*xpy*xpy*value;
     }
-
-  return (static_cast<RealType>(FlusserValue));
-
+  
+  // Nomalisation
+  c11/=vcl_pow(c00, (1+1)/2);
+  c12/=vcl_pow(c00, (1+2)/2);
+  c21/=vcl_pow(c00, (2+1)/2);
+  c20/=vcl_pow(c00, (2+0)/2);
+  c30/=vcl_pow(c00, (3+0)/2);
+  c22/=vcl_pow(c00, (2+2)/2);
+  c31/=vcl_pow(c00, (3+1)/2);
+  c40/=vcl_pow(c00, (4+0)/2);
+  
+  // Compute moments combinations
+  moments[0]  = static_cast<ScalarRealType>(c11.real());
+  moments[1]  = static_cast<ScalarRealType>((c21*c12).real());
+  moments[2]  = static_cast<ScalarRealType>((c20*c12*c12).real());
+  moments[3]  = static_cast<ScalarRealType>((c20*c12*c12).imag());
+  moments[4]  = static_cast<ScalarRealType>((c30*c12*c12*c12).real());
+  moments[5]  = static_cast<ScalarRealType>((c30*c12*c12*c12).imag());
+  moments[6]  = static_cast<ScalarRealType>(c22.real());
+  moments[7]  = static_cast<ScalarRealType>((c31*c12*c12).real());
+  moments[8]  = static_cast<ScalarRealType>((c31*c12*c12).imag());
+  moments[9]  = static_cast<ScalarRealType>((c40*c12*c12*c12*c12).real());
+  moments[10] = static_cast<ScalarRealType>((c40*c12*c12*c12*c12).imag());
+  
+  // Return result
+  return moments;
 }
 
 } // namespace otb
 
 #endif
+
