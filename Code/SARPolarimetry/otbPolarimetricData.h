@@ -35,7 +35,7 @@ typedef enum
   HH_HV = 3,
   VH_VV = 4,
   HH_VV = 5,
-  UNKNOWN = 6
+  UNKNOWN_ARCHITECTURE = 6
   } ArchitectureType;
 
 /** \class PolarimetricData

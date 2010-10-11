@@ -201,7 +201,7 @@ PolarimetricSynthesisFilter<TInputImageHH, TInputImageHV, TInputImageVH, TInputI
       itkExceptionMacro("Only the HH and VV channels are available : Polarimetric synthesis is not supported !");
       return;
 
-    case UNKNOWN:
+    case UNKNOWN_ARCHITECTURE:
       itkExceptionMacro("Unknown architecture : Polarimetric synthesis is impossible !");
       return;
 

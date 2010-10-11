@@ -25,7 +25,7 @@ namespace otb
 PolarimetricData
 ::PolarimetricData()
 {
-  SetArchitectureType(UNKNOWN);
+  SetArchitectureType(UNKNOWN_ARCHITECTURE);
 }
 
 void
@@ -70,7 +70,7 @@ PolarimetricData
     }
   else
     {
-    SetArchitectureType(UNKNOWN);
+    SetArchitectureType(UNKNOWN_ARCHITECTURE);
     }
 }
 
