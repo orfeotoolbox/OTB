@@ -42,8 +42,8 @@ int otbComplexMomentImage(int argc, char * argv[])
   typedef itk::Image<InputPixelType,  Dimension> InputImageType;
   typedef otb::ImageFileReader<InputImageType>   ReaderType;
 
-  typedef std::complex<float>                                          ComplexType;
-  typedef otb::ComplexMomentImageFunction<InputImageType, ComplexType> CMType;
+  typedef otb::ComplexMomentImageFunction<InputImageType> CMType;
+  typedef CMType::ComplexType                             ComplexType;
 
   ReaderType::Pointer reader         = ReaderType::New();
   CMType::Pointer     function = CMType::New();
@@ -53,8 +53,8 @@ int otbComplexMomentImage(int argc, char * argv[])
   reader->Update();
   function->SetInputImage(reader->GetOutput());
 
-  function->SetQ(q);
-  function->SetP(p);
+  function->SetQmax(q);
+  function->SetPmax(p);
 
   InputImageType::IndexType index;
   index[0] = 10;
@@ -64,15 +64,15 @@ int otbComplexMomentImage(int argc, char * argv[])
 
   std::ofstream outputStream(outputFilename);
 
-  Result = function->EvaluateAtIndex(index);
-  outputStream << std::setprecision(10) << "function->EvaluateAtIndex( index ): " << Result << std::endl;
-
-  outputStream << " With NeighborhoodRadius(3):" << std::endl;
-
   function->SetNeighborhoodRadius(3);
   Result = function->EvaluateAtIndex(index);
-  outputStream << "function->EvaluateAtIndex( index ): " << Result << std::endl;
-
+  for (unsigned int k=0; k<=p; k++)
+    {
+    for (unsigned int l=0; l<=q; l++)
+      {
+      outputStream << "ComplexMoment c(" << k << l << ") : " << Result.at(k).at(l) << std::endl;
+      }
+    }
   outputStream.close();
 
   return EXIT_SUCCESS;

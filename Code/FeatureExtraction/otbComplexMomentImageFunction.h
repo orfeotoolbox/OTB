@@ -18,7 +18,7 @@
 #ifndef __otbComplexMomentImageFunction_h
 #define __otbComplexMomentImageFunction_h
 
-#include "otbGeometricMomentImageFunction.h"
+#include "itkImageFunction.h"
 
 #include <complex>
 
@@ -45,43 +45,48 @@ namespace otb
  *
  * \ingroup ImageFunctions
  */
-template <class TInput,
-    class TOutput = std::complex<double>,
-    class TPrecision = double,
-    class TCoordRep = float>
+
+template <class TInputImage, class TCoordRep = float>
 class ITK_EXPORT ComplexMomentImageFunction :
-  public GeometricMomentImageFunction<TInput, TOutput, TPrecision, TCoordRep>
+    public itk::ImageFunction <TInputImage,
+      std::vector< std::vector< std::complex<double> > >,
+      TCoordRep>
 {
 public:
   /** Standard class typedefs. */
   typedef ComplexMomentImageFunction                                           Self;
-  typedef GeometricMomentImageFunction<TInput, TOutput, TPrecision, TCoordRep> Superclass;
+  typedef itk::ImageFunction<TInputImage, 
+                             std::vector<
+                             std::vector<
+                             std::complex<double> > >, 
+                             TCoordRep>                                        Superclass;
   typedef itk::SmartPointer<Self>                                              Pointer;
   typedef itk::SmartPointer<const Self>                                        ConstPointer;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ComplexMomentImageFunction, GeometricMomentImageFunction);
+  itkTypeMacro(ComplexMomentImageFunction, ImageFunction);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** InputImageType typedef support. */
-  typedef typename Superclass::InputType           InputType;
+  typedef TInputImage                              InputImageType;
   typedef typename Superclass::IndexType           IndexType;
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
   typedef typename Superclass::PointType           PointType;
 
-  typedef typename Superclass::OutputType ComplexType;
+  typedef float                                    ScalarRealType;
 
-  /** Type for calculation precision */
-  typedef typename Superclass::PrecisionType PrecisionType;
+  typedef typename Superclass::OutputType          ComplexType;
+  typedef typename std::complex<ScalarRealType>    ScalarComplexType;
 
-  /** ComplexType for calculation precision */
-  typedef std::complex<PrecisionType> ComplexPrecisionType;
-
+  /** Dimension of the underlying image. */
+  itkStaticConstMacro(ImageDimension, unsigned int,
+                      InputImageType::ImageDimension);
+  
   /** Evalulate the function at specified index */
   virtual ComplexType EvaluateAtIndex(const IndexType& index) const;
-
+  
   /** Evaluate the function at non-integer positions */
   virtual ComplexType Evaluate(const PointType& point) const
   {
@@ -96,11 +101,17 @@ public:
     this->ConvertContinuousIndexToNearestIndex(cindex, index);
     return this->EvaluateAtIndex(index);
   }
-
-  itkSetMacro(P, unsigned int);
-  itkGetConstReferenceMacro(P, unsigned int);
-  itkSetMacro(Q, unsigned int);
-  itkGetConstReferenceMacro(Q, unsigned int);
+  
+  /** Get/Set the radius of the neighborhood over which the
+   *  statistics are evaluated 
+   */
+  itkSetMacro( NeighborhoodRadius, unsigned int );
+  itkGetConstReferenceMacro( NeighborhoodRadius, unsigned int );
+  
+  itkSetMacro(Pmax, unsigned int);
+  itkGetConstReferenceMacro(Pmax, unsigned int);
+  itkSetMacro(Qmax, unsigned int);
+  itkGetConstReferenceMacro(Qmax, unsigned int);
 
 protected:
   ComplexMomentImageFunction();
@@ -111,8 +122,9 @@ private:
   ComplexMomentImageFunction(const Self &);  //purposely not implemented
   void operator =(const Self&);  //purposely not implemented
 
-  unsigned int m_P;
-  unsigned int m_Q;
+  unsigned int m_Pmax;
+  unsigned int m_Qmax;
+  unsigned int m_NeighborhoodRadius;
 
 };
 

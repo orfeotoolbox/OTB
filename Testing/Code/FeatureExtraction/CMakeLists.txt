@@ -69,8 +69,8 @@ ADD_TEST(feTvComplexMomentImage ${FEATUREEXTRACTION_TESTS1}
                         ${TEMP}/feComplexMomentImage.txt
         otbComplexMomentImage
 	${INPUTDATA}/TeteAToto.png
-  1
-  1
+  4
+  4
   ${TEMP}/feComplexMomentImage.txt)
 
 ADD_TEST(feTvHuImage ${FEATUREEXTRACTION_TESTS1}
