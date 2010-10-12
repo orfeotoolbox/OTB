@@ -73,7 +73,7 @@ public:
 		   ITK_TYPENAME itk::NumericTraits<
 		   typename TInputImage::PixelType>::RealType,
 		   11 >,
-		    TCoordRep >                                           Superclass;
+		   TCoordRep >                                            Superclass;
   typedef itk::SmartPointer<Self>                                         Pointer;
   typedef itk::SmartPointer<const Self>                                   ConstPointer;
 

@@ -43,6 +43,7 @@ FlusserImageFunction<TInputImage, TCoordRep>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os, indent);
+  os << indent << " Neighborhood radius value   : "  << m_NeighborhoodRadius << std::endl;
 }
 
 template <class TInputImage, class TCoordRep>
@@ -104,17 +105,17 @@ FlusserImageFunction<TInputImage,TCoordRep>
     ScalarRealType y = static_cast<ScalarRealType>(it.GetOffset(i)[1]);
     
     // Build complex value
-    ComplexType xpy(x,y),xmy(x,-y);
+    ComplexType xpy(x,y),xqy(x,-y);
     
     // Update cumulants
     c00+=value;
-    c11+=xpy*xmy*value;
-    c12+=xpy*xmy*xmy*value;
-    c21+=xpy*xpy*xmy*value;
+    c11+=xpy*xqy*value;
+    c12+=xpy*xqy*xqy*value;
+    c21+=xpy*xpy*xqy*value;
     c20+=xpy*xpy*value;
     c30+=xpy*xpy*xpy*value;
-    c22+=xpy*xpy*xmy*xmy*value;
-    c31+=xpy*xpy*xpy*xmy*value;
+    c22+=xpy*xpy*xqy*xqy*value;
+    c31+=xpy*xpy*xpy*xqy*value;
     c40+=xpy*xpy*xpy*xpy*value;
     }
   

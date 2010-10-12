@@ -59,7 +59,7 @@ int otbFlusserImage(int argc, char * argv[])
   Result = function->EvaluateAtIndex(index);
 
   std::ofstream outputStream(outputFilename);
-  outputStream << std::setprecision(10) << "Flusser Image moments: [12]" << std::endl;
+  outputStream << std::setprecision(10) << "Flusser Image moments: [10]" << std::endl;
 
   for (unsigned int j = 1; j < 12; j++)
     {
