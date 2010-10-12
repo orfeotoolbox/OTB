@@ -33,17 +33,15 @@ int otbHuImage(int argc, char * argv[])
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename  = argv[2];
-  unsigned int Number = 1;
 
   typedef unsigned char InputPixelType;
   const unsigned int Dimension = 2;
 
   typedef itk::Image<InputPixelType,  Dimension>             InputImageType;
   typedef otb::ImageFileReader<InputImageType>               ReaderType;
-  typedef std::complex<float>                                ComplexType;
-  typedef float                                              RealType;
-  typedef otb::HuImageFunction<InputImageType, float, float> FunctionType;
-
+  typedef otb::HuImageFunction<InputImageType>               FunctionType;
+  typedef FunctionType::RealType                             RealType;
+  
   InputImageType::RegionType region;
   InputImageType::SizeType   size;
   InputImageType::IndexType  start;
@@ -65,23 +63,19 @@ int otbHuImage(int argc, char * argv[])
   image->SetRegions(region);
   image->Update();
   function->SetInputImage(image);
+  function->SetNeighborhoodRadius(3);
 
   InputImageType::IndexType index;
   index[0] = 10;
   index[1] = 10;
 
-  RealType Result;
+  RealType Result = function->EvaluateAtIndex(index);
 
   std::ofstream outputStream(outputFilename);
   outputStream << std::setprecision(10) << "Hu Image moments: [10]" << std::endl;
-  for (Number = 1; Number < 10; Number++)
+  for (unsigned int j = 1; j < 8; j++)
     {
-    //OTB-FA-00024-CS
-    function->SetMomentNumber(Number);
-    //OTB-FA-00025-CS
-    function->SetNeighborhoodRadius(3);
-    Result = function->EvaluateAtIndex(index);
-    outputStream << "Hu(" << Number << ") = " << Result << std::endl;
+    outputStream << "Hu(" << j << ") = " << Result[j-1] << std::endl;
     }
   outputStream.close();
 

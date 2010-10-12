@@ -52,8 +52,7 @@ int main(int argc, char * argv[])
     }
 
   const char * inputFilename  = argv[1];
-
-  unsigned int mMomentNumber((unsigned char) ::atoi(argv[2]));
+  const unsigned int radius   = atoi(argv[2]);
 
   typedef unsigned char InputPixelType;
   const unsigned int Dimension = 2;
@@ -75,9 +74,8 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef float MomentType;
-  typedef otb::HuImageFunction<InputImageType,
-      MomentType>   HuType;
+  typedef otb::HuImageFunction<InputImageType>   HuType;
+  typedef HuType::RealType                       MomentType;
 
   HuType::Pointer hmFunction = HuType::New();
   // Software Guide : EndCodeSnippet
@@ -122,7 +120,7 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   hmFunction->SetInputImage(image);
-  hmFunction->SetMomentNumber(mMomentNumber);
+  hmFunction->SetNeighborhoodRadius(radius);
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -133,9 +131,12 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   MomentType Result = hmFunction->EvaluateAtIndex(center);
-
-  std::cout << "The moment of order " << mMomentNumber <<
-  " is equal to " << Result << std::endl;
+ 
+  for (unsigned int j=0; j<7; j++)
+    {
+    std::cout << "The moment of order " << j+1 <<
+      " is equal to " << Result[j] << std::endl;
+    }
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex

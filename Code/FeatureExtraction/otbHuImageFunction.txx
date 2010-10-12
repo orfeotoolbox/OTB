@@ -19,7 +19,7 @@
 #define __otbHuImageFunction_txx
 
 #include "otbHuImageFunction.h"
-#include "otbComplexMomentImageFunction.h"
+#include "itkConstNeighborhoodIterator.h"
 #include "itkNumericTraits.h"
 #include "itkMacro.h"
 #include <complex>
@@ -30,157 +30,113 @@ namespace otb
 /**
    * Constructor
    */
-template <class TInput, class TOutput, class TPrecision, class TCoordRep>
-HuImageFunction<TInput, TOutput, TPrecision, TCoordRep>
+template <class TInputImage, class TCoordRep>
+HuImageFunction<TInputImage, TCoordRep>
 ::HuImageFunction()
 {
-  m_MomentNumber = -1;
+  m_NeighborhoodRadius = 1;
 }
 
-/**
-   *
-   */
-template <class TInput, class TOutput, class TPrecision, class TCoordRep>
+template <class TInputImage, class TCoordRep>
 void
-HuImageFunction<TInput, TOutput, TPrecision, TCoordRep>
+HuImageFunction<TInputImage, TCoordRep>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os, indent);
-  os << indent << " m_MomentNumber           : "  << m_MomentNumber << std::endl;
+  os << indent << " Neighborhood radius value   : "  << m_NeighborhoodRadius << std::endl;
 }
 
-template <class TInput, class TOutput, class TPrecision, class TCoordRep>
-typename HuImageFunction<TInput, TOutput, TPrecision, TCoordRep>::RealType
-HuImageFunction<TInput, TOutput, TPrecision, TCoordRep>
+template <class TInputImage, class TCoordRep>
+typename HuImageFunction<TInputImage, TCoordRep>::RealType
+HuImageFunction<TInputImage, TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
-  //typename InputType::SizeType        ImageSize;
-  RealType    HuValue = 0.;
-  ComplexType HuValueComplex;
-
-  typedef otb::ComplexMomentImageFunction<InputType, ComplexType> CMType;
-  typename CMType::Pointer function = CMType::New();
-
-  if (!this->GetInputImage())
+  // Build moments vector
+  RealType moments;
+  
+  // Initialize moments
+  moments.Fill( itk::NumericTraits< ScalarRealType >::Zero );
+  
+  // Check for input image
+  if( !this->GetInputImage() )
     {
-    return (itk::NumericTraits<RealType>::max());
+    return moments;
+    }
+  
+  // Check for out of buffer
+  if ( !this->IsInsideBuffer( index ) )
+    {
+    return moments;
+    }
+  
+  // Define complex type
+  typedef std::complex<ScalarRealType> ComplexType;
+  
+  // Define and intialize cumulants for complex moments
+  ComplexType c11, c20, c02,c30, c03, c21, c12;
+  c11 = itk::NumericTraits<ComplexType>::Zero;
+  c20 = itk::NumericTraits<ComplexType>::Zero;
+  c02 = itk::NumericTraits<ComplexType>::Zero;
+  c30 = itk::NumericTraits<ComplexType>::Zero;
+  c03 = itk::NumericTraits<ComplexType>::Zero;
+  c21 = itk::NumericTraits<ComplexType>::Zero;
+  c12 = itk::NumericTraits<ComplexType>::Zero;
+  
+  ScalarRealType c00 = itk::NumericTraits<ScalarRealType>::Zero;
+    
+  // Create an N-d neighborhood kernel, using a zeroflux boundary condition
+  typename InputImageType::SizeType kernelSize;
+  kernelSize.Fill( m_NeighborhoodRadius );
+  
+  itk::ConstNeighborhoodIterator<InputImageType>
+    it(kernelSize, this->GetInputImage(), this->GetInputImage()->GetBufferedRegion());
+  
+  // Set the iterator at the desired location
+  it.SetLocation(index);
+  
+  // Walk the neighborhood
+  const unsigned int size = it.Size();
+  for (unsigned int i = 0; i < size; ++i)
+    {
+    // Retrieve value, and centered-reduced position
+    ScalarRealType value = static_cast<ScalarRealType>(it.GetPixel(i));
+    ScalarRealType x = static_cast<ScalarRealType>(it.GetOffset(i)[0]);
+    ScalarRealType y = static_cast<ScalarRealType>(it.GetOffset(i)[1]);
+    
+    // Build complex value
+    ComplexType xpy(x,y),xqy(x,-y);
+    
+    // Update cumulants
+    c00+=value;
+    c11+=xpy*xqy*value;
+    c20+=xpy*xpy*value;
+    c02+=xqy*xqy*value;
+    c30+=xpy*xpy*xpy*value;
+    c03+=xqy*xqy*xqy*value;
+    c21+=xpy*xpy*xqy*value;
+    c12+=xpy*xqy*xqy*value;
     }
 
-  if (!this->IsInsideBuffer(index))
-    {
-    otbMsgDevMacro(<< index);
-    return (itk::NumericTraits<RealType>::max());
-    }
-
-  assert(m_MomentNumber > 0);
-  assert(m_MomentNumber < 8);
-
-  function->SetInputImage(this->GetInputImage());
-  function->SetNeighborhoodRadius(this->GetNeighborhoodRadius());
-
-  switch (m_MomentNumber)
-    {
-    case 1:
-      {
-      ComplexType C11;
-      function->SetP(1);
-      function->SetQ(1);
-      C11 = function->EvaluateAtIndex(index);
-      HuValue = C11.real();
-      }
-      break;
-    case 2:
-      {
-      ComplexType C20, C02;
-      function->SetP(2);
-      function->SetQ(0);
-      C20 = function->EvaluateAtIndex(index);
-      function->SetP(0);
-      function->SetQ(2);
-      C02 = function->EvaluateAtIndex(index);
-
-      HuValue = vcl_abs(C20 * C02);
-
-      }
-      break;
-    case 3:
-      {
-      ComplexType C30, C03;
-      function->SetP(3);
-      function->SetQ(0);
-      C30 = function->EvaluateAtIndex(index);
-      function->SetP(0);
-      function->SetQ(3);
-      C03 = function->EvaluateAtIndex(index);
-
-      HuValue = vcl_abs(C30 * C03);
-      }
-      break;
-    case 4:
-      {
-      ComplexType C21, C12;
-      function->SetP(2);
-      function->SetQ(1);
-      C21 = function->EvaluateAtIndex(index);
-      function->SetP(1);
-      function->SetQ(2);
-      C12 = function->EvaluateAtIndex(index);
-
-      HuValue = vcl_abs(C21 * C12);
-      }
-      break;
-
-    case 5:
-      {
-      ComplexType C30, C12;
-      function->SetP(3);
-      function->SetQ(0);
-      C30 = function->EvaluateAtIndex(index);
-      function->SetP(1);
-      function->SetQ(2);
-      C12 = function->EvaluateAtIndex(index);
-
-      HuValueComplex = C30 * vcl_pow(C12, 3);
-      HuValue = HuValueComplex.real();
-      }
-      break;
-
-    case 6:
-      {
-      ComplexType C20, C12;
-      function->SetP(2);
-      function->SetQ(0);
-      C20 = function->EvaluateAtIndex(index);
-      function->SetP(1);
-      function->SetQ(2);
-      C12 = function->EvaluateAtIndex(index);
-
-      HuValueComplex = C20 * vcl_pow(C12, 2);
-      HuValue = HuValueComplex.real();
-      }
-      break;
-
-    case 7:
-      {
-      ComplexType C30, C12;
-      function->SetP(3);
-      function->SetQ(0);
-      C30 = function->EvaluateAtIndex(index);
-      function->SetP(1);
-      function->SetQ(2);
-      C12 = function->EvaluateAtIndex(index);
-
-      HuValueComplex = C30 * vcl_pow(C12, 3);
-      HuValue = HuValueComplex.imag();
-      }
-      break;
-
-    default:
-      itkWarningMacro("Hu's invariant parameters are between 1 and 7");
-    }
-
-  return (static_cast<RealType>(HuValue));
-
+  // Nomalisation
+  c11/=vcl_pow(c00, (1+1)/2);
+  c20/=vcl_pow(c00, (2+0)/2);
+  c02/=vcl_pow(c00, (0+2)/2);
+  c30/=vcl_pow(c00, (3+0)/2);
+  c03/=vcl_pow(c00, (0+3)/2);
+  c21/=vcl_pow(c00, (2+1)/2);
+  c12/=vcl_pow(c00, (1+2)/2);
+ 
+  // Compute moments combinations
+  moments[0]  = static_cast<ScalarRealType>(c11.real());
+  moments[1]  = static_cast<ScalarRealType>((c20*c02).real());
+  moments[2]  = static_cast<ScalarRealType>((c30*c03).real());
+  moments[3]  = static_cast<ScalarRealType>((c21*c12).real());
+  moments[4]  = static_cast<ScalarRealType>((c30*c12*c12*c12).real());
+  moments[5]  = static_cast<ScalarRealType>((c20*c12*c12).real());
+  moments[6]  = static_cast<ScalarRealType>((c30*c12*c12*c12).imag());
+ 
+  // Return result
+  return moments;
 }
 
 } // namespace otb
