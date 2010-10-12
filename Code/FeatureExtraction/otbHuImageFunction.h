@@ -65,11 +65,11 @@ public:
   /** Standard class typedefs. */
   typedef HuImageFunction                                                 Self;
   typedef itk::ImageFunction< TInputImage,
-		   itk::FixedArray<
-		   ITK_TYPENAME itk::NumericTraits<
+                   itk::FixedArray<
+                   ITK_TYPENAME itk::NumericTraits<
                    typename TInputImage::PixelType>::RealType,
-		   7 >,
-		   TCoordRep >                                            Superclass;
+                   7 >,
+                   TCoordRep >                                            Superclass;
   typedef itk::SmartPointer<Self>                                         Pointer;
   typedef itk::SmartPointer<const Self>                                   ConstPointer;
 

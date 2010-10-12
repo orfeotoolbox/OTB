@@ -107,24 +107,24 @@ HuImageFunction<TInputImage, TCoordRep>
     ComplexType xpy(x,y),xqy(x,-y);
     
     // Update cumulants
-    c00+=value;
-    c11+=xpy*xqy*value;
-    c20+=xpy*xpy*value;
-    c02+=xqy*xqy*value;
-    c30+=xpy*xpy*xpy*value;
-    c03+=xqy*xqy*xqy*value;
-    c21+=xpy*xpy*xqy*value;
-    c12+=xpy*xqy*xqy*value;
+    c00 += value;
+    c11 += xpy*xqy*value;
+    c20 += xpy*xpy*value;
+    c02 += xqy*xqy*value;
+    c30 += xpy*xpy*xpy*value;
+    c03 += xqy*xqy*xqy*value;
+    c21 += xpy*xpy*xqy*value;
+    c12 += xpy*xqy*xqy*value;
     }
 
   // Nomalisation
-  c11/=vcl_pow(c00, (1+1)/2);
-  c20/=vcl_pow(c00, (2+0)/2);
-  c02/=vcl_pow(c00, (0+2)/2);
-  c30/=vcl_pow(c00, (3+0)/2);
-  c03/=vcl_pow(c00, (0+3)/2);
-  c21/=vcl_pow(c00, (2+1)/2);
-  c12/=vcl_pow(c00, (1+2)/2);
+  c11 /= vcl_pow(c00, (1+1)/2);
+  c20 /= vcl_pow(c00, (2+0)/2);
+  c02 /= vcl_pow(c00, (0+2)/2);
+  c30 /= vcl_pow(c00, (3+0)/2);
+  c03 /= vcl_pow(c00, (0+3)/2);
+  c21 /= vcl_pow(c00, (2+1)/2);
+  c12 /= vcl_pow(c00, (1+2)/2);
  
   // Compute moments combinations
   moments[0]  = static_cast<ScalarRealType>(c11.real());

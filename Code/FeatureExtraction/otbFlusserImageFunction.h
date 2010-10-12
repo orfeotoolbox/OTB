@@ -69,11 +69,11 @@ public:
   /** Standard class typedefs. */
   typedef FlusserImageFunction                                            Self;
   typedef itk::ImageFunction< TInputImage,
-		   itk::FixedArray<
-		   ITK_TYPENAME itk::NumericTraits<
-		   typename TInputImage::PixelType>::RealType,
-		   11 >,
-		   TCoordRep >                                            Superclass;
+                   itk::FixedArray<
+                   ITK_TYPENAME itk::NumericTraits<
+                   typename TInputImage::PixelType>::RealType,
+                   11 >,
+                   TCoordRep >                                            Superclass;
   typedef itk::SmartPointer<Self>                                         Pointer;
   typedef itk::SmartPointer<const Self>                                   ConstPointer;
 

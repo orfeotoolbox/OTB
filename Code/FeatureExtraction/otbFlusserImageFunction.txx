@@ -108,26 +108,26 @@ FlusserImageFunction<TInputImage,TCoordRep>
     ComplexType xpy(x,y),xqy(x,-y);
     
     // Update cumulants
-    c00+=value;
-    c11+=xpy*xqy*value;
-    c12+=xpy*xqy*xqy*value;
-    c21+=xpy*xpy*xqy*value;
-    c20+=xpy*xpy*value;
-    c30+=xpy*xpy*xpy*value;
-    c22+=xpy*xpy*xqy*xqy*value;
-    c31+=xpy*xpy*xpy*xqy*value;
-    c40+=xpy*xpy*xpy*xpy*value;
+    c00 += value;
+    c11 += xpy*xqy*value;
+    c12 += xpy*xqy*xqy*value;
+    c21 += xpy*xpy*xqy*value;
+    c20 += xpy*xpy*value;
+    c30 += xpy*xpy*xpy*value;
+    c22 += xpy*xpy*xqy*xqy*value;
+    c31 += xpy*xpy*xpy*xqy*value;
+    c40 += xpy*xpy*xpy*xpy*value;
     }
   
   // Nomalisation
-  c11/=vcl_pow(c00, (1+1)/2);
-  c12/=vcl_pow(c00, (1+2)/2);
-  c21/=vcl_pow(c00, (2+1)/2);
-  c20/=vcl_pow(c00, (2+0)/2);
-  c30/=vcl_pow(c00, (3+0)/2);
-  c22/=vcl_pow(c00, (2+2)/2);
-  c31/=vcl_pow(c00, (3+1)/2);
-  c40/=vcl_pow(c00, (4+0)/2);
+  c11 /= vcl_pow(c00, (1+1)/2);
+  c12 /= vcl_pow(c00, (1+2)/2);
+  c21 /= vcl_pow(c00, (2+1)/2);
+  c20 /= vcl_pow(c00, (2+0)/2);
+  c30 /= vcl_pow(c00, (3+0)/2);
+  c22 /= vcl_pow(c00, (2+2)/2);
+  c31 /= vcl_pow(c00, (3+1)/2);
+  c40 /= vcl_pow(c00, (4+0)/2);
   
   // Compute moments combinations
   moments[0]  = static_cast<ScalarRealType>(c11.real());
@@ -149,4 +149,3 @@ FlusserImageFunction<TInputImage,TCoordRep>
 } // namespace otb
 
 #endif
-
