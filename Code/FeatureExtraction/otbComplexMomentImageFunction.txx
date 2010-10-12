@@ -58,7 +58,7 @@ ComplexMomentImageFunction<TInputImage, TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
   // Build moments vector
-  ComplexType moments;//<--- pb VariableLengthVector : compute the length before
+  ComplexType moments;
   moments.resize(m_Pmax+1);
   
   std::vector<ScalarComplexType> valXpY, valXqY;
@@ -76,7 +76,7 @@ ComplexMomentImageFunction<TInputImage, TCoordRep>
       valXqY.at(q)        =  ScalarComplexType(1.0,0.0);
       }
     }
-  std::cout << "moments initiated!" << std::endl;
+
   // Check for input image
   if( !this->GetInputImage() )
     {

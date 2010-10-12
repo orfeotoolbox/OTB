@@ -27,9 +27,10 @@ namespace otb
 
 /**
  * \class ComplexMomentImageFunction
- * \brief Calculate the complex moment value in the full image.
+ * \brief Calculate the complex moment value in the specified
+ * neighborhood.
  *
- * Calculate the complex moment value over an image.
+ * Calculate the complex moment values over a specified neighborhood.
  * The implemented equation is:
  *
  *  \f[  c_{p,q}=\int_{-\infty}^{\infty} \int_{-\infty}^{\infty} (x+iy)^{p} \cdot (x-iy)^{q} \cdot f(x,y) \cdot

@@ -28,7 +28,8 @@ namespace otb
  * \class HuImageFunction
  * \brief Calculate the Hu's invariant parameter.
  *
- * Calculate the Hu's invariant over an image defined as:
+ * Calculate the Hu's invariants over a specified neighbohood defined
+ * as :
  *
  * - \f$ \phi_{1} = c_{11} \f$
  * - \f$ \phi_{2} = c_{20} c_{02} \f$

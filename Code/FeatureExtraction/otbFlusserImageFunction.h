@@ -28,7 +28,8 @@ namespace otb
  * \class FlusserImageFunction
  * \brief Calculate the Flusser's invariant parameters.
  *
- * Calculate the Flusser's invariant over an image defined as:
+ * Calculate the Flusser's invariants over a specified neighborhood
+ * defined as :
  *
  * - \f$ \psi_{1} = c_{11} \f$
  * - \f$ \psi_{2} = c_{21} c_{12} \f$
