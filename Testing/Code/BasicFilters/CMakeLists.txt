@@ -1776,6 +1776,22 @@ ADD_TEST(bfTvBandMathImageFilterWithIdx ${BASICFILTERS_TESTS13}
 ADD_TEST(bfTvComplexToIntensityFilterTest ${BASICFILTERS_TESTS13} 
   otbComplexToIntensityFilterTest)
 
+ADD_TEST(bfTvRealAndImaginaryImageToComplexImageFilterTest ${BASICFILTERS_TESTS13}
+  otbRealAndImaginaryImageToComplexImageFilterTest
+  ${INPUTDATA}/GomaAvant.png
+  ${INPUTDATA}/GomaApres.png
+)
+
+ADD_TEST(bfTvRealImageToComplexImageFilterTest ${BASICFILTERS_TESTS13}
+  otbRealImageToComplexImageFilterTest
+  ${INPUTDATA}/GomaAvant.png
+)
+
+ADD_TEST(bfTvImaginaryImageToComplexImageFilterTest ${BASICFILTERS_TESTS13}
+  otbImaginaryImageToComplexImageFilterTest
+  ${INPUTDATA}/GomaAvant.png
+)
+
 
 # A enrichir
 SET(BasicFilters_SRCS1
@@ -2025,6 +2041,9 @@ SET(BasicFilters_SRCS13
 otbBasicFiltersTests13.cxx
 otbBandMathImageFilter.cxx
 otbComplexToIntensityFilterTest.cxx
+otbRealAndImaginaryImageToComplexImageFilterTest.cxx
+otbRealImageToComplexImageFilterTest.cxx
+otbImaginaryImageToComplexImageFilterTest.cxx
 )
 
 
