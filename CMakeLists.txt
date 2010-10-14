@@ -631,7 +631,7 @@ IF(OTB_USE_PQXX)
         ENDIF (NOT PQ_LIBRARY)
 
 
-# Add compiler option
+        # Add compiler option
         ADD_DEFINITIONS(-DOTB_USE_PQXX)
 
         INCLUDE_DIRECTORIES(${PQXX_INCLUDE_DIR})
