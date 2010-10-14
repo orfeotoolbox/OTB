@@ -111,12 +111,10 @@ template <class TValue, class TLabel>
 void
 SVMModel<TValue, TLabel>::DeleteModel()
 {
-  if (m_Model)
-    {
-    svm_destroy_model(m_Model);
-    m_Model = NULL;
-    }
+  svm_free_and_destroy_model(&m_Model);
+  m_Model = NULL;
 }
+
 template <class TValue, class TLabel>
 void
 SVMModel<TValue, TLabel>::DeleteProblem()
