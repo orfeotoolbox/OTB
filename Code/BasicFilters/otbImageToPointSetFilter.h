@@ -57,10 +57,11 @@ public:
                       TInputImage::ImageDimension);
 
   /** Some PointSet related typedefs. */
-  typedef   typename Superclass::OutputPointSetType    OutputPointSetType;
-  typedef   typename Superclass::OutputPointSetPointer OutputPointSetPointer;
-  typedef   typename Superclass::PointsContainerType   PointsContainerType;
-  typedef   itk::ProcessObject                         ProcessObjectType;
+  typedef   typename Superclass::OutputPointSetType     OutputPointSetType;
+  typedef   typename Superclass::OutputPointSetPointer  OutputPointSetPointer;
+  typedef   typename Superclass::PointsContainerType    PointsContainerType;
+  typedef   typename Superclass::PointDataContainerType PointDataContainerType;
+  typedef   itk::ProcessObject                          ProcessObjectType;
 
   /** Set the input image of this process object.  */
   void SetInput(unsigned int idx, const InputImageType *input);
@@ -82,7 +83,8 @@ protected:
 
   /** Multi-threading implementation */
 
-  typedef std::vector<typename OutputPointSetType::PointsContainer::Pointer> OutputPointsContainerForThreadType;
+  typedef std::vector<typename OutputPointSetType::PointsContainer::Pointer>    OutputPointsContainerForThreadType;
+  typedef std::vector<typename OutputPointSetType::PointDataContainer::Pointer> OutputPointDataContainerForThreadType;
 
   virtual void BeforeThreadedGenerateData();
 
@@ -103,7 +105,8 @@ protected:
     Pointer Filter;
   };
 
-  OutputPointsContainerForThreadType m_PointsContainerPerThread;
+  OutputPointsContainerForThreadType    m_PointsContainerPerThread;
+  OutputPointDataContainerForThreadType m_PointDataContainerPerThread;
 
   /** End Multi-threading implementation */
 

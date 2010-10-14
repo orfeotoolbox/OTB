@@ -41,6 +41,7 @@ ThresholdImageToPointSetFilter<TInputImage, TOutputPointSet>
 ::ThreadedGenerateData(const InputImageRegionType& inputRegionForThread, int threadId)
 {
   this->m_PointsContainerPerThread[threadId] = PointsContainerType::New();
+  this->m_PointDataContainerPerThread[threadId] = PointDataContainerType::New();
   InputImageConstPointer inputPtr = this->GetInput();
 
   // Define the iterators
@@ -49,7 +50,6 @@ ThresholdImageToPointSetFilter<TInputImage, TOutputPointSet>
   itk::ProgressReporter progress(this, threadId, inputRegionForThread.GetNumberOfPixels());
 
   typename OutputPointSetType::PointType position;
-
   inputIt.GoToBegin();
 
   while (!inputIt.IsAtEnd())
@@ -62,7 +62,7 @@ ThresholdImageToPointSetFilter<TInputImage, TOutputPointSet>
       position[0] = index[0];
       position[1] = index[1];
       this->m_PointsContainerPerThread[threadId]->push_back(position);
-
+      this->m_PointDataContainerPerThread[threadId]->push_back(static_cast<typename PointDataContainerType::Element>(value));
       }
     ++inputIt;
     progress.CompletedPixel();  // potential exception thrown here

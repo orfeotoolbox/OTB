@@ -55,10 +55,11 @@ public:
   itkTypeMacro(PointSetSource, itk::ProcessObject);
 
   /** Some convenient typedefs. */
-  typedef itk::DataObject::Pointer                     DataObjectPointer;
-  typedef TOutputPointSet                              OutputPointSetType;
-  typedef typename OutputPointSetType::Pointer         OutputPointSetPointer;
-  typedef typename OutputPointSetType::PointsContainer PointsContainerType;
+  typedef itk::DataObject::Pointer                        DataObjectPointer;
+  typedef TOutputPointSet                                 OutputPointSetType;
+  typedef typename OutputPointSetType::Pointer            OutputPointSetPointer;
+  typedef typename OutputPointSetType::PointsContainer    PointsContainerType;
+  typedef typename OutputPointSetType::PointDataContainer PointDataContainerType;
 
   /** Get the point set output of this process object.  */
   OutputPointSetType * GetOutput(void);

@@ -38,6 +38,9 @@ ImageToPointSetFilter<TInputImage, TOutputPointSet>
   ProcessObjectType::SetNumberOfRequiredOutputs(1);
   ProcessObjectType::SetNthOutput(0, output.GetPointer());
 
+  m_PointsContainerPerThread.clear();
+  m_PointDataContainerPerThread.clear();
+
   // create default region splitter
   m_RegionSplitter = itk::ImageRegionSplitter<itkGetStaticConstMacro(InputImageDimension)>::New();
 
@@ -133,6 +136,9 @@ ImageToPointSetFilter<TInputImage, TOutputPointSet>
   PointsContainerType * outputPointsContainer = this->GetOutput()->GetPoints();
   outputPointsContainer->Initialize();
 
+  PointDataContainerType * outputPointDataContainer = this->GetOutput()->GetPointData();
+  outputPointDataContainer->Initialize();
+
   typename TInputImage::RegionType inputRegion = this->GetInput()->GetLargestPossibleRegion();
 
   unsigned int numDivisions;
@@ -180,6 +186,10 @@ ImageToPointSetFilter<TInputImage, TOutputPointSet>
     this->m_PointsContainerPerThread
       = OutputPointsContainerForThreadType(this->GetNumberOfThreads(), defaultPointsContainer);
 
+    typename PointDataContainerType::Pointer defaultPointDataContainer = PointDataContainerType::New();
+    this->m_PointDataContainerPerThread
+      = OutputPointDataContainerForThreadType(this->GetNumberOfThreads(), defaultPointDataContainer);
+
     // Setting up multithreader
     this->GetMultiThreader()->SetNumberOfThreads(this->GetNumberOfThreads());
     this->GetMultiThreader()->SetSingleMethod(this->ThreaderCallback, &str);
@@ -224,6 +234,21 @@ ImageToPointSetFilter<TInputImage, TOutputPointSet>
       }
     }
 
+  PointDataContainerType * outputPointDataContainer = this->GetOutput()->GetPointData();
+
+  typedef typename PointDataContainerType::ConstIterator OutputPointDataContainerIterator;
+  for (unsigned int i = 0; i < this->m_PointDataContainerPerThread.size(); ++i)
+    {
+    if (this->m_PointDataContainerPerThread[i].IsNotNull())
+      {
+      for (OutputPointDataContainerIterator it = this->m_PointDataContainerPerThread[i]->Begin();
+           it != this->m_PointDataContainerPerThread[i]->End();
+           ++it)
+        {
+        outputPointDataContainer->push_back(it.Value());
+        }
+      }
+    }
 }
 
 template <class TInputImage, class TOutputPointSet>
