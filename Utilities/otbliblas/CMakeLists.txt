@@ -30,6 +30,14 @@ IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
   INSTALL(FILES ${__files1}
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbliblas/include/liblas
     COMPONENT Development)
+  FILE(GLOB __files2 "${CMAKE_CURRENT_SOURCE_DIR}/include/liblas/detail/*.hpp")
+  INSTALL(FILES ${__files2}
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbliblas/include/liblas/detail
+    COMPONENT Development)
+  FILE(GLOB __files3 "${CMAKE_CURRENT_SOURCE_DIR}/include/liblas/capi/*.h")
+  INSTALL(FILES ${__files3}
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbliblas/include/liblas/capi
+    COMPONENT Development)
 ENDIF(NOT OTB_INSTALL_NO_DEVELOPMENT)
 
 ENDIF(NOT OTB_DISABLE_UTILITIES_COMPILATION)
