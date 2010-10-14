@@ -63,7 +63,6 @@ int otbSVMInverseCosSpectralAngleKernelFunctorImageModelEstimatorTest(int argc, 
 
   otb::InverseCosSAMKernelFunctor myKernel;
   myKernel.SetValue("Coef", 1.0);
-  myKernel.Update();
 
   svmEstimator->SetKernelFunctor(&myKernel);
   svmEstimator->SetKernelType(GENERIC);
