@@ -26,13 +26,13 @@ namespace otb
 {
 
 /** \class PointSetToPointSetFilter
- * \brief Base class to output PointSet data with image data as input
+ * \brief Base class to process PointSet data
  *
  * PointSetToPointSetFilter is the base class for all process objects that output
- * Point Set data and require image data as input. Specifically, this class
+ * PointSet data and require a PointSet as input. Specifically, this class
  * defines the SetInput() method for defining the input to a filter.
  *
- * \ingroup ImageFilters
+ * \ingroup PointSetFilters
  */
 template <class TInputPointSet, class TOutputPointSet>
 class ITK_EXPORT PointSetToPointSetFilter : public PointSetSource<TOutputPointSet>
