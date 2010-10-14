@@ -27,9 +27,9 @@
 #include "itkImage.h"
 
 #include "otbImageFileReader.h"
-#include "otbFlusserImageFunction.h"
+#include "otbRadiometricMomentsImageFunction.h"
 
-int otbFlusserImage(int argc, char * argv[])
+int otbRadiometricMomentsImage(int argc, char * argv[])
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename  = argv[2];
@@ -39,7 +39,7 @@ int otbFlusserImage(int argc, char * argv[])
 
   typedef itk::Image<InputPixelType,  Dimension>                  InputImageType;
   typedef otb::ImageFileReader<InputImageType>                    ReaderType;
-  typedef otb::FlusserImageFunction<InputImageType>               FunctionType;
+  typedef otb::RadiometricMomentsImageFunction<InputImageType>    FunctionType;
   typedef FunctionType::RealType                                  RealType;
 
   ReaderType::Pointer   reader         = ReaderType::New();
@@ -58,11 +58,11 @@ int otbFlusserImage(int argc, char * argv[])
   Result = function->EvaluateAtIndex(index);
 
   std::ofstream outputStream(outputFilename);
-  outputStream << std::setprecision(10) << "Flusser Image moments: [10]" << std::endl;
+  outputStream << std::setprecision(10) << "Radiometric moments: [10]" << std::endl;
 
-  for (unsigned int j = 1; j < 12; j++)
+  for (unsigned int j = 1; j < 5; j++)
     {
-    outputStream << "Flusser(" << j << ") = " << Result[j-1] << std::endl;
+    outputStream << "Radiometric Moment(" << j << ") = " << Result[j-1] << std::endl;
     }
 
   outputStream.close();

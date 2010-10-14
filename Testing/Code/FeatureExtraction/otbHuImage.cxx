@@ -42,34 +42,20 @@ int otbHuImage(int argc, char * argv[])
   typedef otb::HuImageFunction<InputImageType>               FunctionType;
   typedef FunctionType::RealType                             RealType;
   
-  InputImageType::RegionType region;
-  InputImageType::SizeType   size;
-  InputImageType::IndexType  start;
-
-  start.Fill(0);
-  size[0] = 50;
-  size[1] = 50;
-
   ReaderType::Pointer   reader         = ReaderType::New();
   FunctionType::Pointer function = FunctionType::New();
 
   reader->SetFileName(inputFilename);
-
-  InputImageType::Pointer image = reader->GetOutput();
-
-  region.SetIndex(start);
-  region.SetSize(size);
-
-  image->SetRegions(region);
-  image->Update();
-  function->SetInputImage(image);
-  function->SetNeighborhoodRadius(3);
-
+  reader->Update();
+  function->SetInputImage(reader->GetOutput());
+ 
   InputImageType::IndexType index;
-  index[0] = 10;
-  index[1] = 10;
+  index[0] = 100;
+  index[1] = 100;
 
-  RealType Result = function->EvaluateAtIndex(index);
+  function->SetNeighborhoodRadius(3);
+  RealType Result;
+  Result = function->EvaluateAtIndex(index);
 
   std::ofstream outputStream(outputFilename);
   outputStream << std::setprecision(10) << "Hu Image moments: [10]" << std::endl;

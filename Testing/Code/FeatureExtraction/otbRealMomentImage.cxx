@@ -27,44 +27,53 @@
 #include "itkImage.h"
 
 #include "otbImageFileReader.h"
-#include "otbFlusserImageFunction.h"
+#include "otbRealMomentImageFunction.h"
 
-int otbFlusserImage(int argc, char * argv[])
+int otbRealMomentImage(int argc, char * argv[])
 {
   const char * inputFilename  = argv[1];
-  const char * outputFilename  = argv[2];
+  unsigned int p((unsigned int) ::atoi(argv[2]));
+  unsigned int q((unsigned int) ::atoi(argv[3]));
+  const char * outputFilename  = argv[4];
 
   typedef unsigned char InputPixelType;
   const unsigned int Dimension = 2;
 
-  typedef itk::Image<InputPixelType,  Dimension>                  InputImageType;
-  typedef otb::ImageFileReader<InputImageType>                    ReaderType;
-  typedef otb::FlusserImageFunction<InputImageType>               FunctionType;
-  typedef FunctionType::RealType                                  RealType;
+  typedef itk::Image<InputPixelType,  Dimension> InputImageType;
+  typedef otb::ImageFileReader<InputImageType>   ReaderType;
 
-  ReaderType::Pointer   reader         = ReaderType::New();
-  FunctionType::Pointer function       = FunctionType::New();
+  typedef otb::RealMomentImageFunction<InputImageType>    FunctionType;
+  typedef FunctionType::RealType                          RealType;
+
+  ReaderType::Pointer    reader         = ReaderType::New();
+  FunctionType::Pointer  function       = FunctionType::New();
 
   reader->SetFileName(inputFilename);
+
   reader->Update();
   function->SetInputImage(reader->GetOutput());
+
+  function->SetQmax(q);
+  function->SetPmax(p);
 
   InputImageType::IndexType index;
   index[0] = 100;
   index[1] = 100;
 
-  function->SetNeighborhoodRadius(3);  
   RealType Result;
-  Result = function->EvaluateAtIndex(index);
 
   std::ofstream outputStream(outputFilename);
-  outputStream << std::setprecision(10) << "Flusser Image moments: [10]" << std::endl;
-
-  for (unsigned int j = 1; j < 12; j++)
+  outputStream << std::setprecision(10) << "Central Image moments: [10]" << std::endl;
+  
+  function->SetNeighborhoodRadius(3);
+  Result = function->EvaluateAtIndex(index);
+  for (unsigned int k=0; k<=p; k++)
     {
-    outputStream << "Flusser(" << j << ") = " << Result[j-1] << std::endl;
+    for (unsigned int l=0; l<=q; l++)
+      {
+      outputStream << "RealMoment c(" << k << l << ") : " << Result.at(k).at(l) << std::endl;
+      }
     }
-
   outputStream.close();
 
   return EXIT_SUCCESS;

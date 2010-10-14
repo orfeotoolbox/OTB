@@ -57,13 +57,14 @@ int otbComplexMomentImage(int argc, char * argv[])
   function->SetPmax(p);
 
   InputImageType::IndexType index;
-  index[0] = 10;
-  index[1] = 10;
+  index[0] = 100;
+  index[1] = 100;
 
   ComplexType Result;
 
   std::ofstream outputStream(outputFilename);
-
+  outputStream << std::setprecision(10);
+  
   function->SetNeighborhoodRadius(3);
   Result = function->EvaluateAtIndex(index);
   for (unsigned int k=0; k<=p; k++)

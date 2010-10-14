@@ -68,23 +68,39 @@ ADD_TEST(feTvComplexMomentImage ${FEATUREEXTRACTION_TESTS1}
    --compare-ascii ${NOTOL}     ${BASELINE_FILES}/feComplexMomentImage.txt
                         ${TEMP}/feComplexMomentImage.txt
         otbComplexMomentImage
-	${INPUTDATA}/TeteAToto.png
+	${INPUTDATA}/poupees.png
   4
   4
   ${TEMP}/feComplexMomentImage.txt)
+
+ADD_TEST(feTvRealMomentImage ${FEATUREEXTRACTION_TESTS1}
+   --compare-ascii ${NOTOL}     ${BASELINE_FILES}/feRealMomentImage.txt
+                        ${TEMP}/feRealMomentImage.txt
+        otbRealMomentImage
+	${INPUTDATA}/poupees.png
+  4
+  4
+  ${TEMP}/feRealMomentImage.txt)
+
+ADD_TEST(feTvRadiometricMomentsImage ${FEATUREEXTRACTION_TESTS1}
+   --compare-ascii ${NOTOL}     ${BASELINE_FILES}/feTvRadiometricMomentsImage.txt
+                        ${TEMP}/feTvRadiometricMomentsImage.txt
+        otbRadiometricMomentsImage
+	${INPUTDATA}/poupees.png
+  ${TEMP}/feTvRadiometricMomentsImage.txt)
 
 ADD_TEST(feTvHuImage ${FEATUREEXTRACTION_TESTS1}
    --compare-ascii ${NOTOL}     ${BASELINE_FILES}/feHuImage.txt
                         ${TEMP}/feHuImage.txt
         otbHuImage
-	${INPUTDATA}/TeteAToto.png
+	${INPUTDATA}/poupees.png
   ${TEMP}/feHuImage.txt)
 
 ADD_TEST(feTuFlusserImage ${FEATUREEXTRACTION_TESTS1}
    --compare-ascii ${EPSILON_8}     ${BASELINE_FILES}/feFlusserImage.txt
                         ${TEMP}/feFlusserImage.txt
         otbFlusserImage
-	${INPUTDATA}/TeteAToto.png
+	${INPUTDATA}/poupees.png
   ${TEMP}/feFlusserImage.txt)
 
 ADD_TEST(feTuComplexMomentPathNew ${FEATUREEXTRACTION_TESTS1}
@@ -1376,6 +1392,8 @@ otbAlignImageToPath.cxx
 otbDrawPath.cxx
 otbDrawPathAlign.cxx
 otbComplexMomentImage.cxx
+otbRealMomentImage.cxx
+otbRadiometricMomentsImageFunction.cxx
 otbHuImage.cxx
 otbFlusserImage.cxx
 otbComplexMomentPathNew.cxx
