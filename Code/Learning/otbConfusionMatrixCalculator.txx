@@ -101,7 +101,7 @@ ConfusionMatrixCalculator<TRefListLabel, TProdListLabel>
     int prodPos = m_MapOfClasses[prodLabel];
 
     ++samplesPerClass[refPos];
-    m_ConfusionMatrix(refPos, prodPos) += 1;
+    m_ConfusionMatrix(prodPos, refPos) += 1;
 
     ++refIterator;
     ++prodIterator;
