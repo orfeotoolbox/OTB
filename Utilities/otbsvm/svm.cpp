@@ -2695,7 +2695,7 @@ int svm_save_model(const char *model_file_name, const svm_model *model)
 	{
 		fprintf(fp, "rho");
 		for(int i=0;i<nr_class*(nr_class-1)/2;i++)
-			fprintf(fp," %g",model->rho[i]);
+			fprintf(fp," %.10g",model->rho[i]);
 		fprintf(fp, "\n");
 	}
 	
