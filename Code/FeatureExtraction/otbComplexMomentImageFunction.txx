@@ -19,11 +19,9 @@
 #define __otbComplexMomentImageFunction_txx
 
 #include "otbComplexMomentImageFunction.h"
-#include "itkImageRegionIterator.h"
-#include "itkImage.h"
 #include "itkConstNeighborhoodIterator.h"
 #include "itkNumericTraits.h"
-#include "otbMacro.h"
+#include "itkMacro.h"
 
 namespace otb
 {
@@ -31,96 +29,124 @@ namespace otb
 /**
    * Constructor
    */
-template <class TInput, class TOutput, class TPrecision, class TCoordRep>
-ComplexMomentImageFunction<TInput, TOutput, TPrecision, TCoordRep>
+template <class TInputImage, class TCoordRep>
+ComplexMomentImageFunction<TInputImage, TCoordRep>
 ::ComplexMomentImageFunction()
 {
-  m_P = 0;
-  m_Q = 0;
+  m_NeighborhoodRadius = 1;
+  m_Pmax = 4;
+  m_Qmax = 4;
 }
 
 /**
    *
    */
-template <class TInput, class TOutput, class TPrecision, class TCoordRep>
+template <class TInputImage, class TCoordRep>
 void
-ComplexMomentImageFunction<TInput, TOutput, TPrecision, TCoordRep>
+ComplexMomentImageFunction<TInputImage, TCoordRep>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os, indent);
-  os << indent << " p indice value      : "  << m_P << std::endl;
-  os << indent << " q indice value      : "  << m_Q << std::endl;
+  os << indent << " p indice maximum value      : "  << m_Pmax << std::endl;
+  os << indent << " q indice maximum value      : "  << m_Qmax << std::endl;
+  os << indent << " Neighborhood radius value   : "  << m_NeighborhoodRadius << std::endl;
 }
 
-template <class TInput, class TOutput, class TPrecision, class TCoordRep>
-typename ComplexMomentImageFunction<TInput, TOutput, TPrecision, TCoordRep>::ComplexType
-ComplexMomentImageFunction<TInput, TOutput, TPrecision, TCoordRep>
+template <class TInputImage, class TCoordRep>
+typename ComplexMomentImageFunction<TInputImage, TCoordRep>::ComplexType
+ComplexMomentImageFunction<TInputImage, TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
-  typename TInput::SizeType ImageSize;
-  ComplexPrecisionType      Sum;
-  ComplexPrecisionType      ValP;
-  ComplexPrecisionType      ValQ;
-  PrecisionType             Norm;
-  IndexType                 IndexValue;
-  IndexType                 indexPos = index;
-  typename TInput::SizeType kernelSize;
-
-  if (!this->GetInputImage())
+  // Build moments vector
+  ComplexType moments;
+  moments.resize(m_Pmax+1);
+  
+  std::vector<ScalarComplexType> valXpY, valXqY;
+  valXpY.resize(m_Pmax+1);
+  valXqY.resize(m_Qmax+1);
+    
+  // Initialize moments
+  for (unsigned int p = 0; p <= m_Pmax; p++)
     {
-    otbMsgDevMacro(<< "Pb with GetInputImage");
-    return (ComplexType(itk::NumericTraits<PrecisionType>::Zero, itk::NumericTraits<PrecisionType>::Zero));
+    moments.at(p).resize(m_Qmax+1);
+    valXpY.at(p) = ScalarComplexType(1.0,0.0);
+    for (unsigned int q = 0; q <= m_Qmax; q++)
+      {
+      moments.at(p).at(q) =  ScalarComplexType(0.0,0.0);
+      valXqY.at(q)        =  ScalarComplexType(1.0,0.0);
+      }
     }
 
-  if (this->GetNeighborhoodRadius() < 0)
+  // Check for input image
+  if( !this->GetInputImage() )
     {
-    ImageSize = this->GetInputImage()->GetBufferedRegion().GetSize();
-
-    indexPos[0] = ImageSize[0] / 2;
-    indexPos[1] = ImageSize[1] / 2;
-
-    kernelSize[0] = indexPos[0];
-    kernelSize[1] = indexPos[1];
+    return moments;
     }
-  else
+  
+  // Check for out of buffer
+  if ( !this->IsInsideBuffer( index ) )
     {
-    kernelSize.Fill(this->GetNeighborhoodRadius());
+    return moments;
     }
-
-  itk::ConstNeighborhoodIterator<TInput>
-  it(kernelSize, this->GetInputImage(), this->GetInputImage()->GetBufferedRegion());
-
+  
+  // Create an N-d neighborhood kernel, using a zeroflux boundary condition
+  typename InputImageType::SizeType kernelSize;
+  kernelSize.Fill( m_NeighborhoodRadius );
+  
+  itk::ConstNeighborhoodIterator<InputImageType>
+    it(kernelSize, this->GetInputImage(), this->GetInputImage()->GetBufferedRegion());
+  
   // Set the iterator at the desired location
-  it.SetLocation(indexPos);
-  Sum = ComplexPrecisionType(0.0, 0.0);
-  Norm = 0;
-
+  it.SetLocation(index);
+  
+  // Walk the neighborhood
   const unsigned int size = it.Size();
   for (unsigned int i = 0; i < size; ++i)
     {
-    IndexValue = it.GetIndex(i);
-    ValP = ComplexPrecisionType(1.0, 0.0);
-    ValQ = ComplexPrecisionType(1.0, 0.0);
-    unsigned int p  = m_P;
-    while (p > 0)
+    // Retrieve value, and centered-reduced position
+    ScalarRealType value = static_cast<ScalarRealType>(it.GetPixel(i));
+    ScalarRealType     x = static_cast<ScalarRealType>(it.GetOffset(i)[0]);
+    ScalarRealType     y = static_cast<ScalarRealType>(it.GetOffset(i)[1]);
+    
+    // Build complex value
+    ScalarComplexType xpy(x,y),xqy(x,-y);
+    
+    unsigned int pTmp = 1;
+    unsigned int qTmp = 1;
+    
+    while (pTmp <= m_Pmax)
       {
-      ValP *= ComplexPrecisionType(IndexValue[0] - indexPos[0], IndexValue[1] - indexPos[1]);
-      --p;
+      valXpY.at(pTmp) = valXpY.at(pTmp-1) * xpy;
+      pTmp ++;
       }
-    unsigned int q  = m_Q;
-    while (q > 0)
+    while (qTmp <= m_Qmax)
       {
-      ValQ *= ComplexPrecisionType(IndexValue[0] - indexPos[0], -IndexValue[1] - indexPos[1]);
-      --q;
+      valXqY.at(qTmp) = valXqY.at(qTmp-1) * xqy;
+      qTmp ++;
       }
+    
 
-    Sum += (ValP * ValQ * ComplexPrecisionType(static_cast<PrecisionType>(it.GetPixel(i)), 0.0));
-    Norm += it.GetPixel(i);
+    // Update cumulants
+    for (unsigned int p = 0; p <= m_Pmax; p++)
+      {
+      for (unsigned int q= 0; q <= m_Qmax; q++)
+        {
+        moments.at(p).at(q) += valXpY.at(p) * valXqY.at(q) * value;   
+        }
+      }
+    }
+  
+  // Normalisation
+  for (unsigned int p = 0; p <= m_Pmax; p++)
+    {
+    for (unsigned int q= 0; q <= m_Qmax; q++)
+      {
+      moments.at(p).at(q) /= vcl_pow(moments.at(0).at(0), (p+q)/2);   
+      }
     }
 
-  Norm = vcl_pow(Norm, ((PrecisionType) m_P + (PrecisionType) m_Q) / 2.);
-
-  return (static_cast<ComplexType>(Sum / Norm));
+  // Return result
+  return moments;
 }
 
 } // namespace otb

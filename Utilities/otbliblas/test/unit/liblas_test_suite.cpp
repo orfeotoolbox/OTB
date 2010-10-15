@@ -1,4 +1,4 @@
-// $Id: liblas_test_suite.cpp 648 2008-05-02 06:16:35Z mloskot $
+// $Id$
 //
 // (C) Copyright Mateusz Loskot 2008, mateusz@loskot.net
 // Distributed under the BSD License
@@ -20,7 +20,6 @@ namespace tut
 
 int main(int argc, char* argv[])
 {
-
     if (1 == argc)
     {
         tut::g_test_data_path = "../data"; // default path
@@ -34,7 +33,6 @@ int main(int argc, char* argv[])
         std::cout << "Usage: liblas_test <test data path>\n";
         return 1;
     }
-
 
     std::cout << "libLAS Test Suite:\n==================";
 
@@ -53,4 +51,3 @@ int main(int argc, char* argv[])
 
     return 0;
 }
-

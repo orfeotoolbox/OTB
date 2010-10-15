@@ -47,13 +47,12 @@ int main(int argc, char * argv[])
   if (argc != 3)
     {
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
-    std::cerr << " moment_number" << std::endl;
+    std::cerr << " neighborhood_radius" << std::endl;
     return EXIT_FAILURE;
     }
 
   const char * inputFilename  = argv[1];
-
-  unsigned int mMomentNumber((unsigned char) ::atoi(argv[2]));
+  const unsigned int radius   = atoi(argv[2]);
 
   typedef unsigned char InputPixelType;
   const unsigned int Dimension = 2;
@@ -75,9 +74,8 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef float MomentType;
-  typedef otb::FlusserImageFunction<InputImageType,
-      MomentType>   FlusserType;
+  typedef otb::FlusserImageFunction<InputImageType>   FlusserType;
+  typedef FlusserType::RealType                       MomentType;
 
   FlusserType::Pointer fmFunction = FlusserType::New();
   // Software Guide : EndCodeSnippet
@@ -122,7 +120,7 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   fmFunction->SetInputImage(image);
-  fmFunction->SetMomentNumber(mMomentNumber);
+  fmFunction->SetNeighborhoodRadius(radius);
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -134,8 +132,11 @@ int main(int argc, char * argv[])
   // Software Guide : BeginCodeSnippet
   MomentType Result = fmFunction->EvaluateAtIndex(center);
 
-  std::cout << "The moment of order " << mMomentNumber <<
-  " is equal to " << Result << std::endl;
+  for (unsigned int j=0; j<11; j++)
+    {
+    std::cout << "The moment of order " << j+1 <<
+      " is equal to " << Result[j] << std::endl;
+    }
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex

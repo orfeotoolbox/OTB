@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: las_version.h 932 2008-10-10 18:42:09Z hobu $
+ * $Id$
  *
  * Project:  libLAS - http://liblas.org - A BSD library for LAS format data.
  * Purpose:  Basic macros for the libLAS C API
@@ -44,8 +44,8 @@
 
 #ifndef LIBLAS_VERSION_MAJOR
 #define LIBLAS_VERSION_MAJOR    1
-#define LIBLAS_VERSION_MINOR    0
-#define LIBLAS_VERSION_REV      0
+#define LIBLAS_VERSION_MINOR    2
+#define LIBLAS_VERSION_REV      1
 #define LIBLAS_VERSION_BUILD    0
 #endif
 
@@ -54,11 +54,11 @@
 #endif
 
 #ifndef LIBLAS_RELEASE_DATE
-#define LIBLAS_RELEASE_DATE     20080000
+#define LIBLAS_RELEASE_DATE     20091002
 #endif
 
 #ifndef LIBLAS_RELEASE_NAME
-#define LIBLAS_RELEASE_NAME     "1.0.0"
+#define LIBLAS_RELEASE_NAME     "1.2.1"
 #endif
 
 #endif /* LAS_VERSION_H_INCLUDED */

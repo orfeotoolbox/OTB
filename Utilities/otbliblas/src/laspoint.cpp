@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: laspoint.cpp 813 2008-07-25 21:53:52Z mloskot $
+ * $Id$
  *
  * Project:  libLAS - http://liblas.org - A BSD library for LAS format data.
  * Purpose:  LAS point class 
@@ -50,17 +50,26 @@
 namespace liblas {
 
 LASPoint::LASPoint() :
-    m_intensity(0), m_flags(0), m_class(0),
-        m_angleRank(0), m_userData(0), m_gpsTime(0)
+    m_intensity(0),
+    m_flags(0),
+    m_class(0),
+    m_angleRank(0),
+    m_userData(0),
+    m_pointSourceId(0),
+    m_gpsTime(0)
 {
     std::memset(m_coords, 0, sizeof(m_coords));
 }
 
 LASPoint::LASPoint(LASPoint const& other) :
     m_intensity(other.m_intensity),
-        m_flags(other.m_flags), m_class(other.m_class),
-            m_angleRank(other.m_angleRank), m_userData(other.m_userData),
-                m_gpsTime(other.m_gpsTime)
+    m_flags(other.m_flags),
+    m_class(other.m_class),
+    m_angleRank(other.m_angleRank),
+    m_userData(other.m_userData),
+    m_pointSourceId(other.m_pointSourceId),
+    m_gpsTime(other.m_gpsTime),
+    m_color(other.m_color)
 {
     std::memcpy(m_coords, other.m_coords, sizeof(m_coords));
 }
@@ -77,7 +86,9 @@ LASPoint& LASPoint::operator=(LASPoint const& rhs)
         m_class = rhs.m_class;
         m_angleRank = rhs.m_angleRank;
         m_userData = rhs.m_userData;
+        m_pointSourceId = rhs.m_pointSourceId;
         m_gpsTime = rhs.m_gpsTime;
+        m_color = rhs.m_color;
     }
     return *this;
 }
@@ -93,43 +104,35 @@ void LASPoint::SetCoordinates(LASHeader const& header, double x, double y, doubl
 
 void LASPoint::SetReturnNumber(uint16_t const& num)
 {
-    // Store value in bits 1,2,3
-    uint8_t val = static_cast<uint8_t>(num);
-    uint16_t const begin = 1;
-    uint8_t mask = uint8_t(~0);
-    m_flags &= ~(mask << (begin - 1)); 
-    m_flags |= ((val & mask) << (begin - 1));
+    // Store value in bits 0,1,2
+    uint8_t mask = 0x7 << 0; // 0b00000111
+    m_flags &= ~mask;
+    m_flags |= mask & (static_cast<uint8_t>(num) << 0);
+
 }
 
 void LASPoint::SetNumberOfReturns(uint16_t const& num)
 {
-    // Store value in bits 4,5,6
-    uint8_t val = static_cast<uint8_t>(num);
-    uint16_t const begin = 4;
-    uint8_t mask = uint8_t(~0);
-    m_flags &= ~(mask << (begin - 1)); 
-    m_flags |= ((val & mask) << (begin - 1));
+    // Store value in bits 3,4,5
+    uint8_t mask = 0x7 << 3; // 0b00111000
+    m_flags &= ~mask;
+    m_flags |= mask & (static_cast<uint8_t>(num) << 3);
 }
 
 void LASPoint::SetScanDirection(uint16_t const& dir)
 {
-    // Store value in bit 7th
-    uint8_t val = static_cast<uint8_t>(dir);
-    uint16_t const begin = 7;
-    uint8_t mask = uint8_t(~0);
-    m_flags &= ~(mask << (begin - 1)); 
-    m_flags |= ((val & mask) << (begin - 1));
+    // Store value in bit 6
+    uint8_t mask = 0x1 << 6; // 0b01000000
+    m_flags &= ~mask;
+    m_flags |= mask & (static_cast<uint8_t>(dir) << 6);
 }
 
 void LASPoint::SetFlightLineEdge(uint16_t const& edge)
 {
-    // Store value in bit 8th
-    uint8_t val = static_cast<uint8_t>(edge);
-    uint16_t const begin = 8;
-    uint8_t mask = uint8_t(~0);
-    m_flags &= ~(mask << (begin - 1)); 
-    m_flags |= ((val & mask) << (begin - 1));
-}
+    // Store value in bit 7
+    uint8_t mask = 0x1 << 7; // 0b10000000
+    m_flags &= ~mask;
+    m_flags |= mask & (static_cast<uint8_t>(edge) << 7);}
 
 void LASPoint::SetScanAngleRank(int8_t const& rank)
 {
@@ -143,7 +146,10 @@ void LASPoint::SetUserData(uint8_t const& data)
 
 bool LASPoint::equal(LASPoint const& other) const
 {
-    double const epsilon = std::numeric_limits<double>::epsilon(); 
+    // TODO - mloskot: Default epsilon is too small.
+    //                 Is 0.00001 good as tolerance or too wide?
+    //double const epsilon = std::numeric_limits<double>::epsilon(); 
+    double const epsilon = 0.00001;
 
     double const dx = m_coords[0] - other.m_coords[0];
     double const dy = m_coords[1] - other.m_coords[1];
@@ -151,9 +157,9 @@ bool LASPoint::equal(LASPoint const& other) const
 
     // TODO: Should we compare other data members, besides the coordinates?
 
-    if (((dx <= epsilon) && (dx >= -epsilon ))
-        || ((dy <= epsilon) && (dy >= -epsilon ))
-        || ((dz <= epsilon) && (dz >= -epsilon )))
+    if (((dx <= epsilon) && (dx >= -epsilon))
+        && ((dy <= epsilon) && (dy >= -epsilon))
+        && ((dz <= epsilon) && (dz >= -epsilon)))
     {
         return true;
     }
@@ -215,4 +221,6 @@ bool LASPoint::IsValid() const
 
     return true;
 }
+
+
 } // namespace liblas

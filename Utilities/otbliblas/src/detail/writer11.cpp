@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: writer11.cpp 816 2008-07-31 00:04:36Z mloskot $
+ * $Id$
  *
  * Project:  libLAS - http://liblas.org - A BSD library for LAS format data.
  * Purpose:  LAS 1.1 writer implementation for C++ libLAS 
@@ -54,7 +54,7 @@
 namespace liblas { namespace detail { namespace v11 {
 
 WriterImpl::WriterImpl(std::ostream& ofs) :
-    Base(), m_ofs(ofs), m_pointCount(0)
+    Base(ofs), m_pointCount(0)
 {
 }
 
@@ -208,7 +208,23 @@ void WriterImpl::WriteHeader(LASHeader& header)
     detail::write_n(m_ofs, header.GetMaxZ(), sizeof(double));
     detail::write_n(m_ofs, header.GetMinZ(), sizeof(double));
     
-    WriteVLR(header);
+    // If WriteVLR returns a value, it is because the header's 
+    // offset is not large enough to contain the VLRs.  The value 
+    // it returns is the number of bytes we must increase the header
+    // by in order for it to contain the VLRs.
+    int32_t difference = WriteVLR(header);
+    if (difference < 0) {
+        header.SetDataOffset(header.GetDataOffset() + abs(difference) );
+        WriteVLR(header);
+
+        // Make sure to rewrite the dataoffset in the header portion now that
+        // we've changed it.
+        std::streamsize const current_pos = m_ofs.tellp();
+        std::streamsize const offset_pos = 96; 
+        m_ofs.seekp(offset_pos, std::ios::beg);
+        detail::write_n(m_ofs, header.GetDataOffset() , sizeof(header.GetDataOffset()));
+        m_ofs.seekp(current_pos, std::ios::beg);        
+    }
 
     // If we already have points, we're going to put it at the end of the file.  
     // If we don't have any points,  we're going to leave it where it is.
@@ -228,50 +244,20 @@ void WriterImpl::UpdateHeader(LASHeader const& header)
     }
 }
 
-void WriterImpl::WritePointRecord(detail::PointRecord const& record)
-{
-    // Write point data record format 0
-
-    // TODO: Static assert would be better
-    assert(20 == sizeof(record));
-    detail::write_n(m_ofs, record, sizeof(record));
-
-    ++m_pointCount;
-}
-
-void WriterImpl::WritePointRecord(detail::PointRecord const& record, double const& time)
+void WriterImpl::WritePointRecord(LASPoint const& point, const LASHeader& header)
 {
     // TODO: Static assert would be better
-    assert(28 == sizeof(record) + sizeof(time));
+    
+    double t = 0;
+    assert(LASHeader::ePointSize0 == sizeof(m_record));
+    Writer::FillPointRecord(m_record, point, header);
+    detail::write_n(m_ofs, m_record, sizeof(m_record));
 
-    // Write point data record format 1
-    WritePointRecord(record);
-
-    detail::write_n(m_ofs, time, sizeof(double));
-}
-
-void WriterImpl::WriteVLR(LASHeader const& header) 
-{
-    m_ofs.seekp(header.GetHeaderSize(), std::ios::beg);
- 
-    for (uint32_t i = 0; i < header.GetRecordsCount(); ++i)
-    {
-        LASVLR vlr = header.GetVLR(i);
-        
-        detail::write_n(m_ofs, vlr.GetReserved(), sizeof(uint16_t));
-        detail::write_n(m_ofs, vlr.GetUserId(true).c_str(), 16);
-        detail::write_n(m_ofs, vlr.GetRecordId(), sizeof(uint16_t));
-        detail::write_n(m_ofs, vlr.GetRecordLength(), sizeof(uint16_t));
-        detail::write_n(m_ofs, vlr.GetDescription(true).c_str(), 32);
-        std::vector<uint8_t> const& data = vlr.GetData();
-        std::streamsize const size = static_cast<std::streamsize>(data.size());
-        detail::write_n(m_ofs, data.front(), size);
+    if (header.GetDataFormatId() == LASHeader::ePointFormat1) {
+        t = point.GetTime();
+        detail::write_n(m_ofs, t, sizeof(double));
     }
-}
-
-std::ostream& WriterImpl::GetStream() const
-{
-    return m_ofs;
+    ++m_pointCount;
 }
 
 }}} // namespace liblas::detail::v11

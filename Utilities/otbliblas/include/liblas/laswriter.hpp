@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: laswriter.hpp 813 2008-07-25 21:53:52Z mloskot $
+ * $Id$
  *
  * Project:  libLAS - http://liblas.org - A BSD library for LAS format data.
  * Purpose:  LAS writer class 
@@ -64,6 +64,9 @@ public:
     
     std::size_t GetVersion() const;
     LASHeader const& GetHeader() const;
+
+    /// \todo TODO: Move point record composition deep into writer implementation.
+    /// \todo TODO: How to handle point_source_id in portable way, for LAS 1.0 and 1.1
     bool WritePoint(LASPoint const& point);
 
     // Allow fetching of the stream
@@ -71,6 +74,11 @@ public:
     
     // Allow in-place writing of header
     void WriteHeader(LASHeader& header);
+
+    // Reproject data as they are written if the LASWriter's reference is
+    // different than the LASHeader's
+    bool SetSRS(const LASSpatialReference& ref);
+    
     
 private:
     
@@ -82,6 +90,7 @@ private:
 
     LASHeader m_header;
     detail::PointRecord m_record;
+
 };
 
 } // namespace liblas

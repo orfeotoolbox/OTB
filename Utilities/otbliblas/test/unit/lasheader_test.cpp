@@ -1,4 +1,4 @@
-// $Id: lasheader_test.cpp 763 2008-05-25 07:46:11Z mloskot $
+// $Id$
 //
 // (C) Copyright Mateusz Loskot 2008, mateusz@loskot.net
 // Distributed under the BSD License
@@ -6,6 +6,7 @@
 // http://www.opensource.org/licenses/bsd-license.php)
 //
 #include <liblas/lasheader.hpp>
+#include <liblas/lasspatialreference.hpp>
 #include <liblas/cstdint.hpp>
 #include <liblas/guid.hpp>
 #include <tut/tut.hpp>
@@ -183,7 +184,7 @@ namespace tut
 
         try
         {
-            h.SetVersionMinor(2);
+            h.SetVersionMinor(3);
             ensure("std::out_of_range not thrown", false);
         }
         catch (std::out_of_range const& e)
@@ -281,5 +282,17 @@ namespace tut
         }
     }
 
+    // Test GetSRS
+    template<>
+    template<>
+    void to::test<12>()
+    {
+        liblas::LASHeader h;
+        liblas::LASSpatialReference srs = h.GetSRS();
+
+        ensure_equals(srs.GetProj4(), "");
+        ensure_equals(srs.GetWKT(), "");
+
+    }
 }
 

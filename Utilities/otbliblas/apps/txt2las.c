@@ -1,6 +1,6 @@
 /***************************************************************************
- * $Id: txt2las.c 864 2008-08-22 16:04:18Z mloskot $
- * $Date: 2008-08-22 11:04:18 -0500 (Fri, 22 Aug 2008) $
+ * $Id$
+ * $Date$
  *
  * Project: libLAS -- C/C++ read/write library for LAS LIDAR data
  * Purpose: ASCII text to LAS translation
@@ -16,6 +16,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define LAS_FORMAT_10 0
+#define LAS_FORMAT_11 1
+#define LAS_FORMAT_12 2
 
 void usage()
 {
@@ -53,8 +56,11 @@ void usage()
     fprintf(stderr,"   u - user data (does not currently work)\n");
     fprintf(stderr,"   p - point source ID\n");
     fprintf(stderr,"   e - edge of flight line\n");
-    fprintf(stderr,"   d - direction of scan flag\n\n");
-
+    fprintf(stderr,"   d - direction of scan flag\n");
+    fprintf(stderr,"   R - red channel of RGB color\n");
+    fprintf(stderr,"   G - green channel of RGB color\n");
+    fprintf(stderr,"   B - blue channel of RGB color\n\n");
+    
     fprintf(stderr,"\n----------------------------------------------------------\n");
     fprintf(stderr," The '-scale 0.02' flag specifies the quantization. The\n");
     fprintf(stderr," default value of 0.01 means that the smallest increment\n");
@@ -95,7 +101,8 @@ static int parse(const char* parse_string, const char* line, double* xyz, LASPoi
     const char* p = parse_string;
     const char* l = line;
 
-
+    LASColorH color = LASColor_Create();
+    
     while (p[0])
     {
         /* // we expect the x coordinate */
@@ -246,6 +253,7 @@ static int parse(const char* parse_string, const char* line, double* xyz, LASPoi
                         "WARNING: point source ID %d is out of range of unsigned short\n", 
                         temp_i);
 /*          point->point_source_ID = temp_i & 65535; */
+            LASPoint_SetPointSourceId(point, temp_i);
             /*// then advance to next white space */
             while (l[0] && l[0] != ' ' && l[0] != ',' && l[0] != '\t') l++; 
         }
@@ -291,12 +299,48 @@ static int parse(const char* parse_string, const char* line, double* xyz, LASPoi
             /* // then advance to next white space */
             while (l[0] && l[0] != ' ' && l[0] != ',' && l[0] != '\t') l++; 
         }
+        /* // we expect the red channel of the RGB field */
+        else if (p[0] == 'R') 
+        {
+            /* // first skip white spaces */
+            while (l[0] && (l[0] == ' ' || l[0] == ',' || l[0] == '\t')) l++; 
+            if (l[0] == 0) return FALSE;
+            if (sscanf(l, "%d", &temp_i) != 1) return FALSE;
+            LASColor_SetRed(color, temp_i);
+            /* // then advance to next white space */
+            while (l[0] && l[0] != ' ' && l[0] != ',' && l[0] != '\t') l++; 
+        }
+        /* // we expect the green channel of the RGB field */
+        else if (p[0] == 'G') 
+        {
+            /* // first skip white spaces */
+            while (l[0] && (l[0] == ' ' || l[0] == ',' || l[0] == '\t')) l++; 
+            if (l[0] == 0) return FALSE;
+            if (sscanf(l, "%d", &temp_i) != 1) return FALSE;
+            LASColor_SetGreen(color, temp_i);
+            /* // then advance to next white space */
+            while (l[0] && l[0] != ' ' && l[0] != ',' && l[0] != '\t') l++; 
+        }
+        /* // we expect the blue channel of the RGB field */
+        else if (p[0] == 'B') 
+        {
+            /* // first skip white spaces */
+            while (l[0] && (l[0] == ' ' || l[0] == ',' || l[0] == '\t')) l++; 
+            if (l[0] == 0) return FALSE;
+            if (sscanf(l, "%d", &temp_i) != 1) return FALSE;
+            LASColor_SetBlue(color, temp_i);
+            /* // then advance to next white space */
+            while (l[0] && l[0] != ' ' && l[0] != ',' && l[0] != '\t') l++; 
+        }
+
         else
         {
         fprintf(stderr, "ERROR: next symbol '%s' unknown in parse control string\n", p);
         }
         p++;
     }
+    LASPoint_SetColor(point, color);
+    LASColor_Destroy(color);
     return TRUE;
 }
 
@@ -329,6 +373,7 @@ int main(int argc, char *argv[])
     LASHeaderH header = NULL;
     LASWriterH writer = NULL;
     LASError err;
+    int format = LAS_FORMAT_12;
 
     int xyz_min_quant[3] = {0, 0, 0};
     int xyz_max_quant[3] = {0, 0, 0};
@@ -419,6 +464,26 @@ int main(int argc, char *argv[])
             file_name_out = argv[i];
         }
 
+        else if (   strcmp(argv[i],"--format") == 0   ||
+                    strcmp(argv[i],"-f") == 0    ||
+                    strcmp(argv[i],"-format") == 0 
+                )
+        {
+            i++;
+            if (strcmp(argv[i], "1.0") == 0) {
+                format = LAS_FORMAT_10;
+            }
+            else if (strcmp(argv[i], "1.1") == 0) {
+                format = LAS_FORMAT_11;
+            } 
+            else if (strcmp(argv[i], "1.2") == 0) {
+                format = LAS_FORMAT_12;
+            }
+            else {
+                LASError_Print("Format must be specified as 1.0, 1.1, or 1.2");
+            }
+
+        }
         else if (   strcmp(argv[i],"--system_identifier") == 0   ||
                     strcmp(argv[i],"-system_identifier") == 0   ||
                     strcmp(argv[i],"-s") == 0   ||
@@ -447,22 +512,13 @@ int main(int argc, char *argv[])
             i++;
             file_creation_year = (unsigned short)atoi(argv[i]);
         }
-        else if (   i == argc - 2 
-                    && file_name_in == NULL && 
+        else if (   file_name_in == NULL && 
                     file_name_out == NULL
                 )
         {
             file_name_in = argv[i];
         }
-        else if (   i == argc - 1 && 
-                    file_name_in == NULL && 
-                    file_name_out == NULL
-                )
-        {
-            file_name_in = argv[i];
-        }
-        else if (   i == argc - 1 && 
-                    file_name_in && 
+        else if (   file_name_in && 
                     file_name_out == NULL
                 )
         {
@@ -681,13 +737,34 @@ int main(int argc, char *argv[])
     if (generating_software) LASHeader_SetSoftwareId(header, generating_software);
     LASHeader_SetCreationDOY(header, file_creation_day);
     LASHeader_SetCreationYear(header, file_creation_year);
-      
 
-    if (strstr(parse_string,"t"))
+    
+    if (format == LAS_FORMAT_10) {
+        LASHeader_SetVersionMinor(header, 0);
+    } else if (format == LAS_FORMAT_11){
+        LASHeader_SetVersionMinor(header, 1);
+    } else if (format == LAS_FORMAT_12) {
+        LASHeader_SetVersionMinor(header, 2);
+    }      
+
+    if (strstr(parse_string,"t") && (strstr(parse_string, "R") || strstr(parse_string, "G") ||strstr(parse_string, "B") ) )
     {
-        fprintf(stderr, "Setting to LAS version 1.1!!!\n");
+        fprintf(stderr, "Setting point format to 3, overriding version to 1.2 -- RGB + time\n");
+        LASHeader_SetDataFormatId(header, 3);
+        LASHeader_SetVersionMinor(header, 2);
+    }
+    else if ((strstr(parse_string, "R") || strstr(parse_string, "G") ||strstr(parse_string, "B") ) )
+    {
+        fprintf(stderr, "Setting point format to 2, overriding version to 1.2 -- RGB\n");
+        LASHeader_SetDataFormatId(header, 2);
+        LASHeader_SetVersionMinor(header, 2);
+    }
+    else if (strstr(parse_string,"t")) 
+    {
+        fprintf(stderr, "Setting point format to 1\n");
         LASHeader_SetDataFormatId(header, 1);
     }
+    
     else
     {
         LASHeader_SetDataFormatId(header, 0);
@@ -702,6 +779,7 @@ int main(int argc, char *argv[])
     LASHeader_SetPointRecordsByReturnCount(header, 2, number_of_points_by_return[3]);
     LASHeader_SetPointRecordsByReturnCount(header, 3, number_of_points_by_return[4]);
     LASHeader_SetPointRecordsByReturnCount(header, 4, number_of_points_by_return[5]);
+
 
 
 

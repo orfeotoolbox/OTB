@@ -1,6 +1,6 @@
 /***************************************************************************
- * $Id: las2txt.c 879 2008-09-25 18:26:15Z hobu $
- * $Date: 2008-09-25 13:26:15 -0500 (Thu, 25 Sep 2008) $
+ * $Id$
+ * $Date$
  *
  * Project: libLAS -- C/C++ read/write library for LAS LIDAR data
  * Purpose: LAS translation to ASCII text with optional configuration
@@ -56,7 +56,11 @@ void usage()
     fprintf(stderr,"   u - user data (does not currently work)\n");
     fprintf(stderr,"   p - point source ID\n");
     fprintf(stderr,"   e - edge of flight line\n");
-    fprintf(stderr,"   d - direction of scan flag\n\n");
+    fprintf(stderr,"   d - direction of scan flag\n");
+    fprintf(stderr,"   R - red channel of RGB color\n");
+    fprintf(stderr,"   G - green channel of RGB color\n");
+    fprintf(stderr,"   B - blue channel of RGB color\n");
+    fprintf(stderr,"   M - vertex index number\n\n");
 
     fprintf(stderr,"----------------------------------------------------------\n");
     fprintf(stderr," The '--sep space' flag specifies what separator to use. The\n");
@@ -106,7 +110,9 @@ int main(int argc, char *argv[])
     LASPointH p = NULL;
     FILE* file_out = NULL;
     int len;
-  
+    
+    uint32_t index = 0;
+    
     for (i = 1; i < argc; i++)
     {
         if (    strcmp(argv[i],"-h") == 0 ||
@@ -141,7 +147,8 @@ int main(int argc, char *argv[])
         {
             i++;
 
-            if (strcmp(argv[i],"komma") == 0)
+            if (strcmp(argv[i],"komma") == 0 || 
+                strcmp(argv[i],"comma") == 0 )
             {
                 separator_sign = ',';
             }
@@ -190,7 +197,8 @@ int main(int argc, char *argv[])
                 )
         {
             i++;
-            if (strcmp(argv[i],"komma") == 0)
+            if (strcmp(argv[i],"komma") == 0 || 
+                strcmp(argv[i],"comma") == 0 )
             {
                 header_comment_sign = ',';
             }
@@ -258,15 +266,11 @@ int main(int argc, char *argv[])
             i++;
             file_name_out = argv[i];
         }
-        else if (i == argc - 2 && file_name_in == 0 && file_name_out == 0)
+        else if (file_name_in == 0 && file_name_out == 0)
         {
             file_name_in = argv[i];
         }
-        else if (i == argc - 1 && file_name_in == 0 && file_name_out == 0)
-        {
-            file_name_in = argv[i];
-        }
-        else if (i == argc - 1 && file_name_in && file_name_out == 0)
+        else if (file_name_in && file_name_out == 0)
         {
             file_name_out = argv[i];
         }
@@ -464,17 +468,21 @@ int main(int argc, char *argv[])
     p = LASReader_GetNextPoint(reader);
     while (p)
     {
+        
         if (skip_invalid && !LASPoint_IsValid(p)) {
             if (verbose) {
                 LASError_Print("Skipping writing invalid point...");
             }
             p = LASReader_GetNextPoint(reader);
+            index -=1;
             continue;
         }
         
         i = 0;
         for (;;)
         {
+            LASColorH color = LASPoint_GetColor(p);
+            
             switch (parse_string[i])
             {
             /* // the x coordinate */      
@@ -517,12 +525,24 @@ int main(int argc, char *argv[])
             case 'n': 
                 fprintf(file_out, "%d", LASPoint_GetNumberOfReturns(p));
                 break;
-/*
-      case 'p': // the point source ID
-        fprintf(file_out, "%d", lasreader->point.point_source_ID);
-        break;
-*/
-   
+            /* the red channel color */
+            case 'R': 
+                fprintf(file_out, "%d", LASColor_GetRed(color));
+                break;            
+            /* the green channel color */
+            case 'G': 
+                fprintf(file_out, "%d", LASColor_GetGreen(color));
+                break;            
+            /* the blue channel color */
+            case 'B': 
+                fprintf(file_out, "%d", LASColor_GetBlue(color));
+                break;            
+            case 'M':
+                fprintf(file_out, "%d", index);
+                break;
+            case 'p':
+                fprintf(file_out, "%d", LASPoint_GetPointSourceId(p));
+                break;
             /* the edge of flight line flag */
             case 'e': 
                 fprintf(file_out, "%d", LASPoint_GetFlightLineEdge(p));
@@ -542,9 +562,13 @@ int main(int argc, char *argv[])
                 fprintf(file_out, "\012");
                 break;
             }
-        }
+            
+            LASColor_Destroy(color);
 
+        }
+        
         p = LASReader_GetNextPoint(reader);
+        index +=1;
     }
 
 

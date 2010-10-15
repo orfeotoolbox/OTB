@@ -1,4 +1,4 @@
-// $Id: laswriter_test.cpp 812 2008-07-25 21:52:56Z mloskot $
+// $Id$
 //
 // (C) Copyright Mateusz Loskot 2008, mateusz@loskot.net
 // Distributed under the BSD License
@@ -25,9 +25,9 @@ namespace tut
         std::string tmpfile_;
         std::string file10_;
 
-        laswriter_data()
-            : tmpfile_(g_test_data_path + "//tmp.las"),
-                file10_(g_test_data_path + "//TO_core_last_clip.las")
+        laswriter_data() :
+            tmpfile_(g_test_data_path + "//tmp.las"),
+            file10_(g_test_data_path + "//TO_core_last_clip.las")
         {}
 
         ~laswriter_data()
@@ -35,45 +35,6 @@ namespace tut
             // remove temporary file after each test case
             int const rc = std::remove(tmpfile_.c_str());
             ensure_equals(rc, 0);
-        }
-
-        void test_file10_point1(liblas::LASPoint const& p)
-        {
-            ensure_distance(p.GetX(), double(630262.30), 0.0001);
-            ensure_distance(p.GetY(), double(4834500), 0.0001);
-            ensure_distance(p.GetZ(), double(51.53), 0.0001);
-            ensure_equals(p.GetIntensity(), 670);
-            ensure_equals(p.GetClassification(), 1);
-            ensure_equals(p.GetScanAngleRank(), 0);
-            ensure_equals(p.GetUserData(), 0);
-            ensure_equals(p.GetScanFlags(), 9);
-            ensure_distance(p.GetTime(), double(413665.23360000004), 0.0001);
-        }
-
-        void test_file10_point2(liblas::LASPoint const& p)
-        {
-            ensure_distance(p.GetX(), double(630282.45), 0.0001);
-            ensure_distance(p.GetY(), double(4834500), 0.0001);
-            ensure_distance(p.GetZ(), double(51.63), 0.0001);
-            ensure_equals(p.GetIntensity(), 350);
-            ensure_equals(p.GetClassification(), 1);
-            ensure_equals(p.GetScanAngleRank(), 0);
-            ensure_equals(p.GetUserData(), 0);
-            ensure_equals(p.GetScanFlags(), 9);
-            ensure_distance(p.GetTime(), double(413665.52880000003), 0.0001);
-        }
-
-        void test_file10_point4(liblas::LASPoint const& p)
-        {
-            ensure_distance(p.GetX(), double(630346.83), 0.0001);
-            ensure_distance(p.GetY(), double(4834500), 0.0001);
-            ensure_distance(p.GetZ(), double(50.90), 0.0001);
-            ensure_equals(p.GetIntensity(), 150);
-            ensure_equals(p.GetClassification(), 1);
-            ensure_equals(p.GetScanAngleRank(), 0);
-            ensure_equals(p.GetUserData(), 0);
-            ensure_equals(p.GetScanFlags(), 18);
-            ensure_distance(p.GetTime(), double(414093.84360000002), 0.0001);
         }
     };
 
@@ -92,11 +53,11 @@ namespace tut
             std::ofstream ofs;
             ofs.open(tmpfile_.c_str(), std::ios::out | std::ios::binary);
 
-            // LAS 1.1, Point Format 0
+            // LAS 1.2, Point Format 0
             liblas::LASHeader header;
             liblas::LASWriter writer(ofs, header);
 
-            ensure_equals<std::size_t>(writer.GetVersion(), liblas::eLASVersion11);
+            ensure_equals<std::size_t>(writer.GetVersion(), liblas::eLASVersion12);
 
             liblas::LASHeader const& hdr_default = writer.GetHeader();
             test_default_header(hdr_default);
@@ -108,7 +69,7 @@ namespace tut
             ifs.open(tmpfile_.c_str(), std::ios::in | std::ios::binary);
             liblas::LASReader reader(ifs);
 
-            ensure_equals<std::size_t>(reader.GetVersion(), liblas::eLASVersion11);
+            ensure_equals<std::size_t>(reader.GetVersion(), liblas::eLASVersion12);
             
             liblas::LASHeader const& hdr_default = reader.GetHeader();
             test_default_header(hdr_default);
@@ -140,15 +101,18 @@ namespace tut
             point.SetClassification(7);
             point.SetScanAngleRank(90);
             point.SetUserData(0);
+            point.SetPointSourceID(1);
 
             writer.WritePoint(point);
 
             // write 2nd point
             point.SetCoordinates(40, 50, 60);
+            point.SetPointSourceID(2);
             writer.WritePoint(point);
 
             // write 3rd point
             point.SetCoordinates(70, 80, 90);
+            point.SetPointSourceID(3);
             writer.WritePoint(point);
         }
 
@@ -174,8 +138,9 @@ namespace tut
             ensure_equals(point.GetClassification(), 7);
             ensure_equals(point.GetScanAngleRank(), 90);
             ensure_equals(point.GetUserData(), 0);
+            ensure_equals(point.GetPointSourceID(), 1);
 
-            // read 3rd point
+            // read 2nd point
             reader.ReadNextPoint();
             point = reader.GetPoint();
             ensure_distance(point.GetX(), 40.0, 0.1);
@@ -189,8 +154,9 @@ namespace tut
             ensure_equals(point.GetClassification(), 7);
             ensure_equals(point.GetScanAngleRank(), 90);
             ensure_equals(point.GetUserData(), 0);
+            ensure_equals(point.GetPointSourceID(), 2);
 
-            // read 1st point
+            // read 3rd point
             reader.ReadNextPoint();
             point = reader.GetPoint();
             ensure_distance(point.GetX(), 70.0, 0.1);
@@ -204,6 +170,7 @@ namespace tut
             ensure_equals(point.GetClassification(), 7);
             ensure_equals(point.GetScanAngleRank(), 90);
             ensure_equals(point.GetUserData(), 0);
+            ensure_equals(point.GetPointSourceID(), 3);
         }
     }
 

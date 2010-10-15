@@ -1,4 +1,4 @@
-// $Id: guid_test.cpp 645 2008-05-02 05:48:16Z mloskot $
+// $Id$
 //
 // (C) Copyright Mateusz Loskot 2008, mateusz@loskot.net
 // Distributed under the BSD License

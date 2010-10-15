@@ -20,6 +20,7 @@
 
 #include "otbImageToPointSetFilter.h"
 #include "itkPointSet.h"
+#include "itkConceptChecking.h"
 
 namespace otb
 {
@@ -62,6 +63,14 @@ public:
   typedef typename Superclass::OutputPointSetPointer         OutputPointSetPointer;
   typedef typename Superclass::OutputPointSetType::PixelType OutputPointSetPixelType;
   typedef typename Superclass::PointsContainerType           PointsContainerType;
+  typedef typename Superclass::PointDataContainerType        PointDataContainerType;
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(PixelConvertibleToPointSetDataType,
+                  (itk::Concept::Convertible<InputPixelType, typename PointDataContainerType::Element>));
+#endif
+
 
   itkSetMacro(LowerThreshold, InputPixelType);
   itkGetConstReferenceMacro(LowerThreshold, InputPixelType);

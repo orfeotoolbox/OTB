@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: lasheader.cpp 875 2008-09-20 20:28:41Z hobu $
+ * $Id$
  *
  * Project:  libLAS - http://liblas.org - A BSD library for LAS format data.
  * Purpose:  LAS header class 
@@ -44,6 +44,8 @@
 #include <liblas/cstdint.hpp>
 #include <liblas/guid.hpp>
 #include <liblas/detail/utility.hpp>
+#include <liblas/lasspatialreference.hpp>
+
 // GeoTIFF
 #ifdef HAVE_LIBGEOTIFF
 #include <geotiff.h>
@@ -53,6 +55,7 @@
 #include "geovalues.h"
 #include "geotiffio.h"
 #endif // HAVE_LIBGEOTIFF
+
 //std
 #include <algorithm>
 #include <fstream>
@@ -69,7 +72,7 @@ namespace liblas
 
 char const* const LASHeader::FileSignature = "LASF";
 char const* const LASHeader::SystemIdentifier = "libLAS";
-char const* const LASHeader::SoftwareIdentifier = "libLAS 1.0";
+char const* const LASHeader::SoftwareIdentifier = "libLAS 1.2";
 
 LASHeader::LASHeader()
 {
@@ -95,7 +98,7 @@ LASHeader::LASHeader(LASHeader const& other) :
     m_scales(other.m_scales),
     m_offsets(other.m_offsets),
     m_extents(other.m_extents),
-    m_proj4(other.m_proj4)
+    m_srs(other.m_srs)
 {
     void* p = 0;
 
@@ -110,7 +113,7 @@ LASHeader::LASHeader(LASHeader const& other) :
     std::vector<uint32_t>(other.m_pointRecordsByReturn).swap(m_pointRecordsByReturn);
     assert(ePointsByReturnSize >= m_pointRecordsByReturn.size());
     
-    std::vector<LASVLR>(other.m_vlrs).swap(m_vlrs);
+    std::vector<LASVariableRecord>(other.m_vlrs).swap(m_vlrs);
 
 }
 
@@ -147,11 +150,11 @@ LASHeader& LASHeader::operator=(LASHeader const& rhs)
         std::vector<uint32_t>(rhs.m_pointRecordsByReturn).swap(m_pointRecordsByReturn);
         assert(ePointsByReturnSize >= m_pointRecordsByReturn.size());
 
-        std::vector<LASVLR>(rhs.m_vlrs).swap(m_vlrs);
+        std::vector<LASVariableRecord>(rhs.m_vlrs).swap(m_vlrs);
         m_scales = rhs.m_scales;
         m_offsets = rhs.m_offsets;
         m_extents = rhs.m_extents;
-        m_proj4 = rhs.m_proj4;
+        m_srs = rhs.m_srs;
     }
     return *this;
 }
@@ -183,7 +186,6 @@ bool LASHeader::operator==(LASHeader const& other) const
     if (m_scales != other.m_scales) return false;
     if (m_offsets != other.m_offsets) return false;
     if (m_extents != other.m_extents) return false;
-    if (m_proj4 != other.m_proj4) return false;
     
     return true;
 }
@@ -258,7 +260,7 @@ void LASHeader::SetVersionMinor(uint8_t v)
 {
     if (v > eVersionMinorMax)
         throw std::out_of_range("version minor out of range");
-
+    
     m_versionMinor = v;
 }
 
@@ -354,13 +356,15 @@ void LASHeader::SetDataOffset(uint32_t v)
     uint32_t const dataSignatureSize = 2;
     uint16_t const hsize = GetHeaderSize();
 
-    if ((eVersionMinorMin == m_versionMinor && v < hsize + dataSignatureSize)
-        || (eVersionMinorMax == m_versionMinor && v < hsize))
+    if ( (m_versionMinor == 0 && v < hsize + dataSignatureSize) ||
+         (m_versionMinor == 1 && v < hsize) ||
+         (m_versionMinor == 2 && v < hsize) )
     {
         throw std::out_of_range("data offset out of range");
     }
-
+    
     m_dataOffset = v;
+    
 }
 
 uint32_t LASHeader::GetRecordsCount() const
@@ -377,18 +381,28 @@ LASHeader::PointFormat LASHeader::GetDataFormatId() const
 {
     if (ePointFormat0 == m_dataFormatId)
         return ePointFormat0;
-    else
+    else if (ePointFormat1 == m_dataFormatId)
         return ePointFormat1;
+    else if (ePointFormat2 == m_dataFormatId)
+        return ePointFormat2;
+    else
+        return ePointFormat3;
 }
 
 void LASHeader::SetDataFormatId(LASHeader::PointFormat v)
 {
-    m_dataFormatId = (ePointFormat0 == v ? 0 : 1);
+    m_dataFormatId = static_cast<uint8_t>(v);
 
     if (ePointFormat0 == m_dataFormatId)
         m_dataRecordLen = ePointSize0;
-    else
+    else if (ePointFormat1 == m_dataFormatId) 
         m_dataRecordLen = ePointSize1;
+    else if (ePointFormat2 == m_dataFormatId)
+        m_dataRecordLen = ePointSize2;
+    else if (ePointFormat3 == m_dataFormatId)
+        m_dataRecordLen = ePointSize3;
+    else
+        m_dataRecordLen = ePointSize3;
 }
 
 uint16_t LASHeader::GetDataRecordLength() const
@@ -401,10 +415,20 @@ uint16_t LASHeader::GetDataRecordLength() const
         assert(ePointSize0 == m_dataRecordLen);
         return ePointSize0;
     }
-    else
+    if (ePointFormat1 == m_dataFormatId)
     {
         assert(ePointSize1 == m_dataRecordLen);
         return ePointSize1;
+    }
+    if (ePointFormat2 == m_dataFormatId)
+    {
+        assert(ePointSize2 == m_dataRecordLen);
+        return ePointSize2;
+    }
+    else
+    {
+        assert(ePointSize3 == m_dataRecordLen);
+        return ePointSize3;
     }
 }
 
@@ -515,38 +539,13 @@ void LASHeader::SetMin(double x, double y, double z)
     m_extents.min = detail::Point<double>(x, y, z);
 }
 
-void LASHeader::AddVLR(LASVLR const& v) 
+void LASHeader::AddVLR(LASVariableRecord const& v) 
 {
     m_vlrs.push_back(v);
-
-    uint32_t end_size = 0;
-    std::vector<LASVLR>::const_iterator i;
-        
-    // Calculate a new data offset size
-    for (i = m_vlrs.begin(); i != m_vlrs.end(); ++i) 
-    {
-        end_size += (*i).GetTotalSize();
-    }
-
-    uint32_t size = 0;
-    uint32_t const dataSignatureSize = 2;
-    
-    // Add the signature if we're a 1.0 file    
-    if (eVersionMinorMin == m_versionMinor) {
-        size = end_size + dataSignatureSize; 
-    } else {
-        size = end_size;
-    }
-
-    SetDataOffset(GetHeaderSize()+size);
-
-    // We're assuming that the reader or writer has reset 
-    // the VLR count to 0 before adding them back with AddVLR  
-    // FIXME I think this is still broken - hobu
     m_recordsCount += 1;
 }
 
-LASVLR const& LASHeader::GetVLR(uint32_t index) const 
+LASVariableRecord const& LASHeader::GetVLR(uint32_t index) const 
 {
     return m_vlrs[index];
 }
@@ -556,37 +555,21 @@ void LASHeader::DeleteVLR(uint32_t index)
     if (index >= m_vlrs.size())
         throw std::out_of_range("index is out of range");
 
-    std::vector<LASVLR>::iterator i = m_vlrs.begin() + index;
-
-    // Deal with the dataoffset when deleting
-    uint32_t size = (*i).GetTotalSize();
+    std::vector<LASVariableRecord>::iterator i = m_vlrs.begin() + index;
 
     m_vlrs.erase(i);
     m_recordsCount = static_cast<uint32_t>(m_vlrs.size());
-    
-    SetDataOffset(GetDataOffset() - size);
-    
+
 }
 
-/// Fetch the Georeference as a proj.4 string
-std::string LASHeader::GetProj4() const 
-{
-    return m_proj4;
-}
-
-       
-void LASHeader::SetProj4(std::string const& v)
-{
-    m_proj4 = v;
-}
 
 void LASHeader::Init()
 {
     // Initialize public header block with default
-    // values according to LAS 1.1
+    // values according to LAS 1.2
 
     m_versionMajor = 1;
-    m_versionMinor = 1;
+    m_versionMinor = 2;
     m_dataFormatId = ePointFormat0;
     m_dataRecordLen = ePointSize0;
 
@@ -632,17 +615,14 @@ void LASHeader::ClearGeoKeyVLRs()
 {
     std::string const uid("LASF_Projection");
 
-    uint32_t beg_size = 0;
-    uint32_t end_size = 0;
-
-    std::vector<LASVLR> vlrs = m_vlrs;
-    std::vector<LASVLR>::const_iterator i;
-    std::vector<LASVLR>::iterator j;
+    std::vector<LASVariableRecord> vlrs = m_vlrs;
+    std::vector<LASVariableRecord>::const_iterator i;
+    std::vector<LASVariableRecord>::iterator j;
 
     for (i = m_vlrs.begin(); i != m_vlrs.end(); ++i)
     {
-        LASVLR record = *i;
-        beg_size += (*i).GetTotalSize();
+        LASVariableRecord record = *i;
+        // beg_size += (*i).GetTotalSize();
 
         std::string user = record.GetUserId(true);
         if (uid == user.c_str())
@@ -692,174 +672,31 @@ void LASHeader::ClearGeoKeyVLRs()
     // and update header information
     m_vlrs = vlrs;
     m_recordsCount = static_cast<uint32_t>(m_vlrs.size());
-    
-    // Calculate a new data offset size
-    for (i = m_vlrs.begin(); i != m_vlrs.end(); ++i) 
-    {
-        end_size += (*i).GetTotalSize();
-    }
-
-    uint32_t size = 0;
-    uint32_t const dataSignatureSize = 2;
-    
-    // Add the signature if we're a 1.0 file    
-    if (eVersionMinorMin == m_versionMinor)
-    {
-        size = end_size + dataSignatureSize; 
-    }
-    else
-    {
-        size = end_size;
-    }
-
-    SetDataOffset(GetHeaderSize()+size);
 
 }
 void LASHeader::SetGeoreference() 
-{
-#ifndef HAVE_LIBGEOTIFF
+{    
+    std::vector<LASVariableRecord> vlrs = m_srs.GetVLRs();
 
-    ;
-
-#else
-
-    int ret = 0;
-    
-    detail::raii_wrapper<ST_TIFF> st(ST_Create(), ST_Destroy);
-    detail::raii_wrapper<GTIF> gt(GTIFNewSimpleTags(st.get()), GTIFFree);    
-	
-    // Wipe out any existing VLRs that represent geotiff keys on the 
-    // header.  We're going to rewrite them to be totally derived from the 
-    // proj4 string.
+    // Wipe the GeoTIFF-related VLR records off of the LASHeader
     ClearGeoKeyVLRs();
-    
-    if (GetProj4().empty())
-		return;
 
-    ret = GTIFSetFromProj4(gt.get(), GetProj4().c_str());
-    if (!ret)
-	{
-        throw std::invalid_argument("PROJ.4 string is invalid or unsupported");
+    std::vector<LASVariableRecord>::const_iterator i;
+
+    for (i = vlrs.begin(); i != vlrs.end(); ++i) 
+    {
+        AddVLR(*i);
     }
 
-    ret = GTIFWriteKeys(gt.get());
-    if (!ret)
-	{
-        throw std::runtime_error("The geotiff keys could not be written");
-    }
-    
-    short* kdata = NULL;
-    short kvalue = 0;
-    double* ddata = NULL;
-    double dvalue = 0;
-    int dtype = 0;
-    int dcount = 0;
-    int ktype = 0;
-    int kcount = 0;
+}
 
-    //GTIFF_GEOKEYDIRECTORY == 34735
-    ret = ST_GetKey(st.get(), 34735, &kcount, &ktype, (void**)&kdata);
-    if (ret)
-	{    
-        LASVLR record;
-        int i = 0;
-        record.SetRecordId(34735);
-        record.SetUserId("LASF_Projection");
-        std::vector<uint8_t> data;
-
-        // Shorts are 2 bytes in length
-        uint16_t length = 2*kcount;
-
-        record.SetRecordLength(length);
-        
-        // Copy the data into the data vector
-        for (i = 0; i < kcount; i++)
-		{
-            kvalue = kdata[i];
-            
-            uint8_t* v = reinterpret_cast<uint8_t*>(&kvalue); 
-            
-            data.push_back(v[0]);
-            data.push_back(v[1]);
-        }
-
-        record.SetData(data);
-
-        AddVLR(record);
-    }
-
-    // FIXME We don't handle ASCII keys yet
-    // GTIFF_ASCIIPARAMS == 34737
-    // ret = ST_GetKey(st.get(), 34737, &acount, &atype, (void**)&adata);
-    // if (ret) {
-    //     
-    //     LASVLR record;
-    //     int i = 0;
-    //     record.SetRecordId(34737);
-    //     record.SetUserId("LASF_Projection");
-    //     std::vector<uint8_t> data;
-    // 
-    //     uint32_t length = acount;
-    //     record.SetRecordLength(length);
-    //     
-    //     // Copy the data into the data vector
-    // 
-    //     for (i=0; i<acount;i++) {
-    //         avalue = adata[i];
-    //         
-    //         uint8_t* v =  reinterpret_cast<uint8_t*>(&avalue);
-    //         
-    //         data.push_back(v[0]);
-    //         data.push_back(v[1]);
-    //         data.push_back(v[2]);
-    //         data.push_back(v[3]);
-    //         data.push_back(v[4]);
-    //         data.push_back(v[5]);
-    //         data.push_back(v[6]);
-    //         data.push_back(v[7]);
-    //         
-    //     }
-    //     record.SetData(data);
-    //     AddVLR(record);
-    // }
-
-
-    // GTIFF_DOUBLEPARAMS == 34736
-    ret = ST_GetKey(st.get(), 34736, &dcount, &dtype, (void**)&ddata);
-
-    if (ret)
-	{       
-        LASVLR record;
-        int i = 0;
-        record.SetRecordId(34736);
-        record.SetUserId("LASF_Projection");
-        std::vector<uint8_t> data;
-
-        // Doubles are 8 bytes in length
-        uint16_t length = 8*dcount;
-        record.SetRecordLength(length);
-        
-        // Copy the data into the data vector
-        for (i=0; i<dcount;i++)
-		{
-            dvalue = ddata[i];
-            
-            uint8_t* v =  reinterpret_cast<uint8_t*>(&dvalue);
-            
-            data.push_back(v[0]);
-            data.push_back(v[1]);
-            data.push_back(v[2]);
-            data.push_back(v[3]);
-            data.push_back(v[4]);
-            data.push_back(v[5]);
-            data.push_back(v[6]);
-            data.push_back(v[7]);   
-        }
-        
-		record.SetData(data);
-        AddVLR(record);
-    }
-#endif // HAVE_LIBGEOTIFF
+LASSpatialReference LASHeader::GetSRS() const
+{
+    return m_srs;
+}
+void LASHeader::SetSRS(LASSpatialReference& srs)
+{
+    m_srs = srs;
 }
 
 } // namespace liblas

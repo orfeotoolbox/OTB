@@ -3,7 +3,9 @@
 #include <string.h>
 #include <liblas.h>
 
-
+#ifdef HAVE_GEOTIFF
+#include <geotiff.h>
+#endif
 
 
 static const char * LASPointClassification [] = {
@@ -45,8 +47,18 @@ static const char * LASPointClassification [] = {
 LASPointSummary* SummarizePoints(LASReaderH reader) {
     
     LASPointSummary* summary;
-    LASPointH p;
+    LASPointH p = NULL;
+    LASColorH color = NULL;
+    LASColorH min_color = NULL;
+    LASColorH max_color = NULL;
+    
     uint8_t cls = 0;
+    uint16_t red = 0;
+    uint16_t green = 0;
+    uint16_t blue = 0;
+    
+    uint16_t ptsrc = 0;
+    
     int i = 0;
 
     summary = (LASPointSummary*) malloc(sizeof(LASPointSummary));
@@ -138,7 +150,41 @@ LASPointSummary* SummarizePoints(LASReaderH reader) {
         
         cls = LASPoint_GetClassification(p);
         LASPoint_SetClassification(summary->pmin, MIN(cls, LASPoint_GetClassification(summary->pmin)));
-        LASPoint_SetClassification(summary->pmax, MAX(cls, LASPoint_GetClassification(summary->pmax)));  
+        LASPoint_SetClassification(summary->pmax, MAX(cls, LASPoint_GetClassification(summary->pmax)));
+
+        ptsrc = LASPoint_GetPointSourceId(p);
+        LASPoint_SetPointSourceId(summary->pmin, MIN(ptsrc, LASPoint_GetPointSourceId(summary->pmin)));
+        LASPoint_SetPointSourceId(summary->pmax, MAX(ptsrc, LASPoint_GetPointSourceId(summary->pmax)));
+
+        color = LASPoint_GetColor(p);
+        min_color = LASPoint_GetColor(summary->pmin);
+        max_color = LASPoint_GetColor(summary->pmax);
+        
+        red = MIN(LASColor_GetRed(min_color), LASColor_GetRed(color));
+        green = MIN(LASColor_GetGreen(min_color), LASColor_GetGreen(color));
+        blue = MIN(LASColor_GetBlue(min_color), LASColor_GetBlue(color));
+
+        LASColor_SetRed(min_color, red);
+        LASColor_SetGreen(min_color, green);
+        LASColor_SetBlue(min_color, blue);
+        
+        LASPoint_SetColor(summary->pmin, min_color);
+        LASColor_Destroy(min_color);
+
+        red = MAX(LASColor_GetRed(max_color), LASColor_GetRed(color));
+        green = MAX(LASColor_GetGreen(max_color), LASColor_GetGreen(color));
+        blue = MAX(LASColor_GetBlue(max_color), LASColor_GetBlue(color));
+
+        LASColor_SetRed(max_color, red);
+        LASColor_SetGreen(max_color, green);
+        LASColor_SetBlue(max_color, blue);
+        
+        LASPoint_SetColor(summary->pmax, max_color);
+        LASColor_Destroy(max_color);
+        
+        LASColor_Destroy(color);
+        
+        
 
         summary->classification[(cls & 31)]++;            
         if (cls & 32) summary->classification_synthetic++;          
@@ -201,7 +247,11 @@ void print_point(FILE *file, LASPointH point) {
     fprintf(file, "  Classification:\t%d\n",
                   LASPoint_GetClassification(point)
                   );
-
+    fprintf(file, "  Color:\t%d %d %d\n",
+                  LASColor_GetRed(LASPoint_GetColor(point)),
+                  LASColor_GetGreen(LASPoint_GetColor(point)),
+                  LASColor_GetBlue(LASPoint_GetColor(point))
+                  );
 }
 void print_point_summary(FILE *file, LASPointSummary* summary, LASHeaderH header) {
 
@@ -273,6 +323,21 @@ void print_point_summary(FILE *file, LASPointSummary* summary, LASHeaderH header
                   LASPoint_GetClassification(summary->pmin),
                   LASPoint_GetClassification(summary->pmax)
                   );
+    fprintf(file, "  Point Source Id:\t%d,%d\n",
+                  LASPoint_GetPointSourceId(summary->pmin),
+                  LASPoint_GetPointSourceId(summary->pmax)
+                  );
+    fprintf(file, "  Minimum Color:\t %d %d %d\n",
+                  LASColor_GetRed(LASPoint_GetColor(summary->pmin)),
+                  LASColor_GetGreen(LASPoint_GetColor(summary->pmin)),
+                  LASColor_GetBlue(LASPoint_GetColor(summary->pmin))
+        );
+
+    fprintf(file, "  Maximum Color:\t %d %d %d\n",
+                  LASColor_GetRed(LASPoint_GetColor(summary->pmax)),
+                  LASColor_GetGreen(LASPoint_GetColor(summary->pmax)),
+                  LASColor_GetBlue(LASPoint_GetColor(summary->pmax))
+        );
 
     fprintf(file, "\n  Number of Points by Return\n");
     fprintf(file, "---------------------------------------------------------\n");
@@ -345,18 +410,30 @@ void print_header(FILE *file, LASHeaderH header, const char* file_name, int bSki
     uint16_t nVLRRecordId = 0;
     
     LASVLRH pVLR = NULL;
-
+    LASSRSH pSRS = NULL;
     uint32_t nVLR = 0;
     int i = 0;
-    
+
+#ifdef HAVE_GEOTIFF
+    const GTIF* pGTIF = NULL;
+#else
+    const void* pGTIF = NULL;
+#endif    
+
     pszSignature = LASHeader_GetFileSignature(header);
     pszProjectId = LASHeader_GetProjectId(header);
     pszSystemId = LASHeader_GetSystemId(header);
     pszSoftwareId = LASHeader_GetSoftwareId(header);
-    pszProj4 = LASHeader_GetProj4(header);
+    
+    pSRS = LASHeader_GetSRS(header);
+    pszProj4 = LASSRS_GetProj4(pSRS);
+    pGTIF = LASSRS_GetGTIF(pSRS);
     
     nVLR = LASHeader_GetRecordsCount(header);
-    
+ 
+ 
+
+       
     fprintf(file, "\n---------------------------------------------------------\n");
     fprintf(file, "  Header Summary\n");
     fprintf(file, "---------------------------------------------------------\n");
@@ -438,7 +515,9 @@ void print_header(FILE *file, LASHeaderH header, const char* file_name, int bSki
     
     fprintf(file, " Spatial Reference           %s\n",
                     pszProj4);
-
+#ifdef HAVE_LIBGEOTIFF
+    if (pGTIF) GTIFPrint((GTIF*)pGTIF, 0, 0);
+#endif
     if (nVLR && !bSkipVLR) {
         
     fprintf(file, "\n---------------------------------------------------------\n");

@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: writer10.hpp 813 2008-07-25 21:53:52Z mloskot $
+ * $Id$
  *
  * Project:  libLAS - http://liblas.org - A BSD library for LAS format data.
  * Purpose:  LAS 1.0 writer implementation for C++ libLAS 
@@ -60,14 +60,10 @@ public:
     std::size_t GetVersion() const;
     void WriteHeader(LASHeader& header);
     void UpdateHeader(LASHeader const& header);
-    void WritePointRecord(PointRecord const& record);
-    void WritePointRecord(PointRecord const& record, double const& time);
-    void WriteVLR(LASHeader const& header);
-    std::ostream& GetStream() const;
+    void WritePointRecord(LASPoint const& record, const LASHeader& header);
 
 private:
 
-    std::ostream& m_ofs;
     liblas::uint32_t m_pointCount;
 };
 

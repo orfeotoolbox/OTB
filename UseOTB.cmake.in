@@ -148,3 +148,86 @@ IF(OTB_CURL_MULTI_AVAILABLE)
   ADD_DEFINITIONS(-DOTB_CURL_MULTI_AVAILABLE)
 ENDIF(OTB_CURL_MULTI_AVAILABLE)
 
+IF(OTB_USE_LIBLAS)
+IF(OTB_USE_EXTERNAL_LIBLAS)
+    FIND_PATH(LIBLAS_INCLUDE_DIR liblas.hpp)
+    IF(LIBLAS_INCLUDE_DIR)
+      INCLUDE_DIRECTORIES(BEFORE ${LIBLAS_INCLUDE_DIR})
+    ENDIF(LIBLAS_INCLUDE_DIR)
+    
+    FIND_LIBRARY(LIBLAS_LIBRARY NAMES liblas)
+    IF(LIBLAS_LIBRARY)
+      LINK_DIRECTORIES( ${LIBLAS_LIBRARY} )
+    ENDIF(LIBLAS_LIBRARY)
+ENDIF(OTB_USE_EXTERNAL_LIBLAS)
+ENDIF(OTB_USE_LIBLAS)
+
+IF(OTB_USE_MAPNIK)
+        FIND_PATH(MAPNIK_INCLUDE_DIR mapnik/map.hpp PATHS)
+        MARK_AS_ADVANCED(MAPNIK_INCLUDE_DIR)
+        IF (NOT MAPNIK_INCLUDE_DIR)
+                MESSAGE(FATAL_ERROR
+                        "Cannot find MAPNIK include directory. Please set MAPNIK_INCLUDE_DIR or SET OTB_USE_MAPNIK OFF.")
+        ENDIF (NOT MAPNIK_INCLUDE_DIR)
+
+        FIND_PATH(FREETYPE2_INCLUDE_DIR freetype/freetype.h PATHS /usr/include/freetype2)
+        MARK_AS_ADVANCED(FREETYPE2_INCLUDE_DIR)
+        IF (NOT FREETYPE2_INCLUDE_DIR)
+                MESSAGE(FATAL_ERROR
+                        "Cannot find FREETYPE2 include directory. Please set  or SET OTB_USE_MAPNIK OFF.")
+        ENDIF (NOT FREETYPE2_INCLUDE_DIR)
+
+        FIND_LIBRARY(MAPNIK_LIBRARY mapnik )
+        MARK_AS_ADVANCED(MAPNIK_LIBRARY)
+        IF (NOT MAPNIK_LIBRARY)
+                MESSAGE(FATAL_ERROR
+                        "Cannot find MAPNIK library. Please set MAPNIK_LIBRARY or SET OTB_USE_MAPNIK OFF.")
+        ENDIF (NOT MAPNIK_LIBRARY)
+
+        # libicuuc is a unicode library mapnik relies on.
+        # since libicuuc version 1.42, we need to link against it when linking against mapnik
+        # otherwise we get undefined symbol error
+        FIND_LIBRARY(ICUUC_LIBRARY icuuc )
+        MARK_AS_ADVANCED(ICUUC_LIBRARY)
+        IF (NOT ICUUC_LIBRARY)
+                MESSAGE(FATAL_ERROR
+                        "Cannot find ICUUC library, needed by MAPNIK. Please set ICUUC_LIBRARY or SET OTB_USE_MAPNIK OFF.")
+        ENDIF (NOT ICUUC_LIBRARY)
+
+        # Add compiler option
+        ADD_DEFINITIONS(-DOTB_USE_MAPNIK)
+
+        INCLUDE_DIRECTORIES(${MAPNIK_INCLUDE_DIR})
+ENDIF(OTB_USE_MAPNIK)
+
+IF(OTB_USE_PQXX)
+
+        FIND_PATH(PQXX_INCLUDE_DIR pqxx/pqxx PATHS)
+        MARK_AS_ADVANCED(PQXX_INCLUDE_DIR)
+        IF (NOT PQXX_INCLUDE_DIR)
+                MESSAGE(FATAL_ERROR
+                        "Cannot find PQXX include directory. Please set PQXX_INCLUDE_DIR or SET OTB_USE_PQXX OFF.")
+        ENDIF (NOT PQXX_INCLUDE_DIR)
+
+
+        FIND_LIBRARY(PQXX_LIBRARY pqxx )
+        MARK_AS_ADVANCED(PQXX_LIBRARY)
+        IF (NOT PQXX_LIBRARY)
+                MESSAGE(FATAL_ERROR
+                        "Cannot find PQXX library. Please set PQXX_LIBRARY or SET OTB_USE_PQXX OFF.")
+        ENDIF (NOT PQXX_LIBRARY)
+
+        FIND_LIBRARY(PQ_LIBRARY pq )
+        MARK_AS_ADVANCED(PQ_LIBRARY)
+        IF (NOT PQ_LIBRARY)
+                MESSAGE(FATAL_ERROR
+                        "Cannot find PQ library. Please set PQ_LIBRARY or SET OTB_USE_PQXX OFF.")
+        ENDIF (NOT PQ_LIBRARY)
+
+
+        # Add compiler option
+        ADD_DEFINITIONS(-DOTB_USE_PQXX)
+
+        INCLUDE_DIRECTORIES(${PQXX_INCLUDE_DIR})
+        
+ENDIF(OTB_USE_PQXX)

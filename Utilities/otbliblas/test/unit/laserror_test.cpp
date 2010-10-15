@@ -1,4 +1,4 @@
-// $Id: laserror_test.cpp 745 2008-05-21 00:50:09Z mloskot $
+// $Id$
 //
 // (C) Copyright Mateusz Loskot 2008, mateusz@loskot.net
 // Distributed under the BSD License

@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: lasrecordheader.hpp 889 2008-09-28 04:17:22Z hobu $
+ * $Id: lasvariablerecord.hpp 889 2008-09-28 04:17:22Z hobu $
  *
  * Project:  libLAS - http://liblas.org - A BSD library for LAS format data.
  * Purpose:  LAS record header class 
@@ -40,8 +40,8 @@
  * OF SUCH DAMAGE.
  ****************************************************************************/
 
-#ifndef LIBLAS_LASRECORDHEADER_HPP_INCLUDED
-#define LIBLAS_LASRECORDHEADER_HPP_INCLUDED
+#ifndef LIBLAS_LASVARIABLERECORD_HPP_INCLUDED
+#define LIBLAS_LASVARIABLERECORD_HPP_INCLUDED
 
 #include <liblas/cstdint.hpp>
 // std
@@ -51,27 +51,27 @@
 namespace liblas {
 
 /// Representation of variable-length record data.
-class LASVLR
+class LASVariableRecord
 {
 public:
 
     /// Default constructor.
     /// Zero-initialization of record data.
     /// \exception No throw
-    LASVLR(); 
+    LASVariableRecord(); 
 
     /// Copy constructor.
     /// Construction of new record object as a copy of existing one.
     /// \exception No throw
-    LASVLR(LASVLR const& other);
+    LASVariableRecord(LASVariableRecord const& other);
     
-    ~LASVLR();
+    ~LASVariableRecord();
 
     /// Assignment operator.
     /// Construction and initializition of record object by
     /// assignment of another one.
     /// \exception No throw
-    LASVLR& operator=(LASVLR const& rhs);
+    LASVariableRecord& operator=(LASVariableRecord const& rhs);
 
     /// Get record signature (LAS 1.0) or reserved bytes (LAS 1.1).
     /// \exception No throw
@@ -113,7 +113,7 @@ public:
 
     /// Compare actual header object against the other.
     /// \exception No throw
-    bool equal(LASVLR const& other) const;
+    bool equal(LASVariableRecord const& other) const;
 
     /// Get the total size of the VLR in bytes
     uint32_t GetTotalSize() const;
@@ -136,9 +136,9 @@ private:
 };
 
 /// Equality operator.
-/// Implemented in terms of LASVLR::equal member function.
+/// Implemented in terms of LASVariableRecord::equal member function.
 /// \exception No throw
-inline bool operator==(LASVLR const& lhs, LASVLR const& rhs)
+inline bool operator==(LASVariableRecord const& lhs, LASVariableRecord const& rhs)
 {
     return lhs.equal(rhs);
 }
@@ -146,12 +146,11 @@ inline bool operator==(LASVLR const& lhs, LASVLR const& rhs)
 /// Inequality operator.
 /// Implemented in terms of LASRecordHeader::equal member function.
 /// \exception No throw
-inline bool operator!=(LASVLR const& lhs, LASVLR const& rhs)
+inline bool operator!=(LASVariableRecord const& lhs, LASVariableRecord const& rhs)
 {
     return (!(lhs == rhs));
 }
 
 } // namespace liblas
 
-#endif // LIBLAS_LASRECORDHEADER_HPP_INCLUDED
-
+#endif // LIBLAS_LASVARIABLERECORD_HPP_INCLUDED

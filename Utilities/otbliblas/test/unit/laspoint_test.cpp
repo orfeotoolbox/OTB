@@ -1,4 +1,4 @@
-// $Id: laspoint_test.cpp 637 2008-05-02 02:50:47Z mloskot $
+// $Id$
 //
 // (C) Copyright Mateusz Loskot 2008, mateusz@loskot.net
 // Distributed under the BSD License
@@ -6,6 +6,7 @@
 // http://www.opensource.org/licenses/bsd-license.php)
 //
 #include <liblas/laspoint.hpp>
+#include <liblas/lascolor.hpp>
 #include <liblas/exception.hpp>
 #include <tut/tut.hpp>
 #include <bitset>
@@ -365,6 +366,49 @@ namespace tut
             p.SetScanAngleRank(outofrange);
             ensure_not(p.IsValid());
         }
+    }
+
+    // Test Get/SetColor
+    template<>
+    template<>
+    void to::test<16>()
+    {
+        ensure_equals("invalid default red color",
+            m_default.GetColor().GetRed(), 0);
+
+        ensure_equals("invalid default green color",
+            m_default.GetColor().GetGreen(), 0);
+
+        ensure_equals("invalid default blue color",
+            m_default.GetColor().GetBlue(), 0);
+                        
+        liblas::LASColor color;
+        color.SetRed(211);
+        color.SetGreen(211);
+        color.SetBlue(211);
+        
+        m_default.SetColor(color);
+
+        ensure_equals("invalid set red color",
+            m_default.GetColor().GetRed(), 211);
+
+        ensure_equals("invalid set green color",
+            m_default.GetColor().GetGreen(), 211);
+
+        ensure_equals("invalid set blue color",
+            m_default.GetColor().GetBlue(), 211);
+        
+        liblas::LASPoint p = m_default;
+
+        ensure_equals("invalid copied red color",
+            p.GetColor().GetRed(), 211);
+
+        ensure_equals("invalid copied green color",
+            p.GetColor().GetGreen(), 211);
+            
+        ensure_equals("invalid copied blue color",
+            p.GetColor().GetBlue(), 211);        
+        
     }
 }
 

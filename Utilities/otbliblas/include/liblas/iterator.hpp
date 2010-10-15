@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: iterator.hpp 813 2008-07-25 21:53:52Z mloskot $
+ * $Id$
  *
  * Project:  libLAS - http://liblas.org - A BSD library for LAS format data.
  * Purpose:  Reader and writer iterator implementation

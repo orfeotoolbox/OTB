@@ -18,9 +18,8 @@
 #ifndef __otbFlusserImageFunction_h
 #define __otbFlusserImageFunction_h
 
-#include "otbRealMomentImageFunction.h"
-
-#include <complex>
+#include "itkImageFunction.h"
+#include "itkFixedArray.h"
 
 namespace otb
 {
@@ -29,7 +28,8 @@ namespace otb
  * \class FlusserImageFunction
  * \brief Calculate the Flusser's invariant parameters.
  *
- * Calculate the Flusser's invariant over an image defined as:
+ * Calculate the Flusser's invariants over a specified neighborhood
+ * defined as :
  *
  * - \f$ \psi_{1} = c_{11} \f$
  * - \f$ \psi_{2} = c_{21} c_{12} \f$
@@ -58,41 +58,44 @@ namespace otb
  * \ingroup ImageFunctions
  */
 
-template <class TInput,
-    class TOutput    = double,
-    class TPrecision = double,
-    class TCoordRep  = float>
+template <class TInputImage, class TCoordRep = float >
 class ITK_EXPORT FlusserImageFunction :
-  public RealMomentImageFunction<TInput, TOutput, TPrecision, TCoordRep>
+  public itk::ImageFunction< TInputImage,
+    itk::FixedArray<
+    ITK_TYPENAME itk::NumericTraits<typename TInputImage::PixelType>::RealType,
+    11 >,
+    TCoordRep >
 {
 public:
   /** Standard class typedefs. */
   typedef FlusserImageFunction                                            Self;
-  typedef RealMomentImageFunction<TInput, TOutput, TPrecision, TCoordRep> Superclass;
+  typedef itk::ImageFunction< TInputImage,
+                   itk::FixedArray<
+                   ITK_TYPENAME itk::NumericTraits<
+                   typename TInputImage::PixelType>::RealType,
+                   11 >,
+                   TCoordRep >                                            Superclass;
   typedef itk::SmartPointer<Self>                                         Pointer;
   typedef itk::SmartPointer<const Self>                                   ConstPointer;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(FlusserImageFunction, RealMomentImageFunction);
+  itkTypeMacro(FlusserImageFunction, ImageFunction);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** InputImageType typedef support. */
-  typedef TInput                                   InputType;
+  typedef TInputImage                              InputImageType;
   typedef typename Superclass::IndexType           IndexType;
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
   typedef typename Superclass::PointType           PointType;
 
-  typedef typename Superclass::RealType   RealType;
-  typedef typename std::complex<RealType> ComplexType;
-
-  /** Type for calculation precision */
-  typedef typename Superclass::PrecisionType PrecisionType;
+  typedef typename Superclass::OutputType          RealType;
+  typedef typename RealType::ValueType             ScalarRealType;
 
   /** Dimension of the underlying image. */
   itkStaticConstMacro(ImageDimension, unsigned int,
-                      InputType::ImageDimension);
+                      InputImageType::ImageDimension);
 
   /** Evalulate the function at specified index */
   virtual RealType EvaluateAtIndex(const IndexType& index) const;
@@ -113,9 +116,10 @@ public:
   }
 
   /** Get/Set the radius of the neighborhood over which the
-      statistics are evaluated */
-  itkSetClampMacro(MomentNumber, short, 1, 11);
-  itkGetConstReferenceMacro(MomentNumber, short);
+   *  statistics are evaluated 
+   */
+  itkSetMacro( NeighborhoodRadius, unsigned int );
+  itkGetConstReferenceMacro( NeighborhoodRadius, unsigned int );
 
 protected:
   FlusserImageFunction();
@@ -126,7 +130,7 @@ private:
   FlusserImageFunction(const Self &);  //purposely not implemented
   void operator =(const Self&);  //purposely not implemented
 
-  short m_MomentNumber;
+  unsigned int m_NeighborhoodRadius;
 };
 
 } // namespace otb
@@ -136,3 +140,4 @@ private:
 #endif
 
 #endif
+

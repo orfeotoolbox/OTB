@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: writer.cpp 813 2008-07-25 21:53:52Z mloskot $
+ * $Id$
  *
  * Project:  libLAS - http://liblas.org - A BSD library for LAS format data.
  * Purpose:  LAS writer implementation for C++ libLAS 
@@ -42,8 +42,16 @@
 #include <liblas/detail/writer.hpp>
 #include <liblas/detail/writer10.hpp>
 #include <liblas/detail/writer11.hpp>
+#include <liblas/detail/writer12.hpp>
 #include <liblas/lasheader.hpp>
 #include <liblas/laspoint.hpp>
+#include <liblas/lasspatialreference.hpp>
+
+#ifdef HAVE_GDAL
+#include <ogr_srs_api.h>
+#endif
+
+
 // std
 #include <fstream>
 #include <cassert>
@@ -52,14 +60,158 @@
 
 namespace liblas { namespace detail {
 
-Writer::Writer()
+Writer::Writer(std::ostream& ofs) : m_ofs(ofs), m_transform(0), m_in_ref(0), m_out_ref(0)
 {
 }
 
 Writer::~Writer()
 {
+#ifdef HAVE_GDAL
+    if (m_transform) {
+        OCTDestroyCoordinateTransformation(m_transform);
+    }
+    if (m_in_ref) {
+        OSRDestroySpatialReference(m_in_ref);
+    }
+    if (m_out_ref) {
+        OSRDestroySpatialReference(m_out_ref);
+    }
+#endif
 }
 
+std::ostream& Writer::GetStream() const
+{
+    return m_ofs;
+}
+
+
+void Writer::FillPointRecord(PointRecord& record, const LASPoint& point, const LASHeader& header) 
+{
+    if (m_transform) {
+        // let's just copy the point for now.
+        LASPoint p = LASPoint(point);
+        Project(p);
+        record.x = static_cast<int32_t>((p.GetX() - header.GetOffsetX()) / header.GetScaleX());
+        record.y = static_cast<int32_t>((p.GetY() - header.GetOffsetY()) / header.GetScaleY());
+        record.z = static_cast<int32_t>((p.GetZ() - header.GetOffsetZ()) / header.GetScaleZ());
+    } else {
+        record.x = static_cast<int32_t>((point.GetX() - header.GetOffsetX()) / header.GetScaleX());
+        record.y = static_cast<int32_t>((point.GetY() - header.GetOffsetY()) / header.GetScaleY());
+        record.z = static_cast<int32_t>((point.GetZ() - header.GetOffsetZ()) / header.GetScaleZ());
+    }
+
+    record.intensity = point.GetIntensity();
+    record.flags = point.GetScanFlags();
+    record.classification = point.GetClassification();
+    record.scan_angle_rank = point.GetScanAngleRank();
+    record.user_data = point.GetUserData();
+    record.point_source_id = point.GetPointSourceID();
+}
+
+uint32_t Writer::WriteVLR(LASHeader const& header) 
+{
+    // If this function returns a value, it is the size that the header's 
+    // data offset must be increased by in order for the VLRs to fit in 
+    // the header.  
+    m_ofs.seekp(header.GetHeaderSize(), std::ios::beg);
+
+    // if the VLRs won't fit because the data offset is too 
+    // small, we need to throw an error.
+    uint32_t vlr_total_size = 0;
+        
+    // Calculate a new data offset size
+    for (uint32_t i = 0; i < header.GetRecordsCount(); ++i)
+    {
+        LASVariableRecord vlr = header.GetVLR(i);
+        vlr_total_size += vlr.GetTotalSize();
+    }
+    
+    int32_t difference = header.GetDataOffset() - (vlr_total_size + header.GetHeaderSize());
+
+    if (difference < 0) 
+    {
+        return difference;
+    }
+    
+    for (uint32_t i = 0; i < header.GetRecordsCount(); ++i)
+    {
+        LASVariableRecord vlr = header.GetVLR(i);
+
+        detail::write_n(m_ofs, vlr.GetReserved(), sizeof(uint16_t));
+        detail::write_n(m_ofs, vlr.GetUserId(true).c_str(), 16);
+        detail::write_n(m_ofs, vlr.GetRecordId(), sizeof(uint16_t));
+        detail::write_n(m_ofs, vlr.GetRecordLength(), sizeof(uint16_t));
+        detail::write_n(m_ofs, vlr.GetDescription(true).c_str(), 32);
+        std::vector<uint8_t> const& data = vlr.GetData();
+        std::streamsize const size = static_cast<std::streamsize>(data.size());
+        detail::write_n(m_ofs, data.front(), size);
+    }
+    
+    // if we had more room than we need for the VLRs, we need to pad that with 
+    // 0's.  We must also not forget to add the 1.0 pad bytes to the end of this
+    // but the impl should be the one doing that, not us.
+    if (difference > 0) {
+        detail::write_n(m_ofs, "\0", difference);
+    }
+    return 0;
+}
+
+
+void Writer::SetSRS(const LASSpatialReference& srs )
+{
+    m_out_srs = srs;
+#ifdef HAVE_GDAL
+    m_in_ref = OSRNewSpatialReference(0);
+    m_out_ref = OSRNewSpatialReference(0);
+
+    int result = OSRSetFromUserInput(m_in_ref, m_in_srs.GetWKT().c_str());
+    if (result != OGRERR_NONE) 
+    {
+        std::ostringstream msg; 
+        msg << "Could not import input spatial reference for Writer::" << CPLGetLastErrorMsg() << result;
+        std::string message(msg.str());
+        throw std::runtime_error(message);
+    }
+    
+    result = OSRSetFromUserInput(m_out_ref, m_out_srs.GetWKT().c_str());
+    if (result != OGRERR_NONE) 
+    {
+        std::ostringstream msg; 
+        msg << "Could not import output spatial reference for Writer::" << CPLGetLastErrorMsg() << result;
+        std::string message(msg.str());
+        throw std::runtime_error(message);
+    }
+
+    m_transform = OCTNewCoordinateTransformation( m_in_ref, m_out_ref);
+    
+#endif
+}
+
+void Writer::Project(LASPoint& p)
+{
+#ifdef HAVE_GDAL
+    
+    int ret = 0;
+    double x = p.GetX();
+    double y = p.GetY();
+    double z = p.GetZ();
+    
+    ret = OCTTransform(m_transform, 1, &x, &y, &z);
+    
+    if (!ret) {
+        std::ostringstream msg; 
+        msg << "Could not project point for Writer::" << CPLGetLastErrorMsg() << ret;
+        std::string message(msg.str());
+        throw std::runtime_error(message);
+    }
+    
+    p.SetX(x);
+    p.SetY(y);
+    p.SetZ(z);
+#else
+    UNREFERENCED_PARAMETER(p);
+#endif
+}
 Writer* WriterFactory::Create(std::ostream& ofs, LASHeader const& header)
 {
     if (!ofs)
@@ -78,6 +230,10 @@ Writer* WriterFactory::Create(std::ostream& ofs, LASHeader const& header)
     if (1 == major && 1 == minor)
     {
         return new v11::WriterImpl(ofs);
+    }
+    if (1 == major && 2 == minor)
+    {
+        return new v12::WriterImpl(ofs);
     }
     else if (2 == major && 0 == minor)
     {
