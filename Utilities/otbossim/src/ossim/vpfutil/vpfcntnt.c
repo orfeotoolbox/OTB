@@ -22,7 +22,7 @@
  *    None
  *E
  **************************************************************************/
-#if defined(__CYGWIN__) || defined(__APPLE__)|| defined(_WIN32) || defined(__FreeBSD__)
+#if defined(__CYGWIN__) || defined(__APPLE__)|| defined(_WIN32) || defined(__FreeBSD__) || defined(__OpenBSD__)
 #  include "ossim/vpfutil/values.h"
 #else
 #  include <values.h>

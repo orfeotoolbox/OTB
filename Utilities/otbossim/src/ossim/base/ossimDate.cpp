@@ -629,7 +629,7 @@ ossimLocalTm ossimLocalTm::convertToGmt()const
    _tzset();
 #endif
 
-#if ( defined(__APPLE__) || defined(__FreeBSD__) )
+#if ( defined(__APPLE__) || defined(__FreeBSD__)  || defined(__OpenBSD__) )
    gmt.tm_sec -= tm_gmtoff; // Seconds east of UTC
 #else
    gmt.tm_sec += timezone; // Seconds west of UTC

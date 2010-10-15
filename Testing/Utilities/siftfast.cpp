@@ -19,7 +19,7 @@
 
 #include <iostream>
 
-#ifdef __FreeBSD__
+#if defined (__FreeBSD__) || defined (__OpenBSD__)
 #  include <sys/time.h>
 #else
 #  include <sys/timeb.h>    // ftime(), struct timeb
@@ -48,7 +48,7 @@ inline u32 timeGetTime()
     _ftime(&t);
     millisec = (u32)(t.time*1000+t.millitm);
 #else
-#  ifdef __FreeBSD__
+#  if defined (__FreeBSD__) || defined (__OpenBSD__)
     // tv_sec is multiplied by 1000 to maintain same result as above
     // tv_usec is in micro-seconds, so multiply by 1000 to maintain same
     // result as above
