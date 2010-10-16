@@ -231,6 +231,11 @@ public:
     return m_MapParameters;
   }
 
+  // Override this method to to split m_MapParameters into specific variables to speed up kernel evaluations
+  virtual void Update(void)
+  {
+  }
+
 private:
 
   /** Kernel functor parameters */
