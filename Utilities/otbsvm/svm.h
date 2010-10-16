@@ -138,9 +138,10 @@ public:
   {
   }
 
-  /** Recopy constructor */
+  /** Copy constructor */
   GenericKernelFunctorBase(const GenericKernelFunctorBase& copy);
-  virtual GenericKernelFunctorBase& operator=(const GenericKernelFunctorBase& copy);
+
+  GenericKernelFunctorBase& operator=(const GenericKernelFunctorBase& copy);
 
   virtual ~GenericKernelFunctorBase()
   {
@@ -266,8 +267,9 @@ public:
       }
   }
 
-  /** Recopy constructor */
+  /** Copy constructor */
   ComposedKernelFunctor( const ComposedKernelFunctor& copy );
+
   ComposedKernelFunctor& operator=(const ComposedKernelFunctor& copy);
 
   typedef std::vector<GenericKernelFunctorBase *> KernelListType;
