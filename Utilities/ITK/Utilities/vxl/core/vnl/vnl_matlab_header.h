@@ -9,6 +9,9 @@
 //  \brief MATLAB header structure
 //  \author fsm
 
+#undef swap32
+#undef swap64
+
 #include <vxl_config.h>
 
 struct vnl_matlab_header

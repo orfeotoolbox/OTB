@@ -223,18 +223,18 @@ bool vnl_math_isfinite(long double x)
 
 #if defined(VCL_BORLAND)
 //: Return true if x is inf
-bool vnl_math_isinf(float x) { return !_finite(x) && !_isnan(x); }
+bool vnl_math_isinf(float x) { return !_finite(x) && !vnl_math_isnan(x); }
 //: Return true if x is inf
-bool vnl_math_isinf(double x) { return !_finite(x) && !_isnan(x); }
+bool vnl_math_isinf(double x) { return !_finite(x) && !vnl_math_isnan(x); }
 //: Return true if x is inf
-bool vnl_math_isinf(long double x) { return !_finitel(x) && !_isnanl(x); }
+bool vnl_math_isinf(long double x) { return !_finitel(x) && !vnl_math_isnan(x); }
 #elif !defined(VNL_HAS_NO_FINITE)
 //: Return true if x is inf
-bool vnl_math_isinf(float x) { return !finitef(x) && !isnan(x); }
+bool vnl_math_isinf(float x) { return !finitef(x) && !vnl_math_isnan(x); }
 //: Return true if x is inf
-bool vnl_math_isinf(double x) { return !finite(x) && !isnan(x); }
+bool vnl_math_isinf(double x) { return !finite(x) && !vnl_math_isnan(x); }
 //: Return true if x is inf
-bool vnl_math_isinf(long double x) { return !finitel(x) && !isnan(x); }
+bool vnl_math_isinf(long double x) { return !finitel(x) && !vnl_math_isnan(x); }
 #else
 // Assume IEEE floating point number representation
 bool vnl_math_isinf(float x) {return(bMe(&x,0x7f800000L,sz_f)&&!bMp(&x,0x007fffffL,sz_f))||bMp(&x,0x7fffffffL,sz_f)==0x7f7fffffL;}
