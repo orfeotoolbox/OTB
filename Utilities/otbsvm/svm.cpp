@@ -3641,6 +3641,7 @@ add(const svm_node *px, const svm_node *py) const
 // ****************************************************************************************
 
 ComposedKernelFunctor::ComposedKernelFunctor(const ComposedKernelFunctor& copy)
+: Superclass(copy)
 {
   *this = copy;
 }
