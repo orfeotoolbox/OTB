@@ -3140,14 +3140,14 @@ svm_model *svm_copy_model( const svm_model *model )
   // Generic kernel copy
   if (param.kernel_type == GENERIC)
     {
-    paramCpy.kernel_generic = Malloc(GenericKernelFunctorBase, sizeof(*(param.kernel_generic)));
-    memcpy(paramCpy.kernel_generic, param.kernel_generic, sizeof(*(param.kernel_generic)));
+    paramCpy.kernel_generic = new GenericKernelFunctorBase;
+    *paramCpy.kernel_generic = *param.kernel_generic;
     }
-  // Composrd kernel copy
+  // Composed kernel copy
   if (param.kernel_type == COMPOSED)
     {
-    paramCpy.kernel_composed = Malloc(ComposedKernelFunctor, 1);
-    *(paramCpy.kernel_composed) = *(param.kernel_composed);
+    paramCpy.kernel_composed = new ComposedKernelFunctor;
+    *paramCpy.kernel_generic = *param.kernel_generic;
     }
 
   return modelCpy;
