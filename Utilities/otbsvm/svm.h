@@ -147,7 +147,7 @@ public:
   {
   }
 
-  typedef GenericKernelFunctorBase Superclass;
+  typedef GenericKernelFunctorBase Self;
   typedef std::map<std::string, std::string> MapType;
   typedef MapType::iterator MapIterator;
   typedef MapType::const_iterator MapConstIterator;
