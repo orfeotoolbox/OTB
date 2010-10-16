@@ -3650,7 +3650,7 @@ ComposedKernelFunctor&
 ComposedKernelFunctor::operator=(const ComposedKernelFunctor& copy)
 {
   // Call Superclass::operator=
-  static_cast<Superclass&>(*this) = static_cast<const Superclass&>(copy);
+  Superclass::operator =(copy);
 
   // Copy Self attributes
   this->m_KernelFunctorList   = copy.m_KernelFunctorList;
