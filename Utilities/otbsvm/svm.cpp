@@ -275,11 +275,11 @@ private:
 };
 
 Kernel::Kernel(int l, svm_node * const * x_, const svm_parameter& param)
-:kernel_type(param.kernel_type), degree(param.degree),
+:/*** Begin OTB modification ***/
+ m_param(param),
+ /*** End OTB modification ***/
+ kernel_type(param.kernel_type), degree(param.degree),
  gamma(param.gamma), coef0(param.coef0)
-/*** Begin OTB modification ***/
-, m_param(param)
-/*** End OTB modification ***/
 {
 	switch(kernel_type)
 	{
@@ -2655,7 +2655,7 @@ int svm_save_model(const char *model_file_name, const svm_model *model)
 	    return -1;
 	    }
 
-	  //Load generic parameters
+	  //Save generic parameters
 	  int cr = param.kernel_generic->save_parameters(&fp,"generic_kernel_parameters");
 	  if( cr != 0 )
 	    {
@@ -2669,7 +2669,7 @@ int svm_save_model(const char *model_file_name, const svm_model *model)
       fprintf(stderr, "composed kernel functor is not initialized\n");
       return -1;
       }
-    //Load generic parameters
+    //Save generic parameters
     int cr = param.kernel_composed->save_parameters(&fp, "composed_kernel_parameters");
     if (cr != 0)
       {
