@@ -246,6 +246,8 @@ private:
 class ComposedKernelFunctor: public GenericKernelFunctorBase
 {
 public:
+  typedef GenericKernelFunctorBase Superclass;
+
   ComposedKernelFunctor()
   {
     this->SetName("ComposedFunctorName");
