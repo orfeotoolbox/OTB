@@ -11,9 +11,11 @@ class GenericKernelFunctorBase;
 class ComposedKernelFunctor;
 /*** End OTB modification ***/
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+/*** Begin OTB modification ***/
+//#ifdef __cplusplus
+//extern "C" {
+//#endif
+/*** End OTB modification ***/
 
 extern int libsvm_version;
 
@@ -121,9 +123,11 @@ void svm_set_print_string_function(void (*print_func)(const char *));
 // this function will be removed in future release
 void svm_destroy_model(struct svm_model *model_ptr); 
 
-#ifdef __cplusplus
-}
-#endif
+/*** Begin OTB modification ***/
+//#ifdef __cplusplus
+//}
+//#endif
+/*** End OTB modification ***/
 
 /*** Begin OTB modification ***/
 
