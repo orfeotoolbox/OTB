@@ -236,19 +236,19 @@ private:
 	{
 		return dot(x[i],x[j]);
 	}
-	double kernel_poly(int i, int j, const svm_parameter& param) const
+	double kernel_poly(int i, int j, const svm_parameter&) const
 	{
 		return powi(gamma*dot(x[i],x[j])+coef0,degree);
 	}
-	double kernel_rbf(int i, int j, const svm_parameter& param) const
+	double kernel_rbf(int i, int j, const svm_parameter&) const
 	{
 		return exp(-gamma*(x_square[i]+x_square[j]-2*dot(x[i],x[j])));
 	}
-	double kernel_sigmoid(int i, int j, const svm_parameter& param) const
+	double kernel_sigmoid(int i, int j, const svm_parameter&) const
 	{
 		return tanh(gamma*dot(x[i],x[j])+coef0);
 	}
-	double kernel_precomputed(int i, int j, const svm_parameter& param) const
+	double kernel_precomputed(int i, int j, const svm_parameter&) const
 	{
 		return x[i][(int)(x[j][0].value)].value;
 	}
