@@ -32,17 +32,17 @@ SET(liblas_SRCS
 #include Gdal and GeoTiff support only if version >= 1.6
 IF(GDAL_VERSION VERSION_LESS 1.6)
   MESSAGE(STATUS "Disabling GDAL/GeoTIFF support for LibLAS (requires GDAL version >= 1.6)")
-ELSE(GDAL_VERSION VERSION_LESS 1.6)
+ELSE()
   MESSAGE(STATUS "Enabling GDAL/GeoTIFF support for LibLAS")
   INCLUDE_DIRECTORIES(${GDAL_INCLUDE_DIR} ${GEOTIFF_INCLUDE_DIRS} ${TIFF_INCLUDE_DIRS})
-  
+
   LIST(APPEND liblas_SRCS
        "${liblas_SOURCES_DIR}/gt_citation.cpp"
        "${liblas_SOURCES_DIR}/gt_wkt_srs.cpp")
-  
+
   ADD_DEFINITIONS(-DHAVE_GDAL -DHAVE_LIBGEOTIFF)
-ENDIF(GDAL_VERSION VERSION_LESS 1.6)
-  
+ENDIF()
+
 IF(NOT OTB_DISABLE_UTILITIES_COMPILATION)
 
 
