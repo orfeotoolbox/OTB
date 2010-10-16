@@ -38,8 +38,12 @@ static inline double powi(double base, int times)
 
 static void print_string_stdout(const char *s)
 {
-	fputs(s,stdout);
-	fflush(stdout);
+  /*** Begin OTB modification ***/
+#ifdef OTB_SHOW_ALL_MSG_DEBUG
+  fputs(s,stdout);
+  fflush(stdout);
+#endif
+  /*** End OTB modification ***/
 }
 static void (*svm_print_string) (const char *) = &print_string_stdout;
 #if 1
