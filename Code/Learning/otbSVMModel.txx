@@ -184,7 +184,7 @@ SVMModel<TValue, TLabel>::BuildProblem()
     {
     itkExceptionMacro(<< "No samples, can not build SVM problem.");
     }
-  std::cout << "Rebuilding problem ..." << std::endl;
+  otbMsgDebugMacro(<< "Rebuilding problem ...");
 
   // Get the size of the samples
   long int elements = m_Samples[0].first.size() + 1;
