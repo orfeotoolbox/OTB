@@ -328,14 +328,8 @@ SVMModel<TValue, TLabel>::Train()
   // Check consistency
   this->ConsistencyCheck();
 
-  // retrieve parameters
-  struct svm_parameter parameters = m_Parameters;
-
   // train the model
-  m_Model = svm_train(&m_Problem, &parameters);
-
-  // Reset the parameters
-  m_Parameters = parameters;
+  m_Model = svm_train(&m_Problem, &m_Parameters);
 
   // Set the model as up-to-date
   m_ModelUpToDate = true;
