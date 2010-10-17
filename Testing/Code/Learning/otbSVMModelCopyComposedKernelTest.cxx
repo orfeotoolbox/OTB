@@ -27,6 +27,13 @@
 
 int otbSVMModelCopyComposedKernelTest(int argc, char* argv[])
 {
+  if (argc != 3)
+    {
+    std::cerr << "Wrong number of arguments" << std::endl;
+    return EXIT_FAILURE;
+    }
+
+
   typedef unsigned char InputPixelType;
   typedef unsigned char LabelPixelType;
 
