@@ -19,22 +19,22 @@
 #endif
 
 #include "itkImageIOFactory.h"
-#include "itkBioRadImageIOFactory.h"
-#include "itkBMPImageIOFactory.h"
-#include "itkGDCMImageIOFactory.h"
-#include "itkDICOMImageIO2Factory.h"
-#include "itkNiftiImageIOFactory.h"
-#include "itkAnalyzeImageIOFactory.h"
-#include "itkNiftiImageIOFactory.h"
-#include "itkGiplImageIOFactory.h"
+//#include "itkBioRadImageIOFactory.h"
+//#include "itkBMPImageIOFactory.h"
+//#include "itkGDCMImageIOFactory.h"
+//#include "itkDICOMImageIO2Factory.h"
+//#include "itkNiftiImageIOFactory.h"
+//#include "itkAnalyzeImageIOFactory.h"
+//#include "itkNiftiImageIOFactory.h"
+//#include "itkGiplImageIOFactory.h"
 #include "itkJPEGImageIOFactory.h"
-#include "itkLSMImageIOFactory.h"
-#include "itkMetaImageIOFactory.h"
+//#include "itkLSMImageIOFactory.h"
+//#include "itkMetaImageIOFactory.h"
 #include "itkPNGImageIOFactory.h"
-#include "itkNrrdImageIOFactory.h"
-#include "itkTIFFImageIOFactory.h"
+//#include "itkNrrdImageIOFactory.h"
+//#include "itkTIFFImageIOFactory.h"
 #include "itkVTKImageIOFactory.h"
-#include "itkStimulateImageIOFactory.h"
+//#include "itkStimulateImageIOFactory.h"
 #include "itkMutexLock.h"
 #include "itkMutexLockHolder.h"
 
@@ -99,27 +99,27 @@ ImageIOFactory::RegisterBuiltInFactories()
     MutexLockHolder<SimpleMutexLock> mutexHolder( mutex );
     if( firstTime )
       {
-      ObjectFactoryBase::RegisterFactory( BioRadImageIOFactory::New() ); //should be before GDCM
-      ObjectFactoryBase::RegisterFactory( GDCMImageIOFactory::New() );
-      ObjectFactoryBase::RegisterFactory( MetaImageIOFactory::New() );
+//      ObjectFactoryBase::RegisterFactory( BioRadImageIOFactory::New() ); //should be before GDCM
+//      ObjectFactoryBase::RegisterFactory( GDCMImageIOFactory::New() );
+//      ObjectFactoryBase::RegisterFactory( MetaImageIOFactory::New() );
       ObjectFactoryBase::RegisterFactory( PNGImageIOFactory::New() );
       ObjectFactoryBase::RegisterFactory( VTKImageIOFactory::New() );
-      ObjectFactoryBase::RegisterFactory( GiplImageIOFactory::New() );
-      ObjectFactoryBase::RegisterFactory( LSMImageIOFactory::New()); //should be before TIFF
+//      ObjectFactoryBase::RegisterFactory( GiplImageIOFactory::New() );
+//      ObjectFactoryBase::RegisterFactory( LSMImageIOFactory::New()); //should be before TIFF
       // ITK Teleconference 2008-02-22 determined that
       // AnalyzeImageIOFactory MUST be the default for reading all
       // non-nifti identified .hdr/.img images.  This requires
       // that the AnalyzeImageIOFactory can now come before the Nifti
       // Factory because AnalyzeImageIO->CanRead() has been instrumented to
       // reject .hdr/.img files with the nifti magic number tags.
-      ObjectFactoryBase::RegisterFactory( AnalyzeImageIOFactory::New());
-      ObjectFactoryBase::RegisterFactory( NiftiImageIOFactory::New());
-      ObjectFactoryBase::RegisterFactory( StimulateImageIOFactory::New());
+//      ObjectFactoryBase::RegisterFactory( AnalyzeImageIOFactory::New());
+//      ObjectFactoryBase::RegisterFactory( NiftiImageIOFactory::New());
+//      ObjectFactoryBase::RegisterFactory( StimulateImageIOFactory::New());
       ObjectFactoryBase::RegisterFactory( JPEGImageIOFactory::New());
-      ObjectFactoryBase::RegisterFactory( TIFFImageIOFactory::New());
-      ObjectFactoryBase::RegisterFactory( NrrdImageIOFactory::New() );
-      ObjectFactoryBase::RegisterFactory( BMPImageIOFactory::New() );
-      ObjectFactoryBase::RegisterFactory( DICOMImageIO2Factory::New() );
+//      ObjectFactoryBase::RegisterFactory( TIFFImageIOFactory::New());
+//      ObjectFactoryBase::RegisterFactory( NrrdImageIOFactory::New() );
+//      ObjectFactoryBase::RegisterFactory( BMPImageIOFactory::New() );
+//      ObjectFactoryBase::RegisterFactory( DICOMImageIO2Factory::New() );
       firstTime = false;
       }
     }
