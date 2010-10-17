@@ -32,12 +32,34 @@ namespace otb
 class LinearKernelFunctor : public GenericKernelFunctorBase
 {
 public:
+  typedef LinearKernelFunctor                 Self;
+  typedef GenericKernelFunctorBase            Superclass;
+
   LinearKernelFunctor() : GenericKernelFunctorBase() {}
   virtual ~LinearKernelFunctor() {}
 
-  virtual double operator ()(const svm_node *x, const svm_node *y, const svm_parameter& param) const
+  // Deep copy operator
+  virtual GenericKernelFunctorBase* Clone() const
+  {
+    return new Self(*this);
+  }
+
+  virtual double operator ()(const svm_node *x, const svm_node *y, const svm_parameter&) const
   {
     return this->dot(x, y);
+  }
+
+protected:
+  LinearKernelFunctor(const Self& copy)
+  : Superclass(copy)
+  {
+    *this = copy;
+  }
+
+  LinearKernelFunctor& operator=(const Self& copy)
+  {
+    Superclass::operator =(copy);
+    return *this;
   }
 };
 
