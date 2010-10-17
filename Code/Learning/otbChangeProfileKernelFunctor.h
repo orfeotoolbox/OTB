@@ -44,6 +44,14 @@ class ChangeProfileKernelFunctor
   : public GenericKernelFunctorBase
 {
 public:
+  typedef ChangeProfileKernelFunctor   Self;
+  typedef GenericKernelFunctorBase     Superclass;
+
+  // Deep copy operator
+  virtual GenericKernelFunctorBase* Clone() const
+  {
+    return new Self(*this);
+  }
 
   double operator ()(const svm_node * x, const svm_node * y,
                      const svm_parameter& param) const;
@@ -54,6 +62,21 @@ public:
   /** Specific implementation of \code Update \endcode to split m_MapParameters
    * into specific variables to speed up kernel evaluations */
   void Update();
+
+protected:
+  ChangeProfileKernelFunctor(const Self& copy)
+  : Superclass(copy)
+  {
+    *this = copy;
+  }
+
+  ChangeProfileKernelFunctor&
+  operator=(const Self& copy)
+  {
+    Superclass::operator =(copy);
+    Update();
+    return *this;
+  }
 
 private:
   double m_Coef;

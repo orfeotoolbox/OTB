@@ -27,6 +27,7 @@ ChangeProfileKernelFunctor
 ::ChangeProfileKernelFunctor ()
   : GenericKernelFunctorBase ()
 {
+  this->SetName("ChangeProfile");
   m_Coef = 0.0;
   m_Degree = 1.0;
   m_Gamma = 1.0;

@@ -344,7 +344,7 @@ ADD_TEST(leTvSVMImageClassificationWithRuleFilter ${LEARNING_TESTS3}
 
 
 ADD_TEST(leTvSVMModelGenericKernelsTest ${LEARNING_TESTS3}
-    --compare-n-ascii ${NOTOL} 16
+    --compare-n-ascii ${NOTOL} 17
         ${BASELINE_FILES}/leTvSVMModelGenericKernelsTest1.txt
         ${TEMP}/leTvSVMModelGenericKernelsTest1.txt
         ${BASELINE_FILES}/leTvSVMModelGenericKernelsTest2.txt
@@ -377,6 +377,8 @@ ADD_TEST(leTvSVMModelGenericKernelsTest ${LEARNING_TESTS3}
         ${TEMP}/leTvSVMModelGenericKernelsTest15.txt
         ${BASELINE_FILES}/leTvSVMModelGenericKernelsTest16.txt
         ${TEMP}/leTvSVMModelGenericKernelsTest16.txt
+        ${BASELINE_FILES}/leTvSVMModelGenericKernelsTest17.txt
+        ${TEMP}/leTvSVMModelGenericKernelsTest17.txt
 	otbSVMModelGenericKernelsTest
         ${TEMP}/leTvSVMModelGenericKernelsTest1.txt
         ${TEMP}/leTvSVMModelGenericKernelsTest2.txt
@@ -394,10 +396,11 @@ ADD_TEST(leTvSVMModelGenericKernelsTest ${LEARNING_TESTS3}
 	${TEMP}/leTvSVMModelGenericKernelsTest14.txt
 	${TEMP}/leTvSVMModelGenericKernelsTest15.txt
 	${TEMP}/leTvSVMModelGenericKernelsTest16.txt
+    ${TEMP}/leTvSVMModelGenericKernelsTest17.txt
     )
 
 
-FOREACH(kernelType RANGE 0 14)
+FOREACH(kernelType RANGE 0 18)
   ADD_TEST(leTvSVMKernelTest${kernelType} ${LEARNING_TESTS3}
    --compare-ascii ${EPSILON_9}
       ${BASELINE_FILES}/leTvSVMKernelTest${kernelType}.txt

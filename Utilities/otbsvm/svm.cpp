@@ -38,8 +38,14 @@ static inline double powi(double base, int times)
 
 static void print_string_stdout(const char *s)
 {
-	fputs(s,stdout);
-	fflush(stdout);
+  /*** Begin OTB modification ***/
+#ifdef OTB_SHOW_ALL_MSG_DEBUG
+  fputs(s,stdout);
+  fflush(stdout);
+#else
+  s = 0; // keep compiler happy
+#endif
+  /*** End OTB modification ***/
 }
 static void (*svm_print_string) (const char *) = &print_string_stdout;
 #if 1
@@ -232,7 +238,7 @@ private:
 	static double dot(const svm_node *px, const svm_node *py);
 
   /*** OTB modification : add svm_parameter to the list of parameters ***/
-	double kernel_linear(int i, int j, const svm_parameter& param) const
+	double kernel_linear(int i, int j, const svm_parameter&) const
 	{
 		return dot(x[i],x[j]);
 	}
@@ -2114,7 +2120,9 @@ static void svm_group_classes(const svm_problem *prob, int *nr_class_ret, int **
 //
 svm_model *svm_train(const svm_problem *prob, const svm_parameter *param)
 {
-	svm_model *model = Malloc(svm_model,1);
+  /*** Begin OTB modification ***/
+	svm_model *model = new svm_model;
+	/*** End OTB modification ***/
 	model->param = *param;
 	model->free_sv = 0;	// XXX
 
@@ -2782,8 +2790,9 @@ svm_model *svm_load_model(const char *model_file_name, GenericKernelFunctorBase*
 	if(fp==NULL) return NULL;
 	
 	// read parameters
-
-	svm_model *model = Malloc(svm_model,1);
+  /*** Begin OTB modification ***/
+	svm_model *model = new svm_model;
+  /*** End OTB modification ***/
 	svm_parameter& param = model->param;
 	model->rho = NULL;
 	model->probA = NULL;
@@ -2814,7 +2823,7 @@ svm_model *svm_load_model(const char *model_file_name, GenericKernelFunctorBase*
 				free(model->rho);
 				free(model->label);
 				free(model->nSV);
-				free(model);
+				delete model;
 				return NULL;
 			}
 		}
@@ -2836,7 +2845,7 @@ svm_model *svm_load_model(const char *model_file_name, GenericKernelFunctorBase*
 				free(model->rho);
 				free(model->label);
 				free(model->nSV);
-				free(model);
+				delete model;
 				return NULL;
 			}
 		}
@@ -2901,10 +2910,10 @@ svm_model *svm_load_model(const char *model_file_name, GenericKernelFunctorBase*
         {
         if (generic_kernel_functor == NULL)
           {
-          fprintf(stderr, "generic kernel functor is not initialized\n", cmd);
+          fprintf(stderr, "generic kernel functor is not initialized\n");
           return NULL;
           }
-        param.kernel_generic = generic_kernel_functor;
+        param.kernel_generic = generic_kernel_functor->Clone();
         //Load generic parameters
         int cr = param.kernel_generic->load_parameters(&fp);
         if (cr != 0)
@@ -2928,8 +2937,7 @@ svm_model *svm_load_model(const char *model_file_name, GenericKernelFunctorBase*
 
         param.kernel_composed = new ComposedKernelFunctor;
         int cr = param.kernel_composed->load_parameters(&fp);
-        model->delete_composed = true;
-        //int cr = param.kernel_generic->load_parameters(&fp);
+
         if (cr != 0)
           {
           fprintf(stderr, "error while loading composed kernel parameters from the file %s.\n", model_file_name);
@@ -3025,14 +3033,13 @@ svm_model *svm_copy_model( const svm_model *model )
   const svm_parameter& param = model->param;
 
   // instanciated the copy
-  svm_model *modelCpy = Malloc(svm_model,1);
+  svm_model *modelCpy = new svm_model;
   svm_parameter& paramCpy = modelCpy->param;
   modelCpy->rho = NULL;
   modelCpy->probA = NULL;
   modelCpy->probB = NULL;
   modelCpy->label = NULL;
   modelCpy->nSV = NULL;
-  modelCpy->delete_composed = false;
 
   // SVM type copy
   paramCpy.svm_type = param.svm_type;
@@ -3140,14 +3147,18 @@ svm_model *svm_copy_model( const svm_model *model )
   // Generic kernel copy
   if (param.kernel_type == GENERIC)
     {
-    paramCpy.kernel_generic = new GenericKernelFunctorBase;
-    *paramCpy.kernel_generic = *param.kernel_generic;
+    if (param.kernel_generic != NULL)
+      paramCpy.kernel_generic = param.kernel_generic->Clone();
+    else
+      paramCpy.kernel_generic = NULL;
     }
   // Composed kernel copy
   if (param.kernel_type == COMPOSED)
     {
-    paramCpy.kernel_composed = new ComposedKernelFunctor;
-    *paramCpy.kernel_generic = *param.kernel_generic;
+    if (param.kernel_composed != NULL)
+      paramCpy.kernel_composed = param.kernel_composed->Clone();
+    else
+      paramCpy.kernel_composed = NULL;
     }
 
   return modelCpy;
@@ -3177,7 +3188,7 @@ void svm_free_and_destroy_model(svm_model** model_ptr_ptr)
 	if(model_ptr != NULL)
 	{
 		svm_free_model_content(model_ptr);
-		free(model_ptr);
+		delete model_ptr;
 	}
 }
 
@@ -3187,11 +3198,14 @@ void svm_destroy_model(svm_model* model_ptr)
 	svm_free_and_destroy_model(&model_ptr);
 }
 
-void svm_destroy_param(svm_parameter* param)
+/*** Begin OTB modification ***/
+void svm_destroy_param(svm_parameter* /*param*/)
 {
-	free(param->weight_label);
-	free(param->weight);
+  // done in destructor now
+	//free(param->weight_label);
+	//free(param->weight);
 }
+/*** End OTB modification ***/
 
 const char *svm_check_parameter(const svm_problem *prob, const svm_parameter *param)
 {
@@ -3337,17 +3351,49 @@ void svm_set_print_string_function(void (*print_func)(const char *))
 
 /*** Begin OTB modification ***/
 
-GenericKernelFunctorBase::GenericKernelFunctorBase(const GenericKernelFunctorBase& copy)
+GenericKernelFunctorBase::GenericKernelFunctorBase()
+  : m_Name("FunctorName")
+{
+}
+
+GenericKernelFunctorBase::~GenericKernelFunctorBase()
+{
+}
+
+GenericKernelFunctorBase::GenericKernelFunctorBase(const Self& copy)
 {
   *this = copy;
 }
 
 GenericKernelFunctorBase&
-GenericKernelFunctorBase::operator=(const GenericKernelFunctorBase& copy)
+GenericKernelFunctorBase::operator=(const Self& copy)
 {
   this->m_MapParameters = copy.m_MapParameters;
   this->m_Name = copy.m_Name;
   return *this;
+}
+
+GenericKernelFunctorBase* GenericKernelFunctorBase::Clone() const
+{
+  return new Self(*this);
+}
+
+double GenericKernelFunctorBase::operator()(const svm_node * /*x*/, const svm_node * /*y*/, const svm_parameter& /*param*/) const
+{
+  itkGenericExceptionMacro(<<"Kernel functor not definied (Null)");
+  return static_cast<double> (0.);
+}
+
+/** Used for Taylor classification*/
+// degree is the development degree
+// index is the current value
+// isAtEnd to indicate that it's the last possible derivation
+// baseValue is the constant of the formula
+double GenericKernelFunctorBase::derivative(const svm_node * /*x*/, const svm_node * /*y*/, const svm_parameter& /*param*/,
+                          int /*degree*/, int /*index*/, bool /*isAtEnd*/, double /*constValue*/) const
+{
+  itkGenericExceptionMacro(<<"derivative method not definied (Null)");
+  return 0.;
 }
 
 int
@@ -3371,6 +3417,7 @@ load_parameters(FILE ** pfile)
     }
   return 0;
 }
+
 int
 GenericKernelFunctorBase::
 save_parameters(FILE ** pfile, const char * generic_kernel_parameters_keyword)const
@@ -3636,27 +3683,123 @@ add(const svm_node *px, const svm_node *py) const
   return(vec);
 }
 
+
+void GenericKernelFunctorBase::SetName(std::string name)
+{
+  m_Name = name;
+}
+std::string GenericKernelFunctorBase::GetName(void) const
+{
+  return m_Name;
+}
+
+void GenericKernelFunctorBase::SetMapParameters(const MapType & map)
+{
+  m_MapParameters = map;
+}
+
+const GenericKernelFunctorBase::MapType & GenericKernelFunctorBase::GetMapParameters() const
+{
+  return m_MapParameters;
+}
+
+GenericKernelFunctorBase::MapType GenericKernelFunctorBase::GetMapParameters()
+{
+  return m_MapParameters;
+}
+
+void GenericKernelFunctorBase::Update(void)
+{
+}
+
 // ****************************************************************************************
 // ************************ ComposedKernelFunctor methods ********************/
 // ****************************************************************************************
 
-ComposedKernelFunctor::ComposedKernelFunctor(const ComposedKernelFunctor& copy)
+ComposedKernelFunctor::ComposedKernelFunctor()
+{
+  this->SetName("ComposedFunctorName");
+  this->SetValue<bool> ("MultiplyKernelFunctor", false);
+}
+
+ComposedKernelFunctor::~ComposedKernelFunctor()
+{
+  ClearFunctorList();
+}
+
+ComposedKernelFunctor::ComposedKernelFunctor(const Self& copy)
 : Superclass(copy)
 {
   *this = copy;
 }
 
 ComposedKernelFunctor&
-ComposedKernelFunctor::operator=(const ComposedKernelFunctor& copy)
+ComposedKernelFunctor::operator=(const Self& copy)
 {
   // Call Superclass::operator=
   Superclass::operator =(copy);
 
   // Copy Self attributes
-  this->m_KernelFunctorList   = copy.m_KernelFunctorList;
-  this->m_HaveToBeDeletedList = copy.m_HaveToBeDeletedList;
+  SetKernelFunctorList(copy.m_KernelFunctorList);
   this->m_PonderationList     = copy.m_PonderationList;
   return *this;
+}
+
+ComposedKernelFunctor* ComposedKernelFunctor::Clone() const
+{
+  return new Self(*this);
+}
+
+double ComposedKernelFunctor::operator()(const svm_node *x, const svm_node *y, const svm_parameter& param) const
+{
+  double out = 0.;
+  if (!m_KernelFunctorList.empty() && !m_PonderationList.empty() && m_KernelFunctorList.size()
+      == m_PonderationList.size())
+    {
+    for (unsigned int i = 0; i < m_KernelFunctorList.size(); i++)
+      {
+      const GenericKernelFunctorBase& kernel = *m_KernelFunctorList[i];
+      if (!this->GetValue<bool> ("MultiplyKernelFunctor"))
+        {
+        out += m_PonderationList[i] * kernel(x, y, param);
+        }
+      else
+        {
+        out *= kernel(x, y, param);
+        }
+      }
+    }
+  else
+    {
+    itkGenericExceptionMacro(<<"ComposedKernelFunctor::operator() : lists dimensions mismatch");
+    }
+  return out;
+}
+
+double ComposedKernelFunctor::derivative(const svm_node *x, const svm_node *y, const svm_parameter& param, int degree, int index, bool isAtEnd, double constValue) const
+{
+  double out = 0.;
+  if (m_KernelFunctorList.size() != 0 && m_PonderationList.size() != 0 && m_KernelFunctorList.size()
+      == m_PonderationList.size())
+    {
+    for (unsigned int i = 0; i < m_KernelFunctorList.size(); i++)
+      {
+      if ((this->GetValue<bool> ("MultiplyKernelFunctor")) == false)
+        {
+        out += m_PonderationList[i] * (m_KernelFunctorList[i]->derivative(x, y, param, degree, index, isAtEnd,
+                                                                          constValue));
+        }
+      else
+        {
+        itkGenericExceptionMacro(<<"derivative method not definied (Null)");
+        }
+      }
+    }
+  else
+    {
+    itkGenericExceptionMacro(<<"ComposedKernelFunctor::operator() : lists dimensions mismatch");
+    }
+  return out;
 }
 
 void
@@ -3664,28 +3807,30 @@ ComposedKernelFunctor
 ::print_parameters(void)const
 {
  MapConstIterator iter = this->GetMapParameters().begin();
- std::cout << "Print composed kernel parameters: "<<this->GetName()<<", "<<this->GetMapParameters().size()<<std::endl;
- while( iter != this->GetMapParameters().end() )
-   {
-     std::cout << "  "<<iter->first <<"  "<<iter->second<<std::endl;
-     ++iter;
-   }
- std::cout<<std::endl;
- std::cout<<"Composition kernels:"<<std::endl;
- if (m_KernelFunctorList.size() != 0 && m_PonderationList.size() != 0 && m_KernelFunctorList.size() == m_PonderationList.size())
-   {
-     for (unsigned int i = 0; i<m_KernelFunctorList.size(); i++)
-       {
-   std::cout<<m_KernelFunctorList[i]->GetName()<<":"<<std::endl;
-   std::cout<<"Associated ponderation:"<<m_PonderationList[i]<<std::endl;
-   m_KernelFunctorList[i]->print_parameters();
-   std::cout<<std::endl;
-       }
-   }
- else
-   {
-     itkGenericExceptionMacro(<<"ComposedKernelFunctor::print_param() : lists dimensions mismatch");
-   }
+  std::cout << "Print composed kernel parameters: " << this->GetName() << ", " << this->GetMapParameters().size()
+      << std::endl;
+  while (iter != this->GetMapParameters().end())
+    {
+    std::cout << "  " << iter->first << "  " << iter->second << std::endl;
+    ++iter;
+    }
+  std::cout << std::endl;
+  std::cout << "Composition kernels:" << std::endl;
+  if (m_KernelFunctorList.size() != 0 && m_PonderationList.size() != 0 && m_KernelFunctorList.size()
+      == m_PonderationList.size())
+    {
+    for (unsigned int i = 0; i < m_KernelFunctorList.size(); i++)
+      {
+      std::cout << m_KernelFunctorList[i]->GetName() << ":" << std::endl;
+      std::cout << "Associated ponderation:" << m_PonderationList[i] << std::endl;
+      m_KernelFunctorList[i]->print_parameters();
+      std::cout << std::endl;
+      }
+    }
+  else
+    {
+    itkGenericExceptionMacro(<<"ComposedKernelFunctor::print_param() : lists dimensions mismatch");
+    }
 }
 
 
@@ -3698,47 +3843,46 @@ load_parameters(FILE ** pfile)
   char value[81];
 
   // Read functor name
-  fscanf(*pfile,"%80s",keyword);
+  fscanf(*pfile, "%80s", keyword);
   this->SetName(std::string(keyword));
   // Read number of parameters
-  fscanf(*pfile,"%d",&NbParams);
+  fscanf(*pfile, "%d", &NbParams);
 
-  for ( int cpt=0 ; cpt < NbParams ; cpt++)
+  for (int cpt = 0; cpt < NbParams; cpt++)
     {
-      fscanf(*pfile,"%80s",keyword);
-      fscanf(*pfile,"%80s",value);
-      this->SetValue<std::string>(keyword, value);
+    fscanf(*pfile, "%80s", keyword);
+    fscanf(*pfile, "%80s", value);
+    this->SetValue<std::string> (keyword, value);
     }
-
   char tempChar[100];
   fscanf(*pfile, "%80s", tempChar);
-  while( strcmp(tempChar,"Ponderation")==0 || strcmp(tempChar,"list:")==0 )
+  while (strcmp(tempChar, "Ponderation") == 0 || strcmp(tempChar, "list:") == 0)
     {
-      fscanf(*pfile, "%80s", tempChar);
+    fscanf(*pfile, "%80s", tempChar);
     }
 
   unsigned int i = 0;
-  while( strcmp(tempChar,"Kernels")!=0 )
+  while (strcmp(tempChar, "Kernels") != 0)
     {
-      m_PonderationList.push_back(::atof(tempChar));
-      fscanf(*pfile, "%80s", tempChar);
-      i++;
+    m_PonderationList.push_back(::atof(tempChar));
+    fscanf(*pfile, "%80s", tempChar);
+    i++;
     }
-  while( strcmp(tempChar,"Kernels")==0 || strcmp(tempChar,"list:")==0 || strcmp(tempChar,"Number")==0 || strcmp(tempChar,"of")==0 || strcmp(tempChar,"Kernels:")==0)
+  while (strcmp(tempChar, "Kernels") == 0 || strcmp(tempChar, "list:") == 0 || strcmp(tempChar, "Number") == 0
+      || strcmp(tempChar, "of") == 0 || strcmp(tempChar, "Kernels:") == 0)
     {
-      fscanf(*pfile, "%80s", tempChar);
+    fscanf(*pfile, "%80s", tempChar);
     }
   int NbOfKernels = ::atoi(tempChar);
 
-  for(unsigned int j=0; j<static_cast<unsigned int>(NbOfKernels); j++)
+  for (unsigned int j = 0; j < static_cast<unsigned int> (NbOfKernels); j++)
     {
-      fscanf(*pfile, "%80s", tempChar);
-      GenericKernelFunctorBase * gen;
-      gen = new GenericKernelFunctorBase;
-      gen->load_parameters(pfile);
-      m_KernelFunctorList.push_back(gen);
-      // Add the pointer to the "Have to Deleted" pointer list
-      m_HaveToBeDeletedList.push_back(gen);
+    fscanf(*pfile, "%80s", tempChar);
+    GenericKernelFunctorBase * gen;
+    gen = new GenericKernelFunctorBase;
+    gen->load_parameters(pfile);
+    AddKernelFunctorModelToKernelList(gen);
+    delete gen;
     }
 
   return 0;
@@ -3756,20 +3900,20 @@ save_parameters(FILE ** pfile, const char * composed_kernel_parameters_keyword)c
   flux << this->GetMapParameters().size();
   flux >> strNbParams;
   line = line + " " + this->GetName() + " " + strNbParams;
-  while( iter != this->GetMapParameters().end() )
+  while (iter != this->GetMapParameters().end())
     {
-      line = line + "   " + iter->first + " " + iter->second;
-      ++iter;
+    line = line + "   " + iter->first + " " + iter->second;
+    ++iter;
     }
   line = line + "\n" + "Ponderation list:\n";
 
-  for (unsigned int i = 0; i<m_PonderationList.size(); i++)
+  for (unsigned int i = 0; i < m_PonderationList.size(); i++)
     {
-      std::string ponde;
-      ::otb::StringStream flux;
-      flux << m_PonderationList[i];
-      flux >> ponde;
-      line = line + "   " + ponde;
+    std::string ponde;
+    ::otb::StringStream flux;
+    flux << m_PonderationList[i];
+    flux >> ponde;
+    line = line + "   " + ponde;
     }
   line = line + "\n" + "Kernels list:\nNumber of Kernels: ";
   std::string nbOfKernels;
@@ -3778,14 +3922,75 @@ save_parameters(FILE ** pfile, const char * composed_kernel_parameters_keyword)c
   flux2 >> nbOfKernels;
 
   line = line + nbOfKernels + "\n";
-  fprintf(*pfile,"%s", line.c_str());
-  for (unsigned int i = 0; i<m_KernelFunctorList.size(); i++)
+  fprintf(*pfile, "%s", line.c_str());
+  for (unsigned int i = 0; i < m_KernelFunctorList.size(); i++)
     {
-      m_KernelFunctorList[i]->save_parameters(pfile, "generic_kernel_parameters");
+    m_KernelFunctorList[i]->save_parameters(pfile, "generic_kernel_parameters");
     }
 
   return 0;
 }
+
+
+/** Set/Get the SVM Model vector for the composed kernel */
+ComposedKernelFunctor::KernelListType& ComposedKernelFunctor::GetKernelFunctorList()
+{
+  return m_KernelFunctorList;
+}
+
+void ComposedKernelFunctor::SetKernelFunctorList(const KernelListType& kernelFunctorList)
+{
+  ClearFunctorList();
+  KernelListType::const_iterator it = kernelFunctorList.begin();
+  for (; it != kernelFunctorList.end(); ++it)
+    {
+    m_KernelFunctorList.push_back( (*it)->Clone() );
+    }
+}
+
+// Add 1 element to the end of the list
+void ComposedKernelFunctor::AddKernelFunctorModelToKernelList(const GenericKernelFunctorBase * kernelfunctor)
+{
+  m_KernelFunctorList.push_back( kernelfunctor->Clone() );
+}
+
+void ComposedKernelFunctor::ClearFunctorList()
+{
+  KernelListType::iterator it = m_KernelFunctorList.begin();
+  for (; it != m_KernelFunctorList.end(); ++it)
+    {
+    delete *it;
+    }
+  m_KernelFunctorList.clear();
+}
+
+
+/** Set/Get the ponderation list to apply to each svm_model of the composed kernel */
+std::vector<double> ComposedKernelFunctor::GetPonderationList()
+{
+  return m_PonderationList;
+}
+
+void ComposedKernelFunctor::SetPonderationModelList(const std::vector<double> & list)
+{
+  m_PonderationList = list;
+}
+
+// Add 1 element to the end of the list
+void ComposedKernelFunctor::AddPonderationToPonderationList(const double & pond)
+{
+  m_PonderationList.push_back(pond);
+}
+
+/** Set/Get the boolean to know which operation has to be done with the kernel functors. */
+void ComposedKernelFunctor::SetMultiplyKernelFunctor( bool val )
+{
+  this->SetValue<bool>("MultiplyKernelFunctor", val);
+}
+
+bool ComposedKernelFunctor::GetMultiplyKernelFunctor()
+{
+  return (this->GetValue<bool>("MultiplyKernelFunctor"));
+}
+
 /*** End OTB modification ***/
-
-

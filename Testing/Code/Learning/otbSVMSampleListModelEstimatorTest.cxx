@@ -35,7 +35,7 @@
 
 #include "otbListSampleGenerator.h"
 
-int otbSVMSampleListModelEstimatorNew(int argc, char* argv[])
+int otbSVMSampleListModelEstimatorNew(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
   typedef double InputPixelType;
   typedef double LabelPixelType;

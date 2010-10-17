@@ -46,6 +46,14 @@ class SpectralAngleKernelFunctor
   : public GenericKernelFunctorBase
 {
 public:
+  typedef SpectralAngleKernelFunctor   Self;
+  typedef GenericKernelFunctorBase     Superclass;
+
+  // Deep copy operator
+  virtual GenericKernelFunctorBase* Clone() const
+  {
+    return new Self(*this);
+  }
 
   double operator ()(const svm_node * x, const svm_node * y,
                      const svm_parameter& param) const;
@@ -58,7 +66,23 @@ public:
   void Update();
 
 protected:
-  inline double  SAM(const svm_node * x, const svm_node * y) const;
+  SpectralAngleKernelFunctor(const Self& copy)
+  : Superclass(copy)
+  {
+    *this = copy;
+  }
+
+  SpectralAngleKernelFunctor&
+  operator=(const Self& copy)
+  {
+    Superclass::operator =(copy);
+    Update();
+    return *this;
+  }
+
+private:
+
+  double SAM(const svm_node * x, const svm_node * y) const;
 
   double m_Coef;
 };

@@ -19,15 +19,18 @@
 #define __otbSVMKernels_h
 
 #include "itkNumericTraits.h"
-#include "itkImageRegionIterator.h"
+#include "otbMath.h"
 
 // Existing kernels
 #include "otbSpectralAngleKernelFunctor.h"
 #include "otbChangeProfileKernelFunctor.h"
 #include "otbNonGaussianRBFKernelFunctor.h"
+#include "otbMixturePolyRBFKernelFunctor.h"
 
 #include "svm.h"
 #include <vector>
+#include <algorithm> // for std::find
+#include <string.h> // for strpbrk
 
 namespace otb
 {
@@ -37,15 +40,37 @@ namespace otb
 class CustomKernelFunctor : public GenericKernelFunctorBase
 {
 public:
+  typedef CustomKernelFunctor          Self;
+  typedef GenericKernelFunctorBase     Superclass;
+
   CustomKernelFunctor() : GenericKernelFunctorBase()
   {
     this->SetName("custom");
   }
   virtual ~CustomKernelFunctor() {}
 
+  // Deep copy operator
+  virtual GenericKernelFunctorBase* Clone() const
+  {
+    return new Self(*this);
+  }
+
   virtual double operator ()(const svm_node *x, const svm_node *y, const svm_parameter& /*param*/) const
   {
     return (dot(x, x) - 2.0 * dot(x, y) + dot(y, y));
+  }
+
+protected:
+  CustomKernelFunctor(const Self& copy)
+  : Superclass(copy)
+  {
+    *this = copy;
+  }
+
+  CustomKernelFunctor& operator=(const Self& copy)
+  {
+    Superclass::operator =(copy);
+    return *this;
   }
 };
 
@@ -55,6 +80,9 @@ public:
 class InvMultiQuadricKernelFunctor : public GenericKernelFunctorBase
 {
 public:
+  typedef InvMultiQuadricKernelFunctor Self;
+  typedef GenericKernelFunctorBase     Superclass;
+
   InvMultiQuadricKernelFunctor() : GenericKernelFunctorBase()
   {
     this->SetName("invMultiQuadric");
@@ -62,16 +90,37 @@ public:
   }
   virtual ~InvMultiQuadricKernelFunctor() {}
 
+  // Deep copy operator
+  virtual GenericKernelFunctorBase* Clone() const
+  {
+    return new Self(*this);
+  }
+
   virtual double operator ()(const svm_node *x, const svm_node *y, const svm_parameter& param) const
   {
-    CustomKernelFunctor custom;
-    double              mq = this->GetValue<double>("const_coef") + custom(x, y, param);
+    double              mq = this->GetValue<double>("const_coef") + m_Custom(x, y, param);
     if (mq == 0.0)
       {
       return itk::NumericTraits<double>::max();
       }
     return 1.0 / sqrt(mq);
   }
+
+protected:
+  InvMultiQuadricKernelFunctor(const Self& copy)
+  : Superclass(copy)
+  {
+    *this = copy;
+  }
+
+  InvMultiQuadricKernelFunctor& operator=(const Self& copy)
+  {
+    Superclass::operator =(copy);
+    return *this;
+  }
+
+private:
+  CustomKernelFunctor m_Custom;
 };
 
 /** \class KModKernelFunctor
@@ -80,6 +129,9 @@ public:
 class KModKernelFunctor : public GenericKernelFunctorBase
 {
 public:
+  typedef KModKernelFunctor            Self;
+  typedef GenericKernelFunctorBase     Superclass;
+
   KModKernelFunctor() : GenericKernelFunctorBase()
   {
     this->SetName("KMod");
@@ -89,8 +141,7 @@ public:
 
   virtual double operator ()(const svm_node *x, const svm_node *y, const svm_parameter& param) const
   {
-    CustomKernelFunctor custom;
-    double              mq = this->GetValue<double>("const_coef") + custom(x, y, param);
+    double              mq = this->GetValue<double>("const_coef") + m_Custom(x, y, param);
 
     if (mq == 0.0)
       {
@@ -98,6 +149,28 @@ public:
       }
     return exp(param.gamma / mq) - 1.0;
   }
+
+  // Deep copy operator
+  virtual GenericKernelFunctorBase* Clone() const
+  {
+    return new Self(*this);
+  }
+
+protected:
+  KModKernelFunctor(const Self& copy)
+  : Superclass(copy)
+  {
+    *this = copy;
+  }
+
+  KModKernelFunctor& operator=(const Self& copy)
+  {
+    Superclass::operator =(copy);
+    return *this;
+  }
+
+private:
+  CustomKernelFunctor m_Custom;
 };
 
 /** \class SAMKernelFunctor
@@ -106,6 +179,9 @@ public:
 class SAMKernelFunctor : public GenericKernelFunctorBase
 {
 public:
+  typedef SAMKernelFunctor             Self;
+  typedef GenericKernelFunctorBase     Superclass;
+
   SAMKernelFunctor() : GenericKernelFunctorBase()
   {
     this->SetName("SAM");
@@ -122,6 +198,25 @@ public:
     double ss = dot(x, y);
     return vcl_acos(ss / vcl_sqrt(den));
   }
+
+  // Deep copy operator
+  virtual GenericKernelFunctorBase* Clone() const
+  {
+    return new Self(*this);
+  }
+
+protected:
+  SAMKernelFunctor(const Self& copy)
+  : Superclass(copy)
+  {
+    *this = copy;
+  }
+
+  SAMKernelFunctor& operator=(const Self& copy)
+  {
+    Superclass::operator =(copy);
+    return *this;
+  }
 };
 
 /** \class RadialSAMKernelFunctor
@@ -130,6 +225,9 @@ public:
 class RadialSAMKernelFunctor : public GenericKernelFunctorBase
 {
 public:
+  typedef RadialSAMKernelFunctor       Self;
+  typedef GenericKernelFunctorBase     Superclass;
+
   RadialSAMKernelFunctor() : GenericKernelFunctorBase()
   {
     this->SetName("RadialSAM");
@@ -138,9 +236,30 @@ public:
 
   virtual double operator ()(const svm_node *x, const svm_node *y, const svm_parameter& param) const
   {
-    SAMKernelFunctor sam;
-    return vcl_exp(-param.gamma * sam(x, y, param));
+    return vcl_exp(-param.gamma * m_Sam(x, y, param));
   }
+
+  // Deep copy operator
+  virtual GenericKernelFunctorBase* Clone() const
+  {
+    return new Self(*this);
+  }
+
+protected:
+  RadialSAMKernelFunctor(const Self& copy)
+  : Superclass(copy)
+  {
+    *this = copy;
+  }
+
+  RadialSAMKernelFunctor& operator=(const Self& copy)
+  {
+    Superclass::operator =(copy);
+    return *this;
+  }
+
+private:
+  SAMKernelFunctor m_Sam;
 };
 
 /** \class InverseCosSAMKernelFunctor
@@ -149,6 +268,9 @@ public:
 class InverseCosSAMKernelFunctor : public GenericKernelFunctorBase
 {
 public:
+  typedef InverseCosSAMKernelFunctor   Self;
+  typedef GenericKernelFunctorBase     Superclass;
+
   InverseCosSAMKernelFunctor() : GenericKernelFunctorBase()
   {
     this->SetName("InverseCosSAM");
@@ -157,9 +279,30 @@ public:
 
   virtual double operator ()(const svm_node *x, const svm_node *y, const svm_parameter& param) const
   {
-    SAMKernelFunctor sam;
-    return 1.0 - vcl_cos(sam(x, y, param));
+    return 1.0 - vcl_cos(m_Sam(x, y, param));
   }
+
+  // Deep copy operator
+  virtual GenericKernelFunctorBase* Clone() const
+  {
+    return new Self(*this);
+  }
+
+protected:
+  InverseCosSAMKernelFunctor(const Self& copy)
+  : Superclass(copy)
+  {
+    *this = copy;
+  }
+
+  InverseCosSAMKernelFunctor& operator=(const Self& copy)
+  {
+    Superclass::operator =(copy);
+    return *this;
+  }
+
+private:
+  SAMKernelFunctor m_Sam;
 };
 
 /** \class InvMultiQuadraticSAMKernelFunctor
@@ -168,6 +311,9 @@ public:
 class InvMultiQuadraticSAMKernelFunctor : public GenericKernelFunctorBase
 {
 public:
+  typedef InvMultiQuadraticSAMKernelFunctor   Self;
+  typedef GenericKernelFunctorBase            Superclass;
+
   InvMultiQuadraticSAMKernelFunctor() : GenericKernelFunctorBase()
   {
     this->SetName("invMultiQuadraticSAM");
@@ -175,10 +321,15 @@ public:
   }
   virtual ~InvMultiQuadraticSAMKernelFunctor() {}
 
+  // Deep copy operator
+  virtual GenericKernelFunctorBase* Clone() const
+  {
+    return new Self(*this);
+  }
+
   virtual double operator ()(const svm_node *x, const svm_node *y, const svm_parameter& param) const
   {
-    SAMKernelFunctor sam;
-    double           mq = this->GetValue<double>("const_coef") + sam(x, y, param);
+    double           mq = this->GetValue<double>("const_coef") + m_Sam(x, y, param);
 
     if (mq == 0.)
       {
@@ -186,6 +337,22 @@ public:
       }
     return 1. / sqrt(mq);
   }
+
+protected:
+  InvMultiQuadraticSAMKernelFunctor(const Self& copy)
+  : Superclass(copy)
+  {
+    *this = copy;
+  }
+
+  InvMultiQuadraticSAMKernelFunctor& operator=(const Self& copy)
+  {
+    Superclass::operator =(copy);
+    return *this;
+  }
+
+private:
+  SAMKernelFunctor m_Sam;
 };
 
 /** \class KModSAMKernelFunctor
@@ -194,6 +361,9 @@ public:
 class KModSAMKernelFunctor : public GenericKernelFunctorBase
 {
 public:
+  typedef KModSAMKernelFunctor                Self;
+  typedef GenericKernelFunctorBase            Superclass;
+
   KModSAMKernelFunctor() : GenericKernelFunctorBase()
   {
     this->SetName("KModSAM");
@@ -201,10 +371,15 @@ public:
   }
   virtual ~KModSAMKernelFunctor() {}
 
+  // Deep copy operator
+  virtual GenericKernelFunctorBase* Clone() const
+  {
+    return new Self(*this);
+  }
+
   virtual double operator ()(const svm_node *x, const svm_node *y, const svm_parameter& param) const
   {
-    SAMKernelFunctor sam;
-    double           mq = this->GetValue<double>("const_coef") + sam(x, y, param);
+    double           mq = this->GetValue<double>("const_coef") + m_Sam(x, y, param);
 
     if (mq == 0.)
       {
@@ -212,6 +387,22 @@ public:
       }
     return vcl_exp(param.gamma / mq) - 1.0;
   }
+
+protected:
+  KModSAMKernelFunctor(const Self& copy)
+  : Superclass(copy)
+  {
+    *this = copy;
+  }
+
+  KModSAMKernelFunctor& operator=(const Self& copy)
+  {
+    Superclass::operator =(copy);
+    return *this;
+  }
+
+private:
+  SAMKernelFunctor m_Sam;
 };
 
 /** \class RBFKernelFunctor
@@ -220,6 +411,9 @@ public:
 class RBFKernelFunctor : public GenericKernelFunctorBase
 {
 public:
+  typedef RBFKernelFunctor                    Self;
+  typedef GenericKernelFunctorBase            Superclass;
+
   RBFKernelFunctor() : GenericKernelFunctorBase()
   {
     this->SetName("RBF");
@@ -227,11 +421,15 @@ public:
   }
   virtual ~RBFKernelFunctor() {}
 
+  // Deep copy operator
+  virtual GenericKernelFunctorBase* Clone() const
+  {
+    return new Self(*this);
+  }
+
   virtual double operator ()(const svm_node *x, const svm_node *y, const svm_parameter& param) const
   {
-    CustomKernelFunctor custom;
-    double              res = this->GetValue<double>("gamma_coef") * custom(x, y, param);
-
+    double              res = this->GetValue<double>("gamma_coef") * m_Custom(x, y, param);
     return vcl_exp(-res);
   }
 
@@ -310,6 +508,21 @@ public:
 
   }
 
+protected:
+  RBFKernelFunctor(const Self& copy)
+  : Superclass(copy)
+  {
+    *this = copy;
+  }
+
+  RBFKernelFunctor& operator=(const Self& copy)
+  {
+    Superclass::operator =(copy);
+    return *this;
+  }
+
+private:
+  CustomKernelFunctor m_Custom;
 };
 
 /** \class RBFRBFSAMKernelFunctor
@@ -318,6 +531,9 @@ public:
 class RBFRBFSAMKernelFunctor : public GenericKernelFunctorBase
 {
 public:
+  typedef RBFRBFSAMKernelFunctor              Self;
+  typedef GenericKernelFunctorBase            Superclass;
+
   RBFRBFSAMKernelFunctor() : GenericKernelFunctorBase()
   {
     this->SetName("RBFRBFSAM");
@@ -325,13 +541,34 @@ public:
   }
   virtual ~RBFRBFSAMKernelFunctor() {}
 
+  // Deep copy operator
+  virtual GenericKernelFunctorBase* Clone() const
+  {
+    return new Self(*this);
+  }
+
   virtual double operator ()(const svm_node *x, const svm_node *y, const svm_parameter& param) const
   {
-    CustomKernelFunctor    custom;
-    RadialSAMKernelFunctor radialSam;
-    return (this->GetValue<double>("lin_coef") * vcl_exp(-param.gamma * custom(x, y, param))
-            + (1.0 - this->GetValue<double>("lin_coef")) * radialSam(x, y, param));
+    return (this->GetValue<double>("lin_coef") * vcl_exp(-param.gamma * m_Custom(x, y, param))
+            + (1.0 - this->GetValue<double>("lin_coef")) * m_RadialSam(x, y, param));
   }
+
+protected:
+  RBFRBFSAMKernelFunctor(const Self& copy)
+  : Superclass(copy)
+  {
+    *this = copy;
+  }
+
+  RBFRBFSAMKernelFunctor& operator=(const Self& copy)
+  {
+    Superclass::operator =(copy);
+    return *this;
+  }
+
+private:
+  CustomKernelFunctor    m_Custom;
+  RadialSAMKernelFunctor m_RadialSam;
 };
 
 /** \class PolyRBFSAMKernelFunctor
@@ -340,6 +577,9 @@ public:
 class PolyRBFSAMKernelFunctor : public GenericKernelFunctorBase
 {
 public:
+  typedef PolyRBFSAMKernelFunctor             Self;
+  typedef GenericKernelFunctorBase            Superclass;
+
   PolyRBFSAMKernelFunctor() : GenericKernelFunctorBase()
   {
     this->SetName("polyRBFSAM");
@@ -348,13 +588,34 @@ public:
   }
   virtual ~PolyRBFSAMKernelFunctor() {}
 
+  // Deep copy operator
+  virtual GenericKernelFunctorBase* Clone() const
+  {
+    return new Self(*this);
+  }
+
   virtual double operator ()(const svm_node *x, const svm_node *y, const svm_parameter& param) const
   {
-    RadialSAMKernelFunctor radialSam;
     return this->GetValue<double>("const_lin") * vcl_pow(dot(x, y) + this->GetValue<double>("const_coef"), param.degree)
            + (1.0 - this->GetValue<double>("const_coef"))
-           * radialSam(x, y, param);
+           * m_RadialSam(x, y, param);
   }
+
+protected:
+  PolyRBFSAMKernelFunctor(const Self& copy)
+  : Superclass(copy)
+  {
+    *this = copy;
+  }
+
+  PolyRBFSAMKernelFunctor& operator=(const Self& copy)
+  {
+    Superclass::operator =(copy);
+    return *this;
+  }
+
+private:
+  RadialSAMKernelFunctor m_RadialSam;
 };
 
 /** \class RBFDiffKernelFunctor
@@ -363,11 +624,20 @@ public:
 class RBFDiffKernelFunctor : public GenericKernelFunctorBase
 {
 public:
+  typedef RBFDiffKernelFunctor                Self;
+  typedef GenericKernelFunctorBase            Superclass;
+
   RBFDiffKernelFunctor() : GenericKernelFunctorBase()
   {
     this->SetName("RBFDiff");
   }
   virtual ~RBFDiffKernelFunctor() {}
+
+  // Deep copy operator
+  virtual GenericKernelFunctorBase* Clone() const
+  {
+    return new Self(*this);
+  }
 
   virtual double operator ()(const svm_node *x, const svm_node *y, const svm_parameter& param) const
   {
@@ -396,6 +666,20 @@ public:
       }
     return total;
   }
+
+protected:
+  RBFDiffKernelFunctor(const Self& copy)
+  : Superclass(copy)
+  {
+    *this = copy;
+  }
+
+  RBFDiffKernelFunctor& operator=(const Self& copy)
+  {
+    Superclass::operator =(copy);
+    return *this;
+  }
+
 };
 
 /** \class CustomLinearKernelFunctor
@@ -404,17 +688,41 @@ public:
 class CustomLinearKernelFunctor : public GenericKernelFunctorBase
 {
 public:
+  typedef CustomLinearKernelFunctor           Self;
+  typedef GenericKernelFunctorBase            Superclass;
+
   CustomLinearKernelFunctor() : GenericKernelFunctorBase()
   {
     this->SetName("customLinear");
   }
   virtual ~CustomLinearKernelFunctor() {}
 
+  // Deep copy operator
+  virtual GenericKernelFunctorBase* Clone() const
+  {
+    return new Self(*this);
+  }
+
   virtual double operator ()(const svm_node *x, const svm_node *y, const svm_parameter& param) const
   {
-    CustomKernelFunctor custom;
-    return (vcl_exp(-param.gamma * custom(x, y, param)));
+    return (vcl_exp(-param.gamma * m_Custom(x, y, param)));
   }
+
+protected:
+  CustomLinearKernelFunctor(const Self& copy)
+  : Superclass(copy)
+  {
+    *this = copy;
+  }
+
+  CustomLinearKernelFunctor& operator=(const Self& copy)
+  {
+    Superclass::operator =(copy);
+    return *this;
+  }
+
+private:
+  CustomKernelFunctor m_Custom;
 };
 
 /** \class GroupedRBFKernelFunctor
@@ -423,11 +731,20 @@ public:
 class GroupedRBFKernelFunctor : public GenericKernelFunctorBase
 {
 public:
+  typedef GroupedRBFKernelFunctor             Self;
+  typedef GenericKernelFunctorBase            Superclass;
+
   GroupedRBFKernelFunctor() : GenericKernelFunctorBase()
   {
     this->SetName("groupedRBF");
   }
   virtual ~GroupedRBFKernelFunctor() {}
+
+  // Deep copy operator
+  virtual GenericKernelFunctorBase* Clone() const
+  {
+    return new Self(*this);
+  }
 
   virtual double operator ()(const svm_node *x, const svm_node *y, const svm_parameter& param) const
   {
@@ -513,8 +830,7 @@ public:
           }
 
         // value can have different value according to j
-        CustomLinearKernelFunctor customLinear;
-        value =  customLinear(xGroup, yGroup, param);
+        value =  m_CustomLinear(xGroup, yGroup, param);
 
         total += value;
         }
@@ -552,8 +868,7 @@ public:
           }
 
         // value can have different value according to j
-        CustomLinearKernelFunctor customLinear;
-        value =  customLinear(xGroup, yGroup, param);
+        value =  m_CustomLinear(xGroup, yGroup, param);
 
         total += value;
         }
@@ -563,8 +878,7 @@ public:
 
     else
       {
-      CustomLinearKernelFunctor customLinear;
-      total =  static_cast<double>(numberOfGroups) * customLinear(x, y, param);
+      total =  static_cast<double>(numberOfGroups) * m_CustomLinear(x, y, param);
       }
 
     if (xTemp != NULL) delete xTemp;
@@ -572,6 +886,22 @@ public:
 
     return total;
   }
+
+protected:
+  GroupedRBFKernelFunctor(const Self& copy)
+  : Superclass(copy)
+  {
+    *this = copy;
+  }
+
+  GroupedRBFKernelFunctor& operator=(const Self& copy)
+  {
+    Superclass::operator =(copy);
+    return *this;
+  }
+
+private:
+  CustomLinearKernelFunctor m_CustomLinear;
 };
 
 /** \class GroupingAdaptiveKernelFunctor
@@ -580,6 +910,9 @@ public:
 class GroupingAdaptiveKernelFunctor : public GenericKernelFunctorBase
 {
 public:
+  typedef GroupingAdaptiveKernelFunctor       Self;
+  typedef GenericKernelFunctorBase            Superclass;
+
   GroupingAdaptiveKernelFunctor() : GenericKernelFunctorBase()
   {
     this->SetName("groupingAdaptive");
@@ -587,6 +920,12 @@ public:
     this->SetValue<double>("const_coef", 1.);
   }
   virtual ~GroupingAdaptiveKernelFunctor() {}
+
+  // Deep copy operator
+  virtual GenericKernelFunctorBase* Clone() const
+  {
+    return new Self(*this);
+  }
 
   virtual double operator ()(const svm_node *x, const svm_node *y, const svm_parameter& param) const
   {
@@ -730,6 +1069,21 @@ public:
 
     return total;
   }
+
+
+protected:
+  GroupingAdaptiveKernelFunctor(const Self& copy)
+  : Superclass(copy)
+  {
+    *this = copy;
+  }
+
+  GroupingAdaptiveKernelFunctor& operator=(const Self& copy)
+  {
+    Superclass::operator =(copy);
+    return *this;
+  }
+
 };
 
 }

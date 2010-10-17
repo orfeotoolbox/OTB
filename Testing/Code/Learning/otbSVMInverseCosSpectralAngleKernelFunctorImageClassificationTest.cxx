@@ -35,6 +35,12 @@
 
 int otbSVMInverseCosSpectralAngleKernelFunctorImageClassificationTest(int argc, char* argv[])
 {
+  if (argc != 4)
+    {
+    std::cerr << "Wrong number of arguments" << std::endl;
+    return EXIT_FAILURE;
+    }
+
   const char* inputImageFileName = argv[1];
   const char* trainingImageFileName = argv[2];
   const char* outputModelFileName = argv[3];

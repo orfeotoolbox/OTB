@@ -70,7 +70,6 @@ SVMModel<TValue, TLabel>::Initialize()
   if (!m_Model)
     {
     m_Model = new struct svm_model;
-    m_Model->delete_composed = false;
     m_Model->l = 0;
     m_Model->nr_class = 0;
     m_Model->SV = NULL;
@@ -184,7 +183,7 @@ SVMModel<TValue, TLabel>::BuildProblem()
     {
     itkExceptionMacro(<< "No samples, can not build SVM problem.");
     }
-  std::cout << "Rebuilding problem ..." << std::endl;
+  otbMsgDebugMacro(<< "Rebuilding problem ...");
 
   // Get the size of the samples
   long int elements = m_Samples[0].first.size() + 1;
@@ -328,14 +327,8 @@ SVMModel<TValue, TLabel>::Train()
   // Check consistency
   this->ConsistencyCheck();
 
-  // retrieve parameters
-  struct svm_parameter parameters = m_Parameters;
-
   // train the model
-  m_Model = svm_train(&m_Problem, &parameters);
-
-  // Reset the parameters
-  m_Parameters = parameters;
+  m_Model = svm_train(&m_Problem, &m_Parameters);
 
   // Set the model as up-to-date
   m_ModelUpToDate = true;
