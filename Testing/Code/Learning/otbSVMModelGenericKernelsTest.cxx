@@ -38,6 +38,11 @@
 
 int otbSVMModelGenericKernelsTest(int argc, char* argv[])
 {
+  if (argc != 18)
+    {
+    return EXIT_FAILURE;
+    }
+
   typedef unsigned char InputPixelType;
   typedef unsigned char LabelPixelType;
 
@@ -61,6 +66,7 @@ int otbSVMModelGenericKernelsTest(int argc, char* argv[])
   otb::SpectralAngleKernelFunctor        spectAngleFunctor; 
   otb::NonGaussianRBFKernelFunctor       nonGaussRBFFunctor;
   otb::ChangeProfileKernelFunctor        changeProFunctor;
+  otb::MixturePolyRBFKernelFunctor       mixPolRBFFunctor;
 
   invMultiQuadricFunctor.SetValue<double>("const_coef", 2.);
   invMultiQuadraticSAMFunctor.SetValue<double>("const_coef", 3.);
@@ -78,9 +84,15 @@ int otbSVMModelGenericKernelsTest(int argc, char* argv[])
   changeProFunctor.SetValue<double>("Coef", 0.1);
   changeProFunctor.SetValue<double>("Degree", 1.1);
   changeProFunctor.SetValue<double>("Gamma", 1.1);
+  mixPolRBFFunctor.SetValue<double>("Mixture", 0.5);
+  mixPolRBFFunctor.SetValue<double>("GammaPoly", 1.0);
+  mixPolRBFFunctor.SetValue<double>("CoefPoly", 1.0);
+  mixPolRBFFunctor.SetValue<double>("DegreePoly", 2.0);
+  mixPolRBFFunctor.SetValue<double>("GammaRBF", 1.0);
+
 
   struct svm_model *model;
-  model = new struct svm_model;
+  model = new svm_model;
   model->param.svm_type = 0;
   model->param.kernel_type = 5;
   model->nr_class = 2;
@@ -168,54 +180,57 @@ int otbSVMModelGenericKernelsTest(int argc, char* argv[])
   model->nSV[0] = 3;
   model->nSV[1] = 2;
 
-  model->param.kernel_generic = &customFunctor;
+  model->param.kernel_generic = customFunctor.Clone();
   svmModel->SetModel(model);
   svmModel->SaveModel(argv[1]);
-  model->param.kernel_generic = &invMultiQuadricFunctor;
+  model->param.kernel_generic = invMultiQuadricFunctor.Clone();
   svmModel->SetModel(model);
   svmModel->SaveModel(argv[2]);
-  model->param.kernel_generic = &SAMFunctor;
+  model->param.kernel_generic = SAMFunctor.Clone();
   svmModel->SetModel(model);
   svmModel->SaveModel(argv[3]);
-  model->param.kernel_generic = &kModFunctor;
+  model->param.kernel_generic = kModFunctor.Clone();;
   svmModel->SetModel(model);
   svmModel->SaveModel(argv[4]);
-  model->param.kernel_generic = &radialSAMFunctor;
+  model->param.kernel_generic = radialSAMFunctor.Clone();
   svmModel->SetModel(model);
   svmModel->SaveModel(argv[5]);
-  model->param.kernel_generic = &invMultiQuadraticSAMFunctor;
+  model->param.kernel_generic = invMultiQuadraticSAMFunctor.Clone();
   svmModel->SetModel(model);
   svmModel->SaveModel(argv[6]);
-  model->param.kernel_generic = &KModSAMFunctor;
+  model->param.kernel_generic = KModSAMFunctor.Clone();
   svmModel->SetModel(model);
   svmModel->SaveModel(argv[7]);
-  model->param.kernel_generic = &RBFRBFSAMFunctor;
+  model->param.kernel_generic = RBFRBFSAMFunctor.Clone();
   svmModel->SetModel(model);
   svmModel->SaveModel(argv[8]);
-  model->param.kernel_generic = &polyRBFSAMFunctor;
+  model->param.kernel_generic = polyRBFSAMFunctor.Clone();
   svmModel->SetModel(model);
   svmModel->SaveModel(argv[9]);
-  model->param.kernel_generic = &RBFDiffFunctor;
+  model->param.kernel_generic = RBFDiffFunctor.Clone();
   svmModel->SetModel(model);
   svmModel->SaveModel(argv[10]);
-  model->param.kernel_generic = &customLinearFunctor;
+  model->param.kernel_generic = customLinearFunctor.Clone();
   svmModel->SetModel(model);
   svmModel->SaveModel(argv[11]);
-  model->param.kernel_generic = &groupedRBFFunctor;
+  model->param.kernel_generic = groupedRBFFunctor.Clone();
   svmModel->SetModel(model);
   svmModel->SaveModel(argv[12]);
-  model->param.kernel_generic = &groupingAdaptiveFunctor;
+  model->param.kernel_generic = groupingAdaptiveFunctor.Clone();
   svmModel->SetModel(model);
   svmModel->SaveModel(argv[13]);
-  model->param.kernel_generic = &spectAngleFunctor;
+  model->param.kernel_generic = spectAngleFunctor.Clone();
   svmModel->SetModel(model);
   svmModel->SaveModel(argv[14]);
-  model->param.kernel_generic = &nonGaussRBFFunctor;
+  model->param.kernel_generic = nonGaussRBFFunctor.Clone();
   svmModel->SetModel(model);
   svmModel->SaveModel(argv[15]);
-  model->param.kernel_generic = &changeProFunctor;
+  model->param.kernel_generic = changeProFunctor.Clone();
   svmModel->SetModel(model);
   svmModel->SaveModel(argv[16]);
+  model->param.kernel_generic = mixPolRBFFunctor.Clone();
+  svmModel->SetModel(model);
+  svmModel->SaveModel(argv[17]);
 
   return EXIT_SUCCESS;
 }
@@ -223,6 +238,11 @@ int otbSVMModelGenericKernelsTest(int argc, char* argv[])
 template<class KernelType>
 int otbSVMKernelsTest_generic(int argc, char* argv[])
 {
+  if (argc != 5)
+    {
+    return EXIT_FAILURE;
+    }
+
   std::string imageFilename = argv[1];
   std::string vectorDataFilename = argv[2];
   std::string outputModelFileName= argv[3];
@@ -338,6 +358,18 @@ int otbSVMKernelsTest(int argc, char* argv[])
       break;
     case 14:
       return otbSVMKernelsTest_generic<otb::GroupingAdaptiveKernelFunctor>(argc, argv);
+      break;
+    case 15:
+      return otbSVMKernelsTest_generic<otb::SpectralAngleKernelFunctor>(argc, argv);
+      break;
+    case 16:
+      return otbSVMKernelsTest_generic<otb::NonGaussianRBFKernelFunctor>(argc, argv);
+      break;
+    case 17:
+      return otbSVMKernelsTest_generic<otb::ChangeProfileKernelFunctor>(argc, argv);
+      break;
+    case 18:
+      return otbSVMKernelsTest_generic<otb::MixturePolyRBFKernelFunctor>(argc, argv);
       break;
     default:
        std::cerr << "No more kernel available\n";
