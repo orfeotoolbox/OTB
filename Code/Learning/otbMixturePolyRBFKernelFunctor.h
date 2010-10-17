@@ -42,8 +42,17 @@ class MixturePolyRBFKernelFunctor
   : public GenericKernelFunctorBase
 {
 public:
+  typedef MixturePolyRBFKernelFunctor  Self;
+  typedef GenericKernelFunctorBase     Superclass;
+
   double operator ()(const svm_node * x, const svm_node * y,
                      const svm_parameter& param) const;
+
+  // Deep copy operator
+  virtual GenericKernelFunctorBase* Clone() const
+  {
+    return new Self(*this);
+  }
 
   MixturePolyRBFKernelFunctor ();
   virtual ~MixturePolyRBFKernelFunctor () {}
@@ -53,6 +62,20 @@ public:
   void Update();
 
 protected:
+  MixturePolyRBFKernelFunctor(const Self& copy)
+  : Superclass(copy)
+  {
+    *this = copy;
+  }
+
+  MixturePolyRBFKernelFunctor&
+  operator=(const Self& copy)
+  {
+    Superclass::operator =(copy);
+    Update();
+    return *this;
+  }
+
   double m_Mixture;
   double m_GammaPoly;
   double m_CoefPoly;

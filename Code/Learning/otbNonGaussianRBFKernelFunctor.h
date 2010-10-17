@@ -41,6 +41,14 @@ class NonGaussianRBFKernelFunctor
   : public GenericKernelFunctorBase
 {
 public:
+  typedef NonGaussianRBFKernelFunctor  Self;
+  typedef GenericKernelFunctorBase     Superclass;
+
+  // Deep copy operator
+  virtual GenericKernelFunctorBase* Clone() const
+  {
+    return new Self(*this);
+  }
 
   double operator ()(const svm_node * x, const svm_node * y,
                      const svm_parameter& param) const;
@@ -53,9 +61,25 @@ public:
   void Update();
 
 protected:
+  NonGaussianRBFKernelFunctor(const Self& copy)
+  : Superclass(copy)
+  {
+    *this = copy;
+  }
+
+  NonGaussianRBFKernelFunctor&
+  operator=(const Self& copy)
+  {
+    Superclass::operator =(copy);
+    Update();
+    return *this;
+  }
+
+protected:
   double m_Alpha;
   double m_Beta;
   double m_Gamma;
+
 };
 
 } // end of namespace otb

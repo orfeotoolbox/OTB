@@ -7,11 +7,163 @@
 #include <map>
 #include <vector>
 #include "otbMacro.h"
-class GenericKernelFunctorBase;
-class ComposedKernelFunctor;
-/*** End OTB modification ***/
+#include <string.h>
 
-/*** Begin OTB modification ***/
+struct svm_node;
+struct svm_parameter;
+
+/** \class GenericKernelFunctorBase
+ * \brief Undocumented
+ */
+class GenericKernelFunctorBase
+{
+public:
+  typedef GenericKernelFunctorBase Self;
+
+  typedef std::map<std::string, std::string> MapType;
+  typedef MapType::iterator MapIterator;
+  typedef MapType::const_iterator MapConstIterator;
+
+  GenericKernelFunctorBase();
+
+  virtual ~GenericKernelFunctorBase();
+
+  virtual GenericKernelFunctorBase* Clone() const;
+
+  virtual double operator()(const svm_node * /*x*/, const svm_node * /*y*/, const svm_parameter& /*param*/) const;
+
+
+  virtual double derivative(const svm_node * /*x*/, const svm_node * /*y*/, const svm_parameter& /*param*/,
+                            int /*degree*/, int /*index*/, bool /*isAtEnd*/, double /*constValue*/) const;
+
+  virtual int load_parameters(FILE ** pfile);
+
+  virtual int save_parameters(FILE ** pfile, const char * generic_kernel_parameters_keyword) const;
+
+  virtual void print_parameters(void) const;
+
+  virtual double dot(const svm_node *px, const svm_node *py) const;
+
+  virtual svm_node * sub(const svm_node *px, const svm_node *py) const;
+
+  virtual svm_node * add(const svm_node *px, const svm_node *py) const;
+
+  virtual void SetName(std::string name);
+  virtual std::string GetName(void) const;
+
+  virtual void SetMapParameters(const MapType & map);
+  virtual const MapType & GetMapParameters() const;
+  virtual MapType GetMapParameters();
+
+  template<class T>
+  T GetValue(const char *option) const
+  {
+    std::string Value = m_MapParameters.find(std::string(option))->second;
+    T lValeur;
+    ::otb::StringStream flux;
+    flux << Value;
+    flux >> lValeur;
+    return lValeur;
+  }
+
+  template<class T>
+  void SetValue(const char *option, const T & value)
+  {
+    std::string lValeur;
+    ::otb::StringStream flux;
+    flux << value;
+    flux >> lValeur;
+    m_MapParameters[std::string(option)] = lValeur;
+  }
+
+  // Override this method to to split m_MapParameters into specific variables to speed up kernel evaluations
+  virtual void Update(void);
+
+protected:
+  GenericKernelFunctorBase(const Self& copy);
+
+  Self& operator=(const Self& copy);
+
+private:
+  /** Kernel functor parameters */
+  MapType m_MapParameters;
+
+  /** Functor label name (without space) */
+  std::string m_Name;
+};
+
+/** \class ComposedKernelFunctor
+ * \brief Undocumented
+ */
+class ComposedKernelFunctor: public GenericKernelFunctorBase
+{
+public:
+  typedef ComposedKernelFunctor    Self;
+  typedef GenericKernelFunctorBase Superclass;
+
+  ComposedKernelFunctor();
+
+  virtual ~ComposedKernelFunctor();
+
+  virtual ComposedKernelFunctor* Clone() const;
+
+  typedef std::vector<GenericKernelFunctorBase *> KernelListType;
+
+  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param) const;
+
+  /** Used for Taylor classification*/
+  // degree is the developement degree
+  // index is the current value
+  // isAtEnd to indicate that it's the last possible derivation
+  // baseValue is the constant of the formula
+  virtual double derivative(const svm_node *x, const svm_node *y, const svm_parameter& param, int degree, int index, bool isAtEnd, double constValue) const;
+
+  virtual int load_parameters(FILE ** pfile);
+
+  virtual int save_parameters(FILE ** pfile, const char * composed_kernel_parameters_keyword) const;
+
+  virtual void print_parameters(void)const;
+
+  /** Get a reference to the internal kernel list */
+  KernelListType& GetKernelFunctorList();
+
+  /** Set internal kernel list. A clone is made of each kernel when copying */
+  void SetKernelFunctorList(const KernelListType& kernelFunctorList);
+
+  // Add 1 element to the end of the list. A clone is made of the kernel
+  void AddKernelFunctorModelToKernelList(const GenericKernelFunctorBase * kernelfunctor);
+
+  /** Set/Get the ponderation list to apply to each svm_model of the composed kernel */
+  std::vector<double> GetPonderationList();
+  void SetPonderationModelList(const std::vector<double> & list);
+  // Add 1 element to the end of the list
+  void AddPonderationToPonderationList(const double & pond);
+
+  /** Set/Get the boolean to know which operation has to be done with the kernel functors. */
+  void SetMultiplyKernelFunctor( bool val );
+  bool GetMultiplyKernelFunctor();
+
+protected:
+  /** Copy constructor */
+  ComposedKernelFunctor(const Self& copy);
+
+  /* Assignment operator */
+  Self& operator=(const Self& copy);
+
+private:
+
+  void ClearFunctorList();
+
+  typedef GenericKernelFunctorBase::MapType MapType;
+  typedef GenericKernelFunctorBase::MapIterator MapIterator;
+  typedef GenericKernelFunctorBase::MapConstIterator MapConstIterator;
+
+  /** Generic kernel functors that composed kernel */
+  KernelListType m_KernelFunctorList;
+  /** Ponderation list to apply to each svm_model of the composed kernel*/
+  std::vector<double> m_PonderationList;
+};
+
 //#ifdef __cplusplus
 //extern "C" {
 //#endif
@@ -37,7 +189,80 @@ enum { LINEAR, POLY, RBF, SIGMOID, PRECOMPUTED, GENERIC, COMPOSED }; /* kernel_t
 
 struct svm_parameter
 {
-	int svm_type;
+  /*** Begin OTB modification ***/
+  svm_parameter()
+  : kernel_generic(NULL),
+    kernel_composed(NULL),
+    nr_weight(0),
+    weight_label(NULL),
+    weight(NULL)
+  {
+  }
+
+  svm_parameter(const svm_parameter& copy)
+  : kernel_generic(NULL),
+    kernel_composed(NULL),
+    nr_weight(0),
+    weight_label(NULL),
+    weight(NULL)
+  {
+    *this = copy;
+  }
+
+  ~svm_parameter()
+  {
+    delete kernel_generic;
+    delete kernel_composed;
+    free(weight_label);
+    free(weight);
+  }
+
+  svm_parameter& operator=(const svm_parameter& copy)
+  {
+    svm_type = copy.svm_type;
+    kernel_type = copy.kernel_type;
+    degree = copy.degree;
+    gamma = copy.gamma;
+    coef0 = copy.coef0;
+    const_coef = copy.const_coef;
+    lin_coef = copy.lin_coef;
+    memcpy(custom, copy.custom, 500);
+    delete kernel_generic;
+    delete kernel_composed;
+    kernel_generic = copy.kernel_generic != NULL ? copy.kernel_generic->Clone() : NULL;
+    kernel_composed = copy.kernel_composed != NULL ? copy.kernel_composed->Clone() : NULL;
+    cache_size = copy.cache_size;
+    eps = copy.eps;
+    C = copy.C;
+
+    if (nr_weight > 0)
+      {
+      free(weight_label);
+      free(weight);
+      }
+
+    nr_weight = copy.nr_weight;
+    if (nr_weight > 0)
+      {
+      weight_label = (int *)malloc(nr_weight*sizeof(int));
+      weight = (double *)malloc(nr_weight*sizeof(double));
+      }
+    else
+      {
+      weight_label = NULL;
+      weight = NULL;
+      }
+    memcpy(weight_label, copy.weight_label, nr_weight);
+    memcpy(weight, copy.weight, nr_weight);
+    nu = copy.nu;
+    p = copy.p;
+    shrinking = copy.shrinking;
+    probability = copy.probability;
+    return *this;
+  }
+  /*** End OTB modification ***/
+
+  int svm_type;
 	int kernel_type;
 	int degree;	/* for poly */
 	double gamma;	/* for poly/rbf/sigmoid */
@@ -66,7 +291,7 @@ struct svm_parameter
 
 //
 // svm_model
-// 
+//
 struct svm_model
 {
 	struct svm_parameter param;	/* parameter */
@@ -86,10 +311,6 @@ struct svm_model
 	/* XXX */
 	int free_sv;		/* 1 if svm_model is created by svm_load_model*/
 				/* 0 if svm_model is created by svm_train */
-
-  /*** Begin OTB modification ***/
-  bool delete_composed; // to know if the composed functor was set using load method
-  /*** End OTB modification ***/
 };
 
 struct svm_model *svm_train(const struct svm_problem *prob, const struct svm_parameter *param);
@@ -121,279 +342,12 @@ void svm_set_print_string_function(void (*print_func)(const char *));
 
 // deprecated
 // this function will be removed in future release
-void svm_destroy_model(struct svm_model *model_ptr); 
+void svm_destroy_model(struct svm_model *model_ptr);
 
 /*** Begin OTB modification ***/
 //#ifdef __cplusplus
 //}
 //#endif
-/*** End OTB modification ***/
-
-/*** Begin OTB modification ***/
-
-/** \class GenericKernelFunctorBase
- * \brief Undocumented
- */
-class GenericKernelFunctorBase
-{
-public:
-  GenericKernelFunctorBase() :
-    m_Name("FunctorName")
-  {
-  }
-
-  /** Copy constructor */
-  GenericKernelFunctorBase(const GenericKernelFunctorBase& copy);
-
-  GenericKernelFunctorBase& operator=(const GenericKernelFunctorBase& copy);
-
-  virtual ~GenericKernelFunctorBase()
-  {
-  }
-
-  typedef GenericKernelFunctorBase Self;
-  typedef std::map<std::string, std::string> MapType;
-  typedef MapType::iterator MapIterator;
-  typedef MapType::const_iterator MapConstIterator;
-
-  template<class T>
-  T GetValue(const char *option) const
-  {
-    std::string Value = m_MapParameters.find(std::string(option))->second;
-    T lValeur;
-    ::otb::StringStream flux;
-    flux << Value;
-    flux >> lValeur;
-    return lValeur;
-  }
-
-  template<class T>
-  void SetValue(const char *option, const T & value)
-  {
-    std::string lValeur;
-    ::otb::StringStream flux;
-    flux << value;
-    flux >> lValeur;
-    m_MapParameters[std::string(option)] = lValeur;
-  }
-
-  virtual double operator()(const svm_node * /*x*/, const svm_node * /*y*/, const svm_parameter& /*param*/) const
-  {
-    itkGenericExceptionMacro(<<"Kernel functor not definied (Null)");
-    return static_cast<double> (0.);
-  }
-
-  /** Used for Taylor classification*/
-  // degree is the development degree
-  // index is the current value
-  // isAtEnd to indicate that it's the last possible derivation
-  // baseValue is the constant of the formula
-  virtual double derivative(const svm_node * /*x*/, const svm_node * /*y*/, const svm_parameter& /*param*/,
-                            int /*degree*/, int /*index*/, bool /*isAtEnd*/, double /*constValue*/) const
-  {
-    itkGenericExceptionMacro(<<"derivative method not definied (Null)");
-    return 0.;
-  }
-
-  virtual int load_parameters(FILE ** pfile);
-
-  virtual int save_parameters(FILE ** pfile, const char * generic_kernel_parameters_keyword) const;
-
-  virtual void print_parameters(void) const;
-
-  virtual double dot(const svm_node *px, const svm_node *py) const;
-
-  virtual svm_node * sub(const svm_node *px, const svm_node *py) const;
-
-  virtual svm_node * add(const svm_node *px, const svm_node *py) const;
-
-  virtual void SetName(std::string name)
-  {
-    m_Name = name;
-  }
-  virtual std::string GetName(void)
-  {
-    return m_Name;
-  }
-  virtual const std::string GetName(void) const
-  {
-    return m_Name;
-  }
-
-  virtual void SetMapParameters(const MapType & map)
-  {
-    m_MapParameters = map;
-  }
-
-  virtual const MapType & GetMapParameters() const
-  {
-    return m_MapParameters;
-  }
-
-  virtual MapType GetMapParameters()
-  {
-    return m_MapParameters;
-  }
-
-  // Override this method to to split m_MapParameters into specific variables to speed up kernel evaluations
-  virtual void Update(void)
-  {
-  }
-
-private:
-
-  /** Kernel functor parameters */
-  MapType m_MapParameters;
-
-  /** Functor label name (without space) */
-  std::string m_Name;
-};
-
-/** \class ComposedKernelFunctor
- * \brief Undocumented
- */
-class ComposedKernelFunctor: public GenericKernelFunctorBase
-{
-public:
-  typedef GenericKernelFunctorBase Superclass;
-
-  ComposedKernelFunctor()
-  {
-    this->SetName("ComposedFunctorName");
-    this->SetValue<bool> ("MultiplyKernelFunctor", false);
-  }
-
-  virtual ~ComposedKernelFunctor()
-  {
-    for(unsigned int i=0; i < m_HaveToBeDeletedList.size(); i++)
-      {
-      for(unsigned int j=0; j<m_KernelFunctorList.size(); j++)
-        {
-        if(m_KernelFunctorList[j] == m_HaveToBeDeletedList[i])
-          {
-          delete m_KernelFunctorList[j];
-          m_HaveToBeDeletedList[i] = NULL;
-          }
-        }
-      }
-  }
-
-  /** Copy constructor */
-  ComposedKernelFunctor( const ComposedKernelFunctor& copy );
-
-  ComposedKernelFunctor& operator=(const ComposedKernelFunctor& copy);
-
-  typedef std::vector<GenericKernelFunctorBase *> KernelListType;
-
-  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param) const
-    {
-    double out = 0.;
-    if (m_KernelFunctorList.size() != 0 && m_PonderationList.size() != 0 && m_KernelFunctorList.size() == m_PonderationList.size())
-      {
-      for (unsigned int i = 0; i<m_KernelFunctorList.size(); i++)
-        {
-        if ((this->GetValue<bool>("MultiplyKernelFunctor")) == false)
-          {
-          out += m_PonderationList[i]*(*m_KernelFunctorList[i])(x, y, param);
-          }
-        else
-          {
-          out *= (*m_KernelFunctorList[i])(x, y, param);
-          }
-        }
-      }
-    else
-      {
-      itkGenericExceptionMacro(<<"ComposedKernelFunctor::operator() : lists dimensions mismatch");
-      }
-    return out;
-    }
-
-  /** Used for Taylor classification*/
-  // degree is the developement degree
-  // index is the current value
-  // isAtEnd to indicate that it's the last possible derivation
-  // baseValue is the constant of the formula
-  virtual double derivative(const svm_node *x, const svm_node *y, const svm_parameter& param, int degree, int index, bool isAtEnd, double constValue)const
-  {
-    double out = 0.;
-    if (m_KernelFunctorList.size() != 0 && m_PonderationList.size() != 0 && m_KernelFunctorList.size() == m_PonderationList.size())
-      {
-      for (unsigned int i = 0; i<m_KernelFunctorList.size(); i++)
-        {
-        if ((this->GetValue<bool>("MultiplyKernelFunctor")) == false)
-          {
-          out += m_PonderationList[i]*(m_KernelFunctorList[i]->derivative(x, y, param, degree, index, isAtEnd, constValue));
-          }
-        else
-          {
-          itkGenericExceptionMacro(<<"derivative method not definied (Null)");
-          }
-        }
-      }
-    else
-      {
-      itkGenericExceptionMacro(<<"ComposedKernelFunctor::operator() : lists dimensions mismatch");
-      }
-    return out;
-  }
-
-  virtual int load_parameters(FILE ** pfile);
-
-  virtual int save_parameters(FILE ** pfile, const char * composed_kernel_parameters_keyword) const;
-
-  virtual void print_parameters(void)const;
-
-  /** Set/Get the SVM Model vector for the composed kernel */
-  KernelListType GetKernelFunctorList()
-    {return m_KernelFunctorList;};
-
-  void SetKernelFunctorList(KernelListType kernelFunctorList)
-    {m_KernelFunctorList = kernelFunctorList;};
-
-  // Add 1 element to the end of the list
-  void AddKernelFunctorModelToKernelList(GenericKernelFunctorBase * kernelfunctor)
-    {m_KernelFunctorList.push_back(kernelfunctor);};
-
-  /** Generic kernel functors that have to be deleted. */
-  KernelListType GetHaveToBeDeletedList()
-    {return m_HaveToBeDeletedList;};
-  void SetHaveToBeDeletedList(KernelListType kernelFunctorList)
-    {m_HaveToBeDeletedList = kernelFunctorList;};
-  // Add 1 element to the end of the list
-  void AddKernelFunctorModelToDeleteKernelList(GenericKernelFunctorBase * kernelfunctor)
-    {m_HaveToBeDeletedList.push_back(kernelfunctor);};
-
-  /** Set/Get the ponderation list to apply to each svm_model of the composed kernel */
-  std::vector<double> GetPonderationList()
-    {return m_PonderationList;};
-  void SetPonderationModelList(const std::vector<double> & list)
-    {m_PonderationList = list;};
-  // Add 1 element to the end of the list
-  void AddPonderationToPonderationList(const double & pond)
-    {m_PonderationList.push_back(pond);};
-
-  /** Set/Get the boolean to know which operation has to be done with the kernel functors. */
-  void SetMultiplyKernelFunctor( bool val )
-    {this->SetValue<bool>("MultiplyKernelFunctor", val);};
-  bool GetMultiplyKernelFunctor()
-    {return (this->GetValue<bool>("MultiplyKernelFunctor"));};
-
-private:
-  typedef GenericKernelFunctorBase::MapType MapType;
-  typedef GenericKernelFunctorBase::MapIterator MapIterator;
-  typedef GenericKernelFunctorBase::MapConstIterator MapConstIterator;
-
-  /** Generic kernel functors that composed kernel */
-  KernelListType m_KernelFunctorList;
-  /** Generic kernel functors that have to be deleted.
-   * This list was made for the load_parameters methods where you set new functors using new.
-   * But, in other cases, functor can be added with reference. Thus, we need to know which ones have to be deleted.  */
-  KernelListType m_HaveToBeDeletedList;
-  /** Ponderation list to apply to each svm_model of the composed kernel*/
-  std::vector<double> m_PonderationList;
-};
-
 /*** End OTB modification ***/
 
 #endif /* _LIBSVM_H */

@@ -299,13 +299,15 @@ public:
   }
 
   /** Get/Set methods for generic kernel functor */
-  virtual GenericKernelFunctorBase * GetKernelFunctor(void) const
+  GenericKernelFunctorBase * GetKernelFunctor(void) const
   {
     return m_Parameters.kernel_generic;
   }
-  virtual void SetKernelFunctor(GenericKernelFunctorBase* pGenericKernelFunctor)
+
+  void SetKernelFunctor(GenericKernelFunctorBase* pGenericKernelFunctor)
   {
-    m_Parameters.kernel_generic = pGenericKernelFunctor;
+    if (pGenericKernelFunctor != NULL)
+      m_Parameters.kernel_generic = pGenericKernelFunctor->Clone();
     this->Modified();
   }
 

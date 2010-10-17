@@ -70,7 +70,6 @@ SVMModel<TValue, TLabel>::Initialize()
   if (!m_Model)
     {
     m_Model = new struct svm_model;
-    m_Model->delete_composed = false;
     m_Model->l = 0;
     m_Model->nr_class = 0;
     m_Model->SV = NULL;
