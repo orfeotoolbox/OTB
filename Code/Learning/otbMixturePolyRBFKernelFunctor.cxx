@@ -27,6 +27,7 @@ MixturePolyRBFKernelFunctor
 ::MixturePolyRBFKernelFunctor ()
   : GenericKernelFunctorBase ()
 {
+  this->SetName("MixturePolyRBF");
   m_Mixture = 0.5;
   m_GammaPoly = 1.0;
   m_CoefPoly = 1.0;

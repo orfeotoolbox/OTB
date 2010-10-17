@@ -29,8 +29,8 @@ SpectralAngleKernelFunctor
 ::SpectralAngleKernelFunctor ()
   : GenericKernelFunctorBase ()
 {
+  this->SetName("SAMcoeff");
   m_Coef = 2.0;
-
   SetValue("Coef", m_Coef);
 }
 

@@ -27,6 +27,7 @@ NonGaussianRBFKernelFunctor
 ::NonGaussianRBFKernelFunctor ()
   : GenericKernelFunctorBase ()
 {
+  this->SetName("NonGaussianRBF");
   m_Alpha = 1.0;
   m_Beta = 2.0;
   m_Gamma = 1.0;
