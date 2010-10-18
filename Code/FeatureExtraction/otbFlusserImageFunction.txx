@@ -101,8 +101,8 @@ FlusserImageFunction<TInputImage,TCoordRep>
     {
     // Retrieve value, and centered-reduced position
     ScalarRealType value = static_cast<ScalarRealType>(it.GetPixel(i));
-    ScalarRealType x = static_cast<ScalarRealType>(it.GetOffset(i)[0]);
-    ScalarRealType y = static_cast<ScalarRealType>(it.GetOffset(i)[1]);
+    ScalarRealType x = static_cast<ScalarRealType>(it.GetOffset(i)[0])/(2*m_NeighborhoodRadius+1);
+    ScalarRealType y = static_cast<ScalarRealType>(it.GetOffset(i)[1])/(2*m_NeighborhoodRadius+1);
     
     // Build complex value
     ComplexType xpy(x,y),xqy(x,-y);
@@ -120,15 +120,15 @@ FlusserImageFunction<TInputImage,TCoordRep>
     }
   
   // Nomalisation
-  c11 /= vcl_pow(c00, (1+1)/2);
-  c12 /= vcl_pow(c00, (1+2)/2);
-  c21 /= vcl_pow(c00, (2+1)/2);
-  c20 /= vcl_pow(c00, (2+0)/2);
-  c30 /= vcl_pow(c00, (3+0)/2);
-  c22 /= vcl_pow(c00, (2+2)/2);
-  c31 /= vcl_pow(c00, (3+1)/2);
-  c40 /= vcl_pow(c00, (4+0)/2);
-  
+  c11 /= c00;
+  c12 /= c00;
+  c21 /= c00;
+  c20 /= c00;
+  c30 /= c00;
+  c22 /= c00;
+  c31 /= c00;
+  c40 /= c00;
+
   // Compute moments combinations
   moments[0]  = static_cast<ScalarRealType>(c11.real());
   moments[1]  = static_cast<ScalarRealType>((c21*c12).real());

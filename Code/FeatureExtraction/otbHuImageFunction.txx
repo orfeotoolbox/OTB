@@ -100,9 +100,8 @@ HuImageFunction<TInputImage, TCoordRep>
     {
     // Retrieve value, and centered-reduced position
     ScalarRealType value = static_cast<ScalarRealType>(it.GetPixel(i));
-    ScalarRealType x = static_cast<ScalarRealType>(it.GetOffset(i)[0]);
-    ScalarRealType y = static_cast<ScalarRealType>(it.GetOffset(i)[1]);
-    
+    ScalarRealType x = static_cast<ScalarRealType>(it.GetOffset(i)[0])/(2*m_NeighborhoodRadius+1);
+    ScalarRealType y = static_cast<ScalarRealType>(it.GetOffset(i)[1])/(2*m_NeighborhoodRadius+1);
     // Build complex value
     ComplexType xpy(x,y),xqy(x,-y);
     
@@ -118,13 +117,13 @@ HuImageFunction<TInputImage, TCoordRep>
     }
 
   // Nomalisation
-  c11 /= vcl_pow(c00, (1+1)/2);
-  c20 /= vcl_pow(c00, (2+0)/2);
-  c02 /= vcl_pow(c00, (0+2)/2);
-  c30 /= vcl_pow(c00, (3+0)/2);
-  c03 /= vcl_pow(c00, (0+3)/2);
-  c21 /= vcl_pow(c00, (2+1)/2);
-  c12 /= vcl_pow(c00, (1+2)/2);
+  c11 /= c00;
+  c20 /= c00;
+  c02 /= c00;
+  c30 /= c00;
+  c03 /= c00;
+  c21 /= c00;
+  c12 /= c00;
  
   // Compute moments combinations
   moments[0]  = static_cast<ScalarRealType>(c11.real());

@@ -61,19 +61,13 @@ ComplexMomentImageFunction<TInputImage, TCoordRep>
   ComplexType moments;
   moments.resize(m_Pmax+1);
   
-  std::vector<ScalarComplexType> valXpY, valXqY;
-  valXpY.resize(m_Pmax+1);
-  valXqY.resize(m_Qmax+1);
-    
   // Initialize moments
   for (unsigned int p = 0; p <= m_Pmax; p++)
     {
     moments.at(p).resize(m_Qmax+1);
-    valXpY.at(p) = ScalarComplexType(1.0,0.0);
     for (unsigned int q = 0; q <= m_Qmax; q++)
       {
       moments.at(p).at(q) =  ScalarComplexType(0.0,0.0);
-      valXqY.at(q)        =  ScalarComplexType(1.0,0.0);
       }
     }
 
@@ -105,33 +99,18 @@ ComplexMomentImageFunction<TInputImage, TCoordRep>
     {
     // Retrieve value, and centered-reduced position
     ScalarRealType value = static_cast<ScalarRealType>(it.GetPixel(i));
-    ScalarRealType     x = static_cast<ScalarRealType>(it.GetOffset(i)[0]);
-    ScalarRealType     y = static_cast<ScalarRealType>(it.GetOffset(i)[1]);
+    ScalarRealType     x = static_cast<ScalarRealType>(it.GetOffset(i)[0])/(2*m_NeighborhoodRadius+1);
+    ScalarRealType     y = static_cast<ScalarRealType>(it.GetOffset(i)[1])/(2*m_NeighborhoodRadius+1);
     
     // Build complex value
     ScalarComplexType xpy(x,y),xqy(x,-y);
     
-    unsigned int pTmp = 1;
-    unsigned int qTmp = 1;
-    
-    while (pTmp <= m_Pmax)
-      {
-      valXpY.at(pTmp) = valXpY.at(pTmp-1) * xpy;
-      pTmp ++;
-      }
-    while (qTmp <= m_Qmax)
-      {
-      valXqY.at(qTmp) = valXqY.at(qTmp-1) * xqy;
-      qTmp ++;
-      }
-    
-
     // Update cumulants
     for (unsigned int p = 0; p <= m_Pmax; p++)
       {
       for (unsigned int q= 0; q <= m_Qmax; q++)
         {
-        moments.at(p).at(q) += valXpY.at(p) * valXqY.at(q) * value;   
+        moments.at(p).at(q) += vcl_pow(xpy,p) * vcl_pow(xqy,q) * value;   
         }
       }
     }
@@ -141,7 +120,10 @@ ComplexMomentImageFunction<TInputImage, TCoordRep>
     {
     for (unsigned int q= 0; q <= m_Qmax; q++)
       {
-      moments.at(p).at(q) /= vcl_pow(moments.at(0).at(0), (p+q)/2);   
+      if (p+q != 0)
+        {
+        moments.at(p).at(q) /= moments.at(0).at(0);
+        }
       }
     }
 
