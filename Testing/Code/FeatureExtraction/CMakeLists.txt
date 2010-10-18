@@ -73,6 +73,16 @@ ADD_TEST(feTvComplexMomentImage ${FEATUREEXTRACTION_TESTS1}
   4
   ${TEMP}/feComplexMomentImage.txt)
 
+ADD_TEST(feTvComplexMomentImageScaleInvariant ${FEATUREEXTRACTION_TESTS1}
+  --compare-ascii ${NOTOL}     ${BASELINE_FILES}/feComplexMomentImageScaleInvariant.txt
+                        ${TEMP}/feComplexMomentImageScaleInvariant.txt
+        otbComplexMomentImageScaleInvariant
+	${INPUTDATA}/poupees.png
+  4
+  4
+  ${TEMP}/feComplexMomentImageScaleInvariant.txt
+  ${TEMP}/feComplexImageScaleInvariant.tiff)
+
 ADD_TEST(feTvRealMomentImage ${FEATUREEXTRACTION_TESTS1}
    --compare-ascii ${NOTOL}     ${BASELINE_FILES}/feRealMomentImage.txt
                         ${TEMP}/feRealMomentImage.txt
@@ -96,12 +106,42 @@ ADD_TEST(feTvHuImage ${FEATUREEXTRACTION_TESTS1}
 	${INPUTDATA}/poupees.png
   ${TEMP}/feHuImage.txt)
 
+ADD_TEST(feTuHuImageScaleInvariant ${FEATUREEXTRACTION_TESTS1}
+        otbHuImageScaleInvariant
+	${INPUTDATA}/poupees.png
+        ${TEMP}/feHuImageScaleInvariant.txt
+        ${TEMP}/feHuImageScaleInvariant.tiff
+        )
+
+ADD_TEST(feTuHuImageRotationInvariant ${FEATUREEXTRACTION_TESTS1}
+        otbHuImageRotationInvariant
+	${INPUTDATA}/poupees.png
+        ${TEMP}/feHuImageRotationInvariant.txt
+        ${TEMP}/feHuImageRotationInvariant.tiff
+        90
+        )
+
 ADD_TEST(feTuFlusserImage ${FEATUREEXTRACTION_TESTS1}
    --compare-ascii ${EPSILON_8}     ${BASELINE_FILES}/feFlusserImage.txt
                         ${TEMP}/feFlusserImage.txt
         otbFlusserImage
 	${INPUTDATA}/poupees.png
   ${TEMP}/feFlusserImage.txt)
+
+ADD_TEST(feTuFlusserImageScaleInvariant ${FEATUREEXTRACTION_TESTS1}
+        otbFlusserImageScaleInvariant
+	${INPUTDATA}/poupees.png
+        ${TEMP}/feFlusserImageScaleInvariant.txt
+        ${TEMP}/feFlusserImageScaleInvariant.tiff
+        )
+
+ADD_TEST(feTuFlusserImageRotationInvariant ${FEATUREEXTRACTION_TESTS1}
+        otbFlusserImageRotationInvariant
+	${INPUTDATA}/poupees.png
+        ${TEMP}/feFlusserImageRotationInvariant.txt
+        ${TEMP}/feFlusserImageRotationInvariant.tiff
+        90
+        )
 
 ADD_TEST(feTuComplexMomentPathNew ${FEATUREEXTRACTION_TESTS1}
         otbComplexMomentPathNew)
