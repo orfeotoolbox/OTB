@@ -90,7 +90,7 @@ ${ITK_PNG_LIBRARIES}
 ITKSpatialObject
 #ITKMetaIO
 #ITKDICOMParser
-#    expat
+expat
 #ITKniftiio
 itkjpeg8
 )
