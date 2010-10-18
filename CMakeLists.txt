@@ -6,6 +6,11 @@ IF(COMMAND CMAKE_POLICY)
   CMAKE_POLICY(SET CMP0003 NEW)
 ENDIF(COMMAND CMAKE_POLICY)
 
+#-----------------------------------------------------------------------------
+# Sanity check -- prevent in-source builds
+#
+INCLUDE(${CMAKE_CURRENT_SOURCE_DIR}/CMake/PreventInSourceBuilds.cmake)
+
 PROJECT(OTB)
 
 # Path to additional CMake modules
