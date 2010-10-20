@@ -25,4 +25,7 @@
 #include "otbTestMain.h"
 
 void RegisterTests()
-{}
+{
+  REGISTER_TEST(otbLocalHistogramImageFunctionNew);
+  REGISTER_TEST(otbLocalHistogramImageFunctionTest);
+}

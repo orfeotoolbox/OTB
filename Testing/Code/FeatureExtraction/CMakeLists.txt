@@ -1420,8 +1420,17 @@ ADD_TEST(feTvScalarImageToPanTexTextureFilter ${FEATUREEXTRACTION_TESTS15}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFeatureExtractionTests16 ~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ADD_TEST(feTuLocalHistogramImageFunctionNew ${FEATUREEXTRACTION_TESTS16}
+        otbLocalHistogramImageFunctionNew
+)
 
-
+ADD_TEST(feTuLocalHistogramImageFunctionTest ${FEATUREEXTRACTION_TESTS16}
+#   --compare-ascii ${EPSILON_8}     ${BASELINE_FILES}/feFlusserImage.txt
+#                        ${TEMP}/feFlusserImage.txt
+        otbLocalHistogramImageFunctionTest
+		${INPUTDATA}/poupees_1canal.hd
+  		${TEMP}/feLocalHistogramImage.txt
+)
 
 
 
@@ -1606,6 +1615,8 @@ otbScalarImageToHigherOrderTexturesFilter.cxx
 
 SET(BasicFeatureExtraction_SRCS16
 otbFeatureExtractionTests16.cxx
+otbLocalHistogramImageFunctionNew.cxx
+otbLocalHistogramImageFunctionTest.cxx
 )
 
 
