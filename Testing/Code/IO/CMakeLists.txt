@@ -1556,7 +1556,7 @@ ADD_TEST(ioTvossimElevManagerTest2 ${IO_TESTS12}
 ADD_TEST(ioTuDEMToOrthoImageGeneratorNew ${IO_TESTS12}
       otbDEMToOrthoImageGeneratorNew )
 
-ADD_TEST(ioTvDEMToOrthoImageGeneratorTest ${IO_TESTS12}
+ADD_TEST(ioTvDEMToOrthoImageGeneratorObsoleteTest ${IO_TESTS12}
 --compare-image ${EPSILON_9}  ${BASELINE}/ioTvDEMToOrthoImageGenerator.tif
                         ${TEMP}/ioTvDEMToOrthoImageGenerator.tif
         otbDEMToOrthoImageGeneratorTest
@@ -1572,11 +1572,37 @@ ADD_TEST(ioTvDEMToOrthoImageGeneratorTest ${IO_TESTS12}
          N # hemisphere
 )
 
+ADD_TEST(ioTvDEMToOrthoImageGeneratorTest ${IO_TESTS12}
+--compare-image ${EPSILON_9}  ${BASELINE}/ioTvDEMToOrthoImageGenerator.tif
+                        ${TEMP}/ioTvDEMToOrthoImageGenerator.tif
+        otbDEMToOrthoImageGeneratorTest2
+         ${INPUTDATA}/DEM/srtm_directory
+         ${TEMP}/ioTvDEMToOrthoImageGenerator.tif
+         778245.3501 #6.5
+         4933369.633 #44.5
+         500
+         500
+         30 #resolution in m
+         -30 #resolution in m
+    	 31 # utm zone
+         N # hemisphere
+)
+
+
 #Big extend
-ADD_TEST(ioTvDEMToOrthoImageGeneratorTest2 ${IO_TESTS12}
+ADD_TEST(ioTvDEMToOrthoImageGeneratorObsoleteTest2 ${IO_TESTS12}
 --compare-image ${EPSILON_9}  ${BASELINE}/ioTvDEMToOrthoImageGenerator2.tif
                         ${TEMP}/ioTvDEMToOrthoImageGenerator2.tif
         otbDEMToOrthoImageGeneratorTest
+         ${INPUTDATA}/DEM/srtm_directory
+         ${TEMP}/ioTvDEMToOrthoImageGenerator2.tif
+         576378.080 5763132.837 232 422 2000 -2000 30 N
+)
+
+ADD_TEST(ioTvDEMToOrthoImageGeneratorTest2 ${IO_TESTS12}
+--compare-image ${EPSILON_9}  ${BASELINE}/ioTvDEMToOrthoImageGenerator2.tif
+                        ${TEMP}/ioTvDEMToOrthoImageGenerator2.tif
+        otbDEMToOrthoImageGeneratorTest2
          ${INPUTDATA}/DEM/srtm_directory
          ${TEMP}/ioTvDEMToOrthoImageGenerator2.tif
          576378.080 5763132.837 232 422 2000 -2000 30 N
@@ -2717,6 +2743,7 @@ otbOssimElevManagerTest2.cxx
 otbOssimElevManagerTest4.cxx
 otbDEMToOrthoImageGeneratorNew.cxx
 otbDEMToOrthoImageGeneratorTest.cxx
+otbDEMToOrthoImageGeneratorTest2.cxx
 otbPrepareSRTMDirectoryNew.cxx
 otbPrepareSRTMDirectoryTest.cxx
 )

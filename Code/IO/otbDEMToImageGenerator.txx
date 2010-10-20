@@ -40,6 +40,8 @@ DEMToImageGenerator<TDEMImage>
 
   // Value defined in the norm for points SRTM doesn't have information.
   m_DefaultUnknownValue = static_cast<PixelType>(-32768);
+
+  m_Transform         = GenericRSTransformType::New();
 }
 
 // DEM folder specification method
@@ -80,6 +82,22 @@ void DEMToImageGenerator<TDEMImage>
   output->SetOrigin(m_OutputOrigin);
 }
 
+
+template <class TDEMImage>
+void DEMToImageGenerator<TDEMImage>
+::BeforeThreadedGenerateData()
+{
+  m_Transform->InstanciateTransform();
+  DEMImagePointerType DEMImage = this->GetOutput();
+
+  // allocate the output buffer
+  DEMImage->SetBufferedRegion(DEMImage->GetRequestedRegion());
+  DEMImage->Allocate();
+  DEMImage->FillBuffer(0);
+  std::cout << "m_Transform :" << m_Transform << std::endl;
+}
+
+
 template <class TDEMImage>
 void
 DEMToImageGenerator<TDEMImage>
@@ -98,17 +116,29 @@ DEMToImageGenerator<TDEMImage>
   IndexType currentindex;
   PointType phyPoint;
   double    height;
+  PointType geoPoint;
 
   for (outIt.GoToBegin(); !outIt.IsAtEnd(); ++outIt)
     {
     currentindex = outIt.GetIndex();
     DEMImage->TransformIndexToPhysicalPoint(currentindex, phyPoint);
 
-//       otbMsgDevMacro(<< "PhyPoint : (" << phyPoint[0] << "," << phyPoint[1] << ")");
 
-    height = m_DEMHandler->GetHeightAboveMSL(phyPoint); // Altitude calculation
+    if(m_Transform.IsNotNull())
+      {
+        geoPoint = m_Transform->TransformPoint(phyPoint);
+        height = m_DEMHandler->GetHeightAboveMSL(geoPoint); // Altitude calculation
+      }
+    else
+      {
+        height = m_DEMHandler->GetHeightAboveMSL(phyPoint); // Altitude calculation
+      }
+/*    otbMsgDevMacro(<< "Index : (" << currentindex[0]<< "," << currentindex[1] << ") -> PhyPoint : ("
+                   << phyPoint[0] << "," << phyPoint[1] << ") -> GeoPoint: ("
+                   << geoPoint[0] << "," << geoPoint[1] << ") -> height" << height);
+*/
 //       otbMsgDevMacro(<< "height" << height);
-    // MNT sets a default value (-32768) at point where it doesn't have altitude information.
+    // DEM sets a default value (-32768) at point where it doesn't have altitude information.
     // OSSIM has chosen to change this default value in OSSIM_DBL_NAN (-4.5036e15).
     if (!ossim::isnan(height))
       {

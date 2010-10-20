@@ -15,16 +15,15 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "vcl_deprecated.h"
 
 #include "itkExceptionObject.h"
-#include "otbDEMToOrthoImageGenerator.h"
+#include "otbDEMToImageGenerator.h"
 #include "otbMapProjections.h"
 #include "otbStreamingImageFileWriter.h"
 #include "otbImage.h"
 #include "otbStandardFilterWatcher.h"
 
-int otbDEMToOrthoImageGeneratorTest(int argc, char * argv[])
+int otbDEMToOrthoImageGeneratorTest2(int argc, char * argv[])
 {
   if (argc < 9)
     {
@@ -40,7 +39,7 @@ int otbDEMToOrthoImageGeneratorTest(int argc, char * argv[])
   const unsigned int Dimension = 2;
   typedef otb::Image<double, Dimension>                               ImageType;
   typedef otb::UtmInverseProjection                                   MapProjectionType;
-  typedef otb::DEMToOrthoImageGenerator<ImageType, MapProjectionType> DEMToImageGeneratorType;
+  typedef otb::DEMToImageGenerator<ImageType>                         DEMToImageGeneratorType;
   typedef DEMToImageGeneratorType::DEMHandlerType                     DEMHandlerType;
   typedef DEMHandlerType::PointType                                   PointType;
   typedef DEMToImageGeneratorType::SizeType                           SizeType;
@@ -67,12 +66,13 @@ int otbDEMToOrthoImageGeneratorTest(int argc, char * argv[])
 
   mapProj->SetZone(::atoi(argv[9]));
   mapProj->SetHemisphere(argv[10][0]);
+  std::string projectionRef = mapProj->GetWkt();
 
   object->SetDEMDirectoryPath(folderPath);
   object->SetOutputOrigin(origin);
   object->SetOutputSize(size);
   object->SetOutputSpacing(spacing);
-  object->SetMapProjection(mapProj);
+  object->SetOutputProjectionRef(projectionRef);
 
   std::cout << object << std::endl;
 
