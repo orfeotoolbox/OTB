@@ -1608,6 +1608,16 @@ ADD_TEST(ioTvDEMToOrthoImageGeneratorTest2 ${IO_TESTS12}
          576378.080 5763132.837 232 422 2000 -2000 30 N
 )
 
+
+ADD_TEST(ioTvDEMToOrthoImageGeneratorWithInputImage ${IO_TESTS12}
+#--compare-image ${EPSILON_9}  ${BASELINE}/ioTvDEMToOrthoImageGeneratorWithInputImage.tif
+#                        ${TEMP}/ioTvDEMToOrthoImageGeneratorWithInputImage.tif
+        otbDEMToOrthoImageGeneratorWithInputImageTest
+         ${INPUTDATA}/DEM/srtm_directory
+         ${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/Arcachon_extrait_3852_3319_546_542.tif
+         ${TEMP}/ioTvDEMToOrthoImageGeneratorWithInputImage.tif
+)
+
 # ---  otb::PrepareSRTMDirectory ---
 ADD_TEST(ioTuPrepareSRTMDirectoryNew ${IO_TESTS12}
       otbPrepareSRTMDirectoryNew )
@@ -2744,6 +2754,7 @@ otbOssimElevManagerTest4.cxx
 otbDEMToOrthoImageGeneratorNew.cxx
 otbDEMToOrthoImageGeneratorTest.cxx
 otbDEMToOrthoImageGeneratorTest2.cxx
+otbDEMToOrthoImageGeneratorWithInputImageTest.cxx
 otbPrepareSRTMDirectoryNew.cxx
 otbPrepareSRTMDirectoryTest.cxx
 )
