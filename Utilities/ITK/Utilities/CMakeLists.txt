@@ -160,10 +160,10 @@ IF(NOT ITK_INSTALL_NO_DEVELOPMENT)
   INSTALL(FILES
     ${ITK_BINARY_DIR}/Utilities/itkThirdParty.h
     ${ITK_SOURCE_DIR}/Utilities/itk_zlib.h
-    ${ITK_SOURCE_DIR}/Utilities/itk_tiff.h
+#    ${ITK_SOURCE_DIR}/Utilities/itk_tiff.h
     ${ITK_SOURCE_DIR}/Utilities/itk_png.h
-    ${ITK_SOURCE_DIR}/Utilities/metaIOConfig.h
-    ${ITK_BINARY_DIR}/Utilities/NrrdIO/NrrdConfigure.h
+#    ${ITK_SOURCE_DIR}/Utilities/metaIOConfig.h
+#    ${ITK_BINARY_DIR}/Utilities/NrrdIO/NrrdConfigure.h
     DESTINATION ${ITK_INSTALL_INCLUDE_DIR_CM24_UTILITIES}
     COMPONENT Development
     )
