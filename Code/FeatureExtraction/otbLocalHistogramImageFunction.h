@@ -40,13 +40,15 @@ namespace otb
 template <class TInputImage, class TCoordRep = float >
 class ITK_EXPORT LocalHistogramImageFunction :
   public itk::ImageFunction< TInputImage,
-                         itk::VariableLengthVector<unsigned int>, TCoordRep >
+                typename itk::Statistics::ScalarImageToHistogramGenerator<TInputImage>::HistogramConstPointer,
+                TCoordRep >
 {
 public:
   /** Standard class typedefs. */
   typedef LocalHistogramImageFunction                                     Self;
   typedef itk::ImageFunction< TInputImage,
-                    itk::VariableLengthVector<unsigned int>, TCoordRep >  Superclass;
+                  typename itk::Statistics::ScalarImageToHistogramGenerator<TInputImage>::HistogramConstPointer,
+                  TCoordRep >                                             Superclass;
   typedef itk::SmartPointer<Self>                                         Pointer;
   typedef itk::SmartPointer<const Self>                                   ConstPointer;
 
