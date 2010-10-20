@@ -229,24 +229,6 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 GenericRSResampleImageFilter<TInputImage, TOutputImage>
-::SetOutputParametersFromImage(const ImageBaseType * image)
-{
-  const InputImageType * src = dynamic_cast<const InputImageType*>(image);
-  
-  this->SetOutputOrigin ( src->GetOrigin() );
-  this->SetOutputSpacing ( src->GetSpacing() );
-  this->SetOutputStartIndex ( src->GetLargestPossibleRegion().GetIndex() );
-  this->SetOutputSize ( src->GetLargestPossibleRegion().GetSize() );
-  this->SetOutputProjectionRef(src->GetProjectionRef());
-  this->SetOutputKeywordList(src->GetImageKeywordlist());
-}
-/**
- * Method used to copy the parameters of the input image
- * 
- */
-template <class TInputImage, class TOutputImage>
-void
-GenericRSResampleImageFilter<TInputImage, TOutputImage>
 ::SetOutputParametersFromMap(const std::string map, const SpacingType& spacing)
 {
   // Get the input Image
