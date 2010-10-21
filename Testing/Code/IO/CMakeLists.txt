@@ -2640,6 +2640,8 @@ ADD_TEST(ioTvMapFileProductWriter ${IO_TESTS21}
   otbMapFileProductWriter
   ${INPUTDATA}/ExtrZoneNuageuse.tif
   ${TEMP}/mapserver/toulouseExtract.map
+  ${TEMP}/mapserver/result               # Shape index path
+  http://localhost/cgi-bin/mapserv # cgi executable path
   256
 )
 

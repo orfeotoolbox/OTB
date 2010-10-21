@@ -25,7 +25,9 @@ int otbMapFileProductWriter(int argc, char* argv[])
 {
   const char * infname = argv[1];
   const char * path = argv[2];
-  unsigned int tileSize = atoi(argv[3]);
+  const char * shapepath = argv[3];
+  const char * cgipath = argv[4];
+  unsigned int tileSize = atoi(argv[5]);
 
   typedef otb::VectorImage<double>               ImageType;
   typedef otb::MapFileProductWriter<ImageType>   MapFileProductWriterType;
@@ -39,6 +41,8 @@ int otbMapFileProductWriter(int argc, char* argv[])
   
   mapWriter->SetInput(reader->GetOutput());
   mapWriter->SetFileName(path);
+  mapWriter->SetShapeIndexPath(shapepath);
+  mapWriter->SetCGIPath(cgipath);
   mapWriter->SetTileSize(tileSize);
   
   mapWriter->Update();
