@@ -126,3 +126,13 @@ int otbVectorImageTest(int argc, char* argv[])
 
   return EXIT_SUCCESS;
 }
+
+int otbVectorImageComplexTest(int argc, char* argv[])
+{
+  typedef std::complex<float> PixelType;
+  typedef otb::VectorImage<PixelType, 2> ImageType;
+  ImageType::Pointer image = ImageType::New();
+  image->Initialize();
+
+  return EXIT_SUCCESS;
+}

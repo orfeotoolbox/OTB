@@ -1121,6 +1121,9 @@ ADD_TEST(ioTvOtbVectorImageTestFORMOSAT2 ${IO_TESTS9}
 
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
+ADD_TEST(ioTuVectorImageComplexTest ${IO_TESTS9}
+  otbVectorImageComplexTest)
+
 # ---  otb::VectorImageReadWriteTest  ---
 ADD_TEST(ioTvVectorImageFileReaderWriterTest ${IO_TESTS9}
    --compare-image ${EPSILON_9}
