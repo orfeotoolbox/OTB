@@ -20,6 +20,7 @@
 
 #include "otbBlendingFunction.h"
 #include "otbMath.h"
+#include "otbAlphaBlendingFunctor.h"
 
 namespace otb
 {
@@ -35,6 +36,9 @@ namespace Function
  * \f[ \alpha = \alpha_{pix} * \alpha_{glo} \f]
  * \f$ \alpha_{pix} \f$ is retrieved from the second pixel RGBA
  * \f$ \alpha_{glo} \f$ is provided by the SetAlpha() method (1.0 by default)
+ *
+ *
+ * This class is not intended to be subclassed
  *
  *  \ingroup Visualization
  */
@@ -62,44 +66,34 @@ public:
   typedef TInputRGBPixel2                        InputPixel2Type;
   typedef TOutputRGBPixel                        OutputRGBPixelType;
   typedef typename OutputRGBPixelType::ValueType OutputValueType;
+  typedef Functor::AlphaBlendingFunctor<InputPixel1Type, InputPixel2Type, OutputRGBPixelType> FunctorType;
 
   /** Evaluate method  */
-  inline virtual const OutputRGBPixelType Evaluate(const InputPixel1Type& input1, const InputPixel2Type& input2)
+  inline const OutputRGBPixelType Evaluate(const InputPixel1Type& input1, const InputPixel2Type& input2) const
   {
-    OutputRGBPixelType resp;
-    resp.Fill(itk::NumericTraits<OutputValueType>::max());
-    double alpha = static_cast<double>(input2.GetAlpha()) / 255.0 * m_Alpha;
-
-    resp.SetRed(static_cast<OutputValueType>(vcl_floor(0.5 +
-                                                       (1.0 - alpha) * static_cast<double>(input1.GetRed())
-                                                       + alpha * static_cast<double>(input2.GetRed())
-                                                       )));
-    resp.SetGreen(static_cast<OutputValueType>(vcl_floor(0.5 +
-                                                         (1.0 - alpha) * static_cast<double>(input1.GetGreen())
-                                                         + alpha * static_cast<double>(input2.GetGreen())
-                                                         )));
-    resp.SetBlue(static_cast<OutputValueType>(vcl_floor(0.5 +
-                                                        (1.0 - alpha) * static_cast<double>(input1.GetBlue())
-                                                        + alpha * static_cast<double>(input2.GetBlue())
-                                                        )));
-    return resp;
+    return functor(input1, input2);
   }
 
   /** Set/Get the alpha value */
-  itkSetClampMacro(Alpha, double, 0., 1.);
-  itkGetMacro(Alpha, double);
+  void SetAlpha(double a)
+  {
+    functor.SetAlpha(a);
+  }
+  double GetAlpha() const
+  {
+    return functor.GetAlpha();
+  }
 
 protected:
   /** Constructor */
-  AlphaBlendingFunction() : m_Alpha(1.0) {}
+  AlphaBlendingFunction() : functor() {}
   /** Destructor */
-  virtual ~AlphaBlendingFunction() {}
+  ~AlphaBlendingFunction() {}
 private:
   AlphaBlendingFunction(const Self&); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  /** Alpha value for blending (should be in the range [0,1] */
-  double m_Alpha;
+  FunctorType functor;
 
 };
 } // end namespace Functor

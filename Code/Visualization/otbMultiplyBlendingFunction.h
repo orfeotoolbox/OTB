@@ -30,6 +30,9 @@ namespace Function
  * \brief Implements simple blending
  * For each channel the blending function is as follows:
  * \f[ P_{o} = P_{i1} * P_{i2} / 255 \f]
+ *
+ * This class is not intended to be subclassed
+ *
  *  \ingroup Visualization
  */
 template <class TInputRGBPixel1, class TInputRGBPixel2 = TInputRGBPixel1, class TOutputRGBPixel = TInputRGBPixel1>
@@ -58,7 +61,7 @@ public:
   typedef typename OutputRGBPixelType::ValueType OutputValueType;
 
   /** Evaluate method  */
-  virtual const OutputRGBPixelType Evaluate(const InputPixel1Type& input1, const InputPixel2Type& input2)
+  inline const OutputRGBPixelType Evaluate(const InputPixel1Type& input1, const InputPixel2Type& input2) const
   {
     OutputRGBPixelType resp;
     resp.SetRed(static_cast<OutputValueType>(
@@ -80,7 +83,7 @@ protected:
   /** Constructor */
   MultiplyBlendingFunction() {}
   /** Destructor */
-  virtual ~MultiplyBlendingFunction() {}
+  ~MultiplyBlendingFunction() {}
 private:
   MultiplyBlendingFunction(const Self&);     //purposely not implemented
   void operator =(const Self&);    //purposely not implemented

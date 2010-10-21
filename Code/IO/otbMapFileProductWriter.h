@@ -29,7 +29,7 @@
 #include "otbGenericRSTransform.h"
 #include "otbStreamingShrinkImageFilter.h"
 
-// FileMap necessary includes
+// sahpe index necessary includes
 #include "otbVectorData.h"
 #include "otbVectorDataFileWriter.h"
 
@@ -49,9 +49,10 @@ namespace otb
  * where the file is saved on the disk.
  * The product generated are a mapfile wich is the configuration file
  * for mapservers, a tile index and finally the tiles.
+ * This class allow the user to specify the cgi-bin used (SetCGIPath)
+ * and the directory where to store the index shapefile and the tiles 
+ * (SetShapeIndexPath)
  *
- * NOTE : The user must edit the *.map file generated to put the right
- * informations concerning the field 'wms_onlineresource'.
  *
  * \ingroup IO
  *
@@ -77,10 +78,12 @@ public:
   typedef typename InputImageType::InternalPixelType   InternalPixelType;
   typedef typename InputImageType::SizeType            SizeType;
   typedef typename InputImageType::IndexType           IndexType;
-  typedef unsigned char                                OutputPixelType;
   typedef typename InputImageType::Pointer             InputImagePointer;
   typedef typename InputImageType::RegionType          InputImageRegionType;
   typedef typename InputImageType::PixelType           InputImagePixelType;
+  
+  typedef unsigned char                                OutputPixelType;
+  typedef VectorImage<OutputPixelType>                 OutputImageType;
 
   typedef VectorData<double,2>                         VectorDataType;
   typedef typename VectorDataType::DataNodeType        DataNodeType;
@@ -91,17 +94,19 @@ public:
   
 
   /// Multi channels Extract ROI filter
-  typedef MultiChannelExtractROI<InternalPixelType, OutputPixelType> VectorImageExtractROIFilterType;
-
+  typedef MultiChannelExtractROI
+  <InternalPixelType, OutputPixelType>                 VectorImageExtractROIFilterType;
+  
   // Writer
-  typedef ImageFileWriter< VectorImage<OutputPixelType> >            VectorWriterType;
+  typedef ImageFileWriter<OutputImageType>            VectorWriterType;
   
   // Resampler
-  typedef StreamingShrinkImageFilter<InputImageType,InputImageType > StreamingShrinkImageFilterType;
+  typedef StreamingShrinkImageFilter
+  <InputImageType,InputImageType >        StreamingShrinkImageFilterType;
 
   // Intensity Rescale
-  typedef VectorRescaleIntensityImageFilter<InputImageType,
-                                            InputImageType>          VectorRescaleIntensityImageFilterType;
+  typedef VectorRescaleIntensityImageFilter
+  <InputImageType,InputImageType>          VectorRescaleIntensityImageFilterType;
 
   // Transformer
   typedef GenericRSTransform<>           TransformType;
@@ -119,10 +124,19 @@ public:
 
   /** Method to set the filename of the mapfile generated */
   itkSetStringMacro(FileName);
-  
+  itkGetStringMacro(FileName);
+
   /** Set/Get the size of each tile*/
   itkSetMacro(TileSize,unsigned int);
   itkGetMacro(TileSize,unsigned int);
+
+  /** Set CGI filename path */
+  itkSetStringMacro(CGIPath);
+  itkGetStringMacro(CGIPath);
+  
+  /** Set SahpePATH: the directory where to store the shapefile */
+  itkSetStringMacro(ShapeIndexPath);
+  itkGetStringMacro(ShapeIndexPath);
   
   /** Update Method : Call a porotected Write method */
   virtual void Update()
@@ -158,8 +172,6 @@ private:
   /** Method To Generate the mapFile*/
   virtual void GenerateMapFile();
 
-  std::string          m_Path;
-  bool                 m_UseExtendMode;
   InputImagePointer    m_VectorImage;
   InputImagePointer    m_ResampleVectorImage;
 
@@ -170,7 +182,7 @@ private:
   typename VectorWriterType::Pointer                m_VectorWriter;
 
   // Resampler
-  typename StreamingShrinkImageFilterType::Pointer m_StreamingShrinkImageFilter;
+  typename StreamingShrinkImageFilterType::Pointer  m_StreamingShrinkImageFilter;
 
   // Rescale intensity
   typename VectorRescaleIntensityImageFilterType::Pointer m_VectorRescaleIntensityImageFilter;
@@ -184,12 +196,15 @@ private:
   typename DataNodeType::Pointer                   m_Folder;
   
   // Tile size
-  unsigned int m_TileSize;
-  unsigned int m_CurrentDepth;
+  unsigned int                 m_TileSize;
+  unsigned int                 m_CurrentDepth;
 
   // File and path name
-  std::string m_FileName;
-  std::string m_IndexShapeFileName;
+  std::string                   m_FileName;
+  std::string                   m_IndexShapeFileName;
+  std::string                   m_CGIPath;
+  std::string                   m_ShapeIndexPath;
+  
 };
 
 } // end namespace otb
