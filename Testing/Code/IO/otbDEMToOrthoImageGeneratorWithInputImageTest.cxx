@@ -23,13 +23,14 @@
 #include "otbImage.h"
 #include "otbStandardFilterWatcher.h"
 #include "otbImageFileReader.h"
+#include "otbExtractROI.h"
 
 int otbDEMToOrthoImageGeneratorWithInputImageTest(int argc, char * argv[])
 {
-  if (argc < 6)
+  if (argc < 4)
     {
     std::cout << argv[0] <<
-    " DEM folder path , input filename, output filename , X Output Size, Y Output size "
+    " DEM folder path , input filename, output filename "
               << std::endl;
     return EXIT_FAILURE;
     }
@@ -39,7 +40,8 @@ int otbDEMToOrthoImageGeneratorWithInputImageTest(int argc, char * argv[])
   char * outputName = argv[3];
 
   const unsigned int Dimension = 2;
-  typedef otb::Image<double, Dimension>                               ImageType;
+  typedef double                                                      PixelType;
+  typedef otb::Image<PixelType, Dimension>                            ImageType;
   typedef otb::DEMToImageGenerator<ImageType>                         DEMToImageGeneratorType;
   typedef DEMToImageGeneratorType::SizeType                           SizeType;
   typedef otb::StreamingImageFileWriter<ImageType>                    WriterType;
@@ -50,18 +52,26 @@ int otbDEMToOrthoImageGeneratorWithInputImageTest(int argc, char * argv[])
   ReaderType::Pointer              reader = ReaderType::New();
   WriterType::Pointer              writer = WriterType::New();
 
-  SizeType size;
-  size[0] = ::atoi(argv[4]);
-  size[1] = ::atoi(argv[5]);
-
   reader->SetFileName(inputName);
   reader->UpdateOutputInformation();
+  unsigned int startX = 10;
+  unsigned int startY = 10;
+  unsigned int sizeX = 500;
+  unsigned int sizeY = 500;
+
+  typedef otb::ExtractROI<PixelType, PixelType> ExtractROIType;
+  ExtractROIType::Pointer filterRoi = ExtractROIType::New();
+
+  filterRoi->SetStartX(startX);
+  filterRoi->SetStartY(startY);
+  filterRoi->SetSizeX(sizeX);
+  filterRoi->SetSizeY(sizeY);
+
+  filterRoi->SetInput(reader->GetOutput());
+  filterRoi->UpdateOutputInformation();
 
   object->SetDEMDirectoryPath(folderPath);
-//  object->SetOutputOrigin(origin);
-//  object->SetOutputSize(size);
-//  object->SetOutputSpacing(spacing);
-  object->SetOutputParametersFromImage(reader->GetOutput());
+  object->SetOutputParametersFromImage(filterRoi->GetOutput());
 
   std::cout << object << std::endl;
 

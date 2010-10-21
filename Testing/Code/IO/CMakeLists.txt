@@ -1609,14 +1609,16 @@ ADD_TEST(ioTvDEMToOrthoImageGeneratorTest2 ${IO_TESTS12}
 )
 
 
+IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(ioTvDEMToOrthoImageGeneratorWithInputImage ${IO_TESTS12}
-#--compare-image ${EPSILON_9}  ${BASELINE}/ioTvDEMToOrthoImageGeneratorWithInputImage.tif
-#                        ${TEMP}/ioTvDEMToOrthoImageGeneratorWithInputImage.tif
+--compare-image ${EPSILON_9}  ${BASELINE}/ioTvDEMToOrthoImageGeneratorWithInputImage.tif
+                        ${TEMP}/ioTvDEMToOrthoImageGeneratorWithInputImage.tif
         otbDEMToOrthoImageGeneratorWithInputImageTest
-         ${INPUTDATA}/DEM/srtm_directory
-         ${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/Arcachon_extrait_3852_3319_546_542.tif
+         ${INPUTDATA}/DEM/srtm_directory/
+         ${LARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
          ${TEMP}/ioTvDEMToOrthoImageGeneratorWithInputImage.tif
 )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # ---  otb::PrepareSRTMDirectory ---
 ADD_TEST(ioTuPrepareSRTMDirectoryNew ${IO_TESTS12}
