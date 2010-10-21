@@ -306,13 +306,13 @@ ADD_TEST(fiTeBinaryThresholdImageFilterTest ${EXE_TESTS}
 
 ADD_TEST(fiTeDerivativeImageFilterTest ${EXE_TESTS}
 	--compare-n-images ${TOL} 2
-	${BASELINE}/DerivativeImageFilterFloatOutput.mhd
-	${TEMP}/DerivativeImageFilterFloatOutput.mhd
+	${BASELINE}/DerivativeImageFilterFloatOutput.hdr
+	${TEMP}/DerivativeImageFilterFloatOutput.hdr
 	${BASELINE}/DerivativeImageFilterOutput.png
 	${TEMP}/DerivativeImageFilterOutput.png
 	DerivativeImageFilterTest
 	${INPUTDATA}/ROISpot5.png
-	${TEMP}/DerivativeImageFilterFloatOutput.mhd
+	${TEMP}/DerivativeImageFilterFloatOutput.hdr
 	${TEMP}/DerivativeImageFilterOutput.png
     1 0
 )
