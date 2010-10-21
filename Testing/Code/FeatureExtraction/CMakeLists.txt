@@ -1420,6 +1420,39 @@ ADD_TEST(feTvScalarImageToPanTexTextureFilter ${FEATUREEXTRACTION_TESTS15}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFeatureExtractionTests16 ~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# -------            otb::FourierMellinDescriptorsImageFunction   -------------
+
+ADD_TEST(feTuFourierMellinDescriptorsNew ${FEATUREEXTRACTION_TESTS16}
+  otbFourierMellinDescriptorsNew
+  )
+
+ADD_TEST(feTvFourierMellinDescriptors ${FEATUREEXTRACTION_TESTS16}
+  --compare-ascii ${NOTOL}     
+  ${BASELINE_FILES}/feTvFourierMellinDescriptors.txt
+  ${TEMP}/feTvFourierMellinDescriptors.txt
+  otbFourierMellinDescriptors
+  ${INPUTDATA}/poupees.png
+  4
+  4
+  ${TEMP}/feTvFourierMellinDescriptors.txt
+  )
+
+ADD_TEST(feTvFourierMellinDescriptorsScaleInvariant ${FEATUREEXTRACTION_TESTS16}
+  otbFourierMellinDescriptorsScaleInvariant
+  ${INPUTDATA}/poupees.png
+  4
+  4
+  )
+
+ADD_TEST(feTvFourierMellinDescriptorsRotationInvariant ${FEATUREEXTRACTION_TESTS16}
+  otbFourierMellinDescriptorsRotationInvariant
+  ${INPUTDATA}/poupees.png
+  4
+  4
+  90
+  )
+  
 ADD_TEST(feTuLocalHistogramImageFunctionNew ${FEATUREEXTRACTION_TESTS16}
         otbLocalHistogramImageFunctionNew
 )
@@ -1430,10 +1463,7 @@ ADD_TEST(feTuLocalHistogramImageFunctionTest ${FEATUREEXTRACTION_TESTS16}
         otbLocalHistogramImageFunctionTest
 		${INPUTDATA}/poupees_1canal.hd
   		${TEMP}/feLocalHistogramImage.txt
-)
-
-
-
+                )
 # A enrichir
 SET(BasicFeatureExtraction_SRCS1
 otbFeatureExtractionTests1.cxx
@@ -1615,6 +1645,7 @@ otbScalarImageToHigherOrderTexturesFilter.cxx
 
 SET(BasicFeatureExtraction_SRCS16
 otbFeatureExtractionTests16.cxx
+otbFourierMellinDescriptors.cxx
 otbLocalHistogramImageFunctionNew.cxx
 otbLocalHistogramImageFunctionTest.cxx
 )
