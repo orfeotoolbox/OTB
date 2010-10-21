@@ -213,16 +213,7 @@ public:
   otbGetObjectMemberConstMacro(Transform,AverageElevation,double);
   
   /** Useful to set the output parameters from an existing image*/
-  template <class TImageType> void SetOutputParametersFromImage(const TImageType * image)
-    {
-    this->SetOutputOrigin ( image->GetOrigin() );
-    this->SetOutputSpacing ( image->GetSpacing() );
-    this->SetOutputStartIndex ( image->GetLargestPossibleRegion().GetIndex() );
-    this->SetOutputSize ( image->GetLargestPossibleRegion().GetSize() );
-    this->SetOutputProjectionRef(image->GetProjectionRef());
-    this->SetOutputKeywordList(image->GetImageKeywordlist());
-    }
-
+  void SetOutputParametersFromImage(const ImageBaseType * image);
 
   /** Useful to set the output parameters from an existing image*/
   void SetOutputParametersFromMap(const std::string map, const SpacingType& spacing);
