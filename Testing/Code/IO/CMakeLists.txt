@@ -1121,8 +1121,13 @@ ADD_TEST(ioTvOtbVectorImageTestFORMOSAT2 ${IO_TESTS9}
 
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
-ADD_TEST(ioTuVectorImageComplexTest ${IO_TESTS9}
-  otbVectorImageComplexTest)
+ADD_TEST(ioTuVectorImageComplexNew ${IO_TESTS9}
+  otbVectorImageComplexNew)
+
+#ADD_TEST(ioTuVectorImageComplexTest ${IO_TESTS9}
+#  otbVectorImageComplexTest
+#dual pol image
+#)
 
 # ---  otb::VectorImageReadWriteTest  ---
 ADD_TEST(ioTvVectorImageFileReaderWriterTest ${IO_TESTS9}
