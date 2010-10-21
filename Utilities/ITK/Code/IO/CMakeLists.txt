@@ -105,6 +105,7 @@ ELSE( OTB_USE_EXTERNAL_EXPAT  )
 #    ITKDICOMParser
     otbexpat
 #    ITKniftiio
+    itkjpeg8
 )
 ENDIF( OTB_USE_EXTERNAL_EXPAT )
 
