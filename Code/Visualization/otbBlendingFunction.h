@@ -51,7 +51,7 @@ public:
   typedef TOutputRGBPixel OutputRGBPixelType;
 
   /** Evaluate method  */
-  virtual const OutputRGBPixelType Evaluate(const InputPixel1Type& input1, const InputPixel2Type& input2) = 0;
+  virtual const OutputRGBPixelType Evaluate(const InputPixel1Type& input1, const InputPixel2Type& input2) const = 0;
 
 protected:
   /** Constructor */

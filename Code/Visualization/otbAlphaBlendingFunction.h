@@ -36,6 +36,9 @@ namespace Function
  * \f$ \alpha_{pix} \f$ is retrieved from the second pixel RGBA
  * \f$ \alpha_{glo} \f$ is provided by the SetAlpha() method (1.0 by default)
  *
+ *
+ * This class is not intended to be subclassed
+ *
  *  \ingroup Visualization
  */
 template <class TInputRGBPixel1, class TInputRGBPixel2, class TOutputRGBPixel = TInputRGBPixel1>
@@ -64,7 +67,7 @@ public:
   typedef typename OutputRGBPixelType::ValueType OutputValueType;
 
   /** Evaluate method  */
-  inline virtual const OutputRGBPixelType Evaluate(const InputPixel1Type& input1, const InputPixel2Type& input2)
+  inline const OutputRGBPixelType Evaluate(const InputPixel1Type& input1, const InputPixel2Type& input2) const
   {
     OutputRGBPixelType resp;
     resp.Fill(itk::NumericTraits<OutputValueType>::max());
@@ -93,7 +96,7 @@ protected:
   /** Constructor */
   AlphaBlendingFunction() : m_Alpha(1.0) {}
   /** Destructor */
-  virtual ~AlphaBlendingFunction() {}
+  ~AlphaBlendingFunction() {}
 private:
   AlphaBlendingFunction(const Self&); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
