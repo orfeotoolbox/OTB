@@ -64,24 +64,26 @@ ADD_TEST(feTvDrawPathTestAlign ${FEATUREEXTRACTION_TESTS1}
 	${INPUTDATA}/DeuxTraits.png
 	${TEMP}/feDrawPathAlignDeuxTraits.png)
 
+ADD_TEST(feTuComplexMomentImageNew ${FEATUREEXTRACTION_TESTS1}
+  otbComplexMomentImageNew
+  )
+
 ADD_TEST(feTvComplexMomentImage ${FEATUREEXTRACTION_TESTS1}
-   --compare-ascii ${NOTOL}     ${BASELINE_FILES}/feComplexMomentImage.txt
-                        ${TEMP}/feComplexMomentImage.txt
-        otbComplexMomentImage
-	${INPUTDATA}/poupees.png
+  --compare-ascii ${NOTOL}     ${BASELINE_FILES}/feTvComplexMomentImage.txt
+                               ${TEMP}/feTvComplexMomentImage.txt
+  otbComplexMomentImage
+  ${INPUTDATA}/poupees.png
   4
   4
-  ${TEMP}/feComplexMomentImage.txt)
+  ${TEMP}/feTvComplexMomentImage.txt
+  )
 
 ADD_TEST(feTvComplexMomentImageScaleInvariant ${FEATUREEXTRACTION_TESTS1}
-  --compare-ascii ${NOTOL}     ${BASELINE_FILES}/feComplexMomentImageScaleInvariant.txt
-                        ${TEMP}/feComplexMomentImageScaleInvariant.txt
-        otbComplexMomentImageScaleInvariant
-	${INPUTDATA}/poupees.png
+  otbComplexMomentImageScaleInvariant
+  ${INPUTDATA}/poupees.png
   4
   4
-  ${TEMP}/feComplexMomentImageScaleInvariant.txt
-  ${TEMP}/feComplexImageScaleInvariant.tiff)
+  )
 
 ADD_TEST(feTvRealMomentImage ${FEATUREEXTRACTION_TESTS1}
    --compare-ascii ${NOTOL}     ${BASELINE_FILES}/feRealMomentImage.txt
@@ -1453,17 +1455,20 @@ ADD_TEST(feTvFourierMellinDescriptorsRotationInvariant ${FEATUREEXTRACTION_TESTS
   90
   )
   
+# -------            otb::LocalHistogramImageFunction   -------------
+
 ADD_TEST(feTuLocalHistogramImageFunctionNew ${FEATUREEXTRACTION_TESTS16}
         otbLocalHistogramImageFunctionNew
 )
 
 ADD_TEST(feTuLocalHistogramImageFunctionTest ${FEATUREEXTRACTION_TESTS16}
-#   --compare-ascii ${EPSILON_8}     ${BASELINE_FILES}/feFlusserImage.txt
-#                        ${TEMP}/feFlusserImage.txt
         otbLocalHistogramImageFunctionTest
 		${INPUTDATA}/poupees_1canal.hd
   		${TEMP}/feLocalHistogramImage.txt
                 )
+
+
+
 # A enrichir
 SET(BasicFeatureExtraction_SRCS1
 otbFeatureExtractionTests1.cxx

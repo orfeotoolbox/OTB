@@ -75,10 +75,9 @@ public:
   typedef typename Superclass::IndexType           IndexType;
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
   typedef typename Superclass::PointType           PointType;
-
-  typedef float                                    ScalarRealType;
-
-  typedef typename Superclass::OutputType          ComplexType;
+  typedef typename Superclass::OutputType          OutputType;
+  
+  typedef double                                   ScalarRealType;
   typedef typename std::complex<ScalarRealType>    ScalarComplexType;
 
   /** Dimension of the underlying image. */
@@ -86,16 +85,16 @@ public:
                       InputImageType::ImageDimension);
   
   /** Evalulate the function at specified index */
-  virtual ComplexType EvaluateAtIndex(const IndexType& index) const;
+  virtual OutputType EvaluateAtIndex(const IndexType& index) const;
   
   /** Evaluate the function at non-integer positions */
-  virtual ComplexType Evaluate(const PointType& point) const
+  virtual OutputType Evaluate(const PointType& point) const
   {
     IndexType index;
     this->ConvertPointToNearestIndex(point, index);
     return this->EvaluateAtIndex(index);
   }
-  virtual ComplexType EvaluateAtContinuousIndex(
+  virtual OutputType EvaluateAtContinuousIndex(
     const ContinuousIndexType& cindex) const
   {
     IndexType index;

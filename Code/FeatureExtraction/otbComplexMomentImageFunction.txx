@@ -38,9 +38,6 @@ ComplexMomentImageFunction<TInputImage, TCoordRep>
   m_Qmax = 4;
 }
 
-/**
-   *
-   */
 template <class TInputImage, class TCoordRep>
 void
 ComplexMomentImageFunction<TInputImage, TCoordRep>
@@ -53,12 +50,12 @@ ComplexMomentImageFunction<TInputImage, TCoordRep>
 }
 
 template <class TInputImage, class TCoordRep>
-typename ComplexMomentImageFunction<TInputImage, TCoordRep>::ComplexType
+typename ComplexMomentImageFunction<TInputImage, TCoordRep>::OutputType
 ComplexMomentImageFunction<TInputImage, TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
   // Build moments vector
-  ComplexType moments;
+  OutputType moments;
   moments.resize(m_Pmax+1);
   
   // Initialize moments
@@ -116,17 +113,14 @@ ComplexMomentImageFunction<TInputImage, TCoordRep>
     }
   
   // Normalisation
-  for (unsigned int p = 0; p <= m_Pmax; p++)
+  for (int p = m_Pmax; p >= 0; p--)
     {
-    for (unsigned int q= 0; q <= m_Qmax; q++)
+    for (int q= m_Qmax; q >= 0; q--)
       {
-      if (p+q != 0)
-        {
-        moments.at(p).at(q) /= moments.at(0).at(0);
-        }
+      moments.at(p).at(q) /= moments.at(0).at(0);
       }
     }
-
+  
   // Return result
   return moments;
 }
