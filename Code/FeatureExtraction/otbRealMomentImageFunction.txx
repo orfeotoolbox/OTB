@@ -50,12 +50,12 @@ RealMomentImageFunction<TInputImage, TCoordRep>
 }
 
 template <class TInputImage, class TCoordRep>
-typename RealMomentImageFunction<TInputImage, TCoordRep>::RealType
+typename RealMomentImageFunction<TInputImage, TCoordRep>::OutputType
 RealMomentImageFunction<TInputImage, TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
   // Build moments vector
-  RealType moments;
+  OutputType moments;
   moments.resize(m_Pmax+1);
   
   std::vector<ScalarRealType> valXpY, valXqY;
@@ -102,8 +102,8 @@ RealMomentImageFunction<TInputImage, TCoordRep>
     {
     // Retrieve value, and centered-reduced position
     ScalarRealType value = static_cast<ScalarRealType>(it.GetPixel(i));
-    ScalarRealType     x = static_cast<ScalarRealType>(it.GetOffset(i)[0]);
-    ScalarRealType     y = static_cast<ScalarRealType>(it.GetOffset(i)[1]);
+    ScalarRealType     x = static_cast<ScalarRealType>(it.GetOffset(i)[0])/(2*m_NeighborhoodRadius+1);
+    ScalarRealType     y = static_cast<ScalarRealType>(it.GetOffset(i)[1])/(2*m_NeighborhoodRadius+1);
     
     unsigned int pTmp = 1;
     unsigned int qTmp = 1;
@@ -131,11 +131,11 @@ RealMomentImageFunction<TInputImage, TCoordRep>
     }
   
   // Normalisation
-  for (unsigned int p = 0; p <= m_Pmax; p++)
+  for (int p = m_Pmax; p >= 0; p--)
     {
-    for (unsigned int q= 0; q <= m_Qmax; q++)
+    for (int q= m_Qmax; q >= 0; q--)
       {
-      moments.at(p).at(q) /= vcl_pow(moments.at(0).at(0),((double)(p+q))/2.0);   
+      moments.at(p).at(q) /= moments.at(0).at(0);   
       }
     }
 

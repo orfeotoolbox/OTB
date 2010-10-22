@@ -85,14 +85,18 @@ ADD_TEST(feTvComplexMomentImageScaleInvariant ${FEATUREEXTRACTION_TESTS1}
   4
   )
 
+ADD_TEST(feTuRealMomentImageNew ${FEATUREEXTRACTION_TESTS1}
+  otbRealMomentImageNew
+  )
+
 ADD_TEST(feTvRealMomentImage ${FEATUREEXTRACTION_TESTS1}
-   --compare-ascii ${NOTOL}     ${BASELINE_FILES}/feRealMomentImage.txt
-                        ${TEMP}/feRealMomentImage.txt
+   --compare-ascii ${NOTOL}     ${BASELINE_FILES}/feTvRealMomentImage.txt
+                        ${TEMP}/feTvRealMomentImage.txt
         otbRealMomentImage
 	${INPUTDATA}/poupees.png
-  4
-  4
-  ${TEMP}/feRealMomentImage.txt)
+        4
+        4
+        ${TEMP}/feTvRealMomentImage.txt)
 
 ADD_TEST(feTvRadiometricMomentsImage ${FEATUREEXTRACTION_TESTS1}
    --compare-ascii ${NOTOL}     ${BASELINE_FILES}/feTvRadiometricMomentsImage.txt

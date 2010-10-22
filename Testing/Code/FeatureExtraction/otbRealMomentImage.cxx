@@ -24,10 +24,26 @@
 #include <iomanip>
 #include <fstream>
 #include "itkExceptionObject.h"
-#include "itkImage.h"
+#include "otbImage.h"
 
 #include "otbImageFileReader.h"
 #include "otbRealMomentImageFunction.h"
+
+int otbRealMomentImageNew(int argc, char * argv[])
+{
+  typedef unsigned char InputPixelType;
+  const unsigned int Dimension = 2;
+
+  typedef otb::Image<InputPixelType,  Dimension>          InputImageType;
+  typedef otb::RealMomentImageFunction<InputImageType>    FunctionType;
+
+  // Instantiating object
+  FunctionType::Pointer  function       = FunctionType::New();
+  
+  std::cout << function << std::endl; 
+  
+  return EXIT_SUCCESS;
+}
 
 int otbRealMomentImage(int argc, char * argv[])
 {
@@ -39,11 +55,11 @@ int otbRealMomentImage(int argc, char * argv[])
   typedef unsigned char InputPixelType;
   const unsigned int Dimension = 2;
 
-  typedef itk::Image<InputPixelType,  Dimension> InputImageType;
+  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
   typedef otb::ImageFileReader<InputImageType>   ReaderType;
 
   typedef otb::RealMomentImageFunction<InputImageType>    FunctionType;
-  typedef FunctionType::RealType                          RealType;
+  typedef FunctionType::OutputType                        OutputType;
 
   ReaderType::Pointer    reader         = ReaderType::New();
   FunctionType::Pointer  function       = FunctionType::New();
@@ -60,7 +76,7 @@ int otbRealMomentImage(int argc, char * argv[])
   index[0] = 100;
   index[1] = 100;
 
-  RealType Result;
+  OutputType Result;
 
   std::ofstream outputStream(outputFilename);
   outputStream << std::setprecision(10) << "Central Image moments: [10]" << std::endl;
