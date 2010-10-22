@@ -47,12 +47,12 @@ RadiometricMomentsImageFunction<TInputImage, TCoordRep>
 }
 
 template <class TInputImage, class TCoordRep>
-typename RadiometricMomentsImageFunction<TInputImage,TCoordRep>::RealType
+typename RadiometricMomentsImageFunction<TInputImage,TCoordRep>::OutputType
 RadiometricMomentsImageFunction<TInputImage,TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
   // Build moments vector
-  RealType moments;
+  OutputType moments;
   
   // Initialize moments
   moments.Fill( itk::NumericTraits< ScalarRealType >::Zero );

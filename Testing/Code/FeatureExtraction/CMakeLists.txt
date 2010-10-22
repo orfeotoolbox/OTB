@@ -98,6 +98,10 @@ ADD_TEST(feTvRealMomentImage ${FEATUREEXTRACTION_TESTS1}
         4
         ${TEMP}/feTvRealMomentImage.txt)
 
+ADD_TEST(feTuRadiometricMomentsImageNew ${FEATUREEXTRACTION_TESTS1}
+  otbRadiometricMomentsImageNew
+  )
+
 ADD_TEST(feTvRadiometricMomentsImage ${FEATUREEXTRACTION_TESTS1}
    --compare-ascii ${NOTOL}     ${BASELINE_FILES}/feTvRadiometricMomentsImage.txt
                         ${TEMP}/feTvRadiometricMomentsImage.txt
