@@ -109,25 +109,26 @@ ADD_TEST(feTvRadiometricMomentsImage ${FEATUREEXTRACTION_TESTS1}
 	${INPUTDATA}/poupees.png
   ${TEMP}/feTvRadiometricMomentsImage.txt)
 
-ADD_TEST(feTvHuImage ${FEATUREEXTRACTION_TESTS1}
-   --compare-ascii ${NOTOL}     ${BASELINE_FILES}/feHuImage.txt
-                        ${TEMP}/feHuImage.txt
-        otbHuImage
-	${INPUTDATA}/poupees.png
-  ${TEMP}/feHuImage.txt)
-
-ADD_TEST(feTuHuImageScaleInvariant ${FEATUREEXTRACTION_TESTS1}
-        otbHuImageScaleInvariant
-	${INPUTDATA}/poupees.png
-        ${TEMP}/feHuImageScaleInvariant.txt
-        ${TEMP}/feHuImageScaleInvariant.tiff
+ADD_TEST(feTuHuImageNew ${FEATUREEXTRACTION_TESTS1}
+        otbHuImageNew
         )
 
-ADD_TEST(feTuHuImageRotationInvariant ${FEATUREEXTRACTION_TESTS1}
+ADD_TEST(feTvHuImage ${FEATUREEXTRACTION_TESTS1}
+   --compare-ascii ${NOTOL}     ${BASELINE_FILES}/feTvHuImage.txt
+                        ${TEMP}/feTvHuImage.txt
+        otbHuImage
+	${INPUTDATA}/poupees.png
+        ${TEMP}/feTvHuImage.txt
+        )
+
+ADD_TEST(feTvHuImageScaleInvariant ${FEATUREEXTRACTION_TESTS1}
+        otbHuImageScaleInvariant
+	${INPUTDATA}/poupees.png
+        )
+
+ADD_TEST(feTvHuImageRotationInvariant ${FEATUREEXTRACTION_TESTS1}
         otbHuImageRotationInvariant
 	${INPUTDATA}/poupees.png
-        ${TEMP}/feHuImageRotationInvariant.txt
-        ${TEMP}/feHuImageRotationInvariant.tiff
         90
         )
 

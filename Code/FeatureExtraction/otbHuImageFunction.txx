@@ -47,12 +47,12 @@ HuImageFunction<TInputImage, TCoordRep>
 }
 
 template <class TInputImage, class TCoordRep>
-typename HuImageFunction<TInputImage, TCoordRep>::RealType
+typename HuImageFunction<TInputImage, TCoordRep>::OutputType
 HuImageFunction<TInputImage, TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
   // Build moments vector
-  RealType moments;
+  OutputType moments;
   
   // Initialize moments
   moments.Fill( itk::NumericTraits< ScalarRealType >::Zero );

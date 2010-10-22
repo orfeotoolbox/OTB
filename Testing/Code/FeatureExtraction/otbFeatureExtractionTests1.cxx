@@ -36,6 +36,7 @@ void RegisterTests()
   REGISTER_TEST(otbRealMomentImage);
   REGISTER_TEST(otbRadiometricMomentsImageNew);
   REGISTER_TEST(otbRadiometricMomentsImage);
+  REGISTER_TEST(otbHuImageNew);
   REGISTER_TEST(otbHuImage);
   REGISTER_TEST(otbHuImageRotationInvariant);
   REGISTER_TEST(otbHuImageScaleInvariant);

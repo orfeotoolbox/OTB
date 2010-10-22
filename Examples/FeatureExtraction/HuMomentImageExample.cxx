@@ -75,7 +75,7 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::HuImageFunction<InputImageType>   HuType;
-  typedef HuType::RealType                       MomentType;
+  typedef HuType::OutputType                     MomentType;
 
   HuType::Pointer hmFunction = HuType::New();
   // Software Guide : EndCodeSnippet

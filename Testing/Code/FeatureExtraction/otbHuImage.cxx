@@ -29,12 +29,24 @@
 #include "otbImageFileReader.h"
 #include "otbHuImageFunction.h"
 #include "otbBCOInterpolateImageFunction.h"
-#include "itkLinearInterpolateImageFunction.h"
 #include "otbStreamingResampleImageFilter.h"
-#include "otbStreamingImageFileWriter.h"
 #include "itkResampleImageFilter.h"
 
+int otbHuImageNew(int argc, char * argv[])
+{
+  typedef unsigned char InputPixelType;
+  const unsigned int Dimension = 2;
 
+  typedef otb::Image<InputPixelType,  Dimension>                  InputImageType;
+  typedef otb::HuImageFunction<InputImageType>                    FunctionType;
+
+  // Instantiating object
+  FunctionType::Pointer function       = FunctionType::New();
+
+  std::cout << function << std::endl; 
+ 
+  return EXIT_SUCCESS;
+}
 
 int otbHuImage(int argc, char * argv[])
 {
@@ -47,7 +59,7 @@ int otbHuImage(int argc, char * argv[])
   typedef otb::Image<InputPixelType,  Dimension>             InputImageType;
   typedef otb::ImageFileReader<InputImageType>               ReaderType;
   typedef otb::HuImageFunction<InputImageType>               FunctionType;
-  typedef FunctionType::RealType                             RealType;
+  typedef FunctionType::OutputType                           OutputType;
   
   ReaderType::Pointer   reader         = ReaderType::New();
   FunctionType::Pointer function = FunctionType::New();
@@ -61,15 +73,17 @@ int otbHuImage(int argc, char * argv[])
   index[1] = 100;
 
   function->SetNeighborhoodRadius(3);
-  RealType Result;
+  OutputType Result;
   Result = function->EvaluateAtIndex(index);
 
   std::ofstream outputStream(outputFilename);
   outputStream << std::setprecision(10) << "Hu Image moments: [10]" << std::endl;
+
   for (unsigned int j = 1; j < 8; j++)
     {
     outputStream << "Hu(" << j << ") = " << Result[j-1] << std::endl;
     }
+
   outputStream.close();
 
   return EXIT_SUCCESS;
@@ -78,9 +92,6 @@ int otbHuImage(int argc, char * argv[])
 int otbHuImageScaleInvariant(int argc, char * argv[])
 {
   const char * inputFilename   = argv[1];
-  const char * outputFilename  = argv[2];
-  const char * outputImageName = argv[3];
-
 
   typedef double InputPixelType;
   const unsigned int Dimension = 2;
@@ -92,15 +103,13 @@ int otbHuImageScaleInvariant(int argc, char * argv[])
   typedef otb::BCOInterpolateImageFunction<InputImageType, 
     double>                                                               InterpolatorType;
   typedef otb::HuImageFunction<InputImageType>                            FunctionType;
-  typedef FunctionType::RealType                                          RealType;
-  typedef otb::StreamingImageFileWriter<InputImageType>                   WriterType;
+  typedef FunctionType::OutputType                                        OutputType;
   
   ReaderType::Pointer                         reader = ReaderType::New();
   StreamingResampleImageFilterType::Pointer   resampler = StreamingResampleImageFilterType::New();
   InterpolatorType::Pointer                   interpolator = InterpolatorType::New();
   FunctionType::Pointer                       function1 = FunctionType::New();
   FunctionType::Pointer                       function2 = FunctionType::New();
-  WriterType::Pointer                         writer = WriterType::New();
   
   reader->SetFileName(inputFilename);
   reader->Update();
@@ -117,57 +126,50 @@ int otbHuImageScaleInvariant(int argc, char * argv[])
   resampler->SetOutputSize(size);
   resampler->SetOutputSpacing(0.5);
   resampler->Update();
-  writer->SetInput(resampler->GetOutput());
-  writer->SetFileName(outputImageName);
-  writer->Update();
 
   function1->SetInputImage(reader->GetOutput());
   InputImageType::IndexType index1;
   index1[0] = 100;
   index1[1] = 100;
   function1->SetNeighborhoodRadius(2);  
-  RealType Result1 = function1->EvaluateAtIndex(index1);
+  OutputType Result1 = function1->EvaluateAtIndex(index1);
 
   function2->SetInputImage(resampler->GetOutput());
   InputImageType::IndexType index2;
   index2[0] = 200;
   index2[1] = 200;
   function2->SetNeighborhoodRadius(4);  
-  RealType Result2 = function2->EvaluateAtIndex(index2);
+  OutputType Result2 = function2->EvaluateAtIndex(index2);
 
-  std::ofstream outputStream(outputFilename);
-  outputStream << std::setprecision(10);
-  
+  double error = 0.0;
+
   for (unsigned int j = 1; j < 8; j++)
     {
-    double error = 2*vcl_abs( Result1[j-1] - Result2[j-1]) / vcl_abs(Result1[j-1] + Result2[j-1]);
+    error += vcl_pow(vcl_abs( Result1[j-1] - Result2[j-1]), 2);
     
-    outputStream << "Error = " << error << std::endl
-                 << "Original Image - Hu Moment #" << j << " : " << Result1[j-1] << std::endl
-                 << "Scaled Image   - Hu Moment #" << j << " : " << Result2[j-1] << std::endl
-                 << std::endl;
-    
-    if (error > 1)
-      {
-      itkGenericExceptionMacro(  <<std::endl 
-                                 << "Error = " << error 
-                                 << "  > 1     -> TEST FAILLED" << std::endl 
-                                 << "Original Image - Hu Moment #" << j << " : " << Result1[j-1] << std::endl
-                                 << "Scaled Image   - Hu Moment #" << j << " : " << Result2[j-1] << std::endl
-                                 << std::endl);
-      }
+    std::cout << "Original -H" << j
+              << " : " << Result1[j]
+              << "  /  Scaled - H" << j 
+              << " : " << Result2[j] << std::endl;
     }
-  outputStream.close();
 
+  error = vcl_sqrt(error)/7.0;
+  std::cout << "Error : " << error << std::endl
+            << std::endl;
+  
+  if (error > 1E-3)
+    {
+    itkGenericExceptionMacro( << "Error = " << error
+                              << "  > 1E-3     -> TEST FAILLED" << std::endl );
+    }
+  
   return EXIT_SUCCESS;
 }
 
 int otbHuImageRotationInvariant(int argc, char * argv[])
 {
   const char * inputFilename  = argv[1];
-  const char * outputFilename  = argv[2];
-  const char * outputImageName = argv[3];
-  const double angleInDegrees = atoi(argv[4]);
+  const double angleInDegrees = atoi(argv[2]);
 
 
   typedef double InputPixelType;
@@ -176,10 +178,10 @@ int otbHuImageRotationInvariant(int argc, char * argv[])
   typedef otb::ImageFileReader<InputImageType>                            ReaderType;
   typedef itk::ResampleImageFilter<
     InputImageType, InputImageType >                                      FilterType;
-  typedef itk::LinearInterpolateImageFunction<InputImageType, double>     InterpolatorType;
+  typedef otb::BCOInterpolateImageFunction<InputImageType, 
+    double>                                                               InterpolatorType;
   typedef otb::HuImageFunction<InputImageType>                            FunctionType;
-  typedef FunctionType::RealType                                          RealType;
-  typedef otb::StreamingImageFileWriter<InputImageType>                   WriterType;
+  typedef FunctionType::OutputType                                        OutputType;
   typedef itk::AffineTransform< double, Dimension >  TransformType;
  
 
@@ -189,10 +191,13 @@ int otbHuImageRotationInvariant(int argc, char * argv[])
   InterpolatorType::Pointer                   interpolator = InterpolatorType::New();
   FunctionType::Pointer                       function1 = FunctionType::New();
   FunctionType::Pointer                       function2 = FunctionType::New();
-  WriterType::Pointer                         writer = WriterType::New();
-  
+   
   reader->SetFileName(inputFilename);
   reader->Update();
+
+  interpolator->SetInputImage(reader->GetOutput());
+  interpolator->SetRadius(2);
+  interpolator->SetAlpha(-0.5);
 
   filter->SetInterpolator(interpolator);
   filter->SetDefaultPixelValue( 100 );
@@ -228,47 +233,41 @@ int otbHuImageRotationInvariant(int argc, char * argv[])
   filter->SetTransform( transform );
   filter->Update();
 
-  writer->SetInput(filter->GetOutput());
-  writer->SetFileName(outputImageName);
-  writer->Update();
-
   function1->SetInputImage(reader->GetOutput());
   InputImageType::IndexType index1;
   index1[0] = 256;
   index1[1] = 256;
   function1->SetNeighborhoodRadius(4);  
-  RealType Result1 = function1->EvaluateAtIndex(index1);
+  OutputType Result1 = function1->EvaluateAtIndex(index1);
 
   function2->SetInputImage(filter->GetOutput());
   InputImageType::IndexType index2;
   index2[0] = 256;
   index2[1] = 256;
   function2->SetNeighborhoodRadius(4);  
-  RealType Result2 = function2->EvaluateAtIndex(index2);
+  OutputType Result2 = function2->EvaluateAtIndex(index2);
 
-  std::ofstream outputStream(outputFilename);
-  outputStream << std::setprecision(10);
-
+  double error = 0.0;
+  
   for (unsigned int j = 1; j < 8; j++)
     {
-    double error = vcl_abs( Result1[j-1] - Result2[j-1]);
+    error += vcl_pow(vcl_abs( Result1[j-1] - Result2[j-1]), 2);
 
-    outputStream << "Error = " << error << std::endl
-                 << "Original Image - Hu Moment #" << j << " : " << Result1[j-1] << std::endl
-                 << "Rotated Image  - Hu Moment #" << j << " : " << Result2[j-1] << std::endl
-                 << "Rotation angle : " << angleInDegrees << std::endl;
-    
-    if (error > 1E-9)
-      {
-      itkGenericExceptionMacro(  <<std::endl 
-                                 << "Error = " << error 
-                                 << "  > 1E-9    -> TEST FAILLED" << std::endl 
-                                 << "Original Image - Hu Moment #" << j << " : " << Result1[j-1] << std::endl 
-                                 << "Rotated Image  - Hu Moment #" << j << " : " << Result2[j-1] << std::endl
-                                 << "Rotation angle : " << angleInDegrees << std::endl );
-      }
+    std::cout << "Original -H" << j
+              << " : " << Result1[j]
+              << "  /  Rotated - H" << j 
+              << " : " << Result2[j] << std::endl;
     }
-  outputStream.close();
-  
+
+  error = vcl_sqrt(error)/7.0;
+  std::cout << "Error : " << error << std::endl
+            << std::endl;
+   
+  if (error > 1E-3)
+      {
+      itkGenericExceptionMacro( << "Error = " << error
+                                << "  > 1E-3     -> TEST FAILLED" << std::endl );
+      }
+    
   return EXIT_SUCCESS;
 }
