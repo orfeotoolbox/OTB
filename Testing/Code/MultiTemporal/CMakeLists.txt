@@ -19,7 +19,7 @@ SET(MULTITEMPORAL_TESTS1 ${CXX_TEST_PATH}/otbMultiTemporalTests1)
 
 # -------            otb::testname   ------------------------------
 
-ADD_TEST(cdTvCBAMI ${MULTITEMPORAL_TESTS1}
+ADD_TEST(mtTvCBAMI ${MULTITEMPORAL_TESTS1}
   --compare-image ${TOL}   ${BASELINE}/cdCBAMIImage.png
                     ${TEMP}/cdCBAMIImage.png
         otbCBAMIMultiTemporalTest
