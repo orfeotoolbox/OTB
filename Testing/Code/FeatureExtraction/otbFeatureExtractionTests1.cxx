@@ -39,6 +39,7 @@ void RegisterTests()
   REGISTER_TEST(otbHuImage);
   REGISTER_TEST(otbHuImageRotationInvariant);
   REGISTER_TEST(otbHuImageScaleInvariant);
+  REGISTER_TEST(otbFlusserImageNew);
   REGISTER_TEST(otbFlusserImage);
   REGISTER_TEST(otbFlusserImageRotationInvariant);
   REGISTER_TEST(otbFlusserImageScaleInvariant);

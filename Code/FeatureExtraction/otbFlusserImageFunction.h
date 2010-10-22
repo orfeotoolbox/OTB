@@ -90,24 +90,24 @@ public:
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
   typedef typename Superclass::PointType           PointType;
 
-  typedef typename Superclass::OutputType          RealType;
-  typedef typename RealType::ValueType             ScalarRealType;
+  typedef typename Superclass::OutputType          OutputType;
+  typedef typename OutputType::ValueType           ScalarRealType;
 
   /** Dimension of the underlying image. */
   itkStaticConstMacro(ImageDimension, unsigned int,
                       InputImageType::ImageDimension);
 
   /** Evalulate the function at specified index */
-  virtual RealType EvaluateAtIndex(const IndexType& index) const;
+  virtual OutputType EvaluateAtIndex(const IndexType& index) const;
 
   /** Evaluate the function at non-integer positions */
-  virtual RealType Evaluate(const PointType& point) const
+  virtual OutputType Evaluate(const PointType& point) const
   {
     IndexType index;
     this->ConvertPointToNearestIndex(point, index);
     return this->EvaluateAtIndex(index);
   }
-  virtual RealType EvaluateAtContinuousIndex(
+  virtual OutputType EvaluateAtContinuousIndex(
     const ContinuousIndexType& cindex) const
   {
     IndexType index;

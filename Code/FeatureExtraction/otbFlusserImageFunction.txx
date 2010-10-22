@@ -47,12 +47,12 @@ FlusserImageFunction<TInputImage, TCoordRep>
 }
 
 template <class TInputImage, class TCoordRep>
-typename FlusserImageFunction<TInputImage,TCoordRep>::RealType
+typename FlusserImageFunction<TInputImage,TCoordRep>::OutputType
 FlusserImageFunction<TInputImage,TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
   // Build moments vector
-  RealType moments;
+  OutputType moments;
   
   // Initialize moments
   moments.Fill( itk::NumericTraits< ScalarRealType >::Zero );

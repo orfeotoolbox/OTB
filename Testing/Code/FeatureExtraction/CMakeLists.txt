@@ -131,25 +131,25 @@ ADD_TEST(feTuHuImageRotationInvariant ${FEATUREEXTRACTION_TESTS1}
         90
         )
 
-ADD_TEST(feTuFlusserImage ${FEATUREEXTRACTION_TESTS1}
-   --compare-ascii ${EPSILON_8}     ${BASELINE_FILES}/feFlusserImage.txt
-                        ${TEMP}/feFlusserImage.txt
+ADD_TEST(feTuFlusserImageNew ${FEATUREEXTRACTION_TESTS1}
+        otbFlusserImageNew
+)
+
+ADD_TEST(feTvFlusserImage ${FEATUREEXTRACTION_TESTS1}
+   --compare-ascii ${EPSILON_8}     ${BASELINE_FILES}/feTvFlusserImage.txt
+                        ${TEMP}/feTvFlusserImage.txt
         otbFlusserImage
 	${INPUTDATA}/poupees.png
-  ${TEMP}/feFlusserImage.txt)
+        ${TEMP}/feTvFlusserImage.txt)
 
 ADD_TEST(feTuFlusserImageScaleInvariant ${FEATUREEXTRACTION_TESTS1}
         otbFlusserImageScaleInvariant
 	${INPUTDATA}/poupees.png
-        ${TEMP}/feFlusserImageScaleInvariant.txt
-        ${TEMP}/feFlusserImageScaleInvariant.tiff
         )
 
 ADD_TEST(feTuFlusserImageRotationInvariant ${FEATUREEXTRACTION_TESTS1}
         otbFlusserImageRotationInvariant
 	${INPUTDATA}/poupees.png
-        ${TEMP}/feFlusserImageRotationInvariant.txt
-        ${TEMP}/feFlusserImageRotationInvariant.tiff
         90
         )
 

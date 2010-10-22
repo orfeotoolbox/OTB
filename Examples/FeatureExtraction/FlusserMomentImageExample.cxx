@@ -75,7 +75,7 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::FlusserImageFunction<InputImageType>   FlusserType;
-  typedef FlusserType::RealType                       MomentType;
+  typedef FlusserType::OutputType                     MomentType;
 
   FlusserType::Pointer fmFunction = FlusserType::New();
   // Software Guide : EndCodeSnippet
