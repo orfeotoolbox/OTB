@@ -49,6 +49,10 @@ scores suggest a ``winner'', a measurement vector can be flagged as ill
 defined. Such a rejection scheme can avoid risks of assigning a class label
 without a proper win margin.
 
+Note that to use these concepts into your own programs, you might have to link
+to other OTB libraries (edit the \code{TARGET\_LINK\_LIBRARIES} to add them),
+for example OTBLearning, OTBMarkov.
+
 \subsection{k-d Tree Based k-Means Clustering}
 \label{sec:KdTreeBasedKMeansClustering}
 \ifitkFullVersion

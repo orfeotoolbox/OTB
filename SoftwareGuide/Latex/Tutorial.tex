@@ -309,6 +309,10 @@ TARGET_LINK_LIBRARIES(SimpleViewer OTBCommon OTBIO OTBGui OTBVisualization)
 \end{small}
 
 Notice that you have to link to 2 other OTB libraries: OTBGui and OTBVisualization.
+In other situations you might have to add other OTB libraries, for example OTBLearning,
+OTBFeatureExtraction, etc. To make a long story short, basically add the library
+when you're using some domain specific filters and if you're getting messages from
+the compiler such as {\em undefined reference to}.
 
 \input{SimpleViewer}
 
