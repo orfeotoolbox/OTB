@@ -22,6 +22,8 @@
 #pragma warning ( disable : 4786 )
 #endif
 
+#include "otbConfigure.h"
+
 #include "otbTestMain.h"
 
 void RegisterTests()
@@ -44,6 +46,11 @@ void RegisterTests()
   REGISTER_TEST(otbFlusserMomentsImageFunction);
   REGISTER_TEST(otbFlusserMomentsImageFunctionRotationInvariant);
   REGISTER_TEST(otbFlusserMomentsImageFunctionScaleInvariant);
+#if defined(OTB_USE_DEPRECATED)
+  REGISTER_TEST(otbHuImage);
+  REGISTER_TEST(otbFlusserImage);
+  REGISTER_TEST(otbComplexMomentImage);
+#endif
   REGISTER_TEST(otbComplexMomentPathNew);
   REGISTER_TEST(otbComplexMomentPath);
   REGISTER_TEST(otbComplexMomentPathFloat);

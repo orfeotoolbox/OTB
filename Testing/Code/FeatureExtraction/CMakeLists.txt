@@ -154,6 +154,32 @@ ADD_TEST(feTuFlusserMomentsImageFunctionRotationInvariant ${FEATUREEXTRACTION_TE
         90
         )
 
+# Deprecated class tests
+IF (OTB_USE_DEPRECATED)
+  ADD_TEST(feTvHuImage ${FEATUREEXTRACTION_TESTS1}
+   --compare-ascii ${NOTOL}     ${BASELINE_FILES}/feHuImage.txt
+                        ${TEMP}/feHuImage.txt
+        otbHuImage
+        ${INPUTDATA}/TeteAToto.png
+        ${TEMP}/feHuImage.txt)
+
+  ADD_TEST(feTvComplexMomentImage ${FEATUREEXTRACTION_TESTS1}
+   --compare-ascii ${NOTOL}     ${BASELINE_FILES}/feComplexMomentImage.txt
+                        ${TEMP}/feComplexMomentImage.txt
+        otbComplexMomentImage
+	${INPUTDATA}/TeteAToto.png
+        1
+        1
+        ${TEMP}/feComplexMomentImage.txt)
+
+  ADD_TEST(feTuFlusserImage ${FEATUREEXTRACTION_TESTS1}
+   --compare-ascii ${EPSILON_8}     ${BASELINE_FILES}/feFlusserImage.txt
+                        ${TEMP}/feFlusserImage.txt
+        otbFlusserImage
+	${INPUTDATA}/TeteAToto.png
+        ${TEMP}/feFlusserImage.txt)
+ENDIF (OTB_USE_DEPRECATED)
+
 ADD_TEST(feTuComplexMomentPathNew ${FEATUREEXTRACTION_TESTS1}
         otbComplexMomentPathNew)
 
@@ -1495,6 +1521,16 @@ otbComplexMomentPathFloat.cxx
 otbHuPathNew.cxx
 otbHuPath.cxx
 )
+
+IF(OTB_USE_DEPRECATED)
+SET(BasicFeatureExtraction_SRCS1
+${BasicFeatureExtraction_SRCS1}
+otbHuImage.cxx
+otbComplexMomentImage.cxx
+otbFlusserImage.cxx
+)
+ENDIF(OTB_USE_DEPRECATED)
+
 SET(BasicFeatureExtraction_SRCS2
 otbFeatureExtractionTests2.cxx
 otbFlusserPathNew.cxx
