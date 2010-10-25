@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRealMomentImageFunction_h
-#define __otbRealMomentImageFunction_h
+#ifndef __otbRealMomentsImageFunction_h
+#define __otbRealMomentsImageFunction_h
 
 #include "itkImageFunction.h"
 
@@ -24,7 +24,7 @@ namespace otb
 {
 
 /**
- * \class RealMomentImageFunction
+ * \class RealMomentsImageFunction
  * \brief Calculate the moment values in the specified
  * neighborhood.
  * 
@@ -34,7 +34,7 @@ namespace otb
  */
 
 template <class TInputImage, class TCoordRep = float>
-class ITK_EXPORT RealMomentImageFunction :
+class ITK_EXPORT RealMomentsImageFunction :
     public itk::ImageFunction<TInputImage,
                               std::vector< std::vector< 
                               ITK_TYPENAME itk::NumericTraits<
@@ -43,7 +43,7 @@ class ITK_EXPORT RealMomentImageFunction :
 {
 public:
   /** Standard class typedefs. */
-  typedef RealMomentImageFunction                                              Self;
+  typedef RealMomentsImageFunction                                             Self;
   typedef itk::ImageFunction<TInputImage, 
                              std::vector< std::vector< 
                              ITK_TYPENAME itk::NumericTraits<
@@ -53,7 +53,7 @@ public:
   typedef itk::SmartPointer<const Self>                                        ConstPointer;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(RealMomentImageFunction, ImageFunction);
+  itkTypeMacro(RealMomentsImageFunction, ImageFunction);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -101,12 +101,12 @@ public:
   itkGetConstReferenceMacro(Qmax, unsigned int);
 
 protected:
-  RealMomentImageFunction();
-  virtual ~RealMomentImageFunction() {}
+  RealMomentsImageFunction();
+  virtual ~RealMomentsImageFunction() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  RealMomentImageFunction(const Self &);  //purposely not implemented
+  RealMomentsImageFunction(const Self &);  //purposely not implemented
   void operator =(const Self&);           //purposely not implemented
 
   unsigned int m_Pmax;
@@ -117,7 +117,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRealMomentImageFunction.txx"
+#include "otbRealMomentsImageFunction.txx"
 #endif
 
 #endif

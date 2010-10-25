@@ -15,10 +15,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRealMomentImageFunction_txx
-#define __otbRealMomentImageFunction_txx
+#ifndef __otbRealMomentsImageFunction_txx
+#define __otbRealMomentsImageFunction_txx
 
-#include "otbRealMomentImageFunction.h"
+#include "otbRealMomentsImageFunction.h"
 #include "itkConstNeighborhoodIterator.h"
 #include "itkNumericTraits.h"
 #include "itkMacro.h"
@@ -30,8 +30,8 @@ namespace otb
    * Constructor
    */
 template <class TInputImage, class TCoordRep>
-RealMomentImageFunction<TInputImage, TCoordRep>
-::RealMomentImageFunction()
+RealMomentsImageFunction<TInputImage, TCoordRep>
+::RealMomentsImageFunction()
 {
   m_NeighborhoodRadius = 1;
   m_Pmax = 4;
@@ -40,7 +40,7 @@ RealMomentImageFunction<TInputImage, TCoordRep>
 
 template <class TInputImage, class TCoordRep>
 void
-RealMomentImageFunction<TInputImage, TCoordRep>
+RealMomentsImageFunction<TInputImage, TCoordRep>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os, indent);
@@ -50,8 +50,8 @@ RealMomentImageFunction<TInputImage, TCoordRep>
 }
 
 template <class TInputImage, class TCoordRep>
-typename RealMomentImageFunction<TInputImage, TCoordRep>::OutputType
-RealMomentImageFunction<TInputImage, TCoordRep>
+typename RealMomentsImageFunction<TInputImage, TCoordRep>::OutputType
+RealMomentsImageFunction<TInputImage, TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
   // Build moments vector

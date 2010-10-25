@@ -85,18 +85,18 @@ ADD_TEST(feTvComplexMomentsImageFunctionScaleInvariant ${FEATUREEXTRACTION_TESTS
   4
   )
 
-ADD_TEST(feTuRealMomentImageNew ${FEATUREEXTRACTION_TESTS1}
-  otbRealMomentImageNew
+ADD_TEST(feTuRealMomentsImageFunctionNew ${FEATUREEXTRACTION_TESTS1}
+  otbRealMomentsImageFunctionNew
   )
 
-ADD_TEST(feTvRealMomentImage ${FEATUREEXTRACTION_TESTS1}
-   --compare-ascii ${NOTOL}     ${BASELINE_FILES}/feTvRealMomentImage.txt
-                        ${TEMP}/feTvRealMomentImage.txt
-        otbRealMomentImage
+ADD_TEST(feTvRealMomentsImageFunction ${FEATUREEXTRACTION_TESTS1}
+   --compare-ascii ${NOTOL}     ${BASELINE_FILES}/feTvRealMomentsImageFunction.txt
+                        ${TEMP}/feTvRealMomentsImageFunction.txt
+        otbRealMomentsImageFunction
 	${INPUTDATA}/poupees.png
         4
         4
-        ${TEMP}/feTvRealMomentImage.txt)
+        ${TEMP}/feTvRealMomentsImageFunction.txt)
 
 ADD_TEST(feTuRadiometricMomentsImageNew ${FEATUREEXTRACTION_TESTS1}
   otbRadiometricMomentsImageNew
@@ -1485,7 +1485,7 @@ otbAlignImageToPath.cxx
 otbDrawPath.cxx
 otbDrawPathAlign.cxx
 otbComplexMomentsImageFunction.cxx
-otbRealMomentImage.cxx
+otbRealMomentsImageFunction.cxx
 otbRadiometricMomentsImageFunction.cxx
 otbHuMomentsImageFunction.cxx
 otbFlusserMomentsImageFunction.cxx

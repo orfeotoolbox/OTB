@@ -27,15 +27,15 @@
 #include "otbImage.h"
 
 #include "otbImageFileReader.h"
-#include "otbRealMomentImageFunction.h"
+#include "otbRealMomentsImageFunction.h"
 
-int otbRealMomentImageNew(int argc, char * argv[])
+int otbRealMomentsImageFunctionNew(int argc, char * argv[])
 {
   typedef unsigned char InputPixelType;
   const unsigned int Dimension = 2;
 
   typedef otb::Image<InputPixelType,  Dimension>          InputImageType;
-  typedef otb::RealMomentImageFunction<InputImageType>    FunctionType;
+  typedef otb::RealMomentsImageFunction<InputImageType>   FunctionType;
 
   // Instantiating object
   FunctionType::Pointer  function       = FunctionType::New();
@@ -45,7 +45,7 @@ int otbRealMomentImageNew(int argc, char * argv[])
   return EXIT_SUCCESS;
 }
 
-int otbRealMomentImage(int argc, char * argv[])
+int otbRealMomentsImageFunction(int argc, char * argv[])
 {
   const char * inputFilename  = argv[1];
   unsigned int p((unsigned int) ::atoi(argv[2]));
@@ -58,7 +58,7 @@ int otbRealMomentImage(int argc, char * argv[])
   typedef otb::Image<InputPixelType,  Dimension> InputImageType;
   typedef otb::ImageFileReader<InputImageType>   ReaderType;
 
-  typedef otb::RealMomentImageFunction<InputImageType>    FunctionType;
+  typedef otb::RealMomentsImageFunction<InputImageType>   FunctionType;
   typedef FunctionType::OutputType                        OutputType;
 
   ReaderType::Pointer    reader         = ReaderType::New();
