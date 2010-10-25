@@ -98,16 +98,16 @@ ADD_TEST(feTvRealMomentsImageFunction ${FEATUREEXTRACTION_TESTS1}
         4
         ${TEMP}/feTvRealMomentsImageFunction.txt)
 
-ADD_TEST(feTuRadiometricMomentsImageNew ${FEATUREEXTRACTION_TESTS1}
-  otbRadiometricMomentsImageNew
+ADD_TEST(feTuRadiometricMomentsImageFunctionNew ${FEATUREEXTRACTION_TESTS1}
+  otbRadiometricMomentsImageFunctionNew
   )
 
-ADD_TEST(feTvRadiometricMomentsImage ${FEATUREEXTRACTION_TESTS1}
-   --compare-ascii ${NOTOL}     ${BASELINE_FILES}/feTvRadiometricMomentsImage.txt
-                        ${TEMP}/feTvRadiometricMomentsImage.txt
-        otbRadiometricMomentsImage
+ADD_TEST(feTvRadiometricMomentsImageFunction ${FEATUREEXTRACTION_TESTS1}
+   --compare-ascii ${NOTOL}     ${BASELINE_FILES}/feTvRadiometricMomentsImageFunction.txt
+                                ${TEMP}/feTvRadiometricMomentsImageFunction.txt
+        otbRadiometricMomentsImageFunction
 	${INPUTDATA}/poupees.png
-  ${TEMP}/feTvRadiometricMomentsImage.txt)
+        ${TEMP}/feTvRadiometricMomentsImageFunction.txt)
 
 ADD_TEST(feTuHuMomentsImageFunctionNew ${FEATUREEXTRACTION_TESTS1}
         otbHuMomentsImageFunctionNew

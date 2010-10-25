@@ -34,8 +34,8 @@ void RegisterTests()
   REGISTER_TEST(otbComplexMomentsImageFunctionScaleInvariant);
   REGISTER_TEST(otbRealMomentsImageFunctionNew);
   REGISTER_TEST(otbRealMomentsImageFunction);
-  REGISTER_TEST(otbRadiometricMomentsImageNew);
-  REGISTER_TEST(otbRadiometricMomentsImage);
+  REGISTER_TEST(otbRadiometricMomentsImageFunctionNew);
+  REGISTER_TEST(otbRadiometricMomentsImageFunction);
   REGISTER_TEST(otbHuMomentsImageFunctionNew);
   REGISTER_TEST(otbHuMomentsImageFunction);
   REGISTER_TEST(otbHuMomentsImageFunctionRotationInvariant);
