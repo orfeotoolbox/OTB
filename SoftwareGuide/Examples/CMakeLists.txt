@@ -306,10 +306,10 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/TouziEdgeDetectorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/HarrisExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/SURFExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/ComplexMomentImageExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/ComplexMomentsImageFunctionExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/ComplexMomentPathExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/HuMomentImageExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/FlusserMomentImageExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/HuMomentsImageFunctionExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/FlusserMomentsImageFunctionExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/ExtractRoadByStepsExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/ExtractRoadExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/SeamCarvingExample.cxx
