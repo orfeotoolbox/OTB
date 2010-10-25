@@ -22,6 +22,8 @@
 #pragma warning ( disable : 4786 )
 #endif
 
+#include "otbConfigure.h"
+
 #include "otbTestMain.h"
 
 void RegisterTests()

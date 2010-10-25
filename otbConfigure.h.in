@@ -72,3 +72,6 @@
 
 /* Path of OTB binaries and OTB install */
 #define OTB_CONFIG "@OTB_BINARY_DIR@"
+
+/* Deprecated Managment */
+#cmakedefine OTB_USE_DEPRECATED
