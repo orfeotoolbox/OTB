@@ -26,6 +26,7 @@
 #include "otbImage.h"
 #include "otbDEMHandler.h"
 #include "itkImageRegionIteratorWithIndex.h"
+#include "otbGenericRSTransform.h"
 
 namespace otb
 {
@@ -68,6 +69,13 @@ public:
 
   typedef otb::DEMHandler DEMHandlerType;
 
+  /** Specialisation of OptResampleFilter with a remote
+    * sensing  transform
+    */
+  typedef GenericRSTransform<>                       GenericRSTransformType;
+  typedef typename GenericRSTransformType::Pointer   GenericRSTransformPointerType;
+
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
@@ -90,15 +98,82 @@ public:
   itkSetMacro(DefaultUnknownValue, PixelType);
   itkGetConstReferenceMacro(DefaultUnknownValue, PixelType);
 
+  /** Set/Get the Default Unknown Value. */
+  itkSetObjectMacro(Transform, GenericRSTransformType);
+  itkGetConstObjectMacro(Transform, GenericRSTransformType);
+
   /** Set the DEM directory. */
   virtual void SetDEMDirectoryPath(const char* DEMDirectory);
   virtual void SetDEMDirectoryPath(const std::string& DEMDirectory);
+
+  /**
+   * Set/Get input & output projections.
+   * Set/Get input & output keywordlist
+   * The macro are not used here cause the input and the output are
+   * inversed.
+   */
+  void SetInputProjectionRef(const std::string&  ref)
+  {
+    m_Transform->SetOutputProjectionRef(ref);
+    this->Modified();
+  }
+
+  std::string GetInputProjectionRef() const
+  {
+    return m_Transform->GetOutputProjectionRef();
+  }
+
+  void SetOutputProjectionRef(const std::string&  ref)
+  {
+    m_Transform->SetInputProjectionRef(ref);
+    this->Modified();
+  }
+
+  std::string GetOutputProjectionRef() const
+  {
+    return m_Transform->GetInputProjectionRef();
+  }
+
+  /** Set/Get Input Keywordlist*/
+  void SetInputKeywordList(const ImageKeywordlist& kwl)
+  {
+    m_Transform->SetOutputKeywordList(kwl);
+    this->Modified();
+  }
+  const ImageKeywordlist GetInputKeywordList()
+  {
+    return m_Transform->GetOutputKeywordList();
+  }
+
+  /** Set/Get output Keywordlist*/
+  void SetOutputKeywordList(const ImageKeywordlist& kwl)
+  {
+    m_Transform->SetInputKeywordList(kwl);
+    this->Modified();
+  }
+
+  const ImageKeywordlist GetOutputKeywordList()
+  {
+    return m_Transform->GetInputKeywordList();
+  }
+
+  /** Useful to set the output parameters from an existing image*/
+  template <class TImageType> void SetOutputParametersFromImage(const TImageType * image)
+    {
+    this->SetOutputOrigin ( image->GetOrigin() );
+    this->SetOutputSpacing ( image->GetSpacing() );
+    //this->SetOutputStartIndex ( image->GetLargestPossibleRegion().GetIndex() );
+    this->SetOutputSize ( image->GetLargestPossibleRegion().GetSize() );
+    this->SetOutputProjectionRef(image->GetProjectionRef());
+    this->SetOutputKeywordList(image->GetImageKeywordlist());
+    }
 
 protected:
   DEMToImageGenerator();
   virtual ~DEMToImageGenerator(){}
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void BeforeThreadedGenerateData();
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                             int threadId);
   virtual void GenerateOutputInformation();
@@ -112,6 +187,8 @@ protected:
 private:
   DEMToImageGenerator(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
+
+  GenericRSTransformPointerType      m_Transform;
 };
 
 } // namespace otb

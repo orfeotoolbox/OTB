@@ -11,13 +11,35 @@ namespace otb
 class LinearKernelFunctor : public GenericKernelFunctorBase
 {
 public:
-  LinearKernelFunctor(): GenericKernelFunctorBase() {};
-  virtual ~LinearKernelFunctor() {};
+  typedef LinearKernelFunctor                 Self;
+  typedef GenericKernelFunctorBase            Superclass;
 
-  virtual double Evaluate(const svm_node *x, const svm_node *y, const svm_parameter& param)const
-    {
-      return 0.;
-    }
+  LinearKernelFunctor() : GenericKernelFunctorBase() {}
+  virtual ~LinearKernelFunctor() {}
+
+  // Deep copy operator
+  virtual GenericKernelFunctorBase* Clone() const
+  {
+    return new Self(*this);
+  }
+
+  virtual double operator ()(const svm_node *x, const svm_node *y, const svm_parameter&) const
+  {
+    return this->dot(x, y);
+  }
+
+protected:
+  LinearKernelFunctor(const Self& copy)
+  : Superclass(copy)
+  {
+    *this = copy;
+  }
+
+  LinearKernelFunctor& operator=(const Self& copy)
+  {
+    Superclass::operator =(copy);
+    return *this;
+  }
 };
 
 }
@@ -41,7 +63,7 @@ int svmTest( int argc, char *argv[] )
 //        otb::LinearKernelFunctor lFunctor;
 
         struct svm_model* model;
-        model = svm_load_model(inputFilename,NULL);//,static_cast<otb::GenericKernelFunctorBase *>(&lFunctor));
+        model = svm_load_model(inputFilename,NULL);
         if(model == 0)
         {
                 itkGenericExceptionMacro( << "Problem while loading SVM model "

@@ -24,12 +24,29 @@
 #include <iomanip>
 #include <fstream>
 #include "itkExceptionObject.h"
-#include "itkImage.h"
+#include "otbImage.h"
 
 #include "otbImageFileReader.h"
 #include "otbRadiometricMomentsImageFunction.h"
 
-int otbRadiometricMomentsImage(int argc, char * argv[])
+int otbRadiometricMomentsImageFunctionNew(int argc, char * argv[])
+{
+  typedef unsigned char InputPixelType;
+  const unsigned int Dimension = 2;
+
+  typedef otb::Image<InputPixelType,  Dimension>                  InputImageType;
+  typedef otb::RadiometricMomentsImageFunction<InputImageType>    FunctionType;
+ 
+  // Instantiating object
+  FunctionType::Pointer function       = FunctionType::New();
+
+  std::cout << function << std::endl; 
+  
+  return EXIT_SUCCESS;
+}
+
+
+int otbRadiometricMomentsImageFunction(int argc, char * argv[])
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename  = argv[2];
@@ -40,7 +57,7 @@ int otbRadiometricMomentsImage(int argc, char * argv[])
   typedef itk::Image<InputPixelType,  Dimension>                  InputImageType;
   typedef otb::ImageFileReader<InputImageType>                    ReaderType;
   typedef otb::RadiometricMomentsImageFunction<InputImageType>    FunctionType;
-  typedef FunctionType::RealType                                  RealType;
+  typedef FunctionType::OutputType                                OutputType;
 
   ReaderType::Pointer   reader         = ReaderType::New();
   FunctionType::Pointer function       = FunctionType::New();
@@ -54,7 +71,7 @@ int otbRadiometricMomentsImage(int argc, char * argv[])
   index[1] = 100;
 
   function->SetNeighborhoodRadius(3);  
-  RealType Result;
+  OutputType Result;
   Result = function->EvaluateAtIndex(index);
 
   std::ofstream outputStream(outputFilename);

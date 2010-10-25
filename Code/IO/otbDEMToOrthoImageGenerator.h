@@ -18,6 +18,8 @@
 #ifndef __otbDEMToOrthoImageGenerator_h
 #define __otbDEMToOrthoImageGenerator_h
 
+#include "vcl_deprecated.h"
+
 #include <iostream>
 #include <stdio.h>
 

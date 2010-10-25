@@ -15,8 +15,9 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "itkExceptionObject.h"
+#include "vcl_deprecated.h"
 
+#include "itkExceptionObject.h"
 #include "otbDEMToOrthoImageGenerator.h"
 #include "otbMapProjections.h"
 #include "otbStreamingImageFileWriter.h"

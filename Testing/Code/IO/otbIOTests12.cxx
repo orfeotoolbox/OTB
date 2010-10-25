@@ -35,6 +35,8 @@ void RegisterTests()
   REGISTER_TEST(otbOssimElevManagerTest4);
   REGISTER_TEST(otbDEMToOrthoImageGeneratorNew);
   REGISTER_TEST(otbDEMToOrthoImageGeneratorTest);
+  REGISTER_TEST(otbDEMToOrthoImageGeneratorTest2);
+  REGISTER_TEST(otbDEMToOrthoImageGeneratorWithInputImageTest);
   REGISTER_TEST(otbPrepareSRTMDirectoryNew);
   REGISTER_TEST(otbPrepareSRTMDirectoryTest);
 }

@@ -199,58 +199,29 @@ ADD_TEST(fiTeMathematicalMorphologyGrayscaleFiltersTest ${EXE_TESTS}
 
 ADD_TEST(fiTeLaplacianRecursiveGaussianImageFilter1Test ${EXE_TESTS}
 	--compare-n-images ${TOL} 2
-	${BASELINE}/LaplacianRecursiveGaussianImageFilteroutput3.mha
-	${TEMP}/LaplacianRecursiveGaussianImageFilteroutput3.mha
-        ${BASELINE}/LaplacianRecursiveGaussianImageFilterOutput3.png
-	${TEMP}/LaplacianRecursiveGaussianImageFilterOutput3.png
-	LaplacianRecursiveGaussianImageFilter1Test
-	${INPUTDATA}/ROISpot5.png
-	${TEMP}/LaplacianRecursiveGaussianImageFilteroutput3.mha
-        3
-        ${TEMP}/LaplacianRecursiveGaussianImageFilterOutput3.png
-)
-
-# ------- LaplacianRecursiveGaussianImageFilter1Test----------
-
-ADD_TEST(fiTeLaplacianRecursiveGaussianImageFilter1Test ${EXE_TESTS}
-	--compare-n-images ${TOL} 2
-	${BASELINE}/LaplacianRecursiveGaussianImageFilteroutput5.mha
-	${TEMP}/LaplacianRecursiveGaussianImageFilteroutput5.mha
+	${BASELINE}/LaplacianRecursiveGaussianImageFilteroutput5.hdr
+	${TEMP}/LaplacianRecursiveGaussianImageFilteroutput5.hdr
         ${BASELINE}/LaplacianRecursiveGaussianImageFilterOutput5.png
 	${TEMP}/LaplacianRecursiveGaussianImageFilterOutput5.png
 	LaplacianRecursiveGaussianImageFilter1Test
 	${INPUTDATA}/ROISpot5.png
-	${TEMP}/LaplacianRecursiveGaussianImageFilteroutput5.mha
+	${TEMP}/LaplacianRecursiveGaussianImageFilteroutput5.hdr
         5
-	${TEMP}/LaplacianRecursiveGaussianImageFilterOutput5.png
+        ${TEMP}/LaplacianRecursiveGaussianImageFilterOutput5.png
 )
+
 
 # ------- LaplacianRecursiveGaussianImageFilter2Test----------
 
 ADD_TEST(fiTeLaplacianRecursiveGaussianImageFilter2Test ${EXE_TESTS}
 	--compare-n-images ${TOL} 2
-	${BASELINE}/LaplacianRecursiveGaussianImageFilter2output3.mha
-	${TEMP}/LaplacianRecursiveGaussianImageFilter2output3.mha
-	${BASELINE}/LaplacianRecursiveGaussianImageFilter2Output3.png
-	${TEMP}/LaplacianRecursiveGaussianImageFilter2Output3.png
-	LaplacianRecursiveGaussianImageFilter2Test
-	${INPUTDATA}/ROISpot5.png
-	${TEMP}/LaplacianRecursiveGaussianImageFilter2output3.mha
-        3
-	${TEMP}/LaplacianRecursiveGaussianImageFilter2Output3.png
-)
-
-# ------- LaplacianRecursiveGaussianImageFilter2Test----------
-
-ADD_TEST(fiTeLaplacianRecursiveGaussianImageFilter2Test ${EXE_TESTS}
-	--compare-n-images ${TOL} 2
-	${BASELINE}/LaplacianRecursiveGaussianImageFilter2output5.mha
-	${TEMP}/LaplacianRecursiveGaussianImageFilter2output5.mha
+	${BASELINE}/LaplacianRecursiveGaussianImageFilter2output5.hdr
+	${TEMP}/LaplacianRecursiveGaussianImageFilter2output5.hdr
 	${BASELINE}/LaplacianRecursiveGaussianImageFilter2Output5.png
 	${TEMP}/LaplacianRecursiveGaussianImageFilter2Output5.png
 	LaplacianRecursiveGaussianImageFilter2Test
 	${INPUTDATA}/ROISpot5.png
-	${TEMP}/LaplacianRecursiveGaussianImageFilter2output5.mha
+	${TEMP}/LaplacianRecursiveGaussianImageFilter2output5.hdr
         5
 	${TEMP}/LaplacianRecursiveGaussianImageFilter2Output5.png
 )
@@ -306,13 +277,13 @@ ADD_TEST(fiTeBinaryThresholdImageFilterTest ${EXE_TESTS}
 
 ADD_TEST(fiTeDerivativeImageFilterTest ${EXE_TESTS}
 	--compare-n-images ${TOL} 2
-	${BASELINE}/DerivativeImageFilterFloatOutput.mhd
-	${TEMP}/DerivativeImageFilterFloatOutput.mhd
+	${BASELINE}/DerivativeImageFilterFloatOutput.hdr
+	${TEMP}/DerivativeImageFilterFloatOutput.hdr
 	${BASELINE}/DerivativeImageFilterOutput.png
 	${TEMP}/DerivativeImageFilterOutput.png
 	DerivativeImageFilterTest
 	${INPUTDATA}/ROISpot5.png
-	${TEMP}/DerivativeImageFilterFloatOutput.mhd
+	${TEMP}/DerivativeImageFilterFloatOutput.hdr
 	${TEMP}/DerivativeImageFilterOutput.png
     1 0
 )

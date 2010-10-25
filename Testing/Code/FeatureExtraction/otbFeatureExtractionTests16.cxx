@@ -25,4 +25,11 @@
 #include "otbTestMain.h"
 
 void RegisterTests()
-{}
+{
+  REGISTER_TEST(otbFourierMellinDescriptorsNew);
+  REGISTER_TEST(otbFourierMellinDescriptors);
+  REGISTER_TEST(otbFourierMellinDescriptorsScaleInvariant);
+  REGISTER_TEST(otbFourierMellinDescriptorsRotationInvariant);
+  REGISTER_TEST(otbLocalHistogramImageFunctionNew);
+  REGISTER_TEST(otbLocalHistogramImageFunctionTest);
+}

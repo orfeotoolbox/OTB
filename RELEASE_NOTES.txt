@@ -1,3 +1,21 @@
+OTB-v.3.8.0 - Changes since version 3.6.0 (????/??/??)
+-----------------------------------------
+
+* Monteverdi
+  * 
+
+* Applications
+  * 
+
+* Library
+  * Rework FlusserImageFunction andHuImageFunction to output all moments in one pass
+  * Rework RealMomentsImagefilter and ComplexMomentImageFilter to output a matrix of all moments associated to p, q inferior to a given parameter
+  * Add RadiometricMomentsImage function that output a vector containing the local mean, variance, skewness and kurtosis
+   
+
+* System
+  * 
+
 OTB-v.3.6.0 - Changes since version 3.4.0 (2010/10/07)
 -----------------------------------------
 

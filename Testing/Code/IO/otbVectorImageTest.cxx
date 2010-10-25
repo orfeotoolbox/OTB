@@ -126,3 +126,32 @@ int otbVectorImageTest(int argc, char* argv[])
 
   return EXIT_SUCCESS;
 }
+
+int otbVectorImageComplexNew(int argc, char* argv[])
+{
+  typedef std::complex<float> PixelType;
+  typedef otb::VectorImage<PixelType, 2> ImageType;
+  ImageType::Pointer image = ImageType::New();
+  image->Initialize();
+
+  return EXIT_SUCCESS;
+}
+
+int otbVectorImageComplexTest(int argc, char* argv[])
+{
+  typedef std::complex<float> PixelType;
+  typedef otb::VectorImage<PixelType, 2> ImageType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  ReaderType::Pointer reader = ReaderType::New();
+  reader->SetFileName(argv[1]);
+  reader->UpdateOutputInformation();
+  std::cout << reader->GetOutput()->GetNumberOfComponentsPerPixel() << std::endl;
+
+  reader->Update();
+  ImageType::IndexType index;
+  index[0]=0;
+  index[1]=0;
+  std::cout << reader->GetOutput()->GetPixel(index) << std::endl;
+
+  return EXIT_SUCCESS;
+}

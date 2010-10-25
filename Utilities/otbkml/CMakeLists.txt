@@ -152,6 +152,8 @@ SET(libzlib_la_SOURCES
 	${libzlib_la_SOURCES_DIR}/zip.c
   ${libzlib_la_SOURCES_DIR}/iomem_simple.c
 )
+SET(LIBKML_COMPILE_ZLIB OFF)
+
 
 # Only for Windows Visual Studio and Mac OSX
 SET(libzlib_src_la_SOURCES "")
@@ -174,6 +176,7 @@ IF(WIN32)
                 ${libzlib_src_la_SOURCES_DIR}/trees.c
                 ${libzlib_src_la_SOURCES_DIR}/uncompr.c
                 ${libzlib_src_la_SOURCES_DIR}/zutil.c )
+         SET(LIBKML_COMPILE_ZLIB ON)
       ENDIF(NOT MINGW)
 #    ENDIF(NOT CYGWIN)
   ENDIF(NOT BORLAND)
@@ -194,6 +197,7 @@ IF(APPLE)
                 ${libzlib_src_la_SOURCES_DIR}/trees.c
                 ${libzlib_src_la_SOURCES_DIR}/uncompr.c
                 ${libzlib_src_la_SOURCES_DIR}/zutil.c )
+         SET(LIBKML_COMPILE_ZLIB ON)
 ENDIF(APPLE)
 
 
@@ -259,6 +263,12 @@ IF( OTB_USE_EXTERNAL_EXPAT )
 ELSE( OTB_USE_EXTERNAL_EXPAT  )
         TARGET_LINK_LIBRARIES(otbkml otbexpat)
 ENDIF( OTB_USE_EXTERNAL_EXPAT )
+
+IF(NOT LIBKML_COMPILE_ZLIB)
+  TARGET_LINK_LIBRARIES(otbkml ${ZLIB_LIBRARY})
+ENDIF(NOT LIBKML_COMPILE_ZLIB)
+
+
 IF(OTB_LIBRARY_PROPERTIES)
   SET_TARGET_PROPERTIES(otbkml PROPERTIES ${OTB_LIBRARY_PROPERTIES})
 ENDIF(OTB_LIBRARY_PROPERTIES)

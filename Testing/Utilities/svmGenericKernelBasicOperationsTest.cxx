@@ -6,22 +6,6 @@
 #include "svm.h"
 #include "otbSVMKernels.h"
 
-namespace otb
-{
-  /*
-class LinearKernelFunctor : public GenericKernelFunctorBase
-{
-public:
-  LinearKernelFunctor(): GenericKernelFunctorBase() {};
-  virtual ~LinearKernelFunctor() {};
-
-  virtual double Evaluate(const svm_node *x, const svm_node *y, const svm_parameter& param)const
-    {
-      return 0.;
-    }
-};
-*/
-}
 
 int svmGenericKernelBasicOperationsTest( int argc, char *argv[] )
 {
@@ -93,20 +77,12 @@ int svmGenericKernelBasicOperationsTest( int argc, char *argv[] )
 
   f.close();
 
+  delete [] px;
+  delete [] py;
+  delete [] resSub;
+  delete [] resAdd;
+
   return EXIT_SUCCESS;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
+}
 
 

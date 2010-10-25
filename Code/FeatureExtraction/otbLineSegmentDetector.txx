@@ -18,6 +18,8 @@
 #ifndef __otbLineSegmentDetector_txx
 #define __otbLineSegmentDetector_txx
 
+#include <boost/math/special_functions/beta.hpp>
+
 #include "otbLineSegmentDetector.h"
 #include "itkImageRegionIterator.h"
 #include "itkNumericTraits.h"
@@ -885,14 +887,17 @@ LineSegmentDetector<TInputImage, TPrecision>
 ::NFA(int n, int k, double p, double logNT) const
 {
   double val;
+  double n_d = static_cast<double>(n);
+  double k_d = static_cast<double>(k);
 
-  if (k == 0) return -logNT;
+  if (k == 0)
+    return -logNT;
 
-  val = -logNT - log10(betai((double) k, (double) (n - k + 1), p));
+  val = -logNT - log10( boost::math::ibeta(k_d, n_d - k_d + 1, p) );
 
   if (vnl_math_isinf(val)) /* approximate by the first term of the tail */
-    val = -logNT - (factln(n) - factln(k) - factln(n - k)) / CONST_LN10
-          - (double) k * log10(p) - (double) (n - k) * log10(1.0 - p);
+    val = -logNT - (boost::math::lgamma(n_d + 1.0) - boost::math::lgamma(k_d + 1) - boost::math::lgamma(n_d - k_d + 1)) / CONST_LN10
+          - k_d * log10(p) - (n_d - k_d) * log10(1.0 - p);
 
   return val;
 }
@@ -908,105 +913,6 @@ LineSegmentDetector<TInputImage, TPrecision>
   Superclass::PrintSelf(os, indent);
 
 }
-
-/**************************************************************************************************************/
-/**************************************************************************************************************/
-/*
-  rutines betacf, gammln, betai, and factln
-  Taken from http://sd-www.jhupal.edu/IMP/data/spec_req/NR/Code
-*/
-/**************************************************************************************************************/
-/**************************************************************************************************************/
-template <class TInputImage, class TPrecision>
-double
-LineSegmentDetector<TInputImage, TPrecision>
-::betacf(double a, double b, double x) const
-{
-  int    m, m2;
-  double aa, c, d, del, h, qab, qam, qap;
-
-  qab = a + b;
-  qap = a + 1.0;
-  qam = a - 1.0;
-  c = 1.0;
-  d = 1.0 - qab * x / qap;
-  if (fabs(d) < FPMIN) d = FPMIN;
-  d = 1.0 / d;
-  h = d;
-  for (m = 1; m <= MAXIT; m++)
-    {
-    m2 = 2 * m;
-    aa = m * (b - m) * x / ((qam + m2) * (a + m2));
-    d = 1.0 + aa * d;
-    if (fabs(d) < FPMIN) d = FPMIN;
-    c = 1.0 + aa / c;
-    if (fabs(c) < FPMIN) c = FPMIN;
-    d = 1.0 / d;
-    h *= d * c;
-    aa = -(a + m) * (qab + m) * x / ((a + m2) * (qap + m2));
-    d = 1.0 + aa * d;
-    if (fabs(d) < FPMIN) d = FPMIN;
-    c = 1.0 + aa / c;
-    if (fabs(c) < FPMIN) c = FPMIN;
-    d = 1.0 / d;
-    del = d * c;
-    h *= del;
-    if (fabs(del - 1.0) < EPS) break;
-    }
-
-  return h;
-}
-
-template <class TInputImage, class TPrecision>
-double
-LineSegmentDetector<TInputImage, TPrecision>
-::gammln(double xx) const
-{
-  double        x, y, tmp, ser;
-  static double cof[6] = {76.18009172947146, -86.50532032941677,
-                          24.01409824083091, -1.231739572450155,
-                          0.1208650973866179e-2, -0.5395239384953e-5};
-  int           j;
-
-  y = x = xx;
-  tmp = x + 5.5;
-  tmp -= (x + 0.5) * log(tmp);
-  ser = 1.000000000190015;
-  for (j = 0; j <= 5; ++j)
-    ser += cof[j] / ++y;
-  return -tmp + log(2.5066282746310005 * ser / x);
-}
-
-template <class TInputImage, class TPrecision>
-double
-LineSegmentDetector<TInputImage, TPrecision>
-::betai(double a, double b, double x) const
-{
-  double betacf(double a, double b, double x);
-  double gammln(double xx);
-  double bt;
-
-  if (x == 0.0 || x == 1.0) bt = 0.0;
-  else bt = exp(this->gammln(a + b) - this->gammln(a) - this->gammln(b) + a * log(x) + b * log(1.0 - x));
-  if (x < (a + 1.0) / (a + b + 2.0)) return bt * this->betacf(a, b, x) / a;
-  else return 1.0 - bt*this->betacf(b, a, 1.0 - x) / b;
-}
-
-template <class TInputImage, class TPrecision>
-double
-LineSegmentDetector<TInputImage, TPrecision>
-::factln(int n) const
-{
-  double gammln(double xx);
-  static double a[101];
-
-  if (n <= 1) return 0.0;
-  if (n <= 100) return a[n] ? a[n] : (a[n] = this->gammln(n + 1.0));
-  else return this->gammln(n + 1.0);
-}
-
-/*********************    end Numerical Recipes functions         **************************************************************************/
-/**************************************************************************************************************/
 
 } // end namespace otb
 
