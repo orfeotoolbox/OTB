@@ -1318,6 +1318,68 @@ private:
 };
 
 
+/** \class LAIFromReflectancesLinear
+ *  This functor computes the LAI from reflectances using a
+ *  linear relationship.
+ *  LAI = \beta_0 + \sum_j \beta_j \rho_j where \rho are the
+ *  reflectances 
+ *  Default values for the parameters are taken from A. Bsaibes et
+ *  al. / Remote Sensing of Environment 113 (2009) 716–729  
+ *
+ *
+ *  \ingroup Functor
+ * \ingroup Radiometry
+ * \ingroup VegetationIndices
+ */
+template <class TInput1, class TInput2, class TOutput>
+class LAIFromReflectancesLinear : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
+{
+public:
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "LAIFromReflectancesLinear";
+  }
+
+  typedef NDVI<TInput1, TInput2, TOutput> NDVIFunctorType;
+  LAIFromReflectancesLinear() : m_RedCoef(-17.91), m_NirCoef(12.26) {}
+  virtual ~LAIFromReflectancesLinear() {}
+
+  NDVIFunctorType GetReflectances(void) const
+  {
+    return (m_NDVIfunctor);
+  }
+
+  void SetRedCoef(const double val)
+  {
+    m_RedCoef = val;
+  }
+  double GetRedCoef(void) const
+  {
+    return (m_RedCoef);
+  }
+
+  void SetNirCoef(const double val)
+  {
+    m_NirCoef = val;
+  }
+  double GetNirCoef(void) const
+  {
+    return (m_NirCoef);
+  }
+  
+protected:
+  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const
+  {
+      return (static_cast<TOutput>(m_RedCoef*r+m_NirCoef*nir));
+  }
+private:
+  const NDVIFunctorType m_NDVIfunctor;
+  double m_RedCoef;
+  double m_NirCoef;
+};
+
+
 } // namespace Functor
 } // namespace otb
 

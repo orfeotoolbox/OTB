@@ -35,4 +35,5 @@ void RegisterTests()
   REGISTER_TEST(otbWDVIRAndNIRVegetationIndexImageFilter);
   REGISTER_TEST(otbWDVIMultiChannelRAndNIRVegetationIndexImageFilter);
   REGISTER_TEST(otbLAIFromNDVILogarithmic);
+  REGISTER_TEST(otbLAIFromReflectancesLinear);
 }

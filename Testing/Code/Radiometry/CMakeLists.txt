@@ -920,7 +920,7 @@ ADD_TEST(raTvWDVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TES
         2.0   # g : slope of soil line
 )
 
-# -------            WDVI MultiChannelRAndNIRVegetationIndexImageFilter   ------------------------------
+# -------            LAI NDVI Logarithmic   ------------------------------
 ADD_TEST(raTvLAIFromNDVILogarithmicFunctorTest ${RADIOMETRY_TESTS6}
         otbLAIFromNDVILogarithmic
         3   # red
@@ -928,6 +928,15 @@ ADD_TEST(raTvLAIFromNDVILogarithmicFunctorTest ${RADIOMETRY_TESTS6}
         0.12   # ndvi soil
         0.91   # ndvi infinity
         0.70   # extinction coefficient
+)
+
+# -------            LAI Reflectances Linear   ------------------------------
+ADD_TEST(raTvLAIFromReflectancesLinearFunctorTest ${RADIOMETRY_TESTS6}
+        otbLAIFromReflectancesLinear
+        3   # red
+        4   # nir
+        -18   # red coef
+        13   # nir coef
 )
 
 
@@ -1562,6 +1571,7 @@ otbAVIMultiChannelRAndGAndNIRVegetationIndexImageFilter.cxx
 otbWDVIRAndNIRVegetationIndexImageFilter.cxx
 otbWDVIMultiChannelRAndNIRVegetationIndexImageFilter.cxx
 otbLAIFromNDVILogarithmicFunctorTest.cxx
+otbLAIFromReflectancesLinearFunctorTest.cxx
 )
 
 SET(Radiometry_SRCS7
