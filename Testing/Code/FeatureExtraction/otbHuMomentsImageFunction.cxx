@@ -27,18 +27,18 @@
 #include "otbImage.h"
 
 #include "otbImageFileReader.h"
-#include "otbHuImageFunction.h"
+#include "otbHuMomentsImageFunction.h"
 #include "otbBCOInterpolateImageFunction.h"
 #include "otbStreamingResampleImageFilter.h"
 #include "itkResampleImageFilter.h"
 
-int otbHuImageNew(int argc, char * argv[])
+int otbHuMomentsImageFunctionNew(int argc, char * argv[])
 {
   typedef unsigned char InputPixelType;
   const unsigned int Dimension = 2;
 
   typedef otb::Image<InputPixelType,  Dimension>                  InputImageType;
-  typedef otb::HuImageFunction<InputImageType>                    FunctionType;
+  typedef otb::HuMomentsImageFunction<InputImageType>             FunctionType;
 
   // Instantiating object
   FunctionType::Pointer function       = FunctionType::New();
@@ -48,7 +48,7 @@ int otbHuImageNew(int argc, char * argv[])
   return EXIT_SUCCESS;
 }
 
-int otbHuImage(int argc, char * argv[])
+int otbHuMomentsImageFunction(int argc, char * argv[])
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename  = argv[2];
@@ -58,7 +58,7 @@ int otbHuImage(int argc, char * argv[])
 
   typedef otb::Image<InputPixelType,  Dimension>             InputImageType;
   typedef otb::ImageFileReader<InputImageType>               ReaderType;
-  typedef otb::HuImageFunction<InputImageType>               FunctionType;
+  typedef otb::HuMomentsImageFunction<InputImageType>        FunctionType;
   typedef FunctionType::OutputType                           OutputType;
   
   ReaderType::Pointer   reader         = ReaderType::New();
@@ -89,7 +89,7 @@ int otbHuImage(int argc, char * argv[])
   return EXIT_SUCCESS;
 }
 
-int otbHuImageScaleInvariant(int argc, char * argv[])
+int otbHuMomentsImageFunctionScaleInvariant(int argc, char * argv[])
 {
   const char * inputFilename   = argv[1];
 
@@ -102,7 +102,7 @@ int otbHuImageScaleInvariant(int argc, char * argv[])
     double>                                                               StreamingResampleImageFilterType;
   typedef otb::BCOInterpolateImageFunction<InputImageType, 
     double>                                                               InterpolatorType;
-  typedef otb::HuImageFunction<InputImageType>                            FunctionType;
+  typedef otb::HuMomentsImageFunction<InputImageType>                     FunctionType;
   typedef FunctionType::OutputType                                        OutputType;
   
   ReaderType::Pointer                         reader = ReaderType::New();
@@ -166,7 +166,7 @@ int otbHuImageScaleInvariant(int argc, char * argv[])
   return EXIT_SUCCESS;
 }
 
-int otbHuImageRotationInvariant(int argc, char * argv[])
+int otbHuMomentsImageFunctionRotationInvariant(int argc, char * argv[])
 {
   const char * inputFilename  = argv[1];
   const double angleInDegrees = atoi(argv[2]);
@@ -180,7 +180,7 @@ int otbHuImageRotationInvariant(int argc, char * argv[])
     InputImageType, InputImageType >                                      FilterType;
   typedef otb::BCOInterpolateImageFunction<InputImageType, 
     double>                                                               InterpolatorType;
-  typedef otb::HuImageFunction<InputImageType>                            FunctionType;
+  typedef otb::HuMomentsImageFunction<InputImageType>                     FunctionType;
   typedef FunctionType::OutputType                                        OutputType;
   typedef itk::AffineTransform< double, Dimension >  TransformType;
  

@@ -32,14 +32,14 @@
 
 // Software Guide : BeginLatex
 //
-// This example illustrates the use of the \doxygen{otb}{HuMomentImageFunction}.
+// This example illustrates the use of the \doxygen{otb}{HuMomentsImageFunction}.
 //
 // The first step required to use this filter is to include its header file.
 //
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-#include "otbHuImageFunction.h"
+#include "otbHuMomentsImageFunction.h"
 // Software Guide : EndCodeSnippet
 
 int main(int argc, char * argv[])
@@ -74,8 +74,8 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::HuImageFunction<InputImageType>   HuType;
-  typedef HuType::OutputType                     MomentType;
+  typedef otb::HuMomentsImageFunction<InputImageType>  HuType;
+  typedef HuType::OutputType                           MomentType;
 
   HuType::Pointer hmFunction = HuType::New();
   // Software Guide : EndCodeSnippet

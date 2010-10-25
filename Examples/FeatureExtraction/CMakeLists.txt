@@ -21,8 +21,8 @@ TARGET_LINK_LIBRARIES(ComplexMomentImageExample OTBFeatureExtraction OTBCommon O
 ADD_EXECUTABLE(ComplexMomentPathExample ComplexMomentPathExample.cxx )
 TARGET_LINK_LIBRARIES(ComplexMomentPathExample OTBFeatureExtraction OTBCommon OTBIO)
 
-ADD_EXECUTABLE(HuMomentImageExample HuMomentImageExample.cxx )
-TARGET_LINK_LIBRARIES(HuMomentImageExample OTBFeatureExtraction OTBCommon OTBIO)
+ADD_EXECUTABLE(HuMomentsImageFunctionExample HuMomentsImageFunctionExample.cxx )
+TARGET_LINK_LIBRARIES(HuMomentsImageFunctionExample OTBFeatureExtraction OTBCommon OTBIO)
 
 ADD_EXECUTABLE(FlusserMomentImageExample FlusserMomentImageExample.cxx )
 TARGET_LINK_LIBRARIES(FlusserMomentImageExample OTBFeatureExtraction OTBCommon OTBIO)

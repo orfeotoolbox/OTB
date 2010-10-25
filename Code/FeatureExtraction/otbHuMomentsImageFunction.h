@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbHuImageFunction_h
-#define __otbHuImageFunction_h
+#ifndef __otbHuMomentsImageFunction_h
+#define __otbHuMomentsImageFunction_h
 
 #include "itkImageFunction.h"
 #include "itkFixedArray.h"
@@ -25,8 +25,8 @@ namespace otb
 {
 
 /**
- * \class HuImageFunction
- * \brief Calculate the Hu's invariant parameter.
+ * \class HuMomentsImageFunction
+ * \brief Calculate the Hu's invariant parameters.
  *
  * Calculate the Hu's invariants over a specified neighbohood defined
  * as :
@@ -55,7 +55,7 @@ namespace otb
  */
 
 template <class TInputImage, class TCoordRep = float>
-class ITK_EXPORT HuImageFunction :
+class ITK_EXPORT HuMomentsImageFunction :
 public itk::ImageFunction< TInputImage,
     itk::FixedArray<
     ITK_TYPENAME itk::NumericTraits<typename TInputImage::PixelType>::RealType,
@@ -64,7 +64,7 @@ public itk::ImageFunction< TInputImage,
 {
 public:
   /** Standard class typedefs. */
-  typedef HuImageFunction                                                 Self;
+  typedef HuMomentsImageFunction                                          Self;
   typedef itk::ImageFunction< TInputImage,
                    itk::FixedArray<
                    ITK_TYPENAME itk::NumericTraits<
@@ -75,7 +75,7 @@ public:
   typedef itk::SmartPointer<const Self>                                   ConstPointer;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(HuImageFunction, ImageFunction);
+  itkTypeMacro(HuMomentsImageFunction, ImageFunction);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -118,12 +118,12 @@ public:
   itkGetConstReferenceMacro( NeighborhoodRadius, unsigned int );
   
 protected:
-  HuImageFunction();
-  virtual ~HuImageFunction() {}
+  HuMomentsImageFunction();
+  virtual ~HuMomentsImageFunction() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  HuImageFunction(const Self &);  //purposely not implemented
+  HuMomentsImageFunction(const Self &);  //purposely not implemented
   void operator =(const Self&);  //purposely not implemented
 
   unsigned int m_NeighborhoodRadius;
@@ -132,7 +132,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbHuImageFunction.txx"
+#include "otbHuMomentsImageFunction.txx"
 #endif
 
 #endif

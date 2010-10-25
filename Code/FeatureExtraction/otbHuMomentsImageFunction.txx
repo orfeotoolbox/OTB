@@ -15,10 +15,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbHuImageFunction_txx
-#define __otbHuImageFunction_txx
+#ifndef __otbHuMomentsImageFunction_txx
+#define __otbHuMomentsImageFunction_txx
 
-#include "otbHuImageFunction.h"
+#include "otbHuMomentsImageFunction.h"
 #include "itkConstNeighborhoodIterator.h"
 #include "itkNumericTraits.h"
 #include "itkMacro.h"
@@ -31,15 +31,15 @@ namespace otb
    * Constructor
    */
 template <class TInputImage, class TCoordRep>
-HuImageFunction<TInputImage, TCoordRep>
-::HuImageFunction()
+HuMomentsImageFunction<TInputImage, TCoordRep>
+::HuMomentsImageFunction()
 {
   m_NeighborhoodRadius = 1;
 }
 
 template <class TInputImage, class TCoordRep>
 void
-HuImageFunction<TInputImage, TCoordRep>
+HuMomentsImageFunction<TInputImage, TCoordRep>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os, indent);
@@ -47,8 +47,8 @@ HuImageFunction<TInputImage, TCoordRep>
 }
 
 template <class TInputImage, class TCoordRep>
-typename HuImageFunction<TInputImage, TCoordRep>::OutputType
-HuImageFunction<TInputImage, TCoordRep>
+typename HuMomentsImageFunction<TInputImage, TCoordRep>::OutputType
+HuMomentsImageFunction<TInputImage, TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
   // Build moments vector

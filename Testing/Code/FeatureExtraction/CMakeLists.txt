@@ -109,25 +109,25 @@ ADD_TEST(feTvRadiometricMomentsImage ${FEATUREEXTRACTION_TESTS1}
 	${INPUTDATA}/poupees.png
   ${TEMP}/feTvRadiometricMomentsImage.txt)
 
-ADD_TEST(feTuHuImageNew ${FEATUREEXTRACTION_TESTS1}
-        otbHuImageNew
+ADD_TEST(feTuHuMomentsImageFunctionNew ${FEATUREEXTRACTION_TESTS1}
+        otbHuMomentsImageFunctionNew
         )
 
-ADD_TEST(feTvHuImage ${FEATUREEXTRACTION_TESTS1}
-   --compare-ascii ${NOTOL}     ${BASELINE_FILES}/feTvHuImage.txt
-                        ${TEMP}/feTvHuImage.txt
-        otbHuImage
+ADD_TEST(feTvHuMomentsImageFunction ${FEATUREEXTRACTION_TESTS1}
+   --compare-ascii ${NOTOL}     ${BASELINE_FILES}/feTvHuMomentsImageFunction.txt
+                        ${TEMP}/feTvHuMomentsImageFunction.txt
+        otbHuMomentsImageFunction
 	${INPUTDATA}/poupees.png
-        ${TEMP}/feTvHuImage.txt
+        ${TEMP}/feTvHuMomentsImageFunction.txt
         )
 
-ADD_TEST(feTvHuImageScaleInvariant ${FEATUREEXTRACTION_TESTS1}
-        otbHuImageScaleInvariant
+ADD_TEST(feTvHuMomentsImageFunctionScaleInvariant ${FEATUREEXTRACTION_TESTS1}
+        otbHuMomentsImageFunctionScaleInvariant
 	${INPUTDATA}/poupees.png
         )
 
-ADD_TEST(feTvHuImageRotationInvariant ${FEATUREEXTRACTION_TESTS1}
-        otbHuImageRotationInvariant
+ADD_TEST(feTvHuMomentsImageFunctionRotationInvariant ${FEATUREEXTRACTION_TESTS1}
+        otbHuMomentsImageFunctionRotationInvariant
 	${INPUTDATA}/poupees.png
         90
         )
@@ -1487,7 +1487,7 @@ otbDrawPathAlign.cxx
 otbComplexMomentImage.cxx
 otbRealMomentImage.cxx
 otbRadiometricMomentsImageFunction.cxx
-otbHuImage.cxx
+otbHuMomentsImageFunction.cxx
 otbFlusserImage.cxx
 otbComplexMomentPathNew.cxx
 otbComplexMomentPath.cxx
