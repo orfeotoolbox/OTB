@@ -132,24 +132,24 @@ ADD_TEST(feTvHuMomentsImageFunctionRotationInvariant ${FEATUREEXTRACTION_TESTS1}
         90
         )
 
-ADD_TEST(feTuFlusserImageNew ${FEATUREEXTRACTION_TESTS1}
-        otbFlusserImageNew
+ADD_TEST(feTuFlusserMomentsImageFunctionNew ${FEATUREEXTRACTION_TESTS1}
+        otbFlusserMomentsImageFunctionNew
 )
 
-ADD_TEST(feTvFlusserImage ${FEATUREEXTRACTION_TESTS1}
-   --compare-ascii ${EPSILON_8}     ${BASELINE_FILES}/feTvFlusserImage.txt
-                        ${TEMP}/feTvFlusserImage.txt
-        otbFlusserImage
+ADD_TEST(feTvFlusserMomentsImageFunction ${FEATUREEXTRACTION_TESTS1}
+   --compare-ascii ${EPSILON_8}     ${BASELINE_FILES}/feTvFlusserMomentsImageFunction.txt
+                        ${TEMP}/feTvFlusserMomentsImageFunction.txt
+        otbFlusserMomentsImageFunction
 	${INPUTDATA}/poupees.png
-        ${TEMP}/feTvFlusserImage.txt)
+        ${TEMP}/feTvFlusserMomentsImageFunction.txt)
 
-ADD_TEST(feTuFlusserImageScaleInvariant ${FEATUREEXTRACTION_TESTS1}
-        otbFlusserImageScaleInvariant
+ADD_TEST(feTuFlusserMomentsImageFunctionScaleInvariant ${FEATUREEXTRACTION_TESTS1}
+        otbFlusserMomentsImageFunctionScaleInvariant
 	${INPUTDATA}/poupees.png
         )
 
-ADD_TEST(feTuFlusserImageRotationInvariant ${FEATUREEXTRACTION_TESTS1}
-        otbFlusserImageRotationInvariant
+ADD_TEST(feTuFlusserMomentsImageFunctionRotationInvariant ${FEATUREEXTRACTION_TESTS1}
+        otbFlusserMomentsImageFunctionRotationInvariant
 	${INPUTDATA}/poupees.png
         90
         )
@@ -1488,7 +1488,7 @@ otbComplexMomentImage.cxx
 otbRealMomentImage.cxx
 otbRadiometricMomentsImageFunction.cxx
 otbHuMomentsImageFunction.cxx
-otbFlusserImage.cxx
+otbFlusserMomentsImageFunction.cxx
 otbComplexMomentPathNew.cxx
 otbComplexMomentPath.cxx
 otbComplexMomentPathFloat.cxx

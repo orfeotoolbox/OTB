@@ -15,10 +15,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbFlusserImageFunction_txx
-#define __otbFlusserImageFunction_txx
+#ifndef __otbFlusserMomentsImageFunction_txx
+#define __otbFlusserMomentsImageFunction_txx
 
-#include "otbFlusserImageFunction.h"
+#include "otbFlusserMomentsImageFunction.h"
 #include "itkConstNeighborhoodIterator.h"
 #include "itkNumericTraits.h"
 #include "itkMacro.h"
@@ -31,15 +31,15 @@ namespace otb
  * Constructor
  */
 template <class TInputImage, class TCoordRep>
-FlusserImageFunction<TInputImage, TCoordRep>
-::FlusserImageFunction()
+FlusserMomentsImageFunction<TInputImage, TCoordRep>
+::FlusserMomentsImageFunction()
 {
   m_NeighborhoodRadius = 1;
 }
 
 template <class TInputImage, class TCoordRep>
 void
-FlusserImageFunction<TInputImage, TCoordRep>
+FlusserMomentsImageFunction<TInputImage, TCoordRep>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os, indent);
@@ -47,8 +47,8 @@ FlusserImageFunction<TInputImage, TCoordRep>
 }
 
 template <class TInputImage, class TCoordRep>
-typename FlusserImageFunction<TInputImage,TCoordRep>::OutputType
-FlusserImageFunction<TInputImage,TCoordRep>
+typename FlusserMomentsImageFunction<TInputImage,TCoordRep>::OutputType
+FlusserMomentsImageFunction<TInputImage,TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
   // Build moments vector

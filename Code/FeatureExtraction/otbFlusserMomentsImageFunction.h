@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbFlusserImageFunction_h
-#define __otbFlusserImageFunction_h
+#ifndef __otbFlusserMomentsImageFunction_h
+#define __otbFlusserMomentsImageFunction_h
 
 #include "itkImageFunction.h"
 #include "itkFixedArray.h"
@@ -25,7 +25,7 @@ namespace otb
 {
 
 /**
- * \class FlusserImageFunction
+ * \class FlusserMomentsImageFunction
  * \brief Calculate the Flusser's invariant parameters.
  *
  * Calculate the Flusser's invariants over a specified neighborhood
@@ -59,7 +59,7 @@ namespace otb
  */
 
 template <class TInputImage, class TCoordRep = float >
-class ITK_EXPORT FlusserImageFunction :
+class ITK_EXPORT FlusserMomentsImageFunction :
   public itk::ImageFunction< TInputImage,
     itk::FixedArray<
     ITK_TYPENAME itk::NumericTraits<typename TInputImage::PixelType>::RealType,
@@ -68,7 +68,7 @@ class ITK_EXPORT FlusserImageFunction :
 {
 public:
   /** Standard class typedefs. */
-  typedef FlusserImageFunction                                            Self;
+  typedef FlusserMomentsImageFunction                                     Self;
   typedef itk::ImageFunction< TInputImage,
                    itk::FixedArray<
                    ITK_TYPENAME itk::NumericTraits<
@@ -79,7 +79,7 @@ public:
   typedef itk::SmartPointer<const Self>                                   ConstPointer;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(FlusserImageFunction, ImageFunction);
+  itkTypeMacro(FlusserMomentsImageFunction, ImageFunction);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -122,12 +122,12 @@ public:
   itkGetConstReferenceMacro( NeighborhoodRadius, unsigned int );
 
 protected:
-  FlusserImageFunction();
-  virtual ~FlusserImageFunction() {}
+  FlusserMomentsImageFunction();
+  virtual ~FlusserMomentsImageFunction() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  FlusserImageFunction(const Self &);  //purposely not implemented
+  FlusserMomentsImageFunction(const Self &);  //purposely not implemented
   void operator =(const Self&);  //purposely not implemented
 
   unsigned int m_NeighborhoodRadius;
@@ -136,7 +136,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbFlusserImageFunction.txx"
+#include "otbFlusserMomentsImageFunction.txx"
 #endif
 
 #endif

@@ -32,14 +32,14 @@
 
 // Software Guide : BeginLatex
 //
-// This example illustrates the use of the \doxygen{otb}{FlusserMomentImageFunction}.
+// This example illustrates the use of the \doxygen{otb}{FlusserMomentsImageFunction}.
 //
 // The first step required to use this filter is to include its header file.
 //
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-#include "otbFlusserImageFunction.h"
+#include "otbFlusserMomentsImageFunction.h"
 // Software Guide : EndCodeSnippet
 
 int main(int argc, char * argv[])
@@ -67,15 +67,15 @@ int main(int argc, char * argv[])
 
   //  Software Guide : BeginLatex
   //
-  //  The \doxygen{otb}{FlusserImageFunction} is templated over the
+  //  The \doxygen{otb}{FlusserMomentsImageFunction} is templated over the
   //  input image type and the output (real) type value, so we start by
   //  defining:
   //
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::FlusserImageFunction<InputImageType>   FlusserType;
-  typedef FlusserType::OutputType                     MomentType;
+  typedef otb::FlusserMomentsImageFunction<InputImageType>  FlusserType;
+  typedef FlusserType::OutputType                           MomentType;
 
   FlusserType::Pointer fmFunction = FlusserType::New();
   // Software Guide : EndCodeSnippet

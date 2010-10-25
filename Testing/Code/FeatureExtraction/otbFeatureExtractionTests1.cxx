@@ -40,10 +40,10 @@ void RegisterTests()
   REGISTER_TEST(otbHuMomentsImageFunction);
   REGISTER_TEST(otbHuMomentsImageFunctionRotationInvariant);
   REGISTER_TEST(otbHuMomentsImageFunctionScaleInvariant);
-  REGISTER_TEST(otbFlusserImageNew);
-  REGISTER_TEST(otbFlusserImage);
-  REGISTER_TEST(otbFlusserImageRotationInvariant);
-  REGISTER_TEST(otbFlusserImageScaleInvariant);
+  REGISTER_TEST(otbFlusserMomentsImageFunctionNew);
+  REGISTER_TEST(otbFlusserMomentsImageFunction);
+  REGISTER_TEST(otbFlusserMomentsImageFunctionRotationInvariant);
+  REGISTER_TEST(otbFlusserMomentsImageFunctionScaleInvariant);
   REGISTER_TEST(otbComplexMomentPathNew);
   REGISTER_TEST(otbComplexMomentPath);
   REGISTER_TEST(otbComplexMomentPathFloat);

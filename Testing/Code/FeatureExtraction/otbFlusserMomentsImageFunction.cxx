@@ -27,20 +27,20 @@
 #include "otbImage.h"
 
 #include "otbImageFileReader.h"
-#include "otbFlusserImageFunction.h"
+#include "otbFlusserMomentsImageFunction.h"
 #include "otbBCOInterpolateImageFunction.h"
 #include "itkLinearInterpolateImageFunction.h"
 #include "otbStreamingResampleImageFilter.h"
 #include "itkResampleImageFilter.h"
 
 
-int otbFlusserImageNew(int argc, char * argv[])
+int otbFlusserMomentsImageFunctionNew(int argc, char * argv[])
 {
   typedef unsigned char InputPixelType;
   const unsigned int Dimension = 2;
 
   typedef otb::Image<InputPixelType,  Dimension>                  InputImageType;
-  typedef otb::FlusserImageFunction<InputImageType>               FunctionType;
+  typedef otb::FlusserMomentsImageFunction<InputImageType>        FunctionType;
 
   // Instantiating object
   FunctionType::Pointer function       = FunctionType::New();
@@ -50,7 +50,7 @@ int otbFlusserImageNew(int argc, char * argv[])
   return EXIT_SUCCESS;
 }
 
-int otbFlusserImage(int argc, char * argv[])
+int otbFlusserMomentsImageFunction(int argc, char * argv[])
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename  = argv[2];
@@ -61,7 +61,7 @@ int otbFlusserImage(int argc, char * argv[])
 
   typedef otb::Image<InputPixelType,  Dimension>                  InputImageType;
   typedef otb::ImageFileReader<InputImageType>                    ReaderType;
-  typedef otb::FlusserImageFunction<InputImageType>               FunctionType;
+  typedef otb::FlusserMomentsImageFunction<InputImageType>        FunctionType;
   typedef FunctionType::OutputType                                OutputType;
 
   ReaderType::Pointer   reader         = ReaderType::New();
@@ -92,7 +92,7 @@ int otbFlusserImage(int argc, char * argv[])
   return EXIT_SUCCESS;
 }
 
-int otbFlusserImageScaleInvariant(int argc, char * argv[])
+int otbFlusserMomentsImageFunctionScaleInvariant(int argc, char * argv[])
 {
   const char * inputFilename  = argv[1];
   
@@ -105,7 +105,7 @@ int otbFlusserImageScaleInvariant(int argc, char * argv[])
     double>                                                               StreamingResampleImageFilterType;
   typedef otb::BCOInterpolateImageFunction<InputImageType, 
     double>                                                               InterpolatorType;
-  typedef otb::FlusserImageFunction<InputImageType>                       FunctionType;
+  typedef otb::FlusserMomentsImageFunction<InputImageType>                FunctionType;
   typedef FunctionType::OutputType                                        OutputType;
   
   ReaderType::Pointer                         reader = ReaderType::New();
@@ -169,7 +169,7 @@ int otbFlusserImageScaleInvariant(int argc, char * argv[])
   return EXIT_SUCCESS;
 }
 
-int otbFlusserImageRotationInvariant(int argc, char * argv[])
+int otbFlusserMomentsImageFunctionRotationInvariant(int argc, char * argv[])
 {
   const char * inputFilename  = argv[1];
   const double angleInDegrees = atoi(argv[2]);
@@ -183,7 +183,7 @@ int otbFlusserImageRotationInvariant(int argc, char * argv[])
     InputImageType, InputImageType >                                      FilterType;
   typedef otb::BCOInterpolateImageFunction<InputImageType, 
     double>                                                               InterpolatorType;
-  typedef otb::FlusserImageFunction<InputImageType>                       FunctionType;
+  typedef otb::FlusserMomentsImageFunction<InputImageType>                FunctionType;
   typedef FunctionType::OutputType                                        OutputType;
   typedef itk::AffineTransform< double, Dimension >                       TransformType;
  
