@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbComplexMomentImageFunction_h
-#define __otbComplexMomentImageFunction_h
+#ifndef __otbComplexMomentsImageFunction_h
+#define __otbComplexMomentsImageFunction_h
 
 #include "itkImageFunction.h"
 
@@ -26,8 +26,8 @@ namespace otb
 {
 
 /**
- * \class ComplexMomentImageFunction
- * \brief Calculate the complex moment value in the specified
+ * \class ComplexMomentsImageFunction
+ * \brief Calculate the complex moment values in the specified
  * neighborhood.
  *
  * Calculate the complex moment values over a specified neighborhood.
@@ -48,14 +48,14 @@ namespace otb
  */
 
 template <class TInputImage, class TCoordRep = float>
-class ITK_EXPORT ComplexMomentImageFunction :
+class ITK_EXPORT ComplexMomentsImageFunction :
     public itk::ImageFunction <TInputImage,
       std::vector< std::vector< std::complex<double> > >,
       TCoordRep>
 {
 public:
   /** Standard class typedefs. */
-  typedef ComplexMomentImageFunction                                           Self;
+  typedef ComplexMomentsImageFunction                                          Self;
   typedef itk::ImageFunction<TInputImage, 
                              std::vector<
                              std::vector<
@@ -65,7 +65,7 @@ public:
   typedef itk::SmartPointer<const Self>                                        ConstPointer;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ComplexMomentImageFunction, ImageFunction);
+  itkTypeMacro(ComplexMomentsImageFunction, ImageFunction);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -114,12 +114,12 @@ public:
   itkGetConstReferenceMacro(Qmax, unsigned int);
 
 protected:
-  ComplexMomentImageFunction();
-  virtual ~ComplexMomentImageFunction() {}
+  ComplexMomentsImageFunction();
+  virtual ~ComplexMomentsImageFunction() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  ComplexMomentImageFunction(const Self &);  //purposely not implemented
+  ComplexMomentsImageFunction(const Self &);  //purposely not implemented
   void operator =(const Self&);  //purposely not implemented
 
   unsigned int m_Pmax;
@@ -131,7 +131,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbComplexMomentImageFunction.txx"
+#include "otbComplexMomentsImageFunction.txx"
 #endif
 
 #endif

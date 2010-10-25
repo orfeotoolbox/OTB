@@ -15,8 +15,8 @@ TARGET_LINK_LIBRARIES(TouziEdgeDetectorExample OTBFeatureExtraction OTBCommon OT
 ADD_EXECUTABLE(HarrisExample HarrisExample.cxx )
 TARGET_LINK_LIBRARIES(HarrisExample OTBFeatureExtraction OTBCommon OTBIO)
 
-ADD_EXECUTABLE(ComplexMomentImageExample ComplexMomentImageExample.cxx )
-TARGET_LINK_LIBRARIES(ComplexMomentImageExample OTBFeatureExtraction OTBCommon OTBIO)
+ADD_EXECUTABLE(ComplexMomentsImageFunctionExample ComplexMomentsImageFunctionExample.cxx )
+TARGET_LINK_LIBRARIES(ComplexMomentsImageFunctionExample OTBFeatureExtraction OTBCommon OTBIO)
 
 ADD_EXECUTABLE(ComplexMomentPathExample ComplexMomentPathExample.cxx )
 TARGET_LINK_LIBRARIES(ComplexMomentPathExample OTBFeatureExtraction OTBCommon OTBIO)

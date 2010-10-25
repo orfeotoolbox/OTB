@@ -64,22 +64,22 @@ ADD_TEST(feTvDrawPathTestAlign ${FEATUREEXTRACTION_TESTS1}
 	${INPUTDATA}/DeuxTraits.png
 	${TEMP}/feDrawPathAlignDeuxTraits.png)
 
-ADD_TEST(feTuComplexMomentImageNew ${FEATUREEXTRACTION_TESTS1}
-  otbComplexMomentImageNew
+ADD_TEST(feTuComplexMomentsImageFunctionNew ${FEATUREEXTRACTION_TESTS1}
+  otbComplexMomentsImageFunctionNew
   )
 
-ADD_TEST(feTvComplexMomentImage ${FEATUREEXTRACTION_TESTS1}
-  --compare-ascii ${NOTOL}     ${BASELINE_FILES}/feTvComplexMomentImage.txt
-                               ${TEMP}/feTvComplexMomentImage.txt
-  otbComplexMomentImage
+ADD_TEST(feTvComplexMomentsImageFunction ${FEATUREEXTRACTION_TESTS1}
+  --compare-ascii ${NOTOL}     ${BASELINE_FILES}/feTvComplexMomentsImageFunction.txt
+                               ${TEMP}/feTvComplexMomentsImageFunction.txt
+  otbComplexMomentsImageFunction
   ${INPUTDATA}/poupees.png
   4
   4
-  ${TEMP}/feTvComplexMomentImage.txt
+  ${TEMP}/feTvComplexMomentsImageFunction.txt
   )
 
-ADD_TEST(feTvComplexMomentImageScaleInvariant ${FEATUREEXTRACTION_TESTS1}
-  otbComplexMomentImageScaleInvariant
+ADD_TEST(feTvComplexMomentsImageFunctionScaleInvariant ${FEATUREEXTRACTION_TESTS1}
+  otbComplexMomentsImageFunctionScaleInvariant
   ${INPUTDATA}/poupees.png
   4
   4
@@ -1484,7 +1484,7 @@ otbFeatureExtractionTests1.cxx
 otbAlignImageToPath.cxx
 otbDrawPath.cxx
 otbDrawPathAlign.cxx
-otbComplexMomentImage.cxx
+otbComplexMomentsImageFunction.cxx
 otbRealMomentImage.cxx
 otbRadiometricMomentsImageFunction.cxx
 otbHuMomentsImageFunction.cxx

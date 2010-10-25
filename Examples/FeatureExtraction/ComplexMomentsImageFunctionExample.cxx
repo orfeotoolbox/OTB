@@ -32,14 +32,14 @@
 
 // Software Guide : BeginLatex
 //
-// This example illustrates the use of the \doxygen{otb}{ComplexMomentImageFunction}.
+// This example illustrates the use of the \doxygen{otb}{ComplexMomentsImageFunction}.
 //
 // The first step required to use this filter is to include its header file.
 //
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-#include "otbComplexMomentImageFunction.h"
+#include "otbComplexMomentsImageFunction.h"
 // Software Guide : EndCodeSnippet
 
 int main(int argc, char * argv[])
@@ -75,7 +75,7 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::ComplexMomentImageFunction<InputImageType> CMType;
+  typedef otb::ComplexMomentsImageFunction<InputImageType> CMType;
   typedef CMType::OutputType OutputType;
  
   CMType::Pointer cmFunction = CMType::New();

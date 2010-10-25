@@ -27,18 +27,18 @@
 #include "otbImage.h"
 
 #include "otbImageFileReader.h"
-#include "otbComplexMomentImageFunction.h"
+#include "otbComplexMomentsImageFunction.h"
 #include "otbBCOInterpolateImageFunction.h"
 #include "otbStreamingResampleImageFilter.h"
 
 
-int otbComplexMomentImageNew(int argc, char * argv[])
+int otbComplexMomentsImageFunctionNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
   typedef double     InputPixelType;
 
-  typedef otb::Image<InputPixelType,  Dimension>                     ImageType;
-  typedef otb::ComplexMomentImageFunction<ImageType>                 FunctionType;
+  typedef otb::Image<InputPixelType,  Dimension>                    ImageType;
+  typedef otb::ComplexMomentsImageFunction<ImageType>               FunctionType;
 
   // Instantiating object
   FunctionType::Pointer function = FunctionType::New();
@@ -48,7 +48,7 @@ int otbComplexMomentImageNew(int argc, char * argv[])
   return EXIT_SUCCESS;
 }
 
-int otbComplexMomentImage(int argc, char * argv[])
+int otbComplexMomentsImageFunction(int argc, char * argv[])
 {
   const char * inputFilename  = argv[1];
   unsigned int p((unsigned int) ::atoi(argv[2]));
@@ -61,8 +61,8 @@ int otbComplexMomentImage(int argc, char * argv[])
   typedef itk::Image<InputPixelType,  Dimension> InputImageType;
   typedef otb::ImageFileReader<InputImageType>   ReaderType;
 
-  typedef otb::ComplexMomentImageFunction<InputImageType> CMType;
-  typedef CMType::OutputType                              OutputType;
+  typedef otb::ComplexMomentsImageFunction<InputImageType> CMType;
+  typedef CMType::OutputType                               OutputType;
 
   ReaderType::Pointer reader         = ReaderType::New();
   CMType::Pointer     function = CMType::New();
@@ -99,7 +99,7 @@ int otbComplexMomentImage(int argc, char * argv[])
 }
 
 
-int otbComplexMomentImageScaleInvariant(int argc, char * argv[])
+int otbComplexMomentsImageFunctionScaleInvariant(int argc, char * argv[])
 {
   const char * inputFilename  = argv[1];
   unsigned int p((unsigned int) ::atoi(argv[2]));
@@ -114,7 +114,7 @@ int otbComplexMomentImageScaleInvariant(int argc, char * argv[])
     double>                                                               StreamingResampleImageFilterType;
   typedef otb::BCOInterpolateImageFunction<InputImageType, 
     double>                                                               InterpolatorType;
-  typedef otb::ComplexMomentImageFunction<InputImageType>                 FunctionType;
+  typedef otb::ComplexMomentsImageFunction<InputImageType>                FunctionType;
   typedef FunctionType::OutputType                                        OutputType;
   
   ReaderType::Pointer                         reader = ReaderType::New();

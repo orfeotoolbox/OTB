@@ -15,10 +15,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbComplexMomentImageFunction_txx
-#define __otbComplexMomentImageFunction_txx
+#ifndef __otbComplexMomentsImageFunction_txx
+#define __otbComplexMomentsImageFunction_txx
 
-#include "otbComplexMomentImageFunction.h"
+#include "otbComplexMomentsImageFunction.h"
 #include "itkConstNeighborhoodIterator.h"
 #include "itkNumericTraits.h"
 #include "itkMacro.h"
@@ -30,8 +30,8 @@ namespace otb
    * Constructor
    */
 template <class TInputImage, class TCoordRep>
-ComplexMomentImageFunction<TInputImage, TCoordRep>
-::ComplexMomentImageFunction()
+ComplexMomentsImageFunction<TInputImage, TCoordRep>
+::ComplexMomentsImageFunction()
 {
   m_NeighborhoodRadius = 1;
   m_Pmax = 4;
@@ -40,7 +40,7 @@ ComplexMomentImageFunction<TInputImage, TCoordRep>
 
 template <class TInputImage, class TCoordRep>
 void
-ComplexMomentImageFunction<TInputImage, TCoordRep>
+ComplexMomentsImageFunction<TInputImage, TCoordRep>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os, indent);
@@ -50,8 +50,8 @@ ComplexMomentImageFunction<TInputImage, TCoordRep>
 }
 
 template <class TInputImage, class TCoordRep>
-typename ComplexMomentImageFunction<TInputImage, TCoordRep>::OutputType
-ComplexMomentImageFunction<TInputImage, TCoordRep>
+typename ComplexMomentsImageFunction<TInputImage, TCoordRep>::OutputType
+ComplexMomentsImageFunction<TInputImage, TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
   // Build moments vector
