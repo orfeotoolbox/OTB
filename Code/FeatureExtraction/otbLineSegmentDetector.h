@@ -216,12 +216,6 @@ protected:
   /** Create a copy of a rectangle*/
   virtual void CopyRectangle(RectangleType& rDst, RectangleType& rSrc) const;
 
-  /** Rutines from numerical recipes*/
-  virtual double betacf(double a, double b, double x) const;
-  virtual double gammln(double xx) const;
-  virtual double betai(double a, double b, double x) const;
-  virtual double factln(int n) const;
-
   /** Printself method*/
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
