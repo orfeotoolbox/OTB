@@ -69,6 +69,52 @@ double BCOInterpolateImageFunctionBase<TInputImage, TCoordRep>
   return m_Alpha;
 }
 
+template<class TInputImage, class TCoordRep>
+typename BCOInterpolateImageFunctionBase< TInputImage, TCoordRep >
+::CoefContainerType
+BCOInterpolateImageFunctionBase<TInputImage, TCoordRep>
+::EvaluateCoef( const ContinuousIndexValueType & indexValue ) const
+{
+  // Init BCO coefficient container
+  int radius = this->GetRadius();
+  unsigned int winSize = 2*radius+1;
+  CoefContainerType BCOCoef = CoefContainerType(winSize, 0.);
+  double offset, dist, position, step;
+
+  offset = indexValue - itk::Math::Floor<IndexValueType>(indexValue+0.5);
+
+  // Compute BCO coefficients
+  step = 4./static_cast<double>(2*radius);
+  position = - double(radius) * step;
+
+  for ( int i = -radius; i <= radius; i++)
+    {
+    // Compute the BCO coefficients according to alpha.
+    dist = vcl_abs(position - offset*step);
+    
+    if( dist <= 2. )
+      {
+      if (dist <= 1.)
+        {
+        BCOCoef[radius+i] = (m_Alpha + 2.)*vcl_abs(vcl_pow(dist, 3))
+          - (m_Alpha + 3.)*vcl_pow(dist, 2) + 1;
+        }
+      else
+        {
+        BCOCoef[radius+i] = m_Alpha*vcl_abs(vcl_pow(dist, 3)) - 5
+          *m_Alpha*vcl_pow(dist, 2) + 8*m_Alpha*vcl_abs(dist) - 4*m_Alpha;
+        }
+      }
+    else
+      {
+      BCOCoef[m_Radius+i] = 0;
+      }
+    position += step;
+    }
+
+  return BCOCoef;
+}
+
 template <class TInputImage, class TCoordRep>
 void BCOInterpolateImageFunction<TInputImage, TCoordRep>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
@@ -84,9 +130,7 @@ BCOInterpolateImageFunction<TInputImage, TCoordRep>
 {
   int radius = this->GetRadius();
   unsigned int winSize = 2*radius+1;
-  CoefContainerType BCOCoefX = CoefContainerType(winSize, 0.);
-  CoefContainerType BCOCoefY = CoefContainerType(winSize, 0.);
-  double offsetX, offsetY, distX, distY, position, step, alpha, norma;
+  double norma;
   unsigned int dim;
 
   IndexType baseIndex;
@@ -96,56 +140,8 @@ BCOInterpolateImageFunction<TInputImage, TCoordRep>
 
   RealType value = itk::NumericTraits<RealType>::Zero;
 
-  offsetX = index[0] - itk::Math::Floor<IndexValueType>(index[0]+0.5);
-  offsetY = index[1] - itk::Math::Floor<IndexValueType>(index[1]+0.5);
-
-  step = 4./static_cast<double>(2*radius);
-  position = - double(radius) * step;
-
-  alpha = this->GetAlpha();
-
-  for ( int i = -radius; i <= radius; i++)
-    {
-    distX = vcl_abs(position - offsetX*step);
-    distY = vcl_abs(position - offsetY*step);
-
-    if( distX <= 2. )
-      {
-      if (distX <= 1.)
-        {
-        BCOCoefX[radius+i] = (alpha + 2.)*vcl_abs(vcl_pow(distX, 3))
-          - (alpha + 3.)*vcl_pow(distX, 2) + 1;
-        }
-      else
-        {
-        BCOCoefX[radius+i] = alpha*vcl_abs(vcl_pow(distX, 3))
-          - 5*alpha*vcl_pow(distX, 2) + 8*alpha*vcl_abs(distX) - 4*alpha;
-        }
-      }
-    else
-      {
-      BCOCoefX[radius+i] = 0;
-      }
-
-    if( distY <= 2. )
-      {
-      if (distY <= 1.)
-        {
-        BCOCoefY[radius+i] = (alpha + 2.)*vcl_abs(vcl_pow(distY, 3))
-          - (alpha + 3.)*vcl_pow(distY, 2) + 1;
-        }
-      else
-        {
-        BCOCoefY[radius+i] = alpha*vcl_abs(vcl_pow(distY, 3)) - 5
-          *alpha*vcl_pow(distY, 2) + 8*alpha*vcl_abs(distY) - 4*alpha;
-        }
-      }
-    else
-      {
-      BCOCoefY[radius+i] = 0;
-      }
-     position += step;
-    }
+  CoefContainerType BCOCoefX = EvaluateCoef(index[0]);
+  CoefContainerType BCOCoefY = EvaluateCoef(index[1]);
 
   // Compute base index = closet index
   for( dim = 0; dim < ImageDimension; dim++ )
@@ -208,9 +204,7 @@ BCOInterpolateImageFunction< otb::VectorImage<TPixel,VImageDimension> , TCoordRe
 
   int radius = this->GetRadius();
   unsigned int winSize = 2*radius+1;
-  CoefContainerType BCOCoefX = CoefContainerType(winSize, 0.);
-  CoefContainerType BCOCoefY = CoefContainerType(winSize, 0.);
-  double offsetX, offsetY, distX, distY, position, step, alpha, norma;
+  double norma;
   unsigned int dim;
   unsigned int componentNumber = this->GetInputImage()->GetNumberOfComponentsPerPixel();
 
@@ -241,56 +235,8 @@ BCOInterpolateImageFunction< otb::VectorImage<TPixel,VImageDimension> , TCoordRe
 
   output.SetSize(componentNumber);
 
-  offsetX = index[0] - itk::Math::Floor<IndexValueType>(index[0]+0.5);
-  offsetY = index[1] - itk::Math::Floor<IndexValueType>(index[1]+0.5);
-
-  step = 4./static_cast<double>(2*radius);
-  position = - double(radius) * step;
-
-  alpha = this->GetAlpha();
-
-  for ( int i = -radius; i <= radius; i++)
-    {
-    distX = vcl_abs(position - offsetX*step);
-    distY = vcl_abs(position - offsetY*step);
-
-    if( distX <= 2. )
-      {
-      if (distX <= 1.)
-        {
-        BCOCoefX[radius+i] = (alpha + 2.)*vcl_abs(vcl_pow(distX, 3))
-          - (alpha + 3.)*vcl_pow(distX, 2) + 1;
-        }
-      else
-        {
-        BCOCoefX[radius+i] = alpha*vcl_abs(vcl_pow(distX, 3))
-          - 5*alpha*vcl_pow(distX, 2) + 8*alpha*vcl_abs(distX) - 4*alpha;
-        }
-      }
-    else
-      {
-      BCOCoefX[radius+i] = 0;
-      }
-
-    if( distY <= 2. )
-      {
-      if (distY <= 1.)
-        {
-        BCOCoefY[radius+i] = (alpha + 2.)*vcl_abs(vcl_pow(distY, 3))
-          - (alpha + 3.)*vcl_pow(distY, 2) + 1;
-        }
-      else
-        {
-        BCOCoefY[radius+i] = alpha*vcl_abs(vcl_pow(distY, 3)) - 5
-          *alpha*vcl_pow(distY, 2) + 8*alpha*vcl_abs(distY) - 4*alpha;
-        }
-      }
-    else
-      {
-      BCOCoefY[radius+i] = 0;
-      }
-     position += step;
-    }
+  CoefContainerType BCOCoefX = EvaluateCoef(index[0]);
+  CoefContainerType BCOCoefY = EvaluateCoef(index[1]);
 
   //Compute base index = closet index
   for( dim = 0; dim < ImageDimension; dim++ )

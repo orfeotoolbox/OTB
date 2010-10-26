@@ -72,7 +72,7 @@ public:
   typedef typename Superclass::RealType RealType;
 
   /** Dimension underlying input image. */
-  itkStaticConstMacro(ImageDimension, unsigned int,Superclass::ImageDimension);
+  itkStaticConstMacro(ImageDimension, unsigned int, Superclass::ImageDimension);
 
   /** Index typedef support. */
   typedef typename Superclass::IndexType      IndexType;
@@ -83,6 +83,7 @@ public:
 
   /** ContinuousIndex typedef support. */
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
+  typedef TCoordRep                                ContinuousIndexValueType;
 
   /** Coeficients container type.*/
   typedef vnl_vector<double> CoefContainerType;
@@ -109,6 +110,8 @@ protected:
   BCOInterpolateImageFunctionBase() : m_Radius(2), m_Alpha(-0.5) {};
   virtual ~BCOInterpolateImageFunctionBase() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  /** Compute the BCO coefficients. */
+  virtual CoefContainerType EvaluateCoef( const ContinuousIndexValueType & indexValue ) const;
 
 private:
   BCOInterpolateImageFunctionBase( const Self& ); //purposely not implemented
