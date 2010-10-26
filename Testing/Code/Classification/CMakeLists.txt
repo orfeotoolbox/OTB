@@ -11,26 +11,22 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 SET(NOTOL 0.0)
 SET(EPSILON_10 0.0000000001)
 
-SET(MULTITEMPORAL_TESTS1 ${CXX_TEST_PATH}/otbClassificationTests1)
+SET(CLASSIFICATION_TESTS1 ${CXX_TEST_PATH}/otbClassificationTests1)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ MULTITEMPORAL_TESTS1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CLASSIFICATION_TESTS1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # -------            otb::testname   ------------------------------
 
-ADD_TEST(clTvCBAMI ${MULTITEMPORAL_TESTS1}
-        otbCBAMIClassificationTest
-	 ${INPUTDATA}/GomaAvant.png
-	 ${INPUTDATA}/GomaApres.png
-	 2
-	 ${TEMP}/cdCBAMIImage.png
+ADD_TEST(clTvBinaryDecisionTreeClassifier ${CLASSIFICATION_TESTS1}
+        otbBinaryDecisionTreeClassifierTest
 	 )
 
 
 # -------  CXX Source Files -----------------------------------
 SET(BasicClassification_SRCS1 
-otbClassificationTests1.cxx 
+otbBinaryDecisionTreeClassifierTest.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbClassificationTests1 "${BasicClassification_SRCS1}" "OTBClassification;OTBIO;OTBTesting")
