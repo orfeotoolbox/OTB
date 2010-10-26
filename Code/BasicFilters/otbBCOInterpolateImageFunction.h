@@ -105,9 +105,6 @@ public:
    * calling the method. */
   virtual OutputType EvaluateAtContinuousIndex( const ContinuousIndexType & index ) const = 0;
 
-  /** Compute the BCO coefficients. */
-  virtual void EvaluateCoef( const ContinuousIndexType & index ) const;
-
 protected:
   BCOInterpolateImageFunctionBase() : m_Radius(2), m_Alpha(-0.5) {};
   virtual ~BCOInterpolateImageFunctionBase() {};
@@ -118,7 +115,7 @@ private:
   void operator=( const Self& ); //purposely not implemented
 
   /** Used radius for the BCO */
-  double                 m_Radius;
+  unsigned int           m_Radius;
   /** Optimisation Coefficient */
   double                 m_Alpha;
 };

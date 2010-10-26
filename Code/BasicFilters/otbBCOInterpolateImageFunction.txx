@@ -69,69 +69,6 @@ double BCOInterpolateImageFunctionBase<TInputImage, TCoordRep>
   return m_Alpha;
 }
 
-template<class TInputImage, class TCoordRep>
-void
-BCOInterpolateImageFunctionBase<TInputImage, TCoordRep>
-::EvaluateCoef( const ContinuousIndexType & index ) const
-{
-  // Init BCO coefficient container
-  unsigned int winSize = 2*m_Radius+1;
-  CoefContainerType BCOCoefX = CoefContainerType(winSize, 0.);
-  CoefContainerType BCOCoefY = CoefContainerType(winSize, 0.);
-  double offsetX, offsetY, distX, distY, position, step;
-
-  offsetX = index[0] - itk::Math::Floor<IndexValueType>(index[0]+0.5);
-  offsetY = index[1] - itk::Math::Floor<IndexValueType>(index[1]+0.5);
-
-  // Compute BCO coefficients
-  step = 4./static_cast<double>(2*m_Radius);
-  position = - double(m_Radius) * step;
-
-  for ( int i = -m_Radius; i <= m_Radius; i++)
-    {
-    // Compute the BCO coefficients according to alpha.
-    distX = vcl_abs(position - offsetX*step);
-    distY = vcl_abs(position - offsetY*step);
-
-    if( distX <= 2. )
-      {
-      if (distX <= 1.)
-        {
-        BCOCoefX[m_Radius+i] = (m_Alpha + 2.)*vcl_abs(vcl_pow(distX, 3))
-          - (m_Alpha + 3.)*vcl_pow(distX, 2) + 1;
-        }
-      else
-        {
-        BCOCoefX[m_Radius+i] = m_Alpha*vcl_abs(vcl_pow(distX, 3)) - 5
-          *m_Alpha*vcl_pow(distX, 2) + 8*m_Alpha*vcl_abs(distX) - 4*m_Alpha;
-        }
-      }
-    else
-      {
-      BCOCoefX[m_Radius+i] = 0;
-      }
-
-    if( distY <= 2. )
-      {
-      if (distY <= 1.)
-        {
-        BCOCoefY[m_Radius+i] = (m_Alpha + 2.)*vcl_abs(vcl_pow(distY, 3))
-          - (m_Alpha + 3.)*vcl_pow(distY, 2) + 1;
-        }
-      else
-        {
-        BCOCoefY[m_Radius+i] = m_Alpha*vcl_abs(vcl_pow(distY, 3)) - 5
-          *m_Alpha*vcl_pow(distY, 2) + 8*m_Alpha*vcl_abs(distY) - 4*m_Alpha;
-        }
-      }
-    else
-      {
-      BCOCoefY[m_Radius+i] = 0;
-      }
-    position += step;
-    }
-}
-
 template <class TInputImage, class TCoordRep>
 void BCOInterpolateImageFunction<TInputImage, TCoordRep>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
@@ -145,7 +82,7 @@ typename BCOInterpolateImageFunction< TInputImage, TCoordRep >
 BCOInterpolateImageFunction<TInputImage, TCoordRep>
 ::EvaluateAtContinuousIndex( const ContinuousIndexType & index ) const
 {
-  double radius = this->GetRadius();
+  int radius = this->GetRadius();
   unsigned int winSize = 2*radius+1;
   CoefContainerType BCOCoefX = CoefContainerType(winSize, 0.);
   CoefContainerType BCOCoefY = CoefContainerType(winSize, 0.);
@@ -269,7 +206,7 @@ BCOInterpolateImageFunction< otb::VectorImage<TPixel,VImageDimension> , TCoordRe
 {
   typedef typename itk::NumericTraits<InputPixelType>::ScalarRealType ScalarRealType;
 
-  double radius = this->GetRadius();
+  int radius = this->GetRadius();
   unsigned int winSize = 2*radius+1;
   CoefContainerType BCOCoefX = CoefContainerType(winSize, 0.);
   CoefContainerType BCOCoefY = CoefContainerType(winSize, 0.);
