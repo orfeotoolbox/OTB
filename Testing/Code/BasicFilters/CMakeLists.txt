@@ -742,9 +742,12 @@ ADD_TEST(bfTuBCOInterpolateImageFunctionNew ${BASICFILTERS_TESTS6}
   )
 
 ADD_TEST(bfTvBCOInterpolateImageFunction ${BASICFILTERS_TESTS6}
+--compare-ascii ${NOTOL}
+     		     ${BASELINE_FILES}/bfTvBCOInterpolateImageFunctionOutput.txt
+		     ${TEMP}/bfTvBCOInterpolateImageFunctionOutput.txt
   otbBCOInterpolateImageFunction
   ${INPUTDATA}/poupees.tif
-  ${TEMP}/bfBCOInterpolateImageFunctionOutput.txt
+  ${TEMP}/bfTvBCOInterpolateImageFunctionOutput.txt
   3 # radius
   -0.5 # optimised bicubic
   0.5 0.5
@@ -761,9 +764,12 @@ ADD_TEST(bfTuBCOInterpolateImageFunctionOverVectorImageNew ${BASICFILTERS_TESTS6
   otbBCOInterpolateImageFunctionOverVectorImageNew)
 
 ADD_TEST(bfTvBCOInterpolateImageFunctionOverVectorImage ${BASICFILTERS_TESTS6}
+--compare-ascii ${NOTOL}
+     		     ${BASELINE_FILES}/bfTvBCOInterpolateImageFunctionOverVectorImageOutput.txt
+		     ${TEMP}/bfTvBCOInterpolateImageFunctionOverVectorImageOutput.txt
   otbBCOInterpolateImageFunctionOverVectorImage
   ${INPUTDATA}/poupees.tif
-  ${TEMP}/bfBCOInterpolateImageFunctionOverVectorImageOutput.txt
+  ${TEMP}/bfTvBCOInterpolateImageFunctionOverVectorImageOutput.txt
   3 # radius
   -0.5 # optimised bicubic
   0.5 0.5
@@ -777,17 +783,23 @@ ADD_TEST(bfTvBCOInterpolateImageFunctionOverVectorImage ${BASICFILTERS_TESTS6}
   )
 
 ADD_TEST(bfTvBCOInterpolateImageFunctionTest ${BASICFILTERS_TESTS6}
+--compare-image ${EPSILON_7}
+     		  ${BASELINE}/bfTvBCOInterpolateImageFunctionTest.tif
+		  ${TEMP}/bfTvBCOInterpolateImageFunctionTest.tif
   otbBCOInterpolateImageFunctionTest
   ${INPUTDATA}/poupees.tif
-  ${TEMP}/bfBCOInterpolateImageFunctionTest.tif
+  ${TEMP}/bfTvBCOInterpolateImageFunctionTest.tif
   3 # radius
   -0.5 # optimised bicubic
   )
 
 ADD_TEST(bfTvBCOInterpolateImageFunctionVectorImageTest ${BASICFILTERS_TESTS6}
+--compare-image ${EPSILON_7}
+     		  ${BASELINE}/bfTvBCOInterpolateImageFunctionVectorImageTest.tif
+		  ${TEMP}/bfTvBCOInterpolateImageFunctionVectorImageTest.tif
   otbBCOInterpolateImageFunctionVectorImageTest
   ${INPUTDATA}/poupees.tif
-  ${TEMP}/bfBCOInterpolateImageFunctionVectorImageTest.tif
+  ${TEMP}/bfTvBCOInterpolateImageFunctionVectorImageTest.tif
   4 # radius
   -0.5 # optimised bicubic
   )

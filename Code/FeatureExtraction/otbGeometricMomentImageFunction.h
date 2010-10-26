@@ -18,6 +18,8 @@
 #ifndef __otbGeometricMomentImageFunction_h
 #define __otbGeometricMomentImageFunction_h
 
+#include "vcl_deprecated_header.h"
+
 #include "itkImageFunction.h"
 
 namespace otb
@@ -27,6 +29,9 @@ namespace otb
  * \class GeometricMomentImageFunction
  * \brief Virtual class for the Geometric moments for an image function
  *
+ * For backward compatibility only
+ * 
+ * 
  * \ingroup ImageFunctions
  */
 
