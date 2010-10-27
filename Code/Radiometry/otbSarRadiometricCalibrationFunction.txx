@@ -9,9 +9,6 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) CS Systemes d'information. All rights reserved.
-  See CSCopyright.txt for details.
-
 
      This software is distributed WITHOUT ANY WARRANTY; without even
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
@@ -104,7 +101,7 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
   FunctorRealType Noise;
   FunctorRealType AntennaPatternNewGain;
   FunctorRealType AntennaPatternOldGain;
-  FunctorRealType IncidenceAngle; 
+  FunctorRealType IncidenceAngle;
   FunctorRealType RangeSpreadLoss;
 
   Noise = static_cast<FunctorRealType>(m_Noise->EvaluateAtIndex(index));
@@ -112,7 +109,7 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
   AntennaPatternOldGain = static_cast<FunctorRealType>(m_AntennaPatternOldGain->EvaluateAtIndex(index));
   IncidenceAngle = static_cast<FunctorRealType>(m_IncidenceAngle->EvaluateAtIndex(index));
   RangeSpreadLoss = static_cast<FunctorRealType>(m_RangeSpreadLoss->EvaluateAtIndex(index));
-   
+
   FunctorType functor;
   functor.SetNoise(Noise);
   functor.SetScale(m_Scale);

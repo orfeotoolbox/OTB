@@ -9,9 +9,6 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) CS Systemes d'information. All rights reserved.
-  See CSCopyright.txt for details.
-
 
      This software is distributed WITHOUT ANY WARRANTY; without even
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
@@ -87,7 +84,7 @@ SarParametricMapFunction<TInputImage, TCoordRep>
   if (m_PointSet->GetNumberOfPoints() > 0)
     {
     EvaluateParametricCoefficient();
-    }      
+    }
   this->Modified();
 }
 
@@ -98,7 +95,7 @@ SarParametricMapFunction<TInputImage, TCoordRep>
 {
   PointSetPointer pointSet;
   pointSet = this->GetPointSet();
-   
+
   if (pointSet->GetNumberOfPoints() == 0)
     {
     itkExceptionMacro(<< "PointSet must be set before evaluating the parametric coefficient (at least one value)");
@@ -120,7 +117,7 @@ SarParametricMapFunction<TInputImage, TCoordRep>
     pointSet->GetPointData(0, &pointValue);
     m_Coeff->SetPointData(0,pointValue);
     }
-  
+
   // Perform the plane least square estimation
   unsigned int nbRecords = pointSet->GetNumberOfPoints();
   unsigned int nbCoef    = m_Coeff->GetNumberOfPoints();
@@ -134,17 +131,17 @@ SarParametricMapFunction<TInputImage, TCoordRep>
     this->GetPointSet()->GetPoint(i, &point);
     this->GetPointSet()->GetPointData(i, &pointValue);
     b(i)  = pointValue;
-    
+
     for(unsigned int pointId = 0; pointId < nbCoef; ++pointId)
       {
       PointType  powerCoef;
       powerCoef.Fill(0);
       this->GetCoeff()->GetPoint(pointId, &powerCoef);
       a(i,pointId)  = vcl_pow(point[0],powerCoef[0]);
-      a(i,pointId) *= vcl_pow(point[1],powerCoef[1]);     
+      a(i,pointId) *= vcl_pow(point[1],powerCoef[1]);
       }
     }
-  
+
   if(this->GetCoeff()->GetNumberOfPoints()>0)
   {
   // Create the linear system
@@ -176,7 +173,7 @@ SarParametricMapFunction<TInputImage, TCoordRep>
   RealType result;
   typename PointSetType::PixelType pointValue;
   pointValue = itk::NumericTraits<PixelType>::Zero;
-  
+
   result = itk::NumericTraits<RealType>::Zero;
 
   if (!this->GetInputImage())
@@ -200,7 +197,7 @@ SarParametricMapFunction<TInputImage, TCoordRep>
       {
       PointType  powerCoef;
       powerCoef.Fill(0);
-      
+
       this->GetCoeff()->GetPoint(pointId, &powerCoef);
       this->GetCoeff()->GetPointData(pointId, &pointValue);
 
@@ -224,16 +221,16 @@ SarParametricMapFunction<TInputImage, TCoordRep>
   point.Fill(0);
   PixelType pointValue;
   pointValue = itk::NumericTraits<PixelType>::Zero;
-  
+
   this->Superclass::PrintSelf(os, indent);
-  
+
   for(unsigned int i = 0; i < m_Coeff->GetNumberOfPoints(); ++i)
   {
     m_Coeff->GetPoint(i,&point);
     m_Coeff->GetPointData(i,&pointValue);
     os << indent << "Polynom coefficient: "  << point <<" with value : "<< pointValue << std::endl;
-  } 
-  
+  }
+
 }
 
 

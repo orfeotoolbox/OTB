@@ -9,8 +9,6 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) CS Systemes d'information. All rights reserved.
-  See CSCopyright.txt for details.
 
      This software is distributed WITHOUT ANY WARRANTY; without even
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
@@ -35,7 +33,7 @@ namespace otb
  *
  * \ingroup ImageFunctions
  */
- 
+
 template <class TInputImage, class TCoordRep = float>
 class ITK_EXPORT SarParametricMapFunction :
   public itk::ImageFunction<TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::ScalarRealType,
@@ -100,7 +98,7 @@ public:
     m_PointSet = val;
     EvaluateParametricCoefficient();
     this->Modified();
-  }  
+  }
 
   /** Get/Set the Coeff pointer*/
   itkSetObjectMacro(Coeff, PointSetType);
@@ -114,14 +112,14 @@ public:
   /** Get/Set the Coeff pointer*/
   itkSetMacro(UsingClosestPointMethod, bool);
   itkGetConstReferenceMacro(UsingClosestPointMethod, bool);
-  
+
   /** Get/Set the PolynomalSize pointer*/
   void SetPolynomalSize(const IndexType PolynomalSize);
 
   /** Evaluate parametric coefficent from pointset */
   void EvaluateParametricCoefficient();
 
-  /** Set constante value for evaluation*/ 
+  /** Set constante value for evaluation*/
   void SetConstantValue(const RealType& value);
 
 protected:
@@ -135,8 +133,8 @@ private:
 
   PointSetPointer m_PointSet;
   PointSetPointer m_Coeff;
-  bool            m_IsInitialize;  
-  bool            m_UsingClosestPointMethod;  
+  bool            m_IsInitialize;
+  bool            m_UsingClosestPointMethod;
 };
 
 } // end namespace otb
