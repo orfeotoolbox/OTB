@@ -282,7 +282,7 @@ BCOInterpolateImageFunction< otb::VectorImage<TPixel,VImageDimension> , TCoordRe
       }
     }
 
-  norma = (vcl_log(radius)/vcl_log(2.0));
+  norma = (vcl_log(static_cast<double>(radius))/vcl_log(2.0));
   norma = norma * norma;
 
   for( unsigned int k = 0; k<componentNumber; k++)
