@@ -62,7 +62,9 @@ public:
   itkNewMacro(Self);
 
   /** Output type for GetClassSample method */
-  typedef itk::Statistics::MembershipSample<TSample> OutputType;
+  typedef itk::Statistics::MembershipSample<TSample>            OutputType;
+  typedef itk::VariableLengthVector<float>                      HyperplanesDistancesType;
+  typedef itk::Statistics::ListSample<HyperplanesDistancesType> HyperplanesDistancesListSampleType;
 
   /** typedefs from TSample object */
   typedef typename TSample::MeasurementType       MeasurementType;
@@ -78,6 +80,9 @@ public:
   /** Returns the classification result */
   OutputType* GetOutput();
   void SetOutput(OutputType* output);
+
+  /** Returns the hyperplanes distances */
+  HyperplanesDistancesListSampleType * GetHyperplanesDistancesOutput();
 
   /** Type definitions for the SVM Model. */
   typedef SVMModel<MeasurementType, ClassLabelType> SVMModelType;
@@ -104,6 +109,9 @@ private:
 
   /** Output pointer (MembershipSample) */
   typename OutputType::Pointer m_Output;
+
+  /** Hyperplanes distances output */
+  typename HyperplanesDistancesListSampleType::Pointer m_HyperplanesDistancesOutput;
 
   SVMModelPointer m_Model;
 }; // end of class

@@ -29,6 +29,7 @@ SVMClassifier<TSample, TLabel>
 ::SVMClassifier()
 {
   m_Output = OutputType::New();
+  m_HyperplanesDistancesOutput = HyperplanesDistancesListSampleType::New();
 }
 
 template<class TSample, class TLabel>
@@ -89,6 +90,14 @@ SVMClassifier<TSample, TLabel>
 }
 
 template<class TSample, class TLabel>
+typename SVMClassifier<TSample, TLabel>::HyperplanesDistancesListSampleType *
+SVMClassifier<TSample, TLabel>
+::GetHyperplanesDistancesOutput()
+{
+  return m_HyperplanesDistancesOutput;
+}
+
+template<class TSample, class TLabel>
 void
 SVMClassifier<TSample, TLabel>
 ::DoClassification()
@@ -118,6 +127,9 @@ SVMClassifier<TSample, TLabel>
       }
 
     ClassLabelType classLabel = m_Model->EvaluateLabel(modelMeasurement);
+    typename SVMModelType::DistancesVectorType hdistances = m_Model->EvaluateHyperplanesDistances(modelMeasurement);
+    HyperplanesDistancesType distances = hdistances;
+    m_HyperplanesDistancesOutput->PushBack(distances);
     // Julien: Event if we support larger type for class labels,
     // the AddInstance method wait for an unsigned int, so we cast it here.
     m_Output->AddInstance(static_cast<unsigned int>(classLabel), iterO.GetInstanceIdentifier());
