@@ -181,7 +181,7 @@ BCOInterpolateImageFunction<TInputImage, TCoordRep>
     value += lineRes[i+radius]*BCOCoefX[i+radius];
     }
 
-  norma = (vcl_log(radius)/vcl_log(2.0));
+  norma = (vcl_log(static_cast<double>(radius))/vcl_log(2.0));
   norma = norma * norma;
 
   return ( static_cast<OutputType>( value/norma ) );
