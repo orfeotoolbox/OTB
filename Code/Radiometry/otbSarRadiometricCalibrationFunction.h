@@ -51,7 +51,7 @@ public:
   /** Standard class typedefs. */
   typedef SarRadiometricCalibrationFunction Self;
   typedef itk::ImageFunction<TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::AbsType,
-      TCoordRep>                                          Superclass;
+      TCoordRep>                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -145,7 +145,7 @@ private:
   SarRadiometricCalibrationFunction(const Self &);  //purposely not implemented
   void operator =(const Self&);  //purposely not implemented
 
-  FunctorRealType   m_Scale;
+  FunctorRealType             m_Scale;
   ParametricFunctionPointer   m_Noise;
   ParametricFunctionPointer   m_AntennaPatternNewGain;
   ParametricFunctionPointer   m_AntennaPatternOldGain;
@@ -160,5 +160,3 @@ private:
 #endif
 
 #endif
-
-

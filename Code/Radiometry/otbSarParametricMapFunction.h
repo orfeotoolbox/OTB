@@ -43,7 +43,7 @@ public:
   /** Standard class typedefs. */
   typedef SarParametricMapFunction Self;
   typedef itk::ImageFunction<TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::ScalarRealType,
-      TCoordRep>                                          Superclass;
+      TCoordRep>                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 

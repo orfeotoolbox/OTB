@@ -150,13 +150,13 @@ SarParametricMapFunction<TInputImage, TCoordRep>
 
   // And solve it
   if(this->GetCoeff()->GetNumberOfPoints()>1)
-	linearSystemSolver.minimize(bestParams);
+    linearSystemSolver.minimize(bestParams);
 
   for(unsigned int pointId = 0; pointId < nbCoef; ++pointId)
     {
     this->GetCoeff()->SetPointData(pointId,bestParams[pointId]);
-  }
     }
+  }
   m_IsInitialize = true;
 }
 
