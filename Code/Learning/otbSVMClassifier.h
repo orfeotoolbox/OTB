@@ -21,6 +21,7 @@
 #include "itkSampleClassifier.h"
 #include "otbSVMModel.h"
 #include "itkVectorImage.h"
+#include "itkListSample.h"
 
 namespace otb
 {
