@@ -108,8 +108,9 @@ PhysicalToRPCSensorModelImageFilter<TImage>
   
     m_GCPsToSensorModelFilter->SetInput(input);
     m_GCPsToSensorModelFilter->UpdateOutputInformation();
-    std::cout<<"RPC model estimated. RMS ground error: "<<m_GCPsToSensorModelFilter->GetRMSGroundError()
-             <<", Mean error: "<<m_GCPsToSensorModelFilter->GetMeanError()<<std::endl;
+    
+    otbGenericMsgDebugMacro(<<"RPC model estimated. RMS ground error: "<<m_GCPsToSensorModelFilter->GetRMSGroundError()
+             <<", Mean error: "<<m_GCPsToSensorModelFilter->GetMeanError());
   
     // Encapsulate the keywordlist
     itk::MetaDataDictionary& dict = this->GetOutput()->GetMetaDataDictionary();
