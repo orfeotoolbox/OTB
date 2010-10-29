@@ -80,8 +80,8 @@ int otbSarParametricMapFunctionToImageFilter(int argc, char * argv[])
   polynomalSize[1] = 0;
   function->SetPolynomalSize(polynomalSize);
 
+  function->EvaluateParametricCoefficient();
   std::cout << function << std::endl;     
-
 
   filter->SetFunction(function);
 
