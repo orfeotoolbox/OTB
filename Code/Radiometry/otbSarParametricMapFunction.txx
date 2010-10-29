@@ -133,6 +133,8 @@ SarParametricMapFunction<TInputImage, TCoordRep>
       this->GetPointSet()->GetPoint(i, &point);
       this->GetPointSet()->GetPointData(i, &pointValue);
       b(i) = pointValue;
+      //std::cout << "point = " << point << std::endl;
+      //std::cout << "b(" << i << ") = " << pointValue << std::endl;
 
       for (unsigned int pointId = 0; pointId < nbCoef; ++pointId)
         {
@@ -141,6 +143,7 @@ SarParametricMapFunction<TInputImage, TCoordRep>
         this->GetCoeff()->GetPoint(pointId, &powerCoef);
         a(i, pointId) = vcl_pow(point[0], powerCoef[0]);
         a(i, pointId) *= vcl_pow(point[1], powerCoef[1]);
+        //std::cout << "a(" << i << "," << pointId << ") = " << a(i, pointId) << std::endl;
         }
       }
 
@@ -149,13 +152,11 @@ SarParametricMapFunction<TInputImage, TCoordRep>
     vnl_lsqr linearSystemSolver(linearSystem);
 
     // And solve it
-    if (this->GetCoeff()->GetNumberOfPoints() > 1)
-      {
-      linearSystemSolver.minimize(bestParams);
-      }
+    linearSystemSolver.minimize(bestParams);
 
     for (unsigned int pointId = 0; pointId < nbCoef; ++pointId)
       {
+      //std::cout << "bestParams(" << pointId << ") = " << bestParams[pointId] << std::endl;
       this->GetCoeff()->SetPointData(pointId, bestParams[pointId]);
       }
     }
