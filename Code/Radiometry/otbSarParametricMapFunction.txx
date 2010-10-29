@@ -28,6 +28,7 @@
 #include <vnl/vnl_least_squares_function.h>
 
 
+
 namespace otb
 {
 
@@ -96,70 +97,70 @@ SarParametricMapFunction<TInputImage, TCoordRep>
   PointSetPointer pointSet;
   pointSet = this->GetPointSet();
 
+  PointType coef;
+  PointType point;
+  coef.Fill(0);
+  point.Fill(0);
+  typename PointSetType::PixelType pointValue;
+  pointValue = itk::NumericTraits<PixelType>::Zero;
+
   if (pointSet->GetNumberOfPoints() == 0)
     {
     itkExceptionMacro(<< "PointSet must be set before evaluating the parametric coefficient (at least one value)");
     }
-
-  PointType  coef;
-  PointType  point;
-  coef.Fill(0);
-  point.Fill(0);
-
-  typename PointSetType::PixelType pointValue;
-  pointValue = itk::NumericTraits<PixelType>::Zero;
-
-  if(pointSet->GetNumberOfPoints() == 1)
+  else if (pointSet->GetNumberOfPoints() == 1)
     {
     coef[0] = 0;
     coef[1] = 0;
-    m_Coeff->SetPoint(0,coef);
+    m_Coeff->SetPoint(0, coef);
     pointSet->GetPointData(0, &pointValue);
-    m_Coeff->SetPointData(0,pointValue);
+    m_Coeff->SetPointData(0, pointValue);
     }
-
-  // Perform the plane least square estimation
-  unsigned int nbRecords = pointSet->GetNumberOfPoints();
-  unsigned int nbCoef    = m_Coeff->GetNumberOfPoints();
-
-  vnl_sparse_matrix<double> a(nbRecords, nbCoef);
-  vnl_vector<double> b(nbRecords), bestParams(nbCoef);
-
-  // Fill the linear system
-  for (unsigned int i = 0; i < nbRecords; ++i)
+  else
     {
-    this->GetPointSet()->GetPoint(i, &point);
-    this->GetPointSet()->GetPointData(i, &pointValue);
-    b(i)  = pointValue;
+    // Perform the plane least square estimation
+    unsigned int nbRecords = pointSet->GetNumberOfPoints();
+    unsigned int nbCoef = m_Coeff->GetNumberOfPoints();
 
-    for(unsigned int pointId = 0; pointId < nbCoef; ++pointId)
+    vnl_sparse_matrix<double> a(nbRecords, nbCoef);
+    vnl_vector<double> b(nbRecords), bestParams(nbCoef);
+    b.fill(0);
+    bestParams.fill(0);
+
+    // Fill the linear system
+    for (unsigned int i = 0; i < nbRecords; ++i)
       {
-      PointType  powerCoef;
-      powerCoef.Fill(0);
-      this->GetCoeff()->GetPoint(pointId, &powerCoef);
-      a(i,pointId)  = vcl_pow(point[0],powerCoef[0]);
-      a(i,pointId) *= vcl_pow(point[1],powerCoef[1]);
+      this->GetPointSet()->GetPoint(i, &point);
+      this->GetPointSet()->GetPointData(i, &pointValue);
+      b(i) = pointValue;
+
+      for (unsigned int pointId = 0; pointId < nbCoef; ++pointId)
+        {
+        PointType powerCoef;
+        powerCoef.Fill(0);
+        this->GetCoeff()->GetPoint(pointId, &powerCoef);
+        a(i, pointId) = vcl_pow(point[0], powerCoef[0]);
+        a(i, pointId) *= vcl_pow(point[1], powerCoef[1]);
+        }
+      }
+
+    // Create the linear system
+    vnl_sparse_matrix_linear_system<double> linearSystem(a, b);
+    vnl_lsqr linearSystemSolver(linearSystem);
+
+    // And solve it
+    if (this->GetCoeff()->GetNumberOfPoints() > 1)
+      {
+      linearSystemSolver.minimize(bestParams);
+      }
+
+    for (unsigned int pointId = 0; pointId < nbCoef; ++pointId)
+      {
+      this->GetCoeff()->SetPointData(pointId, bestParams[pointId]);
       }
     }
-
-  if(this->GetCoeff()->GetNumberOfPoints()>0)
-  {
-  // Create the linear system
-  vnl_sparse_matrix_linear_system<double> linearSystem(a, b);
-  vnl_lsqr linearSystemSolver(linearSystem);
-
-  // And solve it
-  if(this->GetCoeff()->GetNumberOfPoints()>1)
-    linearSystemSolver.minimize(bestParams);
-
-  for(unsigned int pointId = 0; pointId < nbCoef; ++pointId)
-    {
-    this->GetCoeff()->SetPointData(pointId,bestParams[pointId]);
-    }
-  }
   m_IsInitialize = true;
 }
-
 
 /**
  *
