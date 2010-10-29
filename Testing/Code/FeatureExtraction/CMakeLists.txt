@@ -1501,14 +1501,14 @@ ADD_TEST(feTuLocalHistogramImageFunctionTest ${FEATUREEXTRACTION_TESTS16}
 		${INPUTDATA}/poupees_1canal.hd
   		${TEMP}/feLocalHistogramImage.txt
                 )
-  
+
 # -------   otb::ImageFunctionAdapter   -------------
 
 ADD_TEST(feTuImageFunctionAdapterNew ${FEATUREEXTRACTION_TESTS16}
         otbImageFunctionAdapterNew
 )
 
-ADD_TEST(feTVImageFunctionAdapter ${FEATUREEXTRACTION_TESTS16}
+ADD_TEST(feTvImageFunctionAdapter ${FEATUREEXTRACTION_TESTS16}
         otbImageFunctionAdapter
                 ${INPUTDATA}/poupees.png
 	        )
