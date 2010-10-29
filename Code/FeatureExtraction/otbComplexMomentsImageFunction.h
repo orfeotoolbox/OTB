@@ -47,7 +47,7 @@ namespace otb
  * \ingroup ImageFunctions
  */
 
-template <class TInputImage, class TCoordRep = float>
+template <class TInputImage, class TCoordRep = double>
 class ITK_EXPORT ComplexMomentsImageFunction :
     public itk::ImageFunction <TInputImage,
       std::vector< std::vector< std::complex<double> > >,

@@ -23,6 +23,7 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbLocalHistogramImageFunction.h"
+#include "otbStreamingMinMaxImageFilter.h"
 
 int otbLocalHistogramImageFunctionTest(int argc, char * argv[])
 {
@@ -34,20 +35,29 @@ int otbLocalHistogramImageFunctionTest(int argc, char * argv[])
 
   typedef otb::Image<InputPixelType,  Dimension>                  InputImageType;
   typedef otb::ImageFileReader<InputImageType>                    ReaderType;
+  typedef otb::StreamingMinMaxImageFilter<InputImageType>         MinMaxFilterType;
   typedef otb::LocalHistogramImageFunction<InputImageType>        FunctionType;
 
-  ReaderType::Pointer   reader         = ReaderType::New();
-  FunctionType::Pointer function       = FunctionType::New();
+  
+  ReaderType::Pointer reader         = ReaderType::New();
+  MinMaxFilterType::Pointer filter   = MinMaxFilterType::New();
+  FunctionType::Pointer function     = FunctionType::New();
 
   reader->SetFileName(inputFilename);
   reader->Update();
+  
+  filter->SetInput(reader->GetOutput());
+  filter->Update();
+
   function->SetInputImage(reader->GetOutput());
 
   InputImageType::IndexType index;
   index[0] = 100;
   index[1] = 100;
 
-  function->SetNeighborhoodRadius(3);  
+  function->SetNeighborhoodRadius(3);
+  function->SetHistogramMin(filter->GetMinimum());
+  function->SetHistogramMax(filter->GetMaximum());
   FunctionType::OutputType Result;
   Result = function->EvaluateAtIndex(index);
 

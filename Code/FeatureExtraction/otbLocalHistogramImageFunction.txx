@@ -34,7 +34,7 @@ namespace otb
 template <class TInputImage, class TCoordRep>
 LocalHistogramImageFunction<TInputImage, TCoordRep>
 ::LocalHistogramImageFunction() :
-       m_NeighborhoodRadius(1), m_NumberOfHistogramBins(128)
+  m_NeighborhoodRadius(1), m_NumberOfHistogramBins(128), m_HistogramMin(0), m_HistogramMax(1)
 {
 }
 
@@ -46,6 +46,8 @@ LocalHistogramImageFunction<TInputImage, TCoordRep>
   this->Superclass::PrintSelf(os, indent);
   os << indent << " Neighborhood radius value   : "  << this->GetNeighborhoodRadius() << std::endl;
   os << indent << " Number Of Histogram Bins    : "  << this->GetNumberOfHistogramBins() << std::endl;
+  os << indent << " Histogram Minimum           : "  << this->GetHistogramMin() << std::endl;
+  os << indent << " Histogram Maximum           : "  << this->GetHistogramMax() << std::endl;
 }
 
 template <class TInputImage, class TCoordRep>
@@ -55,6 +57,8 @@ LocalHistogramImageFunction<TInputImage,TCoordRep>
 {
   typename HistogramGeneratorType::Pointer histogramGenerator = HistogramGeneratorType::New();
   histogramGenerator->SetNumberOfBins( this->GetNumberOfHistogramBins() );
+  histogramGenerator->SetHistogramMin( this->GetHistogramMin() );
+  histogramGenerator->SetHistogramMax( this->GetHistogramMax() );
 
   // Check for input image
   if( !this->GetInputImage() )

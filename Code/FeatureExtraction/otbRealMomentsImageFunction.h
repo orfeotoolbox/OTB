@@ -33,7 +33,7 @@ namespace otb
  * \ingroup ImageFunctions
  */
 
-template <class TInputImage, class TCoordRep = float>
+template <class TInputImage, class TCoordRep = double>
 class ITK_EXPORT RealMomentsImageFunction :
     public itk::ImageFunction<TInputImage,
                               std::vector< std::vector< 

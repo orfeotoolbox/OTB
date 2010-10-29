@@ -56,15 +56,18 @@ namespace otb
 template <class TInputImage, class TCoordRep = double>
 class ITK_EXPORT FourierMellinDescriptorsImageFunction :
     public itk::ImageFunction <TInputImage,
-      std::vector< std::vector< double > >,
-      TCoordRep>
+                               std::vector< std::vector<
+                               ITK_TYPENAME itk::NumericTraits<
+                               typename TInputImage::PixelType>::RealType > >,
+                               TCoordRep>
 {
 public:
   /** Standard class typedefs. */
   typedef FourierMellinDescriptorsImageFunction                                Self;
   typedef itk::ImageFunction<TInputImage, 
-                             std::vector<
-                             std::vector<double> >, 
+                             std::vector< std::vector<
+                             ITK_TYPENAME itk::NumericTraits<
+                             typename TInputImage::PixelType>::RealType > >, 
                              TCoordRep>                                        Superclass;
   typedef itk::SmartPointer<Self>                                              Pointer;
   typedef itk::SmartPointer<const Self>                                        ConstPointer;

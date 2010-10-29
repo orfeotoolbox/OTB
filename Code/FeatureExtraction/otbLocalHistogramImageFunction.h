@@ -37,7 +37,7 @@ namespace otb
  * \ingroup ImageFunctions
  */
 
-template <class TInputImage, class TCoordRep = float >
+template <class TInputImage, class TCoordRep = double >
 class ITK_EXPORT LocalHistogramImageFunction :
   public itk::ImageFunction< TInputImage,
                 typename itk::Statistics::ScalarImageToHistogramGenerator<TInputImage>::HistogramConstPointer,
@@ -103,6 +103,12 @@ public:
   itkSetClampMacro( NumberOfHistogramBins, unsigned long, 1, itk::NumericTraits<unsigned long>::max() );
   itkGetConstMacro( NumberOfHistogramBins, unsigned long );
 
+  itkSetMacro( HistogramMin, double );
+  itkGetConstReferenceMacro( HistogramMin, double );
+
+  itkSetMacro( HistogramMax, double );
+  itkGetConstReferenceMacro( HistogramMax, double );
+
 protected:
   LocalHistogramImageFunction();
   virtual ~LocalHistogramImageFunction() {}
@@ -114,6 +120,8 @@ private:
 
   unsigned int     m_NeighborhoodRadius;
   unsigned long    m_NumberOfHistogramBins;
+  double           m_HistogramMin;
+  double           m_HistogramMax;
 
 };
 
