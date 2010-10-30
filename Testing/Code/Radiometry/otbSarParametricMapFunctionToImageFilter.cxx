@@ -45,9 +45,11 @@ int otbSarParametricMapFunctionToImageFilter(int argc, char * argv[])
 
   reader->SetFileName(argv[1]);
   writer->SetFileName(argv[2]);
+
+  reader->GetOutput()->UpdateOutputInformation();
   filter->SetInput(reader->GetOutput());
 
-  FunctionType::Pointer function = FunctionType::New();
+  FunctionType* function = filter->GetFunction();
   function->SetInputImage(reader->GetOutput());
 
   /** Test on some indexes and some physical coordinates*/
@@ -81,9 +83,17 @@ int otbSarParametricMapFunctionToImageFilter(int argc, char * argv[])
   function->SetPolynomalSize(polynomalSize);
 
   function->EvaluateParametricCoefficient();
-  std::cout << function << std::endl;     
 
-  filter->SetFunction(function);
+  FunctionType::IndexType index;
+  index[0] = 0;
+  index[1] = 0;
+  std::cout << index << " -> " << function->EvaluateAtIndex(index) << std::endl;
+  index[0] = 50;
+  index[1] = 50;
+  std::cout << index << " -> " << function->EvaluateAtIndex(index) << std::endl;
+  index[0] = 100;
+  index[1] = 100;
+  std::cout << index << " -> " << function->EvaluateAtIndex(index) << std::endl;
 
   writer->SetInput(filter->GetOutput());
   writer->SetNumberOfStreamDivisions(2);

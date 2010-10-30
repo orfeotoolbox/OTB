@@ -22,6 +22,7 @@
 #include "itkImageFunction.h"
 #include "itkPointSet.h"
 #include "itkPoint.h"
+#include "itkVariableSizeMatrix.h"
 
 namespace otb
 {
@@ -68,6 +69,8 @@ public:
   typedef typename PointSetType::PointType               PointType;
   typedef typename PointSetType::PixelType               PixelType;
 
+  typedef itk::VariableSizeMatrix<double>                MatrixType;
+
   /** Datatype used for the evaluation */
   typedef typename itk::NumericTraits<InputPixelType>::ScalarRealType                       RealType;
 
@@ -100,9 +103,9 @@ public:
   }
 
   /** Get/Set the Coeff pointer*/
-  itkSetObjectMacro(Coeff, PointSetType);
-  itkGetObjectMacro(Coeff, PointSetType);
-  itkGetConstObjectMacro(Coeff, PointSetType);
+  itkSetMacro(Coeff, MatrixType);
+  itkGetMacro(Coeff, MatrixType);
+  itkGetConstMacro(Coeff, MatrixType);
 
   /** Get/Set the Coeff pointer*/
   itkSetMacro(IsInitialize, bool);
@@ -130,10 +133,14 @@ private:
   SarParametricMapFunction(const Self &);  //purposely not implemented
   void operator =(const Self&);  //purposely not implemented
 
+  double Horner(PointType point) const;
+
   PointSetPointer m_PointSet;
-  PointSetPointer m_Coeff;
+  MatrixType      m_Coeff;
   bool            m_IsInitialize;
   bool            m_UsingClosestPointMethod;
+
+
 };
 
 } // end namespace otb

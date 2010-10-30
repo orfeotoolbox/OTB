@@ -51,8 +51,6 @@ int otbSarParametricMapFunctionTest(int argc, char* argv[])
   /** Input Image*/
   reader->SetFileName(infname);
   reader->Update();
-
-  /** Computing the density around a pixel  */
   filter->SetInputImage(reader->GetOutput());
 
   /** Test on some indexes and some physical coordinates*/

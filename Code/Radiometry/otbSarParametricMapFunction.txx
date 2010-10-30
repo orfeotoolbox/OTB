@@ -40,7 +40,8 @@ SarParametricMapFunction<TInputImage, TCoordRep>
 ::SarParametricMapFunction()
 {
   m_PointSet = PointSetType::New();
-  m_Coeff    = PointSetType::New();
+  m_Coeff.SetSize(1,1);
+  m_Coeff.Fill(0);
   m_IsInitialize = false;
   m_UsingClosestPointMethod = false;
 }
@@ -64,26 +65,43 @@ SarParametricMapFunction<TInputImage, TCoordRep>
 template <class TInputImage, class TCoordRep>
 void
 SarParametricMapFunction<TInputImage, TCoordRep>
-::SetPolynomalSize(const IndexType PolynomalSize)
+::SetPolynomalSize(const IndexType polynomalSize)
 {
-  typedef typename IndexType::IndexValueType IndexValueType;
-  IndexValueType pointId = 0;
-  PointType coef;
-  coef.Fill(0);
-
-  m_IsInitialize = false;
-  for (IndexValueType i = 0; i <= PolynomalSize[0]; ++i)
-    {
-    coef[0] = i;
-    for (IndexValueType j = 0; j <= PolynomalSize[1]; ++j)
-      {
-      coef[1] = j;
-      m_Coeff->SetPoint(pointId, coef);
-      ++pointId;
-      }
-    }
-
+  m_Coeff.SetSize(polynomalSize[1] + 1, polynomalSize[0] + 1);
+  m_Coeff.Fill(0);
   this->Modified();
+}
+
+template <class TInputImage, class TCoordRep>
+double
+SarParametricMapFunction<TInputImage, TCoordRep>
+::Horner(PointType point) const
+{
+  // Implementation of a Horner scheme evaluation for bivariate polynomial
+  //std::cout << "Horner " << std::endl;
+
+  const typename InputImageType::RegionType& region = this->GetInputImage()->GetLargestPossibleRegion();
+  const typename InputImageType::IndexType&  origin = region.GetIndex();
+  const typename InputImageType::SizeType&   size   = region.GetSize();
+
+  point[0] = (point[0] - origin[0]) / size[0];
+  point[1] = (point[1] - origin[1]) / size[1];
+
+  //std::cout << "point = " << point << std::endl;
+
+  double result = 0;
+  for (unsigned int ycoeff = m_Coeff.Rows(); ycoeff > 0 ; --ycoeff)
+     {
+     double intermediate = 0;
+     for (unsigned int xcoeff = m_Coeff.Cols(); xcoeff > 0 ; --xcoeff)
+       {
+       //std::cout << "m_Coeff(" << ycoeff-1 << "," << xcoeff-1 << ") = " << m_Coeff(ycoeff-1, xcoeff-1) << std::endl;
+       intermediate = intermediate * point[0] + m_Coeff(ycoeff-1, xcoeff-1);
+       }
+     result += vcl_pow( point[1], ycoeff-1 ) * intermediate;
+     }
+
+  return result;
 }
 
 template <class TInputImage, class TCoordRep>
@@ -106,23 +124,22 @@ SarParametricMapFunction<TInputImage, TCoordRep>
     }
   else if (pointSet->GetNumberOfPoints() == 1)
     {
-    coef[0] = 0;
-    coef[1] = 0;
-    m_Coeff->SetPoint(0, coef);
     pointSet->GetPointData(0, &pointValue);
-    m_Coeff->SetPointData(0, pointValue);
+    m_Coeff(0, 0) = pointValue;
     }
   else
     {
-    InputImageType* inputImage = const_cast<InputImageType*>(this->GetInputImage());
-    //std::cout << inputImage << std::endl;
-    typename InputImageType::RegionType region = inputImage->GetLargestPossibleRegion();
-    typename InputImageType::IndexType  origin = region.GetIndex();
-    typename InputImageType::SizeType   size = region.GetSize();
+    // Get input region for normalization of coordinates
+    const typename InputImageType::RegionType& region = this->GetInputImage()->GetLargestPossibleRegion();
+    const typename InputImageType::IndexType&  origin = region.GetIndex();
+    const typename InputImageType::SizeType&   size   = region.GetSize();
+
+    //std::cout << "size = " << size << std::endl;
+    //std::cout << "origin = " << origin << std::endl;
 
     // Perform the plane least square estimation
     unsigned int nbRecords = pointSet->GetNumberOfPoints();
-    unsigned int nbCoef = m_Coeff->GetNumberOfPoints();
+    unsigned int nbCoef = m_Coeff.Rows() * m_Coeff.Cols();
 
     vnl_sparse_matrix<double> a(nbRecords, nbCoef);
     vnl_vector<double> b(nbRecords), bestParams(nbCoef);
@@ -138,28 +155,32 @@ SarParametricMapFunction<TInputImage, TCoordRep>
       //std::cout << "point = " << point << std::endl;
       //std::cout << "b(" << i << ") = " << pointValue << std::endl;
 
-      for (unsigned int pointId = 0; pointId < nbCoef; ++pointId)
+      for (unsigned int xcoeff = 0; xcoeff < m_Coeff.Cols(); ++xcoeff)
         {
-        PointType powerCoef;
-        powerCoef.Fill(0);
-        this->GetCoeff()->GetPoint(pointId, &powerCoef);
-        a(i, pointId) = vcl_pow( (point[0] - origin[0]) / size[0], powerCoef[0]);
-        a(i, pointId) *= vcl_pow( (point[1] - origin[1]) / size[1], powerCoef[1]);
-        //std::cout << "a(" << i << "," << pointId << ") = " << a(i, pointId) << std::endl;
+        double xpart = vcl_pow( (point[0] - origin[0]) / size[0], xcoeff);
+        for (unsigned int ycoeff = 0; ycoeff < m_Coeff.Rows(); ++ycoeff)
+          {
+          double ypart = vcl_pow( (point[1] - origin[1]) / size[1], ycoeff);
+          a(i, xcoeff * m_Coeff.Rows() + ycoeff) = xpart * ypart;
+          //std::cout << "a(" << i << "," << xcoeff * m_Coeff.Rows() + ycoeff << ") = " <<  xpart * ypart << std::endl;
+          }
         }
       }
 
     // Create the linear system
     vnl_sparse_matrix_linear_system<double> linearSystem(a, b);
-    vnl_lsqr linearSystemSolver(linearSystem);
 
     // And solve it
+    vnl_lsqr linearSystemSolver(linearSystem);
     linearSystemSolver.minimize(bestParams);
 
-    for (unsigned int pointId = 0; pointId < nbCoef; ++pointId)
+    for (unsigned int xcoeff = 0; xcoeff < m_Coeff.Cols(); ++xcoeff)
       {
-      //std::cout << "bestParams(" << pointId << ") = " << bestParams[pointId] << std::endl;
-      this->GetCoeff()->SetPointData(pointId, bestParams[pointId]);
+      for (unsigned int ycoeff = 0; ycoeff < m_Coeff.Rows(); ++ycoeff)
+        {
+        m_Coeff(ycoeff, xcoeff) = bestParams(xcoeff * m_Coeff.Rows() + ycoeff);
+        //std::cout << "m_Coeff(" << ycoeff << "," << xcoeff << ") = " << m_Coeff(ycoeff, xcoeff) << std::endl;
+        }
       }
     }
   m_IsInitialize = true;
@@ -174,50 +195,27 @@ typename SarParametricMapFunction<TInputImage, TCoordRep>
 SarParametricMapFunction<TInputImage, TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
-  RealType result;
-  typename PointSetType::PixelType pointValue;
-  pointValue = itk::NumericTraits<PixelType>::Zero;
-
-  result = itk::NumericTraits<RealType>::Zero;
+  RealType result = itk::NumericTraits<RealType>::Zero;
 
   if (!this->GetInputImage())
     {
-    return (itk::NumericTraits<RealType>::max());
+    itkExceptionMacro(<< "No input image specified");
     }
-
-  if (!this->IsInsideBuffer(index))
+  else if (!this->GetInputImage()->GetLargestPossibleRegion().IsInside(index))
     {
-    return (itk::NumericTraits<RealType>::max());
+    result = itk::NumericTraits<RealType>::max();
     }
-
-  if (!m_IsInitialize)
+  else if (!m_IsInitialize)
     {
-    itkExceptionMacro(<< "must estimate parameters before evaluating ");
+    itkExceptionMacro(<< "Must call EvaluateParametricCoefficient before evaluating");
     }
-
-  if(!m_UsingClosestPointMethod)
+  else if(!m_UsingClosestPointMethod)
     {
-    const InputImageType* inputImage = this->GetInputImage();
-    typename InputImageType::RegionType region = inputImage->GetLargestPossibleRegion();
-    typename InputImageType::IndexType  origin = region.GetIndex();
-    typename InputImageType::SizeType   size = region.GetSize();
-
-    for(unsigned int pointId = 0; pointId < m_Coeff->GetNumberOfPoints(); ++pointId)
-      {
-      PointType  powerCoef;
-      powerCoef.Fill(0);
-
-      this->GetCoeff()->GetPoint(pointId, &powerCoef);
-      this->GetCoeff()->GetPointData(pointId, &pointValue);
-
-      PointType normalized_point;
-      normalized_point[0] = static_cast<typename PointType::ValueType>(index[0] - origin[0]) / size[0];
-      normalized_point[1] = static_cast<typename PointType::ValueType>(index[1] - origin[1]) / size[1];
-
-      result += pointValue * vcl_pow(normalized_point[0],powerCoef[0]) * vcl_pow(normalized_point[1],powerCoef[1]);
-      }
+    PointType point;
+    point[0] = static_cast<typename PointType::ValueType>(index[0]);
+    point[1] = static_cast<typename PointType::ValueType>(index[1]);
+    result = this->Horner(point);
     }
-
   return result;
 }
 
@@ -230,20 +228,8 @@ void
 SarParametricMapFunction<TInputImage, TCoordRep>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  PointType  point;
-  point.Fill(0);
-  PixelType pointValue;
-  pointValue = itk::NumericTraits<PixelType>::Zero;
-
   this->Superclass::PrintSelf(os, indent);
-
-  for(unsigned int i = 0; i < m_Coeff->GetNumberOfPoints(); ++i)
-  {
-    m_Coeff->GetPoint(i,&point);
-    m_Coeff->GetPointData(i,&pointValue);
-    os << indent << "Polynom coefficient: "  << point <<" with value : "<< pointValue << std::endl;
-  }
-
+  os << indent << "Polynom coefficients: "  << m_Coeff << std::endl;
 }
 
 
