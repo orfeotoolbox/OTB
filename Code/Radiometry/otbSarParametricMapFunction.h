@@ -96,7 +96,6 @@ public:
   {
     m_IsInitialize = false;
     m_PointSet = val;
-    EvaluateParametricCoefficient();
     this->Modified();
   }
 

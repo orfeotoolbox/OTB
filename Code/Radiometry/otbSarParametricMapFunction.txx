@@ -82,10 +82,7 @@ SarParametricMapFunction<TInputImage, TCoordRep>
       ++pointId;
       }
     }
-  if (m_PointSet->GetNumberOfPoints() > 0)
-    {
-    EvaluateParametricCoefficient();
-    }
+
   this->Modified();
 }
 
@@ -94,8 +91,7 @@ void
 SarParametricMapFunction<TInputImage, TCoordRep>
 ::EvaluateParametricCoefficient()
 {
-  PointSetPointer pointSet;
-  pointSet = this->GetPointSet();
+  PointSetPointer pointSet = this->GetPointSet();
 
   PointType coef;
   PointType point;
@@ -118,6 +114,12 @@ SarParametricMapFunction<TInputImage, TCoordRep>
     }
   else
     {
+    InputImageType* inputImage = const_cast<InputImageType*>(this->GetInputImage());
+    //std::cout << inputImage << std::endl;
+    typename InputImageType::RegionType region = inputImage->GetLargestPossibleRegion();
+    typename InputImageType::IndexType  origin = region.GetIndex();
+    typename InputImageType::SizeType   size = region.GetSize();
+
     // Perform the plane least square estimation
     unsigned int nbRecords = pointSet->GetNumberOfPoints();
     unsigned int nbCoef = m_Coeff->GetNumberOfPoints();
@@ -133,14 +135,17 @@ SarParametricMapFunction<TInputImage, TCoordRep>
       this->GetPointSet()->GetPoint(i, &point);
       this->GetPointSet()->GetPointData(i, &pointValue);
       b(i) = pointValue;
+      //std::cout << "point = " << point << std::endl;
+      //std::cout << "b(" << i << ") = " << pointValue << std::endl;
 
       for (unsigned int pointId = 0; pointId < nbCoef; ++pointId)
         {
         PointType powerCoef;
         powerCoef.Fill(0);
         this->GetCoeff()->GetPoint(pointId, &powerCoef);
-        a(i, pointId) = vcl_pow(point[0], powerCoef[0]);
-        a(i, pointId) *= vcl_pow(point[1], powerCoef[1]);
+        a(i, pointId) = vcl_pow( (point[0] - origin[0]) / size[0], powerCoef[0]);
+        a(i, pointId) *= vcl_pow( (point[1] - origin[1]) / size[1], powerCoef[1]);
+        //std::cout << "a(" << i << "," << pointId << ") = " << a(i, pointId) << std::endl;
         }
       }
 
@@ -149,13 +154,11 @@ SarParametricMapFunction<TInputImage, TCoordRep>
     vnl_lsqr linearSystemSolver(linearSystem);
 
     // And solve it
-    if (this->GetCoeff()->GetNumberOfPoints() > 1)
-      {
-      linearSystemSolver.minimize(bestParams);
-      }
+    linearSystemSolver.minimize(bestParams);
 
     for (unsigned int pointId = 0; pointId < nbCoef; ++pointId)
       {
+      //std::cout << "bestParams(" << pointId << ") = " << bestParams[pointId] << std::endl;
       this->GetCoeff()->SetPointData(pointId, bestParams[pointId]);
       }
     }
@@ -187,13 +190,18 @@ SarParametricMapFunction<TInputImage, TCoordRep>
     return (itk::NumericTraits<RealType>::max());
     }
 
-  if (m_IsInitialize == false )
+  if (!m_IsInitialize)
     {
     itkExceptionMacro(<< "must estimate parameters before evaluating ");
     }
 
-  if(m_UsingClosestPointMethod == false )
+  if(!m_UsingClosestPointMethod)
     {
+    const InputImageType* inputImage = this->GetInputImage();
+    typename InputImageType::RegionType region = inputImage->GetLargestPossibleRegion();
+    typename InputImageType::IndexType  origin = region.GetIndex();
+    typename InputImageType::SizeType   size = region.GetSize();
+
     for(unsigned int pointId = 0; pointId < m_Coeff->GetNumberOfPoints(); ++pointId)
       {
       PointType  powerCoef;
@@ -202,7 +210,11 @@ SarParametricMapFunction<TInputImage, TCoordRep>
       this->GetCoeff()->GetPoint(pointId, &powerCoef);
       this->GetCoeff()->GetPointData(pointId, &pointValue);
 
-      result += pointValue * vcl_pow(index[0],powerCoef[0]) * vcl_pow(index[1],powerCoef[1]);
+      PointType normalized_point;
+      normalized_point[0] = static_cast<typename PointType::ValueType>(index[0] - origin[0]) / size[0];
+      normalized_point[1] = static_cast<typename PointType::ValueType>(index[1] - origin[1]) / size[1];
+
+      result += pointValue * vcl_pow(normalized_point[0],powerCoef[0]) * vcl_pow(normalized_point[1],powerCoef[1]);
       }
     }
 

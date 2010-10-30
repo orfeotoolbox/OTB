@@ -98,26 +98,25 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
     }
 
 
-  FunctorRealType Noise;
-  FunctorRealType AntennaPatternNewGain;
-  FunctorRealType AntennaPatternOldGain;
-  FunctorRealType IncidenceAngle;
-  FunctorRealType RangeSpreadLoss;
+  FunctorRealType noise;
+  FunctorRealType antennaPatternNewGain;
+  FunctorRealType antennaPatternOldGain;
+  FunctorRealType incidenceAngle;
+  FunctorRealType rangeSpreadLoss;
 
-  Noise = static_cast<FunctorRealType>(m_Noise->EvaluateAtIndex(index));
-  AntennaPatternNewGain = static_cast<FunctorRealType>(m_AntennaPatternNewGain->EvaluateAtIndex(index));
-  AntennaPatternOldGain = static_cast<FunctorRealType>(m_AntennaPatternOldGain->EvaluateAtIndex(index));
-  IncidenceAngle = static_cast<FunctorRealType>(m_IncidenceAngle->EvaluateAtIndex(index));
-  RangeSpreadLoss = static_cast<FunctorRealType>(m_RangeSpreadLoss->EvaluateAtIndex(index));
+  noise = static_cast<FunctorRealType>(m_Noise->EvaluateAtIndex(index));
+  antennaPatternNewGain = static_cast<FunctorRealType>(m_AntennaPatternNewGain->EvaluateAtIndex(index));
+  antennaPatternOldGain = static_cast<FunctorRealType>(m_AntennaPatternOldGain->EvaluateAtIndex(index));
+  incidenceAngle = static_cast<FunctorRealType>(m_IncidenceAngle->EvaluateAtIndex(index));
+  rangeSpreadLoss = static_cast<FunctorRealType>(m_RangeSpreadLoss->EvaluateAtIndex(index));
 
   FunctorType functor;
-  functor.SetNoise(Noise);
+  functor.SetNoise(noise);
   functor.SetScale(m_Scale);
-  functor.SetAntennaPatternNewGain(AntennaPatternNewGain);
-  functor.SetAntennaPatternOldGain(AntennaPatternOldGain);
-  functor.SetIncidenceAngle(IncidenceAngle);
-  functor.SetRangeSpreadLoss(RangeSpreadLoss);
-
+  functor.SetAntennaPatternNewGain(antennaPatternNewGain);
+  functor.SetAntennaPatternOldGain(antennaPatternOldGain);
+  functor.SetIncidenceAngle(incidenceAngle);
+  functor.SetRangeSpreadLoss(rangeSpreadLoss);
 
   const RealType value = static_cast<RealType>(vcl_abs(this->GetInputImage()->GetPixel(index)));
   result = functor(value);
