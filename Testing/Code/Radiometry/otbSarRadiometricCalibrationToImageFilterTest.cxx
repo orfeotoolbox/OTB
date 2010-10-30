@@ -25,7 +25,7 @@
 int otbSarRadiometricCalibrationToImageFilterTest(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef double                                                                  RealType;
+  typedef float                                                                        RealType;
   typedef std::complex<RealType>                                                       PixelType;
   typedef otb::Image<PixelType, Dimension>                                             InputImageType;
   typedef otb::Image<RealType, Dimension>                                              OutputImageType;
@@ -43,19 +43,27 @@ int otbSarRadiometricCalibrationToImageFilterTest(int argc, char * argv[])
   reader->SetFileName(argv[1]);
   writer->SetFileName(argv[2]);
   filter->SetInput(reader->GetOutput());
-  filter->SetNumberOfThreads(1);
-  // Generate an extract from the large input
-  OutputImageType::RegionType region;
-  OutputImageType::IndexType  id;
-  id[0] = atoi(argv[3]);   id[1] = atoi(argv[4]);
-  OutputImageType::SizeType size;
-  size[0] = atoi(argv[5]);   size[1] = atoi(argv[6]);
-  region.SetIndex(id);
-  region.SetSize(size);
-  extractor->SetExtractionRegion(region);
 
-  extractor->SetInput(filter->GetOutput());
-  writer->SetInput(extractor->GetOutput());
+  if (argc > 3)
+    {
+    // Generate an extract from the large input
+    OutputImageType::RegionType region;
+    OutputImageType::IndexType  id;
+    id[0] = atoi(argv[3]);   id[1] = atoi(argv[4]);
+    OutputImageType::SizeType size;
+    size[0] = atoi(argv[5]);   size[1] = atoi(argv[6]);
+    region.SetIndex(id);
+    region.SetSize(size);
+    extractor->SetExtractionRegion(region);
+
+    extractor->SetInput(filter->GetOutput());
+    writer->SetInput(extractor->GetOutput());
+    }
+  else
+    {
+    // Calibrate the whole image
+    writer->SetInput(filter->GetOutput());
+    }
   writer->Update();
 
   return EXIT_SUCCESS;
