@@ -174,7 +174,8 @@ void GDALImageIO::Read(void* buffer)
   CPLErr         lCrGdal;
   std::streamoff cpt(0);
 
-  if (GDALDataTypeIsComplex(m_PxType))
+//  if (GDALDataTypeIsComplex(m_PxType))
+  if(0)
     {
     lCrGdal = m_poBands[0]->RasterIO(GF_Read,
                                      lFirstColumn,
@@ -400,13 +401,17 @@ void GDALImageIO::InternalReadImageInformation()
     {
     SetComponentType(INT);
     }
-  else if ((m_PxType == GDT_Float32) || (m_PxType == GDT_CFloat32))
+  else if (m_PxType == GDT_Float32)
     {
     SetComponentType(FLOAT);
     }
   else if ((m_PxType == GDT_Float64) || (m_PxType == GDT_CFloat64))
     {
     SetComponentType(DOUBLE);
+    }
+  else if (m_PxType == GDT_CFloat32)
+    {
+    SetComponentType(CFLOAT);
     }
   else
     {
@@ -445,6 +450,10 @@ void GDALImageIO::InternalReadImageInformation()
     {
     m_NbOctetPixel = 8;
     }
+  else if (this->GetComponentType() == CFLOAT)
+    {
+    m_NbOctetPixel = sizeof(std::complex<float>);
+    }
   else
     {
     itkExceptionMacro(<< "Component type unknown");
@@ -454,7 +463,8 @@ void GDALImageIO::InternalReadImageInformation()
   // Pixel Type always set to Scalar for GDAL ? maybe also to vector ?
 
   // Modif Patrick: LIRE LES IMAGES COMPLEXES
-  if (GDALDataTypeIsComplex(m_PxType))
+//  if (GDALDataTypeIsComplex(m_PxType))
+  if(0)
     {
     m_NbOctetPixel = m_NbOctetPixel * 2;
     this->SetNumberOfComponents(2);

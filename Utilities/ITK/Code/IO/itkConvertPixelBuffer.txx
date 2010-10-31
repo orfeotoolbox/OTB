@@ -595,6 +595,27 @@ ConvertPixelBuffer<InputPixelType, OutputPixelType, OutputConvertTraits>
     }
 }
 
+template < typename InputPixelType,
+           typename OutputPixelType,
+           class OutputConvertTraits
+           >
+void
+ConvertPixelBuffer<InputPixelType, OutputPixelType, OutputConvertTraits>
+::ConvertComplexToGray(std::complex<InputPixelType>* inputData, 
+                      int inputNumberOfComponents, 
+                      OutputPixelType* outputData , size_t size)
+{
+  std::complex<InputPixelType>* endInput = inputData + size;
+  while(inputData != endInput)
+    {
+    OutputConvertTraits::SetNthComponent(0, *outputData, 
+      static_cast<OutputComponentType>
+                                         (std::norm(*inputData)));
+    inputData++;
+    outputData++;
+    }
+}
+
 
 template < typename InputPixelType,
            typename OutputPixelType,
@@ -697,6 +718,25 @@ ConvertPixelBuffer<InputPixelType, OutputPixelType, OutputConvertTraits>
     }
 }
 
+
+template < typename InputPixelType,
+           typename OutputPixelType,
+           class OutputConvertTraits >
+void
+ConvertPixelBuffer<InputPixelType, OutputPixelType, OutputConvertTraits>
+::ConvertComplexVectorImageToVectorImage(std::complex<InputPixelType>* inputData, 
+                     int inputNumberOfComponents, 
+                     OutputPixelType* outputData , size_t size)
+{
+  size_t length = size* (size_t)inputNumberOfComponents;
+  for( size_t i=0; i< length; i++ )
+    {
+    OutputConvertTraits::SetNthComponent( 0, *outputData, 
+                                          static_cast <  OutputComponentType >( (*inputData).real() ));
+    ++outputData;
+    ++inputData;
+    }
+}
 
 }// end namespace itk
 

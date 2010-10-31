@@ -204,6 +204,8 @@ const std::type_info& ImageIOBase::GetComponentTypeInfo() const
       return typeid(float);
     case DOUBLE:
       return typeid(double);
+    case CFLOAT:
+      return typeid(std::complex<float>);
     case UNKNOWNCOMPONENTTYPE:
     default:
       itkExceptionMacro ("Unknown component type: " << m_ComponentType);
@@ -441,7 +443,8 @@ bool ImageIOBase::SetPixelTypeInfo(const std::type_info& ptype)
       !itkSetPixelType(this,ptype,ImageIOBase::LONG,(long)(0)) &&
       !itkSetPixelType(this,ptype,ImageIOBase::ULONG,(unsigned long)(0)) &&
       !itkSetPixelType(this,ptype,ImageIOBase::FLOAT,(float)(0)) &&
-      !itkSetPixelType(this,ptype,ImageIOBase::DOUBLE,(double)(0)) )
+      !itkSetPixelType(this,ptype,ImageIOBase::DOUBLE,(double)(0)) &&
+      !itkSetPixelType(this,ptype,ImageIOBase::CFLOAT,(std::complex<float>)(0)) )
     {
     if ( ptype == typeid(Offset<2>) )
       {
@@ -647,6 +650,8 @@ unsigned int ImageIOBase::GetComponentSize() const
       return sizeof(float);
     case DOUBLE:
       return sizeof(double);
+    case CFLOAT:
+      return sizeof(std::complex<float>);
     case UNKNOWNCOMPONENTTYPE:
     default:
       itkExceptionMacro ("Unknown component type: " << m_ComponentType);
@@ -712,6 +717,8 @@ std::string ImageIOBase::GetComponentTypeAsString(IOComponentType t) const
       return (s = "float");
     case DOUBLE:
       return (s = "double");
+    case CFLOAT:
+      return (s = "complex_float");
     case UNKNOWNCOMPONENTTYPE:
     default:
       return (s = "unknown");
@@ -852,6 +859,14 @@ void ImageIOBase::WriteBufferAsASCII(std::ostream& os, const void *buffer,
       }
       break;
 
+    case CFLOAT:
+      {
+      typedef const std::complex<float> * Type;
+      Type buf = reinterpret_cast<Type>(buffer);
+      WriteBuffer(os, buf, numComp);
+      }
+      break;
+
     default:
       break;
     }
@@ -944,6 +959,13 @@ void ImageIOBase::ReadBufferAsASCII(std::istream& is, void *buffer,
     case DOUBLE:
       {
       double *buf = reinterpret_cast<double*>(buffer);
+      ReadBuffer(is, buf, numComp);
+      }
+      break;
+
+    case CFLOAT:
+      {
+      std::complex<float> *buf = reinterpret_cast<std::complex<float>*>(buffer);
       ReadBuffer(is, buf, numComp);
       }
       break;
