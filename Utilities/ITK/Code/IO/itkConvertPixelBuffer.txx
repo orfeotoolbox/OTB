@@ -718,6 +718,27 @@ ConvertPixelBuffer<InputPixelType, OutputPixelType, OutputConvertTraits>
     }
 }
 
+/* To be able to convert transparently*/
+/*template<typename InputType, typename OutputType>
+OutputType
+SpecialCast(const InputType& in, const OutputType& dummy)
+{
+  return static_cast < OutputType >( in );
+}*/
+
+template<typename InputType, typename OutputType>
+OutputType
+SpecialCast(const std::complex<InputType>& in, const OutputType& dummy)
+{
+  return static_cast < OutputType >( in.real() );
+ }
+
+template<typename InputType, typename OutputType>
+std::complex<OutputType>
+SpecialCast(const std::complex<InputType>& in, const std::complex<OutputType>& dummy)
+{
+  return static_cast < std::complex<OutputType> >( in );
+}
 
 template < typename InputPixelType,
            typename OutputPixelType,
@@ -729,10 +750,11 @@ ConvertPixelBuffer<InputPixelType, OutputPixelType, OutputConvertTraits>
                      OutputPixelType* outputData , size_t size)
 {
   size_t length = size* (size_t)inputNumberOfComponents;
+  OutputPixelType dummy;
   for( size_t i=0; i< length; i++ )
     {
     OutputConvertTraits::SetNthComponent( 0, *outputData, 
-                                          static_cast <  OutputComponentType >( (*inputData).real() ));
+                                          SpecialCast(*inputData, dummy));
     ++outputData;
     ++inputData;
     }

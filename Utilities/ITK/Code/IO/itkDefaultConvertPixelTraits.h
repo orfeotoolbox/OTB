@@ -282,6 +282,10 @@ public:                                                                  \
       pixel = TargetType( pixel.real(), v );                           \
       }                                                                  \
     }                                                                    \
+  static void SetNthComponent(int i, TargetType & pixel, const TargetType& v) \
+    { \
+      pixel = v; \
+    } \
   static ComponentType GetScalarValue(const TargetType& pixel)           \
     {                                                                    \
     return std::norm(pixel);                                             \
