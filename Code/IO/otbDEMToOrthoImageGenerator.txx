@@ -83,24 +83,13 @@ DEMToOrthoImageGenerator<TDEMImage, TMapProjection>
 
 //     otbMsgDevMacro(<< "GeoPoint: (" << geoPoint[0] << "," << geoPoint[1] << ")");
 
-    height = this->m_DEMHandler->GetHeightAboveMSL(geoPoint);  // Altitude calculation
+    height = this->m_DEMFunction->Evaluate(geoPoint);  // Altitude calculation
     otbMsgDevMacro(<< "Index : (" << currentindex[0]<< "," << currentindex[1] << ") -> PhyPoint : ("
                    << cartoPoint[0] << "," << cartoPoint[1] << ") -> GeoPoint: ("
                    << geoPoint[0] << "," << geoPoint[1] << ") -> height" << height);
 
 //     otbMsgDevMacro(<< "height: " << height);
-    // MNT sets a default value (-32768) at point where it doesn't have altitude information.
-    // OSSIM has chosen to change this default value in OSSIM_DBL_NAN (-4.5036e15).
-    if (!ossim::isnan(height))
-      {
-      // Fill the image
-      DEMImage->SetPixel(currentindex, static_cast<PixelType>(height));
-      }
-    else
-      {
-      // Back to the MNT default value
-      DEMImage->SetPixel(currentindex, this->m_DefaultUnknownValue);
-      }
+
     progress.CompletedPixel();
     }
 }
