@@ -1,1 +1,0 @@
-/usr/bin/c++    -mmacosx-version-min=10.6  -fPIC -Wall -Wno-long-long -ansi -std=c++98 -O3 -DNDEBUG -Wl,-search_paths_first -headerpad_max_install_names  CMakeFiles/lasinfo.dir/lasinfo.cpp.o CMakeFiles/lasinfo.dir/laskernel.cpp.o  -o ../bin/lasinfo  -L/usr/local/lib ../bin/liblas.a /usr/local/lib/libboost_program_options.a 

@@ -1,1 +1,0 @@
-/usr/bin/c++    -mmacosx-version-min=10.6  -fPIC -Wall -Wno-long-long -ansi -std=c++98 -O3 -DNDEBUG -Wl,-search_paths_first -headerpad_max_install_names  CMakeFiles/lasinfo-old.dir/lascommon.c.o CMakeFiles/lasinfo-old.dir/lasinfo-old.c.o  -o ../bin/lasinfo-old  -L/usr/local/lib ../bin/liblas_c.dylib ../bin/liblas.a 

@@ -1,0 +1,1100 @@
+2009-03-25 16:58  hobu
+
+	* trunk/nmake.opt: tweak some comments
+
+2009-03-25 16:52  hobu
+
+	* trunk/configure.ac: name our dist target to liblas-src and ensure
+	  that the .bz2 file is made with 'make dist'
+
+2009-03-25 11:22  mloskot
+
+	* trunk: Updated svn:ignore property.
+
+2009-03-25 11:21  mloskot
+
+	* trunk/build/msvc90, trunk/build/msvc90/las2las,
+	  trunk/build/msvc90/las2txt, trunk/build/msvc90/lasdiff,
+	  trunk/build/msvc90/lasinfo, trunk/build/msvc90/lasmerge,
+	  trunk/build/msvc90/liblas_c_dll, trunk/build/msvc90/liblas_lib,
+	  trunk/build/msvc90/liblas_test, trunk/build/msvc90/txt2las: Updated
+	  svn:ignore property.
+
+2009-03-25 11:14  mloskot
+
+	* trunk/apps/makefile.vc, trunk/nmake.opt: nmake.opt: Added support of
+	  EXT_NMAKE_OPT for building libLAS with NMAKE (Ticket #117).
+	  Improved detection of GDAL_HOME and GEOTIFF_HOME - check if
+	  directories exist. Added auto-magical determination of version of
+	  Visual C++ compiler based on NMAKE version (see WARNING in
+	  NMAKE).
+
+2009-03-25 09:56  mloskot
+
+	* trunk/nmake.opt: Fixed LF to CRLF in nmake.opt.
+
+2009-03-25 09:43  mloskot
+
+	* trunk/src: Updated svn:ignore property for src.
+
+2009-03-23 09:47  mloskot
+
+	* trunk/build/msvc90/liblas_lib/liblas_lib.vcproj: build/msvc90:
+	  updated project files after renaming classes LASSRS and LASVLR."
+
+2009-03-22 20:13  hobu
+
+	* trunk/include/liblas/lascolor.hpp, trunk/src/lascolor.cpp: fix #116,
+	  LASColor has no == operation
+
+2009-03-22 20:12  hobu
+
+	* trunk/include/liblas/capi/liblas.h, trunk/src/las_c_api.cpp: Fix
+	  #115, add Get/SetPointSourceId to C API
+
+2009-03-20 21:16  mloskot
+
+	* trunk/src/makefile.vc: Renamed class LASVLR to LASVariableRecord in
+	  src/makefile.vc (Ticket #114).
+
+2009-03-20 20:59  mloskot
+
+	* trunk/src/Makefile.am: Renamed class LASVLR to LASVariableRecord in
+	  src/Makefile.am (Ticket 14). The C API has not been touched.
+
+2009-03-20 20:55  mloskot
+
+	* trunk/build/msvc80/liblas_dll/liblas_dll.vcproj,
+	  trunk/build/msvc80/liblas_lib/liblas_lib.vcproj,
+	  trunk/build/msvc80/liblas_test/liblas_test.vcproj,
+	  trunk/build/msvc90/liblas_dll/liblas_dll.vcproj,
+	  trunk/build/msvc90/liblas_lib/liblas_lib.vcproj,
+	  trunk/build/msvc90/liblas_test/liblas_test.vcproj,
+	  trunk/include/Makefile.am, trunk/include/liblas/lasheader.hpp,
+	  trunk/include/liblas/lasreader.hpp,
+	  trunk/include/liblas/lasrecordheader.hpp,
+	  trunk/include/liblas/lasspatialreference.hpp,
+	  trunk/include/liblas/lasvariablerecord.hpp, trunk/src/CMakeLists.txt,
+	  trunk/src/detail/reader.cpp, trunk/src/detail/reader10.cpp,
+	  trunk/src/detail/reader11.cpp, trunk/src/detail/reader12.cpp,
+	  trunk/src/detail/writer.cpp, trunk/src/las_c_api.cpp,
+	  trunk/src/lasheader.cpp, trunk/src/lasrecordheader.cpp,
+	  trunk/src/lasspatialreference.cpp, trunk/src/lasvariablerecord.cpp,
+	  trunk/test/unit/CMakeLists.txt, trunk/test/unit/Makefile.am,
+	  trunk/test/unit/lasrecordheader_test.cpp,
+	  trunk/test/unit/lasvariablerecord_test.cpp: Renamed class LASVLR to
+	  LASVariableRecord (Ticket #114). The C API has not been touched.
+
+2009-03-20 20:42  mloskot
+
+	* trunk/test/unit/Makefile.am: Renamed class LASSRS to
+	  LASSpatialReference in test/unit/Makefile.am (Ticket #113).
+
+2009-03-20 20:35  mloskot
+
+	* trunk/build/msvc80/liblas_lib/liblas_lib.vcproj,
+	  trunk/build/msvc80/liblas_test/liblas_test.vcproj,
+	  trunk/build/msvc90/liblas_lib/liblas_lib.vcproj,
+	  trunk/include/Makefile.am, trunk/include/liblas/detail/fwd.hpp,
+	  trunk/include/liblas/detail/reader.hpp,
+	  trunk/include/liblas/detail/writer.hpp,
+	  trunk/include/liblas/lasheader.hpp,
+	  trunk/include/liblas/lasreader.hpp,
+	  trunk/include/liblas/lasspatialreference.hpp,
+	  trunk/include/liblas/lassrs.hpp, trunk/include/liblas/laswriter.hpp,
+	  trunk/src/CMakeLists.txt, trunk/src/Makefile.am,
+	  trunk/src/detail/reader.cpp, trunk/src/detail/writer.cpp,
+	  trunk/src/las_c_api.cpp, trunk/src/lasheader.cpp,
+	  trunk/src/lasreader.cpp, trunk/src/lasspatialreference.cpp,
+	  trunk/src/lassrs.cpp, trunk/src/laswriter.cpp, trunk/src/makefile.vc,
+	  trunk/test/unit/lasheader_test.cpp,
+	  trunk/test/unit/lasspatialreference_test.cpp,
+	  trunk/test/unit/lassrs_test.cpp: Renamed class LASSRS to
+	  LASSpatialReference (Ticket #113). The C API has not been
+	  touched.
+
+2009-03-20 18:02  hobu
+
+	* trunk/configure.ac, trunk/include/liblas/capi/las_version.h,
+	  trunk/nmake.opt, trunk/python/setup.py: increment versions in prep
+	  for 1.2.0b3
+
+2009-03-20 17:19  hobu
+
+	* trunk/python/tests/Header.txt: try to fix date test again
+
+2009-03-20 16:59  hobu
+
+	* trunk/python/tests/SRS.txt, trunk/python/tests/VLR.txt: Guards for
+	  when we have no HAVE_LIBGEOTIFF
+
+2009-03-20 16:59  hobu
+
+	* trunk/python/tests/File.txt: Make sure that void functions return
+	  None for ctype or we'll get unexpected jtrunk back
+
+2009-03-20 16:57  hobu
+
+	* trunk/python/liblas/core.py: Make sure that void functions return
+	  None for ctype or we'll get unexpected jtrunk back
+
+2009-03-20 16:50  hobu
+
+	* trunk/python/liblas/core.py: don't know where LASReader_Destroy
+	  went
+
+2009-03-20 16:25  hobu
+
+	* trunk/src/las_c_api.cpp: We use #ifdef _WIN32 instead of #ifdef
+	  WIN32 for strncasecmp
+
+2009-03-20 01:31  mloskot
+
+	* trunk/include/liblas/detail/reader.hpp,
+	  trunk/include/liblas/lasreader.hpp, trunk/src/detail/reader.cpp,
+	  trunk/src/detail/reader10.cpp, trunk/src/detail/reader11.cpp,
+	  trunk/src/detail/reader12.cpp, trunk/src/lasreader.cpp: Fixed
+	  weakness of MakePIMPL by reverting changes applied as r984 and
+	  bringing m_pimpl back to constness. There is no need to re-create
+	  internal reader object and reassign it to m_pimpl, because reader
+	  state can be correctly reset by simple call of LASReader::Init.
+	  This fix is also related to Ticket #85. All 87 test cases pass.
+
+2009-03-20 01:27  mloskot
+
+	* trunk/test/unit/lasreader_iterator_test.cpp: Fixed LF.
+
+2009-03-20 00:45  mloskot
+
+	* trunk/build/msvc80/liblas_lib/liblas_lib.vcproj,
+	  trunk/build/msvc80/liblas_test/liblas_test.vcproj: Updated
+	  build/msvc80 adding new files. Use $(SolutionDir) macro in unit
+	  test runner, instead of relative path.
+
+2009-03-20 00:44  mloskot
+
+	* trunk/test/unit/liblas_test_suite.cpp: Cleanup
+
+2009-03-20 00:35  mloskot
+
+	* trunk/test/unit/lasreader_iterator_test.cpp: Fixed missing reset
+	  operation on reader when re-using it with iterators (#85).
+
+2009-03-20 00:31  mloskot
+
+	* trunk/src/lasreader.cpp: Fixed but with incompletely re-initialized
+	  LASReader after reset. The MakePIMPL idea is weak.
+
+2009-03-19 22:34  hobu
+
+	* trunk/python/liblas/core.py, trunk/python/tests/File.txt: beef up
+	  test for _Destroy being called twice
+
+2009-03-19 22:11  hobu
+
+	* trunk/src/las_c_api.cpp: strncasecmp doesn't exist on windows
+
+2009-03-19 18:16  hobu
+
+	* trunk/src/las_c_api.cpp: fix #112, rename VALIDATE_POINTER0 and
+	  VALIDATE_POINTER1
+
+2009-03-19 04:20  hobu
+
+	* trunk/include/liblas/lasheader.hpp, trunk/python/liblas/file.py,
+	  trunk/python/tests/File.txt, trunk/src/las_c_api.cpp,
+	  trunk/src/lasheader.cpp: stop tracking open readers/writers in
+	  order to allow multiple readers to operate on a file #111
+
+2009-03-18 03:40  hobu
+
+	* trunk/include/liblas/detail/writer.hpp: dummy struct for when we
+	  don't have GDAL
+
+2009-03-17 17:30  hobu
+
+	* trunk/apps/las2txt.c: fix #109, las2txt doesn't output RGB
+
+2009-03-17 17:24  hobu
+
+	* trunk/include/liblas/capi/liblas.h, trunk/src/las_c_api.cpp: fix
+	  #110, LASSRS VLR methods for C API
+
+2009-03-17 17:19  hobu
+
+	* trunk/python/liblas/core.py, trunk/python/liblas/srs.py,
+	  trunk/python/tests/SRS.txt: Add VLR methods to srs object
+
+2009-03-17 17:12  hobu
+
+	* trunk/src/detail/writer.cpp: oops #108
+
+2009-03-17 16:58  hobu
+
+	* trunk/include/liblas/detail/reader.hpp,
+	  trunk/include/liblas/detail/writer.hpp, trunk/python/tests/SRS.txt,
+	  trunk/src/detail/reader.cpp, trunk/src/detail/writer.cpp: Fix #108,
+	  LASWriter::SetSRS and LASReader::SetSRS don't work
+
+2009-03-17 16:56  hobu
+
+	* trunk/python/liblas/file.py: clean up __del__ a bit when core is
+	  already deleted
+
+2009-03-17 16:55  hobu
+
+	* trunk/python/liblas/point.py: complete #106, add descale/scale
+	  convenience methods to liblas.point
+
+2009-03-17 04:15  hobu
+
+	* trunk/src/lassrs.cpp: clean up a bit
+
+2009-03-17 04:05  hobu
+
+	* trunk/include/liblas/capi/liblas.h,
+	  trunk/include/liblas/detail/reader.hpp, trunk/python/liblas/core.py,
+	  trunk/python/liblas/file.py, trunk/python/tests/SRS.txt,
+	  trunk/src/detail/reader.cpp, trunk/src/las_c_api.cpp,
+	  trunk/src/lassrs.cpp: start fixing LASReader/LASWriter SetSRS
+	  methods
+
+2009-03-16 14:57  hobu
+
+	* trunk/test/unit/Makefile.am, trunk/test/unit/common.cpp,
+	  trunk/test/unit/lasheader_test.cpp,
+	  trunk/test/unit/laspoint_test.cpp, trunk/test/unit/lassrs_test.cpp:
+	  making mloskot proud by adding to the tests
+
+2009-03-13 17:35  hobu
+
+	* trunk/configure.ac, trunk/include/liblas/capi/las_version.h,
+	  trunk/nmake.opt, trunk/python/setup.py: increment versions to 1.2.0b2
+	  in preparation for release
+
+2009-03-13 17:34  hobu
+
+	* trunk/apps/makefile.vc: link GEOTIFF_LIB to everything because we
+	  do GTIFPrint when available now.
+
+2009-03-13 04:35  hobu
+
+	* trunk/configure.ac: try again on r1098
+
+2009-03-13 04:30  hobu
+
+	* trunk/configure.ac: try again on r1097
+
+2009-03-13 04:04  hobu
+
+	* trunk/configure.ac: don't overwrite GEOTIFF_INC in the GDAL source
+	  tree case with the wrong stuff
+
+2009-03-12 19:53  hobu
+
+	* trunk/apps/las2las.c: default to writing 1.2 files for las2las, can
+	  be overriden with --format
+
+2009-03-12 19:53  hobu
+
+	* trunk/apps/txt2las.c: clean up logic for RGB parsing, support
+	  setting the format
+
+2009-03-12 19:40  hobu
+
+	* trunk/apps/txt2las.c: support setting RGB colors in txt2las #103
+
+2009-03-12 17:40  hobu
+
+	* trunk/src/laspoint.cpp: fix #104, copy the LASColor in copy and
+	  assignment constructors of LASPoint
+
+2009-03-12 02:34  hobu
+
+	* trunk/configure.ac: attempt to fix #100 by pulling in libtiff's
+	  header location
+
+2009-03-10 20:17  hobu
+
+	* trunk/apps/lascommon.c, trunk/include/liblas/lassrs.hpp,
+	  trunk/src/las_c_api.cpp, trunk/src/lassrs.cpp: there is no such thing
+	  as a TIFF*, clean up cases for when we don't have libgeotiff
+
+2009-03-09 18:07  hobu
+
+	* trunk/include/liblas/capi/liblas.h, trunk/include/liblas/lassrs.hpp,
+	  trunk/src/las_c_api.cpp, trunk/src/lassrs.cpp: fix #102, add
+	  LASSRS::SetGTIFF
+
+2009-03-08 20:11  hobu
+
+	* trunk/src/las_c_api.cpp: make sure to only free things that exist
+
+2009-03-08 20:10  hobu
+
+	* trunk/include/liblas/capi/liblas.h, trunk/src/las_c_api.cpp: fix
+	  #101, LASString_Free
+
+2009-03-08 20:05  hobu
+
+	* trunk/include/liblas/capi/liblas.h: oops, missing LASSRS_Destroy
+
+2009-03-08 14:37  hobu
+
+	* trunk/apps/lascommon.c: silence const warning
+
+2009-03-08 13:34  hobu
+
+	* trunk/apps/lascommon.c: const qualifier for GTIF*
+
+2009-03-07 19:24  hobu
+
+	* trunk/src/lassrs.cpp, trunk/test/data/1.0_0.las,
+	  trunk/test/data/1.0_1.las, trunk/test/data/1.1_0.las,
+	  trunk/test/data/1.1_1.las, trunk/test/data/1.2_0.las,
+	  trunk/test/data/1.2_1.las, trunk/test/data/1.2_2.las,
+	  trunk/test/data/1.2_3.las: oops we were dumb with ASCII records
+
+2009-03-07 18:43  hobu
+
+	* trunk/apps/lascommon.c: use GTIFPrint if we can to print geotiff
+	  info
+
+2009-03-07 18:39  hobu
+
+	* trunk/src/lassrs.cpp: return an empty string if we have nothing
+
+2009-03-04 19:36  hobu
+
+	* trunk/test/data/make_data.py: add number_of_points parameter
+
+2009-02-26 02:13  hobu
+
+	* trunk/configure.ac, trunk/include/liblas/capi/las_version.h,
+	  trunk/nmake.opt, trunk/python/setup.py: increment versions in
+	  preparation for 1.2.0b1
+
+2009-02-26 02:10  hobu
+
+	* trunk/include/Makefile.am: add 1.2-related headers to dist target
+
+2009-02-26 00:53  mloskot
+
+	* trunk/include/liblas/detail/reader12.hpp,
+	  trunk/include/liblas/detail/writer12.hpp,
+	  trunk/include/liblas/lascolor.hpp, trunk/src/detail/reader12.cpp,
+	  trunk/src/detail/writer12.cpp: Little refactoring and cleanup, no
+	  fixes applied.
+
+2009-02-26 00:36  mloskot
+
+	* trunk/include/liblas/lascolor.hpp, trunk/src/lascolor.cpp: Fixed LAS
+	  version and copyright notice and updated doxygen doc in
+	  lascolor.{hpp|cpp}
+
+2009-02-26 00:24  mloskot
+
+	* trunk/include/liblas/detail/reader12.hpp,
+	  trunk/include/liblas/detail/writer12.hpp,
+	  trunk/src/detail/reader12.cpp, trunk/src/detail/writer12.cpp: Fixed
+	  LAS version and copyright notice in {reader12|writer12}.{hpp|cpp}
+
+2009-02-25 23:57  mloskot
+
+	* trunk/src/detail/reader.cpp, trunk/src/detail/writer.cpp,
+	  trunk/src/lassrs.cpp: Use Zero as nullptr value instead of
+	  'almost-deprecated' NULL macro.
+
+2009-02-25 23:51  mloskot
+
+	* trunk/include/liblas/lassrs.hpp, trunk/src/lassrs.cpp: Little
+	  refactoring of LASRSR class.
+
+2009-02-25 13:02  mloskot
+
+	* trunk/build/msvc90/liblas_lib/liblas_lib.vcproj,
+	  trunk/src/detail/reader.cpp, trunk/src/detail/writer.cpp,
+	  trunk/src/lasheader.cpp, trunk/src/lassrs.cpp: * Updated project
+	  files for Visual C++ 2008.
+	  * Cleaned up some warnings.
+
+2009-02-25 05:41  hobu
+
+	* trunk/src/lassrs.cpp: Fix #98, LASSRS not compiling without geotiff
+	  or GDAL
+
+2009-02-25 05:34  hobu
+
+	* trunk/nmake.opt: support building against a GDAL source tree
+
+2009-02-25 05:33  hobu
+
+	* trunk/src/detail/writer.cpp, trunk/src/lassrs.cpp: clean up some
+	  warnings, add a FIXME for projecting while writing PointRecord,
+	  which needs to be descaled
+
+2009-02-24 04:33  hobu
+
+	* trunk/makefile.vc, trunk/src/makefile.vc: w00t! windows building.
+
+2009-02-23 23:52  hobu
+
+	* trunk/configure.ac: support building against a GDAL source tree
+
+2009-02-23 20:04  hobu
+
+	* trunk/configure.ac: add configure logic to use gdal source tree --
+	  not quite done yet
+
+2009-02-21 03:11  hobu
+
+	* trunk/include/liblas/lassrs.hpp, trunk/python/tests/Header.txt,
+	  trunk/python/tests/SRS.txt, trunk/src/las_c_api.cpp,
+	  trunk/src/lasheader.cpp, trunk/src/lassrs.cpp: make ResetVLRs
+	  private, clean up SetGeoreference
+
+2009-02-21 03:11  hobu
+
+	* trunk/test/data/1.0_0.las, trunk/test/data/1.0_1.las,
+	  trunk/test/data/1.1_0.las, trunk/test/data/1.1_1.las,
+	  trunk/test/data/1.2_0.las, trunk/test/data/1.2_1.las,
+	  trunk/test/data/1.2_2.las, trunk/test/data/1.2_3.las,
+	  trunk/test/data/make_data.py: latest version of test data with srs
+	  and guids
+
+2009-02-21 03:06  hobu
+
+	* trunk/test/data/make_data.py: use a srs object now that
+	  header.proj4 is gone
+
+2009-02-21 02:52  hobu
+
+	* trunk/python/liblas/header.py, trunk/python/tests/File.txt,
+	  trunk/python/tests/Header.txt, trunk/python/tests/VLR.txt: fix up
+	  tests
+
+2009-02-20 22:54  hobu
+
+	* trunk/src/lassrs.cpp: oops, we're broken right now
+
+2009-02-20 22:44  hobu
+
+	* trunk/apps/lascommon.c, trunk/include/liblas/capi/liblas.h,
+	  trunk/include/liblas/lasheader.hpp, trunk/python/liblas/core.py,
+	  trunk/python/liblas/header.py, trunk/python/tests/Header.txt,
+	  trunk/src/detail/reader.cpp, trunk/src/las_c_api.cpp,
+	  trunk/src/lasheader.cpp: remove LASHeader::[G|S]etProj4 #97
+
+2009-02-20 22:36  hobu
+
+	* trunk/python/tests/Header.txt, trunk/python/tests/VLR.txt: update
+	  python tests to reflect current oprations
+
+2009-02-20 21:49  hobu
+
+	* trunk/include/liblas/capi/liblas.h, trunk/include/liblas/liblas.hpp,
+	  trunk/python/liblas/__init__.py, trunk/python/liblas/core.py,
+	  trunk/python/tests/VLR.txt, trunk/src/las_c_api.cpp: add the ability
+	  to check for HAVE_GDAL and HAVE_LIBGEOTIFF at runtime
+
+2009-02-20 19:42  hobu
+
+	* trunk/src/lassrs.cpp: we should fetch the m_gtiff on Set* methods
+	  to create it
+
+2009-02-20 19:14  hobu
+
+	* trunk/include/liblas/detail/reader.hpp,
+	  trunk/include/liblas/detail/writer.hpp,
+	  trunk/include/liblas/lasreader.hpp,
+	  trunk/include/liblas/laswriter.hpp, trunk/src/detail/reader.cpp,
+	  trunk/src/detail/writer.cpp, trunk/src/lasreader.cpp,
+	  trunk/src/laswriter.cpp: add the ability to have Reader/Writer
+	  project on the way out #93
+
+2009-02-20 05:43  hobu
+
+	* trunk/include/liblas/capi/liblas.h, trunk/python/liblas/__init__.py,
+	  trunk/python/liblas/core.py, trunk/python/liblas/header.py,
+	  trunk/python/liblas/srs.py, trunk/python/tests/Header.txt,
+	  trunk/python/tests/SRS.txt, trunk/src/las_c_api.cpp: start on Python
+	  API for SRS
+
+2009-02-20 04:19  hobu
+
+	* trunk/include/liblas/capi/liblas.h, trunk/include/liblas/lassrs.hpp,
+	  trunk/src/las_c_api.cpp, trunk/src/lassrs.cpp: C API for LASSRS
+
+2009-02-19 19:34  hobu
+
+	* trunk/include/liblas/lassrs.hpp, trunk/src/Makefile.am,
+	  trunk/src/gt_wkt_srs.cpp, trunk/src/lassrs.cpp: move the GDAL code
+	  into its own file so it can easily be swapped in and out
+
+2009-02-19 19:20  hobu
+
+	* trunk/test/data/1.0_0.las, trunk/test/data/1.0_1.las,
+	  trunk/test/data/1.1_0.las, trunk/test/data/1.1_1.las,
+	  trunk/test/data/1.2_0.las, trunk/test/data/1.2_1.las,
+	  trunk/test/data/1.2_2.las, trunk/test/data/1.2_3.las,
+	  trunk/test/data/make_data.py: use correct SRS description and
+	  points for the test data
+
+2009-02-19 19:08  hobu
+
+	* trunk/apps/lascommon.c: don't leak a LASColorH
+
+2009-02-19 19:04  hobu
+
+	* trunk/apps/lascommon.c: don't leak a LASColorH
+
+2009-02-19 19:02  hobu
+
+	* trunk/src/lassrs.cpp: don't leak, better error checking
+
+2009-02-19 05:27  hobu
+
+	* trunk/test/data/1.0_0.las, trunk/test/data/1.0_1.las,
+	  trunk/test/data/1.1_0.las, trunk/test/data/1.1_1.las,
+	  trunk/test/data/1.2_0.las, trunk/test/data/1.2_1.las,
+	  trunk/test/data/1.2_2.las, trunk/test/data/1.2_3.las,
+	  trunk/test/data/make_data.py: make files more rigorous
+
+2009-02-19 04:17  hobu
+
+	* trunk/src/lasheader.cpp, trunk/src/lassrs.cpp,
+	  trunk/test/data/1.0_0.las, trunk/test/data/1.0_1.las,
+	  trunk/test/data/1.1_0.las, trunk/test/data/1.1_1.las,
+	  trunk/test/data/1.2_0.las, trunk/test/data/1.2_1.las,
+	  trunk/test/data/1.2_2.las, trunk/test/data/1.2_3.las: fix up SRS
+	  handling of ASCII keys. libgeotiff's simple keys stuff was at
+	  fault
+
+2009-02-18 15:29  hobu
+
+	* trunk/src/detail/reader.cpp, trunk/src/lasheader.cpp,
+	  trunk/src/lassrs.cpp, trunk/test/data/1.0_0.las,
+	  trunk/test/data/1.0_1.las, trunk/test/data/1.1_0.las,
+	  trunk/test/data/1.1_1.las, trunk/test/data/1.2_0.las,
+	  trunk/test/data/1.2_1.las, trunk/test/data/1.2_2.las,
+	  trunk/test/data/1.2_3.las, trunk/test/data/make_data.py: a bunch of
+	  debugging lint to fix not supporting geotiff ASCII records
+
+2009-02-17 22:35  hobu
+
+	* trunk/test/data/1.0_0.las, trunk/test/data/1.0_1.las,
+	  trunk/test/data/1.1_0.las, trunk/test/data/1.1_1.las,
+	  trunk/test/data/1.2_0.las, trunk/test/data/1.2_1.las,
+	  trunk/test/data/1.2_2.las, trunk/test/data/1.2_3.las,
+	  trunk/test/data/make_data.py: add test data array
+
+2009-02-17 21:00  hobu
+
+	* trunk/python/tests/Header.txt: update test for 1.2 being default
+
+2009-02-17 21:00  hobu
+
+	* trunk/src/lassrs.cpp: support libgeotiff-only setting of proj4
+
+2009-02-17 20:26  hobu
+
+	* trunk/configure.ac: apply Doug's patch for #66
+
+2009-02-17 19:19  hobu
+
+	* trunk/include/liblas/lassrs.hpp, trunk/src/lassrs.cpp: allow building
+	  without libgeotiff or GDAL
+
+2009-02-17 18:55  hobu
+
+	* trunk/test/unit/common.cpp, trunk/test/unit/laswriter_test.cpp:
+	  update tests to reflect that 1.2 is now the default version
+
+2009-02-17 18:48  hobu
+
+	* trunk/test/data/make_data.py: add make_data script
+
+2009-02-17 17:57  hobu
+
+	* trunk/include/liblas/lassrs.hpp: docs for LASSRS
+
+2009-02-17 17:56  hobu
+
+	* trunk/src/lassrs.cpp: remember to clear the vlrs when doing a Reset
+
+2009-02-17 07:02  hobu
+
+	* trunk/python/liblas/color.py, trunk/python/liblas/header.py,
+	  trunk/src/lasheader.cpp: default to using 1.2 for LASHeader and fix
+	  SetVersionMinor interaction with the data offset that likely
+	  prevented us from ever correctly writing 1.0 data
+
+2009-02-17 05:21  hobu
+
+	* trunk/include/liblas/lassrs.hpp: don't include private geotiff
+	  stuff
+
+2009-02-17 04:49  hobu
+
+	* trunk/CMakeLists.txt, trunk/src/CMakeLists.txt: update cmake a bit.
+	  We need to be able to set GDAL though
+
+2009-02-17 04:13  hobu
+
+	* trunk/python/tests/VLR.txt, trunk/src/detail/reader.cpp,
+	  trunk/src/lasheader.cpp, trunk/src/lassrs.cpp: fix up so tests can
+	  pass
+
+2009-02-17 02:51  hobu
+
+	* trunk/test/unit/Makefile.am: add geotiff and gdal info to test
+	  automake stuff
+
+2009-02-17 02:40  hobu
+
+	* trunk/configure.ac: fix #96, check for ST_Create in libgeotiff
+	  instead of XTIFFClientOpen
+
+2009-02-17 02:33  hobu
+
+	* trunk/include/Makefile.am: fix #95, nobase option for include files
+
+2009-02-17 02:32  hobu
+
+	* trunk/configure.ac, trunk/include/liblas/capi/las_version.h,
+	  trunk/nmake.opt, trunk/python/setup.py: increment versions to 1.2
+	  which is where we will be at the next release
+
+2009-02-16 20:34  hobu
+
+	* trunk/include/liblas/lassrs.hpp, trunk/src/lasheader.cpp,
+	  trunk/src/lassrs.cpp: oh, it seems to work now :)
+
+2009-02-16 18:50  hobu
+
+	* trunk/include/liblas/lasheader.hpp, trunk/include/liblas/lassrs.hpp,
+	  trunk/src/lasheader.cpp, trunk/src/lassrs.cpp: more updates to
+	  LASSRS. Still broken, but improving :)
+
+2009-02-16 05:40  hobu
+
+	* trunk/include/liblas/detail/utility.hpp,
+	  trunk/include/liblas/lassrs.hpp, trunk/src/detail/reader.cpp,
+	  trunk/src/lassrs.cpp: some improvement on srs stuff
+
+2009-02-16 04:19  hobu
+
+	* trunk/include/liblas/detail/utility.hpp,
+	  trunk/include/liblas/lasheader.hpp, trunk/include/liblas/lassrs.hpp,
+	  trunk/src/detail/reader.cpp, trunk/src/lasheader.cpp,
+	  trunk/src/lassrs.cpp: more SRS stuff, quite broken right now unless
+	  you link GDAL in
+
+2009-02-14 03:07  hobu
+
+	* trunk/Makefile.am, trunk/apps/Makefile.am, trunk/include/Makefile.am,
+	  trunk/include/liblas/lassrs.hpp: more LASSRS stuff
+
+2009-02-14 02:47  hobu
+
+	* trunk/src/lassrs.cpp: more LASSRS stuff, pull in GDAL's code
+
+2009-02-13 03:12  hobu
+
+	* trunk/include/liblas/detail/fwd.hpp,
+	  trunk/include/liblas/lasheader.hpp, trunk/include/liblas/lassrs.hpp,
+	  trunk/src/Makefile.am, trunk/src/lassrs.cpp: LASSRS skeleton
+
+2009-02-12 04:23  hobu
+
+	* trunk/src/Makefile.am: GDAL define support for src/
+
+2009-02-11 19:31  hobu
+
+	* trunk/include/liblas/detail/reader.hpp,
+	  trunk/include/liblas/detail/reader10.hpp,
+	  trunk/include/liblas/detail/reader11.hpp,
+	  trunk/include/liblas/detail/reader12.hpp,
+	  trunk/include/liblas/detail/writer.hpp,
+	  trunk/include/liblas/detail/writer10.hpp,
+	  trunk/include/liblas/detail/writer11.hpp,
+	  trunk/include/liblas/detail/writer12.hpp,
+	  trunk/src/detail/reader.cpp, trunk/src/detail/reader10.cpp,
+	  trunk/src/detail/reader11.cpp, trunk/src/detail/reader12.cpp,
+	  trunk/src/detail/writer.cpp, trunk/src/detail/writer10.cpp,
+	  trunk/src/detail/writer11.cpp, trunk/src/detail/writer12.cpp:
+	  reorganize reader and writer Impl to put redundant VLR-related
+	  operations in the Reader:: and Writer:: abstract classes instead
+	  of each Impl
+
+2009-02-11 19:18  hobu
+
+	* trunk/apps/lascommon.c, trunk/include/liblas/capi/liblas.h: report
+	  min/max colors as part of a summary
+
+2009-02-11 15:55  hobu
+
+	* trunk/include/liblas/detail/reader.hpp,
+	  trunk/include/liblas/detail/reader10.hpp,
+	  trunk/include/liblas/detail/reader11.hpp,
+	  trunk/include/liblas/detail/reader12.hpp,
+	  trunk/include/liblas/detail/writer.hpp, trunk/src/detail/reader.cpp,
+	  trunk/src/detail/reader10.cpp, trunk/src/detail/reader11.cpp,
+	  trunk/src/detail/reader12.cpp: remove redundant GetStream and move
+	  istream into abstract Reader:: class
+
+2009-02-11 15:49  hobu
+
+	* trunk/include/liblas/detail/writer.hpp,
+	  trunk/include/liblas/detail/writer10.hpp,
+	  trunk/include/liblas/detail/writer11.hpp,
+	  trunk/include/liblas/detail/writer12.hpp,
+	  trunk/src/detail/writer.cpp, trunk/src/detail/writer10.cpp,
+	  trunk/src/detail/writer11.cpp, trunk/src/detail/writer12.cpp: remove
+	  redundant GetStream and move ostream into abstract Writer:: class
+
+2009-02-11 04:34  hobu
+
+	* trunk/apps/las2las.c: allow las2las to write 1.2 format
+
+2009-02-11 04:33  hobu
+
+	* trunk/src/detail/writer.cpp, trunk/src/detail/writer12.cpp,
+	  trunk/src/laswriter.cpp: actually support writing 1.2 now that
+	  coding is done
+
+2009-02-11 04:24  hobu
+
+	* trunk/include/liblas/detail/writer.hpp, trunk/src/detail/writer.cpp,
+	  trunk/src/detail/writer10.cpp, trunk/src/detail/writer11.cpp,
+	  trunk/src/detail/writer12.cpp: we have to descale the points as we
+	  write them
+
+2009-02-11 03:56  hobu
+
+	* trunk/include/liblas/detail/writer.hpp,
+	  trunk/include/liblas/detail/writer10.hpp,
+	  trunk/include/liblas/detail/writer11.hpp,
+	  trunk/include/liblas/detail/writer12.hpp,
+	  trunk/src/detail/reader12.cpp, trunk/src/detail/writer.cpp,
+	  trunk/src/detail/writer10.cpp, trunk/src/detail/writer11.cpp,
+	  trunk/src/detail/writer12.cpp, trunk/src/laswriter.cpp: 1.2 LASWriter
+	  support
+
+2009-02-10 20:46  hobu
+
+	* trunk/include/liblas/capi/liblas.h, trunk/python/liblas/color.py,
+	  trunk/python/liblas/core.py, trunk/python/liblas/point.py,
+	  trunk/python/tests/Point.txt, trunk/src/las_c_api.cpp: color
+	  implementation for C API and Python API
+
+2009-02-10 20:15  hobu
+
+	* trunk/include/liblas/detail/fwd.hpp,
+	  trunk/include/liblas/detail/utility.hpp,
+	  trunk/include/liblas/lascolor.hpp, trunk/include/liblas/laspoint.hpp,
+	  trunk/include/liblas/lasreader.hpp, trunk/src/Makefile.am,
+	  trunk/src/detail/reader10.cpp, trunk/src/detail/reader11.cpp,
+	  trunk/src/detail/reader12.cpp, trunk/src/lascolor.cpp,
+	  trunk/src/laspoint.cpp: rework to use public LASColor class, 1.2
+	  reading now works
+
+2009-02-10 16:26  hobu
+
+	* trunk/src/detail/reader10.cpp, trunk/src/detail/reader12.cpp,
+	  trunk/src/lasreader.cpp: clean up commented out code
+
+2009-02-10 15:54  hobu
+
+	* trunk/include/liblas/detail/reader.hpp: make FillPoint protected
+	  instead of public
+
+2009-02-10 03:34  hobu
+
+	* trunk/include/liblas/detail/fwd.hpp,
+	  trunk/include/liblas/detail/reader.hpp,
+	  trunk/include/liblas/detail/reader10.hpp,
+	  trunk/include/liblas/detail/reader11.hpp,
+	  trunk/include/liblas/detail/reader12.hpp,
+	  trunk/include/liblas/detail/utility.hpp,
+	  trunk/include/liblas/laspoint.hpp,
+	  trunk/include/liblas/lasreader.hpp, trunk/python/tests/File.txt,
+	  trunk/src/detail/reader.cpp, trunk/src/detail/reader10.cpp,
+	  trunk/src/detail/reader11.cpp, trunk/src/detail/reader12.cpp,
+	  trunk/src/laspoint.cpp, trunk/src/lasreader.cpp: reorganize
+	  LASReader. Tests (cppUnit and Python) all still pass
+
+2009-02-09 01:47  hobu
+
+	* trunk/include/liblas/detail/reader12.hpp,
+	  trunk/include/liblas/detail/writer12.hpp,
+	  trunk/include/liblas/lasheader.hpp, trunk/include/liblas/liblas.hpp,
+	  trunk/src/Makefile.am, trunk/src/detail/reader.cpp,
+	  trunk/src/detail/reader11.cpp, trunk/src/detail/reader12.cpp,
+	  trunk/src/detail/writer12.cpp, trunk/src/lasheader.cpp,
+	  trunk/src/laspoint.cpp, trunk/src/lasreader.cpp: start in on 1.2 read
+	  support. Tests pass, but 1.2 reading is not working yet
+
+2009-02-06 03:01  hobu
+
+	* trunk/python/liblas/__init__.py, trunk/python/liblas/core.py: re-fix
+	  #89 liblas.version
+
+2009-02-05 02:59  hobu
+
+	* trunk/include/liblas/laspoint.hpp: add Red, Green, and Blue to
+	  LASPoint for 1.2 support #91
+
+2009-02-05 02:48  hobu
+
+	* trunk/include/liblas/lasheader.hpp,
+	  trunk/test/unit/lasheader_test.cpp: increment max VersionMinor to 2
+	  for 1.2 support #91
+
+2009-02-05 02:43  hobu
+
+	* trunk/include/liblas/lasheader.hpp: increment the point formats and
+	  point sizes for LAS 1.2 #91
+
+2009-02-04 03:31  hobu
+
+	* trunk/README: add a link to the 1.2 specification
+
+2009-02-04 03:26  hobu
+
+	* trunk/build/xcode, trunk/build/xcode/xcode.xcodeproj/hobu.mode1v3,
+	  trunk/build/xcode/xcode.xcodeproj/hobu.pbxuser,
+	  trunk/build/xcode/xcode.xcodeproj/project.pbxproj: xcode projects
+
+2009-02-03 16:08  mloskot
+
+	* trunk/include/liblas/laspoint.hpp,
+	  trunk/include/liblas/lasreader.hpp: * Documented libLAS-specific
+	  elements of LASPoint class (no need to repeat LAS specification).
+
+2009-02-03 15:40  mloskot
+
+	* trunk/build/msvc90/liblas.sln, trunk/include/liblas/laspoint.hpp,
+	  trunk/src/detail/reader11.cpp, trunk/test/unit/laswriter_test.cpp: *
+	  Updated LASWriter test with checks of get/set methods for Point
+	  Source ID attribute.
+	  * Removed unused <iostream> from laspoint.hpp.
+	  * Include missing <iostream> in reader11.cpp, std::cerr object is
+	  used.
+	  * build/msvc90 project updated.
+
+2009-02-03 15:21  hobu
+
+	* trunk/include/liblas/lasreader.hpp, trunk/src/lasreader.cpp: fix up
+	  creation of a local m_pimpl that was masking the LASReader's
+
+2009-02-03 14:59  mloskot
+
+	* trunk/include/liblas/detail/utility.hpp,
+	  trunk/include/liblas/laspoint.hpp, trunk/src/laspoint.cpp,
+	  trunk/src/lasreader.cpp, trunk/src/laswriter.cpp,
+	  trunk/test/unit/common.cpp: Fixed #87 - implemented support for
+	  reading/writing "Point Source ID" - attribute of point record
+	  defined in LAS 1.0.
+	  The new LASPoint accessors operating on Point Source ID play dual
+	  role, for LAS 1.0 they get/set User Bit Field but for LAS 1.1 -
+	  Point Source ID.
+
+2009-02-03 14:50  mloskot
+
+	* trunk/test/sample/utility.hpp: Added print_point() function to
+	  sample/utility.hpp header.
+
+2009-02-03 14:48  mloskot
+
+	* trunk/build/msvc90: Updated svn:ignore property for build/msvc90.
+
+2009-02-03 05:32  hobu
+
+	* trunk/include/liblas/lasreader.hpp, trunk/src/lasreader.cpp: an
+	  attempt at a Reset() and IsEOF() functions #85
+
+2009-01-01 02:56  hobu
+
+	* trunk/build/xcode, trunk/build/xcode/xcode.xcodeproj,
+	  trunk/build/xcode/xcode.xcodeproj/hobu.mode1v3,
+	  trunk/build/xcode/xcode.xcodeproj/hobu.pbxuser,
+	  trunk/build/xcode/xcode.xcodeproj/project.pbxproj: add xcode
+	  project
+
+2008-12-31 04:50  hobu
+
+	* trunk/apps: ignore liblas-config
+
+2008-12-26 05:39  hobu
+
+	* trunk/apps/las2txt.c: add index parse option to las2txt #86
+
+2008-12-26 05:31  hobu
+
+	* trunk/test/unit/lasreader_iterator_test.cpp: fix test to use
+	  qualified type names
+
+2008-12-26 05:21  hobu
+
+	* trunk/configure.ac, trunk/include/liblas/capi/las_version.h,
+	  trunk/python/setup.py: bump minor version so we're now 1.1 in trtrunk
+
+2008-12-26 05:21  hobu
+
+	* trunk/nmake.opt: change to *nix line ending mode
+
+2008-12-26 05:16  hobu
+
+	* trunk/apps/Makefile.am, trunk/apps/liblas-config.in,
+	  trunk/configure.ac: add a liblas-config script #88
+
+2008-12-26 04:00  hobu
+
+	* trunk/python/liblas/core.py: no lint
+
+2008-12-26 03:59  hobu
+
+	* trunk/python/liblas/core.py: make sure to free heap allocated
+	  strings that were given to us by the C API
+
+2008-12-25 05:38  hobu
+
+	* trunk/python/liblas/core.py: fix #89, broken liblas.version
+
+2008-12-15 15:12  mloskot
+
+	* trunk/src/detail/reader10.cpp, trunk/src/detail/reader11.cpp: Unified
+	  type of count value passed to ST_SetKey/ST_GetKey of libgeotiff
+	  API
+
+2008-12-10 16:05  mloskot
+
+	* trunk/build/msvc90, trunk/build/msvc90/clean.bat,
+	  trunk/build/msvc90/las2las,
+	  trunk/build/msvc90/las2las/las2las.vcproj,
+	  trunk/build/msvc90/las2ogr,
+	  trunk/build/msvc90/las2ogr/las2ogr.vcproj,
+	  trunk/build/msvc90/las2ogr/las2ogr.vsprops,
+	  trunk/build/msvc90/las2txt,
+	  trunk/build/msvc90/las2txt/las2txt.vcproj,
+	  trunk/build/msvc90/lasdiff,
+	  trunk/build/msvc90/lasdiff/lasdiff.vcproj,
+	  trunk/build/msvc90/lasinfo,
+	  trunk/build/msvc90/lasinfo/lasinfo.vcproj,
+	  trunk/build/msvc90/lasmerge,
+	  trunk/build/msvc90/lasmerge/lasmerge.vcproj,
+	  trunk/build/msvc90/liblas.sln, trunk/build/msvc90/liblas.vsprops,
+	  trunk/build/msvc90/liblas_c_dll,
+	  trunk/build/msvc90/liblas_c_dll/liblas_c_dll.vcproj,
+	  trunk/build/msvc90/liblas_dll,
+	  trunk/build/msvc90/liblas_dll/liblas_dll.vcproj,
+	  trunk/build/msvc90/liblas_lib,
+	  trunk/build/msvc90/liblas_lib/liblas_lib.vcproj,
+	  trunk/build/msvc90/liblas_test,
+	  trunk/build/msvc90/liblas_test/liblas_test.vcproj,
+	  trunk/build/msvc90/txt2las,
+	  trunk/build/msvc90/txt2las/txt2las.vcproj: Added solution &
+	  projects for Visual Studio 9.0
+
+2008-11-13 22:02  hobu
+
+	* trunk/README: dummy
+
+2008-11-13 21:59  hobu
+
+	* trunk/README: dummy
+
+2008-11-13 21:58  hobu
+
+	* trunk/README: dummy
+
+2008-11-13 21:50  hobu
+
+	* trunk/README: point to new maillist
+
+2008-11-09 12:41  mloskot
+
+	* trunk/test/unit/lasreader_iterator_test.cpp:
+	  lasreader_iterator_test.cpp: refactored to remove redundant code
+	  and reuse common test group data.
+
+2008-11-06 16:18  mloskot
+
+	* trunk/test/unit/common.hpp,
+	  trunk/test/unit/lasreader_iterator_test.cpp:
+	  lasreader_iterator_test.cpp: added test cases for number of
+	  standard algorithms: copy, count, equal, find, find_if, for_each.
+
+2008-11-06 15:51  mloskot
+
+	* trunk/test/unit/common.hpp: test/unit/common.hpp: Added is_xy
+	  predicated and bbox_calculator functor, both used in unit tests.
+
+2008-11-06 15:48  mloskot
+
+	* trunk/src/laspoint.cpp: liblas::LASPoint: fixed incorrect
+	  logical-or where logical-and is expected (Ticket #84).
+
+2008-11-06 15:42  mloskot
+
+	* trunk/include/liblas/detail/utility.hpp: liblas::detail::Point:
+	  improved equal-to operation for Point<T> class.
+
+2008-11-05 20:41  mloskot
+
+	* trunk/build/msvc80/liblas_test/liblas_test.vcproj: Updated Visual
+	  C++ project file liblas_test.vcproj.
+
+2008-11-05 20:38  mloskot
+
+	* trunk/test/unit/CMakeLists.txt, trunk/test/unit/Makefile.am,
+	  trunk/test/unit/lasreader_iterator_test.cpp: Added unit test of
+	  liblas::lasreader_iterator class.
+
+2008-11-05 20:33  mloskot
+
+	* trunk/test/unit/common.cpp, trunk/test/unit/common.hpp,
+	  trunk/test/unit/lasreader_test.cpp: Move common test routines from
+	  lasreader_test.cpp to common.hpp|.cpp
+
+2008-11-05 19:17  mloskot
+
+	* trunk/README: REAME: reordered utilities
+
+2008-10-30 08:35  mloskot
+
+	* trunk/include/liblas/capi/liblas.h,
+	  trunk/include/liblas/lasheader.hpp,
+	  trunk/include/liblas/laspoint.hpp,
+	  trunk/include/liblas/lasreader.hpp,
+	  trunk/include/liblas/laswriter.hpp, trunk/src/lasreader.cpp,
+	  trunk/src/laswriter.cpp: Expose TODO entries in .c and .cpp files
+	  from doxygen comments in headers, to not to forget about them.
+
+2008-10-29 11:15  mloskot
+
+	* trunk/doc/las2ogr.txt: doc/las2ogr.txt: Updated svn:mine-type,
+	  svn:eol-style and svn:keywords.
+
+2008-10-29 11:12  mloskot
+
+	* trunk/doc/las2ogr.txt: Set svn:keywords on las2ogr.txt
+
+2008-10-29 11:09  mloskot
+
+	* trunk/README, trunk/doc/las2ogr.txt: Added doc/las2ogr.txt file.
+	  Linked las2ogr.txt from main README.
+
+2008-10-29 10:54  mloskot
+
+	* trunk/apps/makefile.vc: apps/makefile.vc: remove .ilk and .pdb
+	  files from clean target.
+
+2008-10-14 02:18  hobu
+
+	* trunk/python/liblas/point.py, trunk/python/tests/File.txt,
+	  trunk/python/tests/Header.txt, trunk/python/tests/Point.txt: more
+	  fixups related to #83.. ensure we use GMT and fix microseconds
+	  overflow
+
