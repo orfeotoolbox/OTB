@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbCenteredReducedSampleListFilter_h
-#define __otbCenteredReducedSampleListFilter_h
+#ifndef __otbShiftsScaleSampleListFilter_h
+#define __otbShiftsScaleSampleListFilter_h
 
 #include "itkProcessObject.h"
 #include "itkDataObject.h"
@@ -25,26 +25,26 @@
 namespace otb {
 namespace Statistics {
 
-/** \class CenteredReducedSampleListFilter
+/** \class ShiftsScaleSampleListFilter
  *  \brief This class generate a centered and reduced sample list from and input sample list.
  *
- *	Mean and variance can be set via the SetMeans() and SetVariances() methods.
+ *	Mean and variance can be set via the SetShifts() and SetScales() methods.
  *
  * \sa ImageToListAdaptor
  */
 template < class TInputSampleList, class TOutputSampleList = TInputSampleList >
-class ITK_EXPORT CenteredReducedSampleListFilter :
+class ITK_EXPORT ShiftsScaleSampleListFilter :
   public itk::ProcessObject
 {
 public:
   /** Standard class typedefs */
-  typedef CenteredReducedSampleListFilter            Self;
+  typedef ShiftsScaleSampleListFilter            Self;
   typedef itk::ProcessObject                         Superclass;
   typedef itk::SmartPointer< Self >                  Pointer;
   typedef itk::SmartPointer<const Self>              ConstPointer;
   
   /** Run-time type information (and related methods). */
-  itkTypeMacro(CenteredReducedSampleListFilter,itk::ProcessObject);
+  itkTypeMacro(ShiftsScaleSampleListFilter,itk::ProcessObject);
   
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -70,13 +70,13 @@ public:
   typedef itk::DataObjectDecorator< InputSampleListType >      InputSampleListObjectType;
   typedef itk::DataObjectDecorator< OutputSampleListType >     OutputSampleListObjectType;
 
-  /** Set/Get the means for this sample list */
-  itkSetMacro(Means,InputMeasurementVectorType);
-  itkGetMacro(Means,InputMeasurementVectorType);
+  /** Set/Get the Shifts for this sample list */
+  itkSetMacro(Shifts,InputMeasurementVectorType);
+  itkGetMacro(Shifts,InputMeasurementVectorType);
 
-  /** Set/Get the variances for this sample list */
-  itkSetMacro(Variances,InputMeasurementVectorType);
-  itkGetMacro(Variances,InputMeasurementVectorType);
+  /** Set/Get the Scales for this sample list */
+  itkSetMacro(Scales,InputMeasurementVectorType);
+  itkGetMacro(Scales,InputMeasurementVectorType);
 
   /** Method to set/get the input list sample */
   void SetInput( const InputSampleListType * inputPtr );
@@ -102,19 +102,19 @@ protected:
    /** Standard itk::ProcessObject subclass method. */
    virtual DataObjectPointer MakeOutput(unsigned int idx);
 
-  CenteredReducedSampleListFilter();
-  virtual ~CenteredReducedSampleListFilter() {}
+  ShiftsScaleSampleListFilter();
+  virtual ~ShiftsScaleSampleListFilter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  CenteredReducedSampleListFilter(const Self&); //purposely not implemented
+  ShiftsScaleSampleListFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  /** The vector of means */
-  InputMeasurementVectorType m_Means;
+  /** The vector of Shifts */
+  InputMeasurementVectorType m_Shifts;
 
-  /** The vector of variances */
-  InputMeasurementVectorType m_Variances;
+  /** The vector of Scales */
+  InputMeasurementVectorType m_Scales;
 
 }; // end of class ImageToListGenerator
 
@@ -122,7 +122,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbCenteredReducedSampleListFilter.txx"
+#include "otbShiftsScaleSampleListFilter.txx"
 #endif
 
 #endif

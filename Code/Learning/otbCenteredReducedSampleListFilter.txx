@@ -15,17 +15,18 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbCenteredReducedSampleListFilter_txx
-#define __otbCenteredReducedSampleListFilter_txx
+#ifndef __otbShiftScaleSampleListFilter_txx
+#define __otbShiftScaleSampleListFilter_txx
 
-#include "otbCenteredReducedSampleListFilter.h"
+#include "otbShiftScaleSampleListFilter.h"
+#include "itkProgressReporter.h"
 
 namespace otb {
 namespace Statistics {
 
 template < class TInputSampleList, class TOutputSampleList >
-CenteredReducedSampleListFilter<TInputSampleList,TOutputSampleList>
-::CenteredReducedSampleListFilter()
+ShiftScaleSampleListFilter<TInputSampleList,TOutputSampleList>
+::ShiftScaleSampleListFilter()
  {
 	this->SetNumberOfRequiredInputs(1);
 	this->SetNumberOfRequiredOutputs(1);
@@ -37,9 +38,9 @@ CenteredReducedSampleListFilter<TInputSampleList,TOutputSampleList>
  }
 
 template < class TInputSampleList, class TOutputSampleList >
-typename CenteredReducedSampleListFilter<TInputSampleList,TOutputSampleList>
+typename ShiftScaleSampleListFilter<TInputSampleList,TOutputSampleList>
 ::DataObjectPointer
- CenteredReducedSampleListFilter<TInputSampleList,TOutputSampleList>
+ ShiftScaleSampleListFilter<TInputSampleList,TOutputSampleList>
 ::MakeOutput(unsigned int itkNotUsed(idx))
  {
 	typename OutputSampleListObjectType::Pointer outputPtr = OutputSampleListObjectType::New();
@@ -50,7 +51,7 @@ typename CenteredReducedSampleListFilter<TInputSampleList,TOutputSampleList>
 
 template < class TInputSampleList, class TOutputSampleList >
 void
-CenteredReducedSampleListFilter<TInputSampleList,TOutputSampleList>
+ShiftScaleSampleListFilter<TInputSampleList,TOutputSampleList>
 ::SetInput( const InputSampleListType * input )
  {
 	typename InputSampleListObjectType::Pointer inputPtr = InputSampleListObjectType::New();
@@ -61,7 +62,7 @@ CenteredReducedSampleListFilter<TInputSampleList,TOutputSampleList>
 
 template < class TInputSampleList, class TOutputSampleList >
 void
-CenteredReducedSampleListFilter<TInputSampleList,TOutputSampleList>
+ShiftScaleSampleListFilter<TInputSampleList,TOutputSampleList>
 ::SetInput( const InputSampleListObjectType * inputPtr )
  {
 	// Process object is not const-correct so the const_cast is required here
@@ -70,9 +71,9 @@ CenteredReducedSampleListFilter<TInputSampleList,TOutputSampleList>
  }
 
 template < class TInputSampleList, class TOutputSampleList >
-const typename CenteredReducedSampleListFilter<TInputSampleList,TOutputSampleList>
+const typename ShiftScaleSampleListFilter<TInputSampleList,TOutputSampleList>
 ::InputSampleListObjectType *
-CenteredReducedSampleListFilter<TInputSampleList,TOutputSampleList>
+ShiftScaleSampleListFilter<TInputSampleList,TOutputSampleList>
 ::GetInput() const
  {
 	if (this->GetNumberOfInputs() < 1)
@@ -85,9 +86,9 @@ CenteredReducedSampleListFilter<TInputSampleList,TOutputSampleList>
  }
 
 template < class TInputSampleList, class TOutputSampleList >
-const typename CenteredReducedSampleListFilter<TInputSampleList,TOutputSampleList>
+const typename ShiftScaleSampleListFilter<TInputSampleList,TOutputSampleList>
 ::InputSampleListType *
-CenteredReducedSampleListFilter<TInputSampleList,TOutputSampleList>
+ShiftScaleSampleListFilter<TInputSampleList,TOutputSampleList>
 ::GetInputSampleList() const
  {
 	if (this->GetNumberOfInputs() < 1)
@@ -101,9 +102,9 @@ CenteredReducedSampleListFilter<TInputSampleList,TOutputSampleList>
  }
 
 template < class TInputSampleList, class TOutputSampleList >
-typename CenteredReducedSampleListFilter<TInputSampleList,TOutputSampleList>
+typename ShiftScaleSampleListFilter<TInputSampleList,TOutputSampleList>
 ::OutputSampleListType *
-CenteredReducedSampleListFilter<TInputSampleList,TOutputSampleList>
+ShiftScaleSampleListFilter<TInputSampleList,TOutputSampleList>
 ::GetOutputSampleList()
  {
 	typename OutputSampleListObjectType::Pointer dataObjectPointer = static_cast<OutputSampleListObjectType * >
@@ -112,9 +113,9 @@ CenteredReducedSampleListFilter<TInputSampleList,TOutputSampleList>
  }
 
 template < class TInputSampleList, class TOutputSampleList >
-typename CenteredReducedSampleListFilter<TInputSampleList,TOutputSampleList>
+typename ShiftScaleSampleListFilter<TInputSampleList,TOutputSampleList>
 ::OutputSampleListObjectType *
-CenteredReducedSampleListFilter<TInputSampleList,TOutputSampleList>
+ShiftScaleSampleListFilter<TInputSampleList,TOutputSampleList>
 ::GetOutput()
  {
 	return static_cast<OutputSampleListObjectType * >
@@ -123,15 +124,63 @@ CenteredReducedSampleListFilter<TInputSampleList,TOutputSampleList>
 
 template < class TInputSampleList, class TOutputSampleList >
 void
-CenteredReducedSampleListFilter<TInputSampleList,TOutputSampleList>
+ShiftScaleSampleListFilter<TInputSampleList,TOutputSampleList>
 ::GenerateData()
  {
+	// Retrieve input and output pointers
+	typename InputSampleListObjectType::ConstPointer inputPtr = this->GetInput();
+	typename OutputSampleListObjectType::Pointer     outputPtr = this->GetOutput();
+
+	// Retrieve the ListSample
+	InputSampleListConstPointer inputSampleListPtr = inputPtr->Get();
+	OutputSampleListPointer outputSampleListPtr    = const_cast<OutputSampleListType *>(outputPtr->Get());
+
+	// Compute the 1/(sigma) vector
+	InputMeasurementVectorType invertedScales = m_Scales;
+	for(unsigned int idx = 0;idx < invertedScales.Size();++idx)
+	{
+		invertedScales[idx] = 1 / m_Scales[idx];
+	}
+
+	// Clear any previous output
+	outputSampleListPtr->Clear();
+
+	typename InputSampleListType::ConstIterator inputIt = inputSampleListPtr->Begin();
+
+	// Set-up progress reporting
+	itk::ProgressReporter progress(this,0,inputSampleListPtr->Size());
+
+	// Iterate on the InputSampleList
+	while(inputIt != inputSampleListPtr->End())
+		{
+		// Retrieve current input sample
+		InputMeasurementVectorType currentInputMeasurement = inputIt.GetMeasurementVector();
+
+		// Build current output sample
+		OutputMeasurementVectorType currentOutputMeasurement;
+		currentOutputMeasurement.SetSize(currentInputMeasurement.GetSize());
+
+		// Center and reduce each component
+		for(unsigned int idx = 0;idx < invertedScales.Size();++idx)
+			{
+			currentOutputMeasurement[idx] = static_cast<OutputValueType>(
+			(currentInputMeasurement[idx]-m_Shifts[idx])*invertedScales[idx]);
+			}
+
+		// Add the current output sample to the output SampleList
+		outputSampleListPtr->PushBack(currentOutputMeasurement);
+
+		// Update progress
+		progress.CompletedPixel();
+
+		++inputIt;
+		}
 
  }
 
 template < class TInputSampleList, class TOutputSampleList >
 void
-CenteredReducedSampleListFilter<TInputSampleList,TOutputSampleList>
+ShiftScaleSampleListFilter<TInputSampleList,TOutputSampleList>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
  {
 	// Call superclass implementation

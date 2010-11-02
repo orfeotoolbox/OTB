@@ -38,3 +38,29 @@ int otbCenteredReducedSampleListFilterNew(int argc, char * argv[])
 
 	return EXIT_SUCCESS;
 }
+
+int otbCenteredReducedSampleListFilter(int argc, char * argv[])
+{
+	FloatSampleListType::Pointer inputSampleList = FloatSampleListType::New();
+	inputSampleList->SetMeasurementVectorSize(2);
+	FloatSampleListType sample(2);
+	sample[0]=-1;
+	sample[1]=-5;
+	inputSampleList->PushBack(sample);
+	sample[0]=-1;
+	sample[1]=-2;
+	inputSampleList->PushBack(sample);
+	sample[0]=3;
+	sample[1]=1;
+	inputSampleList->PushBack(sample);
+
+	CenteredReducedFilterType::Pointer filter = CenteredReducedFilterType::New();
+	sample[0]=1;
+	sample[1]=-3;
+	filter->SetMeans(sample);
+
+
+	return EXIT_SUCCESS;
+}
+
+
