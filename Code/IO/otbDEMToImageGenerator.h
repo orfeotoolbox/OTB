@@ -100,6 +100,7 @@ public:
 
   /** Set/Get the Default Unknown Value. */
   itkSetObjectMacro(Transform, GenericRSTransformType);
+  itkGetObjectMacro(Transform, GenericRSTransformType);
   itkGetConstObjectMacro(Transform, GenericRSTransformType);
 
   /** Set the DEM directory. */
