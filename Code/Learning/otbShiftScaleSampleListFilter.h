@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbShiftsScaleSampleListFilter_h
-#define __otbShiftsScaleSampleListFilter_h
+#ifndef __otbShiftScaleSampleListFilter_h
+#define __otbShiftScaleSampleListFilter_h
 
 #include "itkProcessObject.h"
 #include "itkDataObject.h"
@@ -25,26 +25,26 @@
 namespace otb {
 namespace Statistics {
 
-/** \class ShiftsScaleSampleListFilter
+/** \class ShiftScaleSampleListFilter
  *  \brief This class generate a centered and reduced sample list from and input sample list.
  *
- *	Mean and variance can be set via the SetShifts() and SetScales() methods.
+ *	Shifts and scales can be set via the SetShift() and SetScales() methods.
  *
  * \sa ImageToListAdaptor
  */
 template < class TInputSampleList, class TOutputSampleList = TInputSampleList >
-class ITK_EXPORT ShiftsScaleSampleListFilter :
+class ITK_EXPORT ShiftScaleSampleListFilter :
   public itk::ProcessObject
 {
 public:
   /** Standard class typedefs */
-  typedef ShiftsScaleSampleListFilter            Self;
+  typedef ShiftScaleSampleListFilter            Self;
   typedef itk::ProcessObject                         Superclass;
   typedef itk::SmartPointer< Self >                  Pointer;
   typedef itk::SmartPointer<const Self>              ConstPointer;
   
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ShiftsScaleSampleListFilter,itk::ProcessObject);
+  itkTypeMacro(ShiftScaleSampleListFilter,itk::ProcessObject);
   
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -102,12 +102,12 @@ protected:
    /** Standard itk::ProcessObject subclass method. */
    virtual DataObjectPointer MakeOutput(unsigned int idx);
 
-  ShiftsScaleSampleListFilter();
-  virtual ~ShiftsScaleSampleListFilter() {}
+  ShiftScaleSampleListFilter();
+  virtual ~ShiftScaleSampleListFilter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  ShiftsScaleSampleListFilter(const Self&); //purposely not implemented
+  ShiftScaleSampleListFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   /** The vector of Shifts */
@@ -122,7 +122,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbShiftsScaleSampleListFilter.txx"
+#include "otbShiftScaleSampleListFilter.txx"
 #endif
 
 #endif

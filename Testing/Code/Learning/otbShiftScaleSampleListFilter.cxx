@@ -43,7 +43,7 @@ int otbShiftScaleSampleListFilter(int argc, char * argv[])
 {
 	FloatSampleListType::Pointer inputSampleList = FloatSampleListType::New();
 	inputSampleList->SetMeasurementVectorSize(2);
-	FloatSampleListType sample(2);
+	FloatSampleType sample(2);
 	sample[0]=-1;
 	sample[1]=-5;
 	inputSampleList->PushBack(sample);
@@ -53,12 +53,14 @@ int otbShiftScaleSampleListFilter(int argc, char * argv[])
 	sample[0]=3;
 	sample[1]=1;
 	inputSampleList->PushBack(sample);
-
 	ShiftScaleFilterType::Pointer filter = ShiftScaleFilterType::New();
 	sample[0]=1;
 	sample[1]=-3;
-	filter->SetMeans(sample);
-
+	filter->SetShifts(sample);
+	sample[0]=2;
+	sample[1]=3;
+	filter->SetScales(sample);
+	filter->Update();
 
 	return EXIT_SUCCESS;
 }
