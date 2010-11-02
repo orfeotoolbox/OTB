@@ -29,6 +29,7 @@
 #include "otbImage.h"
 
 #include "itkMetaDataObject.h"
+#include "otbMetaDataKey.h"
 
 #include "itkExceptionObject.h"
 #include "itkMacro.h"
@@ -587,14 +588,14 @@ void GDALImageIO::InternalReadImageInformation()
   /* -------------------------------------------------------------------- */
 
   double     adfGeoTransform[6];
-  VectorType VadfGeoTransform;
+  MetaDataKey::VectorType VadfGeoTransform;
 
   if (m_poDataset->GetGeoTransform(adfGeoTransform) == CE_None)
     {
     for (int cpt = 0; cpt < 6; cpt++)
       VadfGeoTransform.push_back(adfGeoTransform[cpt]);
 
-    itk::EncapsulateMetaData<VectorType>(dict, MetaDataKey::GeoTransformKey, VadfGeoTransform);
+    itk::EncapsulateMetaData<MetaDataKey::VectorType>(dict, MetaDataKey::GeoTransformKey, VadfGeoTransform);
 
     /// retrieve orgin and spacing from the geo transform
     m_Origin[0] = VadfGeoTransform[0];
@@ -661,13 +662,13 @@ void GDALImageIO::InternalReadImageInformation()
   /* -------------------------------------------------------------------- */
 
   double     GeoX(0), GeoY(0);
-  VectorType VGeo;
+  MetaDataKey::VectorType VGeo;
 
   GDALInfoReportCorner("Upper Left", 0.0, 0.0, GeoX, GeoY);
   VGeo.push_back(GeoX);
   VGeo.push_back(GeoY);
 
-  itk::EncapsulateMetaData<VectorType>(dict, MetaDataKey::UpperLeftCornerKey, VGeo);
+  itk::EncapsulateMetaData<MetaDataKey::VectorType>(dict, MetaDataKey::UpperLeftCornerKey, VGeo);
 
   VGeo.clear();
 
@@ -675,7 +676,7 @@ void GDALImageIO::InternalReadImageInformation()
   VGeo.push_back(GeoX);
   VGeo.push_back(GeoY);
 
-  itk::EncapsulateMetaData<VectorType>(dict, MetaDataKey::UpperRightCornerKey, VGeo);
+  itk::EncapsulateMetaData<MetaDataKey::VectorType>(dict, MetaDataKey::UpperRightCornerKey, VGeo);
 
   VGeo.clear();
 
@@ -683,7 +684,7 @@ void GDALImageIO::InternalReadImageInformation()
   VGeo.push_back(GeoX);
   VGeo.push_back(GeoY);
 
-  itk::EncapsulateMetaData<VectorType>(dict, MetaDataKey::LowerLeftCornerKey, VGeo);
+  itk::EncapsulateMetaData<MetaDataKey::VectorType>(dict, MetaDataKey::LowerLeftCornerKey, VGeo);
 
   VGeo.clear();
 
@@ -691,7 +692,7 @@ void GDALImageIO::InternalReadImageInformation()
   VGeo.push_back(GeoX);
   VGeo.push_back(GeoY);
 
-  itk::EncapsulateMetaData<VectorType>(dict, MetaDataKey::LowerRightCornerKey, VGeo);
+  itk::EncapsulateMetaData<MetaDataKey::VectorType>(dict, MetaDataKey::LowerRightCornerKey, VGeo);
 
   VGeo.clear();
 
@@ -720,7 +721,7 @@ void GDALImageIO::InternalReadImageInformation()
       for (int i = 0; i < GDALGetColorEntryCount(hTable); ++i)
         {
         GDALColorEntry sEntry;
-        VectorType     VColorEntry;
+        MetaDataKey::VectorType VColorEntry;
 
         GDALGetColorEntryAsRGB(hTable, i, &sEntry);
 
@@ -729,7 +730,7 @@ void GDALImageIO::InternalReadImageInformation()
         VColorEntry.push_back(sEntry.c3);
         VColorEntry.push_back(sEntry.c4);
 
-        itk::EncapsulateMetaData<VectorType>(dict, MetaDataKey::ColorEntryAsRGBKey, VColorEntry);
+        itk::EncapsulateMetaData<MetaDataKey::VectorType>(dict, MetaDataKey::ColorEntryAsRGBKey, VColorEntry);
 
         }
       }

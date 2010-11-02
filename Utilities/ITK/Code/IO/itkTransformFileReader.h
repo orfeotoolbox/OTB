@@ -27,7 +27,6 @@
 #else
 
 #include "itkLightProcessObject.h"
-#include "metaTransform.h"
 #include "itkTransformBase.h"
 
 namespace itk

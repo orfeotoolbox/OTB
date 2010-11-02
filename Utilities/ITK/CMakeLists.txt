@@ -481,9 +481,9 @@ ENDIF(ITK_USE_SYSTEM_VXL)
 
 
 # Provide options to use system versions of third-party libraries.
-ITK_THIRD_PARTY_OPTION(ZLIB zlib)
-ITK_THIRD_PARTY_OPTION(PNG  png)
-ITK_THIRD_PARTY_OPTION(TIFF tiff)
+#ITK_THIRD_PARTY_OPTION(ZLIB zlib)
+#ITK_THIRD_PARTY_OPTION(PNG  png)
+#ITK_THIRD_PARTY_OPTION(TIFF tiff)
 
 OPTION(ITK_USE_LIBXML2 "Use LIBXML2." OFF)
 MARK_AS_ADVANCED(ITK_USE_LIBXML2)
@@ -812,42 +812,42 @@ INCLUDE_DIRECTORIES(
 # if GDCM was build with VTK support, including it will bring the VTK
 # include paths as well, and the wrong DICOMParser will be picked.
 
-OPTION(ITK_USE_SYSTEM_GDCM "Use an outside build of GDCM." OFF)
-MARK_AS_ADVANCED(ITK_USE_SYSTEM_GDCM)
-IF(ITK_USE_SYSTEM_GDCM)
-  FIND_PACKAGE(GDCM)
-  IF(GDCM_FOUND)
-    INCLUDE(${GDCM_USE_FILE})
-    IF( "${GDCM_MAJOR_VERSION}" LESS 2.0 )
-      SET(ITK_GDCM_LIBRARIES gdcm)
-    ELSE( "${GDCM_MAJOR_VERSION}" LESS 2.0 )
-      IF(ITK_USE_SYSTEM_TIFF)
-        # Long story short. ITKIO is NOT linked to itkjpeg8 explicitely. itkjpeg8 dep is being
-        # pulled from linking to itktiff. However in case of ITK_SYSTEM_TIFF the FindTIFF module
-        # do not explicitely link to the system jpeg. One can check however that on most GNU/Linux system
-        # $ ldd /usr/lib/libtiff.so
-        #    linux-vdso.so.1 =>  (0x00007fff67fff000)
-        #    libjpeg.so.62 => /usr/lib/libjpeg.so.62 (0x00007f635f9f2000)
-        # As a side note, ITK_SYSTEM_TIFF is somewhat robust as itkjpeg8 dep can also be pulled from
-        # linking to the default gdcm libraries since they use the itkjpeg libraries.
-        # I do not know the correct fix:
-        # 1. Have FindTIFF link to jpeg8 (which would be the right thing to do for static system libtiff)
-        # 2. Have ITKIO explicitely link to itkjpeg8
-        # For the time being let's explicitely pull the dep to itkjpeg8 ourselves.
-        SET(ITK_GDCM_LIBRARIES gdcmMSFF itkjpeg8)
-      ELSE(ITK_USE_SYSTEM_TIFF)
-        SET(ITK_GDCM_LIBRARIES gdcmMSFF)
-      ENDIF(ITK_USE_SYSTEM_TIFF)
-    ENDIF( "${GDCM_MAJOR_VERSION}" LESS 2.0 )
-  ELSE(GDCM_FOUND)
-    MESSAGE(FATAL_ERROR "Must set GDCM_DIR for ITK_USE_SYSTEM_GDCM.")
-  ENDIF(GDCM_FOUND)
-ELSE(ITK_USE_SYSTEM_GDCM)
-  SET(ITK_GDCM_LIBRARIES itkgdcm)
-  SET(GDCM_INCLUDE_DIR
-    ${ITK_SOURCE_DIR}/Utilities/gdcm/src
-    )
-ENDIF(ITK_USE_SYSTEM_GDCM)
+#OPTION(ITK_USE_SYSTEM_GDCM "Use an outside build of GDCM." OFF)
+#MARK_AS_ADVANCED(ITK_USE_SYSTEM_GDCM)
+#IF(ITK_USE_SYSTEM_GDCM)
+#  FIND_PACKAGE(GDCM)
+#  IF(GDCM_FOUND)
+#    INCLUDE(${GDCM_USE_FILE})
+#    IF( "${GDCM_MAJOR_VERSION}" LESS 2.0 )
+#      SET(ITK_GDCM_LIBRARIES gdcm)
+#    ELSE( "${GDCM_MAJOR_VERSION}" LESS 2.0 )
+#      IF(ITK_USE_SYSTEM_TIFF)
+#        # Long story short. ITKIO is NOT linked to itkjpeg8 explicitely. itkjpeg8 dep is being
+#        # pulled from linking to itktiff. However in case of ITK_SYSTEM_TIFF the FindTIFF module
+#        # do not explicitely link to the system jpeg. One can check however that on most GNU/Linux system
+#        # $ ldd /usr/lib/libtiff.so
+#        #    linux-vdso.so.1 =>  (0x00007fff67fff000)
+#        #    libjpeg.so.62 => /usr/lib/libjpeg.so.62 (0x00007f635f9f2000)
+#        # As a side note, ITK_SYSTEM_TIFF is somewhat robust as itkjpeg8 dep can also be pulled from
+#        # linking to the default gdcm libraries since they use the itkjpeg libraries.
+#        # I do not know the correct fix:
+#        # 1. Have FindTIFF link to jpeg8 (which would be the right thing to do for static system libtiff)
+#        # 2. Have ITKIO explicitely link to itkjpeg8
+#        # For the time being let's explicitely pull the dep to itkjpeg8 ourselves.
+#        SET(ITK_GDCM_LIBRARIES gdcmMSFF itkjpeg8)
+#      ELSE(ITK_USE_SYSTEM_TIFF)
+#        SET(ITK_GDCM_LIBRARIES gdcmMSFF)
+#      ENDIF(ITK_USE_SYSTEM_TIFF)
+#    ENDIF( "${GDCM_MAJOR_VERSION}" LESS 2.0 )
+#  ELSE(GDCM_FOUND)
+#    MESSAGE(FATAL_ERROR "Must set GDCM_DIR for ITK_USE_SYSTEM_GDCM.")
+#  ENDIF(GDCM_FOUND)
+#ELSE(ITK_USE_SYSTEM_GDCM)
+#  SET(ITK_GDCM_LIBRARIES itkgdcm)
+#  SET(GDCM_INCLUDE_DIR
+#    ${ITK_SOURCE_DIR}/Utilities/gdcm/src
+#    )
+#ENDIF(ITK_USE_SYSTEM_GDCM)
 
 #-----------------------------------------------------------------------------
 # Help other projects use ITK.

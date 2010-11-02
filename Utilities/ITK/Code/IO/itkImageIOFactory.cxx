@@ -27,10 +27,10 @@
 //#include "itkAnalyzeImageIOFactory.h"
 //#include "itkNiftiImageIOFactory.h"
 //#include "itkGiplImageIOFactory.h"
-#include "itkJPEGImageIOFactory.h"
+//#include "itkJPEGImageIOFactory.h"
 //#include "itkLSMImageIOFactory.h"
 //#include "itkMetaImageIOFactory.h"
-#include "itkPNGImageIOFactory.h"
+//#include "itkPNGImageIOFactory.h"
 //#include "itkNrrdImageIOFactory.h"
 //#include "itkTIFFImageIOFactory.h"
 #include "itkVTKImageIOFactory.h"
@@ -102,7 +102,7 @@ ImageIOFactory::RegisterBuiltInFactories()
 //      ObjectFactoryBase::RegisterFactory( BioRadImageIOFactory::New() ); //should be before GDCM
 //      ObjectFactoryBase::RegisterFactory( GDCMImageIOFactory::New() );
 //      ObjectFactoryBase::RegisterFactory( MetaImageIOFactory::New() );
-      ObjectFactoryBase::RegisterFactory( PNGImageIOFactory::New() );
+//      ObjectFactoryBase::RegisterFactory( PNGImageIOFactory::New() );
       ObjectFactoryBase::RegisterFactory( VTKImageIOFactory::New() );
 //      ObjectFactoryBase::RegisterFactory( GiplImageIOFactory::New() );
 //      ObjectFactoryBase::RegisterFactory( LSMImageIOFactory::New()); //should be before TIFF
@@ -115,7 +115,7 @@ ImageIOFactory::RegisterBuiltInFactories()
 //      ObjectFactoryBase::RegisterFactory( AnalyzeImageIOFactory::New());
 //      ObjectFactoryBase::RegisterFactory( NiftiImageIOFactory::New());
 //      ObjectFactoryBase::RegisterFactory( StimulateImageIOFactory::New());
-      ObjectFactoryBase::RegisterFactory( JPEGImageIOFactory::New());
+//      ObjectFactoryBase::RegisterFactory( JPEGImageIOFactory::New());
 //      ObjectFactoryBase::RegisterFactory( TIFFImageIOFactory::New());
 //      ObjectFactoryBase::RegisterFactory( NrrdImageIOFactory::New() );
 //      ObjectFactoryBase::RegisterFactory( BMPImageIOFactory::New() );

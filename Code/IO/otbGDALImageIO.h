@@ -29,8 +29,6 @@
 /* ITK Libraries */
 #include "itkImageIOBase.h"
 
-#include "otbMetaDataKey.h"
-
 /* GDAL Libraries */
 #include "gdal.h"
 #include "gdal_priv.h"
@@ -51,8 +49,7 @@ namespace otb
  * \ingroup IOFilters
  *
  */
-class ITK_EXPORT GDALImageIO : public itk::ImageIOBase,
-  public MetaDataKey
+class ITK_EXPORT GDALImageIO : public itk::ImageIOBase
 {
 public:
 

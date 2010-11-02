@@ -25,27 +25,27 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
 
 # These directories are always needed.
 SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
-  ${OTB_SOURCE_DIR}/Code/Common
   ${OTB_SOURCE_DIR}/Code/BasicFilters
-  ${OTB_SOURCE_DIR}/Code/IO
   ${OTB_SOURCE_DIR}/Code/ChangeDetection
-  ${OTB_SOURCE_DIR}/Code/FeatureExtraction
-  ${OTB_SOURCE_DIR}/Code/Learning
-  ${OTB_SOURCE_DIR}/Code/MultiScale
-  ${OTB_SOURCE_DIR}/Code/SpatialReasoning
+  ${OTB_SOURCE_DIR}/Code/Common
   ${OTB_SOURCE_DIR}/Code/DisparityMap
-  ${OTB_SOURCE_DIR}/Code/Visu
-  ${OTB_SOURCE_DIR}/Code/Visualization
-  ${OTB_SOURCE_DIR}/Code/Gui
+  ${OTB_SOURCE_DIR}/Code/FeatureExtraction
   ${OTB_SOURCE_DIR}/Code/Fusion
+  ${OTB_SOURCE_DIR}/Code/GeospatialAnalysis
+  ${OTB_SOURCE_DIR}/Code/Gui
+  ${OTB_SOURCE_DIR}/Code/IO
+  ${OTB_SOURCE_DIR}/Code/Learning
+  ${OTB_SOURCE_DIR}/Code/Markov
+  ${OTB_SOURCE_DIR}/Code/MultiScale
+  ${OTB_SOURCE_DIR}/Code/OBIA
   ${OTB_SOURCE_DIR}/Code/Projections
   ${OTB_SOURCE_DIR}/Code/Radiometry
   ${OTB_SOURCE_DIR}/Code/SARPolarimetry
-  ${OTB_SOURCE_DIR}/Code/Markov
-  ${OTB_SOURCE_DIR}/Code/GeospatialAnalysis
+  ${OTB_SOURCE_DIR}/Code/SpatialReasoning
   ${OTB_SOURCE_DIR}/Code/Testing
+  ${OTB_SOURCE_DIR}/Code/Visu
+  ${OTB_SOURCE_DIR}/Code/Visualization
   ${OTB_SOURCE_DIR}/Utilities/otbsvm
-  ${OTB_SOURCE_DIR}/Utilities/otbossim
   ${OTB_SOURCE_DIR}/Utilities/otbossim/include
   ${OTB_SOURCE_DIR}/Utilities/otbossim/include/ossim
   ${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim
@@ -56,7 +56,6 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Utilities/otb6S
   ${OTB_SOURCE_DIR}/Utilities/tinyXMLlib
 #  ${OTB_SOURCE_DIR}/Utilities/otbgalib
-  ${OTB_SOURCE_DIR}/Utilities/otbkml
   ${OTB_SOURCE_DIR}/Utilities/otbkml/src
   ${OTB_SOURCE_DIR}/Utilities/otbkml/third_party
   ${OTB_SOURCE_DIR}/Utilities/otbliblas/include
@@ -67,8 +66,6 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Utilities/otbconfigfile
   ${OTB_SOURCE_DIR}/Utilities/otbknn
   ${OTB_SOURCE_DIR}/Utilities/otbmuparser
-  ${OTB_BINARY_DIR}/Code/Visualization
-  ${OTB_SOURCE_DIR}/Code/OBIA
 )
 
 
@@ -167,20 +164,20 @@ ELSE(OTB_USE_EXTERNAL_ITK)
         ${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/vxl/v3p/netlib
         ${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/vxl/vcl
         ${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/vxl/core
-        ${OTB_BINARY_DIR}/Utilities/ITK/Utilities/vxl/v3p/netlib
+#        ${OTB_BINARY_DIR}/Utilities/ITK/Utilities/vxl/v3p/netlib
         ${OTB_BINARY_DIR}/Utilities/ITK/Utilities/vxl/vcl
         ${OTB_BINARY_DIR}/Utilities/ITK/Utilities/vxl/core
-        ${OTB_SOURCE_DIR}/Utilities/ITK/Utilities
+#        ${OTB_SOURCE_DIR}/Utilities/ITK/Utilities
         ${OTB_BINARY_DIR}/Utilities/ITK/Utilities
         ${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/itkExtHdrs
-        ${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/DICOMParser
-        ${OTB_BINARY_DIR}/Utilities/ITK/Utilities/DICOMParser
-        ${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/MetaIO
-        ${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/nifti/niftilib
-        ${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/nifti/znzlib
-        ${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/gdcm/src
-        ${OTB_BINARY_DIR}/Utilities/ITK/Utilities/gdcm
-        ${OTB_BINARY_DIR}/Utilities/ITK/Utilities/NrrdIO
+#        ${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/DICOMParser
+#        ${OTB_BINARY_DIR}/Utilities/ITK/Utilities/DICOMParser
+#        ${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/MetaIO
+#        ${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/nifti/niftilib
+#        ${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/nifti/znzlib
+#        ${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/gdcm/src
+#        ${OTB_BINARY_DIR}/Utilities/ITK/Utilities/gdcm
+#        ${OTB_BINARY_DIR}/Utilities/ITK/Utilities/NrrdIO
         )
 ENDIF(OTB_USE_EXTERNAL_ITK)
 
@@ -416,14 +413,14 @@ ELSE(OTB_USE_EXTERNAL_ITK)
               Utilities/ITK/Utilities/vxl/core
               Utilities/ITK/Utilities
               Utilities/ITK/Utilities/itkExtHdrs
-              Utilities/ITK/Utilities/DICOMParser
-              Utilities/ITK/Utilities/MetaIO
-              Utilities/ITK/Utilities/nifti/niftilib
-              Utilities/ITK/Utilities/nifti/znzlib
-              Utilities/ITK/gdcm/src
-	      Utilities/ITK/gdcm
-              Utilities/ITK/Utilities/NrrdIO
-        )
+#              Utilities/ITK/Utilities/DICOMParser
+#              Utilities/ITK/Utilities/MetaIO
+#              Utilities/ITK/Utilities/nifti/niftilib
+#              Utilities/ITK/Utilities/nifti/znzlib
+#              Utilities/ITK/gdcm/src
+#              Utilities/ITK/gdcm
+#              Utilities/ITK/Utilities/NrrdIO 
+)
 
 # JULIEN Seems that ITK_INCLUDE_DIRS_CONFIG replaces ITK_INCLUDE_DIRS_INSTALL_TREE
 #             SET(ITK_INCLUDE_DIRS  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/ITK/)
