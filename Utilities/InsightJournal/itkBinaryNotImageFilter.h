@@ -1,3 +1,20 @@
+/*=========================================================================
+
+  Program:   Insight Segmentation & Registration Toolkit
+  Module:    $RCSfile: itkBinaryImageToStatisticsLabelMapFilter.h,v $
+  Language:  C++
+  Date:      $Date: 2006/03/28 19:59:05 $
+  Version:   $Revision: 1.6 $
+
+  Copyright (c) Insight Software Consortium. All rights reserved.
+  See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
+
 #ifndef __itkBinaryNotImageFilter_h
 #define __itkBinaryNotImageFilter_h
 
@@ -7,15 +24,15 @@
 
 namespace itk
 {
-  
+
 /** \class BinaryNotImageFilter
  * \brief Implements the BinaryNot logical operator pixel-wise between two images.
  *
- * This class is parametrized over the types of the two 
- * input images and the type of the output image. 
+ * This class is parametrized over the types of the two
+ * input images and the type of the output image.
  * Numeric conversions (castings) are done by the C++ defaults.
  *
- * 
+ *
  * The total operation over one pixel will be
  *
  *  output_pixel = static_cast<PixelType>( input1_pixel != input2_pixel )
@@ -24,8 +41,8 @@ namespace itk
  *
  * \ingroup IntensityImageFilters  Multithreaded
  */
-namespace Functor {  
-  
+namespace Functor {
+
 template< class TPixel >
 class BinaryNot
 {
@@ -52,7 +69,7 @@ public:
 
   TPixel m_ForegroundValue;
   TPixel m_BackgroundValue;
-}; 
+};
 
 }
 template <class TImage>
@@ -65,11 +82,11 @@ UnaryFunctorImageFilter<TImage, TImage,
 {
 public:
   /** Standard class typedefs. */
-  typedef BinaryNotImageFilter  Self;
+  typedef BinaryNotImageFilter                         Self;
   typedef UnaryFunctorImageFilter<TImage, TImage,
     Functor::BinaryNot<  typename TImage::PixelType> > Superclass;
-  typedef SmartPointer<Self>   Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                           Pointer;
+  typedef SmartPointer<const Self>                     ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -95,7 +112,7 @@ public:
   /** Get the value used as "background". Defaults to
    * NumericTraits<PixelType>::NonpositiveMin(). */
   itkGetConstMacro(BackgroundValue, PixelType);
-  
+
 
 protected:
   BinaryNotImageFilter()
@@ -112,12 +129,12 @@ protected:
     typedef typename NumericTraits<PixelType>::PrintType
                                               PixelPrintType;
 
-    os << indent << "ForegroundValue: " 
-                    << static_cast< PixelPrintType > (m_ForegroundValue) 
+    os << indent << "ForegroundValue: "
+                    << static_cast< PixelPrintType > (m_ForegroundValue)
                     << std::endl;
- 
-    os << indent << "BackgroundValue: " 
-                    << static_cast< PixelPrintType > (m_BackgroundValue) 
+
+    os << indent << "BackgroundValue: "
+                    << static_cast< PixelPrintType > (m_BackgroundValue)
                     << std::endl;
     }
 
@@ -134,7 +151,7 @@ private:
 
   PixelType m_ForegroundValue;
   PixelType m_BackgroundValue;
-  
+
 };
 
 } // end namespace itk
