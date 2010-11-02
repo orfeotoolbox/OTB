@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSRTMHeightAboveMSLFunction_h
-#define __otbSRTMHeightAboveMSLFunction_h
+#ifndef __otbElevDatabaseHeightAboveMSLFunction_h
+#define __otbElevDatabaseHeightAboveMSLFunction_h
 
 #include "itkFunctionBase.h"
 #include "itkImageBase.h"
@@ -30,7 +30,7 @@ class ossimElevManager;
 namespace otb
 {
 
-/** \class SRTMHeightAboveMSLFunction
+/** \class ElevDatabaseHeightAboveMSLFunction
  * \brief Evaluates a  the height above MSL(Mean Sea Level) of a geographic point
  *  of DTED and SRTM formats.
  *
@@ -42,10 +42,10 @@ template <
 class TOutput,
 class TCoordRep = float
 >
-class SRTMHeightAboveMSLFunction :
+class ElevDatabaseHeightAboveMSLFunction :
     public itk::FunctionBase< itk::Point<TCoordRep,
                                ::itk::GetImageDimension<TOutput>::ImageDimension>,
-                       TOutput >
+                       typename TOutput::PixelType >
 {
 public:
     /** Dimension underlying input image. */
@@ -54,7 +54,7 @@ public:
 
 
     /** Standard class typedefs. */
-  typedef SRTMHeightAboveMSLFunction                            Self;
+  typedef ElevDatabaseHeightAboveMSLFunction                            Self;
   typedef itk::FunctionBase<
     itk::Point<TCoordRep, itkGetStaticConstMacro(ImageDimension)>,
     TOutput >                                                   Superclass;
@@ -62,7 +62,10 @@ public:
   typedef itk::SmartPointer<const Self>                         ConstPointer;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(SRTMHeightAboveMSLFunction, itk::FunctionBase);
+  itkTypeMacro(ElevDatabaseHeightAboveMSLFunction, itk::FunctionBase);
+
+  /** Method for creation through the object factory. */
+  itkNewMacro(Self);
 
   /** OutputType typedef support. */
   typedef TOutput OutputImageType;
@@ -93,7 +96,7 @@ public:
 
   /** Evaluate the function at specified Point position.
    * Subclasses must provide this method. */
-  virtual OutputImageType Evaluate( const PointType& point) const;
+  virtual PixelType Evaluate( const PointType& point) const;
 
   /** Try to open the DEM directory. */
   virtual void OpenDEMDirectory(const char* DEMDirectory);
@@ -101,22 +104,27 @@ public:
   /** Set the default height above ellipsoid in case no information is available*/
   virtual void SetDefaultHeightAboveEllipsoid(double h);
 
+  /** Set/Get the DEM Function. */
+  itkSetMacro(DefaultUnknownValue, PixelType);
+  itkGetConstMacro(DefaultUnknownValue, PixelType);
+
 protected:
-  SRTMHeightAboveMSLFunction();
-  ~SRTMHeightAboveMSLFunction() {}
+  ElevDatabaseHeightAboveMSLFunction();
+  ~ElevDatabaseHeightAboveMSLFunction() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  SRTMHeightAboveMSLFunction(const Self&); //purposely not implemented
+  ElevDatabaseHeightAboveMSLFunction(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   ossimElevManager* m_ElevManager;
+  PixelType         m_DefaultUnknownValue;
 };
 
 }// end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-# include "otbSRTMHeightAboveMSLFunction.txx"
+# include "otbElevDatabaseHeightAboveMSLFunction.txx"
 #endif
 
 #endif

@@ -17,13 +17,13 @@
 =========================================================================*/
 
 #include "otbMacro.h"
-#include "otbSRTMHeightAboveMSLFunction.h"
+#include "otbElevDatabaseHeightAboveMSLFunction.h"
 #include "otbImage.h"
 
-int otbSRTMHeightAboveMSLFunction(int argc, char* argv[])
+int otbElevDatabaseHeightAboveMSLFunction(int argc, char* argv[])
 {
   typedef otb::Image<float,2>                          ImageType;
-  typedef otb::SRTMHeightAboveMSLFunction<ImageType>   SrtmFunctionType;
+  typedef otb::ElevDatabaseHeightAboveMSLFunction<ImageType>   SrtmFunctionType;
 
   SrtmFunctionType::Pointer srtmDem;
 

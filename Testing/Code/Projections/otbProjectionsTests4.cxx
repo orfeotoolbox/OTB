@@ -30,5 +30,5 @@ void RegisterTests()
   REGISTER_TEST(otbGenericRSResampleImageFilterNew);
   REGISTER_TEST(otbGenericRSResampleImageFilter);
   REGISTER_TEST(otbGenericRSResampleImageFilterFromMap);
-  REGISTER_TEST(otbSRTMHeightAboveMSLFunction);
+  REGISTER_TEST(otbElevDatabaseHeightAboveMSLFunction);
 }

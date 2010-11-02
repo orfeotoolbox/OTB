@@ -16,12 +16,12 @@
 
 =========================================================================*/
 
-#ifndef __otbSRTMHeightAboveMSLFunction_txx
-#define __otbSRTMHeightAboveMSLFunction_txx
+#ifndef __otbElevDatabaseHeightAboveMSLFunction_txx
+#define __otbElevDatabaseHeightAboveMSLFunction_txx
 
 #include "otbMacro.h"
 
-#include "otbSRTMHeightAboveMSLFunction.h"
+#include "otbElevDatabaseHeightAboveMSLFunction.h"
 
 #include "elevation/ossimElevManager.h"
 #include "base/ossimGeoidManager.h"
@@ -38,10 +38,13 @@ namespace otb
  * Constructor
  */
 template <class TOutput, class TCoordRep>
-SRTMHeightAboveMSLFunction<TOutput, TCoordRep>
-::SRTMHeightAboveMSLFunction() :
+ElevDatabaseHeightAboveMSLFunction<TOutput, TCoordRep>
+::ElevDatabaseHeightAboveMSLFunction() :
      m_ElevManager(ossimElevManager::instance())
 {
+  // Value defined in the norm for points SRTM doesn't have information.
+  m_DefaultUnknownValue = static_cast<PixelType>(-32768);
+
 }
 
 
@@ -50,20 +53,21 @@ SRTMHeightAboveMSLFunction<TOutput, TCoordRep>
  */
 template <class TOutput, class TCoordRep>
 void
-SRTMHeightAboveMSLFunction<TOutput, TCoordRep>
+ElevDatabaseHeightAboveMSLFunction<TOutput, TCoordRep>
 ::PrintSelf(
   std::ostream& os,
   itk::Indent indent) const
 {
-  Superclass::PrintSelf( os, indent );
+  os << indent << " m_DefaultUnknownValue           : "  << m_DefaultUnknownValue << std::endl;
+
 }
 
 /**
  *
  */
 template <class TOutput, class TCoordRep>
-typename SRTMHeightAboveMSLFunction<TOutput, TCoordRep>::OutputImageType
-SRTMHeightAboveMSLFunction<TOutput, TCoordRep>
+typename ElevDatabaseHeightAboveMSLFunction<TOutput, TCoordRep>::PixelType
+ElevDatabaseHeightAboveMSLFunction<TOutput, TCoordRep>
 ::Evaluate(const PointType& point) const
 {
   double   height;
@@ -72,12 +76,21 @@ SRTMHeightAboveMSLFunction<TOutput, TCoordRep>
   ossimWorldPoint.lat = point[1];
   height = m_ElevManager->getHeightAboveMSL(ossimWorldPoint);
 
-  return static_cast<OutputImageType>( height );
+  if (!ossim::isnan(height))
+    {
+    return static_cast<PixelType>( height );
+    }
+  else
+    {
+    // Back to the MNT default value
+    return static_cast<PixelType>( m_DefaultUnknownValue );
+    }
+
 }
 
 template <class TOutput, class TCoordRep>
 void
-SRTMHeightAboveMSLFunction<TOutput, TCoordRep>
+ElevDatabaseHeightAboveMSLFunction<TOutput, TCoordRep>
 ::OpenDEMDirectory(const char* DEMDirectory)
 {
   ossimFilename ossimDEMDir;
@@ -91,7 +104,7 @@ SRTMHeightAboveMSLFunction<TOutput, TCoordRep>
 
 template <class TOutput, class TCoordRep>
 void
-SRTMHeightAboveMSLFunction<TOutput, TCoordRep>
+ElevDatabaseHeightAboveMSLFunction<TOutput, TCoordRep>
 ::SetDefaultHeightAboveEllipsoid(double h)
 {
   m_ElevManager->setDefaultHeightAboveEllipsoid(h);
