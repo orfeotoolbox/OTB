@@ -268,19 +268,18 @@ CHECK_TYPE_SIZE("__int64"   OTB_SIZEOF___INT64)
 CHECK_TYPE_SIZE("long int" OTB_SIZEOF_LONG_INT)
 CHECK_TYPE_SIZE("short int" OTB_SIZEOF_SHORT_INT)
 
-IF (BUILD_TESTING)
-    #-----------------------------------------------------------------------------
-    # Configure the default OTB_DATA_ROOT for the location of OTB Data.
-    FIND_PATH(OTB_DATA_ROOT README-OTB-Data PATHS $ENV{OTB_DATA_ROOT} ${OTB_SOURCE_DIR}/../OTB-Data)
-    MARK_AS_ADVANCED(OTB_DATA_ROOT)
-    
-    OPTION(OTB_DATA_USE_LARGEINPUT "Use Large inputs images test." OFF)
-    MARK_AS_ADVANCED(OTB_DATA_USE_LARGEINPUT)
-    IF(OTB_DATA_USE_LARGEINPUT)
-      FIND_PATH(OTB_DATA_LARGEINPUT_ROOT OTBData.readme $ENV{OTB_DATA_LARGEINPUT_ROOT})
-      MARK_AS_ADVANCED(OTB_DATA_LARGEINPUT_ROOT)
-    ENDIF(OTB_DATA_USE_LARGEINPUT)
-ENDIF (BUILD_TESTING)
+#-----------------------------------------------------------------------------
+# Configure the default OTB_DATA_ROOT for the location of OTB Data.
+FIND_PATH(OTB_DATA_ROOT README-OTB-Data PATHS $ENV{OTB_DATA_ROOT} ${OTB_SOURCE_DIR}/../OTB-Data)
+MARK_AS_ADVANCED(OTB_DATA_ROOT)
+
+OPTION(OTB_DATA_USE_LARGEINPUT "Use Large inputs images test." OFF)
+MARK_AS_ADVANCED(OTB_DATA_USE_LARGEINPUT)
+IF(OTB_DATA_USE_LARGEINPUT)
+  FIND_PATH(OTB_DATA_LARGEINPUT_ROOT OTBData.readme $ENV{OTB_DATA_LARGEINPUT_ROOT})
+  MARK_AS_ADVANCED(OTB_DATA_LARGEINPUT_ROOT)
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
 
 #-----------------------------------------------------------------------------
 # Configure files with settings for use by the build
@@ -347,3 +346,4 @@ SET(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} ${OTB_REQUIRED_LINK_
 
 INCLUDE(OTBCPack)
 INCLUDE(GenerateConfigProperties)
+
