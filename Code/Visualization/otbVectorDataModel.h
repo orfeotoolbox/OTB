@@ -97,7 +97,7 @@ public:
   itkSetMacro(Spacing, SpacingType);
   itkGetConstReferenceMacro(Spacing, SpacingType);
 
-  void CopyFileds( TreeNodeType * node );
+  void CopyFields( TreeNodeType * node );
 
 protected:
   /** Constructor */
