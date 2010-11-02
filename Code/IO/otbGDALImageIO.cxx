@@ -67,6 +67,8 @@ GDALImageIO::GDALImageIO()
   m_NbBands = 0;
   m_FlagWriteImageInformation = true;
 
+  m_CanStreamWrite = false;
+
 //  GDALAllRegister();
 }
 
@@ -280,7 +282,7 @@ void GDALImageIO::InternalReadImageInformation()
 
   if (m_FileName.empty() == true)
     {
-    itkExceptionMacro(<< "GDAl read : empty image file name file.");
+    itkExceptionMacro(<< "GDAL read : empty image file name file.");
     }
 
   std::string lFileNameGdal = m_FileName;
@@ -742,30 +744,62 @@ void GDALImageIO::InternalReadImageInformation()
 
 bool GDALImageIO::CanWriteFile(const char* name)
 {
-  // First check the extension
+  // Init GDAL parameters
+  GDALAllRegister();
+
+  // First check the filename
   if (name == NULL)
     {
     itkDebugMacro(<< "No filename specified.");
     return false;
     }
 
-  // Recuperation du type a partir du nom de fichier
-  std::string extGDAL = TypeConversion(name);
-  if (extGDAL == "NOT-FOUND")
+  // Get the GDAL format ID from the name
+  std::string gdalDriverShortName = FilenameToGdalDriverShortName(name);
+  if (gdalDriverShortName == "NOT-FOUND")
     {
     return false;
     }
 
+  // Check the driver for support of Create or at least CreateCopy
+  GDALDriver* driver = GetGDALDriverManager()->GetDriverByName(gdalDriverShortName.c_str());
+  if ( GDALGetMetadataItem( driver, GDAL_DCAP_CREATE, NULL ) == NULL
+       && GDALGetMetadataItem( driver, GDAL_DCAP_CREATECOPY, NULL ) == NULL )
+    {
+    itkDebugMacro(<< "The driver " << GDALGetDriverShortName(driver) << " does not support writing");
+    return false;
+    }
   return true;
-
 }
 
-/** TODO : Methode Write non implementee */
+bool GDALImageIO::CanStreamWrite()
+{
+  // Get the GDAL format ID from the name
+  std::string gdalDriverShortName = FilenameToGdalDriverShortName(m_FileName);
+  GDALDriver* driver = GetGDALDriverManager()->GetDriverByName(gdalDriverShortName.c_str());
+  if (driver == NULL)
+    {
+    itkDebugMacro(<< "Unable to instantiate driver " << gdalDriverShortName);
+    m_CanStreamWrite = false;
+    }
+
+  if ( GDALGetMetadataItem( driver, GDAL_DCAP_CREATE, NULL ) != NULL )
+    {
+    m_CanStreamWrite = true;
+    return true;
+    }
+  else
+    {
+    m_CanStreamWrite = false;
+    }
+  return m_CanStreamWrite;
+}
+
 void GDALImageIO::Write(const void* buffer)
 {
   if (m_FlagWriteImageInformation == true)
     {
-    this->InternalWriteImageInformation();
+    this->InternalWriteImageInformation(buffer);
     m_FlagWriteImageInformation = false;
     }
 
@@ -776,12 +810,12 @@ void GDALImageIO::Write(const void* buffer)
     return;
     }
 
-  unsigned int lNbLines   = this->GetIORegion().GetSize()[1];
+  unsigned int lNbLines = this->GetIORegion().GetSize()[1];
   unsigned int lNbColumns = this->GetIORegion().GetSize()[0];
-  int          lFirstLine   = this->GetIORegion().GetIndex()[1]; // [1... ]
-  int          lFirstColumn = this->GetIORegion().GetIndex()[0]; // [1... ]
+  int lFirstLine = this->GetIORegion().GetIndex()[1]; // [1... ]
+  int lFirstColumn = this->GetIORegion().GetIndex()[0]; // [1... ]
 
-  // Particular case: checking that the writen region is the same size
+  // Particular case: checking that the written region is the same size
   // of the entire image
   // starting at offset 0 (when no streaming)
   if ((lNbLines == m_Dimensions[1]) && (lNbColumns == m_Dimensions[0]))
@@ -790,8 +824,8 @@ void GDALImageIO::Write(const void* buffer)
     lFirstColumn = 0;
     }
 
-  std::streamoff lNbPixels = static_cast<std::streamoff>(lNbColumns) * static_cast<std::streamoff>(lNbLines);
-  std::streamoff lBufferSize = static_cast<std::streamoff>(m_NbOctetPixel) * lNbPixels;
+  std::streamoff lNbPixels = static_cast<std::streamoff> (lNbColumns) * static_cast<std::streamoff> (lNbLines);
+  std::streamoff lBufferSize = static_cast<std::streamoff> (m_NbOctetPixel) * lNbPixels;
   otbMsgDevMacro(<< " BufferSize allocated : " << lBufferSize);
 
   unsigned char* value = new unsigned char[lBufferSize];
@@ -801,60 +835,71 @@ void GDALImageIO::Write(const void* buffer)
     return;
     }
 
-  // Mise a jour du step
-  std::streamoff step = static_cast<std::streamoff>(m_NbBands);
-  step = step * static_cast<std::streamoff>(m_NbOctetPixel);
-
-  CPLErr lCrGdal;
-
-  std::streamoff cpt(0);
-  for (int nbComponents = 0; nbComponents < m_NbBands; ++nbComponents)
+  if (m_CanStreamWrite)
     {
-    cpt = static_cast<std::streamoff>(nbComponents) * static_cast<std::streamoff>(m_NbOctetPixel);
+    // Update Step
+    std::streamoff step = static_cast<std::streamoff> (m_NbBands);
+    step = step * static_cast<std::streamoff> (m_NbOctetPixel);
 
-    for (std::streamoff i = 0; i < lBufferSize; i = i + static_cast<std::streamoff>(m_NbOctetPixel))
+    CPLErr lCrGdal;
+
+    std::streamoff cpt(0);
+    for (int nbComponents = 0; nbComponents < m_NbBands; ++nbComponents)
       {
-      memcpy((void*) (&(value[i])), (const void*) (&(p[cpt])), (size_t) (m_NbOctetPixel));
-      cpt += step;
+      cpt = static_cast<std::streamoff> (nbComponents) * static_cast<std::streamoff> (m_NbOctetPixel);
+
+      for (std::streamoff i = 0; i < lBufferSize; i = i + static_cast<std::streamoff> (m_NbOctetPixel))
+        {
+        memcpy((void*) (&(value[i])), (const void*) (&(p[cpt])), (size_t) (m_NbOctetPixel));
+        cpt += step;
+        }
+      GDALRasterBand *poBand;
+      poBand = m_poBands[nbComponents]; //m_poDataset->GetRasterBand(nbComponents+1);
+
+      lCrGdal = m_poBands[nbComponents]->RasterIO(GF_Write, lFirstColumn, lFirstLine, lNbColumns, lNbLines, value,
+                                                  lNbColumns, lNbLines, m_PxType, 0, 0);
+      if (lCrGdal == CE_Failure)
+        {
+        itkExceptionMacro(<< "Error while writing image (GDAL format) " << m_FileName.c_str() << ".");
+        }
+
+      m_poBands[nbComponents]->FlushCache();
       }
-    GDALRasterBand *poBand;
-    poBand =  m_poBands[nbComponents]; //m_poDataset->GetRasterBand(nbComponents+1);
-//          lCrGdal = poBand->RasterIO(GF_Write,lFirstColumn,lFirstLine,lNbColumns, lNbLines, value , lNbColumns, lNbLines, m_PxType,0, 0 );
-    lCrGdal = m_poBands[nbComponents]->RasterIO(GF_Write,
-                                                lFirstColumn,
-                                                lFirstLine,
-                                                lNbColumns,
-                                                lNbLines,
-                                                value,
-                                                lNbColumns,
-                                                lNbLines,
-                                                m_PxType,
-                                                0,
-                                                0);
-    if (lCrGdal == CE_Failure)
-      {
-      itkExceptionMacro(<< "Error while writing image (GDAL format) " << m_FileName.c_str() << ".");
-      }
-    m_poBands[nbComponents]->FlushCache();
+
+    delete[] value;
+    value = NULL;
+
+    m_poDataset->FlushCache();
     }
+  else
+    {
+    // We only wrote data to the memory dataset
+    // Now write it to output format with CreateCopy()
+    std::string gdalDriverShortName = FilenameToGdalDriverShortName(m_FileName);
+    std::string realFileName = GetGdalWriteImageFileName(gdalDriverShortName, m_FileName);
 
-  delete[] value;
-  value = NULL;
+    GDALDriver* driver = GetGDALDriverManager()->GetDriverByName(gdalDriverShortName.c_str());
+    if (driver == NULL)
+      {
+      itkExceptionMacro(<< "Unable to instantiate driver " << gdalDriverShortName << " to write " << m_FileName);
+      }
 
-  m_poDataset->FlushCache();
+    GDALDataset* hOutputDS = driver->CreateCopy( realFileName.c_str(), m_poDataset, FALSE,
+                                                 NULL, NULL, NULL );
+
+    GDALClose(hOutputDS);
+    }
 }
 
 /** TODO : Methode WriteImageInformation non implementee */
 void GDALImageIO::WriteImageInformation()
 {
-
 }
 
-void GDALImageIO::InternalWriteImageInformation()
+void GDALImageIO::InternalWriteImageInformation(const void* buffer)
 {
-
   char **     papszOptions = NULL;
-  std::string extGDAL;
+  std::string driverShortName;
   m_NbBands = this->GetNumberOfComponents();
 
   if ((m_Dimensions[0] == 0) && (m_Dimensions[1] == 0))
@@ -945,33 +990,65 @@ void GDALImageIO::InternalWriteImageInformation()
   // Automatically set the Type to Binary for GDAL data
   this->SetFileTypeToBinary();
 
-  GDALAllRegister();
-
-  extGDAL = TypeConversion(m_FileName);
-  if (extGDAL == "NOT-FOUND")
+  driverShortName = FilenameToGdalDriverShortName(m_FileName);
+  if (driverShortName == "NOT-FOUND")
     {
     itkExceptionMacro(
-      << "GDAL Writing failed : the image file name '" << m_FileName.c_str() << "' is not reconized by GDAL.");
+      << "GDAL Writing failed : the image file name '" << m_FileName.c_str() << "' is not recognized by GDAL.");
     }
 
-  m_hDriver = GetGDALDriverManager()->GetDriverByName(extGDAL.c_str());
-  if (m_hDriver == NULL)
+  if (m_CanStreamWrite)
     {
-    itkExceptionMacro(<< "GDAL Writing failed : Driver not reconized");
-    }
-  std::string realFileName = GetGdalWriteImageFileName(extGDAL, m_FileName);
+    m_hDriver = GetGDALDriverManager()->GetDriverByName(driverShortName.c_str());
+    if (m_hDriver == NULL)
+      {
+      itkExceptionMacro(<< "GDAL Writing failed : Driver not recognized");
+      }
+    std::string realFileName = GetGdalWriteImageFileName(driverShortName, m_FileName);
 
-  if (m_poDataset != NULL)
-    {
-    GDALClose(m_poDataset);
-    m_poDataset = NULL;
+    // Close a previously opened dataset eventually
+    if (m_poDataset != NULL)
+      {
+      GDALClose(m_poDataset);
+      m_poDataset = NULL;
+      }
+
+    m_poDataset = m_hDriver->Create(
+      realFileName.c_str(), m_Dimensions[0], m_Dimensions[1], m_NbBands, m_PxType, papszOptions);
+    if (m_poDataset == NULL)
+      {
+      itkExceptionMacro(
+        << "GDAL Writing failed : Impossible to create the image file name '" << realFileName.c_str() << "'.");
+      }
     }
-  m_poDataset = m_hDriver->Create(
-    realFileName.c_str(), m_Dimensions[0], m_Dimensions[1], m_NbBands, m_PxType, papszOptions);
-  if (m_poDataset == NULL)
+  else
     {
-    itkExceptionMacro(
-      << "GDAL Writing failed : Impossible to create the image file name '" << realFileName.c_str() << "'.");
+    // Create a memory dataset to hold the image
+    m_hDriver = GetGDALDriverManager()->GetDriverByName("MEM");
+    if (m_hDriver == NULL)
+      {
+      itkExceptionMacro(
+          << "GDAL Failed to find MEM driver");
+      }
+
+    std::ostringstream stream;
+    stream << "MEM:::"
+           <<  "DATAPOINTER=" << buffer << ","
+           <<  "PIXELS=" << m_Dimensions[0] << ","
+           <<  "LINES=" << m_Dimensions[1] << ","
+           <<  "BANDS=" << m_NbBands << ","
+           <<  "DATATYPE=" << GDALGetDataTypeName(m_PxType) << ","
+           <<  "PIXELOFFSET=" << m_NbOctetPixel * m_NbBands << ","
+           <<  "LINEOFFSET=" << m_NbOctetPixel * m_NbBands * m_Dimensions[0] << ","
+           <<  "BANDOFFSET=" << m_NbOctetPixel;
+    m_poDataset = static_cast<GDALDataset *>(GDALOpen(stream.str().c_str(), GA_ReadOnly));
+    //m_poDataset = m_hDriver->Create(NULL, m_Dimensions[0], m_Dimensions[1], m_NbBands, m_PxType, NULL);
+    if (m_poDataset == NULL)
+      {
+      itkExceptionMacro(
+          << "GDAL Failed to create MEM dataset");
+      }
+
     }
 
   // Get all the Bands
@@ -986,16 +1063,12 @@ void GDALImageIO::InternalWriteImageInformation()
     m_poBands[i] = m_poDataset->GetRasterBand(i + 1);
     }
 
-  // JULIEN: ADDING SUPPORT FOR METADATA WRITING.
-
   /*----------------------------------------------------------------------*/
   /*-------------------------- METADATA ----------------------------------*/
   /*----------------------------------------------------------------------*/
 
   // Now initialize the itk dictionary
   itk::MetaDataDictionary& dict = this->GetMetaDataDictionary();
-  char**                   papszMetadata;
-  papszMetadata =  m_poDataset->GetMetadata(NULL);
   itk::OStringStream oss;
 
   /* -------------------------------------------------------------------- */
@@ -1089,36 +1162,41 @@ void GDALImageIO::InternalWriteImageInformation()
 
 }
 
-std::string GDALImageIO::TypeConversion(std::string name)
+std::string GDALImageIO::FilenameToGdalDriverShortName(std::string name)
 {
   std::string extension;
-  std::string extGDAL;
+  std::string gdalDriverShortName;
 
-  //Recuperer extension du fichier image
-  extension = System::GetExtension(name);
+  // Get extension in lowercase
+  extension = otb::System::SetToLower( System::GetExtension(name) );
 
-  if ((extension == "tif") || (extension == "tiff") || (extension == "TIF") || (extension == "TIFF")) extGDAL = "GTiff";
-  else if ((extension == "hdr") || (extension == "HDR")) extGDAL = "ENVI";
-  else if ((extension == "img") || (extension == "IMG")) extGDAL = "HFA";
-  else if (extension == "ntf") extGDAL = "NITF";
-//Pas PNG car BUG !!
-//  else if ((extension=="png")||(extension=="PNG"))
-//      extGDAL="PNG";
-//Pas JPEG car BUG !!
-//  else if ((extension=="jpg")||(extension=="JPG")||(extension=="jpeg")||(extension=="JPEG"))
-//      extGDAL="JPEG";
-  else if ((extension=="pix")||(extension=="PIX")) extGDAL="PCIDSK";
-  else extGDAL = "NOT-FOUND";
-  return extGDAL;
+  if      ( extension == "tif" || extension == "tiff" )
+    gdalDriverShortName = "GTiff";
+  else if ( extension == "hdr" )
+    gdalDriverShortName = "ENVI";
+  else if ( extension == "img" )
+    gdalDriverShortName = "HFA";
+  else if ( extension == "ntf" )
+    gdalDriverShortName = "NITF";
+  else if ( extension == "png" )
+    gdalDriverShortName="PNG";
+  else if ( extension == "jpg" || extension=="jpeg" )
+    gdalDriverShortName="JPEG";
+  else if ( extension == "pix" )
+    gdalDriverShortName="PCIDSK";
+  else
+    gdalDriverShortName = "NOT-FOUND";
+
+  return gdalDriverShortName;
 }
 
-std::string GDALImageIO::GetGdalWriteImageFileName(std::string& extGDAL, std::string filename)
+std::string GDALImageIO::GetGdalWriteImageFileName(std::string& gdalDriverShortName, std::string filename)
 {
   std::string gdalFileName;
 
   gdalFileName = filename;
-  //Suppression de l'extension HDR
-  if (extGDAL == "ENVI")
+  // Suppress hdr extension for ENVI format
+  if (gdalDriverShortName == "ENVI")
     {
     gdalFileName = System::GetRootName(filename);
     }
