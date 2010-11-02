@@ -1,0 +1,117 @@
+.. _qhull:
+
+*********************************************
+Generating Convex Hulls with libLAS and Qhull
+*********************************************
+
+
+:Author: Mateusz Loskot
+:Contact: mateusz at loskot dot net
+
+This article is dedicate to tools, techniques and
+`algorithms <http://en.wikipedia.org/wiki/Convex_hull_algorithms>`__ useful to
+create `convex hull <http://en.wikipedia.org/wiki/Convex_hull>`__ of cloud of
+points serialized in LAS file. You can find samples at http://liblas.org/samples 
+to play with.
+
+
+Using qhull programs
+------------------------------------------------------------------------------
+
+Calculation of convex hull of points stored in LAS file using
+`Qhull <http://www.qhull.org/>`__ program involves two steps:
+
+* output coordinates of points from LAS file to form of acceptable by
+  'qhull' as input
+* pass that output to ''qhull'' that will calculate convex hull
+
+The 'qhull' accepts plain text input that consists of basic 3 blocks:
+
+* dimension
+* number of points
+* point coordinates
+
+It is possible to use :ref:`las2txt` and basic command line utilities
+available in every Unix system to generate all the three blocks and output
+them together in required format:
+
+::
+
+    $ las2txt --stdout --parse xyz cloud.las > points.txt
+    $ cat points.txt | wc -l > count.txt
+    $ echo "3" > dimension.txt
+    $ cat dimension.txt count.txt points.txt > qhull_input.txt 
+    $ head -n4 qhull_input.txt
+    3
+    213093
+    630499.95 4834749.17 62.15
+    630499.83 4834748.88 62.68
+
+Now, file 'qhull_input.txt' is ready to use with 'qhull' program:
+
+::
+
+    $ qhull s < qhull_input.txt 
+
+    Convex hull of 213093 points in 3-d:
+
+      Number of vertices: 149
+      Number of facets: 282
+      Number of non-simplicial facets: 4
+
+    Statistics for:  | qhull s
+
+      Number of points processed: 172
+      Number of hyperplanes created: 795
+      Number of distance tests for qhull: 2430368
+      Number of distance tests for merging: 3484
+      Number of distance tests for checking: 3890
+      Number of merged facets: 12
+      CPU seconds to compute hull (after input): 0.07
+
+
+and output calculated actual convex hull geometry:
+
+::
+
+    $ qhull s n TO qhull.txt < qhull_input.txt
+
+Outputting data for qhull programs with C++
+------------------------------------------------------------------------------
+
+Alternatively, one may need to output LAS file to qhull input format using
+Python script or C++ program. Here is example of how to do program it in C++
+using libLAS :ref:`reader and iterator <cpptutorial>`:
+
+.. code-block:: cpp
+
+ // stream operator formatting LASPoint coordiantes, necessary to inject it to liblas namespace
+ namespace liblas {
+    std::ostream& operator << (std::ostream& os, liblas::LASPoint const& point)
+    {
+       return os << point[0] << '\t' << point[1] << '\t' << point[2] << '\t';
+    }
+ }
+
+ // open input data reader 
+ std::ifstream ifs("cloud.las", std::ios::in | std::ios::binary);
+ liblas::LASReader reader(ifs);
+
+ // open file for output
+ std::ofstream ofs("qhull_input.txt");
+ ofs << "3\n"; // dimension block
+ ofs << dimension << reader.GetHeader().GetPointRecordsCount() << std::endl; // number of points block
+ 
+ // point coordinates
+ ofs << std::setiosflags(std::ios::fixed) << std::setprecision(6);
+ std::copy(liblas::lasreader_iterator(reader), liblas::lasreader_iterator(),
+           std::ostream_iterator<liblas::LASPoint>(ofs, "\n"));
+
+
+Other hull information sources
+------------------------------------------------------------------------------
+
+* http://www.netlib.org/voronoi/hull.html
+* http://netlib.sandia.gov/voronoi/
+* http://code.flickr.com/blog/2008/10/30/the-shape-of-alpha/
+* http://gis.stackexchange.com/questions/1200/concave-hull-definition-algorithms-and-practical-solutions

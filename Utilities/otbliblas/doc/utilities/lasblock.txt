@@ -1,0 +1,84 @@
+
+.. raw:: pdf
+
+    PageBreak
+    
+.. _lasblock:
+    
+****************************************************************
+  lasblock
+****************************************************************
+
+:Author: Howard Butler
+:Contact: hobu.inc at gmail.com
+
+
+lasblock is a utility for pre-processing an LAS file into "chips" or "blocks".  
+These blocks are a custom point partitioning process that aims to optimize 
+the fill capacity, shape, and speed of processing.  More specifically, 
+it attempts to keep the blocks as full as possible and as square as possible 
+to augment querying characteristics for `Oracle Point Cloud`_. 
+This pre-processing is needed as precursor 
+step in the processing chain that ends with actually loading the data via 
+:ref:`las2oci`.
+
+
+Usage
+------------------------------------------------------------------------------
+
+
+Block a file, and write out blocks with 6 decimals of precision with 
+a nominal capacity of 3000 points per block:
+
+::
+
+    $ lasblock -c 3000  -p 6 myfile.las
+
+.. note::
+    If no capacity is specified with ``-c``, 10000 is assumed.  
+
+.. note::
+    lasblock will always write out a myfile.las.kdx file name by default, 
+    but you can override the output name with a ``-o`` command-line switch.
+
+Arguments
+------------------------------------------------------------------------------
+
+::
+
+    Allowed lasblock options:
+      -h [ --help ]                 Produce this help message
+      -c [ --capacity ] arg (=3000) Number of points to nominally put into each 
+                                    block (note that this number will not be exact)
+      -p [ --precision ] arg (=8)   Number of decimal points to write for each bbox
+      -i [ --input ] arg            input LAS file
+      -o [ --output ] arg           The output .kdx file (defaults to input 
+                                    filename + .kdx)
+      -v [ --verbose ]              Verbose message output
+
+
+
+
+.. figure:: ../images/lasblock_small.png
+    :alt: lasblock output
+
+.. figure:: ../images/lasblock_big.png
+    :alt: lasblock output
+
+
+Format
+------------------------------------------------------------------------------
+
+lasblock's format is quite simple.  It contains an id, a point count, a 2d block, and 
+a list of all the point ids that exist within that block in a simple text file.
+These files are called ``.kdx`` files for :ref:`las2oci` to be able to 
+consume, but there's nothing preventing you from giving them your own name.
+
+::
+
+    id count minx miny maxx maxy {id1 id2 ... idx}
+    0 9686 630250 4834500 630305.47 4834543.1 41357 ...
+    1 9686 630250.01 4834543.1 630305.47 4834617.4 210093 ...
+
+.. _`Oracle Point Cloud`: http://download.oracle.com/docs/cd/B28359_01/appdev.111/b28400/sdo_pc_pkg_ref.htm
+

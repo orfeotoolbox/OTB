@@ -1,0 +1,53 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual C# Express 2005
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnetLibLAS_Express", "dotnetLibLAS\dotnetLibLAS_Express.csproj", "{5652982E-9576-47F1-896A-1B700E6648FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnitTest_Express", "NUnitTest\NUnitTest_Express.csproj", "{E019C630-508C-4F2C-9743-F66423C216F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloWorldLAS_Express", "HelloWorldLAS\HelloWorldLAS_Express.csproj", "{85856BBA-7888-4196-9602-740986C7FA98}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Read_Express", "Samples\Read_Express\Read_Express.csproj", "{545BB2BA-CE19-474B-AB86-5BC2373658CB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5652982E-9576-47F1-896A-1B700E6648FA} = {5652982E-9576-47F1-896A-1B700E6648FA}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Read", "Samples\Read\Read.csproj", "{D2CFF726-B11D-4C01-B8CD-5FFC250302A2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Write_Express", "Samples\WriteLAS\Write_Express.csproj", "{51ACDC75-D5FA-445C-9E04-E7BF07AAFAD5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5652982E-9576-47F1-896A-1B700E6648FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5652982E-9576-47F1-896A-1B700E6648FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5652982E-9576-47F1-896A-1B700E6648FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5652982E-9576-47F1-896A-1B700E6648FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E019C630-508C-4F2C-9743-F66423C216F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E019C630-508C-4F2C-9743-F66423C216F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E019C630-508C-4F2C-9743-F66423C216F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E019C630-508C-4F2C-9743-F66423C216F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85856BBA-7888-4196-9602-740986C7FA98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85856BBA-7888-4196-9602-740986C7FA98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85856BBA-7888-4196-9602-740986C7FA98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85856BBA-7888-4196-9602-740986C7FA98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{545BB2BA-CE19-474B-AB86-5BC2373658CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{545BB2BA-CE19-474B-AB86-5BC2373658CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{545BB2BA-CE19-474B-AB86-5BC2373658CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{545BB2BA-CE19-474B-AB86-5BC2373658CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2CFF726-B11D-4C01-B8CD-5FFC250302A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2CFF726-B11D-4C01-B8CD-5FFC250302A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2CFF726-B11D-4C01-B8CD-5FFC250302A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2CFF726-B11D-4C01-B8CD-5FFC250302A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51ACDC75-D5FA-445C-9E04-E7BF07AAFAD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51ACDC75-D5FA-445C-9E04-E7BF07AAFAD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51ACDC75-D5FA-445C-9E04-E7BF07AAFAD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51ACDC75-D5FA-445C-9E04-E7BF07AAFAD5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

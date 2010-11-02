@@ -1,0 +1,76 @@
+.. raw:: pdf
+
+    PageBreak
+    
+.. _lasmerge:
+    
+****************************************************************
+  lasmerge: merge multiple LAS files into a single file
+****************************************************************
+
+:Author: Martin Isenburg
+:Contact: isenburg@cs.unc.edu
+
+    
+lasmerge reads multiple LIDAR data files in the LAS format and merges them 
+into a single file. The filenames can either be provided one by one or in 
+form of a text file.
+
+All the header information of the first file provided is used including 
+variable and user_defined headers. but some records are updated by 
+integrating the corresponding information from other headers. these are:
+
+* number_of_point_records
+* number_of_points_by_return[5]
+* max_x, min_x, max_y, min_y, max_z, and min_z
+
+In addition x_scale_factor, y_scale_factor, z_scale_factor may need to be 
+increased to accommodate a possibly larger bounding box. The user can 
+also set those in the command line with
+
+  -scale 0.01     or     -scale_xyz  0.01 0.01 0.001
+
+Similarly a new offset can be specified
+
+  -xyz_offset 63025000 483450000 0
+
+Usage
+-----
+
+::
+
+  $ lasmerge -i in1.las -i in2.las -i in3.las -o out.las
+
+merge the three inX.las files into one out.las file. 
+
+::
+
+  $ lasmerge -i las_file_list.txt -o out.las
+
+merges all LAS files listed in the text file into one out.las file
+
+::
+
+  $ lasmerge -i las_file_list.txt -o out.las -scale 0.01 -verbose
+
+merges the file and stores the LIDAR points with 0.01 accuracy in x, y, and 
+z and prints out control information.
+
+::
+
+  $ lasmerge -i las_file_list.txt -o out.las -scale_xyz 0.01 0.01 0.001
+
+same but with a different accuracy for z.
+
+Help
+~~~~
+
+::
+
+    C:\lastools\bin>lasmerge -h
+    usage:
+    lasmerge -i lasfiles.txt -o out.las
+    lasmerge -i file1.las -i file2.las -i file3.las -o out.las
+    lasmerge -i file1.las -i file2.las -olas > out.las
+    lasmerge -i lasfiles.txt -scale 0.01 -verbose -o out.las
+    lasmerge -h

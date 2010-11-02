@@ -1,0 +1,27 @@
+# $Id$
+#
+# A proxy makefile on MSBuild command to build .NET bindings using NMAKE.
+# Defines three targets: build, rebuild and clean.
+#
+# TODO: Define install and package targets
+#
+!INCLUDE ..\nmake.opt
+
+BUILDACTION="Build"
+BUILDPLATFORM="Any CPU"
+
+!IF "$(BUILD_DEBUG)" == "YES"
+BUILDCONFIG=Debug
+!ELSE
+BUILDCONFIG=Release
+!ENDIF
+
+default: build
+
+rebuild: clean build
+
+build:
+    msbuild dotnetLibLAS.sln /t:$(BUILDACTION) /p:Configuration=$(BUILDCONFIG) /p:Platform=$(BUILDPLATFORM)
+
+clean:
+    msbuild dotnetLibLAS.sln /t:Clean /p:Configuration=$(BUILDCONFIG) /p:Platform=$(BUILDPLATFORM)

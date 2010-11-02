@@ -1,33 +1,48 @@
 PROJECT(otbliblas)
 
 SET(liblas_VERSION_MAJOR "1")
-SET(liblas_VERSION_MINOR "2")
-SET(liblas_VERSION_PATCH "1")
+SET(liblas_VERSION_MINOR "6")
+SET(liblas_VERSION_PATCH "0")
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 SET(liblas_SOURCES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
+
 SET(liblas_SRCS
-    "${liblas_SOURCES_DIR}/las_c_api.cpp"
-    "${liblas_SOURCES_DIR}/lascolor.cpp"
-    "${liblas_SOURCES_DIR}/laserror.cpp"
-    "${liblas_SOURCES_DIR}/lasfile.cpp"
-    "${liblas_SOURCES_DIR}/lasheader.cpp"
-    "${liblas_SOURCES_DIR}/laspoint.cpp"
-    "${liblas_SOURCES_DIR}/lasreader.cpp"
-    "${liblas_SOURCES_DIR}/lasspatialreference.cpp"
-    "${liblas_SOURCES_DIR}/lasvariablerecord.cpp"
-    "${liblas_SOURCES_DIR}/laswriter.cpp"
-    "${liblas_SOURCES_DIR}/tifvsi.cpp"
-    "${liblas_SOURCES_DIR}/detail/file.cpp"
-    "${liblas_SOURCES_DIR}/detail/reader11.cpp"
-    "${liblas_SOURCES_DIR}/detail/reader.cpp"
-    "${liblas_SOURCES_DIR}/detail/writer11.cpp"
-    "${liblas_SOURCES_DIR}/detail/writer.cpp"
-    "${liblas_SOURCES_DIR}/detail/reader10.cpp"
-    "${liblas_SOURCES_DIR}/detail/reader12.cpp"
-    "${liblas_SOURCES_DIR}/detail/writer10.cpp"
-    "${liblas_SOURCES_DIR}/detail/writer12.cpp")
+  #las src
+  "${liblas_SOURCES_DIR}/las_c_api.cpp"
+  "${liblas_SOURCES_DIR}/lasclassification.cpp"
+  "${liblas_SOURCES_DIR}/lascolor.cpp"
+  "${liblas_SOURCES_DIR}/lasdimension.cpp"
+  "${liblas_SOURCES_DIR}/laserror.cpp"
+  "${liblas_SOURCES_DIR}/lasfilter.cpp"
+  "${liblas_SOURCES_DIR}/lasheader.cpp"
+  "${liblas_SOURCES_DIR}/lasindex.cpp"
+  "${liblas_SOURCES_DIR}/laspoint.cpp"
+  "${liblas_SOURCES_DIR}/lasreader.cpp"
+  "${liblas_SOURCES_DIR}/lasspatialreference.cpp"
+  "${liblas_SOURCES_DIR}/lasschema.cpp"
+  "${liblas_SOURCES_DIR}/lastransform.cpp"
+  "${liblas_SOURCES_DIR}/utility.cpp"
+  "${liblas_SOURCES_DIR}/lasvariablerecord.cpp"
+  "${liblas_SOURCES_DIR}/laswriter.cpp"
+  "${liblas_SOURCES_DIR}/tifvsi.cpp"
+  #index
+  "${liblas_SOURCES_DIR}/detail/index/indexcell.cpp"
+  "${liblas_SOURCES_DIR}/detail/index/indexoutput.cpp"
+  #reader
+  "${liblas_SOURCES_DIR}/detail/reader/reader.cpp"
+  "${liblas_SOURCES_DIR}/detail/reader/point.cpp"
+  "${liblas_SOURCES_DIR}/detail/reader/header.cpp"
+  "${liblas_SOURCES_DIR}/detail/reader/cachedreader.cpp"
+  #writer
+  "${liblas_SOURCES_DIR}/detail/writer/writer.cpp"
+  "${liblas_SOURCES_DIR}/detail/writer/point.cpp"
+  "${liblas_SOURCES_DIR}/detail/writer/base.cpp"
+  "${liblas_SOURCES_DIR}/detail/writer/header.cpp"
+  #detail 
+  "${liblas_SOURCES_DIR}/detail/utility.cpp"
+  )
 
 #include Gdal and GeoTiff support only if version >= 1.6
 IF(GDAL_VERSION VERSION_LESS 1.6)

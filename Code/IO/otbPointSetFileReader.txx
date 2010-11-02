@@ -66,9 +66,9 @@ PointSetFileReader<TOutputPointSet>
 
   std::ifstream ifs;
   ifs.open(m_FileName.c_str(), std::ios::in | std::ios::binary);
-  liblas::LASReader reader(ifs);
+  liblas::Reader reader(ifs);
 
-  liblas::LASHeader const& header = reader.GetHeader();
+  liblas::Header const& header = reader.GetHeader();
 
   otbDebugMacro(<< "Signature: " << header.GetFileSignature());
   otbDebugMacro(<< "Points count: " << header.GetPointRecordsCount());
@@ -126,9 +126,9 @@ void PointSetFileReader<TOutputPointSet>
 
   std::ifstream ifs;
   ifs.open(m_FileName.c_str(), std::ios::in | std::ios::binary);
-  liblas::LASReader reader(ifs);
+  liblas::Reader reader(ifs);
 
-  liblas::LASHeader const& header = reader.GetHeader();
+  liblas::Header const& header = reader.GetHeader();
 
   otbDebugMacro(<< "Signature: " << header.GetFileSignature());
   otbDebugMacro(<< "Points count: " << header.GetPointRecordsCount());
@@ -140,7 +140,7 @@ void PointSetFileReader<TOutputPointSet>
     {
     while (reader.ReadNextPoint())
       {
-      liblas::LASPoint const& p = reader.GetPoint();
+      liblas::Point const& p = reader.GetPoint();
 
       PointType point;
       point[0] = p.GetX();
@@ -160,7 +160,7 @@ void PointSetFileReader<TOutputPointSet>
     {
     while (reader.ReadNextPoint())
       {
-      liblas::LASPoint const& p = reader.GetPoint();
+      liblas::Point const& p = reader.GetPoint();
 
       PointType point;
       point[0] = p.GetX();
