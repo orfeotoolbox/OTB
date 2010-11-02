@@ -254,7 +254,7 @@ int otbImageFunctionAdapter(int argc, char * argv[])
   HMImageFunctionAdapterType::OutputType resultAdaptedHM = HMadaptedFunction->EvaluateAtIndex(index);
   
   rsltIdx = 0;
-  for (unsigned int i=0; i<=7; i++)
+  for (unsigned int i=0; i<7; i++)
     {
     error += vcl_pow(vcl_abs(resultAdaptedHM[rsltIdx] - resultHM[i]), 2);
 
