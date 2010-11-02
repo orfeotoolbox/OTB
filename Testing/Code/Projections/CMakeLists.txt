@@ -971,6 +971,11 @@ ENDFOREACH( file ${SENSOR_TYPES})
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 
+ADD_TEST(prTuSRTMHeightAboveMSLFunction ${PROJECTIONS_TESTS4}
+   otbSRTMHeightAboveMSLFunction
+)
+
+
 #=======================================================================================
 SET(Projections_SRCS1
 otbProjectionsTests1.cxx
@@ -1026,6 +1031,7 @@ SET(Projections_SRCS4
 otbProjectionsTests4.cxx
 otbPhysicalToRPCSensorModelImageFilter.cxx
 otbGenericRSResampleImageFilter.cxx
+otbSRTMHeightAboveMSLFunction.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbProjectionsTests1 "${Projections_SRCS1}" "OTBProjections;OTBIO;OTBTesting")
