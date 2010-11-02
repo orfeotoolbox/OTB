@@ -22,24 +22,24 @@
 
 #include "itkListSample.h"
 #include "itkVariableLengthVector.h"
-#include "otbCenteredReducedSampleListFilter.h"
+#include "otbShiftScaleSampleListFilter.h"
 
 typedef itk::VariableLengthVector<double> DoubleSampleType;
 typedef itk::Statistics::ListSample<DoubleSampleType> DoubleSampleListType;
 
 typedef itk::VariableLengthVector<float> FloatSampleType;
 typedef itk::Statistics::ListSample<FloatSampleType> FloatSampleListType;
-typedef otb::Statistics::CenteredReducedSampleListFilter<FloatSampleListType,DoubleSampleListType> CenteredReducedFilterType;
+typedef otb::Statistics::ShiftScaleSampleListFilter<FloatSampleListType,DoubleSampleListType> ShiftScaleFilterType;
 
 
-int otbCenteredReducedSampleListFilterNew(int argc, char * argv[])
+int otbShiftScaleSampleListFilterNew(int argc, char * argv[])
 {
-	CenteredReducedFilterType::Pointer instance = CenteredReducedFilterType::New();
+	ShiftScaleFilterType::Pointer instance = ShiftScaleFilterType::New();
 
 	return EXIT_SUCCESS;
 }
 
-int otbCenteredReducedSampleListFilter(int argc, char * argv[])
+int otbShiftScaleSampleListFilter(int argc, char * argv[])
 {
 	FloatSampleListType::Pointer inputSampleList = FloatSampleListType::New();
 	inputSampleList->SetMeasurementVectorSize(2);
@@ -54,7 +54,7 @@ int otbCenteredReducedSampleListFilter(int argc, char * argv[])
 	sample[1]=1;
 	inputSampleList->PushBack(sample);
 
-	CenteredReducedFilterType::Pointer filter = CenteredReducedFilterType::New();
+	ShiftScaleFilterType::Pointer filter = ShiftScaleFilterType::New();
 	sample[0]=1;
 	sample[1]=-3;
 	filter->SetMeans(sample);

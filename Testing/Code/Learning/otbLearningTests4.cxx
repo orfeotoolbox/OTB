@@ -37,5 +37,5 @@ void RegisterTests()
   REGISTER_TEST(otbConfusionMatrixCalculatorWrongSize);
   REGISTER_TEST(otbConfusionMatrixCalculatorUpdate);
   REGISTER_TEST(otbSVMValidation);
-  REGISTER_TEST(otbCenteredReducedSampleListFilterNew);
+  REGISTER_TEST(otbShiftScaleSampleListFilterNew);
 }
