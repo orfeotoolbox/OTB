@@ -1,0 +1,8 @@
+***************************************************************
+libLAS Installation
+***************************************************************
+
+ 
+See http://liblas.org/compilation.html for details how to build 
+libLAS from source.  See http://liblas.org/download.html for 
+locations to download pre-built binaries of libLAS.
