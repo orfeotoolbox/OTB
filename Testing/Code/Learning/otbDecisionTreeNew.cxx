@@ -18,14 +18,14 @@
 #include "itkExceptionObject.h"
 #include "otbDecisionTree.h"
 
+enum WheatTypes { WinterWheat, SummerWheat };
+
 int otbDecisionTreeNew(int argc, char* argv[])
 {
 
-  enum WheatTypes { WinterWheat, SummerWheat };
-
   typedef bool AttributeValueType;
 
-  typedef otbDecisionTree< AttributeValueType, WheatTypes > DecisionTreeType;
+  typedef otb::DecisionTree< AttributeValueType, WheatTypes > DecisionTreeType;
 
   DecisionTreeType::Pointer decisionTree = DecisionTreeType::New();
 
