@@ -557,6 +557,9 @@ otbSVMValidation 500 500 0.0025 0.0075 0.0075 0.0025 0. 0.0025 0. 0.0025 0 1)
 ADD_TEST(leTuDecisionTreeNew ${LEARNING_TESTS5}
 otbDecisionTreeNew)
 
+ADD_TEST(leTvDecisionTreeBuild ${LEARNING_TESTS5}
+otbDecisionTreeBuild)
+
 # A enrichir
 SET(BasicLearning_SRCS1
 otbLearningTests1.cxx
@@ -627,6 +630,7 @@ otbSVMValidation.cxx
 SET(BasicLearning_SRCS5
 otbLearningTests5.cxx
 otbDecisionTreeNew.cxx
+otbDecisionTreeBuild.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbLearningTests1 "${BasicLearning_SRCS1}" "OTBLearning;OTBIO;OTBTesting")

@@ -51,8 +51,16 @@ public:
   /** Runtime informations macro */
   itkTypeMacro(DecisionTree, DataObject);  
 
-  typedef typename std::map< AttributeValueType, ConstPointer > MapType;
-  void AddBranch(const DecisionTree& branch);
+  typedef typename std::map< AttributeValueType, Pointer > MapType;
+
+  itkSetMacro(Attribute, unsigned int);
+  itkGetMacro(Attribute, unsigned int);
+
+  /** Add a subtree on the tested attribute*/
+  void AddBranch(AttributeValueType attr, Pointer branch);
+
+  /** Add a leaf node on the tested attribute*/
+  void AddBranch(AttributeValueType attr, LabelType label);
 
   LabelType Decide(const std::vector<AttributeValueType> example);
 
@@ -71,9 +79,14 @@ private:
   void operator =(const Self&); // purposely not implemented
 
   /** Map holding the tree */
-  MapType m_Map;
+  MapType* m_Map;
   /** The attribute number (in the vector) being tested */
   unsigned int m_Attribute;
+
+  /** Is the tree a final node? */
+  bool m_IsFinal;
+
+  LabelType m_Label;
 
   
 };

@@ -23,6 +23,7 @@
 
 #include "otbDecisionTree.h"
 #include "otbMacro.h"
+#include "itkNumericTraits.h"
 
 namespace otb
 {
@@ -33,6 +34,9 @@ template <class AttributeValueType, class LabelType>
 DecisionTree<AttributeValueType, LabelType>
 ::DecisionTree()
 {
+  m_Map = new MapType;
+  m_IsFinal = true;
+  m_Label = static_cast<LabelType>(0);
 }
 /**
  * Destructor
@@ -41,6 +45,25 @@ template <class AttributeValueType, class LabelType>
 DecisionTree<AttributeValueType, LabelType>
 ::~DecisionTree()
 {
+  delete m_Map;
+}
+
+template <class AttributeValueType, class LabelType>
+void
+DecisionTree<AttributeValueType, LabelType>
+::AddBranch(AttributeValueType attr, Pointer branch)
+{
+  m_IsFinal = false;
+  (*m_Map)[attr] = branch;
+}
+
+template <class AttributeValueType, class LabelType>
+void
+DecisionTree<AttributeValueType, LabelType>
+::AddBranch(AttributeValueType attr, LabelType label)
+{
+  m_IsFinal = true;
+  m_Label = label;
 }
 
 
