@@ -45,6 +45,7 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Code/Testing
   ${OTB_SOURCE_DIR}/Code/Visu
   ${OTB_SOURCE_DIR}/Code/Visualization
+  ${OTB_BINARY_DIR}/Code/Visualization
   ${OTB_SOURCE_DIR}/Utilities/otbsvm
   ${OTB_SOURCE_DIR}/Utilities/otbossim/include
   ${OTB_SOURCE_DIR}/Utilities/otbossim/include/ossim
