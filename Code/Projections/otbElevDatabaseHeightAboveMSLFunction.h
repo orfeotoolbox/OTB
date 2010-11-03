@@ -92,6 +92,7 @@ public:
 
   /** Try to open the DEM directory. */
   virtual void OpenDEMDirectory(const char* DEMDirectory);
+  virtual void OpenDEMDirectory(const std::string&  DEMDirectory);
 
   /** Set the default height above ellipsoid in case no information is available*/
   virtual void SetDefaultHeightAboveEllipsoid(double h);

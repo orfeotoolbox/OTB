@@ -91,6 +91,14 @@ ElevDatabaseHeightAboveMSLFunction<TOutputPixel, TCoordRep, NPointDimension>
 template <class TOutputPixel, class TCoordRep, unsigned int NPointDimension>
 void
 ElevDatabaseHeightAboveMSLFunction<TOutputPixel, TCoordRep, NPointDimension>
+::OpenDEMDirectory(const std::string& DEMDirectory)
+{
+  this->OpenDEMDirectory(DEMDirectory.c_str());
+}
+
+template <class TOutputPixel, class TCoordRep, unsigned int NPointDimension>
+void
+ElevDatabaseHeightAboveMSLFunction<TOutputPixel, TCoordRep, NPointDimension>
 ::OpenDEMDirectory(const char* DEMDirectory)
 {
   ossimFilename ossimDEMDir;
@@ -101,6 +109,7 @@ ElevDatabaseHeightAboveMSLFunction<TOutputPixel, TCoordRep, NPointDimension>
     itkExceptionMacro("Failed to open DEM Directory: " << ossimDEMDir);
     }
 }
+
 
 template <class TOutputPixel, class TCoordRep, unsigned int NPointDimension>
 void
