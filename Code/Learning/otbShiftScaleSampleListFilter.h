@@ -39,7 +39,6 @@ namespace Statistics {
  *	This filter provide pipeline support for itk::Statistics::ListSample via itk::DataObjectDecorator for
  *	both the input and the output sample list.
  *
- * \sa ImageToListAdaptor
  */
 template < class TInputSampleList, class TOutputSampleList = TInputSampleList >
 class ITK_EXPORT ShiftScaleSampleListFilter :
