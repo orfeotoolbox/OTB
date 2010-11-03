@@ -46,12 +46,13 @@ int otbShiftScaleSampleListFilter(int argc, char * argv[])
 	// Compute the number of samples
 	const char * outfname = argv[1];
 	unsigned int sampleSize = atoi(argv[2]);
-	unsigned int nbSamples = (argc-3)/sampleSize;
+	unsigned int nbSamples = (argc-2*sampleSize-2)/sampleSize;
 
 	FloatSampleListType::Pointer inputSampleList = FloatSampleListType::New();
 	inputSampleList->SetMeasurementVectorSize(sampleSize);
 
 	ShiftScaleFilterType::Pointer filter = ShiftScaleFilterType::New();
+	filter->SetInput(inputSampleList);
 
 	FloatSampleType sample(sampleSize);
 

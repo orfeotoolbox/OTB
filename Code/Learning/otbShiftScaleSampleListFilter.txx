@@ -55,8 +55,7 @@ ShiftScaleSampleListFilter<TInputSampleList,TOutputSampleList>
 ::SetInput( const InputSampleListType * input )
  {
 	typename InputSampleListObjectType::Pointer inputPtr = InputSampleListObjectType::New();
-	InputSampleListPointer inputSampleList = InputSampleListType::New();
-	inputPtr->Set(inputSampleList);
+	inputPtr->Set(input);
 	this->SetInput(inputPtr);
  }
 
@@ -175,7 +174,6 @@ ShiftScaleSampleListFilter<TInputSampleList,TOutputSampleList>
 
 		++inputIt;
 		}
-
  }
 
 template < class TInputSampleList, class TOutputSampleList >
