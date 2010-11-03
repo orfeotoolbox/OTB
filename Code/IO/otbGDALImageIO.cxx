@@ -67,6 +67,7 @@ GDALImageIO::GDALImageIO()
   m_NbBands = 0;
   m_FlagWriteImageInformation = true;
 
+  m_IsComplex = false;
 //  GDALAllRegister();
 }
 
@@ -174,8 +175,7 @@ void GDALImageIO::Read(void* buffer)
   CPLErr         lCrGdal;
   std::streamoff cpt(0);
 
-//  if (GDALDataTypeIsComplex(m_PxType))
-  if(0)
+  if (GDALDataTypeIsComplex(m_PxType) && !m_IsComplex)
     {
     lCrGdal = m_poBands[0]->RasterIO(GF_Read,
                                      lFirstColumn,
@@ -453,6 +453,7 @@ void GDALImageIO::InternalReadImageInformation()
   else if (this->GetComponentType() == CFLOAT)
     {
     m_NbOctetPixel = sizeof(std::complex<float>);
+    m_IsComplex = true;
     }
   else
     {

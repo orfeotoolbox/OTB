@@ -167,6 +167,7 @@ private:
 
   bool m_FlagWriteImageInformation;
 
+  bool m_IsComplex;
 };
 
 } // end namespace otb
