@@ -26,9 +26,18 @@ namespace otb {
 namespace Statistics {
 
 /** \class ShiftScaleSampleListFilter
- *  \brief This class generate a centered and reduced sample list from and input sample list.
+ *  \brief This class generate a shifted and scaled version of the input sample list
+ *
+ *  For each component of the sample, the following formula is applied :
+ *
+ *  \f[ output = \frac{input - shift}{scale} \f]
+ *
+ *	Standard casting is applied between input and output type.
  *
  *	Shifts and scales can be set via the SetShift() and SetScales() methods.
+ *
+ *	This filter provide pipeline support for itk::Statistics::ListSample via itk::DataObjectDecorator for
+ *	both the input and the output sample list.
  *
  * \sa ImageToListAdaptor
  */
