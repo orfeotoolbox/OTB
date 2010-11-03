@@ -78,7 +78,8 @@ public:
 
   typedef itk::FunctionBase< PointType, PixelType>         DEMFunctionBaseType;
   typedef typename DEMFunctionBaseType::Pointer            DEMFunctionBasePointer;
-  typedef otb::ElevDatabaseHeightAboveMSLFunction<DEMImageType,typename PointType::ValueType>    SRTMFunctionType;
+  typedef otb::ElevDatabaseHeightAboveMSLFunction<PixelType,
+                        typename PointType::ValueType>     SRTMFunctionType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -193,7 +194,7 @@ protected:
   SizeType                m_OutputSize;
   PixelType               m_DefaultUnknownValue;
 
-  typename DEMFunctionBaseType::Pointer m_DEMFunction;
+  DEMFunctionBasePointer  m_DEMFunction;
 
 private:
   DEMToImageGenerator(const Self &); //purposely not implemented

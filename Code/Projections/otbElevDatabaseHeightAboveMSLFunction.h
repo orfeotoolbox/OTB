@@ -39,25 +39,22 @@ namespace otb
  * \ingroup ImageFunctions
  */
 template <
-class TOutput,
-class TCoordRep = float
+class TOutputPixel,
+class TCoordRep = float,
+unsigned int NPointDimension=2
 >
 class ElevDatabaseHeightAboveMSLFunction :
-    public itk::FunctionBase< itk::Point<TCoordRep,
-                               ::itk::GetImageDimension<TOutput>::ImageDimension>,
-                       typename TOutput::PixelType >
+    public itk::FunctionBase< itk::Point<TCoordRep, NPointDimension>,
+                              TOutputPixel >
 {
 public:
-    /** Dimension underlying input image. */
-    itkStaticConstMacro(ImageDimension, unsigned int,
-                        TOutput::ImageDimension);
-
+    /** Dimension of the Space */
+    itkStaticConstMacro(PointDimension, unsigned int, NPointDimension);
 
     /** Standard class typedefs. */
-  typedef ElevDatabaseHeightAboveMSLFunction                            Self;
+  typedef ElevDatabaseHeightAboveMSLFunction                    Self;
   typedef itk::FunctionBase<
-    itk::Point<TCoordRep, itkGetStaticConstMacro(ImageDimension)>,
-    TOutput >                                                   Superclass;
+      itk::Point<TCoordRep, NPointDimension>, TOutputPixel >    Superclass;
   typedef itk::SmartPointer<Self>                               Pointer;
   typedef itk::SmartPointer<const Self>                         ConstPointer;
 
@@ -67,24 +64,19 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** OutputType typedef support. */
-  typedef TOutput OutputImageType;
-
-  /** InputPixel typedef support */
-  typedef typename OutputImageType::PixelType PixelType;
-
-  /** InputImagePointer typedef support */
-  typedef typename OutputImageType::ConstPointer ImageConstPointer;
+  /** Output Pixel typedef support */
+  typedef TOutputPixel   PixelType;
 
   /** CoordRepType typedef support. */
   typedef TCoordRep CoordRepType;
 
-  /** Index Type. */
-  typedef typename OutputImageType::IndexType      IndexType;
-  typedef typename OutputImageType::IndexValueType IndexValueType;
-
   /** Point Type. */
-  typedef itk::Point<TCoordRep,itkGetStaticConstMacro(ImageDimension)> PointType;
+  typedef itk::Point<TCoordRep,NPointDimension>    PointType;
+
+  /** Get the dimension (size) of the point. */
+  static unsigned int GetPointDimension()
+    { return NPointDimension; }
+
 
   /** Set the Elev Manager to the function. */
   virtual void SetElevManager(ossimElevManager * ptr )

@@ -37,8 +37,8 @@ namespace otb
 /**
  * Constructor
  */
-template <class TOutput, class TCoordRep>
-ElevDatabaseHeightAboveMSLFunction<TOutput, TCoordRep>
+template <class TOutputPixel, class TCoordRep, unsigned int NPointDimension>
+ElevDatabaseHeightAboveMSLFunction<TOutputPixel, TCoordRep, NPointDimension>
 ::ElevDatabaseHeightAboveMSLFunction() :
      m_ElevManager(ossimElevManager::instance())
 {
@@ -51,9 +51,9 @@ ElevDatabaseHeightAboveMSLFunction<TOutput, TCoordRep>
 /**
  * Standard "PrintSelf" method
  */
-template <class TOutput, class TCoordRep>
+template <class TOutputPixel, class TCoordRep, unsigned int NPointDimension>
 void
-ElevDatabaseHeightAboveMSLFunction<TOutput, TCoordRep>
+ElevDatabaseHeightAboveMSLFunction<TOutputPixel, TCoordRep, NPointDimension>
 ::PrintSelf(
   std::ostream& os,
   itk::Indent indent) const
@@ -65,9 +65,9 @@ ElevDatabaseHeightAboveMSLFunction<TOutput, TCoordRep>
 /**
  *
  */
-template <class TOutput, class TCoordRep>
-typename ElevDatabaseHeightAboveMSLFunction<TOutput, TCoordRep>::PixelType
-ElevDatabaseHeightAboveMSLFunction<TOutput, TCoordRep>
+template <class TOutputPixel, class TCoordRep, unsigned int NPointDimension>
+typename ElevDatabaseHeightAboveMSLFunction<TOutputPixel, TCoordRep, NPointDimension>::PixelType
+ElevDatabaseHeightAboveMSLFunction<TOutputPixel, TCoordRep, NPointDimension>
 ::Evaluate(const PointType& point) const
 {
   double   height;
@@ -88,9 +88,9 @@ ElevDatabaseHeightAboveMSLFunction<TOutput, TCoordRep>
 
 }
 
-template <class TOutput, class TCoordRep>
+template <class TOutputPixel, class TCoordRep, unsigned int NPointDimension>
 void
-ElevDatabaseHeightAboveMSLFunction<TOutput, TCoordRep>
+ElevDatabaseHeightAboveMSLFunction<TOutputPixel, TCoordRep, NPointDimension>
 ::OpenDEMDirectory(const char* DEMDirectory)
 {
   ossimFilename ossimDEMDir;
@@ -102,9 +102,9 @@ ElevDatabaseHeightAboveMSLFunction<TOutput, TCoordRep>
     }
 }
 
-template <class TOutput, class TCoordRep>
+template <class TOutputPixel, class TCoordRep, unsigned int NPointDimension>
 void
-ElevDatabaseHeightAboveMSLFunction<TOutput, TCoordRep>
+ElevDatabaseHeightAboveMSLFunction<TOutputPixel, TCoordRep, NPointDimension>
 ::SetDefaultHeightAboveEllipsoid(double h)
 {
   m_ElevManager->setDefaultHeightAboveEllipsoid(h);

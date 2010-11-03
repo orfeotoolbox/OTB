@@ -22,8 +22,7 @@
 
 int otbElevDatabaseHeightAboveMSLFunction(int argc, char* argv[])
 {
-  typedef otb::Image<float,2>                          ImageType;
-  typedef otb::ElevDatabaseHeightAboveMSLFunction<ImageType>   SrtmFunctionType;
+  typedef otb::ElevDatabaseHeightAboveMSLFunction<float>   SrtmFunctionType;
 
   SrtmFunctionType::Pointer srtmDem;
 
