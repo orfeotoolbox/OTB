@@ -995,12 +995,12 @@ TerraSarImageMetadataInterface::GetCenterIncidenceAngleIndex() const
   std::string key = "sceneCoord.sceneCenterCoord.refRow";
   ossimString tempVal = kwl.find(key.c_str());
 
-  it[0] = tempVal.toInt();
+  it[1] = tempVal.toInt();
 
   key = "sceneCoord.sceneCenterCoord.refColumn";
   tempVal = kwl.find(key.c_str());
 
-  it[1] = tempVal.toInt();
+  it[0] = tempVal.toInt();
 
   return it;
 }
@@ -1067,13 +1067,13 @@ TerraSarImageMetadataInterface::GetCornersIncidenceAnglesIndex() const
     oss << "sceneCoord.sceneCornerCoord[" << i << "].refRow";
     ossimString tempVal = kwl.find(oss.str().c_str());
 
-    it[0] = tempVal.toInt();
+    it[1] = tempVal.toInt();
 
     oss2.str("");
     oss2 << "sceneCoord.sceneCornerCoord[" << i << "].refColumn";
     tempVal = kwl.find(oss2.str().c_str());
 
-    it[1] = tempVal.toInt();
+    it[0] = tempVal.toInt();
 
     iv.push_back(it);
     }
@@ -1309,6 +1309,33 @@ TerraSarImageMetadataInterface
     return points;
 }
 
+TerraSarImageMetadataInterface::RealType
+TerraSarImageMetadataInterface
+::GetRadiometricCalibrationScale() const
+{
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
+    {
+    itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
+    }
+
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+    {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+    }
+
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key;
+  key = "calibration.calibrationConstant.calFactor";
+
+  ossimString calFactorValue = kwl.find(key.c_str());
+
+  return calFactorValue.toDouble();
+}
+
 TerraSarImageMetadataInterface::PointSetPointer
 TerraSarImageMetadataInterface
 ::GetRadiometricCalibrationIncidenceAngle() const
@@ -1325,27 +1352,33 @@ TerraSarImageMetadataInterface
     DoubleVectorType cornerIncidenceAngleValue = this->GetCornersIncidenceAngles();
     IndexVectorType cornerIncidenceAngleIndex = this->GetCornersIncidenceAnglesIndex();
 
+    std::cout << "centerIncidenceAngleValue " << centerIncidenceAngleValue << std::endl;
+    std::cout << "centerIncidenceAngleIndex " << centerIncidenceAngleIndex << std::endl;
+
       points->Initialize();
     unsigned int noPoint = 0;
 
       p0[0] = centerIncidenceAngleIndex[0];
       p0[1] = centerIncidenceAngleIndex[1];
 
-    points->SetPoint(noPoint, p0);
+      points->SetPoint(noPoint, p0);
       points->SetPointData(noPoint, centerIncidenceAngleValue*M_PI/180.);
       ++noPoint;
 
       for(unsigned int i = 0; i < cornerIncidenceAngleIndex.size(); ++i)
       {
 
-        p0[0] = cornerIncidenceAngleIndex.at(i)[0];
+          p0[0] = cornerIncidenceAngleIndex.at(i)[0];
           p0[1] = cornerIncidenceAngleIndex.at(i)[1];
+          std::cout << "centerIncidenceAngleIndex " << p0[0] << " " << p0[1]
+                 << "  =  " << cornerIncidenceAngleValue[i] << std::endl;
 
           points->SetPoint(noPoint, p0);
           points->SetPointData(noPoint, cornerIncidenceAngleValue[i]*M_PI/180.);
           ++noPoint;
       }
 
+      std::cout << "IncidenceAngle pointset " << points << std::endl;
 
     return points;
 }
@@ -1355,7 +1388,7 @@ TerraSarImageMetadataInterface
 ::GetRadiometricCalibrationIncidenceAnglePolynomialDegree() const
 {
   IndexType polynomSize;
-  polynomSize[0] = 1;
+  polynomSize[0] = 2;
   polynomSize[1] = 1;
 
   return polynomSize;
