@@ -88,8 +88,7 @@ int main(int argc, char * argv[])
 
   typedef DEMToImageGeneratorType::SizeType       SizeType;
   typedef DEMToImageGeneratorType::SpacingType    SpacingType;
-  typedef DEMToImageGeneratorType::DEMHandlerType DEMHandlerType;
-  typedef DEMHandlerType::PointType               PointType;
+  typedef DEMToImageGeneratorType::PointType      PointType;
 
   demToImage->SetDEMDirectoryPath(argv[9]);
 

@@ -68,7 +68,7 @@ public:
   typedef typename Superclass::OutputImageRegionType      OutputImageRegionType;
   typedef itk::ImageRegionIteratorWithIndex<DEMImageType> ImageIteratorType;
 
-  typedef otb::DEMHandler DEMHandlerType;
+//  typedef otb::DEMHandler DEMHandlerType;
 
   /** Specialisation of OptResampleFilter with a remote
     * sensing  transform
