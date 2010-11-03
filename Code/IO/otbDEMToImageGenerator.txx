@@ -38,6 +38,8 @@ DEMToImageGenerator<TDEMImage>
   m_OutputOrigin[1] = 0;
 
   m_Transform         = GenericRSTransformType::New();
+  m_DEMFunction       = SRTMFunctionType::New();
+
 }
 
 // DEM folder specification method

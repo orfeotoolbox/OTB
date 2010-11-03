@@ -100,10 +100,6 @@ public:
   itkGetConstReferenceMacro(OutputSpacing, SpacingType);
 
   /** Set/Get the Default Unknown Value. */
-  itkSetMacro(DefaultUnknownValue, PixelType);
-  itkGetConstReferenceMacro(DefaultUnknownValue, PixelType);
-
-  /** Set/Get the Default Unknown Value. */
   itkSetObjectMacro(Transform, GenericRSTransformType);
   itkGetObjectMacro(Transform, GenericRSTransformType);
   itkGetConstObjectMacro(Transform, GenericRSTransformType);
@@ -115,7 +111,6 @@ public:
   /** Set/Get the DEM Function. */
   itkSetObjectMacro(DEMFunction, DEMFunctionBaseType);
   itkGetConstObjectMacro(DEMFunction, DEMFunctionBaseType);
-
 
   /**
    * Set/Get input & output projections.
@@ -192,8 +187,6 @@ protected:
   PointType               m_OutputOrigin;
   SpacingType             m_OutputSpacing;
   SizeType                m_OutputSize;
-  PixelType               m_DefaultUnknownValue;
-
   DEMFunctionBasePointer  m_DEMFunction;
 
 private:
