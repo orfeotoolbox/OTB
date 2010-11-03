@@ -22,6 +22,7 @@ SET(LEARNING_TESTS1 ${CXX_TEST_PATH}/otbLearningTests1)
 SET(LEARNING_TESTS2 ${CXX_TEST_PATH}/otbLearningTests2)
 SET(LEARNING_TESTS3 ${CXX_TEST_PATH}/otbLearningTests3)
 SET(LEARNING_TESTS4 ${CXX_TEST_PATH}/otbLearningTests4)
+SET(LEARNING_TESTS4 ${CXX_TEST_PATH}/otbLearningTests5)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbLearningTESTS1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -549,6 +550,13 @@ otbSVMValidation 500 500 0.0025 0.0075 0.0075 0.0025 0. 0.0025 0. 0.0025 0 0)
 ADD_TEST(leTvSVMValidationLinearlySeparableWithProbEstimate ${LEARNING_TESTS4}
 otbSVMValidation 500 500 0.0025 0.0075 0.0075 0.0025 0. 0.0025 0. 0.0025 0 1)
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbLearningTESTS5 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# -------            otb::DecisionTree   ------------------------------
+ADD_TEST(leTuDecisionTreeNew ${LEARNING_TESTS5}
+otbDecisionTreeNew)
+
 # A enrichir
 SET(BasicLearning_SRCS1
 otbLearningTests1.cxx
@@ -616,10 +624,16 @@ otbConfusionMatrixCalculatorTest.cxx
 otbSVMValidation.cxx
 )
 
+SET(BasicLearning_SRCS5
+otbLearningTests5.cxx
+otbDecisionTreeNew.cxx
+)
+
 OTB_ADD_EXECUTABLE(otbLearningTests1 "${BasicLearning_SRCS1}" "OTBLearning;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbLearningTests2 "${BasicLearning_SRCS2}" "OTBLearning;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbLearningTests3 "${BasicLearning_SRCS3}" "OTBLearning;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbLearningTests4 "${BasicLearning_SRCS4}" "OTBLearning;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbLearningTests5 "${BasicLearning_SRCS5}" "OTBLearning;OTBIO;OTBTesting")
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
