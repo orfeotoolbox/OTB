@@ -34,7 +34,7 @@ template <class AttributeValueType, class LabelType>
 DecisionTree<AttributeValueType, LabelType>
 ::DecisionTree()
 {
-  m_Map = new MapType;
+  m_TreeMap = new TreeMapType;
   m_IsFinal = true;
   m_Label = static_cast<LabelType>(0);
 }
@@ -45,7 +45,7 @@ template <class AttributeValueType, class LabelType>
 DecisionTree<AttributeValueType, LabelType>
 ::~DecisionTree()
 {
-  delete m_Map;
+  delete m_TreeMap;
 }
 
 template <class AttributeValueType, class LabelType>
@@ -54,7 +54,7 @@ DecisionTree<AttributeValueType, LabelType>
 ::AddBranch(AttributeValueType attr, Pointer branch)
 {
   m_IsFinal = false;
-  (*m_Map)[attr] = branch;
+  (*m_TreeMap)[attr] = branch;
 }
 
 template <class AttributeValueType, class LabelType>
@@ -63,7 +63,35 @@ DecisionTree<AttributeValueType, LabelType>
 ::AddBranch(AttributeValueType attr, LabelType label)
 {
   m_IsFinal = true;
-  m_Label = label;
+  m_LabelMap[attr] = label;
+}
+
+template <class AttributeValueType, class LabelType>
+LabelType
+DecisionTree<AttributeValueType, LabelType>
+::Decide(const ExampleType example)
+{
+  if( m_IsFinal )
+    {
+    AttributeValueType attrValue = example[m_Attribute];
+    if( m_LabelMap.find(attrValue) == m_LabelMap.end() ) // attribute
+							 // not found
+							 // in the map 
+      itkGenericExceptionMacro(<< "Example could not be handled by decision tree.");
+    LabelType lab = m_LabelMap[attrValue];
+    return lab;
+    }
+  else
+    {
+    AttributeValueType attrValue = example[m_Attribute];
+    if( m_TreeMap->find(attrValue) == m_TreeMap->end() ) // attribute
+					                 // not found
+					                 // in the map
+      itkGenericExceptionMacro(<< "Example could not be handled by decision tree.");
+    Pointer child = (*m_TreeMap)[attrValue];
+    return child->Decide(example);
+    }
+
 }
 
 
