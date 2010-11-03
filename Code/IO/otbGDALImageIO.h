@@ -29,8 +29,6 @@
 /* ITK Libraries */
 #include "itkImageIOBase.h"
 
-#include "otbMetaDataKey.h"
-
 /* GDAL Libraries */
 #include "gdal.h"
 #include "gdal_priv.h"
@@ -41,6 +39,7 @@
 
 namespace otb
 {
+class GDALDatasetWrapper;
 
 /** \class GDALImageIO
  *
@@ -51,8 +50,7 @@ namespace otb
  * \ingroup IOFilters
  *
  */
-class ITK_EXPORT GDALImageIO : public itk::ImageIOBase,
-  public MetaDataKey
+class ITK_EXPORT GDALImageIO : public itk::ImageIOBase
 {
 public:
 
@@ -102,11 +100,7 @@ public:
   virtual bool CanWriteFile(const char*);
 
   /** Determine the file type. Returns true if the ImageIO can stream write the specified file */
-//THOMAS
-  virtual bool CanStreamWrite()
-  {
-    return true;
-  }
+  virtual bool CanStreamWrite();
 
   /** Writes the spacing and dimentions of the image.
    * Assumes SetFileName has been called with a valid file name. */
@@ -115,9 +109,6 @@ public:
   /** Writes the data to disk from the memory buffer provided. Make sure
    * that the IORegion has been set properly. */
   virtual void Write(const void* buffer);
-
-  // JULIEN: NOT USED, NOT IMPLEMENTED
-  //void SampleImage(void* buffer,int XBegin, int YBegin, int SizeXRead, int SizeYRead, int XSample, int YSample);
 
 protected:
   /** Constructor.*/
@@ -129,11 +120,7 @@ protected:
   /** Read all information on the image*/
   void InternalReadImageInformation();
   /** Write all information on the image*/
-  void InternalWriteImageInformation();
-  /** Dimension along Ox of the image*/
-  int m_width;
-  /** Dimension along Oy of the image*/
-  int m_height;
+  void InternalWriteImageInformation(const void* buffer);
   /** Number of bands of the image*/
   int m_NbBands;
   /** Buffer*/
@@ -150,14 +137,15 @@ private:
   void operator =(const Self&); //purposely not implemented
 
   /** Determine real file name to write the image */
-  std::string GetGdalWriteImageFileName(std::string& extGDAL, std::string filename);
+  std::string GetGdalWriteImageFileName(std::string& gdalDriverShortName, std::string filename);
 
-  std::string TypeConversion(std::string name);
+  std::string FilenameToGdalDriverShortName(std::string name);
+
 
   /** GDAL parameters. */
-  GDALDriver*      m_hDriver;
-  GDALDataset*     m_poDataset;
-  GDALRasterBand** m_poBands;
+  typedef itk::SmartPointer<GDALDatasetWrapper> GDALDatasetWrapperPointer;
+  GDALDatasetWrapperPointer m_Dataset;
+
   GDALDataType     m_PxType;
   /** Nombre d'octets par pixel */
   int m_NbOctetPixel;
@@ -166,6 +154,7 @@ private:
                             double& dfGeoX, double& dfGeoY);
 
   bool m_FlagWriteImageInformation;
+  bool m_CanStreamWrite;
 
 };
 
