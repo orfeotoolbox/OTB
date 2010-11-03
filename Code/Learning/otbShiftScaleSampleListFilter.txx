@@ -98,7 +98,7 @@ ShiftScaleSampleListFilter<TInputSampleList,TOutputSampleList>
 
 	typename InputSampleListObjectType::Pointer dataObjectPointer = static_cast<const InputSampleListObjectType * >
 	(this->ProcessObject::GetInput(0) );
-	return dataObjectPointer.Get();
+	return dataObjectPointer->Get();
  }
 
 template < class TInputSampleList, class TOutputSampleList >
@@ -109,7 +109,7 @@ ShiftScaleSampleListFilter<TInputSampleList,TOutputSampleList>
  {
 	typename OutputSampleListObjectType::Pointer dataObjectPointer = static_cast<OutputSampleListObjectType * >
 	(this->ProcessObject::GetOutput(0) );
-	return dataObjectPointer.Get();
+	return const_cast<OutputSampleListType *>(dataObjectPointer->Get());
  }
 
 template < class TInputSampleList, class TOutputSampleList >

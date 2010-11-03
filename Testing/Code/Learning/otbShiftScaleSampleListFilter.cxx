@@ -24,6 +24,8 @@
 #include "itkVariableLengthVector.h"
 #include "otbShiftScaleSampleListFilter.h"
 
+#include <fstream>
+
 typedef itk::VariableLengthVector<double> DoubleSampleType;
 typedef itk::Statistics::ListSample<DoubleSampleType> DoubleSampleListType;
 
@@ -41,26 +43,71 @@ int otbShiftScaleSampleListFilterNew(int argc, char * argv[])
 
 int otbShiftScaleSampleListFilter(int argc, char * argv[])
 {
+	// Compute the number of samples
+	const char * outfname = argv[1];
+	unsigned int sampleSize = atoi(argv[2]);
+	unsigned int nbSamples = (argc-3)/sampleSize;
+
 	FloatSampleListType::Pointer inputSampleList = FloatSampleListType::New();
-	inputSampleList->SetMeasurementVectorSize(2);
-	FloatSampleType sample(2);
-	sample[0]=-1;
-	sample[1]=-5;
-	inputSampleList->PushBack(sample);
-	sample[0]=-1;
-	sample[1]=-2;
-	inputSampleList->PushBack(sample);
-	sample[0]=3;
-	sample[1]=1;
-	inputSampleList->PushBack(sample);
+	inputSampleList->SetMeasurementVectorSize(sampleSize);
+
 	ShiftScaleFilterType::Pointer filter = ShiftScaleFilterType::New();
-	sample[0]=1;
-	sample[1]=-3;
+
+	FloatSampleType sample(sampleSize);
+
+	unsigned int index = 3;
+
+	std::ofstream ofs(outfname);
+
+	ofs<<"Sample size: "<<sampleSize<<std::endl;
+	ofs<<"Nb samples : "<<nbSamples<<std::endl;
+
+	for(unsigned int i = 0; i<sampleSize;++i)
+	{
+		sample[i]=atof(argv[index]);
+		++index;
+	}
+
+	ofs<<"Shifts: "<<sample<<std::endl;
+
 	filter->SetShifts(sample);
-	sample[0]=2;
-	sample[1]=3;
+
+	for(unsigned int i = 0; i<sampleSize;++i)
+	{
+		sample[i]=atof(argv[index]);
+		++index;
+	}
+
+	ofs<<"Scales: "<<sample<<std::endl;
+
 	filter->SetScales(sample);
+
+	ofs<<"Input samples: "<<std::endl;
+
+	for(unsigned int sampleId = 0; sampleId<nbSamples;++sampleId)
+	{
+		for(unsigned int i = 0; i<sampleSize;++i)
+			{
+				sample[i]=atof(argv[index]);
+				++index;
+			}
+		ofs<<sample<<std::endl;
+		inputSampleList->PushBack(sample);
+	}
+
 	filter->Update();
+
+	DoubleSampleListType::ConstIterator outIt = filter->GetOutputSampleList()->Begin();
+
+	ofs<<"Output samples: "<<std::endl;
+
+	while(outIt != filter->GetOutputSampleList()->End())
+	{
+		ofs<<outIt.GetMeasurementVector()<<std::endl;
+		++outIt;
+	}
+
+	ofs.close();
 
 	return EXIT_SUCCESS;
 }
