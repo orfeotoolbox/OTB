@@ -1,0 +1,36 @@
+  >>> from liblas import schema
+  >>> from liblas import header
+  >>> from liblas import file
+  
+  >>> f2 = file.File('../test/data/TO_core_last_clip.las')
+
+
+  >>> f = schema.Schema()
+  >>> f.size
+  20
+  
+
+  >>> h = f2.header
+  >>> f = h.schema
+  
+  >>> h.version
+  '1.0'
+  
+  >>> f.size
+  28
+
+  
+  >>> h = header.Header()
+  >>> f = h.schema
+
+  
+  >>> f.size
+  34
+
+
+
+  >>> h.schema = f
+  
+  >>> h.data_record_length
+  34
+  
