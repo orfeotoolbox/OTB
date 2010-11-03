@@ -1,0 +1,258 @@
+.. _python_tutorial:
+
+*********************************************
+Python Tutorial
+*********************************************
+
+This basic tutorial explains how to use libLAS to read and write 
+LIDAR data encoded in LAS file format from Python.
+
+=============================================
+Reading
+=============================================
+
+1. Reading LAS data in Python is a simple as opening the file with the 
+file.File class and using the iterator to chug through the points.
+
+.. code-block:: python
+
+    >>> from liblas import file
+    >>> f = file.File('file.las',mode='r')
+    >>> for p in f:
+    ...     print 'X,Y,Z: ', p.x, p.y, p.z
+
+2. You can also read specific points from a file:
+
+.. code-block:: python
+
+    >>> from liblas import file
+    >>> f = file.File('file.las', mode='r')
+    >>> p = f.read(0)
+    >>> p
+    <liblas.point.Point object at 0x7377f0>
+
+File versions and formats
+------------------------------------------------------------------------------
+
+The LAS format, as of this writing, provides three different file format 
+versions (1.0, 1.1, and 1.2) and four different point format verions (0, 1, 2, 3). 
+It is important that you be mindful of the minor_version and the dataformat_id 
+when working with files.  If the dataformat_id is not correct for the type of 
+data you want to store (color, time, or color + time), none of that data will
+be read or written, even though placeholders will exist on the liblas.point 
+for them.  
+
+    
+.. csv-table:: Point format versions and their properties
+    :header: "dataformat_id", "Time", "Color"
+    
+    "0", 
+    "1", x
+    "2", , x 
+    "3", x, x
+
+You control whether or not color, time, or color + time is stored in the 
+file by setting the dataformat_id in the header that you use to create 
+the file.File.  This has to be done when you instantiate the file, it 
+cannot be changed after the fact.  Attempting to do so may result in 
+disastrous results.
+
+.. csv-table:: Base properties of all points regardless of dataformat_id
+    :header: "Name"
+    
+    "x"
+    "y"
+    "z"
+    "intensity"
+    "return_number"
+    "number_of_returns"
+    "scan_direction"
+    "flightline_edge"
+    "classification"
+    "scan_angle"
+    "user_data"
+    
+=============================================
+Header
+=============================================
+
+Headers, points, VLRs, colors, and GUIDs are *copies*, not references in 
+the libLAS Python bindings.  After opening a LAS file, you can fetch 
+the header with the following property:
+
+.. code-block:: python
+
+    >>> header = f.header
+    >>> h
+    <liblas.header.Header object at 0x737790>
+
+Discussion
+------------------------------------------------------------------------------
+
+
+
+There are many properties of the header that you can get and set:
+
+.. code-block:: python
+
+    >>> h.major_version, h.minor_version
+    (1, 0)
+    >>> h.dataformat_id
+    0
+    >>> h.min
+    [289020.90000000002, 4320942.6100000003, 166.78]
+    >>> h.max
+    [290106.02000000002, 4323641.5700000003, 215.48000000000002]
+    >>> h.scale
+    [0.01, 0.01, 0.01]
+    >>> h.offset
+    [-0.0, -0.0, -0.0]
+
+    >>> h.point_records_count
+    3265110L
+
+    >>> from liblas import guid
+    >>> h.project_id
+    '00000000-0000-0000-0000-000000000000'
+    >>> h.guid
+    00000000-0000-0000-0000-000000000000
+    >>> g = guid.GUID()
+    >>> g
+    5cb59173-124b-476b-9729-bafa87cfb27c
+    >>> h.guid = g
+    >>> h.guid
+    5cb59173-124b-476b-9729-bafa87cfb27c
+    >>> h.project_id
+    '5cb59173-124b-476b-9729-bafa87cfb27c'
+    
+    # only works if you have libgeotiff and/or GDAL linked in
+    >>> s = h.srs
+    >>> s.proj4
+    +proj=tmerc +lat_0=0.000000000 +lon_0=-93.000000000 +k=0.999600 \
+    +x_0=500000.000 +y_0=0.000 +ellps=WGS84 +units=m 
+
+=============================================
+Point
+=============================================
+
+The liblas.point module contains a Point class that you can use to manipulate 
+LAS point data.  It is fairly basic and contains a number of properties you 
+can set and get:
+
+.. code-block:: python
+
+    >>> p.x, p.y, p.z
+    (289814.15000000002, 4320978.6100000003, 170.75999999999999)
+
+    >>> p.scan_angle
+    0
+    >>> p.scan_direction
+    0
+    >>> p.return_number
+    0
+    >>> p.number_of_returns
+    6
+    >>> p.flightline_edge
+    0
+    >>> p.classification
+    2
+    >>> p.time
+    datetime.datetime(1970, 1, 6, 12, 44, 10, 1)
+
+    >>> p.intensity
+    120
+    
+    >>> c = p.color
+    >>> c.red
+    255
+    >>> c.blue
+    255
+    >>> c.green
+    255
+
+=============================================
+VLRs
+=============================================
+
+Variable Length Records (VLR) are frequently used by applications to store 
+anything they wish in the file as a "blob" written into the header of the 
+file.  libLAS supports writing and creating your own VLRs in addition to 
+taking on the work of interpreting and using VLR records related to 
+spatial reference systems if GDAL and proj.4 are linked into the library.  
+
+The following code demonstrates how to write your own VLR by opening an 
+XML file and inserting it into a new file.
+
+.. code-block:: python
+
+    from liblas import file as lasfile
+    from liblas import vlr
+    from liblas import header as lasheader
+
+    f = lasfile.File('test/data/srs_utm17.las',None,'rb')
+    h = f.header
+
+    v = vlr.VLR()
+
+    text =  open('schemas/las.xml','rb').read()
+
+    import ctypes
+
+    data = ctypes.create_string_buffer(text)
+
+    v.userid='hobu'
+    v.recordid = 12345
+    v.data = data
+
+    h.add_vlr(v)
+
+    f2 = lasfile.File('junk.las',header=h,mode='w')
+    for p in f:
+        f2.write(p)
+    f2.close()
+
+    
+=============================================
+Writing
+=============================================
+
+To write a new LAS file, you are first required to have a header. The header
+will have a number of default values, but it is important to set the
+dataformat_id and version_minor if you wish to have 1.1 files or records that
+also include time values.
+
+.. code-block:: python
+
+    >>> from liblas import header
+    >>> h = header.Header()
+
+    ### Support storing time values
+    >>> h.dataformat_id = 1
+    
+    ### Store a 1.1 version file
+    >>> h.minor_version = 1
+
+Another important item to not is possible to have the same file open for 
+read and write at the same time because LAS files are sequential.  For example, 
+the following will fail:
+
+.. code-block:: python
+
+  >>> f = file.File('junk.las', mode="w", header=h)
+  >>> f2 = file.File('junk.las')
+  Traceback (most recent call last):
+  ...
+  LASException: ('File %s is already open.  Close the file or delete the reference to it', 'junk.las')
+
+
+Writing to a LAS file is as simple as opening the file for write mode 
+with the header you want to write and issuing the write() command with some 
+liblas.point.Point instances:
+
+.. code-block:: python
+
+    >>> f = file.File('junk.las',mode='w', header= h)
+    >>> pt = liblas.point.Point()
+    >>> f.write(pt)
+    >>> f.close()
+

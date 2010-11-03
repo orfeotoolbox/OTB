@@ -42,18 +42,30 @@
 #ifndef LIBLAS_LASPOINT_HPP_INCLUDED
 #define LIBLAS_LASPOINT_HPP_INCLUDED
 
-#include <liblas/cstdint.hpp>
-#include <liblas/detail/fwd.hpp>
-#include <liblas/detail/utility.hpp>
+#include <liblas/lasclassification.hpp>
 #include <liblas/lascolor.hpp>
+#include <liblas/detail/pointrecord.hpp>
+#include <liblas/detail/fwd.hpp>
+#include <liblas/detail/private_utility.hpp>
+#include <liblas/external/property_tree/ptree.hpp>
+#include <liblas/lasschema.hpp>
+
+// boost
+#include <boost/array.hpp>
+#include <boost/cstdint.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/any.hpp>
 // std
 #include <stdexcept> // std::out_of_range
 #include <cstdlib> // std::size_t
+#include <vector> // std::vector
+
 
 namespace liblas {
 
+
 /// Point data record composed with X, Y, Z coordinates and attributes.
-class LASPoint
+class Point
 {
 public:
 
@@ -67,7 +79,6 @@ public:
         eScanAngleRank = 32,
         eTime = 64
     };
-
 
     enum ClassificationType
     {
@@ -93,22 +104,31 @@ public:
         eScanAngleRankMax = 90
     };
 
-    LASPoint();
-    LASPoint(LASPoint const& other);
-    LASPoint& operator=(LASPoint const& rhs);
+    Point();
+    Point(HeaderPtr header);
+    Point(Point const& other);
+    Point& operator=(Point const& rhs);
 
     double GetX() const;
     double GetY() const;
     double GetZ() const;
+    
+    boost::int32_t GetRawX() const;
+    boost::int32_t GetRawY() const;
+    boost::int32_t GetRawZ() const;
+        
     void SetCoordinates(double const& x, double const& y, double const& z);
-    void SetCoordinates(LASHeader const& header, double x, double y, double z);
     
     void SetX(double const& value);
     void SetY(double const& value);
     void SetZ(double const& value);
 
-    uint16_t GetIntensity() const;
-    void SetIntensity(uint16_t const& intensity);
+    void SetRawX(boost::int32_t const& value);
+    void SetRawY(boost::int32_t const& value);
+    void SetRawZ(boost::int32_t const& value);
+    
+    boost::uint16_t GetIntensity() const;
+    void SetIntensity(boost::uint16_t const& intensity);
 
     /// Gets all scanning flags encoded as single byte.
     /// The flags are (mandatory):
@@ -116,249 +136,115 @@ public:
     /// - Number of Returns - given pulse (bits 3, 4, 5);
     /// - Scan Direction Flag (bit 6);
     /// - Edge of Flight Line (bit 7).
-    uint8_t GetScanFlags() const;
+    boost::uint8_t GetScanFlags() const;
 
     /// Sets all scanning flags passed as a single byte.
     /// \sa Documentation of GetScanFlags method for flags details.
-    void SetScanFlags(uint8_t const& flags);
+    void SetScanFlags(boost::uint8_t const& flags);
     
-    uint16_t GetReturnNumber() const;
-    void SetReturnNumber(uint16_t const& num);
+    boost::uint16_t GetReturnNumber() const;
+    void SetReturnNumber(boost::uint16_t const& num);
 
-    uint16_t GetNumberOfReturns() const;
-    void SetNumberOfReturns(uint16_t const& num);
+    boost::uint16_t GetNumberOfReturns() const;
+    void SetNumberOfReturns(boost::uint16_t const& num);
 
-    uint16_t GetScanDirection() const;
-    void SetScanDirection(uint16_t const& dir);
+    boost::uint16_t GetScanDirection() const;
+    void SetScanDirection(boost::uint16_t const& dir);
     
-    uint16_t GetFlightLineEdge() const;
-    void SetFlightLineEdge(uint16_t const& edge);
+    boost::uint16_t GetFlightLineEdge() const;
+    void SetFlightLineEdge(boost::uint16_t const& edge);
 
-    uint8_t GetClassification() const;
-    void SetClassification(uint8_t const& classify);
+    //Classification& GetClassification();
+    Classification GetClassification() const;
+    void SetClassification(Classification const& cls);
+    void SetClassification(Classification::bitset_type const& flags);
+    void SetClassification(boost::uint8_t const& flags);
 
-    int8_t GetScanAngleRank() const;
-    void SetScanAngleRank(int8_t const& rank);
+    boost::int8_t GetScanAngleRank() const;
+    void SetScanAngleRank(boost::int8_t const& rank);
 
     /// Fetch value of File Marker (LAS 1.0) or User Data (LAS 1.1).
-    uint8_t GetUserData() const;
+    boost::uint8_t GetUserData() const;
 
     /// Set value of File Marker (LAS 1.0) or User Data (LAS 1.1).
-    void SetUserData(uint8_t const& data);
+    void SetUserData(boost::uint8_t const& data);
 
     /// Fetch value of User Bit Field (LAS 1.0) or Point Source ID (LAS 1.1).
-    uint16_t GetPointSourceID() const;
+    boost::uint16_t GetPointSourceID() const;
 
     /// Set value of User Bit Field (LAS 1.0) or Point Source ID (LAS 1.1).
-    void SetPointSourceID(uint16_t const& id);
+    void SetPointSourceID(boost::uint16_t const& id);
 
     /// Fetch color value associated with this point (LAS 1.2)
-    LASColor const& GetColor() const;
+    Color GetColor() const;
 
     /// Set color value associated with this point (LAS 1.2)
-    void SetColor(LASColor const& value);
+    void SetColor(Color const& value);
 
-                
     double GetTime() const;
     void SetTime(double const& time);
-
-    /// Index operator providing access to XYZ coordinates of point record.
-    /// Valid index values are 0, 1 or 2.
-    /// \exception std::out_of_range if requested index is out of range (> 2).
-    double& operator[](std::size_t const& n);
 
     /// Const version of index operator providing access to XYZ coordinates of point record.
     /// Valid index values are 0, 1 or 2.
     /// \exception std::out_of_range if requested index is out of range (> 2).
-    double const& operator[](std::size_t const& n) const;
+    double operator[](std::size_t const& index) const;
 
     /// \todo TODO: Should we compare other data members, but not only coordinates?
-    bool equal(LASPoint const& other) const;
+    bool equal(Point const& other) const;
 
     bool Validate() const;
     bool IsValid() const;
+
+
+    std::vector<boost::uint8_t> const& GetData() const {return m_data; }
+    void SetData(std::vector<boost::uint8_t> const& v) { m_data = v;}
     
+    void SetHeaderPtr(HeaderPtr header);
+    HeaderPtr GetHeaderPtr() const;
+    
+    property_tree::ptree GetPTree() const;
+    
+    boost::any GetValue(Dimension const& d) const;
 
 private:
 
-    static std::size_t const coords_size = 3;
-    double m_coords[coords_size];
-    uint16_t m_intensity;
-    uint8_t m_flags;
-    uint8_t m_class;
-    int8_t m_angleRank;
-    uint8_t m_userData;
-    uint16_t m_pointSourceId;
-    double m_gpsTime;
+    std::vector<boost::uint8_t> m_data;
     
-    LASColor m_color;
-    detail::PointRecord m_rec;
-    
-    void throw_out_of_range() const
-    {
-        throw std::out_of_range("coordinate subscript out of range");
-    }
+    std::vector<boost::uint8_t>::size_type GetDimensionBytePosition(std::size_t dim_pos) const;
+    HeaderPtr m_header;
+    Header const& m_default_header;
+
 };
 
-/// Equal-to operator implemented in terms of LASPoint::equal method.
-inline bool operator==(LASPoint const& lhs, LASPoint const& rhs)
+/// Equal-to operator implemented in terms of Point::equal method.
+inline bool operator==(Point const& lhs, Point const& rhs)
 {
     return lhs.equal(rhs);
 }
 
-/// Not-equal-to operator implemented in terms of LASPoint::equal method.
-inline bool operator!=(LASPoint const& lhs, LASPoint const& rhs)
+/// Not-equal-to operator implemented in terms of Point::equal method.
+inline bool operator!=(Point const& lhs, Point const& rhs)
 {
     return (!(lhs == rhs));
 }
 
-inline void LASPoint::SetCoordinates(double const& x, double const& y, double const& z)
+inline double Point::operator[](std::size_t const& index) const
 {
-    m_coords[0] = x;
-    m_coords[1] = y;
-    m_coords[2] = z;
-}
+    
+    if (index == 0) 
+        return GetX();
+    if (index == 1) 
+        return GetY();
+    if (index == 2)
+        return GetZ();
 
-inline double LASPoint::GetX() const
-{
-    return m_coords[0];
-}
-
-inline void LASPoint::SetX( double const& value ) 
-{
-    m_coords[0] = value;
-}
-
-inline double LASPoint::GetY() const
-{
-    return m_coords[1];
-}
-
-inline void LASPoint::SetY( double const& value ) 
-{
-    m_coords[1] = value;
-}
-
-inline double LASPoint::GetZ() const
-{
-    return m_coords[2];
-}
-
-inline void LASPoint::SetZ( double const& value ) 
-{
-    m_coords[2] = value;
-}
-
-inline uint16_t LASPoint::GetIntensity() const
-{
-    return m_intensity;
-}
-
-inline void LASPoint::SetIntensity(uint16_t const& intensity)
-{
-    m_intensity = intensity;
-}
-
-inline uint16_t LASPoint::GetReturnNumber() const
-{
-    // Read bits 1,2,3 (first 3 bits)
-    return (m_flags & 0x07);
-}
-
-inline uint16_t LASPoint::GetNumberOfReturns() const
-{
-    // Read bits 4,5,6
-    return ((m_flags >> 3) & 0x07);
-}
-
-inline uint16_t LASPoint::GetScanDirection() const
-{
-    // Read 7th bit
-    return ((m_flags >> 6) & 0x01);
-}
-
-inline uint16_t LASPoint::GetFlightLineEdge() const
-{
-    // Read 8th bit
-    return ((m_flags >> 7) & 0x01);
-}
-
-inline uint8_t LASPoint::GetScanFlags() const
-{
-    return m_flags;
-}
-
-inline void LASPoint::SetScanFlags(uint8_t const& flags)
-{
-    m_flags = flags;
-}
-
-inline uint8_t LASPoint::GetClassification() const
-{
-    return m_class;
-}
-
-inline void LASPoint::SetClassification(uint8_t const& classify)
-{
-    m_class = classify;
-}
-
-inline int8_t LASPoint::GetScanAngleRank() const
-{
-    return m_angleRank;
-}
-
-inline uint8_t LASPoint::GetUserData() const
-{
-    return m_userData;
-}
-
-inline uint16_t LASPoint::GetPointSourceID() const
-{
-    return m_pointSourceId;
-}
-
-inline void LASPoint::SetPointSourceID(uint16_t const& id)
-{
-    m_pointSourceId = id;
-}
-
-inline double LASPoint::GetTime() const
-{
-    return m_gpsTime;
-}
-
-inline void LASPoint::SetTime(double const& time)
-{
-    m_gpsTime = time;
-}
-
-inline LASColor const& LASPoint::GetColor() const
-{
-    return m_color;
-}
-
-inline void LASPoint::SetColor(LASColor const& value)
-{
-    m_color = value;
+    throw std::out_of_range("coordinate subscript out of range");
+    
 }
 
 
-inline double& LASPoint::operator[](std::size_t const& n)
-{
-    if (coords_size <= n)
-        throw_out_of_range();
+std::ostream& operator<<(std::ostream& os, liblas::Point const&);
 
-    return m_coords[n];
-}
-
-inline double const& LASPoint::operator[](std::size_t const& n) const
-{
-    if (coords_size <= n)
-        throw_out_of_range();
-
-    return m_coords[n];
-}
 
 } // namespace liblas
 

@@ -39,8 +39,10 @@
  * OF SUCH DAMAGE.
  ****************************************************************************/
 
+#include <liblas/lasversion.hpp>
 #include <liblas/laswriter.hpp>
-#include <liblas/detail/writer.hpp>
+#include <liblas/detail/writer/writer.hpp>
+
 // std
 #include <stdexcept>
 #include <fstream>
@@ -51,58 +53,172 @@
 namespace liblas
 {
 
-LASWriter::LASWriter(std::ostream& ofs, LASHeader const& header) :
-    m_pimpl(detail::WriterFactory::Create(ofs, header)), m_header(header)
+Writer::Writer(std::ostream& ofs, Header const& header) :
+    m_pimpl(detail::WriterFactory::Create(ofs)), m_header(HeaderPtr(new liblas::Header(header))), 
+    m_filters(0),
+    m_transforms(0),
+    m_reprojection_transform(TransformPtr())
 {
-    m_pimpl->WriteHeader(m_header);
+    liblas::Header const& h = m_pimpl->WriteHeader(*m_header);
+    m_header = HeaderPtr(new liblas::Header(h));
+
+    // Copy our input SRS.  If the user issues SetInputSRS, it will 
+    // be overwritten
+    m_in_srs = m_header->GetSRS();
 }
 
-LASWriter::~LASWriter()
+Writer::~Writer()
 {
     assert(0 != m_pimpl.get());
 
-    m_pimpl->UpdateHeader(m_header);
+    m_pimpl->UpdateHeader(*m_header);
 }
 
-std::size_t LASWriter::GetVersion() const
+Header const& Writer::GetHeader() const
 {
-    return m_pimpl->GetVersion();
+    return *m_header;
 }
 
-LASHeader const& LASWriter::GetHeader() const
-{
-    return m_header;
-}
-
-bool LASWriter::WritePoint(LASPoint const& point)
+bool Writer::WritePoint(Point const& point)
 {
     if (!point.IsValid())
     {
         return false;
     }
 
-    m_pimpl->WritePointRecord(point, m_header);
+    std::vector<liblas::FilterI*>::const_iterator fi;
+    std::vector<liblas::TransformI*>::const_iterator ti;
+    bool bHaveTransforms = false;
+    bool bHaveFilters = false;
+    
+    if (m_transforms != 0 ) {
+        bHaveTransforms = true;
+    }
+    
+    if (m_filters != 0 ) {
+        bHaveFilters = true;
+    }
+    
 
+    if (bHaveFilters) {
+    if (m_filters->size() != 0) {
+        // We have filters, filter this point.  All filters must 
+        // return true for us to keep it.
+        bool keep = false;
+        for (fi = m_filters->begin(); fi != m_filters->end(); ++fi) {
+            liblas::FilterI* filter = *fi;
+            if (filter->filter(point)){
+                // if ->filter() is true, we keep the point
+                keep = true;
+            } else {
+                keep = false;
+                break;
+            }
+            
+        }
+        if (!keep) {
+            return false;
+        } 
+    }
+    }
+    
+    if (bHaveTransforms) {
+    if (m_transforms->size() != 0) {
+    
+        // Apply the transforms to each point
+        Point p(point);
+        for (ti = m_transforms->begin(); ti != m_transforms->end(); ++ti) {
+            liblas::TransformI* transform = *ti;
+            transform->transform(p);
+
+        }
+        
+        // We have to write a copy of our point, because we're applying 
+        // transformations that change the point.
+        m_pimpl->WritePoint(p, m_header);
+        return true;
+        
+    }
+    }
+
+    // if we haven't returned because of the filter and we don't have any 
+    // transforms, just write the point
+    m_pimpl->WritePoint(point, m_header);
     return true;
 }
 
-std::ostream& LASWriter::GetStream() const
+std::ostream& Writer::GetStream() const
 {
     return m_pimpl->GetStream();
 }
 
-void LASWriter::WriteHeader(LASHeader& header)
+void Writer::WriteHeader(Header& header)
 {
-    m_pimpl->WriteHeader(header);
-    m_header = header;
+    // The writer may update our header as part of its 
+    // writing process (change VLRs for SRS's, for instance).
+    liblas::Header const& h = m_pimpl->WriteHeader(header);
+    m_header = HeaderPtr(new liblas::Header(h));
 }
 
-bool LASWriter::SetSRS(const LASSpatialReference& srs)
+bool Writer::SetSRS(const SpatialReference& srs)
 {
-    m_pimpl->SetSRS(srs);
+    SetOutputSRS(srs);
     return true;
 }
 
+bool Writer::SetInputSRS(const SpatialReference& srs)
+{
+    m_in_srs = srs;
+    return true;
+}
 
+bool Writer::SetOutputSRS(const SpatialReference& srs)
+{
+    m_out_srs = srs;
+
+    // Check the very first transform and see if it is 
+    // the reprojection transform.  If it is, we're going to 
+    // nuke it and replace it with a new one
+    
+    // If there was nothing there, we're going to make a new reprojection
+    // transform and put in on the transforms list (or make a new transforms
+    // list if *that* isn't there).
+    TransformI* possible_reprojection_transform = 0;
+    
+    if (m_transforms != 0) {
+        if (m_transforms->size() > 0) {
+            possible_reprojection_transform = m_transforms->at(0);
+        }
+    }
+    
+    if (m_reprojection_transform.get() == possible_reprojection_transform && m_reprojection_transform.get() != 0) {
+        // remove it from the transforms list
+        std::vector<TransformI*>::iterator i = m_transforms->begin();
+        m_transforms->erase(i);
+    }
+    
+    // overwrite our reprojection transform
+    m_reprojection_transform = TransformPtr(new ReprojectionTransform(m_in_srs, m_out_srs));
+    
+    if (m_transforms != 0) {
+        if (m_transforms->size() > 0) {
+            // Insert the new reprojection transform to the beginning of the 
+            // vector there are already transforms there.
+            m_transforms->insert(m_transforms->begin(), m_reprojection_transform.get());
+            
+        } else {
+            // List exists, but its size is 0
+            m_transforms->push_back(m_reprojection_transform.get());
+        }
+    } else {
+        // transforms don't exist yet, make a new one and put our 
+        // reprojection transform on it.
+        m_transforms = new std::vector<liblas::TransformI*>;
+        m_transforms->push_back(m_reprojection_transform.get());
+    }
+
+
+    return true;
+}
 } // namespace liblas
 

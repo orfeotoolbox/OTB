@@ -46,8 +46,8 @@ int main(int argc, char* argv[])
     catch (std::exception const& e)
     {
         std::cerr << "TUT raised exception: " << e.what() << std::endl;
-        return 1;
     }
 
-    return 0;
+    return (reporter.all_ok() ? 0 : 1);
 }
+

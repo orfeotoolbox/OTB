@@ -29,7 +29,7 @@ namespace otb
  */
 template <class TInputImage>
 MapFileProductWriter<TInputImage>
-::MapFileProductWriter(): m_TileSize(256)
+::MapFileProductWriter(): m_TileSize(256),m_SRID(26918)
 {
   // Modify superclass default values, can be overridden by subclasses
   this->SetNumberOfRequiredInputs(1);
@@ -115,17 +115,15 @@ MapFileProductWriter<TInputImage>
   // Initialize the filename, the vectordatas
   this->Initialize();
   
+  // Generate the mapFile
+  this->GenerateMapFile();
+  
   // Do the tiling
   this->Tiling();
 
-  // Generate the mapFile
-  this->GenerateMapFile();
-
-  // Write the IndexTile
-  typename VectorDataFileWriterType::Pointer writer = VectorDataFileWriterType::New();
-  writer->SetFileName(m_IndexShapeFileName);
-  writer->SetInput(m_VectorDataIndexTile);
-  writer->Update();
+  // Close the file
+  m_File <<"END" << std::endl;
+  m_File.close();
 }
 
 /**
@@ -143,17 +141,23 @@ MapFileProductWriter<TInputImage>
     itkExceptionMacro(<<itksys::SystemTools::GetFilenameLastExtension(m_FileName)
                       <<" is a wrong Extension FileName : Expected .map");
     }
+  
+  // Initialize the index vectordata
+  this->InitializeVectorData();
+}
 
-  // the index shapefile filename
-  std::ostringstream tempIndexShapeName;
-  tempIndexShapeName << m_ShapeIndexPath<<"/";
-  tempIndexShapeName << itksys::SystemTools::GetFilenameWithoutExtension(m_FileName);
-  tempIndexShapeName << "_index.shp";
-  m_IndexShapeFileName = tempIndexShapeName.str();
-
+/**
+ * Initialize the vectordata to write
+ * 
+ */
+template <class TInputImage>
+void
+MapFileProductWriter<TInputImage>
+::InitializeVectorData()
+{
   // Intitialize the vectordata to build the indexTile
   m_VectorDataIndexTile  = VectorDataType::New();
-  m_VectorDataIndexTile->SetProjectionRef(m_VectorImage->GetProjectionRef());
+  m_VectorDataIndexTile->SetProjectionRef(otb::GeoInformationConversion::ToWKT(m_SRID)/*m_VectorImage->GetProjectionRef()*/);
   DataNodeType::Pointer root = m_VectorDataIndexTile->GetDataTree()->GetRoot()->Get();
   DataNodeType::Pointer document = DataNodeType::New();
   m_Folder = DataNodeType::New();
@@ -184,15 +188,6 @@ MapFileProductWriter<TInputImage>
   outMin.Fill(0);
   outMax.Fill(255);
 
-  // Build wgs ref to compute long/lat
-  OGRSpatialReferenceH oSRS = OSRNewSpatialReference(NULL);
-  OSRSetWellKnownGeogCS(oSRS, "WGS84");
-  char * wgsRefC = NULL;
-  OSRExportToWkt(oSRS, &wgsRefC);
-  std::string wgsRef = wgsRefC;
-  CPLFree(wgsRefC);
-  OSRRelease(oSRS);
-
   // Update image base information
   m_VectorImage->UpdateOutputInformation();
 
@@ -208,15 +203,6 @@ MapFileProductWriter<TInputImage>
     static_cast<unsigned int>(max(vcl_ceil(vcl_log(static_cast<float>(sizeX) / static_cast<float>(m_TileSize)) / vcl_log(2.0)),
                                   vcl_ceil(vcl_log(static_cast<float>(sizeY) / static_cast<float>(m_TileSize)) / vcl_log(2.0))));
   
-  // Compute nbTile : Keep this for progress Bar ?
-//   int nbTile = 0;
-
-//   for (int i = 0; i <= maxDepth; i++)
-//     {
-//     int ratio = 1<<(maxDepth - i);  // static_cast<int>(vcl_pow(2., (maxDepth - i)));
-//     nbTile += (((sizeX / ratio) / m_TileSize) + 1)  * (((sizeY / ratio) / m_TileSize) + 1);
-//     }
-  
   // Extract size & index
   SizeType  extractSize;
   IndexType extractIndex;
@@ -225,6 +211,14 @@ MapFileProductWriter<TInputImage>
     {
     // update the attribute value Current Depth
     m_CurrentDepth = depth;
+
+    // Compose the name of the vectordata
+    // the index shapefile filename
+    std::ostringstream tempIndexShapeName;
+    tempIndexShapeName << m_ShapeIndexPath<<"/";
+    tempIndexShapeName << itksys::SystemTools::GetFilenameWithoutExtension(m_FileName)<<"_"<<m_CurrentDepth;
+    tempIndexShapeName << "_index.shp";
+    m_IndexShapeFileName = tempIndexShapeName.str();
 
     // Resample image to the max Depth
     int sampleRatioValue = 1 << (maxDepth - depth); // 2^(maxDepth - depth)
@@ -286,7 +280,7 @@ MapFileProductWriter<TInputImage>
     // Do it once here outside of the loop
     std::ostringstream path;
     path << m_ShapeIndexPath<<"/tiles";
-    
+
     ossimFilename cachingDir(path.str());
     cachingDir.createDirectory();
     
@@ -319,13 +313,10 @@ MapFileProductWriter<TInputImage>
         
         // Generate Tile filename
         std::ostringstream ossFileName;
-        ossFileName << m_ShapeIndexPath<<"/";
-        ossFileName << "tiles/tile_";
-        ossFileName << m_CurrentDepth<<"_";
-        ossFileName << x<<"_";
-        ossFileName << y;
-        ossFileName << ".tif";
-
+        ossFileName << path.str()<<"/";
+        ossFileName << "tile_"<<m_CurrentDepth<<"_";
+        ossFileName << x<<"_"<<y<<".tif";
+        
         // Extract ROI
         m_VectorImageExtractROIFilter = VectorImageExtractROIFilterType::New();
         
@@ -347,7 +338,6 @@ MapFileProductWriter<TInputImage>
         m_VectorWriter = VectorWriterType::New();
         m_VectorWriter->SetFileName(ossFileName.str().c_str());
         m_VectorWriter->SetInput(m_VectorImageExtractROIFilter->GetOutput());
-        //m_VectorWriter->WriteGeomFileOn();
         m_VectorWriter->Update();
 
         /** TODO : Generate KML for this tile */
@@ -355,7 +345,7 @@ MapFileProductWriter<TInputImage>
         m_Transform = TransformType::New();
         m_Transform->SetInputKeywordList(m_ResampleVectorImage->GetImageKeywordlist());
         m_Transform->SetInputProjectionRef(m_VectorImage->GetProjectionRef());
-        m_Transform->SetOutputProjectionRef(wgsRef);
+        m_Transform->SetOutputProjectionRef(otb::GeoInformationConversion::ToWKT(m_SRID));
         m_Transform->InstanciateTransform();
 
         InputPointType  inputPoint;
@@ -371,6 +361,7 @@ MapFileProductWriter<TInputImage>
         indexTile[1] = extractIndex[1] + sizeTile[1];
         m_ResampleVectorImage->TransformIndexToPhysicalPoint(indexTile, inputPoint);
         outputPoint = m_Transform->TransformPoint(inputPoint);
+        //outputPoint = inputPoint;
         OutputPointType lowerLeftCorner = outputPoint;
         
         // Compute lower right corner
@@ -378,6 +369,7 @@ MapFileProductWriter<TInputImage>
         indexTile[1] = extractIndex[1] + sizeTile[1];
         m_ResampleVectorImage->TransformIndexToPhysicalPoint(indexTile, inputPoint);
         outputPoint = m_Transform->TransformPoint(inputPoint);
+        //outputPoint = inputPoint;
         OutputPointType lowerRightCorner = outputPoint;
 
         // Compute upper right corner
@@ -385,6 +377,7 @@ MapFileProductWriter<TInputImage>
         indexTile[1] = extractIndex[1];
         m_ResampleVectorImage->TransformIndexToPhysicalPoint(indexTile, inputPoint);
         outputPoint = m_Transform->TransformPoint(inputPoint);
+        //outputPoint = inputPoint;
         OutputPointType upperRightCorner = outputPoint;
 
         // Compute upper left corner
@@ -392,6 +385,7 @@ MapFileProductWriter<TInputImage>
         indexTile[1] = extractIndex[1];
         m_ResampleVectorImage->TransformIndexToPhysicalPoint(indexTile, inputPoint);
         outputPoint = m_Transform->TransformPoint(inputPoint);
+        //outputPoint = inputPoint;
         OutputPointType upperLeftCorner = outputPoint;
   
         // Build The indexTile
@@ -406,6 +400,18 @@ MapFileProductWriter<TInputImage>
       x++;
       y = 0;
       }
+
+    // Add the layer in the mapfile
+    this->AddLayer();
+    
+    // Write the IndexTile
+    typename VectorDataFileWriterType::Pointer writer = VectorDataFileWriterType::New();
+    writer->SetFileName(m_IndexShapeFileName);
+    std::cout <<" ---> Writing the vectordata : "<<m_IndexShapeFileName  << std::endl;
+    writer->SetInput(m_VectorDataIndexTile);
+    writer->Update();
+    
+    this->InitializeVectorData();
     }
 }
 
@@ -479,82 +485,89 @@ MapFileProductWriter<TInputImage>
   cachingDir.createDirectory();
 
   // Create a mapfile
-  std::ofstream file(m_FileName.c_str());
-  file << fixed << setprecision(6);
+  m_File.open(m_FileName.c_str());
+  m_File << fixed << setprecision(6);
   
   // Get the name of the layer
   std::ostringstream tempIndexShapeName;
   tempIndexShapeName << itksys::SystemTools::GetFilenameWithoutExtension(m_FileName);
 
-  file <<"MAP" << std::endl;
-  file <<"\tNAME "<<tempIndexShapeName.str()<< std::endl;
-  file <<"\t# Map image size" << std::endl;
-  file <<"\tSIZE "<< m_TileSize <<" "<< m_TileSize << std::endl;
-  file <<"\tUNITS dd" << std::endl;
-  file <<"\tSHAPEPATH '"<<m_ShapeIndexPath<<"'"<<std::endl;
-  file <<"\tEXTENT -180 -90 180 90" << std::endl;  //TODO : get the
+  m_File <<"MAP" << std::endl;
+  m_File <<"\tNAME "<<tempIndexShapeName.str()<< std::endl;
+  m_File <<"\t# Map image size" << std::endl;
+  m_File <<"\tSIZE "<< m_TileSize <<" "<< m_TileSize << std::endl;
+  m_File <<"\tUNITS dd" << std::endl;
+  m_File <<"\tSHAPEPATH '"<<m_ShapeIndexPath<<"'"<<std::endl;
+  m_File <<"\tEXTENT -180 -90 180 90" << std::endl;  //TODO : get the
                                                    //extent from the
                                                    //vector data
-  file <<"\tPROJECTION" << std::endl;
-  file <<"\t \"init=epsg:4326\"" << std::endl;
-  file <<"\tEND" << std::endl;
+  m_File <<"\tPROJECTION" << std::endl;
+  m_File <<"\t \"init=epsg:"<<m_SRID<<"\"" << std::endl;
+  m_File <<"\tEND" << std::endl;
 
-  file <<"\t# Background color for the map canvas -- change as desired" << std::endl;
-  file <<"\tIMAGECOLOR 192 192 192" << std::endl;
-  file <<"\tIMAGEQUALITY 95" << std::endl;
-  file <<"\tIMAGETYPE PNG" << std::endl;
-  file <<"\tOUTPUTFORMAT" << std::endl;
-  file <<"\t\tNAME PNG" << std::endl;
-  file <<"\t\tDRIVER 'GD/PNG'" << std::endl;
-  file <<"\t\tMIMETYPE 'image/png'" << std::endl;
-  file <<"\t\tIMAGEMODE RGB" << std::endl;
-  file <<"\t\tFORMATOPTION INTERLACE=OFF" << std::endl;
-  file <<"\t\tEXTENSION 'png'" << std::endl;
-  file <<"\tEND" << std::endl;
+  m_File <<"\t# Background color for the map canvas -- change as desired" << std::endl;
+  m_File <<"\tIMAGECOLOR 192 192 192" << std::endl;
+  m_File <<"\tIMAGEQUALITY 95" << std::endl;
+  m_File <<"\tIMAGETYPE PNG" << std::endl;
+  m_File <<"\tOUTPUTFORMAT" << std::endl;
+  m_File <<"\t\tNAME PNG" << std::endl;
+  m_File <<"\t\tDRIVER 'GD/PNG'" << std::endl;
+  m_File <<"\t\tMIMETYPE 'image/png'" << std::endl;
+  m_File <<"\t\tIMAGEMODE RGB" << std::endl;
+  m_File <<"\t\tFORMATOPTION INTERLACE=OFF" << std::endl;
+  m_File <<"\t\tEXTENSION 'png'" << std::endl;
+  m_File <<"\tEND" << std::endl;
 
 
-  file <<"\t# Web interface definition. Only the template parameter" << std::endl;
-  file <<"\t# is required to display a map. See MapServer documentation" << std::endl;
-  file <<"\tWEB" << std::endl;
-  file <<"\t\t# Set IMAGEPATH to the path where MapServer should" << std::endl;
-  file <<"\t\t# write its output." << std::endl;
-  //file <<"#IMAGEPATH \'D:\OSGeo4W_bis2/tmp/ms_tmp/\'" << std::endl;
+  m_File <<"\t# Web interface definition. Only the template parameter" << std::endl;
+  m_File <<"\t# is required to display a map. See MapServer documentation" << std::endl;
+  m_File <<"\tWEB" << std::endl;
+  m_File <<"\t\t# Set IMAGEPATH to the path where MapServer should" << std::endl;
+  m_File <<"\t\t# write its output." << std::endl;
+  //m_File <<"#IMAGEPATH \'D:\OSGeo4W_bis2/tmp/ms_tmp/\'" << std::endl;
 
-  file <<"\t\t# Set IMAGEURL to the url that points to IMAGEPATH" << std::endl;
-  file <<"\t\t# as defined in your web server configuration" << std::endl;
-  file <<"\t\t#IMAGEURL '/ms_tmp/'" << std::endl;
+  m_File <<"\t\t# Set IMAGEURL to the url that points to IMAGEPATH" << std::endl;
+  m_File <<"\t\t# as defined in your web server configuration" << std::endl;
+  m_File <<"\t\t#IMAGEURL '/ms_tmp/'" << std::endl;
 
-  file <<"\t\t# WMS server settings" << std::endl;
-  file <<"\t\t# NOTE : the user must change the path to the mapserver excecutable in the "<<std::endl;
-  file <<"\t\t#  wms_onlineresource field"<<std::endl;
-  file <<"\t\tMETADATA" << std::endl;
-  file <<"\t\t 'wms_title'           'Level0'" << std::endl;
-  file <<"\t\t \'wms_onlineresource\'  \'"<<m_CGIPath<<"?map="<<m_FileName<<"&\'" << std::endl;
-  file <<"\t\t \'wms_srs\'             \'EPSG:4326 EPSG:900913\'" << std::endl; // TODO : guess the EPSG used
-  file <<"\t\tEND" << std::endl;
-  file <<"\tEND" << std::endl;
+  m_File <<"\t\t# WMS server settings" << std::endl;
+  m_File <<"\t\t# NOTE : the user must change the path to the mapserver excecutable in the "<<std::endl;
+  m_File <<"\t\t#  wms_onlineresource field"<<std::endl;
+  m_File <<"\t\tMETADATA" << std::endl;
+  m_File <<"\t\t 'wms_title'           'Level0'" << std::endl;
+  m_File <<"\t\t \'wms_onlineresource\'  \'"<<m_CGIPath<<"?map="<<m_FileName<<"&\'" << std::endl;
+  m_File <<"\t\t \'wms_srs\'             \'EPSG:"<<m_SRID<<" EPSG:900913\'" << std::endl; // TODO : guess the EPSG used
+  m_File <<"\t\tEND" << std::endl;
+  m_File <<"\tEND" << std::endl;
 
-  file <<"\tLAYER" << std::endl;
-  file <<"\t\tNAME '"<<tempIndexShapeName.str()<<"'"<< std::endl;
-  file <<"\t\t\tOFFSITE  0 0 0"<< std::endl;
-  file <<"\t\t\tTYPE RASTER" << std::endl;
-  file <<"\t\t\tTILEITEM 'LOCATION'" << std::endl;
-  file <<"\t\t\tTILEINDEX \'"<< itksys::SystemTools::GetFilenameName(m_IndexShapeFileName)<<"\'" << std::endl;
+
+
+}
+
+
+template <class TInputImage>
+void
+MapFileProductWriter<TInputImage>
+::AddLayer()
+{
+  m_File <<"\tLAYER" << std::endl;
+  m_File <<"\t\tNAME '"<<itksys::SystemTools::GetFilenameWithoutExtension(m_IndexShapeFileName)/*tempIndexShapeName.str()*/<<"'"<< std::endl;
+  m_File <<"\t\t\tOFFSITE  0 0 0"<< std::endl;
+  m_File <<"\t\t\tTYPE RASTER" << std::endl;
+  m_File <<"\t\t\tTILEITEM 'LOCATION'" << std::endl;
+  m_File <<"\t\t\tTILEINDEX \'"<< itksys::SystemTools::GetFilenameName(m_IndexShapeFileName)<<"\'" << std::endl;
   //file <<"\t\t\tMETADATA" << std::endl;
   //file <<"\t\t\t 'wms_title' 'earthsat'" << std::endl;
   //file <<"\t\t\t 'wms_name' 'earthsat'" << std::endl;
   //file <<"\t\t\tEND" << std::endl;
-  file <<"\t\t\tPROCESSING \"RESAMPLE=AVERAGE\"" << std::endl;
-  file <<"\t\t\tSTATUS ON" << std::endl;
-  file <<"\t\t\tTRANSPARENCY 100" << std::endl;
-  file <<"\t\t\tPROJECTION" << std::endl;
-  file <<"\t\t\t \"init=epsg:4326\"" << std::endl;
-  file <<"\t\t\tEND" << std::endl;
-  file <<"\t\t#MINSCALE 250000" << std::endl;
-  file <<"\tEND" << std::endl;
-  file <<"END" << std::endl;
-
-  file.close();
+  m_File <<"\t\t\tPROCESSING \"RESAMPLE=AVERAGE\"" << std::endl;
+  m_File <<"\t\t\tSTATUS ON" << std::endl;
+  m_File <<"\t\t\tTRANSPARENCY 100" << std::endl;
+  m_File <<"\t\t\tPROJECTION" << std::endl;
+  m_File <<"\t\t\t \"init=epsg:"<<m_SRID<<"\"" << std::endl;
+  m_File <<"\t\t\tEND" << std::endl;
+  m_File <<"\t\t#MINSCALE 250000" << std::endl;
+  m_File <<"\tEND" << std::endl;
 }
 
 template <class TInputImage>

@@ -8,7 +8,6 @@
 #include <liblas/lasreader.hpp>
 #include <liblas/lasheader.hpp>
 #include <liblas/laspoint.hpp>
-#include <liblas/cstdint.hpp>
 #include <liblas/liblas.hpp>
 #include <tut/tut.hpp>
 #include <fstream>
@@ -30,7 +29,7 @@ namespace tut
     typedef test_group<lasreader_data> tg;
     typedef tg::object to;
 
-    tg test_group_lasreader("liblas::LASReader");
+    tg test_group_lasreader("liblas::Reader");
 
     // Test user-declared constructor
     template<>
@@ -39,9 +38,9 @@ namespace tut
     {
         std::ifstream ifs;
         ifs.open(file10_.c_str(), std::ios::in | std::ios::binary);
-        liblas::LASReader reader(ifs);
+        liblas::Reader reader(ifs);
 
-        ensure_equals<std::size_t>(reader.GetVersion(), liblas::eLASVersion10);
+        ensure_equals(reader.GetHeader().GetVersionMinor(), 0);
     }
 
     // Test reading header
@@ -51,8 +50,8 @@ namespace tut
     {
         std::ifstream ifs;
         ifs.open(file10_.c_str(), std::ios::in | std::ios::binary);
-        liblas::LASReader reader(ifs);
-        liblas::LASHeader const& hdr = reader.GetHeader();
+        liblas::Reader reader(ifs);
+        liblas::Header const& hdr = reader.GetHeader();
 
         test_file10_header(hdr);
     }
@@ -64,11 +63,11 @@ namespace tut
     {
         std::ifstream ifs;
         ifs.open(file10_.c_str(), std::ios::in | std::ios::binary);
-        liblas::LASReader reader(ifs);
+        liblas::Reader reader(ifs);
 
         // uninitialized point object, a null-point
-        liblas::LASPoint const& p = reader.GetPoint();
-        ensure(p == liblas::LASPoint());
+        liblas::Point const& p = reader.GetPoint();
+        ensure(p == liblas::Point());
     }
 
     // Test ReadPoint and GetPoint pair
@@ -78,7 +77,7 @@ namespace tut
     {
         std::ifstream ifs;
         ifs.open(file10_.c_str(), std::ios::in | std::ios::binary);
-        liblas::LASReader reader(ifs);
+        liblas::Reader reader(ifs);
 
         // read 1st point
         reader.ReadNextPoint();
@@ -111,7 +110,7 @@ namespace tut
     {
         std::ifstream ifs;
         ifs.open(file10_.c_str(), std::ios::in | std::ios::binary);
-        liblas::LASReader reader(ifs);
+        liblas::Reader reader(ifs);
 
         // read 1st point
         reader.ReadPointAt(0);
@@ -133,7 +132,7 @@ namespace tut
     {
         std::ifstream ifs;
         ifs.open(file10_.c_str(), std::ios::in | std::ios::binary);
-        liblas::LASReader reader(ifs);
+        liblas::Reader reader(ifs);
 
         // read 1st point
         test_file10_point1(reader[0]);
@@ -152,11 +151,35 @@ namespace tut
     {
         std::ifstream ifs;
         ifs.open(file10_.c_str(), std::ios::in | std::ios::binary);
-        liblas::LASReader reader(ifs);
+        liblas::Reader reader(ifs);
 
         std::istream& is = reader.GetStream();
 
         ensure_equals(ifs, is);
     }
+
+
+    // Test seek nd GetPoint pair
+    template<>
+    template<>
+    void to::test<8>()
+    {
+        std::ifstream ifs;
+        ifs.open(file10_.c_str(), std::ios::in | std::ios::binary);
+        liblas::Reader reader(ifs);
+
+        // read 1st point
+	reader.ReadNextPoint();
+        test_file10_point1(reader.GetPoint());
+        
+	// seek to 4th point
+        reader.seek(4);
+
+	// read 4th point
+        test_file10_point4(reader[3]);
+
+    }
+
+    // Test GetStream method
 }
 

@@ -41,34 +41,53 @@
  * OF SUCH DAMAGE.
  ****************************************************************************/
 
-
 #ifndef LIBLAS_HPP_INCLUDED
 #define LIBLAS_HPP_INCLUDED
 
-#include <liblas/cstdint.hpp>
+// liblas
+#include <liblas/version.hpp>
+#include <liblas/exception.hpp>
+#include <liblas/guid.hpp>
+#include <liblas/iterator.hpp>
+#include <liblas/lasbounds.hpp>
+#include <liblas/lasclassification.hpp>
+#include <liblas/lascolor.hpp>
+#include <liblas/laserror.hpp>
+#include <liblas/lasfilter.hpp>
+#include <liblas/lasheader.hpp>
+#include <liblas/laspoint.hpp>
+#include <liblas/lasreader.hpp>
+#include <liblas/lasschema.hpp>
+#include <liblas/lasspatialreference.hpp>
+#include <liblas/lastransform.hpp>
+#include <liblas/lasvariablerecord.hpp>
+#include <liblas/lasversion.hpp>
+#include <liblas/laswriter.hpp>
+#include <liblas/utility.hpp>
+#include <liblas/detail/endian.hpp>
+#include <liblas/detail/private_utility.hpp>
+#include <liblas/capi/las_version.h>
+
+// booost
+#include <boost/array.hpp>
+#include <boost/concept_check.hpp>
+#include <boost/cstdint.hpp>
+#include <boost/shared_ptr.hpp>
+// std
+#include <cstring>
 #include <fstream>
 #include <string>
+#include <vector>
 
 /// Namespace grouping all elements of libLAS public interface.
 /// \note
 /// User's may notice there is namespace \em detail nested
-/// in the \em liblas. The \em detail should be considered as
-/// private namespace dedicated for implementation details,
-/// so libLAS are not supposed to access it directly,
-/// nor included headers from the \em detail subdirectory of \em liblas include folder.
+/// in the \em liblas namespace. The \em detail should be considered as private
+/// namespace dedicated for implementation details, so libLAS users are not
+/// supposed to access it directly, nor included headers from the \em detail
+/// subdirectory of \em liblas include folder.
 namespace liblas
 {
-
-/// Version numbers of the ASPRS LAS Specification.
-/// Numerical representation of versions is calculated according to 
-/// following formula: <em>major * 100000 + minor</em>
-enum LASFileVersion
-{
-    eLASVersion10 = 1 * 100000 + 0, ///< LAS Format 1.0
-    eLASVersion11 = 1 * 100000 + 1, ///< LAS Format 1.1
-    eLASVersion12 = 1 * 100000 + 2, ///< LAS Format 1.2
-    eLASVersion20 = 2 * 100000 + 0  ///< LAS Format 2.0
-};
 
 /// Open file to read in binary mode.
 /// The input file is also attached to input stream.
@@ -98,23 +117,36 @@ inline bool Create(std::ofstream& ofs, std::string const& filename) // throw()
     return ofs.is_open();
 }
 
-inline bool IsGDALEnabled()
+class ReaderI
 {
-#ifdef HAVE_GDAL
-    return true;
-#else
-    return false;
-#endif
-}
+public:
 
-inline bool IsLibGeoTIFFEnabled()
+    virtual HeaderPtr ReadHeader() = 0;
+    virtual Point const& ReadNextPoint(HeaderPtr header) = 0;
+    virtual Point const& ReadPointAt(std::size_t n, HeaderPtr header) = 0;
+    virtual void Seek(std::size_t n, HeaderPtr header) = 0;
+    
+    virtual void Reset(HeaderPtr header) = 0;
+    
+    virtual std::istream& GetStream() const = 0;
+    
+    virtual ~ReaderI() {};    
+};
+
+class WriterI
 {
-#ifdef HAVE_LIBGEOTIFF
-    return true;
-#else
-    return false;
-#endif
-}
+public:
+
+    virtual Header const& WriteHeader(Header const& header) = 0;
+    virtual void UpdateHeader(Header const& header) = 0;
+    virtual void WritePoint(const Point& point, HeaderPtr header) = 0;
+
+    virtual std::ostream& GetStream() const = 0;
+
+    virtual ~WriterI() {};    
+
+};
+
 
 } // namespace liblas
 

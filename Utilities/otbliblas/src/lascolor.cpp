@@ -40,48 +40,60 @@
  ****************************************************************************/
 
 #include <liblas/lascolor.hpp>
-#include <liblas/cstdint.hpp>
-
+// boost
+#include <boost/cstdint.hpp>
 // std
-#include <cstring>
+#include <stdexcept>
+#include <limits>
 
 namespace liblas {
 
-LASColor::LASColor() :
-    m_red(0),
-    m_green(0),
-    m_blue(0)
+Color::Color()
+{
+    m_color.assign(0);
+}
+
+Color::Color(boost::uint32_t red, boost::uint32_t green, boost::uint32_t blue)
+{
+    if (red > std::numeric_limits<boost::uint16_t>::max() || 
+        green > std::numeric_limits<boost::uint16_t>::max() || 
+        blue > std::numeric_limits<boost::uint16_t>::max())
+        throw_invalid_color_component();
+
+    using boost::uint16_t;
+
+    m_color[0] = static_cast<uint16_t>(red);
+    m_color[1] = static_cast<uint16_t>(green);
+    m_color[2] = static_cast<uint16_t>(blue);
+}
+
+Color::Color(boost::array<value_type, 3> const& color)
+{
+    m_color = color;
+}
+
+Color::Color(Color const& other)
+    : m_color(other.m_color)
 {
 }
 
-LASColor::LASColor(LASColor const& other) :
-    m_red(other.m_red),
-    m_green(other.m_green),
-    m_blue(other.m_blue)
-{
-}
-
-LASColor& LASColor::operator=(LASColor const& rhs)
+Color& Color::operator=(Color const& rhs)
 {
     if (&rhs != this)
     {
-        m_red = rhs.m_red;
-        m_green = rhs.m_green;
-        m_blue = rhs.m_blue;
+        m_color = rhs.m_color;
     }
     return *this;
 }
 
-bool LASColor::operator==(LASColor const& other) const
+void Color::throw_index_out_of_range() const
 {
-    if (&other == this) return true;
-    
-    if (m_red != other.m_red) return false;
-    if (m_green != other.m_green) return false;
-    if (m_blue != other.m_blue) return false;
+    throw std::out_of_range("subscript out of range");
+}
 
-    return true;
+void Color::throw_invalid_color_component() const
+{
+    throw std::invalid_argument("Color component value too large.  Each must be less than 65536");
 }
 
 } // namespace liblas
-

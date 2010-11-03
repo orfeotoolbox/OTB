@@ -5,8 +5,8 @@
 // (See accompanying file LICENSE.txt or copy at
 // http://www.opensource.org/licenses/bsd-license.php)
 //
+#include <liblas/liblas.hpp>
 #include <liblas/guid.hpp>
-#include <liblas/cstdint.hpp>
 #include <tut/tut.hpp>
 #include <string>
 #include <algorithm> // std::std::transform
@@ -90,10 +90,10 @@ namespace tut
     template<>
     void to::test<4>()
     {
-        liblas::uint32_t d1(0);
-        liblas::uint16_t d2(0);
-        liblas::uint16_t d3(0);
-        liblas::uint8_t d4[8] = { 0 };
+        boost::uint32_t d1(0);
+        boost::uint16_t d2(0);
+        boost::uint16_t d3(0);
+        boost::uint8_t d4[8] = { 0 };
 
         liblas::guid g(d1, d2, d3, d4);
 
@@ -152,10 +152,10 @@ namespace tut
         ensure_equals(g1.to_string(), strguid);
 
         // Binary representation of "01234567-89ab-cdef-0123-456789abcdef"
-        liblas::uint32_t n1 = 19088743;
-        liblas::uint16_t n2 = 35243;
-        liblas::uint16_t n3 = 52719;
-        liblas::uint8_t n4[8] = { 0 };
+        boost::uint32_t n1 = 19088743;
+        boost::uint16_t n2 = 35243;
+        boost::uint16_t n3 = 52719;
+        boost::uint8_t n4[8] = { 0 };
         n4[0] = 0x01;
         n4[1] = 0x23;
         n4[2] = 0x45;

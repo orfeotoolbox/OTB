@@ -25,7 +25,7 @@
 #include "otbMultiChannelExtractROI.h"
 #include "otbImageFileWriter.h"
 #include "otbVectorRescaleIntensityImageFilter.h"
-#include <ogr_spatialref.h>
+#include "otbGeoInformationConversion.h"
 #include "otbGenericRSTransform.h"
 #include "otbStreamingShrinkImageFilter.h"
 
@@ -172,6 +172,12 @@ private:
   /** Method To Generate the mapFile*/
   virtual void GenerateMapFile();
 
+  /** Add a layer to the mapfile*/
+  void AddLayer();
+
+  /** Intialize vd*/
+  void InitializeVectorData();
+
   InputImagePointer    m_VectorImage;
   InputImagePointer    m_ResampleVectorImage;
 
@@ -204,6 +210,10 @@ private:
   std::string                   m_IndexShapeFileName;
   std::string                   m_CGIPath;
   std::string                   m_ShapeIndexPath;
+
+  std::ofstream                 m_File;
+
+  int m_SRID;
   
 };
 

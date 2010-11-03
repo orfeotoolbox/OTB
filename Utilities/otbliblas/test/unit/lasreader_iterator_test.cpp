@@ -5,11 +5,11 @@
 // (See accompanying file LICENSE.txt or copy at
 // http://www.opensource.org/licenses/bsd-license.php)
 //
-#include <liblas/cstdint.hpp>
+#include <liblas/liblas.hpp>
 #include <liblas/iterator.hpp>
 #include <liblas/laspoint.hpp>
 #include <liblas/lasreader.hpp>
-#include <liblas/detail/utility.hpp>
+#include <liblas/detail/private_utility.hpp>
 #include <tut/tut.hpp>
 #include <algorithm>
 #include <fstream>
@@ -25,7 +25,7 @@ namespace tut
     {
         std::string file10_;
         std::ifstream ifs_;
-        LASReader reader_;
+        Reader reader_;
 
         lasreader_iterator_data() :
             file10_(g_test_data_path + "//TO_core_last_clip.las"),
@@ -123,11 +123,13 @@ namespace tut
         ensure_distance(it->GetY(), double(4834500), 0.0001);
         ensure_distance(it->GetZ(), double(51.53), 0.0001);
         ensure_equals(it->GetIntensity(), 670);
-        ensure_equals(it->GetClassification(), liblas::uint8_t(1));
         ensure_equals(it->GetScanAngleRank(), 0);
         ensure_equals(it->GetUserData(), 3);
         ensure_equals(it->GetScanFlags(), 9);
         ensure_distance(it->GetTime(), double(413665.23360000004), 0.0001);
+
+        liblas::Classification c(1);
+        ensure_equals(it->GetClassification(), c);
     }
 
     // Test pre-increment operator
@@ -179,11 +181,11 @@ namespace tut
     template<>
     void to::test<13>()
     {
-        liblas::uint32_t const cnt = reader_.GetHeader().GetPointRecordsCount();
+        boost::uint32_t const cnt = reader_.GetHeader().GetPointRecordsCount();
         lasreader_iterator it(reader_); // move to 1st point
         lasreader_iterator end;
 
-        liblas::uint32_t s = 0;
+        boost::uint32_t s = 0;
         while (end != it)
         {
             s++;
@@ -198,12 +200,13 @@ namespace tut
     template<>
     void to::test<14>()
     {
-        liblas::uint32_t const cnt = reader_.GetHeader().GetPointRecordsCount();
+        boost::uint32_t const cnt = reader_.GetHeader().GetPointRecordsCount();
         lasreader_iterator it(reader_); // move to 1st point
         lasreader_iterator end;
 
-        lasreader_iterator::difference_type const d = std::distance(it, end);
-        ensure_equals(d, cnt);
+        typedef lasreader_iterator::difference_type difference_type;
+        difference_type const d = std::distance(it, end);
+        ensure_equals(d, static_cast<difference_type>(cnt));
     }
 
     // Test std::distance operation
@@ -211,13 +214,15 @@ namespace tut
     template<>
     void to::test<15>()
     {
-        std::size_t a = std::distance(lasreader_iterator(reader_), lasreader_iterator());
+        typedef lasreader_iterator::difference_type difference_type;
+        
+        difference_type a = std::distance(lasreader_iterator(reader_), lasreader_iterator());
 
         // Reader state is set to "past-the-end-of-file"
         // So, reset is needed
         reader_.Reset();
 
-        std::size_t b = std::distance(lasreader_iterator(reader_), lasreader_iterator());
+        difference_type b = std::distance(lasreader_iterator(reader_), lasreader_iterator());
 
         ensure_equals(a, b);
     }
@@ -241,11 +246,11 @@ namespace tut
     template<>
     void to::test<17>()
     {
-        liblas::uint32_t const size = reader_.GetHeader().GetPointRecordsCount();
+        boost::uint32_t const size = reader_.GetHeader().GetPointRecordsCount();
         lasreader_iterator it(reader_);
         lasreader_iterator end;
 
-        typedef std::list<LASPoint> list_t;
+        typedef std::list<Point> list_t;
         typedef std::back_insert_iterator<list_t> inserter_t;
         list_t cache;
 
@@ -267,7 +272,7 @@ namespace tut
     void to::test<18>()
     {
         // Construct copy of 2nd point record from tested file
-        LASPoint pt;
+        Point pt;
         pt.SetCoordinates(630282.45, 4834500, 51.63);
         pt.SetIntensity(350);
         pt.SetClassification(1);
@@ -282,8 +287,9 @@ namespace tut
         lasreader_iterator end;
 
         // Count records equal to given point object
-        lasreader_iterator::difference_type const expected = 1;
-        lasreader_iterator::difference_type n = std::count(it, end, pt);
+        typedef lasreader_iterator::difference_type difference_type;
+        difference_type const expected = 1;
+        difference_type n = std::count(it, end, pt);
         ensure_equals(n, expected);
     }
 
@@ -293,10 +299,10 @@ namespace tut
     void to::test<19>()
     {
         std::ifstream ifs(file10_.c_str(), std::ios::in | std::ios::binary);
-        LASReader reader(ifs);
+        Reader reader(ifs);
 
         // Copy LAS records to std::list based cache
-        typedef std::list<LASPoint> list_t;
+        typedef std::list<Point> list_t;
         typedef std::back_insert_iterator<list_t> inserter_t;
         list_t cache;
         {
@@ -328,7 +334,7 @@ namespace tut
     void to::test<20>()
     {
         // Construct copy of 2nd point record from tested file
-        LASPoint pt;
+        Point pt;
         pt.SetCoordinates(630282.45, 4834500, 51.63);
         pt.SetIntensity(350);
         pt.SetClassification(1);
@@ -373,16 +379,15 @@ namespace tut
         lasreader_iterator end;
 
         typedef liblas::detail::Point<double> point_t;
-        typedef liblas::detail::Extents<double> bbox_t;
+        typedef liblas::Bounds<double> bbox_t;
 
-        LASHeader const& h = reader_.GetHeader();
-        bbox_t lasbbox(point_t(h.GetMinX(), h.GetMinY(), h.GetMinZ()),
-                       point_t(h.GetMaxX(), h.GetMaxY(), h.GetMaxZ()));
-
+        Header const& h = reader_.GetHeader();
+        bbox_t lasbbox = h.GetExtent();
+                  
         // Accumulate points extents to common bounding box
-        bbox_t bbox;
-        std::for_each(it, end, bbox_calculator(bbox));
-
-        ensure(lasbbox == bbox);
+        bbox_t accumulated;
+        std::for_each(it, end, bbox_calculator(accumulated));
+        
+        ensure(lasbbox == accumulated);
     }
 }

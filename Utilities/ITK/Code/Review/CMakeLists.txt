@@ -4,11 +4,11 @@
 SET(ITKIOReview_SRCS
   itkBruker2DSEQImageIO.cxx
   itkBruker2DSEQImageIOFactory.cxx
-  itkPhilipsRECImageIO.cxx
-  itkPhilipsRECImageIOFactory.cxx
+#  itkPhilipsRECImageIO.cxx
+#  itkPhilipsRECImageIOFactory.cxx
   itkPhilipsPAR.cxx
-  itkVoxBoCUBImageIO.cxx
-  itkVoxBoCUBImageIOFactory.cxx
+#  itkVoxBoCUBImageIO.cxx
+#  itkVoxBoCUBImageIOFactory.cxx
   itkGaborKernelFunction.cxx
   itkMRCHeaderObject.cxx
   itkMRCImageIO.cxx

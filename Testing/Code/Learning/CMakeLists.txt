@@ -549,7 +549,27 @@ otbSVMValidation 500 500 0.0025 0.0075 0.0075 0.0025 0. 0.0025 0. 0.0025 0 0)
 ADD_TEST(leTvSVMValidationLinearlySeparableWithProbEstimate ${LEARNING_TESTS4}
 otbSVMValidation 500 500 0.0025 0.0075 0.0075 0.0025 0. 0.0025 0. 0.0025 0 1)
 
-# A enrichir
+# ShiftScaleSampleListFilter tests ----------
+ADD_TEST(leTuShiftScaleSampleListFilterNew ${LEARNING_TESTS4}
+otbShiftScaleSampleListFilterNew)
+
+ADD_TEST(leTvShiftScaleSampleListFilter ${LEARNING_TESTS4}
+--compare-ascii ${NOTOL}
+	${BASELINE_FILES}/leTvShiftScaleSampleListFilterOutput.txt
+	${TEMP}/leTvShiftScaleSampleListFilterOutput.txt
+otbShiftScaleSampleListFilter
+${TEMP}/leTvShiftScaleSampleListFilterOutput.txt
+ 2
+-1 -3
+ 1  2
+-2 -5
+-1 -3
+ 0 -1
+)
+
+
+
+# Testing srcs
 SET(BasicLearning_SRCS1
 otbLearningTests1.cxx
 otbSVMModelNew.cxx
@@ -614,6 +634,7 @@ otbExhaustiveExponentialOptimizerNew.cxx
 otbListSampleGeneratorTest.cxx
 otbConfusionMatrixCalculatorTest.cxx
 otbSVMValidation.cxx
+otbShiftScaleSampleListFilter.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbLearningTests1 "${BasicLearning_SRCS1}" "OTBLearning;OTBIO;OTBTesting")

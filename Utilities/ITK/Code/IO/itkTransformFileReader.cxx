@@ -21,6 +21,7 @@
 #include "itkTransformBase.h"
 #include "itkTransformFactoryBase.h"
 
+#include <itksys/ios/fstream>
 #include <itksys/ios/sstream>
 
 namespace itk

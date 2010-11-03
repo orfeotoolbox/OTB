@@ -6,20 +6,24 @@
 // http://www.opensource.org/licenses/bsd-license.php)
 //
 #include <liblas/lasheader.hpp>
-#include <liblas/cstdint.hpp>
 #include <liblas/guid.hpp>
 #include <tut/tut.hpp>
 #include "common.hpp"
+// boost
+#include <boost/cstdint.hpp>
+// std
+#include <string>
 
-namespace tut
-{
+using namespace boost;
 
-void test_default_header(liblas::LASHeader const& h)
+namespace tut {
+
+void test_default_header(liblas::Header const& h)
 {
-    using liblas::LASHeader;
+    using liblas::Header;
 
     ensure_equals("wrong default file signature",
-        h.GetFileSignature(), LASHeader::FileSignature);
+        h.GetFileSignature(), Header::FileSignature);
 
     ensure_equals("wrong default file source id",
         h.GetFileSourceId(), 0);
@@ -36,9 +40,9 @@ void test_default_header(liblas::LASHeader const& h)
         h.GetVersionMinor(), 2);
 
     ensure_equals("wrong default system id",
-        h.GetSystemId(), LASHeader::SystemIdentifier);
+        h.GetSystemId(), Header::SystemIdentifier);
     ensure_equals("wrong default software id",
-        h.GetSoftwareId(), LASHeader::SoftwareIdentifier);
+        h.GetSoftwareId(), Header::SoftwareIdentifier);
 
     // TODO: Fix me to use todays day # and year
     // ensure_equals("wrong default creation day-of-year",
@@ -46,9 +50,9 @@ void test_default_header(liblas::LASHeader const& h)
     // ensure_equals("wrong default creation year",
     //     h.GetCreationYear(), 0);
     ensure_equals("wrong default header size",
-        h.GetHeaderSize(), liblas::uint16_t(227));
+        h.GetHeaderSize(), boost::uint16_t(227));
     
-    liblas::uint32_t offset = 229;
+    boost::uint32_t offset = 229;
     if (h.GetVersionMinor() == 1 || h.GetVersionMinor() == 2)
     {
         offset = 227;
@@ -57,13 +61,13 @@ void test_default_header(liblas::LASHeader const& h)
         h.GetDataOffset(), offset);
     
     ensure_equals("wrong default records count",
-        h.GetRecordsCount(), liblas::uint32_t(0));
+        h.GetRecordsCount(), boost::uint32_t(0));
     ensure_equals("wrong default data format id",
-        h.GetDataFormatId(), LASHeader::ePointFormat0);
+        h.GetDataFormatId(), liblas::ePointFormat3);
     ensure_equals("wrong default data record length",
-        h.GetDataRecordLength(), LASHeader::ePointSize0);
+        h.GetDataRecordLength(), liblas::ePointSize3);
     ensure_equals("wrong default point records count",
-        h.GetPointRecordsCount(), liblas::uint32_t(0));
+        h.GetPointRecordsCount(), boost::uint32_t(0));
 
     ensure_equals("wrong default X scale", h.GetScaleX(), double(0.01));
     ensure_equals("wrong default Y scale", h.GetScaleY(), double(0.01));
@@ -81,7 +85,7 @@ void test_default_header(liblas::LASHeader const& h)
     ensure_equals("wrong default max Z", h.GetMaxZ(), double(0));
 }
 
-void test_default_point(liblas::LASPoint const& p)
+void test_default_point(liblas::Point const& p)
 {
     ensure_equals("wrong default X coordinate",
         p.GetX(), double(0));
@@ -100,7 +104,7 @@ void test_default_point(liblas::LASPoint const& p)
     ensure_equals("wrong defualt edge of flight line",
         p.GetFlightLineEdge(), 0);
     ensure_equals("wrong defualt classification",
-        p.GetClassification(), 0);
+        p.GetClassification(), liblas::Classification::bitset_type());
     ensure_equals("wrong defualt scan angle rank",
         p.GetScanAngleRank(), 0);
     ensure_equals("wrong defualt file marker/user data value",
@@ -120,49 +124,49 @@ void test_default_point(liblas::LASPoint const& p)
     ensure("invalid defualt point record", p.IsValid());
 }
 
-void test_file10_header(liblas::LASHeader const& h)
+void test_file10_header(liblas::Header const& h)
 {
-    ensure_equals(h.GetFileSignature(), liblas::LASHeader::FileSignature);
+    ensure_equals(h.GetFileSignature(), liblas::Header::FileSignature);
     ensure_equals(h.GetFileSourceId(), 0);
     ensure_equals(h.GetReserved(), 0);
 
     liblas::guid g;
     ensure(g.is_null());
-    ensure_equals(h.GetProjectId(), g);
+    ensure_equals("wrong ProjectId", h.GetProjectId(), g);
 
-    ensure_equals(h.GetVersionMajor(), 1);
-    ensure_equals(h.GetVersionMinor(), 0);
-    ensure_equals(h.GetSystemId(), std::string(""));
-    ensure_equals(h.GetSoftwareId(), std::string("TerraScan"));
-    ensure_equals(h.GetCreationDOY(), 0);
-    ensure_equals(h.GetCreationYear(), 0);
-    ensure_equals(h.GetHeaderSize(), liblas::uint16_t(227));
-    ensure_equals(h.GetDataOffset(), liblas::uint32_t(229));
-    ensure_equals(h.GetRecordsCount(), liblas::uint32_t(0));
-    ensure_equals(h.GetDataFormatId(), liblas::LASHeader::ePointFormat1);
-    ensure_equals(h.GetDataRecordLength(), liblas::LASHeader::ePointSize1);
-    ensure_equals(h.GetPointRecordsCount(), liblas::uint32_t(8));
-    ensure_equals(h.GetScaleX(), double(0.01));
-    ensure_equals(h.GetScaleY(), double(0.01));
-    ensure_equals(h.GetScaleZ(), double(0.01));
-    ensure_equals(h.GetOffsetX(), double(-0));
-    ensure_equals(h.GetOffsetY(), double(-0));
-    ensure_equals(h.GetOffsetZ(), double(-0));
-    ensure_equals(h.GetMinX(), double(630262.3));
-    ensure_equals(h.GetMaxX(), double(630346.83));
-    ensure_equals(h.GetMinY(), double(4834500));
-    ensure_equals(h.GetMaxY(), double(4834500));
-    ensure_equals(h.GetMinZ(), double(50.9));
-    ensure_equals(h.GetMaxZ(), double(55.26));
+    ensure_equals("wrong VersionMajor", h.GetVersionMajor(), 1);
+    ensure_equals("wrong VersionMinor", h.GetVersionMinor(), 0);
+    ensure_equals("wrong GetSystemId", h.GetSystemId(), std::string(""));
+    ensure_equals("wrong GetSoftwareId", h.GetSoftwareId(), std::string("TerraScan"));
+    ensure_equals("Wrong GetCreationDOY", h.GetCreationDOY(), 0);
+    ensure_equals("Wrong GetCreationYear", h.GetCreationYear(), 0);
+    ensure_equals("Wrong GetHeaderSize", h.GetHeaderSize(), boost::uint16_t(227));
+    ensure_equals("Wrong GetDataOffset", h.GetDataOffset(), boost::uint32_t(229));
+    ensure_equals("Wrong GetRecordsCount", h.GetRecordsCount(), boost::uint32_t(0));
+    ensure_equals("Wrong GetDataFormatId", h.GetDataFormatId(), liblas::ePointFormat1);
+    ensure_equals("Wrong GetDataRecordLength", h.GetDataRecordLength(), liblas::ePointSize1);
+    ensure_equals("Wrong GetPointRecordsCount", h.GetPointRecordsCount(), boost::uint32_t(8));
+    ensure_equals("Wrong GetScaleX", h.GetScaleX(), double(0.01));
+    ensure_equals("Wrong GetScaleY", h.GetScaleY(), double(0.01));
+    ensure_equals("Wrong GetScaleZ", h.GetScaleZ(), double(0.01));
+    ensure_equals("Wrong GetOffsetX", h.GetOffsetX(),double(-0));
+    ensure_equals("Wrong GetOffsetY", h.GetOffsetY(), double(-0));
+    ensure_equals("Wrong GetOffsetZ", h.GetOffsetZ(), double(-0));
+    ensure_equals("Wrong GetMinX", h.GetMinX(), double(630262.3));
+    ensure_equals("Wrong GetMaxX", h.GetMaxX(), double(630346.83));
+    ensure_equals("Wrong GetMinY", h.GetMinY(), double(4834500));
+    ensure_equals("Wrong GetMaxY", h.GetMaxY(), double(4834500));
+    ensure_equals("Wrong GetMinZ", h.GetMinZ(), double(50.9));
+    ensure_equals("Wrong GetMaxZ", h.GetMaxZ(), double(55.26));
 }
 
-void test_file10_point1(liblas::LASPoint const& p)
+void test_file10_point1(liblas::Point const& p)
 {
     ensure_distance(p.GetX(), double(630262.30), 0.0001);
     ensure_distance(p.GetY(), double(4834500), 0.0001);
     ensure_distance(p.GetZ(), double(51.53), 0.0001);
     ensure_equals(p.GetIntensity(), 670);
-    ensure_equals(p.GetClassification(), liblas::uint8_t(1));
+    ensure_equals(p.GetClassification(), liblas::Classification::bitset_type(1));
     ensure_equals(p.GetScanAngleRank(), 0);
     ensure_equals(p.GetUserData(), 3);
     ensure_equals(p.GetPointSourceID(), 0);
@@ -170,13 +174,13 @@ void test_file10_point1(liblas::LASPoint const& p)
     ensure_distance(p.GetTime(), double(413665.23360000004), 0.0001);
 }
 
-void test_file10_point2(liblas::LASPoint const& p)
+void test_file10_point2(liblas::Point const& p)
 {
     ensure_distance(p.GetX(), double(630282.45), 0.0001);
     ensure_distance(p.GetY(), double(4834500), 0.0001);
     ensure_distance(p.GetZ(), double(51.63), 0.0001);
     ensure_equals(p.GetIntensity(), 350);
-    ensure_equals(p.GetClassification(), 1);
+    ensure_equals(p.GetClassification(), liblas::Classification::bitset_type(1));
     ensure_equals(p.GetScanAngleRank(), 0);
     ensure_equals(p.GetUserData(), 3);
     ensure_equals(p.GetPointSourceID(), 0);
@@ -184,13 +188,13 @@ void test_file10_point2(liblas::LASPoint const& p)
     ensure_distance(p.GetTime(), double(413665.52880000003), 0.0001);
 }
 
-void test_file10_point4(liblas::LASPoint const& p)
+void test_file10_point4(liblas::Point const& p)
 {
     ensure_distance(p.GetX(), double(630346.83), 0.0001);
     ensure_distance(p.GetY(), double(4834500), 0.0001);
     ensure_distance(p.GetZ(), double(50.90), 0.0001);
     ensure_equals(p.GetIntensity(), 150);
-    ensure_equals(p.GetClassification(), 1);
+    ensure_equals(p.GetClassification(), liblas::Classification::bitset_type(1));
     ensure_equals(p.GetScanAngleRank(), 0);
     ensure_equals(p.GetUserData(), 4);
     ensure_equals(p.GetPointSourceID(), 0);
@@ -199,4 +203,3 @@ void test_file10_point4(liblas::LASPoint const& p)
 }
 
 }
-

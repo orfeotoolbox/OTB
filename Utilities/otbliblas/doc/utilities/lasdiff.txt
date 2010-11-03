@@ -1,0 +1,28 @@
+.. raw:: pdf
+
+    PageBreak
+    
+.. _lasdiff:
+
+****************************************************************
+  lasdiff
+****************************************************************
+
+:Author: Martin Isenburg
+:Contact: isenburg@cs.unc.edu
+
+
+lasdiff compares two LAS files and reports whether they are identical 
+or whether they are different.
+
+Usage
+-----
+
+::
+
+    C:\lastools\bin>lasdiff  -h
+    usage:
+    lasdiff lidar1.las lidar2.las
+    lasdiff lidar1.las lidar1.laz
+    lasdiff -i lidar1.las -i lidar1.laz
+    lasdiff -h

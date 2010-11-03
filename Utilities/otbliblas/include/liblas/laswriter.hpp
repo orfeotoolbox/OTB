@@ -42,55 +42,91 @@
 #ifndef LIBLAS_LASWRITER_HPP_INCLUDED
 #define LIBLAS_LASWRITER_HPP_INCLUDED
 
+#include <liblas/lasversion.hpp>
 #include <liblas/lasheader.hpp>
 #include <liblas/laspoint.hpp>
-#include <liblas/detail/fwd.hpp>
+#include <liblas/lastransform.hpp>
+#include <liblas/lasfilter.hpp>
+// boost
+#include <boost/shared_ptr.hpp>
 // std
 #include <iosfwd> // std::ostream
 #include <string>
 #include <memory>
 #include <cstdlib> // std::size_t
 
-namespace liblas
-{
+namespace liblas {
 
-/// \todo To be documented.
-class LASWriter
+/// Defines public interface to LAS writer implementation.
+/// This class 
+class Writer
 {
 public:
 
-    LASWriter(std::ostream& ofs, LASHeader const& header);
-    ~LASWriter();
+    /// Consructor initializes reader with specified output stream and header specification.
+    /// @param ofs - stream used as destination for LAS records.
+    /// @param header - specifies obligatory properties of LAS file.
+    /// @exception std::runtime_error - on failure state of the input stream.
+    Writer(std::ostream& ofs, Header const& header);
+
+    /// Destructor does not close file attached to the output stream
+    /// Header may be updated after writing operation completed, if necessary
+    /// in order to maintain data consistency.
+    ~Writer();
     
-    std::size_t GetVersion() const;
-    LASHeader const& GetHeader() const;
+    /// Provides access to header structure.
+    Header const& GetHeader() const;
 
     /// \todo TODO: Move point record composition deep into writer implementation.
     /// \todo TODO: How to handle point_source_id in portable way, for LAS 1.0 and 1.1
-    bool WritePoint(LASPoint const& point);
+    bool WritePoint(Point const& point);
 
-    // Allow fetching of the stream
+    /// Allow fetching of the stream
     std::ostream& GetStream() const;
     
-    // Allow in-place writing of header
-    void WriteHeader(LASHeader& header);
+    /// Allow in-place writing of header
+    void WriteHeader(Header& header);
 
-    // Reproject data as they are written if the LASWriter's reference is
-    // different than the LASHeader's
-    bool SetSRS(const LASSpatialReference& ref);
-    
+    /// Reproject data as they are written if the Writer's reference is
+    /// different than the Header's
+    bool SetSRS(const SpatialReference& ref);
+    bool SetInputSRS(const SpatialReference& ref);
+    bool SetOutputSRS(const SpatialReference& ref);
+
+    /// Sets filters that are used to determine wither or not to 
+    /// keep a point that before we write it
+    /// Filters are applied *before* transforms.
+    void SetFilters(std::vector<liblas::FilterI*>* filters) {m_filters = filters;}
+
+    /// Sets transforms to apply to points.  Points are transformed in 
+    /// place *in the order* of the transform list.
+    /// Filters are applied *before* transforms.  If an input/output SRS 
+    /// is set on the writer, the reprojection transform will happen *first* 
+    /// before any other transforms are applied.  This transform is a 
+    /// special case.  You can define your own reprojection transforms and add 
+    /// it to the list, but be sure to not issue a SetOutputSRS to trigger 
+    /// the internal transform creation
+    void SetTransforms(std::vector<liblas::TransformI*>* transforms) {m_transforms = transforms;}
     
 private:
     
     // Blocked copying operations, declared but not defined.
-    LASWriter(LASWriter const& other);
-    LASWriter& operator=(LASWriter const& rhs);
+    Writer(Writer const& other);
+    Writer& operator=(Writer const& rhs);
 
-    const std::auto_ptr<detail::Writer> m_pimpl;
+    const std::auto_ptr<WriterI> m_pimpl;
 
-    LASHeader m_header;
+    HeaderPtr m_header;
     detail::PointRecord m_record;
 
+    std::vector<liblas::FilterI*>* m_filters;
+    std::vector<liblas::TransformI*>* m_transforms;
+    
+    TransformPtr m_reprojection_transform;
+    
+    SpatialReference m_out_srs;
+    SpatialReference m_in_srs;
+    
 };
 
 } // namespace liblas

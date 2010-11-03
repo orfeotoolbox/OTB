@@ -1,0 +1,56 @@
+.. _csharp_tutorial:
+
+*********************************************
+C# Tutorial
+*********************************************
+
+This basic tutorial explains how to use libLAS to read and write 
+LIDAR data encoded in LAS file format from C#.
+
+=============================================
+Hello world
+=============================================
+
+.. code-block:: cpp
+
+ using System;
+ using System.Text;
+ using LibLAS;
+
+ class Program
+ {
+    static void Main(string[] args)
+
+    {
+        try
+        {
+            LASReader lasreader = new LASReader(@"F:\sample_in.las");
+            LASPoint laspoint;
+            LASHeader lasheader = lasreader.GetHeader();
+            LASWriter laswriter = new LASWriter(@"F:\sample_out.las", lasheader, LASReadWriteMode.LASModeWrite);
+            Console.WriteLine("Number of points in file= {0}", lasheader.PointRecordsCount);
+
+            while (lasreader.GetNextPoint())
+            {
+                laspoint = lasreader.GetPoint();
+                //Console.WriteLine(laspoint.X + "," + laspoint.Y + "," + laspoint.Z);
+                laswriter.WritePoint(laspoint);
+            }
+        }
+        catch (LASException e)
+        {
+            Console.WriteLine("\nLASException! Msg: {0}", e.Message);
+        }
+        catch
+        {
+            Console.WriteLine("Unknown exception caught");
+        }
+        finally
+        {
+            Console.WriteLine("Do i need something to do?");
+        }
+
+        Console.WriteLine("End of file");
+        Console.Read();
+    }
+ }

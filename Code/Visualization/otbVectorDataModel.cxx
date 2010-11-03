@@ -57,6 +57,7 @@ void VectorDataModel::AddPointToGeometry(VertexType& vertex, bool callUpdate)
   if  (m_CurrentNodeType == FEATURE_POINT)
     {
     otbMsgDevMacro(<< "VectorDataModel::AddPointToGeometry: Creating and adding new point");
+    m_CurrentGeometry = NULL;
     if (m_CurrentGeometry.IsNull())
       {
       m_CurrentGeometry = DataNodeType::New();
@@ -64,7 +65,6 @@ void VectorDataModel::AddPointToGeometry(VertexType& vertex, bool callUpdate)
       m_CurrentGeometry->SetNodeType(FEATURE_POINT);
       m_CurrentGeometry->SetPoint(newPoint);
       m_VectorData->GetDataTree()->Add(m_CurrentGeometry, m_CurrentRootNode);
-      m_CurrentGeometry = NULL;
       this->Modified();
       }
     else
@@ -124,6 +124,7 @@ void VectorDataModel::EndGeometry(bool callUpdate)
   if  (m_CurrentGeometry->GetNodeType() == FEATURE_POINT)
     {
     otbMsgDevMacro(<< "VectorDataModel::EndGeometry: Point don't need the geometry to be ended");
+    m_CurrentGeometry = NULL;
     }
   else if (m_CurrentGeometry->GetNodeType() == FEATURE_POLYGON)
     {
@@ -267,8 +268,8 @@ VectorDataModel::AddNode( TreeNodeType * node )
   vertex[1] = point[1];
   this->AddPointToGeometry(vertex, false);
 
-        //Add Other Fields
-        CopyFileds( node );
+  //Add Other Fields
+  CopyFields( node );
 
   this->EndGeometry(false);
   break;
@@ -278,7 +279,6 @@ VectorDataModel::AddNode( TreeNodeType * node )
   m_CurrentNodeType = FEATURE_LINE;
   const LineType * line = node->Get()->GetLine();
   LineType::VertexListType::ConstIterator vIt = line->GetVertexList()->Begin();
-  
   while (vIt != line->GetVertexList()->End())
     {
       PointType point = vIt.Value();
@@ -286,10 +286,10 @@ VectorDataModel::AddNode( TreeNodeType * node )
       vertex[0] = point[0];
       vertex[1] = point[1];
       this->AddPointToGeometry(vertex, false);
+      vIt++;
     }
-
         //Add Other Fields
-        CopyFileds( node );
+        CopyFields( node );
 
   this->EndGeometry(false);
   break;
@@ -311,7 +311,7 @@ VectorDataModel::AddNode( TreeNodeType * node )
     }
 
         //Add Other Fields
-        CopyFileds( node );
+        CopyFields( node );
       
   this->EndGeometry(false);
   break;
@@ -336,7 +336,7 @@ VectorDataModel::AddNode( TreeNodeType * node )
 }
 
 void
-VectorDataModel::CopyFileds( TreeNodeType * node )
+VectorDataModel::CopyFields( TreeNodeType * node )
 {
   std::vector< std::string > fieldList = node->Get()->GetFieldList();
   unsigned int i;

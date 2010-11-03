@@ -30,14 +30,14 @@ namespace tut
     typedef test_group<laserror_data> tg;
     typedef tg::object to;
 
-    tg test_group_laserror("liblas::LASError");
+    tg test_group_laserror("liblas::Error");
 
     // Test constructor
     template<>
     template<>
     void to::test<1>()
     {
-        liblas::LASError err(code, msg, method);
+        liblas::Error err(code, msg, method);
 
         ensure_equals(err.GetCode(), code);
         ensure_equals(err.GetMessage(), msg);
@@ -49,8 +49,8 @@ namespace tut
     template<>
     void to::test<2>()
     {
-        liblas::LASError err(code, msg, method);
-        liblas::LASError copy(err);
+        liblas::Error err(code, msg, method);
+        liblas::Error copy(err);
 
         ensure_equals(copy.GetCode(), code);
         ensure_equals(copy.GetMessage(), msg);
@@ -62,10 +62,10 @@ namespace tut
     template<>
     void to::test<3>()
     {
-        liblas::LASError copy(0, "", "");;
+        liblas::Error copy(0, "", "");;
 
         {
-            liblas::LASError err(code, msg, method);
+            liblas::Error err(code, msg, method);
             copy = err;
         }
 

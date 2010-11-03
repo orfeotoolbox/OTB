@@ -18,6 +18,7 @@
 #define __itkTransformFileWriter_cxx
 
 #include "itkTransformFileWriter.h"
+#include <itksys/ios/fstream>
 
 namespace itk
 {

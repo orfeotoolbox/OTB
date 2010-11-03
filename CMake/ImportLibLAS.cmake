@@ -1,0 +1,35 @@
+MESSAGE(STATUS "Importing LibLAS...")
+# Use the liblas library (do not link on solaris)
+OPTION(OTB_USE_LIBLAS "Use liblas library to support Lidar data format." ON)
+MARK_AS_ADVANCED(OTB_USE_LIBLAS)
+
+IF(OTB_USE_LIBLAS)
+    
+    OPTION(OTB_USE_EXTERNAL_LIBLAS "Use an outside build of LibLAS (Lidar data)." OFF)
+    MARK_AS_ADVANCED(OTB_USE_EXTERNAL_LIBLAS)
+    
+    IF(OTB_USE_EXTERNAL_LIBLAS)
+        FIND_PATH(LIBLAS_INCLUDE_DIR liblas.hpp)
+        IF(LIBLAS_INCLUDE_DIR)
+          INCLUDE_DIRECTORIES(BEFORE ${LIBLAS_INCLUDE_DIR})
+        ENDIF(LIBLAS_INCLUDE_DIR)
+        
+        FIND_LIBRARY(LIBLAS_LIBRARY NAMES liblas)
+        IF(LIBLAS_LIBRARY)
+          LINK_DIRECTORIES( ${LIBLAS_LIBRARY} )
+        ENDIF(LIBLAS_LIBRARY)
+    ENDIF(OTB_USE_EXTERNAL_LIBLAS)
+    
+    IF(OTB_USE_EXTERNAL_LIBLAS)
+      MESSAGE(STATUS "  Using LibLAS external version")
+      MESSAGE(STATUS "  LibLAS includes : ${LIBLAS_INCLUDE_DIR}")
+      MESSAGE(STATUS "  LibLAS library  : ${LIBLAS_LIBRARY}")
+    ELSE(OTB_USE_EXTERNAL_LIBLAS)
+      MESSAGE(STATUS "  Using LibLAS internal version")
+    ENDIF(OTB_USE_EXTERNAL_LIBLAS)
+
+ELSE(OTB_USE_LIBLAS)
+
+    MESSAGE(STATUS "  Disabling LibLAS support")
+    
+ENDIF(OTB_USE_LIBLAS)

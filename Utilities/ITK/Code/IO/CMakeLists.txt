@@ -8,12 +8,12 @@ SET(ITKIO_SRCS
   itkBioRadImageIOFactory.cxx
 #  itkBMPImageIO.cxx
 #  itkBMPImageIOFactory.cxx
-  itkBrains2HeaderBase.cxx
-  itkBrains2HeaderFactory.cxx
-  itkBrains2IPLHeaderInfo.cxx
-  itkBrains2MaskHeaderInfo.cxx
-  itkBrains2MaskImageIO.cxx
-  itkBrains2MaskImageIOFactory.cxx
+#  itkBrains2HeaderBase.cxx
+#  itkBrains2HeaderFactory.cxx
+#  itkBrains2IPLHeaderInfo.cxx
+#  itkBrains2MaskHeaderInfo.cxx
+#  itkBrains2MaskImageIO.cxx
+#  itkBrains2MaskImageIOFactory.cxx
 #  itkDICOMImageIO2.cxx
 #  itkDICOMImageIO2Factory.cxx
 #  itkDICOMSeriesFileNames.cxx
@@ -27,16 +27,16 @@ SET(ITKIO_SRCS
   itkGE5ImageIOFactory.cxx
   itkGEAdwImageIO.cxx
   itkGEAdwImageIOFactory.cxx
-  itkGiplImageIO.cxx
-  itkGiplImageIOFactory.cxx
+#  itkGiplImageIO.cxx
+#  itkGiplImageIOFactory.cxx
   itkIOCommon.cxx
   itkIPLCommonImageIO.cxx
   itkIPLFileNameList.cxx
   itkImageIOBase.cxx
   itkImageIOFactory.cxx
   itkImageIORegion.cxx
-  itkJPEGImageIO.cxx
-  itkJPEGImageIOFactory.cxx
+#  itkJPEGImageIO.cxx
+#  itkJPEGImageIOFactory.cxx
 #  itkLSMImageIO.cxx
 #  itkLSMImageIOFactory.cxx
 #  itkMetaImageIO.cxx
@@ -44,8 +44,8 @@ SET(ITKIO_SRCS
 #  itkNrrdImageIO.cxx
 #  itkNrrdImageIOFactory.cxx
   itkNumericSeriesFileNames.cxx
-  itkPNGImageIO.cxx
-  itkPNGImageIOFactory.cxx
+#  itkPNGImageIO.cxx
+#  itkPNGImageIOFactory.cxx
   itkPolygonGroupSpatialObjectXMLFile.cxx
   itkRegularExpressionSeriesFileNames.cxx
   itkSiemensVisionImageIO.cxx
@@ -85,27 +85,27 @@ IF( OTB_USE_EXTERNAL_EXPAT )
 TARGET_LINK_LIBRARIES(ITKIO
 #ITKNrrdIO
 #${ITK_GDCM_LIBRARIES}
-${ITK_PNG_LIBRARIES}
+#${ITK_PNG_LIBRARIES}
 #${ITK_TIFF_LIBRARIES}
 ITKSpatialObject
 #ITKMetaIO
 #ITKDICOMParser
 ${EXPAT_LIBRARY}
 #ITKniftiio
-itkjpeg8
+#itkjpeg8
 )
 ELSE( OTB_USE_EXTERNAL_EXPAT  )
     TARGET_LINK_LIBRARIES(ITKIO
 #    ITKNrrdIO
 #    ${ITK_GDCM_LIBRARIES}
-    ${ITK_PNG_LIBRARIES}
+#    ${ITK_PNG_LIBRARIES}
 #    ${ITK_TIFF_LIBRARIES}
     ITKSpatialObject
 #    ITKMetaIO
 #    ITKDICOMParser
     otbexpat
 #    ITKniftiio
-    itkjpeg8
+#    itkjpeg8
 )
 ENDIF( OTB_USE_EXTERNAL_EXPAT )
 
