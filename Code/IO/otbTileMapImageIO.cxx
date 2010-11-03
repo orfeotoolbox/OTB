@@ -32,8 +32,9 @@
 #include "otbMacro.h"
 #include "otbSystem.h"
 
-#include "itkPNGImageIO.h"
-#include "itkJPEGImageIO.h"
+//#include "itkPNGImageIO.h"
+//#include "itkJPEGImageIO.h"
+#include "otbGDALImageIO.h"
 
 #include "base/ossimFilename.h"
 
@@ -218,23 +219,8 @@ void TileMapImageIO::GenerateTileInfo(double x, double y, int numTileX, int numT
 bool TileMapImageIO::CanReadFromCache(std::string filename)
 {
   itk::ImageIOBase::Pointer imageIO;
-  //Open the file to fill the buffer
-  if (m_FileSuffix == "png")
-    {
-    imageIO = itk::PNGImageIO::New();
-    }
-  else if (m_FileSuffix == "jpg")
-    {
-    imageIO = itk::JPEGImageIO::New();
-    }
-  else
-    {
-    itkExceptionMacro(<< "TileMapImageIO : Bad addressing Style");
-    }
-  bool lCanRead(false);
-  lCanRead = imageIO->CanReadFile(filename.c_str());
-
-  return lCanRead;
+  imageIO = otb::GDALImageIO::New();
+  return imageIO->CanReadFile(filename.c_str());
 }
 
 /*
@@ -353,26 +339,21 @@ void TileMapImageIO::ReadTile(std::string filename, void * buffer)
 {
   otbMsgDevMacro(<< "Retrieving " << filename);
   unsigned char *           bufferCacheFault = NULL;
-  itk::ImageIOBase::Pointer imageIO;
 
-  if (m_FileSuffix == "png")
-    {
-    imageIO = itk::PNGImageIO::New();
-    }
-  else if (m_FileSuffix == "jpg")
-    {
-    imageIO = itk::JPEGImageIO::New();
-    }
-  else
-    {
-    itkExceptionMacro(<< "TileMapImageIO : Bad addressing Style");
-    }
-  bool lCanRead(false);
-  lCanRead = imageIO->CanReadFile(filename.c_str());
+  itk::ImageIOBase::Pointer imageIO;
+  imageIO = otb::GDALImageIO::New();
+  bool lCanRead = imageIO->CanReadFile(filename.c_str());
 
   if (lCanRead == true)
     {
     imageIO->SetFileName(filename.c_str());
+    imageIO->ReadImageInformation();
+    itk::ImageIORegion ioRegion(2);
+    ioRegion.SetIndex(0, 0);
+    ioRegion.SetIndex(1, 0);
+    ioRegion.SetSize(0, 256);
+    ioRegion.SetSize(1, 256);
+    imageIO->SetIORegion(ioRegion);
     imageIO->Read(buffer);
     }
   else
@@ -430,7 +411,7 @@ void TileMapImageIO::ReadImageInformation()
   m_Dimensions[0] = (1 << m_Depth) * 256;
   m_Dimensions[1] = (1 << m_Depth) * 256;
   otbMsgDevMacro(<< "Get Dimensions : x=" << m_Dimensions[0] << " & y=" << m_Dimensions[1]);
-  this->SetNumberOfComponents(3);
+  this->SetNumberOfComponents(4);
   this->SetNumberOfDimensions(2);
   this->SetFileTypeToBinary();
   SetComponentType(UCHAR);
@@ -646,26 +627,13 @@ void TileMapImageIO::InternalWrite(double x, double y, const void* buffer)
   BuildFileName(quad, filename);
 
   itk::ImageIOBase::Pointer imageIO;
-  //Open the file to write the buffer
-  if (m_FileSuffix == "png")
-    {
-    imageIO = itk::PNGImageIO::New();
-    }
-  else if (m_FileSuffix == "jpg")
-    {
-    imageIO = itk::JPEGImageIO::New();
-    }
-  else
-    {
-    itkExceptionMacro(<< "TileMapImageIO : Bad addressing Style");
-    }
+  imageIO = otb::GDALImageIO::New();
+  bool lCanWrite = imageIO->CanWriteFile(filename.str().c_str());
 
-  bool lCanWrite(false);
-  lCanWrite = imageIO->CanWriteFile(filename.str().c_str());
-  otbMsgDevMacro(<< filename.str());
 
-  if (lCanWrite == true)
+  if (lCanWrite)
     {
+    imageIO->CanStreamWrite();
     imageIO->SetNumberOfDimensions(2);
     imageIO->SetDimensions(0, 256);
     imageIO->SetDimensions(1, 256);

@@ -39,13 +39,13 @@ ADD_SUBDIRECTORY(kwsys)
 
 #------------------------------------------------------------------------------
 # Build jpeg first because tiff needs it
-ADD_SUBDIRECTORY(itkjpeg)
+#ADD_SUBDIRECTORY(itkjpeg)
 
 #------------------------------------------------------------------------------
 # Build third-party utilities.
 
-ITK_THIRD_PARTY_SUBDIR(ZLIB itkzlib)
-ITK_THIRD_PARTY_SUBDIR(PNG  itkpng)
+#ITK_THIRD_PARTY_SUBDIR(ZLIB itkzlib)
+#ITK_THIRD_PARTY_SUBDIR(PNG  itkpng)
 #ITK_THIRD_PARTY_SUBDIR(TIFF itktiff)
 SET(OPJ_PREFIX "itk")
 #ITK_THIRD_PARTY_SUBDIR(OpenJPEG openjpeg)
@@ -108,9 +108,9 @@ ADD_SUBDIRECTORY(KWStyle)
 
 #------------------------------------------------------------------------------
 # Create the DICOMParse library for ITK
-SET(DICOMPARSER_NAMESPACE itkdicomparser)
-SET(DICOMPARSER_LIBRARY ITKDICOMParser)
-SET(DICOMPARSER_STANDALONE 0)
+#SET(DICOMPARSER_NAMESPACE itkdicomparser)
+#SET(DICOMPARSER_LIBRARY ITKDICOMParser)
+#SET(DICOMPARSER_STANDALONE 0)
 #ADD_SUBDIRECTORY(DICOMParser)
 
 IF(ITK_DISABLE_CXX_TESTING)
@@ -159,9 +159,9 @@ ENDIF(ITK_USE_FLAT_DIRECTORY_INSTALL)
 IF(NOT ITK_INSTALL_NO_DEVELOPMENT)
   INSTALL(FILES
     ${ITK_BINARY_DIR}/Utilities/itkThirdParty.h
-    ${ITK_SOURCE_DIR}/Utilities/itk_zlib.h
+#    ${ITK_SOURCE_DIR}/Utilities/itk_zlib.h
 #    ${ITK_SOURCE_DIR}/Utilities/itk_tiff.h
-    ${ITK_SOURCE_DIR}/Utilities/itk_png.h
+#    ${ITK_SOURCE_DIR}/Utilities/itk_png.h
 #    ${ITK_SOURCE_DIR}/Utilities/metaIOConfig.h
 #    ${ITK_BINARY_DIR}/Utilities/NrrdIO/NrrdConfigure.h
     DESTINATION ${ITK_INSTALL_INCLUDE_DIR_CM24_UTILITIES}

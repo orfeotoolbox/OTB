@@ -9,9 +9,9 @@ IF(ITK_USE_SYSTEM_VXL)
     )
 ENDIF(ITK_USE_SYSTEM_VXL)
 
-IF(ITK_USE_SYSTEM_GDCM)
-  SET(ITK_INCLUDE_DIRS_SYSTEM ${GDCM_DIR})
-ENDIF(ITK_USE_SYSTEM_GDCM)
+#IF(ITK_USE_SYSTEM_GDCM)
+#  SET(ITK_INCLUDE_DIRS_SYSTEM ${GDCM_DIR})
+#ENDIF(ITK_USE_SYSTEM_GDCM)
 
 #-----------------------------------------------------------------------------
 # Include directories from the build tree.
@@ -27,19 +27,19 @@ SET(ITK_INCLUDE_DIRS_BUILD_TREE ${ITK_INCLUDE_DIRS_BUILD_TREE}
   ${ITK_SOURCE_DIR}/Code/Numerics/FEM
   ${ITK_SOURCE_DIR}/Code/Numerics/NeuralNetworks
   ${ITK_SOURCE_DIR}/Code/SpatialObject
-  ${ITK_SOURCE_DIR}/Utilities/MetaIO
-  ${ITK_SOURCE_DIR}/Utilities/NrrdIO
-  ${ITK_BINARY_DIR}/Utilities/NrrdIO
-  ${ITK_SOURCE_DIR}/Utilities/DICOMParser
-  ${ITK_BINARY_DIR}/Utilities/DICOMParser
+#  ${ITK_SOURCE_DIR}/Utilities/MetaIO
+#  ${ITK_SOURCE_DIR}/Utilities/NrrdIO
+#  ${ITK_BINARY_DIR}/Utilities/NrrdIO
+#  ${ITK_SOURCE_DIR}/Utilities/DICOMParser
+#  ${ITK_BINARY_DIR}/Utilities/DICOMParser
 #  ${ITK_BINARY_DIR}/Utilities/expat
 #  ${ITK_SOURCE_DIR}/Utilities/expat
   ${ITK_SOURCE_DIR}/../otbexpat
-  ${ITK_SOURCE_DIR}/Utilities/nifti/niftilib
-  ${ITK_SOURCE_DIR}/Utilities/nifti/znzlib
+#  ${ITK_SOURCE_DIR}/Utilities/nifti/niftilib
+#  ${ITK_SOURCE_DIR}/Utilities/nifti/znzlib
   ${ITK_SOURCE_DIR}/Utilities/itkExtHdrs
   ${ITK_BINARY_DIR}/Utilities
-  ${ITK_SOURCE_DIR}/Utilities
+#  ${ITK_SOURCE_DIR}/Utilities
 )
 
 
