@@ -22,7 +22,7 @@ SET(LEARNING_TESTS1 ${CXX_TEST_PATH}/otbLearningTests1)
 SET(LEARNING_TESTS2 ${CXX_TEST_PATH}/otbLearningTests2)
 SET(LEARNING_TESTS3 ${CXX_TEST_PATH}/otbLearningTests3)
 SET(LEARNING_TESTS4 ${CXX_TEST_PATH}/otbLearningTests4)
-SET(LEARNING_TESTS4 ${CXX_TEST_PATH}/otbLearningTests5)
+SET(LEARNING_TESTS5 ${CXX_TEST_PATH}/otbLearningTests5)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbLearningTESTS1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
