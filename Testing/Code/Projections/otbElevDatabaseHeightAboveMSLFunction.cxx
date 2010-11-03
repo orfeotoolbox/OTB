@@ -16,19 +16,16 @@
 
 =========================================================================*/
 
-// this file defines the otbProjectionsTest for the test driver
-// and all it expects is that you have a function called RegisterTests
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
+#include "otbMacro.h"
+#include "otbElevDatabaseHeightAboveMSLFunction.h"
+#include "otbImage.h"
 
-#include "otbTestMain.h"
-
-void RegisterTests()
+int otbElevDatabaseHeightAboveMSLFunction(int argc, char* argv[])
 {
-  REGISTER_TEST(otbPhysicalToRPCSensorModelImageFilter);
-  REGISTER_TEST(otbGenericRSResampleImageFilterNew);
-  REGISTER_TEST(otbGenericRSResampleImageFilter);
-  REGISTER_TEST(otbGenericRSResampleImageFilterFromMap);
-  REGISTER_TEST(otbElevDatabaseHeightAboveMSLFunction);
+  typedef otb::ElevDatabaseHeightAboveMSLFunction<float>   SrtmFunctionType;
+
+  SrtmFunctionType::Pointer srtmDem;
+
+  return EXIT_SUCCESS;
+
 }
