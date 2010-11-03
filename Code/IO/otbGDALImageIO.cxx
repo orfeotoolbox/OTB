@@ -27,6 +27,7 @@
 #include "otbMacro.h"
 #include "otbSystem.h"
 #include "otbImage.h"
+#include "itkArray.h"
 
 #include "itkMetaDataObject.h"
 #include "otbMetaDataKey.h"
@@ -38,6 +39,121 @@
 
 namespace otb
 {
+
+// only two states : the Pointer is Null or GetDataSet() returns a valid dataset
+class GDALDatasetWrapper : public itk::LightObject
+{
+  friend class GDALDriverManagerWrapper;
+
+public:
+  typedef GDALDatasetWrapper      Self;
+  typedef itk::LightObject        Superclass;
+  typedef itk::SmartPointer<Self> Pointer;
+
+  /** Method for creation through the object factory. */
+  itkNewMacro(Self);
+
+  /** Run-time type information (and related methods). */
+  itkTypeMacro(GDALImageIO, itk::LightObject);
+
+  /** Easy access to the internal GDALDataset object.
+   *  Don't close it, it will be automatic */
+  GDALDataset* GetDataSet()
+    {
+    return m_Dataset;
+    }
+
+protected :
+  GDALDatasetWrapper()
+   : m_Dataset(NULL)
+  {
+  }
+
+  ~GDALDatasetWrapper()
+  {
+    if (m_Dataset)
+      {
+      GDALClose(m_Dataset);
+      }
+  }
+
+private:
+  GDALDataset* m_Dataset;
+};
+
+
+// Wraps the GdalDriverManager so that GDALAllRegister is called automatically
+class GDALDriverManagerWrapper
+{
+public:
+  // GetInstance returns a reference to a GDALDriverManagerWrapper
+  // This is the only entry point to interact with this class
+  static GDALDriverManagerWrapper& GetInstance()
+  {
+
+    // Declare a static method variable of type GDALDriverManagerWrapper
+    // so that it is constructed and initialized only on the first call
+    // to GetInstance(), and so try to avoid static initialization order problems
+
+    static GDALDriverManagerWrapper theUniqueInstance;
+    return theUniqueInstance;
+  }
+
+  // Open the file for reading and returns a smart dataset pointer
+  GDALDatasetWrapper::Pointer Open( std::string filename )
+  {
+    GDALDatasetWrapper::Pointer datasetWrapper;
+    GDALDatasetH dataset = GDALOpen(filename.c_str(), GA_ReadOnly);
+    if (dataset != NULL)
+      {
+      datasetWrapper = GDALDatasetWrapper::New();
+      datasetWrapper->m_Dataset = static_cast<GDALDataset*>(dataset);
+      }
+    return datasetWrapper;
+  }
+
+  // Open the new  file for writing and returns a smart dataset pointer
+  GDALDatasetWrapper::Pointer Create( std::string driverShortName, std::string filename,
+                                      int nXSize, int nYSize, int nBands,
+                                      GDALDataType eType, char ** papszOptions )
+  {
+    GDALDatasetWrapper::Pointer datasetWrapper;
+
+    GDALDriver*  driver = GetDriverByName( driverShortName );
+    if(driver != NULL)
+      {
+      GDALDataset* dataset = driver->Create(filename.c_str(),
+                                            nXSize, nYSize,
+                                            nBands, eType,
+                                            papszOptions );
+
+      if (dataset != NULL)
+        {
+        datasetWrapper = GDALDatasetWrapper::New();
+        datasetWrapper->m_Dataset = dataset;
+        }
+      }
+    return datasetWrapper;
+  }
+
+
+  GDALDriver* GetDriverByName( std::string driverShortName )
+  {
+    return GetGDALDriverManager()->GetDriverByName(driverShortName.c_str());
+  }
+
+private :
+  // private constructor so that this class is allocated only inside GetInstance
+  GDALDriverManagerWrapper()
+  {
+    GDALAllRegister();
+  }
+
+  ~GDALDriverManagerWrapper()
+  {
+    GDALDestroyDriverManager();
+  }
+};
 
 GDALImageIO::GDALImageIO()
 {
@@ -61,36 +177,18 @@ GDALImageIO::GDALImageIO()
 
   m_IsIndexed   = false;
   m_currentfile = NULL;
-  m_poBands     = NULL;
-  m_hDriver     = NULL;
-  m_poDataset   = NULL;
+  //m_poBands     = NULL;
+  //m_hDriver     = NULL;
+  //m_poDataset   = NULL;
 
   m_NbBands = 0;
   m_FlagWriteImageInformation = true;
 
   m_CanStreamWrite = false;
-
-//  GDALAllRegister();
 }
 
 GDALImageIO::~GDALImageIO()
 {
-//THOMAS
-//  if( m_hDriver != NULL ) GDALClose( m_hDriver ); //Ne pas le faire  sinon SegFault !!!!
-//         if( m_poBands != NULL ) delete [] m_poBands;
-//   if( m_poDataset != NULL ) delete m_poDataset;
-
-  if (m_poDataset != NULL)
-    {
-
-    GDALClose(m_poDataset);
-    m_poDataset = NULL;
-    }
-  if (m_poBands != NULL)
-    {
-    delete[] m_poBands;
-    }
-  GDALDestroyDriverManager();
 }
 
 // Tell only if the file can be read with GDAL.
@@ -102,38 +200,8 @@ bool GDALImageIO::CanReadFile(const char* file)
     itkDebugMacro(<< "No filename specified.");
     return false;
     }
-
-  std::string lFileNameGdal;
-  lFileNameGdal = std::string(file);
-
-  // Init GDAL parameters
-  GDALAllRegister();
-
-  // Open file with GDAL
-  m_poDataset = static_cast<GDALDataset *>(GDALOpen(lFileNameGdal.c_str(), GA_ReadOnly));
-
-  if (m_poDataset == NULL)
-    {
-    fprintf(stderr,
-            "GDALOpen failed - %d\n%s\n",
-            CPLGetLastErrorNo(), CPLGetLastErrorMsg());
-
-    GDALDestroyDriverManager();
-    CPLDumpSharedList(NULL);
-    itkDebugMacro(<< "No dataset ");
-    otbMsgDevMacro(<< "Not CanReadFile GDAL");
-    return false;
-    }
-  else
-    {
-    GDALClose(m_poDataset);
-    m_poDataset = NULL;
-    GDALDestroyDriverManager();
-    CPLDumpSharedList(NULL);
-
-    otbMsgDevMacro(<< "CanReadFile GDAL");
-    return true;
-    }
+  m_Dataset = GDALDriverManagerWrapper::GetInstance().Open(file);
+  return m_Dataset.IsNotNull();
 }
 
 // Used to print information about this object
@@ -159,41 +227,37 @@ void GDALImageIO::Read(void* buffer)
     return;
     }
 
-  int lNbLines   = this->GetIORegion().GetSize()[1];
-  int lNbColumns = this->GetIORegion().GetSize()[0];
+  int lNbLines     = this->GetIORegion().GetSize()[1];
+  int lNbColumns   = this->GetIORegion().GetSize()[0];
   int lFirstLine   = this->GetIORegion().GetIndex()[1]; // [1... ]
   int lFirstColumn = this->GetIORegion().GetIndex()[0]; // [1... ]
 
   std::streamoff lNbPixels = (static_cast<std::streamoff>(lNbColumns)) * (static_cast<std::streamoff>(lNbLines));
   std::streamoff lBufferSize = static_cast<std::streamoff>(m_NbOctetPixel) * lNbPixels;
 
-  unsigned char* value = new unsigned char[lBufferSize];
-  if (value == NULL)
-    {
-    itkExceptionMacro(<< "Memory allocation error");
-    return;
-    }
+  itk::Array<unsigned char> value(lBufferSize);
 
   CPLErr         lCrGdal;
   std::streamoff cpt(0);
+  GDALDataset* dataset = m_Dataset->GetDataSet();
 
   if (GDALDataTypeIsComplex(m_PxType))
     {
-    lCrGdal = m_poBands[0]->RasterIO(GF_Read,
-                                     lFirstColumn,
-                                     lFirstLine,
-                                     lNbColumns,
-                                     lNbLines,
-                                     value,
-                                     lNbColumns,
-                                     lNbLines,
-                                     m_PxType,
-                                     0,
-                                     0);
+    lCrGdal = dataset->GetRasterBand(1)->RasterIO(GF_Read,
+                                                 lFirstColumn,
+                                                 lFirstLine,
+                                                 lNbColumns,
+                                                 lNbLines,
+                                                 value.data_block(),
+                                                 lNbColumns,
+                                                 lNbLines,
+                                                 m_PxType,
+                                                 0,
+                                                 0);
 
     if (lCrGdal == CE_Failure)
       {
-      itkExceptionMacro(<< "Error while reading image (GDAL format) " << m_FileName.c_str() << ".");
+      itkExceptionMacro(<< "Error while reading image (GDAL format) " << m_FileName );
       }
     cpt = 0;
     for (std::streamoff i = 0; i < lBufferSize; i = i + static_cast<std::streamoff>(m_NbOctetPixel))
@@ -206,12 +270,12 @@ void GDALImageIO::Read(void* buffer)
     {
     step = step * static_cast<std::streamoff>(m_NbOctetPixel);
 
-    lCrGdal = m_poBands[0]->RasterIO(GF_Read,
+    lCrGdal = dataset->GetRasterBand(1)->RasterIO(GF_Read,
                                      lFirstColumn,
                                      lFirstLine,
                                      lNbColumns,
                                      lNbLines,
-                                     value,
+                                     value.data_block(),
                                      lNbColumns,
                                      lNbLines,
                                      m_PxType,
@@ -223,17 +287,17 @@ void GDALImageIO::Read(void* buffer)
       }
     // Recopie dans le buffer
     cpt = 0;
+    GDALColorTable* colorTable = dataset->GetRasterBand(1)->GetColorTable();
     for (std::streamoff i = 0; i < lBufferSize; i = i + static_cast<std::streamoff>(m_NbOctetPixel))
       {
       GDALColorEntry color;
-      m_poBands[0]->GetColorTable()->GetColorEntryAsRGB(value[i], &color);
+      colorTable->GetColorEntryAsRGB(value[i], &color);
       p[cpt] = color.c1;
       p[cpt + 1] = color.c2;
       p[cpt + 2] = color.c3;
       p[cpt + 3] = color.c4;
       cpt += step;
       }
-
     }
   else
     {
@@ -242,17 +306,17 @@ void GDALImageIO::Read(void* buffer)
 
     for (unsigned int nbComponents = 0; nbComponents < this->GetNumberOfComponents(); ++nbComponents)
       {
-      lCrGdal = m_poBands[nbComponents]->RasterIO(GF_Read,
-                                                  lFirstColumn,
-                                                  lFirstLine,
-                                                  lNbColumns,
-                                                  lNbLines,
-                                                  value,
-                                                  lNbColumns,
-                                                  lNbLines,
-                                                  m_PxType,
-                                                  0,
-                                                  0);
+      lCrGdal = dataset->GetRasterBand(nbComponents+1)->RasterIO(GF_Read,
+                                                                lFirstColumn,
+                                                                lFirstLine,
+                                                                lNbColumns,
+                                                                lNbLines,
+                                                                value.data_block(),
+                                                                lNbColumns,
+                                                                lNbLines,
+                                                                m_PxType,
+                                                                0,
+                                                                0);
       if (lCrGdal == CE_Failure)
         {
         itkExceptionMacro(<< "Error while reading image (GDAL format) " << m_FileName.c_str() << ".");
@@ -266,9 +330,6 @@ void GDALImageIO::Read(void* buffer)
         }
       }
     }
-
-  delete[] value;
-  value = NULL;
 }
 
 void GDALImageIO::ReadImageInformation()
@@ -279,53 +340,21 @@ void GDALImageIO::ReadImageInformation()
 
 void GDALImageIO::InternalReadImageInformation()
 {
-  int i;
-
-  if (m_FileName.empty() == true)
-    {
-    itkExceptionMacro(<< "GDAL read : empty image file name file.");
-    }
-
-  std::string lFileNameGdal = m_FileName;
-
-  // Init GDAL parameters
-  GDALAllRegister();
-
-  // Get Dataset
-  if (m_poDataset != NULL)
-    {
-//       delete m_poDataset;
-    GDALClose(m_poDataset);
-    m_poDataset = NULL;
-    }
-  m_poDataset = static_cast<GDALDataset *>(GDALOpen(lFileNameGdal.c_str(), GA_ReadOnly));
+  GDALDataset* dataset = m_Dataset->GetDataSet();
   otbMsgDevMacro(<< "  GCPCount (original): " << m_poDataset->GetGCPCount());
 
-  if (m_poDataset == NULL)
-    {
-    itkExceptionMacro(<< "Gdal dataset is null.");
-    return;
-    }
-
-//  else
-//  {
-// Get image dimensions
-  m_width = m_poDataset->GetRasterXSize();
-  m_height = m_poDataset->GetRasterYSize();
-
-  if ((m_width == 0) || (m_height == 0))
+  // Get image dimensions
+  if ( dataset->GetRasterXSize() == 0 || dataset->GetRasterYSize() == 0 )
     {
     itkExceptionMacro(<< "Dimension is undefined.");
     }
-  else
-    {
-    // Set image dimensions into IO
-    m_Dimensions[0] = m_width;
-    m_Dimensions[1] = m_height;
-    }
+
+  // Set image dimensions into IO
+  m_Dimensions[0] = dataset->GetRasterXSize();
+  m_Dimensions[1] = dataset->GetRasterYSize();
 
   // Get Number of Bands
-  m_NbBands = m_poDataset->GetRasterCount();
+  m_NbBands = dataset->GetRasterCount();
   if (m_NbBands == 0)
     {
 //FIXME this happen in the case of a hdf file with SUBDATASETS
@@ -364,20 +393,10 @@ void GDALImageIO::InternalReadImageInformation()
   // Automatically set the Type to Binary for GDAL data
   this->SetFileTypeToBinary();
 
-  // Get all the Bands
-  m_poBands = new GDALRasterBand *[m_NbBands];
-  if (m_poBands == NULL)
-    {
-    itkExceptionMacro(<< "Memory allocation error for the 'rasterBands'");
-    return;
-    }
-  for (i = 0; i < m_NbBands; ++i)
-    m_poBands[i] = m_poDataset->GetRasterBand(i + 1);
-
   // Get Data Type
-  // Consider only the data type given by the first band!!!!!
+  // Consider only the data type given by the first band
   // Maybe be could changed (to check)
-  m_PxType = m_poBands[0]->GetRasterDataType();
+  m_PxType = dataset->GetRasterBand(1)->GetRasterDataType();
 
   // Following the data type given by GDAL we set it for ImageIO
   // BE CAREFUL !!!! At this time the complex data type are regarded
@@ -477,7 +496,6 @@ void GDALImageIO::InternalReadImageInformation()
       this->SetPixelType(VECTOR);
       }
     }
-  // }
 
   /*----------------------------------------------------------------------*/
   /*-------------------------- METADATA ----------------------------------*/
@@ -496,31 +514,31 @@ void GDALImageIO::InternalReadImageInformation()
   if (m_NumberOfDimensions == 3) m_Spacing[2] = 1;
 
   char** papszMetadata;
-  papszMetadata =  m_poDataset->GetMetadata(NULL);
+  papszMetadata =  dataset->GetMetadata(NULL);
 
   /* -------------------------------------------------------------------- */
   /*      Report general info.                                            */
   /* -------------------------------------------------------------------- */
   GDALDriverH hDriver;
 
-  hDriver = m_poDataset->GetDriver();
+  hDriver = dataset->GetDriver();
 
   std::string driverShortName =  static_cast<std::string>(GDALGetDriverShortName(hDriver));
-  std::string driverLongName =  static_cast<std::string>(GDALGetDriverLongName(hDriver));
+  std::string driverLongName  =  static_cast<std::string>(GDALGetDriverLongName(hDriver));
 
   itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::DriverShortNameKey, driverShortName);
-  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::DriverLongNameKey, driverLongName);
+  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::DriverLongNameKey,  driverLongName);
 
   /* -------------------------------------------------------------------- */
   /* Get the projection coordinate system of the image : ProjectionRef  */
   /* -------------------------------------------------------------------- */
 
-  if (m_poDataset->GetProjectionRef() != NULL && !std::string(m_poDataset->GetProjectionRef()).empty())
+  if (dataset->GetProjectionRef() != NULL && !std::string(dataset->GetProjectionRef()).empty())
     {
     OGRSpatialReferenceH pSR = OSRNewSpatialReference(NULL);
 
     const char *         pszProjection = NULL;
-    pszProjection =  m_poDataset->GetProjectionRef();
+    pszProjection =  dataset->GetProjectionRef();
 
     if (OSRImportFromWkt(pSR,(char **) (&pszProjection)) == OGRERR_NONE)
       {
@@ -534,7 +552,7 @@ void GDALImageIO::InternalReadImageInformation()
       }
     else
       itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey,
-                                            static_cast<std::string>(m_poDataset->GetProjectionRef()));
+                                            static_cast<std::string>(dataset->GetProjectionRef()));
 
     if (pSR != NULL)
       {
@@ -548,10 +566,10 @@ void GDALImageIO::InternalReadImageInformation()
   /* -------------------------------------------------------------------- */
 
   unsigned int gcpCount = 0;
-  gcpCount = m_poDataset->GetGCPCount();
+  gcpCount = dataset->GetGCPCount();
   if (gcpCount > 0)
     {
-    std::string gcpProjectionKey = static_cast<std::string>(m_poDataset->GetGCPProjection());
+    std::string gcpProjectionKey = static_cast<std::string>(dataset->GetGCPProjection());
     itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::GCPProjectionKey, gcpProjectionKey);
 
     if (gcpProjectionKey.empty())
@@ -568,7 +586,7 @@ void GDALImageIO::InternalReadImageInformation()
       {
 
       const GDAL_GCP *psGCP;
-      psGCP = m_poDataset->GetGCPs() + cpt;
+      psGCP = dataset->GetGCPs() + cpt;
 
       OTB_GCP pOtbGCP(psGCP);
 
@@ -590,7 +608,7 @@ void GDALImageIO::InternalReadImageInformation()
   double     adfGeoTransform[6];
   MetaDataKey::VectorType VadfGeoTransform;
 
-  if (m_poDataset->GetGeoTransform(adfGeoTransform) == CE_None)
+  if (dataset->GetGeoTransform(adfGeoTransform) == CE_None)
     {
     for (int cpt = 0; cpt < 6; cpt++)
       VadfGeoTransform.push_back(adfGeoTransform[cpt]);
@@ -621,7 +639,7 @@ void GDALImageIO::InternalReadImageInformation()
   /*      Report metadata.                                                */
   /* -------------------------------------------------------------------- */
 
-  papszMetadata = m_poDataset->GetMetadata(NULL);
+  papszMetadata = dataset->GetMetadata(NULL);
   if (CSLCount(papszMetadata) > 0)
     {
     std::string key;
@@ -641,7 +659,7 @@ void GDALImageIO::InternalReadImageInformation()
   /*      Report subdatasets.                                             */
   /* -------------------------------------------------------------------- */
 
-  papszMetadata = m_poDataset->GetMetadata("SUBDATASETS");
+  papszMetadata = dataset->GetMetadata("SUBDATASETS");
   if (CSLCount(papszMetadata) > 0)
     {
     std::string key;
@@ -672,7 +690,7 @@ void GDALImageIO::InternalReadImageInformation()
 
   VGeo.clear();
 
-  GDALInfoReportCorner("Upper Right", m_width, 0.0, GeoX, GeoY);
+  GDALInfoReportCorner("Upper Right", m_Dimensions[0], 0.0, GeoX, GeoY);
   VGeo.push_back(GeoX);
   VGeo.push_back(GeoY);
 
@@ -680,7 +698,7 @@ void GDALImageIO::InternalReadImageInformation()
 
   VGeo.clear();
 
-  GDALInfoReportCorner("Lower Left", 0.0, m_height, GeoX, GeoY);
+  GDALInfoReportCorner("Lower Left", 0.0, m_Dimensions[1], GeoX, GeoY);
   VGeo.push_back(GeoX);
   VGeo.push_back(GeoY);
 
@@ -688,7 +706,7 @@ void GDALImageIO::InternalReadImageInformation()
 
   VGeo.clear();
 
-  GDALInfoReportCorner("Lower Right", m_width, m_height, GeoX, GeoY);
+  GDALInfoReportCorner("Lower Right", m_Dimensions[0], m_Dimensions[1], GeoX, GeoY);
   VGeo.push_back(GeoX);
   VGeo.push_back(GeoY);
 
@@ -700,11 +718,11 @@ void GDALImageIO::InternalReadImageInformation()
   /* Color Table                                                          */
   /* -------------------------------------------------------------------- */
 
-  for (int iBand = 0; iBand < m_poDataset->GetRasterCount(); iBand++)
+  for (int iBand = 0; iBand < dataset->GetRasterCount(); iBand++)
     {
     GDALColorTableH hTable;
     GDALRasterBandH hBand;
-    hBand = GDALGetRasterBand(m_poDataset, iBand + 1);
+    hBand = GDALGetRasterBand(dataset, iBand + 1);
     if ((GDALGetRasterColorInterpretation(hBand) == GCI_PaletteIndex)
         && (hTable = GDALGetRasterColorTable(hBand)) != NULL)
       {
@@ -745,9 +763,6 @@ void GDALImageIO::InternalReadImageInformation()
 
 bool GDALImageIO::CanWriteFile(const char* name)
 {
-  // Init GDAL parameters
-  GDALAllRegister();
-
   // First check the filename
   if (name == NULL)
     {
@@ -763,7 +778,7 @@ bool GDALImageIO::CanWriteFile(const char* name)
     }
 
   // Check the driver for support of Create or at least CreateCopy
-  GDALDriver* driver = GetGDALDriverManager()->GetDriverByName(gdalDriverShortName.c_str());
+  GDALDriver* driver = GDALDriverManagerWrapper::GetInstance().GetDriverByName(gdalDriverShortName);
   if ( GDALGetMetadataItem( driver, GDAL_DCAP_CREATE, NULL ) == NULL
        && GDALGetMetadataItem( driver, GDAL_DCAP_CREATECOPY, NULL ) == NULL )
     {
@@ -777,7 +792,7 @@ bool GDALImageIO::CanStreamWrite()
 {
   // Get the GDAL format ID from the name
   std::string gdalDriverShortName = FilenameToGdalDriverShortName(m_FileName);
-  GDALDriver* driver = GetGDALDriverManager()->GetDriverByName(gdalDriverShortName.c_str());
+  GDALDriver* driver = GDALDriverManagerWrapper::GetInstance().GetDriverByName(gdalDriverShortName);
   if (driver == NULL)
     {
     itkDebugMacro(<< "Unable to instantiate driver " << gdalDriverShortName);
@@ -787,7 +802,6 @@ bool GDALImageIO::CanStreamWrite()
   if ( GDALGetMetadataItem( driver, GDAL_DCAP_CREATE, NULL ) != NULL )
     {
     m_CanStreamWrite = true;
-    return true;
     }
   else
     {
@@ -829,12 +843,7 @@ void GDALImageIO::Write(const void* buffer)
   std::streamoff lBufferSize = static_cast<std::streamoff> (m_NbOctetPixel) * lNbPixels;
   otbMsgDevMacro(<< " BufferSize allocated : " << lBufferSize);
 
-  unsigned char* value = new unsigned char[lBufferSize];
-  if (value == NULL)
-    {
-    itkExceptionMacro(<< "Memory allocation error");
-    return;
-    }
+  itk::Array<unsigned char> value(lBufferSize);
 
   if (m_CanStreamWrite)
     {
@@ -854,40 +863,34 @@ void GDALImageIO::Write(const void* buffer)
         memcpy((void*) (&(value[i])), (const void*) (&(p[cpt])), (size_t) (m_NbOctetPixel));
         cpt += step;
         }
-      GDALRasterBand *poBand;
-      poBand = m_poBands[nbComponents]; //m_poDataset->GetRasterBand(nbComponents+1);
+      GDALRasterBand *poBand = m_Dataset->GetDataSet()->GetRasterBand(nbComponents+1);
 
-      lCrGdal = m_poBands[nbComponents]->RasterIO(GF_Write, lFirstColumn, lFirstLine, lNbColumns, lNbLines, value,
-                                                  lNbColumns, lNbLines, m_PxType, 0, 0);
+      lCrGdal = poBand->RasterIO(GF_Write, lFirstColumn, lFirstLine, lNbColumns, lNbLines, value.data_block(),
+                                 lNbColumns, lNbLines, m_PxType, 0, 0);
       if (lCrGdal == CE_Failure)
         {
         itkExceptionMacro(<< "Error while writing image (GDAL format) " << m_FileName.c_str() << ".");
         }
 
-      m_poBands[nbComponents]->FlushCache();
+      poBand->FlushCache();
       }
-
-    delete[] value;
-    value = NULL;
-
-    m_poDataset->FlushCache();
+    m_Dataset->GetDataSet()->FlushCache();
     }
   else
     {
     // We only wrote data to the memory dataset
-    // Now write it to output format with CreateCopy()
+    // Now write it to the real file with CreateCopy()
     std::string gdalDriverShortName = FilenameToGdalDriverShortName(m_FileName);
     std::string realFileName = GetGdalWriteImageFileName(gdalDriverShortName, m_FileName);
 
-    GDALDriver* driver = GetGDALDriverManager()->GetDriverByName(gdalDriverShortName.c_str());
+    GDALDriver* driver = GDALDriverManagerWrapper::GetInstance().GetDriverByName(gdalDriverShortName);
     if (driver == NULL)
       {
       itkExceptionMacro(<< "Unable to instantiate driver " << gdalDriverShortName << " to write " << m_FileName);
       }
 
-    GDALDataset* hOutputDS = driver->CreateCopy( realFileName.c_str(), m_poDataset, FALSE,
+    GDALDataset* hOutputDS = driver->CreateCopy( realFileName.c_str(), m_Dataset->GetDataSet(), FALSE,
                                                  NULL, NULL, NULL );
-
     GDALClose(hOutputDS);
     }
 }
@@ -1000,38 +1003,15 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
 
   if (m_CanStreamWrite)
     {
-    m_hDriver = GetGDALDriverManager()->GetDriverByName(driverShortName.c_str());
-    if (m_hDriver == NULL)
-      {
-      itkExceptionMacro(<< "GDAL Writing failed : Driver not recognized");
-      }
-    std::string realFileName = GetGdalWriteImageFileName(driverShortName, m_FileName);
-
-    // Close a previously opened dataset eventually
-    if (m_poDataset != NULL)
-      {
-      GDALClose(m_poDataset);
-      m_poDataset = NULL;
-      }
-
-    m_poDataset = m_hDriver->Create(
-      realFileName.c_str(), m_Dimensions[0], m_Dimensions[1], m_NbBands, m_PxType, papszOptions);
-    if (m_poDataset == NULL)
-      {
-      itkExceptionMacro(
-        << "GDAL Writing failed : Impossible to create the image file name '" << realFileName.c_str() << "'.");
-      }
+    m_Dataset = GDALDriverManagerWrapper::GetInstance().Create(
+                     driverShortName,
+                     GetGdalWriteImageFileName(driverShortName, m_FileName),
+                     m_Dimensions[0],m_Dimensions[1],
+                     m_NbBands, m_PxType,
+                     papszOptions);
     }
   else
     {
-    // Create a memory dataset to hold the image
-    m_hDriver = GetGDALDriverManager()->GetDriverByName("MEM");
-    if (m_hDriver == NULL)
-      {
-      itkExceptionMacro(
-          << "GDAL Failed to find MEM driver");
-      }
-
     std::ostringstream stream;
     stream << "MEM:::"
            <<  "DATAPOINTER=" << buffer << ","
@@ -1042,26 +1022,14 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
            <<  "PIXELOFFSET=" << m_NbOctetPixel * m_NbBands << ","
            <<  "LINEOFFSET=" << m_NbOctetPixel * m_NbBands * m_Dimensions[0] << ","
            <<  "BANDOFFSET=" << m_NbOctetPixel;
-    m_poDataset = static_cast<GDALDataset *>(GDALOpen(stream.str().c_str(), GA_ReadOnly));
-    //m_poDataset = m_hDriver->Create(NULL, m_Dimensions[0], m_Dimensions[1], m_NbBands, m_PxType, NULL);
-    if (m_poDataset == NULL)
-      {
-      itkExceptionMacro(
-          << "GDAL Failed to create MEM dataset");
-      }
 
+    m_Dataset = GDALDriverManagerWrapper::GetInstance().Open(stream.str());
     }
 
-  // Get all the Bands
-  m_poBands = new GDALRasterBand *[m_NbBands];
-
-  if (m_poBands == NULL)
+  if (m_Dataset.IsNull())
     {
-    itkExceptionMacro(<< "Memory allocation error for 'rasterBands'");
-    }
-  for (int i = 0; i < m_NbBands; ++i)
-    {
-    m_poBands[i] = m_poDataset->GetRasterBand(i + 1);
+    itkExceptionMacro(
+      << "GDAL Writing failed : Impossible to create the image file name '" << m_FileName << "'.");
     }
 
   /*----------------------------------------------------------------------*/
@@ -1071,6 +1039,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   // Now initialize the itk dictionary
   itk::MetaDataDictionary& dict = this->GetMetaDataDictionary();
   itk::OStringStream oss;
+  GDALDataset* dataset = m_Dataset->GetDataSet();
 
   /* -------------------------------------------------------------------- */
   /* Set the GCPs                                                          */
@@ -1106,7 +1075,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
 
     std::string gcpProjectionRef;
     itk::ExposeMetaData<std::string>(dict, MetaDataKey::GCPProjectionKey, gcpProjectionRef);
-    m_poDataset->SetGCPs(gcpCount, gdalGcps, gcpProjectionRef.c_str());
+    dataset->SetGCPs(gcpCount, gdalGcps, gcpProjectionRef.c_str());
 
     delete[] gdalGcps;
     }
@@ -1119,14 +1088,14 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   itk::ExposeMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projectionRef);
   if (!projectionRef.empty())
     {
-    m_poDataset->SetProjection(projectionRef.c_str());
+    dataset->SetProjection(projectionRef.c_str());
     }
 
   /* -------------------------------------------------------------------- */
   /*  Set the six coefficients of affine geoTtransform      */
   /* -------------------------------------------------------------------- */
 
-  double * geoTransform = new double[6];
+  itk::Array<double> geoTransform(6);
   /// Reporting origin and spacing
   geoTransform[0] = m_Origin[0];
   geoTransform[3] = m_Origin[1];
@@ -1136,8 +1105,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   // FIXME: Here component 1 and 4 should be replaced by the orientation parameters
   geoTransform[2] = 0.;
   geoTransform[4] = 0.;
-  m_poDataset->SetGeoTransform(geoTransform);
-  delete[] geoTransform;
+  dataset->SetGeoTransform(geoTransform.data_block());
 
   /* -------------------------------------------------------------------- */
   /*      Report metadata.                                                */
@@ -1156,7 +1124,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
       std::string  tag = svalue.substr(0, equalityPos);
       std::string  value = svalue.substr(equalityPos + 1);
       otbMsgDevMacro(<< "Metadata: " << tag << "=" << value);
-      m_poDataset->SetMetadataItem(tag.c_str(), value.c_str(), NULL);
+      dataset->SetMetadataItem(tag.c_str(), value.c_str(), NULL);
       }
     }
   // END
@@ -1214,9 +1182,9 @@ bool GDALImageIO::GDALInfoReportCorner(const char * /*corner_name*/, double x, d
   /* -------------------------------------------------------------------- */
   /*      Transform the point into georeferenced coordinates.             */
   /* -------------------------------------------------------------------- */
-  if (m_poDataset->GetGeoTransform(adfGeoTransform) == CE_None)
+  if (m_Dataset->GetDataSet()->GetGeoTransform(adfGeoTransform) == CE_None)
     {
-    pszProjection = m_poDataset->GetProjectionRef();
+    pszProjection = m_Dataset->GetDataSet()->GetProjectionRef();
 
     GeoX = adfGeoTransform[0] + adfGeoTransform[1] * x
            + adfGeoTransform[2] * y;

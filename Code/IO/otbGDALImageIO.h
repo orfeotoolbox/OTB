@@ -39,6 +39,7 @@
 
 namespace otb
 {
+class GDALDatasetWrapper;
 
 /** \class GDALImageIO
  *
@@ -120,10 +121,6 @@ protected:
   void InternalReadImageInformation();
   /** Write all information on the image*/
   void InternalWriteImageInformation(const void* buffer);
-  /** Dimension along Ox of the image*/
-  int m_width;
-  /** Dimension along Oy of the image*/
-  int m_height;
   /** Number of bands of the image*/
   int m_NbBands;
   /** Buffer*/
@@ -144,10 +141,11 @@ private:
 
   std::string FilenameToGdalDriverShortName(std::string name);
 
+
   /** GDAL parameters. */
-  GDALDriver*      m_hDriver;
-  GDALDataset*     m_poDataset;
-  GDALRasterBand** m_poBands;
+  typedef itk::SmartPointer<GDALDatasetWrapper> GDALDatasetWrapperPointer;
+  GDALDatasetWrapperPointer m_Dataset;
+
   GDALDataType     m_PxType;
   /** Nombre d'octets par pixel */
   int m_NbOctetPixel;

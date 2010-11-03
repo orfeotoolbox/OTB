@@ -347,6 +347,13 @@ void TileMapImageIO::ReadTile(std::string filename, void * buffer)
   if (lCanRead == true)
     {
     imageIO->SetFileName(filename.c_str());
+    imageIO->ReadImageInformation();
+    itk::ImageIORegion ioRegion(2);
+    ioRegion.SetIndex(0, 0);
+    ioRegion.SetIndex(1, 0);
+    ioRegion.SetSize(0, 256);
+    ioRegion.SetSize(1, 256);
+    imageIO->SetIORegion(ioRegion);
     imageIO->Read(buffer);
     }
   else
@@ -404,7 +411,7 @@ void TileMapImageIO::ReadImageInformation()
   m_Dimensions[0] = (1 << m_Depth) * 256;
   m_Dimensions[1] = (1 << m_Depth) * 256;
   otbMsgDevMacro(<< "Get Dimensions : x=" << m_Dimensions[0] << " & y=" << m_Dimensions[1]);
-  this->SetNumberOfComponents(3);
+  this->SetNumberOfComponents(4);
   this->SetNumberOfDimensions(2);
   this->SetFileTypeToBinary();
   SetComponentType(UCHAR);
@@ -623,8 +630,10 @@ void TileMapImageIO::InternalWrite(double x, double y, const void* buffer)
   imageIO = otb::GDALImageIO::New();
   bool lCanWrite = imageIO->CanWriteFile(filename.str().c_str());
 
+
   if (lCanWrite)
     {
+    imageIO->CanStreamWrite();
     imageIO->SetNumberOfDimensions(2);
     imageIO->SetDimensions(0, 256);
     imageIO->SetDimensions(1, 256);
