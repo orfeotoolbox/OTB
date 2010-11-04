@@ -19,8 +19,6 @@
 #define __otbGaussianAdditiveNoiseSampleListFilter_h
 
 #include "otbListSampleToListSampleFilter.h"
-#include "itkDataObject.h"
-#include "itkDataObjectDecorator.h"
 
 namespace otb {
 namespace Statistics {
@@ -70,7 +68,6 @@ public:
   typedef typename OutputSampleListType::MeasurementVectorType OutputMeasurementVectorType;
   typedef typename OutputMeasurementVectorType::ValueType      OutputValueType;
   
-  typedef typename Superclass::DataObjectPointer               DataObjectPointer;
   typedef typename Superclass::InputSampleListObjectType       InputSampleListObjectType;  
   typedef typename Superclass::OutputSampleListObjectType      OutputSampleListObjectType;
 
