@@ -29,8 +29,9 @@ namespace otb
 
 /**
  * \class SarParametricMapFunction
- * \brief Calculate the density pixel of  in the neighborhood of a pixel
+ * \brief Evaluates a parametric bidimensionnal polynomial model from a PointSet
  *
+ *  \note This is an internal class used by the Sar calibration framework.
  *
  * \ingroup ImageFunctions
  */
@@ -108,12 +109,7 @@ public:
   itkGetConstMacro(Coeff, MatrixType);
 
   /** Get/Set the Coeff pointer*/
-  itkSetMacro(IsInitialize, bool);
   itkGetConstReferenceMacro(IsInitialize, bool);
-
-  /** Get/Set the Coeff pointer*/
-  itkSetMacro(UsingClosestPointMethod, bool);
-  itkGetConstReferenceMacro(UsingClosestPointMethod, bool);
 
   /** Get/Set the PolynomalSize pointer*/
   void SetPolynomalSize(const IndexType PolynomalSize);
@@ -138,9 +134,8 @@ private:
   PointSetPointer m_PointSet;
   MatrixType      m_Coeff;
   bool            m_IsInitialize;
-  bool            m_UsingClosestPointMethod;
-
-
+  double          m_ProductWidth; /// the width of the complete product (read from metadata)
+  double          m_ProductHeight; /// the height of the complete product (read from metadata)
 };
 
 } // end namespace otb

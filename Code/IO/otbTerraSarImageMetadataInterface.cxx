@@ -21,6 +21,7 @@
 #endif
 
 #include "otbMacro.h"
+#include "otbMath.h"
 
 #include "otbTerraSarImageMetadataInterface.h"
 
@@ -995,12 +996,12 @@ TerraSarImageMetadataInterface::GetCenterIncidenceAngleIndex() const
   std::string key = "sceneCoord.sceneCenterCoord.refRow";
   ossimString tempVal = kwl.find(key.c_str());
 
-  it[0] = tempVal.toInt();
+  it[1] = tempVal.toInt();
 
   key = "sceneCoord.sceneCenterCoord.refColumn";
   tempVal = kwl.find(key.c_str());
 
-  it[1] = tempVal.toInt();
+  it[0] = tempVal.toInt();
 
   return it;
 }
@@ -1067,19 +1068,18 @@ TerraSarImageMetadataInterface::GetCornersIncidenceAnglesIndex() const
     oss << "sceneCoord.sceneCornerCoord[" << i << "].refRow";
     ossimString tempVal = kwl.find(oss.str().c_str());
 
-    it[0] = tempVal.toInt();
+    it[1] = tempVal.toInt();
 
     oss2.str("");
     oss2 << "sceneCoord.sceneCornerCoord[" << i << "].refColumn";
     tempVal = kwl.find(oss2.str().c_str());
 
-    it[1] = tempVal.toInt();
+    it[0] = tempVal.toInt();
 
     iv.push_back(it);
     }
 
   return iv;
-
 }
 
 
@@ -1088,7 +1088,7 @@ TerraSarImageMetadataInterface
 ::Horner(std::vector<double>& coefficients, const double tauMinusTauRef) const
 {
   std::vector<double>::reverse_iterator coefIt = coefficients.rbegin();
-  double                                res = *(coefIt);
+  double res = *(coefIt);
   ++coefIt;
 
   while (coefIt < coefficients.rend())
@@ -1105,65 +1105,65 @@ TerraSarImageMetadataInterface::PointSetPointer
 TerraSarImageMetadataInterface
 ::GetRadiometricCalibrationNoise() const
 {
-    PointSetPointer points = PointSetType::New();
+  PointSetPointer points = PointSetType::New();
 
-    IndexVectorType cornerIndex = this->GetCornersIncidenceAnglesIndex();
-      unsigned int numberOfRows = 0;
-      unsigned int numberOfCols = 0;
+  IndexVectorType cornerIndex = this->GetCornersIncidenceAnglesIndex();
+  unsigned int numberOfRows = 0;
+  unsigned int numberOfCols = 0;
 
-    for(unsigned int i = 0; i < cornerIndex.size(); ++i)
+  for (unsigned int i = 0; i < cornerIndex.size(); ++i)
     {
-      IndexType index;
-      index = cornerIndex[i];
-      unsigned int noRow = index[0];
-      unsigned int noCol = index[1];
-      if(noRow > numberOfRows )
+    IndexType index;
+    index = cornerIndex[i];
+    unsigned int noRow = index[0];
+    unsigned int noCol = index[1];
+    if (noRow > numberOfRows)
       {
-        numberOfRows = noRow;
+      numberOfRows = noRow;
       }
-      if(noCol > numberOfCols )
+    if (noCol > numberOfCols)
       {
-        numberOfCols = noCol;
+      numberOfCols = noCol;
       }
     }
 
-    double startTime = this->GetStartTimeUTC();
-    double stopTime  = this->GetStopTimeUTC();
-    RealType firstRangeTime     = this->GetRangeTimeFirstPixel();
-    RealType lastRangeTime      = this->GetRangeTimeLastPixel();
+  double startTime = this->GetStartTimeUTC();
+  double stopTime = this->GetStopTimeUTC();
+  RealType firstRangeTime = this->GetRangeTimeFirstPixel();
+  RealType lastRangeTime = this->GetRangeTimeLastPixel();
 
-      points->Initialize();
-    unsigned int noPoint = 0;
+  points->Initialize();
+  unsigned int noPoint = 0;
 
-    PointType  p0;
+  PointType p0;
 
-    unsigned int numberOfNoiseRecords = this->GetNumberOfNoiseRecords();
+  unsigned int numberOfNoiseRecords = this->GetNumberOfNoiseRecords();
 
-      for(unsigned int noiseRecord = 0; noiseRecord < numberOfNoiseRecords; ++noiseRecord)
+  for (unsigned int noiseRecord = 0; noiseRecord < numberOfNoiseRecords; ++noiseRecord)
+    {
+    double currentNoiseTime = this->GetNoiseTimeUTC(noiseRecord);
+    RealType AzimutAcquisition = (currentNoiseTime - startTime) * numberOfRows / (stopTime - startTime);
+    RealType referencePointTime = this->GetNoiseReferencePoint(noiseRecord);
+
+    std::vector<RealType> polynomialCoefficient;
+    polynomialCoefficient = this->GetNoisePolynomialCoefficients(noiseRecord);
+
+    p0[0] = AzimutAcquisition;
+
+    for (unsigned int col = 0; col < numberOfCols; ++col)
       {
-        double currentNoiseTime = this->GetNoiseTimeUTC(noiseRecord);
-        RealType AzimutAcquisition = (currentNoiseTime - startTime)*numberOfRows /(stopTime-startTime);
-        RealType referencePointTime = this->GetNoiseReferencePoint(noiseRecord);
+      RealType rangeTime = col * (lastRangeTime - firstRangeTime) / (numberOfCols) + firstRangeTime;
+      RealType tauMinusTauRef = rangeTime - referencePointTime;
+      RealType value = this->Horner(polynomialCoefficient, tauMinusTauRef);
 
-        std::vector<RealType> polynomialCoefficient;
-        polynomialCoefficient = this->GetNoisePolynomialCoefficients(noiseRecord);
+      p0[1] = col;
+      points->SetPoint(noPoint, p0);
+      points->SetPointData(noPoint, value);
+      ++noPoint;
 
-        p0[0] = AzimutAcquisition;
-
-        for(unsigned int col = 0; col < numberOfCols; ++col)
-        {
-          RealType rangeTime = col *(lastRangeTime-firstRangeTime)/(numberOfCols) + firstRangeTime;
-          RealType tauMinusTauRef = rangeTime - referencePointTime;
-          RealType value = this->Horner(polynomialCoefficient,tauMinusTauRef);
-
-          p0[1] = col;
-            points->SetPoint(noPoint, p0);
-            points->SetPointData(noPoint, value);
-            ++noPoint;
-
-        }
       }
-    return points;
+    }
+  return points;
 }
 
 TerraSarImageMetadataInterface::IndexType
@@ -1171,10 +1171,8 @@ TerraSarImageMetadataInterface
 ::GetRadiometricCalibrationNoisePolynomialDegree() const
 {
   IndexType polynomSize;
-  polynomSize[0] = 3;
-  polynomSize[1] = 3;
-  polynomSize[0] = 0;
-  polynomSize[1] = 0;
+  polynomSize[0] = 2;
+  polynomSize[1] = 2;
 
   return polynomSize;
 }
@@ -1297,57 +1295,66 @@ TerraSarImageMetadataInterface
   return rangeTime;
 }
 
-
-TerraSarImageMetadataInterface::PointSetPointer
+TerraSarImageMetadataInterface::RealType
 TerraSarImageMetadataInterface
-::GetRadiometricCalibrationAntennaPatternOldGain() const
+::GetRadiometricCalibrationScale() const
 {
-    PointSetPointer points = PointSetType::New();
-    double Ks = this->GetCalibrationFactor();
-    points = this->GetConstantValuePointSet(Ks);
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
+    {
+    itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
+    }
 
-    return points;
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+    {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+    }
+
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key;
+  key = "calibration.calibrationConstant.calFactor";
+
+  ossimString calFactorValue = kwl.find(key.c_str());
+
+  return calFactorValue.toDouble();
 }
 
 TerraSarImageMetadataInterface::PointSetPointer
 TerraSarImageMetadataInterface
 ::GetRadiometricCalibrationIncidenceAngle() const
 {
-    PointSetPointer points = PointSetType::New();
-    double Ks = this->GetCalibrationFactor();
-    points = this->GetConstantValuePointSet(Ks);
-    PointType  p0;
+  PointSetPointer points = PointSetType::New();
+  PointType p0;
 
+  double centerIncidenceAngleValue = this->GetCenterIncidenceAngle();
+  IndexType centerIncidenceAngleIndex = this->GetCenterIncidenceAngleIndex();
 
-    double centerIncidenceAngleValue    = this->GetCenterIncidenceAngle();
-    IndexType centerIncidenceAngleIndex = this->GetCenterIncidenceAngleIndex();
+  DoubleVectorType cornerIncidenceAngleValue = this->GetCornersIncidenceAngles();
+  IndexVectorType cornerIncidenceAngleIndex = this->GetCornersIncidenceAnglesIndex();
+  points->Initialize();
+  unsigned int noPoint = 0;
 
-    DoubleVectorType cornerIncidenceAngleValue = this->GetCornersIncidenceAngles();
-    IndexVectorType cornerIncidenceAngleIndex = this->GetCornersIncidenceAnglesIndex();
+  p0[0] = centerIncidenceAngleIndex[0];
+  p0[1] = centerIncidenceAngleIndex[1];
 
-      points->Initialize();
-    unsigned int noPoint = 0;
+  points->SetPoint(noPoint, p0);
+  points->SetPointData(noPoint, centerIncidenceAngleValue * CONST_PI_180);
+  ++noPoint;
 
-      p0[0] = centerIncidenceAngleIndex[0];
-      p0[1] = centerIncidenceAngleIndex[1];
+  for (unsigned int i = 0; i < cornerIncidenceAngleIndex.size(); ++i)
+    {
+
+    p0[0] = cornerIncidenceAngleIndex.at(i)[0];
+    p0[1] = cornerIncidenceAngleIndex.at(i)[1];
 
     points->SetPoint(noPoint, p0);
-      points->SetPointData(noPoint, centerIncidenceAngleValue*M_PI/180.);
-      ++noPoint;
-
-      for(unsigned int i = 0; i < cornerIncidenceAngleIndex.size(); ++i)
-      {
-
-        p0[0] = cornerIncidenceAngleIndex.at(i)[0];
-          p0[1] = cornerIncidenceAngleIndex.at(i)[1];
-
-          points->SetPoint(noPoint, p0);
-          points->SetPointData(noPoint, cornerIncidenceAngleValue[i]*M_PI/180.);
-          ++noPoint;
-      }
-
-
-    return points;
+    points->SetPointData(noPoint, cornerIncidenceAngleValue[i] * CONST_PI_180);
+    ++noPoint;
+    }
+  return points;
 }
 
 TerraSarImageMetadataInterface::IndexType
@@ -1355,7 +1362,7 @@ TerraSarImageMetadataInterface
 ::GetRadiometricCalibrationIncidenceAnglePolynomialDegree() const
 {
   IndexType polynomSize;
-  polynomSize[0] = 1;
+  polynomSize[0] = 2;
   polynomSize[1] = 1;
 
   return polynomSize;

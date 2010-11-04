@@ -55,23 +55,21 @@ public:
 
   inline TOutput operator ()(const TInput& value) const
   {
+    RealType digitalNumber = static_cast<RealType> (vcl_abs(value));
     RealType sigma;
-    RealType digitalNumber;
-    digitalNumber = static_cast<RealType> (value);
-    digitalNumber = vcl_abs(digitalNumber);
-    sigma  = m_Scale * (digitalNumber * digitalNumber) - m_Noise;
+
+    sigma  = m_Scale * (digitalNumber * digitalNumber - m_Noise);
     sigma *= vcl_sin(m_IncidenceAngle);
     sigma *= m_AntennaPatternOldGain;
     sigma /= m_AntennaPatternNewGain;
     sigma *= m_RangeSpreadLoss;
+
     if(sigma < 0.0)
     {
       sigma = 0.0;
     }
 
-    OutputType result;
-    result = static_cast<OutputType>(sigma);
-      return result;
+    return static_cast<OutputType>(sigma);
   }
 
   /** Set offset method */

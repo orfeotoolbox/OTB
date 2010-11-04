@@ -22,12 +22,15 @@
 #include "otbSarParametricMapFunction.h"
 #include "itkNumericTraits.h"
 
+#include "itkMetaDataDictionary.h"
+#include "itkMetaDataObject.h"
+#include "otbMetaDataKey.h"
+#include "otbImageKeywordlist.h"
+#include "base/ossimKeywordlist.h"
 
 #include <vnl/algo/vnl_lsqr.h>
 #include <vnl/vnl_sparse_matrix_linear_system.h>
 #include <vnl/vnl_least_squares_function.h>
-
-
 
 namespace otb
 {
@@ -38,12 +41,13 @@ namespace otb
 template <class TInputImage, class TCoordRep>
 SarParametricMapFunction<TInputImage, TCoordRep>
 ::SarParametricMapFunction()
+ : m_PointSet(PointSetType::New()),
+   m_IsInitialize(false),
+   m_ProductWidth(0),
+   m_ProductHeight(0)
 {
-  m_PointSet = PointSetType::New();
   m_Coeff.SetSize(1,1);
   m_Coeff.Fill(0);
-  m_IsInitialize = false;
-  m_UsingClosestPointMethod = false;
 }
 
 template <class TInputImage, class TCoordRep>
@@ -78,16 +82,8 @@ SarParametricMapFunction<TInputImage, TCoordRep>
 ::Horner(PointType point) const
 {
   // Implementation of a Horner scheme evaluation for bivariate polynomial
-  //std::cout << "Horner " << std::endl;
-
-  const typename InputImageType::RegionType& region = this->GetInputImage()->GetLargestPossibleRegion();
-  const typename InputImageType::IndexType&  origin = region.GetIndex();
-  const typename InputImageType::SizeType&   size   = region.GetSize();
-
-  point[0] = (point[0] - origin[0]) / size[0];
-  point[1] = (point[1] - origin[1]) / size[1];
-
-  //std::cout << "point = " << point << std::endl;
+  point[0] /= m_ProductWidth;
+  point[1] /= m_ProductHeight;
 
   double result = 0;
   for (unsigned int ycoeff = m_Coeff.Rows(); ycoeff > 0 ; --ycoeff)
@@ -130,12 +126,19 @@ SarParametricMapFunction<TInputImage, TCoordRep>
   else
     {
     // Get input region for normalization of coordinates
-    const typename InputImageType::RegionType& region = this->GetInputImage()->GetLargestPossibleRegion();
-    const typename InputImageType::IndexType&  origin = region.GetIndex();
-    const typename InputImageType::SizeType&   size   = region.GetSize();
+    const itk::MetaDataDictionary& dict = this->GetInputImage()->GetMetaDataDictionary();
+    ImageKeywordlist imageKeywordlist;
+    if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+      {
+      itk::ExposeMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+      }
 
-    //std::cout << "size = " << size << std::endl;
-    //std::cout << "origin = " << origin << std::endl;
+    ossimKeywordlist kwl;
+    imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+    ossimString nbLinesValue = kwl.find("number_lines");
+    ossimString nbSamplesValue = kwl.find("number_samples");
+    m_ProductWidth = nbSamplesValue.toDouble();
+    m_ProductHeight = nbLinesValue.toDouble();
 
     // Perform the plane least square estimation
     unsigned int nbRecords = pointSet->GetNumberOfPoints();
@@ -157,10 +160,10 @@ SarParametricMapFunction<TInputImage, TCoordRep>
 
       for (unsigned int xcoeff = 0; xcoeff < m_Coeff.Cols(); ++xcoeff)
         {
-        double xpart = vcl_pow( static_cast<double>(point[0] - origin[0]) / size[0], static_cast<double>(xcoeff));
+        double xpart = vcl_pow( static_cast<double>(point[0]) / m_ProductWidth, static_cast<double>(xcoeff));
         for (unsigned int ycoeff = 0; ycoeff < m_Coeff.Rows(); ++ycoeff)
           {
-          double ypart = vcl_pow( static_cast<double>(point[1] - origin[1]) / size[1], static_cast<double>(ycoeff));
+          double ypart = vcl_pow( static_cast<double>(point[1]) / m_ProductHeight, static_cast<double>(ycoeff));
           a(i, xcoeff * m_Coeff.Rows() + ycoeff) = xpart * ypart;
           //std::cout << "a(" << i << "," << xcoeff * m_Coeff.Rows() + ycoeff << ") = " <<  xpart * ypart << std::endl;
           }
@@ -197,19 +200,15 @@ SarParametricMapFunction<TInputImage, TCoordRep>
 {
   RealType result = itk::NumericTraits<RealType>::Zero;
 
-  if (!this->GetInputImage())
-    {
-    itkExceptionMacro(<< "No input image specified");
-    }
-  else if (!this->GetInputImage()->GetLargestPossibleRegion().IsInside(index))
-    {
-    result = itk::NumericTraits<RealType>::max();
-    }
-  else if (!m_IsInitialize)
+  if (!m_IsInitialize)
     {
     itkExceptionMacro(<< "Must call EvaluateParametricCoefficient before evaluating");
     }
-  else if(!m_UsingClosestPointMethod)
+  else if (m_Coeff.Rows() * m_Coeff.Cols() == 1)
+    {
+    result = m_Coeff(0,0);
+    }
+  else
     {
     PointType point;
     point[0] = static_cast<typename PointType::ValueType>(index[0]);

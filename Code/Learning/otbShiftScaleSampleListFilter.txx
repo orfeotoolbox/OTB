@@ -33,20 +33,20 @@ void
 ShiftScaleSampleListFilter<TInputSampleList,TOutputSampleList>
 ::GenerateData()
 {
-  // Retrieve input and output pointers
-  typename InputSampleListObjectType::ConstPointer inputPtr = this->GetInput();
-  typename OutputSampleListObjectType::Pointer     outputPtr = this->GetOutput();
+ // Retrieve input and output pointers
+ typename InputSampleListObjectType::ConstPointer inputPtr = this->GetInput();
+ typename OutputSampleListObjectType::Pointer     outputPtr = this->GetOutput();
 
   // Retrieve the ListSample
   InputSampleListConstPointer inputSampleListPtr = inputPtr->Get();
   OutputSampleListPointer outputSampleListPtr    = const_cast<OutputSampleListType *>(outputPtr->Get());
 
-  // Compute the 1/(sigma) vector
-  InputMeasurementVectorType invertedScales = m_Scales;
-  for(unsigned int idx = 0;idx < invertedScales.Size();++idx)
-    {
-    invertedScales[idx] = 1 / m_Scales[idx];
-    }
+ // Compute the 1/(sigma) vector
+ InputMeasurementVectorType invertedScales = m_Scales;
+ for(unsigned int idx = 0;idx < invertedScales.Size();++idx)
+ {
+  invertedScales[idx] = 1 / m_Scales[idx];
+ }
 
   // Clear any previous output
   outputSampleListPtr->Clear();

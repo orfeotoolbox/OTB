@@ -157,11 +157,13 @@ public:
   /** Get the corners index */
   IndexVectorType GetCornersIncidenceAnglesIndex() const;
 
+  /** Get the constant calibration factor */
+  RealType   GetRadiometricCalibrationScale() const;
 
   PointSetPointer GetRadiometricCalibrationNoise() const;
   IndexType GetRadiometricCalibrationNoisePolynomialDegree() const;
 
-  PointSetPointer GetRadiometricCalibrationAntennaPatternOldGain() const;
+  //PointSetPointer GetRadiometricCalibrationAntennaPatternOldGain() const;
   PointSetPointer GetRadiometricCalibrationIncidenceAngle() const;
   IndexType GetRadiometricCalibrationIncidenceAnglePolynomialDegree() const;
 

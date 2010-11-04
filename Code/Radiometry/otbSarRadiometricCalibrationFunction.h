@@ -29,7 +29,7 @@ namespace otb
 
 /**
  * \class SarRadiometricCalibrationFunction
- * \brief Calculate the density pixel of  in the neighborhood of a pixel
+ * \brief Calculate the backscatter for the given pixel
  *
  * Calculate the backscatter for the given pixel
  *

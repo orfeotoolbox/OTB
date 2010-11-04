@@ -22,7 +22,7 @@
 
 #include "itkListSample.h"
 #include "itkVariableLengthVector.h"
-#include "otbShiftScaleSampleListFilter.h"
+#include "otbConcatenateSampleListFilter.h"
 
 #include <fstream>
 
@@ -31,61 +31,47 @@ typedef itk::Statistics::ListSample<DoubleSampleType> DoubleSampleListType;
 
 typedef itk::VariableLengthVector<float> FloatSampleType;
 typedef itk::Statistics::ListSample<FloatSampleType> FloatSampleListType;
-typedef otb::Statistics::ShiftScaleSampleListFilter<FloatSampleListType,DoubleSampleListType> ShiftScaleFilterType;
+typedef otb::Statistics::ConcatenateSampleListFilter<FloatSampleListType,DoubleSampleListType> ConcatenateFilterType;
 
 
-int otbShiftScaleSampleListFilterNew(int argc, char * argv[])
+int otbConcatenateSampleListFilterNew(int argc, char * argv[])
 {
- ShiftScaleFilterType::Pointer instance = ShiftScaleFilterType::New();
+ ConcatenateFilterType::Pointer instance = ConcatenateFilterType::New();
 
  return EXIT_SUCCESS;
 }
 
-int otbShiftScaleSampleListFilter(int argc, char * argv[])
+int otbConcatenateSampleListFilter(int argc, char * argv[])
 {
  // Compute the number of samples
  const char * outfname = argv[1];
  unsigned int sampleSize = atoi(argv[2]);
- unsigned int nbSamples = (argc-2*sampleSize-2)/sampleSize;
+ unsigned int nbSamples1 = atoi(argv[3]);
+ unsigned int nbSamples2 = atoi(argv[4]);
 
- FloatSampleListType::Pointer inputSampleList = FloatSampleListType::New();
- inputSampleList->SetMeasurementVectorSize(sampleSize);
+ FloatSampleListType::Pointer inputSampleList1 = FloatSampleListType::New();
+ inputSampleList1->SetMeasurementVectorSize(sampleSize);
 
- ShiftScaleFilterType::Pointer filter = ShiftScaleFilterType::New();
- filter->SetInput(inputSampleList);
+ FloatSampleListType::Pointer inputSampleList2 = FloatSampleListType::New();
+ inputSampleList2->SetMeasurementVectorSize(sampleSize);
+
+ ConcatenateFilterType::Pointer filter = ConcatenateFilterType::New();
+ filter->AddInput(inputSampleList1);
+ filter->AddInput(inputSampleList2);
 
  FloatSampleType sample(sampleSize);
 
- unsigned int index = 3;
+ unsigned int index = 5;
 
  std::ofstream ofs(outfname);
 
  ofs<<"Sample size: "<<sampleSize<<std::endl;
- ofs<<"Nb samples : "<<nbSamples<<std::endl;
+ ofs<<"Nb samples 1: "<<nbSamples1<<std::endl;
+ ofs<<"Nb samples 2: "<<nbSamples2<<std::endl;
 
- for(unsigned int i = 0; i<sampleSize;++i)
- {
-  sample[i]=atof(argv[index]);
-  ++index;
- }
+ ofs<<"Input samples 1: "<<std::endl;
 
- ofs<<"Shifts: "<<sample<<std::endl;
-
- filter->SetShifts(sample);
-
- for(unsigned int i = 0; i<sampleSize;++i)
- {
-  sample[i]=atof(argv[index]);
-  ++index;
- }
-
- ofs<<"Scales: "<<sample<<std::endl;
-
- filter->SetScales(sample);
-
- ofs<<"Input samples: "<<std::endl;
-
- for(unsigned int sampleId = 0; sampleId<nbSamples;++sampleId)
+ for(unsigned int sampleId = 0; sampleId<nbSamples1;++sampleId)
  {
   for(unsigned int i = 0; i<sampleSize;++i)
    {
@@ -93,7 +79,20 @@ int otbShiftScaleSampleListFilter(int argc, char * argv[])
     ++index;
    }
   ofs<<sample<<std::endl;
-  inputSampleList->PushBack(sample);
+  inputSampleList1->PushBack(sample);
+ }
+
+ ofs<<"Input samples 2: "<<std::endl;
+
+ for(unsigned int sampleId = 0; sampleId<nbSamples2;++sampleId)
+ {
+  for(unsigned int i = 0; i<sampleSize;++i)
+  {
+   sample[i]=atof(argv[index]);
+   ++index;
+  }
+  ofs<<sample<<std::endl;
+  inputSampleList2->PushBack(sample);
  }
 
  filter->Update();
