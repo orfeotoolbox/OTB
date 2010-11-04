@@ -44,6 +44,7 @@
 
 #include <liblas/lasreader.hpp>
 #include <liblas/laswriter.hpp>
+#include <liblas/lasindex.hpp>
 #include <iterator>
 #include <cassert>
 
@@ -72,7 +73,7 @@ public:
 
     /// Initializes iterator pointing to beginning of LAS file sequence.
     /// No ownership transfer of reader object occurs.
-    reader_iterator(liblas::LASReader& reader)
+    reader_iterator(liblas::Reader& reader)
         : m_reader(&reader)
     {
         assert(0 != m_reader);
@@ -84,7 +85,12 @@ public:
     reference operator*() const
     {
         assert(0 != m_reader);
-        return m_reader->GetPoint();
+        if (0 != m_reader)
+        {
+            return m_reader->GetPoint();
+        }
+
+        throw std::runtime_error("reader is null and iterator not dereferencable");
     }
 
     /// Pointer-to-member operator.
@@ -129,7 +135,7 @@ private:
         }
     }
 
-    liblas::LASReader* m_reader;
+    liblas::Reader* m_reader;
 };
 
 /// Equality operator implemented in terms of reader_iterator::equal
@@ -164,7 +170,7 @@ public:
     /// Initialize iterator with given writer.
     /// The writer position is not changed.
     /// No ownership transfer of writer object occurs.
-    writer_iterator(liblas::LASWriter& writer)
+    writer_iterator(liblas::Writer& writer)
         : m_writer(&writer)
     {
         assert(0 != m_writer);
@@ -205,16 +211,99 @@ public:
 
 private:
 
-    liblas::LASWriter* m_writer;
+    liblas::Writer* m_writer;
+};
+
+template <typename T>
+class index_filter_iterator
+{
+public:
+
+    typedef std::input_iterator_tag iterator_category;
+    typedef T value_type;
+    typedef T const* pointer;
+    typedef T const& reference;
+    typedef ptrdiff_t difference_type;
+
+    /// Initializes iterator pointing to pass-the-end.
+    index_filter_iterator()
+        : m_index(0)
+    {}
+
+    /// Initializes iterator pointing to beginning of Index's filtered points sequence.
+    /// No ownership transfer of index object occurs.
+    index_filter_iterator(liblas::Index& index)
+        : m_index(&index)
+    {
+        assert(0 != m_index);
+        getval();
+    }
+
+    /// Dereference operator.
+    /// It is implemented in terms of Index::GetNextID function.
+    reference operator*() const
+    {
+        assert(0 != m_index);
+        if (0 != m_index)
+        {
+            // return m_index->GetNextID();
+        }
+
+        throw std::runtime_error("index is null and iterator not dereferencable");
+    }
+
+    /// Pointer-to-member operator.
+    /// It is implemented in terms of Index::GetPoint function.
+    pointer operator->() const
+    {
+        return &(operator*());
+    }
+
+    /// Pre-increment operator.
+    /// Moves iterator to next record by calling Index::GetNextID.
+    index_filter_iterator& operator++()
+    {
+        assert(0 != m_index);
+        getval();
+        return (*this);
+    }
+
+    /// Post-increment operator.
+    /// Moves iterator to next record by calling Index::FindNextID.
+    index_filter_iterator operator++(int)
+    {
+        index_filter_iterator tmp(*this);
+        ++(*this);
+        return tmp;
+    }
+
+    /// Compare passed iterator to this.
+    /// Determine if both iterators apply to the same instance of liblas::Index class.
+    bool equal(index_filter_iterator const& rhs) const
+    {
+        return m_index == rhs.m_index;
+    }
+
+private:
+
+    void getval()
+    {
+        // if (0 != m_index && !(m_index->FindNextID()))
+        // {
+        //     m_index = 0;
+        // }
+    }
+
+    liblas::Index* m_index;
 };
 
 // Declare specializations for user's convenience
 
 /// Public specialization of LASReader input iterator for liblas::LASPoint type.
-typedef reader_iterator<LASPoint> lasreader_iterator;
+typedef reader_iterator<Point> lasreader_iterator;
 
 /// Public specialization of LASWriter output iterator for liblas::LASPoint type.
-typedef writer_iterator<LASPoint> laswriter_iterator;
+typedef writer_iterator<Point> laswriter_iterator;
 
 } // namespace liblas
 

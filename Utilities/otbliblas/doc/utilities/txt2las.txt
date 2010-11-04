@@ -1,0 +1,83 @@
+.. raw:: pdf
+
+    PageBreak
+    
+.. _txt2las:
+    
+****************************************************************
+  txt2las
+****************************************************************
+
+:Author: Martin Isenburg
+:Contact: isenburg@cs.unc.edu
+
+    
+txt2las converts LIDAR data from a standard ASCII format into the more 
+efficient binary LAS representation.
+
+Usage
+-----
+
+::
+
+  $ txt2las -i lidar.taxyz -o lidar.las -parse ssxyz
+
+converts ASCII file and uses the 3rd, 4th, and 5th entry of each
+line as the x, y, and z coordinate of each point.
+
+::
+
+  $ txt2las -i lidar.txt.gz -o lidar.las -parse txyzsa
+
+converts a gzipped ASCII file and uses the 1st entry of each line
+as the gps time, the 3rd, 4th, and 5th entry as the x, y, and z
+coordinate of each point, and the 6th entry as the scan angle
+
+Help
+~~~~
+
+::
+
+    C:\lastools\bin>txt2las -h
+    usage:
+    txt2las -parse tsxyz lidar.txt
+    txt2las -parse txyzar lidar.txt.gz lidar.laz
+    txt2las -parse xyz -scale 0.02 -i lidar.txt -o lidar.laz
+    txt2las -parse xyzsst -verbose -scale 0.05 lidar.txt
+    txt2las -parse xsysz -xyz_scale 0.02 0.02 0.01 lidar.txt
+    txt2las -h
+
+Parsing Flags
+-------------
+
+The '-parse tsxyz' flag specifies how to interpret each line of the ASCII 
+file. For example, 'tsxyzssa' means that the first number is the gpstime, 
+the next number should be skipped, the next three numbers are the x, y, 
+and z coordinate, the next two should be skipped, and the next number 
+is the scan angle.
+
+The other supported entries are:
+  * i - intensity
+  * n - number of returns of given pulse
+  * r - number of return
+  * c - classification
+  * u - user data
+  * p - point source ID
+  * e - edge of flight line flag
+  * d - direction of scan flag.
+
+Scale
+-----
+
+The '-scale 0.02' flag specifies the quantization. The default value of 
+0.01 means that the smallest increment two between coordinates is 0.01. 
+If measurements are in meters this corresponds to centimeter accuracy, 
+which is commonly considered sufficient for LIDAR data.
+
+Other parameters
+----------------
+
+Other parameters such as '-xyz_offset 500000 2000000 0' 
+or '-xyz_scale 0.02 0.02 0.01' or '-file_creation 67 2003'
+or '-system_identifier "Airborne One Leica 50,000 Hz"'
+or '-generating_software "TerraScan"' are available too.

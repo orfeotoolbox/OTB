@@ -42,89 +42,121 @@
 #ifndef LIBLAS_LASSPATIALREFERENCE_HPP_INCLUDED
 #define LIBLAS_LASSPATIALREFERENCE_HPP_INCLUDED
 
-#include <liblas/lasvariablerecord.hpp>
-#include <liblas/cstdint.hpp>
 #include <liblas/detail/fwd.hpp>
-#include <liblas/detail/utility.hpp>
+#include <liblas/detail/private_utility.hpp>
+#include <liblas/lasvariablerecord.hpp>
 #include <liblas/exception.hpp>
 #include <liblas/capi/las_config.h>
+#include <liblas/external/property_tree/ptree.hpp>
 
 // GDAL OSR
 #ifdef HAVE_GDAL
-#include "ogr_srs_api.h"
-#include "cpl_port.h"
-#include "cpl_serv.h"
-#include "geo_tiffp.h"
+#include <ogr_srs_api.h>
+#include <cpl_port.h>
+#include <cpl_serv.h>
+#include <geo_tiffp.h>
 #define CPL_ERROR_H_INCLUDED
-
-#include "geo_normalize.h"
-#include "geovalues.h"
-#include "ogr_spatialref.h"
-#include "gdal.h"
-#include "xtiffio.h"
-#include "cpl_multiproc.h"
-
+#include <geo_normalize.h>
+#include <geovalues.h>
+#include <ogr_spatialref.h>
+#include <gdal.h>
+#include <xtiffio.h>
+#include <cpl_multiproc.h>
 #endif
 
 // GeoTIFF
 #ifdef HAVE_LIBGEOTIFF
-#include "geotiff.h"
-#include "geo_simpletags.h"
-#include "geo_normalize.h"
-#include "geo_simpletags.h"
-#include "geovalues.h"
+#include <geotiff.h>
+#include <geo_simpletags.h>
+#include <geo_normalize.h>
+#include <geo_simpletags.h>
+#include <geovalues.h>
 #endif // HAVE_LIBGEOTIFF
 
 // std
 #include <stdexcept> // std::out_of_range
 #include <cstdlib> // std::size_t
 #include <string>
+#include <stdio.h>
 
 // Fake out the compiler if we don't have libgeotiff
-#ifndef HAVE_LIBGEOTIFF
-typedef struct GTIFS * GTIF;
-typedef struct ST_TIFFS * ST_TIFF;
+#if !defined(LIBGEOTIFF_VERSION) && !defined(HAVE_LIBGEOTIFF) 
+typedef struct GTIFS *GTIF;
+typedef struct ST_TIFFS *ST_TIFF;
 #endif
 
 namespace liblas {
 
 /// Spatial Reference System container for libLAS
-class LASSpatialReference
+class SpatialReference
 {
 public:
+    enum WKTModeFlag
+    {
+        eHorizontalOnly = 1,
+        eCompoundOK = 2
+    };
 
     /// Default constructor.
-    LASSpatialReference();
+    SpatialReference();
 
     /// Destructor.
     /// If libgeotiff is enabled, deallocates libtiff and libgeotiff objects used internally.
-    ~LASSpatialReference();
+    ~SpatialReference();
 
-    /// Constructor creating LASSpatialReference instance from given Variable-Length Record.
-    LASSpatialReference(const std::vector<LASVariableRecord>& vlrs);
+    /// Constructor creating SpatialReference instance from given Variable-Length Record.
+    SpatialReference(std::vector<VariableRecord> const& vlrs);
 
     /// Copy constryctor.
-    LASSpatialReference(LASSpatialReference const& other);
+    SpatialReference(SpatialReference const& other);
 
     /// Assignment operator.
-    LASSpatialReference& operator=(LASSpatialReference const& rhs);
+    SpatialReference& operator=(SpatialReference const& rhs);
     
     /// Returns a pointer to the internal GTIF*.  Only available if 
     /// you have libgeotiff linked in.
     const GTIF* GetGTIF();
-    
-    void SetGTIF(const GTIF* gtiff, const ST_TIFF* tiff);
+
+    void SetGTIF(const GTIF* pgtiff, const ST_TIFF* ptiff);
 
     /// Returns the OGC WKT describing Spatial Reference System.
     /// If GDAL is linked, it uses GDAL's operations and methods to determine 
     /// the WKT.  If GDAL is not linked, no WKT is returned.
-    std::string GetWKT() const;
+    /// \param mode_flag May be eHorizontalOnly indicating the WKT will not 
+    /// include vertical coordinate system info (the default), or 
+    /// eCompoundOK indicating the the returned WKT may be a compound 
+    /// coordinate system if there is vertical coordinate system info 
+    /// available.
+    std::string GetWKT(WKTModeFlag mode_flag = eHorizontalOnly) const;
+    std::string GetWKT(WKTModeFlag mode_flag, bool pretty) const;
     
     /// Sets the SRS using GDAL's OGC WKT. If GDAL is not linked, this 
     /// operation has no effect.
     /// \param v - a string containing the WKT string.  
     void SetWKT(std::string const& v);
-    
+
+    /// Sets the vertical coordinate system using geotiff key values.
+    /// This operation should normally be done after setting the horizontal
+    /// portion of the coordinate system with something like SetWKT(), 
+    /// SetProj4(), SetGTIF() or SetFromUserInput()
+    /// \param verticalCSType - An EPSG vertical coordinate system code, 
+    /// normally in the range 5600 to 5799, or -1 if one is not available.
+    /// \param citation - a textual description of the vertical coordinate 
+    /// system or an empty string if nothing is available.
+    /// \param verticalDatum - the EPSG vertical datum code, often in the 
+    /// range 5100 to 5299 - implied by verticalCSType if that is provided, or 
+    /// -1 if no value is available.
+    /// \param verticalUnits - the EPSG vertical units code, often 9001 for Metre.
+    void SetVerticalCS(int verticalCSType, 
+                       std::string const& citation = std::string(0),
+                       int verticalDatum = -1,
+                       int verticalUnits = 9001);
+
+    /// Sets the SRS using GDAL's SetFromUserInput function. If GDAL is not linked, this 
+    /// operation has no effect.
+    /// \param v - a string containing the definition (filename, proj4, wkt, etc).  
+    void SetFromUserInput(std::string const& v);
+        
     /// Returns the Proj.4 string describing the Spatial Reference System.
     /// If GDAL is linked, it uses GDAL's operations and methods to determine 
     /// the Proj.4 string -- otherwise, if libgeotiff is linked, it uses 
@@ -140,29 +172,32 @@ public:
     /// \param v - a string containing the Proj.4 string.
     void SetProj4(std::string const& v);
     
-    /// Set the LASVLRs for the LASSpatialReference.  SetVLRs will only copy 
+    /// Set the LASVLRs for the SpatialReference.  SetVLRs will only copy 
     /// VLR records that pertain to the GeoTIFF keys, and extraneous 
     /// VLR records will not be copied.
     /// \param vlrs - A list of VLRs that contains VLRs describing GeoTIFF keys
-    void SetVLRs(const std::vector<LASVariableRecord>& vlrs);
+    void SetVLRs(std::vector<VariableRecord> const& vlrs);
     
     /// Add a VLR representing GeoTIFF keys to the SRS
-    void AddVLR(const LASVariableRecord& vlr);
+    void AddVLR(VariableRecord const& vlr);
     
-    /// Return a copy of the LASVLRs that LASSpatialReference maintains
-    std::vector<LASVariableRecord> GetVLRs() const;
+    /// Return a copy of the LASVLRs that SpatialReference maintains
+    std::vector<VariableRecord> GetVLRs() const;
 
+    liblas::property_tree::ptree GetPTree() const;    
 private:
 
+    // FIXME: Define as shared_ptr<GTIF> with custom deleter to get rid of bloated mem management, unsafe anyway --mloskot
     GTIF* m_gtiff;
     ST_TIFF* m_tiff;
 
-    std::vector<LASVariableRecord> m_vlrs;
-    bool IsGeoVLR(const LASVariableRecord& vlr) const;
+    std::vector<VariableRecord> m_vlrs;
+    bool IsGeoVLR(VariableRecord const& vlr) const;
+    std::string GetGTIFFText() const;
 
-    /// Reset the VLRs of the LASSpatialReference using the existing GTIF* and ST_TIF*
+    /// Reset the VLRs of the SpatialReference using the existing GTIF* and ST_TIF*
     /// Until this method is called, 
-    /// the LASSpatialReference will only contain a SRS description using the VLRs 
+    /// the SpatialReference will only contain a SRS description using the VLRs 
     /// that it was first instantiated with.  SetWKT and SetProj4 can 
     /// be used to change the GTIF* 
     void ResetVLRs();

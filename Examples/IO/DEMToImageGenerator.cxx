@@ -99,8 +99,7 @@ int main(int argc, char * argv[])
   // Software Guide : BeginCodeSnippet
   typedef DEMToImageGeneratorType::SizeType       SizeType;
   typedef DEMToImageGeneratorType::SpacingType    SpacingType;
-  typedef DEMToImageGeneratorType::DEMHandlerType DEMHandlerType;
-  typedef DEMHandlerType::PointType               PointType;
+  typedef DEMToImageGeneratorType::PointType      PointType;
   // Software Guide : EndCodeSnippet
 
   // Instantiating writer

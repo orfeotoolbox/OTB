@@ -40,8 +40,7 @@ int otbDEMToOrthoImageGeneratorTest2(int argc, char * argv[])
   typedef otb::Image<double, Dimension>                               ImageType;
   typedef otb::UtmInverseProjection                                   MapProjectionType;
   typedef otb::DEMToImageGenerator<ImageType>                         DEMToImageGeneratorType;
-  typedef DEMToImageGeneratorType::DEMHandlerType                     DEMHandlerType;
-  typedef DEMHandlerType::PointType                                   PointType;
+  typedef DEMToImageGeneratorType::PointType                          PointType;
   typedef DEMToImageGeneratorType::SizeType                           SizeType;
   typedef DEMToImageGeneratorType::SpacingType                        SpacingType;
   typedef otb::StreamingImageFileWriter<ImageType>                    WriterType;

@@ -43,102 +43,102 @@
 #ifndef LIBLAS_LASVARIABLERECORD_HPP_INCLUDED
 #define LIBLAS_LASVARIABLERECORD_HPP_INCLUDED
 
-#include <liblas/cstdint.hpp>
+#include <liblas/detail/private_utility.hpp>
+#include <liblas/external/property_tree/ptree.hpp>
+// boost
+#include <boost/array.hpp>
+#include <boost/cstdint.hpp>
 // std
 #include <string>
 #include <vector>
+#include <iostream>
 
 namespace liblas {
 
 /// Representation of variable-length record data.
-class LASVariableRecord
+class VariableRecord
 {
 public:
 
     /// Default constructor.
     /// Zero-initialization of record data.
     /// \exception No throw
-    LASVariableRecord(); 
+    VariableRecord(); 
 
     /// Copy constructor.
     /// Construction of new record object as a copy of existing one.
     /// \exception No throw
-    LASVariableRecord(LASVariableRecord const& other);
+    VariableRecord(VariableRecord const& other);
     
-    ~LASVariableRecord();
+    ~VariableRecord();
 
     /// Assignment operator.
     /// Construction and initializition of record object by
     /// assignment of another one.
     /// \exception No throw
-    LASVariableRecord& operator=(LASVariableRecord const& rhs);
+    VariableRecord& operator=(VariableRecord const& rhs);
 
     /// Get record signature (LAS 1.0) or reserved bytes (LAS 1.1).
     /// \exception No throw
-    uint16_t GetReserved() const;
+    boost::uint16_t GetReserved() const;
     
-    void SetReserved(uint16_t);
+    void SetReserved(boost::uint16_t data);
 
     /// Get identifier of user which created the record.
     /// The character data is up to 16 bytes long.
     /// \exception No throw
     std::string GetUserId(bool pad /*= false*/) const;
     
-    void SetUserId(std::string const&);
+    void SetUserId(std::string const& id);
 
     /// Get identifier of record.
     /// The record ID is closely related to the user ID.
     /// \exception No throw
-    uint16_t GetRecordId() const;
+    boost::uint16_t GetRecordId() const;
     
-    void SetRecordId(uint16_t);
+    void SetRecordId(boost::uint16_t id);
 
     /// Get record length after the header.
     /// \exception No throw
-    uint16_t GetRecordLength() const;
+    boost::uint16_t GetRecordLength() const;
     
-    void SetRecordLength(uint16_t);
+    void SetRecordLength(boost::uint16_t length);
 
     /// Get text description of data in the record.
     /// The character data is up to 32 bytes long.
     /// \exception No throw
     std::string GetDescription(bool pad /*= false*/) const;
     
-    void SetDescription(std::string const&);
+    void SetDescription(std::string const& text);
 
     /// Get the data for this VLR
-    std::vector<uint8_t> const& GetData() const;
+    std::vector<boost::uint8_t> const& GetData() const;
     
-    void SetData(std::vector<uint8_t> const&);
+    void SetData(std::vector<boost::uint8_t> const& data);
 
     /// Compare actual header object against the other.
     /// \exception No throw
-    bool equal(LASVariableRecord const& other) const;
+    bool equal(VariableRecord const& other) const;
 
     /// Get the total size of the VLR in bytes
-    uint32_t GetTotalSize() const;
+    std::size_t GetTotalSize() const;
     
+    liblas::property_tree::ptree GetPTree() const;    
+
 private:
 
-    enum
-    {
-        eUIDSize = 16,
-        eDescriptionSize = 32
-    };
-    
-    uint16_t m_reserved;
-    uint16_t m_recordId;
-    uint16_t m_recordLength; // after header
-
-    char m_userId[eUIDSize];
-    char m_desc[eDescriptionSize];
-    std::vector<uint8_t> m_data;
+    std::vector<boost::uint8_t> m_data;
+    boost::array<char, 32> m_description;
+    boost::array<char, 16> m_user_id;    
+    boost::uint16_t m_reserved;
+    boost::uint16_t m_record_id;
+    boost::uint16_t m_record_size; // length after header
 };
 
 /// Equality operator.
-/// Implemented in terms of LASVariableRecord::equal member function.
+/// Implemented in terms of VariableRecord::equal member function.
 /// \exception No throw
-inline bool operator==(LASVariableRecord const& lhs, LASVariableRecord const& rhs)
+inline bool operator==(VariableRecord const& lhs, VariableRecord const& rhs)
 {
     return lhs.equal(rhs);
 }
@@ -146,10 +146,13 @@ inline bool operator==(LASVariableRecord const& lhs, LASVariableRecord const& rh
 /// Inequality operator.
 /// Implemented in terms of LASRecordHeader::equal member function.
 /// \exception No throw
-inline bool operator!=(LASVariableRecord const& lhs, LASVariableRecord const& rhs)
+inline bool operator!=(VariableRecord const& lhs, VariableRecord const& rhs)
 {
     return (!(lhs == rhs));
 }
+
+std::ostream& operator<<(std::ostream& os, liblas::VariableRecord const&);
+
 
 } // namespace liblas
 

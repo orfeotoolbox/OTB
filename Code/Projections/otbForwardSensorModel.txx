@@ -82,7 +82,7 @@ ForwardSensorModel<TScalarType, NInputDimensions, NOutputDimensions>
 
 //      otbMsgDevMacro(<< "PointP Before iter : (" << point[1] << "," << point[0] <<")");
 
-      heightTmp = this->m_DEMHandler->GetHeightAboveMSL(currentPoint);
+      heightTmp = this->GetDEMFunction()->Evaluate(currentPoint);
 
 //       otbMsgDevMacro(<< "height : " << heightTmp);
 

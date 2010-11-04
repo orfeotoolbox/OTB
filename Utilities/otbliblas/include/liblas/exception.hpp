@@ -49,7 +49,7 @@
 namespace liblas {
 
 /// Exception reporting invalid point data.
-/// It's usually thrown by LASPoint::Validate function.
+/// It's usually thrown by Point::Validate function.
 class invalid_point_data : public std::runtime_error
 {
 public:
@@ -59,8 +59,8 @@ public:
     {}
 
     /// Return flags identifying invalid point data members.
-    /// Flags are composed with composed with LASPoint::DataMemberFlag.
-    /// Testing flags example: bool timeValid = e.who() & LASPoint::eTime;
+    /// Flags are composed with composed with Point::DataMemberFlag.
+    /// Testing flags example: bool timeValid = e.who() & Point::eTime;
     unsigned int who() const
     {
         return m_who;

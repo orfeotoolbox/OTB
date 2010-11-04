@@ -1,0 +1,36 @@
+.. _ironpython:
+
+*********************************************
+IronPython Tutorial
+*********************************************
+
+This basic tutorial explains how to use libLAS to read and write 
+LIDAR data encoded in LAS file format from IronPython.
+
+=============================================
+Hello world
+=============================================
+
+.. code-block:: python
+
+ import System
+ import System.Text
+ import LibLAS
+
+ class Program(object):
+ 	def Main(self, args):
+ 		try:
+ 			try:
+ 				lasreader = LASReader()
+ 				lasheader = lasreader.GetHeader()
+ 				laswriter = LASWriter()
+ 				Console.WriteLine('Number of points in file= {0}', lasheader.PointRecordsCount)
+ 			except LASException, e:
+ 				Console.WriteLine('\nLASException! Msg: {0}', e.Message)
+ 			except None:
+ 				Console.WriteLine('Unknown exception caught')
+ 		finally:
+ 			Console.WriteLine('Do i need something to do?')
+ 		Console.WriteLine('End of file')
+ 		Console.Read()
+ 
