@@ -567,6 +567,23 @@ ${TEMP}/leTvShiftScaleSampleListFilterOutput.txt
  0 -1
 )
 
+# ConcatenateSampleListFilter tests ----------
+ADD_TEST(leTuConcatenateSampleListFilterNew ${LEARNING_TESTS4}
+otbConcatenateSampleListFilterNew)
+
+ADD_TEST(leTvConcatenateSampleListFilter ${LEARNING_TESTS4}
+--compare-ascii ${NOTOL}
+	${BASELINE_FILES}/leTvConcatenateSampleListFilterOutput.txt
+	${TEMP}/leTvConcatenateSampleListFilterOutput.txt
+otbConcatenateSampleListFilter
+${TEMP}/leTvConcatenateSampleListFilterOutput.txt
+ 2 3 2
+-1 -3
+ 1  2
+-2 -5
+-1 -3
+ 0 -1
+)
 
 
 # Testing srcs
@@ -635,6 +652,7 @@ otbListSampleGeneratorTest.cxx
 otbConfusionMatrixCalculatorTest.cxx
 otbSVMValidation.cxx
 otbShiftScaleSampleListFilter.cxx
+otbConcatenateSampleListFilter.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbLearningTests1 "${BasicLearning_SRCS1}" "OTBLearning;OTBIO;OTBTesting")
