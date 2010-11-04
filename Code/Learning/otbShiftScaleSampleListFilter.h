@@ -18,9 +18,8 @@
 #ifndef __otbShiftScaleSampleListFilter_h
 #define __otbShiftScaleSampleListFilter_h
 
-#include "itkProcessObject.h"
-#include "itkDataObject.h"
-#include "itkDataObjectDecorator.h"
+#include "otbListSampleToListSampleFilter.h"
+
 
 namespace otb {
 namespace Statistics {
@@ -36,24 +35,22 @@ namespace Statistics {
  *
  *	Shifts and scales can be set via the SetShift() and SetScales() methods.
  *
- *	This filter provide pipeline support for itk::Statistics::ListSample via itk::DataObjectDecorator for
- *	both the input and the output sample list.
- *
- * \sa ImageToListAdaptor
+ * \sa ListSampleToListSampleFilter
  */
 template < class TInputSampleList, class TOutputSampleList = TInputSampleList >
 class ITK_EXPORT ShiftScaleSampleListFilter :
-  public itk::ProcessObject
+  public otb::Statistics::ListSampleToListSampleFilter<TInputSampleList,TOutputSampleList>
 {
 public:
   /** Standard class typedefs */
-  typedef ShiftScaleSampleListFilter            Self;
-  typedef itk::ProcessObject                         Superclass;
+  typedef ShiftScaleSampleListFilter                 Self;
+  typedef otb::Statistics::ListSampleToListSampleFilter
+  <TInputSampleList,TOutputSampleList>               Superclass;
   typedef itk::SmartPointer< Self >                  Pointer;
   typedef itk::SmartPointer<const Self>              ConstPointer;
   
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ShiftScaleSampleListFilter,itk::ProcessObject);
+  itkTypeMacro(ShiftScaleSampleListFilter,otb::Statistics::ListSampleToListSampleFilter);
   
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -71,13 +68,9 @@ public:
   typedef typename OutputSampleListType::ConstPointer          OutputSampleListConstPointer;
   typedef typename OutputSampleListType::MeasurementVectorType OutputMeasurementVectorType;
   typedef typename OutputMeasurementVectorType::ValueType      OutputValueType;
-  
-  /** ListSample is not a DataObject, we need to decorate it to push it down
-   * a ProcessObject's pipeline */
-  typedef itk::DataObject::Pointer                             DataObjectPointer;
 
-  typedef itk::DataObjectDecorator< InputSampleListType >      InputSampleListObjectType;
-  typedef itk::DataObjectDecorator< OutputSampleListType >     OutputSampleListObjectType;
+  typedef typename Superclass::InputSampleListObjectType     InputSampleListObjectType;
+  typedef typename Superclass::OutputSampleListObjectType     OutputSampleListObjectType;
 
   /** Set/Get the Shifts for this sample list */
   itkSetMacro(Shifts,InputMeasurementVectorType);
@@ -87,29 +80,9 @@ public:
   itkSetMacro(Scales,InputMeasurementVectorType);
   itkGetMacro(Scales,InputMeasurementVectorType);
 
-  /** Method to set/get the input list sample */
-  void SetInput( const InputSampleListType * inputPtr );
-  void SetInput( const InputSampleListObjectType * inputPtr );
-
-  /** Returns the input sample list */
-  const InputSampleListType * GetInputSampleList() const;
-
-  /** Returns the input sample list as a data object */
-  const InputSampleListObjectType * GetInput() const;
-
-  /** Returns the output sample list */
-  OutputSampleListType * GetOutputSampleList();
-
-  /** Returns the output sample list as a data object */
-  OutputSampleListObjectType * GetOutput();
-
-
 protected:
   /** This method causes the filter to generate its output. */
    virtual void GenerateData();
-
-   /** Standard itk::ProcessObject subclass method. */
-   virtual DataObjectPointer MakeOutput(unsigned int idx);
 
   ShiftScaleSampleListFilter();
   virtual ~ShiftScaleSampleListFilter() {}
@@ -125,7 +98,7 @@ private:
   /** The vector of Scales */
   InputMeasurementVectorType m_Scales;
 
-}; // end of class ImageToListGenerator
+}; // end of class ShiftScaleSampleListFilter
 
 } // end of namespace Statistics
 } // end of namespace otb
