@@ -28,10 +28,10 @@ namespace Statistics {
 /** \class ConcatenateSampleListFilter
  *  \brief This class concatenates several sample list into a single one.
  *
- *	Standard casting is applied between input and output type.
+ * Standard casting is applied between input and output type.
  *
- *	This filter provide pipeline support for itk::Statistics::ListSample via itk::DataObjectDecorator for
- *	both the input and the output sample list.
+ * This filter provide pipeline support for itk::Statistics::ListSample via itk::DataObjectDecorator for
+ * both the input and the output sample list.
  *
  * \sa ImageToListAdaptor
  */

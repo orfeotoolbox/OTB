@@ -32,12 +32,12 @@ namespace Statistics {
  *
  *  \f[ output = \frac{input - shift}{scale} \f]
  *
- *	Standard casting is applied between input and output type.
+ * Standard casting is applied between input and output type.
  *
- *	Shifts and scales can be set via the SetShift() and SetScales() methods.
+ * Shifts and scales can be set via the SetShift() and SetScales() methods.
  *
- *	This filter provide pipeline support for itk::Statistics::ListSample via itk::DataObjectDecorator for
- *	both the input and the output sample list.
+ * This filter provide pipeline support for itk::Statistics::ListSample via itk::DataObjectDecorator for
+ * both the input and the output sample list.
  *
  */
 template < class TInputSampleList, class TOutputSampleList = TInputSampleList >

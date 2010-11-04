@@ -36,80 +36,80 @@ typedef otb::Statistics::ConcatenateSampleListFilter<FloatSampleListType,DoubleS
 
 int otbConcatenateSampleListFilterNew(int argc, char * argv[])
 {
-	ConcatenateFilterType::Pointer instance = ConcatenateFilterType::New();
+ ConcatenateFilterType::Pointer instance = ConcatenateFilterType::New();
 
-	return EXIT_SUCCESS;
+ return EXIT_SUCCESS;
 }
 
 int otbConcatenateSampleListFilter(int argc, char * argv[])
 {
-	// Compute the number of samples
-	const char * outfname = argv[1];
-	unsigned int sampleSize = atoi(argv[2]);
-	unsigned int nbSamples1 = atoi(argv[3]);
-	unsigned int nbSamples2 = atoi(argv[4]);
+ // Compute the number of samples
+ const char * outfname = argv[1];
+ unsigned int sampleSize = atoi(argv[2]);
+ unsigned int nbSamples1 = atoi(argv[3]);
+ unsigned int nbSamples2 = atoi(argv[4]);
 
-	FloatSampleListType::Pointer inputSampleList1 = FloatSampleListType::New();
-	inputSampleList1->SetMeasurementVectorSize(sampleSize);
+ FloatSampleListType::Pointer inputSampleList1 = FloatSampleListType::New();
+ inputSampleList1->SetMeasurementVectorSize(sampleSize);
 
-	FloatSampleListType::Pointer inputSampleList2 = FloatSampleListType::New();
-	inputSampleList2->SetMeasurementVectorSize(sampleSize);
+ FloatSampleListType::Pointer inputSampleList2 = FloatSampleListType::New();
+ inputSampleList2->SetMeasurementVectorSize(sampleSize);
 
-	ConcatenateFilterType::Pointer filter = ConcatenateFilterType::New();
-	filter->AddInput(inputSampleList1);
-	filter->AddInput(inputSampleList2);
+ ConcatenateFilterType::Pointer filter = ConcatenateFilterType::New();
+ filter->AddInput(inputSampleList1);
+ filter->AddInput(inputSampleList2);
 
-	FloatSampleType sample(sampleSize);
+ FloatSampleType sample(sampleSize);
 
-	unsigned int index = 5;
+ unsigned int index = 5;
 
-	std::ofstream ofs(outfname);
+ std::ofstream ofs(outfname);
 
-	ofs<<"Sample size: "<<sampleSize<<std::endl;
-	ofs<<"Nb samples 1: "<<nbSamples1<<std::endl;
-	ofs<<"Nb samples 2: "<<nbSamples2<<std::endl;
+ ofs<<"Sample size: "<<sampleSize<<std::endl;
+ ofs<<"Nb samples 1: "<<nbSamples1<<std::endl;
+ ofs<<"Nb samples 2: "<<nbSamples2<<std::endl;
 
-	ofs<<"Input samples 1: "<<std::endl;
+ ofs<<"Input samples 1: "<<std::endl;
 
-	for(unsigned int sampleId = 0; sampleId<nbSamples1;++sampleId)
-	{
-		for(unsigned int i = 0; i<sampleSize;++i)
-			{
-				sample[i]=atof(argv[index]);
-				++index;
-			}
-		ofs<<sample<<std::endl;
-		inputSampleList1->PushBack(sample);
-	}
+ for(unsigned int sampleId = 0; sampleId<nbSamples1;++sampleId)
+ {
+  for(unsigned int i = 0; i<sampleSize;++i)
+   {
+    sample[i]=atof(argv[index]);
+    ++index;
+   }
+  ofs<<sample<<std::endl;
+  inputSampleList1->PushBack(sample);
+ }
 
-	ofs<<"Input samples 2: "<<std::endl;
+ ofs<<"Input samples 2: "<<std::endl;
 
-	for(unsigned int sampleId = 0; sampleId<nbSamples2;++sampleId)
-	{
-		for(unsigned int i = 0; i<sampleSize;++i)
-		{
-			sample[i]=atof(argv[index]);
-			++index;
-		}
-		ofs<<sample<<std::endl;
-		inputSampleList2->PushBack(sample);
-	}
+ for(unsigned int sampleId = 0; sampleId<nbSamples2;++sampleId)
+ {
+  for(unsigned int i = 0; i<sampleSize;++i)
+  {
+   sample[i]=atof(argv[index]);
+   ++index;
+  }
+  ofs<<sample<<std::endl;
+  inputSampleList2->PushBack(sample);
+ }
 
-	filter->Update();
+ filter->Update();
 
-	DoubleSampleListType::ConstIterator outIt = filter->GetOutputSampleList()->Begin();
+ DoubleSampleListType::ConstIterator outIt = filter->GetOutputSampleList()->Begin();
 
-	ofs<<"Output samples: "<<std::endl;
+ ofs<<"Output samples: "<<std::endl;
 
-	while(outIt != filter->GetOutputSampleList()->End())
-	{
-		ofs<<outIt.GetMeasurementVector()<<std::endl;
-		++outIt;
-	}
+ while(outIt != filter->GetOutputSampleList()->End())
+ {
+  ofs<<outIt.GetMeasurementVector()<<std::endl;
+  ++outIt;
+ }
 
-	ofs.close();
+ ofs.close();
 
-	return EXIT_SUCCESS;
+ return EXIT_SUCCESS;
 }
 
 

@@ -36,81 +36,81 @@ typedef otb::Statistics::ShiftScaleSampleListFilter<FloatSampleListType,DoubleSa
 
 int otbShiftScaleSampleListFilterNew(int argc, char * argv[])
 {
-	ShiftScaleFilterType::Pointer instance = ShiftScaleFilterType::New();
+ ShiftScaleFilterType::Pointer instance = ShiftScaleFilterType::New();
 
-	return EXIT_SUCCESS;
+ return EXIT_SUCCESS;
 }
 
 int otbShiftScaleSampleListFilter(int argc, char * argv[])
 {
-	// Compute the number of samples
-	const char * outfname = argv[1];
-	unsigned int sampleSize = atoi(argv[2]);
-	unsigned int nbSamples = (argc-2*sampleSize-2)/sampleSize;
+ // Compute the number of samples
+ const char * outfname = argv[1];
+ unsigned int sampleSize = atoi(argv[2]);
+ unsigned int nbSamples = (argc-2*sampleSize-2)/sampleSize;
 
-	FloatSampleListType::Pointer inputSampleList = FloatSampleListType::New();
-	inputSampleList->SetMeasurementVectorSize(sampleSize);
+ FloatSampleListType::Pointer inputSampleList = FloatSampleListType::New();
+ inputSampleList->SetMeasurementVectorSize(sampleSize);
 
-	ShiftScaleFilterType::Pointer filter = ShiftScaleFilterType::New();
-	filter->SetInput(inputSampleList);
+ ShiftScaleFilterType::Pointer filter = ShiftScaleFilterType::New();
+ filter->SetInput(inputSampleList);
 
-	FloatSampleType sample(sampleSize);
+ FloatSampleType sample(sampleSize);
 
-	unsigned int index = 3;
+ unsigned int index = 3;
 
-	std::ofstream ofs(outfname);
+ std::ofstream ofs(outfname);
 
-	ofs<<"Sample size: "<<sampleSize<<std::endl;
-	ofs<<"Nb samples : "<<nbSamples<<std::endl;
+ ofs<<"Sample size: "<<sampleSize<<std::endl;
+ ofs<<"Nb samples : "<<nbSamples<<std::endl;
 
-	for(unsigned int i = 0; i<sampleSize;++i)
-	{
-		sample[i]=atof(argv[index]);
-		++index;
-	}
+ for(unsigned int i = 0; i<sampleSize;++i)
+ {
+  sample[i]=atof(argv[index]);
+  ++index;
+ }
 
-	ofs<<"Shifts: "<<sample<<std::endl;
+ ofs<<"Shifts: "<<sample<<std::endl;
 
-	filter->SetShifts(sample);
+ filter->SetShifts(sample);
 
-	for(unsigned int i = 0; i<sampleSize;++i)
-	{
-		sample[i]=atof(argv[index]);
-		++index;
-	}
+ for(unsigned int i = 0; i<sampleSize;++i)
+ {
+  sample[i]=atof(argv[index]);
+  ++index;
+ }
 
-	ofs<<"Scales: "<<sample<<std::endl;
+ ofs<<"Scales: "<<sample<<std::endl;
 
-	filter->SetScales(sample);
+ filter->SetScales(sample);
 
-	ofs<<"Input samples: "<<std::endl;
+ ofs<<"Input samples: "<<std::endl;
 
-	for(unsigned int sampleId = 0; sampleId<nbSamples;++sampleId)
-	{
-		for(unsigned int i = 0; i<sampleSize;++i)
-			{
-				sample[i]=atof(argv[index]);
-				++index;
-			}
-		ofs<<sample<<std::endl;
-		inputSampleList->PushBack(sample);
-	}
+ for(unsigned int sampleId = 0; sampleId<nbSamples;++sampleId)
+ {
+  for(unsigned int i = 0; i<sampleSize;++i)
+   {
+    sample[i]=atof(argv[index]);
+    ++index;
+   }
+  ofs<<sample<<std::endl;
+  inputSampleList->PushBack(sample);
+ }
 
-	filter->Update();
+ filter->Update();
 
-	DoubleSampleListType::ConstIterator outIt = filter->GetOutputSampleList()->Begin();
+ DoubleSampleListType::ConstIterator outIt = filter->GetOutputSampleList()->Begin();
 
-	ofs<<"Output samples: "<<std::endl;
+ ofs<<"Output samples: "<<std::endl;
 
-	while(outIt != filter->GetOutputSampleList()->End())
-	{
-		ofs<<outIt.GetMeasurementVector()<<std::endl;
-		++outIt;
-	}
+ while(outIt != filter->GetOutputSampleList()->End())
+ {
+  ofs<<outIt.GetMeasurementVector()<<std::endl;
+  ++outIt;
+ }
 
-	ofs.close();
+ ofs.close();
 
-	return EXIT_SUCCESS;
+ return EXIT_SUCCESS;
 }
 
 
