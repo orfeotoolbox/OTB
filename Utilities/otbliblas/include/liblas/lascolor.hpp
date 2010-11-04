@@ -14,8 +14,7 @@
  * modification, are permitted provided that the following 
  * conditions are met:
  * 
- *     * Redistributions of source code must retain the above copyright 
- *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions of source code must rede following disclaimer.
  *     * Redistributions in binary form must reproduce the above copyright 
  *       notice, this list of conditions and the following disclaimer in 
  *       the documentation and/or other materials provided 
@@ -42,122 +41,126 @@
 #ifndef LIBLAS_LASCOLOR_HPP_INCLUDED
 #define LIBLAS_LASCOLOR_HPP_INCLUDED
 
-#include <liblas/cstdint.hpp>
-#include <liblas/detail/fwd.hpp>
-#include <liblas/detail/utility.hpp>
+// boost
+#include <boost/array.hpp>
+#include <boost/cstdint.hpp>
 // std
-#include <stdexcept> // std::out_of_range
 #include <cstdlib> // std::size_t
 
 namespace liblas {
 
 /// RGB color container
-class LASColor
+class Color
 {
 public:
 
+    typedef boost::uint16_t value_type;
+
     /// Default constructor.
     /// Initializes with black color using RGB {0, 0, 0}.
-    LASColor();
+    Color();
+
+    /// User-defined constructor.
+    /// Initializes object with given RGB values.
+    /// \exception std::invalid_argument if color component value is out of range of unsigned 8-bit integer.
+    Color(boost::uint32_t red, boost::uint32_t green, boost::uint32_t blue);
+
+    /// User-defined constructor.
+    /// Initializes colour components based on values of 3-element array.
+    /// \exception std::invalid_argument if color component value is out of range of unsigned 8-bit integer.
+    Color(boost::array<value_type, 3> const& color);
 
     /// Copy constructor.
-    LASColor(LASColor const& other);
+    Color(Color const& other);
 
     /// Assignment opreator.
-    LASColor& operator=(LASColor const& rhs);
+    Color& operator=(Color const& rhs);
 
-    /// Comparison operator.
-    bool operator==(const LASColor& other) const;
-    
     /// Fetch value of the red image channel 
-    uint16_t GetRed() const;
+    value_type GetRed() const;
 
     /// Set value of the red image channel 
-    void SetRed(uint16_t const& value);
+    void SetRed(value_type const& value);
 
     /// Fetch value of the blue image channel 
-    uint16_t GetBlue() const;
+    value_type GetBlue() const;
 
     /// Set value of the blue image channel 
-    void SetBlue(uint16_t const& value);
+    void SetBlue(value_type const& value);
 
     /// Fetch value of the green image channel 
-    uint16_t GetGreen() const;
+    value_type GetGreen() const;
 
     /// Set value of the red image channel 
-    void SetGreen(uint16_t const& value);
+    void SetGreen(value_type const& value);
 
     /// Index operator providing access to RGB values.
     /// Valid index values are 0, 1 or 2.
     /// \exception std::out_of_range if requested index is out of range (> 2).
-    uint16_t& operator[](std::size_t const& n);
+    value_type& operator[](std::size_t const& index);
 
     /// Const version of index operator providing access to RGB values.
     /// Valid index values are 0, 1 or 2.
     /// \exception std::out_of_range if requested index is out of range (> 2).
-    uint16_t const& operator[](std::size_t const& n) const;    
+    value_type const& operator[](std::size_t const& index) const;
 
 private:
 
-    
-    uint16_t m_red;
-    uint16_t m_green;
-    uint16_t m_blue;
-    
-    void throw_out_of_range() const
-    {
-        throw std::out_of_range("subscript out of range");
-    }
+    typedef boost::array<value_type, 3> base_type;
+    base_type m_color;
+
+    void throw_index_out_of_range() const;
+    void throw_invalid_color_component() const;
 };
 
-
-inline uint16_t LASColor::GetRed() const
+inline Color::value_type Color::GetRed() const
 {
-    return m_red;
+    return m_color[0];
 }
 
-inline void LASColor::SetRed(uint16_t const& value)
+inline void Color::SetRed(Color::value_type const& value)
 {
-    m_red = value;
+    m_color[0] = value;
 }
 
-inline uint16_t LASColor::GetBlue() const
+inline Color::value_type Color::GetGreen() const
 {
-    return m_blue;
+    return m_color[1];
 }
 
-inline void LASColor::SetBlue(uint16_t const& value)
+inline void Color::SetGreen(Color::value_type const& value)
 {
-    m_blue = value;
+    m_color[1] = value;
 }
 
-inline uint16_t LASColor::GetGreen() const
+inline Color::value_type Color::GetBlue() const
 {
-    return m_green;
+    return m_color[2];
 }
 
-inline void LASColor::SetGreen(uint16_t const& value)
+inline void Color::SetBlue(Color::value_type const& value)
 {
-    m_green = value;
+    m_color[2] = value;
 }
 
-inline uint16_t& LASColor::operator[](std::size_t const& n)
+inline Color::value_type& Color::operator[](std::size_t const& index)
 {
-    if (n == 0) { return m_red; }
-    if (n == 1) { return m_green; }
-    if (n == 2) { return m_blue; }
-
-    throw_out_of_range();
-
+    return m_color[index];
 }
 
-inline uint16_t const& LASColor::operator[](std::size_t const& n) const
+inline Color::value_type const& Color::operator[](std::size_t const& index) const
 {
-    if (n == 0) { return m_red; }
-    if (n == 1) { return m_green; }
-    if (n == 2) { return m_blue; }
+    return m_color[index];
+}
 
-    throw_out_of_range();
+inline bool operator==(Color const& lhs, Color const& rhs)
+{
+    return lhs[0] == rhs[0] && lhs[1] == rhs[1] && lhs[2] == rhs[2];
+}
+
+inline bool operator!=(Color const& lhs, Color const& rhs)
+{
+    return !(lhs == rhs);
 }
 
 } // namespace liblas

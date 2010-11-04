@@ -111,7 +111,7 @@ int main(int argc, char *argv[])
     FILE* file_out = NULL;
     int len;
     
-    uint32_t index = 0;
+    unsigned int index = 0;
     
     for (i = 1; i < argc; i++)
     {
@@ -316,7 +316,7 @@ int main(int argc, char *argv[])
             }
 
             len = (int)strlen(file_name_in);
-            file_name_out = strdup(file_name_in);
+            file_name_out = LASCopyString(file_name_in);
             if (file_name_out[len-3] == '.' && file_name_out[len-2] == 'g' && file_name_out[len-1] == 'z')
             {
                 len = len - 4;
@@ -487,19 +487,19 @@ int main(int argc, char *argv[])
             {
             /* // the x coordinate */      
             case 'x': 
-                lidardouble2string(printstring, LASPoint_GetX(p)); fprintf(file_out, printstring);
+                lidardouble2string(printstring, LASPoint_GetX(p)); fprintf(file_out, "%s", printstring);
                 break;
             /* // the y coordinate */
             case 'y': 
-                lidardouble2string(printstring, LASPoint_GetY(p)); fprintf(file_out, printstring);
+                lidardouble2string(printstring, LASPoint_GetY(p)); fprintf(file_out, "%s", printstring);
                 break;
             /* // the z coordinate */ 
             case 'z': 
-                lidardouble2string(printstring, LASPoint_GetZ(p)); fprintf(file_out, printstring);
+                lidardouble2string(printstring, LASPoint_GetZ(p)); fprintf(file_out, "%s", printstring);
                 break;
             /* // the gps-time */
             case 't': 
-                lidardouble2string(printstring,LASPoint_GetTime(p)); fprintf(file_out, printstring);
+                lidardouble2string(printstring,LASPoint_GetTime(p)); fprintf(file_out, "%s", printstring);
                 break;
             /* // the intensity */
             case 'i': 
@@ -538,7 +538,7 @@ int main(int argc, char *argv[])
                 fprintf(file_out, "%d", LASColor_GetBlue(color));
                 break;            
             case 'M':
-                fprintf(file_out, "%d", index);
+                fprintf(file_out, "%u", index);
                 break;
             case 'p':
                 fprintf(file_out, "%d", LASPoint_GetPointSourceId(p));

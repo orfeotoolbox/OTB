@@ -1,0 +1,25 @@
+.. raw:: pdf
+
+    PageBreak
+    
+.. _ts2las:
+    
+****************************************************************
+  ts2las
+****************************************************************
+
+:Author: Howard Butler
+:Contact: hobu at hobu.net
+
+    
+
+ts2las converts TerraSolid .bin files into LAS files.  
+
+Usage
+-----
+
+::
+
+  $ ts2las -i input.bin -o lidar.las
+
+

@@ -1,0 +1,153 @@
+.. raw:: pdf
+
+    PageBreak
+    
+.. _class_documentation:
+
+****************************************************************
+  Python Class Documentation
+****************************************************************
+
+
+
+
+
+=============================================
+liblas.color.Color
+=============================================
+
+.. autoclass:: liblas.color.Color
+    :members:   __init__, 
+                red,
+                green,
+                blue,
+                __iter__
+
+
+
+=============================================
+liblas.file.File
+=============================================
+
+.. autoclass:: liblas.file.File
+    :members:   __init__, 
+                close, 
+                header, 
+                read, 
+                write,
+                output_srs,
+                input_srs,
+                __iter__, 
+                __getitem__,
+                __len__
+                
+=============================================
+liblas.format.Format
+=============================================
+
+.. autoclass:: liblas.format.Format
+    :members:   __init__,
+                major,
+                minor,
+                color,
+                time,
+                size
+
+=============================================
+liblas.guid.GUID
+=============================================
+
+.. autoclass:: liblas.guid.GUID
+    :members:   __init__,
+                __str__,
+                __eq__
+
+=============================================
+liblas.header.Header
+=============================================
+
+.. autoclass:: liblas.header.Header
+    :members:   __init__,
+                major,
+                minor,
+                guid,
+                date,
+                project_id,
+                file_signature,
+                file_source_id,
+                encoding,
+                system_id,
+                software_id,
+                header_length,
+                data_offset,
+                num_vlrs,
+                schema,
+                data_format_id,
+                count, __len__, set_count,
+                return_count,
+                scale,
+                offset,
+                max,
+                min
+
+=============================================
+liblas.point.Point
+=============================================
+
+.. autoclass:: liblas.point.Point
+    :members:   __init__, 
+                x, 
+                y, 
+                z, 
+                time, 
+                raw_time, 
+                scan_angle, 
+                scan_direction, 
+                scan_flags, 
+                flightline_edge, 
+                number_of_returns, 
+                return_number,
+                classification,
+                user_data,
+                point_source_id,
+                color,
+                data
+                
+
+=============================================
+liblas.srs.SRS
+=============================================
+
+.. autoclass:: liblas.srs.SRS
+    :members:   __init__,
+                set_verticalcs,
+                wkt,
+                proj4,
+                get_wkt,
+                get_proj4,
+                set_wkt,
+                set_proj4,
+                get_wkt_compoundok,
+                set_userinput
+                
+
+=============================================
+liblas.vlr.VLR
+=============================================
+
+.. autoclass:: liblas.vlr.VLR
+    :members:   __init__,
+                userid,
+                description,
+                recordlength,
+                recordid,
+                reserved,
+                data
+
+.. _specification: http://liblas.org/_static/specifications/asprs_las_format_v13.pdf
+.. _GDAL: http://www.gdal.org
+.. _Proj.4: http://proj.osgeo.org
+.. _SetFromUserInput: http://www.gdal.org/ogr/ogr__srs__api_8h.html#7a043a4b3d477847dcc89efdff3a563a
+
+
+

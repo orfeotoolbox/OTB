@@ -6,7 +6,7 @@
  * Author:   Mateusz Loskot, mateusz@loskot.net
  *
  ******************************************************************************
- * Copyright (c) 2008, Mateusz Loskot
+ * Copyright (c) 2010, Mateusz Loskot
  * Copyright (c) 2008, Phil Vachon
  *
  * All rights reserved.
@@ -43,16 +43,23 @@
 #ifndef LIBLAS_LASHEADER_HPP_INCLUDED
 #define LIBLAS_LASHEADER_HPP_INCLUDED
 
-#include <liblas/lasvariablerecord.hpp>
-#include <liblas/lasspatialreference.hpp>
-#include <liblas/cstdint.hpp>
 #include <liblas/guid.hpp>
-#include <liblas/detail/utility.hpp>
-#include <liblas/detail/fwd.hpp>
+#include <liblas/lasbounds.hpp>
+#include <liblas/lasschema.hpp>
+#include <liblas/lasspatialreference.hpp>
+#include <liblas/lasvariablerecord.hpp>
+#include <liblas/lasversion.hpp>
+#include <liblas/external/property_tree/ptree.hpp>
+// boost
+#include <boost/cstdint.hpp>
+#include <boost/foreach.hpp>
 
 //std
+#include <cstddef>
 #include <string>
 #include <vector>
+#include <sstream>
+#include <cmath>
 
 namespace liblas {
 
@@ -64,38 +71,9 @@ namespace liblas {
 /// \todo  TODO (low-priority): replace static-size char arrays as data members
 ///        with std::string and return const-reference to string object.
 ///
-class LASHeader
+class Header
 {
 public:
-
-    /// Range of allowed ASPRS LAS file format versions.
-    enum FormatVersion
-    {
-        eVersionMajorMin = 1, ///< Minimum of major component
-        eVersionMajorMax = 1, ///< Maximum of major component
-        eVersionMinorMin = 0, ///< Minimum of minor component
-        eVersionMinorMax = 2 ///< Maximum of minor component
-    };
-
-    /// Versions of point record format.
-    enum PointFormat
-    {
-        ePointFormat0 = 0, ///< Point Data Format \e 0
-        ePointFormat1 = 1, ///< Point Data Format \e 1
-        ePointFormat2 = 2, ///< Point Data Format \e 2
-        ePointFormat3 = 3 ///< Point Data Format \e 3
-
-    };
-
-    /// Number of bytes of point record storage in particular format.
-    enum PointSize
-    {
-        ePointSize0 = 20, ///< Size of point record in data format \e 0
-        ePointSize1 = 28, ///< Size of point record in data format \e 1
-        ePointSize2 = 26, ///< Size of point record in data format \e 2
-        ePointSize3 = 34  ///< Size of point record in data format \e 3
-
-    };
 
     /// Official signature of ASPRS LAS file format, always \b "LASF".
     static char const* const FileSignature;
@@ -106,20 +84,24 @@ public:
     /// Default software identifier used by libLAS, always \b "libLAS X.Y".
     static char const* const SoftwareIdentifier;
 
+    /// Array of 5 elements - numbers of points recorded by each return.
+    /// \todo TODO: Consider replacing with {boost|std::tr1}::array<T, 5> --mloskot
+    typedef std::vector<boost::uint32_t> RecordsByReturnArray;
+
     /// Default constructor.
     /// The default constructed header is configured according to the ASPRS
-    /// LAS 1.1 Specification, point data format set to 0.
+    /// LAS 1.2 Specification, point data format set to 0.
     /// Other fields filled with 0.
-    LASHeader();
+    Header();
 
     /// Copy constructor.
-    LASHeader(LASHeader const& other);
+    Header(Header const& other);
 
     /// Assignment operator.
-    LASHeader& operator=(LASHeader const& rhs);
+    Header& operator=(Header const& rhs);
     
     /// Comparison operator.
-    bool operator==(const LASHeader& other) const;
+    bool operator==(const Header& other) const;
 
     /// Get ASPRS LAS file signature.
     /// \return 4-characters long string - \b "LASF".
@@ -135,25 +117,25 @@ public:
 
     /// Get file source identifier.
     /// \exception No throw
-    uint16_t GetFileSourceId() const;
+    boost::uint16_t GetFileSourceId() const;
 
     /// Set file source identifier.
     /// \param v - should be set to a value between 1 and 65535.
     /// \exception No throw
     ///
     /// \todo TODO: Should we warn or throw about type overflow when user passes 65535 + 1 = 0
-    void SetFileSourceId(uint16_t v);
+    void SetFileSourceId(boost::uint16_t v);
 
     /// Get value field reserved by the ASPRS LAS Specification.
     /// \note This field is always filled with 0.
     ///
     /// \todo TODO: Should we warn or throw about type overflow when user passes 65535 + 1 = 0
-    uint16_t GetReserved() const;
+    boost::uint16_t GetReserved() const;
 
     /// Set reserved value for the header identifier.
     /// \param v - should be set to a value between 1 and 65535.
     /// \exception No throw
-    void SetReserved(uint16_t v);
+    void SetReserved(boost::uint16_t v);
 
     /// Get project identifier.
     /// \return Global Unique Identifier as an instance of liblas::guid class.
@@ -164,21 +146,21 @@ public:
 
     /// Get major component of version of LAS format.
     /// \return Always 1 is returned as the only valid value.
-    uint8_t GetVersionMajor() const;
+    boost::uint8_t GetVersionMajor() const;
 
     /// Set major component of version of LAS format.
     /// \exception std::out_of_range - invalid value given.
     /// \param v - value between eVersionMajorMin and eVersionMajorMax.
-    void SetVersionMajor(uint8_t v);
+    void SetVersionMajor(boost::uint8_t v);
 
     /// Get minor component of version of LAS format.
-    /// \return Valid values are 1 or 0.
-    uint8_t GetVersionMinor() const;
+    /// \return Valid values are 0, 1, 2, 3.
+    boost::uint8_t GetVersionMinor() const;
 
     /// Set minor component of version of LAS format.
     /// \exception std::out_of_range - invalid value given.
     /// \param v - value between eVersionMinorMin and eVersionMinorMax.
-    void SetVersionMinor(uint8_t v);
+    void SetVersionMinor(boost::uint8_t v);
 
     /// Get system identifier.
     /// Default value is \b "libLAS" specified as the SystemIdentifier constant.
@@ -207,63 +189,73 @@ public:
 
     /// Get day of year of file creation date.
     /// \todo TODO: Use full date structure instead of Julian date number.
-    uint16_t GetCreationDOY() const;
+    boost::uint16_t GetCreationDOY() const;
 
     /// Set day of year of file creation date.
     /// \exception std::out_of_range - given value is higher than number 366.
     /// \todo TODO: Use full date structure instead of Julian date number.
-    void SetCreationDOY(uint16_t v);
+    void SetCreationDOY(boost::uint16_t v);
 
     /// Set year of file creation date.
     /// \todo TODO: Remove if full date structure is used.
-    uint16_t GetCreationYear() const;
+    boost::uint16_t GetCreationYear() const;
 
     /// Get year of file creation date.
     /// \exception std::out_of_range - given value is higher than number 9999.
     /// \todo TODO: Remove if full date structure is used.
-    void SetCreationYear(uint16_t v);
+    void SetCreationYear(boost::uint16_t v);
 
     /// Get number of bytes of generic verion of public header block storage.
     /// Standard version of the public header block is 227 bytes long.
-    uint16_t GetHeaderSize() const;
+    boost::uint16_t GetHeaderSize() const;
+
+    /// Sets the header size.  Note that this is not the same as the offset to 
+    /// point data. 
+    void SetHeaderSize(boost::uint16_t v);
     
     /// Get number of bytes from the beginning to the first point record.
-    uint32_t GetDataOffset() const;
+    boost::uint32_t GetDataOffset() const;
 
     /// Set number of bytes from the beginning to the first point record.
     /// \exception std::out_of_range - if given offset is bigger than 227+2 bytes
     /// for the LAS 1.0 format and 227 bytes for the LAS 1.1 format.
-    void SetDataOffset(uint32_t v);
+    void SetDataOffset(boost::uint32_t v);
 
     /// Get number of variable-length records.
-    uint32_t GetRecordsCount() const;
+    boost::uint32_t GetRecordsCount() const;
 
     /// Set number of variable-length records.
-    void SetRecordsCount(uint32_t v);
+    void SetRecordsCount(boost::uint32_t v);
     
     /// Get identifier of point data (record) format.
-    PointFormat GetDataFormatId() const;
+    PointFormatName GetDataFormatId() const;
 
     /// Set identifier of point data (record) format.
-    void SetDataFormatId(PointFormat v);
+    void SetDataFormatId(PointFormatName v);
 
-    /// \todo To be documented
-    uint16_t GetDataRecordLength() const;
+    /// The length in bytes of each point.  All points in the file are 
+    /// considered to be fixed in size, and the PointFormatName is used 
+    /// to determine the fixed portion of the dimensions in the point.  Any 
+    /// other byte space in the point record beyond the liblas::Schema::GetBaseByteSize() 
+    /// can be used for other, optional, dimensions.  If no schema is 
+    /// available for the file in the form of a liblas.org VLR schema record,
+    /// These extra bytes are available via liblas::Point::GetExtraData().
+    boost::uint16_t GetDataRecordLength() const;
     
     /// Get total number of point records stored in the LAS file.
-    uint32_t GetPointRecordsCount() const;
+    boost::uint32_t GetPointRecordsCount() const;
 
     /// Set number of point records that will be stored in a new LAS file.
-    void SetPointRecordsCount(uint32_t v);
+    void SetPointRecordsCount(boost::uint32_t v);
     
     /// Get array of the total point records per return.
-    std::vector<uint32_t> const& GetPointRecordsByReturnCount() const;
+    RecordsByReturnArray const& GetPointRecordsByReturnCount() const;
 
     /// Set values of 5-elements array of total point records per return.
     /// \exception std::out_of_range - if index is bigger than 4.
     /// \param index - subscript (0-4) of array element being updated.
     /// \param v - new value to assign to array element identified by index.
-    void SetPointRecordsByReturnCount(std::size_t index, uint32_t v);
+    void SetPointRecordsByReturnCount(std::size_t index, boost::uint32_t v);
     
     /// Get scale factor for X coordinate.
     double GetScaleX() const;
@@ -314,38 +306,66 @@ public:
     void SetMin(double x, double y, double z);
 
     /// Adds a variable length record to the header
-    void AddVLR(LASVariableRecord const& v);
+    void AddVLR(VariableRecord const& v);
     
     /// Returns a VLR 
-    LASVariableRecord const& GetVLR(uint32_t index) const;
+    VariableRecord const& GetVLR(boost::uint32_t index) const;
+    
+    /// Returns all of the VLRs
+    const std::vector<VariableRecord>& GetVLRs() const;
 
     /// Removes a VLR from the the header.
-    void DeleteVLR(uint32_t index);
+    void DeleteVLR(boost::uint32_t index);
+    void DeleteVLRs(std::string const& name, boost::uint16_t id);
 
     /// Rewrite variable-length record with georeference infomation, if available.
     void SetGeoreference();
     
     /// Fetch the georeference
-    LASSpatialReference GetSRS() const;
+    SpatialReference GetSRS() const;
     
     /// Set the georeference
-    void SetSRS(LASSpatialReference& srs);
+    void SetSRS(SpatialReference& srs);
+    
+    /// Returns the schema.
+    Schema const& GetSchema() const;
 
+    /// Sets the schema
+    void SetSchema(const Schema& format);
+
+    /// Return the liblas::Bounds.  This is a 
+    /// combination of the GetMax and GetMin 
+    /// (or GetMinX, GetMaxY, etc) data.
+    const Bounds<double>& GetExtent() const;
+
+    /// Set the liblas::Bounds.  This is a 
+    /// combination of the GetMax and GetMin 
+    /// (or GetMinX, GetMaxY, etc) data, and it is equivalent to setting 
+    /// all of these values.
+    void SetExtent(Bounds<double> const& extent);
+
+    /// Returns a property_tree that contains 
+    /// all of the header data in a structured format.
+    liblas::property_tree::ptree GetPTree() const;
+    
+    void to_rst(std::ostream& os) const;
+    void to_xml(std::ostream& os) const;
+    void to_json(std::ostream& os) const;
+    
 private:
     
     typedef detail::Point<double> PointScales;
     typedef detail::Point<double> PointOffsets;
-    typedef detail::Extents<double> PointExtents;
 
     enum
     {
         eDataSignatureSize = 2,
         eFileSignatureSize = 4,
-        ePointsByReturnSize = 5,
+        ePointsByReturnSize = 7,
         eProjectId4Size = 8,
         eSystemIdSize = 32,
         eSoftwareIdSize = 32,
-        eHeaderSize = 227,
+        eHeaderSize = 227, 
         eFileSourceIdMax = 65535
     };
 
@@ -356,37 +376,61 @@ private:
     // Private function members
     //
     void Init();
-    void ClearGeoKeyVLRs();
 
     //
     // Private data members
     //
-    char m_signature[eFileSignatureSize];
-    uint16_t m_sourceId;
-    uint16_t m_reserved;
-    uint32_t m_projectId1;
-    uint16_t m_projectId2;
-    uint16_t m_projectId3;
-    uint8_t m_projectId4[eProjectId4Size];
-    uint8_t m_versionMajor;
-    uint8_t m_versionMinor;
-    char m_systemId[eSystemIdSize];
+    char m_signature[eFileSignatureSize]; // TODO: replace with boost::array --mloskot
+    boost::uint16_t m_sourceId;
+    boost::uint16_t m_reserved;
+    boost::uint32_t m_projectId1;
+    boost::uint16_t m_projectId2;
+    boost::uint16_t m_projectId3;
+    boost::uint8_t m_projectId4[eProjectId4Size];
+    boost::uint8_t m_versionMajor;
+    boost::uint8_t m_versionMinor;
+    char m_systemId[eSystemIdSize]; // TODO: replace with boost::array --mloskot
     char m_softwareId[eSoftwareIdSize];
-    uint16_t m_createDOY;
-    uint16_t m_createYear;
-    uint16_t m_headerSize;
-    uint32_t m_dataOffset;
-    uint32_t m_recordsCount;
-    uint8_t m_dataFormatId;
-    uint16_t m_dataRecordLen;
-    uint32_t m_pointRecordsCount;
-    std::vector<uint32_t> m_pointRecordsByReturn;
+    boost::uint16_t m_createDOY;
+    boost::uint16_t m_createYear;
+    boost::uint16_t m_headerSize;
+    boost::uint32_t m_dataOffset;
+    boost::uint32_t m_recordsCount;
+    boost::uint32_t m_pointRecordsCount;
+    RecordsByReturnArray m_pointRecordsByReturn;
     PointScales m_scales;
     PointOffsets m_offsets;
-    PointExtents m_extents;
-    std::vector<LASVariableRecord> m_vlrs;
-    LASSpatialReference m_srs;
+    Bounds<double> m_extent;
+    std::vector<VariableRecord> m_vlrs;
+    SpatialReference m_srs;
+    Schema m_schema;
 };
+
+std::ostream& operator<<(std::ostream& os, liblas::Header const&);
+
+/// Singleton used for all empty points upon construction.  If 
+/// a reader creates the point, the HeaderPtr from the file that was 
+/// read will be used, but all stand-alone points will have EmptyHeader 
+/// as their base.
+class DefaultHeader
+{
+public:
+    virtual ~DefaultHeader() {};
+    
+    static Header const& get() 
+    {
+        static Header object;
+        return object;
+    }
+protected:
+    DefaultHeader();
+    DefaultHeader( DefaultHeader const&);
+    DefaultHeader& operator=( DefaultHeader const&);
+    
+};
+
+
+
 
 } // namespace liblas
 

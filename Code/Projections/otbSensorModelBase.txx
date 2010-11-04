@@ -40,13 +40,9 @@ SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>
 ::SensorModelBase() : Superclass(OutputSpaceDimension, 0)
 {
   m_Model = NULL;
-  m_DEMHandler = DEMHandlerType::New();
   m_UseDEM = false;
   m_DEMIsLoaded = false;
   m_AverageElevation = 0.0;
-  // Ensure that Elev manager never returns default nan value
-  m_DEMHandler->SetDefaultHeightAboveEllipsoid(0.);
-
 }
 
 template <class TScalarType,

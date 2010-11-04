@@ -1,12 +1,13 @@
+/* liblas */
+#include <liblas.h>
+#ifdef HAVE_LIBGEOTIFF
+#include <geotiff.h>
+#include <geo_normalize.h>
+#endif
+/* std */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <liblas.h>
-
-#ifdef HAVE_GEOTIFF
-#include <geotiff.h>
-#endif
-
 
 static const char * LASPointClassification [] = {
   "Created, never classified",
@@ -43,22 +44,19 @@ static const char * LASPointClassification [] = {
   "Reserved for ASPRS Definition"
 };
 
-
 LASPointSummary* SummarizePoints(LASReaderH reader) {
     
-    LASPointSummary* summary;
+    LASPointSummary* summary = NULL;
     LASPointH p = NULL;
     LASColorH color = NULL;
     LASColorH min_color = NULL;
     LASColorH max_color = NULL;
     
-    uint8_t cls = 0;
-    uint16_t red = 0;
-    uint16_t green = 0;
-    uint16_t blue = 0;
-    
-    uint16_t ptsrc = 0;
-    
+    unsigned char cls = 0;
+    unsigned short red = 0;
+    unsigned short green = 0;
+    unsigned short blue = 0;
+    unsigned short ptsrc = 0;
     int i = 0;
 
     summary = (LASPointSummary*) malloc(sizeof(LASPointSummary));
@@ -74,9 +72,6 @@ LASPointSummary* SummarizePoints(LASReaderH reader) {
     summary->classification_keypoint = 0;
     summary->classification_withheld = 0;
     
-
-
-
     p  = LASReader_GetNextPoint(reader);
     
     if (!p) {
@@ -94,7 +89,6 @@ LASPointSummary* SummarizePoints(LASReaderH reader) {
     i = 1;
     while (p)
     {
-    
         summary->x = LASPoint_GetX(p);
         LASPoint_SetX(summary->pmin, MIN(summary->x, LASPoint_GetX(summary->pmin)));
         LASPoint_SetX(summary->pmax, MAX(summary->x, LASPoint_GetX(summary->pmax)));
@@ -183,8 +177,6 @@ LASPointSummary* SummarizePoints(LASReaderH reader) {
         LASColor_Destroy(max_color);
         
         LASColor_Destroy(color);
-        
-        
 
         summary->classification[(cls & 31)]++;            
         if (cls & 32) summary->classification_synthetic++;          
@@ -192,8 +184,8 @@ LASPointSummary* SummarizePoints(LASReaderH reader) {
         if (cls & 128) summary->classification_withheld++;
           
           /*
-          // if (lasreader->point.point_source_ID < point_min.point_source_ID) point_min.point_source_ID = lasreader->point.point_source_ID;
-          // else if (lasreader->point.point_source_ID > point_max.point_source_ID) point_max.point_source_ID = lasreader->point.point_source_ID;
+          if (lasreader->point.point_source_ID < point_min.point_source_ID) point_min.point_source_ID = lasreader->point.point_source_ID;
+          else if (lasreader->point.point_source_ID > point_max.point_source_ID) point_max.point_source_ID = lasreader->point.point_source_ID;
 
           */
         p  = LASReader_GetNextPoint(reader);
@@ -211,6 +203,8 @@ LASPointSummary* SummarizePoints(LASReaderH reader) {
 
 void print_point(FILE *file, LASPointH point) {
 
+    LASColorH color = NULL;
+    
     fprintf(file, "---------------------------------------------------------\n");
     
     fprintf(file, "  X: \t\t%.6f\n", 
@@ -247,17 +241,24 @@ void print_point(FILE *file, LASPointH point) {
     fprintf(file, "  Classification:\t%d\n",
                   LASPoint_GetClassification(point)
                   );
-    fprintf(file, "  Color:\t%d %d %d\n",
-                  LASColor_GetRed(LASPoint_GetColor(point)),
-                  LASColor_GetGreen(LASPoint_GetColor(point)),
-                  LASColor_GetBlue(LASPoint_GetColor(point))
+    fprintf(file, "  Point Source ID:\t%d\n",
+                  LASPoint_GetPointSourceId(point)
                   );
+                  
+    color = LASPoint_GetColor(point);
+    fprintf(file, "  Color:\t%d %d %d\n",
+                  LASColor_GetRed(color),
+                  LASColor_GetGreen(color),
+                  LASColor_GetBlue(color)
+                  );
+    LASColor_Destroy(color);
+
 }
 void print_point_summary(FILE *file, LASPointSummary* summary, LASHeaderH header) {
 
     long rgpsum = 0;
     long pbretsum = 0;
-    
+    LASColorH color = NULL;
     int i = 0;
 
     if (!summary) {LASError_Print("Point Summary does not exist!"); exit(1);}
@@ -327,18 +328,23 @@ void print_point_summary(FILE *file, LASPointSummary* summary, LASHeaderH header
                   LASPoint_GetPointSourceId(summary->pmin),
                   LASPoint_GetPointSourceId(summary->pmax)
                   );
+                  
+    color = LASPoint_GetColor(summary->pmin);
     fprintf(file, "  Minimum Color:\t %d %d %d\n",
-                  LASColor_GetRed(LASPoint_GetColor(summary->pmin)),
-                  LASColor_GetGreen(LASPoint_GetColor(summary->pmin)),
-                  LASColor_GetBlue(LASPoint_GetColor(summary->pmin))
+                  LASColor_GetRed(color),
+                  LASColor_GetGreen(color),
+                  LASColor_GetBlue(color)
         );
+    LASColor_Destroy(color);
 
+    color = LASPoint_GetColor(summary->pmax);
     fprintf(file, "  Maximum Color:\t %d %d %d\n",
-                  LASColor_GetRed(LASPoint_GetColor(summary->pmax)),
-                  LASColor_GetGreen(LASPoint_GetColor(summary->pmax)),
-                  LASColor_GetBlue(LASPoint_GetColor(summary->pmax))
+                  LASColor_GetRed(color),
+                  LASColor_GetGreen(color),
+                  LASColor_GetBlue(color)
         );
-
+    LASColor_Destroy(color);
+    
     fprintf(file, "\n  Number of Points by Return\n");
     fprintf(file, "---------------------------------------------------------\n");
 
@@ -357,9 +363,8 @@ void print_point_summary(FILE *file, LASPointSummary* summary, LASHeaderH header
     }
     fprintf(file, "\n Total Pulses: %ld\n", rgpsum); 
 
-
     for (i = 0; i < 5; i++) {
-        if (LASHeader_GetPointRecordsByReturnCount(header, i) != summary->number_of_points_by_return[i]) 
+        if (LASHeader_GetPointRecordsByReturnCount(header, i) != (unsigned int)summary->number_of_points_by_return[i]) 
         {
             fprintf(file, " \n Actual number of points by return \n is different from header (actual, header):\n"); 
             for (i = 0; i < 5; i++) {
@@ -394,30 +399,31 @@ void print_point_summary(FILE *file, LASPointSummary* summary, LASHeaderH header
     }
 }
 
-
-
-void print_header(FILE *file, LASHeaderH header, const char* file_name, int bSkipVLR) {
+void print_header(FILE *file, LASHeaderH header, const char* file_name, int bSkipVLR, int bWKT) {
 
     char *pszSignature = NULL;
     char *pszProjectId = NULL;
     char *pszSystemId = NULL;
     char *pszSoftwareId = NULL;
     char *pszProj4 = NULL;
+    char *pszWKT = NULL;
     
     char *pszVLRUser = NULL;
     char *pszVLRDescription = NULL;
-    uint16_t nVLRLength = 0;
-    uint16_t nVLRRecordId = 0;
+    unsigned short nVLRLength = 0;
+    unsigned short nVLRRecordId = 0;
     
     LASVLRH pVLR = NULL;
     LASSRSH pSRS = NULL;
-    uint32_t nVLR = 0;
+    unsigned int nVLR = 0;
     int i = 0;
 
-#ifdef HAVE_GEOTIFF
+#ifdef HAVE_LIBGEOTIFF
     const GTIF* pGTIF = NULL;
+    /* GTIFDefn defn; */
 #else
     const void* pGTIF = NULL;
+    /* const void* defn =NULL; */
 #endif    
 
     pszSignature = LASHeader_GetFileSignature(header);
@@ -427,17 +433,14 @@ void print_header(FILE *file, LASHeaderH header, const char* file_name, int bSki
     
     pSRS = LASHeader_GetSRS(header);
     pszProj4 = LASSRS_GetProj4(pSRS);
+    pszWKT = LASSRS_GetWKT_CompoundOK(pSRS);
     pGTIF = LASSRS_GetGTIF(pSRS);
     
     nVLR = LASHeader_GetRecordsCount(header);
- 
- 
 
-       
     fprintf(file, "\n---------------------------------------------------------\n");
     fprintf(file, "  Header Summary\n");
     fprintf(file, "---------------------------------------------------------\n");
-
 
     fprintf(file, "  File Name: %s\n", file_name);
     
@@ -517,7 +520,15 @@ void print_header(FILE *file, LASHeaderH header, const char* file_name, int bSki
                     pszProj4);
 #ifdef HAVE_LIBGEOTIFF
     if (pGTIF) GTIFPrint((GTIF*)pGTIF, 0, 0);
+
+    /* GTIFGetDefn(pGTIF, &defn); */
+    /* GTIFPrintDefn(&defn, file); */
 #endif
+    if (bWKT)
+    {
+        fprintf(file, "%s", pszWKT);
+        fprintf(file, "%s", "\n");
+    }
     if (nVLR && !bSkipVLR) {
         
     fprintf(file, "\n---------------------------------------------------------\n");
@@ -544,16 +555,18 @@ void print_header(FILE *file, LASHeaderH header, const char* file_name, int bSki
             LASVLR_Destroy(pVLR);
             pVLR = NULL;
             
-            free(pszVLRUser);
-            free(pszVLRDescription);
+            LASString_Free(pszVLRUser);
+            LASString_Free(pszVLRDescription);
         }
         
     }
-    free(pszSignature);
-    free(pszProjectId);
-    free(pszSystemId);
-    free(pszSoftwareId);
-    free(pszProj4);
+    LASString_Free(pszSignature);
+    LASString_Free(pszProjectId);
+    LASString_Free(pszSystemId);
+    LASString_Free(pszSoftwareId);
+    LASString_Free(pszProj4);
+    LASString_Free(pszWKT);
+    LASSRS_Destroy(pSRS);
 }
 
 void repair_header(FILE *file, LASHeaderH header, LASPointSummary* summary) {
@@ -572,8 +585,7 @@ void repair_header(FILE *file, LASHeaderH header, LASPointSummary* summary) {
         LASError_Print("Inputted summary to repair_header was NULL ");
         exit(1);
 
-    } 
-
+    }
 
     if (! repair_bounding_box) {
         if ( LASHeader_GetMinX(header) != LASPoint_GetX(summary->pmin) )
@@ -611,14 +623,12 @@ void repair_header(FILE *file, LASHeaderH header, LASPointSummary* summary) {
             LASError_Print("Could not set minimum for header ");
             exit(1);
         }
-
     }
-
 
     for (i = 0; i < 5; i++) {
 
         if (LASHeader_GetPointRecordsByReturnCount(header, i) != 
-            summary->number_of_points_by_return[i]) 
+            (unsigned char)summary->number_of_points_by_return[i]) 
         {
             update_return_counts = TRUE;
             break;
@@ -634,4 +644,3 @@ void repair_header(FILE *file, LASHeaderH header, LASPointSummary* summary) {
         }                
     }   
 }
-

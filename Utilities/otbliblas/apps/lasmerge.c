@@ -27,7 +27,7 @@ void usage()
 {
 
     fprintf(stderr,"----------------------------------------------------------\n");
-    fprintf(stderr,"    lasmerge (version %s) usage:\n", LAS_GetVersion());
+    fprintf(stderr,"    lasmerge (version %s) usage:\n", LAS_GetFullVersion());
     fprintf(stderr,"----------------------------------------------------------\n");
     fprintf(stderr,"\n");
 
@@ -60,7 +60,7 @@ void usage()
     fprintf(stderr,"\n");
     
     fprintf(stderr, "For more information, see the full documentation for lasmerge at:\n"
-                    " http://liblas.org/browser/trunk/doc/lasmerge.txt\n");
+                    " http://liblas.org/utilities/lasmerge.html\n");
     fprintf(stderr,"----------------------------------------------------------\n");
 
 }
@@ -233,7 +233,7 @@ int main(int argc, char *argv[])
                         alloced_file_name_in *= 2;
                         file_names_in = (char**)realloc(file_names_in,sizeof(char*)*alloced_file_name_in);
                     }
-                    file_names_in[num_file_name_in] = strdup(line);
+                    file_names_in[num_file_name_in] = LASCopyString(line);
                     i = (int)strlen(file_names_in[num_file_name_in]) - 1;
                     while ( i && 
                             file_names_in[num_file_name_in][i] != 's' && 
@@ -351,21 +351,15 @@ int main(int argc, char *argv[])
                         LASHeader_GetMaxZ(merged_header));
     }
 
-    if (xyz_scale)
-    {
-        LASHeader_SetScale( merged_header, 
-                            xyz_scale[0], 
-                            xyz_scale[1], 
-                            xyz_scale[2]);
-    }
+    LASHeader_SetScale( merged_header, 
+                        xyz_scale[0], 
+                        xyz_scale[1], 
+                        xyz_scale[2]);
 
-    if (xyz_offset)
-    {
-        LASHeader_SetOffset(merged_header, 
-                            xyz_offset[0], 
-                            xyz_offset[1], 
-                            xyz_offset[2] );
-    }
+    LASHeader_SetOffset(merged_header, 
+                        xyz_offset[0], 
+                        xyz_offset[1], 
+                        xyz_offset[2] );
 
     x_scale_factor = LASHeader_GetScaleX(merged_header);
     if (((LASHeader_GetMaxX(merged_header) - LASHeader_GetOffsetX(merged_header)) / LASHeader_GetScaleX(merged_header)) > largest_int ||

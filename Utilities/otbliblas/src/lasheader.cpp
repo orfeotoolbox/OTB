@@ -40,22 +40,14 @@
  * OF SUCH DAMAGE.
  ****************************************************************************/
 
-#include <liblas/lasheader.hpp>
-#include <liblas/cstdint.hpp>
 #include <liblas/guid.hpp>
-#include <liblas/detail/utility.hpp>
+#include <liblas/lasheader.hpp>
 #include <liblas/lasspatialreference.hpp>
-
-// GeoTIFF
-#ifdef HAVE_LIBGEOTIFF
-#include <geotiff.h>
-#include <geo_simpletags.h>
-#include "geo_normalize.h"
-#include "geo_simpletags.h"
-#include "geovalues.h"
-#include "geotiffio.h"
-#endif // HAVE_LIBGEOTIFF
-
+#include <liblas/lasschema.hpp>
+#include <liblas/detail/private_utility.hpp>
+// boost
+#include <boost/cstdint.hpp>
+#include <boost/lambda/lambda.hpp>
 //std
 #include <algorithm>
 #include <fstream>
@@ -66,20 +58,21 @@
 #include <cassert>
 #include <ctime>
 
+using namespace boost;
 
-namespace liblas
-{
+namespace liblas {
 
-char const* const LASHeader::FileSignature = "LASF";
-char const* const LASHeader::SystemIdentifier = "libLAS";
-char const* const LASHeader::SoftwareIdentifier = "libLAS 1.2";
+char const* const Header::FileSignature = "LASF";
+char const* const Header::SystemIdentifier = "libLAS";
+char const* const Header::SoftwareIdentifier = "libLAS 1.2";
 
-LASHeader::LASHeader()
+
+Header::Header() : m_schema(ePointFormat3)
 {
     Init();
 }
 
-LASHeader::LASHeader(LASHeader const& other) :
+Header::Header(Header const& other) :
     m_sourceId(other.m_sourceId),
     m_reserved(other.m_reserved),
     m_projectId1(other.m_projectId1),
@@ -92,13 +85,14 @@ LASHeader::LASHeader(LASHeader const& other) :
     m_headerSize(other.m_headerSize),
     m_dataOffset(other.m_dataOffset),
     m_recordsCount(other.m_recordsCount),
-    m_dataFormatId(other.m_dataFormatId),
-    m_dataRecordLen(other.m_dataRecordLen),
+    // m_dataFormatId(other.m_dataFormatId),
+    // m_dataRecordLen(other.m_dataRecordLen),
     m_pointRecordsCount(other.m_pointRecordsCount),
     m_scales(other.m_scales),
     m_offsets(other.m_offsets),
-    m_extents(other.m_extents),
-    m_srs(other.m_srs)
+    m_extent(other.m_extent),
+    m_srs(other.m_srs),
+    m_schema(other.m_schema)
 {
     void* p = 0;
 
@@ -113,11 +107,11 @@ LASHeader::LASHeader(LASHeader const& other) :
     std::vector<uint32_t>(other.m_pointRecordsByReturn).swap(m_pointRecordsByReturn);
     assert(ePointsByReturnSize >= m_pointRecordsByReturn.size());
     
-    std::vector<LASVariableRecord>(other.m_vlrs).swap(m_vlrs);
+    std::vector<VariableRecord>(other.m_vlrs).swap(m_vlrs);
 
 }
 
-LASHeader& LASHeader::operator=(LASHeader const& rhs)
+Header& Header::operator=(Header const& rhs)
 {
     if (&rhs != this)
     {
@@ -143,23 +137,25 @@ LASHeader& LASHeader::operator=(LASHeader const& rhs)
         m_dataOffset = rhs.m_dataOffset;
         m_recordsCount = rhs.m_recordsCount;
 //        m_recordsCount = 0;
-        m_dataFormatId = rhs.m_dataFormatId;
-        m_dataRecordLen = rhs.m_dataRecordLen;
+        // m_dataFormatId = rhs.m_dataFormatId;
+        // m_dataRecordLen = rhs.m_dataRecordLen;
         m_pointRecordsCount = rhs.m_pointRecordsCount;
         
         std::vector<uint32_t>(rhs.m_pointRecordsByReturn).swap(m_pointRecordsByReturn);
         assert(ePointsByReturnSize >= m_pointRecordsByReturn.size());
 
-        std::vector<LASVariableRecord>(rhs.m_vlrs).swap(m_vlrs);
+        std::vector<VariableRecord>(rhs.m_vlrs).swap(m_vlrs);
         m_scales = rhs.m_scales;
         m_offsets = rhs.m_offsets;
-        m_extents = rhs.m_extents;
+        m_extent = rhs.m_extent;
         m_srs = rhs.m_srs;
+        m_schema = rhs.m_schema;
+
     }
     return *this;
 }
 
-bool LASHeader::operator==(LASHeader const& other) const
+bool Header::operator==(Header const& other) const
 {
     if (&other == this) return true;
     
@@ -179,24 +175,24 @@ bool LASHeader::operator==(LASHeader const& other) const
     if (m_headerSize != other.m_headerSize) return false;
     if (m_dataOffset != other.m_dataOffset) return false;
     if (m_recordsCount != other.m_recordsCount) return false;
-    if (m_dataFormatId != other.m_dataFormatId) return false;
-    if (m_dataRecordLen != other.m_dataRecordLen) return false;
+    // if (m_dataFormatId != other.m_dataFormatId) return false;
+    // if (m_dataRecordLen != other.m_dataRecordLen) return false;
     if (m_pointRecordsCount != other.m_pointRecordsCount) return false;
     if (m_pointRecordsByReturn != other.m_pointRecordsByReturn) return false;
     if (m_scales != other.m_scales) return false;
     if (m_offsets != other.m_offsets) return false;
-    if (m_extents != other.m_extents) return false;
+    if (m_extent != other.m_extent) return false;
     
     return true;
 }
 
 
-std::string LASHeader::GetFileSignature() const
+std::string Header::GetFileSignature() const
 {
     return std::string(m_signature, eFileSignatureSize);
 }
 
-void LASHeader::SetFileSignature(std::string const& v)
+void Header::SetFileSignature(std::string const& v)
 {
     if (0 != v.compare(0, eFileSignatureSize, FileSignature))
         throw std::invalid_argument("invalid file signature");
@@ -204,46 +200,46 @@ void LASHeader::SetFileSignature(std::string const& v)
     std::strncpy(m_signature, v.c_str(), eFileSignatureSize);
 }
 
-uint16_t LASHeader::GetFileSourceId() const
+uint16_t Header::GetFileSourceId() const
 {
     return m_sourceId;
 }
 
-void LASHeader::SetFileSourceId(uint16_t v)
+void Header::SetFileSourceId(uint16_t v)
 {
     // TODO: Should we warn or throw about type overflow occuring when
     //       user passes 65535 + 1 = 0
     m_sourceId = v;
 }
 
-uint16_t LASHeader::GetReserved() const
+uint16_t Header::GetReserved() const
 {
     return m_reserved;
 }
 
-void LASHeader::SetReserved(uint16_t v)
+void Header::SetReserved(uint16_t v)
 {
     // TODO: Should we warn or throw about type overflow occuring when
     //       user passes 65535 + 1 = 0
     m_reserved = v;
 }
 
-liblas::guid LASHeader::GetProjectId() const
+liblas::guid Header::GetProjectId() const
 {
     return liblas::guid(m_projectId1, m_projectId2, m_projectId3, m_projectId4);
 }
 
-void LASHeader::SetProjectId(guid const& v)
+void Header::SetProjectId(guid const& v)
 {
     v.output_data(m_projectId1, m_projectId2, m_projectId3, m_projectId4);
 }
 
-uint8_t LASHeader::GetVersionMajor() const
+uint8_t Header::GetVersionMajor() const
 {
     return m_versionMajor;
 }
 
-void LASHeader::SetVersionMajor(uint8_t v)
+void Header::SetVersionMajor(uint8_t v)
 {
     if (eVersionMajorMin > v || v > eVersionMajorMax)
         throw std::out_of_range("version major out of range");
@@ -251,20 +247,22 @@ void LASHeader::SetVersionMajor(uint8_t v)
     m_versionMajor = v;
 }
 
-uint8_t LASHeader::GetVersionMinor() const
+uint8_t Header::GetVersionMinor() const
 {
     return m_versionMinor;
 }
 
-void LASHeader::SetVersionMinor(uint8_t v)
+void Header::SetVersionMinor(uint8_t v)
 {
     if (v > eVersionMinorMax)
         throw std::out_of_range("version minor out of range");
     
     m_versionMinor = v;
+
+
 }
 
-std::string LASHeader::GetSystemId(bool pad /*= false*/) const
+std::string Header::GetSystemId(bool pad /*= false*/) const
 {
     // copy array of chars and trim zeros if smaller than 32 bytes
     std::string tmp(std::string(m_systemId, eSystemIdSize).c_str());
@@ -280,7 +278,7 @@ std::string LASHeader::GetSystemId(bool pad /*= false*/) const
     return tmp;
 }
 
-void LASHeader::SetSystemId(std::string const& v)
+void Header::SetSystemId(std::string const& v)
 {
     if (v.size() > eSystemIdSize)
         throw std::invalid_argument("system id too long");
@@ -289,7 +287,7 @@ void LASHeader::SetSystemId(std::string const& v)
     std::strncpy(m_systemId, v.c_str(), eSystemIdSize);
 }
 
-std::string LASHeader::GetSoftwareId(bool pad /*= false*/) const
+std::string Header::GetSoftwareId(bool pad /*= false*/) const
 {
     std::string tmp(std::string(m_softwareId, eSoftwareIdSize).c_str());
 
@@ -304,7 +302,7 @@ std::string LASHeader::GetSoftwareId(bool pad /*= false*/) const
     return tmp;
 }
 
-void LASHeader::SetSoftwareId(std::string const& v)
+void Header::SetSoftwareId(std::string const& v)
 {
     if (v.size() > eSoftwareIdSize)
         throw std::invalid_argument("generating software id too long");
@@ -314,12 +312,12 @@ void LASHeader::SetSoftwareId(std::string const& v)
     std::strncpy(m_softwareId, v.c_str(), eSoftwareIdSize);
 }
 
-uint16_t LASHeader::GetCreationDOY() const
+uint16_t Header::GetCreationDOY() const
 {
     return m_createDOY;
 }
 
-void LASHeader::SetCreationDOY(uint16_t v)
+void Header::SetCreationDOY(uint16_t v)
 {
     if (v > 366)
         throw std::out_of_range("day of year out of range");
@@ -327,12 +325,12 @@ void LASHeader::SetCreationDOY(uint16_t v)
     m_createDOY = v;
 }
 
-uint16_t LASHeader::GetCreationYear() const
+uint16_t Header::GetCreationYear() const
 {
     return m_createYear;
 }
 
-void LASHeader::SetCreationYear(uint16_t v)
+void Header::SetCreationYear(uint16_t v)
 {
     // mloskot: I've taken these values arbitrarily
     if (v > 9999)
@@ -341,137 +339,105 @@ void LASHeader::SetCreationYear(uint16_t v)
     m_createYear = v;
 }
 
-uint16_t LASHeader::GetHeaderSize() const
+uint16_t Header::GetHeaderSize() const
 {
-    return eHeaderSize;
+    return m_headerSize;
 }
 
-uint32_t LASHeader::GetDataOffset() const
+void Header::SetHeaderSize(uint16_t v)
+{
+
+    m_headerSize = v;
+}
+
+uint32_t Header::GetDataOffset() const
 {
     return m_dataOffset;
 }
 
-void LASHeader::SetDataOffset(uint32_t v)
+void Header::SetDataOffset(uint32_t v)
 {
-    uint32_t const dataSignatureSize = 2;
-    uint16_t const hsize = GetHeaderSize();
-
-    if ( (m_versionMinor == 0 && v < hsize + dataSignatureSize) ||
-         (m_versionMinor == 1 && v < hsize) ||
-         (m_versionMinor == 2 && v < hsize) )
-    {
-        throw std::out_of_range("data offset out of range");
-    }
+    // uint32_t const dataSignatureSize = 2;
+    // uint16_t const hsize = GetHeaderSize();
+    // 
+    // if ( (m_versionMinor == 0 && v < hsize + dataSignatureSize) ||
+    //      (m_versionMinor == 1 && v < hsize) ||
+    //      (m_versionMinor == 2 && v < hsize) )
+    // {
+    //     throw std::out_of_range("data offset out of range");
+    // }
     
     m_dataOffset = v;
     
 }
 
-uint32_t LASHeader::GetRecordsCount() const
+uint32_t Header::GetRecordsCount() const
 {
     return m_recordsCount;
 }
 
-void LASHeader::SetRecordsCount(uint32_t v)
+void Header::SetRecordsCount(uint32_t v)
 {
     m_recordsCount = v;
 }
 
-LASHeader::PointFormat LASHeader::GetDataFormatId() const
+liblas::PointFormatName Header::GetDataFormatId() const
 {
-    if (ePointFormat0 == m_dataFormatId)
-        return ePointFormat0;
-    else if (ePointFormat1 == m_dataFormatId)
-        return ePointFormat1;
-    else if (ePointFormat2 == m_dataFormatId)
-        return ePointFormat2;
-    else
-        return ePointFormat3;
+    return m_schema.GetDataFormatId();
+
 }
 
-void LASHeader::SetDataFormatId(LASHeader::PointFormat v)
+void Header::SetDataFormatId(liblas::PointFormatName v)
 {
-    m_dataFormatId = static_cast<uint8_t>(v);
-
-    if (ePointFormat0 == m_dataFormatId)
-        m_dataRecordLen = ePointSize0;
-    else if (ePointFormat1 == m_dataFormatId) 
-        m_dataRecordLen = ePointSize1;
-    else if (ePointFormat2 == m_dataFormatId)
-        m_dataRecordLen = ePointSize2;
-    else if (ePointFormat3 == m_dataFormatId)
-        m_dataRecordLen = ePointSize3;
-    else
-        m_dataRecordLen = ePointSize3;
+    m_schema.SetDataFormatId(v);
 }
 
-uint16_t LASHeader::GetDataRecordLength() const
+uint16_t Header::GetDataRecordLength() const
 {
-    // NOTE: assertions below are used to check if our assumption is correct,
-    // for debugging purpose only.
-
-    if (ePointFormat0 == m_dataFormatId)
-    {
-        assert(ePointSize0 == m_dataRecordLen);
-        return ePointSize0;
-    }
-    if (ePointFormat1 == m_dataFormatId)
-    {
-        assert(ePointSize1 == m_dataRecordLen);
-        return ePointSize1;
-    }
-    if (ePointFormat2 == m_dataFormatId)
-    {
-        assert(ePointSize2 == m_dataRecordLen);
-        return ePointSize2;
-    }
-    else
-    {
-        assert(ePointSize3 == m_dataRecordLen);
-        return ePointSize3;
-    }
+    // No matter what the schema says, this must be a a short in size.
+    return static_cast<boost::uint16_t>(m_schema.GetByteSize());
 }
 
-uint32_t LASHeader::GetPointRecordsCount() const
+uint32_t Header::GetPointRecordsCount() const
 {
     return m_pointRecordsCount;
 }
 
-void LASHeader::SetPointRecordsCount(uint32_t v)
+void Header::SetPointRecordsCount(uint32_t v)
 {
     m_pointRecordsCount = v;
 }
 
-std::vector<uint32_t> const& LASHeader::GetPointRecordsByReturnCount() const
+Header::RecordsByReturnArray const& Header::GetPointRecordsByReturnCount() const
 {
     return m_pointRecordsByReturn;
 }
 
-void LASHeader::SetPointRecordsByReturnCount(std::size_t index, uint32_t v)
+void Header::SetPointRecordsByReturnCount(std::size_t index, uint32_t v)
 {
-    assert(m_pointRecordsByReturn.size() == LASHeader::ePointsByReturnSize);
+    assert(m_pointRecordsByReturn.size() == Header::ePointsByReturnSize);
 
     uint32_t& t = m_pointRecordsByReturn.at(index);
     t = v;
 }
 
 
-double LASHeader::GetScaleX() const
+double Header::GetScaleX() const
 {
     return m_scales.x;
 }
 
-double LASHeader::GetScaleY() const
+double Header::GetScaleY() const
 {
     return m_scales.y;
 }
 
-double LASHeader::GetScaleZ() const
+double Header::GetScaleZ() const
 {
     return m_scales.z;
 }
 
-void LASHeader::SetScale(double x, double y, double z)
+void Header::SetScale(double x, double y, double z)
 {
     double const minscale = 0.01;
     m_scales.x = (0 == x) ? minscale : x;
@@ -479,83 +445,100 @@ void LASHeader::SetScale(double x, double y, double z)
     m_scales.z = (0 == z) ? minscale : z;
 }
 
-double LASHeader::GetOffsetX() const
+double Header::GetOffsetX() const
 {
     return m_offsets.x;
 }
 
-double LASHeader::GetOffsetY() const
+double Header::GetOffsetY() const
 {
     return m_offsets.y;
 }
 
-double LASHeader::GetOffsetZ() const
+double Header::GetOffsetZ() const
 {
     return m_offsets.z;
 }
 
-void LASHeader::SetOffset(double x, double y, double z)
+void Header::SetOffset(double x, double y, double z)
 {
     m_offsets = PointOffsets(x, y, z);
 }
 
-double LASHeader::GetMaxX() const
+double Header::GetMaxX() const
 {
-    return m_extents.max.x;
+    return m_extent.max(0);
 }
 
-double LASHeader::GetMinX() const
+double Header::GetMinX() const
 {
-    return m_extents.min.x;
+    return m_extent.min(0);
 }
 
-double LASHeader::GetMaxY() const
+double Header::GetMaxY() const
 {
-    return m_extents.max.y;
+    return m_extent.max(1);
 }
 
-double LASHeader::GetMinY() const
+double Header::GetMinY() const
 {
-    return m_extents.min.y;
+    return m_extent.min(1);
 }
 
-double LASHeader::GetMaxZ() const
+double Header::GetMaxZ() const
 {
-    return m_extents.max.z;
+    return m_extent.max(2);
 }
 
-double LASHeader::GetMinZ() const
+double Header::GetMinZ() const
 {
-    return m_extents.min.z;
+    return m_extent.min(2);
 }
 
-void LASHeader::SetMax(double x, double y, double z)
+void Header::SetMax(double x, double y, double z)
 {
-    m_extents.max = detail::Point<double>(x, y, z);
+    // m_extent = Bounds(m_extent.min(0), m_extent.min(1), m_extent.max(0), m_extent.max(1), m_extent.min(2), m_extent.max(2));
+    // Bounds(minx, miny, minz, maxx, maxy, maxz)
+    m_extent = Bounds<double>(m_extent.min(0), m_extent.min(1), m_extent.min(2), x, y, z);
 }
 
-void LASHeader::SetMin(double x, double y, double z)
+void Header::SetMin(double x, double y, double z)
 {
-    m_extents.min = detail::Point<double>(x, y, z);
+    m_extent = Bounds<double>(x, y, z, m_extent.max(0), m_extent.max(1), m_extent.max(2));
 }
 
-void LASHeader::AddVLR(LASVariableRecord const& v) 
+void Header::SetExtent(Bounds<double> const& extent)
+{
+    m_extent = extent;
+}
+
+const Bounds<double>& Header::GetExtent() const
+{
+    return m_extent;
+}
+
+void Header::AddVLR(VariableRecord const& v) 
 {
     m_vlrs.push_back(v);
     m_recordsCount += 1;
 }
 
-LASVariableRecord const& LASHeader::GetVLR(uint32_t index) const 
+VariableRecord const& Header::GetVLR(uint32_t index) const 
 {
     return m_vlrs[index];
 }
 
-void LASHeader::DeleteVLR(uint32_t index) 
+const std::vector<VariableRecord>& Header::GetVLRs() const
+{
+    return m_vlrs;
+}
+
+void Header::DeleteVLR(uint32_t index) 
 {    
     if (index >= m_vlrs.size())
         throw std::out_of_range("index is out of range");
 
-    std::vector<LASVariableRecord>::iterator i = m_vlrs.begin() + index;
+    std::vector<VariableRecord>::iterator i = m_vlrs.begin() + index;
 
     m_vlrs.erase(i);
     m_recordsCount = static_cast<uint32_t>(m_vlrs.size());
@@ -563,26 +546,26 @@ void LASHeader::DeleteVLR(uint32_t index)
 }
 
 
-void LASHeader::Init()
+void Header::Init()
 {
     // Initialize public header block with default
     // values according to LAS 1.2
 
     m_versionMajor = 1;
     m_versionMinor = 2;
-    m_dataFormatId = ePointFormat0;
-    m_dataRecordLen = ePointSize0;
-
-
+    // m_dataFormatId = ePointFormat0;
+    // m_dataRecordLen = ePointSize0;
+    
+    m_createDOY = m_createYear = 0;
     std::time_t now;
-    std::tm *ptm;
-
     std::time(&now);
-    ptm = std::gmtime(&now);
-    
-    m_createDOY = static_cast<uint16_t>(ptm->tm_yday);
-    m_createYear = static_cast<uint16_t>(ptm->tm_year + 1900);
-    
+    std::tm* ptm = std::gmtime(&now);
+    if (0 != ptm)
+    {
+        m_createDOY = static_cast<uint16_t>(ptm->tm_yday);
+        m_createYear = static_cast<uint16_t>(ptm->tm_year + 1900);
+    }
+
     m_headerSize = eHeaderSize;
 
     m_sourceId = m_reserved = m_projectId2 = m_projectId3 = uint16_t();
@@ -595,15 +578,15 @@ void LASHeader::Init()
 
     std::memset(m_signature, 0, eFileSignatureSize);
     std::strncpy(m_signature, FileSignature, eFileSignatureSize);
-//    m_signature = LASHeader::FileSignature;
+//    m_signature = Header::FileSignature;
 
     std::memset(m_systemId, 0, eSystemIdSize);
     std::strncpy(m_systemId, SystemIdentifier, eSystemIdSize);
-//    m_systemId = LASHeader::SystemIdentifier;
+//    m_systemId = Header::SystemIdentifier;
 
     std::memset(m_softwareId, 0, eSoftwareIdSize);
     std::strncpy(m_softwareId, SoftwareIdentifier, eSoftwareIdSize);
-//    m_softwareId = LASHeader::SoftwareIdentifier;
+//    m_softwareId = Header::SoftwareIdentifier;
 
     m_pointRecordsByReturn.resize(ePointsByReturnSize);
 
@@ -611,93 +594,304 @@ void LASHeader::Init()
     SetScale(0.01, 0.01, 0.01);
 }
 
-void LASHeader::ClearGeoKeyVLRs()
+bool SameVLRs(std::string const& name, boost::uint16_t id, liblas::VariableRecord const& record)
 {
-    std::string const uid("LASF_Projection");
-
-    std::vector<LASVariableRecord> vlrs = m_vlrs;
-    std::vector<LASVariableRecord>::const_iterator i;
-    std::vector<LASVariableRecord>::iterator j;
-
-    for (i = m_vlrs.begin(); i != m_vlrs.end(); ++i)
-    {
-        LASVariableRecord record = *i;
-        // beg_size += (*i).GetTotalSize();
-
-        std::string user = record.GetUserId(true);
-        if (uid == user.c_str())
-        {
-            uint16_t id = record.GetRecordId();
-
-            if (34735 == id)
-            {
-                // Geotiff SHORT key
-                for(j = vlrs.begin(); j != vlrs.end(); ++j)
-                {
-                    if (*j == *i)
-                    {
-                        vlrs.erase(j);
-                        break;
-                    }
-                }
-            }
-            else if (34736 == id)
-            {
-                // Geotiff DOUBLE key
-                for(j = vlrs.begin(); j != vlrs.end(); ++j)
-                {
-                    if (*j == *i)
-                    {
-                        vlrs.erase(j);
-                        break;
-                    }
-                }
-            }        
-            else if (34737 == id)
-            {
-                // Geotiff ASCII key
-                for (j = vlrs.begin(); j != vlrs.end(); ++j)
-                {
-                    if (*j == *i)
-                    {
-                        vlrs.erase(j);
-                        break;
-                    }
-                }
-            }
-        } // uid == user
+    if (record.GetUserId(false) == name) {
+        if (record.GetRecordId() == id) {
+            return true;
+        }
     }
-    
-    // Copy our list of surviving VLRs back to our member variable
-    // and update header information
-    m_vlrs = vlrs;
-    m_recordsCount = static_cast<uint32_t>(m_vlrs.size());
+    return false;
+}
+
+
+void Header::DeleteVLRs(std::string const& name, boost::uint16_t id)
+{
+
+    m_vlrs.erase( std::remove_if( m_vlrs.begin(), 
+                                  m_vlrs.end(),
+                                  boost::bind( &SameVLRs, name, id, _1 ) ),
+                  m_vlrs.end());
+
+    m_recordsCount = static_cast<uint32_t>(m_vlrs.size());        
 
 }
-void LASHeader::SetGeoreference() 
+
+
+
+void Header::SetGeoreference() 
 {    
-    std::vector<LASVariableRecord> vlrs = m_srs.GetVLRs();
+    std::vector<VariableRecord> vlrs = m_srs.GetVLRs();
 
-    // Wipe the GeoTIFF-related VLR records off of the LASHeader
-    ClearGeoKeyVLRs();
+    // Wipe the GeoTIFF-related VLR records off of the Header
+    DeleteVLRs("LASF_Projection", 34735);
+    DeleteVLRs("LASF_Projection", 34736);
+    DeleteVLRs("LASF_Projection", 34737);
 
-    std::vector<LASVariableRecord>::const_iterator i;
+    std::vector<VariableRecord>::const_iterator i;
 
     for (i = vlrs.begin(); i != vlrs.end(); ++i) 
     {
         AddVLR(*i);
     }
-
 }
 
-LASSpatialReference LASHeader::GetSRS() const
+SpatialReference Header::GetSRS() const
 {
     return m_srs;
 }
-void LASHeader::SetSRS(LASSpatialReference& srs)
+
+void Header::SetSRS(SpatialReference& srs)
 {
     m_srs = srs;
 }
 
-} // namespace liblas
+Schema const& Header::GetSchema() const
+{
+    
+    return m_schema;
+}
 
+void Header::SetSchema(const Schema& format)
+{
+
+    // // A user can use the set the header's version information and 
+    // // format information and sizes by using a PointFormat instance
+    // // in addition to setting all the settings individually by hand
+
+    // // The DataRecordLength will be set to the max of either the format's 
+    // // byte size or the pointformat's specified size according to whether 
+    // // or not it has color or time (FIXME: or waveform packets once we get to 1.3 )
+    // // The extra space that is available can be used to store LASPoint::GetExtraData.
+    // // We trim the format size to uint16_t because that's what the header stores 
+
+    // if (format.HasColor() && format.HasTime()) {
+    //     SetDataFormatId(liblas::ePointFormat3);
+    //     SetDataRecordLength(std::max(   static_cast<uint16_t>(ePointSize3),
+    //                                     static_cast<uint16_t>(format.GetByteSize())));
+    // } else if (format.HasColor()  && !format.HasTime()) {
+    //     SetDataFormatId(liblas::ePointFormat2);
+    //     SetDataRecordLength(std::max(   static_cast<uint16_t>(ePointSize2),
+    //                                     static_cast<uint16_t>(format.GetByteSize())));
+    // } else if (!format.HasColor()  && format.HasTime()) {
+    //     SetDataFormatId(liblas::ePointFormat1);
+    //     SetDataRecordLength(std::max(   static_cast<uint16_t>(ePointSize1),
+    //                                     static_cast<uint16_t>(format.GetByteSize())));
+    // } else {
+    //     SetDataFormatId(liblas::ePointFormat0);
+    //     SetDataRecordLength(std::max(   static_cast<uint16_t>(ePointSize0),
+    //                                     static_cast<uint16_t>(format.GetByteSize())));
+    // }
+    
+    m_schema = format;
+    
+    Dimension x = m_schema.GetDimension("X");
+    x.SetScale(m_scales.x);
+    x.IsFinitePrecision(true);
+    x.SetOffset(m_offsets.x);
+    m_schema.SetDimension(x);
+    
+    Dimension y = m_schema.GetDimension("Y");
+    y.SetScale(m_scales.y);
+    y.IsFinitePrecision(true);
+    y.SetOffset(m_offsets.y);
+    m_schema.SetDimension(y);
+    
+    Dimension z = m_schema.GetDimension("Z");
+    z.SetScale(m_scales.z);
+    z.IsFinitePrecision(true);
+    z.SetOffset(m_offsets.z);
+    m_schema.SetDimension(z);
+    
+} 
+
+liblas::property_tree::ptree Header::GetPTree( ) const
+{
+    using liblas::property_tree::ptree;
+    ptree pt;
+    
+    pt.put("filesignature", GetFileSignature());
+    pt.put("projectdid", GetProjectId());
+    pt.put("systemid", GetSystemId());
+    pt.put("softwareid", GetSoftwareId());
+    
+    
+    std::ostringstream version;
+    version << static_cast<int>(GetVersionMajor());
+    version <<".";
+    version << static_cast<int>(GetVersionMinor());
+    pt.put("version", version.str());
+    
+    pt.put("filesourceid", GetFileSourceId());
+    pt.put("reserved", GetReserved());
+
+// #ifdef HAVE_GDAL
+//     pt.put("srs", GetSRS().GetWKT(liblas::SpatialReference::eHorizontalOnly, true));
+// #else
+// #ifdef HAVE_LIBGEOTIFF
+//     pt.put("srs", GetSRS().GetProj4());
+// #endif
+// #endif
+    
+    ptree srs = GetSRS().GetPTree();
+    pt.add_child("srs", srs);
+    
+    std::ostringstream date;
+    date << GetCreationDOY() << "/" << GetCreationYear();
+    pt.put("date", date.str());
+    
+    pt.put("size", GetHeaderSize());
+    pt.put("dataoffset", GetDataOffset());
+
+    
+    pt.put("count", GetPointRecordsCount());
+    pt.put("dataformatid", GetDataFormatId());
+    pt.put("datarecordlength", GetDataRecordLength());
+    
+    ptree return_count;
+    liblas::Header::RecordsByReturnArray returns = GetPointRecordsByReturnCount();
+    for (boost::uint32_t i=0; i< 5; i++){
+        ptree r;
+        r.put("id", i);
+        r.put("count", returns[i]);
+        return_count.add_child("return", r);
+    }
+    pt.add_child("returns", return_count);
+    
+    pt.put("scale.x", GetScaleX());
+    pt.put("scale.y", GetScaleY());
+    pt.put("scale.z", GetScaleZ());
+    
+    pt.put("offset.x", GetOffsetX());
+    pt.put("offset.y", GetOffsetY());
+    pt.put("offset.z", GetOffsetZ());
+    
+    pt.put("minimum.x", GetMinX());
+    pt.put("minimum.y", GetMinY());
+    pt.put("minimum.z", GetMinZ());
+    
+    pt.put("maximum.x", GetMaxX());
+    pt.put("maximum.y", GetMaxY());
+    pt.put("maximum.z", GetMaxZ());
+
+    
+    for (boost::uint32_t i=0; i< GetRecordsCount(); i++) {
+        pt.add_child("vlrs.vlr", GetVLR(i).GetPTree());
+    }    
+    
+    return pt;
+}
+
+void Header::to_rst(std::ostream& os) const
+{
+
+    using liblas::property_tree::ptree;
+    ptree tree = GetPTree();
+
+    os << "---------------------------------------------------------" << std::endl;
+    os << "  Header Summary" << std::endl;
+    os << "---------------------------------------------------------" << std::endl;
+    os << std::endl;
+
+    os << "  Version:                     " << tree.get<std::string>("version") << std::endl;
+    os << "  Source ID:                   " << tree.get<boost::uint32_t>("filesourceid") << std::endl;
+    os << "  Reserved:                    " << tree.get<std::string>("reserved") << std::endl;
+    os << "  Project ID/GUID:             '" << tree.get<std::string>("projectdid") << "'" << std::endl;
+    os << "  System ID:                   '" << tree.get<std::string>("systemid") << "'" << std::endl;
+    os << "  Generating Software:         '" << tree.get<std::string>("softwareid") << "'" << std::endl;
+    os << "  File Creation Day/Year:      " << tree.get<std::string>("date") << std::endl;
+    os << "  Header Byte Size             " << tree.get<boost::uint32_t>("size") << std::endl;
+    os << "  Data Offset:                 " << tree.get<std::string>("dataoffset") << std::endl;
+
+    os << "  Number Var. Length Records:  ";
+    try {
+      os << tree.get_child("vlrs").size();
+    }
+    catch (liblas::property_tree::ptree_bad_path const& e) {
+      ::boost::ignore_unused_variable_warning(e);
+      os << "None";
+    }
+    os << std::endl;
+
+    os << "  Point Data Format:           " << tree.get<boost::uint32_t>("dataformatid") << std::endl;
+    os << "  Number of Point Records:     " << tree.get<boost::uint32_t>("count") << std::endl;
+
+    std::ostringstream returns_oss;
+    BOOST_FOREACH(ptree::value_type &v,
+          tree.get_child("returns"))
+    {
+          returns_oss << v.second.get<std::string>("count")<< " ";
+
+    }        
+
+    os << "  Number of Points by Return:  " << returns_oss.str() << std::endl;
+
+    os.setf(std::ios_base::fixed, std::ios_base::floatfield);
+    double scale = tree.get<double>("scale.z");
+
+    double frac = 0;
+    double integer = 0;
+    frac = std::modf(scale, &integer);
+
+    boost::uint32_t prec = static_cast<boost::uint32_t>(std::fabs(std::floor(std::log10(frac))));
+    os.precision(prec);
+
+    os << "  Scale Factor X Y Z:          " 
+     << tree.get<double>("scale.x") << " " 
+     << tree.get<double>("scale.y") << " " 
+     << tree.get<double>("scale.z") << std::endl;
+
+    os << "  Offset X Y Z:                " 
+     << tree.get<double>("offset.x") << " " 
+     << tree.get<double>("offset.y") << " " 
+     << tree.get<double>("offset.z") << std::endl;
+
+    os << "  Min X Y Z:                   " 
+     << tree.get<double>("minimum.x") << " " 
+     << tree.get<double>("minimum.y") << " " 
+     << tree.get<double>("minimum.z") << std::endl;
+
+    os << "  Max X Y Z:                   " 
+     << tree.get<double>("maximum.x") << " " 
+     << tree.get<double>("maximum.y") << " " 
+     << tree.get<double>("maximum.z") << std::endl;         
+
+    os << "  Spatial Reference:  " << std::endl;
+    os << tree.get<std::string>("srs.prettywkt") << std::endl;
+    os << tree.get<std::string>("srs.gtiff") << std::endl;   
+
+    // os << "---------------------------------------------------------" << std::endl;
+    // os << "  VLR Summary" << std::endl;
+    // os << "---------------------------------------------------------" << std::endl;
+
+    // try {
+    //     std::ostringstream vlrs_oss;
+    //     BOOST_FOREACH(ptree::value_type &v,
+    //             tree.get_child("vlrs"))
+    //     {
+    //             vlrs_oss << "    User: '" 
+    //                      << v.second.get<std::string>("userid")
+    //                      << "' - Description: '"
+    //                      << v.second.get<std::string>("description") 
+    //                      <<"'" 
+    //                      << std::endl;
+    //             vlrs_oss << "    ID: " << v.second.get<boost::uint32_t>("id")
+    //                      << " Length: " <<v.second.get<boost::uint32_t>("length")
+    //                      << std::endl;
+    //     }
+    // 
+    //     os << vlrs_oss.str();
+    // }
+    // catch (liblas::property_tree::ptree_bad_path const& e) {
+    //     ::boost::ignore_unused_variable_warning(e);
+    // }
+}
+std::ostream& operator<<(std::ostream& os, liblas::Header const& h)
+{
+
+    
+    h.to_rst(os);
+    return os;
+    
+}
+} // namespace liblas

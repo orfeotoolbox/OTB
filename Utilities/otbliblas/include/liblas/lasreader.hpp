@@ -47,56 +47,152 @@
 #include <liblas/laspoint.hpp>
 #include <liblas/lasvariablerecord.hpp>
 #include <liblas/lasspatialreference.hpp>
-#include <liblas/detail/fwd.hpp>
+#include <liblas/lastransform.hpp>
+#include <liblas/lasfilter.hpp>
+#include <liblas/external/property_tree/ptree.hpp>
+// boost
+#include <boost/cstdint.hpp>
 // std
+#include <cstddef>
 #include <iosfwd>
-#include <string>
 #include <memory>
-#include <cstdlib> // std::size_t
+#include <string>
+#include <vector>
 
 namespace liblas {
 
-/// \todo To be documented.
-class LASReader
+
+/// Defines public interface to LAS reader implementation.
+class Reader
 {
 public:
 
-    LASReader(std::istream& ifs);
-    ~LASReader();
+    /// Consructor initializes reader with input stream as source of LAS records.
+    /// @param ifs - stream used as source of LAS records.
+    /// @exception std::runtime_error - on failure state of the input stream.
+    Reader(std::istream& ifs);
+    Reader(std::istream& ifs, boost::uint32_t cache_size);
+    Reader(std::istream& ifs, boost::uint32_t cache_size, Header& header);
+    Reader(ReaderI* reader);
+    
+    
+    /// User-defined consructor initializes reader with input stream and
+    /// a header to override the values in the file
+    /// @exception std::runtime_error - on failure state of the input stream.
+    Reader(std::istream& ifs, Header& header);
+    
+    /// Destructor.
+    /// @exception nothrow
+    ~Reader();
+    
+    /// Provides read-only access to header of LAS file being read.
+    /// @exception nothrow
+    Header const& GetHeader() const;
 
-    std::size_t GetVersion() const;
-    LASHeader const& GetHeader() const;
-    LASPoint const& GetPoint() const;
-    std::vector<LASVariableRecord> const& GetVLRs() const;
-    /// Allow fetching of the stream
+    /// Provides read-only access to current point record.
+    /// @exception nothrow
+    Point const& GetPoint() const;
+
+    /// Provides read-only access to collection of variable-length records.
+    /// @exception nothrow
+    std::vector<VariableRecord> const& GetVLRs() const;
+
+    /// Allow fetching of the stream attached to the reader.
+    /// @exception nothrow
     std::istream& GetStream() const;
+
+    /// Checks if end-of-file has been reached.
     bool IsEOF() const;
 
+    /// Fetches next point record in file.
+    /// @exception may throw std::exception
     bool ReadNextPoint();
+
+    /// Fetches n-th point record from file.
+    /// @exception may throw std::exception
     bool ReadPointAt(std::size_t n);
-    bool ReadVLR();
+
+    /// Reinitializes state of the reader.
+    /// @exception may throw std::exception
     void Reset();
 
-    /// Reproject data as they are written if the LASWriter's reference is
-    /// different than the LASHeader's    
-    bool SetSRS(const LASSpatialReference& ref);
+    /// Move to the specified point to start 
+    /// ReadNextPoint operations
+    /// @exception may throw std::exception
+    bool seek(std::size_t n);
+    
+    /// Reproject data as they are written if the Reader's reference is
+    /// different than the Header's.
+    /// @exception may throw std::exception
+    bool SetSRS(const SpatialReference& ref);
+    
+    /// Override the spatial reference of the Reader's Header for 
+    /// writing purposes.
+    /// @exception may throw std::exception
+    bool SetInputSRS(const SpatialReference& ref);
 
-    /// The operator is not const because it updates file stream position.
-    LASPoint const& operator[](std::size_t n);
+    /// Override the spatial reference of the Reader's Header for 
+    /// writing purposes.
+    /// @exception may throw std::exception
+    bool SetOutputSRS(const SpatialReference& ref);
 
+    /// Provides index-based access to point records.
+    /// The operator is implemented in terms of ReadPointAt method
+    /// and is not const-qualified because it updates file stream position.
+    /// @exception may throw std::exception
+    Point const& operator[](std::size_t n);
+    
+    /// Sets filters that are used to determine whether or not to 
+    /// keep a point that was read from the file.  Filters have *no* 
+    /// effect for reading data at specific locations in the file.  
+    /// They only affect reading ReadNextPoint-style operations
+    /// Filters are applied *before* transforms.
+    void SetFilters(std::vector<liblas::FilterPtr> const& filters) {m_filters = filters;}
+
+    /// Sets transforms to apply to points.  Points are transformed in 
+    /// place *in the order* of the transform list.
+    /// Filters are applied *before* transforms.  If an input/output SRS 
+    /// is set on the reader, the reprojection transform will happen *first* 
+    /// before any other transforms are applied.  This transform is a 
+    /// special case.  You can define your own reprojection transforms and add 
+    /// it to the list, but be sure to not issue a SetOutputSRS to trigger 
+    /// the internal transform creation
+    void SetTransforms(std::vector<liblas::TransformPtr> const& transforms) {m_transforms = transforms;}
+
+    /// Summarize the file represented by the reader in the form of a 
+    /// property_tree.  
+    liblas::property_tree::ptree Summarize();
 private:
 
     // Blocked copying operations, declared but not defined.
-    LASReader(LASReader const& other);
-    LASReader& operator=(LASReader const& rhs);
+    Reader(Reader const& other);
+    Reader& operator=(Reader const& rhs);
 
     void Init(); // throws on error
+    bool KeepPoint(liblas::Point const& p);
 
-    const std::auto_ptr<detail::Reader> m_pimpl;
-    LASHeader m_header;
-    LASPoint m_point;
-    std::vector<LASVariableRecord> m_vlrs;
+    const std::auto_ptr<ReaderI> m_pimpl;
+
+    HeaderPtr m_header;
+    Point* m_point;
+    PointPtr m_empty_point;
+    
+    
+    // Set if the user provides a header to override the header as 
+    // read from the istream
+    bool bCustomHeader;
+    
+    std::vector<liblas::FilterPtr> m_filters;
+    std::vector<liblas::TransformPtr> m_transforms;
+
+    TransformPtr m_reprojection_transform;
+
+    SpatialReference m_out_srs;
+    SpatialReference m_in_srs;
+    
 };
+
+
 
 } // namespace liblas
 

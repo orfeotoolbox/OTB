@@ -84,9 +84,13 @@
 #  define MAX(a,b)      ((a>b) ? a : b)
 #endif
 
-#ifdef _MSC_VER
-#define strdup _strdup
+#if defined(_MSC_VER) && \
+    (_MSC_FULL_VER >= 150000000)
+#define LASCopyString _strdup
+#else
+#define LASCopyString strdup
 #endif
+
 
 
 #endif /* LAS_CONFIG_H_INCLUDED */

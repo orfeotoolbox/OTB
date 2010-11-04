@@ -20,6 +20,8 @@
 #define LAS_FORMAT_11 1
 #define LAS_FORMAT_12 2
 
+
+
 void usage()
 {
 
@@ -536,7 +538,7 @@ int main(int argc, char *argv[])
     if (file_name_out == NULL && file_name_in != NULL)
     {
         int len = (int)strlen(file_name_in);
-        file_name_out = strdup(file_name_in);
+        file_name_out = LASCopyString(file_name_in);
 
         while (len > 0 && file_name_out[len] != '.')
         {
@@ -567,7 +569,7 @@ int main(int argc, char *argv[])
     }
 
     /* create a cheaper parse string that only looks for 'x' 'y' 'z' and 'r' */
-    parse_less = strdup(parse_string);
+    parse_less = LASCopyString(parse_string);
     for (i = 0; i < (int)strlen(parse_string); i++)
     {
         if (parse_less[i] != 'x' && 
@@ -701,13 +703,10 @@ int main(int argc, char *argv[])
         xyz_max_dequant[i] = xyz_offset[i] + (xyz_max_quant[i] * xyz_scale[i]);
     }
 
-
-#define log_xor !=0==!
-
     /* make sure there is not sign flip */
     for (i = 0; i < 3; i++)
     {
-        if ((xyz_min[i] > 0) log_xor (xyz_min_dequant[i] > 0))
+        if ((xyz_min[i] > 0) != (xyz_min_dequant[i] > 0))
         {
             fprintf(stderr, 
                     "WARNING: quantization sign flip for %s min coord %g -> %g. use offset or scale up\n", 
@@ -716,7 +715,7 @@ int main(int argc, char *argv[])
                     xyz_min_dequant[i]
                    );
         }
-        if ((xyz_max[i] > 0) log_xor (xyz_max_dequant[i] > 0))
+        if ((xyz_max[i] > 0) != (xyz_max_dequant[i] > 0))
         {
             fprintf(stderr, 
                     "WARNING: quantization sign flip for %s max coord %g -> %g. use offset or scale up\n", 
@@ -726,8 +725,6 @@ int main(int argc, char *argv[])
                    );
         }
     }
-
-#undef log_xor
 
     /* populate the header */
       
@@ -836,6 +833,8 @@ int main(int argc, char *argv[])
             LASPoint_SetY(point, xyz[1]);
             LASPoint_SetZ(point, xyz[2]);
 
+            LASPoint_SetTime(point, gps_time); 
+
             /* write the first point */
             err = LASWriter_WritePoint(writer, point);
             if (err) {
@@ -884,6 +883,8 @@ int main(int argc, char *argv[])
             LASPoint_SetY(point, xyz[1]);
             LASPoint_SetZ(point, xyz[2]);
 
+            LASPoint_SetTime(point, gps_time); 
+            
             /* write the first point */
             err = LASWriter_WritePoint(writer, point);
             if (err) {

@@ -9,24 +9,27 @@
 // (See accompanying file LICENSE.txt or copy at
 // http://www.opensource.org/licenses/bsd-license.php)
 //
-#ifdef HAVE_GDAL
 #if defined(_MSC_VER) && defined(USE_VLD)
 #include <vld.h>
 #endif
+
+#ifdef HAVE_GDAL
+// ogr
+#include <ogr_api.h> // Go first, to bring GeoTIFF definitions if any
+#endif
+
 // liblas
 #include <liblas/liblas.hpp>
-#include <liblas/laspoint.hpp>
-#include <liblas/lasreader.hpp>
-#include <liblas/cstdint.hpp>
-// ogr
-#include <ogr_api.h>
+
 //std
+#include <cassert>
 #include <algorithm>
 #include <fstream>
 #include <iostream>
 #include <stdexcept>
 #include <string>
-#include <cassert>
+
+#ifdef HAVE_GDAL
 
 // Anonymous namespace for local definitions
 namespace { 
@@ -146,7 +149,7 @@ void create_layer_def(OGRLayerH lyr)
     err = OGR_L_CreateField(lyr, fld, 0);
     if (OGRERR_NONE != err)
     {
-        throw std::runtime_error("angle field cration failed");
+        throw std::runtime_error("angle field creation failed");
     }
     
     OGR_Fld_Destroy(fld);
@@ -155,12 +158,12 @@ void create_layer_def(OGRLayerH lyr)
     err = OGR_L_CreateField(lyr, fld, 0);
     if (OGRERR_NONE != err)
     {
-        throw std::runtime_error("intensity field cration failed");
+        throw std::runtime_error("intensity field creation failed");
     }
     
     OGR_Fld_Destroy(fld);
 
-    fld = create_field("asprsclass", OFTInteger, 10, 0);
+    fld = create_field("asprsclass", OFTString, 60, 0);
     err = OGR_L_CreateField(lyr, fld, 0);
     if (OGRERR_NONE != err)
     {
@@ -182,7 +185,7 @@ void create_layer_def(OGRLayerH lyr)
     err = OGR_L_CreateField(lyr, fld, 0);
     if (OGRERR_NONE != err)
     {
-        throw std::runtime_error("gpstime field cration failed");
+        throw std::runtime_error("gpstime field creation failed");
     }
     
     OGR_Fld_Destroy(fld);
@@ -218,13 +221,16 @@ void usage()
 
 } // anonymous namespace
 
+#endif // #ifdef HAVE_GDAL
+
 int main(int argc, char* argv[])
 {
     int rc = 0;
 
+#ifdef HAVE_GDAL
     try
     {
-        OGRRegisterAll();
+        ::OGRRegisterAll();
 
         // Parse command-line options
         std::string in_file;
@@ -287,7 +293,7 @@ int main(int argc, char* argv[])
         {
             throw std::runtime_error(std::string("Can not open \'") + in_file + "\'");
         }
-        liblas::LASReader reader(ifs);
+        liblas::Reader reader(ifs);
 
         //
         // Target
@@ -324,8 +330,8 @@ int main(int argc, char* argv[])
         //
         // Translation of points cloud to features set
         //
-        liblas::uint32_t i = 0;
-        liblas::uint32_t const size = reader.GetHeader().GetPointRecordsCount();
+        boost::uint32_t i = 0;
+        boost::uint32_t const size = reader.GetHeader().GetPointRecordsCount();
 
         std::cout << "Translating " << size << " points:\n";
 
@@ -333,12 +339,16 @@ int main(int argc, char* argv[])
         
         while (reader.ReadNextPoint())
         {
-            liblas::LASPoint const& p = reader.GetPoint();   
+            liblas::Point const& p = reader.GetPoint();   
 
             OGR_F_SetFieldInteger(feat, 0, p.GetReturnNumber());
             OGR_F_SetFieldInteger(feat, 1, p.GetScanAngleRank());
             OGR_F_SetFieldInteger(feat, 2, p.GetIntensity());
-            OGR_F_SetFieldInteger(feat, 3, p.GetClassification());
+
+            std::ostringstream os;
+            os << p.GetClassification();
+            OGR_F_SetFieldString(feat, 3, os.str().c_str());
+
             OGR_F_SetFieldInteger(feat, 4, p.GetNumberOfReturns());
             OGR_F_SetFieldDouble(feat, 5, p.GetTime());
 
@@ -370,8 +380,12 @@ int main(int argc, char* argv[])
         std::cerr << "Unknown error\n";
         rc = -1;
     }
+#else
+    std::cout << "Missing GDAL/OGR support built-in las2ogr. Aborted." << std::endl;
+#endif // #ifdef HAVE_GDAL
 
+    ::OGRCleanupAll();
     return rc;
 }
-#endif // #ifdef HAVE_GDAL
+
 

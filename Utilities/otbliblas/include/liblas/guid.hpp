@@ -59,9 +59,12 @@
 #ifndef LIBLAS_GUID_HPP_INCLUDED
 #define LIBLAS_GUID_HPP_INCLUDED
 
-#include <liblas/cstdint.hpp>
 #include <liblas/detail/sha1.hpp>
-#include <liblas/detail/utility.hpp>
+#include <liblas/detail/private_utility.hpp>
+// boost
+#include <boost/array.hpp>
+#include <boost/cstdint.hpp>
+// std
 #include <iosfwd>
 #include <iomanip>
 #include <algorithm>
@@ -79,7 +82,7 @@ namespace liblas {
 /// Definition of Globally Unique Identifier type.
 /// The GUID is a 16-byte (128-bit) number.
 /// This class is used to represent value stored as Project Identifier
-/// in public header block (see LASHeader) of a LAS file.
+/// in public header block (see Header) of a LAS file.
 /// All files in a unique project should have the same value of
 /// the Project Identifier. It is used together with File Source ID to
 /// uniquely identify every LAS, globally.
@@ -94,7 +97,7 @@ public:
     /// \post guid::is_null() == true.
     guid() /* throw() */
     {
-        std::fill(data_, data_ + static_size, 0);
+        data_.assign(0);
     }
 
     /// Initializes from textual representation of valid GUID.
@@ -125,7 +128,7 @@ public:
     /// \param d4 - last 64 bits of GUID number.
     /// \exception std::invalid_argument if construction failed.
     /// \post guid::is_null() == false.
-    guid(liblas::uint32_t const& d1, liblas::uint16_t const& d2, liblas::uint16_t const& d3, liblas::uint8_t const (&d4)[8])
+    guid(boost::uint32_t const& d1, boost::uint16_t const& d2, boost::uint16_t const& d3, boost::uint8_t const (&d4)[8])
     {
         construct(d1, d2, d3, d4);
     }
@@ -134,7 +137,7 @@ public:
     /// \exception nothrow
     guid(guid const& rhs) /* throw() */
     {
-        std::copy(rhs.data_, rhs.data_ + static_size, data_);
+        data_ = rhs.data_;
     }
 
     /// Destructor.
@@ -148,7 +151,7 @@ public:
     {
         if (&rhs != this)
         {
-            std::copy(rhs.data_, rhs.data_ + static_size, data_);
+             data_ = rhs.data_;
         }
         return *this;
     }
@@ -157,7 +160,7 @@ public:
     /// \exception nothrow
     bool operator==(guid const& rhs) const /* throw() */
     {
-        return std::equal(data_, data_ + static_size, rhs.data_);
+        return data_ == rhs.data_;
     }
 
     /// Inequality operator.
@@ -174,7 +177,7 @@ public:
     /// \exception nothrow
     bool operator<(guid const& rhs) const /* throw() */
     {
-        return std::lexicographical_compare(data_, data_ + static_size, rhs.data_, rhs.data_ + static_size);
+        return data_ < rhs.data_;
     }
     
     /// More-than operator.
@@ -184,7 +187,7 @@ public:
     /// \exception nothrow
     bool operator>(guid const& rhs) const /* throw() */
     {
-        return std::lexicographical_compare(rhs.data_, rhs.data_ + static_size, data_, data_ + static_size);
+        return data_ > rhs.data_;
     }
 
     /// Less-than-or-equal-to operator.
@@ -192,7 +195,7 @@ public:
     /// \exception nothrow
     bool operator<=(guid const& rhs) const /* throw() */
     {
-        return (*this == rhs) || (*this < rhs);
+        return data_ <= rhs.data_;
     }
 
     /// More-than-or-equal-to operator.
@@ -200,7 +203,7 @@ public:
     /// \exception nothrow
     bool operator>=(guid const& rhs) const /* throw() */
     {
-        return (*this == rhs) || (*this > rhs);
+        return data_ >= rhs.data_;
     }
 
     /// Test if the GUID object is null GUID or not.
@@ -246,16 +249,20 @@ public:
     /// and equal to 16 bytes (128-bit number).
     size_t byte_count() const /* throw() */
     {
-        return static_size;
+        return data_.size();
     }
 
+    size_t size() const /* throw() */
+    {
+        return byte_count();
+    }
 
     /// Send bytes of GUID data to sequenec of bytes using given output iterator.
     /// \exception nothrow
     template <typename ByteOutputIterator>
     void output_bytes(ByteOutputIterator out) const
     {
-        std::copy(data_, data_ + static_size, out);
+        std::copy(data_.begin(), data_.end(), out);
     }
 
     /// Separate bytes of GUID data to distinct buffers.
@@ -264,11 +271,11 @@ public:
     /// \param d3 - buffer for 16 bits of third chunk of GUID number.
     /// \param d4 - buffer for last 64 bits of GUID number.
     /// \exception nothrow
-    void output_data(liblas::uint32_t& d1, liblas::uint16_t& d2, liblas::uint16_t& d3, liblas::uint8_t (&d4)[8]) const
+    void output_data(boost::uint32_t& d1, boost::uint16_t& d2, boost::uint16_t& d3, boost::uint8_t (&d4)[8]) const
     {
         d1 = d2 = d3 = 0;
         std::size_t pos = 0;
-        int const charbit = std::numeric_limits<liblas::uint8_t>::digits;
+        int const charbit = std::numeric_limits<boost::uint8_t>::digits;
         
         for (; pos < 4; ++pos)
         {
@@ -369,7 +376,7 @@ private:
         }
     }
 
-    void construct(liblas::uint32_t const& d1, liblas::uint16_t const& d2, liblas::uint16_t const& d3, liblas::uint8_t const (&d4)[8])
+    void construct(boost::uint32_t const& d1, boost::uint16_t const& d2, boost::uint16_t const& d3, boost::uint8_t const (&d4)[8])
     {
         std::ostringstream ss;
         ss.flags(std::ios::hex);        
@@ -390,7 +397,7 @@ private:
         for (std::size_t i = 0; i < sizeof(d4); ++i)
         {
             ss.width(2);
-            ss << static_cast<liblas::uint32_t>(d4[i]);
+            ss << static_cast<boost::uint32_t>(d4[i]);
             if (1 == i)
                 ss << '-';
         }
@@ -409,9 +416,9 @@ private:
             init_rand = false;
         }
         
-        for (size_t i = 0; i < static_size; i++)
+        for (size_t i = 0; i < result.data_.size(); i++)
         {
-            result.data_[i] = detail::generate_random_byte<liblas::uint8_t>();
+            result.data_[i] = detail::generate_random_byte<boost::uint8_t>();
         }
     
         // set variant
@@ -430,14 +437,16 @@ private:
     // name based
     static guid create_name_based(guid const& namespace_guid, char const* name, int name_length)
     {
-        using liblas::uint8_t;
+        using boost::uint8_t;
         
         detail::SHA1 sha1;
-        sha1.Input(namespace_guid.data_, namespace_guid.static_size);
+
+        sha1.Input(namespace_guid.data_);
         sha1.Input(name, name_length);
-        unsigned int digest[5];
+		boost::array<unsigned int, 5> digest;
+        digest.assign(0);
         
-        if (sha1.Result(digest) == false)
+        if (!sha1.Result(digest))
         {
             throw std::runtime_error("create error");
         }
@@ -473,8 +482,7 @@ private:
     
 private:
 
-    static const std::size_t static_size = 16;
-    liblas::uint8_t data_[static_size];
+    ::boost::array<boost::uint8_t, 16> data_;
 };
 
 inline std::ostream& operator<<(std::ostream& os, guid const& g)
@@ -497,7 +505,7 @@ inline std::ostream& operator<<(std::ostream& os, guid const& g)
         }
         os << hex;
         os.fill('0');
-        for (size_t i = 0; i < g.static_size; ++i)
+        for (size_t i = 0; i < g.size(); ++i)
         {
             os.width(2);
             os << static_cast<unsigned int>(g.data_[i]);
@@ -537,7 +545,7 @@ inline std::istream& operator>>(std::istream& is, guid &g)
             is >> c; // read brace
         }
 
-        for (size_t i = 0; i < temp_guid.static_size && is; ++i)
+        for (size_t i = 0; i < temp_guid.size() && is; ++i)
         {
             std::stringstream ss;
 
@@ -559,7 +567,7 @@ inline std::istream& operator>>(std::istream& is, guid &g)
                 is.setstate(ios_base::badbit);
             }
 
-            temp_guid.data_[i] = static_cast<liblas::uint8_t>(val);
+            temp_guid.data_[i] = static_cast<boost::uint8_t>(val);
 
             if (is)
             {

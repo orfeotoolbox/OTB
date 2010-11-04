@@ -57,6 +57,7 @@ void VectorDataModel::AddPointToGeometry(VertexType& vertex, bool callUpdate)
   if  (m_CurrentNodeType == FEATURE_POINT)
     {
     otbMsgDevMacro(<< "VectorDataModel::AddPointToGeometry: Creating and adding new point");
+    m_CurrentGeometry = NULL;
     if (m_CurrentGeometry.IsNull())
       {
       m_CurrentGeometry = DataNodeType::New();

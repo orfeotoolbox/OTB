@@ -54,21 +54,21 @@ namespace liblas {
 /// This class describes details of error condition occured in
 /// libLAS core. All errors are stacked by C API layer, so it's
 /// possible to track problem down to its source.
-class LASError
+class Error
 {
 public:
 
     /// Custom constructor.
     /// This is the main and the only tool to initialize error instance.
-    LASError(int code, std::string const& message, std::string const& method);
+    Error(int code, std::string const& message, std::string const& method);
 
     /// Copy constructor.
     /// Error objects are copyable.
-    LASError(LASError const& other);
+    Error(Error const& other);
 
     /// Assignment operator.
     /// Error objects are assignable.
-    LASError& operator=(LASError const& rhs);
+    Error& operator=(Error const& rhs);
 
     // TODO - mloskot: What about replacing string return by copy with const char* ?
     //        char const* GetMethod() const { return m_method.c_str(); }, etc.
@@ -86,4 +86,4 @@ private:
 
 } // namespace liblas
 
-#endif
+#endif // LIBLAS_LASERROR_HPP_INCLUDED

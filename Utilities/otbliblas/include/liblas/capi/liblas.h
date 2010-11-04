@@ -42,16 +42,10 @@
 #ifndef LIBLAS_H_INCLUDED
 #define LIBLAS_H_INCLUDED
 
-
-
 #define LIBLAS_C_API 1
 
 #include "las_version.h"
 #include "las_config.h"
-
-
-#include <liblas/cstdint.hpp>
-
 
 typedef struct LASWriterHS *LASWriterH;
 typedef struct LASReaderHS *LASReaderH;
@@ -61,6 +55,7 @@ typedef struct LASGuidHS *LASGuidH;
 typedef struct LASVLRHS *LASVLRH;
 typedef struct LASColorHS *LASColorH;
 typedef struct LASSRSHS *LASSRSH;
+typedef struct LASSchemaHS *LASSchemaH;
 
 
 /* Fake out the compiler if we don't have libgeotiff */
@@ -98,17 +93,17 @@ typedef struct  {
 
     double t;
     double x, y, z;
-    uint16_t intensity;
-    uint8_t cls;
-    int8_t scan_angle;
-    uint8_t user_data;
-    uint16_t retnum;
-    uint16_t numret;
-    uint16_t scandir;
-    uint16_t fedge;
-    uint16_t red;
-    uint16_t green;
-    uint16_t blue;
+    unsigned short intensity;
+    unsigned char cls;
+    char scan_angle;
+    unsigned char user_data;
+    unsigned short retnum;
+    unsigned short numret;
+    unsigned short scandir;
+    unsigned short fedge;
+    unsigned short red;
+    unsigned short green;
+    unsigned short blue;
     long rgpsum;    
     int number_of_point_records;
     int number_of_points_by_return[8];
@@ -126,11 +121,13 @@ typedef struct  {
  *  @return the version string for this library.
 */
 LAS_DLL char* LAS_GetVersion(void);
+LAS_DLL char* LAS_GetFullVersion(void);
 
 LAS_DLL int LAS_IsLibGeoTIFFEnabled(void);
 
 LAS_DLL int LAS_IsGDALEnabled(void);
 
+LAS_DLL int LAS_IsLibSpatialIndexEnabled(void);
 /****************************************************************************/
 /* Error handling                                                           */
 /****************************************************************************/
@@ -182,6 +179,19 @@ LAS_DLL void LASError_Print(const char* message);
 */
 LAS_DLL LASReaderH LASReader_Create(const char * filename);
 
+/** Creates a LASReaderH object that can be used to read LASHeaderH and 
+ *  LASPointH objects with.  The LASReaderH must not be created with a 
+ *  filename that is opened for read or write by any other API functions.
+ *  This function allows you to optionally override the file's header 
+ *  information with your own.  
+ *  @return opaque pointer to a LASReaderH instance.
+ *  @param filename Filename to open for read 
+ *  @param hHeader a LASHeaderH instance to override the file's header with.
+ *  
+*/
+LAS_DLL LASReaderH LASReader_CreateWithHeader(  const char * filename, 
+                                                LASHeaderH hHeader);
+
 /** Reads the next available point on the LASReaderH instance.  If no point 
  *  is available to read, NULL is returned.  If an error happens during 
  *  the reading of the next available point, an error will be added to the 
@@ -206,7 +216,7 @@ LAS_DLL LASPointH LASReader_GetNextPoint(const LASReaderH hReader);
  *  LASError_GetLastError* methods to confirm the existence of an error 
  *  if NULL is returned.
 */
-LAS_DLL LASPointH LASReader_GetPointAt(const LASReaderH hReader, uint32_t position);
+LAS_DLL LASPointH LASReader_GetPointAt(const LASReaderH hReader, unsigned int position);
 
 /** Closes the file for reading operations represented by the LASReaderH instance.
  *  @param hReader the opqaue handle to the LASReaderH
@@ -222,7 +232,17 @@ LAS_DLL void LASReader_Destroy(LASReaderH hReader);
 LAS_DLL LASHeaderH LASReader_GetHeader(const LASReaderH hReader);
 
 
-LAS_DLL LASError LASReader_SetSRS(LASHeaderH hReader, const LASSRSH hSRS);
+LAS_DLL LASError LASReader_SetSRS(LASReaderH hReader, const LASSRSH hSRS);
+LAS_DLL LASError LASReader_SetInputSRS(LASReaderH hReader, const LASSRSH hSRS);
+LAS_DLL LASError LASReader_SetOutputSRS(LASReaderH hReader, const LASSRSH hSRS);
+
+/** Seeks to the specified point for the next LASReader_GetNextPoint
+ *  operation to start from.  If an error is returned, the seek failed
+ *  for some reason.
+ *  @param hReader the LASReaderH instance
+ *  @return a LASError defaulting to LE_None upon success.  
+*/
+LAS_DLL LASError LASReader_Seek(LASReaderH hReader, unsigned int position);
 
 
 /****************************************************************************/
@@ -284,14 +304,14 @@ LAS_DLL LASError LASPoint_SetZ(LASPointH hPoint, double value);
  *  magnitude, it is optional, and it is LiDAR system specific.
  *  @return the intensity value for the point.
 */
-LAS_DLL uint16_t LASPoint_GetIntensity(const LASPointH hPoint);
+LAS_DLL unsigned short LASPoint_GetIntensity(const LASPointH hPoint);
 
 /** Sets the intensity value for the point.
  *  @param hPoint the opaque pointer to the LASPointH instance
  *  @param value the value to set the intensity to
  *  @return an error number if an error occured.
 */
-LAS_DLL LASError LASPoint_SetIntensity(LASPointH hPoint, uint16_t value);
+LAS_DLL LASError LASPoint_SetIntensity(LASPointH hPoint, unsigned short value);
 
 /** Returns the return number for the point.  The return number is "the pulse
  *  return number for a given output pulse."  The first return number starts with
@@ -301,33 +321,33 @@ LAS_DLL LASError LASPoint_SetIntensity(LASPointH hPoint, uint16_t value);
  *  methods to determine if an error occurred during this operation if 0 
  *  is returned.
 */
-LAS_DLL uint16_t LASPoint_GetReturnNumber(const LASPointH hPoint);
+LAS_DLL unsigned short LASPoint_GetReturnNumber(const LASPointH hPoint);
 
 /** Sets the return number for the point.  Valid values are from 1-6.
  *  @param hPoint LASPointH instance
  *  @param value the value to set for the return number
  *  @return LASError value determine success or failure.
 */
-LAS_DLL LASError LASPoint_SetReturnNumber(LASPointH hPoint, uint16_t value);
+LAS_DLL LASError LASPoint_SetReturnNumber(LASPointH hPoint, unsigned short value);
 
 /** Returns the total number of returns for a given pulse.
  *  @param hPoint LASPointH instance
  *  @return total number of returns for this pulse.
 */
-LAS_DLL uint16_t LASPoint_GetNumberOfReturns(const LASPointH hPoint);
+LAS_DLL unsigned short LASPoint_GetNumberOfReturns(const LASPointH hPoint);
 
 /** Sets the number of returns for the point.  Valid values are from 1-5.
  *  @param hPoint LASPointH instance
  *  @param value the value to set for the number of returns
  *  @return LASError value determine success or failure.
 */
-LAS_DLL LASError LASPoint_SetNumberOfReturns(LASPointH hPoint, uint16_t value);
+LAS_DLL LASError LASPoint_SetNumberOfReturns(LASPointH hPoint, unsigned short value);
 
 /** Returns the scan direction for a given pulse.
  *  @param hPoint LASPointH instance
  *  @return the scan direction for a given pulse.
 */
-LAS_DLL uint16_t LASPoint_GetScanDirection(const LASPointH hPoint);
+LAS_DLL unsigned short LASPoint_GetScanDirection(const LASPointH hPoint);
 
 /** Sets the scan direction for a given pulse.  Valid values are 0 or 1, with 
  *  1 being a positive scan direction and 0 being a negative scan direction.
@@ -335,13 +355,13 @@ LAS_DLL uint16_t LASPoint_GetScanDirection(const LASPointH hPoint);
  *  @param value the value to set for scan direction
  *  @return LASError value determine success or failure.
 */
-LAS_DLL LASError LASPoint_SetScanDirection(LASPointH hPoint, uint16_t value);
+LAS_DLL LASError LASPoint_SetScanDirection(LASPointH hPoint, unsigned short value);
 
 /** Returns whether or not a given pulse is an edge point
  *  @param hPoint LASPointH instance
  *  @return whether or not a given pulse is an edge point.
 */
-LAS_DLL uint16_t LASPoint_GetFlightLineEdge(const LASPointH hPoint);
+LAS_DLL unsigned short LASPoint_GetFlightLineEdge(const LASPointH hPoint);
 
 /** Sets the edge marker for a given pulse.  Valid values are 0 or 1, with 
  *  1 being an edge point and 0 being interior.
@@ -349,34 +369,34 @@ LAS_DLL uint16_t LASPoint_GetFlightLineEdge(const LASPointH hPoint);
  *  @param value the value to set for flightline edge
  *  @return LASError value determine success or failure.
 */
-LAS_DLL LASError LASPoint_SetFlightLineEdge(LASPointH hPoint, uint16_t value);
+LAS_DLL LASError LASPoint_SetFlightLineEdge(LASPointH hPoint, unsigned short value);
 
 /** Returns all of the scan flags for the point -- Return number, number of 
  *  returns, flightline edge, scan direction, and scan angle rank.
  *  @param hPoint LASPointH instance
  *  @return all of the scan flags for the point
 */
-LAS_DLL uint8_t LASPoint_GetScanFlags(const LASPointH hPoint);
+LAS_DLL unsigned char LASPoint_GetScanFlags(const LASPointH hPoint);
 
 /** Sets all of the scan flags for the point.  No validation is done. 
  *  @param hPoint LASPointH instance
  *  @param value the value to set for the flags
  *  @return LASError value determine success or failure.
 */
-LAS_DLL LASError LASPoint_SetScanFlags(LASPointH hPoint, uint8_t value);
+LAS_DLL LASError LASPoint_SetScanFlags(LASPointH hPoint, unsigned char value);
 
 /** Returns the classification for the point
  *  @param hPoint LASPointH instance
  *  @return the classification for the point
 */
-LAS_DLL uint8_t LASPoint_GetClassification(const LASPointH hPoint);
+LAS_DLL unsigned char LASPoint_GetClassification(const LASPointH hPoint);
 
 /** Sets the classification for the point.  No validation is done. 
  *  @param hPoint LASPointH instance
  *  @param value the value to set for the classification
  *  @return LASError value determine success or failure.
 */
-LAS_DLL LASError LASPoint_SetClassification(LASPointH hPoint, uint8_t value);
+LAS_DLL LASError LASPoint_SetClassification(LASPointH hPoint, unsigned char value);
 
 /** Returns the time for the point
  *  @param hPoint LASPointH instance
@@ -395,40 +415,40 @@ LAS_DLL LASError LASPoint_SetTime(LASPointH hPoint, double value);
  *  @param hPoint LASPointH instance
  *  @return the scan angle for the point
 */
-LAS_DLL int8_t LASPoint_GetScanAngleRank(const LASPointH hPoint);
+LAS_DLL char LASPoint_GetScanAngleRank(const LASPointH hPoint);
 
 /** Sets the scan angle for the point.  No validation is done. 
  *  @param hPoint LASPointH instance
  *  @param value the value to set for the scan angle
  *  @return LASError value determine success or failure.
 */
-LAS_DLL LASError LASPoint_SetScanAngleRank(LASPointH hPoint, int8_t value);
+LAS_DLL LASError LASPoint_SetScanAngleRank(LASPointH hPoint, char value);
 
 /** Sets the point source id for the point.  No validation is done. 
  *  @param hPoint LASPointH instance
  *  @param value the value to set for the point source id
  *  @return LASError value determine success or failure.
 */
-LAS_DLL LASError LASPoint_SetPointSourceId(LASPointH hPoint, uint16_t value);
+LAS_DLL LASError LASPoint_SetPointSourceId(LASPointH hPoint, unsigned short value);
 
 /** Returns the point source id for the point
  *  @param hPoint LASPointH instance
  *  @return the scan angle for the point
 */
-LAS_DLL uint16_t LASPoint_GetPointSourceId(LASPointH hPoint);
+LAS_DLL unsigned short LASPoint_GetPointSourceId(LASPointH hPoint);
 
 /** Returns the arbitrary user data for the point
  *  @param hPoint LASPointH instance
  *  @return the arbitrary user data for the point
 */
-LAS_DLL uint8_t LASPoint_GetUserData(const LASPointH hPoint);
+LAS_DLL unsigned char LASPoint_GetUserData(const LASPointH hPoint);
 
 /** Sets the arbitrary user data for the point.  No validation is done. 
  *  @param hPoint LASPointH instance
  *  @param value the value to set for the arbitrary user data
  *  @return LASError value determine success or failure.
 */
-LAS_DLL LASError LASPoint_SetUserData(LASPointH hPoint, uint8_t value);
+LAS_DLL LASError LASPoint_SetUserData(LASPointH hPoint, unsigned char value);
 
 /** Returns a bitfield representing the validity of various members
  *  enum DataMemberFlag
@@ -463,7 +483,7 @@ LAS_DLL LASPointH LASPoint_Create(void);
  *  @return new LASPointH instance.  If the value is NULL use the 
  *  LASError_GetLastError* methods to determine the problem
 */
-LAS_DLL LASPointH LASPoint_Copy(const LASPointH);
+LAS_DLL LASPointH LASPoint_Copy(const LASPointH hPoint);
 
 /** Destroys/deletes a LASPointH instance
 */
@@ -497,7 +517,7 @@ LAS_DLL char *LASHeader_GetFileSignature(const LASHeaderH hHeader);
  *  @param hHeader LASHeaderH instance
  *  @return the file source id for the file.
 */
-LAS_DLL uint16_t LASHeader_GetFileSourceId(const LASHeaderH hHeader);
+LAS_DLL unsigned short LASHeader_GetFileSourceId(const LASHeaderH hHeader);
 
 /** Sets the FileSource ID value for the header.  By default, this value is "0" if it 
  *  is not explicitly set.  See the LAS specification for details on what this
@@ -506,7 +526,7 @@ LAS_DLL uint16_t LASHeader_GetFileSourceId(const LASHeaderH hHeader);
  *  @param value the value to set as the FileSource ID value for the header
  *  @return LASError enum
 */
-LAS_DLL LASError LASHeader_SetFileSourceId(LASHeaderH hHeader, uint16_t value);
+LAS_DLL LASError LASHeader_SetFileSourceId(LASHeaderH hHeader, unsigned short value);
 
 /** Returns the project id for the header as a GUID string
  *  @return the project id for the header as a GUID string
@@ -532,7 +552,7 @@ LAS_DLL LASError LASHeader_SetGUID(LASHeaderH hHeader, LASGuidH hId);
  *  @param hHeader LASHeaderH instance
  *  @return major version number for the header.
 */
-LAS_DLL uint8_t LASHeader_GetVersionMajor(const LASHeaderH hHeader);
+LAS_DLL unsigned char LASHeader_GetVersionMajor(const LASHeaderH hHeader);
 
 /** Sets the major version number for the header.  All values other than 1 
  *  are invalid.
@@ -540,14 +560,14 @@ LAS_DLL uint8_t LASHeader_GetVersionMajor(const LASHeaderH hHeader);
  *  @param value integer value to set the major version to (only the value 1 is valid)
  *  @return LASError enum
 */
-LAS_DLL LASError LASHeader_SetVersionMajor(LASHeaderH hHeader, uint8_t value);
+LAS_DLL LASError LASHeader_SetVersionMajor(LASHeaderH hHeader, unsigned char value);
 
 /** Returns the min version number for the header.  This value is expected 
  *  to be 1 or 0 representing LAS 1.1 or LAS 1.0
  *  @param hHeader LASHeaderH instance
  *  @return minor version number for the header.
 */
-LAS_DLL uint8_t LASHeader_GetVersionMinor(const LASHeaderH hHeader);
+LAS_DLL unsigned char LASHeader_GetVersionMinor(const LASHeaderH hHeader);
 
 /** Sets the minor version number for the header.  All values other than 1 or 0 
  *  are invalid.
@@ -557,7 +577,7 @@ LAS_DLL uint8_t LASHeader_GetVersionMinor(const LASHeaderH hHeader);
  *
  *  @todo TODO: Maybe this should return fatal error if version out of range -- hobu
 */
-LAS_DLL LASError LASHeader_SetVersionMinor(LASHeaderH hHeader, uint8_t value);
+LAS_DLL LASError LASHeader_SetVersionMinor(LASHeaderH hHeader, unsigned char value);
 
 /** Returns the System ID for the header.  The caller assumes ownership of the returned string
  *  @return the system id for the header as a character array
@@ -590,7 +610,7 @@ LAS_DLL LASError LASHeader_SetSoftwareId(LASHeaderH hHeader, const char* value);
 /** Returns the reserved value for the header.  This should aways be 0.
  *  @return the reserved value for the header.
 */
-LAS_DLL uint16_t LASHeader_GetReserved(const LASHeaderH hHeader);
+LAS_DLL unsigned short LASHeader_GetReserved(const LASHeaderH hHeader);
 
 /** Sets the Reserved value for the header.  By default, this value is "0" if it 
  *  is not explicitly set.  See the LAS specification for details on what this
@@ -599,13 +619,13 @@ LAS_DLL uint16_t LASHeader_GetReserved(const LASHeaderH hHeader);
  *  @param value the value to set as the reserved value for the header
  *  @return LASError enum
 */
-LAS_DLL LASError LASHeader_SetReserved(LASHeaderH hHeader, uint16_t value);
+LAS_DLL LASError LASHeader_SetReserved(LASHeaderH hHeader, unsigned short value);
 
 /** Returns the file creation day of the year.  The values start from 1, being January 1st, 
  *  and end at 365 or 366 being December 31st, depending on leap year.
  *  @return the day of the year as an integer starting from 1 for the file creation.
 */
-LAS_DLL uint16_t LASHeader_GetCreationDOY(const LASHeaderH hHeader);
+LAS_DLL unsigned short LASHeader_GetCreationDOY(const LASHeaderH hHeader);
 
 /** Sets the file creation day of the year.  The values start from 1, being January 1st.  No
  *  date validation is done
@@ -613,13 +633,13 @@ LAS_DLL uint16_t LASHeader_GetCreationDOY(const LASHeaderH hHeader);
  *  @param value the value to set as the creation day
  *  @return LASError enum
 */
-LAS_DLL LASError LASHeader_SetCreationDOY(LASHeaderH hHeader, uint16_t value);
+LAS_DLL LASError LASHeader_SetCreationDOY(LASHeaderH hHeader, unsigned short value);
 
 /** Returns the file creation year.  This is a four digit number representing the 
  *  year for the file, ie 2003, 2008, etc.
  *  @return the creation year for the file or 0 if none is set
 */
-LAS_DLL uint16_t LASHeader_GetCreationYear(const LASHeaderH hHeader);
+LAS_DLL unsigned short LASHeader_GetCreationYear(const LASHeaderH hHeader);
 
 /** Sets the file creation year.  This should be a four digit number representing
  *  the year for the file, ie 2003, 2008, etc.  No validation on the value is done
@@ -627,18 +647,18 @@ LAS_DLL uint16_t LASHeader_GetCreationYear(const LASHeaderH hHeader);
  *  @param value the value to set for the creation year
  *  @return LASError enum
 */
-LAS_DLL LASError LASHeader_SetCreationYear(LASHeaderH hHeader, uint16_t value);
+LAS_DLL LASError LASHeader_SetCreationYear(LASHeaderH hHeader, unsigned short value);
 
 /** Returns the size of the header for the file in bytes.
  *  @return the size of the header for the file in bytes.
 */
-LAS_DLL uint16_t LASHeader_GetHeaderSize(const LASHeaderH hHeader);
+LAS_DLL unsigned short LASHeader_GetHeaderSize(const LASHeaderH hHeader);
 
 /** Returns the byte offset to the start of actual point data for the file
  *  @param hHeader LASHeaderH instance
  *  @return the type offset to the start of actual point data for the file
 */
-LAS_DLL uint32_t LASHeader_GetDataOffset(const LASHeaderH hHeader);
+LAS_DLL unsigned int LASHeader_GetDataOffset(const LASHeaderH hHeader);
 
 /** Sets the location in number of bytes to start writing point data.  Any
  *  space between the end of the LASVLRHs and this value will be written with 0's.
@@ -646,26 +666,34 @@ LAS_DLL uint32_t LASHeader_GetDataOffset(const LASHeaderH hHeader);
  *  @param value the long integer to set for byte location determining the end of the header
  *  @return LASError enum
 */
- LAS_DLL LASError LASHeader_SetDataOffset(const LASHeaderH hHeader, uint32_t value);
+ LAS_DLL LASError LASHeader_SetDataOffset(const LASHeaderH hHeader, unsigned int value);
 
 /** Returns the number of variable length records in the header
  *  @param hHeader LASHeaderH instance
  *  @return the number of variable length records in the header
 */
-LAS_DLL uint32_t LASHeader_GetRecordsCount(const LASHeaderH hHeader);
+LAS_DLL unsigned int LASHeader_GetRecordsCount(const LASHeaderH hHeader);
 
 /** Returns the record length for the points based on their data format id in bytes
  *  @param hHeader LASHeaderH instance
  *  @return the record length for the points based on their data format id in bytes
 */
-LAS_DLL uint16_t LASHeader_GetDataRecordLength(const LASHeaderH hHeader);
+LAS_DLL unsigned short LASHeader_GetDataRecordLength(const LASHeaderH hHeader);
+
+/** Explicitly set the record length for the file.  If you set the DataFormatId,
+ *  default values will be set for you.
+ *  @param hHeader LASHeaderH instance
+ *  @param value the value for the data record length (in bytes).
+ *  @return LASError enum
+*/
+LAS_DLL LASError LASHeader_SetDataRecordLength(const LASHeaderH hHeader, unsigned short value);
 
 /** Returns the data format id.  If this value is 1, the point data have time values
  *  associated with them.  If it is 0, the point data do not have time values.  
  *  @param hHeader LASHeaderH instance
  *  @return the data format id for the file.
 */
-LAS_DLL uint8_t LASHeader_GetDataFormatId(const LASHeaderH hHeader);
+LAS_DLL unsigned char LASHeader_GetDataFormatId(const LASHeaderH hHeader);
 
 /** Sets the data format id for the file.  The value should be 1 or 0, with 1 being
  *  points that contain time values and 0 being points that do not.
@@ -673,28 +701,28 @@ LAS_DLL uint8_t LASHeader_GetDataFormatId(const LASHeaderH hHeader);
  *  @param value the value for the data format id, 1 or 0 are valid values.
  *  @return LASError enum
 */
-LAS_DLL LASError LASHeader_SetDataFormatId(const LASHeaderH hHeader, uint8_t value);
+LAS_DLL LASError LASHeader_SetDataFormatId(const LASHeaderH hHeader, unsigned char value);
 
 /** Returns the number of point records in the file.  This value may not reflect the actual 
  *  number of point records in the file.
  *  @param hHeader LASHeaderH instance
  *  @return the number of point records in the file
 */
-LAS_DLL uint32_t LASHeader_GetPointRecordsCount(const LASHeaderH hHeader);
+LAS_DLL unsigned int LASHeader_GetPointRecordsCount(const LASHeaderH hHeader);
 
 /** Sets the number of point records for the file.
  *  @param hHeader LASHeaderH instance
  *  @param value the long integer to set for the number of point records in the file
  *  @return LASError enum
 */
-LAS_DLL LASError LASHeader_SetPointRecordsCount(const LASHeaderH hHeader, uint32_t value);
+LAS_DLL LASError LASHeader_SetPointRecordsCount(const LASHeaderH hHeader, unsigned int value);
 
 /** Returns the number of point records by return.
  *  @param hHeader LASHeaderH instance
  *  @param index the return number to fetch the count for
  *  @return the number of point records for a given return
 */
-LAS_DLL uint32_t LASHeader_GetPointRecordsByReturnCount(const LASHeaderH hHeader, int index);
+LAS_DLL unsigned int LASHeader_GetPointRecordsByReturnCount(const LASHeaderH hHeader, int index);
 
 /** Sets the number of point records for a given return
  *  @param hHeader LASHeaderH instance
@@ -702,7 +730,7 @@ LAS_DLL uint32_t LASHeader_GetPointRecordsByReturnCount(const LASHeaderH hHeader
  *  @param value the number of point records for the return 
  *  @return LASError enum
 */
-LAS_DLL LASError LASHeader_SetPointRecordsByReturnCount(const LASHeaderH hHeader, int index, uint32_t value);
+LAS_DLL LASError LASHeader_SetPointRecordsByReturnCount(const LASHeaderH hHeader, int index, unsigned int value);
 
 /** Return the X scale factor
  *  @param hHeader LASHeaderH instance
@@ -818,14 +846,14 @@ LAS_DLL LASError LASHeader_SetMax(LASHeaderH hHeader, double x, double y, double
  *  @param i the index starting from 0 of the VLR to fetch
  *  @return LASVLRH instance that models the Variable Length Record
 */
-LAS_DLL LASVLRH LASHeader_GetVLR(const LASHeaderH hHeader, uint32_t i);
+LAS_DLL LASVLRH LASHeader_GetVLR(const LASHeaderH hHeader, unsigned int i);
 
 /** Deletes a VLR record from the header for the given index.
  *  @param hHeader the LASHeaderH instance
  *  @param index the index starting from 0 of the VLR to delete
  *  @return LASErrorEnum
 */
-LAS_DLL LASError LASHeader_DeleteVLR(LASHeaderH hHeader, uint32_t index);
+LAS_DLL LASError LASHeader_DeleteVLR(LASHeaderH hHeader, unsigned int index);
 
 /** Adds a VLR record to the header. 
  *  @param hHeader the LASHeaderH instance
@@ -876,8 +904,17 @@ LAS_DLL LASError LASWriter_WriteHeader(const LASWriterH hWriter, const LASHeader
 */
 LAS_DLL void LASWriter_Destroy(LASWriterH hWriter);
 
+/** Returns a LASHeaderH representing the header for the file
+ *  @param hWriter the LASWriterH instance
+ *  @return a LASHeaderH representing the header for the file.  NULL is returned 
+ *  in the event of an error.  Use the LASError_GetLastError* methods to check
+ *  in the event of a NULL return.
+*/
+LAS_DLL LASHeaderH LASWriter_GetHeader(const LASWriterH hWriter);
 
 LAS_DLL LASError LASWriter_SetSRS(LASWriterH hWriter, const LASSRSH hSRS);
+LAS_DLL LASError LASWriter_SetInputSRS(LASWriterH hWriter, const LASSRSH hSRS);
+LAS_DLL LASError LASWriter_SetOutputSRS(LASWriterH hWriter, const LASSRSH hSRS);
 
 /****************************************************************************/
 /* GUID Operations                                                          */
@@ -966,33 +1003,33 @@ LAS_DLL LASError LASVLR_SetDescription(LASVLRH hVLR, const char* value);
  *  @param hVLR the LASVLRH instance
  *  @return the record length of the data stored in the VLR
 */
-LAS_DLL uint16_t LASVLR_GetRecordLength(const LASVLRH hVLR);
+LAS_DLL unsigned short LASVLR_GetRecordLength(const LASVLRH hVLR);
 
 /** Sets the record length of the data stored in the VLR
  *  @param hVLR the LASVLRH instance
  *  @param value the length to set for the VLR data length
  *  @return LASErrorEnum
 */
-LAS_DLL LASError LASVLR_SetRecordLength(LASVLRH hVLR, uint16_t value);
+LAS_DLL LASError LASVLR_SetRecordLength(LASVLRH hVLR, unsigned short value);
 
 /** Gets the record id for the VLR
  *  @param hVLR the LASVLRH instance
  *  @return the record id for the VLR
 */
-LAS_DLL uint16_t LASVLR_GetRecordId(const LASVLRH hVLR);
+LAS_DLL unsigned short LASVLR_GetRecordId(const LASVLRH hVLR);
 
 /** Sets the record id for the VLR
  *  @param hVLR the LASVLRH instance
  *  @param value the record id to set
  *  @return LASErrorEnum
 */
-LAS_DLL LASError LASVLR_SetRecordId(LASVLRH hVLR, uint16_t value);
+LAS_DLL LASError LASVLR_SetRecordId(LASVLRH hVLR, unsigned short value);
 
 /** Gets the reserved value of the VLR.  This should be 0 and should aways be 0.
  *  @param hVLR the LASVLRH instance
  *  @return the reserved value of the VLR.
 */
-LAS_DLL uint16_t LASVLR_GetReserved(const LASVLRH hVLR);
+LAS_DLL unsigned short LASVLR_GetReserved(const LASVLRH hVLR);
 
 /** Sets the reserved value of the VLR.  This should be 0 and you should not 
  *  have to ever monkey with this value according to the spec.
@@ -1000,7 +1037,7 @@ LAS_DLL uint16_t LASVLR_GetReserved(const LASVLRH hVLR);
  *  @param value the value to set for the reserved value
  *  @return LASErrorEnum
 */
-LAS_DLL LASError LASVLR_SetReserved(LASVLRH hVLR, uint16_t value);
+LAS_DLL LASError LASVLR_SetReserved(LASVLRH hVLR, unsigned short value);
 
 /** Gets the data stream for the VLR as an array of bytes.  The length of this 
  *  array should be the same as LASVLR_GetRecordLength.  You must allocate it on 
@@ -1009,16 +1046,17 @@ LAS_DLL LASError LASVLR_SetReserved(LASVLRH hVLR, uint16_t value);
  *  @param data a pointer to your array where you want the data copied
  *  @return LASErrorEnum
 */
-LAS_DLL LASError LASVLR_GetData(const LASVLRH hVLR, uint8_t* data);
+LAS_DLL LASError LASVLR_GetData(const LASVLRH hVLR, unsigned char* data);
 
 /** Sets the data stream for the VLR as an array of bytes.  The length of this 
  *  array should be the same as LASVLR_GetRecordLength.  The data are copied into 
  *  the VLR structure.
  *  @param hVLR the LASVLRH instance
  *  @param data a pointer to your array.  It must be LASVLR_GetRecordLength in size
+ *  @param length length of the data to set on the VLR
  *  @return LASErrorEnum
 */
-LAS_DLL LASError LASVLR_SetData(const LASVLRH hVLR, uint8_t* data, uint16_t length);
+LAS_DLL LASError LASVLR_SetData(const LASVLRH hVLR, unsigned char* data, unsigned short length);
 
 
 /****************************************************************************/
@@ -1037,38 +1075,38 @@ LAS_DLL void LASColor_Destroy(LASColorH hColor);
 /** Returns the red value for the color.
  *  @return the red value for the color.
 */
-LAS_DLL uint16_t LASColor_GetRed(const LASColorH hColor);
+LAS_DLL unsigned short LASColor_GetRed(const LASColorH hColor);
 
 /** Sets the red value for the color
  *  @param hColor the opaque pointer to the LASColorH instance
  *  @param value the value to set the red value to
  *  @return an error number if an error occured.
 */
-LAS_DLL LASError LASColor_SetRed(LASColorH hColor, uint16_t value);
+LAS_DLL LASError LASColor_SetRed(LASColorH hColor, unsigned short value);
 
 /** Returns the green value for the color.
  *  @return the green value for the color.
 */
-LAS_DLL uint16_t LASColor_GetGreen(const LASColorH hColor);
+LAS_DLL unsigned short LASColor_GetGreen(const LASColorH hColor);
 
 /** Sets the green value for the color
  *  @param hColor the opaque pointer to the LASColorH instance
  *  @param value the value to set the green value to
  *  @return an error number if an error occured.
 */
-LAS_DLL LASError LASColor_SetGreen(LASColorH hColor, uint16_t value);
+LAS_DLL LASError LASColor_SetGreen(LASColorH hColor, unsigned short value);
 
 /** Returns the blue value for the color.
  *  @return the blue value for the color.
 */
-LAS_DLL uint16_t LASColor_GetBlue(const LASColorH hColor);
+LAS_DLL unsigned short LASColor_GetBlue(const LASColorH hColor);
 
 /** Sets the blue value for the color
  *  @param hColor the opaque pointer to the LASColorH instance
  *  @param value the value to set the blue value to
  *  @return an error number if an error occured.
 */
-LAS_DLL LASError LASColor_SetBlue(LASColorH hColor, uint16_t value);
+LAS_DLL LASError LASColor_SetBlue(LASColorH hColor, unsigned short value);
 
 
 /** Returns the color for the LASPointH
@@ -1095,21 +1133,37 @@ LAS_DLL LASSRSH LASSRS_Create(void);
 
 
 LAS_DLL const GTIF* LASSRS_GetGTIF(LASSRSH hSRS);
-LAS_DLL char* LASSRS_GetWKT(LASSRSH hSRS);
+LAS_DLL char* LASSRS_GetWKT(LASSRSH hSRS );
+LAS_DLL char* LASSRS_GetWKT_CompoundOK( LASSRSH hSRS );
 LAS_DLL LASError LASSRS_SetWKT(LASSRSH hSRS, const char* value);
+LAS_DLL LASError LASSRS_SetFromUserInput(LASSRSH hSRS, const char* value);
 LAS_DLL char* LASSRS_GetProj4(LASSRSH hSRS);
 LAS_DLL LASError LASSRS_SetProj4(LASSRSH hSRS, const char* value);
+LAS_DLL LASError LASSRS_SetVerticalCS(LASSRSH hSRS, int verticalCSType,
+                                      const char *citation, int verticalDatum,
+                                      int verticalUnits );
 LAS_DLL LASSRSH LASHeader_GetSRS(const LASHeaderH hHeader);
 LAS_DLL LASError LASHeader_SetSRS(LASHeaderH hHeader, const LASSRSH hSRS);
 LAS_DLL void LASSRS_Destroy(LASSRSH hSRS);
-LAS_DLL LASVLRH LASSRS_GetVLR(const LASSRSH hSRS, uint32_t i);
-LAS_DLL uint32_t LASSRS_GetVLRCount(const LASSRSH hSRS);
+LAS_DLL LASVLRH LASSRS_GetVLR(const LASSRSH hSRS, unsigned int i);
+LAS_DLL unsigned int LASSRS_GetVLRCount(const LASSRSH hSRS);
 
 /** Method to ensure that you are freeing char*'s from the 
  *  correct heap.
  *  @param string the string to free
 */
 LAS_DLL void LASString_Free(char* string);
+
+LAS_DLL unsigned short LASSchema_GetByteSize( LASSchemaH hFormat);
+LAS_DLL unsigned short LASSchema_GetBaseByteSize( LASSchemaH hFormat);
+
+
+
+LAS_DLL LASSchemaH LASHeader_GetSchema( LASHeaderH hHeader );
+LAS_DLL LASError LASHeader_SetSchema( LASHeaderH hHeader, LASSchemaH hFormat);
+
+LAS_DLL void LASSchema_Destroy(LASSchemaH hFormat);
+
 
 LAS_C_END
 #endif

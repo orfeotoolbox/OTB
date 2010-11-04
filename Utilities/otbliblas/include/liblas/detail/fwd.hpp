@@ -42,23 +42,37 @@
 #ifndef LIBLAS_DETAIL_FWD_HPP_INCLUDED
 #define LIBLAS_DETAIL_FWD_HPP_INCLUDED
 
+#include <boost/shared_ptr.hpp>
+
 // Forward declarations
 namespace liblas {
 
-class LASHeader;
-class LASPoint;
-class LASReader;
-class LASWriter;
-class LASColor;
-class LASSpatialReference;
+template<typename T> class Bounds;
+class Classification;
+class Color;
+class FilterI;
+class Header;
+class Point;
+class PointFormat;
+class Reader;
+class ReaderI;
+class Writer;
+class WriterI;
+class SpatialReference;
+class TransformI;
+class VariableRecord;
+
+typedef boost::shared_ptr<Header> HeaderPtr;
+typedef boost::shared_ptr<Point> PointPtr;
 
 namespace detail {
 
-class Reader;
-class Writer;
+class ReaderImpl;
+class WriterImpl;
 struct PointRecord;
 struct Color;
 
 }} // namespace liblas::detail
 
 #endif // LIBLAS_DETAIL_FWD_HPP_INCLUDED
+

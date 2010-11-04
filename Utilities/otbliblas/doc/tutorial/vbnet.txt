@@ -1,0 +1,42 @@
+.. _vbnet:
+
+*********************************************
+VB.NET Tutorial
+*********************************************
+
+This basic tutorial explains how to use libLAS to read and write 
+LIDAR data encoded in LAS file format from VB.NET.
+
+=============================================
+Hello world
+=============================================
+
+.. code-block:: python
+
+ Imports System
+ Imports System.Text
+ Imports LibLAS
+ Class Program
+ 	Private Shared Sub Main(args As String())
+ 		Try
+ 			Dim lasreader As New LASReader("F:\sample_in.las")
+ 			Dim laspoint As LASPoint
+ 			Dim lasheader As LASHeader = lasreader.GetHeader()
+ 			Dim laswriter As New LASWriter("F:\sample_out.las", lasheader, LASReadWriteMode.LASModeWrite)
+ 			Console.WriteLine("Number of points in file= {0}", lasheader.PointRecordsCount)
+ 			While lasreader.GetNextPoint()
+ 				laspoint = lasreader.GetPoint()
+ 				'Console.WriteLine(laspoint.X + "," + laspoint.Y + "," + laspoint.Z);
+ 				laswriter.WritePoint(laspoint)
+ 			End While
+ 		Catch e As LASException
+ 			Console.WriteLine("" & Chr(10) & "LASException! Msg: {0}", e.Message)
+ 		Catch
+ 			Console.WriteLine("Unknown exception caught")
+ 		Finally
+ 			Console.WriteLine("Do i need something to do?")
+ 		End Try
+ 		Console.WriteLine("End of file")
+ 		Console.Read()
+ 	End Sub
+ End Class

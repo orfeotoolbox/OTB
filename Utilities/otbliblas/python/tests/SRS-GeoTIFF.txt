@@ -1,0 +1,19 @@
+  >>> from liblas import srs
+  >>> from liblas import point
+  >>> from liblas import header
+  
+  >>> import liblas
+  >>> s = srs.SRS()
+  >>> s.proj4
+  ''
+  >>> s.proj4 = '+proj=utm +zone=15 +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
+
+  >>> s.proj4
+  '+proj=tmerc +lat_0=0.000000000 +lon_0=-93.000000000 +k=0.999600 +x_0=500000.000 +y_0=0.000 +ellps=WGS84 +units=m '
+
+  >>> from liblas import file
+  >>> f = file.File('../test/data/1.2_3.las',mode='r')
+  >>> s = f.header.srs
+  >>> s.proj4
+  '+proj=utm +zone=15 +ellps=GRS80 +units=m '
+  

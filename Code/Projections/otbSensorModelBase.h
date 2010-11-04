@@ -22,7 +22,9 @@
 
 #include "otbMacro.h"
 #include "otbImageKeywordlist.h"
-#include "otbDEMHandler.h"
+
+#include "itkFunctionBase.h"
+#include "otbElevDatabaseHeightAboveMSLFunction.h"
 
 #include "projection/ossimProjection.h"
 
@@ -51,18 +53,22 @@ class ITK_EXPORT SensorModelBase : public itk::Transform<TScalarType,
 public:
 
   /** Standard class typedefs. */
-  typedef SensorModelBase Self;
+  typedef SensorModelBase               Self;
   typedef itk::Transform<TScalarType,
       NInputDimensions,
-      NOutputDimensions>         Superclass;
+      NOutputDimensions>                Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   typedef itk::Point<TScalarType, NInputDimensions>  InputPointType;
   typedef itk::Point<TScalarType, NOutputDimensions> OutputPointType;
 
-  typedef DEMHandler                       DEMHandlerType;
-  typedef typename DEMHandlerType::Pointer DEMHandlerPointerType;
+  typedef TScalarType                                      PixelType;
+  typedef itk::FunctionBase< OutputPointType, PixelType>   DEMFunctionBaseType;
+  typedef typename DEMFunctionBaseType::Pointer            DEMFunctionBasePointer;
+  typedef otb::ElevDatabaseHeightAboveMSLFunction<PixelType,
+                        typename OutputPointType::ValueType>     SRTMFunctionType;
+
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -90,9 +96,16 @@ public:
   itkSetMacro(AverageElevation, TScalarType);
   itkGetMacro(AverageElevation, TScalarType);
 
+  /** Set/Get the DEM Function. */
+  itkSetObjectMacro(DEMFunction, DEMFunctionBaseType);
+  itkGetConstObjectMacro(DEMFunction, DEMFunctionBaseType);
+
+
   virtual void SetDEMDirectory(const std::string& directory)
   {
-    m_DEMHandler->OpenDEMDirectory(directory.c_str());
+    typename SRTMFunctionType::Pointer  srtmFunction = SRTMFunctionType::New();
+    srtmFunction->OpenDEMDirectory(directory);
+    this->SetDEMFunction( srtmFunction.GetPointer() );
     m_DEMIsLoaded = true;
     this->EnableDEM();
   }
@@ -127,8 +140,8 @@ protected:
   /** Specify if DEM is used in Point Transformation */
   bool m_UseDEM;
 
-  /** Object that read and use DEM */
-  DEMHandlerPointerType m_DEMHandler;
+  /** DEM Function : evaluate the height value from a DEM */
+  DEMFunctionBasePointer  m_DEMFunction;
 
   /** Specify an average elevation to use */
   TScalarType m_AverageElevation;
