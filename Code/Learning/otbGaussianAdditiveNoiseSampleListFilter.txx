@@ -30,7 +30,7 @@ GaussianAdditiveNoiseSampleListFilter<TInputSampleList,TOutputSampleList>
 ::GaussianAdditiveNoiseSampleListFilter()
 {
   m_Mean = 0.;
-  m_Variance = 1.;
+  m_Variance = 1e-3;
 }
 
 template < class TInputSampleList, class TOutputSampleList >
@@ -42,7 +42,6 @@ GaussianAdditiveNoiseSampleListFilter<TInputSampleList,TOutputSampleList>
   GeneratorType::Pointer   generator   = GeneratorType::New();
 
   unsigned int size = this->GetInput()->Get()->GetMeasurementVectorSize();
-  std::cout << "size " << size<< std::endl;
   if(size == 0)
     {
     itkExceptionMacro(<< "MeasurementVector size is  "<<size << " , excpect non null size " );
@@ -60,10 +59,6 @@ void
 GaussianAdditiveNoiseSampleListFilter<TInputSampleList,TOutputSampleList>
 ::GenerateData()
 {
-
-  // Generate Random sequence 
-  this->GenerateRandomSequence();
-
   // Retrieve input and output pointers
   typename InputSampleListObjectType::ConstPointer inputPtr = this->GetInput();
   typename OutputSampleListObjectType::Pointer     outputPtr = this->GetOutput();
@@ -83,6 +78,9 @@ GaussianAdditiveNoiseSampleListFilter<TInputSampleList,TOutputSampleList>
   // Iterate on the InputSampleList
   while(inputIt != inputSampleListPtr->End())
     {
+    // Generate Random sequence 
+    this->GenerateRandomSequence();
+
     // Retrieve current input sample
     InputMeasurementVectorType currentInputMeasurement = inputIt.GetMeasurementVector();
 
@@ -90,13 +88,12 @@ GaussianAdditiveNoiseSampleListFilter<TInputSampleList,TOutputSampleList>
     OutputMeasurementVectorType currentOutputMeasurement;
     currentOutputMeasurement.SetSize(currentInputMeasurement.GetSize());
 
-    // Center and reduce each component
+    // Add the white noise to each component of the sample
     for(unsigned int idx = 0;idx < inputSampleListPtr->GetMeasurementVectorSize();++idx)
       {
       currentOutputMeasurement[idx] = static_cast<OutputValueType>(
         (static_cast<double>(currentInputMeasurement[idx])+m_WhiteGaussianNoiseCoefficients[idx]));
       }
-    std::cout <<"input sample "<<currentInputMeasurement << " output sample "<<  currentOutputMeasurement  << std::endl;
 
     // Add the current output sample to the output SampleList
     outputSampleListPtr->PushBack(currentOutputMeasurement);
@@ -116,7 +113,6 @@ GaussianAdditiveNoiseSampleListFilter<TInputSampleList,TOutputSampleList>
   // Call superclass implementation
   Superclass::PrintSelf(os,indent);
 }
-
 
 } // End namespace Statistics
 } // End namespace otb
