@@ -69,7 +69,7 @@ ConcatenateSampleListFilter<TInputSampleList,TOutputSampleList>
   // Retrieve the ListSample
   typename InputSampleListObjectType::ConstPointer inputPtr =
     static_cast<InputSampleListObjectType *>(Superclass::ProcessObject::GetInput(inputIndex));
-  totalNumberOfSamples+=inputPtr->Get()->Size();
+  totalNumberOfSamples += inputPtr->Get()->Size();
   }
 
  // Set-up progress reporting

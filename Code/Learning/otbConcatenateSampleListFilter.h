@@ -37,7 +37,7 @@ class ITK_EXPORT ConcatenateSampleListFilter :
 {
 public:
   /** Standard class typedefs */
-  typedef ConcatenateSampleListFilter            Self;
+  typedef ConcatenateSampleListFilter                Self;
   typedef otb::Statistics::ListSampleToListSampleFilter
   <TInputSampleList,TOutputSampleList>               Superclass;
   typedef itk::SmartPointer< Self >                  Pointer;
