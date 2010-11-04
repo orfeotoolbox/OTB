@@ -29,6 +29,23 @@
 #include "otbSarImageMetadataInterface.h"
 #include "otbSarImageMetadataInterfaceFactory.h"
 
+void printPointSet(otb::SarImageMetadataInterface::PointSetPointer pointSet, std::ostream& stream )
+{
+  stream << pointSet << std::endl;
+  if (pointSet->GetNumberOfPoints() < 20)
+    {
+    stream << "PointSet values :" << std::endl;
+    otb::SarImageMetadataInterface::PointSetType::PointType point;
+    otb::SarImageMetadataInterface::PointSetType::PixelType pointValue;
+    for (unsigned int i = 0; i < pointSet->GetNumberOfPoints(); ++i)
+       {
+       pointSet->GetPoint(i, &point);
+       pointSet->GetPointData(i, &pointValue);
+       stream << point << " : " << pointValue << std::endl;
+       }
+    }
+}
+
 int otbSarImageMetadataInterfaceTest(int argc, char* argv[])
 {
   // Verify the number of parameters in the command line
@@ -44,29 +61,30 @@ int otbSarImageMetadataInterfaceTest(int argc, char* argv[])
 
   otb::SarImageMetadataInterface::Pointer lImageMetadata = otb::SarImageMetadataInterfaceFactory::CreateIMI(reader->GetOutput()->GetMetaDataDictionary());
 
-
   std::ofstream file;
   file.open(outputFilename);
   file << "GetRadiometricCalibrationScale                      : " << lImageMetadata->GetRadiometricCalibrationScale() << std::endl;
-  file << "NumberOfPoints for GetRadiometricCalibrationNoise() : " << lImageMetadata->GetRadiometricCalibrationNoise()->GetNumberOfPoints() << std::endl;
-  file << "NumberOfPoints for GetRadiometricCalibrationAntennaPatternNewGain:                 "
-       << lImageMetadata->GetRadiometricCalibrationAntennaPatternNewGain()->GetNumberOfPoints() << std::endl;
-  file << "NumberOfPoints for GetRadiometricCalibrationAntennaPatternOldGain:                 "
-       << lImageMetadata->GetRadiometricCalibrationAntennaPatternOldGain()->GetNumberOfPoints() << std::endl;
-  file << "NumberOfPoints for GetRadiometricCalibrationIncidenceAngle:                        "
-       << lImageMetadata->GetRadiometricCalibrationIncidenceAngle()->GetNumberOfPoints() << std::endl;
-  file << "NumberOfPoints for GetRadiometricCalibrationRangeSpreadLoss:                       "
-       << lImageMetadata->GetRadiometricCalibrationRangeSpreadLoss()->GetNumberOfPoints() << std::endl;
-  file << "NumberOfPoints for GetRadiometricCalibrationNoisePolynomialDegree:                 "
-       << lImageMetadata->GetRadiometricCalibrationNoisePolynomialDegree() << std::endl;
-  file << "NumberOfPoints for GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree: "
-       << lImageMetadata->GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree() << std::endl;
-  file << "NumberOfPoints for GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree: "
-       << lImageMetadata->GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree() << std::endl;
-  file << "NumberOfPoints for GetRadiometricCalibrationIncidenceAnglePolynomialDegree:        "
-       << lImageMetadata->GetRadiometricCalibrationIncidenceAnglePolynomialDegree() << std::endl;
-  file << "NumberOfPoints for GetRadiometricCalibrationRangeSpreadLossPolynomialDegree:       "
-       << lImageMetadata->GetRadiometricCalibrationRangeSpreadLossPolynomialDegree() << std::endl;
+
+  file << "CalibrationNoise : " << std::endl;
+  file << "Polynomial degree : " << lImageMetadata->GetRadiometricCalibrationNoisePolynomialDegree() << std::endl;
+  printPointSet(lImageMetadata->GetRadiometricCalibrationNoise(), file);
+
+  file << "CalibrationAntennaPatternNewGain : " << std::endl;
+  file << "Polynomial degree : " << lImageMetadata->GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree() << std::endl;
+  printPointSet(lImageMetadata->GetRadiometricCalibrationAntennaPatternNewGain(), file);
+
+  file << "CalibrationAntennaPatternOldGain : " << std::endl;
+  file << "Polynomial degree : " << lImageMetadata->GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree() << std::endl;
+  printPointSet(lImageMetadata->GetRadiometricCalibrationAntennaPatternOldGain(), file);
+
+  file << "CalibrationIncidenceAngle : " << std::endl;
+  file << "Polynomial degree : " << lImageMetadata->GetRadiometricCalibrationIncidenceAnglePolynomialDegree() << std::endl;
+  printPointSet(lImageMetadata->GetRadiometricCalibrationIncidenceAngle(), file);
+
+  file << "CalibrationRangeSpreadLoss : " << std::endl;
+  file << "Polynomial degree : " << lImageMetadata->GetRadiometricCalibrationRangeSpreadLossPolynomialDegree() << std::endl;
+  printPointSet(lImageMetadata->GetRadiometricCalibrationRangeSpreadLoss(), file);
+
   file.close();
 
   std::cout << lImageMetadata << std::endl;

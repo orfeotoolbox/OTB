@@ -21,6 +21,7 @@
 #endif
 
 #include "otbMacro.h"
+#include "otbMath.h"
 
 #include "otbTerraSarImageMetadataInterface.h"
 
@@ -1079,7 +1080,6 @@ TerraSarImageMetadataInterface::GetCornersIncidenceAnglesIndex() const
     }
 
   return iv;
-
 }
 
 
@@ -1088,7 +1088,7 @@ TerraSarImageMetadataInterface
 ::Horner(std::vector<double>& coefficients, const double tauMinusTauRef) const
 {
   std::vector<double>::reverse_iterator coefIt = coefficients.rbegin();
-  double                                res = *(coefIt);
+  double res = *(coefIt);
   ++coefIt;
 
   while (coefIt < coefficients.rend())
@@ -1105,65 +1105,65 @@ TerraSarImageMetadataInterface::PointSetPointer
 TerraSarImageMetadataInterface
 ::GetRadiometricCalibrationNoise() const
 {
-    PointSetPointer points = PointSetType::New();
+  PointSetPointer points = PointSetType::New();
 
-    IndexVectorType cornerIndex = this->GetCornersIncidenceAnglesIndex();
-      unsigned int numberOfRows = 0;
-      unsigned int numberOfCols = 0;
+  IndexVectorType cornerIndex = this->GetCornersIncidenceAnglesIndex();
+  unsigned int numberOfRows = 0;
+  unsigned int numberOfCols = 0;
 
-    for(unsigned int i = 0; i < cornerIndex.size(); ++i)
+  for (unsigned int i = 0; i < cornerIndex.size(); ++i)
     {
-      IndexType index;
-      index = cornerIndex[i];
-      unsigned int noRow = index[0];
-      unsigned int noCol = index[1];
-      if(noRow > numberOfRows )
+    IndexType index;
+    index = cornerIndex[i];
+    unsigned int noRow = index[0];
+    unsigned int noCol = index[1];
+    if (noRow > numberOfRows)
       {
-        numberOfRows = noRow;
+      numberOfRows = noRow;
       }
-      if(noCol > numberOfCols )
+    if (noCol > numberOfCols)
       {
-        numberOfCols = noCol;
+      numberOfCols = noCol;
       }
     }
 
-    double startTime = this->GetStartTimeUTC();
-    double stopTime  = this->GetStopTimeUTC();
-    RealType firstRangeTime     = this->GetRangeTimeFirstPixel();
-    RealType lastRangeTime      = this->GetRangeTimeLastPixel();
+  double startTime = this->GetStartTimeUTC();
+  double stopTime = this->GetStopTimeUTC();
+  RealType firstRangeTime = this->GetRangeTimeFirstPixel();
+  RealType lastRangeTime = this->GetRangeTimeLastPixel();
 
-      points->Initialize();
-    unsigned int noPoint = 0;
+  points->Initialize();
+  unsigned int noPoint = 0;
 
-    PointType  p0;
+  PointType p0;
 
-    unsigned int numberOfNoiseRecords = this->GetNumberOfNoiseRecords();
+  unsigned int numberOfNoiseRecords = this->GetNumberOfNoiseRecords();
 
-      for(unsigned int noiseRecord = 0; noiseRecord < numberOfNoiseRecords; ++noiseRecord)
+  for (unsigned int noiseRecord = 0; noiseRecord < numberOfNoiseRecords; ++noiseRecord)
+    {
+    double currentNoiseTime = this->GetNoiseTimeUTC(noiseRecord);
+    RealType AzimutAcquisition = (currentNoiseTime - startTime) * numberOfRows / (stopTime - startTime);
+    RealType referencePointTime = this->GetNoiseReferencePoint(noiseRecord);
+
+    std::vector<RealType> polynomialCoefficient;
+    polynomialCoefficient = this->GetNoisePolynomialCoefficients(noiseRecord);
+
+    p0[0] = AzimutAcquisition;
+
+    for (unsigned int col = 0; col < numberOfCols; ++col)
       {
-        double currentNoiseTime = this->GetNoiseTimeUTC(noiseRecord);
-        RealType AzimutAcquisition = (currentNoiseTime - startTime)*numberOfRows /(stopTime-startTime);
-        RealType referencePointTime = this->GetNoiseReferencePoint(noiseRecord);
+      RealType rangeTime = col * (lastRangeTime - firstRangeTime) / (numberOfCols) + firstRangeTime;
+      RealType tauMinusTauRef = rangeTime - referencePointTime;
+      RealType value = this->Horner(polynomialCoefficient, tauMinusTauRef);
 
-        std::vector<RealType> polynomialCoefficient;
-        polynomialCoefficient = this->GetNoisePolynomialCoefficients(noiseRecord);
+      p0[1] = col;
+      points->SetPoint(noPoint, p0);
+      points->SetPointData(noPoint, value);
+      ++noPoint;
 
-        p0[0] = AzimutAcquisition;
-
-        for(unsigned int col = 0; col < numberOfCols; ++col)
-        {
-          RealType rangeTime = col *(lastRangeTime-firstRangeTime)/(numberOfCols) + firstRangeTime;
-          RealType tauMinusTauRef = rangeTime - referencePointTime;
-          RealType value = this->Horner(polynomialCoefficient,tauMinusTauRef);
-
-          p0[1] = col;
-            points->SetPoint(noPoint, p0);
-            points->SetPointData(noPoint, value);
-            ++noPoint;
-
-        }
       }
-    return points;
+    }
+  return points;
 }
 
 TerraSarImageMetadataInterface::IndexType
@@ -1171,10 +1171,8 @@ TerraSarImageMetadataInterface
 ::GetRadiometricCalibrationNoisePolynomialDegree() const
 {
   IndexType polynomSize;
-  polynomSize[0] = 3;
-  polynomSize[1] = 3;
-  polynomSize[0] = 0;
-  polynomSize[1] = 0;
+  polynomSize[0] = 2;
+  polynomSize[1] = 2;
 
   return polynomSize;
 }
@@ -1297,18 +1295,6 @@ TerraSarImageMetadataInterface
   return rangeTime;
 }
 
-
-TerraSarImageMetadataInterface::PointSetPointer
-TerraSarImageMetadataInterface
-::GetRadiometricCalibrationAntennaPatternOldGain() const
-{
-    PointSetPointer points = PointSetType::New();
-    double Ks = this->GetCalibrationFactor();
-    points = this->GetConstantValuePointSet(Ks);
-
-    return points;
-}
-
 TerraSarImageMetadataInterface::RealType
 TerraSarImageMetadataInterface
 ::GetRadiometricCalibrationScale() const
@@ -1340,47 +1326,35 @@ TerraSarImageMetadataInterface::PointSetPointer
 TerraSarImageMetadataInterface
 ::GetRadiometricCalibrationIncidenceAngle() const
 {
-    PointSetPointer points = PointSetType::New();
-    double Ks = this->GetCalibrationFactor();
-    points = this->GetConstantValuePointSet(Ks);
-    PointType  p0;
+  PointSetPointer points = PointSetType::New();
+  PointType p0;
 
+  double centerIncidenceAngleValue = this->GetCenterIncidenceAngle();
+  IndexType centerIncidenceAngleIndex = this->GetCenterIncidenceAngleIndex();
 
-    double centerIncidenceAngleValue    = this->GetCenterIncidenceAngle();
-    IndexType centerIncidenceAngleIndex = this->GetCenterIncidenceAngleIndex();
+  DoubleVectorType cornerIncidenceAngleValue = this->GetCornersIncidenceAngles();
+  IndexVectorType cornerIncidenceAngleIndex = this->GetCornersIncidenceAnglesIndex();
+  points->Initialize();
+  unsigned int noPoint = 0;
 
-    DoubleVectorType cornerIncidenceAngleValue = this->GetCornersIncidenceAngles();
-    IndexVectorType cornerIncidenceAngleIndex = this->GetCornersIncidenceAnglesIndex();
+  p0[0] = centerIncidenceAngleIndex[0];
+  p0[1] = centerIncidenceAngleIndex[1];
 
-    std::cout << "centerIncidenceAngleValue " << centerIncidenceAngleValue << std::endl;
-    std::cout << "centerIncidenceAngleIndex " << centerIncidenceAngleIndex << std::endl;
+  points->SetPoint(noPoint, p0);
+  points->SetPointData(noPoint, centerIncidenceAngleValue * CONST_PI_180);
+  ++noPoint;
 
-      points->Initialize();
-    unsigned int noPoint = 0;
+  for (unsigned int i = 0; i < cornerIncidenceAngleIndex.size(); ++i)
+    {
 
-      p0[0] = centerIncidenceAngleIndex[0];
-      p0[1] = centerIncidenceAngleIndex[1];
+    p0[0] = cornerIncidenceAngleIndex.at(i)[0];
+    p0[1] = cornerIncidenceAngleIndex.at(i)[1];
 
-      points->SetPoint(noPoint, p0);
-      points->SetPointData(noPoint, centerIncidenceAngleValue*M_PI/180.);
-      ++noPoint;
-
-      for(unsigned int i = 0; i < cornerIncidenceAngleIndex.size(); ++i)
-      {
-
-          p0[0] = cornerIncidenceAngleIndex.at(i)[0];
-          p0[1] = cornerIncidenceAngleIndex.at(i)[1];
-          std::cout << "centerIncidenceAngleIndex " << p0[0] << " " << p0[1]
-                 << "  =  " << cornerIncidenceAngleValue[i] << std::endl;
-
-          points->SetPoint(noPoint, p0);
-          points->SetPointData(noPoint, cornerIncidenceAngleValue[i]*M_PI/180.);
-          ++noPoint;
-      }
-
-      std::cout << "IncidenceAngle pointset " << points << std::endl;
-
-    return points;
+    points->SetPoint(noPoint, p0);
+    points->SetPointData(noPoint, cornerIncidenceAngleValue[i] * CONST_PI_180);
+    ++noPoint;
+    }
+  return points;
 }
 
 TerraSarImageMetadataInterface::IndexType

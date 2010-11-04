@@ -163,7 +163,7 @@ public:
   PointSetPointer GetRadiometricCalibrationNoise() const;
   IndexType GetRadiometricCalibrationNoisePolynomialDegree() const;
 
-  PointSetPointer GetRadiometricCalibrationAntennaPatternOldGain() const;
+  //PointSetPointer GetRadiometricCalibrationAntennaPatternOldGain() const;
   PointSetPointer GetRadiometricCalibrationIncidenceAngle() const;
   IndexType GetRadiometricCalibrationIncidenceAnglePolynomialDegree() const;
 

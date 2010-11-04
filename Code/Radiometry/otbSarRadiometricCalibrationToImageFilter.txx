@@ -63,34 +63,26 @@ SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>
   noise->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationNoise());
   noise->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationNoisePolynomialDegree());
   noise->EvaluateParametricCoefficient();
-  //function->SetNoise(noise);
   
   antennaPatternNewGain = function->GetAntennaPatternNewGain();
   antennaPatternNewGain->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationAntennaPatternNewGain());
   antennaPatternNewGain->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree());
   antennaPatternNewGain->EvaluateParametricCoefficient();
-  //function->SetAntennaPatternNewGain(antennaPatternNewGain);
   
   antennaPatternOldGain = function->GetAntennaPatternOldGain();
   antennaPatternOldGain->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationAntennaPatternOldGain());
   antennaPatternOldGain->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree());
   antennaPatternOldGain->EvaluateParametricCoefficient();
-  //function->SetAntennaPatternNewGain(antennaPatternOldGain);
   
   incidenceAngle = function->GetIncidenceAngle();
   incidenceAngle->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationIncidenceAngle());
   incidenceAngle->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationIncidenceAnglePolynomialDegree());
   incidenceAngle->EvaluateParametricCoefficient();
-  //function->SetAntennaPatternNewGain(incidenceAngle);
   
   rangeSpreadLoss = function->GetRangeSpreadLoss();
   rangeSpreadLoss->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationRangeSpreadLoss());
   rangeSpreadLoss->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationRangeSpreadLossPolynomialDegree());
   rangeSpreadLoss->EvaluateParametricCoefficient();
-  //function->SetAntennaPatternNewGain(rangeSpreadLoss);
-  
-  //this->SetFunction(function);
-
 }
 
 

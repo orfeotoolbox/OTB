@@ -55,33 +55,21 @@ public:
 
   inline TOutput operator ()(const TInput& value) const
   {
-    //std::cout << "SarRadiometricCalibrationFunctor value " << value << std::endl;
+    RealType digitalNumber = static_cast<RealType> (vcl_abs(value));
     RealType sigma;
-    RealType digitalNumber;
-    digitalNumber = static_cast<RealType> (vcl_abs(value));
-    //std::cout << "SarRadiometricCalibrationFunctor digitalNumber " << digitalNumber << std::endl;
-    //std::cout << "SarRadiometricCalibrationFunctor m_Scale " << m_Scale << std::endl;
-    //std::cout << "SarRadiometricCalibrationFunctor m_IncidenceAngle " << m_IncidenceAngle << std::endl;
-    //digitalNumber = vcl_abs(digitalNumber);
-    //sigma  = m_Scale * (digitalNumber * digitalNumber) - m_Noise;
-    sigma  = m_Scale * (digitalNumber * digitalNumber);
-    sigma *= vcl_sin(m_IncidenceAngle);
-    //std::cout << "SarRadiometricCalibrationFunctor sigma " << sigma << std::endl;
 
-    /*
+    sigma  = m_Scale * (digitalNumber * digitalNumber - m_Noise);
+    sigma *= vcl_sin(m_IncidenceAngle);
     sigma *= m_AntennaPatternOldGain;
     sigma /= m_AntennaPatternNewGain;
     sigma *= m_RangeSpreadLoss;
-    */
 
     if(sigma < 0.0)
     {
       sigma = 0.0;
     }
 
-    OutputType result;
-    result = static_cast<OutputType>(sigma);
-      return result;
+    return static_cast<OutputType>(sigma);
   }
 
   /** Set offset method */
