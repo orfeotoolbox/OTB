@@ -421,34 +421,42 @@ void GDALImageIO::InternalReadImageInformation()
   if (this->GetComponentType() == CHAR)
     {
     m_NbOctetPixel = 1;
+    m_IsComplex = false;
     }
   else if (this->GetComponentType() == UCHAR)
     {
     m_NbOctetPixel = 1;
+    m_IsComplex = false;
     }
   else if (this->GetComponentType() == USHORT)
     {
     m_NbOctetPixel = 2;
+    m_IsComplex = false;
     }
   else if (this->GetComponentType() == SHORT)
     {
     m_NbOctetPixel = 2;
+    m_IsComplex = false;
     }
   else if (this->GetComponentType() == INT)
     {
     m_NbOctetPixel = 4;
+    m_IsComplex = false;
     }
   else if (this->GetComponentType() == UINT)
     {
     m_NbOctetPixel = 4;
+    m_IsComplex = false;
     }
   else if (this->GetComponentType() == FLOAT)
     {
     m_NbOctetPixel = 4;
+    m_IsComplex = false;
     }
   else if (this->GetComponentType() == DOUBLE)
     {
     m_NbOctetPixel = 8;
+    m_IsComplex = false;
     }
   else if (this->GetComponentType() == CFLOAT)
     {

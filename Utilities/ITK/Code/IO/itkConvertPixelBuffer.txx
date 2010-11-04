@@ -719,19 +719,13 @@ ConvertPixelBuffer<InputPixelType, OutputPixelType, OutputConvertTraits>
 }
 
 /* To be able to convert transparently*/
-/*template<typename InputType, typename OutputType>
-OutputType
-SpecialCast(const InputType& in, const OutputType& dummy)
-{
-  return static_cast < OutputType >( in );
-}*/
 
 template<typename InputType, typename OutputType>
 OutputType
 SpecialCast(const std::complex<InputType>& in, const OutputType& dummy)
 {
   return static_cast < OutputType >( in.real() );
- }
+}
 
 template<typename InputType, typename OutputType>
 std::complex<OutputType>
