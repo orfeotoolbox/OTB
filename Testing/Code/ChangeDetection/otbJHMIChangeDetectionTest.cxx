@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#include "itkImageFileReader.h"
-#include "itkImageFileWriter.h"
+#include "otbImageFileReader.h"
+#include "otbImageFileWriter.h"
 #include "itkRescaleIntensityImageFilter.h"
 #include <itkImage.h>
 #include "otbJoinHistogramMIImageFilter.h"
@@ -44,9 +44,9 @@ int otbJHMIChangeDetectionTest(int argc, char* argv[])
   typedef itk::Image<InternalPixelType, Dimension> ChangeImageType;
   typedef itk::Image<OutputPixelType, Dimension>   OutputImageType;
 
-  typedef itk::ImageFileReader<InputImageType1> ReaderType1;
-  typedef itk::ImageFileReader<InputImageType2> ReaderType2;
-  typedef itk::ImageFileWriter<OutputImageType> WriterType;
+  typedef otb::ImageFileReader<InputImageType1> ReaderType1;
+  typedef otb::ImageFileReader<InputImageType2> ReaderType2;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
   typedef itk::RescaleIntensityImageFilter<ChangeImageType,
       OutputImageType> RescalerType;
 
