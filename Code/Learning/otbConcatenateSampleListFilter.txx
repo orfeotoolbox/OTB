@@ -27,27 +27,7 @@ namespace Statistics {
 template < class TInputSampleList, class TOutputSampleList >
 ConcatenateSampleListFilter<TInputSampleList,TOutputSampleList>
 ::ConcatenateSampleListFilter()
- {
- this->SetNumberOfRequiredInputs(1);
- this->SetNumberOfRequiredOutputs(1);
-
- // Generate the output sample list
- typename OutputSampleListObjectType::Pointer outputPtr =
-   static_cast< OutputSampleListObjectType * >(this->MakeOutput(0).GetPointer());
- this->ProcessObject::SetNthOutput(0, outputPtr.GetPointer());
- }
-
-template < class TInputSampleList, class TOutputSampleList >
-typename ConcatenateSampleListFilter<TInputSampleList,TOutputSampleList>
-::DataObjectPointer
- ConcatenateSampleListFilter<TInputSampleList,TOutputSampleList>
-::MakeOutput(unsigned int itkNotUsed(idx))
- {
- typename OutputSampleListObjectType::Pointer outputPtr = OutputSampleListObjectType::New();
- OutputSampleListPointer outputSampleList = OutputSampleListType::New();
- outputPtr->Set(outputSampleList);
- return static_cast<DataObjectPointer>(outputPtr);
- }
+ {}
 
 template < class TInputSampleList, class TOutputSampleList >
 void
@@ -65,29 +45,9 @@ ConcatenateSampleListFilter<TInputSampleList,TOutputSampleList>
 ::AddInput( const InputSampleListObjectType * inputPtr )
  {
  // Process object is not const-correct so the const_cast is required here
- this->ProcessObject::AddInput(const_cast< InputSampleListObjectType* >( inputPtr ) );
+ Superclass::ProcessObject::AddInput(const_cast< InputSampleListObjectType* >( inputPtr ) );
  }
 
-template < class TInputSampleList, class TOutputSampleList >
-typename ConcatenateSampleListFilter<TInputSampleList,TOutputSampleList>
-::OutputSampleListType *
-ConcatenateSampleListFilter<TInputSampleList,TOutputSampleList>
-::GetOutputSampleList()
- {
- typename OutputSampleListObjectType::Pointer dataObjectPointer = static_cast<OutputSampleListObjectType * >
- (this->ProcessObject::GetOutput(0) );
- return const_cast<OutputSampleListType *>(dataObjectPointer->Get());
- }
-
-template < class TInputSampleList, class TOutputSampleList >
-typename ConcatenateSampleListFilter<TInputSampleList,TOutputSampleList>
-::OutputSampleListObjectType *
-ConcatenateSampleListFilter<TInputSampleList,TOutputSampleList>
-::GetOutput()
- {
- return static_cast<OutputSampleListObjectType * >
-  (this->ProcessObject::GetOutput(0) );
- }
 
 template < class TInputSampleList, class TOutputSampleList >
 void
@@ -108,7 +68,7 @@ ConcatenateSampleListFilter<TInputSampleList,TOutputSampleList>
   {
   // Retrieve the ListSample
   typename InputSampleListObjectType::ConstPointer inputPtr =
-    static_cast<InputSampleListObjectType *>(this->GetInput(inputIndex));
+    static_cast<InputSampleListObjectType *>(Superclass::ProcessObject::GetInput(inputIndex));
   totalNumberOfSamples+=inputPtr->Get()->Size();
   }
 
@@ -119,7 +79,7 @@ ConcatenateSampleListFilter<TInputSampleList,TOutputSampleList>
  {
   // Retrieve the ListSample
   typename InputSampleListObjectType::ConstPointer inputPtr =
-    static_cast<InputSampleListObjectType *>(this->GetInput(inputIndex));
+    static_cast<InputSampleListObjectType *>(Superclass::ProcessObject::GetInput(inputIndex));
   InputSampleListConstPointer inputSampleListPtr = inputPtr->Get();
 
   typename InputSampleListType::ConstIterator inputIt = inputSampleListPtr->Begin();
