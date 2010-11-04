@@ -566,8 +566,23 @@ ${TEMP}/leTvShiftScaleSampleListFilterOutput.txt
 -1 -3
  0 -1
 )
+# Gaussian Additive 
+ADD_TEST(leTuGaussianAdditiveNoiseSampleListFilterNew ${LEARNING_TESTS4}
+otbGaussianAdditiveNoiseSampleListFilterNew)
 
-
+ADD_TEST(leTvGaussianAdditiveNoiseSampleListFilter ${LEARNING_TESTS4}
+--compare-ascii ${NOTOL}
+	${BASELINE_FILES}/leTvGaussianAdditiveNoiseSampleListFilterOutput.txt
+	${TEMP}/leTvGaussianAdditiveNoiseSampleListFilterOutput.txt
+otbGaussianAdditiveNoiseSampleListFilter
+${TEMP}/leTvGaussianAdditiveNoiseSampleListFilterOutput.txt
+ 2
+-1 -3
+ 1  2
+-2 -5
+-1 -3
+ 0 -1
+)
 
 # Testing srcs
 SET(BasicLearning_SRCS1
@@ -635,6 +650,7 @@ otbListSampleGeneratorTest.cxx
 otbConfusionMatrixCalculatorTest.cxx
 otbSVMValidation.cxx
 otbShiftScaleSampleListFilter.cxx
+otbGaussianAdditiveNoiseSampleListFilter.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbLearningTests1 "${BasicLearning_SRCS1}" "OTBLearning;OTBIO;OTBTesting")
