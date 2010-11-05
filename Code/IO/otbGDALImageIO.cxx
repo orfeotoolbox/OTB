@@ -342,7 +342,7 @@ void GDALImageIO::ReadImageInformation()
 void GDALImageIO::InternalReadImageInformation()
 {
   GDALDataset* dataset = m_Dataset->GetDataSet();
-  otbMsgDevMacro(<< "  GCPCount (original): " << m_poDataset->GetGCPCount());
+//  otbMsgDevMacro(<< "  GCPCount (original): " << m_Dataset->GetGCPCount());
 
   // Get image dimensions
   if ( dataset->GetRasterXSize() == 0 || dataset->GetRasterYSize() == 0 )
