@@ -41,13 +41,17 @@ GaussianAdditiveNoiseSampleListFilter<TInputSampleList,TOutputSampleList>
   typedef itk::Statistics::MersenneTwisterRandomVariateGenerator GeneratorType;
   GeneratorType::Pointer   generator   = GeneratorType::New();
 
+  // Clear the coefficients vector first
+  m_WhiteGaussianNoiseCoefficients.clear();
+
+  // Get the size of the measurement vectors
   unsigned int size = this->GetInput()->Get()->GetMeasurementVectorSize();
   if(size == 0)
     {
     itkExceptionMacro(<< "MeasurementVector size is  "<<size << " , excpect non null size " );
     }
   else
-    for(unsigned int i = 0; i <size  ; i++)
+    for(unsigned int i = 0; i <size; i++)
       {
       double ran = generator->GetNormalVariate(m_Mean,m_Variance);
       m_WhiteGaussianNoiseCoefficients.push_back(ran);

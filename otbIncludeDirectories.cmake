@@ -38,6 +38,7 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Code/Markov
   ${OTB_SOURCE_DIR}/Code/MultiScale
   ${OTB_SOURCE_DIR}/Code/OBIA
+  ${OTB_SOURCE_DIR}/Code/ObjectDetection
   ${OTB_SOURCE_DIR}/Code/Projections
   ${OTB_SOURCE_DIR}/Code/Radiometry
   ${OTB_SOURCE_DIR}/Code/SARPolarimetry
@@ -302,6 +303,7 @@ SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
   GeospatialAnalysis
   Testing
   OBIA
+  ObjectDetection
   Utilities
   Utilities/ITK
   Utilities/otbsvm
