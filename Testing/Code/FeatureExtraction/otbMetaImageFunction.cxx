@@ -20,12 +20,86 @@
 #endif
 
 #include "otbMetaImageFunction.h"
+#include "otbImage.h"
+#include "otbImageFileReader.h"
+#include "otbFlusserMomentsImageFunction.h"
+#include "otbImageFunctionAdapter.h"
 
-typedef otb::MetaImageFunction<> MetaImageFunctionType;
+typedef unsigned short                                                InputPixelType;
+const unsigned int Dimension =                                        2;
+
+typedef otb::Image<InputPixelType,  Dimension>                        InputImageType;
+typedef otb::ImageFileReader<InputImageType>                          ReaderType;
+typedef otb::FlusserMomentsImageFunction<InputImageType>              FlusserFunctionType;
+typedef otb::ImageFunctionAdapter<InputImageType,FlusserFunctionType> FunctionType;
+
+typedef otb::MetaImageFunction<
+        itk::NumericTraits<InputPixelType>::RealType,double>          MetaImageFunctionType;
+typedef MetaImageFunctionType::PointType                              PointType;
+typedef MetaImageFunctionType::OutputType                             OutputType;
 
 int otbMetaImageFunctionNew(int argc, char * argv[])
 {
   MetaImageFunctionType::Pointer function = MetaImageFunctionType::New();
+
+  return EXIT_SUCCESS;
+}
+
+int otbMetaImageFunction(int argc, char * argv[])
+{
+  // Read the input image
+  ReaderType::Pointer   reader = ReaderType::New();
+  reader->SetFileName(argv[1]);
+  reader->Update();
+
+  // Build  flusser functions with different radius
+  FunctionType::Pointer function1 = FunctionType::New();
+  FunctionType::Pointer function2 = FunctionType::New();
+  FunctionType::Pointer function3 = FunctionType::New();
+
+  function1->SetInputImage(reader->GetOutput());
+  function2->SetInputImage(reader->GetOutput());
+  function3->SetInputImage(reader->GetOutput());
+
+  function1->GetImageFunction()->SetNeighborhoodRadius(3);
+  function2->GetImageFunction()->SetNeighborhoodRadius(5);
+  function3->GetImageFunction()->SetNeighborhoodRadius(7);
+
+  std::ofstream outputStream(argv[2]);
+
+  MetaImageFunctionType::Pointer metaFunction = MetaImageFunctionType::New();
+  metaFunction->AddFunction(function1);
+  metaFunction->AddFunction(function2);
+  metaFunction->AddFunction(function3);
+
+  outputStream<<"Initial number of functions: "<<metaFunction->GetNumberOfFunctions()<<std::endl;
+
+  metaFunction->RemoveNthFunction(2);
+
+  outputStream<<"Number of functions after removing the 2nd: "<<metaFunction->GetNumberOfFunctions()<<std::endl;
+
+  metaFunction->ClearFunctions();
+
+  outputStream<<"Number of functions after clear: "<<metaFunction->GetNumberOfFunctions()<<std::endl;
+
+  metaFunction->AddFunction(function1);
+  metaFunction->AddFunction(function2);
+  metaFunction->AddFunction(function3);
+
+  outputStream<<"Adding functions again: "<<metaFunction->GetNumberOfFunctions()<<std::endl;
+
+  // For coverage
+  metaFunction->GetNthFunction(0);
+
+  PointType p;
+  p[0] = atof(argv[3]);
+  p[1] = atof(argv[4]);
+
+  OutputType output = metaFunction->Evaluate(p);
+
+  outputStream<<"Evaluate("<<p<<") = "<<output<<std::endl;
+
+  outputStream.close();
 
   return EXIT_SUCCESS;
 }

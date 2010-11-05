@@ -1518,6 +1518,15 @@ ADD_TEST(feTuMetaImageFunctionNew ${FEATUREEXTRACTION_TESTS16}
         otbMetaImageFunctionNew
 )
 
+ADD_TEST(feTvMetaImageFunction ${FEATUREEXTRACTION_TESTS16}
+--compare-ascii ${EPSILON_8}     
+    ${BASELINE_FILES}/feTvMetaImageFunction.txt
+    ${TEMP}/feTvMetaImageFunction.txt
+    otbMetaImageFunction
+	${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+    ${TEMP}/feTvMetaImageFunction.txt
+    451846.014047961 5412466.57452216
+)
 
 # A enrichir
 SET(BasicFeatureExtraction_SRCS1
