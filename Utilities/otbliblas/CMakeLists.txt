@@ -8,37 +8,6 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 SET(liblas_SOURCES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-#SET(liblas_SRCS
-    #"${liblas_SOURCES_DIR}/las_c_api.cpp"
-    #"${liblas_SOURCES_DIR}/lascolor.cpp"
-    #"${liblas_SOURCES_DIR}/laserror.cpp"
-    #"${liblas_SOURCES_DIR}/lasfile.cpp"
-    #"${liblas_SOURCES_DIR}/lasheader.cpp"
-    #"${liblas_SOURCES_DIR}/laspoint.cpp"
-    #"${liblas_SOURCES_DIR}/lasreader.cpp"
-    #"${liblas_SOURCES_DIR}/lasspatialreference.cpp"
-    #"${liblas_SOURCES_DIR}/lasvariablerecord.cpp"
-    #"${liblas_SOURCES_DIR}/laswriter.cpp"
-    #"${liblas_SOURCES_DIR}/tifvsi.cpp"
-    #"${liblas_SOURCES_DIR}/detail/file.cpp"
-    #"${liblas_SOURCES_DIR}/detail/reader11.cpp"
-    #"${liblas_SOURCES_DIR}/detail/reader/reader.cpp"
-    #"${liblas_SOURCES_DIR}/detail/reader/point.cpp"
-    #"${liblas_SOURCES_DIR}/detail/reader/header.cpp"
-    #"${liblas_SOURCES_DIR}/detail/reader/cachedreader.cpp"
-    #"${liblas_SOURCES_DIR}/detail/writer11.cpp"
-    #"${liblas_SOURCES_DIR}/detail/writer/writer.cpp"
-    #"${liblas_SOURCES_DIR}/detail/writer/point.cpp"
-    #"${liblas_SOURCES_DIR}/detail/writer/base.cpp"
-    #"${liblas_SOURCES_DIR}/detail/writer/header.cpp"
-
-    #"${liblas_SOURCES_DIR}/detail/reader10.cpp"
-    #"${liblas_SOURCES_DIR}/detail/reader12.cpp"
-    #"${liblas_SOURCES_DIR}/detail/writer10.cpp"
-    #"${liblas_SOURCES_DIR}/detail/writer12.cpp"
-#    )
-
-
 SET(liblas_SRCS
   #las src
   "${liblas_SOURCES_DIR}/las_c_api.cpp"
@@ -121,10 +90,15 @@ IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
   INSTALL(FILES ${__files3}
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbliblas/include/liblas/capi
     COMPONENT Development)
-  FILE(GLOB_RECURSE __files4 "${CMAKE_CURRENT_SOURCE_DIR}/include/liblas/external/property_tree/*.hpp")
+  FILE(GLOB __files4 "${CMAKE_CURRENT_SOURCE_DIR}/include/liblas/external/property_tree/*.hpp")
   INSTALL(FILES ${__files4}
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbliblas/include/liblas/external/property_tree
     COMPONENT Development)
+  FILE(GLOB __files5 "${CMAKE_CURRENT_SOURCE_DIR}/include/liblas/external/property_tree/detail/*.hpp")
+  INSTALL(FILES ${__files4}
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbliblas/include/liblas/external/property_tree/detail
+    COMPONENT Development)
+
 ENDIF(NOT OTB_INSTALL_NO_DEVELOPMENT)
 
 ENDIF(NOT OTB_DISABLE_UTILITIES_COMPILATION)
