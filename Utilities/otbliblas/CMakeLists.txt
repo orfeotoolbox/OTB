@@ -91,7 +91,6 @@ ENDIF()
 
 IF(NOT OTB_DISABLE_UTILITIES_COMPILATION)
 
-
 ADD_LIBRARY(otbliblas ${liblas_SRCS} )
 
 IF(NOT GDAL_VERSION VERSION_LESS 1.6)
@@ -121,6 +120,10 @@ IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
   FILE(GLOB __files3 "${CMAKE_CURRENT_SOURCE_DIR}/include/liblas/capi/*.h")
   INSTALL(FILES ${__files3}
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbliblas/include/liblas/capi
+    COMPONENT Development)
+  FILE(GLOB_RECURSE __files4 "${CMAKE_CURRENT_SOURCE_DIR}/include/liblas/external/property_tree/*.hpp")
+  INSTALL(FILES ${__files4}
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbliblas/include/liblas/external/property_tree
     COMPONENT Development)
 ENDIF(NOT OTB_INSTALL_NO_DEVELOPMENT)
 
