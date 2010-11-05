@@ -529,6 +529,37 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
         numberOfPixels);              \
       } \
     }
+#define ITK_CONVERT_CBUFFER_IF_BLOCK(type)               \
+ else if( m_ImageIO->GetComponentTypeInfo() == typeid(type) )   \
+   {                                                   \
+   if( strcmp( this->GetOutput()->GetNameOfClass(), "VectorImage" ) == 0 ) \
+     { \
+     ConvertPixelBuffer<                                 \
+      type::value_type,        \
+      OutputImagePixelType,                             \
+      ConvertPixelTraits                                \
+      >                                                 \
+      ::ConvertComplexVectorImageToVectorImage(                             \
+        static_cast<type*>(inputData),                \
+        m_ImageIO->GetNumberOfComponents(),             \
+        outputData,                                     \
+        numberOfPixels);              \
+     } \
+   else \
+     { \
+     ConvertPixelBuffer<                                 \
+      type::value_type,        \
+      OutputImagePixelType,                             \
+      ConvertPixelTraits                                \
+      >                                                 \
+      ::ConvertComplexToGray(                                        \
+        static_cast<type*>(inputData),                  \
+        m_ImageIO->GetNumberOfComponents(),             \
+        outputData,                                     \
+        numberOfPixels);              \
+      } \
+    }
+
   if(0)
     {
     }
@@ -542,6 +573,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   ITK_CONVERT_BUFFER_IF_BLOCK( long)
   ITK_CONVERT_BUFFER_IF_BLOCK(float)
   ITK_CONVERT_BUFFER_IF_BLOCK( double)
+  ITK_CONVERT_CBUFFER_IF_BLOCK(std::complex<float>)
   else
     {
     ImageFileReaderException e(__FILE__, __LINE__);
@@ -567,6 +599,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     return;
     }
 #undef ITK_CONVERT_BUFFER_IF_BLOCK
+#undef ITK_CONVERT_CBUFFER_IF_BLOCK
 }
 
 

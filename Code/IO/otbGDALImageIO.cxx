@@ -185,6 +185,7 @@ GDALImageIO::GDALImageIO()
   m_FlagWriteImageInformation = true;
 
   m_CanStreamWrite = false;
+  m_IsComplex = false;
 }
 
 GDALImageIO::~GDALImageIO()
@@ -241,7 +242,7 @@ void GDALImageIO::Read(void* buffer)
   std::streamoff cpt(0);
   GDALDataset* dataset = m_Dataset->GetDataSet();
 
-  if (GDALDataTypeIsComplex(m_PxType))
+  if (GDALDataTypeIsComplex(m_PxType) && !m_IsComplex)
     {
     lCrGdal = dataset->GetRasterBand(1)->RasterIO(GF_Read,
                                                  lFirstColumn,
@@ -341,7 +342,7 @@ void GDALImageIO::ReadImageInformation()
 void GDALImageIO::InternalReadImageInformation()
 {
   GDALDataset* dataset = m_Dataset->GetDataSet();
-  otbMsgDevMacro(<< "  GCPCount (original): " << m_poDataset->GetGCPCount());
+//  otbMsgDevMacro(<< "  GCPCount (original): " << m_Dataset->GetGCPCount());
 
   // Get image dimensions
   if ( dataset->GetRasterXSize() == 0 || dataset->GetRasterYSize() == 0 )
@@ -422,13 +423,17 @@ void GDALImageIO::InternalReadImageInformation()
     {
     SetComponentType(INT);
     }
-  else if ((m_PxType == GDT_Float32) || (m_PxType == GDT_CFloat32))
+  else if (m_PxType == GDT_Float32)
     {
     SetComponentType(FLOAT);
     }
   else if ((m_PxType == GDT_Float64) || (m_PxType == GDT_CFloat64))
     {
     SetComponentType(DOUBLE);
+    }
+  else if (m_PxType == GDT_CFloat32)
+    {
+    SetComponentType(CFLOAT);
     }
   else
     {
@@ -438,34 +443,47 @@ void GDALImageIO::InternalReadImageInformation()
   if (this->GetComponentType() == CHAR)
     {
     m_NbOctetPixel = 1;
+    m_IsComplex = false;
     }
   else if (this->GetComponentType() == UCHAR)
     {
     m_NbOctetPixel = 1;
+    m_IsComplex = false;
     }
   else if (this->GetComponentType() == USHORT)
     {
     m_NbOctetPixel = 2;
+    m_IsComplex = false;
     }
   else if (this->GetComponentType() == SHORT)
     {
     m_NbOctetPixel = 2;
+    m_IsComplex = false;
     }
   else if (this->GetComponentType() == INT)
     {
     m_NbOctetPixel = 4;
+    m_IsComplex = false;
     }
   else if (this->GetComponentType() == UINT)
     {
     m_NbOctetPixel = 4;
+    m_IsComplex = false;
     }
   else if (this->GetComponentType() == FLOAT)
     {
     m_NbOctetPixel = 4;
+    m_IsComplex = false;
     }
   else if (this->GetComponentType() == DOUBLE)
     {
     m_NbOctetPixel = 8;
+    m_IsComplex = false;
+    }
+  else if (this->GetComponentType() == CFLOAT)
+    {
+    m_NbOctetPixel = sizeof(std::complex<float>);
+    m_IsComplex = true;
     }
   else
     {
@@ -475,8 +493,9 @@ void GDALImageIO::InternalReadImageInformation()
   /******************************************************************/
   // Pixel Type always set to Scalar for GDAL ? maybe also to vector ?
 
-  // Modif Patrick: LIRE LES IMAGES COMPLEXES
-  if (GDALDataTypeIsComplex(m_PxType))
+  //Once all sorts of gdal complex image are handle, this won't be
+  //necessary any more
+  if (GDALDataTypeIsComplex(m_PxType) && (m_PxType != GDT_CFloat32))
     {
     m_NbOctetPixel = m_NbOctetPixel * 2;
     this->SetNumberOfComponents(2);

@@ -68,7 +68,7 @@ class ITK_EXPORT ImageFunctionAdapterBase :
   typedef typename Superclass::OutputType          OutputType;
   typedef typename OutputType::ValueType           OutputValueType;
   
-  // Template Partial Specialazation Specific typedef //
+  // Template Partial Specialization Specific typedef //
   typedef TInternalImageFunctionType               InternalImageFunctionType;
   typedef typename InternalImageFunctionType::Pointer       InternalImageFunctionPointerType;
   
@@ -196,7 +196,7 @@ public:
   typedef typename Superclass::IndexType           IndexType;
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
   typedef typename Superclass::OutputType          OutputType;
-  // Template Partial Specialazation Specific typedef //
+  // Template Partial Specialization Specific typedef //
   typedef typename Superclass::InternalImageFunctionType               InternalImageFunctionType;
 
   // Evalulate the function at specified index //
@@ -241,7 +241,7 @@ public:
   typedef typename Superclass::IndexType           IndexType;
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
   typedef typename Superclass::OutputType          OutputType;
-  // Template Partial Specialazation Specific typedef //
+  // Template Partial Specialization Specific typedef //
   typedef typename Superclass::InternalImageFunctionType               InternalImageFunctionType;
 
   // Evalulate the function at specified index //
@@ -286,7 +286,7 @@ public:
   typedef typename Superclass::IndexType           IndexType;
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
   typedef typename Superclass::OutputType          OutputType;
-  // Template Partial Specialazation Specific typedef //
+  // Template Partial Specialization Specific typedef //
   typedef typename Superclass::InternalImageFunctionType               InternalImageFunctionType;
 
   // Evalulate the function at specified index //
@@ -331,7 +331,7 @@ public:
   typedef typename Superclass::IndexType           IndexType;
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
   typedef typename Superclass::OutputType          OutputType;
-  // Template Partial Specialazation Specific typedef //
+  // Template Partial Specialization Specific typedef //
   typedef typename Superclass::InternalImageFunctionType               InternalImageFunctionType;
 
   // Evalulate the function at specified index //
@@ -376,7 +376,7 @@ public:
   typedef typename Superclass::IndexType           IndexType;
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
   typedef typename Superclass::OutputType          OutputType;
-  // Template Partial Specialazation Specific typedef //
+  // Template Partial Specialization Specific typedef //
   typedef typename Superclass::InternalImageFunctionType               InternalImageFunctionType;
 
   // Evalulate the function at specified index //
@@ -421,7 +421,7 @@ public:
   typedef typename Superclass::IndexType           IndexType;
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
   typedef typename Superclass::OutputType          OutputType;
-  // Template Partial Specialazation Specific typedef //
+  // Template Partial Specialization Specific typedef //
   typedef typename Superclass::InternalImageFunctionType               InternalImageFunctionType;
 
   // Evalulate the function at specified index //
@@ -467,7 +467,7 @@ public:
   typedef typename Superclass::IndexType           IndexType;
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
   typedef typename Superclass::OutputType          OutputType;
-  // Template Partial Specialazation Specific typedef 
+  // Template Partial Specialization Specific typedef
   typedef typename Superclass::InternalImageFunctionType               InternalImageFunctionType;
 
   // Evalulate the function at specified index //
