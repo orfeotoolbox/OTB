@@ -95,10 +95,9 @@ IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbliblas/include/liblas/external/property_tree
     COMPONENT Development)
   FILE(GLOB __files5 "${CMAKE_CURRENT_SOURCE_DIR}/include/liblas/external/property_tree/detail/*.hpp")
-  INSTALL(FILES ${__files4}
+  INSTALL(FILES ${__files5}
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbliblas/include/liblas/external/property_tree/detail
     COMPONENT Development)
-
 ENDIF(NOT OTB_INSTALL_NO_DEVELOPMENT)
 
 ENDIF(NOT OTB_DISABLE_UTILITIES_COMPILATION)
