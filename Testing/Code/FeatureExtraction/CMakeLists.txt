@@ -1512,6 +1512,11 @@ ADD_TEST(feTvImageFunctionAdapter ${FEATUREEXTRACTION_TESTS16}
         otbImageFunctionAdapter
                 ${INPUTDATA}/poupees.png
 	        )
+	        
+# -------   otb::MetaImageFunction   -------------
+ADD_TEST(feTuMetaImageFunctionNew ${FEATUREEXTRACTION_TESTS16}
+        otbMetaImageFunctionNew
+)
 
 
 # A enrichir
@@ -1709,6 +1714,7 @@ otbFourierMellinDescriptors.cxx
 otbLocalHistogramImageFunctionNew.cxx
 otbLocalHistogramImageFunctionTest.cxx
 otbImageFunctionAdapter.cxx
+otbMetaImageFunction.cxx
 )
 
 
