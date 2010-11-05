@@ -471,9 +471,9 @@ void GDALImageIO::InternalReadImageInformation()
   /******************************************************************/
   // Pixel Type always set to Scalar for GDAL ? maybe also to vector ?
 
-  // Modif Patrick: LIRE LES IMAGES COMPLEXES
-//  if (GDALDataTypeIsComplex(m_PxType))
-  if(0)
+  //Once all sorts of gdal complex image are handle, this won't be
+  //necessary any more
+  if (GDALDataTypeIsComplex(m_PxType) && (m_PxType != GDT_CFloat32))
     {
     m_NbOctetPixel = m_NbOctetPixel * 2;
     this->SetNumberOfComponents(2);
