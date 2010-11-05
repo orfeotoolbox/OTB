@@ -51,7 +51,7 @@ GaussianAdditiveNoiseSampleListFilter<TInputSampleList,TOutputSampleList>
     itkExceptionMacro(<< "MeasurementVector size is  "<<size << " , excpect non null size " );
     }
   else
-    for(unsigned int i = 0; i <size  ; i++)
+    for(unsigned int i = 0; i <size; i++)
       {
       double ran = generator->GetNormalVariate(m_Mean,m_Variance);
       m_WhiteGaussianNoiseCoefficients.push_back(ran);
