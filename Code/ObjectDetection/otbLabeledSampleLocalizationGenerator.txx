@@ -36,9 +36,6 @@ LabeledSampleLocalizationGenerator<TVectorData>
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfRequiredOutputs(1);
  
-  m_OutputVectorData = VectorDataType::New();
-  this->SetNthOutput(0, m_OutputVectorData);
-
   m_RandomGenerator = RandomGeneratorType::New();
 }
 

@@ -108,8 +108,6 @@ private:
   LabeledSampleLocalizationGenerator(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  typename VectorDataType::Pointer m_OutputVectorData;
-
   RandomGeneratorType::Pointer m_RandomGenerator;
 
   std::string               m_ClassKey;
