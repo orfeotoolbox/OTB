@@ -146,11 +146,13 @@ int otbVectorImageComplexTest(int argc, char* argv[])
   reader->SetFileName(argv[1]);
   reader->UpdateOutputInformation();
   std::cout << reader->GetOutput()->GetNumberOfComponentsPerPixel() << std::endl;
-
+  itk::ImageIOBase::Pointer io = reader->GetImageIO();
+  std::cout << io << std::endl;
   reader->Update();
   ImageType::IndexType index;
   index[0]=0;
   index[1]=0;
+
   std::cout << reader->GetOutput()->GetPixel(index) << std::endl;
 
   return EXIT_SUCCESS;

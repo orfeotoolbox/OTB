@@ -595,6 +595,27 @@ ConvertPixelBuffer<InputPixelType, OutputPixelType, OutputConvertTraits>
     }
 }
 
+template < typename InputPixelType,
+           typename OutputPixelType,
+           class OutputConvertTraits
+           >
+void
+ConvertPixelBuffer<InputPixelType, OutputPixelType, OutputConvertTraits>
+::ConvertComplexToGray(std::complex<InputPixelType>* inputData, 
+                      int inputNumberOfComponents, 
+                      OutputPixelType* outputData , size_t size)
+{
+  std::complex<InputPixelType>* endInput = inputData + size;
+  while(inputData != endInput)
+    {
+    OutputConvertTraits::SetNthComponent(0, *outputData, 
+      static_cast<OutputComponentType>
+                                         (std::norm(*inputData)));
+    inputData++;
+    outputData++;
+    }
+}
+
 
 template < typename InputPixelType,
            typename OutputPixelType,
@@ -697,6 +718,41 @@ ConvertPixelBuffer<InputPixelType, OutputPixelType, OutputConvertTraits>
     }
 }
 
+/* To be able to convert transparently*/
+
+template<typename InputType, typename OutputType>
+OutputType
+SpecialCast(const std::complex<InputType>& in, const OutputType& dummy)
+{
+  return static_cast < OutputType >( in.real() );
+}
+
+template<typename InputType, typename OutputType>
+std::complex<OutputType>
+SpecialCast(const std::complex<InputType>& in, const std::complex<OutputType>& dummy)
+{
+  return static_cast < std::complex<OutputType> >( in );
+}
+
+template < typename InputPixelType,
+           typename OutputPixelType,
+           class OutputConvertTraits >
+void
+ConvertPixelBuffer<InputPixelType, OutputPixelType, OutputConvertTraits>
+::ConvertComplexVectorImageToVectorImage(std::complex<InputPixelType>* inputData, 
+                     int inputNumberOfComponents, 
+                     OutputPixelType* outputData , size_t size)
+{
+  size_t length = size* (size_t)inputNumberOfComponents;
+  OutputPixelType dummy;
+  for( size_t i=0; i< length; i++ )
+    {
+    OutputConvertTraits::SetNthComponent( 0, *outputData, 
+                                          SpecialCast(*inputData, dummy));
+    ++outputData;
+    ++inputData;
+    }
+}
 
 }// end namespace itk
 
