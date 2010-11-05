@@ -74,10 +74,8 @@ public:
   typedef itk::Statistics::MersenneTwisterRandomVariateGenerator RandomGeneratorType;
   typedef itk::Statistics::EuclideanDistance<PointType>          EuclideanDistanceType;
   
-  /** Connects the vector data from which the localizations are going to be extracted.
-    * This is the only input vector data, both the positive and
-    * negative sample localizations come from it */
-  void SetInput(const VectorDataType *);
+  /** Connects the VectorDatas from which the localizations are going to be extracted. */
+  void PushBackInput(const VectorDataType *);
   const VectorDataType * GetInput(unsigned int idx) const;
 
   virtual void Update();

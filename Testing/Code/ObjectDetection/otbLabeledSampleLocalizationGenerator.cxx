@@ -60,8 +60,8 @@ int otbLabeledSampleLocalizationGenerator(int argc, char* argv[])
   reader2->SetFileName(inputVD2);
   reader2->Update();
 
-  generator->SetInput(reader1->GetOutput());
-  generator->SetInput(reader2->GetOutput());
+  generator->PushBackInput(reader1->GetOutput());
+  generator->PushBackInput(reader2->GetOutput());
 
   generator->SetPseudoRandom(true);
 

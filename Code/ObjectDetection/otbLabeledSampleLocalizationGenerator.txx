@@ -58,7 +58,7 @@ LabeledSampleLocalizationGenerator<TVectorData>
 template <class TVectorData>
 void
 LabeledSampleLocalizationGenerator<TVectorData>
-::SetInput(const VectorDataType * vectorData)
+::PushBackInput(const VectorDataType * vectorData)
 {
   this->Superclass::SetNthInput(this->GetNumberOfInputs(), const_cast<VectorDataType *>(vectorData));
 }
@@ -286,13 +286,6 @@ LabeledSampleLocalizationGenerator<TVectorData>
       }   
     }
 }
-
-
-
-  //m_RandomGenerator->SetSeed(1234); // dans le polygonhandler
-  // 1- transmit the points
-  // 2- generate random negative points from polygons regarding to
-  // declared points...
 
 } // end namespace otb
 
