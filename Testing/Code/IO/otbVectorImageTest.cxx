@@ -171,3 +171,8 @@ int otbVectorImageComplexFloatTest(int argc, char* argv[])
 {
   return otbVectorImageComplexGenericTest<float>(argc, argv);
 }
+
+int otbVectorImageComplexDoubleTest(int argc, char* argv[])
+{
+  return otbVectorImageComplexGenericTest<double>(argc, argv);
+}

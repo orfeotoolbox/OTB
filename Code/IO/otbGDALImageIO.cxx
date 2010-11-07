@@ -427,13 +427,17 @@ void GDALImageIO::InternalReadImageInformation()
     {
     SetComponentType(FLOAT);
     }
-  else if ((m_PxType == GDT_Float64) || (m_PxType == GDT_CFloat64))
+  else if (m_PxType == GDT_Float64)
     {
     SetComponentType(DOUBLE);
     }
   else if (m_PxType == GDT_CFloat32)
     {
     SetComponentType(CFLOAT);
+    }
+  else if (m_PxType == GDT_CFloat64)
+    {
+    SetComponentType(CDOUBLE);
     }
   else
     {
@@ -485,6 +489,11 @@ void GDALImageIO::InternalReadImageInformation()
     m_NbOctetPixel = sizeof(std::complex<float>);
     m_IsComplex = true;
     }
+  else if (this->GetComponentType() == CDOUBLE)
+    {
+    m_NbOctetPixel = sizeof(std::complex<double>);
+    m_IsComplex = true;
+    }
   else
     {
     itkExceptionMacro(<< "Component type unknown");
@@ -495,7 +504,9 @@ void GDALImageIO::InternalReadImageInformation()
 
   //Once all sorts of gdal complex image are handle, this won't be
   //necessary any more
-  if (GDALDataTypeIsComplex(m_PxType) && (m_PxType != GDT_CFloat32))
+  if (GDALDataTypeIsComplex(m_PxType) 
+      && (m_PxType != GDT_CFloat32)
+      && (m_PxType != GDT_CFloat64))
     {
     m_NbOctetPixel = m_NbOctetPixel * 2;
     this->SetNumberOfComponents(2);

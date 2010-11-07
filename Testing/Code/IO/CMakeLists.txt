@@ -1129,6 +1129,11 @@ ADD_TEST(ioTuVectorImageComplexFloatTest ${IO_TESTS9}
     ${INPUTDATA}/multibandComplexFloat.hdr
 )
 
+ADD_TEST(ioTuVectorImageComplexDoubleTest ${IO_TESTS9}
+  otbVectorImageComplexDoubleTest
+    ${INPUTDATA}/multibandComplexDouble.hdr
+)
+
 # ---  otb::VectorImageReadWriteTest  ---
 ADD_TEST(ioTvVectorImageFileReaderWriterTest ${IO_TESTS9}
    --compare-image ${EPSILON_9}

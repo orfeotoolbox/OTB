@@ -574,6 +574,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   ITK_CONVERT_BUFFER_IF_BLOCK(float)
   ITK_CONVERT_BUFFER_IF_BLOCK( double)
   ITK_CONVERT_CBUFFER_IF_BLOCK(std::complex<float>)
+  ITK_CONVERT_CBUFFER_IF_BLOCK(std::complex<double>)
   else
     {
     ImageFileReaderException e(__FILE__, __LINE__);
