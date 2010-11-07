@@ -1124,9 +1124,9 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(ioTuVectorImageComplexNew ${IO_TESTS9}
   otbVectorImageComplexNew)
 
-ADD_TEST(ioTuVectorImageComplexTest ${IO_TESTS9}
-  otbVectorImageComplexTest
-    ${INPUTDATA}/multibandComplex.hdr
+ADD_TEST(ioTuVectorImageComplexFloatTest ${IO_TESTS9}
+  otbVectorImageComplexFloatTest
+    ${INPUTDATA}/multibandComplexFloat.hdr
 )
 
 # ---  otb::VectorImageReadWriteTest  ---

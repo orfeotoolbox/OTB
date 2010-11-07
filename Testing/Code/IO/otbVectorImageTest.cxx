@@ -14,7 +14,7 @@
   the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
-  =========================================================================*/
+=========================================================================*/
 
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
@@ -137,23 +137,37 @@ int otbVectorImageComplexNew(int argc, char* argv[])
   return EXIT_SUCCESS;
 }
 
-int otbVectorImageComplexTest(int argc, char* argv[])
+
+template<class InternalType>
+int otbVectorImageComplexGenericTest(int argc, char* argv[])
 {
-  typedef std::complex<float> PixelType;
+  typedef std::complex<InternalType> PixelType;
   typedef otb::VectorImage<PixelType, 2> ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
-  ReaderType::Pointer reader = ReaderType::New();
+  typename ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);
   reader->UpdateOutputInformation();
   std::cout << reader->GetOutput()->GetNumberOfComponentsPerPixel() << std::endl;
   itk::ImageIOBase::Pointer io = reader->GetImageIO();
   std::cout << io << std::endl;
   reader->Update();
-  ImageType::IndexType index;
+  typename ImageType::IndexType index;
   index[0]=0;
   index[1]=0;
 
-  std::cout << reader->GetOutput()->GetPixel(index) << std::endl;
+  typename ImageType::PixelType pixel = reader->GetOutput()->GetPixel(index);
+  std::cout << pixel << std::endl;
 
+  //Test value
+  if ((pixel[0] != PixelType(0,1))
+      || (pixel[1] != PixelType(20000, 20001)))
+    {
+    return EXIT_FAILURE;
+    }
   return EXIT_SUCCESS;
+}
+
+int otbVectorImageComplexFloatTest(int argc, char* argv[])
+{
+  return otbVectorImageComplexGenericTest<float>(argc, argv);
 }

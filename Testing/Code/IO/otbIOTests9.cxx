@@ -29,7 +29,7 @@ void RegisterTests()
   REGISTER_TEST(otbImageTest);
   REGISTER_TEST(otbVectorImageTest);
   REGISTER_TEST(otbVectorImageComplexNew);
-  REGISTER_TEST(otbVectorImageComplexTest);
+  REGISTER_TEST(otbVectorImageComplexFloatTest);
   REGISTER_TEST(otbStreamingImageFilterTest);
   REGISTER_TEST(otbVectorImageFileReaderWriterTest);
   REGISTER_TEST(otbStreamingShortImageFileWriterTest);
