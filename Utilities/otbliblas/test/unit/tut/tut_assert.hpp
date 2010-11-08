@@ -135,7 +135,7 @@ void ensure_equals(const M& msg, const double& actual, const double& expected, c
 {
     const double diff = actual - expected;
 
-    if ( (actual != expected) && !((diff <= epsilon) && (diff >= -epsilon )) )
+    if ( !((diff <= epsilon) && (diff >= -epsilon )) )
     {
         std::ostringstream ss;
         detail::msg_prefix(ss,msg)

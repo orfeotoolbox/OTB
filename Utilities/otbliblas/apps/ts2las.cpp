@@ -120,7 +120,6 @@ bool ReadHeader(ScanHdr* hdr, std::istream* istrm)
         return false;
     }    
 
-    return true;
 }
 
 bool WritePoints(liblas::Writer* writer, std::istream* strm, ScanHdr* hdr) 
@@ -136,9 +135,9 @@ bool WritePoints(liblas::Writer* writer, std::istream* strm, ScanHdr* hdr)
             {
                 // std::cout << "stream position is: " << strm->tellg() << std::endl;
                 if (hdr->HdrVersion == 20020715) {
-                    detail::read_n(*point, *strm, sizeof(ScanPnt));
+                    liblas::detail::read_n(*point, *strm, sizeof(ScanPnt));
                 } else{
-                    detail::read_n(*row, *strm, sizeof(ScanRow));
+                    liblas::detail::read_n(*row, *strm, sizeof(ScanRow));
                     point->Pnt.x = row->x;
                     point->Pnt.y = row->y;
                     point->Pnt.z = row->z;
@@ -149,8 +148,7 @@ bool WritePoints(liblas::Writer* writer, std::istream* strm, ScanHdr* hdr)
                 }
                 Point p;
 
-                p.SetCoordinates(writer->GetHeader(),
-                                    point->Pnt.x,
+                p.SetCoordinates( point->Pnt.x,
                                     point->Pnt.y,
                                     point->Pnt.z);
 
@@ -160,8 +158,8 @@ bool WritePoints(liblas::Writer* writer, std::istream* strm, ScanHdr* hdr)
                 p.SetClassification(point->Code);
                 p.SetIntensity(point->Intensity);
                 if (hdr->Time) {
-                    liblas::uint32_t t = 0xFFFFFFFF;
-                    detail::read_n(t, *strm, sizeof(t));
+                    boost::uint32_t t = 0xFFFFFFFF;
+                    liblas::detail::read_n(t, *strm, sizeof(t));
 
                     // Time stamps are assumed to be GPS week seconds. The 
                     // storage format is a 32 bit unsigned integer where 
@@ -170,15 +168,15 @@ bool WritePoints(liblas::Writer* writer, std::istream* strm, ScanHdr* hdr)
                     p.SetTime(t*0.0002);
                 }
                 if (hdr->Color) {
-                    liblas::uint8_t r, g, b, a = 0;
+                    boost::uint8_t r, g, b, a = 0;
                     liblas::Color color;
-                    detail::read_n(r, *strm, sizeof(r));
-                    detail::read_n(b, *strm, sizeof(b));
-                    detail::read_n(g, *strm, sizeof(g));
+                    liblas::detail::read_n(r, *strm, sizeof(r));
+                    liblas::detail::read_n(b, *strm, sizeof(b));
+                    liblas::detail::read_n(g, *strm, sizeof(g));
                     
                     // TS .bin says to read 4 bytes here for some reason.  Maybe 
                     // this is an alpha value or something
-                    detail::read_n(a, *strm, sizeof(a));
+                    liblas::detail::read_n(a, *strm, sizeof(a));
                     
                     color.SetGreen(g);
                     color.SetBlue(b);

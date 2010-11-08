@@ -436,7 +436,10 @@ IndexMap Schema::LoadDimensions(liblas::property_tree::ptree tree)
         d.IsSigned(issigned);
         d.IsRequired(isrequired);
         d.SetPosition(position);
-        if (min != max && min != 0 && max != 0) {
+        if (!detail::compare_distance(max, min ) && 
+            !detail::compare_distance(0.0, min) &&
+            !detail::compare_distance(0.0, max))
+        {
             d.SetMinimum(min);
             d.SetMaximum(max);
         }

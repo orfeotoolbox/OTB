@@ -1,4 +1,4 @@
-# Install script for directory: /tmp/liblas-main
+# Install script for directory: /tmp/liblas
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -29,19 +29,19 @@ ENDIF(NOT CMAKE_INSTALL_COMPONENT)
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/liblas/doc" TYPE FILE FILES
-    "/tmp/liblas-main/AUTHORS"
-    "/tmp/liblas-main/COPYING"
-    "/tmp/liblas-main/INSTALL"
-    "/tmp/liblas-main/LICENSE.txt"
-    "/tmp/liblas-main/README.txt"
+    "/tmp/liblas/AUTHORS"
+    "/tmp/liblas/COPYING"
+    "/tmp/liblas/INSTALL"
+    "/tmp/liblas/LICENSE.txt"
+    "/tmp/liblas/README.txt"
     )
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  INCLUDE("/tmp/liblas-main/src/cmake_install.cmake")
-  INCLUDE("/tmp/liblas-main/apps/cmake_install.cmake")
-  INCLUDE("/tmp/liblas-main/test/cmake_install.cmake")
+  INCLUDE("/tmp/liblas/src/cmake_install.cmake")
+  INCLUDE("/tmp/liblas/apps/cmake_install.cmake")
+  INCLUDE("/tmp/liblas/test/cmake_install.cmake")
 
 ENDIF(NOT CMAKE_INSTALL_LOCAL_ONLY)
 
@@ -51,7 +51,7 @@ ELSE(CMAKE_INSTALL_COMPONENT)
   SET(CMAKE_INSTALL_MANIFEST "install_manifest.txt")
 ENDIF(CMAKE_INSTALL_COMPONENT)
 
-FILE(WRITE "/tmp/liblas-main/${CMAKE_INSTALL_MANIFEST}" "")
+FILE(WRITE "/tmp/liblas/${CMAKE_INSTALL_MANIFEST}" "")
 FOREACH(file ${CMAKE_INSTALL_MANIFEST_FILES})
-  FILE(APPEND "/tmp/liblas-main/${CMAKE_INSTALL_MANIFEST}" "${file}\n")
+  FILE(APPEND "/tmp/liblas/${CMAKE_INSTALL_MANIFEST}" "${file}\n")
 ENDFOREACH(file)

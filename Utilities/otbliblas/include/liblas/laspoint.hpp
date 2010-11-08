@@ -49,6 +49,7 @@
 #include <liblas/detail/private_utility.hpp>
 #include <liblas/external/property_tree/ptree.hpp>
 #include <liblas/lasschema.hpp>
+#include <liblas/export.hpp>
 
 // boost
 #include <boost/array.hpp>
@@ -65,7 +66,7 @@ namespace liblas {
 
 
 /// Point data record composed with X, Y, Z coordinates and attributes.
-class Point
+class LAS_DLL Point
 {
 public:
 
@@ -243,7 +244,7 @@ inline double Point::operator[](std::size_t const& index) const
 }
 
 
-std::ostream& operator<<(std::ostream& os, liblas::Point const&);
+LAS_DLL std::ostream& operator<<(std::ostream& os, liblas::Point const&);
 
 
 } // namespace liblas

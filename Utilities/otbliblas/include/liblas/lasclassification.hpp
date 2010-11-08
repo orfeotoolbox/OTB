@@ -44,6 +44,7 @@
 
 // boost
 #include <boost/cstdint.hpp>
+#include <liblas/export.hpp>
 // std
 #include <cassert>
 #include <cstddef>
@@ -56,7 +57,7 @@ namespace liblas {
 
 /// Class definition to manipulate properties of point record classification.
 ///
-class Classification
+class LAS_DLL Classification
 {
 public:
 

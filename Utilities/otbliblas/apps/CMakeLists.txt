@@ -21,15 +21,20 @@ set(LAS2LAS las2las)
 set(LAS2LAS_OLD las2las-old)
 set(LAS2TXT las2txt)
 set(TXT2LAS txt2las)
+set(TS2LAS ts2las)
 set(LASBLOCK lasblock )
 
 set(BIGFILE_TEST bigfile_test)
 set(LASINDEX_TEST lasindex_test)
 
+if(Boost_IOSTREAMS_FOUND)
+  set(BIGFILE_BIO_TEST bigfile_boost_iostreams_test)
+endif()
+
 # Set the build type to release if it is not explicitly set by the user and 
 # isn't in the cache yet
 if (NOT CMAKE_BUILD_TYPE )
-set(CMAKE_BUILD_TYPE "Release")
+  set(CMAKE_BUILD_TYPE "Release")
 endif()
 
 # Utilities depending on 3rd-pary libraries
@@ -43,7 +48,7 @@ endif()
 
 set(LIBLAS_UTILITIES
     ${LASINFO_OLD} ${LASINFO} ${LASMERGE} ${LAS2LAS} ${LAS2TXT} ${TXT2LAS} 
-    ${LAS2OGR}  ${LAS2OCI} ${LAS2LAS} ${LAS2LAS_OLD} ${LASBLOCK} )
+    ${LAS2OGR}  ${LAS2OCI} ${LAS2LAS} ${LAS2LAS_OLD} ${LASBLOCK} ${TS2LAS})
 
 # TODO: Experimental and requires testing --mloskot
 # Generate user-specific settings for Visual Studio project
@@ -62,12 +67,18 @@ endif()
 ###############################################################################
 # Configure build targets
 
+if(WIN32)
+    add_definitions("-DLAS_DLL_EXPORT=1")
+endif()
+
+
 set(APPS_CPP_DEPENDENCIES
     ${LIBLAS_LIB_NAME}
     ${TIFF_LIBRARY}
     ${GEOTIFF_LIBRARY}
     ${GDAL_LIBRARY}
-    ${SPATIALINDEX_LIBRARY})
+    ${SPATIALINDEX_LIBRARY}
+    ${Boost_LIBRARIES})
 
 link_directories(${Boost_LIBRARY_DIRS})
 
@@ -87,12 +98,12 @@ endif()
 
 if(LAS2LAS)
     add_executable(${LAS2LAS} las2las.cpp laskernel.cpp)
-    target_link_libraries(${LAS2LAS} ${APPS_CPP_DEPENDENCIES} ${Boost_LIBRARIES})
+    target_link_libraries(${LAS2LAS} ${APPS_CPP_DEPENDENCIES} )
 endif()
 
 if(LASINFO)
     add_executable(${LASINFO} lasinfo.cpp laskernel.cpp)
-    target_link_libraries(${LASINFO} ${APPS_CPP_DEPENDENCIES} ${Boost_LIBRARIES})
+    target_link_libraries(${LASINFO} ${APPS_CPP_DEPENDENCIES} )
 endif()
 
 # Build las2txt
@@ -109,6 +120,11 @@ if(TXT2LAS)
     target_link_libraries(${TXT2LAS} ${LIBLAS_C_LIB_NAME})
 endif()
 
+if(TS2LAS)
+    add_executable(${TS2LAS} ts2las.cpp )
+    target_link_libraries(${TS2LAS} ${APPS_CPP_DEPENDENCIES} )
+endif()
+
 # Build lasmerge
 if(LASMERGE)
     set(LASMERGE_SRC lascommon.c ${LASMERGE}.c)
@@ -120,7 +136,7 @@ endif()
 if(LASBLOCK)
     set(LASBLOCK_SRC lasblock.cpp chipper.cpp chipper.hpp)
     add_executable(${LASBLOCK} ${LASBLOCK_SRC})
-    target_link_libraries(${LASBLOCK} ${APPS_CPP_DEPENDENCIES} ${Boost_LIBRARIES})
+    target_link_libraries(${LASBLOCK} ${APPS_CPP_DEPENDENCIES} )
 endif()
 
 # Build las2ogr
@@ -132,17 +148,22 @@ endif()
 # Build las2oci
 if(LAS2OCI)
     add_executable(${LAS2OCI} las2oci.cpp oci_wrapper.cpp kdx_util.cpp oci_util.cpp laskernel.cpp chipper.cpp)
-    target_link_libraries(${LAS2OCI} ${APPS_CPP_DEPENDENCIES} ${Boost_LIBRARIES} ${ORACLE_LIBRARY})
+    target_link_libraries(${LAS2OCI} ${APPS_CPP_DEPENDENCIES} ${ORACLE_LIBRARY})
 endif()
 
 if(BIGFILE_TEST)
-    add_executable(${BIGFILE_TEST} bigtest.cpp)
+    add_executable(${BIGFILE_TEST} bigtest.c)
     target_link_libraries(${BIGFILE_TEST} ${LIBLAS_C_LIB_NAME})
 endif()
 
 if (LASINDEX_TEST)
     add_executable(${LASINDEX_TEST} lasindex_test.cpp)
-    target_link_libraries(${LASINDEX_TEST} ${APPS_CPP_DEPENDENCIES} ${Boost_LIBRARIES})    
+    target_link_libraries(${LASINDEX_TEST} ${APPS_CPP_DEPENDENCIES})    
+endif()
+
+if(BIGFILE_BIO_TEST)
+    add_executable(${BIGFILE_BIO_TEST} bigfile_boost_iostreams_test.cpp)
+    target_link_libraries(${BIGFILE_BIO_TEST} ${APPS_CPP_DEPENDENCIES} )    
 endif()
 
 ###############################################################################

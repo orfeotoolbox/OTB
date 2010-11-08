@@ -46,6 +46,7 @@
 
 #include "las_version.h"
 #include "las_config.h"
+#include <liblas/export.hpp>
 
 typedef struct LASWriterHS *LASWriterH;
 typedef struct LASReaderHS *LASReaderH;
@@ -1154,8 +1155,8 @@ LAS_DLL unsigned int LASSRS_GetVLRCount(const LASSRSH hSRS);
 */
 LAS_DLL void LASString_Free(char* string);
 
-LAS_DLL unsigned short LASSchema_GetByteSize( LASSchemaH hFormat);
-LAS_DLL unsigned short LASSchema_GetBaseByteSize( LASSchemaH hFormat);
+LAS_DLL unsigned int LASSchema_GetByteSize( LASSchemaH hFormat);
+LAS_DLL unsigned int LASSchema_GetBaseByteSize( LASSchemaH hFormat);
 
 
 

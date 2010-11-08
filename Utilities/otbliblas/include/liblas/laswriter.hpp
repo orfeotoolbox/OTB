@@ -47,6 +47,7 @@
 #include <liblas/laspoint.hpp>
 #include <liblas/lastransform.hpp>
 #include <liblas/lasfilter.hpp>
+#include <liblas/export.hpp>
 // boost
 #include <boost/shared_ptr.hpp>
 // std
@@ -59,7 +60,7 @@ namespace liblas {
 
 /// Defines public interface to LAS writer implementation.
 /// This class 
-class Writer
+class LAS_DLL Writer
 {
 public:
 

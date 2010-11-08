@@ -55,17 +55,9 @@
 #  define LAS_C_END
 #endif
 
-#ifndef LAS_DLL
-#if defined(_MSC_VER) && !defined(LAS_DISABLE_DLL)
-#  define LAS_DLL     __declspec(dllexport)
-#else
-#  if defined(USE_GCC_VISIBILITY_FLAG)
-#    define LAS_DLL     __attribute__ ((visibility("default")))
-#  else
-#    define LAS_DLL
-#  endif
-#endif
-#endif
+LAS_C_START
+#include <liblas/export.hpp>
+LAS_C_END
 
 #ifndef NULL
 #define NULL 0

@@ -48,7 +48,7 @@
   datetime.datetime(2008, 3, 19, 0, 0)
 
   >>> h.software_id
-  'libLAS 1.2'
+  'libLAS 1.6.0b2'
   >>> h.software_id = 'hobu'
   >>> h.software_id
   'hobu'

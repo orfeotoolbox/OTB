@@ -1,4 +1,4 @@
-# Install script for directory: /tmp/liblas-main/test
+# Install script for directory: /tmp/liblas/test
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -29,7 +29,7 @@ ENDIF(NOT CMAKE_INSTALL_COMPONENT)
 
 IF(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  INCLUDE("/tmp/liblas-main/test/unit/cmake_install.cmake")
+  INCLUDE("/tmp/liblas/test/unit/cmake_install.cmake")
 
 ENDIF(NOT CMAKE_INSTALL_LOCAL_ONLY)
 

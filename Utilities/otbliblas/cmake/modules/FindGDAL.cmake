@@ -55,6 +55,7 @@ IF(WIN32)
             NAMES gdal.h 
             PATH_PREFIXES gdal gdal-1.6
             PATHS
+            "${OSGEO4W_ROOT_DIR}/apps/gdal-dev/include"
             "$ENV{LIB_DIR}/include/gdal"
             ${OSGEO4W_ROOT_DIR}/include)
 
@@ -66,6 +67,7 @@ IF(WIN32)
             "$ENV{LIB_DIR}/lib"
             /usr/lib
             c:/msys/local/lib
+            "${OSGEO4W_ROOT_DIR}/apps/gdal-dev/lib"            
             ${OSGEO4W_ROOT_DIR}/lib)
         
         IF(GDAL_LIBRARY)

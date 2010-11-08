@@ -39,10 +39,10 @@ RM = "/Applications/CMake 2.8-0.app/Contents/bin/cmake" -E remove -f
 CMAKE_EDIT_COMMAND = "/Applications/CMake 2.8-0.app/Contents/bin/ccmake"
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /tmp/liblas-main
+CMAKE_SOURCE_DIR = /tmp/liblas
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /tmp/liblas-main
+CMAKE_BINARY_DIR = /tmp/liblas
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -101,7 +101,7 @@ list_install_components/fast: list_install_components
 # Special rule for the target package
 package: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Run CPack packaging tool..."
-	cd /tmp/liblas-main && "/Applications/CMake 2.8-0.app/Contents/bin/cpack" --config ./CPackConfig.cmake
+	cd /tmp/liblas && "/Applications/CMake 2.8-0.app/Contents/bin/cpack" --config ./CPackConfig.cmake
 .PHONY : package
 
 # Special rule for the target package
@@ -111,7 +111,7 @@ package/fast: package
 # Special rule for the target package_source
 package_source:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Run CPack packaging tool for source..."
-	cd /tmp/liblas-main && "/Applications/CMake 2.8-0.app/Contents/bin/cpack" --config ./CPackSourceConfig.cmake /tmp/liblas-main/CPackSourceConfig.cmake
+	cd /tmp/liblas && "/Applications/CMake 2.8-0.app/Contents/bin/cpack" --config ./CPackSourceConfig.cmake /tmp/liblas/CPackSourceConfig.cmake
 .PHONY : package_source
 
 # Special rule for the target package_source
@@ -140,14 +140,14 @@ test/fast: test
 
 # The main all target
 all: cmake_check_build_system
-	cd /tmp/liblas-main && $(CMAKE_COMMAND) -E cmake_progress_start /tmp/liblas-main/CMakeFiles /tmp/liblas-main/test/CMakeFiles/progress.marks
-	cd /tmp/liblas-main && $(MAKE) -f CMakeFiles/Makefile2 test/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /tmp/liblas-main/CMakeFiles 0
+	cd /tmp/liblas && $(CMAKE_COMMAND) -E cmake_progress_start /tmp/liblas/CMakeFiles /tmp/liblas/test/CMakeFiles/progress.marks
+	cd /tmp/liblas && $(MAKE) -f CMakeFiles/Makefile2 test/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /tmp/liblas/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /tmp/liblas-main && $(MAKE) -f CMakeFiles/Makefile2 test/clean
+	cd /tmp/liblas && $(MAKE) -f CMakeFiles/Makefile2 test/clean
 .PHONY : clean
 
 # The main clean target
@@ -156,17 +156,17 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /tmp/liblas-main && $(MAKE) -f CMakeFiles/Makefile2 test/preinstall
+	cd /tmp/liblas && $(MAKE) -f CMakeFiles/Makefile2 test/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /tmp/liblas-main && $(MAKE) -f CMakeFiles/Makefile2 test/preinstall
+	cd /tmp/liblas && $(MAKE) -f CMakeFiles/Makefile2 test/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /tmp/liblas-main && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /tmp/liblas && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Help Target
@@ -195,6 +195,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /tmp/liblas-main && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /tmp/liblas && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

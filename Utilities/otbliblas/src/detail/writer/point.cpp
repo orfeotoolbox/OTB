@@ -77,12 +77,9 @@ void Point::setup()
     // that we can write into the file as necessary.  We make it 
     // here instead of at each ::write() invocation to save the 
     // allocation and writing of the array
-    if (m_format.GetByteSize() != m_format.GetBaseByteSize()) {
-        std::size_t size = m_format.GetByteSize() - m_format.GetBaseByteSize();
-        
-        if (size < 0) {
-            throw std::runtime_error("ByteSize of format was less than BaseByteSize, this cannot happen!");
-        }
+    if (m_format.GetByteSize() != m_format.GetBaseByteSize())
+	{
+        std::size_t const size = m_format.GetByteSize() - m_format.GetBaseByteSize();
         
         m_blanks.resize(size);
         m_blanks.assign(size, 0);

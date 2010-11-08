@@ -39,10 +39,10 @@ RM = "/Applications/CMake 2.8-0.app/Contents/bin/cmake" -E remove -f
 CMAKE_EDIT_COMMAND = "/Applications/CMake 2.8-0.app/Contents/bin/ccmake"
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /tmp/liblas-main
+CMAKE_SOURCE_DIR = /tmp/liblas
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /tmp/liblas-main
+CMAKE_BINARY_DIR = /tmp/liblas
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -111,7 +111,7 @@ package/fast: package
 # Special rule for the target package_source
 package_source:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Run CPack packaging tool for source..."
-	"/Applications/CMake 2.8-0.app/Contents/bin/cpack" --config ./CPackSourceConfig.cmake /tmp/liblas-main/CPackSourceConfig.cmake
+	"/Applications/CMake 2.8-0.app/Contents/bin/cpack" --config ./CPackSourceConfig.cmake /tmp/liblas/CPackSourceConfig.cmake
 .PHONY : package_source
 
 # Special rule for the target package_source
@@ -140,9 +140,9 @@ test/fast: test
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /tmp/liblas-main/CMakeFiles /tmp/liblas-main/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /tmp/liblas/CMakeFiles /tmp/liblas/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /tmp/liblas-main/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /tmp/liblas/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -326,6 +326,19 @@ lasmerge/fast:
 .PHONY : lasmerge/fast
 
 #=============================================================================
+# Target rules for targets named ts2las
+
+# Build rule for target.
+ts2las: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 ts2las
+.PHONY : ts2las
+
+# fast build rule for target.
+ts2las/fast:
+	$(MAKE) -f apps/CMakeFiles/ts2las.dir/build.make apps/CMakeFiles/ts2las.dir/build
+.PHONY : ts2las/fast
+
+#=============================================================================
 # Target rules for targets named txt2las
 
 # Build rule for target.
@@ -378,6 +391,7 @@ help:
 	@echo "... lasinfo"
 	@echo "... lasinfo-old"
 	@echo "... lasmerge"
+	@echo "... ts2las"
 	@echo "... txt2las"
 	@echo "... liblas_test"
 .PHONY : help

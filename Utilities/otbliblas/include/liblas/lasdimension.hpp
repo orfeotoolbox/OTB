@@ -46,6 +46,7 @@
 #include <liblas/external/property_tree/ptree.hpp>
 #include <liblas/lasvariablerecord.hpp>
 #include <liblas/lasversion.hpp>
+#include <liblas/export.hpp>
 // boost
 #include <boost/cstdint.hpp>
 #include <boost/any.hpp>
@@ -59,7 +60,6 @@
 #include <boost/multi_index/hashed_index.hpp>
 #include <boost/multi_index/sequenced_index.hpp>
 
-
 // std
 #include <iosfwd>
 #include <limits>
@@ -71,14 +71,14 @@
 namespace liblas {  
 
 /// Dimension definition
-class Dimension
+class LAS_DLL Dimension
 {
 public:
     Dimension(std::string const& name, std::size_t size_in_bits);
     Dimension& operator=(Dimension const& rhs);
     Dimension(Dimension const& other);
         
-    virtual ~Dimension() {};
+    virtual ~Dimension() {}
         
     inline std::string const& GetName() const { return m_name; }
     

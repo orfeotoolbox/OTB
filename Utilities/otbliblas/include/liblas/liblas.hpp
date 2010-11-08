@@ -67,6 +67,7 @@
 #include <liblas/detail/endian.hpp>
 #include <liblas/detail/private_utility.hpp>
 #include <liblas/capi/las_version.h>
+#include <liblas/export.hpp>
 
 // booost
 #include <boost/array.hpp>
@@ -130,7 +131,7 @@ public:
     
     virtual std::istream& GetStream() const = 0;
     
-    virtual ~ReaderI() {};    
+    virtual ~ReaderI() {}
 };
 
 class WriterI
@@ -143,10 +144,9 @@ public:
 
     virtual std::ostream& GetStream() const = 0;
 
-    virtual ~WriterI() {};    
+    virtual ~WriterI() {}
 
 };
-
 
 } // namespace liblas
 

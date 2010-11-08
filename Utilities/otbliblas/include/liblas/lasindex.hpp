@@ -47,6 +47,7 @@
 #include <liblas/lasbounds.hpp>
 #include <liblas/lasvariablerecord.hpp>
 #include <liblas/detail/index/indexcell.hpp>
+#include <liblas/export.hpp>
 
 // std
 #include <stdexcept> // std::out_of_range
@@ -58,13 +59,14 @@
 namespace liblas {
 
 #define LIBLAS_INDEX_MAXMEMDEFAULT	10000000	// 10 megs default
-#define LIBLAS_INDEX_MINMEMDEFAULT	100000	// 1 meg at least has to be allowed
+#define LIBLAS_INDEX_MINMEMDEFAULT	1000000	// 1 meg at least has to be allowed
 #define LIBLAS_INDEX_VERSIONMAJOR	1
-#define LIBLAS_INDEX_VERSIONMINOR	0
+#define LIBLAS_INDEX_VERSIONMINOR	1	// minor version 1 begins 10/12/10
 #define LIBLAS_INDEX_MAXSTRLEN	512
 #define LIBLAS_INDEX_MAXCELLS	250000
 #define LIBLAS_INDEX_OPTPTSPERCELL	100
 #define LIBLAS_INDEX_MAXPTSPERCELL	1000
+#define LIBLAS_INDEX_RESERVEFILTERDEFAULT	1000000	// 1 million points will be reserved on large files for filter result
 
 // define this in order to fix problem with last bytes of last VLR getting corrupted
 // when saved and reloaded from index or las file.
@@ -74,8 +76,8 @@ typedef std::vector<boost::uint8_t> IndexVLRData;
 typedef std::vector<liblas::detail::IndexCell> IndexCellRow;
 typedef std::vector<IndexCellRow>	IndexCellDataBlock;
 
-class liblas::detail::IndexCell;
-class IndexData;
+class LAS_DLL IndexData;
+class LAS_DLL IndexIterator;
 
 // Index class is the fundamental object for building and filtering a spatial index of points in an LAS file.
 // An Index class doesn't do anything until it is configured with an IndexData object (see below).
@@ -114,7 +116,7 @@ class IndexData;
 // Currently only one, two or three dimensional spatial window filters are supported. See IndexData below for 
 //		more info on filtering.
 
-class Index
+class LAS_DLL Index
 {
 public:
 	Index();
@@ -136,15 +138,11 @@ private:
 	Bounds<double> m_bounds;
 	bool m_indexBuilt, m_tempFileStarted, m_readerCreated, m_readOnly, m_writestandaloneindex, m_forceNewIndex;
 	int m_debugOutputLevel;
+	boost::uint8_t m_versionMajor, m_versionMinor;
     boost::uint32_t m_pointRecordsCount, m_maxMemoryUsage, m_cellsX, m_cellsY, m_cellsZ, m_totalCells, 
-		m_tempFileWrittenBytes, m_DataVLR_ID;
-    boost::int32_t m_LowXCellCompletelyIn, m_HighXCellCompletelyIn, m_LowYCellCompletelyIn, m_HighYCellCompletelyIn,
-		m_LowZCellCompletelyIn, m_HighZCellCompletelyIn;
-    boost::int32_t m_LowXBorderCell, m_HighXBorderCell, m_LowYBorderCell, m_HighYBorderCell,
-		m_LowZBorderCell, m_HighZBorderCell;
+		m_DataVLR_ID;
+    liblas::detail::TempFileOffsetType m_tempFileWrittenBytes;
     double m_rangeX, m_rangeY, m_rangeZ, m_cellSizeZ, m_cellSizeX, m_cellSizeY;
-	double m_filterMinXCell, m_filterMaxXCell, m_filterMinYCell, m_filterMaxYCell, m_filterMinZCell, m_filterMaxZCell,
-		m_LowXBorderPartCell, m_HighXBorderPartCell, m_LowYBorderPartCell, m_HighYBorderPartCell;
 	std::string m_tempFileName;	
 	std::string m_indexAuthor;
 	std::string m_indexComment;
@@ -159,9 +157,14 @@ private:
     void ClearOldIndex(void);
 	bool BuildIndex(void);
 	bool Validate(void);
+	boost::uint32_t GetDefaultReserve(void);
 	bool LoadIndexVLR(VariableRecord const& vlr);
-	void SetCellFilterBounds(IndexData const& ParamSrc);
-	bool FilterOneVLR(VariableRecord const& vlr, boost::uint32_t& i, IndexData const& ParamSrc);
+	void SetCellFilterBounds(IndexData & ParamSrc);
+	bool FilterOneVLR(VariableRecord const& vlr, boost::uint32_t& i, IndexData & ParamSrc, bool & VLRDone);
+	bool FilterPointSeries(boost::uint32_t & PointID, boost::uint32_t & PointsScanned, 
+		boost::uint32_t const PointsToIgnore, boost::uint32_t const x, boost::uint32_t const y, boost::uint32_t const z, 
+		liblas::detail::ConsecPtAccumulator const ConsecutivePts, IndexIterator *Iterator, 
+		IndexData const& ParamSrc);
 	bool VLRInteresting(boost::int32_t MinCellX, boost::int32_t MinCellY, boost::int32_t MaxCellX, boost::int32_t MaxCellY, 
 		IndexData const& ParamSrc);
 	bool CellInteresting(boost::int32_t x, boost::int32_t y, IndexData const& ParamSrc);
@@ -190,9 +193,9 @@ private:
 	// Creates a Writer from m_ofs and re-saves LAS header with new index, but not with data point records
 	bool SaveIndexInStandAloneFile(void);
 	// Calculate index bounds dimensions
-	void CalcRangeX(void)	{m_rangeX = m_bounds.max(0) - m_bounds.min(0);};
-	void CalcRangeY(void)	{m_rangeY = m_bounds.max(1) - m_bounds.min(1);};
-	void CalcRangeZ(void)	{m_rangeZ = m_bounds.max(2) - m_bounds.min(2);};
+	void CalcRangeX(void)	{m_rangeX = m_bounds.max(0) - m_bounds.min(0);}
+	void CalcRangeY(void)	{m_rangeY = m_bounds.max(1) - m_bounds.min(1);}
+	void CalcRangeZ(void)	{m_rangeZ = m_bounds.max(2) - m_bounds.min(2);}
 
 	// error messages
 	bool FileError(const char *Reporter);
@@ -211,69 +214,76 @@ private:
 	
 public:
 	// IndexFailed and IndexReady can be used to tell if an Index is ready for a filter operation
-    bool IndexFailed(void)  const {return (! m_indexBuilt);};
-    bool IndexReady(void)  const {return (m_indexBuilt);};
+    bool IndexFailed(void)  const {return (! m_indexBuilt);}
+    bool IndexReady(void)  const {return (m_indexBuilt);}
     // Prep takes the input data and initializes Index values and then either builds or examines the Index
     bool Prep(IndexData const& ParamSrc);
     // Filter performs a point filter using the bounds in ParamSrc
-    const std::vector<boost::uint32_t>& Filter(IndexData const& ParamSrc);
+    const std::vector<boost::uint32_t>& Filter(IndexData & ParamSrc);
+    IndexIterator* Filter(IndexData const& ParamSrc, boost::uint32_t ChunkSize);
+    IndexIterator* Filter(double LowFilterX, double HighFilterX, double LowFilterY, double HighFilterY, 
+		double LowFilterZ, double HighFilterZ, boost::uint32_t ChunkSize);
+    IndexIterator* Filter(Bounds<double> const& BoundsSrc, boost::uint32_t ChunkSize);
+    
     // Return the bounds of the current Index
-	double GetMinX(void) const	{return m_bounds.min(0);};
-	double GetMaxX(void) const	{return m_bounds.max(0);};
-	double GetMinY(void) const	{return m_bounds.min(1);};
-	double GetMaxY(void) const	{return m_bounds.max(1);};
-	double GetMinZ(void) const	{return m_bounds.min(2);};
-	double GetMaxZ(void) const	{return m_bounds.max(2);};
+	double GetMinX(void) const	{return m_bounds.min(0);}
+	double GetMaxX(void) const	{return m_bounds.max(0);}
+	double GetMinY(void) const	{return m_bounds.min(1);}
+	double GetMaxY(void) const	{return m_bounds.max(1);}
+	double GetMinZ(void) const	{return m_bounds.min(2);}
+	double GetMaxZ(void) const	{return m_bounds.max(2);}
 	// Ranges are updated when an index is built or the index header VLR read
-	double GetRangeX(void) const	{return m_rangeX;};
-	double GetRangeY(void) const	{return m_rangeY;};
-	double GetRangeZ(void) const	{return m_rangeZ;};
-	Bounds<double> const& GetBounds(void) const	{return m_bounds;};
+	double GetRangeX(void) const	{return m_rangeX;}
+	double GetRangeY(void) const	{return m_rangeY;}
+	double GetRangeZ(void) const	{return m_rangeZ;}
+	Bounds<double> const& GetBounds(void) const	{return m_bounds;}
 	// Return the number of points used to build the Index
-	boost::uint32_t GetPointRecordsCount(void) const	{return m_pointRecordsCount;};
+	boost::uint32_t GetPointRecordsCount(void) const	{return m_pointRecordsCount;}
 	// Return the number of cells in the Index
-	boost::uint32_t GetCellsX(void) const	{return m_cellsX;};
-	boost::uint32_t GetCellsY(void) const	{return m_cellsY;};
+	boost::uint32_t GetCellsX(void) const	{return m_cellsX;}
+	boost::uint32_t GetCellsY(void) const	{return m_cellsY;}
 	// Return the number of Z-dimension cells in the Index. Value is 1 if no Z-cells were created during Index building
-	boost::uint32_t GetCellsZ(void) const	{return m_cellsZ;};
+	boost::uint32_t GetCellsZ(void) const	{return m_cellsZ;}
 	// 42 is the ID for the Index header VLR and 43 is the normal ID for the Index data VLR's
 	// For future expansion, multiple indexes could assign data VLR ID's of their own choosing
-	boost::uint32_t GetDataVLR_ID(void) const	{return m_DataVLR_ID;};
+	boost::uint32_t GetDataVLR_ID(void) const	{return m_DataVLR_ID;}
 	// Since the user can define a Z cell size it is useful to examine that for an existing index
-	double GetCellSizeZ(void) const	{return m_cellSizeZ;};
+	double GetCellSizeZ(void) const	{return m_cellSizeZ;}
 	// Return values used in building or examining index
-	FILE *GetDebugger(void) const	{return m_debugger;};
-	bool GetReadOnly(void) const	{return m_readOnly;};
-	bool GetStandaloneIndex(void) const	{return m_writestandaloneindex;};
-	bool GetForceNewIndex(void) const	{return m_forceNewIndex;};
-	boost::uint32_t GetMaxMemoryUsage(void) const	{return m_maxMemoryUsage;};
-	int GetDebugOutputLevel(void) const {return m_debugOutputLevel;};
+	FILE *GetDebugger(void) const	{return m_debugger;}
+	bool GetReadOnly(void) const	{return m_readOnly;}
+	bool GetStandaloneIndex(void) const	{return m_writestandaloneindex;}
+	bool GetForceNewIndex(void) const	{return m_forceNewIndex;}
+	boost::uint32_t GetMaxMemoryUsage(void) const	{return m_maxMemoryUsage;}
+	int GetDebugOutputLevel(void) const {return m_debugOutputLevel;}
 	// Not sure if these are more useful than dangerous
-	Header *GetPointHeader(void) {return &m_pointheader;};
-	Header *GetIndexHeader(void) {return &m_idxheader;};
-	Reader *GetReader(void) const {return m_reader;};
-	Reader *GetIndexReader(void) const {return m_idxreader;};
-	const char *GetTempFileName(void) const {return m_tempFileName.c_str();};
+	Header *GetPointHeader(void) {return &m_pointheader;}
+	Header *GetIndexHeader(void) {return &m_idxheader;}
+	Reader *GetReader(void) const {return m_reader;}
+	Reader *GetIndexReader(void) const {return m_idxreader;}
+	const char *GetTempFileName(void) const {return m_tempFileName.c_str();}
 	// Returns the strings set in the index when built
 	const char *GetIndexAuthorStr(void)  const;
 	const char *GetIndexCommentStr(void)  const;
 	const char *GetIndexDateStr(void)  const;
+	boost::uint8_t GetVersionMajor(void) const	{return m_versionMajor;}
+	boost::uint8_t GetVersionMinor(void) const	{return m_versionMinor;}
 	// Methods for setting values used when reading index from file to facilitate moving reading function into
 	// separate IndexInput object at a future time to provide symmetry with IndexOutput
-	void SetDataVLR_ID(boost::uint32_t DataVLR_ID)	{m_DataVLR_ID = DataVLR_ID;};
-	void SetIndexAuthorStr(const char *ias)	{m_indexAuthor = ias;};
-	void SetIndexCommentStr(const char *ics)	{m_indexComment = ics;};
-	void SetIndexDateStr(const char *ids)	{m_indexDate = ids;};
-	void SetMinX(double minX)	{m_bounds.min(0, minX);};
-	void SetMaxX(double maxX)	{m_bounds.max(0, maxX);};
-	void SetMinY(double minY)	{m_bounds.min(1, minY);};
-	void SetMaxY(double maxY)	{m_bounds.max(1, maxY);};
-	void SetMinZ(double minZ)	{m_bounds.min(2, minZ);};
-	void SetMaxZ(double maxZ)	{m_bounds.max(2, maxZ);};
-	void SetPointRecordsCount(boost::uint32_t prc)	{m_pointRecordsCount = prc;};
-	void SetCellsX(boost::uint32_t cellsX)	{m_cellsX = cellsX;};
-	void SetCellsY(boost::uint32_t cellsY)	{m_cellsY = cellsY;};
-	void SetCellsZ(boost::uint32_t cellsZ)	{m_cellsZ = cellsZ;};
+	void SetDataVLR_ID(boost::uint32_t DataVLR_ID)	{m_DataVLR_ID = DataVLR_ID;}
+	void SetIndexAuthorStr(const char *ias)	{m_indexAuthor = ias;}
+	void SetIndexCommentStr(const char *ics)	{m_indexComment = ics;}
+	void SetIndexDateStr(const char *ids)	{m_indexDate = ids;}
+	void SetMinX(double minX)	{m_bounds.min(0, minX);}
+	void SetMaxX(double maxX)	{m_bounds.max(0, maxX);}
+	void SetMinY(double minY)	{m_bounds.min(1, minY);}
+	void SetMaxY(double maxY)	{m_bounds.max(1, maxY);}
+	void SetMinZ(double minZ)	{m_bounds.min(2, minZ);}
+	void SetMaxZ(double maxZ)	{m_bounds.max(2, maxZ);}
+	void SetPointRecordsCount(boost::uint32_t prc)	{m_pointRecordsCount = prc;}
+	void SetCellsX(boost::uint32_t cellsX)	{m_cellsX = cellsX;}
+	void SetCellsY(boost::uint32_t cellsY)	{m_cellsY = cellsY;}
+	void SetCellsZ(boost::uint32_t cellsZ)	{m_cellsZ = cellsZ;}
 	
 }; 
 
@@ -333,9 +343,10 @@ public:
 //		system that a liblas::Header returns with the commands GetMin{X|Y|Z} and a liblas::Point returns with 
 //		Get{X|Y|Z}
 
-class IndexData
+class LAS_DLL IndexData
 {
 friend class Index;
+friend class IndexIterator;
 
 public:
 	IndexData(void);
@@ -383,7 +394,6 @@ public:
 		Index const& index);
 	bool SetFilterValues(Bounds<double> const& src, Index const& index);
 
-    // Blocked copying operations, declared but not defined.
     /// Copy constructor.
     IndexData(IndexData const& other);
     /// Assignment operator.
@@ -392,10 +402,12 @@ public:
 private:
 	void SetValues(void);
 	bool CalcFilterEnablers(void);
+	void Copy(IndexData const& other);
 	
 protected:
 	Reader *m_reader;
 	Reader *m_idxreader;
+	IndexIterator *m_iterator;
 	Bounds<double> m_filter;
 	std::istream *m_ifs;
 	std::ostream *m_ofs;
@@ -404,44 +416,102 @@ protected:
 	const char *m_indexComment;
 	const char *m_indexDate;
 	double m_cellSizeZ;
+	double m_LowXBorderPartCell, m_HighXBorderPartCell, m_LowYBorderPartCell, m_HighYBorderPartCell;
+    boost::int32_t m_LowXCellCompletelyIn, m_HighXCellCompletelyIn, m_LowYCellCompletelyIn, m_HighYCellCompletelyIn,
+		m_LowZCellCompletelyIn, m_HighZCellCompletelyIn;
+    boost::int32_t m_LowXBorderCell, m_HighXBorderCell, m_LowYBorderCell, m_HighYBorderCell,
+		m_LowZBorderCell, m_HighZBorderCell;
 	boost::uint32_t m_maxMemoryUsage;
 	int m_debugOutputLevel;
 	bool m_noFilterX, m_noFilterY, m_noFilterZ, m_readOnly, m_writestandaloneindex, m_forceNewIndex, m_indexValid;
 	FILE *m_debugger;
+
+	void SetIterator(IndexIterator *setIt) {m_iterator = setIt;}
+	IndexIterator *GetIterator(void) {return(m_iterator);}
 	
 public:
-	double GetCellSizeZ(void) const	{return m_cellSizeZ;};
-	FILE *GetDebugger(void) const	{return m_debugger;};
-	bool GetReadOnly(void) const	{return m_readOnly;};
-	bool GetStandaloneIndex(void) const	{return m_writestandaloneindex;};
-	bool GetForceNewIndex(void) const	{return m_forceNewIndex;};
-	boost::uint32_t GetMaxMemoryUsage(void) const	{return m_maxMemoryUsage;};
-	Reader *GetReader(void) const {return m_reader;};
-	int GetDebugOutputLevel(void) const {return m_debugOutputLevel;};
-	const char *GetTempFileName(void) const {return m_tempFileName;};
+	double GetCellSizeZ(void) const	{return m_cellSizeZ;}
+	FILE *GetDebugger(void) const	{return m_debugger;}
+	bool GetReadOnly(void) const	{return m_readOnly;}
+	bool GetStandaloneIndex(void) const	{return m_writestandaloneindex;}
+	bool GetForceNewIndex(void) const	{return m_forceNewIndex;}
+	boost::uint32_t GetMaxMemoryUsage(void) const	{return m_maxMemoryUsage;}
+	Reader *GetReader(void) const {return m_reader;}
+	int GetDebugOutputLevel(void) const {return m_debugOutputLevel;}
+	const char *GetTempFileName(void) const {return m_tempFileName;}
 	const char *GetIndexAuthorStr(void)  const;
 	const char *GetIndexCommentStr(void)  const;
 	const char *GetIndexDateStr(void)  const;
-	double GetMinFilterX(void) const	{return m_filter.min(0);};
-	double GetMaxFilterX(void) const	{return m_filter.max(0);};
-	double GetMinFilterY(void) const	{return m_filter.min(1);};
-	double GetMaxFilterY(void) const	{return m_filter.max(1);};
-	double GetMinFilterZ(void) const	{return m_filter.min(2);};
-	double GetMaxFilterZ(void) const	{return m_filter.max(2);};
+	double GetMinFilterX(void) const	{return m_filter.min(0);}
+	double GetMaxFilterX(void) const	{return m_filter.max(0);}
+	double GetMinFilterY(void) const	{return m_filter.min(1);}
+	double GetMaxFilterY(void) const	{return m_filter.max(1);}
+	double GetMinFilterZ(void) const	{return m_filter.min(2);}
+	double GetMaxFilterZ(void) const	{return m_filter.max(2);}
 	void ClampFilterBounds(Bounds<double> const& m_bounds);
-	void SetReader(Reader *reader)	{m_reader = reader;};
-	void SetIStream(std::istream *ifs)	{m_ifs = ifs;};
-	void SetOStream(std::ostream *ofs)	{m_ofs = ofs;};
-	void SetTmpFileName(const char *tmpfilenme)	{m_tempFileName = tmpfilenme;};
-	void SetIndexAuthor(const char *indexauthor)	{m_indexAuthor = indexauthor;};
-	void SetIndexComment(const char *indexcomment)	{m_indexComment = indexcomment;};
-	void SetIndexDate(const char *indexdate)	{m_indexDate = indexdate;};
-	void SetCellSizeZ(double cellsizez)	{m_cellSizeZ = cellsizez;};
-	void SetMaxMem(boost::uint32_t maxmem)	{m_maxMemoryUsage = maxmem;};
-	void SetDebugOutputLevel(int debugoutputlevel)	{m_debugOutputLevel = debugoutputlevel;};
-	void SetReadOnly(bool readonly)	{m_readOnly = readonly;};
-	void SetStandaloneIndex(bool writestandaloneindex)	{m_writestandaloneindex = writestandaloneindex;};
-	void SetDebugger(FILE *debugger)	{m_debugger = debugger;};
+	void SetReader(Reader *reader)	{m_reader = reader;}
+	void SetIStream(std::istream *ifs)	{m_ifs = ifs;}
+	void SetOStream(std::ostream *ofs)	{m_ofs = ofs;}
+	void SetTmpFileName(const char *tmpfilenme)	{m_tempFileName = tmpfilenme;}
+	void SetIndexAuthor(const char *indexauthor)	{m_indexAuthor = indexauthor;}
+	void SetIndexComment(const char *indexcomment)	{m_indexComment = indexcomment;}
+	void SetIndexDate(const char *indexdate)	{m_indexDate = indexdate;}
+	void SetCellSizeZ(double cellsizez)	{m_cellSizeZ = cellsizez;}
+	void SetMaxMem(boost::uint32_t maxmem)	{m_maxMemoryUsage = maxmem;}
+	void SetDebugOutputLevel(int debugoutputlevel)	{m_debugOutputLevel = debugoutputlevel;}
+	void SetReadOnly(bool readonly)	{m_readOnly = readonly;}
+	void SetStandaloneIndex(bool writestandaloneindex)	{m_writestandaloneindex = writestandaloneindex;}
+	void SetDebugger(FILE *debugger)	{m_debugger = debugger;}
+};
+
+class LAS_DLL IndexIterator
+{
+friend class Index;
+
+protected:
+	IndexData m_indexData;
+	Index *m_index;
+	boost::uint32_t m_chunkSize, m_advance;
+	boost::uint32_t m_curVLR, m_curCellStartPos, m_curCellX, m_curCellY, m_totalPointsScanned, m_ptsScannedCurCell,
+		m_ptsScannedCurVLR;
+	boost::uint32_t m_conformingPtsFound;
+
+public:
+	IndexIterator(Index *IndexSrc, double LowFilterX, double HighFilterX, double LowFilterY, double HighFilterY, 
+		double LowFilterZ, double HighFilterZ, boost::uint32_t ChunkSize);
+	IndexIterator(Index *IndexSrc, IndexData const& IndexDataSrc, boost::uint32_t ChunkSize);
+	IndexIterator(Index *IndexSrc, Bounds<double> const& BoundsSrc, boost::uint32_t ChunkSize);
+    /// Copy constructor.
+ 	IndexIterator(IndexIterator const& other);
+    /// Assignment operator.
+    IndexIterator& operator=(IndexIterator const& rhs);
+private:
+ 	void Copy(IndexIterator const& other);
+	void ResetPosition(void);
+
+public:
+	/// n=0 or n=1 gives next sequence with no gap, n>1 skips n-1 filter-compliant points, n<0 skips backwards
+    const std::vector<boost::uint32_t>& advance(boost::int32_t n);
+    /// returns filter-compliant points beginning with the nth compliant point, 0 and 1 return first set of compliant points
+    const std::vector<boost::uint32_t>& operator()(boost::int32_t n);
+	/// returns next set of filter-compliant points with no skipped points
+	inline const std::vector<boost::uint32_t>& operator++()	{return (advance(1));}
+	/// returns next set of filter-compliant points with no skipped points
+	inline const std::vector<boost::uint32_t>& operator++(int)	{return (advance(1));}
+	/// returns set of filter-compliant points skipping backwards 1 from the end of the last set
+	inline const std::vector<boost::uint32_t>& operator--()	{return (advance(-1));}
+	/// returns set of filter-compliant points skipping backwards 1 from the end of the last set
+	inline const std::vector<boost::uint32_t>& operator--(int)	{return (advance(-1));}
+	/// returns next set of filter-compliant points with n-1 skipped points, for n<0 acts like -=()
+	inline const std::vector<boost::uint32_t>& operator+=(boost::int32_t n)	{return (advance(n));}
+	/// returns next set of filter-compliant points with n-1 skipped points, for n<0 acts like -()
+	inline const std::vector<boost::uint32_t>& operator+(boost::int32_t n)	{return (advance(n));}
+	/// returns set of filter-compliant points beginning n points backwards from the end of the last set, for n<0 acts like +=()
+	inline const std::vector<boost::uint32_t>& operator-=(boost::int32_t n)	{return (advance(-n));}
+	/// returns set of filter-compliant points beginning n points backwards from the end of the last set, for n<0 acts like +()
+	inline const std::vector<boost::uint32_t>& operator-(boost::int32_t n)	{return (advance(-n));}
+    /// returns filter-compliant points beginning with the nth compliant point, 0 and 1 return first set of compliant points
+	inline const std::vector<boost::uint32_t>& operator[](boost::int32_t n)	{return ((*this)(n));}
 };
 
 template <typename T, typename Q>
@@ -489,7 +559,7 @@ inline void ReadVLRDataNoInc_str(char * dest, IndexVLRData const& src, T const s
     if (static_cast<size_t>(pos) + static_cast<size_t>(srclen) > src.size())
 		throw std::out_of_range("liblas::detail::ReadVLRDataNoInc_str: array index out of range");
  	// copy srclen bytes to destination
-	memcpy(dest, &src[pos], srclen);
+    std::memcpy(dest, &src[pos], srclen);
 }
 
 } // namespace liblas

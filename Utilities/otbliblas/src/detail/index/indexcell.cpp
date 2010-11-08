@@ -57,7 +57,7 @@ IndexCell::IndexCell() :
 } // IndexCell::IndexCell
 
 
-void IndexCell::SetFileOffset(boost::uint32_t fos)
+void IndexCell::SetFileOffset(TempFileOffsetType fos)
 {
 	m_FileOffset = fos;
 } // IndexCell::SetFileOffset
@@ -67,7 +67,7 @@ void IndexCell::SetNumPoints(boost::uint32_t nmp)
 	m_NumPoints = nmp;
 } // IndexCell::SetNumPoints
 
-boost::uint32_t IndexCell::GetFileOffset(void) const
+TempFileOffsetType IndexCell::GetFileOffset(void) const
 {
 	return(m_FileOffset);
 } // IndexCell::GetFileOffset

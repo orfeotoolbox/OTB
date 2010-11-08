@@ -2038,23 +2038,21 @@ LAS_DLL LASSchemaH LASSchema_Create(  liblas::PointFormatName point_format) {
 }
 
 
-LAS_DLL boost::uint16_t LASSchema_GetByteSize( LASSchemaH hFormat)
+LAS_DLL unsigned int LASSchema_GetByteSize( LASSchemaH hFormat)
 {
     VALIDATE_LAS_POINTER1(hFormat, "LASSchema_GetByteSize", 0);
     
     liblas::Schema* format = ((liblas::Schema*) hFormat);
-    // TODO: I'd advise to change API to return built-in C type size_t --mloskot
-    return format->GetByteSize();    
+    return static_cast<unsigned int>(format->GetByteSize());    
 }
 
 
-LAS_DLL boost::uint16_t LASSchema_GetBaseByteSize( LASSchemaH hFormat)
+LAS_DLL unsigned int LASSchema_GetBaseByteSize( LASSchemaH hFormat)
 {
     VALIDATE_LAS_POINTER1(hFormat, "LASSchema_GetBaseByteSize", 0);
     
     liblas::Schema* format = ((liblas::Schema*) hFormat);
-    // TODO: I'd advise to change API to return built-in C type size_t --mloskot
-    return format->GetByteSize();    
+    return static_cast<unsigned int>(format->GetBaseByteSize());    
 }
 
 

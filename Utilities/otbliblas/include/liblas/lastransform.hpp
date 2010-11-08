@@ -45,10 +45,12 @@
 #include <liblas/lasversion.hpp>
 #include <liblas/laspoint.hpp>
 #include <liblas/lasspatialreference.hpp>
+#include <liblas/export.hpp>
 // boost
 #include <boost/shared_ptr.hpp>
 // std
 #include <vector>
+#include <string>
 
 namespace liblas {
 
@@ -59,36 +61,106 @@ namespace liblas {
 
 
 /// Defines public interface to LAS transform implementation.
-class TransformI
+class LAS_DLL TransformI
 {
 public:
     
     virtual bool transform(Point& point) = 0;
-    virtual ~TransformI() {};
+    virtual ~TransformI() {}
 };
 
 typedef boost::shared_ptr<liblas::TransformI> TransformPtr;
 
-class ReprojectionTransform: public TransformI
+class LAS_DLL ReprojectionTransform: public TransformI
 {
 public:
     
     ReprojectionTransform(const SpatialReference& inSRS, const SpatialReference& outSRS);    
+    ReprojectionTransform(const SpatialReference& inSRS, const SpatialReference& outSRS, liblas::HeaderPtr new_header);    
     ~ReprojectionTransform();
 
     bool transform(Point& point);
 
 private:
 
-    // FIXME: use shared_ptr with custom deleter and get rid of bloat of OGR manual calls --mloskot
-    OGRCoordinateTransformationH m_transform;
-    OGRSpatialReferenceH m_in_ref;
-    OGRSpatialReferenceH m_out_ref;
+#ifdef HAVE_GDAL
+    struct OGRSpatialReferenceDeleter
+    {
+       template <typename T>
+       void operator()(T* ptr)
+       {
+           ::OSRDestroySpatialReference(ptr);
+       }
+    };
+
+    struct OSRTransformDeleter
+    {
+       template <typename T>
+       void operator()(T* ptr)
+       {
+           ::OCTDestroyCoordinateTransformation(ptr);
+       }
+    };
+
+#endif
+
+    liblas::HeaderPtr m_new_header;
+    
+    typedef boost::shared_ptr<void> ReferencePtr;
+    typedef boost::shared_ptr<void> TransformPtr;
+    ReferencePtr m_in_ref_ptr;
+    ReferencePtr m_out_ref_ptr;
+    TransformPtr m_transform_ptr;
+    
+
 
     ReprojectionTransform(ReprojectionTransform const& other);
     ReprojectionTransform& operator=(ReprojectionTransform const& rhs);
+    
+    void Initialize(SpatialReference const& inSRS, SpatialReference const& outSRS);
 };
 
+class LAS_DLL TranslationTransform: public TransformI
+{
+public:
+    
+    TranslationTransform(std::string const& expression);
+    ~TranslationTransform();
+
+    bool transform(Point& point);
+    
+    enum OPER_TYPE
+    {
+        eOPER_MULTIPLY = 0, 
+        eOPER_DIVIDE = 1, 
+        eOPER_SUBTRACT = 2,  
+        eOPER_ADD = 3,
+        eOPER_NONE = -99
+    };
+
+    // Yes, Mateusz, I'm embarassed by this :)
+    struct operation{
+        OPER_TYPE oper;
+        std::string dimension;
+        double value;
+        std::string expression;
+        
+        operation(std::string name) : oper(eOPER_NONE), dimension(name), value(0.0)
+        {
+        }
+    };
+
+private:
+
+    TranslationTransform(TranslationTransform const& other);
+    TranslationTransform& operator=(TranslationTransform const& rhs);
+    
+    operation GetOperation(std::string const& expression);
+    
+    std::vector<operation> operations;
+    
+    std::string m_expression;
+};
 } // namespace liblas
 
 #endif // ndef LIBLAS_LASTRANSFORM_HPP_INCLUDED
