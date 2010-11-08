@@ -93,6 +93,8 @@ public:
   typedef typename Superclass::OutputType          OutputType;
   typedef typename OutputType::ValueType           ScalarRealType;
 
+  typedef TCoordRep                                CoordRepType;
+
   /** Dimension of the underlying image. */
   itkStaticConstMacro(ImageDimension, unsigned int,
                       InputImageType::ImageDimension);
