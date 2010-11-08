@@ -36,11 +36,37 @@ ADD_TEST(odTvLabeledSampleLocalizationGenerator ${OBJECTDETECTION_TESTS1}
   ${TEMP}/TvLabeledSampleLocalizationGeneratorOutput.shp
   )
 
+ADD_TEST(odTuDescriptorsListSampleGeneratorNew ${OBJECTDETECTION_TESTS1}
+  otbDescriptorsListSampleGeneratorNew
+  )
+
+ADD_TEST(odTvDescriptorsListSampleGeneratorNoStreaming ${OBJECTDETECTION_TESTS1}
+  --compare-ascii ${NOTOL}
+  ${BASELINE_FILES}/TvDescriptorsListSampleGeneratorNoStreamingOutput.txt
+  ${TEMP}/TvDescriptorsListSampleGeneratorNoStreamingOutput.txt
+  otbDescriptorsListSampleGenerator
+  ${INPUTDATA}/ObjectReco/Boats/maur_B010202_01_amplitude.tif
+  ${INPUTDATA}/ObjectReco/Boats/maur_B010202_01LabeledPoints.shp
+  ${TEMP}/TvDescriptorsListSampleGeneratorNoStreamingOutput.txt
+  0
+  )
+
+ADD_TEST(odTvDescriptorsListSampleGeneratorStreaming ${OBJECTDETECTION_TESTS1}
+  --compare-ascii ${NOTOL}
+  ${BASELINE_FILES}/TvDescriptorsListSampleGeneratorNoStreamingOutput.txt
+  ${TEMP}/TvDescriptorsListSampleGeneratorStreamingOutput.txt
+  otbDescriptorsListSampleGenerator
+  ${INPUTDATA}/ObjectReco/Boats/maur_B010202_01_amplitude.tif
+  ${INPUTDATA}/ObjectReco/Boats/maur_B010202_01LabeledPoints.shp
+  ${TEMP}/TvDescriptorsListSampleGeneratorStreamingOutput.txt
+  50
+  )
 
 # A enrichir
 SET(ObjectDetection_SRCS1
 otbObjectDetectionTests1.cxx
 otbLabeledSampleLocalizationGenerator.cxx
+otbDescriptorsListSampleGenerator.cxx
 )
 
 
