@@ -20,7 +20,6 @@
 
 #include "otbVectorDataSource.h"
 #include "otbGenericRSTransform.h"
-#include "otbImageKeywordlist.h"
 
 namespace otb
 {
@@ -28,11 +27,16 @@ namespace otb
 /** \class ImageToEnvelopeVectorDataFilter
   * \brief Build a vector data containing the polygon of the image envelope
   *
+  * This filter uses the GenericRSTransform to project the four corners of the image into ground position.
+  * In case of raw image geometry, a DEM directory or average elevation can be set for better accuracy.
+  *
+  * This filter supports user-specified output projection. If no projection is defined, the standard WGS84
+  * projection will be used.
+  *
   * \ingroup VectorDataFilter
   * \ingroup Projection
   *
   */
-
 template <class TInputImage, class TOutputVectorData>
 class ITK_EXPORT ImageToEnvelopeVectorDataFilter :
   public otb::VectorDataSource<TOutputVectorData>
@@ -53,28 +57,21 @@ public:
   /** Some typedefs. */
   typedef otb::GenericRSTransform<double, 2, 2>    InternalTransformType;
   typedef typename InternalTransformType::Pointer  InternalTransformPointerType;
-
   typedef typename OutputVectorDataType
                    ::DataNodeType                  OutputDataNodeType;
   typedef typename OutputVectorDataType
                    ::DataNodePointerType           OutputDataNodePointerType;
-  typedef typename OutputVectorDataType::DataTreePointerType OutputDataTreePointerType;
+  typedef typename OutputVectorDataType
+                   ::DataTreePointerType           OutputDataTreePointerType;
+  typedef typename OutputVectorDataType
+                   ::DataTreeType::TreeNodeType    OutputInternalTreeNodeType;
+  typedef typename OutputDataNodeType::PolygonType PolygonType;
 
-  typedef typename InputVectorDataType::DataTreeType::TreeNodeType  InputInternalTreeNodeType;
-  typedef typename OutputVectorDataType::DataTreeType::TreeNodeType OutputInternalTreeNodeType;
-  typedef typename InputInternalTreeNodeType::ChildrenListType      InputChildrenListType;
+  /** Set input image */
+  void SetInput(const InputImageType *input);
 
-  typedef typename OutputDataNodeType::PointType PointType;
-
-  typedef typename OutputDataNodeType::LineType             LineType;
-  typedef typename OutputDataNodeType::LineConstPointerType LineConstPointerType;
-  typedef typename OutputDataNodeType::LinePointerType      LinePointerType;
-
-  typedef typename OutputDataNodeType::PolygonType             PolygonType;
-
-  typedef typename OutputDataNodeType::PolygonListType             PolygonListType;
-  typedef typename OutputDataNodeType::PolygonListConstPointerType PolygonListConstPointerType;
-  typedef typename OutputDataNodeType::PolygonListPointerType      PolygonListPointerType;
+  /** Get input image */
+  const InputImageType * GetInput();
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -98,7 +95,11 @@ protected:
 
   void GenerateOutputInformation(void);
 
+  void GenerateInputRequestedRegion();
+
   void GenerateData(void);
+
+  void InstantiateTransform();
 
 private:
   ImageToEnvelopeVectorDataFilter(const Self &); //purposely not implemented
