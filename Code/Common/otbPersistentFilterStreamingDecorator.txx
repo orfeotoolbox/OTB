@@ -32,33 +32,7 @@ PersistentFilterStreamingDecorator<TFilter>
   m_Filter = FilterType::New();
   m_Streamer = StreamerType::New();
 }
-template <class TFilter>
-void
-PersistentFilterStreamingDecorator<TFilter>
-::SetInput(const ImageType *input)
-{
-  // ProcessObject is not const_correct so this cast is required here.
-  this->ProcessObject::SetNthInput(0, const_cast<ImageType *>(input));
-}
-template <class TFilter>
-const typename PersistentFilterStreamingDecorator<TFilter>::ImageType *
-PersistentFilterStreamingDecorator<TFilter>
-::GetInput(void)
-{
-  if (this->GetNumberOfInputs() < 1)
-    {
-    return 0;
-    }
 
-  return static_cast<ImageType*>(this->ProcessObject::GetInput(0));
-}
-template <class TFilter>
-const typename PersistentFilterStreamingDecorator<TFilter>::ImageType *
-PersistentFilterStreamingDecorator<TFilter>
-::GetInput(unsigned int idx)
-{
-  return static_cast<ImageType*>(this->ProcessObject::GetInput(idx));
-}
 template <class TFilter>
 void
 PersistentFilterStreamingDecorator<TFilter>
@@ -66,9 +40,18 @@ PersistentFilterStreamingDecorator<TFilter>
 {
   // Reset the filter before the generation.
   this->GetFilter()->Reset();
-  m_Streamer->SetInput(m_Filter->GetOutput());
-  m_Streamer->Update();
-  // Synthetize data afther the streaming of the whole image.
+
+  /*
+  for (unsigned int idx = 0; idx < this->GetFilter()->GetNumberOfOutputs(); ++idx)
+    {
+    this->GetStreamer()->SetNthInput(idx, this->GetFilter()->GetOutput(idx));
+    }
+  */
+
+  this->GetStreamer()->SetInput(this->GetFilter()->GetOutput());
+  this->GetStreamer()->Update();
+
+  // Synthetize data after the streaming of the whole image.
   this->GetFilter()->Synthetize();
 }
 
@@ -79,6 +62,7 @@ PersistentFilterStreamingDecorator<TFilter>
 {
   this->GenerateData();
 }
+
 /**
  * PrintSelf Method
  */

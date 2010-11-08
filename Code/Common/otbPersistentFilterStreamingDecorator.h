@@ -31,7 +31,7 @@ namespace otb
  *  its data on the whole image, but never loads the whole of it, and eventually processes
  *  each piece with multiple threads. Before the streaming of the whole image is triggered,
  *  the Reset() method of the persistent filter is called to clear the temporary data it might
- *  contain. Afther the streaming, the Synthetize() method is called to synthetize the
+ *  contain. After the streaming, the Synthetize() method is called to synthetize the
  *  temporary data. One can access the persistent filter via the GetFilter() method, and
  * StreamingVirtualWriter via the GetStreamer() method.
  *
@@ -67,10 +67,6 @@ public:
   itkGetObjectMacro(Filter, FilterType);
   itkGetConstObjectMacro(Filter, FilterType);
   itkGetObjectMacro(Streamer, StreamerType);
-
-  void SetInput(const ImageType *input);
-  const ImageType * GetInput(void);
-  const ImageType * GetInput(unsigned int idx);
 
   virtual void Update(void);
 
