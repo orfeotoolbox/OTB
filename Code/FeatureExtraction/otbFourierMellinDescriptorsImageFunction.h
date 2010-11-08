@@ -89,6 +89,8 @@ public:
   typedef typename std::complex<ScalarRealType>    ScalarComplexType;
   typedef typename std::vector< std::vector< ScalarComplexType > >  ComplexType;
 
+  typedef TCoordRep                                CoordRepType;
+
   /** Dimension of the underlying image. */
   itkStaticConstMacro(ImageDimension, unsigned int,
                       InputImageType::ImageDimension);

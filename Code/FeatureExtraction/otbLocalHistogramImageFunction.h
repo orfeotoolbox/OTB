@@ -71,6 +71,8 @@ public:
   typedef typename HistogramType::Pointer                   HistogramPointer;
   typedef typename GeneratorType::Pointer                   GeneratorPointer;
 
+  typedef TCoordRep                                CoordRepType;
+
   /** Dimension of the underlying image. */
   itkStaticConstMacro(ImageDimension, unsigned int,
                       InputImageType::ImageDimension);
