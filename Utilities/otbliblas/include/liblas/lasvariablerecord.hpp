@@ -45,6 +45,7 @@
 
 #include <liblas/detail/private_utility.hpp>
 #include <liblas/external/property_tree/ptree.hpp>
+#include <liblas/export.hpp>
 // boost
 #include <boost/array.hpp>
 #include <boost/cstdint.hpp>
@@ -56,7 +57,7 @@
 namespace liblas {
 
 /// Representation of variable-length record data.
-class VariableRecord
+class LAS_DLL VariableRecord
 {
 public:
 
@@ -151,7 +152,7 @@ inline bool operator!=(VariableRecord const& lhs, VariableRecord const& rhs)
     return (!(lhs == rhs));
 }
 
-std::ostream& operator<<(std::ostream& os, liblas::VariableRecord const&);
+LAS_DLL std::ostream& operator<<(std::ostream& os, liblas::VariableRecord const&);
 
 
 } // namespace liblas

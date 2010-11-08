@@ -1,4 +1,4 @@
-# Install script for directory: /tmp/liblas-main/apps
+# Install script for directory: /tmp/liblas/apps
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -28,10 +28,11 @@ IF(NOT CMAKE_INSTALL_COMPONENT)
 ENDIF(NOT CMAKE_INSTALL_COMPONENT)
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/tmp/liblas-main/bin/lasinfo-old")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/tmp/liblas/bin/lasinfo-old")
   IF(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/lasinfo-old")
     EXECUTE_PROCESS(COMMAND "/usr/bin/install_name_tool"
-      -change "/tmp/liblas-main/bin/liblas_c.dylib" "/usr/local/lib/liblas_c.dylib"
+      -change "/tmp/liblas/bin/liblas.dylib" "liblas.dylib"
+      -change "/tmp/liblas/bin/liblas_c.dylib" "/usr/local/lib/liblas_c.dylib"
       "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/lasinfo-old")
     IF(CMAKE_INSTALL_DO_STRIP)
       EXECUTE_PROCESS(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/lasinfo-old")
@@ -40,8 +41,11 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/tmp/liblas-main/bin/lasinfo")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/tmp/liblas/bin/lasinfo")
   IF(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/lasinfo")
+    EXECUTE_PROCESS(COMMAND "/usr/bin/install_name_tool"
+      -change "/tmp/liblas/bin/liblas.dylib" "liblas.dylib"
+      "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/lasinfo")
     IF(CMAKE_INSTALL_DO_STRIP)
       EXECUTE_PROCESS(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/lasinfo")
     ENDIF(CMAKE_INSTALL_DO_STRIP)
@@ -49,10 +53,11 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/tmp/liblas-main/bin/lasmerge")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/tmp/liblas/bin/lasmerge")
   IF(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/lasmerge")
     EXECUTE_PROCESS(COMMAND "/usr/bin/install_name_tool"
-      -change "/tmp/liblas-main/bin/liblas_c.dylib" "/usr/local/lib/liblas_c.dylib"
+      -change "/tmp/liblas/bin/liblas.dylib" "liblas.dylib"
+      -change "/tmp/liblas/bin/liblas_c.dylib" "/usr/local/lib/liblas_c.dylib"
       "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/lasmerge")
     IF(CMAKE_INSTALL_DO_STRIP)
       EXECUTE_PROCESS(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/lasmerge")
@@ -61,8 +66,11 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/tmp/liblas-main/bin/las2las")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/tmp/liblas/bin/las2las")
   IF(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/las2las")
+    EXECUTE_PROCESS(COMMAND "/usr/bin/install_name_tool"
+      -change "/tmp/liblas/bin/liblas.dylib" "liblas.dylib"
+      "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/las2las")
     IF(CMAKE_INSTALL_DO_STRIP)
       EXECUTE_PROCESS(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/las2las")
     ENDIF(CMAKE_INSTALL_DO_STRIP)
@@ -70,10 +78,11 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/tmp/liblas-main/bin/las2txt")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/tmp/liblas/bin/las2txt")
   IF(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/las2txt")
     EXECUTE_PROCESS(COMMAND "/usr/bin/install_name_tool"
-      -change "/tmp/liblas-main/bin/liblas_c.dylib" "/usr/local/lib/liblas_c.dylib"
+      -change "/tmp/liblas/bin/liblas.dylib" "liblas.dylib"
+      -change "/tmp/liblas/bin/liblas_c.dylib" "/usr/local/lib/liblas_c.dylib"
       "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/las2txt")
     IF(CMAKE_INSTALL_DO_STRIP)
       EXECUTE_PROCESS(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/las2txt")
@@ -82,10 +91,11 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/tmp/liblas-main/bin/txt2las")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/tmp/liblas/bin/txt2las")
   IF(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/txt2las")
     EXECUTE_PROCESS(COMMAND "/usr/bin/install_name_tool"
-      -change "/tmp/liblas-main/bin/liblas_c.dylib" "/usr/local/lib/liblas_c.dylib"
+      -change "/tmp/liblas/bin/liblas.dylib" "liblas.dylib"
+      -change "/tmp/liblas/bin/liblas_c.dylib" "/usr/local/lib/liblas_c.dylib"
       "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/txt2las")
     IF(CMAKE_INSTALL_DO_STRIP)
       EXECUTE_PROCESS(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/txt2las")
@@ -94,8 +104,11 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/tmp/liblas-main/bin/las2las")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/tmp/liblas/bin/las2las")
   IF(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/las2las")
+    EXECUTE_PROCESS(COMMAND "/usr/bin/install_name_tool"
+      -change "/tmp/liblas/bin/liblas.dylib" "liblas.dylib"
+      "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/las2las")
     IF(CMAKE_INSTALL_DO_STRIP)
       EXECUTE_PROCESS(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/las2las")
     ENDIF(CMAKE_INSTALL_DO_STRIP)
@@ -103,10 +116,11 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/tmp/liblas-main/bin/las2las-old")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/tmp/liblas/bin/las2las-old")
   IF(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/las2las-old")
     EXECUTE_PROCESS(COMMAND "/usr/bin/install_name_tool"
-      -change "/tmp/liblas-main/bin/liblas_c.dylib" "/usr/local/lib/liblas_c.dylib"
+      -change "/tmp/liblas/bin/liblas.dylib" "liblas.dylib"
+      -change "/tmp/liblas/bin/liblas_c.dylib" "/usr/local/lib/liblas_c.dylib"
       "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/las2las-old")
     IF(CMAKE_INSTALL_DO_STRIP)
       EXECUTE_PROCESS(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/las2las-old")
@@ -115,11 +129,26 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/tmp/liblas-main/bin/lasblock")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/tmp/liblas/bin/lasblock")
   IF(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/lasblock")
+    EXECUTE_PROCESS(COMMAND "/usr/bin/install_name_tool"
+      -change "/tmp/liblas/bin/liblas.dylib" "liblas.dylib"
+      "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/lasblock")
     IF(CMAKE_INSTALL_DO_STRIP)
       EXECUTE_PROCESS(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/lasblock")
     ENDIF(CMAKE_INSTALL_DO_STRIP)
   ENDIF(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/lasblock")
+ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
+
+IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/tmp/liblas/bin/ts2las")
+  IF(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/ts2las")
+    EXECUTE_PROCESS(COMMAND "/usr/bin/install_name_tool"
+      -change "/tmp/liblas/bin/liblas.dylib" "liblas.dylib"
+      "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/ts2las")
+    IF(CMAKE_INSTALL_DO_STRIP)
+      EXECUTE_PROCESS(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/ts2las")
+    ENDIF(CMAKE_INSTALL_DO_STRIP)
+  ENDIF(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/ts2las")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 

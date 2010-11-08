@@ -86,26 +86,15 @@ bool Writer::WritePoint(Point const& point)
         return false;
     }
 
-    std::vector<liblas::FilterI*>::const_iterator fi;
-    std::vector<liblas::TransformI*>::const_iterator ti;
-    bool bHaveTransforms = false;
-    bool bHaveFilters = false;
-    
-    if (m_transforms != 0 ) {
-        bHaveTransforms = true;
-    }
-    
-    if (m_filters != 0 ) {
-        bHaveFilters = true;
-    }
-    
+    bool bHaveTransforms = (m_transforms != 0);
+    bool bHaveFilters = (m_filters != 0);
 
     if (bHaveFilters) {
     if (m_filters->size() != 0) {
         // We have filters, filter this point.  All filters must 
         // return true for us to keep it.
         bool keep = false;
-        for (fi = m_filters->begin(); fi != m_filters->end(); ++fi) {
+        for (std::vector<liblas::FilterI*>::const_iterator fi = m_filters->begin(); fi != m_filters->end(); ++fi) {
             liblas::FilterI* filter = *fi;
             if (filter->filter(point)){
                 // if ->filter() is true, we keep the point
@@ -127,7 +116,8 @@ bool Writer::WritePoint(Point const& point)
     
         // Apply the transforms to each point
         Point p(point);
-        for (ti = m_transforms->begin(); ti != m_transforms->end(); ++ti) {
+        for (std::vector<liblas::TransformI*>::const_iterator ti = m_transforms->begin();
+             ti != m_transforms->end(); ++ti) {
             liblas::TransformI* transform = *ti;
             transform->transform(p);
 
@@ -137,7 +127,6 @@ bool Writer::WritePoint(Point const& point)
         // transformations that change the point.
         m_pimpl->WritePoint(p, m_header);
         return true;
-        
     }
     }
 
@@ -198,7 +187,7 @@ bool Writer::SetOutputSRS(const SpatialReference& srs)
     }
     
     // overwrite our reprojection transform
-    m_reprojection_transform = TransformPtr(new ReprojectionTransform(m_in_srs, m_out_srs));
+    m_reprojection_transform = TransformPtr(new ReprojectionTransform(m_in_srs, m_out_srs, m_header));
     
     if (m_transforms != 0) {
         if (m_transforms->size() > 0) {

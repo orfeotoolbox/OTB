@@ -50,6 +50,10 @@
 #include <string>
 #include <vector>
 
+#ifdef HAVE_GDAL
+#  include "cpl_conv.h"
+#endif
+
 using namespace boost;
 
 namespace liblas {
@@ -364,7 +368,7 @@ const GTIF* SpatialReference::GetGTIF()
 
     m_gtiff = GTIFNewSimpleTags(m_tiff);
     if (!m_gtiff) 
-        throw std::runtime_error("The geotiff keys could not read from VLR records");
+        throw std::runtime_error("The geotiff keys could not be read from VLR records");
     
     return m_gtiff;
 #endif
@@ -395,16 +399,16 @@ std::string SpatialReference::GetWKT(WKTModeFlag mode_flag , bool pretty) const
     {
         pszWKT = GTIFGetOGISDefn( m_gtiff, &sGTIFDefn );
 
-            if (pretty) {
-                OGRSpatialReference* poSRS = (OGRSpatialReference*) OSRNewSpatialReference(NULL);
-                char *pszOrigWKT = pszWKT;
-                poSRS->importFromWkt( &pszOrigWKT );
-
-                CPLFree( pszWKT );
-                pszWKT = NULL;
-                poSRS->exportToPrettyWkt(&pszWKT, false);
-                delete poSRS;
-            }
+        if (pretty) {
+            OGRSpatialReference* poSRS = (OGRSpatialReference*) OSRNewSpatialReference(NULL);
+            char *pszOrigWKT = pszWKT;
+            poSRS->importFromWkt( &pszOrigWKT );
+            
+            CPLFree( pszWKT );
+            pszWKT = NULL;
+            poSRS->exportToPrettyWkt(&pszWKT, false);
+            delete poSRS;
+        }
                 
         // Older versions of GDAL lack StripVertical(), but should never
         // actually return COMPD_CS anyways.
@@ -499,10 +503,10 @@ void SpatialReference::SetWKT(std::string const& v)
 #endif
 }
 
-void SpatialReference::SetVerticalCS(int verticalCSType, 
+void SpatialReference::SetVerticalCS(boost::int32_t verticalCSType, 
                                      std::string const& citation,
-                                     int verticalDatum,
-                                     int verticalUnits)
+                                     boost::int32_t verticalDatum,
+                                     boost::int32_t verticalUnits)
 {
     if (!m_gtiff)
     {

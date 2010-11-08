@@ -39,10 +39,10 @@ RM = "/Applications/CMake 2.8-0.app/Contents/bin/cmake" -E remove -f
 CMAKE_EDIT_COMMAND = "/Applications/CMake 2.8-0.app/Contents/bin/ccmake"
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /tmp/liblas-main
+CMAKE_SOURCE_DIR = /tmp/liblas
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /tmp/liblas-main
+CMAKE_BINARY_DIR = /tmp/liblas
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -101,7 +101,7 @@ list_install_components/fast: list_install_components
 # Special rule for the target package
 package: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Run CPack packaging tool..."
-	cd /tmp/liblas-main && "/Applications/CMake 2.8-0.app/Contents/bin/cpack" --config ./CPackConfig.cmake
+	cd /tmp/liblas && "/Applications/CMake 2.8-0.app/Contents/bin/cpack" --config ./CPackConfig.cmake
 .PHONY : package
 
 # Special rule for the target package
@@ -111,7 +111,7 @@ package/fast: package
 # Special rule for the target package_source
 package_source:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Run CPack packaging tool for source..."
-	cd /tmp/liblas-main && "/Applications/CMake 2.8-0.app/Contents/bin/cpack" --config ./CPackSourceConfig.cmake /tmp/liblas-main/CPackSourceConfig.cmake
+	cd /tmp/liblas && "/Applications/CMake 2.8-0.app/Contents/bin/cpack" --config ./CPackSourceConfig.cmake /tmp/liblas/CPackSourceConfig.cmake
 .PHONY : package_source
 
 # Special rule for the target package_source
@@ -140,14 +140,14 @@ test/fast: test
 
 # The main all target
 all: cmake_check_build_system
-	cd /tmp/liblas-main && $(CMAKE_COMMAND) -E cmake_progress_start /tmp/liblas-main/CMakeFiles /tmp/liblas-main/test/unit/CMakeFiles/progress.marks
-	cd /tmp/liblas-main && $(MAKE) -f CMakeFiles/Makefile2 test/unit/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /tmp/liblas-main/CMakeFiles 0
+	cd /tmp/liblas && $(CMAKE_COMMAND) -E cmake_progress_start /tmp/liblas/CMakeFiles /tmp/liblas/test/unit/CMakeFiles/progress.marks
+	cd /tmp/liblas && $(MAKE) -f CMakeFiles/Makefile2 test/unit/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /tmp/liblas/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /tmp/liblas-main && $(MAKE) -f CMakeFiles/Makefile2 test/unit/clean
+	cd /tmp/liblas && $(MAKE) -f CMakeFiles/Makefile2 test/unit/clean
 .PHONY : clean
 
 # The main clean target
@@ -156,22 +156,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /tmp/liblas-main && $(MAKE) -f CMakeFiles/Makefile2 test/unit/preinstall
+	cd /tmp/liblas && $(MAKE) -f CMakeFiles/Makefile2 test/unit/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /tmp/liblas-main && $(MAKE) -f CMakeFiles/Makefile2 test/unit/preinstall
+	cd /tmp/liblas && $(MAKE) -f CMakeFiles/Makefile2 test/unit/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /tmp/liblas-main && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /tmp/liblas && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 test/unit/CMakeFiles/liblas_test.dir/rule:
-	cd /tmp/liblas-main && $(MAKE) -f CMakeFiles/Makefile2 test/unit/CMakeFiles/liblas_test.dir/rule
+	cd /tmp/liblas && $(MAKE) -f CMakeFiles/Makefile2 test/unit/CMakeFiles/liblas_test.dir/rule
 .PHONY : test/unit/CMakeFiles/liblas_test.dir/rule
 
 # Convenience name for target.
@@ -180,7 +180,7 @@ liblas_test: test/unit/CMakeFiles/liblas_test.dir/rule
 
 # fast build rule for target.
 liblas_test/fast:
-	cd /tmp/liblas-main && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/build
+	cd /tmp/liblas && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/build
 .PHONY : liblas_test/fast
 
 common.o: common.cpp.o
@@ -188,7 +188,7 @@ common.o: common.cpp.o
 
 # target to build an object file
 common.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/common.cpp.o
+	cd /tmp/liblas && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/common.cpp.o
 .PHONY : common.cpp.o
 
 common.i: common.cpp.i
@@ -196,7 +196,7 @@ common.i: common.cpp.i
 
 # target to preprocess a source file
 common.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/common.cpp.i
+	cd /tmp/liblas && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/common.cpp.i
 .PHONY : common.cpp.i
 
 common.s: common.cpp.s
@@ -204,7 +204,7 @@ common.s: common.cpp.s
 
 # target to generate assembly for a file
 common.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/common.cpp.s
+	cd /tmp/liblas && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/common.cpp.s
 .PHONY : common.cpp.s
 
 guid_test.o: guid_test.cpp.o
@@ -212,7 +212,7 @@ guid_test.o: guid_test.cpp.o
 
 # target to build an object file
 guid_test.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/guid_test.cpp.o
+	cd /tmp/liblas && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/guid_test.cpp.o
 .PHONY : guid_test.cpp.o
 
 guid_test.i: guid_test.cpp.i
@@ -220,7 +220,7 @@ guid_test.i: guid_test.cpp.i
 
 # target to preprocess a source file
 guid_test.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/guid_test.cpp.i
+	cd /tmp/liblas && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/guid_test.cpp.i
 .PHONY : guid_test.cpp.i
 
 guid_test.s: guid_test.cpp.s
@@ -228,7 +228,7 @@ guid_test.s: guid_test.cpp.s
 
 # target to generate assembly for a file
 guid_test.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/guid_test.cpp.s
+	cd /tmp/liblas && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/guid_test.cpp.s
 .PHONY : guid_test.cpp.s
 
 lasbounds_test.o: lasbounds_test.cpp.o
@@ -236,7 +236,7 @@ lasbounds_test.o: lasbounds_test.cpp.o
 
 # target to build an object file
 lasbounds_test.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/lasbounds_test.cpp.o
+	cd /tmp/liblas && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/lasbounds_test.cpp.o
 .PHONY : lasbounds_test.cpp.o
 
 lasbounds_test.i: lasbounds_test.cpp.i
@@ -244,7 +244,7 @@ lasbounds_test.i: lasbounds_test.cpp.i
 
 # target to preprocess a source file
 lasbounds_test.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/lasbounds_test.cpp.i
+	cd /tmp/liblas && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/lasbounds_test.cpp.i
 .PHONY : lasbounds_test.cpp.i
 
 lasbounds_test.s: lasbounds_test.cpp.s
@@ -252,7 +252,7 @@ lasbounds_test.s: lasbounds_test.cpp.s
 
 # target to generate assembly for a file
 lasbounds_test.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/lasbounds_test.cpp.s
+	cd /tmp/liblas && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/lasbounds_test.cpp.s
 .PHONY : lasbounds_test.cpp.s
 
 laserror_test.o: laserror_test.cpp.o
@@ -260,7 +260,7 @@ laserror_test.o: laserror_test.cpp.o
 
 # target to build an object file
 laserror_test.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/laserror_test.cpp.o
+	cd /tmp/liblas && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/laserror_test.cpp.o
 .PHONY : laserror_test.cpp.o
 
 laserror_test.i: laserror_test.cpp.i
@@ -268,7 +268,7 @@ laserror_test.i: laserror_test.cpp.i
 
 # target to preprocess a source file
 laserror_test.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/laserror_test.cpp.i
+	cd /tmp/liblas && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/laserror_test.cpp.i
 .PHONY : laserror_test.cpp.i
 
 laserror_test.s: laserror_test.cpp.s
@@ -276,7 +276,7 @@ laserror_test.s: laserror_test.cpp.s
 
 # target to generate assembly for a file
 laserror_test.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/laserror_test.cpp.s
+	cd /tmp/liblas && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/laserror_test.cpp.s
 .PHONY : laserror_test.cpp.s
 
 lasheader_test.o: lasheader_test.cpp.o
@@ -284,7 +284,7 @@ lasheader_test.o: lasheader_test.cpp.o
 
 # target to build an object file
 lasheader_test.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/lasheader_test.cpp.o
+	cd /tmp/liblas && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/lasheader_test.cpp.o
 .PHONY : lasheader_test.cpp.o
 
 lasheader_test.i: lasheader_test.cpp.i
@@ -292,7 +292,7 @@ lasheader_test.i: lasheader_test.cpp.i
 
 # target to preprocess a source file
 lasheader_test.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/lasheader_test.cpp.i
+	cd /tmp/liblas && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/lasheader_test.cpp.i
 .PHONY : lasheader_test.cpp.i
 
 lasheader_test.s: lasheader_test.cpp.s
@@ -300,7 +300,7 @@ lasheader_test.s: lasheader_test.cpp.s
 
 # target to generate assembly for a file
 lasheader_test.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/lasheader_test.cpp.s
+	cd /tmp/liblas && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/lasheader_test.cpp.s
 .PHONY : lasheader_test.cpp.s
 
 laspoint_test.o: laspoint_test.cpp.o
@@ -308,7 +308,7 @@ laspoint_test.o: laspoint_test.cpp.o
 
 # target to build an object file
 laspoint_test.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/laspoint_test.cpp.o
+	cd /tmp/liblas && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/laspoint_test.cpp.o
 .PHONY : laspoint_test.cpp.o
 
 laspoint_test.i: laspoint_test.cpp.i
@@ -316,7 +316,7 @@ laspoint_test.i: laspoint_test.cpp.i
 
 # target to preprocess a source file
 laspoint_test.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/laspoint_test.cpp.i
+	cd /tmp/liblas && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/laspoint_test.cpp.i
 .PHONY : laspoint_test.cpp.i
 
 laspoint_test.s: laspoint_test.cpp.s
@@ -324,7 +324,7 @@ laspoint_test.s: laspoint_test.cpp.s
 
 # target to generate assembly for a file
 laspoint_test.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/laspoint_test.cpp.s
+	cd /tmp/liblas && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/laspoint_test.cpp.s
 .PHONY : laspoint_test.cpp.s
 
 lasreader_iterator_test.o: lasreader_iterator_test.cpp.o
@@ -332,7 +332,7 @@ lasreader_iterator_test.o: lasreader_iterator_test.cpp.o
 
 # target to build an object file
 lasreader_iterator_test.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/lasreader_iterator_test.cpp.o
+	cd /tmp/liblas && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/lasreader_iterator_test.cpp.o
 .PHONY : lasreader_iterator_test.cpp.o
 
 lasreader_iterator_test.i: lasreader_iterator_test.cpp.i
@@ -340,7 +340,7 @@ lasreader_iterator_test.i: lasreader_iterator_test.cpp.i
 
 # target to preprocess a source file
 lasreader_iterator_test.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/lasreader_iterator_test.cpp.i
+	cd /tmp/liblas && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/lasreader_iterator_test.cpp.i
 .PHONY : lasreader_iterator_test.cpp.i
 
 lasreader_iterator_test.s: lasreader_iterator_test.cpp.s
@@ -348,7 +348,7 @@ lasreader_iterator_test.s: lasreader_iterator_test.cpp.s
 
 # target to generate assembly for a file
 lasreader_iterator_test.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/lasreader_iterator_test.cpp.s
+	cd /tmp/liblas && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/lasreader_iterator_test.cpp.s
 .PHONY : lasreader_iterator_test.cpp.s
 
 lasreader_test.o: lasreader_test.cpp.o
@@ -356,7 +356,7 @@ lasreader_test.o: lasreader_test.cpp.o
 
 # target to build an object file
 lasreader_test.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/lasreader_test.cpp.o
+	cd /tmp/liblas && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/lasreader_test.cpp.o
 .PHONY : lasreader_test.cpp.o
 
 lasreader_test.i: lasreader_test.cpp.i
@@ -364,7 +364,7 @@ lasreader_test.i: lasreader_test.cpp.i
 
 # target to preprocess a source file
 lasreader_test.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/lasreader_test.cpp.i
+	cd /tmp/liblas && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/lasreader_test.cpp.i
 .PHONY : lasreader_test.cpp.i
 
 lasreader_test.s: lasreader_test.cpp.s
@@ -372,7 +372,7 @@ lasreader_test.s: lasreader_test.cpp.s
 
 # target to generate assembly for a file
 lasreader_test.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/lasreader_test.cpp.s
+	cd /tmp/liblas && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/lasreader_test.cpp.s
 .PHONY : lasreader_test.cpp.s
 
 lasspatialreference_test.o: lasspatialreference_test.cpp.o
@@ -380,7 +380,7 @@ lasspatialreference_test.o: lasspatialreference_test.cpp.o
 
 # target to build an object file
 lasspatialreference_test.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/lasspatialreference_test.cpp.o
+	cd /tmp/liblas && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/lasspatialreference_test.cpp.o
 .PHONY : lasspatialreference_test.cpp.o
 
 lasspatialreference_test.i: lasspatialreference_test.cpp.i
@@ -388,7 +388,7 @@ lasspatialreference_test.i: lasspatialreference_test.cpp.i
 
 # target to preprocess a source file
 lasspatialreference_test.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/lasspatialreference_test.cpp.i
+	cd /tmp/liblas && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/lasspatialreference_test.cpp.i
 .PHONY : lasspatialreference_test.cpp.i
 
 lasspatialreference_test.s: lasspatialreference_test.cpp.s
@@ -396,7 +396,7 @@ lasspatialreference_test.s: lasspatialreference_test.cpp.s
 
 # target to generate assembly for a file
 lasspatialreference_test.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/lasspatialreference_test.cpp.s
+	cd /tmp/liblas && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/lasspatialreference_test.cpp.s
 .PHONY : lasspatialreference_test.cpp.s
 
 lasvariablerecord_test.o: lasvariablerecord_test.cpp.o
@@ -404,7 +404,7 @@ lasvariablerecord_test.o: lasvariablerecord_test.cpp.o
 
 # target to build an object file
 lasvariablerecord_test.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/lasvariablerecord_test.cpp.o
+	cd /tmp/liblas && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/lasvariablerecord_test.cpp.o
 .PHONY : lasvariablerecord_test.cpp.o
 
 lasvariablerecord_test.i: lasvariablerecord_test.cpp.i
@@ -412,7 +412,7 @@ lasvariablerecord_test.i: lasvariablerecord_test.cpp.i
 
 # target to preprocess a source file
 lasvariablerecord_test.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/lasvariablerecord_test.cpp.i
+	cd /tmp/liblas && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/lasvariablerecord_test.cpp.i
 .PHONY : lasvariablerecord_test.cpp.i
 
 lasvariablerecord_test.s: lasvariablerecord_test.cpp.s
@@ -420,7 +420,7 @@ lasvariablerecord_test.s: lasvariablerecord_test.cpp.s
 
 # target to generate assembly for a file
 lasvariablerecord_test.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/lasvariablerecord_test.cpp.s
+	cd /tmp/liblas && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/lasvariablerecord_test.cpp.s
 .PHONY : lasvariablerecord_test.cpp.s
 
 laswriter_test.o: laswriter_test.cpp.o
@@ -428,7 +428,7 @@ laswriter_test.o: laswriter_test.cpp.o
 
 # target to build an object file
 laswriter_test.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/laswriter_test.cpp.o
+	cd /tmp/liblas && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/laswriter_test.cpp.o
 .PHONY : laswriter_test.cpp.o
 
 laswriter_test.i: laswriter_test.cpp.i
@@ -436,7 +436,7 @@ laswriter_test.i: laswriter_test.cpp.i
 
 # target to preprocess a source file
 laswriter_test.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/laswriter_test.cpp.i
+	cd /tmp/liblas && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/laswriter_test.cpp.i
 .PHONY : laswriter_test.cpp.i
 
 laswriter_test.s: laswriter_test.cpp.s
@@ -444,7 +444,7 @@ laswriter_test.s: laswriter_test.cpp.s
 
 # target to generate assembly for a file
 laswriter_test.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/laswriter_test.cpp.s
+	cd /tmp/liblas && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/laswriter_test.cpp.s
 .PHONY : laswriter_test.cpp.s
 
 liblas_test_suite.o: liblas_test_suite.cpp.o
@@ -452,7 +452,7 @@ liblas_test_suite.o: liblas_test_suite.cpp.o
 
 # target to build an object file
 liblas_test_suite.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/liblas_test_suite.cpp.o
+	cd /tmp/liblas && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/liblas_test_suite.cpp.o
 .PHONY : liblas_test_suite.cpp.o
 
 liblas_test_suite.i: liblas_test_suite.cpp.i
@@ -460,7 +460,7 @@ liblas_test_suite.i: liblas_test_suite.cpp.i
 
 # target to preprocess a source file
 liblas_test_suite.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/liblas_test_suite.cpp.i
+	cd /tmp/liblas && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/liblas_test_suite.cpp.i
 .PHONY : liblas_test_suite.cpp.i
 
 liblas_test_suite.s: liblas_test_suite.cpp.s
@@ -468,7 +468,7 @@ liblas_test_suite.s: liblas_test_suite.cpp.s
 
 # target to generate assembly for a file
 liblas_test_suite.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/liblas_test_suite.cpp.s
+	cd /tmp/liblas && $(MAKE) -f test/unit/CMakeFiles/liblas_test.dir/build.make test/unit/CMakeFiles/liblas_test.dir/liblas_test_suite.cpp.s
 .PHONY : liblas_test_suite.cpp.s
 
 # Help Target
@@ -534,6 +534,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /tmp/liblas-main && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /tmp/liblas && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

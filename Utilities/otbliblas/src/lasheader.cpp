@@ -64,7 +64,7 @@ namespace liblas {
 
 char const* const Header::FileSignature = "LASF";
 char const* const Header::SystemIdentifier = "libLAS";
-char const* const Header::SoftwareIdentifier = "libLAS 1.2";
+char const* const Header::SoftwareIdentifier = "libLAS 1.6.0b2";
 
 
 Header::Header() : m_schema(ePointFormat3)
@@ -439,10 +439,11 @@ double Header::GetScaleZ() const
 
 void Header::SetScale(double x, double y, double z)
 {
+
     double const minscale = 0.01;
-    m_scales.x = (0 == x) ? minscale : x;
-    m_scales.y = (0 == y) ? minscale : y;
-    m_scales.z = (0 == z) ? minscale : z;
+    m_scales.x = (detail::compare_distance(0.0, x)) ? minscale : x;
+    m_scales.y = (detail::compare_distance(0.0, y)) ? minscale : y;
+    m_scales.z = (detail::compare_distance(0.0, z)) ? minscale : z;
 }
 
 double Header::GetOffsetX() const
@@ -827,34 +828,54 @@ void Header::to_rst(std::ostream& os) const
     os << "  Number of Points by Return:  " << returns_oss.str() << std::endl;
 
     os.setf(std::ios_base::fixed, std::ios_base::floatfield);
-    double scale = tree.get<double>("scale.z");
+    double x_scale = tree.get<double>("scale.x");
+    double y_scale = tree.get<double>("scale.y");
+    double z_scale = tree.get<double>("scale.z");
 
+    boost::uint32_t x_precision = 6;
+    boost::uint32_t y_precision = 6;
+    boost::uint32_t z_precision = 6;
     double frac = 0;
     double integer = 0;
-    frac = std::modf(scale, &integer);
+    
+    frac = std::modf(x_scale, &integer);
+    x_precision = static_cast<boost::uint32_t>(std::fabs(std::floor(std::log10(frac))));
+    frac = std::modf(y_scale, &integer);
+    y_precision = static_cast<boost::uint32_t>(std::fabs(std::floor(std::log10(frac))));
+    frac = std::modf(z_scale, &integer);
+    z_precision = static_cast<boost::uint32_t>(std::fabs(std::floor(std::log10(frac))));
 
-    boost::uint32_t prec = static_cast<boost::uint32_t>(std::fabs(std::floor(std::log10(frac))));
-    os.precision(prec);
+    os << "  Scale Factor X Y Z:          ";
+    os.precision(x_precision);
+    os << tree.get<double>("scale.x") << " "; 
+    os.precision(y_precision);
+    os << tree.get<double>("scale.y") << " "; 
+    os.precision(z_precision);
+    os << tree.get<double>("scale.z") << std::endl;
 
-    os << "  Scale Factor X Y Z:          " 
-     << tree.get<double>("scale.x") << " " 
-     << tree.get<double>("scale.y") << " " 
-     << tree.get<double>("scale.z") << std::endl;
+    os << "  Offset X Y Z:                ";
+    os.precision(x_precision);
+    os << tree.get<double>("offset.x") << " ";
+    os.precision(y_precision);
+    os << tree.get<double>("offset.y") << " ";
+    os.precision(z_precision);
+    os << tree.get<double>("offset.z") << std::endl;
 
-    os << "  Offset X Y Z:                " 
-     << tree.get<double>("offset.x") << " " 
-     << tree.get<double>("offset.y") << " " 
-     << tree.get<double>("offset.z") << std::endl;
+    os << "  Min X Y Z:                   ";
+    os.precision(x_precision);
+    os << tree.get<double>("minimum.x") << " "; 
+    os.precision(y_precision);
+    os << tree.get<double>("minimum.y") << " ";
+    os.precision(z_precision);
+    os << tree.get<double>("minimum.z") << std::endl;
 
-    os << "  Min X Y Z:                   " 
-     << tree.get<double>("minimum.x") << " " 
-     << tree.get<double>("minimum.y") << " " 
-     << tree.get<double>("minimum.z") << std::endl;
-
-    os << "  Max X Y Z:                   " 
-     << tree.get<double>("maximum.x") << " " 
-     << tree.get<double>("maximum.y") << " " 
-     << tree.get<double>("maximum.z") << std::endl;         
+    os << "  Max X Y Z:                   ";
+    os.precision(x_precision);
+    os << tree.get<double>("maximum.x") << " ";
+    os.precision(y_precision);
+    os << tree.get<double>("maximum.y") << " ";
+    os.precision(z_precision);
+    os << tree.get<double>("maximum.z") << std::endl;         
 
     os << "  Spatial Reference:  " << std::endl;
     os << tree.get<std::string>("srs.prettywkt") << std::endl;

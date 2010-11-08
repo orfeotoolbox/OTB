@@ -77,12 +77,11 @@ Dimension::Dimension(std::string const& name, std::size_t size_in_bits) :
     m_byte_offset(0),
     m_bit_offset(0)
 {
-     if (size_in_bits == 0) {
-        std::ostringstream oss;
-        oss << "The bit size of the dimension is 0, the dimension is invalid.";
-        throw std::runtime_error(oss.str());
+     if (0 == size_in_bits)
+	 {
+        throw std::runtime_error("The bit size of the dimension is 0, the dimension is invalid.");
      }
-};
+}
 
 /// copy constructor
 Dimension::Dimension(Dimension const& other) :
@@ -101,8 +100,8 @@ Dimension::Dimension(Dimension const& other) :
     , m_bit_offset(other.m_bit_offset)
 {
 }
-// 
-// // assignment constructor
+ 
+/// assignment operator
 Dimension& Dimension::operator=(Dimension const& rhs)
 {
     if (&rhs != this)
@@ -127,9 +126,9 @@ Dimension& Dimension::operator=(Dimension const& rhs)
 
 std::size_t Dimension::GetByteSize() const 
 {
-
-    std::size_t bit_position = m_bit_size % 8;
-    if (bit_position > 0) {
+    std::size_t const bit_position = m_bit_size % 8;
+    if (bit_position > 0)
+	{
         // For dimensions that are not byte aligned,
         // we need to determine how many bytes they 
         // will take.  We have to read at least one byte if the 
@@ -160,9 +159,10 @@ liblas::property_tree::ptree Dimension::GetPTree() const
     dim.put("bitoffset" , GetBitOffset());
     dim.put("bytesize", GetByteSize());
     
-   if (IsNumeric()) {
+   if (IsNumeric())
+   {
        if (! (detail::compare_distance(GetMinimum(), GetMaximum() ) 
-            && detail::compare_distance(0.0, GetMaximum())))
+           && detail::compare_distance(0.0, GetMaximum())))
        {
            dim.put("minimum", GetMinimum());
            dim.put("maximum", GetMaximum());
@@ -174,15 +174,22 @@ liblas::property_tree::ptree Dimension::GetPTree() const
 
 std::ostream& operator<<(std::ostream& os, liblas::Dimension const& d)
 {
-    
     using liblas::property_tree::ptree;
     ptree tree = d.GetPTree();
     
-    std::string name = tree.get<std::string>("name");
-    
+    std::string const name = tree.get<std::string>("name");
 
-    os << "'" << name << "'" << " -- ";
-    os << " size: " << tree.get<boost::uint32_t>("size");
+    std::ostringstream quoted_name;
+    quoted_name << "'" << name << "'";
+    std::ostringstream pad;
+    std::string const& cur = quoted_name.str();
+    std::string::size_type size = cur.size();
+    std::string::size_type pad_size = 30 - size;
+    
+    for (std::string::size_type i=0; i != pad_size; i++ ) {
+        pad << " ";
+    }
+    os << quoted_name.str() << pad.str() <<" -- "<< " size: " << tree.get<boost::uint32_t>("size");
     os << " offset: " << tree.get<boost::uint32_t>("byteoffset");
     os << std::endl;
     

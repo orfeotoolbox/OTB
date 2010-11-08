@@ -41,6 +41,8 @@
 #ifndef LIBLAS_LASCOLOR_HPP_INCLUDED
 #define LIBLAS_LASCOLOR_HPP_INCLUDED
 
+#include <liblas/export.hpp>
+
 // boost
 #include <boost/array.hpp>
 #include <boost/cstdint.hpp>
@@ -50,7 +52,7 @@
 namespace liblas {
 
 /// RGB color container
-class Color
+class LAS_DLL Color
 {
 public:
 

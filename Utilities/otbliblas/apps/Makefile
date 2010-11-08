@@ -39,10 +39,10 @@ RM = "/Applications/CMake 2.8-0.app/Contents/bin/cmake" -E remove -f
 CMAKE_EDIT_COMMAND = "/Applications/CMake 2.8-0.app/Contents/bin/ccmake"
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /tmp/liblas-main
+CMAKE_SOURCE_DIR = /tmp/liblas
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /tmp/liblas-main
+CMAKE_BINARY_DIR = /tmp/liblas
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -101,7 +101,7 @@ list_install_components/fast: list_install_components
 # Special rule for the target package
 package: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Run CPack packaging tool..."
-	cd /tmp/liblas-main && "/Applications/CMake 2.8-0.app/Contents/bin/cpack" --config ./CPackConfig.cmake
+	cd /tmp/liblas && "/Applications/CMake 2.8-0.app/Contents/bin/cpack" --config ./CPackConfig.cmake
 .PHONY : package
 
 # Special rule for the target package
@@ -111,7 +111,7 @@ package/fast: package
 # Special rule for the target package_source
 package_source:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Run CPack packaging tool for source..."
-	cd /tmp/liblas-main && "/Applications/CMake 2.8-0.app/Contents/bin/cpack" --config ./CPackSourceConfig.cmake /tmp/liblas-main/CPackSourceConfig.cmake
+	cd /tmp/liblas && "/Applications/CMake 2.8-0.app/Contents/bin/cpack" --config ./CPackSourceConfig.cmake /tmp/liblas/CPackSourceConfig.cmake
 .PHONY : package_source
 
 # Special rule for the target package_source
@@ -140,14 +140,14 @@ test/fast: test
 
 # The main all target
 all: cmake_check_build_system
-	cd /tmp/liblas-main && $(CMAKE_COMMAND) -E cmake_progress_start /tmp/liblas-main/CMakeFiles /tmp/liblas-main/apps/CMakeFiles/progress.marks
-	cd /tmp/liblas-main && $(MAKE) -f CMakeFiles/Makefile2 apps/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /tmp/liblas-main/CMakeFiles 0
+	cd /tmp/liblas && $(CMAKE_COMMAND) -E cmake_progress_start /tmp/liblas/CMakeFiles /tmp/liblas/apps/CMakeFiles/progress.marks
+	cd /tmp/liblas && $(MAKE) -f CMakeFiles/Makefile2 apps/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /tmp/liblas/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /tmp/liblas-main && $(MAKE) -f CMakeFiles/Makefile2 apps/clean
+	cd /tmp/liblas && $(MAKE) -f CMakeFiles/Makefile2 apps/clean
 .PHONY : clean
 
 # The main clean target
@@ -156,22 +156,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /tmp/liblas-main && $(MAKE) -f CMakeFiles/Makefile2 apps/preinstall
+	cd /tmp/liblas && $(MAKE) -f CMakeFiles/Makefile2 apps/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /tmp/liblas-main && $(MAKE) -f CMakeFiles/Makefile2 apps/preinstall
+	cd /tmp/liblas && $(MAKE) -f CMakeFiles/Makefile2 apps/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /tmp/liblas-main && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /tmp/liblas && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 apps/CMakeFiles/bigfile_test.dir/rule:
-	cd /tmp/liblas-main && $(MAKE) -f CMakeFiles/Makefile2 apps/CMakeFiles/bigfile_test.dir/rule
+	cd /tmp/liblas && $(MAKE) -f CMakeFiles/Makefile2 apps/CMakeFiles/bigfile_test.dir/rule
 .PHONY : apps/CMakeFiles/bigfile_test.dir/rule
 
 # Convenience name for target.
@@ -180,12 +180,12 @@ bigfile_test: apps/CMakeFiles/bigfile_test.dir/rule
 
 # fast build rule for target.
 bigfile_test/fast:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/bigfile_test.dir/build.make apps/CMakeFiles/bigfile_test.dir/build
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/bigfile_test.dir/build.make apps/CMakeFiles/bigfile_test.dir/build
 .PHONY : bigfile_test/fast
 
 # Convenience name for target.
 apps/CMakeFiles/las2las.dir/rule:
-	cd /tmp/liblas-main && $(MAKE) -f CMakeFiles/Makefile2 apps/CMakeFiles/las2las.dir/rule
+	cd /tmp/liblas && $(MAKE) -f CMakeFiles/Makefile2 apps/CMakeFiles/las2las.dir/rule
 .PHONY : apps/CMakeFiles/las2las.dir/rule
 
 # Convenience name for target.
@@ -194,12 +194,12 @@ las2las: apps/CMakeFiles/las2las.dir/rule
 
 # fast build rule for target.
 las2las/fast:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/las2las.dir/build.make apps/CMakeFiles/las2las.dir/build
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/las2las.dir/build.make apps/CMakeFiles/las2las.dir/build
 .PHONY : las2las/fast
 
 # Convenience name for target.
 apps/CMakeFiles/las2las-old.dir/rule:
-	cd /tmp/liblas-main && $(MAKE) -f CMakeFiles/Makefile2 apps/CMakeFiles/las2las-old.dir/rule
+	cd /tmp/liblas && $(MAKE) -f CMakeFiles/Makefile2 apps/CMakeFiles/las2las-old.dir/rule
 .PHONY : apps/CMakeFiles/las2las-old.dir/rule
 
 # Convenience name for target.
@@ -208,12 +208,12 @@ las2las-old: apps/CMakeFiles/las2las-old.dir/rule
 
 # fast build rule for target.
 las2las-old/fast:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/las2las-old.dir/build.make apps/CMakeFiles/las2las-old.dir/build
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/las2las-old.dir/build.make apps/CMakeFiles/las2las-old.dir/build
 .PHONY : las2las-old/fast
 
 # Convenience name for target.
 apps/CMakeFiles/las2txt.dir/rule:
-	cd /tmp/liblas-main && $(MAKE) -f CMakeFiles/Makefile2 apps/CMakeFiles/las2txt.dir/rule
+	cd /tmp/liblas && $(MAKE) -f CMakeFiles/Makefile2 apps/CMakeFiles/las2txt.dir/rule
 .PHONY : apps/CMakeFiles/las2txt.dir/rule
 
 # Convenience name for target.
@@ -222,12 +222,12 @@ las2txt: apps/CMakeFiles/las2txt.dir/rule
 
 # fast build rule for target.
 las2txt/fast:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/las2txt.dir/build.make apps/CMakeFiles/las2txt.dir/build
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/las2txt.dir/build.make apps/CMakeFiles/las2txt.dir/build
 .PHONY : las2txt/fast
 
 # Convenience name for target.
 apps/CMakeFiles/lasblock.dir/rule:
-	cd /tmp/liblas-main && $(MAKE) -f CMakeFiles/Makefile2 apps/CMakeFiles/lasblock.dir/rule
+	cd /tmp/liblas && $(MAKE) -f CMakeFiles/Makefile2 apps/CMakeFiles/lasblock.dir/rule
 .PHONY : apps/CMakeFiles/lasblock.dir/rule
 
 # Convenience name for target.
@@ -236,12 +236,12 @@ lasblock: apps/CMakeFiles/lasblock.dir/rule
 
 # fast build rule for target.
 lasblock/fast:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/lasblock.dir/build.make apps/CMakeFiles/lasblock.dir/build
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/lasblock.dir/build.make apps/CMakeFiles/lasblock.dir/build
 .PHONY : lasblock/fast
 
 # Convenience name for target.
 apps/CMakeFiles/lasindex_test.dir/rule:
-	cd /tmp/liblas-main && $(MAKE) -f CMakeFiles/Makefile2 apps/CMakeFiles/lasindex_test.dir/rule
+	cd /tmp/liblas && $(MAKE) -f CMakeFiles/Makefile2 apps/CMakeFiles/lasindex_test.dir/rule
 .PHONY : apps/CMakeFiles/lasindex_test.dir/rule
 
 # Convenience name for target.
@@ -250,12 +250,12 @@ lasindex_test: apps/CMakeFiles/lasindex_test.dir/rule
 
 # fast build rule for target.
 lasindex_test/fast:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/lasindex_test.dir/build.make apps/CMakeFiles/lasindex_test.dir/build
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/lasindex_test.dir/build.make apps/CMakeFiles/lasindex_test.dir/build
 .PHONY : lasindex_test/fast
 
 # Convenience name for target.
 apps/CMakeFiles/lasinfo.dir/rule:
-	cd /tmp/liblas-main && $(MAKE) -f CMakeFiles/Makefile2 apps/CMakeFiles/lasinfo.dir/rule
+	cd /tmp/liblas && $(MAKE) -f CMakeFiles/Makefile2 apps/CMakeFiles/lasinfo.dir/rule
 .PHONY : apps/CMakeFiles/lasinfo.dir/rule
 
 # Convenience name for target.
@@ -264,12 +264,12 @@ lasinfo: apps/CMakeFiles/lasinfo.dir/rule
 
 # fast build rule for target.
 lasinfo/fast:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/lasinfo.dir/build.make apps/CMakeFiles/lasinfo.dir/build
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/lasinfo.dir/build.make apps/CMakeFiles/lasinfo.dir/build
 .PHONY : lasinfo/fast
 
 # Convenience name for target.
 apps/CMakeFiles/lasinfo-old.dir/rule:
-	cd /tmp/liblas-main && $(MAKE) -f CMakeFiles/Makefile2 apps/CMakeFiles/lasinfo-old.dir/rule
+	cd /tmp/liblas && $(MAKE) -f CMakeFiles/Makefile2 apps/CMakeFiles/lasinfo-old.dir/rule
 .PHONY : apps/CMakeFiles/lasinfo-old.dir/rule
 
 # Convenience name for target.
@@ -278,12 +278,12 @@ lasinfo-old: apps/CMakeFiles/lasinfo-old.dir/rule
 
 # fast build rule for target.
 lasinfo-old/fast:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/lasinfo-old.dir/build.make apps/CMakeFiles/lasinfo-old.dir/build
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/lasinfo-old.dir/build.make apps/CMakeFiles/lasinfo-old.dir/build
 .PHONY : lasinfo-old/fast
 
 # Convenience name for target.
 apps/CMakeFiles/lasmerge.dir/rule:
-	cd /tmp/liblas-main && $(MAKE) -f CMakeFiles/Makefile2 apps/CMakeFiles/lasmerge.dir/rule
+	cd /tmp/liblas && $(MAKE) -f CMakeFiles/Makefile2 apps/CMakeFiles/lasmerge.dir/rule
 .PHONY : apps/CMakeFiles/lasmerge.dir/rule
 
 # Convenience name for target.
@@ -292,12 +292,26 @@ lasmerge: apps/CMakeFiles/lasmerge.dir/rule
 
 # fast build rule for target.
 lasmerge/fast:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/lasmerge.dir/build.make apps/CMakeFiles/lasmerge.dir/build
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/lasmerge.dir/build.make apps/CMakeFiles/lasmerge.dir/build
 .PHONY : lasmerge/fast
 
 # Convenience name for target.
+apps/CMakeFiles/ts2las.dir/rule:
+	cd /tmp/liblas && $(MAKE) -f CMakeFiles/Makefile2 apps/CMakeFiles/ts2las.dir/rule
+.PHONY : apps/CMakeFiles/ts2las.dir/rule
+
+# Convenience name for target.
+ts2las: apps/CMakeFiles/ts2las.dir/rule
+.PHONY : ts2las
+
+# fast build rule for target.
+ts2las/fast:
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/ts2las.dir/build.make apps/CMakeFiles/ts2las.dir/build
+.PHONY : ts2las/fast
+
+# Convenience name for target.
 apps/CMakeFiles/txt2las.dir/rule:
-	cd /tmp/liblas-main && $(MAKE) -f CMakeFiles/Makefile2 apps/CMakeFiles/txt2las.dir/rule
+	cd /tmp/liblas && $(MAKE) -f CMakeFiles/Makefile2 apps/CMakeFiles/txt2las.dir/rule
 .PHONY : apps/CMakeFiles/txt2las.dir/rule
 
 # Convenience name for target.
@@ -306,39 +320,39 @@ txt2las: apps/CMakeFiles/txt2las.dir/rule
 
 # fast build rule for target.
 txt2las/fast:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/txt2las.dir/build.make apps/CMakeFiles/txt2las.dir/build
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/txt2las.dir/build.make apps/CMakeFiles/txt2las.dir/build
 .PHONY : txt2las/fast
 
-bigtest.o: bigtest.cpp.o
+bigtest.o: bigtest.c.o
 .PHONY : bigtest.o
 
 # target to build an object file
-bigtest.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/bigfile_test.dir/build.make apps/CMakeFiles/bigfile_test.dir/bigtest.cpp.o
-.PHONY : bigtest.cpp.o
+bigtest.c.o:
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/bigfile_test.dir/build.make apps/CMakeFiles/bigfile_test.dir/bigtest.c.o
+.PHONY : bigtest.c.o
 
-bigtest.i: bigtest.cpp.i
+bigtest.i: bigtest.c.i
 .PHONY : bigtest.i
 
 # target to preprocess a source file
-bigtest.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/bigfile_test.dir/build.make apps/CMakeFiles/bigfile_test.dir/bigtest.cpp.i
-.PHONY : bigtest.cpp.i
+bigtest.c.i:
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/bigfile_test.dir/build.make apps/CMakeFiles/bigfile_test.dir/bigtest.c.i
+.PHONY : bigtest.c.i
 
-bigtest.s: bigtest.cpp.s
+bigtest.s: bigtest.c.s
 .PHONY : bigtest.s
 
 # target to generate assembly for a file
-bigtest.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/bigfile_test.dir/build.make apps/CMakeFiles/bigfile_test.dir/bigtest.cpp.s
-.PHONY : bigtest.cpp.s
+bigtest.c.s:
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/bigfile_test.dir/build.make apps/CMakeFiles/bigfile_test.dir/bigtest.c.s
+.PHONY : bigtest.c.s
 
 chipper.o: chipper.cpp.o
 .PHONY : chipper.o
 
 # target to build an object file
 chipper.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/lasblock.dir/build.make apps/CMakeFiles/lasblock.dir/chipper.cpp.o
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/lasblock.dir/build.make apps/CMakeFiles/lasblock.dir/chipper.cpp.o
 .PHONY : chipper.cpp.o
 
 chipper.i: chipper.cpp.i
@@ -346,7 +360,7 @@ chipper.i: chipper.cpp.i
 
 # target to preprocess a source file
 chipper.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/lasblock.dir/build.make apps/CMakeFiles/lasblock.dir/chipper.cpp.i
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/lasblock.dir/build.make apps/CMakeFiles/lasblock.dir/chipper.cpp.i
 .PHONY : chipper.cpp.i
 
 chipper.s: chipper.cpp.s
@@ -354,7 +368,7 @@ chipper.s: chipper.cpp.s
 
 # target to generate assembly for a file
 chipper.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/lasblock.dir/build.make apps/CMakeFiles/lasblock.dir/chipper.cpp.s
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/lasblock.dir/build.make apps/CMakeFiles/lasblock.dir/chipper.cpp.s
 .PHONY : chipper.cpp.s
 
 las2las-old.o: las2las-old.c.o
@@ -362,7 +376,7 @@ las2las-old.o: las2las-old.c.o
 
 # target to build an object file
 las2las-old.c.o:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/las2las-old.dir/build.make apps/CMakeFiles/las2las-old.dir/las2las-old.c.o
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/las2las-old.dir/build.make apps/CMakeFiles/las2las-old.dir/las2las-old.c.o
 .PHONY : las2las-old.c.o
 
 las2las-old.i: las2las-old.c.i
@@ -370,7 +384,7 @@ las2las-old.i: las2las-old.c.i
 
 # target to preprocess a source file
 las2las-old.c.i:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/las2las-old.dir/build.make apps/CMakeFiles/las2las-old.dir/las2las-old.c.i
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/las2las-old.dir/build.make apps/CMakeFiles/las2las-old.dir/las2las-old.c.i
 .PHONY : las2las-old.c.i
 
 las2las-old.s: las2las-old.c.s
@@ -378,7 +392,7 @@ las2las-old.s: las2las-old.c.s
 
 # target to generate assembly for a file
 las2las-old.c.s:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/las2las-old.dir/build.make apps/CMakeFiles/las2las-old.dir/las2las-old.c.s
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/las2las-old.dir/build.make apps/CMakeFiles/las2las-old.dir/las2las-old.c.s
 .PHONY : las2las-old.c.s
 
 las2las.o: las2las.cpp.o
@@ -386,7 +400,7 @@ las2las.o: las2las.cpp.o
 
 # target to build an object file
 las2las.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/las2las.dir/build.make apps/CMakeFiles/las2las.dir/las2las.cpp.o
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/las2las.dir/build.make apps/CMakeFiles/las2las.dir/las2las.cpp.o
 .PHONY : las2las.cpp.o
 
 las2las.i: las2las.cpp.i
@@ -394,7 +408,7 @@ las2las.i: las2las.cpp.i
 
 # target to preprocess a source file
 las2las.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/las2las.dir/build.make apps/CMakeFiles/las2las.dir/las2las.cpp.i
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/las2las.dir/build.make apps/CMakeFiles/las2las.dir/las2las.cpp.i
 .PHONY : las2las.cpp.i
 
 las2las.s: las2las.cpp.s
@@ -402,7 +416,7 @@ las2las.s: las2las.cpp.s
 
 # target to generate assembly for a file
 las2las.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/las2las.dir/build.make apps/CMakeFiles/las2las.dir/las2las.cpp.s
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/las2las.dir/build.make apps/CMakeFiles/las2las.dir/las2las.cpp.s
 .PHONY : las2las.cpp.s
 
 las2txt.o: las2txt.c.o
@@ -410,7 +424,7 @@ las2txt.o: las2txt.c.o
 
 # target to build an object file
 las2txt.c.o:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/las2txt.dir/build.make apps/CMakeFiles/las2txt.dir/las2txt.c.o
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/las2txt.dir/build.make apps/CMakeFiles/las2txt.dir/las2txt.c.o
 .PHONY : las2txt.c.o
 
 las2txt.i: las2txt.c.i
@@ -418,7 +432,7 @@ las2txt.i: las2txt.c.i
 
 # target to preprocess a source file
 las2txt.c.i:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/las2txt.dir/build.make apps/CMakeFiles/las2txt.dir/las2txt.c.i
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/las2txt.dir/build.make apps/CMakeFiles/las2txt.dir/las2txt.c.i
 .PHONY : las2txt.c.i
 
 las2txt.s: las2txt.c.s
@@ -426,7 +440,7 @@ las2txt.s: las2txt.c.s
 
 # target to generate assembly for a file
 las2txt.c.s:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/las2txt.dir/build.make apps/CMakeFiles/las2txt.dir/las2txt.c.s
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/las2txt.dir/build.make apps/CMakeFiles/las2txt.dir/las2txt.c.s
 .PHONY : las2txt.c.s
 
 lasblock.o: lasblock.cpp.o
@@ -434,7 +448,7 @@ lasblock.o: lasblock.cpp.o
 
 # target to build an object file
 lasblock.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/lasblock.dir/build.make apps/CMakeFiles/lasblock.dir/lasblock.cpp.o
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/lasblock.dir/build.make apps/CMakeFiles/lasblock.dir/lasblock.cpp.o
 .PHONY : lasblock.cpp.o
 
 lasblock.i: lasblock.cpp.i
@@ -442,7 +456,7 @@ lasblock.i: lasblock.cpp.i
 
 # target to preprocess a source file
 lasblock.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/lasblock.dir/build.make apps/CMakeFiles/lasblock.dir/lasblock.cpp.i
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/lasblock.dir/build.make apps/CMakeFiles/lasblock.dir/lasblock.cpp.i
 .PHONY : lasblock.cpp.i
 
 lasblock.s: lasblock.cpp.s
@@ -450,7 +464,7 @@ lasblock.s: lasblock.cpp.s
 
 # target to generate assembly for a file
 lasblock.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/lasblock.dir/build.make apps/CMakeFiles/lasblock.dir/lasblock.cpp.s
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/lasblock.dir/build.make apps/CMakeFiles/lasblock.dir/lasblock.cpp.s
 .PHONY : lasblock.cpp.s
 
 lascommon.o: lascommon.c.o
@@ -458,11 +472,11 @@ lascommon.o: lascommon.c.o
 
 # target to build an object file
 lascommon.c.o:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/las2las-old.dir/build.make apps/CMakeFiles/las2las-old.dir/lascommon.c.o
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/las2txt.dir/build.make apps/CMakeFiles/las2txt.dir/lascommon.c.o
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/lasinfo-old.dir/build.make apps/CMakeFiles/lasinfo-old.dir/lascommon.c.o
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/lasmerge.dir/build.make apps/CMakeFiles/lasmerge.dir/lascommon.c.o
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/txt2las.dir/build.make apps/CMakeFiles/txt2las.dir/lascommon.c.o
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/las2las-old.dir/build.make apps/CMakeFiles/las2las-old.dir/lascommon.c.o
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/las2txt.dir/build.make apps/CMakeFiles/las2txt.dir/lascommon.c.o
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/lasinfo-old.dir/build.make apps/CMakeFiles/lasinfo-old.dir/lascommon.c.o
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/lasmerge.dir/build.make apps/CMakeFiles/lasmerge.dir/lascommon.c.o
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/txt2las.dir/build.make apps/CMakeFiles/txt2las.dir/lascommon.c.o
 .PHONY : lascommon.c.o
 
 lascommon.i: lascommon.c.i
@@ -470,11 +484,11 @@ lascommon.i: lascommon.c.i
 
 # target to preprocess a source file
 lascommon.c.i:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/las2las-old.dir/build.make apps/CMakeFiles/las2las-old.dir/lascommon.c.i
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/las2txt.dir/build.make apps/CMakeFiles/las2txt.dir/lascommon.c.i
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/lasinfo-old.dir/build.make apps/CMakeFiles/lasinfo-old.dir/lascommon.c.i
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/lasmerge.dir/build.make apps/CMakeFiles/lasmerge.dir/lascommon.c.i
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/txt2las.dir/build.make apps/CMakeFiles/txt2las.dir/lascommon.c.i
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/las2las-old.dir/build.make apps/CMakeFiles/las2las-old.dir/lascommon.c.i
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/las2txt.dir/build.make apps/CMakeFiles/las2txt.dir/lascommon.c.i
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/lasinfo-old.dir/build.make apps/CMakeFiles/lasinfo-old.dir/lascommon.c.i
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/lasmerge.dir/build.make apps/CMakeFiles/lasmerge.dir/lascommon.c.i
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/txt2las.dir/build.make apps/CMakeFiles/txt2las.dir/lascommon.c.i
 .PHONY : lascommon.c.i
 
 lascommon.s: lascommon.c.s
@@ -482,11 +496,11 @@ lascommon.s: lascommon.c.s
 
 # target to generate assembly for a file
 lascommon.c.s:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/las2las-old.dir/build.make apps/CMakeFiles/las2las-old.dir/lascommon.c.s
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/las2txt.dir/build.make apps/CMakeFiles/las2txt.dir/lascommon.c.s
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/lasinfo-old.dir/build.make apps/CMakeFiles/lasinfo-old.dir/lascommon.c.s
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/lasmerge.dir/build.make apps/CMakeFiles/lasmerge.dir/lascommon.c.s
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/txt2las.dir/build.make apps/CMakeFiles/txt2las.dir/lascommon.c.s
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/las2las-old.dir/build.make apps/CMakeFiles/las2las-old.dir/lascommon.c.s
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/las2txt.dir/build.make apps/CMakeFiles/las2txt.dir/lascommon.c.s
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/lasinfo-old.dir/build.make apps/CMakeFiles/lasinfo-old.dir/lascommon.c.s
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/lasmerge.dir/build.make apps/CMakeFiles/lasmerge.dir/lascommon.c.s
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/txt2las.dir/build.make apps/CMakeFiles/txt2las.dir/lascommon.c.s
 .PHONY : lascommon.c.s
 
 lasindex_test.o: lasindex_test.cpp.o
@@ -494,7 +508,7 @@ lasindex_test.o: lasindex_test.cpp.o
 
 # target to build an object file
 lasindex_test.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/lasindex_test.dir/build.make apps/CMakeFiles/lasindex_test.dir/lasindex_test.cpp.o
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/lasindex_test.dir/build.make apps/CMakeFiles/lasindex_test.dir/lasindex_test.cpp.o
 .PHONY : lasindex_test.cpp.o
 
 lasindex_test.i: lasindex_test.cpp.i
@@ -502,7 +516,7 @@ lasindex_test.i: lasindex_test.cpp.i
 
 # target to preprocess a source file
 lasindex_test.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/lasindex_test.dir/build.make apps/CMakeFiles/lasindex_test.dir/lasindex_test.cpp.i
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/lasindex_test.dir/build.make apps/CMakeFiles/lasindex_test.dir/lasindex_test.cpp.i
 .PHONY : lasindex_test.cpp.i
 
 lasindex_test.s: lasindex_test.cpp.s
@@ -510,7 +524,7 @@ lasindex_test.s: lasindex_test.cpp.s
 
 # target to generate assembly for a file
 lasindex_test.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/lasindex_test.dir/build.make apps/CMakeFiles/lasindex_test.dir/lasindex_test.cpp.s
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/lasindex_test.dir/build.make apps/CMakeFiles/lasindex_test.dir/lasindex_test.cpp.s
 .PHONY : lasindex_test.cpp.s
 
 lasinfo-old.o: lasinfo-old.c.o
@@ -518,7 +532,7 @@ lasinfo-old.o: lasinfo-old.c.o
 
 # target to build an object file
 lasinfo-old.c.o:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/lasinfo-old.dir/build.make apps/CMakeFiles/lasinfo-old.dir/lasinfo-old.c.o
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/lasinfo-old.dir/build.make apps/CMakeFiles/lasinfo-old.dir/lasinfo-old.c.o
 .PHONY : lasinfo-old.c.o
 
 lasinfo-old.i: lasinfo-old.c.i
@@ -526,7 +540,7 @@ lasinfo-old.i: lasinfo-old.c.i
 
 # target to preprocess a source file
 lasinfo-old.c.i:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/lasinfo-old.dir/build.make apps/CMakeFiles/lasinfo-old.dir/lasinfo-old.c.i
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/lasinfo-old.dir/build.make apps/CMakeFiles/lasinfo-old.dir/lasinfo-old.c.i
 .PHONY : lasinfo-old.c.i
 
 lasinfo-old.s: lasinfo-old.c.s
@@ -534,7 +548,7 @@ lasinfo-old.s: lasinfo-old.c.s
 
 # target to generate assembly for a file
 lasinfo-old.c.s:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/lasinfo-old.dir/build.make apps/CMakeFiles/lasinfo-old.dir/lasinfo-old.c.s
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/lasinfo-old.dir/build.make apps/CMakeFiles/lasinfo-old.dir/lasinfo-old.c.s
 .PHONY : lasinfo-old.c.s
 
 lasinfo.o: lasinfo.cpp.o
@@ -542,7 +556,7 @@ lasinfo.o: lasinfo.cpp.o
 
 # target to build an object file
 lasinfo.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/lasinfo.dir/build.make apps/CMakeFiles/lasinfo.dir/lasinfo.cpp.o
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/lasinfo.dir/build.make apps/CMakeFiles/lasinfo.dir/lasinfo.cpp.o
 .PHONY : lasinfo.cpp.o
 
 lasinfo.i: lasinfo.cpp.i
@@ -550,7 +564,7 @@ lasinfo.i: lasinfo.cpp.i
 
 # target to preprocess a source file
 lasinfo.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/lasinfo.dir/build.make apps/CMakeFiles/lasinfo.dir/lasinfo.cpp.i
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/lasinfo.dir/build.make apps/CMakeFiles/lasinfo.dir/lasinfo.cpp.i
 .PHONY : lasinfo.cpp.i
 
 lasinfo.s: lasinfo.cpp.s
@@ -558,7 +572,7 @@ lasinfo.s: lasinfo.cpp.s
 
 # target to generate assembly for a file
 lasinfo.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/lasinfo.dir/build.make apps/CMakeFiles/lasinfo.dir/lasinfo.cpp.s
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/lasinfo.dir/build.make apps/CMakeFiles/lasinfo.dir/lasinfo.cpp.s
 .PHONY : lasinfo.cpp.s
 
 laskernel.o: laskernel.cpp.o
@@ -566,8 +580,8 @@ laskernel.o: laskernel.cpp.o
 
 # target to build an object file
 laskernel.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/las2las.dir/build.make apps/CMakeFiles/las2las.dir/laskernel.cpp.o
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/lasinfo.dir/build.make apps/CMakeFiles/lasinfo.dir/laskernel.cpp.o
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/las2las.dir/build.make apps/CMakeFiles/las2las.dir/laskernel.cpp.o
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/lasinfo.dir/build.make apps/CMakeFiles/lasinfo.dir/laskernel.cpp.o
 .PHONY : laskernel.cpp.o
 
 laskernel.i: laskernel.cpp.i
@@ -575,8 +589,8 @@ laskernel.i: laskernel.cpp.i
 
 # target to preprocess a source file
 laskernel.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/las2las.dir/build.make apps/CMakeFiles/las2las.dir/laskernel.cpp.i
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/lasinfo.dir/build.make apps/CMakeFiles/lasinfo.dir/laskernel.cpp.i
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/las2las.dir/build.make apps/CMakeFiles/las2las.dir/laskernel.cpp.i
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/lasinfo.dir/build.make apps/CMakeFiles/lasinfo.dir/laskernel.cpp.i
 .PHONY : laskernel.cpp.i
 
 laskernel.s: laskernel.cpp.s
@@ -584,8 +598,8 @@ laskernel.s: laskernel.cpp.s
 
 # target to generate assembly for a file
 laskernel.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/las2las.dir/build.make apps/CMakeFiles/las2las.dir/laskernel.cpp.s
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/lasinfo.dir/build.make apps/CMakeFiles/lasinfo.dir/laskernel.cpp.s
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/las2las.dir/build.make apps/CMakeFiles/las2las.dir/laskernel.cpp.s
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/lasinfo.dir/build.make apps/CMakeFiles/lasinfo.dir/laskernel.cpp.s
 .PHONY : laskernel.cpp.s
 
 lasmerge.o: lasmerge.c.o
@@ -593,7 +607,7 @@ lasmerge.o: lasmerge.c.o
 
 # target to build an object file
 lasmerge.c.o:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/lasmerge.dir/build.make apps/CMakeFiles/lasmerge.dir/lasmerge.c.o
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/lasmerge.dir/build.make apps/CMakeFiles/lasmerge.dir/lasmerge.c.o
 .PHONY : lasmerge.c.o
 
 lasmerge.i: lasmerge.c.i
@@ -601,7 +615,7 @@ lasmerge.i: lasmerge.c.i
 
 # target to preprocess a source file
 lasmerge.c.i:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/lasmerge.dir/build.make apps/CMakeFiles/lasmerge.dir/lasmerge.c.i
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/lasmerge.dir/build.make apps/CMakeFiles/lasmerge.dir/lasmerge.c.i
 .PHONY : lasmerge.c.i
 
 lasmerge.s: lasmerge.c.s
@@ -609,15 +623,39 @@ lasmerge.s: lasmerge.c.s
 
 # target to generate assembly for a file
 lasmerge.c.s:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/lasmerge.dir/build.make apps/CMakeFiles/lasmerge.dir/lasmerge.c.s
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/lasmerge.dir/build.make apps/CMakeFiles/lasmerge.dir/lasmerge.c.s
 .PHONY : lasmerge.c.s
+
+ts2las.o: ts2las.cpp.o
+.PHONY : ts2las.o
+
+# target to build an object file
+ts2las.cpp.o:
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/ts2las.dir/build.make apps/CMakeFiles/ts2las.dir/ts2las.cpp.o
+.PHONY : ts2las.cpp.o
+
+ts2las.i: ts2las.cpp.i
+.PHONY : ts2las.i
+
+# target to preprocess a source file
+ts2las.cpp.i:
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/ts2las.dir/build.make apps/CMakeFiles/ts2las.dir/ts2las.cpp.i
+.PHONY : ts2las.cpp.i
+
+ts2las.s: ts2las.cpp.s
+.PHONY : ts2las.s
+
+# target to generate assembly for a file
+ts2las.cpp.s:
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/ts2las.dir/build.make apps/CMakeFiles/ts2las.dir/ts2las.cpp.s
+.PHONY : ts2las.cpp.s
 
 txt2las.o: txt2las.c.o
 .PHONY : txt2las.o
 
 # target to build an object file
 txt2las.c.o:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/txt2las.dir/build.make apps/CMakeFiles/txt2las.dir/txt2las.c.o
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/txt2las.dir/build.make apps/CMakeFiles/txt2las.dir/txt2las.c.o
 .PHONY : txt2las.c.o
 
 txt2las.i: txt2las.c.i
@@ -625,7 +663,7 @@ txt2las.i: txt2las.c.i
 
 # target to preprocess a source file
 txt2las.c.i:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/txt2las.dir/build.make apps/CMakeFiles/txt2las.dir/txt2las.c.i
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/txt2las.dir/build.make apps/CMakeFiles/txt2las.dir/txt2las.c.i
 .PHONY : txt2las.c.i
 
 txt2las.s: txt2las.c.s
@@ -633,7 +671,7 @@ txt2las.s: txt2las.c.s
 
 # target to generate assembly for a file
 txt2las.c.s:
-	cd /tmp/liblas-main && $(MAKE) -f apps/CMakeFiles/txt2las.dir/build.make apps/CMakeFiles/txt2las.dir/txt2las.c.s
+	cd /tmp/liblas && $(MAKE) -f apps/CMakeFiles/txt2las.dir/build.make apps/CMakeFiles/txt2las.dir/txt2las.c.s
 .PHONY : txt2las.c.s
 
 # Help Target
@@ -660,6 +698,7 @@ help:
 	@echo "... package_source"
 	@echo "... rebuild_cache"
 	@echo "... test"
+	@echo "... ts2las"
 	@echo "... txt2las"
 	@echo "... bigtest.o"
 	@echo "... bigtest.i"
@@ -697,6 +736,9 @@ help:
 	@echo "... lasmerge.o"
 	@echo "... lasmerge.i"
 	@echo "... lasmerge.s"
+	@echo "... ts2las.o"
+	@echo "... ts2las.i"
+	@echo "... ts2las.s"
 	@echo "... txt2las.o"
 	@echo "... txt2las.i"
 	@echo "... txt2las.s"
@@ -711,6 +753,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /tmp/liblas-main && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /tmp/liblas && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

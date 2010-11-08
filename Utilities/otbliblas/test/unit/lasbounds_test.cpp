@@ -35,20 +35,19 @@ namespace tut
     template<>
     void to::test<1>()
     {
-
-        
         Ranges rngs;
         rngs.push_back(xrng);
         rngs.push_back(yrng);
         rngs.push_back(zrng);
         
-        liblas::Bounds<double> b(rngs);        
-        ensure_equals(b.minx(), 0);
-        ensure_equals(b.maxx(), 100);
-        ensure_equals(b.miny(), 0);
-        ensure_equals(b.maxy(), 200);
-        ensure_equals(b.minz(), 0);
-        ensure_equals(b.maxz(), 300);
+        typedef liblas::Bounds<double> b_t;
+        b_t b(rngs);
+        ensure_equals(b.minx(), b_t::value_type(0));
+        ensure_equals(b.maxx(), b_t::value_type(100));
+        ensure_equals(b.miny(), b_t::value_type(0));
+        ensure_equals(b.maxy(), b_t::value_type(200));
+        ensure_equals(b.minz(), b_t::value_type(0));
+        ensure_equals(b.maxz(), b_t::value_type(300));
     }
 
     template<>

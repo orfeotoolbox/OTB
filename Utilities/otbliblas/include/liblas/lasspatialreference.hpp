@@ -47,15 +47,16 @@
 #include <liblas/lasvariablerecord.hpp>
 #include <liblas/exception.hpp>
 #include <liblas/capi/las_config.h>
+#include <liblas/export.hpp>
 #include <liblas/external/property_tree/ptree.hpp>
 
 // GDAL OSR
 #ifdef HAVE_GDAL
 #include <ogr_srs_api.h>
 #include <cpl_port.h>
-#include <cpl_serv.h>
-#include <geo_tiffp.h>
-#define CPL_ERROR_H_INCLUDED
+//#include <cpl_serv.h>
+//#include <geo_tiffp.h>
+//#define CPL_ERROR_H_INCLUDED
 #include <geo_normalize.h>
 #include <geovalues.h>
 #include <ogr_spatialref.h>
@@ -88,7 +89,7 @@ typedef struct ST_TIFFS *ST_TIFF;
 namespace liblas {
 
 /// Spatial Reference System container for libLAS
-class SpatialReference
+class LAS_DLL SpatialReference
 {
 public:
     enum WKTModeFlag
@@ -147,10 +148,10 @@ public:
     /// range 5100 to 5299 - implied by verticalCSType if that is provided, or 
     /// -1 if no value is available.
     /// \param verticalUnits - the EPSG vertical units code, often 9001 for Metre.
-    void SetVerticalCS(int verticalCSType, 
+    void SetVerticalCS(boost::int32_t verticalCSType, 
                        std::string const& citation = std::string(0),
-                       int verticalDatum = -1,
-                       int verticalUnits = 9001);
+                       boost::int32_t verticalDatum = -1,
+                       boost::int32_t verticalUnits = 9001);
 
     /// Sets the SRS using GDAL's SetFromUserInput function. If GDAL is not linked, this 
     /// operation has no effect.

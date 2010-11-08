@@ -43,6 +43,7 @@
 #include <liblas/lasheader.hpp>
 #include <liblas/lasschema.hpp>
 #include <liblas/exception.hpp>
+#include <liblas/detail/binary.hpp>
 #include <liblas/detail/pointrecord.hpp>
 // boost
 #include <boost/array.hpp>
@@ -95,14 +96,12 @@ Point& Point::operator=(Point const& rhs)
     return *this;
 }
 
-
 void Point::SetCoordinates(double const& x, double const& y, double const& z)
 {
     SetX(x);
     SetY(y);
     SetZ(z);
 }
-
 
 bool Point::equal(Point const& other) const
 {
@@ -184,7 +183,6 @@ bool Point::IsValid() const
     if (this->GetReturnNumber() > 0x07)
         return false;
 
-
     return true;
 }
 
@@ -230,24 +228,17 @@ void Point::SetHeaderPtr(HeaderPtr header)
         SetUserData(p.GetUserData());
         SetPointSourceID(p.GetPointSourceID());
         
-        try {
-            SetTime(p.GetTime());
-        } catch (std::runtime_error const&) 
+        try
         {
-            
+            SetTime(p.GetTime());
+            SetColor(p.GetColor());
+        }
+        catch (std::runtime_error const&)
+        {   
         }
 
-        try {
-            SetColor(p.GetColor());
-        } catch (std::runtime_error const&) 
-        {
-            
-        }
-        
         // FIXME: copy other custom dimensions here?  resetting the 
         // headerptr can be catastrophic in a lot of cases.  
-
-        
     }
     
     m_header = header;
@@ -391,59 +382,70 @@ double Point::GetZ() const
 
 void Point::SetX( double const& value ) 
 {
-    boost::int32_t v = static_cast<boost::int32_t>(value);
+    boost::int32_t v;
+    double scale;
+    double offset;
+
     if (m_header.get() != 0 ) 
     {
-        // descale the value given our scale/offset
-        v = static_cast<boost::int32_t>(
-                             detail::sround(((value - m_header->GetOffsetX()) / 
-                                              m_header->GetScaleX())));
-
-    } else 
+        scale = m_header->GetScaleX();
+        offset = m_header->GetOffsetX();
+    } 
+    else 
     {
-        v = static_cast<boost::int32_t>(
-                             detail::sround(((value - m_default_header.GetOffsetX()) / 
-                                              m_default_header.GetScaleX())));
+        scale = m_default_header.GetScaleX();
+        offset = m_default_header.GetOffsetX();
     }
 
+    // descale the value given our scale/offset
+    v = static_cast<boost::int32_t>(
+                         detail::sround((value - offset) / scale));
     SetRawX(v);
 }
 
 void Point::SetY( double const& value ) 
 {
-    boost::int32_t v = static_cast<boost::int32_t>(value);
+    boost::int32_t v;
+    double scale;
+    double offset;
+
     if (m_header.get() != 0 ) 
     {
-        // descale the value given our scale/offset
-        v = static_cast<boost::int32_t>(
-                             detail::sround(((value - m_header->GetOffsetY()) / 
-                                              m_header->GetScaleY())));
-    } else 
+        scale = m_header->GetScaleY();
+        offset = m_header->GetOffsetY();
+    } 
+    else 
     {
-        v = static_cast<boost::int32_t>(
-                             detail::sround(((value - m_default_header.GetOffsetY()) / 
-                                              m_default_header.GetScaleY())));
+        scale = m_default_header.GetScaleY();
+        offset = m_default_header.GetOffsetY();
     }
-    
+
+    // descale the value given our scale/offset
+    v = static_cast<boost::int32_t>(
+                         detail::sround((value - offset) / scale));
     SetRawY(v);
 }
 
 void Point::SetZ( double const& value ) 
 {
-    boost::int32_t v = static_cast<boost::int32_t>(value);
-    if (m_header) 
+    boost::int32_t v;
+    double scale;
+    double offset;
+
+    if (m_header.get() != 0 ) 
     {
-        // descale the value given our scale/offset
-        v = static_cast<boost::int32_t>(
-                             detail::sround(((value - m_header->GetOffsetZ()) / 
-                                              m_header->GetScaleZ())));
-    } else
+        scale = m_header->GetScaleZ();
+        offset = m_header->GetOffsetZ();
+    } 
+    else 
     {
-        v = static_cast<boost::int32_t>(
-                             detail::sround(((value - m_default_header.GetOffsetZ()) / 
-                                              m_default_header.GetScaleZ())));
+        scale = m_default_header.GetScaleZ();
+        offset = m_default_header.GetOffsetZ();
     }
-    
+
+    // descale the value given our scale/offset
+    v = static_cast<boost::int32_t>(
+                         detail::sround((value - offset) / scale));
     SetRawZ(v);
 }
 
@@ -722,14 +724,11 @@ boost::uint16_t Point::GetPointSourceID() const
     return output;
 }
 
-
 void Point::SetPointSourceID(boost::uint16_t const& id)
 {
     // "Point Source ID" is always the 12th dimension    
     std::vector<boost::uint8_t>::size_type pos = GetDimensionBytePosition(11);
-    liblas::detail::intToBits<boost::uint16_t>(id, 
-                                               m_data, 
-                                               pos);
+    liblas::detail::intToBits<boost::uint16_t>(id, m_data, pos);
 }
 
 void Point::SetTime(double const& t)
@@ -753,53 +752,39 @@ void Point::SetTime(double const& t)
     }
     std::vector<boost::uint8_t>::size_type pos = GetDimensionBytePosition(index_pos);
 
-    const boost::uint8_t* x_b =  reinterpret_cast<const boost::uint8_t*>(&t);
-#if defined(LIBLAS_BIG_ENDIAN)
-        for (boost::int32_t n = sizeof( double )-1; n >= 0; n--)
-#else
-        for (boost::uint32_t n = 0; n < sizeof( double ); n++)
-#endif 
-            m_data[pos+n] = x_b[n];
-
+    detail::binary::endian_value<double> value(t);
+    value.store<detail::binary::little_endian_tag>(&m_data[0] + pos);
 }
 
 double Point::GetTime() const
 {
-    // "Time" is the 13th dimension if it exists
-    std::size_t index_pos = 12;
-
     PointFormatName f;
-    if (m_header) {
+    if (m_header)
+    {
         f = m_header->GetDataFormatId();
-    } else {
+    }
+    else
+    {
         f = m_default_header.GetDataFormatId();
     }   
     
-    if ( f == ePointFormat0 || f == ePointFormat2 ) {
+    if (f == ePointFormat0 || f == ePointFormat2)
+    {
         // std::ostringstream msg;
         // msg << "Point::GetTime - Unable to get time for ePointFormat0 or ePointFormat2, "
         //     << "no Time dimension exists on this format";
         // throw std::runtime_error(msg.str());
         return 0.0;
     }
+
+    // "Time" is the 13th dimension if it exists
+    std::size_t const index_pos = 12;
     std::vector<boost::uint8_t>::size_type pos = GetDimensionBytePosition(index_pos);
 
-
-    boost::uint8_t* data = new boost::uint8_t[8];
-    
-#if defined(LIBLAS_BIG_ENDIAN)
-        for (boost::uint32_t n = 0; n < sizeof( double ); n++)
-#else
-        for (boost::int32_t n = sizeof( double )-1; n >= 0; n--)
-#endif  
-            data[n] = m_data[pos+n];
-
-    const double* output = reinterpret_cast<const double*>(data);
-    double out = *output;
-    delete[] data;
-    return out;
+    detail::binary::endian_value<double> value;
+    value.load<detail::binary::little_endian_tag>(&m_data[0] + pos);
+    return value;
 }
-
 
 Color Point::GetColor() const
 {
@@ -868,22 +853,13 @@ void Point::SetColor(Color const& value)
     
     std::vector<boost::uint8_t>::size_type green_pos = GetDimensionBytePosition(index_pos + 1);
     std::vector<boost::uint8_t>::size_type blue_pos = GetDimensionBytePosition(index_pos + 2);
- 
-
     std::vector<boost::uint8_t>::size_type red_pos = GetDimensionBytePosition(index_pos);
     assert(red_pos + sizeof(Color::value_type) <= m_data.size());
+    
     intToBits<boost::uint16_t>(value.GetRed(), m_data, red_pos);
-    intToBits<boost::uint16_t>(value.GetGreen(), 
-                                               m_data, 
-                                               green_pos);
-    intToBits<boost::uint16_t>(value.GetBlue(), 
-                                               m_data, 
-                                               blue_pos);
+    intToBits<boost::uint16_t>(value.GetGreen(), m_data, green_pos);
+    intToBits<boost::uint16_t>(value.GetBlue(), m_data, blue_pos);
 }
-
-
-
-
 
 std::vector<boost::uint8_t>::size_type Point::GetDimensionBytePosition(std::size_t dim_pos) const
 {
@@ -898,19 +874,12 @@ std::vector<boost::uint8_t>::size_type Point::GetDimensionBytePosition(std::size
     return output;
 }
 
-
-
-
-
 boost::any Point::GetValue(Dimension const& d) const
 {
-
     boost::any output;
+    boost::ignore_unused_variable_warning(d);
 
- 
-    
     return output;
 }
-
 
 } // namespace liblas

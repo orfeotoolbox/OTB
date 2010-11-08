@@ -39,10 +39,10 @@ RM = "/Applications/CMake 2.8-0.app/Contents/bin/cmake" -E remove -f
 CMAKE_EDIT_COMMAND = "/Applications/CMake 2.8-0.app/Contents/bin/ccmake"
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /tmp/liblas-main
+CMAKE_SOURCE_DIR = /tmp/liblas
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /tmp/liblas-main
+CMAKE_BINARY_DIR = /tmp/liblas
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -101,7 +101,7 @@ list_install_components/fast: list_install_components
 # Special rule for the target package
 package: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Run CPack packaging tool..."
-	cd /tmp/liblas-main && "/Applications/CMake 2.8-0.app/Contents/bin/cpack" --config ./CPackConfig.cmake
+	cd /tmp/liblas && "/Applications/CMake 2.8-0.app/Contents/bin/cpack" --config ./CPackConfig.cmake
 .PHONY : package
 
 # Special rule for the target package
@@ -111,7 +111,7 @@ package/fast: package
 # Special rule for the target package_source
 package_source:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Run CPack packaging tool for source..."
-	cd /tmp/liblas-main && "/Applications/CMake 2.8-0.app/Contents/bin/cpack" --config ./CPackSourceConfig.cmake /tmp/liblas-main/CPackSourceConfig.cmake
+	cd /tmp/liblas && "/Applications/CMake 2.8-0.app/Contents/bin/cpack" --config ./CPackSourceConfig.cmake /tmp/liblas/CPackSourceConfig.cmake
 .PHONY : package_source
 
 # Special rule for the target package_source
@@ -140,14 +140,14 @@ test/fast: test
 
 # The main all target
 all: cmake_check_build_system
-	cd /tmp/liblas-main && $(CMAKE_COMMAND) -E cmake_progress_start /tmp/liblas-main/CMakeFiles /tmp/liblas-main/src/CMakeFiles/progress.marks
-	cd /tmp/liblas-main && $(MAKE) -f CMakeFiles/Makefile2 src/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /tmp/liblas-main/CMakeFiles 0
+	cd /tmp/liblas && $(CMAKE_COMMAND) -E cmake_progress_start /tmp/liblas/CMakeFiles /tmp/liblas/src/CMakeFiles/progress.marks
+	cd /tmp/liblas && $(MAKE) -f CMakeFiles/Makefile2 src/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /tmp/liblas/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /tmp/liblas-main && $(MAKE) -f CMakeFiles/Makefile2 src/clean
+	cd /tmp/liblas && $(MAKE) -f CMakeFiles/Makefile2 src/clean
 .PHONY : clean
 
 # The main clean target
@@ -156,22 +156,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /tmp/liblas-main && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
+	cd /tmp/liblas && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /tmp/liblas-main && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
+	cd /tmp/liblas && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /tmp/liblas-main && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /tmp/liblas && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 src/CMakeFiles/las.dir/rule:
-	cd /tmp/liblas-main && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/las.dir/rule
+	cd /tmp/liblas && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/las.dir/rule
 .PHONY : src/CMakeFiles/las.dir/rule
 
 # Convenience name for target.
@@ -180,12 +180,12 @@ las: src/CMakeFiles/las.dir/rule
 
 # fast build rule for target.
 las/fast:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/build
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/build
 .PHONY : las/fast
 
 # Convenience name for target.
 src/CMakeFiles/las_c.dir/rule:
-	cd /tmp/liblas-main && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/las_c.dir/rule
+	cd /tmp/liblas && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/las_c.dir/rule
 .PHONY : src/CMakeFiles/las_c.dir/rule
 
 # Convenience name for target.
@@ -194,7 +194,7 @@ las_c: src/CMakeFiles/las_c.dir/rule
 
 # fast build rule for target.
 las_c/fast:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las_c.dir/build.make src/CMakeFiles/las_c.dir/build
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las_c.dir/build.make src/CMakeFiles/las_c.dir/build
 .PHONY : las_c/fast
 
 detail/index/indexcell.o: detail/index/indexcell.cpp.o
@@ -202,7 +202,7 @@ detail/index/indexcell.o: detail/index/indexcell.cpp.o
 
 # target to build an object file
 detail/index/indexcell.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/index/indexcell.cpp.o
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/index/indexcell.cpp.o
 .PHONY : detail/index/indexcell.cpp.o
 
 detail/index/indexcell.i: detail/index/indexcell.cpp.i
@@ -210,7 +210,7 @@ detail/index/indexcell.i: detail/index/indexcell.cpp.i
 
 # target to preprocess a source file
 detail/index/indexcell.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/index/indexcell.cpp.i
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/index/indexcell.cpp.i
 .PHONY : detail/index/indexcell.cpp.i
 
 detail/index/indexcell.s: detail/index/indexcell.cpp.s
@@ -218,7 +218,7 @@ detail/index/indexcell.s: detail/index/indexcell.cpp.s
 
 # target to generate assembly for a file
 detail/index/indexcell.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/index/indexcell.cpp.s
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/index/indexcell.cpp.s
 .PHONY : detail/index/indexcell.cpp.s
 
 detail/index/indexoutput.o: detail/index/indexoutput.cpp.o
@@ -226,7 +226,7 @@ detail/index/indexoutput.o: detail/index/indexoutput.cpp.o
 
 # target to build an object file
 detail/index/indexoutput.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/index/indexoutput.cpp.o
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/index/indexoutput.cpp.o
 .PHONY : detail/index/indexoutput.cpp.o
 
 detail/index/indexoutput.i: detail/index/indexoutput.cpp.i
@@ -234,7 +234,7 @@ detail/index/indexoutput.i: detail/index/indexoutput.cpp.i
 
 # target to preprocess a source file
 detail/index/indexoutput.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/index/indexoutput.cpp.i
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/index/indexoutput.cpp.i
 .PHONY : detail/index/indexoutput.cpp.i
 
 detail/index/indexoutput.s: detail/index/indexoutput.cpp.s
@@ -242,7 +242,7 @@ detail/index/indexoutput.s: detail/index/indexoutput.cpp.s
 
 # target to generate assembly for a file
 detail/index/indexoutput.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/index/indexoutput.cpp.s
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/index/indexoutput.cpp.s
 .PHONY : detail/index/indexoutput.cpp.s
 
 detail/reader/cachedreader.o: detail/reader/cachedreader.cpp.o
@@ -250,7 +250,7 @@ detail/reader/cachedreader.o: detail/reader/cachedreader.cpp.o
 
 # target to build an object file
 detail/reader/cachedreader.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/reader/cachedreader.cpp.o
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/reader/cachedreader.cpp.o
 .PHONY : detail/reader/cachedreader.cpp.o
 
 detail/reader/cachedreader.i: detail/reader/cachedreader.cpp.i
@@ -258,7 +258,7 @@ detail/reader/cachedreader.i: detail/reader/cachedreader.cpp.i
 
 # target to preprocess a source file
 detail/reader/cachedreader.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/reader/cachedreader.cpp.i
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/reader/cachedreader.cpp.i
 .PHONY : detail/reader/cachedreader.cpp.i
 
 detail/reader/cachedreader.s: detail/reader/cachedreader.cpp.s
@@ -266,7 +266,7 @@ detail/reader/cachedreader.s: detail/reader/cachedreader.cpp.s
 
 # target to generate assembly for a file
 detail/reader/cachedreader.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/reader/cachedreader.cpp.s
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/reader/cachedreader.cpp.s
 .PHONY : detail/reader/cachedreader.cpp.s
 
 detail/reader/header.o: detail/reader/header.cpp.o
@@ -274,7 +274,7 @@ detail/reader/header.o: detail/reader/header.cpp.o
 
 # target to build an object file
 detail/reader/header.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/reader/header.cpp.o
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/reader/header.cpp.o
 .PHONY : detail/reader/header.cpp.o
 
 detail/reader/header.i: detail/reader/header.cpp.i
@@ -282,7 +282,7 @@ detail/reader/header.i: detail/reader/header.cpp.i
 
 # target to preprocess a source file
 detail/reader/header.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/reader/header.cpp.i
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/reader/header.cpp.i
 .PHONY : detail/reader/header.cpp.i
 
 detail/reader/header.s: detail/reader/header.cpp.s
@@ -290,7 +290,7 @@ detail/reader/header.s: detail/reader/header.cpp.s
 
 # target to generate assembly for a file
 detail/reader/header.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/reader/header.cpp.s
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/reader/header.cpp.s
 .PHONY : detail/reader/header.cpp.s
 
 detail/reader/point.o: detail/reader/point.cpp.o
@@ -298,7 +298,7 @@ detail/reader/point.o: detail/reader/point.cpp.o
 
 # target to build an object file
 detail/reader/point.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/reader/point.cpp.o
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/reader/point.cpp.o
 .PHONY : detail/reader/point.cpp.o
 
 detail/reader/point.i: detail/reader/point.cpp.i
@@ -306,7 +306,7 @@ detail/reader/point.i: detail/reader/point.cpp.i
 
 # target to preprocess a source file
 detail/reader/point.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/reader/point.cpp.i
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/reader/point.cpp.i
 .PHONY : detail/reader/point.cpp.i
 
 detail/reader/point.s: detail/reader/point.cpp.s
@@ -314,7 +314,7 @@ detail/reader/point.s: detail/reader/point.cpp.s
 
 # target to generate assembly for a file
 detail/reader/point.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/reader/point.cpp.s
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/reader/point.cpp.s
 .PHONY : detail/reader/point.cpp.s
 
 detail/reader/reader.o: detail/reader/reader.cpp.o
@@ -322,7 +322,7 @@ detail/reader/reader.o: detail/reader/reader.cpp.o
 
 # target to build an object file
 detail/reader/reader.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/reader/reader.cpp.o
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/reader/reader.cpp.o
 .PHONY : detail/reader/reader.cpp.o
 
 detail/reader/reader.i: detail/reader/reader.cpp.i
@@ -330,7 +330,7 @@ detail/reader/reader.i: detail/reader/reader.cpp.i
 
 # target to preprocess a source file
 detail/reader/reader.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/reader/reader.cpp.i
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/reader/reader.cpp.i
 .PHONY : detail/reader/reader.cpp.i
 
 detail/reader/reader.s: detail/reader/reader.cpp.s
@@ -338,7 +338,7 @@ detail/reader/reader.s: detail/reader/reader.cpp.s
 
 # target to generate assembly for a file
 detail/reader/reader.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/reader/reader.cpp.s
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/reader/reader.cpp.s
 .PHONY : detail/reader/reader.cpp.s
 
 detail/utility.o: detail/utility.cpp.o
@@ -346,7 +346,7 @@ detail/utility.o: detail/utility.cpp.o
 
 # target to build an object file
 detail/utility.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/utility.cpp.o
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/utility.cpp.o
 .PHONY : detail/utility.cpp.o
 
 detail/utility.i: detail/utility.cpp.i
@@ -354,7 +354,7 @@ detail/utility.i: detail/utility.cpp.i
 
 # target to preprocess a source file
 detail/utility.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/utility.cpp.i
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/utility.cpp.i
 .PHONY : detail/utility.cpp.i
 
 detail/utility.s: detail/utility.cpp.s
@@ -362,7 +362,7 @@ detail/utility.s: detail/utility.cpp.s
 
 # target to generate assembly for a file
 detail/utility.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/utility.cpp.s
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/utility.cpp.s
 .PHONY : detail/utility.cpp.s
 
 detail/writer/base.o: detail/writer/base.cpp.o
@@ -370,7 +370,7 @@ detail/writer/base.o: detail/writer/base.cpp.o
 
 # target to build an object file
 detail/writer/base.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/writer/base.cpp.o
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/writer/base.cpp.o
 .PHONY : detail/writer/base.cpp.o
 
 detail/writer/base.i: detail/writer/base.cpp.i
@@ -378,7 +378,7 @@ detail/writer/base.i: detail/writer/base.cpp.i
 
 # target to preprocess a source file
 detail/writer/base.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/writer/base.cpp.i
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/writer/base.cpp.i
 .PHONY : detail/writer/base.cpp.i
 
 detail/writer/base.s: detail/writer/base.cpp.s
@@ -386,7 +386,7 @@ detail/writer/base.s: detail/writer/base.cpp.s
 
 # target to generate assembly for a file
 detail/writer/base.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/writer/base.cpp.s
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/writer/base.cpp.s
 .PHONY : detail/writer/base.cpp.s
 
 detail/writer/header.o: detail/writer/header.cpp.o
@@ -394,7 +394,7 @@ detail/writer/header.o: detail/writer/header.cpp.o
 
 # target to build an object file
 detail/writer/header.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/writer/header.cpp.o
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/writer/header.cpp.o
 .PHONY : detail/writer/header.cpp.o
 
 detail/writer/header.i: detail/writer/header.cpp.i
@@ -402,7 +402,7 @@ detail/writer/header.i: detail/writer/header.cpp.i
 
 # target to preprocess a source file
 detail/writer/header.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/writer/header.cpp.i
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/writer/header.cpp.i
 .PHONY : detail/writer/header.cpp.i
 
 detail/writer/header.s: detail/writer/header.cpp.s
@@ -410,7 +410,7 @@ detail/writer/header.s: detail/writer/header.cpp.s
 
 # target to generate assembly for a file
 detail/writer/header.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/writer/header.cpp.s
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/writer/header.cpp.s
 .PHONY : detail/writer/header.cpp.s
 
 detail/writer/point.o: detail/writer/point.cpp.o
@@ -418,7 +418,7 @@ detail/writer/point.o: detail/writer/point.cpp.o
 
 # target to build an object file
 detail/writer/point.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/writer/point.cpp.o
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/writer/point.cpp.o
 .PHONY : detail/writer/point.cpp.o
 
 detail/writer/point.i: detail/writer/point.cpp.i
@@ -426,7 +426,7 @@ detail/writer/point.i: detail/writer/point.cpp.i
 
 # target to preprocess a source file
 detail/writer/point.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/writer/point.cpp.i
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/writer/point.cpp.i
 .PHONY : detail/writer/point.cpp.i
 
 detail/writer/point.s: detail/writer/point.cpp.s
@@ -434,7 +434,7 @@ detail/writer/point.s: detail/writer/point.cpp.s
 
 # target to generate assembly for a file
 detail/writer/point.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/writer/point.cpp.s
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/writer/point.cpp.s
 .PHONY : detail/writer/point.cpp.s
 
 detail/writer/writer.o: detail/writer/writer.cpp.o
@@ -442,7 +442,7 @@ detail/writer/writer.o: detail/writer/writer.cpp.o
 
 # target to build an object file
 detail/writer/writer.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/writer/writer.cpp.o
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/writer/writer.cpp.o
 .PHONY : detail/writer/writer.cpp.o
 
 detail/writer/writer.i: detail/writer/writer.cpp.i
@@ -450,7 +450,7 @@ detail/writer/writer.i: detail/writer/writer.cpp.i
 
 # target to preprocess a source file
 detail/writer/writer.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/writer/writer.cpp.i
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/writer/writer.cpp.i
 .PHONY : detail/writer/writer.cpp.i
 
 detail/writer/writer.s: detail/writer/writer.cpp.s
@@ -458,7 +458,7 @@ detail/writer/writer.s: detail/writer/writer.cpp.s
 
 # target to generate assembly for a file
 detail/writer/writer.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/writer/writer.cpp.s
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/detail/writer/writer.cpp.s
 .PHONY : detail/writer/writer.cpp.s
 
 las_c_api.o: las_c_api.cpp.o
@@ -466,7 +466,7 @@ las_c_api.o: las_c_api.cpp.o
 
 # target to build an object file
 las_c_api.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las_c.dir/build.make src/CMakeFiles/las_c.dir/las_c_api.cpp.o
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las_c.dir/build.make src/CMakeFiles/las_c.dir/las_c_api.cpp.o
 .PHONY : las_c_api.cpp.o
 
 las_c_api.i: las_c_api.cpp.i
@@ -474,7 +474,7 @@ las_c_api.i: las_c_api.cpp.i
 
 # target to preprocess a source file
 las_c_api.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las_c.dir/build.make src/CMakeFiles/las_c.dir/las_c_api.cpp.i
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las_c.dir/build.make src/CMakeFiles/las_c.dir/las_c_api.cpp.i
 .PHONY : las_c_api.cpp.i
 
 las_c_api.s: las_c_api.cpp.s
@@ -482,7 +482,7 @@ las_c_api.s: las_c_api.cpp.s
 
 # target to generate assembly for a file
 las_c_api.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las_c.dir/build.make src/CMakeFiles/las_c.dir/las_c_api.cpp.s
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las_c.dir/build.make src/CMakeFiles/las_c.dir/las_c_api.cpp.s
 .PHONY : las_c_api.cpp.s
 
 lasclassification.o: lasclassification.cpp.o
@@ -490,7 +490,7 @@ lasclassification.o: lasclassification.cpp.o
 
 # target to build an object file
 lasclassification.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasclassification.cpp.o
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasclassification.cpp.o
 .PHONY : lasclassification.cpp.o
 
 lasclassification.i: lasclassification.cpp.i
@@ -498,7 +498,7 @@ lasclassification.i: lasclassification.cpp.i
 
 # target to preprocess a source file
 lasclassification.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasclassification.cpp.i
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasclassification.cpp.i
 .PHONY : lasclassification.cpp.i
 
 lasclassification.s: lasclassification.cpp.s
@@ -506,7 +506,7 @@ lasclassification.s: lasclassification.cpp.s
 
 # target to generate assembly for a file
 lasclassification.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasclassification.cpp.s
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasclassification.cpp.s
 .PHONY : lasclassification.cpp.s
 
 lascolor.o: lascolor.cpp.o
@@ -514,7 +514,7 @@ lascolor.o: lascolor.cpp.o
 
 # target to build an object file
 lascolor.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lascolor.cpp.o
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lascolor.cpp.o
 .PHONY : lascolor.cpp.o
 
 lascolor.i: lascolor.cpp.i
@@ -522,7 +522,7 @@ lascolor.i: lascolor.cpp.i
 
 # target to preprocess a source file
 lascolor.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lascolor.cpp.i
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lascolor.cpp.i
 .PHONY : lascolor.cpp.i
 
 lascolor.s: lascolor.cpp.s
@@ -530,7 +530,7 @@ lascolor.s: lascolor.cpp.s
 
 # target to generate assembly for a file
 lascolor.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lascolor.cpp.s
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lascolor.cpp.s
 .PHONY : lascolor.cpp.s
 
 lasdimension.o: lasdimension.cpp.o
@@ -538,7 +538,7 @@ lasdimension.o: lasdimension.cpp.o
 
 # target to build an object file
 lasdimension.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasdimension.cpp.o
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasdimension.cpp.o
 .PHONY : lasdimension.cpp.o
 
 lasdimension.i: lasdimension.cpp.i
@@ -546,7 +546,7 @@ lasdimension.i: lasdimension.cpp.i
 
 # target to preprocess a source file
 lasdimension.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasdimension.cpp.i
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasdimension.cpp.i
 .PHONY : lasdimension.cpp.i
 
 lasdimension.s: lasdimension.cpp.s
@@ -554,7 +554,7 @@ lasdimension.s: lasdimension.cpp.s
 
 # target to generate assembly for a file
 lasdimension.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasdimension.cpp.s
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasdimension.cpp.s
 .PHONY : lasdimension.cpp.s
 
 laserror.o: laserror.cpp.o
@@ -562,7 +562,7 @@ laserror.o: laserror.cpp.o
 
 # target to build an object file
 laserror.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/laserror.cpp.o
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/laserror.cpp.o
 .PHONY : laserror.cpp.o
 
 laserror.i: laserror.cpp.i
@@ -570,7 +570,7 @@ laserror.i: laserror.cpp.i
 
 # target to preprocess a source file
 laserror.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/laserror.cpp.i
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/laserror.cpp.i
 .PHONY : laserror.cpp.i
 
 laserror.s: laserror.cpp.s
@@ -578,7 +578,7 @@ laserror.s: laserror.cpp.s
 
 # target to generate assembly for a file
 laserror.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/laserror.cpp.s
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/laserror.cpp.s
 .PHONY : laserror.cpp.s
 
 lasfilter.o: lasfilter.cpp.o
@@ -586,7 +586,7 @@ lasfilter.o: lasfilter.cpp.o
 
 # target to build an object file
 lasfilter.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasfilter.cpp.o
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasfilter.cpp.o
 .PHONY : lasfilter.cpp.o
 
 lasfilter.i: lasfilter.cpp.i
@@ -594,7 +594,7 @@ lasfilter.i: lasfilter.cpp.i
 
 # target to preprocess a source file
 lasfilter.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasfilter.cpp.i
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasfilter.cpp.i
 .PHONY : lasfilter.cpp.i
 
 lasfilter.s: lasfilter.cpp.s
@@ -602,7 +602,7 @@ lasfilter.s: lasfilter.cpp.s
 
 # target to generate assembly for a file
 lasfilter.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasfilter.cpp.s
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasfilter.cpp.s
 .PHONY : lasfilter.cpp.s
 
 lasheader.o: lasheader.cpp.o
@@ -610,7 +610,7 @@ lasheader.o: lasheader.cpp.o
 
 # target to build an object file
 lasheader.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasheader.cpp.o
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasheader.cpp.o
 .PHONY : lasheader.cpp.o
 
 lasheader.i: lasheader.cpp.i
@@ -618,7 +618,7 @@ lasheader.i: lasheader.cpp.i
 
 # target to preprocess a source file
 lasheader.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasheader.cpp.i
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasheader.cpp.i
 .PHONY : lasheader.cpp.i
 
 lasheader.s: lasheader.cpp.s
@@ -626,7 +626,7 @@ lasheader.s: lasheader.cpp.s
 
 # target to generate assembly for a file
 lasheader.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasheader.cpp.s
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasheader.cpp.s
 .PHONY : lasheader.cpp.s
 
 lasindex.o: lasindex.cpp.o
@@ -634,7 +634,7 @@ lasindex.o: lasindex.cpp.o
 
 # target to build an object file
 lasindex.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasindex.cpp.o
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasindex.cpp.o
 .PHONY : lasindex.cpp.o
 
 lasindex.i: lasindex.cpp.i
@@ -642,7 +642,7 @@ lasindex.i: lasindex.cpp.i
 
 # target to preprocess a source file
 lasindex.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasindex.cpp.i
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasindex.cpp.i
 .PHONY : lasindex.cpp.i
 
 lasindex.s: lasindex.cpp.s
@@ -650,7 +650,7 @@ lasindex.s: lasindex.cpp.s
 
 # target to generate assembly for a file
 lasindex.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasindex.cpp.s
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasindex.cpp.s
 .PHONY : lasindex.cpp.s
 
 laspoint.o: laspoint.cpp.o
@@ -658,7 +658,7 @@ laspoint.o: laspoint.cpp.o
 
 # target to build an object file
 laspoint.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/laspoint.cpp.o
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/laspoint.cpp.o
 .PHONY : laspoint.cpp.o
 
 laspoint.i: laspoint.cpp.i
@@ -666,7 +666,7 @@ laspoint.i: laspoint.cpp.i
 
 # target to preprocess a source file
 laspoint.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/laspoint.cpp.i
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/laspoint.cpp.i
 .PHONY : laspoint.cpp.i
 
 laspoint.s: laspoint.cpp.s
@@ -674,7 +674,7 @@ laspoint.s: laspoint.cpp.s
 
 # target to generate assembly for a file
 laspoint.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/laspoint.cpp.s
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/laspoint.cpp.s
 .PHONY : laspoint.cpp.s
 
 lasreader.o: lasreader.cpp.o
@@ -682,7 +682,7 @@ lasreader.o: lasreader.cpp.o
 
 # target to build an object file
 lasreader.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasreader.cpp.o
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasreader.cpp.o
 .PHONY : lasreader.cpp.o
 
 lasreader.i: lasreader.cpp.i
@@ -690,7 +690,7 @@ lasreader.i: lasreader.cpp.i
 
 # target to preprocess a source file
 lasreader.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasreader.cpp.i
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasreader.cpp.i
 .PHONY : lasreader.cpp.i
 
 lasreader.s: lasreader.cpp.s
@@ -698,7 +698,7 @@ lasreader.s: lasreader.cpp.s
 
 # target to generate assembly for a file
 lasreader.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasreader.cpp.s
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasreader.cpp.s
 .PHONY : lasreader.cpp.s
 
 lasschema.o: lasschema.cpp.o
@@ -706,7 +706,7 @@ lasschema.o: lasschema.cpp.o
 
 # target to build an object file
 lasschema.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasschema.cpp.o
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasschema.cpp.o
 .PHONY : lasschema.cpp.o
 
 lasschema.i: lasschema.cpp.i
@@ -714,7 +714,7 @@ lasschema.i: lasschema.cpp.i
 
 # target to preprocess a source file
 lasschema.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasschema.cpp.i
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasschema.cpp.i
 .PHONY : lasschema.cpp.i
 
 lasschema.s: lasschema.cpp.s
@@ -722,7 +722,7 @@ lasschema.s: lasschema.cpp.s
 
 # target to generate assembly for a file
 lasschema.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasschema.cpp.s
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasschema.cpp.s
 .PHONY : lasschema.cpp.s
 
 lasspatialreference.o: lasspatialreference.cpp.o
@@ -730,7 +730,7 @@ lasspatialreference.o: lasspatialreference.cpp.o
 
 # target to build an object file
 lasspatialreference.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasspatialreference.cpp.o
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasspatialreference.cpp.o
 .PHONY : lasspatialreference.cpp.o
 
 lasspatialreference.i: lasspatialreference.cpp.i
@@ -738,7 +738,7 @@ lasspatialreference.i: lasspatialreference.cpp.i
 
 # target to preprocess a source file
 lasspatialreference.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasspatialreference.cpp.i
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasspatialreference.cpp.i
 .PHONY : lasspatialreference.cpp.i
 
 lasspatialreference.s: lasspatialreference.cpp.s
@@ -746,7 +746,7 @@ lasspatialreference.s: lasspatialreference.cpp.s
 
 # target to generate assembly for a file
 lasspatialreference.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasspatialreference.cpp.s
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasspatialreference.cpp.s
 .PHONY : lasspatialreference.cpp.s
 
 lastransform.o: lastransform.cpp.o
@@ -754,7 +754,7 @@ lastransform.o: lastransform.cpp.o
 
 # target to build an object file
 lastransform.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lastransform.cpp.o
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lastransform.cpp.o
 .PHONY : lastransform.cpp.o
 
 lastransform.i: lastransform.cpp.i
@@ -762,7 +762,7 @@ lastransform.i: lastransform.cpp.i
 
 # target to preprocess a source file
 lastransform.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lastransform.cpp.i
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lastransform.cpp.i
 .PHONY : lastransform.cpp.i
 
 lastransform.s: lastransform.cpp.s
@@ -770,7 +770,7 @@ lastransform.s: lastransform.cpp.s
 
 # target to generate assembly for a file
 lastransform.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lastransform.cpp.s
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lastransform.cpp.s
 .PHONY : lastransform.cpp.s
 
 lasvariablerecord.o: lasvariablerecord.cpp.o
@@ -778,7 +778,7 @@ lasvariablerecord.o: lasvariablerecord.cpp.o
 
 # target to build an object file
 lasvariablerecord.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasvariablerecord.cpp.o
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasvariablerecord.cpp.o
 .PHONY : lasvariablerecord.cpp.o
 
 lasvariablerecord.i: lasvariablerecord.cpp.i
@@ -786,7 +786,7 @@ lasvariablerecord.i: lasvariablerecord.cpp.i
 
 # target to preprocess a source file
 lasvariablerecord.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasvariablerecord.cpp.i
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasvariablerecord.cpp.i
 .PHONY : lasvariablerecord.cpp.i
 
 lasvariablerecord.s: lasvariablerecord.cpp.s
@@ -794,7 +794,7 @@ lasvariablerecord.s: lasvariablerecord.cpp.s
 
 # target to generate assembly for a file
 lasvariablerecord.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasvariablerecord.cpp.s
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/lasvariablerecord.cpp.s
 .PHONY : lasvariablerecord.cpp.s
 
 laswriter.o: laswriter.cpp.o
@@ -802,7 +802,7 @@ laswriter.o: laswriter.cpp.o
 
 # target to build an object file
 laswriter.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/laswriter.cpp.o
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/laswriter.cpp.o
 .PHONY : laswriter.cpp.o
 
 laswriter.i: laswriter.cpp.i
@@ -810,7 +810,7 @@ laswriter.i: laswriter.cpp.i
 
 # target to preprocess a source file
 laswriter.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/laswriter.cpp.i
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/laswriter.cpp.i
 .PHONY : laswriter.cpp.i
 
 laswriter.s: laswriter.cpp.s
@@ -818,7 +818,7 @@ laswriter.s: laswriter.cpp.s
 
 # target to generate assembly for a file
 laswriter.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/laswriter.cpp.s
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/laswriter.cpp.s
 .PHONY : laswriter.cpp.s
 
 utility.o: utility.cpp.o
@@ -826,7 +826,7 @@ utility.o: utility.cpp.o
 
 # target to build an object file
 utility.cpp.o:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/utility.cpp.o
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/utility.cpp.o
 .PHONY : utility.cpp.o
 
 utility.i: utility.cpp.i
@@ -834,7 +834,7 @@ utility.i: utility.cpp.i
 
 # target to preprocess a source file
 utility.cpp.i:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/utility.cpp.i
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/utility.cpp.i
 .PHONY : utility.cpp.i
 
 utility.s: utility.cpp.s
@@ -842,7 +842,7 @@ utility.s: utility.cpp.s
 
 # target to generate assembly for a file
 utility.cpp.s:
-	cd /tmp/liblas-main && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/utility.cpp.s
+	cd /tmp/liblas && $(MAKE) -f src/CMakeFiles/las.dir/build.make src/CMakeFiles/las.dir/utility.cpp.s
 .PHONY : utility.cpp.s
 
 # Help Target
@@ -954,6 +954,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /tmp/liblas-main && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /tmp/liblas && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

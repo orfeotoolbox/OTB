@@ -50,6 +50,7 @@
 #include <liblas/lasvariablerecord.hpp>
 #include <liblas/lasversion.hpp>
 #include <liblas/external/property_tree/ptree.hpp>
+#include <liblas/export.hpp>
 // boost
 #include <boost/cstdint.hpp>
 #include <boost/foreach.hpp>
@@ -71,7 +72,7 @@ namespace liblas {
 /// \todo  TODO (low-priority): replace static-size char arrays as data members
 ///        with std::string and return const-reference to string object.
 ///
-class Header
+class LAS_DLL Header
 {
 public:
 
@@ -406,30 +407,29 @@ private:
     Schema m_schema;
 };
 
-std::ostream& operator<<(std::ostream& os, liblas::Header const&);
+LAS_DLL std::ostream& operator<<(std::ostream& os, liblas::Header const&);
 
 /// Singleton used for all empty points upon construction.  If 
 /// a reader creates the point, the HeaderPtr from the file that was 
 /// read will be used, but all stand-alone points will have EmptyHeader 
 /// as their base.
-class DefaultHeader
+class LAS_DLL DefaultHeader
 {
 public:
-    virtual ~DefaultHeader() {};
+    virtual ~DefaultHeader() {}
     
     static Header const& get() 
     {
         static Header object;
         return object;
     }
+
 protected:
     DefaultHeader();
     DefaultHeader( DefaultHeader const&);
     DefaultHeader& operator=( DefaultHeader const&);
     
 };
-
-
 
 
 } // namespace liblas

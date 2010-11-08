@@ -35,10 +35,10 @@ RM = "/Applications/CMake 2.8-0.app/Contents/bin/cmake" -E remove -f
 CMAKE_EDIT_COMMAND = "/Applications/CMake 2.8-0.app/Contents/bin/ccmake"
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /tmp/liblas-main
+CMAKE_SOURCE_DIR = /tmp/liblas
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /tmp/liblas-main
+CMAKE_BINARY_DIR = /tmp/liblas
 
 # Include any dependencies generated for this target.
 include test/unit/CMakeFiles/liblas_test.dir/depend.make
@@ -51,17 +51,17 @@ include test/unit/CMakeFiles/liblas_test.dir/flags.make
 
 test/unit/CMakeFiles/liblas_test.dir/common.cpp.o: test/unit/CMakeFiles/liblas_test.dir/flags.make
 test/unit/CMakeFiles/liblas_test.dir/common.cpp.o: test/unit/common.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /tmp/liblas-main/CMakeFiles $(CMAKE_PROGRESS_1)
+	$(CMAKE_COMMAND) -E cmake_progress_report /tmp/liblas/CMakeFiles $(CMAKE_PROGRESS_1)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object test/unit/CMakeFiles/liblas_test.dir/common.cpp.o"
-	cd /tmp/liblas-main/test/unit && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/liblas_test.dir/common.cpp.o -c /tmp/liblas-main/test/unit/common.cpp
+	cd /tmp/liblas/test/unit && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/liblas_test.dir/common.cpp.o -c /tmp/liblas/test/unit/common.cpp
 
 test/unit/CMakeFiles/liblas_test.dir/common.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/liblas_test.dir/common.cpp.i"
-	cd /tmp/liblas-main/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /tmp/liblas-main/test/unit/common.cpp > CMakeFiles/liblas_test.dir/common.cpp.i
+	cd /tmp/liblas/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /tmp/liblas/test/unit/common.cpp > CMakeFiles/liblas_test.dir/common.cpp.i
 
 test/unit/CMakeFiles/liblas_test.dir/common.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/liblas_test.dir/common.cpp.s"
-	cd /tmp/liblas-main/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /tmp/liblas-main/test/unit/common.cpp -o CMakeFiles/liblas_test.dir/common.cpp.s
+	cd /tmp/liblas/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /tmp/liblas/test/unit/common.cpp -o CMakeFiles/liblas_test.dir/common.cpp.s
 
 test/unit/CMakeFiles/liblas_test.dir/common.cpp.o.requires:
 .PHONY : test/unit/CMakeFiles/liblas_test.dir/common.cpp.o.requires
@@ -75,17 +75,17 @@ test/unit/CMakeFiles/liblas_test.dir/common.cpp.o.provides.build: test/unit/CMak
 
 test/unit/CMakeFiles/liblas_test.dir/guid_test.cpp.o: test/unit/CMakeFiles/liblas_test.dir/flags.make
 test/unit/CMakeFiles/liblas_test.dir/guid_test.cpp.o: test/unit/guid_test.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /tmp/liblas-main/CMakeFiles $(CMAKE_PROGRESS_2)
+	$(CMAKE_COMMAND) -E cmake_progress_report /tmp/liblas/CMakeFiles $(CMAKE_PROGRESS_2)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object test/unit/CMakeFiles/liblas_test.dir/guid_test.cpp.o"
-	cd /tmp/liblas-main/test/unit && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/liblas_test.dir/guid_test.cpp.o -c /tmp/liblas-main/test/unit/guid_test.cpp
+	cd /tmp/liblas/test/unit && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/liblas_test.dir/guid_test.cpp.o -c /tmp/liblas/test/unit/guid_test.cpp
 
 test/unit/CMakeFiles/liblas_test.dir/guid_test.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/liblas_test.dir/guid_test.cpp.i"
-	cd /tmp/liblas-main/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /tmp/liblas-main/test/unit/guid_test.cpp > CMakeFiles/liblas_test.dir/guid_test.cpp.i
+	cd /tmp/liblas/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /tmp/liblas/test/unit/guid_test.cpp > CMakeFiles/liblas_test.dir/guid_test.cpp.i
 
 test/unit/CMakeFiles/liblas_test.dir/guid_test.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/liblas_test.dir/guid_test.cpp.s"
-	cd /tmp/liblas-main/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /tmp/liblas-main/test/unit/guid_test.cpp -o CMakeFiles/liblas_test.dir/guid_test.cpp.s
+	cd /tmp/liblas/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /tmp/liblas/test/unit/guid_test.cpp -o CMakeFiles/liblas_test.dir/guid_test.cpp.s
 
 test/unit/CMakeFiles/liblas_test.dir/guid_test.cpp.o.requires:
 .PHONY : test/unit/CMakeFiles/liblas_test.dir/guid_test.cpp.o.requires
@@ -99,17 +99,17 @@ test/unit/CMakeFiles/liblas_test.dir/guid_test.cpp.o.provides.build: test/unit/C
 
 test/unit/CMakeFiles/liblas_test.dir/lasbounds_test.cpp.o: test/unit/CMakeFiles/liblas_test.dir/flags.make
 test/unit/CMakeFiles/liblas_test.dir/lasbounds_test.cpp.o: test/unit/lasbounds_test.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /tmp/liblas-main/CMakeFiles $(CMAKE_PROGRESS_3)
+	$(CMAKE_COMMAND) -E cmake_progress_report /tmp/liblas/CMakeFiles $(CMAKE_PROGRESS_3)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object test/unit/CMakeFiles/liblas_test.dir/lasbounds_test.cpp.o"
-	cd /tmp/liblas-main/test/unit && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/liblas_test.dir/lasbounds_test.cpp.o -c /tmp/liblas-main/test/unit/lasbounds_test.cpp
+	cd /tmp/liblas/test/unit && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/liblas_test.dir/lasbounds_test.cpp.o -c /tmp/liblas/test/unit/lasbounds_test.cpp
 
 test/unit/CMakeFiles/liblas_test.dir/lasbounds_test.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/liblas_test.dir/lasbounds_test.cpp.i"
-	cd /tmp/liblas-main/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /tmp/liblas-main/test/unit/lasbounds_test.cpp > CMakeFiles/liblas_test.dir/lasbounds_test.cpp.i
+	cd /tmp/liblas/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /tmp/liblas/test/unit/lasbounds_test.cpp > CMakeFiles/liblas_test.dir/lasbounds_test.cpp.i
 
 test/unit/CMakeFiles/liblas_test.dir/lasbounds_test.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/liblas_test.dir/lasbounds_test.cpp.s"
-	cd /tmp/liblas-main/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /tmp/liblas-main/test/unit/lasbounds_test.cpp -o CMakeFiles/liblas_test.dir/lasbounds_test.cpp.s
+	cd /tmp/liblas/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /tmp/liblas/test/unit/lasbounds_test.cpp -o CMakeFiles/liblas_test.dir/lasbounds_test.cpp.s
 
 test/unit/CMakeFiles/liblas_test.dir/lasbounds_test.cpp.o.requires:
 .PHONY : test/unit/CMakeFiles/liblas_test.dir/lasbounds_test.cpp.o.requires
@@ -123,17 +123,17 @@ test/unit/CMakeFiles/liblas_test.dir/lasbounds_test.cpp.o.provides.build: test/u
 
 test/unit/CMakeFiles/liblas_test.dir/laserror_test.cpp.o: test/unit/CMakeFiles/liblas_test.dir/flags.make
 test/unit/CMakeFiles/liblas_test.dir/laserror_test.cpp.o: test/unit/laserror_test.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /tmp/liblas-main/CMakeFiles $(CMAKE_PROGRESS_4)
+	$(CMAKE_COMMAND) -E cmake_progress_report /tmp/liblas/CMakeFiles $(CMAKE_PROGRESS_4)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object test/unit/CMakeFiles/liblas_test.dir/laserror_test.cpp.o"
-	cd /tmp/liblas-main/test/unit && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/liblas_test.dir/laserror_test.cpp.o -c /tmp/liblas-main/test/unit/laserror_test.cpp
+	cd /tmp/liblas/test/unit && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/liblas_test.dir/laserror_test.cpp.o -c /tmp/liblas/test/unit/laserror_test.cpp
 
 test/unit/CMakeFiles/liblas_test.dir/laserror_test.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/liblas_test.dir/laserror_test.cpp.i"
-	cd /tmp/liblas-main/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /tmp/liblas-main/test/unit/laserror_test.cpp > CMakeFiles/liblas_test.dir/laserror_test.cpp.i
+	cd /tmp/liblas/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /tmp/liblas/test/unit/laserror_test.cpp > CMakeFiles/liblas_test.dir/laserror_test.cpp.i
 
 test/unit/CMakeFiles/liblas_test.dir/laserror_test.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/liblas_test.dir/laserror_test.cpp.s"
-	cd /tmp/liblas-main/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /tmp/liblas-main/test/unit/laserror_test.cpp -o CMakeFiles/liblas_test.dir/laserror_test.cpp.s
+	cd /tmp/liblas/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /tmp/liblas/test/unit/laserror_test.cpp -o CMakeFiles/liblas_test.dir/laserror_test.cpp.s
 
 test/unit/CMakeFiles/liblas_test.dir/laserror_test.cpp.o.requires:
 .PHONY : test/unit/CMakeFiles/liblas_test.dir/laserror_test.cpp.o.requires
@@ -147,17 +147,17 @@ test/unit/CMakeFiles/liblas_test.dir/laserror_test.cpp.o.provides.build: test/un
 
 test/unit/CMakeFiles/liblas_test.dir/lasheader_test.cpp.o: test/unit/CMakeFiles/liblas_test.dir/flags.make
 test/unit/CMakeFiles/liblas_test.dir/lasheader_test.cpp.o: test/unit/lasheader_test.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /tmp/liblas-main/CMakeFiles $(CMAKE_PROGRESS_5)
+	$(CMAKE_COMMAND) -E cmake_progress_report /tmp/liblas/CMakeFiles $(CMAKE_PROGRESS_5)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object test/unit/CMakeFiles/liblas_test.dir/lasheader_test.cpp.o"
-	cd /tmp/liblas-main/test/unit && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/liblas_test.dir/lasheader_test.cpp.o -c /tmp/liblas-main/test/unit/lasheader_test.cpp
+	cd /tmp/liblas/test/unit && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/liblas_test.dir/lasheader_test.cpp.o -c /tmp/liblas/test/unit/lasheader_test.cpp
 
 test/unit/CMakeFiles/liblas_test.dir/lasheader_test.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/liblas_test.dir/lasheader_test.cpp.i"
-	cd /tmp/liblas-main/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /tmp/liblas-main/test/unit/lasheader_test.cpp > CMakeFiles/liblas_test.dir/lasheader_test.cpp.i
+	cd /tmp/liblas/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /tmp/liblas/test/unit/lasheader_test.cpp > CMakeFiles/liblas_test.dir/lasheader_test.cpp.i
 
 test/unit/CMakeFiles/liblas_test.dir/lasheader_test.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/liblas_test.dir/lasheader_test.cpp.s"
-	cd /tmp/liblas-main/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /tmp/liblas-main/test/unit/lasheader_test.cpp -o CMakeFiles/liblas_test.dir/lasheader_test.cpp.s
+	cd /tmp/liblas/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /tmp/liblas/test/unit/lasheader_test.cpp -o CMakeFiles/liblas_test.dir/lasheader_test.cpp.s
 
 test/unit/CMakeFiles/liblas_test.dir/lasheader_test.cpp.o.requires:
 .PHONY : test/unit/CMakeFiles/liblas_test.dir/lasheader_test.cpp.o.requires
@@ -171,17 +171,17 @@ test/unit/CMakeFiles/liblas_test.dir/lasheader_test.cpp.o.provides.build: test/u
 
 test/unit/CMakeFiles/liblas_test.dir/laspoint_test.cpp.o: test/unit/CMakeFiles/liblas_test.dir/flags.make
 test/unit/CMakeFiles/liblas_test.dir/laspoint_test.cpp.o: test/unit/laspoint_test.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /tmp/liblas-main/CMakeFiles $(CMAKE_PROGRESS_6)
+	$(CMAKE_COMMAND) -E cmake_progress_report /tmp/liblas/CMakeFiles $(CMAKE_PROGRESS_6)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object test/unit/CMakeFiles/liblas_test.dir/laspoint_test.cpp.o"
-	cd /tmp/liblas-main/test/unit && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/liblas_test.dir/laspoint_test.cpp.o -c /tmp/liblas-main/test/unit/laspoint_test.cpp
+	cd /tmp/liblas/test/unit && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/liblas_test.dir/laspoint_test.cpp.o -c /tmp/liblas/test/unit/laspoint_test.cpp
 
 test/unit/CMakeFiles/liblas_test.dir/laspoint_test.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/liblas_test.dir/laspoint_test.cpp.i"
-	cd /tmp/liblas-main/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /tmp/liblas-main/test/unit/laspoint_test.cpp > CMakeFiles/liblas_test.dir/laspoint_test.cpp.i
+	cd /tmp/liblas/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /tmp/liblas/test/unit/laspoint_test.cpp > CMakeFiles/liblas_test.dir/laspoint_test.cpp.i
 
 test/unit/CMakeFiles/liblas_test.dir/laspoint_test.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/liblas_test.dir/laspoint_test.cpp.s"
-	cd /tmp/liblas-main/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /tmp/liblas-main/test/unit/laspoint_test.cpp -o CMakeFiles/liblas_test.dir/laspoint_test.cpp.s
+	cd /tmp/liblas/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /tmp/liblas/test/unit/laspoint_test.cpp -o CMakeFiles/liblas_test.dir/laspoint_test.cpp.s
 
 test/unit/CMakeFiles/liblas_test.dir/laspoint_test.cpp.o.requires:
 .PHONY : test/unit/CMakeFiles/liblas_test.dir/laspoint_test.cpp.o.requires
@@ -195,17 +195,17 @@ test/unit/CMakeFiles/liblas_test.dir/laspoint_test.cpp.o.provides.build: test/un
 
 test/unit/CMakeFiles/liblas_test.dir/lasreader_iterator_test.cpp.o: test/unit/CMakeFiles/liblas_test.dir/flags.make
 test/unit/CMakeFiles/liblas_test.dir/lasreader_iterator_test.cpp.o: test/unit/lasreader_iterator_test.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /tmp/liblas-main/CMakeFiles $(CMAKE_PROGRESS_7)
+	$(CMAKE_COMMAND) -E cmake_progress_report /tmp/liblas/CMakeFiles $(CMAKE_PROGRESS_7)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object test/unit/CMakeFiles/liblas_test.dir/lasreader_iterator_test.cpp.o"
-	cd /tmp/liblas-main/test/unit && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/liblas_test.dir/lasreader_iterator_test.cpp.o -c /tmp/liblas-main/test/unit/lasreader_iterator_test.cpp
+	cd /tmp/liblas/test/unit && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/liblas_test.dir/lasreader_iterator_test.cpp.o -c /tmp/liblas/test/unit/lasreader_iterator_test.cpp
 
 test/unit/CMakeFiles/liblas_test.dir/lasreader_iterator_test.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/liblas_test.dir/lasreader_iterator_test.cpp.i"
-	cd /tmp/liblas-main/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /tmp/liblas-main/test/unit/lasreader_iterator_test.cpp > CMakeFiles/liblas_test.dir/lasreader_iterator_test.cpp.i
+	cd /tmp/liblas/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /tmp/liblas/test/unit/lasreader_iterator_test.cpp > CMakeFiles/liblas_test.dir/lasreader_iterator_test.cpp.i
 
 test/unit/CMakeFiles/liblas_test.dir/lasreader_iterator_test.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/liblas_test.dir/lasreader_iterator_test.cpp.s"
-	cd /tmp/liblas-main/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /tmp/liblas-main/test/unit/lasreader_iterator_test.cpp -o CMakeFiles/liblas_test.dir/lasreader_iterator_test.cpp.s
+	cd /tmp/liblas/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /tmp/liblas/test/unit/lasreader_iterator_test.cpp -o CMakeFiles/liblas_test.dir/lasreader_iterator_test.cpp.s
 
 test/unit/CMakeFiles/liblas_test.dir/lasreader_iterator_test.cpp.o.requires:
 .PHONY : test/unit/CMakeFiles/liblas_test.dir/lasreader_iterator_test.cpp.o.requires
@@ -219,17 +219,17 @@ test/unit/CMakeFiles/liblas_test.dir/lasreader_iterator_test.cpp.o.provides.buil
 
 test/unit/CMakeFiles/liblas_test.dir/lasreader_test.cpp.o: test/unit/CMakeFiles/liblas_test.dir/flags.make
 test/unit/CMakeFiles/liblas_test.dir/lasreader_test.cpp.o: test/unit/lasreader_test.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /tmp/liblas-main/CMakeFiles $(CMAKE_PROGRESS_8)
+	$(CMAKE_COMMAND) -E cmake_progress_report /tmp/liblas/CMakeFiles $(CMAKE_PROGRESS_8)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object test/unit/CMakeFiles/liblas_test.dir/lasreader_test.cpp.o"
-	cd /tmp/liblas-main/test/unit && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/liblas_test.dir/lasreader_test.cpp.o -c /tmp/liblas-main/test/unit/lasreader_test.cpp
+	cd /tmp/liblas/test/unit && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/liblas_test.dir/lasreader_test.cpp.o -c /tmp/liblas/test/unit/lasreader_test.cpp
 
 test/unit/CMakeFiles/liblas_test.dir/lasreader_test.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/liblas_test.dir/lasreader_test.cpp.i"
-	cd /tmp/liblas-main/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /tmp/liblas-main/test/unit/lasreader_test.cpp > CMakeFiles/liblas_test.dir/lasreader_test.cpp.i
+	cd /tmp/liblas/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /tmp/liblas/test/unit/lasreader_test.cpp > CMakeFiles/liblas_test.dir/lasreader_test.cpp.i
 
 test/unit/CMakeFiles/liblas_test.dir/lasreader_test.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/liblas_test.dir/lasreader_test.cpp.s"
-	cd /tmp/liblas-main/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /tmp/liblas-main/test/unit/lasreader_test.cpp -o CMakeFiles/liblas_test.dir/lasreader_test.cpp.s
+	cd /tmp/liblas/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /tmp/liblas/test/unit/lasreader_test.cpp -o CMakeFiles/liblas_test.dir/lasreader_test.cpp.s
 
 test/unit/CMakeFiles/liblas_test.dir/lasreader_test.cpp.o.requires:
 .PHONY : test/unit/CMakeFiles/liblas_test.dir/lasreader_test.cpp.o.requires
@@ -243,17 +243,17 @@ test/unit/CMakeFiles/liblas_test.dir/lasreader_test.cpp.o.provides.build: test/u
 
 test/unit/CMakeFiles/liblas_test.dir/lasspatialreference_test.cpp.o: test/unit/CMakeFiles/liblas_test.dir/flags.make
 test/unit/CMakeFiles/liblas_test.dir/lasspatialreference_test.cpp.o: test/unit/lasspatialreference_test.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /tmp/liblas-main/CMakeFiles $(CMAKE_PROGRESS_9)
+	$(CMAKE_COMMAND) -E cmake_progress_report /tmp/liblas/CMakeFiles $(CMAKE_PROGRESS_9)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object test/unit/CMakeFiles/liblas_test.dir/lasspatialreference_test.cpp.o"
-	cd /tmp/liblas-main/test/unit && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/liblas_test.dir/lasspatialreference_test.cpp.o -c /tmp/liblas-main/test/unit/lasspatialreference_test.cpp
+	cd /tmp/liblas/test/unit && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/liblas_test.dir/lasspatialreference_test.cpp.o -c /tmp/liblas/test/unit/lasspatialreference_test.cpp
 
 test/unit/CMakeFiles/liblas_test.dir/lasspatialreference_test.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/liblas_test.dir/lasspatialreference_test.cpp.i"
-	cd /tmp/liblas-main/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /tmp/liblas-main/test/unit/lasspatialreference_test.cpp > CMakeFiles/liblas_test.dir/lasspatialreference_test.cpp.i
+	cd /tmp/liblas/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /tmp/liblas/test/unit/lasspatialreference_test.cpp > CMakeFiles/liblas_test.dir/lasspatialreference_test.cpp.i
 
 test/unit/CMakeFiles/liblas_test.dir/lasspatialreference_test.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/liblas_test.dir/lasspatialreference_test.cpp.s"
-	cd /tmp/liblas-main/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /tmp/liblas-main/test/unit/lasspatialreference_test.cpp -o CMakeFiles/liblas_test.dir/lasspatialreference_test.cpp.s
+	cd /tmp/liblas/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /tmp/liblas/test/unit/lasspatialreference_test.cpp -o CMakeFiles/liblas_test.dir/lasspatialreference_test.cpp.s
 
 test/unit/CMakeFiles/liblas_test.dir/lasspatialreference_test.cpp.o.requires:
 .PHONY : test/unit/CMakeFiles/liblas_test.dir/lasspatialreference_test.cpp.o.requires
@@ -267,17 +267,17 @@ test/unit/CMakeFiles/liblas_test.dir/lasspatialreference_test.cpp.o.provides.bui
 
 test/unit/CMakeFiles/liblas_test.dir/lasvariablerecord_test.cpp.o: test/unit/CMakeFiles/liblas_test.dir/flags.make
 test/unit/CMakeFiles/liblas_test.dir/lasvariablerecord_test.cpp.o: test/unit/lasvariablerecord_test.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /tmp/liblas-main/CMakeFiles $(CMAKE_PROGRESS_10)
+	$(CMAKE_COMMAND) -E cmake_progress_report /tmp/liblas/CMakeFiles $(CMAKE_PROGRESS_10)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object test/unit/CMakeFiles/liblas_test.dir/lasvariablerecord_test.cpp.o"
-	cd /tmp/liblas-main/test/unit && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/liblas_test.dir/lasvariablerecord_test.cpp.o -c /tmp/liblas-main/test/unit/lasvariablerecord_test.cpp
+	cd /tmp/liblas/test/unit && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/liblas_test.dir/lasvariablerecord_test.cpp.o -c /tmp/liblas/test/unit/lasvariablerecord_test.cpp
 
 test/unit/CMakeFiles/liblas_test.dir/lasvariablerecord_test.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/liblas_test.dir/lasvariablerecord_test.cpp.i"
-	cd /tmp/liblas-main/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /tmp/liblas-main/test/unit/lasvariablerecord_test.cpp > CMakeFiles/liblas_test.dir/lasvariablerecord_test.cpp.i
+	cd /tmp/liblas/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /tmp/liblas/test/unit/lasvariablerecord_test.cpp > CMakeFiles/liblas_test.dir/lasvariablerecord_test.cpp.i
 
 test/unit/CMakeFiles/liblas_test.dir/lasvariablerecord_test.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/liblas_test.dir/lasvariablerecord_test.cpp.s"
-	cd /tmp/liblas-main/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /tmp/liblas-main/test/unit/lasvariablerecord_test.cpp -o CMakeFiles/liblas_test.dir/lasvariablerecord_test.cpp.s
+	cd /tmp/liblas/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /tmp/liblas/test/unit/lasvariablerecord_test.cpp -o CMakeFiles/liblas_test.dir/lasvariablerecord_test.cpp.s
 
 test/unit/CMakeFiles/liblas_test.dir/lasvariablerecord_test.cpp.o.requires:
 .PHONY : test/unit/CMakeFiles/liblas_test.dir/lasvariablerecord_test.cpp.o.requires
@@ -291,17 +291,17 @@ test/unit/CMakeFiles/liblas_test.dir/lasvariablerecord_test.cpp.o.provides.build
 
 test/unit/CMakeFiles/liblas_test.dir/laswriter_test.cpp.o: test/unit/CMakeFiles/liblas_test.dir/flags.make
 test/unit/CMakeFiles/liblas_test.dir/laswriter_test.cpp.o: test/unit/laswriter_test.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /tmp/liblas-main/CMakeFiles $(CMAKE_PROGRESS_11)
+	$(CMAKE_COMMAND) -E cmake_progress_report /tmp/liblas/CMakeFiles $(CMAKE_PROGRESS_11)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object test/unit/CMakeFiles/liblas_test.dir/laswriter_test.cpp.o"
-	cd /tmp/liblas-main/test/unit && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/liblas_test.dir/laswriter_test.cpp.o -c /tmp/liblas-main/test/unit/laswriter_test.cpp
+	cd /tmp/liblas/test/unit && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/liblas_test.dir/laswriter_test.cpp.o -c /tmp/liblas/test/unit/laswriter_test.cpp
 
 test/unit/CMakeFiles/liblas_test.dir/laswriter_test.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/liblas_test.dir/laswriter_test.cpp.i"
-	cd /tmp/liblas-main/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /tmp/liblas-main/test/unit/laswriter_test.cpp > CMakeFiles/liblas_test.dir/laswriter_test.cpp.i
+	cd /tmp/liblas/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /tmp/liblas/test/unit/laswriter_test.cpp > CMakeFiles/liblas_test.dir/laswriter_test.cpp.i
 
 test/unit/CMakeFiles/liblas_test.dir/laswriter_test.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/liblas_test.dir/laswriter_test.cpp.s"
-	cd /tmp/liblas-main/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /tmp/liblas-main/test/unit/laswriter_test.cpp -o CMakeFiles/liblas_test.dir/laswriter_test.cpp.s
+	cd /tmp/liblas/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /tmp/liblas/test/unit/laswriter_test.cpp -o CMakeFiles/liblas_test.dir/laswriter_test.cpp.s
 
 test/unit/CMakeFiles/liblas_test.dir/laswriter_test.cpp.o.requires:
 .PHONY : test/unit/CMakeFiles/liblas_test.dir/laswriter_test.cpp.o.requires
@@ -315,17 +315,17 @@ test/unit/CMakeFiles/liblas_test.dir/laswriter_test.cpp.o.provides.build: test/u
 
 test/unit/CMakeFiles/liblas_test.dir/liblas_test_suite.cpp.o: test/unit/CMakeFiles/liblas_test.dir/flags.make
 test/unit/CMakeFiles/liblas_test.dir/liblas_test_suite.cpp.o: test/unit/liblas_test_suite.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /tmp/liblas-main/CMakeFiles $(CMAKE_PROGRESS_12)
+	$(CMAKE_COMMAND) -E cmake_progress_report /tmp/liblas/CMakeFiles $(CMAKE_PROGRESS_12)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object test/unit/CMakeFiles/liblas_test.dir/liblas_test_suite.cpp.o"
-	cd /tmp/liblas-main/test/unit && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/liblas_test.dir/liblas_test_suite.cpp.o -c /tmp/liblas-main/test/unit/liblas_test_suite.cpp
+	cd /tmp/liblas/test/unit && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/liblas_test.dir/liblas_test_suite.cpp.o -c /tmp/liblas/test/unit/liblas_test_suite.cpp
 
 test/unit/CMakeFiles/liblas_test.dir/liblas_test_suite.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/liblas_test.dir/liblas_test_suite.cpp.i"
-	cd /tmp/liblas-main/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /tmp/liblas-main/test/unit/liblas_test_suite.cpp > CMakeFiles/liblas_test.dir/liblas_test_suite.cpp.i
+	cd /tmp/liblas/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /tmp/liblas/test/unit/liblas_test_suite.cpp > CMakeFiles/liblas_test.dir/liblas_test_suite.cpp.i
 
 test/unit/CMakeFiles/liblas_test.dir/liblas_test_suite.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/liblas_test.dir/liblas_test_suite.cpp.s"
-	cd /tmp/liblas-main/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /tmp/liblas-main/test/unit/liblas_test_suite.cpp -o CMakeFiles/liblas_test.dir/liblas_test_suite.cpp.s
+	cd /tmp/liblas/test/unit && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /tmp/liblas/test/unit/liblas_test_suite.cpp -o CMakeFiles/liblas_test.dir/liblas_test_suite.cpp.s
 
 test/unit/CMakeFiles/liblas_test.dir/liblas_test_suite.cpp.o.requires:
 .PHONY : test/unit/CMakeFiles/liblas_test.dir/liblas_test_suite.cpp.o.requires
@@ -367,11 +367,12 @@ bin/liblas_test: test/unit/CMakeFiles/liblas_test.dir/lasspatialreference_test.c
 bin/liblas_test: test/unit/CMakeFiles/liblas_test.dir/lasvariablerecord_test.cpp.o
 bin/liblas_test: test/unit/CMakeFiles/liblas_test.dir/laswriter_test.cpp.o
 bin/liblas_test: test/unit/CMakeFiles/liblas_test.dir/liblas_test_suite.cpp.o
-bin/liblas_test: bin/liblas.a
+bin/liblas_test: bin/liblas.dylib
+bin/liblas_test: /usr/local/lib/libboost_program_options.a
 bin/liblas_test: test/unit/CMakeFiles/liblas_test.dir/build.make
 bin/liblas_test: test/unit/CMakeFiles/liblas_test.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --red --bold "Linking CXX executable ../../bin/liblas_test"
-	cd /tmp/liblas-main/test/unit && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/liblas_test.dir/link.txt --verbose=$(VERBOSE)
+	cd /tmp/liblas/test/unit && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/liblas_test.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
 test/unit/CMakeFiles/liblas_test.dir/build: bin/liblas_test
@@ -392,10 +393,10 @@ test/unit/CMakeFiles/liblas_test.dir/requires: test/unit/CMakeFiles/liblas_test.
 .PHONY : test/unit/CMakeFiles/liblas_test.dir/requires
 
 test/unit/CMakeFiles/liblas_test.dir/clean:
-	cd /tmp/liblas-main/test/unit && $(CMAKE_COMMAND) -P CMakeFiles/liblas_test.dir/cmake_clean.cmake
+	cd /tmp/liblas/test/unit && $(CMAKE_COMMAND) -P CMakeFiles/liblas_test.dir/cmake_clean.cmake
 .PHONY : test/unit/CMakeFiles/liblas_test.dir/clean
 
 test/unit/CMakeFiles/liblas_test.dir/depend:
-	cd /tmp/liblas-main && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /tmp/liblas-main /tmp/liblas-main/test/unit /tmp/liblas-main /tmp/liblas-main/test/unit /tmp/liblas-main/test/unit/CMakeFiles/liblas_test.dir/DependInfo.cmake --color=$(COLOR)
+	cd /tmp/liblas && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /tmp/liblas /tmp/liblas/test/unit /tmp/liblas /tmp/liblas/test/unit /tmp/liblas/test/unit/CMakeFiles/liblas_test.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : test/unit/CMakeFiles/liblas_test.dir/depend
 

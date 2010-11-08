@@ -880,7 +880,7 @@ int main(int argc, char *argv[])
         } else {
             if (verbose) {
                 fprintf(stderr, 
-                    "Setting xyz offset to commandline-assigned values...\n");
+                    "Setting xyz offset to %.8f %.8f %.8f...\n", xyz_offset[0], xyz_offset[1], xyz_offset[2]);
             }
             LASHeader_SetOffset(surviving_header,
                                 xyz_offset[0],
@@ -892,7 +892,7 @@ int main(int argc, char *argv[])
     if (do_set_scale) {
         if (verbose) {
             fprintf(stderr, 
-                "Setting xyz scale...\n");
+                "Setting xyz scale to %.8f %.8f %.8f...\n", xyz_scale[0], xyz_scale[1], xyz_scale[2]);
         }
         LASHeader_SetScale( surviving_header, 
                             xyz_scale[0],

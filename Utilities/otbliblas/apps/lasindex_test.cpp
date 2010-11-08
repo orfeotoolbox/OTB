@@ -99,6 +99,10 @@ void usage(FILE *debugger)
     fprintf(debugger,"  follow with low and high values for Z filter\n");
     fprintf(debugger,"\n");
     
+    fprintf(debugger,"-it (use iterator for filtering):\n");
+    fprintf(debugger,"  follow with number of points to be returned in each iteration\n");
+    fprintf(debugger,"\n");
+    
     fprintf(debugger, "\nFor more information, see the full documentation for lasindex_test at:\n"
                     " http://liblas.org/browser/trunk/doc/lasindex_test.txt\n");
     fprintf(debugger,"----------------------------------------------------------\n");
@@ -121,6 +125,7 @@ std::istream* OpenInput(std::string filename)
     if (!istrm->good())
     {
         delete istrm;
+        istrm = 0;
         throw std::runtime_error("Reading stream was not able to be created.");
     }
     return istrm;
@@ -142,6 +147,7 @@ std::ostream* OpenOutput(std::string filename)
     if (!ostrm->good())
     {
         delete ostrm;
+        ostrm = 0;
         throw std::runtime_error("Writing stream was not able to be created.");
     }
     return ostrm;
@@ -162,6 +168,26 @@ void IndexFilterInitError(FILE *debugger)
     fprintf(debugger, "Unable to initialize index filter. Invalid values.\n");
 }
 
+bool ReportIteratorResults(FILE *debugger, uint32_t resultSize, uint32_t pointCount, uint32_t step)
+{
+	if (resultSize)
+	{
+		// do something with the list of points
+		#ifdef VISUAL_8
+		fprintf(debugger, "Points within filter area %d of %d, step %d, %s\n", resultSize, 
+			pointCount, step, "Using iterator");
+		#else // VISUAL_8
+		fprintf(debugger, "Points within filter area %d of %d, step %d, %s\n", resultSize, 
+			pointCount, step, "Using iterator");
+		#endif // VISUAL_8
+		return true;
+	}
+	else
+	{
+		IndexFilterNoPoints(debugger);
+		return false;
+	} // else
+} // ReportIteratorResults
 
 int main(int argc, char* argv[])
 {
@@ -174,12 +200,14 @@ int main(int argc, char* argv[])
 	char *datefield = 0;
 	double zbinheight = 0.0;
 	double oLowFilterX = 0.0, oHighFilterX = 0.0, oLowFilterY = 0.0, oHighFilterY = 0.0, oLowFilterZ = 0.0, oHighFilterZ = 0.0;
-	uint32_t maxmem = 0;
+	boost::uint32_t maxmem = 0;
+	boost::uint32_t chunkSize = 100;
 	int debuglevel = 3;
 	bool readonly = 0;
 	bool forcenewindex = 0;
 	bool boundssetbyuser = 0;
 	bool writestandaloneindex = 0;
+	bool useiterator = 0;
 	FILE *debugger = stderr;
 	
 	// temporary until argv[] starts to work
@@ -207,13 +235,18 @@ int main(int argc, char* argv[])
 		 "-n", "C:\\LibLAS\\Samples\\N1440375_idx.ldx", "-r"};
 	argc = 6;
 	*/
-	/*-----------------build embedded index, filter with user bounds------------
+	/*-----------------build embedded index, filter with user bounds------------ */
 	const char* arggv[] = {"foo", "-t", "C:\\LibLAS\\Samples\\N1440375.tmp",
 		 "-i", "C:\\LibLAS\\Samples\\N1440375.las", "-a", SAMPLE_AUTHOR, "-c", SAMPLE_COMMENT, "-d", SAMPLE_DATE,
 		 "-o", "C:\\LibLAS\\Samples\\N1440375_idx.las",
 		 "-x", "1443000.00", "1444000.00", "-y", "376000.02", "379000.00", "-z", "850.00", "950.00"};
 	argc = 22;
-	*/	
+
+	/*------------filter with embedded index using iterator---------------------
+	const char* arggv[] = {"foo",
+		 "-i", "C:\\LibLAS\\Samples\\N1440375_idx.las", "-r", "-it", "20000"};
+	argc = 6;
+	*/
 	/*---------------------Serpent Mound Model LAS Data-----------------------*/
 	/*----------------------------build index-----------------------------------
 	const char* arggv[] = {"foo", "-t", "C:\\LibLAS\\Samples\\Serpent Mound Model LAS Data.tmp",
@@ -230,8 +263,8 @@ int main(int argc, char* argv[])
 	/*----------------------------build index-----------------------------------
 	const char* arggv[] = {"foo", "-t", "C:\\LibLAS\\Mount St Helens Oct 4 2004.tmp",
 		 "-i", "C:\\LibLAS\\Samples\\Mount St Helens Oct 4 2004.las", "-a", SAMPLE_AUTHOR, "-c", SAMPLE_COMMENT, "-d", SAMPLE_DATE,
-		 "-o", "C:\\LibLAS\\Samples\\Mount St Helens Oct 4 2004_idx.las"};
-	argc = 13;
+		 "-o", "C:\\LibLAS\\Samples\\Mount St Helens Oct 4 2004_idx.las", "-b", "100"};
+	argc = 15;
 	*/
 	/*------------------filter with embedded index------------------------------
 	const char* arggv[] = {"foo",
@@ -251,18 +284,34 @@ int main(int argc, char* argv[])
 	argc = 4;
 	*/
 	/*------------------------------flatDataset-------------------------------*/
-	///*------------------------------build index---------------------------------
+	/*------------------------------build index---------------------------------
 	const char* arggv[] = {"foo", "-t", "C:\\LibLAS\\flatDataset.tmp",
 		 "-i", "C:\\LibLAS\\Samples\\flatDataset.las", "-a", SAMPLE_AUTHOR, "-c", SAMPLE_COMMENT, "-d", SAMPLE_DATE,
 		 "-o", "C:\\LibLAS\\Samples\\flatDataset_idx.las"};
 	argc = 13;
-	//*/
+	*/
 	/*------------------filter with embedded index------------------------------
 	const char* arggv[] = {"foo",
 		 "-i", "C:\\LibLAS\\Samples\\flatDataset_idx.las", "-r"};
 	argc = 4;
 	*/
-	/*------------------------------------------------------------------------*/
+	/*------------filter with embedded index using iterator---------------------
+	const char* arggv[] = {"foo",
+		 "-i", "C:\\LibLAS\\Samples\\flatDataset_idx.las", "-r", "-it", "25"};
+	argc = 6;
+	*/
+	/*---------------------------billion_points-------------------------------*/
+	/*-----------------build index in standalone file---------------------------
+	const char* arggv[] = {"foo", "-t", "K:\\FME\\billion_points.tmp",
+		 "-i", "D:\\Zips\\FME\\billion_points.las", "-a", SAMPLE_AUTHOR, "-c", SAMPLE_COMMENT, "-d", SAMPLE_DATE,
+		 "-o", "K:\\FME\\billion_points_idx.ldx", "-s", "-it", "5000000"};
+	argc = 16;
+	*/
+	/*-------------------filter from standalone file using iterator---------------
+	const char* arggv[] = {"foo", "-i", "D:\\Zips\\FME\\billion_points.las",
+		 "-n", "K:\\FME\\billion_points_idx.ldx", "-r", "-it", "5000000"};
+	argc = 8;
+	*/
 	
 	for (int i = 1; i < argc; i++)
     {
@@ -375,11 +424,19 @@ int main(int argc, char* argv[])
             oHighFilterZ = atof((const char *)arggv[i]);
             boundssetbyuser = true;
         }
+        else if (   strcmp((const char *)arggv[i],"-it") == 0
+            )
+        {
+            i++;
+            chunkSize = atoi((const char *)arggv[i]);
+            useiterator = true;
+        }
 	} // for
 
 	fprintf(debugger, "%s\n", lasinfilenme);
 	
 	IndexData ParamSrc;
+	IndexData ParamSrc2;
 	
 	if (lasinfilenme)
 	{
@@ -419,7 +476,80 @@ int main(int argc, char* argv[])
 							if (index.IndexReady())
 							{
 								// for testing filter bounds set by user
-								if (boundssetbyuser)
+								if (useiterator)
+								{
+									ParamSrc = IndexData(index);
+									ParamSrc2 = IndexData(index);
+									if (ParamSrc.SetFilterValues(index.GetBounds(), index)
+										&& ParamSrc2.SetFilterValues((index.GetMinX() + index.GetMaxX()) * .5, index.GetMaxX(), 
+										(index.GetMinY() + index.GetMaxY()) * .5, index.GetMaxY(), index.GetMinZ(), index.GetMaxZ(), index))
+									{
+										// two iterators with different filter bounds
+										IndexIterator *indexIt = index.Filter(ParamSrc, chunkSize);
+										IndexIterator *indexIt2 = index.Filter(ParamSrc2, chunkSize);
+										if (indexIt && indexIt2)
+										{
+											for (boost::uint32_t step = 0; step < 1000; ++step)
+											{
+												// use any of these to begin the vector with the next point that fits the filter criteria 
+												// that hasn't been scanned yet.
+												// ex: indexIt->advance(1) starts the vector on the first point that fits the criteria if no points have 
+												// been scanned previously. If there have been previous points scanned then the vector returned
+												// will start with the next point that fits the criteria beyond those previously scanned.
+												// ex: indexIt->advance(5) starts the vector on the fifth point that fits the criteria if no points have 
+												// been scanned previously. If there have been previous points scanned then the vector returned
+												// will start with the fifth point that fits the criteria beyond those previously scanned.
+												// The following three methods may be used to advance by any positive number X.
+												//const std::vector<boost::uint32_t>& FilterResult = indexIt->advance(X);
+												//const std::vector<boost::uint32_t>& FilterResult = (*indexIt)+=X;
+												//const std::vector<boost::uint32_t>& FilterResult = (*indexIt)+X;
+												// The following two methods may be used to advance as though X were 1.
+												// There is no functional difference between pre and post increment;
+												//const std::vector<boost::uint32_t>& FilterResult = ++(*indexIt);
+												//const std::vector<boost::uint32_t>& FilterResult = (*indexIt)++;
+												// Random access to any number point in the file that fits the filter criteria is 
+												// provided with the overloaded [] operator or () operator.
+												// ex: (*indexIt)[32] would start the array at the 32nd point in the file that fits the criteria
+												// Any number of non-conforming points may have been skipped to get to the start point
+												//const std::vector<boost::uint32_t>& FilterResult = (*indexIt)[32];
+												//const std::vector<boost::uint32_t>& FilterResult = (*indexIt)(0);
+												
+												// get first or next consecutive range on first iterator
+												const std::vector<boost::uint32_t>& FilterResult = (*indexIt)++;
+												if (!ReportIteratorResults(debugger, FilterResult.size(), index.GetPointRecordsCount(), step))
+													break;
+
+												// get first or next consecutive range on 2nd iterator
+												const std::vector<boost::uint32_t>& FilterResult2 = (*indexIt2)++;
+												if (!ReportIteratorResults(debugger, FilterResult2.size(), index.GetPointRecordsCount(), step))
+													break;
+
+												// get next range on first iterator
+												const std::vector<boost::uint32_t>& FilterResult3 = (*indexIt)++;
+												if (!ReportIteratorResults(debugger, FilterResult3.size(), index.GetPointRecordsCount(), step))
+													break;
+												
+												// get a range beginning with the 5th compliant point on 2nd iterator
+												const std::vector<boost::uint32_t>& FilterResult4 = (*indexIt2)[5];
+												if (!ReportIteratorResults(debugger, FilterResult4.size(), index.GetPointRecordsCount(), step))
+													break;
+
+												// get a range on first iterator beginning 6 compliant pts beyond last range (skipping 5)
+												const std::vector<boost::uint32_t>& FilterResult5 = (*indexIt)+6;
+												if (!ReportIteratorResults(debugger, FilterResult5.size(), index.GetPointRecordsCount(), step))
+													break;
+											
+											} // for
+										} // if
+										else
+											IndexFilterInitError(debugger);
+										delete indexIt;
+										delete indexIt2;
+									}
+									else
+										IndexFilterInitError(debugger);
+								} // if useiterator
+								else if (boundssetbyuser)
 								{
 									Bounds<double> filterBounds(oLowFilterX, oLowFilterY, oLowFilterZ,
 										oHighFilterX, oHighFilterY, oHighFilterZ);
@@ -429,8 +559,11 @@ int main(int argc, char* argv[])
 										if (FilterResult.size())
 										{
 											// do something with the list of points
-											fprintf(debugger, "Points within filter area %zu of %d, %s\n", FilterResult.size(), 
-												index.GetPointRecordsCount(), "User-defined gilter bounds");
+											std::ostringstream oss;
+											oss << "Points within filter area " << FilterResult.size() 
+												<< " of " << index.GetPointRecordsCount()
+												<< ",\nUser-defined filter bounds" << std::endl;
+											fprintf(debugger, "%s", oss.str().c_str());
 										}
 										else
 											IndexFilterNoPoints(debugger);
@@ -518,20 +651,24 @@ int main(int argc, char* argv[])
 													indexBounds.max(2));
 												break;
 											} // 5
+                                            default:
+                                            {
+                                                CovgStr = "";
+                                                break;
+                                            }
 										} // switch
+
 										if (ParamSrc.SetFilterValues(filterBounds, index))
 										{
 											const std::vector<uint32_t>& FilterResult = index.Filter(ParamSrc);
 											if (FilterResult.size())
 											{
 												// do something with the list of points
-												#ifdef VISUAL_8
-												fprintf(debugger, "Points within filter area %d of %d, %s\n", FilterResult.size(), 
-													index.GetPointRecordsCount(), CovgStr);
-												#else // VISUAL_8
-												fprintf(debugger, "Points within filter area %zu of %d, %s\n", FilterResult.size(), 
-													index.GetPointRecordsCount(), CovgStr);
-												#endif // VISUAL_8
+												std::ostringstream oss;
+												oss << "Points within filter area " << FilterResult.size() 
+													<< " of " << index.GetPointRecordsCount() 
+													<< ", " << CovgStr << std::endl;
+												fprintf(debugger, "%s", oss.str().c_str());
 											}
 											else
 												IndexFilterNoPoints(debugger);
@@ -558,8 +695,8 @@ int main(int argc, char* argv[])
 					if (static_cast<std::ifstream&>(*idxstrm))
 						static_cast<std::ifstream&>(*idxstrm).close();
 				} // if
-				if (idxreader)
-					delete idxreader;
+
+				delete idxreader;
 				delete reader;
 			} // if reader
 		

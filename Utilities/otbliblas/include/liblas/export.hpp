@@ -2,11 +2,11 @@
  * $Id$
  *
  * Project:  libLAS - http://liblas.org - A BSD library for LAS format data.
- * Purpose:  Stream wrapper for FILE pointer.
- * Author:   Mateusz Loskot <mateusz@loskot.net>
+ * Purpose:  LAS DLL export macros file
+ * Author:   Howard Butler, hobu@hobu.net
  *
  ******************************************************************************
- * Copyright (c) 2010, Mateusz Loskot
+ * Copyright (c) 2010, Howard Butler
  *
  * All rights reserved.
  * 
@@ -39,75 +39,27 @@
  * OF SUCH DAMAGE.
  ****************************************************************************/
 
-#ifndef LIBLAS_DETAIL_FILE_PTR_STREAM_HPP_INCLUDED
-#define LIBLAS_DETAIL_FILE_PTR_STREAM_HPP_INCLUDED
+#ifndef LASEXPORT_HPP_INCLUDED
+#define LASEXPORT_HPP_INCLUDED
 
-#include <cstdio>
-#include <istream>
-#include <ostream>
-#include <streambuf>
+#ifndef LAS_DLL
+#if defined(_MSC_VER) && !defined(LAS_DISABLE_DLL)
+#if defined(LAS_DLL_EXPORT)
+#   define LAS_DLL   __declspec(dllexport)
+#elif defined(LAS_DLL_IMPORT)
+#   define LAS_DLL   __declspec(dllimport)
+#endif
+#else
+#  if defined(USE_GCC_VISIBILITY_FLAG)
+#    define LAS_DLL     __attribute__ ((visibility("default")))
+#  else
+#    define LAS_DLL
+#  endif
+#endif
+#endif
 
-namespace liblas { namespace detail {
+#ifdef _MSC_VER
+#pragma warning(disable:4251 4275)
+#endif // _MSC_VER
 
-class file_ptr_streambuf : public std::streambuf
-{
-public:
-
-    file_ptr_streambuf(FILE* fp) : std::streambuf() , fp(fp) {}
-
-protected:
-
-    virtual int overflow(int c)
-    {
-        return EOF != c ? std::fputc(c, fp) : EOF;
-    }
-
-    virtual int underflow()
-    {
-        int const c = std::getc(fp);
-        if (c != EOF)
-        {
-            std::ungetc(c, fp);
-        }
-        return c;
-    }
-
-    virtual int uflow()
-    {
-        return std::getc(fp);
-    }
-
-    virtual int pbackfail(int c)
-    {
-        return EOF != c ? std::ungetc(c, fp) : EOF;
-    }
-
-    virtual int sync()
-    {
-        return std::fflush(fp);
-    }
-
-private:
-    FILE* fp;
-};
-
-#pragma warning(push)
-#pragma warning(disable: 4355)
-
-class file_ptr_istream : private file_ptr_streambuf, public std::istream
-{
-public:
-    explicit file_ptr_istream(FILE* fp) : file_ptr_streambuf(fp), std::istream(this) {}
-};
-
-class file_ptr_ostream : private file_ptr_streambuf, public std::ostream
-{
-public:
-    explicit file_ptr_ostream(FILE* fp) : file_ptr_streambuf(fp), std::ostream(this) {}
-};
-
-#pragma warning(pop)
-
-}} //namespace liblas::detail
-
-#endif // LIBLAS_DETAIL_FILE_PTR_STREAM_HPP_INCLUDED
+#endif // LIBLAS_HPP_INCLUDED

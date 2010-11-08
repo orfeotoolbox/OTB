@@ -44,6 +44,7 @@
 #ifndef LIBLAS_LASERROR_HPP_INCLUDED
 #define LIBLAS_LASERROR_HPP_INCLUDED
 
+#include <liblas/export.hpp>
 //std
 #include <iosfwd>
 #include <string>
@@ -54,7 +55,7 @@ namespace liblas {
 /// This class describes details of error condition occured in
 /// libLAS core. All errors are stacked by C API layer, so it's
 /// possible to track problem down to its source.
-class Error
+class LAS_DLL Error
 {
 public:
 
@@ -73,9 +74,9 @@ public:
     // TODO - mloskot: What about replacing string return by copy with const char* ?
     //        char const* GetMethod() const { return m_method.c_str(); }, etc.
 
-    int GetCode() const { return m_code; };
-    std::string GetMessage() const { return m_message; };
-    std::string GetMethod() const { return m_method; };    
+    int GetCode() const { return m_code; }
+    std::string GetMessage() const { return m_message; }
+    std::string GetMethod() const { return m_method; }   
 
 private:
 

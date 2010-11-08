@@ -223,19 +223,6 @@ bool operator!=(Point<T> const& lhs, Point<T> const& rhs)
 //     return (!lhs.equal(rhs));
 // }
 
-template <typename T>
-inline T generate_random_byte()
-{
-    // Requires pseudo-random numbers generator to be initialized
-    // in create_random_based() function - a poor man solution.
-    T const rmin = (std::numeric_limits<T>::min)();
-    T const rmax = (std::numeric_limits<T>::max)();
-    unsigned int const rnd = std::rand() % rmax + rmin;
-
-    assert(rnd <= 255);
-    return static_cast<T>(rnd);
-}
-
 template <typename T> 
 bool compare_distance(const T& actual, const T& expected) 
 { 

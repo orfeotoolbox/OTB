@@ -55,6 +55,7 @@ typedef boost::uint32_t ElevRange;
 typedef boost::uint8_t	ConsecPtAccumulator;
 typedef std::map<boost::uint32_t, ConsecPtAccumulator> IndexCellData;
 typedef std::map<boost::uint32_t, IndexCellData> IndexSubCellData;
+typedef boost::uint64_t	TempFileOffsetType;
 
 class IndexCell
 {
@@ -62,7 +63,7 @@ public:
 	IndexCell();
 	
 private:
-	boost::uint32_t m_FileOffset;
+	TempFileOffsetType m_FileOffset;
 	boost::uint32_t m_NumPoints;
 	ElevExtrema m_MinZ, m_MaxZ;
 	IndexCellData m_PtRecords;
@@ -70,15 +71,15 @@ private:
 	IndexSubCellData m_SubCellRecords;
 
 public:
-	void SetFileOffset(boost::uint32_t fos);
+	void SetFileOffset(TempFileOffsetType fos);
 	void SetNumPoints(boost::uint32_t nmp);
-	boost::uint32_t GetFileOffset(void) const;
+	TempFileOffsetType GetFileOffset(void) const;
 	boost::uint32_t GetNumRecords(void) const;
 	boost::uint32_t GetNumPoints(void) const;
 	boost::uint32_t GetNumSubCellRecords(void) const;
 	boost::uint32_t GetNumZCellRecords(void) const;
-	ElevExtrema GetMinZ(void) const {return m_MinZ;};
-	ElevExtrema GetMaxZ(void) const {return m_MaxZ;};
+	ElevExtrema GetMinZ(void) const {return m_MinZ;}
+	ElevExtrema GetMaxZ(void) const {return m_MaxZ;}
 	bool RoomToAdd(boost::uint32_t a);
 	void AddPointRecord(boost::uint32_t a);
 	void AddPointRecord(boost::uint32_t a, boost::uint8_t b);
@@ -98,8 +99,6 @@ public:
 	const IndexSubCellData::iterator GetEndSubCell(void);
 	const IndexSubCellData::iterator GetFirstZCellRecord(void);
 	const IndexSubCellData::iterator GetEndZCell(void);
-
-	
 };
 
 }} // namespace liblas::detail

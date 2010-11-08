@@ -1,4 +1,4 @@
-# Install script for directory: /tmp/liblas-main/test/unit
+# Install script for directory: /tmp/liblas/test/unit
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)

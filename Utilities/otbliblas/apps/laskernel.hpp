@@ -65,7 +65,7 @@
 using namespace std;
 namespace po = boost::program_options;
 
-#define SEPARATORS ",|"
+#define SEPARATORS ",| "
 typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
 
 bool IsDualRangeFilter(std::string parse_string) ;
@@ -92,9 +92,9 @@ std::vector<liblas::TransformPtr> GetTransforms(po::variables_map vm, bool verbo
 #define compare_no_case(a,b,n)  strncasecmp( (a), (b), (n) )
 #endif
 
-std::istream* OpenInput(std::string filename, bool bEnd);
-std::string TryReadFileData(std::string filename);
-std::vector<char> TryReadRawFileData(std::string filename);
+// std::istream* OpenInput(std::string const& filename, bool bEnd);
+std::string TryReadFileData(std::string const& filename);
+std::vector<char> TryReadRawFileData(std::string const& filename);
 bool term_progress(std::ostream& os, double complete);
 void SetStreamPrecision(std::ostream& os, double scale);
 

@@ -50,12 +50,12 @@
 // LIBLAS_VERSION / 100 % 1000 is the minor version
 // LIBLAS_VERSION / 100000 is the major version
 
-#define LIBLAS_VERSION 103000
+#define LIBLAS_VERSION 106000
 
 // LIBLAS_LIB_VERSION must be defined to be the same as LIBLAS_VERSION
 // but as a *string* in the form "x_y[_z]" where x is the major version
 // number, y is the minor version number, and z is the patch level if not 0.
 
-#define LIBLAS_LIB_VERSION "1_3"
+#define LIBLAS_LIB_VERSION "1_6"
 
 #endif // LIBLAS_VERSION_HPP_INCLUDED

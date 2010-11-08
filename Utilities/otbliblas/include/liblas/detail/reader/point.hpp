@@ -81,9 +81,6 @@ private:
     HeaderPtr m_header;
     liblas::Point m_point;
     std::vector<boost::uint8_t> m_raw_data;
-    
-    void setup();
-
 };
 
 
