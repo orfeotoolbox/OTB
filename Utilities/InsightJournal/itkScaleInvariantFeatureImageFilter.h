@@ -75,10 +75,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "itkLinearInterpolateImageFunction.h"
 #include "itkNearestNeighborInterpolateImageFunction.h"
-#include "itkImage.h"
+#include "otbImage.h"
 
-#include "itkImageFileReader.h"
-#include "itkImageFileWriter.h"
+#include "otbImageFileWriter.h"
 
 #include "itkAffineTransform.h"
 #include "itkIdentityTransform.h"

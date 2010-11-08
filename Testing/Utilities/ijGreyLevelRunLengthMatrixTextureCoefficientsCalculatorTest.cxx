@@ -18,8 +18,8 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include "itkImage.h"
-#include "itkImageFileReader.h"
+#include "otbImage.h"
+#include "otbImageFileReader.h"
 
 #include "itkScalarImageToGreyLevelRunLengthMatrixGenerator.h"
 #include "itkGreyLevelRunLengthMatrixTextureCoefficientsCalculator.h"
@@ -35,9 +35,9 @@ int ijGreyLevelRunLengthMatrixTextureCoefficientsCalculatorTest( int argc, char*
   const unsigned int ImageDimension = 2;
   typedef float RealType;
 
-  typedef itk::Image<PixelType, ImageDimension> ImageType;
+  typedef otb::Image<PixelType, ImageDimension> ImageType;
   
-  typedef itk::ImageFileReader<ImageType> ReaderType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
   ReaderType::Pointer imageReader = ReaderType::New();
   imageReader->SetFileName( argv[1] );
   imageReader->Update();

@@ -632,7 +632,7 @@ int main(int argc, char *argv[])
   // with a viewer to help determine an appropriate threshold to be used on
   // the output of the \code{fastmarching} filter.
   //
-  typedef itk::ImageFileWriter<InternalImageType> InternalWriterType;
+  typedef otb::ImageFileWriter<InternalImageType> InternalWriterType;
 
   InternalWriterType::Pointer mapWriter = InternalWriterType::New();
   mapWriter->SetInput(fastMarching->GetOutput());

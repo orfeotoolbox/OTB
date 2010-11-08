@@ -55,7 +55,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "itkImageSeriesReader.h"
 #include "itkNumericSeriesFileNames.h"
 #include "itkPointSetToImageFilter.h"
-#include "itkImageFileWriter.h"
+#include "otbImageFileWriter.h"
 
 int main(int argc, char *argv[])
 {
@@ -90,11 +90,11 @@ int main(int argc, char *argv[])
 
   typedef float
   PixelType;
-  typedef itk::Image<PixelType,
+  typedef otb::Image<PixelType,
       Dimension>                            FixedImageType;
   typedef itk::ScaleInvariantFeatureImageFilter<FixedImageType,
       Dimension> SiftFilterType;
-  typedef itk::Image<unsigned char,
+  typedef otb::Image<unsigned char,
       Dimension>                            OutputImageType;
 
   typedef itk::ImageSource<FixedImageType> ImageSourceType;
@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
   std::cerr << "ImageFile1 = " << inputImage1 << "\n";
   std::cerr << "SIFT Feature\n" << std::endl;
 
-  typedef itk::ImageFileReader<FixedImageType> FixedImageReaderType;
+  typedef otb::ImageFileReader<FixedImageType> FixedImageReaderType;
   FixedImageReaderType::Pointer tmpImageReader  = FixedImageReaderType::New();
   tmpImageReader  = FixedImageReaderType::New();
 
@@ -159,7 +159,7 @@ int main(int argc, char *argv[])
   pointSet1->SetSize(fixedImage->GetLargestPossibleRegion().GetSize());
   pointSet1->Update();
 
-  typedef itk::ImageFileWriter<OutputImageType> WriterType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outputImageKeys1);

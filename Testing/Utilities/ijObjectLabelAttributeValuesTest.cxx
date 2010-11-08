@@ -1,4 +1,5 @@
-#include "itkImageFileReader.h"
+#include "otbImage.h"
+#include "otbImageFileReader.h"
 #include "itkShapeLabelObject.h"
 #include "itkLabelMap.h"
 #include "itkLabelImageToStatisticsLabelMapFilter.h"
@@ -14,7 +15,7 @@ int ijObjectLabelAttributeValuesTest(int argc, char * argv[])
 {
   const int dim = 3;
   typedef unsigned char PixelType;
-  typedef itk::Image< PixelType, dim >    ImageType;
+  typedef otb::Image< PixelType, dim >    ImageType;
 
   if( argc != 3)
     {
@@ -23,7 +24,7 @@ int ijObjectLabelAttributeValuesTest(int argc, char * argv[])
     exit(1);
     }
 
-  typedef itk::ImageFileReader< ImageType > ReaderType;
+  typedef otb::ImageFileReader< ImageType > ReaderType;
   ReaderType::Pointer reader1 = ReaderType::New();
   reader1->SetFileName( argv[1] );
 
