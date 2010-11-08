@@ -20,6 +20,7 @@ ADD_SUBDIRECTORY(ObjectDetection)
 
 
 
+
 IF(OTB_USE_VISU_GUI)
         ADD_SUBDIRECTORY(Visu)
         ADD_SUBDIRECTORY(Gui)
