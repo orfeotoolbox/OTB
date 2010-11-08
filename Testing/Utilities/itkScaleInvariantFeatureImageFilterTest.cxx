@@ -39,7 +39,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "itkImageSeriesReader.h"
 #include "itkNumericSeriesFileNames.h"
 #include "itkPointSetToImageFilter.h"
-#include "itkImageFileWriter.h"
+#include "otbImage.h"
+#include "otbImageFileReader.h"
+#include "otbImageFileWriter.h"
 #include "otbMath.h"
 
 int itk2DScaleInvariantFeatureImageFilterTest( int argc, char *argv[])
@@ -66,9 +68,9 @@ int itk2DScaleInvariantFeatureImageFilterTest( int argc, char *argv[])
   int mode = 's';
 
   typedef float PixelType;
-  typedef itk::Image<PixelType, Dimension> FixedImageType;
+  typedef otb::Image<PixelType, Dimension> FixedImageType;
   typedef itk::ScaleInvariantFeatureImageFilter<FixedImageType, Dimension> SiftFilterType;
-  typedef itk::Image<unsigned char, Dimension> OutputImageType;
+  typedef otb::Image<unsigned char, Dimension> OutputImageType;
 
   typedef itk::ImageSource<FixedImageType> ImageSourceType;
 
@@ -84,7 +86,7 @@ int itk2DScaleInvariantFeatureImageFilterTest( int argc, char *argv[])
   std::cerr << "ImageFile1 = " << inputImage1 << "\n";
   std::cerr << "SIFT Feature\n" << std::endl;
 
-  typedef itk::ImageFileReader< FixedImageType  > FixedImageReaderType;
+  typedef otb::ImageFileReader< FixedImageType  > FixedImageReaderType;
   FixedImageReaderType::Pointer tmpImageReader  = FixedImageReaderType::New();
   tmpImageReader  = FixedImageReaderType::New();
 
@@ -130,7 +132,7 @@ int itk2DScaleInvariantFeatureImageFilterTest( int argc, char *argv[])
   pointSet1->SetSize(fixedImage->GetLargestPossibleRegion().GetSize());
   pointSet1->Update();
 
-  typedef itk::ImageFileWriter<OutputImageType> WriterType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outputImageKeys1);

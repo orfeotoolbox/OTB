@@ -21,8 +21,7 @@
 #endif
 
 #include "itkExceptionObject.h"
-#include "itkImage.h"
-#include "itkImageFileWriter.h"
+#include "otbImage.h"
 #include "itkPolyLineParametricPath.h"
 
 #include "otbImageFileReader.h"
@@ -40,14 +39,14 @@ int otbDrawPathAlign(int argc, char * argv[])
   typedef unsigned char OutputPixelType;
   const unsigned int Dimension = 2;
 
-  typedef itk::Image<InputPixelType,  Dimension> InputImageType;
-  typedef itk::Image<OutputPixelType, Dimension> OutputImageType;
+  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
   typedef itk::PolyLineParametricPath<Dimension> PathType;
   typedef PathType::Pointer                      PathPointerType;
 
   typedef otb::ImageFileReader<InputImageType>  ReaderType;
-  typedef itk::ImageFileWriter<OutputImageType> WriterType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
   typedef otb::ImageToPathListAlignFilter<InputImageType, PathType> PathListType;
   typedef PathListType::OutputPathListType                          OutputPathListType;

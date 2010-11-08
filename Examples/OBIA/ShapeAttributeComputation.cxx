@@ -74,7 +74,7 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::ImageFileReader<ImageType> ReaderType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);
   // Software Guide : EndCodeSnippet
