@@ -46,6 +46,7 @@
 #include <liblas/laspoint.hpp>
 #include <liblas/detail/fwd.hpp>
 #include <liblas/external/property_tree/ptree.hpp>
+#include <liblas/export.hpp>
 // boost
 #include <boost/cstdint.hpp>
 #include <boost/foreach.hpp>
@@ -60,7 +61,7 @@ typedef boost::array<boost::uint32_t, 32> classes_type;
 namespace liblas {
 
 /// A summarization utililty for LAS points
-class Summary
+class LAS_DLL Summary
 {
 public:
     
@@ -88,7 +89,7 @@ private:
     bool bHaveHeader; 
 };
 
-std::ostream& operator<<(std::ostream& os, liblas::Summary const& s);
+LAS_DLL std::ostream& operator<<(std::ostream& os, liblas::Summary const& s);
 
 } // namespace liblas
 

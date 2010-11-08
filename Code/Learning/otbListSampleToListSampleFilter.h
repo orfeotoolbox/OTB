@@ -18,9 +18,7 @@
 #ifndef __otbListSampleToListSampleFilter_h
 #define __otbListSampleToListSampleFilter_h
 
-#include "itkProcessObject.h"
-#include "itkDataObject.h"
-#include "itkDataObjectDecorator.h"
+#include "otbListSampleSource.h"
 
 namespace otb {
 namespace Statistics {
@@ -36,17 +34,17 @@ namespace Statistics {
  */
 template < class TInputSampleList, class TOutputSampleList = TInputSampleList >
 class ITK_EXPORT ListSampleToListSampleFilter :
-  public itk::ProcessObject
+  public ListSampleSource<TOutputSampleList>
 {
 public:
   /** Standard class typedefs */
   typedef ListSampleToListSampleFilter               Self;
-  typedef itk::ProcessObject                         Superclass;
+  typedef ListSampleSource<TOutputSampleList>        Superclass;
   typedef itk::SmartPointer< Self >                  Pointer;
   typedef itk::SmartPointer<const Self>              ConstPointer;
   
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ListSampleToListSampleFilter,itk::ProcessObject);
+  itkTypeMacro(ListSampleToListSampleFilter,ListSampleSource);
   
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -59,18 +57,17 @@ public:
   typedef typename InputMeasurementVectorType::ValueType      InputValueType;
 
   /** OutputSampleList typedefs */
-  typedef TOutputSampleList                                    OutputSampleListType;
-  typedef typename OutputSampleListType::Pointer               OutputSampleListPointer;
-  typedef typename OutputSampleListType::ConstPointer          OutputSampleListConstPointer;
-  typedef typename OutputSampleListType::MeasurementVectorType OutputMeasurementVectorType;
-  typedef typename OutputMeasurementVectorType::ValueType      OutputValueType;
+  typedef typename Superclass::OutputSampleListType            OutputSampleListType;
+  typedef typename Superclass::OutputSampleListPointer         OutputSampleListPointer;
+  typedef typename Superclass::OutputSampleListConstPointer    OutputSampleListConstPointer;
+  typedef typename Superclass::OutputMeasurementVectorType     OutputMeasurementVectorType;
+  typedef typename Superclass::OutputValueType                 OutputValueType;
   
   /** ListSample is not a DataObject, we need to decorate it to push it down
    * a ProcessObject's pipeline */
   typedef itk::DataObject::Pointer                             DataObjectPointer;
-
   typedef itk::DataObjectDecorator< InputSampleListType >      InputSampleListObjectType;
-  typedef itk::DataObjectDecorator< OutputSampleListType >     OutputSampleListObjectType;
+  typedef typename Superclass::OutputSampleListObjectType      OutputSampleListObjectType;
 
   /** Method to set/get the input list sample */
   void SetInput( const InputSampleListType * inputPtr );
@@ -82,16 +79,7 @@ public:
   /** Returns the input sample list as a data object */
   const InputSampleListObjectType * GetInput() const;
 
-  /** Returns the output sample list */
-  OutputSampleListType * GetOutputSampleList();
-
-  /** Returns the output sample list as a data object */
-  OutputSampleListObjectType * GetOutput();
-
-
 protected:
-  /** Standard itk::ProcessObject subclass method. */
-  virtual DataObjectPointer MakeOutput(unsigned int idx);
 
   ListSampleToListSampleFilter();
   virtual ~ListSampleToListSampleFilter() {}

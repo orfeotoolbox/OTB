@@ -43,4 +43,6 @@ void RegisterTests()
   REGISTER_TEST(otbGaussianAdditiveNoiseSampleListFilter);
   REGISTER_TEST(otbConcatenateSampleListFilterNew);
   REGISTER_TEST(otbConcatenateSampleListFilter);
+  REGISTER_TEST(otbListSampleToBalancedListSampleFilterNew);
+  REGISTER_TEST(otbListSampleToBalancedListSampleFilter);
 }

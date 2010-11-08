@@ -1,7 +1,7 @@
 
 #include "laskernel.hpp"
 
-std::istream* OpenInput(std::string filename, bool bEnd) 
+std::istream* OpenInput(std::string const& filename, bool bEnd) 
 {
     std::ios::openmode mode = std::ios::in | std::ios::binary;
     if (bEnd == true) {
@@ -30,10 +30,10 @@ std::string TryReadFileData(std::string const& filename)
     std::vector<char> data = TryReadRawFileData(filename);
 
     // FIXME: What is this construction supposed to grab? --mloskot
-    return std::string(data.front(), (std::size_t) data.size());
+    return std::string(&data[0], data.size());
 }
 
-std::vector<char> TryReadRawFileData(std::string filename)
+std::vector<char> TryReadRawFileData(std::string const& filename)
 {
     std::istream* infile = OpenInput(filename.c_str(), true);
     std::ifstream::pos_type size;
@@ -63,7 +63,7 @@ bool term_progress(std::ostream& os, double complete)
     static int lastTick = -1;
     int tick = static_cast<int>(complete * 40.0);
 
-    tick = std::min(40, std::max(0, tick));
+    tick = (std::min)(40, std::max(0, tick));
 
     // Have we started a new progress run?  
     if (tick < lastTick && lastTick >= 39)
@@ -153,7 +153,7 @@ void RepairHeader(liblas::Summary const& summary, liblas::Header& header)
                       tree.get<double>("summary.points.maximum.y"),
                       tree.get<double>("summary.points.maximum.z"));
         
-    }     catch (liblas::property_tree::ptree_bad_path const& e) 
+    }     catch (liblas::property_tree::ptree_bad_path const& ) 
     {
         std::cerr << "Unable to write header bounds info.  Does the outputted file have any points?";
         return;
@@ -175,7 +175,7 @@ void RepairHeader(liblas::Summary const& summary, liblas::Header& header)
             header.SetPointRecordsByReturnCount(i-1, count);        
         } 
         
-    }     catch (liblas::property_tree::ptree_bad_path const& e) 
+    }     catch (liblas::property_tree::ptree_bad_path const& ) 
     {
         std::cerr << "Unable to write header point return count info.  Does the outputted file have any points?";
         return;
@@ -255,7 +255,13 @@ po::options_description GetFilteringOptions()
 po::options_description filtering_options("Filtering options");
 
 filtering_options.add_options()
-    ("extent,e", po::value< std::vector<double> >()->multitoken(), "Extent window that points must fall within to keep.\nFor example, \n  -e minx miny maxx maxy\n  or \n  -e minx miny minz maxx maxy maxz")
+    ("extent,e", po::value< string >(), "Extent window that points must fall within to keep.\nUse a comma-separated or quoted, space-separated list, for example, \n -e minx, miny, maxx, maxy\n or \n -e minx, miny, minz, maxx, maxy, maxz\n -e \"minx miny minz maxx maxy maxz\"")     
+    ("minx", po::value< double >(), "Extent must be greater than or equal to minx to be kept. \n --minx 1234.0")
+    ("miny", po::value< double >(), "Extent must be greater than or equal to miny to be kept. \n --miny 5678.0")
+    ("minz", po::value< double >(), "Extent must be greater than or equal to minz to be kept. If maxx and maxy are set but not minz *and maxz, all z values are kept. \n --minz 0.0")
+    ("maxx", po::value< double >(), "Extent must be less than or equal to maxx to be kept. \n --maxx 1234.0")
+    ("maxy", po::value< double >(), "Extent must be less than or equal to maxy to be kept. \n --maxy 5678.0")
+    ("maxz", po::value< double >(), "Extent must be less than or equal to maxz to be kept. If maxx and maxy are set but not maxz *and minz, all z values are kept. \n --maxz 10.0")
     ("thin,t", po::value<boost::uint32_t>()->default_value(0), "Simple decimation-style thinning.\nThin the file by removing every t'th point from the file.")
     ("last_return_only", po::value<bool>()->zero_tokens(), "Keep last returns (cannot be used with --first_return_only)")
     ("first_return_only", po::value<bool>()->zero_tokens(), "Keep first returns (cannot be used with --last_return_only")
@@ -294,8 +300,8 @@ po::options_description GetHeaderOptions()
     transform_options.add_options()
         ("a_srs", po::value< string >(), "Coordinate system to assign to input LAS file")
         ("a_vertcs", po::value< std::vector<string> >()->multitoken(), "Override vertical coordinate system information.  Use --a_vertcs \"verticalCSType [citation [verticalDatum [verticalUnits]]]\"\nFor example: --a_vertcs 5703 \"North American Vertical Datum of 1988 (NAVD88)\" 5103 9001")   
-        ("offset", po::value< std::vector<double> >()->multitoken(), "A list of offsets to set on the output file: \n--offset 0 0 0")
-        ("scale", po::value< std::vector<double> >()->multitoken(), "A list of scales to set on the output file: \n--scale 0.1 0.1 0.00001")
+        ("offset", po::value< string >(), "A comma-separated or quoted, space-separated list of offsets to set on the output file: \n--offset 0,0,0\n--offset \"1234 5678 91011\"")
+        ("scale", po::value< std::vector<double> >()->multitoken(), "A list of scales to set on the output file. Scales *cannot* be negative, and should always be a negative power of 10 \n--scale 0.1 0.1 0.00001")
         ("format,f", po::value< string >(), "Set the LAS format of the new file (only 1.0-1.2 supported at this time): \n--format 1.2\n-f 1.1")
         ("pad-header", po::value< string >(), "Add extra bytes to the existing header")
         ("min-offset", po::value<bool>()->zero_tokens(), "Set the offset of the header to the minimums of all values in the file.  Note that this requires multiple read passes through the file to achieve.")
@@ -305,6 +311,7 @@ po::options_description GetHeaderOptions()
         ("add-vlr", po::value<std::vector<std::string> >()->multitoken(), "Add VLRs with the given name and id combination. --add-vlr hobu 1234 \"Description of the VLR\" \"filename.ext\"")
         ("system-identifier", po::value<std::string>(), "Set the SystemID for the file. --system_identifier \"MODIFICATION\"")
         ("generating-software", po::value<std::string>(), "Set the SoftwareID for the file. --generating_software \"liblas.org\"")
+        ("point-translate", po::value<std::string>(), "An expression to translate the X, Y, Z values of the point. For example, converting Z units that are in meters to feet: --point-translate \"x*1.0 y*1.0 z*3.2808399\"")
 
     ;
     
@@ -313,6 +320,8 @@ po::options_description GetHeaderOptions()
 std::vector<liblas::FilterPtr> GetFilters(po::variables_map vm, bool verbose)
 {
     std::vector<liblas::FilterPtr> filters;
+    liblas::Bounds<double> extent;
+    bool bSetExtent = false;
     
     if (vm.count("keep-classes")) 
     {
@@ -408,14 +417,73 @@ std::vector<liblas::FilterPtr> GetFilters(po::variables_map vm, bool verbose)
                                                             liblas::FilterI::eExclusion);
         filters.push_back(return_filter); 
     }
-            
+
+    if (vm.count("minx")) 
+    {
+        double minx = vm["minx"].as< double >();
+        extent.min(0, minx);
+        bSetExtent = true;
+        if (verbose)
+            std::cout << "Setting minx to: " << minx << std::endl;
+    }
+
+    if (vm.count("maxx")) 
+    {
+        double maxx = vm["maxx"].as< double >();
+        extent.max(0, maxx);
+        bSetExtent = true;
+        if (verbose)
+            std::cout << "Setting maxx to: " << maxx << std::endl;
+    }
+
+    if (vm.count("miny")) 
+    {
+        double miny = vm["miny"].as< double >();
+        extent.min(1, miny);
+        bSetExtent = true;
+        if (verbose)
+            std::cout << "Setting miny to: " << miny << std::endl;
+    }
+
+    if (vm.count("maxx")) 
+    {
+        double maxy = vm["maxy"].as< double >();
+        extent.max(1, maxy);
+        bSetExtent = true;
+        if (verbose)
+            std::cout << "Setting maxy to: " << maxy << std::endl;
+    }
+
+    if (vm.count("minz")) 
+    {
+        double minz = vm["minz"].as< double >();
+        extent.min(2, minz);
+        bSetExtent = true;
+        if (verbose)
+            std::cout << "Setting minz to: " << minz << std::endl;
+    }
+
+    if (vm.count("maxz")) 
+    {
+        double maxz = vm["maxz"].as< double >();
+        extent.max(2, maxz);
+        bSetExtent = true;
+        if (verbose)
+            std::cout << "Setting maxz to: " << maxz << std::endl;
+    }
+    
     if (vm.count("extent")) 
     {
+        std::string bounds_string = vm["extent"].as< string >();
 
-        std::vector<double> vbounds = vm["extent"].as< std::vector<double> >();
+        boost::char_separator<char> sep(SEPARATORS);
 
+        std::vector<double> vbounds;
+        tokenizer tokens(bounds_string, sep);
         liblas::Bounds<double> bounds;
-
+        for (tokenizer::iterator t = tokens.begin(); t != tokens.end(); ++t) {
+            vbounds.push_back(atof((*t).c_str()));
+        }
         if (vbounds.size() == 4) 
         {
             bounds = liblas::Bounds<double>(vbounds[0], 
@@ -435,6 +503,15 @@ std::vector<liblas::FilterPtr> GetFilters(po::variables_map vm, bool verbose)
             oss << "Bounds must be specified as a 4-tuple or "
                    "6-tuple, not a "<< vbounds.size()<<"-tuple" << "\n";
             throw std::runtime_error(oss.str());
+        }
+        
+        if ( bSetExtent ) 
+        {
+            if (verbose) 
+            {
+                std::cout << " Growing --extent bounds with those that were set via --[x|y|z][min|max]" << std::endl;
+            }
+            bounds.grow(extent);
         }
     
         if (verbose)
@@ -458,6 +535,11 @@ std::vector<liblas::FilterPtr> GetFilters(po::variables_map vm, bool verbose)
         }
 
         liblas::FilterPtr bounds_filter = MakeBoundsFilter(bounds, liblas::FilterI::eInclusion);
+        // Set to false because we are using this opportunity to set the filter
+        // If it were still true after this point, *another* BoundsFilter would be 
+        // added to the filters list at the end of this function
+        if (bSetExtent)
+            bSetExtent = false; 
         filters.push_back(bounds_filter);
         
     }
@@ -585,7 +667,16 @@ std::vector<liblas::FilterPtr> GetFilters(po::variables_map vm, bool verbose)
             std::vector<liblas::Color::value_type> rgb;
             for(tokenizer::iterator c = rgbs.begin(); c != rgbs.end(); ++c)
             {
-                rgb.push_back(atoi((*c).c_str()));
+                int color_val = atoi((*c).c_str());
+                if (color_val < std::numeric_limits<boost::uint16_t>::min() || 
+                    color_val > std::numeric_limits<boost::uint16_t>::max()) 
+                {
+                    ostringstream oss;
+                    oss << "Color value must be between 0-65536, not " << color_val;
+                    throw std::runtime_error( oss.str() );
+                    
+                }
+                rgb.push_back(static_cast<boost::uint16_t>(color_val));
             }
             liblas::Color color(rgb[0], rgb[1], rgb[2]);
             colors.push_back(color);
@@ -611,7 +702,16 @@ std::vector<liblas::FilterPtr> GetFilters(po::variables_map vm, bool verbose)
             std::vector<liblas::Color::value_type> rgb;
             for(tokenizer::iterator c = rgbs.begin(); c != rgbs.end(); ++c)
             {
-                rgb.push_back(atoi((*c).c_str()));
+                int color_val = atoi((*c).c_str());
+                if (color_val < std::numeric_limits<boost::uint16_t>::min() || 
+                    color_val > std::numeric_limits<boost::uint16_t>::max()) 
+                {
+                    ostringstream oss;
+                    oss << "Color value must be between 0-65536, not " << color_val;
+                    throw std::runtime_error( oss.str() );
+                    
+                }
+                rgb.push_back(static_cast<boost::uint16_t>(color_val));
             }
             liblas::Color color(rgb[0], rgb[1], rgb[2]);
             colors.push_back(color);
@@ -664,12 +764,347 @@ std::vector<liblas::FilterPtr> GetFilters(po::variables_map vm, bool verbose)
         filters.push_back(valid_filter);            
     }
 
+
+    // If we have bSetExtent and we haven't turned it off by merging with a --extent 
+    // BoundsFilter, make a filter
+    if (bSetExtent)
+    {
+        liblas::FilterPtr bounds_filter = MakeBoundsFilter(extent, liblas::FilterI::eInclusion);
+        filters.push_back(bounds_filter);
+    }
+    
     return filters;
 }
 
 std::vector<liblas::TransformPtr> GetTransforms(po::variables_map vm, bool verbose, liblas::Header& header)
 {
     std::vector<liblas::TransformPtr> transforms;
+
+    if (vm.count("offset")) 
+    {
+        std::string offset_string = vm["offset"].as< string >();
+        if (verbose)
+            std::cout << "Setting offsets to: " << offset_string << std::endl;
+        boost::char_separator<char> sep(SEPARATORS);
+        std::vector<double> offsets;
+        tokenizer tokens(offset_string, sep);
+        bool mins = false;
+        std::string m("min");
+        for (tokenizer::iterator t = tokens.begin(); t != tokens.end(); ++t) {
+            // Check if the user set --offset min,min,min
+            // FIXME: make this so the user could do --offset min,min,20.00
+            if (!(*t).compare(m))
+            {   
+                mins = true;
+                continue;
+            }
+            else
+            {
+                mins = false;
+                offsets.push_back(atof((*t).c_str()));
+            }
+        }
+        if (offsets.size() != 3) 
+        {
+            throw std::runtime_error("All three values for setting the offset must be floats, and there must be three values");
+
+        }
+        header.SetOffset(offsets[0], offsets[1], offsets[2]);
+    }
+
+
+    if (vm.count("scale")) 
+    {
+        std::vector<double> scales = vm["scale"].as< std::vector<double> >();
+
+        if (scales.size() != 3) {
+            ostringstream oss;
+            oss << "Three arguments must be given to scale. "
+                << "--scale x y z";
+
+            throw std::runtime_error(oss.str());
+        }
+
+        
+        if (verbose)
+        {
+            ostringstream oss;
+            for (std::vector<double>::const_iterator i = scales.begin();
+                 i != scales.end();
+                 i++) 
+                {
+                    oss << *i << " ";
+                }
+                std::cout << "Setting scales to: " << oss.str() << std::endl;
+        }
+
+
+        header.SetScale(scales[0], scales[1], scales[2]);
+    }
+    
+    if (vm.count("format")) 
+    {
+        std::string format_string = vm["format"].as< string >();
+        if (verbose)
+            std::cout << "Setting format to: " << format_string << std::endl;
+            
+        boost::char_separator<char> sep(".");
+        std::vector<int> versions;
+        tokenizer tokens(format_string, sep);
+        for (tokenizer::iterator t = tokens.begin(); t != tokens.end(); ++t) {
+            const char* v =(*t).c_str();
+            int i = atoi(v);
+            versions.push_back(i);
+        }
+        if (versions.size() < 2)
+        {
+            ostringstream oss;
+            oss << "Format version must dotted -- ie, '1.0' or '1.2', not " << format_string;
+            throw std::runtime_error(oss.str());
+        }
+        
+        int minor = versions[1];
+        if (minor > 2){
+            ostringstream oss;
+            oss << "Format version must dotted -- ie, '1.0' or '1.2', not " << format_string;
+            throw std::runtime_error(oss.str());
+        }
+        header.SetVersionMinor(static_cast<boost::uint8_t>(minor)); 
+    }
+    if (vm.count("pad-header")) 
+    {
+        std::string header_pad = vm["pad-header"].as< string >();
+        if (verbose)
+            std::cout << "Increasing header pad to: " << header_pad << std::endl;
+
+        boost::uint32_t offset = header.GetDataOffset();
+        if (atoi(header_pad.c_str()) == 0) {
+            ostringstream oss;
+            oss << "Header pad was 0.  It must be greater than "<<offset<< " bytes";
+            throw std::runtime_error(oss.str());
+            
+        }
+        header.SetDataOffset(atoi(header_pad.c_str()));
+    }
+
+    if (vm.count("file-creation"))
+    {
+        std::vector<std::string> creation = vm["file-creation"].as< std::vector<std::string> >();
+
+        if (verbose)
+        {
+            ostringstream oss;
+            for (std::vector<std::string>::const_iterator i = creation.begin();
+                 i != creation.end();
+                 i++) 
+                {
+                    oss << *i << " ";
+                }
+                std::cout << "Setting file creation to " << oss.str() << std::endl;
+        }
+            
+        std::string m("now");
+        bool now = false;
+        if (creation.size() == 1 ) 
+        {
+            if (!(creation[0].compare(m))) 
+            {
+                now = true;
+            }            
+        }
+        
+        boost::int32_t day = 0;
+        boost::int32_t year = 0;
+        
+        
+        if (creation.size() == 2) 
+        {
+            day = atoi(creation[0].c_str());
+            year = atoi(creation[1].c_str());
+            
+            if (day < 0 || day > 366) {
+                ostringstream oss;
+                oss << "Day must be between 1-366, not " << day;
+                throw std::runtime_error(oss.str());
+            }
+            if (year < 0)
+            {
+                ostringstream oss;
+                oss << "Year must be greater than 0, not " << year;
+                throw std::runtime_error(oss.str());
+            }
+            
+        }
+        
+        if (now == true) 
+        {
+            liblas::Header h;
+            header.SetCreationDOY(h.GetCreationDOY());
+            header.SetCreationYear(h.GetCreationYear());
+        } else {
+            header.SetCreationDOY(static_cast<boost::uint16_t>(day));
+            header.SetCreationYear(static_cast<boost::uint16_t>(year));
+            
+        }
+    }
+
+    if (vm.count("add-schema")) 
+    {
+        liblas::VariableRecord vlr = header.GetSchema().GetVLR();
+        header.AddVLR(vlr);
+    }
+
+    if (vm.count("delete-vlr")) 
+    {
+        std::vector<std::string> vlrs = vm["delete-vlr"].as< std::vector<std::string> >();
+        
+        
+        if (vlrs.size() % 2 != 0) {
+            ostringstream err;
+            err << "VLR descriptions must be in pairs of 2 -- A name and an ID";
+            throw std::runtime_error(err.str());
+        }
+        ostringstream oss;
+        
+        for (std::vector<std::string>::const_iterator i = vlrs.begin();
+             i != vlrs.end();
+             i++) 
+            {
+                oss << *i << " ";
+            }
+        if (verbose)
+        {
+
+                std::cout << "Deleting VLRs with the values: " << oss.str() << std::endl;
+        }
+        
+        for (std::vector<std::string>::size_type i = 0; i < vlrs.size(); i=i+2)
+        {
+            boost::int32_t id = atoi(vlrs[i+1].c_str());
+            if (id < 0)
+            {
+                throw std::runtime_error("VLR ID must be > 0");
+            }
+            if (id > std::numeric_limits<boost::uint16_t>::max()) {
+                ostringstream oss;
+                oss << "ID must be less than "<< std::numeric_limits<boost::uint16_t>::max() <<", not " << id;
+                throw std::runtime_error(oss.str());
+            }
+            header.DeleteVLRs(vlrs[i], static_cast<boost::uint16_t>(id));
+        }
+    }
+
+    if (vm.count("add-vlr")) 
+    {
+        std::vector<std::string> vlrs = vm["add-vlr"].as< std::vector<std::string> >();
+        
+        
+        if (vlrs.size() < 3) {
+            ostringstream err;
+            err << "VLR additions must be at least 3 arguments -- --add-vlr NAME 42 \"filename.ext\"";
+            throw std::runtime_error(err.str());
+        }
+        if (vlrs.size() > 4)
+            throw std::runtime_error("Only one VLR may be added at a time");
+
+        ostringstream oss;
+        
+        for (std::vector<std::string>::const_iterator i = vlrs.begin();
+             i != vlrs.end();
+             i++) 
+            {
+                oss << *i << " ";
+            }
+
+        
+        liblas::VariableRecord v;
+        v.SetUserId(vlrs[0]);
+
+        boost::int32_t id = atoi(vlrs[1].c_str());
+        if (id < 0)
+        {
+            throw std::runtime_error("VLR ID must be > 0");
+        }
+        if (id > std::numeric_limits<boost::uint16_t>::max()) {
+            ostringstream oss;
+            oss << "ID must be less than "<< std::numeric_limits<boost::uint16_t>::max() <<", not " << id;
+            throw std::runtime_error(oss.str());
+        }
+
+        v.SetRecordId(static_cast<boost::uint16_t>(id));
+        
+        std::vector<boost::uint8_t> data;
+        
+        std::string data_or_filename;
+        if (vlrs.size() == 4){
+
+            v.SetDescription(vlrs[2]);
+            data_or_filename = vlrs[3];
+        } else {
+            data_or_filename = vlrs[2];
+        } 
+
+        try {
+            std::vector<char> d;
+            d = TryReadRawFileData(data_or_filename);
+            for (std::vector<char>::const_iterator i = d.begin(); i != d.end(); ++i) 
+            {
+                data.push_back(*i);
+            }
+            
+        } catch (std::runtime_error const& ) {
+            std::string::const_iterator i;
+            for (i = data_or_filename.begin(); i != data_or_filename.end(); ++i)
+            {
+                data.push_back(*i);
+            }
+        }    
+
+        if (data.size() > std::numeric_limits<boost::uint16_t>::max()) {
+            std::ostringstream oss;
+            oss << "This VLR with length " << data.size() << " does" 
+                << " not fit within the maximum VLR size of " 
+                << std::numeric_limits<boost::uint16_t>::max();
+            throw std::runtime_error(oss.str());
+        }
+
+        if (verbose)
+        {
+
+                std::cout << "Adding VLRs with the values: " << oss.str() << std::endl;
+        }
+
+
+        v.SetData(data);
+        v.SetRecordLength(static_cast<boost::uint16_t>(data.size()));
+        header.AddVLR(v);
+    }
+
+    if (vm.count("generating-software")) 
+    {
+        std::string software = vm["generating-software"].as< std::string >();
+        if (verbose)
+        {
+
+                std::cout << "Setting Software ID to: " << software<< std::endl;
+        }
+        header.SetSoftwareId(software);
+    }
+
+    if (vm.count("system-identifier")) 
+    {
+        std::string id = vm["system-identifier"].as< std::string >();
+        
+
+        if (verbose)
+        {
+
+                std::cout << "Setting System ID to: " << id<< std::endl;
+        }
+        
+        header.SetSystemId(id);
+    }
+    
 
     if (vm.count("a_srs")) 
     {
@@ -773,296 +1208,20 @@ std::vector<liblas::TransformPtr> GetTransforms(po::variables_map vm, bool verbo
         liblas::Bounds<double> b = header.GetExtent();
         b.project(in_ref, out_ref);
         header.SetExtent(b);
-        liblas::TransformPtr srs_transform = liblas::TransformPtr(new liblas::ReprojectionTransform(in_ref, out_ref));
+        liblas::TransformPtr srs_transform = liblas::TransformPtr(new liblas::ReprojectionTransform(in_ref, out_ref, liblas::HeaderPtr(new liblas::Header(header))));
         transforms.push_back(srs_transform);
     }
 
-
-
-
-    if (vm.count("offset")) 
+    if (vm.count("point-translate")) 
     {
-
-        std::vector<double> offsets = vm["offset"].as< std::vector<double> >();
-        if (offsets.size() != 3) {
-            ostringstream oss;
-            oss << "Three arguments must be given to offset. "
-                << "--offset x y z";
-
-            throw std::runtime_error(oss.str());
-        }
-
-        
-        if (verbose)
-        {
-            ostringstream oss;
-            for (std::vector<double>::const_iterator i = offsets.begin();
-                 i != offsets.end();
-                 i++) 
-                {
-                    oss << *i << " ";
-                }
-                std::cout << "Setting offsets to: " << oss.str() << std::endl;
-        }
-
-        header.SetOffset(offsets[0], offsets[1], offsets[2]);
-    }
-
-    if (vm.count("scale")) 
-    {
-        std::vector<double> scales = vm["scale"].as< std::vector<double> >();
-
-        if (scales.size() != 3) {
-            ostringstream oss;
-            oss << "Three arguments must be given to scale. "
-                << "--scale x y z";
-
-            throw std::runtime_error(oss.str());
-        }
-
-        
-        if (verbose)
-        {
-            ostringstream oss;
-            for (std::vector<double>::const_iterator i = scales.begin();
-                 i != scales.end();
-                 i++) 
-                {
-                    oss << *i << " ";
-                }
-                std::cout << "Setting scales to: " << oss.str() << std::endl;
-        }
-
-
-        header.SetScale(scales[0], scales[1], scales[2]);
-    }
-    
-    if (vm.count("format")) 
-    {
-        std::string format_string = vm["format"].as< string >();
-        if (verbose)
-            std::cout << "Setting format to: " << format_string << std::endl;
-            
-        boost::char_separator<char> sep(".");
-        std::vector<int> versions;
-        tokenizer tokens(format_string, sep);
-        for (tokenizer::iterator t = tokens.begin(); t != tokens.end(); ++t) {
-            const char* v =(*t).c_str();
-            int i = atoi(v);
-            versions.push_back(i);
-        }
-        if (versions.size() < 2)
-        {
-            ostringstream oss;
-            oss << "Format version must dotted -- ie, '1.0' or '1.2', not " << format_string;
-            throw std::runtime_error(oss.str());
-        }
-        
-        int minor = versions[1];
-        if (minor > 2){
-            ostringstream oss;
-            oss << "Format version must dotted -- ie, '1.0' or '1.2', not " << format_string;
-            throw std::runtime_error(oss.str());
-        }
-        header.SetVersionMinor(static_cast<boost::uint8_t>(minor)); 
-    }
-    if (vm.count("pad-header")) 
-    {
-        std::string header_pad = vm["pad-header"].as< string >();
-        if (verbose)
-            std::cout << "Increasing header pad to: " << header_pad << std::endl;
-
-        boost::uint32_t offset = header.GetDataOffset();
-        if (atoi(header_pad.c_str()) == 0) {
-            ostringstream oss;
-            oss << "Header pad was 0.  It must be greater than "<<offset<< " bytes";
-            throw std::runtime_error(oss.str());
-            
-        }
-        header.SetDataOffset(atoi(header_pad.c_str()));
-    }
-
-    if (vm.count("file-creation"))
-    {
-        std::vector<std::string> creation = vm["file-creation"].as< std::vector<std::string> >();
-
-        if (verbose)
-        {
-            ostringstream oss;
-            for (std::vector<std::string>::const_iterator i = creation.begin();
-                 i != creation.end();
-                 i++) 
-                {
-                    oss << *i << " ";
-                }
-                std::cout << "Setting file creation to " << oss.str() << std::endl;
-        }
-            
-        std::string m("now");
-        bool now = false;
-        if (creation.size() == 1 ) 
-        {
-            if (!(creation[0].compare(m))) 
-            {
-                now = true;
-            }            
-        }
-        
-        boost::uint32_t day = 0;
-        boost::uint32_t year = 0;
-        
-        
-        if (creation.size() == 2) 
-        {
-            day = atoi(creation[0].c_str());
-            year = atoi(creation[1].c_str());
-        }
-        
-        if (now == true) 
-        {
-            liblas::Header h;
-            header.SetCreationDOY(h.GetCreationDOY());
-            header.SetCreationYear(h.GetCreationYear());
-        } else {
-            header.SetCreationDOY(day);
-            header.SetCreationYear(year);
-            
-        }
-    }
-
-    if (vm.count("add-schema")) 
-    {
-        liblas::VariableRecord vlr = header.GetSchema().GetVLR();
-        header.AddVLR(vlr);
-    }
-
-    if (vm.count("delete-vlr")) 
-    {
-        std::vector<std::string> vlrs = vm["delete-vlr"].as< std::vector<std::string> >();
-        
-        
-        if (vlrs.size() % 2 != 0) {
-            ostringstream err;
-            err << "VLR descriptions must be in pairs of 2";
-            throw std::runtime_error(err.str());
-        }
-        ostringstream oss;
-        
-        for (std::vector<std::string>::const_iterator i = vlrs.begin();
-             i != vlrs.end();
-             i++) 
-            {
-                oss << *i << " ";
-            }
+        std::string translate = vm["point-translate"].as< std::string >();
         if (verbose)
         {
 
-                std::cout << "Deleting VLRs with the values: " << oss.str() << std::endl;
+                std::cout << "Translating points with expression: " << translate << std::endl;
         }
-        
-        for (std::vector<std::string>::size_type i = 0; i < vlrs.size(); i=i+2)
-        {
-            header.DeleteVLRs(vlrs[i], atoi(vlrs[i+1].c_str()));
-        }
-    }
-
-    if (vm.count("add-vlr")) 
-    {
-        std::vector<std::string> vlrs = vm["add-vlr"].as< std::vector<std::string> >();
-        
-        
-        if (vlrs.size() < 3) {
-            ostringstream err;
-            err << "VLR additions must be at least 3 arguments -- --add-vlr NAME 42 \"filename.ext\"";
-            throw std::runtime_error(err.str());
-        }
-        if (vlrs.size() > 4)
-            throw std::runtime_error("Only one VLR may be added at a time");
-
-        ostringstream oss;
-        
-        for (std::vector<std::string>::const_iterator i = vlrs.begin();
-             i != vlrs.end();
-             i++) 
-            {
-                oss << *i << " ";
-            }
-
-        
-        liblas::VariableRecord v;
-        v.SetUserId(vlrs[0]);
-        v.SetRecordId(atoi(vlrs[1].c_str()));
-        
-        std::vector<boost::uint8_t> data;
-        
-        std::string data_or_filename;
-        if (vlrs.size() == 4){
-
-            v.SetDescription(vlrs[2]);
-            data_or_filename = vlrs[3];
-        } else {
-            data_or_filename = vlrs[2];
-        } 
-
-        try {
-            std::vector<char> d;
-            d = TryReadRawFileData(data_or_filename);
-            for (std::vector<char>::const_iterator i = d.begin(); i != d.end(); ++i) 
-            {
-                data.push_back(*i);
-            }
-            
-        } catch (std::runtime_error const& ) {
-            std::string::const_iterator i;
-            for (i = data_or_filename.begin(); i != data_or_filename.end(); ++i)
-            {
-                data.push_back(*i);
-            }
-        }    
-
-        if (data.size() > std::numeric_limits<boost::uint16_t>::max()) {
-            std::ostringstream oss;
-            oss << "This VLR with length " << data.size() << " does" 
-                << " not fit within the maximum VLR size of " 
-                << std::numeric_limits<boost::uint16_t>::max();
-            throw std::runtime_error(oss.str());
-        }
-
-        if (verbose)
-        {
-
-                std::cout << "Adding VLRs with the values: " << oss.str() << std::endl;
-        }
-
-
-        v.SetData(data);
-        v.SetRecordLength(data.size());
-        header.AddVLR(v);
-    }
-
-    if (vm.count("generating-software")) 
-    {
-        std::string software = vm["generating-software"].as< std::string >();
-        if (verbose)
-        {
-
-                std::cout << "Setting Software ID to: " << software<< std::endl;
-        }
-        header.SetSoftwareId(software);
-    }
-
-    if (vm.count("system-identifier")) 
-    {
-        std::string id = vm["system-identifier"].as< std::string >();
-        
-
-        if (verbose)
-        {
-
-                std::cout << "Setting System ID to: " << id<< std::endl;
-        }
-        
-        header.SetSystemId(id);
+        liblas::TransformPtr trans_trans = liblas::TransformPtr(new liblas::TranslationTransform(translate));
+        transforms.push_back(trans_trans);
     }
     return transforms;
 }

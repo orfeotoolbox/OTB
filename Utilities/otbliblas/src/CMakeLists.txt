@@ -194,28 +194,41 @@ set(LIBLAS_C_SOURCES
   ${LIBLAS_HEADERS_DIR}/capi/liblas.h
   las_c_api.cpp)
 
-# Static libLAS C++ library
-add_library(${LIBLAS_LIB_NAME} STATIC ${LIBLAS_SOURCES})
+# NOTE:
+# This hack is required to correctly link static into shared library.
+# Such practice is not recommended as not portable, instead each library,
+# static and shared should be built from sources separately.
+if(UNIX)
+  add_definitions("-fPIC")
+endif()
 
-# Shared libLAS C library
+if(WIN32)
+    add_definitions("-DLAS_DLL_EXPORT=1")
+endif()
+
+add_library(${LIBLAS_LIB_NAME} SHARED ${LIBLAS_SOURCES})
 add_library(${LIBLAS_C_LIB_NAME} SHARED ${LIBLAS_C_SOURCES})
 
-if (APPLE)
-    set_target_properties(
-    ${LIBLAS_C_LIB_NAME}
-    PROPERTIES
-    INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib"
-    
-    )
-endif(APPLE)
+target_link_libraries(${LIBLAS_LIB_NAME}
+  ${LIBLAS_LIB_NAME}
+  ${TIFF_LIBRARY}
+  ${GEOTIFF_LIBRARY}
+  ${GDAL_LIBRARY}
+  ${Boost_LIBRARIES})
 
-########
 target_link_libraries(${LIBLAS_C_LIB_NAME}
   ${LIBLAS_LIB_NAME}
   ${TIFF_LIBRARY}
   ${GEOTIFF_LIBRARY}
   ${GDAL_LIBRARY}
-  ${SPATIALINDEX_LIBRARY})
+  ${Boost_LIBRARIES})
+
+if (APPLE)
+  set_target_properties(
+    ${LIBLAS_C_LIB_NAME}
+    PROPERTIES
+    INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
+endif()
 
 ###############################################################################
 # Targets installation

@@ -182,7 +182,7 @@ int main(int argc, char * argv[])
   rescaler->SetOutputMinimum(0);
   rescaler->SetOutputMaximum(255);
 
-  typedef itk::ImageFileWriter<WriteImageType> WriterType;
+  typedef otb::ImageFileWriter<WriteImageType> WriterType;
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(argv[2]);
 

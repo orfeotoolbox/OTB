@@ -49,20 +49,22 @@ namespace liblas { namespace detail {
 
 IndexOutput::IndexOutput(liblas::Index *indexsource) :
 	m_index(indexsource), 
-	m_VLRCommonDataSize(5 * sizeof(boost::uint32_t)),
+	m_VLRCommonDataSize(6 * sizeof(boost::uint32_t)),
 	m_VLRDataSizeLocation(4 * sizeof(boost::uint32_t)),
 	m_FirstCellLocation(0),
-	m_LastCellLocation(sizeof(boost::uint32_t) * 2)
+	m_LastCellLocation(sizeof(boost::uint32_t) * 2),
+	m_VLRPointCountLocation(5 * sizeof(boost::uint32_t)),
+	m_DataPointsThisVLR(0)
 {
 } // IndexOutput::IndexOutput
 
 bool IndexOutput::InitiateOutput(void)
 {
 
-	boost::uint8_t VersionMajor = LIBLAS_INDEX_VERSIONMAJOR, VersionMinor = LIBLAS_INDEX_VERSIONMINOR;
+	boost::uint8_t Version;
 	char DestStr[LIBLAS_INDEX_MAXSTRLEN];
 	boost::uint16_t StringLen;
-	boost::uint16_t WritePos = 0;
+	boost::uint32_t WritePos = 0;
 	
 	try {
 		// write a header in standard VLR format
@@ -72,8 +74,10 @@ bool IndexOutput::InitiateOutput(void)
 		m_indexVLRHeaderRecord.SetDescription("LibLAS Index Header");
 		// set the header data into the header data string
 		// Index file version
-		WriteVLRData_n(m_indexVLRHeaderData, VersionMajor, WritePos);
-		WriteVLRData_n(m_indexVLRHeaderData, VersionMinor, WritePos);
+		Version = m_index->GetVersionMajor();
+		WriteVLRData_n(m_indexVLRHeaderData, Version, WritePos);
+		Version = m_index->GetVersionMinor();
+		WriteVLRData_n(m_indexVLRHeaderData, Version, WritePos);
 		// creator		
 		strncpy(DestStr, m_index->GetIndexAuthorStr(), LIBLAS_INDEX_MAXSTRLEN - 1);
 		DestStr[LIBLAS_INDEX_MAXSTRLEN - 1] = 0;
@@ -107,7 +111,7 @@ bool IndexOutput::InitiateOutput(void)
 		TempData = m_index->GetMaxZ();
 		WriteVLRData_n(m_indexVLRHeaderData, TempData, WritePos);
 
-		// ID number of associated data VLR's - normally 43 but may use heigher numbers
+		// ID number of associated data VLR's - normally 43 but may use higher numbers
 		// in order to store more than one index in a file
 		boost::uint32_t TempLong = m_index->GetDataVLR_ID();
 		WriteVLRData_n(m_indexVLRHeaderData, TempLong, WritePos);
@@ -122,8 +126,9 @@ bool IndexOutput::InitiateOutput(void)
 		TempLong = m_index->GetCellsZ();
 		WriteVLRData_n(m_indexVLRHeaderData, TempLong, WritePos);
 		
-		// record length		
-		m_indexVLRHeaderRecord.SetRecordLength(WritePos);
+		// record length
+		assert(WritePos <= std::numeric_limits<boost::uint16_t>::max());		
+		m_indexVLRHeaderRecord.SetRecordLength(static_cast<boost::uint16_t>(WritePos));
 		m_indexVLRHeaderData.resize(WritePos);
 		m_indexVLRHeaderRecord.SetData(m_indexVLRHeaderData);
 		m_index->GetIndexHeader()->AddVLR(m_indexVLRHeaderRecord);
@@ -166,9 +171,15 @@ bool IndexOutput::OutputCell(liblas::detail::IndexCell *CellBlock, boost::uint32
 		NumPts = CellBlock->GetNumPoints();
 		if (NumPts)
 		{
+			// keep track of the number of points in this VLR - added in Index version 1.1
+			m_DataPointsThisVLR += NumPts;
+			
 			// current cell, x, y
 			WriteVLRData_n(m_indexVLRTempData, x, m_TempWritePos);
 			WriteVLRData_n(m_indexVLRTempData, y, m_TempWritePos);
+			// number of points in this cell - added in Index version 1.1
+			WriteVLRData_n(m_indexVLRTempData, NumPts, m_TempWritePos);
+
 			// min and max Z
 			ElevExtrema ExtremaZ = CellBlock->GetMinZ();
 			WriteVLRData_n(m_indexVLRTempData, ExtremaZ, m_TempWritePos);
@@ -182,6 +193,7 @@ bool IndexOutput::OutputCell(liblas::detail::IndexCell *CellBlock, boost::uint32
 			WriteVLRData_n(m_indexVLRTempData, SubCellsXY, m_TempWritePos);
 			SubCellsZ = CellBlock->GetNumZCellRecords();
 			WriteVLRData_n(m_indexVLRTempData, SubCellsZ, m_TempWritePos);
+			
 
 			// <<<>>> prevent array overruns
 			// compile data into one long vector m_indexVLRTempData
@@ -264,6 +276,8 @@ bool IndexOutput::OutputCell(liblas::detail::IndexCell *CellBlock, boost::uint32
 				// update data record size
 				m_DataRecordSize += m_TempWritePos;
 				WriteVLRDataNoInc_n(m_indexVLRCellPointData, m_DataRecordSize, m_VLRDataSizeLocation);
+				// number of points in this VLR - added in Index version 1.1
+				WriteVLRDataNoInc_n(m_indexVLRCellPointData, m_DataPointsThisVLR, m_VLRPointCountLocation);
 				WriteVLRDataNoInc_str(m_indexVLRCellPointData, (char * const)&m_indexVLRTempData[0], m_TempWritePos, WritePos);
 				m_SomeDataReadyToWrite = true;
 				// rewind counter to start new cell data
@@ -288,6 +302,8 @@ bool IndexOutput::OutputCell(liblas::detail::IndexCell *CellBlock, boost::uint32
 				if (m_indexVLRCellPointData.size() != numeric_limits<unsigned short>::max())
 					m_indexVLRCellPointData.resize(numeric_limits<unsigned short>::max());
 				WriteVLRDataNoInc_n(m_indexVLRCellPointData, m_DataRecordSize, m_VLRDataSizeLocation);
+				// number of points in this VLR - added in Index version 1.1
+				WriteVLRDataNoInc_n(m_indexVLRCellPointData, m_DataPointsThisVLR, m_VLRPointCountLocation);
 				
 				// write out the part that fits in this VLR (excluding the common data)
 				boost::uint32_t WrittenBytes = numeric_limits<unsigned short>::max() - WritePos;
@@ -334,6 +350,7 @@ bool IndexOutput::InitializeVLRData(boost::uint32_t CurCellX, boost::uint32_t Cu
 		m_indexVLRCellPointData.resize(numeric_limits<unsigned short>::max());
 
 		m_DataRecordSize = m_VLRCommonDataSize;
+		m_DataPointsThisVLR = 0;
 		// 1st cell in VLR, x, y
 		WriteVLRDataNoInc_n(m_indexVLRCellPointData, CurCellX, m_FirstCellLocation);
 		WriteVLRDataNoInc_n(m_indexVLRCellPointData, CurCellY, m_FirstCellLocation + sizeof(boost::uint32_t));
@@ -342,6 +359,8 @@ bool IndexOutput::InitializeVLRData(boost::uint32_t CurCellX, boost::uint32_t Cu
 		WriteVLRDataNoInc_n(m_indexVLRCellPointData, CurCellY, m_LastCellLocation + sizeof(boost::uint32_t));
 		// data record size
 		WriteVLRDataNoInc_n(m_indexVLRCellPointData, m_DataRecordSize, m_VLRDataSizeLocation);
+		// number of points in this VLR - added in Index version 1.1
+		WriteVLRDataNoInc_n(m_indexVLRCellPointData, m_DataPointsThisVLR, m_VLRPointCountLocation);
 		m_FirstCellInVLR = false;
 		m_SomeDataReadyToWrite = false;
 

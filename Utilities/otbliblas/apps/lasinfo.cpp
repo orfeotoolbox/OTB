@@ -69,9 +69,9 @@ void OutputHelp( std::ostream & oss, po::options_description const& options)
 
     oss << options;
 
-    oss <<"\nFor more information, see the full documentation for lasinfo2 at:\n";
+    oss <<"\nFor more information, see the full documentation for lasinfo at:\n";
     
-    oss << " http://liblas.org/utilities/lasinfo2.html\n";
+    oss << " http://liblas.org/utilities/lasinfo.html\n";
     oss << "----------------------------------------------------------\n";
 
 }
@@ -105,6 +105,8 @@ int main(int argc, char* argv[])
     bool show_schema = true;
     bool output_xml = false;
     bool output_json = false;
+    bool show_point = false;
+    boost::uint32_t point = 0;
     
     std::vector<liblas::FilterPtr> filters;
     std::vector<liblas::TransformPtr> transforms;
@@ -113,7 +115,7 @@ int main(int argc, char* argv[])
 
     try {
 
-        po::options_description file_options("lasinfo2 options");
+        po::options_description file_options("lasinfo options");
         po::options_description filtering_options = GetFilteringOptions();
         po::options_description header_options = GetHeaderOptions();
 
@@ -129,7 +131,9 @@ int main(int argc, char* argv[])
             ("no-vlrs", po::value<bool>(&show_vlrs)->zero_tokens()->implicit_value(false), "Don't show VLRs")
             ("no-schema", po::value<bool>(&show_schema)->zero_tokens()->implicit_value(false), "Don't show schema")
             ("no-check", po::value<bool>(&check)->zero_tokens()->implicit_value(false), "Don't scan points")
-            ("xml", po::value<bool>(&output_xml)->zero_tokens()->implicit_value(true), "Output summary as XML")
+            ("xml", po::value<bool>(&output_xml)->zero_tokens()->implicit_value(true), "Output as XML")
+            ("point,p", po::value<boost::uint32_t>(&point), "Display a point with a given id.  --point 44")
+
             // ("json", po::value<bool>(&output_json)->zero_tokens()->implicit_value(true), "Output summary as JSON")
 
 // --xml
@@ -151,6 +155,10 @@ int main(int argc, char* argv[])
             return 1;
         }
 
+        if (vm.count("point")) 
+        {
+            show_point = true;
+        }
 
         if (vm.count("input")) 
         {
@@ -183,7 +191,33 @@ int main(int argc, char* argv[])
     
 
         liblas::Reader reader(ifs);
-        
+        if (show_point)
+        {
+            try 
+            {
+                reader.ReadPointAt(point);
+                liblas::Point const& p = reader.GetPoint();
+                if (output_xml) {
+                    liblas::property_tree::ptree tree;
+                    tree = p.GetPTree();
+                    liblas::property_tree::write_xml(std::cout, tree);
+                    exit(0);
+                } 
+                else 
+                {
+                    std::cout <<  p << std::endl;
+                    exit(0);    
+                }
+                
+            } catch (std::out_of_range const& e)
+            {
+                std::cerr << "Unable to read point at index " << point << ": " << e.what() << std::endl;
+                exit(1);
+                
+            }
+
+        }
+
         liblas::Summary summary;
         if (check)
             summary = check_points(  reader, 

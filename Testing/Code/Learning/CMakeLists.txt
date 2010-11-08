@@ -603,6 +603,34 @@ ${TEMP}/leTvConcatenateSampleListFilterOutput.txt
  0 -1
 )
 
+#ListSampleToBalancedListSampleFilterNew tests ----------
+ADD_TEST(leTuListSampleToBalancedListSampleFilterNew ${LEARNING_TESTS4}
+otbListSampleToBalancedListSampleFilterNew)
+
+ADD_TEST(leTvListSampleToBalancedListSampleFilter ${LEARNING_TESTS4}
+--compare-ascii ${NOTOL}
+${BASELINE_FILES}/leTvListSampleToBalancedListSampleFilterOutput.txt
+ ${TEMP}/leTvListSampleToBalancedListSampleFilterOutput.txt
+otbListSampleToBalancedListSampleFilter
+${TEMP}/leTvListSampleToBalancedListSampleFilterOutput.txt
+ 2 
+-1 -3  0 # The third element is the label of the SampleList
+ 1  2  1
+-2 -5  0
+-1 -3  1
+ 0 -1  1
+-3  1  1
+-5  2  1 
+ 2  1  1
+ 2  8  1 
+ 1 -4  0
+-1  5  4 
+ 2  5  1
+ 0 -5  0
+ 1 -1  2
+)
+
+
 # Testing srcs
 SET(BasicLearning_SRCS1
 otbLearningTests1.cxx
@@ -671,6 +699,7 @@ otbSVMValidation.cxx
 otbShiftScaleSampleListFilter.cxx
 otbGaussianAdditiveNoiseSampleListFilter.cxx
 otbConcatenateSampleListFilter.cxx
+otbListSampleToBalancedListSampleFilter.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbLearningTests1 "${BasicLearning_SRCS1}" "OTBLearning;OTBIO;OTBTesting")

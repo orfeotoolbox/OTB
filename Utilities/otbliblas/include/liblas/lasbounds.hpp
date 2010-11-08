@@ -46,7 +46,7 @@
 #include <liblas/laspoint.hpp>
 #include <liblas/lastransform.hpp>
 #include <liblas/detail/private_utility.hpp>
-
+#include <liblas/export.hpp>
 // boost
 #include <boost/cstdint.hpp>
 
@@ -62,14 +62,16 @@
 namespace liblas {
 
 template <typename T>
-class Range
+class LAS_DLL Range
 {
 public:
     T min;
     T max;
-    
+
+	typedef T value_type;
+
     Range(T mmin=std::numeric_limits<T>::max(), T mmax=std::numeric_limits<T>::min())
-        : min(mmin), max(mmax) {};
+        : min(mmin), max(mmax) {}
     
 
     Range(Range const& other)
@@ -127,7 +129,7 @@ public:
     
     bool empty(void) const 
     {
-        return min==std::numeric_limits<T>::max() && max==std::numeric_limits<T>::min();
+        return detail::compare_distance(min, std::numeric_limits<T>::max()) && detail::compare_distance(max, std::numeric_limits<T>::min());
     }
     
     void shift(T v) 
@@ -157,6 +159,13 @@ public:
         if (v > max)
             max = v;
     }
+
+    void grow(Range const& r) 
+    {
+        grow(r.min);
+        grow(r.max);
+    }
+
     T length() const
     {
         return max - min;
@@ -168,7 +177,7 @@ class Bounds
 {
 public:
 
-
+	typedef T value_type;
     typedef typename std::vector< Range<T> >::size_type size_type;
     
     typedef typename std::vector< Range<T> > RangeVec;
@@ -426,6 +435,8 @@ bool contains(Bounds const& other) const
     for (size_type i = 0; i < dimension(); i++) {
         if ( ranges[i].contains(other.ranges[i]) )
             return true;
+        else // As soon as it is not contains, we're false
+            return false;
     }
     return true;
 }
@@ -524,7 +535,7 @@ void grow(Point const& p)
 
 T volume() const
 {
-    T output;
+    T output = T();
     for (size_type i = 0; i < dimension(); i++) {
         output = output * ranges[i].length();
     }
@@ -576,6 +587,13 @@ Bounds<T> project(liblas::SpatialReference const& in_ref, liblas::SpatialReferen
 };
 
 
+
 } // namespace liblas
+
+// Needed for C++ DLL exports
+#ifdef _MSC_VER
+template class LAS_DLL liblas::Range<double>;
+template class LAS_DLL liblas::Bounds<double>;
+#endif
 
 #endif // ndef LIBLAS_LASBOUNDS_HPP_INCLUDED

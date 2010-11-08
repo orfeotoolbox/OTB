@@ -18,7 +18,7 @@ install_requires = ['setuptools']
 
 import os
 
-version = '1.6.0b1'
+version = '1.6.0b2'
 
 if os.name == 'nt':
     # Windows NT library

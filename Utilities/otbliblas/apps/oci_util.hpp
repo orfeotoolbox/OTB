@@ -33,7 +33,7 @@ bool WipeBlockTable(   OWConnection* connection,
                     std::string cloudColumnName);
 std::string to_upper(const std::string&);
 std::string ReadSQLData(std::string filename);
-std::istream* OpenInput(std::string filename, bool bEnd) ;
+std::istream* OpenInput(std::string const& filename, bool bEnd) ;
 
 #ifdef _WIN32
 #define compare_no_case(a,b,n)  _strnicmp( (a), (b), (n) )

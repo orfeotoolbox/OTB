@@ -98,15 +98,15 @@
 //
 // Software Guide : EndLatex
 
-#include "itkImage.h"
+#include "otbImage.h"
 #include "vnl/vnl_math.h"
 
 // Software Guide : BeginCodeSnippet
 #include "itkImageSliceConstIteratorWithIndex.h"
 #include "itkImageLinearIteratorWithIndex.h"
 // Software Guide : EndCodeSnippet
-#include "itkImageFileReader.h"
-#include "itkImageFileWriter.h"
+#include "otbImageFileReader.h"
+#include "otbImageFileWriter.h"
 
 int main(int argc, char *argv[])
 {
@@ -131,8 +131,8 @@ int main(int argc, char *argv[])
 
 // Software Guide : BeginCodeSnippet
   typedef unsigned short           PixelType;
-  typedef itk::Image<PixelType, 2> ImageType2D;
-  typedef itk::Image<PixelType, 3> ImageType3D;
+  typedef otb::Image<PixelType, 2> ImageType2D;
+  typedef otb::Image<PixelType, 3> ImageType3D;
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -146,8 +146,8 @@ int main(int argc, char *argv[])
   typedef itk::ImageSliceConstIteratorWithIndex<ImageType3D> SliceIteratorType;
 // Software Guide : EndCodeSnippet
 
-  typedef itk::ImageFileReader<ImageType3D> ReaderType;
-  typedef itk::ImageFileWriter<ImageType2D> WriterType;
+  typedef otb::ImageFileReader<ImageType3D> ReaderType;
+  typedef otb::ImageFileWriter<ImageType2D> WriterType;
 
   ImageType3D::ConstPointer inputImage;
   ReaderType::Pointer       reader = ReaderType::New();

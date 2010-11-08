@@ -47,6 +47,7 @@
 #include <liblas/lasvariablerecord.hpp>
 #include <liblas/lasversion.hpp>
 #include <liblas/lasdimension.hpp>
+#include <liblas/export.hpp>
 
 // boost
 #include <boost/cstdint.hpp>
@@ -62,7 +63,6 @@
 #include <boost/multi_index/sequenced_index.hpp>
 #include <boost/multi_index/mem_fun.hpp>
 #include <boost/multi_index/random_access_index.hpp>
-
 
 // std
 #include <iosfwd>
@@ -93,9 +93,7 @@ typedef multi_index_container<
     random_access<tag<index> >,
     // sort by less<string> on GetName
     hashed_unique<tag<name>, const_mem_fun<Dimension,std::string const&,&Dimension::GetName> >
-    
-
-  >
+      >
 > IndexMap;
 
 typedef IndexMap::index<name>::type index_by_name;
@@ -104,7 +102,7 @@ typedef IndexMap::index<index>::type index_by_index;
 
 
 /// Schema definition
-class Schema
+class LAS_DLL Schema
 {
 public:
     
@@ -114,7 +112,7 @@ public:
     Schema& operator=(Schema const& rhs);
     Schema(Schema const& other);
     
-    ~Schema() {};
+    ~Schema() {}
 
     /// Fetch byte size
     std::size_t GetByteSize() const;
@@ -174,7 +172,7 @@ bool inline sort_dimensions(Dimension i, Dimension j)
     return i < j; 
 }
 
-std::ostream& operator<<(std::ostream& os, liblas::Schema const&);
+LAS_DLL std::ostream& operator<<(std::ostream& os, liblas::Schema const&);
 
 
 } // namespace liblas

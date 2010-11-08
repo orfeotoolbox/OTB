@@ -32,12 +32,12 @@
 //
 // Software Guide : EndLatex
 
-#include "itkImage.h"
+#include "otbImage.h"
 // Software Guide : BeginCodeSnippet
 #include "itkImageLinearConstIteratorWithIndex.h"
 // Software Guide : EndCodeSnippet
-#include "itkImageFileReader.h"
-#include "itkImageFileWriter.h"
+#include "otbImageFileReader.h"
+#include "otbImageFileWriter.h"
 
 int main(int argc, char *argv[])
 {
@@ -60,11 +60,11 @@ int main(int argc, char *argv[])
 
 // Software Guide : BeginCodeSnippet
   typedef unsigned char            PixelType;
-  typedef itk::Image<PixelType, 3> Image3DType;
-  typedef itk::Image<PixelType, 4> Image4DType;
+  typedef otb::Image<PixelType, 3> Image3DType;
+  typedef otb::Image<PixelType, 4> Image4DType;
 
-  typedef itk::ImageFileReader<Image4DType> Reader4DType;
-  typedef itk::ImageFileWriter<Image3DType> Writer3DType;
+  typedef otb::ImageFileReader<Image4DType> Reader4DType;
+  typedef otb::ImageFileWriter<Image3DType> Writer3DType;
 
   Reader4DType::Pointer reader4D = Reader4DType::New();
   reader4D->SetFileName(argv[1]);

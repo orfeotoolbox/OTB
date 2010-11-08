@@ -20,6 +20,50 @@ namespace po = boost::program_options;
 using namespace liblas;
 using namespace std;
 
+// 0, 4, 16, 64, 256
+//std::size_t const default_buffer_size = 0;
+//std::size_t const default_buffer_size = 4 * 1024;
+//std::size_t const default_buffer_size = 16 * 1024;
+//std::size_t const default_buffer_size = 64 * 1024;
+//std::size_t const default_buffer_size = 256 * 1024;
+std::size_t const default_buffer_size = 1024 * 1024;
+std::vector<char> ofs_buffer;
+std::vector<char> ifs_buffer;
+
+std::ofstream& set_ofstream_buffer(std::ofstream& ofs, std::size_t buffer_size)
+{
+    char* buffer = 0; // unbuffered;
+    if (buffer_size > 0)
+    {
+        std::vector<char>(buffer_size).swap(ofs_buffer);
+        buffer = &ofs_buffer[0];
+    }
+
+    std::streambuf* sb = ofs.rdbuf()->pubsetbuf(buffer, buffer_size);
+    if (0 != buffer && 0 == sb)
+    {
+        throw std::runtime_error("failed to attach non-null buffer to input file stream");
+    }
+    return ofs;
+}
+
+std::ifstream& set_ifstream_buffer(std::ifstream& ifs, std::size_t buffer_size)
+{
+    char* buffer = 0; // unbuffered;
+    if (buffer_size > 0)
+    {
+        std::vector<char>(buffer_size).swap(ifs_buffer);
+        buffer = &ifs_buffer[0];
+    }
+
+    std::streambuf* sb = ifs.rdbuf()->pubsetbuf(buffer, buffer_size);
+    if (0 != buffer && 0 == sb)
+    {
+        throw std::runtime_error("failed to attach non-null buffer to input file stream");
+    }
+    return ifs;
+}
+
 liblas::Writer* start_writer(   std::ofstream* strm, 
                                 std::string const& output, 
                                 liblas::Header const& header)
@@ -30,12 +74,14 @@ liblas::Writer* start_writer(   std::ofstream* strm,
         std::ostringstream oss;
         oss << "Cannot create " << output << "for write.  Exiting...";
         throw std::runtime_error(oss.str());
-    }        
+    }
+
+    // set_ofstream_buffer(*strm, default_buffer_size);
+
     liblas::Writer* writer = new liblas::Writer(*strm, header);
     return writer;
     
 }
-
 
 bool process(   std::string const& input,
                 std::string const& output,
@@ -48,35 +94,36 @@ bool process(   std::string const& input,
                 bool min_offset)
 {
 
-
-    
     std::ifstream ifs;
     if (!liblas::Open(ifs, input.c_str()))
     {
         std::cerr << "Cannot open " << input << "for read.  Exiting...";
         return false;
     }
+    // set_ifstream_buffer(ifs, default_buffer_size);
+
     liblas::Reader reader(ifs);
     liblas::Summary* summary = new liblas::Summary;
     
     reader.SetFilters(filters);
-    reader.SetTransforms(transforms);
-
+    reader.SetTransforms(transforms);    
+    
     if (min_offset) 
     {
         
         liblas::property_tree::ptree tree = reader.Summarize();
-    
         try
         {
-            header.SetOffset(tree.get<double>("minimum.x"),
-                             tree.get<double>("minimum.y"),
-                             tree.get<double>("minimum.z"));
+            header.SetOffset(tree.get<double>("summary.points.minimum.x"),
+                             tree.get<double>("summary.points.minimum.y"),
+                             tree.get<double>("summary.points.minimum.z"));
     
                               
-        }     catch (liblas::property_tree::ptree_bad_path const& e) 
+        }
+        catch (liblas::property_tree::ptree_bad_path const& e) 
         {
             std::cerr << "Unable to write minimum header info.  Does the outputted file have any points?";
+            std::cerr << e.what() << std::endl;
             return false;
         }
         if (verbose) 
@@ -287,14 +334,18 @@ int main(int argc, char* argv[])
         if (vm.count("input")) 
         {
             input = vm["input"].as< string >();
-            std::ifstream ifs;
+            
             if (verbose)
                 std::cout << "Opening " << input << " to fetch Header" << std::endl;
+
+            std::ifstream ifs;
             if (!liblas::Open(ifs, input.c_str()))
             {
                 std::cerr << "Cannot open " << input << "for read.  Exiting...";
                 return 1;
             }
+            // set_ifstream_buffer(ifs, default_buffer_size);
+
             liblas::Reader reader(ifs);
             header = reader.GetHeader();
         } else {
@@ -332,11 +383,13 @@ int main(int argc, char* argv[])
         }
         
     }
-    catch(std::exception& e) {
+    catch(std::exception& e)
+    {
         std::cerr << "error: " << e.what() << "\n";
         return 1;
     }
-    catch(...) {
+    catch(...)
+    {
         std::cerr << "Exception of unknown type!\n";
     }
     

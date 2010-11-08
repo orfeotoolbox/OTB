@@ -2,9 +2,8 @@
 
 #include <liblas/detail/private_utility.hpp>
 
-#include <liblas/laswriter.hpp>
-#include <liblas/laspoint.hpp>
-#include <liblas/lascolor.hpp>
+#include <liblas/liblas.hpp>
+
 #include <iostream>
 #ifdef _WIN32
 #define compare_no_case(a,b,n)  _strnicmp( (a), (b), (n) )
@@ -25,13 +24,13 @@ struct ScanRow
         z(0)
     {}
 
-    liblas::uint8_t Code;
-    liblas::uint8_t Line;
-    liblas::uint16_t EchoInt;
+    boost::uint8_t Code;
+    boost::uint8_t Line;
+    boost::uint16_t EchoInt;
 
-    liblas::int32_t x;
-    liblas::int32_t y;
-    liblas::int32_t z;
+    boost::int32_t x;
+    boost::int32_t y;
+    boost::int32_t z;
 
 };
 
@@ -44,9 +43,9 @@ struct Point3d
         z(0)
     {}
 
-    liblas::int32_t x;
-    liblas::int32_t y;
-    liblas::int32_t z;
+    boost::int32_t x;
+    boost::int32_t y;
+    boost::int32_t z;
 
 };
 
@@ -62,12 +61,12 @@ struct ScanPnt
     {}
 
     Point3d Pnt;
-    liblas::uint8_t Code;
-    liblas::uint8_t Echo;
-    liblas::uint8_t Flag;
-    liblas::uint8_t Mark;
-    liblas::uint16_t Line;
-    liblas::uint16_t Intensity;
+    boost::uint8_t Code;
+    boost::uint8_t Echo;
+    boost::uint8_t Flag;
+    boost::uint8_t Mark;
+    boost::uint16_t Line;
+    boost::uint16_t Intensity;
 
 };
 
@@ -87,17 +86,17 @@ struct ScanHdr
         Color(0)
     {}
 
-    liblas::int32_t HdrSize;
-    liblas::int32_t HdrVersion;
-    liblas::int32_t Tunniste;
+    boost::int32_t HdrSize;
+    boost::int32_t HdrVersion;
+    boost::int32_t Tunniste;
     char Magic[4];
-    liblas::int32_t PntCnt;
-    liblas::int32_t Units;
+    boost::int32_t PntCnt;
+    boost::int32_t Units;
     double OrgX;
     double OrgY;
     double OrgZ;
-    liblas::int32_t Time;
-    liblas::int32_t Color;
+    boost::int32_t Time;
+    boost::int32_t Color;
 
     // 
     // int HdrSize;

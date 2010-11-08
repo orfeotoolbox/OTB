@@ -530,7 +530,7 @@ int main(int argc, char *argv[])
   resample->SetOutputSpacing(fixedImage->GetSpacing());
   resample->SetDefaultPixelValue(100);
 
-  typedef itk::ImageFileWriter<FixedImageType> WriterFixedType;
+  typedef otb::ImageFileWriter<FixedImageType> WriterFixedType;
 
   WriterFixedType::Pointer writer =  WriterFixedType::New();
 
@@ -579,7 +579,7 @@ int main(int argc, char *argv[])
 
   intensityRescaler->SetInput(difference->GetOutput());
 
-  typedef itk::ImageFileWriter<OutputImageType> WriterType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
   WriterType::Pointer writer2 =  WriterType::New();
 

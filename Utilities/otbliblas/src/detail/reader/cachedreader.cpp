@@ -66,6 +66,7 @@ CachedReaderImpl::CachedReaderImpl(std::istream& ifs , std::size_t size)
     , m_cache_size(size)
     , m_cache_start_position(0)
     , m_cache_read_position(0)
+    , m_cache_initialized(false)
 {
 }
 
@@ -81,13 +82,13 @@ HeaderPtr CachedReaderImpl::ReadHeader()
     if (m_cache_size > hptr->GetPointRecordsCount()) {
         m_cache_size = hptr->GetPointRecordsCount();
     }
-    m_cache.resize(m_cache_size);
-    
-    // Mark all positions as uncached and build up the mask
-    // to the size of the number of points in the file
-    for (boost::uint32_t i = 0; i < hptr->GetPointRecordsCount(); ++i) {
-        m_mask.push_back(0);
-    }
+    // // FIXME: Note, vector::resize never shrinks the container and frees memory! Are we aware of this fact here? --mloskot
+    // m_cache.resize(m_cache_size);
+    // 
+    // // Mark all positions as uncached and build up the mask
+    // // to the size of the number of points in the file
+    // boost::uint8_t const uncached_mask = 0;
+    // cache_mask_type(hptr->GetPointRecordsCount(), uncached_mask).swap(m_mask);
     
     return hptr;
 }
@@ -138,6 +139,21 @@ liblas::Point const& CachedReaderImpl::ReadCachedPoint(boost::uint32_t position,
     // }
     // std::cout << std::endl;
 
+    // If our point cache and mask have not yet been initialized, we 
+    // should do so before tyring to read any points.  We don't want to do 
+    // this in ::Reset or ::ReadHeader, as these functions may be called 
+    // multiple times and screw up our assumptions.
+    if (!m_cache_initialized) 
+    {
+        m_cache = cache_type(m_cache_size);
+    
+        // Mark all positions as uncached and build up the mask
+        // to the size of the number of points in the file
+        boost::uint8_t const uncached_mask = 0;
+        cache_mask_type(header->GetPointRecordsCount(), uncached_mask).swap(m_mask);
+ 
+        m_cache_initialized = true;
+    }
     if (m_mask[position] == 1) {
         m_cache_read_position = position;
         return m_cache[cache_position];
@@ -206,7 +222,7 @@ liblas::Point const& CachedReaderImpl::ReadPointAt(std::size_t n, HeaderPtr head
         std::string out(output.str());
         throw std::runtime_error(out);
     }
-
+    
     liblas::Point const& p = ReadCachedPoint(n, header);
     m_cache_read_position = n;
     return p;
@@ -215,7 +231,10 @@ liblas::Point const& CachedReaderImpl::ReadPointAt(std::size_t n, HeaderPtr head
 void CachedReaderImpl::Reset(HeaderPtr header)
 {
     if (m_mask.empty())
+    {    
+        ReaderImpl::Reset(header);
         return;
+    }
 
     typedef cache_mask_type::size_type size_type;
     size_type old_cache_start_position = m_cache_start_position;
@@ -232,6 +251,7 @@ void CachedReaderImpl::Reset(HeaderPtr header)
 
     m_cache_start_position = 0;
     m_cache_read_position = 0;
+    m_cache_initialized = false;
 
     ReaderImpl::Reset(header);
 }

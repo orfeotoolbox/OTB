@@ -72,8 +72,8 @@ int main(int argc, char * argv[])
     }
 
   typedef float                           PixelType;
-  typedef itk::Image<PixelType, 2>        ImageType;
-  typedef itk::ImageFileReader<ImageType> ReaderType;
+  typedef otb::Image<PixelType, 2>        ImageType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
 
   typedef itk::ConstNeighborhoodIterator<ImageType> NeighborhoodIteratorType;
   typedef itk::ImageRegionIterator<ImageType>       IteratorType;
@@ -187,8 +187,8 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
   typedef unsigned char                        WritePixelType;
-  typedef itk::Image<WritePixelType, 2>        WriteImageType;
-  typedef itk::ImageFileWriter<WriteImageType> WriterType;
+  typedef otb::Image<WritePixelType, 2>        WriteImageType;
+  typedef otb::ImageFileWriter<WriteImageType> WriterType;
 
   typedef itk::RescaleIntensityImageFilter<ImageType,
       WriteImageType> RescaleFilterType;

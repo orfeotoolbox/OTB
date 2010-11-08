@@ -26,13 +26,14 @@ namespace Statistics {
 /** \class GaussianAdditiveNoiseSampleListFilter
  *  \brief This class generate a noised version of the input sample list
  *
- * For each component of the samples, a random value of the sequence
- * value is added.
+ * For each component of the samples, a white gaussian random is added.
  * 
  * It use the MersenneTwisterRandomVariateGenerator to generate a
  * sequence of numbers following the normal law considered as White
  * Gaussian Noise.
  * Mean and Variance are set via the methods SetMean() and SetVariance().
+ * The input SampleList can be noised m_NumberOfIteration times via the
+ * method SetNumberOfIteration()
  *
  * \sa ListSampleToListSampleFilter
  */
@@ -78,6 +79,10 @@ public:
   /** Set/Get the Scales for this sample list */
   itkSetMacro(Variance,double);
   itkGetMacro(Variance,double);
+
+  /** Set how many times the ListSample must be noised */
+  itkSetMacro(NumberOfIteration,unsigned int);
+  itkGetMacro(NumberOfIteration,unsigned int);
   
 protected:
   /** This method causes the filter to generate its output. */
@@ -100,7 +105,8 @@ private:
   double              m_Mean;
   double              m_Variance;
   std::vector<double> m_WhiteGaussianNoiseCoefficients;
-
+  unsigned int        m_NumberOfIteration;
+  
 }; // end of class ImageToListGenerator
 
 } // end of namespace Statistics

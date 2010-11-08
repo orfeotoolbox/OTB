@@ -29,8 +29,9 @@
 
 // Software Guide : BeginCodeSnippet
 // Software Guide : EndCodeSnippet
-#include "itkImageFileReader.h"
-#include "itkImageFileWriter.h"
+#include "otbImage.h"
+#include "otbImageFileReader.h"
+#include "otbImageFileWriter.h"
 #include "itkSimpleFilterWatcher.h"
 
 //#include "itkLabelStatisticsKeepNObjectsImageFilter.h"
@@ -55,16 +56,16 @@ int main(int argc, char * argv[])
   const int dim = 3;
 
   typedef unsigned char              PixelType;
-  typedef itk::Image<PixelType, dim> IType;
+  typedef otb::Image<PixelType, dim> IType;
 
-  typedef itk::ImageFileReader<IType> ReaderType;
+  typedef otb::ImageFileReader<IType> ReaderType;
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);
 
   ReaderType::Pointer reader2 = ReaderType::New();
   reader2->SetFileName(argv[2]);
 
-  typedef itk::StatisticsLabelObject<PixelType, dim>            LabelObjectType;
+  typedef  itk::StatisticsLabelObject<PixelType, dim>           LabelObjectType;
   typedef  itk::LabelMap<LabelObjectType>                       LabelMapType;
   typedef  itk::LabelImageToLabelMapFilter<IType, LabelMapType> LabelizerType;
 
@@ -107,7 +108,7 @@ int main(int argc, char * argv[])
   opening->SetAttribute( argv[7] );
   itk::SimpleFilterWatcher watcher(opening, "filter");
 */
-  typedef itk::ImageFileWriter<IType> WriterType;
+  typedef otb::ImageFileWriter<IType> WriterType;
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput(binarizer->GetOutput());
   writer->SetFileName(argv[3]);

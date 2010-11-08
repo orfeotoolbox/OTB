@@ -31,6 +31,7 @@ GaussianAdditiveNoiseSampleListFilter<TInputSampleList,TOutputSampleList>
 {
   m_Mean = 0.;
   m_Variance = 1e-3;
+  m_NumberOfIteration = 1;
 }
 
 template < class TInputSampleList, class TOutputSampleList >
@@ -48,7 +49,7 @@ GaussianAdditiveNoiseSampleListFilter<TInputSampleList,TOutputSampleList>
   unsigned int size = this->GetInput()->Get()->GetMeasurementVectorSize();
   if(size == 0)
     {
-    itkExceptionMacro(<< "MeasurementVector size is  "<<size << " , excpect non null size " );
+    itkExceptionMacro(<< "MeasurementVector size is  "<<size << " , expected non null size " );
     }
   else
     for(unsigned int i = 0; i <size; i++)
@@ -73,39 +74,43 @@ GaussianAdditiveNoiseSampleListFilter<TInputSampleList,TOutputSampleList>
   
   // Clear any previous output
   outputSampleListPtr->Clear();
-
-  typename InputSampleListType::ConstIterator inputIt = inputSampleListPtr->Begin();
-
+  
   // Set-up progress reporting
-  itk::ProgressReporter progress(this,0,inputSampleListPtr->Size());
+  itk::ProgressReporter progress(this,0,inputSampleListPtr->Size()*m_NumberOfIteration);
 
-  // Iterate on the InputSampleList
-  while(inputIt != inputSampleListPtr->End())
+  // Iterate m_NumberOfIteration-times the noising process
+  for (unsigned int currIteration = 0; currIteration< m_NumberOfIteration ; currIteration++)
     {
-    // Generate Random sequence 
-    this->GenerateRandomSequence();
+    typename InputSampleListType::ConstIterator inputIt = inputSampleListPtr->Begin();
 
-    // Retrieve current input sample
-    InputMeasurementVectorType currentInputMeasurement = inputIt.GetMeasurementVector();
-
-    // Build current output sample
-    OutputMeasurementVectorType currentOutputMeasurement;
-    currentOutputMeasurement.SetSize(currentInputMeasurement.GetSize());
-
-    // Add the white noise to each component of the sample
-    for(unsigned int idx = 0;idx < inputSampleListPtr->GetMeasurementVectorSize();++idx)
+    // Iterate on the InputSampleList
+    while(inputIt != inputSampleListPtr->End())
       {
-      currentOutputMeasurement[idx] = static_cast<OutputValueType>(
-        (static_cast<double>(currentInputMeasurement[idx])+m_WhiteGaussianNoiseCoefficients[idx]));
+      // Generate Random sequence 
+      this->GenerateRandomSequence();
+
+      // Retrieve current input sample
+      InputMeasurementVectorType currentInputMeasurement = inputIt.GetMeasurementVector();
+
+      // Build current output sample
+      OutputMeasurementVectorType currentOutputMeasurement;
+      currentOutputMeasurement.SetSize(currentInputMeasurement.GetSize());
+
+      // Add the white noise to each component of the sample
+      for(unsigned int idx = 0;idx < inputSampleListPtr->GetMeasurementVectorSize();++idx)
+        {
+        currentOutputMeasurement[idx] = static_cast<OutputValueType>(
+          (static_cast<double>(currentInputMeasurement[idx])+m_WhiteGaussianNoiseCoefficients[idx]));
+        }
+      
+      // Add the current output sample to the output SampleList
+      outputSampleListPtr->PushBack(currentOutputMeasurement);
+
+      // Update progress
+      progress.CompletedPixel();
+
+      ++inputIt;
       }
-
-    // Add the current output sample to the output SampleList
-    outputSampleListPtr->PushBack(currentOutputMeasurement);
-
-    // Update progress
-    progress.CompletedPixel();
-
-    ++inputIt;
     }
 }
 
