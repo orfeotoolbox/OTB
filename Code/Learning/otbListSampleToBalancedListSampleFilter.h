@@ -34,7 +34,6 @@ namespace Statistics {
  * computed. This maximum number by the m_BalacingFactor determines
  * the final number of samples belonging to each label.    
  * 
- * 
  * Mean and Variance are set via the methods SetMean() and SetVariance().
  *
  * \sa ListSampleToListSampleFilter, GaussianAdditiveNoiseSampleListFilter
@@ -48,7 +47,7 @@ class ITK_EXPORT ListSampleToBalancedListSampleFilter :
 {
 public:
   /** Standard class typedefs */
-  typedef ListSampleToBalancedListSampleFilter      Self;
+  typedef ListSampleToBalancedListSampleFilter       Self;
   typedef otb::Statistics::ListSampleToListSampleFilter
   <TInputSampleList,TOutputSampleList>               Superclass;
   typedef itk::SmartPointer< Self >                  Pointer;

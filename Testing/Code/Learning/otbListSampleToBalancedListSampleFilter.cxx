@@ -24,13 +24,13 @@
 #include "otbListSampleToBalancedListSampleFilter.h"
 #include <fstream>
 
-typedef itk::VariableLengthVector<double> DoubleSampleType;
+typedef itk::VariableLengthVector<double>             DoubleSampleType;
 typedef itk::Statistics::ListSample<DoubleSampleType> DoubleSampleListType;
 
-typedef itk::VariableLengthVector<unsigned int> IntegerSampleType;
+typedef itk::VariableLengthVector<unsigned int>        IntegerSampleType;
 typedef itk::Statistics::ListSample<IntegerSampleType> IntegerSampleListType;
 
-typedef itk::VariableLengthVector<float> FloatSampleType;
+typedef itk::VariableLengthVector<float>             FloatSampleType;
 typedef itk::Statistics::ListSample<FloatSampleType> FloatSampleListType;
 
 typedef otb::Statistics::ListSampleToBalancedListSampleFilter
@@ -83,8 +83,6 @@ int otbListSampleToBalancedListSampleFilter(int argc, char * argv[])
       }
     label[0]= atof(argv[index++]);
 
-    //std::cout<<sample<<std::endl;
-    //std::cout<<label<<std::endl;
     ofs<<sample<<std::endl;
     ofs<<label<<std::endl;
     inputSampleList->PushBack(sample);
