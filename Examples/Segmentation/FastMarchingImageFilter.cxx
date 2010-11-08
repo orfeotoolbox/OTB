@@ -636,17 +636,17 @@ int main(int argc, char *argv[])
 
   InternalWriterType::Pointer mapWriter = InternalWriterType::New();
   mapWriter->SetInput(fastMarching->GetOutput());
-  mapWriter->SetFileName("FastMarchingFilterOutput4.mha");
+  mapWriter->SetFileName("FastMarchingFilterOutput4.tif");
   mapWriter->Update();
 
   InternalWriterType::Pointer speedWriter = InternalWriterType::New();
   speedWriter->SetInput(sigmoid->GetOutput());
-  speedWriter->SetFileName("FastMarchingFilterOutput3.mha");
+  speedWriter->SetFileName("FastMarchingFilterOutput3.tif");
   speedWriter->Update();
 
   InternalWriterType::Pointer gradientWriter = InternalWriterType::New();
   gradientWriter->SetInput(gradientMagnitude->GetOutput());
-  gradientWriter->SetFileName("FastMarchingFilterOutput2.mha");
+  gradientWriter->SetFileName("FastMarchingFilterOutput2.tif");
   gradientWriter->Update();
 
   //  Software Guide : BeginLatex
