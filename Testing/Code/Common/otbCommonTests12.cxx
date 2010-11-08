@@ -28,4 +28,6 @@ void RegisterTests()
 {
   REGISTER_TEST(otbParserTestNew);
   REGISTER_TEST(otbParserTest);
+  REGISTER_TEST(otbVariableLengthVectorConverterNew);
+  //REGISTER_TEST(otbVariableLengthVectorConverter);
 }
