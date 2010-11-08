@@ -79,6 +79,9 @@ public:
   const InputImageType * GetInput(void);
   const InputImageType * GetInput(unsigned int idx);
 
+  void SetNthInput(unsigned int idx, const InputImageType *input);
+
+
   /** SmartPointer to a region splitting object */
   typedef itk::ImageRegionSplitter<itkGetStaticConstMacro(InputImageDimension)> SplitterType;
   typedef typename SplitterType::Pointer                                        RegionSplitterPointer;

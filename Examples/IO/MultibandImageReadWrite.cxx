@@ -84,8 +84,8 @@ int main(int argc, char * argv[])
   //  We can now instantiate the types of the reader and writer. These two
   //  classes are parameterized over the image type.
   //
-  //  \index{itk::ImageFileReader!Instantiation}
-  //  \index{itk::ImageFileWriter!Instantiation}
+  //  \index{otb::ImageFileReader!Instantiation}
+  //  \index{otb::ImageFileWriter!Instantiation}
   //
   //  Software Guide : EndLatex
 

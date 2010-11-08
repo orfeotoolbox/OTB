@@ -674,7 +674,7 @@ namespace itk
     if (VDimension != 2) return;
     
     typedef itk::Image< unsigned char, VDimension >  OutImageType;
-    typedef typename itk::ImageFileWriter< OutImageType  >  FixedWriterType;
+    typedef typename otb::ImageFileWriter< OutImageType  >  FixedWriterType;
     typedef  itk::ResampleImageFilter< TFixedImageType,  OutImageType    >    
       OutResampleFilterType;
     

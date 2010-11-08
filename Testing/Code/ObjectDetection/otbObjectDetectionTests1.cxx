@@ -29,4 +29,6 @@ void RegisterTests()
 {
   REGISTER_TEST(otbLabeledSampleLocalizationGeneratorNew);
   REGISTER_TEST(otbLabeledSampleLocalizationGenerator);
+  REGISTER_TEST(otbDescriptorsListSampleGeneratorNew);
+  REGISTER_TEST(otbDescriptorsListSampleGenerator);
 }

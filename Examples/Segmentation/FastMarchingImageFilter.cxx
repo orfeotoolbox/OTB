@@ -632,21 +632,21 @@ int main(int argc, char *argv[])
   // with a viewer to help determine an appropriate threshold to be used on
   // the output of the \code{fastmarching} filter.
   //
-  typedef itk::ImageFileWriter<InternalImageType> InternalWriterType;
+  typedef otb::ImageFileWriter<InternalImageType> InternalWriterType;
 
   InternalWriterType::Pointer mapWriter = InternalWriterType::New();
   mapWriter->SetInput(fastMarching->GetOutput());
-  mapWriter->SetFileName("FastMarchingFilterOutput4.mha");
+  mapWriter->SetFileName("FastMarchingFilterOutput4.tif");
   mapWriter->Update();
 
   InternalWriterType::Pointer speedWriter = InternalWriterType::New();
   speedWriter->SetInput(sigmoid->GetOutput());
-  speedWriter->SetFileName("FastMarchingFilterOutput3.mha");
+  speedWriter->SetFileName("FastMarchingFilterOutput3.tif");
   speedWriter->Update();
 
   InternalWriterType::Pointer gradientWriter = InternalWriterType::New();
   gradientWriter->SetInput(gradientMagnitude->GetOutput());
-  gradientWriter->SetFileName("FastMarchingFilterOutput2.mha");
+  gradientWriter->SetFileName("FastMarchingFilterOutput2.tif");
   gradientWriter->Update();
 
   //  Software Guide : BeginLatex

@@ -137,12 +137,19 @@ void
 StreamingImageVirtualWriter<TInputImage>
 ::SetInput(const InputImageType *input)
 {
+  this->SetNthInput(0, input);
+}
+
+template <class TInputImage>
+void
+StreamingImageVirtualWriter<TInputImage>
+::SetNthInput(unsigned int idx, const InputImageType *input)
+{
   // ProcessObject is not const_correct so this cast is required here.
-  this->itk::ProcessObject::SetNthInput(0,
+  this->itk::ProcessObject::SetNthInput(idx,
                                         const_cast<TInputImage *>(input));
 }
 
-//---------------------------------------------------------
 template <class TInputImage>
 const typename StreamingImageVirtualWriter<TInputImage>::InputImageType *
 StreamingImageVirtualWriter<TInputImage>
@@ -164,6 +171,7 @@ StreamingImageVirtualWriter<TInputImage>
 {
   return static_cast<TInputImage*> (this->itk::ProcessObject::GetInput(idx));
 }
+
 template <class TInputImage>
 void
 StreamingImageVirtualWriter<TInputImage>

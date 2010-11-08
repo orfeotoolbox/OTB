@@ -27,9 +27,9 @@ namespace otb
  *   update.
  *   For instance, a filter computing global statistics on an image with streaming
  *   capabilities will have to keep the temporary results for each streamed piece of the
- *   image in order to synthetize the global statistics at the end. This filter is an
+ *   image in order to synthesize the global statistics at the end. This filter is an
  *   itk::ImageToImageFilter, providing two additional methods. The first one, Synthetize(),
- *   allows the user to synthetize() temporary data produced by the multiple updates on different
+ *   allows the user to synthesize temporary data produced by the multiple updates on different
  *   pieces of the image to the global result. The second one, Reset(), allows the user to
  *   reset the temporary data for a new input image for instance.
  *
@@ -60,7 +60,7 @@ public:
    */
   virtual void Reset(void) = 0;
   /**
-   * Synthetize the persistent data of the filter.
+   * Synthesize the persistent data of the filter.
    */
   virtual void Synthetize(void) = 0;
 
