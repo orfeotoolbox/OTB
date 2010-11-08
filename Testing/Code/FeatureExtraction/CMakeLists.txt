@@ -1504,12 +1504,12 @@ ADD_TEST(feTuLocalHistogramImageFunctionTest ${FEATUREEXTRACTION_TESTS16}
 
 # -------   otb::ImageFunctionAdapter   -------------
 
-ADD_TEST(feTuImageFunctionAdapterNew ${FEATUREEXTRACTION_TESTS16}
-        otbImageFunctionAdapterNew
+ADD_TEST(feTuImageFunctionAdaptorNew ${FEATUREEXTRACTION_TESTS16}
+        otbImageFunctionAdaptorNew
 )
 
-ADD_TEST(feTvImageFunctionAdapter ${FEATUREEXTRACTION_TESTS16}
-        otbImageFunctionAdapter
+ADD_TEST(feTvImageFunctionAdaptor ${FEATUREEXTRACTION_TESTS16}
+        otbImageFunctionAdaptor
                 ${INPUTDATA}/poupees.png
 	        )
 	        
@@ -1722,7 +1722,7 @@ otbFeatureExtractionTests16.cxx
 otbFourierMellinDescriptors.cxx
 otbLocalHistogramImageFunctionNew.cxx
 otbLocalHistogramImageFunctionTest.cxx
-otbImageFunctionAdapter.cxx
+otbImageFunctionAdaptor.cxx
 otbMetaImageFunction.cxx
 )
 
