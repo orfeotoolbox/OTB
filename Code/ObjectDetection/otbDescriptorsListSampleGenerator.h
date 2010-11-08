@@ -21,6 +21,7 @@
 #include <vector>
 
 #include "itkFixedArray.h"
+#include "itkImageRegion.h"
 
 #include "otbListSampleSource.h"
 #include "otbVectorData.h"
@@ -145,6 +146,8 @@ public:
   SamplesPositionType&             GetSamplesPositions();
   SamplesPositionObjectType*       GetSamplesPositionsObject();
 
+  itkSetMacro( NeighborhoodRadius, unsigned int );
+  itkGetConstReferenceMacro( NeighborhoodRadius, unsigned int );
 
   /** Make a DataObject of the correct type to be used as the specified
    * output. */
@@ -160,17 +163,51 @@ protected:
   virtual ~PersistentDescriptorsListSampleGenerator();
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
+  void GenerateInputRequestedRegion();
+
   void BeforeThreadedGenerateData();
 
   /** Multi-thread version GenerateData. */
-  void  ThreadedGenerateData(const RegionType&
-                             outputRegionForThread,
+  void  ThreadedGenerateData(const RegionType& outputRegionForThread,
                              int threadId);
 
 private:
   PersistentDescriptorsListSampleGenerator(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
+  template <typename TCoordRepType>
+  bool
+  IsInsideWithNeighborhoodRadius(const RegionType& region, const ContinuousIndexType &index) const
+    {
+    typedef typename RegionType::IndexType     IndexType;
+    typedef typename IndexType::IndexValueType IndexValueType;
+
+    for(unsigned int i=0; i<ImageDimension; i++)
+      {
+#ifdef ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY
+      if( itk::Math::RoundHalfIntegerUp<IndexValueType>(index[i]) < static_cast<IndexValueType>( region.GetIndex(i) ) + m_NeighborhoodRadius  + 1 )
+#else
+      if( index[i] < static_cast<TCoordRepType>( region.GetIndex(i) ) + m_NeighborhoodRadius )
+#endif
+        {
+        return false;
+        }
+      // bound is the last valid pixel location
+#ifdef ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY
+      const TCoordRepType bound = static_cast<TCoordRepType>(
+          region.GetIndex(i) + region.GetSize(i) - 0.5);
+#else
+      const TCoordRepType bound = static_cast<TCoordRepType>(
+          region.GetIndex(i) + static_cast<IndexValueType>(region.GetSize(i)) - 1);
+#endif
+
+      if( index[i] > bound - m_NeighborhoodRadius - 1 )
+        {
+        return false;
+        }
+      }
+    return true;
+    }
   typedef std::vector<ListSamplePointerType>      ListSampleArray;
   typedef std::vector<LabelListSamplePointerType> LabelListSampleArray;
   typedef std::vector<SamplesPositionType>        SamplesPositionArray;
@@ -180,6 +217,8 @@ private:
   SamplesPositionArray           m_ThreadSamplesPosition;
 
   DescriptorsFunctionPointerType m_DescriptorsFunction;
+
+  unsigned int m_NeighborhoodRadius;
 };
 
 
@@ -310,6 +349,9 @@ public:
     {
       return this->GetFilter()->GetSamplesPositionsObject();
     }
+
+    otbSetObjectMemberMacro(Filter, NeighborhoodRadius, unsigned int);
+    otbGetObjectMemberMacro(Filter, NeighborhoodRadius, unsigned int);
 
   protected:
     /** Constructor */

@@ -28,6 +28,7 @@ namespace otb
 template <class TInputImage, class TVectorData, class TFunctionType, class TListSample, class TLabelListSample>
 PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,TListSample,TLabelListSample>
 ::PersistentDescriptorsListSampleGenerator()
+  : m_NeighborhoodRadius(0)
 {
   // Need 2 inputs : a vector image and a vectordata
   this->SetNumberOfRequiredInputs(2);
@@ -240,8 +241,50 @@ PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,T
 template <class TInputImage, class TVectorData, class TFunctionType, class TListSample, class TLabelListSample>
 void
 PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,TListSample,TLabelListSample>
+::GenerateInputRequestedRegion()
+{
+  Superclass::GenerateInputRequestedRegion();
+
+  // get pointers to the input and output
+  typename Superclass::InputImagePointer inputPtr =
+    const_cast< TInputImage * >( this->GetInput() );
+  typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
+
+  if ( !inputPtr || !outputPtr )
+    {
+    return;
+    }
+
+  // get a copy of the input requested region (should equal the output
+  // requested region)
+  typename TInputImage::RegionType inputRequestedRegion;
+  inputRequestedRegion = inputPtr->GetRequestedRegion();
+
+  // pad the input requested region by the operator radius
+  inputRequestedRegion.PadByRadius( m_NeighborhoodRadius );
+
+  // crop the input requested region at the input's largest possible region
+  if ( inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()) )
+    {
+    inputPtr->SetRequestedRegion( inputRequestedRegion );
+    return;
+    }
+  else
+    {
+    // Couldn't crop the region (requested region is outside the largest
+    // possible region).  Throw an exception.
+
+    // store what we tried to request (prior to trying to crop)
+    inputPtr->SetRequestedRegion( inputRequestedRegion );
+    }
+}
+
+template <class TInputImage, class TVectorData, class TFunctionType, class TListSample, class TLabelListSample>
+void
+PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,TListSample,TLabelListSample>
 ::BeforeThreadedGenerateData()
 {
+  std::cout << "Buffered Region : " << this->GetInput()->GetBufferedRegion() << std::endl;
 }
 
 

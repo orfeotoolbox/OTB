@@ -80,15 +80,16 @@ protected:
 
   virtual void GenerateData(void);
 
-private:
-  PersistentFilterStreamingDecorator(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
-
   /// Object responsible for streaming
   StreamerPointerType m_Streamer;
 
   /// Object responsible for computation
   FilterPointerType m_Filter;
+
+private:
+  PersistentFilterStreamingDecorator(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
+
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION

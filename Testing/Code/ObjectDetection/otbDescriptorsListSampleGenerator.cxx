@@ -135,6 +135,7 @@ int otbDescriptorsListSampleGenerator(int argc, char* argv[])
   descriptorsGenerator->SetInputImage(imageReader->GetOutput());
   descriptorsGenerator->SetSamplesLocations(vectorDataReader->GetOutput());
   descriptorsGenerator->SetDescriptorsFunction(descriptorsFunction.GetPointer());
+  descriptorsGenerator->SetNeighborhoodRadius(5);
 
   if (streaming == 0)
     {
