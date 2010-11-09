@@ -32,9 +32,40 @@ ListSampleToBalancedListSampleFilter<TInputSampleList,TLabelSampleList,TOutputSa
 ::ListSampleToBalancedListSampleFilter()
 {
   this->SetNumberOfRequiredInputs(2);
+  this->SetNumberOfRequiredOutputs(2);
+
+  // Create the second output
+  //this->itk::ProcessObject::SetNthOutput(0, this->MakeOutput(0).GetPointer());
+  this->itk::ProcessObject::SetNthOutput(1, this->MakeOutput(1).GetPointer());
   
   m_AddGaussianNoiseFilter = GaussianAdditiveNoiseType::New();
   m_BalancingFactor  = 5;
+}
+
+template < class TInputSampleList, class TLabelSampleList, class TOutputSampleList >
+typename ListSampleToBalancedListSampleFilter<TInputSampleList,TLabelSampleList,TOutputSampleList>
+::DataObjectPointer
+ListSampleToBalancedListSampleFilter<TInputSampleList,TLabelSampleList,TOutputSampleList>
+::MakeOutput(unsigned int idx)
+{
+  DataObjectPointer output;
+  switch (idx)
+    {
+    case 0:
+      Superclass::MakeOutput(0);
+      break;
+    case 1:
+      {
+      typename LabelSampleListObjectType::Pointer labelListSample = LabelSampleListObjectType::New();
+      labelListSample->Set(LabelSampleListType::New());
+      output = static_cast<itk::DataObject*>(labelListSample.GetPointer());
+      break;
+      }
+    default:
+      output = static_cast<itk::DataObject*>(InputSampleListObjectType::New().GetPointer());
+      break;
+    }
+  return output;
 }
 
 // Method to set the SampleList 
@@ -91,6 +122,27 @@ ListSampleToBalancedListSampleFilter<TInputSampleList,TLabelSampleList,TOutputSa
    (Superclass::ProcessObject::GetInput(1) );
   return dataObjectPointer->Get();
 }
+
+// Get the output label SampleList
+template < class TInputSampleList, class TLabelSampleList, class TOutputSampleList >
+typename ListSampleToBalancedListSampleFilter<TInputSampleList,TLabelSampleList,TOutputSampleList>
+::LabelSampleListType *
+ListSampleToBalancedListSampleFilter<TInputSampleList,TLabelSampleList,TOutputSampleList>
+::GetOutputLabelSampleList()
+{
+  return const_cast<LabelSampleListType*>(this->GetOutputLabel()->Get());
+}
+
+// Get the output label SampleList as DataObject
+template < class TInputSampleList, class TLabelSampleList, class TOutputSampleList >
+typename ListSampleToBalancedListSampleFilter<TInputSampleList,TLabelSampleList,TOutputSampleList>
+::LabelSampleListObjectType *
+ListSampleToBalancedListSampleFilter<TInputSampleList,TLabelSampleList,TOutputSampleList>
+::GetOutputLabel()
+{
+  return dynamic_cast<LabelSampleListObjectType*>(this->itk::ProcessObject::GetOutput(1));
+}
+
 
 // Get the max sample number having the same label
 template < class TInputSampleList, class TLabelSampleList, class TOutputSampleList >
@@ -174,6 +226,10 @@ ListSampleToBalancedListSampleFilter<TInputSampleList,TLabelSampleList,TOutputSa
   typename LabelSampleListObjectType::ConstPointer labelPtr  = this->GetInputLabel();
   typename OutputSampleListObjectType::Pointer     outputPtr = this->GetOutput();
 
+  typename LabelSampleListObjectType::Pointer outputLabelPtr  = this->GetOutputLabel();
+  typename LabelSampleListType::Pointer   outputLabel = const_cast<LabelSampleListType*>(outputLabelPtr->Get());
+   
+
   // Retrieve the ListSample
    InputSampleListConstPointer inputSampleListPtr = inputPtr->Get();
    LabelSampleListConstPointer labelSampleListPtr = labelPtr->Get();
@@ -222,6 +278,9 @@ ListSampleToBalancedListSampleFilter<TInputSampleList,TLabelSampleList,TOutputSa
      // Add the current input casted sample to the output SampleList
      outputSampleListPtr->PushBack(currentOutputMeasurement);
 
+     // Add the currentsample list label
+     outputLabel->PushBack(currentLabelMeasurement);
+
      // Add the noised versions of the current sample to OutputSampleList
      typename OutputSampleListType::ConstIterator tempIt = noisingFilter->GetOutput()->Get()->Begin();
      
@@ -231,6 +290,10 @@ ListSampleToBalancedListSampleFilter<TInputSampleList,TLabelSampleList,TOutputSa
        OutputMeasurementVectorType currentTempMeasurement = tempIt.GetMeasurementVector();
        // Add to output SampleList
        outputSampleListPtr->PushBack(currentTempMeasurement);
+       
+       // Add a label in the output ListSample
+       outputLabel->PushBack(currentLabelMeasurement);
+       
        ++tempIt;
        }
      

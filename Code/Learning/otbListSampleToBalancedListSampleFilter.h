@@ -81,10 +81,13 @@ public:
   typedef typename OutputSampleListType::MeasurementVectorType OutputMeasurementVectorType;
   typedef typename OutputMeasurementVectorType::ValueType      OutputValueType;
   
+  /** DataObject typedef*/
+  typedef typename Superclass::DataObjectPointer               DataObjectPointer;
+  
   /** Input & Output sample list as data object */
   typedef typename Superclass::InputSampleListObjectType       InputSampleListObjectType;  
   typedef typename Superclass::OutputSampleListObjectType      OutputSampleListObjectType;
-
+  
   /** Filter adding noise to a ListSample */
   typedef otb::Statistics::GaussianAdditiveNoiseSampleListFilter
   <InputSampleListType,OutputSampleListType>                   GaussianAdditiveNoiseType;
@@ -99,6 +102,12 @@ public:
   
   /** Returns the label sample list as a data object */
   const LabelSampleListObjectType * GetInputLabel() const;
+
+  /** Returns the output label samplelist */
+  LabelSampleListType * GetOutputLabelSampleList();
+
+  /** Returns the label sample list as a data object */
+  LabelSampleListObjectType * GetOutputLabel();
   
   /** Set/Get the mean for the white gaussian noise to generate  */
   otbSetObjectMemberMacro(AddGaussianNoiseFilter,Mean,double);
@@ -124,6 +133,9 @@ protected:
     * have the higher number of sample.
     */
   void ComputeMaxSampleFrequency();
+
+  /** Make Output */
+  DataObjectPointer MakeOutput(unsigned int idx);
   
   ListSampleToBalancedListSampleFilter();
   virtual ~ListSampleToBalancedListSampleFilter() {}
