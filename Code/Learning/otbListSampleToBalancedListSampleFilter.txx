@@ -86,7 +86,7 @@ ListSampleToBalancedListSampleFilter<TInputSampleList,TLabelSampleList,TOutputSa
 ::SetInputLabel( const LabelSampleListObjectType * labelPtr ) 
 {
   // Process object is not const-correct so the const_cast is required here
-  Superclass::ProcessObject::SetNthInput(1,
+  this->itk::ProcessObject::SetNthInput(1,
                                    const_cast< LabelSampleListObjectType* >( labelPtr  ) );
 }
 
@@ -103,7 +103,7 @@ ListSampleToBalancedListSampleFilter<TInputSampleList,TLabelSampleList,TOutputSa
     }
 
   return static_cast<const  LabelSampleListObjectType* >
-    (Superclass::ProcessObject::GetInput(1) );
+    (this->itk::ProcessObject::GetInput(1) );
 }
 
 // Method to get the SampleList
@@ -119,7 +119,7 @@ ListSampleToBalancedListSampleFilter<TInputSampleList,TLabelSampleList,TOutputSa
     }
 
  typename LabelSampleListObjectType::ConstPointer dataObjectPointer = static_cast<const LabelSampleListObjectType * >
-   (Superclass::ProcessObject::GetInput(1) );
+   (this->itk::ProcessObject::GetInput(1) );
   return dataObjectPointer->Get();
 }
 
@@ -180,7 +180,7 @@ ListSampleToBalancedListSampleFilter<TInputSampleList,TLabelSampleList,TOutputSa
     {
     // Get the current label sample
     LabelMeasurementVectorType currentInputMeasurement = labelIt.GetMeasurementVector();
-    histogram->IncreaseFrequency(currentInputMeasurement[0], 1.);
+    histogram->IncreaseFrequency(currentInputMeasurement[0], 1);
     ++labelIt;
     }
   
@@ -207,8 +207,15 @@ ListSampleToBalancedListSampleFilter<TInputSampleList,TLabelSampleList,TOutputSa
   iter = histogram->Begin();
   while ( iter != histogram->End() )
     {
-    unsigned int coeff = static_cast<unsigned int>(balancedFrequency/iter.GetFrequency());
-    m_MultiplicativeCoefficient.push_back(coeff);
+    if(iter.GetFrequency() - 1e-10 < 0.)
+      m_MultiplicativeCoefficient.push_back(0);
+    else
+      {
+      unsigned int coeff = static_cast<unsigned int>(balancedFrequency/iter.GetFrequency());
+      m_MultiplicativeCoefficient.push_back(coeff);
+      std::cout <<"iter.GetFrequency() " << iter.GetFrequency() <<" --> coedd "<<coeff  << std::endl;
+      }
+    
     ++iter;
     }
 }
