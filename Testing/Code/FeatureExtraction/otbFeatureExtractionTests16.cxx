@@ -36,4 +36,6 @@ void RegisterTests()
   REGISTER_TEST(otbImageFunctionAdaptor);
   REGISTER_TEST(otbMetaImageFunctionNew);
   REGISTER_TEST(otbMetaImageFunction);
+  REGISTER_TEST(otbHaralickTexturesImageFunctionNew);
+  REGISTER_TEST(otbHaralickTexturesImageFunction);
 }

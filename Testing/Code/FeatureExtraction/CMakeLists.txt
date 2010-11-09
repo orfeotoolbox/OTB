@@ -1528,6 +1528,23 @@ ADD_TEST(feTvMetaImageFunction ${FEATUREEXTRACTION_TESTS16}
     451846.014047961 5412466.57452216
 )
 
+# -------   otb::HaralickTexturesImageFunction   -------------
+ADD_TEST(feTuHaralickTexturesImageFunctionNew ${FEATUREEXTRACTION_TESTS16}
+        otbHaralickTexturesImageFunctionNew
+)
+
+ADD_TEST(feTvHaralickTexturesImageFunction ${FEATUREEXTRACTION_TESTS16}
+--compare-ascii ${EPSILON_8}     
+    ${BASELINE_FILES}/feTvHaralickTexturesImageFunction.txt
+    ${TEMP}/feTvHaralickTexturesImageFunction.txt
+    otbHaralickTexturesImageFunction
+	${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+    ${TEMP}/feTvHaralickTexturesImageFunction.txt
+    451846.014047961 5412466.57452216
+)
+
+
+
 # A enrichir
 SET(BasicFeatureExtraction_SRCS1
 otbFeatureExtractionTests1.cxx
@@ -1724,6 +1741,7 @@ otbLocalHistogramImageFunctionNew.cxx
 otbLocalHistogramImageFunctionTest.cxx
 otbImageFunctionAdaptor.cxx
 otbMetaImageFunction.cxx
+otbHaralickTexturesImageFunction.cxx
 )
 
 
