@@ -19,7 +19,7 @@
 #define __otbMetaImageFunction_txx
 
 #include "otbMetaImageFunction.h"
-#include "otbImageFunctionAdapter.h"
+#include "otbImageFunctionAdaptor.h"
 
 #include <algorithm>
 
