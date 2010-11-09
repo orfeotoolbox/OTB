@@ -24,6 +24,7 @@
 #include "itkExceptionObject.h"
 #include "itkFixedArray.h"
 #include "itkHistogram.h"
+#include "itkSmartPointer.h"
 
 
 namespace otb
@@ -207,9 +208,9 @@ private:
 
 //Histogram
 template< class TMeasurement, unsigned int VMeasurementVectorSize, class TFrequencyContainer, class TPrecisionType >
-class ITK_EXPORT VariableLengthVectorConverter<itk::Statistics::Histogram<TMeasurement, 
-                                                                          VMeasurementVectorSize, 
-                                                                          TFrequencyContainer>,
+class ITK_EXPORT VariableLengthVectorConverter<typename itk::SmartPointer< const itk::Statistics::Histogram<TMeasurement, 
+                                                                                                            VMeasurementVectorSize, 
+                                                                                                            TFrequencyContainer> >,
                                                TPrecisionType> :
 public itk::ProcessObject
 {
@@ -228,9 +229,9 @@ public:
 
   typedef TPrecisionType                                                           OutputPrecisionType;
   typedef typename itk::VariableLengthVector<OutputPrecisionType>                  OutputType;
-  typedef typename itk::Statistics::Histogram<TMeasurement, 
-                                              VMeasurementVectorSize, 
-                                              TFrequencyContainer>                 InputType;
+  typedef typename itk::SmartPointer< const itk::Statistics::Histogram<TMeasurement, 
+                                                                       VMeasurementVectorSize, 
+                                                                       TFrequencyContainer> >   InputType;
 
   OutputType Convert(InputType input);
  

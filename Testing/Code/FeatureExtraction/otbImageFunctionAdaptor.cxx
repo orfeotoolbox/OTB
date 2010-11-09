@@ -266,7 +266,7 @@ int otbImageFunctionAdaptor(int argc, char * argv[])
               << "\t - resultRaM : " << resultRaM[i] << std::endl;
     rsltIdx ++;
     }
-/*
+
   LHFunction->SetInputImage(reader->GetOutput());
   LHFunction->SetNeighborhoodRadius(5);
   LHFunction->SetNumberOfHistogramBins(64);
@@ -290,7 +290,7 @@ int otbImageFunctionAdaptor(int argc, char * argv[])
               << "\t - resultLH : " << resultLH->GetFrequency(i) << std::endl;
     rsltIdx ++;
     }
- */
+
   error = vcl_sqrt(error);
   std::cout << std::endl << "Error : " << error << std::endl
             << std::endl;
