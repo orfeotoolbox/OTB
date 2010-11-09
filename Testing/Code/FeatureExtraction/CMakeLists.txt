@@ -1507,12 +1507,12 @@ ADD_TEST(feTvLocalHistogramImageFunctionTest ${FEATUREEXTRACTION_TESTS16}
 
 # -------   otb::ImageFunctionAdapter   -------------
 
-ADD_TEST(feTuImageFunctionAdapterNew ${FEATUREEXTRACTION_TESTS16}
-        otbImageFunctionAdapterNew
+ADD_TEST(feTuImageFunctionAdaptorNew ${FEATUREEXTRACTION_TESTS16}
+        otbImageFunctionAdaptorNew
 )
 
-ADD_TEST(feTvImageFunctionAdapter ${FEATUREEXTRACTION_TESTS16}
-        otbImageFunctionAdapter
+ADD_TEST(feTvImageFunctionAdaptor ${FEATUREEXTRACTION_TESTS16}
+        otbImageFunctionAdaptor
                 ${INPUTDATA}/poupees.png
 	        )
 	        
@@ -1530,6 +1530,23 @@ ADD_TEST(feTvMetaImageFunction ${FEATUREEXTRACTION_TESTS16}
     ${TEMP}/feTvMetaImageFunction.txt
     451846.014047961 5412466.57452216
 )
+
+# -------   otb::HaralickTexturesImageFunction   -------------
+ADD_TEST(feTuHaralickTexturesImageFunctionNew ${FEATUREEXTRACTION_TESTS16}
+        otbHaralickTexturesImageFunctionNew
+)
+
+ADD_TEST(feTvHaralickTexturesImageFunction ${FEATUREEXTRACTION_TESTS16}
+--compare-ascii ${EPSILON_8}     
+    ${BASELINE_FILES}/feTvHaralickTexturesImageFunction.txt
+    ${TEMP}/feTvHaralickTexturesImageFunction.txt
+    otbHaralickTexturesImageFunction
+	${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+    ${TEMP}/feTvHaralickTexturesImageFunction.txt
+    451846.014047961 5412466.57452216
+)
+
+
 
 # A enrichir
 SET(BasicFeatureExtraction_SRCS1
@@ -1725,8 +1742,9 @@ otbFeatureExtractionTests16.cxx
 otbFourierMellinDescriptors.cxx
 otbLocalHistogramImageFunctionNew.cxx
 otbLocalHistogramImageFunctionTest.cxx
-otbImageFunctionAdapter.cxx
+otbImageFunctionAdaptor.cxx
 otbMetaImageFunction.cxx
+otbHaralickTexturesImageFunction.cxx
 )
 
 

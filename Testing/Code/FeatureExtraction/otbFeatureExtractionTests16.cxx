@@ -32,8 +32,10 @@ void RegisterTests()
   REGISTER_TEST(otbFourierMellinDescriptorsRotationInvariant);
   REGISTER_TEST(otbLocalHistogramImageFunctionNew);
   REGISTER_TEST(otbLocalHistogramImageFunctionTest);
-  REGISTER_TEST(otbImageFunctionAdapterNew);
-  REGISTER_TEST(otbImageFunctionAdapter);
+  REGISTER_TEST(otbImageFunctionAdaptorNew);
+  REGISTER_TEST(otbImageFunctionAdaptor);
   REGISTER_TEST(otbMetaImageFunctionNew);
   REGISTER_TEST(otbMetaImageFunction);
+  REGISTER_TEST(otbHaralickTexturesImageFunctionNew);
+  REGISTER_TEST(otbHaralickTexturesImageFunction);
 }

@@ -80,6 +80,8 @@ public:
   typedef double                                   ScalarRealType;
   typedef typename std::complex<ScalarRealType>    ScalarComplexType;
 
+  typedef TCoordRep                                CoordRepType;
+
   /** Dimension of the underlying image. */
   itkStaticConstMacro(ImageDimension, unsigned int,
                       InputImageType::ImageDimension);

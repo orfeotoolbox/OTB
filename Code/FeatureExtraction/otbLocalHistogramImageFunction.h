@@ -68,6 +68,8 @@ public:
   typedef itk::Statistics::Histogram<typename TInputImage::PixelType> HistogramType;
   typedef typename HistogramType::Pointer                    HistogramPointer;
 
+  typedef TCoordRep                                CoordRepType;
+
   /** Dimension of the underlying image. */
   itkStaticConstMacro(ImageDimension, unsigned int,
                       InputImageType::ImageDimension);

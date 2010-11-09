@@ -975,6 +975,20 @@ ADD_TEST(prTuElevDatabaseHeightAboveMSLFunction ${PROJECTIONS_TESTS4}
    otbElevDatabaseHeightAboveMSLFunction
 )
 
+#------ otb::ImageToEnvelopeVectorDataFilter ---------------------
+ADD_TEST(prTuImageToEnvelopeVectorDataFilterNew ${PROJECTIONS_TESTS4}
+otbImageToEnvelopeVectorDataFilterNew)
+
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(prTvImageToEnvelopeVectorDataFilter ${PROJECTIONS_TESTS4}
+--compare-ascii ${NOTOL}
+  ${BASELINE_FILES}/prTvImageToEnvelopeVectorDataFilterOutput.kml
+  ${TEMP}/prTvImageToEnvelopeVectorDataFilterOutput.kml
+  otbImageToEnvelopeVectorDataFilter
+  ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+  ${TEMP}/prTvImageToEnvelopeVectorDataFilterOutput.kml
+)
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 #=======================================================================================
 SET(Projections_SRCS1
@@ -1032,6 +1046,7 @@ otbProjectionsTests4.cxx
 otbPhysicalToRPCSensorModelImageFilter.cxx
 otbGenericRSResampleImageFilter.cxx
 otbElevDatabaseHeightAboveMSLFunction.cxx
+otbImageToEnvelopeVectorDataFilter.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbProjectionsTests1 "${Projections_SRCS1}" "OTBProjections;OTBIO;OTBTesting")

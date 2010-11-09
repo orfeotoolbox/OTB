@@ -23,7 +23,7 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbFlusserMomentsImageFunction.h"
-#include "otbImageFunctionAdapter.h"
+#include "otbImageFunctionAdaptor.h"
 
 typedef unsigned short                                                InputPixelType;
 const unsigned int Dimension =                                        2;
@@ -31,7 +31,7 @@ const unsigned int Dimension =                                        2;
 typedef otb::Image<InputPixelType,  Dimension>                        InputImageType;
 typedef otb::ImageFileReader<InputImageType>                          ReaderType;
 typedef otb::FlusserMomentsImageFunction<InputImageType>              FlusserFunctionType;
-typedef otb::ImageFunctionAdapter<InputImageType,FlusserFunctionType> FunctionType;
+typedef otb::ImageFunctionAdaptor<FlusserFunctionType> FunctionType;
 
 typedef otb::MetaImageFunction<
         itk::NumericTraits<InputPixelType>::RealType,double>          MetaImageFunctionType;
@@ -61,9 +61,9 @@ int otbMetaImageFunction(int argc, char * argv[])
   function2->SetInputImage(reader->GetOutput());
   function3->SetInputImage(reader->GetOutput());
 
-  function1->GetImageFunction()->SetNeighborhoodRadius(3);
-  function2->GetImageFunction()->SetNeighborhoodRadius(5);
-  function3->GetImageFunction()->SetNeighborhoodRadius(7);
+  function1->GetInternalImageFunction()->SetNeighborhoodRadius(3);
+  function2->GetInternalImageFunction()->SetNeighborhoodRadius(5);
+  function3->GetInternalImageFunction()->SetNeighborhoodRadius(7);
 
   std::ofstream outputStream(argv[2]);
 
