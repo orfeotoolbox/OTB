@@ -26,9 +26,11 @@
 #include "otbRadiometricMomentsImageFunction.h"
 #include "itkListSample.h"
 #include "itkFixedArray.h"
+#include "itkVariableLengthVector.h"
 #include "otbDescriptorsListSampleGenerator.h"
 #include "otbImageFileReader.h"
 #include "otbVectorDataFileReader.h"
+#include "otbImageFunctionAdapter.h"
 
 const unsigned int Dimension = 2;
 typedef int        LabelType;
@@ -39,10 +41,13 @@ typedef double     CoordRepType;
 typedef otb::Image<PixelType, Dimension>                              ImageType;
 typedef otb::VectorData<>                                             VectorDataType;
 typedef otb::RadiometricMomentsImageFunction<ImageType, CoordRepType> FunctionType;
+  typedef otb::ImageFunctionAdapter
+    <ImageType,FunctionType>                                          AdapatedFunctionType;
 
-typedef FunctionType::OutputType                        SampleType;
+//typedef FunctionType::OutputType                      SampleType;
+typedef itk::VariableLengthVector<CoordRepType>         SampleType;
 typedef itk::Statistics::ListSample<SampleType>         ListSampleType;
-typedef itk::FixedArray<LabelType, 1>                   LabelSampleType;
+typedef itk::FixedArray<LabelType>                      LabelSampleType;
 typedef itk::Statistics::ListSample<LabelSampleType>    LabelListSampleType;
 
 typedef otb::DescriptorsListSampleGenerator
@@ -127,9 +132,9 @@ int otbDescriptorsListSampleGenerator(int argc, char* argv[])
   //imageReader->Update();
   //vectorDataReader->Update();
 
-  FunctionType::Pointer descriptorsFunction = FunctionType::New();
+  AdapatedFunctionType::Pointer descriptorsFunction = AdapatedFunctionType::New();
   descriptorsFunction->SetInputImage(imageReader->GetOutput());
-  descriptorsFunction->SetNeighborhoodRadius(5);
+  descriptorsFunction->GetImageFunction()->SetNeighborhoodRadius(5);
 
   DescriptorsListSampleGeneratorType::Pointer descriptorsGenerator = DescriptorsListSampleGeneratorType::New();
   descriptorsGenerator->SetInputImage(imageReader->GetOutput());
