@@ -30,7 +30,7 @@
 #include "otbDescriptorsListSampleGenerator.h"
 #include "otbImageFileReader.h"
 #include "otbVectorDataFileReader.h"
-#include "otbImageFunctionAdapter.h"
+#include "otbImageFunctionAdaptor.h"
 
 const unsigned int Dimension = 2;
 typedef int        LabelType;
@@ -41,8 +41,8 @@ typedef double     CoordRepType;
 typedef otb::Image<PixelType, Dimension>                              ImageType;
 typedef otb::VectorData<>                                             VectorDataType;
 typedef otb::RadiometricMomentsImageFunction<ImageType, CoordRepType> FunctionType;
-  typedef otb::ImageFunctionAdapter
-    <ImageType,FunctionType>                                          AdapatedFunctionType;
+  typedef otb::ImageFunctionAdaptor
+    <FunctionType>                                          AdapatedFunctionType;
 
 //typedef FunctionType::OutputType                      SampleType;
 typedef itk::VariableLengthVector<CoordRepType>         SampleType;
@@ -134,7 +134,7 @@ int otbDescriptorsListSampleGenerator(int argc, char* argv[])
 
   AdapatedFunctionType::Pointer descriptorsFunction = AdapatedFunctionType::New();
   descriptorsFunction->SetInputImage(imageReader->GetOutput());
-  descriptorsFunction->GetImageFunction()->SetNeighborhoodRadius(5);
+  descriptorsFunction->GetInternalImageFunction()->SetNeighborhoodRadius(5);
 
   DescriptorsListSampleGeneratorType::Pointer descriptorsGenerator = DescriptorsListSampleGeneratorType::New();
   descriptorsGenerator->SetInputImage(imageReader->GetOutput());
