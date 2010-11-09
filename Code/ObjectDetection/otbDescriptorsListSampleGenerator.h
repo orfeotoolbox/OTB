@@ -20,7 +20,7 @@
 
 #include <vector>
 
-#include "itkFixedArray.h"
+#include "itkVariableLengthVector.h"
 #include "itkImageRegion.h"
 
 #include "otbListSampleSource.h"
@@ -40,7 +40,7 @@ template <class TOutputPrecision>
 class DefaultDescriptorsType
 {
 public:
-  typedef itk::FixedArray<TOutputPrecision, 4> Type;
+  typedef itk::VariableLengthVector<TOutputPrecision> Type;
 };
 
 /** \class PersistentDescriptorsListSampleGenerator
