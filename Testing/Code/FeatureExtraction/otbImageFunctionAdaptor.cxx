@@ -71,8 +71,8 @@ int otbImageFunctionAdaptorNew(int argc, char * argv[])
   std::cout << HMadaptedFunction << std::endl;
   RaMImageFunctionAdaptorType::Pointer RaMadaptedFunction = RaMImageFunctionAdaptorType::New();
   std::cout << RaMadaptedFunction << std::endl;
-  //LHImageFunctionAdaptorType::Pointer LHadaptedFunction = LHImageFunctionAdaptorType::New();
-  //std::cout << LHadaptedFunction << std::endl;
+  LHImageFunctionAdaptorType::Pointer LHadaptedFunction = LHImageFunctionAdaptorType::New();
+  std::cout << LHadaptedFunction << std::endl;
  
   return EXIT_SUCCESS;
 }
@@ -266,7 +266,7 @@ int otbImageFunctionAdaptor(int argc, char * argv[])
               << "\t - resultRaM : " << resultRaM[i] << std::endl;
     rsltIdx ++;
     }
-
+/*
   LHFunction->SetInputImage(reader->GetOutput());
   LHFunction->SetNeighborhoodRadius(5);
   LHFunction->SetNumberOfHistogramBins(64);
@@ -290,16 +290,42 @@ int otbImageFunctionAdaptor(int argc, char * argv[])
               << "\t - resultLH : " << resultLH->GetFrequency(i) << std::endl;
     rsltIdx ++;
     }
-  
+ */
   error = vcl_sqrt(error);
   std::cout << std::endl << "Error : " << error << std::endl
             << std::endl;
 
- if (error > 1E-3)
+  if (error > 1E-3)
     {
     itkGenericExceptionMacro( << "Error = " << error
                               << "  > 1E-9     -> TEST FAILLED" << std::endl );
     }
+  
+  // Testing the use of a user defined InternalImageFunction instead
+  // of the build-in InternalImageFunction
+  FMDFunctionType::Pointer myFunction = FMDFunctionType::New();
+  FMDImageFunctionAdaptorType::Pointer myAdaptedFunction = FMDImageFunctionAdaptorType::New();
+  
+  myFunction->SetNeighborhoodRadius(8);
+  myFunction->SetPmax(2);
+  myFunction->SetQmax(2);
+
+  myAdaptedFunction->SetInputImage(reader->GetOutput());
+  myAdaptedFunction->SetInternalImageFunction(myFunction);
+  FMDImageFunctionAdaptorType::OutputType myResult = myAdaptedFunction->EvaluateAtIndex(index);
+  
+  rsltIdx = 0;
+  for (unsigned int i=0; i<=2; i++)
+    {
+    for (unsigned int j=0; j<=2; j++)
+      {
+      std::cout << "myResult: " << myResult[rsltIdx] << std::endl;
+      rsltIdx ++;
+      }
+    }
+  std::cout << myAdaptedFunction << std::endl;
+
+  
 
   return EXIT_SUCCESS;
 }
