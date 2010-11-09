@@ -1496,11 +1496,14 @@ ADD_TEST(feTuLocalHistogramImageFunctionNew ${FEATUREEXTRACTION_TESTS16}
         otbLocalHistogramImageFunctionNew
 )
 
-ADD_TEST(feTuLocalHistogramImageFunctionTest ${FEATUREEXTRACTION_TESTS16}
-        otbLocalHistogramImageFunctionTest
-		${INPUTDATA}/poupees_1canal.hd
-  		${TEMP}/feLocalHistogramImage.txt
-                )
+ADD_TEST(feTvLocalHistogramImageFunctionTest ${FEATUREEXTRACTION_TESTS16}
+--compare-ascii ${EPSILON_8}     
+	${BASELINE_FILES}/feLocalHistogramImage.txt
+   	${TEMP}/feLocalHistogramImage.txt
+	otbLocalHistogramImageFunctionTest
+	${INPUTDATA}/prison_toulouse.tif
+  	${TEMP}/feLocalHistogramImage.txt
+)
 
 # -------   otb::ImageFunctionAdapter   -------------
 

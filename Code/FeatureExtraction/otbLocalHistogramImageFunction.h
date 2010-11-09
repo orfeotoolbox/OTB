@@ -20,7 +20,7 @@
 
 #include "itkImageFunction.h"
 #include "itkFixedArray.h"
-#include "itkScalarImageToHistogramGenerator.h"
+#include "itkHistogram.h"
 #include "itkNumericTraits.h"
 
 namespace otb
@@ -40,14 +40,14 @@ namespace otb
 template <class TInputImage, class TCoordRep = double >
 class ITK_EXPORT LocalHistogramImageFunction :
   public itk::ImageFunction< TInputImage,
-                typename itk::Statistics::ScalarImageToHistogramGenerator<TInputImage>::HistogramConstPointer,
+                typename itk::Statistics::Histogram<typename TInputImage::PixelType>::Pointer,
                 TCoordRep >
 {
 public:
   /** Standard class typedefs. */
   typedef LocalHistogramImageFunction                                     Self;
   typedef itk::ImageFunction< TInputImage,
-                  typename itk::Statistics::ScalarImageToHistogramGenerator<TInputImage>::HistogramConstPointer,
+                  typename itk::Statistics::Histogram<typename TInputImage::PixelType>::Pointer,
                   TCoordRep >                                             Superclass;
   typedef itk::SmartPointer<Self>                                         Pointer;
   typedef itk::SmartPointer<const Self>                                   ConstPointer;
@@ -65,11 +65,8 @@ public:
   typedef typename Superclass::PointType           PointType;
 
   typedef typename Superclass::OutputType          OutputType;
-  typedef itk::Statistics::ScalarImageToHistogramGenerator<TInputImage> HistogramGeneratorType;
-  typedef typename HistogramGeneratorType::GeneratorType    GeneratorType;
-  typedef typename GeneratorType::HistogramType             HistogramType;
-  typedef typename HistogramType::Pointer                   HistogramPointer;
-  typedef typename GeneratorType::Pointer                   GeneratorPointer;
+  typedef itk::Statistics::Histogram<typename TInputImage::PixelType> HistogramType;
+  typedef typename HistogramType::Pointer                    HistogramPointer;
 
   typedef TCoordRep                                CoordRepType;
 

@@ -107,21 +107,28 @@ VariableLengthVectorConverter< itk::FixedArray<TInternalInputType, VArrayDimensi
 
 // Histogram
 template< class TMeasurement, unsigned int VMeasurementVectorSize, class TFrequencyContainer, class TPrecisionType >
-typename VariableLengthVectorConverter< itk::Statistics::Histogram<TMeasurement, VMeasurementVectorSize, TFrequencyContainer>, TPrecisionType>
+typename VariableLengthVectorConverter< itk::SmartPointer< const itk::Statistics::Histogram<TMeasurement, 
+                                                                                            VMeasurementVectorSize, 
+                                                                                            TFrequencyContainer> >, 
+                                        TPrecisionType>
 ::OutputType
-VariableLengthVectorConverter< itk::Statistics::Histogram<TMeasurement, VMeasurementVectorSize, TFrequencyContainer>, TPrecisionType>
+VariableLengthVectorConverter< itk::SmartPointer<const itk::Statistics::Histogram<TMeasurement, 
+                                                                                  VMeasurementVectorSize, 
+                                                                                  TFrequencyContainer> >, 
+                               TPrecisionType>
 ::Convert(InputType input)
 {
-  unsigned int nbBins, rsltIdx = 0;
+  unsigned int rsltIdx = 0;
+  itk::Size<1> nbBins;
   OutputType result;
 
-  nbBins = input.GetSize();
+  nbBins[0] = input->GetSize()[0];
+  
+  result.SetSize(nbBins[0]);
 
-  result.SetSize(nbBins);
-
-  for (unsigned int i=0; i<nbBins; i++)
+  for (unsigned int i=0; i<nbBins[0]; i++)
     {
-    result[rsltIdx] = static_cast<OutputPrecisionType>(input.GetFrequency(i));
+    result[rsltIdx] = static_cast<OutputPrecisionType>(input->GetFrequency(i));
     rsltIdx ++;
     }
   
