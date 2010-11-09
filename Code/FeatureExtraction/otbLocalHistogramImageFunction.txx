@@ -19,7 +19,6 @@
 #define __otbLocalHistogramImageFunction_txx
 
 #include "otbLocalHistogramImageFunction.h"
-#include "itkImageToHistogramGenerator.h"
 #include "itkConstNeighborhoodIterator.h"
 #include "itkNumericTraits.h"
 #include "itkMacro.h"
@@ -55,27 +54,37 @@ typename LocalHistogramImageFunction<TInputImage,TCoordRep>::OutputType
 LocalHistogramImageFunction<TInputImage,TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
-  typename HistogramGeneratorType::Pointer histogramGenerator = HistogramGeneratorType::New();
-  histogramGenerator->SetNumberOfBins( this->GetNumberOfHistogramBins() );
-  histogramGenerator->SetHistogramMin( this->GetHistogramMin() );
-  histogramGenerator->SetHistogramMax( this->GetHistogramMax() );
+
+  typename HistogramType::Pointer histogram = HistogramType::New();
+
+  typename HistogramType::SizeType size ;
+  size.Fill( this->GetNumberOfHistogramBins() ) ;
+
+  typename HistogramType::MeasurementVectorType lowerBound;
+  typename HistogramType::MeasurementVectorType upperBound;
+
+  lowerBound.Fill( static_cast<typename HistogramType::MeasurementType>(this->GetHistogramMin()) ) ;
+  upperBound.Fill( static_cast<typename HistogramType::MeasurementType>(this->GetHistogramMax()) ) ;
+
+  histogram->Initialize(size, lowerBound, upperBound ) ;
+  histogram->SetToZero();
 
   // Check for input image
   if( !this->GetInputImage() )
     {
-    return histogramGenerator->GetOutput();
+    return histogram;
     }
 
   // Check for out of buffer
   if ( !this->IsInsideBuffer( index ) )
     {
-    return histogramGenerator->GetOutput();
+    return histogram;
     }
 
-  typename InputImageType::Pointer currentImage;
-  currentImage = InputImageType::New();
+  typename InputImageType::ConstPointer currentImage = this->GetInputImage();
 
-  currentImage = const_cast<InputImageType *>(this->GetInputImage());
+  typename itk::ConstNeighborhoodIterator<InputImageType>::RadiusType radius;
+  radius.Fill( this->GetNeighborhoodRadius() );
 
   typename InputImageType::RegionType region;
   typename InputImageType::IndexType currentIndex;
@@ -90,20 +99,25 @@ LocalHistogramImageFunction<TInputImage,TCoordRep>
   region.SetIndex(currentIndex);
   region.SetSize(currentSize);
 
-  if(region.Crop(currentImage->GetRequestedRegion()) )
+  itk::ConstNeighborhoodIterator<InputImageType> it(radius, currentImage, region);
+
+  float numberOfPixelsCounted = 0.0;
+
+  it.GoToBegin();
+  while (!it.IsAtEnd())
     {
-      typedef itk::ExtractImageFilter<InputImageType,InputImageType> ExtractFilterType;
-      typename ExtractFilterType::Pointer extractFilter = ExtractFilterType::New();
-
-      extractFilter->SetInput(this->GetInputImage());
-      extractFilter->SetExtractionRegion(region);
-      extractFilter->Update();
-
-      histogramGenerator->SetInput(  extractFilter->GetOutput()  );
-      histogramGenerator->Compute();
+    typename HistogramType::MeasurementVectorType sample;
+    for (unsigned int j = 0; j < sample.Size(); ++j)
+      {
+      sample[j] = it.GetPixel(j);
+      }
+    if( histogram->IncreaseFrequency(sample, 1) )
+      {
+      ++numberOfPixelsCounted;
+      }
+    ++it;
     }
-
-  return histogramGenerator->GetOutput();
+  return histogram;
 }
 
 } // namespace otb
