@@ -213,7 +213,6 @@ ListSampleToBalancedListSampleFilter<TInputSampleList,TLabelSampleList,TOutputSa
       {
       unsigned int coeff = static_cast<unsigned int>(balancedFrequency/iter.GetFrequency());
       m_MultiplicativeCoefficient.push_back(coeff);
-      std::cout <<"iter.GetFrequency() " << iter.GetFrequency() <<" --> coedd "<<coeff  << std::endl;
       }
     
     ++iter;
