@@ -706,9 +706,9 @@ void TiXmlElement::SetDoubleAttribute( const char * name, double val )
 {	
 	char buf[256];
 	#if defined(TIXML_SNPRINTF)		
-		TIXML_SNPRINTF( buf, sizeof(buf), "%f", val );
+		TIXML_SNPRINTF( buf, sizeof(buf), "%g", val );
 	#else
-		sprintf( buf, "%f", val );
+		sprintf( buf, "%g", val );
 	#endif
 	SetAttribute( name, buf );
 }
