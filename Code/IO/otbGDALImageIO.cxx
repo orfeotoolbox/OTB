@@ -27,7 +27,7 @@
 #include "otbMacro.h"
 #include "otbSystem.h"
 #include "otbImage.h"
-#include "itkArray.h"
+#include "itkVariableLengthVector.h"
 
 #include "itkMetaDataObject.h"
 #include "otbMetaDataKey.h"
@@ -236,7 +236,7 @@ void GDALImageIO::Read(void* buffer)
   std::streamoff lNbPixels = (static_cast<std::streamoff>(lNbColumns)) * (static_cast<std::streamoff>(lNbLines));
   std::streamoff lBufferSize = static_cast<std::streamoff>(m_NbOctetPixel) * lNbPixels;
 
-  itk::Array<unsigned char> value(lBufferSize);
+  itk::VariableLengthVector<unsigned char> value(lBufferSize);
 
   CPLErr         lCrGdal;
   std::streamoff cpt(0);
@@ -249,7 +249,7 @@ void GDALImageIO::Read(void* buffer)
                                                  lFirstLine,
                                                  lNbColumns,
                                                  lNbLines,
-                                                 value.data_block(),
+                                                 const_cast<unsigned char*>(value.GetDataPointer()),
                                                  lNbColumns,
                                                  lNbLines,
                                                  m_PxType,
@@ -276,7 +276,7 @@ void GDALImageIO::Read(void* buffer)
                                      lFirstLine,
                                      lNbColumns,
                                      lNbLines,
-                                     value.data_block(),
+                                     const_cast<unsigned char*>(value.GetDataPointer()),
                                      lNbColumns,
                                      lNbLines,
                                      m_PxType,
@@ -312,7 +312,7 @@ void GDALImageIO::Read(void* buffer)
                                                                 lFirstLine,
                                                                 lNbColumns,
                                                                 lNbLines,
-                                                                value.data_block(),
+                                                                const_cast<unsigned char*>(value.GetDataPointer()),
                                                                 lNbColumns,
                                                                 lNbLines,
                                                                 m_PxType,
@@ -793,6 +793,8 @@ void GDALImageIO::InternalReadImageInformation()
 
 bool GDALImageIO::CanWriteFile(const char* name)
 {
+  m_FileName = name;
+
   // First check the filename
   if (name == NULL)
     {
@@ -823,6 +825,7 @@ bool GDALImageIO::CanStreamWrite()
   // Get the GDAL format ID from the name
   std::string gdalDriverShortName = FilenameToGdalDriverShortName(m_FileName);
   GDALDriver* driver = GDALDriverManagerWrapper::GetInstance().GetDriverByName(gdalDriverShortName);
+
   if (driver == NULL)
     {
     itkDebugMacro(<< "Unable to instantiate driver " << gdalDriverShortName);
@@ -873,7 +876,7 @@ void GDALImageIO::Write(const void* buffer)
   std::streamoff lBufferSize = static_cast<std::streamoff> (m_NbOctetPixel) * lNbPixels;
   otbMsgDevMacro(<< " BufferSize allocated : " << lBufferSize);
 
-  itk::Array<unsigned char> value(lBufferSize);
+  itk::VariableLengthVector<unsigned char> value(lBufferSize);
 
   if (m_CanStreamWrite)
     {
@@ -895,7 +898,7 @@ void GDALImageIO::Write(const void* buffer)
         }
       GDALRasterBand *poBand = m_Dataset->GetDataSet()->GetRasterBand(nbComponents+1);
 
-      lCrGdal = poBand->RasterIO(GF_Write, lFirstColumn, lFirstLine, lNbColumns, lNbLines, value.data_block(),
+      lCrGdal = poBand->RasterIO(GF_Write, lFirstColumn, lFirstLine, lNbColumns, lNbLines, const_cast<unsigned char*>(value.GetDataPointer()),
                                  lNbColumns, lNbLines, m_PxType, 0, 0);
       if (lCrGdal == CE_Failure)
         {
@@ -1125,7 +1128,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   /*  Set the six coefficients of affine geoTtransform      */
   /* -------------------------------------------------------------------- */
 
-  itk::Array<double> geoTransform(6);
+  itk::VariableLengthVector<double> geoTransform(6);
   /// Reporting origin and spacing
   geoTransform[0] = m_Origin[0];
   geoTransform[3] = m_Origin[1];
@@ -1135,7 +1138,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   // FIXME: Here component 1 and 4 should be replaced by the orientation parameters
   geoTransform[2] = 0.;
   geoTransform[4] = 0.;
-  dataset->SetGeoTransform(geoTransform.data_block());
+  dataset->SetGeoTransform(const_cast<double*>(geoTransform.GetDataPointer()));
 
   /* -------------------------------------------------------------------- */
   /*      Report metadata.                                                */
