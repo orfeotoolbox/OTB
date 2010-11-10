@@ -45,7 +45,10 @@ ShiftScaleSampleListFilter<TInputSampleList,TOutputSampleList>
   InputMeasurementVectorType invertedScales = m_Scales;
   for(unsigned int idx = 0;idx < invertedScales.Size();++idx)
     {
-    invertedScales[idx] = 1 / m_Scales[idx];
+    if(m_Scales[idx]-1e-10 < 0.)
+      invertedScales[idx] = 0.;
+    else
+      invertedScales[idx] = 1 / m_Scales[idx];
     }
 
   // Clear any previous output
