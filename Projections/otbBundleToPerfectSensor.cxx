@@ -27,10 +27,11 @@
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbGenericRSResampleImageFilter.h"
+#include "otbBCOInterpolateImageFunction.h"
 
 #include "itkExceptionObject.h"
 
-#include "otbStandardFilterWatcher.h"
+#include "otbStandardWriterWatcher.h"
 #include "otbSimpleRcsPanSharpeningFusionImageFilter.h"
 #include "itkPixelBuilder.h"
 
@@ -81,11 +82,12 @@ int main(int argc, char* argv[])
 
     typedef unsigned short int PixelType;
 
-    typedef otb::VectorImage<PixelType, 2>          XsImageType;
-    typedef otb::Image<PixelType,2>                 PanImageType;
-    typedef otb::ImageFileReader<XsImageType>          XsReaderType;
-    typedef otb::ImageFileReader<PanImageType>         PanReaderType;
-    typedef otb::StreamingImageFileWriter<XsImageType> WriterType;
+    typedef otb::VectorImage<PixelType, 2>                XsImageType;
+    typedef otb::Image<PixelType,2>                       PanImageType;
+    typedef otb::ImageFileReader<XsImageType>             XsReaderType;
+    typedef otb::ImageFileReader<PanImageType>            PanReaderType;
+    typedef otb::StreamingImageFileWriter<XsImageType>    WriterType;
+    typedef otb::BCOInterpolateImageFunction<XsImageType> InterpolatorType;
 
     typedef otb::GenericRSResampleImageFilter<XsImageType,XsImageType>  ResamplerType;
 
@@ -102,6 +104,8 @@ int main(int argc, char* argv[])
     
     // Resample filter 
     ResamplerType::Pointer    resampler = ResamplerType::New();
+    InterpolatorType::Pointer interpolator = InterpolatorType::New();
+    resampler->SetInterpolator(interpolator);
     
     // Add DEM if any
     if(parseResult->IsOptionPresent("--DEMDirectory"))
@@ -151,9 +155,9 @@ int main(int argc, char* argv[])
     WriterType::Pointer writer = WriterType::New();
     writer->SetFileName(parseResult->GetOutputImage());
     writer->SetInput(fusionFilter->GetOutput());
+    writer->SetWriteGeomFile(true);
 
-    otb::StandardFilterWatcher w4(writer,"Perfect sensor fusion");
-
+    otb::StandardWriterWatcher w4(writer,resampler,"Perfect sensor fusion");
 
     if ( parseResult->IsOptionPresent("--NumStreamDivisions") )
     {
