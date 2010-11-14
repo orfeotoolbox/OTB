@@ -15,9 +15,12 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
 #ifndef __otbStreamingResampleImageFilter_txx
 #define __otbStreamingResampleImageFilter_txx
+
+#include "otbStreamingImageFileWriter.h"
+
+#include "itkProgressAccumulator.h"
 
 namespace otb
 {
@@ -43,6 +46,11 @@ void
 StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType>
 ::GenerateData()
 {
+  // Set up progress reporting
+  typename itk::ProgressAccumulator::Pointer progress = itk::ProgressAccumulator::New();
+  progress->SetMiniPipelineFilter(this);
+  progress->RegisterInternalFilter(m_WarpFilter,1.f);
+
   m_WarpFilter->GraftOutput(this->GetOutput());
   m_WarpFilter->Update();
   this->GraftOutput(m_WarpFilter->GetOutput());

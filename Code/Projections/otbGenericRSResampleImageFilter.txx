@@ -18,9 +18,13 @@
 #ifndef __otbGenericRSResampleImageFilter_txx
 #define __otbGenericRSResampleImageFilter_txx
 
+#include "otbGenericRSResampleImageFilter.h"
+
 #include "itkMetaDataDictionary.h"
 #include "itkMetaDataObject.h"
 #include "otbMetaDataKey.h"
+
+#include "itkProgressAccumulator.h"
 
 #include "projection/ossimUtmProjection.h"
 #include "itkPoint.h"
@@ -53,6 +57,11 @@ void
 GenericRSResampleImageFilter<TInputImage, TOutputImage>
 ::GenerateData()
 {
+  // Set up progress reporting
+  typename itk::ProgressAccumulator::Pointer progress = itk::ProgressAccumulator::New();
+  progress->SetMiniPipelineFilter(this);
+  progress->RegisterInternalFilter(m_Resampler,1.f);
+
   m_Resampler->GraftOutput(this->GetOutput());
   m_Resampler->Update();
   this->GraftOutput(m_Resampler->GetOutput());
