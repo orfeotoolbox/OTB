@@ -24,39 +24,39 @@
 namespace otb {
 namespace Statistics {
 
-template < class TInputSampleList, class TOutputSampleList >
-ConcatenateSampleListFilter<TInputSampleList,TOutputSampleList>
+template < class TSampleList>
+ConcatenateSampleListFilter<TSampleList>
 ::ConcatenateSampleListFilter()
  {}
 
-template < class TInputSampleList, class TOutputSampleList >
+template <class TSampleList>
 void
-ConcatenateSampleListFilter<TInputSampleList,TOutputSampleList>
-::AddInput( const InputSampleListType * input )
+ConcatenateSampleListFilter<TSampleList>
+::AddInput( const SampleListType * input )
  {
- typename InputSampleListObjectType::Pointer inputPtr = InputSampleListObjectType::New();
+ typename SampleListObjectType::Pointer inputPtr = SampleListObjectType::New();
  inputPtr->Set(input);
  this->AddInput(inputPtr);
  }
 
-template < class TInputSampleList, class TOutputSampleList >
+template <class TSampleList>
 void
-ConcatenateSampleListFilter<TInputSampleList,TOutputSampleList>
-::AddInput( const InputSampleListObjectType * inputPtr )
+ConcatenateSampleListFilter<TSampleList>
+::AddInput( const SampleListObjectType * inputPtr )
  {
  // Process object is not const-correct so the const_cast is required here
- Superclass::ProcessObject::AddInput(const_cast< InputSampleListObjectType* >( inputPtr ) );
+ Superclass::ProcessObject::AddInput(const_cast< SampleListObjectType* >( inputPtr ) );
  }
 
 
-template < class TInputSampleList, class TOutputSampleList >
+template <class TSampleList>
 void
-ConcatenateSampleListFilter<TInputSampleList,TOutputSampleList>
+ConcatenateSampleListFilter<TSampleList>
 ::GenerateData()
  {
  // Retrieve output pointers
- typename OutputSampleListObjectType::Pointer     outputPtr = this->GetOutput();
- OutputSampleListPointer outputSampleListPtr    = const_cast<OutputSampleListType *>(outputPtr->Get());
+ typename SampleListObjectType::Pointer     outputPtr = this->GetOutput();
+ SampleListPointer outputSampleListPtr    = const_cast<SampleListType *>(outputPtr->Get());
 
  // Clear any previous output
  outputSampleListPtr->Clear();
@@ -67,8 +67,8 @@ ConcatenateSampleListFilter<TInputSampleList,TOutputSampleList>
  for(unsigned int inputIndex = 0; inputIndex<this->GetNumberOfInputs();++inputIndex)
   {
   // Retrieve the ListSample
-  typename InputSampleListObjectType::ConstPointer inputPtr =
-    static_cast<InputSampleListObjectType *>(Superclass::ProcessObject::GetInput(inputIndex));
+  typename SampleListObjectType::ConstPointer inputPtr =
+    static_cast<SampleListObjectType *>(Superclass::ProcessObject::GetInput(inputIndex));
   totalNumberOfSamples += inputPtr->Get()->Size();
   }
 
@@ -78,31 +78,17 @@ ConcatenateSampleListFilter<TInputSampleList,TOutputSampleList>
  for(unsigned int inputIndex = 0; inputIndex<this->GetNumberOfInputs();++inputIndex)
  {
   // Retrieve the ListSample
-  typename InputSampleListObjectType::ConstPointer inputPtr =
-    static_cast<InputSampleListObjectType *>(Superclass::ProcessObject::GetInput(inputIndex));
-  InputSampleListConstPointer inputSampleListPtr = inputPtr->Get();
+  typename SampleListObjectType::ConstPointer inputPtr =
+    static_cast<SampleListObjectType *>(Superclass::ProcessObject::GetInput(inputIndex));
+  SampleListConstPointer inputSampleListPtr = inputPtr->Get();
 
-  typename InputSampleListType::ConstIterator inputIt = inputSampleListPtr->Begin();
+  typename SampleListType::ConstIterator inputIt = inputSampleListPtr->Begin();
 
   // Iterate on the InputSampleList
   while(inputIt != inputSampleListPtr->End())
   {
-  // Retrieve current input sample
-  InputMeasurementVectorType currentInputMeasurement = inputIt.GetMeasurementVector();
-
-  // Build current output sample
-  OutputMeasurementVectorType currentOutputMeasurement;
-  currentOutputMeasurement.SetSize(currentInputMeasurement.GetSize());
-
-  // Center and reduce each component
-  for(unsigned int idx = 0;idx < currentInputMeasurement.Size();++idx)
-   {
-   currentOutputMeasurement[idx] = static_cast<OutputValueType>(
-   currentInputMeasurement[idx]);
-   }
-
   // Add the current output sample to the output SampleList
-  outputSampleListPtr->PushBack(currentOutputMeasurement);
+  outputSampleListPtr->PushBack(inputIt.GetMeasurementVector());
 
   // Update progress
   progress.CompletedPixel();
@@ -112,9 +98,9 @@ ConcatenateSampleListFilter<TInputSampleList,TOutputSampleList>
  }
  }
 
-template < class TInputSampleList, class TOutputSampleList >
+template <class TSampleList>
 void
-ConcatenateSampleListFilter<TInputSampleList,TOutputSampleList>
+ConcatenateSampleListFilter<TSampleList>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
  {
  // Call superclass implementation

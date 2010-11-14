@@ -26,20 +26,20 @@ namespace Statistics {
 /** \class ConcatenateSampleListFilter
  *  \brief This class concatenates several sample list into a single one.
  *
- * Standard casting is applied between input and output type.
- *
+ * For the sake of genericity on the MeasurementVector type, no casting is applied so
+ * this filter does not allow different input/output SampleList.
  *
  * \sa ListSampleToListSampleFilter
  */
-template < class TInputSampleList, class TOutputSampleList = TInputSampleList >
+template < class TSampleList >
 class ITK_EXPORT ConcatenateSampleListFilter :
-  public otb::Statistics::ListSampleToListSampleFilter<TInputSampleList,TOutputSampleList>
+  public otb::Statistics::ListSampleToListSampleFilter<TSampleList,TSampleList>
 {
 public:
   /** Standard class typedefs */
   typedef ConcatenateSampleListFilter                Self;
   typedef otb::Statistics::ListSampleToListSampleFilter
-  <TInputSampleList,TOutputSampleList>               Superclass;
+  <TSampleList,TSampleList>                          Superclass;
   typedef itk::SmartPointer< Self >                  Pointer;
   typedef itk::SmartPointer<const Self>              ConstPointer;
   
@@ -49,26 +49,18 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
   
-  /** InputSampleList typedefs */
-  typedef TInputSampleList                                    InputSampleListType;
-  typedef typename InputSampleListType::Pointer               InputSampleListPointer;
-  typedef typename InputSampleListType::ConstPointer          InputSampleListConstPointer;
-  typedef typename InputSampleListType::MeasurementVectorType InputMeasurementVectorType;
-  typedef typename InputMeasurementVectorType::ValueType      InputValueType;
-
-  /** OutputSampleList typedefs */
-  typedef TOutputSampleList                                    OutputSampleListType;
-  typedef typename OutputSampleListType::Pointer               OutputSampleListPointer;
-  typedef typename OutputSampleListType::ConstPointer          OutputSampleListConstPointer;
-  typedef typename OutputSampleListType::MeasurementVectorType OutputMeasurementVectorType;
-  typedef typename OutputMeasurementVectorType::ValueType      OutputValueType;
+  /** SampleList typedefs */
+  typedef TSampleList                                    SampleListType;
+  typedef typename SampleListType::Pointer               SampleListPointer;
+  typedef typename SampleListType::ConstPointer          SampleListConstPointer;
+  typedef typename SampleListType::MeasurementVectorType MeasurementVectorType;
+  typedef typename MeasurementVectorType::ValueType      ValueType;
   
-  typedef typename Superclass::InputSampleListObjectType       InputSampleListObjectType;  
-  typedef typename Superclass::OutputSampleListObjectType      OutputSampleListObjectType;
+  typedef typename Superclass::InputSampleListObjectType       SampleListObjectType;
 
   /** Method to set/get the input list sample */
-  void AddInput( const InputSampleListType * inputPtr );
-  void AddInput( const InputSampleListObjectType * inputPtr );
+  void AddInput( const SampleListType * inputPtr );
+  void AddInput( const SampleListObjectType * inputPtr );
 
 protected:
   /** This method causes the filter to generate its output. */

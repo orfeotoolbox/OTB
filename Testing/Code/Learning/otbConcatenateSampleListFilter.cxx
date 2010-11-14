@@ -29,10 +29,7 @@
 typedef itk::VariableLengthVector<double> DoubleSampleType;
 typedef itk::Statistics::ListSample<DoubleSampleType> DoubleSampleListType;
 
-typedef itk::VariableLengthVector<float> FloatSampleType;
-typedef itk::Statistics::ListSample<FloatSampleType> FloatSampleListType;
-typedef otb::Statistics::ConcatenateSampleListFilter<FloatSampleListType,DoubleSampleListType> ConcatenateFilterType;
-
+typedef otb::Statistics::ConcatenateSampleListFilter<DoubleSampleListType> ConcatenateFilterType;
 
 int otbConcatenateSampleListFilterNew(int argc, char * argv[])
 {
@@ -49,17 +46,17 @@ int otbConcatenateSampleListFilter(int argc, char * argv[])
  unsigned int nbSamples1 = atoi(argv[3]);
  unsigned int nbSamples2 = atoi(argv[4]);
 
- FloatSampleListType::Pointer inputSampleList1 = FloatSampleListType::New();
+ DoubleSampleListType::Pointer inputSampleList1 = DoubleSampleListType::New();
  inputSampleList1->SetMeasurementVectorSize(sampleSize);
 
- FloatSampleListType::Pointer inputSampleList2 = FloatSampleListType::New();
+ DoubleSampleListType::Pointer inputSampleList2 = DoubleSampleListType::New();
  inputSampleList2->SetMeasurementVectorSize(sampleSize);
 
  ConcatenateFilterType::Pointer filter = ConcatenateFilterType::New();
  filter->AddInput(inputSampleList1);
  filter->AddInput(inputSampleList2);
 
- FloatSampleType sample(sampleSize);
+ DoubleSampleType sample(sampleSize);
 
  unsigned int index = 5;
 
