@@ -640,6 +640,9 @@ otbDecisionTreeNew)
 ADD_TEST(leTvDecisionTreeBuild ${LEARNING_TESTS5}
 otbDecisionTreeBuild)
 
+ADD_TEST(leTvDecisionTreeWithRealValues ${LEARNING_TESTS5}
+otbDecisionTreeWithRealValues)
+
 
 # Testing srcs
 SET(BasicLearning_SRCS1
@@ -716,6 +719,7 @@ SET(BasicLearning_SRCS5
 otbLearningTests5.cxx
 otbDecisionTreeNew.cxx
 otbDecisionTreeBuild.cxx
+otbDecisionTreeWithRealValues.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbLearningTests1 "${BasicLearning_SRCS1}" "OTBLearning;OTBIO;OTBTesting")

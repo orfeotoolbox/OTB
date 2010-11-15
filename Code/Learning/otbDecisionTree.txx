@@ -51,10 +51,31 @@ DecisionTree<AttributeValueType, LabelType>
 template <class AttributeValueType, class LabelType>
 void
 DecisionTree<AttributeValueType, LabelType>
+::AddBranch(AttributeValueType attr, DecisionTreeTestType testType, Pointer branch)
+{
+  m_IsFinal = false;
+  KeyType key = KeyType(attr, testType);
+  (*m_TreeMap)[key] = branch;
+}
+
+template <class AttributeValueType, class LabelType>
+void
+DecisionTree<AttributeValueType, LabelType>
 ::AddBranch(AttributeValueType attr, Pointer branch)
 {
   m_IsFinal = false;
-  (*m_TreeMap)[attr] = branch;
+  KeyType key = KeyType(attr, EQ);
+  (*m_TreeMap)[key] = branch;
+}
+
+template <class AttributeValueType, class LabelType>
+void
+DecisionTree<AttributeValueType, LabelType>
+::AddBranch(AttributeValueType attr, DecisionTreeTestType testType, LabelType label)
+{
+  m_IsFinal = true;
+  KeyType key = KeyType(attr, testType);
+  m_LabelMap[key] = label;
 }
 
 template <class AttributeValueType, class LabelType>
@@ -63,7 +84,8 @@ DecisionTree<AttributeValueType, LabelType>
 ::AddBranch(AttributeValueType attr, LabelType label)
 {
   m_IsFinal = true;
-  m_LabelMap[attr] = label;
+  KeyType key = KeyType(attr, EQ);
+  m_LabelMap[key] = label;
 }
 
 template <class AttributeValueType, class LabelType>
@@ -71,26 +93,51 @@ LabelType
 DecisionTree<AttributeValueType, LabelType>
 ::Decide(const ExampleType example)
 {
+  AttributeValueType attrValue = example[m_Attribute];
+  bool found = false;
+  KeyType key;
   if( m_IsFinal )
     {
-    AttributeValueType attrValue = example[m_Attribute];
-    if( m_LabelMap.find(attrValue) == m_LabelMap.end() ) // attribute
-							 // not found
-							 // in the map 
+    for(DecisionTreeTestType i = MIN; i <= MAX; i=DecisionTreeTestType(i+1) )
+      {
+      key = KeyType(attrValue, i);
+      if( m_LabelMap.find(key) != m_LabelMap.end() )
+	{
+	found = true;
+	break;
+	}
+      } 
+    if (! found )                                      // attribute
+                                                       // not found
+						       // in the map 
       itkGenericExceptionMacro(<< "Example could not be handled by decision tree.");
-    LabelType lab = m_LabelMap[attrValue];
+
+    LabelType lab = m_LabelMap[key];
     return lab;
     }
   else
     {
-    AttributeValueType attrValue = example[m_Attribute];
-    if( m_TreeMap->find(attrValue) == m_TreeMap->end() ) // attribute
+    found = false;
+    for(DecisionTreeTestType i = MIN; i <= MAX; i=DecisionTreeTestType(i+1) )
+      {
+      key = KeyType(attrValue, i);
+      if( m_TreeMap->find(key) != m_TreeMap->end() )
+	{
+	found = true;
+	break;
+	}
+      } 
+    if( ! found )                                         // attribute
 					                 // not found
 					                 // in the map
       itkGenericExceptionMacro(<< "Example could not be handled by decision tree.");
-    Pointer child = (*m_TreeMap)[attrValue];
+
+    std::cout << key.first << " " << key.second << std::endl;
+    Pointer child = (*m_TreeMap)[key];
     return child->Decide(example);
     }
+
+
 
 }
 

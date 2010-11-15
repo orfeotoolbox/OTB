@@ -26,6 +26,7 @@
 
 namespace otb
 {
+
 /**
  * \class DecisionTree
  * \brief Models a decision tree
@@ -52,6 +53,8 @@ template <class AttributeValueType, class LabelType>
 class ITK_EXPORT DecisionTree : public itk::DataObject
 {
 public:
+
+  enum DecisionTreeTestType { MIN, LT=MIN, LE, EQ, GE, GT, MAX=GT};
   /** Standard typedefs */
   typedef DecisionTree                  Self;
   typedef itk::DataObject               Superclass;
@@ -63,17 +66,24 @@ public:
   /** Runtime informations macro */
   itkTypeMacro(DecisionTree, DataObject);  
 
-  typedef typename std::map< AttributeValueType, Pointer > TreeMapType;
-  typedef typename std::map< AttributeValueType, LabelType > LabelMapType;
+  typedef typename std::pair< AttributeValueType, DecisionTreeTestType > KeyType;
+  typedef typename std::map< KeyType, Pointer > TreeMapType;
+  typedef typename std::map< KeyType, LabelType > LabelMapType;
   typedef std::vector<AttributeValueType> ExampleType;
 
   itkSetMacro(Attribute, unsigned int);
   itkGetMacro(Attribute, unsigned int);
 
   /** Add a subtree on the tested attribute*/
+  void AddBranch(AttributeValueType attr, DecisionTreeTestType testType, Pointer branch);
+  /** Add a subtree on the tested attribute - syntactic sugar for the
+      EQ case*/
   void AddBranch(AttributeValueType attr, Pointer branch);
 
   /** Add a leaf node on the tested attribute*/
+  void AddBranch(AttributeValueType attr, DecisionTreeTestType testType, LabelType label);
+  /** Add a leaf node on the tested attribute - syntactic sugar for the
+      EQ case*/
   void AddBranch(AttributeValueType attr, LabelType label);
 
   LabelType Decide(const ExampleType example);

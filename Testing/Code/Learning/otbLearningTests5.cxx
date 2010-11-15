@@ -28,4 +28,5 @@ void RegisterTests()
 {
   REGISTER_TEST(otbDecisionTreeNew);
   REGISTER_TEST(otbDecisionTreeBuild);
+  REGISTER_TEST(otbDecisionTreeWithRealValues);
 }
