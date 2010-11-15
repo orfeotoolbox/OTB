@@ -94,50 +94,118 @@ DecisionTree<AttributeValueType, LabelType>
 ::Decide(const ExampleType example)
 {
   AttributeValueType attrValue = example[m_Attribute];
+
+  std::cout << "Trying to match attribute " << m_Attribute << " with value " << attrValue << std::endl;
+
   bool found = false;
   KeyType key;
   if( m_IsFinal )
     {
-    for(DecisionTreeTestType i = MIN; i <= MAX; i=DecisionTreeTestType(i+1) )
+    typename LabelMapType::const_iterator lmIt = m_LabelMap.begin();
+    while( lmIt != m_LabelMap.end() )
       {
-      key = KeyType(attrValue, i);
-      if( m_LabelMap.find(key) != m_LabelMap.end() )
+      KeyType theKey = lmIt->first;
+      DecisionTreeTestType theTest = theKey.second;
+      AttributeValueType theValue = theKey.first;
+      switch( theTest  ) 
 	{
-	found = true;
-	break;
+	case LT:
+	  if( attrValue < theValue )
+	    return lmIt->second;
+	  break;
+	case LE:
+	  if( attrValue <= theValue )
+	    return lmIt->second;
+	  break;
+	case EQ:
+	  if( attrValue == theValue )
+	    return lmIt->second;
+	  break;
+	case GE:
+	  if( attrValue >= theValue )
+	    return lmIt->second;
+	  break;
+	case GT:
+	  if( attrValue > theValue )
+	    return lmIt->second;
+	  break;
 	}
-      } 
-    if (! found )                                      // attribute
-                                                       // not found
-						       // in the map 
-      itkGenericExceptionMacro(<< "Example could not be handled by decision tree.");
+      ++lmIt;
+      }
+    
+    // if we get here it means that a verified test was  not found
+    itkGenericExceptionMacro(<< "Example could not be handled by decision tree.");
 
-    LabelType lab = m_LabelMap[key];
-    return lab;
     }
   else
     {
     found = false;
-    for(DecisionTreeTestType i = MIN; i <= MAX; i=DecisionTreeTestType(i+1) )
+
+    // Look for branches matching the test on the attribute
+    std::vector< KeyType > candidateKeys;
+
+    typename TreeMapType::const_iterator tmIt = m_TreeMap->begin();
+    while( tmIt != m_TreeMap->end() )
       {
-      key = KeyType(attrValue, i);
-      if( m_TreeMap->find(key) != m_TreeMap->end() )
+      KeyType theKey = tmIt->first;
+      DecisionTreeTestType theTest = theKey.second;
+      AttributeValueType theValue = theKey.first;
+      switch( theTest  ) 
 	{
-	found = true;
-	break;
+	case LT:
+	  if( attrValue < theValue )
+	    {
+	    candidateKeys.push_back( theKey );
+	    found = true;
+	    }
+	  break;
+	case LE:
+	  if( attrValue <= theValue )
+	    {
+	    candidateKeys.push_back( theKey );
+	    found = true;
+	    }
+	  break;
+	case EQ:
+	  if( attrValue == theValue )
+	    {
+	    candidateKeys.push_back( theKey );
+	    found = true;
+	    }
+	  break;
+	case GE:
+	  if( attrValue >= theValue )
+	    {
+	    candidateKeys.push_back( theKey );
+	    found = true;
+	    }
+	  break;
+	case GT:
+	  if( attrValue > theValue )
+	    {
+	    candidateKeys.push_back( theKey );
+	    found = true;
+	    }
+	  break;
 	}
-      } 
+      ++tmIt;
+      }
+    
     if( ! found )                                         // attribute
 					                 // not found
 					                 // in the map
       itkGenericExceptionMacro(<< "Example could not be handled by decision tree.");
 
-    std::cout << key.first << " " << key.second << std::endl;
-    Pointer child = (*m_TreeMap)[key];
-    return child->Decide(example);
+    // If we found one or several matching tests
+    typename std::vector< KeyType >::const_iterator ckIt = candidateKeys.begin();
+    while ( ckIt != candidateKeys.end() )
+      {
+      std::cout << (*ckIt).first << " " << (*ckIt).second << std::endl;
+      Pointer child = (*m_TreeMap)[(*ckIt)];
+      return child->Decide(example);
+      }
+
     }
-
-
 
 }
 

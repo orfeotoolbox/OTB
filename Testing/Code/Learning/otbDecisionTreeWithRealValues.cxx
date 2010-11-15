@@ -52,8 +52,8 @@ int otbDecisionTreeWithRealValues(int argc, char* argv[])
   decisionTree->AddBranch( 100, DecisionTreeType::LE, doyLE100Tree );
 
   doyLE100Tree->SetAttribute( 1 );
-  doyLE100Tree->AddBranch( 0.7, DecisionTreeType::GT, SummerWheat );
-  doyLE100Tree->AddBranch( 0.7, DecisionTreeType::LT, WinterWheat );
+  doyLE100Tree->AddBranch( 0.7, DecisionTreeType::LT, SummerWheat );
+  doyLE100Tree->AddBranch( 0.7, DecisionTreeType::GE, WinterWheat );
 
   doyGT100Tree->SetAttribute( 1 );
   doyGT100Tree->AddBranch( 0.7, DecisionTreeType::LE, WinterWheat );
