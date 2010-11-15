@@ -45,7 +45,9 @@ SET(liblas_SRCS
   )
 
 #include Gdal and GeoTiff support only if version >= 1.6
-IF(GDAL_VERSION VERSION_LESS 1.6)
+COMPARE_VERSION_STRINGS(GDAL_VERSION VERSION_LESS 1.6 result)
+IF(result LESS 0)
+#IF(GDAL_VERSION VERSION_LESS 1.6)
   MESSAGE(STATUS "Disabling GDAL/GeoTIFF support for LibLAS (requires GDAL version >= 1.6)")
 ELSE()
   MESSAGE(STATUS "Enabling GDAL/GeoTIFF support for LibLAS")
