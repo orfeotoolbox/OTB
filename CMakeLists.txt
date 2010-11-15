@@ -11,6 +11,9 @@ ENDIF(COMMAND CMAKE_POLICY)
 #
 INCLUDE(${CMAKE_CURRENT_SOURCE_DIR}/CMake/PreventInSourceBuilds.cmake)
 
+#For the support of cmake 2.6 which does not have VERSION_LESS
+INCLUDE(${CMAKE_CURRENT_SOURCE_DIR}/CMake/CompareVersionStrings.cmake)
+
 PROJECT(OTB)
 
 # Path to additional CMake modules
