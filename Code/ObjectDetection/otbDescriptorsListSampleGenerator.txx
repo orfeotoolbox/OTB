@@ -318,7 +318,7 @@ PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,T
         listSample->PushBack( sample );
 
         LabelMeasurementVectorType label;
-        label[0] = static_cast<LabelMeasurementType>(vectorDataIt.Get()->GetFieldAsString("Class")[0]);
+        label[0] = static_cast<LabelMeasurementType>(vectorDataIt.Get()->GetFieldAsInt("Class"));
         labelListSample->PushBack( label );
 
         samplesPosition.push_back(point);
