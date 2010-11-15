@@ -33,17 +33,22 @@ namespace otb
  *
  * A decision tree holds an attribute that is being tested and 2
  * maps (STL): one for subtrees and anoter for labels (for the case
- * where there are no subtrees). These maps use the value of the
- * attribute being tested as keys.
+ * where there are no subtrees). These maps as keys a pair (STL) which
+ * holds the value of the attribute being tested as well as the type
+ * of test (LT, LE, EQ, GE, GT).
  *
  * In order to build a tree, one uses the method AddBranch. There are
  * 2 versions of this method: one for adding a subtree, and another
- * for adding labels in the case of leaf nodes.
+ * for adding labels in the case of leaf nodes. Each of these versions
+ * has a syntactic sugar version for the case of EQ test.
  *
  * This implementation does not use different classes for terminal and
  * non terminal nodes for simplicity and follows the implementation
  * suggested by P. Norvig in the python version of the AIMA code which
- * is available at http://aima-python.googlecode.com/svn/trunk/learning.py
+ * is available at
+ * http://aima-python.googlecode.com/svn/trunk/learning.py
+ *
+ * In the case of several terminal nodes being eligible, the first is returned.
  *
  * \sa DecisionTreeClassifier
  * \sa DecisionTreeEstimator
