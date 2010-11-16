@@ -70,7 +70,7 @@ public:
   typedef TNeighIter                       IteratorType;
   typedef typename IteratorType::PixelType PixelType;
 
-  HillShadingFunctor() : m_AzimuthLight(30.0 / 180.0 * CONST_PI), m_ElevationLight(45.0 / 180.0 * CONST_PI),
+  HillShadingFunctor() : m_AzimuthLight(30.0 * CONST_PI_180), m_ElevationLight(45.0 *CONST_PI_180),
     m_XRes(100.0), m_YRes(100.0), m_Scale(0.1)
   {
     m_SinElev = vcl_sin(m_ElevationLight);
