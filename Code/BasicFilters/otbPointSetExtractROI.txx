@@ -53,7 +53,6 @@ void
 PointSetExtractROI<TInputPointSet, TOutputPointSet>
 ::GenerateData(void)
 {
-
   typedef typename TInputPointSet::PointsContainer  InputPointsContainer;
   typedef typename TOutputPointSet::PointsContainer OutputPointsContainer;
 
@@ -87,33 +86,37 @@ PointSetExtractROI<TInputPointSet, TOutputPointSet>
   OutputPointDataContainerPointer outData = outputPointSet->GetPointData();
 
   typename InputPointsContainer::ConstIterator    inputPoint  = inPoints->Begin();
-  typename InputPointDataContainer::ConstIterator inputData;
-  if (inData.IsNotNull())
-    {
-    inputData = inData->Begin();
-    }
-
+  
+  // Commented cause using iterator on the pointSetData crash
+  // Use a direct access to pointSet Data instead to avoid segfault
+  //typename InputPointDataContainer::ConstIterator inputData = inData->Begin();
+  //if (inData.IsNotNull())
+  //  {
+  //    inputData = inData->Begin();
+  //  }
+  
   while (inputPoint != inPoints->End())
     {
     typename InputPointsContainer::Element point = inputPoint.Value();
+    
     if ((((point[0] >= m_StartX) && (point[0] < m_StartX + m_SizeX))
          || ((point[0] <= m_StartX) && (point[0] > m_StartX + m_SizeX))) //cover the case when size<0
         && (((point[1] >= m_StartY) && (point[1] < m_StartY + m_SizeY))
             || ((point[1] <= m_StartY) && (point[1] > m_StartY + m_SizeY))))
       {
-      outPoints->push_back(inputPoint.Value());
-      if (inData.IsNotNull())
-        {
-        outData->push_back(inputData.Value());
-        }
+      // Add the point 
+      outPoints->push_back(point);
+      // Get & Add the data
+      typename InputPointSetType::PixelType  data;
+      inputPointSet->GetPointData(inputPoint.Index(),&data);
+      outData->push_back(data/*inputData.Value()*/);
       }
-
+    
     ++inputPoint;
-    ++inputData;
+    //++inputData;
     }
-
 }
 
-} // end namespace itk
+} // end namespace otb
 
 #endif

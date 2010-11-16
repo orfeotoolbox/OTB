@@ -32,6 +32,10 @@
 #include "otbVectorDataFileReader.h"
 #include "otbImageFunctionAdaptor.h"
 
+#include "otbStatisticsXMLFileReader.h"
+#include "otbShiftScaleSampleListFilter.h"
+#include "otbSVMSampleListModelEstimator.h"
+
 const unsigned int Dimension = 2;
 typedef int        LabelType;
 typedef double     PixelType;
@@ -41,14 +45,13 @@ typedef double     CoordRepType;
 typedef otb::Image<PixelType, Dimension>                              ImageType;
 typedef otb::VectorData<>                                             VectorDataType;
 typedef otb::RadiometricMomentsImageFunction<ImageType, CoordRepType> FunctionType;
-  typedef otb::ImageFunctionAdaptor
-    <FunctionType>                                          AdapatedFunctionType;
+typedef otb::ImageFunctionAdaptor<FunctionType>                       AdapatedFunctionType;
 
 //typedef FunctionType::OutputType                      SampleType;
-typedef itk::VariableLengthVector<CoordRepType>         SampleType;
-typedef itk::Statistics::ListSample<SampleType>         ListSampleType;
-typedef itk::FixedArray<LabelType>                      LabelSampleType;
-typedef itk::Statistics::ListSample<LabelSampleType>    LabelListSampleType;
+typedef itk::VariableLengthVector<FunctionPrecisionType> SampleType;
+typedef itk::Statistics::ListSample<SampleType>          ListSampleType;
+typedef itk::FixedArray<LabelType>                       LabelSampleType;
+typedef itk::Statistics::ListSample<LabelSampleType>     LabelListSampleType;
 
 typedef otb::DescriptorsListSampleGenerator
            < ImageType,
@@ -61,9 +64,20 @@ typedef otb::DescriptorsListSampleGenerator
 typedef otb::ImageFileReader<ImageType>           ImageReaderType;
 typedef otb::VectorDataFileReader<VectorDataType> VectorDataReaderType;
 
+typedef otb::Functor::VariableLengthVectorToMeasurementVectorFunctor<SampleType>
+                                                        MeasurementVectorFunctorType;
+
+typedef otb::StatisticsXMLFileReader<SampleType>   StatisticsReader;
+typedef otb::Statistics::ShiftScaleSampleListFilter<ListSampleType> ShiftScaleListSampleFilterType;
+
+typedef otb::SVMSampleListModelEstimator<
+  ListSampleType,
+  LabelListSampleType,
+  MeasurementVectorFunctorType>                         SVMEstimatorType;
+
+
 typedef FunctionType::PointType PointType;
 typedef DescriptorsListSampleGeneratorType::SamplesPositionType SamplesPositionType;
-
 
 struct SampleEntry
 {
@@ -112,7 +126,7 @@ int otbDescriptorsListSampleGeneratorNew(int itkNotUsed(argc), char* itkNotUsed(
 
 int otbDescriptorsListSampleGenerator(int argc, char* argv[])
 {
-  if (argc != 5)
+  if (argc != 6)
     {
     std::cerr << "Wrong number of arguments" << std::endl;
     return EXIT_FAILURE;
@@ -122,6 +136,7 @@ int otbDescriptorsListSampleGenerator(int argc, char* argv[])
   const char* inputSamplesLocation = argv[2];
   const char* outputFileName = argv[3];
   int streaming = atoi(argv[4]);
+  int neighborhood = atoi(argv[5]);
 
   ImageReaderType::Pointer imageReader = ImageReaderType::New();
   imageReader->SetFileName(inputImageFileName);
@@ -140,7 +155,7 @@ int otbDescriptorsListSampleGenerator(int argc, char* argv[])
   descriptorsGenerator->SetInputImage(imageReader->GetOutput());
   descriptorsGenerator->SetSamplesLocations(vectorDataReader->GetOutput());
   descriptorsGenerator->SetDescriptorsFunction(descriptorsFunction.GetPointer());
-  descriptorsGenerator->SetNeighborhoodRadius(5);
+  descriptorsGenerator->SetNeighborhoodRadius(neighborhood);
 
   if (streaming == 0)
     {
@@ -189,3 +204,75 @@ int otbDescriptorsListSampleGenerator(int argc, char* argv[])
 
   return EXIT_SUCCESS;
 }
+
+
+
+int otbDescriptorsSVMModelCreation(int argc, char* argv[])
+{
+  if (argc != 7)
+    {
+    std::cerr << "Wrong number of arguments" << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  const char* inputImageFileName = argv[1];
+  const char* inputSamplesLocation = argv[2];
+  const char* featureStatisticsFileName = argv[3];
+  const char* outputFileName = argv[4];
+  int streaming = atoi(argv[5]);
+  int neighborhood = atoi(argv[6]);
+
+  ImageReaderType::Pointer imageReader = ImageReaderType::New();
+  imageReader->SetFileName(inputImageFileName);
+
+  VectorDataReaderType::Pointer vectorDataReader = VectorDataReaderType::New();
+  vectorDataReader->SetFileName(inputSamplesLocation);
+
+  //imageReader->Update();
+  //vectorDataReader->Update();
+
+  AdapatedFunctionType::Pointer descriptorsFunction = AdapatedFunctionType::New();
+  descriptorsFunction->SetInputImage(imageReader->GetOutput());
+  descriptorsFunction->GetInternalImageFunction()->SetNeighborhoodRadius(neighborhood);
+
+  DescriptorsListSampleGeneratorType::Pointer descriptorsGenerator = DescriptorsListSampleGeneratorType::New();
+  descriptorsGenerator->SetInputImage(imageReader->GetOutput());
+  descriptorsGenerator->SetSamplesLocations(vectorDataReader->GetOutput());
+  descriptorsGenerator->SetDescriptorsFunction(descriptorsFunction.GetPointer());
+  descriptorsGenerator->SetNeighborhoodRadius(5);
+
+  if (streaming == 0)
+    {
+    descriptorsGenerator->GetStreamer()->SetNumberOfStreamDivisions(1);
+    }
+  else
+    {
+    descriptorsGenerator->GetStreamer()->SetNumberOfStreamDivisions(streaming);
+    }
+
+  descriptorsGenerator->Update();
+
+  // Normalize the samples
+  // Read the mean and variance form the XML file
+  StatisticsReader::Pointer  statisticsReader = StatisticsReader::New();
+  statisticsReader->SetFileName(featureStatisticsFileName);
+  SampleType meanMeasurentVector     = statisticsReader->GetStatisticVectorByName("mean");
+  SampleType varianceMeasurentVector = statisticsReader->GetStatisticVectorByName("stddev");
+
+  // Shift scale the samples
+  ShiftScaleListSampleFilterType::Pointer shiftscaleFilter = ShiftScaleListSampleFilterType::New();
+  shiftscaleFilter->SetInput(descriptorsGenerator->GetListSample());
+  shiftscaleFilter->SetShifts(meanMeasurentVector);
+  shiftscaleFilter->SetScales(varianceMeasurentVector);
+  shiftscaleFilter->Update();
+
+  SVMEstimatorType::Pointer svmEstimator = SVMEstimatorType::New();
+  svmEstimator->SetInputSampleList(shiftscaleFilter->GetOutputSampleList());
+  svmEstimator->SetTrainingSampleList(descriptorsGenerator->GetLabelListSample());
+  svmEstimator->Update();
+  svmEstimator->GetModel()->SaveModel(outputFileName);
+
+  return EXIT_SUCCESS;
+}
+
+
