@@ -14,7 +14,7 @@ OTB-v.3.8.0 - Changes since version 3.6.0 (????/??/??)
    
 
 * System
-  * Internal liblas updated to 1.6.0 + OTB patches (root CMakeList.txtr)
+  * Internal liblas updated to 1.6.0b2 + OTB patches (root CMakeList.txt)
 
 OTB-v.3.6.0 - Changes since version 3.4.0 (2010/10/07)
 -----------------------------------------
