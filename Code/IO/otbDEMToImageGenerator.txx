@@ -96,7 +96,6 @@ void DEMToImageGenerator<TDEMImage>
   DEMImage->SetBufferedRegion(DEMImage->GetRequestedRegion());
   DEMImage->Allocate();
   DEMImage->FillBuffer(0);
-  std::cout << "m_Transform :" << m_Transform << std::endl;
 }
 
 
