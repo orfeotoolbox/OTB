@@ -20,8 +20,6 @@
 
 #include "otbPointSetExtractROI.h"
 #include "itkExceptionObject.h"
-#include "itkImageRegion.h"
-#include "itkContinuousIndex.h"
 
 namespace otb
 {
