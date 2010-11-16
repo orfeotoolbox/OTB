@@ -613,7 +613,7 @@ unsigned int OGRIOHelper<TVectorData>
   for (typename ChildrenListType::iterator it = children.begin(); it != children.end(); ++it)
     {
     DataNodePointerType dataNode = (*it)->Get();
-    otbGenericMsgDebugMacro(<< "Type of node " << dataNode->GetNodeType() << " id" << dataNode->GetNodeId());
+    otbMsgDevMacro(<< "Type of node " << dataNode->GetNodeType() << " id" << dataNode->GetNodeId());
     ++m_Kept;
 
     // Get the kwl
