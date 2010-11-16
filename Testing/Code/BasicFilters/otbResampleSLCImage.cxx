@@ -23,6 +23,8 @@
 #include "otbStreamingImageFileWriter.h"
 #include "itkTranslationTransform.h"
 #include "itkResampleImageFilter.h"
+#include "otbComplexToIntensityImageFilter.h"
+#include "otbStreamingCompareImageFilter.h"
 
 int otbResampleSLCImage(int argc, char * argv[])
 {
@@ -30,35 +32,35 @@ int otbResampleSLCImage(int argc, char * argv[])
   const char* outputFilename = argv[2];
 
   const unsigned int Dimension = 2;
-  typedef std::complex<double> InputPixelType;
-  typedef std::complex<double> OutputPixelType;
-//   typedef double InterpolatorPrecisionType;
+  typedef std::complex<double> ComplexPixelType;
+  typedef double               RealPixelType;
 
-  typedef otb::Image<InputPixelType, Dimension>          InputImageType;
-  typedef otb::Image<OutputPixelType, Dimension>         OutputImageType;
-  typedef otb::ImageFileReader<InputImageType>           ReaderType;
-  typedef otb::StreamingImageFileWriter<OutputImageType> WriterType;
+  typedef otb::Image<ComplexPixelType, Dimension>        ComplexImageType;
+  typedef otb::Image<RealPixelType, Dimension>           RealImageType;
+  typedef otb::ImageFileReader<ComplexImageType>         ReaderType;
   typedef itk::TranslationTransform<double, Dimension>   TransformType;
-//   typedef otb::StreamingResampleImageFilter<InputImageType,OutputImageType,InterpolatorPrecisionType> StreamingResampleImageFilterType;
-  typedef itk::ResampleImageFilter<InputImageType, OutputImageType> ResampleFilterType;
+  typedef otb::ComplexToIntensityImageFilter<ComplexImageType, RealImageType> ComplexToIntensityFilterType;
+  typedef itk::ResampleImageFilter<ComplexImageType, ComplexImageType> ComplexResampleFilterType;
+  typedef itk::ResampleImageFilter<RealImageType, RealImageType> RealResampleFilterType;
 
   // Instantiating object
   ReaderType::Pointer         reader = ReaderType::New();
-  WriterType::Pointer         writer = WriterType::New();
-  ResampleFilterType::Pointer resampler = ResampleFilterType::New();
+  ComplexToIntensityFilterType::Pointer beforeResampleConversion = ComplexToIntensityFilterType::New();
+  ComplexToIntensityFilterType::Pointer afterResampleConversion = ComplexToIntensityFilterType::New();
+
+  ComplexResampleFilterType::Pointer complexResample = ComplexResampleFilterType::New();
+  RealResampleFilterType::Pointer realResample = RealResampleFilterType::New();
   TransformType::Pointer      transform = TransformType::New();
+
+  typedef otb::StreamingCompareImageFilter<RealImageType> StreamingCompareImageFilterType;
 
   // Input Image
   reader->SetFileName(inputFilename);
 
-  // Resampler connected to input image
-  resampler->SetInput(reader->GetOutput());
-
   // Size of output resampler result
-  ResampleFilterType::SizeType size;
+  ComplexResampleFilterType::SizeType size;
   size[0] = 200;
   size[1] = 200;
-  resampler->SetSize(size);
 
   // Transformation creation
   TransformType::OutputVectorType translation;
@@ -66,15 +68,28 @@ int otbResampleSLCImage(int argc, char * argv[])
   translation[1] = 20;
   transform->SetOffset(translation);
 
-  // Resampler is updated with new transformation (default is identity)
-  resampler->SetTransform(transform);
+  // Image -> Resample -> Intensity image
+  complexResample->SetInput(reader->GetOutput());
+  complexResample->SetSize(size);
+  complexResample->SetTransform(transform);
+  afterResampleConversion->SetInput(complexResample->GetOutput());
 
-  // Result of resampler is written
-  writer->SetInput(resampler->GetOutput());
-  writer->SetNumberOfStreamDivisions(1);
-  writer->SetFileName(outputFilename);
+  // Image -> Intensity image -> Resample Image
+  beforeResampleConversion->SetInput(reader->GetOutput());
+  realResample->SetInput(beforeResampleConversion->GetOutput());
+  realResample->SetTransform(transform);
+  realResample->SetSize(size);
 
-  writer->Update();
+  // Compare results
+  StreamingCompareImageFilterType::Pointer compareImage = StreamingCompareImageFilterType::New();
+  compareImage->SetInput1(afterResampleConversion->GetOutput());
+  compareImage->SetInput2(realResample->GetOutput());
+  compareImage->Update();
+
+  if( compareImage->GetMAE() )
+    {
+    return EXIT_FAILURE;
+    }
 
   return EXIT_SUCCESS;
 }

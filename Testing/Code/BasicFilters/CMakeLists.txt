@@ -509,12 +509,8 @@ ADD_TEST(bfTvStreamingResampleImageFilterCompareWithITK ${BASICFILTERS_TESTS5}
 
 
 ADD_TEST(bfTvResampleSLCImage ${BASICFILTERS_TESTS5}
-            --compare-image ${NOTOL}
-                ${BASELINE}/bfTvResampleSLCImage.tif
-                ${TEMP}/bfTvResampleSLCImage.tif
             otbResampleSLCImage
                 ${INPUTDATA}/RSAT_imagery_HH.tif
-                ${TEMP}/bfTvResampleSLCImage.tif
 )
 
 # -------            otb::StreamingMinMaxImageFilter   ----------------------------
