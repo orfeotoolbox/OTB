@@ -26,7 +26,6 @@ SET(liblas_SRCS
   "${liblas_SOURCES_DIR}/utility.cpp"
   "${liblas_SOURCES_DIR}/lasvariablerecord.cpp"
   "${liblas_SOURCES_DIR}/laswriter.cpp"
-  "${liblas_SOURCES_DIR}/tifvsi.cpp"
   #index
   "${liblas_SOURCES_DIR}/detail/index/indexcell.cpp"
   "${liblas_SOURCES_DIR}/detail/index/indexoutput.cpp"
@@ -55,13 +54,14 @@ SET(liblas_SRCS
 #
 #  LIST(APPEND liblas_SRCS
 #       "${liblas_SOURCES_DIR}/gt_citation.cpp"
-#       "${liblas_SOURCES_DIR}/gt_wkt_srs.cpp")
+#       "${liblas_SOURCES_DIR}/gt_wkt_srs.cpp"
+#       "${liblas_SOURCES_DIR}/tifvsi.cpp")
 #
 #  ADD_DEFINITIONS(-DHAVE_GDAL -DHAVE_LIBGEOTIFF)
 #ENDIF()
 
 IF(NOT OTB_DISABLE_UTILITIES_COMPILATION)
-
+ADD_DEFINITIONS(-DLAS_DISABLE_DLL)
 ADD_LIBRARY(otbliblas ${liblas_SRCS} )
 
 #IF(NOT GDAL_VERSION VERSION_LESS 1.6)
