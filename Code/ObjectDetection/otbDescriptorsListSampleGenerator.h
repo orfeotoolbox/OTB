@@ -158,6 +158,11 @@ public:
   void Reset(void);
   void Synthetize(void);
 
+  void AddInput(itk::DataObject * dataObject)
+  {
+    Superclass::AddInput(dataObject);
+  }
+
 protected:
   PersistentDescriptorsListSampleGenerator();
   virtual ~PersistentDescriptorsListSampleGenerator();
@@ -291,6 +296,11 @@ public:
     {
       return this->GetFilter()->GetInput();
     }
+
+    void AddInput(itk::DataObject * dataObject)
+      {
+        this->GetFilter()->AddInput(dataObject);
+      }
 
     /** Sample locations as a VectorData of points. The label is in the ClassKey feature */
     void SetSamplesLocations(InputVectorDataType * input)

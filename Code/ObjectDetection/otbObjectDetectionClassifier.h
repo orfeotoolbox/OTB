@@ -114,6 +114,11 @@ public:
 
   typedef itk::Statistics::ListSample<DescriptorType>        ListSampleType;
 
+  void AddInput(itk::DataObject * dataObject)
+  {
+    this->Superclass::AddInput(dataObject);
+  }
+
   /** SVM model used for classification */
   void SetSVMModel(SVMModelType * model);
 
@@ -285,6 +290,11 @@ public:
     OutputVectorDataType* GetOutputVectorData()
     {
       return this->GetFilter()->GetOutputVectorData();
+    }
+
+    void AddInput(itk::DataObject * dataObject)
+    {
+      this->GetFilter()->AddInput(dataObject);
     }
 
     /** The function to evaluate */
