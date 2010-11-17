@@ -462,13 +462,13 @@ ADD_TEST( utTvKmlprintgeometry   ${UTILITIES_TESTS}
 # with 2 features.
 ADD_TEST( utTvClassifyKNN2   ${UTILITIES_TESTS}
         --compare-image ${NOTOL}
-           ${BASELINE}/output2D_2ch.mhd
-           ${TEMP}/output2D_2ch.mhd
+           ${BASELINE}/output2D_2ch.tif
+           ${TEMP}/output2D_2ch.tif
         classifyKNN2
         ${INPUTDATA}/mapfile.t1t2_139_2
-        ${INPUTDATA}/mst1139.mhd
-        ${INPUTDATA}/mst2139.mhd
-        ${TEMP}/output2D_2ch.mhd
+        ${INPUTDATA}/mst1139.tif
+        ${INPUTDATA}/mst2139.tif
+        ${TEMP}/output2D_2ch.tif
         4
         )
 
