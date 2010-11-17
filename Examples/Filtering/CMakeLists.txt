@@ -96,13 +96,13 @@ ADD_TEST(fiTeDanielssonDistanceMapImageFilterTest ${EXE_TESTS}
 	${TEMP}/DanielssonDistanceMapImageFilterOutput1.png
 	${BASELINE}/DanielssonDistanceMapImageFilterOutput2.png
 	${TEMP}/DanielssonDistanceMapImageFilterOutput2.png
-	${BASELINE}/DanielssonDistanceMapImageFilterOutput3.mhd
-	${TEMP}/DanielssonDistanceMapImageFilterOutput3.mhd
+	${BASELINE}/DanielssonDistanceMapImageFilterOutput3.tif
+	${TEMP}/DanielssonDistanceMapImageFilterOutput3.tif
 	DanielssonDistanceMapImageFilterTest
 	${INPUTDATA}/FivePoints.png
 	${TEMP}/DanielssonDistanceMapImageFilterOutput1.png
 	${TEMP}/DanielssonDistanceMapImageFilterOutput2.png
-	${TEMP}/DanielssonDistanceMapImageFilterOutput3.mhd
+	${TEMP}/DanielssonDistanceMapImageFilterOutput3.tif
 )
 
 # ------- MeanImageFilterTest----------
