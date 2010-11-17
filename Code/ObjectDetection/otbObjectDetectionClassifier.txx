@@ -239,8 +239,6 @@ PersistentObjectDetectionClassifier<TInputImage,TOutputVectorData,TLabel,TFuncti
 ::ThreadedGenerateData(const RegionType& outputRegionForThread,
                        int threadId)
 {
-#define LOGG(t) std::cout << #t << "  :  " << t << std::endl
-
   SVMModelType* model = static_cast<SVMModelType*>(this->itk::ProcessObject::GetInput(1));
 
   typedef typename RegionType::IndexType      IndexType;
@@ -264,24 +262,14 @@ PersistentObjectDetectionClassifier<TInputImage,TOutputVectorData,TLabel,TFuncti
           point[0] = current[0];
           point[1] = current[1];
 
-          //LOGG(point);
           DescriptorType descriptor = m_DescriptorsFunction->Evaluate(point);
-          //LOGG(descriptor);
           SVMModelMeasurementType modelMeasurement(descriptor.GetSize());
           for (unsigned int i = 0; i < descriptor.GetSize(); ++i)
             {
             modelMeasurement[i] = (descriptor[i] - m_Shifts[i]) * m_InvertedScales[i];
-
-/*
-            LOGG(i);
-            LOGG(descriptor[i]);
-            LOGG(m_Shifts[i]);
-            LOGG(m_InvertedScales[i]);
-            LOGG( modelMeasurement[i]);
-*/
             }
           LabelType label = model->EvaluateLabel(modelMeasurement);
-          //LOGG(label);
+
           if (label != m_NoClassLabel)
             {
             m_ThreadPointArray[threadId].push_back(std::make_pair(point, label));
