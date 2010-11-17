@@ -1440,20 +1440,20 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # -------            SarRadiometricCalibrationFunction   ------------------------------
 ADD_TEST(raTuSarParametricMapFunction ${RADIOMETRY_TESTS9}
-#	--compare-ascii ${NOTOL}
-#		    ${BASELINE_FILES}/raTvSarParametricMapFunctionOutputAscii.txt
-#	    	${TEMP}/raTvSarParametricMapFunctionOutputAscii.txt
+	--compare-ascii ${NOTOL}
+		    ${BASELINE_FILES}/raTvSarParametricMapFunctionOutputAscii.txt
+	    	${TEMP}/raTvSarParametricMapFunctionOutputAscii.txt
         otbSarParametricMapFunctionTest
 	 	${INPUTDATA}/scene.png
 	 	${TEMP}/raTvSarParametricMapFunctionOutputAscii.txt
 )
 ADD_TEST(raTvSarParametricMapFunctionToImageFilter  ${RADIOMETRY_TESTS9}
-#	--compare-image ${EPSILON_7}
-#	    ${BASELINE}/bfTvFunctionToImageFilterTest.tif
-#	    ${TEMP}/bfTvFunctionToImageFilterTest.tif
+	--compare-image ${EPSILON}
+	    	${BASELINE}/raTvSarParametricMapFunctionToImageFilter.tif
+	    	${TEMP}/raTvSarParametricMapFunctionToImageFilter.tif
         otbSarParametricMapFunctionToImageFilter
-	    ${INPUTDATA}/poupees_1canal.hd
 	    ${TEMP}/raTvSarParametricMapFunctionToImageFilter.tif
+	    100 200 # image size
 )
 
 
@@ -1474,15 +1474,36 @@ ADD_TEST(raTvSarRadiometricCalibrationFunction ${RADIOMETRY_TESTS9}
 # -------  SarRadiometricCalibrationToImageFilter   ------------------------------
 
 IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(raTvSarRadiometricCalibrationToImageFilter  ${RADIOMETRY_TESTS9}
+ADD_TEST(raTvSarRadiometricCalibrationToImageWithComplexPixelFilter_TSX_PANGKALANBUUN  ${RADIOMETRY_TESTS9}
 	--compare-image ${EPSILON}
 	    	${BASELINE}/raTvSarRadiometricCalibrationToImageFilter_TSX_PANGKALANBUUN_HH.tif
 	    	${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_PANGKALANBUUN_HH.tif
-        otbSarRadiometricCalibrationToImageFilterTest
+        otbSarRadiometricCalibrationToImageFilterWithComplexPixelTest
 	    ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
 	    ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_PANGKALANBUUN_HH.tif
 	    1000 1000 250 250 # Extract
 )
+
+ADD_TEST(raTvSarRadiometricCalibrationToImageWithComplexPixelFilter_TSX_TORONTO ${RADIOMETRY_TESTS9}
+    --compare-image ${EPSILON}  
+                ${BASELINE}/raTvSarRadiometricCalibrationToImageFilter_TSX_TORONTO.tif
+                ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_TORONTO.tif
+        otbSarRadiometricCalibrationToImageFilterWithComplexPixelTest
+        ${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
+        ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_TORONTO.tif
+		2000 2000 250 250 # Extract
+)
+
+ADD_TEST(raTvSarRadiometricCalibrationToImageWithRealPixelFilter_TSX_UPSALA ${RADIOMETRY_TESTS9}
+    --compare-image ${EPSILON}  
+                ${BASELINE}/raTvSarRadiometricCalibrationToImageFilter_TSX_UPSALA.tif
+                ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_UPSALA.tif
+        otbSarRadiometricCalibrationToImageFilterWithRealPixelTest
+        ${LARGEINPUT}/TERRASARX/UPSALA_GLACIER/TSX1_SAR__MGD/IMAGEDATA/IMAGE_HH_SRA_strip_012.tif
+        ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_UPSALA.tif
+	2000 2000 250 250 # Extract
+)
+
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # -------            SarBrightnessFunctor   ------------------------------
@@ -1625,7 +1646,8 @@ otbSarParametricMapFunctionTest.cxx
 otbSarParametricMapFunctionToImageFilter.cxx
 otbSarRadiometricCalibrationFunctor.cxx
 otbSarRadiometricCalibrationFunction.cxx
-otbSarRadiometricCalibrationToImageFilterTest.cxx
+otbSarRadiometricCalibrationToImageFilterWithComplexPixelTest.cxx
+otbSarRadiometricCalibrationToImageFilterWithRealPixelTest.cxx
 otbSarBrightnessFunctor.cxx
 otbSarBrightnessFunction.cxx
 otbSarBrightnessToImageFilterTest.cxx

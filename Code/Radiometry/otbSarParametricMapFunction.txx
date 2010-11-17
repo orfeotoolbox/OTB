@@ -57,6 +57,8 @@ SarParametricMapFunction<TInputImage, TCoordRep>
 {
   PointType  p0;
   p0.Fill(0);
+  m_ProductWidth = 1;
+  m_ProductHeight = 1;
   m_IsInitialize = false;
   m_PointSet->Initialize();
   m_PointSet->SetPoint(0, p0);
@@ -131,14 +133,18 @@ SarParametricMapFunction<TInputImage, TCoordRep>
     if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
       {
       itk::ExposeMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+      ossimKeywordlist kwl;
+      imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+      ossimString nbLinesValue = kwl.find("number_lines");
+      ossimString nbSamplesValue = kwl.find("number_samples");
+      m_ProductWidth = nbSamplesValue.toDouble();
+      m_ProductHeight = nbLinesValue.toDouble();
       }
-
-    ossimKeywordlist kwl;
-    imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-    ossimString nbLinesValue = kwl.find("number_lines");
-    ossimString nbSamplesValue = kwl.find("number_samples");
-    m_ProductWidth = nbSamplesValue.toDouble();
-    m_ProductHeight = nbLinesValue.toDouble();
+    else
+      {
+      m_ProductHeight = this->GetInputImage()->GetLargestPossibleRegion().GetSize()[0] ;
+      m_ProductWidth  = this->GetInputImage()->GetLargestPossibleRegion().GetSize()[1];
+      }
 
     // Perform the plane least square estimation
     unsigned int nbRecords = pointSet->GetNumberOfPoints();
