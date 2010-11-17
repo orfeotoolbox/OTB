@@ -22,12 +22,11 @@
 #include "otbImageFileWriter.h"
 #include "itkExtractImageFilter.h"
 
-int otbSarRadiometricCalibrationToImageFilterTest(int argc, char * argv[])
+int otbSarRadiometricCalibrationToImageFilterWithComplexPixelTest(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
   typedef float                                                                        RealType;
-  //typedef std::complex<RealType>                                                       PixelType;
-  typedef RealType                                                       PixelType;
+  typedef std::complex<RealType>                                                       PixelType;
   typedef otb::Image<PixelType, Dimension>                                             InputImageType;
   typedef otb::Image<RealType, Dimension>                                              OutputImageType;
   typedef otb::ImageFileReader<InputImageType>                                         ReaderType;
