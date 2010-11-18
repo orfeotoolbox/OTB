@@ -23,83 +23,106 @@
 #include "otbImage.h"
 #include "itkExceptionObject.h"
 #include "otbImageFileReader.h"
+#include "otbImageFileWriter.h"
 #include "otbExtractROI.h"
 #include "otbComplexToIntensityImageFilter.h"
 #include "itkComplexToRealImageFilter.h"
 #include "itkComplexToImaginaryImageFilter.h"
 #include "otbStreamingCompareImageFilter.h"
+#include "itkComplexToRealImageFilter.h"
+#include "itkComplexToImaginaryImageFilter.h"
+
 
 int otbImageFileReaderCompareComplexPixelWithFloatPixelTest(int argc, char* argv[])
 {
-  if (argc < 6)
+  if (argc < 7)
     {
-    std::cout << argv[0] << "<inputImage> <startX> <startY> <sizeX> <sizeY>"  << std::endl;
+    std::cout << argv[0] << "<inputImage> <outputImage> <startX> <startY> <sizeX> <sizeY>"  << std::endl;
     return EXIT_FAILURE;
     }
 
   const char * inputFilename  = argv[1];
-  unsigned int startX = (unsigned int)(::atoi(argv[2]));
-  unsigned int startY = (unsigned int)(::atoi(argv[3]));
-  unsigned int sizeX = (unsigned int)(::atoi(argv[4]));
-  unsigned int sizeY = (unsigned int)(::atoi(argv[5]));
+  const char * outputFilename  = argv[2];
+  unsigned int startX = (unsigned int)(::atoi(argv[3]));
+  unsigned int startY = (unsigned int)(::atoi(argv[4]));
+  unsigned int sizeX = (unsigned int)(::atoi(argv[5]));
+  unsigned int sizeY = (unsigned int)(::atoi(argv[6]));
 
   typedef std::complex<float> ComplexPixelType;
   typedef float               PixelType;
   const unsigned int Dimension = 2;
 
-  typedef otb::Image<PixelType,  Dimension> ImageType;
   typedef otb::Image<ComplexPixelType,  Dimension> ComplexImageType;
+  typedef otb::Image<PixelType,  Dimension>        ImageType;
+  typedef otb::ImageFileReader<ComplexImageType>   ReaderType;
+  typedef otb::ImageFileWriter<ComplexImageType>   WriterType;
+  typedef otb::ExtractROI<ComplexPixelType, ComplexPixelType>  ExtractROIFilterType;
+  typedef otb::StreamingCompareImageFilter<ImageType>          CompareFilterType;
+  typedef itk::ComplexToRealImageFilter<ComplexImageType, ImageType>     RealExtractorType;
+  typedef itk::ComplexToImaginaryImageFilter<ComplexImageType,ImageType> ImaginaryExtractorType;
 
-  typedef otb::ImageFileReader<ImageType>  FloatReaderType;
-  typedef otb::ImageFileReader<ComplexImageType>  ComplexReaderType;
+  ReaderType::Pointer reader = ReaderType::New();
+  reader->SetFileName(inputFilename);
 
-  ComplexReaderType::Pointer complexReader = ComplexReaderType::New();
-  FloatReaderType::Pointer floatReader = FloatReaderType::New();
 
-  complexReader->SetFileName(inputFilename);
-  floatReader->SetFileName(inputFilename);
+  ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
+  extractROIFilter->SetStartX(startX);
+  extractROIFilter->SetStartY(startY);
+  extractROIFilter->SetSizeX(sizeX);
+  extractROIFilter->SetSizeY(sizeY);
+  extractROIFilter->SetInput(reader->GetOutput());
 
-  typedef otb::ExtractROI<PixelType, PixelType>  FloatExtractROIFilterType;
-  typedef otb::ExtractROI<ComplexPixelType, ComplexPixelType>  ComplexExtractROIFilterType;
+  WriterType::Pointer writer = WriterType::New();
+  writer->SetFileName(outputFilename);
+  writer->SetInput(extractROIFilter->GetOutput());
+  writer->Update();
 
-  ComplexExtractROIFilterType::Pointer complexExtractROIFilter = ComplexExtractROIFilterType::New();
-  FloatExtractROIFilterType::Pointer floatExtractROIFilter = FloatExtractROIFilterType::New();
+  std::cout << "Write " << std::endl;
 
-  floatExtractROIFilter->SetStartX(startX);
-  floatExtractROIFilter->SetStartY(startY);
-  floatExtractROIFilter->SetSizeX(sizeX);
-  floatExtractROIFilter->SetSizeY(sizeY);
-  floatExtractROIFilter->SetInput(floatReader->GetOutput());
+  ReaderType::Pointer readerAfterWrite = ReaderType::New();
+  readerAfterWrite->SetFileName(outputFilename);
+  readerAfterWrite->Update();
 
-  complexExtractROIFilter->SetStartX(startX);
-  complexExtractROIFilter->SetStartY(startY);
-  complexExtractROIFilter->SetSizeX(sizeX);
-  complexExtractROIFilter->SetSizeY(sizeY);
-  complexExtractROIFilter->SetInput(complexReader->GetOutput());
+  /* Compare Real Part */
+  RealExtractorType::Pointer realExtractor = RealExtractorType::New();
+  RealExtractorType::Pointer realExtractorAfterWrite = RealExtractorType::New();
 
-  typedef itk::ComplexToRealImageFilter<ComplexImageType, ImageType> RealPartFilterType;
-  RealPartFilterType::Pointer realPart = RealPartFilterType::New();
-  realPart->SetInput(complexExtractROIFilter->GetOutput());
+  realExtractor->SetInput(extractROIFilter->GetOutput());
+  realExtractorAfterWrite->SetInput(readerAfterWrite->GetOutput());
 
-  typedef otb::StreamingCompareImageFilter<ImageType> CompareFilterType;
-  CompareFilterType::Pointer compareWithRealPartFilter = CompareFilterType::New();
-  compareWithRealPartFilter->SetInput1(floatExtractROIFilter->GetOutput());
-  compareWithRealPartFilter->SetInput2(realPart->GetOutput());
-  compareWithRealPartFilter->Update();
+  CompareFilterType::Pointer compareRealPartFilter = CompareFilterType::New();
+  compareRealPartFilter->SetInput1(realExtractor->GetOutput());
+  compareRealPartFilter->SetInput2(realExtractorAfterWrite->GetOutput());
+  compareRealPartFilter->Update();
 
-  typedef itk::ComplexToImaginaryImageFilter<ComplexImageType, ImageType> ImagPartFilterType;
-  ImagPartFilterType::Pointer imagPart = ImagPartFilterType::New();
-  imagPart->SetInput(complexExtractROIFilter->GetOutput());
+  /* Compare Imaginary Part */
+  ImaginaryExtractorType::Pointer imagExtractor = ImaginaryExtractorType::New();
+  ImaginaryExtractorType::Pointer imagExtractorAfterWrite = ImaginaryExtractorType::New();
 
-  CompareFilterType::Pointer compareWithImagPartFilter = CompareFilterType::New();
-  compareWithImagPartFilter->SetInput1(floatExtractROIFilter->GetOutput());
-  compareWithImagPartFilter->SetInput2(imagPart->GetOutput());
-  compareWithImagPartFilter->Update();
+  imagExtractor->SetInput(extractROIFilter->GetOutput());
+  imagExtractorAfterWrite->SetInput(readerAfterWrite->GetOutput());
 
-  if( compareWithRealPartFilter->GetMSE() > 0.0 ||
-      compareWithImagPartFilter->GetMSE() < 0.0000001 )
+  CompareFilterType::Pointer compareImagPartFilter = CompareFilterType::New();
+  compareImagPartFilter->SetInput1(imagExtractor->GetOutput());
+  compareImagPartFilter->SetInput2(imagExtractorAfterWrite->GetOutput());
+  compareImagPartFilter->Update();
+
+  std::cout << " Real Part comparison : " << compareRealPartFilter->GetMSE()<< std::endl;
+  std::cout << " Imaginary Part comparison : " << compareImagPartFilter->GetMSE()<< std::endl;
+
+
+  if( compareRealPartFilter->GetMSE() > 0.0 )
     {
+    std::cout << " Real part not the same " << std::endl;
     return EXIT_FAILURE;
     }
+
+  if( compareImagPartFilter->GetMSE() > 0.0 )
+    {
+    std::cout << " Imaginary part not the same" << std::endl;
+    return EXIT_FAILURE;
+    }
+
+
   return EXIT_SUCCESS;
 }

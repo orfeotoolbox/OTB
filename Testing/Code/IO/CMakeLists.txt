@@ -125,6 +125,7 @@ ADD_TEST(ioTvImageFileReaderWithComplexPixel_RADARSAT ${IO_TESTS1}
 ADD_TEST(ioTvImageFileReaderCompareComplexPixelWithFloatPixel_PALSAR ${IO_TESTS1}
          otbImageFileReaderCompareComplexPixelWithFloatPixelTest
          ${LARGEDATA}/PALSAR/200801280007/l1data/VOL-ALPSRP037120700-H1.1__A
+         ${TEMP}/ioTvImageFileReaderCompareComplexPixelWithFloatPixel_PALSAR.tif
          0 0 100 100)
 
 ENDIF(OTB_DATA_USE_LARGEINPUT)
