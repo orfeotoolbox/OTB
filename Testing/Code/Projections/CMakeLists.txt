@@ -393,7 +393,7 @@ ADD_TEST(prTlOrthoRectificationSPOT5 ${PROJECTIONS_TESTS2}
         )
 
  ADD_TEST(prTlOrthoRectificationMonoThreadSPOT5 ${PROJECTIONS_TESTS2}
-  --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationSPOT5_UTM.tif
+  --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationSPOT5_UTM_band1.tif
                           ${TEMP}/prTvOrthoRectificationMonoThreadSPOT5_UTM.tif
         otbOrthoRectificationMonoThreadFilter
         ${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
