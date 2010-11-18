@@ -244,7 +244,6 @@ void GDALImageIO::Read(void* buffer)
 
   if (GDALDataTypeIsComplex(m_PxType) && !m_IsComplex)
     {
-    std::cout << "GDALImageIO::Read() ICI" << std::endl;
     lCrGdal = dataset->GetRasterBand(1)->RasterIO(GF_Read,
                                                  lFirstColumn,
                                                  lFirstLine,
@@ -270,8 +269,6 @@ void GDALImageIO::Read(void* buffer)
     }
   else if (m_IsIndexed)
     {
-    std::cout << "GDALImageIO::Read() La" << std::endl;
-
     step = step * static_cast<std::streamoff>(m_NbOctetPixel);
 
     lCrGdal = dataset->GetRasterBand(1)->RasterIO(GF_Read,
@@ -305,8 +302,6 @@ void GDALImageIO::Read(void* buffer)
     }
   else
     {
-    std::cout << "GDALImageIO::Read() lalalalaLa" << std::endl;
-
     // Mise a jour du step
     step = step * static_cast<std::streamoff>(m_NbOctetPixel);
 
