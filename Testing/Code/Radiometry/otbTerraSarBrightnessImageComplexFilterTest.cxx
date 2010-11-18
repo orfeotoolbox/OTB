@@ -59,8 +59,8 @@ int otbTerraSarBrightnessImageComplexFilterTest(int argc, char * argv[])
     region.SetIndex(id);
     region.SetSize(size);
     extractor->SetExtractionRegion(region);
-
     extractor->SetInput(filter->GetOutput());
+    extractor->Update();
     writer->SetInput(extractor->GetOutput());
     }
   else

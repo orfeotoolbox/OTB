@@ -27,10 +27,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbExtractROI.h"
-#include "itkComplexToRealImageFilter.h"
-#include "itkComplexToImaginaryImageFilter.h"
-#include "otbImageList.h"
-#include "otbImageListToVectorImageFilter.h"
+#include "otbComplexToVectorImageCastFilter.h"
 
 
 int otbImageFileReaderRADComplexFloatExtract(int argc, char* argv[])
@@ -46,20 +43,18 @@ int otbImageFileReaderRADComplexFloatExtract(int argc, char* argv[])
 
   typedef otb::Image<InputPixelType,  Dimension> InputImageType;
   typedef otb::Image<OutputPixelType, Dimension> OutputCplxImageType;
-  typedef otb::Image<int, Dimension>             OutputScalarImageType;
-  typedef otb::VectorImage<int, Dimension>       OutputImageType;
-  typedef otb::ImageList<OutputScalarImageType>  ImageListType;
+  typedef otb::Image<float, Dimension>             OutputScalarImageType;
+  typedef otb::VectorImage<float, Dimension>       OutputImageType;
 
   typedef otb::ImageFileReader<InputImageType>  ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
-  typedef itk::ComplexToRealImageFilter<OutputCplxImageType, OutputScalarImageType> RealExtractorType;
-  typedef itk::ComplexToImaginaryImageFilter<OutputCplxImageType
-, OutputScalarImageType> ImaginaryExtractorType;
-  typedef otb::ImageListToVectorImageFilter<ImageListType, OutputImageType>           ListToVectorImageFilterType;
+
+  typedef otb::ComplexToVectorImageCastFilter<OutputCplxImageType, OutputImageType>          CasterType;
 
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
+  CasterType::Pointer caster = CasterType::New();
 
   reader->SetFileName(inputFilename);
   writer->SetFileName(outputFilename);
@@ -76,22 +71,9 @@ int otbImageFileReaderRADComplexFloatExtract(int argc, char* argv[])
   extractROIFilter->SetSizeX(100);
   extractROIFilter->SetSizeY(100);
 
-  // The rest of the code is here to translate the image complexe into
-  // a VectorImage of int which each channel is the real and imagynary part
+  caster->SetInput(extractROIFilter->GetOutput());
 
-  RealExtractorType::Pointer realExt = RealExtractorType::New();
-  ImaginaryExtractorType::Pointer imgExt = ImaginaryExtractorType::New();
-
-  realExt->SetInput(extractROIFilter->GetOutput());
-  imgExt->SetInput(extractROIFilter->GetOutput());
-
-  ImageListType::Pointer imList = ImageListType::New();
-  imList->PushBack(realExt->GetOutput());
-  imList->PushBack(imgExt->GetOutput());
-  ListToVectorImageFilterType::Pointer listCaster = ListToVectorImageFilterType::New();
-  listCaster->SetInput(imList);
-
-  writer->SetInput(listCaster->GetOutput());
+  writer->SetInput(caster->GetOutput());
   writer->Update();
 
   return EXIT_SUCCESS;

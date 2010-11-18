@@ -26,6 +26,8 @@
 #include "otbFineRegistrationImageFilter.h"
 #include "otbStandardFilterWatcher.h"
 #include "itkTimeProbe.h"
+#include "otbExtractROI.h"
+
 
 #include "itkNormalizedCorrelationImageToImageMetric.h"
 #include "itkMeanReciprocalSquareDifferenceImageToImageMetric.h"
@@ -33,11 +35,12 @@
 
 int otbFineRegistrationImageFilterTest( int argc, char * argv[] )
 {
-  if(argc!=12)
+  if(argc!=16)
     {
     std::cerr<<"Usage: "<<argv[0]<<" fixed_fname moving_fname output_correl output_field radius search_radius ";
     std::cerr<<"subpixPrecision metric(0=CC,1=NCC,2=MeanSquare,3=Mean reciprocal square difference) ";
     std::cerr<<"gridStep offsetX offsetY"<<std::endl;
+    std::cerr<<"ROI : indexX, indexY, startX, startY"<<std::endl;
     return EXIT_FAILURE;
     }
   const char * fixedFileName  = argv[1];
@@ -51,16 +54,21 @@ int otbFineRegistrationImageFilterTest( int argc, char * argv[] )
   const unsigned int gridStep = atoi(argv[9]);
   const double       offsetx  = atof(argv[10]);
   const double       offsety  = atof(argv[11]);
+  const unsigned int startX   = atoi(argv[12]);
+  const unsigned int startY   = atoi(argv[13]);
+  const unsigned int sizeX    = atoi(argv[14]);
+  const unsigned int sizeY    = atoi(argv[15]);
 
   typedef double      PixelType;
   const unsigned int  Dimension = 2;
 
-  typedef itk::FixedArray<PixelType,Dimension>                                DeformationValueType;
-  typedef otb::Image< PixelType,  Dimension >                                 ImageType;
-  typedef otb::Image<DeformationValueType,Dimension>                          FieldImageType;
-  typedef otb::ImageFileReader< ImageType >                                   ReaderType;
-  typedef otb::ImageFileWriter< ImageType >                                   CorrelWriterType;
-  typedef otb::ImageFileWriter< FieldImageType>                               FieldWriterType;
+  typedef itk::FixedArray<PixelType,Dimension>                                 DeformationValueType;
+  typedef otb::Image< PixelType,  Dimension >                                  ImageType;
+  typedef otb::Image<DeformationValueType,Dimension>                           FieldImageType;
+  typedef otb::ImageFileReader< ImageType >                                    ReaderType;
+  typedef otb::ImageFileWriter< ImageType >                                    CorrelWriterType;
+  typedef otb::ImageFileWriter< FieldImageType>                                FieldWriterType;
+  typedef otb::ExtractROI<PixelType, PixelType>                                ExtractFiltertype;
   typedef otb::FineRegistrationImageFilter<ImageType,ImageType,FieldImageType> RegistrationFilterType;
   
   ReaderType::Pointer freader = ReaderType::New();
@@ -71,9 +79,22 @@ int otbFineRegistrationImageFilterTest( int argc, char * argv[] )
   mreader->SetFileName(movingFileName);
   //mreader->Update();
 
+  ExtractFiltertype::Pointer fextract = ExtractFiltertype::New();
+  fextract->SetInput(freader->GetOutput());
+  fextract->SetStartX(startX);
+  fextract->SetStartY(startY);
+  fextract->SetSizeX(sizeX);
+  fextract->SetSizeY(sizeY);
+  ExtractFiltertype::Pointer mextract = ExtractFiltertype::New();
+  mextract->SetInput(mreader->GetOutput());
+  mextract->SetStartX(startX);
+  mextract->SetStartY(startY);
+  mextract->SetSizeX(sizeX);
+  mextract->SetSizeY(sizeY);
+
   RegistrationFilterType::Pointer registration = RegistrationFilterType::New();
-  registration->SetFixedInput(freader->GetOutput());
-  registration->SetMovingInput(mreader->GetOutput());
+  registration->SetFixedInput(/*freader*/fextract->GetOutput());
+  registration->SetMovingInput(/*mreader*/mextract->GetOutput());
   registration->SetRadius(radius);
   registration->SetSearchRadius(sradius);
   registration->SetSubPixelAccuracy(precision);

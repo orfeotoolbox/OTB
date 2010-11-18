@@ -20,9 +20,12 @@
 #include "otbTerraSarCalibrationImageFilter.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
+#include "otbVectorImage.h"
 #include "itkExtractImageFilter.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
+#include "otbComplexToVectorImageCastFilter.h"
+
 
 int otbTerraSarCalibrationImageComplexFilterTest(int argc, char * argv[])
 {
@@ -31,17 +34,22 @@ int otbTerraSarCalibrationImageComplexFilterTest(int argc, char * argv[])
   const bool   useFastCalibration = atoi(argv[3]);
   const bool   resultsInDbs = atoi(argv[4]);
 
-  typedef std::complex<double>                                      ComplexType;
-  typedef otb::Image<ComplexType, 2>                                ImageType;
-  typedef otb::ImageFileReader<ImageType>                           ReaderType;
-  typedef otb::ImageFileWriter<ImageType>                           WriterType;
-  typedef otb::TerraSarCalibrationImageFilter<ImageType, ImageType> FilterType;
-  typedef itk::ExtractImageFilter<ImageType, ImageType>             ExtractorType;
+  typedef std::complex<double>        ComplexType;
+  typedef otb::Image<ComplexType, 2>  ImageCplxType;
+  typedef otb::Image<double, 2>       ImageScalarType; 
+  typedef otb::VectorImage<double, 2> OutputImageType;
+
+  typedef otb::ImageFileReader<ImageCplxType>                                 ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType>                               WriterType;
+  typedef otb::TerraSarCalibrationImageFilter<ImageCplxType, ImageCplxType>   FilterType;
+  typedef itk::ExtractImageFilter<ImageCplxType, ImageCplxType>               ExtractorType;
+  typedef otb::ComplexToVectorImageCastFilter<ImageCplxType, OutputImageType> CasterType;
 
   ReaderType::Pointer    reader = ReaderType::New();
   WriterType::Pointer    writer = WriterType::New();
   FilterType::Pointer    filter = FilterType::New();
   ExtractorType::Pointer extractor = ExtractorType::New();
+  CasterType::Pointer caster = CasterType::New();
 
   reader->SetFileName(inputFileName);
   writer->SetFileName(outputFileName);
@@ -52,26 +60,30 @@ int otbTerraSarCalibrationImageComplexFilterTest(int argc, char * argv[])
   filter->SetUseFastCalibration(useFastCalibration);
   filter->SetResultsInDecibels(resultsInDbs);
 
+
   if (argc == 9)
     {
-    ImageType::RegionType region;
-    ImageType::IndexType  id;
+    ImageCplxType::RegionType region;
+    ImageCplxType::IndexType  id;
     id[0] = atoi(argv[5]);
     id[1] = atoi(argv[6]);
-    ImageType::SizeType size;
+    ImageCplxType::SizeType size;
     size[0] = atoi(argv[7]);
     size[1] = atoi(argv[8]);
     region.SetIndex(id);
     region.SetSize(size);
     extractor->SetExtractionRegion(region);
     extractor->SetInput(filter->GetOutput());
-    writer->SetInput(extractor->GetOutput());
+
+    caster->SetInput(extractor->GetOutput());
     }
   else
     {
-    writer->SetInput(filter->GetOutput());
+      caster->SetInput(filter->GetOutput());
     }
-
+  
+   
+  writer->SetInput(caster->GetOutput());
   writer->Update();
 
   return EXIT_SUCCESS;
