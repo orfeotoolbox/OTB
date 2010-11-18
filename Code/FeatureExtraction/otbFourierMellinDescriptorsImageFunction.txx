@@ -28,8 +28,8 @@ namespace otb
 {
 
 /**
-   * Constructor
-   */
+  * Constructor
+  */
 template <class TInputImage, class TCoordRep>
 FourierMellinDescriptorsImageFunction<TInputImage, TCoordRep>
 ::FourierMellinDescriptorsImageFunction()

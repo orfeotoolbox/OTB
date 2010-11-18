@@ -35,4 +35,6 @@ void RegisterTests()
   REGISTER_TEST(otbObjectDetectionClassifier);
   REGISTER_TEST(otbObjectDetectionClassifierNew);
   REGISTER_TEST(otbObjectDetectionClassifier);
+  REGISTER_TEST(otbStandardMetaImageFunctionBuilderNew);
+  REGISTER_TEST(otbStandardMetaImageFunctionBuilder);
 }

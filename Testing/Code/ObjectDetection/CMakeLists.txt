@@ -94,12 +94,22 @@ ADD_TEST(odTvObjectDetectionClassifier ${OBJECTDETECTION_TESTS1}
   5 # neighborhood radius
   )
 
+ADD_TEST(odTuStandardMetaImageFunctionBuilderNew ${OBJECTDETECTION_TESTS1}
+  otbStandardMetaImageFunctionBuilderNew
+  )
+
+ADD_TEST(odTvStandardMetaImageFunctionBuilder ${OBJECTDETECTION_TESTS1}
+  otbStandardMetaImageFunctionBuilder
+  ${INPUTDATA}/ObjectReco/Boats/maur_B010202_01.tif
+  )
+
 # A enrichir
 SET(ObjectDetection_SRCS1
 otbObjectDetectionTests1.cxx
 otbLabeledSampleLocalizationGenerator.cxx
 otbDescriptorsListSampleGenerator.cxx
 otbObjectDetectionClassifier.cxx
+otbStandardMetaImageFunctionBuilder.cxx
 )
 
 
