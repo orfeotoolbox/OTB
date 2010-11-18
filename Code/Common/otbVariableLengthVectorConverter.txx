@@ -91,7 +91,7 @@ typename VariableLengthVectorConverter< itk::FixedArray<TInternalInputType, VArr
 VariableLengthVectorConverter< itk::FixedArray<TInternalInputType, VArrayDimension>, TPrecisionType>
 ::Convert(InputType input)
 {
-  unsigned int p, q, rsltIdx = 0;
+  unsigned int rsltIdx = 0;
   OutputType result;
 
   result.SetSize(VArrayDimension);
