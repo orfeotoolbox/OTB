@@ -21,11 +21,11 @@
 #include "otbPointSetFileReader.h"
 #include "otbMacro.h"
 
-#include <liblas/laspoint.hpp>
-#include <liblas/lasreader.hpp>
+#include <liblas/capi/liblas.h>
 
 #include <fstream>  // std::ifstream
 #include <iostream> // std::cout
+#include <iomanip>
 
 namespace otb
 {
@@ -64,22 +64,20 @@ PointSetFileReader<TOutputPointSet>
 
   this->TestFileExistanceAndReadability();
 
-  std::ifstream ifs;
-  ifs.open(m_FileName.c_str(), std::ios::in | std::ios::binary);
-  liblas::Reader reader(ifs);
+  LASReaderH reader = LASReader_Create(m_FileName.c_str());
+  LASHeaderH header = LASReader_GetHeader(reader);
+  
+  otbDebugMacro(<< "Signature: " << LASHeader_GetFileSignature(header));
+  otbDebugMacro(<< "Points count: " << LASHeader_GetPointRecordsCount(header));
 
-  liblas::Header const& header = reader.GetHeader();
+  m_NumberOfPoints = LASHeader_GetPointRecordsCount(header);
 
-  otbDebugMacro(<< "Signature: " << header.GetFileSignature());
-  otbDebugMacro(<< "Points count: " << header.GetPointRecordsCount());
-
-  m_NumberOfPoints = header.GetPointRecordsCount();
-  m_MinX = header.GetMinX();
-  m_MaxX = header.GetMaxX();
-  m_MinY = header.GetMinY();
-  m_MaxY = header.GetMaxY();
-  ifs.close();
-
+  m_MinX = LASHeader_GetMinX(header);
+  m_MaxX = LASHeader_GetMaxX(header); 
+  m_MinY = LASHeader_GetMinY(header);
+  m_MaxY = LASHeader_GetMaxX(header);
+  
+  LASReader_Destroy(reader);
 }
 
 template <class TOutputPointSet>
@@ -123,55 +121,52 @@ void PointSetFileReader<TOutputPointSet>
 ::GenerateData()
 {
   typename TOutputPointSet::Pointer output = this->GetOutput();
+  
+  LASReaderH reader = LASReader_Create(m_FileName.c_str());
+  LASHeaderH header = LASReader_GetHeader(reader);
 
-  std::ifstream ifs;
-  ifs.open(m_FileName.c_str(), std::ios::in | std::ios::binary);
-  liblas::Reader reader(ifs);
+  otbDebugMacro(<< "Signature: " << LASHeader_GetFileSignature(header));
+  otbDebugMacro(<< "Points count: " << LASHeader_GetPointRecordsCount(header));
 
-  liblas::Header const& header = reader.GetHeader();
-
-  otbDebugMacro(<< "Signature: " << header.GetFileSignature());
-  otbDebugMacro(<< "Points count: " << header.GetPointRecordsCount());
-
-  m_NumberOfPoints = header.GetPointRecordsCount();
+  m_NumberOfPoints = LASHeader_GetPointRecordsCount(header);
 
   //If the output pointset is of dimension 2, altitude is stored as information
   if (PointType::PointDimension == 2)
     {
-    while (reader.ReadNextPoint())
+    LASPointH pt = LASPoint_Create();
+    while (pt = LASReader_GetNextPoint(reader))
       {
-      liblas::Point const& p = reader.GetPoint();
-
+      
       PointType point;
-      point[0] = p.GetX();
-      point[1] = p.GetY();
+      point[0] = LASPoint_GetX(pt);
+      point[1] = LASPoint_GetY(pt);
 
       unsigned long i = output->GetNumberOfPoints();
       output->SetPoint(i, point);
 
       PixelType V;
-      V = static_cast<PixelType>(p.GetZ());
+      V = static_cast<PixelType>(LASPoint_GetZ(pt));
       output->SetPointData(i, V);
-
       }
     }
   //If the output pointset is of dimension 3, store the altitude as information
   else if (PointType::PointDimension == 3)
     {
-    while (reader.ReadNextPoint())
+    LASPointH p = LASPoint_Create();
+    while (p = LASReader_GetNextPoint(reader))
       {
-      liblas::Point const& p = reader.GetPoint();
+      //liblas::Point const& p = reader.GetPoint();
 
       PointType point;
-      point[0] = p.GetX();
-      point[1] = p.GetY();
-      point[2] = p.GetZ();
+      point[0] = LASPoint_GetX(p);
+      point[1] = LASPoint_GetY(p);
+      point[2] = LASPoint_GetZ(p);
 
       unsigned long i = output->GetNumberOfPoints();
       output->SetPoint(i, point);
 
       PixelType V;
-      V = static_cast<PixelType>(p.GetZ());
+      V = static_cast<PixelType>(LASPoint_GetZ(p));
       output->SetPointData(i, V);
 
       }
@@ -181,7 +176,7 @@ void PointSetFileReader<TOutputPointSet>
     itkExceptionMacro(<< "Can't handle pointset dimension other than 2 and 3");
     }
 
-  ifs.close();
+  LASReader_Destroy(reader);
 }
 
 template <class TOutputPointSet>

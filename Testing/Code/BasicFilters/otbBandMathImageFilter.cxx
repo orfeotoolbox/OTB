@@ -193,8 +193,7 @@ int otbBandMathImageFilterWithIdx( int argc, char* argv[])
   typedef otb::Image<PixelType, 2>                          ImageType;
   typedef otb::BandMathImageFilter<ImageType>               FilterType;
   typedef otb::StreamingImageFileWriter<ImageType>          WriterType;
-  
-  unsigned int i;
+ 
   const unsigned int N = 100;
   unsigned int FAIL_FLAG = 0;
 
