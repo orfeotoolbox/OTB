@@ -97,7 +97,7 @@ LabeledSampleLocalizationGenerator<TVectorData>
   itVector.GoToBegin();
   while (!itVector.IsAtEnd())
     {
-    if (itVector.Get()->IsPointFeature())
+    if (itVector.Get()->IsPointFeature() && itVector.Get()->GetFieldAsInt(m_ClassKey)!=m_NoClassIdentifier)
       {
       VertexType vertex;
       vertex[0] = itVector.Get()->GetPoint()[0];
@@ -114,9 +114,9 @@ LabeledSampleLocalizationGenerator<TVectorData>
   //std::cout << "insiders: " << insiders.size() << std::endl;
 
   // Search parametrization 
-  unsigned int nbMaxIter = (unsigned int)((node->GetPolygonExteriorRing()->GetArea()
-                                           - insiders.size() * CONST_PI * vcl_pow(this->GetInhibitionRadius(), 2)) 
-                                           / (CONST_PI * vcl_pow(this->GetInhibitionRadius(), 2)));
+  unsigned int nbMaxIter = (unsigned int)(node->GetPolygonExteriorRing()->GetArea());
+//                                           - insiders.size() * CONST_PI * vcl_pow(this->GetInhibitionRadius(), 2))
+//                                           / (CONST_PI * vcl_pow(this->GetInhibitionRadius(), 2)));
   //std::cout << "nbMaxIter: " << nbMaxIter << std::endl;
 
   unsigned int nbMaxPosition = (unsigned int)(nbMaxIter * this->GetRandomLocalizationDensity());
@@ -159,7 +159,7 @@ LabeledSampleLocalizationGenerator<TVectorData>
         point[1] = candidate[1];
         
         vPoint.push_back(point);
-        insiders.push_back(point);
+//        insiders.push_back(point);
         
         nbPosition --;
         }
