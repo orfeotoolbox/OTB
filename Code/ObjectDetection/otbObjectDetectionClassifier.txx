@@ -132,7 +132,7 @@ PersistentObjectDetectionClassifier<TInputImage,TOutputVectorData,TLabel,TFuncti
 {
   // merge all points in a single vector data
   //std::copy(m_ThreadPointArray[0].begin(), m_ThreadPointArray[0].end(),
-   //         std::ostream_iterator<DescriptorsFunctionPointType>(std::cout, "\n") );
+  //std::ostream_iterator<DescriptorsFunctionPointType>(std::cout, "\n") );
 
   VectorDataType* vdata = this->GetOutputVectorData();
 
@@ -231,15 +231,14 @@ PersistentObjectDetectionClassifier<TInputImage,TOutputVectorData,TLabel,TFuncti
 
 }
 
-
-
 template <class TInputImage, class TOutputVectorData, class TLabel, class TFunctionType>
 void
 PersistentObjectDetectionClassifier<TInputImage,TOutputVectorData,TLabel,TFunctionType>
 ::ThreadedGenerateData(const RegionType& outputRegionForThread,
                        int threadId)
 {
-  SVMModelType* model = static_cast<SVMModelType*>(this->itk::ProcessObject::GetInput(1));
+  InputImageType* input = static_cast<InputImageType*>(this->itk::ProcessObject::GetInput(0));
+  SVMModelType*   model = static_cast<SVMModelType*>(this->itk::ProcessObject::GetInput(1));
 
   typedef typename RegionType::IndexType      IndexType;
   typedef typename RegionType::IndexValueType IndexValueType;
@@ -272,7 +271,9 @@ PersistentObjectDetectionClassifier<TInputImage,TOutputVectorData,TLabel,TFuncti
 
           if (label != m_NoClassLabel)
             {
-            m_ThreadPointArray[threadId].push_back(std::make_pair(point, label));
+            DescriptorsFunctionPointType phyPoint;
+            input->TransformIndexToPhysicalPoint(current, phyPoint);
+            m_ThreadPointArray[threadId].push_back(std::make_pair(phyPoint, label));
             }
           }
         }
