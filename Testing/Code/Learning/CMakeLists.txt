@@ -22,6 +22,7 @@ SET(LEARNING_TESTS1 ${CXX_TEST_PATH}/otbLearningTests1)
 SET(LEARNING_TESTS2 ${CXX_TEST_PATH}/otbLearningTests2)
 SET(LEARNING_TESTS3 ${CXX_TEST_PATH}/otbLearningTests3)
 SET(LEARNING_TESTS4 ${CXX_TEST_PATH}/otbLearningTests4)
+SET(LEARNING_TESTS5 ${CXX_TEST_PATH}/otbLearningTests5)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbLearningTESTS1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -584,7 +585,6 @@ ${TEMP}/leTvGaussianAdditiveNoiseSampleListFilterOutput.txt
  0 -1
 )
 
-
 # ConcatenateSampleListFilter tests ----------
 ADD_TEST(leTuConcatenateSampleListFilterNew ${LEARNING_TESTS4}
 otbConcatenateSampleListFilterNew)
@@ -629,6 +629,19 @@ ${TEMP}/leTvListSampleToBalancedListSampleFilterOutput.txt
  0 -5  0
  1 -1  2
 )
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbLearningTESTS5 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# -------            otb::DecisionTree   ------------------------------
+ADD_TEST(leTuDecisionTreeNew ${LEARNING_TESTS5}
+otbDecisionTreeNew)
+
+ADD_TEST(leTvDecisionTreeBuild ${LEARNING_TESTS5}
+otbDecisionTreeBuild)
+
+ADD_TEST(leTvDecisionTreeWithRealValues ${LEARNING_TESTS5}
+otbDecisionTreeWithRealValues)
 
 
 # Testing srcs
@@ -702,10 +715,18 @@ otbConcatenateSampleListFilter.cxx
 otbListSampleToBalancedListSampleFilter.cxx
 )
 
+SET(BasicLearning_SRCS5
+otbLearningTests5.cxx
+otbDecisionTreeNew.cxx
+otbDecisionTreeBuild.cxx
+otbDecisionTreeWithRealValues.cxx
+)
+
 OTB_ADD_EXECUTABLE(otbLearningTests1 "${BasicLearning_SRCS1}" "OTBLearning;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbLearningTests2 "${BasicLearning_SRCS2}" "OTBLearning;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbLearningTests3 "${BasicLearning_SRCS3}" "OTBLearning;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbLearningTests4 "${BasicLearning_SRCS4}" "OTBLearning;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbLearningTests5 "${BasicLearning_SRCS5}" "OTBLearning;OTBIO;OTBTesting")
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
