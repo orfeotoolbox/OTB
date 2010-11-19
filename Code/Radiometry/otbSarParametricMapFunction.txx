@@ -188,7 +188,7 @@ SarParametricMapFunction<TInputImage, TCoordRep>
     vnl_lsqr linearSystemSolver(linearSystem);
 	std::cout << "EvaluateParam bestParams: " <<bestParams<< std::endl;
     linearSystemSolver.minimize(bestParams);
-	
+	std::cout << "EvaluateParam minimize bestParams: " <<bestParams<< std::endl;
     for (unsigned int xcoeff = 0; xcoeff < coeffCols; ++xcoeff)
       {
       for (unsigned int ycoeff = 0; ycoeff < coeffRows; ++ycoeff)
