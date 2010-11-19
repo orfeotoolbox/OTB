@@ -81,7 +81,7 @@ SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>
   typename ParametricFunctionType::PointType point;
   point.Fill(0);
   typename ParametricFunctionType::PointSetType::PixelType pointValue;
-  pointValue = itk::NumericTraits<ParametricFunctionType::PointSetType::PixelType>::Zero;
+  pointValue = itk::NumericTraits<typename ParametricFunctionType::PointSetType::PixelType>::Zero;
   unsigned int nbRecords = imageMetadataInterface->GetRadiometricCalibrationIncidenceAngle()->GetNumberOfPoints();
 
   // Fill the linear system
