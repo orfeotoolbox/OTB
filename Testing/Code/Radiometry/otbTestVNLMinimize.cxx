@@ -24,9 +24,9 @@
 int otbTestVNLMinimize(int argc, char * argv[])
 {
   vnl_sparse_matrix<double> a(5, 6);
-  vnl_vector<double> b(5), bestParams2(6);
+  vnl_vector<double> b(5), bestParams(6);
   b.fill(0);
-  bestParams2.fill(0);
+  bestParams.fill(0);
   
   a(0,0) = 1;
   a(0,1) = 0.500098;
@@ -68,7 +68,7 @@ int otbTestVNLMinimize(int argc, char * argv[])
   b(3) = 0.44059;
   b(4) = 0.462275;
   
-  vnl_sparse_matrix_linear_system<double> linearSystem2(a, b);
+  vnl_sparse_matrix_linear_system<double> linearSystem(a, b);
   std::cout << "Satart solve init:" << std::endl;
   // And solve it
   vnl_lsqr linearSystemSolver(linearSystem);
