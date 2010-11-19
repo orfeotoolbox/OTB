@@ -29,8 +29,9 @@ LabeledSampleLocalizationGenerator<TVectorData>
 ::LabeledSampleLocalizationGenerator() :
   m_ClassKey("Class"),
   m_NoClassIdentifier(0),
-  m_RandomLocalizationDensity(.05),
-  m_InhibitionRadius(5.0)
+  m_RandomLocalizationDensity(.005),
+  m_InhibitionRadius(5.0),
+  m_NbMaxIteration(10000)
 {
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfRequiredOutputs(1);
@@ -114,16 +115,17 @@ LabeledSampleLocalizationGenerator<TVectorData>
   //std::cout << "insiders: " << insiders.size() << std::endl;
 
   // Search parametrization 
-  unsigned int nbMaxIter = (unsigned int)(node->GetPolygonExteriorRing()->GetArea());
-//                                           - insiders.size() * CONST_PI * vcl_pow(this->GetInhibitionRadius(), 2))
-//                                           / (CONST_PI * vcl_pow(this->GetInhibitionRadius(), 2)));
-  //std::cout << "nbMaxIter: " << nbMaxIter << std::endl;
-
-  unsigned int nbMaxPosition = (unsigned int)(nbMaxIter * this->GetRandomLocalizationDensity());
+  //unsigned int nbMaxIter = (unsigned int)(node->GetPolygonExteriorRing()->GetArea());
+  //                                         - insiders.size() * CONST_PI * vcl_pow(this->GetInhibitionRadius(), 2))
+  //                                         / (CONST_PI * vcl_pow(this->GetInhibitionRadius(), 2)));
+  
+  unsigned int nbMaxPosition = (unsigned int)(node->GetPolygonExteriorRing()->GetArea() * this->GetRandomLocalizationDensity());
+  
+  //std::cout << "nbMaxIter: " << this->GetNbMaxIteration() << std::endl;
   //std::cout << "nbMaxPosition: " << nbMaxPosition << std::endl;
   
   // Generation
-  unsigned int nbIter =  nbMaxIter;
+  unsigned long int nbIter =  this->GetNbMaxIteration();
   unsigned int nbPosition = nbMaxPosition;
 
   PointType rangeMin,rangeMax;

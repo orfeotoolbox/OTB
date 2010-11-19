@@ -33,7 +33,7 @@
 #include "itkComplexToImaginaryImageFilter.h"
 
 
-int otbImageFileReaderCompareComplexPixelWithFloatPixelTest(int argc, char* argv[])
+int otbCompareWritingComplexImageTest(int argc, char* argv[])
 {
   if (argc < 7)
     {

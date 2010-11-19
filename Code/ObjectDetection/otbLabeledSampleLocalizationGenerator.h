@@ -96,6 +96,10 @@ public:
   itkGetConstMacro(InhibitionRadius, double);
   itkSetMacro(InhibitionRadius, double);
 
+  /** The maximum iteration number during negative sample positions */
+  itkGetConstMacro(NbMaxIteration, unsigned long int);
+  itkSetMacro(NbMaxIteration, unsigned long int);
+
   /** Set the seed for random number generator */
   void SetSeed(unsigned int seed)
   {
@@ -122,6 +126,7 @@ private:
   int                       m_NoClassIdentifier;
   double                    m_RandomLocalizationDensity;
   double                    m_InhibitionRadius;
+  unsigned long int         m_NbMaxIteration;
 };
 
 } // end namespace otb
