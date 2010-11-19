@@ -163,7 +163,7 @@ private:
   unsigned int                    m_NeighborhoodRadius;
   ParamContainerType              m_FlusserMomentsParam;              //[NeighborhoodRadius]
   ParamContainerType              m_RadiometricMomentsParam;          //[NeighborhoodRadius]
-  ParamContainerType              m_LocalHistogramParam;              //[NeighborhoodRadius; nbBins]
+  ParamContainerType              m_LocalHistogramParam;              //[NeighborhoodRadius; nbBins; minHistogram; maxHistogram]
   ParamContainerType              m_FourierMellinDescriptorsParam;    //[NeighborhoodRadius; PMax; QMax]
 };
 

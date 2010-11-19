@@ -36,8 +36,10 @@ StandardMetaImageFunctionBuilder<TPrecision, TCoordRep>
   m_RadiometricMomentsParam.push_back(static_cast<ValueType>(this->GetNeighborhoodRadius()));
   
   m_LocalHistogramParam.push_back(static_cast<ValueType>(this->GetNeighborhoodRadius()));
-  m_LocalHistogramParam.push_back(64);
-  
+  m_LocalHistogramParam.push_back(16);
+  m_LocalHistogramParam.push_back(0);
+  m_LocalHistogramParam.push_back(4096);
+   
   m_FourierMellinDescriptorsParam.push_back(static_cast<ValueType>(this->GetNeighborhoodRadius()));
   m_FourierMellinDescriptorsParam.push_back(3);
   m_FourierMellinDescriptorsParam.push_back(3);
@@ -115,10 +117,12 @@ void
 StandardMetaImageFunctionBuilder<TPrecision, TCoordRep>
 ::SetLocalHistogramIFParameters(ParamContainerType Param)
 {
-  if (Param.size()==2)
+  if (Param.size()==4)
     {
     m_LocalHistogramParam[0] = Param[0];
     m_LocalHistogramParam[1] = Param[1];
+    m_LocalHistogramParam[2] = Param[2];
+    m_LocalHistogramParam[3] = Param[3];
     }
 }
   

@@ -19,7 +19,6 @@
 #define __otbLocalHistogramIFFactory_txx
 
 #include "otbLocalHistogramIFFactory.h"
-#include "otbStreamingMinMaxImageFilter.h"
 
 
 namespace otb
@@ -42,16 +41,11 @@ LocalHistogramIFFactory<TImageType, TCoordRep, TPrecision>
 {
   typename AdaptedLocalHistogramIF::Pointer function = AdaptedLocalHistogramIF::New();
   
-  typedef otb::StreamingMinMaxImageFilter<InputImageType>               MinMaxFilterType;
-  typename MinMaxFilterType::Pointer filter = MinMaxFilterType::New();
-  filter->SetInput(image);
-  filter->Update();
-
   function->SetInputImage(image);
   function->GetInternalImageFunction()->SetNeighborhoodRadius(param[0]);
   function->GetInternalImageFunction()->SetNumberOfHistogramBins(param[1]);
-  function->GetInternalImageFunction()->SetHistogramMin(filter->GetMinimum());
-  function->GetInternalImageFunction()->SetHistogramMax(filter->GetMaximum());
+  function->GetInternalImageFunction()->SetHistogramMin(param[2]);
+  function->GetInternalImageFunction()->SetHistogramMax(param[3]);
 
   metaIF->AddFunction(function);
   container->push_back(image);
