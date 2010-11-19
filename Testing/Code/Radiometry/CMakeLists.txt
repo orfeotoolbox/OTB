@@ -1534,7 +1534,9 @@ ADD_TEST(raTvSarBrightnessToImageFilter  ${RADIOMETRY_TESTS9}
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
-
+ADD_TEST(raTvTestVNLMinimize  ${RADIOMETRY_TESTS9}
+	otbTestVNLMinimize
+)
 
 
 
@@ -1651,6 +1653,7 @@ otbSarRadiometricCalibrationToImageFilterWithRealPixelTest.cxx
 otbSarBrightnessFunctor.cxx
 otbSarBrightnessFunction.cxx
 otbSarBrightnessToImageFilterTest.cxx
+otbTestVNLMinimize.cxx
 )
 
 
