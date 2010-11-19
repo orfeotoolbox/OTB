@@ -67,7 +67,8 @@ int otbLabeledSampleLocalizationGenerator(int argc, char* argv[])
   generator->SetClassKey("Class");
   generator->SetNoClassIdentifier(0);
   generator->SetInhibitionRadius(5);
-  generator->SetRandomLocalizationDensity(0.05);
+  generator->SetRandomLocalizationDensity(0.004);
+  generator->SetNbMaxIteration(1000);
 
   generator->Update();
 
