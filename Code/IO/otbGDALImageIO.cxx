@@ -922,8 +922,19 @@ void GDALImageIO::Write(const void* buffer)
       itkExceptionMacro(<< "Unable to instantiate driver " << gdalDriverShortName << " to write " << m_FileName);
       }
 
+    // If JPEG, set the JPEG compression quality to 95.
+    char * option[2];
+    option[0] = NULL;
+    option[1] = NULL;
+    // If JPEG, set the image quality
+    if( gdalDriverShortName.compare("JPEG") == 0 )
+      {
+	option[0] = const_cast<char *>("QUALITY=95");
+ 
+      }
+    
     GDALDataset* hOutputDS = driver->CreateCopy( realFileName.c_str(), m_Dataset->GetDataSet(), FALSE,
-                                                 NULL, NULL, NULL );
+                                                 option, NULL, NULL );
     GDALClose(hOutputDS);
     }
 }

@@ -26,14 +26,5 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbLUMImageIOTestCanRead);
-  REGISTER_TEST(otbLUMImageIOTestCanWrite);
-  REGISTER_TEST(otbMWImageIOTestCanRead);
-  REGISTER_TEST(otbMWImageIOTestCanWrite);
-  REGISTER_TEST(otbImageFileReaderTest);
-  REGISTER_TEST(otbImageFileReaderTestFloat);
-  REGISTER_TEST(otbShortImageIOTest);
-  REGISTER_TEST(otbImageIOFactoryNew);
-  REGISTER_TEST(otbImageFileReaderWithComplexPixelTest);
-  REGISTER_TEST(otbCompareWritingComplexImageTest);
+  REGISTER_TEST(otbCBAMIChangeDetectionTest);
 }
