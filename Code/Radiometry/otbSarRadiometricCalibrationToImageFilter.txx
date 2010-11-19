@@ -76,11 +76,23 @@ SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>
 
   std::cout<<"SarRadiometricCalibrationToImageFilter starts trouble"<<std::endl;
   incidenceAngle = function->GetIncidenceAngle();
-  std::cout<<"function->GetIncidenceAngle():"<<std::endl;
-  std::cout<<function->GetIncidenceAngle()<<std::endl;
   incidenceAngle->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationIncidenceAngle());
   std::cout<<"imageMetadataInterface->GetRadiometricCalibrationIncidenceAngle():"<<std::endl;
-  std::cout<<imageMetadataInterface->GetRadiometricCalibrationIncidenceAngle()<<std::endl;
+  typename ParametricFunctionType::PointType point;
+  point.Fill(0);
+  typename ParametricFunctionType::PointSetType::PixelType pointValue;
+  pointValue = itk::NumericTraits<ParametricFunctionType::PointSetType::PixelType>::Zero;
+  unsigned int nbRecords = imageMetadataInterface->GetRadiometricCalibrationIncidenceAngle()->GetNumberOfPoints();
+
+  // Fill the linear system
+  for (unsigned int i = 0; i < nbRecords; ++i)
+  {
+      imageMetadataInterface->GetRadiometricCalibrationIncidenceAngle()->GetPoint(i, &point);
+      imageMetadataInterface->GetRadiometricCalibrationIncidenceAngle()->GetPointData(i, &pointValue);
+      //std::cout << "point = " << point << std::endl;
+      std::cout << pointValue << " / "<<point<<std::endl;
+	}
+  //std::cout<<imageMetadataInterface->GetRadiometricCalibrationIncidenceAngle()<<std::endl;
   incidenceAngle->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationIncidenceAnglePolynomialDegree());
   std::cout<<"imageMetadataInterface->GetRadiometricCalibrationIncidenceAnglePolynomialDegree():"<<std::endl;
   std::cout<<imageMetadataInterface->GetRadiometricCalibrationIncidenceAnglePolynomialDegree()<<std::endl;
