@@ -94,6 +94,19 @@ ADD_TEST(odTvObjectDetectionClassifier ${OBJECTDETECTION_TESTS1}
   5 # neighborhood radius
   )
 
+ADD_TEST(odTvObjectDetectionClassifierStreaming ${OBJECTDETECTION_TESTS1}
+  --compare-ogr ${NOTOL}
+  ${BASELINE_FILES}/TvObjectDetectionClassifierOutput.shp
+  ${TEMP}/TvObjectDetectionClassifierOutput.shp
+  otbObjectDetectionClassifier
+  ${INPUTDATA}/ObjectReco/Boats/maur_B010202_01_extract_amplitude.tif
+  ${INPUTDATA}/ObjectReco/Boats/FeatureStats_RadiometricMoments_amplitude.xml
+  ${BASELINE_FILES}/TvDescriptorsSVMModelCreation.svm
+  ${TEMP}/TvObjectDetectionClassifierOutput.shp
+  50 # streaming
+  5 # neighborhood radius
+  )
+
 ADD_TEST(odTuStandardMetaImageFunctionBuilderNew ${OBJECTDETECTION_TESTS1}
   otbStandardMetaImageFunctionBuilderNew
   )
