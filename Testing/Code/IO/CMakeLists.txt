@@ -122,10 +122,16 @@ ADD_TEST(ioTvImageFileReaderWithComplexPixel_RADARSAT ${IO_TESTS1}
          ${TEMP}/ioImageFileReaderWithComplexPixel_RADARSAT.tif
          0 0 100 100)
 
-ADD_TEST(ioTvImageFileReaderCompareComplexPixelWithFloatPixel_PALSAR ${IO_TESTS1}
-         otbImageFileReaderCompareComplexPixelWithFloatPixelTest
+ADD_TEST(ioTvCompareWritingComplexImage_TIF ${IO_TESTS1}
+         otbCompareWritingComplexImageTest
          ${LARGEDATA}/PALSAR/200801280007/l1data/VOL-ALPSRP037120700-H1.1__A
          ${TEMP}/ioTvImageFileReaderCompareComplexPixelWithFloatPixel_PALSAR.tif
+         0 0 100 100)
+
+ADD_TEST(ioTvCompareWritingComplexImage_HDR ${IO_TESTS1}
+         otbCompareWritingComplexImageTest
+         ${LARGEDATA}/PALSAR/200801280007/l1data/VOL-ALPSRP037120700-H1.1__A
+         ${TEMP}/ioTvImageFileReaderCompareComplexPixelWithFloatPixel_PALSAR.hdr
          0 0 100 100)
 
 ENDIF(OTB_DATA_USE_LARGEINPUT)
@@ -2692,7 +2698,7 @@ otbImageFileReaderTestFloat.cxx
 otbShortImageIOTest.cxx
 otbImageIOFactoryNew.cxx
 otbImageFileReaderWithComplexPixel.cxx
-otbImageFileReaderCompareComplexPixelWithFloatPixel.cxx
+otbCompareWritingComplexImage.cxx
 )
 SET(BasicIO_SRCS2
 otbIOTests2.cxx
