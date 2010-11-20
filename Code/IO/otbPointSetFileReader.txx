@@ -134,7 +134,7 @@ void PointSetFileReader<TOutputPointSet>
   if (PointType::PointDimension == 2)
     {
     LASPointH pt = LASPoint_Create();
-    while (pt = LASReader_GetNextPoint(reader))
+    while ((pt = LASReader_GetNextPoint(reader)))
       {
       
       PointType point;
@@ -153,7 +153,7 @@ void PointSetFileReader<TOutputPointSet>
   else if (PointType::PointDimension == 3)
     {
     LASPointH p = LASPoint_Create();
-    while (p = LASReader_GetNextPoint(reader))
+    while ((p = LASReader_GetNextPoint(reader)))
       {
       //liblas::Point const& p = reader.GetPoint();
 
