@@ -15,11 +15,12 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#include <cstdlib>
+#include <iostream>
 
 #include <vnl/algo/vnl_lsqr.h>
 #include <vnl/vnl_sparse_matrix_linear_system.h>
 #include <vnl/vnl_least_squares_function.h>
-#include <iostream>
 
 int otbTestVNLMinimize(int argc, char * argv[])
 {
