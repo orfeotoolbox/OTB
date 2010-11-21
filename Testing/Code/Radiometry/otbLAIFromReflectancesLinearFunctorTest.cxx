@@ -20,9 +20,8 @@
 
 int otbLAIFromReflectancesLinear(int argc, char * argv[])
 {
-  const unsigned int Dimension = 2;
   typedef double                           PixelType;
- 
+
   typedef otb::Functor::LAIFromReflectancesLinear<PixelType, PixelType, PixelType> FunctorType;
 
   FunctorType laiFunct = FunctorType();

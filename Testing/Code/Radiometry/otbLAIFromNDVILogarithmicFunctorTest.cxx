@@ -20,9 +20,8 @@
 
 int otbLAIFromNDVILogarithmic(int argc, char * argv[])
 {
-  const unsigned int Dimension = 2;
   typedef double                           PixelType;
- 
+
   typedef otb::Functor::LAIFromNDVILogarithmic<PixelType, PixelType, PixelType> FunctorType;
 
   FunctorType laiFunct = FunctorType();

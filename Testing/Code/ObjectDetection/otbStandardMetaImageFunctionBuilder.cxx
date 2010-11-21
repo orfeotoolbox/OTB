@@ -35,7 +35,7 @@ int otbStandardMetaImageFunctionBuilderNew(int argc, char* argv[])
 {
   typedef double                                                PrecisionType;
   typedef otb::StandardMetaImageFunctionBuilder<PrecisionType>  BuilderType;
-  
+
   // instantiation
   BuilderType::Pointer builder = BuilderType::New();
 
@@ -48,7 +48,6 @@ int otbStandardMetaImageFunctionBuilder(int argc, char* argv[])
 {
   const char * inputFilename  = argv[1];
 
-  unsigned int nbFunction;
   std::vector<double> p1, p2, p3, p4;
 
   typedef double                                                PrecisionType;
