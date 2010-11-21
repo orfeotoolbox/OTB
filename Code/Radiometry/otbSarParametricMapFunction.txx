@@ -28,9 +28,7 @@
 #include "otbImageKeywordlist.h"
 #include "base/ossimKeywordlist.h"
 
-#include <vnl/algo/vnl_lsqr.h>
-#include <vnl/vnl_sparse_matrix_linear_system.h>
-#include <vnl/vnl_least_squares_function.h>
+#include <vnl/algo/vnl_svd.h>
 
 namespace otb
 {
@@ -150,8 +148,9 @@ SarParametricMapFunction<TInputImage, TCoordRep>
     unsigned int nbRecords = pointSet->GetNumberOfPoints();
     unsigned int nbCoef = m_Coeff.Rows() * m_Coeff.Cols();
 
-    vnl_sparse_matrix<double> a(nbRecords, nbCoef);
+    vnl_matrix<double> a(nbRecords, nbCoef);
     vnl_vector<double> b(nbRecords), bestParams(nbCoef);
+    a.fill(0);
     b.fill(0);
     bestParams.fill(0);
 
@@ -176,12 +175,9 @@ SarParametricMapFunction<TInputImage, TCoordRep>
         }
       }
 
-    // Create the linear system
-    vnl_sparse_matrix_linear_system<double> linearSystem(a, b);
-
-    // And solve it
-    vnl_lsqr linearSystemSolver(linearSystem);
-    linearSystemSolver.minimize(bestParams);
+    // Solve linear system with SVD decomposition
+    vnl_svd<double> svd(a);
+    bestParams = svd.solve(b);
 
     for (unsigned int xcoeff = 0; xcoeff < m_Coeff.Cols(); ++xcoeff)
       {
