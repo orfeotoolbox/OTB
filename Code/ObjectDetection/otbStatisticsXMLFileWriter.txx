@@ -41,7 +41,7 @@ StatisticsXMLFileWriter<TMeasurementVector>
   inputData.first  = name;
   
   // Check if the statistic name is already added
-  for(unsigned int idx= 0; idx< m_MeasurementVectorContainer.size() ; idx++)
+  for(unsigned int idx= 0; idx< m_MeasurementVectorContainer.size(); idx++)
     {
     if(strcmp(m_MeasurementVectorContainer[idx].first.c_str(),name) == 0 )
       {

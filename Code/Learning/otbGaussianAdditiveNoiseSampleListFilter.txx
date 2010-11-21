@@ -79,7 +79,7 @@ GaussianAdditiveNoiseSampleListFilter<TInputSampleList,TOutputSampleList>
   itk::ProgressReporter progress(this,0,inputSampleListPtr->Size()*m_NumberOfIteration);
 
   // Iterate m_NumberOfIteration-times the noising process
-  for (unsigned int currIteration = 0; currIteration< m_NumberOfIteration ; currIteration++)
+  for (unsigned int currIteration = 0; currIteration< m_NumberOfIteration; currIteration++)
     {
     typename InputSampleListType::ConstIterator inputIt = inputSampleListPtr->Begin();
 

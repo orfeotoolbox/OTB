@@ -106,8 +106,8 @@ StatisticsXMLFileReader<TMeasurementVector>
     std::vector<double>   tempMeasurementVector;
     
     for( TiXmlElement* sample = currentStat->FirstChildElement("StatisticVector");
-	 sample != NULL;
-	 sample = sample->NextSiblingElement() )
+   sample != NULL;
+   sample = sample->NextSiblingElement() )
       {
       // Get the current value of the statistic vector
       double value;
@@ -118,7 +118,7 @@ StatisticsXMLFileReader<TMeasurementVector>
     
     // resize the Measurement Vector
     currentStatisticVector.second.SetSize(tempMeasurementVector.size());
-    for(unsigned int i = 0 ; i < tempMeasurementVector.size(); i++)
+    for(unsigned int i = 0; i < tempMeasurementVector.size(); i++)
       currentStatisticVector.second.SetElement(i,
                                                (static_cast<InputValueType>(tempMeasurementVector[i])));
     
@@ -129,7 +129,6 @@ StatisticsXMLFileReader<TMeasurementVector>
 
   m_IsUpdated = true;
 }
-
 
 
 

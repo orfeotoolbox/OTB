@@ -24,7 +24,7 @@ namespace otb {
 
 /** \class StatisticsXMLFileReader
  *  \brief   Read a xml file where are stored several statistics 
- *	
+ *  
  * To get a specific statistic Measurement vector, use the method
  * GetStatisticVectorByName(name) which allow you to get the
  * Measurement vector for the statistic set as paramater.

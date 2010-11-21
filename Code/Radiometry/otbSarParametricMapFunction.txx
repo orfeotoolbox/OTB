@@ -88,10 +88,10 @@ SarParametricMapFunction<TInputImage, TCoordRep>
   point[1] /= m_ProductHeight;
 
   double result = 0;
-  for (unsigned int ycoeff = m_Coeff.Rows(); ycoeff > 0 ; --ycoeff)
+  for (unsigned int ycoeff = m_Coeff.Rows(); ycoeff > 0; --ycoeff)
      {
      double intermediate = 0;
-     for (unsigned int xcoeff = m_Coeff.Cols(); xcoeff > 0 ; --xcoeff)
+     for (unsigned int xcoeff = m_Coeff.Cols(); xcoeff > 0; --xcoeff)
        {
        //std::cout << "m_Coeff(" << ycoeff-1 << "," << xcoeff-1 << ") = " << m_Coeff(ycoeff-1, xcoeff-1) << std::endl;
        intermediate = intermediate * point[0] + m_Coeff(ycoeff-1, xcoeff-1);
@@ -142,29 +142,29 @@ SarParametricMapFunction<TInputImage, TCoordRep>
       }
     else
       {
-      m_ProductHeight = this->GetInputImage()->GetLargestPossibleRegion().GetSize()[0] ;
+      m_ProductHeight = this->GetInputImage()->GetLargestPossibleRegion().GetSize()[0];
       m_ProductWidth  = this->GetInputImage()->GetLargestPossibleRegion().GetSize()[1];
       }
 
-	// Perform the plane least square estimation
+  // Perform the plane least square estimation
     unsigned int nbRecords = pointSet->GetNumberOfPoints();
-	const unsigned int coeffRows = m_Coeff.Rows();
-	const unsigned int coeffCols = m_Coeff.Cols();	
+  const unsigned int coeffRows = m_Coeff.Rows();
+  const unsigned int coeffCols = m_Coeff.Cols();  
     unsigned int nbCoef = coeffRows * coeffCols;
-	const double invProductHeight = 1. / m_ProductHeight;
-	const double invProductWidth = 1. / m_ProductWidth;
+  const double invProductHeight = 1. / m_ProductHeight;
+  const double invProductWidth = 1. / m_ProductWidth;
 
     vnl_sparse_matrix<double> a(nbRecords, nbCoef);
     vnl_vector<double> b(nbRecords), bestParams(nbCoef);
     b.fill(0);
     bestParams.fill(0);
 
-	// Fill the linear system
+  // Fill the linear system
     for (unsigned int i = 0; i < nbRecords; ++i)
       {
       this->GetPointSet()->GetPoint(i, &point);
       this->GetPointSet()->GetPointData(i, &pointValue);
-	  b(i) = pointValue;
+    b(i) = pointValue;
       //std::cout << "point = " << point << std::endl;
       std::cout << "b(" << i << ") = " << pointValue << " / "<<point<<std::endl;
 
@@ -180,21 +180,21 @@ SarParametricMapFunction<TInputImage, TCoordRep>
         }
       }
 
-	// Create the linear system
-	std::cout<<a.cols()<<","<<a.rows()<<" === "<<b.size()<<" === "<<bestParams.size()<<std::endl;
+  // Create the linear system
+  std::cout<<a.cols()<<","<<a.rows()<<" === "<<b.size()<<" === "<<bestParams.size()<<std::endl;
     vnl_sparse_matrix_linear_system<double> linearSystem(a, b);
 
-	// And solve it
+  // And solve it
     vnl_lsqr linearSystemSolver(linearSystem);
-	std::cout << "EvaluateParam bestParams: " <<bestParams<< std::endl;
+  std::cout << "EvaluateParam bestParams: " <<bestParams<< std::endl;
     linearSystemSolver.minimize(bestParams);
-	std::cout << "EvaluateParam minimize bestParams: " <<bestParams<< std::endl;
+  std::cout << "EvaluateParam minimize bestParams: " <<bestParams<< std::endl;
     for (unsigned int xcoeff = 0; xcoeff < coeffCols; ++xcoeff)
       {
       for (unsigned int ycoeff = 0; ycoeff < coeffRows; ++ycoeff)
         {
-	    m_Coeff(ycoeff, xcoeff) = bestParams(xcoeff * coeffRows + ycoeff);
-	    //std::cout << "m_Coeff(" << ycoeff << "," << xcoeff << ") = " << m_Coeff(ycoeff, xcoeff) << std::endl;
+      m_Coeff(ycoeff, xcoeff) = bestParams(xcoeff * coeffRows + ycoeff);
+      //std::cout << "m_Coeff(" << ycoeff << "," << xcoeff << ") = " << m_Coeff(ycoeff, xcoeff) << std::endl;
         }
       }
     }

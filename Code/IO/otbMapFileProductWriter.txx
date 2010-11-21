@@ -541,7 +541,6 @@ MapFileProductWriter<TInputImage>
   m_File <<"\tEND" << std::endl;
 
 
-
 }
 
 

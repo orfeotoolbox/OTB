@@ -24,18 +24,18 @@ int otbDecisionTreeWithRealValues(int argc, char* argv[])
 {
 /** We build the following decision tree
 
-         	       	       	       	   -------------      
-				          ( DOY LE 100  )     
-				           -------------      
-				    	Yes  -/	  --   No     
-				    	  --/	    \--	      
-			     -------------	------------- 
-			    ( NDVI GT 0.7 )    ( NDVI GT 0.7 )
-			     -------------	------------- 
-				 / --		       /\     
-			  Yes  -/    \-	No     	  Yes-/	 \- No
-			     -/	       \	   -/	   \- 
-			   WW  	       SW      	   SW  	    WW
+                                         -------------      
+                  ( DOY LE 100  )     
+                   -------------      
+              Yes  -/    --   No     
+                --/      \--        
+           -------------  ------------- 
+          ( NDVI GT 0.7 )    ( NDVI GT 0.7 )
+           -------------  ------------- 
+         / --           /\     
+        Yes  -/    \-  No         Yes-/   \- No
+           -/         \     -/     \- 
+         WW           SW           SW        WW
 
   */
   typedef double AttributeValueType;

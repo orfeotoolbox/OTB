@@ -30,8 +30,8 @@ namespace Statistics {
  *  input and returning ListSample.
  *
  *
- *	This filter provides pipeline support for itk::Statistics::ListSample via itk::DataObjectDecorator for
- *	the output sample list.
+ *  This filter provides pipeline support for itk::Statistics::ListSample via itk::DataObjectDecorator for
+ *  the output sample list.
  *
  */
 template < class TInputSampleList, class TOutputSampleList = TInputSampleList >

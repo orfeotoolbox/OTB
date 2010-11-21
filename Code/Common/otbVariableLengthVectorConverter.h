@@ -81,7 +81,6 @@ private:
 };
 
 
-
 // Real Matrix
 template< class TInternalInputType, class TPrecisionType >
 class ITK_EXPORT VariableLengthVectorConverter<std::vector<std::vector<TInternalInputType> >,
@@ -123,7 +122,6 @@ private:
 };
 
 
-
 //Complex Matrix
 template< class TInternalInputType, class TPrecisionType >
 class ITK_EXPORT VariableLengthVectorConverter<std::vector<std::vector<std::complex<TInternalInputType> > >,
@@ -163,7 +161,6 @@ private:
   VariableLengthVectorConverter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 };
-
 
 
 //Fixed Array

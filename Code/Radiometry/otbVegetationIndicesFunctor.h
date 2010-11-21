@@ -1306,8 +1306,8 @@ protected:
     else
       {
       return (static_cast<TOutput>(
-		-(1.0/m_ExtinctionCoefficient)*vcl_log((dval- m_NdviInf)/(m_NdviSoil-m_NdviInf))
-		));
+    -(1.0/m_ExtinctionCoefficient)*vcl_log((dval- m_NdviInf)/(m_NdviSoil-m_NdviInf))
+    ));
       }
   }
 private:

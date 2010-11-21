@@ -31,7 +31,6 @@
 #include "otbRenderingFunction.h"
 
 
-
 namespace otb
 {
   namespace Function
@@ -187,7 +186,7 @@ namespace otb
           ParametersType param;
           param.SetSize(2 * nbBands);
 
-          for (unsigned int i = 0 ; i < nbBands ; ++i)
+          for (unsigned int i = 0; i < nbBands; ++i)
           {
             // Min Band
             param.SetElement(2 * i, SCREEN_COLOR_MIN_VALUE);
