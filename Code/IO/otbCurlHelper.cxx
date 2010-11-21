@@ -180,8 +180,7 @@ int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs,
   // Perform
   int lStillRunning;
 
-  while (CURLM_CALL_MULTI_PERFORM == curl_multi_perform(multiHandle, &lStillRunning))
-;
+  while (CURLM_CALL_MULTI_PERFORM == curl_multi_perform(multiHandle, &lStillRunning));
 
   // Now get that URL
   while (lStillRunning)
@@ -213,13 +212,10 @@ int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs,
         /* select error */
         break;
       case 0:
-      /* timeout */
+        /* timeout */
       default:
         /* timeout or readable/writable sockets */
-        while (
-          CURLM_CALL_MULTI_PERFORM == curl_multi_perform(multiHandle, &lStillRunning)
-          )
-     ;
+        while (CURLM_CALL_MULTI_PERFORM == curl_multi_perform(multiHandle, &lStillRunning));
         break;
       }
     }
