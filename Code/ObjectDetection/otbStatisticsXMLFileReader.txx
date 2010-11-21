@@ -131,7 +131,6 @@ StatisticsXMLFileReader<TMeasurementVector>
 }
 
 
-
 template < class TMeasurementVector >
 void
 StatisticsXMLFileReader<TMeasurementVector>

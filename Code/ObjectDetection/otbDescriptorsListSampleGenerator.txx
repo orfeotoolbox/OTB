@@ -336,7 +336,6 @@ PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,T
 
 
 
-
 template <class TInputImage, class TVectorData, class TListSample, class TLabelListSample, class TOutputPrecision, class TCoordRep>
 DescriptorsListSampleGenerator<TInputImage,TVectorData,TListSample,TLabelListSample,TOutputPrecision,TCoordRep>
 ::DescriptorsListSampleGenerator()

@@ -140,7 +140,7 @@ SarParametricMapFunction<TInputImage, TCoordRep>
       }
     else
       {
-      m_ProductHeight = this->GetInputImage()->GetLargestPossibleRegion().GetSize()[0] ;
+      m_ProductHeight = this->GetInputImage()->GetLargestPossibleRegion().GetSize()[0];
       m_ProductWidth  = this->GetInputImage()->GetLargestPossibleRegion().GetSize()[1];
       }
 

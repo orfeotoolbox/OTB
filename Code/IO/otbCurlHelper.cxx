@@ -219,7 +219,7 @@ int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs,
         while (
           CURLM_CALL_MULTI_PERFORM == curl_multi_perform(multiHandle, &lStillRunning)
           )
-      ;
+     ;
         break;
       }
     }
