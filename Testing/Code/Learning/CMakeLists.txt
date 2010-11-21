@@ -12,7 +12,7 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 SET(NOTOL 0.0)
 
 #EPSILON est different de 0.0 pour les tests multiplateformes avec différentes options de compilation.
-SET(EPSILON 0.0000000001)
+SET(EPSILON_10 0.0000000001)
 SET(EPSILON_3 0.001)
 SET(EPSILON_4 0.0001)
 SET(EPSILON_5 0.00001)
@@ -189,7 +189,7 @@ ADD_TEST(leTuSOMNew ${LEARNING_TESTS2}
         otbSOMNew)
 
 ADD_TEST(leTvSOM ${LEARNING_TESTS2}
-        --compare-image ${EPSILON}
+        --compare-image ${EPSILON_10}
  ${BASELINE}/leSOMPoupeesSubOutputMap1.hdr
  ${TEMP}/leSOMPoupeesSubOutputMap1.hdr
  otbSOM
@@ -203,7 +203,7 @@ ADD_TEST(leTuPeriodicSOMNew ${LEARNING_TESTS2}
         otbPeriodicSOMNew)
 
 ADD_TEST(leTvPeriodicSOM ${LEARNING_TESTS2}
-        --compare-image ${EPSILON}
+        --compare-image ${EPSILON_10}
  ${BASELINE}/lePeriodicSOMPoupeesSubOutputMap1.hdr
  ${TEMP}/lePeriodicSOMPoupeesSubOutputMap1.hdr
  otbPeriodicSOMTest
@@ -248,7 +248,7 @@ ADD_TEST(leTuSOMWithMissingValueNew ${LEARNING_TESTS2}
          otbSOMWithMissingValueNew )
 
 ADD_TEST(leTvSOMWithMissingValue ${LEARNING_TESTS2}
-        --compare-image ${EPSILON}
+        --compare-image ${EPSILON_10}
  ${BASELINE}/leSOMWithMissingValue.hdr
  ${TEMP}/leSOMWithMissingValue.hdr
  otbSOMWithMissingValueTest

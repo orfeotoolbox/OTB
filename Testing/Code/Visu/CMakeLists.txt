@@ -12,7 +12,7 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 #Tolerance sur diff pixel image
 SET(TOL 0.0)
-SET(EPSILON 0.000001)
+SET(EPSILON_6 0.000001)
 
 
 SET(VISU_TESTS1 ${CXX_TEST_PATH}/otbVisuTests1)
@@ -121,7 +121,7 @@ ADD_TEST(viTuImageToGrayscaleAnaglyphImageFilterNew ${VISU_TESTS2}
 )
 
 ADD_TEST(viTvImageToGrayscaleAnaglyphImageFilter ${VISU_TESTS2}
-	--compare-image  ${EPSILON}
+	--compare-image  ${EPSILON_6}
 	${BASELINE}/viTvGrayscaleAnaglyphFilterResult.tif
 	${TEMP}/viTvGrayscaleAnaglyphFilterResult.tif
 	otbImageToGrayscaleAnaglyphImageFilter
@@ -137,7 +137,7 @@ ADD_TEST(viTuVectorImageToColorAnaglyphVectorImageFilterNew ${VISU_TESTS2}
 )
 
 ADD_TEST(viTvVectorImageToColorAnaglyphVectorImageFilter ${VISU_TESTS2}
-	--compare-image ${EPSILON}
+	--compare-image ${EPSILON_6}
 	${BASELINE}/viTvColorAnaglyphFilterResult.tif
 	${TEMP}/viTvColorAnaglyphFilterResult.tif
 	otbVectorImageToColorAnaglyphVectorImageFilter
@@ -174,7 +174,7 @@ ADD_TEST(viTuImageWidgetTransferFunctionsNew ${VISU_TESTS2}
         )
 
 ADD_TEST(viTvImageWidgetTransferFunctions ${VISU_TESTS2}
---compare-ascii ${EPSILON}
+--compare-ascii ${EPSILON_6}
 		${BASELINE_FILES}/viTvImageWidgetTransferFunctionsOutput.txt
 		${TEMP}/viTvImageWidgetTransferFunctionsOutput.txt
         otbImageWidgetTransferFunctions
