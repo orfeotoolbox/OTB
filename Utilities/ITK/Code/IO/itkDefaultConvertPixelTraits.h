@@ -117,7 +117,7 @@ public:                                                                  \
     {                                                                    \
       pixel[i] = v;                                                      \
     }                                                                    \
-  static void SetNthComponent(int i, TargetType & pixel, const TargetType& v)   \
+  static void SetNthComponent(int , TargetType & pixel, const TargetType& v)   \
     {                                                                    \
       pixel = v;                                                      \
     }                                                                    \
@@ -154,7 +154,7 @@ public:                                                                  \
     {                                                                    \
       pixel[i] = v;                                                      \
     }                                                                    \
-  static void SetNthComponent(int i, TargetType & pixel, const TargetType& v)   \
+  static void SetNthComponent(int , TargetType & pixel, const TargetType& v)   \
     {                                                                    \
       pixel = v;                                                      \
     }                                                                    \
@@ -223,7 +223,7 @@ public:                                                                  \
       const unsigned int col = i % cols;                                 \
       pixel[row][col] = v;                                               \
     }                                                                    \
-  static void SetNthComponent(int i, TargetType & pixel, const TargetType& v)   \
+  static void SetNthComponent(int , TargetType & pixel, const TargetType& v)   \
     {                                                                    \
       pixel = v;                                               \
     }                                                                    \
@@ -296,7 +296,7 @@ public:                                                                  \
       pixel = TargetType( pixel.real(), v );                           \
       }                                                                  \
     }                                                                    \
-  static void SetNthComponent(int i, TargetType & pixel, const TargetType& v) \
+  static void SetNthComponent(int , TargetType & pixel, const TargetType& v) \
     { \
       pixel = v; \
     } \
