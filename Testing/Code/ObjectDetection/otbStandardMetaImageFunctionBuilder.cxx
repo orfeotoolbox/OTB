@@ -81,6 +81,8 @@ int otbStandardMetaImageFunctionBuilder(int argc, char* argv[])
 
   p1.push_back(7);
   p1.push_back(128);
+  p1.push_back(0);
+  p1.push_back(1500);
 
   p2.push_back(6);
   

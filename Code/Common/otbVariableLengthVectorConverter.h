@@ -204,10 +204,8 @@ private:
 };
 
 //Histogram
-template< class TMeasurement, unsigned int VMeasurementVectorSize, class TFrequencyContainer, class TPrecisionType >
-class ITK_EXPORT VariableLengthVectorConverter<typename itk::SmartPointer< const itk::Statistics::Histogram<TMeasurement, 
-                                                                                                            VMeasurementVectorSize, 
-                                                                                                            TFrequencyContainer> >,
+template< class TPixel, class TPrecisionType >
+class ITK_EXPORT VariableLengthVectorConverter<typename itk::SmartPointer< itk::Statistics::Histogram<TPixel> >,
                                                TPrecisionType> :
 public itk::ProcessObject
 {
@@ -226,9 +224,7 @@ public:
 
   typedef TPrecisionType                                                           OutputPrecisionType;
   typedef typename itk::VariableLengthVector<OutputPrecisionType>                  OutputType;
-  typedef typename itk::SmartPointer< const itk::Statistics::Histogram<TMeasurement, 
-                                                                       VMeasurementVectorSize, 
-                                                                       TFrequencyContainer> >   InputType;
+  typedef typename itk::SmartPointer< itk::Statistics::Histogram<TPixel> >         InputType;
 
   OutputType Convert(InputType input);
  

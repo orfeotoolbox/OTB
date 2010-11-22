@@ -168,6 +168,8 @@ int otbImageFunctionAdaptor(int argc, char * argv[])
     {
     std::cout << "ExceptionObject caught for FMDadaptedFunction() !" << std::endl;
     std::cout << err << std::endl;
+
+    return EXIT_FAILURE;
     }
 
 
@@ -202,6 +204,8 @@ int otbImageFunctionAdaptor(int argc, char * argv[])
     {
     std::cout << "ExceptionObject caught for RMFunction() !" << std::endl;
     std::cout << err << std::endl;
+
+    return EXIT_FAILURE;
     }
 
   try
@@ -236,6 +240,8 @@ int otbImageFunctionAdaptor(int argc, char * argv[])
     {
     std::cout << "ExceptionObject caught for CMadaptedFunction() !" << std::endl;
     std::cout << err << std::endl;
+
+    return EXIT_FAILURE;
     }
 
   try
@@ -261,6 +267,8 @@ int otbImageFunctionAdaptor(int argc, char * argv[])
     {
     std::cout << "ExceptionObject caught for FMFunction() !" << std::endl;
     std::cout << err << std::endl;
+
+    return EXIT_FAILURE;
     }
 
   try
@@ -286,6 +294,8 @@ int otbImageFunctionAdaptor(int argc, char * argv[])
     {
     std::cout << "ExceptionObject caught for HMFunction() !" << std::endl;
     std::cout << err << std::endl;
+
+    return EXIT_FAILURE;
     }
 
   try
@@ -312,6 +322,8 @@ int otbImageFunctionAdaptor(int argc, char * argv[])
     {
     std::cout << "ExceptionObject caught for RaMFunction() !" << std::endl;
     std::cout << err << std::endl;
+
+    return EXIT_FAILURE;
     }
 
   try
@@ -344,6 +356,8 @@ int otbImageFunctionAdaptor(int argc, char * argv[])
     {
     std::cout << "ExceptionObject caught for LHFunction() !" << std::endl;
     std::cout << err << std::endl;
+    
+    return EXIT_FAILURE;
     }
 
   error = vcl_sqrt(error);
@@ -386,6 +400,8 @@ int otbImageFunctionAdaptor(int argc, char * argv[])
     {
     std::cout << "ExceptionObject caught for FMDFunctionType() !" << std::endl;
     std::cout << err << std::endl;
+    
+    return EXIT_FAILURE;
     }
 
 

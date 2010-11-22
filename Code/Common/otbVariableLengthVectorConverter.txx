@@ -49,7 +49,6 @@ VariableLengthVectorConverter< std::vector<std::vector<TInternalInputType> >, TP
       rsltIdx ++;
       }
     }
-  
   return result;
 }
 
@@ -80,7 +79,6 @@ VariableLengthVectorConverter< std::vector<std::vector<std::complex<TInternalInp
       rsltIdx ++;
       }
     }
-  
   return result;
 }
 
@@ -101,20 +99,15 @@ VariableLengthVectorConverter< itk::FixedArray<TInternalInputType, VArrayDimensi
     result[rsltIdx] = static_cast<OutputPrecisionType>(input[i]);
     rsltIdx ++;
     }
-  
   return result;
 }
 
 // Histogram
-template< class TMeasurement, unsigned int VMeasurementVectorSize, class TFrequencyContainer, class TPrecisionType >
-typename VariableLengthVectorConverter< itk::SmartPointer< const itk::Statistics::Histogram<TMeasurement, 
-                                                                                            VMeasurementVectorSize, 
-                                                                                            TFrequencyContainer> >, 
+template< class TPixel, class TPrecisionType >
+typename VariableLengthVectorConverter< itk::SmartPointer< itk::Statistics::Histogram<TPixel> >, 
                                         TPrecisionType>
 ::OutputType
-VariableLengthVectorConverter< itk::SmartPointer<const itk::Statistics::Histogram<TMeasurement, 
-                                                                                  VMeasurementVectorSize, 
-                                                                                  TFrequencyContainer> >, 
+VariableLengthVectorConverter< itk::SmartPointer< itk::Statistics::Histogram<TPixel> >, 
                                TPrecisionType>
 ::Convert(InputType input)
 {
@@ -131,7 +124,7 @@ VariableLengthVectorConverter< itk::SmartPointer<const itk::Statistics::Histogra
     result[rsltIdx] = static_cast<OutputPrecisionType>(input->GetFrequency(i));
     rsltIdx ++;
     }
-  
+  std::cout << "Histogram to VLV" << std::endl;
   return result;
 }
 
