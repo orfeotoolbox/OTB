@@ -29,6 +29,7 @@
 #include "otbRadiometricMomentsImageFunction.h"
 #include "otbFourierMellinDescriptorsImageFunction.h"
 #include "otbLocalHistogramImageFunction.h"
+#include "otbHaralickTexturesImageFunction.h"
 
 
 int otbStandardMetaImageFunctionBuilderNew(int argc, char* argv[])
@@ -48,7 +49,7 @@ int otbStandardMetaImageFunctionBuilder(int argc, char* argv[])
 {
   const char * inputFilename  = argv[1];
 
-  std::vector<double> p1, p2, p3, p4;
+  std::vector<double> p1, p2, p3, p4, p5;
 
   typedef double                                                PrecisionType;
   typedef double                                                CoordRepType;
@@ -75,6 +76,9 @@ int otbStandardMetaImageFunctionBuilder(int argc, char* argv[])
   typedef otb::FlusserMomentsImageFunction<ImageType, CoordRepType>  LocalHistogramIF;
   typedef otb::ImageFunctionAdaptor<LocalHistogramIF>                AdaptedLocalHistogramIF;
 
+  typedef otb::HaralickTexturesImageFunction<ImageType, CoordRepType>  HaralickTexturesIF;
+  typedef otb::ImageFunctionAdaptor<HaralickTexturesIF>                AdaptedHaralickTexturesIF;
+
   p1.push_back(7);
   p1.push_back(128);
 
@@ -85,6 +89,12 @@ int otbStandardMetaImageFunctionBuilder(int argc, char* argv[])
   p4.push_back(9);
   p4.push_back(5);
   p4.push_back(5);
+
+  p5.push_back(10);
+  p5.push_back(1);
+  p5.push_back(1500);
+  p5.push_back(16);
+  p5.push_back(4);
 
   // instantiation
   ImageReaderType::Pointer       Ireader  = ImageReaderType::New();
@@ -102,6 +112,7 @@ int otbStandardMetaImageFunctionBuilder(int argc, char* argv[])
   builder->SetFlusserMomentsIFParameters(p2);
   builder->SetRadiometricMomentsIFParameters(p3);
   builder->SetFourierMellinDescriptorsIFParameters(p4);
+  builder->SetHaralickTexturesIFParameters(p5);
     
   builder->AddImage(VIreader->GetOutput());
   
@@ -113,22 +124,27 @@ int otbStandardMetaImageFunctionBuilder(int argc, char* argv[])
 
   std::cout << static_cast<AdaptedLocalHistogramIF *>(MIF->GetNthFunction(0))->GetInternalImageFunction()
             << std::endl;
-  std::cout << static_cast<AdaptedLocalHistogramIF *>(MIF->GetNthFunction(4))->GetInternalImageFunction()
+  std::cout << static_cast<AdaptedLocalHistogramIF *>(MIF->GetNthFunction(5))->GetInternalImageFunction()
             << std::endl;
 
   std::cout << static_cast<AdaptedFlusserMomentsIF *>(MIF->GetNthFunction(1))->GetInternalImageFunction()
             << std::endl;
-  std::cout << static_cast<AdaptedFlusserMomentsIF *>(MIF->GetNthFunction(8))->GetInternalImageFunction()
+  std::cout << static_cast<AdaptedFlusserMomentsIF *>(MIF->GetNthFunction(9))->GetInternalImageFunction()
             << std::endl;
 
   std::cout << static_cast<AdaptedRadiometricMomentsIF *>(MIF->GetNthFunction(2))->GetInternalImageFunction()
             << std::endl;
-  std::cout << static_cast<AdaptedRadiometricMomentsIF *>(MIF->GetNthFunction(12))->GetInternalImageFunction()
+  std::cout << static_cast<AdaptedRadiometricMomentsIF *>(MIF->GetNthFunction(13))->GetInternalImageFunction()
             << std::endl;
 
   std::cout << static_cast<AdaptedFourierMellinDescriptorsIF *>(MIF->GetNthFunction(3))->GetInternalImageFunction()
             << std::endl;
-  std::cout << static_cast<AdaptedFourierMellinDescriptorsIF *>(MIF->GetNthFunction(16))->GetInternalImageFunction()
+  std::cout << static_cast<AdaptedFourierMellinDescriptorsIF *>(MIF->GetNthFunction(17))->GetInternalImageFunction()
+            << std::endl;
+
+  std::cout << static_cast<AdaptedHaralickTexturesIF *>(MIF->GetNthFunction(4))->GetInternalImageFunction()
+            << std::endl;
+  std::cout << static_cast<AdaptedHaralickTexturesIF *>(MIF->GetNthFunction(21))->GetInternalImageFunction()
             << std::endl;
 
   return EXIT_SUCCESS;

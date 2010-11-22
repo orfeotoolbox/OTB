@@ -43,6 +43,12 @@ StandardMetaImageFunctionBuilder<TPrecision, TCoordRep>
   m_FourierMellinDescriptorsParam.push_back(static_cast<ValueType>(this->GetNeighborhoodRadius()));
   m_FourierMellinDescriptorsParam.push_back(3);
   m_FourierMellinDescriptorsParam.push_back(3);
+
+  m_HaralickTexturesParam.push_back(static_cast<ValueType>(this->GetNeighborhoodRadius()));
+  m_HaralickTexturesParam.push_back(0);
+  m_HaralickTexturesParam.push_back(4096);
+  m_HaralickTexturesParam.push_back(30);
+  m_HaralickTexturesParam.push_back(2);
 }
 
 template <class TPrecision, class TCoordRep>
@@ -81,6 +87,7 @@ StandardMetaImageFunctionBuilder<TPrecision, TCoordRep>
     m_RadiometricMomentsParam[0]       = static_cast<ValueType>(radius);
     m_LocalHistogramParam[0]           = static_cast<ValueType>(radius);
     m_FourierMellinDescriptorsParam[0] = static_cast<ValueType>(radius);
+    m_HaralickTexturesParam[0]         = static_cast<ValueType>(radius);
     }
 }  
  
@@ -163,6 +170,29 @@ StandardMetaImageFunctionBuilder<TPrecision, TCoordRep>
     m_FourierMellinDescriptorsParam[0] = Param[0];
     m_FourierMellinDescriptorsParam[1] = Param[1];
     m_FourierMellinDescriptorsParam[2] = Param[2];
+    }
+}
+
+template <class TPrecision, class TCoordRep>
+typename StandardMetaImageFunctionBuilder<TPrecision, TCoordRep>::ParamContainerType 
+StandardMetaImageFunctionBuilder<TPrecision, TCoordRep>
+::GetHaralickTexturesIFParameters()
+{
+  return m_HaralickTexturesParam;
+}
+ 
+template <class TPrecision, class TCoordRep>
+void 
+StandardMetaImageFunctionBuilder<TPrecision, TCoordRep>
+::SetHaralickTexturesIFParameters(ParamContainerType Param)
+{
+  if (Param.size()==5)
+    {
+    m_HaralickTexturesParam[0] = Param[0];
+    m_HaralickTexturesParam[1] = Param[1];
+    m_HaralickTexturesParam[2] = Param[2];
+    m_HaralickTexturesParam[3] = Param[3];
+    m_HaralickTexturesParam[4] = Param[4];
     }
 }
 

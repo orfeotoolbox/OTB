@@ -31,6 +31,7 @@
 #include "otbFlusserMomentsIFFactory.h"
 #include "otbRadiometricMomentsIFFactory.h"
 #include "otbFourierMellinDescriptorsIFFactory.h"
+#include "otbHaralickTexturesIFFactory.h"
 
 
 namespace otb
@@ -95,6 +96,9 @@ public:
   
   ParamContainerType GetFourierMellinDescriptorsIFParameters();
   void SetFourierMellinDescriptorsIFParameters(ParamContainerType Param);
+
+  ParamContainerType GetHaralickTexturesIFParameters();
+  void SetHaralickTexturesIFParameters(ParamContainerType Param);
   
   MetaImageFunctionPointerType GetMetaImageFunction();
   DataObjectContainerType GetDataObjectContainer();
@@ -115,6 +119,8 @@ public:
       CoordRepType, TPrecision>               RadiometricMomentsIFFactoryType;
     typedef FourierMellinDescriptorsIFFactory<ImageType,
       CoordRepType, TPrecision>               FourierMellinDescriptorsIFFactoryType;
+    typedef HaralickTexturesIFFactory<ImageType,
+      CoordRepType, TPrecision>               HaralickTexturesIFFactoryType;
     
     //Multi-Channel Factories
     typedef MultiChannelIFFactory<LocalHistogramIFFactoryType, InputImageType>  
@@ -125,11 +131,14 @@ public:
                                                             MCRadiometricMomentsIFFactoryType;
     typedef MultiChannelIFFactory<FourierMellinDescriptorsIFFactoryType, InputImageType>  
                                                             MCFourierMellinDescriptorsIFFactoryType;
+    typedef MultiChannelIFFactory<HaralickTexturesIFFactoryType, InputImageType>  
+                                                            MCHaralickTexturesIFFactoryType;
 
-    MCLocalHistogramIFFactoryType MCLocalHistogramIFFactory;// = MCLocalHistogramIFFactoryType::New();
-    MCFlusserMomentsIFFactoryType MCFlusserMomentsIFFactory;// = MCFlusserMomentsIFFactoryType::New();
-    MCRadiometricMomentsIFFactoryType MCRadiometricMomentsIFFactory;// = MCRadiometricMomentsIFFactoryType::New();
-    MCFourierMellinDescriptorsIFFactoryType MCFourierMellinDescriptorsIFFactory;// = MCFourierMellinDescriptorsIFFactoryType::New();
+    MCLocalHistogramIFFactoryType MCLocalHistogramIFFactory;
+    MCFlusserMomentsIFFactoryType MCFlusserMomentsIFFactory;
+    MCRadiometricMomentsIFFactoryType MCRadiometricMomentsIFFactory;
+    MCFourierMellinDescriptorsIFFactoryType MCFourierMellinDescriptorsIFFactory;
+    MCHaralickTexturesIFFactoryType MCHaralickTexturesIFFactory;
 
     MCLocalHistogramIFFactory.Create(image, 
                                      m_LocalHistogramParam, 
@@ -147,6 +156,10 @@ public:
                                                m_FourierMellinDescriptorsParam, 
                                                m_MetaImageFunction, 
                                                &m_DataObjectContainer);
+    MCHaralickTexturesIFFactory.Create(image, 
+                                       m_HaralickTexturesParam, 
+                                       m_MetaImageFunction, 
+                                       &m_DataObjectContainer);
   }
 
 protected:
@@ -165,6 +178,8 @@ private:
   ParamContainerType              m_RadiometricMomentsParam;          //[NeighborhoodRadius]
   ParamContainerType              m_LocalHistogramParam;              //[NeighborhoodRadius; nbBins; minHistogram; maxHistogram]
   ParamContainerType              m_FourierMellinDescriptorsParam;    //[NeighborhoodRadius; PMax; QMax]
+  ParamContainerType              m_HaralickTexturesParam;            //[NeighborhoodRadius; ImageMin; ImageMax; NbBinPerAxis; Offset]
+
 };
 
 } // End namespace otb
