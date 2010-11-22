@@ -282,7 +282,6 @@ PersistentObjectDetectionClassifier<TInputImage,TOutputVectorData,TLabel,TFuncti
 }
 
 
-
 template <class TInputImage, class TOutputVectorData, class TLabel, class TFunctionPrecision, class TCoordRep>
 ObjectDetectionClassifier<TInputImage,TOutputVectorData,TLabel,TFunctionPrecision,TCoordRep>
 ::ObjectDetectionClassifier()
