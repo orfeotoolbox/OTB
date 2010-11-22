@@ -1056,6 +1056,10 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
     }
   else
     {
+    // buffer casted in unsigned long cause under Win32 the adress
+    // don't begin with 0x, the adress in not interpreted as
+    // hexadecimal but alpha numeric value, then the conversion to
+    // integer make us pointing to an non allowed memory block => Crash.
     std::ostringstream stream;
     stream << "MEM:::"
            <<  "DATAPOINTER=" << (unsigned long)(buffer) << ","
