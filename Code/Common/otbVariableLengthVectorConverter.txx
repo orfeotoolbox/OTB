@@ -124,7 +124,6 @@ VariableLengthVectorConverter< itk::SmartPointer< itk::Statistics::Histogram<TPi
     result[rsltIdx] = static_cast<OutputPrecisionType>(input->GetFrequency(i));
     rsltIdx ++;
     }
-  std::cout << "Histogram to VLV" << std::endl;
   return result;
 }
 
