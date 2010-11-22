@@ -135,7 +135,6 @@ DecisionTree<AttributeValueType, LabelType>
     
     // if we get here it means that a verified test was  not found
     itkGenericExceptionMacro(<< "Example could not be handled by decision tree.");
-
     }
   else
     {
@@ -210,7 +209,9 @@ DecisionTree<AttributeValueType, LabelType>
       }
 
     }
-
+  //added return statement to suppress warning, but if/then/else
+  //conditions make sure it is never reached 
+    return static_cast<LabelType>(0);
 }
 
 
