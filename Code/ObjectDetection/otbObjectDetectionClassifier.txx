@@ -248,14 +248,16 @@ PersistentObjectDetectionClassifier<TInputImage,TOutputVectorData,TLabel,TFuncti
   end[0] += outputRegionForThread.GetSize(0);
   end[1] += outputRegionForThread.GetSize(1);
 
+  unsigned int step = m_NeighborhoodRadius/2;
+
   IndexType current = begin;
   for (; current[1] != end[1]; current[1]++)
     {
-    if (current[1] % m_NeighborhoodRadius == 0)
+    if (current[1] % step == 0)
       {
       for(current[0] = 0; current[0] != end[0]; current[0]++)
         {
-        if (current[0] % m_NeighborhoodRadius == 0)
+        if (current[0] % step == 0)
           {
           DescriptorsFunctionPointType point;
           point[0] = current[0];
