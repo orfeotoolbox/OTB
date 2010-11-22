@@ -148,9 +148,9 @@ int otbHuMomentsImageFunctionScaleInvariant(int argc, char * argv[])
     error += vcl_pow(vcl_abs( Result1[j-1] - Result2[j-1]), 2);
     
     std::cout << "Original -H" << j
-              << " : " << Result1[j]
+              << " : " << Result1[j-1]
               << "  /  Scaled - H" << j 
-              << " : " << Result2[j] << std::endl;
+              << " : " << Result2[j-1] << std::endl;
     }
 
   error = vcl_sqrt(error)/7.0;
@@ -254,9 +254,9 @@ int otbHuMomentsImageFunctionRotationInvariant(int argc, char * argv[])
     error += vcl_pow(vcl_abs( Result1[j-1] - Result2[j-1]), 2);
 
     std::cout << "Original -H" << j
-              << " : " << Result1[j]
+              << " : " << Result1[j-1]
               << "  /  Rotated - H" << j 
-              << " : " << Result2[j] << std::endl;
+              << " : " << Result2[j-1] << std::endl;
     }
 
   error = vcl_sqrt(error)/7.0;

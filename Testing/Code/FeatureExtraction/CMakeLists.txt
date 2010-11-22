@@ -143,12 +143,12 @@ ADD_TEST(feTvFlusserMomentsImageFunction ${FEATUREEXTRACTION_TESTS1}
 	${INPUTDATA}/poupees.png
         ${TEMP}/feTvFlusserMomentsImageFunction.txt)
 
-ADD_TEST(feTuFlusserMomentsImageFunctionScaleInvariant ${FEATUREEXTRACTION_TESTS1}
+ADD_TEST(feTvFlusserMomentsImageFunctionScaleInvariant ${FEATUREEXTRACTION_TESTS1}
         otbFlusserMomentsImageFunctionScaleInvariant
 	${INPUTDATA}/poupees.png
         )
 
-ADD_TEST(feTuFlusserMomentsImageFunctionRotationInvariant ${FEATUREEXTRACTION_TESTS1}
+ADD_TEST(feTvFlusserMomentsImageFunctionRotationInvariant ${FEATUREEXTRACTION_TESTS1}
         otbFlusserMomentsImageFunctionRotationInvariant
 	${INPUTDATA}/poupees.png
         90

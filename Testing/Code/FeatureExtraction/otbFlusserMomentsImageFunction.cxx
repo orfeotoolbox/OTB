@@ -151,9 +151,9 @@ int otbFlusserMomentsImageFunctionScaleInvariant(int argc, char * argv[])
     error += vcl_pow(vcl_abs( Result1[j-1] - Result2[j-1]), 2);
 
     std::cout << "Original -F" << j
-              << " : " << Result1[j]
+              << " : " << Result1[j-1]
               << "  /  Scaled - F" << j 
-              << " : " << Result2[j] << std::endl;
+              << " : " << Result2[j-1] << std::endl;
     }
     
   error = vcl_sqrt(error)/11.0;
@@ -257,9 +257,9 @@ int otbFlusserMomentsImageFunctionRotationInvariant(int argc, char * argv[])
     error += vcl_pow(vcl_abs( Result1[j-1] - Result2[j-1]), 2);
     
     std::cout << "Original -F" << j
-              << " : " << Result1[j]
+              << " : " << Result1[j-1]
               << "  /  Rotated - F" << j 
-              << " : " << Result2[j] << std::endl;
+              << " : " << Result2[j-1] << std::endl;
     }
     
   error = vcl_sqrt(error)/11.0;
