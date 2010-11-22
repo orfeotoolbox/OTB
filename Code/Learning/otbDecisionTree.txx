@@ -108,28 +108,28 @@ DecisionTree<AttributeValueType, LabelType>
       DecisionTreeTestType theTest = theKey.second;
       AttributeValueType theValue = theKey.first;
       switch( theTest  ) 
-  {
-  case LT:
-    if( attrValue < theValue )
-      return lmIt->second;
-    break;
-  case LE:
-    if( attrValue <= theValue )
-      return lmIt->second;
-    break;
-  case EQ:
-    if( attrValue == theValue )
-      return lmIt->second;
-    break;
-  case GE:
-    if( attrValue >= theValue )
-      return lmIt->second;
-    break;
-  case GT:
-    if( attrValue > theValue )
-      return lmIt->second;
-    break;
-  }
+	{
+	case LT:
+	  if( attrValue < theValue )
+	    return lmIt->second;
+	  break;
+	case LE:
+	  if( attrValue <= theValue )
+	    return lmIt->second;
+	  break;
+	case EQ:
+	  if( attrValue == theValue )
+	    return lmIt->second;
+	  break;
+	case GE:
+	  if( attrValue >= theValue )
+	    return lmIt->second;
+	  break;
+	case GT:
+	  if( attrValue > theValue )
+	    return lmIt->second;
+	  break;
+	}
       ++lmIt;
       }
     
@@ -151,58 +151,62 @@ DecisionTree<AttributeValueType, LabelType>
       DecisionTreeTestType theTest = theKey.second;
       AttributeValueType theValue = theKey.first;
       switch( theTest  ) 
-  {
-  case LT:
-    if( attrValue < theValue )
-      {
-      candidateKeys.push_back( theKey );
-      found = true;
-      }
-    break;
-  case LE:
-    if( attrValue <= theValue )
-      {
-      candidateKeys.push_back( theKey );
-      found = true;
-      }
-    break;
-  case EQ:
-    if( attrValue == theValue )
-      {
-      candidateKeys.push_back( theKey );
-      found = true;
-      }
-    break;
-  case GE:
-    if( attrValue >= theValue )
-      {
-      candidateKeys.push_back( theKey );
-      found = true;
-      }
-    break;
-  case GT:
-    if( attrValue > theValue )
-      {
-      candidateKeys.push_back( theKey );
-      found = true;
-      }
-    break;
-  }
+	{
+	case LT:
+	  if( attrValue < theValue )
+	    {
+	    candidateKeys.push_back( theKey );
+	    found = true;
+	    }
+	  break;
+	case LE:
+	  if( attrValue <= theValue )
+	    {
+	    candidateKeys.push_back( theKey );
+	    found = true;
+	    }
+	  break;
+	case EQ:
+	  if( attrValue == theValue )
+	    {
+	    candidateKeys.push_back( theKey );
+	    found = true;
+	    }
+	  break;
+	case GE:
+	  if( attrValue >= theValue )
+	    {
+	    candidateKeys.push_back( theKey );
+	    found = true;
+	    }
+	  break;
+	case GT:
+	  if( attrValue > theValue )
+	    {
+	    candidateKeys.push_back( theKey );
+	    found = true;
+	    }
+	  break;
+	}
       ++tmIt;
       }
     
     if( ! found )                                         // attribute
-                           // not found
-                           // in the map
-      itkGenericExceptionMacro(<< "Example could not be handled by decision tree.");
-
-    // If we found one or several matching tests
-    typename std::vector< KeyType >::const_iterator ckIt = candidateKeys.begin();
-    while ( ckIt != candidateKeys.end() )
+      // not found
+      // in the map
       {
-      std::cout << (*ckIt).first << " " << (*ckIt).second << std::endl;
-      Pointer child = (*m_TreeMap)[(*ckIt)];
-      return child->Decide(example);
+      itkGenericExceptionMacro(<< "Example could not be handled by decision tree.");
+      }
+    else
+      {
+      // If we found one or several matching tests
+      typename std::vector< KeyType >::const_iterator ckIt = candidateKeys.begin();
+      while ( ckIt != candidateKeys.end() )
+	{
+	std::cout << (*ckIt).first << " " << (*ckIt).second << std::endl;
+	Pointer child = (*m_TreeMap)[(*ckIt)];
+	return child->Decide(example);
+	}
       }
 
     }
