@@ -75,7 +75,7 @@ PointSetFileReader<TOutputPointSet>
   m_MinX = LASHeader_GetMinX(header);
   m_MaxX = LASHeader_GetMaxX(header); 
   m_MinY = LASHeader_GetMinY(header);
-  m_MaxY = LASHeader_GetMaxX(header);
+  m_MaxY = LASHeader_GetMaxY(header);
   
   LASReader_Destroy(reader);
 }
