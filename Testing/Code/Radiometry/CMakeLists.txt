@@ -1504,6 +1504,13 @@ ADD_TEST(raTvSarRadiometricCalibrationToImageWithComplexPixelFilter_TSX_PANGKALA
 	    1000 1000 250 250 # Extract
 )
 
+ADD_TEST(raTvSarRadiometricCalibrationToImageCompareFilter_TSX_PANGKALANBUUN  ${RADIOMETRY_TESTS9}
+        otbSarRadiometricCalibrationToImageFilterCompareTest
+	    ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+	    1000 1000 250 250 # Extract
+)
+
+
 ADD_TEST(raTvSarRadiometricCalibrationToImageWithComplexPixelFilter_TSX_TORONTO ${RADIOMETRY_TESTS9}
     --compare-image ${EPSILON_12}  
                 ${BASELINE}/raTvSarRadiometricCalibrationToImageFilter_TSX_TORONTO.tif
@@ -1676,6 +1683,7 @@ otbSarBrightnessFunctor.cxx
 otbSarBrightnessFunction.cxx
 otbSarBrightnessToImageFilterTest.cxx
 otbTestVNLMinimize.cxx
+otbSarRadiometricCalibrationToImageFilterCompareTest.cxx
 )
 
 
