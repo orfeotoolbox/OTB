@@ -156,6 +156,18 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
         }
       }
 
+    
+    // Ignore lines with RTTI inside by default : to avoid multibaseline
+    // between Linux and Win32 plateforms
+    if ((!ignoreCurrentLineRef) && (!ignoreCurrentLineTest))
+      {
+      if(isStringFound(strfileref))
+        ignoreCurrentLineRef = true;
+      
+      if(isStringFound(strfiletest))
+        ignoreCurrentLineTest = true;
+      }
+    
     //Compare the lines only if none is supposed to be ignored
     //Note: the iterator increment will take care of moving only the
     //ignored one if the order does not matter
@@ -1141,6 +1153,16 @@ bool TestHelper::isScientificNumeric(std::string str) const
     }
 
   return true;
+}
+
+bool TestHelper::isStringFound(std::string str) const
+{
+  std::string searchString = "RTTI";
+  
+  if(str.find(searchString) != std::string::npos )
+    return true;
+  
+  return false;
 }
 
 bool TestHelper::isHexaPointerAddress(std::string str) const
