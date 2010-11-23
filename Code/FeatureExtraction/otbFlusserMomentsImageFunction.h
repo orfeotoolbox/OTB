@@ -51,7 +51,10 @@ namespace otb
  * And:
  *  - \f$(x,y)\f$ pixel localization;
  *  - \f$ f(x,y)\f$ the pixel value over the \f$(x,y)\f$ coordinate.
- *
+ * 
+ * Note that the output is defined as:
+ * \f$ \psi_{i} = output[i-1] \f$
+ *  
  * This class is templated over the input image type and the
  * coordinate representation type (e.g. float or double).
  *
