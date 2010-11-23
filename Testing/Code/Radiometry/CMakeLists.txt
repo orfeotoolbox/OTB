@@ -531,7 +531,6 @@ ADD_TEST(raTuAtmosphericRadiativeTermsSingleChannelNew ${RADIOMETRY_TESTS3}
 ADD_TEST(raTvAtmosphericRadiativeTermsTest ${RADIOMETRY_TESTS3}
          --compare-ascii ${NOTOL}  ${BASELINE_FILES}/raTvAtmosphericRadiativeTermsTest.txt
                                    ${TEMP}/raTvAtmosphericRadiativeTermsTest.txt
-                                   --ignore-lines-with 1 RTTI
         otbAtmosphericRadiativeTermsTest
                                    ${TEMP}/raTvAtmosphericRadiativeTermsTest.txt
 )
