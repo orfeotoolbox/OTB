@@ -38,6 +38,7 @@
 int otbImageFunctionAdaptorNew(int argc, char * argv[])
 {
   typedef double InputPixelType;
+  typedef double PrecisionType;
   const unsigned int Dimension = 2;
 
   typedef otb::Image<InputPixelType,  Dimension>                        InputImageType;
@@ -50,13 +51,13 @@ int otbImageFunctionAdaptorNew(int argc, char * argv[])
   typedef otb::RadiometricMomentsImageFunction<InputImageType>          RaMFunctionType;
   typedef otb::LocalHistogramImageFunction<InputImageType>              LHFunctionType;
 
-  typedef otb::ImageFunctionAdaptor<FMDFunctionType>                    FMDImageFunctionAdaptorType;
-  typedef otb::ImageFunctionAdaptor<RMFunctionType>                     RMImageFunctionAdaptorType;
-  typedef otb::ImageFunctionAdaptor<CMFunctionType>                     CMImageFunctionAdaptorType;
-  typedef otb::ImageFunctionAdaptor<FMFunctionType>                     FMImageFunctionAdaptorType;
-  typedef otb::ImageFunctionAdaptor<HMFunctionType>                     HMImageFunctionAdaptorType;
-  typedef otb::ImageFunctionAdaptor<RaMFunctionType>                    RaMImageFunctionAdaptorType;
-  typedef otb::ImageFunctionAdaptor<LHFunctionType>                     LHImageFunctionAdaptorType;
+  typedef otb::ImageFunctionAdaptor<FMDFunctionType, PrecisionType>                    FMDImageFunctionAdaptorType;
+  typedef otb::ImageFunctionAdaptor<RMFunctionType, PrecisionType>                     RMImageFunctionAdaptorType;
+  typedef otb::ImageFunctionAdaptor<CMFunctionType, PrecisionType>                     CMImageFunctionAdaptorType;
+  typedef otb::ImageFunctionAdaptor<FMFunctionType, PrecisionType>                     FMImageFunctionAdaptorType;
+  typedef otb::ImageFunctionAdaptor<HMFunctionType, PrecisionType>                     HMImageFunctionAdaptorType;
+  typedef otb::ImageFunctionAdaptor<RaMFunctionType, PrecisionType>                    RaMImageFunctionAdaptorType;
+  typedef otb::ImageFunctionAdaptor<LHFunctionType, PrecisionType>                     LHImageFunctionAdaptorType;
 
   // Instantiating objects
   FMDImageFunctionAdaptorType::Pointer FMDadaptedFunction = FMDImageFunctionAdaptorType::New();
@@ -82,6 +83,7 @@ int otbImageFunctionAdaptor(int argc, char * argv[])
   const char * inputFilename  = argv[1];
   
   typedef double InputPixelType;
+  typedef double PrecisionType;
   const unsigned int Dimension = 2;
   unsigned int rsltIdx = 0;
 
@@ -97,13 +99,13 @@ int otbImageFunctionAdaptor(int argc, char * argv[])
   typedef otb::RadiometricMomentsImageFunction<InputImageType>          RaMFunctionType;
   typedef otb::LocalHistogramImageFunction<InputImageType>              LHFunctionType;
 
-  typedef otb::ImageFunctionAdaptor<FMDFunctionType>                                    FMDImageFunctionAdaptorType;
-  typedef otb::ImageFunctionAdaptor<RMFunctionType>                                     RMImageFunctionAdaptorType;
-  typedef otb::ImageFunctionAdaptor<CMFunctionType>                                     CMImageFunctionAdaptorType;
-  typedef otb::ImageFunctionAdaptor<FMFunctionType>                                     FMImageFunctionAdaptorType;
-  typedef otb::ImageFunctionAdaptor<HMFunctionType>                                     HMImageFunctionAdaptorType;
-  typedef otb::ImageFunctionAdaptor<RaMFunctionType>                                    RaMImageFunctionAdaptorType;
-  typedef otb::ImageFunctionAdaptor<LHFunctionType>                                     LHImageFunctionAdaptorType;
+  typedef otb::ImageFunctionAdaptor<FMDFunctionType, PrecisionType>                                    FMDImageFunctionAdaptorType;
+  typedef otb::ImageFunctionAdaptor<RMFunctionType, PrecisionType>                                     RMImageFunctionAdaptorType;
+  typedef otb::ImageFunctionAdaptor<CMFunctionType, PrecisionType>                                     CMImageFunctionAdaptorType;
+  typedef otb::ImageFunctionAdaptor<FMFunctionType, PrecisionType>                                     FMImageFunctionAdaptorType;
+  typedef otb::ImageFunctionAdaptor<HMFunctionType, PrecisionType>                                     HMImageFunctionAdaptorType;
+  typedef otb::ImageFunctionAdaptor<RaMFunctionType, PrecisionType>                                    RaMImageFunctionAdaptorType;
+  typedef otb::ImageFunctionAdaptor<LHFunctionType, PrecisionType>                                     LHImageFunctionAdaptorType;
 
   // Instantiating objects
   ReaderType::Pointer  reader = ReaderType::New();
