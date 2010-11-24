@@ -219,7 +219,6 @@ SarParametricMapFunction<TInputImage, TCoordRep>
 }
 
 
-
 /**
  *
  */
