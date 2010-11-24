@@ -304,18 +304,8 @@ PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,T
     if (vectorDataIt.Get()->IsPointFeature())
       {
       VectorDataPointType point = vectorDataIt.Get()->GetPoint();
-      point[0] = itk::Math::Floor(point[0]);
-      point[1] = itk::Math::Floor(point[1]);
-
       ContinuousIndexType cidx;
-
-      // Without removing 0.5, some samples are processed two times
-      // TODO : check ImageRegion::InInside( ContinuousIndex )
-      //cidx[0] = point[0] - 0.5;
-      //cidx[1] = point[1] - 0.5;
-
-      cidx[0] = point[0];
-      cidx[1] = point[1];
+      this->GetInput()->TransformPhysicalPointToContinuousIndex(point,cidx);
 
       RegionType paddedRegion = outputRegionForThread;
       paddedRegion.PadByRadius(m_NeighborhoodRadius);
