@@ -22,26 +22,26 @@
 
 namespace otb
 {
-template< class TInternalImageFunctionType >
-ImageFunctionAdaptor< TInternalImageFunctionType >
+template< class TInternalImageFunctionType, class TOutputPrecision >
+ImageFunctionAdaptor< TInternalImageFunctionType, TOutputPrecision >
 ::ImageFunctionAdaptor()
 {
   m_InternalImageFunction = InternalImageFunctionType::New();
   m_Converter = ConverterType::New(); 
 }
 
-template< class TInternalImageFunctionType >
+template< class TInternalImageFunctionType, class TOutputPrecision >
 void
-ImageFunctionAdaptor< TInternalImageFunctionType >
+ImageFunctionAdaptor< TInternalImageFunctionType, TOutputPrecision >
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
   os << indent << "Internal Image Function: " << m_InternalImageFunction << std::endl;
 }
 
-template< class TInternalImageFunctionType >
-typename ImageFunctionAdaptor< TInternalImageFunctionType >::OutputType
-ImageFunctionAdaptor< TInternalImageFunctionType >
+template< class TInternalImageFunctionType, class TOutputPrecision >
+typename ImageFunctionAdaptor< TInternalImageFunctionType, TOutputPrecision >::OutputType
+ImageFunctionAdaptor< TInternalImageFunctionType, TOutputPrecision >
 ::EvaluateAtIndex(const IndexType& index) const
 {
   OutputType result;

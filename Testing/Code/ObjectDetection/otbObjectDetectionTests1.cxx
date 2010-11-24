@@ -31,4 +31,10 @@ void RegisterTests()
   REGISTER_TEST(otbLabeledSampleLocalizationGenerator);
   REGISTER_TEST(otbDescriptorsListSampleGeneratorNew);
   REGISTER_TEST(otbDescriptorsListSampleGenerator);
+  REGISTER_TEST(otbDescriptorsSVMModelCreation);
+  REGISTER_TEST(otbObjectDetectionClassifier);
+  REGISTER_TEST(otbObjectDetectionClassifierNew);
+  REGISTER_TEST(otbObjectDetectionClassifier);
+  REGISTER_TEST(otbStandardMetaImageFunctionBuilderNew);
+  REGISTER_TEST(otbStandardMetaImageFunctionBuilder);
 }

@@ -106,11 +106,9 @@ int otbBandMathImageFilter( int argc, char* argv[])
   filter->SetExpression("cos(2 * pi * b1)/(2 * pi * b2 + 1E-3)*sin(pi * canal3) + ndvi(b1,b2) * sqrt(2) * canal3");
   filter->Update();
 
-  std::cout << std::endl;
-  std::cout << "---  Standard Use"                                 << std::endl;
+  std::cout << "\n---  Standard Use\n";
   std::cout << "Parsed Expression :   " << filter->GetExpression() << std::endl;
-  //std::cout << "About the Filter  :   " << filter                  << std::endl;
- 
+
   ImageType::Pointer output = filter->GetOutput();
   IteratorType it(output, region);
 
@@ -125,10 +123,10 @@ int otbBandMathImageFilter( int argc, char* argv[])
     PixelType result = it.Get();
     PixelType ndvi_expected;
     PixelType error;
-    
+
     if ( vcl_abs( px1 + px2) < 1E-6 )
       ndvi_expected = 0.0;
-    else 
+    else
       ndvi_expected = (px2-px1)/(px2+px1);
     
     PixelType expected = vcl_cos( 2 * otb::CONST_PI * px1 ) / ( 2 * otb::CONST_PI * px2 + 1E-3 ) * vcl_sin( otb::CONST_PI * px3 )
@@ -161,22 +159,21 @@ int otbBandMathImageFilter( int argc, char* argv[])
 
 
   /** Edge Effect Handling */
-  std::cout << std::endl;
-  std::cout << "--- Edge Effect Handling" << std::endl;
-  std::cout << "- +/-inf section"         << std::endl;
+  std::cout << "\n--- Edge Effect Handling\n";
+  std::cout << "- +/-inf section\n";
   filter->SetExpression("b1 / b2");
   filter->Update();
 
-  std::cout << "- nan section" << std::endl;
+  std::cout << "- nan section\n";
   it1.GoToBegin(); it2.GoToBegin(); it.GoToBegin();
   for(i=1; i<=50; i++ , ++it1, ++it2, ++it){}
   if(vnl_math_isnan(it.Get()))
-    std::cout << "Pixel_1 =  " << it1.Get() << "     Pixel_2 =  " << it2.Get() << "     Result =  " << it.Get() << "     Expected =  nan" << std::endl;
+    std::cout << "Pixel_1 =  " << it1.Get() << "     Pixel_2 =  " << it2.Get() << "     Result =  " << it.Get() << "     Expected =  nan\n";
   else
-    itkGenericExceptionMacro(  << std::endl 
-             << "Error > Bad Edge Effect Handling -> Test Failled" << std::endl 
-             << "Pixel_1 =  "     << it1.Get()  << "     Pixel_2 =  "  << it2.Get() 
-             << "     Result =  " << it.Get()   << "     Expected =  nan" << std::endl );
+    itkGenericExceptionMacro(
+             << "\nError > Bad Edge Effect Handling -> Test Failled\n"
+             << "Pixel_1 =  "     << it1.Get()  << "     Pixel_2 =  "  << it2.Get()
+             << "     Result =  " << it.Get()   << "     Expected =  nan\n" );
   std::cout << std::endl;
 
   return EXIT_SUCCESS;
@@ -193,10 +190,8 @@ int otbBandMathImageFilterWithIdx( int argc, char* argv[])
   typedef otb::Image<PixelType, 2>                          ImageType;
   typedef otb::BandMathImageFilter<ImageType>               FilterType;
   typedef otb::StreamingImageFileWriter<ImageType>          WriterType;
-  
-  unsigned int i;
+
   const unsigned int N = 100;
-  unsigned int FAIL_FLAG = 0;
 
   ImageType::SizeType size;
   size.Fill(N);
@@ -274,6 +269,6 @@ int otbBandMathImageFilterWithIdx( int argc, char* argv[])
   writer2->SetInput(filter->GetOutput());
   writer2->SetFileName(outfname2);
   writer2->Update();
-  
+
   return EXIT_SUCCESS;
 }

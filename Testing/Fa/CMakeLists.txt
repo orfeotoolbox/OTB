@@ -172,7 +172,7 @@ ENDIF (OTB_USE_DEPRECATED)
 
 # ---  FA 00060 : Pb Map activation  ---
 ADD_TEST(FA-00060-le_Map_Activation ${CXX_TEST_PATH}/MapActivation
-	${INPUTDATA}/list.mhd
+	${INPUTDATA}/list.tif
         4
         4
         20

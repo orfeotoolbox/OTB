@@ -1800,6 +1800,20 @@ ADD_TEST(bfTvImaginaryImageToComplexImageFilterTest ${BASICFILTERS_TESTS13}
   ${INPUTDATA}/GomaAvant.png
 )
 
+ADD_TEST(bfTuComplexToVectorImageCastFilterNew ${BASICFILTERS_TESTS13}
+  otbComplexToVectorImageCastFilterNew
+)
+
+ADD_TEST(bfTuComplexToVectorImageCastFilterTest ${BASICFILTERS_TESTS13}
+  --compare-image ${NOTOL}
+  ${TEMP}/bfTvComplexToVectorImageCastFilterTest.tif
+  ${BASELINE}/bfTvComplexToVectorImageCastFilterTest.tif
+  otbComplexToVectorImageCastFilterTest
+    ${INPUTDATA}/RSAT_imagery_HH.tif
+    ${TEMP}/bfTvComplexToVectorImageCastFilterTest.tif
+)
+
+
 
 # A enrichir
 SET(BasicFilters_SRCS1
@@ -2052,6 +2066,7 @@ otbComplexToIntensityFilterTest.cxx
 otbRealAndImaginaryImageToComplexImageFilterTest.cxx
 otbRealImageToComplexImageFilterTest.cxx
 otbImaginaryImageToComplexImageFilterTest.cxx
+otbComplexToVectorImageCastFilter.cxx
 )
 
 

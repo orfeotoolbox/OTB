@@ -151,7 +151,7 @@ namespace otb
 
           ParametersType psup;
           psup.SetSize(p.GetSize() - 2);
-          for (unsigned int i = 0 ; i < psup.GetSize() ; i++)
+          for (unsigned int i = 0; i < psup.GetSize(); i++)
           {
             psup[i] = p[i + 2];
           }
@@ -161,7 +161,7 @@ namespace otb
           EvaluateGaussianDistribution();
 
           otbMsgDevMacro(<< "GaussianRenderingFunction::SetParameters: Gaussian curve mean = "
-                         << m_Mean << " ; standard deviation = " << m_StandardDeviation);
+                         << m_Mean << "; standard deviation = " << m_StandardDeviation);
 
           this->Modified();
         }
@@ -182,7 +182,7 @@ namespace otb
           p[0] = m_Mean;
           p[1] = m_StandardDeviation;
 
-          for (unsigned int i = 0 ; i < psup.GetSize() ; i++)
+          for (unsigned int i = 0; i < psup.GetSize(); i++)
           {
             p[i + 2] = psup[i];
           }
@@ -221,18 +221,18 @@ namespace otb
         virtual void EvaluateGaussianDistribution()
         {
           m_BinLowerBounds.clear();
-	  
-	  // MDE : Correction
+    
+    // MDE : Correction
           unsigned int nbHist = this->m_PixelRepresentationFunction->GetOutputSize();
 
-          for (unsigned int histIndex = 0 ; histIndex < nbHist ; histIndex++)
+          for (unsigned int histIndex = 0; histIndex < nbHist; histIndex++)
           {
             std::vector<double> blb;
 
             double xMin = m_Mean - 3 * m_StandardDeviation;
             double xMax = m_Mean + 3 * m_StandardDeviation;
 
-            for (unsigned int binIndex = 0 ; binIndex <= SCREEN_COLOR_MAX_VALUE ; binIndex++)
+            for (unsigned int binIndex = 0; binIndex <= SCREEN_COLOR_MAX_VALUE; binIndex++)
             {
               double x = ( xMax - xMin ) * binIndex / ( SCREEN_COLOR_MAX_VALUE + 1 ) + xMin;
               double cdfValue = itk::Statistics::GaussianDistribution::CDF(x, m_Mean, m_StandardDeviation);

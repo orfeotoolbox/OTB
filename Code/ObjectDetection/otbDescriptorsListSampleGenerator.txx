@@ -284,7 +284,6 @@ void
 PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,TListSample,TLabelListSample>
 ::BeforeThreadedGenerateData()
 {
-  std::cout << "Buffered Region : " << this->GetInput()->GetBufferedRegion() << std::endl;
 }
 
 
@@ -306,19 +305,17 @@ PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,T
       {
       VectorDataPointType point = vectorDataIt.Get()->GetPoint();
       ContinuousIndexType cidx;
+      this->GetInput()->TransformPhysicalPointToContinuousIndex(point,cidx);
 
-      // Without removing 0.5, some samples are processed two times
-      // TODO : check ImageRegion::InInside( ContinuousIndex )
-      cidx[0] = point[0] - 0.5;
-      cidx[1] = point[1] - 0.5;
-
-      if (outputRegionForThread.IsInside(cidx))
+      RegionType paddedRegion = outputRegionForThread;
+      paddedRegion.PadByRadius(m_NeighborhoodRadius);
+      if (this->IsInsideWithNeighborhoodRadius(paddedRegion, cidx))
         {
         SampleMeasurementVectorType sample(m_DescriptorsFunction->Evaluate(point));
         listSample->PushBack( sample );
 
         LabelMeasurementVectorType label;
-        label[0] = static_cast<LabelMeasurementType>(vectorDataIt.Get()->GetFieldAsString("Class")[0]);
+        label[0] = static_cast<LabelMeasurementType>(vectorDataIt.Get()->GetFieldAsInt("Class"));
         labelListSample->PushBack( label );
 
         samplesPosition.push_back(point);
@@ -326,9 +323,6 @@ PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,T
       }
     }
 }
-
-
-
 
 
 template <class TInputImage, class TVectorData, class TListSample, class TLabelListSample, class TOutputPrecision, class TCoordRep>
@@ -344,7 +338,6 @@ DescriptorsListSampleGenerator<TInputImage,TVectorData,TListSample,TLabelListSam
 {
 
 }
-
 
 
 } // end namespace otb

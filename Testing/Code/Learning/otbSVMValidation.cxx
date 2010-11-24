@@ -40,8 +40,8 @@ int otbSVMValidation(int argc, char* argv[])
 {
  if(argc != 13)
  {
-	 std::cerr<<"Usage: "<<argv[0]<<" nbTrainingSamples nbValidationSamples positiveCenterX positiveCenterY negativeCenterX negativeCenterY positiveRadiusMin positiveRadiusMax negativeRadiusMin negativeRadiusMax kernel probEstimate"<<std::endl;
-	 return EXIT_FAILURE;
+   std::cerr<<"Usage: "<<argv[0]<<" nbTrainingSamples nbValidationSamples positiveCenterX positiveCenterY negativeCenterX negativeCenterY positiveRadiusMin positiveRadiusMax negativeRadiusMin negativeRadiusMax kernel probEstimate"<<std::endl;
+   return EXIT_FAILURE;
  }
  unsigned int nbTrainingSamples = atoi(argv[1]);
  unsigned int nbValidationSamples = atoi(argv[2]);
@@ -68,7 +68,7 @@ int otbSVMValidation(int argc, char* argv[])
   typedef otb::SVMClassifier<ListSampleType, LabelType>   ClassifierType;
   typedef ClassifierType::OutputType                      ClassifierOutputType;
   typedef otb::ConfusionMatrixCalculator
-		  <TrainingListSampleType,TrainingListSampleType> ConfusionMatrixCalculatorType;
+      <TrainingListSampleType,TrainingListSampleType> ConfusionMatrixCalculatorType;
 
 
   RandomGeneratorType::Pointer random = RandomGeneratorType::New();
@@ -84,30 +84,30 @@ int otbSVMValidation(int argc, char* argv[])
 //  std::ofstream training("training.csv");
   for(unsigned int i =0; i < nbTrainingSamples; ++i)
   {
-	  // Generate a positive sample
-	  double angle = random->GetVariateWithOpenUpperRange( otb::CONST_2PI );
-	  double radius = random->GetUniformVariate(prmin,prmax);
-	  SampleType pSample(2);
-	  pSample[0] = cpx+radius*vcl_sin(angle);
-	  pSample[1] = cpy+radius*vcl_cos(angle);
-	  TrainingSampleType label;
-	  label[0]=1;
-	  trainingSamples->PushBack(pSample);
-	  trainingLabels->PushBack(label);
+    // Generate a positive sample
+    double angle = random->GetVariateWithOpenUpperRange( otb::CONST_2PI );
+    double radius = random->GetUniformVariate(prmin,prmax);
+    SampleType pSample(2);
+    pSample[0] = cpx+radius*vcl_sin(angle);
+    pSample[1] = cpy+radius*vcl_cos(angle);
+    TrainingSampleType label;
+    label[0]=1;
+    trainingSamples->PushBack(pSample);
+    trainingLabels->PushBack(label);
 
-//	  training<<"1 1:"<<pSample[0]<<" 2:"<<pSample[1]<<std::endl;
+//    training<<"1 1:"<<pSample[0]<<" 2:"<<pSample[1]<<std::endl;
 
-	  // Generate a negative sample
-	  angle = random->GetVariateWithOpenUpperRange( otb::CONST_2PI );
-	  radius = random->GetUniformVariate(nrmin,nrmax);
-	  SampleType nSample(2);
-	  nSample[0] = cnx+radius*vcl_sin(angle);
-	  nSample[1] = cny+radius*vcl_cos(angle);
-	  label[0]=2;
-	  trainingSamples->PushBack(nSample);
-	  trainingLabels->PushBack(label);
+    // Generate a negative sample
+    angle = random->GetVariateWithOpenUpperRange( otb::CONST_2PI );
+    radius = random->GetUniformVariate(nrmin,nrmax);
+    SampleType nSample(2);
+    nSample[0] = cnx+radius*vcl_sin(angle);
+    nSample[1] = cny+radius*vcl_cos(angle);
+    label[0]=2;
+    trainingSamples->PushBack(nSample);
+    trainingLabels->PushBack(label);
 
-//	  training<<"2 1:"<<nSample[0]<<" 2:"<<nSample[1]<<std::endl;
+//    training<<"2 1:"<<nSample[0]<<" 2:"<<nSample[1]<<std::endl;
 
   }
 //  training.close();
@@ -117,28 +117,28 @@ int otbSVMValidation(int argc, char* argv[])
 //  std::ofstream validation("validation.csv");
   for(unsigned int i =0; i < nbValidationSamples; ++i)
     {
-  	  // Generate a positive sample
-  	  double angle = random->GetVariateWithOpenUpperRange( otb::CONST_2PI );
-  	  double radius = random->GetUniformVariate(prmin,prmax);
-  	  SampleType pSample(2);
-  	  pSample[0] = cpx+radius*vcl_sin(angle);
-  	  pSample[1] = cpy+radius*vcl_cos(angle);
-  	  TrainingSampleType label;
-  	  label[0]=1;
-  	  validationSamples->PushBack(pSample);
-  	  validationLabels->PushBack(label);
-//	  validation<<"1 1:"<<pSample[0]<<" 2:"<<pSample[1]<<std::endl;
+      // Generate a positive sample
+      double angle = random->GetVariateWithOpenUpperRange( otb::CONST_2PI );
+      double radius = random->GetUniformVariate(prmin,prmax);
+      SampleType pSample(2);
+      pSample[0] = cpx+radius*vcl_sin(angle);
+      pSample[1] = cpy+radius*vcl_cos(angle);
+      TrainingSampleType label;
+      label[0]=1;
+      validationSamples->PushBack(pSample);
+      validationLabels->PushBack(label);
+//    validation<<"1 1:"<<pSample[0]<<" 2:"<<pSample[1]<<std::endl;
 
-  	  // Generate a negative sample
-  	  angle = random->GetVariateWithOpenUpperRange( otb::CONST_2PI );
-  	  radius = random->GetUniformVariate(nrmin,nrmax);
-  	  SampleType nSample(2);
-  	  nSample[0] = cnx+radius*vcl_sin(angle);
-  	  nSample[1] = cny+radius*vcl_cos(angle);
-  	  label[0]=2;
-  	  validationSamples->PushBack(nSample);
-  	  validationLabels->PushBack(label);
-//	  validation<<"2 1:"<<nSample[0]<<" 2:"<<nSample[1]<<std::endl;
+      // Generate a negative sample
+      angle = random->GetVariateWithOpenUpperRange( otb::CONST_2PI );
+      radius = random->GetUniformVariate(nrmin,nrmax);
+      SampleType nSample(2);
+      nSample[0] = cnx+radius*vcl_sin(angle);
+      nSample[1] = cny+radius*vcl_cos(angle);
+      label[0]=2;
+      validationSamples->PushBack(nSample);
+      validationLabels->PushBack(label);
+//    validation<<"2 1:"<<nSample[0]<<" 2:"<<nSample[1]<<std::endl;
 
     }
 //  validation.close();
@@ -170,8 +170,8 @@ int otbSVMValidation(int argc, char* argv[])
 
   while (it != itEnd)
   {
-	  classifierListLabel->PushBack(it.GetClassLabel());
-	  ++it;
+    classifierListLabel->PushBack(it.GetClassLabel());
+    ++it;
   }
 
   ConfusionMatrixCalculatorType::Pointer confMatCalc =  ConfusionMatrixCalculatorType::New();
@@ -187,12 +187,12 @@ int otbSVMValidation(int argc, char* argv[])
 
   if(confMatCalc->GetKappaIndex()!=1)
   {
-	  std::cerr<<"Kappa index should be 1."<<std::endl;
-	  return EXIT_FAILURE;
+    std::cerr<<"Kappa index should be 1."<<std::endl;
+    return EXIT_FAILURE;
   }
   else
   {
-	  return EXIT_SUCCESS;
+    return EXIT_SUCCESS;
   }
 }
 

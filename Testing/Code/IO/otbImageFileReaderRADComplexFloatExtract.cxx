@@ -23,9 +23,12 @@
 #include "itkExceptionObject.h"
 #include <iostream>
 #include "otbImage.h"
+#include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbExtractROI.h"
+#include "otbComplexToVectorImageCastFilter.h"
+
 
 int otbImageFileReaderRADComplexFloatExtract(int argc, char* argv[])
 {
@@ -35,16 +38,23 @@ int otbImageFileReaderRADComplexFloatExtract(int argc, char* argv[])
 
   typedef std::complex<float> InputPixelType;
   typedef std::complex<float> OutputPixelType;
+  
   const unsigned int Dimension = 2;
 
   typedef otb::Image<InputPixelType,  Dimension> InputImageType;
-  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputCplxImageType;
+  typedef otb::Image<float, Dimension>             OutputScalarImageType;
+  typedef otb::VectorImage<float, Dimension>       OutputImageType;
 
   typedef otb::ImageFileReader<InputImageType>  ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
+  typedef otb::ComplexToVectorImageCastFilter<OutputCplxImageType, OutputImageType>          CasterType;
+
+
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
+  CasterType::Pointer caster = CasterType::New();
 
   reader->SetFileName(inputFilename);
   writer->SetFileName(outputFilename);
@@ -61,7 +71,9 @@ int otbImageFileReaderRADComplexFloatExtract(int argc, char* argv[])
   extractROIFilter->SetSizeX(100);
   extractROIFilter->SetSizeY(100);
 
-  writer->SetInput(extractROIFilter->GetOutput());
+  caster->SetInput(extractROIFilter->GetOutput());
+
+  writer->SetInput(caster->GetOutput());
   writer->Update();
 
   return EXIT_SUCCESS;

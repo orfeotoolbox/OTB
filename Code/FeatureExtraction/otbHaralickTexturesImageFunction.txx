@@ -47,6 +47,10 @@ HaralickTexturesImageFunction<TInputImage, TCoordRep>
 {
   this->Superclass::PrintSelf(os, indent);
   os << indent << " Neighborhood radius value   : "  << m_NeighborhoodRadius << std::endl;
+  os << indent << " Input image minimum value   : "  << m_InputImageMinimum << std::endl;
+  os << indent << " Input Image maximum value   : "  << m_InputImageMaximum << std::endl;
+  os << indent << " Number of bins per axis     : "  << m_NumberOfBinsPerAxis << std::endl;
+  os << indent << " Offset                      : "  << m_Offset << std::endl;
 }
 
 template <class TInputImage, class TCoordRep>

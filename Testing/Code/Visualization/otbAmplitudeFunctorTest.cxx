@@ -44,9 +44,9 @@ int otbAmplitudeFunctorTest(int argc, char * argv[])
   vectorPixel.SetElement(2,3.0);
 
   // Test VectorPixelType
-  for(unsigned int i = 0 ; i < 3 ; ++i)
+  for(unsigned int i = 0; i < 3; ++i)
     {
-    for(unsigned int j = 0 ; j < 3 ; ++j)
+    for(unsigned int j = 0; j < 3; ++j)
       {
       channels.clear();
       channels.push_back(i);
@@ -68,9 +68,9 @@ int otbAmplitudeFunctorTest(int argc, char * argv[])
   rgbPixel.SetRed(1.0);
   rgbPixel.SetGreen(2.0);
   rgbPixel.SetBlue(3.0);
-  for(unsigned int i = 0 ; i < 3 ; ++i)
+  for(unsigned int i = 0; i < 3; ++i)
     {
-    for(unsigned int j = 0 ; j < 3 ; ++j)
+    for(unsigned int j = 0; j < 3; ++j)
       {
       channels.clear();
       channels.push_back(i);
@@ -97,9 +97,9 @@ int otbAmplitudeFunctorTest(int argc, char * argv[])
   rgbaPixel.SetBlue(3.0);
   rgbaPixel.SetAlpha(4.0);
 
-  for(unsigned int i = 0 ; i < 4 ; ++i)
+  for(unsigned int i = 0; i < 4; ++i)
     {
-    for(unsigned int j = 0 ; j < 4 ; ++j)
+    for(unsigned int j = 0; j < 4; ++j)
       {
       channels.clear();
       channels.push_back(i);

@@ -63,7 +63,12 @@ int otbLabeledSampleLocalizationGenerator(int argc, char* argv[])
   generator->PushBackInput(reader1->GetOutput());
   generator->PushBackInput(reader2->GetOutput());
 
-  generator->SetPseudoRandom(true);
+  generator->SetSeed(0); // enable reproducible random number sequence
+  generator->SetClassKey("Class");
+  generator->SetNoClassIdentifier(0);
+  generator->SetInhibitionRadius(5);
+  generator->SetRandomLocalizationDensity(0.004);
+  generator->SetNbMaxIteration(1000);
 
   generator->Update();
 

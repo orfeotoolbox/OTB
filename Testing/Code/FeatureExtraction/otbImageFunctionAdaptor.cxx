@@ -38,6 +38,7 @@
 int otbImageFunctionAdaptorNew(int argc, char * argv[])
 {
   typedef double InputPixelType;
+  typedef double PrecisionType;
   const unsigned int Dimension = 2;
 
   typedef otb::Image<InputPixelType,  Dimension>                        InputImageType;
@@ -50,13 +51,13 @@ int otbImageFunctionAdaptorNew(int argc, char * argv[])
   typedef otb::RadiometricMomentsImageFunction<InputImageType>          RaMFunctionType;
   typedef otb::LocalHistogramImageFunction<InputImageType>              LHFunctionType;
 
-  typedef otb::ImageFunctionAdaptor<FMDFunctionType>                    FMDImageFunctionAdaptorType;
-  typedef otb::ImageFunctionAdaptor<RMFunctionType>                     RMImageFunctionAdaptorType;
-  typedef otb::ImageFunctionAdaptor<CMFunctionType>                     CMImageFunctionAdaptorType;
-  typedef otb::ImageFunctionAdaptor<FMFunctionType>                     FMImageFunctionAdaptorType;
-  typedef otb::ImageFunctionAdaptor<HMFunctionType>                     HMImageFunctionAdaptorType;
-  typedef otb::ImageFunctionAdaptor<RaMFunctionType>                    RaMImageFunctionAdaptorType;
-  typedef otb::ImageFunctionAdaptor<LHFunctionType>                     LHImageFunctionAdaptorType;
+  typedef otb::ImageFunctionAdaptor<FMDFunctionType, PrecisionType>                    FMDImageFunctionAdaptorType;
+  typedef otb::ImageFunctionAdaptor<RMFunctionType, PrecisionType>                     RMImageFunctionAdaptorType;
+  typedef otb::ImageFunctionAdaptor<CMFunctionType, PrecisionType>                     CMImageFunctionAdaptorType;
+  typedef otb::ImageFunctionAdaptor<FMFunctionType, PrecisionType>                     FMImageFunctionAdaptorType;
+  typedef otb::ImageFunctionAdaptor<HMFunctionType, PrecisionType>                     HMImageFunctionAdaptorType;
+  typedef otb::ImageFunctionAdaptor<RaMFunctionType, PrecisionType>                    RaMImageFunctionAdaptorType;
+  typedef otb::ImageFunctionAdaptor<LHFunctionType, PrecisionType>                     LHImageFunctionAdaptorType;
 
   // Instantiating objects
   FMDImageFunctionAdaptorType::Pointer FMDadaptedFunction = FMDImageFunctionAdaptorType::New();
@@ -82,6 +83,7 @@ int otbImageFunctionAdaptor(int argc, char * argv[])
   const char * inputFilename  = argv[1];
   
   typedef double InputPixelType;
+  typedef double PrecisionType;
   const unsigned int Dimension = 2;
   unsigned int rsltIdx = 0;
 
@@ -97,13 +99,13 @@ int otbImageFunctionAdaptor(int argc, char * argv[])
   typedef otb::RadiometricMomentsImageFunction<InputImageType>          RaMFunctionType;
   typedef otb::LocalHistogramImageFunction<InputImageType>              LHFunctionType;
 
-  typedef otb::ImageFunctionAdaptor<FMDFunctionType>                                    FMDImageFunctionAdaptorType;
-  typedef otb::ImageFunctionAdaptor<RMFunctionType>                                     RMImageFunctionAdaptorType;
-  typedef otb::ImageFunctionAdaptor<CMFunctionType>                                     CMImageFunctionAdaptorType;
-  typedef otb::ImageFunctionAdaptor<FMFunctionType>                                     FMImageFunctionAdaptorType;
-  typedef otb::ImageFunctionAdaptor<HMFunctionType>                                     HMImageFunctionAdaptorType;
-  typedef otb::ImageFunctionAdaptor<RaMFunctionType>                                    RaMImageFunctionAdaptorType;
-  typedef otb::ImageFunctionAdaptor<LHFunctionType>                                     LHImageFunctionAdaptorType;
+  typedef otb::ImageFunctionAdaptor<FMDFunctionType, PrecisionType>                                    FMDImageFunctionAdaptorType;
+  typedef otb::ImageFunctionAdaptor<RMFunctionType, PrecisionType>                                     RMImageFunctionAdaptorType;
+  typedef otb::ImageFunctionAdaptor<CMFunctionType, PrecisionType>                                     CMImageFunctionAdaptorType;
+  typedef otb::ImageFunctionAdaptor<FMFunctionType, PrecisionType>                                     FMImageFunctionAdaptorType;
+  typedef otb::ImageFunctionAdaptor<HMFunctionType, PrecisionType>                                     HMImageFunctionAdaptorType;
+  typedef otb::ImageFunctionAdaptor<RaMFunctionType, PrecisionType>                                    RaMImageFunctionAdaptorType;
+  typedef otb::ImageFunctionAdaptor<LHFunctionType, PrecisionType>                                     LHImageFunctionAdaptorType;
 
   // Instantiating objects
   ReaderType::Pointer  reader = ReaderType::New();
@@ -136,159 +138,228 @@ int otbImageFunctionAdaptor(int argc, char * argv[])
   // Content testing 
   double error = 0.0;
 
-  FMDFunction->SetInputImage(reader->GetOutput());
-  FMDFunction->SetNeighborhoodRadius(5);
-  FMDFunction->SetPmax(5);
-  FMDFunction->SetQmax(5);
-  FMDFunctionType::OutputType resultFMD = FMDFunction->EvaluateAtIndex(index);
-
-  FMDadaptedFunction->SetInputImage(reader->GetOutput());
-  FMDadaptedFunction->GetInternalImageFunction()->SetNeighborhoodRadius(5);
-  FMDadaptedFunction->GetInternalImageFunction()->SetPmax(5);
-  FMDadaptedFunction->GetInternalImageFunction()->SetQmax(5);
-  FMDImageFunctionAdaptorType::OutputType resultAdaptedFMD = FMDadaptedFunction->EvaluateAtIndex(index);
   
-  rsltIdx = 0;
-  for (unsigned int i=0; i<=5; i++)
+  try
     {
-    for (unsigned int j=0; j<=5; j++)
+    FMDFunction->SetInputImage(reader->GetOutput());
+    FMDFunction->SetNeighborhoodRadius(5);
+    FMDFunction->SetPmax(5);
+    FMDFunction->SetQmax(5);
+    FMDFunctionType::OutputType resultFMD = FMDFunction->EvaluateAtIndex(index);
+
+    FMDadaptedFunction->SetInputImage(reader->GetOutput());
+    FMDadaptedFunction->GetInternalImageFunction()->SetNeighborhoodRadius(5);
+    FMDadaptedFunction->GetInternalImageFunction()->SetPmax(5);
+    FMDadaptedFunction->GetInternalImageFunction()->SetQmax(5);
+    FMDImageFunctionAdaptorType::OutputType resultAdaptedFMD = FMDadaptedFunction->EvaluateAtIndex(index);
+
+    rsltIdx = 0;
+    for (unsigned int i = 0; i <= 5; i++)
       {
-      error += vcl_pow(vcl_abs(resultAdaptedFMD[rsltIdx] - resultFMD.at(i).at(j)), 2);
-    
-      std::cout << "resultAdaptedFMD : " << resultAdaptedFMD[rsltIdx] 
-                << "\t - resultFMD : " << resultFMD.at(i).at(j) << std::endl;
-      rsltIdx ++;
+      for (unsigned int j = 0; j <= 5; j++)
+        {
+        error += vcl_pow(vcl_abs(resultAdaptedFMD[rsltIdx] - resultFMD.at(i).at(j)), 2);
+
+        std::cout << "resultAdaptedFMD : " << resultAdaptedFMD[rsltIdx]
+            << "\t - resultFMD : " << resultFMD.at(i).at(j) << std::endl;
+        rsltIdx++;
+        }
       }
     }
-
-  RMFunction->SetInputImage(reader->GetOutput());
-  RMFunction->SetNeighborhoodRadius(5);
-  RMFunction->SetPmax(5);
-  RMFunction->SetQmax(5);
-  RMFunctionType::OutputType resultRM = RMFunction->EvaluateAtIndex(index);
-
-  RMadaptedFunction->SetInputImage(reader->GetOutput());
-  RMadaptedFunction->GetInternalImageFunction()->SetNeighborhoodRadius(5);
-  RMadaptedFunction->GetInternalImageFunction()->SetPmax(5);
-  RMadaptedFunction->GetInternalImageFunction()->SetQmax(5);
-  RMImageFunctionAdaptorType::OutputType resultAdaptedRM = RMadaptedFunction->EvaluateAtIndex(index);
-  
-  rsltIdx = 0;
-  for (unsigned int i=0; i<=5; i++)
+  catch (itk::ExceptionObject& err)
     {
-    for (unsigned int j=0; j<=5; j++)
-      {
-      error += vcl_pow(vcl_abs(resultAdaptedRM[rsltIdx] - resultRM.at(i).at(j)), 2);
+    std::cout << "ExceptionObject caught for FMDadaptedFunction() !" << std::endl;
+    std::cout << err << std::endl;
 
-      std::cout << "resultAdaptedRM : " << resultAdaptedRM[rsltIdx] 
-                << "\t - resultRM : " << resultRM.at(i).at(j) << std::endl;
-      rsltIdx ++;
-      }
+    return EXIT_FAILURE;
     }
 
-  CMFunction->SetInputImage(reader->GetOutput());
-  CMFunction->SetNeighborhoodRadius(5);
-  CMFunction->SetPmax(5);
-  CMFunction->SetQmax(5);
-  CMFunctionType::OutputType resultCM = CMFunction->EvaluateAtIndex(index);
 
-  CMadaptedFunction->SetInputImage(reader->GetOutput());
-  CMadaptedFunction->GetInternalImageFunction()->SetNeighborhoodRadius(5);
-  CMadaptedFunction->GetInternalImageFunction()->SetPmax(5);
-  CMadaptedFunction->GetInternalImageFunction()->SetQmax(5);
-  CMImageFunctionAdaptorType::OutputType resultAdaptedCM = CMadaptedFunction->EvaluateAtIndex(index);
-  
-  rsltIdx = 0;
-  for (unsigned int i=0; i<=5; i++)
+  try
     {
-    for (unsigned int j=0; j<=5; j++)
+    RMFunction->SetInputImage(reader->GetOutput());
+    RMFunction->SetNeighborhoodRadius(5);
+    RMFunction->SetPmax(5);
+    RMFunction->SetQmax(5);
+    RMFunctionType::OutputType resultRM = RMFunction->EvaluateAtIndex(index);
+
+    RMadaptedFunction->SetInputImage(reader->GetOutput());
+    RMadaptedFunction->GetInternalImageFunction()->SetNeighborhoodRadius(5);
+    RMadaptedFunction->GetInternalImageFunction()->SetPmax(5);
+    RMadaptedFunction->GetInternalImageFunction()->SetQmax(5);
+    RMImageFunctionAdaptorType::OutputType resultAdaptedRM = RMadaptedFunction->EvaluateAtIndex(index);
+
+    rsltIdx = 0;
+    for (unsigned int i = 0; i <= 5; i++)
       {
-      error += vcl_pow(vcl_abs(resultAdaptedCM[rsltIdx] - resultCM.at(i).at(j).real()), 2);
-      std::cout << "resultAdaptedCM : (" << resultAdaptedCM[rsltIdx]
-                << "," << resultAdaptedCM[rsltIdx+1] << ")"
-                << "\t - resultCM : " << resultCM.at(i).at(j) << std::endl;
-      rsltIdx ++;
-      error += vcl_pow(vcl_abs(resultAdaptedCM[rsltIdx] - resultCM.at(i).at(j).imag()), 2);
-      rsltIdx ++;
+      for (unsigned int j = 0; j <= 5; j++)
+        {
+        error += vcl_pow(vcl_abs(resultAdaptedRM[rsltIdx] - resultRM.at(i).at(j)), 2);
+
+        std::cout << "resultAdaptedRM : " << resultAdaptedRM[rsltIdx] << "\t - resultRM : " << resultRM.at(i).at(j)
+            << std::endl;
+        rsltIdx++;
+        }
       }
     }
-
-  FMFunction->SetInputImage(reader->GetOutput());
-  FMFunction->SetNeighborhoodRadius(5);
-  FMFunctionType::OutputType resultFM = FMFunction->EvaluateAtIndex(index);
-
-  FMadaptedFunction->SetInputImage(reader->GetOutput());
-  FMadaptedFunction->GetInternalImageFunction()->SetNeighborhoodRadius(5);
-  FMImageFunctionAdaptorType::OutputType resultAdaptedFM = FMadaptedFunction->EvaluateAtIndex(index);
-  
-  rsltIdx = 0;
-  for (unsigned int i=0; i<11; i++)
+  catch (itk::ExceptionObject& err)
     {
+    std::cout << "ExceptionObject caught for RMFunction() !" << std::endl;
+    std::cout << err << std::endl;
+
+    return EXIT_FAILURE;
+    }
+
+  try
+    {
+    CMFunction->SetInputImage(reader->GetOutput());
+    CMFunction->SetNeighborhoodRadius(5);
+    CMFunction->SetPmax(5);
+    CMFunction->SetQmax(5);
+    CMFunctionType::OutputType resultCM = CMFunction->EvaluateAtIndex(index);
+
+    CMadaptedFunction->SetInputImage(reader->GetOutput());
+    CMadaptedFunction->GetInternalImageFunction()->SetNeighborhoodRadius(5);
+    CMadaptedFunction->GetInternalImageFunction()->SetPmax(5);
+    CMadaptedFunction->GetInternalImageFunction()->SetQmax(5);
+    CMImageFunctionAdaptorType::OutputType resultAdaptedCM = CMadaptedFunction->EvaluateAtIndex(index);
+
+    rsltIdx = 0;
+    for (unsigned int i = 0; i <= 5; i++)
+      {
+      for (unsigned int j = 0; j <= 5; j++)
+        {
+        error += vcl_pow(vcl_abs(resultAdaptedCM[rsltIdx] - resultCM.at(i).at(j).real()), 2);
+        std::cout << "resultAdaptedCM : (" << resultAdaptedCM[rsltIdx] << "," << resultAdaptedCM[rsltIdx + 1] << ")"
+            << "\t - resultCM : " << resultCM.at(i).at(j) << std::endl;
+        rsltIdx++;
+        error += vcl_pow(vcl_abs(resultAdaptedCM[rsltIdx] - resultCM.at(i).at(j).imag()), 2);
+        rsltIdx++;
+        }
+      }
+    }
+  catch (itk::ExceptionObject& err)
+    {
+    std::cout << "ExceptionObject caught for CMadaptedFunction() !" << std::endl;
+    std::cout << err << std::endl;
+
+    return EXIT_FAILURE;
+    }
+
+  try
+    {
+    FMFunction->SetInputImage(reader->GetOutput());
+    FMFunction->SetNeighborhoodRadius(5);
+    FMFunctionType::OutputType resultFM = FMFunction->EvaluateAtIndex(index);
+
+    FMadaptedFunction->SetInputImage(reader->GetOutput());
+    FMadaptedFunction->GetInternalImageFunction()->SetNeighborhoodRadius(5);
+    FMImageFunctionAdaptorType::OutputType resultAdaptedFM = FMadaptedFunction->EvaluateAtIndex(index);
+
+    rsltIdx = 0;
+    for (unsigned int i = 0; i < 11; i++)
+      {
       error += vcl_pow(vcl_abs(resultAdaptedFM[rsltIdx] - resultFM[i]), 2);
 
-      std::cout << "resultAdaptedFM : " << resultAdaptedFM[rsltIdx] 
-                << "\t - resultFM : " << resultFM[i] << std::endl;
-      rsltIdx ++;
+      std::cout << "resultAdaptedFM : " << resultAdaptedFM[rsltIdx] << "\t - resultFM : " << resultFM[i] << std::endl;
+      rsltIdx++;
+      }
     }
-
-  HMFunction->SetInputImage(reader->GetOutput());
-  HMFunction->SetNeighborhoodRadius(5);
-  HMFunctionType::OutputType resultHM = HMFunction->EvaluateAtIndex(index);
-
-  HMadaptedFunction->SetInputImage(reader->GetOutput());
-  HMadaptedFunction->GetInternalImageFunction()->SetNeighborhoodRadius(5);
-  HMImageFunctionAdaptorType::OutputType resultAdaptedHM = HMadaptedFunction->EvaluateAtIndex(index);
-  
-  rsltIdx = 0;
-  for (unsigned int i=0; i<7; i++)
+  catch (itk::ExceptionObject& err)
     {
-    error += vcl_pow(vcl_abs(resultAdaptedHM[rsltIdx] - resultHM[i]), 2);
+    std::cout << "ExceptionObject caught for FMFunction() !" << std::endl;
+    std::cout << err << std::endl;
 
-    std::cout << "resultAdaptedHM : " << resultAdaptedHM[rsltIdx] 
-              << "\t - resultHM : " << resultHM[i] << std::endl;
-    rsltIdx ++;
+    return EXIT_FAILURE;
     }
 
-  RaMFunction->SetInputImage(reader->GetOutput());
-  RaMFunction->SetNeighborhoodRadius(5);
-  RaMFunctionType::OutputType resultRaM = RaMFunction->EvaluateAtIndex(index);
-  
-  RaMadaptedFunction->SetInputImage(reader->GetOutput());
-  RaMadaptedFunction->GetInternalImageFunction()->SetNeighborhoodRadius(5);
-  RaMImageFunctionAdaptorType::OutputType resultAdaptedRaM = RaMadaptedFunction->EvaluateAtIndex(index);
-  
-  rsltIdx = 0;
-  for (unsigned int i=0; i<4; i++)
-    { 
-    error += vcl_pow(vcl_abs(resultAdaptedRaM[rsltIdx] - resultRaM[i]), 2);
-
-    std::cout << "resultAdaptedRaM : " << resultAdaptedRaM[rsltIdx] 
-              << "\t - resultRaM : " << resultRaM[i] << std::endl;
-    rsltIdx ++;
-    }
-
-  LHFunction->SetInputImage(reader->GetOutput());
-  LHFunction->SetNeighborhoodRadius(5);
-  LHFunction->SetNumberOfHistogramBins(64);
-  LHFunction->SetHistogramMin(filter->GetMinimum());
-  LHFunction->SetHistogramMax(filter->GetMaximum());
-  LHFunctionType::OutputType resultLH = LHFunction->EvaluateAtIndex(index);
-
-  LHadaptedFunction->SetInputImage(reader->GetOutput());
-  LHadaptedFunction->GetInternalImageFunction()->SetNeighborhoodRadius(5);
-  LHadaptedFunction->GetInternalImageFunction()->SetNumberOfHistogramBins(64);
-  LHadaptedFunction->GetInternalImageFunction()->SetHistogramMin(filter->GetMinimum());
-  LHadaptedFunction->GetInternalImageFunction()->SetHistogramMax(filter->GetMaximum());
-  LHImageFunctionAdaptorType::OutputType resultAdaptedLH = LHadaptedFunction->EvaluateAtIndex(index);
-  
-  rsltIdx = 0;
-  for (unsigned int i=0; i<64; i++)
+  try
     {
-    error += vcl_pow(vcl_abs( resultAdaptedLH[rsltIdx] - resultLH->GetFrequency(i)), 2);
+    HMFunction->SetInputImage(reader->GetOutput());
+    HMFunction->SetNeighborhoodRadius(5);
+    HMFunctionType::OutputType resultHM = HMFunction->EvaluateAtIndex(index);
 
-    std::cout << "resultAdaptedLH : " << resultAdaptedLH[rsltIdx]
-              << "\t - resultLH : " << resultLH->GetFrequency(i) << std::endl;
-    rsltIdx ++;
+    HMadaptedFunction->SetInputImage(reader->GetOutput());
+    HMadaptedFunction->GetInternalImageFunction()->SetNeighborhoodRadius(5);
+    HMImageFunctionAdaptorType::OutputType resultAdaptedHM = HMadaptedFunction->EvaluateAtIndex(index);
+
+    rsltIdx = 0;
+    for (unsigned int i = 0; i < 7; i++)
+      {
+      error += vcl_pow(vcl_abs(resultAdaptedHM[rsltIdx] - resultHM[i]), 2);
+
+      std::cout << "resultAdaptedHM : " << resultAdaptedHM[rsltIdx] << "\t - resultHM : " << resultHM[i] << std::endl;
+      rsltIdx++;
+      }
+    }
+  catch (itk::ExceptionObject& err)
+    {
+    std::cout << "ExceptionObject caught for HMFunction() !" << std::endl;
+    std::cout << err << std::endl;
+
+    return EXIT_FAILURE;
+    }
+
+  try
+    {
+    RaMFunction->SetInputImage(reader->GetOutput());
+    RaMFunction->SetNeighborhoodRadius(5);
+    RaMFunctionType::OutputType resultRaM = RaMFunction->EvaluateAtIndex(index);
+
+    RaMadaptedFunction->SetInputImage(reader->GetOutput());
+    RaMadaptedFunction->GetInternalImageFunction()->SetNeighborhoodRadius(5);
+    RaMImageFunctionAdaptorType::OutputType resultAdaptedRaM = RaMadaptedFunction->EvaluateAtIndex(index);
+
+    rsltIdx = 0;
+    for (unsigned int i = 0; i < 4; i++)
+      {
+      error += vcl_pow(vcl_abs(resultAdaptedRaM[rsltIdx] - resultRaM[i]), 2);
+
+      std::cout << "resultAdaptedRaM : " << resultAdaptedRaM[rsltIdx] << "\t - resultRaM : " << resultRaM[i]
+          << std::endl;
+      rsltIdx++;
+      }
+    }
+  catch (itk::ExceptionObject& err)
+    {
+    std::cout << "ExceptionObject caught for RaMFunction() !" << std::endl;
+    std::cout << err << std::endl;
+
+    return EXIT_FAILURE;
+    }
+
+  try
+    {
+    LHFunction->SetInputImage(reader->GetOutput());
+    LHFunction->SetNeighborhoodRadius(5);
+    LHFunction->SetNumberOfHistogramBins(64);
+    LHFunction->SetHistogramMin(filter->GetMinimum());
+    LHFunction->SetHistogramMax(filter->GetMaximum());
+    LHFunctionType::OutputType resultLH = LHFunction->EvaluateAtIndex(index);
+
+    LHadaptedFunction->SetInputImage(reader->GetOutput());
+    LHadaptedFunction->GetInternalImageFunction()->SetNeighborhoodRadius(5);
+    LHadaptedFunction->GetInternalImageFunction()->SetNumberOfHistogramBins(64);
+    LHadaptedFunction->GetInternalImageFunction()->SetHistogramMin(filter->GetMinimum());
+    LHadaptedFunction->GetInternalImageFunction()->SetHistogramMax(filter->GetMaximum());
+    LHImageFunctionAdaptorType::OutputType resultAdaptedLH = LHadaptedFunction->EvaluateAtIndex(index);
+
+    rsltIdx = 0;
+    for (unsigned int i = 0; i < 64; i++)
+      {
+      error += vcl_pow(vcl_abs(resultAdaptedLH[rsltIdx] - resultLH->GetFrequency(i)), 2);
+
+      std::cout << "resultAdaptedLH : " << resultAdaptedLH[rsltIdx] << "\t - resultLH : " << resultLH->GetFrequency(i)
+          << std::endl;
+      rsltIdx++;
+      }
+    }
+  catch (itk::ExceptionObject& err)
+    {
+    std::cout << "ExceptionObject caught for LHFunction() !" << std::endl;
+    std::cout << err << std::endl;
+    
+    return EXIT_FAILURE;
     }
 
   error = vcl_sqrt(error);
@@ -303,29 +374,38 @@ int otbImageFunctionAdaptor(int argc, char * argv[])
   
   // Testing the use of a user defined InternalImageFunction instead
   // of the build-in InternalImageFunction
-  FMDFunctionType::Pointer myFunction = FMDFunctionType::New();
-  FMDImageFunctionAdaptorType::Pointer myAdaptedFunction = FMDImageFunctionAdaptorType::New();
-  
-  myFunction->SetNeighborhoodRadius(8);
-  myFunction->SetPmax(2);
-  myFunction->SetQmax(2);
-
-  myAdaptedFunction->SetInputImage(reader->GetOutput());
-  myAdaptedFunction->SetInternalImageFunction(myFunction);
-  FMDImageFunctionAdaptorType::OutputType myResult = myAdaptedFunction->EvaluateAtIndex(index);
-  
-  rsltIdx = 0;
-  for (unsigned int i=0; i<=2; i++)
+  try
     {
-    for (unsigned int j=0; j<=2; j++)
-      {
-      std::cout << "myResult: " << myResult[rsltIdx] << std::endl;
-      rsltIdx ++;
-      }
-    }
-  std::cout << myAdaptedFunction << std::endl;
+    FMDFunctionType::Pointer myFunction = FMDFunctionType::New();
+    FMDImageFunctionAdaptorType::Pointer myAdaptedFunction = FMDImageFunctionAdaptorType::New();
 
-  
+    myFunction->SetNeighborhoodRadius(8);
+    myFunction->SetPmax(2);
+    myFunction->SetQmax(2);
+
+    myAdaptedFunction->SetInputImage(reader->GetOutput());
+    myAdaptedFunction->SetInternalImageFunction(myFunction);
+    FMDImageFunctionAdaptorType::OutputType myResult = myAdaptedFunction->EvaluateAtIndex(index);
+
+    rsltIdx = 0;
+    for (unsigned int i = 0; i <= 2; i++)
+      {
+      for (unsigned int j = 0; j <= 2; j++)
+        {
+        std::cout << "myResult: " << myResult[rsltIdx] << std::endl;
+        rsltIdx++;
+        }
+      }
+    std::cout << myAdaptedFunction << std::endl;
+    }
+  catch (itk::ExceptionObject& err)
+    {
+    std::cout << "ExceptionObject caught for FMDFunctionType() !" << std::endl;
+    std::cout << err << std::endl;
+    
+    return EXIT_FAILURE;
+    }
+
 
   return EXIT_SUCCESS;
 }

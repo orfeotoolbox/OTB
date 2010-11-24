@@ -25,10 +25,12 @@
 
 #include "otbMacro.h"
 #include "otbImage.h"
+#include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
 #include "otbInverseSensorModel.h"
 #include "otbStreamingResampleImageFilter.h"
+#include "otbMultiToMonoChannelExtractROI.h"
 
 #include "otbOrthoRectificationFilter.h"
 #include "otbMapProjections.h"
@@ -47,15 +49,21 @@ int otbOrthoRectificationMonoThreadFilter(int argc, char* argv[])
     return EXIT_FAILURE;
     }
 
-  typedef otb::Image<double, 2>                                                     ImageType;
-  typedef otb::ImageFileReader<ImageType>                                           ReaderType;
-  typedef otb::StreamingImageFileWriter<ImageType>                                  WriterType;
+  typedef double                                   PixelType;
+  typedef otb::Image<PixelType, 2>                 ImageType;
+  typedef otb::VectorImage<PixelType, 2>           VectorImageType;
+  typedef otb::ImageFileReader<VectorImageType>    ReaderType;
+  typedef otb::StreamingImageFileWriter<ImageType> WriterType;
+
+  typedef otb::MultiToMonoChannelExtractROI<PixelType, PixelType>                   ExtractorType;
   typedef otb::UtmInverseProjection                                                 UtmMapProjectionType;
   typedef otb::OrthoRectificationFilter<ImageType, ImageType, UtmMapProjectionType> OrthoRectifFilterType;
+ 
 
   //Allocate pointer
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
+  ExtractorType::Pointer extractor = ExtractorType::New();
 
   OrthoRectifFilterType::Pointer orthoRectifFilter = OrthoRectifFilterType::New();
   UtmMapProjectionType::Pointer  utmMapProjection = UtmMapProjectionType::New();
@@ -65,9 +73,12 @@ int otbOrthoRectificationMonoThreadFilter(int argc, char* argv[])
   writer->SetFileName(argv[2]);
 
   reader->GenerateOutputInformation();
-  std::cout << reader->GetOutput() << std::endl;
 
-  orthoRectifFilter->SetInput(reader->GetOutput());
+  // Extract the first channel of the image
+  extractor->SetInput(reader->GetOutput());
+  extractor->SetChannel(1);
+
+  orthoRectifFilter->SetInput(extractor->GetOutput());
 
   ImageType::IndexType start;
   start[0] = 0;

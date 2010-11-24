@@ -52,7 +52,7 @@ SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>
   FunctionPointer function = this->GetFunction();
 
   function->SetScale(imageMetadataInterface->GetRadiometricCalibrationScale());
-  
+
   ParametricFunctionPointer   noise;
   ParametricFunctionPointer   antennaPatternNewGain;
   ParametricFunctionPointer   antennaPatternOldGain;
@@ -63,7 +63,7 @@ SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>
   noise->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationNoise());
   noise->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationNoisePolynomialDegree());
   noise->EvaluateParametricCoefficient();
-  
+
   antennaPatternNewGain = function->GetAntennaPatternNewGain();
   antennaPatternNewGain->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationAntennaPatternNewGain());
   antennaPatternNewGain->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree());
@@ -73,16 +73,30 @@ SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>
   antennaPatternOldGain->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationAntennaPatternOldGain());
   antennaPatternOldGain->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree());
   antennaPatternOldGain->EvaluateParametricCoefficient();
-  
+
   incidenceAngle = function->GetIncidenceAngle();
   incidenceAngle->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationIncidenceAngle());
+  typename ParametricFunctionType::PointType point;
+  point.Fill(0);
+  typename ParametricFunctionType::PointSetType::PixelType pointValue;
+  pointValue = itk::NumericTraits<typename ParametricFunctionType::PointSetType::PixelType>::Zero;
+  unsigned int nbRecords = imageMetadataInterface->GetRadiometricCalibrationIncidenceAngle()->GetNumberOfPoints();
+
+  // Fill the linear system
+  for (unsigned int i = 0; i < nbRecords; ++i)
+  {
+      imageMetadataInterface->GetRadiometricCalibrationIncidenceAngle()->GetPoint(i, &point);
+      imageMetadataInterface->GetRadiometricCalibrationIncidenceAngle()->GetPointData(i, &pointValue);
+      std::cout << pointValue << " / "<<point<<std::endl;
+  }
   incidenceAngle->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationIncidenceAnglePolynomialDegree());
+
   incidenceAngle->EvaluateParametricCoefficient();
-  
   rangeSpreadLoss = function->GetRangeSpreadLoss();
   rangeSpreadLoss->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationRangeSpreadLoss());
   rangeSpreadLoss->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationRangeSpreadLossPolynomialDegree());
   rangeSpreadLoss->EvaluateParametricCoefficient();
+
 }
 
 

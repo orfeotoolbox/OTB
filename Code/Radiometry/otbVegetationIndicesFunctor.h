@@ -1237,6 +1237,149 @@ private:
   const NDVIFunctorType m_NDVIfunctor;
 };
 
+/** \class LAIFromNDVILogarithmic
+ *  This functor computes the LAI from NDVI using a
+ *  logarithmic relationship. Asrar et al. (1984), Baret and Guyot
+ *  (1991) and Wilson and Meyers (2007). Default values for the
+ *  parameters are taken from A. Bsaibes et al. / Remote Sensing of
+ *  Environment 113 (2009) 716–729 
+ *
+ *
+ *  \ingroup Functor
+ * \ingroup Radiometry
+ * \ingroup VegetationIndices
+ */
+template <class TInput1, class TInput2, class TOutput>
+class LAIFromNDVILogarithmic : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
+{
+public:
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "LAIFromNDVILogarithmic";
+  }
+
+  typedef NDVI<TInput1, TInput2, TOutput> NDVIFunctorType;
+  LAIFromNDVILogarithmic() : m_NdviSoil(0.10), m_NdviInf(0.89), m_ExtinctionCoefficient(0.71) {}
+  virtual ~LAIFromNDVILogarithmic() {}
+
+  NDVIFunctorType GetNDVI(void) const
+  {
+    return (m_NDVIfunctor);
+  }
+
+  void SetNdviSoil(const double val)
+  {
+    m_NdviSoil = val;
+  }
+  double GetNdviSoil(void) const
+  {
+    return (m_NdviSoil);
+  }
+
+  void SetNdviInf(const double val)
+  {
+    m_NdviInf = val;
+  }
+  double GetNdviInf(void) const
+  {
+    return (m_NdviInf);
+  }
+
+  void SetExtinctionCoefficient(const double val)
+  {
+    m_ExtinctionCoefficient = val;
+  }
+  double GetExtinctionCoefficient(void) const
+  {
+    return (m_ExtinctionCoefficient);
+  }  
+  
+protected:
+  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const
+  {
+    double dval = this->GetNDVI() (r, nir);
+    if (dval < 0)
+      {
+      return  (static_cast<TOutput>(0));
+      }
+    else
+      {
+      return (static_cast<TOutput>(
+    -(1.0/m_ExtinctionCoefficient)*vcl_log((dval- m_NdviInf)/(m_NdviSoil-m_NdviInf))
+    ));
+      }
+  }
+private:
+  const NDVIFunctorType m_NDVIfunctor;
+  double m_NdviSoil;
+  double m_NdviInf;
+  double m_ExtinctionCoefficient;
+};
+
+
+/** \class LAIFromReflectancesLinear
+ *  This functor computes the LAI from reflectances using a
+ *  linear relationship.
+ *  LAI = \beta_0 + \sum_j \beta_j \rho_j where \rho are the
+ *  reflectances 
+ *  Default values for the parameters are taken from A. Bsaibes et
+ *  al. / Remote Sensing of Environment 113 (2009) 716–729  
+ *
+ *
+ *  \ingroup Functor
+ * \ingroup Radiometry
+ * \ingroup VegetationIndices
+ */
+template <class TInput1, class TInput2, class TOutput>
+class LAIFromReflectancesLinear : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
+{
+public:
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "LAIFromReflectancesLinear";
+  }
+
+  typedef NDVI<TInput1, TInput2, TOutput> NDVIFunctorType;
+  LAIFromReflectancesLinear() : m_RedCoef(-17.91), m_NirCoef(12.26) {}
+  virtual ~LAIFromReflectancesLinear() {}
+
+  NDVIFunctorType GetReflectances(void) const
+  {
+    return (m_NDVIfunctor);
+  }
+
+  void SetRedCoef(const double val)
+  {
+    m_RedCoef = val;
+  }
+  double GetRedCoef(void) const
+  {
+    return (m_RedCoef);
+  }
+
+  void SetNirCoef(const double val)
+  {
+    m_NirCoef = val;
+  }
+  double GetNirCoef(void) const
+  {
+    return (m_NirCoef);
+  }
+  
+protected:
+  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const
+  {
+      return (static_cast<TOutput>(m_RedCoef*r+m_NirCoef*nir));
+  }
+private:
+  const NDVIFunctorType m_NDVIfunctor;
+  double m_RedCoef;
+  double m_NirCoef;
+};
+
+
 } // namespace Functor
 } // namespace otb
 

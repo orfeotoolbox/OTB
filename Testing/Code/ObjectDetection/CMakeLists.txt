@@ -46,9 +46,10 @@ ADD_TEST(odTvDescriptorsListSampleGeneratorNoStreaming ${OBJECTDETECTION_TESTS1}
   ${TEMP}/TvDescriptorsListSampleGeneratorNoStreamingOutput.txt
   otbDescriptorsListSampleGenerator
   ${INPUTDATA}/ObjectReco/Boats/maur_B010202_01_amplitude.tif
-  ${INPUTDATA}/ObjectReco/Boats/maur_B010202_01LabeledPoints.shp
+  ${BASELINE_FILES}/TvLabeledSampleLocalizationGeneratorOutput.shp
   ${TEMP}/TvDescriptorsListSampleGeneratorNoStreamingOutput.txt
-  0
+  0 # streaming
+  5 # neighborhood radius
   )
 
 ADD_TEST(odTvDescriptorsListSampleGeneratorStreaming ${OBJECTDETECTION_TESTS1}
@@ -57,9 +58,62 @@ ADD_TEST(odTvDescriptorsListSampleGeneratorStreaming ${OBJECTDETECTION_TESTS1}
   ${TEMP}/TvDescriptorsListSampleGeneratorStreamingOutput.txt
   otbDescriptorsListSampleGenerator
   ${INPUTDATA}/ObjectReco/Boats/maur_B010202_01_amplitude.tif
-  ${INPUTDATA}/ObjectReco/Boats/maur_B010202_01LabeledPoints.shp
+  ${BASELINE_FILES}/TvLabeledSampleLocalizationGeneratorOutput.shp
   ${TEMP}/TvDescriptorsListSampleGeneratorStreamingOutput.txt
-  50
+  50 # streaming
+  5 # neighborhood radius
+  )
+
+ADD_TEST(odTvDescriptorsSVMModelCreation ${OBJECTDETECTION_TESTS1}
+  --compare-ascii ${NOTOL}
+  ${BASELINE_FILES}/TvDescriptorsSVMModelCreation.svm
+  ${TEMP}/TvDescriptorsSVMModelCreation.svm
+  otbDescriptorsSVMModelCreation
+  ${INPUTDATA}/ObjectReco/Boats/maur_B010202_01_amplitude.tif
+  ${BASELINE_FILES}/TvLabeledSampleLocalizationGeneratorOutput.shp
+  ${INPUTDATA}/ObjectReco/Boats/FeatureStats_RadiometricMoments_amplitude.xml
+  ${TEMP}/TvDescriptorsSVMModelCreation.svm
+  0 # streaming
+  5 # neighborhood radius
+  )
+
+ADD_TEST(odTuObjectDetectionClassifierNew ${OBJECTDETECTION_TESTS1}
+  otbObjectDetectionClassifierNew
+  )
+
+ADD_TEST(odTvObjectDetectionClassifier ${OBJECTDETECTION_TESTS1}
+  --compare-ogr ${NOTOL}
+  ${BASELINE_FILES}/TvObjectDetectionClassifierOutput.shp
+  ${TEMP}/TvObjectDetectionClassifierOutput.shp
+  otbObjectDetectionClassifier
+  ${INPUTDATA}/ObjectReco/Boats/maur_B010202_01_extract_amplitude.tif
+  ${INPUTDATA}/ObjectReco/Boats/FeatureStats_RadiometricMoments_amplitude.xml
+  ${BASELINE_FILES}/TvDescriptorsSVMModelCreation.svm
+  ${TEMP}/TvObjectDetectionClassifierOutput.shp
+  0 # streaming
+  5 # neighborhood radius
+  )
+
+ADD_TEST(odTvObjectDetectionClassifierStreaming ${OBJECTDETECTION_TESTS1}
+  --compare-ogr ${NOTOL}
+  ${BASELINE_FILES}/TvObjectDetectionClassifierOutput.shp
+  ${TEMP}/TvObjectDetectionClassifierOutput.shp
+  otbObjectDetectionClassifier
+  ${INPUTDATA}/ObjectReco/Boats/maur_B010202_01_extract_amplitude.tif
+  ${INPUTDATA}/ObjectReco/Boats/FeatureStats_RadiometricMoments_amplitude.xml
+  ${BASELINE_FILES}/TvDescriptorsSVMModelCreation.svm
+  ${TEMP}/TvObjectDetectionClassifierOutput.shp
+  50 # streaming
+  5 # neighborhood radius
+  )
+
+ADD_TEST(odTuStandardMetaImageFunctionBuilderNew ${OBJECTDETECTION_TESTS1}
+  otbStandardMetaImageFunctionBuilderNew
+  )
+
+ADD_TEST(odTvStandardMetaImageFunctionBuilder ${OBJECTDETECTION_TESTS1}
+  otbStandardMetaImageFunctionBuilder
+  ${INPUTDATA}/ObjectReco/Boats/maur_B010202_01.tif
   )
 
 # A enrichir
@@ -67,10 +121,12 @@ SET(ObjectDetection_SRCS1
 otbObjectDetectionTests1.cxx
 otbLabeledSampleLocalizationGenerator.cxx
 otbDescriptorsListSampleGenerator.cxx
+otbObjectDetectionClassifier.cxx
+otbStandardMetaImageFunctionBuilder.cxx
 )
 
 
-OTB_ADD_EXECUTABLE(otbObjectDetectionTests1 "${ObjectDetection_SRCS1}" "OTBObjectDetection;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbObjectDetectionTests1 "${ObjectDetection_SRCS1}" "OTBObjectDetection;OTBIO;OTBTesting;OTBLearning")
 
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

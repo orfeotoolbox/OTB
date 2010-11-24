@@ -158,6 +158,11 @@ public:
   void Reset(void);
   void Synthetize(void);
 
+  void AddInput(itk::DataObject * dataObject)
+  {
+    Superclass::AddInput(dataObject);
+  }
+
 protected:
   PersistentDescriptorsListSampleGenerator();
   virtual ~PersistentDescriptorsListSampleGenerator();
@@ -175,17 +180,16 @@ private:
   PersistentDescriptorsListSampleGenerator(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  template <typename TCoordRepType>
-  bool
-  IsInsideWithNeighborhoodRadius(const RegionType& region, const ContinuousIndexType &index) const
+  bool IsInsideWithNeighborhoodRadius(const RegionType& region, const ContinuousIndexType &index) const
     {
     typedef typename RegionType::IndexType     IndexType;
     typedef typename IndexType::IndexValueType IndexValueType;
+    typedef typename ContinuousIndexType::ValueType ContinuousIndexValueType;
 
     for(unsigned int i=0; i<ImageDimension; i++)
       {
 #ifdef ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY
-      if( itk::Math::RoundHalfIntegerUp<IndexValueType>(index[i]) < static_cast<IndexValueType>( region.GetIndex(i) ) + m_NeighborhoodRadius  + 1 )
+      if( itk::Math::RoundHalfIntegerUp<IndexValueType>(index[i]) < static_cast<IndexValueType>( region.GetIndex(i) ) + m_NeighborhoodRadius )
 #else
       if( index[i] < static_cast<TCoordRepType>( region.GetIndex(i) ) + m_NeighborhoodRadius )
 #endif
@@ -194,14 +198,14 @@ private:
         }
       // bound is the last valid pixel location
 #ifdef ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY
-      const TCoordRepType bound = static_cast<TCoordRepType>(
+      const ContinuousIndexValueType bound = static_cast<ContinuousIndexValueType>(
           region.GetIndex(i) + region.GetSize(i) - 0.5);
 #else
-      const TCoordRepType bound = static_cast<TCoordRepType>(
+      const ContinuousIndexValueType bound = static_cast<ContinuousIndexValueType>(
           region.GetIndex(i) + static_cast<IndexValueType>(region.GetSize(i)) - 1);
 #endif
 
-      if( index[i] > bound - m_NeighborhoodRadius - 1 )
+      if( index[i] > bound - m_NeighborhoodRadius )
         {
         return false;
         }
@@ -292,6 +296,11 @@ public:
     {
       return this->GetFilter()->GetInput();
     }
+
+    void AddInput(itk::DataObject * dataObject)
+      {
+        this->GetFilter()->AddInput(dataObject);
+      }
 
     /** Sample locations as a VectorData of points. The label is in the ClassKey feature */
     void SetSamplesLocations(InputVectorDataType * input)

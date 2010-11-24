@@ -339,7 +339,7 @@ int main(int argc, char* argv[])
 
   // Software Guide : BeginLatex
   //
-  // For the deformation field estimation, we will use the \doxygen{otb}{NearestPointDeformationFieldGenerator}.
+  // For the deformation field estimation, we will use the \doxygen{otb}{BSplinesInterpolateDeformationFieldGenerator}.
   // This filter will perform a nearest neighbor interpolation on the deformation values in the point set data.
   //
   // Software Guide : EndLatex

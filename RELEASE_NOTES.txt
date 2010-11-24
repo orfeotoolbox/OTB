@@ -2,20 +2,50 @@ OTB-v.3.8.0 - Changes since version 3.6.0 (????/??/??)
 -----------------------------------------
 
 * Monteverdi
-  * 
+  * New Polarimetric Synthesis module
+  * New DEM image extraction / HillShading module: creates an image from a DEM tiles directory, with optional hillshading
+  * New ColorMapping module: apply a colormap to a mono band image
+  * Viewer module: add multi input support, with slideshow or transparency mode, add more rendering functions, add splitted/packed layout option
+  * Vectorization module: new semi-automatic mode based on segmentation results proposals
 
 * Applications
-  * 
+  * Object Detection applications (see also http://wiki.orfeo-toolbox.org/index.php/Object_detection)
+    * EstimateFeatureStatistics to evaluate descriptors statistics on a set of images
+    * TrainObjectDetector: generates an SVM model from input images and a vector data
+    * ObjectDetector: detects points in an image from an SVM model
+  * Add automatically generated GUI wrappers for OTB processing chains
+    * Add FLTK wrapper
+    * Add a generic Qt based widget class
+    * Add a Qt GUI wrapper based on the generic Qt widget
+    * Add a Qgis plugin wrapper based on the generic Qt widget
 
 * Library
-  * Rework FlusserImageFunction andHuImageFunction to output all moments in one pass
-  * Rework RealMomentsImagefilter and ComplexMomentImageFilter to output a matrix of all moments associated to p, q inferior to a given parameter
-  * Add RadiometricMomentsImage function that output a vector containing the local mean, variance, skewness and kurtosis
-   
+  * Improved local descriptors tools based on ImageFunction :
+    * Rework FlusserImageFunction and HuImageFunction to output all moments in one pass (FlusserMomentsImageFunction, HuMomentsImageFunction)
+    * Rework RealMomentsImagefilter and ComplexMomentImageFilter to output a matrix of all moments associated to p, q inferior to a given parameter (ComplexMomentsImageFunction, HuMomentsImageFunction)
+    * Add image function to compute a vector containing the local mean, variance, skewness and kurtosis (RadiometricMomentsImageFunction)
+    * Add local histogram image function (LocalHistogramImageFunction)
+    * Add image function to compute the local Fourier Mellin coefficients (FourierMellinDescriptorsImageFunction)
+    * Add a class to adapt any image function return types to itk::VariableLengthVector (ImageFunctionAdaptor)
+    * Add a class to build composite image functions (MetaImageFunction)
+  * New object detection framework (see also http://wiki.orfeo-toolbox.org/index.php/Object_detection)
+    * Add filter to generate negative samples (LabeledSampleLocalizationGenerator)
+    * Add filter to evaluate an image function on a set of point and generate ListSample (DescriptorsListSampleGenerator)
+    * Add filter to balance the sample number of different classes in a ListSample by generating new samples from existing ones plus noise (ListSampleToBalancedListSampleFilter, GaussianAdditiveNoiseSampleListFilter)
+    * Add filter to apply a shift/scale to a ListSample (ShiftScaleSampleListFilter)
+    * Add filter to detect object from an SVM model and an image function (ObjectDetectionClassifier)
+  * SVMClassifier: add hyperplanes distances as output
+  * GDALImageIO: support writing of non-streamable format (JPEG, PNG)
+  * Support reading vector images of std::complex
+  * BandMathFilter: add physical and image coordinates variables
 
 * System
-  * Internal liblas updated to 1.6.0 + OTB patches (root CMakeList.txtr)
-
+  * Internal liblas updated to 1.6.0b2 + OTB patches (root CMakeList.txt)
+  * Internal libsvm updated to 3.0 + OTB patches (additionnal kernels)
+  * Internal ITK: removed compilation of medical image formats library and associated ImageIO
+  * Internal ITK: removed dependency on libtiff, libjpeg, libpng and zlib, now handled by gdal
+  * Support for gcc-4.5
+  
 OTB-v.3.6.0 - Changes since version 3.4.0 (2010/10/07)
 -----------------------------------------
 

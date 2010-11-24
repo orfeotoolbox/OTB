@@ -91,18 +91,15 @@ ADD_TEST(fiTeMathematicalMorphologyBinaryFiltersTest ${EXE_TESTS}
 # ------- DanielssonDistanceMapImageFilterTest----------
 
 ADD_TEST(fiTeDanielssonDistanceMapImageFilterTest ${EXE_TESTS}
-	--compare-n-images ${TOL} 3
+	--compare-n-images ${TOL} 2
 	${BASELINE}/DanielssonDistanceMapImageFilterOutput1.png
 	${TEMP}/DanielssonDistanceMapImageFilterOutput1.png
 	${BASELINE}/DanielssonDistanceMapImageFilterOutput2.png
 	${TEMP}/DanielssonDistanceMapImageFilterOutput2.png
-	${BASELINE}/DanielssonDistanceMapImageFilterOutput3.mhd
-	${TEMP}/DanielssonDistanceMapImageFilterOutput3.mhd
 	DanielssonDistanceMapImageFilterTest
 	${INPUTDATA}/FivePoints.png
 	${TEMP}/DanielssonDistanceMapImageFilterOutput1.png
 	${TEMP}/DanielssonDistanceMapImageFilterOutput2.png
-	${TEMP}/DanielssonDistanceMapImageFilterOutput3.mhd
 )
 
 # ------- MeanImageFilterTest----------

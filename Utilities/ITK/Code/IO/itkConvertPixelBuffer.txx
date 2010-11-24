@@ -602,7 +602,7 @@ template < typename InputPixelType,
 void
 ConvertPixelBuffer<InputPixelType, OutputPixelType, OutputConvertTraits>
 ::ConvertComplexToGray(std::complex<InputPixelType>* inputData, 
-                      int inputNumberOfComponents, 
+                      int itkNotUsed(inputNumberOfComponents),
                       OutputPixelType* outputData , size_t size)
 {
   std::complex<InputPixelType>* endInput = inputData + size;
@@ -722,14 +722,14 @@ ConvertPixelBuffer<InputPixelType, OutputPixelType, OutputConvertTraits>
 
 template<typename InputType, typename OutputType>
 OutputType
-SpecialCast(const std::complex<InputType>& in, const OutputType& dummy)
+SpecialCast(const std::complex<InputType>& in, const OutputType& itkNotUsed(dummy))
 {
   return static_cast < OutputType >( in.real() );
 }
 
 template<typename InputType, typename OutputType>
 std::complex<OutputType>
-SpecialCast(const std::complex<InputType>& in, const std::complex<OutputType>& dummy)
+SpecialCast(const std::complex<InputType>& in, const std::complex<OutputType>& itkNotUsed(dummy))
 {
   return static_cast < std::complex<OutputType> >( in );
 }

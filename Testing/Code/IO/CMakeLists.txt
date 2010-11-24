@@ -98,26 +98,41 @@ ADD_TEST(ioTvMultiMonoChannelROI_ENVI2PNG ${COMMON_TESTS3}
 
 IF(OTB_DATA_USE_LARGEINPUT)
 # ---  SAR_ERS2_SLCI (GDAL)  ---
-ADD_TEST(ioTvImageFileReaderERS ${IO_TESTS1}
-   --compare-image ${EPSILON_9}   ${BASELINE}/ioImageFileReaderERS_SLCI.tif
-                            ${TEMP}/ioImageFileReaderERS_SLCI.tif
-         otbImageFileReaderERS
-         ${LARGEDATA}/SAR_ERS2_SLCI_SCENE1/
-         ${TEMP}/ioImageFileReaderERS_SLCI.tif)
-
-ADD_TEST(ioTvImageFileReaderRADARSAT ${IO_TESTS1}
-   --compare-image ${EPSILON_9} ${BASELINE}/ioImageFileReaderRADARSAT.tif
-                           ${TEMP}/ioImageFileReaderRADARSAT.tif
-         otbImageFileReaderERS
-         ${LARGEDATA}/RADARSAT1/GOMA/SCENE01/
-         ${TEMP}/ioImageFileReaderRADARSAT.tif)
-
-ADD_TEST(ioTvImageFileReaderPALSAR ${IO_TESTS1}
-   --compare-image ${EPSILON_9}   ${BASELINE}/ioImageFileReaderPALSAR_l1.1.tif
-                            ${TEMP}/ioImageFileReaderPALSAR_l1.1.tif
-         otbImageFileReaderERS
+ADD_TEST(ioTvImageFileReaderWithComplexPixel_PALSAR ${IO_TESTS1}
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioImageFileReaderWithComplexPixel_PALSAR_l1.1.tif
+                            ${TEMP}/ioImageFileReaderWithComplexPixel_PALSAR_l1.1.tif
+         otbImageFileReaderWithComplexPixelTest
          ${LARGEDATA}/PALSAR/200801280007/l1data/VOL-ALPSRP037120700-H1.1__A
-         ${TEMP}/ioImageFileReaderPALSAR_l1.1.tif)
+         ${TEMP}/ioImageFileReaderWithComplexPixel_PALSAR_l1.1.tif
+         0 0 100 100)
+
+ADD_TEST(ioTvImageFileReaderWithComplexPixel_ERS ${IO_TESTS1}
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioImageFileReaderWithComplexPixel_ERS_SLCI.tif
+                            ${TEMP}/ioImageFileReaderWithComplexPixel_ERS_SLCI.tif
+         otbImageFileReaderWithComplexPixelTest
+         ${LARGEDATA}/SAR_ERS2_SLCI_SCENE1/
+         ${TEMP}/ioImageFileReaderWithComplexPixel_ERS_SLCI.tif
+         0 0 100 100)
+
+ADD_TEST(ioTvImageFileReaderWithComplexPixel_RADARSAT ${IO_TESTS1}
+   --compare-image ${EPSILON_9} ${BASELINE}/ioImageFileReaderWithComplexPixel_RADARSAT.tif
+                           ${TEMP}/ioImageFileReaderWithComplexPixel_RADARSAT.tif
+         otbImageFileReaderWithComplexPixelTest
+         ${LARGEDATA}/RADARSAT1/GOMA/SCENE01/
+         ${TEMP}/ioImageFileReaderWithComplexPixel_RADARSAT.tif
+         0 0 100 100)
+
+ADD_TEST(ioTvCompareWritingComplexImage_TIF ${IO_TESTS1}
+         otbCompareWritingComplexImageTest
+         ${LARGEDATA}/PALSAR/200801280007/l1data/VOL-ALPSRP037120700-H1.1__A
+         ${TEMP}/ioTvImageFileReaderCompareComplexPixelWithFloatPixel_PALSAR.tif
+         0 0 100 100)
+
+ADD_TEST(ioTvCompareWritingComplexImage_HDR ${IO_TESTS1}
+         otbCompareWritingComplexImageTest
+         ${LARGEDATA}/PALSAR/200801280007/l1data/VOL-ALPSRP037120700-H1.1__A
+         ${TEMP}/ioTvImageFileReaderCompareComplexPixelWithFloatPixel_PALSAR.hdr
+         0 0 100 100)
 
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
@@ -2674,7 +2689,6 @@ ADD_TEST(ioTvTileMapImageIOHelperTest ${IO_TESTS21}
 #----------------------------------------------------------------------------------
 SET(BasicIO_SRCS1
 otbIOTests1.cxx
-otbImageFileReaderERS.cxx
 otbLUMImageIOTestCanRead.cxx
 otbLUMImageIOTestCanWrite.cxx
 otbMWImageIOTestCanRead.cxx
@@ -2683,6 +2697,8 @@ otbImageFileReaderTest.cxx
 otbImageFileReaderTestFloat.cxx
 otbShortImageIOTest.cxx
 otbImageIOFactoryNew.cxx
+otbImageFileReaderWithComplexPixel.cxx
+otbCompareWritingComplexImage.cxx
 )
 SET(BasicIO_SRCS2
 otbIOTests2.cxx

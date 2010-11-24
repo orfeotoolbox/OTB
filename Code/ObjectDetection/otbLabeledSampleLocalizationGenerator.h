@@ -33,15 +33,15 @@ namespace otb
  *  This generator produces a unique vector data containing labeled positions
  *  extracted from inputs. 
  *
- *  Input points are transmited to the output. In addition, 'no class'
+ *  Input points are transmitted to the output. In addition, 'no class'
  *  points are randomly picked inside input polygons making sure
  *  they are at least at a given distance (InhibitionRadius) of every
  *  known points.
  *  
- *  Classes are specified by the VectorData with a metadata identified by
+ *  Classes are specified by the VectorData with a metadata field identified by
  *  a specific key. This key can be provided by the SetClassKey() method
  *  (using "Class" as a default key).
- *  Features associated with 
+ *  The field is retrieved by GetFieldAsInt(), thus must be int-compatible
  *
  */
 template <class TVectorData>
@@ -80,18 +80,32 @@ public:
 
   virtual void Update();
 
-  /** Accessors */
+  /** Field name containing the class identifier */
   itkGetConstMacro(ClassKey, std::string);
   itkSetMacro(ClassKey, std::string);
-  itkGetConstMacro(NoClassIdentifier, std::string);
-  itkSetMacro(NoClassIdentifier, std::string);
+
+  /** Identifier for the negative samples class */
+  itkGetConstMacro(NoClassIdentifier, int);
+  itkSetMacro(NoClassIdentifier, int);
+
+  /** The density of auto-generated negative samples inside the polygons */
   itkGetConstMacro(RandomLocalizationDensity, double);
   itkSetMacro(RandomLocalizationDensity, double);
+
+  /** The minimum distance between a generated negative sample and positive samples */
   itkGetConstMacro(InhibitionRadius, double);
   itkSetMacro(InhibitionRadius, double);
-  itkGetConstMacro(PseudoRandom, bool);
-  itkSetMacro(PseudoRandom, bool);
-  
+
+  /** The maximum iteration number during negative sample positions */
+  itkGetConstMacro(NbMaxIteration, unsigned long int);
+  itkSetMacro(NbMaxIteration, unsigned long int);
+
+  /** Set the seed for random number generator */
+  void SetSeed(unsigned int seed)
+  {
+    m_RandomGenerator->SetSeed(seed);
+  }
+
 protected:
   LabeledSampleLocalizationGenerator();
   virtual ~LabeledSampleLocalizationGenerator() {}
@@ -99,10 +113,8 @@ protected:
 
   /** Triggers the Computation of the sample list */
   void GenerateData(void);
-  /** Create a dictionary containing all differente values of ClassKey
-    * field */
-  void ClassKeyValuesCollector();
-  PointVectorType RandomPointsGenerator(DataNodeType * node);
+
+  std::pair<PointVectorType,PointVectorType> RandomPointsGenerator(DataNodeType * node);
   
 private:
   LabeledSampleLocalizationGenerator(const Self &); //purposely not implemented
@@ -111,13 +123,10 @@ private:
   RandomGeneratorType::Pointer m_RandomGenerator;
 
   std::string               m_ClassKey;
-  std::vector<std::string>  m_ClassKeyDictionary;
-  std::string               m_NoClassIdentifier;
+  int                       m_NoClassIdentifier;
   double                    m_RandomLocalizationDensity;
   double                    m_InhibitionRadius;
-
-  bool                      m_PseudoRandom;
-
+  unsigned long int         m_NbMaxIteration;
 };
 
 } // end namespace otb

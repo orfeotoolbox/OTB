@@ -28,10 +28,10 @@ template<class TVectorData>
 LabeledSampleLocalizationGenerator<TVectorData>
 ::LabeledSampleLocalizationGenerator() :
   m_ClassKey("Class"),
-  m_NoClassIdentifier("NoClass"),
-  m_RandomLocalizationDensity(.05),
+  m_NoClassIdentifier(0),
+  m_RandomLocalizationDensity(.005),
   m_InhibitionRadius(5.0),
-  m_PseudoRandom(false)
+  m_NbMaxIteration(10000)
 {
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfRequiredOutputs(1);
@@ -74,58 +74,18 @@ LabeledSampleLocalizationGenerator<TVectorData>
 }
 
 template <class TVectorData>
-void
-LabeledSampleLocalizationGenerator<TVectorData>
-::ClassKeyValuesCollector()
-{
-  unsigned int nbInputs = this->GetNumberOfInputs();
-
-  for (unsigned int i=0; i<nbInputs; i++)
-    {
-    typename VectorDataType::ConstPointer vectorData = static_cast<const VectorDataType *>(this->GetInput(i));
-    
-    TreeIteratorType itVector(vectorData->GetDataTree());
-    itVector.GoToBegin();
-    while (!itVector.IsAtEnd())
-      {
-      std::string tmpString;
-      if (itVector.Get()->IsPolygonFeature() || itVector.Get()->IsPointFeature())
-        {
-        tmpString = itVector.Get()->GetFieldAsString(this->GetClassKey());
-        
-        bool duplication = true;
-        for (unsigned j=0; j<m_ClassKeyDictionary.size(); j++)
-          {
-          duplication = duplication * (m_ClassKeyDictionary.at(j) != tmpString);
-          }
-        
-        if (duplication == true)
-          {
-          m_ClassKeyDictionary.push_back(tmpString);
-          }
-        }
-      ++itVector;
-      }   
-    }
-}
-
-template <class TVectorData>
-typename LabeledSampleLocalizationGenerator<TVectorData>
-::PointVectorType
+std::pair<typename LabeledSampleLocalizationGenerator<TVectorData>
+::PointVectorType,
+ typename LabeledSampleLocalizationGenerator<TVectorData>
+ ::PointVectorType>
 LabeledSampleLocalizationGenerator<TVectorData>
 ::RandomPointsGenerator(DataNodeType * node)
 {
   // Output
-  PointVectorType vPoint;
+  PointVectorType vPoint,pPoint;
 
   // Euclidean distance
   typename EuclideanDistanceType::Pointer euclideanDistance = EuclideanDistanceType::New();
-
-  // Enable 'pseudo randomness'
-  if (this->GetPseudoRandom())
-    {
-    this->m_RandomGenerator->SetSeed((unsigned int)0);
-    }
 
   // Gathering Information
   RegionType generatorRegion = node->GetPolygonExteriorRing()->GetBoundingRegion();
@@ -140,7 +100,7 @@ LabeledSampleLocalizationGenerator<TVectorData>
   itVector.GoToBegin();
   while (!itVector.IsAtEnd())
     {
-    if (itVector.Get()->IsPointFeature())
+    if (itVector.Get()->IsPointFeature() && itVector.Get()->GetFieldAsInt(m_ClassKey)!=m_NoClassIdentifier)
       {
       VertexType vertex;
       vertex[0] = itVector.Get()->GetPoint()[0];
@@ -157,16 +117,17 @@ LabeledSampleLocalizationGenerator<TVectorData>
   //std::cout << "insiders: " << insiders.size() << std::endl;
 
   // Search parametrization 
-  unsigned int nbMaxIter = (unsigned int)((node->GetPolygonExteriorRing()->GetArea()
-                                           - insiders.size() * CONST_PI * vcl_pow(this->GetInhibitionRadius(), 2)) 
-                                           / (CONST_PI * vcl_pow(this->GetInhibitionRadius(), 2)));
-  //std::cout << "nbMaxIter: " << nbMaxIter << std::endl;
-
-  unsigned int nbMaxPosition = (unsigned int)(nbMaxIter * this->GetRandomLocalizationDensity());
+  //unsigned int nbMaxIter = (unsigned int)(node->GetPolygonExteriorRing()->GetArea());
+  //                                         - insiders.size() * CONST_PI * vcl_pow(this->GetInhibitionRadius(), 2))
+  //                                         / (CONST_PI * vcl_pow(this->GetInhibitionRadius(), 2)));
+  
+  unsigned int nbMaxPosition = (unsigned int)(node->GetPolygonExteriorRing()->GetArea() * this->GetRandomLocalizationDensity());
+  
+  //std::cout << "nbMaxIter: " << this->GetNbMaxIteration() << std::endl;
   //std::cout << "nbMaxPosition: " << nbMaxPosition << std::endl;
   
   // Generation
-  unsigned int nbIter =  nbMaxIter;
+  unsigned long int nbIter =  this->GetNbMaxIteration();
   unsigned int nbPosition = nbMaxPosition;
 
   PointType rangeMin,rangeMax;
@@ -194,24 +155,27 @@ LabeledSampleLocalizationGenerator<TVectorData>
         valid = (euclideanDistance->Evaluate(candidate,*pit) > this->GetInhibitionRadius());
         ++pit;
         }
-      
+      PointType point;
+      point[0] = candidate[0];
+      point[1] = candidate[1];
       if(valid)
         {
-        PointType point;
-        point[0] = candidate[0];
-        point[1] = candidate[1];
-        
         vPoint.push_back(point);
-        insiders.push_back(point);
-        
-        nbPosition --;
+//        insiders.push_back(point);
         }
+      else
+        {
+        pPoint.push_back(point);
+        }
+        nbPosition --;
       }
     nbIter --;
     }
   
-  
-  return vPoint;
+  std::pair<PointVectorType,PointVectorType> result;
+  result.first = (vPoint);
+  result.second = (pPoint);
+  return result;
 }
 
 template <class TVectorData>
@@ -229,8 +193,6 @@ LabeledSampleLocalizationGenerator<TVectorData>
 {
   unsigned int nbInputs = this->GetNumberOfInputs();
 
-  this->ClassKeyValuesCollector();
-
   this->GetOutput(0)->SetMetaDataDictionary(this->GetInput(0)->GetMetaDataDictionary());
   
   // Retrieving root node
@@ -241,6 +203,7 @@ LabeledSampleLocalizationGenerator<TVectorData>
   // Adding the layer to the data tree
   this->GetOutput(0)->GetDataTree()->Add(document, root);
 
+  // Copy all point feature in output VectorData
   for (unsigned int i=0; i<nbInputs; i++)
     {
     typename VectorDataType::ConstPointer vectorData = static_cast<const VectorDataType *>(this->GetInput(i));
@@ -257,6 +220,8 @@ LabeledSampleLocalizationGenerator<TVectorData>
       }   
     }
 
+  // Iterates through the polygon features and generates random point inside the polygon with
+  // the "NoClass" identifier
   for (unsigned int i=0; i<nbInputs; i++)
     {
     typename VectorDataType::ConstPointer vectorData = static_cast<const VectorDataType *>(this->GetInput(i));
@@ -267,7 +232,9 @@ LabeledSampleLocalizationGenerator<TVectorData>
       {
       if (itVector.Get()->IsPolygonFeature())
         {
-        PointVectorType vPoint = RandomPointsGenerator(itVector.Get());
+        std::pair<PointVectorType,PointVectorType> points = RandomPointsGenerator(itVector.Get());
+        PointVectorType vPoint = points.first;
+        PointVectorType pPoint = points.second;
         
         for (typename PointVectorType::const_iterator it = vPoint.begin(); it != vPoint.end(); ++it)
           {
@@ -275,7 +242,16 @@ LabeledSampleLocalizationGenerator<TVectorData>
           CurrentGeometry->SetNodeId("FEATURE_POINT");
           CurrentGeometry->SetNodeType(otb::FEATURE_POINT);
           CurrentGeometry->SetPoint(*it);
-          CurrentGeometry->SetFieldAsString(this->GetClassKey(), this->GetNoClassIdentifier());
+          CurrentGeometry->SetFieldAsInt(this->GetClassKey(), this->GetNoClassIdentifier());
+          this->GetOutput(0)->GetDataTree()->Add(CurrentGeometry, document);
+          }
+        for (typename PointVectorType::const_iterator it = pPoint.begin(); it != pPoint.end(); ++it)
+          {
+          typename DataNodeType::Pointer CurrentGeometry = DataNodeType::New();
+          CurrentGeometry->SetNodeId("FEATURE_POINT");
+          CurrentGeometry->SetNodeType(otb::FEATURE_POINT);
+          CurrentGeometry->SetPoint(*it);
+          CurrentGeometry->SetFieldAsInt(this->GetClassKey(), 1);
           this->GetOutput(0)->GetDataTree()->Add(CurrentGeometry, document);
           }
         }

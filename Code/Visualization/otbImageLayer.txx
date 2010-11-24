@@ -27,7 +27,7 @@
 #include "otbImageKeywordlist.h"
 #include "otbImageMetadataInterfaceBase.h"
 #include "itkMetaDataDictionary.h"
-#include "otbImageMetadataInterfaceFactory.h"
+#include "itkPixelBuilder.h"
 
 #include "vnl/vnl_random.h"
 namespace otb
@@ -377,7 +377,8 @@ ImageLayer<TImage, TOutputImage>
   //FIXME only if necessary
   this->UpdateListSample();
 
-  PixelType      pixel;
+  PixelType pixel;
+  itk::PixelBuilder<PixelType>::Zero(pixel,(m_Image->GetNumberOfComponentsPerPixel()));
 
   // Ensure rendering function initialization
   m_RenderingFunction->Initialize(m_Image->GetMetaDataDictionary()); //FIXME check, but the call must be done in the generator. To be moved to the layer?

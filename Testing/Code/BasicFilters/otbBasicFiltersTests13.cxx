@@ -33,4 +33,6 @@ void RegisterTests()
   REGISTER_TEST(otbRealAndImaginaryImageToComplexImageFilterTest);
   REGISTER_TEST(otbRealImageToComplexImageFilterTest);
   REGISTER_TEST(otbImaginaryImageToComplexImageFilterTest);
+  REGISTER_TEST(otbComplexToVectorImageCastFilterNew);
+  REGISTER_TEST(otbComplexToVectorImageCastFilterTest);
 }

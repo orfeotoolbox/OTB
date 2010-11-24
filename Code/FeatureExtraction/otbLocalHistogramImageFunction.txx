@@ -57,16 +57,16 @@ LocalHistogramImageFunction<TInputImage,TCoordRep>
 
   typename HistogramType::Pointer histogram = HistogramType::New();
 
-  typename HistogramType::SizeType size ;
-  size.Fill( this->GetNumberOfHistogramBins() ) ;
+  typename HistogramType::SizeType size;
+  size.Fill( this->GetNumberOfHistogramBins() );
 
   typename HistogramType::MeasurementVectorType lowerBound;
   typename HistogramType::MeasurementVectorType upperBound;
 
-  lowerBound.Fill( static_cast<typename HistogramType::MeasurementType>(this->GetHistogramMin()) ) ;
-  upperBound.Fill( static_cast<typename HistogramType::MeasurementType>(this->GetHistogramMax()) ) ;
+  lowerBound.Fill( static_cast<typename HistogramType::MeasurementType>(this->GetHistogramMin()) );
+  upperBound.Fill( static_cast<typename HistogramType::MeasurementType>(this->GetHistogramMax()) );
 
-  histogram->Initialize(size, lowerBound, upperBound ) ;
+  histogram->Initialize(size, lowerBound, upperBound );
   histogram->SetToZero();
 
   // Check for input image
@@ -90,7 +90,7 @@ LocalHistogramImageFunction<TInputImage,TCoordRep>
   typename InputImageType::IndexType currentIndex;
   typename InputImageType::SizeType currentSize;
 
-  for(unsigned int i = 0 ; i < ImageDimension; ++i )
+  for(unsigned int i = 0; i < ImageDimension; ++i )
     {
     currentIndex[i] = index[i] - this->GetNeighborhoodRadius();
     currentSize[i] = 2 * this->GetNeighborhoodRadius() + 1;

@@ -9,7 +9,7 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 #Tolerance sur diff pixel image
 SET(TOL 0.0)
-SET(EPSILON 0.0000000001)
+SET(EPSILON_10 0.0000000001)
 
 SET(CHANGEDETECTION_TESTS1 ${CXX_TEST_PATH}/otbChangeDetectionTests1)
 SET(CHANGEDETECTION_TESTS2 ${CXX_TEST_PATH}/otbChangeDetectionTests2)
@@ -41,7 +41,7 @@ ADD_TEST(cdTvCorrel ${CHANGEDETECTION_TESTS1}
 	 )
 
 ADD_TEST(cdTvMeanDiff ${CHANGEDETECTION_TESTS1}
-  --compare-image ${EPSILON}
+  --compare-image ${EPSILON_10}
 		  ${BASELINE}/cdMeanDiffImage.hdr
 		  ${TEMP}/cdMeanDiffImage.hdr
 	otbMeanDiffChangeDetectionTest
@@ -90,7 +90,7 @@ ADD_TEST(cdTuKullbackLeiblerDistanceImageFilterNew ${CHANGEDETECTION_TESTS2}
          otbKullbackLeiblerDistanceImageFilterNew)
 
 ADD_TEST(cdTvKullbackLeiblerDistanceImageFilter ${CHANGEDETECTION_TESTS2}
-         --compare-image ${EPSILON}
+         --compare-image ${EPSILON_10}
 			 ${BASELINE}/cdTVKullbackLeiblerDistanceImageFilterOutput.hdr
 			 ${TEMP}/cdTVKullbackLeiblerDistanceImageFilterOutput.hdr
 	 otbKullbackLeiblerDistanceImageFilter
@@ -103,7 +103,7 @@ ADD_TEST(cdTuKullbackLeiblerProfileImageFilterNew ${CHANGEDETECTION_TESTS2}
          otbKullbackLeiblerProfileImageFilterNew)
 
 ADD_TEST(cdTlKullbackLeiblerProfileImageFilter ${CHANGEDETECTION_TESTS2}
-         --compare-image ${EPSILON}
+         --compare-image ${EPSILON_10}
 			 ${BASELINE}/cdTVKullbackLeiblerProfileImageFilterOutput.hdr
 			 ${TEMP}/cdTVKullbackLeiblerProfileImageFilterOutput.hdr
 	 otbKullbackLeiblerProfileImageFilter
