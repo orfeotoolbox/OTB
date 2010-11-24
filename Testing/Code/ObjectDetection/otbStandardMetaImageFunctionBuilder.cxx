@@ -65,19 +65,19 @@ int otbStandardMetaImageFunctionBuilder(int argc, char* argv[])
   typedef BuilderType::DataObjectContainerType                  DataObjectContainerType;
 
   typedef otb::FlusserMomentsImageFunction<ImageType, CoordRepType>  FlusserMomentsIF;
-  typedef otb::ImageFunctionAdaptor<FlusserMomentsIF>                AdaptedFlusserMomentsIF;
+  typedef otb::ImageFunctionAdaptor<FlusserMomentsIF, PrecisionType> AdaptedFlusserMomentsIF;
 
   typedef otb::RadiometricMomentsImageFunction<ImageType, CoordRepType>  RadiometricMomentsIF;
-  typedef otb::ImageFunctionAdaptor<RadiometricMomentsIF>                AdaptedRadiometricMomentsIF;
+  typedef otb::ImageFunctionAdaptor<RadiometricMomentsIF, PrecisionType>                AdaptedRadiometricMomentsIF;
 
   typedef otb::FourierMellinDescriptorsImageFunction<ImageType, CoordRepType>  FourierMellinDescriptorsIF;
-  typedef otb::ImageFunctionAdaptor<FourierMellinDescriptorsIF>                AdaptedFourierMellinDescriptorsIF;
+  typedef otb::ImageFunctionAdaptor<FourierMellinDescriptorsIF, PrecisionType> AdaptedFourierMellinDescriptorsIF;
 
   typedef otb::FlusserMomentsImageFunction<ImageType, CoordRepType>  LocalHistogramIF;
-  typedef otb::ImageFunctionAdaptor<LocalHistogramIF>                AdaptedLocalHistogramIF;
+  typedef otb::ImageFunctionAdaptor<LocalHistogramIF, PrecisionType>   AdaptedLocalHistogramIF;
 
   typedef otb::HaralickTexturesImageFunction<ImageType, CoordRepType>  HaralickTexturesIF;
-  typedef otb::ImageFunctionAdaptor<HaralickTexturesIF>                AdaptedHaralickTexturesIF;
+  typedef otb::ImageFunctionAdaptor<HaralickTexturesIF, PrecisionType> AdaptedHaralickTexturesIF;
 
   p1.push_back(7);
   p1.push_back(128);

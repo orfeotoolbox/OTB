@@ -49,8 +49,8 @@ typedef otb::ObjectDetectionClassifier
              FunctionPrecisionType,
              CoordRepType > ObjectDetectionClassifierType;
 
-typedef otb::RadiometricMomentsImageFunction<ImageType, CoordRepType> FunctionType;
-typedef otb::ImageFunctionAdaptor<FunctionType>                       AdapatedFunctionType;
+typedef otb::RadiometricMomentsImageFunction<ImageType, CoordRepType>   FunctionType;
+typedef otb::ImageFunctionAdaptor<FunctionType, FunctionPrecisionType>  AdapatedFunctionType;
 
 typedef otb::ImageFileReader<ImageType>           ImageReaderType;
 typedef otb::VectorDataFileWriter<VectorDataType> VectorDataWriterType;

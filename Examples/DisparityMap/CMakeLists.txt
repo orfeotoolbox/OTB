@@ -27,7 +27,6 @@ SET(TOL 0.0)
 
 # ------- SimpleDisparityMapEstimationExampleTest ----------
 
-
 ADD_TEST(dmTeSimpleDisparityMapEstimationExampleTest ${EXE_TESTS}
  --compare-n-images ${TOL} 2
  ${BASELINE}/deformationFieldOutput.png
@@ -35,8 +34,8 @@ ADD_TEST(dmTeSimpleDisparityMapEstimationExampleTest ${EXE_TESTS}
  ${BASELINE}/resampledMovingOutput.png
  ${TEMP}/resampledMovingOutput.png
  SimpleDisparityMapEstimationExampleTest
- ${INPUTDATA}/ROI_IKO_PAN_LesHalles_pos_spacing.tif
- ${INPUTDATA}/ROI_IKO_PAN_LesHalles_warped_pos_spacing.tif
+ ${INPUTDATA}/StereoFixed.png
+ ${INPUTDATA}/StereoMoving.png
  ${TEMP}/deformationFieldOutput.png
  ${TEMP}/resampledMovingOutput.png
  100 10 15 10 10 250 0.9

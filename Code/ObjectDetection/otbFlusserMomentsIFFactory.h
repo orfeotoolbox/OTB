@@ -68,7 +68,8 @@ public:
   typedef typename std::vector<PrecisionType>         ParamContainerType;
   typedef FlusserMomentsImageFunction<InputImageType, CoordRepType>
                                                       FlusserMomentsIF;
-  typedef ImageFunctionAdaptor<FlusserMomentsIF>      AdaptedFlusserMomentsIF;
+  typedef ImageFunctionAdaptor<FlusserMomentsIF, TPrecision>      
+                                                      AdaptedFlusserMomentsIF;
 
   void Create(InputImageType * image, 
               ParamContainerType param, 

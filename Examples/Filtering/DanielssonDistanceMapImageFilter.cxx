@@ -23,7 +23,6 @@
 //    INPUTS:  {FivePoints.png}
 //    OUTPUTS: {DanielssonDistanceMapImageFilterOutput1.png}
 //    OUTPUTS: {DanielssonDistanceMapImageFilterOutput2.png}
-//    OUTPUTS: {DanielssonDistanceMapImageFilterOutput3.mhd}
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
@@ -196,68 +195,12 @@ int main(int argc, char * argv[])
 
   //  Software Guide : BeginLatex
   //
-  //  The distance filter also produces an image of \doxygen{itk}{Offset} pixels
-  //  representing the vectorial distance to the closest object in the scene.
-  //  The type of this output image is defined by the VectorImageType
-  //  trait of the filter type.
-  //
-  //  Software Guide : EndLatex
-
-  // Software Guide : BeginCodeSnippet
-  typedef FilterType::VectorImageType OffsetImageType;
-  // Software Guide : EndCodeSnippet
-
-  //  Software Guide : BeginLatex
-  //
-  //  We can use this type for instantiating an \doxygen{otb}{ImageFileWriter} type
-  //  and creating an object of this class in the following lines.
-  //
-  //  Software Guide : EndLatex
-
-  // Software Guide : BeginCodeSnippet
-  typedef otb::ImageFileWriter<OffsetImageType> WriterOffsetType;
-  WriterOffsetType::Pointer offsetWriter = WriterOffsetType::New();
-  // Software Guide : EndCodeSnippet
-
-  //  Software Guide : BeginLatex
-  //
-  //  The output of the distance filter can be connected as input to the
-  //  writer.
-  //
-  //  Software Guide : EndLatex
-
-  // Software Guide : BeginCodeSnippet
-  offsetWriter->SetInput(filter->GetVectorDistanceMap());
-  // Software Guide : EndCodeSnippet
-
-  offsetWriter->SetFileName(argv[4]);
-
-  //  Software Guide : BeginLatex
-  //
   //  Execution of the writer is triggered by the invocation of the
   //  \code{Update()} method. Since this method can potentially throw
   //  exceptions it must be placed in a \code{try/catch} block.
   //
   //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
-  try
-    {
-    offsetWriter->Update();
-    }
-  catch (itk::ExceptionObject exp)
-    {
-    std::cerr << "Exception caught !" << std::endl;
-    std::cerr <<     exp    << std::endl;
-    }
-  // Software Guide : EndCodeSnippet
-
-  //  Software Guide : BeginLatex
-  //
-  //  Note that only the \doxygen{itk}{MetaImageIO} class supports reading and
-  //  writing images of pixel type \doxygen{itk}{Offset}.
-  //
-  //  Software Guide : EndLatex
 
   return EXIT_SUCCESS;
 }

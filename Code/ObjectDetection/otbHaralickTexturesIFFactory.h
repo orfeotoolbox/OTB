@@ -69,7 +69,8 @@ public:
   typedef HaralickTexturesImageFunction<InputImageType, CoordRepType>
                                                            HaralickTexturesIF;
   typedef typename HaralickTexturesIF::OffsetType          OffsetType;
-  typedef ImageFunctionAdaptor<HaralickTexturesIF>         AdaptedHaralickTexturesIF;
+  typedef ImageFunctionAdaptor<HaralickTexturesIF, TPrecision>
+                                                           AdaptedHaralickTexturesIF;
 
   void Create(InputImageType * image, 
               ParamContainerType param, 
