@@ -42,10 +42,10 @@ typedef double     PixelType;
 typedef double     FunctionPrecisionType;
 typedef double     CoordRepType;
 
-typedef otb::Image<PixelType, Dimension>                              ImageType;
-typedef otb::VectorData<>                                             VectorDataType;
-typedef otb::RadiometricMomentsImageFunction<ImageType, CoordRepType> FunctionType;
-typedef otb::ImageFunctionAdaptor<FunctionType>                       AdapatedFunctionType;
+typedef otb::Image<PixelType, Dimension>                               ImageType;
+typedef otb::VectorData<>                                              VectorDataType;
+typedef otb::RadiometricMomentsImageFunction<ImageType, CoordRepType>  FunctionType;
+typedef otb::ImageFunctionAdaptor<FunctionType, FunctionPrecisionType> AdapatedFunctionType;
 
 //typedef FunctionType::OutputType                      SampleType;
 typedef itk::VariableLengthVector<FunctionPrecisionType> SampleType;

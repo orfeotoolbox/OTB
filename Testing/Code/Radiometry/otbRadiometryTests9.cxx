@@ -45,4 +45,5 @@ void RegisterTests()
   REGISTER_TEST(otbSarBrightnessToImageFilterTest);
   REGISTER_TEST(otbTestVNLMinimize);
   REGISTER_TEST(otbSarRadiometricCalibrationToImageFilterCompareTest);
+  REGISTER_TEST(otbSarRadiometricCalibrationToImageFilterWithExtractROIBeforeTest);
 }

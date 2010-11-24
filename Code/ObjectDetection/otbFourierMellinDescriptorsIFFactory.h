@@ -68,7 +68,8 @@ public:
   typedef typename std::vector<PrecisionType>         ParamContainerType;
   typedef FourierMellinDescriptorsImageFunction<InputImageType, CoordRepType>
                                                       FourierMellinDescriptorsIF;
-  typedef ImageFunctionAdaptor<FourierMellinDescriptorsIF>      AdaptedFourierMellinDescriptorsIF;
+  typedef ImageFunctionAdaptor<FourierMellinDescriptorsIF, TPrecision>     
+                                                      AdaptedFourierMellinDescriptorsIF;
 
   void Create(InputImageType * image, 
               ParamContainerType param, 

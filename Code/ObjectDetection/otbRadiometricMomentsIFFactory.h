@@ -68,7 +68,8 @@ public:
   typedef typename std::vector<PrecisionType>              ParamContainerType;
   typedef RadiometricMomentsImageFunction<InputImageType, CoordRepType>
                                                            RadiometricMomentsIF;
-  typedef ImageFunctionAdaptor<RadiometricMomentsIF>       AdaptedRadiometricMomentsIF;
+  typedef ImageFunctionAdaptor<RadiometricMomentsIF, TPrecision>       
+                                                           AdaptedRadiometricMomentsIF;
 
   void Create(InputImageType * image, 
               ParamContainerType param, 

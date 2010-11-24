@@ -81,22 +81,23 @@ public:
   typedef typename ParametricFunctionType::Pointer                    ParametricFunctionPointer;
   typedef typename ParametricFunctionType::ConstPointer               ParametricFunctionConstPointer;
 
-  /** Evalulate the function at specified index */
-  virtual OutputType EvaluateAtIndex(const IndexType& index) const;
-
   /** Evaluate the function at non-integer positions */
-  virtual OutputType Evaluate(const PointType& point) const
+  virtual OutputType Evaluate(const PointType& point) const;
+
+  /** Evalulate the function at specified index */
+  virtual OutputType EvaluateAtIndex(const IndexType& index) const
   {
-    IndexType index;
-    this->ConvertPointToNearestIndex(point, index);
-    return this->EvaluateAtIndex(index);
+    PointType point;
+    this->GetInputImage()->TransformIndexToPhysicalPoint( index, point);
+    return this->Evaluate(point);
   }
+
   virtual OutputType EvaluateAtContinuousIndex(
     const ContinuousIndexType& cindex) const
   {
-    IndexType index;
-    this->ConvertContinuousIndexToNearestIndex(cindex, index);
-    return this->EvaluateAtIndex(index);
+    PointType point;
+    this->GetInputImage()->TransformContinuousIndexToPhysicalPoint( cindex, point);
+    return this->Evaluate(point);
   }
 
   /** Set the input image.

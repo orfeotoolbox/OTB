@@ -25,7 +25,7 @@
 #include "otbMultiChannelExtractROI.h"
 #include "otbComplexToVectorImageCastFilter.h"
 
-int otbSarRadiometricCalibrationToImageFilterWithComplexPixelTest(int argc, char * argv[])
+int otbSarRadiometricCalibrationToImageFilterWithExtractROIBeforeTest(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
   typedef float                                                                        RealType;
@@ -37,7 +37,7 @@ int otbSarRadiometricCalibrationToImageFilterWithComplexPixelTest(int argc, char
   typedef otb::ImageFileWriter<OutputImageType>                                        WriterType;
 
   typedef otb::SarRadiometricCalibrationToImageFilter<InputImageType, OutputImageType> CalibFilterType;
-  typedef otb::ExtractROI<RealType, RealType>                                          ExtractorType;
+  typedef otb::ExtractROI<PixelType, PixelType>                                        ExtractorType;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -47,7 +47,6 @@ int otbSarRadiometricCalibrationToImageFilterWithComplexPixelTest(int argc, char
   reader->SetFileName(argv[1]);
   writer->SetFileName(argv[2]);
 
-  calibFilter->SetInput(reader->GetOutput());
 
   if (argc > 3)
     {
@@ -61,14 +60,17 @@ int otbSarRadiometricCalibrationToImageFilterWithComplexPixelTest(int argc, char
     region.SetSize(size);
 
     extractor->SetExtractionRegion(region);
-    extractor->SetInput(calibFilter->GetOutput());
-    writer->SetInput(extractor->GetOutput());
+    extractor->SetInput(reader->GetOutput());
+    extractor->Update();
+    calibFilter->SetInput(extractor->GetOutput());
     }
   else
     {
     // Calibrate the whole image
-    writer->SetInput(calibFilter->GetOutput());
+    calibFilter->SetInput(reader->GetOutput());
     }
+
+  writer->SetInput(calibFilter->GetOutput());
   writer->Update();
 
   return EXIT_SUCCESS;

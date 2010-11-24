@@ -30,21 +30,17 @@ namespace otb
 {
 
 
-template< class TInternalImageFunctionType >
+template< class TInternalImageFunctionType, class TOutputPrecision = double >
 class ITK_EXPORT ImageFunctionAdaptor :
     public itk::ImageFunction< typename TInternalImageFunctionType::InputImageType,
-                               itk::VariableLengthVector<
-                               ITK_TYPENAME itk::NumericTraits<typename TInternalImageFunctionType::InputImageType::PixelType>
-                               ::RealType >,
+                               itk::VariableLengthVector<TOutputPrecision>,
                                typename TInternalImageFunctionType::CoordRepType >
 {
   public:
   // Standard class typedefs. //
   typedef ImageFunctionAdaptor                                          Self;
   typedef itk::ImageFunction< typename TInternalImageFunctionType::InputImageType,
-                              itk::VariableLengthVector<
-                              ITK_TYPENAME itk::NumericTraits<typename TInternalImageFunctionType::InputImageType::PixelType>
-                              ::RealType >,
+                              itk::VariableLengthVector<TOutputPrecision>,
                               typename TInternalImageFunctionType::CoordRepType >
                                                                         Superclass;
   typedef itk::SmartPointer<Self>                                       Pointer;
@@ -70,7 +66,7 @@ class ITK_EXPORT ImageFunctionAdaptor :
   typedef typename InternalImageFunctionType::OutputType    InternalImageFunctionOutputType;
 
   // Converter related typedefs //
-  typedef VariableLengthVectorConverter<InternalImageFunctionOutputType, double> ConverterType;
+  typedef VariableLengthVectorConverter<InternalImageFunctionOutputType, TOutputPrecision> ConverterType;
 
 
   // Dimension of the underlying image. //
