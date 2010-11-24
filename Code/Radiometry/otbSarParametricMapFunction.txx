@@ -199,7 +199,7 @@ template <class TInputImage, class TCoordRep>
 typename SarParametricMapFunction<TInputImage, TCoordRep>
 ::RealType
 SarParametricMapFunction<TInputImage, TCoordRep>
-::EvaluateAtIndex(const IndexType& index) const
+::Evaluate(const PointType& point) const
 {
   RealType result = itk::NumericTraits<RealType>::Zero;
 
@@ -213,13 +213,11 @@ SarParametricMapFunction<TInputImage, TCoordRep>
     }
   else
     {
-    PointType point;
-    point[0] = static_cast<typename PointType::ValueType>(index[0]);
-    point[1] = static_cast<typename PointType::ValueType>(index[1]);
     result = this->Horner(point);
     }
   return result;
 }
+
 
 
 /**

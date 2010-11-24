@@ -75,16 +75,18 @@ public:
   /** Datatype used for the evaluation */
   typedef typename itk::NumericTraits<InputPixelType>::ScalarRealType                       RealType;
 
-  /** Evalulate the function at specified index */
-  virtual RealType EvaluateAtIndex(const IndexType& index) const;
+  /** Evaluate the function at specific positions */
+  virtual RealType Evaluate(const PointType& point) const;
 
-  /** Evaluate the function at non-integer positions */
-  virtual RealType Evaluate(const PointType& point) const
+  /** Evalulate the function at specified index */
+  virtual RealType EvaluateAtIndex(const IndexType& index) const
   {
-    IndexType index;
-    this->ConvertPointToNearestIndex(point, index);
-    return this->EvaluateAtIndex(index);
+    PointType point;
+    point[0] = static_cast<typename PointType::ValueType>(index[0]);
+    point[1] = static_cast<typename PointType::ValueType>(index[1]);
+    return this->Evaluate(point);
   }
+
   virtual RealType EvaluateAtContinuousIndex(
     const ContinuousIndexType& cindex) const
   {
