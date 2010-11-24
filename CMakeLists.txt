@@ -114,11 +114,13 @@ SET(CXX_TEST_PATH ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 
 #-----------------------------------------------------------------------------
 # External libraries
-INCLUDE(ImportLibLAS)
+
+# Put GDAL first, since on Windows, include dirs for other libs (curl, expat, mapnik)  contain gdal 1.5 includes
+INCLUDE(ImportGdal) 
+INCLUDE(ImportLibLAS) # depends on ImportGdal
 INCLUDE(ImportExpat)
 INCLUDE(ImportITK)
 INCLUDE(ImportJPEG2000)
-INCLUDE(ImportGdal)
 INCLUDE(ImportFLTK) # depends on ImportGdal
 INCLUDE(ImportCurl)
 INCLUDE(ImportPqxx)
@@ -198,9 +200,7 @@ INCLUDE(PreventInstallOnBuildTree)
 
 INCLUDE_DIRECTORIES (
   ${OTB_BINARY_DIR}
-  ${OTB_SOURCE_DIR}
-  ${OTB_INCLUDE_DIRS}
-  ${OTB_LIBRARY_PATH} )
+  ${OTB_INCLUDE_DIRS} )
 
 #-----------------------------------------------------------------------------
 # Option for display all developpment message
