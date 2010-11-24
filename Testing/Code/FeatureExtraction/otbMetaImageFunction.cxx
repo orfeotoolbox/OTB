@@ -26,15 +26,15 @@
 #include "otbImageFunctionAdaptor.h"
 
 typedef unsigned short                                                InputPixelType;
+typedef double                                                        PrecisionType;
 const unsigned int Dimension =                                        2;
 
 typedef otb::Image<InputPixelType,  Dimension>                        InputImageType;
 typedef otb::ImageFileReader<InputImageType>                          ReaderType;
 typedef otb::FlusserMomentsImageFunction<InputImageType>              FlusserFunctionType;
-typedef otb::ImageFunctionAdaptor<FlusserFunctionType> FunctionType;
+typedef otb::ImageFunctionAdaptor<FlusserFunctionType, PrecisionType> FunctionType;
 
-typedef otb::MetaImageFunction<
-        itk::NumericTraits<InputPixelType>::RealType,double>          MetaImageFunctionType;
+typedef otb::MetaImageFunction<PrecisionType, double>                 MetaImageFunctionType;
 typedef MetaImageFunctionType::PointType                              PointType;
 typedef MetaImageFunctionType::OutputType                             OutputType;
 
