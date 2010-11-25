@@ -939,6 +939,20 @@ ADD_TEST(raTvLAIFromReflectancesLinearFunctorTest ${RADIOMETRY_TESTS6}
         13   # nir coef
 )
 
+# -------            Landsat TM Bright   ------------------------------
+ADD_TEST(raTvLandsatTMIndexBrightTest ${RADIOMETRY_TESTS6}
+        otbLandsatTMIndexBright
+        3   #TM1
+        4   #TM2
+        8   #TM3
+        21  #TM4
+        33  #TM5
+        41  #TM61
+        8   #TM62
+        21  #TM7
+  
+)
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbRADIOMETRY_TESTS7 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1641,6 +1655,7 @@ otbWDVIRAndNIRVegetationIndexImageFilter.cxx
 otbWDVIMultiChannelRAndNIRVegetationIndexImageFilter.cxx
 otbLAIFromNDVILogarithmicFunctorTest.cxx
 otbLAIFromReflectancesLinearFunctorTest.cxx
+otbLandsatTMIndexBrightTest.cxx
 )
 
 SET(Radiometry_SRCS7
