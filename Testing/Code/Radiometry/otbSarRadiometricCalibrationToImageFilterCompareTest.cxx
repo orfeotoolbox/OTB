@@ -33,7 +33,7 @@ int otbSarRadiometricCalibrationToImageFilterCompareTest(int argc, char * argv[]
   typedef otb::ImageFileReader<InputImageType>                                          ReaderType;
   typedef otb::SarRadiometricCalibrationToImageFilter<InputImageType, OutputImageType>  FilterComplexType;
   typedef otb::SarRadiometricCalibrationToImageFilter<OutputImageType, OutputImageType> FilterRealType;
-  typedef otb::ExtractROI<RealType, RealType>                                   ExtractorType;
+  typedef otb::ExtractROI<RealType, RealType>                                           ExtractorType;
   typedef itk::ComplexToModulusImageFilter<InputImageType, OutputImageType>             ModulusType;
   typedef otb::StreamingCompareImageFilter<OutputImageType>                             CompareFilterType;
 

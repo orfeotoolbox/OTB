@@ -76,7 +76,7 @@ public:
   typedef TCoordRep                                                 CoordRepType;
   
   // Other typedef
-  typedef MetaImageFunction<TPrecision>                             MetaImageFunctionType;
+  typedef MetaImageFunction<TPrecision, CoordRepType>               MetaImageFunctionType;
   typedef typename MetaImageFunctionType::Pointer                   MetaImageFunctionPointerType;
   typedef typename std::vector<itk::DataObject::Pointer>            DataObjectContainerType;
   typedef typename std::vector<ValueType>                           ParamContainerType;
@@ -140,10 +140,10 @@ public:
     MCFourierMellinDescriptorsIFFactoryType MCFourierMellinDescriptorsIFFactory;
     MCHaralickTexturesIFFactoryType MCHaralickTexturesIFFactory;
 
-    MCLocalHistogramIFFactory.Create(image, 
-                                     m_LocalHistogramParam, 
-                                     m_MetaImageFunction,
-                                     &m_DataObjectContainer);
+    //MCLocalHistogramIFFactory.Create(image, 
+    //                                 m_LocalHistogramParam, 
+    //                                 m_MetaImageFunction,
+    //                                 &m_DataObjectContainer);
     MCFlusserMomentsIFFactory.Create(image, 
                                      this->GetFlusserMomentsIFParameters(), 
                                      m_MetaImageFunction,

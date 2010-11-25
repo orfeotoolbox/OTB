@@ -82,10 +82,14 @@ template <class TInputImage, class TCoordRep>
 typename SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
 ::OutputType
 SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
-::EvaluateAtIndex(const IndexType& index) const
+::Evaluate(const PointType& point) const
 {
   RealType result;
   result = itk::NumericTraits<RealType>::Zero;
+
+  IndexType index;
+  this->GetInputImage()->TransformPhysicalPointToIndex(point,index);
+
 
   if (!this->GetInputImage())
     {
@@ -104,11 +108,12 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
   FunctorRealType incidenceAngle;
   FunctorRealType rangeSpreadLoss;
 
-  noise = static_cast<FunctorRealType>(m_Noise->EvaluateAtIndex(index));
-  antennaPatternNewGain = static_cast<FunctorRealType>(m_AntennaPatternNewGain->EvaluateAtIndex(index));
-  antennaPatternOldGain = static_cast<FunctorRealType>(m_AntennaPatternOldGain->EvaluateAtIndex(index));
-  incidenceAngle = static_cast<FunctorRealType>(m_IncidenceAngle->EvaluateAtIndex(index));
-  rangeSpreadLoss = static_cast<FunctorRealType>(m_RangeSpreadLoss->EvaluateAtIndex(index));
+
+  noise = static_cast<FunctorRealType>(m_Noise->Evaluate(point));
+  antennaPatternNewGain = static_cast<FunctorRealType>(m_AntennaPatternNewGain->Evaluate(point));
+  antennaPatternOldGain = static_cast<FunctorRealType>(m_AntennaPatternOldGain->Evaluate(point));
+  incidenceAngle = static_cast<FunctorRealType>(m_IncidenceAngle->Evaluate(point));
+  rangeSpreadLoss = static_cast<FunctorRealType>(m_RangeSpreadLoss->Evaluate(point));
 
   FunctorType functor;
   functor.SetNoise(noise);
@@ -117,6 +122,7 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
   functor.SetAntennaPatternOldGain(antennaPatternOldGain);
   functor.SetIncidenceAngle(incidenceAngle);
   functor.SetRangeSpreadLoss(rangeSpreadLoss);
+
 
   const RealType value = static_cast<RealType>(vcl_abs(this->GetInputImage()->GetPixel(index)));
   result = functor(value);

@@ -65,10 +65,11 @@ public:
   // Other typedef
   typedef typename MetaImageFunction<TPrecision>::Pointer  MetaImageFunctionPointerType;
   typedef typename std::vector<itk::DataObject::Pointer>   DataObjectContainerType;
-  typedef typename std::vector<PrecisionType>         ParamContainerType;
+  typedef typename std::vector<PrecisionType>              ParamContainerType;
   typedef LocalHistogramImageFunction<InputImageType, CoordRepType>
                                                       LocalHistogramIF;
-  typedef ImageFunctionAdaptor<LocalHistogramIF>      AdaptedLocalHistogramIF;
+  typedef ImageFunctionAdaptor<LocalHistogramIF, TPrecision> 
+                                                      AdaptedLocalHistogramIF;
 
   void Create(InputImageType * image, 
               ParamContainerType param, 

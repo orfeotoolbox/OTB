@@ -76,7 +76,7 @@ SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>
 
   incidenceAngle = function->GetIncidenceAngle();
   incidenceAngle->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationIncidenceAngle());
-  
+
   typename ParametricFunctionType::PointType point;
   point.Fill(0);
   typename ParametricFunctionType::PointSetType::PixelType pointValue;
@@ -88,6 +88,7 @@ SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>
   {
       imageMetadataInterface->GetRadiometricCalibrationIncidenceAngle()->GetPoint(i, &point);
       imageMetadataInterface->GetRadiometricCalibrationIncidenceAngle()->GetPointData(i, &pointValue);
+      std::cout << pointValue << " / "<<point<<std::endl;
   }
   incidenceAngle->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationIncidenceAnglePolynomialDegree());
 

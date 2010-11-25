@@ -74,13 +74,15 @@ LabeledSampleLocalizationGenerator<TVectorData>
 }
 
 template <class TVectorData>
-typename LabeledSampleLocalizationGenerator<TVectorData>
-::PointVectorType
+std::pair<typename LabeledSampleLocalizationGenerator<TVectorData>
+::PointVectorType,
+ typename LabeledSampleLocalizationGenerator<TVectorData>
+ ::PointVectorType>
 LabeledSampleLocalizationGenerator<TVectorData>
 ::RandomPointsGenerator(DataNodeType * node)
 {
   // Output
-  PointVectorType vPoint;
+  PointVectorType vPoint,pPoint;
 
   // Euclidean distance
   typename EuclideanDistanceType::Pointer euclideanDistance = EuclideanDistanceType::New();
@@ -153,24 +155,27 @@ LabeledSampleLocalizationGenerator<TVectorData>
         valid = (euclideanDistance->Evaluate(candidate,*pit) > this->GetInhibitionRadius());
         ++pit;
         }
-      
+      PointType point;
+      point[0] = candidate[0];
+      point[1] = candidate[1];
       if(valid)
         {
-        PointType point;
-        point[0] = candidate[0];
-        point[1] = candidate[1];
-        
         vPoint.push_back(point);
 //        insiders.push_back(point);
-        
-        nbPosition --;
         }
+      else
+        {
+        pPoint.push_back(point);
+        }
+        nbPosition --;
       }
     nbIter --;
     }
   
-  
-  return vPoint;
+  std::pair<PointVectorType,PointVectorType> result;
+  result.first = (vPoint);
+  result.second = (pPoint);
+  return result;
 }
 
 template <class TVectorData>
@@ -227,7 +232,9 @@ LabeledSampleLocalizationGenerator<TVectorData>
       {
       if (itVector.Get()->IsPolygonFeature())
         {
-        PointVectorType vPoint = RandomPointsGenerator(itVector.Get());
+        std::pair<PointVectorType,PointVectorType> points = RandomPointsGenerator(itVector.Get());
+        PointVectorType vPoint = points.first;
+        PointVectorType pPoint = points.second;
         
         for (typename PointVectorType::const_iterator it = vPoint.begin(); it != vPoint.end(); ++it)
           {
@@ -236,6 +243,15 @@ LabeledSampleLocalizationGenerator<TVectorData>
           CurrentGeometry->SetNodeType(otb::FEATURE_POINT);
           CurrentGeometry->SetPoint(*it);
           CurrentGeometry->SetFieldAsInt(this->GetClassKey(), this->GetNoClassIdentifier());
+          this->GetOutput(0)->GetDataTree()->Add(CurrentGeometry, document);
+          }
+        for (typename PointVectorType::const_iterator it = pPoint.begin(); it != pPoint.end(); ++it)
+          {
+          typename DataNodeType::Pointer CurrentGeometry = DataNodeType::New();
+          CurrentGeometry->SetNodeId("FEATURE_POINT");
+          CurrentGeometry->SetNodeType(otb::FEATURE_POINT);
+          CurrentGeometry->SetPoint(*it);
+          CurrentGeometry->SetFieldAsInt(this->GetClassKey(), 1);
           this->GetOutput(0)->GetDataTree()->Add(CurrentGeometry, document);
           }
         }
