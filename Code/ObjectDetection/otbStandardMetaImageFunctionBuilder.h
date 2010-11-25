@@ -107,9 +107,9 @@ public:
   template <class TInputImage>
   void AddImage(TInputImage * image)
   {
-    typedef Image<ValueType, 2>              ImageType;
     typedef TInputImage                      InputImageType;
- 
+    typedef Image<ValueType, 2>              ImageType;
+
     //Mono-Channel Factories
     typedef LocalHistogramIFFactory<ImageType,
       CoordRepType, TPrecision>               LocalHistogramIFFactoryType;
@@ -140,26 +140,30 @@ public:
     MCFourierMellinDescriptorsIFFactoryType MCFourierMellinDescriptorsIFFactory;
     MCHaralickTexturesIFFactoryType MCHaralickTexturesIFFactory;
 
-    //MCLocalHistogramIFFactory.Create(image, 
-    //                                 m_LocalHistogramParam, 
-    //                                 m_MetaImageFunction,
-    //                                 &m_DataObjectContainer);
+    
+    MCRadiometricMomentsIFFactory.Create(image, 
+                                         this->GetRadiometricMomentsIFParameters(), 
+                                         m_MetaImageFunction,
+                                         &m_DataObjectContainer);
     MCFlusserMomentsIFFactory.Create(image, 
                                      this->GetFlusserMomentsIFParameters(), 
                                      m_MetaImageFunction,
                                      &m_DataObjectContainer);
-    MCRadiometricMomentsIFFactory.Create(image, 
-                                         m_RadiometricMomentsParam, 
-                                         m_MetaImageFunction,
-                                         &m_DataObjectContainer);
+    
     MCFourierMellinDescriptorsIFFactory.Create(image, 
-                                               m_FourierMellinDescriptorsParam, 
+                                               this->GetFourierMellinDescriptorsIFParameters(), 
                                                m_MetaImageFunction, 
                                                &m_DataObjectContainer);
-    MCHaralickTexturesIFFactory.Create(image, 
-                                       m_HaralickTexturesParam, 
-                                       m_MetaImageFunction, 
-                                       &m_DataObjectContainer);
+
+    //MCLocalHistogramIFFactory.Create(image, 
+    //                                 m_LocalHistogramParam, 
+    //                                 m_MetaImageFunction,
+    //                                 &m_DataObjectContainer);
+
+    //MCHaralickTexturesIFFactory.Create(image, 
+    //                                   m_HaralickTexturesParam, 
+    //                                   m_MetaImageFunction, 
+    //                                   &m_DataObjectContainer);
   }
 
 protected:
