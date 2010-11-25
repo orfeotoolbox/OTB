@@ -28,6 +28,7 @@ namespace BandName
 * to the radiometric functors.*
 */
 enum BandName {BLUE, GREEN, RED, NIR, MIR};
+enum LandsatTMBandNames {TM1, TM2, TM3, TM4, TM5, TM60, TM61, TM62, TM7}
 
 // Note for landsat equivalence
 // http://landsat.gsfc.nasa.gov/news/news-archive/sci_0017.html
