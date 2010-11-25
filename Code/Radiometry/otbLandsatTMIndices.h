@@ -60,7 +60,7 @@ public:
     return !(*this != other);
   }
   // Operator performing the work
-  inline TOutput operator ()(const TInput& inputPixel) const = 0;
+  inline TOutput operator ()(const TInput& inputPixel) const;
 
   /// Constructor
   LandsatTMIndexBase() :  m_EpsilonToBeConsideredAsZero(0.0000001), m_TM1(0), m_TM2(1), m_TM3(2), m_TM4(3), m_TM5(4), m_TM60(5), m_TM61(5), m_TM62(6), m_TM7{7}, m_SAT(L7) {}
@@ -200,7 +200,6 @@ protected:
   // compute the index value
   double m_EpsilonToBeConsideredAsZero;
 
-private:
   unsigned int m_TM1;
   unsigned int m_TM2;
   unsigned int m_TM3;
@@ -241,14 +240,13 @@ public:
     return "Bright";
   }
 
-  typedef NDVI<TInput, TOutput> NDVIFunctorType;
   Bright() {}
   virtual ~Bright() {}
 
   inline TOutput operator ()(const TInput& inputPixel) 
   {
 
-    double result = inputPixel[TM1]+inputPixel[TM2]+2*inputPixel[TM3]+2*inputPixel[TM4]+inputPixel[TM5]+inputPixel[TM7];
+    double result = inputPixel[this->m_TM1]+inputPixel[this->m_TM2]+2*inputPixel[this->m_TM3]+2*inputPixel[this->m_TM4]+inputPixel[this->m_TM5]+inputPixel[this->m_TM7];
     return static_cast<TOutput>(result);
   }
   
