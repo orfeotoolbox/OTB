@@ -41,6 +41,21 @@ ShiftScaleSampleListFilter<TInputSampleList,TOutputSampleList>
   InputSampleListConstPointer inputSampleListPtr = inputPtr->Get();
   OutputSampleListPointer outputSampleListPtr    = const_cast<OutputSampleListType *>(outputPtr->Get());
 
+  // Check if the inputSampleList is not empty
+  if(inputSampleListPtr->Size() == 0)
+    itkExceptionMacro(<< "Input Sample List is empty");
+  
+  // Check if the size of the scale and the shift measurement vectors
+  // are the same than the input vector
+  if(inputSampleListPtr->GetMeasurementVectorSize() != m_Scales.Size() 
+     || inputSampleListPtr->GetMeasurementVectorSize() != m_Shifts.Size())
+    itkExceptionMacro(<< "Inconsistent measurement vector size : Input Sample List size "
+                      << inputSampleListPtr->GetMeasurementVectorSize()
+                      << " Scale measurement vector size "
+                      <<m_Scales.Size()
+                      <<" Shift measurement vector size "
+                      <<m_Shifts.Size());
+  
   // Compute the 1/(sigma) vector
   InputMeasurementVectorType invertedScales = m_Scales;
   for(unsigned int idx = 0;idx < invertedScales.Size();++idx)
