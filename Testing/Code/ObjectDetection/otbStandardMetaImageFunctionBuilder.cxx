@@ -124,30 +124,33 @@ int otbStandardMetaImageFunctionBuilder(int argc, char* argv[])
   DataObjectContainerType DOC = builder->GetDataObjectContainer();
   std::cout << "DataObjectContainer.size(): " << DOC.size() << std::endl;
 
-  std::cout << static_cast<AdaptedLocalHistogramIF *>(MIF->GetNthFunction(0))->GetInternalImageFunction()
+  std::cout << static_cast<AdaptedRadiometricMomentsIF *>(MIF->GetNthFunction(0))->GetInternalImageFunction()
             << std::endl;
-  std::cout << static_cast<AdaptedLocalHistogramIF *>(MIF->GetNthFunction(5))->GetInternalImageFunction()
+  std::cout << static_cast<AdaptedRadiometricMomentsIF *>(MIF->GetNthFunction(3))->GetInternalImageFunction()
             << std::endl;
 
+ 
   std::cout << static_cast<AdaptedFlusserMomentsIF *>(MIF->GetNthFunction(1))->GetInternalImageFunction()
             << std::endl;
-  std::cout << static_cast<AdaptedFlusserMomentsIF *>(MIF->GetNthFunction(9))->GetInternalImageFunction()
+  std::cout << static_cast<AdaptedFlusserMomentsIF *>(MIF->GetNthFunction(7))->GetInternalImageFunction()
             << std::endl;
 
-  std::cout << static_cast<AdaptedRadiometricMomentsIF *>(MIF->GetNthFunction(2))->GetInternalImageFunction()
+  std::cout << static_cast<AdaptedFourierMellinDescriptorsIF *>(MIF->GetNthFunction(2))->GetInternalImageFunction()
             << std::endl;
-  std::cout << static_cast<AdaptedRadiometricMomentsIF *>(MIF->GetNthFunction(13))->GetInternalImageFunction()
+  std::cout << static_cast<AdaptedFourierMellinDescriptorsIF *>(MIF->GetNthFunction(11))->GetInternalImageFunction()
             << std::endl;
 
-  std::cout << static_cast<AdaptedFourierMellinDescriptorsIF *>(MIF->GetNthFunction(3))->GetInternalImageFunction()
+/*
+  std::cout << static_cast<AdaptedLocalHistogramIF *>(MIF->GetNthFunction())->GetInternalImageFunction()
             << std::endl;
-  std::cout << static_cast<AdaptedFourierMellinDescriptorsIF *>(MIF->GetNthFunction(17))->GetInternalImageFunction()
+  std::cout << static_cast<AdaptedLocalHistogramIF *>(MIF->GetNthFunction(5))->GetInternalImageFunction()
             << std::endl;
 
   std::cout << static_cast<AdaptedHaralickTexturesIF *>(MIF->GetNthFunction(4))->GetInternalImageFunction()
             << std::endl;
   std::cout << static_cast<AdaptedHaralickTexturesIF *>(MIF->GetNthFunction(21))->GetInternalImageFunction()
             << std::endl;
-
+*/
+  
   return EXIT_SUCCESS;
 }
