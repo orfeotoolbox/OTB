@@ -31,7 +31,7 @@ namespace Functor
 namespace LandsatTM
 {
 
-enum SATType {L5, L7}
+enum SATType {L5, L7};
 /**
    * \class LandsatTMIndexBase
    * \brief Base class for Landsat-TM indices
