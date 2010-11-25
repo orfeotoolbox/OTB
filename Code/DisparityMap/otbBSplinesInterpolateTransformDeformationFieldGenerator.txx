@@ -67,7 +67,7 @@ BSplinesInterpolateTransformDeformationFieldGenerator<TPointSet, TDeformationFie
 
   // Initialization of the splines interpolator
   typename SPlineInterpolatorListType::Pointer splineIntList = SPlineInterpolatorListType::New();
-
+std::cout<<"BIG FOOOOOOOOOOOOOOOOOOOOOOOOOOOOR"<<std::endl;
   for (unsigned int paramIndex = 0; paramIndex < this->GetTransform()->GetNumberOfParameters(); ++paramIndex)
     {
     // Create a new interpolator
@@ -104,7 +104,7 @@ BSplinesInterpolateTransformDeformationFieldGenerator<TPointSet, TDeformationFie
         }
       ++pointDataCounter;
       }
-
+std::cout<<"CHELOU THINGSSSSSSSSSSSSSSSSSSSSs"<<std::endl;
     // Set the interpolator parameters
     splineIntList->Back()->SetInput(tmpPointSet);
     splineIntList->Back()->SetSplineOrder(m_SplineOrder);
@@ -124,6 +124,8 @@ BSplinesInterpolateTransformDeformationFieldGenerator<TPointSet, TDeformationFie
   // Interpolation
   typedef itk::ImageRegionIteratorWithIndex<DeformationFieldType> IteratorType;
   IteratorType outIt(outputPtr, outputPtr->GetRequestedRegion());
+
+  std::cout<<"MAIN LOOOOOOOOOOOOOOOOOOOOOOOOOOOP"<<std::endl;
 
   // main loop
   for (outIt.GoToBegin(); !outIt.IsAtEnd(); ++outIt)
@@ -153,7 +155,10 @@ BSplinesInterpolateTransformDeformationFieldGenerator<TPointSet, TDeformationFie
       this->GetTransform()->SetParameters(params);
       PointType sourcePoint, targetPoint;
       outputPtr->TransformIndexToPhysicalPoint(index, sourcePoint);
+ 	  std::cout<<sourcePoint<<"  "<<p<<"  "<<index<<"  "<<V<<std::endl;
       targetPoint = this->GetTransform()->TransformPoint(sourcePoint);
+
+	   std::cout<<targetPoint<<std::endl;
       // And the deformation
       PixelType pixel;
       pixel.SetSize(2);
