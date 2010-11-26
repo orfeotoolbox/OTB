@@ -2758,6 +2758,7 @@ otbVectorImageTest.cxx
 otbStreamingImageFilterTest.cxx
 otbVectorImageFileReaderWriterTest.cxx
 otbStreamingShortImageFileWriterTest.cxx
+otbComplexImageTests.cxx
 )
 SET(BasicIO_SRCS10
 otbIOTests10.cxx
