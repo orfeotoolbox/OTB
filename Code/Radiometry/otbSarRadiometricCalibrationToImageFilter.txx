@@ -88,7 +88,6 @@ SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>
   {
       imageMetadataInterface->GetRadiometricCalibrationIncidenceAngle()->GetPoint(i, &point);
       imageMetadataInterface->GetRadiometricCalibrationIncidenceAngle()->GetPointData(i, &pointValue);
-      std::cout << pointValue << " / "<<point<<std::endl;
   }
   incidenceAngle->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationIncidenceAnglePolynomialDegree());
 
