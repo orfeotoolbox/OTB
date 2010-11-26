@@ -31,7 +31,7 @@
 
 int otbVectorImageComplexNew(int argc, char* argv[])
 {
-  typedef std::complex<float> PixelType;
+  typedef std::complex<float>            PixelType;
   typedef otb::VectorImage<PixelType, 2> ImageType;
   ImageType::Pointer image = ImageType::New();
   image->Initialize();
@@ -43,8 +43,8 @@ int otbVectorImageComplexNew(int argc, char* argv[])
 template<class InternalType>
 int otbVectorImageComplexGenericTest(int argc, char* argv[])
 {
-  typedef std::complex<InternalType> PixelType;
-  typedef otb::VectorImage<PixelType, 2> ImageType;
+  typedef std::complex<InternalType>      PixelType;
+  typedef otb::VectorImage<PixelType, 2>  ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typename ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);
@@ -84,8 +84,8 @@ int otbVectorImageComplexDoubleTest(int argc, char* argv[])
 template<class InternalType>
 int otbImageComplexGenericTest(int argc, char* argv[])
 {
-  typedef std::complex<InternalType> PixelType;
-  typedef otb::Image<PixelType, 2> ImageType;
+  typedef std::complex<InternalType>      PixelType;
+  typedef otb::Image<PixelType, 2>        ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typename ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);
