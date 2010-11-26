@@ -37,4 +37,5 @@ void RegisterTests()
   REGISTER_TEST(otbLAIFromNDVILogarithmic);
   REGISTER_TEST(otbLAIFromReflectancesLinear);
   REGISTER_TEST(otbLandsatTMIndexBright);
+  REGISTER_TEST(otbLandsatTMIndexVis);
 }
