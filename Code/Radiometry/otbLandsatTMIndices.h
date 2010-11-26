@@ -237,7 +237,7 @@ public:
   inline TOutput operator ()(const TInput& inputPixel) 
   {
 
-    double result = inputPixel[this->m_TM1]+inputPixel[this->m_TM2]+2*inputPixel[this->m_TM3]+2*inputPixel[this->m_TM4]+inputPixel[this->m_TM5]+inputPixel[this->m_TM7];
+    double result = (inputPixel[this->m_TM1]+inputPixel[this->m_TM2]+2*inputPixel[this->m_TM3]+2*inputPixel[this->m_TM4]+inputPixel[this->m_TM5]+inputPixel[this->m_TM7])/8.0;
     return static_cast<TOutput>(result);
   }
   

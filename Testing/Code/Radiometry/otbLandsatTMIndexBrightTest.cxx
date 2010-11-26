@@ -37,7 +37,9 @@ int otbLandsatTMIndexBright(int argc, char * argv[])
   double TM62 = (::atof(argv[7]));
   double TM7 = (::atof(argv[8]));
 
-  double goodResult = (TM1+TM2+2*TM3+2*TM4+TM7+TM7)/8.0;
+  double goodResult = (TM1+TM2+2*TM3+2*TM4+TM5+TM7)/8.0;
+
+  std::cout << goodResult ;
 
   InputPixelType pixel;
   pixel[0] = TM1;
@@ -50,6 +52,8 @@ int otbLandsatTMIndexBright(int argc, char * argv[])
   pixel[7] = TM7;
 
   double result = brightFunct(pixel);
+
+  std::cout << " " << result << std::endl;
 
   if( result!=goodResult ) return EXIT_FAILURE;
   
