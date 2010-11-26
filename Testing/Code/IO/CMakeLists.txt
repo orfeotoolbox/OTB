@@ -2707,6 +2707,33 @@ ADD_TEST(ioTvTileMapImageIOHelperTest ${IO_TESTS21}
               ${TEMP}/ioTvTileMapImageIOHelperTest.txt
 )
 
+ADD_TEST(ioTvImageDoubleToImageComplex ${IO_TESTS21}
+         otbImageDoubleToImageComplex
+              ${INPUTDATA}/monobandunsignedchar.png
+)
+
+ADD_TEST(ioTvImageComplexToImageDouble ${IO_TESTS21}
+         otbImageComplexToImageDouble
+              ${INPUTDATA}/monobandComplexDouble.hdr
+)
+
+ADD_TEST(ioTvImageComplexToImageComplex ${IO_TESTS21}
+         otbImageComplexToImageComplex
+              ${INPUTDATA}/monobandComplexDouble.hdr
+)
+
+ADD_TEST(ioTvImageComplexToVectorImageDouble ${IO_TESTS21}
+         otbImageComplexToVectorImageDouble
+              ${INPUTDATA}/monobandComplexDouble.hdr
+)
+
+ADD_TEST(ioTvImageComplexToVectorImageComplex ${IO_TESTS21}
+         otbImageComplexToVectorImageComplex
+              ${INPUTDATA}/monobandComplexDouble.hdr
+)
+
+
+
 #----------------------------------------------------------------------------------
 SET(BasicIO_SRCS1
 otbIOTests1.cxx
@@ -2918,6 +2945,7 @@ otbIOTests21.cxx
 otbMapFileProductWriterNew.cxx
 otbMapFileProductWriter.cxx
 otbTileMapImageIOHelperTest.cxx
+otbComplexImageManipulationTest.cxx
 )
 
 
