@@ -214,7 +214,7 @@ protected:
  *  \f]
  *  This expression is the one used in Baraldi et al. 2006, "Automatic
  *  Spectral Rule-Based Preliminary Mapping of Calibrated Landsat TM
- *  and ETMµ+ Images", IEEE Trans. on Geoscience and Remote Sensing,
+ *  and ETM+ Images", IEEE Trans. on Geoscience and Remote Sensing,
  *  vol 44, no 9.
  * 
  * \ingroup Functor
@@ -238,6 +238,44 @@ public:
   {
 
     double result = (inputPixel[this->m_TM1]+inputPixel[this->m_TM2]+2*inputPixel[this->m_TM3]+2*inputPixel[this->m_TM4]+inputPixel[this->m_TM5]+inputPixel[this->m_TM7])/8.0;
+    return static_cast<TOutput>(result);
+  }
+  
+
+};
+
+/** \class Vis
+ *  Visible index for LandsatTM. Computes a mean of the 3 visible
+ *  bands as follows:
+ *  \f[
+ *    \frac{1}{3}\left( TM1 + TM2 + TM3 \right)
+ *  \f]
+ *  This expression is the one used in Baraldi et al. 2006, "Automatic
+ *  Spectral Rule-Based Preliminary Mapping of Calibrated Landsat TM
+ *  and ETM+ Images", IEEE Trans. on Geoscience and Remote Sensing,
+ *  vol 44, no 9.
+ * 
+ * \ingroup Functor
+ * \ingroup Radiometry
+ * \ingroup LandsatTMIndices
+ */
+template <class TInput, class TOutput>
+class Vis : public LandsatTMIndexBase<TInput, TOutput>
+{
+public:
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "Vis";
+  }
+
+  Vis() {}
+  virtual ~Vis() {}
+
+  inline TOutput operator ()(const TInput& inputPixel) 
+  {
+
+    double result = (inputPixel[this->m_TM1]+inputPixel[this->m_TM2]+inputPixel[this->m_TM3])/3.0;
     return static_cast<TOutput>(result);
   }
   
