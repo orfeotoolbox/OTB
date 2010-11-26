@@ -1139,13 +1139,23 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(ioTuVectorImageComplexNew ${IO_TESTS9}
   otbVectorImageComplexNew)
 
-ADD_TEST(ioTuVectorImageComplexFloatTest ${IO_TESTS9}
+ADD_TEST(ioTvVectorImageComplexFloatTest ${IO_TESTS9}
   otbVectorImageComplexFloatTest
     ${INPUTDATA}/multibandComplexFloat.hdr
 )
 
-ADD_TEST(ioTuVectorImageComplexDoubleTest ${IO_TESTS9}
+ADD_TEST(ioTvVectorImageComplexDoubleTest ${IO_TESTS9}
   otbVectorImageComplexDoubleTest
+    ${INPUTDATA}/multibandComplexDouble.hdr
+)
+
+ADD_TEST(ioTvImageComplexFloatTest ${IO_TESTS9}
+  otbImageComplexFloatTest
+    ${INPUTDATA}/multibandComplexFloat.hdr
+)
+
+ADD_TEST(ioTvImageComplexDoubleTest ${IO_TESTS9}
+  otbImageComplexDoubleTest
     ${INPUTDATA}/multibandComplexDouble.hdr
 )
 
