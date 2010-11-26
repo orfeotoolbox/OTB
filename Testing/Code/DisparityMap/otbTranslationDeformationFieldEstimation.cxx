@@ -194,11 +194,6 @@ int otbTranslationDeformationFieldEstimation(int argc, char* argv[])
   win.Fill(winSize);
   explo.Fill(exploSize);
 
-	fixedReader->GenerateOutputInformation();
-    movingReader->GenerateOutputInformation();
-	std::cout<<fixedReader->GetOutput()->GetLargestPossibleRegion().GetSize()<<std::endl;
-	std::cout<<movingReader->GetOutput()->GetLargestPossibleRegion().GetSize()<<std::endl;
-
   dmestimator->SetFixedImage(fixedReader->GetOutput());
   dmestimator->SetMovingImage(movingReader->GetOutput());
   dmestimator->SetPointSet(nodes);
@@ -238,7 +233,7 @@ int otbTranslationDeformationFieldEstimation(int argc, char* argv[])
   writer->SetFileName(oss.str().c_str());
   writer->SetInput(rescaler->GetOutput());
   writer->Update();
-  
+
   //3.b NNearest points deformation field linear interpolate  generator
   writer = WriterType::New();
   dfwriter = DeformationFieldWriterType::New();
@@ -283,31 +278,25 @@ int otbTranslationDeformationFieldEstimation(int argc, char* argv[])
   generator3->SetOutputSpacing(fixedReader->GetOutput()->GetSpacing());
   generator3->SetOutputSize(fixedReader->GetOutput()->GetLargestPossibleRegion().GetSize());
   generator3->SetMetricThreshold(metricThreshold);
-  
- std::cout<<"BSPLINE GOd"<<std::endl;
-  generator3->Update();
-  std::cout<<"BSPLINE DONE"<<std::endl;
 
   warper->SetInput(movingReader->GetOutput());
   warper->SetDeformationField(generator3->GetOutput());
   rescaler->SetInput(warper->GetOutput());
   rescaler->SetOutputMaximum(255);
   rescaler->SetOutputMinimum(0);
- std::cout<<"_bs_df"<<std::endl;
+
   oss.str("");
   oss << outputFileNamePrefix << "_bs_df.hdr";
   dfwriter->SetFileName(oss.str().c_str());
   dfwriter->SetInput(generator3->GetOutput());
   dfwriter->Update();
- std::cout<<"_bs_df done"<<std::endl;
 
- std::cout<<"_bs_oi"<<std::endl;
   oss.str("");
   oss << outputFileNamePrefix << "_bs_oi.tif";
   writer->SetFileName(oss.str().c_str());
   writer->SetInput(rescaler->GetOutput());
   writer->Update();
-std::cout<<"_bs_oi done"<<std::endl;
+
   //3.d Nearest transform deformation field generator
   writer = WriterType::New();
   dfwriter = DeformationFieldWriterType::New();
@@ -327,20 +316,19 @@ std::cout<<"_bs_oi done"<<std::endl;
   rescaler->SetInput(warper->GetOutput());
   rescaler->SetOutputMaximum(255);
   rescaler->SetOutputMinimum(0);
-std::cout<<"_nt_df"<<std::endl;
+
   oss.str("");
   oss << outputFileNamePrefix << "_nt_df.hdr";
   dfwriter->SetFileName(oss.str().c_str());
   dfwriter->SetInput(generator4->GetOutput());
   dfwriter->Update();
-std::cout<<"_nt_df done"<<std::endl;
-std::cout<<"_nt_oi"<<std::endl;
+
   oss.str("");
   oss << outputFileNamePrefix << "_nt_oi.tif";
   writer->SetFileName(oss.str().c_str());
   writer->SetInput(rescaler->GetOutput());
   writer->Update();
-std::cout<<"_nt_oi done"<<std::endl;
+
   //3.e NNearest transforms deformation field linear interpolation generator
   writer = WriterType::New();
   dfwriter = DeformationFieldWriterType::New();
@@ -362,21 +350,17 @@ std::cout<<"_nt_oi done"<<std::endl;
   rescaler->SetOutputMaximum(255);
   rescaler->SetOutputMinimum(0);
 
-  std::cout<<"_nnt_df"<<std::endl;
   oss.str("");
   oss << outputFileNamePrefix << "_nnt_df.hdr";
   dfwriter->SetFileName(oss.str().c_str());
   dfwriter->SetInput(generator5->GetOutput());
   dfwriter->Update();
-std::cout<<"_nnt_df done"<<std::endl;
 
-std::cout<<"_nnt_oi"<<std::endl;
   oss.str("");
   oss << outputFileNamePrefix << "_nnt_oi.tif";
   writer->SetFileName(oss.str().c_str());
   writer->SetInput(rescaler->GetOutput());
   writer->Update();
-std::cout<<"_nnt_oi done"<<std::endl;
 
   //3.e Transforms deformation field spline interpolation generator
   writer = WriterType::New();
@@ -389,7 +373,6 @@ std::cout<<"_nnt_oi done"<<std::endl;
   generator6->SetOutputOrigin(fixedReader->GetOutput()->GetOrigin());
   generator6->SetOutputSpacing(fixedReader->GetOutput()->GetSpacing());
   generator6->SetOutputSize(fixedReader->GetOutput()->GetLargestPossibleRegion().GetSize());
-  std::cout<<fixedReader->GetOutput()->GetLargestPossibleRegion().GetSize()<<std::endl;
   generator6->SetMetricThreshold(metricThreshold);
   generator6->SetTransform(transform);
   generator6->SetSplineOrder(4);
@@ -400,20 +383,18 @@ std::cout<<"_nnt_oi done"<<std::endl;
   rescaler->SetInput(warper->GetOutput());
   rescaler->SetOutputMaximum(255);
   rescaler->SetOutputMinimum(0);
-std::cout<<"_bst_df"<<std::endl;
+
   oss.str("");
   oss << outputFileNamePrefix << "_bst_df.hdr";
   dfwriter->SetFileName(oss.str().c_str());
   dfwriter->SetInput(generator6->GetOutput());
   dfwriter->Update();
-std::cout<<"_bst_df done"<<std::endl;
 
-std::cout<<"_bst_oi"<<std::endl;
   oss.str("");
   oss << outputFileNamePrefix << "_bst_oi.tif";
   writer->SetFileName(oss.str().c_str());
   writer->SetInput(rescaler->GetOutput());
   writer->Update();
-std::cout<<"_bst_oi done"<<std::endl;
+
   return EXIT_SUCCESS;
 }

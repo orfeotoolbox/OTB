@@ -55,12 +55,11 @@
 
 int main(int argc, char * argv[])
 {
-  if (argc < 5)
+  if (argc < 4)
     {
     std::cerr << "Usage: " << argv[0];
     std::cerr << " inputImageFile outputDistanceMapImageFile ";
     std::cerr << " outputVoronoiMapImageFilter ";
-    std::cerr << " outputVectorMapImageFilter ";
     std::cerr << std::endl;
     return EXIT_FAILURE;
     }
