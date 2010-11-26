@@ -115,7 +115,7 @@ int otbImageComplexGenericTest(int argc, char* argv[])
   pixel = reader->GetOutput()->GetPixel(index);
   std::cout << pixel << std::endl;
 
-  if (pixel != PixelType(4040,4041))
+  if (pixel != PixelType(2020,2021))
     {
     std::cout << "Found " << pixel << " should be " << PixelType(2020,2021) << std::endl;
     return EXIT_FAILURE;
@@ -133,4 +133,52 @@ int otbImageComplexFloatTest(int argc, char* argv[])
 int otbImageComplexDoubleTest(int argc, char* argv[])
 {
   return otbImageComplexGenericTest<double>(argc, argv);
+}
+
+
+template<class InternalType>
+int otbVectorImageComplexIntoRealGenericTest(int argc, char* argv[])
+{
+  typedef InternalType                    PixelType;
+  typedef otb::VectorImage<PixelType, 2>  ImageType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typename ReaderType::Pointer reader = ReaderType::New();
+  reader->SetFileName(argv[1]);
+  reader->UpdateOutputInformation();
+  std::cout << reader->GetOutput()->GetNumberOfComponentsPerPixel() << std::endl;
+  itk::ImageIOBase::Pointer io = reader->GetImageIO();
+  std::cout << io << std::endl;
+  reader->Update();
+  typename ImageType::IndexType index;
+  index[0]=0;
+  index[1]=0;
+
+  typename ImageType::PixelType pixel = reader->GetOutput()->GetPixel(index);
+  std::cout << pixel << std::endl;
+
+  //Test value
+  if (reader->GetOutput()->GetNumberOfComponentsPerPixel() != 4)
+    {
+    std::cout << reader->GetOutput()->GetNumberOfComponentsPerPixel() << " bands instead of 4" << std::endl;
+    return EXIT_FAILURE;
+    }
+  if ((pixel[0] != 0) || (pixel[1] != 1) || (pixel[2] != 20000) || (pixel[3] != 20001))
+    {
+    std::cout << "Found " << pixel[0] << " should be " << 0 << std::endl;
+    std::cout << "Found " << pixel[1] << " should be " << 1 << std::endl;
+    std::cout << "Found " << pixel[2] << " should be " << 20000 << std::endl;
+    std::cout << "Found " << pixel[3] << " should be " << 20001 << std::endl;
+    return EXIT_FAILURE;
+    }
+  return EXIT_SUCCESS;
+}
+
+int otbVectorImageComplexIntoRealFloatTest(int argc, char* argv[])
+{
+  return otbVectorImageComplexIntoRealGenericTest<float>(argc, argv);
+}
+
+int otbVectorImageComplexIntoRealDoubleTest(int argc, char* argv[])
+{
+  return otbVectorImageComplexIntoRealGenericTest<double>(argc, argv);
 }

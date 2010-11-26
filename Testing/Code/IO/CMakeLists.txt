@@ -1159,6 +1159,17 @@ ADD_TEST(ioTvImageComplexDoubleTest ${IO_TESTS9}
     ${INPUTDATA}/multibandComplexDouble.hdr
 )
 
+ADD_TEST(ioTvVectorImageComplexIntoRealFloatTest ${IO_TESTS9}
+  otbVectorImageComplexIntoRealFloatTest
+    ${INPUTDATA}/multibandComplexFloat.hdr
+)
+
+ADD_TEST(ioTvVectorImageComplexIntoRealDoubleTest ${IO_TESTS9}
+  otbVectorImageComplexIntoRealDoubleTest
+    ${INPUTDATA}/multibandComplexDouble.hdr
+)
+
+
 # ---  otb::VectorImageReadWriteTest  ---
 ADD_TEST(ioTvVectorImageFileReaderWriterTest ${IO_TESTS9}
    --compare-image ${EPSILON_9}
