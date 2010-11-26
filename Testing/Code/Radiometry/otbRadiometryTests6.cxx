@@ -36,5 +36,5 @@ void RegisterTests()
   REGISTER_TEST(otbWDVIMultiChannelRAndNIRVegetationIndexImageFilter);
   REGISTER_TEST(otbLAIFromNDVILogarithmic);
   REGISTER_TEST(otbLAIFromReflectancesLinear);
-  REGISTER_TEST(otbLansatTMIndexBright);
+  REGISTER_TEST(otbLandsatTMIndexBright);
 }

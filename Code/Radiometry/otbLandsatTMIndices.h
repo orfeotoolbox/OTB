@@ -137,31 +137,22 @@ public:
     return m_TM1;
   }
 
-  itkSetMacro(TM1, unsigned int);
   itkGetConstMacro(TM1, unsigned int);
 
-  itkSetMacro(TM2, unsigned int);
   itkGetConstMacro(TM2, unsigned int);
 
-  itkSetMacro(TM3, unsigned int);
   itkGetConstMacro(TM3, unsigned int);
 
-  itkSetMacro(TM4, unsigned int);
   itkGetConstMacro(TM4, unsigned int);
 
-  itkSetMacro(TM5, unsigned int);
   itkGetConstMacro(TM5, unsigned int);
 
-  itkSetMacro(TM60, unsigned int);
   itkGetConstMacro(TM60, unsigned int);
 
-  itkSetMacro(TM61, unsigned int);
   itkGetConstMacro(TM61, unsigned int);
 
-  itkSetMacro(TM62, unsigned int);
   itkGetConstMacro(TM62, unsigned int);
 
-  itkSetMacro(TM7, unsigned int);
   itkGetConstMacro(TM7, unsigned int);
 
   void SetSAT(SATType sat)
