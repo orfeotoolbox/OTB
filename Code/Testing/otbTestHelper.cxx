@@ -157,7 +157,7 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
       }
 
     
-    // Ignore lines with RTTI inside by default : to avoid multibaseline
+    // Ignore lines with "RTTI" and "Modified Time" inside by default : to avoid multibaseline
     // between Linux and Win32 plateforms
     if ((!ignoreCurrentLineRef) && (!ignoreCurrentLineTest))
       {
@@ -1157,11 +1157,19 @@ bool TestHelper::isScientificNumeric(std::string str) const
 
 bool TestHelper::isStringFound(std::string str) const
 {
-  std::string searchString = "RTTI";
+  std::string rttiString = "RTTI";
+   std::string modTimeString = "Modified Time"; 
+  if(str.find(rttiString) != std::string::npos )
+    {
+      return true;
+    }
+  else if(str.find(modTimeString) != std::string::npos )
+    {
+      return true;
+    }
   
-  if(str.find(searchString) != std::string::npos )
-    return true;
   
+
   return false;
 }
 
