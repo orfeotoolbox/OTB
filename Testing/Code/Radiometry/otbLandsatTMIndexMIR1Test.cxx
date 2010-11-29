@@ -19,14 +19,14 @@
 #include "itkFixedArray.h"
 #include "otbLandsatTMIndices.h"
 
-int otbLandsatTMIndexVis(int argc, char * argv[])
+int otbLandsatTMIndexMIR1(int argc, char * argv[])
 {
   typedef double                           OutputPixelType;
   typedef itk::FixedArray< double, 8 >     InputPixelType;
 
-  typedef otb::Functor::LandsatTM::Vis<InputPixelType, OutputPixelType> FunctorType;
+  typedef otb::Functor::LandsatTM::MIR1<InputPixelType, OutputPixelType> FunctorType;
 
-  FunctorType visFunct = FunctorType();
+  FunctorType mir1Funct = FunctorType();
 
   double TM1 = (::atof(argv[1]));
   double TM2 = (::atof(argv[2]));
@@ -37,7 +37,7 @@ int otbLandsatTMIndexVis(int argc, char * argv[])
   double TM62 = (::atof(argv[7]));
   double TM7 = (::atof(argv[8]));
 
-  double goodResult = (TM1+TM2+TM3)/3.0;
+  double goodResult = TM5;
 
   std::cout << goodResult ;
 
