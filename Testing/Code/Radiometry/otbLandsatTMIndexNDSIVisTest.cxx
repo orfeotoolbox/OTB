@@ -19,14 +19,14 @@
 #include "itkFixedArray.h"
 #include "otbLandsatTMIndices.h"
 
-int otbLandsatTMIndexVis(int argc, char * argv[])
+int otbLandsatTMIndexNDSIVis(int argc, char * argv[])
 {
   typedef double                           OutputPixelType;
   typedef itk::FixedArray< double, 8 >     InputPixelType;
 
-  typedef otb::Functor::LandsatTM::Vis<InputPixelType, OutputPixelType> FunctorType;
+  typedef otb::Functor::LandsatTM::NDSIVis<InputPixelType, OutputPixelType> FunctorType;
 
-  FunctorType visFunct = FunctorType();
+  FunctorType ndsiVisFunct = FunctorType();
 
   double TM1 = (::atof(argv[1]));
   double TM2 = (::atof(argv[2]));
@@ -37,7 +37,8 @@ int otbLandsatTMIndexVis(int argc, char * argv[])
   double TM62 = (::atof(argv[7]));
   double TM7 = (::atof(argv[8]));
 
-  double goodResult = (TM1+TM2+TM3)/3.0;
+  double vis = (TM1+TM2+TM3)/3.0;
+  double goodResult = (Vis-TM5)/(Vis+TM5+ndsiVisFunct.GetEpsilonToBeConsideredAsZero());
 
   std::cout << goodResult ;
 
@@ -51,7 +52,7 @@ int otbLandsatTMIndexVis(int argc, char * argv[])
   pixel[6] = TM62;
   pixel[7] = TM7;
 
-  double result = visFunct(pixel);
+  double result = ndsiVisFunct(pixel);
 
   std::cout << " " << result << std::endl;
 
