@@ -183,6 +183,8 @@ public:
   }
   itkGetConstMacro(SAT, SATType);
 
+  itkGetConstMacro(EpsilonToBeConsideredAsZero, double);
+
   /** Return the index name */
   virtual std::string GetName() const = 0;
 
