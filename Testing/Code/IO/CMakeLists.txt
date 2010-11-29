@@ -2709,12 +2709,12 @@ ADD_TEST(ioTvTileMapImageIOHelperTest ${IO_TESTS21}
 
 ADD_TEST(ioTvImageDoubleToImageComplex ${IO_TESTS21}
          otbImageDoubleToImageComplex
-              ${INPUTDATA}/monobandunsignedchar.png
+             ${INPUTDATA}/monobandUnsignedInt.tif
 )
 
 ADD_TEST(ioTvImageComplexToImageDouble ${IO_TESTS21}
          otbImageComplexToImageDouble
-              ${INPUTDATA}/monobandComplexDouble.hdr
+              ${INPUTDATA}/monobandComplexDouble
 )
 
 ADD_TEST(ioTvImageComplexToImageComplex ${IO_TESTS21}
@@ -2732,7 +2732,30 @@ ADD_TEST(ioTvImageComplexToVectorImageComplex ${IO_TESTS21}
               ${INPUTDATA}/monobandComplexDouble.hdr
 )
 
+ADD_TEST(ioTvVectorImageDoubleToImageComplex ${IO_TESTS21}
+         otbVectorImageDoubleToImageComplex
+              ${INPUTDATA}/multibandUnsignedInt.tif
+)
 
+ADD_TEST(ioTvVectorImageDoubleToVectorImageComplex ${IO_TESTS21}
+         otbVectorImageDoubleToVectorImageComplex
+              ${INPUTDATA}/multibandUnsignedInt.tif
+)
+
+ADD_TEST(ioTvVectorImageComplexToVectorImageDouble ${IO_TESTS21}
+         otbVectorImageComplexToVectorImageDouble
+              ${INPUTDATA}/multibandComplexDouble.hdr
+)
+
+ADD_TEST(ioTvVectorImageComplexToVectorImageComplex ${IO_TESTS21}
+         otbVectorImageComplexToVectorImageComplex
+              ${INPUTDATA}/multibandComplexDouble.hdr
+)
+
+ADD_TEST(ioTvImageDoubleToVectorImageComplex ${IO_TESTS21}
+         otbImageDoubleToVectorImageComplex
+              ${INPUTDATA}/monobandUnsignedInt.tif
+)
 
 #----------------------------------------------------------------------------------
 SET(BasicIO_SRCS1
