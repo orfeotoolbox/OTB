@@ -250,7 +250,7 @@ public:
  *  Visible index for LandsatTM. Computes a mean of the 3 visible
  *  bands as follows:
  *  \f[
- *    \frac{1}{3}\left( TM1 + TM2 + TM3 \right)
+ *    \frac{1}{3}\left( TM1 + TM2 + TM3 \right)}
  *  \f]
  *  This expression is the one used in Baraldi et al. 2006, "Automatic
  *  Spectral Rule-Based Preliminary Mapping of Calibrated Landsat TM
@@ -283,6 +283,433 @@ public:
   
 
 };
+
+
+/** \class NIR
+ *  NIR index for LandsatTM. Alias for the TM4 band.
+ * 
+ * \ingroup Functor
+ * \ingroup Radiometry
+ * \ingroup LandsatTMIndices
+ */
+template <class TInput, class TOutput>
+class NIR : public LandsatTMIndexBase<TInput, TOutput>
+{
+public:
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "NIR";
+  }
+
+  NIR() {}
+  virtual ~NIR() {}
+
+  inline TOutput operator ()(const TInput& inputPixel) 
+  {
+
+    double result = this->TM4;
+    return static_cast<TOutput>(result);
+  }
+  
+
+};
+
+/** \class MIR1
+ *  MIR1 index for LandsatTM. Alias for the TM5 band.
+ * 
+ * \ingroup Functor
+ * \ingroup Radiometry
+ * \ingroup LandsatTMIndices
+ */
+template <class TInput, class TOutput>
+class MIR1 : public LandsatTMIndexBase<TInput, TOutput>
+{
+public:
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "MIR1";
+  }
+
+  MIR1() {}
+  virtual ~MIR1() {}
+
+  inline TOutput operator ()(const TInput& inputPixel) 
+  {
+
+    double result = this->TM5;
+    return static_cast<TOutput>(result);
+  }
+  
+
+};
+
+/** \class MIR2
+ *  MIR2 index for LandsatTM. Alias for the TM7 band.
+ * 
+ * \ingroup Functor
+ * \ingroup Radiometry
+ * \ingroup LandsatTMIndices
+ */
+template <class TInput, class TOutput>
+class MIR2 : public LandsatTMIndexBase<TInput, TOutput>
+{
+public:
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "MIR2";
+  }
+
+  MIR2() {}
+  virtual ~MIR2() {}
+
+  inline TOutput operator ()(const TInput& inputPixel) 
+  {
+
+    double result = this->TM7;
+    return static_cast<TOutput>(result);
+  }
+  
+
+};
+
+/** \class TIR
+ *  TIR index for LandsatTM. This is TM60 for Landsat 5 and TM62 for Landsat 7.
+ * 
+ * \ingroup Functor
+ * \ingroup Radiometry
+ * \ingroup LandsatTMIndices
+ */
+template <class TInput, class TOutput>
+class TIR : public LandsatTMIndexBase<TInput, TOutput>
+{
+public:
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "TIR";
+  }
+
+  TIR() {}
+  virtual ~TIR() {}
+
+  inline TOutput operator ()(const TInput& inputPixel) 
+  {
+
+    double result = this->TM62;
+
+    if( this->SAT == L5 )
+      result = this->TM60;
+    
+    return static_cast<TOutput>(result);
+  }
+  
+
+};
+
+/** \class MIRTIR
+ *
+ *  MIRTIR index for LandsatTM.
+ *
+ *  In general, clouds tend
+ *  to be colder and feature a higher reflectance at the 1700 nm
+ *  wavelength (TM5) than cold and highly reflective barren land. To
+ *  enhance this difference, a well known TM band 5/6 composite is
+ *  specifically designed for cloud detection in :
+ *
+ *  R. Irish, "Landsat 7 automatic cloud cover assessment (ACCA)",
+ *  Poc. of SPIE, vol 4049, pp. 348-355, 2000.
+ * 
+ * \ingroup Functor
+ * \ingroup Radiometry
+ * \ingroup LandsatTMIndices
+ */
+template <class TInput, class TOutput>
+class MIRTIR : public LandsatTMIndexBase<TInput, TOutput>
+{
+public:
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "MIRTIR";
+  }
+
+  MIRTIR() {}
+  virtual ~MIRTIR() {}
+
+  inline TOutput operator ()(const TInput& inputPixel) 
+  {
+
+    double tir = this->TM62;
+    double mir1 = this->TM5;
+
+    if( this->SAT == L5 )
+      tir = this->TM60;
+
+    double result = (1 - mir1)*tir;
+    
+    return static_cast<TOutput>(result);
+  }
+  
+
+};
+
+/** \class NDVI
+ *
+ *  NDVI index for LandsatTM.
+ * 
+ * \ingroup Functor
+ * \ingroup Radiometry
+ * \ingroup LandsatTMIndices
+ */
+template <class TInput, class TOutput>
+class NDVI : public LandsatTMIndexBase<TInput, TOutput>
+{
+public:
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "NDVI";
+  }
+
+  NDVI() {}
+  virtual ~NDVI() {}
+
+  inline TOutput operator ()(const TInput& inputPixel) 
+  {
+
+    double result = (this->TM4 - this->TM3)/(this->TM4 + this->TM3 + this->m_EpsilonToBeConsideredAsZero);
+    
+    return static_cast<TOutput>(result);
+  }
+  
+
+};
+
+/** \class NDBSI
+ *
+ *  Normalized Difference Bare Soil index for LandsatTM.
+ *
+ *  \f[
+ *    \frac{\left( TM5 - TM4 \right)}{\left( TM5 + TM4 + \epsilon \right)}
+ *  \f]
+ *
+ *  This expression is the one used in Baraldi et al. 2006, "Automatic
+ *  Spectral Rule-Based Preliminary Mapping of Calibrated Landsat TM
+ *  and ETM+ Images", IEEE Trans. on Geoscience and Remote Sensing,
+ *  vol 44, no 9.
+ *
+ *  NDBSI > -0.2 is a strong (necesary, but not sufficient)
+ *  indication of the presence of bare soil areas.
+ * 
+ * \ingroup Functor
+ * \ingroup Radiometry
+ * \ingroup LandsatTMIndices
+ */
+template <class TInput, class TOutput>
+class NDBSI : public LandsatTMIndexBase<TInput, TOutput>
+{
+public:
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "NDBSI";
+  }
+
+  NDBSI() {}
+  virtual ~NDBSI() {}
+
+  inline TOutput operator ()(const TInput& inputPixel) 
+  {
+
+    double result = (this->TM4 - this->TM3)/(this->TM4 + this->TM3 + this->m_EpsilonToBeConsideredAsZero);
+    
+    return static_cast<TOutput>(result);
+  }
+  
+
+};
+
+/** \class BIO
+ *
+ *  Another Bare Soil index for LandsatTM.
+ *
+ *  \f[
+ *    \frac{\left( (TM5 + TM3) - (TM4 + TM1)  \right)}{\left( (TM5 + TM3) + (TM4 + TM1) \right)}
+ *  \f]
+ *
+ *  This expression is the one used in: Roy PS, Miyatake S and Rikimaru
+ *  A (1997) Biophysical Spectral Response Modelling Approach for
+ *  Forest Density Stratification. FCD Mapper User’s Guide.
+ * 
+ * \ingroup Functor
+ * \ingroup Radiometry
+ * \ingroup LandsatTMIndices
+ */
+template <class TInput, class TOutput>
+class BIO : public LandsatTMIndexBase<TInput, TOutput>
+{
+public:
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "BIO";
+  }
+
+  BIO() {}
+  virtual ~BIO() {}
+
+  inline TOutput operator ()(const TInput& inputPixel) 
+  {
+
+    double result = ((this->TM5 + this->TM3) + (this->TM4 + this->TM1))/((this->TM5 + this->TM3) - (this->TM4 + this->TM1));
+    
+    return static_cast<TOutput>(result);
+  }
+  
+
+};
+
+
+/** \class NDSI
+ *
+ *  Normalized Difference Snow index for LandsatTM.
+ *
+ *  \f[
+ *    \frac{\left( TM2 - TM5 \right)}{\left( TM2 + TM5 + \epsilon \right)}
+ *  \f]
+ *
+ *  This expression is the one used in R. Irish, "Landsat 7 automatic
+ *  cloud cover assessment (ACCA)", Poc. of SPIE, vol 4049,
+ *  pp. 348-355, 2000.
+ * 
+ * \ingroup Functor
+ * \ingroup Radiometry
+ * \ingroup LandsatTMIndices
+ */
+template <class TInput, class TOutput>
+class NDSI : public LandsatTMIndexBase<TInput, TOutput>
+{
+public:
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "NDSI";
+  }
+
+  NDSI() {}
+  virtual ~NDSI() {}
+
+  inline TOutput operator ()(const TInput& inputPixel) 
+  {
+
+    double result = (this->TM2 - this->TM5)/(this->TM2 + this->TM5 + this->m_EpsilonToBeConsideredAsZero);
+    
+    return static_cast<TOutput>(result);
+  }
+  
+
+};
+
+/** \class NDSIVis
+ *
+ *  Baraldi's Normalized Difference Snow index for LandsatTM.
+ *
+ *  \f[
+ *    \frac{\left( Vis - TM5 \right)}{\left( Vis + TM5 + \epsilon \right)}
+ *  \f]
+ *
+ *  where
+ *
+ *  \f[
+ *    Vis = \frac{1}{3}\left( TM1 + TM2 + TM3 \right)}
+ *  \f]
+ *
+ *  This expression is the one used in Baraldi et al. 2006, "Automatic
+ *  Spectral Rule-Based Preliminary Mapping of Calibrated Landsat TM
+ *  and ETM+ Images", IEEE Trans. on Geoscience and Remote Sensing,
+ *  vol 44, no 9.
+ *
+ *  and is an adaptation of the one given in R. Irish, "Landsat 7
+ *  automatic cloud cover assessment (ACCA)", Poc. of SPIE, vol 4049,
+ *  pp. 348-355, 2000.
+ *
+ *  NDSIVis > 0.5 is a strong (necesary, but not sufficient)
+ *  indication of the presence of snow areas.
+ * 
+ * \ingroup Functor
+ * \ingroup Radiometry
+ * \ingroup LandsatTMIndices
+ */
+template <class TInput, class TOutput>
+class NDSIVis : public LandsatTMIndexBase<TInput, TOutput>
+{
+public:
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "NDSIVis";
+  }
+
+  NDSIVis() {}
+  virtual ~NDSIVis() {}
+
+  inline TOutput operator ()(const TInput& inputPixel) 
+  {
+
+    double vis = (inputPixel[this->m_TM1]+inputPixel[this->m_TM2]+inputPixel[this->m_TM3])/3.0;
+    double result = (vis - this->TM5)/(vis + this->TM5 + this->m_EpsilonToBeConsideredAsZero);
+    
+    return static_cast<TOutput>(result);
+  }
+  
+
+};
+
+/** \class NDBBBI
+ *
+ *  Normalized Difference Blue-band component in Built-up areas and
+ *  Barren land index for LandsatTM.
+ *
+ *  \f[
+ *    \frac{\left( TM1 - TM5 \right)}{\left( TM1 + TM5 + \epsilon \right)}
+ *  \f]
+ *
+ *  This expression is the one used in Baraldi et al. 2006, "Automatic
+ *  Spectral Rule-Based Preliminary Mapping of Calibrated Landsat TM
+ *  and ETM+ Images", IEEE Trans. on Geoscience and Remote Sensing,
+ *  vol 44, no 9.
+ * 
+ * \ingroup Functor
+ * \ingroup Radiometry
+ * \ingroup LandsatTMIndices
+ */
+template <class TInput, class TOutput>
+class NDBBBI : public LandsatTMIndexBase<TInput, TOutput>
+{
+public:
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "NDBBBI";
+  }
+
+  NDBBBI() {}
+  virtual ~NDBBBI() {}
+
+  inline TOutput operator ()(const TInput& inputPixel) 
+  {
+
+    double result = (this->TM2 - this->TM5)/(this->TM2 + this->TM5 + this->m_EpsilonToBeConsideredAsZero);
+    
+    return static_cast<TOutput>(result);
+  }
+  
+
+};
+
 
 } // namespace LandsatTM
 } // namespace Functor
