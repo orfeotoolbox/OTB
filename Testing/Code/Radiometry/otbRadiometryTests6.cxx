@@ -38,4 +38,14 @@ void RegisterTests()
   REGISTER_TEST(otbLAIFromReflectancesLinear);
   REGISTER_TEST(otbLandsatTMIndexBright);
   REGISTER_TEST(otbLandsatTMIndexVis);
+  REGISTER_TEST(otbLandsatTMIndexNIR);
+  REGISTER_TEST(otbLandsatTMIndexMIR1);
+  REGISTER_TEST(otbLandsatTMIndexMIR2);
+  REGISTER_TEST(otbLandsatTMIndexTIR);
+  REGISTER_TEST(otbLandsatTMIndexMIRTIR);
+  REGISTER_TEST(otbLandsatTMIndexNDVI);
+  REGISTER_TEST(otbLandsatTMIndexNDBSI);
+  REGISTER_TEST(otbLandsatTMIndexBIO);
+  REGISTER_TEST(otbLandsatTMIndexNDSI);
+  REGISTER_TEST(otbLandsatTMIndexNDBBBI);
 }

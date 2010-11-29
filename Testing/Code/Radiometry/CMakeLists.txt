@@ -967,6 +967,147 @@ ADD_TEST(raTvLandsatTMIndexVisTest ${RADIOMETRY_TESTS6}
   
 )
 
+# -------            Landsat TM NIR   ------------------------------
+ADD_TEST(raTvLandsatTMIndexNIRTest ${RADIOMETRY_TESTS6}
+        otbLandsatTMIndexNIR
+        3   #TM1
+        4   #TM2
+        8   #TM3
+        21  #TM4
+        33  #TM5
+        41  #TM61
+        8   #TM62
+        21  #TM7
+  
+)
+
+# -------            Landsat TM MIR1   ------------------------------
+ADD_TEST(raTvLandsatTMIndexMIR1Test ${RADIOMETRY_TESTS6}
+        otbLandsatTMIndexMIR1
+        3   #TM1
+        4   #TM2
+        8   #TM3
+        21  #TM4
+        33  #TM5
+        41  #TM61
+        8   #TM62
+        21  #TM7
+  
+)
+
+# -------            Landsat TM MIR2   ------------------------------
+ADD_TEST(raTvLandsatTMIndexMIR2Test ${RADIOMETRY_TESTS6}
+        otbLandsatTMIndexMIR2
+        3   #TM1
+        4   #TM2
+        8   #TM3
+        21  #TM4
+        33  #TM5
+        41  #TM61
+        8   #TM62
+        21  #TM7
+  
+)
+
+# -------            Landsat TM TIR   ------------------------------
+ADD_TEST(raTvLandsatTMIndexTIRTest ${RADIOMETRY_TESTS6}
+        otbLandsatTMIndexTIR
+        3   #TM1
+        4   #TM2
+        8   #TM3
+        21  #TM4
+        33  #TM5
+        41  #TM61
+        8   #TM62
+        21  #TM7
+  
+)
+
+# -------            Landsat TM MIRTIR   ------------------------------
+ADD_TEST(raTvLandsatTMIndexMIRTIRTest ${RADIOMETRY_TESTS6}
+        otbLandsatTMIndexMIRTIR
+        3   #TM1
+        4   #TM2
+        8   #TM3
+        21  #TM4
+        33  #TM5
+        41  #TM61
+        8   #TM62
+        21  #TM7
+  
+)
+
+# -------            Landsat TM NDVI   ------------------------------
+ADD_TEST(raTvLandsatTMIndexNDVITest ${RADIOMETRY_TESTS6}
+        otbLandsatTMIndexNDVI
+        3   #TM1
+        4   #TM2
+        8   #TM3
+        21  #TM4
+        33  #TM5
+        41  #TM61
+        8   #TM62
+        21  #TM7
+  
+)
+ 
+# -------            Landsat TM NDBSI   ------------------------------
+ADD_TEST(raTvLandsatTMIndexNDBSITest ${RADIOMETRY_TESTS6}
+        otbLandsatTMIndexNDBSI
+        3   #TM1
+        4   #TM2
+        8   #TM3
+        21  #TM4
+        33  #TM5
+        41  #TM61
+        8   #TM62
+        21  #TM7
+  
+)
+
+
+# -------            Landsat TM BIO   ------------------------------
+ADD_TEST(raTvLandsatTMIndexBIOTest ${RADIOMETRY_TESTS6}
+        otbLandsatTMIndexBIO
+        3   #TM1
+        4   #TM2
+        8   #TM3
+        21  #TM4
+        33  #TM5
+        41  #TM61
+        8   #TM62
+        21  #TM7
+  
+)
+
+# -------            Landsat TM NDSI   ------------------------------
+ADD_TEST(raTvLandsatTMIndexNDSITest ${RADIOMETRY_TESTS6}
+        otbLandsatTMIndexNDSI
+        3   #TM1
+        4   #TM2
+        8   #TM3
+        21  #TM4
+        33  #TM5
+        41  #TM61
+        8   #TM62
+        21  #TM7
+  
+)
+
+# -------            Landsat TM NDBBBI   ------------------------------
+ADD_TEST(raTvLandsatTMIndexNDBBBITest ${RADIOMETRY_TESTS6}
+        otbLandsatTMIndexNDBBBI
+        3   #TM1
+        4   #TM2
+        8   #TM3
+        21  #TM4
+        33  #TM5
+        41  #TM61
+        8   #TM62
+        21  #TM7
+  
+)
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbRADIOMETRY_TESTS7 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1671,6 +1812,16 @@ otbLAIFromNDVILogarithmicFunctorTest.cxx
 otbLAIFromReflectancesLinearFunctorTest.cxx
 otbLandsatTMIndexBrightTest.cxx
 otbLandsatTMIndexVisTest.cxx
+otbLandsatTMIndexNIRTest.cxx
+otbLandsatTMIndexMIR1Test.cxx
+otbLandsatTMIndexMIR2Test.cxx
+otbLandsatTMIndexTIRTest.cxx
+otbLandsatTMIndexMIRTIRTest.cxx
+otbLandsatTMIndexNDVITest.cxx
+otbLandsatTMIndexNDBSITest.cxx
+otbLandsatTMIndexBIOTest.cxx
+otbLandsatTMIndexNDSITest.cxx
+otbLandsatTMIndexNDBBBITest.cxx
 )
 
 SET(Radiometry_SRCS7
