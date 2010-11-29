@@ -38,7 +38,7 @@ int otbLandsatTMIndexNDSIVis(int argc, char * argv[])
   double TM7 = (::atof(argv[8]));
 
   double vis = (TM1+TM2+TM3)/3.0;
-  double goodResult = (Vis-TM5)/(Vis+TM5+ndsiVisFunct.GetEpsilonToBeConsideredAsZero());
+  double goodResult = (vis-TM5)/(vis+TM5+ndsiVisFunct.GetEpsilonToBeConsideredAsZero());
 
   std::cout << goodResult ;
 

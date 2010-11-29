@@ -51,7 +51,7 @@ int otbLandsatTMIndexMIR1(int argc, char * argv[])
   pixel[6] = TM62;
   pixel[7] = TM7;
 
-  double result = visFunct(pixel);
+  double result = mir1Funct(pixel);
 
   std::cout << " " << result << std::endl;
 

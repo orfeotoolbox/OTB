@@ -308,7 +308,7 @@ public:
   inline TOutput operator ()(const TInput& inputPixel) 
   {
 
-    double result = this->TM4;
+    double result = inputPixel[this->m_TM4];
     return static_cast<TOutput>(result);
   }
   
@@ -338,7 +338,7 @@ public:
   inline TOutput operator ()(const TInput& inputPixel) 
   {
 
-    double result = this->TM5;
+    double result = inputPixel[this->m_TM5];
     return static_cast<TOutput>(result);
   }
   
@@ -368,7 +368,7 @@ public:
   inline TOutput operator ()(const TInput& inputPixel) 
   {
 
-    double result = this->TM7;
+    double result = inputPixel[this->m_TM7];
     return static_cast<TOutput>(result);
   }
   
@@ -398,10 +398,10 @@ public:
   inline TOutput operator ()(const TInput& inputPixel) 
   {
 
-    double result = this->TM62;
+    double result = inputPixel[this->m_TM62];
 
-    if( this->SAT == L5 )
-      result = this->TM60;
+    if( this->m_SAT == L5 )
+      result = inputPixel[this->m_TM60];
     
     return static_cast<TOutput>(result);
   }
@@ -442,11 +442,11 @@ public:
   inline TOutput operator ()(const TInput& inputPixel) 
   {
 
-    double tir = this->TM62;
-    double mir1 = this->TM5;
+    double tir = inputPixel[this->m_TM62];
+    double mir1 = inputPixel[this->m_TM5];
 
-    if( this->SAT == L5 )
-      tir = this->TM60;
+    if( this->m_SAT == L5 )
+      tir = inputPixel[this->m_TM60];
 
     double result = (1 - mir1)*tir;
     
@@ -480,7 +480,8 @@ public:
   inline TOutput operator ()(const TInput& inputPixel) 
   {
 
-    double result = (this->TM4 - this->TM3)/(this->TM4 + this->TM3 + this->m_EpsilonToBeConsideredAsZero);
+    double result = (inputPixel[this->m_TM4] - inputPixel[this->m_TM3])/
+      (inputPixel[this->m_TM4] + inputPixel[this->m_TM3] + this->m_EpsilonToBeConsideredAsZero);
     
     return static_cast<TOutput>(result);
   }
@@ -524,7 +525,8 @@ public:
   inline TOutput operator ()(const TInput& inputPixel) 
   {
 
-    double result = (this->TM4 - this->TM3)/(this->TM4 + this->TM3 + this->m_EpsilonToBeConsideredAsZero);
+    double result = (inputPixel[this->m_TM5] - inputPixel[this->m_TM4])/
+      (inputPixel[this->m_TM5] + inputPixel[this->m_TM4] + this->m_EpsilonToBeConsideredAsZero);
     
     return static_cast<TOutput>(result);
   }
@@ -564,7 +566,10 @@ public:
   inline TOutput operator ()(const TInput& inputPixel) 
   {
 
-    double result = ((this->TM5 + this->TM3) + (this->TM4 + this->TM1))/((this->TM5 + this->TM3) - (this->TM4 + this->TM1));
+    double result = ((inputPixel[this->m_TM5] + inputPixel[this->m_TM3])
+                     - (inputPixel[this->m_TM4] + inputPixel[this->m_TM1]))
+      /((inputPixel[this->m_TM5] + inputPixel[this->m_TM3])
+        + (inputPixel[this->m_TM4] + inputPixel[this->m_TM1]));
     
     return static_cast<TOutput>(result);
   }
@@ -605,7 +610,8 @@ public:
   inline TOutput operator ()(const TInput& inputPixel) 
   {
 
-    double result = (this->TM2 - this->TM5)/(this->TM2 + this->TM5 + this->m_EpsilonToBeConsideredAsZero);
+    double result = (inputPixel[this->m_TM2] - inputPixel[this->m_TM5])
+      /(inputPixel[this->m_TM2] + inputPixel[this->m_TM5] + this->m_EpsilonToBeConsideredAsZero);
     
     return static_cast<TOutput>(result);
   }
@@ -660,7 +666,7 @@ public:
   {
 
     double vis = (inputPixel[this->m_TM1]+inputPixel[this->m_TM2]+inputPixel[this->m_TM3])/3.0;
-    double result = (vis - this->TM5)/(vis + this->TM5 + this->m_EpsilonToBeConsideredAsZero);
+    double result = (vis - inputPixel[this->m_TM5])/(vis + inputPixel[this->m_TM5] + this->m_EpsilonToBeConsideredAsZero);
     
     return static_cast<TOutput>(result);
   }
@@ -702,8 +708,8 @@ public:
   inline TOutput operator ()(const TInput& inputPixel) 
   {
 
-    double result = (this->TM2 - this->TM5)/(this->TM2 + this->TM5 + this->m_EpsilonToBeConsideredAsZero);
-    
+    double result = (inputPixel[this->m_TM1] - inputPixel[this->m_TM5])
+      /(inputPixel[this->m_TM1] + inputPixel[this->m_TM5] + this->m_EpsilonToBeConsideredAsZero);
     return static_cast<TOutput>(result);
   }
   

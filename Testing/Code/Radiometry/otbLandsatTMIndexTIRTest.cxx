@@ -39,12 +39,12 @@ int otbLandsatTMIndexTIR(int argc, char * argv[])
   double TM62 = (::atof(argv[7]));
   double TM7 = (::atof(argv[8]));
 
-  tirFunctL7.SetSAT(L7);
+  tirFunctL7.SetSAT(otb::Functor::LandsatTM::L7);
   double goodResult = TM62;
 
   std::cout << goodResult ;
 
-  InputPixelType pixelL7;
+  L7InputPixelType pixelL7;
   pixelL7[0] = TM1;
   pixelL7[1] = TM2;
   pixelL7[2] = TM3;
@@ -65,22 +65,21 @@ int otbLandsatTMIndexTIR(int argc, char * argv[])
   L5FunctorType tirFunctL5 = L5FunctorType();
 
   
-  tirFunctL5.SetSAT(L5);
-  goodResult = TM61;
+  tirFunctL5.SetSAT(otb::Functor::LandsatTM::L5);
+  goodResult = TM60;
 
   std::cout << goodResult ;
     
-  InputPixelL5Type pixelL5;
+  L5InputPixelType pixelL5;
   pixelL5[0] = TM1;
   pixelL5[1] = TM2;
   pixelL5[2] = TM3;
   pixelL5[3] = TM4;
   pixelL5[4] = TM5;
-  pixelL5[5] = TM61;
-  pixelL5[6] = TM62;
-  pixelL5[7] = TM7;
+  pixelL5[5] = TM60;
+  pixelL5[6] = TM7;
   
-  double result = tirFunctL5(pixelL5);
+  result = tirFunctL5(pixelL5);
 
   std::cout << " " << result << std::endl;
 
