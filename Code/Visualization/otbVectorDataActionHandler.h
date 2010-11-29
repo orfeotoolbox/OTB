@@ -94,10 +94,18 @@ public:
           = sourceWidget->GetScreenToImageTransform()->TransformPoint(
           screenPoint);
 
+        if( m_IsContinuousPoint == false )
+          {
+          imagePoint[0] = static_cast<unsigned int>(imagePoint[0]) + 0.5;
+          imagePoint[1] = static_cast<unsigned int>(imagePoint[1]) + 0.5;
+          }
+
+
         // Transform to index
         typename ModelType::VertexType index;
         index[0] = imagePoint[0];
         index[1] = imagePoint[1];
+
 
         //Add Offset
         index[0] += m_Offset[0];
@@ -178,18 +186,23 @@ public:
   itkSetMacro(Offset, OffsetType);
   itkGetMacro(Offset, OffsetType);
 
-  /** Set/Get End polygon Mouse butto */
+  /** Set/Get End polygon Mouse button */
   itkSetMacro(EndMouseButton, int);
   itkGetMacro(EndMouseButton, int);
 
-  /** Set/Get Add polygon Mouse butto */
+  /** Set/Get Add polygon Mouse button */
   itkSetMacro(AddMouseButton, int);
   itkGetMacro(AddMouseButton, int);
+
+  /** Set/Get if Screen Point Centered */
+  itkSetMacro(IsContinuousPoint, bool);
+  itkGetMacro(IsContinuousPoint, bool);
 
 protected:
   /** Constructor */
   VectorDataActionHandler() :
-    m_Offset(), m_View(), m_Model(), m_EndMouseButton(3), m_AddMouseButton(1)
+    m_Offset(), m_View(), m_Model(), m_EndMouseButton(3),
+    m_AddMouseButton(1), m_IsContinuousPoint(true)
   {
   }
 
@@ -221,6 +234,9 @@ private:
   
   /// Add polygon Mouse button
   int m_AddMouseButton;  
+
+  // Is image point is continous  otherwise centered
+  bool m_IsContinuousPoint;
 
 }; // end class
 } // end namespace otb

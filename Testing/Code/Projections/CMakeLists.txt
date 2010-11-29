@@ -251,7 +251,7 @@ FOREACH( file ${SARSENSORMODEL_TYPES})
   STRING(REGEX REPLACE "${sharp_regexp}" "\\1" sensor_name "${file}")
   # Tests
 	ADD_TEST(prTvSensorModelGrid_${sensor_name} ${PROJECTIONS_TESTS1}
-	  --compare-n-images ${NOTOL} 2
+	  --compare-n-images ${EPSILON_6} 2
 	         ${BASELINE}/prTvSensorModelGridDeltaX_${sensor_name}.tif
 	         ${TEMP}/prTvSensorModelGridDeltaX_${sensor_name}.tif
 	         ${BASELINE}/prTvSensorModelGridDeltaY_${sensor_name}.tif
@@ -264,7 +264,7 @@ FOREACH( file ${SARSENSORMODEL_TYPES})
 		)
 
 	ADD_TEST(prTvForwardSensorModelGrid_${sensor_name} ${PROJECTIONS_TESTS1}
-	  --compare-n-images ${NOTOL} 2
+	  --compare-n-images ${EPSILON_6} 2
 	         ${BASELINE}/prTvForwardSensorModelGridX_${sensor_name}.tif
 	         ${TEMP}/prTvForwardSensorModelGridX_${sensor_name}.tif
 	         ${BASELINE}/prTvForwardSensorModelGridY_${sensor_name}.tif
