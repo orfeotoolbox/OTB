@@ -47,5 +47,6 @@ void RegisterTests()
   REGISTER_TEST(otbLandsatTMIndexNDBSI);
   REGISTER_TEST(otbLandsatTMIndexBIO);
   REGISTER_TEST(otbLandsatTMIndexNDSI);
+  REGISTER_TEST(otbLandsatTMIndexNDSIVis);
   REGISTER_TEST(otbLandsatTMIndexNDBBBI);
 }

@@ -1094,6 +1094,21 @@ ADD_TEST(raTvLandsatTMIndexNDSITest ${RADIOMETRY_TESTS6}
   
 )
 
+# -------            Landsat TM NDSIVis   ------------------------------
+ADD_TEST(raTvLandsatTMIndexNDSIVisTest ${RADIOMETRY_TESTS6}
+        otbLandsatTMIndexNDSIVis
+        3   #TM1
+        4   #TM2
+        8   #TM3
+        21  #TM4
+        33  #TM5
+        41  #TM61
+        8   #TM62
+        21  #TM7
+  
+)
+
+
 # -------            Landsat TM NDBBBI   ------------------------------
 ADD_TEST(raTvLandsatTMIndexNDBBBITest ${RADIOMETRY_TESTS6}
         otbLandsatTMIndexNDBBBI
@@ -1821,6 +1836,7 @@ otbLandsatTMIndexNDVITest.cxx
 otbLandsatTMIndexNDBSITest.cxx
 otbLandsatTMIndexBIOTest.cxx
 otbLandsatTMIndexNDSITest.cxx
+otbLandsatTMIndexNDSIVisTest.cxx
 otbLandsatTMIndexNDBBBITest.cxx
 )
 
