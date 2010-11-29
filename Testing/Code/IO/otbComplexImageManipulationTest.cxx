@@ -27,7 +27,7 @@
 /***********
  * 1.
  * Read Image<double> as Image<complex>
- * out : real = a, imag = 0
+ * out : real = in, imag = 0
  ***********/
 int otbImageDoubleToImageComplex(int argc, char * argv[])
 {
@@ -56,16 +56,19 @@ int otbImageDoubleToImageComplex(int argc, char * argv[])
   itk::ImageRegionIteratorWithIndex<CplxImageType> it( reader->GetOutput(), region );
 
   unsigned int count = 0;
+
   it.GoToBegin();
   while( it.IsAtEnd()==false )
     {
-      if( (it.Get().real() != static_cast<RealType>(count)) || (it.Get().imag() != static_cast<RealType>(0)) ) 
-  {
-    std::cout<<"Image double read as Image complex error : "<<it.Get()<<", waited for ("<<count<<", 0)"<<std::endl;
+      count = it.GetIndex()[1]*reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]+it.GetIndex()[0];
 
-    return EXIT_FAILURE;
-  }
-      count++;
+      if( (it.Get().real() != static_cast<RealType>(count)) || (it.Get().imag() != static_cast<RealType>(0)) ) 
+	{
+	  std::cout<<"Image double read as Image complex error : "<<it.Get()<<", waited for ("<<count<<", 0)"<<std::endl;
+
+	  return EXIT_FAILURE;
+	}
+
       ++it;
     }
 
@@ -94,7 +97,7 @@ int otbImageComplexToImageDouble(int argc, char * argv[])
 
   id.Fill(0);
   size[0] = 10;
-  size[1] = 1;
+  size[1] = 2;
 
   region.SetSize( size );
   region.SetIndex( id ); 
@@ -102,20 +105,22 @@ int otbImageComplexToImageDouble(int argc, char * argv[])
   reader->GetOutput()->SetRequestedRegion(region);
   reader->Update();
 
-  itk::ImageRegionIterator<ScalImageType> it( reader->GetOutput(), region );
+  itk::ImageRegionIteratorWithIndex<ScalImageType> it( reader->GetOutput(), region );
 
   unsigned int count = 0;
   it.GoToBegin();
   while( it.IsAtEnd()==false )
     {
-      double norm = vcl_sqrt(static_cast<double>(count*count + (count+1)*(count+1)));
+      count = 2*(it.GetIndex()[1]*reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]+it.GetIndex()[0]);
+   
+      double norm = vcl_sqrt(static_cast<double>( (count*count) + (count+1)*(count+1)));
+
       if(it.Get() != static_cast<RealType>(norm))
-  {
-    std::cout<<"Image complex read as Image double error : waited for norm "<<it.Get()<<", waited for "<<norm<<"."<<std::endl;
-    
-    return EXIT_FAILURE;
-  }
-      count += 2;
+	{
+	  std::cout<<"Image complex read as Image double error : value (should be norm): "<<it.Get()<<", waited for "<<norm<<"."<<std::endl;
+	  
+	  return EXIT_FAILURE;
+	}
       ++it;
     }
   
@@ -155,20 +160,22 @@ int otbImageComplexToImageComplex(int argc, char * argv[])
   reader->GetOutput()->SetRequestedRegion(region);
   reader->Update();
 
-  itk::ImageRegionIterator<CplxImageType> it( reader->GetOutput(), region );
+  itk::ImageRegionIteratorWithIndex<CplxImageType> it( reader->GetOutput(), region );
 
   unsigned int count = 0;
   it.GoToBegin();
   while( it.IsAtEnd()==false )
     {
+     count = 2*(it.GetIndex()[1]*reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]+it.GetIndex()[0]);
+
       if( (it.Get().real() != static_cast<RealType>(count)) || ( it.Get().imag() != static_cast<RealType>(count+1) ) ) 
-  {
-    std::cout<<"Image complex read as Image complex error: "<<it.Get()<<", waited for ("<<count<<", "<<count+1<<")"<<std::endl;
-    
-    return EXIT_FAILURE;
-  }
+	{
+	  std::cout<<"Image complex read as Image complex error: "<<it.Get()<<", waited for ("<<count<<", "<<count+1<<")"<<std::endl;
+	  
+	  return EXIT_FAILURE;
+	}
       
-      count += 2;
+
       ++it;
     }
 
@@ -206,20 +213,22 @@ int otbImageComplexToVectorImageDouble(int argc, char * argv[])
   reader->GetOutput()->SetRequestedRegion(region);
   reader->Update();
 
-  itk::ImageRegionIterator<ScalVectorImageType> it( reader->GetOutput(), region );
+  itk::ImageRegionIteratorWithIndex<ScalVectorImageType> it( reader->GetOutput(), region );
 
   unsigned int count = 0;
   it.GoToBegin();
   while( it.IsAtEnd()==false )
     {
-      if( (it.Get()[0] != static_cast<RealType>(count)) || (it.Get()[1] != static_cast<RealType>(count+1)) )
-  {
-    std::cout<<"Image complex read as Vector Image double error: "<<it.Get()<<", waited for ("<<count<<", "<<count+1<<")"<<std::endl;
-    
-    return EXIT_FAILURE;
-  }
+     count = 2*(it.GetIndex()[1]*reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]+it.GetIndex()[0]);
 
-      count += 2;
+     if( (it.Get()[0] != static_cast<RealType>(count)) || (it.Get()[1] != static_cast<RealType>(count+1)) )
+	{
+	  std::cout<<"Image complex read as Vector Image double error: "<<it.Get()<<", waited for ("<<count<<", "<<count+1<<")"<<std::endl;
+	  
+	  return EXIT_FAILURE;
+	}
+
+      //count += 2;
       ++it;
     }
   
@@ -257,21 +266,22 @@ int otbImageComplexToVectorImageComplex(int argc, char * argv[])
   reader->GetOutput()->SetRequestedRegion(region);
   reader->Update();
 
-  itk::ImageRegionIterator<CmplxVectorImageType> it( reader->GetOutput(), region );
+  itk::ImageRegionIteratorWithIndex<CmplxVectorImageType> it( reader->GetOutput(), region );
 
   unsigned int count = 0;
   it.GoToBegin();
   while( it.IsAtEnd()==false )
     {
+      count = 2*(it.GetIndex()[1]*reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]+it.GetIndex()[0]);
+
       if( (it.Get()[0].real() != static_cast<RealType>(count)) || ( it.Get()[0].imag() != static_cast<RealType>(count+1) ) ) 
-  {
-    std::cout<<"Image complex read as Vector Image complex error: "<<it.Get()[0]<<", waited for ("<<count<<", "<<count+1<<")"<<std::endl;
-    
-    return EXIT_FAILURE;
-  }
+	{
+	  std::cout<<"Image complex read as Vector Image complex error: "<<it.Get()[0]<<", waited for ("<<count<<", "<<count+1<<")"<<std::endl;
+	  
+	  return EXIT_FAILURE;
+	}
    
-      count += 2;
-      ++it;
+       ++it;
     }
   
   
@@ -308,20 +318,21 @@ int otbVectorImageDoubleToImageComplex(int argc, char * argv[])
   reader->GetOutput()->SetRequestedRegion(region);
   reader->Update();
 
-  itk::ImageRegionIterator<CmplxImageType> it( reader->GetOutput(), region );
+  itk::ImageRegionIteratorWithIndex<CmplxImageType> it( reader->GetOutput(), region );
 
   unsigned int count = 0;
   it.GoToBegin();
   while( it.IsAtEnd()==false )
     {
+      count = 2*(it.GetIndex()[1]*reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]+it.GetIndex()[0]);
+  
       if(it.Get().real() != static_cast<RealType>(count) || (it.Get().imag() != static_cast<RealType>(count+1)) ) 
-  {
-    std::cout<<"Vector Image double read as Image double error: "<<it.Get()<<", waited for ("<<count<<", "<<count+1<<")"<<std::endl;
-    
-    return EXIT_FAILURE;
-  }
+	{
+	  std::cout<<"Vector Image double read as Image double error: "<<it.Get()<<", waited for ("<<count<<", "<<count+1<<")"<<std::endl;
+	  
+	  return EXIT_FAILURE;
+	}
 
-      count += 2;
       ++it;
     }
   
@@ -359,20 +370,21 @@ int otbVectorImageDoubleToVectorImageComplex(int argc, char * argv[])
   reader->GetOutput()->SetRequestedRegion(region);
   reader->Update();
 
-  itk::ImageRegionIterator<CmplxVectorImageType> it( reader->GetOutput(), region );
+  itk::ImageRegionIteratorWithIndex<CmplxVectorImageType> it( reader->GetOutput(), region );
 
   unsigned int count = 0;
   it.GoToBegin();
   while( it.IsAtEnd()==false )
     {
-      if(it.Get()[0].real() != static_cast<RealType>(count) || (it.Get()[0].imag() != static_cast<RealType>(0)) ) 
-  {
-    std::cout<<"Vector Image double read as Vector Image complex error: "<<it.Get()[0]<<", waited for ("<<count<<", 0)."<<std::endl;
-    
-    return EXIT_FAILURE;
-  }
+      count = 2*(it.GetIndex()[1]*reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]+it.GetIndex()[0]);;
 
-      count += 2;
+      if(it.Get()[0].real() != static_cast<RealType>(count) || (it.Get()[0].imag() != static_cast<RealType>(0)) ) 
+	{
+	  std::cout<<"Vector Image double read as Vector Image complex error: "<<it.Get()[0]<<", waited for ("<<count<<", 0)."<<std::endl;
+	  
+	  return EXIT_FAILURE;
+	}
+
       ++it;
     }
   
@@ -410,21 +422,22 @@ int otbVectorImageComplexToVectorImageDouble(int argc, char * argv[])
   reader->Update();
   unsigned int l_Size = reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0]* reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1];
 
-  itk::ImageRegionIterator<ScalVectorImageType> it( reader->GetOutput(), region );
+  itk::ImageRegionIteratorWithIndex<ScalVectorImageType> it( reader->GetOutput(), region );
   unsigned int count = 0;
   it.GoToBegin();
   while( it.IsAtEnd()==false )
     {
+      count = 2*(it.GetIndex()[1]*reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]+it.GetIndex()[0]);
       double norm1 = vcl_sqrt(static_cast<double>(count*count + (count+1)*(count+1)));
-      double norm2 = vcl_sqrt(static_cast<double>((l_Size+count)*(l_Size+count) + (l_Size+count+1)*(l_Size+count+1)));
+      double norm2 = vcl_sqrt(static_cast<double>((2*l_Size+count)*(2*l_Size+count) + (2*l_Size+count+1)*(2*l_Size+count+1)));
+ 
       if( (it.Get()[0] != norm1) || (it.Get()[1] != norm2) ) 
-  {
-    std::cout<<"Vector Image complex read as Vector Image double error: "<<it.Get()<<", waited for ("<<norm1<<", "<<norm2<<")."<<std::endl;
-    
-    return EXIT_FAILURE;
-  }
+	{
+	  std::cout<<"Vector Image complex read as Vector Image double error: "<<it.Get()<<", waited for ("<<norm1<<", "<<norm2<<")."<<std::endl;
+	  
+	  return EXIT_FAILURE;
+	}
 
-      count += 2;
       ++it;
     }
   
@@ -463,32 +476,27 @@ int otbVectorImageComplexToVectorImageComplex(int argc, char * argv[])
   reader->GetOutput()->SetRequestedRegion(region);
   reader->Update();
 
-  if(reader->GetOutput()->GetNumberOfComponentsPerPixel() != 1)
-    {
-      std::cout<<"Invalid image size, should be 1, no "<<reader->GetOutput()->GetNumberOfComponentsPerPixel()<<"."<<std::endl;
-
-      return EXIT_FAILURE;
-    }
-
-  itk::ImageRegionIterator<CmplxVectorImageType> it( reader->GetOutput(), region );
+  itk::ImageRegionIteratorWithIndex<CmplxVectorImageType> it( reader->GetOutput(), region );
   unsigned int l_Size = reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0]* reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1];
 
   unsigned int count = 0;
   it.GoToBegin();
   while( it.IsAtEnd()==false )
     {
+     count = 2*(it.GetIndex()[1]*reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]+it.GetIndex()[0]);
+
       PixelType cmplx1(count, count+1);
-      PixelType cmplx2(l_Size+count, l_Size+count+1);
+      PixelType cmplx2(2*l_Size+count, 2*l_Size+count+1);
+
       if( (it.Get()[0] != cmplx1) || (it.Get()[1] != cmplx2) ) 
-  {
-    std::cout<<"Image double read as Vector Image complex error: "<<std::endl;
-    std::cout<<it.Get()[0]<<", waited for "<<cmplx1<<"."<<std::endl;
-    std::cout<<it.Get()[1]<<", waited for "<<cmplx2<<"."<<std::endl;
+	{
+	  std::cout<<"Image double read as Vector Image complex error: "<<std::endl;
+	  std::cout<<it.Get()[0]<<", waited for "<<cmplx1<<"."<<std::endl;
+	  std::cout<<it.Get()[1]<<", waited for "<<cmplx2<<"."<<std::endl;
 
-    return EXIT_FAILURE;
-  }
+	  return EXIT_FAILURE;
+	}
 
-      count++;
       ++it;
     }
   
@@ -534,21 +542,22 @@ int otbImageDoubleToVectorImageComplex(int argc, char * argv[])
       return EXIT_FAILURE;
     }
 
-  itk::ImageRegionIterator<CmplxVectorImageType> it( reader->GetOutput(), region );
+  itk::ImageRegionIteratorWithIndex<CmplxVectorImageType> it( reader->GetOutput(), region );
   unsigned int l_Size = reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0]* reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1];
 
   unsigned int count = 0;
   it.GoToBegin();
   while( it.IsAtEnd()==false )
     {
-      if( (it.Get()[0].real() != static_cast<RealType>(count)) || (it.Get()[0].imag() != 0) ) 
-  {
-    std::cout<<"Image double read as Vector Image complex error: "<<it.Get()[0]<<", waited for ("<<count<<", 0)."<<std::endl;
-    
-    return EXIT_FAILURE;
-  }
+      count = it.GetIndex()[1]*reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]+it.GetIndex()[0];
 
-      count++;
+      if( (it.Get()[0].real() != static_cast<RealType>(count)) || (it.Get()[0].imag() != 0) ) 
+	{
+	  std::cout<<"Image double read as Vector Image complex error: "<<it.Get()[0]<<", waited for ("<<count<<", 0)."<<std::endl;
+	  
+	  return EXIT_FAILURE;
+	}
+
       ++it;
     }
   
