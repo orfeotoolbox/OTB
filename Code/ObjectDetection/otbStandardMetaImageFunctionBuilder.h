@@ -107,9 +107,10 @@ public:
   template <class TInputImage>
   void AddImage(TInputImage * image)
   {
-    typedef TInputImage                      InputImageType;
-    typedef Image<ValueType, 2>              ImageType;
-
+    typedef TInputImage                                   InputImageType;
+    typedef typename InputImageType::InternalPixelType    InternalPixelType;
+    typedef Image<InternalPixelType, 2>                   ImageType;
+   
     //Mono-Channel Factories
     typedef LocalHistogramIFFactory<ImageType,
       CoordRepType, TPrecision>               LocalHistogramIFFactoryType;
