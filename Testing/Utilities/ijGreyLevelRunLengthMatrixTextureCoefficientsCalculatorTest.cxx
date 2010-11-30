@@ -54,7 +54,7 @@ int ijGreyLevelRunLengthMatrixTextureCoefficientsCalculatorTest( int argc, char*
     numberOfPixelsInMask *= imageReader->GetOutput()->GetLargestPossibleRegion().GetSize()[i];
     numberOfDirections *= 3;
     } 
-  numberOfDirections = vcl_floor( 0.5 * numberOfDirections );
+  numberOfDirections = static_cast<unsigned int>( vcl_floor( 0.5 * static_cast<double>(numberOfDirections) ) );
   unsigned int numberOfBins = 100;
 
   try
