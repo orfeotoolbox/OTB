@@ -36,4 +36,9 @@ void RegisterTests()
   REGISTER_TEST(otbImageComplexToImageComplex);
   REGISTER_TEST(otbImageComplexToVectorImageDouble);
   REGISTER_TEST(otbImageComplexToVectorImageComplex);
+  REGISTER_TEST(otbVectorImageDoubleToImageComplex);
+  REGISTER_TEST(otbVectorImageDoubleToVectorImageComplex);
+ REGISTER_TEST(otbVectorImageComplexToVectorImageDouble);
+  REGISTER_TEST(otbVectorImageComplexToVectorImageComplex);
+  REGISTER_TEST(otbImageDoubleToVectorImageComplex);
 }
