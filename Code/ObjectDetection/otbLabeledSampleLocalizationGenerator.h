@@ -100,6 +100,10 @@ public:
   itkGetConstMacro(NbMaxIteration, unsigned long int);
   itkSetMacro(NbMaxIteration, unsigned long int);
 
+  /** Set the number of samples position to generate inside the inhibition radius window around a positive point */
+  itkGetConstMacro(NumberOfPositiveSamplesPerPoint, unsigned int);
+  itkSetMacro(NumberOfPositiveSamplesPerPoint,unsigned int);
+
   /** Set the seed for random number generator */
   void SetSeed(unsigned int seed)
   {
@@ -127,6 +131,7 @@ private:
   double                    m_RandomLocalizationDensity;
   double                    m_InhibitionRadius;
   unsigned long int         m_NbMaxIteration;
+  unsigned int              m_NumberOfPositiveSamplesPerPoint;
 };
 
 } // end namespace otb

@@ -31,7 +31,8 @@ LabeledSampleLocalizationGenerator<TVectorData>
   m_NoClassIdentifier(0),
   m_RandomLocalizationDensity(.005),
   m_InhibitionRadius(5.0),
-  m_NbMaxIteration(10000)
+  m_NbMaxIteration(10000),
+  m_NumberOfPositiveSamplesPerPoint(10)
 {
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfRequiredOutputs(1);
@@ -161,7 +162,6 @@ LabeledSampleLocalizationGenerator<TVectorData>
       if(valid)
         {
         vPoint.push_back(point);
-//        insiders.push_back(point);
         }
       else
         {
@@ -172,6 +172,21 @@ LabeledSampleLocalizationGenerator<TVectorData>
     nbIter --;
     }
   
+  // Densifying positive points
+
+  for(typename PointVectorType::const_iterator iIt = insiders.begin(); iIt != insiders.end();++iIt)
+    {
+    for(unsigned int i = 0; i < m_NumberOfPositiveSamplesPerPoint; ++i)
+      {
+      PointType point;
+      for(unsigned int dim = 0; dim < 2; ++dim)
+        {
+        point[dim] = (*iIt)[dim]+this->m_RandomGenerator->GetUniformVariate(-m_InhibitionRadius,m_InhibitionRadius);
+        }
+      pPoint.push_back(point);
+      }
+    }
+
   std::pair<PointVectorType,PointVectorType> result;
   result.first = (vPoint);
   result.second = (pPoint);
