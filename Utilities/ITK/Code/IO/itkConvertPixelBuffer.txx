@@ -605,12 +605,13 @@ ConvertPixelBuffer<InputPixelType, OutputPixelType, OutputConvertTraits>
                       int itkNotUsed(inputNumberOfComponents),
                       OutputPixelType* outputData , size_t size)
 {
+  OutputPixelType dummy;
   std::complex<InputPixelType>* endInput = inputData + size;
   while(inputData != endInput)
     {
     OutputConvertTraits::SetNthComponent(0, *outputData, 
-      static_cast<OutputComponentType>
-                                         (std::norm(*inputData)));
+      static_cast<OutputPixelType>
+                                         (SpecialCast(*inputData,dummy)));
     inputData++;
     outputData++;
     }
