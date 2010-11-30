@@ -565,3 +565,102 @@ int otbImageDoubleToVectorImageComplex(int argc, char * argv[])
   return EXIT_SUCCESS;
 }
 
+/***********
+ * 11.
+ * Read VectorImage<complex> as Image<double>
+ * out : Amplitude(norm(in[0]), norm(in[1], ...)
+ * Amplitude is defined as in itkConvertPixelBuffer
+ ***********/
+int otbVectorImageComplexToImageDouble(int argc, char * argv[])
+{
+  typedef double                                RealType;
+  typedef std::complex<RealType>                PixelType;
+  typedef otb::VectorImage<PixelType, 2>               CmplxVectorImageType;
+  typedef otb::ImageFileReader<CmplxVectorImageType>       ReaderType;
+
+
+  ReaderType::Pointer reader = ReaderType::New();
+  reader->SetFileName(argv[1]);
+
+  CmplxVectorImageType::IndexType id;
+  CmplxVectorImageType::SizeType size;
+  CmplxVectorImageType::RegionType region;
+
+  id.Fill(0);
+  size[0] = 10;
+  size[1] = 1;
+
+  region.SetSize( size );
+  region.SetIndex( id ); 
+
+  reader->GetOutput()->SetRequestedRegion(region);
+  reader->Update();
+
+  if(reader->GetOutput()->GetNumberOfComponentsPerPixel() == 1)
+    {
+      std::cout<<"Invalid image size, should be greater than 1."<<std::endl;
+
+      return EXIT_FAILURE;
+    }
+
+  itk::ImageRegionIteratorWithIndex<CmplxVectorImageType> it( reader->GetOutput(), region );
+  unsigned int l_Size = reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0]* reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1];
+
+  unsigned int count = 0;
+  it.GoToBegin();
+  while( it.IsAtEnd()==false )
+    {
+      count = 2*(it.GetIndex()[1]*reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]+it.GetIndex()[0]);
+
+      if(reader->GetOutput()->GetNumberOfComponentsPerPixel() == 2)
+	{
+	  // Amplitude = input[0] norm * input[1] norm
+	  double norm1 = vcl_sqrt(static_cast<double>( (count*count) + (count+1)*(count+1)));
+	  double norm2 = vcl_sqrt(static_cast<double>( ((2*l_Size+count)*(2*l_Size+count)) + (2*l_Size+count+1)*(2*l_Size+count+1)));	  
+
+	  if( it.Get() != static_cast<RealType>(norm1*norm2)) 
+	    {
+	      std::cout<<"Vector Image complex with 2 bands read as Image double error: "<<it.Get()<<", waited for norm value: "<<norm1*norm2<<"."<<std::endl;
+	      
+	      return EXIT_FAILURE;
+	    }
+	}
+      else if(reader->GetOutput()->GetNumberOfComponentsPerPixel() == 3)
+	{
+	  // Amplitude = (2125*norm(input[0]) + 7154*norm(input[1]) + 721*norm(input[2])) / 10000
+	  double norm1 = vcl_sqrt(static_cast<double>( (count*count) + (count+1)*(count+1)));
+	  double norm2 = vcl_sqrt(static_cast<double>( ((2*l_Size+count)*(2*l_Size+count)) + (2*l_Size+count+1)*(2*l_Size+count+1)));	  
+	  double norm3 = vcl_sqrt(static_cast<double>( ((4*l_Size+count)*(4*l_Size+count)) + (4*l_Size+count+1)*(4*l_Size+count+1)));	  
+
+	  if( it.Get() != static_cast<RealType>( (2125*norm1+7154*norm2+721*norm3)/10000 ) )
+	    {
+	      std::cout<<"Vector Image complex with 3 bands read as Image double error: "<<it.Get()<<", waited for norm value: "<<(2125*norm1+7154*norm2+721*norm3)/10000<<"."<<std::endl;
+	      std::cout<<"With: norm1="<<norm1<<", norm2=: "<<norm2<<", norm3= "<<norm3<<"."<<std::endl;
+
+	      return EXIT_FAILURE;
+	    }
+	}
+      else
+	{
+	  // Amplitude = (2125*norm(input[0]) + 7154*norm(input[1]) + 721*norm(input[2])) / 10000
+	  double norm1 = vcl_sqrt(static_cast<double>( (count*count) + (count+1)*(count+1)));
+	  double norm2 = vcl_sqrt(static_cast<double>( ((2*l_Size+count)*(2*l_Size+count)) + (2*l_Size+count+1)*(2*l_Size+count+1)));	  
+	  double norm3 = vcl_sqrt(static_cast<double>( ((4*l_Size+count)*(4*l_Size+count)) + (4*l_Size+count+1)*(4*l_Size+count+1)));	  
+	  double norm4 = vcl_sqrt(static_cast<double>( ((6*l_Size+count)*(6*l_Size+count)) + (6*l_Size+count+1)*(6*l_Size+count+1)));	  
+
+	  if( it.Get() != static_cast<RealType>( (2125*norm1+7154*norm2+721*norm3)/10000 * norm4 ) )
+	    {
+	      std::cout<<"Vector Image complex with 4 bands read as Image double error: "<<it.Get()<<", waited for norm value: "<<(2125*norm1+7154*norm2+721*norm3)/10000*norm4<<"."<<std::endl;
+	      std::cout<<"With: norm1="<<norm1<<", norm2=: "<<norm2<<", norm3= "<<norm3<<", norm4= "<<norm4<<"."<<std::endl;
+	      
+	      return EXIT_FAILURE;
+	    }
+	       
+	    ++it;
+	    }
+	}
+  
+  
+  return EXIT_SUCCESS;
+}
+

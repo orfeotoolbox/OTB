@@ -2734,12 +2734,12 @@ ADD_TEST(ioTvImageComplexToVectorImageComplex ${IO_TESTS21}
 
 ADD_TEST(ioTvVectorImageDoubleToImageComplex ${IO_TESTS21}
          otbVectorImageDoubleToImageComplex
-              ${INPUTDATA}/multibandUnsignedInt.tif
+              ${INPUTDATA}/multibandDouble.tif
 )
 
 ADD_TEST(ioTvVectorImageDoubleToVectorImageComplex ${IO_TESTS21}
          otbVectorImageDoubleToVectorImageComplex
-              ${INPUTDATA}/multibandUnsignedInt.tif
+              ${INPUTDATA}/multibandDouble.tif
 )
 
 ADD_TEST(ioTvVectorImageComplexToVectorImageDouble ${IO_TESTS21}
@@ -2755,6 +2755,21 @@ ADD_TEST(ioTvVectorImageComplexToVectorImageComplex ${IO_TESTS21}
 ADD_TEST(ioTvImageDoubleToVectorImageComplex ${IO_TESTS21}
          otbImageDoubleToVectorImageComplex
               ${INPUTDATA}/monobandDouble.tif
+)
+
+ADD_TEST(ioTvVectorImageComplexToImageDouble_2bands ${IO_TESTS21}
+         otbVectorImageComplexToImageDouble
+              ${INPUTDATA}/multibandComplexDouble.hdr
+)
+
+ADD_TEST(ioTvVectorImageComplexToImageDouble_3bands ${IO_TESTS21}
+         otbVectorImageComplexToImageDouble
+              ${INPUTDATA}/multi3bandsDouble.hdr
+)
+
+ADD_TEST(ioTvVectorImageComplexToImageDouble_4bands ${IO_TESTS21}
+         otbVectorImageComplexToImageDouble
+              ${INPUTDATA}/mono3bandsDouble.hdr
 )
 
 #----------------------------------------------------------------------------------
