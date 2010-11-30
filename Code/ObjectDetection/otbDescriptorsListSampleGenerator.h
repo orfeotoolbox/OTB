@@ -189,7 +189,7 @@ private:
     for(unsigned int i=0; i<ImageDimension; i++)
       {
 #ifdef ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY
-      if( itk::Math::RoundHalfIntegerUp<IndexValueType>(index[i]) < static_cast<IndexValueType>( region.GetIndex(i) ) + m_NeighborhoodRadius )
+      if( itk::Math::RoundHalfIntegerUp<IndexValueType>(index[i]) < static_cast<IndexValueType>( region.GetIndex(i) ) + static_cast<IndexValueType>(m_NeighborhoodRadius) )
 #else
       if( index[i] < static_cast<TCoordRepType>( region.GetIndex(i) ) + m_NeighborhoodRadius )
 #endif

@@ -69,7 +69,6 @@ DEMToOrthoImageGenerator<TDEMImage, TMapProjection>
   // Walk the output image, evaluating the height at each pixel
   IndexType currentindex;
   PointType cartoPoint;
-  double    height;
   PointType geoPoint;
   for (outIt.GoToBegin(); !outIt.IsAtEnd(); ++outIt)
     {

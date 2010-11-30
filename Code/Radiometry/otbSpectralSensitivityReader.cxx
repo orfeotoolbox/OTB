@@ -96,7 +96,7 @@ SpectralSensitivityReader
     }
   catch (itk::ExceptionObject& err)
     {
-    itkExceptionMacro(<< "Invalid input image");
+    itkExceptionMacro(<< "Invalid input image" << err.GetDescription());
     }
 
   std::string instrument = oss.str();

@@ -381,7 +381,6 @@ IkonosImageMetadataInterface::VariableLengthVectorType
 IkonosImageMetadataInterface
 ::GetPhysicalBias() const
 {
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
   if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Ikonos Image");
@@ -398,7 +397,6 @@ IkonosImageMetadataInterface::VariableLengthVectorType
 IkonosImageMetadataInterface
 ::GetPhysicalGain() const
 {
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
   if (!this->CanRead())
     {
     itkExceptionMacro(<< "Invalid Metadata, no Ikonos Image");
