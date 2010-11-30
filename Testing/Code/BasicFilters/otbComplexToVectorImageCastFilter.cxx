@@ -41,9 +41,6 @@ int otbComplexToVectorImageCastFilterNew(int argc, char * argv[])
 
 int otbComplexToVectorImageCastFilterTest(int argc, char * argv[])
 {
-  const char * infname      = argv[1];
-  const char * outfname     = argv[2];
-  
   typedef std::complex<float>        ComplexType;
   typedef otb::Image<ComplexType, 2> CplxImageType;
   typedef otb::VectorImage<float, 2> VectorImageType;

@@ -2709,7 +2709,7 @@ ADD_TEST(ioTvTileMapImageIOHelperTest ${IO_TESTS21}
 
 ADD_TEST(ioTvImageDoubleToImageComplex ${IO_TESTS21}
          otbImageDoubleToImageComplex
-             ${INPUTDATA}/monobandUnsignedInt.tif
+             ${INPUTDATA}/monobandDouble.tif
 )
 
 ADD_TEST(ioTvImageComplexToImageDouble ${IO_TESTS21}
@@ -2754,7 +2754,7 @@ ADD_TEST(ioTvVectorImageComplexToVectorImageComplex ${IO_TESTS21}
 
 ADD_TEST(ioTvImageDoubleToVectorImageComplex ${IO_TESTS21}
          otbImageDoubleToVectorImageComplex
-              ${INPUTDATA}/monobandUnsignedInt.tif
+              ${INPUTDATA}/monobandDouble.tif
 )
 
 #----------------------------------------------------------------------------------

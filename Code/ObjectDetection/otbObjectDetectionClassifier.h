@@ -37,7 +37,7 @@ namespace otb
 {
 
 template <class TFunctionPrecision>
-class DefaultDescriptorsType
+class DefaultDescriptorType
 {
 public:
   typedef itk::VariableLengthVector<TFunctionPrecision> Type;
@@ -236,7 +236,7 @@ class ITK_EXPORT ObjectDetectionClassifier :
                                                    TOutputVectorData,
                                                    TLabel,
                                                    itk::FunctionBase< itk::Point<TCoordRep, 2>,
-                                                                      typename DefaultDescriptorsType<TFunctionPrecision>::Type> >
+                                                                      typename DefaultDescriptorType<TFunctionPrecision>::Type> >
                                                  >
 {
 public:
@@ -248,7 +248,7 @@ public:
                   TOutputVectorData,
                   TLabel,
                   itk::FunctionBase< itk::Point<TCoordRep, 2>,
-                                     typename DefaultDescriptorsType<TFunctionPrecision>::Type> >
+                                     typename DefaultDescriptorType<TFunctionPrecision>::Type> >
               >                                 Superclass;
     typedef itk::SmartPointer<Self>             Pointer;
     typedef itk::SmartPointer<const Self>       ConstPointer;
@@ -269,7 +269,7 @@ public:
     typedef itk::Point<TCoordRep, 2> PointType;
 
     /** The return value of the function */
-    typedef typename DefaultDescriptorsType<FunctionPrecision>::Type DescriptorType;
+    typedef typename DefaultDescriptorType<FunctionPrecision>::Type DescriptorType;
 
     /** The function evaluated on the input image at locations specified by the vector data */
     typedef itk::FunctionBase<PointType, DescriptorType> DescriptorsFunctionType;
