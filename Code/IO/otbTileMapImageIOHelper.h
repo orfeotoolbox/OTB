@@ -18,6 +18,10 @@
 #ifndef __otbTileMapImageIOHelper_h
 #define __otbTileMapImageIOHelper_h
 
+
+#include "itkObject.h"
+#include "itkObjectFactory.h"
+
 #include <string>
 #include <iostream>
 #include <sstream>
@@ -30,11 +34,30 @@ namespace otb
  *
  */
 
-class TileMapImageIOHelper
+class TileMapImageIOHelper: public itk::Object
 {
 public:
+  /** Standard class typedefs. */
+  typedef TileMapImageIOHelper           Self;
+  typedef itk::SmartPointer<Self>        Pointer;
+  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef itk::Object                    Superclass;
+
+  itkTypeMacro(TileMapImageIOHelper, itk::Object);
+  itkNewMacro(Self);
+
   /** Correspondance between depth and scale for the quad tree paradigm*/
   const std::string ConvertDepthToScale(const unsigned int depth) const;
+
+protected:
+  TileMapImageIOHelper() {}
+  ~TileMapImageIOHelper() {}
+
+private:
+  TileMapImageIOHelper(const Self &);  //purposely not implemented
+  void operator =(const Self&);  //purposely not implemented
+
+
 }; // end class TileMapImageIOHelper
 
 } // end namespace otb

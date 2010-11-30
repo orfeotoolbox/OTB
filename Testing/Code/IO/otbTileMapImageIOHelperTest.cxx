@@ -22,14 +22,15 @@
 int otbTileMapImageIOHelperNew(int argc, char * argv[])
 {
 
-  otb::TileMapImageIOHelper myTileMapImageIOHelper;
+  otb::TileMapImageIOHelper::Pointer myTileMapImageIOHelper;
+  myTileMapImageIOHelper = otb::TileMapImageIOHelper::New();
   return EXIT_SUCCESS;
 }
 
 int otbTileMapImageIOHelperTest(int argc, char * argv[])
 {
-
-  otb::TileMapImageIOHelper myTileMapImageIOHelper;
+  otb::TileMapImageIOHelper::Pointer myTileMapImageIOHelper;
+  myTileMapImageIOHelper = otb::TileMapImageIOHelper::New();
 
   char * filename = argv[1];
   std::ofstream file;
@@ -37,7 +38,7 @@ int otbTileMapImageIOHelperTest(int argc, char * argv[])
 
   for (unsigned int i=0; i < 22; ++i)
     {
-    file << i << ": " << myTileMapImageIOHelper.ConvertDepthToScale(i) << std::endl;
+    file << i << ": " << myTileMapImageIOHelper->ConvertDepthToScale(i) << std::endl;
     }
 
   file.close();
