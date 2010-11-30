@@ -35,7 +35,7 @@ namespace otb
  *  membership function is modeled by a trapezoidal function for which
  *  4 values have to be provided.
  */
-template <class TNValues, class TPrecision=double>
+template <unsigned int TNValues = 2, class TPrecision=double>
 class ITK_EXPORT FuzzyVariable : public itk::DataObject
 {
 public:
@@ -53,7 +53,7 @@ public:
   /** Type to hold the membership functions */
   typedef itk::FixedArray< PrecisionType, TNValues > ValueVectorType;
   /** Membership value accessors */
-  itkConstGetMacro(Value, Memberships);
+  itkGetMacro(Memberships, ValueVectorType);
 
 
 protected:
@@ -69,4 +69,9 @@ private:
   ValueVectorType m_Memberships;
 };
 } // end namespace otb
+
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbFuzzyVariable.txx"
+#endif
+
 #endif
