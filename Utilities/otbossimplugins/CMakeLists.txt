@@ -22,7 +22,7 @@ SET(ossimplugins_SOURCES
 )
 
 ADD_LIBRARY(otbossimplugins ${ossimplugins_SOURCES} )
-TARGET_LINK_LIBRARIES(otbossimplugins ${GDAL_LIBRARY} ${OGR_LIBRARY} ${GEOTIFF_LIBRARY} otbossim)
+TARGET_LINK_LIBRARIES(otbossimplugins ${GEOTIFF_LIBRARY} ${GDAL_LIBRARY} ${OGR_LIBRARY} otbossim)
 #TARGET_LINK_LIBRARIES(otbossimplugins otbossim)
 
 IF(OTB_LIBRARY_PROPERTIES)
