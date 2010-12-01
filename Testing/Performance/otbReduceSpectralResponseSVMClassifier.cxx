@@ -34,8 +34,9 @@
 ./bin/otbReduceSpectralResponseSVMClassifier ../data/BD-CNES/jpl/nicolet/minerals/borate/txt/ ../data/BD-CNES/jpl/nicolet/minerals/carbonate/txt/ ../data/BD-CNES/jpl/nicolet/minerals/cyclosilicate/txt/ ../data/BD-CNES/jpl/nicolet/manmade/txt/ ../data/BD-CNES/jpl/nicolet/soils/txt/ ../hg/SimuPerformances/Data/Rsr/SPOT5/HRG1/rep6S.dat 4 4 12 27.3 152.7 2.5 -77.0 1013. 2.48134 0.34400 1 0.199854
 */
 
-int main(int argc, char * argv[])
+int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
 {
+
    double percentage=0.1;
       
    typedef otb::SpectralResponse< double,double>  ResponseType;
