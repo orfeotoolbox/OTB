@@ -44,9 +44,9 @@ public:
   inline TOutput operator ()(const TInput1& A, const TInput2& B) const
   {
     TOutput out;
-    out.SetRed(A.GetRed() * B);
-    out.SetGreen(A.GetGreen() * B);
-    out.SetBlue(A.GetBlue() * B);
+    out.SetRed( static_cast<typename TOutput::ValueType>(static_cast<double>(A.GetRed()) * static_cast<double>(B)) );
+    out.SetGreen( static_cast<typename TOutput::ValueType>(static_cast<double>(A.GetGreen()) * static_cast<double>(B)) );
+    out.SetBlue(static_cast<typename TOutput::ValueType>(static_cast<double>(A.GetBlue()) * static_cast<double>(B)));
     return out;
   }
 };

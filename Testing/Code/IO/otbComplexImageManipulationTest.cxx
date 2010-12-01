@@ -63,11 +63,11 @@ int otbImageDoubleToImageComplex(int argc, char * argv[])
       count = it.GetIndex()[1]*reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]+it.GetIndex()[0];
 
       if( (it.Get().real() != static_cast<RealType>(count)) || (it.Get().imag() != static_cast<RealType>(0)) ) 
-	{
-	  std::cout<<"Image double read as Image complex error : "<<it.Get()<<", waited for ("<<count<<", 0)"<<std::endl;
+  {
+    std::cout<<"Image double read as Image complex error : "<<it.Get()<<", waited for ("<<count<<", 0)"<<std::endl;
 
-	  return EXIT_FAILURE;
-	}
+    return EXIT_FAILURE;
+  }
 
       ++it;
     }
@@ -116,11 +116,11 @@ int otbImageComplexToImageDouble(int argc, char * argv[])
       double norm = vcl_sqrt(static_cast<double>( (count*count) + (count+1)*(count+1)));
 
       if(it.Get() != static_cast<RealType>(norm))
-	{
-	  std::cout<<"Image complex read as Image double error : value (should be norm): "<<it.Get()<<", waited for "<<norm<<"."<<std::endl;
-	  
-	  return EXIT_FAILURE;
-	}
+  {
+    std::cout<<"Image complex read as Image double error : value (should be norm): "<<it.Get()<<", waited for "<<norm<<"."<<std::endl;
+    
+    return EXIT_FAILURE;
+  }
       ++it;
     }
   
@@ -169,11 +169,11 @@ int otbImageComplexToImageComplex(int argc, char * argv[])
      count = 2*(it.GetIndex()[1]*reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]+it.GetIndex()[0]);
 
       if( (it.Get().real() != static_cast<RealType>(count)) || ( it.Get().imag() != static_cast<RealType>(count+1) ) ) 
-	{
-	  std::cout<<"Image complex read as Image complex error: "<<it.Get()<<", waited for ("<<count<<", "<<count+1<<")"<<std::endl;
-	  
-	  return EXIT_FAILURE;
-	}
+  {
+    std::cout<<"Image complex read as Image complex error: "<<it.Get()<<", waited for ("<<count<<", "<<count+1<<")"<<std::endl;
+    
+    return EXIT_FAILURE;
+  }
       
 
       ++it;
@@ -222,11 +222,11 @@ int otbImageComplexToVectorImageDouble(int argc, char * argv[])
      count = 2*(it.GetIndex()[1]*reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]+it.GetIndex()[0]);
 
      if( (it.Get()[0] != static_cast<RealType>(count)) || (it.Get()[1] != static_cast<RealType>(count+1)) )
-	{
-	  std::cout<<"Image complex read as Vector Image double error: "<<it.Get()<<", waited for ("<<count<<", "<<count+1<<")"<<std::endl;
-	  
-	  return EXIT_FAILURE;
-	}
+  {
+    std::cout<<"Image complex read as Vector Image double error: "<<it.Get()<<", waited for ("<<count<<", "<<count+1<<")"<<std::endl;
+    
+    return EXIT_FAILURE;
+  }
 
       //count += 2;
       ++it;
@@ -275,11 +275,11 @@ int otbImageComplexToVectorImageComplex(int argc, char * argv[])
       count = 2*(it.GetIndex()[1]*reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]+it.GetIndex()[0]);
 
       if( (it.Get()[0].real() != static_cast<RealType>(count)) || ( it.Get()[0].imag() != static_cast<RealType>(count+1) ) ) 
-	{
-	  std::cout<<"Image complex read as Vector Image complex error: "<<it.Get()[0]<<", waited for ("<<count<<", "<<count+1<<")"<<std::endl;
-	  
-	  return EXIT_FAILURE;
-	}
+  {
+    std::cout<<"Image complex read as Vector Image complex error: "<<it.Get()[0]<<", waited for ("<<count<<", "<<count+1<<")"<<std::endl;
+    
+    return EXIT_FAILURE;
+  }
    
        ++it;
     }
@@ -327,11 +327,11 @@ int otbVectorImageDoubleToImageComplex(int argc, char * argv[])
       count = 2*(it.GetIndex()[1]*reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]+it.GetIndex()[0]);
   
       if(it.Get().real() != static_cast<RealType>(count) || (it.Get().imag() != static_cast<RealType>(count+1)) ) 
-	{
-	  std::cout<<"Vector Image double read as Image double error: "<<it.Get()<<", waited for ("<<count<<", "<<count+1<<")"<<std::endl;
-	  
-	  return EXIT_FAILURE;
-	}
+  {
+    std::cout<<"Vector Image double read as Image double error: "<<it.Get()<<", waited for ("<<count<<", "<<count+1<<")"<<std::endl;
+    
+    return EXIT_FAILURE;
+  }
 
       ++it;
     }
@@ -379,11 +379,11 @@ int otbVectorImageDoubleToVectorImageComplex(int argc, char * argv[])
       count = 2*(it.GetIndex()[1]*reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]+it.GetIndex()[0]);;
 
       if(it.Get()[0].real() != static_cast<RealType>(count) || (it.Get()[0].imag() != static_cast<RealType>(0)) ) 
-	{
-	  std::cout<<"Vector Image double read as Vector Image complex error: "<<it.Get()[0]<<", waited for ("<<count<<", 0)."<<std::endl;
-	  
-	  return EXIT_FAILURE;
-	}
+  {
+    std::cout<<"Vector Image double read as Vector Image complex error: "<<it.Get()[0]<<", waited for ("<<count<<", 0)."<<std::endl;
+    
+    return EXIT_FAILURE;
+  }
 
       ++it;
     }
@@ -432,11 +432,11 @@ int otbVectorImageComplexToVectorImageDouble(int argc, char * argv[])
       double norm2 = vcl_sqrt(static_cast<double>((2*l_Size+count)*(2*l_Size+count) + (2*l_Size+count+1)*(2*l_Size+count+1)));
  
       if( (it.Get()[0] != norm1) || (it.Get()[1] != norm2) ) 
-	{
-	  std::cout<<"Vector Image complex read as Vector Image double error: "<<it.Get()<<", waited for ("<<norm1<<", "<<norm2<<")."<<std::endl;
-	  
-	  return EXIT_FAILURE;
-	}
+  {
+    std::cout<<"Vector Image complex read as Vector Image double error: "<<it.Get()<<", waited for ("<<norm1<<", "<<norm2<<")."<<std::endl;
+    
+    return EXIT_FAILURE;
+  }
 
       ++it;
     }
@@ -489,13 +489,13 @@ int otbVectorImageComplexToVectorImageComplex(int argc, char * argv[])
       PixelType cmplx2(2*l_Size+count, 2*l_Size+count+1);
 
       if( (it.Get()[0] != cmplx1) || (it.Get()[1] != cmplx2) ) 
-	{
-	  std::cout<<"Image double read as Vector Image complex error: "<<std::endl;
-	  std::cout<<it.Get()[0]<<", waited for "<<cmplx1<<"."<<std::endl;
-	  std::cout<<it.Get()[1]<<", waited for "<<cmplx2<<"."<<std::endl;
+  {
+    std::cout<<"Image double read as Vector Image complex error: "<<std::endl;
+    std::cout<<it.Get()[0]<<", waited for "<<cmplx1<<"."<<std::endl;
+    std::cout<<it.Get()[1]<<", waited for "<<cmplx2<<"."<<std::endl;
 
-	  return EXIT_FAILURE;
-	}
+    return EXIT_FAILURE;
+  }
 
       ++it;
     }
@@ -552,14 +552,113 @@ int otbImageDoubleToVectorImageComplex(int argc, char * argv[])
       count = it.GetIndex()[1]*reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]+it.GetIndex()[0];
 
       if( (it.Get()[0].real() != static_cast<RealType>(count)) || (it.Get()[0].imag() != 0) ) 
-	{
-	  std::cout<<"Image double read as Vector Image complex error: "<<it.Get()[0]<<", waited for ("<<count<<", 0)."<<std::endl;
-	  
-	  return EXIT_FAILURE;
-	}
+  {
+    std::cout<<"Image double read as Vector Image complex error: "<<it.Get()[0]<<", waited for ("<<count<<", 0)."<<std::endl;
+    
+    return EXIT_FAILURE;
+  }
 
       ++it;
     }
+  
+  
+  return EXIT_SUCCESS;
+}
+
+/***********
+ * 11.
+ * Read VectorImage<complex> as Image<double>
+ * out : Amplitude(norm(in[0]), norm(in[1], ...)
+ * Amplitude is defined as in itkConvertPixelBuffer
+ ***********/
+int otbVectorImageComplexToImageDouble(int argc, char * argv[])
+{
+  typedef double                                RealType;
+  typedef std::complex<RealType>                PixelType;
+  typedef otb::VectorImage<PixelType, 2>               CmplxVectorImageType;
+  typedef otb::ImageFileReader<CmplxVectorImageType>       ReaderType;
+
+
+  ReaderType::Pointer reader = ReaderType::New();
+  reader->SetFileName(argv[1]);
+
+  CmplxVectorImageType::IndexType id;
+  CmplxVectorImageType::SizeType size;
+  CmplxVectorImageType::RegionType region;
+
+  id.Fill(0);
+  size[0] = 10;
+  size[1] = 1;
+
+  region.SetSize( size );
+  region.SetIndex( id ); 
+
+  reader->GetOutput()->SetRequestedRegion(region);
+  reader->Update();
+
+  if(reader->GetOutput()->GetNumberOfComponentsPerPixel() == 1)
+    {
+      std::cout<<"Invalid image size, should be greater than 1."<<std::endl;
+
+      return EXIT_FAILURE;
+    }
+
+  itk::ImageRegionIteratorWithIndex<CmplxVectorImageType> it( reader->GetOutput(), region );
+  unsigned int l_Size = reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0]* reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1];
+
+  unsigned int count = 0;
+  it.GoToBegin();
+  while( it.IsAtEnd()==false )
+    {
+      count = 2*(it.GetIndex()[1]*reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]+it.GetIndex()[0]);
+
+      if(reader->GetOutput()->GetNumberOfComponentsPerPixel() == 2)
+  {
+    // Amplitude = input[0] norm * input[1] norm
+    double norm1 = vcl_sqrt(static_cast<double>( (count*count) + (count+1)*(count+1)));
+    double norm2 = vcl_sqrt(static_cast<double>( ((2*l_Size+count)*(2*l_Size+count)) + (2*l_Size+count+1)*(2*l_Size+count+1)));    
+
+    if( it.Get() != static_cast<RealType>(norm1*norm2)) 
+      {
+        std::cout<<"Vector Image complex with 2 bands read as Image double error: "<<it.Get()<<", waited for norm value: "<<norm1*norm2<<"."<<std::endl;
+        
+        return EXIT_FAILURE;
+      }
+  }
+      else if(reader->GetOutput()->GetNumberOfComponentsPerPixel() == 3)
+  {
+    // Amplitude = (2125*norm(input[0]) + 7154*norm(input[1]) + 721*norm(input[2])) / 10000
+    double norm1 = vcl_sqrt(static_cast<double>( (count*count) + (count+1)*(count+1)));
+    double norm2 = vcl_sqrt(static_cast<double>( ((2*l_Size+count)*(2*l_Size+count)) + (2*l_Size+count+1)*(2*l_Size+count+1)));    
+    double norm3 = vcl_sqrt(static_cast<double>( ((4*l_Size+count)*(4*l_Size+count)) + (4*l_Size+count+1)*(4*l_Size+count+1)));    
+
+    if( it.Get() != static_cast<RealType>( (2125*norm1+7154*norm2+721*norm3)/10000 ) )
+      {
+        std::cout<<"Vector Image complex with 3 bands read as Image double error: "<<it.Get()<<", waited for norm value: "<<(2125*norm1+7154*norm2+721*norm3)/10000<<"."<<std::endl;
+        std::cout<<"With: norm1="<<norm1<<", norm2=: "<<norm2<<", norm3= "<<norm3<<"."<<std::endl;
+
+        return EXIT_FAILURE;
+      }
+  }
+      else
+  {
+    // Amplitude = (2125*norm(input[0]) + 7154*norm(input[1]) + 721*norm(input[2])) / 10000
+    double norm1 = vcl_sqrt(static_cast<double>( (count*count) + (count+1)*(count+1)));
+    double norm2 = vcl_sqrt(static_cast<double>( ((2*l_Size+count)*(2*l_Size+count)) + (2*l_Size+count+1)*(2*l_Size+count+1)));    
+    double norm3 = vcl_sqrt(static_cast<double>( ((4*l_Size+count)*(4*l_Size+count)) + (4*l_Size+count+1)*(4*l_Size+count+1)));    
+    double norm4 = vcl_sqrt(static_cast<double>( ((6*l_Size+count)*(6*l_Size+count)) + (6*l_Size+count+1)*(6*l_Size+count+1)));    
+
+    if( it.Get() != static_cast<RealType>( (2125*norm1+7154*norm2+721*norm3)/10000 * norm4 ) )
+      {
+        std::cout<<"Vector Image complex with 4 bands read as Image double error: "<<it.Get()<<", waited for norm value: "<<(2125*norm1+7154*norm2+721*norm3)/10000*norm4<<"."<<std::endl;
+        std::cout<<"With: norm1="<<norm1<<", norm2=: "<<norm2<<", norm3= "<<norm3<<", norm4= "<<norm4<<"."<<std::endl;
+        
+        return EXIT_FAILURE;
+      }
+         
+      ++it;
+      }
+  }
   
   
   return EXIT_SUCCESS;
