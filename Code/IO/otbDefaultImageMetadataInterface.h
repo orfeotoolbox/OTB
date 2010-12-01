@@ -151,13 +151,23 @@ public:
   }
 
   /** Get the 3 spectral band numbers corresponding to the default display for visualization,
-   *  in the order R, G, B */
+   *  in the order R, G, B.
+   *
+   *  Nota : When two spectral bands are available: first band is given to the R and B channel
+   *         When one spectral band is available : the only band is given to the R, G and B channel.
+   *
+   */
   std::vector<unsigned int> GetDefaultDisplay() const
   {
+    unsigned int i = 0;
     std::vector<unsigned int> rgb(3);
-    rgb[0] = 0;
-    rgb[1] = 1;
-    rgb[2] = 2;
+
+
+    while( i <this->GetNumberOfBands() || i < 3 )
+      {
+      rgb[i] = i;
+      ++i;
+      }
     return rgb;
   }
 
