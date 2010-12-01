@@ -261,7 +261,7 @@ PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,T
   inputRequestedRegion = inputPtr->GetRequestedRegion();
 
   // pad the input requested region by the operator radius
-  inputRequestedRegion.PadByRadius( m_NeighborhoodRadius );
+  inputRequestedRegion.PadByRadius( m_NeighborhoodRadius + 1 );
 
   // crop the input requested region at the input's largest possible region
   if ( inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()) )
@@ -284,6 +284,7 @@ void
 PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,TListSample,TLabelListSample>
 ::BeforeThreadedGenerateData()
 {
+  std::cout << this->GetInput()->GetBufferedRegion() << std::endl;
 }
 
 
@@ -306,6 +307,10 @@ PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,T
       VectorDataPointType point = vectorDataIt.Get()->GetPoint();
       ContinuousIndexType cidx;
       this->GetInput()->TransformPhysicalPointToContinuousIndex(point,cidx);
+
+      // OGR convention : vector data are recorded with a 0.5 shift
+      cidx[0] -= 0.5;
+      cidx[1] -= 0.5;
 
       RegionType paddedRegion = outputRegionForThread;
       paddedRegion.PadByRadius(m_NeighborhoodRadius);
