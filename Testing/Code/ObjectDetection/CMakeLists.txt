@@ -97,12 +97,12 @@ ADD_TEST(odTvObjectDetectionClassifier ${OBJECTDETECTION_TESTS1}
 ADD_TEST(odTvObjectDetectionClassifierStreaming ${OBJECTDETECTION_TESTS1}
   --compare-ogr ${NOTOL}
   ${BASELINE_FILES}/TvObjectDetectionClassifierOutput.shp
-  ${TEMP}/TvObjectDetectionClassifierOutput.shp
+  ${TEMP}/TvObjectDetectionClassifierOutputStreaming.shp
   otbObjectDetectionClassifier
   ${INPUTDATA}/ObjectReco/Boats/maur_B010202_01_extract_amplitude.tif
   ${INPUTDATA}/ObjectReco/Boats/FeatureStats_RadiometricMoments_amplitude.xml
   ${BASELINE_FILES}/TvDescriptorsSVMModelCreation.svm
-  ${TEMP}/TvObjectDetectionClassifierOutput.shp
+  ${TEMP}/TvObjectDetectionClassifierOutputStreaming.shp
   50 # streaming
   5 # neighborhood radius
   )
