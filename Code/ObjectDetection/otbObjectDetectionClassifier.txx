@@ -141,8 +141,11 @@ PersistentObjectDetectionClassifier<TInputImage,TOutputVectorData,TLabel,TFuncti
   // Create the document node
   VectorDataNodePointerType document = VectorDataNodeType::New();
   document->SetNodeType(otb::DOCUMENT);
+  VectorDataNodePointerType folder = VectorDataNodeType::New();
+  folder->SetNodeType(otb::FOLDER);
   // Adding the layer to the data tree
   vdata->GetDataTree()->Add(document, root);
+  vdata->GetDataTree()->Add(folder, document);
 
   for (unsigned int threadId = 0; threadId < m_ThreadPointArray.size(); ++threadId)
     {
@@ -160,7 +163,7 @@ PersistentObjectDetectionClassifier<TInputImage,TOutputVectorData,TLabel,TFuncti
       p[1] = it->first[1];
       currentGeometry->SetPoint(p);
       currentGeometry->SetFieldAsInt(m_ClassKey, it->second);
-      vdata->GetDataTree()->Add(currentGeometry, document);
+      vdata->GetDataTree()->Add(currentGeometry, folder);
       }
     }
 }
@@ -196,7 +199,7 @@ PersistentObjectDetectionClassifier<TInputImage,TOutputVectorData,TLabel,TFuncti
   inputRequestedRegion = inputPtr->GetRequestedRegion();
 
   // pad the input requested region by the operator radius
-  inputRequestedRegion.PadByRadius( m_NeighborhoodRadius );
+  inputRequestedRegion.PadByRadius( m_NeighborhoodRadius + 1 );
 
   // crop the input requested region at the input's largest possible region
   if ( inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()) )
