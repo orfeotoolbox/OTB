@@ -62,7 +62,7 @@ public:
   
   OutputType Convert (InputType input)
   {
-    itkGenericExceptionMacro( << "Type Convertion Not Implemented." << std::endl );
+    return static_cast<OutputType>(input);
   }
 
 protected:
