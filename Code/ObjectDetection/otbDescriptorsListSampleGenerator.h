@@ -44,9 +44,10 @@ public:
 };
 
 /** \class PersistentDescriptorsListSampleGenerator
- *  \brief
+ *  \brief [internal] Helper class for the implementation of DescriptorsListSampleGenerator
  *
- *
+ *  This class inherits PersistentImageFilter and provides the Reset/Synthesize functions,
+ *  plus the ThreadedGenerateData function implementing the image function evaluation
  */
 template <class TInputImage, class TVectorData, class TFunctionType, class TListSample, class TLabelListSample>
 class ITK_EXPORT PersistentDescriptorsListSampleGenerator :
@@ -227,10 +228,17 @@ private:
 
 
 /** \class DescriptorsListSampleGenerator
- *  \brief
+ *  \brief This class generates a ListSample by computing local descriptors
+ *  on an image at specified positions.
  *
+ *  Given an image (by SetInputImage()) and a vector data containing points (by SetSamplesLocations()),
+ *  this class evaluates an ImageFunction (set by SetDescriptorsFunction()) at each point of the vector data
+ *  over the image.
+ *  It generates a ListSample containing the descriptors values for each sample,
+ *  along with a label ListSample containing the label associatged with each sample.
+ *  The label is read from the vector data using the data field "Class", read as an int
  *  
- *
+ *  This class is streaming capable and multithreaded
  */
 template <class TInputImage, class TVectorData, class TListSample, class TLabelListSample, class TOutputPrecision = double, class TCoordRep = double>
 class ITK_EXPORT DescriptorsListSampleGenerator :
