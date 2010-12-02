@@ -64,8 +64,8 @@ RadiometricMomentsImageFunction<TInputImage,TCoordRep>
     }
   
   // Check for out of buffer
-  Self* _this = const_cast<Self*>(this);
-  _this->SetInputImage( this->GetInputImage() );
+  //Self* _this = const_cast<Self*>(this);
+  //_this->SetInputImage( this->GetInputImage() );
   if ( !this->IsInsideBuffer( index ) )
     {
     return moments;

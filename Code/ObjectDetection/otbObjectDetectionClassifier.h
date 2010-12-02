@@ -44,8 +44,11 @@ public:
 };
 
 /** \class PersistentObjectDetectionClassifier
- *  \brief
+ *  \brief [internal] Helper class for the implementation of ObjectDetectionClassifier
+ *  with streaming capabilities
  *
+ *  This class inherits PersistentImageFilter and provides the Reset/Synthesize functions,
+ *  plus the ThreadedGenerateData function implementing the image function evaluation
  *
  */
 template <class TInputImage, class TOutputVectorData, class TLabel, class TFunctionType>
@@ -224,10 +227,15 @@ private:
 
 
 /** \class ObjectDetectionClassifier
- *  \brief
+ *  \brief This class detects object in an image, given a SVM model and a local descriptors function
  *
- *  
+ *  Given an image (by SetInputImage()), a SVM model (by SetSVMModel) and an local descriptors ImageFunction
+ *  (set by SetDescriptorsFunction()), this class computes the local descriptors on a regular grid
+ *  over the image, and evaluates the class label of the corresponding sample.
+ *  It outputs a vector data with the points for which the descriptors are not classified as "negative",
+ *  the negative class label being given by SetNoClassLabel()
  *
+ *  This class is streaming capable and multithreaded
  */
 template <class TInputImage, class TOutputVectorData, class TLabel, class TFunctionPrecision = double, class TCoordRep = double>
 class ITK_EXPORT ObjectDetectionClassifier :
@@ -324,9 +332,11 @@ public:
     otbSetObjectMemberMacro(Filter, NeighborhoodRadius, unsigned int);
     otbGetObjectMemberMacro(Filter, NeighborhoodRadius, unsigned int);
 
+    /** Set/Get the name of the field containing the class information */
     otbGetObjectMemberMacro(Filter, ClassKey, std::string);
     otbSetObjectMemberMacro(Filter, ClassKey, std::string);
 
+    /** Set/Get the  label of the negative samples */
     otbGetObjectMemberMacro(Filter, NoClassLabel, LabelType);
     otbSetObjectMemberMacro(Filter, NoClassLabel, LabelType);
 
