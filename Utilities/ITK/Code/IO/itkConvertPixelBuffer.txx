@@ -571,8 +571,6 @@ ConvertPixelBuffer<InputPixelType, OutputPixelType, OutputConvertTraits>
 
 
 // Convert Grayscale to Complex
-
-// Le bug double -> std::complex<double> vient certainement d'ici
 template < typename InputPixelType,
            typename OutputPixelType,
            class OutputConvertTraits
@@ -582,7 +580,6 @@ ConvertPixelBuffer<InputPixelType, OutputPixelType, OutputConvertTraits>
 ::ConvertGrayToComplex(InputPixelType* inputData, 
                    OutputPixelType* outputData , size_t size)
 {
-  std::cout<<"Convert gray to complex "<<std::endl;
   InputPixelType* endInput = inputData + size;
   while(inputData != endInput)
     {
