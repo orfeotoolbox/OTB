@@ -126,9 +126,9 @@ int Convert::Describe(ApplicationDescriptor* descriptor)
   descriptor->AddInputImage();
   descriptor->AddOutputImage();
   descriptor->AddOption("OutputPixelType","OutputPixelType: unsigned char (1), short int (2), int (3), float (4),"
-                        " double (5), unsigned short int (12), unsigned int (13); default 1","-t", 1, false,ApplicationDescriptor::Integer);
-  descriptor->AddOption("UseRescale", "Rescale value between output type min and max","-r", 0, false,ApplicationDescriptor::Boolean);
-  descriptor->AddOption("RescaleType", "Transfer function for the rescaling: linear (1), log (2); default 1","-rt", 1, false,ApplicationDescriptor::Integer);
+                        " double (5), unsigned short int (12), unsigned int (13); default 1","t", 1, false,ApplicationDescriptor::Integer);
+  descriptor->AddOption("UseRescale", "Rescale value between output type min and max","r", 0, false,ApplicationDescriptor::Boolean);
+  descriptor->AddOption("RescaleType", "Transfer function for the rescaling: linear (1), log (2); default 1","rt", 1, false,ApplicationDescriptor::Integer);
   
   return EXIT_SUCCESS;
 }
