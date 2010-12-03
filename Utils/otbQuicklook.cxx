@@ -36,16 +36,16 @@ int Quicklook::Describe(ApplicationDescriptor* descriptor)
   descriptor->SetDescription("Generates a subsampled version of an image");
   descriptor->AddInputImage();
   descriptor->AddOutputImage();
-  descriptor->AddOptionNParams("ChannelList", "channel list","-cl",false,ApplicationDescriptor::Enumerated);
-  descriptor->AddOption("ROIStartX","first point of ROI in x-direction ","-ROIx0",1,false,ApplicationDescriptor::Integer);
-  descriptor->AddOption("ROIStartY","first point of ROI in y-direction ","-ROIy0",1,false,ApplicationDescriptor::Integer);
-  descriptor->AddOption("ROISizeX","size of ROI in x-direction ","-ROINx",1,false,ApplicationDescriptor::Integer);
-  descriptor->AddOption("ROISizeY","size of ROI in y-direction ","-ROINy",1,false,ApplicationDescriptor::Integer);
+  descriptor->AddOptionNParams("ChannelList", "channel list","cl",false,ApplicationDescriptor::Enumerated);
+  descriptor->AddOption("ROIStartX","first point of ROI in x-direction ","ROIx0",1,false,ApplicationDescriptor::Integer);
+  descriptor->AddOption("ROIStartY","first point of ROI in y-direction ","ROIy0",1,false,ApplicationDescriptor::Integer);
+  descriptor->AddOption("ROISizeX","size of ROI in x-direction ","ROINx",1,false,ApplicationDescriptor::Integer);
+  descriptor->AddOption("ROISizeY","size of ROI in y-direction ","ROINy",1,false,ApplicationDescriptor::Integer);
 
-  descriptor->AddOption("SizeX","size of quicklook in x-direction ","-Nx",1,false,ApplicationDescriptor::Integer);
-  descriptor->AddOption("SizeY","size of quicklook in y-direction ","-Ny",1,false,ApplicationDescriptor::Integer);
+  descriptor->AddOption("SizeX","size of quicklook in x-direction ","Nx",1,false,ApplicationDescriptor::Integer);
+  descriptor->AddOption("SizeY","size of quicklook in y-direction ","Ny",1,false,ApplicationDescriptor::Integer);
 
-  descriptor->AddOption("SamplingRatio","Sampling Ratio ","-sr",1,false,ApplicationDescriptor::Real);
+  descriptor->AddOption("SamplingRatio","Sampling Ratio ","sr",1,false,ApplicationDescriptor::Real);
 
   return EXIT_SUCCESS;
 }
