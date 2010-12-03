@@ -42,11 +42,11 @@ int BundleToPerfectSensor::Describe(ApplicationDescriptor* descriptor)
   descriptor->SetName("BundleToSensorModel");
   descriptor->SetDescription("Using available image metadata to determine the sensor model, computes a cartographic projection of the image");
   descriptor->AddOutputImage();
-  descriptor->AddOption("DEMDirectory","Directory were to find the DEM tiles","-dem",1,false,otb::ApplicationDescriptor::DirectoryName);
-  descriptor->AddOption("NumStreamDivisions","Number of streaming divisions (optional)","-stream",1,false,otb::ApplicationDescriptor::Integer);
-  descriptor->AddOption("LocMapSpacing","Generate a coarser deformation field with the given spacing.","-lmSpacing",1,false,otb::ApplicationDescriptor::Real);
-  descriptor->AddOption("InputPanchro","The input panchromatic image","-inP", 1,true,otb::ApplicationDescriptor::InputImage);
-  descriptor->AddOption("InputXS","The input multi-spectral image","-inXS", 1,true,otb::ApplicationDescriptor::InputImage);
+  descriptor->AddOption("DEMDirectory","Directory were to find the DEM tiles","dem",1,false,otb::ApplicationDescriptor::DirectoryName);
+  descriptor->AddOption("NumStreamDivisions","Number of streaming divisions (optional)","stream",1,false,otb::ApplicationDescriptor::Integer);
+  descriptor->AddOption("LocMapSpacing","Generate a coarser deformation field with the given spacing.","lmSpacing",1,false,otb::ApplicationDescriptor::Real);
+  descriptor->AddOption("InputPanchro","The input panchromatic image","inP", 1,true,otb::ApplicationDescriptor::InputImage);
+  descriptor->AddOption("InputXS","The input multi-spectral image","inXS", 1,true,otb::ApplicationDescriptor::InputImage);
 
   return EXIT_SUCCESS;
 }
@@ -71,11 +71,11 @@ int BundleToPerfectSensor::Execute(otb::ApplicationOptionsResult* parseResult)
 
     // Read input images information
     PanReaderType::Pointer preader= PanReaderType::New();
-    preader->SetFileName(parseResult->GetParameterString("--InputPanchro"));
+    preader->SetFileName(parseResult->GetParameterString("InputPanchro"));
     preader->GenerateOutputInformation();
 
     XsReaderType::Pointer xsreader= XsReaderType::New();
-    xsreader->SetFileName(parseResult->GetParameterString("--InputXS"));
+    xsreader->SetFileName(parseResult->GetParameterString("InputXS"));
     xsreader->GenerateOutputInformation();
     
     // Resample filter 
@@ -84,9 +84,9 @@ int BundleToPerfectSensor::Execute(otb::ApplicationOptionsResult* parseResult)
     resampler->SetInterpolator(interpolator);
     
     // Add DEM if any
-    if(parseResult->IsOptionPresent("--DEMDirectory"))
+    if(parseResult->IsOptionPresent("DEMDirectory"))
       {
-      resampler->SetDEMDirectory(parseResult->GetParameterString("--DEMDirectory",0));
+      resampler->SetDEMDirectory(parseResult->GetParameterString("DEMDirectory",0));
       }
     
     // Set up output image informations
@@ -95,9 +95,9 @@ int BundleToPerfectSensor::Execute(otb::ApplicationOptionsResult* parseResult)
     XsImageType::SizeType size = preader->GetOutput()->GetLargestPossibleRegion().GetSize();
     XsImageType::PointType origin = preader->GetOutput()->GetOrigin();
 
-    if(parseResult->IsOptionPresent("--LocMapSpacing"))
+    if(parseResult->IsOptionPresent("LocMapSpacing"))
       {
-      double defScalarSpacing = parseResult->GetParameterFloat("--LocMapSpacing");
+      double defScalarSpacing = parseResult->GetParameterFloat("LocMapSpacing");
       std::cout<<"Generating coarse deformation field (spacing="<<defScalarSpacing<<")"<<std::endl;
       XsImageType::SpacingType defSpacing;
 
@@ -135,10 +135,10 @@ int BundleToPerfectSensor::Execute(otb::ApplicationOptionsResult* parseResult)
 
     otb::StandardWriterWatcher w4(writer,resampler,"Perfect sensor fusion");
 
-    if ( parseResult->IsOptionPresent("--NumStreamDivisions") )
+    if ( parseResult->IsOptionPresent("NumStreamDivisions") )
       {
-      std::cout<<"Setting number of stream division to "<<parseResult->GetParameterULong("--NumStreamDivisions")<<std::endl;
-      writer->SetTilingStreamDivisions(parseResult->GetParameterULong("--NumStreamDivisions"));
+      std::cout<<"Setting number of stream division to "<<parseResult->GetParameterULong("NumStreamDivisions")<<std::endl;
+      writer->SetTilingStreamDivisions(parseResult->GetParameterULong("NumStreamDivisions"));
       }
     else
       {
