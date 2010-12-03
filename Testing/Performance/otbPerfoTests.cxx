@@ -27,4 +27,5 @@
 void RegisterTests()
 {
   REGISTER_TEST(otbReduceSpectralResponseSVMClassifier);
+  REGISTER_TEST(otbAtmosphericCorrectionsRSRSVMClassifier);
 }

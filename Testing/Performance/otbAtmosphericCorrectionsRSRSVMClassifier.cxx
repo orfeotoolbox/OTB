@@ -31,10 +31,10 @@
 
 
 /*
-./bin/otbReduceSpectralResponseSVMClassifier ../data/BD-CNES/jpl/nicolet/minerals/borate/txt/ ../data/BD-CNES/jpl/nicolet/minerals/carbonate/txt/ ../data/BD-CNES/jpl/nicolet/minerals/cyclosilicate/txt/ ../data/BD-CNES/jpl/nicolet/manmade/txt/ ../data/BD-CNES/jpl/nicolet/soils/txt/ ../hg/SimuPerformances/Data/Rsr/SPOT5/HRG1/rep6S.dat 4
+./bin/otbAtmosphericCorrectionsRSRSVMClassifier ../data/BD-CNES/jpl/nicolet/minerals/borate/txt/ ../data/BD-CNES/jpl/nicolet/minerals/carbonate/txt/ ../data/BD-CNES/jpl/nicolet/minerals/cyclosilicate/txt/ ../data/BD-CNES/jpl/nicolet/manmade/txt/ ../data/BD-CNES/jpl/nicolet/soils/txt/ ../hg/SimuPerformances/Data/Rsr/SPOT5/HRG1/rep6S.dat 4 4 12 27.3 152.7 2.5 -77.0 1013. 2.48134 0.34400 1 0.199854
 */
 
-int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
+int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
 {
 
    double percentage=0.1;
@@ -44,9 +44,11 @@ int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
   
    typedef otb::SatelliteRSR< double,double>  SatRSRType;
    typedef SatRSRType::Pointer  SatRSRPointerType;
-
-   typedef otb::ReduceSpectralResponse < ResponseType,SatRSRType>  ReduceResponseType;
+  
+   typedef otb::AtmosphericCorrectionsReduceSpectralResponse < ResponseType,SatRSRType>  ReduceResponseType;
    typedef ReduceResponseType::Pointer  ReduceResponseTypePointerType;
+   
+   typedef ReduceResponseType::AtmosphericCorrectionParametersType  AtmosphericCorrectionParametersType;
   
    typedef itk::VariableLengthVector<double> SampleType;
    typedef itk::Statistics::ListSample<SampleType>         SampleListType;
@@ -59,12 +61,25 @@ int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
   
   typedef otb::ConfusionMatrixCalculator<TrainingSampleListType,TrainingSampleListType> ConfusionMatrixCalculatorType;
       
-   if ( argc!= 8 )
+   if ( argc!= 19 )
    {
-      std::cout << argv[0] << std::endl << "\t" << "<dir_spectres_class1>" << "\t" << "<dir_spectres_class2>" << "\t" << "<dir_spectres_class3>" << "\t" << "<dir_spectres_class4>" << "\t" << "<dir_spectres_class5>"  << "\t" << "<Gabarit_SAT_fileSRname>" << "\t" << "<nbBands>" <<  std::endl ;
+      std::cout << argv[0] << std::endl << "\t" << "<dir_spectres_class1>" << "\t" << "<dir_spectres_class2>" << "\t" << "<dir_spectres_class3>" << "\t" << "<dir_spectres_class4>" << "\t" << "<dir_spectres_class5>"  << "\t" << "<Gabarit_SAT_fileSRname>" << "\t" << "<nbBands>" << "\t" << "<day>"  << "\t" << "<month>"  << "\t" << "<zenithSolarAngle>"  << "\t" << "<azimutSolarAngle>"  << "\t" << "<viewingZenitalAngle>"  << "\t" << "<viewingAzimutalAngle>"  << "\t" << "<atmoPressure>"  << "\t" << "<waterVaporAmount>"  << "\t" << "<ozoneAmount>"  << "\t" << "<aerosolModelValue>"  << "\t" << "<aerosolOptical>" <<  std::endl ;
       return EXIT_FAILURE;
    }
-
+   /*
+   27.3    #elevation et azimuth solaire
+   4       #day
+   12      #month
+   # AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms parameters
+   152.7 #solar azimutal angle
+   2.5 #viewing zenithal angle
+   -77.0 #viewing azimutal angle
+   1013. #atmo pressure
+   2.48134 #water vapour amount
+   0.34400 #ozone amount
+   1 #aerosol model type 
+   0.199854 #aerosol optical
+   */
   
    //Instantiation
   
@@ -85,8 +100,41 @@ int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
    satRSR->SetNbBands(nbBand);
    /** Load the satelite response file*/
    satRSR->Load(fileSatG);
+  
+   //Process 6S direct chain
+   AtmosphericCorrectionParametersType::Pointer dataAtmosphericCorrectionParameters = AtmosphericCorrectionParametersType::New();
+  
+   //Set inputs of the atmo parameters
+   const int day(atoi(argv[8]));
+   const int month(atoi(argv[9]));
+   const double zenithSolarAngle(static_cast<double>(atof(argv[10])));
+   const double azimutSolarAngle(static_cast<double>(atof(argv[11])));
+   const double viewingZenitalAngle(static_cast<double>(atof(argv[12])));
+   const double viewingAzimutalAngle(static_cast<double>(atof(argv[13])));
+   const double atmoPressure(static_cast<double>(atof(argv[14])));
+   const double waterVaporAmount(static_cast<double>(atof(argv[15])));
+   const double ozoneAmount(static_cast<double>(atof(argv[16])));
+   const int aerosolModelValue(::atoi(argv[17]));
+   const double aerosolOptical( static_cast<double>(atof(argv[18])) );
+   // Set parameters
+   dataAtmosphericCorrectionParameters->SetSolarZenithalAngle(zenithSolarAngle);
+   dataAtmosphericCorrectionParameters->SetSolarAzimutalAngle(azimutSolarAngle);
+   dataAtmosphericCorrectionParameters->SetViewingZenithalAngle(viewingZenitalAngle);
+   dataAtmosphericCorrectionParameters->SetViewingAzimutalAngle(viewingAzimutalAngle);
+   dataAtmosphericCorrectionParameters->SetMonth(month);
+   dataAtmosphericCorrectionParameters->SetDay(day);
+   dataAtmosphericCorrectionParameters->SetAtmosphericPressure(atmoPressure);
+   dataAtmosphericCorrectionParameters->SetWaterVaporAmount(waterVaporAmount);
+   dataAtmosphericCorrectionParameters->SetOzoneAmount(ozoneAmount);
+  
+   typedef AtmosphericCorrectionParametersType::AerosolModelType
+      AerosolModelType;
+  
+   AerosolModelType aerosolModel = static_cast<AerosolModelType>(aerosolModelValue);
+   dataAtmosphericCorrectionParameters->SetAerosolModel(aerosolModel);
+   dataAtmosphericCorrectionParameters->SetAerosolOptical(aerosolOptical);
 
-
+  
    //divide into training and testing files
    //90% of files are used for training and 10% for testing
    std::vector<ossimFilename> trainingFiles; //contains training files for all classes
@@ -150,6 +198,8 @@ int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
       reduceResponse->SetInputSatRSR(satRSR);
       /** Load the spectral response of the object in the simulator*/
       reduceResponse->SetInputSpectralResponse(spectralResponse);
+      reduceResponse->SetDataAtmosphericCorrectionParameters(dataAtmosphericCorrectionParameters);
+      reduceResponse->Process6S();
       reduceResponse->CalculateResponse();
       
       //Get the response in an itk::VariableLengthVector and add it to the sample list for SVMModelEstimator
@@ -192,6 +242,8 @@ int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
       reduceResponse->SetInputSatRSR(satRSR);
       /** Load the spectral response of the object in the simulator*/
       reduceResponse->SetInputSpectralResponse(spectralResponse);
+      reduceResponse->SetDataAtmosphericCorrectionParameters(dataAtmosphericCorrectionParameters);
+      reduceResponse->Process6S();
       reduceResponse->CalculateResponse();
       
       //Get the response in an itk::VariableLengthVector and add it to the sample list for SVMClassifier

@@ -22,6 +22,17 @@ ADD_TEST(rsrSVMClassifier ${PERFO_TESTS}
         ${SRCLASS4} 
         ${SAT_RSR}/rep6S.dat
         4 #nbBands
+        )
+        
+ADD_TEST(atmosphericCorrectionsRSRSVMClassifier ${PERFO_TESTS}
+        otbAtmosphericCorrectionsRSRSVMClassifier
+        ${SRCLASS0} 
+        ${SRCLASS1} 
+        ${SRCLASS2} 
+        ${SRCLASS3} 
+        ${SRCLASS4} 
+        ${SAT_RSR}/rep6S.dat
+        4 #nbBands
         4 #day
         12 #month
         27.3 #elevation et azimuth solaire
@@ -38,11 +49,13 @@ ADD_TEST(rsrSVMClassifier ${PERFO_TESTS}
 SET(PERFO_SRCS
 otbPerfoTests.cxx
 otbReduceSpectralResponseSVMClassifier.cxx
+otbAtmosphericCorrectionsRSRSVMClassifier.cxx
 )
 
 
 ADD_EXECUTABLE(otbPerfoTests ${PERFO_SRCS})
 TARGET_LINK_LIBRARIES(otbPerfoTests OTBIO OTBCommon OTBRadiometry OTBLearning OTBTesting)
+
 
 # INSTALL_TARGETS(/bin otbReduceSpectralResponseSVMClassifier)
 
