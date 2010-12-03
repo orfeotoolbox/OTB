@@ -84,11 +84,11 @@ int SplitImage::Describe(ApplicationDescriptor* descriptor)
   descriptor->SetName("SplitImage");
   descriptor->SetDescription("Split a N multiband image into N images");
   descriptor->AddInputImage();
-  descriptor->AddOption("OutputImagesBaseName", "Base name for the output images", "-on", 1,true,ApplicationDescriptor::String);
+  descriptor->AddOption("OutputImagesBaseName", "Base name for the output images", "on", 1,true,ApplicationDescriptor::String);
   descriptor->AddOption("OutputPixelType",
                     "OutputPixelType: unsigned char (1), short int (2), int (3), float (4),"
                     " double (5), unsigned short int (12), unsigned int (13); default 1",
-                    "-t", 1, false,ApplicationDescriptor::Integer);
+                    "t", 1, false,ApplicationDescriptor::Integer);
   
   return EXIT_SUCCESS;
 }
