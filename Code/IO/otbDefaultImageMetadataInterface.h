@@ -162,8 +162,10 @@ public:
     unsigned int i = 0;
     std::vector<unsigned int> rgb(3);
 
+    unsigned int min;
+    min = std::min(this->GetNumberOfBands(), static_cast<unsigned int>(3));
 
-    while( i <this->GetNumberOfBands() || i < 3 )
+    while( i < min )
       {
       rgb[i] = i;
       ++i;
