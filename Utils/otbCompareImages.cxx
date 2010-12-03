@@ -31,14 +31,14 @@ int CompareImages::Describe(ApplicationDescriptor* descriptor)
 {
   descriptor->SetName("CompareImages");
   descriptor->SetDescription("Estimator between 2 images");
-  descriptor->AddOption("InputReference","The reference image","-inR", 1, true,ApplicationDescriptor::String);
-  descriptor->AddOption("InputMeasured","The measured image","-inM", 1, true,ApplicationDescriptor::String);
-  descriptor->AddOption("NumBandRefImage","The channel number to compare in the reference image (between 1 and number of channels)","-chR", 1, false,ApplicationDescriptor::Integer);
-  descriptor->AddOption("NumBandMeasuredImage","The channel number to compare in the measured image (between 1 and number of channels)","-chM", 1, false,ApplicationDescriptor::Integer);
-  descriptor->AddOption("StartX", "first point in x-axis ", "-x0", 1, false, ApplicationDescriptor::Real);
-  descriptor->AddOption("StartY", "first point in y-axis ", "-y0", 1, false, ApplicationDescriptor::Real);
-  descriptor->AddOption("SizeX", "size in x-axis ", "-Nx", 1, false, ApplicationDescriptor::Integer);
-  descriptor->AddOption("SizeY", "size in y-axis ", "-Ny", 1, false, ApplicationDescriptor::Integer);
+  descriptor->AddOption("InputReference","The reference image","inR", 1, true,ApplicationDescriptor::String);
+  descriptor->AddOption("InputMeasured","The measured image","inM", 1, true,ApplicationDescriptor::String);
+  descriptor->AddOption("NumBandRefImage","The channel number to compare in the reference image (between 1 and number of channels)","chR", 1, false,ApplicationDescriptor::Integer);
+  descriptor->AddOption("NumBandMeasuredImage","The channel number to compare in the measured image (between 1 and number of channels)","chM", 1, false,ApplicationDescriptor::Integer);
+  descriptor->AddOption("StartX", "first point in x-axis ", "x0", 1, false, ApplicationDescriptor::Real);
+  descriptor->AddOption("StartY", "first point in y-axis ", "y0", 1, false, ApplicationDescriptor::Real);
+  descriptor->AddOption("SizeX", "size in x-axis ", "Nx", 1, false, ApplicationDescriptor::Integer);
+  descriptor->AddOption("SizeY", "size in y-axis ", "Ny", 1, false, ApplicationDescriptor::Integer);
   return EXIT_SUCCESS;
 }
 
