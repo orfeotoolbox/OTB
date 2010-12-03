@@ -265,6 +265,12 @@ PersistentObjectDetectionClassifier<TInputImage,TOutputVectorData,TLabel,TFuncti
           DescriptorsFunctionPointType point;
           input->TransformIndexToPhysicalPoint(current,point);
 
+          ContinuousIndexType currentContinuous(current);
+          currentContinuous[0] += 0.5;
+          currentContinuous[1] += 0.5;
+          DescriptorsFunctionPointType pointOGR;
+          input->TransformContinuousIndexToPhysicalPoint(currentContinuous,pointOGR);
+
           DescriptorType descriptor = m_DescriptorsFunction->Evaluate(point);
           SVMModelMeasurementType modelMeasurement(descriptor.GetSize());
           for (unsigned int i = 0; i < descriptor.GetSize(); ++i)
@@ -275,7 +281,7 @@ PersistentObjectDetectionClassifier<TInputImage,TOutputVectorData,TLabel,TFuncti
 
           if (label != m_NoClassLabel)
             {
-            m_ThreadPointArray[threadId].push_back(std::make_pair(point, label));
+            m_ThreadPointArray[threadId].push_back(std::make_pair(pointOGR, label));
             }
           }
         }
