@@ -912,7 +912,7 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
       // If no verbose and an diff was found, exit checking. The full checking will be executed in verbose mode
       if ((!m_ReportErrors) && (nbdiff != 0)) return (1);
       } //if(nbdiff == 0)
-
+    
     }
 
   /* -------------------------------------------------------------------- */
@@ -1467,8 +1467,6 @@ void TestHelper::ogrReportOnLayer(OGRLayer * ref_poLayer,
   /*      Report various overall information.                             */
   /* -------------------------------------------------------------------- */
   printf("\n");
-
-  otbCheckStringValue("Layer name", ref_poDefn->GetName(), test_poDefn->GetName(), nbdiff, m_ReportErrors);
 
   otbCheckStringValue("Geometry", OGRGeometryTypeToName(ref_poDefn->GetGeomType()),
                       OGRGeometryTypeToName(test_poDefn->GetGeomType()), nbdiff, m_ReportErrors);
