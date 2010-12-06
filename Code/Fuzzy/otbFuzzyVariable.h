@@ -67,6 +67,9 @@ public:
   void SetMembership(unsigned int var, PrecisionType v1, PrecisionType v2, PrecisionType v3, PrecisionType v4);
   TPrecision GetMembership(unsigned int var, TPrecision val);
 
+  /** Get the variable with the maximum membership */
+  unsigned int GetMaxVar();
+
 
 protected:
   /** Constructor */

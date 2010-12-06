@@ -62,6 +62,26 @@ FuzzyVariable<TNValues, TPrecision>::GetMembership(unsigned int var, TPrecision 
 
 }
 
+template <unsigned int TNValues, class TPrecision>
+unsigned int
+FuzzyVariable<TNValues, TPrecision>::GetMaxVar()
+{
+
+  this->UpdateMembershipValues();
+  TPrecision maxMem = this->m_MembershipValues[0];
+  unsigned int maxVar = 0;
+
+  for(unsigned int i = 1; i < TNValues; i++)
+    if( this->m_MembershipValues[i] > maxMem )
+      {
+      maxMem = this->m_MembershipValues[i];
+      maxVar = i;
+      }
+
+  return maxVar;
+
+}
+
 
 template <unsigned int TNValues, class TPrecision>
 void

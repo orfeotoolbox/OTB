@@ -24,17 +24,21 @@ SET(Fuzzy_TESTS1 ${CXX_TEST_PATH}/otbFuzzyTests1)
 ADD_TEST(fzTuFuzzyVariableNew ${Fuzzy_TESTS1} 
 	otbFuzzyVariableNew)
 
-ADD_TEST(fzTuFuzzyVariable2Values ${Fuzzy_TESTS1} 
+ADD_TEST(fzTvFuzzyVariable2Values ${Fuzzy_TESTS1} 
 	otbFuzzyVariable2Values)
 
-ADD_TEST(fzTuFuzzyVariableSetValue ${Fuzzy_TESTS1} 
+ADD_TEST(fzTvFuzzyVariableSetValue ${Fuzzy_TESTS1} 
 	otbFuzzyVariableSetValue)
+
+ADD_TEST(fzTvFuzzyVariableGetMaxVar ${Fuzzy_TESTS1} 
+	otbFuzzyVariableGetMaxVar)
 
 
 SET(BasicFuzzy_SRCS1
 otbFuzzyVariableNew.cxx
 otbFuzzyVariable2Values.cxx
 otbFuzzyVariableSetValue.cxx
+otbFuzzyVariableGetMaxVar.cxx
 )
 
 ADD_EXECUTABLE(otbFuzzyTests1 otbFuzzyTests1.cxx ${BasicFuzzy_SRCS1})
