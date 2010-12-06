@@ -115,9 +115,9 @@ int otbImageComplexGenericTest(int argc, char* argv[])
   pixel = reader->GetOutput()->GetPixel(index);
   std::cout << pixel << std::endl;
 
-  if (pixel != PixelType(2020,2021))
+  if (pixel != PixelType(1010,1011))
     {
-    std::cout << "Found " << pixel << " should be " << PixelType(2020,2021) << std::endl;
+    std::cout << "Found " << pixel << " should be " << PixelType(1010,1011) << std::endl;
     return EXIT_FAILURE;
     }
 
