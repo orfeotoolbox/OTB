@@ -1123,6 +1123,20 @@ ADD_TEST(raTvLandsatTMIndexNDBBBITest ${RADIOMETRY_TESTS6}
   
 )
 
+# -------            Landsat TM Linguistic Labels   ------------------------------
+ADD_TEST(raTvLandsatTMLinguisticLabelsTest ${RADIOMETRY_TESTS6}
+        otbLandsatTMLinguisticLabels
+        3   #TM1
+        4   #TM2
+        8   #TM3
+        21  #TM4
+        33  #TM5
+        41  #TM61
+        8   #TM62
+        21  #TM7
+  
+)
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbRADIOMETRY_TESTS7 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1838,6 +1852,7 @@ otbLandsatTMIndexBIOTest.cxx
 otbLandsatTMIndexNDSITest.cxx
 otbLandsatTMIndexNDSIVisTest.cxx
 otbLandsatTMIndexNDBBBITest.cxx
+otbLandsatTMLinguisticLabelsTest.cxx
 )
 
 SET(Radiometry_SRCS7

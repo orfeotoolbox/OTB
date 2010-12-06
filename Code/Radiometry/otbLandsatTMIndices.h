@@ -20,7 +20,9 @@
 
 #include "otbMath.h"
 #include "itkVariableLengthVector.h"
+#include "itkFixedArray.h"
 #include "otbBandName.h"
+#include "otbFuzzyVariable.h"
 
 namespace otb
 {
@@ -731,6 +733,152 @@ public:
       /(inputPixel[this->m_TM1] + inputPixel[this->m_TM5] + this->m_EpsilonToBeConsideredAsZero);
     return static_cast<TOutput>(result);
   }
+  
+
+};
+
+/** \class LandsatTMLinguisticVariables
+ *
+ * TIR muts be in °C
+ *
+ * \ingroup Functor
+ * \ingroup Radiometry
+ * \ingroup LandsatTMIndices
+ */
+template <class TInput>
+class LinguisticVariables : public LandsatTMIndexBase<TInput, itk::FixedArray<unsigned int, 11> >
+{
+public:
+
+  typedef typename TInput::ValueType PrecisionType;
+  typedef otb::FuzzyVariable<11, PrecisionType> FuzzyVarType;
+  
+  enum LinguisticValues {MINlv=0, Low=MINlv, Medium, MAXlv=2, High=MAXlv};
+  enum Indices { MINid=0, bright=MINid, vis, nir, mir1, mir2, tir, mirtir, ndsivis, ndbbbi, ndvi, MAXid=10, ndbsi=MAXid };
+  
+    /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "LandsatTM Linguistic Variables";
+  }
+  
+  LinguisticVariables()
+    {
+    m_FvBright = FuzzyVarType::New();
+    m_FvVis = FuzzyVarType::New();
+    m_FvNIR = FuzzyVarType::New();
+    m_FvMIR1 = FuzzyVarType::New();
+    m_FvMIR2 = FuzzyVarType::New();
+    m_FvTIR = FuzzyVarType::New();
+    m_FvMIRTIR = FuzzyVarType::New();
+    m_FvNDSIVis = FuzzyVarType::New();
+    m_FvNDBBBI = FuzzyVarType::New();
+    m_FvNDVI = FuzzyVarType::New();
+    m_FvNDBSI = FuzzyVarType::New();
+
+    PrecisionType maximumValue = itk::NumericTraits<PrecisionType>::max();
+    PrecisionType minimumValue = itk::NumericTraits<PrecisionType>::min();
+    
+    m_FvBright->SetMembership(Low, minimumValue, minimumValue, 40, 40);
+    m_FvBright->SetMembership(Medium, 40, 40, 60, 60);
+    m_FvBright->SetMembership(High, 60, 60, maximumValue, maximumValue);
+
+    m_FvVis->SetMembership(Low, minimumValue, minimumValue, 30, 30);
+    m_FvVis->SetMembership(Medium, 30, 30, 50, 50);
+    m_FvVis->SetMembership(High, 50, 50, maximumValue, maximumValue);
+
+    m_FvNIR->SetMembership(Low, minimumValue, minimumValue, 40, 40);
+    m_FvNIR->SetMembership(Medium, 40, 40, 60, 60);
+    m_FvNIR->SetMembership(High, 60, 60, maximumValue, maximumValue);
+
+    m_FvMIR1->SetMembership(Low, minimumValue, minimumValue, 40, 40);
+    m_FvMIR1->SetMembership(Medium, 40, 40, 60, 60);
+    m_FvMIR1->SetMembership(High, 60, 60, maximumValue, maximumValue);
+
+    m_FvMIR2->SetMembership(Low, minimumValue, minimumValue, 30, 30);
+    m_FvMIR2->SetMembership(Medium, 30, 30, 50, 50);
+    m_FvMIR2->SetMembership(High, 50, 50, maximumValue, maximumValue);
+
+    m_FvTIR->SetMembership(Low, minimumValue, minimumValue, 0, 0);
+    m_FvTIR->SetMembership(Medium, 0, 0, 28, 28);
+    m_FvTIR->SetMembership(High, 28, 28, maximumValue, maximumValue);
+
+    m_FvMIRTIR->SetMembership(Low, minimumValue, minimumValue, 18000, 18000);
+    m_FvMIRTIR->SetMembership(Medium, 18000, 18000, 22000, 22000);
+    m_FvMIRTIR->SetMembership(High, 22000, 22000, maximumValue, maximumValue);
+
+    m_FvNDSIVis->SetMembership(Low, minimumValue, minimumValue, 0, 0);
+    m_FvNDSIVis->SetMembership(Medium, 0, 0, 0.5, 0.5);
+    m_FvNDSIVis->SetMembership(High, 0.5, 0.5, maximumValue, maximumValue);
+
+    m_FvNDBBBI ->SetMembership(Low, minimumValue, minimumValue, -0.20, -0.20);
+    m_FvNDBBBI->SetMembership(Medium, -0.20, -0.20, 0.10, 0.10);
+    m_FvNDBBBI->SetMembership(High, 0.10, 0.10, maximumValue, maximumValue);
+
+    m_FvNDVI->SetMembership(Low, minimumValue, minimumValue, 0.36, 0.36);
+    m_FvNDVI->SetMembership(Medium, 0.36, 0.36, 0.7, 0.7);
+    m_FvNDVI->SetMembership(High, 0.7, 0.7, maximumValue, maximumValue);
+
+    m_FvNDBSI->SetMembership(Low, minimumValue, minimumValue, -0.20, -0.20);
+    m_FvNDBSI->SetMembership(Medium, -0.20, -0.20, 0.10, 0.10);
+    m_FvNDBSI->SetMembership(High, 0.10, 0.10, maximumValue, maximumValue);
+    }
+  virtual ~LinguisticVariables() {}
+
+  inline itk::FixedArray<unsigned int, 11> operator ()(const TInput& inputPixel) 
+  {
+
+    itk::FixedArray<unsigned int, 11> result;
+    
+    m_FvBright->SetValue( Bright<TInput, TInput>( inputPixel ) );
+    result[ bright ] = m_FvBright->GetMaxVar();
+
+    m_FvVis->SetValue( Vis<TInput, TInput>( inputPixel ) );
+    result[ vis ] = m_FvVis->GetMaxVar();
+
+    m_FvNIR->SetValue( NIR<TInput, TInput>( inputPixel ) );
+    result[ nir ] = m_FvNIR->GetMaxVar();
+
+    m_FvMIR1->SetValue( MIR1<TInput, TInput>( inputPixel ) );
+    result[ mir1 ] = m_FvMIR1->GetMaxVar();
+
+    m_FvMIR2->SetValue( MIR2<TInput, TInput>( inputPixel ) );
+    result[ mir2 ] = m_FvMIR2->GetMaxVar();
+
+    m_FvTIR->SetValue( TIR<TInput, TInput>( inputPixel ) );
+    result[ tir ] = m_FvTIR->GetMaxVar();
+
+    m_FvMIRTIR->SetValue( MIRTIR<TInput, TInput>( inputPixel ) );
+    result[ mirtir ] = m_FvMIRTIR->GetMaxVar();
+
+    m_FvNDSIVis->SetValue( NDSIVis<TInput, TInput>( inputPixel ) );
+    result[ ndsivis ] = m_FvNDSIVis->GetMaxVar();
+
+    m_FvNDBBBI->SetValue( NDBBBI<TInput, TInput>( inputPixel ) );
+    result[ ndbbbi ] = m_FvNDBBBI->GetMaxVar();
+
+    m_FvNDVI->SetValue( NDVI<TInput, TInput>( inputPixel ) );
+    result[ ndvi ] = m_FvNDVI->GetMaxVar();
+
+    m_FvNDBSI->SetValue( NDBSI<TInput, TInput>( inputPixel ) );
+    result[ ndbsi ] = m_FvNDBSI->GetMaxVar();
+
+    
+    return result;
+  }
+
+protected:
+  typename FuzzyVarType::Pointer m_FvBright;
+  typename FuzzyVarType::Pointer m_FvVis;
+  typename FuzzyVarType::Pointer m_FvNIR;
+  typename FuzzyVarType::Pointer m_FvMIR1;
+  typename FuzzyVarType::Pointer m_FvMIR2;
+  typename FuzzyVarType::Pointer m_FvTIR;
+  typename FuzzyVarType::Pointer m_FvMIRTIR;
+  typename FuzzyVarType::Pointer m_FvNDSIVis;
+  typename FuzzyVarType::Pointer m_FvNDBBBI;
+  typename FuzzyVarType::Pointer m_FvNDVI;
+  typename FuzzyVarType::Pointer m_FvNDBSI;
   
 
 };
