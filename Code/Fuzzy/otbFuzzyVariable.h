@@ -57,7 +57,11 @@ public:
   itkGetMacro(MembershipValues, ValueVectorType);
 
   /** Accessors for the value of the variable */
-  itkSetMacro(Value, TPrecision);
+  void SetValue(TPrecision val)
+  {
+    this->m_Value = val;
+    this->UpdateMembershipValues();
+  }
   itkGetConstMacro(Value, TPrecision);
 
   void SetMembership(unsigned int var, PrecisionType v1, PrecisionType v2, PrecisionType v3, PrecisionType v4);

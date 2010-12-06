@@ -43,10 +43,10 @@ FuzzyVariable<TNValues, TPrecision>::SetMembership(unsigned int var, TPrecision 
 {
   if( v1>v2 || v2>v3 || v3>v4)
     itkExceptionMacro(<< "Values have to be v1<=v2<=v3<=v4");
-  m_MembershipFunctions[var*TNValues] = v1;
-  m_MembershipFunctions[var*TNValues+1] = v2;
-  m_MembershipFunctions[var*TNValues+2] = v3;
-  m_MembershipFunctions[var*TNValues+3] = v4;
+  m_MembershipFunctions[var*4] = v1;
+  m_MembershipFunctions[var*4+1] = v2;
+  m_MembershipFunctions[var*4+2] = v3;
+  m_MembershipFunctions[var*4+3] = v4;
 
   this->UpdateMembershipValues();
 }
@@ -69,10 +69,10 @@ FuzzyVariable<TNValues, TPrecision>::UpdateMembershipValues()
 {
   for(unsigned int i=0; i<TNValues; i++)
     {
-    TPrecision v1 = this->m_MembershipFunctions[i*TNValues+0];
-    TPrecision v2 = this->m_MembershipFunctions[i*TNValues+1];
-    TPrecision v3 = this->m_MembershipFunctions[i*TNValues+2];
-    TPrecision v4 = this->m_MembershipFunctions[i*TNValues+3];
+    TPrecision v1 = this->m_MembershipFunctions[i*4+0];
+    TPrecision v2 = this->m_MembershipFunctions[i*4+1];
+    TPrecision v3 = this->m_MembershipFunctions[i*4+2];
+    TPrecision v4 = this->m_MembershipFunctions[i*4+3];
     if( this->m_Value < v1 || this->m_Value > v4 )
       m_MembershipValues[i] = 0;
     if( this->m_Value >= v1 && this->m_Value < v2 )
@@ -89,9 +89,10 @@ FuzzyVariable<TNValues, TPrecision>::UpdateMembershipValues()
 
     if( this->m_Value >= v3 && this->m_Value < v4 )
       {
+      std::cout << " here " << std::endl;
       if(v4>v3)
         m_MembershipValues[i] = static_cast<TPrecision>((v4 - this->m_Value)/(v4 - v3));
-      else m_MembershipValues[i] = static_cast<TPrecision>(0);
+      else m_MembershipValues[i] = static_cast<TPrecision>(1);
       }
     
     }

@@ -27,10 +27,14 @@ ADD_TEST(fzTuFuzzyVariableNew ${Fuzzy_TESTS1}
 ADD_TEST(fzTuFuzzyVariable2Values ${Fuzzy_TESTS1} 
 	otbFuzzyVariable2Values)
 
+ADD_TEST(fzTuFuzzyVariableSetValue ${Fuzzy_TESTS1} 
+	otbFuzzyVariableSetValue)
+
 
 SET(BasicFuzzy_SRCS1
 otbFuzzyVariableNew.cxx
 otbFuzzyVariable2Values.cxx
+otbFuzzyVariableSetValue.cxx
 )
 
 ADD_EXECUTABLE(otbFuzzyTests1 otbFuzzyTests1.cxx ${BasicFuzzy_SRCS1})
