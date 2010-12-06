@@ -28,6 +28,8 @@ void RegisterTests()
 {
   REGISTER_TEST(otbMapFileProductWriterNew);
   REGISTER_TEST(otbMapFileProductWriter);
+  REGISTER_TEST(otbKmzProductWriterNew);
+  REGISTER_TEST(otbKmzProductWriter);
   REGISTER_TEST(otbTileMapImageIOHelperNew);
   REGISTER_TEST(otbTileMapImageIOHelperTest);
   // Complex tests
