@@ -739,7 +739,15 @@ public:
 
 /** \class LandsatTMLinguisticVariables
  *
- * TIR muts be in °C
+ * Implementation of the linguistic labels assigned to fuzzy sets
+ *  providing a complete partition of a feature space consisting of
+ *  scalar variables representing specific Landsat TM indices as
+ *  described in Baraldi et al. 2006, "Automatic Spectral Rule-Based
+ *  Preliminary Mapping of Calibrated Landsat TM and ETM+ Images",
+ *  IEEE Trans. on Geoscience and Remote Sensing, vol 44, no 9.
+ * The hard coded thresholds are taken from table III of the paper.
+ *
+ * TIR must be in °C
  *
  * \ingroup Functor
  * \ingroup Radiometry
