@@ -751,6 +751,7 @@ class LinguisticVariables : public LandsatTMIndexBase<TInput, itk::FixedArray<un
 public:
 
   typedef typename TInput::ValueType PrecisionType;
+  typedef typename itk::FixedArray<unsigned int, 11> OutputPixelType;
   typedef otb::FuzzyVariable<11, PrecisionType> FuzzyVarType;
   
   enum LinguisticValues {MINlv=0, Low=MINlv, Medium, MAXlv=2, High=MAXlv};
@@ -777,7 +778,7 @@ public:
     m_FvNDBSI = FuzzyVarType::New();
 
     PrecisionType maximumValue = itk::NumericTraits<PrecisionType>::max();
-    PrecisionType minimumValue = itk::NumericTraits<PrecisionType>::min();
+    PrecisionType minimumValue = itk::NumericTraits<PrecisionType>::NonpositiveMin();
     
     m_FvBright->SetMembership(Low, minimumValue, minimumValue, 40, 40);
     m_FvBright->SetMembership(Medium, 40, 40, 60, 60);
@@ -830,37 +831,37 @@ public:
 
     itk::FixedArray<unsigned int, 11> result;
     
-    m_FvBright->SetValue( Bright<TInput, TInput>( inputPixel ) );
+    m_FvBright->SetValue( Bright<TInput, PrecisionType>()( inputPixel ) );
     result[ bright ] = m_FvBright->GetMaxVar();
 
-    m_FvVis->SetValue( Vis<TInput, TInput>( inputPixel ) );
+    m_FvVis->SetValue( Vis<TInput, PrecisionType>()( inputPixel ) );
     result[ vis ] = m_FvVis->GetMaxVar();
 
-    m_FvNIR->SetValue( NIR<TInput, TInput>( inputPixel ) );
+    m_FvNIR->SetValue( NIR<TInput, PrecisionType>()( inputPixel ) );
     result[ nir ] = m_FvNIR->GetMaxVar();
 
-    m_FvMIR1->SetValue( MIR1<TInput, TInput>( inputPixel ) );
+    m_FvMIR1->SetValue( MIR1<TInput, PrecisionType>()( inputPixel ) );
     result[ mir1 ] = m_FvMIR1->GetMaxVar();
 
-    m_FvMIR2->SetValue( MIR2<TInput, TInput>( inputPixel ) );
+    m_FvMIR2->SetValue( MIR2<TInput, PrecisionType>()( inputPixel ) );
     result[ mir2 ] = m_FvMIR2->GetMaxVar();
 
-    m_FvTIR->SetValue( TIR<TInput, TInput>( inputPixel ) );
+    m_FvTIR->SetValue( TIR<TInput, PrecisionType>()( inputPixel ) );
     result[ tir ] = m_FvTIR->GetMaxVar();
 
-    m_FvMIRTIR->SetValue( MIRTIR<TInput, TInput>( inputPixel ) );
+    m_FvMIRTIR->SetValue( MIRTIR<TInput, PrecisionType>()( inputPixel ) );
     result[ mirtir ] = m_FvMIRTIR->GetMaxVar();
 
-    m_FvNDSIVis->SetValue( NDSIVis<TInput, TInput>( inputPixel ) );
+    m_FvNDSIVis->SetValue( NDSIVis<TInput, PrecisionType>()( inputPixel ) );
     result[ ndsivis ] = m_FvNDSIVis->GetMaxVar();
 
-    m_FvNDBBBI->SetValue( NDBBBI<TInput, TInput>( inputPixel ) );
+    m_FvNDBBBI->SetValue( NDBBBI<TInput, PrecisionType>()( inputPixel ) );
     result[ ndbbbi ] = m_FvNDBBBI->GetMaxVar();
 
-    m_FvNDVI->SetValue( NDVI<TInput, TInput>( inputPixel ) );
+    m_FvNDVI->SetValue( NDVI<TInput, PrecisionType>()( inputPixel ) );
     result[ ndvi ] = m_FvNDVI->GetMaxVar();
 
-    m_FvNDBSI->SetValue( NDBSI<TInput, TInput>( inputPixel ) );
+    m_FvNDBSI->SetValue( NDBSI<TInput, PrecisionType>()( inputPixel ) );
     result[ ndbsi ] = m_FvNDBSI->GetMaxVar();
 
     
