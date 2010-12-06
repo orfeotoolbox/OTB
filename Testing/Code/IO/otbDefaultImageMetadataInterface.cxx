@@ -29,6 +29,10 @@ int otbDefaultImageMetadataInterface(int argc, char* argv[])
 
   ObjectType::Pointer obj = ObjectType::New();
 
+  bool hasRisedException;
+
+  hasRisedException = false;
+
   try
     {
       std::cout << obj->GetPhysicalBias() << std::endl;
@@ -37,7 +41,17 @@ int otbDefaultImageMetadataInterface(int argc, char* argv[])
     {
     std::cout << "ExceptionObject caught for GetPhysicalBias() !" << std::endl;
     std::cout << err << std::endl;
+    hasRisedException =true;
     }
+
+  if(!hasRisedException)
+    {
+    std::cerr << " Should has raise an exception !"<< std::endl;
+    return EXIT_FAILURE;
+    }
+
+  hasRisedException = false;
+
 
   try
     {
@@ -47,7 +61,16 @@ int otbDefaultImageMetadataInterface(int argc, char* argv[])
     {
     std::cout << "ExceptionObject caught for GetPhysicalGain() !" << std::endl;
     std::cout << err << std::endl;
+    hasRisedException =true;
     }
+
+  if(!hasRisedException)
+    {
+    std::cerr << " Should has raise an exception !"<< std::endl;
+    return EXIT_FAILURE;
+    }
+
+  hasRisedException = false;
 
   try
     {
@@ -57,7 +80,16 @@ int otbDefaultImageMetadataInterface(int argc, char* argv[])
     {
     std::cout << "ExceptionObject caught for GetSolarIrradiance() !" << std::endl;
     std::cout << err << std::endl;
+    hasRisedException =true;
     }
+
+  if(!hasRisedException)
+    {
+    std::cerr << " Should has raise an exception !"<< std::endl;
+    return EXIT_FAILURE;
+    }
+
+  hasRisedException = false;
 
   try
     {
@@ -67,7 +99,16 @@ int otbDefaultImageMetadataInterface(int argc, char* argv[])
     {
     std::cout << "ExceptionObject caught for GetDay() !" << std::endl;
     std::cout << err << std::endl;
+    hasRisedException =true;
     }
+
+  if(!hasRisedException)
+    {
+    std::cerr << " Should has raise an exception !"<< std::endl;
+    return EXIT_FAILURE;
+    }
+
+  hasRisedException = false;
 
   try
     {
@@ -77,7 +118,16 @@ int otbDefaultImageMetadataInterface(int argc, char* argv[])
     {
     std::cout << "ExceptionObject caught for GetMonth() !" << std::endl;
     std::cout << err << std::endl;
+    hasRisedException =true;
     }
+
+  if(!hasRisedException)
+    {
+    std::cerr << " Should has raise an exception !"<< std::endl;
+    return EXIT_FAILURE;
+    }
+
+  hasRisedException = false;
 
   try
     {
@@ -87,7 +137,16 @@ int otbDefaultImageMetadataInterface(int argc, char* argv[])
     {
     std::cout << "ExceptionObject caught for GetYear() !" << std::endl;
     std::cout << err << std::endl;
+    hasRisedException =true;
     }
+
+  if(!hasRisedException)
+    {
+    std::cerr << " Should has raise an exception !"<< std::endl;
+    return EXIT_FAILURE;
+    }
+
+  hasRisedException = false;
 
   try
     {
@@ -97,7 +156,16 @@ int otbDefaultImageMetadataInterface(int argc, char* argv[])
     {
     std::cout << "ExceptionObject caught for GetHour() !" << std::endl;
     std::cout << err << std::endl;
+    hasRisedException =true;
     }
+
+  if(!hasRisedException)
+    {
+    std::cerr << " Should has raise an exception !"<< std::endl;
+    return EXIT_FAILURE;
+    }
+
+  hasRisedException = false;
 
   try
     {
@@ -107,7 +175,16 @@ int otbDefaultImageMetadataInterface(int argc, char* argv[])
     {
     std::cout << "ExceptionObject caught for GetMinute() !" << std::endl;
     std::cout << err << std::endl;
+    hasRisedException =true;
     }
+
+  if(!hasRisedException)
+    {
+    std::cerr << " Should has raise an exception !"<< std::endl;
+    return EXIT_FAILURE;
+    }
+
+  hasRisedException = false;
 
   try
     {
@@ -117,7 +194,16 @@ int otbDefaultImageMetadataInterface(int argc, char* argv[])
     {
     std::cout << "ExceptionObject caught for GetProductionDay() !" << std::endl;
     std::cout << err << std::endl;
+    hasRisedException =true;
     }
+
+  if(!hasRisedException)
+    {
+    std::cerr << " Should has raise an exception !"<< std::endl;
+    return EXIT_FAILURE;
+    }
+
+  hasRisedException = false;
 
   try
     {
@@ -127,7 +213,16 @@ int otbDefaultImageMetadataInterface(int argc, char* argv[])
     {
     std::cout << "ExceptionObject caught for GetProductionMonth() !" << std::endl;
     std::cout << err << std::endl;
+    hasRisedException =true;
     }
+
+  if(!hasRisedException)
+    {
+    std::cerr << " Should has raise an exception !"<< std::endl;
+    return EXIT_FAILURE;
+    }
+
+  hasRisedException = false;
 
   try
     {
@@ -137,7 +232,16 @@ int otbDefaultImageMetadataInterface(int argc, char* argv[])
     {
     std::cout << "ExceptionObject caught for GetProductionYear() !" << std::endl;
     std::cout << err << std::endl;
+    hasRisedException =true;
     }
+
+  if(!hasRisedException)
+    {
+    std::cerr << " Should has raise an exception !"<< std::endl;
+    return EXIT_FAILURE;
+    }
+
+  hasRisedException = false;
 
   try
     {
@@ -147,7 +251,16 @@ int otbDefaultImageMetadataInterface(int argc, char* argv[])
     {
     std::cout << "ExceptionObject caught for GetSatElevation() !" << std::endl;
     std::cout << err << std::endl;
+    hasRisedException =true;
     }
+
+  if(!hasRisedException)
+    {
+    std::cerr << " Should has raise an exception !"<< std::endl;
+    return EXIT_FAILURE;
+    }
+
+  hasRisedException = false;
 
   try
     {
@@ -157,7 +270,16 @@ int otbDefaultImageMetadataInterface(int argc, char* argv[])
     {
     std::cout << "ExceptionObject caught for GetSatAzimuth() !" << std::endl;
     std::cout << err << std::endl;
+    hasRisedException =true;
     }
+
+  if(!hasRisedException)
+    {
+    std::cerr << " Should has raise an exception !"<< std::endl;
+    return EXIT_FAILURE;
+    }
+
+  hasRisedException = false;
 
   try
     {
@@ -167,7 +289,16 @@ int otbDefaultImageMetadataInterface(int argc, char* argv[])
     {
     std::cout << "ExceptionObject caught for GetFirstWavelengths() !" << std::endl;
     std::cout << err << std::endl;
+    hasRisedException =true;
     }
+
+  if(!hasRisedException)
+    {
+    std::cerr << " Should has raise an exception !"<< std::endl;
+    return EXIT_FAILURE;
+    }
+
+  hasRisedException = false;
 
   try
     {
@@ -177,7 +308,16 @@ int otbDefaultImageMetadataInterface(int argc, char* argv[])
     {
     std::cout << "ExceptionObject caught for GetLastWavelengths() !" << std::endl;
     std::cout << err << std::endl;
+    hasRisedException =true;
     }
+
+  if(!hasRisedException)
+    {
+    std::cerr << " Should has raise an exception !"<< std::endl;
+    return EXIT_FAILURE;
+    }
+
+  hasRisedException = false;
 
   try
     {
@@ -191,18 +331,21 @@ int otbDefaultImageMetadataInterface(int argc, char* argv[])
     {
     std::cout << "ExceptionObject caught for CanRead() !" << std::endl;
     std::cout << err << std::endl;
+    return EXIT_FAILURE;
     }
+
+  hasRisedException = false;
 
   try
     {
-      std::vector<unsigned int> rgb(3);
-      rgb = obj->GetDefaultDisplay();
+    std::vector<unsigned int> rgb(3);
+    rgb = obj->GetDefaultDisplay();
 
-      if( rgb[0] != 0 || rgb[1] != 1 || rgb[2] != 2 )
-        {
-        std::cout << "wrong value for GetDefaultDisplay() method!" << std::endl;
-        return EXIT_FAILURE;
-        }
+    if (obj->GetNumberOfBands() != 0 && rgb[0] != 0 && rgb[1] != 1 && rgb[2] != 2)
+      {
+      std::cout << "wrong value for GetDefaultDisplay() method!" << std::endl;
+      return EXIT_FAILURE;
+      }
     }
   catch (itk::ExceptionObject& err)
     {
