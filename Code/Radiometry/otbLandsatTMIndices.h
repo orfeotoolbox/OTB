@@ -745,7 +745,12 @@ public:
  *  described in Baraldi et al. 2006, "Automatic Spectral Rule-Based
  *  Preliminary Mapping of Calibrated Landsat TM and ETM+ Images",
  *  IEEE Trans. on Geoscience and Remote Sensing, vol 44, no 9.
+ *
  * The hard coded thresholds are taken from table III of the paper.
+ * The implementation proposed here is not at all optimal in the sense
+ * that otb::FuzzyVariables are used where simple thresholds would be
+ * enough. This is done like this so this class can also provide
+ * membership values instead of crisp ones.
  *
  * TIR must be in °C
  *
