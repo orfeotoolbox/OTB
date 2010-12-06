@@ -28,4 +28,5 @@
 void RegisterTests()
 {
   REGISTER_TEST(otbFuzzyVariableNew);
+  REGISTER_TEST(otbFuzzyVariable2Values);
 }

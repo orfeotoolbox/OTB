@@ -29,7 +29,7 @@ namespace otb
  *
  *  A fuzzy variable is defined as a set of qualitative values for a
  *  magnitude. These values are ordered, as for instance Low, Medium,
- *  High. The semantics are not used here. This class it holds a
+ *  High. The semantics are not used here. This class holds a
  *  vector where each component is the membership value for each one
  *  of the qualitative values of the variable (MEDIUM = 0.9). Each
  *  membership function is modeled by a trapezoidal function for which
@@ -52,8 +52,16 @@ public:
   typedef TPrecision PrecisionType;
   /** Type to hold the membership functions */
   typedef itk::FixedArray< PrecisionType, TNValues > ValueVectorType;
+  typedef itk::FixedArray< PrecisionType, 4*TNValues > MembershipVectorType;
   /** Membership value accessors */
-  itkGetMacro(Memberships, ValueVectorType);
+  itkGetMacro(MembershipValues, ValueVectorType);
+
+  /** Accessors for the value of the variable */
+  itkSetMacro(Value, TPrecision);
+  itkGetConstMacro(Value, TPrecision);
+
+  void SetMembership(unsigned int var, PrecisionType v1, PrecisionType v2, PrecisionType v3, PrecisionType v4);
+  TPrecision GetMembership(unsigned int var, TPrecision val);
 
 
 protected:
@@ -63,10 +71,14 @@ protected:
   ~FuzzyVariable() {}
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  /** Update the membership values */
+  void UpdateMembershipValues();
 
 private:
   /** Vector containing the membership functions */
-  ValueVectorType m_Memberships;
+  ValueVectorType m_MembershipValues;
+  MembershipVectorType m_MembershipFunctions;
+  TPrecision m_Value;
 };
 } // end namespace otb
 
