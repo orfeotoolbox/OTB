@@ -67,18 +67,119 @@ int otbLandsatTMLinguisticLabels(int argc, char * argv[])
 
   LVFunctorType::OutputPixelType result = lvFunct( pixel );
 
+
+  // Bright
+  {
+  unsigned int goodResult = lo;
+  if( bright > 40 ) goodResult = me;
+  if( bright > 60 ) goodResult = hi;
+
+  if( result[ LVFunctorType::bright ] != goodResult )
+    return EXIT_FAILURE;
+  }
+
+  // Vis
+  {
+  unsigned int goodResult = lo;
+  if( vis > 30 ) goodResult = me;
+  if( vis > 50 ) goodResult = hi;
+
+  if( result[ LVFunctorType::vis ] != goodResult )
+    return EXIT_FAILURE;
+  }
+
+  // Nir
+  {
+  unsigned int goodResult = lo;
+  if( nir > 40 ) goodResult = me;
+  if( nir > 60 ) goodResult = hi;
+
+  if( result[ LVFunctorType::nir ] != goodResult )
+    return EXIT_FAILURE;
+  }
+
+  // Mir1
+  {
+  unsigned int goodResult = lo;
+  if( mir1 > 40 ) goodResult = me;
+  if( mir1 > 60 ) goodResult = hi;
+
+  if( result[ LVFunctorType::mir1 ] != goodResult )
+    return EXIT_FAILURE;
+  }
+
+  // Mir2
+  {
+  unsigned int goodResult = lo;
+  if( mir2 > 30 ) goodResult = me;
+  if( mir2 > 50 ) goodResult = hi;
+
+  if( result[ LVFunctorType::mir2 ] != goodResult )
+    return EXIT_FAILURE;
+  }
+
+  // Tir
+  {
+  unsigned int goodResult = lo;
+  if( tir > 0 ) goodResult = me;
+  if( tir > 28 ) goodResult = hi;
+
+  if( result[ LVFunctorType::tir ] != goodResult )
+    return EXIT_FAILURE;
+  }
+
+  // Mirtir
+  {
+  unsigned int goodResult = lo;
+  if( mirtir > 18000 ) goodResult = me;
+  if( mirtir > 22000 ) goodResult = hi;
+
+  if( result[ LVFunctorType::mirtir ] != goodResult )
+    return EXIT_FAILURE;
+  }
+
+
+  // Ndsivis
+  {
+  unsigned int goodResult = lo;
+  if( ndsivis > 0.0 ) goodResult = me;
+  if( ndsivis > 0.5 ) goodResult = hi;
+
+  if( result[ LVFunctorType::ndsivis ] != goodResult )
+    return EXIT_FAILURE;
+  }
+
+  // Ndbbbi
+  {
+  unsigned int goodResult = lo;
+  if( ndbbbi > -0.20 ) goodResult = me;
+  if( ndbbbi > 0.10 ) goodResult = hi;
+
+  if( result[ LVFunctorType::ndbbbi ] != goodResult )
+    return EXIT_FAILURE;
+  }
+
+  // Ndvi
+  {
+  unsigned int goodResult = lo;
+  if( ndvi > 0.36 ) goodResult = me;
+  if( ndvi > 0.70 ) goodResult = hi;
+
+  if( result[ LVFunctorType::ndvi ] != goodResult )
+    return EXIT_FAILURE;
+  }
+
+
+  // Ndbsi
+  {
+  unsigned int goodResult = lo;
+  if( ndbsi > -0.20 ) goodResult = me;
+  if( ndbsi > 0.10 ) goodResult = hi;
+
+  if( result[ LVFunctorType::ndbsi ] != goodResult )
+    return EXIT_FAILURE;
+  }
   
-
-  // double goodResult = (TM1-TM5)/(TM1+TM5+ndbbbiFunct.GetEpsilonToBeConsideredAsZero());
-
-  // std::cout << goodResult ;
-
-
-  // double result = ndbbbiFunct(pixel);
-
-  // std::cout << " " << result << std::endl;
-
-  // if( result!=goodResult ) return EXIT_FAILURE;
-  
+   
   return EXIT_SUCCESS;
 }

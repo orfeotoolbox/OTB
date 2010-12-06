@@ -1137,6 +1137,19 @@ ADD_TEST(raTvLandsatTMLinguisticLabelsTest ${RADIOMETRY_TESTS6}
   
 )
 
+ADD_TEST(raTvLandsatTMLinguisticLabelsTest2 ${RADIOMETRY_TESTS6}
+        otbLandsatTMLinguisticLabels
+        3   #TM1
+        4   #TM2
+        80   #TM3
+        100  #TM4
+        33  #TM5
+        1  #TM61
+        8   #TM62
+        51  #TM7
+  
+)
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbRADIOMETRY_TESTS7 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
