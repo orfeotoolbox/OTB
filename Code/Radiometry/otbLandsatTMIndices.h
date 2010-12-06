@@ -59,8 +59,6 @@ public:
   {
     return !(*this != other);
   }
-  // Operator performing the work
-  inline TOutput operator ()(const TInput& inputPixel) const;
 
   /// Constructor
   LandsatTMIndexBase() :  m_EpsilonToBeConsideredAsZero(0.0000001), m_TM1(0), m_TM2(1), m_TM3(2), m_TM4(3), m_TM5(4), m_TM60(5), m_TM61(5), m_TM62(6), m_TM7{7}, m_SAT(L7) {}
@@ -185,8 +183,6 @@ public:
 
   itkGetConstMacro(EpsilonToBeConsideredAsZero, double);
 
-  /** Return the index name */
-  virtual std::string GetName() const = 0;
 
 protected:
   // This method must be reimplemented in subclasses to actually
@@ -208,6 +204,29 @@ protected:
 };
 
 
+/** \class LandsatTMIndex
+ * 
+ * \ingroup Functor
+ * \ingroup Radiometry
+ * \ingroup LandsatTMIndices
+ */
+template <class TInput, class TOutput>
+class LandsatTMIndex : public LandsatTMIndexBase<TInput, TOutput>
+{
+public:
+
+  // Operator performing the work
+  inline TOutput operator ()(const TInput& inputPixel) const;
+
+  /** Return the index name */
+  virtual std::string GetName() const = 0;
+
+  LandsatTMIndex() {}
+  virtual ~LandsatTMIndex() {}
+  
+
+};
+
 /** \class Bright
  *  Brightness index for LandsatTM. Computes a weighted mean of the
  *  non thermal bands as follows :
@@ -224,7 +243,7 @@ protected:
  * \ingroup LandsatTMIndices
  */
 template <class TInput, class TOutput>
-class Bright : public LandsatTMIndexBase<TInput, TOutput>
+class Bright : public LandsatTMIndex<TInput, TOutput>
 {
 public:
   /** Return the index name */
@@ -262,7 +281,7 @@ public:
  * \ingroup LandsatTMIndices
  */
 template <class TInput, class TOutput>
-class Vis : public LandsatTMIndexBase<TInput, TOutput>
+class Vis : public LandsatTMIndex<TInput, TOutput>
 {
 public:
   /** Return the index name */
@@ -293,7 +312,7 @@ public:
  * \ingroup LandsatTMIndices
  */
 template <class TInput, class TOutput>
-class NIR : public LandsatTMIndexBase<TInput, TOutput>
+class NIR : public LandsatTMIndex<TInput, TOutput>
 {
 public:
   /** Return the index name */
@@ -323,7 +342,7 @@ public:
  * \ingroup LandsatTMIndices
  */
 template <class TInput, class TOutput>
-class MIR1 : public LandsatTMIndexBase<TInput, TOutput>
+class MIR1 : public LandsatTMIndex<TInput, TOutput>
 {
 public:
   /** Return the index name */
@@ -353,7 +372,7 @@ public:
  * \ingroup LandsatTMIndices
  */
 template <class TInput, class TOutput>
-class MIR2 : public LandsatTMIndexBase<TInput, TOutput>
+class MIR2 : public LandsatTMIndex<TInput, TOutput>
 {
 public:
   /** Return the index name */
@@ -383,7 +402,7 @@ public:
  * \ingroup LandsatTMIndices
  */
 template <class TInput, class TOutput>
-class TIR : public LandsatTMIndexBase<TInput, TOutput>
+class TIR : public LandsatTMIndex<TInput, TOutput>
 {
 public:
   /** Return the index name */
@@ -427,7 +446,7 @@ public:
  * \ingroup LandsatTMIndices
  */
 template <class TInput, class TOutput>
-class MIRTIR : public LandsatTMIndexBase<TInput, TOutput>
+class MIRTIR : public LandsatTMIndex<TInput, TOutput>
 {
 public:
   /** Return the index name */
@@ -465,7 +484,7 @@ public:
  * \ingroup LandsatTMIndices
  */
 template <class TInput, class TOutput>
-class NDVI : public LandsatTMIndexBase<TInput, TOutput>
+class NDVI : public LandsatTMIndex<TInput, TOutput>
 {
 public:
   /** Return the index name */
@@ -510,7 +529,7 @@ public:
  * \ingroup LandsatTMIndices
  */
 template <class TInput, class TOutput>
-class NDBSI : public LandsatTMIndexBase<TInput, TOutput>
+class NDBSI : public LandsatTMIndex<TInput, TOutput>
 {
 public:
   /** Return the index name */
@@ -551,7 +570,7 @@ public:
  * \ingroup LandsatTMIndices
  */
 template <class TInput, class TOutput>
-class BIO : public LandsatTMIndexBase<TInput, TOutput>
+class BIO : public LandsatTMIndex<TInput, TOutput>
 {
 public:
   /** Return the index name */
@@ -595,7 +614,7 @@ public:
  * \ingroup LandsatTMIndices
  */
 template <class TInput, class TOutput>
-class NDSI : public LandsatTMIndexBase<TInput, TOutput>
+class NDSI : public LandsatTMIndex<TInput, TOutput>
 {
 public:
   /** Return the index name */
@@ -650,7 +669,7 @@ public:
  * \ingroup LandsatTMIndices
  */
 template <class TInput, class TOutput>
-class NDSIVis : public LandsatTMIndexBase<TInput, TOutput>
+class NDSIVis : public LandsatTMIndex<TInput, TOutput>
 {
 public:
   /** Return the index name */
@@ -693,7 +712,7 @@ public:
  * \ingroup LandsatTMIndices
  */
 template <class TInput, class TOutput>
-class NDBBBI : public LandsatTMIndexBase<TInput, TOutput>
+class NDBBBI : public LandsatTMIndex<TInput, TOutput>
 {
 public:
   /** Return the index name */
