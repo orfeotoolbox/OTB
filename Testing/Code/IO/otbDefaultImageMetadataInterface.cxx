@@ -198,7 +198,7 @@ int otbDefaultImageMetadataInterface(int argc, char* argv[])
       std::vector<unsigned int> rgb(3);
       rgb = obj->GetDefaultDisplay();
 
-      if( rgb[0] != 0 || rgb[1] != 1 || rgb[2] != 2 )
+      if( rgb[0] != 0 || rgb[1] != 0 || rgb[2] != 0 )
         {
         std::cout << "wrong value for GetDefaultDisplay() method!" << std::endl;
         return EXIT_FAILURE;
