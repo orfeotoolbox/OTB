@@ -331,12 +331,6 @@ int otbDefaultImageMetadataInterface(int argc, char* argv[])
     {
     std::cout << "ExceptionObject caught for CanRead() !" << std::endl;
     std::cout << err << std::endl;
-    hasRisedException =true;
-    }
-
-  if(!hasRisedException)
-    {
-    std::cerr << " Should has raise an exception !"<< std::endl;
     return EXIT_FAILURE;
     }
 
@@ -344,29 +338,20 @@ int otbDefaultImageMetadataInterface(int argc, char* argv[])
 
   try
     {
-      std::vector<unsigned int> rgb(3);
-      rgb = obj->GetDefaultDisplay();
+    std::vector<unsigned int> rgb(3);
+    rgb = obj->GetDefaultDisplay();
 
-      if( rgb[0] != 0 || rgb[1] != 0 || rgb[2] != 0 )
-        {
-        std::cout << "wrong value for GetDefaultDisplay() method!" << std::endl;
-        return EXIT_FAILURE;
-        }
+    if (obj->GetNumberOfBands() != 0 && rgb[0] != 0 && rgb[1] != 1 && rgb[2] != 2)
+      {
+      std::cout << "wrong value for GetDefaultDisplay() method!" << std::endl;
+      return EXIT_FAILURE;
+      }
     }
   catch (itk::ExceptionObject& err)
     {
     std::cout << "ExceptionObject caught for GetDefaultDisplay() !" << std::endl;
     std::cout << err << std::endl;
-    hasRisedException =true;
     }
-
-  if(!hasRisedException)
-    {
-    std::cerr << " Should has raise an exception !"<< std::endl;
-    return EXIT_FAILURE;
-    }
-
-  hasRisedException = false;
 
   return EXIT_SUCCESS;
 
