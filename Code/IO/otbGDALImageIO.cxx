@@ -210,6 +210,8 @@ void GDALImageIO::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
   os << indent << "Compression Level : " << m_CompressionLevel << "\n";
+  os << indent << "IsComplex (otb side) : " << m_IsComplex << "\n";
+  os << indent << "Byte per pixel : " << m_NbOctetPixel << "\n";
 }
 
 // Read a 3D image (or event more bands)... not implemented yet
@@ -233,16 +235,20 @@ void GDALImageIO::Read(void* buffer)
   int lFirstLine   = this->GetIORegion().GetIndex()[1]; // [1... ]
   int lFirstColumn = this->GetIORegion().GetIndex()[0]; // [1... ]
 
-  std::streamoff lNbPixels = (static_cast<std::streamoff>(lNbColumns)) * (static_cast<std::streamoff>(lNbLines));
+  std::streamoff lNbPixels = (static_cast<std::streamoff>(lNbColumns))
+                             * (static_cast<std::streamoff>(lNbLines));
   std::streamoff lBufferSize = static_cast<std::streamoff>(m_NbOctetPixel) * lNbPixels;
-
+  if (GDALDataTypeIsComplex(m_PxType) && !m_IsComplex)
+    {
+    lBufferSize *= 2;
+    }
   itk::VariableLengthVector<unsigned char> value(lBufferSize);
 
   CPLErr         lCrGdal;
   std::streamoff cpt(0);
   GDALDataset* dataset = m_Dataset->GetDataSet();
 
-  if (GDALDataTypeIsComplex(m_PxType)
+  if (GDALDataTypeIsComplex(m_PxType) //TODO should disappear
       && (m_PxType != GDT_CFloat32)
       && (m_PxType != GDT_CFloat64))
     {
@@ -268,6 +274,39 @@ void GDALImageIO::Read(void* buffer)
       memcpy((void*) (&(p[cpt])), (const void*) (&(value[i])), (size_t) (m_NbOctetPixel));
       cpt += static_cast<std::streamoff>(m_NbOctetPixel);
       }
+    }
+  else if (GDALDataTypeIsComplex(m_PxType) && !m_IsComplex)
+    {
+    // Mise a jour du step
+    step = step * static_cast<std::streamoff>(m_NbOctetPixel);
+
+    for (unsigned int nbComponents = 0; nbComponents < dataset->GetRasterCount(); ++nbComponents)
+      {
+      lCrGdal = dataset->GetRasterBand(nbComponents+1)->RasterIO(GF_Read,
+                                                                lFirstColumn,
+                                                                lFirstLine,
+                                                                lNbColumns,
+                                                                lNbLines,
+                                                                const_cast<unsigned char*>(value.GetDataPointer()),
+                                                                lNbColumns,
+                                                                lNbLines,
+                                                                m_PxType,
+                                                                0,
+                                                                0);
+      if (lCrGdal == CE_Failure)
+        {
+        itkExceptionMacro(<< "Error while reading image (GDAL format) " << m_FileName.c_str() << ".");
+        }
+      // Recopie dans le buffer
+      cpt = static_cast<std::streamoff>(nbComponents) * static_cast<std::streamoff>(m_NbOctetPixel);
+      for (std::streamoff i = 0; i < lBufferSize; i = i + static_cast<std::streamoff>(m_NbOctetPixel))
+        {
+        memcpy((void*) (&(p[cpt])), (const void*) (&(value[i])), (size_t) (m_NbOctetPixel)); //Real part
+        memcpy((void*) (&(p[cpt+m_NbOctetPixel])), (const void*) (&(value[i+m_NbOctetPixel])), (size_t) (m_NbOctetPixel)); //Imaginary part
+        cpt += step;
+        }
+      }
+
     }
   else if (m_IsIndexed)
     {
@@ -307,7 +346,7 @@ void GDALImageIO::Read(void* buffer)
     // Mise a jour du step
     step = step * static_cast<std::streamoff>(m_NbOctetPixel);
 
-    for (unsigned int nbComponents = 0; nbComponents < this->GetNumberOfComponents(); ++nbComponents)
+    for (unsigned int nbComponents = 0; nbComponents < dataset->GetRasterCount(); ++nbComponents)
       {
       lCrGdal = dataset->GetRasterBand(nbComponents+1)->RasterIO(GF_Read,
                                                                 lFirstColumn,
@@ -401,10 +440,6 @@ void GDALImageIO::InternalReadImageInformation()
   // Maybe be could changed (to check)
   m_PxType = dataset->GetRasterBand(1)->GetRasterDataType();
 
-  // Following the data type given by GDAL we set it for ImageIO
-  // BE CAREFUL !!!! At this time the complex data type are regarded
-  // as integer data type in hope that ITK uses that kind of system
-  // (take time to check !!)
   if (m_PxType == GDT_Byte)
     {
     SetComponentType(UCHAR);
@@ -496,7 +531,7 @@ void GDALImageIO::InternalReadImageInformation()
 
   //Once all sorts of gdal complex image are handle, this won't be
   //necessary any more
-  if (GDALDataTypeIsComplex(m_PxType) 
+  if (GDALDataTypeIsComplex(m_PxType) //TODO should disappear
       && (m_PxType != GDT_CFloat32)
       && (m_PxType != GDT_CFloat64))
     {
@@ -518,6 +553,17 @@ void GDALImageIO::InternalReadImageInformation()
       this->SetPixelType(VECTOR);
       }
     }
+
+  if(GDALDataTypeIsComplex(m_PxType) && !m_IsComplex)
+    {
+    // we are reading a complex data set into an image where the pixel
+    // type is not complex: we have to double the number of component
+    // for that to work
+    m_NbOctetPixel = m_NbOctetPixel / 2;
+    this->SetNumberOfComponents(m_NbBands*2);
+    this->SetPixelType(VECTOR);
+    }
+
 
   /*----------------------------------------------------------------------*/
   /*-------------------------- METADATA ----------------------------------*/

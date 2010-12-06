@@ -72,6 +72,11 @@ public:
   itkSetMacro(CompressionLevel, int);
   itkGetMacro(CompressionLevel, int);
 
+  /** Set/Get whether the pixel type (otb side) is complex */
+  itkSetMacro(IsComplex, bool);
+  itkGetMacro(IsComplex, bool);
+
+
   /*-------- This part of the interface deals with reading data. ------ */
 
   /** Determine the file type. Returns true if this ImageIO can read the
@@ -156,6 +161,8 @@ private:
   bool m_FlagWriteImageInformation;
   bool m_CanStreamWrite;
 
+  /** Whether the pixel type (otb side, not gdal side) is complex
+   * this information has to be provided by the reader */
   bool m_IsComplex;
 };
 

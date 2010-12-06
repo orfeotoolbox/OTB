@@ -36,6 +36,7 @@
 #include "ossim/ossimPluginProjectionFactory.h"
 
 #include "otbTileMapImageIO.h" //FIXME find a better way
+#include "otbGDALImageIO.h" //FIXME find a better way
 #include "projection/ossimTileMapModel.h"
 
 #include <itksys/SystemTools.hxx>
@@ -276,6 +277,16 @@ ImageFileReader<TOutputImage>
     throw e;
     return;
     }
+
+  // Hint the IO whether the OTB image type takes complex pixels
+  // this will determine the strategy to fill up a vector image
+  if (strcmp(this->m_ImageIO->GetNameOfClass(), "GDALImageIO") == 0)
+    {
+    typename GDALImageIO::Pointer imageIO = dynamic_cast<GDALImageIO*>(this->GetImageIO());
+    OutputImagePixelType dummy;
+    imageIO->SetIsComplex(PixelIsComplex(dummy));
+    }
+
 
   // Got to allocate space for the image. Determine the characteristics of
   // the image.
@@ -574,6 +585,18 @@ ImageFileReader<TOutputImage>
   otbMsgDevMacro(<< "fic_trouve : " << fic_trouve);
   return (fic_trouve);
 }
+
+template<class T>
+bool PixelIsComplex(const std::complex<T>& dummy)
+{
+  return true;
+}
+template<class T>
+bool PixelIsComplex(const T& dummy)
+{
+  return false;
+}
+
 
 } //namespace otb
 
