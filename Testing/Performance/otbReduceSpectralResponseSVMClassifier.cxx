@@ -116,7 +116,7 @@ int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
       {
          ind = rand()%(result.size());
          testing.push_back(result[ind]);
-         training.erase(training.begin()+j);
+         training.erase(training.begin()+(ind-j));
       }
       
       //add to global training files and testing files
@@ -173,6 +173,14 @@ int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
    SVMModelEstimatorType::Pointer estimator = SVMModelEstimatorType::New();
    estimator->SetInputSampleList(sampleList);
    estimator->SetTrainingSampleList(trainingList);
+   estimator->SetNu(0.5);
+   estimator->SetKernelGamma(1);
+   estimator->SetKernelCoef0(1);
+   estimator->SetC(1);
+   estimator->SetEpsilon(0.001);
+   estimator->SetP(0.1);
+   estimator->DoProbabilityEstimates(true);
+   
    estimator->Update();
    estimator->GetModel()->SaveModel("model.txt");
   

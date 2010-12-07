@@ -94,6 +94,10 @@ public:
 
   inline TOutput operator() (const TInput & inPixel)
   {
+//     std::cout << "m_SphericalAlbedo "<< m_SphericalAlbedo << std::endl;
+//     std::cout << "m_Coefficient "<< m_Coefficient << std::endl;
+//     std::cout << "m_Residu "<< m_Residu << std::endl;
+    
     TOutput outPixel;
 //     outPixel.first = inPixel.first;
     double temp, temp1, temp2;

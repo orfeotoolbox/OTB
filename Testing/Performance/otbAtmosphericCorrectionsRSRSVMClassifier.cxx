@@ -223,6 +223,7 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
    SVMModelEstimatorType::Pointer estimator = SVMModelEstimatorType::New();
    estimator->SetInputSampleList(sampleList);
    estimator->SetTrainingSampleList(trainingList);
+   estimator->DoProbabilityEstimates(true);
    estimator->Update();
    estimator->GetModel()->SaveModel("model.txt");
   
