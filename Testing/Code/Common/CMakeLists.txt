@@ -83,7 +83,7 @@ ADD_TEST(coTuCmdLineArgParser_EmptyList ${COMMON_TESTS1}
 
 ADD_TEST(coTuCmdLineArgParser_List1Arg ${COMMON_TESTS1}
         otbTestCommandLineArgumentParserList
-        -image image.png -entier 150 -double 12.25 -deuxentiers 78 56 -doubles 1.0)
+        -image image.png -entier 150 -double 12.25 -deuxentiers 78 56 -doubles 1.0 2.5)
 
 ADD_TEST(coTuCmdLineArgParser_List2Arg ${COMMON_TESTS1}
         otbTestCommandLineArgumentParserList
@@ -92,6 +92,11 @@ ADD_TEST(coTuCmdLineArgParser_List2Arg ${COMMON_TESTS1}
 ADD_TEST(coTuCmdLineArgParser_List2ArgBis ${COMMON_TESTS1}
         otbTestCommandLineArgumentParserList
         -image image.png -entier 150 -double 12.25 -doubles 1.0 2.0 -deuxentiers 78 56 )
+
+
+ADD_TEST(coTuCmdLineArgParser_List3ArgWithError ${COMMON_TESTS1}
+        otbTestCommandLineArgumentParserList
+        -image image.png -entier 150 -double 12.25 -deuxentiers 78 56 -doubles 1.0 2.5 -3.5)
 
 #ADD_TEST(coTuCmdLineArgParserGUIDeuxEntiers_ExactNumberArg ${COMMON_TESTS1}
 #        otbTestCommandLineArgumentParserGUI
