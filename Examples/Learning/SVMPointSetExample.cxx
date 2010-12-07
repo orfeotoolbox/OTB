@@ -111,7 +111,6 @@ int main(int argc, char* argv[])
 
   estimator->SetInputPointSet(mPSet);
   estimator->SetTrainingPointSet(lPSet);
-  estimator->SetNumberOfClasses(2);
 
   estimator->Update();
 

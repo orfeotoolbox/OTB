@@ -93,7 +93,7 @@ int main(int argc, char* argv[])
   svmEstimator->SetSVMType(C_SVC);
   svmEstimator->SetInputImage(inputReader->GetOutput());
   svmEstimator->SetTrainingImage(trainingReader->GetOutput());
-  svmEstimator->SetNumberOfClasses(4);
+
 //  Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex

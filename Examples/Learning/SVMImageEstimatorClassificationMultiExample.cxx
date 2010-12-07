@@ -145,7 +145,6 @@ int main(int argc, char *argv[])
 
   svmEstimator->SetInputImage(inputReader->GetOutput());
   svmEstimator->SetTrainingImage(trainingReader->GetOutput());
-  svmEstimator->SetNumberOfClasses(4);
 
 //  Software Guide : EndCodeSnippet
 
