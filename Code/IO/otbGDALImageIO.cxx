@@ -280,7 +280,7 @@ void GDALImageIO::Read(void* buffer)
     // Mise a jour du step
     step = step * static_cast<std::streamoff>(m_NbOctetPixel);
 
-    for (unsigned int nbComponents = 0; nbComponents < dataset->GetRasterCount(); ++nbComponents)
+    for (int nbComponents = 0; nbComponents < dataset->GetRasterCount(); ++nbComponents)
       {
       lCrGdal = dataset->GetRasterBand(nbComponents+1)->RasterIO(GF_Read,
                                                                 lFirstColumn,
@@ -346,7 +346,7 @@ void GDALImageIO::Read(void* buffer)
     // Mise a jour du step
     step = step * static_cast<std::streamoff>(m_NbOctetPixel);
 
-    for (unsigned int nbComponents = 0; nbComponents < dataset->GetRasterCount(); ++nbComponents)
+    for (int nbComponents = 0; nbComponents < dataset->GetRasterCount(); ++nbComponents)
       {
       lCrGdal = dataset->GetRasterBand(nbComponents+1)->RasterIO(GF_Read,
                                                                 lFirstColumn,
