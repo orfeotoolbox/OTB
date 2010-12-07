@@ -64,7 +64,7 @@ JPEG2000ImageIO::JPEG2000ImageIO()
   m_Origin[0] = 0.0;
   m_Origin[1] = 0.0;
 
-  m_NbOctetPixel = 1;
+  m_BytePerPixel = 1;
 }
 
 JPEG2000ImageIO::~JPEG2000ImageIO()
@@ -296,17 +296,17 @@ void JPEG2000ImageIO::Read(void* buffer)
 
       std::streamsize tile_component_size = data_size / nb_comps;
       std::streamoff  buffer_skip         =
-        std::max(0, tile_y0 - buffer_y0) * buffer_size_x * nb_comps * m_NbOctetPixel;
-      std::streamoff  tile_skip            = std::max(0, buffer_y0 - tile_y0) * (tile_x1 - tile_x0) * m_NbOctetPixel;
-      std::streamoff  tile_offset_begin    = std::max(0, buffer_x0 - tile_x0) * m_NbOctetPixel;
-      std::streamoff  buffer_offset_begin  = std::max(0, tile_x0 - buffer_x0) * nb_comps * m_NbOctetPixel;
+        std::max(0, tile_y0 - buffer_y0) * buffer_size_x * nb_comps * m_BytePerPixel;
+      std::streamoff  tile_skip            = std::max(0, buffer_y0 - tile_y0) * (tile_x1 - tile_x0) * m_BytePerPixel;
+      std::streamoff  tile_offset_begin    = std::max(0, buffer_x0 - tile_x0) * m_BytePerPixel;
+      std::streamoff  buffer_offset_begin  = std::max(0, tile_x0 - buffer_x0) * nb_comps * m_BytePerPixel;
       std::streamsize line_size           =
         (std::min(tile_x1, buffer_x0 + buffer_size_x - 1) - std::max(tile_x0, buffer_x0) + 1);
       std::streamsize nb_lines            = std::min(tile_y1, buffer_y0 + buffer_size_y - 1) - std::max(tile_y0,
                                                                                                         buffer_y0) + 1;
-      std::streamsize buffer_line_size    = buffer_size_x * nb_comps * m_NbOctetPixel;
-      std::streamsize tile_line_size      = (tile_x1 - tile_x0) * m_NbOctetPixel;
-      std::streampos  buffer_step          = nb_comps * m_NbOctetPixel;
+      std::streamsize buffer_line_size    = buffer_size_x * nb_comps * m_BytePerPixel;
+      std::streamsize tile_line_size      = (tile_x1 - tile_x0) * m_BytePerPixel;
+      std::streampos  buffer_step          = nb_comps * m_BytePerPixel;
 
       otbMsgDevMacro(<< "buffer_skip: " << buffer_skip);
       otbMsgDevMacro(<< "tile_skip: " << tile_skip);
@@ -324,15 +324,15 @@ void JPEG2000ImageIO::Read(void* buffer)
         {
         for (int line = 0; line < nb_lines; ++line)
           {
-          buffer_pos = buffer_skip + comp * m_NbOctetPixel + line * buffer_line_size + buffer_offset_begin;
+          buffer_pos = buffer_skip + comp * m_BytePerPixel + line * buffer_line_size + buffer_offset_begin;
           tile_pos   = comp * tile_component_size + tile_skip + line * tile_line_size + tile_offset_begin;
 
           for (int cols = 0; cols < line_size; ++cols)
             {
-            for (unsigned int octet = 0; octet < m_NbOctetPixel; ++octet)
+            for (unsigned int octet = 0; octet < m_BytePerPixel; ++octet)
               {
               charstarbuffer[buffer_pos + cols * buffer_step +
-                             octet] = tile_data[tile_pos + cols * m_NbOctetPixel + octet];
+                             octet] = tile_data[tile_pos + cols * m_BytePerPixel + octet];
               }
             }
           }
@@ -432,7 +432,7 @@ void JPEG2000ImageIO::ReadImageInformation()
 
   if (precision <= 8)
     {
-    m_NbOctetPixel = 1;
+    m_BytePerPixel = 1;
     if (isSigned)
       {
       SetComponentType(CHAR);
@@ -444,7 +444,7 @@ void JPEG2000ImageIO::ReadImageInformation()
     }
   else if (precision <= 16)
     {
-    m_NbOctetPixel = 2;
+    m_BytePerPixel = 2;
     if (isSigned)
       {
       SetComponentType(SHORT);
@@ -456,7 +456,7 @@ void JPEG2000ImageIO::ReadImageInformation()
     }
   else
     {
-    m_NbOctetPixel = 4;
+    m_BytePerPixel = 4;
     if (isSigned)
       {
       SetComponentType(INT);
@@ -483,7 +483,7 @@ void JPEG2000ImageIO::ReadImageInformation()
   otbMsgDebugMacro(<< "Number of tiles: " << nb_tiles_x << " " << nb_tiles_y);
   otbMsgDebugMacro(<< "Precision: " << precision);
   otbMsgDebugMacro(<< "Signed: " << isSigned);
-  otbMsgDebugMacro(<< "Number of octet per value: " << m_NbOctetPixel);
+  otbMsgDebugMacro(<< "Number of octet per value: " << m_BytePerPixel);
   otbMsgDebugMacro(<< "==========================");
 
   otbMsgDebugMacro(<< "Driver to read: JPEG2000");
@@ -532,47 +532,47 @@ void JPEG2000ImageIO::Write(const void* /*buffer*/)
 
 //         if ( this->GetComponentType() == CHAR )
 //         {
-//                 m_NbOctetPixel = 1;
+//                 m_BytePerPixel = 1;
 //                 m_PxType = GDT_Byte;
 //         }
 //         else if ( this->GetComponentType() == UCHAR )
 //         {
-//                 m_NbOctetPixel = 1;
+//                 m_BytePerPixel = 1;
 //                 m_PxType = GDT_Byte;
 //         }
 //         else if ( this->GetComponentType() == USHORT )
 //         {
-//                 m_NbOctetPixel = 2;
+//                 m_BytePerPixel = 2;
 //                 m_PxType = GDT_UInt16;
 //         }
 //         else if ( this->GetComponentType() == SHORT )
 //         {
-//                 m_NbOctetPixel = 2;
+//                 m_BytePerPixel = 2;
 //                 m_PxType = GDT_Int16;
 //         }
 //         else if ( this->GetComponentType() == INT )
 //         {
-//                 m_NbOctetPixel = 4;
+//                 m_BytePerPixel = 4;
 //                 m_PxType = GDT_Int32;
 //         }
 //         else if ( this->GetComponentType() == UINT )
 //         {
-//                 m_NbOctetPixel = 4;
+//                 m_BytePerPixel = 4;
 //                 m_PxType = GDT_UInt32;
 //         }
 //         else if ( this->GetComponentType() == FLOAT )
 //         {
-//                 m_NbOctetPixel = 4;
+//                 m_BytePerPixel = 4;
 //                 m_PxType = GDT_Float32;
 //         }
 //         else if ( this->GetComponentType() == DOUBLE )
 //         {
-//                 m_NbOctetPixel = 8;
+//                 m_BytePerPixel = 8;
 //                 m_PxType = GDT_Float64;
 //         }
 //         else
 //         {
-//                 m_NbOctetPixel = 1;
+//                 m_BytePerPixel = 1;
 //                 m_PxType = GDT_Byte;
 //         }
 
@@ -654,7 +654,7 @@ void JPEG2000ImageIO::Write(const void* /*buffer*/)
 //   l_current_param_ptr->dy = 1;
 //   l_current_param_ptr->h = m_Dimensions[1];
 //   l_current_param_ptr->sgnd = 0;
-//   l_current_param_ptr->prec = 8*m_NbOctetPixel;
+//   l_current_param_ptr->prec = 8*m_BytePerPixel;
 //   l_current_param_ptr->w = m_Dimensions[0];
 //   l_current_param_ptr->x0 = 0;
 //   l_current_param_ptr->y0 = 0;
@@ -713,7 +713,7 @@ void JPEG2000ImageIO::Write(const void* /*buffer*/)
 //     std::streamsize buffer_size_x = this->GetIORegion().GetSize()[0];
 //     std::streamsize buffer_size_y = this->GetIORegion().GetSize()[1];
 
-//     std::streamsize buffer_size = this->GetIORegion().GetNumberOfPixels()*m_NbOctetPixel*m_nbBands;
+//     std::streamsize buffer_size = this->GetIORegion().GetNumberOfPixels()*m_BytePerPixel*m_nbBands;
 
 //     unsigned int nb_tile_x = (unsigned int)vcl_ceil((double)m_Dimensions[0]/(double)m_Parameters.cp_tdx);
 //     unsigned int nb_tile_y = (unsigned int)vcl_ceil((double)m_Dimensions[1]/(double)m_Parameters.cp_tdy);
@@ -722,7 +722,7 @@ void JPEG2000ImageIO::Write(const void* /*buffer*/)
 
 //     OPJ_BYTE * desinterleaved_data = new OPJ_BYTE[buffer_size];
 
-//     std::streamoff step = m_NbBands*m_NbOctetPixel;
+//     std::streamoff step = m_NbBands*m_BytePerPixel;
 
 //     std::streamsize component_size = new
 

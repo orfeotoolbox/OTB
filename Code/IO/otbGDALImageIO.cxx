@@ -211,7 +211,7 @@ void GDALImageIO::PrintSelf(std::ostream& os, itk::Indent indent) const
   Superclass::PrintSelf(os, indent);
   os << indent << "Compression Level : " << m_CompressionLevel << "\n";
   os << indent << "IsComplex (otb side) : " << m_IsComplex << "\n";
-  os << indent << "Byte per pixel : " << m_NbOctetPixel << "\n";
+  os << indent << "Byte per pixel : " << m_BytePerPixel << "\n";
 }
 
 // Read a 3D image (or event more bands)... not implemented yet
@@ -237,7 +237,7 @@ void GDALImageIO::Read(void* buffer)
 
   std::streamoff lNbPixels = (static_cast<std::streamoff>(lNbColumns))
                              * (static_cast<std::streamoff>(lNbLines));
-  std::streamoff lBufferSize = static_cast<std::streamoff>(m_NbOctetPixel) * lNbPixels;
+  std::streamoff lBufferSize = static_cast<std::streamoff>(m_BytePerPixel) * lNbPixels;
   if (GDALDataTypeIsComplex(m_PxType) && !m_IsComplex)
     {
     lBufferSize *= 2;
@@ -269,16 +269,16 @@ void GDALImageIO::Read(void* buffer)
       itkExceptionMacro(<< "Error while reading image (GDAL format) " << m_FileName );
       }
     cpt = 0;
-    for (std::streamoff i = 0; i < lBufferSize; i = i + static_cast<std::streamoff>(m_NbOctetPixel))
+    for (std::streamoff i = 0; i < lBufferSize; i = i + static_cast<std::streamoff>(m_BytePerPixel))
       {
-      memcpy((void*) (&(p[cpt])), (const void*) (&(value[i])), (size_t) (m_NbOctetPixel));
-      cpt += static_cast<std::streamoff>(m_NbOctetPixel);
+      memcpy((void*) (&(p[cpt])), (const void*) (&(value[i])), (size_t) (m_BytePerPixel));
+      cpt += static_cast<std::streamoff>(m_BytePerPixel);
       }
     }
   else if (GDALDataTypeIsComplex(m_PxType) && !m_IsComplex)
     {
     // Mise a jour du step
-    step = step * static_cast<std::streamoff>(m_NbOctetPixel);
+    step = step * static_cast<std::streamoff>(m_BytePerPixel);
 
     for (int nbComponents = 0; nbComponents < dataset->GetRasterCount(); ++nbComponents)
       {
@@ -298,15 +298,15 @@ void GDALImageIO::Read(void* buffer)
         itkExceptionMacro(<< "Error while reading image (GDAL format) " << m_FileName.c_str() << ".");
         }
       // Recopie dans le buffer
-      cpt = static_cast<std::streamoff>(nbComponents) * static_cast<std::streamoff>(m_NbOctetPixel);
-      for (std::streamoff i = 0; i < lBufferSize; i = i + static_cast<std::streamoff>(m_NbOctetPixel))
+      cpt = static_cast<std::streamoff>(nbComponents) * static_cast<std::streamoff>(m_BytePerPixel);
+      for (std::streamoff i = 0; i < lBufferSize; i = i + static_cast<std::streamoff>(m_BytePerPixel))
         {
         memcpy((void*) (&(p[cpt])),
                (const void*) (&(value[i])),
-               (size_t) (m_NbOctetPixel)); //Real part
-        memcpy((void*) (&(p[cpt+m_NbOctetPixel])),
-               (const void*) (&(value[i+m_NbOctetPixel])),
-               (size_t) (m_NbOctetPixel)); //Imaginary part
+               (size_t) (m_BytePerPixel)); //Real part
+        memcpy((void*) (&(p[cpt+m_BytePerPixel])),
+               (const void*) (&(value[i+m_BytePerPixel])),
+               (size_t) (m_BytePerPixel)); //Imaginary part
         cpt += step;
         }
       }
@@ -314,7 +314,7 @@ void GDALImageIO::Read(void* buffer)
     }
   else if (m_IsIndexed)
     {
-    step = step * static_cast<std::streamoff>(m_NbOctetPixel);
+    step = step * static_cast<std::streamoff>(m_BytePerPixel);
 
     lCrGdal = dataset->GetRasterBand(1)->RasterIO(GF_Read,
                                      lFirstColumn,
@@ -334,7 +334,7 @@ void GDALImageIO::Read(void* buffer)
     // Recopie dans le buffer
     cpt = 0;
     GDALColorTable* colorTable = dataset->GetRasterBand(1)->GetColorTable();
-    for (std::streamoff i = 0; i < lBufferSize; i = i + static_cast<std::streamoff>(m_NbOctetPixel))
+    for (std::streamoff i = 0; i < lBufferSize; i = i + static_cast<std::streamoff>(m_BytePerPixel))
       {
       GDALColorEntry color;
       colorTable->GetColorEntryAsRGB(value[i], &color);
@@ -348,7 +348,7 @@ void GDALImageIO::Read(void* buffer)
   else
     {
     // Mise a jour du step
-    step = step * static_cast<std::streamoff>(m_NbOctetPixel);
+    step = step * static_cast<std::streamoff>(m_BytePerPixel);
 
     for (int nbComponents = 0; nbComponents < dataset->GetRasterCount(); ++nbComponents)
       {
@@ -368,10 +368,10 @@ void GDALImageIO::Read(void* buffer)
         itkExceptionMacro(<< "Error while reading image (GDAL format) " << m_FileName.c_str() << ".");
         }
       // Recopie dans le buffer
-      cpt = static_cast<std::streamoff>(nbComponents) * static_cast<std::streamoff>(m_NbOctetPixel);
-      for (std::streamoff i = 0; i < lBufferSize; i = i + static_cast<std::streamoff>(m_NbOctetPixel))
+      cpt = static_cast<std::streamoff>(nbComponents) * static_cast<std::streamoff>(m_BytePerPixel);
+      for (std::streamoff i = 0; i < lBufferSize; i = i + static_cast<std::streamoff>(m_BytePerPixel))
         {
-        memcpy((void*) (&(p[cpt])), (const void*) (&(value[i])), (size_t) (m_NbOctetPixel));
+        memcpy((void*) (&(p[cpt])), (const void*) (&(value[i])), (size_t) (m_BytePerPixel));
         cpt += step;
         }
       }
@@ -487,43 +487,43 @@ void GDALImageIO::InternalReadImageInformation()
 
   if (this->GetComponentType() == CHAR)
     {
-    m_NbOctetPixel = 1;
+    m_BytePerPixel = 1;
     }
   else if (this->GetComponentType() == UCHAR)
     {
-    m_NbOctetPixel = 1;
+    m_BytePerPixel = 1;
     }
   else if (this->GetComponentType() == USHORT)
     {
-    m_NbOctetPixel = 2;
+    m_BytePerPixel = 2;
     }
   else if (this->GetComponentType() == SHORT)
     {
-    m_NbOctetPixel = 2;
+    m_BytePerPixel = 2;
     }
   else if (this->GetComponentType() == INT)
     {
-    m_NbOctetPixel = 4;
+    m_BytePerPixel = 4;
     }
   else if (this->GetComponentType() == UINT)
     {
-    m_NbOctetPixel = 4;
+    m_BytePerPixel = 4;
     }
   else if (this->GetComponentType() == FLOAT)
     {
-    m_NbOctetPixel = 4;
+    m_BytePerPixel = 4;
     }
   else if (this->GetComponentType() == DOUBLE)
     {
-    m_NbOctetPixel = 8;
+    m_BytePerPixel = 8;
     }
   else if (this->GetComponentType() == CFLOAT)
     {
-    m_NbOctetPixel = sizeof(std::complex<float>);
+    m_BytePerPixel = sizeof(std::complex<float>);
     }
   else if (this->GetComponentType() == CDOUBLE)
     {
-    m_NbOctetPixel = sizeof(std::complex<double>);
+    m_BytePerPixel = sizeof(std::complex<double>);
     }
   else
     {
@@ -539,7 +539,7 @@ void GDALImageIO::InternalReadImageInformation()
       && (m_PxType != GDT_CFloat32)
       && (m_PxType != GDT_CFloat64))
     {
-    m_NbOctetPixel = m_NbOctetPixel * 2;
+    m_BytePerPixel = m_BytePerPixel * 2;
     this->SetNumberOfComponents(2);
     this->SetPixelType(COMPLEX);
     // Is this necessary ?
@@ -562,7 +562,7 @@ void GDALImageIO::InternalReadImageInformation()
     // we are reading a complex data set into an image where the pixel
     // type is not complex: we have to double the number of component
     // for that to work
-    m_NbOctetPixel = m_NbOctetPixel / 2;
+    m_BytePerPixel = m_BytePerPixel / 2;
     this->SetNumberOfComponents(m_NbBands*2);
     this->SetPixelType(VECTOR);
     }
@@ -915,7 +915,7 @@ void GDALImageIO::Write(const void* buffer)
     }
 
   std::streamoff lNbPixels = static_cast<std::streamoff> (lNbColumns) * static_cast<std::streamoff> (lNbLines);
-  std::streamoff lBufferSize = static_cast<std::streamoff> (m_NbOctetPixel) * lNbPixels;
+  std::streamoff lBufferSize = static_cast<std::streamoff> (m_BytePerPixel) * lNbPixels;
   otbMsgDevMacro(<< " BufferSize allocated : " << lBufferSize);
 
   itk::VariableLengthVector<unsigned char> value(lBufferSize);
@@ -924,18 +924,18 @@ void GDALImageIO::Write(const void* buffer)
     {
     // Update Step
     std::streamoff step = static_cast<std::streamoff> (m_NbBands);
-    step = step * static_cast<std::streamoff> (m_NbOctetPixel);
+    step = step * static_cast<std::streamoff> (m_BytePerPixel);
 
     CPLErr lCrGdal;
 
     std::streamoff cpt(0);
     for (int nbComponents = 0; nbComponents < m_NbBands; ++nbComponents)
       {
-      cpt = static_cast<std::streamoff> (nbComponents) * static_cast<std::streamoff> (m_NbOctetPixel);
+      cpt = static_cast<std::streamoff> (nbComponents) * static_cast<std::streamoff> (m_BytePerPixel);
 
-      for (std::streamoff i = 0; i < lBufferSize; i = i + static_cast<std::streamoff> (m_NbOctetPixel))
+      for (std::streamoff i = 0; i < lBufferSize; i = i + static_cast<std::streamoff> (m_BytePerPixel))
         {
-        memcpy((void*) (&(value[i])), (const void*) (&(p[cpt])), (size_t) (m_NbOctetPixel));
+        memcpy((void*) (&(value[i])), (const void*) (&(p[cpt])), (size_t) (m_BytePerPixel));
         cpt += step;
         }
       GDALRasterBand *poBand = m_Dataset->GetDataSet()->GetRasterBand(nbComponents+1);
@@ -1012,28 +1012,28 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
 
     if (this->GetComponentType() == SHORT)
       {
-      m_NbOctetPixel = 4;
+      m_BytePerPixel = 4;
       m_PxType = GDT_CInt16;
       }
     else if (this->GetComponentType() == INT)
       {
-      m_NbOctetPixel = 8;
+      m_BytePerPixel = 8;
       m_PxType = GDT_CInt32;
       }
     else if (this->GetComponentType() == DOUBLE)
       {
-      m_NbOctetPixel = 16;
+      m_BytePerPixel = 16;
       m_PxType = GDT_CFloat64;
       }
     else if (this->GetComponentType() == FLOAT)
       {
-      m_NbOctetPixel = 8;
+      m_BytePerPixel = 8;
       m_PxType = GDT_CFloat32;
       }
     else
       {
       this->SetComponentType(FLOAT);
-      m_NbOctetPixel = 8;
+      m_BytePerPixel = 8;
       m_PxType = GDT_CFloat32;
       }
     }
@@ -1041,47 +1041,47 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
     {
     if (this->GetComponentType() == CHAR)
       {
-      m_NbOctetPixel = 1;
+      m_BytePerPixel = 1;
       m_PxType = GDT_Byte;
       }
     else if (this->GetComponentType() == UCHAR)
       {
-      m_NbOctetPixel = 1;
+      m_BytePerPixel = 1;
       m_PxType = GDT_Byte;
       }
     else if (this->GetComponentType() == USHORT)
       {
-      m_NbOctetPixel = 2;
+      m_BytePerPixel = 2;
       m_PxType = GDT_UInt16;
       }
     else if (this->GetComponentType() == SHORT)
       {
-      m_NbOctetPixel = 2;
+      m_BytePerPixel = 2;
       m_PxType = GDT_Int16;
       }
     else if (this->GetComponentType() == INT)
       {
-      m_NbOctetPixel = 4;
+      m_BytePerPixel = 4;
       m_PxType = GDT_Int32;
       }
     else if (this->GetComponentType() == UINT)
       {
-      m_NbOctetPixel = 4;
+      m_BytePerPixel = 4;
       m_PxType = GDT_UInt32;
       }
     else if (this->GetComponentType() == FLOAT)
       {
-      m_NbOctetPixel = 4;
+      m_BytePerPixel = 4;
       m_PxType = GDT_Float32;
       }
     else if (this->GetComponentType() == DOUBLE)
       {
-      m_NbOctetPixel = 8;
+      m_BytePerPixel = 8;
       m_PxType = GDT_Float64;
       }
     else
       {
-      m_NbOctetPixel = 1;
+      m_BytePerPixel = 1;
       m_PxType = GDT_Byte;
       }
     }
@@ -1118,9 +1118,9 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
            <<  "LINES=" << m_Dimensions[1] << ","
            <<  "BANDS=" << m_NbBands << ","
            <<  "DATATYPE=" << GDALGetDataTypeName(m_PxType) << ","
-           <<  "PIXELOFFSET=" << m_NbOctetPixel * m_NbBands << ","
-           <<  "LINEOFFSET=" << m_NbOctetPixel * m_NbBands * m_Dimensions[0] << ","
-           <<  "BANDOFFSET=" << m_NbOctetPixel;
+           <<  "PIXELOFFSET=" << m_BytePerPixel * m_NbBands << ","
+           <<  "LINEOFFSET=" << m_BytePerPixel * m_NbBands * m_Dimensions[0] << ","
+           <<  "BANDOFFSET=" << m_BytePerPixel;
 
     m_Dataset = GDALDriverManagerWrapper::GetInstance().Open(stream.str());
     }

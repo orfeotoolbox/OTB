@@ -58,7 +58,7 @@ MSTARImageIO::MSTARImageIO()
   m_Origin[0] = 0.0;
   m_Origin[1] = 0.0;
 
-  m_NbOctetPixel = 0;
+  m_BytePerPixel = 0;
 
   MSTARfp = NULL;        /* Input FILE ptr to MSTAR image file     */
   HDRfp = NULL;          /* Output FILE ptr to MSTAR header file   */
@@ -313,14 +313,14 @@ void MSTARImageIO::Read(void* buffer)
     otbMsgDevMacro(<< " Scene type ");
     }
 
-  unsigned long step = this->GetNumberOfComponents() * (unsigned long) (m_NbOctetPixel);
+  unsigned long step = this->GetNumberOfComponents() * (unsigned long) (m_BytePerPixel);
   float *       p = static_cast<float *>(buffer);
 
   int lNbLines   = this->GetIORegion().GetSize()[1];
   int lNbColumns = this->GetIORegion().GetSize()[0];
 
   unsigned long lNbPixels = (unsigned long) (lNbColumns * lNbLines);
-  unsigned long lTailleBuffer = (unsigned long) (m_NbOctetPixel) * lNbPixels;
+  unsigned long lTailleBuffer = (unsigned long) (m_BytePerPixel) * lNbPixels;
 
   unsigned char* value = new unsigned char[lTailleBuffer];
 
@@ -467,10 +467,10 @@ void MSTARImageIO::Read(void* buffer)
         // Recopie dans le buffer
 
         unsigned long cpt(0);
-        cpt = (unsigned long) (nbComponents) * (unsigned long) (m_NbOctetPixel);
-        for (unsigned long i = 0; i < lTailleBuffer; i = i + m_NbOctetPixel)
+        cpt = (unsigned long) (nbComponents) * (unsigned long) (m_BytePerPixel);
+        for (unsigned long i = 0; i < lTailleBuffer; i = i + m_BytePerPixel)
           {
-          memcpy((void*) (&(p[cpt])), (const void*) (&(FSCENEdata[i])), (size_t) (m_NbOctetPixel));
+          memcpy((void*) (&(p[cpt])), (const void*) (&(FSCENEdata[i])), (size_t) (m_BytePerPixel));
           cpt += step;
           }
 
@@ -508,10 +508,10 @@ void MSTARImageIO::Read(void* buffer)
         // Recopie dans le buffer
 
         unsigned long cpt(0);
-        cpt = (unsigned long) (nbComponents) * (unsigned long) (m_NbOctetPixel);
-        for (unsigned long i = 0; i < lTailleBuffer; i = i + m_NbOctetPixel)
+        cpt = (unsigned long) (nbComponents) * (unsigned long) (m_BytePerPixel);
+        for (unsigned long i = 0; i < lTailleBuffer; i = i + m_BytePerPixel)
           {
-          memcpy((void*) (&(p[cpt])), (const void*) (&(CHIPdata[i])), (size_t) (m_NbOctetPixel));
+          memcpy((void*) (&(p[cpt])), (const void*) (&(CHIPdata[i])), (size_t) (m_BytePerPixel));
           cpt += step;
           }
 
@@ -540,7 +540,7 @@ void MSTARImageIO::ReadImageInformation()
 {
   int NbLignes;                /* Nombre de lignes de l'image */
   int NbColonnes;              /* Nombre de colonnes de l'image */
-  int NbOctetPixel = sizeof(float);            /* Nombre octets/pixel l'image */
+  int BytePerPixel = sizeof(float);            /* Nombre octets/pixel l'image */
 
   MSTARname = m_FileName.c_str();
   MSTARfp = fopen(MSTARname, "rb");
@@ -624,7 +624,7 @@ void MSTARImageIO::ReadImageInformation()
   this->SetNumberOfDimensions(2);
   m_Dimensions[0] = NbColonnes;
   m_Dimensions[1] = NbLignes;
-  m_NbOctetPixel = NbOctetPixel;
+  m_BytePerPixel = BytePerPixel;
   otbMsgDebugMacro(<< "Image size cree : " << m_Dimensions[0] << "," << m_Dimensions[1]);
 
   m_PixelType = VECTOR;

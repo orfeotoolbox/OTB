@@ -154,7 +154,7 @@ private:
     }
 
   /** Nombre d'octets par pixel */
-  int  m_NbOctetPixel;
+  int  m_BytePerPixel;
   bool m_FlagWriteImageInformation;
   /** File byte order */
   itk::ImageIOBase::ByteOrder m_FileByteOrder;

@@ -133,7 +133,7 @@ private:
   unsigned char  bigushortbuf[2];  /* BigEndian ushort buffer...*/
   unsigned short littleushortval;  /* LittleEndian ushort value.*/
 
-  int m_NbOctetPixel;
+  int m_BytePerPixel;
 };
 
 } // end namespace otb

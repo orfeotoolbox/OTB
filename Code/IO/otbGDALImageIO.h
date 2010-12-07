@@ -153,7 +153,7 @@ private:
 
   GDALDataType     m_PxType;
   /** Nombre d'octets par pixel */
-  int m_NbOctetPixel;
+  int m_BytePerPixel;
 
   bool GDALInfoReportCorner(const char * corner_name, double x, double y,
                             double& dfGeoX, double& dfGeoY);
