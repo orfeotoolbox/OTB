@@ -103,7 +103,7 @@ public:
 
   // Intensity Rescale
   typedef VectorRescaleIntensityImageFilter<InputImageType,
-					    InputImageType> VectorRescaleIntensityImageFilterType;
+              InputImageType> VectorRescaleIntensityImageFilterType;
 
   // Transformer
   typedef GenericRSTransform<>           TransformType;
@@ -195,18 +195,18 @@ private:
   /** KML generate  Filename - PathName - tile number - North - South - East - West */
   void GenerateKML(std::string pathname, int depth, int x, int y, double north, double south, double east, double west);
   void GenerateKMLExtended(std::string pathname,
-			   int depth,
-			   int x,
+         int depth,
+         int x,
                             int y,
-			   OutputPointType lowerLeft,
+         OutputPointType lowerLeft,
                             OutputPointType lowerRight,
-			   OutputPointType upperRight,
-			   OutputPointType upperLeft);
+         OutputPointType upperRight,
+         OutputPointType upperLeft);
 
   /** KML with link generate */
   void GenerateKMLWithLink(std::string pathname,
                            int depth, int x, int y, int tileStartX, int tileStartY,
-			   double north, double south, double east, double west, double centerLong, double centerLat);
+         double north, double south, double east, double west, double centerLong, double centerLat);
   void GenerateKMLExtendedWithLink(std::string pathname,
                                    int depth, int x, int y, int tileStartX, int tileStartY,
                                    OutputPointType lowerLeft, OutputPointType lowerRight,

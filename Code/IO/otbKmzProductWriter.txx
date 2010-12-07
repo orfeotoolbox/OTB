@@ -386,7 +386,7 @@ KmzProductWriter<TInputImage>
         // Generate pathname
         std::ostringstream path;
         path << m_Path;
-	
+  
         ossimFilename cachingDir(path.str());
         cachingDir.createDirectory();
 
@@ -408,8 +408,8 @@ KmzProductWriter<TInputImage>
 
         // Set Channel to extract
         m_VectorImageExtractROIFilter->SetChannel(1);//m_ProductVector[m_CurrentProduct].m_Composition[0] + 1);
-	m_VectorImageExtractROIFilter->SetChannel(2);//m_ProductVector[m_CurrentProduct].m_Composition[1] + 1);
-	m_VectorImageExtractROIFilter->SetChannel(3);//m_ProductVector[m_CurrentProduct].m_Composition[2] + 1);
+  m_VectorImageExtractROIFilter->SetChannel(2);//m_ProductVector[m_CurrentProduct].m_Composition[1] + 1);
+  m_VectorImageExtractROIFilter->SetChannel(3);//m_ProductVector[m_CurrentProduct].m_Composition[2] + 1);
 
         // Set extract roi input
         m_VectorImageExtractROIFilter->SetInput(m_ResampleVectorImage);
@@ -418,7 +418,7 @@ KmzProductWriter<TInputImage>
         m_VectorWriter = VectorWriterType::New();
         m_VectorWriter->SetFileName(ossFileName.str().c_str());
         m_VectorWriter->SetInput(m_VectorImageExtractROIFilter->GetOutput());
-	m_VectorWriter->WriteGeomFileOn();
+  m_VectorWriter->WriteGeomFileOn();
         m_VectorWriter->Update();
 
         /** TODO : Generate KML for this tile */
@@ -481,7 +481,7 @@ KmzProductWriter<TInputImage>
         m_ResampleVectorImage->TransformIndexToPhysicalPoint(indexTile, inputPoint);
         outputPoint = m_Transform->TransformPoint(inputPoint);
         OutputPointType lowerLeftCorner = outputPoint;
-	
+  
         // Compute lower right corner
         indexTile[0] = extractIndex[0] + sizeTile[0];
         indexTile[1] = extractIndex[1] + sizeTile[1];
@@ -502,36 +502,36 @@ KmzProductWriter<TInputImage>
         m_ResampleVectorImage->TransformIndexToPhysicalPoint(indexTile, inputPoint);
         outputPoint = m_Transform->TransformPoint(inputPoint);
         OutputPointType upperLeftCorner = outputPoint;
-	
+  
         /** END GX LAT LON */
 
-	// Create KML - Filename - PathName - tile number - North - South - East - West
-	if (sampleRatioValue == 1)
-	  {
-	  if (!m_UseExtendMode) // Extended format
-	    this->GenerateKML(path.str(), depth, x, y, north, south, east, west);
-	  else 
-	    this->GenerateKMLExtended(path.str(), depth, 
-				      x, y, lowerLeftCorner, 
-				      lowerRightCorner, 
-				      upperRightCorner, upperLeftCorner);
-	  }
-	else
-	  {
-	  // Search tiles to link
-	  int tileXStart = extractIndex[0] / (m_TileSize / 2);
-	  int tileYStart = extractIndex[1] / (m_TileSize / 2);
+  // Create KML - Filename - PathName - tile number - North - South - East - West
+  if (sampleRatioValue == 1)
+    {
+    if (!m_UseExtendMode) // Extended format
+      this->GenerateKML(path.str(), depth, x, y, north, south, east, west);
+    else 
+      this->GenerateKMLExtended(path.str(), depth, 
+              x, y, lowerLeftCorner, 
+              lowerRightCorner, 
+              upperRightCorner, upperLeftCorner);
+    }
+  else
+    {
+    // Search tiles to link
+    int tileXStart = extractIndex[0] / (m_TileSize / 2);
+    int tileYStart = extractIndex[1] / (m_TileSize / 2);
 
-	  // Create KML with link
-	  if (!m_UseExtendMode)
-	    this->GenerateKMLWithLink(path.str(), depth, x, y, tileXStart, tileYStart,
-				      north, south, east, west, centerLong, centerLat);
-	  else
-	    this->GenerateKMLExtendedWithLink(
-	      path.str(), depth, x, y, tileXStart, tileYStart,
-	      lowerLeftCorner, lowerRightCorner, upperRightCorner, upperLeftCorner,
-	      centerLong, centerLat);
-	  }
+    // Create KML with link
+    if (!m_UseExtendMode)
+      this->GenerateKMLWithLink(path.str(), depth, x, y, tileXStart, tileYStart,
+              north, south, east, west, centerLong, centerLat);
+    else
+      this->GenerateKMLExtendedWithLink(
+        path.str(), depth, x, y, tileXStart, tileYStart,
+        lowerLeftCorner, lowerRightCorner, upperRightCorner, upperLeftCorner,
+        centerLong, centerLat);
+    }
 
         if (depth == 0)
           {
@@ -576,7 +576,6 @@ KmzProductWriter<TInputImage>
 }
 
 
-
 /**
 *
 */
@@ -612,11 +611,11 @@ template <class TInputImage>
 void
 KmzProductWriter<TInputImage>
 ::GenerateKMLRoot(std::string title,
-		  double north,
-		  double south,
-		  double east,
-		  double west,
-		  bool extended)
+      double north,
+      double south,
+      double east,
+      double west,
+      bool extended)
 {
   // Give a name to the root file
   std::ostringstream kmlname;
@@ -690,9 +689,9 @@ KmzProductWriter<TInputImage>
 //     tempOutputPointOrigin = tempTransform->TransformPoint(tempPointOrigin);
 
 //     this->AddNetworkLinkToRootKML(tempOutputPointOrigin[1],
-// 				  tempOutputPoint[1], tempOutputPointOrigin[0],
-// 				  tempOutputPoint[0], currentImageName, false,
-// 				  i);
+//           tempOutputPoint[1], tempOutputPointOrigin[0],
+//           tempOutputPoint[0], currentImageName, false,
+//           i);
 //     }
 
   // Last thing to do is to close the root kml
@@ -760,12 +759,12 @@ template <class TInputImage>
 void
 KmzProductWriter<TInputImage>
 ::AddNetworkLinkToRootKML(double north,
-			  double south,
-			  double east,
-			  double west,
-			  std::string directory,
-			  bool addRegion,
-			  unsigned int pos)
+        double south,
+        double east,
+        double west,
+        std::string directory,
+        bool addRegion,
+        unsigned int pos)
 {
   m_RootKmlFile << "\t\t<Document>" << std::endl;
   m_RootKmlFile << "\t\t\t<name>" << m_FileName<< "</name>" << std::endl;
@@ -940,8 +939,8 @@ template <class TInputImage>
 void
 KmzProductWriter<TInputImage>
 ::GenerateKMLExtended(std::string pathname, int depth, int x, int y,
-		      OutputPointType lowerLeft, OutputPointType lowerRight,
-		      OutputPointType upperRight, OutputPointType upperLeft)
+          OutputPointType lowerLeft, OutputPointType lowerRight,
+          OutputPointType upperRight, OutputPointType upperLeft)
 {
   std::ostringstream kmlname;
   kmlname << pathname;
@@ -1044,10 +1043,10 @@ template <class TInputImage>
 void
 KmzProductWriter<TInputImage>
 ::GenerateKMLExtendedWithLink(std::string pathname,
-			      int depth, int x, int y, int tileStartX, int tileStartY,
-			      OutputPointType lowerLeft, OutputPointType lowerRight,
-			      OutputPointType upperRight, OutputPointType upperLeft,
-			      double centerLong, double centerLat)
+            int depth, int x, int y, int tileStartX, int tileStartY,
+            OutputPointType lowerLeft, OutputPointType lowerRight,
+            OutputPointType upperRight, OutputPointType upperLeft,
+            double centerLong, double centerLat)
 {
   std::ostringstream kmlname;
   kmlname << pathname;
@@ -1229,8 +1228,8 @@ template <class TInputImage>
 void
 KmzProductWriter<TInputImage>
 ::GenerateKMLWithLink(std::string pathname,
-		      int depth, int x, int y, int tileStartX, int tileStartY,
-		      double north, double south, double east, double west, double centerLong, double centerLat)
+          int depth, int x, int y, int tileStartX, int tileStartY,
+          double north, double south, double east, double west, double centerLong, double centerLat)
 {
   std::ostringstream kmlname;
   kmlname << pathname;
