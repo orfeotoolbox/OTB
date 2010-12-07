@@ -218,7 +218,6 @@ int main(int argc, char* argv[])
 // Software Guide : BeginCodeSnippet
   estimator->SetInputPointSet(fPSet);
   estimator->SetTrainingPointSet(lPSet);
-  estimator->SetNumberOfClasses(2);
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex

@@ -158,6 +158,7 @@ int otbComplexMomentsImageFunctionScaleInvariant(int argc, char * argv[])
   OutputType Result2 = function2->EvaluateAtIndex(index2);
 
   double error;
+
   error = 0.0;
 
   for (unsigned int k=0; k<=p; k++)
