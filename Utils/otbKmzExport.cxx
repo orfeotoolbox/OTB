@@ -74,5 +74,6 @@ int KmzExport::Execute(otb::ApplicationOptionsResult* parseResult)
   // trigger the writing
   kmzWriter->Update();
 
+  return EXIT_SUCCESS;
 }
 }
