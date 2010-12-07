@@ -301,8 +301,12 @@ void GDALImageIO::Read(void* buffer)
       cpt = static_cast<std::streamoff>(nbComponents) * static_cast<std::streamoff>(m_NbOctetPixel);
       for (std::streamoff i = 0; i < lBufferSize; i = i + static_cast<std::streamoff>(m_NbOctetPixel))
         {
-        memcpy((void*) (&(p[cpt])), (const void*) (&(value[i])), (size_t) (m_NbOctetPixel)); //Real part
-        memcpy((void*) (&(p[cpt+m_NbOctetPixel])), (const void*) (&(value[i+m_NbOctetPixel])), (size_t) (m_NbOctetPixel)); //Imaginary part
+        memcpy((void*) (&(p[cpt])),
+               (const void*) (&(value[i])),
+               (size_t) (m_NbOctetPixel)); //Real part
+        memcpy((void*) (&(p[cpt+m_NbOctetPixel])),
+               (const void*) (&(value[i+m_NbOctetPixel])),
+               (size_t) (m_NbOctetPixel)); //Imaginary part
         cpt += step;
         }
       }
@@ -539,7 +543,6 @@ void GDALImageIO::InternalReadImageInformation()
     this->SetNumberOfComponents(2);
     this->SetPixelType(COMPLEX);
     // Is this necessary ?
-    //if(m_NbBands !=1) itkExceptionMacro(<<"GDALImageIO::InternalReadImageInformation() Can read only one band image ");
     }
   else
     {
@@ -697,7 +700,8 @@ void GDALImageIO::InternalReadImageInformation()
     if (projRef.empty())
       {
       projRef =
-        "GEOGCS[\"GCS_WGS_1984\",DATUM[\"D_WGS_1984\",SPHEROID[\"WGS_1984\",6378137,298.257223563]],PRIMEM[\"Greenwich\",0],UNIT[\"Degree\",0.017453292519943295]]";
+        "GEOGCS[\"GCS_WGS_1984\",DATUM[\"D_WGS_1984\",SPHEROID[\"WGS_1984\",6378137,298.257223563]],"
+        "PRIMEM[\"Greenwich\",0],UNIT[\"Degree\",0.017453292519943295]]";
 
       itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projRef);
       }
@@ -936,8 +940,17 @@ void GDALImageIO::Write(const void* buffer)
         }
       GDALRasterBand *poBand = m_Dataset->GetDataSet()->GetRasterBand(nbComponents+1);
 
-      lCrGdal = poBand->RasterIO(GF_Write, lFirstColumn, lFirstLine, lNbColumns, lNbLines, const_cast<unsigned char*>(value.GetDataPointer()),
-                                 lNbColumns, lNbLines, m_PxType, 0, 0);
+      lCrGdal = poBand->RasterIO(GF_Write,
+                                 lFirstColumn,
+                                 lFirstLine,
+                                 lNbColumns,
+                                 lNbLines,
+                                 const_cast<unsigned char*>(value.GetDataPointer()),
+                                 lNbColumns,
+                                 lNbLines,
+                                 m_PxType,
+                                 0,
+                                 0);
       if (lCrGdal == CE_Failure)
         {
         itkExceptionMacro(<< "Error while writing image (GDAL format) " << m_FileName.c_str() << ".");
