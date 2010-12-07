@@ -155,7 +155,7 @@ private:
   std::vector<std::string>    m_ChannelsFileName;
   std::fstream *              m_ChannelsFile;
   unsigned int                m_NbOfChannels;
-  int                         m_NbOctetPixel;
+  int                         m_BytePerPixel;
 
 };
 

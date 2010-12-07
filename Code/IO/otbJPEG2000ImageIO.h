@@ -120,7 +120,7 @@ private:
   /** Openjpeg stream */
   opj_stream_t * m_OpenJpegStream;
   /** pixel nb of octets */
-  unsigned int m_NbOctetPixel;
+  unsigned int m_BytePerPixel;
 
 };
 

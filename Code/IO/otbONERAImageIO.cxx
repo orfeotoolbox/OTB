@@ -40,7 +40,7 @@ ONERAImageIO::ONERAImageIO()
   this->SetNumberOfDimensions(2);
   m_PixelType = COMPLEX;
   m_ComponentType = FLOAT;
-  m_NbOctetPixel = 4;
+  m_BytePerPixel = 4;
 
   // Set default spacing to one
   m_Spacing[0] = 1.0;
@@ -188,10 +188,10 @@ void ONERAImageIO::Read(void* buffer)
     itkExceptionMacro(<< "Cannot read requested file");
     }
 
-  std::streamoff  numberOfBytesPerLines = static_cast<std::streamoff>(2 * m_width * m_NbOctetPixel);
+  std::streamoff  numberOfBytesPerLines = static_cast<std::streamoff>(2 * m_width * m_BytePerPixel);
   std::streamoff  headerLength = ONERA_HEADER_LENGTH + numberOfBytesPerLines;
   std::streamoff  offset;
-  std::streamsize numberOfBytesToBeRead = 2 * m_NbOctetPixel * lNbColumns;
+  std::streamsize numberOfBytesToBeRead = 2 * m_BytePerPixel * lNbColumns;
   std::streamsize numberOfBytesRead;
 
   char*           value = new char[numberOfBytesToBeRead];
@@ -200,7 +200,7 @@ void ONERAImageIO::Read(void* buffer)
   for (int LineNo = lFirstLine; LineNo < lFirstLine + lNbLines; LineNo++)
     {
     offset  =  headerLength + numberOfBytesPerLines * static_cast<std::streamoff>(LineNo);
-    offset +=  static_cast<std::streamoff>(m_NbOctetPixel * lFirstColumn);
+    offset +=  static_cast<std::streamoff>(m_BytePerPixel * lFirstColumn);
     m_Datafile.seekg(offset, std::ios::beg);
     m_Datafile.read(static_cast<char *>(value), numberOfBytesToBeRead);
     numberOfBytesRead = m_Datafile.gcount();
@@ -322,7 +322,7 @@ void ONERAImageIO::InternalReadImageInformation()
     this->SetNumberOfComponents(2);
     this->SetPixelType(COMPLEX);
     m_ComponentType = FLOAT;
-    m_NbOctetPixel = 4;
+    m_BytePerPixel = 4;
     }
   else
     {
@@ -385,7 +385,7 @@ void ONERAImageIO::InternalReadImageInformation()
   otbMsgDebugMacro(<< "         ComponentType      : " << this->GetComponentTypeAsString(this->GetComponentType()));
   otbMsgDebugMacro(<< "         ComponentSize      : " << this->GetComponentSize());
   otbMsgDebugMacro(<< "         NumberOfComponents : " << this->GetNumberOfComponents());
-  otbMsgDebugMacro(<< "         NbOctetPixel       : " << m_NbOctetPixel);
+  otbMsgDebugMacro(<< "         BytePerPixel       : " << m_BytePerPixel);
   otbMsgDebugMacro(<< "         Host byte order    : " << this->GetByteOrderAsString(m_ByteOrder));
   otbMsgDebugMacro(<< "         File byte order    : " << this->GetByteOrderAsString(m_FileByteOrder));
 
@@ -498,10 +498,10 @@ void ONERAImageIO::Write(const void* buffer)
     lFirstColumn = 0;
     }
 
-  std::streamsize numberOfBytesPerLines = step * lNbColumns * m_NbOctetPixel;
+  std::streamsize numberOfBytesPerLines = step * lNbColumns * m_BytePerPixel;
   std::streamoff  headerLength = ONERA_HEADER_LENGTH + numberOfBytesPerLines;
   std::streamoff  offset;
-  unsigned long   numberOfBytesRegion = step * m_NbOctetPixel * lNbColumns * lNbLines;
+  unsigned long   numberOfBytesRegion = step * m_BytePerPixel * lNbColumns * lNbLines;
 
   char *tempmemory = new char[numberOfBytesRegion];
   memcpy(tempmemory, buffer, numberOfBytesRegion);
@@ -511,7 +511,7 @@ void ONERAImageIO::Write(const void* buffer)
     char* value = tempmemory + numberOfBytesPerLines * (LineNo - lFirstLine);
 
     offset  =  headerLength + static_cast<std::streamoff>(numberOfBytesPerLines) * static_cast<std::streamoff>(LineNo);
-    offset +=  static_cast<std::streamoff>(m_NbOctetPixel * lFirstColumn);
+    offset +=  static_cast<std::streamoff>(m_BytePerPixel * lFirstColumn);
     m_Datafile.seekp(offset, std::ios::beg);
     m_Datafile.write(static_cast<char *>(value), numberOfBytesPerLines);
     }
@@ -589,7 +589,7 @@ void ONERAImageIO::WriteImageInformation()
   otbMsgDebugMacro(<< "         Size               : " << m_Dimensions[0] << "," << m_Dimensions[1]);
   otbMsgDebugMacro(<< "         ComponentType      : " << this->GetComponentType());
   otbMsgDebugMacro(<< "         NumberOfComponents : " << this->GetNumberOfComponents());
-  otbMsgDebugMacro(<< "         NbOctetPixel       : " << m_NbOctetPixel);
+  otbMsgDebugMacro(<< "         BytePerPixel       : " << m_BytePerPixel);
   otbMsgDebugMacro(<< "         Host byte order    : " << this->GetByteOrderAsString(m_ByteOrder));
 
 }
