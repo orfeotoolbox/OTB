@@ -46,10 +46,13 @@ namespace otb
  * \brief This class generate a Kmz from one or several input
  * images. The inputs must have a non empty metadata informations.
  *
- * This class writes kmz files, supported by GE. The input must have
- * metadata 
+ * This class writes kmz files, supported by Google Earth. The input
+ * must have metadata (a non empty keywordlist)
+ * 
  * The size of the tiles can be set via the method
- * SetTileSize(unsigned int) 
+ * SetTileSize(unsigned int), the user can also specify the name of
+ * the output Kmz filename via SetPath().
+ * 
  * 
  *
  * \ingroup IO
@@ -76,9 +79,9 @@ public:
   typedef typename InputImageType::InternalPixelType   InternalPixelType;
   typedef typename InputImageType::SizeType    SizeType;
   typedef typename InputImageType::IndexType   IndexType;
+  typedef typename InputImageType::RegionType  RegionType;
   typedef unsigned char                        OutputPixelType;
   typedef typename InputImageType::Pointer     InputImagePointer;
-  typedef typename InputImageType::RegionType  InputImageRegionType;
   typedef typename InputImageType::PixelType   InputImagePixelType;
 
   typedef VectorData<double,2>                    VectorDataType;
@@ -110,7 +113,10 @@ public:
   // Cast Image Filter
   typedef itk::CastImageFilter<InputImageType, VectorImage<OutputPixelType> > CastFilterType;
 
-
+  // std::pair description <-> legend (image)
+  typedef std::pair<std::string,InputImagePointer>      LegendPairType;
+  typedef std::vector<LegendPairType>                   LegendVectorType;
+  
   /** Dimension of input image. */
   itkStaticConstMacro(InputImageDimension, unsigned int,
                       InputImageType::ImageDimension);
@@ -126,6 +132,25 @@ public:
   virtual void Update()
   {
     this->Write();
+  }
+  
+  // Public method to Add Logo 
+  itkSetMacro(Logo,InputImagePointer);
+
+  // Public method to store the legend and their description in the
+  // legendVector
+  void AddLegend(std::string description, const InputImagePointer legend)
+  {
+    LegendPairType   legendPair;
+    legendPair.first  = description;
+    legendPair.second = legend; 
+    m_LegendVector.push_back(legendPair);
+  }
+  // Method to add legend with empty description
+  void AddLegend(const InputImagePointer legend)
+  {
+    std::string emptyString ="";
+    this->AddLegend(emptyString,legend);
   }
 
 protected:
@@ -152,15 +177,17 @@ private:
      */
   void  CloseRootKML();
 
-//   /** Method to avoid code duplication*/
-//   /** call the method that generates the bounding box kml*/
-//   void BoundingBoxKmlProcess(double north, double south, double east, double west);
+  /** method to  generate the bounding box kml*/
+  void BoundingBoxKmlProcess(double north, double south, double east, double west);
 
    /** Method to generate the root kml*/
    void RootKmlProcess(double north, double south, double east, double west);
 
-//   /** Add Roi to kmz*/
+  /** Add Roi to kmz*/
 //   void RegionOfInterestProcess();
+
+  // Add Legends to the root kml
+  void AddLegendToRootKml(double north, double south, double east, double west);
 
   /** KML root generate */
   void GenerateKMLRoot(std::string title, double north, double south, double east, double west, bool extended);
@@ -186,10 +213,10 @@ private:
                                    OutputPointType upperRight, OutputPointType upperLeft,
                                    double centerLong, double centerLat);
 
-//   /** Method to create the bounding kml of the "iteration" th product */
-//   void GenerateBoundingKML(double north, double south,
-//                            double east,  double west);
-
+  /** Method to create the bounding kml of the "iteration" th product */
+  void GenerateBoundingKML(double north, double south,
+                           double east,  double west);
+  
 
   /**
     * Add a networkLink <NetworkLink> ....  </NetworkLink>
@@ -211,6 +238,12 @@ private:
 
   /**Cut the image file name to built the directory name*/
   std::string GetCuttenFileName(std::string description, unsigned int idx);
+
+  /** Method to add logo if any */
+  void AddLogo();
+  
+  /** Method to add Legend if any */
+  void ProcessLegends();
 
   std::string          m_Path;
   bool                 m_UseExtendMode;
@@ -261,6 +294,12 @@ private:
   // Convenience string
   std::string            m_KmzExtension;
   std::string            m_KmlExtension;
+
+  // Logo
+  InputImagePointer      m_Logo;
+
+  // Vector used to store legend and description
+  LegendVectorType       m_LegendVector;
 };
 
 } // end namespace otb

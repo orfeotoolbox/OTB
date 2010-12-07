@@ -29,8 +29,12 @@ namespace otb
 {
 template <class TInputImage>
 KmzProductWriter<TInputImage>
-::KmzProductWriter():  m_TileSize(512),m_UseExtendMode(true)
+::KmzProductWriter()
 {
+  m_TileSize      = 512;
+  m_UseExtendMode = true;
+  //m_Logo          = InputImageType::New();
+
   // Modify superclass default values, can be overridden by subclasses
   this->SetNumberOfRequiredInputs(1);
 }
@@ -103,9 +107,21 @@ KmzProductWriter<TInputImage>
 ::Write()
 {
   m_VectorImage = const_cast<TInputImage *>(this->GetInput());
-  std::cout <<"Input Information " << m_VectorImage->GetLargestPossibleRegion() << std::endl;
+  
+  // Do some checks, If no metadata nor projection ref available,
+  // input is not usable.
+  bool emptyProjRef = m_VectorImage->GetProjectionRef().empty();
+  bool emptyKWL     = m_VectorImage->GetImageKeywordlist().GetSize() == 0 ? true : false;
+  
+  if(emptyProjRef &&  emptyKWL)
+    {
+    itkExceptionMacro(<<"The input image have empty keyword list, please use an image with metadata informations");
+    }
+  
+  // Continue processing
   this->Initialize();
-  this->Tiling();
+  this->AddLogo();
+  this->Tiling();  
 }
 
 
@@ -114,6 +130,14 @@ void
 KmzProductWriter<TInputImage>
 ::Initialize()
 {
+  // Check that the right extension is given : expected .kmz */
+  if (itksys::SystemTools::GetFilenameLastExtension(m_Path) != ".kmz")
+    {
+    itkExceptionMacro(<<itksys::SystemTools::GetFilenameLastExtension(m_Path)
+                      <<" is a wrong Extension FileName : Expected .kmz");
+    }
+
+  // Decompose the filename, the full path
   m_FileName = itksys::SystemTools::GetFilenameWithoutExtension(m_Path);
   m_Path = itksys::SystemTools::GetFilenamePath(m_Path);
   m_CurrentImageName = this->GetCuttenFileName(m_FileName, 0);
@@ -133,8 +157,92 @@ KmzProductWriter<TInputImage>
   // Create a kmz file
   m_KmzFileName << m_Path << "/" << m_FileName << m_KmzExtension;
   m_KmzFile = kmlengine::KmzFile::Create(m_KmzFileName.str().c_str());
+ 
 }
 
+ /**
+  * Add Logo if any
+  * 
+  */
+template <class TInputImage>
+void
+KmzProductWriter<TInputImage>
+::AddLogo()
+{
+  // Logo
+  if(!m_Logo.IsNull())
+    {
+    std::ostringstream     logoFilename;
+    logoFilename << m_Path;
+    logoFilename << "/logo.jpeg";
+    
+    ossimFilename cachingDir(m_Path);
+    cachingDir.createDirectory();
+    
+    typename CastFilterType::Pointer castFiler = CastFilterType::New();
+    castFiler->SetInput(m_Logo);
+    
+    m_VectorWriter = VectorWriterType::New();
+    m_VectorWriter->SetFileName(logoFilename.str());
+    m_VectorWriter->SetInput(castFiler->GetOutput());
+    m_VectorWriter->Update();
+    
+    // Add the logo to the kmz
+    itk::OStringStream logo_root_path_in_kmz;
+    logo_root_path_in_kmz << "logo.jpeg";
+    
+    itk::OStringStream logo_absolut_path;
+    logo_absolut_path << logoFilename.str();
+    
+    this->AddFileToKMZ(logo_absolut_path, logo_root_path_in_kmz);
+    
+    // Remove the logo file with stdio method :remove
+    if (remove(logo_absolut_path.str().c_str()) != 0)
+      {
+      itkExceptionMacro(<< "Error while deleting the file" << logo_absolut_path.str());
+      }
+    }
+}
+
+/**
+  * Add legend if any
+  */
+template <class TInputImage>
+void
+KmzProductWriter<TInputImage>
+::ProcessLegends()
+{
+  for (unsigned int idx = 0; idx < m_LegendVector.size(); idx++)
+    {
+    std::ostringstream legendName;
+    legendName << m_Path;
+    legendName << "/legend_" << idx <<".jpeg";
+    
+    InputImagePointer legend = m_LegendVector[idx].second;
+    typename CastFilterType::Pointer castFiler = CastFilterType::New();
+    castFiler->SetInput(legend);
+
+    m_VectorWriter = VectorWriterType::New();
+    m_VectorWriter->SetFileName(legendName.str().c_str());
+    m_VectorWriter->SetInput(castFiler->GetOutput());
+    m_VectorWriter->Update();
+
+    // Add the legend to the kmz
+    itk::OStringStream legend_root_path_in_kmz;
+    legend_root_path_in_kmz << "legends/legend_" << idx << ".jpeg";
+    
+    itk::OStringStream legend_absolut_path;
+    legend_absolut_path << legendName.str();
+
+    this->AddFileToKMZ(legend_absolut_path, legend_root_path_in_kmz);
+
+    // Remove the legend file with stdio method :remove
+    if (remove(legend_absolut_path.str().c_str()) != 0)
+      {
+      itkExceptionMacro(<< "Error while deleting the file" << legend_absolut_path.str());
+      }
+    }
+}
 
 template <class TInputImage>
 void
@@ -186,7 +294,6 @@ KmzProductWriter<TInputImage>
   SizeType  extractSize;
   IndexType extractIndex;
 
-  std::cout << "maxDepth " << maxDepth<< std::endl;
   for (int depth = 0; depth <= maxDepth; depth++)
     {
 
@@ -289,8 +396,6 @@ KmzProductWriter<TInputImage>
         ossFileName << "/";
         ossFileName << y;
         ossFileName << ".jpg";
-
-        std::cout <<"Writing the file "<< ossFileName.str() << std::endl;
 
         // Extract ROI
         m_VectorImageExtractROIFilter = VectorImageExtractROIFilterType::New();
@@ -437,8 +542,7 @@ KmzProductWriter<TInputImage>
             }
 
           // Add the bounding box kml
-          //this->BoundingBoxKmlProcess(north, south, east, west); :
-          //To Add After#########################
+          this->BoundingBoxKmlProcess(north, south, east, west); 
           }
 
         // Add the files to the kmz file
@@ -470,6 +574,7 @@ KmzProductWriter<TInputImage>
       }
     }
 }
+
 
 
 /**
@@ -547,49 +652,48 @@ KmzProductWriter<TInputImage>
   this->GenerateKMLRoot(m_FileName, north, south, east, west, extended);
 
   // Add the legend for this product if any
-  //this->AddCurrentProductLegends(0);
+  this->ProcessLegends();
 
   // Add the flag netwotk link for each input image
   this->AddNetworkLinkToRootKML(north, south, east, west, m_CurrentImageName, true, 0);
 
   // Root kml must be the first kml created
   // Mutliple Inputs
-  for (unsigned int i = 1; i < 1; i++)
-    {
-    // Method to write a legend in the kmz
-    //this->AddCurrentProductLegends(i);
+//   for (unsigned int i = 1; i < 1; i++)
+//     {
+//     // Method to write a legend in the kmz
+//     //this->AddCurrentProductLegends(i);
 
-    // Get the filename
-    //std::string fname  = this->GetInputDataDescription<FloatingVectorImageType>("InputImage", i);
-    std::string currentImageName = this->GetCuttenFileName(m_FileName, i);
+//     // Get the filename
+//     //std::string fname  = this->GetInputDataDescription<FloatingVectorImageType>("InputImage", i);
+//     std::string currentImageName = this->GetCuttenFileName(m_FileName, i);
     
-    // Get the pĥysical coordinate of the center
-    SizeType tempSize = m_VectorImage->GetLargestPossibleRegion().GetSize();
-    InputPointType tempPoint, tempPointOrigin;
-    IndexType      tempIndex, tempIndexOrigin;
-    tempIndex[0] = tempSize[0];
-    tempIndex[1] = tempSize[1];
-    tempIndexOrigin.Fill(0);
+//     // Get the pĥysical coordinate of the center
+//     SizeType tempSize = m_VectorImage->GetLargestPossibleRegion().GetSize();
+//     InputPointType tempPoint, tempPointOrigin;
+//     IndexType      tempIndex, tempIndexOrigin;
+//     tempIndex[0] = tempSize[0];
+//     tempIndex[1] = tempSize[1];
+//     tempIndexOrigin.Fill(0);
 
-    m_VectorImage->TransformIndexToPhysicalPoint(tempIndex, tempPoint);
-    m_VectorImage->TransformIndexToPhysicalPoint(tempIndexOrigin,
-						 tempPointOrigin);
+//     m_VectorImage->TransformIndexToPhysicalPoint(tempIndex, tempPoint);
+//     m_VectorImage->TransformIndexToPhysicalPoint(tempIndexOrigin, tempPointOrigin);
 
-    // Compute the transform
-    TransformType::Pointer tempTransform = TransformType::New();
-    tempTransform->SetInputKeywordList(m_VectorImage->GetImageKeywordlist());
-    tempTransform->SetInputProjectionRef(m_VectorImage->GetProjectionRef());
-    tempTransform->InstanciateTransform();
+//     // Compute the transform
+//     TransformType::Pointer tempTransform = TransformType::New();
+//     tempTransform->SetInputKeywordList(m_VectorImage->GetImageKeywordlist());
+//     tempTransform->SetInputProjectionRef(m_VectorImage->GetProjectionRef());
+//     tempTransform->InstanciateTransform();
 
-    OutputPointType tempOutputPoint, tempOutputPointOrigin;
-    tempOutputPoint = tempTransform->TransformPoint(tempPoint);
-    tempOutputPointOrigin = tempTransform->TransformPoint(tempPointOrigin);
+//     OutputPointType tempOutputPoint, tempOutputPointOrigin;
+//     tempOutputPoint = tempTransform->TransformPoint(tempPoint);
+//     tempOutputPointOrigin = tempTransform->TransformPoint(tempPointOrigin);
 
-    this->AddNetworkLinkToRootKML(tempOutputPointOrigin[1],
-				  tempOutputPoint[1], tempOutputPointOrigin[0],
-				  tempOutputPoint[0], currentImageName, false,
-				  i);
-    }
+//     this->AddNetworkLinkToRootKML(tempOutputPointOrigin[1],
+// 				  tempOutputPoint[1], tempOutputPointOrigin[0],
+// 				  tempOutputPoint[0], currentImageName, false,
+// 				  i);
+//     }
 
   // Last thing to do is to close the root kml
   this->CloseRootKML();
@@ -619,29 +723,28 @@ void
 KmzProductWriter<TInputImage>
 ::CloseRootKML()
 {
-//   if (m_HasLogo)
-//     {
-//     RegionType logoReg = m_Logo->GetLargestPossibleRegion();
-//     SizeType   logoSize = logoReg.GetSize();
-//     double     lx = static_cast<double>(logoSize[0]);
-//     double     ly = static_cast<double>(logoSize[1]);
-//     int        sizey = 150;
-//     int        sizex = static_cast<int>((lx / ly * sizey));
-
-//     /** LOGO **/
-//     m_RootKmlFile << "\t\t<ScreenOverlay>" << std::endl;
-//     m_RootKmlFile << "\t\t\t<Icon>" << std::endl;
-//     m_RootKmlFile << "\t\t\t\t<href>logo.jpeg</href>" << std::endl;
-//     m_RootKmlFile << "\t\t\t</Icon>" << std::endl;
-//     m_RootKmlFile << "\t\t\t<name>Logo</name>" << std::endl;
-//     m_RootKmlFile << "\t\t\t<overlayXY x=\"1\" y=\"1\" xunits=\"fraction\" yunits=\"fraction\"/>" << std::endl;
-//     m_RootKmlFile << "\t\t\t<screenXY x=\"1\" y=\"1\" xunits=\"fraction\" yunits=\"fraction\"/>" << std::endl;
-//     m_RootKmlFile << "\t\t\t<size x=\"" << sizex << "\" y=\"" << sizey <<
-//     "\" xunits=\"pixels\" yunits=\"pixels\"/> " << std::endl;
-//     m_RootKmlFile << "\t\t</ScreenOverlay>" << std::endl;
-
-//     /** LOGO **/
-//     }
+  if (!m_Logo.IsNull())
+    {
+    RegionType logoReg = m_Logo->GetLargestPossibleRegion();
+    SizeType   logoSize = logoReg.GetSize();
+    double     lx = static_cast<double>(logoSize[0]);
+    double     ly = static_cast<double>(logoSize[1]);
+    int        sizey = 150;
+    int        sizex = static_cast<int>((lx / ly * sizey));
+    
+    /** LOGO **/
+    m_RootKmlFile << "\t\t<ScreenOverlay>" << std::endl;
+    m_RootKmlFile << "\t\t\t<Icon>" << std::endl;
+    m_RootKmlFile << "\t\t\t\t<href>logo.jpeg</href>" << std::endl;
+    m_RootKmlFile << "\t\t\t</Icon>" << std::endl;
+    m_RootKmlFile << "\t\t\t<name>Logo</name>" << std::endl;
+    m_RootKmlFile << "\t\t\t<overlayXY x=\"1\" y=\"1\" xunits=\"fraction\" yunits=\"fraction\"/>" << std::endl;
+    m_RootKmlFile << "\t\t\t<screenXY x=\"1\" y=\"1\" xunits=\"fraction\" yunits=\"fraction\"/>" << std::endl;
+    m_RootKmlFile << "\t\t\t<size x=\"" << sizex << "\" y=\"" << sizey <<
+    "\" xunits=\"pixels\" yunits=\"pixels\"/> " << std::endl;
+    m_RootKmlFile << "\t\t</ScreenOverlay>" << std::endl;
+    /** LOGO **/
+    }
 
   m_RootKmlFile << "\t</Document>" << std::endl;
   m_RootKmlFile << "</kml>" << std::endl;
@@ -768,9 +871,68 @@ KmzProductWriter<TInputImage>
 
   // Add a placemark with the images used as legend
   // If any
-  //this->AddLegendToRootKml(north, south, east, west, pos);
+  this->AddLegendToRootKml(north, south, east, west);
 
   m_RootKmlFile << "\t\t</Document>" << std::endl;
+}
+
+/**
+  * Add the bounding box kml
+  */
+
+template <class TInputImage>
+void
+KmzProductWriter<TInputImage>
+::BoundingBoxKmlProcess(double north, double south, double east, double west)
+{
+  // Create the bounding kml
+  this->GenerateBoundingKML(north, south,  east, west);
+
+  // Add the root kml in the kmz
+  std::ostringstream bound_in_kmz;
+  bound_in_kmz << "bounds/bound_0"<< m_KmlExtension;
+  std::ostringstream bound_absolute_path;
+  bound_absolute_path << m_Path << "/bound_0"<< m_KmlExtension;
+
+  // Add the root file in the kmz
+  this->AddFileToKMZ(bound_absolute_path, bound_in_kmz);
+
+  // Remove the bounding files with stdio method :remove
+  if (remove(bound_absolute_path.str().c_str()) != 0)
+    {
+    itkExceptionMacro(<< "Error while deleting the file" << bound_absolute_path.str());
+    }
+}
+
+/**
+ * Add the legends available
+ *
+ */
+template <class TInputImage>
+void
+KmzProductWriter<TInputImage>
+::AddLegendToRootKml(double north, double south, double east, double west)
+{
+  double lat = (north + south) / 2.;
+  double lon = (east + west) / 2.;
+  
+  if (m_LegendVector.size() > 0)
+    {
+    m_RootKmlFile << "\t\t\t\t<Placemark>" << std::endl;
+    m_RootKmlFile << "\t\t\t\t\t<name>Legend</name>" << std::endl;
+    m_RootKmlFile << "\t\t\t\t\t<description>" << std::endl;
+    m_RootKmlFile << "\t\t\t\t\t\t<![CDATA[ Legend of the product " << m_FileName << std::endl;
+
+    for(unsigned int idx = 0; idx < m_LegendVector.size(); idx++)
+      m_RootKmlFile << "\t\t\t\t\t\t<img src=\"legends/legend_"<< idx <<".jpeg\" width=\"215\" height=\"175\"  >";
+    
+    m_RootKmlFile << "\t\t\t\t\t\t ]]>" << std::endl;
+    m_RootKmlFile << "\t\t\t\t\t</description>" << std::endl;
+    m_RootKmlFile << "\t\t\t\t\t<Point>" << std::endl;
+    m_RootKmlFile << "\t\t\t\t\t\t<coordinates>" << lon << "," << lat << "</coordinates>" << std::endl;
+    m_RootKmlFile << "\t\t\t\t\t</Point>" << std::endl;
+    m_RootKmlFile << "\t\t\t\t</Placemark>" << std::endl;
+    }
 }
 
 
@@ -1240,6 +1402,52 @@ KmzProductWriter<TInputImage>
   fileTest << "</kml>" << std::endl;
   fileTest.close();
 
+}
+
+
+template <class TInputImage>
+void
+KmzProductWriter<TInputImage>
+::GenerateBoundingKML(double north, double south, double east, double west)
+{
+  std::ostringstream kmlname;
+  kmlname << m_Path;
+  kmlname << "/";
+  kmlname << "bound_0" << m_KmlExtension;
+  std::ofstream fileTest(kmlname.str().c_str());
+
+  fileTest << fixed << setprecision(6);
+
+  fileTest << "<?xml version=\"1.0\" encoding=\"utf-8\"?>" << std::endl;
+  fileTest << "<kml xmlns=\"http://www.opengis.net/kml/2.2\"" << std::endl;
+  fileTest << " xmlns:gx=\"http://www.google.com/kml/ext/2.2\">" << std::endl;
+
+  fileTest << "\t<Document>" << std::endl;
+  fileTest << "\t\t<name> Bounding box of the  product " << m_FileName<< "</name>" <<
+  std::endl;
+  fileTest << "\t\t<open>1</open>" << std::endl;
+  fileTest << "\t\t<Placemark>" << std::endl;
+  fileTest << "\t\t\t<description>The bounding Box of the image</description>" << std::endl;
+  fileTest << "\t\t<LineString>" << std::endl;
+  fileTest << "\t\t\t<extrude>0</extrude>" << std::endl;
+  fileTest << "\t\t\t<tessellate>1</tessellate>" << std::endl;
+  fileTest << "\t\t\t<altitudeMode>clampedToGround</altitudeMode>" << std::endl;
+  fileTest << "\t\t\t<coordinates>" << std::endl;
+
+  fileTest << "\t\t\t\t\t" <<  west << "," << north << std::endl;
+  fileTest << "\t\t\t\t\t" <<  east << "," << north << std::endl;
+  fileTest << "\t\t\t\t\t" <<  east << "," << south << std::endl;
+  fileTest << "\t\t\t\t\t" <<  west << "," << south << std::endl;
+  fileTest << "\t\t\t\t\t" <<  west << "," << north << std::endl;
+
+  fileTest << "\t\t\t</coordinates>" << std::endl;
+  fileTest << "\t\t</LineString>" << std::endl;
+  fileTest << "\t\t</Placemark>" << std::endl;
+
+  fileTest << "\t</Document>" << std::endl;
+  fileTest << "</kml>" << std::endl;
+
+  fileTest.close();
 }
 
 
