@@ -302,9 +302,18 @@ bool CommandLineArgumentParser::TryParseCommandLine(int argc, char *argv[],
         if (argv[i + 1] != NULL)
           {
           std::string strArgv = std::string(argv[i + 1]);
-          if (strArgv[0] == '-')
+          if (strArgv[0] == '-' )
             {
-            goOnFlag = false;
+            // Test if the string is an argument or a real
+            if(!this->IsNumber(strArgv))
+              {
+              goOnFlag = false;
+              }
+            else // If not an argument add it to the option list
+              {
+              outResult->AddParameter(m_OptionList[index].CommonName, strArgv);
+              ++i;
+              }
             }
           else
             {
@@ -334,6 +343,28 @@ bool CommandLineArgumentParser::TryParseCommandLine(int argc, char *argv[],
     }
 
 // Everything is correct
+  return true;
+}
+
+
+bool CommandLineArgumentParser::IsNumber(std::string text)
+{
+  if(text.empty()) 
+    return false;
+  
+  // Don't test the sign (-)
+  unsigned int i = 1;
+  while (text[i])
+    {
+    if( text[i] != '.' && text[i] != ',')
+      {
+      if(!isdigit(text[i]))
+        {
+        return false;
+        }
+      }
+    i++;
+    }
   return true;
 }
 
