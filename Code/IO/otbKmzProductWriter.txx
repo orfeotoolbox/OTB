@@ -33,7 +33,6 @@ KmzProductWriter<TInputImage>
 {
   m_TileSize      = 512;
   m_UseExtendMode = true;
-  //m_Logo          = InputImageType::New();
 
   // Modify superclass default values, can be overridden by subclasses
   this->SetNumberOfRequiredInputs(1);
@@ -112,7 +111,7 @@ KmzProductWriter<TInputImage>
   // input is not usable.
   bool emptyProjRef = m_VectorImage->GetProjectionRef().empty();
   bool emptyKWL     = m_VectorImage->GetImageKeywordlist().GetSize() == 0 ? true : false;
-  
+
   if(emptyProjRef &&  emptyKWL)
     {
     itkExceptionMacro(<<"The input image have empty keyword list, please use an image with metadata informations");
@@ -253,8 +252,8 @@ KmzProductWriter<TInputImage>
   unsigned int curIdx = 0;
   
   /** Image statistics*/
-  typename InputImageType::PixelType inMin(numberOfChannel), inMax(numberOfChannel), outMin(numberOfChannel), outMax(
-    numberOfChannel);
+  typename InputImageType::PixelType inMin(numberOfChannel), inMax(numberOfChannel), 
+    outMin(numberOfChannel), outMax(numberOfChannel);
   outMin.Fill(0);
   outMax.Fill(255);
 
@@ -296,7 +295,6 @@ KmzProductWriter<TInputImage>
 
   for (int depth = 0; depth <= maxDepth; depth++)
     {
-
     // update the attribute value Current Depth
     m_CurrentDepth = depth;
 
@@ -338,10 +336,19 @@ KmzProductWriter<TInputImage>
       m_VectorRescaleIntensityImageFilter->SetOutputMinimum(outMin);
       m_VectorRescaleIntensityImageFilter->SetOutputMaximum(outMax);
 
-      m_VectorRescaleIntensityImageFilter->SetInputMinimum(inMin);
-      m_VectorRescaleIntensityImageFilter->SetInputMaximum(inMax);
-      m_VectorRescaleIntensityImageFilter->SetAutomaticInputMinMaxComputation(false);
-
+      // Case of input image with size lower than the tileSize
+      // this case is illustrated with depth==0 and
+      // sampleRatioValue==1
+      if(depth==0 && sampleRatioValue == 1)
+        {
+        m_VectorRescaleIntensityImageFilter->SetAutomaticInputMinMaxComputation(true);
+        }
+      else
+        {
+        m_VectorRescaleIntensityImageFilter->SetInputMinimum(inMin);
+        m_VectorRescaleIntensityImageFilter->SetInputMaximum(inMax);
+        m_VectorRescaleIntensityImageFilter->SetAutomaticInputMinMaxComputation(false);
+        }
       m_ResampleVectorImage = m_VectorRescaleIntensityImageFilter->GetOutput();
       }
 
@@ -408,8 +415,8 @@ KmzProductWriter<TInputImage>
 
         // Set Channel to extract
         m_VectorImageExtractROIFilter->SetChannel(1);//m_ProductVector[m_CurrentProduct].m_Composition[0] + 1);
-  m_VectorImageExtractROIFilter->SetChannel(2);//m_ProductVector[m_CurrentProduct].m_Composition[1] + 1);
-  m_VectorImageExtractROIFilter->SetChannel(3);//m_ProductVector[m_CurrentProduct].m_Composition[2] + 1);
+        m_VectorImageExtractROIFilter->SetChannel(2);//m_ProductVector[m_CurrentProduct].m_Composition[1] + 1);
+        m_VectorImageExtractROIFilter->SetChannel(3);//m_ProductVector[m_CurrentProduct].m_Composition[2] + 1);
 
         // Set extract roi input
         m_VectorImageExtractROIFilter->SetInput(m_ResampleVectorImage);
@@ -418,7 +425,7 @@ KmzProductWriter<TInputImage>
         m_VectorWriter = VectorWriterType::New();
         m_VectorWriter->SetFileName(ossFileName.str().c_str());
         m_VectorWriter->SetInput(m_VectorImageExtractROIFilter->GetOutput());
-  m_VectorWriter->WriteGeomFileOn();
+        m_VectorWriter->WriteGeomFileOn();
         m_VectorWriter->Update();
 
         /** TODO : Generate KML for this tile */
@@ -533,7 +540,7 @@ KmzProductWriter<TInputImage>
         centerLong, centerLat);
     }
 
-        if (depth == 0)
+  if (depth == 0)
           {
           // Add the headers and the basic stuffs in the kml only once.
           if (curIdx == 0)
@@ -776,12 +783,6 @@ KmzProductWriter<TInputImage>
   m_RootKmlFile << "\t\t\t\t<range>35000</range>" << std::endl;
   m_RootKmlFile << "\t\t\t</LookAt>" << std::endl;
 
-  // Georeferenced Products
-  // Add network link
-  // If not geo add a ground Overlay with image
-  // as an icon
-//   if (this->IsProductHaveMetaData(pos))
-//     {
   m_RootKmlFile << "\t\t\t<NetworkLink>" << std::endl;
   m_RootKmlFile << "\t\t\t\t<name>" << m_FileName<< "</name>" <<  std::endl;
   m_RootKmlFile << "\t\t\t\t<open>1</open>" << std::endl;
@@ -790,6 +791,7 @@ KmzProductWriter<TInputImage>
   m_RootKmlFile << "\t\t\t\t\t<listItemType>checkHideChildren</listItemType>" << std::endl;
   m_RootKmlFile << "\t\t\t\t</ListStyle>" << std::endl;
   m_RootKmlFile << "\t\t\t</Style>" << std::endl;
+
   if (addRegion)
     {
     m_RootKmlFile << "\t\t\t\t<Region>" << std::endl;
@@ -809,43 +811,12 @@ KmzProductWriter<TInputImage>
     m_RootKmlFile << "\t\t\t\t\t</LatLonAltBox>" << std::endl;
     m_RootKmlFile << "\t\t\t\t</Region>" << std::endl;
     }
-
+  
   m_RootKmlFile << "\t\t\t\t<Link>" << std::endl;
   m_RootKmlFile << "\t\t\t\t\t<href>" << directory << "/0/0/0" << m_KmlExtension << "</href>" << std::endl;
   m_RootKmlFile << "\t\t\t\t\t<viewRefreshMode>onRegion</viewRefreshMode>" << std::endl;
   m_RootKmlFile << "\t\t\t\t</Link>" << std::endl;
   m_RootKmlFile << "\t\t\t</NetworkLink>" << std::endl;
-//    }
-//   else
-//     {
-//     m_RootKmlFile << "\t\t\t<GroundOverlay>" << std::endl;
-//     m_RootKmlFile << "\t\t\t\t<name>" << m_FileName<< "</name>" << std::endl;
-//     m_RootKmlFile << "\t\t\t\t<Icon>" << std::endl;
-//     m_RootKmlFile << "\t\t\t\t\t<href>" << directory << "/0.jpg" << "</href>" << std::endl;
-//     m_RootKmlFile << "\t\t\t\t</Icon>" << std::endl;
-
-//     if (!m_UseExtendMode)
-//       {
-//       m_RootKmlFile << "\t\t\t\t<LatLonBox>" << std::endl;
-//       m_RootKmlFile << "\t\t\t\t\t<north>" << north << "</north>" << std::endl;
-//       m_RootKmlFile << "\t\t\t\t\t<south>" << south << "</south>" << std::endl;
-//       m_RootKmlFile << "\t\t\t\t\t<east>" << east << "</east>" << std::endl;
-//       m_RootKmlFile << "\t\t\t\t\t<west>" << west << "</west>" << std::endl;
-//       m_RootKmlFile << "\t\t\t\t</LatLonBox>" << std::endl;
-//       }
-//     else
-//       {
-//       m_RootKmlFile << "\t\t\t<gx:LatLonQuad>" << std::endl;
-//       m_RootKmlFile << "\t\t\t\t<coordinates>" << std::endl;
-//       m_RootKmlFile << " " << m_LowerLeftCorner[0]  << "," << m_LowerLeftCorner[1];
-//       m_RootKmlFile << " " << m_LowerRightCorner[0] << "," << m_LowerRightCorner[1];
-//       m_RootKmlFile << " " << m_UpperRightCorner[0] << "," << m_UpperRightCorner[1];
-//       m_RootKmlFile << " " << m_UpperLeftCorner[0]  << "," << m_UpperRightCorner[1]  << std::endl;
-//       m_RootKmlFile << "\t\t\t\t</coordinates>" << std::endl;
-//       m_RootKmlFile << "\t\t\t</gx:LatLonQuad>" << std::endl;
-//       }
-//     m_RootKmlFile << "\t\t\t</GroundOverlay>" << std::endl;
-//     }
 
   m_RootKmlFile << "\t\t\t<Folder>" << std::endl;
   m_RootKmlFile << "\t\t\t\t<name>The bounding box </name>" << std::endl;

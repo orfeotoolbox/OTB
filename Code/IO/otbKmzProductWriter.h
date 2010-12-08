@@ -153,6 +153,9 @@ public:
     this->AddLegend(emptyString,legend);
   }
 
+  // Set the size of the tiles to produce
+  itkSetMacro(TileSize,int);
+
 protected:
   KmzProductWriter();
   virtual ~KmzProductWriter();
