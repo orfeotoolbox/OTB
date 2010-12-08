@@ -31,6 +31,7 @@ int KmzExport::Describe(ApplicationDescriptor* descriptor)
   descriptor->SetDescription("Chain that Estimate a sensor model in order to export the input image to Google Earth understandable format Kmz");
   descriptor->AddInputImage(); 
   descriptor->AddOption("OutputProductName", "Output Kmz product ", "kmz", 1, true,ApplicationDescriptor::FileName);
+  descriptor->AddOption("TileSize", "Set the size of the tiles ", "s", 1, false,ApplicationDescriptor::Integer);
   descriptor->AddOption("LogoImage", "Add a logo to the final Kmz ", "lo", 1, false,ApplicationDescriptor::FileName);
   descriptor->AddOption("LegendImage", "Add a legend to the image exported ", "le", 1, false,ApplicationDescriptor::FileName);
  
@@ -53,6 +54,11 @@ int KmzExport::Execute(otb::ApplicationOptionsResult* parseResult)
   kmzWriter->SetInput(reader->GetOutput());
   kmzWriter->SetPath(parseResult->GetParameterString("OutputProductName"));
 
+  // If the tilesize is set
+  if(parseResult->IsOptionPresent("TileSize"))
+    {
+    kmzWriter->SetTileSize(parseResult->GetParameterUInt("TileSize"));
+    }
   // Read the logo if any
   if(parseResult->IsOptionPresent("LogoImage"))
     {
@@ -69,7 +75,7 @@ int KmzExport::Execute(otb::ApplicationOptionsResult* parseResult)
     legendReader->Update();
     kmzWriter->AddLegend("Input Legend",legendReader->GetOutput());
     kmzWriter->AddLegend(legendReader->GetOutput());
-    }
+    } 
   
   // trigger the writing
   kmzWriter->Update();
