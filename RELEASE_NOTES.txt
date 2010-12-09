@@ -45,7 +45,25 @@ OTB-v.3.8.0 - Changes since version 3.6.0 (????/??/??)
   * Internal ITK: removed compilation of medical image formats library and associated ImageIO
   * Internal ITK: removed dependency on libtiff, libjpeg, libpng and zlib, now handled by gdal
   * Support for gcc-4.5
-  
+
+* Bug fix:
+  * Monteverdi
+    * 0000216: Monteverdi viewer unable to display multi band images
+    * 0000193: Crash in vectorization module when the after the activation of the semi-automatic mode
+    * 0000195: unable to perform TSX calibration with the sar calibration module in monteverdi 1.4
+    * 0000207: Vectorization module shift coordinates
+    * 0000202: Error message "otbSVMModel.txx:310 eps <= O" in the SVM classification module
+    * 0000194: error message opening dataset in monteverdi (development version)
+    * 0000200: Monteverdi -in option does not open viewer anymore
+
+  * OTB-applications
+    * 0000213: Problem in denomination of otb process chain wrapped as qgis plugin
+    * 0000201: otbFastOrthoRectif switched back to double precision again
+
+  * OTB-lib
+    * 0000192: Crappy support of gdal: GDALImageIO
+
+
 OTB-v.3.6.0 - Changes since version 3.4.0 (2010/10/07)
 -----------------------------------------
 
