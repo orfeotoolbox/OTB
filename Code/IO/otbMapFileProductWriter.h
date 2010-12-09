@@ -51,8 +51,7 @@ namespace otb
  * for mapservers, a tile index and finally the tiles.
  * This class allow the user to specify the cgi-bin used (SetCGIPath)
  * and the directory where to store the index shapefile and the tiles 
- * (SetShapeIndexPath)
- *
+ * via SetShapeIndexPath method
  *
  * \ingroup IO
  *
@@ -144,6 +143,9 @@ public:
     this->Write();
   }
 
+  /** Macro to set the SRID we want to project Data in*/
+  itkSetMacro(SRID,int);
+  
 protected:
   MapFileProductWriter();
   virtual ~MapFileProductWriter();
@@ -213,7 +215,7 @@ private:
 
   std::ofstream                 m_File;
 
-  int m_SRID;
+  int                           m_SRID;
   
 };
 
