@@ -117,8 +117,8 @@ ENDIF( OTB_USE_CURL )
 #ADD_EXECUTABLE(TransformReadWrite TransformReadWrite.cxx )
 #TARGET_LINK_LIBRARIES(TransformReadWrite)
 
-ADD_EXECUTABLE(ImageToKmzChain ImageToKmzChain.cxx)
-TARGET_LINK_LIBRARIES(ImageToKmzChain OTBIO)
+ADD_EXECUTABLE(ImageToKmzAndMapFileProductExample ImageToKmzAndMapFileProductExample.cxx)
+TARGET_LINK_LIBRARIES(ImageToKmzAndMapFileProductExample OTBIO)
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
@@ -169,14 +169,15 @@ ADD_TEST(ioTeDEMToImageGeneratorTest ${EXE_TESTS1}
           ${INPUTDATA}/DEM_srtm
          )
 
-# Testing the chain of creating a kmz from 
+# Testing the chain of creating a kmz and MapFilefrom 
 # a non georeferenced image
-ADD_TEST(ioImageToKmzChain ${EXE_TESTS1}
-         #--compare-image ${EPSILON_5}  ${BASELINE}/DEMToImageGenerator.tif
-         #                      ${TEMP}/DEMToImageGenerator.tif
-         ImageToKmzChain
+ADD_TEST(ioImageToKmzAndMapFileProductExample ${EXE_TESTS1}
+         ImageToKmzAndMapFileProductExample
          ${DATA}/Haiti1.jpeg
          ${TEMP}/ioTeHaitiKmzProduct.kmz
+         ${TEMP}/mapserverExample/ioTeHaitiMapFileProduct.map
+         ${TEMP}/mapserverExample/shapeindex
+         http://localhost/cgi-bin/mapserv
          1980.000000 1986.000000 -72.351257 18.555075 0.000000 
          1963.000000 1944.000000 -72.352051 18.556946 0.000000
          2078.000000 1566.000000 -72.346130 18.574358 0.000000

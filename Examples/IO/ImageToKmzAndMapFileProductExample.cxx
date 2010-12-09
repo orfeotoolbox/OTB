@@ -19,18 +19,23 @@
 // Software Guide : BeginLatex
 //
 // This example demonstrates the use of the
-// \doxygen{otb}{KmzProductWriter}. This filter is intended to
-// produce Kmz file (Google Earth Readable). In this example we will
-// use a file with no meta-data, use the
-// \doxygen{otb}{GGCPToRPCSensorModelImageFilter} in order to 
-// approximate a rpc model, and then use our filter to produce a kmz
-// file.
-// Note that the \doxygen{otb}{KmzProductWriter} can only process
-// inputs with a non empty keyword list.
+// \doxygen{otb}{KmzProductWriter} and the
+// \doxygen{otb}{MapFileProductWriter}.  
+// The first filter is intended to produce Kmz file (Google Earth
+// Readable), and the second one is intended to produce map files
+// callable through a WMS (Web Map Service) service. In this example
+// we will  use a file with no meta-data, use the
+// \doxygen{otb}{GGCPToRPCSensorModelImageFilter} in order to
+// approximate a rpc model, and then use our filters to produce a kmz 
+// and MapFile products.
+// Note that the \doxygen{otb}{KmzProductWriter} and the
+// \doxygen{otb}{MapFileProductWriter} can only process inputs with a
+// non empty keyword list. 
 //
 // The first step toward the use of these filters is to include the
 // proper header files: the one for the rpc sensor estimation filter and
-// the one defining the procedure for creating kmz files.
+// the one defining the procedure for creating kmz files and finally
+// the header concerning the MapProduct writer.
 //
 // Software Guide : EndLatex
 
@@ -40,6 +45,7 @@
 
 // Software Guide : BeginCodeSnippet
 #include "otbKmzProductWriter.h"
+#include "otbMapFileProductWriter.h"
 #include "otbGCPsToRPCSensorModelImageFilter.h"
 // Software Guide : EndCodeSnippet
 //
@@ -47,17 +53,16 @@
 int main(int argc, char* argv[])
 {
 
-  if (argc < 3)
+  if (argc < 6)
     {
     std::cerr << "Usage: " << argv[0] << " infname outfname kmzFileName a1x a1y b1x b1y b1z ... aNx aNy aNz bNx bNy bNz" << std::endl;
     return EXIT_FAILURE;
     }
-  else if ((argc - 3) % 5 != 0)
+  else if ((argc - 6) % 5 != 0)
     {
     std::cerr << "Inconsistent GCPs description!" << std::endl;
     return EXIT_FAILURE;
     }
-
   
 // Software Guide : BeginLatex
 //
@@ -90,7 +95,7 @@ int main(int argc, char* argv[])
   rpcEstimator->SetInput(reader->GetOutput());
 // Software Guide : EndCodeSnippet
 
-  unsigned int nbGCPs = (argc - 3) / 5;
+  unsigned int nbGCPs = (argc - 6) / 5;
 
   std::cout << "Receiving " << nbGCPs << " from command line." << std::endl;
 
@@ -111,13 +116,13 @@ int main(int argc, char* argv[])
 
 // Software Guide : BeginCodeSnippet
     Point2DType sensorPoint;
-    sensorPoint[0] = atof(argv[3 + gcpId * 5]);
-    sensorPoint[1] = atof(argv[4 + gcpId * 5]);
+    sensorPoint[0] = atof(argv[6 + gcpId * 5]);
+    sensorPoint[1] = atof(argv[7 + gcpId * 5]);
 
     Point3DType geoPoint;
-    geoPoint[0] = atof(argv[5 + 5 * gcpId]);
-    geoPoint[1] = atof(argv[6 + 5 * gcpId]);
-    geoPoint[2] = atof(argv[7 + 5 * gcpId]);
+    geoPoint[0] = atof(argv[8 + 5 * gcpId]);
+    geoPoint[1] = atof(argv[9 + 5 * gcpId]);
+    geoPoint[2] = atof(argv[10+ 5 * gcpId]);
 
     rpcEstimator->AddGCP(sensorPoint, geoPoint);
 // Software Guide : EndCodeSnippet
@@ -133,9 +138,9 @@ int main(int argc, char* argv[])
 //
 // The last step of the chain, is to export the image to a Google 
 // Earth understandable format using the KmzProductWriter. Note that 
-// the writer can associate legend  via the method
-// AddLegend(std::string description,ImageType * legend) and a logo  
-// SetLogo(ImageType*) to the kmz. 
+// the writer can add legends via the method
+// AddLegend(std::string description,ImageType * legend) and a logo in
+// the kmz using SetLogo(ImageType*). 
 //
 // Software Guide : EndLatex
 
@@ -156,6 +161,47 @@ int main(int argc, char* argv[])
   kmzWriter->SetPath(argv[2]);
   
   kmzWriter->Update();
+// Software Guide : EndCodeSnippet
+
+// Software Guide : BeginLatex
+//
+// The Mapfile is the heart of MapServer. It defines the relationships
+// between objects, points MapServer (http://mapserver.org/) to where
+// data are located and defines how things are to be drawn. The class
+// \doxygen{otb}{MapFileProductWriter} allow producing the mapserver
+// configuration file, the tiles to draw, and shapefiles descrining
+// the tiles and where to find them.
+// The Mapfile writer allow setting the complete path to the mapfile
+// via SetFileName(std::string),the path where to store the tiles via
+// the method SetShapeIndexPath() and finally the path to the cgi-bin
+// to use via the method SetGCIPath().
+// 
+//
+// Software Guide : EndLatex
+
+// Software Guide : BeginCodeSnippet
+  typedef otb::MapFileProductWriter<ImageType>   MapFileProductWriterType;
+  MapFileProductWriterType::Pointer  mapWriter  = MapFileProductWriterType::New();
+// Software Guide : EndCodeSnippet
+
+// Software Guide : BeginLatex
+//
+// The user can also specify a Spatial Reference System Identifier
+// (SRID) to choose his projection. In this example we choose WGS84 to
+// project our datas in. The SRID relative to WGS84 is 4326.
+// Finally, we trigger the MapFile writting by calling the
+// \code{Update()}  method on the writer. 
+//
+// Software Guide : EndLatex
+
+// Software Guide : BeginCodeSnippet
+  mapWriter->SetInput(rpcEstimator->GetOutput());
+  mapWriter->SetFileName(argv[3]);
+  mapWriter->SetShapeIndexPath(argv[4]);
+  mapWriter->SetCGIPath(argv[5]);
+  mapWriter->SetSRID(4326);
+  
+  mapWriter->Update();
 // Software Guide : EndCodeSnippet
 
   return EXIT_SUCCESS;
