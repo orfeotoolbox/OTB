@@ -192,7 +192,6 @@ int main(int argc, char * argv[])
   ShapeLabelMapFilterType::Pointer shapeLabelMapFilter =
     ShapeLabelMapFilterType::New();
   shapeLabelMapFilter->SetInput(labelMapFilter->GetOutput());
-
   // Software Guide : EndCodeSnippet
   //  Software Guide : BeginLatex
   //
@@ -201,10 +200,8 @@ int main(int argc, char * argv[])
   //
   //  Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet
-
   RadiometricLabelMapFilterType::Pointer radiometricLabelMapFilter
     = RadiometricLabelMapFilterType::New();
-
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -222,7 +219,6 @@ int main(int argc, char * argv[])
   //
   //  Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet
-
   NDVIImageFilterType:: Pointer ndviImageFilter = NDVIImageFilterType::New();
 
   ndviImageFilter->SetRedIndex(3);
@@ -236,7 +232,6 @@ int main(int argc, char * argv[])
 
   radiometricLabelMapFilter->SetInput(shapeLabelMapFilter->GetOutput());
   radiometricLabelMapFilter->SetFeatureImage(ndviVectorImageFilter->GetOutput());
-
   // Software Guide : EndCodeSnippet
   //  Software Guide : BeginLatex
   //
@@ -247,14 +242,12 @@ int main(int argc, char * argv[])
   //
   //  Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet
-
   OpeningLabelMapFilterType::Pointer opening = OpeningLabelMapFilterType::New();
   opening->SetInput(radiometricLabelMapFilter->GetOutput());
   opening->SetAttributeName(attr);
   opening->SetLambda(thresh);
   opening->SetReverseOrdering(lowerThan);
   opening->Update();
-
 
   // Software Guide : EndCodeSnippet
   //  Software Guide : BeginLatex
@@ -264,11 +257,9 @@ int main(int argc, char * argv[])
   //
   //  Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet
-
   LabelMapToBinaryImageFilterType::Pointer labelMap2LabeledImage
     = LabelMapToBinaryImageFilterType::New();
   labelMap2LabeledImage->SetInput(opening->GetOutput());
-
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
