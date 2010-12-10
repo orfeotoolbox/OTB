@@ -58,11 +58,14 @@
 #include "itkLabelMap.h"
 #include "otbShapeAttributesLabelMapFilter.h"
 #include "otbStatisticsAttributesLabelMapFilter.h"
-#include "otbRadiometricAttributesLabelMapFilter.h"
+#include "otbBandsStatisticsAttributesLabelMapFilter.h"
 #include "otbAttributesMapOpeningLabelMapFilter.h"
 #include "itkLabelMapToBinaryImageFilter.h"
 #include "otbMultiChannelExtractROI.h"
 #include "otbVectorRescaleIntensityImageFilter.h"
+#include "otbVegetationIndicesFunctor.h"
+#include "otbMultiChannelRAndNIRIndexImageFilter.h"
+#include "otbImageToVectorImageCastFilter.h"
 
 int main(int argc, char * argv[])
 {
@@ -80,7 +83,7 @@ int main(int argc, char * argv[])
   const char * outfname = argv[2];
   const char * outprettyfname = argv[3];
   const char * attr     = argv[4];
-  bool         lowerThan       = atoi(argv[5]);
+  double       lowerThan      = atof(argv[5]);
   double       thresh         = atof(argv[6]);
 
   const unsigned int spatialRadius          = atoi(argv[7]);
@@ -117,10 +120,10 @@ int main(int argc, char * argv[])
   LabelMapFilterType;
   typedef otb::ShapeAttributesLabelMapFilter<LabelMapType>
   ShapeLabelMapFilterType;
-  typedef otb::StatisticsAttributesLabelMapFilter<LabelMapType,
+  typedef otb::BandsStatisticsAttributesLabelMapFilter<LabelMapType,
       ImageType>
   StatisticsLabelMapFilterType;
-  typedef otb::RadiometricAttributesLabelMapFilter<LabelMapType,
+  typedef otb::BandsStatisticsAttributesLabelMapFilter<LabelMapType,
       VectorImageType>
   RadiometricLabelMapFilterType;
   typedef otb::AttributesMapOpeningLabelMapFilter<LabelMapType>
@@ -128,6 +131,10 @@ int main(int argc, char * argv[])
   typedef itk::LabelMapToBinaryImageFilter<LabelMapType,
       LabeledImageType>
   LabelMapToBinaryImageFilterType;
+  typedef otb::MultiChannelRAndNIRIndexImageFilter<VectorImageType,
+      ImageType> NDVIImageFilterType;
+  typedef otb::ImageToVectorImageCastFilter<ImageType,VectorImageType>
+  ImageToVectorImageCastFilterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(reffname);
@@ -177,47 +184,60 @@ int main(int argc, char * argv[])
   // where each segmented region has a unique label.
   //
   //  Software Guide : EndLatex
-
   // Software Guide : BeginCodeSnippet
   LabelMapFilterType::Pointer labelMapFilter = LabelMapFilterType::New();
   labelMapFilter->SetInput(filter->GetLabeledClusteredOutput());
   labelMapFilter->SetBackgroundValue(itk::NumericTraits<LabelType>::min());
-  // Software Guide : EndCodeSnippet
 
   ShapeLabelMapFilterType::Pointer shapeLabelMapFilter =
     ShapeLabelMapFilterType::New();
   shapeLabelMapFilter->SetInput(labelMapFilter->GetOutput());
 
+  // Software Guide : EndCodeSnippet
   //  Software Guide : BeginLatex
   //
-  // Instantiate the  \doxygen{otb}{RadiometricAttributesLabelMapFilter} to
+  // Instantiate the  \doxygen{otb}{BandsStatisticsAttributesLabelMapFilter} to
   // compute radiometric value on each label object.
   //
   //  Software Guide : EndLatex
-
   // Software Guide : BeginCodeSnippet
+
   RadiometricLabelMapFilterType::Pointer radiometricLabelMapFilter
     = RadiometricLabelMapFilterType::New();
 
-  radiometricLabelMapFilter->SetInput1(shapeLabelMapFilter->GetOutput());
-  radiometricLabelMapFilter->SetInput2(vreader->GetOutput());
   // Software Guide : EndCodeSnippet
-
-  //  Software Guide : BeginLatex
+  // Software Guide : BeginLatex
   //
-  // Then, we specify the red and the near infrared channels
-  // By default, images are supposed to be standard 4-band
-  // images (B,G,R,NIR). The index of each channel can
-  // be set via the \code{Set***ChannelIndex()} accessors.
+  //  Feature image could be one of the following image:
+  //  \item GEMI
+  //  \item NDVI
+  //  \item IR
+  //  \item IC
+  //  \item IB
+  //  \item NDWI2
+  //  \item Intensity
+  //
+  //  Input image must be convert to the desired coefficient.
+  //  In our case, radiometric label map will be process on a NDVI coefficient.
   //
   //  Software Guide : EndLatex
-
   // Software Guide : BeginCodeSnippet
-  radiometricLabelMapFilter->SetRedChannelIndex(2);
-  radiometricLabelMapFilter->SetNIRChannelIndex(3);
-  radiometricLabelMapFilter->Update();
-  // Software Guide : EndCodeSnippet
 
+  NDVIImageFilterType:: Pointer ndviImageFilter = NDVIImageFilterType::New();
+
+  ndviImageFilter->SetRedIndex(3);
+  ndviImageFilter->SetNIRIndex(4);
+  ndviImageFilter->SetInput(vreader->GetOutput());
+
+  ImageToVectorImageCastFilterType::Pointer ndviVectorImageFilter =
+      ImageToVectorImageCastFilterType::New();
+
+  ndviVectorImageFilter->SetInput(ndviImageFilter->GetOutput());
+
+  radiometricLabelMapFilter->SetInput(shapeLabelMapFilter->GetOutput());
+  radiometricLabelMapFilter->SetFeatureImage(ndviVectorImageFilter->GetOutput());
+
+  // Software Guide : EndCodeSnippet
   //  Software Guide : BeginLatex
   //
   // The \doxygen{otb}{AttributesMapOpeningLabelMapFilter} will perform the selection.
@@ -226,28 +246,30 @@ int main(int argc, char * argv[])
   // object with an attribute value greater than \code{Lambda} instead.
   //
   //  Software Guide : EndLatex
-
   // Software Guide : BeginCodeSnippet
+
   OpeningLabelMapFilterType::Pointer opening = OpeningLabelMapFilterType::New();
   opening->SetInput(radiometricLabelMapFilter->GetOutput());
   opening->SetAttributeName(attr);
   opening->SetLambda(thresh);
   opening->SetReverseOrdering(lowerThan);
-  // Software Guide : EndCodeSnippet
+  opening->Update();
 
+
+  // Software Guide : EndCodeSnippet
   //  Software Guide : BeginLatex
   //
   //  Then, Label objects selected are transform in a Label Image using the
   //  \doxygen{itk}{LabelMapToLabelImageFilter}.
   //
   //  Software Guide : EndLatex
-
   // Software Guide : BeginCodeSnippet
+
   LabelMapToBinaryImageFilterType::Pointer labelMap2LabeledImage
     = LabelMapToBinaryImageFilterType::New();
   labelMap2LabeledImage->SetInput(opening->GetOutput());
-  // Software Guide : EndCodeSnippet
 
+  // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
   // And finally, we declare the writer and call its \code{Update()} method to
@@ -257,6 +279,7 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   WriterType::Pointer writer = WriterType::New();
+
   writer->SetFileName(outfname);
   writer->SetInput(labelMap2LabeledImage->GetOutput());
   writer->Update();

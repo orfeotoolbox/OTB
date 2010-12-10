@@ -139,7 +139,7 @@ private:
  * The ReducedAttributesSet flag allows to tell the internal
  * statistics filter to compute only the main attributes.
  *
- * \deprecated use the otb::BandsStatisticsImageFilter instead
+ * \deprecated use the otb::BandsStatisticsAttributesLabelMapFilter instead
  *
  * \sa MultiStatsAttributesLabelObjectFunctor AttributesMapLabelObject
  * \sa GEMI NDVI IR IC IB NDWI2
