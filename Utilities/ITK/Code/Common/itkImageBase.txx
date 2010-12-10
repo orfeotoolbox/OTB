@@ -285,7 +285,7 @@ ImageBase<VImageDimension>
   else 
     {
     // Let us try to give a warning of this change in behavior.
-    itkWarningMacro(<<"Not executing UpdateOutputData due to zero pixel condition RequestedRegion:" 
+    itkDebugMacro(<<"Not executing UpdateOutputData due to zero pixel condition RequestedRegion:" 
                     <<  this->GetRequestedRegion() << " BufferedRegion: " << this->GetBufferedRegion());
     }
 #endif // !ITK_LEGACY_SILENT && !ITK_LEGACY_REMOVE

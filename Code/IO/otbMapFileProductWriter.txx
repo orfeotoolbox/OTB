@@ -407,7 +407,6 @@ MapFileProductWriter<TInputImage>
     // Write the IndexTile
     typename VectorDataFileWriterType::Pointer writer = VectorDataFileWriterType::New();
     writer->SetFileName(m_IndexShapeFileName);
-    std::cout <<" ---> Writing the vectordata : "<<m_IndexShapeFileName  << std::endl;
     writer->SetInput(m_VectorDataIndexTile);
     writer->Update();
     
@@ -536,7 +535,7 @@ MapFileProductWriter<TInputImage>
   m_File <<"\t\tMETADATA" << std::endl;
   m_File <<"\t\t 'wms_title'           'Level0'" << std::endl;
   m_File <<"\t\t \'wms_onlineresource\'  \'"<<m_CGIPath<<"?map="<<m_FileName<<"&\'" << std::endl;
-  m_File <<"\t\t \'wms_srs\'             \'EPSG:"<<m_SRID<<" EPSG:900913\'" << std::endl; // TODO : guess the EPSG used
+  m_File <<"\t\t \'wms_srs\'             \'EPSG:"<<m_SRID<<" EPSG:900913\'" << std::endl; 
   m_File <<"\t\tEND" << std::endl;
   m_File <<"\tEND" << std::endl;
 
@@ -565,7 +564,9 @@ MapFileProductWriter<TInputImage>
   m_File <<"\t\t\tPROJECTION" << std::endl;
   m_File <<"\t\t\t \"init=epsg:"<<m_SRID<<"\"" << std::endl;
   m_File <<"\t\t\tEND" << std::endl;
-  m_File <<"\t\t#MINSCALE 250000" << std::endl;
+  m_File <<"\t\t#MINSCALE 250000" << std::endl; // TODO : problem with
+                                                // the MINSCALE AND
+                                                // MAXSCALE ..
   m_File <<"\tEND" << std::endl;
 }
 

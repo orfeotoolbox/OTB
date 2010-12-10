@@ -263,6 +263,7 @@ private:
   void PrintUsage(std::ostream& os) const;
   void PrintVersion(std::ostream& os) const;
   bool FindOption(const std::string&, int& index);
+  bool IsNumber(std::string text);
 
   /** Try processing a command line.  Returns false if something breaks */
   bool TryParseCommandLine(int argc, char *argv[],

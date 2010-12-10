@@ -28,6 +28,7 @@ void RegisterTests()
 {
   REGISTER_TEST(ExtractROITest);
   REGISTER_TEST(DEMToImageGeneratorTest);
+  REGISTER_TEST(ImageToKmzAndMapFileProductExample);  
 }
 
 #undef main
@@ -37,3 +38,7 @@ void RegisterTests()
 #undef main
 #define main DEMToImageGeneratorTest
 #include "DEMToImageGenerator.cxx"
+
+#undef main
+#define main ImageToKmzAndMapFileProductExample
+#include "ImageToKmzAndMapFileProductExample.cxx"

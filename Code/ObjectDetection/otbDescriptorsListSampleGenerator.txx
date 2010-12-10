@@ -283,9 +283,7 @@ template <class TInputImage, class TVectorData, class TFunctionType, class TList
 void
 PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,TListSample,TLabelListSample>
 ::BeforeThreadedGenerateData()
-{
-  std::cout << this->GetInput()->GetBufferedRegion() << std::endl;
-}
+{}
 
 
 template <class TInputImage, class TVectorData, class TFunctionType, class TListSample, class TLabelListSample>
