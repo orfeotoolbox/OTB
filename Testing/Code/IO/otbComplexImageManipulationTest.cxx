@@ -543,7 +543,6 @@ int otbImageDoubleToVectorImageComplex(int argc, char * argv[])
     }
 
   itk::ImageRegionIteratorWithIndex<CmplxVectorImageType> it( reader->GetOutput(), region );
-  unsigned int l_Size = reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0]* reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1];
 
   unsigned int count = 0;
   it.GoToBegin();
