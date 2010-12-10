@@ -60,7 +60,7 @@ public:
 
   /** Handle Full widget dragging
    * \param widgetId The id of the handled Curve widget
-   * \param event kind of event ot handle : FL_PUSH, FL_RELEASE
+   * \param event kind of event or handle : FL_PUSH, FL_RELEASE
    */
   virtual bool HandleWidgetEvent(std::string widgetId, int event)
   {
@@ -70,44 +70,44 @@ public:
       switch (event)
         {
         case FL_PUSH:
-        { 
-        PointType screenPoint = m_View->GetFullWidget()->GetMousePosition();
-        PointType ImagePoint  = m_View->GetFullWidget()->GetScreenToImageTransform()->TransformPoint(screenPoint);
-        m_IndexPushed[0] = ImagePoint[0];
-        m_IndexPushed[1] = ImagePoint[1];
-        return true;
-        }
-        case FL_RELEASE:
-        { 
-        PointType screenPoint = m_View->GetFullWidget()->GetMousePosition();
-        PointType ImagePoint  = m_View->GetFullWidget()->GetScreenToImageTransform()->TransformPoint(screenPoint);
-        m_IndexReleased[0] = ImagePoint[0];
-        m_IndexReleased[1] = ImagePoint[1];
-    
-        // Compute the shift
-        m_MoveX = -m_IndexReleased[0] + m_IndexPushed[0];
-        m_MoveY = -m_IndexReleased[1] + m_IndexPushed[1];
-    
-        // Compute the origin and the size of the visible region
-        IndexType  indexBegin,indexEnd;
-        indexBegin[0] = static_cast<unsigned int>(m_Model->GetExtractRegion().GetIndex()[0] + m_MoveX);
-        indexBegin[1] = static_cast<unsigned int>(m_Model->GetExtractRegion().GetIndex()[1] + m_MoveY);
-        indexEnd[0]   = indexBegin[0] + m_Model->GetExtractRegion().GetSize()[0];
-        indexEnd[1]   = indexBegin[1] + m_Model->GetExtractRegion().GetSize()[1];
-
-        if (indexEnd[0] <m_Model->GetLayer(0)->GetExtent().GetSize()[0] && 
-            indexEnd[1] <m_Model->GetLayer(0)->GetExtent().GetSize()[1] && 
-            indexBegin[0] >m_Model->GetLayer(0)->GetExtent().GetIndex()[0] && 
-            indexBegin[1] >m_Model->GetLayer(0)->GetExtent().GetIndex()[1] )
           {
-          m_Model->SetExtractRegionByIndex(indexBegin, indexEnd);
-          m_Model->Update();
+          PointType screenPoint = m_View->GetFullWidget()->GetMousePosition();
+          PointType ImagePoint = m_View->GetFullWidget()->GetScreenToImageTransform()->TransformPoint(screenPoint);
+          m_IndexPushed[0] = ImagePoint[0];
+          m_IndexPushed[1] = ImagePoint[1];
+          return true;
           }
-        return true;
+        case FL_RELEASE:
+          {
+          PointType screenPoint = m_View->GetFullWidget()->GetMousePosition();
+          PointType ImagePoint = m_View->GetFullWidget()->GetScreenToImageTransform()->TransformPoint(screenPoint);
+          m_IndexReleased[0] = ImagePoint[0];
+          m_IndexReleased[1] = ImagePoint[1];
+
+          // Compute the shift
+          m_MoveX = -m_IndexReleased[0] + m_IndexPushed[0];
+          m_MoveY = -m_IndexReleased[1] + m_IndexPushed[1];
+
+          // Compute the origin and the size of the visible region
+          IndexType indexBegin, indexEnd;
+          indexBegin[0] = static_cast<unsigned int> (m_Model->GetExtractRegion().GetIndex()[0] + m_MoveX);
+          indexBegin[1] = static_cast<unsigned int> (m_Model->GetExtractRegion().GetIndex()[1] + m_MoveY);
+          indexEnd[0] = indexBegin[0] + m_Model->GetExtractRegion().GetSize()[0];
+          indexEnd[1] = indexBegin[1] + m_Model->GetExtractRegion().GetSize()[1];
+
+          if (indexEnd[0] < m_Model->GetLayer(0)->GetExtent().GetSize()[0] && indexEnd[1]
+              < m_Model->GetLayer(0)->GetExtent().GetSize()[1] && indexBegin[0]
+              > static_cast<unsigned int> (m_Model->GetLayer(0)->GetExtent().GetIndex()[0]) && indexBegin[1]
+              > static_cast<unsigned int> (m_Model->GetLayer(0)->GetExtent().GetIndex()[1]))
+            {
+            m_Model->SetExtractRegionByIndex(indexBegin, indexEnd);
+            m_Model->Update();
+            }
+          return true;
+          }
         }
-        }
-      return false;
       }
+    return false;
   }
     
   /** Set/Get the pointer to the view */
