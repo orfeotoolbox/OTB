@@ -47,7 +47,6 @@ REGISTER_TEST(otbNormalizeAttributesLabelMapFilterNew);
 REGISTER_TEST(otbNormalizeAttributesLabelMapFilter);
 REGISTER_TEST(otbKMeansAttributesLabelMapFilterNew);
 REGISTER_TEST(otbKMeansAttributesLabelMapFilter);
-REGISTER_TEST(otbRadiometricAttributesLabelMapFilterNew);
 REGISTER_TEST(otbBandsStatisticsAttributesLabelMapFilterNew);
 REGISTER_TEST(otbBandsStatisticsAttributesLabelMapFilter);
 REGISTER_TEST(otbShapeAttributesLabelMapFilterNew);
