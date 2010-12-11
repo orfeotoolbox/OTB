@@ -248,7 +248,6 @@ int main(int argc, char * argv[])
   opening->SetLambda(thresh);
   opening->SetReverseOrdering(lowerThan);
   opening->Update();
-
   // Software Guide : EndCodeSnippet
   //  Software Guide : BeginLatex
   //
