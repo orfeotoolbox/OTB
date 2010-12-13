@@ -44,8 +44,6 @@ int BandMath::Execute(otb::ApplicationOptionsResult* parseResult)
 {
   const unsigned int NbImages = parseResult->GetNumberOfParameters("InputImages");
 
-  std::cout << "Compute result considering " << NbImages << " input images" << std::endl;
-
   const unsigned int Dimension = 2;
   typedef otb::Image<double, Dimension> ImageType;
   typedef otb::VectorImage<double, Dimension> VectorImageType;
@@ -69,8 +67,8 @@ int BandMath::Execute(otb::ApplicationOptionsResult* parseResult)
 
     imageReader->UpdateOutputInformation();
 
-    std::cout << "Image #" << i + 1 << " has " << imageReader->GetOutput()->GetNumberOfComponentsPerPixel()
-        << " components" << std::endl;
+    otbMsgDevMacro( << "Image #" << i + 1 << " has " << imageReader->GetOutput()->GetNumberOfComponentsPerPixel()
+        << " components" << std::endl );
 
     for (unsigned int j = 0; j < imageReader->GetOutput()->GetNumberOfComponentsPerPixel(); j++)
       {
