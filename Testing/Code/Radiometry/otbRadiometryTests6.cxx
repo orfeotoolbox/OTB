@@ -51,4 +51,5 @@ void RegisterTests()
   REGISTER_TEST(otbLandsatTMIndexNDBBBI);
   REGISTER_TEST(otbLandsatTMLinguisticLabels);
   REGISTER_TEST(otbLandsatTMKernelSpectralRules);
+  REGISTER_TEST(otbLandsatTMThickCloudTest);
 }

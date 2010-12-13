@@ -38,7 +38,7 @@ namespace LandsatTM
 /// Landsat 5 or 7
 enum SATType {L5, L7};
 /// Thermal band in Kelvin or Celsius
-enum DegreeType {Kelvin, Celsius};
+enum DegreeType {Kelvin, HundredsKelvin, Celsius};
 /// Reflectances in thousands or in (0-1)
 enum ReflectanceType {Thousands, Normalized};
 /**
@@ -219,16 +219,37 @@ protected:
     TInput newPix( inputPixel );
     if( this->m_Degree == Kelvin )
       {
-      newPix[this->m_TM60] = newPix[this->m_TM60]-273.15;
+      if(this->m_SAT == L5)
+        {
+        newPix[this->m_TM60] = newPix[this->m_TM60]-273.15;
+        }
+      else
+        {
+        newPix[this->m_TM61] = newPix[this->m_TM61]-273.15;
+        newPix[this->m_TM62] = newPix[this->m_TM62]-273.15;
+        }
+      }
+    else
+      if( this->m_Degree == HundredsKelvin )
+      {
+            if(this->m_SAT == L5)
+        {
+        newPix[this->m_TM60] = newPix[this->m_TM60]/100.-273.15;
+        }
+      else
+        {
+        newPix[this->m_TM61] = newPix[this->m_TM61]/100.-273.15;
+        newPix[this->m_TM62] = newPix[this->m_TM62]/100.-273.15;
+        }
       }
     if( this->m_Reflectance == Thousands )
       {
-      newPix[this->m_TM1] = newPix[this->m_TM1]/1000;
-      newPix[this->m_TM2] = newPix[this->m_TM2]/1000;
-      newPix[this->m_TM3] = newPix[this->m_TM3]/1000;
-      newPix[this->m_TM4] = newPix[this->m_TM4]/1000;
-      newPix[this->m_TM5] = newPix[this->m_TM5]/1000;
-      newPix[this->m_TM7] = newPix[this->m_TM7]/1000;
+      newPix[this->m_TM1] = newPix[this->m_TM1]/1000.;
+      newPix[this->m_TM2] = newPix[this->m_TM2]/1000.;
+      newPix[this->m_TM3] = newPix[this->m_TM3]/1000.;
+      newPix[this->m_TM4] = newPix[this->m_TM4]/1000.;
+      newPix[this->m_TM5] = newPix[this->m_TM5]/1000.;
+      newPix[this->m_TM7] = newPix[this->m_TM7]/1000.;
       }
 
     return newPix;
@@ -1053,7 +1074,6 @@ public:
     TInput newPixel(this->PrepareValues( inputPixel ));
     this->SetMinMax(newPixel);
 
-    std::cout << this->m_Min123 << " " << this->m_TV1 << " " << this->m_Max123 << std::endl;
     bool result = (this->m_Min123 >= (this->m_TV1 * this->m_Max123))
       and (this->m_Max123 <= this->m_TV1 * newPixel[this->m_TM4])
       and (newPixel[this->m_TM5] <= this->m_TV1 * newPixel[this->m_TM4])
