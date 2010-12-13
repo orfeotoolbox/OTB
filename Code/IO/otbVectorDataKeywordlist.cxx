@@ -35,7 +35,7 @@ VectorDataKeywordlist
     {
     if (m_FieldList[i].first->GetType() == OFTString)
       {
-      CPLFree(m_FieldList[i].second.String);
+      VSIFree(m_FieldList[i].second.String);
       }
     delete (m_FieldList[i].first);
     }
@@ -64,7 +64,7 @@ VectorDataKeywordlist
   OGRFieldDefn* fieldDefn =  new OGRFieldDefn(key.c_str(), OFTString);
 
   OGRField field;
-  char *   cstr = new char[value.length() + 1];
+  char *   cstr = (char*)VSIMalloc( (value.length() + 1) * sizeof(char) );
   strcpy(cstr, value.c_str());
   field.String = cstr;
 
@@ -132,7 +132,7 @@ VectorDataKeywordlist
         if (m_FieldList[i].first->GetType() == OFTString)
           {
           OGRField field;
-          char *   cstr = new char[value.length() + 1];
+          char *   cstr = (char*)VSIMalloc( (value.length() + 1) * sizeof(char) );
           strcpy(cstr, value.c_str());
           field.String = cstr;
           m_FieldList[i].second = field;
