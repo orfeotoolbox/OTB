@@ -49,6 +49,6 @@ void RegisterTests()
   REGISTER_TEST(otbLandsatTMIndexNDSI);
   REGISTER_TEST(otbLandsatTMIndexNDSIVis);
   REGISTER_TEST(otbLandsatTMIndexNDBBBI);
-  REGISTER_TEST(otbLandsatTMLinguisticLabels
-    );
+  REGISTER_TEST(otbLandsatTMLinguisticLabels);
+  REGISTER_TEST(otbLandsatTMKernelSpectralRules);
 }
