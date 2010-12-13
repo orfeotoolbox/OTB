@@ -35,7 +35,12 @@ namespace Functor
 namespace LandsatTM
 {
 
+/// Landsat 5 or 7
 enum SATType {L5, L7};
+/// Thermal band in Kelvin or Celsius
+enum DegreeType {Kelvin, Celsius};
+/// Reflectances in thousands or in (0-1)
+enum ReflectanceType {Thousands, Normalized};
 /**
    * \class LandsatTMIndexBase
    * \brief Base class for Landsat-TM indices
@@ -65,7 +70,7 @@ public:
   }
 
   /// Constructor
-  LandsatTMIndexBase() :  m_EpsilonToBeConsideredAsZero(0.0000001), m_TM1(0), m_TM2(1), m_TM3(2), m_TM4(3), m_TM5(4), m_TM60(5), m_TM61(5), m_TM62(6), m_TM7{7}, m_SAT(L7) {}
+  LandsatTMIndexBase() :  m_EpsilonToBeConsideredAsZero(0.0000001), m_TM1(0), m_TM2(1), m_TM3(2), m_TM4(3), m_TM5(4), m_TM60(5), m_TM61(5), m_TM62(6), m_TM7{7}, m_SAT(L7), m_Degree(Celsius), m_Reflectance(Normalized) {}
   /// Desctructor
   virtual ~LandsatTMIndexBase() {}
 
@@ -159,6 +164,9 @@ public:
 
   void SetSAT(SATType sat)
   {
+
+    this->m_SAT = sat;
+    
     if( sat == L5 )
       {
       m_TM1 = 0;
@@ -185,12 +193,46 @@ public:
   }
   itkGetConstMacro(SAT, SATType);
 
+  void SetDegree(DegreeType deg)
+  {
+    this->m_Degree = deg;
+  }
+
+  itkGetConstMacro(Degree, DegreeType);
+
+  void SetReflectance(ReflectanceType ref)
+  {
+    this->m_Reflectance = ref;
+  }
+
+  itkGetConstMacro(Reflectance, ReflectanceType);
+
   itkGetConstMacro(EpsilonToBeConsideredAsZero, double);
 
 
 protected:
-  // This method must be reimplemented in subclasses to actually
-  // compute the index value
+  /// Prepare the values so they are normalized and in °C
+
+  TInput PrepareValues(const TInput& inputPixel)
+  {
+
+    TInput newPix( inputPixel );
+    if( this->m_Degree == Kelvin )
+      {
+      newPix[this->TM60] = newPix[this->TM60]-273.15;
+      }
+    if( this->m_Reflectance == Thousands )
+      {
+      newPix[this->TM1] = newPix[this->TM1]/1000;
+      newPix[this->TM2] = newPix[this->TM2]/1000;
+      newPix[this->TM3] = newPix[this->TM3]/1000;
+      newPix[this->TM4] = newPix[this->TM4]/1000;
+      newPix[this->TM5] = newPix[this->TM5]/1000;
+      newPix[this->TM7] = newPix[this->TM7]/1000;
+      }
+  }
+
+  
   double m_EpsilonToBeConsideredAsZero;
 
   unsigned int m_TM1;
@@ -204,6 +246,8 @@ protected:
   unsigned int m_TM7;
 
   SATType m_SAT;
+  DegreeType m_Degree;
+  ReflectanceType m_Reflectance;
 
 };
 
