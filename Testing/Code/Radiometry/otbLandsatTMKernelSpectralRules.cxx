@@ -59,14 +59,16 @@ int otbLandsatTMKernelSpectralRules(int argc, char * argv[])
   PrecisionType TV1 = 0.7;
   PrecisionType TV2 = 0.5;
 
-  typedef otb::Functor::LandsatTM::ThikCloudsSpectralRule<InputPixelType> R1FunctorType;
+  typedef otb::Functor::LandsatTM::ThickCloudsSpectralRule<InputPixelType> R1FunctorType;
   R1FunctorType r1Funct = R1FunctorType();
   bool result = r1Funct(pixel);
   bool goodResult = (min123 >= (TV1 * max123))
-    and (max123 <= TV1 * TM4) and (TM5 <= TV1 * TM4)
-    and (TM5 >= TV1 * max123) and (TM7 <= TV1 * TM4);
+    and (max123 <= TV1 * TM4)
+    and (TM5 <= TV1 * TM4)
+    and (TM5 >= TV1 * max123)
+    and (TM7 <= TV1 * TM4);
 
-  std::cout << "Rule 1 " << goodResult << result << std::endl;
+  std::cout << "Rule 1 " << goodResult << " " << result << std::endl;
   if( result!=goodResult ) return EXIT_FAILURE;
   
   return EXIT_SUCCESS;

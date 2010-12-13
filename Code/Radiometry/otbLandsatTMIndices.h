@@ -23,6 +23,8 @@
 #include "itkFixedArray.h"
 #include "otbBandName.h"
 #include "otbFuzzyVariable.h"
+#include <vector>
+#include <algorithm>
 
 namespace otb
 {
@@ -894,6 +896,125 @@ protected:
   typename FuzzyVarType::Pointer m_FvNDVI;
   typename FuzzyVarType::Pointer m_FvNDBSI;
   
+
+};
+
+
+/** \class KernelSpectralRule
+ *
+ * Implementation of the Kernel Spectral rules for Landsat TM image
+ *  land cover classification as described in table IV of Baraldi et
+ *  al. 2006, "Automatic Spectral Rule-Based Preliminary Mapping of
+ *  Calibrated Landsat TM and ETM+ Images", IEEE Trans. on Geoscience
+ *  and Remote Sensing, vol 44, no 9.
+ *
+ * This is a virtual class defining the common accessors to the 14 spectral rules
+ *
+ *
+ * TIR must be in °C
+ *
+ * \ingroup Functor
+ * \ingroup Radiometry
+ * \ingroup LandsatTMIndices
+ */
+template <class TInput>
+class KernelSpectralRule : public LandsatTMIndexBase<TInput, bool >
+{
+public:
+
+  typedef typename TInput::ValueType PrecisionType;
+  typedef bool OutputPixelType;
+  
+    /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "LandsatTM KernelSpectralRule";
+  }
+  
+  KernelSpectralRule() : m_TV1(0.7), m_TV2(0.5) { }
+  virtual ~KernelSpectralRule() {}
+
+  void SetTV1(PrecisionType tv1)
+  {
+    this->m_TV1 = tv1;
+  }
+
+  void SetTV2(PrecisionType tv2)
+  {
+    this->m_TV2 = tv2;
+  }
+
+  itkGetConstMacro(TV1, PrecisionType);
+  itkGetConstMacro(TV2, PrecisionType);
+protected:
+  /** Tolerance value 1*/
+  PrecisionType m_TV1;
+  /** Tolerance value 2*/
+  PrecisionType m_TV2;
+
+  PrecisionType m_Max123;
+  PrecisionType m_Min123;
+
+  void SetMinMax(const TInput& inputPixel)
+  {
+  std::vector< PrecisionType > v123;
+  v123.push_back(inputPixel[this->m_TM1]);
+  v123.push_back(inputPixel[this->m_TM2]);
+  v123.push_back(inputPixel[this->m_TM3]);
+
+  this->m_Max123 = *(max_element ( v123.begin(), v123.end() ));
+  this->m_Min123 = *(min_element ( v123.begin(), v123.end() ));
+  }
+};
+
+/** \class ThickCloudsSpectralRule
+ *
+ * Implementation of the ThickCloudsSpectralRule for Landsat TM image
+ *  land cover classification as described in table IV of Baraldi et
+ *  al. 2006, "Automatic Spectral Rule-Based Preliminary Mapping of
+ *  Calibrated Landsat TM and ETM+ Images", IEEE Trans. on Geoscience
+ *  and Remote Sensing, vol 44, no 9.
+ *
+ * This is a virtual class defining the common accessors to the 14 spectral rules
+ *
+ *
+ * TIR must be in °C
+ *
+ * \ingroup Functor
+ * \ingroup Radiometry
+ * \ingroup LandsatTMIndices
+ */
+template <class TInput>
+class ThickCloudsSpectralRule : public KernelSpectralRule<TInput>
+{
+public:
+
+  typedef typename TInput::ValueType PrecisionType;
+  typedef bool OutputPixelType;
+  
+    /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "LandsatTM ThickCloudsSpectralRule";
+  }
+  
+  ThickCloudsSpectralRule() { }
+  virtual ~ThickCloudsSpectralRule() {}
+
+  inline bool operator ()(const TInput& inputPixel)
+  {
+
+    this->SetMinMax(inputPixel);
+
+    std::cout << this->m_Min123 << " " << this->m_TV1 << " " << this->m_Max123 << std::endl;
+    bool result = (this->m_Min123 >= (this->m_TV1 * this->m_Max123))
+      and (this->m_Max123 <= this->m_TV1 * inputPixel[this->m_TM4])
+      and (inputPixel[this->m_TM5] <= this->m_TV1 * inputPixel[this->m_TM4])
+      and (inputPixel[this->m_TM5] >= this->m_TV1 * this->m_Max123)
+      and (inputPixel[this->m_TM7] <= this->m_TV1 * inputPixel[this->m_TM4]);
+
+    return result;
+  }
 
 };
 

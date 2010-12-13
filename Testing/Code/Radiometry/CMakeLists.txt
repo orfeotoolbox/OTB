@@ -1152,14 +1152,27 @@ ADD_TEST(raTvLandsatTMLinguisticLabelsTest2 ${RADIOMETRY_TESTS6}
 
 ADD_TEST(raTvLandsatTMKernelSpectralRulesTest ${RADIOMETRY_TESTS6}
         otbLandsatTMKernelSpectralRules
-        3   #TM1
-        4   #TM2
-        80   #TM3
-        100  #TM4
+        63   #TM1
+        64   #TM2
+        57   #TM3
+        150  #TM4
         33  #TM5
         1  #TM61
         8   #TM62
         51  #TM7
+
+)
+
+ADD_TEST(raTvLandsatTMKernelSpectralRulesTest2 ${RADIOMETRY_TESTS6}
+        otbLandsatTMKernelSpectralRules
+        49   #TM1
+        50   #TM2
+        70   #TM3
+        100  #TM4
+        69  #TM5
+        0  #TM61
+        0   #TM62
+        0  #TM7
 
 )
 
