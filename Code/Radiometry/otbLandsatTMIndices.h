@@ -219,17 +219,19 @@ protected:
     TInput newPix( inputPixel );
     if( this->m_Degree == Kelvin )
       {
-      newPix[this->TM60] = newPix[this->TM60]-273.15;
+      newPix[this->m_TM60] = newPix[this->m_TM60]-273.15;
       }
     if( this->m_Reflectance == Thousands )
       {
-      newPix[this->TM1] = newPix[this->TM1]/1000;
-      newPix[this->TM2] = newPix[this->TM2]/1000;
-      newPix[this->TM3] = newPix[this->TM3]/1000;
-      newPix[this->TM4] = newPix[this->TM4]/1000;
-      newPix[this->TM5] = newPix[this->TM5]/1000;
-      newPix[this->TM7] = newPix[this->TM7]/1000;
+      newPix[this->m_TM1] = newPix[this->m_TM1]/1000;
+      newPix[this->m_TM2] = newPix[this->m_TM2]/1000;
+      newPix[this->m_TM3] = newPix[this->m_TM3]/1000;
+      newPix[this->m_TM4] = newPix[this->m_TM4]/1000;
+      newPix[this->m_TM5] = newPix[this->m_TM5]/1000;
+      newPix[this->m_TM7] = newPix[this->m_TM7]/1000;
       }
+
+    return newPix;
   }
 
   
@@ -306,7 +308,8 @@ public:
   inline TOutput operator ()(const TInput& inputPixel) 
   {
 
-    double result = (inputPixel[this->m_TM1]+inputPixel[this->m_TM2]+2*inputPixel[this->m_TM3]+2*inputPixel[this->m_TM4]+inputPixel[this->m_TM5]+inputPixel[this->m_TM7])/8.0;
+    TInput newPixel(this->PrepareValues( inputPixel ));
+    double result = (newPixel[this->m_TM1]+newPixel[this->m_TM2]+2*newPixel[this->m_TM3]+2*newPixel[this->m_TM4]+newPixel[this->m_TM5]+newPixel[this->m_TM7])/8.0;
     return static_cast<TOutput>(result);
   }
   
@@ -343,8 +346,8 @@ public:
 
   inline TOutput operator ()(const TInput& inputPixel) 
   {
-
-    double result = (inputPixel[this->m_TM1]+inputPixel[this->m_TM2]+inputPixel[this->m_TM3])/3.0;
+    TInput newPixel(this->PrepareValues( inputPixel ));
+    double result = (newPixel[this->m_TM1]+newPixel[this->m_TM2]+newPixel[this->m_TM3])/3.0;
     return static_cast<TOutput>(result);
   }
   
@@ -374,8 +377,8 @@ public:
 
   inline TOutput operator ()(const TInput& inputPixel) 
   {
-
-    double result = inputPixel[this->m_TM4];
+    TInput newPixel(this->PrepareValues( inputPixel ));
+    double result = newPixel[this->m_TM4];
     return static_cast<TOutput>(result);
   }
   
@@ -404,8 +407,8 @@ public:
 
   inline TOutput operator ()(const TInput& inputPixel) 
   {
-
-    double result = inputPixel[this->m_TM5];
+    TInput newPixel(this->PrepareValues( inputPixel ));
+    double result = newPixel[this->m_TM5];
     return static_cast<TOutput>(result);
   }
   
@@ -434,8 +437,8 @@ public:
 
   inline TOutput operator ()(const TInput& inputPixel) 
   {
-
-    double result = inputPixel[this->m_TM7];
+    TInput newPixel(this->PrepareValues( inputPixel ));
+    double result = newPixel[this->m_TM7];
     return static_cast<TOutput>(result);
   }
   
@@ -464,11 +467,11 @@ public:
 
   inline TOutput operator ()(const TInput& inputPixel) 
   {
-
-    double result = inputPixel[this->m_TM62];
+    TInput newPixel(this->PrepareValues( inputPixel ));
+    double result = newPixel[this->m_TM62];
 
     if( this->m_SAT == L5 )
-      result = inputPixel[this->m_TM60];
+      result = newPixel[this->m_TM60];
     
     return static_cast<TOutput>(result);
   }
@@ -508,12 +511,12 @@ public:
 
   inline TOutput operator ()(const TInput& inputPixel) 
   {
-
-    double tir = inputPixel[this->m_TM62];
-    double mir1 = inputPixel[this->m_TM5];
+    TInput newPixel(this->PrepareValues( inputPixel ));
+    double tir = newPixel[this->m_TM62];
+    double mir1 = newPixel[this->m_TM5];
 
     if( this->m_SAT == L5 )
-      tir = inputPixel[this->m_TM60];
+      tir = newPixel[this->m_TM60];
 
     double result = (1 - mir1)*tir;
     
@@ -546,9 +549,9 @@ public:
 
   inline TOutput operator ()(const TInput& inputPixel) 
   {
-
-    double result = (inputPixel[this->m_TM4] - inputPixel[this->m_TM3])/
-      (inputPixel[this->m_TM4] + inputPixel[this->m_TM3] + this->m_EpsilonToBeConsideredAsZero);
+    TInput newPixel(this->PrepareValues( inputPixel ));
+    double result = (newPixel[this->m_TM4] - newPixel[this->m_TM3])/
+      (newPixel[this->m_TM4] + newPixel[this->m_TM3] + this->m_EpsilonToBeConsideredAsZero);
     
     return static_cast<TOutput>(result);
   }
@@ -591,9 +594,9 @@ public:
 
   inline TOutput operator ()(const TInput& inputPixel) 
   {
-
-    double result = (inputPixel[this->m_TM5] - inputPixel[this->m_TM4])/
-      (inputPixel[this->m_TM5] + inputPixel[this->m_TM4] + this->m_EpsilonToBeConsideredAsZero);
+    TInput newPixel(this->PrepareValues( inputPixel ));
+    double result = (newPixel[this->m_TM5] - newPixel[this->m_TM4])/
+      (newPixel[this->m_TM5] + newPixel[this->m_TM4] + this->m_EpsilonToBeConsideredAsZero);
     
     return static_cast<TOutput>(result);
   }
@@ -632,11 +635,11 @@ public:
 
   inline TOutput operator ()(const TInput& inputPixel) 
   {
-
-    double result = ((inputPixel[this->m_TM5] + inputPixel[this->m_TM3])
-                     - (inputPixel[this->m_TM4] + inputPixel[this->m_TM1]))
-      /((inputPixel[this->m_TM5] + inputPixel[this->m_TM3])
-        + (inputPixel[this->m_TM4] + inputPixel[this->m_TM1]));
+    TInput newPixel(this->PrepareValues( inputPixel ));
+    double result = ((newPixel[this->m_TM5] + newPixel[this->m_TM3])
+                     - (newPixel[this->m_TM4] + newPixel[this->m_TM1]))
+      /((newPixel[this->m_TM5] + newPixel[this->m_TM3])
+        + (newPixel[this->m_TM4] + newPixel[this->m_TM1]));
     
     return static_cast<TOutput>(result);
   }
@@ -676,9 +679,9 @@ public:
 
   inline TOutput operator ()(const TInput& inputPixel) 
   {
-
-    double result = (inputPixel[this->m_TM2] - inputPixel[this->m_TM5])
-      /(inputPixel[this->m_TM2] + inputPixel[this->m_TM5] + this->m_EpsilonToBeConsideredAsZero);
+    TInput newPixel(this->PrepareValues( inputPixel ));
+    double result = (newPixel[this->m_TM2] - newPixel[this->m_TM5])
+      /(newPixel[this->m_TM2] + newPixel[this->m_TM5] + this->m_EpsilonToBeConsideredAsZero);
     
     return static_cast<TOutput>(result);
   }
@@ -731,9 +734,9 @@ public:
 
   inline TOutput operator ()(const TInput& inputPixel) 
   {
-
-    double vis = (inputPixel[this->m_TM1]+inputPixel[this->m_TM2]+inputPixel[this->m_TM3])/3.0;
-    double result = (vis - inputPixel[this->m_TM5])/(vis + inputPixel[this->m_TM5] + this->m_EpsilonToBeConsideredAsZero);
+    TInput newPixel(this->PrepareValues( inputPixel ));
+    double vis = (newPixel[this->m_TM1]+newPixel[this->m_TM2]+newPixel[this->m_TM3])/3.0;
+    double result = (vis - newPixel[this->m_TM5])/(vis + newPixel[this->m_TM5] + this->m_EpsilonToBeConsideredAsZero);
     
     return static_cast<TOutput>(result);
   }
@@ -774,9 +777,9 @@ public:
 
   inline TOutput operator ()(const TInput& inputPixel) 
   {
-
-    double result = (inputPixel[this->m_TM1] - inputPixel[this->m_TM5])
-      /(inputPixel[this->m_TM1] + inputPixel[this->m_TM5] + this->m_EpsilonToBeConsideredAsZero);
+    TInput newPixel(this->PrepareValues( inputPixel ));
+    double result = (newPixel[this->m_TM1] - newPixel[this->m_TM5])
+      /(newPixel[this->m_TM1] + newPixel[this->m_TM5] + this->m_EpsilonToBeConsideredAsZero);
     return static_cast<TOutput>(result);
   }
   
@@ -887,40 +890,40 @@ public:
 
   inline itk::FixedArray<unsigned int, 11> operator ()(const TInput& inputPixel) 
   {
-
+    TInput newPixel(this->PrepareValues( inputPixel ));
     itk::FixedArray<unsigned int, 11> result;
     
-    m_FvBright->SetValue( Bright<TInput, PrecisionType>()( inputPixel ) );
+    m_FvBright->SetValue( Bright<TInput, PrecisionType>()( newPixel ) );
     result[ bright ] = m_FvBright->GetMaxVar();
 
-    m_FvVis->SetValue( Vis<TInput, PrecisionType>()( inputPixel ) );
+    m_FvVis->SetValue( Vis<TInput, PrecisionType>()( newPixel ) );
     result[ vis ] = m_FvVis->GetMaxVar();
 
-    m_FvNIR->SetValue( NIR<TInput, PrecisionType>()( inputPixel ) );
+    m_FvNIR->SetValue( NIR<TInput, PrecisionType>()( newPixel ) );
     result[ nir ] = m_FvNIR->GetMaxVar();
 
-    m_FvMIR1->SetValue( MIR1<TInput, PrecisionType>()( inputPixel ) );
+    m_FvMIR1->SetValue( MIR1<TInput, PrecisionType>()( newPixel ) );
     result[ mir1 ] = m_FvMIR1->GetMaxVar();
 
-    m_FvMIR2->SetValue( MIR2<TInput, PrecisionType>()( inputPixel ) );
+    m_FvMIR2->SetValue( MIR2<TInput, PrecisionType>()( newPixel ) );
     result[ mir2 ] = m_FvMIR2->GetMaxVar();
 
-    m_FvTIR->SetValue( TIR<TInput, PrecisionType>()( inputPixel ) );
+    m_FvTIR->SetValue( TIR<TInput, PrecisionType>()( newPixel ) );
     result[ tir ] = m_FvTIR->GetMaxVar();
 
-    m_FvMIRTIR->SetValue( MIRTIR<TInput, PrecisionType>()( inputPixel ) );
+    m_FvMIRTIR->SetValue( MIRTIR<TInput, PrecisionType>()( newPixel ) );
     result[ mirtir ] = m_FvMIRTIR->GetMaxVar();
 
-    m_FvNDSIVis->SetValue( NDSIVis<TInput, PrecisionType>()( inputPixel ) );
+    m_FvNDSIVis->SetValue( NDSIVis<TInput, PrecisionType>()( newPixel ) );
     result[ ndsivis ] = m_FvNDSIVis->GetMaxVar();
 
-    m_FvNDBBBI->SetValue( NDBBBI<TInput, PrecisionType>()( inputPixel ) );
+    m_FvNDBBBI->SetValue( NDBBBI<TInput, PrecisionType>()( newPixel ) );
     result[ ndbbbi ] = m_FvNDBBBI->GetMaxVar();
 
-    m_FvNDVI->SetValue( NDVI<TInput, PrecisionType>()( inputPixel ) );
+    m_FvNDVI->SetValue( NDVI<TInput, PrecisionType>()( newPixel ) );
     result[ ndvi ] = m_FvNDVI->GetMaxVar();
 
-    m_FvNDBSI->SetValue( NDBSI<TInput, PrecisionType>()( inputPixel ) );
+    m_FvNDBSI->SetValue( NDBSI<TInput, PrecisionType>()( newPixel ) );
     result[ ndbsi ] = m_FvNDBSI->GetMaxVar();
 
     
@@ -1047,15 +1050,15 @@ public:
 
   inline bool operator ()(const TInput& inputPixel)
   {
-
-    this->SetMinMax(inputPixel);
+    TInput newPixel(this->PrepareValues( inputPixel ));
+    this->SetMinMax(newPixel);
 
     std::cout << this->m_Min123 << " " << this->m_TV1 << " " << this->m_Max123 << std::endl;
     bool result = (this->m_Min123 >= (this->m_TV1 * this->m_Max123))
-      and (this->m_Max123 <= this->m_TV1 * inputPixel[this->m_TM4])
-      and (inputPixel[this->m_TM5] <= this->m_TV1 * inputPixel[this->m_TM4])
-      and (inputPixel[this->m_TM5] >= this->m_TV1 * this->m_Max123)
-      and (inputPixel[this->m_TM7] <= this->m_TV1 * inputPixel[this->m_TM4]);
+      and (this->m_Max123 <= this->m_TV1 * newPixel[this->m_TM4])
+      and (newPixel[this->m_TM5] <= this->m_TV1 * newPixel[this->m_TM4])
+      and (newPixel[this->m_TM5] >= this->m_TV1 * this->m_Max123)
+      and (newPixel[this->m_TM7] <= this->m_TV1 * newPixel[this->m_TM4]);
 
     return result;
   }
