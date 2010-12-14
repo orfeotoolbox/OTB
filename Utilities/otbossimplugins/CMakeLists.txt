@@ -4,6 +4,11 @@ SET(ossimplugins_VERSION_MAJOR "1")
 SET(ossimplugins_VERSION_MINOR "8")
 SET(ossimplugins_VERSION_PATCH "4")
 
+# svn revision number of ossim (used for .so versioning)
+SET(OSSIMPLUGINS_SVN_REVISION "18162")
+# patch number for OTB modifications applied on top of OSSIM_SVN_REVISION (used for .so versioning)
+SET(OSSIMPLUGINS_OTB_PATCH "1")
+
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} 
   ${CMAKE_CURRENT_SOURCE_DIR}/ossim 
   ${OTB_SOURCE_DIR}/Utilities/otbossim/include
@@ -23,7 +28,9 @@ SET(ossimplugins_SOURCES
 
 ADD_LIBRARY(otbossimplugins ${ossimplugins_SOURCES} )
 TARGET_LINK_LIBRARIES(otbossimplugins ${GEOTIFF_LIBRARY} ${GDAL_LIBRARY} ${OGR_LIBRARY} otbossim)
-#TARGET_LINK_LIBRARIES(otbossimplugins otbossim)
+SET_TARGET_PROPERTIES(otbossimplugins
+                      PROPERTIES VERSION "${OSSIMPLUGINS_SVN_REVISION}.${OSSIMPLUGINS_OTB_PATCH}.0"
+                                 SOVERSION "${OSSIMPLUGINS_SVN_REVISION}.${OSSIMPLUGINS_OTB_PATCH}")
 
 IF(OTB_LIBRARY_PROPERTIES)
   SET_TARGET_PROPERTIES(otbossimplugins PROPERTIES ${OTB_LIBRARY_PROPERTIES})
