@@ -41,12 +41,12 @@ int BundleToPerfectSensor::Describe(ApplicationDescriptor* descriptor)
 {
   descriptor->SetName("BundleToSensorModel");
   descriptor->SetDescription("Using available image metadata to determine the sensor model, computes a cartographic projection of the image");
-  descriptor->AddOutputImage();
   descriptor->AddOption("DEMDirectory","Directory were to find the DEM tiles","dem",1,false,otb::ApplicationDescriptor::DirectoryName);
   descriptor->AddOption("NumStreamDivisions","Number of streaming divisions (optional)","stream",1,false,otb::ApplicationDescriptor::Integer);
   descriptor->AddOption("LocMapSpacing","Generate a coarser deformation field with the given spacing.","lmSpacing",1,false,otb::ApplicationDescriptor::Real);
   descriptor->AddOption("InputPanchro","The input panchromatic image","inP", 1,true,otb::ApplicationDescriptor::InputImage);
   descriptor->AddOption("InputXS","The input multi-spectral image","inXS", 1,true,otb::ApplicationDescriptor::InputImage);
+  descriptor->AddOutputImage();
 
   return EXIT_SUCCESS;
 }
