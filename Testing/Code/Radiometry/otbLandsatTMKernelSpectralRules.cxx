@@ -82,6 +82,21 @@ int otbLandsatTMKernelSpectralRules(int argc, char * argv[])
 
   std::cout << "Rule 2 " << goodResult << " " << result << std::endl;
   if( result!=goodResult ) return EXIT_FAILURE;
+
+  typedef otb::Functor::LandsatTM::SnowOrIceSpectralRule<InputPixelType> R3FunctorType;
+  R3FunctorType r3Funct = R3FunctorType();
+  result = r3Funct(pixel);
+  goodResult = (min123 >= (TV1 * max123))
+    and (TM4 >= TV1 * max123)
+    and (TM5 <= TV2 * TM4)
+    and (TM5 <= TV1* min123)
+    and (TM7 <= TV2 * TM4)
+    and (TM7 <= TV1*min123);
+
+  std::cout << "Rule 3 " << goodResult << " " << result << std::endl;
+  if( result!=goodResult ) return EXIT_FAILURE;
+
+
   
   return EXIT_SUCCESS;
 }
