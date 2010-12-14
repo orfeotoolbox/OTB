@@ -1272,6 +1272,53 @@ public:
 
 };
 
+/** \class DominantBlueSpectralRule
+ *
+ * Implementation of the DominantBlueSpectralRule for Landsat TM image
+ *  land cover classification as described in table IV of Baraldi et
+ *  al. 2006, "Automatic Spectral Rule-Based Preliminary Mapping of
+ *  Calibrated Landsat TM and ETM+ Images", IEEE Trans. on Geoscience
+ *  and Remote Sensing, vol 44, no 9.
+ *
+ *
+ * \ingroup Functor
+ * \ingroup Radiometry
+ * \ingroup LandsatTMIndices
+ */
+template <class TInput>
+class DominantBlueSpectralRule : public KernelSpectralRule<TInput>
+{
+public:
+
+  typedef typename TInput::ValueType PrecisionType;
+  typedef bool OutputPixelType;
+  
+    /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "LandsatTM DominantBlueSpectralRule";
+  }
+  
+  DominantBlueSpectralRule() { }
+  virtual ~DominantBlueSpectralRule() {}
+
+  inline bool operator ()(const TInput& inputPixel)
+  {
+    TInput newPixel(this->PrepareValues( inputPixel ));
+    this->SetMinMax(newPixel);
+
+    bool result = (newPixel[this->m_TM1] >= this->m_TV1 * newPixel[this->m_TM2])
+      and (newPixel[this->m_TM1] >= this->m_TV1 * newPixel[this->m_TM3])
+      and (newPixel[this->m_TM1] >= this->m_TV1 * newPixel[this->m_TM4])
+      and (newPixel[this->m_TM1] >= this->m_TV1 * newPixel[this->m_TM5])
+      and (newPixel[this->m_TM1] >= this->m_TV1 * newPixel[this->m_TM7]);
+
+
+    return result;
+  }
+
+};
+
 } // namespace LandsatTM
 } // namespace Functor
 } // namespace otb
