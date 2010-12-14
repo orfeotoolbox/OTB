@@ -31,8 +31,8 @@ int VectorDataSetField::Describe(ApplicationDescriptor* descriptor)
 {
   descriptor->SetName("VectorDataSetField");
   descriptor->SetDescription("Set a specified field to a specified value on all features of a vector data");
-  descriptor->AddOption("Input","Input vector data","in",1,true,ApplicationDescriptor::String);
-  descriptor->AddOption("Output","Output vector data","out",1,true,ApplicationDescriptor::String);
+  descriptor->AddOption("Input","Input vector data","in",1,true,ApplicationDescriptor::FileName);
+  descriptor->AddOption("Output","Output vector data","out",1,true,ApplicationDescriptor::FileName);
   descriptor->AddOption("Field","Field name","fn",1,true,ApplicationDescriptor::String);
   descriptor->AddOption("Value","Field value","fv",1,true,ApplicationDescriptor::String);
   
