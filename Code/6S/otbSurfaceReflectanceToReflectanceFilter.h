@@ -23,7 +23,7 @@
 #define __otbSurfaceReflectanceToReflectanceFilter_h
 
 
-#include "itkUnaryFunctorImageFilter.h"
+#include "otbUnaryImageFunctorWithVectorImageFilter.h"
 
 #include "otbAtmosphericRadiativeTerms.h"
 #include "otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms.h"
@@ -94,7 +94,6 @@ public:
 
   inline TOutput operator() (const TInput & inPixel)
   {
-//     std::cout << "m_SphericalAlbedo "<< m_SphericalAlbedo << std::endl;
 //     std::cout << "m_Coefficient "<< m_Coefficient << std::endl;
 //     std::cout << "m_Residu "<< m_Residu << std::endl;
     
@@ -159,7 +158,7 @@ private:
  */
 template <class TInputImage, class TOutputImage >
 class ITK_EXPORT SurfaceReflectanceToReflectanceFilter :
-      public itk::UnaryFunctorImageFilter< TInputImage,
+      public UnaryImageFunctorWithVectorImageFilter< TInputImage,
       TOutputImage,
       ITK_TYPENAME Functor::ReflectanceToSurfaceReflectanceImageFunctor< ITK_TYPENAME TInputImage::InternalPixelType,
       ITK_TYPENAME TOutputImage::InternalPixelType > >
@@ -176,7 +175,7 @@ public:
   ITK_TYPENAME OutputImageType::InternalPixelType> FunctorType;
   /** "typedef" for standard classes. */
   typedef SurfaceReflectanceToReflectanceFilter                                                     Self;
-  typedef itk::UnaryFunctorImageFilter< InputImageType, OutputImageType, FunctorType >    Superclass;
+  typedef UnaryImageFunctorWithVectorImageFilter< InputImageType, OutputImageType, FunctorType >    Superclass;
   typedef itk::SmartPointer<Self>                                                                        Pointer;
   typedef itk::SmartPointer<const Self>                                                                  ConstPointer;
 

@@ -37,7 +37,7 @@
 int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
 {
 
-   double percentage=0.1;
+   
       
    typedef otb::SpectralResponse< double,double>  ResponseType;
    typedef ResponseType::Pointer  ResponsePointerType;
@@ -59,13 +59,13 @@ int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
   
   typedef otb::ConfusionMatrixCalculator<TrainingSampleListType,TrainingSampleListType> ConfusionMatrixCalculatorType;
       
-   if ( argc!= 8 )
+   if ( argc!= 9 )
    {
-      std::cout << argv[0] << std::endl << "\t" << "<dir_spectres_class1>" << "\t" << "<dir_spectres_class2>" << "\t" << "<dir_spectres_class3>" << "\t" << "<dir_spectres_class4>" << "\t" << "<dir_spectres_class5>"  << "\t" << "<Gabarit_SAT_fileSRname>" << "\t" << "<nbBands>" <<  std::endl ;
+      std::cout << argv[0] << std::endl << "\t" << "<dir_spectres_class1>" << "\t" << "<dir_spectres_class2>" << "\t" << "<dir_spectres_class3>" << "\t" << "<dir_spectres_class4>" << "\t" << "<dir_spectres_class5>"  << "\t" << "<Gabarit_SAT_fileSRname>" << "\t" << "<nbBands>" << "\t" << "<percentage_validation_files>" << std::endl ;
       return EXIT_FAILURE;
    }
 
-  
+   
    //Instantiation
   
    //Load fileSR into vector
@@ -78,7 +78,7 @@ int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
   
    const std::string fileSatG(argv[6]);
    unsigned int nbBand = atoi(argv[7]);
-  
+   float percentage=atof(argv[8]);
   
    SatRSRPointerType  satRSR=SatRSRType::New();
    /** Set the satelite number of bands */

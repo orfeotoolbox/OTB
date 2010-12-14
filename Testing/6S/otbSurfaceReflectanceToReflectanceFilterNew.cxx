@@ -17,7 +17,7 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 #include "otbMacro.h"
-#include "otbImage.h"
+#include "otbVectorImage.h"
 #include "itkImageRegionIterator.h"
 #include "otbSpectralResponse.h"
 
@@ -32,9 +32,9 @@ int main(int argc, char * argv[])
     return EXIT_FAILURE;
   }
   
-  const unsigned int                            Dimension = 1;
+  const unsigned int                            Dimension = 2;
   typedef double                                PixelType;
-  typedef otb::Image<PixelType,Dimension> ImageType;
+  typedef otb::VectorImage<PixelType,Dimension> ImageType;
 
   typedef itk::ImageRegionIterator< ImageType > IteratorType;
   //typedef ResponseType::PairType    PairType;
@@ -56,79 +56,81 @@ int main(int argc, char * argv[])
   //rsr to image
   ImageType::IndexType start;
   start[0] =  0;
+  start[1] =  0;
 
   ImageType::SizeType  size;
-  size[0]  = myResponse->Size();
-  
+  size[0] = 1;
+  size[1] = 1;
 
   std::cout << "Image size: " << size << std::endl;
   
   ImageType::PointType origin;
   origin[0] = 0;
+  origin[1] = 0;
   //origin[1] = -90;
 
   ImageType::SpacingType spacing;
   spacing[0] = 1;
+  spacing[1] = 1;
   //spacing[1] = -resolution;
 
-  
   ImageType::RegionType region;
   region.SetSize( size );
   region.SetIndex( start );
   
   ImageType::Pointer image = ImageType::New();
   image->SetRegions( region );
-  image->SetNumberOfComponentsPerPixel( 1 );
+  image->SetNumberOfComponentsPerPixel( (myResponse)->Size() );
   image->Allocate();
+   
+  ImageType::PixelType pixel;
+  pixel.SetSize((myResponse)->Size());
   
-  IteratorType iterator( image, image->GetRequestedRegion() );
-  
-  unsigned int i = 0;
-  for ( iterator.GoToBegin(); !iterator.IsAtEnd(); ++iterator )
+  for ( unsigned int i = 0; i<(myResponse)->Size(); i++ )
   {
-    iterator.Set( myResponse->GetResponse()[i]->second );
-    ++i;
+    pixel[i] = myResponse->GetResponse()[i]->second;
   }
+  image->SetPixel(start,pixel);
 
   //Instantiation
   SurfaceReflectanceToReflectanceFilterPointerType  myFilter=SurfaceReflectanceToReflectanceFilterType::New();
   
-  myFilter->SetInput(image);
-  
-  typedef otb::AtmosphericRadiativeTerms::DataVectorType DataVectorType;
-  otb::AtmosphericRadiativeTerms::Pointer atmo = otb::AtmosphericRadiativeTerms::New();
-  
-  DataVectorType intrinsic;
-  DataVectorType albedo;
-  DataVectorType gaseous;
-  DataVectorType downTrans;
-  DataVectorType upTrans;
-  
-  
-  intrinsic.push_back(static_cast<double>(atof(argv[2])));
-  albedo.push_back(static_cast<double>(atof(argv[3])));
-  gaseous.push_back(static_cast<double>(atof(argv[4])));
-  downTrans.push_back(static_cast<double>(atof(argv[5])));
-  upTrans.push_back(static_cast<double>(atof(argv[6])));
-  
-
-  atmo->SetIntrinsicAtmosphericReflectances(intrinsic);
-  atmo->SetSphericalAlbedos(albedo);
-  atmo->SetTotalGaseousTransmissions(gaseous);
-  atmo->SetDownwardTransmittances(downTrans);
-  atmo->SetUpwardTransmittances(upTrans);
-  
-  myFilter->SetAtmosphericRadiativeTerms(atmo);
-  myFilter->Update();
-  
-  i = 0;
-  IteratorType iterator2( myFilter->GetOutput(), myFilter->GetOutput()->GetRequestedRegion() );
-  for ( iterator2.GoToBegin(); !iterator2.IsAtEnd(); ++iterator2 )
-  {
-    myResponse->GetResponse()[i]->second = iterator2.Get();
-    ++i;
-  }
-  
-  std::cout << "Output SpectResponse " << myResponse << std::endl;
+//   myFilter->SetInput(image);
+//   
+//   typedef otb::AtmosphericRadiativeTerms::DataVectorType DataVectorType;
+//   otb::AtmosphericRadiativeTerms::Pointer atmo = otb::AtmosphericRadiativeTerms::New();
+//   
+//   DataVectorType intrinsic;
+//   DataVectorType albedo;
+//   DataVectorType gaseous;
+//   DataVectorType downTrans;
+//   DataVectorType upTrans;
+//   
+// 
+//   intrinsic.push_back(static_cast<double>(atof(argv[2])));
+//   albedo.push_back(static_cast<double>(atof(argv[3])));
+//   gaseous.push_back(static_cast<double>(atof(argv[4])));
+//   downTrans.push_back(static_cast<double>(atof(argv[5])));
+//   upTrans.push_back(static_cast<double>(atof(argv[6])));
+//   
+// 
+//   atmo->SetIntrinsicAtmosphericReflectances(intrinsic);
+//   atmo->SetSphericalAlbedos(albedo);
+//   atmo->SetTotalGaseousTransmissions(gaseous);
+//   atmo->SetDownwardTransmittances(downTrans);
+//   atmo->SetUpwardTransmittances(upTrans);
+//   
+//   myFilter->SetAtmosphericRadiativeTerms(atmo);
+//   myFilter->Update();
+//   
+//   i = 0;
+//   IteratorType iterator2( myFilter->GetOutput(), myFilter->GetOutput()->GetRequestedRegion() );
+//   for ( iterator2.GoToBegin(); !iterator2.IsAtEnd(); ++iterator2 )
+//   {
+//     myResponse->GetResponse()[i]->second = iterator2.Get()[];
+//     ++i;
+//   }
+//   
+//   std::cout << "Output SpectResponse " << myResponse << std::endl;
   return EXIT_SUCCESS;
 }

@@ -37,7 +37,7 @@
 int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
 {
 
-   double percentage=0.1;
+   
       
    typedef otb::SpectralResponse< double,double>  ResponseType;
    typedef ResponseType::Pointer  ResponsePointerType;
@@ -61,9 +61,9 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
   
   typedef otb::ConfusionMatrixCalculator<TrainingSampleListType,TrainingSampleListType> ConfusionMatrixCalculatorType;
       
-   if ( argc!= 19 )
+   if ( argc!= 20 )
    {
-      std::cout << argv[0] << std::endl << "\t" << "<dir_spectres_class1>" << "\t" << "<dir_spectres_class2>" << "\t" << "<dir_spectres_class3>" << "\t" << "<dir_spectres_class4>" << "\t" << "<dir_spectres_class5>"  << "\t" << "<Gabarit_SAT_fileSRname>" << "\t" << "<nbBands>" << "\t" << "<day>"  << "\t" << "<month>"  << "\t" << "<zenithSolarAngle>"  << "\t" << "<azimutSolarAngle>"  << "\t" << "<viewingZenitalAngle>"  << "\t" << "<viewingAzimutalAngle>"  << "\t" << "<atmoPressure>"  << "\t" << "<waterVaporAmount>"  << "\t" << "<ozoneAmount>"  << "\t" << "<aerosolModelValue>"  << "\t" << "<aerosolOptical>" <<  std::endl ;
+      std::cout << argv[0] << std::endl << "\t" << "<dir_spectres_class1>" << "\t" << "<dir_spectres_class2>" << "\t" << "<dir_spectres_class3>" << "\t" << "<dir_spectres_class4>" << "\t" << "<dir_spectres_class5>"  << "\t" << "<Gabarit_SAT_fileSRname>" << "\t" << "<nbBands>" << "\t" << "<day>"  << "\t" << "<month>"  << "\t" << "<zenithSolarAngle>"  << "\t" << "<azimutSolarAngle>"  << "\t" << "<viewingZenitalAngle>"  << "\t" << "<viewingAzimutalAngle>"  << "\t" << "<atmoPressure>"  << "\t" << "<waterVaporAmount>"  << "\t" << "<ozoneAmount>"  << "\t" << "<aerosolModelValue>"  << "\t" << "<aerosolOptical>" << "\t" << "<percentage_validation_files>" << std::endl ;
       return EXIT_FAILURE;
    }
    /*
@@ -93,6 +93,7 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
   
    const std::string fileSatG(argv[6]);
    unsigned int nbBand = atoi(argv[7]);
+   float percentage=atof(argv[19]);
   
   
    SatRSRPointerType  satRSR=SatRSRType::New();
@@ -199,8 +200,9 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
       /** Load the spectral response of the object in the simulator*/
       reduceResponse->SetInputSpectralResponse(spectralResponse);
       reduceResponse->SetDataAtmosphericCorrectionParameters(dataAtmosphericCorrectionParameters);
-      reduceResponse->Process6S();
       reduceResponse->CalculateResponse();
+      reduceResponse->Process6S();
+      
       
       //Get the response in an itk::VariableLengthVector and add it to the sample list for SVMModelEstimator
       SampleType sample;
@@ -244,8 +246,9 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
       /** Load the spectral response of the object in the simulator*/
       reduceResponse->SetInputSpectralResponse(spectralResponse);
       reduceResponse->SetDataAtmosphericCorrectionParameters(dataAtmosphericCorrectionParameters);
-      reduceResponse->Process6S();
       reduceResponse->CalculateResponse();
+      reduceResponse->Process6S();
+      
       
       //Get the response in an itk::VariableLengthVector and add it to the sample list for SVMClassifier
       SampleType sample;

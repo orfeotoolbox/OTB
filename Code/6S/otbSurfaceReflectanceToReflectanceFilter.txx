@@ -137,8 +137,9 @@ SurfaceReflectanceToReflectanceFilter<TInputImage,TOutputImage>
 {  
   //this->GetFunctor().clear();
 
-  for (unsigned int i = 0;i<this->GetInput()->GetNumberOfComponentsPerPixel();++i)
-    {
+//    for (unsigned int i = 0;i<this->GetInput()->GetNumberOfComponentsPerPixel();++i)
+   for (unsigned int i = 0;i<m_AtmosphericRadiativeTerms->GetWavelengthSpectralBand().size();++i)
+   {
       double coef;
       double res;
       coef = static_cast<double>(m_AtmosphericRadiativeTerms->GetTotalGaseousTransmission(i)
@@ -151,10 +152,11 @@ SurfaceReflectanceToReflectanceFilter<TInputImage,TOutputImage>
       functor.SetCoefficient(coef);
       functor.SetResidu(res);
       functor.SetSphericalAlbedo(static_cast<double>(m_AtmosphericRadiativeTerms->GetSphericalAlbedo(i)));
-    
-      //this->GetFunctor().push_back(functor);
-      this->SetFunctor(functor);
-    }
+          std::cout << "m_SphericalAlbedo "<< m_AtmosphericRadiativeTerms->GetSphericalAlbedo(i) << std::endl;
+   
+      this->GetFunctorVector().push_back(functor);
+//       this->SetFunctor(functor);
+   }
 }
 
 

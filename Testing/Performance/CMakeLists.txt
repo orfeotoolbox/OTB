@@ -22,6 +22,7 @@ ADD_TEST(rsrSVMClassifier ${PERFO_TESTS}
         ${SRCLASS4} 
         ${SAT_RSR}/rep6S.dat
         4 #nbBands
+        0.2 #percentage of validation files
         )
         
 ADD_TEST(atmosphericCorrectionsRSRSVMClassifier ${PERFO_TESTS}
@@ -44,6 +45,7 @@ ADD_TEST(atmosphericCorrectionsRSRSVMClassifier ${PERFO_TESTS}
         0.34400 #ozone amount
         1 #aerosol model type 
         0.199854 #aerosol optical
+        0.2 #percentage of validation files
         )
 
 SET(PERFO_SRCS
