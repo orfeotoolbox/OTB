@@ -36,7 +36,7 @@ int Quicklook::Describe(ApplicationDescriptor* descriptor)
   descriptor->SetDescription("Generates a subsampled version of an image");
   descriptor->AddInputImage();
   descriptor->AddOutputImage();
-  descriptor->AddOptionNParams("ChannelList", "channel list","cl",false,ApplicationDescriptor::Enumerated);
+  descriptor->AddOptionNParams("ChannelList", "channel list","cl",false,ApplicationDescriptor::StringList);
   descriptor->AddOption("ROIStartX","first point of ROI in x-direction ","ROIx0",1,false,ApplicationDescriptor::Integer);
   descriptor->AddOption("ROIStartY","first point of ROI in y-direction ","ROIy0",1,false,ApplicationDescriptor::Integer);
   descriptor->AddOption("ROISizeX","size of ROI in x-direction ","ROINx",1,false,ApplicationDescriptor::Integer);
