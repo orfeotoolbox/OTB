@@ -822,8 +822,6 @@ public:
  * enough. This is done like this so this class can also provide (TODO)
  * membership values instead of crisp ones.
  *
- * TIR must be in °C
- *
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
@@ -979,8 +977,6 @@ protected:
  * This is a virtual class defining the common accessors to the 14 spectral rules
  *
  *
- * TIR must be in °C
- *
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
@@ -1043,10 +1039,6 @@ protected:
  *  Calibrated Landsat TM and ETM+ Images", IEEE Trans. on Geoscience
  *  and Remote Sensing, vol 44, no 9.
  *
- * This is a virtual class defining the common accessors to the 14 spectral rules
- *
- *
- * TIR must be in °C
  *
  * \ingroup Functor
  * \ingroup Radiometry
