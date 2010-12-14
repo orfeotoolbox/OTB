@@ -35,7 +35,7 @@ int BandMath::Describe(ApplicationDescriptor* descriptor)
   descriptor->SetDescription("Perform a mathematical operation on monoband images");
   descriptor->AddOptionNParams("InputImages", "Input images file names", "ims", true, ApplicationDescriptor::InputImage);
   descriptor->AddOutputImage();
-  descriptor->AddOption("Expression", "The mathematical expression to apply",
+  descriptor->AddOption("Expression", "The mathematical expression to apply. \nUse im1b1 for the first band, im1b2 for the second one...",
                         "exp", 1, true, ApplicationDescriptor::String);
   return EXIT_SUCCESS;
 }
