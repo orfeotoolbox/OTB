@@ -56,6 +56,16 @@ int otbLandsatTMKernelSpectralRules(int argc, char * argv[])
   PrecisionType max123 = *(max_element ( v123.begin(), v123.end() ));
   PrecisionType min123 = *(min_element ( v123.begin(), v123.end() ));
 
+  std::vector< PrecisionType > v12347;
+  v12347.push_back(TM1);
+  v12347.push_back(TM2);
+  v12347.push_back(TM3);
+  v12347.push_back(TM4);
+  v12347.push_back(TM7);
+
+  PrecisionType max12347 = *(max_element ( v12347.begin(), v12347.end() ));
+  PrecisionType min12347 = *(min_element ( v12347.begin(), v12347.end() ));
+
 
   std::vector< PrecisionType > v45;
   v45.push_back(TM4);
@@ -178,6 +188,16 @@ int otbLandsatTMKernelSpectralRules(int argc, char * argv[])
     and (TM5 >= TV1 * TM4)
     and (TM5 >= TV1 * TM7)
     and (TM7 >= TV2 * max45);
+
+  std::cout << "Rule 9 " << goodResult << " " << result << std::endl;
+  if( result!=goodResult ) return EXIT_FAILURE;
+
+
+  typedef otb::Functor::LandsatTM::FlatResponseBarrenLandOrBuiltUpSpectralRule<InputPixelType> R10FunctorType;
+  R10FunctorType r10Funct = R10FunctorType();
+  result = r10Funct(pixel);
+  goodResult = (TM5 >= TV1 * max12347)
+    and (min12347 >= TV2 * TM5);
 
   std::cout << "Rule 9 " << goodResult << " " << result << std::endl;
   if( result!=goodResult ) return EXIT_FAILURE;
