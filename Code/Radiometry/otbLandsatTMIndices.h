@@ -1077,6 +1077,57 @@ public:
 
 };
 
+/** \class ThinCloudsSpectralRule
+ *
+ * Implementation of the ThinCloudsSpectralRule for Landsat TM image
+ *  land cover classification as described in table IV of Baraldi et
+ *  al. 2006, "Automatic Spectral Rule-Based Preliminary Mapping of
+ *  Calibrated Landsat TM and ETM+ Images", IEEE Trans. on Geoscience
+ *  and Remote Sensing, vol 44, no 9.
+ *
+ *
+ * \ingroup Functor
+ * \ingroup Radiometry
+ * \ingroup LandsatTMIndices
+ */
+template <class TInput>
+class ThinCloudsSpectralRule : public KernelSpectralRule<TInput>
+{
+public:
+
+  typedef typename TInput::ValueType PrecisionType;
+  typedef bool OutputPixelType;
+  
+    /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "LandsatTM ThinCloudsSpectralRule";
+  }
+  
+  ThinCloudsSpectralRule() { }
+  virtual ~ThinCloudsSpectralRule() {}
+
+  inline bool operator ()(const TInput& inputPixel)
+  {
+    TInput newPixel(this->PrepareValues( inputPixel ));
+    this->SetMinMax(newPixel);
+
+    bool result = (this->m_Min123 >= (this->m_TV1 * this->m_Max123))
+      and (newPixel[this->m_TM4] >= this->m_Max123)
+      and !((newPixel[this->m_TM1] <= newPixel[this->m_TM2]
+             and newPixel[this->m_TM2] <= newPixel[this->m_TM3]
+              and newPixel[this->m_TM3] <= newPixel[this->m_TM4])
+            and (newPixel[this->m_TM3] >= this->m_TV1 * newPixel[this->m_TM4]))
+      and (newPixel[this->m_TM4] >= this->m_TV1 * newPixel[this->m_TM5])
+      and (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM4])
+      and (newPixel[this->m_TM5] >= this->m_TV1 * this->m_Max123)
+      and (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM7]);
+
+    return result;
+  }
+
+};
+
 
 } // namespace LandsatTM
 } // namespace Functor
