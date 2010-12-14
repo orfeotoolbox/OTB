@@ -56,6 +56,13 @@ int otbLandsatTMKernelSpectralRules(int argc, char * argv[])
   PrecisionType max123 = *(max_element ( v123.begin(), v123.end() ));
   PrecisionType min123 = *(min_element ( v123.begin(), v123.end() ));
 
+
+  std::vector< PrecisionType > v45;
+  v45.push_back(TM4);
+  v45.push_back(TM5);
+
+  PrecisionType max45 = *(max_element ( v45.begin(), v45.end() ));
+  
   PrecisionType TV1 = 0.7;
   PrecisionType TV2 = 0.5;
 
@@ -143,6 +150,22 @@ int otbLandsatTMKernelSpectralRules(int argc, char * argv[])
     and (TM7 < TV1 * TM5);
 
   std::cout << "Rule 7 " << goodResult << " " << result << std::endl;
+  if( result!=goodResult ) return EXIT_FAILURE;
+
+  typedef otb::Functor::LandsatTM::RangelandSpectralRule<InputPixelType> R8FunctorType;
+  R8FunctorType r8Funct = R8FunctorType();
+  result = r8Funct(pixel);
+  goodResult = (TM2 >= TV2 * TM1)
+    and (TM2 >= TV1 * TM3)
+    and (TM4 > max123)
+    and (TM3 < TV1 * TM4)
+    and (TM4 >= TV1 * TM5)
+    and (TM5 >= TV1 * TM4)
+    and (TM5 >= max123)
+    and (TM7 < TV1 * max45)
+    and (TM5 >= TM7);
+
+  std::cout << "Rule 8 " << goodResult << " " << result << std::endl;
   if( result!=goodResult ) return EXIT_FAILURE;
 
 

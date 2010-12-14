@@ -1188,6 +1188,12 @@ ADD_TEST(raTvLandsatTMThinCloudTest ${RADIOMETRY_TESTS6}
         ${TEMP}/raTvLandsatTMThinCloudTest_cloudImage.tif
 )
 
+ADD_TEST(raTvLandsatTMVegetationTest ${RADIOMETRY_TESTS6}
+        otbLandsatTMVegetationTest
+        ${INPUTDATA}/L5Strip.tif
+        ${TEMP}/raTvLandsatTMVegetationTest_cloudImage.tif
+)
+
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1908,6 +1914,7 @@ otbLandsatTMLinguisticLabelsTest.cxx
 otbLandsatTMKernelSpectralRules.cxx
 otbLandsatTMThickCloudTest.cxx
 otbLandsatTMThinCloudTest.cxx
+otbLandsatTMVegetationTest.cxx
 )
 
 SET(Radiometry_SRCS7
