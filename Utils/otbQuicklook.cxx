@@ -33,19 +33,19 @@ namespace otb
 int Quicklook::Describe(ApplicationDescriptor* descriptor)
 {
   descriptor->SetName("Quicklook");
-  descriptor->SetDescription("Generates a subsampled version of an image");
+  descriptor->SetDescription("Generates a subsampled version of an extract of an image defined by ROIStart and ROISize.\n This extract is subsampled using the ration OR the output image Size");
   descriptor->AddInputImage();
   descriptor->AddOutputImage();
-  descriptor->AddOptionNParams("ChannelList", "channel list","cl",false,ApplicationDescriptor::StringList);
+  descriptor->AddOptionNParams("ChannelList", "channel list [1..N], separate with \" \"","cl",false,ApplicationDescriptor::StringList);
   descriptor->AddOption("ROIStartX","first point of ROI in x-direction ","ROIx0",1,false,ApplicationDescriptor::Integer);
   descriptor->AddOption("ROIStartY","first point of ROI in y-direction ","ROIy0",1,false,ApplicationDescriptor::Integer);
   descriptor->AddOption("ROISizeX","size of ROI in x-direction ","ROINx",1,false,ApplicationDescriptor::Integer);
   descriptor->AddOption("ROISizeY","size of ROI in y-direction ","ROINy",1,false,ApplicationDescriptor::Integer);
 
-  descriptor->AddOption("SizeX","size of quicklook in x-direction ","Nx",1,false,ApplicationDescriptor::Integer);
-  descriptor->AddOption("SizeY","size of quicklook in y-direction ","Ny",1,false,ApplicationDescriptor::Integer);
+  descriptor->AddOption("SamplingRatio","Sampling Ratio, default is 2","sr",1,false,ApplicationDescriptor::Integer);
 
-  descriptor->AddOption("SamplingRatio","Sampling Ratio ","sr",1,false,ApplicationDescriptor::Real);
+  descriptor->AddOption("SizeX","quicklook size quicklook in x-direction ","Nx",1,false,ApplicationDescriptor::Integer);
+  descriptor->AddOption("SizeY","quicklook size quicklook in y-direction ","Ny",1,false,ApplicationDescriptor::Integer);
 
   return EXIT_SUCCESS;
 }
@@ -118,9 +118,7 @@ int Quicklook::Execute(otb::ApplicationOptionsResult* parseResult)
       }
 
     extractROIFilter->SetInput( reader->GetOutput() );
-    //  extractROIFilter->Update();
-    // extractROIFilter->GenerateOutputInformation();
-
+ 
     double ROISizeX =  static_cast<double>( regionROI[0] );
     double ROISizeY =  static_cast<double>( regionROI[1] );
 
@@ -138,7 +136,7 @@ int Quicklook::Execute(otb::ApplicationOptionsResult* parseResult)
         }
       }
     else
-      {
+      { 
       if ( parseResult->IsOptionPresent("SizeX") && parseResult->IsOptionPresent("SizeY") )
         {
         SamplingRatioX =  ROISizeX / parseResult->GetParameterDouble("SizeX");
@@ -158,6 +156,7 @@ int Quicklook::Execute(otb::ApplicationOptionsResult* parseResult)
           Ratio =  static_cast<unsigned int>(ROISizeY / parseResult->GetParameterDouble("SizeY"));
           }
         }
+       
       if ( Ratio <= 1.)
         {
         std::cout << "Error in SizeX and/or SizeY : values must be greater than 1." << std::endl;
@@ -165,9 +164,7 @@ int Quicklook::Execute(otb::ApplicationOptionsResult* parseResult)
         }
       }
     
-    // Setting the ShrinkImageFilter parameters
-    /*        typedef itk::ShrinkImageFilter< ExtractROIFilterType::OutputImageType,
-        ExtractROIFilterType::OutputImageType >  ShrinkImageFilterType;*/
+
     typedef otb::StreamingShrinkImageFilter<ExtractROIFilterType::OutputImageType,ExtractROIFilterType::OutputImageType> ShrinkImageFilterType;
 
     ShrinkImageFilterType::Pointer ResamplingFilter = ShrinkImageFilterType::New();
@@ -175,7 +172,7 @@ int Quicklook::Execute(otb::ApplicationOptionsResult* parseResult)
     ResamplingFilter->SetShrinkFactor( Ratio );
     ResamplingFilter->GenerateOutputInformation();
     otbGenericMsgDebugMacro(<<ResamplingFilter->GetOutput()->GetLargestPossibleRegion());
-    //ResamplingFilter->Update();
+
     writer->SetInput(ResamplingFilter->GetOutput() );
     writer->Update();
     
