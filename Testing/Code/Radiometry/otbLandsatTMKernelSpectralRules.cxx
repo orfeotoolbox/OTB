@@ -113,7 +113,7 @@ int otbLandsatTMKernelSpectralRules(int argc, char * argv[])
     and (TM1 >= TV1 * TM3)
     and (max123 <= TV1 * TM4)
     and (TM5 <= TV1 * TM4)
-    and (TM3 >= TV2 TM5)
+    and (TM3 >= TV2 * TM5)
     and (min123 >= TV1 * TM7);
 
   std::cout << "Rule 5 " << goodResult << " " << result << std::endl;
