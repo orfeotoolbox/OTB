@@ -131,6 +131,20 @@ int otbLandsatTMKernelSpectralRules(int argc, char * argv[])
   std::cout << "Rule 6 " << goodResult << " " << result << std::endl;
   if( result!=goodResult ) return EXIT_FAILURE;
 
+  typedef otb::Functor::LandsatTM::VegetationSpectralRule<InputPixelType> R7FunctorType;
+  R7FunctorType r7Funct = R7FunctorType();
+  result = r7Funct(pixel);
+  goodResult = (TM2 >= TV2 * TM1)
+    and (TM2 >= TV1 * TM3)
+    and (TM3 <= TV1 * TM4)
+    and (TM4 >= max123)
+    and (TM5 <= TV1 * TM4)
+    and (TM5 >= TV1 * TM3)
+    and (TM7 <= TV1 * TM5);
+
+  std::cout << "Rule 7 " << goodResult << " " << result << std::endl;
+  if( result!=goodResult ) return EXIT_FAILURE;
+
 
   
   return EXIT_SUCCESS;
