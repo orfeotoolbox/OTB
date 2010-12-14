@@ -77,8 +77,8 @@ int otbLandsatTMKernelSpectralRules(int argc, char * argv[])
   goodResult = (min123 >= (TV1 * max123))
     and (TM4 >= max123)
     and !((TM1<=TM2 and TM2<=TM3 and TM3<=TM4) and TM3 >= TV1*TM4)
-    and (TM4 >= TV*TM5) and (TM5 >= TV*TM4)
-    and (TM5 >= TV*max123) and (TM5 >= TV*TM7);
+    and (TM4 >= TV1*TM5) and (TM5 >= TV1*TM4)
+    and (TM5 >= TV1*max123) and (TM5 >= TV1*TM7);
 
   std::cout << "Rule 2 " << goodResult << " " << result << std::endl;
   if( result!=goodResult ) return EXIT_FAILURE;
