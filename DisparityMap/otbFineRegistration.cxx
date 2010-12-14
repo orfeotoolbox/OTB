@@ -70,7 +70,7 @@ int FineRegistration::Describe(ApplicationDescriptor* descriptor)
   descriptor->AddOption("SubPixelAccuracy","(optional) Metric extrema location will be refined up to the given accuracy. Default is 0.01",
                         "spa",1,false, ApplicationDescriptor::Real);
   descriptor->AddOption("ValidityMask","(optional) Threshold to obtain a validity mask. Params are lowerThan or greaterThan and a threshold",
-                        "vm",2,false, ApplicationDescriptor::String);
+                        "vm",2,false, ApplicationDescriptor::Real);
   return EXIT_SUCCESS;
 }
 
