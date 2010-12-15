@@ -120,7 +120,7 @@ int main(int argc, char * argv[])
   ImageType::Pointer Izz = duplicator->GetOutput();
 
   writer->SetInput(Izz);
-  outputFileName = outputPrefix + "-Izz.mhd";
+  outputFileName = outputPrefix + "-Izz.hdr";
   writer->SetFileName(outputFileName.c_str());
   writer->Update();
 
@@ -133,7 +133,7 @@ int main(int argc, char * argv[])
   ImageType::Pointer Iyy = duplicator->GetOutput();
 
   writer->SetInput(Iyy);
-  outputFileName = outputPrefix + "-Iyy.mhd";
+  outputFileName = outputPrefix + "-Iyy.hdr";
   writer->SetFileName(outputFileName.c_str());
   writer->Update();
 
@@ -146,7 +146,7 @@ int main(int argc, char * argv[])
   ImageType::Pointer Ixx = duplicator->GetOutput();
 
   writer->SetInput(Ixx);
-  outputFileName = outputPrefix + "-Ixx.mhd";
+  outputFileName = outputPrefix + "-Ixx.hdr";
   writer->SetFileName(outputFileName.c_str());
   writer->Update();
 
@@ -164,7 +164,7 @@ int main(int argc, char * argv[])
   ImageType::Pointer Iyz = duplicator->GetOutput();
 
   writer->SetInput(Iyz);
-  outputFileName = outputPrefix + "-Iyz.mhd";
+  outputFileName = outputPrefix + "-Iyz.hdr";
   writer->SetFileName(outputFileName.c_str());
   writer->Update();
 
@@ -182,7 +182,7 @@ int main(int argc, char * argv[])
   ImageType::Pointer Ixz = duplicator->GetOutput();
 
   writer->SetInput(Ixz);
-  outputFileName = outputPrefix + "-Ixz.mhd";
+  outputFileName = outputPrefix + "-Ixz.hdr";
   writer->SetFileName(outputFileName.c_str());
   writer->Update();
 
@@ -200,7 +200,7 @@ int main(int argc, char * argv[])
   ImageType::Pointer Ixy = duplicator->GetOutput();
 
   writer->SetInput(Ixy);
-  outputFileName = outputPrefix + "-Ixy.mhd";
+  outputFileName = outputPrefix + "-Ixy.hdr";
   writer->SetFileName(outputFileName.c_str());
   writer->Update();
   // Software Guide : EndCodeSnippet

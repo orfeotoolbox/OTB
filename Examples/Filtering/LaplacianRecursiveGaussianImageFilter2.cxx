@@ -21,14 +21,14 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {ROISpot5.png}
-//    OUTPUTS: {LaplacianRecursiveGaussianImageFilter2output3.mha}
+//    OUTPUTS: {LaplacianRecursiveGaussianImageFilter2output3.hdr}
 //    3
 //    OUTPUTS: {LaplacianRecursiveGaussianImageFilter2Output3.png}
 //  Software Guide : EndCommandLineArgs
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {ROISpot5.png}
-//    OUTPUTS: {LaplacianRecursiveGaussianImageFilter2output5.mha}
+//    OUTPUTS: {LaplacianRecursiveGaussianImageFilter2output5.hdr}
 //    5
 //    OUTPUTS: {LaplacianRecursiveGaussianImageFilter2Output5.png}
 //  Software Guide : EndCommandLineArgs
