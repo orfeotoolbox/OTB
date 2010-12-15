@@ -1485,25 +1485,6 @@ ADD_TEST(ioTvPipelineMetadataHandlingTest ${IO_TESTS11}
 #	${TEMP}/temp.img
 #        )
 
-# -------            otb::DXFToSpatialObjectGroupFilter -------------------------------------------
-ADD_TEST(ioTuDXFToSpatialObjectGroupFilterNew ${IO_TESTS11}
-         otbDXFToSpatialObjectGroupFilterNew)
-
-# -------            otb::SpatialObjectDXFReader -------------------------------------------
-ADD_TEST(ioTuSpatialObjectDXFReaderNew ${IO_TESTS11}
-         otbSpatialObjectDXFReaderNew)
-
-ADD_TEST(ioTvSpatialObjectDXFReader ${IO_TESTS11}
---compare-image ${EPSILON_9}
-	 ${BASELINE}/ioTvSpatialObjectDXFReaderOutput.png
-	 ${TEMP}/ioTvSpatialObjectDXFReaderOutput.png
-         otbSpatialObjectDXFReader
-	 ${INPUTDATA}/Lardenne.dxf
-	 ${TEMP}/ioTvSpatialObjectDXFReaderOutput.png
-	 TOIT
-	 50
-)
-
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS12 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2926,9 +2907,6 @@ otbImageMetadataFileWriterTest.cxx
 otbImageMetadataStreamingFileWriterTest.cxx
 otbPipelineMetadataHandlingTest.cxx
 otbPipelineMetadataHandlingWithUFFilterTest.cxx
-otbDXFToSpatialObjectGroupFilterNew.cxx
-otbSpatialObjectDXFReaderNew.cxx
-otbSpatialObjectDXFReader.cxx
 )
 SET(BasicIO_SRCS12
 otbIOTests12.cxx

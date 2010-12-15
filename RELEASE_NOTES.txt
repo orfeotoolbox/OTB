@@ -46,6 +46,7 @@ OTB-v.3.8.0 - Changes since version 3.6.0 (2010/12/16)
   * Internal ITK: removed compilation of medical image formats library and associated ImageIO
   * Internal ITK: removed dependency on libtiff, libjpeg, libpng and zlib, now handled by gdal
   * Support for gcc-4.5
+  * Remove dxflib from Utilities for licensing issues
 
 * Bug fix:
   * Monteverdi

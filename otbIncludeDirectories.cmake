@@ -53,7 +53,6 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim
   ${OTB_SOURCE_DIR}/Utilities/otbossimplugins
   ${OTB_SOURCE_DIR}/Utilities/otbossimplugins/ossim
-  ${OTB_SOURCE_DIR}/Utilities/dxflib
   ${OTB_SOURCE_DIR}/Utilities/InsightJournal
   ${OTB_SOURCE_DIR}/Utilities/otb6S
   ${OTB_SOURCE_DIR}/Utilities/tinyXMLlib
@@ -323,7 +322,6 @@ SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
   Utilities/otbliblas/include
   Utilities/otbedison
   Utilities/otbsiftfast
-  Utilities/dxflib
   Utilities/otbconfigfile
   Utilities/otbknn
   Utilities/otbmuparser

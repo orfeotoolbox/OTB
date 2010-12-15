@@ -18,21 +18,18 @@
 
 //  Software Guide : BeginLatex
 //
-//  Although specific vector data IO approaches, as the one
-//  presented in section \ref{sec:ReadDXF}, can be useful, it is even more
-//  interesting to have available approaches which are independent of
-//  the input format. Unfortunately, many vector data formats do not
+//  Unfortunately, many vector data formats do not
 //  share the models for the data they represent. However, in some
 //  cases, when simple data is stored, it can be decomposed in simple
 //  objects as for instance polylines, polygons and points. This is
-//  the case for the Shapefile and the KML (Keyhole Markup Language),
+//  the case for the Shapefile and the KML (Keyhole Markup Language) formats,
 //  for instance.
 //
 //  Even though specific reader/writer for Shapefile and the Google KML
 //  are available in OTB, we designed a generic approach for the IO of
 //  this kind of data.
 
-//  The reader/writer for VectorData in OTB is able to access to a variety of
+//  The reader/writer for VectorData in OTB is able to access a variety of
 //  vector file formats (all OGR supported formats)
 //
 //  In section \ref{sec:VectorDataProjection}, you will find more information on

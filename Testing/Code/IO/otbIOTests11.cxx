@@ -30,7 +30,4 @@ void RegisterTests()
   REGISTER_TEST(otbImageMetadataStreamingFileWriterTest);
   REGISTER_TEST(otbPipelineMetadataHandlingTest);
   REGISTER_TEST(otbPipelineMetadataHandlingWithUFFilterTest);
-  REGISTER_TEST(otbDXFToSpatialObjectGroupFilterNew);
-  REGISTER_TEST(otbSpatialObjectDXFReaderNew);
-  REGISTER_TEST(otbSpatialObjectDXFReader);
 }

@@ -50,9 +50,6 @@ TARGET_LINK_LIBRARIES(ImageSeriesIOExample OTBCommon OTBIO)
 ADD_EXECUTABLE(MetadataExample MetadataExample.cxx )
 TARGET_LINK_LIBRARIES(MetadataExample OTBCommon OTBIO)
 
-ADD_EXECUTABLE(DXFReaderExample DXFReaderExample.cxx )
-TARGET_LINK_LIBRARIES(DXFReaderExample OTBCommon OTBIO)
-
 ADD_EXECUTABLE(VectorDataIOExample VectorDataIOExample.cxx )
 TARGET_LINK_LIBRARIES(VectorDataIOExample OTBCommon OTBIO)
 
