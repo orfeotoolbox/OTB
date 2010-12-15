@@ -48,6 +48,7 @@ int otbLandsatTMThickCloudTest(int argc, char * argv[])
   R1FunctorType r1Funct = R1FunctorType();
   r1Funct.SetDegree(otb::Functor::LandsatTM::HundredsKelvin);
   r1Funct.SetReflectance(otb::Functor::LandsatTM::Thousands);
+  r1Funct.SetSAT(otb::Functor::LandsatTM::L5);
 
   typedef itk::UnaryFunctorImageFilter< InputImageType, OutputImageType, R1FunctorType > FilterType;
 
