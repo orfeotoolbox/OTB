@@ -243,7 +243,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/IO/ExtractROI.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/ImageSeriesIOExample.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/MetadataExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/IO/DXFReaderExample.cxx
+  #${OTB_SOURCE_DIR}/Examples/IO/DXFReaderExample.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/VectorDataIOExample.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/DEMToImageGenerator.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/LidarReaderExample.cxx
