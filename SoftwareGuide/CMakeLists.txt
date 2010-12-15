@@ -67,9 +67,7 @@ ENDIF( NOT OTB_SOURCE_DIR )
 OPTION(GENERATE_WRAPPING_DOC "Generate wrappings documentation as well" OFF)
 
 IF(GENERATE_WRAPPING_DOC)
-  #FIND_PACKAGE(OTB-Wrapping)
-  #IF(OTB-Wrapping_FOUND)
-  FIND_PATH(OTB-Wrapping_SOURCE_DIR FindOTB-Wrapping.cmake.in)
+  FIND_PATH(OTB-Wrapping_SOURCE_DIR README-OTB-Wrapping PATHS ${OTB_SOURCE_DIR}/../OTB-Wrapping)
   IF( NOT OTB-Wrapping_SOURCE_DIR )
     MESSAGE(FATAL_ERROR "OTB-Wrapping source directory is not set")
   ENDIF( NOT OTB-Wrapping_SOURCE_DIR )
@@ -80,6 +78,9 @@ IF(GENERATE_WRAPPING_DOC)
 ENDIF(GENERATE_WRAPPING_DOC)
 
 OPTION(GENERATE_MONTEVERDI_DOC "Generate Monteverdi user guide as well" OFF)
+
+# Configure the default OTB_DATA_ROOT for the location of OTB Data.
+FIND_PATH(OTB_DATA_ROOT README-OTB-Data PATHS $ENV{OTB_DATA_ROOT} ${OTB_SOURCE_DIR}/../OTB-Data)
 
 # OTB_DATA_PATHS is searched recursively.. you need not enter sub-directories
 SET(OTB_DATA_PATHS "${OTB_DATA_ROOT}/Examples::${OTB_DATA_ROOT}/Input" CACHE STRING "Where the OTB data is. Enter a double colon seperated list.")

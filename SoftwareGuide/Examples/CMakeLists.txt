@@ -402,7 +402,7 @@ SET(OTB_EXAMPLES_SRCS ${OTB_EXAMPLES_SRCS}
   ${OTB_SOURCE_DIR}/Examples/Patented/SIFTDisparityMapEstimation.cxx
   ${OTB_SOURCE_DIR}/Examples/Patented/SIFTFastExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Patented/EstimateAffineTransformationExample.cxx
-  #${OTB_SOURCE_DIR}/Examples/Patented/SIFTDensityExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/Patented/SIFTDensityExample.cxx
    )
 ENDIF(OTB_USE_PATENTED)
 
