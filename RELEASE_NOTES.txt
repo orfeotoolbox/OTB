@@ -1,4 +1,4 @@
-OTB-v.3.8.0 - Changes since version 3.6.0 (????/??/??)
+OTB-v.3.8.0 - Changes since version 3.6.0 (2010/12/16)
 -----------------------------------------
 
 * Monteverdi
@@ -38,6 +38,7 @@ OTB-v.3.8.0 - Changes since version 3.6.0 (????/??/??)
   * GDALImageIO: support writing of non-streamable format (JPEG, PNG)
   * Support reading vector images of std::complex
   * BandMathFilter: add physical and image coordinates variables
+  * Add a class to generate a kmz file from an image
 
 * System
   * Internal liblas updated to 1.6.0b2 + OTB patches (root CMakeList.txt)
