@@ -199,7 +199,21 @@ int otbLandsatTMKernelSpectralRules(int argc, char * argv[])
   goodResult = (TM5 >= TV1 * max12347)
     and (min12347 >= TV2 * TM5);
 
-  std::cout << "Rule 9 " << goodResult << " " << result << std::endl;
+  std::cout << "Rule 10 " << goodResult << " " << result << std::endl;
+  if( result!=goodResult ) return EXIT_FAILURE;
+
+
+  typedef otb::Functor::LandsatTM::ShadowWithBarrenLandSpectralRule<InputPixelType> R11FunctorType;
+  R11FunctorType r11Funct = R11FunctorType();
+  result = r11Funct(pixel);
+  goodResult = (TM1 >= TM2 )
+    and (TM2 >= TM3)
+    and (TM3 >= TV1 * TM4)
+    and (TM1 >= TM5)
+    and (TM5 >= TV1 * TM4)
+    and (TM5 >= TV2 * TM7);
+
+  std::cout << "Rule 11 " << goodResult << " " << result << std::endl;
   if( result!=goodResult ) return EXIT_FAILURE;
 
 
