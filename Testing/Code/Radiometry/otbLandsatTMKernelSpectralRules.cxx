@@ -92,8 +92,12 @@ int otbLandsatTMKernelSpectralRules(int argc, char * argv[])
     and (TM5 >= TV1 * max123)
     and (TM7 <= TV1 * TM4);
 
-  std::cout << "Rule 1 " << goodResult << " " << result << std::endl;
-  if( result!=goodResult ) return EXIT_FAILURE;
+  
+  if( result!=goodResult )
+    {
+    std::cerr << "Rule 1 " << goodResult << " " << result << std::endl;
+    return EXIT_FAILURE;
+    }
 
   typedef otb::Functor::LandsatTM::ThinCloudsSpectralRule<InputPixelType> R2FunctorType;
   R2FunctorType r2Funct = R2FunctorType();
@@ -104,8 +108,12 @@ int otbLandsatTMKernelSpectralRules(int argc, char * argv[])
     and (TM4 >= TV1*TM5) and (TM5 >= TV1*TM4)
     and (TM5 >= TV1*max123) and (TM5 >= TV1*TM7);
 
-  std::cout << "Rule 2 " << goodResult << " " << result << std::endl;
-  if( result!=goodResult ) return EXIT_FAILURE;
+
+  if( result!=goodResult )
+    {
+      std::cerr << "Rule 2 " << goodResult << " " << result << std::endl;
+      return EXIT_FAILURE;
+    }
 
   typedef otb::Functor::LandsatTM::SnowOrIceSpectralRule<InputPixelType> R3FunctorType;
   R3FunctorType r3Funct = R3FunctorType();
@@ -117,8 +125,12 @@ int otbLandsatTMKernelSpectralRules(int argc, char * argv[])
     and (TM7 <= TV2 * TM4)
     and (TM7 <= TV1*min123);
 
-  std::cout << "Rule 3 " << goodResult << " " << result << std::endl;
-  if( result!=goodResult ) return EXIT_FAILURE;
+
+  if( result!=goodResult )
+    {
+      std::cerr << "Rule 3 " << goodResult << " " << result << std::endl;
+      return EXIT_FAILURE;
+    }
 
 
   typedef otb::Functor::LandsatTM::WaterOrShadowSpectralRule<InputPixelType> R4FunctorType;
@@ -126,8 +138,12 @@ int otbLandsatTMKernelSpectralRules(int argc, char * argv[])
   result = r4Funct(pixel);
   goodResult = (TM1 >= TM2) and (TM2 >= TM3) and (TM3 >= TM4) and (TM4 >= TM5) and (TM4 >= TM7);
 
-  std::cout << "Rule 4 " << goodResult << " " << result << std::endl;
-  if( result!=goodResult ) return EXIT_FAILURE;
+
+  if( result!=goodResult ) 
+    {
+    std::cerr << "Rule 4 " << goodResult << " " << result << std::endl;
+    return EXIT_FAILURE;
+    }
 
 
   typedef otb::Functor::LandsatTM::PitbogOrGreenhouseSpectralRule<InputPixelType> R5FunctorType;
@@ -140,8 +156,12 @@ int otbLandsatTMKernelSpectralRules(int argc, char * argv[])
     and (TM3 >= TV2 * TM5)
     and (min123 >= TV1 * TM7);
 
-  std::cout << "Rule 5 " << goodResult << " " << result << std::endl;
-  if( result!=goodResult ) return EXIT_FAILURE;
+
+  if( result!=goodResult )
+    {
+      std::cerr << "Rule 5 " << goodResult << " " << result << std::endl;
+      return EXIT_FAILURE;
+    }
 
   typedef otb::Functor::LandsatTM::DominantBlueSpectralRule<InputPixelType> R6FunctorType;
   R6FunctorType r6Funct = R6FunctorType();
@@ -152,8 +172,12 @@ int otbLandsatTMKernelSpectralRules(int argc, char * argv[])
     and (TM1 >= TV1 * TM5)
     and (TM1 >= TV1 * TM7);
 
-  std::cout << "Rule 6 " << goodResult << " " << result << std::endl;
-  if( result!=goodResult ) return EXIT_FAILURE;
+
+  if( result!=goodResult ) 
+    {
+    std::cerr << "Rule 6 " << goodResult << " " << result << std::endl;
+    return EXIT_FAILURE;
+    }
 
   typedef otb::Functor::LandsatTM::VegetationSpectralRule<InputPixelType> R7FunctorType;
   R7FunctorType r7Funct = R7FunctorType();
@@ -166,8 +190,12 @@ int otbLandsatTMKernelSpectralRules(int argc, char * argv[])
     and (TM5 >= TV1 * TM3)
     and (TM7 < TV1 * TM5);
 
-  std::cout << "Rule 7 " << goodResult << " " << result << std::endl;
-  if( result!=goodResult ) return EXIT_FAILURE;
+
+  if( result!=goodResult )
+    {
+      std::cerr << "Rule 7 " << goodResult << " " << result << std::endl;
+      return EXIT_FAILURE;
+    }
 
   typedef otb::Functor::LandsatTM::RangelandSpectralRule<InputPixelType> R8FunctorType;
   R8FunctorType r8Funct = R8FunctorType();
@@ -182,8 +210,12 @@ int otbLandsatTMKernelSpectralRules(int argc, char * argv[])
     and (TM7 < TV1 * max45)
     and (TM5 >= TM7);
 
-  std::cout << "Rule 8 " << goodResult << " " << result << std::endl;
-  if( result!=goodResult ) return EXIT_FAILURE;
+
+  if( result!=goodResult ) 
+    {
+    std::cerr << "Rule 8 " << goodResult << " " << result << std::endl;
+    return EXIT_FAILURE;
+    }
 
   typedef otb::Functor::LandsatTM::BarrenLandOrBuiltUpOrCloudsSpectralRule<InputPixelType> R9FunctorType;
   R9FunctorType r9Funct = R9FunctorType();
@@ -196,8 +228,12 @@ int otbLandsatTMKernelSpectralRules(int argc, char * argv[])
     and (TM5 >= TV1 * TM7)
     and (TM7 >= TV2 * max45);
 
-  std::cout << "Rule 9 " << goodResult << " " << result << std::endl;
-  if( result!=goodResult ) return EXIT_FAILURE;
+
+  if( result!=goodResult )
+    {
+      std::cerr << "Rule 9 " << goodResult << " " << result << std::endl;
+      return EXIT_FAILURE;
+    }
 
 
   typedef otb::Functor::LandsatTM::FlatResponseBarrenLandOrBuiltUpSpectralRule<InputPixelType> R10FunctorType;
@@ -206,8 +242,12 @@ int otbLandsatTMKernelSpectralRules(int argc, char * argv[])
   goodResult = (TM5 >= TV1 * max12347)
     and (min12347 >= TV2 * TM5);
 
-  std::cout << "Rule 10 " << goodResult << " " << result << std::endl;
-  if( result!=goodResult ) return EXIT_FAILURE;
+
+  if( result!=goodResult ) 
+    {
+    std::cerr << "Rule 10 " << goodResult << " " << result << std::endl;
+    return EXIT_FAILURE;
+    }
 
 
   typedef otb::Functor::LandsatTM::ShadowWithBarrenLandSpectralRule<InputPixelType> R11FunctorType;
@@ -220,8 +260,12 @@ int otbLandsatTMKernelSpectralRules(int argc, char * argv[])
     and (TM5 >= TV1 * TM4)
     and (TM5 >= TV2 * TM7);
 
-  std::cout << "Rule 11 " << goodResult << " " << result << std::endl;
-  if( result!=goodResult ) return EXIT_FAILURE;
+
+  if( result!=goodResult )
+    {
+      std::cerr << "Rule 11 " << goodResult << " " << result << std::endl;
+      return EXIT_FAILURE;
+    }
 
   typedef otb::Functor::LandsatTM::ShadowWithVegetationSpectralRule<InputPixelType> R12FunctorType;
   R12FunctorType r12Funct = R12FunctorType();
@@ -234,8 +278,12 @@ int otbLandsatTMKernelSpectralRules(int argc, char * argv[])
     and (TM3 >= TV1 * TM5)
     and (TM7 < TV1 * TM4);
 
-  std::cout << "Rule 12 " << goodResult << " " << result << std::endl;
-  if( result!=goodResult ) return EXIT_FAILURE;
+
+  if( result!=goodResult ) 
+    {
+    std::cerr << "Rule 12 " << goodResult << " " << result << std::endl;
+    return EXIT_FAILURE;
+    }
 
   typedef otb::Functor::LandsatTM::ShadowCloudOrSnowSpectralRule<InputPixelType> R13FunctorType;
   R13FunctorType r13Funct = R13FunctorType();
@@ -245,8 +293,12 @@ int otbLandsatTMKernelSpectralRules(int argc, char * argv[])
     and (TM5 < TM1)
     and (TM7 < TV1 * TM1);
 
-  std::cout << "Rule 13 " << goodResult << " " << result << std::endl;
-  if( result!=goodResult ) return EXIT_FAILURE;
+
+  if( result!=goodResult )
+    {
+      std::cerr << "Rule 13 " << goodResult << " " << result << std::endl;
+      return EXIT_FAILURE;
+    }
 
   typedef otb::Functor::LandsatTM::WetlandSpectralRule<InputPixelType> R14FunctorType;
   R14FunctorType r14Funct = R14FunctorType();
@@ -260,8 +312,12 @@ int otbLandsatTMKernelSpectralRules(int argc, char * argv[])
     and (TM3 >= TV2 * TM5)
     and (TM5 >= TM7);
 
-  std::cout << "Rule 14 " << goodResult << " " << result << std::endl;
-  if( result!=goodResult ) return EXIT_FAILURE;
+
+  if( result!=goodResult ) 
+    {
+    std::cerr << "Rule 14 " << goodResult << " " << result << std::endl;
+    return EXIT_FAILURE;
+    }
 
 
 
