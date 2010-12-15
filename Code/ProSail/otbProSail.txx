@@ -22,6 +22,7 @@
 
 #include "otbProSail.h"
 #include <boost/math/special_functions/expint.hpp>
+#include <boost/shared_ptr.hpp>
 #include "otbMath.h"
 
 //TODO check EPSILON matlab
@@ -301,10 +302,9 @@ ProSail<TSpectralResponse>
       tmp2.first=lambda;
       tmp2.second=static_cast<ValuePrecisionType>(resv);
       
-      m_Resh->GetResponse().push_back(&tmp1);
-      m_Resv->GetResponse().push_back(&tmp2);
-      
-      std::cout<<"first : "<<m_Resh->GetResponse()[i]->first<<" , second : "<<m_Resh->GetResponse()[i]->second<<std::endl;
+      m_Resh->GetResponse().push_back(tmp1);
+      m_Resv->GetResponse().push_back(tmp2);
+
    }
 
 }

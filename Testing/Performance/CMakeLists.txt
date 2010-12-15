@@ -22,7 +22,7 @@ ADD_TEST(rsrSVMClassifier ${PERFO_TESTS}
         ${SRCLASS4} 
         ${SAT_RSR}/rep6S.dat
         4 #nbBands
-        0.2 #percentage of validation files
+        0.1 #percentage of validation files
         )
         
 ADD_TEST(atmosphericCorrectionsRSRSVMClassifier ${PERFO_TESTS}

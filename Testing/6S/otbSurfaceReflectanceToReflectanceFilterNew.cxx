@@ -88,7 +88,7 @@ int main(int argc, char * argv[])
   
   for ( unsigned int i = 0; i<(myResponse)->Size(); i++ )
   {
-    pixel[i] = myResponse->GetResponse()[i]->second;
+    pixel[i] = myResponse->GetResponse()[i].second;
   }
   image->SetPixel(start,pixel);
 

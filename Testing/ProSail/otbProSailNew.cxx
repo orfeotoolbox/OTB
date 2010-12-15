@@ -77,7 +77,7 @@ int otbProSailNew(int argc, char * argv[])
    std::cout<<"size  : "<<prosail->GetResh()->GetResponse().size()<<std::endl;
    for(unsigned int i=0;i<prosail->GetResh()->GetResponse().size();i++)
    {
-      std::cout<<"lambda : "<<prosail->GetResv()->GetResponse()[i]->first<<" Resh : "<<prosail->GetResh()->GetResponse()[i]->second<<" Resv : "<<prosail->GetResv()->GetResponse()[i]->second<<std::endl;
+      std::cout<<"lambda : "<<prosail->GetResv()->GetResponse()[i].first<<" Resh : "<<prosail->GetResh()->GetResponse()[i].second<<" Resv : "<<prosail->GetResv()->GetResponse()[i].second<<std::endl;
    }
 
    
