@@ -19,7 +19,7 @@
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {qb_RoadExtract.tif}
 //    OUTPUTS: {OBIARadiometricAttribute1.tif}, {qb_ExtractRoad_Radiometry_pretty.jpg}
-//    STATS::Ndvi::Mean 0 0.5 16 16 50 1.0
+//    STATS::Band1::Mean 0 0.5 16 16 50 1.0
 //  Software Guide : EndCommandLineArgs
 
 //  Software Guide : BeginLatex
@@ -27,23 +27,14 @@
 //  This example shows the basic approach to perform object based analysis on a image.
 //  The input image is firstly segmented using the \doxygen{otb}{MeanShiftImageFilter}
 //  Then each segmented region is converted to a Map of labeled objects.
-//  Afterwards the \doxygen{otb}{RadiometricAttributesLabelMapFilter} computes
-//  radiometric attributes for each object.
-//
-//  This filter internally applies the
-//  \doxygen{otb}{StatisticsAttributesLabelMapFilter} to the following features:
-//  \begin{itemize}
-//  \item GEMI
-//  \item NDVI
-//  \item IR
-//  \item IC
-//  \item IB
-//  \item NDWI2
-//  \item Intensity
-//  \item and original B, G, R and NIR channels
-//  \end{itemize}
-//  Here we use the \doxygen{otb}{AttributesMapOpeningLabelMapFilter} to extract vegetated areas.
-//  Let's get to the source code explanation.
+//  Afterwards the \doxygen{otb}{otbMultiChannelRAndNIRIndexImageFilter} computes
+//  radiometric attributes for each object. In this example the NDVI is computed.
+//  The computed feature is passed to the \doxygen{otb}{BandsStatisticsAttributesLabelMapFilter}
+//  which computes statistics over the resulting band.
+//  Therefore, region's statistics over each band can be access by concatening
+//  STATS, the band number and the statistical attribute separated by colons. In this example
+//  the mean of the first band (which contains the NDVI) is access over all the regions
+//  with the attribute: 'STATS::Band1::Mean'.
 //
 //  Software Guide : EndLatex
 
@@ -59,9 +50,9 @@
 #include "otbShapeAttributesLabelMapFilter.h"
 #include "otbStatisticsAttributesLabelMapFilter.h"
 #include "otbBandsStatisticsAttributesLabelMapFilter.h"
-#include "otbAttributesMapOpeningLabelMapFilter.h"
 #include "itkLabelMapToBinaryImageFilter.h"
 #include "otbMultiChannelExtractROI.h"
+#include "otbAttributesMapOpeningLabelMapFilter.h"
 #include "otbVectorRescaleIntensityImageFilter.h"
 #include "otbVegetationIndicesFunctor.h"
 #include "otbMultiChannelRAndNIRIndexImageFilter.h"

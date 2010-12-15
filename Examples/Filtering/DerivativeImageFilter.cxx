@@ -21,7 +21,7 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS:  {ROISpot5.png}
-//    OUTPUTS: {DerivativeImageFilterFloatOutput.mhd}
+//    OUTPUTS: {DerivativeImageFilterFloatOutput.hdr}
 //    OUTPUTS: {DerivativeImageFilterOutput.png}
 //    1 0
 //  Software Guide : EndCommandLineArgs
