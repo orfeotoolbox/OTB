@@ -21,22 +21,16 @@
 #include <vector>
 #include <algorithm>
 
-int otbLandsatTMKernelSpectralRules(int argc, char * argv[])
-{
+#include "otbImage.h"
+#include "otbVectorImage.h"
+#include "otbImageFileReader.h"
+#include "itkImageRegionConstIterator.h"
+#include <sstream>
 
+int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, double TM61, double TM62, double TM7)
+{
   typedef double PrecisionType;
   typedef itk::FixedArray< PrecisionType, 8 >     InputPixelType;
-
-
-
-  double TM1 = (::atof(argv[1]));
-  double TM2 = (::atof(argv[2]));
-  double TM3 = (::atof(argv[3]));
-  double TM4 = (::atof(argv[4]));
-  double TM5 = (::atof(argv[5]));
-  double TM61 = (::atof(argv[6]));
-  double TM62 = (::atof(argv[7]));
-  double TM7 = (::atof(argv[8]));
 
   InputPixelType pixel;
   pixel[0] = TM1;
@@ -206,7 +200,7 @@ int otbLandsatTMKernelSpectralRules(int argc, char * argv[])
     and (TM3 < TV1 * TM4)
     and (TM4 >= TV1 * TM5)
     and (TM5 >= TV1 * TM4)
-    and (TM5 >= max123)
+    and (TM5 > max123)
     and (TM7 < TV1 * max45)
     and (TM5 >= TM7);
 
@@ -223,7 +217,7 @@ int otbLandsatTMKernelSpectralRules(int argc, char * argv[])
   goodResult = (TM3 >= TV2 * TM1)
     and (TM3 >= TV1 * TM2)
     and (TM4 >= TV1 * max123)
-    and (TM5 > max123)
+    and (TM5 >= max123)
     and (TM5 >= TV1 * TM4)
     and (TM5 >= TV1 * TM7)
     and (TM7 >= TV2 * max45);
@@ -232,6 +226,8 @@ int otbLandsatTMKernelSpectralRules(int argc, char * argv[])
   if( result!=goodResult )
     {
       std::cerr << "Rule 9 " << goodResult << " " << result << std::endl;
+      std::cerr << TM1 << " " << TM2 << " " << TM3 << " " << TM4 << " " << TM5 << " " << TM7 << std::endl;
+      std::cerr << max123 << " " << min123 << " " << max45 << " " << max234 << " " << min12347 << " " << max12347 << std::endl;
       return EXIT_FAILURE;
     }
 
@@ -323,4 +319,79 @@ int otbLandsatTMKernelSpectralRules(int argc, char * argv[])
 
   
   return EXIT_SUCCESS;
+
 }
+
+int otbLandsatTMKernelSpectralRules(int argc, char * argv[])
+{
+  double TM1 = (::atof(argv[1]));
+  double TM2 = (::atof(argv[2]));
+  double TM3 = (::atof(argv[3]));
+  double TM4 = (::atof(argv[4]));
+  double TM5 = (::atof(argv[5]));
+  double TM61 = (::atof(argv[6]));
+  double TM62 = (::atof(argv[7]));
+  double TM7 = (::atof(argv[8]));
+
+  return computeRules(TM1, TM2, TM3, TM4, TM5, TM61, TM62, TM7);
+
+}
+
+
+int otbLandsatTMKernelSpectralRulesWithImage(int argc, char * argv[])
+{
+
+  typedef double InputPixelType;
+
+  typedef otb::VectorImage< InputPixelType, 2 > InputImageType;
+  
+  typedef otb::ImageFileReader< InputImageType > ReaderType;
+  
+  ReaderType::Pointer reader = ReaderType::New();
+  reader->SetFileName( argv[1] );
+  reader->Update();
+
+  typedef itk::ImageRegionConstIterator< InputImageType > IteratorType;
+
+  IteratorType it(reader->GetOutput(), reader->GetOutput()->GetLargestPossibleRegion());
+
+  it.GoToBegin();
+
+
+  if( it.Get().Size() != 7 and it.Get().Size() != 8)
+    {
+    std::cerr << " Image must have either 7 or 8 bands " << std::endl;
+    return EXIT_FAILURE;
+    }
+  
+  while(! it.IsAtEnd() )
+    {
+
+    InputImageType::PixelType pix = it.Get();
+
+    int returnCode = EXIT_FAILURE;
+
+    if( pix.Size() == 7 )
+      {
+      returnCode = computeRules(pix[0], pix[1], pix[2], pix[3], pix[4], pix[5], pix[5], pix[6]);
+      }
+    if( pix.Size() == 8 )
+      {
+      returnCode = computeRules(pix[0], pix[1], pix[2], pix[3], pix[4], pix[5], pix[6], pix[7]);
+      }
+
+    if( returnCode == EXIT_FAILURE )
+      {
+      return EXIT_FAILURE;
+      }
+    
+    ++it;
+    }
+  
+
+  
+  return EXIT_SUCCESS;
+}
+
+
+
