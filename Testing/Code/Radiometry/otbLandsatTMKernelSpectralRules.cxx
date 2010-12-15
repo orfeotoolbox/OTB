@@ -66,6 +66,13 @@ int otbLandsatTMKernelSpectralRules(int argc, char * argv[])
   PrecisionType max12347 = *(max_element ( v12347.begin(), v12347.end() ));
   PrecisionType min12347 = *(min_element ( v12347.begin(), v12347.end() ));
 
+  std::vector< PrecisionType > v234;
+  v234.push_back(TM2);
+  v234.push_back(TM3);
+  v234.push_back(TM4);
+
+  PrecisionType max234 = *(max_element ( v234.begin(), v234.end() ));
+
 
   std::vector< PrecisionType > v45;
   v45.push_back(TM4);
@@ -227,7 +234,18 @@ int otbLandsatTMKernelSpectralRules(int argc, char * argv[])
     and (TM3 >= TV1 * TM5)
     and (TM7 < TV1 * TM4);
 
-  std::cout << "Rule 11 " << goodResult << " " << result << std::endl;
+  std::cout << "Rule 12 " << goodResult << " " << result << std::endl;
+  if( result!=goodResult ) return EXIT_FAILURE;
+
+  typedef otb::Functor::LandsatTM::ShadowCloudOrSnowSpectralRule<InputPixelType> R13FunctorType;
+  R13FunctorType r13Funct = R13FunctorType();
+  result = r13Funct(pixel);
+  goodResult = (TM1 >= TV1 * max234)
+    and (max234 >= TV1 * TM1)
+    and (TM5 < TM1)
+    and (TM7 < TV1 * TM1);
+
+  std::cout << "Rule 13 " << goodResult << " " << result << std::endl;
   if( result!=goodResult ) return EXIT_FAILURE;
 
 

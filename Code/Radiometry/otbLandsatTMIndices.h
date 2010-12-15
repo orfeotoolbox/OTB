@@ -1020,6 +1020,7 @@ protected:
   PrecisionType m_Min123;
   PrecisionType m_Max12347;
   PrecisionType m_Min12347;
+  PrecisionType m_Max234;
   PrecisionType m_Max45;
 
   void SetMinMax(const TInput& inputPixel)
@@ -1042,6 +1043,12 @@ protected:
   this->m_Max12347 = *(max_element ( v12347.begin(), v12347.end() ));
   this->m_Min12347 = *(min_element ( v12347.begin(), v12347.end() ));
 
+  std::vector< PrecisionType > v234;
+  v234.push_back(inputPixel[this->m_TM2]);
+  v234.push_back(inputPixel[this->m_TM3]);
+  v234.push_back(inputPixel[this->m_TM4]);
+
+  this->m_Max234 = *(max_element ( v234.begin(), v234.end() ));
   
   std::vector< PrecisionType > v45;
   v45.push_back(inputPixel[this->m_TM4]);
@@ -1628,6 +1635,51 @@ public:
   }
 };
 
+
+
+/** \class ShadowCloudOrSnowSpectralRule
+ *
+ * Implementation of the ShadowCloudOrSnowSpectralRule for Landsat TM image
+ *  land cover classification as described in table IV of Baraldi et
+ *  al. 2006, "Automatic Spectral Rule-Based Preliminary Mapping of
+ *  Calibrated Landsat TM and ETM+ Images", IEEE Trans. on Geoscience
+ *  and Remote Sensing, vol 44, no 9.
+ *
+ *
+ * \ingroup Functor
+ * \ingroup Radiometry
+ * \ingroup LandsatTMIndices
+ */
+template <class TInput>
+class ShadowCloudOrSnowSpectralRule : public KernelSpectralRule<TInput>
+{
+public:
+
+  typedef typename TInput::ValueType PrecisionType;
+  typedef bool OutputPixelType;
+  
+    /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "LandsatTM ShadowCloudOrSnowSpectralRule";
+  }
+  
+  ShadowCloudOrSnowSpectralRule() { }
+  virtual ~ShadowCloudOrSnowSpectralRule() {}
+
+  inline bool operator ()(const TInput& inputPixel)
+  {
+    TInput newPixel(this->PrepareValues( inputPixel ));
+    this->SetMinMax(newPixel);
+
+    bool result = (newPixel[this->m_TM1] >= this->m_TV1 * this->m_Max234)
+      and (this->m_Max234 >= this->m_TV1 * newPixel[this->m_TM1])
+      and (newPixel[this->m_TM5] < newPixel[this->m_TM1])
+      and (newPixel[this->m_TM7] < this->m_TV1 * newPixel[this->m_TM1]);
+
+    return result;
+  }
+};
 
 } // namespace LandsatTM
 } // namespace Functor
