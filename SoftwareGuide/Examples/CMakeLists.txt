@@ -363,7 +363,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Visualization/VisuExample1.cxx
   ${OTB_SOURCE_DIR}/Examples/OBIA/ImageToLabelToImage.cxx
   ${OTB_SOURCE_DIR}/Examples/OBIA/ShapeAttributeComputation.cxx
-  ${OTB_SOURCE_DIR}/Examples/OBIA/KeepNObjects.cxx
+#   ${OTB_SOURCE_DIR}/Examples/OBIA/KeepNObjects.cxx
   ${OTB_SOURCE_DIR}/Examples/OBIA/RadiometricAttributesLabelMapFilterExample.cxx
   ${OTB_SOURCE_DIR}/Examples/GeospatialAnalysis/PostGISCreateTable.cxx
   ${OTB_SOURCE_DIR}/Examples/Iterators/ImageLinearIteratorWithIndex.cxx

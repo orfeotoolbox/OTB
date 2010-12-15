@@ -109,6 +109,8 @@ SET( Tex_SRCS
   Watersheds.tex
   Fusion.tex
   Radiometry.tex
+  FeatureExtraction.tex
+  ObjectBasedImageAnalysis.tex
   ReleaseNotes.tex
 )
 
