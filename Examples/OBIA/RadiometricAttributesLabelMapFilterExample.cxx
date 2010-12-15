@@ -187,7 +187,7 @@ int main(int argc, char * argv[])
   //  Software Guide : BeginLatex
   //
   // Instantiate the  \doxygen{otb}{BandsStatisticsAttributesLabelMapFilter} to
-  // compute radiometric value on each label object.
+  // compute statistics of the feature image on each label object.
   //
   //  Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet
@@ -197,6 +197,7 @@ int main(int argc, char * argv[])
   // Software Guide : BeginLatex
   //
   //  Feature image could be one of the following image:
+  //  \begin{itemize}
   //  \item GEMI
   //  \item NDVI
   //  \item IR
@@ -204,9 +205,10 @@ int main(int argc, char * argv[])
   //  \item IB
   //  \item NDWI2
   //  \item Intensity
+  //  \end{itemize}
   //
   //  Input image must be convert to the desired coefficient.
-  //  In our case, radiometric label map will be process on a NDVI coefficient.
+  //  In our case, statistics are computed on the NDVI coefficient on each label object.
   //
   //  Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet
