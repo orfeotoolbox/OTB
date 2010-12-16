@@ -82,10 +82,10 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
   R1FunctorType r1Funct = R1FunctorType();
   OutputPixelType result = r1Funct(pixel);
   OutputPixelType goodResult = static_cast<OutputPixelType>((min123 >= (TV1 * max123))
-    and (max123 <= TV1 * TM4)
-    and (TM5 <= TV1 * TM4)
-    and (TM5 >= TV1 * max123)
-                                                            and (TM7 <= TV1 * TM4));
+                                                            and (max123 >= TV1 * TM4)
+                                                            and (TM5 >= TV1 * TM4)
+                                                            and (TM5 >= TV1 * max123)
+                                                            and (TM7 >= TV1 * TM4));
 
   
   if( result!=goodResult )

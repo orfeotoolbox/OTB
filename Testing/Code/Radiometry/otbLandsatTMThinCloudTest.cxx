@@ -30,7 +30,7 @@ int otbLandsatTMThinCloudTest(int argc, char * argv[])
 {
 
   typedef double InputPixelType;
-  typedef unsigned char OutputPixelType;
+  typedef double OutputPixelType;
 
   typedef otb::VectorImage< InputPixelType, 2 > InputImageType;
   typedef otb::Image< OutputPixelType, 2 > OutputImageType;
@@ -45,13 +45,13 @@ int otbLandsatTMThinCloudTest(int argc, char * argv[])
   writer->SetFileName( argv[2] );
 
   typedef otb::Functor::LandsatTM::ThinCloudsSpectralRule<InputImageType::PixelType, OutputPixelType> R1FunctorType;
-  R1FunctorType r1Funct = R1FunctorType();
-  r1Funct.SetDegree(otb::Functor::LandsatTM::HundredsKelvin);
-  r1Funct.SetReflectance(otb::Functor::LandsatTM::Thousands);
 
-  typedef itk::UnaryFunctorImageFilter< InputImageType, OutputImageType, R1FunctorType > FilterType;
+    typedef itk::UnaryFunctorImageFilter< InputImageType, OutputImageType, R1FunctorType > FilterType;
 
   FilterType::Pointer filter = FilterType::New();
+  (filter->GetFunctor()).SetDegree(otb::Functor::LandsatTM::HundredsKelvin);
+  (filter->GetFunctor()).SetReflectance(otb::Functor::LandsatTM::Thousands);
+  (filter->GetFunctor()).SetSAT(otb::Functor::LandsatTM::L5);
 
   filter->SetInput( reader->GetOutput() );
 
