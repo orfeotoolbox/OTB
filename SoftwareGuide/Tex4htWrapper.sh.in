@@ -1,5 +1,6 @@
 #!/bin/sh
 
+#To generate the html docunetation, use the command 'sh Tex4htWrapper.sh SoftwareGuide'
 TEXINPUTS=$TEXINPUTS:${ITK_TEXINPUTS}
 export TEXINPUTS
 
