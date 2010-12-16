@@ -31,12 +31,14 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Code/DisparityMap
   ${OTB_SOURCE_DIR}/Code/FeatureExtraction
   ${OTB_SOURCE_DIR}/Code/Fusion
+  ${OTB_SOURCE_DIR}/Code/Fuzzy
   ${OTB_SOURCE_DIR}/Code/GeospatialAnalysis
   ${OTB_SOURCE_DIR}/Code/Gui
   ${OTB_SOURCE_DIR}/Code/IO
   ${OTB_SOURCE_DIR}/Code/Learning
   ${OTB_SOURCE_DIR}/Code/Markov
   ${OTB_SOURCE_DIR}/Code/MultiScale
+  ${OTB_SOURCE_DIR}/Code/MultiTemporal
   ${OTB_SOURCE_DIR}/Code/OBIA
   ${OTB_SOURCE_DIR}/Code/ObjectDetection
   ${OTB_SOURCE_DIR}/Code/Projections
@@ -289,6 +291,7 @@ SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
   FeatureExtraction
   Learning
   MultiScale
+  MultiTemporal
   SpatialReasoning
   DisparityMap
   Visu
@@ -302,6 +305,7 @@ SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
   GeospatialAnalysis
   Testing
   OBIA
+  Fuzzy
   ObjectDetection
   Utilities
   Utilities/ITK
