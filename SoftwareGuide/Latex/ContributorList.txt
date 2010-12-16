@@ -25,7 +25,6 @@ Gwendoline Blanchet (CNES)
 Adamo Ferro
 Rik Bellens
 Jean-Guilhem Cailton (Ark\'emie)
-Guillaume Borrut (CS)
 Etienne Bougoin (CS)
 Tishampati Dhar
 Massimo Di Stefano
@@ -38,3 +37,4 @@ Aur\'elien Bricier (CS)
 S\'ebastien Dinot (CS)
 Julien Malik (CS)
 Amit Kulkarni
+Angelos Tzotsos
