@@ -31,6 +31,7 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
 {
   typedef double PrecisionType;
   typedef itk::FixedArray< PrecisionType, 8 >     InputPixelType;
+  typedef unsigned char OutputPixelType;
 
   InputPixelType pixel;
   pixel[0] = TM1;
@@ -77,14 +78,14 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
   PrecisionType TV1 = 0.7;
   PrecisionType TV2 = 0.5;
 
-  typedef otb::Functor::LandsatTM::ThickCloudsSpectralRule<InputPixelType> R1FunctorType;
+  typedef otb::Functor::LandsatTM::ThickCloudsSpectralRule<InputPixelType, OutputPixelType> R1FunctorType;
   R1FunctorType r1Funct = R1FunctorType();
-  bool result = r1Funct(pixel);
-  bool goodResult = (min123 >= (TV1 * max123))
+  OutputPixelType result = r1Funct(pixel);
+  OutputPixelType goodResult = static_cast<OutputPixelType>((min123 >= (TV1 * max123))
     and (max123 <= TV1 * TM4)
     and (TM5 <= TV1 * TM4)
     and (TM5 >= TV1 * max123)
-    and (TM7 <= TV1 * TM4);
+                                                            and (TM7 <= TV1 * TM4));
 
   
   if( result!=goodResult )
@@ -93,14 +94,14 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
     return EXIT_FAILURE;
     }
 
-  typedef otb::Functor::LandsatTM::ThinCloudsSpectralRule<InputPixelType> R2FunctorType;
+  typedef otb::Functor::LandsatTM::ThinCloudsSpectralRule<InputPixelType, OutputPixelType> R2FunctorType;
   R2FunctorType r2Funct = R2FunctorType();
   result = r2Funct(pixel);
-  goodResult = (min123 >= (TV1 * max123))
-    and (TM4 >= max123)
-    and !((TM1<=TM2 and TM2<=TM3 and TM3<=TM4) and TM3 >= TV1*TM4)
-    and (TM4 >= TV1*TM5) and (TM5 >= TV1*TM4)
-    and (TM5 >= TV1*max123) and (TM5 >= TV1*TM7);
+  goodResult = static_cast<OutputPixelType>((min123 >= (TV1 * max123))
+                                            and (TM4 >= max123)
+                                            and !((TM1<=TM2 and TM2<=TM3 and TM3<=TM4) and TM3 >= TV1*TM4)
+                                            and (TM4 >= TV1*TM5) and (TM5 >= TV1*TM4)
+                                            and (TM5 >= TV1*max123) and (TM5 >= TV1*TM7));
 
 
   if( result!=goodResult )
@@ -109,15 +110,15 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
       return EXIT_FAILURE;
     }
 
-  typedef otb::Functor::LandsatTM::SnowOrIceSpectralRule<InputPixelType> R3FunctorType;
+  typedef otb::Functor::LandsatTM::SnowOrIceSpectralRule<InputPixelType, OutputPixelType> R3FunctorType;
   R3FunctorType r3Funct = R3FunctorType();
   result = r3Funct(pixel);
-  goodResult = (min123 >= (TV1 * max123))
-    and (TM4 >= TV1 * max123)
-    and (TM5 <= TV2 * TM4)
-    and (TM5 <= TV1* min123)
-    and (TM7 <= TV2 * TM4)
-    and (TM7 <= TV1*min123);
+  goodResult = static_cast<OutputPixelType>((min123 >= (TV1 * max123))
+                                            and (TM4 >= TV1 * max123)
+                                            and (TM5 <= TV2 * TM4)
+                                            and (TM5 <= TV1* min123)
+                                            and (TM7 <= TV2 * TM4)
+                                            and (TM7 <= TV1*min123));
 
 
   if( result!=goodResult )
@@ -127,10 +128,10 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
     }
 
 
-  typedef otb::Functor::LandsatTM::WaterOrShadowSpectralRule<InputPixelType> R4FunctorType;
+  typedef otb::Functor::LandsatTM::WaterOrShadowSpectralRule<InputPixelType, OutputPixelType> R4FunctorType;
   R4FunctorType r4Funct = R4FunctorType();
   result = r4Funct(pixel);
-  goodResult = (TM1 >= TM2) and (TM2 >= TM3) and (TM3 >= TM4) and (TM4 >= TM5) and (TM4 >= TM7);
+  goodResult = static_cast<OutputPixelType>((TM1 >= TM2) and (TM2 >= TM3) and (TM3 >= TM4) and (TM4 >= TM5) and (TM4 >= TM7));
 
 
   if( result!=goodResult ) 
@@ -140,15 +141,15 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
     }
 
 
-  typedef otb::Functor::LandsatTM::PitbogOrGreenhouseSpectralRule<InputPixelType> R5FunctorType;
+  typedef otb::Functor::LandsatTM::PitbogOrGreenhouseSpectralRule<InputPixelType, OutputPixelType> R5FunctorType;
   R5FunctorType r5Funct = R5FunctorType();
   result = r5Funct(pixel);
-  goodResult = (TM3 >= TV1 * TM1)
-    and (TM1 >= TV1 * TM3)
-    and (max123 <= TV1 * TM4)
-    and (TM5 <= TV1 * TM4)
-    and (TM3 >= TV2 * TM5)
-    and (min123 >= TV1 * TM7);
+  goodResult = static_cast<OutputPixelType>((TM3 >= TV1 * TM1)
+                                            and (TM1 >= TV1 * TM3)
+                                            and (max123 <= TV1 * TM4)
+                                            and (TM5 <= TV1 * TM4)
+                                            and (TM3 >= TV2 * TM5)
+                                            and (min123 >= TV1 * TM7));
 
 
   if( result!=goodResult )
@@ -157,14 +158,14 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
       return EXIT_FAILURE;
     }
 
-  typedef otb::Functor::LandsatTM::DominantBlueSpectralRule<InputPixelType> R6FunctorType;
+  typedef otb::Functor::LandsatTM::DominantBlueSpectralRule<InputPixelType, OutputPixelType> R6FunctorType;
   R6FunctorType r6Funct = R6FunctorType();
   result = r6Funct(pixel);
-  goodResult = (TM1 >= TV1 * TM2)
-    and (TM1 >= TV1 * TM3)
-    and (TM1 >= TV1 * TM4)
-    and (TM1 >= TV1 * TM5)
-    and (TM1 >= TV1 * TM7);
+  goodResult = static_cast<OutputPixelType>((TM1 >= TV1 * TM2)
+                                            and (TM1 >= TV1 * TM3)
+                                            and (TM1 >= TV1 * TM4)
+                                            and (TM1 >= TV1 * TM5)
+                                            and (TM1 >= TV1 * TM7));
 
 
   if( result!=goodResult ) 
@@ -173,16 +174,16 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
     return EXIT_FAILURE;
     }
 
-  typedef otb::Functor::LandsatTM::VegetationSpectralRule<InputPixelType> R7FunctorType;
+  typedef otb::Functor::LandsatTM::VegetationSpectralRule<InputPixelType, OutputPixelType> R7FunctorType;
   R7FunctorType r7Funct = R7FunctorType();
   result = r7Funct(pixel);
-  goodResult = (TM2 >= TV2 * TM1)
-    and (TM2 >= TV1 * TM3)
-    and (TM3 < TV1 * TM4)
-    and (TM4 > max123)
-    and (TM5 < TV1 * TM4)
-    and (TM5 >= TV1 * TM3)
-    and (TM7 < TV1 * TM5);
+  goodResult = static_cast<OutputPixelType>((TM2 >= TV2 * TM1)
+                                            and (TM2 >= TV1 * TM3)
+                                            and (TM3 < TV1 * TM4)
+                                            and (TM4 > max123)
+                                            and (TM5 < TV1 * TM4)
+                                            and (TM5 >= TV1 * TM3)
+                                            and (TM7 < TV1 * TM5));
 
 
   if( result!=goodResult )
@@ -191,18 +192,18 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
       return EXIT_FAILURE;
     }
 
-  typedef otb::Functor::LandsatTM::RangelandSpectralRule<InputPixelType> R8FunctorType;
+  typedef otb::Functor::LandsatTM::RangelandSpectralRule<InputPixelType, OutputPixelType> R8FunctorType;
   R8FunctorType r8Funct = R8FunctorType();
   result = r8Funct(pixel);
-  goodResult = (TM2 >= TV2 * TM1)
-    and (TM2 >= TV1 * TM3)
-    and (TM4 > max123)
-    and (TM3 < TV1 * TM4)
-    and (TM4 >= TV1 * TM5)
-    and (TM5 >= TV1 * TM4)
-    and (TM5 > max123)
-    and (TM7 < TV1 * max45)
-    and (TM5 >= TM7);
+  goodResult = static_cast<OutputPixelType>((TM2 >= TV2 * TM1)
+                                            and (TM2 >= TV1 * TM3)
+                                            and (TM4 > max123)
+                                            and (TM3 < TV1 * TM4)
+                                            and (TM4 >= TV1 * TM5)
+                                            and (TM5 >= TV1 * TM4)
+                                            and (TM5 > max123)
+                                            and (TM7 < TV1 * max45)
+                                            and (TM5 >= TM7));
 
 
   if( result!=goodResult ) 
@@ -211,16 +212,16 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
     return EXIT_FAILURE;
     }
 
-  typedef otb::Functor::LandsatTM::BarrenLandOrBuiltUpOrCloudsSpectralRule<InputPixelType> R9FunctorType;
+  typedef otb::Functor::LandsatTM::BarrenLandOrBuiltUpOrCloudsSpectralRule<InputPixelType, OutputPixelType> R9FunctorType;
   R9FunctorType r9Funct = R9FunctorType();
   result = r9Funct(pixel);
-  goodResult = (TM3 >= TV2 * TM1)
-    and (TM3 >= TV1 * TM2)
-    and (TM4 >= TV1 * max123)
-    and (TM5 >= max123)
-    and (TM5 >= TV1 * TM4)
-    and (TM5 >= TV1 * TM7)
-    and (TM7 >= TV2 * max45);
+  goodResult = static_cast<OutputPixelType>((TM3 >= TV2 * TM1)
+                                            and (TM3 >= TV1 * TM2)
+                                            and (TM4 >= TV1 * max123)
+                                            and (TM5 >= max123)
+                                            and (TM5 >= TV1 * TM4)
+                                            and (TM5 >= TV1 * TM7)
+                                            and (TM7 >= TV2 * max45));
 
 
   if( result!=goodResult )
@@ -232,11 +233,11 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
     }
 
 
-  typedef otb::Functor::LandsatTM::FlatResponseBarrenLandOrBuiltUpSpectralRule<InputPixelType> R10FunctorType;
+  typedef otb::Functor::LandsatTM::FlatResponseBarrenLandOrBuiltUpSpectralRule<InputPixelType, OutputPixelType> R10FunctorType;
   R10FunctorType r10Funct = R10FunctorType();
   result = r10Funct(pixel);
-  goodResult = (TM5 >= TV1 * max12347)
-    and (min12347 >= TV2 * TM5);
+  goodResult = static_cast<OutputPixelType>((TM5 >= TV1 * max12347)
+                                            and (min12347 >= TV2 * TM5));
 
 
   if( result!=goodResult ) 
@@ -246,15 +247,15 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
     }
 
 
-  typedef otb::Functor::LandsatTM::ShadowWithBarrenLandSpectralRule<InputPixelType> R11FunctorType;
+  typedef otb::Functor::LandsatTM::ShadowWithBarrenLandSpectralRule<InputPixelType, OutputPixelType> R11FunctorType;
   R11FunctorType r11Funct = R11FunctorType();
   result = r11Funct(pixel);
-  goodResult = (TM1 >= TM2 )
-    and (TM2 >= TM3)
-    and (TM3 >= TV1 * TM4)
-    and (TM1 >= TM5)
-    and (TM5 >= TV1 * TM4)
-    and (TM5 >= TV2 * TM7);
+  goodResult = static_cast<OutputPixelType>((TM1 >= TM2 )
+                                            and (TM2 >= TM3)
+                                            and (TM3 >= TV1 * TM4)
+                                            and (TM1 >= TM5)
+                                            and (TM5 >= TV1 * TM4)
+                                            and (TM5 >= TV2 * TM7));
 
 
   if( result!=goodResult )
@@ -263,16 +264,16 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
       return EXIT_FAILURE;
     }
 
-  typedef otb::Functor::LandsatTM::ShadowWithVegetationSpectralRule<InputPixelType> R12FunctorType;
+  typedef otb::Functor::LandsatTM::ShadowWithVegetationSpectralRule<InputPixelType, OutputPixelType> R12FunctorType;
   R12FunctorType r12Funct = R12FunctorType();
   result = r12Funct(pixel);
-  goodResult = (TM1 >= TM2)
-    and (TM2 >= TM3)
-    and (TM1 >= TV2 * TM4)
-    and (TM3 < TV1 * TM4)
-    and (TM5 < TV1 * TM4)
-    and (TM3 >= TV1 * TM5)
-    and (TM7 < TV1 * TM4);
+  goodResult = static_cast<OutputPixelType>((TM1 >= TM2)
+                                            and (TM2 >= TM3)
+                                            and (TM1 >= TV2 * TM4)
+                                            and (TM3 < TV1 * TM4)
+                                            and (TM5 < TV1 * TM4)
+                                            and (TM3 >= TV1 * TM5)
+                                            and (TM7 < TV1 * TM4));
 
 
   if( result!=goodResult ) 
@@ -281,13 +282,13 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
     return EXIT_FAILURE;
     }
 
-  typedef otb::Functor::LandsatTM::ShadowCloudOrSnowSpectralRule<InputPixelType> R13FunctorType;
+  typedef otb::Functor::LandsatTM::ShadowCloudOrSnowSpectralRule<InputPixelType, OutputPixelType> R13FunctorType;
   R13FunctorType r13Funct = R13FunctorType();
   result = r13Funct(pixel);
-  goodResult = (TM1 >= TV1 * max234)
-    and (max234 >= TV1 * TM1)
-    and (TM5 < TM1)
-    and (TM7 < TV1 * TM1);
+  goodResult = static_cast<OutputPixelType>((TM1 >= TV1 * max234)
+                                            and (max234 >= TV1 * TM1)
+                                            and (TM5 < TM1)
+                                            and (TM7 < TV1 * TM1));
 
 
   if( result!=goodResult )
@@ -296,17 +297,17 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
       return EXIT_FAILURE;
     }
 
-  typedef otb::Functor::LandsatTM::WetlandSpectralRule<InputPixelType> R14FunctorType;
+  typedef otb::Functor::LandsatTM::WetlandSpectralRule<InputPixelType, OutputPixelType> R14FunctorType;
   R14FunctorType r14Funct = R14FunctorType();
   result = r14Funct(pixel);
-  goodResult = (TM1 >= TM2)
-    and (TM2 >= TM3)
-    and (TM1 >= TV1 * TM4)
-    and (TM3 < TM4)
-    and (TM4 >= TV1 * TM5)
-    and (TM5 >= TV1 * TM4)
-    and (TM3 >= TV2 * TM5)
-    and (TM5 >= TM7);
+  goodResult = static_cast<OutputPixelType>((TM1 >= TM2)
+                                            and (TM2 >= TM3)
+                                            and (TM1 >= TV1 * TM4)
+                                            and (TM3 < TM4)
+                                            and (TM4 >= TV1 * TM5)
+                                            and (TM5 >= TV1 * TM4)
+                                            and (TM3 >= TV2 * TM5)
+                                            and (TM5 >= TM7));
 
 
   if( result!=goodResult ) 

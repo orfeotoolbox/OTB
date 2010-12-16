@@ -44,7 +44,7 @@ int otbLandsatTMVegetationTest(int argc, char * argv[])
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName( argv[2] );
 
-  typedef otb::Functor::LandsatTM::VegetationSpectralRule<InputImageType::PixelType> R1FunctorType;
+  typedef otb::Functor::LandsatTM::VegetationSpectralRule<InputImageType::PixelType, OutputPixelType> R1FunctorType;
   R1FunctorType r1Funct = R1FunctorType();
   r1Funct.SetDegree(otb::Functor::LandsatTM::HundredsKelvin);
   r1Funct.SetReflectance(otb::Functor::LandsatTM::Thousands);

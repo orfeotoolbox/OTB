@@ -16,7 +16,6 @@
 
 =========================================================================*/
 #include "itkExceptionObject.h"
-#include "itkFixedArray.h"
 #include "otbLandsatTMIndices.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
@@ -29,7 +28,7 @@
 int otbLandsatTMThickCloudTest(int argc, char * argv[])
 {
 
-  typedef double InputPixelType;
+  typedef float InputPixelType;
   typedef unsigned char OutputPixelType;
 
   typedef otb::VectorImage< InputPixelType, 2 > InputImageType;
@@ -44,7 +43,7 @@ int otbLandsatTMThickCloudTest(int argc, char * argv[])
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName( argv[2] );
 
-  typedef otb::Functor::LandsatTM::ThickCloudsSpectralRule<InputImageType::PixelType> R1FunctorType;
+  typedef otb::Functor::LandsatTM::ThickCloudsSpectralRule<InputImageType::PixelType, OutputPixelType> R1FunctorType;
   R1FunctorType r1Funct = R1FunctorType();
   r1Funct.SetDegree(otb::Functor::LandsatTM::HundredsKelvin);
   r1Funct.SetReflectance(otb::Functor::LandsatTM::Thousands);

@@ -981,8 +981,8 @@ protected:
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
  */
-template <class TInput>
-class KernelSpectralRule : public LandsatTMIndexBase<TInput, bool >
+template <class TInput, class TOutput>
+class KernelSpectralRule : public LandsatTMIndexBase<TInput, TOutput >
 {
 public:
 
@@ -1071,8 +1071,8 @@ protected:
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
  */
-template <class TInput>
-class ThickCloudsSpectralRule : public KernelSpectralRule<TInput>
+template <class TInput, class TOutput>
+class ThickCloudsSpectralRule : public KernelSpectralRule<TInput, TOutput>
 {
 public:
 
@@ -1088,7 +1088,7 @@ public:
   ThickCloudsSpectralRule() { }
   virtual ~ThickCloudsSpectralRule() {}
 
-  inline bool operator ()(const TInput& inputPixel)
+  inline TOutput operator ()(const TInput& inputPixel)
   {
     TInput newPixel(this->PrepareValues( inputPixel ));
     this->SetMinMax(newPixel);
@@ -1099,7 +1099,7 @@ public:
       and (newPixel[this->m_TM5] >= this->m_TV1 * this->m_Max123)
       and (newPixel[this->m_TM7] <= this->m_TV1 * newPixel[this->m_TM4]);
 
-    return result;
+    return static_cast<TOutput>(result);
   }
 
 };
@@ -1117,8 +1117,8 @@ public:
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
  */
-template <class TInput>
-class ThinCloudsSpectralRule : public KernelSpectralRule<TInput>
+template <class TInput, class TOutput>
+class ThinCloudsSpectralRule : public KernelSpectralRule<TInput, TOutput>
 {
 public:
 
@@ -1134,7 +1134,7 @@ public:
   ThinCloudsSpectralRule() { }
   virtual ~ThinCloudsSpectralRule() {}
 
-  inline bool operator ()(const TInput& inputPixel)
+  inline TOutput operator ()(const TInput& inputPixel)
   {
     TInput newPixel(this->PrepareValues( inputPixel ));
     this->SetMinMax(newPixel);
@@ -1150,7 +1150,7 @@ public:
       and (newPixel[this->m_TM5] >= this->m_TV1 * this->m_Max123)
       and (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM7]);
 
-    return result;
+    return static_cast<TOutput>(result);
   }
 
 };
@@ -1168,8 +1168,8 @@ public:
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
  */
-template <class TInput>
-class SnowOrIceSpectralRule : public KernelSpectralRule<TInput>
+template <class TInput, class TOutput>
+class SnowOrIceSpectralRule : public KernelSpectralRule<TInput, TOutput>
 {
 public:
 
@@ -1185,7 +1185,7 @@ public:
   SnowOrIceSpectralRule() { }
   virtual ~SnowOrIceSpectralRule() {}
 
-  inline bool operator ()(const TInput& inputPixel)
+  inline TOutput operator ()(const TInput& inputPixel)
   {
     TInput newPixel(this->PrepareValues( inputPixel ));
     this->SetMinMax(newPixel);
@@ -1198,7 +1198,7 @@ public:
       and (newPixel[this->m_TM7] <= this->m_TV2 * newPixel[this->m_TM4])
       and (newPixel[this->m_TM7] <= this->m_TV1 * this->m_Min123);
 
-    return result;
+    return static_cast<TOutput>(result);
   }
 
 };
@@ -1217,8 +1217,8 @@ public:
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
  */
-template <class TInput>
-class WaterOrShadowSpectralRule : public KernelSpectralRule<TInput>
+template <class TInput, class TOutput>
+class WaterOrShadowSpectralRule : public KernelSpectralRule<TInput, TOutput>
 {
 public:
 
@@ -1234,7 +1234,7 @@ public:
   WaterOrShadowSpectralRule() { }
   virtual ~WaterOrShadowSpectralRule() {}
 
-  inline bool operator ()(const TInput& inputPixel)
+  inline TOutput operator ()(const TInput& inputPixel)
   {
     TInput newPixel(this->PrepareValues( inputPixel ));
     this->SetMinMax(newPixel);
@@ -1245,7 +1245,7 @@ public:
       and (newPixel[this->m_TM4] >= newPixel[this->m_TM5])
       and (newPixel[this->m_TM4] >= newPixel[this->m_TM7]);
 
-    return result;
+    return static_cast<TOutput>(result);
   }
 
 };
@@ -1264,8 +1264,8 @@ public:
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
  */
-template <class TInput>
-class PitbogOrGreenhouseSpectralRule : public KernelSpectralRule<TInput>
+template <class TInput, class TOutput>
+class PitbogOrGreenhouseSpectralRule : public KernelSpectralRule<TInput, TOutput>
 {
 public:
 
@@ -1281,7 +1281,7 @@ public:
   PitbogOrGreenhouseSpectralRule() { }
   virtual ~PitbogOrGreenhouseSpectralRule() {}
 
-  inline bool operator ()(const TInput& inputPixel)
+  inline TOutput operator ()(const TInput& inputPixel)
   {
     TInput newPixel(this->PrepareValues( inputPixel ));
     this->SetMinMax(newPixel);
@@ -1294,7 +1294,7 @@ public:
       and (this->m_Min123 >= this->m_TV1 * newPixel[this->m_TM7]);
 
 
-    return result;
+    return static_cast<TOutput>(result);
   }
 
 };
@@ -1312,8 +1312,8 @@ public:
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
  */
-template <class TInput>
-class DominantBlueSpectralRule : public KernelSpectralRule<TInput>
+template <class TInput, class TOutput>
+class DominantBlueSpectralRule : public KernelSpectralRule<TInput, TOutput>
 {
 public:
 
@@ -1329,7 +1329,7 @@ public:
   DominantBlueSpectralRule() { }
   virtual ~DominantBlueSpectralRule() {}
 
-  inline bool operator ()(const TInput& inputPixel)
+  inline TOutput operator ()(const TInput& inputPixel)
   {
     TInput newPixel(this->PrepareValues( inputPixel ));
     this->SetMinMax(newPixel);
@@ -1341,7 +1341,7 @@ public:
       and (newPixel[this->m_TM1] >= this->m_TV1 * newPixel[this->m_TM7]);
 
 
-    return result;
+    return static_cast<TOutput>(result);
   }
 
 };
@@ -1360,8 +1360,8 @@ public:
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
  */
-template <class TInput>
-class VegetationSpectralRule : public KernelSpectralRule<TInput>
+template <class TInput, class TOutput>
+class VegetationSpectralRule : public KernelSpectralRule<TInput, TOutput>
 {
 public:
 
@@ -1377,7 +1377,7 @@ public:
   VegetationSpectralRule() { }
   virtual ~VegetationSpectralRule() {}
 
-  inline bool operator ()(const TInput& inputPixel)
+  inline TOutput operator ()(const TInput& inputPixel)
   {
     TInput newPixel(this->PrepareValues( inputPixel ));
     this->SetMinMax(newPixel);
@@ -1391,7 +1391,7 @@ public:
       and (newPixel[this->m_TM7] < this->m_TV1 * newPixel[this->m_TM5]);
 
 
-    return result;
+    return static_cast<TOutput>(result);
   }
 
 };
@@ -1410,8 +1410,8 @@ public:
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
  */
-template <class TInput>
-class RangelandSpectralRule : public KernelSpectralRule<TInput>
+template <class TInput, class TOutput>
+class RangelandSpectralRule : public KernelSpectralRule<TInput, TOutput>
 {
 public:
 
@@ -1427,7 +1427,7 @@ public:
   RangelandSpectralRule() { }
   virtual ~RangelandSpectralRule() {}
 
-  inline bool operator ()(const TInput& inputPixel)
+  inline TOutput operator ()(const TInput& inputPixel)
   {
     TInput newPixel(this->PrepareValues( inputPixel ));
     this->SetMinMax(newPixel);
@@ -1443,7 +1443,7 @@ public:
       and (newPixel[this->m_TM5] >= newPixel[this->m_TM7]);
 
 
-    return result;
+    return static_cast<TOutput>(result);
   }
 
 };
@@ -1461,8 +1461,8 @@ public:
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
  */
-template <class TInput>
-class BarrenLandOrBuiltUpOrCloudsSpectralRule : public KernelSpectralRule<TInput>
+template <class TInput, class TOutput>
+class BarrenLandOrBuiltUpOrCloudsSpectralRule : public KernelSpectralRule<TInput, TOutput>
 {
 public:
 
@@ -1478,7 +1478,7 @@ public:
   BarrenLandOrBuiltUpOrCloudsSpectralRule() { }
   virtual ~BarrenLandOrBuiltUpOrCloudsSpectralRule() {}
 
-  inline bool operator ()(const TInput& inputPixel)
+  inline TOutput operator ()(const TInput& inputPixel)
   {
     TInput newPixel(this->PrepareValues( inputPixel ));
     this->SetMinMax(newPixel);
@@ -1491,7 +1491,7 @@ public:
       and (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM7])
       and (newPixel[this->m_TM7] >= this->m_TV2 * this->m_Max45);
 
-    return result;
+    return static_cast<TOutput>(result);
   }
 
 };
@@ -1509,8 +1509,8 @@ public:
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
  */
-template <class TInput>
-class FlatResponseBarrenLandOrBuiltUpSpectralRule : public KernelSpectralRule<TInput>
+template <class TInput, class TOutput>
+class FlatResponseBarrenLandOrBuiltUpSpectralRule : public KernelSpectralRule<TInput, TOutput>
 {
 public:
 
@@ -1526,7 +1526,7 @@ public:
   FlatResponseBarrenLandOrBuiltUpSpectralRule() { }
   virtual ~FlatResponseBarrenLandOrBuiltUpSpectralRule() {}
 
-  inline bool operator ()(const TInput& inputPixel)
+  inline TOutput operator ()(const TInput& inputPixel)
   {
     TInput newPixel(this->PrepareValues( inputPixel ));
     this->SetMinMax(newPixel);
@@ -1534,7 +1534,7 @@ public:
     bool result = (newPixel[this->m_TM5] >= this->m_TV1 * this->m_Max12347)
       and (this->m_Min12347 >= this->m_TV2 * newPixel[this->m_TM5]);
 
-    return result;
+    return static_cast<TOutput>(result);
   }
 
 };
@@ -1553,8 +1553,8 @@ public:
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
  */
-template <class TInput>
-class ShadowWithBarrenLandSpectralRule : public KernelSpectralRule<TInput>
+template <class TInput, class TOutput>
+class ShadowWithBarrenLandSpectralRule : public KernelSpectralRule<TInput, TOutput>
 {
 public:
 
@@ -1570,7 +1570,7 @@ public:
   ShadowWithBarrenLandSpectralRule() { }
   virtual ~ShadowWithBarrenLandSpectralRule() {}
 
-  inline bool operator ()(const TInput& inputPixel)
+  inline TOutput operator ()(const TInput& inputPixel)
   {
     TInput newPixel(this->PrepareValues( inputPixel ));
     this->SetMinMax(newPixel);
@@ -1582,7 +1582,7 @@ public:
       and  (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM4])
       and  (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM7]);
 
-    return result;
+    return static_cast<TOutput>(result);
   }
 };
 
@@ -1601,8 +1601,8 @@ public:
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
  */
-template <class TInput>
-class ShadowWithVegetationSpectralRule : public KernelSpectralRule<TInput>
+template <class TInput, class TOutput>
+class ShadowWithVegetationSpectralRule : public KernelSpectralRule<TInput, TOutput>
 {
 public:
 
@@ -1618,7 +1618,7 @@ public:
   ShadowWithVegetationSpectralRule() { }
   virtual ~ShadowWithVegetationSpectralRule() {}
 
-  inline bool operator ()(const TInput& inputPixel)
+  inline TOutput operator ()(const TInput& inputPixel)
   {
     TInput newPixel(this->PrepareValues( inputPixel ));
     this->SetMinMax(newPixel);
@@ -1631,7 +1631,7 @@ public:
       and  (newPixel[this->m_TM3] >= this->m_TV1 * newPixel[this->m_TM5])
       and  (newPixel[this->m_TM7] < this->m_TV1 * newPixel[this->m_TM4]);
 
-    return result;
+    return static_cast<TOutput>(result);
   }
 };
 
@@ -1650,8 +1650,8 @@ public:
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
  */
-template <class TInput>
-class ShadowCloudOrSnowSpectralRule : public KernelSpectralRule<TInput>
+template <class TInput, class TOutput>
+class ShadowCloudOrSnowSpectralRule : public KernelSpectralRule<TInput, TOutput>
 {
 public:
 
@@ -1667,7 +1667,7 @@ public:
   ShadowCloudOrSnowSpectralRule() { }
   virtual ~ShadowCloudOrSnowSpectralRule() {}
 
-  inline bool operator ()(const TInput& inputPixel)
+  inline TOutput operator ()(const TInput& inputPixel)
   {
     TInput newPixel(this->PrepareValues( inputPixel ));
     this->SetMinMax(newPixel);
@@ -1677,7 +1677,7 @@ public:
       and (newPixel[this->m_TM5] < newPixel[this->m_TM1])
       and (newPixel[this->m_TM7] < this->m_TV1 * newPixel[this->m_TM1]);
 
-    return result;
+    return static_cast<TOutput>(result);
   }
 };
 
@@ -1695,8 +1695,8 @@ public:
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
  */
-template <class TInput>
-class WetlandSpectralRule : public KernelSpectralRule<TInput>
+template <class TInput, class TOutput>
+class WetlandSpectralRule : public KernelSpectralRule<TInput, TOutput>
 {
 public:
 
@@ -1712,7 +1712,7 @@ public:
   WetlandSpectralRule() { }
   virtual ~WetlandSpectralRule() {}
 
-  inline bool operator ()(const TInput& inputPixel)
+  inline TOutput operator ()(const TInput& inputPixel)
   {
     TInput newPixel(this->PrepareValues( inputPixel ));
     this->SetMinMax(newPixel);
@@ -1726,7 +1726,7 @@ public:
       and (newPixel[this->m_TM3] >= this->m_TV2 * newPixel[this->m_TM5])
       and (newPixel[this->m_TM5] >= newPixel[this->m_TM7]);
 
-    return result;
+    return static_cast<TOutput>(result);
   }
 };
 
