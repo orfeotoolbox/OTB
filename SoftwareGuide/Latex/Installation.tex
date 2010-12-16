@@ -9,17 +9,120 @@ own applications. What OTB does provide---besides the toolbox proper---is a
 large set of test files and examples that will introduce you to OTB concepts
 and will show you how to use OTB in your own projects.
 
-%% Some of the examples distributed with OTB require third party libraries that
-%% you may have to download. For an initial installation of OTB you may want to
-%% ignore these extra libraries and just build the toolbox itself.
+If you are interested in OTB-powered applications, you may try one of the following:
+\begin{description}
+\item[OTB-Applications]{A set of command-line and graphical processing chains built
+upon OTB.}
+\item [Monteverdi]{An integrated applications giving graphical access to a lot of OTB 
+functionnalities.}
+\item[OTB-Wrapping]{Calling OTB from Python or Java (see chapter~\ref{chap:wrappings}).}
+\end{description}
 
+There are two ways to install OTB on your system: installing from a binary distribution,
+or compiling from sources. What you need depends on your system, and on what you
+intend to do. Table~\ref{tab:installation}.
+
+\begin{center}
+\begin{tiny}
+\begin{table}[!htbp]
+\begin{tabular}{|p{0.2\textwidth}|p{0.2\textwidth}|p{0.2\textwidth}|p{0.2\textwidth}|p{0.2\textwidth}|}
+\hline
+& \textbf{OTB library} & \textbf{Monteverdi} & \textbf{OTB-Applications} & \textbf{Wrappings (Java and Python)} \\
+\hline
+\hline
+\textbf{Any platform} & 
+  Build from source (see section~\ref{sec:source}) &  Build from source (see section~\ref{sec:source}) 
+& Build from source (see section~\ref{sec:source}) & Build from source (see section~\ref{sec:source})\\
+\hline
+\hline
+\textbf{Windows 2000/XP/Seven} &  & Windows installer (see section~\ref{ssec:windows_binaries})& Windows installer (see section~\ref{ssec:windows_binaries})& Windows installer (see section~\ref{ssec:windows_binaries}) \\
+\hline
+\hline
+\textbf{MacOSX $>$ 10.5} &  & app's DMG file (see section~\ref{ssec:mac_binaries}) &  & \\
+\hline
+\hline
+\textbf{Ubuntu Linux 10.10, 10.04 and 9.10 (32/64 bits)} & APT repository (see section~\ref{ssec:ubuntu_binaries}) & APT repository (see section~\ref{ssec:ubuntu_binaries}) & APT repository (see section~\ref{ssec:ubuntu_binaries})&  \\
+\hline
+\textbf{OpenSuse 11.2, 11.3 and 11.4 beta (32/64 bits)} & RPM package (see section~\ref{ssec:opensuse_binaries}) &  RPM package (see section~\ref{ssec:opensuse_binaries}) &  RPM package (see section~\ref{ssec:opensuse_binaries}) & \\
+\hline
+\end{tabular}
+\caption{Available installation procedures with respect to system configuration and target usage}
+\label{tab:installation}
+\end{table}
+\end{tiny}
+\end{center}
+
+\section{Installing binary packages}
+\label{sec:install_binaries}
+
+\subsection{Windows 7/XP/2000}
+\label{ssec:windows_binaries}
+
+For Windows 7/XP/2000 users, installation program exists for Monteverdi, 
+OTB-Applications and OTB-Wrapping. Please go the the 
+\href{http://sourceforge.net/projects/orfeo-toolbox/}{OTB download page}, to
+get them. Double-click on the installer and let it guide you through the 
+installation process.
+
+\subsection{Macintosh}
+\label{ssec:mac_binaries}
+
+For Macintosh, a ready to app's DMG file is available for Monteverdi. 
+Please go the the \href{http://sourceforge.net/projects/orfeo-toolbox/}{OTB download page}.
+Click on the file to launch Monteverdi.
+
+\subsection{Linux}
+
+\subsubsection{Ubuntu 9.10, 10.04 and 10.10}
+\label{ssec:ubuntu_binaries}
+For Unbuntu 9.10 (Karmic Koala), 10.04 (Lucid Lynx) and 10.10 (Maverick Meerkat), OTB, 
+OTB-Applications, Monteverdi and (soon) OTB-Wrappings packages are available through APT repositories.
+
+If you are using apt command lines tools, use this command line to add the otb repository to apt sources:
+\begin{verbatim}
+sudo apt-get install add-apt-repository 
+sudo add-apt-repository ppa:otb/orfeotoolbox-stable
+\end{verbatim}
+Now run:
+\begin{verbatim}
+apt-get update
+apt-get install otb otb-applications monteverdi
+\end{verbatim}
+
+If you are using \emph{Synaptic}, you can add the repositories, update and install the packages through the
+graphical interface.
+
+If you want to use with bleeding edge versions of gdal, boost and qgis, there is an alternate UbuntuGIS repository.
+You can add it by using this command line:
+\begin{verbatim}
+sudo apt-get install add-apt-repository 
+sudo add-apt-repository ppa:otb/orfeotoolbox-stable-ubuntugis
+\end{verbatim}
+Now run:
+\begin{verbatim}
+apt-get update
+apt-get install otb otb-applications monteverdi
+\end{verbatim}
+
+Be careful not to add the two repositories, since they may cause incompatibilities.
+
+\subsubsection{OpenSuse 11.2, 11.3 and 11.4 beta}
+\label{ssec:opensuse_binaries}
+
+For OpenSuse 11.3 and OpenSuse 11.4 beta, OTB, OTB-Applications, Monteverdi and (soon)
+OTB-Wrappings packages are available through APT repositories.
+
+\section{Building from sources}
+\label{sec:source}
 OTB has been developed and tested across different combinations of
 operating systems, compilers, and hardware platforms including
 MS-Windows, Linux on Intel-compatible hardware, Solaris and Mac
 OSX.  It is known to work with the following compilers:
 \begin{itemize}
-\item Cygwin, MinGW, Visual Studio 7, 8 and 9 on MS-Windows%, .NET 2002, .NET 2003
+\item Cygwin, MinGW, Visual Studio 7, 8 and 9 and Visual Studio Express 2005, 
+  2008 and 2010 on MS-Windows%, .NET 2002, .NET 2003
 \item GCC on Unix/Linux systems
+\item GCC on Mac systems
 \end{itemize}
 
 Given the advanced usage of C++ features in the toolbox, some
@@ -27,7 +130,35 @@ compilers may have difficulties processing the code. If you are
 currently using an outdated compiler this may be an excellent excuse
 for upgrading this old piece of software!
 
-\section{External Libraries}
+Please note that though this section only describes how to compile OTB from sources,
+OTB-Applications, Monteverdi and OTB-Wrapping can be compiled in a similar way.
+
+\subsection{Getting the OTB source code}
+
+There are three ways of getting the OTB source code:
+\begin{itemize}
+\item Download the latest current release from the \href{http://sourceforge.net/projects/orfeo-toolbox/}{OTB download page},
+\item Clone the current release with \href{http://mercurial.selenic.com}{Mercurial} from the \href{http://hg.orfeo-toolbox.org/OTB}{OTB mercurial server},
+\item Clone the latest revision with \href{http://mercurial.selenic.com}{Mercurial} from the \href{http://hg.orfeo-toolbox.org/OTB}{OTB mercurial server}.
+\end{itemize}
+
+These last two options need a proper \href{http://mercurial.selenic.com}{Mercurial} installation. To get source code from Mercurial, do:
+\begin{verbatim}
+hg clone http://hg.orfeo-toolbox.org/OTB
+\end{verbatim}
+
+Using Mercurial, you can easily navigate through the different version. For instance, this brings you to the 3.8.0 source code version:
+\begin{verbatim}
+hg update -r 3.8.0
+\end{verbatim}
+
+And this brings you to the latest development version:
+\begin{verbatim}
+hg update
+\end{verbatim}
+
+
+\subsection{External Libraries}
 
 The OTB depends on 3 libraries:
 \begin{itemize}
@@ -53,7 +184,7 @@ download and install this library on your system.
 
 See section \ref{sec:FAQInstall} for quick installation guidelines.
 
-\section{Configuring OTB}
+\subsection{Configuring OTB}
 \label{sec:ConfiguringOTB}
 
 \index{Configuration}
@@ -75,7 +206,7 @@ provides to CMake at configuration time. Typical information includes paths
 to utilities in the system and the selection of software options specified by
 the user.
 
-\subsection{Preparing CMake}
+\subsubsection{Preparing CMake}
 \label{sec:CMakeforOTB}
 
 \index{CMake}
@@ -128,7 +259,7 @@ list in its interface.  Only when no new options appear after a configuration
 iteration can you be sure that the necessary decisions have all been made. At
 this point build files are generated for the current configuration.
 
-\subsection{Configuring OTB}
+\subsubsection{Configuring OTB}
 \label{sec:ConfiguringOTBwithVTK}
 
 \index{Configuration!with VTK}
