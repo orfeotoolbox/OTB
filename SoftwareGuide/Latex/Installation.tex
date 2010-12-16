@@ -38,12 +38,12 @@ intend to do. Table~\ref{tab:installation}.
 \textbf{Windows 2000/XP/Vista/Seven} &  & Windows installer (see section~\ref{ssec:windows_binaries})& Windows installer (see section~\ref{ssec:windows_binaries})& Windows installer (see section~\ref{ssec:windows_binaries}) \\
 \hline
 \hline
-\textbf{MacOSX $>$ 10.5} &  & app's DMG file (see section~\ref{ssec:mac_binaries}) &  & \\
+\textbf{MacOS X 10.5 and higher} &  & app's DMG file (see section~\ref{ssec:mac_binaries}) &  & \\
 \hline
 \hline
 \textbf{Ubuntu Linux 10.10, 10.04 and 9.10 (32/64 bits)} & APT repository (see section~\ref{ssec:ubuntu_binaries}) & APT repository (see section~\ref{ssec:ubuntu_binaries}) & APT repository (see section~\ref{ssec:ubuntu_binaries})&  \\
 \hline
-\textbf{OpenSuse 11.2, 11.3 and 11.4 beta (32/64 bits)} & RPM package (see section~\ref{ssec:opensuse_binaries}) &  RPM package (see section~\ref{ssec:opensuse_binaries}) &  RPM package (see section~\ref{ssec:opensuse_binaries}) & \\
+\textbf{OpenSuse 11.2 and higher (32/64 bits)} & RPM package (see section~\ref{ssec:opensuse_binaries}) &  RPM package (see section~\ref{ssec:opensuse_binaries}) &  RPM package (see section~\ref{ssec:opensuse_binaries}) & \\
 \hline
 \end{tabular}
 \caption{Available installation procedures with respect to system configuration and target usage}
@@ -64,10 +64,10 @@ OTB-Applications and OTB-Wrapping. Please go the the
 get them. Double-click on the installer and let it guide you through the 
 installation process.
 
-\subsection{Macintosh}
+\subsection{MacOS X}
 \label{ssec:mac_binaries}
 
-For Macintosh, a ready to app's DMG file is available for Monteverdi for OS X $>$ 10.5. 
+For MacOS X, a ready to app's DMG file is available for Monteverdi for MacOS X 10.5 and higher. 
 Please go the the \href{http://sourceforge.net/projects/orfeo-toolbox/}{OTB download page}.
 Click on the file to launch Monteverdi.
 
@@ -76,55 +76,63 @@ Click on the file to launch Monteverdi.
 \subsubsection{Ubuntu 9.10, 10.04 and 10.10}
 \label{ssec:ubuntu_binaries}
 For Unbuntu 9.10 (Karmic Koala), 10.04 (Lucid Lynx) and 10.10 (Maverick Meerkat), OTB, 
-OTB-Applications, Monteverdi and (soon) OTB-Wrappings packages are available through APT repositories.
+OTB-Applications, Monteverdi and (soon) OTB-Wrapping packages are available through APT repositories.
 
 If you are using apt command-line tools, use these command-lines to add the otb repository to apt sources:
 \begin{verbatim}
-sudo apt-get install add-apt-repository 
+sudo aptitude install add-apt-repository 
 sudo add-apt-repository ppa:otb/orfeotoolbox-stable
 \end{verbatim}
 Now run:
 \begin{verbatim}
-apt-get update
-apt-get install otb otb-applications monteverdi
+sudo aptitude update
+sudo aptitude install otb otb-applications monteverdi
 \end{verbatim}
 
 If you are using \emph{Synaptic}, you can add the repositories, update and install the packages through the
 graphical interface.
 
-If you want to use with bleeding edge versions of gdal, boost and qgis, there is an alternate UbuntuGIS repository.
+If you want to use OTB with bleeding edge versions of gdal and qgis, there is an alternate UbuntuGIS repository.
 You can add it by using these command-lines:
 \begin{verbatim}
-sudo apt-get install add-apt-repository 
+sudo aptitude install add-apt-repository 
+sudo apt-add-repository ppa:ubuntugis/ubuntugis-unstable
 sudo add-apt-repository ppa:otb/orfeotoolbox-stable-ubuntugis
 \end{verbatim}
 Now run:
 \begin{verbatim}
-apt-get update
-apt-get install otb otb-applications monteverdi
+sudo aptitude update
+sudo aptitude install otb otb-applications monteverdi
 \end{verbatim}
 
 Be careful not to add the two repositories, since they may cause incompatibilities.
 
-\subsubsection{OpenSuse 11.2, 11.3 and 11.4 beta}
+For further informations about ubuntu packages go to href{https://launchpad.net/~otb/+archive/orfeotoolbox-stable}{orfeotoolbox-stable launchpad page} and click on \textbf{Read about installing}.
+
+\textbf{apt-add-repository} will retrieve the GPG keys of the repositories to ensure the origin of the packages. If you are behind a http proxy, this step won't work and apt-add-repository will stall and eventually quit. Following this, aptitude update will issue a warning about a signature problem. You can temporarily ignore this and proceed with OTB installation.
+
+\subsubsection{OpenSuse 11.2 and higher}
 \label{ssec:opensuse_binaries}
 
-For OpenSuse 11.3 and OpenSuse 11.4 beta, OTB, OTB-Applications, Monteverdi and (soon)
-OTB-Wrappings packages are available through \emph{zypper}.
+For OpenSuse 11.2and higher, OTB, OTB-Applications, Monteverdi and (soon)
+OTB-Wrapping packages are available through \emph{zypper}.
 
-First, you need to add the appropriate repository with these command-lines (please replace $11.3$ by your OpenSuse version):
+First, you need to add the appropriate repositories with these command-lines (please replace $11.3$ by your OpenSuse version):
 \begin{verbatim}
-zypper ar http://download.opensuse.org/repositories/games/openSUSE_11.3/ Games
-zypper ar http://download.opensuse.org/repositories/Application:/Geo/openSUSE_11.3/ GEO
-zypper ar http://download.opensuse.org/repositories/home:/tzotsos/openSUSE_11.3/ tzotsos
+sudo zypper ar 
+http://download.opensuse.org/repositories/games/openSUSE_11.3/ Games
+sudo zypper ar 
+http://download.opensuse.org/repositories/Application:/Geo/openSUSE_11.3/ GEO
+sudo zypper ar 
+http://download.opensuse.org/repositories/home:/tzotsos/openSUSE_11.3/ tzotsos
 \end{verbatim}
 
 Now run:
 \begin{verbatim}
-zypper refresh
-zypper install OrfeoToolbox
-zypper install OrfeoToolbox-devel
-zypper install Monteverdi
+sudo zypper refresh
+sudo zypper install OrfeoToolbox
+sudo zypper install OrfeoToolbox-devel
+sudo zypper install Monteverdi
 \end{verbatim}
 
 \section{Building from sources}
