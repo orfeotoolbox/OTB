@@ -38,3 +38,4 @@ Aur\'elien Bricier (CS)
 S\'ebastien Dinot (CS)
 Julien Malik (CS)
 Amit Kulkarni
+Angelos Tzotsos
