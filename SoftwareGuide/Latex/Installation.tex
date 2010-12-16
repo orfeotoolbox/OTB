@@ -78,7 +78,7 @@ Click on the file to launch Monteverdi.
 For Unbuntu 9.10 (Karmic Koala), 10.04 (Lucid Lynx) and 10.10 (Maverick Meerkat), OTB, 
 OTB-Applications, Monteverdi and (soon) OTB-Wrappings packages are available through APT repositories.
 
-If you are using apt command lines tools, use this command line to add the otb repository to apt sources:
+If you are using apt command-line tools, use these command-lines to add the otb repository to apt sources:
 \begin{verbatim}
 sudo apt-get install add-apt-repository 
 sudo add-apt-repository ppa:otb/orfeotoolbox-stable
@@ -93,7 +93,7 @@ If you are using \emph{Synaptic}, you can add the repositories, update and insta
 graphical interface.
 
 If you want to use with bleeding edge versions of gdal, boost and qgis, there is an alternate UbuntuGIS repository.
-You can add it by using this command line:
+You can add it by using these command-lines:
 \begin{verbatim}
 sudo apt-get install add-apt-repository 
 sudo add-apt-repository ppa:otb/orfeotoolbox-stable-ubuntugis
@@ -110,7 +110,21 @@ Be careful not to add the two repositories, since they may cause incompatibiliti
 \label{ssec:opensuse_binaries}
 
 For OpenSuse 11.3 and OpenSuse 11.4 beta, OTB, OTB-Applications, Monteverdi and (soon)
-OTB-Wrappings packages are available through APT repositories.
+OTB-Wrappings packages are available through \emph{zypper}.
+
+First, you need to add the appropriate repository with these command-lines (please replace $11.3$ by your OpenSuse version):
+\begin{verbatim}
+zypper ar http://download.opensuse.org/repositories/games/openSUSE_11.3/ Games
+zypper ar http://download.opensuse.org/repositories/Application:/Geo/openSUSE_11.3/ GEO
+zypper ar http://download.opensuse.org/repositories/home:/tzotsos/openSUSE_11.3/ tzotsos
+\end{verbatim}
+
+Now run:
+\begin{verbatim}
+zypper update
+zypper install OrfeoToolbox
+zypper install OrfeoToolbox-devel
+\end{verbatim}
 
 \section{Building from sources}
 \label{sec:source}
