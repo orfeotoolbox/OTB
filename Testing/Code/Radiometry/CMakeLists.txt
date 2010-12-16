@@ -1181,6 +1181,12 @@ ADD_TEST(raTvLandsatTMKernelSpectralRulesWithImageTest ${RADIOMETRY_TESTS6}
         ${INPUTDATA}/L5Strip.tif
 )
 
+ADD_TEST(raTvLandsatTMBrightTest ${RADIOMETRY_TESTS6}
+        otbLandsatTMBrightTest
+        ${INPUTDATA}/L5Strip.tif
+        ${TEMP}/raTvLandsatTMBrightTest_cloudImage.tif
+)
+
 
 ADD_TEST(raTvLandsatTMThickCloudTest ${RADIOMETRY_TESTS6}
         otbLandsatTMThickCloudTest
@@ -1918,6 +1924,7 @@ otbLandsatTMIndexNDSIVisTest.cxx
 otbLandsatTMIndexNDBBBITest.cxx
 otbLandsatTMLinguisticLabelsTest.cxx
 otbLandsatTMKernelSpectralRules.cxx
+otbLandsatTMBrightTest.cxx
 otbLandsatTMThickCloudTest.cxx
 otbLandsatTMThinCloudTest.cxx
 otbLandsatTMVegetationTest.cxx
