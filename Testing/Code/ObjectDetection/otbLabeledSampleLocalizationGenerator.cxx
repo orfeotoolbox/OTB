@@ -72,7 +72,7 @@ int otbLabeledSampleLocalizationGenerator(int argc, char* argv[])
 
   generator->Update();
 
-  std::cout << generator << std::endl;
+  //std::cout << generator << std::endl;
 
   writer->SetFileName(outputVD);
   writer->SetInput(generator->GetOutput());
