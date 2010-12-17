@@ -430,7 +430,61 @@ public:
       return static_cast<TOutput>(BBBLTIRF);
     if( bbbltirsc and lNDBBBI )
       return static_cast<TOutput>(BBBLTIRNF);
+
+    typedef FlatResponseBarrenLandOrBuiltUpSpectralRule<TInput, bool> FBBSRType;
+    FBBSRType fbbsrf = FBBSRType();
+    fbbsrf.SetTV1( this->m_TV1 );
+    fbbsrf.SetTV2( this->m_TV2 );
+    fbbsrf.SetSAT( this->m_SAT );
+
+    bool fbbsr = fbbsrf( newPixel );
+    // strong barren land or built up spectral category
+    bool sbbsc = (bbcsr or fbbsr) and lNDVI and lNDBSI and !( hNIR or lMIR1);
     
+    bool sbbhtirsc = sbbsc and hTIR;
+
+    if( sbbhtirsc and (dbsr or fbbsr) )
+      return static_cast<TOutput>(SBBHTIRF);
+    if( sbbhtirsc and !(dbsr or fbbsr) )
+      return static_cast<TOutput>(SBBHTIRNF);
+
+    bool sbbltirsc = sbbsc and !(hTIR);
+    if( sbbltirsc and (dbsr or fbbsr) )
+      return static_cast<TOutput>(SBBLTIRF);
+    if( sbbltirsc and !((dbsr or fbbsr)) )
+      return static_cast<TOutput>(SBBLTIRNF);
+
+    // average barren land or built up spectral category
+    bool abbsc = (bbcsr or fbbsr) and lNDVI and mNDBSI and !( hNIR or lMIR1);
+    
+    bool abbhtirsc = abbsc and hTIR;
+
+    if( abbhtirsc and !(lNDBBBI) )
+      return static_cast<TOutput>(ABBHTIRF);
+    if( abbhtirsc and lNDBBBI )
+      return static_cast<TOutput>(ABBHTIRNF);
+
+    bool abbltirsc = abbsc and !(hTIR);
+    if( abbltirsc and !(lNDBBBI) )
+      return static_cast<TOutput>(ABBLTIRF);
+    if( abbltirsc and lNDBBBI )
+      return static_cast<TOutput>(ABBLTIRNF);
+
+    // dark barren land or built
+    bool dbbsc = (bbcsr or fbbsr) and lNDVI and lMIR1 and !( hNIR or hMIR2 or lNDBSI);
+    
+    bool dbbhtirsc = dbbsc and hTIR;
+
+    if( dbbhtirsc and (dbsr or fbbsr) )
+      return static_cast<TOutput>(DBBHTIRF);
+    if( dbbhtirsc and !(dbsr or fbbsr) )
+      return static_cast<TOutput>(DBBHTIRNF);
+
+    bool dbbltirsc = dbbsc and !(hTIR);
+    if( dbbltirsc and (dbsr or fbbsr) )
+      return static_cast<TOutput>(DBBLTIRF);
+    if( dbbltirsc and !((dbsr or fbbsr)) )
+      return static_cast<TOutput>(DBBLTIRNF);
 
     
     return static_cast<TOutput>(SU);
