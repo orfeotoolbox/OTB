@@ -1203,7 +1203,13 @@ ADD_TEST(raTvLandsatTMThinCloudTest ${RADIOMETRY_TESTS6}
 ADD_TEST(raTvLandsatTMVegetationTest ${RADIOMETRY_TESTS6}
         otbLandsatTMVegetationTest
         ${INPUTDATA}/L5Strip.tif
-        ${TEMP}/raTvLandsatTMVegetationTest_cloudImage.tif
+        ${TEMP}/raTvLandsatTMVegetationTest_Image.tif
+)
+
+ADD_TEST(raTvLandsatTMSpectralRuleBasedClassifierTest ${RADIOMETRY_TESTS6}
+        otbLandsatTMSpectralRuleBasedClassifierTest
+        ${INPUTDATA}/L5Strip.tif
+        ${TEMP}/raTvLandsatTMSpectralRuleBasedClassifierTest_Image.tif
 )
 
 
@@ -1928,6 +1934,7 @@ otbLandsatTMBrightTest.cxx
 otbLandsatTMThickCloudTest.cxx
 otbLandsatTMThinCloudTest.cxx
 otbLandsatTMVegetationTest.cxx
+otbLandsatTMSpectralRuleBasedClassifierTest.cxx
 )
 
 SET(Radiometry_SRCS7

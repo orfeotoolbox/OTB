@@ -56,4 +56,5 @@ void RegisterTests()
   REGISTER_TEST(otbLandsatTMThickCloudTest);
   REGISTER_TEST(otbLandsatTMThinCloudTest);
   REGISTER_TEST(otbLandsatTMVegetationTest);
+  REGISTER_TEST(otbLandsatTMSpectralRuleBasedClassifierTest);
 }
