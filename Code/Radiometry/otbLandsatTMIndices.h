@@ -1839,7 +1839,10 @@ class SpectralRuleBasedClassifier : public KernelSpectralRule<TInput, TOutput>
 {
 public:
   // Spectral categories
-  enum SpectralCategories {
+  enum SpectralCategory {
+    NOCLASS, // if the pixel is not classified; just for error
+             // checking; different from SU, which is a real rejection
+             // class
     TKCL, // thick clouds
     TNCL, // thin clouds; possible confusions with cold light toned
           // (highly reflective) barren land and range land
@@ -1968,14 +1971,7 @@ public:
   {
     TInput newPixel(this->PrepareValues( inputPixel ));
 
-    bool result = (newPixel[this->m_TM1] >= newPixel[this->m_TM2])
-      and (newPixel[this->m_TM2] >= newPixel[this->m_TM3])
-      and (newPixel[this->m_TM1] >= this->m_TV1 * newPixel[this->m_TM4])
-      and (newPixel[this->m_TM3] < newPixel[this->m_TM4])
-      and (newPixel[this->m_TM4] >= this->m_TV1 * newPixel[this->m_TM5])
-      and (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM4])
-      and (newPixel[this->m_TM3] >= this->m_TV2 * newPixel[this->m_TM5])
-      and (newPixel[this->m_TM5] >= newPixel[this->m_TM7]);
+    SpectralCategory result = NOCLASS;
 
     return static_cast<TOutput>(result);
   }
