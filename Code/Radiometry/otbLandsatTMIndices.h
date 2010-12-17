@@ -860,25 +860,26 @@ public:
 
     PrecisionType maximumValue = itk::NumericTraits<PrecisionType>::max();
     PrecisionType minimumValue = itk::NumericTraits<PrecisionType>::NonpositiveMin();
-    
-    m_FvBright->SetMembership(Low, minimumValue, minimumValue, 0.4, 0.4);
-    m_FvBright->SetMembership(Medium, 0.4, 0.4, 0.6, 0.6);
-    m_FvBright->SetMembership(High, 0.6, 0.6, maximumValue, maximumValue);
 
-    m_FvVis->SetMembership(Low, minimumValue, minimumValue, 0.3, 0.3);
-    m_FvVis->SetMembership(Medium, 0.3, 0.3, 0.5, 0.5);
+    // the thresholds are changed wrt Baraldi's paper
+    m_FvBright->SetMembership(Low, minimumValue, minimumValue, 0.2, 0.2);
+    m_FvBright->SetMembership(Medium, 0.2, 0.2, 0.5, 0.5);
+    m_FvBright->SetMembership(High, 0.5, 0.5, maximumValue, maximumValue);
+
+    m_FvVis->SetMembership(Low, minimumValue, minimumValue, 0.15, 0.15);
+    m_FvVis->SetMembership(Medium, 0.15, 0.15, 0.5, 0.5);
     m_FvVis->SetMembership(High, 0.5, 0.5, maximumValue, maximumValue);
 
-    m_FvNIR->SetMembership(Low, minimumValue, minimumValue, 0.4, 0.4);
-    m_FvNIR->SetMembership(Medium, 0.4, 0.4, 0.6, 0.6);
-    m_FvNIR->SetMembership(High, 0.6, 0.6, maximumValue, maximumValue);
+    m_FvNIR->SetMembership(Low, minimumValue, minimumValue, 0.2, 0.2);
+    m_FvNIR->SetMembership(Medium, 0.2, 0.2, 0.5, 0.5);
+    m_FvNIR->SetMembership(High, 0.5, 0.5, maximumValue, maximumValue);
 
-    m_FvMIR1->SetMembership(Low, minimumValue, minimumValue, 0.4, 0.4);
-    m_FvMIR1->SetMembership(Medium, 0.4, 0.4, 0.6, 0.6);
-    m_FvMIR1->SetMembership(High, 0.6, 0.6, maximumValue, maximumValue);
+    m_FvMIR1->SetMembership(Low, minimumValue, minimumValue, 0.2, 0.2);
+    m_FvMIR1->SetMembership(Medium, 0.2, 0.2, 0.5, 0.5);
+    m_FvMIR1->SetMembership(High, 0.5, 0.5, maximumValue, maximumValue);
 
     m_FvMIR2->SetMembership(Low, minimumValue, minimumValue, 0.3, 0.3);
-    m_FvMIR2->SetMembership(Medium, 0.3, 0.3, 0.5, 0.5);
+    m_FvMIR2->SetMembership(Medium, 0.15, 0.15, 0.5, 0.5);
     m_FvMIR2->SetMembership(High, 0.5, 0.5, maximumValue, maximumValue);
 
     m_FvTIR->SetMembership(Low, minimumValue, minimumValue, 0, 0);
