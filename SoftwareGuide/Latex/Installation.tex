@@ -86,7 +86,7 @@ sudo add-apt-repository ppa:otb/orfeotoolbox-stable
 Now run:
 \begin{verbatim}
 sudo aptitude update
-sudo aptitude install otb otb-applications monteverdi
+sudo aptitude install otb otbapp monteverdi
 \end{verbatim}
 
 If you are using \emph{Synaptic}, you can add the repositories, update and install the packages through the
@@ -102,14 +102,14 @@ sudo add-apt-repository ppa:otb/orfeotoolbox-stable-ubuntugis
 Now run:
 \begin{verbatim}
 sudo aptitude update
-sudo aptitude install otb otb-applications monteverdi
+sudo aptitude install otb otbapp monteverdi
 \end{verbatim}
 
 Be careful not to add the two repositories, since they may cause incompatibilities.
 
 For further informations about ubuntu packages go to href{https://launchpad.net/~otb/+archive/orfeotoolbox-stable}{orfeotoolbox-stable launchpad page} and click on \textbf{Read about installing}.
 
-\textbf{apt-add-repository} will retrieve the GPG keys of the repositories to ensure the origin of the packages. If you are behind a http proxy, this step won't work and apt-add-repository will stall and eventually quit. Following this, aptitude update will issue a warning about a signature problem. You can temporarily ignore this and proceed with OTB installation.
+\textbf{apt-add-repository} will try to retrieve the GPG keys of the repositories to certify the origin of the packages. If you are behind a http proxy, this step won't work and apt-add-repository will stall and eventually quit. You can temporarily ignore this error and proceed with the update step. Following this, aptitude update will issue a warning about a signature problem. This warning won't prevent you from installing the packages.
 
 \subsubsection{OpenSuse 11.2 and higher}
 \label{ssec:opensuse_binaries}
