@@ -189,8 +189,6 @@ public:
     typename LVType::OutputPixelType lv = lvf( newPixel );
 
     
-    SpectralCategory result = NOCLASS;
-
     typedef ThickCloudsSpectralRule<TInput, bool> TKCLSRType;
     TKCLSRType tkclsrf = TKCLSRType();
     tkclsrf.SetTV1( this->m_TV1 );
@@ -277,7 +275,6 @@ public:
     // water or shadow spectral category
     bool washsc = washsr and lBright and lVis and lNDVI and lNIR and lMIR1 and lMIR2 and !(lTIR);
 
-    return static_cast<TOutput>(washsr * 10);
     
     // deep water or shadow spectral category
     if( washsc and hNDSIVis)
@@ -308,10 +305,135 @@ public:
       return static_cast<TOutput>(PBMNDVI);
     if( pbsc and lNDVI)
       return static_cast<TOutput>(PBLNDVI);
+
+
+    typedef VegetationSpectralRule<TInput, bool> VSRType;
+    VSRType vsrf = VSRType();
+    vsrf.SetTV1( this->m_TV1 );
+    vsrf.SetTV2( this->m_TV2 );
+    vsrf.SetSAT( this->m_SAT );
+
+    bool vsr = vsrf( newPixel );
+
+    bool hNDBSI = (lv[ LVType::ndbsi ] == LVType::High);
+    bool hNIR   = (lv[ LVType::nir ] == LVType::High);
+
+    // strong vegetation spectral category
+    bool svsc = vsr and hNDVI and !(hMIR1 or hMIR2 or hNDBSI);
+
+    if( svsc and hNIR)
+      return static_cast<TOutput>(SVHNIR);
+    if( svsc and !(hNIR))
+      return static_cast<TOutput>(SVLNIR);
+
+    typedef ShadowWithVegetationSpectralRule<TInput, bool> SHVSRType;
+    SHVSRType shvsrf = SHVSRType();
+    shvsrf.SetTV1( this->m_TV1 );
+    shvsrf.SetTV2( this->m_TV2 );
+    shvsrf.SetSAT( this->m_SAT );
+
+    bool shvsr = shvsrf( newPixel );
+
+
+    typedef DominantBlueSpectralRule<TInput, bool> DBSRType;
+    DBSRType dbsrf = DBSRType();
+    dbsrf.SetTV1( this->m_TV1 );
+    dbsrf.SetTV2( this->m_TV2 );
+    dbsrf.SetSAT( this->m_SAT );
+
+    bool dbsr = dbsrf( newPixel );
     
+    // average vegetation spectral category
+    bool avsc = (vsr or shvsr) and mNDVI and !(hMIR1 or hMIR2 or hNDBSI or dbsr);
+
+    if( avsc and hNIR)
+      return static_cast<TOutput>(AVHNIR);
+    if( avsc and !(hNIR))
+      return static_cast<TOutput>(AVLNIR);
+
+    typedef RangelandSpectralRule<TInput, bool> RSRType;
+    RSRType rsrf = RSRType();
+    rsrf.SetTV1( this->m_TV1 );
+    rsrf.SetTV2( this->m_TV2 );
+    rsrf.SetSAT( this->m_SAT );
+
+    bool rsr = rsrf( newPixel );
     
+    // weak vegetation spectral category
+    bool wvsc = (vsr or rsr or shvsr) and lNDVI and lNDBSI and lMIR1 and lMIR2 and !(dbsr);
+
+    if( wvsc and hNIR)
+      return static_cast<TOutput>(WVHNIR);
+    if( wvsc and !(hNIR))
+      return static_cast<TOutput>(WVLNIR);
+
+    bool mNDBSI = (lv[ LVType::ndbsi ] == LVType::Medium);
+    // strong shrub rangeland spectral category
+    bool ssrsc = rsr and hNDVI and mNDBSI;
+    if( ssrsc and hNIR)
+      return static_cast<TOutput>(SSRHNIR);
+    if( ssrsc and !(hNIR))
+      return static_cast<TOutput>(SSRLNIR);
+
+    typedef WetlandSpectralRule<TInput, bool> WESRType;
+    WESRType wesrf = WESRType();
+    wesrf.SetTV1( this->m_TV1 );
+    wesrf.SetTV2( this->m_TV2 );
+    wesrf.SetSAT( this->m_SAT );
+
+    bool wesr = wesrf( newPixel );
     
-    return static_cast<TOutput>(result);
+    // average shrub rangeland spectral category
+    bool asrsc = rsr and mNDVI and mNDBSI and !(shvsr or wesr);
+    if( asrsc and hNIR)
+      return static_cast<TOutput>(ASRHNIR);
+    if( asrsc and !(hNIR))
+      return static_cast<TOutput>(ASRLNIR);
+
+
+    // strong herbaceous rangeland spectral category
+    bool shrsc = rsr and hNDVI and hNDBSI;
+    if( shrsc )
+      return static_cast<TOutput>(SHR);
+
+    typedef BarrenLandOrBuiltUpOrCloudsSpectralRule<TInput, bool> BBCSRType;
+    BBCSRType bbcsrf = BBCSRType();
+    bbcsrf.SetTV1( this->m_TV1 );
+    bbcsrf.SetTV2( this->m_TV2 );
+    bbcsrf.SetSAT( this->m_SAT );
+
+    bool bbcsr = bbcsrf( newPixel );
+    // average herbaceous rangeland spectral category
+    bool ahrsc = (rsr or bbcsr) and mNDVI and hNDBSI;
+    if( ahrsc )
+      return static_cast<TOutput>(AHR);
+
+    // dark rangeland spectral category
+    bool drsc = (vsr or rsr) and lNDVI and lMIR2 and !(hNIR or hMIR1 or lNDBSI);
+    if( drsc )
+      return static_cast<TOutput>(DR);
+
+    // bright barren land or built up spectral category
+    bool bbbsc = bbcsr and hNIR and hMIR2 and lNDVI and !(lNDBSI or lMIR1);
+
+    bool lNDBBBI  = (lv[ LVType::ndbbbi ] == LVType::Low);
+    
+    bool bbbhtirsc = bbbsc and hTIR;
+
+    if( bbbhtirsc and !(lNDBBBI) )
+      return static_cast<TOutput>(BBBHTIRF);
+    if( bbbhtirsc and lNDBBBI )
+      return static_cast<TOutput>(BBBHTIRNF);
+
+    bool bbbltirsc = bbbsc and !(hTIR);
+    if( bbbltirsc and !(lNDBBBI) )
+      return static_cast<TOutput>(BBBLTIRF);
+    if( bbbltirsc and lNDBBBI )
+      return static_cast<TOutput>(BBBLTIRNF);
+    
+
+    
+    return static_cast<TOutput>(SU);
     
   }
 };
