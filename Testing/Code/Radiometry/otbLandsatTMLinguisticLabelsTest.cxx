@@ -71,8 +71,8 @@ int otbLandsatTMLinguisticLabels(int argc, char * argv[])
   // Bright
   {
   unsigned int goodResult = lo;
-  if( bright > 40 ) goodResult = me;
-  if( bright > 60 ) goodResult = hi;
+  if( bright > 0.4 ) goodResult = me;
+  if( bright > 0.6 ) goodResult = hi;
 
   if( result[ LVFunctorType::bright ] != goodResult )
     return EXIT_FAILURE;
@@ -81,8 +81,8 @@ int otbLandsatTMLinguisticLabels(int argc, char * argv[])
   // Vis
   {
   unsigned int goodResult = lo;
-  if( vis > 30 ) goodResult = me;
-  if( vis > 50 ) goodResult = hi;
+  if( vis > 0.3 ) goodResult = me;
+  if( vis > 0.5 ) goodResult = hi;
 
   if( result[ LVFunctorType::vis ] != goodResult )
     return EXIT_FAILURE;
@@ -91,8 +91,8 @@ int otbLandsatTMLinguisticLabels(int argc, char * argv[])
   // Nir
   {
   unsigned int goodResult = lo;
-  if( nir > 40 ) goodResult = me;
-  if( nir > 60 ) goodResult = hi;
+  if( nir > 0.4 ) goodResult = me;
+  if( nir > 0.6 ) goodResult = hi;
 
   if( result[ LVFunctorType::nir ] != goodResult )
     return EXIT_FAILURE;
@@ -101,8 +101,8 @@ int otbLandsatTMLinguisticLabels(int argc, char * argv[])
   // Mir1
   {
   unsigned int goodResult = lo;
-  if( mir1 > 40 ) goodResult = me;
-  if( mir1 > 60 ) goodResult = hi;
+  if( mir1 > 0.4 ) goodResult = me;
+  if( mir1 > 0.6 ) goodResult = hi;
 
   if( result[ LVFunctorType::mir1 ] != goodResult )
     return EXIT_FAILURE;
@@ -111,8 +111,8 @@ int otbLandsatTMLinguisticLabels(int argc, char * argv[])
   // Mir2
   {
   unsigned int goodResult = lo;
-  if( mir2 > 30 ) goodResult = me;
-  if( mir2 > 50 ) goodResult = hi;
+  if( mir2 > 0.3 ) goodResult = me;
+  if( mir2 > 0.5 ) goodResult = hi;
 
   if( result[ LVFunctorType::mir2 ] != goodResult )
     return EXIT_FAILURE;
@@ -131,8 +131,8 @@ int otbLandsatTMLinguisticLabels(int argc, char * argv[])
   // Mirtir
   {
   unsigned int goodResult = lo;
-  if( mirtir > 18000 ) goodResult = me;
-  if( mirtir > 22000 ) goodResult = hi;
+  if( mirtir > 180 ) goodResult = me;
+  if( mirtir > 220 ) goodResult = hi;
 
   if( result[ LVFunctorType::mirtir ] != goodResult )
     return EXIT_FAILURE;

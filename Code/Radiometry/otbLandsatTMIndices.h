@@ -861,33 +861,33 @@ public:
     PrecisionType maximumValue = itk::NumericTraits<PrecisionType>::max();
     PrecisionType minimumValue = itk::NumericTraits<PrecisionType>::NonpositiveMin();
     
-    m_FvBright->SetMembership(Low, minimumValue, minimumValue, 40, 40);
-    m_FvBright->SetMembership(Medium, 40, 40, 60, 60);
-    m_FvBright->SetMembership(High, 60, 60, maximumValue, maximumValue);
+    m_FvBright->SetMembership(Low, minimumValue, minimumValue, 0.4, 0.4);
+    m_FvBright->SetMembership(Medium, 0.4, 0.4, 0.6, 0.6);
+    m_FvBright->SetMembership(High, 0.6, 0.6, maximumValue, maximumValue);
 
-    m_FvVis->SetMembership(Low, minimumValue, minimumValue, 30, 30);
-    m_FvVis->SetMembership(Medium, 30, 30, 50, 50);
-    m_FvVis->SetMembership(High, 50, 50, maximumValue, maximumValue);
+    m_FvVis->SetMembership(Low, minimumValue, minimumValue, 0.3, 0.3);
+    m_FvVis->SetMembership(Medium, 0.3, 0.3, 0.5, 0.5);
+    m_FvVis->SetMembership(High, 0.5, 0.5, maximumValue, maximumValue);
 
-    m_FvNIR->SetMembership(Low, minimumValue, minimumValue, 40, 40);
-    m_FvNIR->SetMembership(Medium, 40, 40, 60, 60);
-    m_FvNIR->SetMembership(High, 60, 60, maximumValue, maximumValue);
+    m_FvNIR->SetMembership(Low, minimumValue, minimumValue, 0.4, 0.4);
+    m_FvNIR->SetMembership(Medium, 0.4, 0.4, 0.6, 0.6);
+    m_FvNIR->SetMembership(High, 0.6, 0.6, maximumValue, maximumValue);
 
-    m_FvMIR1->SetMembership(Low, minimumValue, minimumValue, 40, 40);
-    m_FvMIR1->SetMembership(Medium, 40, 40, 60, 60);
-    m_FvMIR1->SetMembership(High, 60, 60, maximumValue, maximumValue);
+    m_FvMIR1->SetMembership(Low, minimumValue, minimumValue, 0.4, 0.4);
+    m_FvMIR1->SetMembership(Medium, 0.4, 0.4, 0.6, 0.6);
+    m_FvMIR1->SetMembership(High, 0.6, 0.6, maximumValue, maximumValue);
 
-    m_FvMIR2->SetMembership(Low, minimumValue, minimumValue, 30, 30);
-    m_FvMIR2->SetMembership(Medium, 30, 30, 50, 50);
-    m_FvMIR2->SetMembership(High, 50, 50, maximumValue, maximumValue);
+    m_FvMIR2->SetMembership(Low, minimumValue, minimumValue, 0.3, 0.3);
+    m_FvMIR2->SetMembership(Medium, 0.3, 0.3, 0.5, 0.5);
+    m_FvMIR2->SetMembership(High, 0.5, 0.5, maximumValue, maximumValue);
 
     m_FvTIR->SetMembership(Low, minimumValue, minimumValue, 0, 0);
     m_FvTIR->SetMembership(Medium, 0, 0, 28, 28);
     m_FvTIR->SetMembership(High, 28, 28, maximumValue, maximumValue);
 
     m_FvMIRTIR->SetMembership(Low, minimumValue, minimumValue, 18000, 18000);
-    m_FvMIRTIR->SetMembership(Medium, 18000, 18000, 22000, 22000);
-    m_FvMIRTIR->SetMembership(High, 22000, 22000, maximumValue, maximumValue);
+    m_FvMIRTIR->SetMembership(Medium, 180, 180, 220, 220);
+    m_FvMIRTIR->SetMembership(High, 220, 220, maximumValue, maximumValue);
 
     m_FvNDSIVis->SetMembership(Low, minimumValue, minimumValue, 0, 0);
     m_FvNDSIVis->SetMembership(Medium, 0, 0, 0.5, 0.5);
