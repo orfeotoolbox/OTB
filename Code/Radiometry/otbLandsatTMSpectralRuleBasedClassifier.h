@@ -157,7 +157,7 @@ public:
                // possible confusions with buil up areas, especially
                // asphalt roads
     SHCL,      // clouds in shadow areas
-    SHSN,      // snow in shadow areas
+    TWASHSN,   // snow in shadow areas
     WE,        // non forested wetland; possible confusions with
                // shadow areas with vegetation
     TWA,       // turbid water; possible confusions with shadow areas
@@ -486,6 +486,56 @@ public:
     if( dbbltirsc and !((dbsr or fbbsr)) )
       return static_cast<TOutput>(DBBLTIRNF);
 
+    // weak rangeland spectral category
+    bool wrsc = rsr and lNDVI and !(lNDBSI);
+    if( wrsc )
+      return static_cast<TOutput>(WR);
+
+    // shadow area with vegetation spectral category
+    bool shvsc = dbsr and shvsr and lBright and lVis and lNIR and lMIR1 and lMIR2 and !(hNDVI);
+    if( shvsc )
+      return static_cast<TOutput>(SHV);
+
+    typedef ShadowWithBarrenLandSpectralRule<TInput, bool> SHBSRType;
+    SHBSRType shbsrf = SHBSRType();
+    shbsrf.SetTV1( this->m_TV1 );
+    shbsrf.SetTV2( this->m_TV2 );
+    shbsrf.SetSAT( this->m_SAT );
+
+    bool shbsr = shbsrf( newPixel );
+    // shadow with barren land spectral category
+    bool shbsc = dbsr and shbsr and lBright and lVis and lNDVI and lNIR and lMIR1 and lMIR2;
+    if( shbsc )
+      return static_cast<TOutput>(SHB);
+
+    typedef ShadowCloudOrSnowSpectralRule<TInput, bool> SHCLSNSRType;
+    SHCLSNSRType shclsnsrf = SHCLSNSRType();
+    shclsnsrf.SetTV1( this->m_TV1 );
+    shclsnsrf.SetTV2( this->m_TV2 );
+    shclsnsrf.SetSAT( this->m_SAT );
+
+    bool shclsnsr = shclsnsrf( newPixel );
+    // clouds in shadow areas spectral category
+    bool shclsc = dbsr and shclsnsr and !(hNDSIVis or lNIR or lBright or lVis or hNDBSI or hTIR);
+    if( shclsc )
+      return static_cast<TOutput>(SHCL);
+
+    bool hBright     = (lv[ LVType::bright ] == LVType::High);
+    bool hVis        = (lv[ LVType::vis ] == LVType::High);
+    // snow in shadow areas spectral category
+    bool twashsnsc = dbsr and shclsnsr and hNDSIVis and lNIR and lMIR1 and lMIR2 and !(hBright or hVis or hNDBSI or hTIR);
+    if( twashsnsc )    
+      return static_cast<TOutput>(TWASHSN);
+
+    // non forested wetland spectral category
+    bool wesc = dbsr and wesr and lBright and lVis and lNIR and lMIR1 and lMIR2 and !(hNDVI or hNDBSI or lNDSIVis);
+    if( wesc )
+      return static_cast<TOutput>(WE);
+    
+    // turbid water spectral category
+    bool twasc = dbsr and lNDVI and lMIR1 and lMIR2 and !(hBright or hVis or hNIR or lNDSIVis);
+    if( twasc )
+      return static_cast<TOutput>(TWA);
     
     return static_cast<TOutput>(SU);
     
