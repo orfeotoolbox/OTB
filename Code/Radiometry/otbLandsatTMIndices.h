@@ -912,7 +912,7 @@ public:
   {
     TInput newPixel(this->PrepareValues( inputPixel ));
     itk::FixedArray<unsigned int, 11> result;
-    
+
     m_FvBright->SetValue( Bright<TInput, PrecisionType>()( newPixel ) );
     result[ bright ] = m_FvBright->GetMaxVar();
 
@@ -925,13 +925,19 @@ public:
     m_FvMIR1->SetValue( MIR1<TInput, PrecisionType>()( newPixel ) );
     result[ mir1 ] = m_FvMIR1->GetMaxVar();
 
-    m_FvMIR2->SetValue( MIR2<TInput, PrecisionType>()( newPixel ) );
+    MIR2<TInput, PrecisionType> mir2F;
+    mir2F.SetSAT( this->m_SAT );
+    m_FvMIR2->SetValue( mir2F( newPixel ) );
     result[ mir2 ] = m_FvMIR2->GetMaxVar();
 
-    m_FvTIR->SetValue( TIR<TInput, PrecisionType>()( newPixel ) );
+    TIR<TInput, PrecisionType> tirF;
+    tirF.SetSAT( this->m_SAT );
+    m_FvTIR->SetValue( tirF( newPixel ) );
     result[ tir ] = m_FvTIR->GetMaxVar();
 
-    m_FvMIRTIR->SetValue( MIRTIR<TInput, PrecisionType>()( newPixel ) );
+    MIRTIR<TInput, PrecisionType> mirtirF;
+    mirtirF.SetSAT( this->m_SAT );
+    m_FvMIRTIR->SetValue( mirtirF( newPixel ) );
     result[ mirtir ] = m_FvMIRTIR->GetMaxVar();
 
     m_FvNDSIVis->SetValue( NDSIVis<TInput, PrecisionType>()( newPixel ) );
