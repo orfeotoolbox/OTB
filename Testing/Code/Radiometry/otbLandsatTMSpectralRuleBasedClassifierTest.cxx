@@ -16,7 +16,7 @@
 
 =========================================================================*/
 #include "itkExceptionObject.h"
-#include "otbLandsatTMIndices.h"
+#include "otbLandsatTMSpectralRuleBasedClassifier.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
