@@ -1637,7 +1637,6 @@ public:
 };
 
 
-
 /** \class ShadowWithVegetationSpectralRule
  *
  * Implementation of the ShadowWithVegetationSpectralRule for Landsat TM image
@@ -1682,7 +1681,6 @@ public:
     return static_cast<TOutput>(result);
   }
 };
-
 
 
 /** \class ShadowCloudOrSnowSpectralRule

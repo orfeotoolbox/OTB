@@ -39,7 +39,7 @@ int otbLandsatTMIndexBIO(int argc, char * argv[])
 
   double goodResult = ((TM5+TM3)-(TM4+TM1))/((TM5+TM3)+(TM4+TM1));
 
-  std::cout << goodResult ;
+  std::cout << goodResult;
 
   InputPixelType pixel;
   pixel[0] = TM1;

@@ -39,7 +39,7 @@ int otbLandsatTMIndexNDBSI(int argc, char * argv[])
 
   double goodResult = (TM5-TM4)/(TM5+TM4+ndbsiFunct.GetEpsilonToBeConsideredAsZero());
 
-  std::cout << goodResult ;
+  std::cout << goodResult;
 
   InputPixelType pixel;
   pixel[0] = TM1;

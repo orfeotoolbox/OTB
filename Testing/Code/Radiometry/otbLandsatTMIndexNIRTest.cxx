@@ -39,7 +39,7 @@ int otbLandsatTMIndexNIR(int argc, char * argv[])
 
   double goodResult = TM4;
 
-  std::cout << goodResult ;
+  std::cout << goodResult;
 
   InputPixelType pixel;
   pixel[0] = TM1;

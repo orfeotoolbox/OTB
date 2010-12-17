@@ -39,7 +39,7 @@ int otbLandsatTMIndexVis(int argc, char * argv[])
 
   double goodResult = (TM1+TM2+TM3)/3.0;
 
-  std::cout << goodResult ;
+  std::cout << goodResult;
 
   InputPixelType pixel;
   pixel[0] = TM1;

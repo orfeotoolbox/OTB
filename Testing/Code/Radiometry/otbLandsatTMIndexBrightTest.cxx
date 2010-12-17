@@ -39,7 +39,7 @@ int otbLandsatTMIndexBright(int argc, char * argv[])
 
   double goodResult = (TM1+TM2+2*TM3+2*TM4+TM5+TM7)/8.0;
 
-  std::cout << goodResult ;
+  std::cout << goodResult;
 
   InputPixelType pixel;
   pixel[0] = TM1;

@@ -40,7 +40,7 @@ int otbLandsatTMIndexNDSIVis(int argc, char * argv[])
   double vis = (TM1+TM2+TM3)/3.0;
   double goodResult = (vis-TM5)/(vis+TM5+ndsiVisFunct.GetEpsilonToBeConsideredAsZero());
 
-  std::cout << goodResult ;
+  std::cout << goodResult;
 
   InputPixelType pixel;
   pixel[0] = TM1;

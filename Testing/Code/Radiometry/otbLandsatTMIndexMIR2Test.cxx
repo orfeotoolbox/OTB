@@ -39,7 +39,7 @@ int otbLandsatTMIndexMIR2(int argc, char * argv[])
 
   double goodResult = TM7;
 
-  std::cout << goodResult ;
+  std::cout << goodResult;
 
   InputPixelType pixel;
   pixel[0] = TM1;
