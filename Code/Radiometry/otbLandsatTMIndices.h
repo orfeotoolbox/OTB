@@ -878,7 +878,7 @@ public:
     m_FvMIR1->SetMembership(Medium, 0.2, 0.2, 0.5, 0.5);
     m_FvMIR1->SetMembership(High, 0.5, 0.5, maximumValue, maximumValue);
 
-    m_FvMIR2->SetMembership(Low, minimumValue, minimumValue, 0.3, 0.3);
+    m_FvMIR2->SetMembership(Low, minimumValue, minimumValue, 0.15, 0.15);
     m_FvMIR2->SetMembership(Medium, 0.15, 0.15, 0.5, 0.5);
     m_FvMIR2->SetMembership(High, 0.5, 0.5, maximumValue, maximumValue);
 
