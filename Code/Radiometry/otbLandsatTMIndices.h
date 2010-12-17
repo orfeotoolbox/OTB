@@ -885,7 +885,7 @@ public:
     m_FvTIR->SetMembership(Medium, 0, 0, 28, 28);
     m_FvTIR->SetMembership(High, 28, 28, maximumValue, maximumValue);
 
-    m_FvMIRTIR->SetMembership(Low, minimumValue, minimumValue, 18000, 18000);
+    m_FvMIRTIR->SetMembership(Low, minimumValue, minimumValue, 180, 180);
     m_FvMIRTIR->SetMembership(Medium, 180, 180, 220, 220);
     m_FvMIRTIR->SetMembership(High, 220, 220, maximumValue, maximumValue);
 
