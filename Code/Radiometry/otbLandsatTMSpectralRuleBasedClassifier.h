@@ -177,11 +177,118 @@ public:
 
   inline TOutput operator ()(const TInput& inputPixel)
   {
+    // We normalize the pixel just once, so that the indices do not
+    // need to do it
     TInput newPixel(this->PrepareValues( inputPixel ));
 
+
+    // Get the linguistic variables
+    typedef LinguisticVariables<TInput> LVType;
+    LVType lvf = LVType();
+    lvf.SetSAT( this->m_SAT );
+    typename LVType::OutputPixelType lv = lvf( newPixel );
+
+    
     SpectralCategory result = NOCLASS;
 
+    typedef ThickCloudsSpectralRule<TInput, bool> TKCLSRType;
+    TKCLSRType tkclsrf = TKCLSRType();
+    tkclsrf.SetTV1( this->m_TV1 );
+    tkclsrf.SetTV2( this->m_TV2 );
+    tkclsrf.SetSAT( this->m_SAT );
+
+    bool tkclsr = tkclsrf( newPixel );
+
+    typedef ThinCloudsSpectralRule<TInput, bool> TNCLSRType;
+    TNCLSRType tnclsrf = TNCLSRType();
+    tnclsrf.SetTV1( this->m_TV1 );
+    tnclsrf.SetTV2( this->m_TV2 );
+    tnclsrf.SetSAT( this->m_SAT );
+
+    bool tnclsr = tnclsrf( newPixel );
+
+    bool lBright     = (lv[ LVType::bright ] == LVType::Low);
+    bool lVis        = (lv[ LVType::vis ] == LVType::Low);
+    bool lNIR        = (lv[ LVType::nir ] == LVType::Low);
+    bool hNDSIVis    = (lv[ LVType::ndsivis ] == LVType::High);
+    bool lMIR1       = (lv[ LVType::mir1 ] == LVType::Low);
+    bool lMIR2       = (lv[ LVType::mir2 ] == LVType::Low);
+    bool hTIR        = (lv[ LVType::tir ] == LVType::High);
+    bool hMIRTIR     = (lv[ LVType::mirtir ] == LVType::High);
+    bool mMIRTIR     = (lv[ LVType::mirtir ] == LVType::Medium);
+    bool lMIRTIR     = (lv[ LVType::mirtir ] == LVType::Low);
+
+    
+    // cloud spectral category
+    bool clsc = (tkclsr or tnclsr) and !(lBright or
+                                         lVis or lNIR or
+                                         hNDSIVis or
+                                         lMIR1 or
+                                         lMIR2 or hTIR
+                                         or hMIRTIR);
+    
+    // thick cloud spectral category
+    if(clsc and lMIRTIR)
+      return static_cast<TOutput>(TKCL);
+
+    // thin cloud spectral category
+    if(clsc and mMIRTIR)
+      return static_cast<TOutput>(TNCL);
+
+
+    typedef SnowOrIceSpectralRule<TInput, bool> SNICSRType;
+    SNICSRType snicsrf = SNICSRType();
+    snicsrf.SetTV1( this->m_TV1 );
+    snicsrf.SetTV2( this->m_TV2 );
+    snicsrf.SetSAT( this->m_SAT );
+
+    bool snicsr = snicsrf( newPixel );
+
+    bool lNDBSI     = (lv[ LVType::ndbsi ] == LVType::Low);
+    bool lNDSIVis   = (lv[ LVType::ndsivis ] == LVType::Low);
+    bool hMIR1      = (lv[ LVType::mir1 ] == LVType::High);
+    bool hMIR2      = (lv[ LVType::mir2 ] == LVType::High);
+    
+    // snow or ice spectral category
+    bool snicsc = (snicsr and lNDBSI and !(lBright or
+                     lVis or lNDSIVis or lNIR or hMIR1 or hMIR2 or hTIR));
+
+    // snow spectral category
+    if(snicsc and hNDSIVis)
+      return static_cast<TOutput>(SN);
+
+    bool mNDSIVis     = (lv[ LVType::ndsivis ] == LVType::Medium);
+    // ice or snow spectral category
+    if(snicsc and mNDSIVis)
+      return static_cast<TOutput>(ICSN);
+
+
+    typedef WaterOrShadowSpectralRule<TInput, bool> WASHSRType;
+    WASHSRType washsrf = WASHSRType();
+    washsrf.SetTV1( this->m_TV1 );
+    washsrf.SetTV2( this->m_TV2 );
+    washsrf.SetSAT( this->m_SAT );
+
+    bool washsr = washsrf( newPixel );
+    
+    
+    bool lNDVI = (lv[ LVType::ndvi ] == LVType::Low);
+    bool lTIR  = (lv[ LVType::tir ] == LVType::Low);
+    // water or shadow spectral category
+    bool washsc = washsr and lBright and lVis and lNDVI and lNIR and lMIR1 and lMIR2 and !(lTIR);
+
+    return static_cast<TOutput>(washsr * 10);
+    
+    // deep water or shadow spectral category
+    if( washsc and hNDSIVis)
+      return static_cast<TOutput>(DPWASH);
+
+    // shallow water or shadow spectral category
+    if( washsc and !(hNDSIVis))
+      return static_cast<TOutput>(SLWASH);
+    
     return static_cast<TOutput>(result);
+    
   }
 };
 
