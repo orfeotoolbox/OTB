@@ -286,6 +286,30 @@ public:
     // shallow water or shadow spectral category
     if( washsc and !(hNDSIVis))
       return static_cast<TOutput>(SLWASH);
+
+
+    typedef PitbogOrGreenhouseSpectralRule<TInput, bool> PBGHSRType;
+    PBGHSRType pbghsrf = PBGHSRType();
+    pbghsrf.SetTV1( this->m_TV1 );
+    pbghsrf.SetTV2( this->m_TV2 );
+    pbghsrf.SetSAT( this->m_SAT );
+
+    bool pbghsr = pbghsrf( newPixel );
+    
+    // Pit bog spectral category
+    bool pbsc = pbghsr and lMIR1 and lMIR2 and lNDBSI and !(lNIR);
+
+    bool mNDVI = (lv[ LVType::ndvi ] == LVType::Medium);
+    bool hNDVI = (lv[ LVType::ndvi ] == LVType::High);
+    // Pit bog categories for each ndvi
+    if( pbsc and hNDVI)
+      return static_cast<TOutput>(PBHNDVI);
+    if( pbsc and mNDVI)
+      return static_cast<TOutput>(PBMNDVI);
+    if( pbsc and lNDVI)
+      return static_cast<TOutput>(PBLNDVI);
+    
+    
     
     return static_cast<TOutput>(result);
     
