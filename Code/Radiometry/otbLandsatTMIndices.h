@@ -1671,15 +1671,6 @@ public:
   inline TOutput operator ()(const TInput& inputPixel)
   {
     TInput newPixel(this->PrepareValues( inputPixel ));
-    PrecisionType max123;
-    PrecisionType min123;
-    PrecisionType max12347;
-    PrecisionType min12347;
-    PrecisionType max234;
-    PrecisionType max45;
-    this->SetMinMax(newPixel, &min123, &max123, &min12347, &max12347, &max234, &max45);
-    
-
     bool result = (newPixel[this->m_TM1] >= newPixel[this->m_TM2])
       and  (newPixel[this->m_TM2] >= newPixel[this->m_TM3])
       and  (newPixel[this->m_TM1] >= this->m_TV2 * newPixel[this->m_TM4])
@@ -1779,15 +1770,6 @@ public:
   inline TOutput operator ()(const TInput& inputPixel)
   {
     TInput newPixel(this->PrepareValues( inputPixel ));
-    PrecisionType max123;
-    PrecisionType min123;
-    PrecisionType max12347;
-    PrecisionType min12347;
-    PrecisionType max234;
-    PrecisionType max45;
-    this->SetMinMax(newPixel, &min123, &max123, &min12347, &max12347, &max234, &max45);
-
-
     bool result = (newPixel[this->m_TM1] >= newPixel[this->m_TM2])
       and (newPixel[this->m_TM2] >= newPixel[this->m_TM3])
       and (newPixel[this->m_TM1] >= this->m_TV1 * newPixel[this->m_TM4])
