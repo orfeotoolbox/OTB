@@ -1153,10 +1153,10 @@ public:
     this->SetMinMax(newPixel, &min123, &max123, &min12347, &max12347, &max234, &max45);
 
     bool result = (min123 >= (this->m_TV1 * max123))
-      and (max123 >= this->m_TV1 * newPixel[this->m_TM4])
-      and (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM4])
-      and (newPixel[this->m_TM5] >= this->m_TV1 * max123)
-      and (newPixel[this->m_TM7] >= this->m_TV1 * newPixel[this->m_TM4]);
+      && (max123 >= this->m_TV1 * newPixel[this->m_TM4])
+      && (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM4])
+      && (newPixel[this->m_TM5] >= this->m_TV1 * max123)
+      && (newPixel[this->m_TM7] >= this->m_TV1 * newPixel[this->m_TM4]);
 
     return static_cast<TOutput>(result);
   }
@@ -1206,15 +1206,15 @@ public:
 
 
     bool result = (min123 >= (this->m_TV1 * max123))
-      and (newPixel[this->m_TM4] >= max123)
-      and !((newPixel[this->m_TM1] <= newPixel[this->m_TM2]
-             and newPixel[this->m_TM2] <= newPixel[this->m_TM3]
-              and newPixel[this->m_TM3] <= newPixel[this->m_TM4])
-            and (newPixel[this->m_TM3] >= this->m_TV1 * newPixel[this->m_TM4]))
-      and (newPixel[this->m_TM4] >= this->m_TV1 * newPixel[this->m_TM5])
-      and (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM4])
-      and (newPixel[this->m_TM5] >= this->m_TV1 * max123)
-      and (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM7]);
+      && (newPixel[this->m_TM4] >= max123)
+      && !((newPixel[this->m_TM1] <= newPixel[this->m_TM2]
+             && newPixel[this->m_TM2] <= newPixel[this->m_TM3]
+              && newPixel[this->m_TM3] <= newPixel[this->m_TM4])
+            && (newPixel[this->m_TM3] >= this->m_TV1 * newPixel[this->m_TM4]))
+      && (newPixel[this->m_TM4] >= this->m_TV1 * newPixel[this->m_TM5])
+      && (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM4])
+      && (newPixel[this->m_TM5] >= this->m_TV1 * max123)
+      && (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM7]);
 
     return static_cast<TOutput>(result);
   }
@@ -1264,12 +1264,12 @@ public:
 
 
     bool result = (min123 >= (this->m_TV1 * max123))
-      and (newPixel[this->m_TM4] >= (this->m_TV1 * max123))
-      and (newPixel[this->m_TM5] <= this->m_TV2 * newPixel[this->m_TM4])
-      and (newPixel[this->m_TM5] <= this->m_TV1 * min123)
-      and (newPixel[this->m_TM5] <= this->m_TV1 * max123)
-      and (newPixel[this->m_TM7] <= this->m_TV2 * newPixel[this->m_TM4])
-      and (newPixel[this->m_TM7] <= this->m_TV1 * min123);
+      && (newPixel[this->m_TM4] >= (this->m_TV1 * max123))
+      && (newPixel[this->m_TM5] <= this->m_TV2 * newPixel[this->m_TM4])
+      && (newPixel[this->m_TM5] <= this->m_TV1 * min123)
+      && (newPixel[this->m_TM5] <= this->m_TV1 * max123)
+      && (newPixel[this->m_TM7] <= this->m_TV2 * newPixel[this->m_TM4])
+      && (newPixel[this->m_TM7] <= this->m_TV1 * min123);
 
     return static_cast<TOutput>(result);
   }
@@ -1311,10 +1311,10 @@ public:
   {
     TInput newPixel(this->PrepareValues( inputPixel ));
     bool result = (newPixel[this->m_TM1] >= newPixel[this->m_TM2])
-      and (newPixel[this->m_TM2] >= newPixel[this->m_TM3])
-      and (newPixel[this->m_TM3] >= newPixel[this->m_TM4])
-      and (newPixel[this->m_TM4] >= newPixel[this->m_TM5])
-      and (newPixel[this->m_TM4] >= newPixel[this->m_TM7]);
+      && (newPixel[this->m_TM2] >= newPixel[this->m_TM3])
+      && (newPixel[this->m_TM3] >= newPixel[this->m_TM4])
+      && (newPixel[this->m_TM4] >= newPixel[this->m_TM5])
+      && (newPixel[this->m_TM4] >= newPixel[this->m_TM7]);
 
     return static_cast<TOutput>(result);
   }
@@ -1365,11 +1365,11 @@ public:
 
 
     bool result = (newPixel[this->m_TM3] >= this->m_TV1 * newPixel[this->m_TM1])
-      and (newPixel[this->m_TM1] >= this->m_TV1 * newPixel[this->m_TM3])
-      and (max123 <= this->m_TV1 * newPixel[this->m_TM4])
-      and (newPixel[this->m_TM5] <= this->m_TV1 * newPixel[this->m_TM4])
-      and (newPixel[this->m_TM3] >= this->m_TV2 * newPixel[this->m_TM5])
-      and (min123 >= this->m_TV1 * newPixel[this->m_TM7]);
+      && (newPixel[this->m_TM1] >= this->m_TV1 * newPixel[this->m_TM3])
+      && (max123 <= this->m_TV1 * newPixel[this->m_TM4])
+      && (newPixel[this->m_TM5] <= this->m_TV1 * newPixel[this->m_TM4])
+      && (newPixel[this->m_TM3] >= this->m_TV2 * newPixel[this->m_TM5])
+      && (min123 >= this->m_TV1 * newPixel[this->m_TM7]);
 
 
     return static_cast<TOutput>(result);
@@ -1411,10 +1411,10 @@ public:
   {
     TInput newPixel(this->PrepareValues( inputPixel ));
     bool result = (newPixel[this->m_TM1] >= this->m_TV1 * newPixel[this->m_TM2])
-      and (newPixel[this->m_TM1] >= this->m_TV1 * newPixel[this->m_TM3])
-      and (newPixel[this->m_TM1] >= this->m_TV1 * newPixel[this->m_TM4])
-      and (newPixel[this->m_TM1] >= this->m_TV1 * newPixel[this->m_TM5])
-      and (newPixel[this->m_TM1] >= this->m_TV1 * newPixel[this->m_TM7]);
+      && (newPixel[this->m_TM1] >= this->m_TV1 * newPixel[this->m_TM3])
+      && (newPixel[this->m_TM1] >= this->m_TV1 * newPixel[this->m_TM4])
+      && (newPixel[this->m_TM1] >= this->m_TV1 * newPixel[this->m_TM5])
+      && (newPixel[this->m_TM1] >= this->m_TV1 * newPixel[this->m_TM7]);
 
 
     return static_cast<TOutput>(result);
@@ -1466,12 +1466,12 @@ public:
 
 
     bool result = (newPixel[this->m_TM2] >= this->m_TV2 * newPixel[this->m_TM1])
-      and (newPixel[this->m_TM2] >= this->m_TV1 * newPixel[this->m_TM3])
-      and (newPixel[this->m_TM3] < this->m_TV1 * newPixel[this->m_TM4])
-      and (newPixel[this->m_TM4] > max123)
-      and (newPixel[this->m_TM5] < this->m_TV1 * newPixel[this->m_TM4])
-      and (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM3])
-      and (newPixel[this->m_TM7] < this->m_TV1 * newPixel[this->m_TM5]);
+      && (newPixel[this->m_TM2] >= this->m_TV1 * newPixel[this->m_TM3])
+      && (newPixel[this->m_TM3] < this->m_TV1 * newPixel[this->m_TM4])
+      && (newPixel[this->m_TM4] > max123)
+      && (newPixel[this->m_TM5] < this->m_TV1 * newPixel[this->m_TM4])
+      && (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM3])
+      && (newPixel[this->m_TM7] < this->m_TV1 * newPixel[this->m_TM5]);
 
 
     return static_cast<TOutput>(result);
@@ -1523,14 +1523,14 @@ public:
 
 
     bool result = (newPixel[this->m_TM2] >= this->m_TV2 * newPixel[this->m_TM1])
-      and (newPixel[this->m_TM2] >= this->m_TV1 * newPixel[this->m_TM3])
-      and (newPixel[this->m_TM4] > max123)
-      and (newPixel[this->m_TM3] < this->m_TV1 * newPixel[this->m_TM4])
-      and (newPixel[this->m_TM4] >= this->m_TV1 * newPixel[this->m_TM5])
-      and (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM4])
-      and (newPixel[this->m_TM5] > max123)
-      and (newPixel[this->m_TM7] < this->m_TV1 * max45)
-      and (newPixel[this->m_TM5] >= newPixel[this->m_TM7]);
+      && (newPixel[this->m_TM2] >= this->m_TV1 * newPixel[this->m_TM3])
+      && (newPixel[this->m_TM4] > max123)
+      && (newPixel[this->m_TM3] < this->m_TV1 * newPixel[this->m_TM4])
+      && (newPixel[this->m_TM4] >= this->m_TV1 * newPixel[this->m_TM5])
+      && (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM4])
+      && (newPixel[this->m_TM5] > max123)
+      && (newPixel[this->m_TM7] < this->m_TV1 * max45)
+      && (newPixel[this->m_TM5] >= newPixel[this->m_TM7]);
 
 
     return static_cast<TOutput>(result);
@@ -1581,12 +1581,12 @@ public:
 
 
     bool result = (newPixel[this->m_TM3] >= this->m_TV2 * newPixel[this->m_TM1])
-      and (newPixel[this->m_TM3] >= this->m_TV1 * newPixel[this->m_TM2])
-      and (newPixel[this->m_TM4] >= this->m_TV1 * max123)
-      and (newPixel[this->m_TM5] >= max123)
-      and (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM4])
-      and (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM7])
-      and (newPixel[this->m_TM7] >= this->m_TV2 * max45);
+      && (newPixel[this->m_TM3] >= this->m_TV1 * newPixel[this->m_TM2])
+      && (newPixel[this->m_TM4] >= this->m_TV1 * max123)
+      && (newPixel[this->m_TM5] >= max123)
+      && (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM4])
+      && (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM7])
+      && (newPixel[this->m_TM7] >= this->m_TV2 * max45);
 
     return static_cast<TOutput>(result);
   }
@@ -1636,7 +1636,7 @@ public:
 
 
     bool result = (newPixel[this->m_TM5] >= this->m_TV1 * max12347)
-      and (min12347 >= this->m_TV2 * newPixel[this->m_TM5]);
+      && (min12347 >= this->m_TV2 * newPixel[this->m_TM5]);
 
     return static_cast<TOutput>(result);
   }
@@ -1678,11 +1678,11 @@ public:
   {
     TInput newPixel(this->PrepareValues( inputPixel ));
     bool result = (newPixel[this->m_TM1] >= newPixel[this->m_TM2])
-      and  (newPixel[this->m_TM2] >= newPixel[this->m_TM3])
-      and  (newPixel[this->m_TM3] >= this->m_TV1 * newPixel[this->m_TM4])
-      and  (newPixel[this->m_TM1] >= newPixel[this->m_TM5])
-      and  (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM4])
-      and  (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM7]);
+      &&  (newPixel[this->m_TM2] >= newPixel[this->m_TM3])
+      &&  (newPixel[this->m_TM3] >= this->m_TV1 * newPixel[this->m_TM4])
+      &&  (newPixel[this->m_TM1] >= newPixel[this->m_TM5])
+      &&  (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM4])
+      &&  (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM7]);
 
     return static_cast<TOutput>(result);
   }
@@ -1723,12 +1723,12 @@ public:
   {
     TInput newPixel(this->PrepareValues( inputPixel ));
     bool result = (newPixel[this->m_TM1] >= newPixel[this->m_TM2])
-      and  (newPixel[this->m_TM2] >= newPixel[this->m_TM3])
-      and  (newPixel[this->m_TM1] >= this->m_TV2 * newPixel[this->m_TM4])
-      and  (newPixel[this->m_TM3] < this->m_TV1 * newPixel[this->m_TM4])
-      and  (newPixel[this->m_TM5] < this->m_TV1 * newPixel[this->m_TM4])
-      and  (newPixel[this->m_TM3] >= this->m_TV1 * newPixel[this->m_TM5])
-      and  (newPixel[this->m_TM7] < this->m_TV1 * newPixel[this->m_TM4]);
+      &&  (newPixel[this->m_TM2] >= newPixel[this->m_TM3])
+      &&  (newPixel[this->m_TM1] >= this->m_TV2 * newPixel[this->m_TM4])
+      &&  (newPixel[this->m_TM3] < this->m_TV1 * newPixel[this->m_TM4])
+      &&  (newPixel[this->m_TM5] < this->m_TV1 * newPixel[this->m_TM4])
+      &&  (newPixel[this->m_TM3] >= this->m_TV1 * newPixel[this->m_TM5])
+      &&  (newPixel[this->m_TM7] < this->m_TV1 * newPixel[this->m_TM4]);
 
     return static_cast<TOutput>(result);
   }
@@ -1778,9 +1778,9 @@ public:
     
 
     bool result = (newPixel[this->m_TM1] >= this->m_TV1 * max234)
-      and (max234 >= this->m_TV1 * newPixel[this->m_TM1])
-      and (newPixel[this->m_TM5] < newPixel[this->m_TM1])
-      and (newPixel[this->m_TM7] < this->m_TV1 * newPixel[this->m_TM1]);
+      && (max234 >= this->m_TV1 * newPixel[this->m_TM1])
+      && (newPixel[this->m_TM5] < newPixel[this->m_TM1])
+      && (newPixel[this->m_TM7] < this->m_TV1 * newPixel[this->m_TM1]);
 
     return static_cast<TOutput>(result);
   }
@@ -1821,13 +1821,13 @@ public:
   {
     TInput newPixel(this->PrepareValues( inputPixel ));
     bool result = (newPixel[this->m_TM1] >= newPixel[this->m_TM2])
-      and (newPixel[this->m_TM2] >= newPixel[this->m_TM3])
-      and (newPixel[this->m_TM1] >= this->m_TV1 * newPixel[this->m_TM4])
-      and (newPixel[this->m_TM3] < newPixel[this->m_TM4])
-      and (newPixel[this->m_TM4] >= this->m_TV1 * newPixel[this->m_TM5])
-      and (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM4])
-      and (newPixel[this->m_TM3] >= this->m_TV2 * newPixel[this->m_TM5])
-      and (newPixel[this->m_TM5] >= newPixel[this->m_TM7]);
+      && (newPixel[this->m_TM2] >= newPixel[this->m_TM3])
+      && (newPixel[this->m_TM1] >= this->m_TV1 * newPixel[this->m_TM4])
+      && (newPixel[this->m_TM3] < newPixel[this->m_TM4])
+      && (newPixel[this->m_TM4] >= this->m_TV1 * newPixel[this->m_TM5])
+      && (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM4])
+      && (newPixel[this->m_TM3] >= this->m_TV2 * newPixel[this->m_TM5])
+      && (newPixel[this->m_TM5] >= newPixel[this->m_TM7]);
 
     return static_cast<TOutput>(result);
   }
