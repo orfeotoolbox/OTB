@@ -144,23 +144,50 @@ public:
     return m_TM1;
   }
 
-  itkGetConstMacro(TM1, unsigned int);
+  unsigned int GetTM1() const
+  {
+    return this->m_TM1;
+  }
 
-  itkGetConstMacro(TM2, unsigned int);
+  unsigned int GetTM2() const
+  {
+    return this->m_TM2;
+  }
 
-  itkGetConstMacro(TM3, unsigned int);
+  unsigned int GetTM3() const
+  {
+    return this->m_TM3;
+  }
 
-  itkGetConstMacro(TM4, unsigned int);
+  unsigned int GetTM4() const
+  {
+    return this->m_TM4;
+  }
 
-  itkGetConstMacro(TM5, unsigned int);
+  unsigned int GetTM5() const
+  {
+    return this->m_TM5;
+  }
 
-  itkGetConstMacro(TM60, unsigned int);
+  unsigned int GetTM60() const
+  {
+    return this->m_TM60;
+  }
 
-  itkGetConstMacro(TM61, unsigned int);
+  unsigned int GetTM61() const
+  {
+    return this->m_TM61;
+  }
 
-  itkGetConstMacro(TM62, unsigned int);
+  unsigned int GetTM62() const
+  {
+    return this->m_TM62;
+  }
 
-  itkGetConstMacro(TM7, unsigned int);
+  unsigned int GetTM7() const
+  {
+    return this->m_TM7;
+  }
 
   void SetSAT(SATType sat)
   {
@@ -191,24 +218,36 @@ public:
       m_SAT = L7;
       }
   }
-  itkGetConstMacro(SAT, SATType);
+
+  SATType GetSAT() const
+  {
+    return this->m_SAT;
+  }
 
   void SetDegree(DegreeType deg)
   {
     this->m_Degree = deg;
   }
 
-  itkGetConstMacro(Degree, DegreeType);
+  DegreeType GetDegre() const
+  {
+    return this->m_Degree;
+  }
 
   void SetReflectance(ReflectanceType ref)
   {
     this->m_Reflectance = ref;
   }
 
-  itkGetConstMacro(Reflectance, ReflectanceType);
+  ReflectanceType GetReflectance() const
+  {
+    return this->m_Reflectance;
+  }
 
-  itkGetConstMacro(EpsilonToBeConsideredAsZero, double);
-
+  double GetEpsilonToBeConsideredAsZero() const
+  {
+    return this->m_EpsilonToBeConsideredAsZero;
+  }
 
 protected:
   /// Prepare the values so they are normalized and in °C
@@ -1015,8 +1054,16 @@ public:
     this->m_TV2 = tv2;
   }
 
-  itkGetConstMacro(TV1, PrecisionType);
-  itkGetConstMacro(TV2, PrecisionType);
+  PrecisionType GetTV1() const
+  {
+    return this->m_TV1;
+  }
+
+  PrecisionType GetTV2() const
+  {
+    return this->m_TV2;
+  }
+
 protected:
   /** Tolerance value 1*/
   PrecisionType m_TV1;
