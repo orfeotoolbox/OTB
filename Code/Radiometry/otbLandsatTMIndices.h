@@ -49,7 +49,12 @@ enum ReflectanceType {Thousands, Normalized};
    *  vector pixel having 8 components. The order of the components
    *  defaults to the one of Lansat 7, but the Landsat 5 order is also
    *  available. Any other order of bands can be manually selected.
-   *  Subclasses should overload operator().
+   *  Subclasses should overload operator(). This class assumes
+   *  that the input image is calibrated in reflectances and in
+   *  temperature. The reflectances can be given in the 0-1 range
+   *  (Normalized) or in 0-1000 (Thousands). Temperatures can be given
+   *  in Kelvin, in Kelvin*100 or in Celsius. Appropriate accessors
+   *  are available for setting these units.
    *
    * \ingroup Radiometry
  */

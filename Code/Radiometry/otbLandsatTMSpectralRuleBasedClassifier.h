@@ -31,11 +31,16 @@ namespace LandsatTM
 
 /** \class SpectralRuleBasedClassifier
  *
- * Implementation of the SpectralRuleBasedClassifier for Landsat TM image
- *  land cover classification as described in table IV of Baraldi et
- *  al. 2006, "Automatic Spectral Rule-Based Preliminary Mapping of
- *  Calibrated Landsat TM and ETM+ Images", IEEE Trans. on Geoscience
- *  and Remote Sensing, vol 44, no 9.
+ * \brief Implementation of the SpectralRuleBasedClassifier for
+ *  Landsat TM image land cover classification as described in table
+ *  IV of Baraldi et al. 2006, "Automatic Spectral Rule-Based
+ *  Preliminary Mapping of Calibrated Landsat TM and ETM+ Images",
+ *  IEEE Trans. on Geoscience and Remote Sensing, vol 44, no 9. This
+ *  classifier assumes that the input image is calibrated in
+ *  reflectances and in temperature. The reflectances can be given in
+ *  the 0-1 range (Normalized) or in 0-1000 (Thousands). Temperatures
+ *  can be given in Kelvin, in Kelvin*100 or in Celsius. Appropriate
+ *  accessors are available for setting these units.
  *
  *
  * \ingroup Functor
