@@ -75,7 +75,7 @@ public:
   }
 
   /// Constructor
-  LandsatTMIndexBase() :  m_EpsilonToBeConsideredAsZero(0.0000001), m_TM1(0), m_TM2(1), m_TM3(2), m_TM4(3), m_TM5(4), m_TM60(5), m_TM61(5), m_TM62(6), m_TM7{7}, m_SAT(L7), m_Degree(Celsius), m_Reflectance(Normalized) {}
+  LandsatTMIndexBase() :  m_EpsilonToBeConsideredAsZero(0.0000001), m_TM1(0), m_TM2(1), m_TM3(2), m_TM4(3), m_TM5(4), m_TM60(5), m_TM61(5), m_TM62(6), m_TM7(7), m_SAT(L7), m_Degree(Celsius), m_Reflectance(Normalized) {}
   /// Desctructor
   virtual ~LandsatTMIndexBase() {}
 
