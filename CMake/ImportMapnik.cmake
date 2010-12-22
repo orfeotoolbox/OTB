@@ -31,12 +31,14 @@ IF(OTB_USE_MAPNIK)
         # libicuuc is a unicode library mapnik relies on.
         # since libicuuc version 1.42, we need to link against it when linking against mapnik
         # otherwise we get undefined symbol error
+		IF (NOT WIN32)
         FIND_LIBRARY(ICUUC_LIBRARY icuuc )
         MARK_AS_ADVANCED(ICUUC_LIBRARY)
         IF (NOT ICUUC_LIBRARY)
                 MESSAGE(FATAL_ERROR
                         "Cannot find ICUUC library, needed by MAPNIK. Please set ICUUC_LIBRARY or set OTB_USE_MAPNIK OFF.")
         ENDIF (NOT ICUUC_LIBRARY)
+		ENDIF (NOT  WIN32)
 
         # Add compiler option
         ADD_DEFINITIONS(-DOTB_USE_MAPNIK)
