@@ -18,7 +18,7 @@ IF(OTB_USE_MAPNIK)
         MARK_AS_ADVANCED(FREETYPE2_INCLUDE_DIR)
         IF (NOT FREETYPE2_INCLUDE_DIR)
                 MESSAGE(FATAL_ERROR
-                        "Cannot find FREETYPE2 include directory. Please set  or set OTB_USE_MAPNIK OFF.")
+                        "Cannot find FREETYPE2 include directory. Please set FREETYPE2_INCLUDE_DIR or set OTB_USE_MAPNIK OFF.")
         ENDIF (NOT FREETYPE2_INCLUDE_DIR)
 
         FIND_LIBRARY(MAPNIK_LIBRARY mapnik )
@@ -28,17 +28,25 @@ IF(OTB_USE_MAPNIK)
                         "Cannot find MAPNIK library. Please set MAPNIK_LIBRARY or set OTB_USE_MAPNIK OFF.")
         ENDIF (NOT MAPNIK_LIBRARY)
 
-        # libicuuc is a unicode library mapnik relies on.
-        # since libicuuc version 1.42, we need to link against it when linking against mapnik
-        # otherwise we get undefined symbol error
-		IF (NOT WIN32)
-        FIND_LIBRARY(ICUUC_LIBRARY icuuc )
+        # libicuuc (http://site.icu-project.org/) is a unicode library mapnik relies on.
+		# mapnik includes drag icu includes
+		# when linking with mapnik, need to link with libicuuc (at least since 1.42 release)
+        FIND_PATH(ICUUC_INCLUDE_DIR unicode/unistr.h)
+        MARK_AS_ADVANCED(ICUUC_INCLUDE_DIR)
+		
+        FIND_LIBRARY(ICUUC_LIBRARY icuuc)
         MARK_AS_ADVANCED(ICUUC_LIBRARY)
+		
+        IF (NOT ICUUC_INCLUDE_DIR)
+                MESSAGE(FATAL_ERROR
+                        "Cannot find ICUUC_INCLUDE_DIR include directory. Please set ICUUC_INCLUDE_DIR or set OTB_USE_MAPNIK OFF.")
+        ENDIF (NOT ICUUC_INCLUDE_DIR)
+
         IF (NOT ICUUC_LIBRARY)
                 MESSAGE(FATAL_ERROR
                         "Cannot find ICUUC library, needed by MAPNIK. Please set ICUUC_LIBRARY or set OTB_USE_MAPNIK OFF.")
         ENDIF (NOT ICUUC_LIBRARY)
-		ENDIF (NOT  WIN32)
+
 
         # Add compiler option
         ADD_DEFINITIONS(-DOTB_USE_MAPNIK)
@@ -48,6 +56,8 @@ IF(OTB_USE_MAPNIK)
         MESSAGE(STATUS "  Enabling Mapnik support")
         MESSAGE(STATUS "  Mapnik includes : ${MAPNIK_INCLUDE_DIR}")
         MESSAGE(STATUS "  Mapnik library  : ${MAPNIK_LIBRARY}")
+        MESSAGE(STATUS "  ICU includes : ${ICUUC_INCLUDE_DIR}")
+        MESSAGE(STATUS "  ICU library  : ${ICUUC_LIBRARY}")
         
 ELSE(OTB_USE_MAPNIK)
 
