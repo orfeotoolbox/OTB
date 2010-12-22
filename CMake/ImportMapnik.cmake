@@ -51,7 +51,7 @@ IF(OTB_USE_MAPNIK)
         # Add compiler option
         ADD_DEFINITIONS(-DOTB_USE_MAPNIK)
 
-        INCLUDE_DIRECTORIES(${MAPNIK_INCLUDE_DIR})
+        INCLUDE_DIRECTORIES(${MAPNIK_INCLUDE_DIR} ${ICUUC_INCLUDE_DIR})
         
         MESSAGE(STATUS "  Enabling Mapnik support")
         MESSAGE(STATUS "  Mapnik includes : ${MAPNIK_INCLUDE_DIR}")
