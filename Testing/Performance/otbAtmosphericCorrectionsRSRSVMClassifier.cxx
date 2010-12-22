@@ -18,9 +18,10 @@
 #include "itkExceptionObject.h"
 #include "otbMacro.h"
 
-#include "otbAtmosphericCorrectionsReduceSpectralResponse.h"
+#include "otbAtmosphericEffects.h"
 #include "otbSatelliteRSR.h"
 #include "otbSpectralResponse.h"
+#include "otbReduceSpectralResponse.h"
 
 #include "otbSVMSampleListModelEstimator.h"
 #include "otbSVMClassifier.h"
@@ -39,16 +40,19 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
 
    
       
-   typedef otb::SpectralResponse< double,double>  ResponseType;
-   typedef ResponseType::Pointer  ResponsePointerType;
-  
+   typedef otb::SpectralResponse< double,double>  SpectralResponseType;
+   typedef SpectralResponseType::Pointer  SpectralResponsePointerType;
+
    typedef otb::SatelliteRSR< double,double>  SatRSRType;
    typedef SatRSRType::Pointer  SatRSRPointerType;
   
-   typedef otb::AtmosphericCorrectionsReduceSpectralResponse < ResponseType,SatRSRType>  ReduceResponseType;
-   typedef ReduceResponseType::Pointer  ReduceResponseTypePointerType;
+   typedef otb::ReduceSpectralResponse< SpectralResponseType,SatRSRType>  ReduceSpectralResponseType;
    
-   typedef ReduceResponseType::AtmosphericCorrectionParametersType  AtmosphericCorrectionParametersType;
+   typedef otb::AtmosphericEffects< SpectralResponseType,SatRSRType>  AtmosphericEffectsType;
+   
+   typedef AtmosphericEffectsType::AtmosphericCorrectionParametersType  AtmosphericCorrectionParametersType;
+   typedef AtmosphericCorrectionParametersType::AerosolModelType AerosolModelType;
+   typedef AtmosphericCorrectionParametersType::AerosolModelType AerosolModelType;
   
    typedef itk::VariableLengthVector<double> SampleType;
    typedef itk::Statistics::ListSample<SampleType>         SampleListType;
@@ -59,7 +63,7 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
    typedef otb::SVMClassifier<SampleListType,unsigned long> SVMClassifierType;
    typedef SVMClassifierType::OutputType ClassifierOutputType;
   
-  typedef otb::ConfusionMatrixCalculator<TrainingSampleListType,TrainingSampleListType> ConfusionMatrixCalculatorType;
+   typedef otb::ConfusionMatrixCalculator<TrainingSampleListType,TrainingSampleListType> ConfusionMatrixCalculatorType;
       
    if ( argc!= 20 )
    {
@@ -81,31 +85,16 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
    0.199854 #aerosol optical
    */
   
-   //Instantiation
-  
-   //Load fileSR into vector
+
+   //Get input parameters
    std::vector<ossimFilename> dirSR;
    dirSR.push_back(argv[1]);
    dirSR.push_back(argv[2]);
    dirSR.push_back(argv[3]);
    dirSR.push_back(argv[4]);
    dirSR.push_back(argv[5]);
-  
    const std::string fileSatG(argv[6]);
    unsigned int nbBand = atoi(argv[7]);
-   float percentage=atof(argv[19]);
-  
-  
-   SatRSRPointerType  satRSR=SatRSRType::New();
-   /** Set the satelite number of bands */
-   satRSR->SetNbBands(nbBand);
-   /** Load the satelite response file*/
-   satRSR->Load(fileSatG);
-  
-   //Process 6S direct chain
-   AtmosphericCorrectionParametersType::Pointer dataAtmosphericCorrectionParameters = AtmosphericCorrectionParametersType::New();
-  
-   //Set inputs of the atmo parameters
    const int day(atoi(argv[8]));
    const int month(atoi(argv[9]));
    const double zenithSolarAngle(static_cast<double>(atof(argv[10])));
@@ -117,6 +106,18 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
    const double ozoneAmount(static_cast<double>(atof(argv[16])));
    const int aerosolModelValue(::atoi(argv[17]));
    const double aerosolOptical( static_cast<double>(atof(argv[18])) );
+   float percentage=atof(argv[19]);
+  
+
+   //Instantiation
+   AtmosphericCorrectionParametersType::Pointer dataAtmosphericCorrectionParameters = AtmosphericCorrectionParametersType::New();
+   SatRSRPointerType  satRSR=SatRSRType::New();
+   
+   
+   
+   satRSR->SetNbBands(nbBand);
+   satRSR->Load(fileSatG);
+
    // Set parameters
    dataAtmosphericCorrectionParameters->SetSolarZenithalAngle(zenithSolarAngle);
    dataAtmosphericCorrectionParameters->SetSolarAzimutalAngle(azimutSolarAngle);
@@ -127,10 +128,7 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
    dataAtmosphericCorrectionParameters->SetAtmosphericPressure(atmoPressure);
    dataAtmosphericCorrectionParameters->SetWaterVaporAmount(waterVaporAmount);
    dataAtmosphericCorrectionParameters->SetOzoneAmount(ozoneAmount);
-  
-   typedef AtmosphericCorrectionParametersType::AerosolModelType
-      AerosolModelType;
-  
+
    AerosolModelType aerosolModel = static_cast<AerosolModelType>(aerosolModelValue);
    dataAtmosphericCorrectionParameters->SetAerosolModel(aerosolModel);
    dataAtmosphericCorrectionParameters->SetAerosolOptical(aerosolOptical);
@@ -187,32 +185,40 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
    //compute spectral response for all training files
    SampleListType::Pointer sampleList = SampleListType::New();
    TrainingSampleListType::Pointer trainingList = TrainingSampleListType::New();
+   
    for(unsigned int i=0;i<trainingFiles.size();i++)
    {
-      ResponsePointerType  spectralResponse=ResponseType::New();
+      SpectralResponsePointerType  spectralResponse=SpectralResponseType::New();
+      ReduceSpectralResponseType::Pointer reduceSpectralResponse = ReduceSpectralResponseType::New();
+      AtmosphericEffectsType::Pointer  atmosphericEffectsFilter = AtmosphericEffectsType::New();
+   
       std::cout<<"training file : "<<trainingFiles[i]<<std::endl;
       spectralResponse->Load(trainingFiles[i], 100.0);
-         
+      
+      std::cout<<"Befor Reduce Response"<<std::endl;
       //Compute Reduce Spectral Response
-      ReduceResponseTypePointerType  reduceResponse=ReduceResponseType::New();
-      /** Load the satelite response in the simulator */
-      reduceResponse->SetInputSatRSR(satRSR);
-      /** Load the spectral response of the object in the simulator*/
-      reduceResponse->SetInputSpectralResponse(spectralResponse);
-      reduceResponse->SetDataAtmosphericCorrectionParameters(dataAtmosphericCorrectionParameters);
-      reduceResponse->CalculateResponse();
-      reduceResponse->Process6S();
+      reduceSpectralResponse->SetInputSatRSR(satRSR);
+      reduceSpectralResponse->SetInputSpectralResponse(spectralResponse);
+      reduceSpectralResponse->CalculateResponse();
       
+      std::cout<<"After Reduce Response"<<std::endl;
       
+      atmosphericEffectsFilter->SetDataAtmosphericCorrectionParameters(dataAtmosphericCorrectionParameters);
+      atmosphericEffectsFilter->SetInputSatRSR(satRSR);
+      atmosphericEffectsFilter->SetInputSpectralResponse(reduceSpectralResponse->GetReduceResponse());
+      atmosphericEffectsFilter->Process6S();
+      
+      std::cout<<"After Atmospheric effect"<<std::endl;
+
       //Get the response in an itk::VariableLengthVector and add it to the sample list for SVMModelEstimator
       SampleType sample;
       TrainingSampleType trainingSample;
-      sample.SetSize(reduceResponse->GetReduceResponse().size());
+      sample.SetSize(atmosphericEffectsFilter->GetCorrectedSpectralResponse()->Size());
       std::cout<<"reduce response : [";
-      for(unsigned int j=0;j<reduceResponse->GetReduceResponse().size();j++)
+      for(unsigned int j=0;j<atmosphericEffectsFilter->GetCorrectedSpectralResponse()->Size();j++)
       {
-         sample[j]=reduceResponse->GetReduceResponse()[j];
-         std::cout<<reduceResponse->GetReduceResponse()[j]<<" ";
+         sample[j]=atmosphericEffectsFilter->GetCorrectedSpectralResponse()->GetResponse()[j].second;
+         std::cout<<atmosphericEffectsFilter->GetCorrectedSpectralResponse()->GetResponse()[j].second<<" ";
       }
       std::cout<<"]"<<std::endl;
       sampleList->PushBack(sample);
@@ -235,28 +241,31 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
    TrainingSampleListType::Pointer groundTruthClassList = TrainingSampleListType::New();
    for(unsigned int i=0;i<testingFiles.size();i++)
    {
-      ResponsePointerType  spectralResponse=ResponseType::New();
+      SpectralResponsePointerType  spectralResponse=SpectralResponseType::New();
+      ReduceSpectralResponseType::Pointer reduceSpectralResponse = ReduceSpectralResponseType::New();
+      AtmosphericEffectsType::Pointer  atmosphericEffectsFilter = AtmosphericEffectsType::New();
+      
       std::cout<<"testing file : "<<testingFiles[i]<<std::endl;
       spectralResponse->Load(testingFiles[i], 100.0);
-         
+      
       //Compute Reduce Spectral Response
-      ReduceResponseTypePointerType  reduceResponse=ReduceResponseType::New();
-      /** Load the satelite response in the simulator */
-      reduceResponse->SetInputSatRSR(satRSR);
-      /** Load the spectral response of the object in the simulator*/
-      reduceResponse->SetInputSpectralResponse(spectralResponse);
-      reduceResponse->SetDataAtmosphericCorrectionParameters(dataAtmosphericCorrectionParameters);
-      reduceResponse->CalculateResponse();
-      reduceResponse->Process6S();
+      reduceSpectralResponse->SetInputSatRSR(satRSR);
+      reduceSpectralResponse->SetInputSpectralResponse(spectralResponse);
+      reduceSpectralResponse->CalculateResponse();
+      
+      atmosphericEffectsFilter->SetDataAtmosphericCorrectionParameters(dataAtmosphericCorrectionParameters);
+      atmosphericEffectsFilter->SetInputSatRSR(satRSR);
+      atmosphericEffectsFilter->SetInputSpectralResponse(reduceSpectralResponse->GetReduceResponse());
+      atmosphericEffectsFilter->Process6S();
       
       
       //Get the response in an itk::VariableLengthVector and add it to the sample list for SVMClassifier
       SampleType sample;
       TrainingSampleType gtClass;
-      sample.SetSize(reduceResponse->GetReduceResponse().size());
-      for(unsigned int j=0;j<reduceResponse->GetReduceResponse().size();j++)
+      sample.SetSize(atmosphericEffectsFilter->GetCorrectedSpectralResponse()->Size());
+      for(unsigned int j=0;j<atmosphericEffectsFilter->GetCorrectedSpectralResponse()->Size();j++)
       {
-         sample[j]=reduceResponse->GetReduceResponse()[j];
+         sample[j]=atmosphericEffectsFilter->GetCorrectedSpectralResponse()->GetResponse()[j].second;
       }
       sampleList->PushBack(sample);
       gtClass=testingGTClasses[i];

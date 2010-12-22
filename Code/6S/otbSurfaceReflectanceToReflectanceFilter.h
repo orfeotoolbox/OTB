@@ -46,7 +46,7 @@ class ReflectanceToSurfaceReflectanceImageFunctor
 public:
   
   /** "typedef" for standard classes. */
-  typedef ReflectanceToSurfaceReflectanceImageFunctor                                                     Self;
+  typedef ReflectanceToSurfaceReflectanceImageFunctor   Self;
   
   ReflectanceToSurfaceReflectanceImageFunctor()
   {

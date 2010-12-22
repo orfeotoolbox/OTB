@@ -155,12 +155,12 @@ int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
       //Get the response in an itk::VariableLengthVector and add it to the sample list for SVMModelEstimator
       SampleType sample;
       TrainingSampleType trainingSample;
-      sample.SetSize(reduceResponse->GetReduceResponse().size());
+      sample.SetSize(reduceResponse->GetReduceResponse()->Size());
       std::cout<<"reduce response : [";
-      for(unsigned int j=0;j<reduceResponse->GetReduceResponse().size();j++)
+      for(unsigned int j=0;j<reduceResponse->GetReduceResponse()->Size();j++)
       {
-         sample[j]=reduceResponse->GetReduceResponse()[j];
-         std::cout<<reduceResponse->GetReduceResponse()[j]<<" ";
+         sample[j]=reduceResponse->GetReduceResponse()->GetResponse()[j].second;
+         std::cout<<reduceResponse->GetReduceResponse()->GetResponse()[j].second<<" ";
       }
       std::cout<<"]"<<std::endl;
       sampleList->PushBack(sample);
@@ -205,10 +205,10 @@ int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
       //Get the response in an itk::VariableLengthVector and add it to the sample list for SVMClassifier
       SampleType sample;
       TrainingSampleType gtClass;
-      sample.SetSize(reduceResponse->GetReduceResponse().size());
-      for(unsigned int j=0;j<reduceResponse->GetReduceResponse().size();j++)
+      sample.SetSize(reduceResponse->GetReduceResponse()->Size());
+      for(unsigned int j=0;j<reduceResponse->GetReduceResponse()->Size();j++)
       {
-         sample[j]=reduceResponse->GetReduceResponse()[j];
+         sample[j]=reduceResponse->GetReduceResponse()->GetResponse()[j].second;
       }
       sampleList->PushBack(sample);
       gtClass=testingGTClasses[i];
