@@ -82,10 +82,10 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
   R1FunctorType r1Funct = R1FunctorType();
   OutputPixelType result = r1Funct(pixel);
   OutputPixelType goodResult = static_cast<OutputPixelType>((min123 >= (TV1 * max123))
-                                                            and (max123 >= TV1 * TM4)
-                                                            and (TM5 >= TV1 * TM4)
-                                                            and (TM5 >= TV1 * max123)
-                                                            and (TM7 >= TV1 * TM4));
+                                                            && (max123 >= TV1 * TM4)
+                                                            && (TM5 >= TV1 * TM4)
+                                                            && (TM5 >= TV1 * max123)
+                                                            && (TM7 >= TV1 * TM4));
 
   
   if( result!=goodResult )
@@ -98,10 +98,10 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
   R2FunctorType r2Funct = R2FunctorType();
   result = r2Funct(pixel);
   goodResult = static_cast<OutputPixelType>((min123 >= (TV1 * max123))
-                                            and (TM4 >= max123)
-                                            and !((TM1<=TM2 and TM2<=TM3 and TM3<=TM4) and TM3 >= TV1*TM4)
-                                            and (TM4 >= TV1*TM5) and (TM5 >= TV1*TM4)
-                                            and (TM5 >= TV1*max123) and (TM5 >= TV1*TM7));
+                                            && (TM4 >= max123)
+                                            && !((TM1<=TM2 && TM2<=TM3 && TM3<=TM4) && TM3 >= TV1*TM4)
+                                            && (TM4 >= TV1*TM5) && (TM5 >= TV1*TM4)
+                                            && (TM5 >= TV1*max123) && (TM5 >= TV1*TM7));
 
 
   if( result!=goodResult )
@@ -114,11 +114,11 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
   R3FunctorType r3Funct = R3FunctorType();
   result = r3Funct(pixel);
   goodResult = static_cast<OutputPixelType>((min123 >= (TV1 * max123))
-                                            and (TM4 >= TV1 * max123)
-                                            and (TM5 <= TV2 * TM4)
-                                            and (TM5 <= TV1* min123)
-                                            and (TM7 <= TV2 * TM4)
-                                            and (TM7 <= TV1*min123));
+                                            && (TM4 >= TV1 * max123)
+                                            && (TM5 <= TV2 * TM4)
+                                            && (TM5 <= TV1* min123)
+                                            && (TM7 <= TV2 * TM4)
+                                            && (TM7 <= TV1*min123));
 
 
   if( result!=goodResult )
@@ -131,7 +131,7 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
   typedef otb::Functor::LandsatTM::WaterOrShadowSpectralRule<InputPixelType, OutputPixelType> R4FunctorType;
   R4FunctorType r4Funct = R4FunctorType();
   result = r4Funct(pixel);
-  goodResult = static_cast<OutputPixelType>((TM1 >= TM2) and (TM2 >= TM3) and (TM3 >= TM4) and (TM4 >= TM5) and (TM4 >= TM7));
+  goodResult = static_cast<OutputPixelType>((TM1 >= TM2) && (TM2 >= TM3) && (TM3 >= TM4) && (TM4 >= TM5) && (TM4 >= TM7));
 
 
   if( result!=goodResult ) 
@@ -145,11 +145,11 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
   R5FunctorType r5Funct = R5FunctorType();
   result = r5Funct(pixel);
   goodResult = static_cast<OutputPixelType>((TM3 >= TV1 * TM1)
-                                            and (TM1 >= TV1 * TM3)
-                                            and (max123 <= TV1 * TM4)
-                                            and (TM5 <= TV1 * TM4)
-                                            and (TM3 >= TV2 * TM5)
-                                            and (min123 >= TV1 * TM7));
+                                            && (TM1 >= TV1 * TM3)
+                                            && (max123 <= TV1 * TM4)
+                                            && (TM5 <= TV1 * TM4)
+                                            && (TM3 >= TV2 * TM5)
+                                            && (min123 >= TV1 * TM7));
 
 
   if( result!=goodResult )
@@ -162,10 +162,10 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
   R6FunctorType r6Funct = R6FunctorType();
   result = r6Funct(pixel);
   goodResult = static_cast<OutputPixelType>((TM1 >= TV1 * TM2)
-                                            and (TM1 >= TV1 * TM3)
-                                            and (TM1 >= TV1 * TM4)
-                                            and (TM1 >= TV1 * TM5)
-                                            and (TM1 >= TV1 * TM7));
+                                            && (TM1 >= TV1 * TM3)
+                                            && (TM1 >= TV1 * TM4)
+                                            && (TM1 >= TV1 * TM5)
+                                            && (TM1 >= TV1 * TM7));
 
 
   if( result!=goodResult ) 
@@ -178,12 +178,12 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
   R7FunctorType r7Funct = R7FunctorType();
   result = r7Funct(pixel);
   goodResult = static_cast<OutputPixelType>((TM2 >= TV2 * TM1)
-                                            and (TM2 >= TV1 * TM3)
-                                            and (TM3 < TV1 * TM4)
-                                            and (TM4 > max123)
-                                            and (TM5 < TV1 * TM4)
-                                            and (TM5 >= TV1 * TM3)
-                                            and (TM7 < TV1 * TM5));
+                                            && (TM2 >= TV1 * TM3)
+                                            && (TM3 < TV1 * TM4)
+                                            && (TM4 > max123)
+                                            && (TM5 < TV1 * TM4)
+                                            && (TM5 >= TV1 * TM3)
+                                            && (TM7 < TV1 * TM5));
 
 
   if( result!=goodResult )
@@ -196,14 +196,14 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
   R8FunctorType r8Funct = R8FunctorType();
   result = r8Funct(pixel);
   goodResult = static_cast<OutputPixelType>((TM2 >= TV2 * TM1)
-                                            and (TM2 >= TV1 * TM3)
-                                            and (TM4 > max123)
-                                            and (TM3 < TV1 * TM4)
-                                            and (TM4 >= TV1 * TM5)
-                                            and (TM5 >= TV1 * TM4)
-                                            and (TM5 > max123)
-                                            and (TM7 < TV1 * max45)
-                                            and (TM5 >= TM7));
+                                            && (TM2 >= TV1 * TM3)
+                                            && (TM4 > max123)
+                                            && (TM3 < TV1 * TM4)
+                                            && (TM4 >= TV1 * TM5)
+                                            && (TM5 >= TV1 * TM4)
+                                            && (TM5 > max123)
+                                            && (TM7 < TV1 * max45)
+                                            && (TM5 >= TM7));
 
 
   if( result!=goodResult ) 
@@ -216,12 +216,12 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
   R9FunctorType r9Funct = R9FunctorType();
   result = r9Funct(pixel);
   goodResult = static_cast<OutputPixelType>((TM3 >= TV2 * TM1)
-                                            and (TM3 >= TV1 * TM2)
-                                            and (TM4 >= TV1 * max123)
-                                            and (TM5 >= max123)
-                                            and (TM5 >= TV1 * TM4)
-                                            and (TM5 >= TV1 * TM7)
-                                            and (TM7 >= TV2 * max45));
+                                            && (TM3 >= TV1 * TM2)
+                                            && (TM4 >= TV1 * max123)
+                                            && (TM5 >= max123)
+                                            && (TM5 >= TV1 * TM4)
+                                            && (TM5 >= TV1 * TM7)
+                                            && (TM7 >= TV2 * max45));
 
 
   if( result!=goodResult )
@@ -237,7 +237,7 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
   R10FunctorType r10Funct = R10FunctorType();
   result = r10Funct(pixel);
   goodResult = static_cast<OutputPixelType>((TM5 >= TV1 * max12347)
-                                            and (min12347 >= TV2 * TM5));
+                                            && (min12347 >= TV2 * TM5));
 
 
   if( result!=goodResult ) 
@@ -251,11 +251,11 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
   R11FunctorType r11Funct = R11FunctorType();
   result = r11Funct(pixel);
   goodResult = static_cast<OutputPixelType>((TM1 >= TM2 )
-                                            and (TM2 >= TM3)
-                                            and (TM3 >= TV1 * TM4)
-                                            and (TM1 >= TM5)
-                                            and (TM5 >= TV1 * TM4)
-                                            and (TM5 >= TV2 * TM7));
+                                            && (TM2 >= TM3)
+                                            && (TM3 >= TV1 * TM4)
+                                            && (TM1 >= TM5)
+                                            && (TM5 >= TV1 * TM4)
+                                            && (TM5 >= TV2 * TM7));
 
 
   if( result!=goodResult )
@@ -268,12 +268,12 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
   R12FunctorType r12Funct = R12FunctorType();
   result = r12Funct(pixel);
   goodResult = static_cast<OutputPixelType>((TM1 >= TM2)
-                                            and (TM2 >= TM3)
-                                            and (TM1 >= TV2 * TM4)
-                                            and (TM3 < TV1 * TM4)
-                                            and (TM5 < TV1 * TM4)
-                                            and (TM3 >= TV1 * TM5)
-                                            and (TM7 < TV1 * TM4));
+                                            && (TM2 >= TM3)
+                                            && (TM1 >= TV2 * TM4)
+                                            && (TM3 < TV1 * TM4)
+                                            && (TM5 < TV1 * TM4)
+                                            && (TM3 >= TV1 * TM5)
+                                            && (TM7 < TV1 * TM4));
 
 
   if( result!=goodResult ) 
@@ -286,9 +286,9 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
   R13FunctorType r13Funct = R13FunctorType();
   result = r13Funct(pixel);
   goodResult = static_cast<OutputPixelType>((TM1 >= TV1 * max234)
-                                            and (max234 >= TV1 * TM1)
-                                            and (TM5 < TM1)
-                                            and (TM7 < TV1 * TM1));
+                                            && (max234 >= TV1 * TM1)
+                                            && (TM5 < TM1)
+                                            && (TM7 < TV1 * TM1));
 
 
   if( result!=goodResult )
@@ -301,13 +301,13 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
   R14FunctorType r14Funct = R14FunctorType();
   result = r14Funct(pixel);
   goodResult = static_cast<OutputPixelType>((TM1 >= TM2)
-                                            and (TM2 >= TM3)
-                                            and (TM1 >= TV1 * TM4)
-                                            and (TM3 < TM4)
-                                            and (TM4 >= TV1 * TM5)
-                                            and (TM5 >= TV1 * TM4)
-                                            and (TM3 >= TV2 * TM5)
-                                            and (TM5 >= TM7));
+                                            && (TM2 >= TM3)
+                                            && (TM1 >= TV1 * TM4)
+                                            && (TM3 < TM4)
+                                            && (TM4 >= TV1 * TM5)
+                                            && (TM5 >= TV1 * TM4)
+                                            && (TM3 >= TV2 * TM5)
+                                            && (TM5 >= TM7));
 
 
   if( result!=goodResult ) 
@@ -359,7 +359,7 @@ int otbLandsatTMKernelSpectralRulesWithImage(int argc, char * argv[])
   it.GoToBegin();
 
 
-  if( it.Get().Size() != 7 and it.Get().Size() != 8)
+  if( it.Get().Size() != 7 && it.Get().Size() != 8)
     {
     std::cerr << " Image must have either 7 or 8 bands " << std::endl;
     return EXIT_FAILURE;
