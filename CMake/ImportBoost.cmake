@@ -32,6 +32,10 @@ IF(OTB_USE_EXTERNAL_BOOST)
 
   IF(BOOST_IS_COMPLETE)
     MESSAGE(STATUS "  Testing external Boost library    -- yes")
+    
+    # needed for automatic linking on msvc platform
+    LINK_DIRECTORIES( ${Boost_LIBRARY_DIRS} )
+    
   ELSE(BOOST_IS_COMPLETE)
     MESSAGE(STATUS "  Testing external Boost library    -- no")
     MESSAGE(STATUS "  Forcing the OTB_USE_EXTERNAL_BOOST value to OFF")
