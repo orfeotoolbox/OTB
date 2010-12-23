@@ -9,24 +9,12 @@ IF(OTB_USE_MAPNIK)
 
         FIND_PATH(MAPNIK_INCLUDE_DIR mapnik/map.hpp PATHS)
         MARK_AS_ADVANCED(MAPNIK_INCLUDE_DIR)
-        IF (NOT MAPNIK_INCLUDE_DIR)
-                MESSAGE(FATAL_ERROR
-                        "Cannot find MAPNIK include directory. Please set MAPNIK_INCLUDE_DIR or set OTB_USE_MAPNIK OFF.")
-        ENDIF (NOT MAPNIK_INCLUDE_DIR)
-
-        FIND_PATH(FREETYPE2_INCLUDE_DIR freetype/freetype.h PATHS /usr/include/freetype2)
-        MARK_AS_ADVANCED(FREETYPE2_INCLUDE_DIR)
-        IF (NOT FREETYPE2_INCLUDE_DIR)
-                MESSAGE(FATAL_ERROR
-                        "Cannot find FREETYPE2 include directory. Please set FREETYPE2_INCLUDE_DIR or set OTB_USE_MAPNIK OFF.")
-        ENDIF (NOT FREETYPE2_INCLUDE_DIR)
 
         FIND_LIBRARY(MAPNIK_LIBRARY mapnik )
         MARK_AS_ADVANCED(MAPNIK_LIBRARY)
-        IF (NOT MAPNIK_LIBRARY)
-                MESSAGE(FATAL_ERROR
-                        "Cannot find MAPNIK library. Please set MAPNIK_LIBRARY or set OTB_USE_MAPNIK OFF.")
-        ENDIF (NOT MAPNIK_LIBRARY)
+
+        FIND_PATH(FREETYPE2_INCLUDE_DIR freetype/freetype.h PATHS /usr/include/freetype2)
+        MARK_AS_ADVANCED(FREETYPE2_INCLUDE_DIR)
 
         # libicuuc (http://site.icu-project.org/) is a unicode library mapnik relies on.
 		# mapnik includes drag icu includes
@@ -36,28 +24,58 @@ IF(OTB_USE_MAPNIK)
 		
         FIND_LIBRARY(ICUUC_LIBRARY icuuc)
         MARK_AS_ADVANCED(ICUUC_LIBRARY)
+        
+        # ltdl (libtool dl)
+        FIND_PATH(LTDL_INCLUDE_DIR ltdl.h)
+        MARK_AS_ADVANCED(LTDL_INCLUDE_DIR)
 		
+        FIND_LIBRARY(LTDL_LIBRARY ltdl)
+        MARK_AS_ADVANCED(LTDL_LIBRARY)
+       
+        IF (NOT MAPNIK_INCLUDE_DIR)
+                MESSAGE(FATAL_ERROR
+                        "Cannot find MAPNIK include directory. Please set MAPNIK_INCLUDE_DIR or set OTB_USE_MAPNIK OFF.")
+        ENDIF (NOT MAPNIK_INCLUDE_DIR)
+        IF (NOT MAPNIK_LIBRARY)
+                MESSAGE(FATAL_ERROR
+                        "Cannot find MAPNIK library. Please set MAPNIK_LIBRARY or set OTB_USE_MAPNIK OFF.")
+        ENDIF (NOT MAPNIK_LIBRARY)
+
+        IF (NOT FREETYPE2_INCLUDE_DIR)
+                MESSAGE(FATAL_ERROR
+                        "Cannot find FREETYPE2 include directory. Please set FREETYPE2_INCLUDE_DIR or set OTB_USE_MAPNIK OFF.")
+        ENDIF (NOT FREETYPE2_INCLUDE_DIR)
+        
         IF (NOT ICUUC_INCLUDE_DIR)
                 MESSAGE(FATAL_ERROR
                         "Cannot find ICUUC_INCLUDE_DIR include directory. Please set ICUUC_INCLUDE_DIR or set OTB_USE_MAPNIK OFF.")
         ENDIF (NOT ICUUC_INCLUDE_DIR)
-
         IF (NOT ICUUC_LIBRARY)
                 MESSAGE(FATAL_ERROR
                         "Cannot find ICUUC library, needed by MAPNIK. Please set ICUUC_LIBRARY or set OTB_USE_MAPNIK OFF.")
         ENDIF (NOT ICUUC_LIBRARY)
-
+        
+        IF (NOT LTDL_INCLUDE_DIR)
+                MESSAGE(FATAL_ERROR
+                        "Cannot find LTDL_INCLUDE_DIR include directory. Please set LTDL_INCLUDE_DIR or set OTB_USE_MAPNIK OFF.")
+        ENDIF (NOT LTDL_INCLUDE_DIR)
+        IF (NOT LTDL_LIBRARY)
+                MESSAGE(FATAL_ERROR
+                        "Cannot find ICUUC library, needed by MAPNIK. Please set ICUUC_LIBRARY or set OTB_USE_MAPNIK OFF.")
+        ENDIF (NOT LTDL_LIBRARY)
 
         # Add compiler option
         ADD_DEFINITIONS(-DOTB_USE_MAPNIK)
 
-        INCLUDE_DIRECTORIES(${MAPNIK_INCLUDE_DIR} ${ICUUC_INCLUDE_DIR})
+        INCLUDE_DIRECTORIES(${MAPNIK_INCLUDE_DIR} ${ICUUC_INCLUDE_DIR} ${LTDL_INCLUDE_DIR})
         
         MESSAGE(STATUS "  Enabling Mapnik support")
         MESSAGE(STATUS "  Mapnik includes : ${MAPNIK_INCLUDE_DIR}")
         MESSAGE(STATUS "  Mapnik library  : ${MAPNIK_LIBRARY}")
         MESSAGE(STATUS "  ICU includes : ${ICUUC_INCLUDE_DIR}")
         MESSAGE(STATUS "  ICU library  : ${ICUUC_LIBRARY}")
+        MESSAGE(STATUS "  LTDL includes : ${LTDL_INCLUDE_DIR}")
+        MESSAGE(STATUS "  LTDL library  : ${LTDL_LIBRARY}")
         
 ELSE(OTB_USE_MAPNIK)
 

@@ -94,7 +94,9 @@ int otbVectorDataToImageFilterSensorModel(int argc, char * argv[])
   vectorDataRendering->SetOrigin(origin);
   vectorDataRendering->SetSpacing(spacing);
   vectorDataRendering->AddStyle("minor-roads-casing");
+#ifndef WIN32
   vectorDataRendering->AddStyle("roads-text");
+#endif
 
   //Save the image in a file
   typedef otb::ImageFileWriter<ImageType> WriterType;

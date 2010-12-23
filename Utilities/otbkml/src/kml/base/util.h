@@ -26,9 +26,10 @@
 #ifndef KML_BASE_UTIL_H__
 #define KML_BASE_UTIL_H__
 
-#if (!defined(_MSC_VER)) || (_MSC_VER == 1600)
+// OTB provides stdint.h via msinttypes
+//#if (!defined(_MSC_VER)) || (_MSC_VER == 1600)
 #include <stdint.h>  // For fixed-size interger typedefs in this file.
-#endif
+//#endif
 
 // A macro to disallow the evil copy constructor and assignment operator.
 // Should be used in the private: declarations for a class.
@@ -37,6 +38,9 @@
   void operator=(const TypeName&)
 
 typedef unsigned int uint;
+
+// OTB provides stdint.h via msinttypes, so we don't need this
+#if 0
 // MSVC has no header for C99 typedefs. (MSVC 2010 has it)
 #ifdef _MSC_VER
 #if _MSC_VER < 1600
@@ -50,6 +54,7 @@ typedef unsigned __int32 uint32_t;
 typedef unsigned __int64 uint64_t;
 #endif // _MSC_VER < 1600
 #endif  // _MSC_VER
+#endif
 
 #include <string>
 
