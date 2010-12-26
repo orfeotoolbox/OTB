@@ -23,6 +23,10 @@ ENDIF(OTB_USE_EXTERNAL_BOOST)
 SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
     ${GDAL_INCLUDE_DIR} )
 
+IF(WIN32)
+  SET(OTB_MSINTTYPES_INCLUDE_DIR_BUILDTREE ${OTB_SOURCE_DIR}/Utilities/otbmsinttypes )
+ENDIF(WIN32)
+
 # These directories are always needed.
 SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Code/BasicFilters
@@ -31,12 +35,14 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Code/DisparityMap
   ${OTB_SOURCE_DIR}/Code/FeatureExtraction
   ${OTB_SOURCE_DIR}/Code/Fusion
+  ${OTB_SOURCE_DIR}/Code/Fuzzy
   ${OTB_SOURCE_DIR}/Code/GeospatialAnalysis
   ${OTB_SOURCE_DIR}/Code/Gui
   ${OTB_SOURCE_DIR}/Code/IO
   ${OTB_SOURCE_DIR}/Code/Learning
   ${OTB_SOURCE_DIR}/Code/Markov
   ${OTB_SOURCE_DIR}/Code/MultiScale
+  ${OTB_SOURCE_DIR}/Code/MultiTemporal
   ${OTB_SOURCE_DIR}/Code/OBIA
   ${OTB_SOURCE_DIR}/Code/ObjectDetection
   ${OTB_SOURCE_DIR}/Code/Projections
@@ -47,6 +53,7 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Code/Visu
   ${OTB_SOURCE_DIR}/Code/Visualization
   ${OTB_BINARY_DIR}/Code/Visualization
+  ${OTB_MSINTTYPES_INCLUDE_DIR_BUILDTREE}
   ${OTB_SOURCE_DIR}/Utilities/otbsvm
   ${OTB_SOURCE_DIR}/Utilities/otbossim/include
   ${OTB_SOURCE_DIR}/Utilities/otbossim/include/ossim
@@ -281,6 +288,11 @@ ELSE(OTB_USE_EXTERNAL_BOOST)
 ENDIF(OTB_USE_EXTERNAL_BOOST)
 
 
+IF(WIN32)
+  SET(OTB_MSINTTYPES_INCLUDE_RELATIVE_DIR Utilities/otbmsinttypes )
+ENDIF(WIN32)
+
+
 SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
   Common
   BasicFilters
@@ -289,6 +301,7 @@ SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
   FeatureExtraction
   Learning
   MultiScale
+  MultiTemporal
   SpatialReasoning
   DisparityMap
   Visu
@@ -302,9 +315,11 @@ SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
   GeospatialAnalysis
   Testing
   OBIA
+  Fuzzy
   ObjectDetection
   Utilities
   Utilities/ITK
+  ${OTB_MSINTTYPES_INCLUDE_RELATIVE_DIR}
   Utilities/otbsvm
   Utilities/otbossim
   Utilities/otbossim/include

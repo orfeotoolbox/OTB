@@ -207,8 +207,10 @@ VectorDataToImageFilter<TVectorData, TImage>
 
   Superclass::BeforeThreadedGenerateData();
 
+#ifndef WIN32
   mapnik::freetype_engine::register_font("/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf");
-
+#endif
+  
   if (m_UseAsOverlay)
     {
     //Set the default backgroup to transparent

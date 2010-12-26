@@ -25,6 +25,7 @@ SET(RADIOMETRY_TESTS6 ${CXX_TEST_PATH}/otbRadiometryTests6)
 SET(RADIOMETRY_TESTS7 ${CXX_TEST_PATH}/otbRadiometryTests7)
 SET(RADIOMETRY_TESTS8 ${CXX_TEST_PATH}/otbRadiometryTests8)
 SET(RADIOMETRY_TESTS9 ${CXX_TEST_PATH}/otbRadiometryTests9)
+SET(RADIOMETRY_TESTS10 ${CXX_TEST_PATH}/otbRadiometryTests10)
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1572,6 +1573,286 @@ ADD_TEST(raTvSarBrightnessToImageFilter  ${RADIOMETRY_TESTS9}
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbRADIOMETRY_TESTS10 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+# -------            Landsat TM Bright   ------------------------------
+ADD_TEST(raTvLandsatTMIndexBrightTest ${RADIOMETRY_TESTS10}
+        otbLandsatTMIndexBright
+        3   #TM1
+        4   #TM2
+        8   #TM3
+        21  #TM4
+        33  #TM5
+        41  #TM61
+        8   #TM62
+        21  #TM7
+  
+)
+
+# -------            Landsat TM Vis   ------------------------------
+ADD_TEST(raTvLandsatTMIndexVisTest ${RADIOMETRY_TESTS10}
+        otbLandsatTMIndexVis
+        3   #TM1
+        4   #TM2
+        8   #TM3
+        21  #TM4
+        33  #TM5
+        41  #TM61
+        8   #TM62
+        21  #TM7
+  
+)
+
+# -------            Landsat TM NIR   ------------------------------
+ADD_TEST(raTvLandsatTMIndexNIRTest ${RADIOMETRY_TESTS10}
+        otbLandsatTMIndexNIR
+        3   #TM1
+        4   #TM2
+        8   #TM3
+        21  #TM4
+        33  #TM5
+        41  #TM61
+        8   #TM62
+        21  #TM7
+  
+)
+
+# -------            Landsat TM MIR1   ------------------------------
+ADD_TEST(raTvLandsatTMIndexMIR1Test ${RADIOMETRY_TESTS10}
+        otbLandsatTMIndexMIR1
+        3   #TM1
+        4   #TM2
+        8   #TM3
+        21  #TM4
+        33  #TM5
+        41  #TM61
+        8   #TM62
+        21  #TM7
+  
+)
+
+# -------            Landsat TM MIR2   ------------------------------
+ADD_TEST(raTvLandsatTMIndexMIR2Test ${RADIOMETRY_TESTS10}
+        otbLandsatTMIndexMIR2
+        3   #TM1
+        4   #TM2
+        8   #TM3
+        21  #TM4
+        33  #TM5
+        41  #TM61
+        8   #TM62
+        21  #TM7
+  
+)
+
+# -------            Landsat TM TIR   ------------------------------
+ADD_TEST(raTvLandsatTMIndexTIRTest ${RADIOMETRY_TESTS10}
+        otbLandsatTMIndexTIR
+        3   #TM1
+        4   #TM2
+        8   #TM3
+        21  #TM4
+        33  #TM5
+        41  #TM61
+        8   #TM62
+        21  #TM7
+  
+)
+
+# -------            Landsat TM MIRTIR   ------------------------------
+ADD_TEST(raTvLandsatTMIndexMIRTIRTest ${RADIOMETRY_TESTS10}
+        otbLandsatTMIndexMIRTIR
+        3   #TM1
+        4   #TM2
+        8   #TM3
+        21  #TM4
+        33  #TM5
+        41  #TM61
+        8   #TM62
+        21  #TM7
+  
+)
+
+# -------            Landsat TM NDVI   ------------------------------
+ADD_TEST(raTvLandsatTMIndexNDVITest ${RADIOMETRY_TESTS10}
+        otbLandsatTMIndexNDVI
+        3   #TM1
+        4   #TM2
+        8   #TM3
+        21  #TM4
+        33  #TM5
+        41  #TM61
+        8   #TM62
+        21  #TM7
+  
+)
+ 
+# -------            Landsat TM NDBSI   ------------------------------
+ADD_TEST(raTvLandsatTMIndexNDBSITest ${RADIOMETRY_TESTS10}
+        otbLandsatTMIndexNDBSI
+        3   #TM1
+        4   #TM2
+        8   #TM3
+        21  #TM4
+        33  #TM5
+        41  #TM61
+        8   #TM62
+        21  #TM7
+  
+)
+
+
+# -------            Landsat TM BIO   ------------------------------
+ADD_TEST(raTvLandsatTMIndexBIOTest ${RADIOMETRY_TESTS10}
+        otbLandsatTMIndexBIO
+        3   #TM1
+        4   #TM2
+        8   #TM3
+        21  #TM4
+        33  #TM5
+        41  #TM61
+        8   #TM62
+        21  #TM7
+  
+)
+
+# -------            Landsat TM NDSI   ------------------------------
+ADD_TEST(raTvLandsatTMIndexNDSITest ${RADIOMETRY_TESTS10}
+        otbLandsatTMIndexNDSI
+        3   #TM1
+        4   #TM2
+        8   #TM3
+        21  #TM4
+        33  #TM5
+        41  #TM61
+        8   #TM62
+        21  #TM7
+  
+)
+
+# -------            Landsat TM NDSIVis   ------------------------------
+ADD_TEST(raTvLandsatTMIndexNDSIVisTest ${RADIOMETRY_TESTS10}
+        otbLandsatTMIndexNDSIVis
+        3   #TM1
+        4   #TM2
+        8   #TM3
+        21  #TM4
+        33  #TM5
+        41  #TM61
+        8   #TM62
+        21  #TM7
+  
+)
+
+
+# -------            Landsat TM NDBBBI   ------------------------------
+ADD_TEST(raTvLandsatTMIndexNDBBBITest ${RADIOMETRY_TESTS10}
+        otbLandsatTMIndexNDBBBI
+        3   #TM1
+        4   #TM2
+        8   #TM3
+        21  #TM4
+        33  #TM5
+        41  #TM61
+        8   #TM62
+        21  #TM7
+  
+)
+
+# -------            Landsat TM Linguistic Labels   ------------------------------
+ADD_TEST(raTvLandsatTMLinguisticLabelsTest ${RADIOMETRY_TESTS10}
+        otbLandsatTMLinguisticLabels
+        3   #TM1
+        4   #TM2
+        8   #TM3
+        21  #TM4
+        33  #TM5
+        41  #TM61
+        8   #TM62
+        21  #TM7
+  
+)
+
+ADD_TEST(raTvLandsatTMLinguisticLabelsTest2 ${RADIOMETRY_TESTS10}
+        otbLandsatTMLinguisticLabels
+        3   #TM1
+        4   #TM2
+        80   #TM3
+        100  #TM4
+        33  #TM5
+        1  #TM61
+        8   #TM62
+        51  #TM7
+  
+)
+
+ADD_TEST(raTvLandsatTMKernelSpectralRulesTest ${RADIOMETRY_TESTS10}
+        otbLandsatTMKernelSpectralRules
+        63   #TM1
+        64   #TM2
+        57   #TM3
+        150  #TM4
+        33  #TM5
+        1  #TM61
+        8   #TM62
+        51  #TM7
+
+)
+
+ADD_TEST(raTvLandsatTMKernelSpectralRulesTest2 ${RADIOMETRY_TESTS10}
+        otbLandsatTMKernelSpectralRules
+        49   #TM1
+        50   #TM2
+        70   #TM3
+        100  #TM4
+        69  #TM5
+        0  #TM61
+        0   #TM62
+        0  #TM7
+
+)
+
+ADD_TEST(raTvLandsatTMKernelSpectralRulesWithImageTest ${RADIOMETRY_TESTS10}
+        otbLandsatTMKernelSpectralRulesWithImage
+        ${INPUTDATA}/L5Strip.tif
+)
+
+ADD_TEST(raTvLandsatTMBrightTest ${RADIOMETRY_TESTS10}
+        otbLandsatTMBrightTest
+        ${INPUTDATA}/L5Strip.tif
+        ${TEMP}/raTvLandsatTMBrightTest_cloudImage.tif
+)
+
+
+ADD_TEST(raTvLandsatTMThickCloudTest ${RADIOMETRY_TESTS10}
+        otbLandsatTMThickCloudTest
+        ${INPUTDATA}/L5Strip.tif
+        ${TEMP}/raTvLandsatTMThickCloudTest_cloudImage.tif
+)
+
+ADD_TEST(raTvLandsatTMThinCloudTest ${RADIOMETRY_TESTS10}
+        otbLandsatTMThinCloudTest
+        ${INPUTDATA}/L5Strip.tif
+        ${TEMP}/raTvLandsatTMThinCloudTest_cloudImage.tif
+)
+
+ADD_TEST(raTvLandsatTMVegetationTest ${RADIOMETRY_TESTS10}
+        otbLandsatTMVegetationTest
+        ${INPUTDATA}/L5Strip.tif
+        ${TEMP}/raTvLandsatTMVegetationTest_Image.tif
+)
+
+ADD_TEST(raTvLandsatTMSpectralRuleBasedClassifierTest ${RADIOMETRY_TESTS10}
+        otbLandsatTMSpectralRuleBasedClassifierTest
+        ${INPUTDATA}/L5Strip.tif
+        ${TEMP}/raTvLandsatTMSpectralRuleBasedClassifierTest_Image.tif
+)
+
+
 
 
 # A enrichir
@@ -1690,6 +1971,30 @@ otbSarRadiometricCalibrationToImageFilterCompareTest.cxx
 otbSarRadiometricCalibrationToImageFilterWithExtractROIBeforeTest.cxx
 )
 
+SET(Radiometry_SRCS10
+otbRadiometryTests10.cxx
+otbLandsatTMIndexBrightTest.cxx
+otbLandsatTMIndexVisTest.cxx
+otbLandsatTMIndexNIRTest.cxx
+otbLandsatTMIndexMIR1Test.cxx
+otbLandsatTMIndexMIR2Test.cxx
+otbLandsatTMIndexTIRTest.cxx
+otbLandsatTMIndexMIRTIRTest.cxx
+otbLandsatTMIndexNDVITest.cxx
+otbLandsatTMIndexNDBSITest.cxx
+otbLandsatTMIndexBIOTest.cxx
+otbLandsatTMIndexNDSITest.cxx
+otbLandsatTMIndexNDSIVisTest.cxx
+otbLandsatTMIndexNDBBBITest.cxx
+otbLandsatTMLinguisticLabelsTest.cxx
+otbLandsatTMKernelSpectralRules.cxx
+otbLandsatTMBrightTest.cxx
+otbLandsatTMThickCloudTest.cxx
+otbLandsatTMThinCloudTest.cxx
+otbLandsatTMVegetationTest.cxx
+otbLandsatTMSpectralRuleBasedClassifierTest.cxx
+)
+
 
 OTB_ADD_EXECUTABLE(otbRadiometryTests1 "${Radiometry_SRCS1}" "OTBRadiometry;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbRadiometryTests2 "${Radiometry_SRCS2}" "OTBRadiometry;OTBIO;OTBTesting")
@@ -1700,5 +2005,6 @@ OTB_ADD_EXECUTABLE(otbRadiometryTests6 "${Radiometry_SRCS6}" "OTBRadiometry;OTBI
 OTB_ADD_EXECUTABLE(otbRadiometryTests7 "${Radiometry_SRCS7}" "OTBRadiometry;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbRadiometryTests8 "${Radiometry_SRCS8}" "OTBRadiometry;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbRadiometryTests9 "${Radiometry_SRCS9}" "OTBRadiometry;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbRadiometryTests10 "${Radiometry_SRCS10}" "OTBRadiometry;OTBIO;OTBTesting")
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

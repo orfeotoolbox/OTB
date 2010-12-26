@@ -70,6 +70,11 @@ ADD_SUBDIRECTORY(otbsiftfast)
 MESSAGE(STATUS "Configuring otbconfigfile...")
 ADD_SUBDIRECTORY(otbconfigfile)
 
+IF(WIN32)
+MESSAGE(STATUS "Configuring otbmsinttypes...")
+ADD_SUBDIRECTORY(otbmsinttypes)
+ENDIF(WIN32)
+
 IF(BUILD_TESTING)
         ADD_SUBDIRECTORY( Dart )
 ENDIF(BUILD_TESTING)
