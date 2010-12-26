@@ -101,7 +101,7 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
 	{
 	// If so, compute the gaussian weighting (this could be
 	// computed once for all for the sake of optimisation)
-	double gWeight = (1/squaredSigma) * vcl_exp(- currentSquaredRadius/squaredSigma);
+	double gWeight = (1/vcl_sqrt(2*M_PI*squaredSigma)) * vcl_exp(- currentSquaredRadius/(2*squaredSigma));
 
 	// Compute pixel location
 	offset[0]=i;
@@ -165,7 +165,7 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
 	{
 	// If so, compute the gaussian weighting (this could be
 	// computed once for all for the sake of optimisation)
-	double gWeight = (1/squaredSigma) * vcl_exp(- currentSquaredRadius/squaredSigma);
+	double gWeight = (1/vcl_sqrt(2*M_PI*squaredSigma)) * vcl_exp(- currentSquaredRadius/(2*squaredSigma));
 
 	// Compute pixel location
 	offset[0]=i;
