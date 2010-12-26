@@ -62,7 +62,20 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
     {
     return hog;
     }
+
+  // Create an N-d neighborhood kernel, using a zeroflux boundary condition
+  typename InputImageType::SizeType kernelSize;
+  kernelSize.Fill( m_NeighborhoodRadius );
   
+  itk::ConstNeighborhoodIterator<InputImageType>
+    it(kernelSize, this->GetInputImage(), this->GetInputImage()->GetBufferedRegion());
+  
+  // Set the iterator at the desired location
+  it.SetLocation(index);
+  
+  // Offset to be used in the loops
+  typename InputImageType::OffsetType offset;
+
   // Compute the center bin radius
   unsigned int centerBinRadius = vcl_floor(vcl_log(m_NeighborhoodRadius)/vcl_log(2));
 
@@ -91,12 +104,11 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
 	double gWeight = (1/squaredSigma) * vcl_exp(- currentSquaredRadius/squaredSigma);
 
 	// Compute pixel location
-	IndexType currentIndex = index;
-	currentIndex[0]+=i;
-	currentIndex[1]+=j;
-
+	offset[0]=i;
+	offset[1]=j;
+	
 	// Get the current gradient covariant value
-	InputPixelType gradient = this->GetInputImage()->GetPixel(currentIndex);
+	InputPixelType gradient = it.GetPixel(offset);
 
 	// Then, compute the gradient orientation
 	double angle = vcl_atan2(gradient[1],gradient[0]);
@@ -118,13 +130,13 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
   // the normalisation factor with the L1 norm
   // TODO: Replace this with a stl algorithm
   double normalisationFactor = 1e-10;
-  double maxOrientationHistogramValue = globalOrientationHistogram.at(0);
+  double maxOrientationHistogramValue = globalOrientationHistogram[0];
   unsigned int maxOrientationHistogramBin = 0;
 
   for(unsigned int i = 1; i < m_NumberOfOrientationBins;++i)
     {
     // Retrieve current value
-    double currentValue = globalOrientationHistogram.at(i);
+    double currentValue = globalOrientationHistogram[i];
 
     // Update normalisation factor
     normalisationFactor+=currentValue;
@@ -142,9 +154,6 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
 
   // Derive normalisation factor
   normalisationFactor = 1/normalisationFactor;
-  
-  // Only for debug purpose
-  std::cout<<"Principal orientation = "<<principalOrientation*180./M_PI<<std::endl;
   
   // Initialize the five spatial bins
   std::vector<TOutputPrecision> centerHistogram(m_NumberOfOrientationBins,0.);
@@ -167,12 +176,11 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
 	double gWeight = (1/squaredSigma) * vcl_exp(- currentSquaredRadius/squaredSigma);
 
 	// Compute pixel location
-	IndexType currentIndex = index;
-	currentIndex[0]+=i;
-	currentIndex[1]+=j;
-
+	offset[0]=i;
+	offset[1]=j;
+	
 	// Get the current gradient covariant value
-	InputPixelType gradient = this->GetInputImage()->GetPixel(currentIndex);
+	InputPixelType gradient = it.GetPixel(offset);
 
 	// Then, compute the compensated gradient orientation
 	double angle = vcl_atan2(gradient[1],gradient[0]) - principalOrientation;
@@ -185,7 +193,7 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
 	  }
 	else if(angle < -M_PI)
 	  {
-	  angle += M_PI;
+	  angle += 2*M_PI;
 	  }
 
 	// Also compute its magnitude
