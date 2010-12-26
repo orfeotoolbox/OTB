@@ -31,7 +31,7 @@ namespace otb
 template <class TInputImage, class TOutputPrecision, class TCoordRep>
 HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision, TCoordRep>
 ::HistogramOfOrientedGradientCovariantImageFunction() : m_NeighborhoodRadius(1),
-							m_NumberOfOrientationBins(10)
+							m_NumberOfOrientationBins(18)
 {}
 
 template <class TInputImage, class TOutputPrecision, class TCoordRep>
@@ -126,10 +126,8 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
       }
     }
 
-  // Compute principal orientation. We also use this loop to compute
-  // the normalisation factor with the L1 norm
+  // Compute principal orientation
   // TODO: Replace this with a stl algorithm
-  double normalisationFactor = 1e-10;
   double maxOrientationHistogramValue = globalOrientationHistogram[0];
   unsigned int maxOrientationHistogramBin = 0;
 
@@ -137,9 +135,6 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
     {
     // Retrieve current value
     double currentValue = globalOrientationHistogram[i];
-
-    // Update normalisation factor
-    normalisationFactor+=currentValue;
 
     // Look for new maximum
     if(maxOrientationHistogramValue<currentValue)
@@ -152,9 +147,6 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
   // Derive principal orientation
   double principalOrientation = maxOrientationHistogramBin * orientationBinWidth;
 
-  // Derive normalisation factor
-  normalisationFactor = 1/normalisationFactor;
-  
   // Initialize the five spatial bins
   std::vector<TOutputPrecision> centerHistogram(m_NumberOfOrientationBins,0.);
   std::vector<TOutputPrecision> upperLeftHistogram(m_NumberOfOrientationBins,0.);
@@ -206,36 +198,47 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
 	// Compute the angular position
 	double angularPosition = vcl_atan2(j,i) - principalOrientation;
 
+	// Angle is supposed to lie within [-pi,pi], so we ensure that
+	// the compensation did not introduce out-of-range values
+	if(angularPosition > M_PI)
+	  {
+	  angularPosition -= 2*M_PI;
+	  }
+	else if(angularPosition < -M_PI)
+	  {
+	  angularPosition += 2*M_PI;
+	  }
+
 	// Check if we lie in center bin
 	if(currentSquaredRadius < squaredCenterBinRadius)
 	  {
-	  centerHistogram[binIndex]+= magnitude * gWeight * normalisationFactor;
+	  centerHistogram[binIndex]+= magnitude * gWeight;
 	  }
 	else if(angularPosition > 0)
 	  {
 	  if(angularPosition < M_PI/2)
 	    {
-	    upperRightHistogram[binIndex]+= magnitude * gWeight * normalisationFactor;
+	    upperRightHistogram[binIndex]+= magnitude * gWeight;
 	    }
 	  else
 	    {
-	    upperLeftHistogram[binIndex]+= magnitude * gWeight * normalisationFactor;
+	    upperLeftHistogram[binIndex]+= magnitude * gWeight;
 	    }
 	  }
 	else
 	  {
 	  if(angularPosition > -M_PI/2)
 	    {
-	    lowerRightHistogram[binIndex]+= magnitude * gWeight * normalisationFactor;
+	    lowerRightHistogram[binIndex]+= magnitude * gWeight;
 	    }
 	  else
 	    {
-	    lowerLeftHistogram[binIndex]+= magnitude * gWeight * normalisationFactor;
+	    lowerLeftHistogram[binIndex]+= magnitude * gWeight;
 	    }
 	  }
 	
 	// Cumulate values
-	globalOrientationHistogram[binIndex]+= magnitude * gWeight * normalisationFactor;
+	globalOrientationHistogram[binIndex]+= magnitude * gWeight;
 	}
       }
     }
@@ -246,6 +249,26 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
   hog.push_back(upperRightHistogram);
   hog.push_back(lowerRightHistogram);
   hog.push_back(lowerLeftHistogram);
+
+  // Normalize each histogram
+  for(typename OutputType::iterator oIt = hog.begin(); oIt!=hog.end();++oIt)
+    {
+    // Compute L2 norm
+    double squaredCumul = 1e-10;
+    for(typename std::vector<TOutputPrecision>::const_iterator vIt = oIt->begin();
+	vIt!=oIt->end(); ++vIt)
+      {
+      squaredCumul += (*vIt)*(*vIt);
+      }
+    double scale = 1/vcl_sqrt(squaredCumul);
+    // Apply normalisation factor
+    for(typename std::vector<TOutputPrecision>::iterator vIt = oIt->begin();
+	vIt!=oIt->end(); ++vIt)
+      {
+      (*vIt)*=scale;
+      }
+    }
+
 
   // Return result
   return hog;

@@ -41,11 +41,9 @@ namespace otb
  * kernel of $\sigma = 0.5 * r$.
  *
  * From this orientation histogram, the principal orientation is
- * computed by looking for the maximum valued bin. The $L_1$ norm of
- * the histogram is also computed and will be used to normalise the
- * final features.
+ * computed by looking for the maximum valued bin.
  *
- * Once principal orientation and normalisation factor are computed,
+ * Once principal orientation is computed,
  * gradient magnitude values weighted by the gaussian kernel are
  * cumulated in five different histograms corresponding to five
  * distinct spatial areas : the center area (radius of the center area
@@ -53,9 +51,9 @@ namespace otb
  * upper-right, lower-left and lower-right radial areas. Orientation
  * of these radial areas is shifted to match the principal
  * orientation, and gradient orientations to determine histogram bins
- * are also compensated with the principal orientation. All histogram
- * values are weighted by the normalisation factor, ensuring that they
- * all lie in the range $[0,1]$ and sum up to $1$.
+ * are also compensated with the principal orientation. Last, each
+ * histogram is normalized by its $L_2$ norm, ensuring that they
+ * all lie in the range $[0,1]$.
  *
  * This class is templated over the input image type, the output
  * precision (e.g. float ou double) and the
