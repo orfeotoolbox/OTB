@@ -1546,7 +1546,19 @@ ADD_TEST(feTvHaralickTexturesImageFunction ${FEATUREEXTRACTION_TESTS16}
     451846.014047961 5412466.57452216
 )
 
+# ------ otb::HistogramOfOrientedGradientCovariantImageFunction --------
+ADD_TEST(feTuHistogramOfOrientedGradientCovariantImageFunction ${FEATUREEXTRACTION_TESTS16}
+         otbHistogramOfOrientedGradientCovariantImageFunctionNew)
 
+ADD_TEST(feTvHistogramOfOrientedGradientCovariantImageFunction ${FEATUREEXTRACTION_TESTS16}
+--compare-ascii ${EPSILON_8}     
+	 ${BASELINE_FILES}/feTvHistogramOfOrientedGradientCovariantImageFunction.txt
+	 ${TEMP}/feTvHistogramOfOrientedGradientCovariantImageFunction.txt
+         otbHistogramOfOrientedGradientCovariantImageFunction
+	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+	 ${TEMP}/feTvHistogramOfOrientedGradientCovariantImageFunction.txt
+	 5 273 64
+)
 
 # A enrichir
 SET(BasicFeatureExtraction_SRCS1
@@ -1745,6 +1757,7 @@ otbLocalHistogramImageFunctionTest.cxx
 otbImageFunctionAdaptor.cxx
 otbMetaImageFunction.cxx
 otbHaralickTexturesImageFunction.cxx
+otbHistogramOfOrientedGradientCovariantImageFunction.cxx
 )
 
 

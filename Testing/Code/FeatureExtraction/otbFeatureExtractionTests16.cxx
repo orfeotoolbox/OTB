@@ -38,4 +38,6 @@ void RegisterTests()
   REGISTER_TEST(otbMetaImageFunction);
   REGISTER_TEST(otbHaralickTexturesImageFunctionNew);
   REGISTER_TEST(otbHaralickTexturesImageFunction);
+  REGISTER_TEST(otbHistogramOfOrientedGradientCovariantImageFunctionNew);
+  REGISTER_TEST(otbHistogramOfOrientedGradientCovariantImageFunction);
 }
