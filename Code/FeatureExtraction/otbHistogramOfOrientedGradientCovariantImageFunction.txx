@@ -77,7 +77,7 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
   typename InputImageType::OffsetType offset;
 
   // Compute the center bin radius
-  unsigned int centerBinRadius = vcl_floor(vcl_log(m_NeighborhoodRadius)/vcl_log(2));
+  unsigned int centerBinRadius = vcl_floor(vcl_log((double)m_NeighborhoodRadius)/vcl_log(2.0));
 
   // Define a gaussian kernel around the center location
   double squaredRadius = m_NeighborhoodRadius * m_NeighborhoodRadius;
@@ -196,7 +196,7 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
  unsigned int binIndex = vcl_floor((M_PI + angle)/orientationBinWidth);
 
  // Compute the angular position
- double angularPosition = vcl_atan2(j,i) - principalOrientation;
+ double angularPosition = vcl_atan2((double)j,(double)i) - principalOrientation;
 
  // Angle is supposed to lie within [-pi,pi], so we ensure that
  // the compensation did not introduce out-of-range values
