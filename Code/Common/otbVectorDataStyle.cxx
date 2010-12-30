@@ -33,6 +33,48 @@ VectorDataStyle
 
 void
 VectorDataStyle
+::LoadBinaryRasterizationStyle(mapnik::Map& mapnikMap) const
+{
+  {
+  mapnik::feature_type_style style;
+  {
+    mapnik::rule_type rule;
+    rule.set_filter(mapnik::create_filter("[geometry] = 'line'"));
+    {
+     mapnik::line_symbolizer geom = mapnik::line_symbolizer();
+     mapnik::stroke          stroke = mapnik::stroke(mapnik::color("#000000"), 1);
+     stroke.set_line_join(mapnik::ROUND_JOIN);
+     stroke.set_line_cap(mapnik::ROUND_CAP);
+     geom.set_stroke(stroke);
+     rule.append(geom);
+    }
+    style.add_rule(rule);
+   }
+   {
+    mapnik::rule_type rule;
+    rule.set_filter(mapnik::create_filter("[geometry] = 'polygon'"));
+     {
+      mapnik::polygon_symbolizer geom = mapnik::polygon_symbolizer();
+      geom.set_fill(mapnik::color("#000000"));
+      rule.append(geom);
+     }
+     style.add_rule(rule);
+   }
+   {
+    mapnik::rule_type rule;
+    rule.set_filter(mapnik::create_filter("[geometry] = 'point'"));
+    {
+     mapnik::point_symbolizer geom = mapnik::point_symbolizer();
+     rule.append(geom);
+    }
+    style.add_rule(rule);
+   }
+  mapnikMap.insert_style("binary-rasterization", style);
+  }
+}
+
+void
+VectorDataStyle
 ::LoadOSMStyle(mapnik::Map& mapnikMap) const
 {
     {
