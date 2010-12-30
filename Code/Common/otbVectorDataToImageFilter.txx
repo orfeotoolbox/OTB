@@ -24,6 +24,7 @@
 #include "itkImageRegionIterator.h"
 #include "itkImageIteratorWithIndex.h"
 #include "otbVectorDataStyle.h"
+#include "itkRGBAPixel.h"
 
 #include <mapnik/datasource_cache.hpp>
 #include <mapnik/font_engine_freetype.hpp>
@@ -218,12 +219,14 @@ VectorDataToImageFilter<TVectorData, TImage>
     }
   else
     {
-    m_Map.set_background(mapnik::color("#b5d0d0"));
+    //m_Map.set_background(mapnik::color("#b5d0d0"));
+    m_Map.set_background(mapnik::color("#ffffff"));
     }
   //Load the OSM styles using helper class
   otb::VectorDataStyle::Pointer styleLoader = otb::VectorDataStyle::New();
   styleLoader->SetScaleFactor(m_ScaleFactor);
   styleLoader->LoadOSMStyle(m_Map);
+  styleLoader->LoadBinaryRasterizationStyle(m_Map);
 
   //We assume that all the data are reprojected before using OTB.
   VectorDataConstPointer input = this->GetInput();
@@ -432,6 +435,8 @@ VectorDataToImageFilter<TVectorData, TImage>
         boost::put(*mfeature, "place", tr.transcode("city"));
         boost::put(*mfeature, "capital", tr.transcode("yes"));  //FIXME more a question of style
 
+        boost::put(*mfeature, "geometry", tr.transcode("point"));
+
         mDatasource->push(mfeature);
 
         break;
@@ -486,6 +491,8 @@ VectorDataToImageFilter<TVectorData, TImage>
           boost::put(*mfeature, "highway",
                      tr.transcode((dataNode->GetFieldAsString("TYPE")).c_str()));
 
+        boost::put(*mfeature, "geometry", tr.transcode("line"));
+
         mDatasource->push(mfeature);
 
         break;
@@ -512,6 +519,11 @@ VectorDataToImageFilter<TVectorData, TImage>
 
         feature_ptr mfeature = feature_ptr(new Feature(1));
         mfeature->add_geometry(polygon);
+
+        mapnik::transcoder tr("ISO-8859-15");
+
+        boost::put(*mfeature, "geometry", tr.transcode("polygon"));
+
         mDatasource->push(mfeature);
 
         break;
