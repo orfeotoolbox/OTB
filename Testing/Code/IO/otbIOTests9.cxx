@@ -16,8 +16,6 @@
 
 =========================================================================*/
 
-// this file defines the otbCommonTest for the test driver
-// and all it expects is that you have a function called RegisterTests
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
 #endif
@@ -27,6 +25,7 @@
 void RegisterTests()
 {
   REGISTER_TEST(otbImageTest);
+  REGISTER_TEST(otbVectorImageLegacyTest);
   REGISTER_TEST(otbVectorImageTest);
   REGISTER_TEST(otbVectorImageComplexNew);
   REGISTER_TEST(otbVectorImageComplexFloatTest);

@@ -28,7 +28,7 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 
-int otbVectorImageTest(int argc, char* argv[])
+int otbVectorImageLegacyTest(int argc, char* argv[])
 {
   // Verify the number of parameters in the command line
   const char * inputFilename  = argv[1];
@@ -57,7 +57,7 @@ int otbVectorImageTest(int argc, char* argv[])
 
   file << "------ IMAGE --------" << std::endl;
   std::cout << "------ IMAGE --------" << std::endl;
-  // Image n'est pas ecrit dans le fichier car des pointeurs sont affichés, donc la valeur dépend de l'instanciation
+  // Image n'est pas ecrit dans le fichier car des pointeurs sont affichï¿½s, donc la valeur dï¿½pend de l'instanciation
   // -> pour pouvoir faire de tests de non regression sur la sortie ecrite dans le fichier ASCII
   std::cout << image << std::endl;
   std::cout << "---------------------" << std::endl;
@@ -122,6 +122,35 @@ int otbVectorImageTest(int argc, char* argv[])
     }
   tab.clear();
 
+  file.close();
+
+  return EXIT_SUCCESS;
+}
+
+int otbVectorImageTest(int argc, char* argv[])
+{
+  if (argc != 3)
+    {
+    std::cout << argv[0] << "<image> <output information>" << std::endl;
+    return EXIT_FAILURE;
+    }
+  const char * inputFilename  = argv[1];
+  const char * outputAsciiFilename  = argv[2];
+
+  typedef double PixelType;
+  const unsigned int Dimension = 2;
+  typedef otb::VectorImage<PixelType, Dimension> ImageType;
+
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  ReaderType::Pointer reader = ReaderType::New();
+
+  reader->SetFileName(inputFilename);
+  reader->UpdateOutputInformation();
+
+  std::ofstream file;
+
+  file.open(outputAsciiFilename);
+  file << reader->GetOutput();
   file.close();
 
   return EXIT_SUCCESS;

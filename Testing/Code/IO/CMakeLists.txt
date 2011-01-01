@@ -14,11 +14,9 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 #Tolerance on  pixel image diff
 SET(NOTOL 0.0)
+SET(EPSILON_3 0.001)
 SET(EPSILON_5 0.00001)
 SET(EPSILON_9 0.000000001)
-
-#Tolerance sur la difference des valeurs numeriques dans le --compare-ascii
-SET(EPS 0.001)
 
 # !!!!!  Pointe sur un exe généré dans le repertoire Common
 SET(COMMON_TESTS2 ${CXX_TEST_PATH}/otbCommonTests2)
@@ -1096,7 +1094,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(ioTvOtbImageTestSAR_ERS ${IO_TESTS9}
-   --compare-ascii ${EPS}  ${BASELINE_FILES}/ioOtbImageTestSAR_ERS.txt
+   --compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/ioOtbImageTestSAR_ERS.txt
                      ${TEMP}/ioOtbImageTestSAR_ERS.txt
          otbImageTest
          ${LARGEDATA}/SAR_ERS2_SLCI_SCENE1/
@@ -1104,7 +1102,7 @@ ADD_TEST(ioTvOtbImageTestSAR_ERS ${IO_TESTS9}
 
 # ---  Otb::Image Test  ---
 ADD_TEST(ioTvOtbImageTestRadarsat ${IO_TESTS9}
-   --compare-ascii ${EPS}  ${BASELINE_FILES}/ioOtbImageTestRadarsat.txt
+   --compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/ioOtbImageTestRadarsat.txt
                      ${TEMP}/ioOtbImageTestRadarsat.txt
         otbImageTest
        	${LARGEDATA}/RADARSAT1/GOMA/SCENE01/
@@ -1112,25 +1110,25 @@ ADD_TEST(ioTvOtbImageTestRadarsat ${IO_TESTS9}
 
 # ---  Otb::VectorImage Test  ---
 ADD_TEST(ioTvOtbVectorImageTestRadarsat ${IO_TESTS9}
-   --compare-ascii ${EPS}  ${TEMP}/ioOtbImageTestRadarsat.txt
+   --compare-ascii ${EPSILON_3}  ${TEMP}/ioOtbImageTestRadarsat.txt
                      ${TEMP}/ioOtbVectorImageTestRadarsat.txt
-        otbVectorImageTest
+        otbVectorImageLegacyTest
         ${LARGEDATA}/RADARSAT1/GOMA/SCENE01/
         ${TEMP}/ioOtbVectorImageTestRadarsat.txt)
 
 
 # ---  Otb::VectorImage Test  ---
 ADD_TEST(ioTvOtbVectorImageTestSpot5 ${IO_TESTS9}
-   --compare-ascii ${EPS}  ${BASELINE_FILES}/ioOtbVectorImageTestSpot5.txt
+   --compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/ioOtbVectorImageTestSpot5.txt
                      ${TEMP}/ioOtbVectorImageTestSpot5.txt
-        otbVectorImageTest
+        otbVectorImageLegacyTest
         ${LARGEDATA}/SPOT5/TEHERAN/
         ${TEMP}/ioOtbVectorImageTestSpot5.txt)
 
 ADD_TEST(ioTvOtbVectorImageTestFORMOSAT2 ${IO_TESTS9}
-   --compare-ascii ${EPS}  ${BASELINE_FILES}/ioOtbVectorImageTestFORMOSAT2.txt
+   --compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/ioOtbVectorImageTestFORMOSAT2.txt
                      ${TEMP}/ioOtbVectorImageTestFORMOSAT2.txt
-        otbVectorImageTest
+        otbVectorImageLegacyTest
         ${LARGEDATA}/FORMOSAT/Sudouest_20071013_MS_fmsat/
         ${TEMP}/ioOtbVectorImageTestFORMOSAT2.txt)
 
