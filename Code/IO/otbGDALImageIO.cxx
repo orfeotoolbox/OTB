@@ -58,7 +58,7 @@ public:
 
   /** Easy access to the internal GDALDataset object.
    *  Don't close it, it will be automatic */
-  GDALDataset* GetDataSet()
+  GDALDataset* GetDataSet() const
     {
     return m_Dataset;
     }
@@ -79,7 +79,7 @@ protected :
 
 private:
   GDALDataset* m_Dataset;
-};
+}; // end of GDALDatasetWrapper
 
 
 // Wraps the GdalDriverManager so that GDALAllRegister is called automatically
@@ -100,7 +100,7 @@ public:
   }
 
   // Open the file for reading and returns a smart dataset pointer
-  GDALDatasetWrapper::Pointer Open( std::string filename )
+  GDALDatasetWrapper::Pointer Open( std::string filename ) const
   {
     GDALDatasetWrapper::Pointer datasetWrapper;
     GDALDatasetH dataset = GDALOpen(filename.c_str(), GA_ReadOnly);
@@ -115,7 +115,7 @@ public:
   // Open the new  file for writing and returns a smart dataset pointer
   GDALDatasetWrapper::Pointer Create( std::string driverShortName, std::string filename,
                                       int nXSize, int nYSize, int nBands,
-                                      GDALDataType eType, char ** papszOptions )
+                                      GDALDataType eType, char ** papszOptions ) const
   {
     GDALDatasetWrapper::Pointer datasetWrapper;
 
@@ -137,7 +137,7 @@ public:
   }
 
 
-  GDALDriver* GetDriverByName( std::string driverShortName )
+  GDALDriver* GetDriverByName( std::string driverShortName ) const
   {
     return GetGDALDriverManager()->GetDriverByName(driverShortName.c_str());
   }
@@ -153,7 +153,7 @@ private :
   {
     GDALDestroyDriverManager();
   }
-};
+};// end of GDALDriverManagerWrapper
 
 GDALImageIO::GDALImageIO()
 {
@@ -405,25 +405,24 @@ void GDALImageIO::InternalReadImageInformation()
     {
 //FIXME this happen in the case of a hdf file with SUBDATASETS
 // in this situation, at least the first dataset should be open (ideally all in an imagelist)
-//         char** papszMetadata;
-//         papszMetadata = m_poDataset->GetMetadata("SUBDATASETS");
-//         if( CSLCount(papszMetadata) > 0 )
-//         {
-//           std::string key;
-//           itk::MetaDataDictionary & dict = this->GetMetaDataDictionary();
-//           for( int cpt = 0; papszMetadata[cpt] != NULL; cpt++ )
-//           {
-//             std::cout << papszMetadata[cpt] << std::endl;
-//               ::itk::OStringStream lStream;
-//               lStream << MetaDataKey::SubMetadataKey << cpt;
-//               key = lStream.str();
-//
-//               itk::EncapsulateMetaData<std::string>(dict, key,
-//                   static_cast<std::string>( papszMetadata[cpt] ) );
-//           }
-//           std::cout << dict[dict.GetKeys()[0]] << std::endl;
-//           std::cout << key << std::endl;
-//         }
+         char** papszMetadata;
+         papszMetadata = dataset->GetMetadata("SUBDATASETS");
+         if( CSLCount(papszMetadata) > 0 )
+         {
+           std::string key;
+           itk::MetaDataDictionary & dict = this->GetMetaDataDictionary();
+           for( int cpt = 0; papszMetadata[cpt] != NULL; cpt++ )
+           {
+             std::cout << "- metadata: " << papszMetadata[cpt] << std::endl;
+             itk::OStringStream lStream;
+             lStream << MetaDataKey::SubMetadataKey << cpt;
+             key = lStream.str();
+
+             itk::EncapsulateMetaData<std::string>(dict, key, static_cast<std::string> (papszMetadata[cpt]));
+             std::cout << "- dict: " << dict[key] << std::endl;
+             std::cout << "- key: " << key << std::endl;
+           }
+         }
 
     itkExceptionMacro(<< "Zero band found in the dataset");
     return;
