@@ -15,18 +15,37 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef __otbCanopyBidirectionalReflectance_cxx
+#define __otbCanopyBidirectionalReflectance_cxx
 
-// this file defines the otbCommonTest for the test driver
-// and all it expects is that you have a function called RegisterTests
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
+#include "otbCanopyBidirectionalReflectance.h"
 
-#include "otbTestMain.h"
 
-void RegisterTests()
+namespace otb
 {
-//   REGISTER_TEST(otbProSailNew);
-//   REGISTER_TEST(otbProspectTest);
-  REGISTER_TEST(otbSailTest);
+
+
+/**
+ * Constructor
+ */
+
+CanopyBidirectionalReflectance
+::CanopyBidirectionalReflectance()
+{
+
 }
+
+
+
+/**PrintSelf method */
+void
+CanopyBidirectionalReflectance
+::PrintSelf(std::ostream& os, itk::Indent indent) const
+{
+   Superclass::PrintSelf(os,indent);
+}
+
+
+} // end namespace otb
+
+#endif

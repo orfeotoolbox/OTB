@@ -8,10 +8,19 @@ ADD_TEST(otbProSailNew ${PROSAIL_TESTS}
         otbProSailNew
         )
 
-
+ADD_TEST(otbProspectTest ${PROSAIL_TESTS}
+        otbProspectTest
+        )
+        
+ADD_TEST(otbSailTest ${PROSAIL_TESTS}
+        otbSailTest
+        )
+        
 SET(PROSAIL_SRCS
 otbProSailTests.cxx
-otbProSailNew.cxx
+# otbProSailNew.cxx
+# otbProspectTest.cxx
+otbSailTest.cxx
 )
 
 

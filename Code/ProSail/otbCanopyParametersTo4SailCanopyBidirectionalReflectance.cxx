@@ -15,12 +15,12 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbProSail_txx
-#define __otbProSail_txx
+#ifndef __otbCanopyParametersTo4SailCanopyBidirectionalReflectance_cxx
+#define __otbCanopyParametersTo4SailCanopyBidirectionalReflectance_cxx
 
 #include "itkNumericTraits.h"
 
-#include "otbProSail.h"
+#include "otbCanopyParametersTo4SailCanopyBidirectionalReflectance.h"
 #include <boost/math/special_functions/expint.hpp>
 #include <boost/shared_ptr.hpp>
 #include "otbMath.h"
@@ -31,32 +31,103 @@
 namespace otb
 {
 
-template <class TSpectralResponse>
-ProSail<TSpectralResponse>
-::ProSail()
+
+CanopyParametersTo4SailCanopyBidirectionalReflectance
+::CanopyParametersTo4SailCanopyBidirectionalReflectance()
 {
-   m_ProSailParameters = ProSailParametersType::New();
-   m_Resh = SpectralResponseType::New();
-   m_Resv = SpectralResponseType::New();
+   this->ProcessObject::SetNumberOfRequiredInputs(2);
+   this->ProcessObject::SetNumberOfRequiredOutputs(1);
+   
+   CanopyBidirectionalReflectanceType::Pointer output = static_cast<CanopyBidirectionalReflectanceType *>(this->MakeOutput(0).GetPointer());
 }
 
-template <class TSpectralResponse>
+
+
+
 void
-ProSail<TSpectralResponse>
-::Compute()
+CanopyParametersTo4SailCanopyBidirectionalReflectance
+::SetCanopyParameters(const CanopyParametersType * object)
 {
+   this->itk::ProcessObject::SetNthInput(0,const_cast<CanopyParametersType *>(object));
+}
+
+CanopyParametersTo4SailCanopyBidirectionalReflectance::CanopyParametersType *
+CanopyParametersTo4SailCanopyBidirectionalReflectance
+::GetCanopyParameters()
+{
+   if(this->GetNumberOfInputs() != 2)
+   {
+      //exit
+      return 0;
+   }
+   return static_cast<CanopyParametersType *>(this->itk::ProcessObject::GetInput(0));
+}
+
+void
+CanopyParametersTo4SailCanopyBidirectionalReflectance
+::SetLeafOpticalProperties(const LeafOpticalPropertiesType * object)
+{
+   this->itk::ProcessObject::SetNthInput(1,const_cast<LeafOpticalPropertiesType *>(object));
+}
+
+CanopyParametersTo4SailCanopyBidirectionalReflectance::LeafOpticalPropertiesType *
+CanopyParametersTo4SailCanopyBidirectionalReflectance
+::GetLeafOpticalProperties()
+{
+   if(this->GetNumberOfInputs() != 2)
+   {
+      //exit
+      return 0;
+   }
+   return static_cast<LeafOpticalPropertiesType *>(this->itk::ProcessObject::GetInput(1));
+}
+
+
+CanopyParametersTo4SailCanopyBidirectionalReflectance::DataObjectPointer
+CanopyParametersTo4SailCanopyBidirectionalReflectance
+::MakeOutput(unsigned int)
+{
+   return static_cast<itk::DataObject *>(CanopyBidirectionalReflectanceType::New().GetPointer());
+}
+
+CanopyParametersTo4SailCanopyBidirectionalReflectance::CanopyBidirectionalReflectanceType *
+CanopyParametersTo4SailCanopyBidirectionalReflectance
+::GetOutput()
+{
+   if(this->GetNumberOfOutputs() < 1)
+   {
+      //exit
+      return 0;
+   }
+   return static_cast<CanopyBidirectionalReflectanceType *>(this->itk::ProcessObject::GetOutput(0));
+}
+
+
+
+void
+CanopyParametersTo4SailCanopyBidirectionalReflectance
+::GenerateData()
+{
+
+   CanopyParametersType::Pointer canopyParameters = this->GetCanopyParameters();
+   LeafOpticalPropertiesType::Pointer leaftOpticalProperties = this->GetLeafOpticalProperties();
+   CanopyBidirectionalReflectanceType::Pointer output = this->GetOutput();
+   
+   
+   std::cout<<"canopy params : "<<canopyParameters<<std::endl;
+   
    // LEAF ANGLE DISTRIBUTION
    double rd = CONST_PI/180;
    VectorType lidf;
-   this->Calc_LIDF(m_ProSailParameters->GetAngl(), lidf);
+   this->Calc_LIDF(canopyParameters->GetAngl(), lidf);
 
    double cts, cto, ctscto, tants, tanto, cospsi, dso;
-   cts = vcl_cos(rd*m_ProSailParameters->GetTTS());
-   cto = vcl_cos(rd*m_ProSailParameters->GetTTO());
+   cts = vcl_cos(rd*canopyParameters->GetTTS());
+   cto = vcl_cos(rd*canopyParameters->GetTTO());
    ctscto = cts*cto;
-   tants = vcl_tan(rd*m_ProSailParameters->GetTTS());
-   tanto = vcl_tan(rd*m_ProSailParameters->GetTTO());
-   cospsi = vcl_cos(rd*m_ProSailParameters->GetPSI());
+   tants = vcl_tan(rd*canopyParameters->GetTTS());
+   tanto = vcl_tan(rd*canopyParameters->GetTTO());
+   cospsi = vcl_cos(rd*canopyParameters->GetPSI());
    dso = vcl_sqrt(tants*tants+tanto*tanto-2.*tants*tanto*cospsi);
 
    // angular distance, compensation of shadow length
@@ -79,7 +150,7 @@ ProSail<TSpectralResponse>
       // SAIL volume scattering phase function gives interception and portions to be 
       // multiplied by rho and tau
       
-      this->Volscatt(m_ProSailParameters->GetTTS(),m_ProSailParameters->GetTTO(),m_ProSailParameters->GetPSI(),ttl,result);
+      this->Volscatt(canopyParameters->GetTTS(),canopyParameters->GetTTO(),canopyParameters->GetPSI(),ttl,result);
       chi_s = result[0];
       chi_o = result[1];
       frho = result[2];
@@ -131,11 +202,8 @@ ProSail<TSpectralResponse>
    double e1,e2,rinf,rinf2,re,denom,J1ks,J2ks,J1ko,J2ko;
    double Ps,Qs,Pv,Qv,z,g1,g2,Tv1,Tv2,T1,T2,T3;
    double alf,sumint,fhot,x1,y1,f1,fint,x2,y2,f2;
-   LRTType LRT(3);
    double resh,resv;
-   
 
-   this->Prospect5B(LRT);
 
    int nbdata = sizeof(dataSpecP5B) / sizeof(dataSpec);
    for (int i = 0 ; i < nbdata ; i++)
@@ -145,19 +213,19 @@ ProSail<TSpectralResponse>
       Ed = dataSpecP5B[i].diffuseLight; //9
       Rsoil1 = dataSpecP5B[i].drySoil; //10
       Rsoil2 = dataSpecP5B[i].wetSoil; //11
-      rho = LRT[1][i];
-      tau = LRT[2][i];
+      rho = leaftOpticalProperties->GetReflectance()[i].second; //rho = LRT[1][i];
+      tau = leaftOpticalProperties->GetTransmitance()[i].second; //tau = LRT[2][i];
       
       // direct/diffuse light
       //Es = direct
       //Ed = diffuse
-      PARdiro = (1-m_ProSailParameters->GetSkyl()/100.)*Es;
-      PARdifo = (m_ProSailParameters->GetSkyl()/100.)*Ed;
+      PARdiro = (1-canopyParameters->GetSkyl()/100.)*Es;
+      PARdifo = (canopyParameters->GetSkyl()/100.)*Ed;
       
       // Soil Reflectance Properties
       //rsoil1 = dry soil
       //rsoil2 = wet soil
-      rsoil0 = m_ProSailParameters->GetPSoil()*Rsoil1+(1-m_ProSailParameters->GetPSoil())*Rsoil2;
+      rsoil0 = canopyParameters->GetPSoil()*Rsoil1+(1-canopyParameters->GetPSoil())*Rsoil2;
       
       // Here rho and tau come in
       sigb = ddb*rho+ddf*tau;
@@ -176,7 +244,7 @@ ProSail<TSpectralResponse>
    
       // Here the LAI comes in
       // Outputs for the case LAI = 0
-      if (m_ProSailParameters->GetLAI()<0)
+      if (canopyParameters->GetLAI()<0)
       {
          tss = 1;
          too = 1;
@@ -200,17 +268,17 @@ ProSail<TSpectralResponse>
       }
       
       // Other cases (LAI > 0)
-      e1 = exp(-m*m_ProSailParameters->GetLAI());
+      e1 = exp(-m*canopyParameters->GetLAI());
       e2 = e1*e1;
       rinf = (att-m)/sigb;
       rinf2 = rinf*rinf;
       re = rinf*e1;
       denom = 1.-rinf2*e2;
 
-      J1ks=Jfunc1(ks,m,m_ProSailParameters->GetLAI());
-      J2ks=Jfunc2(ks,m,m_ProSailParameters->GetLAI());
-      J1ko=Jfunc1(ko,m,m_ProSailParameters->GetLAI());
-      J2ko=Jfunc2(ko,m,m_ProSailParameters->GetLAI());
+      J1ks=Jfunc1(ks,m,canopyParameters->GetLAI());
+      J2ks=Jfunc2(ks,m,canopyParameters->GetLAI());
+      J1ko=Jfunc1(ko,m,canopyParameters->GetLAI());
+      J2ko=Jfunc2(ko,m,canopyParameters->GetLAI());
       
       Ps = (sf+sb*rinf)*J1ks;
       Qs = (sf*rinf+sb)*J2ks;
@@ -224,9 +292,9 @@ ProSail<TSpectralResponse>
       tdo = (Pv-re*Qv)/denom;
       rdo = (Qv-re*Pv)/denom;
       
-      tss = exp(-ks*m_ProSailParameters->GetLAI());
-      too = exp(-ko*m_ProSailParameters->GetLAI());
-      z = Jfunc3(ks,ko,m_ProSailParameters->GetLAI());
+      tss = exp(-ks*canopyParameters->GetLAI());
+      too = exp(-ko*canopyParameters->GetLAI());
+      z = Jfunc3(ks,ko,canopyParameters->GetLAI());
       g1 = (z-J1ks*too)/(ko+m);
       g2 = (z-J1ko*tss)/(ks+m);
       
@@ -242,18 +310,18 @@ ProSail<TSpectralResponse>
       // Treatment of the hotspot-effect
       alf=1e6;
       // Apply correction 2/(K+k) suggested by F.-M. Br�on
-      if (m_ProSailParameters->GetHSpot()>0) alf=(dso/m_ProSailParameters->GetHSpot())*2./(ks+ko);
+      if (canopyParameters->GetHSpot()>0) alf=(dso/canopyParameters->GetHSpot())*2./(ks+ko);
       if (alf>200) alf=200;
       if (alf==0)
       {
          // The pure hotspot - no shadow
          tsstoo = tss;
-         sumint = (1-tss)/(ks*m_ProSailParameters->GetLAI());
+         sumint = (1-tss)/(ks*canopyParameters->GetLAI());
       }
       else
       {
          // Outside the hotspot
-         fhot=m_ProSailParameters->GetLAI()*vcl_sqrt(ko*ks);
+         fhot=canopyParameters->GetLAI()*vcl_sqrt(ko*ks);
          // Integrate by exponential Simpson method in 20 steps
          // the steps are arranged according to equal partitioning
          // of the slope of the joint probability function
@@ -267,7 +335,7 @@ ProSail<TSpectralResponse>
          {
             if (j<20) x2 = -vcl_log(1.-j*fint)/alf;
             else x2 = 1;
-            y2 = -(ko+ks)*m_ProSailParameters->GetLAI()*x2+fhot*(1.-exp(-alf*x2))/alf;
+            y2 = -(ko+ks)*canopyParameters->GetLAI()*x2+fhot*(1.-exp(-alf*x2))/alf;
             f2 = exp(y2);
             sumint = sumint+(f2-f1)*(x2-x1)/(y2-y1);
             x1=x2;
@@ -279,7 +347,7 @@ ProSail<TSpectralResponse>
 
       // Bidirectional reflectance
       // Single scattering contribution
-      rsos = w*m_ProSailParameters->GetLAI()*sumint;
+      rsos = w*canopyParameters->GetLAI()*sumint;
       // Total canopy contribution
       rso=rsos+rsod;
       //Interaction with the soil
@@ -296,14 +364,14 @@ ProSail<TSpectralResponse>
       resh = (rddt*PARdifo+rsdt*PARdiro)/(PARdiro+PARdifo);
       resv = (rdot*PARdifo+rsot*PARdiro)/(PARdiro+PARdifo);
       
-      PairType tmp1,tmp2;
-      tmp1.first=lambda;
-      tmp1.second=static_cast<ValuePrecisionType>(resh);
-      tmp2.first=lambda;
-      tmp2.second=static_cast<ValuePrecisionType>(resv);
-      
-      m_Resh->GetResponse().push_back(tmp1);
-      m_Resv->GetResponse().push_back(tmp2);
+//       PairType tmp1,tmp2;
+//       tmp1.first=lambda;
+//       tmp1.second=static_cast<ValuePrecisionType>(resh);
+//       tmp2.first=lambda;
+//       tmp2.second=static_cast<ValuePrecisionType>(resv);
+//       
+//       m_Resh->GetResponse().push_back(tmp1);
+//       m_Resv->GetResponse().push_back(tmp2);
 
    }
 
@@ -312,127 +380,8 @@ ProSail<TSpectralResponse>
 
 
 
-/** Plant Leaf Reflectance and Transmittance computation from 400nm to 2500 nm*/
-template <class TSpectralResponse>
 void
-ProSail<TSpectralResponse>
-::Prospect5B( LRTType &LRT )
-{
-
-   unsigned int alpha=40;
-   double lambda, n, k, trans, t12, temp, t21, r12, r21, x, y, ra, ta, r90, t90;
-   double delta, beta, va, vb, vbNN, vbNNinv, vainv, s1, s2, s3, RN, TN;
-   double N, Cab, Car, CBrown, Cw, Cm;
-   N = m_ProSailParameters->GetN();
-   Cab = m_ProSailParameters->GetCab();
-   Car = m_ProSailParameters->GetCar();
-   CBrown = m_ProSailParameters->GetCBrown();
-   Cw = m_ProSailParameters->GetCw();
-   Cm = m_ProSailParameters->GetCm();
-
-   
-   int nbdata = sizeof(dataSpecP5B) / sizeof(dataSpec);
-   for (int i = 0 ; i < nbdata ; i++)
-   {
-      lambda = dataSpecP5B[i].lambda;
-      n = dataSpecP5B[i].refLeafMatInd;
-      
-      k = Cab*dataSpecP5B[i].chlAbsCoef+Car*dataSpecP5B[i].carAbsCoef+CBrown*dataSpecP5B[i].brownAbsCoef+Cw*dataSpecP5B[i].waterAbsCoef;
-      k = k + Cm*dataSpecP5B[i].dryAbsCoef;
-      k = k / N;
-      if(k == itk::NumericTraits<PrecisionType>::ZeroValue() ) k=EPSILON;
-
-      trans=(1.-k)*exp(-k)+k*k*boost::math::expint(1,k);
-      
-      t12 = this->Tav(alpha,n);
-      temp = this->Tav(90,n);
-      
-      
-      t21 = temp/(n*n);
-      r12 = 1.-t12;
-      r21 = 1.-t21;
-      x = t12/temp;
-      y = x*(temp-1)+1-t12;
-      
-      ra = r12+(t12*t21*r21*(trans*trans))/(1.-r21*r21*trans*trans);
-      ta = (t12*t21*trans)/(1.-r21*r21*trans*trans);
-      r90 = (ra-y)/x;
-      t90 = ta/x;
-      
-      delta = (t90*t90-r90*r90-1.)*(t90*t90-r90*r90-1.) - 4.*r90*r90;
-      if(delta < 0) delta = EPSILON;
-      else delta=vcl_sqrt(delta);
-      
-      beta = (1.+r90*r90-t90*t90-delta)/(2.*r90);
-      va=(1.+r90*r90-t90*t90+delta)/(2.*r90);
-      if ((beta-r90)<=0)
-         vb=vcl_sqrt(beta*(va-r90)/(va*EPSILON));
-      else
-         vb=vcl_sqrt(beta*(va-r90)/(va*(beta-r90)));
-   
-      vbNN = vcl_pow(vb,N-1.);
-      vbNNinv = 1./vbNN;
-      vainv = 1./va;
-      s1=ta*t90*(vbNN-vbNNinv);
-      s2=ta*(va-vainv);
-      s3=va*vbNN-vainv*vbNNinv-r90*(vbNN-vbNNinv);
-
-      RN=ra+s1/s3;
-      TN=s2/s3;
-      
-      LRT[0].push_back(lambda);
-      LRT[1].push_back(RN);
-      LRT[2].push_back(TN);
-   }
-   
-}
-
-
-template <class TSpectralResponse>
-double
-ProSail<TSpectralResponse>
-::Tav(const int theta, double ref)
-{
-
-   double theta_rad = theta*CONST_PI/180;
-   double r2, rp, rm, a, k, ds, k2, rm2, res, b1, b2, b;
-   double ts, tp1, tp2, tp3, tp4, tp5, tp; 
-
-   r2=ref*ref;
-   rp=r2+1;
-   rm=r2-1;
-   a=(ref+1)*(ref+1)/2;
-   k=-(r2-1)*(r2-1)/4;
-   ds=sin(theta_rad);
-   
-   k2=k*k;
-   rm2=rm*rm;
-   
-   if(theta_rad==0) res=4*ref/((ref+1)*(ref+1));
-   else
-   {
-      if(theta_rad==CONST_PI/2) b1=itk::NumericTraits<PrecisionType>::ZeroValue();
-      else b1=vcl_sqrt((ds*ds-rp/2)*(ds*ds-rp/2)+k);
-
-      b2=ds*ds-rp/2;
-      b=b1-b2;
-      ts=(k2/(6*vcl_pow(b,3))+k/b-b/2)-(k2/(6*vcl_pow(a,3))+k/a-a/2);
-      tp1=-2*r2*(b-a)/(rp*rp);
-      tp2=-2*r2*rp*log(b/a)/rm2;
-      tp3=r2*(1./b-1./a)/2;
-      tp4=16*r2*r2*(r2*r2+1)*log((2*rp*b-rm2)/(2*rp*a-rm2))/(vcl_pow(rp,3)*rm2);
-      tp5=16*vcl_pow(r2,3)*(1./(2*rp*b-rm2)-1./(2*rp*a-rm2))/vcl_pow(rp,3);
-      tp=tp1+tp2+tp3+tp4+tp5;
-      res=(ts+tp)/(2*ds*ds);
-   }
-   return res;
-   
-   
-}
-
-template <class TSpectralResponse>
-void
-ProSail<TSpectralResponse>
+CanopyParametersTo4SailCanopyBidirectionalReflectance
 ::Calc_LIDF(const double a, VectorType &lidf)
 {
    int ala=a;
@@ -443,9 +392,9 @@ ProSail<TSpectralResponse>
 }
 
 
-template <class TSpectralResponse>
+
 void
-ProSail<TSpectralResponse>
+CanopyParametersTo4SailCanopyBidirectionalReflectance
 ::Campbell(const double ala, VectorType &freq)
 {
    unsigned int n=18;
@@ -506,9 +455,9 @@ ProSail<TSpectralResponse>
 }
 
 
-template <class TSpectralResponse>
+
 void
-ProSail<TSpectralResponse>
+CanopyParametersTo4SailCanopyBidirectionalReflectance
 ::Volscatt(const double tts, const double tto, const double psi, const double ttl, VectorType &result)
 {
 
@@ -625,9 +574,9 @@ ProSail<TSpectralResponse>
 
 
 
-template <class TSpectralResponse>
+
 double
-ProSail<TSpectralResponse>
+CanopyParametersTo4SailCanopyBidirectionalReflectance
 ::Jfunc1(const double k, const double l, const double t)
 {
 // function Jout=Jfunc1(k,l,t)
@@ -653,9 +602,9 @@ ProSail<TSpectralResponse>
    }
 }
 
-template <class TSpectralResponse>
+
 double
-ProSail<TSpectralResponse>
+CanopyParametersTo4SailCanopyBidirectionalReflectance
 ::Jfunc2(const double k, const double l, const double t)
 {
 // function Jout=Jfunc2(k,l,t)
@@ -666,9 +615,9 @@ ProSail<TSpectralResponse>
    return v;
 }
 
-template <class TSpectralResponse>
+
 double
-ProSail<TSpectralResponse>
+CanopyParametersTo4SailCanopyBidirectionalReflectance
 ::Jfunc3(const double k, const double l, const double t)
 {
 // function out=Jfunc3(k,l,t)
@@ -679,13 +628,12 @@ ProSail<TSpectralResponse>
 }
 
 
-template <class TSpectralResponse>
+
 void
-ProSail<TSpectralResponse>
+CanopyParametersTo4SailCanopyBidirectionalReflectance
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
    Superclass::PrintSelf(os,indent);
-   std::cout<<m_ProSailParameters<<std::endl;
 
 }
 } // end namespace otb

@@ -15,18 +15,38 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef __otbLeafOpticalProperties_cxx
+#define __otbLeafOpticalProperties_cxx
 
-// this file defines the otbCommonTest for the test driver
-// and all it expects is that you have a function called RegisterTests
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
+#include "otbLeafOpticalProperties.h"
 
-#include "otbTestMain.h"
 
-void RegisterTests()
+namespace otb
 {
-//   REGISTER_TEST(otbProSailNew);
-//   REGISTER_TEST(otbProspectTest);
-  REGISTER_TEST(otbSailTest);
+
+
+/**
+ * Constructor
+ */
+
+LeafOpticalProperties
+::LeafOpticalProperties()
+{
+   m_Reflectance.clear();
+   m_Transmitance.clear();
 }
+
+
+
+/**PrintSelf method */
+void
+LeafOpticalProperties
+::PrintSelf(std::ostream& os, itk::Indent indent) const
+{
+   Superclass::PrintSelf(os,indent);
+}
+
+
+} // end namespace otb
+
+#endif
