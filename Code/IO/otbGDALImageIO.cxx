@@ -387,14 +387,19 @@ void GDALImageIO::ReadImageInformation()
 
 void GDALImageIO::InternalReadImageInformation()
 {
-
-
+  // Detecting if we are in the case of an image with subdatasets
+  // example: hdf Modis data
+  // in this situation, we are going to change the filename to the
+  // supported gdal format using the m_DatasetNumber value
+  // HDF4_SDS:UNKNOWN:"myfile.hdf":2
+  // and make m_Dataset point to it.
   if (m_Dataset->GetDataSet()->GetRasterCount() == 0)
     {
-// this happen in the case of a hdf file with SUBDATASETS
-// Note: we assume that the datasets are in order
+    // this happen in the case of a hdf file with SUBDATASETS
+    // Note: we assume that the datasets are in order
     char** papszMetadata;
     papszMetadata = m_Dataset->GetDataSet()->GetMetadata("SUBDATASETS");
+    //TODO: we might want to keep the list of names somewhere, at least the number of datasets
     std::vector<std::string> names;
     if( CSLCount(papszMetadata) > 0 )
       {
@@ -414,7 +419,6 @@ void GDALImageIO::InternalReadImageInformation()
       {
       otbMsgDevMacro(<< "Reading: " << names[m_DatasetNumber]);
       m_Dataset = GDALDriverManagerWrapper::GetInstance().Open(names[m_DatasetNumber]);
-      //m_Dataset = GDALDriverManagerWrapper::GetInstance().Open("HDF4_SDS:UNKNOWN:\"/home/christop/OTB/200607030235Terra.1000m.hdf\":26");
       }
     else
       {
@@ -423,7 +427,6 @@ void GDALImageIO::InternalReadImageInformation()
     }
 
   GDALDataset* dataset = m_Dataset->GetDataSet();
-//  otbMsgDevMacro(<< "  GCPCount (original): " << m_Dataset->GetGCPCount());
 
   // Get image dimensions
   if ( dataset->GetRasterXSize() == 0 || dataset->GetRasterYSize() == 0 )
