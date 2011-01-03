@@ -176,6 +176,7 @@ GDALImageIO::GDALImageIO()
   m_Origin[1] = 0.0;
 
   m_IsIndexed   = false;
+  m_DatasetNumber = 0;
   m_currentfile = NULL;
   //m_poBands     = NULL;
   //m_hDriver     = NULL;
@@ -386,6 +387,41 @@ void GDALImageIO::ReadImageInformation()
 
 void GDALImageIO::InternalReadImageInformation()
 {
+
+
+  if (m_Dataset->GetDataSet()->GetRasterCount() == 0)
+    {
+// this happen in the case of a hdf file with SUBDATASETS
+// Note: we assume that the datasets are in order
+    char** papszMetadata;
+    papszMetadata = m_Dataset->GetDataSet()->GetMetadata("SUBDATASETS");
+    std::vector<std::string> names;
+    if( CSLCount(papszMetadata) > 0 )
+      {
+      for( int cpt = 0; papszMetadata[cpt] != NULL; cpt++ )
+        {
+        std::string key, name;
+        if (ParseHdfSubsetName(papszMetadata[cpt], key, name))
+          {
+          otbMsgDevMacro(<< "- key:  " << key);
+          otbMsgDevMacro(<< "- name: " << name);
+          // check if this is a dataset name
+          if (key.find("_NAME") != std::string::npos) names.push_back(name);
+          }
+        }
+      }
+    if (m_DatasetNumber < names.size())
+      {
+      otbMsgDevMacro(<< "Reading: " << names[m_DatasetNumber]);
+      m_Dataset = GDALDriverManagerWrapper::GetInstance().Open(names[m_DatasetNumber]);
+      //m_Dataset = GDALDriverManagerWrapper::GetInstance().Open("HDF4_SDS:UNKNOWN:\"/home/christop/OTB/200607030235Terra.1000m.hdf\":26");
+      }
+    else
+      {
+      itkExceptionMacro(<< "Dataset requested does not exist.");
+      }
+    }
+
   GDALDataset* dataset = m_Dataset->GetDataSet();
 //  otbMsgDevMacro(<< "  GCPCount (original): " << m_Dataset->GetGCPCount());
 
@@ -401,32 +437,9 @@ void GDALImageIO::InternalReadImageInformation()
 
   // Get Number of Bands
   m_NbBands = dataset->GetRasterCount();
-  if (m_NbBands == 0)
-    {
-//FIXME this happen in the case of a hdf file with SUBDATASETS
-// in this situation, at least the first dataset should be open (ideally all in an imagelist)
-         char** papszMetadata;
-         papszMetadata = dataset->GetMetadata("SUBDATASETS");
-         if( CSLCount(papszMetadata) > 0 )
-         {
-           std::string key;
-           itk::MetaDataDictionary & dict = this->GetMetaDataDictionary();
-           for( int cpt = 0; papszMetadata[cpt] != NULL; cpt++ )
-           {
-             std::cout << "- metadata: " << papszMetadata[cpt] << std::endl;
-             itk::OStringStream lStream;
-             lStream << MetaDataKey::SubMetadataKey << cpt;
-             key = lStream.str();
 
-             itk::EncapsulateMetaData<std::string>(dict, key, static_cast<std::string> (papszMetadata[cpt]));
-             std::cout << "- dict: " << dict[key] << std::endl;
-             std::cout << "- key: " << key << std::endl;
-           }
-         }
-
-    itkExceptionMacro(<< "Zero band found in the dataset");
-    return;
-    }
+  otbMsgDevMacro(<< "Dimension: " << m_Dimensions[0] << ", " << m_Dimensions[1]);
+  otbMsgDevMacro(<< "Number of bands: " << m_NbBands);
 
   this->SetNumberOfComponents(m_NbBands);
 
@@ -1299,6 +1312,15 @@ bool GDALImageIO::GDALInfoReportCorner(const char * /*corner_name*/, double x, d
     }
 
   return IsTrue;
+}
+
+bool GDALImageIO::ParseHdfSubsetName(const std::string& id, std::string& key, std::string& name) const
+{
+  std::size_t pos = id.find("=");
+  if (pos == std::string::npos) return false;
+  key = id.substr(0, pos);
+  name = id.substr(pos+1, id.size() - pos - 1);
+  return true;
 }
 
 } // end namespace otb

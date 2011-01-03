@@ -72,10 +72,18 @@ public:
    * enlarge the RequestedRegion to the size of the image on disk. */
   virtual void EnlargeOutputRequestedRegion(itk::DataObject *output);
 
+  /** Set/Get the dataset index to extract (starting at 0)
+   * used in the case of image file containing multiple datasets
+   * (Modis hdf files for example) */
+  itkSetMacro(DatasetNumber, int);
+  itkGetMacro(DatasetNumber, int);
+
 protected:
   ImageFileReader();
   virtual ~ImageFileReader();
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
+
+  int m_DatasetNumber;
 
 private:
   /** Test whether the given filename exist and it is readable,

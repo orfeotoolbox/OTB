@@ -145,6 +145,7 @@ int otbVectorImageTest(int argc, char* argv[])
   ReaderType::Pointer reader = ReaderType::New();
 
   reader->SetFileName(inputFilename);
+  reader->SetDatasetNumber(2);
   reader->UpdateOutputInformation();
 
   std::ofstream file;

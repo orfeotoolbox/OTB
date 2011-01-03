@@ -49,7 +49,7 @@ namespace otb
 
 template <class TOutputImage>
 ImageFileReader<TOutputImage>
-::ImageFileReader() : itk::ImageFileReader<TOutputImage>()
+::ImageFileReader() : itk::ImageFileReader<TOutputImage>(), m_DatasetNumber(0)
 {
 }
 
@@ -278,13 +278,18 @@ ImageFileReader<TOutputImage>
     return;
     }
 
-  // Hint the IO whether the OTB image type takes complex pixels
-  // this will determine the strategy to fill up a vector image
+  // Special actions for the gdal image IO
   if (strcmp(this->m_ImageIO->GetNameOfClass(), "GDALImageIO") == 0)
     {
     typename GDALImageIO::Pointer imageIO = dynamic_cast<GDALImageIO*>(this->GetImageIO());
+
+    // Hint the IO whether the OTB image type takes complex pixels
+    // this will determine the strategy to fill up a vector image
     OutputImagePixelType dummy;
     imageIO->SetIsComplex(PixelIsComplex(dummy));
+
+    // Pass the dataset number (used for hdf files for example)
+    imageIO->SetDatasetNumber(m_DatasetNumber);
     }
 
 

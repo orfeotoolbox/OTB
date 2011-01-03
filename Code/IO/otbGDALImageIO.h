@@ -76,6 +76,9 @@ public:
   itkSetMacro(IsComplex, bool);
   itkGetMacro(IsComplex, bool);
 
+  /** Set/Get the dataset index to extract (starting at 0)*/
+  itkSetMacro(DatasetNumber, int);
+  itkGetMacro(DatasetNumber, int);
 
   /*-------- This part of the interface deals with reading data. ------ */
 
@@ -137,6 +140,9 @@ protected:
   const char* m_currentfile;
   bool        m_IsIndexed;
 
+  /** Dataset index to extract (starting at 0)*/
+  int m_DatasetNumber;
+
 private:
   GDALImageIO(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
@@ -157,6 +163,8 @@ private:
 
   bool GDALInfoReportCorner(const char * corner_name, double x, double y,
                             double& dfGeoX, double& dfGeoY);
+
+  bool ParseHdfSubsetName(const std::string& id, std::string& key, std::string& name) const;
 
   bool m_FlagWriteImageInformation;
   bool m_CanStreamWrite;
