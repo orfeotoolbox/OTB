@@ -1221,7 +1221,23 @@ ADD_TEST(ioTvStreamingImageFilterGDAL_TIFF ${IO_TESTS9}
          ${TEMP}/ioStreamingImageFilterTestGDAL_PoupeesTif.png
          )
 
-
+# Test multidataset
+ADD_TEST(ioTvMultiDatasetReading1 ${IO_TESTS9}
+  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReading1.txt
+                             ${TEMP}/ioTvMultiDatasetReading1.txt
+      otbVectorImageTest
+      ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf
+      ${TEMP}/ioTvMultiDatasetReading1.txt
+      0
+      )
+ADD_TEST(ioTvMultiDatasetReading2 ${IO_TESTS9}
+  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReading2.txt
+                             ${TEMP}/ioTvMultiDatasetReading2.txt
+      otbVectorImageTest
+      ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf
+      ${TEMP}/ioTvMultiDatasetReading2.txt
+      5
+      )
 # ---  STREAMING  IMAGE   FILE    WRITER  ---
 ADD_TEST(ioTvStreamingIFWriterBSQWithoutStreaming ${IO_TESTS2}
    --compare-image ${EPSILON_9}   ${INPUTDATA}/poupees_1canal.c1.hdr
@@ -1242,6 +1258,8 @@ ADD_TEST(ioTvStreamingIFWriterBSQWithStreaming ${IO_TESTS2}
          1 # Streaming
          100
          )
+         
+ 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS10 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
