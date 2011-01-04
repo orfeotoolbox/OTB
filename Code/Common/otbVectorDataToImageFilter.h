@@ -134,6 +134,9 @@ public:
   itkGetMacro(UseAsOverlay, bool);
   itkBooleanMacro(UseAsOverlay);
 
+  itkSetMacro(RenderingStyleType, unsigned int);
+  itkGetMacro(RenderingStyleType, unsigned int);
+
 protected:
   /** Constructor */
   VectorDataToImageFilter();
@@ -178,6 +181,9 @@ private:
 
   //Projection in the proj.4 format (for mapnik)
   std::string m_VectorDataProjectionProj4;
+  
+  //Rendering style type
+  unsigned int m_RenderingStyleType;
 
 }; // end class
 } // end namespace otb
