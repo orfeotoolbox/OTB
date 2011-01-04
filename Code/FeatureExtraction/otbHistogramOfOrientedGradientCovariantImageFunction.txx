@@ -19,6 +19,7 @@
 #define __otbHistogramOfOrientedGradientCovariantImageFunction_txx
 
 #include "otbHistogramOfOrientedGradientCovariantImageFunction.h"
+#include "itkConstNeighborhoodIterator.h"
 #include "itkNumericTraits.h"
 #include "itkMacro.h"
 
@@ -30,8 +31,8 @@ namespace otb
  */
 template <class TInputImage, class TOutputPrecision, class TCoordRep>
 HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision, TCoordRep>
-::HistogramOfOrientedGradientCovariantImageFunction() : m_NeighborhoodRadius(1),
-       m_NumberOfOrientationBins(18)
+::HistogramOfOrientedGradientCovariantImageFunction() : m_NeighborhoodRadius(8),
+                                                        m_NumberOfOrientationBins(18)
 {}
 
 template <class TInputImage, class TOutputPrecision, class TCoordRep>
@@ -77,7 +78,7 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
   typename InputImageType::OffsetType offset;
 
   // Compute the center bin radius
-  unsigned int centerBinRadius = vcl_floor(vcl_log((double)m_NeighborhoodRadius)/vcl_log(2.0));
+  double centerBinRadius = static_cast<double>(m_NeighborhoodRadius)/2;
 
   // Define a gaussian kernel around the center location
   double squaredRadius = m_NeighborhoodRadius * m_NeighborhoodRadius;
@@ -98,31 +99,31 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
       // Check if the current pixel lies within a disc of radius m_NeighborhoodRadius
       double currentSquaredRadius = i*i+j*j;
       if(currentSquaredRadius < squaredRadius)
- {
- // If so, compute the gaussian weighting (this could be
- // computed once for all for the sake of optimisation)
- double gWeight = (1/vcl_sqrt(2*M_PI*squaredSigma)) * vcl_exp(- currentSquaredRadius/(2*squaredSigma));
+        {
+        // If so, compute the gaussian weighting (this could be
+        // computed once for all for the sake of optimisation)
+        double gWeight = (1/vcl_sqrt(2*M_PI*squaredSigma)) * vcl_exp(- currentSquaredRadius/(2*squaredSigma));
 
- // Compute pixel location
- offset[0]=i;
- offset[1]=j;
+        // Compute pixel location
+        offset[0]=i;
+        offset[1]=j;
  
- // Get the current gradient covariant value
- InputPixelType gradient = it.GetPixel(offset);
+        // Get the current gradient covariant value
+        InputPixelType gradient = it.GetPixel(offset);
 
- // Then, compute the gradient orientation
- double angle = vcl_atan2(gradient[1],gradient[0]);
+        // Then, compute the gradient orientation
+        double angle = vcl_atan2(gradient[1],gradient[0]);
 
- // Also compute its magnitude
- TOutputPrecision magnitude = vcl_sqrt(gradient[0]*gradient[0]+gradient[1]*gradient[1]);
+        // Also compute its magnitude
+        TOutputPrecision magnitude = vcl_sqrt(gradient[0]*gradient[0]+gradient[1]*gradient[1]);
 
- // Determine the bin index (shift of M_PI since atan2 values
- // lies in [-pi,pi]
- unsigned int binIndex = vcl_floor((M_PI + angle)/orientationBinWidth);
+        // Determine the bin index (shift of M_PI since atan2 values
+        // lies in [-pi,pi]
+        unsigned int binIndex = vcl_floor((M_PI + angle)/orientationBinWidth);
  
- // Cumulate values
- globalOrientationHistogram[binIndex]+= magnitude * gWeight;
- }
+        // Cumulate values
+        globalOrientationHistogram[binIndex]+= magnitude * gWeight;
+        }
       }
     }
 
@@ -145,7 +146,7 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
     }
 
   // Derive principal orientation
-  double principalOrientation = maxOrientationHistogramBin * orientationBinWidth;
+  double principalOrientation = maxOrientationHistogramBin * orientationBinWidth - M_PI;
 
   // Initialize the five spatial bins
   std::vector<TOutputPrecision> centerHistogram(m_NumberOfOrientationBins,0.);
@@ -162,84 +163,84 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
       // Check if the current pixel lies within a disc of radius m_NeighborhoodRadius
       double currentSquaredRadius = i*i+j*j;
       if(currentSquaredRadius < squaredRadius)
- {
- // If so, compute the gaussian weighting (this could be
- // computed once for all for the sake of optimisation)
- double gWeight = (1/vcl_sqrt(2*M_PI*squaredSigma)) * vcl_exp(- currentSquaredRadius/(2*squaredSigma));
+        {
+        // If so, compute the gaussian weighting (this could be
+        // computed once for all for the sake of optimisation)
+        double gWeight = (1/vcl_sqrt(2*M_PI*squaredSigma)) * vcl_exp(- currentSquaredRadius/(2*squaredSigma));
 
- // Compute pixel location
- offset[0]=i;
- offset[1]=j;
+        // Compute pixel location
+        offset[0]=i;
+        offset[1]=j;
  
- // Get the current gradient covariant value
- InputPixelType gradient = it.GetPixel(offset);
+        // Get the current gradient covariant value
+        InputPixelType gradient = it.GetPixel(offset);
 
- // Then, compute the compensated gradient orientation
- double angle = vcl_atan2(gradient[1],gradient[0]) - principalOrientation;
+        // Then, compute the compensated gradient orientation
+        double angle = vcl_atan2(gradient[1],gradient[0]) - principalOrientation;
 
- // Angle is supposed to lie with [-pi,pi], so we ensure that
- // compenstation did not introduce out-of-range values
- if(angle > M_PI)
-   {
-   angle -= 2*M_PI;
-   }
- else if(angle < -M_PI)
-   {
-   angle += 2*M_PI;
-   }
+        // Angle is supposed to lie with [-pi,pi], so we ensure that
+        // compenstation did not introduce out-of-range values
+        if(angle > M_PI)
+          {
+          angle -= 2*M_PI;
+          }
+        else if(angle < -M_PI)
+          {
+          angle += 2*M_PI;
+          }
 
- // Also compute its magnitude
- TOutputPrecision magnitude = vcl_sqrt(gradient[0]*gradient[0]+gradient[1]*gradient[1]);
+        // Also compute its magnitude
+        TOutputPrecision magnitude = vcl_sqrt(gradient[0]*gradient[0]+gradient[1]*gradient[1]);
 
- // Determine the bin index (shift of M_PI since atan2 values
- // lies in [-pi,pi]
- unsigned int binIndex = vcl_floor((M_PI + angle)/orientationBinWidth);
+        // Determine the bin index (shift of M_PI since atan2 values
+        // lies in [-pi,pi]
+        unsigned int binIndex = vcl_floor((M_PI + angle)/orientationBinWidth);
 
- // Compute the angular position
- double angularPosition = vcl_atan2((double)j,(double)i) - principalOrientation;
+        // Compute the angular position
+        double angularPosition = vcl_atan2((double)j,(double)i) - principalOrientation;
 
- // Angle is supposed to lie within [-pi,pi], so we ensure that
- // the compensation did not introduce out-of-range values
- if(angularPosition > M_PI)
-   {
-   angularPosition -= 2*M_PI;
-   }
- else if(angularPosition < -M_PI)
-   {
-   angularPosition += 2*M_PI;
-   }
+        // Angle is supposed to lie within [-pi,pi], so we ensure that
+        // the compensation did not introduce out-of-range values
+        if(angularPosition > M_PI)
+          {
+          angularPosition -= 2*M_PI;
+          }
+        else if(angularPosition < -M_PI)
+          {
+          angularPosition += 2*M_PI;
+          }
 
- // Check if we lie in center bin
- if(currentSquaredRadius < squaredCenterBinRadius)
-   {
-   centerHistogram[binIndex]+= magnitude * gWeight;
-   }
- else if(angularPosition > 0)
-   {
-   if(angularPosition < M_PI/2)
-     {
-     upperRightHistogram[binIndex]+= magnitude * gWeight;
-     }
-   else
-     {
-     upperLeftHistogram[binIndex]+= magnitude * gWeight;
-     }
-   }
- else
-   {
-   if(angularPosition > -M_PI/2)
-     {
-     lowerRightHistogram[binIndex]+= magnitude * gWeight;
-     }
-   else
-     {
-     lowerLeftHistogram[binIndex]+= magnitude * gWeight;
-     }
-   }
+        // Check if we lie in center bin
+        if(currentSquaredRadius < squaredCenterBinRadius)
+          {
+          centerHistogram[binIndex]+= magnitude * gWeight;
+          }
+        else if(angularPosition > 0)
+          {
+          if(angularPosition < M_PI/2)
+            {
+            upperRightHistogram[binIndex]+= magnitude * gWeight;
+            }
+          else
+            {
+            upperLeftHistogram[binIndex]+= magnitude * gWeight;
+            }
+          }
+        else
+          {
+          if(angularPosition > -M_PI/2)
+            {
+            lowerRightHistogram[binIndex]+= magnitude * gWeight;
+            }
+          else
+            {
+            lowerLeftHistogram[binIndex]+= magnitude * gWeight;
+            }
+          }
  
- // Cumulate values
- globalOrientationHistogram[binIndex]+= magnitude * gWeight;
- }
+        // Cumulate values
+        globalOrientationHistogram[binIndex]+= magnitude * gWeight;
+        }
       }
     }
 
@@ -256,14 +257,14 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
     // Compute L2 norm
     double squaredCumul = 1e-10;
     for(typename std::vector<TOutputPrecision>::const_iterator vIt = oIt->begin();
- vIt!=oIt->end(); ++vIt)
+        vIt!=oIt->end(); ++vIt)
       {
       squaredCumul += (*vIt)*(*vIt);
       }
     double scale = 1/vcl_sqrt(squaredCumul);
     // Apply normalisation factor
     for(typename std::vector<TOutputPrecision>::iterator vIt = oIt->begin();
- vIt!=oIt->end(); ++vIt)
+        vIt!=oIt->end(); ++vIt)
       {
       (*vIt)*=scale;
       }
