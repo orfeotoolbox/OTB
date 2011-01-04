@@ -165,8 +165,8 @@ VectorDataToImageFilter<TVectorData, TImage>
 }
 
 /**
-   * Inform pipeline of required output region
- */
+* Inform pipeline of required output region
+*/
 template <class TVectorData, class TImage>
 void
 VectorDataToImageFilter<TVectorData, TImage>
@@ -235,17 +235,12 @@ VectorDataToImageFilter<TVectorData, TImage>
     case 1:
     {
     styleLoader->LoadBinaryRasterizationStyle(m_Map);
-    if (m_UseAsOverlay)
-      {
-      //Set the default backgroup to transparent
-      m_Map.set_background(mapnik::color(255, 255, 255, 0));
-      }
-    else
-      {
-      m_Map.set_background(mapnik::color("#ffffff"));
-      }
+    //Set the backgroup to white
+    m_Map.set_background(mapnik::color("#ffffff"));
     break;
     }
+    defaut:
+    itkExceptionMacro(<< "Style Not Supported!");
     }
 
   //We assume that all the data are reprojected before using OTB.
