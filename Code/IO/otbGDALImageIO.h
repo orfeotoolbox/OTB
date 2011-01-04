@@ -77,8 +77,8 @@ public:
   itkGetMacro(IsComplex, bool);
 
   /** Set/Get the dataset index to extract (starting at 0)*/
-  itkSetMacro(DatasetNumber, int);
-  itkGetMacro(DatasetNumber, int);
+  itkSetMacro(DatasetNumber, unsigned int);
+  itkGetMacro(DatasetNumber, unsigned int);
 
   /*-------- This part of the interface deals with reading data. ------ */
 
@@ -141,7 +141,7 @@ protected:
   bool        m_IsIndexed;
 
   /** Dataset index to extract (starting at 0)*/
-  int m_DatasetNumber;
+  unsigned int m_DatasetNumber;
 
 private:
   GDALImageIO(const Self &); //purposely not implemented

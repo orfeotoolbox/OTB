@@ -75,15 +75,15 @@ public:
   /** Set/Get the dataset index to extract (starting at 0)
    * used in the case of image file containing multiple datasets
    * (Modis hdf files for example) */
-  itkSetMacro(DatasetNumber, int);
-  itkGetMacro(DatasetNumber, int);
+  itkSetMacro(DatasetNumber, unsigned int);
+  itkGetMacro(DatasetNumber, unsigned int);
 
 protected:
   ImageFileReader();
   virtual ~ImageFileReader();
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  int m_DatasetNumber;
+  unsigned int m_DatasetNumber;
 
 private:
   /** Test whether the given filename exist and it is readable,

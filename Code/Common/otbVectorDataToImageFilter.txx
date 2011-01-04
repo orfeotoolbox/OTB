@@ -49,7 +49,8 @@ template <class TVectorData, class TImage>
 VectorDataToImageFilter<TVectorData, TImage>
 ::VectorDataToImageFilter() :
   m_StyleList(),
-  m_UseAsOverlay(true)
+  m_UseAsOverlay(true),
+  m_RenderingStyleType(0)
 {
   this->SetNumberOfRequiredInputs(1);
   m_Spacing.Fill(1.0);
@@ -211,22 +212,41 @@ VectorDataToImageFilter<TVectorData, TImage>
 #ifndef WIN32
   mapnik::freetype_engine::register_font("/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf");
 #endif
-  
-  if (m_UseAsOverlay)
-    {
-    //Set the default backgroup to transparent
-    m_Map.set_background(mapnik::color(255, 255, 255, 0));
-    }
-  else
-    {
-    //m_Map.set_background(mapnik::color("#b5d0d0"));
-    m_Map.set_background(mapnik::color("#ffffff"));
-    }
+
   //Load the OSM styles using helper class
   otb::VectorDataStyle::Pointer styleLoader = otb::VectorDataStyle::New();
   styleLoader->SetScaleFactor(m_ScaleFactor);
-  styleLoader->LoadOSMStyle(m_Map);
-  styleLoader->LoadBinaryRasterizationStyle(m_Map);
+  switch (m_RenderingStyleType)
+    {
+    case 0:
+    {
+    styleLoader->LoadOSMStyle(m_Map);
+    if (m_UseAsOverlay)
+      {
+      //Set the default backgroup to transparent
+      m_Map.set_background(mapnik::color(255, 255, 255, 0));
+      }
+    else
+      {
+      m_Map.set_background(mapnik::color("#b5d0d0"));
+      }
+    break;
+    }
+    case 1:
+    {
+    styleLoader->LoadBinaryRasterizationStyle(m_Map);
+    if (m_UseAsOverlay)
+      {
+      //Set the default backgroup to transparent
+      m_Map.set_background(mapnik::color(255, 255, 255, 0));
+      }
+    else
+      {
+      m_Map.set_background(mapnik::color("#ffffff"));
+      }
+    break;
+    }
+    }
 
   //We assume that all the data are reprojected before using OTB.
   VectorDataConstPointer input = this->GetInput();
