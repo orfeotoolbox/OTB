@@ -33,6 +33,8 @@
 #include "otbVectorData.h"
 #include "otbVectorDataFileWriter.h"
 
+// projection filter
+#include "otbGenericRSResampleImageFilter.h"
 
 namespace otb
 {
@@ -52,6 +54,10 @@ namespace otb
  * This class allow the user to specify the cgi-bin used (SetCGIPath)
  * and the directory where to store the index shapefile and the tiles 
  * via SetShapeIndexPath method
+ *
+ * Note that this class reproject the input image in the projection
+ * defined by the SRID (via SetSRID() method) set by the user.
+ *
  *
  * \ingroup IO
  *
@@ -106,6 +112,10 @@ public:
   // Intensity Rescale
   typedef VectorRescaleIntensityImageFilter
   <InputImageType,InputImageType>          VectorRescaleIntensityImageFilterType;
+
+  // Project filter 
+  typedef GenericRSResampleImageFilter<InputImageType,InputImageType>  GenericRSResamplerType;
+  typedef typename GenericRSResamplerType::Pointer                   GenericRSResamplerPointerType;
 
   // Transformer
   typedef GenericRSTransform<>           TransformType;
@@ -202,6 +212,9 @@ private:
   typename VectorDataType::Pointer                 m_VectorDataIndexTile;
   typename DataNodeType::Pointer                   m_Polygon;
   typename DataNodeType::Pointer                   m_Folder;
+
+  // Projection Filter 
+  GenericRSResamplerPointerType                    m_GenericRSResampler;
   
   // Tile size
   unsigned int                 m_TileSize;
@@ -215,8 +228,7 @@ private:
 
   std::ofstream                 m_File;
 
-  int                           m_SRID;
-  
+  int                           m_SRID;    
 };
 
 } // end namespace otb
