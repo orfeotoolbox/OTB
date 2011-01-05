@@ -735,7 +735,7 @@ KmzProductWriter<TInputImage>
     SizeType   logoSize = logoReg.GetSize();
     double     lx = static_cast<double>(logoSize[0]);
     double     ly = static_cast<double>(logoSize[1]);
-    int        sizey = 150;
+    int        sizey = 150/4;
     int        sizex = static_cast<int>((lx / ly * sizey));
     
     /** LOGO **/
