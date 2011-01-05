@@ -40,7 +40,9 @@ namespace otb
  *  parmeters, so it is mandatory to set correct parameters to have a
  *  correct result.
  * 
- *  
+ *  The methods SetOutputParmatersFromMap can estimate the output
+ *  image parameters Size/Origin/Spacing so the hole image can be
+ *  reprojected without setting any output parameter.
  *
  * \ingroup Projection
  *
@@ -215,8 +217,15 @@ public:
   /** Useful to set the output parameters from an existing image*/
   void SetOutputParametersFromImage(const ImageBaseType * image);
 
-  /** Useful to set the output parameters from an existing image*/
+  /** Useful to set the output parameters using a map (UTM|WGS84) and
+   * a spacing set by the user
+   */
   void SetOutputParametersFromMap(const std::string map, const SpacingType& spacing);
+
+  /** Useful to set the output parameters from a projectionRef, the
+    * output size,spacing and origin are estimated
+    */
+  void SetOutputParametersFromMap(const std::string projectionRef);
   
   /** Set/Get the grid size for rpc estimator*/
   void SetInputRpcGridSize(const SizeType& gridSize)
@@ -276,6 +285,16 @@ protected:
   virtual void GenerateInputRequestedRegion();
 
   virtual void UpdateTransform();
+
+  /** Struct to store the extent of the output image when using the
+   *  methods SetOutputParameters.
+   */
+  struct OutputImageExtentType{ 
+    double minX; 
+    double maxX; 
+    double minY; 
+    double maxY; 
+  };
   
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
@@ -286,7 +305,11 @@ private:
   // Method to estimate the input & output rpc model
   void EstimateOutputRpcModel();
   void EstimateInputRpcModel();
-  
+  void EstimateOutputSpacing();
+  void EstimateOutputSize();
+  void EstimateOutputImageExtent();
+  void EstimateOutputOrigin();
+
   // boolean that allow the estimation of the input rpc model
   bool                               m_EstimateInputRpcModel;
   bool                               m_EstimateOutputRpcModel;
@@ -297,6 +320,7 @@ private:
   InputRpcModelEstimatorPointerType  m_InputRpcEstimator;
   OutputRpcModelEstimatorPointerType m_OutputRpcEstimator;
   GenericRSTransformPointerType      m_Transform;
+  OutputImageExtentType              m_OutputExtent;
 };
 
 } // namespace otb
