@@ -59,9 +59,25 @@ intend to do. Table~\ref{tab:installation}.
 \label{ssec:windows_binaries}
 
 For Windows 2000/XP/Vista/Seven users, installation programs exists for Monteverdi, 
-OTB-Applications and OTB-Wrapping. Please go the the 
+OTB-Applications and OTB-Wrapping. 
+
+These installers depends on dependencies that can be installed through OSGeo4W. The packages that
+need to be installed are:
+\begin{itemize}
+\item gdal16,
+\item curl, 
+\item libtiff,
+\item libgeotiff,
+\item libjpeg,
+\item zlib, 
+\item libpng.
+\end{itemize}
+Remember that the corresponding dlls are to be accessible in the system path. To ensure so, add
+the OSGeo4W bin directory to your system path.
+
+ Once the dependencies have been properly installed, please go the the 
 \href{http://sourceforge.net/projects/orfeo-toolbox/}{OTB download page}, to
-get them. Double-click on the installer and let it guide you through the 
+get the installer. Double-click on the installer and let it guide you through the 
 installation process.
 
 \subsection{MacOS X}
