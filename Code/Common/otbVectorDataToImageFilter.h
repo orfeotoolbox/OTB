@@ -83,6 +83,13 @@ public:
   /** typedef specific to mapnik */
   typedef boost::shared_ptr<mapnik::memory_datasource> datasource_ptr;
 
+  /** */
+  typedef enum
+  {
+    OSM,
+    Binary
+  } RenderingStyleType;
+
   /** Set/Get the vector data input of this process object.  */
   virtual void SetInput(const VectorDataType *input);
   virtual void SetInput(unsigned int idx, const VectorDataType *input);
@@ -134,8 +141,8 @@ public:
   itkGetMacro(UseAsOverlay, bool);
   itkBooleanMacro(UseAsOverlay);
 
-  itkSetMacro(RenderingStyleType, unsigned int);
-  itkGetMacro(RenderingStyleType, unsigned int);
+  itkSetMacro(RenderingStyleType, RenderingStyleType);
+  itkGetMacro(RenderingStyleType, RenderingStyleType);
 
 protected:
   /** Constructor */
@@ -183,7 +190,7 @@ private:
   std::string m_VectorDataProjectionProj4;
   
   //Rendering style type
-  unsigned int m_RenderingStyleType;
+  RenderingStyleType m_RenderingStyleType;
 
 }; // end class
 } // end namespace otb

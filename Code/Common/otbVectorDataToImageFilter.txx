@@ -50,7 +50,7 @@ VectorDataToImageFilter<TVectorData, TImage>
 ::VectorDataToImageFilter() :
   m_StyleList(),
   m_UseAsOverlay(true),
-  m_RenderingStyleType(0)
+  m_RenderingStyleType(OSM)
 {
   this->SetNumberOfRequiredInputs(1);
   m_Spacing.Fill(1.0);
@@ -218,7 +218,7 @@ VectorDataToImageFilter<TVectorData, TImage>
   styleLoader->SetScaleFactor(m_ScaleFactor);
   switch (m_RenderingStyleType)
     {
-    case 0:
+    case OSM:
     {
     styleLoader->LoadOSMStyle(m_Map);
     if (m_UseAsOverlay)
@@ -232,15 +232,17 @@ VectorDataToImageFilter<TVectorData, TImage>
       }
     break;
     }
-    case 1:
+    case Binary:
     {
     styleLoader->LoadBinaryRasterizationStyle(m_Map);
     //Set the backgroup to white
     m_Map.set_background(mapnik::color("#ffffff"));
     break;
     }
-    defaut:
-    itkExceptionMacro(<< "Style Not Supported!");
+    default:
+    {
+    itkExceptionMacro(<< "Style Not Supported!");    
+    }
     }
 
   //We assume that all the data are reprojected before using OTB.
