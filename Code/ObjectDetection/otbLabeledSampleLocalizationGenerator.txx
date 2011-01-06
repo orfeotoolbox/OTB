@@ -32,7 +32,7 @@ LabeledSampleLocalizationGenerator<TVectorData>
   m_RandomLocalizationDensity(.005),
   m_InhibitionRadius(5.0),
   m_NbMaxIteration(10000),
-  m_NumberOfPositiveSamplesPerPoint(10)
+  m_NumberOfPositiveSamplesPerPoint(50)
 {
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfRequiredOutputs(1);
