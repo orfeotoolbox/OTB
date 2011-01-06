@@ -56,6 +56,7 @@ VectorDataStyle
      {
       mapnik::polygon_symbolizer geom = mapnik::polygon_symbolizer();
       geom.set_fill(mapnik::color("#000000"));
+      geom.set_gamma(0.0);
       rule.append(geom);
      }
      style.add_rule(rule);

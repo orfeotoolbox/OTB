@@ -33,6 +33,8 @@
 #include "ogr_spatialref.h"
 #include "cpl_conv.h"
 
+#include "otbGeoInformationConversion.h"
+
 namespace otb
 {
 
@@ -121,7 +123,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
   // Get the output dictionary
   itk::MetaDataDictionary& dict = this->GetOutput()->GetMetaDataDictionary();
   
-  // Temp image : not allocated but with the sampe metadata as the
+  // Temp image : not allocated but with the same metadata than the
   // output 
   typename OutputImageType::Pointer tempPtr = OutputImageType::New();
   tempPtr->SetRegions(this->GetOutput()->GetLargestPossibleRegion());
@@ -253,7 +255,9 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
   this->SetOutputKeywordList(src->GetImageKeywordlist());
 }
 /**
- * Method used to copy the parameters of the input image
+ * Method used to project the input image in a defined srs, estimating
+ * the output size and origin. The spacing is set by the user. The
+ * supported projection are UTM and WGS84.
  * 
  */
 template <class TInputImage, class TOutputImage>
@@ -268,54 +272,124 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
   // Done here because the transform is not instanciated 
   // yet
   this->UpdateTransform();
-  
+
+  // Needed variable
+  std::string projectionRef;
   // The inverse transform is need here
   GenericRSTransformPointerType invTransform = GenericRSTransformType::New();
   m_Transform->GetInverse(invTransform);
+
+  if(strcmp(map.c_str(),"UTM")== 0)
+    {
+    // Build the UTM transform : Need the zone & the hemisphere
+    // For this we us the geographic coordinate of the input UL corner
+    typedef ossimRefPtr<ossimUtmProjection>       OssimMapProjectionPointerType;
+    typedef itk::Point<double,2>                  GeoPointType;
   
-  // Build the UTM transform : Need the zone & the hemisphere
-  // For this we us the geographic coordinate of the input UL corner
-  typedef ossimRefPtr<ossimUtmProjection>       OssimMapProjectionPointerType;
-  typedef itk::Point<double,2>                  GeoPointType;
+    // instanciate the projection to get the utm zone
+    OssimMapProjectionPointerType  utmMapProjection =  new ossimUtmProjection();
   
-  // instanciate the projection to get the utm zone
-  OssimMapProjectionPointerType  utmMapProjection =  new ossimUtmProjection();
+    // get the utm zone and hemisphere using the input UL corner
+    // geographic coordinates
+    typename InputImageType::PointType  pSrc;
+    IndexType      index;
+    GeoPointType   geoPoint;
+    index[0] = input->GetLargestPossibleRegion().GetIndex()[0];
+    index[1] = input->GetLargestPossibleRegion().GetIndex()[1];
+    input->TransformIndexToPhysicalPoint(index,pSrc);
   
-  // get the utm zone and hemisphere using the input UL corner
-  // geographic coordinates
-  typename InputImageType::PointType  pSrc;
-  IndexType      index;
-  GeoPointType   geoPoint;
-  index[0] = input->GetLargestPossibleRegion().GetIndex()[0];
-  index[1] = input->GetLargestPossibleRegion().GetIndex()[1];
-  input->TransformIndexToPhysicalPoint(index,pSrc);
+    // The first transform of the inverse transform : input -> WGS84
+    geoPoint = invTransform->GetTransform()->GetFirstTransform()->TransformPoint(pSrc);
   
-  // The first transform of the inverse transform : input -> WGS84
-  geoPoint = invTransform->GetTransform()->GetFirstTransform()->TransformPoint(pSrc);
+    // Guess the zone and the hemisphere
+    ossimGpt point(geoPoint[1],  geoPoint[0]);
+    int zone = utmMapProjection->computeZone(point);
+    bool hem = (geoPoint[1]>1e-10)?true:false;
   
-  // Guess the zone and the hemisphere
-  ossimGpt point(geoPoint[1],  geoPoint[0]);
-  int zone = utmMapProjection->computeZone(point);
-  bool hem = (geoPoint[1]>1e-10)?true:false;
+    // Build the output UTM projection ref 
+    OGRSpatialReferenceH oSRS = OSRNewSpatialReference(NULL);
+    OSRSetProjCS(oSRS, "UTM");
+    OSRSetWellKnownGeogCS(oSRS, "WGS84");
+    OSRSetUTM(oSRS, zone, hem);
   
-  // Build the output UTM projection ref 
-  OGRSpatialReferenceH oSRS = OSRNewSpatialReference(NULL);
-  OSRSetProjCS(oSRS, "UTM");
-  OSRSetWellKnownGeogCS(oSRS, "WGS84");
-  OSRSetUTM(oSRS, zone, hem);
-  
-  char * utmRefC = NULL;
-  OSRExportToWkt(oSRS, &utmRefC);
-  std::string utmRef = utmRefC;
-  CPLFree(utmRefC);
-  OSRRelease(oSRS);
+    char * utmRefC = NULL;
+    OSRExportToWkt(oSRS, &utmRefC);
+    projectionRef = utmRefC;
     
-  // Update the transform
-  this->SetOutputProjectionRef(utmRef);
-  this->SetOutputSpacing(spacing);
+    CPLFree(utmRefC);
+    OSRRelease(oSRS);
+
+    // Set the spacing
+    this->SetOutputSpacing(spacing);
+    }
+  else if(strcmp(map.c_str(),"WGS84")==0) 
+    {
+    projectionRef = otb::GeoInformationConversion::ToWKT(4326); //WGS84
+    }
+  else
+    {
+    itkExceptionMacro("The output map "<<map<<"is not supported, please try UTM or WGS84");
+    }
+
+  // Update the transform with the computed projection ref
+  this->SetOutputProjectionRef(projectionRef); 
   this->UpdateTransform();
 
+  // Estimate the extent of the output image 
+  this->EstimateOutputImageExtent();
+
+  // Estimate the origin of the output image
+  this->EstimateOutputOrigin();
+
+  // Set the spacing of the output image
+  this->SetOutputSpacing(spacing);
+
+  // Estimate the size of the output image 
+  this->EstimateOutputSize();
+}
+
+/**
+ * Used to project the input image in a srs defined by its WKT
+ * projectionRef (as parameter) only. estimating the output size, spacing
+ * and origin.  
+ * 
+ */
+template <class TInputImage, class TOutputImage>
+void
+GenericRSResampleImageFilter<TInputImage, TOutputImage>
+::SetOutputParametersFromMap(const std::string projectionRef)
+{
+  // Update the transform with the computed projection ref
+  this->SetOutputProjectionRef(projectionRef); 
+  this->UpdateTransform();
+
+  // Estimate the extent of the output image 
+  this->EstimateOutputImageExtent();
+
+  // Estimate the origin of the output image
+  this->EstimateOutputOrigin();
+
+  // Set the spacing of the output image
+  this->EstimateOutputSpacing();
+
+  // Estimate the size of the output image 
+  this->EstimateOutputSize();
+}
+
+/**
+ * The extent is the projection of the 4 image corner in the final
+ * projection system.
+ */
+template <class TInputImage, class TOutputImage>
+void
+GenericRSResampleImageFilter<TInputImage, TOutputImage>
+::EstimateOutputImageExtent()
+{
+  // Get the input Image
+  const InputImageType* input = this->GetInput();
+
   // Get the inverse transform again : used later
+  GenericRSTransformPointerType invTransform = GenericRSTransformType::New();
   m_Transform->GetInverse(invTransform);
   
   // Compute the 4 corners in the cartographic coordinate system
@@ -372,23 +446,106 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
     if (maxY < voutput[i][1])
       maxY = voutput[i][1];
     }
-  
-  // Compute the output size
-  double sizeCartoX = vcl_abs(maxX - minX);
-  double sizeCartoY = vcl_abs(minY - maxY);
+  // Edit the output image extent type
+  m_OutputExtent.maxX =  maxX;
+  m_OutputExtent.minX =  minX;
+  m_OutputExtent.maxY =  maxY;
+  m_OutputExtent.minY =  minY;
+}
 
+
+/**
+ * Method used to estimate the Origin using the extent of the image
+ * 
+ */
+template <class TInputImage, class TOutputImage>
+void
+GenericRSResampleImageFilter<TInputImage, TOutputImage>
+::EstimateOutputOrigin()
+{
   // Set the output orgin in carto 
   // projection
   OriginType   origin;
-  origin[0] = minX;
-  origin[1] = maxY;
+  origin[0] = m_OutputExtent.minX;
+  origin[1] = m_OutputExtent.maxY;
   this->SetOutputOrigin(origin);
+}
+
+
+/**
+ * Method used to estimate the size using the output size of the image 
+ * 
+ */
+template <class TInputImage, class TOutputImage>
+void
+GenericRSResampleImageFilter<TInputImage, TOutputImage>
+::EstimateOutputSize()
+{
+  // Compute the output size
+  double sizeCartoX = vcl_abs(m_OutputExtent.maxX - m_OutputExtent.minX);
+  double sizeCartoY = vcl_abs(m_OutputExtent.minY - m_OutputExtent.maxY);
   
   // Evaluate output size
   SizeType outputSize;
   outputSize[0] = static_cast<unsigned int>(vcl_floor(vcl_abs(sizeCartoX / this->GetOutputSpacing()[0])));
   outputSize[1] = static_cast<unsigned int>(vcl_floor(vcl_abs(sizeCartoY / this->GetOutputSpacing()[1])));
   this->SetOutputSize(outputSize);
+  this->UpdateTransform();
+}
+
+
+/**
+ * Method used to estimate the spacing using the extent of the image
+ * 
+ */
+template <class TInputImage, class TOutputImage>
+void
+GenericRSResampleImageFilter<TInputImage, TOutputImage>
+::EstimateOutputSpacing()
+{
+  // Get the input Image
+  const InputImageType* input = this->GetInput();
+
+  // Compute the output size
+  double sizeCartoX = vcl_abs(m_OutputExtent.maxX - m_OutputExtent.minX);
+  double sizeCartoY = vcl_abs(m_OutputExtent.minY - m_OutputExtent.maxY);
+
+  OutputPointType o,oX, oY;
+  o[0] = this->GetOutputOrigin()[0];
+  o[1] = this->GetOutputOrigin()[1];
+  
+  oX = o;
+  oY = o;
+  
+  oX[0] += sizeCartoX;
+  oY[1] += sizeCartoY;
+
+  // Transform back into the input image
+  OutputPointType io = m_Transform->TransformPoint(o);
+  OutputPointType ioX = m_Transform->TransformPoint(oX);
+  OutputPointType ioY = m_Transform->TransformPoint(oY);
+
+  // Transform to indices
+  IndexType ioIndex, ioXIndex, ioYIndex;
+  input->TransformPhysicalPointToIndex(io, ioIndex);
+  input->TransformPhysicalPointToIndex(ioX, ioXIndex);
+  input->TransformPhysicalPointToIndex(ioY, ioYIndex);
+
+  // Evaluate Ox and Oy length in number of pixels
+  double OxLength, OyLength;
+
+  OxLength = vcl_sqrt(vcl_pow((double) ioIndex[0] - (double) ioXIndex[0], 2)
+                      +  vcl_pow((double) ioIndex[1] - (double) ioXIndex[1], 2));
+
+  OyLength = vcl_sqrt(vcl_pow((double) ioIndex[0] - (double) ioYIndex[0], 2)
+                      +  vcl_pow((double) ioIndex[1] - (double) ioYIndex[1], 2));
+
+  // Evaluate spacing
+  SpacingType outputSpacing;
+  outputSpacing[0] = sizeCartoX / OxLength;
+  outputSpacing[1] = -sizeCartoY / OyLength;
+
+  this->SetOutputSpacing(outputSpacing);
 }
 
 

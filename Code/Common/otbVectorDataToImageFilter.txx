@@ -50,7 +50,7 @@ VectorDataToImageFilter<TVectorData, TImage>
 ::VectorDataToImageFilter() :
   m_StyleList(),
   m_UseAsOverlay(true),
-  m_RenderingStyleType(0)
+  m_RenderingStyleType(OSM)
 {
   this->SetNumberOfRequiredInputs(1);
   m_Spacing.Fill(1.0);
@@ -165,8 +165,8 @@ VectorDataToImageFilter<TVectorData, TImage>
 }
 
 /**
-   * Inform pipeline of required output region
- */
+* Inform pipeline of required output region
+*/
 template <class TVectorData, class TImage>
 void
 VectorDataToImageFilter<TVectorData, TImage>
@@ -218,7 +218,7 @@ VectorDataToImageFilter<TVectorData, TImage>
   styleLoader->SetScaleFactor(m_ScaleFactor);
   switch (m_RenderingStyleType)
     {
-    case 0:
+    case OSM:
     {
     styleLoader->LoadOSMStyle(m_Map);
     if (m_UseAsOverlay)
@@ -232,19 +232,16 @@ VectorDataToImageFilter<TVectorData, TImage>
       }
     break;
     }
-    case 1:
+    case Binary:
     {
     styleLoader->LoadBinaryRasterizationStyle(m_Map);
-    if (m_UseAsOverlay)
-      {
-      //Set the default backgroup to transparent
-      m_Map.set_background(mapnik::color(255, 255, 255, 0));
-      }
-    else
-      {
-      m_Map.set_background(mapnik::color("#ffffff"));
-      }
+    //Set the backgroup to white
+    m_Map.set_background(mapnik::color("#ffffff"));
     break;
+    }
+    default:
+    {
+    itkExceptionMacro(<< "Style Not Supported!");    
     }
     }
 

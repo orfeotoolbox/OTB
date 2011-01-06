@@ -31,6 +31,8 @@ template <class TInputImage>
 MapFileProductWriter<TInputImage>
 ::MapFileProductWriter(): m_TileSize(256),m_SRID(26918)
 {
+  m_GenericRSResampler = GenericRSResamplerType::New();
+  
   // Modify superclass default values, can be overridden by subclasses
   this->SetNumberOfRequiredInputs(1);
 }
@@ -112,6 +114,16 @@ MapFileProductWriter<TInputImage>
   m_VectorImage = const_cast<TInputImage *>(this->GetInput());
   m_VectorImage->UpdateOutputInformation();
 
+  if(m_VectorImage->GetProjectionRef().empty() 
+     && m_VectorImage->GetImageKeywordlist().GetSize() > 0)
+    {
+    std::cout << "Sensor Model detected : Reprojecting in the targer SRID"<< std::endl;
+    m_GenericRSResampler->SetInput(this->GetInput());
+    m_GenericRSResampler->SetOutputParametersFromMap(otb::GeoInformationConversion::ToWKT(m_SRID));
+    m_VectorImage = m_GenericRSResampler->GetOutput();
+    m_VectorImage->UpdateOutputInformation();
+    }
+
   // Initialize the filename, the vectordatas
   this->Initialize();
   
@@ -120,10 +132,6 @@ MapFileProductWriter<TInputImage>
   
   // Do the tiling
   this->Tiling();
-
-  // Close the file
-  m_File <<"END" << std::endl;
-  m_File.close();
 }
 
 /**
@@ -190,11 +198,11 @@ MapFileProductWriter<TInputImage>
 
   // Update image base information
   m_VectorImage->UpdateOutputInformation();
-
+  
   // Get the image size
   SizeType size;
-  size = m_VectorImage->GetLargestPossibleRegion().GetSize();
-
+  size = m_VectorImage->GetLargestPossibleRegion().GetSize();  
+  
   unsigned int sizeX = size[0];
   unsigned int sizeY = size[1];
 
@@ -338,21 +346,21 @@ MapFileProductWriter<TInputImage>
         m_VectorWriter = VectorWriterType::New();
         m_VectorWriter->SetFileName(ossFileName.str().c_str());
         m_VectorWriter->SetInput(m_VectorImageExtractROIFilter->GetOutput());
+        m_VectorWriter->WriteGeomFileOn();
         m_VectorWriter->Update();
-
+        
         /** TODO : Generate KML for this tile */
         // Search Lat/Lon box
-        m_Transform = TransformType::New();
-        m_Transform->SetInputKeywordList(m_ResampleVectorImage->GetImageKeywordlist());
-        m_Transform->SetInputProjectionRef(m_VectorImage->GetProjectionRef());
-        m_Transform->SetOutputProjectionRef(otb::GeoInformationConversion::ToWKT(m_SRID));
-        m_Transform->InstanciateTransform();
 
+        // Initialize the transform to be used 
+        typename TransformType::Pointer transform = TransformType::New();
+        transform->SetInputProjectionRef(m_GenericRSResampler->GetOutputProjectionRef());
+        transform->SetOutputProjectionRef(otb::GeoInformationConversion::ToWKT(m_SRID));
+        transform->InstanciateTransform();
+        
         InputPointType  inputPoint;
-        OutputPointType outputPoint;
         IndexType       indexTile;
         SizeType        sizeTile;
-        
         sizeTile = extractSize;
  
         /** GX LAT LON **/
@@ -360,33 +368,29 @@ MapFileProductWriter<TInputImage>
         indexTile[0] = extractIndex[0];
         indexTile[1] = extractIndex[1] + sizeTile[1];
         m_ResampleVectorImage->TransformIndexToPhysicalPoint(indexTile, inputPoint);
-        outputPoint = m_Transform->TransformPoint(inputPoint);
-        //outputPoint = inputPoint;
-        OutputPointType lowerLeftCorner = outputPoint;
+        OutputPointType lowerLeftCorner = transform->TransformPoint(inputPoint);
+        //std::cout <<"indexTile "<< indexTile <<" --> input Point "<< inputPoint << " lowerLeftCorner "<<  lowerLeftCorner << std::endl;
         
         // Compute lower right corner
         indexTile[0] = extractIndex[0] + sizeTile[0];
         indexTile[1] = extractIndex[1] + sizeTile[1];
         m_ResampleVectorImage->TransformIndexToPhysicalPoint(indexTile, inputPoint);
-        outputPoint = m_Transform->TransformPoint(inputPoint);
-        //outputPoint = inputPoint;
-        OutputPointType lowerRightCorner = outputPoint;
-
+        OutputPointType lowerRightCorner = transform->TransformPoint(inputPoint);
+        //std::cout <<"indexTile "<< indexTile <<" --> input Point "<< inputPoint << " lowerRightCorner   "<< lowerRightCorner  << std::endl;
+        
         // Compute upper right corner
-        indexTile[0] = extractIndex[0] + sizeTile[0];
+        indexTile[0] = extractIndex[0]+ sizeTile[0];
         indexTile[1] = extractIndex[1];
         m_ResampleVectorImage->TransformIndexToPhysicalPoint(indexTile, inputPoint);
-        outputPoint = m_Transform->TransformPoint(inputPoint);
-        //outputPoint = inputPoint;
-        OutputPointType upperRightCorner = outputPoint;
+        OutputPointType upperRightCorner = transform->TransformPoint(inputPoint);
+        //std::cout <<"indexTile "<< indexTile <<" --> input Point "<< inputPoint << " upperRightCorner "<< upperRightCorner  << std::endl;
 
         // Compute upper left corner
         indexTile[0] = extractIndex[0];
         indexTile[1] = extractIndex[1];
         m_ResampleVectorImage->TransformIndexToPhysicalPoint(indexTile, inputPoint);
-        outputPoint = m_Transform->TransformPoint(inputPoint);
-        //outputPoint = inputPoint;
-        OutputPointType upperLeftCorner = outputPoint;
+        OutputPointType upperLeftCorner = transform->TransformPoint(inputPoint);
+        //std::cout <<"indexTile "<< indexTile <<" --> input Point "<< inputPoint << " upperLeftCorner "<< upperLeftCorner  << std::endl;
   
         // Build The indexTile
         this->AddBBoxToIndexTile(lowerLeftCorner, 
@@ -412,6 +416,10 @@ MapFileProductWriter<TInputImage>
     
     this->InitializeVectorData();
     }
+
+  // Close the file
+  m_File <<"END" << std::endl;
+  m_File.close();
 }
 
 /**
