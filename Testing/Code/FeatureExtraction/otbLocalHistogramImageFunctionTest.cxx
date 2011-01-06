@@ -23,7 +23,6 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbLocalHistogramImageFunction.h"
-#include "otbStreamingMinMaxImageFilter.h"
 
 int otbLocalHistogramImageFunctionTest(int argc, char * argv[])
 {
@@ -35,33 +34,29 @@ int otbLocalHistogramImageFunctionTest(int argc, char * argv[])
 
   typedef otb::Image<InputPixelType,  Dimension>                  InputImageType;
   typedef otb::ImageFileReader<InputImageType>                    ReaderType;
-  typedef otb::StreamingMinMaxImageFilter<InputImageType>         MinMaxFilterType;
   typedef otb::LocalHistogramImageFunction<InputImageType>        FunctionType;
 
   
   ReaderType::Pointer reader         = ReaderType::New();
-  MinMaxFilterType::Pointer filter   = MinMaxFilterType::New();
   FunctionType::Pointer function     = FunctionType::New();
 
   reader->SetFileName(inputFilename);
   reader->Update();
   
-  filter->SetInput(reader->GetOutput());
-  filter->Update();
-
   function->SetInputImage(reader->GetOutput());
 
   InputImageType::IndexType index;
-  index[0] = 100;
-  index[1] = 100;
+  index[0] = atoi(argv[3]);
+  index[1] = atoi(argv[4]);
 
-  function->SetNeighborhoodRadius(10);
-  function->SetHistogramMin(filter->GetMinimum());
-  function->SetHistogramMax(filter->GetMaximum());
+  function->SetNeighborhoodRadius(atoi(argv[5]));
+  function->SetHistogramMin(atoi(argv[6]));
+  function->SetHistogramMax(atoi(argv[7]));
+  function->GaussianSmoothingOff();
+
   FunctionType::OutputType Result;
   Result = function->EvaluateAtIndex(index);
 
-  float numberOfPixelsCounted = 0.0;
 
   std::ofstream outputStream(outputFilename);
   outputStream << std::setprecision(10) << std::endl;
@@ -69,28 +64,8 @@ int otbLocalHistogramImageFunctionTest(int argc, char * argv[])
 
   for(unsigned int i = 0; i < function->GetNumberOfHistogramBins(); ++i)
     {
-      outputStream << "Pos[" <<i <<"] = " << Result->GetFrequency(i) << " -> " << Result->GetMeasurement(i,0) << std::endl;
-      numberOfPixelsCounted += Result->GetFrequency(i);
+    outputStream << "Pos[" <<i <<"] = " << Result->GetMeasurement(i,0) << " -> " << Result->GetFrequency(i,0) << std::endl;
     }
-
-  outputStream  << "Number Of Pixels counted: " << numberOfPixelsCounted << std::endl;
-
-  index[0] = 0;
-  index[1] = 0;
-
-  Result = function->EvaluateAtIndex(index);
-
-  numberOfPixelsCounted = 0.0;
-
-  outputStream << "Index: " << index << std::endl;
-
-  for(unsigned int i = 0; i < function->GetNumberOfHistogramBins(); ++i)
-    {
-      outputStream << "Pos[" <<i <<"] = " << Result->GetFrequency(i) << " -> " << Result->GetMeasurement(i,0) << std::endl;
-      numberOfPixelsCounted += Result->GetFrequency(i);
-    }
-
-  outputStream  << "Number Of Pixels counted: " << numberOfPixelsCounted << std::endl;
 
   outputStream.close();
 

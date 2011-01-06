@@ -33,7 +33,7 @@ namespace otb
 template <class TInputImage, class TCoordRep>
 LocalHistogramImageFunction<TInputImage, TCoordRep>
 ::LocalHistogramImageFunction() :
-  m_NeighborhoodRadius(1), m_NumberOfHistogramBins(128), m_HistogramMin(0), m_HistogramMax(1)
+  m_NeighborhoodRadius(1), m_NumberOfHistogramBins(128), m_HistogramMin(0), m_HistogramMax(1), m_GaussianSmoothing(true)
 {
 }
 
@@ -81,41 +81,52 @@ LocalHistogramImageFunction<TInputImage,TCoordRep>
     return histogram;
     }
 
-  typename InputImageType::ConstPointer currentImage = this->GetInputImage();
+  // Create an N-d neighborhood kernel, using a zeroflux boundary condition
+  typename InputImageType::SizeType kernelSize;
+  kernelSize.Fill( m_NeighborhoodRadius );
 
-  typename itk::ConstNeighborhoodIterator<InputImageType>::RadiusType radius;
-  radius.Fill( this->GetNeighborhoodRadius() );
+  itk::ConstNeighborhoodIterator<InputImageType>
+    it(kernelSize, this->GetInputImage(), this->GetInputImage()->GetBufferedRegion());
+  
+  // Set the iterator at the desired location
+  it.SetLocation(index);
 
-  typename InputImageType::RegionType region;
-  typename InputImageType::IndexType currentIndex;
-  typename InputImageType::SizeType currentSize;
+  // Define a gaussian kernel around the center location
+  double squaredRadius = m_NeighborhoodRadius * m_NeighborhoodRadius;
+  double squaredSigma = 0.25 * squaredRadius;
 
-  for(unsigned int i = 0; i < ImageDimension; ++i )
+  // Offset to be used in the loops
+  typename InputImageType::OffsetType offset;
+
+  // Fill the histogram
+  for(int i = -(int)m_NeighborhoodRadius;i< (int)m_NeighborhoodRadius;++i)
     {
-    currentIndex[i] = index[i] - this->GetNeighborhoodRadius();
-    currentSize[i] = 2 * this->GetNeighborhoodRadius() + 1;
-    }
-
-  region.SetIndex(currentIndex);
-  region.SetSize(currentSize);
-
-  itk::ConstNeighborhoodIterator<InputImageType> it(radius, currentImage, region);
-
-  float numberOfPixelsCounted = 0.0;
-
-  it.GoToBegin();
-  while (!it.IsAtEnd())
-    {
-    typename HistogramType::MeasurementVectorType sample;
-    for (unsigned int j = 0; j < sample.Size(); ++j)
+    for(int j = -(int)m_NeighborhoodRadius;j< (int)m_NeighborhoodRadius;++j)
       {
-      sample[j] = it.GetPixel(j);
+      // Check if the current pixel lies within a disc of radius m_NeighborhoodRadius
+      double currentSquaredRadius = i*i+j*j;
+      if(currentSquaredRadius < squaredRadius)
+        {
+        // If so, compute the gaussian weighting (this could be
+        // computed once for all for the sake of optimisation) if necessary
+        double gWeight = 1.;
+        if(m_GaussianSmoothing)
+          {
+          gWeight = (1/vcl_sqrt(2*M_PI*squaredSigma)) * vcl_exp(- currentSquaredRadius/(2*squaredSigma));
+          }
+
+        // Compute pixel location
+        offset[0]=i;
+        offset[1]=j;
+ 
+        // Get the current value
+        typename HistogramType::MeasurementVectorType sample;
+        sample[0] = it.GetPixel(offset);
+
+        // Populate histogram
+        histogram->IncreaseFrequency(sample,gWeight);
+        }
       }
-    if( histogram->IncreaseFrequency(sample, 1) )
-      {
-      ++numberOfPixelsCounted;
-      }
-    ++it;
     }
   return histogram;
 }

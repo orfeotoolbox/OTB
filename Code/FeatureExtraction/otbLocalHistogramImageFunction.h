@@ -28,9 +28,19 @@ namespace otb
 
 /**
  * \class LocalHistogramImageFunction
- * \brief Calculate the histogram over a specified neighborhood
+ * \brief Calculate a local histogram over a specified circular neighborhood
  *
+ * This image function computes the local histogram of the pixels lying
+ * in a circular neighborhood around the given position.
  *
+ * Pixel count can be optionnaly weighted by a gaussian kernel with
+ * $\sigma = 0.5 radius$ so that pixel far from the center position
+ * account less in the histogram than pixel near the center position. 
+ * This option can be deactivated using the GaussianSmoothing flag.
+ * 
+ * Histogram mininimum value, maximum value and number of bins can be
+ * set using the Setters/Getters.
+ * 
  * This class is templated over the input image type and the
  * coordinate representation type (e.g. float or double).
  *
@@ -108,6 +118,10 @@ public:
   itkSetMacro( HistogramMax, double );
   itkGetConstReferenceMacro( HistogramMax, double );
 
+  itkSetMacro(GaussianSmoothing,bool);
+  itkGetConstReferenceMacro(GaussianSmoothing,bool);
+  itkBooleanMacro(GaussianSmoothing);
+
 protected:
   LocalHistogramImageFunction();
   virtual ~LocalHistogramImageFunction() {}
@@ -121,7 +135,7 @@ private:
   unsigned long    m_NumberOfHistogramBins;
   double           m_HistogramMin;
   double           m_HistogramMax;
-
+  bool             m_GaussianSmoothing;
 };
 
 } // namespace otb

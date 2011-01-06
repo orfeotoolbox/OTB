@@ -1501,8 +1501,9 @@ ADD_TEST(feTvLocalHistogramImageFunctionTest ${FEATUREEXTRACTION_TESTS16}
  ${BASELINE_FILES}/feLocalHistogramImage.txt
     ${TEMP}/feLocalHistogramImage.txt
  otbLocalHistogramImageFunctionTest
- ${INPUTDATA}/prison_toulouse.tif
-   ${TEMP}/feLocalHistogramImage.txt
+ ${INPUTDATA}/pyramide.tif
+ ${TEMP}/feLocalHistogramImage.txt
+ 127 127 127 0 128 128
 )
 
 # -------   otb::ImageFunctionAdapter   -------------
