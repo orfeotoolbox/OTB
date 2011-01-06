@@ -58,9 +58,7 @@ class ITK_EXPORT LeafOpticalProperties : public itk::DataObject
       }
       void SetReflectance(const VectorPairType & refl)
       {
-         std::cout<<"set reflectance"<<std::endl;
          m_Reflectance=refl;
-         std::cout<<"setted"<<std::endl;
       }
       
       /** Set/Get Transmitance*/

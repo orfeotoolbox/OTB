@@ -15,8 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLeafOpticalProperties_cxx
-#define __otbLeafOpticalProperties_cxx
 
 #include "otbLeafOpticalProperties.h"
 
@@ -49,4 +47,3 @@ LeafOpticalProperties
 
 } // end namespace otb
 
-#endif

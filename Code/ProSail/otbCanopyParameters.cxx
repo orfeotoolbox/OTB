@@ -15,8 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbCanopyParameters_cxx
-#define __otbCanopyParameters_cxx
 
 #include "otbCanopyParameters.h"
 
@@ -63,5 +61,4 @@ CanopyParameters
 
 } // end namespace otb
 
-#endif
 

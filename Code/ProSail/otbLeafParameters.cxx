@@ -15,8 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLeafParameters_cxx
-#define __otbLeafParameters_cxx
 
 #include "otbLeafParameters.h"
 
@@ -59,5 +57,4 @@ LeafParameters
 
 } // end namespace otb
 
-#endif
 

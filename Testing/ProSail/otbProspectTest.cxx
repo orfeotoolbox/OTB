@@ -53,7 +53,7 @@ int otbProspectTest(int argc, char * argv[])
    for(unsigned int i=0;i<prospect->GetOutput()->GetReflectance().size();i++)
    {
       std::cout<<"lambda : "<<prospect->GetOutput()->GetReflectance()[i].first;
-      std::cout<<" , refl : "<<prospect->GetOutput()->GetReflectance()[i].second;
+      std::cout<<" , refl : "<<prospect->GetOutput()->GetReflectance()[i].second<<std::endl;
    }
 
    

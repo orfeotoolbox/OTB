@@ -15,9 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbCanopyParametersTo4SailCanopyBidirectionalReflectance_cxx
-#define __otbCanopyParametersTo4SailCanopyBidirectionalReflectance_cxx
-
 #include "itkNumericTraits.h"
 
 #include "otbCanopyParametersTo4SailCanopyBidirectionalReflectance.h"
@@ -39,6 +36,8 @@ CanopyParametersTo4SailCanopyBidirectionalReflectance
    this->ProcessObject::SetNumberOfRequiredOutputs(1);
    
    CanopyBidirectionalReflectanceType::Pointer output = static_cast<CanopyBidirectionalReflectanceType *>(this->MakeOutput(0).GetPointer());
+   this->itk::ProcessObject::SetNthOutput(0,output.GetPointer());
+   
 }
 
 
@@ -203,6 +202,7 @@ CanopyParametersTo4SailCanopyBidirectionalReflectance
    double Ps,Qs,Pv,Qv,z,g1,g2,Tv1,Tv2,T1,T2,T3;
    double alf,sumint,fhot,x1,y1,f1,fint,x2,y2,f2;
    double resh,resv;
+   VectorPairType reshVect, resvVect;
 
 
    int nbdata = sizeof(dataSpecP5B) / sizeof(dataSpec);
@@ -364,16 +364,18 @@ CanopyParametersTo4SailCanopyBidirectionalReflectance
       resh = (rddt*PARdifo+rsdt*PARdiro)/(PARdiro+PARdifo);
       resv = (rdot*PARdifo+rsot*PARdiro)/(PARdiro+PARdifo);
       
-//       PairType tmp1,tmp2;
-//       tmp1.first=lambda;
-//       tmp1.second=static_cast<ValuePrecisionType>(resh);
-//       tmp2.first=lambda;
-//       tmp2.second=static_cast<ValuePrecisionType>(resv);
-//       
-//       m_Resh->GetResponse().push_back(tmp1);
-//       m_Resv->GetResponse().push_back(tmp2);
+      PairType tmp1,tmp2;
+      tmp1.first=lambda;
+      tmp1.second=resh;
+      tmp2.first=lambda;
+      tmp2.second=resv;
+      
+      reshVect.push_back(tmp1);
+      resvVect.push_back(tmp2);
 
    }
+   output->SetResh(reshVect);
+   output->SetResv(resvVect);
 
 }
 
@@ -638,4 +640,3 @@ CanopyParametersTo4SailCanopyBidirectionalReflectance
 }
 } // end namespace otb
 
-#endif

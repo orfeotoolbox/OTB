@@ -15,8 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbCanopyBidirectionalReflectance_cxx
-#define __otbCanopyBidirectionalReflectance_cxx
 
 #include "otbCanopyBidirectionalReflectance.h"
 
@@ -48,4 +46,3 @@ CanopyBidirectionalReflectance
 
 } // end namespace otb
 
-#endif

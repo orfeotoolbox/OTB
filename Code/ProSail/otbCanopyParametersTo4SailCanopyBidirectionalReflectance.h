@@ -47,6 +47,9 @@ class ITK_EXPORT CanopyParametersTo4SailCanopyBidirectionalReflectance : public 
       typedef CanopyBidirectionalReflectance CanopyBidirectionalReflectanceType;
       typedef LeafOpticalProperties LeafOpticalPropertiesType;
 
+      typedef CanopyBidirectionalReflectanceType::PairType PairType;
+      typedef CanopyBidirectionalReflectanceType::VectorPairType VectorPairType;
+      
       typedef std::vector<double> VectorType;
       
       /** Standard macros */

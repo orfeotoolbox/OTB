@@ -15,8 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLeafParametersToProspectLeafOpticalProperties_cxx
-#define __otbLeafParametersToProspectLeafOpticalProperties_cxx
 
 #include "itkNumericTraits.h"
 
@@ -38,6 +36,7 @@ LeafParametersToProspectLeafOpticalProperties
    this->ProcessObject::SetNumberOfRequiredOutputs(1);
    
    LeafOpticalPropertiesType::Pointer output = static_cast<LeafOpticalPropertiesType *>(this->MakeOutput(0).GetPointer());
+   this->itk::ProcessObject::SetNthOutput(0,output.GetPointer());
 }
 
 
@@ -162,8 +161,6 @@ LeafParametersToProspectLeafOpticalProperties
       reflVector.push_back(refl);
       transVector.push_back(trans);
    }
-   
-   std::cout<<"OUTPUT"<<std::endl;
    output->SetReflectance(reflVector);
    output->SetTransmitance(transVector);
    
@@ -220,4 +217,3 @@ LeafParametersToProspectLeafOpticalProperties
 }
 } // end namespace otb
 
-#endif
