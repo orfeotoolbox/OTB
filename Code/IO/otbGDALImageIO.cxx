@@ -177,7 +177,6 @@ GDALImageIO::GDALImageIO()
 
   m_IsIndexed   = false;
   m_DatasetNumber = 0;
-  m_currentfile = NULL;
   //m_poBands     = NULL;
   //m_hDriver     = NULL;
   //m_poDataset   = NULL;

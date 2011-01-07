@@ -137,7 +137,7 @@ protected:
   /** Determines the level of compression for written files.
    *  Range 0-9; 0 = none, 9 = maximum , default = 4 */
   int         m_CompressionLevel;
-  const char* m_currentfile;
+
   bool        m_IsIndexed;
 
   /** Dataset index to extract (starting at 0)*/
