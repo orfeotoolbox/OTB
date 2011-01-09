@@ -265,7 +265,7 @@ template <class TInputInternalPixelType, class TLayerValueType>
 class LayerValueGenerator<itk::RGBAPixel<TInputInternalPixelType>, TLayerValueType>
 {
 public:
-  typedef itk::RGBPixel<TInputInternalPixelType>          PixelType;
+  typedef itk::RGBAPixel<TInputInternalPixelType>         PixelType;
   typedef TLayerValueType                                 LayerValueType;
   typedef typename LayerValueType::ValueType              LayerValueInternalType;
 
