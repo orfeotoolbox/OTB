@@ -474,45 +474,75 @@ bool ossimplugins::ossimTerraSarProductDoc::initImageSize(
 }
 
 bool ossimplugins::ossimTerraSarProductDoc::initGsd(
-   const ossimXmlDocument* xdoc, ossimDpt& gsd) const
+const ossimXmlDocument* xdoc, ossimDpt& gsd) const
 {
-   bool result = true;
-
-   if (xdoc)
-   {
-      ossimString s;
-      if ( getColumnSpacing(xdoc, s) )
+  bool result = true;
+  
+  if (xdoc)
+  {
+    ossimString s;
+    
+    if ( getProductVariant(xdoc, s) )
+    {
+      if (s == "SSC")
       {
-         gsd.x = s.toFloat64();
+        if ( getProjectedSpacingSlantRange(xdoc, s) )
+        {
+          gsd.x = s.toFloat64(); 
+        }
+        else
+        {
+          result = false;
+        }
+        if ( getProjectedSpacingAzimuth(xdoc, s) )
+        {
+          gsd.y = s.toFloat64(); 
+        }
+        else
+        {
+          result = false;
+        }
       }
       else
       {
-         result = false;
+        if ( getRowSpacing(xdoc, s) )
+        {
+          gsd.x = s.toFloat64(s);
+        }
+        else
+        {
+          result = false;
+        }
+        if ( getColumnSpacing(xdoc, s) )
+        {
+          gsd.y = s.toFloat64();
+        }
+        else
+        {
+          result = false;
+        }
       }
-      if ( getRowSpacing(xdoc, s) )
-      {
-         gsd.y = s.toFloat64(s);
-      }
-      else
-      {
-         result = false;
-      }
-   }
-   else
-   {
+    }
+    else
+    {
       result = false;
-   }
-      
-   if (traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "ossimplugins::ossimTerraSarProductDoc::initGsd DEBUG:\ngsd: "
-         << gsd
-         << "\nexit status = " << (result?"true":"false")
-         << std::endl;
-   }
-   
-   return result;
+    }
+  }
+  else
+  {
+    result = false;
+  }
+  
+  if (traceDebug())
+  {
+    ossimNotify(ossimNotifyLevel_DEBUG)
+    << "ossimplugins::ossimTerraSarProductDoc::initGsd DEBUG:\ngsd: "
+    << gsd
+    << "\nexit status = " << (result?"true":"false")
+    << std::endl;
+  }
+  
+  return result;
 }
 
 bool ossimplugins::ossimTerraSarProductDoc::initTiePoints(
@@ -724,6 +754,14 @@ bool ossimplugins::ossimTerraSarProductDoc::getProductType(
    ossimString path = "/level1Product/productInfo/productVariantInfo/productType";
    return ossim::getPath(path, xdoc, s);
 }
+
+bool ossimplugins::ossimTerraSarProductDoc::getProductVariant(
+const ossimXmlDocument* xdoc, ossimString& s) const
+{
+  ossimString path = "/level1Product/productInfo/productVariantInfo/productVariant";
+  return ossim::getPath(path, xdoc, s);
+}
+
 bool ossimplugins::ossimTerraSarProductDoc::getRadiometricCorrection(
    const ossimXmlDocument* xdoc, ossimString& s) const
 {
@@ -891,9 +929,9 @@ bool ossimplugins::ossimTerraSarProductDoc::getAzimuthStopTime(
   if(!res)
     {
       if (traceDebug())
-	{
-	  ossimNotify(ossimNotifyLevel_DEBUG)<< "Node \"/level1Product/productInfo/sceneInfo/stop/timeUTC\" invalid, trying \"/level1Product/instrument/settings/rxGainSetting/stopTimeUTC\"...\n";
-	}  
+        {
+          ossimNotify(ossimNotifyLevel_DEBUG)<< "Node \"/level1Product/productInfo/sceneInfo/stop/timeUTC\" invalid, trying \"/level1Product/instrument/settings/rxGainSetting/stopTimeUTC\"...\n";
+        }  
       path = "/level1Product/instrument/settings/settingRecord/dataSegment segmentID/stopTimeUTC";
       res = ossim::getPath(path, xdoc, s);
     }
@@ -1058,6 +1096,22 @@ bool ossimplugins::ossimTerraSarProductDoc::getRowSpacing(
    return ossim::getPath(path, xdoc, s);
 }
 
+bool ossimplugins::ossimTerraSarProductDoc::getProjectedSpacingSlantRange(
+const ossimXmlDocument* xdoc, ossimString& s) const
+{
+  ossimString path =
+  "/level1Product/productSpecific/complexImageInfo/projectedSpacingRange/slantRange";
+  return ossim::getPath(path, xdoc, s);
+}
+
+bool ossimplugins::ossimTerraSarProductDoc::getProjectedSpacingAzimuth(
+const ossimXmlDocument* xdoc, ossimString& s) const
+{
+  ossimString path =
+  "/level1Product/productSpecific/complexImageInfo/projectedSpacingAzimuth";
+  return ossim::getPath(path, xdoc, s);
+}
+
 bool ossimplugins::ossimTerraSarProductDoc::getImagingMode(
    const ossimXmlDocument* xdoc, ossimString& s) const
 {
@@ -1065,6 +1119,7 @@ bool ossimplugins::ossimTerraSarProductDoc::getImagingMode(
       "/level1Product/productInfo/acquisitionInfo/imagingMode";
    return ossim::getPath(path, xdoc, s);
 }
+
 bool ossimplugins::ossimTerraSarProductDoc::getAcquisitionSensor(
    const ossimXmlDocument* xdoc, ossimString& s) const
 {
@@ -1124,39 +1179,39 @@ bool ossimplugins::ossimTerraSarProductDoc::getCornerIncidenceAngles(
     {
       if (xnodes[i].valid())
       {
-	result = ossim::findFirstNode(ossimString("refRow"), xnodes[i], stmp);
-	refRow = stmp.toUInt32();
-	result = ossim::findFirstNode(ossimString("refColumn"), xnodes[i], stmp);
-	refColumn = stmp.toUInt32();
-	result = ossim::findFirstNode(ossimString("incidenceAngle"), xnodes[i], stmp);
-	// values in vector are indexed with this order
-	//   0 -> lower left
-	//   1 -> upper left
-	//   2 -> upper right
-	//   3 -> lower right
-	
-	if (refRow == 1)
-	{
-	  if (refColumn == 1)
-	  {
-	    s[0] = stmp;
-	  }
-	  else
-	  {
-	    s[3] = stmp;
-	  }
-	}
-	else
-	{
-	  if (refColumn == 1)
-	  {
-	    s[1] = stmp;
-	  }
-	  else
-	  {
-	    s[2] = stmp;
-	  }
-	}
+        result = ossim::findFirstNode(ossimString("refRow"), xnodes[i], stmp);
+        refRow = stmp.toUInt32();
+        result = ossim::findFirstNode(ossimString("refColumn"), xnodes[i], stmp);
+        refColumn = stmp.toUInt32();
+        result = ossim::findFirstNode(ossimString("incidenceAngle"), xnodes[i], stmp);
+        // values in vector are indexed with this order
+        //   0 -> lower left
+        //   1 -> upper left
+        //   2 -> upper right
+        //   3 -> lower right
+        
+        if (refRow == 1)
+        {
+          if (refColumn == 1)
+          {
+            s[0] = stmp;
+          }
+          else
+          {
+            s[3] = stmp;
+          }
+        }
+        else
+        {
+          if (refColumn == 1)
+          {
+            s[1] = stmp;
+          }
+          else
+          {
+            s[2] = stmp;
+          }
+        }
       }
     }
   }
@@ -1184,7 +1239,7 @@ bool ossimplugins::ossimTerraSarProductDoc::initSceneCoord(const ossimXmlDocumen
     ossimString path = "/level1Product/productInfo/sceneInfo/sceneCenterCoord";
     std::vector<ossimRefPtr<ossimXmlNode> > xnodes;
     xdoc->findNodes(path, xnodes);
-	
+        
     if ( (xnodes.size() == 1) && (xnodes[0].valid()) )
     {
       InfoSceneCoord isc;
@@ -1203,7 +1258,7 @@ bool ossimplugins::ossimTerraSarProductDoc::initSceneCoord(const ossimXmlDocumen
       isc.set_rangeTime( stmp.toDouble() );
       result = ossim::findFirstNode(ossimString("incidenceAngle"), xnodes[0], stmp);
       isc.set_incidenceAngle( stmp.toDouble() );
-	
+        
       sceneCoord->set_centerSceneCoord(isc);
       
       ossimString path2 = "/level1Product/productInfo/sceneInfo/sceneCornerCoord";
@@ -1212,35 +1267,35 @@ bool ossimplugins::ossimTerraSarProductDoc::initSceneCoord(const ossimXmlDocumen
       xdoc->findNodes(path2, xnodes2);
       if ( xnodes2.size() )
       {
-	std::vector<InfoSceneCoord> tabIsc;
-	
-	for (ossim_uint32 i = 0; i < xnodes2.size(); ++i)
-	{
-	  if (xnodes2[i].valid())
-	  {
-	    InfoSceneCoord isc2;
-	    
-	    result = ossim::findFirstNode(ossimString("refRow"), xnodes2[i], stmp);
-	    isc2.set_refRow( stmp.toUInt32() );
-	    result = ossim::findFirstNode(ossimString("refColumn"), xnodes2[i], stmp);
-	    isc2.set_refColumn( stmp.toUInt32() );
-	    result = ossim::findFirstNode(ossimString("lat"), xnodes[0], stmp);
-	    isc2.set_lat( stmp.toDouble() );
-	    result = ossim::findFirstNode(ossimString("lon"), xnodes[0], stmp);
-	    isc2.set_lon( stmp.toDouble() );
-	    result = ossim::findFirstNode(ossimString("azimuthTimeUTC"), xnodes[0], stmp);
-	    isc2.set_azimuthTimeUTC( stmp );
-	    result = ossim::findFirstNode(ossimString("rangeTime"), xnodes[0], stmp);
-	    isc2.set_rangeTime( stmp.toDouble() );
-	    result = ossim::findFirstNode(ossimString("incidenceAngle"), xnodes2[i], stmp);
-	    isc2.set_incidenceAngle( stmp.toDouble() );
+        std::vector<InfoSceneCoord> tabIsc;
+        
+        for (ossim_uint32 i = 0; i < xnodes2.size(); ++i)
+        {
+          if (xnodes2[i].valid())
+          {
+            InfoSceneCoord isc2;
+            
+            result = ossim::findFirstNode(ossimString("refRow"), xnodes2[i], stmp);
+            isc2.set_refRow( stmp.toUInt32() );
+            result = ossim::findFirstNode(ossimString("refColumn"), xnodes2[i], stmp);
+            isc2.set_refColumn( stmp.toUInt32() );
+            result = ossim::findFirstNode(ossimString("lat"), xnodes[0], stmp);
+            isc2.set_lat( stmp.toDouble() );
+            result = ossim::findFirstNode(ossimString("lon"), xnodes[0], stmp);
+            isc2.set_lon( stmp.toDouble() );
+            result = ossim::findFirstNode(ossimString("azimuthTimeUTC"), xnodes[0], stmp);
+            isc2.set_azimuthTimeUTC( stmp );
+            result = ossim::findFirstNode(ossimString("rangeTime"), xnodes[0], stmp);
+            isc2.set_rangeTime( stmp.toDouble() );
+            result = ossim::findFirstNode(ossimString("incidenceAngle"), xnodes2[i], stmp);
+            isc2.set_incidenceAngle( stmp.toDouble() );
 
-	    tabIsc.push_back(isc2);
-	  }
-	}
-	
-	sceneCoord->set_cornersSceneCoord( tabIsc );
-	sceneCoord->set_numberOfSceneCoord( tabIsc.size() );
+            tabIsc.push_back(isc2);
+          }
+        }
+        
+        sceneCoord->set_cornersSceneCoord( tabIsc );
+        sceneCoord->set_numberOfSceneCoord( tabIsc.size() );
       }
     }
     else

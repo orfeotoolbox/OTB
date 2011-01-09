@@ -162,7 +162,30 @@ public:
   {
     itkExceptionMacro("GetProductionYear not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
-
+  
+  /** Get the PRF */
+  double GetPRF() const
+  {
+    itkExceptionMacro("GetPRF not implemented in SarDefaultImageMetadataInterface, no captor type found");
+  }
+  
+  /** Get the RSF */
+  double GetRSF() const
+  {
+    itkExceptionMacro("GetRSF not implemented in SarDefaultImageMetadataInterface, no captor type found");
+  }
+  
+  /** Get the radar frequency */
+  double GetRadarFrequency() const
+  {
+    itkExceptionMacro("GetRadarFrequency not implemented in SarDefaultImageMetadataInterface, no captor type found");
+  }
+  
+  /** Get the center incidence angle */
+  double GetCenterIncidenceAngle() const
+  {
+    itkExceptionMacro("GetCenterIncidenceAngle not implemented in SarDefaultImageMetadataInterface, no captor type found");
+  }
 
   bool CanRead() const
   {

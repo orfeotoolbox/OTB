@@ -70,14 +70,18 @@ public:
   virtual PointSetPointer GetRadiometricCalibrationIncidenceAngle() const;
   virtual PointSetPointer GetRadiometricCalibrationRangeSpreadLoss() const;
   virtual PointSetPointer GetRadiometricCalibrationNoise() const;
-
+  
   virtual IndexType GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree() const;
   virtual IndexType GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree() const;
   virtual IndexType GetRadiometricCalibrationIncidenceAnglePolynomialDegree() const;
   virtual IndexType GetRadiometricCalibrationRangeSpreadLossPolynomialDegree() const;
   virtual IndexType GetRadiometricCalibrationNoisePolynomialDegree() const;
-
-
+  
+  virtual double GetPRF() const = 0;
+  virtual double GetRSF() const = 0;
+  virtual double GetRadarFrequency () const = 0;
+  virtual double GetCenterIncidenceAngle() const = 0;
+  
 protected:
   SarImageMetadataInterface();
   virtual ~SarImageMetadataInterface() {}

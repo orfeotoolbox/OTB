@@ -875,6 +875,31 @@ TerraSarImageMetadataInterface::GetPRF() const
   return freq;
 }
 
+double
+TerraSarImageMetadataInterface::GetRSF() const
+{
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
+  {
+    itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
+  }
+  
+  ImageKeywordlistType imageKeywordlist;
+  
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+  
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  
+  ossimString tempVal = kwl.find("sensor_params.sampling_frequency");
+  double      freq = tempVal.toDouble();
+  
+  return freq;
+}
+
 ossimplugins::SceneCoord*
 TerraSarImageMetadataInterface::GetSceneCoord() const
 {

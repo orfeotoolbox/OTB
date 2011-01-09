@@ -170,6 +170,10 @@ SarImageMetadataInterface
     os << indent << "GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree: " << this->GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree() << std::endl;
     os << indent << "GetRadiometricCalibrationIncidenceAnglePolynomialDegree:        " << this->GetRadiometricCalibrationIncidenceAnglePolynomialDegree() << std::endl;
     os << indent << "GetRadiometricCalibrationRangeSpreadLossPolynomialDegree:       " << this->GetRadiometricCalibrationRangeSpreadLossPolynomialDegree() << std::endl;
+    os << indent << "GetPRF:                  " << this->GetPRF() << std::endl;
+    os << indent << "GetRSF:                  " << this->GetRSF() << std::endl;
+    os << indent << "GetRadarFrequency:       " << this->GetRadarFrequency() << std::endl;
+    os << indent << "GetCenterIncidenceAngle: " << this->GetCenterIncidenceAngle() << std::endl;
     }
 }
 

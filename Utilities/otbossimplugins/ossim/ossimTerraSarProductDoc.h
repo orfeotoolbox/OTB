@@ -125,7 +125,7 @@ namespace ossimplugins
                          ossimString& s) const;
       
       bool getReferencePoint(const ossimXmlDocument* xdoc,
-			     ossimString& s) const;
+                             ossimString& s) const;
       
       bool getImageDataStrartWith(const ossimXmlDocument* xdoc,
                                   ossimString& s) const;
@@ -210,11 +210,20 @@ namespace ossimplugins
       bool getRowSpacing(const ossimXmlDocument* xdoc,
                          ossimString& s) const;
       
+      bool getProjectedSpacingSlantRange(const ossimXmlDocument* xdoc,
+                                         ossimString& s) const;
+
+      bool getProjectedSpacingAzimuth(const ossimXmlDocument* xdoc,
+                                      ossimString& s) const;
+
       bool getGeodeticTerrainHeight(const ossimXmlDocument* xdoc,
                                     ossimString& s) const;
 
       bool getProductType(const ossimXmlDocument* xdoc,
                                     ossimString& s) const;
+
+      bool getProductVariant(const ossimXmlDocument* xdoc,
+                             ossimString& s) const;
 
       bool getRadiometricCorrection(const ossimXmlDocument* xdoc,
                                     ossimString& s) const;
@@ -231,9 +240,9 @@ namespace ossimplugins
       bool getRadarFrequency(const ossimXmlDocument* xdoc,
                                     ossimString& s) const;
 /*      bool getCenterIncidenceAngle(const ossimXmlDocument* xdoc,
-				    ossimString& s) const;
+                                    ossimString& s) const;
       bool getCornerIncidenceAngles(const ossimXmlDocument* xdoc,
-				    std::vector<ossimString>& s) const;
+                                    std::vector<ossimString>& s) const;
 */
       /**
        * @brief Method to initialize IncidenceAngles object from
@@ -241,9 +250,9 @@ namespace ossimplugins
        * @param xdoc Opened product xml file.
        * @param pos Pointer to PlatformPosition object.
        * @return true on success, false on error.
-	     */
+             */
       bool initSceneCoord(const ossimXmlDocument* xdoc,
-			      SceneCoord* pos) const;
+                              SceneCoord* pos) const;
       
       /**
        * @brief Method to initialize Noise object from

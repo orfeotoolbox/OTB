@@ -133,6 +133,9 @@ public:
   /** Get the PRF */
   double GetPRF() const;
 
+  /** Get the RSF */
+  double GetRSF() const;  
+  
   /** Get the incidence angles structure */
   //ossimplugins::SceneCoord* GetIncidenceAngles() const;
 
