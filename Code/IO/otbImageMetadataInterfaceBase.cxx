@@ -399,8 +399,18 @@ ImageMetadataInterfaceBase::GetXPixelSpacing() const
 
   ossimKeywordlist kwl;
   imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::string key = "pixel_spacing";
-  ossimString keywordString = kwl.find(key.c_str());
+
+  std::string key;
+  ossimString keywordString;
+
+  key = "meters_per_pixel_x";
+  keywordString = kwl.find(key.c_str());
+  if (!keywordString.empty())
+    {
+    return keywordString.toDouble();
+    }
+  key = "pixel_spacing";
+  keywordString = kwl.find(key.c_str());
 
   return keywordString.toDouble();
 }
@@ -418,8 +428,17 @@ ImageMetadataInterfaceBase::GetYPixelSpacing() const
 
   ossimKeywordlist kwl;
   imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::string key = "pixel_spacing";
-  ossimString keywordString = kwl.find(key.c_str());
+  std::string key;
+  ossimString keywordString;
+
+  key = "meters_per_pixel_y";
+  keywordString = kwl.find(key.c_str());
+  if (!keywordString.empty())
+    {
+    return keywordString.toDouble();
+    }
+  key = "pixel_spacing";
+  keywordString = kwl.find(key.c_str());
 
   return keywordString.toDouble();
 }
