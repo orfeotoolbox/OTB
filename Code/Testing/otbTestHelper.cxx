@@ -134,6 +134,8 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
     strfileref = *itRef;
     strfiletest = *itTest;
 
+    //otbMsgDevMacro(<< "Comparing " << strfileref << " -with- " << strfiletest);
+
     //Check is the current line should be ignored
     bool ignoreCurrentLineRef = false;
     bool ignoreCurrentLineTest = false;
@@ -172,12 +174,20 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
     //Note: the iterator increment will take care of moving only the
     //ignored one if the order does not matter
     bool differenceFoundInCurrentLine = false;
+//    if (ignoreCurrentLineRef || ignoreCurrentLineTest)
+//      {
+//      otbMsgDevMacro( << "* ignoring");
+//      }
     if ((!ignoreCurrentLineRef) && (!ignoreCurrentLineTest))
       {
 //       std::cout << "Ref line:  " << strfileref << std::endl;
 //       std::cout << "Test line: " << strfiletest << std::endl;
       differenceFoundInCurrentLine = CompareLines(strfileref, strfiletest, nbdiff, fluxfilediff, numLine,
                                                   listStrDiffLineFileRef, listStrDiffLineFileTest, epsilon);
+//      if (!differenceFoundInCurrentLine)
+//        {
+//        otbMsgDevMacro( << "* no difference found");
+//        }
       }
 
     if (m_IgnoreLineOrder)
@@ -1264,18 +1274,22 @@ bool TestHelper::CompareLines(std::string strfileref,
           nbdiff++;
 
           }
-        else if ((strRef != strTest)
-                 && (vcl_abs(atof(strRef.c_str())) > m_EpsilonBoundaryChecking)
-                 && (vcl_abs(
-                       atof(strRef.c_str()) - atof(strTest.c_str())) > epsilon * vcl_abs(atof(strRef.c_str())))) //epsilon as relative error
+        else
           {
-          if (m_ReportErrors)
+          float vRef = atof(strRef.c_str());
+          float vTest = atof(strTest.c_str());
+          float vNorm = (vcl_abs(vRef) + vcl_abs(vTest))/2;
+          if ((vNorm > m_EpsilonBoundaryChecking) //make sure that either the test of the ref are non 0
+              && (vcl_abs(vRef-vTest) > epsilon * vNorm)) //epsilon as relative error
             {
-            fluxfilediff << "Diff at line " << numLine << " : vcl_abs ( (" << strRef << ") - (" << strTest
-                         << ") ) > " << epsilon << std::endl;
-            differenceFoundInCurrentLine = true;
+            if (m_ReportErrors)
+              {
+              fluxfilediff << "Diff at line " << numLine << " : vcl_abs ( (" << strRef << ") - (" << strTest
+                  << ") ) > " << epsilon << std::endl;
+              differenceFoundInCurrentLine = true;
+              }
+            nbdiff++;
             }
-          nbdiff++;
           }
         }
       else
