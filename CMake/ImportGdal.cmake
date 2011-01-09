@@ -144,6 +144,41 @@ IF(OTB_USE_EXTERNAL_GDAL)
            "Cannot find ogr library. Please set OGR_LIBRARY.")
   ENDIF (NOT OGR_LIBRARY)
   ENDIF(GDAL_HAS_OGR)
+
+  # Check for some possible crashes when reading TIFF files, when GDAL embeds geotiff and tiff libraries
+  # Known to lead to a crash with the official gdal package available in ubuntu & debian 
+  INCLUDE(CheckCXXSourceRunsWithArgs)
+  
+  # This test is known to fail with the Debian gdal package
+  SET(CMAKE_REQUIRED_INCLUDES ${GDAL_INCLUDE_DIR})
+  SET(CMAKE_REQUIRED_LIBRARIES "${GEOTIFF_LIBRARY};${GDAL_LIBRARY}")
+  CHECK_CXX_SOURCE_RUNS_ARGS(
+            ${CMAKE_CURRENT_SOURCE_DIR}/CMake/TestGDALOpen.cxx
+            ${CMAKE_CURRENT_SOURCE_DIR}/CMake/otb_logo.tif
+            CHECK_GDALOPEN_SYMBOL
+            )
+  IF(NOT CHECK_GDALOPEN_SYMBOL)
+    MESSAGE(WARNING "CHECK_GDALOPEN_SYMBOL test failed : your platform exhibits a gdal/geotiff conflict. "
+    "Opening a TIF file may generate a crash. This is most probably because the gdal library you configured "
+    "embeds its own libgeotiff and is compiled with --with-hide-internal-symbols=yes.\n"
+    "You might consider building GDAL yourself without using --with-hide-internal-symbols=no" )
+  ENDIF(NOT CHECK_GDALOPEN_SYMBOL)
+  
+  # This test is known to fail with the Ubuntu gdal package
+  SET(CMAKE_REQUIRED_INCLUDES ${GEOTIFF_INCLUDE_DIRS};${TIFF_INCLUDE_DIRS})
+  SET(CMAKE_REQUIRED_LIBRARIES "${GDAL_LIBRARY};${GEOTIFF_LIBRARY};${TIFF_LIBRARY}")
+  CHECK_CXX_SOURCE_RUNS_ARGS(
+            ${CMAKE_CURRENT_SOURCE_DIR}/CMake/TestXTIFFOpen.cxx
+            ${CMAKE_CURRENT_SOURCE_DIR}/CMake/otb_logo.tif
+            CHECK_XTIFFOPEN_SYMBOL
+            )
+  IF(NOT CHECK_XTIFFOPEN_SYMBOL)
+    MESSAGE(WARNING "CHECK_XTIFFOPEN_SYMBOL test failed : your platform exhibits a gdal/geotiff conflict. "
+    "Opening a TIF file may generate a crash. This is most probably because the gdal library you configured "
+    "embeds its own libgeotiff and is compiled with --with-hide-internal-symbols=yes.\n"
+    "You might consider building GDAL yourself without using --with-hide-internal-symbols=no" )
+  ENDIF(NOT CHECK_XTIFFOPEN_SYMBOL)
+
 ELSE(OTB_USE_EXTERNAL_GDAL)
 
   MESSAGE(FATAL_ERROR "OTB_USE_EXTERNAL_GDAL=OFF is not implemented. Please set OTB_USE_EXTERNAL_GDAL to ON")
