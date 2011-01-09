@@ -109,46 +109,39 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
   //*****************************
   //Set the input transformation
   //*****************************
-  try
-    {
 
     // First, try to make a geo transform
-    if (!m_InputProjectionRef.empty()) //map projection
+  if (!m_InputProjectionRef.empty()) //map projection
+    {
+    typedef otb::GenericMapProjection<otb::INVERSE, ScalarType, InputSpaceDimension, InputSpaceDimension>
+        InverseMapProjectionType;
+    typename InverseMapProjectionType::Pointer mapTransform = InverseMapProjectionType::New();
+    mapTransform->SetWkt(m_InputProjectionRef);
+    if (mapTransform->GetMapProjection() != NULL)
       {
-      typedef otb::GenericMapProjection<otb::INVERSE, ScalarType, InputSpaceDimension,
-          InputSpaceDimension> InverseMapProjectionType;
-      typename InverseMapProjectionType::Pointer mapTransform = InverseMapProjectionType::New();
-      mapTransform->SetWkt(m_InputProjectionRef);
-      if (mapTransform->GetMapProjection() != NULL)
-        {
-        m_InputTransform = mapTransform.GetPointer();
-        inputTransformIsMap = true;
-        otbMsgDevMacro(<< "Input projection set to map transform: " << m_InputTransform);
-        }
-      }
-
-    // If not, try to make a sensor model
-    if ((m_InputTransform.IsNull()) && (m_InputKeywordList.GetSize()  > 0))
-      {
-      typedef otb::ForwardSensorModel<double, InputSpaceDimension, InputSpaceDimension> ForwardSensorModelType;
-      typename ForwardSensorModelType::Pointer sensorModel = ForwardSensorModelType::New();
-      sensorModel->SetImageGeometry(m_InputKeywordList);
-      if (!m_DEMDirectory.empty())
-        {
-        sensorModel->SetDEMDirectory(m_DEMDirectory);
-        }
-      else if (m_AverageElevation != -32768.0)
-        {
-        sensorModel->SetAverageElevation(m_AverageElevation);
-        }
-      m_InputTransform = sensorModel.GetPointer();
-      inputTransformIsSensor = true;
-      otbMsgDevMacro(<< "Input projection set to sensor model.");
+      m_InputTransform = mapTransform.GetPointer();
+      inputTransformIsMap = true;
+      otbMsgDevMacro(<< "Input projection set to map transform: " << m_InputTransform);
       }
     }
-  catch(itk::ExceptionObject &)
+
+  // If not, try to make a sensor model
+  if ((m_InputTransform.IsNull()) && (m_InputKeywordList.GetSize() > 0))
     {
-    otbMsgDevMacro(<< " Input keyword list does not describe a sensor model.");
+    typedef otb::ForwardSensorModel<double, InputSpaceDimension, InputSpaceDimension> ForwardSensorModelType;
+    typename ForwardSensorModelType::Pointer sensorModel = ForwardSensorModelType::New();
+    sensorModel->SetImageGeometry(m_InputKeywordList);
+    if (!m_DEMDirectory.empty())
+      {
+      sensorModel->SetDEMDirectory(m_DEMDirectory);
+      }
+    else if (m_AverageElevation != -32768.0)
+      {
+      sensorModel->SetAverageElevation(m_AverageElevation);
+      }
+    m_InputTransform = sensorModel.GetPointer();
+    inputTransformIsSensor = true;
+    otbMsgDevMacro(<< "Input projection set to sensor model.");
     }
 
   if (m_InputTransform.IsNull()) //default if we didn't manage to instantiate it before
@@ -182,46 +175,39 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
   //*****************************
   //Set the output transformation
   //*****************************
-  try
+  if (!m_OutputProjectionRef.empty()) //map projection
     {
-    // First, try to make a geo transform
-    if (!m_OutputProjectionRef.empty()) //map projection
+    typedef otb::GenericMapProjection<otb::FORWARD, ScalarType, InputSpaceDimension,
+    OutputSpaceDimension> ForwardMapProjectionType;
+    typename ForwardMapProjectionType::Pointer mapTransform = ForwardMapProjectionType::New();
+    mapTransform->SetWkt(m_OutputProjectionRef);
+    if (mapTransform->GetMapProjection() != NULL)
       {
-      typedef otb::GenericMapProjection<otb::FORWARD, ScalarType, InputSpaceDimension,
-          OutputSpaceDimension> ForwardMapProjectionType;
-      typename ForwardMapProjectionType::Pointer mapTransform = ForwardMapProjectionType::New();
-      mapTransform->SetWkt(m_OutputProjectionRef);
-      if (mapTransform->GetMapProjection() != NULL)
-        {
-        m_OutputTransform = mapTransform.GetPointer();
-        outputTransformIsMap = true;
-        otbMsgDevMacro(<< "Output projection set to map transform: " << m_OutputTransform);
-        }
+      m_OutputTransform = mapTransform.GetPointer();
+      outputTransformIsMap = true;
+      otbMsgDevMacro(<< "Output projection set to map transform: " << m_OutputTransform);
       }
+    }
 
-    // If not, try to make a sensor model
-    if ((m_OutputTransform.IsNull()) && (m_OutputKeywordList.GetSize()  > 0))
-      {
-      typedef otb::InverseSensorModel<double, InputSpaceDimension, OutputSpaceDimension> InverseSensorModelType;
-      typename InverseSensorModelType::Pointer sensorModel = InverseSensorModelType::New();
-      sensorModel->SetImageGeometry(m_OutputKeywordList);
-      if (!m_DEMDirectory.empty())
-        {
-        sensorModel->SetDEMDirectory(m_DEMDirectory);
-        }
-      else if (m_AverageElevation != -32768.0)
-        {
-        sensorModel->SetAverageElevation(m_AverageElevation);
-        }
-      m_OutputTransform = sensorModel.GetPointer();
-      outputTransformIsSensor = true;
-      otbMsgDevMacro(<< "Output projection set to sensor model");
-      }
-    }
-  catch(itk::ExceptionObject &)
+  // If not, try to make a sensor model
+  if ((m_OutputTransform.IsNull()) && (m_OutputKeywordList.GetSize() > 0))
     {
-    otbMsgDevMacro(<< " Output keyword list does not describe a sensor model.");
+    typedef otb::InverseSensorModel<double, InputSpaceDimension, OutputSpaceDimension> InverseSensorModelType;
+    typename InverseSensorModelType::Pointer sensorModel = InverseSensorModelType::New();
+    sensorModel->SetImageGeometry(m_OutputKeywordList);
+    if (!m_DEMDirectory.empty())
+      {
+      sensorModel->SetDEMDirectory(m_DEMDirectory);
+      }
+    else if (m_AverageElevation != -32768.0)
+      {
+      sensorModel->SetAverageElevation(m_AverageElevation);
+      }
+    m_OutputTransform = sensorModel.GetPointer();
+    outputTransformIsSensor = true;
+    otbMsgDevMacro(<< "Output projection set to sensor model");
     }
+
 
   if (m_OutputTransform.IsNull()) //default if we didn't manage to instantiate it before
     {
