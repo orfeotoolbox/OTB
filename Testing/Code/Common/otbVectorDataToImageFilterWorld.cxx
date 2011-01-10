@@ -31,13 +31,15 @@
 int otbVectorDataToImageFilterWorld(int argc, char * argv[])
 {
 
-  if (argc < 10)
+  if (argc < 11)
     {
     std::cout << argv[0] << " <input vector filename> <input image filename>"
               << " <output vector filename> "
               << " <sizeX> <sizeY> "
               << " <origin lon> <origin lat> "
-              << " <spacing lon> <spacing lat> "  << std::endl;
+              << " <spacing lon> <spacing lat> "  
+              << " <font filename>"
+              << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -82,6 +84,7 @@ int otbVectorDataToImageFilterWorld(int argc, char * argv[])
   vectorDataRendering->SetSize(size);
   vectorDataRendering->SetOrigin(origin);
   vectorDataRendering->SetSpacing(spacing);
+  vectorDataRendering->SetFontFileName(argv[10]);
   vectorDataRendering->AddStyle("world");
 #ifndef WIN32
   vectorDataRendering->AddStyle("city");

@@ -144,6 +144,10 @@ public:
   itkSetMacro(RenderingStyleType, RenderingStyleType);
   itkGetMacro(RenderingStyleType, RenderingStyleType);
 
+  /** Add accessors to the font filename */
+  itkSetStringMacro(FontFileName);
+  itkGetStringMacro(FontFileName);
+
 protected:
   /** Constructor */
   VectorDataToImageFilter();
@@ -171,6 +175,9 @@ private:
   DirectionType m_Direction;
 
   mapnik::Map m_Map;
+
+  // font file name
+  std::string   m_FontFileName;
 
   //This factor is used to flip the data on the Y axis when using a
   //sensor model geometry (where the Y coordinate increases top-down)

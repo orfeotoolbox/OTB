@@ -32,10 +32,12 @@
 int otbVectorDataToImageFilterSensorModel(int argc, char * argv[])
 {
 
-  if (argc < 4)
+  if (argc < 5)
     {
     std::cout << argv[0] << " <input vector filename> <input image filename>"
-              << " <output vector filename> "  << std::endl;
+              << " <output vector filename> "
+              << "<font filename>"
+              << std::endl;
 
     return EXIT_FAILURE;
     }
@@ -93,6 +95,7 @@ int otbVectorDataToImageFilterSensorModel(int argc, char * argv[])
   vectorDataRendering->SetSize(size);
   vectorDataRendering->SetOrigin(origin);
   vectorDataRendering->SetSpacing(spacing);
+  vectorDataRendering->SetFontFileName(argv[4]);
   vectorDataRendering->AddStyle("minor-roads-casing");
 #ifndef WIN32
   vectorDataRendering->AddStyle("roads-text");

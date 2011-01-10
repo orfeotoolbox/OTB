@@ -209,10 +209,9 @@ VectorDataToImageFilter<TVectorData, TImage>
 
   Superclass::BeforeThreadedGenerateData();
 
-#ifndef WIN32
-  mapnik::freetype_engine::register_font("/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf");
-#endif
-
+  if(!m_FontFileName.empty())
+    mapnik::freetype_engine::register_font(m_FontFileName);
+  
   //Load the OSM styles using helper class
   otb::VectorDataStyle::Pointer styleLoader = otb::VectorDataStyle::New();
   styleLoader->SetScaleFactor(m_ScaleFactor);

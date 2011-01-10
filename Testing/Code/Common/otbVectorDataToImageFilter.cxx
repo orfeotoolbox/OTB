@@ -31,9 +31,9 @@
 int otbVectorDataToImageFilter(int argc, char * argv[])
 {
 
-  if (argc < 3)
+  if (argc < 4)
     {
-    std::cout << argv[0] << " <input vector filename> <input image filename>"  << std::endl;
+    std::cout << argv[0] << " <input vector filename> <input image filename> <font filename>"  << std::endl;
 
     return EXIT_FAILURE;
     }
@@ -92,6 +92,7 @@ int otbVectorDataToImageFilter(int argc, char * argv[])
   vectorDataRendering->SetSize(size);
   vectorDataRendering->SetOrigin(origin);
   vectorDataRendering->SetSpacing(spacing);
+  vectorDataRendering->SetFontFileName(argv[3]);
   vectorDataRendering->AddStyle("minor-roads-casing");
 #ifndef WIN32
   vectorDataRendering->AddStyle("roads-text");
