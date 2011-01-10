@@ -69,6 +69,7 @@ int main( int argc, char * argv[] )
   const string infname = argv[1];
   const string vectorfname = argv[2];
   const string demdirectory = argv[3];
+  const string fontfilename = argv[5];
   int run   = 1;
   if (argc > 4)
   {
@@ -164,6 +165,7 @@ int main( int argc, char * argv[] )
   vectorDataRendering->SetOrigin(origin);
   vectorDataRendering->SetSpacing(spacing);
   vectorDataRendering->SetScaleFactor(2.4);
+  vectorDataRendering->SetFontFileName(fontfilename);
   // set up the style we want to use
   vectorDataRendering->AddStyle("minor-roads-casing");
   vectorDataRendering->AddStyle("minor-roads");
@@ -189,6 +191,7 @@ int main( int argc, char * argv[] )
   vectorDataRenderingQL->SetOrigin(origin);
   vectorDataRenderingQL->SetSpacing(spacingQL);
   vectorDataRenderingQL->SetScaleFactor(2.4*qlRatio);
+  vectorDataRenderingQL->SetFontFileName(fontfilename);
   vectorDataRenderingQL->AddStyle("minor-roads-casing");
   vectorDataRenderingQL->AddStyle("minor-roads");
   vectorDataRenderingQL->AddStyle("roads");

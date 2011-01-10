@@ -790,7 +790,19 @@ ADD_TEST(coTvVectorDataToImageFilter ${COMMON_TESTS9}
 	${TEMP}/coTvVectorDataToImageFilter.png
         ${BASELINE_FILES}/DejaVuSans.ttf # font
 )
+
+ADD_TEST(coTvVectorDataToImageFilterNoFonts ${COMMON_TESTS9}
+     --compare-image ${NOTOL}
+	   	     ${BASELINE}/coTvVectorDataToImageFilterNoFonts.png
+                     ${TEMP}/coTvVectorDataToImageFilterNoFonts.png
+   otbVectorDataToImageFilterNoFonts
+        ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
+	${TEMP}/coTvVectorDataToImageFilterNoFonts.png
+)
+
 ENDIF(OTB_DATA_USE_LARGEINPUT)
+
+
 
 
 IF(OTB_DATA_USE_LARGEINPUT)
@@ -1073,6 +1085,8 @@ otbVectorDataToImageFilterNew.cxx
 otbVectorDataToImageFilter.cxx
 otbVectorDataToImageFilterSensorModel.cxx
 otbVectorDataToImageFilterWorld.cxx
+otbVectorDataToImageFilterNoFonts.cxx
+
 )
 ENDIF(OTB_USE_MAPNIK)
 
