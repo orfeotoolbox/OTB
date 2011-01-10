@@ -4,4 +4,5 @@ INCLUDE_REGULAR_EXPRESSION("^.*$")
 ADD_EXECUTABLE(VisuExample1 VisuExample1.cxx )
 TARGET_LINK_LIBRARIES(VisuExample1 OTBVisualization OTBGui OTBIO OTBCommon ${OTB_VISU_GUI_LIBRARIES})
 
-
+ADD_EXECUTABLE(VectorDataRendering VectorDataRendering.cxx )
+TARGET_LINK_LIBRARIES(VectorDataRendering OTBVisualization OTBGui OTBIO OTBCommon ${OTB_VISU_GUI_LIBRARIES})
