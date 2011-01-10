@@ -35,16 +35,21 @@
 //
 // Software Guide : EndLatex
 
-#include "otbImageLayerRenderingModel.h"
+
 #include "otbVectorImage.h"
-#include "itkRGBPixel.h"
 #include "itkRGBAPixel.h"
 #include "otbImageFileReader.h"
-#include "otbImageFileWriter.h"
+
+#include "otbVectorDataFileReader.h"
+#include "otbVectorData.h"
+#include "otbVectorDataProjectionFilter.h"
+#include "otbVectorDataToImageFilter.h"
+#include "otbAlphaBlendingFunction.h"
+
+#include "otbImageLayerRenderingModel.h"
 #include "otbImageLayerGenerator.h"
 #include "otbImageLayer.h"
 #include "otbImageView.h"
-#include <FL/Fl.H>
 #include "otbImageWidgetController.h"
 #include "otbWidgetResizingActionHandler.h"
 #include "otbChangeScaledExtractRegionActionHandler.h"
@@ -53,19 +58,9 @@
 #include "otbPixelDescriptionModel.h"
 #include "otbPixelDescriptionActionHandler.h"
 #include "otbPixelDescriptionView.h"
-
-#include "otbVectorDataFileReader.h"
-#include "otbVectorData.h"
-#include "otbVectorDataProjectionFilter.h"
-#include "otbVectorDataExtractROI.h"
-#include "otbVectorDataToImageFilter.h"
-#include "otbAlphaBlendingFunction.h"
-
 #include "otbPackedWidgetManager.h"
-#include "otbStreamingImageFileWriter.h"
 #include "otbHistogramCurve.h"
 #include "otbCurves2DWidget.h"
-#include "otbImageLayer.h"
 
 
 int main( int argc, char * argv[] )
@@ -80,36 +75,33 @@ int main( int argc, char * argv[] )
     run = atoi(argv[4]);
   }
 
-
-
   typedef otb::VectorImage<double,2>                  ImageType;
   typedef ImageType::PixelType                        PixelType;
   typedef itk::RGBAPixel<unsigned char>               RGBAPixelType;
   typedef otb::Image<RGBAPixelType,2>                 OutputImageType;
-
-//   typedef otb::Image<PixelType,2>                    ScalarImageType;
 
   // Reading input image
   typedef otb::ImageFileReader<ImageType>            ReaderType;
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
   reader->UpdateOutputInformation();
+  std::cout << "NumBands: " << reader->GetOutput()->GetNumberOfComponentsPerPixel() << std::endl;
 
-    // Instantiation
+  // Instantiation of the visualization elements
   typedef otb::ImageLayerRenderingModel<OutputImageType>     ModelType;
   ModelType::Pointer model = ModelType::New();
 
 
-  typedef otb::ImageView<ModelType>                  ViewType;
-  typedef otb::ImageWidgetController                 ControllerType;
+  typedef otb::ImageView<ModelType>                   ViewType;
+  typedef otb::ImageWidgetController                  ControllerType;
   typedef otb::WidgetResizingActionHandler
-    <ModelType,ViewType>                             ResizingHandlerType;
+    <ModelType,ViewType>                              ResizingHandlerType;
   typedef otb::ChangeScaledExtractRegionActionHandler
-    <ModelType,ViewType>                             ChangeScaledRegionHandlerType;
+    <ModelType,ViewType>                              ChangeScaledRegionHandlerType;
   typedef otb::ChangeExtractRegionActionHandler
-    <ModelType,ViewType>                             ChangeRegionHandlerType;
+    <ModelType,ViewType>                              ChangeRegionHandlerType;
   typedef otb::ChangeScaleActionHandler
-    <ModelType,ViewType>                             ChangeScaleHandlerType;
+    <ModelType,ViewType>                              ChangeScaleHandlerType;
   typedef otb::PixelDescriptionModel<OutputImageType> PixelDescriptionModelType;
   typedef otb::PixelDescriptionActionHandler
     < PixelDescriptionModelType, ViewType>            PixelDescriptionActionHandlerType;
@@ -119,17 +111,7 @@ int main( int argc, char * argv[] )
   PixelDescriptionModelType::Pointer pixelModel = PixelDescriptionModelType::New();
   pixelModel->SetLayers(model->GetLayers());
 
-  // Filters for the second layer
-//   typedef itk::SobelEdgeDetectionImageFilter<ScalarImageType,ScalarImageType> FilterType;
-//   typedef otb::PerBandVectorImageFilter<ImageType,ImageType,FilterType>
-//   PerBandFilterType;
-
-
-
-  reader->UpdateOutputInformation();
-  std::cout << "NumBands: " << reader->GetOutput()->GetNumberOfComponentsPerPixel() << std::endl;
-
-  // Generate the first layer
+  // Generate the first layer: the remote sensing image
   typedef otb::ImageLayer<ImageType, OutputImageType>                 LayerType;
   typedef otb::ImageLayerGenerator<LayerType>        LayerGeneratorType;
   LayerGeneratorType::Pointer generator = LayerGeneratorType::New();
@@ -138,72 +120,42 @@ int main( int argc, char * argv[] )
   generator->GenerateLayer();
 
 
-  // Generate the second layer
-//   PerBandFilterType::Pointer filter = PerBandFilterType::New();
-//   filter->SetInput(reader->GetOutput());
+  // Generate the second layer: the rendered vector data
 
-     //Read the vector data
-  typedef otb::VectorData<> VectorDataType;
+  //Read the vector data
+  typedef otb::VectorData<>                         VectorDataType;
   typedef otb::VectorDataFileReader<VectorDataType> VectorDataFileReaderType;
   VectorDataFileReaderType::Pointer vectorDataReader = VectorDataFileReaderType::New();
-
   vectorDataReader->SetFileName(vectorfname);
 
-  //Reproject the vector data in the proper projection
+  //Reproject the vector data in the proper projection, ie, the remote sensing image projection
   typedef otb::VectorDataProjectionFilter<VectorDataType, VectorDataType> ProjectionFilterType;
   ProjectionFilterType::Pointer projection = ProjectionFilterType::New();
   projection->SetInput(vectorDataReader->GetOutput());
-//   projection->Update();
-//   std::string projectionRefWkt ="PROJCS[\"UTM Zone 31, Northern Hemisphere\",GEOGCS[\"WGS 84\",DATUM[\"WGS_1984\",SPHEROID[\"WGS 84\",6378137,298.257223563,AUTHORITY[\"EPSG\",\"7030\"]],TOWGS84[0,0,0,0,0,0,0],AUTHORITY[\"EPSG\",\"6326\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9108\"]],AXIS[\"Lat\",NORTH],AXIS[\"Long\",EAST],AUTHORITY[\"EPSG\",\"4326\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",3],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"Meter\",1]]";
-
-//   projection->SetOutputProjectionRef(projectionRefWkt);
 
   projection->SetOutputKeywordList(reader->GetOutput()->GetImageKeywordlist());
   projection->SetOutputOrigin(reader->GetOutput()->GetOrigin());
   projection->SetOutputSpacing(reader->GetOutput()->GetSpacing());
-//   projection->SetDEMDirectory("/home/christop/OTB/trunk/OTB-Data/Input/DEM/srtm_directory");
-  projection->SetDEMDirectory("/home/christop/data/SRTM");
+  projection->SetDEMDirectory(demdirectory); // a good DEM is compulsory to get a reasonable registration
 
+  // get some usefull information from the image to make sure that we are
+  // going to render the vector data in the same geometry
   ImageType::SizeType size;
-//   size[0] = 1000;
-//   size[1] = 1000;
-//   size[0] = 500;
-//   size[1] = 500;
   size[0] = reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0];
   size[1] = reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1];
 
   ImageType::PointType origin;
-//   origin[0] = 1.3769;//UL lon
-//   origin[1] = 43.5455;//UL lat
-//   origin[0] = 374149.980555821;//UL easting
-//   origin[1] = 4829183.99443839;//UL northing
   origin[0] = reader->GetOutput()->GetOrigin()[0];
   origin[1] = reader->GetOutput()->GetOrigin()[1];
 
   ImageType::SpacingType spacing;
-//   spacing[0] = 0.00002;
-//   spacing[1] = -0.00002;
-//   spacing[0] = 0.6;
-//   spacing[1] = -0.6;
   spacing[0] = reader->GetOutput()->GetSpacing()[0];
   spacing[1] = reader->GetOutput()->GetSpacing()[1];
 
-//   typedef otb::RemoteSensingRegion<double> RegionType;
-//   RegionType region;
-//   RegionType::SizeType sizeInUnit;
-//   sizeInUnit[0] = size[0]*spacing[0];
-//   sizeInUnit[1] = size[1]*spacing[1];
-//   region.SetSize(sizeInUnit);
-//   region.SetOrigin(origin);
-//   region.SetRegionProjection(projectionRefWkt);
-//
-//   typedef otb::VectorDataExtractROI<VectorDataType> ExtractROIType;
-//   ExtractROIType::Pointer extractROI = ExtractROIType::New();
-//   extractROI->SetRegion(region);
-//   extractROI->SetInput(projection->GetOutput());
-
-  typedef itk::RGBAPixel<unsigned char>                AlphaPixelType;
-  typedef otb::Image<AlphaPixelType,2>                  AlphaImageType;
+  // set up the rendering of the vector data, the VectorDataToImageFilter uses the
+  // mapnik library to obtain a nice rendering
+  typedef itk::RGBAPixel<unsigned char>                                AlphaPixelType;
+  typedef otb::Image<AlphaPixelType,2>                                 AlphaImageType;
   typedef otb::VectorDataToImageFilter<VectorDataType, AlphaImageType> VectorDataToImageFilterType;
   VectorDataToImageFilterType::Pointer vectorDataRendering = VectorDataToImageFilterType::New();
   vectorDataRendering->SetInput(projection->GetOutput());
@@ -212,12 +164,14 @@ int main( int argc, char * argv[] )
   vectorDataRendering->SetOrigin(origin);
   vectorDataRendering->SetSpacing(spacing);
   vectorDataRendering->SetScaleFactor(2.4);
+  // set up the style we want to use
   vectorDataRendering->AddStyle("minor-roads-casing");
   vectorDataRendering->AddStyle("minor-roads");
   vectorDataRendering->AddStyle("roads");
   vectorDataRendering->AddStyle("roads-text");
 
-
+  // rendering of the quicklook: the quicklook is at an entire different scale, so we don't want to
+  // render the same roads (only the main one).
   VectorDataToImageFilterType::Pointer vectorDataRenderingQL = VectorDataToImageFilterType::New();
   vectorDataRenderingQL->SetInput(projection->GetOutput());
 
@@ -240,35 +194,24 @@ int main( int argc, char * argv[] )
   vectorDataRenderingQL->AddStyle("roads");
   vectorDataRenderingQL->AddStyle("roads-text");
 
+  // Now we are ready to create this second layer
   typedef otb::ImageLayer<OutputImageType, OutputImageType>                 LayerRGBAType;
   typedef otb::ImageLayerGenerator<LayerRGBAType>        LayerGeneratorRGBAType;
   LayerGeneratorRGBAType::Pointer generator2 = LayerGeneratorRGBAType::New();
   generator2->SetImage(vectorDataRendering->GetOutput());
   generator2->GetLayer()->SetName("OSM");
 
+  // with slight transparency of the vector data layer
   typedef otb::Function::AlphaBlendingFunction<AlphaPixelType, RGBAPixelType> BlendingFunctionType;
   BlendingFunctionType::Pointer blendingFunction = BlendingFunctionType::New();
   blendingFunction->SetAlpha(0.8);
   generator2->SetBlendingFunction(blendingFunction);
 
-//   typedef otb::Function::DirectRenderingFunction<AlphaPixelType, RGBAPixelType> RenderingFunctionType;
   typedef otb::Function::StandardRenderingFunction<AlphaPixelType, RGBAPixelType> RenderingFunctionType;
   RenderingFunctionType::Pointer renderingFunction = RenderingFunctionType::New();
   renderingFunction->SetAutoMinMax(false);
   generator2->SetRenderingFunction(renderingFunction);
 
-//   AlphaImageType::Pointer dummyImage = AlphaImageType::New();
-//
-//   AlphaImageType::IndexType dummystart;
-//   dummystart[0] =   0;  // first index on X
-//   dummystart[1] =   0;  // first index on Y
-//
-//   AlphaImageType::RegionType dummyregion;
-//   dummyregion.SetSize( sizeQL );
-//   dummyregion.SetIndex( dummystart );
-//   dummyImage->SetRegions( dummyregion );
-//   dummyImage->Allocate();
-//   generator2->SetQuicklook(dummyImage);
 
   generator2->SetQuicklook(vectorDataRenderingQL->GetOutput());
 
@@ -279,6 +222,8 @@ int main( int argc, char * argv[] )
    // Add the layer to the model
   model->AddLayer(generator->GetLayer());
   model->AddLayer(generator2->GetLayer());
+
+  // All the following code is the manual building of the viewer system
 
   // Build a view
   ViewType::Pointer view = ViewType::New();
@@ -295,13 +240,13 @@ int main( int argc, char * argv[] )
   controller->AddActionHandler(resizingHandler);
 
   // Add the change scaled region handler
-  ChangeScaledRegionHandlerType::Pointer changeScaledHandler =ChangeScaledRegionHandlerType::New();
+  ChangeScaledRegionHandlerType::Pointer changeScaledHandler = ChangeScaledRegionHandlerType::New();
   changeScaledHandler->SetModel(model);
   changeScaledHandler->SetView(view);
   controller->AddActionHandler(changeScaledHandler);
 
   // Add the change extract region handler
-  ChangeRegionHandlerType::Pointer changeHandler =ChangeRegionHandlerType::New();
+  ChangeRegionHandlerType::Pointer changeHandler = ChangeRegionHandlerType::New();
   changeHandler->SetModel(model);
   changeHandler->SetView(view);
   controller->AddActionHandler(changeHandler);
@@ -325,9 +270,10 @@ int main( int argc, char * argv[] )
 
   // adding histograms rendering
   model->Update();
-    // Colors
-  typedef LayerType::HistogramType    HistogramType;
-  typedef otb::HistogramCurve<HistogramType>             HistogramCurveType;
+
+  // Colors
+  typedef LayerType::HistogramType            HistogramType;
+  typedef otb::HistogramCurve<HistogramType>  HistogramCurveType;
 
   HistogramCurveType::ColorType red,green,blue;
   red.Fill(0);
@@ -341,7 +287,6 @@ int main( int argc, char * argv[] )
   blue.Fill(0);
   blue[2]=1.;
   blue[3]=0.5;
-
 
   HistogramCurveType::Pointer rhistogram = HistogramCurveType::New();
   rhistogram->SetHistogram(generator->GetLayer()->GetHistogramList()->GetNthElement(2));
@@ -367,7 +312,6 @@ int main( int argc, char * argv[] )
   m_CurveWidget->SetXAxisLabel("Pixels");
   m_CurveWidget->SetYAxisLabel("Frequency");
 
-
   otb::PackedWidgetManager::Pointer windowManager = otb::PackedWidgetManager::New();
   windowManager->RegisterFullWidget(view->GetFullWidget());
   windowManager->RegisterZoomWidget(view->GetZoomWidget());
@@ -375,13 +319,6 @@ int main( int argc, char * argv[] )
   windowManager->RegisterPixelDescriptionWidget(pixelView->GetPixelDescriptionWidget());
   windowManager->RegisterHistogramWidget(m_CurveWidget);
   windowManager->Show();
-
-
-  typedef otb::StreamingImageFileWriter<OutputImageType> WriterType;
-  WriterType::Pointer         writer    = WriterType::New();
-  writer->SetInput(vectorDataRenderingQL->GetOutput());
-  writer->SetFileName("outputQL.tif");
-  writer->Update();
 
   if(run)
     {
