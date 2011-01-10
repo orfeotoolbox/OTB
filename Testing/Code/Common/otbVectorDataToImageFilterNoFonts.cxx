@@ -28,7 +28,7 @@ w/*=========================================================================
 #include "otbImage.h"
 #include "otbVectorDataToImageFilter.h"
 
-int otbVectorDataToImageFilter(int argc, char * argv[])
+int otbVectorDataToImageFilterNoFonts(int argc, char * argv[])
 {
 
   if (argc < 3)
