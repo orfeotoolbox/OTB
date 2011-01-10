@@ -86,9 +86,7 @@ int otbVectorDataToImageFilterWorld(int argc, char * argv[])
   vectorDataRendering->SetSpacing(spacing);
   vectorDataRendering->SetFontFileName(argv[10]);
   vectorDataRendering->AddStyle("world");
-#ifndef WIN32
   vectorDataRendering->AddStyle("city");
-#endif
   vectorDataRendering->UseAsOverlayOff();
 
   //Save the image in a file
