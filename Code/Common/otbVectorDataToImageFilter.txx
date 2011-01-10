@@ -241,7 +241,8 @@ VectorDataToImageFilter<TVectorData, TImage>
     }
     default:
     {
-    itkExceptionMacro(<< "Style Not Supported!");    
+    itkExceptionMacro(<< "Style Type Not Supported!");
+    break;
     }
     }
 
@@ -374,16 +375,14 @@ VectorDataToImageFilter<TVectorData, TImage>
     {
     itk::RGBAPixel<unsigned char> pix;
     pix[0] = *src;
-    ++src;
-    pix[1] = *src;
-    ++src;
-    pix[2] = *src;
-    ++src;
-    pix[3] = *src;
-    ++src;
-    it.Set(pix);
-    }
+    pix[1] = *(src+1);
+    pix[2] = *(src+2);
+    pix[3] = *(src+3);
+    src += 4;
 
+    it.Set(m_RGBAConverter->Convert(pix));
+    }
+  
   this->AfterThreadedGenerateData();
 }
 
