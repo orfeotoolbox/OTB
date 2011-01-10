@@ -251,8 +251,12 @@ VectorDataToImageFilter<TVectorData, TImage>
   std::string vectorDataProjectionWKT;
   itk::ExposeMetaData<std::string>(
     input->GetMetaDataDictionary(), MetaDataKey::ProjectionRefKey,  vectorDataProjectionWKT);
-  std::cout << "WKT -> " << vectorDataProjectionWKT << std::endl;
+  otbMsgDebugMacro(<< "WKT -> " << vectorDataProjectionWKT);
   m_SensorModelFlip = 1;
+
+  itk::MetaDataDictionary& dict = this->GetOutput()->GetMetaDataDictionary();
+  itk::EncapsulateMetaData<std::string> (dict, MetaDataKey::ProjectionRefKey,
+                                         static_cast<std::string>(vectorDataProjectionWKT));
 
   if (vectorDataProjectionWKT == "")
     {
@@ -274,7 +278,7 @@ VectorDataToImageFilter<TVectorData, TImage>
     m_SensorModelFlip =  1;
     otbMsgDevMacro(<< "The output map will be carto/geo geometry");
     }
-  std::cout << "Proj.4 -> " << m_VectorDataProjectionProj4 << std::endl;
+  otbMsgDebugMacro(<< "Proj.4 -> " << m_VectorDataProjectionProj4);
   m_Map.set_srs(m_VectorDataProjectionProj4);
 }
 
@@ -359,9 +363,9 @@ VectorDataToImageFilter<TVectorData, TImage>
 
   m_Map.zoomToBox(envelope);
 //     std::cout << "Envelope: " << lyr.envelope() << std::endl;
-  std::cout << "Envelope: " << envelope << std::endl;
+  otbMsgDebugMacro(<< "Envelope: " << envelope);
 
-  std::cout << "Map scale: " << m_Map.scale_denominator() << std::endl;
+  otbMsgDebugMacro(<< "Map scale: " << m_Map.scale_denominator());
   mapnik::Image32 buf(m_Map.getWidth(), m_Map.getHeight());
   mapnik::agg_renderer<mapnik::Image32> ren(m_Map, buf);
   ren.apply();
