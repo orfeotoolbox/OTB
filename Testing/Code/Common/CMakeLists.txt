@@ -942,6 +942,14 @@ ADD_TEST(coTuVariableLengthVectorConverter ${COMMON_TESTS12}
 #    otbVariableLengthVectorConverter
 #    )
 
+ADD_TEST(coTuRGBAPixelConverter ${COMMON_TESTS12}
+    otbRGBAPixelConverterNew
+    )
+
+ADD_TEST(coTvRGBAPixelConverter ${COMMON_TESTS12}
+    otbRGBAPixelConverter
+    )
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbCommonTests13 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1101,6 +1109,7 @@ SET(BasicCommon_SRCS12
 otbCommonTests12.cxx
 otbParserTest.cxx
 otbVariableLengthVectorConverter.cxx
+otbRGBAPixelConverter.cxx
 )
 
 
