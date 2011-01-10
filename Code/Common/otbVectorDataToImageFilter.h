@@ -20,6 +20,7 @@
 #define __otbVectorDataToImageFilter_h
 
 #include "itkImageSource.h"
+#include "otbRGBAPixelConverter.h"
 
 #include <mapnik/memory_datasource.hpp>
 #include <mapnik/map.hpp>
@@ -57,6 +58,7 @@ public:
   /** Some typedefs. */
   typedef TVectorData                                         VectorDataType;
   typedef TImage                                              ImageType;
+  typedef typename ImageType::PixelType                       PixelType;
   typedef typename ImageType::Pointer                         ImagePointer;
   typedef typename VectorDataType::ConstPointer               VectorDataConstPointer;
   typedef typename VectorDataType::DataTreeType::TreeNodeType InternalTreeNodeType;
@@ -79,6 +81,9 @@ public:
 
   /** Region typedef */
   typedef typename TImage::RegionType RegionType;
+
+  /** RGBA Converter typedef */
+  typedef RGBAPixelConverter<unsigned char, PixelType> RGBAConverterType;
 
   /** typedef specific to mapnik */
   typedef boost::shared_ptr<mapnik::memory_datasource> datasource_ptr;
@@ -141,6 +146,7 @@ public:
   itkGetMacro(UseAsOverlay, bool);
   itkBooleanMacro(UseAsOverlay);
 
+  /** Get/Set methods for the rendering style type (OSM or Binary) */
   itkSetMacro(RenderingStyleType, RenderingStyleType);
   itkGetMacro(RenderingStyleType, RenderingStyleType);
 
@@ -198,6 +204,9 @@ private:
   
   //Rendering style type
   RenderingStyleType m_RenderingStyleType;
+
+  //RGBA Converter
+  typename RGBAConverterType::Pointer m_RGBAConverter;
 
 }; // end class
 } // end namespace otb

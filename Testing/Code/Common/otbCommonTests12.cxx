@@ -30,4 +30,6 @@ void RegisterTests()
   REGISTER_TEST(otbParserTest);
   REGISTER_TEST(otbVariableLengthVectorConverterNew);
   //REGISTER_TEST(otbVariableLengthVectorConverter);
+  REGISTER_TEST(otbRGBAPixelConverterNew);
+  REGISTER_TEST(otbRGBAPixelConverter);
 }
