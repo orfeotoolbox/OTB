@@ -30,8 +30,11 @@
 * FTM et bruit
 * Résolution spatiale
 * Comment intégrer des simus temporelles?
-* Le simulateur est in framework
+* Le simulateur est un framework
 - certains blocs doivent être interchangeables
 - méta-paramètres du modèle
 - insérable dans un framework d'optimisation
   - on ne cherchera pas à optimiser tous les paramètres
+* Reunion du 10/12/2011
+** Point d'avancement 
+** Demander à faire des exes d'exemple
