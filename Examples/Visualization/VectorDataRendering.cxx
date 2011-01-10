@@ -1,20 +1,40 @@
 /*=========================================================================
 
-Program:   ORFEO Toolbox
-Language:  C++
-Date:      $Date$
-Version:   $Revision$
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
 
 
-Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-See OTBCopyright.txt for details.
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-PURPOSE.  See the above copyright notices for more information.
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+
+//  Software Guide : BeginCommandLineArgs
+//  INPUTS: {${INPUTLARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF}, {${INPUTLARGEDATA}/VECTOR/MidiPyrenees/roads.shp}
+//  ${OTB_DATA_ROOT}/Examples/DEM_srtm 1
+//  Software Guide : EndCommandLineArgs
+
+// Software Guide : BeginLatex
+//
+// This example shows how to combine vector data and combine them with an image. Typically, the
+// vector data would be a shapefile containing information from open street map (roads, etc), the
+// image would be a high resolution image.
+//
+// This example is able to reproject the vector data on the fly, render them using mapnik (including
+// road names) and display it as an overlay to a Quickbird image.
+//
+// For now the code is a bit convoluted, but it is helpful to illustrate the possibilities that it
+// opens up.
+//
+// Software Guide : EndLatex
+
 #include "otbImageLayerRenderingModel.h"
 #include "otbVectorImage.h"
 #include "itkRGBPixel.h"
@@ -30,8 +50,6 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbChangeScaledExtractRegionActionHandler.h"
 #include "otbChangeExtractRegionActionHandler.h"
 #include "otbChangeScaleActionHandler.h"
-// #include "itkSobelEdgeDetectionImageFilter.h"
-// #include "otbPerBandVectorImageFilter.h"
 #include "otbPixelDescriptionModel.h"
 #include "otbPixelDescriptionActionHandler.h"
 #include "otbPixelDescriptionView.h"
@@ -42,7 +60,6 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbVectorDataExtractROI.h"
 #include "otbVectorDataToImageFilter.h"
 #include "otbAlphaBlendingFunction.h"
-//#include "otbDirectRenderingFunction.h"
 
 #include "otbPackedWidgetManager.h"
 #include "otbStreamingImageFileWriter.h"
@@ -50,35 +67,20 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbCurves2DWidget.h"
 #include "otbImageLayer.h"
 
-// Code transfered to the Examples/VectorDataRendering.cxx
-
-// ./otbImageViewerEndToEndTwoLayers ~/OTB/trunk/OTB-Data/Input/QB_Toulouse_Ortho_PAN.tif ~/OTB/trunk/OTB-Data/LargeInput/VECTOR/MidiPyrenees/roads.shp
-// ./otbImageViewerEndToEndTwoLayers ~/OTB/trunk/OTB-Data/Input/QB_Toulouse_Ortho_XS.tif ~/OTB/trunk/OTB-Data/LargeInput/VECTOR/MidiPyrenees/roads.shp
-
-//Streaming
-// ./otbImageViewerEndToEndTwoLayers ~/OTB/trunk/OTB-Data/LargeInput/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF ~/OTB/trunk/OTB-Data/LargeInput/VECTOR/MidiPyrenees/roads.shp 200 500 200 1
-//./otbImageViewerEndToEndTwoLayers ~/data-waitingMove/Singapore/1/000000173549_01_P001_MUL/04MAR21031747-M1BS-000000173549_01_P001.TIF ~/data/Singapore-shapefile2/singapore_highway.shp
-
-//./otbImageViewerEndToEndTwoLayers ~/OTB/trunk/OTB-Data/LargeInput/SPOT5_SCENE01/IMAGERY.TIF ~/data/Asia/roads.shp
-
-// ./otbImageViewerEndToEndTwoLayers ~/data2/Palsar/486_0010_20061221_FBS_11/VOL-ALPSRP048370010-H1.1__A ~/data/Singapore-shapefile2/singapore_highway.shp 200 500 200 1
-// ./otbImageViewerEndToEndTwoLayers ~/data2/Palsar/138_0350_20100116_FBS_11/VOL-ALPSRP211960350-H1.1__A /home/christop/Haiti/roads.shp 1
-
-//WARNING the current configuration of the program is setup for images in sensor coordinates
 
 int main( int argc, char * argv[] )
 {
   // params
-  const char * infname = argv[1];
-  const char * vectorfname = argv[2];
+  const string infname = argv[1];
+  const string vectorfname = argv[2];
+  const string demdirectory = argv[3];
   int run   = 1;
-  if (argc > 3)
+  if (argc > 4)
   {
-    run = atoi(argv[3]);
+    run = atoi(argv[4]);
   }
 
 
-  // typedefs
 
   typedef otb::VectorImage<double,2>                  ImageType;
   typedef ImageType::PixelType                        PixelType;
