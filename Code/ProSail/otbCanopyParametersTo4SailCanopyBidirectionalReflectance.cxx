@@ -86,7 +86,7 @@ CanopyParametersTo4SailCanopyBidirectionalReflectance::DataObjectPointer
 CanopyParametersTo4SailCanopyBidirectionalReflectance
 ::MakeOutput(unsigned int)
 {
-   return static_cast<itk::DataObject *>(CanopyBidirectionalReflectanceType::New().GetPointer());
+   return static_cast<itk::DataObject*>(CanopyBidirectionalReflectanceType::New().GetPointer());
 }
 
 CanopyParametersTo4SailCanopyBidirectionalReflectance::CanopyBidirectionalReflectanceType *
@@ -204,7 +204,7 @@ CanopyParametersTo4SailCanopyBidirectionalReflectance
    double resh,resv;
    VectorPairType reshVect, resvVect;
 
-
+   
    int nbdata = sizeof(dataSpecP5B) / sizeof(dataSpec);
    for (int i = 0 ; i < nbdata ; i++)
    {
@@ -215,7 +215,7 @@ CanopyParametersTo4SailCanopyBidirectionalReflectance
       Rsoil2 = dataSpecP5B[i].wetSoil; //11
       rho = leaftOpticalProperties->GetReflectance()[i].second; //rho = LRT[1][i];
       tau = leaftOpticalProperties->GetTransmitance()[i].second; //tau = LRT[2][i];
-      
+
       // direct/diffuse light
       //Es = direct
       //Ed = diffuse

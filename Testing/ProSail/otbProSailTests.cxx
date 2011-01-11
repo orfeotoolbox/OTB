@@ -26,7 +26,7 @@
 
 void RegisterTests()
 {
-//   REGISTER_TEST(otbProSailNew);
-//   REGISTER_TEST(otbProspectTest);
+  REGISTER_TEST(otbProSailNew);
+  REGISTER_TEST(otbProspectTest);
   REGISTER_TEST(otbSailTest);
 }

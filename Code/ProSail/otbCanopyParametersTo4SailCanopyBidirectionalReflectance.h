@@ -68,7 +68,7 @@ class ITK_EXPORT CanopyParametersTo4SailCanopyBidirectionalReflectance : public 
       virtual void GenerateData();
       
       /** Get Output */
-      DataObjectPointer MakeOutput(unsigned int);
+      virtual DataObjectPointer MakeOutput(unsigned int);
       
       virtual CanopyBidirectionalReflectanceType * GetOutput();
       
@@ -104,7 +104,7 @@ class ITK_EXPORT CanopyParametersTo4SailCanopyBidirectionalReflectance : public 
 
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbCanopyParametersTo4SailCanopyBidirectionalReflectance.cxx"
+// #include "otbCanopyParametersTo4SailCanopyBidirectionalReflectance.cxx"
 #endif
 
 #endif

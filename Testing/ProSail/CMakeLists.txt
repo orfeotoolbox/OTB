@@ -18,8 +18,8 @@ ADD_TEST(otbSailTest ${PROSAIL_TESTS}
         
 SET(PROSAIL_SRCS
 otbProSailTests.cxx
-# otbProSailNew.cxx
-# otbProspectTest.cxx
+otbProSailNew.cxx
+otbProspectTest.cxx
 otbSailTest.cxx
 )
 

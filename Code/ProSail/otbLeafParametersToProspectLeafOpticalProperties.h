@@ -84,7 +84,7 @@ class ITK_EXPORT LeafParametersToProspectLeafOpticalProperties : public itk::Pro
 
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLeafParametersToProspectLeafOpticalProperties.cxx"
+// #include "otbLeafParametersToProspectLeafOpticalProperties.cxx"
 #endif
 
 #endif

@@ -75,14 +75,14 @@ int otbSailTest(int argc, char * argv[])
 
    sail->SetCanopyParameters(canopyParams);
    sail->SetLeafOpticalProperties(prospect->GetOutput());
-   sail->GenerateData();
    sail->Update();
    
-//    for(unsigned int i=0;i<prospect->GetOutput()->GetReflectance().size();i++)
-//    {
-//       std::cout<<"lambda : "<<prospect->GetOutput()->GetReflectance()[i].first;
-//       std::cout<<" , refl : "<<prospect->GetOutput()->GetReflectance()[i].second;
-//    }
+   for(unsigned int i=0;i<prospect->GetOutput()->GetReflectance().size();i++)
+   {
+      std::cout<<"lambda : "<<sail->GetOutput()->GetResh()[i].first;
+      std::cout<<" , resh : "<<sail->GetOutput()->GetResh()[i].second;
+      std::cout<<" , resv : "<<sail->GetOutput()->GetResv()[i].second<<std::endl;
+   }
 
    
    return EXIT_SUCCESS;
