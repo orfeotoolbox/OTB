@@ -791,6 +791,15 @@ ADD_TEST(coTvVectorDataToImageFilter ${COMMON_TESTS9}
         ${BASELINE_FILES}/DejaVuSans.ttf # font
 )
 
+ADD_TEST(coTvVectorDataToImageFilterBinary ${COMMON_TESTS9}
+     --compare-image ${NOTOL}
+	   	     ${BASELINE}/coTvVectorDataToImageFilterBinary.png
+                     ${TEMP}/coTvVectorDataToImageFilterBinary.png
+   otbVectorDataToImageFilterBinary
+        ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
+	${TEMP}/coTvVectorDataToImageFilterBinary.png
+)
+
 ADD_TEST(coTvVectorDataToImageFilterNoFonts ${COMMON_TESTS9}
      --compare-image ${NOTOL}
 	   	     ${BASELINE}/coTvVectorDataToImageFilterNoFonts.png
