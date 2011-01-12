@@ -58,10 +58,10 @@ VectorDataToImageFilter<TVectorData, TImage>
   m_Direction.SetIdentity();
   m_Size.Fill(0);
   m_StartIndex.Fill(0);
-  m_Map = mapnik::Map();
   m_SensorModelFlip = 1;
   m_ScaleFactor = 1.0;
   m_VectorDataProjectionProj4 = "";
+  m_VectorDataProjectionWKT = "";
 }
 
 template <class TVectorData, class TImage>
@@ -69,7 +69,7 @@ void
 VectorDataToImageFilter<TVectorData, TImage>
 ::SetInput(const VectorDataType *input)
 {
-// Process object is not const-correct so the const_cast is required here
+  // Process object is not const-correct so the const_cast is required here
   this->itk::ProcessObject::SetNthInput(0,
                                         const_cast<VectorDataType *>(input));
 }
@@ -172,7 +172,6 @@ void
 VectorDataToImageFilter<TVectorData, TImage>
 ::GenerateOutputInformation()
 {
-
   // we can't call the superclass method here.
 
   // get pointers to the input and output
@@ -193,6 +192,10 @@ VectorDataToImageFilter<TVectorData, TImage>
   outputPtr->SetOrigin(m_Origin);
   outputPtr->SetDirection(m_Direction);
 
+  itk::MetaDataDictionary& dict = outputPtr->GetMetaDataDictionary();
+  itk::EncapsulateMetaData<std::string> (dict, MetaDataKey::ProjectionRefKey,
+                                           static_cast<std::string>(m_VectorDataProjectionWKT));
+
   //TODO update or check the projection information
 
   return;
@@ -208,57 +211,28 @@ VectorDataToImageFilter<TVectorData, TImage>
 {
 
   Superclass::BeforeThreadedGenerateData();
-
+  
+  //Font Handling
   if(!m_FontFileName.empty())
     mapnik::freetype_engine::register_font(m_FontFileName);
   
-  //Load the OSM styles using helper class
+  //Handle the style type using helper class
   otb::VectorDataStyle::Pointer styleLoader = otb::VectorDataStyle::New();
   styleLoader->SetScaleFactor(m_ScaleFactor);
-  switch (m_RenderingStyleType)
-    {
-    case OSM:
-    {
-    styleLoader->LoadOSMStyle(m_Map);
-    if (m_UseAsOverlay)
-      {
-      //Set the default backgroup to transparent
-      m_Map.set_background(mapnik::color(255, 255, 255, 0));
-      }
-    else
-      {
-      m_Map.set_background(mapnik::color("#b5d0d0"));
-      }
-    break;
-    }
-    case Binary:
-    {
-    styleLoader->LoadBinaryRasterizationStyle(m_Map);
-    //Set the backgroup to white
-    m_Map.set_background(mapnik::color("#ffffff"));
-    break;
-    }
-    default:
-    {
-    itkExceptionMacro(<< "Style Type Not Supported!");
-    break;
-    }
-    }
-
+  
   //We assume that all the data are reprojected before using OTB.
   VectorDataConstPointer input = this->GetInput();
   //Converting the projection string to the proj.4 format
-  std::string vectorDataProjectionWKT;
   itk::ExposeMetaData<std::string>(
-    input->GetMetaDataDictionary(), MetaDataKey::ProjectionRefKey,  vectorDataProjectionWKT);
-  otbMsgDebugMacro(<< "WKT -> " << vectorDataProjectionWKT);
-  m_SensorModelFlip = 1;
+    input->GetMetaDataDictionary(), MetaDataKey::ProjectionRefKey,  m_VectorDataProjectionWKT);
+  otbMsgDebugMacro(<< "WKT -> " << m_VectorDataProjectionWKT);
 
   itk::MetaDataDictionary& dict = this->GetOutput()->GetMetaDataDictionary();
-  itk::EncapsulateMetaData<std::string> (dict, MetaDataKey::ProjectionRefKey,
-                                         static_cast<std::string>(vectorDataProjectionWKT));
-
-  if (vectorDataProjectionWKT == "")
+  //itk::EncapsulateMetaData<std::string> (dict, MetaDataKey::ProjectionRefKey,
+  //                                         static_cast<std::string>(m_VectorDataProjectionWKT));
+  m_SensorModelFlip = 1;
+  
+  if (m_VectorDataProjectionWKT == "")
     {
     //We assume that it is an image in sensor model geometry
     //and tell mapnik that this is utm
@@ -269,7 +243,7 @@ VectorDataToImageFilter<TVectorData, TImage>
     }
   else
     {
-    OGRSpatialReferenceH oSRS = OSRNewSpatialReference(vectorDataProjectionWKT.c_str());
+    OGRSpatialReferenceH oSRS = OSRNewSpatialReference(m_VectorDataProjectionWKT.c_str());
     char * pszProj4;
     OSRExportToProj4(oSRS, &pszProj4);
     m_VectorDataProjectionProj4 = pszProj4;
@@ -279,7 +253,123 @@ VectorDataToImageFilter<TVectorData, TImage>
     otbMsgDevMacro(<< "The output map will be carto/geo geometry");
     }
   otbMsgDebugMacro(<< "Proj.4 -> " << m_VectorDataProjectionProj4);
-  m_Map.set_srs(m_VectorDataProjectionProj4);
+  
+  //Internal Tiling Support
+  //Workaround to overcome mapnik maximum tile size limitation
+  ImagePointer output = this->GetOutput();
+  RegionType   requestedRegion = output->GetRequestedRegion();
+  otbMsgDevMacro("requestedRegion: " << requestedRegion);
+  
+  m_NbTile = (vcl_pow(max(vcl_floor((double)requestedRegion.GetSize()[0] / 16000),
+                          vcl_floor((double)requestedRegion.GetSize()[1] / 16000))+1, 2));
+  
+  //std::cout << "nbTile: " << m_NbTile << std::endl;
+  //std::cout << "requestedRegion: " << requestedRegion << std::endl;
+  
+  m_TilingRegions.resize(m_NbTile);
+  m_Maps.resize(m_NbTile);
+  m_VectorDataExtractors.resize(m_NbTile);
+  
+  unsigned int tilingRegionsIdx = 0;
+  unsigned int stdXOffset;
+  unsigned int stdYOffset;
+  
+  stdXOffset = vcl_floor((double)requestedRegion.GetSize()[0]/ (m_NbTile/2))+1;
+  stdYOffset = vcl_floor((double)requestedRegion.GetSize()[1]/ (m_NbTile/2))+1;
+  
+  for(unsigned int i=0; i < vcl_floor((double)(m_NbTile)/2 + 0.5); i++)
+    {
+    for(unsigned int j=0; j < vcl_floor((double)(m_NbTile)/2 + 0.5); j++)
+      {
+      //Set Regions
+      SizeType size;
+      IndexType index;
+      if(m_NbTile == 1)
+        {
+        index = requestedRegion.GetIndex();      
+        size = requestedRegion.GetSize();
+        }
+      else
+        {
+        index[0] = requestedRegion.GetIndex()[0] + i * stdXOffset;
+        index[1] = requestedRegion.GetIndex()[1] + j * stdYOffset;
+        
+        size[0] = min((unsigned int)(requestedRegion.GetSize()[0] - index[0]), stdXOffset);
+        size[1] = min((unsigned int)(requestedRegion.GetSize()[1] - index[1]), stdYOffset);
+        }
+      m_TilingRegions[tilingRegionsIdx].SetIndex(index);
+      m_TilingRegions[tilingRegionsIdx].SetSize(size);
+      
+      //std::cout << "tileRegions[" << tilingRegionsIdx << "] : " 
+      //          << m_TilingRegions[tilingRegionsIdx] << std::endl;
+      
+      //Set Maps
+      m_Maps[tilingRegionsIdx] = mapnik::Map();
+      
+      ////Load the style type
+      switch (m_RenderingStyleType)
+        {
+        case OSM:
+        {
+        styleLoader->LoadOSMStyle(m_Maps[tilingRegionsIdx]);
+        if (m_UseAsOverlay)
+          {
+          //Set the default backgroup to transparent
+          m_Maps[tilingRegionsIdx].set_background(mapnik::color(255, 255, 255, 0));
+          }
+        else
+          {
+          m_Maps[tilingRegionsIdx].set_background(mapnik::color("#b5d0d0"));
+          }
+        break;
+        }
+        case Binary:
+        {
+        styleLoader->LoadBinaryRasterizationStyle(m_Maps[tilingRegionsIdx]);
+        //Set the backgroup to white
+        m_Maps[tilingRegionsIdx].set_background(mapnik::color("#ffffff"));
+        break;
+        }
+        default:
+        {
+        itkExceptionMacro(<< "Style Type Not Supported!");
+        break;
+        }
+        }
+      
+      ////Set Mapnik projection information
+      m_Maps[tilingRegionsIdx].set_srs(m_VectorDataProjectionProj4);
+      
+      //Set VectorData extracts
+      m_VectorDataExtractors[tilingRegionsIdx].resize(this->GetNumberOfInputs());
+      for (unsigned int idx = 0; idx < this->GetNumberOfInputs(); ++idx)
+        {
+        if (this->GetInput(idx))
+          {
+          RemoteSensingRegionType rsRegion;
+          SizePhyType             sizePhy;
+          sizePhy[0] = size[0] * m_Spacing[0];
+          sizePhy[1] = size[1] * m_Spacing[1];
+          rsRegion.SetSize(sizePhy);
+          OriginType              origin;
+          origin[0] = m_Origin[0] + index[0] * m_Spacing[0];
+          origin[1] = m_Origin[1] + index[1] * m_Spacing[1];
+          rsRegion.SetOrigin(origin);
+          rsRegion.SetRegionProjection(m_VectorDataProjectionWKT);
+          
+          //std::cout << "m_SensorModelFlip: " << m_SensorModelFlip << std::endl;
+          //std::cout << "rsTileRegions[" << tilingRegionsIdx << "] : " 
+          //          << rsRegion << std::endl;
+          
+          m_VectorDataExtractors[tilingRegionsIdx][idx] = VectorDataExtractROIType::New();
+          m_VectorDataExtractors[tilingRegionsIdx][idx]->SetRegion(rsRegion);
+          m_VectorDataExtractors[tilingRegionsIdx][idx]->SetInput(this->GetInput(idx));            
+          }
+        }
+      
+      tilingRegionsIdx ++;
+      } 
+    } 
 }
 
 /**
@@ -290,103 +380,109 @@ void
 VectorDataToImageFilter<TVectorData, TImage>
 ::GenerateData(void)
 {
+
   this->AllocateOutputs();
 
   this->BeforeThreadedGenerateData();
 
-  ImagePointer output = this->GetOutput();
-  RegionType   requestedRegion = output->GetRequestedRegion();
-  otbMsgDevMacro("requestedRegion: " << requestedRegion);
-
-  if ((requestedRegion.GetSize()[0] > (16LU << 10)) || (requestedRegion.GetSize()[1] > (16LU << 10)))
+  if (m_StyleList.size() == 0)
     {
-    //Limitation in mapnik/map.hpp, where we have
-    // static const unsigned MIN_MAPSIZE=16;
-    // static const unsigned MAX_MAPSIZE=MIN_MAPSIZE<<11;
-    itkExceptionMacro(<< "Mapnik does not support the generation of tiles bigger than 16 384");
-    }
-
-  //Delete the previous layers from the map
-  int numberLayer = m_Map.layerCount();
-  for (int i = numberLayer - 1; i >= 0; i--) //yes, int.
-    {
-    m_Map.removeLayer(i);
-    }
-  m_Map.resize(requestedRegion.GetSize()[0], requestedRegion.GetSize()[1]);
-
-  for (unsigned int idx = 0; idx < this->GetNumberOfInputs(); ++idx)
-    {
-    if (this->GetInput(idx))
-      {
-      datasource_ptr mDatasource = datasource_ptr(new mapnik::memory_datasource);
-
-      VectorDataConstPointer input = this->GetInput(idx);
-      InternalTreeNodeType * inputRoot = const_cast<InternalTreeNodeType *>(input->GetDataTree()->GetRoot());
-
-      ProcessNode(inputRoot, mDatasource);
-      otbMsgDevMacro("Datasource size: " << mDatasource->size());
-
-      std::stringstream layerName;
-      layerName << "layer-" << idx;
-      mapnik::Layer lyr(layerName.str());
-      lyr.set_srs(m_VectorDataProjectionProj4);
-      lyr.set_datasource(mDatasource);
-      //     lyr.add_style("river");
-      //     lyr.add_style("minor-roads-casing");
-      //     lyr.add_style("minor-roads");
-      //     lyr.add_style("roads");
-      //     lyr.add_style("roads-text");
-      //     lyr.add_style("world");
-
-      if (m_StyleList.size() == 0)
+    switch (m_RenderingStyleType)
+        {
+        case OSM:
+        {
+        //Add default styles
+        itkExceptionMacro(<< "No style is provided for the vector data");
+        break;
+        }
+        case Binary:
+        {
+        //Add default styles
+        this->AddStyle("binary-rasterization");
+        break;
+        }
+        default:
         {
         itkExceptionMacro(<< "No style is provided for the vector data");
+        break;
         }
-      for (unsigned int i = 0; i < m_StyleList.size(); ++i)
+        }
+    }
+
+  ImagePointer output = this->GetOutput();
+ 
+  for (unsigned int tileIdx = 0; tileIdx < m_NbTile; ++tileIdx)
+    {
+    //Delete the previous layers from the map
+    int numberLayer = m_Maps[tileIdx].layerCount();
+    for (int i = numberLayer - 1; i >= 0; i--) //yes, int.
+      {
+      m_Maps[tileIdx].removeLayer(i);
+      }
+    m_Maps[tileIdx].resize(m_TilingRegions[tileIdx].GetSize()[0], m_TilingRegions[tileIdx].GetSize()[1]);
+    
+    for (unsigned int vdIdx = 0; vdIdx < this->GetNumberOfInputs(); ++vdIdx)
+      {
+      if (this->GetInput(vdIdx))
         {
-        lyr.add_style(m_StyleList[i]);
+        datasource_ptr mDatasource = datasource_ptr(new mapnik::memory_datasource);
+        
+        m_VectorDataExtractors[tileIdx][vdIdx]->Update();
+        VectorDataConstPointer input = m_VectorDataExtractors[tileIdx][vdIdx]->GetOutput();
+        InternalTreeNodeType * inputRoot = const_cast<InternalTreeNodeType *>(input->GetDataTree()->GetRoot());
+        
+        ProcessNode(inputRoot, mDatasource);
+        otbMsgDevMacro("Datasource size: " << mDatasource->size());
+        
+        std::stringstream layerName;
+        layerName << "layer-" << tileIdx;
+        mapnik::Layer lyr(layerName.str());
+        lyr.set_srs(m_VectorDataProjectionProj4);
+        lyr.set_datasource(mDatasource);
+        
+        for (unsigned int i = 0; i < m_StyleList.size(); ++i)
+          {
+          lyr.add_style(m_StyleList[i]);
+          }
+        
+        m_Maps[tileIdx].addLayer(lyr);
         }
+      } 
+    assert((m_SensorModelFlip == 1) || (m_SensorModelFlip == -1));
 
-      m_Map.addLayer(lyr);
-
+    mapnik::Envelope<double> envelope(
+      m_Origin[0] + m_TilingRegions[tileIdx].GetIndex()[0]*m_Spacing[0],
+      m_SensorModelFlip*(m_Origin[1] + m_TilingRegions[tileIdx].GetIndex()[1] * m_Spacing[1] 
+                         + m_TilingRegions[tileIdx].GetSize()[1] * m_Spacing[1]),
+      m_Origin[0] + m_TilingRegions[tileIdx].GetIndex()[0] * m_Spacing[0] 
+      + m_TilingRegions[tileIdx].GetSize()[0] * m_Spacing[0],
+      m_SensorModelFlip*(m_Origin[1] + m_TilingRegions[tileIdx].GetIndex()[1] * m_Spacing[1])
+      );
+        
+    m_Maps[tileIdx].zoomToBox(envelope);
+    otbMsgDebugMacro(<< "Envelope: " << envelope);
+    
+    otbMsgDebugMacro(<< "Map scale: " << m_Maps[tileIdx].scale_denominator());
+    mapnik::Image32 buf(m_Maps[tileIdx].getWidth(), m_Maps[tileIdx].getHeight());
+    mapnik::agg_renderer<mapnik::Image32> ren(m_Maps[tileIdx], buf);
+    ren.apply();
+    
+    const unsigned char * src = buf.raw_data();
+    
+    itk::ImageRegionIterator<ImageType> it(output, m_TilingRegions[tileIdx]);
+    
+    for (it.GoToBegin(); !it.IsAtEnd(); ++it)
+      {
+      itk::RGBAPixel<unsigned char> pix;
+      pix[0] = *src;
+      pix[1] = *(src+1);
+      pix[2] = *(src+2);
+      pix[3] = *(src+3);
+      src += 4;
+      
+      it.Set(m_RGBAConverter->Convert(pix));
       }
     }
-  assert((m_SensorModelFlip == 1) || (m_SensorModelFlip == -1));
-
-  mapnik::Envelope<double> envelope(
-    m_Origin[0] + requestedRegion.GetIndex()[0]*m_Spacing[0],
-    m_SensorModelFlip*(m_Origin[1] + requestedRegion.GetIndex()[1] * m_Spacing[1] + m_Spacing[1] *
-                       requestedRegion.GetSize()[1]),
-    m_Origin[0] + requestedRegion.GetIndex()[0]*m_Spacing[0] + m_Spacing[0]*requestedRegion.GetSize()[0],
-    m_SensorModelFlip*(m_Origin[1] + requestedRegion.GetIndex()[1] * m_Spacing[1])
-    );
-
-  m_Map.zoomToBox(envelope);
-//     std::cout << "Envelope: " << lyr.envelope() << std::endl;
-  otbMsgDebugMacro(<< "Envelope: " << envelope);
-
-  otbMsgDebugMacro(<< "Map scale: " << m_Map.scale_denominator());
-  mapnik::Image32 buf(m_Map.getWidth(), m_Map.getHeight());
-  mapnik::agg_renderer<mapnik::Image32> ren(m_Map, buf);
-  ren.apply();
-
-  const unsigned char * src = buf.raw_data();
-
-  itk::ImageRegionIterator<ImageType> it(output, output->GetRequestedRegion());
-
-  for (it.GoToBegin(); !it.IsAtEnd(); ++it)
-    {
-    itk::RGBAPixel<unsigned char> pix;
-    pix[0] = *src;
-    pix[1] = *(src+1);
-    pix[2] = *(src+2);
-    pix[3] = *(src+3);
-    src += 4;
-
-    it.Set(m_RGBAConverter->Convert(pix));
-    }
-  
-  this->AfterThreadedGenerateData();
 }
 
 template <class TVectorData, class TImage>
@@ -426,10 +522,6 @@ VectorDataToImageFilter<TVectorData, TImage>
         }
       case FEATURE_POINT:
         {
-//           itkExceptionMacro(<<"This type (FEATURE_POINT) is not handle (yet) by VectorDataToImageFilter(), please request for it");
-//           std::cout << std::setprecision(15);
-//           std::cout << " ** Inserting new point **" << std::endl;
-
         typedef mapnik::vertex<double, 2>  vertex2d;
         typedef mapnik::point<vertex2d>    point2d;
         typedef boost::shared_ptr<point2d> point_ptr;
@@ -462,8 +554,6 @@ VectorDataToImageFilter<TVectorData, TImage>
         }
       case otb::FEATURE_LINE:
         {
-//           std::cout << std::setprecision(15);
-//           std::cout << " ** Inserting new line **" << std::endl;
         typedef mapnik::vertex<double, 2>                             vertex2d;
         typedef mapnik::line_string<vertex2d, mapnik::vertex_vector2> line2d;
         typedef boost::shared_ptr<line2d>                             line_ptr;
@@ -518,7 +608,6 @@ VectorDataToImageFilter<TVectorData, TImage>
         }
       case FEATURE_POLYGON:
         {
-//         itkExceptionMacro(<<"This type (FEATURE_POLYGON) is not handle (yet) by VectorDataToImageFilter(), please request for it");
         typedef mapnik::vertex<double, 2>                         vertex2d;
         typedef mapnik::polygon<vertex2d, mapnik::vertex_vector2> polygon2d;
         typedef boost::shared_ptr<polygon2d>                      polygon_ptr;

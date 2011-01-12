@@ -21,6 +21,8 @@
 
 #include "itkImageSource.h"
 #include "otbRGBAPixelConverter.h"
+#include "otbVectorDataExtractROI.h"
+#include "otbRemoteSensingRegion.h"
 
 #include <mapnik/memory_datasource.hpp>
 #include <mapnik/map.hpp>
@@ -36,6 +38,22 @@ namespace otb
    * We assume that all the data have been reprojected before in the desired cartographic,
    * geographic or sensor model projection (using the otb::VectorDataProjectionFilter).
    * This filter does not use the projection capabilities of mapnik.
+   * 
+   * According to the class otb::VectorDataStyle, this filter supports
+   * two different rendering style types: OSM and Binary. 
+   * The OSM style type provides styles to render a vector data the
+   * OSM way. These styles must be specified usind the method
+   * "AddStyle()".
+   * The Binary style type provides automaticaly a set of styles to
+   * render a vectro data as a binary mask (foreground pixel value
+   * 255, background pixel value 0).
+   * 
+   * Note:
+   * This class only support the following types as TImage template
+   * parameter:
+   * otb::Image<PixelType>,
+   * otb::Image< itk::RGBAPixel<InternalPixelType> >,
+   * otb::Image< itk::RGBPixel<InternalPixelType> >.
    *
    */
 
@@ -63,6 +81,9 @@ public:
   typedef typename VectorDataType::ConstPointer               VectorDataConstPointer;
   typedef typename VectorDataType::DataTreeType::TreeNodeType InternalTreeNodeType;
   typedef typename InternalTreeNodeType::ChildrenListType     ChildrenListType;
+  typedef VectorDataExtractROI<VectorDataType>                VectorDataExtractROIType;
+  typedef RemoteSensingRegion<double>                         RemoteSensingRegionType;
+  typedef typename RemoteSensingRegionType::SizeType          SizePhyType;
 
   /** Number of dimensions. */
   itkStaticConstMacro(ImageDimension, unsigned int,
@@ -154,6 +175,10 @@ public:
   itkSetStringMacro(FontFileName);
   itkGetStringMacro(FontFileName);
 
+  /** Add accessors to the Projection in the WKT format */
+  itkSetStringMacro(VectorDataProjectionWKT);
+  itkGetStringMacro(VectorDataProjectionWKT);
+
 protected:
   /** Constructor */
   VectorDataToImageFilter();
@@ -180,8 +205,6 @@ private:
   IndexType     m_StartIndex;
   DirectionType m_Direction;
 
-  mapnik::Map m_Map;
-
   // font file name
   std::string   m_FontFileName;
 
@@ -202,11 +225,21 @@ private:
   //Projection in the proj.4 format (for mapnik)
   std::string m_VectorDataProjectionProj4;
   
+  //Projection in the WKT format
+  std::string m_VectorDataProjectionWKT;
+  
   //Rendering style type
   RenderingStyleType m_RenderingStyleType;
 
   //RGBA Converter
   typename RGBAConverterType::Pointer m_RGBAConverter;
+
+  //Internal Tiling
+  unsigned int                                                   m_NbTile;
+  std::vector<RegionType>                                        m_TilingRegions;
+  std::vector<mapnik::Map>                                       m_Maps;
+  std::vector< std::vector<typename VectorDataExtractROIType::Pointer> >   
+                                                                 m_VectorDataExtractors;
 
 }; // end class
 } // end namespace otb
