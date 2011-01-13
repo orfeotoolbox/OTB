@@ -21,9 +21,14 @@
 #include "otbLeafParametersToProspectLeafOpticalProperties.h"
 #include "otbLeafParameters.h"
 
-int otbProspectTest(int argc, char * argv[])
+#include <iostream>
+#include <fstream>
+
+int otbProspectReflTest(int argc, char * argv[])
 {
 
+   char * OutputName      = argv[1];
+   
    typedef otb::LeafParametersToProspectLeafOpticalProperties PropectType;
    typedef otb::LeafParameters LeafParametersType;
    
@@ -48,12 +53,12 @@ int otbProspectTest(int argc, char * argv[])
    leafParams->SetN(N);
    
    prospect->SetInput(leafParams);
-   prospect->GenerateData();
+   prospect->Update();
    
+   std::ofstream outputFile(OutputName,std::ios::out);
    for(unsigned int i=0;i<prospect->GetOutput()->GetReflectance().size();i++)
    {
-      std::cout<<"lambda : "<<prospect->GetOutput()->GetReflectance()[i].first;
-      std::cout<<" , refl : "<<prospect->GetOutput()->GetReflectance()[i].second<<std::endl;
+      outputFile<<prospect->GetOutput()->GetReflectance()[i].second<<std::endl;
    }
 
    

@@ -24,9 +24,14 @@
 #include "otbCanopyParametersTo4SailCanopyBidirectionalReflectance.h"
 #include "otbLeafParametersToProspectLeafOpticalProperties.h"
 
-int otbSailTest(int argc, char * argv[])
-{
+#include <iostream>
+#include <fstream>
 
+int otbSailReflHTest(int argc, char * argv[])
+{
+   char * OutputName      = argv[1];
+   
+   
    typedef otb::LeafParametersToProspectLeafOpticalProperties ProspectType;
    typedef otb::CanopyParametersTo4SailCanopyBidirectionalReflectance SailType;
    typedef otb::LeafParameters LeafParametersType;
@@ -77,11 +82,10 @@ int otbSailTest(int argc, char * argv[])
    sail->SetLeafOpticalProperties(prospect->GetOutput());
    sail->Update();
    
-   for(unsigned int i=0;i<prospect->GetOutput()->GetReflectance().size();i++)
+   std::ofstream outputFile(OutputName,std::ios::out);
+   for(unsigned int i=0;i<sail->GetOutput()->GetResh().size();i++)
    {
-      std::cout<<"lambda : "<<sail->GetOutput()->GetResh()[i].first;
-      std::cout<<" , resh : "<<sail->GetOutput()->GetResh()[i].second;
-      std::cout<<" , resv : "<<sail->GetOutput()->GetResv()[i].second<<std::endl;
+      outputFile<<sail->GetOutput()->GetResh()[i].second<<std::endl;
    }
 
    

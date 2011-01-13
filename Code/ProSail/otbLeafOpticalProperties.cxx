@@ -31,7 +31,7 @@ LeafOpticalProperties
 ::LeafOpticalProperties()
 {
    m_Reflectance.clear();
-   m_Transmitance.clear();
+   m_Transmittance.clear();
 }
 
 

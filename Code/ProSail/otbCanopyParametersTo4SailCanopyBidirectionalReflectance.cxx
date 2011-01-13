@@ -214,7 +214,7 @@ CanopyParametersTo4SailCanopyBidirectionalReflectance
       Rsoil1 = dataSpecP5B[i].drySoil; //10
       Rsoil2 = dataSpecP5B[i].wetSoil; //11
       rho = leaftOpticalProperties->GetReflectance()[i].second; //rho = LRT[1][i];
-      tau = leaftOpticalProperties->GetTransmitance()[i].second; //tau = LRT[2][i];
+      tau = leaftOpticalProperties->GetTransmittance()[i].second; //tau = LRT[2][i];
 
       // direct/diffuse light
       //Es = direct

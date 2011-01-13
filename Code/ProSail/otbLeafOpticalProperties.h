@@ -64,13 +64,13 @@ class ITK_EXPORT LeafOpticalProperties : public itk::DataObject
       /** Set/Get Transmitance*/
 //       itkSetMacro(Transmitance, VectorPairType);
 //       itkGetMacro(Transmitance, VectorPairType);
-      VectorPairType & GetTransmitance()
+      VectorPairType & GetTransmittance()
       {
-         return m_Transmitance;
+         return m_Transmittance;
       }
-      void SetTransmitance(const VectorPairType & trans)
+      void SetTransmittance(const VectorPairType & trans)
       {
-         m_Transmitance=trans;
+         m_Transmittance=trans;
       }
 
 
@@ -88,7 +88,7 @@ class ITK_EXPORT LeafOpticalProperties : public itk::DataObject
       void operator=(const Self&); //purposely not implemented
       
       VectorPairType m_Reflectance;
-      VectorPairType m_Transmitance;
+      VectorPairType m_Transmittance;
 
 };
 }// end namespace otb

@@ -162,7 +162,7 @@ LeafParametersToProspectLeafOpticalProperties
       transVector.push_back(trans);
    }
    output->SetReflectance(reflVector);
-   output->SetTransmitance(transVector);
+   output->SetTransmittance(transVector);
    
 }
 

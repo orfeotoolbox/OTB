@@ -2,25 +2,47 @@ IF(WIN32)
   ADD_DEFINITIONS(-DWIN32)
 ENDIF(WIN32)
 
+SET(EPSILON 0.01)
+SET(BASELINE_FILES ${RSR_SOURCE_DIR}/Data/Baseline)
+SET(TEMP ${RSRTesting_BINARY_DIR}/Temporary)
+
 SET(PROSAIL_TESTS ${CXX_TEST_PATH}/otbProSailTests)
 
-ADD_TEST(otbProSailNew ${PROSAIL_TESTS}
-        otbProSailNew
+
+ADD_TEST(otbProspectReflTest ${PROSAIL_TESTS}
+   --compare-ascii ${EPSILON} ${BASELINE_FILES}/prospect_refl.txt
+                   ${TEMP}/refl.txt
+        otbProspectReflTest
+        ${TEMP}/refl.txt
         )
 
-ADD_TEST(otbProspectTest ${PROSAIL_TESTS}
-        otbProspectTest
+ADD_TEST(otbProspectTransTest ${PROSAIL_TESTS}
+   --compare-ascii ${EPSILON} ${BASELINE_FILES}/prospect_trans.txt
+                   ${TEMP}/trans.txt
+        otbProspectTransTest
+        ${TEMP}/trans.txt
+        )
+
+ADD_TEST(otbSailReflHTest ${PROSAIL_TESTS}
+   --compare-ascii ${EPSILON} ${BASELINE_FILES}/sail_resh.txt
+                   ${TEMP}/resh.txt
+        otbSailReflHTest
+        ${TEMP}/resh.txt
         )
         
-ADD_TEST(otbSailTest ${PROSAIL_TESTS}
-        otbSailTest
-        )
+ADD_TEST(otbSailReflVTest ${PROSAIL_TESTS}
+   --compare-ascii ${EPSILON} ${BASELINE_FILES}/sail_resv.txt
+                   ${TEMP}/resv.txt
+        otbSailReflVTest
+        ${TEMP}/resv.txt
+        )        
         
 SET(PROSAIL_SRCS
 otbProSailTests.cxx
-otbProSailNew.cxx
-otbProspectTest.cxx
-otbSailTest.cxx
+otbProspectReflTest.cxx
+otbProspectTransTest.cxx
+otbSailReflHTest.cxx
+otbSailReflVTest.cxx
 )
 
 
