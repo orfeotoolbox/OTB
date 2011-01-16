@@ -421,7 +421,7 @@ void GDALImageIO::InternalReadImageInformation()
       }
     else
       {
-      itkExceptionMacro(<< "Dataset requested does not exist.");
+      itkExceptionMacro(<< "Dataset requested does not exist (" << names.size() << " datasets)");
       }
     }
 
