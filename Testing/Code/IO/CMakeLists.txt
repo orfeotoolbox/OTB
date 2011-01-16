@@ -1238,6 +1238,20 @@ ADD_TEST(ioTvMultiDatasetReading2 ${IO_TESTS9}
       ${TEMP}/ioTvMultiDatasetReading2.txt
       5
       )
+ADD_TEST(ioTvMultiDatasetReadingInName1 ${IO_TESTS9}
+  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReading1.txt
+                             ${TEMP}/ioTvMultiDatasetReadingInName1.txt
+      otbVectorImageTest
+      ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf:0
+      ${TEMP}/ioTvMultiDatasetReadingInName1.txt
+      )
+ADD_TEST(ioTvMultiDatasetReadingInName2 ${IO_TESTS9}
+  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReading2.txt
+                             ${TEMP}/ioTvMultiDatasetReadingInName2.txt
+      otbVectorImageTest
+      ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf:5
+      ${TEMP}/ioTvMultiDatasetReadingInName2.txt
+      )
 # ---  STREAMING  IMAGE   FILE    WRITER  ---
 ADD_TEST(ioTvStreamingIFWriterBSQWithoutStreaming ${IO_TESTS2}
    --compare-image ${EPSILON_9}   ${INPUTDATA}/poupees_1canal.c1.hdr
