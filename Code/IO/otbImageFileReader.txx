@@ -495,6 +495,18 @@ ImageFileReader<TOutputImage>
     return;
     }
 
+  // Test if we have an hdf file with dataset spec
+  std::string realfile(this->m_FileName);
+  unsigned int datasetNum;
+  if (System::ParseHdfFileName(this->m_FileName, realfile, datasetNum))
+    {
+    otbMsgDevMacro(<< "HDF name with dataset specification detected");
+    otbMsgDevMacro(<< " - " << realfile);
+    otbMsgDevMacro(<< " - " << datasetNum);
+    this->m_FileName = realfile;
+    m_DatasetNumber = datasetNum;
+    }
+
   // Test if the file exists.
   if (!itksys::SystemTools::FileExists(this->m_FileName.c_str()))
     {

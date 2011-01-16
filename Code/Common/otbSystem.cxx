@@ -17,8 +17,9 @@
 =========================================================================*/
 
 #include "otbSystem.h"
-#include <string.h> // strdup
+#include <string> // strdup
 #include <ctype.h> //toupper, tolower
+#include <cstdlib>
 
 #if (defined(WIN32) || defined(WIN32CE)) && !defined(__CYGWIN__) && !defined(__MINGW32__)
 
@@ -243,6 +244,44 @@ std::vector<std::string> System::Readdir(const std::string& pszPath)
     }
   return listFileFind;
 }
+
+/** From an hdf subset name such as:
+ * SUBDATASET_7_NAME=HDF4_EOS:EOS_GRID:"file/MOD13Q1.A2010001.h17v05.005.2010028003734.hdf":MODIS_Grid_16DAY...
+ * it will set key to SUBDATASET_7_NAME
+ * and name to HDF4_EOS:EOS_GRID:"file/MOD13Q1.A2010001.h17v05.005.2010028003734.hdf":MODIS_Grid_16DAY...
+ */
+bool System::ParseHdfSubsetName(const std::string& id, std::string& key, std::string& name)
+{
+  std::size_t pos = id.find("=");
+  if (pos == std::string::npos) return false;
+  key = id.substr(0, pos);
+  name = id.substr(pos+1, id.size() - pos - 1);
+  return true;
+}
+
+/** Parse and hdf filename indicating the dataset number
+ * if id is filelocation/file.hdf:10
+ * it will return filelocation/file.hdf in file
+ * and 10 in datasetNum
+ */
+bool System::ParseHdfFileName(const std::string& id, std::string& file, unsigned int& datasetNum)
+{
+  std::size_t pos = id.rfind(":");
+  if (pos == std::string::npos) return false;
+  std::string datasetNumString(id.substr(pos+1, id.size() - pos - 1));
+  datasetNum = atoi(datasetNumString.c_str());
+  // a value of 0 could be the sign that the conversion failed, we need to check that the character was really 0
+  if (datasetNum == 0)
+    {
+      if (datasetNumString.compare("0") != 0)
+        {
+        return false;
+        }
+    }
+  file = id.substr(0, pos);
+  return true;
+}
+
 
 #endif
 
