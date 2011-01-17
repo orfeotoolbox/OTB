@@ -26,6 +26,18 @@ namespace otb
 
 namespace Functor {
 
+/** \class otbMLCToCoherencyFunctor
+ * \brief Evaluate the Coherency matrix from from the MLC image
+ *
+ * *  Output value are:
+ *   channel #0 : \f$ 0.5 * (S_{hh}+S_{vv}.(S_{hh}+S_{vv})^{*} \f$
+ *   channel #1 : \f$ 0.5 * (S_{hh}+S_{vv}.(S_{hh}-S_{vv})^{*} \f$
+ *   channel #2 : \f$ (S_{hh}+S_{vv}.(S_{hv})^{*} \f$
+ *   channel #3 : \f$ 0.5 * (S_{hh}-S_{vv}.(S_{hh}-S_{vv})^{*} \f$
+ *   channel #4 : \f$ (S_{hh}-S_{vv}.(S_{hv})^{*}  \f$
+ *   channel #5 : \f$ 2.0*S_{hv}.S_{hv}^{*} \f$
+ *
+ */
 template< class TInput, class TOutput>
 class MLCToCoherencyFunctor
 {
@@ -77,7 +89,8 @@ private:
 
 
 /** \class otbMLCToCoherencyImageFilter
- * \brief Compute the Coherency image (9 channels) from the MLC image (9 channels)
+ * \brief Compute the Coherency image (6 complex channels)
+ * from the MLC image (6 complex channels)
  */
 template <class TInputImage, class TOutputImage, class TFunction = Functor::MLCToCoherencyFunctor<
     ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
