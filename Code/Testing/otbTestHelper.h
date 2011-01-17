@@ -93,7 +93,7 @@ private:
   bool isNumeric(std::string str) const;
   bool isScientificNumeric(std::string str) const;
   bool isHexaPointerAddress(std::string str) const;
-  bool isStringFound(std::string str) const;
+  bool isToBeIgnoredForAnyComparison(std::string str) const;
   std::string VectorToString(otb::MetaDataKey::VectorType vector) const;
   //FIXME parameters have to be cleaned up later (this is the first step of refactoring)
   bool CompareLines(std::string strfileref,
