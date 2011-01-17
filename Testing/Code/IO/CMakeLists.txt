@@ -1680,28 +1680,6 @@ ADD_TEST(ioTvDEMToOrthoImageGeneratorWithInputImage ${IO_TESTS12}
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
-# ---  otb::PrepareSRTMDirectory ---
-ADD_TEST(ioTuPrepareSRTMDirectoryNew ${IO_TESTS12}
-      otbPrepareSRTMDirectoryNew )
-
-ADD_TEST(ioTvPrepareSRTMDirectoryTest ${IO_TESTS12}
-  --compare-n-ascii ${EPSILON_9} 3
-		    ${INPUTDATA}/DEM/srtm_directory/N44E007.hgt
-		    ${TEMP}/ioTvPrepareSRTMDirectoryTest/N44E007.hgt
-		    ${INPUTDATA}/DEM/srtm_directory/N46E007.hgt
-		    ${TEMP}/ioTvPrepareSRTMDirectoryTest/N46E007.hgt
-		    ${INPUTDATA}/DEM/srtm_directory/N45E007.hgt
-		    ${TEMP}/ioTvPrepareSRTMDirectoryTest/N45E007.hgt
-  otbPrepareSRTMDirectoryTest
-      ${INPUTDATA}/DEM/srtm_directory
-      ${TEMP}/ioTvPrepareSRTMDirectoryTest
-      7.2
-      45.2
-      6.1
-      44.6
-)
-
-
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -2951,8 +2929,6 @@ otbDEMToOrthoImageGeneratorNew.cxx
 otbDEMToOrthoImageGeneratorTest.cxx
 otbDEMToOrthoImageGeneratorTest2.cxx
 otbDEMToOrthoImageGeneratorWithInputImageTest.cxx
-otbPrepareSRTMDirectoryNew.cxx
-otbPrepareSRTMDirectoryTest.cxx
 )
 
 
