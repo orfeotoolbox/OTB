@@ -22,6 +22,7 @@
 #include "itkObjectFactory.h"
 #include "itkPoint.h"
 #include "itkMultiThreader.h"
+#include "otbCurlHelperInterface.h"
 
 namespace otb
 {
@@ -139,6 +140,8 @@ private:
   std::string m_PlaceName;
   std::string m_CountryName;
   std::string m_TempFileName;
+
+  CurlHelperInterface::Pointer m_Curl;
 
   itk::MultiThreader::Pointer m_Threader;
 };

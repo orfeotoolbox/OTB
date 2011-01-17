@@ -50,6 +50,8 @@ CoordinateToName::CoordinateToName() :
   filename << ".xml";
   m_TempFileName = filename.str();
 
+  m_Curl = CurlHelper::New();
+
   m_Threader = itk::MultiThreader::New();
 
   m_UpdateDistance = 0.01; //about 1km at equator
@@ -119,8 +121,7 @@ void CoordinateToName::DoEvaluate()
 
 void CoordinateToName::RetrieveXML(const std::ostringstream& urlStream) const
 {
-  CurlHelper::Pointer curlHelper = CurlHelper::New();
-  curlHelper->RetrieveFile(urlStream, m_TempFileName);
+  m_Curl->RetrieveFile(urlStream, m_TempFileName);
 }
 
 void CoordinateToName::ParseXMLGeonames(std::string& placeName, std::string& countryName) const
