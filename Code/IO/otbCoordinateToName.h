@@ -108,6 +108,8 @@ public:
   itkSetMacro(Multithread, bool);
   itkBooleanMacro(Multithread);
 
+  itkSetObjectMacro(Curl, CurlHelperInterface);
+
   virtual bool Evaluate();
 
 protected:

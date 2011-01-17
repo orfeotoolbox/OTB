@@ -15,32 +15,30 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbCurlHelper_h
-#define __otbCurlHelper_h
+#ifndef __otbCurlHelperStub_h
+#define __otbCurlHelperStub_h
 
 #include "otbCurlHelperInterface.h"
 
 namespace otb
 {
 /**
- * \class CurlHelper
- * \brief Class to use the curl capabilities from OTB
+ * \class CurlHelperStub
+ * \brief Class to test classes using the curl capabilities from OTB
  *
- * This class is responsible for behaving properly when curl is
- * not available, i.e. the compilation should pass, the runtime should
- * not segfault but of course, the behavior will be different.
+ * This class is available only for testing purposes
  *
  */
-class ITK_EXPORT CurlHelper : public CurlHelperInterface
+class ITK_EXPORT CurlHelperStub : public CurlHelperInterface
 {
 public:
   /** Standard class typedefs. */
-  typedef CurlHelper                    Self;
+  typedef CurlHelperStub                Self;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
   typedef CurlHelperInterface           Superclass;
 
-  itkTypeMacro(CurlHelper, CurlHelperInterface);
+  itkTypeMacro(CurlHelperStub, CurlHelperInterface);
   itkNewMacro(Self);
 
   int TestUrlAvailability(const std::string& url) const;
@@ -51,27 +49,14 @@ public:
                         const std::vector<std::string>& listFiles,
                         int maxConnect) const;
 protected:
-  CurlHelper() :
-    m_Browser("Mozilla/5.0 (Windows; U; Windows NT 6.0; en-GB; rv:1.8.1.11) "
-              "Gecko/20071127 Firefox/2.0.0.11") {}
-  virtual ~CurlHelper() {}
+  CurlHelperStub() {}
+  virtual ~CurlHelperStub() {}
 
 private:
-  CurlHelper(const Self &);  //purposely not implemented
+  CurlHelperStub(const Self &);  //purposely not implemented
   void operator =(const Self&);  //purposely not implemented
 
-  size_t curlDummyWriteFunction(void*, size_t, size_t nmemb, void*)
-  {
-    return nmemb;
-  }
 
-  // Need to use our writing function to handle windows segfaults
-  // Need to be static cause the CURL_OPT is expecting a pure C
-  // function or a static c++ method.
-  static size_t write_data(void* ptr, size_t size, size_t nmemb, void* data);
-
-  // Browser Agent used
-  std::string m_Browser;
 };
 }
 #endif

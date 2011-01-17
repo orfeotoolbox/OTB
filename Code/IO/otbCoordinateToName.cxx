@@ -42,7 +42,7 @@ CoordinateToName::CoordinateToName() :
   typedef itk::Statistics::MersenneTwisterRandomVariateGenerator RandomGenType;
   RandomGenType::Pointer randomGen = RandomGenType::GetInstance();
   randomGen->SetSeed(reinterpret_cast<long int>(this)); //make sure the seed is unique for this class
-  int randomNum = randomGen->GetIntegerVariate();
+  unsigned int randomNum = randomGen->GetIntegerVariate();
 
   std::stringstream filename;
   filename << "tmp-coordinateToName-SignayriUt1-";

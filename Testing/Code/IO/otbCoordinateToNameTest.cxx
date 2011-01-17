@@ -24,6 +24,7 @@
 #include <OpenThreads/Thread>
 
 #include "otbCoordinateToName.h"
+#include "otbCurlHelperStub.h"
 
 int otbCoordinateToNameTest(int argc, char* argv[])
 {
@@ -41,6 +42,10 @@ int otbCoordinateToNameTest(int argc, char* argv[])
   otb::CoordinateToName::Pointer conv = otb::CoordinateToName::New();
   conv->SetLon(atof(argv[1]));
   conv->SetLat(atof(argv[2]));
+
+  //only for testing (remove dependency to network conditions)
+  otb::CurlHelperStub::Pointer curlStub = otb::CurlHelperStub::New();
+  conv->SetCurl(curlStub);
 
   if ((argc > 4) && atoi(argv[4]) == 1)
     {
