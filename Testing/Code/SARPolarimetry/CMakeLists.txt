@@ -179,6 +179,12 @@ ADD_TEST(sarTvMLCToCoherencyImageFilter ${SARPOLARIMETRY_TESTS1}
         ${TEMP}/sarTvMLCToCoherencyImageFilter.tif
 	)
 
+# MLC To Coherency Degree Image Filter
+ADD_TEST(sarTuMLCToCoherencyDegreeImageFilterNew ${SARPOLARIMETRY_TESTS1}
+		otbMLCToCoherencyDegreeImageFilterNew
+)
+
+
 # A enrichir
 SET(SARPOLARIMETRY_SRCS1
 otbSARPolarimetryTests1.cxx
@@ -194,6 +200,7 @@ otbSinclairToCovarianceFunctor.cxx
 otbSinclairImageFilter.cxx
 otbMLCToCoherencyImageFilterNew.cxx
 otbMLCToCoherencyImageFilter.cxx
+otbMLCToCoherencyDegreeImageFilterNew.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbSARPolarimetryTests1 "${SARPOLARIMETRY_SRCS1}" "OTBSARPolarimetry;OTBIO;OTBTesting")

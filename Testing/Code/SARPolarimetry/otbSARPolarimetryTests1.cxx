@@ -38,5 +38,6 @@ void RegisterTests()
   REGISTER_TEST(otbSinclairImageFilter);
   REGISTER_TEST(otbMLCToCoherencyImageFilterNew);
   REGISTER_TEST(otbMLCToCoherencyImageFilter);
+  REGISTER_TEST(otbMLCToCoherencyDegreeImageFilterNew);
 
 }
