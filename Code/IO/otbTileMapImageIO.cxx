@@ -83,6 +83,8 @@ TileMapImageIO::TileMapImageIO()
   // Set maximum of connections to 10
   m_MaxConnect = 10;
 
+  m_Curl = CurlHelper::New();
+
   this->AddSupportedWriteExtension(".otb");
   this->AddSupportedWriteExtension(".OTB");
 
@@ -179,8 +181,7 @@ void TileMapImageIO::Read(void* buffer)
       }
     }
 
-  CurlHelper::Pointer curlHelper = CurlHelper::New();
-  curlHelper->RetrieveFileMulti(m_ListURLs, m_ListFilename, m_MaxConnect);
+  m_Curl->RetrieveFileMulti(m_ListURLs, m_ListFilename, m_MaxConnect);
 
   m_ListURLs.clear();
 
