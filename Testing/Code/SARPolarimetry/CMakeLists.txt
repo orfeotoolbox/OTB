@@ -138,6 +138,7 @@ ADD_TEST(sarTvSinclairImageFilter_SinclairToCovariance ${SARPOLARIMETRY_TESTS1}
         ${TEMP}/sarTvSinclairImageFilter_SinclairToCovariance.tif
 	)
 
+
 # Sinclair To Coherency Image Filter
 ADD_TEST(sarTvSinclairImageFilter_SinclairToCoherency ${SARPOLARIMETRY_TESTS1}
 #  --compare-image ${EPSILON_12}   ${BASELINE}/sarTvSinclairImageFilter_SinclairToCoherency.tif
@@ -148,6 +149,18 @@ ADD_TEST(sarTvSinclairImageFilter_SinclairToCoherency ${SARPOLARIMETRY_TESTS1}
         ${INPUTDATA}/RSAT_imagery_HV.tif
         ${INPUTDATA}/RSAT_imagery_VV.tif
         ${TEMP}/sarTvSinclairImageFilter_SinclairToCoherency.tif
+	)
+
+# Sinclair To Mueller Image Filter
+ADD_TEST(sarTvSinclairImageFilter_SinclairToMueller ${SARPOLARIMETRY_TESTS1}
+#  --compare-image ${EPSILON_12}   ${BASELINE}/sarTvSinclairImageFilter_SinclairToMueller.tif
+#                    ${TEMP}/sarTvSinclairImageFilter_SinclairToMueller.tif
+        otbSinclairImageFilter
+        SinclairToMueller
+        ${INPUTDATA}/RSAT_imagery_HH.tif
+        ${INPUTDATA}/RSAT_imagery_HV.tif
+        ${INPUTDATA}/RSAT_imagery_VV.tif
+        ${TEMP}/sarTvSinclairImageFilter_SinclairToMueller.tif
 	)
 
 

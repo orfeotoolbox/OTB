@@ -29,6 +29,7 @@
 #include "otbSinclairImageFilter.h"
 #include "otbSinclairToCovarianceFunctor.h"
 #include "otbSinclairToCoherencyFunctor.h"
+#include "otbSinclairToMuellerFunctor.h"
 
 
 template<class TInputPixel, class TOutputPixel, class TFunction>
@@ -83,9 +84,11 @@ int otbSinclairImageFilter(int argc, char * argv[])
   const unsigned int Dimension = 2;
   typedef std::complex <double> InputPixelType;
   typedef std::complex <double> OutputPixelType;
+  typedef double                OutputRealPixelType;
 
   typedef otb::Image<InputPixelType,  Dimension>       InputImageType;
   typedef otb::VectorImage<OutputPixelType, Dimension> OutputImageType;
+  typedef otb::VectorImage<OutputRealPixelType, Dimension> OutputRealImageType;
 
   std::string strArgv(argv[1]);
   argc--;
@@ -105,6 +108,14 @@ int otbSinclairImageFilter(int argc, char * argv[])
                                     InputImageType::PixelType,
                                     InputImageType::PixelType,
                                     OutputImageType::PixelType> >
+                  (argc, argv));
+  else  if (strArgv == "SinclairToMueller")
+    return (generic_SinclairImageFilter<InputPixelType, OutputRealPixelType,
+                otb::Functor::SinclairToMuellerFunctor<InputImageType::PixelType,
+                                    InputImageType::PixelType,
+                                    InputImageType::PixelType,
+                                    InputImageType::PixelType,
+                                    OutputRealImageType::PixelType> >
                   (argc, argv));
   else return EXIT_FAILURE;
 
