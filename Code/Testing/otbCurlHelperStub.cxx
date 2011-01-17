@@ -26,7 +26,10 @@ namespace otb
 {
 
 int CurlHelperStub::TestUrlAvailability(const std::string& url) const
-{}
+{
+  itkExceptionMacro(<< "otbCurlHelperStub: method undefined");
+  return -1;
+}
 
 int CurlHelperStub::RetrieveFile(const std::ostringstream& urlStream, std::string filename) const
 {
@@ -50,15 +53,23 @@ int CurlHelperStub::RetrieveFile(const std::ostringstream& urlStream, std::strin
       "</geoname>\n"
       "</geonames>\n";
     file.close();
+    return 0;
     }
+  itkExceptionMacro(<< "otbCurlHelperStub: value not recognized by stub");
+  return -1;
 }
 
 int CurlHelperStub::RetrieveFile(const std::string& urlString, std::string filename) const
-{}
+{
+  itkExceptionMacro(<< "otbCurlHelperStub: method undefined");
+  return -1;
+}
 
 int CurlHelperStub::RetrieveFileMulti(const std::vector<std::string>& listURLs,
-                      const std::vector<std::string>& listFiles,
-                      int maxConnect) const
-{}
+                                      const std::vector<std::string>& listFiles, int maxConnect) const
+{
+  itkExceptionMacro(<< "otbCurlHelperStub: method undefined");
+  return -1;
+}
 
 }
