@@ -33,7 +33,6 @@ class  MLCToCoherencyImageFilter :
 {
 public:
   /** Convenient typedefs for simplifying declarations. */
-  typedef TPixel InputPixelType;
   typedef otb::Image<itk::Vector<TPixel,9>,2> InputImageType;
   typedef otb::Image<itk::Vector<TPixel,9>,2> OutputImageType;
 
