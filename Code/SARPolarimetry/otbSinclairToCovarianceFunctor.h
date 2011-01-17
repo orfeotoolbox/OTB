@@ -51,7 +51,7 @@ public:
   {
     TOutput result;
 
-    result.SetSize(6);
+    result.SetSize(m_NumberOfComponentsPerPixel);
 
     result[0] = static_cast<OutputValueType>( static_cast<ComplexType>(Shh)*vcl_conj(static_cast<ComplexType>(Shh)) );
     result[1] = static_cast<OutputValueType>( static_cast<ComplexType>(Shh)*vcl_conj(static_cast<ComplexType>(Shv)) );

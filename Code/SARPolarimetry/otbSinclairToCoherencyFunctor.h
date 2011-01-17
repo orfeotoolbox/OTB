@@ -51,7 +51,8 @@ public:
   {
     TOutput result;
 
-    result.SetSize(6);
+    result.SetSize(m_NumberOfComponentsPerPixel);
+
     ComplexType HHPlusVV = static_cast<ComplexType>(Shh + Svv);
     ComplexType VVMinusVV = static_cast<ComplexType>(Shh - Svv);
     ComplexType twoHV     = static_cast<ComplexType>( 2.0 * Shv);
