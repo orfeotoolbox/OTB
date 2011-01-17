@@ -164,10 +164,20 @@ ADD_TEST(sarTvSinclairImageFilter_SinclairToMueller ${SARPOLARIMETRY_TESTS1}
 	)
 
 # MLC To Coherency Image Filter
-ADD_TEST(sarTuMLCToCoherencyImageFilter ${SARPOLARIMETRY_TESTS1}
+ADD_TEST(sarTuMLCToCoherencyImageFilterNew ${SARPOLARIMETRY_TESTS1}
 		otbMLCToCoherencyImageFilterNew
 )
 
+ADD_TEST(sarTvMLCToCoherencyImageFilter ${SARPOLARIMETRY_TESTS1}
+#  --compare-image ${EPSILON_12}   ${BASELINE}/sarTvMLCToCoherencyImageFilter.tif
+#                    ${TEMP}/sarTvMLCToCoherencyImageFilter.tif
+        otbMLCToCoherencyImageFilter
+        ${INPUTDATA}/RSAT_imagery_HH.tif
+        ${INPUTDATA}/RSAT_imagery_HV.tif
+        ${INPUTDATA}/RSAT_imagery_HV.tif
+        ${INPUTDATA}/RSAT_imagery_VV.tif
+        ${TEMP}/sarTvMLCToCoherencyImageFilter.tif
+	)
 
 # A enrichir
 SET(SARPOLARIMETRY_SRCS1
@@ -183,6 +193,7 @@ otbVectorMultiChannelsPolarimetricSynthesisFilter.cxx
 otbSinclairToCovarianceFunctor.cxx
 otbSinclairImageFilter.cxx
 otbMLCToCoherencyImageFilterNew.cxx
+otbMLCToCoherencyImageFilter.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbSARPolarimetryTests1 "${SARPOLARIMETRY_SRCS1}" "OTBSARPolarimetry;OTBIO;OTBTesting")
