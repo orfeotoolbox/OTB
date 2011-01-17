@@ -22,16 +22,18 @@
 #include "itkExceptionObject.h"
 #include <iostream>
 
-#include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbMLCToCoherencyImageFilter.h"
 
 int otbMLCToCoherencyImageFilterNew(int argc, char * argv[])
 {
-  typedef double   PixelType;
   const unsigned int Dimension = 2;
 
-  typedef otb::MLCToCoherencyImageFilter<PixelType> FilterType;
+  typedef std::complex<double>   PixelType;
+  typedef otb::VectorImage<PixelType, Dimension> ImageType;
+
+
+  typedef otb::MLCToCoherencyImageFilter<ImageType, ImageType> FilterType;
 
   FilterType::Pointer filter = FilterType::New();
 
