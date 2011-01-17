@@ -245,6 +245,9 @@ std::vector<std::string> System::Readdir(const std::string& pszPath)
   return listFileFind;
 }
 
+#endif
+
+
 /** From an hdf subset name such as:
  * SUBDATASET_7_NAME=HDF4_EOS:EOS_GRID:"file/MOD13Q1.A2010001.h17v05.005.2010028003734.hdf":MODIS_Grid_16DAY...
  * it will set key to SUBDATASET_7_NAME
@@ -281,8 +284,5 @@ bool System::ParseHdfFileName(const std::string& id, std::string& file, unsigned
   file = id.substr(0, pos);
   return true;
 }
-
-
-#endif
 
 }
