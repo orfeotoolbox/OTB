@@ -36,4 +36,6 @@ void RegisterTests()
   REGISTER_TEST(otbVectorMultiChannelsPolarimetricSynthesisFilter);
   REGISTER_TEST(otbSinclairToCovarianceFunctor);
   REGISTER_TEST(otbSinclairImageFilter);
+  REGISTER_TEST(otbMLCToCoherencyImageFilterNew);
+
 }
