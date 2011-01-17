@@ -27,11 +27,10 @@ namespace otb
    * Constructor
    */
 
-PlaceNameToLonLat::PlaceNameToLonLat()
+PlaceNameToLonLat::PlaceNameToLonLat() :
+      m_Lon(-1000.0), m_Lat(-1000.0),
+      m_PlaceName("Where everything started")
 {
-  m_Lon = -1000.0;
-  m_Lat = -1000.0;
-  m_PlaceName = "Where everything started";
   m_Curl = CurlHelper::New();
 }
 

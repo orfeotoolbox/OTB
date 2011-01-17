@@ -16,9 +16,12 @@
 
 =========================================================================*/
 
+
+#include <sstream>
+
 #include "otbCoordinateToName.h"
 #include "otbMacro.h"
-#include <sstream>
+#include "otbUtils.h"
 
 #include "tinyxml.h"
 #include "otbCurlHelper.h"
@@ -31,13 +34,10 @@ namespace otb
 /**
  * Constructor
  */
-
 CoordinateToName::CoordinateToName() :
-  m_Lon(-1000.0), m_Lat(-1000.0), m_Multithread(false), m_IsValid(false)
+  m_Lon(-1000.0), m_Lat(-1000.0), m_Multithread(false), m_IsValid(false),
+  m_PlaceName(""), m_CountryName("")
 {
-  m_PlaceName = "";
-  m_CountryName = "";
-
   //Avoid collision between different instance of the class
   typedef itk::Statistics::MersenneTwisterRandomVariateGenerator RandomGenType;
   RandomGenType::Pointer randomGen = RandomGenType::GetInstance();
@@ -95,7 +95,7 @@ CoordinateToName::ThreadFunction(void *arg)
 
 void CoordinateToName::DoEvaluate()
 {
-  if (IsLonLatValid())
+  if (Utils::IsLonLatValid(m_Lon, m_Lat))
     {
     std::ostringstream urlStream;
     urlStream << "http://ws.geonames.org/findNearbyPlaceName?lat=";
@@ -146,15 +146,6 @@ void CoordinateToName::ParseXMLGeonames(std::string& placeName, std::string& cou
     otbMsgDevMacro(<< "Near " << placeName << " in " << countryName);
     remove(m_TempFileName.c_str());
     }
-}
-
-bool CoordinateToName::IsLonLatValid() const
-{
-  if (m_Lon < -180.0) return false;
-  if (m_Lon > 180.0) return false;
-  if (m_Lat < -90.0) return false;
-  if (m_Lat > 90.0) return false;
-  return true;
 }
 
 } // namespace otb
