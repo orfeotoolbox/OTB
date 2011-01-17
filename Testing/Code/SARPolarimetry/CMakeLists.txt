@@ -121,6 +121,36 @@ ADD_TEST(sarTvMultiChannelsPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
 	)
 
 
+# SinclairToCovarianceFunctor
+ADD_TEST(sarTuSinclairToCovarianceFunctor ${SARPOLARIMETRY_TESTS1}
+		otbSinclairToCovarianceFunctor
+)
+
+# Sinclair To Covariance Image Filter
+ADD_TEST(sarTvSinclairImageFilter_SinclairToCovariance ${SARPOLARIMETRY_TESTS1}
+#  --compare-image ${EPSILON_12}   ${BASELINE}/sarTvSinclairImageFilter_SinclairToCovariance.tif
+#                    ${TEMP}/sarTvSinclairImageFilter_SinclairToCovariance.tif
+        otbSinclairImageFilter
+        SinclairToCovariance
+        ${INPUTDATA}/RSAT_imagery_HH.tif
+        ${INPUTDATA}/RSAT_imagery_HV.tif
+        ${INPUTDATA}/RSAT_imagery_VV.tif
+        ${TEMP}/sarTvSinclairImageFilter_SinclairToCovariance.tif
+	)
+
+# Sinclair To Coherency Image Filter
+ADD_TEST(sarTvSinclairImageFilter_SinclairToCoherency ${SARPOLARIMETRY_TESTS1}
+#  --compare-image ${EPSILON_12}   ${BASELINE}/sarTvSinclairImageFilter_SinclairToCoherency.tif
+#                    ${TEMP}/sarTvSinclairImageFilter_SinclairToCoherency.tif
+        otbSinclairImageFilter
+        SinclairToCoherency
+        ${INPUTDATA}/RSAT_imagery_HH.tif
+        ${INPUTDATA}/RSAT_imagery_HV.tif
+        ${INPUTDATA}/RSAT_imagery_VV.tif
+        ${TEMP}/sarTvSinclairImageFilter_SinclairToCoherency.tif
+	)
+
+
 # A enrichir
 SET(SARPOLARIMETRY_SRCS1
 otbSARPolarimetryTests1.cxx
@@ -132,6 +162,8 @@ otbVHnVVPolarimetricSynthesisFilter.cxx
 otbMultiChannelsPolarimetricSynthesisFilterNew.cxx
 otbMultiChannelsPolarimetricSynthesisFilter.cxx
 otbVectorMultiChannelsPolarimetricSynthesisFilter.cxx
+otbSinclairToCovarianceFunctor.cxx
+otbSinclairImageFilter.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbSARPolarimetryTests1 "${SARPOLARIMETRY_SRCS1}" "OTBSARPolarimetry;OTBIO;OTBTesting")
