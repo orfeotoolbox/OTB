@@ -75,28 +75,20 @@ public:
     TOutput result;
     result.SetSize(m_NumberOfComponentsPerPixel);
 
-    ComplexType T11 =  static_cast<ComplexType>(Coherency[0]);
-    ComplexType T12 =  static_cast<ComplexType>(Coherency[1]);
-    ComplexType T13 =  static_cast<ComplexType>(Coherency[2]);
-    ComplexType T22 =  static_cast<ComplexType>(Coherency[3]);
-    ComplexType T23 =  static_cast<ComplexType>(Coherency[4]);
-    ComplexType T33 =  static_cast<ComplexType>(Coherency[5]);
-
     CoherencyMatrixType T;
     EigenvalueType eigenValues;
     EigenMatrixType eigenVectors;
     HermitianAnalysisType HermitianAnalysis;
 
-
-    T[0] = static_cast<RealType>(T11.real());
-    T[1] = static_cast<RealType>(T22.real());
-    T[2] = static_cast<RealType>(T33.real());
-    T[3] = static_cast<RealType>(T12.real());
-    T[4] = static_cast<RealType>(T12.imag());
-    T[5] = static_cast<RealType>(T13.real());
-    T[6] = static_cast<RealType>(T13.imag());
-    T[7] = static_cast<RealType>(T23.real());
-    T[8] = static_cast<RealType>(T23.imag());
+    T[0] = static_cast<RealType>(Coherency[0].real());
+    T[1] = static_cast<RealType>(Coherency[3].real());
+    T[2] = static_cast<RealType>(Coherency[5].real());
+    T[3] = static_cast<RealType>(Coherency[1].real());
+    T[4] = static_cast<RealType>(Coherency[1].imag());
+    T[5] = static_cast<RealType>(Coherency[2].real());
+    T[6] = static_cast<RealType>(Coherency[2].imag());
+    T[7] = static_cast<RealType>(Coherency[4].real());
+    T[8] = static_cast<RealType>(Coherency[4].imag());
 
     HermitianAnalysis.ComputeEigenValuesAndVectors(T,eigenValues,eigenVectors);
 
