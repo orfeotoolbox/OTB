@@ -250,7 +250,7 @@ ComputeEigenValuesAndVectors(
   float HM[3][3][2];
 
 
-// Passage de la matrice T T1....T9 à une matrice 3*3*2 compatible avec la méthode HermitianDiagonalisation
+// Passage de la matrice T T1....T9 ï¿½ une matrice 3*3*2 compatible avec la mï¿½thode HermitianDiagonalisation
 
 
   HM[0][0][0]=T[0];    HM[0][0][1]=0.; 
@@ -292,7 +292,7 @@ ComputeEigenValuesAndVectors(
   //std::cout << "Valeurs propres : " << eigenVal[0] << "...." << eigenVal[1] <<  "...." << eigenVal[2] << std::endl<< std::endl;
    
   
-  // Récupération des sorties
+  // Rï¿½cupï¿½ration des sorties
   for (int i=0; i<3; i++)
     for (int j=0;j<3; j++)
 	{
@@ -944,16 +944,7 @@ ComputeEigenValuesAndVectorsUsingQL(VectorType &d, double *e, double *z) const
 }
 
 
-
-
-
-
-
-
-
-
-
-}  // end namespace itk
+}  // end namespace otb
  
 #endif
  

@@ -330,7 +330,7 @@ std::ostream & operator<<(std::ostream& os,
   return os;
 }
 
-} // end namespace itk
+} // end namespace otb
 
 
 #ifndef ITK_MANUAL_INSTANTIATION
