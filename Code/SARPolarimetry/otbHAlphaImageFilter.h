@@ -35,7 +35,7 @@
 #include "otbHermitianEigenAnalysis.h"
 
 
-/** Déclaration des constantes */
+/** Dï¿½claration des constantes */
 
 #ifndef PI
 #define PI 3.14159265358979323846
@@ -73,7 +73,6 @@ class  HAlphaImageFilter :
 {
 public:
   /** Convenient typedefs for simplifying declarations. */
-  typedef TPixel InputPixelType;
   typedef otb::Image<itk::Vector<TPixel,9>,2> InputImageType;
   typedef otb::Image<itk::Vector<TPixel,3>,2> OutputImageType;
 
@@ -121,10 +120,10 @@ public:
   typedef itk::Vector<float, 3> EigenvalueType;
 
   /** Matrix type used to store eigenvectors. */
-  // typedef itk::Vector<itk::Vector<double,2>,3> VectorType;// 3 vecteurs propres partie réelle + parties imaginaire =  6 composantes
+  // typedef itk::Vector<itk::Vector<double,2>,3> VectorType;// 3 vecteurs propres partie rï¿½elle + parties imaginaire =  6 composantes
   typedef itk::Vector<float, 2> VectorType;
   typedef itk::Vector<VectorType,3> EigenVectorFirstComposantType;
-   typedef itk::Vector<VectorType,3> EigenVectorType; // type d'un vecteur propre (partie réelle, partie imaginaire)
+   typedef itk::Vector<VectorType,3> EigenVectorType; // type d'un vecteur propre (partie rï¿½elle, partie imaginaire)
    typedef itk::Vector<itk::Vector<float, 6>,3> EigenMatrixType;
 
   typedef itk::Image<EigenVectorType,2> EigenVectorImageType;
@@ -187,7 +186,7 @@ private:
   InputSizeType m_Radius;
   CoherencyMatrixType m_CoherencyMatrix;
   EigenvalueType m_Eigenvalues;
-  EigenVectorFirstComposantType m_Eigenvectors; //récupération de la première composante de chaque vecteur propre;
+  EigenVectorFirstComposantType m_Eigenvectors; //rï¿½cupï¿½ration de la premiï¿½re composante de chaque vecteur propre;
   float m_Entropie;
   float m_Alpha;
   float m_Anisotropie;
