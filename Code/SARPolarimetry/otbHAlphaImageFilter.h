@@ -107,6 +107,9 @@ public:
     RealType  totalEigenValues = 0.0;
     RealType  p[3];
     RealType entropy;
+    RealType alpha;
+    RealType anisotropy;
+
 
     totalEigenValues = static_cast<RealType>( eigenValues[0] + eigenValues[1] + eigenValues[2]);
     if (totalEigenValues <0.00001)
@@ -141,21 +144,21 @@ public:
          if (p[k] > 1.) p[k] = 1.;
       }
 
-    val0=sqrt(eigenVectors[0][0]*eigenVectors[0][0]+eigenvectors[0][1]*eigenvectors[0][1]);
+    val0=sqrt(eigenVectors[0][0]*eigenVectors[0][0] + eigenVectors[0][1]*eigenVectors[0][1]);
     a0=acos(abs(val0)) * CONST_180_PI;
 
-    val1=sqrt(eigenVectors[0][2]*eigenVectors[0][2]+eigenVectors[0][3]*m_EigenVectors[0][3]);
+    val1=sqrt(eigenVectors[0][2]*eigenVectors[0][2] + eigenVectors[0][3]*eigenVectors[0][3]);
     a1=acos(abs(val1)) * CONST_180_PI;
 
-    val2=sqrt(eigenVectors[0][4]*eigenVectors[0][4]+eigenvectors[0][5]*eigenvectors[0][5]);
+    val2=sqrt(eigenVectors[0][4]*eigenVectors[0][4] + eigenVectors[0][5]*eigenVectors[0][5]);
     a2=acos(abs(val2)) * CONST_180_PI;
 
-    m_Alpha=p[0]*a0 + p[1]*a1 + p[2]*a2;
+    alpha=p[0]*a0 + p[1]*a1 + p[2]*a2;
 
-    if (m_Alpha>90) m_Alpha=0.;
+    if (alpha>90) alpha=0.;
 
     // Anisotropy estimation
-    anisotropie=(eigenValues[1] - eigenValues[2])/(eigenValues[1] + eigenValues[2]+0.000001);
+    anisotropy=(eigenValues[1] - eigenValues[2])/(eigenValues[1] + eigenValues[2]+0.000001);
 
     result[0] = entropy;
     result[1] = alpha;
