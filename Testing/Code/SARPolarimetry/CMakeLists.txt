@@ -128,8 +128,8 @@ ADD_TEST(sarTuSinclairToCovarianceFunctor ${SARPOLARIMETRY_TESTS1}
 
 # Sinclair To Covariance Image Filter
 ADD_TEST(sarTvSinclairImageFilter_SinclairToCovariance ${SARPOLARIMETRY_TESTS1}
-#  --compare-image ${EPSILON_12}   ${BASELINE}/sarTvSinclairImageFilter_SinclairToCovariance.tif
-#                    ${TEMP}/sarTvSinclairImageFilter_SinclairToCovariance.tif
+  --compare-image ${EPSILON_12}   ${BASELINE}/sarTvSinclairImageFilter_SinclairToCovariance.tif
+                    ${TEMP}/sarTvSinclairImageFilter_SinclairToCovariance.tif
         otbSinclairImageFilter
         SinclairToCovariance
         ${INPUTDATA}/RSAT_imagery_HH.tif
@@ -141,8 +141,8 @@ ADD_TEST(sarTvSinclairImageFilter_SinclairToCovariance ${SARPOLARIMETRY_TESTS1}
 
 # Sinclair To Coherency Image Filter
 ADD_TEST(sarTvSinclairImageFilter_SinclairToCoherency ${SARPOLARIMETRY_TESTS1}
-#  --compare-image ${EPSILON_12}   ${BASELINE}/sarTvSinclairImageFilter_SinclairToCoherency.tif
-#                    ${TEMP}/sarTvSinclairImageFilter_SinclairToCoherency.tif
+  --compare-image ${EPSILON_12}   ${BASELINE}/sarTvSinclairImageFilter_SinclairToCoherency.tif
+                    ${TEMP}/sarTvSinclairImageFilter_SinclairToCoherency.tif
         otbSinclairImageFilter
         SinclairToCoherency
         ${INPUTDATA}/RSAT_imagery_HH.tif
@@ -153,8 +153,8 @@ ADD_TEST(sarTvSinclairImageFilter_SinclairToCoherency ${SARPOLARIMETRY_TESTS1}
 
 # Sinclair To Mueller Image Filter
 ADD_TEST(sarTvSinclairImageFilter_SinclairToMueller ${SARPOLARIMETRY_TESTS1}
-#  --compare-image ${EPSILON_12}   ${BASELINE}/sarTvSinclairImageFilter_SinclairToMueller.tif
-#                    ${TEMP}/sarTvSinclairImageFilter_SinclairToMueller.tif
+  --compare-image ${EPSILON_12}   ${BASELINE}/sarTvSinclairImageFilter_SinclairToMueller.tif
+                    ${TEMP}/sarTvSinclairImageFilter_SinclairToMueller.tif
         otbSinclairImageFilter
         SinclairToMueller
         ${INPUTDATA}/RSAT_imagery_HH.tif
@@ -169,8 +169,8 @@ ADD_TEST(sarTuMLCToCoherencyImageFilterNew ${SARPOLARIMETRY_TESTS1}
 )
 
 ADD_TEST(sarTvMLCToCoherencyImageFilter ${SARPOLARIMETRY_TESTS1}
-#  --compare-image ${EPSILON_12}   ${BASELINE}/sarTvMLCToCoherencyImageFilter.tif
-#                    ${TEMP}/sarTvMLCToCoherencyImageFilter.tif
+  --compare-image ${EPSILON_12}   ${BASELINE}/sarTvMLCToCoherencyImageFilter.tif
+                    ${TEMP}/sarTvMLCToCoherencyImageFilter.tif
         otbMLCToCoherencyImageFilter
         ${INPUTDATA}/RSAT_imagery_HH.tif
         ${INPUTDATA}/RSAT_imagery_HV.tif
@@ -185,8 +185,8 @@ ADD_TEST(sarTuMLCToCoherencyDegreeImageFilterNew ${SARPOLARIMETRY_TESTS1}
 )
 
 ADD_TEST(sarTvMLCToCoherencyDegreeImageFilter ${SARPOLARIMETRY_TESTS1}
-#  --compare-image ${EPSILON_12}   ${BASELINE}/sarTvMLCToCoherencyDegreeImageFilter.tif
-#                    ${TEMP}/sarTvMLCToCoherencyDegreeImageFilter.tif
+  --compare-image ${EPSILON_12}   ${BASELINE}/sarTvMLCToCoherencyDegreeImageFilter.tif
+                    ${TEMP}/sarTvMLCToCoherencyDegreeImageFilter.tif
         otbMLCToCoherencyDegreeImageFilter
         ${INPUTDATA}/RSAT_imagery_HH.tif
         ${INPUTDATA}/RSAT_imagery_HV.tif
@@ -201,8 +201,8 @@ ADD_TEST(sarTuMLCToCircularCoherencyDegreeImageFilterNew ${SARPOLARIMETRY_TESTS1
 )
 
 ADD_TEST(sarTvMLCToCircularCoherencyDegreeImageFilter ${SARPOLARIMETRY_TESTS1}
-#  --compare-image ${EPSILON_12}   ${BASELINE}/sarTvMLCToCircularCoherencyDegreeImageFilter.tif
-#                    ${TEMP}/sarTvMLCToCircularCoherencyDegreeImageFilter.tif
+  --compare-image ${EPSILON_12}   ${BASELINE}/sarTvMLCToCircularCoherencyDegreeImageFilter.tif
+                    ${TEMP}/sarTvMLCToCircularCoherencyDegreeImageFilter.tif
         otbMLCToCircularCoherencyDegreeImageFilter
         ${INPUTDATA}/RSAT_imagery_HH.tif
         ${INPUTDATA}/RSAT_imagery_HV.tif
@@ -217,8 +217,8 @@ ADD_TEST(sarTuHAlphaImageFilterNew ${SARPOLARIMETRY_TESTS1}
 )
 
 ADD_TEST(sarTvHAlphaImageFilter ${SARPOLARIMETRY_TESTS1}
-#  --compare-image ${EPSILON_12}   ${BASELINE}/sarTvHAlphaImageFilter.tif
-#                    ${TEMP}/sarTvHAlphaImageFilter.tif
+  --compare-image ${EPSILON_12}   ${BASELINE}/sarTvHAlphaImageFilter.tif
+                    ${TEMP}/sarTvHAlphaImageFilter.tif
         otbHAlphaImageFilter
         ${INPUTDATA}/RSAT_imagery_HH.tif
         ${INPUTDATA}/RSAT_imagery_HV.tif
