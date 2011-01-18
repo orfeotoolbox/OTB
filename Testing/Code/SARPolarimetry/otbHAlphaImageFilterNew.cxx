@@ -15,23 +15,27 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#if defined(_MSC_VER)
+#pragma warning ( disable : 4786 )
+#endif
+
 #include "itkExceptionObject.h"
-#include "otbPrepareSRTMDirectory.h"
+#include <iostream>
 
-int otbPrepareSRTMDirectoryTest(int argc, char * argv[])
+#include "otbImage.h"
+#include "otbVectorImage.h"
+#include "otbHAlphaImageFilter.h"
+
+int otbHAlphaImageFilterNew(int argc, char * argv[])
 {
+  typedef double   PixelType;
+  const unsigned int Dimension = 2;
 
-  typedef otb::PrepareSRTMDirectory PrepareSRTMDirectoryType;
+  typedef otb::HAlphaImageFilter<PixelType> FilterType;
 
-  PrepareSRTMDirectoryType::Pointer prepareSRTM = PrepareSRTMDirectoryType::New();
-  prepareSRTM->SetFullDEMDirectoryPath(argv[1]);
-  prepareSRTM->SetDEMDirectoryPath(argv[2]);
-  prepareSRTM->SetULLon(atof(argv[3]));
-  prepareSRTM->SetULLat(atof(argv[4]));
-  prepareSRTM->SetLRLon(atof(argv[5]));
-  prepareSRTM->SetLRLat(atof(argv[6]));
+  FilterType::Pointer filter = FilterType::New();
 
-  prepareSRTM->Evaluate();
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }
