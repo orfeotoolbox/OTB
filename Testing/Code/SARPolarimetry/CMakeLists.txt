@@ -195,6 +195,21 @@ ADD_TEST(sarTvMLCToCoherencyDegreeImageFilter ${SARPOLARIMETRY_TESTS1}
         ${TEMP}/sarTvMLCToCoherencyDegreeImageFilter.tif
 	)
 
+# MLC To Circular Coherency Degree Image Filter
+ADD_TEST(sarTuMLCToCircularCoherencyDegreeImageFilterNew ${SARPOLARIMETRY_TESTS1}
+		otbMLCToCircularCoherencyDegreeImageFilterNew
+)
+
+ADD_TEST(sarTvMLCToCircularCoherencyDegreeImageFilter ${SARPOLARIMETRY_TESTS1}
+#  --compare-image ${EPSILON_12}   ${BASELINE}/sarTvMLCToCircularCoherencyDegreeImageFilter.tif
+#                    ${TEMP}/sarTvMLCToCircularCoherencyDegreeImageFilter.tif
+        otbMLCToCircularCoherencyDegreeImageFilter
+        ${INPUTDATA}/RSAT_imagery_HH.tif
+        ${INPUTDATA}/RSAT_imagery_HV.tif
+        ${INPUTDATA}/RSAT_imagery_HV.tif
+        ${INPUTDATA}/RSAT_imagery_VV.tif
+        ${TEMP}/sarTvMLCToCircularCoherencyDegreeImageFilter.tif
+	)
 
 
 # A enrichir
@@ -214,6 +229,8 @@ otbMLCToCoherencyImageFilterNew.cxx
 otbMLCToCoherencyImageFilter.cxx
 otbMLCToCoherencyDegreeImageFilterNew.cxx
 otbMLCToCoherencyDegreeImageFilter.cxx
+otbMLCToCircularCoherencyDegreeImageFilterNew.cxx
+otbMLCToCircularCoherencyDegreeImageFilter.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbSARPolarimetryTests1 "${SARPOLARIMETRY_SRCS1}" "OTBSARPolarimetry;OTBIO;OTBTesting")
