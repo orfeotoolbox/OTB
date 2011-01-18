@@ -163,10 +163,10 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
     // between Linux and Win32 plateforms
     if ((!ignoreCurrentLineRef) && (!ignoreCurrentLineTest))
       {
-      if(isStringFound(strfileref))
+      if(isToBeIgnoredForAnyComparison(strfileref))
         ignoreCurrentLineRef = true;
       
-      if(isStringFound(strfiletest))
+      if(isToBeIgnoredForAnyComparison(strfiletest))
         ignoreCurrentLineTest = true;
       }
     
@@ -1165,21 +1165,11 @@ bool TestHelper::isScientificNumeric(std::string str) const
   return true;
 }
 
-bool TestHelper::isStringFound(std::string str) const
+bool TestHelper::isToBeIgnoredForAnyComparison(std::string str) const
 {
-  std::string rttiString = "RTTI";
-   std::string modTimeString = "Modified Time"; 
-  if(str.find(rttiString) != std::string::npos )
-    {
-      return true;
-    }
-  else if(str.find(modTimeString) != std::string::npos )
-    {
-      return true;
-    }
-  
-  
-
+  if (str.find("RTTI") != std::string::npos) return true;
+  if (str.find("Modified Time") != std::string::npos) return true;
+  if (str.find("PipelineMTime:") != std::string::npos) return true;
   return false;
 }
 

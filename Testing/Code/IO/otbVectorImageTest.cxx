@@ -136,7 +136,7 @@ int otbVectorImageTest(int argc, char* argv[])
     }
   const char * inputFilename  = argv[1];
   const char * outputAsciiFilename  = argv[2];
-  int datasetNumber = 0;
+  int datasetNumber = -1;
   if (argc > 3)
     {
     datasetNumber = atoi(argv[3]);
@@ -150,7 +150,10 @@ int otbVectorImageTest(int argc, char* argv[])
   ReaderType::Pointer reader = ReaderType::New();
 
   reader->SetFileName(inputFilename);
-  reader->SetDatasetNumber(datasetNumber);
+  if (datasetNumber != -1)
+    {
+    reader->SetDatasetNumber(datasetNumber);
+    }
   reader->UpdateOutputInformation();
 
   std::ofstream file;

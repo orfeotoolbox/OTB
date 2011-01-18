@@ -51,6 +51,7 @@ template <class TOutputImage>
 ImageFileReader<TOutputImage>
 ::ImageFileReader() : itk::ImageFileReader<TOutputImage>(), m_DatasetNumber(0)
 {
+  m_Curl = CurlHelper::New();
 }
 
 template <class TOutputImage>
@@ -479,8 +480,7 @@ ImageFileReader<TOutputImage>
        && this->m_FileName[2] == 't'
        && this->m_FileName[3] == 'p')
     {
-    CurlHelper::Pointer curlHelper = CurlHelper::New();
-    int                 res = curlHelper->TestUrlAvailability(this->m_FileName);
+    int res = m_Curl->TestUrlAvailability(this->m_FileName);
     if (res != 0 && res != 63) // 63 stands for filesize exceed
       {
       itk::ImageFileReaderException e(__FILE__, __LINE__);
@@ -493,6 +493,18 @@ ImageFileReader<TOutputImage>
       throw e;
       }
     return;
+    }
+
+  // Test if we have an hdf file with dataset spec
+  std::string realfile(this->m_FileName);
+  unsigned int datasetNum;
+  if (System::ParseHdfFileName(this->m_FileName, realfile, datasetNum))
+    {
+    otbMsgDevMacro(<< "HDF name with dataset specification detected");
+    otbMsgDevMacro(<< " - " << realfile);
+    otbMsgDevMacro(<< " - " << datasetNum);
+    this->m_FileName = realfile;
+    m_DatasetNumber = datasetNum;
     }
 
   // Test if the file exists.

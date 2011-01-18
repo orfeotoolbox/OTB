@@ -27,11 +27,11 @@ namespace otb
    * Constructor
    */
 
-PlaceNameToLonLat::PlaceNameToLonLat()
+PlaceNameToLonLat::PlaceNameToLonLat() :
+      m_Lon(-1000.0), m_Lat(-1000.0),
+      m_PlaceName("Where everything started")
 {
-  m_Lon = -1000.0;
-  m_Lat = -1000.0;
-  m_PlaceName = "Where everything started";
+  m_Curl = CurlHelper::New();
 }
 
 /**
@@ -107,8 +107,7 @@ curlHandlerWriteMemoryCallback(void *ptr, size_t size, size_t nmemb,
 
 void PlaceNameToLonLat::RetrieveXML(const std::ostringstream& urlStream)
 {
-  CurlHelper::Pointer curlHelper = CurlHelper::New();
-  curlHelper->RetrieveFile(urlStream, "out.xml");
+  m_Curl->RetrieveFile(urlStream, "out.xml");
 }
 
 void PlaceNameToLonLat::ParseXMLYahoo()

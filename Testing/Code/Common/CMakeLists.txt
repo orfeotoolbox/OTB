@@ -46,6 +46,12 @@ ADD_TEST(coTuSystemTests_IsA_Methods ${COMMON_TESTS1}
         ${OTB_DATA_ROOT}
         )
 
+ADD_TEST(coTvParseHdfSubsetName ${COMMON_TESTS1}
+        otbParseHdfSubsetName)
+
+ADD_TEST(coTvParseHdfFileName ${COMMON_TESTS1}
+        otbParseHdfFileName)
+
 # -------            otb::Configuration  -------------
 ADD_TEST(coTuConfigurationTest ${COMMON_TESTS1}
         otbConfigurationTest

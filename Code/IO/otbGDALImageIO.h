@@ -164,8 +164,6 @@ private:
   bool GDALInfoReportCorner(const char * corner_name, double x, double y,
                             double& dfGeoX, double& dfGeoY);
 
-  bool ParseHdfSubsetName(const std::string& id, std::string& key, std::string& name) const;
-
   bool m_FlagWriteImageInformation;
   bool m_CanStreamWrite;
 

@@ -1238,6 +1238,20 @@ ADD_TEST(ioTvMultiDatasetReading2 ${IO_TESTS9}
       ${TEMP}/ioTvMultiDatasetReading2.txt
       5
       )
+ADD_TEST(ioTvMultiDatasetReadingInName1 ${IO_TESTS9}
+  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReading1.txt
+                             ${TEMP}/ioTvMultiDatasetReadingInName1.txt
+      otbVectorImageTest
+      ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf:0
+      ${TEMP}/ioTvMultiDatasetReadingInName1.txt
+      )
+ADD_TEST(ioTvMultiDatasetReadingInName2 ${IO_TESTS9}
+  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReading2.txt
+                             ${TEMP}/ioTvMultiDatasetReadingInName2.txt
+      otbVectorImageTest
+      ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf:5
+      ${TEMP}/ioTvMultiDatasetReadingInName2.txt
+      )
 # ---  STREAMING  IMAGE   FILE    WRITER  ---
 ADD_TEST(ioTvStreamingIFWriterBSQWithoutStreaming ${IO_TESTS2}
    --compare-image ${EPSILON_9}   ${INPUTDATA}/poupees_1canal.c1.hdr
@@ -1665,28 +1679,6 @@ ADD_TEST(ioTvDEMToOrthoImageGeneratorWithInputImage ${IO_TESTS12}
          ${TEMP}/ioTvDEMToOrthoImageGeneratorWithInputImage.tif
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
-
-# ---  otb::PrepareSRTMDirectory ---
-ADD_TEST(ioTuPrepareSRTMDirectoryNew ${IO_TESTS12}
-      otbPrepareSRTMDirectoryNew )
-
-ADD_TEST(ioTvPrepareSRTMDirectoryTest ${IO_TESTS12}
-  --compare-n-ascii ${EPSILON_9} 3
-		    ${INPUTDATA}/DEM/srtm_directory/N44E007.hgt
-		    ${TEMP}/ioTvPrepareSRTMDirectoryTest/N44E007.hgt
-		    ${INPUTDATA}/DEM/srtm_directory/N46E007.hgt
-		    ${TEMP}/ioTvPrepareSRTMDirectoryTest/N46E007.hgt
-		    ${INPUTDATA}/DEM/srtm_directory/N45E007.hgt
-		    ${TEMP}/ioTvPrepareSRTMDirectoryTest/N45E007.hgt
-  otbPrepareSRTMDirectoryTest
-      ${INPUTDATA}/DEM/srtm_directory
-      ${TEMP}/ioTvPrepareSRTMDirectoryTest
-      7.2
-      45.2
-      6.1
-      44.6
-)
-
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2937,8 +2929,6 @@ otbDEMToOrthoImageGeneratorNew.cxx
 otbDEMToOrthoImageGeneratorTest.cxx
 otbDEMToOrthoImageGeneratorTest2.cxx
 otbDEMToOrthoImageGeneratorWithInputImageTest.cxx
-otbPrepareSRTMDirectoryNew.cxx
-otbPrepareSRTMDirectoryTest.cxx
 )
 
 

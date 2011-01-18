@@ -405,7 +405,7 @@ void GDALImageIO::InternalReadImageInformation()
       for( int cpt = 0; papszMetadata[cpt] != NULL; cpt++ )
         {
         std::string key, name;
-        if (ParseHdfSubsetName(papszMetadata[cpt], key, name))
+        if (System::ParseHdfSubsetName(papszMetadata[cpt], key, name))
           {
           otbMsgDevMacro(<< "- key:  " << key);
           otbMsgDevMacro(<< "- name: " << name);
@@ -421,7 +421,7 @@ void GDALImageIO::InternalReadImageInformation()
       }
     else
       {
-      itkExceptionMacro(<< "Dataset requested does not exist.");
+      itkExceptionMacro(<< "Dataset requested does not exist (" << names.size() << " datasets)");
       }
     }
 
@@ -1316,13 +1316,5 @@ bool GDALImageIO::GDALInfoReportCorner(const char * /*corner_name*/, double x, d
   return IsTrue;
 }
 
-bool GDALImageIO::ParseHdfSubsetName(const std::string& id, std::string& key, std::string& name) const
-{
-  std::size_t pos = id.find("=");
-  if (pos == std::string::npos) return false;
-  key = id.substr(0, pos);
-  name = id.substr(pos+1, id.size() - pos - 1);
-  return true;
-}
 
 } // end namespace otb

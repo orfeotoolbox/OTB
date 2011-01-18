@@ -15,17 +15,19 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "itkExceptionObject.h"
-#include "otbPrepareSRTMDirectory.h"
 
-int otbPrepareSRTMDirectoryNew(int argc, char * argv[])
+#include "otbUtils.h"
+
+namespace otb
 {
 
-  typedef otb::PrepareSRTMDirectory PrepareSRTMDirectoryType;
+bool Utils::IsLonLatValid(double lon, double lat)
+{
+  if (lon < -180.0) return false;
+  if (lon > 180.0) return false;
+  if (lat < -90.0) return false;
+  if (lat > 90.0) return false;
+  return true;
+}
 
-  PrepareSRTMDirectoryType::Pointer prepareSRTM = PrepareSRTMDirectoryType::New();
-
-  std::cout << prepareSRTM << std::endl;
-
-  return EXIT_SUCCESS;
 }

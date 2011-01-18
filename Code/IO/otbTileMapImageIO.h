@@ -30,6 +30,8 @@
 #include "itkImageIOBase.h"
 #include "otbImageRegionTileMapSplitter.h"
 
+#include "otbCurlHelperInterface.h"
+
 namespace otb
 {
 
@@ -195,6 +197,8 @@ private:
   std::vector<std::string>          m_ListURLs;
   std::vector<TileNameAndCoordType> m_ListTiles;
   int                               m_MaxConnect;
+
+  CurlHelperInterface::Pointer      m_Curl;
 
   /** Byte per pixel pixel */
   int m_BytePerPixel;

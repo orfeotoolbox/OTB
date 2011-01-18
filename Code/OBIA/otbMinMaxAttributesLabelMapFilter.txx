@@ -89,7 +89,6 @@ void
 MinMaxAttributesLabelMapFilter<TInputImage>
 ::GenerateData()
 {
-  unsigned int nbAttr = this->GetLabelMap()->GetLabelObject(0)->GetNumberOfAttributes();
   std::vector<std::string> attributes = this->GetLabelMap()->GetLabelObject(0)->GetAvailableAttributes();
 
   AttributesMapType& minAttr = this->GetMinimumOutput()->Get();
