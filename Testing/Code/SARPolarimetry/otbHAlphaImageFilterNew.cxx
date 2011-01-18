@@ -22,7 +22,6 @@
 #include "itkExceptionObject.h"
 #include <iostream>
 
-#include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbHAlphaImageFilter.h"
 
