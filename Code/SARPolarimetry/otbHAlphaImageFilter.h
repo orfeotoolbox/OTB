@@ -30,7 +30,6 @@
 #include "vnl/vnl_matrix_fixed.h"
 #include "vnl/algo/vnl_generalized_eigensystem.h"
 
-#include "itkEigenAnalysis3DImageFilter.h"
 #include "itkNthElementImageAdaptor.h"
 #include "otbHermitianEigenAnalysis.h"
 
