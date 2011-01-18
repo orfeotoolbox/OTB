@@ -27,7 +27,7 @@ namespace otb {
  *  \brief This class is a helper class to estimate the output
  *  parameters of an image after projection in a target SRS (defined
  *  here using its projectionRef). 
- *	
+ *       
  * This class allow the computation of the output Origin|Spacing|Size
  * when projecting an image in a target SRS. The user can set the
  * target projectionRef via SetOutputProjectionRef(std::string).

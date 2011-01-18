@@ -41,7 +41,6 @@
 #endif
 
 
-
 namespace otb
  {
 /** \class otbHAlphaImageFilter
@@ -62,11 +61,9 @@ namespace otb
 
 
 
-
 template <class TPixel>
 class  HAlphaImageFilter :
    public itk::ImageToImageFilter< otb::Image<itk::Vector<TPixel,9>,2>, otb::Image<itk::Vector<TPixel,3>,2> >
-
 
 
 {
@@ -80,7 +77,6 @@ public:
                       InputImageType::ImageDimension);
   itkStaticConstMacro(OutputImageDimension, unsigned int,
                       OutputImageType::ImageDimension);
-
 
 
  
@@ -108,7 +104,7 @@ public:
    typedef typename OutputImageType::RegionType OutputImageRegionType; 
 
    typedef typename InputImageType::SizeType InputSizeType; 
-   typedef typename InputImageType::IndexType IndexType ; 
+   typedef typename InputImageType::IndexType IndexType; 
 
    
 
