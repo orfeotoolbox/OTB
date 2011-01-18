@@ -22,6 +22,7 @@
 #include "itkUnaryFunctorImageFilter.h"
 #include "otbHermitianEigenAnalysis.h"
 #include "itkVector.h"
+#include "otbMath.h"
 
 namespace otb
  {
@@ -141,13 +142,13 @@ public:
       }
 
     val0=sqrt(eigenVectors[0][0]*eigenVectors[0][0]+eigenvectors[0][1]*eigenvectors[0][1]);
-    a0=acos(abs(val0)) **180./PI;
+    a0=acos(abs(val0)) * CONST_180_PI;
 
     val1=sqrt(eigenVectors[0][2]*eigenVectors[0][2]+eigenVectors[0][3]*m_EigenVectors[0][3]);
-    a1=acos(abs(val1))*180./PI;
+    a1=acos(abs(val1)) * CONST_180_PI;
 
     val2=sqrt(eigenVectors[0][4]*eigenVectors[0][4]+eigenvectors[0][5]*eigenvectors[0][5]);
-    a2=acos(abs(val2))*180./PI;
+    a2=acos(abs(val2)) * CONST_180_PI;
 
     m_Alpha=p[0]*a0 + p[1]*a1 + p[2]*a2;
 
