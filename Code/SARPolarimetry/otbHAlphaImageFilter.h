@@ -33,12 +33,9 @@ namespace Functor {
  * \brief Evaluate the H-Alpha parameters from the coherency matrix image
  *
  * *  Output value are:
- *   channel #0 : \f$ 0.5 * (S_{hh}+S_{vv}.(S_{hh}+S_{vv})^{*} \f$
- *   channel #1 : \f$ 0.5 * (S_{hh}+S_{vv}.(S_{hh}-S_{vv})^{*} \f$
- *   channel #2 : \f$ (S_{hh}+S_{vv}.(S_{hv})^{*} \f$
- *   channel #3 : \f$ 0.5 * (S_{hh}-S_{vv}.(S_{hh}-S_{vv})^{*} \f$
- *   channel #4 : \f$ (S_{hh}-S_{vv}.(S_{hv})^{*}  \f$
- *   channel #5 : \f$ 2.0*S_{hv}.S_{hv}^{*} \f$
+ *   channel #0 : entropy
+ *   channel #1 : \f$ \alpha \f$ parameter
+ *   channel #2 : anisotropy
  *
  */
 template< class TInput, class TOutput>
