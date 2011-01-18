@@ -28,10 +28,12 @@
 
 int otbHAlphaImageFilterNew(int argc, char * argv[])
 {
-  typedef double   PixelType;
   const unsigned int Dimension = 2;
 
-  typedef otb::HAlphaImageFilter<PixelType> FilterType;
+  typedef std::complex<double>   PixelType;
+  typedef otb::VectorImage<PixelType, Dimension> ImageType;
+
+  typedef otb::HAlphaImageFilter<ImageType, ImageType> FilterType;
 
   FilterType::Pointer filter = FilterType::New();
 
