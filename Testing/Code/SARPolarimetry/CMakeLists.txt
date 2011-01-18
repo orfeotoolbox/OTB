@@ -211,6 +211,11 @@ ADD_TEST(sarTvMLCToCircularCoherencyDegreeImageFilter ${SARPOLARIMETRY_TESTS1}
         ${TEMP}/sarTvMLCToCircularCoherencyDegreeImageFilter.tif
 	)
 
+# H Alpha Image Filter
+ADD_TEST(sarTuHAlphaImageFilterNew ${SARPOLARIMETRY_TESTS1}
+		otbHAlphaImageFilterNew
+)
+
 
 # A enrichir
 SET(SARPOLARIMETRY_SRCS1
@@ -231,6 +236,7 @@ otbMLCToCoherencyDegreeImageFilterNew.cxx
 otbMLCToCoherencyDegreeImageFilter.cxx
 otbMLCToCircularCoherencyDegreeImageFilterNew.cxx
 otbMLCToCircularCoherencyDegreeImageFilter.cxx
+otbHAlphaImageFilterNew.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbSARPolarimetryTests1 "${SARPOLARIMETRY_SRCS1}" "OTBSARPolarimetry;OTBIO;OTBTesting")
