@@ -305,10 +305,10 @@ private:
   // Method to estimate the input & output rpc model
   void EstimateOutputRpcModel();
   void EstimateInputRpcModel();
-  void EstimateOutputSpacing();
-  void EstimateOutputSize();
-  void EstimateOutputImageExtent();
-  void EstimateOutputOrigin();
+  //void EstimateOutputSpacing();
+  //void EstimateOutputSize();
+  //void EstimateOutputImageExtent();
+  //void EstimateOutputOrigin();
 
   // boolean that allow the estimation of the input rpc model
   bool                               m_EstimateInputRpcModel;

@@ -84,8 +84,8 @@ public:
   };
 
   /** Method to Set/Get the input */
-  itkSetObjectMacro(Input,ImageType);
-  itkGetObjectMacro(Input,ImageType);
+  itkSetConstObjectMacro(Input,ImageType);
+  itkGetConstObjectMacro(Input,ImageType);
 
   /** Output Origin */
   itkSetMacro(OutputOrigin,PointType);
@@ -165,7 +165,7 @@ private:
   void EstimateOutputSize();
   void EstimateOutputOrigin();
   
-  typename ImageType::Pointer   m_Input;
+  typename ImageType::ConstPointer   m_Input;
   PointType                     m_OutputOrigin;
   SpacingType                   m_OutputSpacing;
   SizeType                      m_OutputSize;
