@@ -17,7 +17,7 @@
 =========================================================================*/
 #include "itkNumericTraits.h"
 
-#include "otbCanopyParametersTo4SailCanopyBidirectionalReflectance.h"
+#include "otbSailModel.h"
 #include <boost/math/special_functions/expint.hpp>
 #include <boost/shared_ptr.hpp>
 #include "otbMath.h"
@@ -28,105 +28,129 @@
 namespace otb
 {
 
-
-CanopyParametersTo4SailCanopyBidirectionalReflectance
-::CanopyParametersTo4SailCanopyBidirectionalReflectance()
+/** Constructor */
+SailModel
+::SailModel()
 {
    this->ProcessObject::SetNumberOfRequiredInputs(2);
-   this->ProcessObject::SetNumberOfRequiredOutputs(1);
+   this->ProcessObject::SetNumberOfRequiredOutputs(2);
    
-   CanopyBidirectionalReflectanceType::Pointer output = static_cast<CanopyBidirectionalReflectanceType *>(this->MakeOutput(0).GetPointer());
-   this->itk::ProcessObject::SetNthOutput(0,output.GetPointer());
+   SpectralResponseType::Pointer vRefl = static_cast<SpectralResponseType *>(this->MakeOutput(0).GetPointer());
+   this->itk::ProcessObject::SetNthOutput(0,vRefl.GetPointer());
    
+   SpectralResponseType::Pointer hRefl = static_cast<SpectralResponseType *>(this->MakeOutput(1).GetPointer());
+   this->itk::ProcessObject::SetNthOutput(1,hRefl.GetPointer());
+   
+   //default values
+   m_LAI=2;
+   m_Angl=50; 
+   m_PSoil=1;
+   m_Skyl=70; 
+   m_HSpot=0.2;
+   m_TTS=30;
+   m_TTO=0;
+   m_PSI=0;
 }
 
 
-
-
+/** Set/Get input reflectance */
 void
-CanopyParametersTo4SailCanopyBidirectionalReflectance
-::SetCanopyParameters(const CanopyParametersType * object)
+SailModel
+::SetReflectance(const SpectralResponseType * object)
 {
-   this->itk::ProcessObject::SetNthInput(0,const_cast<CanopyParametersType *>(object));
+   this->itk::ProcessObject::SetNthInput(0,const_cast<SpectralResponseType *>(object));
 }
 
-CanopyParametersTo4SailCanopyBidirectionalReflectance::CanopyParametersType *
-CanopyParametersTo4SailCanopyBidirectionalReflectance
-::GetCanopyParameters()
+SailModel::SpectralResponseType *
+SailModel
+::GetReflectance()
 {
    if(this->GetNumberOfInputs() != 2)
    {
       //exit
       return 0;
    }
-   return static_cast<CanopyParametersType *>(this->itk::ProcessObject::GetInput(0));
+   return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetInput(0));
 }
 
+/** Set/Get input transmittance */
 void
-CanopyParametersTo4SailCanopyBidirectionalReflectance
-::SetLeafOpticalProperties(const LeafOpticalPropertiesType * object)
+SailModel
+::SetTransmittance(const SpectralResponseType * object)
 {
-   this->itk::ProcessObject::SetNthInput(1,const_cast<LeafOpticalPropertiesType *>(object));
+   this->itk::ProcessObject::SetNthInput(1,const_cast<SpectralResponseType *>(object));
 }
 
-CanopyParametersTo4SailCanopyBidirectionalReflectance::LeafOpticalPropertiesType *
-CanopyParametersTo4SailCanopyBidirectionalReflectance
-::GetLeafOpticalProperties()
+SailModel::SpectralResponseType *
+SailModel
+::GetTransmittance()
 {
    if(this->GetNumberOfInputs() != 2)
    {
       //exit
       return 0;
    }
-   return static_cast<LeafOpticalPropertiesType *>(this->itk::ProcessObject::GetInput(1));
+   return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetInput(1));
 }
 
-
-CanopyParametersTo4SailCanopyBidirectionalReflectance::DataObjectPointer
-CanopyParametersTo4SailCanopyBidirectionalReflectance
+/** Make output */
+SailModel::DataObjectPointer
+SailModel
 ::MakeOutput(unsigned int)
 {
-   return static_cast<itk::DataObject*>(CanopyBidirectionalReflectanceType::New().GetPointer());
+   return static_cast<itk::DataObject*>(SpectralResponseType::New().GetPointer());
 }
 
-CanopyParametersTo4SailCanopyBidirectionalReflectance::CanopyBidirectionalReflectanceType *
-CanopyParametersTo4SailCanopyBidirectionalReflectance
-::GetOutput()
+/** Get output vertical reflectance */
+SailModel::SpectralResponseType *
+SailModel
+::GetVerticalReflectance()
 {
-   if(this->GetNumberOfOutputs() < 1)
+   if(this->GetNumberOfOutputs() < 2)
    {
       //exit
       return 0;
    }
-   return static_cast<CanopyBidirectionalReflectanceType *>(this->itk::ProcessObject::GetOutput(0));
+   return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetOutput(0));
+}
+
+/** Get output horizontal reflectance */
+SailModel::SpectralResponseType *
+SailModel
+::GetHorizontalReflectance()
+{
+   if(this->GetNumberOfOutputs() < 2)
+   {
+      //exit
+      return 0;
+   }
+   return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetOutput(1));
 }
 
 
-
+/** Generate data */
 void
-CanopyParametersTo4SailCanopyBidirectionalReflectance
+SailModel
 ::GenerateData()
 {
 
-   CanopyParametersType::Pointer canopyParameters = this->GetCanopyParameters();
-   LeafOpticalPropertiesType::Pointer leaftOpticalProperties = this->GetLeafOpticalProperties();
-   CanopyBidirectionalReflectanceType::Pointer output = this->GetOutput();
-   
-   
-   std::cout<<"canopy params : "<<canopyParameters<<std::endl;
+   SpectralResponseType::Pointer inRefl = this->GetReflectance();
+   SpectralResponseType::Pointer inTrans = this->GetTransmittance();
+   SpectralResponseType::Pointer outVRefl = this->GetVerticalReflectance();
+   SpectralResponseType::Pointer outHRefl = this->GetHorizontalReflectance();
    
    // LEAF ANGLE DISTRIBUTION
    double rd = CONST_PI/180;
    VectorType lidf;
-   this->Calc_LIDF(canopyParameters->GetAngl(), lidf);
+   this->Calc_LIDF(m_Angl, lidf);
 
    double cts, cto, ctscto, tants, tanto, cospsi, dso;
-   cts = vcl_cos(rd*canopyParameters->GetTTS());
-   cto = vcl_cos(rd*canopyParameters->GetTTO());
+   cts = vcl_cos(rd*m_TTS);
+   cto = vcl_cos(rd*m_TTO);
    ctscto = cts*cto;
-   tants = vcl_tan(rd*canopyParameters->GetTTS());
-   tanto = vcl_tan(rd*canopyParameters->GetTTO());
-   cospsi = vcl_cos(rd*canopyParameters->GetPSI());
+   tants = vcl_tan(rd*m_TTS);
+   tanto = vcl_tan(rd*m_TTO);
+   cospsi = vcl_cos(rd*m_PSI);
    dso = vcl_sqrt(tants*tants+tanto*tanto-2.*tants*tanto*cospsi);
 
    // angular distance, compensation of shadow length
@@ -149,7 +173,7 @@ CanopyParametersTo4SailCanopyBidirectionalReflectance
       // SAIL volume scattering phase function gives interception and portions to be 
       // multiplied by rho and tau
       
-      this->Volscatt(canopyParameters->GetTTS(),canopyParameters->GetTTO(),canopyParameters->GetPSI(),ttl,result);
+      this->Volscatt(m_TTS,m_TTO,m_PSI,ttl,result);
       chi_s = result[0];
       chi_o = result[1];
       frho = result[2];
@@ -202,8 +226,6 @@ CanopyParametersTo4SailCanopyBidirectionalReflectance
    double Ps,Qs,Pv,Qv,z,g1,g2,Tv1,Tv2,T1,T2,T3;
    double alf,sumint,fhot,x1,y1,f1,fint,x2,y2,f2;
    double resh,resv;
-   VectorPairType reshVect, resvVect;
-
    
    int nbdata = sizeof(dataSpecP5B) / sizeof(dataSpec);
    for (int i = 0 ; i < nbdata ; i++)
@@ -213,19 +235,19 @@ CanopyParametersTo4SailCanopyBidirectionalReflectance
       Ed = dataSpecP5B[i].diffuseLight; //9
       Rsoil1 = dataSpecP5B[i].drySoil; //10
       Rsoil2 = dataSpecP5B[i].wetSoil; //11
-      rho = leaftOpticalProperties->GetReflectance()[i].second; //rho = LRT[1][i];
-      tau = leaftOpticalProperties->GetTransmittance()[i].second; //tau = LRT[2][i];
+      rho = inRefl->GetResponse()[i].second; //rho = LRT[1][i];
+      tau = inTrans->GetResponse()[i].second; //tau = LRT[2][i];
 
       // direct/diffuse light
       //Es = direct
       //Ed = diffuse
-      PARdiro = (1-canopyParameters->GetSkyl()/100.)*Es;
-      PARdifo = (canopyParameters->GetSkyl()/100.)*Ed;
+      PARdiro = (1-m_Skyl/100.)*Es;
+      PARdifo = (m_Skyl/100.)*Ed;
       
       // Soil Reflectance Properties
       //rsoil1 = dry soil
       //rsoil2 = wet soil
-      rsoil0 = canopyParameters->GetPSoil()*Rsoil1+(1-canopyParameters->GetPSoil())*Rsoil2;
+      rsoil0 = m_PSoil*Rsoil1+(1-m_PSoil)*Rsoil2;
       
       // Here rho and tau come in
       sigb = ddb*rho+ddf*tau;
@@ -244,7 +266,7 @@ CanopyParametersTo4SailCanopyBidirectionalReflectance
    
       // Here the LAI comes in
       // Outputs for the case LAI = 0
-      if (canopyParameters->GetLAI()<0)
+      if (m_LAI<0)
       {
          tss = 1;
          too = 1;
@@ -268,17 +290,17 @@ CanopyParametersTo4SailCanopyBidirectionalReflectance
       }
       
       // Other cases (LAI > 0)
-      e1 = exp(-m*canopyParameters->GetLAI());
+      e1 = exp(-m*m_LAI);
       e2 = e1*e1;
       rinf = (att-m)/sigb;
       rinf2 = rinf*rinf;
       re = rinf*e1;
       denom = 1.-rinf2*e2;
 
-      J1ks=Jfunc1(ks,m,canopyParameters->GetLAI());
-      J2ks=Jfunc2(ks,m,canopyParameters->GetLAI());
-      J1ko=Jfunc1(ko,m,canopyParameters->GetLAI());
-      J2ko=Jfunc2(ko,m,canopyParameters->GetLAI());
+      J1ks=Jfunc1(ks,m,m_LAI);
+      J2ks=Jfunc2(ks,m,m_LAI);
+      J1ko=Jfunc1(ko,m,m_LAI);
+      J2ko=Jfunc2(ko,m,m_LAI);
       
       Ps = (sf+sb*rinf)*J1ks;
       Qs = (sf*rinf+sb)*J2ks;
@@ -292,9 +314,9 @@ CanopyParametersTo4SailCanopyBidirectionalReflectance
       tdo = (Pv-re*Qv)/denom;
       rdo = (Qv-re*Pv)/denom;
       
-      tss = exp(-ks*canopyParameters->GetLAI());
-      too = exp(-ko*canopyParameters->GetLAI());
-      z = Jfunc3(ks,ko,canopyParameters->GetLAI());
+      tss = exp(-ks*m_LAI);
+      too = exp(-ko*m_LAI);
+      z = Jfunc3(ks,ko,m_LAI);
       g1 = (z-J1ks*too)/(ko+m);
       g2 = (z-J1ko*tss)/(ks+m);
       
@@ -310,18 +332,18 @@ CanopyParametersTo4SailCanopyBidirectionalReflectance
       // Treatment of the hotspot-effect
       alf=1e6;
       // Apply correction 2/(K+k) suggested by F.-M. Br�on
-      if (canopyParameters->GetHSpot()>0) alf=(dso/canopyParameters->GetHSpot())*2./(ks+ko);
+      if (m_HSpot>0) alf=(dso/m_HSpot)*2./(ks+ko);
       if (alf>200) alf=200;
       if (alf==0)
       {
          // The pure hotspot - no shadow
          tsstoo = tss;
-         sumint = (1-tss)/(ks*canopyParameters->GetLAI());
+         sumint = (1-tss)/(ks*m_LAI);
       }
       else
       {
          // Outside the hotspot
-         fhot=canopyParameters->GetLAI()*vcl_sqrt(ko*ks);
+         fhot=m_LAI*vcl_sqrt(ko*ks);
          // Integrate by exponential Simpson method in 20 steps
          // the steps are arranged according to equal partitioning
          // of the slope of the joint probability function
@@ -335,7 +357,7 @@ CanopyParametersTo4SailCanopyBidirectionalReflectance
          {
             if (j<20) x2 = -vcl_log(1.-j*fint)/alf;
             else x2 = 1;
-            y2 = -(ko+ks)*canopyParameters->GetLAI()*x2+fhot*(1.-exp(-alf*x2))/alf;
+            y2 = -(ko+ks)*m_LAI*x2+fhot*(1.-exp(-alf*x2))/alf;
             f2 = exp(y2);
             sumint = sumint+(f2-f1)*(x2-x1)/(y2-y1);
             x1=x2;
@@ -347,7 +369,7 @@ CanopyParametersTo4SailCanopyBidirectionalReflectance
 
       // Bidirectional reflectance
       // Single scattering contribution
-      rsos = w*canopyParameters->GetLAI()*sumint;
+      rsos = w*m_LAI*sumint;
       // Total canopy contribution
       rso=rsos+rsod;
       //Interaction with the soil
@@ -364,26 +386,23 @@ CanopyParametersTo4SailCanopyBidirectionalReflectance
       resh = (rddt*PARdifo+rsdt*PARdiro)/(PARdiro+PARdifo);
       resv = (rdot*PARdifo+rsot*PARdiro)/(PARdiro+PARdifo);
       
-      PairType tmp1,tmp2;
+      SpectralResponseType::PairType tmp1,tmp2;
       tmp1.first=lambda;
       tmp1.second=resh;
       tmp2.first=lambda;
       tmp2.second=resv;
-      
-      reshVect.push_back(tmp1);
-      resvVect.push_back(tmp2);
+
+      outVRefl->GetResponse().push_back(tmp2);
+      outHRefl->GetResponse().push_back(tmp1);
 
    }
-   output->SetResh(reshVect);
-   output->SetResv(resvVect);
-
 }
 
 
 
 
 void
-CanopyParametersTo4SailCanopyBidirectionalReflectance
+SailModel
 ::Calc_LIDF(const double a, VectorType &lidf)
 {
    int ala=a;
@@ -396,7 +415,7 @@ CanopyParametersTo4SailCanopyBidirectionalReflectance
 
 
 void
-CanopyParametersTo4SailCanopyBidirectionalReflectance
+SailModel
 ::Campbell(const double ala, VectorType &freq)
 {
    unsigned int n=18;
@@ -459,7 +478,7 @@ CanopyParametersTo4SailCanopyBidirectionalReflectance
 
 
 void
-CanopyParametersTo4SailCanopyBidirectionalReflectance
+SailModel
 ::Volscatt(const double tts, const double tto, const double psi, const double ttl, VectorType &result)
 {
 
@@ -578,7 +597,7 @@ CanopyParametersTo4SailCanopyBidirectionalReflectance
 
 
 double
-CanopyParametersTo4SailCanopyBidirectionalReflectance
+SailModel
 ::Jfunc1(const double k, const double l, const double t)
 {
 // function Jout=Jfunc1(k,l,t)
@@ -606,7 +625,7 @@ CanopyParametersTo4SailCanopyBidirectionalReflectance
 
 
 double
-CanopyParametersTo4SailCanopyBidirectionalReflectance
+SailModel
 ::Jfunc2(const double k, const double l, const double t)
 {
 // function Jout=Jfunc2(k,l,t)
@@ -619,7 +638,7 @@ CanopyParametersTo4SailCanopyBidirectionalReflectance
 
 
 double
-CanopyParametersTo4SailCanopyBidirectionalReflectance
+SailModel
 ::Jfunc3(const double k, const double l, const double t)
 {
 // function out=Jfunc3(k,l,t)
@@ -632,7 +651,7 @@ CanopyParametersTo4SailCanopyBidirectionalReflectance
 
 
 void
-CanopyParametersTo4SailCanopyBidirectionalReflectance
+SailModel
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
    Superclass::PrintSelf(os,indent);

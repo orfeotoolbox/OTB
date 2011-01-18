@@ -18,7 +18,7 @@
 #include "itkExceptionObject.h"
 #include "otbMacro.h"
 
-#include "otbLeafParametersToProspectLeafOpticalProperties.h"
+#include "otbProspectModel.h"
 #include "otbLeafParameters.h"
 
 #include <iostream>
@@ -27,23 +27,25 @@
 int otbProspectTransTest(int argc, char * argv[])
 {
 
-   char * OutputName      = argv[1];
+   if(argc != 8)
+   {
+      std::cout<<"Wrong number of arguments !"<<std::endl;
+      return EXIT_FAILURE;
+   }
    
-   typedef otb::LeafParametersToProspectLeafOpticalProperties PropectType;
+   double Cab=static_cast<double>(atof(argv[1]));
+   double Car=static_cast<double>(atof(argv[2]));
+   double CBrown=static_cast<double>(atof(argv[3])); 
+   double Cw=static_cast<double>(atof(argv[4]));
+   double Cm=static_cast<double>(atof(argv[5]));
+   double N=static_cast<double>(atof(argv[6]));
+   char * OutputName      = argv[7];
+   
+   typedef otb::ProspectModel PropectType;
    typedef otb::LeafParameters LeafParametersType;
-   
-   
+    
    LeafParametersType::Pointer leafParams = LeafParametersType::New();
    PropectType::Pointer prospect = PropectType::New();
-
-   
-   double Cab=30.0;
-   double Car=10.0; 
-   double CBrown=0.0; 
-   double Cw=0.015; 
-   double Cm=0.009;
-   double N=1.2;
-
 
    leafParams->SetCab(Cab);
    leafParams->SetCar(Car);
@@ -56,9 +58,9 @@ int otbProspectTransTest(int argc, char * argv[])
    prospect->Update();
    
    std::ofstream outputFile(OutputName,std::ios::out);
-   for(unsigned int i=0;i<prospect->GetOutput()->GetTransmittance().size();i++)
+   for(unsigned int i=0;i<prospect->GetTransmittance()->Size();i++)
    {
-      outputFile<<prospect->GetOutput()->GetTransmittance()[i].second<<std::endl;
+      outputFile<<prospect->GetTransmittance()->GetResponse()[i].second<<std::endl;
    }
 
    

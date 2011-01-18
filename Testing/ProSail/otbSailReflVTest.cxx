@@ -18,47 +18,46 @@
 #include "itkExceptionObject.h"
 #include "otbMacro.h"
 
-#include "otbLeafOpticalProperties.h"
 #include "otbLeafParameters.h"
-#include "otbCanopyParameters.h"
-#include "otbCanopyParametersTo4SailCanopyBidirectionalReflectance.h"
-#include "otbLeafParametersToProspectLeafOpticalProperties.h"
+#include "otbSailModel.h"
+#include "otbProspectModel.h"
 
 #include <iostream>
 #include <fstream>
 
 int otbSailReflVTest(int argc, char * argv[])
 {
-   char * OutputName      = argv[1];
+   if(argc != 16)
+   {
+      std::cout<<"Wrong number of arguments !"<<std::endl;
+      return EXIT_FAILURE;
+   }
+   
+   double Cab=static_cast<double>(atof(argv[1]));
+   double Car=static_cast<double>(atof(argv[2]));
+   double CBrown=static_cast<double>(atof(argv[3])); 
+   double Cw=static_cast<double>(atof(argv[4]));
+   double Cm=static_cast<double>(atof(argv[5]));
+   double N=static_cast<double>(atof(argv[6]));
+   double LAI=static_cast<double>(atof(argv[7]));
+   double Angl=static_cast<double>(atof(argv[8]));
+   double PSoil=static_cast<double>(atof(argv[9])); 
+   double Skyl=static_cast<double>(atof(argv[10]));
+   double HSpot=static_cast<double>(atof(argv[11]));
+   double TTS=static_cast<double>(atof(argv[12]));
+   double TTO=static_cast<double>(atof(argv[13]));
+   double PSI=static_cast<double>(atof(argv[14]));
+   char * OutputName      = argv[15];
    
    
-   typedef otb::LeafParametersToProspectLeafOpticalProperties ProspectType;
-   typedef otb::CanopyParametersTo4SailCanopyBidirectionalReflectance SailType;
+   typedef otb::ProspectModel ProspectType;
+   typedef otb::SailModel SailType;
    typedef otb::LeafParameters LeafParametersType;
-   typedef otb::CanopyParameters CanopyParametersType;
    
    
    LeafParametersType::Pointer leafParams = LeafParametersType::New();
-   CanopyParametersType::Pointer canopyParams = CanopyParametersType::New();
    ProspectType::Pointer prospect = ProspectType::New();
    SailType::Pointer sail = SailType::New();
-
-   
-   double Cab=30.0;
-   double Car=10.0; 
-   double CBrown=0.0; 
-   double Cw=0.015; 
-   double Cm=0.009;
-   double N=1.2;
-   double LAI=2.0;
-   double Angl=50;
-   double PSoil=1;
-   double Skyl=70;
-   double HSpot=0.2;
-   double TTS=30;
-   double TTO=0;
-   double PSI=0;
-
 
    leafParams->SetCab(Cab);
    leafParams->SetCar(Car);
@@ -67,25 +66,26 @@ int otbSailReflVTest(int argc, char * argv[])
    leafParams->SetCm(Cm);
    leafParams->SetN(N);
    
-   canopyParams->SetLAI(LAI);
-   canopyParams->SetAngl(Angl);
-   canopyParams->SetPSoil(PSoil);
-   canopyParams->SetSkyl(Skyl);
-   canopyParams->SetHSpot(HSpot);
-   canopyParams->SetTTS(TTS);
-   canopyParams->SetTTO(TTO);
-   canopyParams->SetPSI(PSI);
+   
    
    prospect->SetInput(leafParams);
-
-   sail->SetCanopyParameters(canopyParams);
-   sail->SetLeafOpticalProperties(prospect->GetOutput());
+   
+   sail->SetLAI(LAI);
+   sail->SetAngl(Angl);
+   sail->SetPSoil(PSoil);
+   sail->SetSkyl(Skyl);
+   sail->SetHSpot(HSpot);
+   sail->SetTTS(TTS);
+   sail->SetTTO(TTO);
+   sail->SetPSI(PSI);
+   sail->SetReflectance(prospect->GetReflectance());
+   sail->SetTransmittance(prospect->GetTransmittance());
    sail->Update();
    
    std::ofstream outputFile(OutputName,std::ios::out);
-   for(unsigned int i=0;i<sail->GetOutput()->GetResv().size();i++)
+   for(unsigned int i=0;i<sail->GetVerticalReflectance()->Size();i++)
    {
-      outputFile<<sail->GetOutput()->GetResv()[i].second<<std::endl;
+      outputFile<<sail->GetVerticalReflectance()->GetResponse()[i].second<<std::endl;
    }
 
    

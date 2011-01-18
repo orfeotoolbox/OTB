@@ -15,65 +15,70 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLeafParametersToProspectLeafOpticalProperties_h
-#define __otbLeafParametersToProspectLeafOpticalProperties_h
+#ifndef __otbProspectModel_h
+#define __otbProspectModel_h
 
 
 #include "itkProcessObject.h"
 #include "itkObjectFactory.h"
 #include "otbLeafParameters.h"
-#include "otbLeafOpticalProperties.h"
+#include "otbSpectralResponse.h"
+// #include "otbLeafOpticalProperties.h"
 #include "dataSpec_P5B.h"
 
 namespace otb
 {
-/** \class LeafParametersToProspectLeafOpticalProperties
-   * \brief this class implements the LeafParametersToProspectLeafOpticalProperties lib.
+/** \class ProspectModel
+   * \brief this class implements the Prospect Model,
+   * \brief which computes leaf reflectance and transmittance from a set of parameters (contained in an otbLeafPrameters)
    *
    * \sa itk::DataObject
  */
 
-class ITK_EXPORT LeafParametersToProspectLeafOpticalProperties : public itk::ProcessObject
+class ITK_EXPORT ProspectModel : public itk::ProcessObject
 {
    public:
       /** Standard class typedefs */
-      typedef LeafParametersToProspectLeafOpticalProperties Self;
+      typedef ProspectModel Self;
       typedef itk::ProcessObject Superclass;
       typedef itk::SmartPointer<Self> Pointer;
       typedef itk::SmartPointer<const Self> ConstPointer;
       
       typedef otb::LeafParameters        LeafParametersType;
-      typedef otb::LeafOpticalProperties LeafOpticalPropertiesType;
-
+//       typedef otb::LeafOpticalProperties LeafOpticalPropertiesType;
+      typedef otb::SpectralResponse<double,double>      SpectralResponseType;
       
       /** Standard macros */
       itkNewMacro(Self);
-      itkTypeMacro(LeafParametersToProspectLeafOpticalProperties,ProcessObject);
+      itkTypeMacro(ProspectModel,ProcessObject);
       
-      /** Set Input */
+      /** Set/Get Input */
       void SetInput(const LeafParametersType *object);
       LeafParametersType * GetInput();
+      
       /** GenerateData */
       virtual void GenerateData();
       
-      /** Get Output */
-      DataObjectPointer MakeOutput(unsigned int);
-      
-      virtual LeafOpticalPropertiesType * GetOutput();
+      /** Get Output reflectance/transmittance*/
+//       virtual LeafOpticalPropertiesType * GetOutput();
+      virtual SpectralResponseType * GetReflectance();
+      virtual SpectralResponseType * GetTransmittance();
 
-      /** compute Transmission of isotropic radiation across an interface between two dielectrics*/
+      /** Compute Transmission of isotropic radiation across an interface between two dielectrics*/
       double Tav(const int theta, double ref);
 
    protected:
       /** Constructor */
-      LeafParametersToProspectLeafOpticalProperties();
+      ProspectModel();
       /** Destructor */
-      virtual ~LeafParametersToProspectLeafOpticalProperties() {};
+      virtual ~ProspectModel() {};
       /** PrintSelf method */
       void PrintSelf(std::ostream& os, itk::Indent indent) const;
+      
+      DataObjectPointer MakeOutput(unsigned int);
 
    private:
-      LeafParametersToProspectLeafOpticalProperties(const Self&); //purposely not implemented
+      ProspectModel(const Self&); //purposely not implemented
       void operator=(const Self&); //purposely not implemented
       
       LeafParametersType::Pointer m_LeafParameters;
@@ -84,7 +89,7 @@ class ITK_EXPORT LeafParametersToProspectLeafOpticalProperties : public itk::Pro
 
 
 #ifndef OTB_MANUAL_INSTANTIATION
-// #include "otbLeafParametersToProspectLeafOpticalProperties.cxx"
+// #include "otbProspectModel.cxx"
 #endif
 
 #endif

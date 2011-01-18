@@ -18,7 +18,7 @@
 
 #include "itkNumericTraits.h"
 
-#include "otbLeafParametersToProspectLeafOpticalProperties.h"
+#include "otbProspectModel.h"
 #include <boost/math/special_functions/expint.hpp>
 #include <boost/shared_ptr.hpp>
 #include "otbMath.h"
@@ -29,26 +29,31 @@
 namespace otb
 {
 
-LeafParametersToProspectLeafOpticalProperties
-::LeafParametersToProspectLeafOpticalProperties()
+/** Constructor */
+ProspectModel
+::ProspectModel()
 {
    this->ProcessObject::SetNumberOfRequiredInputs(1);
-   this->ProcessObject::SetNumberOfRequiredOutputs(1);
+   this->ProcessObject::SetNumberOfRequiredOutputs(2);
    
-   LeafOpticalPropertiesType::Pointer output = static_cast<LeafOpticalPropertiesType *>(this->MakeOutput(0).GetPointer());
-   this->itk::ProcessObject::SetNthOutput(0,output.GetPointer());
+   SpectralResponseType::Pointer outputRefl = static_cast<SpectralResponseType *>(this->MakeOutput(0).GetPointer());
+   this->itk::ProcessObject::SetNthOutput(0,outputRefl.GetPointer());
+   
+   SpectralResponseType::Pointer outputTrans = static_cast<SpectralResponseType *>(this->MakeOutput(1).GetPointer());
+   this->itk::ProcessObject::SetNthOutput(1,outputTrans.GetPointer());
 }
 
-
+/** Set Input */
 void
-LeafParametersToProspectLeafOpticalProperties
+ProspectModel
 ::SetInput(const LeafParametersType * object)
 {
    this->itk::ProcessObject::SetNthInput(0,const_cast<LeafParametersType *>(object));
 }
 
-LeafParametersToProspectLeafOpticalProperties::LeafParametersType *
-LeafParametersToProspectLeafOpticalProperties
+/** Get Input */
+ProspectModel::LeafParametersType *
+ProspectModel
 ::GetInput()
 {
    if(this->GetNumberOfInputs() != 1)
@@ -59,41 +64,54 @@ LeafParametersToProspectLeafOpticalProperties
    return static_cast<LeafParametersType *>(this->itk::ProcessObject::GetInput(0));
 }
 
-
-LeafParametersToProspectLeafOpticalProperties::DataObjectPointer
-LeafParametersToProspectLeafOpticalProperties
+/** Make outputs */
+ProspectModel::DataObjectPointer
+ProspectModel
 ::MakeOutput(unsigned int)
 {
-   return static_cast<itk::DataObject *>(LeafOpticalPropertiesType::New().GetPointer());
+   return static_cast<itk::DataObject *>(SpectralResponseType::New().GetPointer());
 }
 
-LeafParametersToProspectLeafOpticalProperties::LeafOpticalPropertiesType *
-LeafParametersToProspectLeafOpticalProperties
-::GetOutput()
+/** Get Reflectance */
+ProspectModel::SpectralResponseType *
+ProspectModel
+::GetReflectance()
 {
-   if(this->GetNumberOfOutputs() < 1)
+   if(this->GetNumberOfOutputs() < 2)
    {
       //exit
       return 0;
    }
-   return static_cast<LeafOpticalPropertiesType *>(this->itk::ProcessObject::GetOutput(0));
+   return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetOutput(0));
+}
+
+/** Get Transmittance */
+ProspectModel::SpectralResponseType *
+ProspectModel
+::GetTransmittance()
+{
+   if(this->GetNumberOfOutputs() < 2)
+   {
+      //exit
+      return 0;
+   }
+   return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetOutput(1));
 }
 
 /** Plant Leaf Reflectance and Transmittance computation from 400nm to 2500 nm*/
 void
-LeafParametersToProspectLeafOpticalProperties
+ProspectModel
 ::GenerateData()
 {
    
    LeafParametersType::Pointer leafParameters = this->GetInput();
-   LeafOpticalPropertiesType::Pointer output = this->GetOutput();
+   SpectralResponseType::Pointer outRefl = this->GetReflectance();
+   SpectralResponseType::Pointer outTrans = this->GetTransmittance();
    
    unsigned int alpha=40;
    double lambda, n, k, trans, t12, temp, t21, r12, r21, x, y, ra, ta, r90, t90;
    double delta, beta, va, vb, vbNN, vbNNinv, vainv, s1, s2, s3, RN, TN;
    double N, Cab, Car, CBrown, Cw, Cm;
-   LeafOpticalPropertiesType::VectorPairType reflVector;
-   LeafOpticalPropertiesType::VectorPairType transVector;
    
    N = leafParameters->GetN();
    Cab = leafParameters->GetCab();
@@ -152,23 +170,23 @@ LeafParametersToProspectLeafOpticalProperties
       TN=s2/s3;
 
 
-      LeafOpticalPropertiesType::PairType refl;
-      LeafOpticalPropertiesType::PairType trans;
+      SpectralResponseType::PairType refl;
+      SpectralResponseType::PairType trans;
       refl.first=lambda;
       refl.second=RN;
       trans.first=lambda;
       trans.second=TN;
-      reflVector.push_back(refl);
-      transVector.push_back(trans);
+      outRefl->GetResponse().push_back(refl);
+      outTrans->GetResponse().push_back(trans);
    }
-   output->SetReflectance(reflVector);
-   output->SetTransmittance(transVector);
+//    output->SetReflectance(reflVector);
+//    output->SetTransmittance(transVector);
    
 }
 
 
 double
-LeafParametersToProspectLeafOpticalProperties
+ProspectModel
 ::Tav(const int theta, double ref)
 {
 
@@ -209,7 +227,7 @@ LeafParametersToProspectLeafOpticalProperties
 }
 
 void
-LeafParametersToProspectLeafOpticalProperties
+ProspectModel
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
    Superclass::PrintSelf(os,indent);
