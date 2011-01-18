@@ -43,4 +43,5 @@ void RegisterTests()
   REGISTER_TEST(otbMLCToCircularCoherencyDegreeImageFilterNew);
   REGISTER_TEST(otbMLCToCircularCoherencyDegreeImageFilter);
   REGISTER_TEST(otbHAlphaImageFilterNew);
+  REGISTER_TEST(otbHAlphaImageFilter);
 }
