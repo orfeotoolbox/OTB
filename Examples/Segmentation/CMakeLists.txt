@@ -18,6 +18,9 @@ TARGET_LINK_LIBRARIES(OtsuMultipleThresholdImageFilter
 ADD_EXECUTABLE(ConfidenceConnected ConfidenceConnected.cxx )
 TARGET_LINK_LIBRARIES(ConfidenceConnected OTBCommon OTBIO ITKNumerics)
 
+ADD_EXECUTABLE(VectorConfidenceConnected VectorConfidenceConnected.cxx )
+TARGET_LINK_LIBRARIES(VectorConfidenceConnected OTBCommon OTBIO ITKNumerics)
+
 ADD_EXECUTABLE(NeighborhoodConnectedImageFilter NeighborhoodConnectedImageFilter.cxx )
 TARGET_LINK_LIBRARIES(NeighborhoodConnectedImageFilter OTBCommon OTBIO
 ITKNumerics)
@@ -210,7 +213,7 @@ ADD_TEST(seTeOtsuThresholdImageFilterTest ${EXE_TESTS}
 
 # ------- ConfidenceConnectedTest----------
 
-ADD_TEST(seTeConfidenceConnectedTest ${EXE_TESTS}
+ADD_TEST(seTeConfidenceConnectedTest1 ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/ConfidenceConnectedOutput1.png
 	${TEMP}/ConfidenceConnectedOutput1.png
@@ -222,7 +225,7 @@ ADD_TEST(seTeConfidenceConnectedTest ${EXE_TESTS}
 
 # ------- ConfidenceConnectedTest----------
 
-ADD_TEST(seTeConfidenceConnectedTest ${EXE_TESTS}
+ADD_TEST(seTeConfidenceConnectedTest2 ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/ConfidenceConnectedOutput2.png
 	${TEMP}/ConfidenceConnectedOutput2.png
@@ -234,7 +237,7 @@ ADD_TEST(seTeConfidenceConnectedTest ${EXE_TESTS}
 
 # ------- ConfidenceConnectedTest----------
 
-ADD_TEST(seTeConfidenceConnectedTest ${EXE_TESTS}
+ADD_TEST(seTeConfidenceConnectedTest3 ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/ConfidenceConnectedOutput3.png
 	${TEMP}/ConfidenceConnectedOutput3.png
@@ -242,6 +245,48 @@ ADD_TEST(seTeConfidenceConnectedTest ${EXE_TESTS}
 	${INPUTDATA}/QB_Suburb.png
 	${TEMP}/ConfidenceConnectedOutput3.png
   169 146
+)
+
+
+
+# ------- VectorConfidenceConnectedTest----------
+
+ADD_TEST(seTeVectorConfidenceConnectedTest1 ${EXE_TESTS}
+	--compare-n-images ${TOL} 1
+	${BASELINE}/VectorConfidenceConnectedOutput1.png
+	${TEMP}/VectorConfidenceConnectedOutput1.png
+	VectorConfidenceConnectedTest
+	${INPUTDATA}/maur_rgb.png
+	${TEMP}/VectorConfidenceConnectedOutput1.png
+  3.5 # multiplier
+  10 # iterations
+  113 234 # seed index
+)
+
+ADD_TEST(seTeVectorConfidenceConnectedTest2 ${EXE_TESTS}
+	--compare-n-images ${TOL} 1
+	${BASELINE}/VectorConfidenceConnectedOutput2.png
+	${TEMP}/VectorConfidenceConnectedOutput2.png
+	VectorConfidenceConnectedTest
+	${INPUTDATA}/maur_rgb.png
+	${TEMP}/VectorConfidenceConnectedOutput2.png
+  3.5 # multiplier
+  10 # iterations
+  216 30 # seed index
+)
+
+ADD_TEST(seTeVectorConfidenceConnectedTest3 ${EXE_TESTS}
+    --compare-n-images ${TOL} 1
+    ${BASELINE}/VectorConfidenceConnectedOutput3.png
+    ${TEMP}/VectorConfidenceConnectedOutput3.png
+    VectorConfidenceConnectedTest
+    ${INPUTDATA}/maur_rgb.png
+    ${TEMP}/VectorConfidenceConnectedOutput3.png
+    3.5     # multiplier
+    10      # iterations
+    113 234 # seed 1
+    57 217  # seed 2
+    136 190 # seed 3
 )
 
 # ------- NeighborhoodConnectedImageFilterTest----------
