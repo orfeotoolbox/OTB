@@ -946,8 +946,14 @@ ADD_TEST(coTuVariableLengthVectorConverter ${COMMON_TESTS12}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbCommonTests13 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+ADD_TEST(coTuPipelineMemoryPrintCalculatorNew ${COMMON_TESTS13}
+  otbPipelineMemoryPrintCalculatorNew
+    )
 
-
+ADD_TEST(coTvPipelineMemoryPrintCalculator ${COMMON_TESTS13}
+  otbPipelineMemoryPrintCalculatorTest
+  ${INPUTDATA}/qb_RoadExtract.img
+)
 
 
 # -------       Fichiers sources CXX -----------------------------------
@@ -1106,7 +1112,8 @@ otbVariableLengthVectorConverter.cxx
 
 SET(BasicCommon_SRCS13
 otbCommonTests13.cxx
-)
+otbPipelineMemoryPrintCalculatorTest.cxx)
+
 
 OTB_ADD_EXECUTABLE(otbCommonTests1 "${BasicCommon_SRCS1}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbCommonTests2 "${BasicCommon_SRCS2}" "OTBIO;OTBTesting")
