@@ -1268,7 +1268,7 @@ ADD_TEST(ioTvMultiChannelROI_HDF2TIF ${COMMON_TESTS2}
          otbMultiChannelExtractROI
          ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf:5
          ${TEMP}/ioExtractROI_HDF2TIF_MOD09Q1G_20_25_100_150_channel_1_OUT.tif
-         -startX 20 -startY 25 -sizeX 100 -sizeY 150
+         -startX 1400 -startY 3700 -sizeX 100 -sizeY 150
          -channels 1 )
       
 # ---  STREAMING  IMAGE   FILE    WRITER  ---
