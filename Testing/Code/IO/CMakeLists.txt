@@ -1261,6 +1261,16 @@ ADD_TEST(ioTvMultiDatasetReadingInfo ${IO_TESTS9}
       ${INPUTDATA}/MOD13Q1.A2010001.h17v05.005.2010028003734.hdf
       ${TEMP}/ioTvMultiDatasetReadingInfoOut.txt
       )
+            
+ADD_TEST(ioTvMultiChannelROI_HDF2TIF ${COMMON_TESTS2}
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_HDF2TIF_MOD09Q1G_20_25_100_150_channel_1.tif
+                     ${TEMP}/ioExtractROI_HDF2TIF_MOD09Q1G_20_25_100_150_channel_1_OUT.tif
+         otbMultiChannelExtractROI
+         ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf:5
+         ${TEMP}/ioExtractROI_HDF2TIF_MOD09Q1G_20_25_100_150_channel_1_OUT.tif
+         -startX 20 -startY 25 -sizeX 100 -sizeY 150
+         -channels 1 )
+      
 # ---  STREAMING  IMAGE   FILE    WRITER  ---
 ADD_TEST(ioTvStreamingIFWriterBSQWithoutStreaming ${IO_TESTS2}
    --compare-image ${EPSILON_9}   ${INPUTDATA}/poupees_1canal.c1.hdr
