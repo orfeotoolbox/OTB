@@ -233,8 +233,8 @@ ADD_TEST(sarTuCoherencyToMuellerImageFilterNew ${SARPOLARIMETRY_TESTS1}
 )
 
 ADD_TEST(sarTvCoherencyToMuellerImageFilter ${SARPOLARIMETRY_TESTS1}
-#  --compare-image ${EPSILON_12}   ${BASELINE}/sarTvCoherencyToMuellerImageFilter.tif
-#                    ${TEMP}/sarTvCoherencyToMuellerImageFilter.tif
+  --compare-image ${EPSILON_12}   ${BASELINE}/sarTvCoherencyToMuellerImageFilter.tif
+                    ${TEMP}/sarTvCoherencyToMuellerImageFilter.tif
         otbCoherencyToMuellerImageFilter
         ${INPUTDATA}/RSAT_imagery_HH.tif
         ${INPUTDATA}/RSAT_imagery_HV.tif
