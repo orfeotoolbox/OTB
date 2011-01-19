@@ -961,7 +961,6 @@ void GDALImageIO::Write(const void* buffer)
       {
       itkExceptionMacro(<< "Error while writing image (GDAL format) " << m_FileName.c_str() << ".");
       }
-
     // Flush dataset cache
     m_Dataset->GetDataSet()->FlushCache();
     }
@@ -1103,6 +1102,14 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
 
   if (m_CanStreamWrite)
     {
+
+    // Force tile mode for TIFF format. Tile mode is a lot more
+    // efficient when writing huge tiffs
+    if( driverShortName.compare("GTiff") == 0 )
+      {
+      papszOptions = CSLSetNameValue( papszOptions, "TILED", "YES" );
+      }
+
     m_Dataset = GDALDriverManagerWrapper::GetInstance().Create(
                      driverShortName,
                      GetGdalWriteImageFileName(driverShortName, m_FileName),
