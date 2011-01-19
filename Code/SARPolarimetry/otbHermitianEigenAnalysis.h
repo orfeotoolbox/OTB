@@ -77,13 +77,13 @@ public:
       m_Dimension(0),
       m_Order(0),
       m_OrderEigenValues(OrderByValue)
-    {} ;
+    {};
   
   HermitianEigenAnalysis( const unsigned int dimension ):
       m_Dimension(dimension),
       m_Order(dimension),
       m_OrderEigenValues(OrderByValue)
-    {} ;
+    {};
 
   ~HermitianEigenAnalysis() {};
 
@@ -92,7 +92,6 @@ public:
   typedef TVector      VectorType;
 
   
-
 
 
 

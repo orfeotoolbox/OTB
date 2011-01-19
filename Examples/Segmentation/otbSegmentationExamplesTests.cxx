@@ -29,6 +29,7 @@ void RegisterTests()
   REGISTER_TEST(FastMarchingImageFilterTest);
   REGISTER_TEST(OtsuThresholdImageFilterTest);
   REGISTER_TEST(ConfidenceConnectedTest);
+  REGISTER_TEST(VectorConfidenceConnectedTest);
   REGISTER_TEST(NeighborhoodConnectedImageFilterTest);
   REGISTER_TEST(WatershedSegmentationTest);
   REGISTER_TEST(ConnectedThresholdImageFilterTest);
@@ -51,6 +52,10 @@ void RegisterTests()
 #undef main
 #define main ConfidenceConnectedTest
 #include "ConfidenceConnected.cxx"
+
+#undef main
+#define main VectorConfidenceConnectedTest
+#include "VectorConfidenceConnected.cxx"
 
 #undef main
 #define main NeighborhoodConnectedImageFilterTest

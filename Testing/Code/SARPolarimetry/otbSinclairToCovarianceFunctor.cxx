@@ -39,7 +39,7 @@ int otbSinclairToCovarianceFunctor(int argc, char * argv[])
   result[4] = 0.0;
   result[5] = 1.0;
 
-  outputFunct = funct.operator ()( 1.0, 0.0, 0.0, 1.0) ;
+  outputFunct = funct.operator ()( 1.0, 0.0, 0.0, 1.0);
 
   if( vcl_abs(result[0]-outputFunct[0]) > 1e-10 ||
       vcl_abs(result[1]-outputFunct[1]) > 1e-10 ||

@@ -990,6 +990,25 @@ ADD_TEST(prTvImageToEnvelopeVectorDataFilter ${PROJECTIONS_TESTS4}
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
+#------ otb::ImageToGenericRSOutputParameters ---------------------
+ADD_TEST(prTuImageToGenericRSOutputParametersNew ${PROJECTIONS_TESTS4}
+otbImageToGenericRSOutputParametersNew)
+
+
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(prTvImageToGenericRSOutputParameters ${PROJECTIONS_TESTS4}
+  --compare-ascii ${NOTOL}
+  ${BASELINE_FILES}/prTvImageToGenericRSOutputParametersOutput.txt
+  ${TEMP}/prTvImageToGenericRSOutputParametersOutput.txt
+  otbImageToGenericRSOutputParameters
+  ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+  ${TEMP}/prTvImageToGenericRSOutputParametersOutput.txt
+)
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
+
+
+
 #=======================================================================================
 SET(Projections_SRCS1
 otbProjectionsTests1.cxx
@@ -1047,6 +1066,7 @@ otbPhysicalToRPCSensorModelImageFilter.cxx
 otbGenericRSResampleImageFilter.cxx
 otbElevDatabaseHeightAboveMSLFunction.cxx
 otbImageToEnvelopeVectorDataFilter.cxx
+otbImageToGenericRSOutputParameters.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbProjectionsTests1 "${Projections_SRCS1}" "OTBProjections;OTBIO;OTBTesting")

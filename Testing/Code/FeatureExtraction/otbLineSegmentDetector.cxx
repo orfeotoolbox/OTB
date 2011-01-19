@@ -104,3 +104,65 @@ int otbLineSegmentDetector(int argc, char * argv[])
 
   return EXIT_SUCCESS;
 }
+
+int otbLineSegmentDetector_binary(int argc, char * argv[])
+{
+  const char * infname  = argv[1];
+  const char * outfname  = argv[2];
+
+  /** Typedefs */
+  typedef unsigned char                                               PixelType;
+  typedef otb::Image<PixelType>                                       ImageType;
+  typedef otb::ImageFileReader<ImageType>                             ReaderType;
+  typedef otb::LineSegmentDetector<ImageType, double>                 LSDFilterType;
+  typedef otb::DrawLineSpatialObjectListFilter<ImageType, ImageType>  DrawLineListFilterType;
+  typedef otb::ImageFileWriter<ImageType>                             WriterType;
+
+  /** Instantiation of smart pointer*/
+  ReaderType::Pointer             reader         = ReaderType::New();
+  LSDFilterType::Pointer          lsdFilter      = LSDFilterType::New();
+  DrawLineListFilterType::Pointer drawLineFilter = DrawLineListFilterType::New();
+
+  //Reade the input image
+  reader->SetFileName(infname);
+  reader->GenerateOutputInformation();
+
+  //LSD Detection
+  lsdFilter->SetInput(reader->GetOutput());
+
+  //OutputImageRendering
+  ImageType::SizeType size;
+  size[0] = reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0];
+  size[1] = reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1];
+  ImageType::IndexType index;
+  index.Fill(0);
+  ImageType::RegionType region;
+  region.SetSize(size);
+  region.SetIndex(index);
+
+  ImageType::Pointer image = ImageType::New();
+
+  image->SetLargestPossibleRegion( region );
+  image->SetBufferedRegion( region );
+  image->SetRequestedRegion( region );
+  image->Allocate();
+
+  typedef itk::ImageRegionIteratorWithIndex<ImageType> IteratorType;
+  IteratorType it(image, region);
+
+  for (it.GoToBegin(); !it.IsAtEnd(); ++it)
+  {
+    it.Set(0);
+  }
+
+  drawLineFilter->SetInput(image);//Black BCKGRD
+  drawLineFilter->SetInputLineSpatialObjectList(lsdFilter->GetOutput());
+
+  /** Write The Output Image*/
+  WriterType::Pointer writer = WriterType::New();
+  writer->SetFileName(outfname);
+  writer->SetInput(drawLineFilter->GetOutput());
+  writer->Update();
+
+  return EXIT_SUCCESS;
+}

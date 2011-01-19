@@ -57,12 +57,10 @@ public:
   typedef itk::Vector<VectorType,3> EigenVectorFirstComposantType;
   typedef itk::Vector<VectorType,3> EigenVectorType; // type d'un vecteur propre (partie r�elle, partie imaginaire)
   typedef itk::Vector<itk::Vector<float, 6>,3> EigenMatrixType;
-
   typedef itk::Image<EigenVectorType,2> EigenVectorImageType;
   typedef itk::Image<double,2> EigenValueImageType;
 
   typedef itk::Vector<double, 3> OutputVectorType;
-
 
   typedef itk::Vector<float, 2> ComplexVectorType;
   typedef itk::Vector<ComplexVectorType, 3> HermitianVectorType;
@@ -74,7 +72,7 @@ public:
     {
     TOutput result;
     result.SetSize(m_NumberOfComponentsPerPixel);
-
+ 
     CoherencyMatrixType T;
     EigenvalueType eigenValues;
     EigenMatrixType eigenVectors;
@@ -89,7 +87,6 @@ public:
     T[6] = static_cast<RealType>(Coherency[2].imag());
     T[7] = static_cast<RealType>(Coherency[4].real());
     T[8] = static_cast<RealType>(Coherency[4].imag());
-
     HermitianAnalysis.ComputeEigenValuesAndVectors(T,eigenValues,eigenVectors);
 
     // Entropy estimation

@@ -57,14 +57,7 @@ public:
 
   inline TOutputPixel operator ()(const TInputPixel& input)
   {
-    TOutputPixel resp = static_cast<TOutputPixel>(vcl_atan2(input[0], -input[1]));
-
-    if (resp < itk::NumericTraits<TOutputPixel>::Zero)
-      {
-      resp = -resp;
-      }
-
-    return resp;
+    return static_cast<TOutputPixel>(vcl_atan2(input[0], -input[1]));
   }
 };
 }  // end namespace Functor

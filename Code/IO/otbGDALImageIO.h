@@ -101,6 +101,9 @@ public:
   /** Reads 3D data from multiple files assuming one slice per file. */
   virtual void ReadVolume(void* buffer);
 
+ // Get Info about all subDataset in hdf file
+bool GetSubDatasetInfo(std::vector<std::string>& names, std::vector<std::string>& desc);
+
   /*-------- This part of the interfaces deals with writing data. ----- */
 
   /** Determine the file type. Returns true if this ImageIO can read the
@@ -143,6 +146,8 @@ protected:
   /** Dataset index to extract (starting at 0)*/
   unsigned int m_DatasetNumber;
 
+
+
 private:
   GDALImageIO(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
@@ -170,6 +175,8 @@ private:
   /** Whether the pixel type (otb side, not gdal side) is complex
    * this information has to be provided by the reader */
   bool m_IsComplex;
+
+
 };
 
 } // end namespace otb
