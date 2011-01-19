@@ -53,16 +53,16 @@ public:
     RealType T8 = static_cast<RealType>(Coherency[4].real());
     RealType T9 = static_cast<RealType>(Coherency[4].imag());
 
-    result[0] = static_cast<RealType>( (T1+T2+T3)/2. );  //A0+B0
-    result[1] = static_cast<RealType>( (T1+T2-T3)/2. );  //A0+B
-    result[2] = static_cast<RealType>( (T1-T2+T3)/2. );  //A0-B
-    result[3] = static_cast<RealType>( (-T1+T2+T3)/2.); //-A0+B0
-    result[4] = static_cast<RealType>( T4 );             //C
-    result[5] = static_cast<RealType>( T6 );             //H
-    result[6] = static_cast<RealType>( T9 );             //F
-    result[7] = static_cast<RealType>( T8 );             //E
-    result[8] = static_cast<RealType>( T7 );             //G
-    result[9] = static_cast<RealType>(-T5 );             //D
+    result[0] = static_cast<RealType>( (T1+T2+T3)/2. );  // A0+B0
+    result[1] = static_cast<RealType>( (T1+T2-T3)/2. );  // A0+B
+    result[2] = static_cast<RealType>( (T1-T2+T3)/2. );  // A0-B
+    result[3] = static_cast<RealType>( (-T1+T2+T3)/2.);  // -A0+B0
+    result[4] = static_cast<RealType>( T4 );             // C
+    result[5] = static_cast<RealType>( T6 );             // H
+    result[6] = static_cast<RealType>( T9 );             // F
+    result[7] = static_cast<RealType>( T8 );             // E
+    result[8] = static_cast<RealType>( T7 );             // G
+    result[9] = static_cast<RealType>(-T5 );             // D
 
     return result;
     }
@@ -73,7 +73,7 @@ public:
    }
 
    /** Constructor */
-   CoherencyToMuellerFunctor() : m_NumberOfComponentsPerPixel(9)  {}
+   CoherencyToMuellerFunctor() : m_NumberOfComponentsPerPixel(10)  {}
 
    /** Destructor */
    ~CoherencyToMuellerFunctor() {}
