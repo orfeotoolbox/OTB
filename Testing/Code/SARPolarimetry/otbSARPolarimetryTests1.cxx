@@ -45,5 +45,5 @@ void RegisterTests()
   REGISTER_TEST(otbHAlphaImageFilterNew);
   REGISTER_TEST(otbHAlphaImageFilter);
   REGISTER_TEST(otbCoherencyToMuellerImageFilterNew);
-
+  REGISTER_TEST(otbCoherencyToMuellerImageFilter);
 }

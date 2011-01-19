@@ -232,6 +232,17 @@ ADD_TEST(sarTuCoherencyToMuellerImageFilterNew ${SARPOLARIMETRY_TESTS1}
 		otbCoherencyToMuellerImageFilterNew
 )
 
+ADD_TEST(sarTvCoherencyToMuellerImageFilter ${SARPOLARIMETRY_TESTS1}
+#  --compare-image ${EPSILON_12}   ${BASELINE}/sarTvCoherencyToMuellerImageFilter.tif
+#                    ${TEMP}/sarTvCoherencyToMuellerImageFilter.tif
+        otbCoherencyToMuellerImageFilter
+        ${INPUTDATA}/RSAT_imagery_HH.tif
+        ${INPUTDATA}/RSAT_imagery_HV.tif
+        ${INPUTDATA}/RSAT_imagery_HV.tif
+        ${INPUTDATA}/RSAT_imagery_VV.tif
+        ${TEMP}/sarTvCoherencyToMuellerImageFilter.tif
+	)
+
 
 # A enrichir
 SET(SARPOLARIMETRY_SRCS1
@@ -255,6 +266,7 @@ otbMLCToCircularCoherencyDegreeImageFilter.cxx
 otbHAlphaImageFilterNew.cxx
 otbHAlphaImageFilter.cxx
 otbCoherencyToMuellerImageFilterNew.cxx
+otbCoherencyToMuellerImageFilter.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbSARPolarimetryTests1 "${SARPOLARIMETRY_SRCS1}" "OTBSARPolarimetry;OTBIO;OTBTesting")
