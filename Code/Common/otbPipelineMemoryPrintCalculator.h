@@ -28,7 +28,38 @@
 namespace otb
 {
 /** \class PipelineMemoryPrintCalculator
+ *  \brief Estimate pipeline memory usage and optimal stream divisions
  *
+ *  This class allows to estimate the memory usage of a given pipeline
+ *  by tracing back pipeline from a given data (in general, this
+ *  data should be set to the data to write) and
+ *  examining each filter to determine its memory footprint. To do so,
+ *  it performs a dry run of the requested region pipeline
+ *  negociation.
+ *
+ *  The SetDataToWrite() method allows to set the data candidate for
+ *  writing, and for which memory usage estimation should be
+ *  performed.
+ * 
+ *  Additionnaly, this class allows to compute the optimal number of
+ *  stream division to write the data. To do so, the available memory
+ *  can be set via the SetAvailableMemory() method, and an optionnal
+ *  bias correction factor can be applied to wheight the estimate
+ *  memory usage in case a bias occurs between estimated and real
+ *  memory usage. The optimal number of stream divisions can be
+ *  retreived using the GetOptimalNumberOfStreamDivisions().
+ *
+ *  Please note that for now this calculator suffers from the
+ *  following limitations:
+ *  - DataObject taken into account for memory usage estimation are
+ *  only Image and VectorImage instantiation,
+ *  - The estimator is non-intrusive regarding the pipeline high-level
+ *  class, but it is not able to estimate memory usage of minipipeline
+ *  within composite filter (because there is no way to trace back to
+ *  these internal filters). Therefore, memory usage can be highly
+ *  biased depending on the filters in the upstream pipeline. The bias
+ *  correction factor parameters allows to compensate this bias to the first
+ *  order. 
  */
 class ITK_EXPORT PipelineMemoryPrintCalculator :
   public itk::Object
@@ -55,9 +86,16 @@ public:
   /** Get the total memory print (in Mo) */
   itkGetMacro(MemoryPrint,double);
   
-  /** Set/Get the available memory for pipeline execution (in Mo) */
+  /** Set/Get the available memory for pipeline execution (in Mo,
+   *  default is 256 Mo) */
   itkSetMacro(AvailableMemory,double);
   itkGetMacro(AvailableMemory,double);
+
+  /** Set/Get the bias correction factor which will weight the
+   * estimated memory print (allows to compensate bias between
+   * estimated and real memory print, default is 1., i.e. no correction) */
+  itkSetMacro(BiasCorrectionFactor,double);
+  itkGetMacro(BiasCorrectionFactor,double);
 
   /** Get the optimal number of stream division */
   itkGetMacro(OptimalNumberOfStreamDivisions,unsigned long);
@@ -66,138 +104,23 @@ public:
   itkSetObjectMacro(DataToWrite,DataObjectType);
 
   /** Compute pipeline memory print */
-  void Compute()
-  {
-    // Dry run of pipeline synchronisation
-    m_DataToWrite->UpdateOutputInformation();
-    m_DataToWrite->SetRequestedRegionToLargestPossibleRegion();
-    m_DataToWrite->PropagateRequestedRegion();
-
-    // Get the source process object
-    ProcessObjectType * source = m_DataToWrite->GetSource();
-
-    // Check if source exists
-    if(source)
-      {
-      // Call the recursive memory print evaluation
-      m_MemoryPrint = EvaluateMemoryPrint(source);
-      }
-    else
-      {
-      // Get memory print for this data only
-      std::cout<<"DataToWrite has no source."<<std::endl;
-      m_MemoryPrint = EvaluateDataObjectPrint(m_DataToWrite);
-      }
-
-    // TODO: Remove this !
-    m_MemoryPrint*=2;
-
-    // Compute the optimal number of stream division
-    m_OptimalNumberOfStreamDivisions = vcl_ceil(m_MemoryPrint
-                                                /m_AvailableMemory);
-  }
+  void Compute();
 
 protected:
   /** Constructor */
-  PipelineMemoryPrintCalculator()
-    : m_MemoryPrint(0),
-    m_AvailableMemory(256),
-    m_OptimalNumberOfStreamDivisions(0),
-    m_DataToWrite(NULL)
-    {}
+  PipelineMemoryPrintCalculator();
 
   /** Destructor */
-  virtual ~PipelineMemoryPrintCalculator() {}
+  virtual ~PipelineMemoryPrintCalculator();
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const
-  {
-    // Call superclass implementation
-    Superclass::PrintSelf(os,indent);
-  }
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
   
   /** Internal recursive method to evaluate memory print in bytes */
-  double EvaluateMemoryPrint(ProcessObjectType * process)
-  {
-    // This variable will store the final print
-    double print = 0;
-
-    // Retrieve the array of inputs
-    ProcessObjectType::DataObjectPointerArray inputs = process->GetInputs();
-    // First, recurse on each input source
-    for(unsigned int i =0; i < process->GetNumberOfInputs();++i)
-      {
-      // Retrieve the data object
-      DataObjectType * input = inputs[i];
-      
-      // Retrieve possible source
-      ProcessObjectType * source = input->GetSource();
-
-      // If data object has a source
-      if(source)
-        {
-        print += this->EvaluateMemoryPrint(source);
-        }
-      else
-        {
-        double localPrint = this->EvaluateDataObjectPrint(input);
-        std::cout<<process->GetNameOfClass()<<"::Input"<<i<<" (sourceless) "<<localPrint<<" Mo"<<std::endl;
-        print += localPrint;
-        }
-      }
-    // Retrieve the output array
-    ProcessObjectType::DataObjectPointerArray outputs = process->GetOutputs();
-
-    // Now, evaluate the current object print
-    for(unsigned int i =0; i < process->GetNumberOfOutputs();++i)
-      {
-      double localPrint = this->EvaluateDataObjectPrint(outputs[0]);
-      std::cout<<process->GetNameOfClass()<<"::Output"<<i<<" "<<localPrint<<" Mo"<<std::endl;
-      print += localPrint;
-      }
-
-    // Finally, return the total print
-    return print;
-  }
+  double EvaluateMemoryPrint(ProcessObjectType * process);
 
   /** Internal method to evaluate the print (in Mo) of a single data object */
-  double EvaluateDataObjectPrint(DataObjectType * data)
-  {
-
-#define OTB_IMAGE_SIZE_BLOCK(type) \
-    if(dynamic_cast<itk::Image<type,2> *>(data) != NULL) \
-      { \
-      itk::Image<type,2> * image = dynamic_cast<itk::Image<type,2> *>(data);\
-      std::cout<<"Image of "<< image->GetRequestedRegion().GetNumberOfPixels() <<" pixels of type " # type ": "<<sizeof(type)<<" octets, ("<<image->GetRequestedRegion()<<")"<<std::endl; \
-      return image->GetRequestedRegion().GetNumberOfPixels() * image->GetNumberOfComponentsPerPixel() * sizeof(type) * OctetToMegaOctet; \
-      } \
-    if(dynamic_cast<itk::VectorImage<type,2> * >(data) != NULL)     \
-      { \
-      itk::VectorImage<type,2> * image = dynamic_cast<itk::VectorImage<type,2> *>(data);\
-      std::cout<<"VectorImage of "<< image->GetRequestedRegion().GetNumberOfPixels() <<" pixels of "<<image->GetNumberOfComponentsPerPixel()<<" components of type " # type ": "<<sizeof(type)<<" octets, ("<<image->GetRequestedRegion()<<")"<<std::endl;\
-      return image->GetRequestedRegion().GetNumberOfPixels() * image->GetNumberOfComponentsPerPixel() * sizeof(type) * OctetToMegaOctet; \
-      } \
-  
-
-    OTB_IMAGE_SIZE_BLOCK(unsigned char)
-      OTB_IMAGE_SIZE_BLOCK(char)
-      OTB_IMAGE_SIZE_BLOCK(unsigned short)
-      OTB_IMAGE_SIZE_BLOCK( short)
-      OTB_IMAGE_SIZE_BLOCK(unsigned int)
-      OTB_IMAGE_SIZE_BLOCK( int)
-      OTB_IMAGE_SIZE_BLOCK(unsigned long)
-      OTB_IMAGE_SIZE_BLOCK( long)
-      OTB_IMAGE_SIZE_BLOCK(float)
-      OTB_IMAGE_SIZE_BLOCK( double)
-      OTB_IMAGE_SIZE_BLOCK(std::complex<float>)
-      OTB_IMAGE_SIZE_BLOCK(std::complex<double>)
-      typedef itk::FixedArray<float,2> FloatFixedArray2Type;
-      typedef itk::FixedArray<float,2> DoubleFixedArray2Type;
-      OTB_IMAGE_SIZE_BLOCK(FloatFixedArray2Type)
-      OTB_IMAGE_SIZE_BLOCK(DoubleFixedArray2Type)
-      
-      return 0;
-  }
+  double EvaluateDataObjectPrint(DataObjectType * data);
 
 private:
   PipelineMemoryPrintCalculator(const Self &); //purposely not implemented
@@ -205,19 +128,22 @@ private:
 
   /** The total memory print of the pipeline */
   double       m_MemoryPrint;
+  
   /** The available memory for pipeline execution */
   double       m_AvailableMemory;
+  
   /** The optimal number of stream division */
   unsigned long m_OptimalNumberOfStreamDivisions;
 
   /** Pointer to the last pipeline filter */
   DataObjectPointerType m_DataToWrite;
 
+  /** Bias correction factor */
+  double m_BiasCorrectionFactor;
+
+  /** Const conversion factor */
   static const double OctetToMegaOctet;
 };
-
-const double PipelineMemoryPrintCalculator::OctetToMegaOctet = 1./vcl_pow(2,20);
-
 } // end of namespace otb
 
 #endif
