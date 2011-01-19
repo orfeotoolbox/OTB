@@ -312,7 +312,6 @@ ComputeEigenValuesAndVectors(
 }
 
 
-
 template< class TMatrix, class TVector, class TEigenMatrix >
 void
 HermitianEigenAnalysis< TMatrix, TVector, TEigenMatrix >::

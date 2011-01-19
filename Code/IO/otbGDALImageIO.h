@@ -147,7 +147,6 @@ protected:
   unsigned int m_DatasetNumber;
 
 
-
 private:
   GDALImageIO(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
