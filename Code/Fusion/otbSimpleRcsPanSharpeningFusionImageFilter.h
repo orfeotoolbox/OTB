@@ -44,7 +44,6 @@ namespace otb
  * \ingroup Multithreaded
  * \ingroup Fusion
  *
- *
  * \example Fusion/PanSharpeningExample.cxx
  *
  **/
@@ -54,38 +53,19 @@ class ITK_EXPORT SimpleRcsPanSharpeningFusionImageFilter :
   public itk::ImageToImageFilter<TXsImageType, TOutputImageType>
 {
 public:
+  /** Standard class typedefs */
   typedef SimpleRcsPanSharpeningFusionImageFilter Self;
   typedef itk::ImageToImageFilter
   <TXsImageType, TOutputImageType>                Superclass;
   typedef itk::SmartPointer<Self>                 Pointer;
   typedef itk::SmartPointer<const Self>           ConstPointer;
 
+  /** Internal image type used as the smoothing filter output */
   typedef otb::Image<TInternalPrecision, 
     TPanImageType::ImageDimension>                InternalImageType;
-
-  class FusionFunctor
-  {
-  public:
-    typename TOutputImageType::PixelType operator()(const typename TXsImageType::PixelType & xsPixel, const TInternalPrecision & smoothPanchroPixel, const typename TPanImageType::PixelType& sharpPanchroPixel)
-    {
-      // Output pixel
-      typename TOutputImageType::PixelType output(xsPixel.Size());
-
-      for(unsigned int i = 0; i < xsPixel.Size(); ++i)
-        {
-        output[i] = static_cast<typename TOutputImageType::InternalPixelType>(xsPixel[i] *
-                                                                              static_cast<TInternalPrecision>(sharpPanchroPixel/smoothPanchroPixel));
-        }
-
-      return output;
-    }
-  };
-
-  typedef itk::TernaryFunctorImageFilter<TXsImageType, InternalImageType, TPanImageType,TOutputImageType, FusionFunctor> FusionFilterType;
-
-    typedef otb::ConvolutionImageFilter
-      <TPanImageType, InternalImageType> ConvolutionFilterType;
-    typedef typename  ConvolutionFilterType::ArrayType                   ArrayType;
+  
+  /** Typedef for the radius of the smoothing filter */
+  typedef typename itk::Array<TInternalPrecision> ArrayType;
 
   /** Method for creation through object factory */
   itkNewMacro(Self);
@@ -93,17 +73,15 @@ public:
   /** Run-time type information */
   itkTypeMacro(SimpleRcsPanSharpeningFusionImageFilter,
                itk::ImageToImageFilter);
-
-  /** Display */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
-
+  
+  /** Define the radius type for the smoothing operation */
   typedef typename InternalImageType::SizeType RadiusType;
 
-  /** Set the filter radius  */
+  /** Set the smoothing filter radius  */
   itkGetMacro(Radius, RadiusType);
   itkSetMacro(Radius, RadiusType);
 
-  /** Set the input filter */
+  /** Set the kernel used for the smoothing filter */
   itkSetMacro(Filter, ArrayType);
   itkGetConstReferenceMacro(Filter, ArrayType);
 
@@ -114,23 +92,76 @@ public:
   const TXsImageType * GetXsInput(void) const;
 
 protected:
-
+  /** Constructor */
   SimpleRcsPanSharpeningFusionImageFilter();
 
+  /** Call to generate data, wiring composite internal minipipeline */
   void GenerateData();
 
-private:
+  /** PrintSelf method */
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
+private:
   SimpleRcsPanSharpeningFusionImageFilter(Self &);   // intentionally not implemented
   void operator =(const Self&);          // intentionally not implemented
 
+  /** This functor applies the 
+   *  \f[ \frac{XS}{\mathrm{Filtered}(PAN)}PAN  \f] 
+   * operation. It is intended for internal use only.
+   */
+  class FusionFunctor
+  {
+  public:
+    // Implement the fusion as a three arguments operator
+    typename TOutputImageType::PixelType operator()(const typename TXsImageType::PixelType & xsPixel, 
+                                                    const TInternalPrecision & smoothPanchroPixel, 
+                                                    const typename TPanImageType::PixelType& sharpPanchroPixel)
+    {
+      // Build output pixel
+      typename TOutputImageType::PixelType output(xsPixel.Size());
+
+      // Perform fusion for each band with appropriate casting
+      for(unsigned int i = 0; i < xsPixel.Size(); ++i)
+        {
+        output[i] = static_cast<typename TOutputImageType::InternalPixelType>(
+          xsPixel[i] * static_cast<TInternalPrecision>(sharpPanchroPixel/smoothPanchroPixel));
+        }
+      // Returns the output pixel
+      return output;
+    }
+  };
+
+  /**
+   *  Typedef of the TernaryFunctorImageFilter applying the fusion functor to
+   *  p, p_smooth and xs.
+   */
+  typedef itk::TernaryFunctorImageFilter<TXsImageType, 
+                                         InternalImageType, 
+                                         TPanImageType,
+                                         TOutputImageType, 
+                                         FusionFunctor>     FusionFilterType;
+  
+  /** Typedef of the convolution filter performing smoothing */
+  typedef otb::ConvolutionImageFilter
+      <TPanImageType,
+    InternalImageType,
+       itk::ZeroFluxNeumannBoundaryCondition<TPanImageType>,
+       TInternalPrecision>                                  ConvolutionFilterType;
+    
+  /** Pointer to the internal convolution filter */
   typename ConvolutionFilterType::Pointer m_ConvolutionFilter;
+
+  /** Pointer to the fusion filter */
   typename FusionFilterType::Pointer      m_FusionFilter;
 
+  /** Radius used for the smoothing filter */
   RadiusType m_Radius;
-  ArrayType  m_Filter;
-  typename itk::ProgressAccumulator::Pointer m_ProgressAccumulator;
 
+  /** Kernel used for the smoothing filter */
+  ArrayType  m_Filter;
+
+  /** The internal progress accumulator */
+  typename itk::ProgressAccumulator::Pointer m_ProgressAccumulator;
 };
 
 } // end namespace otb

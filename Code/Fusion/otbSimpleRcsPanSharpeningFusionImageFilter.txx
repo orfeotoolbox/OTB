@@ -30,14 +30,19 @@ SimpleRcsPanSharpeningFusionImageFilter
 <TPanImageType, TXsImageType, TOutputImageType, TInternalPrecision>
 ::SimpleRcsPanSharpeningFusionImageFilter()
 {
+  // Fix number of required inputs
   this->SetNumberOfRequiredInputs(2);
+
+  // Instantiate convolution filter
   m_ConvolutionFilter = ConvolutionFilterType::New();
   m_ConvolutionFilter->NormalizeFilterOn();
 
+  // Set-up default parameters
   m_Radius.Fill(3);
   m_Filter.SetSize(7 * 7);
   m_Filter.Fill(1);
 
+  // Instantiate fusion filter
   m_FusionFilter = FusionFilterType::New();
   m_FusionFilter->SetInput2(m_ConvolutionFilter->GetOutput());
 
@@ -130,6 +135,7 @@ SimpleRcsPanSharpeningFusionImageFilter
   m_FusionFilter->SetInput1(this->GetXsInput());
   m_FusionFilter->SetInput3(this->GetPanInput());
 
+  // Wire composite filter
   m_FusionFilter->GraftOutput(this->GetOutput());
   m_FusionFilter->Update();
   this->GraftOutput(m_FusionFilter->GetOutput());
@@ -142,7 +148,6 @@ SimpleRcsPanSharpeningFusionImageFilter
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-
   os
   << indent << "Radius:" << this->m_Radius
   << std::endl;
