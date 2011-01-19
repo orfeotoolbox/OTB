@@ -25,37 +25,33 @@
 
 namespace otb
 {
-template <class TPanImageType, class TXsImageType, class TOutputImageType>
+template <class TPanImageType, class TXsImageType, class TOutputImageType, class TInternalPrecision>
 SimpleRcsPanSharpeningFusionImageFilter
-<TPanImageType, TXsImageType, TOutputImageType>
+<TPanImageType, TXsImageType, TOutputImageType, TInternalPrecision>
 ::SimpleRcsPanSharpeningFusionImageFilter()
 {
   this->SetNumberOfRequiredInputs(2);
   m_ConvolutionFilter = ConvolutionFilterType::New();
   m_ConvolutionFilter->NormalizeFilterOn();
-  m_DivideFilter = DivideFilterType::New();
-  m_MultiplyFilter = MultiplyFilterType::New();
-  m_CastFilter = CastFilterType::New();
 
   m_Radius.Fill(3);
   m_Filter.SetSize(7 * 7);
   m_Filter.Fill(1);
 
-  m_DivideFilter->SetInput2(m_ConvolutionFilter->GetOutput());
-  m_MultiplyFilter->SetInput1(m_DivideFilter->GetOutput());
+  m_FusionFilter = FusionFilterType::New();
+  m_FusionFilter->SetInput2(m_ConvolutionFilter->GetOutput());
 
   // Set-up progress reporting
-    m_ProgressAccumulator = itk::ProgressAccumulator::New();
-    m_ProgressAccumulator->SetMiniPipelineFilter(this);
-    m_ProgressAccumulator->RegisterInternalFilter(m_ConvolutionFilter,0.9);
-    m_ProgressAccumulator->RegisterInternalFilter(m_DivideFilter,0.05);
-    m_ProgressAccumulator->RegisterInternalFilter(m_MultiplyFilter,0.05);
+  m_ProgressAccumulator = itk::ProgressAccumulator::New();
+  m_ProgressAccumulator->SetMiniPipelineFilter(this);
+  m_ProgressAccumulator->RegisterInternalFilter(m_ConvolutionFilter,0.9);
+  m_ProgressAccumulator->RegisterInternalFilter(m_FusionFilter,0.1);
 }
 
-template <class TPanImageType, class TXsImageType, class TOutputImageType>
+template <class TPanImageType, class TXsImageType, class TOutputImageType, class TInternalPrecision>
 void
 SimpleRcsPanSharpeningFusionImageFilter
-<TPanImageType, TXsImageType, TOutputImageType>
+<TPanImageType, TXsImageType, TOutputImageType, TInternalPrecision>
 ::SetPanInput(const TPanImageType *image)
 {
   // We have 2 inputs:  an image and a vector image
@@ -66,10 +62,10 @@ SimpleRcsPanSharpeningFusionImageFilter
   this->Modified();
 }
 
-template <class TPanImageType, class TXsImageType, class TOutputImageType>
+template <class TPanImageType, class TXsImageType, class TOutputImageType, class TInternalPrecision>
 const TPanImageType *
 SimpleRcsPanSharpeningFusionImageFilter
-<TPanImageType, TXsImageType, TOutputImageType>
+<TPanImageType, TXsImageType, TOutputImageType, TInternalPrecision>
 ::GetPanInput(void) const
 {
   if (this->GetNumberOfInputs() < 2)
@@ -81,10 +77,10 @@ SimpleRcsPanSharpeningFusionImageFilter
            (this->itk::ProcessObject::GetInput(1));
 }
 
-template <class TPanImageType, class TXsImageType, class TOutputImageType>
+template <class TPanImageType, class TXsImageType, class TOutputImageType, class TInternalPrecision>
 void
 SimpleRcsPanSharpeningFusionImageFilter
-<TPanImageType, TXsImageType, TOutputImageType>
+<TPanImageType, TXsImageType, TOutputImageType, TInternalPrecision>
 ::SetXsInput(const TXsImageType *image)
 {
   // We have 2 inputs:  an image and a vector image
@@ -95,10 +91,10 @@ SimpleRcsPanSharpeningFusionImageFilter
   this->Modified();
 }
 
-template <class TPanImageType, class TXsImageType, class TOutputImageType>
+template <class TPanImageType, class TXsImageType, class TOutputImageType, class TInternalPrecision>
 const TXsImageType *
 SimpleRcsPanSharpeningFusionImageFilter
-<TPanImageType, TXsImageType, TOutputImageType>
+<TPanImageType, TXsImageType, TOutputImageType, TInternalPrecision>
 ::GetXsInput(void) const
 {
   if (this->GetNumberOfInputs() < 1)
@@ -110,15 +106,15 @@ SimpleRcsPanSharpeningFusionImageFilter
            (this->itk::ProcessObject::GetInput(0));
 }
 
-template <class TPanImageType, class TXsImageType, class TOutputImageType>
+template <class TPanImageType, class TXsImageType, class TOutputImageType, class TInternalPrecision>
 void
 SimpleRcsPanSharpeningFusionImageFilter
-<TPanImageType, TXsImageType, TOutputImageType>
+<TPanImageType, TXsImageType, TOutputImageType, TInternalPrecision>
 ::GenerateData()
 {
   //Check if size is correct
-  typename InternalImageType::SizeType       sizePan;
-  typename InternalVectorImageType::SizeType sizeXs;
+  typename TPanImageType::SizeType       sizePan;
+  typename TXsImageType::SizeType        sizeXs;
   sizePan = this->GetPanInput()->GetLargestPossibleRegion().GetSize();
   sizeXs = this->GetXsInput()->GetLargestPossibleRegion().GetSize();
   if ((sizePan[0] != sizeXs[0]) || (sizePan[1] != sizeXs[1]))
@@ -130,21 +126,19 @@ SimpleRcsPanSharpeningFusionImageFilter
   m_ConvolutionFilter->SetInput(this->GetPanInput());
   m_ConvolutionFilter->SetRadius(this->m_Radius);
   m_ConvolutionFilter->SetFilter(this->m_Filter);
+  
+  m_FusionFilter->SetInput1(this->GetXsInput());
+  m_FusionFilter->SetInput3(this->GetPanInput());
 
-  m_CastFilter->SetInput(this->GetXsInput());
-  m_DivideFilter->SetInput1(m_CastFilter->GetOutput());
-
-  m_MultiplyFilter->SetInput2(this->GetPanInput());
-
-  m_MultiplyFilter->GraftOutput(this->GetOutput());
-  m_MultiplyFilter->Update();
-  this->GraftOutput(m_MultiplyFilter->GetOutput());
+  m_FusionFilter->GraftOutput(this->GetOutput());
+  m_FusionFilter->Update();
+  this->GraftOutput(m_FusionFilter->GetOutput());
 }
 
-template <class TPanImageType, class TXsImageType, class TOutputImageType>
+template <class TPanImageType, class TXsImageType, class TOutputImageType, class TInternalPrecision>
 void
 SimpleRcsPanSharpeningFusionImageFilter
-<TPanImageType, TXsImageType, TOutputImageType>
+<TPanImageType, TXsImageType, TOutputImageType, TInternalPrecision>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);

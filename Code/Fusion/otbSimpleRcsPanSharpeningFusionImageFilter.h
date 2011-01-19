@@ -23,9 +23,7 @@
 
 #include "itkImageToImageFilter.h"
 #include "otbConvolutionImageFilter.h"
-#include "itkDivideImageFilter.h"
-#include "itkMultiplyImageFilter.h"
-#include "itkCastImageFilter.h"
+#include "itkTernaryFunctorImageFilter.h"
 
 #include "itkProgressAccumulator.h"
 
@@ -51,25 +49,43 @@ namespace otb
  *
  **/
 
-template <class TPanImageType, class TXsImageType, class TOutputImageType>
+template <class TPanImageType, class TXsImageType, class TOutputImageType, class TInternalPrecision = float>
 class ITK_EXPORT SimpleRcsPanSharpeningFusionImageFilter :
   public itk::ImageToImageFilter<TXsImageType, TOutputImageType>
 {
 public:
   typedef SimpleRcsPanSharpeningFusionImageFilter Self;
   typedef itk::ImageToImageFilter
-  <TXsImageType, TOutputImageType> Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  <TXsImageType, TOutputImageType>                Superclass;
+  typedef itk::SmartPointer<Self>                 Pointer;
+  typedef itk::SmartPointer<const Self>           ConstPointer;
 
-  //typedef otb::Image<double,2>                InternalImageType;
-  //typedef otb::VectorImage<double>            InternalVectorImageType;
-  typedef otb::Image<double, TPanImageType::ImageDimension>       InternalImageType;
-  typedef otb::VectorImage<double, TPanImageType::ImageDimension> InternalVectorImageType;
+  typedef otb::Image<TInternalPrecision, 
+    TPanImageType::ImageDimension>                InternalImageType;
 
-  typedef typename InternalImageType::PixelType                    InternalPixelType;
-  typedef typename itk::NumericTraits<InternalPixelType>::RealType InternalRealType;
-  typedef typename itk::Array<InternalRealType>                    ArrayType;
+  class FusionFunctor
+  {
+  public:
+    typename TOutputImageType::PixelType operator()(const typename TXsImageType::PixelType & xsPixel, const TInternalPrecision & smoothPanchroPixel, const typename TPanImageType::PixelType& sharpPanchroPixel)
+    {
+      // Output pixel
+      typename TOutputImageType::PixelType output(xsPixel.Size());
+
+      for(unsigned int i = 0; i < xsPixel.Size(); ++i)
+        {
+        output[i] = static_cast<typename TOutputImageType::InternalPixelType>(xsPixel[i] *
+                                                                              static_cast<TInternalPrecision>(sharpPanchroPixel/smoothPanchroPixel));
+        }
+
+      return output;
+    }
+  };
+
+  typedef itk::TernaryFunctorImageFilter<TXsImageType, InternalImageType, TPanImageType,TOutputImageType, FusionFunctor> FusionFilterType;
+
+    typedef otb::ConvolutionImageFilter
+      <TPanImageType, InternalImageType> ConvolutionFilterType;
+    typedef typename  ConvolutionFilterType::ArrayType                   ArrayType;
 
   /** Method for creation through object factory */
   itkNewMacro(Self);
@@ -101,17 +117,6 @@ protected:
 
   SimpleRcsPanSharpeningFusionImageFilter();
 
-  typedef otb::ConvolutionImageFilter
-  <TPanImageType, InternalImageType> ConvolutionFilterType;
-  typedef itk::DivideImageFilter
-  <InternalVectorImageType, InternalImageType,
-      InternalVectorImageType> DivideFilterType;
-  typedef itk::MultiplyImageFilter
-  <InternalVectorImageType, TPanImageType, TOutputImageType> MultiplyFilterType;
-  typedef itk::CastImageFilter<TXsImageType,InternalVectorImageType> CastFilterType;
-
-//  Software Guide : EndCodeSnippet
-
   void GenerateData();
 
 private:
@@ -120,9 +125,7 @@ private:
   void operator =(const Self&);          // intentionally not implemented
 
   typename ConvolutionFilterType::Pointer m_ConvolutionFilter;
-  typename DivideFilterType::Pointer m_DivideFilter;
-  typename MultiplyFilterType::Pointer m_MultiplyFilter;
-  typename CastFilterType::Pointer     m_CastFilter;
+  typename FusionFilterType::Pointer      m_FusionFilter;
 
   RadiusType m_Radius;
   ArrayType  m_Filter;
