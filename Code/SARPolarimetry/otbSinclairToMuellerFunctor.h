@@ -48,8 +48,8 @@ public:
 
     result.SetSize(m_NumberOfComponentsPerPixel);
 
-    ComplexType Txx = static_cast<ComplexType>(Shh);
-    ComplexType Txy = static_cast<ComplexType>(Shv);
+    ComplexType Txx = static_cast<ComplexType>(-Shh);
+    ComplexType Txy = static_cast<ComplexType>(-Shv);
     ComplexType Tyx = static_cast<ComplexType>(Svh);
     ComplexType Tyy = static_cast<ComplexType>(Svv);
 

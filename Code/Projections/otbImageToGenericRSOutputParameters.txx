@@ -65,14 +65,6 @@ ImageToGenericRSOutputParameters<TImage>
   // Finally Estimate the Output Size
   if(!m_ForceSize)
     this->EstimateOutputSize();
-  else
-    std::cout <<"OutputSize "<< this->GetOutputSize() << std::endl;
-
-
-  std::cout <<"    Input Information ...." << std::endl;
-  std::cout <<"Input Image Size "<< m_Input->GetLargestPossibleRegion().GetSize() << std::endl;
-  std::cout <<"Input Image Spacing "<< m_Input->GetSpacing() << std::endl;
-  std::cout <<"Input Image Origin "<< m_Input->GetOrigin() << std::endl;
 }
 
 
@@ -85,8 +77,6 @@ ImageToGenericRSOutputParameters<TImage>
   m_Transform->SetOutputProjectionRef(this->GetInput()->GetProjectionRef());
   m_Transform->SetOutputKeywordList(this->GetInput()->GetImageKeywordlist());
   m_Transform->InstanciateTransform();
-
-  //std::cout <<"Transform "<< m_Transform << std::endl;
 }
 
 
@@ -163,8 +153,6 @@ ImageToGenericRSOutputParameters<TImage>
   m_OutputExtent.minX =  minX;
   m_OutputExtent.maxY =  maxY;
   m_OutputExtent.minY =  minY;
-
-  std::cout <<"minX "<< minX  << " maxX " <<maxX << " minY " << minY << " maxY " << maxY  << std::endl;
 }
 
 
@@ -183,8 +171,6 @@ ImageToGenericRSOutputParameters<TImage>
   origin[0] = m_OutputExtent.minX;
   origin[1] = m_OutputExtent.maxY;
   this->SetOutputOrigin(origin);
-
-  std::cout <<"Output Origin "<<  this->GetOutputOrigin() << std::endl;
 }
 
 /**
@@ -236,8 +222,6 @@ ImageToGenericRSOutputParameters<TImage>
   outputSpacing[1] = -sizeCartoY / OyLength;
 
   this->SetOutputSpacing(outputSpacing);
-
-  std::cout <<"Output Spacing "<<  this->GetOutputSpacing() << std::endl;
 }
 
 /**
@@ -253,16 +237,12 @@ ImageToGenericRSOutputParameters<TImage>
   double sizeCartoX = vcl_abs(m_OutputExtent.maxX - m_OutputExtent.minX);
   double sizeCartoY = vcl_abs(m_OutputExtent.minY - m_OutputExtent.maxY);
   
-  std::cout << "-- Output Spacing Used : "<< this->GetOutputSpacing() << std::endl;
-  
   // Evaluate output size
   SizeType outputSize;
   outputSize[0] = static_cast<unsigned int>(vcl_floor(vcl_abs(sizeCartoX / this->GetOutputSpacing()[0])));
   outputSize[1] = static_cast<unsigned int>(vcl_floor(vcl_abs(sizeCartoY / this->GetOutputSpacing()[1])));
   this->SetOutputSize(outputSize);
   this->UpdateTransform();
-  
-  std::cout <<"Output Size "<< outputSize  << std::endl;
 }
 
 
