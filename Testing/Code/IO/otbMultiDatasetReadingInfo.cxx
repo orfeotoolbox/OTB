@@ -53,7 +53,7 @@ int otbMultiDatasetReadingInfo(int argc, char* argv[])
 	std::ofstream file;
 	file.open(outputAsciiFilename);
 
-	for( int itSubDataset = 0; itSubDataset < names.size() ; itSubDataset++ )
+	for( unsigned int itSubDataset = 0; itSubDataset < names.size() ; itSubDataset++ )
 	{
 		file << "NAME_"<< itSubDataset+1 << " :" <<  names[itSubDataset] <<std::endl;
 		//std::cout << "NAME_"<< itSubDataset+1 << " :" <<  names[itSubDataset] <<std::endl;
