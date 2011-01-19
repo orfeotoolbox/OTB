@@ -243,6 +243,10 @@ ADD_TEST(sarTvCoherencyToMuellerImageFilter ${SARPOLARIMETRY_TESTS1}
         ${TEMP}/sarTvCoherencyToMuellerImageFilter.tif
 	)
 
+# Mueller To Circular polarisation Image Filter
+ADD_TEST(sarTuMuellerToCircularPolarisationImageFilterNew ${SARPOLARIMETRY_TESTS1}
+		otbMuellerToCircularPolarisationImageFilterNew
+)
 
 # A enrichir
 SET(SARPOLARIMETRY_SRCS1
@@ -267,6 +271,7 @@ otbHAlphaImageFilterNew.cxx
 otbHAlphaImageFilter.cxx
 otbCoherencyToMuellerImageFilterNew.cxx
 otbCoherencyToMuellerImageFilter.cxx
+otbMuellerToCircularPolarisationImageFilterNew.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbSARPolarimetryTests1 "${SARPOLARIMETRY_SRCS1}" "OTBSARPolarimetry;OTBIO;OTBTesting")
