@@ -249,8 +249,8 @@ ADD_TEST(sarTuMuellerToCircularPolarisationImageFilterNew ${SARPOLARIMETRY_TESTS
 )
 
 ADD_TEST(sarTvMuellerToCircularPolarisationImageFilter ${SARPOLARIMETRY_TESTS1}
-#  --compare-image ${EPSILON_12}   ${BASELINE}/sarTvMuellerToCircularPolarisationImageFilter.tif
-#                    ${TEMP}/sarTvMuellerToCircularPolarisationImageFilter.tif
+  --compare-image ${EPSILON_12}   ${BASELINE}/sarTvMuellerToCircularPolarisationImageFilter.tif
+                    ${TEMP}/sarTvMuellerToCircularPolarisationImageFilter.tif
         otbMuellerToCircularPolarisationImageFilter
         ${INPUTDATA}/RSAT_imagery_HH.tif
         ${INPUTDATA}/RSAT_imagery_HV.tif
