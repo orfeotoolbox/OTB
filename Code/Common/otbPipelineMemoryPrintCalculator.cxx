@@ -157,8 +157,8 @@ PipelineMemoryPrintCalculator
     OTB_IMAGE_SIZE_BLOCK(std::complex<float>)
     OTB_IMAGE_SIZE_BLOCK(std::complex<double>)
     typedef itk::FixedArray<float,2> FloatFixedArray2Type;
-  typedef itk::FixedArray<float,2> DoubleFixedArray2Type;
-  OTB_IMAGE_SIZE_BLOCK(FloatFixedArray2Type)
+    typedef itk::FixedArray<float,2> DoubleFixedArray2Type;
+    OTB_IMAGE_SIZE_BLOCK(FloatFixedArray2Type)
     OTB_IMAGE_SIZE_BLOCK(DoubleFixedArray2Type)
       
     // If we are still here, none of the macro call succeed
