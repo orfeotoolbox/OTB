@@ -327,7 +327,8 @@ ADD_TEST(ioTvStreamingImageFilterLUM2PNG ${IO_TESTS2}
 ADD_TEST(ioTvStreamingIFWriterLUMWithoutStreaming ${IO_TESTS2}
    --compare-image ${EPSILON_9}       ${TEMP}/ioImageFileReaderPNG2LUM.lum
                                 ${TEMP}/ioStreamingImageFileWriterLUM2LUMWithoutStreaming.lum
-         otbStreamingImageFileWriterTest
+         o
+#include "otbVectorImage.h"tbStreamingImageFileWriterTest
          ${TEMP}/ioImageFileReaderPNG2LUM.lum
          ${TEMP}/ioStreamingImageFileWriterLUM2LUMWithoutStreaming.lum
          0 # StreamingImageFileWriter
@@ -1251,6 +1252,14 @@ ADD_TEST(ioTvMultiDatasetReadingInName2 ${IO_TESTS9}
       otbVectorImageTest
       ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf:5
       ${TEMP}/ioTvMultiDatasetReadingInName2.txt
+      )
+
+ADD_TEST(ioTvMultiDatasetReadingInfo ${IO_TESTS9}
+  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReadingInfo.txt
+                             ${TEMP}/ioTvMultiDatasetReadingInfoOut.txt
+      otbMultiDatasetReadingInfo
+      ${INPUTDATA}/MOD13Q1.A2010001.h17v05.005.2010028003734.hdf
+      ${TEMP}/ioTvMultiDatasetReadingInfoOut.txt
       )
 # ---  STREAMING  IMAGE   FILE    WRITER  ---
 ADD_TEST(ioTvStreamingIFWriterBSQWithoutStreaming ${IO_TESTS2}
@@ -2920,6 +2929,7 @@ SET(BasicIO_SRCS9
 otbIOTests9.cxx
 otbImageTest.cxx
 otbVectorImageTest.cxx
+otbMultiDatasetReadingInfo.cxx
 otbStreamingImageFilterTest.cxx
 otbVectorImageFileReaderWriterTest.cxx
 otbStreamingShortImageFileWriterTest.cxx
