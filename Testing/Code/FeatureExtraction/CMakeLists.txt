@@ -1206,6 +1206,15 @@ ADD_TEST(feTvLineSegmentDetector ${FEATUREEXTRACTION_TESTS11}
     ${TEMP}/feTvLineSegmentDetectorOutputImage.tif
 )
 
+ADD_TEST(feTvLineSegmentDetector_binary ${FEATUREEXTRACTION_TESTS11}
+--compare-image ${NOTOL}
+     ${BASELINE}/feTvLineSegmentDetectorOutputImage.tif
+     ${TEMP}/feTvLineSegmentDetectorOutputImage_binary.tif
+    otbLineSegmentDetector_binary
+     ${INPUTDATA}/scene.png
+     ${TEMP}/feTvLineSegmentDetectorOutputImage_binary.tif
+)
+
 # -------            otb::LineSpatialObjectListToRightAnglePointSetFilter   -------------
 ADD_TEST(feTuLineSpatialObjectListToRightAnglePointSetFilterNew ${FEATUREEXTRACTION_TESTS11}
     otbLineSpatialObjectListToRightAnglePointSetFilterNew)
