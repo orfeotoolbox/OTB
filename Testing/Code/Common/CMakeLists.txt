@@ -951,10 +951,13 @@ ADD_TEST(coTuPipelineMemoryPrintCalculatorNew ${COMMON_TESTS13}
     )
 
 ADD_TEST(coTvPipelineMemoryPrintCalculator ${COMMON_TESTS13}
+  --compare-ascii ${NOTOL}
+  ${BASELINE_FILES}//coTvPipelineMemoryPrintCalculatorOutput.txt
+  ${TEMP}/coTvPipelineMemoryPrintCalculatorOutput.txt
   otbPipelineMemoryPrintCalculatorTest
   ${INPUTDATA}/qb_RoadExtract.img
+  ${TEMP}/coTvPipelineMemoryPrintCalculatorOutput.txt
 )
-
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS1

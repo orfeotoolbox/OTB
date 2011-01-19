@@ -49,8 +49,12 @@ int otbPipelineMemoryPrintCalculatorTest(int argc, char * argv[])
   calculator->SetAvailableMemory(0.1);
   calculator->Compute();
 
-  std::cout<<"Pipeline memory print:   "<<calculator->GetMemoryPrint()<<" Mo"<<std::endl;
-  std::cout<<"Optimal stream division: "<<calculator->GetOptimalNumberOfStreamDivisions()<<" tiles"<<std::endl;
+  std::ofstream ofs(argv[2]);
+  ofs<<"Memory print of whole pipeline:     "<<calculator->GetMemoryPrint()<<" Mo"<<std::endl;
+  ofs<<"Available memory:                   "<<calculator->GetAvailableMemory()<<" Mo"<<std::endl;
+  ofs<<"Optimal number of stream divisions: "<<calculator->GetOptimalNumberOfStreamDivisions()<<std::endl;
+  ofs<<"Bias correction factor applied:     "<<calculator->GetBiasCorrectionFactor()<<std::endl;
+  ofs.close();
 
   return EXIT_SUCCESS;
 }
