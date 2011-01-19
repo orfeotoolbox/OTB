@@ -15,7 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
 #include <iostream>
 #include <fstream>
 #include <string.h>
@@ -902,19 +901,24 @@ bool GDALImageIO::CanStreamWrite()
 
 void GDALImageIO::Write(const void* buffer)
 {
+  // Check if we have to write the image information
   if (m_FlagWriteImageInformation == true)
     {
     this->InternalWriteImageInformation(buffer);
     m_FlagWriteImageInformation = false;
     }
 
-  const unsigned char *p = static_cast<const unsigned char *>(buffer);
+  // Convert buffer from const void * to unsigned char *
+  unsigned char *p = const_cast<unsigned char *>(static_cast<const unsigned char *>(buffer));
+
+  // Check if conversion succeed
   if (p == NULL)
     {
     itkExceptionMacro(<< "GDAL : Bad alloc");
     return;
     }
 
+  // Compute offset and size
   unsigned int lNbLines = this->GetIORegion().GetSize()[1];
   unsigned int lNbColumns = this->GetIORegion().GetSize()[0];
   int lFirstLine = this->GetIORegion().GetIndex()[1]; // [1... ]
@@ -929,50 +933,36 @@ void GDALImageIO::Write(const void* buffer)
     lFirstColumn = 0;
     }
 
-  std::streamoff lNbPixels = static_cast<std::streamoff> (lNbColumns) * static_cast<std::streamoff> (lNbLines);
-  std::streamoff lBufferSize = static_cast<std::streamoff> (m_BytePerPixel) * lNbPixels;
-  otbMsgDevMacro(<< " BufferSize allocated : " << lBufferSize);
-
-  itk::VariableLengthVector<unsigned char> value(lBufferSize);
-
+  // If driver supports streaming
   if (m_CanStreamWrite)
     {
-    // Update Step
-    std::streamoff step = static_cast<std::streamoff> (m_NbBands);
-    step = step * static_cast<std::streamoff> (m_BytePerPixel);
-
-    CPLErr lCrGdal;
-
-    std::streamoff cpt(0);
-    for (int nbComponents = 0; nbComponents < m_NbBands; ++nbComponents)
+    CPLErr lCrGdal = m_Dataset->GetDataSet()->RasterIO(GF_Write,
+                                                       lFirstColumn,
+                                                       lFirstLine,
+                                                       lNbColumns,
+                                                       lNbLines,
+                                                       p,
+                                                       lNbColumns,
+                                                       lNbLines,
+                                                       m_PxType,
+                                                       m_NbBands,
+                                                       // We want to write all bands
+                                                       NULL,
+                                                       // Pixel offset
+                                                       // is nbComp * BytePerPixel
+                                                       m_BytePerPixel * m_NbBands,
+                                                       // Line offset
+                                                       // is pixelOffset * nbColumns
+                                                       m_BytePerPixel * m_NbBands * lNbColumns,
+                                                       // Band offset is BytePerPixel
+                                                       m_BytePerPixel);
+    // Check if writing succeed
+    if (lCrGdal == CE_Failure)
       {
-      cpt = static_cast<std::streamoff> (nbComponents) * static_cast<std::streamoff> (m_BytePerPixel);
-
-      for (std::streamoff i = 0; i < lBufferSize; i = i + static_cast<std::streamoff> (m_BytePerPixel))
-        {
-        memcpy((void*) (&(value[i])), (const void*) (&(p[cpt])), (size_t) (m_BytePerPixel));
-        cpt += step;
-        }
-      GDALRasterBand *poBand = m_Dataset->GetDataSet()->GetRasterBand(nbComponents+1);
-
-      lCrGdal = poBand->RasterIO(GF_Write,
-                                 lFirstColumn,
-                                 lFirstLine,
-                                 lNbColumns,
-                                 lNbLines,
-                                 const_cast<unsigned char*>(value.GetDataPointer()),
-                                 lNbColumns,
-                                 lNbLines,
-                                 m_PxType,
-                                 0,
-                                 0);
-      if (lCrGdal == CE_Failure)
-        {
-        itkExceptionMacro(<< "Error while writing image (GDAL format) " << m_FileName.c_str() << ".");
-        }
-
-      poBand->FlushCache();
+      itkExceptionMacro(<< "Error while writing image (GDAL format) " << m_FileName.c_str() << ".");
       }
+
+    // Flush dataset cache
     m_Dataset->GetDataSet()->FlushCache();
     }
   else
