@@ -36,8 +36,8 @@ template< class TInput, class TOutput>
 class MuellerToCircularPolarisationFunctor
 {
 public:
-  typedef typename std::complex <double>           ComplexType;
-  typedef typename TOutput::ValueType              OutputValueType;
+  typedef double                                    RealType;
+  typedef typename TOutput::ValueType               OutputValueType;
 
   inline TOutput operator()( const TInput & Mueller ) const
     {
