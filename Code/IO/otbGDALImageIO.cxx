@@ -232,96 +232,54 @@ void GDALImageIO::Read(void* buffer)
     return;
     }
 
-
-  std::streamoff  step = static_cast<std::streamoff>(this->GetNumberOfComponents());
-  
+  // Get nb. of lines and columns of the region to read
   int lNbLines     = this->GetIORegion().GetSize()[1];
   int lNbColumns   = this->GetIORegion().GetSize()[0];
   int lFirstLine   = this->GetIORegion().GetIndex()[1]; // [1... ]
   int lFirstColumn = this->GetIORegion().GetIndex()[0]; // [1... ]
 
-  std::streamoff lNbPixels = (static_cast<std::streamoff>(lNbColumns))
-                             * (static_cast<std::streamoff>(lNbLines));
-  std::streamoff lBufferSize = static_cast<std::streamoff>(m_BytePerPixel) * lNbPixels;
-  if (GDALDataTypeIsComplex(m_PxType) && !m_IsComplex)
-    {
-    lBufferSize *= 2;
-    }
-  itk::VariableLengthVector<unsigned char> value(lBufferSize);
-
-  CPLErr         lCrGdal;
-  std::streamoff cpt(0);
   GDALDataset* dataset = m_Dataset->GetDataSet();
 
-  if (GDALDataTypeIsComplex(m_PxType) //TODO should disappear
+  // This special case is due to the fact the CINT/CLONG types
+  // do not exists in ITK. In this case we only report the first band 
+  // TODO This should be fixed
+  if (GDALDataTypeIsComplex(m_PxType) 
       && (m_PxType != GDT_CFloat32)
       && (m_PxType != GDT_CFloat64))
     {
-    lCrGdal = dataset->GetRasterBand(1)->RasterIO(GF_Read,
-                                                 lFirstColumn,
-                                                 lFirstLine,
-                                                 lNbColumns,
-                                                 lNbLines,
-                                                 const_cast<unsigned char*>(value.GetDataPointer()),
-                                                 lNbColumns,
-                                                 lNbLines,
-                                                 m_PxType,
-                                                 0,
-                                                 0);
-
+    CPLErr lCrGdal = dataset->GetRasterBand(1)->RasterIO(GF_Read,
+                                                  lFirstColumn,
+                                                  lFirstLine,
+                                                  lNbColumns,
+                                                  lNbLines,
+                                                  p,
+                                                  lNbColumns,
+                                                  lNbLines,
+                                                  m_PxType,
+                                                  0,
+                                                  0);
+    // Check for gdal error
     if (lCrGdal == CE_Failure)
       {
       itkExceptionMacro(<< "Error while reading image (GDAL format) " << m_FileName );
       }
-    cpt = 0;
-    for (std::streamoff i = 0; i < lBufferSize; i = i + static_cast<std::streamoff>(m_BytePerPixel))
-      {
-      memcpy((void*) (&(p[cpt])), (const void*) (&(value[i])), (size_t) (m_BytePerPixel));
-      cpt += static_cast<std::streamoff>(m_BytePerPixel);
-      }
     }
-  else if (GDALDataTypeIsComplex(m_PxType) && !m_IsComplex)
-    {
-    // Mise a jour du step
-    step = step * static_cast<std::streamoff>(m_BytePerPixel);
-
-    for (int nbComponents = 0; nbComponents < dataset->GetRasterCount(); ++nbComponents)
-      {
-      lCrGdal = dataset->GetRasterBand(nbComponents+1)->RasterIO(GF_Read,
-                                                                lFirstColumn,
-                                                                lFirstLine,
-                                                                lNbColumns,
-                                                                lNbLines,
-                                                                const_cast<unsigned char*>(value.GetDataPointer()),
-                                                                lNbColumns,
-                                                                lNbLines,
-                                                                m_PxType,
-                                                                0,
-                                                                0);
-      if (lCrGdal == CE_Failure)
-        {
-        itkExceptionMacro(<< "Error while reading image (GDAL format) " << m_FileName.c_str() << ".");
-        }
-      // Recopie dans le buffer
-      cpt = static_cast<std::streamoff>(nbComponents) * static_cast<std::streamoff>(m_BytePerPixel);
-      for (std::streamoff i = 0; i < lBufferSize; i = i + static_cast<std::streamoff>(m_BytePerPixel))
-        {
-        memcpy((void*) (&(p[cpt])),
-               (const void*) (&(value[i])),
-               (size_t) (m_BytePerPixel)); //Real part
-        memcpy((void*) (&(p[cpt+m_BytePerPixel])),
-               (const void*) (&(value[i+m_BytePerPixel])),
-               (size_t) (m_BytePerPixel)); //Imaginary part
-        cpt += step;
-        }
-      }
-
-    }
+  // In the indexed case, one has to retrieve the index image and the
+  // color table, and translate p to a 4 components color values buffer
   else if (m_IsIndexed)
     {
-    step = step * static_cast<std::streamoff>(m_BytePerPixel);
+    // TODO: This is a very special case and seems to be working only
+    // for unsigned char pixels. There might be a gdal method to do
+    // the work in a cleaner way
+    std::streamoff lNbPixels = (static_cast<std::streamoff>(lNbColumns))
+                             * (static_cast<std::streamoff>(lNbLines));
+    std::streamoff lBufferSize = static_cast<std::streamoff>(m_BytePerPixel) * lNbPixels;
+    itk::VariableLengthVector<unsigned char> value(lBufferSize);
 
-    lCrGdal = dataset->GetRasterBand(1)->RasterIO(GF_Read,
+   std::streamoff step = static_cast<std::streamoff>(this->GetNumberOfComponents())
+                       * static_cast<std::streamoff>(m_BytePerPixel);
+
+    CPLErr lCrGdal = dataset->GetRasterBand(1)->RasterIO(GF_Read,
                                      lFirstColumn,
                                      lFirstLine,
                                      lNbColumns,
@@ -336,8 +294,8 @@ void GDALImageIO::Read(void* buffer)
       {
       itkExceptionMacro(<< "Error while reading image (GDAL format) " << m_FileName.c_str() << ".");
       }
-    // Recopie dans le buffer
-    cpt = 0;
+    // Interpret index as color
+    std::streamoff cpt(0);
     GDALColorTable* colorTable = dataset->GetRasterBand(1)->GetColorTable();
     for (std::streamoff i = 0; i < lBufferSize; i = i + static_cast<std::streamoff>(m_BytePerPixel))
       {
@@ -353,26 +311,26 @@ void GDALImageIO::Read(void* buffer)
   else
     {
     // Nominal case
-    m_Dataset->GetDataSet()->RasterIO(GF_Read,
-                                      lFirstColumn,
-                                      lFirstLine,
-                                      lNbColumns,
-                                      lNbLines,
-                                      p,
-                                      lNbColumns,
-                                      lNbLines,
-                                      m_PxType,
-                                      m_NbBands,
-                                      // We want to read all bands
-                                      NULL,
-                                      // Pixel offset
-                                      // is nbComp * BytePerPixel
-                                      m_BytePerPixel * m_NbBands,
-                                      // Line offset
-                                      // is pixelOffset * nbColumns
-                                      m_BytePerPixel * m_NbBands * lNbColumns,
-                                      // Band offset is BytePerPixel
-                                      m_BytePerPixel);
+    CPLErr lCrGdal = m_Dataset->GetDataSet()->RasterIO(GF_Read,
+                                                       lFirstColumn,
+                                                       lFirstLine,
+                                                       lNbColumns,
+                                                       lNbLines,
+                                                       p,
+                                                       lNbColumns,
+                                                       lNbLines,
+                                                       m_PxType,
+                                                       m_NbBands,
+                                                       // We want to read all bands
+                                                       NULL,
+                                                       // Pixel offset
+                                                       // is nbComp * BytePerPixel
+                                                       m_BytePerPixel * m_NbBands,
+                                                       // Line offset
+                                                       // is pixelOffset * nbColumns
+                                                       m_BytePerPixel * m_NbBands * lNbColumns,
+                                                       // Band offset is BytePerPixel
+                                                       m_BytePerPixel);
     // Check if gdal call succeed
     if (lCrGdal == CE_Failure)
       {
