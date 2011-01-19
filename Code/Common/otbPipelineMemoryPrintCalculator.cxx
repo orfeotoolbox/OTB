@@ -19,7 +19,7 @@
 
 namespace otb
 {
-const double PipelineMemoryPrintCalculator::OctetToMegaOctet = 1./vcl_pow(2,20);
+const double PipelineMemoryPrintCalculator::OctetToMegaOctet = 1./vcl_pow(2.0, 20);
 
 PipelineMemoryPrintCalculator
 ::PipelineMemoryPrintCalculator()
