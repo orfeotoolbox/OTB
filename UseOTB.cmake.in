@@ -85,6 +85,8 @@ IF(OTB_USE_EXTERNAL_EXPAT)
         MESSAGE(FATAL_ERROR
                   "Cannot use OTB project without EXPAT library. Please set EXPAT_DIR or rebuild OTB and set OTB_USE_EXTERNAL_EXPAT OFF to use INTERNAL EXPAT set on OTB/Utilities repository.")
     ENDIF(EXPAT_FOUND)
+ELSE(OTB_USE_EXTERNAL_EXPAT)
+    ADD_DEFINITIONS(-DOTB_USE_INTERNAL_EXPAT)
 ENDIF(OTB_USE_EXTERNAL_EXPAT)
 
 
