@@ -46,6 +46,21 @@ public:
 
   inline TOutput operator()( const TInput & Mueller ) const
     {
+    RealType P;
+    RealType deg_pol;
+    RealType tau;
+    RealType psi;
+    StokesVectorType Si;
+    StokesVectorType Sr;
+
+    RealType m_PowerMin(itk::NumericTraits<RealType>::max());
+    RealType m_PowerMax(itk::NumericTraits<RealType>::min());
+    RealType m_PolarisationDegreeMin(itk::NumericTraits<RealType>::max());
+    RealType m_PolarisationDegreeMax(itk::NumericTraits<RealType>::min());
+
+    RealType PI_90;
+    PI_90 = static_cast<RealType>( 2 * CONST_PI_180);
+
     TOutput result;
     result.SetSize(m_NumberOfComponentsPerPixel);
 
@@ -67,17 +82,6 @@ public:
     muellerMatrix[3][2] = Mueller[14];
     muellerMatrix[3][3] = Mueller[15];
 
-    RealType P;
-    RealType deg_pol;
-    RealType tau;
-    RealType psi;
-    StokesVectorType Si;
-    StokesVectorType Sr;
-
-    RealType PI_90;
-
-    PI_90 = static_cast<RealType>( 2 * CONST_PI_180);
-
     tau = -45.0;
     while (tau < 46.0)
       {
@@ -86,50 +90,72 @@ public:
         {
         // Define the incident Stokes vector
         Si[0] = 1.0;
-        Si[1] = cos(psi*PI_90)*cos(tau*PI_90);
-        Si[2] = sin(psi*PI_90)*cos(tau*PI_90);
-        Si[3] = sin(tau*PI_90);
+        Si[1] = cos(psi * PI_90) * cos(tau * PI_90);
+        Si[2] = sin(psi * PI_90) * cos(tau * PI_90);
+        Si[3] = sin(tau * PI_90);
 
         // Evaluate the received Stokes vector
         Sr = muellerMatrix * Si;
 
-        //Calcul des param�tres P et deg_pol
-        P=Sr[0];
+        //Evaluate Power and Polarisation degree
+        P = Sr[0];
 
-        if (P<0.00001)
-            deg_pol=0.; //Par d�faut, � laisser ??
+        if (P < 0.00001)
+          {
+          deg_pol = 0.;
+          }
         else
-            deg_pol=vnl_sqrt( Sr[1]*Sr[1] + Sr[2]*Sr[2] + Sr[3]*Sr[3] ) / Sr[0];
+          {
+          deg_pol = vcl_sqrt(Sr[1] * Sr[1] + Sr[2] * Sr[2] + Sr[3] * Sr[3]) / Sr[0];
+          }
 
+        if (P > m_PowerMax)
+          {
+          m_PowerMax = P;
+          }
+
+        if (P < m_PowerMin)
+          {
+          m_PowerMin = P;
+          }
+
+        if (deg_pol > m_PolarisationDegreeMax)
+          {
+          m_PolarisationDegreeMax = deg_pol;
+          }
+
+        if (deg_pol < m_PolarisationDegreeMin)
+          {
+          m_PolarisationDegreeMin = deg_pol;
+          }
         psi += 5.0;
         }
       tau += 5.0;
       }
 
+    result[0] = m_PowerMin;
+    result[1] = m_PowerMax;
+    result[2] = m_PolarisationDegreeMin;
+    result[3] = m_PolarisationDegreeMax;
+
+
     return result;
     }
 
-   unsigned int GetOutputSize()
-   {
-     return m_NumberOfComponentsPerPixel;
-   }
+  unsigned int GetOutputSize()
+  {
+    return m_NumberOfComponentsPerPixel;
+  }
 
    /** Constructor */
-   MuellerToPolarisationDegreeAndPowerFunctor() : m_NumberOfComponentsPerPixel(4),
-       m_PowerMin(itk::NumericTraits<RealType>::max()),
-       m_PowerMax(itk::NumericTraits<RealType>::min()),
-       m_PolarisationDegreeMin(itk::NumericTraits<RealType>::max()),
-       m_PolarisationDegreeMax(itk::NumericTraits<RealType>::min()) {}
+   MuellerToPolarisationDegreeAndPowerFunctor() : m_NumberOfComponentsPerPixel(4) {}
 
    /** Destructor */
    ~MuellerToPolarisationDegreeAndPowerFunctor() {}
 
 private:
     unsigned int m_NumberOfComponentsPerPixel;
-    RealType     m_PowerMin;
-    RealType     m_PowerMax;
-    RealType     m_PolarisationDegreeMin;
-    RealType     m_PolarisationDegreeMax;
+
 };
 }
 
