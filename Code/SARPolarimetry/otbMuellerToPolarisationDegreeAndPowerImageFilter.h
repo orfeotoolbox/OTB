@@ -22,6 +22,8 @@
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkNumericTraits.h"
 #include "itkMatrix.h"
+#include "itkVector.h"
+#include "otbMath.h"
 
 namespace otb
  {
@@ -40,6 +42,7 @@ public:
   typedef double                                    RealType;
   typedef typename TOutput::ValueType               OutputValueType;
   typedef itk::Matrix<RealType,4,4>                 MuellerMatrixType;
+  typedef itk::Vector<RealType,4>                   StokesVectorType;
 
   inline TOutput operator()( const TInput & Mueller ) const
     {
@@ -63,6 +66,38 @@ public:
     muellerMatrix[3][1] = Mueller[13];
     muellerMatrix[3][2] = Mueller[14];
     muellerMatrix[3][3] = Mueller[15];
+
+    RealType P;
+    RealType deg_pol;
+    RealType tau;
+    RealType psi;
+    StokesVectorType Si;
+    StokesVectorType Sr;
+
+    RealType PI_90;
+
+    PI_90 = static_cast<RealType>( 2 * CONST_PI_180);
+
+    tau = -45.0;
+    while (tau < 46.0)
+      {
+      psi = -90.0;
+      while (psi < 91.0)
+        {
+
+        // Define the incident Stokes vector
+        Si[0] = 1.0;
+        Si[1] = cos(psi*PI_90)*cos(tau*PI_90);
+        Si[2] = sin(psi*PI_90)*cos(tau*PI_90);
+        Si[3] = sin(tau*PI_90);
+
+        // Evaluate the received Stokes vector
+        Sr = muellerMatrix * Si;
+
+        psi += 5.0;
+        }
+      tau += 5.0;
+      }
 
     return result;
     }
