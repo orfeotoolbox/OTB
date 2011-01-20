@@ -21,6 +21,7 @@
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkNumericTraits.h"
+#include "itkMatrix.h"
 
 namespace otb
  {
@@ -38,12 +39,30 @@ class MuellerToPolarisationDegreeAndPowerFunctor
 public:
   typedef double                                    RealType;
   typedef typename TOutput::ValueType               OutputValueType;
+  typedef itk::Matrix<RealType,4,4>                 MuellerMatrixType;
 
   inline TOutput operator()( const TInput & Mueller ) const
     {
     TOutput result;
     result.SetSize(m_NumberOfComponentsPerPixel);
 
+    MuellerMatrixType muellerMatrix;
+    muellerMatrix[0][0] = Mueller[0];
+    muellerMatrix[0][1] = Mueller[1];
+    muellerMatrix[0][2] = Mueller[2];
+    muellerMatrix[0][3] = Mueller[3];
+    muellerMatrix[1][0] = Mueller[4];
+    muellerMatrix[1][1] = Mueller[5];
+    muellerMatrix[1][2] = Mueller[6];
+    muellerMatrix[1][3] = Mueller[7];
+    muellerMatrix[2][0] = Mueller[8];
+    muellerMatrix[2][1] = Mueller[9];
+    muellerMatrix[2][2] = Mueller[10];
+    muellerMatrix[2][3] = Mueller[11];
+    muellerMatrix[3][0] = Mueller[12];
+    muellerMatrix[3][1] = Mueller[13];
+    muellerMatrix[3][2] = Mueller[14];
+    muellerMatrix[3][3] = Mueller[15];
 
     return result;
     }
