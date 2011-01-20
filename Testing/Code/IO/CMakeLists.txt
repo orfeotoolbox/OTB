@@ -1258,7 +1258,7 @@ ADD_TEST(ioTvMultiDatasetReadingInfo ${IO_TESTS9}
   --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReadingInfo.txt
                              ${TEMP}/ioTvMultiDatasetReadingInfoOut.txt
       otbMultiDatasetReadingInfo
-      ${INPUTDATA}/MOD13Q1.A2010001.h17v05.005.2010028003734.hdf
+      ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf
       ${TEMP}/ioTvMultiDatasetReadingInfoOut.txt
       )
             
