@@ -94,7 +94,6 @@ public:
   
 
 
-
   /** Compute Eigen values of A 
    * A is any type that overloads the [][] operator and contains the 
    * symmetric matrix. In practice only the upper triangle of the

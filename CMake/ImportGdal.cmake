@@ -161,7 +161,7 @@ IF(OTB_USE_EXTERNAL_GDAL)
     MESSAGE(WARNING "CHECK_GDALOPEN_SYMBOL test failed : your platform exhibits a gdal/geotiff conflict. "
     "Opening a TIF file may generate a crash. This is most probably because the gdal library you configured "
     "embeds its own libgeotiff and is compiled with --with-hide-internal-symbols=yes.\n"
-    "You might consider building GDAL yourself without using --with-hide-internal-symbols=no" )
+    "You might consider building GDAL yourself without using --with-hide-internal-symbols" )
   ENDIF(NOT CHECK_GDALOPEN_SYMBOL)
   
   # This test is known to fail with the Ubuntu gdal package
@@ -176,7 +176,7 @@ IF(OTB_USE_EXTERNAL_GDAL)
     MESSAGE(WARNING "CHECK_XTIFFOPEN_SYMBOL test failed : your platform exhibits a gdal/geotiff conflict. "
     "Opening a TIF file may generate a crash. This is most probably because the gdal library you configured "
     "embeds its own libgeotiff and is compiled with --with-hide-internal-symbols=yes.\n"
-    "You might consider building GDAL yourself without using --with-hide-internal-symbols=no" )
+    "You might consider building GDAL yourself without using --with-hide-internal-symbols" )
   ENDIF(NOT CHECK_XTIFFOPEN_SYMBOL)
 
 ELSE(OTB_USE_EXTERNAL_GDAL)
