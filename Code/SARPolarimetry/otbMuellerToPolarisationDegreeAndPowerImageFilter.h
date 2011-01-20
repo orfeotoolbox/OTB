@@ -20,6 +20,7 @@
 #define __MuellerToPolarisationDegreeAndPowerImageFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
+#include "itkNumericTraits.h"
 
 namespace otb
  {
@@ -54,9 +55,10 @@ public:
 
    /** Constructor */
    MuellerToPolarisationDegreeAndPowerFunctor() : m_NumberOfComponentsPerPixel(4),
-       m_PowerMin(100000.0), m_PowerMax(-100000.0),
-       m_PolarisationDegreeMin( 100000.0),
-       m_PolarisationDegreeMax(-100000.0) {}
+       m_PowerMin(itk::NumericTraits<RealType>::max()),
+       m_PowerMax(itk::NumericTraits<RealType>::min()),
+       m_PolarisationDegreeMin(itk::NumericTraits<RealType>::max()),
+       m_PolarisationDegreeMax(itk::NumericTraits<RealType>::min()) {}
 
    /** Destructor */
    ~MuellerToPolarisationDegreeAndPowerFunctor() {}
