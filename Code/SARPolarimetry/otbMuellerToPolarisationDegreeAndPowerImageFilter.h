@@ -84,7 +84,6 @@ public:
       psi = -90.0;
       while (psi < 91.0)
         {
-
         // Define the incident Stokes vector
         Si[0] = 1.0;
         Si[1] = cos(psi*PI_90)*cos(tau*PI_90);
@@ -93,6 +92,14 @@ public:
 
         // Evaluate the received Stokes vector
         Sr = muellerMatrix * Si;
+
+        //Calcul des param�tres P et deg_pol
+        P=Sr[0];
+
+        if (P<0.00001)
+            deg_pol=0.; //Par d�faut, � laisser ??
+        else
+            deg_pol=vnl_sqrt( Sr[1]*Sr[1] + Sr[2]*Sr[2] + Sr[3]*Sr[3] ) / Sr[0];
 
         psi += 5.0;
         }
