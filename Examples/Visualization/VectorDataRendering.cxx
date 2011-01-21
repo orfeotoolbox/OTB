@@ -80,7 +80,8 @@ int main( int argc, char * argv[] )
   else if (argc == 6)
     {
     inFont = true;
-    fontfilename( argv[5] );
+    const string fontFilenameArg = argv[5];
+    fontfilename.assign(fontFilenameArg );
     }
   else if (argc != 4)
     {
