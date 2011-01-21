@@ -63,8 +63,7 @@ ImageToGenericRSOutputParameters<TImage>
     this->EstimateOutputSpacing();
 
   // Finally Estimate the Output Size
-  if(!m_ForceSize)
-    this->EstimateOutputSize();
+  this->EstimateOutputSize();
 }
 
 
@@ -241,7 +240,20 @@ ImageToGenericRSOutputParameters<TImage>
   SizeType outputSize;
   outputSize[0] = static_cast<unsigned int>(vcl_floor(vcl_abs(sizeCartoX / this->GetOutputSpacing()[0])));
   outputSize[1] = static_cast<unsigned int>(vcl_floor(vcl_abs(sizeCartoY / this->GetOutputSpacing()[1])));
-  this->SetOutputSize(outputSize);
+
+  // if ForceSizeTo used don't update the output size with the value
+  // computed : the value is computed to update the spacing knowing
+  // the forced size and the computed one.
+  if(!m_ForceSize)
+    this->SetOutputSize(outputSize);
+  else
+    {
+    // Compute the spacing knowing the size
+    SpacingType outputSpacing;
+    outputSpacing[0] = this->GetOutputSpacing()[0] * outputSize[0]/this->GetOutputSize()[0];
+    outputSpacing[1] = this->GetOutputSpacing()[1] * outputSize[1]/this->GetOutputSize()[1];
+    this->SetOutputSpacing(outputSpacing);
+    }  
   this->UpdateTransform();
 }
 
