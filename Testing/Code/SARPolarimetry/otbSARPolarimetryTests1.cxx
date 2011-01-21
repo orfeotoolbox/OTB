@@ -51,4 +51,5 @@ void RegisterTests()
   REGISTER_TEST(otbMuellerToPolarisationDegreeAndPowerImageFilterNew);
   REGISTER_TEST(otbMuellerToPolarisationDegreeAndPowerImageFilter);
   REGISTER_TEST(otbMuellerToMLCImageFilterNew);
+  REGISTER_TEST(otbMuellerToMLCImageFilter);
 }

@@ -280,6 +280,17 @@ ADD_TEST(saTuMuellerToMLCImageFilterNew ${SARPOLARIMETRY_TESTS1}
 		otbMuellerToMLCImageFilterNew
 )
 
+ADD_TEST(saTvMuellerToMLCImageFilter ${SARPOLARIMETRY_TESTS1}
+  --compare-image ${EPSILON_12}   ${BASELINE}/saTvMuellerToMLCImageFilter.tif
+                    ${TEMP}/saTvMuellerToMLCImageFilter.tif
+        otbMuellerToMLCImageFilter
+        ${INPUTDATA}/RSAT_imagery_HH.tif
+        ${INPUTDATA}/RSAT_imagery_HV.tif
+        ${INPUTDATA}/RSAT_imagery_HV.tif
+        ${INPUTDATA}/RSAT_imagery_VV.tif
+        ${TEMP}/saTvMuellerToMLCImageFilter.tif
+	)
+
 # A enrichir
 SET(SARPOLARIMETRY_SRCS1
 otbSARPolarimetryTests1.cxx
@@ -308,6 +319,7 @@ otbMuellerToCircularPolarisationImageFilter.cxx
 otbMuellerToPolarisationDegreeAndPowerImageFilterNew.cxx
 otbMuellerToPolarisationDegreeAndPowerImageFilter.cxx
 otbMuellerToMLCImageFilterNew.cxx
+otbMuellerToMLCImageFilter.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbSARPolarimetryTests1 "${SARPOLARIMETRY_SRCS1}" "OTBSARPolarimetry;OTBIO;OTBTesting")
