@@ -161,6 +161,7 @@ int otbVectorImageTest(int argc, char* argv[])
   image = reader->GetOutput();
   std::cout << image << std::endl;
   file.open(outputAsciiFilename);
+  file << std::setprecision(15);
   file << image;
   file.close();
 
