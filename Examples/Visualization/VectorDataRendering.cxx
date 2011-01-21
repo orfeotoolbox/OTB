@@ -69,12 +69,25 @@ int main( int argc, char * argv[] )
   const string infname = argv[1];
   const string vectorfname = argv[2];
   const string demdirectory = argv[3];
-  const string fontfilename = argv[5];
+  const string fontfilename;
   int run   = 1;
-  if (argc > 4)
-  {
-    run = atoi(argv[4]);
-  }
+  bool inFont = false;
+
+  if (argc == 5)
+    {
+      run = atoi(argv[4]);
+    }
+  else if (argc == 6)
+    {
+    inFont = true;
+    fontfilename = argv[5];
+    }
+  else if (argc != 4)
+    {
+    std::cout << "Invalid parameters: " << std::endl;
+    std::cour << argv[0] << " <image filename>  <vector filename> <DEM directory> [<run> = 1] [<font filename> = default font]" << std::endl;
+    return EXIT_FAILURE;
+    }
 
   typedef otb::VectorImage<double,2>                  ImageType;
   typedef ImageType::PixelType                        PixelType;
@@ -165,7 +178,8 @@ int main( int argc, char * argv[] )
   vectorDataRendering->SetOrigin(origin);
   vectorDataRendering->SetSpacing(spacing);
   vectorDataRendering->SetScaleFactor(2.4);
-  vectorDataRendering->SetFontFileName(fontfilename);
+  if (inFont)
+    vectorDataRendering->SetFontFileName(fontfilename);
   // set up the style we want to use
   vectorDataRendering->AddStyle("minor-roads-casing");
   vectorDataRendering->AddStyle("minor-roads");
@@ -191,7 +205,8 @@ int main( int argc, char * argv[] )
   vectorDataRenderingQL->SetOrigin(origin);
   vectorDataRenderingQL->SetSpacing(spacingQL);
   vectorDataRenderingQL->SetScaleFactor(2.4*qlRatio);
-  vectorDataRenderingQL->SetFontFileName(fontfilename);
+  if (inFont)
+    vectorDataRenderingQL->SetFontFileName(fontfilename);
   vectorDataRenderingQL->AddStyle("minor-roads-casing");
   vectorDataRenderingQL->AddStyle("minor-roads");
   vectorDataRenderingQL->AddStyle("roads");
