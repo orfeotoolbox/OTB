@@ -68,6 +68,12 @@ public:
     ComplexType hhvv(M33-M44,-2.*M34);
     ComplexType hvvv(M13-M23,-1.*(M14-M24));
 
+    result[0] = static_cast<OutputValueType>( hhhh );
+    result[1] = static_cast<OutputValueType>( 2.* hhhv );
+    result[2] = static_cast<OutputValueType>( hhvv );
+    result[3] = static_cast<OutputValueType>( 4.* hvhv );
+    result[4] = static_cast<OutputValueType>( 2.* hvvv );
+    result[5] = static_cast<OutputValueType>( vvvv );
 
     return result;
     }
