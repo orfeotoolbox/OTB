@@ -62,15 +62,12 @@ public:
     RealType M43 =  static_cast<RealType>(Mueller[14]);
     RealType M44 =  static_cast<RealType>(Mueller[15]);
 
-    RealType hhhh = M11+M22+2.*M12;   // C1  <hh.hh*>
-    RealType hvhv = M11-M22;          // C2  <hv.hv*>
-    RealType vvvv = M11+M22-2.*M12;   // C3  <vv.vv*>
-    RealType Rehhhv = M13+M23;           // C4  Re<hh.hv*>
-    RealType Imhhhv = -1.*(M14+M24);   // C5   Im<hh.hv*>
-    RealType Rehhvv = M33-M44;  // C6  Re<hh.vv*>
-    RealType Imhhvv = -2.*M34;   // C7  Im<hh.vv*>
-    RealType Rehvvv = M13-M23;  // C8  Re<hv.vv>
-    RealType Imhvvv = -1.*(M14-M24);  // C9  Im<hv.vv*>
+    ComplexType hhhh(M11+M22+2.*M12,0.0);
+    ComplexType hvhv(M11-M22,0.0);
+    ComplexType vvvv(M11+M22-2.*M12,0.0);
+    ComplexType hhhv(M13+M23,-1.*(M14+M24));
+    ComplexType hhvv(M33-M44,-2.*M34);
+    ComplexType hvvv(M13-M23,-1.*(M14-M24));
 
 
     return result;
