@@ -1,118 +1,117 @@
 /*=========================================================================
 
-  Program:   OTB
-  Module:    $otbStokesToMCLImageFilter.h$
+  Program:   ORFEO Toolbox
   Language:  C++
-  Date:      $Date: 24/10/2006 $
-  Version:   $Revision: 1.0 $
+  Date:      $Date$
+  Version:   $Revision$
 
- 
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __StokesToMLCImageFilter_h
-#define __StokesToMLCImageFilter_h
 
-#include "itkImageToImageFilter.h"
-#include "itkImage.h"
-#include "itkNumericTraits.h"
-#include "itkImageRegionIterator.h"
-#include "itkImageRegionConstIterator.h"
-#include "itkImageRegionConstIteratorWithIndex.h"
-#include "itkVector.h"
+#ifndef __MuellerToMLCImageFilter_h
+#define __MuellerToMLCImageFilter_h
 
-#include "otbImage.h"
+#include "itkUnaryFunctorImageFilter.h"
 
 namespace otb
  {
-/** \class otbStokesToMLCImageFilter
- * \brief Compute the MLC image (9 channels) from the Sokes image (10 channels)
+
+namespace Functor {
+
+/** \class otbMuellerToMLCFunctor
+ * \brief Evaluate the  MLC image from the Mueller image
+ *
  */
-template <class TPixel>
-class  StokesToMLCImageFilter :
-   public itk::ImageToImageFilter< otb::Image<itk::Vector<TPixel,10>,2>, otb::Image<itk::Vector<TPixel,9>,2> >
+template< class TInput, class TOutput>
+class MuellerToMLCFunctor
 {
 public:
-  /** Convenient typedefs for simplifying declarations. */
-  typedef TPixel InputPixelType;
-  typedef otb::Image<itk::Vector<TPixel,10>,2> InputImageType;
-  typedef otb::Image<itk::Vector<TPixel,9>,2> OutputImageType;
+  typedef double                                    RealType;
+  typedef std::complex<double>                      ComplexType;
+  typedef typename TOutput::ValueType               OutputValueType;
 
-  /** Extract dimension from input and output image. */
-  itkStaticConstMacro(InputImageDimension, unsigned int,
-                      InputImageType::ImageDimension);
-  itkStaticConstMacro(OutputImageDimension, unsigned int,
-                      OutputImageType::ImageDimension);
-  
+  inline TOutput operator()( const TInput & Mueller ) const
+    {
+    TOutput result;
+    result.SetSize(m_NumberOfComponentsPerPixel);
 
-  /** Standard class typedefs. */
-  typedef StokesToMLCImageFilter Self;
-  typedef itk::ImageToImageFilter< InputImageType, OutputImageType> Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+    RealType M11 =  static_cast<RealType>(Mueller[0]);
+    RealType M12 =  static_cast<RealType>(Mueller[1]);
+    RealType M13 =  static_cast<RealType>(Mueller[2]);
+    RealType M14 =  static_cast<RealType>(Mueller[3]);
+    RealType M21 =  static_cast<RealType>(Mueller[4]);
+    RealType M22 =  static_cast<RealType>(Mueller[5]);
+    RealType M23 =  static_cast<RealType>(Mueller[6]);
+    RealType M24 =  static_cast<RealType>(Mueller[7]);
+    RealType M31 =  static_cast<RealType>(Mueller[8]);
+    RealType M32 =  static_cast<RealType>(Mueller[9]);
+    RealType M33 =  static_cast<RealType>(Mueller[10]);
+    RealType M34 =  static_cast<RealType>(Mueller[11]);
+    RealType M41 =  static_cast<RealType>(Mueller[12]);
+    RealType M42 =  static_cast<RealType>(Mueller[13]);
+    RealType M43 =  static_cast<RealType>(Mueller[14]);
+    RealType M44 =  static_cast<RealType>(Mueller[15]);
 
-  /** Method for creation through the object factory. */
-  itkNewMacro(Self);
+    return result;
+    }
 
-  /** Run-time type information (and related methods). */
-  itkTypeMacro(StokesToMLCImageFilter, ImageToImageFilter);
-  
-  /** Image typedef support. */
-  typedef typename InputImageType::PixelType InputPixelType;
-  typedef typename OutputImageType::PixelType OutputPixelType;
-  
-  typedef typename InputImageType::RegionType InputImageRegionType;
-  typedef typename OutputImageType::RegionType OutputImageRegionType;
+   unsigned int GetOutputSize()
+   {
+     return m_NumberOfComponentsPerPixel;
+   }
 
-  typedef typename InputImageType::SizeType InputSizeType;
-  typedef typename InputImageType::IndexType IndexType ;
+   /** Constructor */
+   MuellerToMLCFunctor() : m_NumberOfComponentsPerPixel(6)  {}
 
-  /** MLC type **/
-  typedef itk::Vector<float,9> MLCType;
-
-  /** Stokes type **/
-  typedef itk::Vector<float,10> StokesType;
-
-  
-  
-  /** StokesToMLCImageFilter needs a larger input requested region than
-   * the output requested region.  As such, StokesToMLCImageFilter needs
-   * to provide an implementation for GenerateInputRequestedRegion()
-   * in order to inform the pipeline execution model.
-   *
-   * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
-  virtual void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError);
-
-protected:
-  StokesToMLCImageFilter();
-  virtual ~StokesToMLCImageFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
-
-  /** StokesToMLCImageFilter can be implemented as a multithreaded filter.
-   * Therefore, this implementation provides a ThreadedGenerateData()
-   * routine which is called for each processing thread. The output
-   * image data is allocated automatically by the superclass prior to
-   * calling ThreadedGenerateData().  ThreadedGenerateData can only
-   * write to the portion of the output image specified by the
-   * parameter "outputRegionForThread"
-   *
-   * \sa ImageToImageFilter::ThreadedGenerateData(),
-   *     ImageToImageFilter::GenerateData() */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            int threadId );
+   /** Destructor */
+   ~MuellerToMLCFunctor() {}
 
 private:
-  StokesToMLCImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+    unsigned int m_NumberOfComponentsPerPixel;
+};
+}
 
- 
- 
 
+/** \class otbMuellerToMLCImageFilter
+ * \brief Compute the MLC  image
+ * from the Mueller image (16 real channels)
+ */
+template <class TInputImage, class TOutputImage, class TFunction = Functor::MuellerToMLCFunctor<
+    ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
+class ITK_EXPORT MuellerToMLCImageFilter :
+   public itk::UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction>
+{
+public:
+   /** Standard class typedefs. */
+   typedef MuellerToMLCImageFilter  Self;
+   typedef itk::UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction> Superclass;
+   typedef itk::SmartPointer<Self>        Pointer;
+   typedef itk::SmartPointer<const Self>  ConstPointer;
+
+   /** Method for creation through the object factory. */
+   itkNewMacro(Self);
+
+   /** Runtime information support. */
+   itkTypeMacro(MuellerToMLCImageFilter,itk::UnaryFunctorImageFilter);
+
+
+protected:
+   MuellerToMLCImageFilter() {}
+  virtual ~MuellerToMLCImageFilter() {}
+
+private:
+  MuellerToMLCImageFilter(const Self&); // purposely not implemented
+  void operator=(const Self&);          // purposely not implemented
 };
   
 } // end namespace otb
-
-#ifndef ITK_MANUAL_INSTANTIATION
-#include "otbStokesToMLCImageFilter.txx"
-#endif
 
 #endif
