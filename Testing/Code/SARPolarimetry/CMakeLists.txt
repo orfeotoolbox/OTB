@@ -23,12 +23,12 @@ SET(SARPOLARIMETRY_TESTS1 ${CXX_TEST_PATH}/otbSARPolarimetryTests1)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-ADD_TEST(sarTuPolarimetricSynthesisFilterNew ${SARPOLARIMETRY_TESTS1}
+ADD_TEST(saTuPolarimetricSynthesisFilterNew ${SARPOLARIMETRY_TESTS1}
         otbPolarimetricSynthesisFilterNew )
 
  # Normal Case
-ADD_TEST(sarTvPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
-  --compare-image ${EPSILON_12}   ${BASELINE}/sarTvPolarimetricSynthesis.tif
+ADD_TEST(saTvPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
+  --compare-image ${EPSILON_12}   ${BASELINE}/saTvPolarimetricSynthesis.tif
                     ${TEMP}/resPolarimetricSynthesis_HH_VH_HV_VV.tif
         otbPolarimetricSynthesisFilter
         ${INPUTDATA}/RSAT_imagery_HH.tif
@@ -43,8 +43,8 @@ ADD_TEST(sarTvPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
 	)
 
  # With 3 channels
-ADD_TEST(sarTvHHnHVnVVPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
-  --compare-image ${EPSILON_12}   ${BASELINE}/sarTvPolarimetricSynthesis_HH_HV_VV.tif
+ADD_TEST(saTvHHnHVnVVPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
+  --compare-image ${EPSILON_12}   ${BASELINE}/saTvPolarimetricSynthesis_HH_HV_VV.tif
                     ${TEMP}/resPolarimetricSynthesis_HH_HV_VV.tif
         otbHHnHVnVVPolarimetricSynthesisFilter
         ${INPUTDATA}/RSAT_imagery_HH.tif
@@ -58,8 +58,8 @@ ADD_TEST(sarTvHHnHVnVVPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
 	)
 
  # With HH and HV channels
-ADD_TEST(sarTvHHnHVPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
-  --compare-image ${EPSILON_12}   ${BASELINE}/sarTvPolarimetricSynthesis_HH_HV.tif
+ADD_TEST(saTvHHnHVPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
+  --compare-image ${EPSILON_12}   ${BASELINE}/saTvPolarimetricSynthesis_HH_HV.tif
                     ${TEMP}/resPolarimetricSynthesis_HH_HV.tif
         otbHHnHVPolarimetricSynthesisFilter
         ${INPUTDATA}/RSAT_imagery_HH.tif
@@ -72,8 +72,8 @@ ADD_TEST(sarTvHHnHVPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
 	)
 
 # With VH and VV channels
-ADD_TEST(sarTvVHnVVPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
-  --compare-image ${EPSILON_12}   ${BASELINE}/sarTvPolarimetricSynthesis_VH_VV.tif
+ADD_TEST(saTvVHnVVPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
+  --compare-image ${EPSILON_12}   ${BASELINE}/saTvPolarimetricSynthesis_VH_VV.tif
                     ${TEMP}/resPolarimetricSynthesis_VH_VV.tif
         otbVHnVVPolarimetricSynthesisFilter
         ${INPUTDATA}/RSAT_imagery_VH.tif
@@ -85,14 +85,14 @@ ADD_TEST(sarTvVHnVVPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
          45.0
 	)
 
-ADD_TEST(sarTuMultiChannelsPolarimetricSynthesisFilterNew ${SARPOLARIMETRY_TESTS1}
+ADD_TEST(saTuMultiChannelsPolarimetricSynthesisFilterNew ${SARPOLARIMETRY_TESTS1}
         otbMultiChannelsPolarimetricSynthesisFilterNew
 	)
 
 # With vector image HH, HV, VH and VV channels
 IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(sarTvVectorMultiChannelsPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
- --compare-image ${EPSILON_12}   ${BASELINE}/sarTvMultiPolarimetricSynthesis1.tif
+ADD_TEST(saTvVectorMultiChannelsPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
+ --compare-image ${EPSILON_12}   ${BASELINE}/saTvMultiPolarimetricSynthesis1.tif
                    ${TEMP}/resMultiPolarimetricSynthesis1.tif
        otbVectorMultiChannelsPolarimetricSynthesisFilter
        ${INPUTDATA}/RSAT_imagery_vector.tif.hdr
@@ -106,8 +106,8 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 
 # With 3 images HH, HV and VV channels turned into vectorImage
-ADD_TEST(sarTvMultiChannelsPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
-  --compare-image ${EPSILON_12}   ${BASELINE}/sarTvMultiPolarimetricSynthesis2.tif
+ADD_TEST(saTvMultiChannelsPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
+  --compare-image ${EPSILON_12}   ${BASELINE}/saTvMultiPolarimetricSynthesis2.tif
                     ${TEMP}/resMultiPolarimetricSynthesis2.tif
         otbMultiChannelsPolarimetricSynthesisFilter
         ${INPUTDATA}/RSAT_imagery_HH.tif
@@ -122,157 +122,157 @@ ADD_TEST(sarTvMultiChannelsPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
 
 
 # SinclairToCovarianceFunctor
-ADD_TEST(sarTuSinclairToCovarianceFunctor ${SARPOLARIMETRY_TESTS1}
+ADD_TEST(saTuSinclairToCovarianceFunctor ${SARPOLARIMETRY_TESTS1}
 		otbSinclairToCovarianceFunctor
 )
 
 # Sinclair To Covariance Image Filter
-ADD_TEST(sarTvSinclairImageFilter_SinclairToCovariance ${SARPOLARIMETRY_TESTS1}
-  --compare-image ${EPSILON_12}   ${BASELINE}/sarTvSinclairImageFilter_SinclairToCovariance.tif
-                    ${TEMP}/sarTvSinclairImageFilter_SinclairToCovariance.tif
+ADD_TEST(saTvSinclairImageFilter_SinclairToCovariance ${SARPOLARIMETRY_TESTS1}
+  --compare-image ${EPSILON_12}   ${BASELINE}/saTvSinclairImageFilter_SinclairToCovariance.tif
+                    ${TEMP}/saTvSinclairImageFilter_SinclairToCovariance.tif
         otbSinclairImageFilter
         SinclairToCovariance
         ${INPUTDATA}/RSAT_imagery_HH.tif
         ${INPUTDATA}/RSAT_imagery_HV.tif
         ${INPUTDATA}/RSAT_imagery_VV.tif
-        ${TEMP}/sarTvSinclairImageFilter_SinclairToCovariance.tif
+        ${TEMP}/saTvSinclairImageFilter_SinclairToCovariance.tif
 	)
 
 
 # Sinclair To Coherency Image Filter
-ADD_TEST(sarTvSinclairImageFilter_SinclairToCoherency ${SARPOLARIMETRY_TESTS1}
-  --compare-image ${EPSILON_12}   ${BASELINE}/sarTvSinclairImageFilter_SinclairToCoherency.tif
-                    ${TEMP}/sarTvSinclairImageFilter_SinclairToCoherency.tif
+ADD_TEST(saTvSinclairImageFilter_SinclairToCoherency ${SARPOLARIMETRY_TESTS1}
+  --compare-image ${EPSILON_12}   ${BASELINE}/saTvSinclairImageFilter_SinclairToCoherency.tif
+                    ${TEMP}/saTvSinclairImageFilter_SinclairToCoherency.tif
         otbSinclairImageFilter
         SinclairToCoherency
         ${INPUTDATA}/RSAT_imagery_HH.tif
         ${INPUTDATA}/RSAT_imagery_HV.tif
         ${INPUTDATA}/RSAT_imagery_VV.tif
-        ${TEMP}/sarTvSinclairImageFilter_SinclairToCoherency.tif
+        ${TEMP}/saTvSinclairImageFilter_SinclairToCoherency.tif
 	)
 
 # Sinclair To Mueller Image Filter
-ADD_TEST(sarTvSinclairImageFilter_SinclairToMueller ${SARPOLARIMETRY_TESTS1}
-  --compare-image ${EPSILON_12}   ${BASELINE}/sarTvSinclairImageFilter_SinclairToMueller.tif
-                    ${TEMP}/sarTvSinclairImageFilter_SinclairToMueller.tif
+ADD_TEST(saTvSinclairImageFilter_SinclairToMueller ${SARPOLARIMETRY_TESTS1}
+  --compare-image ${EPSILON_12}   ${BASELINE}/saTvSinclairImageFilter_SinclairToMueller.tif
+                    ${TEMP}/saTvSinclairImageFilter_SinclairToMueller.tif
         otbSinclairImageFilter
         SinclairToMueller
         ${INPUTDATA}/RSAT_imagery_HH.tif
         ${INPUTDATA}/RSAT_imagery_HV.tif
         ${INPUTDATA}/RSAT_imagery_VV.tif
-        ${TEMP}/sarTvSinclairImageFilter_SinclairToMueller.tif
+        ${TEMP}/saTvSinclairImageFilter_SinclairToMueller.tif
 	)
 
 # MLC To Coherency Image Filter
-ADD_TEST(sarTuMLCToCoherencyImageFilterNew ${SARPOLARIMETRY_TESTS1}
+ADD_TEST(saTuMLCToCoherencyImageFilterNew ${SARPOLARIMETRY_TESTS1}
 		otbMLCToCoherencyImageFilterNew
 )
 
-ADD_TEST(sarTvMLCToCoherencyImageFilter ${SARPOLARIMETRY_TESTS1}
-  --compare-image ${EPSILON_12}   ${BASELINE}/sarTvMLCToCoherencyImageFilter.tif
-                    ${TEMP}/sarTvMLCToCoherencyImageFilter.tif
+ADD_TEST(saTvMLCToCoherencyImageFilter ${SARPOLARIMETRY_TESTS1}
+  --compare-image ${EPSILON_12}   ${BASELINE}/saTvMLCToCoherencyImageFilter.tif
+                    ${TEMP}/saTvMLCToCoherencyImageFilter.tif
         otbMLCToCoherencyImageFilter
         ${INPUTDATA}/RSAT_imagery_HH.tif
         ${INPUTDATA}/RSAT_imagery_HV.tif
         ${INPUTDATA}/RSAT_imagery_HV.tif
         ${INPUTDATA}/RSAT_imagery_VV.tif
-        ${TEMP}/sarTvMLCToCoherencyImageFilter.tif
+        ${TEMP}/saTvMLCToCoherencyImageFilter.tif
 	)
 
 # MLC To Coherency Degree Image Filter
-ADD_TEST(sarTuMLCToCoherencyDegreeImageFilterNew ${SARPOLARIMETRY_TESTS1}
+ADD_TEST(saTuMLCToCoherencyDegreeImageFilterNew ${SARPOLARIMETRY_TESTS1}
 		otbMLCToCoherencyDegreeImageFilterNew
 )
 
-ADD_TEST(sarTvMLCToCoherencyDegreeImageFilter ${SARPOLARIMETRY_TESTS1}
-  --compare-image ${EPSILON_12}   ${BASELINE}/sarTvMLCToCoherencyDegreeImageFilter.tif
-                    ${TEMP}/sarTvMLCToCoherencyDegreeImageFilter.tif
+ADD_TEST(saTvMLCToCoherencyDegreeImageFilter ${SARPOLARIMETRY_TESTS1}
+  --compare-image ${EPSILON_12}   ${BASELINE}/saTvMLCToCoherencyDegreeImageFilter.tif
+                    ${TEMP}/saTvMLCToCoherencyDegreeImageFilter.tif
         otbMLCToCoherencyDegreeImageFilter
         ${INPUTDATA}/RSAT_imagery_HH.tif
         ${INPUTDATA}/RSAT_imagery_HV.tif
         ${INPUTDATA}/RSAT_imagery_HV.tif
         ${INPUTDATA}/RSAT_imagery_VV.tif
-        ${TEMP}/sarTvMLCToCoherencyDegreeImageFilter.tif
+        ${TEMP}/saTvMLCToCoherencyDegreeImageFilter.tif
 	)
 
 # MLC To Circular Coherency Degree Image Filter
-ADD_TEST(sarTuMLCToCircularCoherencyDegreeImageFilterNew ${SARPOLARIMETRY_TESTS1}
+ADD_TEST(saTuMLCToCircularCoherencyDegreeImageFilterNew ${SARPOLARIMETRY_TESTS1}
 		otbMLCToCircularCoherencyDegreeImageFilterNew
 )
 
-ADD_TEST(sarTvMLCToCircularCoherencyDegreeImageFilter ${SARPOLARIMETRY_TESTS1}
-  --compare-image ${EPSILON_12}   ${BASELINE}/sarTvMLCToCircularCoherencyDegreeImageFilter.tif
-                    ${TEMP}/sarTvMLCToCircularCoherencyDegreeImageFilter.tif
+ADD_TEST(saTvMLCToCircularCoherencyDegreeImageFilter ${SARPOLARIMETRY_TESTS1}
+  --compare-image ${EPSILON_12}   ${BASELINE}/saTvMLCToCircularCoherencyDegreeImageFilter.tif
+                    ${TEMP}/saTvMLCToCircularCoherencyDegreeImageFilter.tif
         otbMLCToCircularCoherencyDegreeImageFilter
         ${INPUTDATA}/RSAT_imagery_HH.tif
         ${INPUTDATA}/RSAT_imagery_HV.tif
         ${INPUTDATA}/RSAT_imagery_HV.tif
         ${INPUTDATA}/RSAT_imagery_VV.tif
-        ${TEMP}/sarTvMLCToCircularCoherencyDegreeImageFilter.tif
+        ${TEMP}/saTvMLCToCircularCoherencyDegreeImageFilter.tif
 	)
 
 # H Alpha Image Filter
-ADD_TEST(sarTuHAlphaImageFilterNew ${SARPOLARIMETRY_TESTS1}
+ADD_TEST(saTuHAlphaImageFilterNew ${SARPOLARIMETRY_TESTS1}
 		otbHAlphaImageFilterNew
 )
 
-ADD_TEST(sarTvHAlphaImageFilter ${SARPOLARIMETRY_TESTS1}
-  --compare-image ${EPSILON_12}   ${BASELINE}/sarTvHAlphaImageFilter.tif
-                    ${TEMP}/sarTvHAlphaImageFilter.tif
+ADD_TEST(saTvHAlphaImageFilter ${SARPOLARIMETRY_TESTS1}
+  --compare-image ${EPSILON_12}   ${BASELINE}/saTvHAlphaImageFilter.tif
+                    ${TEMP}/saTvHAlphaImageFilter.tif
         otbHAlphaImageFilter
         ${INPUTDATA}/RSAT_imagery_HH.tif
         ${INPUTDATA}/RSAT_imagery_HV.tif
         ${INPUTDATA}/RSAT_imagery_HV.tif
         ${INPUTDATA}/RSAT_imagery_VV.tif
-        ${TEMP}/sarTvHAlphaImageFilter.tif
+        ${TEMP}/saTvHAlphaImageFilter.tif
 	)
 
 # Coherency To Mueller Image Filter
-ADD_TEST(sarTuCoherencyToMuellerImageFilterNew ${SARPOLARIMETRY_TESTS1}
+ADD_TEST(saTuCoherencyToMuellerImageFilterNew ${SARPOLARIMETRY_TESTS1}
 		otbCoherencyToMuellerImageFilterNew
 )
 
-ADD_TEST(sarTvCoherencyToMuellerImageFilter ${SARPOLARIMETRY_TESTS1}
-  --compare-image ${EPSILON_12}   ${BASELINE}/sarTvCoherencyToMuellerImageFilter.tif
-                    ${TEMP}/sarTvCoherencyToMuellerImageFilter.tif
+ADD_TEST(saTvCoherencyToMuellerImageFilter ${SARPOLARIMETRY_TESTS1}
+  --compare-image ${EPSILON_12}   ${BASELINE}/saTvCoherencyToMuellerImageFilter.tif
+                    ${TEMP}/saTvCoherencyToMuellerImageFilter.tif
         otbCoherencyToMuellerImageFilter
         ${INPUTDATA}/RSAT_imagery_HH.tif
         ${INPUTDATA}/RSAT_imagery_HV.tif
         ${INPUTDATA}/RSAT_imagery_HV.tif
         ${INPUTDATA}/RSAT_imagery_VV.tif
-        ${TEMP}/sarTvCoherencyToMuellerImageFilter.tif
+        ${TEMP}/saTvCoherencyToMuellerImageFilter.tif
 	)
 
 # Mueller To Circular polarisation Image Filter
-ADD_TEST(sarTuMuellerToCircularPolarisationImageFilterNew ${SARPOLARIMETRY_TESTS1}
+ADD_TEST(saTuMuellerToCircularPolarisationImageFilterNew ${SARPOLARIMETRY_TESTS1}
 		otbMuellerToCircularPolarisationImageFilterNew
 )
 
-ADD_TEST(sarTvMuellerToCircularPolarisationImageFilter ${SARPOLARIMETRY_TESTS1}
-  --compare-image ${EPSILON_12}   ${BASELINE}/sarTvMuellerToCircularPolarisationImageFilter.tif
-                    ${TEMP}/sarTvMuellerToCircularPolarisationImageFilter.tif
+ADD_TEST(saTvMuellerToCircularPolarisationImageFilter ${SARPOLARIMETRY_TESTS1}
+  --compare-image ${EPSILON_12}   ${BASELINE}/saTvMuellerToCircularPolarisationImageFilter.tif
+                    ${TEMP}/saTvMuellerToCircularPolarisationImageFilter.tif
         otbMuellerToCircularPolarisationImageFilter
         ${INPUTDATA}/RSAT_imagery_HH.tif
         ${INPUTDATA}/RSAT_imagery_HV.tif
         ${INPUTDATA}/RSAT_imagery_HV.tif
         ${INPUTDATA}/RSAT_imagery_VV.tif
-        ${TEMP}/sarTvMuellerToCircularPolarisationImageFilter.tif
+        ${TEMP}/saTvMuellerToCircularPolarisationImageFilter.tif
 	)
 
 # Mueller To polarisation degree and power Image Filter
-ADD_TEST(sarTuMuellerToPolarisationDegreeAndPowerImageFilterNew ${SARPOLARIMETRY_TESTS1}
+ADD_TEST(saTuMuellerToPolarisationDegreeAndPowerImageFilterNew ${SARPOLARIMETRY_TESTS1}
 		otbMuellerToPolarisationDegreeAndPowerImageFilterNew
 )
 
-ADD_TEST(sarTvMuellerToPolarisationDegreeAndPowerImageFilter ${SARPOLARIMETRY_TESTS1}
-  --compare-image ${EPSILON_12}   ${BASELINE}/sarTvMuellerToPolarisationDegreeAndPowerImageFilter.tif
-                    ${TEMP}/sarTvMuellerToPolarisationDegreeAndPowerImageFilter.tif
+ADD_TEST(saTvMuellerToPolarisationDegreeAndPowerImageFilter ${SARPOLARIMETRY_TESTS1}
+  --compare-image ${EPSILON_12}   ${BASELINE}/saTvMuellerToPolarisationDegreeAndPowerImageFilter.tif
+                    ${TEMP}/saTvMuellerToPolarisationDegreeAndPowerImageFilter.tif
         otbMuellerToPolarisationDegreeAndPowerImageFilter
         ${INPUTDATA}/RSAT_imagery_HH.tif
         ${INPUTDATA}/RSAT_imagery_HV.tif
         ${INPUTDATA}/RSAT_imagery_HV.tif
         ${INPUTDATA}/RSAT_imagery_VV.tif
-        ${TEMP}/sarTvMuellerToPolarisationDegreeAndPowerImageFilter.tif
+        ${TEMP}/saTvMuellerToPolarisationDegreeAndPowerImageFilter.tif
 	)
 
 # A enrichir

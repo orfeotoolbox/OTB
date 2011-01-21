@@ -71,10 +71,10 @@ protected:
 };
 
 template <typename T, typename Q>
-inline void WriteVLRData_n(IndexVLRData& dest, T src, Q& pos)
+inline void WriteVLRData_n(IndexVLRData& dest, T& src, Q& pos)
 {
     // Fix little-endian
-    LIBLAS_SWAP_BYTES_N(&src, sizeof(T));
+    LIBLAS_SWAP_BYTES_N(src, sizeof(T));
     // error if writing past array end
     if (static_cast<size_t>(pos) + sizeof(T) > dest.size())
 		throw std::out_of_range("liblas::detail::WriteVLRData_n: array index out of range");
@@ -85,10 +85,10 @@ inline void WriteVLRData_n(IndexVLRData& dest, T src, Q& pos)
 }
 
 template <typename T, typename Q>
-inline void WriteVLRDataNoInc_n(IndexVLRData& dest, T src, Q const& pos)
+inline void WriteVLRDataNoInc_n(IndexVLRData& dest, T& src, Q const& pos)
 {
     // Fix little-endian
-    LIBLAS_SWAP_BYTES_N(&src, sizeof(T));
+    LIBLAS_SWAP_BYTES_N(src, sizeof(T));
     // error if writing past array end
     if (static_cast<size_t>(pos) + sizeof(T) > dest.size())
 		throw std::out_of_range("liblas::detail::WriteVLRDataNoInc_n: array index out of range");
