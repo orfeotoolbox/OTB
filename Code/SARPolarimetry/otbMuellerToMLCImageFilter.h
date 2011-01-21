@@ -37,7 +37,6 @@ public:
   typedef double                                    RealType;
   typedef std::complex<double>                      ComplexType;
   typedef typename TOutput::ValueType               OutputValueType;
-  typedef typename TOutput::ValueType               OutputValueType;
 
 
   inline TOutput operator()( const TInput & Mueller ) const
