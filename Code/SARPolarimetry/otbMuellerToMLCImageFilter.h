@@ -37,6 +37,8 @@ public:
   typedef double                                    RealType;
   typedef std::complex<double>                      ComplexType;
   typedef typename TOutput::ValueType               OutputValueType;
+  typedef typename TOutput::ValueType               OutputValueType;
+
 
   inline TOutput operator()( const TInput & Mueller ) const
     {
@@ -59,6 +61,17 @@ public:
     RealType M42 =  static_cast<RealType>(Mueller[13]);
     RealType M43 =  static_cast<RealType>(Mueller[14]);
     RealType M44 =  static_cast<RealType>(Mueller[15]);
+
+    RealType hhhh = M11+M22+2.*M12;   // C1  <hh.hh*>
+    RealType hvhv = M11-M22;          // C2  <hv.hv*>
+    RealType vvvv = M11+M22-2.*M12;   // C3  <vv.vv*>
+    RealType Rehhhv = M13+M23;           // C4  Re<hh.hv*>
+    RealType Imhhhv = -1.*(M14+M24);   // C5   Im<hh.hv*>
+    RealType Rehhvv = M33-M44;  // C6  Re<hh.vv*>
+    RealType Imhhvv = -2.*M34;   // C7  Im<hh.vv*>
+    RealType Rehvvv = M13-M23;  // C8  Re<hv.vv>
+    RealType Imhvvv = -1.*(M14-M24);  // C9  Im<hv.vv*>
+
 
     return result;
     }
