@@ -18,7 +18,7 @@
 
 //  Software Guide : BeginCommandLineArgs
 //  INPUTS: {${INPUTLARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF}, {${INPUTLARGEDATA}/VECTOR/MidiPyrenees/roads.shp}
-//  ${OTB_DATA_ROOT}/Examples/DEM_srtm 1
+//  ${OTB_DATA_ROOT}/Examples/DEM_srtm 1 ${OTB_DATA_ROOT}/Baseline/OTB/Files/DejaVuSans.ttf
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
