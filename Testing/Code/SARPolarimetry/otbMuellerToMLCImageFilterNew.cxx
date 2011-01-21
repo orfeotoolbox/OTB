@@ -29,10 +29,12 @@ int otbMuellerToMLCImageFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
 
-  typedef double                                 PixelType;
-  typedef otb::VectorImage<PixelType, Dimension> ImageType;
+  typedef double                                        PixelType;
+  typedef std::complex<PixelType>                       ComplexPixelType;
+  typedef otb::VectorImage<PixelType, Dimension>        ImageType;
+  typedef otb::VectorImage<ComplexPixelType, Dimension> ComplexImageType;
 
-  typedef otb::MuellerToMLCImageFilter<ImageType, ImageType> FilterType;
+  typedef otb::MuellerToMLCImageFilter<ImageType, ComplexImageType> FilterType;
 
   FilterType::Pointer filter = FilterType::New();
 
