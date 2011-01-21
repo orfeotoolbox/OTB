@@ -80,7 +80,7 @@ int main( int argc, char * argv[] )
   else if (argc == 6)
     {
     inFont = true;
-    fontfilename = argv[5];
+    fontfilename( argv[5] );
     }
   else if (argc != 4)
     {
