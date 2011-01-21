@@ -18,7 +18,8 @@
 #ifndef __otbMaskedScalarImageToGreyLevelRunLengthMatrixGenerator_h
 #define __otbMaskedScalarImageToGreyLevelRunLengthMatrixGenerator_h
 
-#include "itkMaskedScalarImageToGreyLevelRunLengthMatrixGenerator.h"
+//#include "itkMaskedScalarImageToGreyLevelRunLengthMatrixGenerator.h"
+#include "itkScalarImageToGreyLevelRunLengthMatrixGenerator.h"
 #include "otbMacro.h"
 
 namespace otb
@@ -33,14 +34,14 @@ namespace otb
  */
 template <class TImage, class THistogramFrequencyContainer = itk::Statistics::DenseFrequencyContainer>
 class MaskedScalarImageToGreyLevelRunLengthMatrixGenerator
-  : public itk::Statistics::MaskedScalarImageToGreyLevelRunLengthMatrixGenerator<TImage,
+  : public itk::Statistics::ScalarImageToGreyLevelRunLengthMatrixGenerator<TImage,
       THistogramFrequencyContainer>
 {
 public:
   /** Standard class typedef */
   typedef MaskedScalarImageToGreyLevelRunLengthMatrixGenerator
                                                      Self;
-  typedef itk::Statistics::MaskedScalarImageToGreyLevelRunLengthMatrixGenerator
+  typedef itk::Statistics::ScalarImageToGreyLevelRunLengthMatrixGenerator
     <TImage, THistogramFrequencyContainer>           Superclass;
   typedef itk::SmartPointer<Self>                    Pointer;
   typedef itk::SmartPointer<const Self>              ConstPointer;
