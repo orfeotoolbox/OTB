@@ -275,6 +275,11 @@ ADD_TEST(saTvMuellerToPolarisationDegreeAndPowerImageFilter ${SARPOLARIMETRY_TES
         ${TEMP}/saTvMuellerToPolarisationDegreeAndPowerImageFilter.tif
 	)
 
+# Mueller To MLC Image Filter
+ADD_TEST(saTuMuellerToMLCImageFilterNew ${SARPOLARIMETRY_TESTS1}
+		otbMuellerToMLCImageFilterNew
+)
+
 # A enrichir
 SET(SARPOLARIMETRY_SRCS1
 otbSARPolarimetryTests1.cxx
@@ -302,6 +307,7 @@ otbMuellerToCircularPolarisationImageFilterNew.cxx
 otbMuellerToCircularPolarisationImageFilter.cxx
 otbMuellerToPolarisationDegreeAndPowerImageFilterNew.cxx
 otbMuellerToPolarisationDegreeAndPowerImageFilter.cxx
+otbMuellerToMLCImageFilterNew.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbSARPolarimetryTests1 "${SARPOLARIMETRY_SRCS1}" "OTBSARPolarimetry;OTBIO;OTBTesting")
