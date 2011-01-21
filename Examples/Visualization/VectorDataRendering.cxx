@@ -69,7 +69,7 @@ int main( int argc, char * argv[] )
   const string infname = argv[1];
   const string vectorfname = argv[2];
   const string demdirectory = argv[3];
-  const string fontfilename;
+  std::string fontfilename;
   int run   = 1;
   bool inFont = false;
 
@@ -80,7 +80,7 @@ int main( int argc, char * argv[] )
   else if (argc == 6)
     {
     inFont = true;
-    const string fontFilenameArg = argv[5];
+    std::string fontFilenameArg = argv[5];
     fontfilename.assign(fontFilenameArg );
     }
   else if (argc != 4)
