@@ -85,7 +85,7 @@ int main( int argc, char * argv[] )
   else if (argc != 4)
     {
     std::cout << "Invalid parameters: " << std::endl;
-    std::cour << argv[0] << " <image filename>  <vector filename> <DEM directory> [<run> = 1] [<font filename> = default font]" << std::endl;
+    std::cout << argv[0] << " <image filename>  <vector filename> <DEM directory> [<run> = 1] [<font filename> = default font]" << std::endl;
     return EXIT_FAILURE;
     }
 
