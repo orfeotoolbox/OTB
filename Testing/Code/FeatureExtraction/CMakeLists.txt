@@ -1045,7 +1045,7 @@ ADD_TEST(feTvImageFittingPolygonListFilter ${FEATUREEXTRACTION_TESTS9}
 
 #--------- SimpleCountStrategy --------------
 
-ADD_TEST(feSimplePointCountStrategyTest ${FEATUREEXTRACTION_TESTS9}
+ADD_TEST(feTvSimplePointCountStrategyTest ${FEATUREEXTRACTION_TESTS9}
     otbSimplePointCountStrategyTest)
 
 
