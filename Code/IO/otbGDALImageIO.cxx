@@ -221,8 +221,8 @@ void GDALImageIO::ReadVolume(void*)
 // Read image with GDAL
 void GDALImageIO::Read(void* buffer)
 {
-  // Convert buffer from const void * to unsigned char *
-  unsigned char *p = const_cast<unsigned char *>(static_cast<const unsigned char *>(buffer));
+  // Convert buffer from void * to unsigned char *
+  unsigned char *p = static_cast<unsigned char *>(buffer);
 
   // Check if conversion succeed
   if (p == NULL)
@@ -896,11 +896,8 @@ void GDALImageIO::Write(const void* buffer)
     m_FlagWriteImageInformation = false;
     }
 
-  // Convert buffer from const void * to unsigned char *
-  unsigned char *p = const_cast<unsigned char *>(static_cast<const unsigned char *>(buffer));
-
   // Check if conversion succeed
-  if (p == NULL)
+  if (buffer == NULL)
     {
     itkExceptionMacro(<< "GDAL : Bad alloc");
     return;
@@ -929,7 +926,7 @@ void GDALImageIO::Write(const void* buffer)
                                                        lFirstLine,
                                                        lNbColumns,
                                                        lNbLines,
-                                                       p,
+                                                       const_cast<void *>(buffer),
                                                        lNbColumns,
                                                        lNbLines,
                                                        m_PxType,
