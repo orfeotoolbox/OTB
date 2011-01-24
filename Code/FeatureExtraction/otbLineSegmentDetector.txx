@@ -53,9 +53,9 @@ LineSegmentDetector<TInputImage, TPrecision>
 ::LineSegmentDetector()
 {
 
-  m_DirectionsAllowed = 1. / 8.;
+  m_DirectionsAllowed = 1. / 16.;
   m_Prec = CONST_PI * m_DirectionsAllowed;
-  m_Threshold = 2.;
+  m_Threshold = 5.2;
 
   /** Compute the modulus and the orientation gradient images */
   m_GradientFilter = GradientFilterType::New();
@@ -108,7 +108,7 @@ LineSegmentDetector<TInputImage, TPrecision>
 
   /** Compute the modulus and the orientation gradient image*/
   m_GradientFilter->SetInput(castFilter->GetOutput());
-  m_GradientFilter->SetSigma(1.3);
+  m_GradientFilter->SetSigma(0.3);
   m_MagnitudeFilter->SetInput(m_GradientFilter->GetOutput());
   m_OrientationFilter->SetInput(m_GradientFilter->GetOutput());
 
@@ -169,10 +169,10 @@ LineSegmentDetector<TInputImage, TPrecision>
   max = minmaxCalculator->GetMaximum();
 
   /** Compute the threshold on the gradient*/
-  m_Threshold = 4 * m_Threshold / vcl_sin(m_Prec) * ((max - min) / 255.);     // threshold normalized with min & max of the values
+  m_Threshold = m_Threshold  * ((max - min) / 255.);     // threshold normalized with min & max of the values
 
   /** Computing the length of the bins*/
-  unsigned int NbBin = 10;
+  unsigned int NbBin = 1024;
   double       lengthBin = static_cast<double>((max - min)) / static_cast<double>(NbBin - 1);
   CoordinateHistogramType  tempHisto(NbBin);  /** Initializing the histogram */
 
