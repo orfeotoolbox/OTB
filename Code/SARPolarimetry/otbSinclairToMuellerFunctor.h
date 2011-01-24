@@ -53,8 +53,8 @@ public:
     ComplexType Tyx = static_cast<ComplexType>(Svh);
     ComplexType Tyy = static_cast<ComplexType>(Svv);
 
-    ComplexType conjTxx = vcl_conj(static_cast<ComplexType>(Shh));
-    ComplexType conjTxy = vcl_conj(static_cast<ComplexType>(Shv));
+    ComplexType conjTxx = vcl_conj(static_cast<ComplexType>(-Shh));
+    ComplexType conjTxy = vcl_conj(static_cast<ComplexType>(-Shv));
     ComplexType conjTyx = vcl_conj(static_cast<ComplexType>(Svh));
     ComplexType conjTyy = vcl_conj(static_cast<ComplexType>(Svv));
 
