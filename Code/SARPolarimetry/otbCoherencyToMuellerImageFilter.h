@@ -19,7 +19,7 @@
 #ifndef __CoherencyToMuellerImageFilter_h
 #define __CoherencyToMuellerImageFilter_h
 
-#include "itkUnaryFunctorImageFilter.h"
+#include "otbUnaryFunctorImageFilter.h"
 
 namespace otb
  {
@@ -91,12 +91,12 @@ private:
 template <class TInputImage, class TOutputImage, class TFunction = Functor::CoherencyToMuellerFunctor<
     ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
 class ITK_EXPORT CoherencyToMuellerImageFilter :
-   public itk::UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction>
+   public otb::UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction>
 {
 public:
    /** Standard class typedefs. */
    typedef CoherencyToMuellerImageFilter  Self;
-   typedef itk::UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction> Superclass;
+   typedef otb::UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction> Superclass;
    typedef itk::SmartPointer<Self>        Pointer;
    typedef itk::SmartPointer<const Self>  ConstPointer;
 
@@ -104,7 +104,7 @@ public:
    itkNewMacro(Self);
 
    /** Runtime information support. */
-   itkTypeMacro(CoherencyToMuellerImageFilter,itk::UnaryFunctorImageFilter);
+   itkTypeMacro(CoherencyToMuellerImageFilter, UnaryFunctorImageFilter);
 
 
 protected:
