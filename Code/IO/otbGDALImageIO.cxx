@@ -240,9 +240,9 @@ void GDALImageIO::Read(void* buffer)
   GDALDataset* dataset = m_Dataset->GetDataSet();
 
   // This special case is due to the fact the CINT/CLONG types
-  // do not exists in ITK. In this case we only report the first band 
+  // do not exists in ITK. In this case we only report the first band
   // TODO This should be fixed
-  if (GDALDataTypeIsComplex(m_PxType) 
+  if (GDALDataTypeIsComplex(m_PxType)
       && (m_PxType != GDT_CFloat32)
       && (m_PxType != GDT_CFloat64))
     {
@@ -263,6 +263,57 @@ void GDALImageIO::Read(void* buffer)
       itkExceptionMacro(<< "Error while reading image (GDAL format) " << m_FileName );
       }
     }
+
+  else if (GDALDataTypeIsComplex(m_PxType) && !m_IsComplex)
+    {
+    // Mise a jour du step
+    std::streamoff  step = static_cast<std::streamoff>(this->GetNumberOfComponents());
+
+    step = step * static_cast<std::streamoff>(m_BytePerPixel);
+
+    std::streamoff lNbPixels = (static_cast<std::streamoff>(lNbColumns))
+      * (static_cast<std::streamoff>(lNbLines));
+    std::streamoff lBufferSize = static_cast<std::streamoff>(m_BytePerPixel) * lNbPixels;
+    lBufferSize *= 2;
+
+    unsigned char* value = new unsigned char[lBufferSize];
+
+    for (int nbComponents = 0; nbComponents < dataset->GetRasterCount(); ++nbComponents)
+      {
+      CPLErr lCrGdal = dataset->GetRasterBand(nbComponents+1)->RasterIO(GF_Read,
+                                                                lFirstColumn,
+                                                                lFirstLine,
+                                                                lNbColumns,
+                                                                lNbLines,
+                                                                value,
+                                                                lNbColumns,
+                                                                lNbLines,
+                                                                m_PxType,
+                                                                0,
+                                                                0);
+      if (lCrGdal == CE_Failure)
+        {
+        itkExceptionMacro(<< "Error while reading image (GDAL format) " << m_FileName.c_str() << ".");
+        }
+      // Recopie dans le buffer
+      std::streamoff cpt(0);
+      //cpt = static_cast<std::streamoff>(nbComponents) * static_cast<std::streamoff>(m_BytePerPixel);
+      cpt = static_cast<std::streamoff>(nbComponents*2*m_BytePerPixel*2);
+      for (std::streamoff i = 0; i < lBufferSize; i = i + static_cast<std::streamoff>(m_BytePerPixel*2))
+        {
+        memcpy((void*) (&(p[cpt])),
+               (const void*) (&(value[i])),
+               (size_t) (m_BytePerPixel)); //Real part
+        memcpy((void*) (&(p[cpt+m_BytePerPixel*2])),
+               (const void*) (&(value[i+m_BytePerPixel])),
+               (size_t) (m_BytePerPixel)); //Imaginary part
+        cpt += step*2;
+        }
+      }
+      delete[] value;
+    }
+
+
   // In the indexed case, one has to retrieve the index image and the
   // color table, and translate p to a 4 components color values buffer
   else if (m_IsIndexed)
