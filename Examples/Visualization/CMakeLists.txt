@@ -11,7 +11,7 @@ ENDIF(OTB_USE_MAPNIK)
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
-SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Visualization)
+SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
 
 SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
 #Remote sensing images (large images )
@@ -35,7 +35,7 @@ IF(OTB_DATA_USE_LARGEINPUT)
       ${INPUTLARGEDATA}/VECTOR/MidiPyrenees/roads.shp
       ${OTB_DATA_ROOT}/Input/DEM/srtm_directory
       0
-      ${BASELINE_FILES}/DejaVuSans.ttf
+      ${INPUTDATA}/DejaVuSans.ttf
       )
   ENDIF(OTB_USE_MAPNIK) 
 ENDIF(OTB_DATA_USE_LARGEINPUT)

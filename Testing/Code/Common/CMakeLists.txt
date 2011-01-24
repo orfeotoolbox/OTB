@@ -794,7 +794,7 @@ ADD_TEST(coTvVectorDataToImageFilter ${COMMON_TESTS9}
    otbVectorDataToImageFilter
         ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
 	${TEMP}/coTvVectorDataToImageFilter.png
-        ${BASELINE_FILES}/DejaVuSans.ttf # font
+        ${INPUTDATA}/DejaVuSans.ttf # font
 )
 
 ADD_TEST(coTvVectorDataToImageFilterBinary ${COMMON_TESTS9}
@@ -829,7 +829,7 @@ ADD_TEST(coTvVectorDataToImageFilterSensorModel ${COMMON_TESTS9}
         ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
         ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
 	${TEMP}/coTvVectorDataToImageFilterSensorModel.png
-        ${BASELINE_FILES}/DejaVuSans.ttf # font
+        ${INPUTDATA}/DejaVuSans.ttf # font
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
@@ -844,7 +844,7 @@ ADD_TEST(coTvVectorDataToImageFilterWorld ${COMMON_TESTS9}
         500 500 #Size
         -20 60 #lon/lat
         0.1 -0.1 #spacing lon/lat
-        ${BASELINE_FILES}/DejaVuSans.ttf # font
+        ${INPUTDATA}/DejaVuSans.ttf # font
 )
 
 
