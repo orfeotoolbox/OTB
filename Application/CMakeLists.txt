@@ -1,0 +1,3 @@
+
+ADD_EXECUTABLE(otbAvirisBandSelection otbAvirisBandSelection.cxx)
+TARGET_LINK_LIBRARIES(otbAvirisBandSelection OTBCommon OTBIO OTBBasicFilters )
