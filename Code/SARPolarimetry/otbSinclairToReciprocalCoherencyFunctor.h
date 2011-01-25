@@ -64,6 +64,8 @@ public:
     result[4] = static_cast<OutputValueType>( VVMinusVV *vcl_conj(twoHV) );
     result[5] = static_cast<OutputValueType>( twoHV * vcl_conj(twoHV) );
 
+    result /= 2.0;
+
     return (result);
   }
 
