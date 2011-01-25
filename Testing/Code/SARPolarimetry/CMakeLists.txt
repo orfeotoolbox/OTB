@@ -235,19 +235,19 @@ ADD_TEST(saTvMLCToCircularCoherencyDegreeImageFilter ${SARPOLARIMETRY_TESTS1}
 	)
 
 # H Alpha Image Filter
-ADD_TEST(saTuHAlphaImageFilterNew ${SARPOLARIMETRY_TESTS1}
-		otbHAlphaImageFilterNew
+ADD_TEST(saTuReciprocalHAlphaImageFilterNew ${SARPOLARIMETRY_TESTS1}
+		otbReciprocalHAlphaImageFilterNew
 )
 
-ADD_TEST(saTvHAlphaImageFilter ${SARPOLARIMETRY_TESTS1}
-  --compare-image ${EPSILON_12}   ${BASELINE}/saTvHAlphaImageFilter.tif
-                    ${TEMP}/saTvHAlphaImageFilter.tif
+ADD_TEST(saTvReciprocalHAlphaImageFilter ${SARPOLARIMETRY_TESTS1}
+  --compare-image ${EPSILON_12}   ${BASELINE}/saTvReciprocalHAlphaImageFilter.tif
+                    ${TEMP}/saTvReciprocalHAlphaImageFilter.tif
         otbHAlphaImageFilter
         ${INPUTDATA}/RSAT_imagery_HH.tif
         ${INPUTDATA}/RSAT_imagery_HV.tif
         ${INPUTDATA}/RSAT_imagery_HV.tif
         ${INPUTDATA}/RSAT_imagery_VV.tif
-        ${TEMP}/saTvHAlphaImageFilter.tif
+        ${TEMP}/saTvReciprocalHAlphaImageFilter.tif
 	)
 
 # Coherency To Mueller Image Filter
@@ -333,8 +333,8 @@ otbMLCToCoherencyDegreeImageFilterNew.cxx
 otbMLCToCoherencyDegreeImageFilter.cxx
 otbMLCToCircularCoherencyDegreeImageFilterNew.cxx
 otbMLCToCircularCoherencyDegreeImageFilter.cxx
-otbHAlphaImageFilterNew.cxx
-otbHAlphaImageFilter.cxx
+otbReciprocalHAlphaImageFilterNew.cxx
+otbReciprocalHAlphaImageFilter.cxx
 otbCoherencyToMuellerImageFilterNew.cxx
 otbCoherencyToMuellerImageFilter.cxx
 otbMuellerToCircularPolarisationImageFilterNew.cxx

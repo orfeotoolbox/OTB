@@ -23,16 +23,16 @@
 #include <iostream>
 
 #include "otbVectorImage.h"
-#include "otbHAlphaImageFilter.h"
+#include "otbReciprocalHAlphaImageFilter.h"
 
-int otbHAlphaImageFilterNew(int argc, char * argv[])
+int otbReciprocalHAlphaImageFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
 
   typedef std::complex<double>   PixelType;
   typedef otb::VectorImage<PixelType, Dimension> ImageType;
 
-  typedef otb::HAlphaImageFilter<ImageType, ImageType> FilterType;
+  typedef otb::ReciprocalHAlphaImageFilter<ImageType, ImageType> FilterType;
 
   FilterType::Pointer filter = FilterType::New();
 

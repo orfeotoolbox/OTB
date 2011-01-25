@@ -25,13 +25,13 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbHAlphaImageFilter.h"
+#include "otbReciprocalHAlphaImageFilter.h"
 #include "otbSinclairImageFilter.h"
 #include "otbSinclairToCoherencyFunctor.h"
 #include "itkMeanImageFilter.h"
 #include "otbPerBandVectorImageFilter.h"
 
-int otbHAlphaImageFilter(int argc, char * argv[])
+int otbReciprocalHAlphaImageFilter(int argc, char * argv[])
 {
   const char * inputFilename1  = argv[1];
   const char * inputFilename2  = argv[2];
@@ -63,7 +63,7 @@ int otbHAlphaImageFilter(int argc, char * argv[])
   typedef otb::PerBandVectorImageFilter<ImageType, ImageType,
                       MeanFilterType>   PerBandMeanFilterType;
 
-  typedef otb::HAlphaImageFilter<ImageType,RealImageType> FilterType;
+  typedef otb::ReciprocalHAlphaImageFilter<ImageType,RealImageType> FilterType;
 
   typedef otb::ImageFileReader<InputImageType>  ReaderType;
   typedef otb::ImageFileWriter<RealImageType> WriterType;

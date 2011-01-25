@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __HAlphaImageFilter_h
-#define __HAlphaImageFilter_h
+#ifndef __ReciprocalHAlphaImageFilter_h
+#define __ReciprocalHAlphaImageFilter_h
 
 #include "otbUnaryFunctorImageFilter.h"
 #include "otbHermitianEigenAnalysis.h"
@@ -30,7 +30,7 @@ namespace otb
 namespace Functor {
 
 /** \class otbHAlphaFunctor
- * \brief Evaluate the H-Alpha parameters from the coherency matrix image
+ * \brief Evaluate the H-Alpha parameters from the reciprocal coherency matrix image
  *
  * *  Output value are:
  *   channel #0 : entropy
@@ -39,7 +39,7 @@ namespace Functor {
  *
  */
 template< class TInput, class TOutput>
-class HAlphaFunctor
+class ReciprocalHAlphaFunctor
 {
 public:
   typedef double                                   RealType;
@@ -71,7 +71,7 @@ public:
   inline TOutput operator()( const TInput & Coherency ) const
     {
     TOutput result;
-    result.SetSize(m_NumberOfComponentsPerPixel);
+    result.SetSize(NumberOfComponentsPerPixel);
  
     CoherencyMatrixType T;
     EigenvalueType eigenValues;
@@ -156,34 +156,33 @@ public:
 
    unsigned int GetOutputSize()
    {
-     return m_NumberOfComponentsPerPixel;
+     return NumberOfComponentsPerPixel;
    }
 
    /** Constructor */
-   HAlphaFunctor() /*: m_NumberOfComponentsPerPixel(3)*/  {}
+   ReciprocalHAlphaFunctor()  {}
 
    /** Destructor */
-   ~HAlphaFunctor() {}
+   ~ReciprocalHAlphaFunctor() {}
 
 private:
-   itkStaticConstMacro(m_NumberOfComponentsPerPixel, unsigned int, 3);
-//    unsigned int m_;
+   itkStaticConstMacro(NumberOfComponentsPerPixel, unsigned int, 3);
 };
 }
 
 
 /** \class otbHAlphaImageFilter
  * \brief Compute the H-Alpha image (3 channels)
- * from the coherency image (6 complex channels)
+ * from the Reciprocal coherency image (6 complex channels)
  */
-template <class TInputImage, class TOutputImage, class TFunction = Functor::HAlphaFunctor<
+template <class TInputImage, class TOutputImage, class TFunction = Functor::ReciprocalHAlphaFunctor<
     ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
-class ITK_EXPORT HAlphaImageFilter :
+class ITK_EXPORT ReciprocalHAlphaImageFilter :
    public otb::UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction>
 {
 public:
    /** Standard class typedefs. */
-   typedef HAlphaImageFilter  Self;
+   typedef ReciprocalHAlphaImageFilter  Self;
    typedef otb::UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction> Superclass;
    typedef itk::SmartPointer<Self>        Pointer;
    typedef itk::SmartPointer<const Self>  ConstPointer;
@@ -192,14 +191,14 @@ public:
    itkNewMacro(Self);
 
    /** Runtime information support. */
-   itkTypeMacro(HAlphaImageFilter,UnaryFunctorImageFilter);
+   itkTypeMacro(ReciprocalHAlphaImageFilter,UnaryFunctorImageFilter);
 
 protected:
-   HAlphaImageFilter() {}
-  virtual ~HAlphaImageFilter() {}
+   ReciprocalHAlphaImageFilter() {}
+  virtual ~ReciprocalHAlphaImageFilter() {}
 
 private:
-  HAlphaImageFilter(const Self&); //purposely not implemented
+  ReciprocalHAlphaImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&);            //purposely not implemented
 
 };
