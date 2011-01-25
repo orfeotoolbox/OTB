@@ -119,7 +119,7 @@ PersistentVectorImageToMatrixFilter<TInputImage>
   TInputImage * inputPtr = const_cast<TInputImage *>(this->GetInput());
   inputPtr->UpdateOutputInformation();
 
-  this->GetMatrixOutput()->Get().SetSize(
+  this->GetMatrixOutput()->Get().set_size(
     inputPtr->GetNumberOfComponentsPerPixel(),
     inputPtr->GetLargestPossibleRegion().GetNumberOfPixels());
 }

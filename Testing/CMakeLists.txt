@@ -8,11 +8,15 @@ SET( otbHyperTests1_SRC
   otbEigenvalueLikelihoodMaximization.cxx
   otbStreamingStatisticsVectorImageFilter.cxx
   otbStreamingStatisticsVectorImageFilter2.cxx
+  otbMatrixMultiplyImageFilter.cxx
+  otbUnConstrainedLeastSquareImageFilter.cxx
   otbVectorImageToMatrixImageFilter.cxx
 )
 
 ADD_EXECUTABLE(otbHyperTests1 ${otbHyperTests1_SRC} otbHyperTests1.cxx)
 TARGET_LINK_LIBRARIES(otbHyperTests1 OTBCommon OTBIO OTBBasicFilters OTBTesting )
+
+
 
 ADD_TEST(vahineVCA1
          ${TESTEXE_DIR}/otbHyperTests1
@@ -34,6 +38,9 @@ ADD_TEST(vahineElmVCA
          ${DATA}/AVIRIS/extract128/extract128_goodbands.hdr
          ${TEMP}/extract128_unmix_vahine_elmvca.tif)
 
+
+
+
 ADD_TEST(bfStreamingStatisticsVectorImageFilter
          ${TESTEXE_DIR}/otbHyperTests1
          otbStreamingStatisticsVectorImageFilterTest
@@ -50,6 +57,36 @@ ADD_TEST(bfStreamingStatisticsVectorImageFilter2
          ${DATA}/AVIRIS/extract128/extract128_goodbands.hdr
          ${TEMP}/extract128_stats_rt.txt)
 
+
+
+
+ADD_TEST(bfMatrixMultiplyImageFilterNew
+         ${TESTEXE_DIR}/otbHyperTests1
+         otbMatrixMultiplyImageFilterNewTest)
+
+ADD_TEST(bfMatrixMultiplyImageFilter
+         ${TESTEXE_DIR}/otbHyperTests1
+         otbMatrixMultiplyImageFilterTest
+         ${DATA}/SYNTHETIC/hsi_cube.tif
+         ${DATA}/SYNTHETIC/endmembers.tif
+         ${TEMP}/bfMatrixMultiplyImageFilter.tif)
+
+
+
+ADD_TEST(bfUnConstrainedLeastSquareImageFilterNew
+         ${TESTEXE_DIR}/otbHyperTests1
+         otbUnConstrainedLeastSquareImageFilterNewTest)
+
+ADD_TEST(bfUnConstrainedLeastSquareImageFilter
+         ${TESTEXE_DIR}/otbHyperTests1
+         otbUnConstrainedLeastSquareImageFilterTest
+         ${DATA}/SYNTHETIC/hsi_cube.tif
+         ${DATA}/SYNTHETIC/endmembers.tif
+         ${TEMP}/bfUnConstrainedLeastSquareImageFilter.tif)
+
+
+
+
 ADD_TEST(bfVectorImageToMatrixNew
          ${TESTEXE_DIR}/otbHyperTests1
          otbVectorImageToMatrixNewTest)
@@ -59,6 +96,10 @@ ADD_TEST(bfVectorImageToMatrix
          otbVectorImageToMatrixTest
          ${DATA}/AVIRIS/extract128/extract128_goodbands.hdr
          ${TEMP}/extract128_matrix.txt)
+
+
+
+
 
 ADD_TEST(hyEigenvalueLikelihoodMaximizationNew
          ${TESTEXE_DIR}/otbHyperTests1
@@ -75,7 +116,5 @@ ADD_TEST(hyEigenvalueLikelihoodMaximization2
          otbEigenvalueLikelihoodMaximizationTest
          ${DATA}/SYNTHETIC/hsi_cube.tif
          ${TEMP}/synthetic_elm.txt)
-         
-         
-            
+
          

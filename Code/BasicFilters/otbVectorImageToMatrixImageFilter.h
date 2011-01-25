@@ -88,7 +88,7 @@ public:
   typedef typename itk::DataObject::Pointer DataObjectPointer;
 
   /** Type of DataObjects used for scalar outputs */
-  typedef itk::VariableSizeMatrix<RealType>                 MatrixType;
+  typedef vnl_matrix<RealType>                          MatrixType;
   typedef itk::SimpleDataObjectDecorator<MatrixType>    MatrixObjectType;
 
   /** Return the computed matrix as a DataObject */
