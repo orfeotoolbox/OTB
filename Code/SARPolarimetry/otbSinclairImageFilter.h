@@ -19,7 +19,7 @@
 #define __otbSinclairImageFilter_h
 
 #include "otbQuaternaryFunctorImageFilter.h"
-#include "otbSinclairToCovarianceFunctor.h"
+#include "otbSinclairToReciprocalCovarianceFunctor.h"
 #include "itkFixedArray.h"
 #include <complex>
 
@@ -37,7 +37,7 @@ namespace otb
 
 template <class TInputImageHH, class TInputImageHV,
           class TInputImageVH, class TInputImageVV, class TOutputImage,
-    class TFunction = Functor::SinclairToCovarianceFunctor<
+    class TFunction = Functor::SinclairToReciprocalCovarianceFunctor<
         typename TInputImageHH::PixelType,
         typename TInputImageHV::PixelType,
         typename TInputImageVH::PixelType,

@@ -27,7 +27,7 @@
 #include "otbImageFileWriter.h"
 #include "otbMLCToCircularCoherencyDegreeImageFilter.h"
 #include "otbSinclairImageFilter.h"
-#include "otbSinclairToCovarianceFunctor.h"
+#include "otbSinclairToReciprocalCovarianceFunctor.h"
 
 
 int otbMLCToCircularCoherencyDegreeImageFilter(int argc, char * argv[])
@@ -47,7 +47,7 @@ int otbMLCToCircularCoherencyDegreeImageFilter(int argc, char * argv[])
   typedef otb::Image<InputPixelType,  Dimension>       InputImageType;
   typedef otb::VectorImage<InputPixelType, Dimension>  ImageType;
   typedef otb::VectorImage<PixelType, Dimension>       RealImageType;
-  typedef otb::Functor::SinclairToCovarianceFunctor<
+  typedef otb::Functor::SinclairToReciprocalCovarianceFunctor<
                       InputImageType::PixelType,
                       InputImageType::PixelType,
                       InputImageType::PixelType,

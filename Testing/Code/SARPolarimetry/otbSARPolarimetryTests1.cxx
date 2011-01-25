@@ -34,7 +34,7 @@ void RegisterTests()
   REGISTER_TEST(otbMultiChannelsPolarimetricSynthesisFilterNew);
   REGISTER_TEST(otbMultiChannelsPolarimetricSynthesisFilter);
   REGISTER_TEST(otbVectorMultiChannelsPolarimetricSynthesisFilter);
-  REGISTER_TEST(otbSinclairToCovarianceFunctor);
+  REGISTER_TEST(otbSinclairToReciprocalCovarianceFunctor);
   REGISTER_TEST(otbSinclairImageFilter);
   REGISTER_TEST(otbMLCToCoherencyImageFilterNew);
   REGISTER_TEST(otbMLCToCoherencyImageFilter);

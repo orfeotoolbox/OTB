@@ -17,15 +17,15 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 
-#include "otbSinclairToCovarianceFunctor.h"
+#include "otbSinclairToReciprocalCovarianceFunctor.h"
 #include "itkVariableLengthVector.h"
 
-int otbSinclairToCovarianceFunctor(int argc, char * argv[])
+int otbSinclairToReciprocalCovarianceFunctor(int argc, char * argv[])
 {
   typedef std::complex<double>                   ScalarType;
   typedef itk::VariableLengthVector<ScalarType>  OutputType;
 
-  typedef otb::Functor::SinclairToCovarianceFunctor<ScalarType, ScalarType,
+  typedef otb::Functor::SinclairToReciprocalCovarianceFunctor<ScalarType, ScalarType,
       ScalarType, ScalarType,OutputType >         FunctorType;
 
   OutputType  result(6);

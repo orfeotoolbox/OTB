@@ -27,7 +27,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbSinclairImageFilter.h"
-#include "otbSinclairToCovarianceFunctor.h"
+#include "otbSinclairToReciprocalCovarianceFunctor.h"
 #include "otbSinclairToCoherencyFunctor.h"
 #include "otbSinclairToMuellerFunctor.h"
 
@@ -93,9 +93,9 @@ int otbSinclairImageFilter(int argc, char * argv[])
   std::string strArgv(argv[1]);
   argc--;
   argv++;
-  if (strArgv == "SinclairToCovariance")
+  if (strArgv == "SinclairToReciprocalCovariance")
     return (generic_SinclairImageFilter<InputPixelType, OutputPixelType,
-                otb::Functor::SinclairToCovarianceFunctor<InputImageType::PixelType,
+                otb::Functor::SinclairToReciprocalCovarianceFunctor<InputImageType::PixelType,
                                     InputImageType::PixelType,
                                     InputImageType::PixelType,
                                     InputImageType::PixelType,

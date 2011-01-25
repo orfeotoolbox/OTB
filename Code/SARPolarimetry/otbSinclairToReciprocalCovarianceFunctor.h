@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSinclairToCovarianceFunctor_h
-#define __otbSinclairToCovarianceFunctor_h
+#ifndef __otbSinclairToReciprocalCovarianceFunctor_h
+#define __otbSinclairToReciprocalCovarianceFunctor_h
 
 #include "vcl_complex.h"
 
@@ -24,7 +24,7 @@ namespace otb
 {
 namespace Functor
 {
-/** \class SinclairToCovarianceFunctor
+/** \class SinclairToReciprocalCovarianceFunctor
  *  \brief Construct the reciprocal fully polarimetric covariance matrix
  *  with Sinclair matrix information.
  *
@@ -40,7 +40,7 @@ namespace Functor
  */
 template <class TInput1, class TInput2, class TInput3,
           class TInput4, class TOutput>
-class SinclairToCovarianceFunctor
+class SinclairToReciprocalCovarianceFunctor
 {
 public:
   /** Some typedefs. */
@@ -51,7 +51,7 @@ public:
   {
     TOutput result;
 
-    result.SetSize(m_NumberOfComponentsPerPixel);
+    result.SetSize(NumberOfComponentsPerPixel);
 
     result[0] = static_cast<OutputValueType>( static_cast<ComplexType>(Shh)*vcl_conj(static_cast<ComplexType>(Shh)) );
     result[1] = static_cast<OutputValueType>( static_cast<ComplexType>(Shh)*vcl_conj(static_cast<ComplexType>(Shv)) );
@@ -65,20 +65,21 @@ public:
 
   unsigned int GetNumberOfComponentsPerPixel()
   {
-    return m_NumberOfComponentsPerPixel;
+    return NumberOfComponentsPerPixel;
   }
 
   /** Constructor */
-  SinclairToCovarianceFunctor() : m_NumberOfComponentsPerPixel(6) {}
+  SinclairToReciprocalCovarianceFunctor() {}
 
   /** Destructor */
-  virtual ~SinclairToCovarianceFunctor() {}
+  virtual ~SinclairToReciprocalCovarianceFunctor() {}
 
 protected:
 
 
 private:
-    unsigned int m_NumberOfComponentsPerPixel;
+    itkStaticConstMacro(NumberOfComponentsPerPixel, unsigned int, 6);
+
 };
 
 } // namespace Functor
