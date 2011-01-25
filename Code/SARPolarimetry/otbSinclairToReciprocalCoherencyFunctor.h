@@ -82,7 +82,7 @@ protected:
 
 
 private:
-    itkStaticConstMacro(NumberOfComponentsPerPixel, unsigned int, 10);
+    itkStaticConstMacro(NumberOfComponentsPerPixel, unsigned int, 6);
 };
 
 } // namespace Functor
