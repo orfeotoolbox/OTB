@@ -29,12 +29,12 @@ namespace Functor
  *  with Sinclair matrix information.
  *
  *  Output value are:
- *   channel #0 : \f$ S_{hh+vv}.S_{hh+vv}^{*} \f$
- *   channel #1 : \f$ S_{hh+vv}.S_{hh-vv}^{*} \f$
- *   channel #2 : \f$ S_{hh+vv}.S_{2*hv}^{*} \f$
- *   channel #3 : \f$ S_{hh-vv}.S_{hh-vv}^{*} \f$
- *   channel #4 : \f$ S_{hh-vv}.S_{2*hv}^{*} \f$
- *   channel #5 : \f$ S_{2*hv}.S_{2*hv}^{*} \f$
+ *   channel #0 : \f$ (S_{hh}+S_{vv}).(S_{hh}+S_{vv})^{*} \f$
+ *   channel #1 : \f$ (S_{hh}+S_{vv}).(S_{hh}-S_{vv})^{*} \f$
+ *   channel #2 : \f$ (S_{hh}+S_{vv}).(2*S_{hv})^{*} \f$
+ *   channel #3 : \f$ (S_{hh}-S_{vv}).(S_{hh}-S_{vv})^{*} \f$
+ *   channel #4 : \f$ (S_{hh}-S_{vv}).(2*S_{hv})^{*} \f$
+ *   channel #5 : \f$ (2*S_{hv}).(2*S_{hv})^{*} \f$
  *
  *  \ingroup Functor
  */
