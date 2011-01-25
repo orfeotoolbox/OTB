@@ -75,7 +75,7 @@ public:
     result[2]  = static_cast<OutputValueType>( Sll * conjSrl  );
     result[3]  = static_cast<OutputValueType>( Sll * conjSrr  );
     result[4]  = static_cast<OutputValueType>( Slr * conjSlr  );
-    result[5]  = static_cast<OutputValueType>( Slr * conjSlr  );
+    result[5]  = static_cast<OutputValueType>( Slr * conjSrl  );
     result[6]  = static_cast<OutputValueType>( Slr * conjSrr  );
     result[7]  = static_cast<OutputValueType>( Srl * conjSrl  );
     result[8]  = static_cast<OutputValueType>( Srl * conjSrr  );
