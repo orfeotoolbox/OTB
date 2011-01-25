@@ -174,16 +174,16 @@ ADD_TEST(saTvSinclairImageFilter_SinclairToReciprocalCircularCovarianceMatrix ${
         ${TEMP}/saTvSinclairImageFilter_SinclairToReciprocalCircularCovarianceMatrix.tif
 	)
 
-# Sinclair To Coherency Image Filter
-ADD_TEST(saTvSinclairImageFilter_SinclairToCoherency ${SARPOLARIMETRY_TESTS1}
-  --compare-image ${EPSILON_12}   ${BASELINE}/saTvSinclairImageFilter_SinclairToCoherency.tif
-                    ${TEMP}/saTvSinclairImageFilter_SinclairToCoherency.tif
+# Sinclair To Reciprocal Coherency Image Filter
+ADD_TEST(saTvSinclairImageFilter_SinclairToReciprocalCoherency ${SARPOLARIMETRY_TESTS1}
+  --compare-image ${EPSILON_12}   ${BASELINE}/saTvSinclairImageFilter_SinclairToReciprocalCoherency.tif
+                    ${TEMP}/saTvSinclairImageFilter_SinclairToReciprocalCoherency.tif
         otbSinclairImageFilter
-        SinclairToCoherency
+        SinclairToReciprocalCoherency
         ${INPUTDATA}/RSAT_imagery_HH.tif
         ${INPUTDATA}/RSAT_imagery_HV.tif
         ${INPUTDATA}/RSAT_imagery_VV.tif
-        ${TEMP}/saTvSinclairImageFilter_SinclairToCoherency.tif
+        ${TEMP}/saTvSinclairImageFilter_SinclairToReciprocalCoherency.tif
 	)
 
 # Sinclair To Mueller Image Filter

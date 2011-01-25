@@ -27,7 +27,7 @@
 #include "otbImageFileWriter.h"
 #include "otbReciprocalHAlphaImageFilter.h"
 #include "otbSinclairImageFilter.h"
-#include "otbSinclairToCoherencyFunctor.h"
+#include "otbSinclairToReciprocalCoherencyFunctor.h"
 #include "itkMeanImageFilter.h"
 #include "otbPerBandVectorImageFilter.h"
 
@@ -48,7 +48,7 @@ int otbReciprocalHAlphaImageFilter(int argc, char * argv[])
   typedef otb::Image<InputPixelType,  Dimension>       InputImageType;
   typedef otb::VectorImage<InputPixelType, Dimension>  ImageType;
   typedef otb::VectorImage<PixelType, Dimension>       RealImageType;
-  typedef otb::Functor::SinclairToCoherencyFunctor<
+  typedef otb::Functor::SinclairToReciprocalCoherencyFunctor<
                       InputImageType::PixelType,
                       InputImageType::PixelType,
                       InputImageType::PixelType,

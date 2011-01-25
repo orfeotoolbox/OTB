@@ -31,7 +31,7 @@
 #include "otbSinclairToCovarianceFunctor.h"
 #include "otbSinclairToReciprocalCircularCovarianceMatrixFunctor.h"
 #include "otbSinclairToCircularCovarianceMatrixFunctor.h"
-#include "otbSinclairToCoherencyFunctor.h"
+#include "otbSinclairToReciprocalCoherencyFunctor.h"
 #include "otbSinclairToMuellerFunctor.h"
 
 
@@ -114,7 +114,7 @@ int otbSinclairImageFilter(int argc, char * argv[])
                   (argc, argv));
   else  if (strArgv == "SinclairToReciprocalCircularCovarianceMatrix")
     return (generic_SinclairImageFilter<InputPixelType, OutputPixelType,
-                otb::Functor::SinclairToReciprocalCircularCovarianceFunctor<InputImageType::PixelType,
+                otb::Functor::SinclairToReciprocalCircularCovarianceMatrixFunctor<InputImageType::PixelType,
                                     InputImageType::PixelType,
                                     InputImageType::PixelType,
                                     InputImageType::PixelType,
@@ -122,15 +122,15 @@ int otbSinclairImageFilter(int argc, char * argv[])
                   (argc, argv));
   else  if (strArgv == "SinclairToCircularCovarianceMatrix")
     return (generic_SinclairImageFilter<InputPixelType, OutputPixelType,
-                otb::Functor::SinclairToCircularCovarianceFunctor<InputImageType::PixelType,
+                otb::Functor::SinclairToCircularCovarianceMatrixFunctor<InputImageType::PixelType,
                                     InputImageType::PixelType,
                                     InputImageType::PixelType,
                                     InputImageType::PixelType,
                                     OutputImageType::PixelType> >
                   (argc, argv));
-  else  if (strArgv == "SinclairToCoherency")
+  else  if (strArgv == "SinclairToReciprocalCoherency")
     return (generic_SinclairImageFilter<InputPixelType, OutputPixelType,
-                otb::Functor::SinclairToCoherencyFunctor<InputImageType::PixelType,
+                otb::Functor::SinclairToReciprocalCoherencyFunctor<InputImageType::PixelType,
                                     InputImageType::PixelType,
                                     InputImageType::PixelType,
                                     InputImageType::PixelType,

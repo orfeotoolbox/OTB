@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSinclairToCoherencyFunctor_h
-#define __otbSinclairToCoherencyFunctor_h
+#ifndef __otbSinclairToReciprocalCoherencyFunctor_h
+#define __otbSinclairToReciprocalCoherencyFunctor_h
 
 #include "vcl_complex.h"
 
@@ -24,7 +24,7 @@ namespace otb
 {
 namespace Functor
 {
-/** \class SinclairToCoherencyFunctor
+/** \class SinclairToReciprocalCoherencyFunctor
  *  \brief Construct the reciprocal fully polarimetric coherency matrix
  *  with Sinclair matrix information.
  *
@@ -40,7 +40,7 @@ namespace Functor
  */
 template <class TInput1, class TInput2, class TInput3,
           class TInput4, class TOutput>
-class SinclairToCoherencyFunctor
+class SinclairToReciprocalCoherencyFunctor
 {
 public:
   /** Some typedefs. */
@@ -51,7 +51,7 @@ public:
   {
     TOutput result;
 
-    result.SetSize(m_NumberOfComponentsPerPixel);
+    result.SetSize(NumberOfComponentsPerPixel);
 
     ComplexType HHPlusVV = static_cast<ComplexType>(Shh + Svv);
     ComplexType VVMinusVV = static_cast<ComplexType>(Shh - Svv);
@@ -69,20 +69,20 @@ public:
 
   unsigned int GetNumberOfComponentsPerPixel()
   {
-    return m_NumberOfComponentsPerPixel;
+    return NumberOfComponentsPerPixel;
   }
 
   /** Constructor */
-  SinclairToCoherencyFunctor() : m_NumberOfComponentsPerPixel(6) {}
+  SinclairToReciprocalCoherencyFunctor() {}
 
   /** Destructor */
-  virtual ~SinclairToCoherencyFunctor() {}
+  virtual ~SinclairToReciprocalCoherencyFunctor() {}
 
 protected:
 
 
 private:
-    unsigned int m_NumberOfComponentsPerPixel;
+    itkStaticConstMacro(NumberOfComponentsPerPixel, unsigned int, 10);
 };
 
 } // namespace Functor
