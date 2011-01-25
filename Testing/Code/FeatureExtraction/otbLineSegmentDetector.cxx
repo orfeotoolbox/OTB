@@ -164,5 +164,30 @@ int otbLineSegmentDetector_binary(int argc, char * argv[])
   writer->SetInput(drawLineFilter->GetOutput());
   writer->Update();
 
+  if (argc > 3)
+    { 
+    //Write the status map
+    const char * regfname  = argv[3];
+    WriterType::Pointer writer0 = WriterType::New();
+    writer0->SetFileName(regfname);
+    writer0->SetInput(lsdFilter->GetMap());
+    writer0->Update();
+
+    //Write the gradient modulus image
+    typedef otb::ImageFileWriter< otb::Image<double> >  WriterDoubleType;
+    const char * gradModfname  = argv[4];
+    WriterDoubleType::Pointer writer1 = WriterDoubleType::New();
+    writer1->SetFileName(gradModfname);
+    writer1->SetInput(lsdFilter->GetGradMod());
+    writer1->Update();
+
+    //Write the gradient orientation image
+    const char * gradOrifname  = argv[5];
+    WriterDoubleType::Pointer writer2 = WriterDoubleType::New();
+    writer1->SetFileName(gradOrifname);
+    writer1->SetInput(lsdFilter->GetGradOri());
+    writer1->Update();
+    }
+
   return EXIT_SUCCESS;
 }
