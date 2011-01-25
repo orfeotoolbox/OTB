@@ -29,6 +29,8 @@
 #include "otbSinclairImageFilter.h"
 #include "otbSinclairToReciprocalCovarianceFunctor.h"
 #include "otbSinclairToCovarianceFunctor.h"
+#include "otbSinclairToReciprocalCircularCovarianceMatrixFunctor.h"
+#include "otbSinclairToCircularCovarianceMatrixFunctor.h"
 #include "otbSinclairToCoherencyFunctor.h"
 #include "otbSinclairToMuellerFunctor.h"
 
@@ -105,6 +107,22 @@ int otbSinclairImageFilter(int argc, char * argv[])
   else  if (strArgv == "SinclairToCovariance")
     return (generic_SinclairImageFilter<InputPixelType, OutputPixelType,
                 otb::Functor::SinclairToCovarianceFunctor<InputImageType::PixelType,
+                                    InputImageType::PixelType,
+                                    InputImageType::PixelType,
+                                    InputImageType::PixelType,
+                                    OutputImageType::PixelType> >
+                  (argc, argv));
+  else  if (strArgv == "SinclairToReciprocalCircularCovarianceMatrix")
+    return (generic_SinclairImageFilter<InputPixelType, OutputPixelType,
+                otb::Functor::SinclairToReciprocalCircularCovarianceFunctor<InputImageType::PixelType,
+                                    InputImageType::PixelType,
+                                    InputImageType::PixelType,
+                                    InputImageType::PixelType,
+                                    OutputImageType::PixelType> >
+                  (argc, argv));
+  else  if (strArgv == "SinclairToCircularCovarianceMatrix")
+    return (generic_SinclairImageFilter<InputPixelType, OutputPixelType,
+                otb::Functor::SinclairToCircularCovarianceFunctor<InputImageType::PixelType,
                                     InputImageType::PixelType,
                                     InputImageType::PixelType,
                                     InputImageType::PixelType,
