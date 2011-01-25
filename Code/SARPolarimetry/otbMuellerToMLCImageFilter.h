@@ -19,7 +19,7 @@
 #ifndef __MuellerToMLCImageFilter_h
 #define __MuellerToMLCImageFilter_h
 
-#include "itkUnaryFunctorImageFilter.h"
+#include "otbUnaryFunctorImageFilter.h"
 
 namespace otb
  {
@@ -102,12 +102,12 @@ private:
 template <class TInputImage, class TOutputImage, class TFunction = Functor::MuellerToMLCFunctor<
     ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
 class ITK_EXPORT MuellerToMLCImageFilter :
-   public itk::UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction>
+   public UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction>
 {
 public:
    /** Standard class typedefs. */
    typedef MuellerToMLCImageFilter  Self;
-   typedef itk::UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction> Superclass;
+   typedef UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction> Superclass;
    typedef itk::SmartPointer<Self>        Pointer;
    typedef itk::SmartPointer<const Self>  ConstPointer;
 
@@ -115,7 +115,7 @@ public:
    itkNewMacro(Self);
 
    /** Runtime information support. */
-   itkTypeMacro(MuellerToMLCImageFilter,itk::UnaryFunctorImageFilter);
+   itkTypeMacro(MuellerToMLCImageFilter, UnaryFunctorImageFilter);
 
 
 protected:

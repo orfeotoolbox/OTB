@@ -19,7 +19,7 @@
 #ifndef __MuellerToPolarisationDegreeAndPowerImageFilter_h
 #define __MuellerToPolarisationDegreeAndPowerImageFilter_h
 
-#include "itkUnaryFunctorImageFilter.h"
+#include "otbUnaryFunctorImageFilter.h"
 #include "itkNumericTraits.h"
 #include "itkMatrix.h"
 #include "itkVector.h"
@@ -167,12 +167,12 @@ private:
 template <class TInputImage, class TOutputImage, class TFunction = Functor::MuellerToPolarisationDegreeAndPowerFunctor<
     ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
 class ITK_EXPORT MuellerToPolarisationDegreeAndPowerImageFilter :
-   public itk::UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction>
+   public UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction>
 {
 public:
    /** Standard class typedefs. */
    typedef MuellerToPolarisationDegreeAndPowerImageFilter  Self;
-   typedef itk::UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction> Superclass;
+   typedef UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction> Superclass;
    typedef itk::SmartPointer<Self>        Pointer;
    typedef itk::SmartPointer<const Self>  ConstPointer;
 
@@ -180,7 +180,7 @@ public:
    itkNewMacro(Self);
 
    /** Runtime information support. */
-   itkTypeMacro(MuellerToPolarisationDegreeAndPowerImageFilter,itk::UnaryFunctorImageFilter);
+   itkTypeMacro(MuellerToPolarisationDegreeAndPowerImageFilter, UnaryFunctorImageFilter);
 
 
 protected:

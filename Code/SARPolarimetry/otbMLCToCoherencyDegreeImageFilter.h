@@ -19,7 +19,7 @@
 #ifndef __MLCToCoherencyDegreeImageFilter_h
 #define __MLCToCoherencyDegreeImageFilter_h
 
-#include "itkUnaryFunctorImageFilter.h"
+#include "otbUnaryFunctorImageFilter.h"
 
 namespace otb
  {
@@ -98,12 +98,12 @@ private:
 template <class TInputImage, class TOutputImage, class TFunction = Functor::MLCToCoherencyDegreeFunctor<
     ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
 class ITK_EXPORT MLCToCoherencyDegreeImageFilter :
-   public itk::UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction>
+   public UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction>
 {
 public:
    /** Standard class typedefs. */
    typedef MLCToCoherencyDegreeImageFilter  Self;
-   typedef itk::UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction> Superclass;
+   typedef UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction> Superclass;
    typedef itk::SmartPointer<Self>        Pointer;
    typedef itk::SmartPointer<const Self>  ConstPointer;
 
@@ -111,7 +111,7 @@ public:
    itkNewMacro(Self);
 
    /** Runtime information support. */
-   itkTypeMacro(MLCToCoherencyDegreeImageFilter,itk::UnaryFunctorImageFilter);
+   itkTypeMacro(MLCToCoherencyDegreeImageFilter, UnaryFunctorImageFilter);
 
 
 protected:

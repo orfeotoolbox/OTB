@@ -95,6 +95,7 @@ public:
     RealType entropy;
     RealType alpha;
     RealType anisotropy;
+    const RealType epsilon = 1.0E-4;
 
 
     totalEigenValues = static_cast<RealType>( eigenValues[0] + eigenValues[1] + eigenValues[2]);
@@ -109,7 +110,7 @@ public:
         p[k] = static_cast<RealType>(eigenValues[k]) / totalEigenValues;
       }
 
-    if ( (p[0]<0.0001) || (p[1]<0.0001) || (p[2]<0.0001) )
+    if ( (p[0] < epsilon) || (p[1] < epsilon) || (p[2] < epsilon) )
       {
       entropy =0.0;
       }
@@ -159,13 +160,14 @@ public:
    }
 
    /** Constructor */
-   HAlphaFunctor() : m_NumberOfComponentsPerPixel(3)  {}
+   HAlphaFunctor() /*: m_NumberOfComponentsPerPixel(3)*/  {}
 
    /** Destructor */
    ~HAlphaFunctor() {}
 
 private:
-    unsigned int m_NumberOfComponentsPerPixel;
+   itkStaticConstMacro(m_NumberOfComponentsPerPixel, unsigned int, 3);
+//    unsigned int m_;
 };
 }
 
