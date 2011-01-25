@@ -157,7 +157,6 @@ public:
   itkGetMacro(ImageSize, SizeType);
 
 
-
   /** Custom Get methods*/
   LabelImagePointerType GetMap()
   {
