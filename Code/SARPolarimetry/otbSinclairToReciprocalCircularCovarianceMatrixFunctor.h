@@ -40,7 +40,7 @@ namespace Functor
  */
 template <class TInput1, class TInput2, class TInput3,
           class TInput4, class TOutput>
-class SinclairToCircularCovarianceMatrixFunctor
+class SinclairToReciprocalCircularCovarianceMatrixFunctor
 {
 public:
   /** Some typedefs. */
@@ -79,10 +79,10 @@ public:
   }
 
   /** Constructor */
-  SinclairToCircularCovarianceMatrixFunctor() : m_NumberOfComponentsPerPixel(6) {}
+  SinclairToReciprocalCircularCovarianceMatrixFunctor() : m_NumberOfComponentsPerPixel(6) {}
 
   /** Destructor */
-  virtual ~SinclairToCircularCovarianceMatrixFunctor() {}
+  virtual ~SinclairToReciprocalCircularCovarianceMatrixFunctor() {}
 
 protected:
 
