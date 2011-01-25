@@ -28,6 +28,7 @@
 #include "otbImageFileWriter.h"
 #include "otbSinclairImageFilter.h"
 #include "otbSinclairToReciprocalCovarianceFunctor.h"
+#include "otbSinclairToCovarianceFunctor.h"
 #include "otbSinclairToCoherencyFunctor.h"
 #include "otbSinclairToMuellerFunctor.h"
 
@@ -96,6 +97,14 @@ int otbSinclairImageFilter(int argc, char * argv[])
   if (strArgv == "SinclairToReciprocalCovariance")
     return (generic_SinclairImageFilter<InputPixelType, OutputPixelType,
                 otb::Functor::SinclairToReciprocalCovarianceFunctor<InputImageType::PixelType,
+                                    InputImageType::PixelType,
+                                    InputImageType::PixelType,
+                                    InputImageType::PixelType,
+                                    OutputImageType::PixelType> >
+                  (argc, argv));
+  else  if (strArgv == "SinclairToCovariance")
+    return (generic_SinclairImageFilter<InputPixelType, OutputPixelType,
+                otb::Functor::SinclairToCovarianceFunctor<InputImageType::PixelType,
                                     InputImageType::PixelType,
                                     InputImageType::PixelType,
                                     InputImageType::PixelType,

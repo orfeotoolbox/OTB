@@ -126,6 +126,18 @@ ADD_TEST(saTuSinclairToCovarianceFunctor ${SARPOLARIMETRY_TESTS1}
 		otbSinclairToCovarianceFunctor
 )
 
+# Sinclair To Reciprocal Covariance Image Filter
+ADD_TEST(saTvSinclairImageFilter_SinclairToReciprocalCovariance ${SARPOLARIMETRY_TESTS1}
+  --compare-image ${EPSILON_12}   ${BASELINE}/saTvSinclairImageFilter_SinclairToReciprocalCovariance.tif
+                    ${TEMP}/saTvSinclairImageFilter_SinclairToReciprocalCovariance.tif
+        otbSinclairImageFilter
+        SinclairToReciprocalCovariance
+        ${INPUTDATA}/RSAT_imagery_HH.tif
+        ${INPUTDATA}/RSAT_imagery_HV.tif
+        ${INPUTDATA}/RSAT_imagery_VV.tif
+        ${TEMP}/saTvSinclairImageFilter_SinclairToReciprocalCovariance.tif
+	)
+
 # Sinclair To Covariance Image Filter
 ADD_TEST(saTvSinclairImageFilter_SinclairToCovariance ${SARPOLARIMETRY_TESTS1}
   --compare-image ${EPSILON_12}   ${BASELINE}/saTvSinclairImageFilter_SinclairToCovariance.tif
