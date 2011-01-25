@@ -23,16 +23,16 @@
 #include <iostream>
 
 #include "otbVectorImage.h"
-#include "otbCoherencyToMuellerImageFilter.h"
+#include "otbReciprocalCoherencyToMuellerImageFilter.h"
 
-int otbCoherencyToMuellerImageFilterNew(int argc, char * argv[])
+int otbReciprocalCoherencyToMuellerImageFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
 
   typedef std::complex<double>   PixelType;
   typedef otb::VectorImage<PixelType, Dimension> ImageType;
 
-  typedef otb::CoherencyToMuellerImageFilter<ImageType, ImageType> FilterType;
+  typedef otb::ReciprocalCoherencyToMuellerImageFilter<ImageType, ImageType> FilterType;
 
   FilterType::Pointer filter = FilterType::New();
 
