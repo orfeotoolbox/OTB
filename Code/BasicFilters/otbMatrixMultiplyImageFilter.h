@@ -75,7 +75,7 @@ public:
     // TODO : support different types !!!
     VectorType inVector(in.GetDataPointer(), in.Size());
     VectorType outVector = m_Matrix * inVector;
-    return OutputType(outVector.data_block(), m_Matrix.rows());
+    return OutputType(outVector.data_block(), outVector.size());
   }
 
 private:
@@ -99,7 +99,7 @@ class ITK_EXPORT MatrixMultiplyImageFilter :
 public:
   /** Standard class typedefs. */
   typedef MatrixMultiplyImageFilter Self;
-  typedef itk::UnaryFunctorImageFilter
+  typedef otb::UnaryFunctorImageFilter
      <TInputImage,
       TOutputImage,
       Functor::MatrixMultiplyFunctor<

@@ -93,9 +93,7 @@ ADD_TEST(bfVectorImageToMatrixNew
 
 ADD_TEST(bfVectorImageToMatrix
          ${TESTEXE_DIR}/otbHyperTests1
-         otbVectorImageToMatrixTest
-         ${DATA}/AVIRIS/extract128/extract128_goodbands.hdr
-         ${TEMP}/extract128_matrix.txt)
+         otbVectorImageToMatrixTest)
 
 
 

@@ -9,12 +9,12 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-Some parts of this code are derived from ITK. See ITKCopyright.txt
-for details.
+  Some parts of this code are derived from ITK. See ITKCopyright.txt
+  for details.
 
 
      This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     the implied warranty of MERCHANT2ABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -40,7 +40,6 @@ PersistentVectorImageToMatrixFilter<TInputImage>
   //
   // allocate the data objects for the outputs which are
   // just decorators around vector/matric types
-  std::cout << "PersistentVectorImageToMatrixFilter" << std::endl;
   this->itk::ProcessObject::SetNthOutput(1, this->MakeOutput(1).GetPointer());
 }
 
@@ -49,7 +48,6 @@ itk::DataObject::Pointer
 PersistentVectorImageToMatrixFilter<TInputImage>
 ::MakeOutput(unsigned int output)
 {
-  std::cout << "MakeOutput" << output << std::endl;
   switch (output)
     {
     case 0:
@@ -136,7 +134,6 @@ void
 PersistentVectorImageToMatrixFilter<TInputImage>
 ::ThreadedGenerateData(const RegionType& outputRegionForThread, int threadId)
 {
-  std::cout << "ThreadedGenerateData " << threadId << std::endl;
   // Support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
@@ -150,7 +147,6 @@ PersistentVectorImageToMatrixFilter<TInputImage>
     const IndexType& idx = it.GetIndex();
 
     unsigned int col = idx[0] + idx[1] * width;
-    //std::cout << idx << " -> " << col << std::endl;
     const PixelType& vectorValue = it.Get();
     MatrixType& m = this->GetMatrixOutput()->Get();
     for (unsigned int r = 0; r < vectorValue.Size(); ++r)

@@ -19,8 +19,8 @@
 #define __otbUnConstrainedLeastSquareImageFilter_h
 
 #include "otbUnaryFunctorImageFilter.h"
-#include "vnl/algo/vnl_matrix_inverse.h"
-
+#include "vnl/algo/vnl_svd.h"
+#include <boost/shared_ptr.hpp>
 
 namespace otb
 {
@@ -44,12 +44,12 @@ public:
   typedef vnl_vector<PrecisionType> VectorType;
   typedef vnl_matrix<PrecisionType> MatrixType;
 
-  UnConstrainedLeastSquareFunctor() {}
+  UnConstrainedLeastSquareFunctor() : m_OutputSize(0) {}
   virtual ~UnConstrainedLeastSquareFunctor() {}
 
   unsigned int GetOutputSize()
   {
-    return m_Matrix.rows();
+    return m_OutputSize;
   }
 
   bool operator !=(const UnConstrainedLeastSquareFunctor& other) const
@@ -62,28 +62,27 @@ public:
     return !(*this != other);
   }
 
-  const MatrixType& GetMatrix()
-  {
-    return m_Matrix;
-  }
-
   void SetMatrix(const MatrixType& m)
   {
-    m_Matrix = m;
-    m_MatrixPseudoInverse = vnl_matrix_inverse<PrecisionType>(m);
+    m_Svd.reset( new SVDType(m) );
+    m_OutputSize = m.cols();
   }
 
   OutputType operator ()(const InputType& in)
   {
-    // TODO : support different types !!!
+    // TODO : support different types between input and output ?
     VectorType inVector(in.GetDataPointer(), in.Size());
-    VectorType outVector = m_MatrixPseudoInverse * inVector;
-    return OutputType(outVector.data_block(), m_MatrixPseudoInverse.rows());
+    VectorType outVector = m_Svd->solve(inVector);
+    return OutputType(outVector.data_block(), outVector.size());
   }
 
 private:
-  MatrixType m_Matrix;
-  MatrixType m_MatrixPseudoInverse;
+
+  typedef vnl_svd<PrecisionType>     SVDType;
+  typedef boost::shared_ptr<SVDType> SVDPointerType;
+
+  unsigned int   m_OutputSize;
+  SVDPointerType m_Svd;
 };
 }
 
@@ -115,7 +114,7 @@ class ITK_EXPORT UnConstrainedLeastSquareImageFilter :
 public:
   /** Standard class typedefs. */
   typedef UnConstrainedLeastSquareImageFilter Self;
-  typedef itk::UnaryFunctorImageFilter
+  typedef otb::UnaryFunctorImageFilter
      <TInputImage,
       TOutputImage,
       Functor::UnConstrainedLeastSquareFunctor<
@@ -141,11 +140,6 @@ public:
   /** Pixel types. */
   typedef typename TInputImage::PixelType  InputPixelType;
   typedef typename TOutputImage::PixelType OutputPixelType;
-
-  const MatrixType& GetMatrix()
-  {
-    return this->GetFunctor().GetMatrix();
-  }
 
   void SetMatrix(const MatrixType& m)
   {
