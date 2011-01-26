@@ -55,7 +55,7 @@ public:
   /** Matrix type used to store eigenvectors. */
   typedef itk::Vector<float, 2> VectorType;
   typedef itk::Vector<VectorType,3> EigenVectorFirstComposantType;
-  typedef itk::Vector<VectorType,3> EigenVectorType; // type d'un vecteur propre (partie r�elle, partie imaginaire)
+  typedef itk::Vector<VectorType,3> EigenVectorType; // eigenvector type (real part, imaginary part)
   typedef itk::Vector<itk::Vector<float, 6>,3> EigenMatrixType;
   typedef itk::Image<EigenVectorType,2> EigenVectorImageType;
   typedef itk::Image<double,2> EigenValueImageType;
