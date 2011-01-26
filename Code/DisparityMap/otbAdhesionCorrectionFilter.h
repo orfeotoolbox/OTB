@@ -54,8 +54,8 @@ namespace otb
  * \sa      FineRegistrationImageFilter, FastCorrelationImageFilter, DisparityMapEstimationMethod, DisparityMapAndMaskEstimationFilter
  * \ingroup IntensityImageFilters, Streamed
  * 
- * See Publications : " Discarding moving objects in quasi-simultaneous stereovision ", N. Sabater, J.M. Morel, A. Almansa, G. Blanchet
- * 										" Sub-pixel stereo matching ", N. Sabater, J.M. Morel, A. Almansa
+ * See Publications : N. Sabater, J.M. Morel, A. Almansa and G. Blanchet, "Discarding moving objects in quasi-simultaneous stereovision", in IEEE International Conference on Image Processing, ICIP'10, 2010. 
+ * 									N. Sabater, J.M. Morel and A. Almansa, "Sub-pixel stereo matching", in IEEE International Geoscience and Remote Sensing Symposium, IGARSS'10, 2010.
  */
 
 
