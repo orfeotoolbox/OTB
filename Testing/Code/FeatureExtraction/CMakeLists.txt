@@ -1213,6 +1213,9 @@ ADD_TEST(feTvLineSegmentDetector_binary ${FEATUREEXTRACTION_TESTS11}
     otbLineSegmentDetector_binary
      ${INPUTDATA}/scene.png
      ${TEMP}/feTvLineSegmentDetectorOutputImage_binary.tif
+     #${TEMP}/feTvLineSegmentDetectorOutputImage_binary_statusMap.tif
+     #${TEMP}/feTvLineSegmentDetectorOutputImage_binary_gradMod.tif
+     #${TEMP}/feTvLineSegmentDetectorOutputImage_binary_gradOri.tif
 )
 
 # -------            otb::LineSpatialObjectListToRightAnglePointSetFilter   -------------
