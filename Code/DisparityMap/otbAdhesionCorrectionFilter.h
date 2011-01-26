@@ -126,6 +126,20 @@ public:
 	 /** Set/Get the threshold for the tolerated difference between disparities */
   itkSetMacro(Tolerance, double);
   itkGetMacro(Tolerance, double);
+  
+  /** Set/Get the discontinuity threshold  */
+  itkSetMacro(DiscontinuityThreshold, double);
+  itkGetMacro(DiscontinuityThreshold, double);
+  
+  /** Set/Get the high discontinuity threshold   */
+  itkSetMacro(DiscontinuityHighThreshold, double);
+  itkGetMacro(DiscontinuityHighThreshold, double);
+  
+    /** Set/Get the maximum edge gap  */
+  itkSetMacro(MaxEdgeGap, double);
+  itkGetMacro(MaxEdgeGap, double);
+  
+  
 
 protected:
   /** Constructor */
@@ -153,6 +167,11 @@ private:
 
 	/** Tolerance  */
 	double                        m_Tolerance;
+	
+	/** Thresholds  */
+	double                        m_DiscontinuityThreshold ;
+	double                        m_DiscontinuityHighThreshold;
+	double                        m_MaxEdgeGap;
  
 };
 

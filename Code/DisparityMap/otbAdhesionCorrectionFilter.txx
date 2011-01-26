@@ -46,6 +46,11 @@ AdhesionCorrectionFilter<TImage, TMask>
   
   // Default Tolerance
   m_Tolerance = 0.25;
+  
+  // Default Thresholds
+  m_DiscontinuityThreshold  = 10.0;
+  m_DiscontinuityHighThreshold = 30.0;
+  m_MaxEdgeGap = 10.0;
 }
 
 
@@ -435,8 +440,7 @@ AdhesionCorrectionFilter<TImage, TMask>
 				}
 				else // Disparity map discontinuities
 				{
-					if (canny_disparity->GetPixel(index_pos) > 10)
-					//if (canny_disparity->GetPixel(index_pos) >= 1) // difference between the Canny algorithm in MARC2 and the algorithm in OTB
+					if (canny_disparity->GetPixel(index_pos) > m_DiscontinuityThreshold )
 					{
 						int pp=0;
 						
@@ -805,7 +809,7 @@ std::cout<<"extend extreme edges if necessary "<<std::endl;
 						// if the next pixel is the continuation of the border,we extend the risk edge //
 						// The extend the border, it has to be as prevalent as before //
 						canny_edgesIt.SetIndex(index_pos_actual);
-						if (canny_edgesIt.Get()>30 && std::fabs(canny_edgesIt.Get() - canny_edges->GetPixel(index_pos_old)) < 10)
+						if (canny_edgesIt.Get()>m_DiscontinuityHighThreshold && std::fabs(canny_edgesIt.Get() - canny_edges->GetPixel(index_pos_old)) < m_MaxEdgeGap)
 						{
 							if (outputriskedgesPtr->GetPixel(index_pos_actual) ==0 && canny_edges->GetPixel(index_pos_actual) > m_max)
 							{
