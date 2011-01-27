@@ -43,7 +43,7 @@ namespace otb
  * 
  * A detection of incoherences between the input disparity map and the median is performed (a pixel corresponds
  * to an incoherence if the absolute value of the difference between the pixel value in the disparity map and in the median
- * image is higher than the incoherence threshold (whose default value is 1). The input disparity map and mask are updated: their value on         * incoherences becomes 0.
+ * image is higher than the incoherence threshold (whose default value is 1). The input disparity map and mask are updated: their value on incoherences becomes 0.
  * 
  * The median image is then computed again on incoherences using the updated disparity map and mask.
  * 

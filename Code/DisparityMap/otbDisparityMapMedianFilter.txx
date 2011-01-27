@@ -210,7 +210,7 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
   std::vector<InputPixelType> pixels;
   while (!InputIt.IsAtEnd() && !MaskInputIt.IsAtEnd() && !outputIt.IsAtEnd() && !outputMaskIt.IsAtEnd() && !outputDisparityMapIt.IsAtEnd()  && !outputDisparityMapIt.IsAtEnd())
   {
-		if (outputIt.GetIndex()[0] >= m_Radius[0] + 1 && outputIt.GetIndex()[0] < input->GetLargestPossibleRegion().GetSize()[0] - m_Radius[0] - 1 && outputIt.GetIndex()[1]>=m_Radius[1] + 1 && outputIt.GetIndex()[1] < input->GetLargestPossibleRegion().GetSize()[1] - m_Radius[1] - 1)
+		if (outputIt.GetIndex()[0] >= m_Radius[0] && outputIt.GetIndex()[0] < input->GetLargestPossibleRegion().GetSize()[0] - m_Radius[0] && outputIt.GetIndex()[1]>=m_Radius[1] && outputIt.GetIndex()[1] < input->GetLargestPossibleRegion().GetSize()[1] - m_Radius[1] )
 		{
 			// determine pixels in the neighborhood window whose subpixel mask is not equal to 0
 			int p=0;
@@ -290,7 +290,7 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
 
   while (!InputIt.IsAtEnd() && !MaskInputIt.IsAtEnd() && !outputIt.IsAtEnd() && !outputMaskIt.IsAtEnd())
   {
-		if (outputIt.GetIndex()[0] >= m_Radius[0] + 1 && outputIt.GetIndex()[0] < input->GetLargestPossibleRegion().GetSize()[0] - m_Radius[0] - 1 && outputIt.GetIndex()[1]>=m_Radius[1] + 1 && outputIt.GetIndex()[1] < input->GetLargestPossibleRegion().GetSize()[1] - m_Radius[1] - 1)
+		if (outputIt.GetIndex()[0] >= m_Radius[0]  && outputIt.GetIndex()[0] < input->GetLargestPossibleRegion().GetSize()[0] - m_Radius[0]  && outputIt.GetIndex()[1]>=m_Radius[1] && outputIt.GetIndex()[1] < input->GetLargestPossibleRegion().GetSize()[1] - m_Radius[1] )
 		{
 			if (MaskInputIt.GetCenterPixel() != 0 && std::fabs(InputIt.GetCenterPixel() - MedianIt.Get())>m_IncoherenceThreshold)
 			{
@@ -324,7 +324,7 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
 
 	while (!updatedDisparityMapIt.IsAtEnd() && !updateDisparityMaskIt.IsAtEnd() && !outputIt.IsAtEnd() && !outputMaskIt.IsAtEnd())
   {
-		if (outputIt.GetIndex()[0] >= m_Radius[0] + 1 && outputIt.GetIndex()[0] < input->GetLargestPossibleRegion().GetSize()[0] - m_Radius[0] - 1 && outputIt.GetIndex()[1]>=m_Radius[1] + 1 && outputIt.GetIndex()[1] < input->GetLargestPossibleRegion().GetSize()[1] - m_Radius[1] - 1)
+		if (outputIt.GetIndex()[0] >= m_Radius[0] && outputIt.GetIndex()[0] < input->GetLargestPossibleRegion().GetSize()[0] - m_Radius[0] && outputIt.GetIndex()[1]>=m_Radius[1] && outputIt.GetIndex()[1] < input->GetLargestPossibleRegion().GetSize()[1] - m_Radius[1] )
 		{
 			if (image_aux_It.Get() != 0)
 			{
