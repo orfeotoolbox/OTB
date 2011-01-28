@@ -51,9 +51,13 @@ public:
   static void ConvertVectorImage(InputPixelType* inputData, 
                       int inputNumberOfComponents, 
                       OutputPixelType* outputData , size_t size);
-  static void ConvertComplexVectorImageToVectorImage(std::complex<InputPixelType>* inputData, 
+  static void ConvertComplexVectorImageToVectorImage(std::complex<InputPixelType>* inputData,
                       int inputNumberOfComponents, 
                       OutputPixelType* outputData , size_t size);
+  static void ConvertComplexVectorImageToVectorImageComplex(std::complex<InputPixelType>* inputData,
+                        int inputNumberOfComponents,
+                        OutputPixelType* outputData , size_t size);
+
   static void ConvertComplexToGray(std::complex<InputPixelType>* inputData, 
                       int inputNumberOfComponents, 
                       OutputPixelType* outputData , size_t size);

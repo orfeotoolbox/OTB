@@ -45,4 +45,7 @@ void RegisterTests()
   REGISTER_TEST(otbVectorImageComplexToVectorImageComplex);
   REGISTER_TEST(otbImageDoubleToVectorImageComplex);
   REGISTER_TEST(otbVectorImageComplexToImageDouble);
+  // not deal in this commit
+  //REGISTER_TEST(otbGDALReadPxlComplexDb);
+  //REGISTER_TEST(otbGDALReadPxlComplexFl);
 }
