@@ -11,6 +11,7 @@ SET( otbHyperTests1_SRC
   otbMatrixMultiplyImageFilter.cxx
   otbUnConstrainedLeastSquareImageFilter.cxx
   otbVectorImageToMatrixImageFilter.cxx
+  otbProjectiveProjection.cxx
 )
 
 ADD_EXECUTABLE(otbHyperTests1 ${otbHyperTests1_SRC} otbHyperTests1.cxx)
@@ -115,4 +116,10 @@ ADD_TEST(hyEigenvalueLikelihoodMaximization2
          ${DATA}/SYNTHETIC/hsi_cube.tif
          ${TEMP}/synthetic_elm.txt)
 
-         
+ADD_TEST(testProjectiveProjection
+         ${TESTEXE_DIR}/otbHyperTests1
+         otbProjectiveProjectionTestHighSNR
+         ${DATA}/SYNTHETIC/hsi_cube.tif
+         8
+         ${TEMP}/hsi_cube_projectiveprojected_8.tif )
+
