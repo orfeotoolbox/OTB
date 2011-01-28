@@ -316,13 +316,13 @@ void GDALImageIO::Read(void* buffer)
     // if the file is complex and the reader is based on a vector of scalar
     if(GDALDataTypeIsComplex(m_PxType) && !m_IsComplex && m_IsVectorImage)
     {
-      m_BytePerPixel = m_BytePerPixel * 2 ;
+      m_BytePerPixel = m_BytePerPixel * 2;
       m_NbBands = this->GetNumberOfComponents() / 2;
     }
     // if the file is scalar with only one band and the reader is based on a vector of complex
     if(!GDALDataTypeIsComplex(m_PxType) && (m_NbBands == 1) && m_IsComplex && m_IsVectorImage )
     {
-      m_BytePerPixel = m_BytePerPixel / 2 ;
+      m_BytePerPixel = m_BytePerPixel / 2;
     }
 
     // keep it for the moment
