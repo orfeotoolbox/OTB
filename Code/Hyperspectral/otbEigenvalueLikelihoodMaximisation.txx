@@ -27,10 +27,6 @@ for details.
 namespace otb
 {
 
-static double EigenvalueLikelihoodMaximisationSquare(const double x){
-  return x*x;
-}
-
 template<class TPrecision>
 EigenvalueLikelihoodMaximisation<TPrecision>
 ::EigenvalueLikelihoodMaximisation()
