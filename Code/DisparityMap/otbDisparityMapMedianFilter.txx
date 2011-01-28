@@ -276,7 +276,7 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
 	image_aux->SetRegions(outputRegionForThread);
 	image_aux->Allocate();
 	image_aux->FillBuffer(0);
-	itk::ImageRegionIterator<TMask> image_aux_It(image_aux,outputRegionForThread);
+	itk::NeighborhoodIterator<TMask> image_aux_It(m_Radius, image_aux,outputRegionForThread);
 	image_aux_It.GoToBegin();
 	InputIt.GoToBegin();
 	MaskInputIt.GoToBegin();
@@ -296,7 +296,10 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
 			{
 				outputDisparityMapIt.Set(0.0); /*Remove pixel from disparity map*/
 				outputDisparityMaskIt.Set(0);
-				image_aux_It.Set(1);
+				for (int i=0;i<image_aux_It.Size();i++)
+				{
+					image_aux_It.SetPixel(i,1);
+				}
 			}
 		}
 		++MedianIt;
@@ -312,7 +315,7 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
 //Recompute median where values had been changed 
   // we  use the updated sub pixel disparity map
 	itk::ConstNeighborhoodIterator<OutputImageType> updatedDisparityMapIt(m_Radius, outputdisparitymapPtr,outputRegionForThread);
-	itk::ConstNeighborhoodIterator<TMask> updateDisparityMaskIt(m_Radius, outputdisparitymaskPtr,outputRegionForThread);
+	itk::ConstNeighborhoodIterator<TMask> updatedDisparityMaskIt(m_Radius, outputdisparitymaskPtr,outputRegionForThread);
 
 	image_aux_It.GoToBegin();
 	outputIt.GoToBegin();
@@ -320,20 +323,20 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
 	outputDisparityMapIt.GoToBegin();
 	outputDisparityMaskIt.GoToBegin();
 	updatedDisparityMapIt.GoToBegin();
-	updateDisparityMaskIt.GoToBegin();
+	updatedDisparityMaskIt.GoToBegin();
 
-	while (!updatedDisparityMapIt.IsAtEnd() && !updateDisparityMaskIt.IsAtEnd() && !outputIt.IsAtEnd() && !outputMaskIt.IsAtEnd())
+	while (!updatedDisparityMapIt.IsAtEnd() && !updatedDisparityMaskIt.IsAtEnd() && !outputIt.IsAtEnd() && !outputMaskIt.IsAtEnd())
   {
 		if (outputIt.GetIndex()[0] >= m_Radius[0] && outputIt.GetIndex()[0] < input->GetLargestPossibleRegion().GetSize()[0] - m_Radius[0] && outputIt.GetIndex()[1]>=m_Radius[1] && outputIt.GetIndex()[1] < input->GetLargestPossibleRegion().GetSize()[1] - m_Radius[1] )
 		{
-			if (image_aux_It.Get() != 0)
+			if (image_aux_It.GetCenterPixel() != 0)
 			{
 				// determine pixels in the neighborhood window whose subpixel mask is not equal to 0
 							int p=0;
 							pixels.clear();
-							for (int i=0;i<updateDisparityMaskIt.Size();i++)
+							for (int i=0;i<updatedDisparityMaskIt.Size();i++)
 							{
-								if (updateDisparityMaskIt.GetPixel(i) != 0)
+								if (updatedDisparityMaskIt.GetPixel(i) != 0)
 								{
 									p++;
 									pixels.push_back(updatedDisparityMapIt.GetPixel(i));
@@ -373,7 +376,7 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
 		++outputIt;
 		++outputMaskIt;
 		++updatedDisparityMapIt;
-		++updateDisparityMaskIt;
+		++updatedDisparityMaskIt;
 	}
 }
 
