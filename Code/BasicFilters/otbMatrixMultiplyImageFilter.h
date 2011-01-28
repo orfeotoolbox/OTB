@@ -72,7 +72,8 @@ public:
 
   OutputType operator ()(const InputType& in)
   {
-    // TODO : support different types !!!
+    // TODO : support different types & Precision correctly
+    // TODO : make the multiplication by hand ?
     VectorType inVector(in.GetDataPointer(), in.Size());
     VectorType outVector = m_Matrix * inVector;
     return OutputType(outVector.data_block(), outVector.size());
@@ -120,7 +121,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MatrixMultiplyImageFilter, itk::UnaryFunctorImageFilter);
+  itkTypeMacro(MatrixMultiplyImageFilter, otb::UnaryFunctorImageFilter);
 
   /** Pixel types. */
   typedef typename TInputImage::PixelType  InputPixelType;
@@ -148,7 +149,6 @@ private:
   MatrixMultiplyImageFilter(const Self &); //purposely not implemented
 
   void operator =(const Self&); //purposely not implemented
-
 };
 
 } // end namespace otb
