@@ -44,6 +44,16 @@ enum LandsatTMBandNames {TM1, TM2, TM3, TM4, TM5, TM60, TM61, TM62, TM7};
 //
 // Spot at
 // http://www.spotimage.com/web/en/233-resolution-and-spectral-bands.php
+
+// Band Number 	Wavelength Interval 	Spectral Response
+// 1 	        0.45-0.52 µm 	        Blue-Green
+// 2 	        0.52-0.60 µm 	        Green
+// 3 	        0.63-0.69 µm 	        Red
+// 4 	        0.76-0.90 µm 	        Near IR
+// 5 	        1.55-1.75 µm 	        Mid-IR
+// 6 	      10.40-12.50 µm 	        Thermal IR
+// 7 	        2.08-2.35 µm 	        Mid-IR
+
 }
 
 }
