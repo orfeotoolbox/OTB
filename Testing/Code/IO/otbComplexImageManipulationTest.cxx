@@ -162,7 +162,7 @@ int otbImageComplexToImageComplex(int argc, char * argv[])
   while( it.IsAtEnd()==false )
     {
      count = 2*(it.GetIndex()[1]*reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]+it.GetIndex()[0]);
-     valPxl.real() = count;valPxl.imag() = count+1;
+     valPxl = PixelType(count, count+1);
      std::cout << "PXL(" <<it.GetIndex()[0]<<","<<it.GetIndex()[1] <<") -> "\
          << "OUTPUT = " << it.Get() \
          << " ||| BASELINE = "<< valPxl << std::endl;
@@ -277,7 +277,7 @@ int otbImageComplexToVectorImageComplex(int argc, char * argv[])
   while( it.IsAtEnd()==false )
     {
       count = 2*(it.GetIndex()[1]*reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]+it.GetIndex()[0]);
-      valPxl.real() = count; valPxl.imag()=count+1;
+      valPxl = PixelType(count, count+1);
       std::cout << "PXL(" <<it.GetIndex()[0]<<","<<it.GetIndex()[1] <<") -> "\
                    << "OUTPUT = " << it.Get() \
                    << " ||| BASELINE = "<< "["<<valPxl << "]" << std::endl;
@@ -335,7 +335,7 @@ int otbVectorImageDoubleToImageComplex(int argc, char * argv[])
   while( it.IsAtEnd()==false )
     {
       count = it.GetIndex()[1]*reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]+it.GetIndex()[0];
-      valPxl.real() = count; valPxl.imag()=l_Size + count;
+      valPxl = PixelType(count, l_Size + count);
       std::cout << "PXL(" <<it.GetIndex()[0]<<","<<it.GetIndex()[1] <<") -> "\
                          << "OUTPUT = " << it.Get() \
                          << " ||| BASELINE = "<< valPxl << std::endl;
@@ -394,8 +394,8 @@ int otbVectorImageDoubleToVectorImageComplex(int argc, char * argv[])
     {
       //count = 2*(it.GetIndex()[1]*reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]+it.GetIndex()[0]);
       count = (it.GetIndex()[1]*reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]+it.GetIndex()[0]);;
-      valPxl[0].real() = count;valPxl[0].imag() = 0;
-      valPxl[1].real() = l_Size + count;valPxl[1].imag() = 0;
+      valPxl[0] = PixelType(count, 0);
+      valPxl[1] = PixelType(l_Size + count, 0);
       std::cout << "PXL(" <<it.GetIndex()[0]<<","<<it.GetIndex()[1] <<") -> "\
                          << "OUTPUT = " << it.Get() \
                          << " ||| BASELINE = "<< "[" << valPxl[0] << ", "<< valPxl[1] << "]" << std::endl;
@@ -577,7 +577,7 @@ int otbImageDoubleToVectorImageComplex(int argc, char * argv[])
   while( it.IsAtEnd()==false )
     {
       count = it.GetIndex()[1]*reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]+it.GetIndex()[0];
-      valPxl.real() = count;valPxl.imag() = 0;
+      valPxl = PixelType(count, 0);
       std::cout <<"PXL(" <<it.GetIndex()[0]<<","<<it.GetIndex()[1] <<") -> "\
           << "OUTPUT = " << it.Get() \
           << " ||| BASELINE = "<< "["<< valPxl << "]"<< std::endl;
@@ -606,7 +606,7 @@ int otbVectorImageComplexToImageDouble(int argc, char * argv[])
 {
   // This case is not handled yet. We need more time to decide what we want to do with this case. ( perhaps return exception ???)
   std::cout << "This case is not handled yet." \
-      << "We need more time to decide what we want to do with this case. ( perhaps return exception ???)" \
+      << "Need specification : throw exception ?" \
       << std::endl;
   return EXIT_FAILURE;
 
