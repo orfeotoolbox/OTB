@@ -2789,73 +2789,73 @@ ADD_TEST(ioTvTileMapImageIOHelperTest ${IO_TESTS21}
 )
 
 # Tests about complex reading
-ADD_TEST(ioTvImageDoubleToImageComplex ${IO_TESTS21} # OK
+ADD_TEST(ioTvImageDoubleToImageComplex ${IO_TESTS21}
          otbImageDoubleToImageComplex
              ${INPUTDATA}/monobandDouble.tif
 )
 
-ADD_TEST(ioTvImageComplexToImageDouble ${IO_TESTS21} # OK
+ADD_TEST(ioTvImageComplexToImageDouble ${IO_TESTS21}
          otbImageComplexToImageDouble
               ${INPUTDATA}/monobandComplexDouble
 )
 
-ADD_TEST(ioTvImageComplexToImageComplex ${IO_TESTS21} # OK
+ADD_TEST(ioTvImageComplexToImageComplex ${IO_TESTS21}
          otbImageComplexToImageComplex
               ${INPUTDATA}/monobandComplexDouble.hdr
 )
 
-ADD_TEST(ioTvImageComplexToVectorImageDouble ${IO_TESTS21} # OK
+ADD_TEST(ioTvImageComplexToVectorImageDouble ${IO_TESTS21}
          otbImageComplexToVectorImageDouble
               ${INPUTDATA}/monobandComplexDouble.hdr
 )
 
-ADD_TEST(ioTvImageComplexToVectorImageComplex ${IO_TESTS21} # OK
+ADD_TEST(ioTvImageComplexToVectorImageComplex ${IO_TESTS21}
          otbImageComplexToVectorImageComplex
               ${INPUTDATA}/monobandComplexDouble.hdr
 )
 
-ADD_TEST(ioTvVectorImageDoubleToImageComplex ${IO_TESTS21} # OK
+ADD_TEST(ioTvVectorImageDoubleToImageComplex ${IO_TESTS21}
          otbVectorImageDoubleToImageComplex
               ${INPUTDATA}/multibandDouble.tif
 )
 
-ADD_TEST(ioTvVectorImageDoubleToVectorImageComplex ${IO_TESTS21} #OK
+ADD_TEST(ioTvVectorImageDoubleToVectorImageComplex ${IO_TESTS21}
          otbVectorImageDoubleToVectorImageComplex
               ${INPUTDATA}/multibandDouble.tif
 )
 
-ADD_TEST(ioTvVectorImageComplexToVectorImageDouble ${IO_TESTS21} #OK
+ADD_TEST(ioTvVectorImageComplexToVectorImageDouble ${IO_TESTS21}
          otbVectorImageComplexToVectorImageDouble
               ${INPUTDATA}/multibandComplexDouble.hdr
 )
 
-ADD_TEST(ioTvVectorImageComplexToVectorImageComplex ${IO_TESTS21} # OK
+ADD_TEST(ioTvVectorImageComplexToVectorImageComplex ${IO_TESTS21}
          otbVectorImageComplexToVectorImageComplex
               ${INPUTDATA}/multibandComplexDouble.hdr
 )
 
-ADD_TEST(ioTvImageDoubleToVectorImageComplex ${IO_TESTS21} # OK
+ADD_TEST(ioTvImageDoubleToVectorImageComplex ${IO_TESTS21}
          otbImageDoubleToVectorImageComplex
               ${INPUTDATA}/monobandDouble.tif
 )
 
-ADD_TEST(ioTvVectorImageComplexToVectorImageDouble_3bands ${IO_TESTS21} #OK
+ADD_TEST(ioTvVectorImageComplexToVectorImageDouble_3bands ${IO_TESTS21}
          otbVectorImageComplexToVectorImageDouble
               ${INPUTDATA}/multibandComplexDouble_3bands.hdr
 )
 
 # Weird cases
-ADD_TEST(ioTvVectorImageComplexToImageDouble_2bands ${IO_TESTS21} #KO
+ADD_TEST(ioTvVectorImageComplexToImageDouble_2bands ${IO_TESTS21}
          otbVectorImageComplexToImageDouble
               ${INPUTDATA}/multibandComplexDouble.hdr
 )
 
-ADD_TEST(ioTvVectorImageComplexToImageDouble_3bands ${IO_TESTS21} # KO
+ADD_TEST(ioTvVectorImageComplexToImageDouble_3bands ${IO_TESTS21}
          otbVectorImageComplexToImageDouble
               ${INPUTDATA}/multibandComplexDouble_3bands.hdr
 )
 
-ADD_TEST(ioTvVectorImageComplexToImageDouble_4bands ${IO_TESTS21} #KO
+ADD_TEST(ioTvVectorImageComplexToImageDouble_4bands ${IO_TESTS21}
          otbVectorImageComplexToImageDouble
               ${INPUTDATA}/multibandComplexDouble_4bands.hdr
 )
