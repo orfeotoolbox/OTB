@@ -1145,32 +1145,32 @@ ADD_TEST(ioTuVectorImageComplexNew ${IO_TESTS9}
 
 ADD_TEST(ioTvVectorImageComplexFloatTest ${IO_TESTS9}
   otbVectorImageComplexFloatTest
-    ${INPUTDATA}/multibandComplexFloat.hdr
+    ${INPUTDATA}/multibandComplexFloat_2bands.hdr
 )
 
 ADD_TEST(ioTvVectorImageComplexDoubleTest ${IO_TESTS9}
   otbVectorImageComplexDoubleTest
-    ${INPUTDATA}/multibandComplexDouble.hdr
+    ${INPUTDATA}/multibandComplexDouble_2bands.hdr
 )
 
 ADD_TEST(ioTvImageComplexFloatTest ${IO_TESTS9}
   otbImageComplexFloatTest
-    ${INPUTDATA}/multibandComplexFloat.hdr
+    ${INPUTDATA}/multibandComplexFloat_2bands.hdr
 )
 
 ADD_TEST(ioTvImageComplexDoubleTest ${IO_TESTS9}
   otbImageComplexDoubleTest
-    ${INPUTDATA}/multibandComplexDouble.hdr
+    ${INPUTDATA}/multibandComplexDouble_2bands.hdr
 )
 
 ADD_TEST(ioTvVectorImageComplexIntoRealFloatTest ${IO_TESTS9}
   otbVectorImageComplexIntoRealFloatTest
-    ${INPUTDATA}/multibandComplexFloat.hdr
+    ${INPUTDATA}/multibandComplexFloat_2bands.hdr
 )
 
 ADD_TEST(ioTvVectorImageComplexIntoRealDoubleTest ${IO_TESTS9}
   otbVectorImageComplexIntoRealDoubleTest
-    ${INPUTDATA}/multibandComplexDouble.hdr
+    ${INPUTDATA}/multibandComplexDouble_2bands.hdr
 )
 
 
