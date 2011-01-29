@@ -34,17 +34,29 @@ void RegisterTests()
   REGISTER_TEST(otbTileMapImageIOHelperNew);
   REGISTER_TEST(otbKmzProductWriterWithLogoAndLegend);
   // Complex tests
-  REGISTER_TEST(otbImageDoubleToImageComplex);
-  REGISTER_TEST(otbImageComplexToImageDouble);
-  REGISTER_TEST(otbImageComplexToImageComplex);
-  REGISTER_TEST(otbImageComplexToVectorImageDouble);
-  REGISTER_TEST(otbImageComplexToVectorImageComplex);
-  REGISTER_TEST(otbVectorImageDoubleToImageComplex);
-  REGISTER_TEST(otbVectorImageDoubleToVectorImageComplex);
-  REGISTER_TEST(otbVectorImageComplexToVectorImageDouble);
-  REGISTER_TEST(otbVectorImageComplexToVectorImageComplex);
-  REGISTER_TEST(otbImageDoubleToVectorImageComplex);
-  REGISTER_TEST(otbVectorImageComplexToImageDouble);
+  REGISTER_TEST(otbMonobandScalarToImageComplexFloat);
+  REGISTER_TEST(otbMonobandScalarToImageComplexDouble);
+  REGISTER_TEST(otbMonobandComplexToImageScalarFloat);
+  REGISTER_TEST(otbMonobandComplexToImageScalarDouble);
+  REGISTER_TEST(otbMonobandComplexToImageComplexFloat);
+  REGISTER_TEST(otbMonobandComplexToImageComplexDouble);
+  REGISTER_TEST(otbMonobandComplexToVectorImageScalarFloat);
+  REGISTER_TEST(otbMonobandComplexToVectorImageScalarDouble);
+  REGISTER_TEST(otbMonobandComplexToVectorImageComplexFloat);
+  REGISTER_TEST(otbMonobandComplexToVectorImageComplexDouble);
+  REGISTER_TEST(otbMultibandScalarToImageComplexFloat);
+  REGISTER_TEST(otbMultibandScalarToImageComplexDouble);
+  REGISTER_TEST(otbMultibandScalarToVectorImageComplexFloat);
+  REGISTER_TEST(otbMultibandScalarToVectorImageComplexDouble);
+  REGISTER_TEST(otbMultibandComplexToVectorImageScalarFloat);
+  REGISTER_TEST(otbMultibandComplexToVectorImageScalarDouble);
+  REGISTER_TEST(otbMultibandComplexToVectorImageComplexFloat);
+  REGISTER_TEST(otbMultibandComplexToVectorImageComplexDouble);
+  REGISTER_TEST(otbMonobandScalarToVectorImageComplexFloat);
+  REGISTER_TEST(otbMonobandScalarToVectorImageComplexDouble);
+  REGISTER_TEST(otbMultibandComplexToImageScalarFloat);
+  REGISTER_TEST(otbMultibandComplexToImageScalarDouble);
+
   // not deal in this commit
   //REGISTER_TEST(otbGDALReadPxlComplexDb);
   //REGISTER_TEST(otbGDALReadPxlComplexFl);
