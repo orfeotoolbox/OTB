@@ -79,7 +79,7 @@ PipelineMemoryPrintCalculator
   m_MemoryPrint *= m_BiasCorrectionFactor;
 
   // Compute the optimal number of stream division
-  m_OptimalNumberOfStreamDivisions = vcl_ceil(m_MemoryPrint
+  m_OptimalNumberOfStreamDivisions = vcl_ceil(static_cast<double>(m_MemoryPrint)
                                               /m_AvailableMemory);
 }
 
