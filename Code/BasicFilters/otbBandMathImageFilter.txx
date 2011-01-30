@@ -68,27 +68,27 @@ void BandMathImageFilter<TImage>
   os << indent << "Computed values follow:"                            << std::endl;
   os << indent << "UnderflowCount: "  << m_UnderflowCount              << std::endl;
   os << indent << "OverflowCount: "   << m_OverflowCount               << std::endl;
-  os << indent << "itk::NumericTraits<PixelType>::NonpositiveMin()  :  " 
+  os << indent << "itk::NumericTraits<PixelType>::NonpositiveMin()  :  "
                << itk::NumericTraits<PixelType>::NonpositiveMin()      << std::endl;
-  os << indent << "itk::NumericTraits<PixelType>::max()  :             " 
+  os << indent << "itk::NumericTraits<PixelType>::max()  :             "
          << itk::NumericTraits<PixelType>::max()                 << std::endl;
 }
 
 template <class TImage>
 void BandMathImageFilter<TImage>
 ::SetNthInput(unsigned int idx, const ImageType * image)
-{  
+{
   this->SetInput(idx, const_cast<TImage *>( image ));
   unsigned int nbInput = this->GetNumberOfInputs();
   m_VVarName.resize(nbInput+4);
-  std::ostringstream varName; 
+  std::ostringstream varName;
   varName << "b" << nbInput;
   m_VVarName[idx] = varName.str();
   
   m_VVarName[idx+1] = "idxX";
   m_VVarName[idx+2] = "idxY";
   m_VVarName[idx+3] = "idxPhyX";
-  m_VVarName[idx+4] = "idxPhyY"; 
+  m_VVarName[idx+4] = "idxPhyY";
 }
 
 template <class TImage>
@@ -102,7 +102,7 @@ void BandMathImageFilter<TImage>
   m_VVarName[idx+1] = "idxX";
   m_VVarName[idx+2] = "idxY";
   m_VVarName[idx+3] = "idxPhyX";
-  m_VVarName[idx+4] = "idxPhyY"; 
+  m_VVarName[idx+4] = "idxPhyY";
 }
 
 template <class TImage>
@@ -150,7 +150,7 @@ void BandMathImageFilter<TImage>
   typename std::vector< std::vector<PixelType> >::iterator   itVImage;
   unsigned int nbThreads = this->GetNumberOfThreads();
   unsigned int nbInputImages = this->GetNumberOfInputs();
-  unsigned int nbAccessIndex = 4; //to give access to image and physical index 
+  unsigned int nbAccessIndex = 4; //to give access to image and physical index
   unsigned int i, j;
   unsigned int inputSize[2];
   std::vector< std::string > tmpIdxVarNames;
@@ -172,8 +172,8 @@ void BandMathImageFilter<TImage>
       {
       itkExceptionMacro(<< "Input images must have the same dimensions." << std::endl
                         << "band #1 is [" << inputSize[0] << ";" << inputSize[1] << "]" << std::endl
-                        << "band #" << p+1 << " is [" 
-                        << this->GetNthInput(p)->GetLargestPossibleRegion().GetSize(0) << ";" 
+                        << "band #" << p+1 << " is ["
+                        << this->GetNthInput(p)->GetLargestPossibleRegion().GetSize(0) << ";"
                         << this->GetNthInput(p)->GetLargestPossibleRegion().GetSize(1) << "]");
       }
     }
@@ -193,7 +193,7 @@ void BandMathImageFilter<TImage>
   m_VVarName.resize(m_NbVar);
   
   for(itParser = m_VParser.begin(); itParser < m_VParser.end(); itParser++)
-    { 
+    {
     *itParser = ParserType::New();
     }
 
@@ -233,13 +233,13 @@ void BandMathImageFilter<TImage>
     }
 
   if((m_UnderflowCount != 0) || (m_OverflowCount!=0))
-    otbWarningMacro(<< std::endl 
+    otbWarningMacro(<< std::endl
         << "The Following Parsed Expression  :  "
         << this->GetExpression()                                 << std::endl
-        << "Generated " << m_UnderflowCount << " Underflow(s) " 
+        << "Generated " << m_UnderflowCount << " Underflow(s) "
         << "And " << m_OverflowCount        << " Overflow(s) "   << std::endl
-        << "The Parsed Expression, The Inputs And The Output "  
-        << "Type May Be Incompatible !");        
+        << "The Parsed Expression, The Inputs And The Output "
+        << "Type May Be Incompatible !");
 }
 
 template< typename TImage >
@@ -247,7 +247,7 @@ void BandMathImageFilter<TImage>
 ::ThreadedGenerateData(const ImageRegionType& outputRegionForThread,
            int threadId)
 {
-  double value; 
+  double value;
   unsigned int j;
   unsigned int nbInputImages = this->GetNumberOfInputs();
   

@@ -24,7 +24,7 @@
 #include "otbImageFileWriter.h"
 #include "otbImage.h"
 
-// Transform 
+// Transform
 #include "itkTransform.h"
 #include "itkAffineTransform.h"
 
@@ -92,7 +92,7 @@ int otbStreamingResampleImageFilterWithAffineTransform(int argc, char* argv[])
     resampler->SetInput(reader->GetOutput());
     resampler->SetOutputParametersFromImage(reader->GetOutput());
     resampler->SetTransform(affineTransform);
-    resampler->SetDeformationFieldSpacing(5.); 
+    resampler->SetDeformationFieldSpacing(5.);
     resampler->SetOutputSize(size);
     resampler->SetEdgePaddingValue(defaultValue);
     

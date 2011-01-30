@@ -34,14 +34,14 @@ ImageToGenericRSOutputParameters<TImage>
 }
 
 /**
- * Trigger the output image information computation 
+ * Trigger the output image information computation
  */
 template<class TImage>
 void
 ImageToGenericRSOutputParameters<TImage>
 ::Compute()
 {
-  // Do some checks : exceptions if Null or empty projectionRef and empty keywordlist 
+  // Do some checks : exceptions if Null or empty projectionRef and empty keywordlist
   if(m_Input.IsNull())
     itkExceptionMacro(<<"The input is null , please set a non null input image");
 
@@ -49,10 +49,10 @@ ImageToGenericRSOutputParameters<TImage>
     itkExceptionMacro(<<"No information in the metadata, please set an image with non empty metadata");
   
   // First Call to UpdateTransform : Initialize with the input image
-  // information 
+  // information
   this->UpdateTransform();
 
-  // Estimate the Output image Extent 
+  // Estimate the Output image Extent
   this->EstimateOutputImageExtent();
 
   // Estimate the Output Origin
@@ -157,14 +157,14 @@ ImageToGenericRSOutputParameters<TImage>
 
 /**
  * Method used to estimate the Origin using the extent of the image
- * 
+ *
  */
 template <class TImage>
 void
 ImageToGenericRSOutputParameters<TImage>
 ::EstimateOutputOrigin()
 {
-  // Set the output orgin in carto 
+  // Set the output orgin in carto
   // projection
   PointType   origin;
   origin[0] = m_OutputExtent.minX;
@@ -174,7 +174,7 @@ ImageToGenericRSOutputParameters<TImage>
 
 /**
  * Method used to estimate the spacing using the extent of the image
- * 
+ *
  */
 template <class TImage>
 void
@@ -224,8 +224,8 @@ ImageToGenericRSOutputParameters<TImage>
 }
 
 /**
- * Method used to estimate the size using the output size of the image 
- * 
+ * Method used to estimate the size using the output size of the image
+ *
  */
 template <class TImage>
 void
@@ -253,7 +253,7 @@ ImageToGenericRSOutputParameters<TImage>
     outputSpacing[0] = this->GetOutputSpacing()[0] * outputSize[0]/this->GetOutputSize()[0];
     outputSpacing[1] = this->GetOutputSpacing()[1] * outputSize[1]/this->GetOutputSize()[1];
     this->SetOutputSpacing(outputSpacing);
-    }  
+    }
   this->UpdateTransform();
 }
 

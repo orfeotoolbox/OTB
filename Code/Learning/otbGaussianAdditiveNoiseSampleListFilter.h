@@ -27,7 +27,7 @@ namespace Statistics {
  *  \brief This class generate a noised version of the input sample list
  *
  * For each component of the samples, a white gaussian random is added.
- * 
+ *
  * It use the MersenneTwisterRandomVariateGenerator to generate a
  * sequence of numbers following the normal law considered as White
  * Gaussian Noise.
@@ -69,7 +69,7 @@ public:
   typedef typename OutputSampleListType::MeasurementVectorType OutputMeasurementVectorType;
   typedef typename OutputMeasurementVectorType::ValueType      OutputValueType;
   
-  typedef typename Superclass::InputSampleListObjectType       InputSampleListObjectType;  
+  typedef typename Superclass::InputSampleListObjectType       InputSampleListObjectType;
   typedef typename Superclass::OutputSampleListObjectType      OutputSampleListObjectType;
 
   /** Set/Get the Shifts for this sample list */
@@ -89,7 +89,7 @@ protected:
    virtual void GenerateData();
 
   /** Generate a white gaussian noise with mean m_Mean and variance
-    * m_Variance 
+    * m_Variance
     */
   void GenerateRandomSequence();
 
@@ -101,7 +101,7 @@ private:
   GaussianAdditiveNoiseSampleListFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
   
-  // Mean and variance for the white gaussian noise to generate 
+  // Mean and variance for the white gaussian noise to generate
   double              m_Mean;
   double              m_Variance;
   std::vector<double> m_WhiteGaussianNoiseCoefficients;

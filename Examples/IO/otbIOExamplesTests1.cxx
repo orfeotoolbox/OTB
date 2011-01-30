@@ -28,7 +28,7 @@ void RegisterTests()
 {
   REGISTER_TEST(ExtractROITest);
   REGISTER_TEST(DEMToImageGeneratorTest);
-  REGISTER_TEST(ImageToKmzAndMapFileProductExample);  
+  REGISTER_TEST(ImageToKmzAndMapFileProductExample);
 }
 
 #undef main

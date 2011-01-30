@@ -62,7 +62,7 @@ int otbListSampleToBalancedListSampleFilter(int argc, char * argv[])
   filter->SetInput(inputSampleList);
   filter->SetInputLabel(labelSampleList);
 
-  // Input Sample 
+  // Input Sample
   FloatSampleType   sample(sampleSize);
   IntegerSampleType label(1);
 

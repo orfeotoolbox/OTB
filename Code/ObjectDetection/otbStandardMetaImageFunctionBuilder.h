@@ -46,16 +46,16 @@ namespace otb
  *    - otbFourierMellinDescriptorsImageFunction
  *    - otbLocalHistogramImageFunction
  *  On Multiple Images (and VectorImages Processed as ImageList).
- * 
+ *
  *  Each ImageFunction can be parametrized. The only thing to do to
  *  complete the MetaImageFunction is to AddImages.
- *  
- *  
- *  
+ *
+ *
+ *
  */
 
 template <class TPrecision = double, class TCoordRep = double>
-class ITK_EXPORT StandardMetaImageFunctionBuilder : 
+class ITK_EXPORT StandardMetaImageFunctionBuilder :
     public itk::LightObject
 {
 public:
@@ -124,15 +124,15 @@ public:
       CoordRepType, TPrecision>               HaralickTexturesIFFactoryType;
     
     //Multi-Channel Factories
-    typedef MultiChannelIFFactory<LocalHistogramIFFactoryType, InputImageType>  
+    typedef MultiChannelIFFactory<LocalHistogramIFFactoryType, InputImageType>
                                                             MCLocalHistogramIFFactoryType;
-    typedef MultiChannelIFFactory<FlusserMomentsIFFactoryType, InputImageType>  
+    typedef MultiChannelIFFactory<FlusserMomentsIFFactoryType, InputImageType>
                                                             MCFlusserMomentsIFFactoryType;
-    typedef MultiChannelIFFactory<RadiometricMomentsIFFactoryType, InputImageType>  
+    typedef MultiChannelIFFactory<RadiometricMomentsIFFactoryType, InputImageType>
                                                             MCRadiometricMomentsIFFactoryType;
-    typedef MultiChannelIFFactory<FourierMellinDescriptorsIFFactoryType, InputImageType>  
+    typedef MultiChannelIFFactory<FourierMellinDescriptorsIFFactoryType, InputImageType>
                                                             MCFourierMellinDescriptorsIFFactoryType;
-    typedef MultiChannelIFFactory<HaralickTexturesIFFactoryType, InputImageType>  
+    typedef MultiChannelIFFactory<HaralickTexturesIFFactoryType, InputImageType>
                                                             MCHaralickTexturesIFFactoryType;
 
     MCLocalHistogramIFFactoryType MCLocalHistogramIFFactory;
@@ -142,28 +142,28 @@ public:
     MCHaralickTexturesIFFactoryType MCHaralickTexturesIFFactory;
 
     
-    MCRadiometricMomentsIFFactory.Create(image, 
-                                         this->GetRadiometricMomentsIFParameters(), 
+    MCRadiometricMomentsIFFactory.Create(image,
+                                         this->GetRadiometricMomentsIFParameters(),
                                          m_MetaImageFunction,
                                          &m_DataObjectContainer);
-    MCFlusserMomentsIFFactory.Create(image, 
-                                     this->GetFlusserMomentsIFParameters(), 
+    MCFlusserMomentsIFFactory.Create(image,
+                                     this->GetFlusserMomentsIFParameters(),
                                      m_MetaImageFunction,
                                      &m_DataObjectContainer);
     
-    MCFourierMellinDescriptorsIFFactory.Create(image, 
-                                               this->GetFourierMellinDescriptorsIFParameters(), 
-                                               m_MetaImageFunction, 
+    MCFourierMellinDescriptorsIFFactory.Create(image,
+                                               this->GetFourierMellinDescriptorsIFParameters(),
+                                               m_MetaImageFunction,
                                                &m_DataObjectContainer);
 
-    //MCLocalHistogramIFFactory.Create(image, 
-    //                                 m_LocalHistogramParam, 
+    //MCLocalHistogramIFFactory.Create(image,
+    //                                 m_LocalHistogramParam,
     //                                 m_MetaImageFunction,
     //                                 &m_DataObjectContainer);
 
-    //MCHaralickTexturesIFFactory.Create(image, 
-    //                                   m_HaralickTexturesParam, 
-    //                                   m_MetaImageFunction, 
+    //MCHaralickTexturesIFFactory.Create(image,
+    //                                   m_HaralickTexturesParam,
+    //                                   m_MetaImageFunction,
     //                                   &m_DataObjectContainer);
   }
 

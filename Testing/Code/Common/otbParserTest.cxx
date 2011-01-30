@@ -109,7 +109,7 @@ int otbParserTest(int argc, char * argv[])
   parser->SetExpr(Expression_StressTest);
   result = parser->Eval();
   std::cout << "Expression Parsing Result : "                    << std::endl;
-  std::cout << Expression_StressTest << " = " << result          << std::endl; // 14.4983 
+  std::cout << Expression_StressTest << " = " << result          << std::endl; // 14.4983
   std::cout << "Expected Result : " << 14.4983 << std::endl      << std::endl;
   error += sqrt((result - 14.4983)*(result - 14.4983));
 
@@ -118,7 +118,7 @@ int otbParserTest(int argc, char * argv[])
   std::cout << "Error : " << error << std::endl;
 
   if(error > 10E-5)
-    { 
+    {
     itkGenericExceptionMacro(  << "Cumulated Error > 10E-5 -> Test Failled" << std::endl );
     }
 

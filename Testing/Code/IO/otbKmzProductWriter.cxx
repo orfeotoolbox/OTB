@@ -100,18 +100,18 @@ int otbKmzProductWriter(int argc, char* argv[])
 
 
 int otbKmzProductWriterWithLogoAndLegend(int argc, char* argv[])
-{ 
+{
   // Parse command line parameters
   typedef otb::CommandLineArgumentParser ParserType;
   ParserType::Pointer parser = ParserType::New();
 
   parser->SetProgramDescription("Chain that Estimate a sensor model in order to export the input image to Google Earth understandable format Kmz");
-  parser->AddInputImage(); 
+  parser->AddInputImage();
   parser->AddOption("--OutputProductName", "Output Kmz product ", "-kmz", 1, true);
   parser->AddOption("--LogoImage", "Output Kmz product ", "-lo", 1, false);
   parser->AddOption("--LegendImage", "Output Kmz product ", "-le", 1, false);
-  parser->AddOptionNParams("--GroudControlPoints", 
-                           "Ground Control Points to estimate sensor model a1x a1y b1x b1y b1z ... aNx aNy aNz bNx bNy bNz", 
+  parser->AddOptionNParams("--GroudControlPoints",
+                           "Ground Control Points to estimate sensor model a1x a1y b1x b1y b1z ... aNx aNy aNz bNx bNy bNz",
                            "-gcp", true);
   
   typedef otb::CommandLineArgumentParseResult ParserResultType;

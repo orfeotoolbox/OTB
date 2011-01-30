@@ -24,8 +24,8 @@
 #include <ogr_spatialref.h>
 #include <fstream>
 
-/** 
-  * This test is the same than the otbGenericRSTransform 
+/**
+  * This test is the same than the otbGenericRSTransform
   * except using the SRID to build the wkt.
   */
 

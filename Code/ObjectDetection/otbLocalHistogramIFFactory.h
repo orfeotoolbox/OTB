@@ -32,16 +32,16 @@ namespace otb
 {
 /** \class LocalHistogramIFFactory
  *  \brief add a LocalHistogram image function to a
- *  MetaImageFunction 
+ *  MetaImageFunction
  *
  *  This class aims at adding an adapted
  *  LocalHistogramImageFunction to an existing MetaImageFunction
  *  through the method Create.
- *  
+ *
  */
 
 template <class TImageType, class TCoordRep = double, class TPrecision = double>
-class ITK_EXPORT LocalHistogramIFFactory : 
+class ITK_EXPORT LocalHistogramIFFactory :
     public itk::LightObject
 {
 public:
@@ -68,12 +68,12 @@ public:
   typedef typename std::vector<PrecisionType>              ParamContainerType;
   typedef LocalHistogramImageFunction<InputImageType, CoordRepType>
                                                       LocalHistogramIF;
-  typedef ImageFunctionAdaptor<LocalHistogramIF, TPrecision> 
+  typedef ImageFunctionAdaptor<LocalHistogramIF, TPrecision>
                                                       AdaptedLocalHistogramIF;
 
-  void Create(InputImageType * image, 
-              ParamContainerType param, 
-              MetaImageFunctionPointerType metaIF, 
+  void Create(InputImageType * image,
+              ParamContainerType param,
+              MetaImageFunctionPointerType metaIF,
               DataObjectContainerType * container);
 
 protected:

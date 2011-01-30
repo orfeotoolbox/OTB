@@ -31,13 +31,13 @@ namespace otb
  *  \brief Produces a VectorData from potentialy multiple VectorData
  *
  *  This generator produces a unique vector data containing labeled positions
- *  extracted from inputs. 
+ *  extracted from inputs.
  *
  *  Input points are transmitted to the output. In addition, 'no class'
  *  points are randomly picked inside input polygons making sure
  *  they are at least at a given distance (InhibitionRadius) of every
  *  known points.
- *  
+ *
  *  Classes are specified by the VectorData with a metadata field identified by
  *  a specific key. This key can be provided by the SetClassKey() method
  *  (using "Class" as a default key).
@@ -59,7 +59,7 @@ public:
   itkTypeMacro(LabeledSampleLocalizationGenerator, VectorDataSource);
 
   /** Method for creation through the object factory. */
-  itkNewMacro(Self); 
+  itkNewMacro(Self);
   
   typedef TVectorData                                           VectorDataType;
   typedef typename VectorDataType::Pointer                      VectorDataPointerType;

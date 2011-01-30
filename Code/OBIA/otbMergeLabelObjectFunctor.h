@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -19,15 +19,15 @@ PURPOSE.  See the above copyright notices for more information.
 #define __otbMergeLabelObjectFunctor_h
 
 
-namespace otb 
+namespace otb
 {
 
 namespace Functor
 {
 
-/** \class MergeLabelObjectFunctor 
+/** \class MergeLabelObjectFunctor
  *  \brief Merge two LabelObjects
- * 
+ *
  * This functor merges the two inputs label objects into a third label
  * object where the Run have been merged. The resulting label object
  * holds data from first input label object copied via the
@@ -35,9 +35,9 @@ namespace Functor
  *
  * Please note that if the two input label objects are disjoint, the
  * resulting label object will have more than one connected component.
- * 
+ *
  * This functor is thread safe.
- */ 
+ */
 template <class TLabelObject >
 class MergeLabelObjectFunctor
 {

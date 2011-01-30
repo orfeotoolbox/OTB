@@ -68,7 +68,7 @@ ListSampleToBalancedListSampleFilter<TInputSampleList,TLabelSampleList,TOutputSa
   return output;
 }
 
-// Method to set the SampleList 
+// Method to set the SampleList
 template < class TInputSampleList, class TLabelSampleList, class TOutputSampleList >
 void
 ListSampleToBalancedListSampleFilter<TInputSampleList,TLabelSampleList,TOutputSampleList>
@@ -83,7 +83,7 @@ ListSampleToBalancedListSampleFilter<TInputSampleList,TLabelSampleList,TOutputSa
 template < class TInputSampleList, class TLabelSampleList, class TOutputSampleList >
 void
 ListSampleToBalancedListSampleFilter<TInputSampleList,TLabelSampleList,TOutputSampleList>
-::SetInputLabel( const LabelSampleListObjectType * labelPtr ) 
+::SetInputLabel( const LabelSampleListObjectType * labelPtr )
 {
   // Process object is not const-correct so the const_cast is required here
   this->itk::ProcessObject::SetNthInput(1,
@@ -163,7 +163,7 @@ ListSampleToBalancedListSampleFilter<TInputSampleList,TLabelSampleList,TOutputSa
     LabelMeasurementVectorType currentInputMeasurement = labelIt.GetMeasurementVector();
     
     if (currentInputMeasurement[0] > maxLabel)
-      maxLabel = currentInputMeasurement[0];  
+      maxLabel = currentInputMeasurement[0];
     
     ++labelIt;
     }
@@ -196,14 +196,14 @@ ListSampleToBalancedListSampleFilter<TInputSampleList,TLabelSampleList,TOutputSa
     }
 
   // Number of sample per label to reach in order to have a balanced
-  // ListSample 
+  // ListSample
   unsigned int balancedFrequency = m_BalancingFactor * maxvalue;
   
   // Guess how much noised samples must be added per sample to get
   // a balanced ListSample : Computed using the
   //  - Frequency of each label  (stored in the histogram)
   //  - The value maxvalue by m_BalancingFactor
-  // The std::vector below stores the multiplicative factor 
+  // The std::vector below stores the multiplicative factor
   iter = histogram->Begin();
   while ( iter != histogram->End() )
     {
@@ -258,9 +258,9 @@ ListSampleToBalancedListSampleFilter<TInputSampleList,TLabelSampleList,TOutputSa
      // Retrieve the current label
      LabelMeasurementVectorType currentLabelMeasurement = labelIt.GetMeasurementVector();
 
-     // Build a temporary ListSample wiht the current 
+     // Build a temporary ListSample wiht the current
      // measurement vector to generate noised versions of this
-     // measurement vector 
+     // measurement vector
      InputSampleListPointer tempListSample = InputSampleListType::New();
      tempListSample->PushBack(currentInputMeasurement);
      

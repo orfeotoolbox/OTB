@@ -50,7 +50,7 @@ namespace otb
  *
  * Note that the output is defined as:
  * \f$ \phi_{i} = output[i-1] \f$
- * 
+ *
  * This class is templated over the input image type and the
  * coordinate representation type (e.g. float or double).
  *
@@ -117,7 +117,7 @@ public:
   }
 
   /** Get/Set the radius of the neighborhood over which the
-   *  statistics are evaluated 
+   *  statistics are evaluated
    */
   itkSetMacro( NeighborhoodRadius, unsigned int );
   itkGetConstReferenceMacro( NeighborhoodRadius, unsigned int );

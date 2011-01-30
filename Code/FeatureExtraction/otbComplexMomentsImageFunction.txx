@@ -107,7 +107,7 @@ ComplexMomentsImageFunction<TInputImage, TCoordRep>
       {
       for (unsigned int q= 0; q <= m_Qmax; q++)
         {
-        moments.at(p).at(q) += vcl_pow(xpy,p) * vcl_pow(xqy,q) * value;   
+        moments.at(p).at(q) += vcl_pow(xpy,p) * vcl_pow(xqy,q) * value;
         }
       }
     }

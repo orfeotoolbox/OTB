@@ -36,7 +36,7 @@ namespace otb
  *  The SetDataToWrite() method allows to set the data candidate for
  *  writing, and for which memory usage estimation should be
  *  performed.
- * 
+ *
  *  Additionnaly, this class allows to compute the optimal number of
  *  stream division to write the data. To do so, the available memory
  *  can be set via the SetAvailableMemory() method, and an optionnal
@@ -55,7 +55,7 @@ namespace otb
  *  these internal filters). Therefore, memory usage can be highly
  *  biased depending on the filters in the upstream pipeline. The bias
  *  correction factor parameters allows to compensate this bias to the first
- *  order. 
+ *  order.
  */
 class ITK_EXPORT PipelineMemoryPrintCalculator :
   public itk::Object

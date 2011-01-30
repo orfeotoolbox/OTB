@@ -33,7 +33,7 @@ namespace otb
  * For backward compatibility only
  * otb::FlusserImageFunction is deprecated and
  * otb::FlusserMomentsImageFunction should be used instead
- * 
+ *
  * Calculate the Flusser's invariant over an image defined as:
  *
  * - \f$ \psi_{1} = c_{11} \f$

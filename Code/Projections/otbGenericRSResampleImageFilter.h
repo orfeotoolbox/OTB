@@ -26,12 +26,12 @@
 namespace otb
 {
 
-/** \class GenericRSResampleImageFilter 
- *  \brief This class is a composite filter that allows you to project 
+/** \class GenericRSResampleImageFilter
+ *  \brief This class is a composite filter that allows you to project
  *  an input image from any  coordinate system to any other one. The
  *  coordinate systems can be  defined by their projection reference,
  *  the keyword list or a meta data dictionary.
- * 
+ *
  *  This class uses the otb::StreamingResampleImageFilter. It defines
  *  and uses a otb::GenericRSTransform using the input/output coordinate
  *  system informations listed below. This class can resample the input to an
@@ -39,7 +39,7 @@ namespace otb
  *  the user. Note that there are no default values for all the
  *  parmeters, so it is mandatory to set correct parameters to have a
  *  correct result.
- * 
+ *
  *  The methods SetOutputParmatersFromMap can estimate the output
  *  image parameters Size/Origin/Spacing so the hole image can be
  *  reprojected without setting any output parameter.
@@ -91,8 +91,8 @@ public:
   typedef typename OutputRpcModelEstimatorType::Pointer        OutputRpcModelEstimatorPointerType;
   
   
-  /** Specialisation of OptResampleFilter with a remote 
-    * sensing  transform 
+  /** Specialisation of OptResampleFilter with a remote
+    * sensing  transform
     */
   typedef GenericRSTransform<>                       GenericRSTransformType;
   typedef typename GenericRSTransformType::Pointer   GenericRSTransformPointerType;
@@ -135,19 +135,19 @@ public:
   }
   otbGetObjectMemberConstMacro(Resampler, Interpolator, const InterpolatorType *);
 
-  /** Default Edge padding value */  
+  /** Default Edge padding value */
   otbSetObjectMemberMacro(Resampler,
                           EdgePaddingValue,
                           typename OutputImageType::PixelType);
-  otbGetObjectMemberMacro(Resampler, 
-                          EdgePaddingValue, 
+  otbGetObjectMemberMacro(Resampler,
+                          EdgePaddingValue,
                           typename OutputImageType::PixelType);
   
-  /** 
-   * Set/Get input & output projections. 
+  /**
+   * Set/Get input & output projections.
    * Set/Get input & output keywordlist
    * The macro are not used here cause the input and the output are
-   * inversed. 
+   * inversed.
    */
   void SetInputProjectionRef(const std::string&  ref)
   {
@@ -289,11 +289,11 @@ protected:
   /** Struct to store the extent of the output image when using the
    *  methods SetOutputParameters.
    */
-  struct OutputImageExtentType{ 
-    double minX; 
-    double maxX; 
-    double minY; 
-    double maxY; 
+  struct OutputImageExtentType{
+    double minX;
+    double maxX;
+    double minY;
+    double maxY;
   };
   
   void PrintSelf(std::ostream& os, itk::Indent indent) const;

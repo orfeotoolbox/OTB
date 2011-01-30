@@ -237,7 +237,7 @@ private:
  *  It generates a ListSample containing the descriptors values for each sample,
  *  along with a label ListSample containing the label associatged with each sample.
  *  The label is read from the vector data using the data field "Class", read as an int
- *  
+ *
  *  This class is streaming capable and multithreaded
  */
 template <class TInputImage, class TVectorData, class TListSample, class TLabelListSample, class TOutputPrecision = double, class TCoordRep = double>

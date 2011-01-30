@@ -622,9 +622,9 @@ unsigned int OGRIOHelper<TVectorData>
                                                MetaDataKey::VectorDataKeywordlistKey,
                                                kwl);
     // Create the field once
-    if (ogrCurrentLayer != NULL && ogrCurrentLayer->GetFeatureCount() == 0) 
+    if (ogrCurrentLayer != NULL && ogrCurrentLayer->GetFeatureCount() == 0)
       {
-      // Take into account the fields stored in the 
+      // Take into account the fields stored in the
       // vectordatakeywordlist
       for (unsigned int fieldIdx  = 0; fieldIdx < kwl.GetNumberOfFields(); fieldIdx++)
         {
@@ -678,7 +678,7 @@ unsigned int OGRIOHelper<TVectorData>
         // Add the fields to the features
         for (unsigned int i  = 0; i < kwl.GetNumberOfFields(); i++)
           {
-          // Get the key of the Nth OGRFieldRefn 
+          // Get the key of the Nth OGRFieldRefn
           const char * key = kwl.GetNthField(i).first->GetNameRef();
           // Edit the value of the field and add it to the current feature
           ogrFeature->SetField(ogrFeature->GetFieldIndex(key) , kwl.GetFieldAsString(key).c_str());
@@ -732,7 +732,7 @@ unsigned int OGRIOHelper<TVectorData>
         // Add the fields to the features
         for (unsigned int i  = 0; i < kwl.GetNumberOfFields(); i++)
           {
-          // Get the key of the Nth OGRFieldRefn 
+          // Get the key of the Nth OGRFieldRefn
           const char * key = kwl.GetNthField(i).first->GetNameRef();
           // Edit the value of the field and add it to the current feature
           ogrFeature->SetField(ogrFeature->GetFieldIndex(key) , kwl.GetFieldAsString(key).c_str());
@@ -810,14 +810,14 @@ unsigned int OGRIOHelper<TVectorData>
 
       //Save it in the structure
       if (ogrCollection == NULL)
-        {   
+        {
         OGRFeature *ogrFeature;
         ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
     
         // Add the fields to the features
         for (unsigned int i  = 0; i < kwl.GetNumberOfFields(); i++)
           {
-          // Get the key of the Nth OGRFieldRefn 
+          // Get the key of the Nth OGRFieldRefn
           const char * key = kwl.GetNthField(i).first->GetNameRef();
           // Edit the value of the field and add it to the current feature
           ogrFeature->SetField(ogrFeature->GetFieldIndex(key) , kwl.GetFieldAsString(key).c_str());

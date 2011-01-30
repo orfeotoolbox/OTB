@@ -165,7 +165,7 @@ int otbLineSegmentDetector_binary(int argc, char * argv[])
   writer->Update();
 
   if (argc > 3)
-    { 
+    {
     //Write the status map
     const char * regfname  = argv[3];
     WriterType::Pointer writer0 = WriterType::New();

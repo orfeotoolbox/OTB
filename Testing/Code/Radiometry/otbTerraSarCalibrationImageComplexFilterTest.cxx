@@ -36,7 +36,7 @@ int otbTerraSarCalibrationImageComplexFilterTest(int argc, char * argv[])
 
   typedef std::complex<double>        ComplexType;
   typedef otb::Image<ComplexType, 2>  ImageCplxType;
-  typedef otb::Image<double, 2>       ImageScalarType; 
+  typedef otb::Image<double, 2>       ImageScalarType;
   typedef otb::VectorImage<double, 2> OutputImageType;
 
   typedef otb::ImageFileReader<ImageCplxType>                                 ReaderType;

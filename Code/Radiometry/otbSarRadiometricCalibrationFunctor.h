@@ -29,7 +29,7 @@ namespace Functor
 {
 /**
  * \class SarRadiometricCalibrationFunctor
- * \brief Compute the backscatter value. 
+ * \brief Compute the backscatter value.
  *  \f$ \sigma^{0} = (scale * DN^{2} + offset) * sin( \theta_{inc}) * OldGain / NewGain * RangeSpreadLoss \f$
  *
  */

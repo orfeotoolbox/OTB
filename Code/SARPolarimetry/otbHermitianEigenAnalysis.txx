@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: otbHermitianEigenAnalysis.txx,v $
   Language:  C++
-  Date:      
-  Version:   
+  Date:
+  Version:
 
   
 
@@ -19,7 +19,7 @@ namespace otb
 {
 
 template< class TMatrix, class TVector, class TEigenMatrix >
-unsigned int 
+unsigned int
 HermitianEigenAnalysis< TMatrix, TVector, TEigenMatrix >::
 ComputeEigenValues(const TMatrix  & A,
                          TVector  & D) const
@@ -40,7 +40,7 @@ ComputeEigenValues(const TMatrix  & A,
     }
 
   ReduceToTridiagonalMatrix( inputMatrix, D, workArea1, workArea1 );
-  const unsigned int eigenErrIndex = 
+  const unsigned int eigenErrIndex =
           ComputeEigenValuesUsingQL( D, workArea1 );
   
   delete[] workArea1;
@@ -232,7 +232,7 @@ static void HermitianDiagonalisation( float HM[3][3][2], float EigenVect[3][3][2
 
 
 template< class TMatrix, class TVector, class TEigenMatrix >
-unsigned int 
+unsigned int
 HermitianEigenAnalysis< TMatrix, TVector, TEigenMatrix >::
 ComputeEigenValuesAndVectors(
             const TMatrix  & T,
@@ -252,14 +252,14 @@ ComputeEigenValuesAndVectors(
 // Passage de la matrice T T1....T9 a une matrice 3*3*2 compatible avec la methode HermitianDiagonalisation
 
 
-  HM[0][0][0]=T[0];    HM[0][0][1]=0.; 
+  HM[0][0][0]=T[0];    HM[0][0][1]=0.;
   HM[0][1][0]=T[3];    HM[0][1][1]=-T[4];
   HM[0][2][0]=T[5];    HM[0][2][1]=-T[6];
   HM[1][0][0]=T[3];    HM[1][0][1]=T[4];
   HM[1][1][0]=T[1];    HM[1][1][1]=0.;
   HM[1][2][0]=T[7];    HM[1][2][1]=-T[8];
   HM[2][0][0]=T[5];    HM[2][0][1]=T[6];
-  HM[2][1][0]=T[7];    HM[2][1][1]=T[8]; 
+  HM[2][1][0]=T[7];    HM[2][1][1]=T[8];
   HM[2][2][0]=T[2];    HM[2][2][1]=0.;
 
  
@@ -275,9 +275,9 @@ ComputeEigenValuesAndVectors(
       {
        eigenVect[i][j][0]=0.;
        eigenVect[i][j][1]=0.;
-      } 
+      }
 
-  for (int i=0;i<3;i++)    
+  for (int i=0;i<3;i++)
     eigenVal[i]=0.;
     
   
@@ -297,7 +297,7 @@ ComputeEigenValuesAndVectors(
        {
           EigenVectors[i][2*j]=eigenVect[i][j][0];
           EigenVectors[i][2*j+1]=eigenVect[i][j][1];
-       } 
+       }
   
 
   for (int i=0;i<3;i++)
@@ -315,7 +315,7 @@ ComputeEigenValuesAndVectors(
 template< class TMatrix, class TVector, class TEigenMatrix >
 void
 HermitianEigenAnalysis< TMatrix, TVector, TEigenMatrix >::
-ReduceToTridiagonalMatrix(double * a, VectorType &d, 
+ReduceToTridiagonalMatrix(double * a, VectorType &d,
                           double *e, double *e2) const
 {
   double d__1;
@@ -325,27 +325,27 @@ ReduceToTridiagonalMatrix(double * a, VectorType &d,
   int i, j, k, l;
   double scale;
   
-  for (i = 0; i < static_cast< int >(m_Order); ++i) 
+  for (i = 0; i < static_cast< int >(m_Order); ++i)
     {
     d[i] = a[m_Order-1 + i * m_Dimension];
     a[m_Order-1 + i * m_Dimension] = a[i + i * m_Dimension];
     }
 
 
-  for (i = m_Order-1; i >= 0; --i) 
+  for (i = m_Order-1; i >= 0; --i)
     {
     l = i - 1;
     h = 0.;
     scale = 0.;
 
     /*     .......... scale row (algol tol then not needed) .......... */
-    for (k = 0; k <= l; ++k) 
+    for (k = 0; k <= l; ++k)
       {
       scale += vnl_math_abs(d[k]);
       }
-    if (scale == 0.) 
+    if (scale == 0.)
       {
-      for (j = 0; j <= l; ++j) 
+      for (j = 0; j <= l; ++j)
         {
         d[j] = a[l + j * m_Dimension];
         a[l + j * m_Dimension] = a[i + j * m_Dimension];
@@ -355,7 +355,7 @@ ReduceToTridiagonalMatrix(double * a, VectorType &d,
         e2[i] = 0.;
         continue;
       }
-    for (k = 0; k <= l; ++k) 
+    for (k = 0; k <= l; ++k)
       {
       d[k] /= scale;
       h += d[k] * d[k];
@@ -368,21 +368,21 @@ ReduceToTridiagonalMatrix(double * a, VectorType &d,
     e[i] = scale * g;
     h -= f * g;
     d[l] = f - g;
-    if (l != 0) 
+    if (l != 0)
       {
 
       /*     .......... form a*u .......... */
-      for (j = 0; j <= l; ++j) 
+      for (j = 0; j <= l; ++j)
         {
         e[j] = 0.;
         }
 
-      for (j = 0; j <= l; ++j) 
+      for (j = 0; j <= l; ++j)
         {
         f = d[j];
         g = e[j] + a[j + j * m_Dimension] * f;
 
-        for (k = j+1; k <= l; ++k) 
+        for (k = j+1; k <= l; ++k)
           {
           g += a[k + j * m_Dimension] * d[k];
           e[k] += a[k + j * m_Dimension] * f;
@@ -393,7 +393,7 @@ ReduceToTridiagonalMatrix(double * a, VectorType &d,
       /*     .......... form p .......... */
       f = 0.;
 
-      for (j = 0; j <= l; ++j) 
+      for (j = 0; j <= l; ++j)
         {
         e[j] /= h;
         f += e[j] * d[j];
@@ -401,25 +401,25 @@ ReduceToTridiagonalMatrix(double * a, VectorType &d,
 
       h = f / (h + h);
       /*     .......... form q .......... */
-      for (j = 0; j <= l; ++j) 
+      for (j = 0; j <= l; ++j)
         {
         e[j] -= h * d[j];
         }
 
       /*     .......... form reduced a .......... */
-      for (j = 0; j <= l; ++j) 
+      for (j = 0; j <= l; ++j)
         {
         f = d[j];
         g = e[j];
 
-        for (k = j; k <= l; ++k) 
+        for (k = j; k <= l; ++k)
           {
           a[k + j * m_Dimension] = a[k + j * m_Dimension] - f * e[k] - g * d[k];
           }
         }
       }
 
-    for (j = 0; j <= l; ++j) 
+    for (j = 0; j <= l; ++j)
       {
       f = d[j];
       d[j] = a[l + j * m_Dimension];
@@ -433,7 +433,7 @@ ReduceToTridiagonalMatrix(double * a, VectorType &d,
 template< class TMatrix, class TVector, class TEigenMatrix >
 void
 HermitianEigenAnalysis< TMatrix, TVector, TEigenMatrix >::
-ReduceToTridiagonalMatrixAndGetTransformation(double * a, VectorType &d, 
+ReduceToTridiagonalMatrixAndGetTransformation(double * a, VectorType &d,
                                               double *e, double *z) const
 {
   double d__1;
@@ -443,31 +443,31 @@ ReduceToTridiagonalMatrixAndGetTransformation(double * a, VectorType &d,
   unsigned int i, j, k, l;
   double scale, hh;
 
-  for (i = 0; i < m_Order; ++i) 
+  for (i = 0; i < m_Order; ++i)
     {
-    for (j = i; j < m_Order; ++j) 
+    for (j = i; j < m_Order; ++j)
       {
       z[j + i * m_Dimension] = a[j + i * m_Dimension];
       }
     d[i] = a[m_Order -1 + i * m_Dimension];
     }
 
-  for (i = m_Order-1; i > 0; --i) 
+  for (i = m_Order-1; i > 0; --i)
     {
     l = i - 1;
     h = 0.0;
     scale = 0.0;
     
     /*     .......... scale row (algol tol then not needed) .......... */
-    for (k = 0; k <= l; ++k) 
+    for (k = 0; k <= l; ++k)
       {
       scale += vnl_math_abs(d[k]);
       }
-    if (scale == 0.0) 
+    if (scale == 0.0)
       {
       e[i] = d[l];
 
-      for (j = 0; j <= l; ++j) 
+      for (j = 0; j <= l; ++j)
         {
         d[j] = z[l + j * m_Dimension];
         z[i + j * m_Dimension] = 0.0;
@@ -476,7 +476,7 @@ ReduceToTridiagonalMatrixAndGetTransformation(double * a, VectorType &d,
       }
     else
       {
-      for (k = 0; k <= l; ++k) 
+      for (k = 0; k <= l; ++k)
         {
         d[k] /= scale;
         h += d[k] * d[k];
@@ -490,18 +490,18 @@ ReduceToTridiagonalMatrixAndGetTransformation(double * a, VectorType &d,
       d[l] = f - g;
       
       /*     .......... form a*u .......... */
-      for (j = 0; j <= l; ++j) 
+      for (j = 0; j <= l; ++j)
         {
         e[j] = 0.0;
         }
 
-      for (j = 0; j <= l; ++j) 
+      for (j = 0; j <= l; ++j)
         {
         f = d[j];
         z[j + i * m_Dimension] = f;
         g = e[j] + z[j + j * m_Dimension] * f;
 
-        for (k = j+1; k <= l; ++k) 
+        for (k = j+1; k <= l; ++k)
           {
           g += z[k + j * m_Dimension] * d[k];
           e[k] += z[k + j * m_Dimension] * f;
@@ -513,7 +513,7 @@ ReduceToTridiagonalMatrixAndGetTransformation(double * a, VectorType &d,
       /*     .......... form p .......... */
       f = 0.0;
 
-      for (j = 0; j <= l; ++j) 
+      for (j = 0; j <= l; ++j)
         {
         e[j] /= h;
         f += e[j] * d[j];
@@ -522,18 +522,18 @@ ReduceToTridiagonalMatrixAndGetTransformation(double * a, VectorType &d,
       hh = f / (h + h);
       
       /*     .......... form q .......... */
-      for (j = 0; j <= l; ++j) 
+      for (j = 0; j <= l; ++j)
         {
         e[j] -= hh * d[j];
         }
 
       /*     .......... form reduced a .......... */
-      for (j = 0; j <= l; ++j) 
+      for (j = 0; j <= l; ++j)
         {
         f = d[j];
         g = e[j];
 
-        for (k = j; k <= l; ++k) 
+        for (k = j; k <= l; ++k)
           {
           z[k + j * m_Dimension] = z[k + j * m_Dimension] - f * e[k] - g * d[k];
           }
@@ -541,49 +541,49 @@ ReduceToTridiagonalMatrixAndGetTransformation(double * a, VectorType &d,
         d[j] = z[l + j * m_Dimension];
         z[i + j * m_Dimension] = 0.0;
         }
-      } 
+      }
 
     d[i] = h;
     }
 
   /*     .......... accumulation of transformation matrices .......... */
-  for (i = 1; i < m_Order; ++i) 
+  for (i = 1; i < m_Order; ++i)
     {
     l = i - 1;
     z[m_Order-1 + l * m_Dimension] = z[l + l * m_Dimension];
     z[l + l * m_Dimension] = 1.0;
     h = d[i];
-    if (h != 0.0) 
+    if (h != 0.0)
       {
-      for (k = 0; k <= l; ++k) 
+      for (k = 0; k <= l; ++k)
         {
         d[k] = z[k + i * m_Dimension] / h;
         }
 
-      for (j = 0; j <= l; ++j) 
+      for (j = 0; j <= l; ++j)
         {
         g = 0.0;
 
-        for (k = 0; k <= l; ++k) 
+        for (k = 0; k <= l; ++k)
           {
           g += z[k + i * m_Dimension] * z[k + j * m_Dimension];
           }
 
-        for (k = 0; k <= l; ++k) 
+        for (k = 0; k <= l; ++k)
           {
           z[k + j * m_Dimension] -= g * d[k];
           }
         }
-      } 
+      }
     
-    for (k = 0; k <= l; ++k) 
+    for (k = 0; k <= l; ++k)
       {
       z[k + i * m_Dimension] = 0.0;
       }
     
     }
     
-  for (i = 0; i < m_Order; ++i) 
+  for (i = 0; i < m_Order; ++i)
     {
     d[i] = z[m_Order-1 + i * m_Dimension];
     z[m_Order-1 + i * m_Dimension] = 0.0;
@@ -624,7 +624,7 @@ ComputeEigenValuesUsingQL(VectorType &d, double *e) const
   tst1 = 0.;
   e[m_Order-1] = 0.;
 
-  for (l = 0; l < m_Order; ++l) 
+  for (l = 0; l < m_Order; ++l)
     {
     j = 0;
     h = vnl_math_abs(d[l]) + vnl_math_abs(e[l]);
@@ -633,10 +633,10 @@ ComputeEigenValuesUsingQL(VectorType &d, double *e) const
       tst1 = h;
       }
     /*     .......... look for small sub-diagonal element .......... */
-    for (m = l; m < m_Order; ++m) 
+    for (m = l; m < m_Order; ++m)
       {
       tst2 = tst1 + vnl_math_abs(e[m]);
-      if (tst2 == tst1) 
+      if (tst2 == tst1)
         {
         break;
         }
@@ -644,12 +644,12 @@ ComputeEigenValuesUsingQL(VectorType &d, double *e) const
       /*                through the bottom of the loop .......... */
       }
 
-    if (m != l) 
+    if (m != l)
       {
     
       do
         {
-        if (j == 30) 
+        if (j == 30)
           {
           /*     .......... set error -- no convergence to an */
           /*                eigenvalue after 30 iterations .......... */
@@ -666,7 +666,7 @@ ComputeEigenValuesUsingQL(VectorType &d, double *e) const
         dl1 = d[l+1];
         h = g - d[l];
 
-        for (i = l+2; i < m_Order; ++i) 
+        for (i = l+2; i < m_Order; ++i)
         {
             d[i] -= h;
         }
@@ -678,7 +678,7 @@ ComputeEigenValuesUsingQL(VectorType &d, double *e) const
         c2 = c;
         el1 = e[l+1];
         s = 0.;
-        for (i = m-1; i >= l; --i) 
+        for (i = m-1; i >= l; --i)
           {
           c3 = c2;
           c2 = c;
@@ -692,7 +692,7 @@ ComputeEigenValuesUsingQL(VectorType &d, double *e) const
           p = c * d[i] - s * g;
           d[i+1] = h + s * (c * g + s * d[i]);
           if( i == l )
-            { 
+            {
             break;
             }
           }
@@ -707,9 +707,9 @@ ComputeEigenValuesUsingQL(VectorType &d, double *e) const
     p = d[l] + f;
  
     if( m_OrderEigenValues == OrderByValue )
-      { 
+      {
       // Order by value
-      for (i = l; i > 0; --i) 
+      for (i = l; i > 0; --i)
         {
         if (p >= d[i-1])
           break;
@@ -720,7 +720,7 @@ ComputeEigenValuesUsingQL(VectorType &d, double *e) const
     else if( m_OrderEigenValues == OrderByMagnitude )
       {
       // Order by magnitude.. make eigen values positive
-      for (i = l; i > 0; --i) 
+      for (i = l; i > 0; --i)
         {
         if (vnl_math_abs(p) >= vnl_math_abs(d[i-1]))
           break;
@@ -756,12 +756,12 @@ ComputeEigenValuesAndVectorsUsingQL(VectorType &d, double *e, double *z) const
   double tst1, tst2;
 
   unsigned int ierr = 0;
-  if (m_Order == 1) 
+  if (m_Order == 1)
     {
     return 1;
     }
 
-  for (i = 1; i < m_Order; ++i) 
+  for (i = 1; i < m_Order; ++i)
     {
     e[i - 1] = e[i];
     }
@@ -770,20 +770,20 @@ ComputeEigenValuesAndVectorsUsingQL(VectorType &d, double *e, double *z) const
   tst1 = 0.;
   e[m_Order-1] = 0.;
 
-  for (l = 0; l < m_Order; ++l) 
+  for (l = 0; l < m_Order; ++l)
     {
     j = 0;
     h = vnl_math_abs(d[l]) + vnl_math_abs(e[l]);
-    if (tst1 < h) 
+    if (tst1 < h)
       {
       tst1 = h;
       }
     
     /*     .......... look for small sub-diagonal element .......... */
-    for (m = l; m < m_Order; ++m) 
+    for (m = l; m < m_Order; ++m)
       {
       tst2 = tst1 + vnl_math_abs(e[m]);
-      if (tst2 == tst1) 
+      if (tst2 == tst1)
         {
         break;
         }
@@ -792,12 +792,12 @@ ComputeEigenValuesAndVectorsUsingQL(VectorType &d, double *e, double *z) const
       /*                through the bottom of the loop .......... */
       }
 
-    if (m != l) 
+    if (m != l)
       {
       do
         {
           
-        if (j == 1000) 
+        if (j == 1000)
           {
           /*     .......... set error -- no convergence to an */
           /*                eigenvalue after 1000 iterations .......... */
@@ -814,7 +814,7 @@ ComputeEigenValuesAndVectorsUsingQL(VectorType &d, double *e, double *z) const
         dl1 = d[l+1];
         h = g - d[l];
 
-        for (i = l+2; i < m_Order; ++i) 
+        for (i = l+2; i < m_Order; ++i)
           {
           d[i] -= h;
         }
@@ -827,7 +827,7 @@ ComputeEigenValuesAndVectorsUsingQL(VectorType &d, double *e, double *z) const
         el1 = e[l+1];
         s = 0.;
         
-        for (i = m-1; i >= l; --i) 
+        for (i = m-1; i >= l; --i)
           {
           c3 = c2;
           c2 = c;
@@ -842,14 +842,14 @@ ComputeEigenValuesAndVectorsUsingQL(VectorType &d, double *e, double *z) const
           d[i + 1] = h + s * (c * g + s * d[i]);
           
           /*     .......... form vector .......... */
-          for (k = 0; k < m_Order; ++k) 
+          for (k = 0; k < m_Order; ++k)
             {
             h = z[k + (i + 1) * m_Dimension];
             z[k + (i + 1) * m_Dimension] = s * z[k + i * m_Dimension] + c * h;
             z[k + i * m_Dimension] = c * z[k + i * m_Dimension] - s * h;
             }
           if( i == l )
-            { 
+            {
             break;
             }
           }
@@ -860,23 +860,23 @@ ComputeEigenValuesAndVectorsUsingQL(VectorType &d, double *e, double *z) const
         tst2 = tst1 + vnl_math_abs(e[l]);
         } while (tst2 > tst1);
   
-      } 
+      }
 
     d[l] += f;
     }
   
   /*     .......... order eigenvalues and eigenvectors .......... */
   if( m_OrderEigenValues == OrderByValue )
-    { 
+    {
     // Order by value
-    for (i = 0; i < m_Order-1; ++i) 
+    for (i = 0; i < m_Order-1; ++i)
       {
       k = i;
       p = d[i];
 
-      for (j = i+1; j < m_Order; ++j) 
+      for (j = i+1; j < m_Order; ++j)
         {
-        if (d[j] >= p) 
+        if (d[j] >= p)
           {
           continue;
           }
@@ -884,14 +884,14 @@ ComputeEigenValuesAndVectorsUsingQL(VectorType &d, double *e, double *z) const
         p = d[j];
       }
 
-      if (k == i) 
+      if (k == i)
         {
         continue;
         }
       d[k] = d[i];
       d[i] = p;
 
-      for (j = 0; j < m_Order; ++j) 
+      for (j = 0; j < m_Order; ++j)
         {
         p = z[j + i * m_Dimension];
         z[j + i * m_Dimension] = z[j + k * m_Dimension];
@@ -902,14 +902,14 @@ ComputeEigenValuesAndVectorsUsingQL(VectorType &d, double *e, double *z) const
   else if( m_OrderEigenValues == OrderByMagnitude )
     {
     // Order by magnitude
-    for (i = 0; i < m_Order-1; ++i) 
+    for (i = 0; i < m_Order-1; ++i)
       {
       k = i;
       p = d[i];
 
-      for (j = i+1; j < m_Order; ++j) 
+      for (j = i+1; j < m_Order; ++j)
         {
-        if (vnl_math_abs(d[j]) >= vnl_math_abs(p)) 
+        if (vnl_math_abs(d[j]) >= vnl_math_abs(p))
           {
           continue;
           }
@@ -917,14 +917,14 @@ ComputeEigenValuesAndVectorsUsingQL(VectorType &d, double *e, double *z) const
         p = d[j];
       }
 
-      if (k == i) 
+      if (k == i)
         {
         continue;
         }
       d[k] = vnl_math_abs(d[i]);
       d[i] = vnl_math_abs(p);
 
-      for (j = 0; j < m_Order; ++j) 
+      for (j = 0; j < m_Order; ++j)
         {
         p = z[j + i * m_Dimension];
         z[j + i * m_Dimension] = z[j + k * m_Dimension];

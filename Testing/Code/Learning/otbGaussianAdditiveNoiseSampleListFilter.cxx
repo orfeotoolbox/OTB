@@ -52,7 +52,7 @@ int otbGaussianAdditiveNoiseSampleListFilter(int argc, char * argv[])
   GaussianFilterType::Pointer filter = GaussianFilterType::New();
   filter->SetInput(inputSampleList);
 
-  // Input Sample 
+  // Input Sample
   FloatSampleType sample(sampleSize);
 
   unsigned int index = 3;

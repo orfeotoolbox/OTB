@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -39,7 +39,7 @@ int otbImageToLabelMapWithAttributesFilter(int argc, char* argv[])
 
   typedef otb::AttributesMapLabelObjectWithClassLabel<double,2,double,double> LabelObjectType;
 
-  typedef otb::ImageToLabelMapWithAttributesFilter<ImageType,  
+  typedef otb::ImageToLabelMapWithAttributesFilter<ImageType,
     LabeledImageType,unsigned int, LabelObjectType>                            FilterType;
   typedef otb::ImageFileReader<ImageType>                      ReaderType;
   typedef otb::ImageFileReader<LabeledImageType>               LabeledReaderType;
@@ -56,7 +56,7 @@ int otbImageToLabelMapWithAttributesFilter(int argc, char* argv[])
   labeledReader->SetFileName(lfname);
   labeledReader->UpdateOutputInformation();
   
-  // Filter 
+  // Filter
   filter->SetInput(reader->GetOutput());
   filter->SetLabeledImage(labeledReader->GetOutput());
   filter->Update();

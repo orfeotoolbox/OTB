@@ -32,16 +32,16 @@ namespace otb
 {
 /** \class FourierMellinDescriptorsFFactory
  *  \brief add a FourierMellinDescriptors image function to a
- *  MetaImageFunction 
+ *  MetaImageFunction
  *
  *  This class aims at adding an adapted
  *  FourierMellinDescriptorsImageFunction to an existing
  *  MetaImageFunction through the method Create.
- *  
+ *
  */
 
 template <class TImageType, class TCoordRep = double, class TPrecision = double>
-class ITK_EXPORT FourierMellinDescriptorsIFFactory : 
+class ITK_EXPORT FourierMellinDescriptorsIFFactory :
     public itk::LightObject
 {
 public:
@@ -68,12 +68,12 @@ public:
   typedef typename std::vector<PrecisionType>         ParamContainerType;
   typedef FourierMellinDescriptorsImageFunction<InputImageType, CoordRepType>
                                                       FourierMellinDescriptorsIF;
-  typedef ImageFunctionAdaptor<FourierMellinDescriptorsIF, TPrecision>     
+  typedef ImageFunctionAdaptor<FourierMellinDescriptorsIF, TPrecision>
                                                       AdaptedFourierMellinDescriptorsIF;
 
-  void Create(InputImageType * image, 
-              ParamContainerType param, 
-              MetaImageFunctionPointerType metaIF, 
+  void Create(InputImageType * image,
+              ParamContainerType param,
+              MetaImageFunctionPointerType metaIF,
               DataObjectContainerType * container);
 
 protected:

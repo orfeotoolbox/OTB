@@ -47,7 +47,7 @@ ShiftScaleSampleListFilter<TInputSampleList,TOutputSampleList>
   
   // Check if the size of the scale and the shift measurement vectors
   // are the same than the input vector
-  if(inputSampleListPtr->GetMeasurementVectorSize() != m_Scales.Size() 
+  if(inputSampleListPtr->GetMeasurementVectorSize() != m_Scales.Size()
      || inputSampleListPtr->GetMeasurementVectorSize() != m_Shifts.Size())
     itkExceptionMacro(<< "Inconsistent measurement vector size : Input Sample List size "
                       << inputSampleListPtr->GetMeasurementVectorSize()

@@ -86,7 +86,7 @@ GaussianAdditiveNoiseSampleListFilter<TInputSampleList,TOutputSampleList>
     // Iterate on the InputSampleList
     while(inputIt != inputSampleListPtr->End())
       {
-      // Generate Random sequence 
+      // Generate Random sequence
       this->GenerateRandomSequence();
 
       // Retrieve current input sample

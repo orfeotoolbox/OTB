@@ -36,7 +36,7 @@ typedef double                                      PixelType;
 typedef otb::VectorImage<PixelType, Dimension>      ImageType;
 typedef ImageType::SizeType                         SizeType;
 
-typedef otb::GenericRSResampleImageFilter<ImageType, 
+typedef otb::GenericRSResampleImageFilter<ImageType,
                                           ImageType> ImageResamplerType;
 typedef ImageResamplerType::OriginType              OriginType;
 typedef ImageResamplerType::SpacingType             SpacingType;
@@ -104,7 +104,7 @@ int otbGenericRSResampleImageFilter(int argc, char* argv[])
     
   // Set the Resampler Parameters
   resampler->SetInput(reader->GetOutput());
-  resampler->SetDeformationFieldSpacing(gridSpacing); 
+  resampler->SetDeformationFieldSpacing(gridSpacing);
   resampler->SetOutputOrigin(origin);
   resampler->SetOutputSize(size);
   resampler->SetOutputSpacing(spacing);
@@ -149,7 +149,7 @@ int otbGenericRSResampleImageFilterFromMap(int argc, char* argv[])
   double iGridSpacing    = atof(argv[2]);
   int    useInRpc        = atoi(argv[3]);
   
-  // Reader Instanciation  
+  // Reader Instanciation
   ReaderType::Pointer         reader    = ReaderType::New();
   reader->SetFileName(infname);
   reader->UpdateOutputInformation();
@@ -171,7 +171,7 @@ int otbGenericRSResampleImageFilterFromMap(int argc, char* argv[])
   // Extract a roi centered on the input center
   ImageType::RegionType roi;
   ImageType::IndexType  roiIndex;
-  SizeType              roiSize; 
+  SizeType              roiSize;
   
   // Fill the size
   roiSize.Fill(1000);
@@ -189,7 +189,7 @@ int otbGenericRSResampleImageFilterFromMap(int argc, char* argv[])
   
   // Set the Resampler Parameters
   resampler->SetInput(extractor->GetOutput());
-  resampler->SetDeformationFieldSpacing(gridSpacing); 
+  resampler->SetDeformationFieldSpacing(gridSpacing);
   resampler->SetOutputParametersFromMap("UTM",spacing);
   
   if (useInRpc)

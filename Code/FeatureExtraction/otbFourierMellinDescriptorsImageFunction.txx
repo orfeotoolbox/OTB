@@ -117,7 +117,7 @@ FourierMellinDescriptorsImageFunction<TInputImage, TCoordRep>
         
         if (x!=0 || y!=0) // vcl_pow limitations
           {
-          coefs.at(p).at(q) += vcl_pow(xplusiy,-p) * vcl_pow(x2plusy2,power) * value; 
+          coefs.at(p).at(q) += vcl_pow(xplusiy,-p) * vcl_pow(x2plusy2,power) * value;
           }
         }
       }

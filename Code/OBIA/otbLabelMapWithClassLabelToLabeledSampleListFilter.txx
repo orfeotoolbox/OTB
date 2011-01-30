@@ -35,7 +35,7 @@ LabelMapWithClassLabelToLabeledSampleListFilter<TInputLabelMap,TOutputListSample
 {}
 
 template <class TInputLabelMap, class TOutputListSample, class TOutputTrainingListSample, class TMeasurementFunctor>
-void 
+void
 LabelMapWithClassLabelToLabeledSampleListFilter<TInputLabelMap,TOutputListSample,TOutputTrainingListSample,TMeasurementFunctor>
 ::Compute()
 {
@@ -43,7 +43,7 @@ LabelMapWithClassLabelToLabeledSampleListFilter<TInputLabelMap,TOutputListSample
   m_OutputSampleList = OutputSampleListType::New();
   m_OutputTrainingSampleList = OutputTrainingSampleListType::New();
   
-  typename InputLabelMapType::LabelObjectContainerType::const_iterator it 
+  typename InputLabelMapType::LabelObjectContainerType::const_iterator it
     = m_InputLabelMap->GetLabelObjectContainer().begin();
 
   // iterate on label objects
@@ -65,7 +65,7 @@ LabelMapWithClassLabelToLabeledSampleListFilter<TInputLabelMap,TOutputListSample
 }
 
 template <class TInputLabelMap, class TOutputListSample, class TOutputTrainingListSample, class TMeasurementFunctor>
-void 
+void
 LabelMapWithClassLabelToLabeledSampleListFilter<TInputLabelMap,TOutputListSample,TOutputTrainingListSample,TMeasurementFunctor>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {

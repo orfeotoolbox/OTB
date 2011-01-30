@@ -57,7 +57,7 @@
 //
 // We start by including the needed header file.
 // The aim of this example is to compute the Normalized Difference Vegetation Index (NDVI)
-// from a multispecral image and perform a threshold on this 
+// from a multispecral image and perform a threshold on this
 // indice to extract area containing a dense vegetation canopy.
 //
 //  Software Guide : EndLatex
@@ -80,7 +80,7 @@ int main( int argc, char* argv[])
 //
 //  We start by the classical \code{typedef}s needed for reading and
 //  writing the images. The \doxygen{otb}{BandMathImageFilter} class
-// works with \doxygen{otb}{Image} as input so we need to define additional 
+// works with \doxygen{otb}{Image} as input so we need to define additional
 // filters to extract each layer of the multispectral image
 //
 //  Software Guide : EndLatex

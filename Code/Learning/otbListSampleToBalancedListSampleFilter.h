@@ -32,14 +32,14 @@ namespace Statistics {
  *
  * The maximum number of samples with same labels are first
  * computed. This maximum number by the m_BalacingFactor determines
- * the final number of samples belonging to each label.    
- * 
+ * the final number of samples belonging to each label.
+ *
  * Mean and Variance are set via the methods SetMean() and SetVariance().
  *
  * \sa ListSampleToListSampleFilter, GaussianAdditiveNoiseSampleListFilter
  */
-template < class TInputSampleList, 
-           class TLabelSampleList, 
+template < class TInputSampleList,
+           class TLabelSampleList,
            class TOutputSampleList = TInputSampleList >
 class ITK_EXPORT ListSampleToBalancedListSampleFilter :
     public otb::Statistics::ListSampleToListSampleFilter<TInputSampleList,
@@ -85,7 +85,7 @@ public:
   typedef typename Superclass::DataObjectPointer               DataObjectPointer;
   
   /** Input & Output sample list as data object */
-  typedef typename Superclass::InputSampleListObjectType       InputSampleListObjectType;  
+  typedef typename Superclass::InputSampleListObjectType       InputSampleListObjectType;
   typedef typename Superclass::OutputSampleListObjectType      OutputSampleListObjectType;
   
   /** Filter adding noise to a ListSample */
@@ -118,7 +118,7 @@ public:
   otbGetObjectMemberConstMacro(AddGaussianNoiseFilter,Variance,double);
 
   /** Set/Get the multiplicative factor : this value is used to
-    * determine the maximum number of samples in each label in order 
+    * determine the maximum number of samples in each label in order
     * to reach a balanced output ListSample
     */
   itkSetMacro(BalancingFactor,unsigned int);

@@ -13,8 +13,8 @@
   for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -32,7 +32,7 @@ namespace otb {
  *
  */
 template<class TInputImage, class TOutputImage=otb::LabelMapWithAdjacency< itk::LabelObject< typename TInputImage::PixelType, TInputImage::ImageDimension > > >
-class ITK_EXPORT LabelImageToLabelMapWithAdjacencyFilter : 
+class ITK_EXPORT LabelImageToLabelMapWithAdjacencyFilter :
     public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
@@ -68,10 +68,10 @@ public:
                       TOutputImage::ImageDimension);
 
   /** Standard New method. */
-  itkNewMacro(Self);  
+  itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(LabelImageToLabelMapWithAdjacencyFilter, 
+  itkTypeMacro(LabelImageToLabelMapWithAdjacencyFilter,
                ImageToImageFilter);
 
   /**
@@ -109,7 +109,7 @@ protected:
     
   }; // end class RLE
 
-  // RLE Vector 
+  // RLE Vector
   typedef std::vector<RLE> RLEVectorType;
 
   /** LabelImageToLabelMapWithAdjacencyFilter needs the entire input be

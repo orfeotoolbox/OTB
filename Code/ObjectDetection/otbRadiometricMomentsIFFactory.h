@@ -32,16 +32,16 @@ namespace otb
 {
 /** \class RadiometricMomentsIFFactory
  *  \brief add a RadiometricMoments image function to a
- *  MetaImageFunction 
+ *  MetaImageFunction
  *
  *  This class aims at adding an adapted
  *  RadiometricMomentsImageFunction to an existing MetaImageFunction
  *  through the method Create.
- *  
+ *
  */
 
 template <class TImageType, class TCoordRep = double, class TPrecision = double>
-class ITK_EXPORT RadiometricMomentsIFFactory : 
+class ITK_EXPORT RadiometricMomentsIFFactory :
     public itk::LightObject
 {
 public:
@@ -68,12 +68,12 @@ public:
   typedef typename std::vector<PrecisionType>              ParamContainerType;
   typedef RadiometricMomentsImageFunction<InputImageType, CoordRepType>
                                                            RadiometricMomentsIF;
-  typedef ImageFunctionAdaptor<RadiometricMomentsIF, TPrecision>       
+  typedef ImageFunctionAdaptor<RadiometricMomentsIF, TPrecision>
                                                            AdaptedRadiometricMomentsIF;
 
-  void Create(InputImageType * image, 
-              ParamContainerType param, 
-              MetaImageFunctionPointerType metaIF, 
+  void Create(InputImageType * image,
+              ParamContainerType param,
+              MetaImageFunctionPointerType metaIF,
               DataObjectContainerType * container);
 
 protected:

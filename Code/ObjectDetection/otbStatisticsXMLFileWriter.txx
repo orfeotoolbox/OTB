@@ -59,7 +59,7 @@ void
 StatisticsXMLFileWriter<TMeasurementVector>
 ::GenerateData()
 {
-  // Check if the input are not null 
+  // Check if the input are not null
   if(m_MeasurementVectorContainer.size() == 0)
     itkExceptionMacro(<<"At Least one input is required, please set input using the method AddInput");
 
@@ -77,7 +77,7 @@ StatisticsXMLFileWriter<TMeasurementVector>
   // Write the XML file
   TiXmlDocument doc;
 
-  TiXmlDeclaration* decl = new TiXmlDeclaration( "1.0", "", "" );  
+  TiXmlDeclaration* decl = new TiXmlDeclaration( "1.0", "", "" );
   doc.LinkEndChild( decl );
 
   TiXmlElement * root = new TiXmlElement( "FeatureStatistics");
@@ -92,7 +92,7 @@ StatisticsXMLFileWriter<TMeasurementVector>
     // The current statistic
     TiXmlElement * feature = new TiXmlElement("Statistic");
     feature->SetAttribute("name", featureName.c_str());
-    root->LinkEndChild( feature );  
+    root->LinkEndChild( feature );
 
     // Store the value for this statistic
     for(unsigned int cindex = 0; cindex < currentMeasurementVector.Size();++cindex)
@@ -100,8 +100,8 @@ StatisticsXMLFileWriter<TMeasurementVector>
       // For each value in Measurementvector
       TiXmlElement * curStatisticVector = new TiXmlElement("StatisticVector");
       curStatisticVector->SetDoubleAttribute("value", currentMeasurementVector.GetElement(cindex));
-      feature->LinkEndChild(curStatisticVector);  
-      } 
+      feature->LinkEndChild(curStatisticVector);
+      }
     }
   
   // Finally, write the file

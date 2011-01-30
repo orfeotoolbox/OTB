@@ -33,14 +33,14 @@ namespace otb
 /** \class BandMathImageFilter
  * \brief Performs a mathematical operation on the input images
  * according to the formula specified by the user.
- * 
+ *
  * This filter is based on the mathematical parser library muParser.
  * The built in functions and operators list is available at:
  * http://muparser.sourceforge.net/mup_features.html#idDef2
- * 
+ *
  * OTB additional functions:
  * ndvi(r, niri)
- * 
+ *
  * OTB additional constants:
  * e - log2e - log10e - ln2 - ln10 - pi - euler
  *
@@ -54,7 +54,7 @@ namespace otb
  * names. For example, in the default case with three input images the
  * following expression is valid :
  * "ndvi(b1,b2)*b3"
- * 
+ *
  * As an additional functionality, the filter also granted access to
  * indexes information under special virtual bands named idxX, idxY
  * for the images indexes and idxPhyX,idxPhyY for the physical
@@ -67,16 +67,16 @@ namespace otb
  * physical index (105.3;207.1) by a black area
  * This functionality assumes that all the band involved have the same
  * spacing and origin.
- * 
- * 
+ *
+ *
  * \sa Parser
- * 
+ *
  * \ingroup Streamed
  * \ingroup Threaded
  */
 
 template< class TImage >
-class ITK_EXPORT BandMathImageFilter 
+class ITK_EXPORT BandMathImageFilter
   : public itk::InPlaceImageFilter< TImage >
 {
 public:
@@ -95,7 +95,7 @@ public:
   /** Some convenient typedefs. */
   typedef TImage                                  ImageType;
   typedef typename ImageType::ConstPointer        ImagePointer;
-  typedef typename ImageType::RegionType          ImageRegionType; 
+  typedef typename ImageType::RegionType          ImageRegionType;
   typedef typename ImageType::PixelType           PixelType;
   typedef typename ImageType::IndexType           IndexType;
   typedef typename ImageType::PointType           OrigineType;
@@ -134,7 +134,7 @@ private :
   BandMathImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  std::string                           m_Expression; 
+  std::string                           m_Expression;
   std::vector<ParserType::Pointer>      m_VParser;
   std::vector< std::vector<double> >    m_AImage;
   std::vector< std::string >            m_VVarName;

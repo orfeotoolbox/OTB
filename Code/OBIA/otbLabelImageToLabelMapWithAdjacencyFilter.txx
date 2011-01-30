@@ -13,8 +13,8 @@
   for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -36,7 +36,7 @@ LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
 }
 
 template <class TInputImage, class TOutputImage>
-void 
+void
 LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
 ::GenerateInputRequestedRegion()
 {
@@ -52,7 +52,7 @@ LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
 
 
 template <class TInputImage, class TOutputImage>
-void 
+void
 LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
 ::EnlargeOutputRequestedRegion(itk::DataObject *)
 {

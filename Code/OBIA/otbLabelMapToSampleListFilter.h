@@ -35,7 +35,7 @@ namespace otb
  * via proper redefinition of the functor.
  */
 
-template <class TInputLabelMap, class TOutputSampleList, 
+template <class TInputLabelMap, class TOutputSampleList,
     class TMeasurementFunctor = Functor::AttributesMapMeasurementFunctor
     <typename TInputLabelMap::LabelObjectType, typename TOutputSampleList::MeasurementVectorType > >
 class ITK_EXPORT LabelMapToSampleListFilter : public itk::Object

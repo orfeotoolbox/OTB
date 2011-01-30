@@ -135,7 +135,7 @@ int otbImageFunctionAdaptor(int argc, char * argv[])
   index[0] = 100;
   index[1] = 100;
   
-  // Content testing 
+  // Content testing
   double error = 0.0;
 
   

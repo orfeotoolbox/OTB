@@ -48,12 +48,12 @@ namespace otb
  *
  * This class writes kmz files, supported by Google Earth. The input
  * must have metadata (a non empty keywordlist)
- * 
+ *
  * The size of the tiles can be set via the method
  * SetTileSize(unsigned int), the user can also specify the name of
  * the output Kmz filename via SetPath().
- * 
- * 
+ *
+ *
  *
  * \ingroup IO
  *
@@ -134,7 +134,7 @@ public:
     this->Write();
   }
   
-  // Public method to Add Logo 
+  // Public method to Add Logo
   itkSetMacro(Logo,InputImagePointer);
 
   // Public method to store the legend and their description in the
@@ -143,7 +143,7 @@ public:
   {
     LegendPairType   legendPair;
     legendPair.first  = description;
-    legendPair.second = legend; 
+    legendPair.second = legend;
     m_LegendVector.push_back(legendPair);
   }
   // Method to add legend with empty description
@@ -311,4 +311,4 @@ private:
 #include "otbKmzProductWriter.txx"
 #endif
 
-#endif 
+#endif

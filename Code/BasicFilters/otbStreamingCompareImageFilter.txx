@@ -30,7 +30,7 @@ namespace otb
 
 template<class TInputImage>
 PersistentCompareImageFilter<TInputImage>
-::PersistentCompareImageFilter() : m_SquareOfDifferences(1), m_AbsoluteValueOfDifferences(1),  
+::PersistentCompareImageFilter() : m_SquareOfDifferences(1), m_AbsoluteValueOfDifferences(1),
  m_ThreadMinRef(1), m_ThreadMaxRef(1), m_Count(1)
 {
   this->SetNumberOfRequiredInputs( 2 );

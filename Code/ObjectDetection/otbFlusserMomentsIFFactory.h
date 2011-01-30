@@ -32,16 +32,16 @@ namespace otb
 {
 /** \class FlusserMomentsFFactory
  *  \brief add a FlusserMoments image function to a
- *  MetaImageFunction 
+ *  MetaImageFunction
  *
  *  This class aims at adding an adapted
  *  FlusserMomentsImageFunction to an existing
  *  MetaImageFunction through the method Create.
- *  
+ *
  */
 
 template <class TImageType, class TCoordRep = double, class TPrecision = double>
-class ITK_EXPORT FlusserMomentsIFFactory : 
+class ITK_EXPORT FlusserMomentsIFFactory :
     public itk::LightObject
 {
 public:
@@ -68,12 +68,12 @@ public:
   typedef typename std::vector<PrecisionType>         ParamContainerType;
   typedef FlusserMomentsImageFunction<InputImageType, CoordRepType>
                                                       FlusserMomentsIF;
-  typedef ImageFunctionAdaptor<FlusserMomentsIF, TPrecision>      
+  typedef ImageFunctionAdaptor<FlusserMomentsIF, TPrecision>
                                                       AdaptedFlusserMomentsIF;
 
-  void Create(InputImageType * image, 
-              ParamContainerType param, 
-              MetaImageFunctionPointerType metaIF, 
+  void Create(InputImageType * image,
+              ParamContainerType param,
+              MetaImageFunctionPointerType metaIF,
               DataObjectContainerType * container);
 
 protected:

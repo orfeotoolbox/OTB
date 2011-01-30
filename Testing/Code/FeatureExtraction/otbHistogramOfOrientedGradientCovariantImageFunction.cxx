@@ -45,7 +45,7 @@ int otbHistogramOfOrientedGradientCovariantImageFunctionNew(int argc, char * arg
   // Instantiating object
   FunctionType::Pointer function       = FunctionType::New();
 
-  std::cout << function << std::endl; 
+  std::cout << function << std::endl;
  
   return EXIT_SUCCESS;
 }

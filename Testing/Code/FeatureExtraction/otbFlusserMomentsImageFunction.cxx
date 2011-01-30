@@ -45,7 +45,7 @@ int otbFlusserMomentsImageFunctionNew(int argc, char * argv[])
   // Instantiating object
   FunctionType::Pointer function       = FunctionType::New();
 
-  std::cout << function << std::endl; 
+  std::cout << function << std::endl;
  
   return EXIT_SUCCESS;
 }
@@ -75,7 +75,7 @@ int otbFlusserMomentsImageFunction(int argc, char * argv[])
   index[0] = 100;
   index[1] = 100;
 
-  function->SetNeighborhoodRadius(3);  
+  function->SetNeighborhoodRadius(3);
   OutputType Result;
   Result = function->EvaluateAtIndex(index);
 
@@ -103,7 +103,7 @@ int otbFlusserMomentsImageFunctionScaleInvariant(int argc, char * argv[])
   typedef otb::StreamingResampleImageFilter<InputImageType,
     InputImageType,
     double>                                                               StreamingResampleImageFilterType;
-  typedef otb::BCOInterpolateImageFunction<InputImageType, 
+  typedef otb::BCOInterpolateImageFunction<InputImageType,
     double>                                                               InterpolatorType;
   typedef otb::FlusserMomentsImageFunction<InputImageType>                FunctionType;
   typedef FunctionType::OutputType                                        OutputType;
@@ -134,14 +134,14 @@ int otbFlusserMomentsImageFunctionScaleInvariant(int argc, char * argv[])
   InputImageType::IndexType index1;
   index1[0] = 256;
   index1[1] = 256;
-  function1->SetNeighborhoodRadius(3);  
+  function1->SetNeighborhoodRadius(3);
   OutputType Result1 = function1->EvaluateAtIndex(index1);
 
   function2->SetInputImage(resampler->GetOutput());
   InputImageType::IndexType index2;
   index2[0] = 512;
   index2[1] = 512;
-  function2->SetNeighborhoodRadius(6);  
+  function2->SetNeighborhoodRadius(6);
   OutputType Result2 = function2->EvaluateAtIndex(index2);
 
   double error = 0.0;
@@ -152,7 +152,7 @@ int otbFlusserMomentsImageFunctionScaleInvariant(int argc, char * argv[])
 
     std::cout << "Original -F" << j
               << " : " << Result1[j-1]
-              << "  /  Scaled - F" << j 
+              << "  /  Scaled - F" << j
               << " : " << Result2[j-1] << std::endl;
     }
     
@@ -181,7 +181,7 @@ int otbFlusserMomentsImageFunctionRotationInvariant(int argc, char * argv[])
   typedef otb::ImageFileReader<InputImageType>                            ReaderType;
   typedef itk::ResampleImageFilter<
     InputImageType, InputImageType >                                      FilterType;
-  typedef otb::BCOInterpolateImageFunction<InputImageType, 
+  typedef otb::BCOInterpolateImageFunction<InputImageType,
     double>                                                               InterpolatorType;
   typedef otb::FlusserMomentsImageFunction<InputImageType>                FunctionType;
   typedef FunctionType::OutputType                                        OutputType;
@@ -207,7 +207,7 @@ int otbFlusserMomentsImageFunctionRotationInvariant(int argc, char * argv[])
 
   const InputImageType::SpacingType & spacing = reader->GetOutput()->GetSpacing();
   const InputImageType::PointType & origin  = reader->GetOutput()->GetOrigin();
-  InputImageType::SizeType size = 
+  InputImageType::SizeType size =
       reader->GetOutput()->GetLargestPossibleRegion().GetSize();
 
   filter->SetOutputOrigin( origin );
@@ -240,14 +240,14 @@ int otbFlusserMomentsImageFunctionRotationInvariant(int argc, char * argv[])
   InputImageType::IndexType index1;
   index1[0] = 256;
   index1[1] = 256;
-  function1->SetNeighborhoodRadius(4);  
+  function1->SetNeighborhoodRadius(4);
   OutputType Result1 = function1->EvaluateAtIndex(index1);
 
   function2->SetInputImage(filter->GetOutput());
   InputImageType::IndexType index2;
   index2[0] = 256;
   index2[1] = 256;
-  function2->SetNeighborhoodRadius(4);  
+  function2->SetNeighborhoodRadius(4);
   OutputType Result2 = function2->EvaluateAtIndex(index2);
 
   double error = 0.0;
@@ -258,7 +258,7 @@ int otbFlusserMomentsImageFunctionRotationInvariant(int argc, char * argv[])
     
     std::cout << "Original -F" << j
               << " : " << Result1[j-1]
-              << "  /  Rotated - F" << j 
+              << "  /  Rotated - F" << j
               << " : " << Result2[j-1] << std::endl;
     }
     

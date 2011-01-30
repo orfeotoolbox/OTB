@@ -26,8 +26,8 @@ namespace otb {
 
 /** \class StatisticsXMLFileWriter
  *  \brief Write in a xml file the values stored in a MeasurementVector set as
- *  input 
- *  
+ *  input
+ *
  * The vector can be set as input via AddInput(name,vector) where name
  * is the name of the statistic, and vector the values.
  * Supported vector types are those implementing the method GetElement(idx)
@@ -35,7 +35,7 @@ namespace otb {
  *
  */
 template < class TMeasurementVector>
-class  StatisticsXMLFileWriter : 
+class  StatisticsXMLFileWriter :
     public itk::Object
 {
 public:

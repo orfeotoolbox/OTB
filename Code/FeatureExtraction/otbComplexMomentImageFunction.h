@@ -33,7 +33,7 @@ namespace otb
  * For backward compatibility only
  * otb::ComplexMomentImageFunction is deprecated and
  * otb::ComplexMomentsImageFunction sould be used instead
- * 
+ *
  * Calculate the complex moment value over an image.
  * The implemented equation is:
  *

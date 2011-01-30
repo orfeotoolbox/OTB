@@ -349,7 +349,7 @@ bool CommandLineArgumentParser::TryParseCommandLine(int argc, char *argv[],
 
 bool CommandLineArgumentParser::IsNumber(std::string text)
 {
-  if(text.empty()) 
+  if(text.empty())
     return false;
   
   // Don't test the sign (-)

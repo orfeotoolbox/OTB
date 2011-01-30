@@ -45,7 +45,7 @@ StatisticsXMLFileReader<TMeasurementVector>
     this->Read();
     }
   
-  // Check if the name of the Statistic is present 
+  // Check if the name of the Statistic is present
   bool found = false;
   unsigned int index = 0;
   for(unsigned int  idx = 0; idx < m_NumberOfOutputs; idx++)
@@ -57,7 +57,7 @@ StatisticsXMLFileReader<TMeasurementVector>
       }
     }
   
-  // if token not found throw an axception 
+  // if token not found throw an axception
   if(!found)
     itkExceptionMacro(<<"No entry corresponding to the token selected ("<<statisticName<<") in the XML file");
   
@@ -94,14 +94,14 @@ StatisticsXMLFileReader<TMeasurementVector>
   for( TiXmlElement* currentStat = root.FirstChildElement().ToElement();
        currentStat != NULL;
        currentStat = currentStat->NextSiblingElement() )
-    {    
+    {
     InputDataType   currentStatisticVector;
     
     // Store the stat type name
     currentStatisticVector.first = currentStat->Attribute("name");
 
     // The size is not stored in the XML file
-    // Store the value in a std::vector, get the size and then 
+    // Store the value in a std::vector, get the size and then
     // build a measurement vector
     std::vector<double>   tempMeasurementVector;
     

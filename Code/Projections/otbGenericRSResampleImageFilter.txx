@@ -42,7 +42,7 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 GenericRSResampleImageFilter<TInputImage, TOutputImage>
 ::GenericRSResampleImageFilter()
-{  
+{
   // flags initialization
   m_EstimateInputRpcModel  = false;
   m_EstimateOutputRpcModel = false;
@@ -99,12 +99,12 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
   itk::MetaDataDictionary& dict = outputPtr->GetMetaDataDictionary();
   
   // Encapsulate the   metadata set by the user
-  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, 
+  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey,
                                         this->GetOutputProjectionRef());
   
   if (this->GetOutputKeywordList().GetSize() > 0)
     {
-    itk::EncapsulateMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, 
+    itk::EncapsulateMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey,
                                                this->GetOutputKeywordList());
     }
   
@@ -125,15 +125,15 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
   itk::MetaDataDictionary& dict = this->GetOutput()->GetMetaDataDictionary();
   
   // Temp image : not allocated but with the same metadata than the
-  // output 
+  // output
   typename OutputImageType::Pointer tempPtr = OutputImageType::New();
   tempPtr->SetRegions(this->GetOutput()->GetLargestPossibleRegion());
 
   // Encapsulate the output metadata in the temp image
   itk::MetaDataDictionary& tempDict = tempPtr->GetMetaDataDictionary();
-  itk::EncapsulateMetaData<std::string>(tempDict, MetaDataKey::ProjectionRefKey, 
+  itk::EncapsulateMetaData<std::string>(tempDict, MetaDataKey::ProjectionRefKey,
                                         this->GetOutputProjectionRef() );
-  itk::EncapsulateMetaData<ImageKeywordlist>(tempDict, MetaDataKey::OSSIMKeywordlistKey, 
+  itk::EncapsulateMetaData<ImageKeywordlist>(tempDict, MetaDataKey::OSSIMKeywordlistKey,
                                              this->GetOutputKeywordList());
   
   // Estimate the rpc model from the temp image
@@ -145,14 +145,14 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
     {
     // Fill the output dict
     itk::EncapsulateMetaData<ImageKeywordlist>(dict,
-                                               MetaDataKey::OSSIMKeywordlistKey,  
+                                               MetaDataKey::OSSIMKeywordlistKey,
                                                m_OutputRpcEstimator->GetOutput()->GetImageKeywordlist());
     // Fill the transform with the right kwl
     m_Transform->SetInputKeywordList( m_OutputRpcEstimator->GetOutput()->GetImageKeywordlist());
     }
 }
 
-/** 
+/**
   * Fill with the default dict of the input and the output
   * and instanciate the transform
   */
@@ -172,7 +172,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
 
  /**
   * Generate Input requested region does only propagate the output
-  * requested region. 
+  * requested region.
   */
  template <class TInputImage, class TOutputImage>
  void
@@ -194,7 +194,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
      this->EstimateInputRpcModel();
      }
 
-   // Instanciate the RS transform 
+   // Instanciate the RS transform
    this->UpdateTransform();
 
    // Generate input requested region
@@ -210,7 +210,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
  /**
   * Method to estimate the rpc model of the input using a temporary
   * image to avoid adding this rpc estimator filter in the minipipeline.
-  * 
+  *
   */
  template <class TInputImage, class TOutputImage>
  void
@@ -218,7 +218,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
  ::EstimateInputRpcModel()
  {
    // Temp image : not allocated but with the sampe metadata as the
-   // output 
+   // output
    typename InputImageType::Pointer tempPtr = InputImageType::New();
    tempPtr->SetRegions(this->GetInput()->GetLargestPossibleRegion());
    tempPtr->CopyInformation(this->GetInput());
@@ -227,7 +227,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
    m_InputRpcEstimator->SetInput(tempPtr);
    m_InputRpcEstimator->UpdateOutputInformation();
 
-   // No need to override the input kwl, just setup the 
+   // No need to override the input kwl, just setup the
    // transform with the kwl estimated
    if(m_InputRpcEstimator->GetInput()->GetImageKeywordlist().GetSize() > 0)
      m_Transform->SetOutputKeywordList(m_InputRpcEstimator->GetOutput()->GetImageKeywordlist());
@@ -239,7 +239,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
 
 /**
  * Method used to copy the parameters of the input image
- * 
+ *
  */
 template <class TInputImage, class TOutputImage>
 void
@@ -259,7 +259,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
  * Method used to project the input image in a defined srs, estimating
  * the output size and origin. The spacing is set by the user. The
  * supported projection are UTM and WGS84.
- * 
+ *
  */
 template <class TInputImage, class TOutputImage>
 void
@@ -269,8 +269,8 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
   // Get the input Image
   const InputImageType* input = this->GetInput();
   
-  // Update the transform with input information 
-  // Done here because the transform is not instanciated 
+  // Update the transform with input information
+  // Done here because the transform is not instanciated
   // yet
   this->UpdateTransform();
 
@@ -307,7 +307,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
     int zone = utmMapProjection->computeZone(point);
     bool hem = (geoPoint[1]>1e-10)?true:false;
   
-    // Build the output UTM projection ref 
+    // Build the output UTM projection ref
     OGRSpatialReferenceH oSRS = OSRNewSpatialReference(NULL);
     OSRSetProjCS(oSRS, "UTM");
     OSRSetWellKnownGeogCS(oSRS, "WGS84");
@@ -320,7 +320,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
     CPLFree(utmRefC);
     OSRRelease(oSRS);
     }
-  else if(strcmp(map.c_str(),"WGS84")==0) 
+  else if(strcmp(map.c_str(),"WGS84")==0)
     {
     projectionRef = otb::GeoInformationConversion::ToWKT(4326); //WGS84
     }
@@ -339,7 +339,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
   genericRSEstimator->Compute();
   
   // Update the Output Parameters
-  this->SetOutputProjectionRef(projectionRef); 
+  this->SetOutputProjectionRef(projectionRef);
   this->SetOutputOrigin(genericRSEstimator->GetOutputOrigin());
   this->SetOutputSpacing(genericRSEstimator->GetOutputSpacing());
   this->SetOutputSize(genericRSEstimator->GetOutputSize());
@@ -349,8 +349,8 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
 /**
  * Used to project the input image in a srs defined by its WKT
  * projectionRef (as parameter) only. estimating the output size, spacing
- * and origin.  
- * 
+ * and origin.
+ *
  */
 template <class TInputImage, class TOutputImage>
 void
@@ -368,7 +368,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
   genericRSEstimator->Compute();
   
   // Update the Output Parameters
-  this->SetOutputProjectionRef(projectionRef); 
+  this->SetOutputProjectionRef(projectionRef);
   this->SetOutputOrigin(genericRSEstimator->GetOutputOrigin());
   this->SetOutputSpacing(genericRSEstimator->GetOutputSpacing());
   this->SetOutputSize(genericRSEstimator->GetOutputSize());

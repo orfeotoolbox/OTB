@@ -31,8 +31,8 @@ namespace otb
  * \brief Virtual class for the Real moments for an image function
  *
  * For backward compatibility only
- * 
- * 
+ *
+ *
  * \ingroup ImageFunctions
  */
 

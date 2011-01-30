@@ -40,7 +40,7 @@ int otbRealMomentsImageFunctionNew(int argc, char * argv[])
   // Instantiating object
   FunctionType::Pointer  function       = FunctionType::New();
   
-  std::cout << function << std::endl; 
+  std::cout << function << std::endl;
   
   return EXIT_SUCCESS;
 }

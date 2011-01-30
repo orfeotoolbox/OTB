@@ -32,16 +32,16 @@ namespace otb
 {
 /** \class HaralickTexturesFFactory
  *  \brief add a HaralickTextures image function to a
- *  MetaImageFunction 
+ *  MetaImageFunction
  *
  *  This class aims at adding an adapted
  *  HaralickTexturesImageFunction to an existing
  *  MetaImageFunction through the method Create.
- *  
+ *
  */
 
 template <class TImageType, class TCoordRep = double, class TPrecision = double>
-class ITK_EXPORT HaralickTexturesIFFactory : 
+class ITK_EXPORT HaralickTexturesIFFactory :
     public itk::LightObject
 {
 public:
@@ -72,9 +72,9 @@ public:
   typedef ImageFunctionAdaptor<HaralickTexturesIF, TPrecision>
                                                            AdaptedHaralickTexturesIF;
 
-  void Create(InputImageType * image, 
-              ParamContainerType param, 
-              MetaImageFunctionPointerType metaIF, 
+  void Create(InputImageType * image,
+              ParamContainerType param,
+              MetaImageFunctionPointerType metaIF,
               DataObjectContainerType * container);
 
 protected:

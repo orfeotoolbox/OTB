@@ -44,14 +44,14 @@ namespace otb
  * spacing (SetOuputSpacing()), the start index (SetOutputIndex()) and
  * the  interpolator (SetInterpolator()) and the origin (SetOrigin())
  * can be set using the method between brackets.
- * 
+ *
  *
  *
  * \ingroup Projection
  *
  **/
 
-template <class TInputImage, class TOutputImage, 
+template <class TInputImage, class TOutputImage,
           class TInterpolatorPrecisionType = double>
 class ITK_EXPORT StreamingResampleImageFilter :
     public itk::ImageToImageFilter<TInputImage, TOutputImage>
@@ -74,17 +74,17 @@ public:
   typedef TOutputImage               OutputImageType;
   
   /** Deformation field used to warp the image*/
-  typedef itk::Vector<double, 
+  typedef itk::Vector<double,
                       TOutputImage::ImageDimension>             DeformationType;
   typedef otb::Image<DeformationType>                           DeformationFieldType;
 
   /** filter warping input image using deformation field */
-  typedef StreamingWarpImageFilter<InputImageType, 
+  typedef StreamingWarpImageFilter<InputImageType,
                                    OutputImageType,
                                    DeformationFieldType>        WarpImageFilterType;
   
   /** Internal filters typedefs*/
-  typedef itk::TransformToDeformationFieldSource<DeformationFieldType, 
+  typedef itk::TransformToDeformationFieldSource<DeformationFieldType,
                                                  double>        DeformationFieldGeneratorType;
   typedef typename DeformationFieldGeneratorType::TransformType TransformType;
   typedef typename DeformationFieldGeneratorType::SizeType      SizeType;
@@ -94,10 +94,10 @@ public:
   typedef typename DeformationFieldGeneratorType::RegionType    RegionType;
 
   /** Interpolator type */
-  typedef itk::InterpolateImageFunction<InputImageType, 
+  typedef itk::InterpolateImageFunction<InputImageType,
                                         TInterpolatorPrecisionType>       InterpolatorType;
   typedef typename InterpolatorType::Pointer                              InterpolatorPointerType;
-  typedef itk::LinearInterpolateImageFunction<InputImageType, 
+  typedef itk::LinearInterpolateImageFunction<InputImageType,
                                               TInterpolatorPrecisionType> DefaultInterpolatorType;
 
   /** ImageBase typedef */
@@ -153,12 +153,12 @@ public:
   }
   otbGetObjectMemberConstMacro(WarpFilter, Interpolator, const InterpolatorType *);
 
-  /** Default Edge padding value */  
+  /** Default Edge padding value */
   otbSetObjectMemberMacro(WarpFilter,
                           EdgePaddingValue,
                           typename OutputImageType::PixelType);
-  otbGetObjectMemberMacro(WarpFilter, 
-                                        EdgePaddingValue, 
+  otbGetObjectMemberMacro(WarpFilter,
+                                        EdgePaddingValue,
                                         typename OutputImageType::PixelType);
 
   /** Import output parameters from a given image */

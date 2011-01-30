@@ -117,7 +117,7 @@ LabeledSampleLocalizationGenerator<TVectorData>
 
   //std::cout << "insiders: " << insiders.size() << std::endl;
 
-  // Search parametrization 
+  // Search parametrization
   //unsigned int nbMaxIter = (unsigned int)(node->GetPolygonExteriorRing()->GetArea());
   //                                         - insiders.size() * CONST_PI * vcl_pow(this->GetInhibitionRadius(), 2))
   //                                         / (CONST_PI * vcl_pow(this->GetInhibitionRadius(), 2)));
@@ -232,7 +232,7 @@ LabeledSampleLocalizationGenerator<TVectorData>
         this->GetOutput(0)->GetDataTree()->Add(itVector.Get(), document);
         }
        ++itVector;
-      }   
+      }
     }
 
   // Iterates through the polygon features and generates random point inside the polygon with
@@ -271,7 +271,7 @@ LabeledSampleLocalizationGenerator<TVectorData>
           }
         }
       ++itVector;
-      }   
+      }
     }
 }
 

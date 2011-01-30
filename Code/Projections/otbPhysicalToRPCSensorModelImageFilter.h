@@ -31,7 +31,7 @@ namespace otb {
  * This filters estimates an RPC sensor model from a list of points
  * homologous point in the physical coordinate system and the WGS84
  * CS.
- * 
+ *
  * The number of points used to estimate the rpc sensor model is
  * defined by the GridSize, note that at least 16 points are needed
  * to estimate a proper RPC sensor model, there are no warning when
@@ -44,7 +44,7 @@ namespace otb {
  * implementation.(TODO)
  *
  * Depending on the value of the DEMDirectory, an elevation fetched
- * from the SRT directory is used.(TODO) 
+ * from the SRT directory is used.(TODO)
  *
  * This filter does not modify the image buffer, but only the
  * metadata. Therefore, it provides in-place support, which is

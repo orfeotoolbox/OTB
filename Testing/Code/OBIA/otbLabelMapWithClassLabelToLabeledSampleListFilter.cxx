@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -54,7 +54,7 @@ int otbLabelMapWithClassLabelToLabeledSampleListFilter(int argc, char* argv[])
   typedef itk::FixedArray<LabelType,1>                           TrainingVectorType;
   typedef itk::Statistics::ListSample<VectorType>                ListSampleType;
   typedef itk::Statistics::ListSample<TrainingVectorType>        TrainingListSampleType;
-  typedef otb::LabelMapWithClassLabelToLabeledSampleListFilter<LabelMapType,ListSampleType,TrainingListSampleType>        
+  typedef otb::LabelMapWithClassLabelToLabeledSampleListFilter<LabelMapType,ListSampleType,TrainingListSampleType>
                                                                  LabelMap2ListSampleFilterType;
 
   // instantiation

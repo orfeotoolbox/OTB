@@ -74,7 +74,7 @@ public:
 
 template <class TInputImage, class TPrecision = double>
 class ITK_EXPORT LineSegmentDetector :
-    public otb::ImageToLineSpatialObjectListFilter<TInputImage> 
+    public otb::ImageToLineSpatialObjectListFilter<TInputImage>
 //TODO public VectorDataSource<ITK_TYPENAME VectorData<> >
 {
 public:

@@ -151,7 +151,7 @@ SVMMarginSampler< TSample, TModel >
   
   for(unsigned int i = 0;i<m_NumberOfCandidates && i<idDistVector.size();++i)
     {
-    std::cout<<"Sample "<<idDistVector[i].first<<" (distance= "<<idDistVector[i].second<<")"<<std::endl; 
+    std::cout<<"Sample "<<idDistVector[i].first<<" (distance= "<<idDistVector[i].second<<")"<<std::endl;
     m_MarginSamples.push_back(idDistVector[i].first);
     }
 

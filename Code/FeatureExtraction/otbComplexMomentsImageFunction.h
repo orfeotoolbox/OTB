@@ -56,10 +56,10 @@ class ITK_EXPORT ComplexMomentsImageFunction :
 public:
   /** Standard class typedefs. */
   typedef ComplexMomentsImageFunction                                          Self;
-  typedef itk::ImageFunction<TInputImage, 
+  typedef itk::ImageFunction<TInputImage,
                              std::vector<
                              std::vector<
-                             std::complex<double> > >, 
+                             std::complex<double> > >,
                              TCoordRep>                                        Superclass;
   typedef itk::SmartPointer<Self>                                              Pointer;
   typedef itk::SmartPointer<const Self>                                        ConstPointer;
@@ -105,7 +105,7 @@ public:
   }
   
   /** Get/Set the radius of the neighborhood over which the
-   *  statistics are evaluated 
+   *  statistics are evaluated
    */
   itkSetMacro( NeighborhoodRadius, unsigned int );
   itkGetConstReferenceMacro( NeighborhoodRadius, unsigned int );

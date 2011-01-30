@@ -63,7 +63,7 @@ int otbSVMModelGenericKernelsTest(int argc, char* argv[])
   otb::CustomLinearKernelFunctor         customLinearFunctor;
   otb::GroupedRBFKernelFunctor           groupedRBFFunctor;
   otb::GroupingAdaptiveKernelFunctor     groupingAdaptiveFunctor;
-  otb::SpectralAngleKernelFunctor        spectAngleFunctor; 
+  otb::SpectralAngleKernelFunctor        spectAngleFunctor;
   otb::NonGaussianRBFKernelFunctor       nonGaussRBFFunctor;
   otb::ChangeProfileKernelFunctor        changeProFunctor;
   otb::MixturePolyRBFKernelFunctor       mixPolRBFFunctor;

@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -27,7 +27,7 @@ namespace otb
 {
 /** \class LabelMapWithAdjacency
 *   \brief This class is a LabelMap with additionnal adjacency information.
-*   
+*
 *   The adjacency information is stored as a map of set of labels, in
 *   order to avoid duplicated neighbors.
 */
@@ -207,7 +207,7 @@ public:
     lpit2->second = lpit1->first;
     }
   }
-      }    
+      }
   }
 
 protected:

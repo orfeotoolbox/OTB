@@ -133,19 +133,19 @@ int otbBandMathImageFilter( int argc, char* argv[])
       + ndvi_expected * vcl_sqrt(PixelType(2)) * px3;
     
     /*
-    std::cout << "Pixel_1 =  " << it1.Get() << "     Pixel_2 =  " << it2.Get() << "     Pixel_3 =  " << it3.Get() 
-        << "     Result =  " << it.Get() << "     Expected =  " << expected << std::endl;  
+    std::cout << "Pixel_1 =  " << it1.Get() << "     Pixel_2 =  " << it2.Get() << "     Pixel_3 =  " << it3.Get()
+        << "     Result =  " << it.Get() << "     Expected =  " << expected << std::endl;
     */
     
     error = (result - expected) * (result - expected) / (result + expected);
     if ( error > 1E-9 )
       {
-      itkGenericExceptionMacro(  <<std::endl 
-         << "Error = " << error << "  > 1E-9     -> TEST FAILLED" << std::endl 
-         << "Pixel_1 =  "       << it1.Get()  
-         << "     Pixel_2 =  "  << it2.Get() 
+      itkGenericExceptionMacro(  <<std::endl
+         << "Error = " << error << "  > 1E-9     -> TEST FAILLED" << std::endl
+         << "Pixel_1 =  "       << it1.Get()
+         << "     Pixel_2 =  "  << it2.Get()
          << "     Pixel_3 =  "  << it3.Get()
-         << "     Result =  "   << it.Get()   
+         << "     Result =  "   << it.Get()
          << "     Expected =  " << expected     << std::endl );
       FAIL_FLAG++;
       }

@@ -51,12 +51,12 @@ KmzProductWriter<TInputImage>
  *
  */
 template <class TInputImage>
-void 
+void
 KmzProductWriter<TInputImage>
 ::SetInput(const InputImageType *input)
 {
   // Process object is not const-correct so the const_cast is required here
-  this->ProcessObject::SetNthInput(0, 
+  this->ProcessObject::SetNthInput(0,
                                    const_cast< InputImageType * >( input ) );
 }
 
@@ -64,10 +64,10 @@ KmzProductWriter<TInputImage>
 template <class TInputImage>
 void
 KmzProductWriter<TInputImage>
-::SetInput( unsigned int index, const TInputImage * image ) 
+::SetInput( unsigned int index, const TInputImage * image )
 {
   // Process object is not const-correct so the const_cast is required here
-  this->ProcessObject::SetNthInput(index, 
+  this->ProcessObject::SetNthInput(index,
                                    const_cast< TInputImage *>( image ) );
 }
 
@@ -77,7 +77,7 @@ KmzProductWriter<TInputImage>
 template <class TInputImage>
 const typename KmzProductWriter<TInputImage>::InputImageType *
 KmzProductWriter<TInputImage>
-::GetInput(void) 
+::GetInput(void)
 {
   if (this->GetNumberOfInputs() < 1)
     {
@@ -120,7 +120,7 @@ KmzProductWriter<TInputImage>
   // Continue processing
   this->Initialize();
   this->AddLogo();
-  this->Tiling();  
+  this->Tiling();
 }
 
 
@@ -161,7 +161,7 @@ KmzProductWriter<TInputImage>
 
  /**
   * Add Logo if any
-  * 
+  *
   */
 template <class TInputImage>
 void
@@ -252,7 +252,7 @@ KmzProductWriter<TInputImage>
   unsigned int curIdx = 0;
   
   /** Image statistics*/
-  typename InputImageType::PixelType inMin(numberOfChannel), inMax(numberOfChannel), 
+  typename InputImageType::PixelType inMin(numberOfChannel), inMax(numberOfChannel),
     outMin(numberOfChannel), outMax(numberOfChannel);
   outMin.Fill(0);
   outMax.Fill(255);
@@ -517,10 +517,10 @@ KmzProductWriter<TInputImage>
     {
     if (!m_UseExtendMode) // Extended format
       this->GenerateKML(path.str(), depth, x, y, north, south, east, west);
-    else 
-      this->GenerateKMLExtended(path.str(), depth, 
-              x, y, lowerLeftCorner, 
-              lowerRightCorner, 
+    else
+      this->GenerateKMLExtended(path.str(), depth,
+              x, y, lowerLeftCorner,
+              lowerRightCorner,
               upperRightCorner, upperLeftCorner);
     }
   else
@@ -549,7 +549,7 @@ KmzProductWriter<TInputImage>
             }
 
           // Add the bounding box kml
-          this->BoundingBoxKmlProcess(north, south, east, west); 
+          this->BoundingBoxKmlProcess(north, south, east, west);
           }
 
         // Add the files to the kmz file
@@ -798,9 +798,9 @@ KmzProductWriter<TInputImage>
     m_RootKmlFile << "\t\t\t\t\t<Lod>" << std::endl;
     m_RootKmlFile << "\t\t\t\t\t\t<minLodPixels>" << m_TileSize / 2 << "</minLodPixels>" << std::endl;
     /** If the last depth, put level of detail LOD to infinite (ie -1)*/
-    if (m_CurrentDepth == m_MaxDepth) 
+    if (m_CurrentDepth == m_MaxDepth)
       m_RootKmlFile << "\t\t\t\t\t\t<maxLodPixels>-1</maxLodPixels>" << std::endl;
-    else 
+    else
       m_RootKmlFile << "\t\t\t\t\t\t<maxLodPixels>" << m_TileSize * 4 << "</maxLodPixels>" << std::endl;
     m_RootKmlFile << "\t\t\t\t\t</Lod>" << std::endl;
     m_RootKmlFile << "\t\t\t\t\t<LatLonAltBox>" << std::endl;
@@ -1218,9 +1218,9 @@ KmzProductWriter<TInputImage>
   fileTest << "\t\t<Region>" << std::endl;
   fileTest << "\t\t\t<Lod>" << std::endl;
   fileTest << "\t\t\t\t<minLodPixels>" << m_TileSize / 2 << "</minLodPixels>" << std::endl;
-  if (m_CurrentDepth == m_MaxDepth) 
+  if (m_CurrentDepth == m_MaxDepth)
     fileTest << "\t\t\t\t<maxLodPixels>-1</maxLodPixels>" << std::endl;
-  else 
+  else
     fileTest << "\t\t\t\t<maxLodPixels>" << m_TileSize * 2 << "</maxLodPixels>" << std::endl;
   fileTest << "\t\t\t</Lod>" << std::endl;
   fileTest << "\t\t\t<LatLonAltBox>" << std::endl;

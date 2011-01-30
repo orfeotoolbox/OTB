@@ -32,7 +32,7 @@ namespace otb
  * For backward compatibility only
  * otb::HuImageFunction is deprecated and otb::HuMomentsImageFunction
  * should be used instead
- * 
+ *
  * Calculate the Hu's invariant over an image defined as:
  *
  * - \f$ \phi_{1} = c_{11} \f$

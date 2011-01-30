@@ -233,7 +233,7 @@ private:
   int m_EndMouseButton;
   
   /// Add polygon Mouse button
-  int m_AddMouseButton;  
+  int m_AddMouseButton;
 
   // Is image point is continous  otherwise centered
   bool m_IsContinuousPoint;

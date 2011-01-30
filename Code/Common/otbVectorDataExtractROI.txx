@@ -249,10 +249,10 @@ bool
 VectorDataExtractROI<TVectorData>
 ::IsPolygonIntersectionNotNull(PolygonPointerType polygon)
 {
-  // Get the VertexList 
-  // -2 cause we don't want the last point 
-  // wich is the same as the first one (closed Ring) 
-  for (unsigned int i = 0; i<polygon->GetVertexList()->Size() - 2; i++ ) 
+  // Get the VertexList
+  // -2 cause we don't want the last point
+  // wich is the same as the first one (closed Ring)
+  for (unsigned int i = 0; i<polygon->GetVertexList()->Size() - 2; i++ )
     {
     // Get the components of the polygon 2 by 2
     VertexType firstVertex;
@@ -281,7 +281,7 @@ VectorDataExtractROI<TVectorData>
 {
   RegionType lineRegion(line->GetBoundingRegion());
   
-  // if the line bounding box have a null 
+  // if the line bounding box have a null
   // intersection with the geoROI
   // the line and the region do not intersect
   if (!lineRegion.Crop(m_GeoROI))
@@ -290,8 +290,8 @@ VectorDataExtractROI<TVectorData>
     }
   else
     {
-    // Get the VertexList 
-    for (unsigned int i = 0; i<line->GetVertexList()->Size() -1; i++ ) 
+    // Get the VertexList
+    for (unsigned int i = 0; i<line->GetVertexList()->Size() -1; i++ )
       {
       // Get the components of the line 2 by 2
       VertexType firstVertex;
@@ -308,7 +308,7 @@ VectorDataExtractROI<TVectorData>
       secondPoint[0] = secondVertex[0];
       secondPoint[1] = secondVertex[1];
     
-      if (m_GeoROI.IsInside(this->PointToContinuousIndex(firstPoint)) 
+      if (m_GeoROI.IsInside(this->PointToContinuousIndex(firstPoint))
           | m_GeoROI.IsInside(this->PointToContinuousIndex(secondPoint)))
         {
         return true;
@@ -317,7 +317,7 @@ VectorDataExtractROI<TVectorData>
         {
         //  -------------------
         // Case 2 : If any of the point is in the region
-        if (!m_GeoROI.IsInside(this->PointToContinuousIndex(firstPoint)) 
+        if (!m_GeoROI.IsInside(this->PointToContinuousIndex(firstPoint))
             && !m_GeoROI.IsInside(this->PointToContinuousIndex(secondPoint)))
           {
           // Build a line with each two vertex
