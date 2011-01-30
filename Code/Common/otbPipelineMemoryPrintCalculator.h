@@ -67,7 +67,7 @@ class ITK_EXPORT PipelineMemoryPrintCalculator :
 public:
   /** Standard class typedefs */
   typedef PipelineMemoryPrintCalculator Self;
-  typedef itk::Object            Superclass;
+  typedef itk::Object                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -111,7 +111,7 @@ protected:
   PipelineMemoryPrintCalculator();
 
   /** Destructor */
-  virtual ~PipelineMemoryPrintCalculator();
+  virtual ~PipelineMemoryPrintCalculator() {};
 
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
