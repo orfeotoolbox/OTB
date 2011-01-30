@@ -988,7 +988,7 @@ private:
 /** \class TSARVI
  *  \brief This functor computes the Transformed Soil Atmospherical Resistant Vegetation Index (TSARVI)
  *
- *  [Yoram J. Kaufman and Didier Tanré, 1992]
+ *  [Yoram J. Kaufman and Didier Tanre, 1992]
  *
  *  \ingroup Functor
  * \ingroup Radiometry
@@ -1242,7 +1242,7 @@ private:
  *  logarithmic relationship. Asrar et al. (1984), Baret and Guyot
  *  (1991) and Wilson and Meyers (2007). Default values for the
  *  parameters are taken from A. Bsaibes et al. / Remote Sensing of
- *  Environment 113 (2009) 716–729 
+ *  Environment 113 (2009) 716-729 
  *
  *
  *  \ingroup Functor
@@ -1324,7 +1324,7 @@ private:
  *  LAI = \beta_0 + \sum_j \beta_j \rho_j where \rho are the
  *  reflectances 
  *  Default values for the parameters are taken from A. Bsaibes et
- *  al. / Remote Sensing of Environment 113 (2009) 716–729  
+ *  al. / Remote Sensing of Environment 113 (2009) 716-729  
  *
  *
  *  \ingroup Functor

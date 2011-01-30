@@ -255,7 +255,7 @@ public:
   }
 
 protected:
-  /// Prepare the values so they are normalized and in °C
+  /// Prepare the values so they are normalized and in degree Celsius
 
   TInput PrepareValues(const TInput& inputPixel)
   {
@@ -679,7 +679,7 @@ public:
  *
  *  This expression is the one used in: Roy PS, Miyatake S and Rikimaru
  *  A (1997) Biophysical Spectral Response Modelling Approach for
- *  Forest Density Stratification. FCD Mapper User’s Guide.
+ *  Forest Density Stratification. FCD Mapper User's Guide.
  * 
  * \ingroup Functor
  * \ingroup Radiometry
@@ -1075,7 +1075,11 @@ protected:
   /** Tolerance value 2*/
   PrecisionType m_TV2;
   
-  void SetMinMax(const TInput& inputPixel, PrecisionType* min123, PrecisionType* max123, PrecisionType* min12347, PrecisionType* max12347, PrecisionType* max234, PrecisionType* max45)
+  void SetMinMax(const TInput& inputPixel,
+                 PrecisionType* min123, PrecisionType* max123,
+                 PrecisionType* min12347, PrecisionType* max12347,
+                 PrecisionType* max234,
+                 PrecisionType* max45)
   {
   std::vector< PrecisionType > v123;
   v123.push_back(inputPixel[this->m_TM1]);
