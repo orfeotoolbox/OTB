@@ -46,12 +46,14 @@ int otbPipelineMemoryPrintCalculatorTest(int argc, char * argv[])
 
   otb::PipelineMemoryPrintCalculator::Pointer calculator = otb::PipelineMemoryPrintCalculator::New();
   calculator->SetDataToWrite(intensity->GetOutput());
-  calculator->SetAvailableMemory(0.1);
+  calculator->SetAvailableMemory(104858);
   calculator->Compute();
 
   std::ofstream ofs(argv[2]);
-  ofs<<"Memory print of whole pipeline:     "<<calculator->GetMemoryPrint()<<" Mo"<<std::endl;
-  ofs<<"Available memory:                   "<<calculator->GetAvailableMemory()<<" Mo"<<std::endl;
+  ofs<<"Memory print of whole pipeline:     "<<calculator->GetMemoryPrint()
+    * otb::PipelineMemoryPrintCalculator::ByteToMegabyte << " Mb"<<std::endl;
+  ofs<<"Available memory:                   "<<calculator->GetAvailableMemory()
+    * otb::PipelineMemoryPrintCalculator::ByteToMegabyte << " Mb"<<std::endl;
   ofs<<"Optimal number of stream divisions: "<<calculator->GetOptimalNumberOfStreamDivisions()<<std::endl;
   ofs<<"Bias correction factor applied:     "<<calculator->GetBiasCorrectionFactor()<<std::endl;
   ofs.close();

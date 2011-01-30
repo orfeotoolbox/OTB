@@ -15,7 +15,13 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+
 #include "otbPipelineMemoryPrintCalculator.h"
+
+#include "otbMath.h"
+#include "itkImage.h"
+#include "itkVectorImage.h"
+#include "itkFixedArray.h"
 
 namespace otb
 {
@@ -30,7 +36,7 @@ PipelineMemoryPrintCalculator
     m_BiasCorrectionFactor(1.)
 {}
 
-void 
+void
 PipelineMemoryPrintCalculator
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
@@ -39,13 +45,13 @@ PipelineMemoryPrintCalculator
 
   // Display parameters
   os<<indent<<"Data to write:                      "<<m_DataToWrite<<std::endl;
-  os<<indent<<"Memory print of whole pipeline:     "<<m_MemoryPrint<<" Mo"<<std::endl;
-  os<<indent<<"Available memory:                   "<<m_AvailableMemory<<" Mo"<<std::endl;
+  os<<indent<<"Memory print of whole pipeline:     "<<m_MemoryPrint * ByteToMegabyte <<" Mb"<<std::endl;
+  os<<indent<<"Available memory:                   "<<m_AvailableMemory * ByteToMegabyte <<" Mb"<<std::endl;
   os<<indent<<"Optimal number of stream divisions: "<<m_OptimalNumberOfStreamDivisions<<std::endl;
   os<<indent<<"Bias correction factor applied:     "<<m_BiasCorrectionFactor<<std::endl;
 }
 
-void 
+void
 PipelineMemoryPrintCalculator
 ::Compute()
 {
@@ -77,12 +83,12 @@ PipelineMemoryPrintCalculator
                                               /m_AvailableMemory);
 }
 
-double 
+PipelineMemoryPrintCalculator::MemoryPrintType
 PipelineMemoryPrintCalculator
 ::EvaluateMemoryPrint(ProcessObjectType * process)
 {
   // This variable will store the final print
-  double print = 0;
+  MemoryPrintType print = 0;
 
   // Retrieve the array of inputs
   ProcessObjectType::DataObjectPointerArray inputs = process->GetInputs();
@@ -91,7 +97,7 @@ PipelineMemoryPrintCalculator
     {
     // Retrieve the data object
     DataObjectType * input = inputs[i];
-      
+
     // Retrieve possible source
     ProcessObjectType * source = input->GetSource();
 
@@ -102,7 +108,7 @@ PipelineMemoryPrintCalculator
       }
     else
       {
-      double localPrint = this->EvaluateDataObjectPrint(input);
+      MemoryPrintType localPrint = this->EvaluateDataObjectPrint(input);
       print += localPrint;
       }
     }
@@ -112,7 +118,7 @@ PipelineMemoryPrintCalculator
   // Now, evaluate the current object print
   for(unsigned int i = 0; i < process->GetNumberOfOutputs(); ++i)
     {
-    double localPrint = this->EvaluateDataObjectPrint(outputs[0]);
+    MemoryPrintType localPrint = this->EvaluateDataObjectPrint(outputs[0]);
     print += localPrint;
     }
 
@@ -120,9 +126,9 @@ PipelineMemoryPrintCalculator
   return print;
 }
 
-double 
+PipelineMemoryPrintCalculator::MemoryPrintType
 PipelineMemoryPrintCalculator
-::EvaluateDataObjectPrint(DataObjectType * data)
+::EvaluateDataObjectPrint(DataObjectType * data) const
 {
 
 #define OTB_IMAGE_SIZE_BLOCK(type)                                      \
@@ -130,15 +136,15 @@ PipelineMemoryPrintCalculator
     {                                                                   \
     itk::Image<type,2> * image = dynamic_cast<itk::Image<type,2> *>(data); \
     return image->GetRequestedRegion().GetNumberOfPixels()              \
-      * image->GetNumberOfComponentsPerPixel() * sizeof(type) * ByteToMegabyte; \
+      * image->GetNumberOfComponentsPerPixel() * sizeof(type); \
     }                                                                   \
   if(dynamic_cast<itk::VectorImage<type,2> * >(data) != NULL)           \
     {                                                                   \
     itk::VectorImage<type,2> * image = dynamic_cast<itk::VectorImage<type,2> *>(data); \
     return image->GetRequestedRegion().GetNumberOfPixels()              \
-      * image->GetNumberOfComponentsPerPixel() * sizeof(type) * ByteToMegabyte; \
+      * image->GetNumberOfComponentsPerPixel() * sizeof(type); \
     }                                                                   \
-  
+
   // Call the macro for each pixel type
   OTB_IMAGE_SIZE_BLOCK(unsigned char)
   OTB_IMAGE_SIZE_BLOCK(char)
