@@ -79,18 +79,20 @@ int generic_main(otb::ApplicationOptionsResult* parseResult,
     
 
     ImageType::SizeType size;
-    if(parseResult->IsOptionPresent("OutputXSize") && parseResult->IsOptionPresent("OutputYSize"))
+    if(parseResult->IsOptionPresent("OutputSize"))
       {
-       size[0]= parseResult->GetParameterDouble("OutputXSize",0);
-       size[1]= parseResult->GetParameterDouble("OutputYSize",0);
+       size[0]= parseResult->GetParameterDouble("OutputSize",0);
+       size[1]= parseResult->GetParameterDouble("OutputSize",1);
        genericRSEstimator->ForceSizeTo(size);
+       std::cout << "size : " << size << std::endl;
       }
 
     ImageType::SpacingType spacing;
-    if(parseResult->IsOptionPresent("OutputXSpacing") && parseResult->IsOptionPresent("OutputYSpacing"))
+    if(parseResult->IsOptionPresent("OutputSpacing"))
       {
-       spacing[0]= parseResult->GetParameterDouble("OutputXSpacing",0);
-       spacing[1]= parseResult->GetParameterDouble("OutputYSpacing",0);
+       spacing[0]= parseResult->GetParameterDouble("OutputSpacing",0);
+       spacing[1]= parseResult->GetParameterDouble("OutputSpacing",1);
+       std::cout << "spacing : " << spacing << std::endl;
       }
     else
       {
@@ -115,10 +117,11 @@ int generic_main(otb::ApplicationOptionsResult* parseResult,
 
     orthofilter->SetInput(reader->GetOutput());
     ImageType::PointType origin;
-    if(parseResult->IsOptionPresent("xUpperLeft") && parseResult->IsOptionPresent("yUpperLeft"))
+    if(parseResult->IsOptionPresent("UpperLeft"))
       {
-       origin[0]= parseResult->GetParameterDouble("xUpperLeft",0);
-       origin[1]= parseResult->GetParameterDouble("yUpperLeft",0);
+       origin[0]= parseResult->GetParameterDouble("UpperLeft",0);
+       origin[1]= parseResult->GetParameterDouble("UpperLeft",1);
+       std::cout << "origin : " << origin << std::endl;
       }
     else
       {
@@ -227,12 +230,12 @@ int OrthoRectification::Describe(ApplicationDescriptor* descriptor)
   descriptor->SetDescription("Using available image metadata to determine the sensor model, computes a cartographic projection of the image");
   descriptor->AddInputImage();
   descriptor->AddOutputImage();
-  descriptor->AddOption("xUpperLeft","Cartographic x coordinate of upper left corner","xUL",1, false, otb::ApplicationDescriptor::Real);
-  descriptor->AddOption("yUpperLeft","Cartographic y coordinate of upper left corner","yUL",1, false, otb::ApplicationDescriptor::Real);
-  descriptor->AddOption("OutputXSize","Size of result image","xSize",1, false, otb::ApplicationDescriptor::Integer);
-  descriptor->AddOption("OutputYSize","Size of result image","ySize",1, false, otb::ApplicationDescriptor::Integer);
-  descriptor->AddOption("OutputXSpacing","Spacing resolution in meters on x Axis","xSpacing",1, false, otb::ApplicationDescriptor::Real);
-  descriptor->AddOption("OutputYSpacing","Spacing resolution in meters on y Axis","ySpacing",1, false, otb::ApplicationDescriptor::Real);
+  descriptor->AddOption("UpperLeft","Cartographic X/Y coordinate of upper left corner ","ul",2, false, otb::ApplicationDescriptor::Real);
+  //descriptor->AddOption("yUpperLeft","Cartographic y coordinate of upper left corner","yUL",1, false, otb::ApplicationDescriptor::Real);
+  descriptor->AddOption("OutputSize","Size of result image in X/Y","size",2, false, otb::ApplicationDescriptor::Integer);
+  // descriptor->AddOption("OutputYSize","Size of result image","ySize",1, false, otb::ApplicationDescriptor::Integer);
+  descriptor->AddOption("OutputSpacing","Spacing resolution in meters on X/Y Axis","spacing",2, false, otb::ApplicationDescriptor::Real);
+  // descriptor->AddOption("OutputYSpacing","Spacing resolution in meters on y Axis","ySpacing",1, false, otb::ApplicationDescriptor::Real);
   descriptor->AddOption("DEMDirectory","Directory where to find the DEM tiles","dem",1,false, otb::ApplicationDescriptor::DirectoryName);
   descriptor->AddOption("NumStreamDivisions","Number of streaming divisions (optional)","stream",1 , false, otb::ApplicationDescriptor::Integer);
   descriptor->AddOptionNParams("MapProjectionType",
