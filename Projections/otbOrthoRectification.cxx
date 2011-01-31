@@ -32,6 +32,8 @@
 #include "itkNearestNeighborInterpolateImageFunction.h"
 #include "otbImageToGenericRSOutputParameters.h"
 
+#include "otbPipelineMemoryPrintCalculator.h"
+
 namespace otb
 {
 
@@ -51,8 +53,8 @@ int generic_main(otb::ApplicationOptionsResult* parseResult,
     typedef itk::LinearInterpolateImageFunction<ImageType, double>          LinearInterpolationType;
     typedef itk::NearestNeighborInterpolateImageFunction<ImageType, double> NearestNeighborInterpolationType;
     typedef otb::BCOInterpolateImageFunction<ImageType>                     BCOInterpolationType;
-
-
+    typedef otb::PipelineMemoryPrintCalculator        MemoryCalculatorType;
+    
     // Read input image information
     ReaderType::Pointer reader=ReaderType::New();
     reader->SetFileName(parseResult->GetInputImage().c_str());
@@ -77,22 +79,11 @@ int generic_main(otb::ApplicationOptionsResult* parseResult,
 
     // Set up output image informations
     
-
-    ImageType::SizeType size;
-    if(parseResult->IsOptionPresent("OutputSize"))
-      {
-       size[0]= parseResult->GetParameterDouble("OutputSize",0);
-       size[1]= parseResult->GetParameterDouble("OutputSize",1);
-       genericRSEstimator->ForceSizeTo(size);
-       std::cout << "size : " << size << std::endl;
-      }
-
     ImageType::SpacingType spacing;
     if(parseResult->IsOptionPresent("OutputSpacing"))
       {
        spacing[0]= parseResult->GetParameterDouble("OutputSpacing",0);
        spacing[1]= parseResult->GetParameterDouble("OutputSpacing",1);
-       std::cout << "spacing : " << spacing << std::endl;
       }
     else
       {
@@ -103,7 +94,8 @@ int generic_main(otb::ApplicationOptionsResult* parseResult,
       spacing[1] = -(metadataInterface->GetYPixelSpacing());
       }
     genericRSEstimator->ForceSpacingTo(spacing);
-    
+    std::cout << "spacing : " << spacing << std::endl;
+
     genericRSEstimator->Compute();
     // set the start index
     ImageType::IndexType start;
@@ -116,20 +108,35 @@ int generic_main(otb::ApplicationOptionsResult* parseResult,
                                                   reader->GetOutput()->GetNumberOfComponentsPerPixel());
 
     orthofilter->SetInput(reader->GetOutput());
+    
     ImageType::PointType origin;
     if(parseResult->IsOptionPresent("UpperLeft"))
       {
        origin[0]= parseResult->GetParameterDouble("UpperLeft",0);
        origin[1]= parseResult->GetParameterDouble("UpperLeft",1);
-       std::cout << "origin : " << origin << std::endl;
       }
     else
       {
       origin = genericRSEstimator->GetOutputOrigin();
       }
+    std::cout << "origin : " << origin << std::endl;
+    
+    ImageType::SizeType size;
+    if(parseResult->IsOptionPresent("OutputSize"))
+      {
+      size[0]= parseResult->GetParameterDouble("OutputSize",0);
+      size[1]= parseResult->GetParameterDouble("OutputSize",1);
+      genericRSEstimator->ForceSizeTo(size);
+      }
+    else 
+      {
+      size = genericRSEstimator->GetOutputSize();
+      }
+    std::cout << "size : " << size << std::endl;
+
     orthofilter->SetOutputOrigin(origin);
     orthofilter->SetOutputSpacing(genericRSEstimator->GetOutputSpacing());
-    orthofilter->SetOutputSize(genericRSEstimator->GetOutputSize());
+    orthofilter->SetOutputSize(size);
     orthofilter->SetOutputStartIndex(start);
     orthofilter->SetEdgePaddingValue(defaultValue);
 
@@ -190,13 +197,30 @@ int generic_main(otb::ApplicationOptionsResult* parseResult,
     writer->SetFileName(parseResult->GetOutputImage());
     writer->SetInput(orthofilter->GetOutput());
 
+    //Instantiate the pipeline memory print estimator
+    MemoryCalculatorType::Pointer calculator = MemoryCalculatorType::New();
+    const double byteToMegabyte = 1./vcl_pow(2.0, 20);
+
+    if (parseResult->IsOptionPresent("AvailableMemory"))
+      {
+      long long int memory = static_cast <long long int> (parseResult->GetParameterUInt("AvailableMemory"));
+      calculator->SetAvailableMemory(memory / byteToMegabyte);
+      }
+
+    calculator->SetDataToWrite(orthofilter->GetOutput());
+    calculator->SetBiasCorrectionFactor(2);
+    calculator->Compute();
+    
+    std::cout << "pipeline memory print estimation: " << calculator->GetMemoryPrint()*byteToMegabyte << " Mo" << std::endl;
+
     if ( parseResult->IsOptionPresent("NumStreamDivisions") )
     {
       writer->SetTilingStreamDivisions(parseResult->GetParameterULong("NumStreamDivisions"));
     }
     else
     {
-      writer->SetTilingStreamDivisions();
+    writer->SetTilingStreamDivisions(calculator->GetOptimalNumberOfStreamDivisions());
+    std::cout << "number of stream divisions : " << calculator->GetOptimalNumberOfStreamDivisions() << std::endl;
     }
 
     otb::StandardFilterWatcher watcher(writer,"Orthorectification");
@@ -245,6 +269,8 @@ int OrthoRectification::Describe(ApplicationDescriptor* descriptor)
   descriptor->AddOption("LocMapSpacing","Generate a coarser deformation field with the given spacing.","lmSpacing",1,false, otb::ApplicationDescriptor::Real);
   descriptor->AddOptionNParams("InterpolatorType",
                                "Type LINEAR/BCO/NEARESTNEIGHBOR (optional, linear by default)","interp", false, otb::ApplicationDescriptor::String);
+  descriptor->AddOption("AvailableMemory","Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default","ram",1,false, otb::ApplicationDescriptor::Integer);
+
   return EXIT_SUCCESS;
 }
 
