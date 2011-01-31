@@ -32,7 +32,7 @@ namespace otb
  * feature. It expects a gradient covariant image as input, such as
  * the output of the itk::GradientImageFilter. Steps of the algorithm
  * are as follows.
- * 
+ *
  * In order to make the C-HOG descriptor rotation-invariant, a
  * principal gradient orientation is first looked for. Within the
  * m_NeighborhoodRadius ($r$), an histogram of the local orientation is
@@ -53,7 +53,7 @@ namespace otb
  * orientation, and gradient orientations to determine histogram bins
  * are also compensated with the principal orientation. Last, each
  * histogram is normalized by its $L_2$ norm, ensuring that they
- * all lie in the range $[0,1]$.
+ * all lie in the range $[0, 1]$.
  *
  * This class is templated over the input image type, the output
  * precision (e.g. float ou double) and the
@@ -64,13 +64,13 @@ namespace otb
 
 template <class TInputImage, class TOutputPrecision = double, class TCoordRep = double >
 class ITK_EXPORT HistogramOfOrientedGradientCovariantImageFunction :
-  public itk::ImageFunction< TInputImage,std::vector< std::vector<
+  public itk::ImageFunction< TInputImage, std::vector< std::vector<
        TOutputPrecision > >, TCoordRep >
 {
 public:
   /** Standard class typedefs. */
   typedef HistogramOfOrientedGradientCovariantImageFunction              Self;
-  typedef itk::ImageFunction< TInputImage,std::vector<std::vector
+  typedef itk::ImageFunction< TInputImage, std::vector<std::vector
     <TOutputPrecision> >, TCoordRep >                                    Superclass;
   typedef itk::SmartPointer<Self>                                        Pointer;
   typedef itk::SmartPointer<const Self>                                  ConstPointer;
@@ -116,12 +116,12 @@ public:
   }
 
   /** Get/Set the radius of the neighborhood over which the
-   *  statistics are evaluated 
+   *  statistics are evaluated
    */
   itkSetMacro( NeighborhoodRadius, unsigned int );
   itkGetConstReferenceMacro( NeighborhoodRadius, unsigned int );
 
-  /** Get/Set the number of bins of the orientation histograms 
+  /** Get/Set the number of bins of the orientation histograms
    */
   itkSetMacro( NumberOfOrientationBins, unsigned int );
   itkGetConstReferenceMacro( NumberOfOrientationBins, unsigned int );
@@ -139,7 +139,7 @@ private:
   // Radius over which the principal orientation will be computed
   unsigned int m_NeighborhoodRadius;
 
-  // Number of bins in the orientation 
+  // Number of bins in the orientation
   unsigned int m_NumberOfOrientationBins;
 };
 

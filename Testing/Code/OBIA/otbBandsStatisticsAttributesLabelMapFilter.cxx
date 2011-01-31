@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -36,7 +36,7 @@ typedef double         PixelType;
 typedef otb::AttributesMapLabelObject<LabelType, Dimension, double>                LabelObjectType;
 typedef itk::LabelMap<LabelObjectType>                                             LabelMapType;
 typedef otb::VectorImage<PixelType, Dimension>                                     VectorImageType;
-typedef otb::Image<unsigned int,2>                                                 LabeledImageType;
+typedef otb::Image<unsigned int, 2>                                                 LabeledImageType;
 
 typedef LabelMapType::LabelObjectContainerType   LabelObjectContainerType;
 typedef LabelObjectContainerType::const_iterator LabelObjectIterator;
@@ -44,8 +44,8 @@ typedef LabelObjectContainerType::const_iterator LabelObjectIterator;
 typedef otb::ImageFileReader<VectorImageType>                                      ReaderType;
 typedef otb::ImageFileReader<LabeledImageType>                                     LabeledReaderType;
 
-typedef itk::LabelImageToLabelMapFilter<LabeledImageType,LabelMapType>             LabelMapFilterType;
-typedef otb::BandsStatisticsAttributesLabelMapFilter<LabelMapType,VectorImageType> BandsStatisticsFilterType;
+typedef itk::LabelImageToLabelMapFilter<LabeledImageType, LabelMapType>             LabelMapFilterType;
+typedef otb::BandsStatisticsAttributesLabelMapFilter<LabelMapType, VectorImageType> BandsStatisticsFilterType;
 
 
 int otbBandsStatisticsAttributesLabelMapFilterNew(int argc, char* argv[])

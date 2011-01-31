@@ -34,9 +34,9 @@ FlusserMomentsIFFactory<TImageType, TCoordRep, TPrecision>
 template <class TImageType, class TCoordRep, class TPrecision>
 void
 FlusserMomentsIFFactory<TImageType, TCoordRep, TPrecision>
-::Create(InputImageType * image, 
-         ParamContainerType param, 
-         MetaImageFunctionPointerType metaIF, 
+::Create(InputImageType * image,
+         ParamContainerType param,
+         MetaImageFunctionPointerType metaIF,
          DataObjectContainerType * container)
 {
   typename AdaptedFlusserMomentsIF::Pointer function = AdaptedFlusserMomentsIF::New();

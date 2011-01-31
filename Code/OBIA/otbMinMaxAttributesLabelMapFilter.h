@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -30,12 +30,12 @@ namespace otb {
  */
 template<class TInputImage>
 class ITK_EXPORT MinMaxAttributesLabelMapFilter :
-    public itk::LabelMapFilter<TInputImage,TInputImage>
+    public itk::LabelMapFilter<TInputImage, TInputImage>
 {
 public:
   /** Standard class typedefs. */
   typedef MinMaxAttributesLabelMapFilter               Self;
-  typedef itk::LabelMapFilter<TInputImage,TInputImage> Superclass;
+  typedef itk::LabelMapFilter<TInputImage, TInputImage> Superclass;
   typedef itk::SmartPointer<Self>                      Pointer;
   typedef itk::SmartPointer<const Self>                ConstPointer;
 
@@ -59,7 +59,7 @@ public:
                       TInputImage::ImageDimension);
 
   /** Standard New method. */
-  itkNewMacro(Self);  
+  itkNewMacro(Self);
 
   /** Runtime information support. */
   itkTypeMacro(MinMaxAttributesLabelMapFilter,

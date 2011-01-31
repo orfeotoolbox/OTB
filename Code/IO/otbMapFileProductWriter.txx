@@ -24,12 +24,12 @@
 namespace otb
 {
 
-/** 
+/**
  * Constructor
  */
 template <class TInputImage>
 MapFileProductWriter<TInputImage>
-::MapFileProductWriter(): m_TileSize(256),m_SRID(26918)
+::MapFileProductWriter(): m_TileSize(256), m_SRID(26918)
 {
   m_GenericRSResampler = GenericRSResamplerType::New();
   
@@ -38,7 +38,7 @@ MapFileProductWriter<TInputImage>
 }
 
 
-/** 
+/**
  * Desctructor
  */
 template <class TInputImage>
@@ -51,12 +51,12 @@ MapFileProductWriter<TInputImage>
  *
  */
 template <class TInputImage>
-void 
+void
 MapFileProductWriter<TInputImage>
 ::SetInput(const InputImageType *input)
 {
   // Process object is not const-correct so the const_cast is required here
-  this->ProcessObject::SetNthInput(0, 
+  this->ProcessObject::SetNthInput(0,
                                    const_cast< InputImageType * >( input ) );
 }
 
@@ -64,10 +64,10 @@ MapFileProductWriter<TInputImage>
 template <class TInputImage>
 void
 MapFileProductWriter<TInputImage>
-::SetInput( unsigned int index, const TInputImage * image ) 
+::SetInput( unsigned int index, const TInputImage * image )
 {
   // Process object is not const-correct so the const_cast is required here
-  this->ProcessObject::SetNthInput(index, 
+  this->ProcessObject::SetNthInput(index,
                                    const_cast< TInputImage *>( image ) );
 }
 
@@ -77,7 +77,7 @@ MapFileProductWriter<TInputImage>
 template <class TInputImage>
 const typename MapFileProductWriter<TInputImage>::InputImageType *
 MapFileProductWriter<TInputImage>
-::GetInput(void) 
+::GetInput(void)
 {
   if (this->GetNumberOfInputs() < 1)
     {
@@ -114,7 +114,7 @@ MapFileProductWriter<TInputImage>
   m_VectorImage = const_cast<TInputImage *>(this->GetInput());
   m_VectorImage->UpdateOutputInformation();
 
-  if(m_VectorImage->GetProjectionRef().empty() 
+  if(m_VectorImage->GetProjectionRef().empty()
      && m_VectorImage->GetImageKeywordlist().GetSize() > 0)
     {
     std::cout << "Sensor Model detected : Reprojecting in the targer SRID"<< std::endl;
@@ -156,7 +156,7 @@ MapFileProductWriter<TInputImage>
 
 /**
  * Initialize the vectordata to write
- * 
+ *
  */
 template <class TInputImage>
 void
@@ -181,7 +181,7 @@ MapFileProductWriter<TInputImage>
 }
 
 /**
- *  Do the tiling 
+ *  Do the tiling
  */
 template <class TInputImage>
 void
@@ -191,7 +191,7 @@ MapFileProductWriter<TInputImage>
   unsigned int numberOfChannel = m_VectorImage->GetNumberOfComponentsPerPixel();
   
   /** Image statistics*/
-  typename InputImageType::PixelType inMin(numberOfChannel), inMax(numberOfChannel), 
+  typename InputImageType::PixelType inMin(numberOfChannel), inMax(numberOfChannel),
     outMin(numberOfChannel), outMax(numberOfChannel);
   outMin.Fill(0);
   outMax.Fill(255);
@@ -201,7 +201,7 @@ MapFileProductWriter<TInputImage>
   
   // Get the image size
   SizeType size;
-  size = m_VectorImage->GetLargestPossibleRegion().GetSize();  
+  size = m_VectorImage->GetLargestPossibleRegion().GetSize();
   
   unsigned int sizeX = size[0];
   unsigned int sizeY = size[1];
@@ -352,7 +352,7 @@ MapFileProductWriter<TInputImage>
         /** TODO : Generate KML for this tile */
         // Search Lat/Lon box
 
-        // Initialize the transform to be used 
+        // Initialize the transform to be used
         typename TransformType::Pointer transform = TransformType::New();
         transform->SetInputProjectionRef(m_GenericRSResampler->GetOutputProjectionRef());
         transform->SetOutputProjectionRef(otb::GeoInformationConversion::ToWKT(m_SRID));
@@ -393,9 +393,9 @@ MapFileProductWriter<TInputImage>
         //std::cout <<"indexTile "<< indexTile <<" --> input Point "<< inputPoint << " upperLeftCorner "<< upperLeftCorner  << std::endl;
   
         // Build The indexTile
-        this->AddBBoxToIndexTile(lowerLeftCorner, 
-                                 lowerRightCorner, 
-                                 upperRightCorner, 
+        this->AddBBoxToIndexTile(lowerLeftCorner,
+                                 lowerRightCorner,
+                                 upperRightCorner,
                                  upperLeftCorner, x, y);
 
         /** END GX LAT LON */
@@ -429,14 +429,14 @@ MapFileProductWriter<TInputImage>
 template <class TInputImage>
 void
 MapFileProductWriter<TInputImage>
-::AddBBoxToIndexTile(OutputPointType lowerLeftCorner, 
-                     OutputPointType lowerRightCorner, 
-                     OutputPointType upperRightCorner, 
-                     OutputPointType upperLeftCorner, 
+::AddBBoxToIndexTile(OutputPointType lowerLeftCorner,
+                     OutputPointType lowerRightCorner,
+                     OutputPointType upperRightCorner,
+                     OutputPointType upperLeftCorner,
                      unsigned int x, unsigned int y)
 {
   // From PointType to VertexType
-  VertexType pLL,pLR,pUR,pUL;
+  VertexType pLL, pLR, pUR, pUL;
 
   pLL[0]=lowerLeftCorner[0];
   pLL[1]=lowerLeftCorner[1];
@@ -450,7 +450,7 @@ MapFileProductWriter<TInputImage>
   pUL[0]=upperLeftCorner[0];
   pUL[1]=upperLeftCorner[1];
   
-  // Form a polygon with the vertices  
+  // Form a polygon with the vertices
   PolygonType::Pointer poly = PolygonType::New();
   poly->AddVertex(pLL);
   poly->AddVertex(pLR);
@@ -467,12 +467,12 @@ MapFileProductWriter<TInputImage>
   oss << "tiles/tile_";
   oss <<m_CurrentDepth <<"_"<< x <<"_"<< y <<".tif";
   
-  // Add the field "LOCATION" used in mapserver clients 
+  // Add the field "LOCATION" used in mapserver clients
   // to get the path to tiles
-  m_Polygon->SetFieldAsString("LOCATION",oss.str());
+  m_Polygon->SetFieldAsString("LOCATION", oss.str());
 
   // Add the to vectordata
-  m_VectorDataIndexTile->GetDataTree()->Add(m_Polygon,m_Folder);
+  m_VectorDataIndexTile->GetDataTree()->Add(m_Polygon, m_Folder);
 }
 
 /**
@@ -543,7 +543,7 @@ MapFileProductWriter<TInputImage>
   m_File <<"\t\tMETADATA" << std::endl;
   m_File <<"\t\t 'wms_title'           'Level0'" << std::endl;
   m_File <<"\t\t \'wms_onlineresource\'  \'"<<m_CGIPath<<"?map="<<m_FileName<<"&\'" << std::endl;
-  m_File <<"\t\t \'wms_srs\'             \'EPSG:"<<m_SRID<<" EPSG:900913\'" << std::endl; 
+  m_File <<"\t\t \'wms_srs\'             \'EPSG:"<<m_SRID<<" EPSG:900913\'" << std::endl;
   m_File <<"\t\tEND" << std::endl;
   m_File <<"\tEND" << std::endl;
 

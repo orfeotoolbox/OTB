@@ -137,7 +137,7 @@ PointSetToDeformationFieldGenerator<TPointSet, TDeformationField>
 {
   PointType pprime;
   // our point are expressed in index and not in physical coordinates
-  //this->GetOutput()->TransformIndexToPhysicalPoint(index,pprime);
+  //this->GetOutput()->TransformIndexToPhysicalPoint(index, pprime);
   return vcl_sqrt(vcl_pow(index[0] - p[0], 2) + vcl_pow(index[1] - p[1], 2));
 }
 /**

@@ -73,7 +73,7 @@ PointSetFileReader<TOutputPointSet>
   m_NumberOfPoints = LASHeader_GetPointRecordsCount(header);
 
   m_MinX = LASHeader_GetMinX(header);
-  m_MaxX = LASHeader_GetMaxX(header); 
+  m_MaxX = LASHeader_GetMaxX(header);
   m_MinY = LASHeader_GetMinY(header);
   m_MaxY = LASHeader_GetMaxY(header);
   

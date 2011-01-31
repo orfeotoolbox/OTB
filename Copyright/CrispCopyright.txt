@@ -1,0 +1,8 @@
+The part of the code that have been developped by Emmanuel Christophe
+between October 6th, 2008 and October 5th, 2010 is under copyright
+from Crisp / NUS.
+
+The code have been release to the OTB project under the Apache2
+license anywhere possible.
+
+See License_Apache2.txt for more details.

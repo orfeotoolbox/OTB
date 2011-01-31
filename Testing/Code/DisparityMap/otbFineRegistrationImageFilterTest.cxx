@@ -38,7 +38,7 @@ int otbFineRegistrationImageFilterTest( int argc, char * argv[] )
   if(argc!=16)
     {
     std::cerr<<"Usage: "<<argv[0]<<" fixed_fname moving_fname output_correl output_field radius search_radius ";
-    std::cerr<<"subpixPrecision metric(0=CC,1=NCC,2=MeanSquare,3=Mean reciprocal square difference) ";
+    std::cerr<<"subpixPrecision metric(0=CC, 1=NCC, 2=MeanSquare, 3=Mean reciprocal square difference) ";
     std::cerr<<"gridStep offsetX offsetY"<<std::endl;
     std::cerr<<"ROI : indexX, indexY, startX, startY"<<std::endl;
     return EXIT_FAILURE;
@@ -62,14 +62,14 @@ int otbFineRegistrationImageFilterTest( int argc, char * argv[] )
   typedef double      PixelType;
   const unsigned int  Dimension = 2;
 
-  typedef itk::FixedArray<PixelType,Dimension>                                 DeformationValueType;
+  typedef itk::FixedArray<PixelType, Dimension>                                 DeformationValueType;
   typedef otb::Image< PixelType,  Dimension >                                  ImageType;
-  typedef otb::Image<DeformationValueType,Dimension>                           FieldImageType;
+  typedef otb::Image<DeformationValueType, Dimension>                           FieldImageType;
   typedef otb::ImageFileReader< ImageType >                                    ReaderType;
   typedef otb::ImageFileWriter< ImageType >                                    CorrelWriterType;
   typedef otb::ImageFileWriter< FieldImageType>                                FieldWriterType;
   typedef otb::ExtractROI<PixelType, PixelType>                                ExtractFiltertype;
-  typedef otb::FineRegistrationImageFilter<ImageType,ImageType,FieldImageType> RegistrationFilterType;
+  typedef otb::FineRegistrationImageFilter<ImageType, ImageType, FieldImageType> RegistrationFilterType;
   
   ReaderType::Pointer freader = ReaderType::New();
   freader->SetFileName(fixedFileName);
@@ -111,7 +111,7 @@ int otbFineRegistrationImageFilterTest( int argc, char * argv[] )
   case 0:
     {
       std::cout<<"Metric: correlation"<<std::endl;
-      typedef itk::NormalizedCorrelationImageToImageMetric<ImageType,ImageType> NCCType;
+      typedef itk::NormalizedCorrelationImageToImageMetric<ImageType, ImageType> NCCType;
       NCCType::Pointer metricPtr = NCCType::New();
       metricPtr->SubtractMeanOff();
       registration->SetMetric(metricPtr);
@@ -121,7 +121,7 @@ int otbFineRegistrationImageFilterTest( int argc, char * argv[] )
   case 1:
     {
       std::cout<<"Metric: normalized correlation"<<std::endl;
-      typedef itk::NormalizedCorrelationImageToImageMetric<ImageType,ImageType> NCCType;
+      typedef itk::NormalizedCorrelationImageToImageMetric<ImageType, ImageType> NCCType;
       NCCType::Pointer metricPtr = NCCType::New();
       metricPtr->SubtractMeanOn();
       registration->SetMetric(metricPtr);
@@ -131,7 +131,7 @@ int otbFineRegistrationImageFilterTest( int argc, char * argv[] )
   case 2:
     {
       std::cout<<"Metric: mean squares"<<std::endl;
-      typedef itk::MeanSquaresImageToImageMetric<ImageType,ImageType> MeanSquareType;
+      typedef itk::MeanSquaresImageToImageMetric<ImageType, ImageType> MeanSquareType;
       MeanSquareType::Pointer metricPtr = MeanSquareType::New();
       registration->SetMetric(metricPtr);
       registration->MinimizeOn();
@@ -140,7 +140,7 @@ int otbFineRegistrationImageFilterTest( int argc, char * argv[] )
   case 3:
     {
       std::cout<<"Metric: mean reciprocal square difference"<<std::endl;
-      typedef itk::MeanReciprocalSquareDifferenceImageToImageMetric<ImageType,ImageType> MRSDType;
+      typedef itk::MeanReciprocalSquareDifferenceImageToImageMetric<ImageType, ImageType> MRSDType;
       MRSDType::Pointer metricPtr = MRSDType::New();
       registration->SetMetric(metricPtr);
       registration->MinimizeOff();

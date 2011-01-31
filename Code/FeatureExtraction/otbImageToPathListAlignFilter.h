@@ -46,7 +46,7 @@ public:
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(ImageToPathListAlignFilter, ImageToPathListFilter);
-//  itkTypeMacro(ImageToPathListAlignFilter,itk::ImageSource);
+//  itkTypeMacro(ImageToPathListAlignFilter, itk::ImageSource);
 
   /** ImageDimension constants */
   itkStaticConstMacro(InputImageDimension, unsigned int,
@@ -71,7 +71,7 @@ public:
 //  typedef          float                                        RealType;
 //typedef typename itk::NumericTraits<PixelType>::RealType       RealType;
   typedef double RealType;
-//  typedef typename itk::Image<RealType,InputImageDimension>      RealImageType;
+//  typedef typename itk::Image<RealType, InputImageDimension>      RealImageType;
   typedef typename otb::Image<RealType, InputImageDimension> RealImageType;
   typedef typename RealImageType::Pointer                    RealImageTypePointer;
   typedef typename RealImageType::IndexType                  RealImageTypeIndexType;
@@ -92,7 +92,7 @@ public:
   itkGetMacro(BackgroundValue, ValueType);
 
   /** The origin of the output image. The origin is the geometric
-   * coordinates of the index (0,0,...,0).  It is stored internally
+   * coordinates of the index (0, 0, ..., 0).  It is stored internally
    * as double but may be set from float.
    * \sa GetOrigin() */
   virtual void SetOrigin(const double* origin);

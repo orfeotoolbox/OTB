@@ -32,12 +32,12 @@ namespace otb
  * Constructor
  */
 template <class TInputImage, class T0utputCorrelation, class TOutputDeformationField>
-FineRegistrationImageFilter<TInputImage,T0utputCorrelation,TOutputDeformationField>
+FineRegistrationImageFilter<TInputImage, T0utputCorrelation, TOutputDeformationField>
 ::FineRegistrationImageFilter()
  {
   this->SetNumberOfRequiredInputs( 2 );
   this->SetNumberOfOutputs(2);
-  this->SetNthOutput(1,TOutputDeformationField::New());
+  this->SetNthOutput(1, TOutputDeformationField::New());
 
   // Default radius
   m_Radius.Fill(2);
@@ -52,10 +52,10 @@ FineRegistrationImageFilter<TInputImage,T0utputCorrelation,TOutputDeformationFie
 
   // Default currentMetric
   m_Metric     = itk::NormalizedCorrelationImageToImageMetric
-      <TInputImage,TInputImage>::New();
+      <TInputImage, TInputImage>::New();
 
   // Default interpolator
-  m_Interpolator = itk::LinearInterpolateImageFunction<TInputImage,double>::New();
+  m_Interpolator = itk::LinearInterpolateImageFunction<TInputImage, double>::New();
 
   // Translation
   m_Translation = TranslationType::New();
@@ -71,7 +71,7 @@ FineRegistrationImageFilter<TInputImage,T0utputCorrelation,TOutputDeformationFie
 
 template <class TInputImage, class T0utputCorrelation, class TOutputDeformationField>
 void
-FineRegistrationImageFilter<TInputImage,T0utputCorrelation,TOutputDeformationField>
+FineRegistrationImageFilter<TInputImage, T0utputCorrelation, TOutputDeformationField>
 ::SetFixedInput( const TInputImage * image )
  {
   // Process object is not const-correct so the const casting is required.
@@ -80,7 +80,7 @@ FineRegistrationImageFilter<TInputImage,T0utputCorrelation,TOutputDeformationFie
 
 template <class TInputImage, class T0utputCorrelation, class TOutputDeformationField>
 void
-FineRegistrationImageFilter<TInputImage,T0utputCorrelation,TOutputDeformationField>
+FineRegistrationImageFilter<TInputImage, T0utputCorrelation, TOutputDeformationField>
 ::SetMovingInput( const TInputImage * image)
  {
   // Process object is not const-correct so the const casting is required.
@@ -89,7 +89,7 @@ FineRegistrationImageFilter<TInputImage,T0utputCorrelation,TOutputDeformationFie
 
 template <class TInputImage, class T0utputCorrelation, class TOutputDeformationField>
 const TInputImage *
-FineRegistrationImageFilter<TInputImage,T0utputCorrelation,TOutputDeformationField>
+FineRegistrationImageFilter<TInputImage, T0utputCorrelation, TOutputDeformationField>
 ::GetFixedInput()
  {
   if (this->GetNumberOfInputs()<1)
@@ -101,7 +101,7 @@ FineRegistrationImageFilter<TInputImage,T0utputCorrelation,TOutputDeformationFie
 
 template <class TInputImage, class T0utputCorrelation, class TOutputDeformationField>
 const TInputImage *
-FineRegistrationImageFilter<TInputImage,T0utputCorrelation,TOutputDeformationField>
+FineRegistrationImageFilter<TInputImage, T0utputCorrelation, TOutputDeformationField>
 ::GetMovingInput()
  {
   if (this->GetNumberOfInputs()<2)
@@ -113,7 +113,7 @@ FineRegistrationImageFilter<TInputImage,T0utputCorrelation,TOutputDeformationFie
 
 template <class TInputImage, class T0utputCorrelation, class TOutputDeformationField>
 TOutputDeformationField *
-FineRegistrationImageFilter<TInputImage,T0utputCorrelation,TOutputDeformationField>
+FineRegistrationImageFilter<TInputImage, T0utputCorrelation, TOutputDeformationField>
 ::GetOutputDeformationField()
  {
   if (this->GetNumberOfOutputs()<2)
@@ -125,7 +125,7 @@ FineRegistrationImageFilter<TInputImage,T0utputCorrelation,TOutputDeformationFie
 
 template <class TInputImage, class TOutputCorrelation, class TOutputDeformationField>
 void
-FineRegistrationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationField>
+FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDeformationField>
 ::GenerateOutputInformation()
  {
   // Call superclass implementation
@@ -140,7 +140,7 @@ FineRegistrationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFie
   SizeType outputSize       = largestRegion.GetSize();
   SpacingType outputSpacing = outputPtr->GetSpacing();
 
-  for(unsigned int dim = 0; dim < TOutputCorrelation::ImageDimension;++dim)
+  for(unsigned int dim = 0; dim < TOutputCorrelation::ImageDimension; ++dim)
     {
     outputSize[dim] /= m_GridStep[dim];
     outputSpacing[dim] *= m_GridStep[dim];
@@ -158,7 +158,7 @@ FineRegistrationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFie
 
 template <class TInputImage, class TOutputCorrelation, class TOutputDeformationField>
 void
-FineRegistrationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationField>
+FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDeformationField>
 ::GenerateInputRequestedRegion()
  {
   // call the superclass' implementation of this method
@@ -184,7 +184,7 @@ FineRegistrationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFie
   SizeType fixedRequestedSize = fixedRequestedRegion.GetSize();
   IndexType fixedRequestedIndex = fixedRequestedRegion.GetIndex();
 
-  for(unsigned int dim = 0; dim < TOutputCorrelation::ImageDimension;++dim)
+  for(unsigned int dim = 0; dim < TOutputCorrelation::ImageDimension; ++dim)
       {
       fixedRequestedSize [dim] *= m_GridStep[dim];
       fixedRequestedIndex[dim] *= m_GridStep[dim];
@@ -207,7 +207,7 @@ FineRegistrationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFie
    IndexType ulIndex = searchFixedRequestedRegion.GetIndex();
 
    IndexType lrIndex;
-   for(unsigned int dim = 0; dim < TInputImage::ImageDimension;++dim)
+   for(unsigned int dim = 0; dim < TInputImage::ImageDimension; ++dim)
      {
      lrIndex[dim]= searchFixedRequestedRegion.GetIndex()[dim]
                  + searchFixedRequestedRegion.GetSize()[dim]-1;
@@ -215,8 +215,8 @@ FineRegistrationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFie
 
    // Transform to physical space
    PointType ulPoint, lrPoint;
-   fixedPtr->TransformIndexToPhysicalPoint(lrIndex,lrPoint);
-   fixedPtr->TransformIndexToPhysicalPoint(ulIndex,ulPoint);
+   fixedPtr->TransformIndexToPhysicalPoint(lrIndex, lrPoint);
+   fixedPtr->TransformIndexToPhysicalPoint(ulIndex, ulPoint);
 
    // Apply default offset
    lrPoint += m_InitialOffset;
@@ -224,16 +224,16 @@ FineRegistrationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFie
 
    // Transform back into moving region index space
    IndexType movingIndex1, movingIndex2, movingIndex;
-   movingPtr->TransformPhysicalPointToIndex(ulPoint,movingIndex1);
-   movingPtr->TransformPhysicalPointToIndex(lrPoint,movingIndex2);
+   movingPtr->TransformPhysicalPointToIndex(ulPoint, movingIndex1);
+   movingPtr->TransformPhysicalPointToIndex(lrPoint, movingIndex2);
 
    // Find requested region
    SizeType movingSize;
 
-   for(unsigned int dim = 0; dim < TInputImage::ImageDimension;++dim)
+   for(unsigned int dim = 0; dim < TInputImage::ImageDimension; ++dim)
      {
-       movingIndex[dim] = std::min(movingIndex1[dim],movingIndex2[dim]);
-       movingSize[dim] = std::max(movingIndex1[dim],movingIndex2[dim]) - movingIndex[dim] + 1;
+       movingIndex[dim] = std::min(movingIndex1[dim], movingIndex2[dim]);
+       movingSize[dim] = std::max(movingIndex1[dim], movingIndex2[dim]) - movingIndex[dim] + 1;
      }
 
    movingRequestedRegion.SetIndex(movingIndex);
@@ -285,7 +285,7 @@ FineRegistrationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFie
 
 template <class TInputImage, class TOutputCorrelation, class TOutputDeformationField>
 void
-FineRegistrationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationField>
+FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDeformationField>
 ::GenerateData()
  {
   // Allocate outputs
@@ -306,8 +306,8 @@ FineRegistrationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFie
   m_Metric->SetComputeGradient(false);
 
   /** Output iterators */
-  itk::ImageRegionIteratorWithIndex<TOutputCorrelation> outputIt(outputPtr,outputPtr->GetRequestedRegion());
-  itk::ImageRegionIterator<TOutputDeformationField> outputDfIt(outputDfPtr,outputPtr->GetRequestedRegion());
+  itk::ImageRegionIteratorWithIndex<TOutputCorrelation> outputIt(outputPtr, outputPtr->GetRequestedRegion());
+  itk::ImageRegionIterator<TOutputDeformationField> outputDfIt(outputDfPtr, outputPtr->GetRequestedRegion());
   outputIt.GoToBegin();
   outputDfIt.GoToBegin();
 
@@ -378,7 +378,7 @@ FineRegistrationImageFilter<TInputImage,TOutputCorrelation,TOutputDeformationFie
       outputPoint = m_Transform->TransformPoint(inputPoint);
       for(unsigned int dim = 0; dim < TInputImage::ImageDimension; ++dim)
         {
-        localOffset[dim] = outputPoint[dim] - inputPoint[dim];//FIXME check the direction
+        localOffset[dim] = outputPoint[dim] - inputPoint[dim]; //FIXME check the direction
         }
       }
 

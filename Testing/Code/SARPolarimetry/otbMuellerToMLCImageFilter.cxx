@@ -57,7 +57,7 @@ int otbMuellerToMLCImageFilter(int argc, char * argv[])
   typedef otb::SinclairImageFilter<InputImageType, InputImageType,
                       InputImageType, InputImageType,
                       RealImageType, FunctionType >  SinclairToMuellerFilterType;
-  typedef otb::MuellerToMLCImageFilter<RealImageType,ComplexImageType> FilterType;
+  typedef otb::MuellerToMLCImageFilter<RealImageType, ComplexImageType> FilterType;
 
 
   typedef otb::ImageFileReader<InputImageType>  ReaderType;

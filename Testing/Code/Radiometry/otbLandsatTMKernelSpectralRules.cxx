@@ -134,7 +134,7 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
   goodResult = static_cast<OutputPixelType>((TM1 >= TM2) && (TM2 >= TM3) && (TM3 >= TM4) && (TM4 >= TM5) && (TM4 >= TM7));
 
 
-  if( result!=goodResult ) 
+  if( result!=goodResult )
     {
     std::cerr << "Rule 4 " << goodResult << " " << result << std::endl;
     return EXIT_FAILURE;
@@ -168,7 +168,7 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
                                             && (TM1 >= TV1 * TM7));
 
 
-  if( result!=goodResult ) 
+  if( result!=goodResult )
     {
     std::cerr << "Rule 6 " << goodResult << " " << result << std::endl;
     return EXIT_FAILURE;
@@ -206,7 +206,7 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
                                             && (TM5 >= TM7));
 
 
-  if( result!=goodResult ) 
+  if( result!=goodResult )
     {
     std::cerr << "Rule 8 " << goodResult << " " << result << std::endl;
     return EXIT_FAILURE;
@@ -240,7 +240,7 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
                                             && (min12347 >= TV2 * TM5));
 
 
-  if( result!=goodResult ) 
+  if( result!=goodResult )
     {
     std::cerr << "Rule 10 " << goodResult << " " << result << std::endl;
     return EXIT_FAILURE;
@@ -276,7 +276,7 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
                                             && (TM7 < TV1 * TM4));
 
 
-  if( result!=goodResult ) 
+  if( result!=goodResult )
     {
     std::cerr << "Rule 12 " << goodResult << " " << result << std::endl;
     return EXIT_FAILURE;
@@ -310,7 +310,7 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
                                             && (TM5 >= TM7));
 
 
-  if( result!=goodResult ) 
+  if( result!=goodResult )
     {
     std::cerr << "Rule 14 " << goodResult << " " << result << std::endl;
     return EXIT_FAILURE;

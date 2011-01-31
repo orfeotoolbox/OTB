@@ -188,7 +188,7 @@ FillGapsFilter
           }
 
         //Estimate the norm each line
-        /*  double Norm12,Norm23,Norm34;
+        /*  double Norm12, Norm23, Norm34;
           Norm12 = vcl_sqrt( (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2) );
           Norm23 = vcl_sqrt( (x2-x3)*(x2-x3) + (y2-y3)*(y2-y3) );
           Norm34 = vcl_sqrt( (x3-x4)*(x3-x4) + (y3-y4)*(y3-y4) );
@@ -199,7 +199,7 @@ FillGapsFilter
         Angle12_23 = Angle12_23 / Norm12 / Norm23;
 
         Angle12_34 = (x2-x1)*(x4-x3) + (y2-y1)*(y4-y3);
-        Angle12_34 = Angle12_34 / Norm12 / Norm34;*/
+        Angle12_34 = Angle12_34 / Norm12 / Norm34; */
 
         Angle12_23 = vcl_cos(vcl_atan2((y2 - y1), (x2 - x1)) - vcl_atan2((y3 - y2), (x3 - x2)));
         Angle12_34 = vcl_cos(vcl_atan2((y2 - y1), (x2 - x1)) - vcl_atan2((y4 - y3), (x4 - x3)));

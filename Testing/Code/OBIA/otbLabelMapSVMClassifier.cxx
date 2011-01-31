@@ -40,32 +40,32 @@ typedef double         PixelType;
 typedef otb::AttributesMapLabelObjectWithClassLabel<LabelType, Dimension, double, LabelType> LabelObjectType;
 typedef itk::LabelMap<LabelObjectType>                                          LabelMapType;
 typedef otb::VectorImage<PixelType, Dimension>                                  VectorImageType;
-typedef otb::Image<unsigned int,2>                                              LabeledImageType;
+typedef otb::Image<unsigned int, 2>                                              LabeledImageType;
 
 typedef otb::ImageFileReader<VectorImageType>                                   ReaderType;
 typedef otb::ImageFileReader<LabeledImageType>                                  LabeledReaderType;
 typedef otb::ImageFileWriter<VectorImageType>                                   WriterType;
 typedef otb::ImageFileWriter<LabeledImageType>                                  LabeledWriterType;
 
-typedef itk::LabelImageToLabelMapFilter<LabeledImageType,LabelMapType>          LabelMapFilterType;
+typedef itk::LabelImageToLabelMapFilter<LabeledImageType, LabelMapType>          LabelMapFilterType;
 typedef otb::ShapeAttributesLabelMapFilter<LabelMapType>                        ShapeFilterType;
-typedef otb::BandsStatisticsAttributesLabelMapFilter<LabelMapType,VectorImageType>  BandsStatisticsFilterType;
+typedef otb::BandsStatisticsAttributesLabelMapFilter<LabelMapType, VectorImageType>  BandsStatisticsFilterType;
 
 // SVM model estimation
 typedef itk::VariableLengthVector<double>                      VectorType;
-typedef itk::FixedArray<LabelType,1>                           TrainingVectorType;
+typedef itk::FixedArray<LabelType, 1>                           TrainingVectorType;
 typedef itk::Statistics::ListSample<VectorType>                ListSampleType;
 typedef itk::Statistics::ListSample<TrainingVectorType>        TrainingListSampleType;
-typedef otb::LabelMapWithClassLabelToLabeledSampleListFilter<LabelMapType,ListSampleType,TrainingListSampleType>
+typedef otb::LabelMapWithClassLabelToLabeledSampleListFilter<LabelMapType, ListSampleType, TrainingListSampleType>
                                                                ListSampleFilterType;
 
 typedef otb::Functor::VariableLengthVectorToMeasurementVectorFunctor<VectorType> MeasurementVectorFunctorType;
-typedef otb::SVMSampleListModelEstimator<ListSampleType,TrainingListSampleType,
+typedef otb::SVMSampleListModelEstimator<ListSampleType, TrainingListSampleType,
   MeasurementVectorFunctorType>                                                  SVMEstimatorType;
 
 typedef otb::LabelMapSVMClassifier<LabelMapType>                                ClassifierType;
 typedef otb::LabelMapWithClassLabelToClassLabelImageFilter
-          <LabelMapType,LabeledImageType>                                       ClassifImageGeneratorType;
+          <LabelMapType, LabeledImageType>                                       ClassifImageGeneratorType;
 
 
 LabelObjectType::Pointer makeTrainingSample(LabelMapType* labelMap, LabelType labelObjectId, LabelType classLabel)

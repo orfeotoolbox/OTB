@@ -33,8 +33,8 @@ namespace otb
  *  From  \f$ \mathit{d_{i}} \f$, histograms are defined :
  *  \f$ \mathit{H(c) : \{c \in I \mid \lbrack d_{1}(c), \ldots , d_{i}(c), \ldots , d_{D}(c)\rbrack  \}} \f$
  *  Thus, 6 textures are defined :
- *  \f$ \mathit{length = \max_{i \in \lbrack1;D\rbrack}(d_{i}(c)} \f$
- *  \f$ \mathit{width = \min_{i \in \lbrack1;D\rbrack}(d_{i}(c)} \f$
+ *  \f$ \mathit{length = \max_{i \in \lbrack1; D\rbrack}(d_{i}(c)} \f$
+ *  \f$ \mathit{width = \min_{i \in \lbrack1; D\rbrack}(d_{i}(c)} \f$
  *  \f$ \mathit{PSI = \frac{1}{D}\sum_{1=1}^{D}d_{i}(c)} \f$
  *  \f$ \mathit{\omega-mean = \frac{1}{D}\sum_{1=1}^{D}\frac{\alpha.(k_{i}-1)}{st_{i}}d_{i}(c)} \f$
  *  \f$ \mathit{ratio = \arctan{\frac{\sum_{j=1}^{n}{sort_{min}^{j}(H(c))}}{\sum_{j=1}^{n}{sort_{max}^{j}(H(c))}}}} \f$
@@ -130,7 +130,7 @@ public:
       off[1] = static_cast<int>(vcl_floor(SpatialThresholdDouble * vcl_sin(angle) + 0.5));
       // last indices in the diration respecting spectral threshold
       OffsetType offEnd = this->FindLastOffset(it, off);
-      // computes distance = dist between the 2 segment point. One of them is the center pixel -> (0,0)
+      // computes distance = dist between the 2 segment point. One of them is the center pixel -> (0, 0)
       dist = vcl_sqrt(vcl_pow(static_cast<double>(offEnd[0]), 2) + vcl_pow(static_cast<double>(offEnd[1]), 2));
 
       // for length computation

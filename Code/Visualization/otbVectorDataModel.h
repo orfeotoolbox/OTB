@@ -76,11 +76,11 @@ public:
   void AddVectorData( VectorDataPointer vData );
   void AddNode( TreeNodeType * node );
   
-  /** Add vertex to the vector data representation. 
+  /** Add vertex to the vector data representation.
    * If callUpdate is set to true il will update the full vector data display.
    */
   void AddPointToGeometry(VertexType& vertex, bool callUpdate = true);
-  /** End the current vector data representation. 
+  /** End the current vector data representation.
    * If callUpdate is set to true il will update the full vector data display.
    */
   void EndGeometry(bool callUpdate = true);

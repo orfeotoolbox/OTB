@@ -45,8 +45,8 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
 }
 
 template <class TInputImage, class TOutputPrecision, class TCoordRep>
-typename HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,TCoordRep>::OutputType
-HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,TCoordRep>
+typename HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision, TCoordRep>::OutputType
+HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision, TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
   // Build output vector
@@ -86,15 +86,15 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
   double squaredSigma = 0.25 * squaredRadius;
 
   // Build a global orientation histogram
-  std::vector<TOutputPrecision> globalOrientationHistogram(m_NumberOfOrientationBins,0.);
+  std::vector<TOutputPrecision> globalOrientationHistogram(m_NumberOfOrientationBins, 0.);
 
   // Compute the orientation bin width
   double orientationBinWidth = 2 * M_PI / m_NumberOfOrientationBins;
 
   // Build the global orientation histogram
-  for(int i = -(int)m_NeighborhoodRadius;i< (int)m_NeighborhoodRadius;++i)
+  for(int i = -(int)m_NeighborhoodRadius; i< (int)m_NeighborhoodRadius; ++i)
     {
-    for(int j = -(int)m_NeighborhoodRadius;j< (int)m_NeighborhoodRadius;++j)
+    for(int j = -(int)m_NeighborhoodRadius; j< (int)m_NeighborhoodRadius; ++j)
       {
       // Check if the current pixel lies within a disc of radius m_NeighborhoodRadius
       double currentSquaredRadius = i*i+j*j;
@@ -112,13 +112,13 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
         InputPixelType gradient = it.GetPixel(offset);
 
         // Then, compute the gradient orientation
-        double angle = vcl_atan2(gradient[1],gradient[0]);
+        double angle = vcl_atan2(gradient[1], gradient[0]);
 
         // Also compute its magnitude
         TOutputPrecision magnitude = vcl_sqrt(gradient[0]*gradient[0]+gradient[1]*gradient[1]);
 
         // Determine the bin index (shift of M_PI since atan2 values
-        // lies in [-pi,pi]
+        // lies in [-pi, pi]
         unsigned int binIndex = vcl_floor((M_PI + angle)/orientationBinWidth);
  
         // Cumulate values
@@ -132,7 +132,7 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
   double maxOrientationHistogramValue = globalOrientationHistogram[0];
   unsigned int maxOrientationHistogramBin = 0;
 
-  for(unsigned int i = 1; i < m_NumberOfOrientationBins;++i)
+  for(unsigned int i = 1; i < m_NumberOfOrientationBins; ++i)
     {
     // Retrieve current value
     double currentValue = globalOrientationHistogram[i];
@@ -149,16 +149,16 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
   double principalOrientation = maxOrientationHistogramBin * orientationBinWidth - M_PI;
 
   // Initialize the five spatial bins
-  std::vector<TOutputPrecision> centerHistogram(m_NumberOfOrientationBins,0.);
-  std::vector<TOutputPrecision> upperLeftHistogram(m_NumberOfOrientationBins,0.);
-  std::vector<TOutputPrecision> upperRightHistogram(m_NumberOfOrientationBins,0.);
-  std::vector<TOutputPrecision> lowerLeftHistogram(m_NumberOfOrientationBins,0.);
-  std::vector<TOutputPrecision> lowerRightHistogram(m_NumberOfOrientationBins,0.);
+  std::vector<TOutputPrecision> centerHistogram(m_NumberOfOrientationBins, 0.);
+  std::vector<TOutputPrecision> upperLeftHistogram(m_NumberOfOrientationBins, 0.);
+  std::vector<TOutputPrecision> upperRightHistogram(m_NumberOfOrientationBins, 0.);
+  std::vector<TOutputPrecision> lowerLeftHistogram(m_NumberOfOrientationBins, 0.);
+  std::vector<TOutputPrecision> lowerRightHistogram(m_NumberOfOrientationBins, 0.);
 
   // Walk the image once more to fill the spatial bins
-  for(int i = -(int)m_NeighborhoodRadius;i< (int)m_NeighborhoodRadius;++i)
+  for(int i = -(int)m_NeighborhoodRadius; i< (int)m_NeighborhoodRadius; ++i)
     {
-    for(int j = -(int)m_NeighborhoodRadius;j< (int)m_NeighborhoodRadius;++j)
+    for(int j = -(int)m_NeighborhoodRadius; j< (int)m_NeighborhoodRadius; ++j)
       {
       // Check if the current pixel lies within a disc of radius m_NeighborhoodRadius
       double currentSquaredRadius = i*i+j*j;
@@ -176,9 +176,9 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
         InputPixelType gradient = it.GetPixel(offset);
 
         // Then, compute the compensated gradient orientation
-        double angle = vcl_atan2(gradient[1],gradient[0]) - principalOrientation;
+        double angle = vcl_atan2(gradient[1], gradient[0]) - principalOrientation;
 
-        // Angle is supposed to lie with [-pi,pi], so we ensure that
+        // Angle is supposed to lie with [-pi, pi], so we ensure that
         // compenstation did not introduce out-of-range values
         if(angle > M_PI)
           {
@@ -193,13 +193,13 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
         TOutputPrecision magnitude = vcl_sqrt(gradient[0]*gradient[0]+gradient[1]*gradient[1]);
 
         // Determine the bin index (shift of M_PI since atan2 values
-        // lies in [-pi,pi]
+        // lies in [-pi, pi]
         unsigned int binIndex = vcl_floor((M_PI + angle)/orientationBinWidth);
 
         // Compute the angular position
-        double angularPosition = vcl_atan2((double)j,(double)i) - principalOrientation;
+        double angularPosition = vcl_atan2((double)j, (double)i) - principalOrientation;
 
-        // Angle is supposed to lie within [-pi,pi], so we ensure that
+        // Angle is supposed to lie within [-pi, pi], so we ensure that
         // the compensation did not introduce out-of-range values
         if(angularPosition > M_PI)
           {
@@ -252,7 +252,7 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
   hog.push_back(lowerLeftHistogram);
 
   // Normalize each histogram
-  for(typename OutputType::iterator oIt = hog.begin(); oIt!=hog.end();++oIt)
+  for(typename OutputType::iterator oIt = hog.begin(); oIt!=hog.end(); ++oIt)
     {
     // Compute L2 norm
     double squaredCumul = 1e-10;

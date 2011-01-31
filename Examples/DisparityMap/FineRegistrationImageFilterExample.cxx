@@ -199,7 +199,7 @@ int main(int argc, char** argv)
       {
       // Software Guide : BeginCodeSnippet
       typedef itk::MeanReciprocalSquareDifferenceImageToImageMetric
-        <InputImageType,InputImageType> MRSDMetricType;
+        <InputImageType, InputImageType> MRSDMetricType;
       MRSDMetricType::Pointer mrsdMetric = MRSDMetricType::New();
       registrator->SetMetric(mrsdMetric);
       // Software Guide : EndCodeSnippet

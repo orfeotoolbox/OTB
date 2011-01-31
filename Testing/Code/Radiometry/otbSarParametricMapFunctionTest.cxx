@@ -56,7 +56,7 @@ int otbSarParametricMapFunctionTest(int argc, char* argv[])
   /** Test on some indexes and some physical coordinates*/
   InputImageType::SizeType size = reader->GetOutput()->GetRequestedRegion().GetSize();
   FunctionType::PointType  p0;
-  IndexType                index;  
+  IndexType                index;
   InputPixelType           value;
   FunctionType::PointType  pDst;
 
@@ -71,7 +71,7 @@ int otbSarParametricMapFunctionTest(int argc, char* argv[])
   filter->SetPointSet(points);
   
   filter->EvaluateParametricCoefficient();
-  std::cout << filter << std::endl;     
+  std::cout << filter << std::endl;
   
   p0[0] = static_cast<unsigned int>(size[0] / 4.);
   p0[1] = static_cast<unsigned int>(size[1] / 8.);
@@ -87,7 +87,7 @@ int otbSarParametricMapFunctionTest(int argc, char* argv[])
   polynomalSize[1] = 0;
   filter->SetPolynomalSize(polynomalSize);
   filter->EvaluateParametricCoefficient();
-  std::cout << filter << std::endl;     
+  std::cout << filter << std::endl;
 
   index[0] = 0;
   index[1] = 0;

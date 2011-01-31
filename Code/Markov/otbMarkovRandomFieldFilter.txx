@@ -356,7 +356,7 @@ MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
 {
 
   //Note: error should be defined according to the number of valid pixel in the output
-  int maxNumPixelError = itk::Math::Round<int,double> (m_ErrorTolerance *
+  int maxNumPixelError = itk::Math::Round<int, double> (m_ErrorTolerance *
                                               m_TotalNumberOfPixelsInInputImage);
 
   m_NumberOfIterations = 0;

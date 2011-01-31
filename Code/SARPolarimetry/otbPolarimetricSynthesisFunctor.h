@@ -66,7 +66,7 @@ public:
     ComplexType tmp;
     double      scalar;
 
-    tmp =   vcl_conj(m_Er[0]) * (m_Ei[0] * static_cast<ComplexType>(Shh) + m_Ei[1] * static_cast<ComplexType>(Shv)) 
+    tmp =   vcl_conj(m_Er[0]) * (m_Ei[0] * static_cast<ComplexType>(Shh) + m_Ei[1] * static_cast<ComplexType>(Shv))
           + vcl_conj(m_Er[1]) * (m_Ei[0] * static_cast<ComplexType>(Svh) + m_Ei[1] * static_cast<ComplexType>(Svv));
 
     scalar = (double) (vcl_pow(vcl_abs(tmp), 2));

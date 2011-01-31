@@ -238,7 +238,7 @@ VectorDataModel::DataNodeType::Pointer VectorDataModel::GetNthDataNode(int n)
 }
 
 void VectorDataModel::SetSelectedGeometry(int n)
-{ 
+{
   m_SelectedGeometry = GetNthDataNode(n);
 }
 

@@ -26,7 +26,7 @@ namespace otb {
 namespace Statistics {
 
 template < class TInputSampleList, class TOutputSampleList >
-GaussianAdditiveNoiseSampleListFilter<TInputSampleList,TOutputSampleList>
+GaussianAdditiveNoiseSampleListFilter<TInputSampleList, TOutputSampleList>
 ::GaussianAdditiveNoiseSampleListFilter()
 {
   m_Mean = 0.;
@@ -36,7 +36,7 @@ GaussianAdditiveNoiseSampleListFilter<TInputSampleList,TOutputSampleList>
 
 template < class TInputSampleList, class TOutputSampleList >
 void
-GaussianAdditiveNoiseSampleListFilter<TInputSampleList,TOutputSampleList>
+GaussianAdditiveNoiseSampleListFilter<TInputSampleList, TOutputSampleList>
 ::GenerateRandomSequence()
 {
   typedef itk::Statistics::MersenneTwisterRandomVariateGenerator GeneratorType;
@@ -54,14 +54,14 @@ GaussianAdditiveNoiseSampleListFilter<TInputSampleList,TOutputSampleList>
   else
     for(unsigned int i = 0; i <size; i++)
       {
-      double ran = generator->GetNormalVariate(m_Mean,m_Variance);
+      double ran = generator->GetNormalVariate(m_Mean, m_Variance);
       m_WhiteGaussianNoiseCoefficients.push_back(ran);
       }
 }
 
 template < class TInputSampleList, class TOutputSampleList >
 void
-GaussianAdditiveNoiseSampleListFilter<TInputSampleList,TOutputSampleList>
+GaussianAdditiveNoiseSampleListFilter<TInputSampleList, TOutputSampleList>
 ::GenerateData()
 {
   // Retrieve input and output pointers
@@ -76,7 +76,7 @@ GaussianAdditiveNoiseSampleListFilter<TInputSampleList,TOutputSampleList>
   outputSampleListPtr->Clear();
   
   // Set-up progress reporting
-  itk::ProgressReporter progress(this,0,inputSampleListPtr->Size()*m_NumberOfIteration);
+  itk::ProgressReporter progress(this, 0, inputSampleListPtr->Size()*m_NumberOfIteration);
 
   // Iterate m_NumberOfIteration-times the noising process
   for (unsigned int currIteration = 0; currIteration< m_NumberOfIteration; currIteration++)
@@ -86,7 +86,7 @@ GaussianAdditiveNoiseSampleListFilter<TInputSampleList,TOutputSampleList>
     // Iterate on the InputSampleList
     while(inputIt != inputSampleListPtr->End())
       {
-      // Generate Random sequence 
+      // Generate Random sequence
       this->GenerateRandomSequence();
 
       // Retrieve current input sample
@@ -97,7 +97,7 @@ GaussianAdditiveNoiseSampleListFilter<TInputSampleList,TOutputSampleList>
       currentOutputMeasurement.SetSize(currentInputMeasurement.GetSize());
 
       // Add the white noise to each component of the sample
-      for(unsigned int idx = 0;idx < inputSampleListPtr->GetMeasurementVectorSize();++idx)
+      for(unsigned int idx = 0; idx < inputSampleListPtr->GetMeasurementVectorSize(); ++idx)
         {
         currentOutputMeasurement[idx] = static_cast<OutputValueType>(
           (static_cast<double>(currentInputMeasurement[idx])+m_WhiteGaussianNoiseCoefficients[idx]));
@@ -116,11 +116,11 @@ GaussianAdditiveNoiseSampleListFilter<TInputSampleList,TOutputSampleList>
 
 template < class TInputSampleList, class TOutputSampleList >
 void
-GaussianAdditiveNoiseSampleListFilter<TInputSampleList,TOutputSampleList>
+GaussianAdditiveNoiseSampleListFilter<TInputSampleList, TOutputSampleList>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
 } // End namespace Statistics

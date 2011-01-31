@@ -34,7 +34,7 @@ namespace otb
  *  \f[ \left( \begin{array}{cc} True positives & False positives \\ False negatives & true Negatives \end{array} \right) \f]
  *
  *  Please note that when accessing the confusion matrix values, the first index is the row index, and the second is the column index,
- *  so that accessing the false positive rate is done by calling GetConfusionMatrix()[1,0].
+ *  so that accessing the false positive rate is done by calling GetConfusionMatrix()[1, 0].
  *
  */
 template <class TRefListLabel, class TProdListLabel>

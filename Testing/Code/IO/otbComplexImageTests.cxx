@@ -61,11 +61,11 @@ int otbVectorImageComplexGenericTest(int argc, char* argv[])
   std::cout << pixel << std::endl;
 
   //Test value
-  if ((pixel[0] != PixelType(0,1))
+  if ((pixel[0] != PixelType(0, 1))
       || (pixel[1] != PixelType(20000, 20001)))
     {
-    std::cout << "Found " << pixel[0] << " should be " << PixelType(0,1) << std::endl;
-    std::cout << "Found " << pixel[1] << " should be " << PixelType(20000,20001) << std::endl;
+    std::cout << "Found " << pixel[0] << " should be " << PixelType(0, 1) << std::endl;
+    std::cout << "Found " << pixel[1] << " should be " << PixelType(20000, 20001) << std::endl;
     return EXIT_FAILURE;
     }
   return EXIT_SUCCESS;
@@ -102,9 +102,9 @@ int otbImageComplexGenericTest(int argc, char* argv[])
   std::cout << pixel << std::endl;
 
   //Test value
-  if (pixel != PixelType(0,1))
+  if (pixel != PixelType(0, 1))
     {
-    std::cout << "Found " << pixel << " should be " << PixelType(0,1) << std::endl;
+    std::cout << "Found " << pixel << " should be " << PixelType(0, 1) << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -115,9 +115,9 @@ int otbImageComplexGenericTest(int argc, char* argv[])
   pixel = reader->GetOutput()->GetPixel(index);
   std::cout << pixel << std::endl;
 
-  if (pixel != PixelType(1010,1011))
+  if (pixel != PixelType(1010, 1011))
     {
-    std::cout << "Found " << pixel << " should be " << PixelType(1010,1011) << std::endl;
+    std::cout << "Found " << pixel << " should be " << PixelType(1010, 1011) << std::endl;
     return EXIT_FAILURE;
     }
 

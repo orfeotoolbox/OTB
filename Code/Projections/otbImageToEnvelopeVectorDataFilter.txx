@@ -35,7 +35,7 @@ ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>
   m_OutputProjectionRef.clear();
 
   // Build output
-  this->SetNthOutput(0,OutputVectorDataType::New());
+  this->SetNthOutput(0, OutputVectorDataType::New());
 }
 
 template <class TInputImage, class TOutputVectorData>
@@ -127,7 +127,7 @@ ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>
   OutputVectorDataPointer outputPtr = this->GetOutput();
 
   // Compute corners as index
-  typename InputImageType::IndexType ul, ur,lr,ll;
+  typename InputImageType::IndexType ul, ur, lr, ll;
   ul = inputPtr->GetLargestPossibleRegion().GetIndex();
   ur = ul;
   ll=ul;
@@ -139,11 +139,11 @@ ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>
   lr[1]+=size[1];
 
   // Get corners as physical points
-  typename InputImageType::PointType ulp,urp,lrp,llp,current;
-  inputPtr->TransformIndexToPhysicalPoint(ul,ulp);
-  inputPtr->TransformIndexToPhysicalPoint(ur,urp);
-  inputPtr->TransformIndexToPhysicalPoint(lr,lrp);
-  inputPtr->TransformIndexToPhysicalPoint(ll,llp);
+  typename InputImageType::PointType ulp, urp, lrp, llp, current;
+  inputPtr->TransformIndexToPhysicalPoint(ul, ulp);
+  inputPtr->TransformIndexToPhysicalPoint(ur, urp);
+  inputPtr->TransformIndexToPhysicalPoint(lr, lrp);
+  inputPtr->TransformIndexToPhysicalPoint(ll, llp);
 
   this->InstantiateTransform();
 
@@ -180,7 +180,7 @@ ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>
   OutputDataNodePointerType newDataNode = OutputDataNodeType::New();
   newDataNode->SetPolygonExteriorRing(envelope);
 
-  tree->Add(newDataNode,document);
+  tree->Add(newDataNode, document);
 }
 
 } // end namespace otb

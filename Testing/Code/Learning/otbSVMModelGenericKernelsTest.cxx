@@ -63,7 +63,7 @@ int otbSVMModelGenericKernelsTest(int argc, char* argv[])
   otb::CustomLinearKernelFunctor         customLinearFunctor;
   otb::GroupedRBFKernelFunctor           groupedRBFFunctor;
   otb::GroupingAdaptiveKernelFunctor     groupingAdaptiveFunctor;
-  otb::SpectralAngleKernelFunctor        spectAngleFunctor; 
+  otb::SpectralAngleKernelFunctor        spectAngleFunctor;
   otb::NonGaussianRBFKernelFunctor       nonGaussRBFFunctor;
   otb::ChangeProfileKernelFunctor        changeProFunctor;
   otb::MixturePolyRBFKernelFunctor       mixPolRBFFunctor;
@@ -189,7 +189,7 @@ int otbSVMModelGenericKernelsTest(int argc, char* argv[])
   model->param.kernel_generic = SAMFunctor.Clone();
   svmModel->SetModel(model);
   svmModel->SaveModel(argv[3]);
-  model->param.kernel_generic = kModFunctor.Clone();;
+  model->param.kernel_generic = kModFunctor.Clone(); ;
   svmModel->SetModel(model);
   svmModel->SaveModel(argv[4]);
   model->param.kernel_generic = radialSAMFunctor.Clone();

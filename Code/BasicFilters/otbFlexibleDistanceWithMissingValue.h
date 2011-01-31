@@ -36,7 +36,7 @@ namespace Statistics {
  *
  * The general formulation is defined as:
  * \f$
-    d(x,y) = \sum_i | x_i^a - y_i^a |^b.
+    d(x, y) = \sum_i | x_i^a - y_i^a |^b.
   \f$
  *
  * The class can be templated over any container that holds data elements, as

@@ -376,7 +376,7 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
   // For each child
   typename InputChildrenListType::iterator it = children.begin();
   while (it != children.end())
-//for(typename InputChildrenListType::iterator it = children.begin(); it!=children.end();++it)
+//for(typename InputChildrenListType::iterator it = children.begin(); it!=children.end(); ++it)
     {
     typename OutputInternalTreeNodeType::Pointer newContainer;
 

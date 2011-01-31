@@ -83,7 +83,7 @@ private:
 *
 *    It Allows to select only a subset of the available attributes.
 */
-template<class TLabelObject,class TMeasurementVector>
+template<class TLabelObject, class TMeasurementVector>
 class AttributesMapMeasurementFunctor
 {
 public:
@@ -113,7 +113,7 @@ public:
   /** Remove an attribute from the exported attributes list */
   void RemoveAttribute(const char * attr)
   {
-    AttributesListType::iterator elt = std::find(m_Attributes.begin(),m_Attributes.end(),attr);
+    AttributesListType::iterator elt = std::find(m_Attributes.begin(), m_Attributes.end(), attr);
     if(elt!=m_Attributes.end())
       {
       m_Attributes.erase(elt);
@@ -142,7 +142,7 @@ private:
  *  \brief A LabelObject with a generic attributes map
  *
  *  This class derives from itk::LabelObject and extends it to
- *  store pairs of key,value (of type TAttributesValue) in an internal
+ *  store pairs of key, value (of type TAttributesValue) in an internal
  *  map container.
  *
  * As such it allows to store any custom attributes as necessary.

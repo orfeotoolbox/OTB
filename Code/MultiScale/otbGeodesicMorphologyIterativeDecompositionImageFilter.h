@@ -40,7 +40,7 @@ namespace otb
  * the convex membership function, \f$ \stackrel{\frown}{\mu}_{N}(f) \f$ denote the concave
  *  membership function and \f$\psi_{N}(f)\f$ denote the leveling function, for a given radius \f$ N \f$
  * as defined in the documentation  of the GeodesicMorphologyDecompositionImageFilter .
- * Let \f$[N_{1},\ldots,N_{n}]\f$ denote a range of increasing radius (or scales). The iterative
+ * Let \f$[N_{1},\ldots, N_{n}]\f$ denote a range of increasing radius (or scales). The iterative
  * decomposition is defined as follows:
  *
  * \f[

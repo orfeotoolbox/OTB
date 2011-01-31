@@ -26,7 +26,7 @@ namespace otb
 {
 
 template <class TInputImage, class TVectorData, class TFunctionType, class TListSample, class TLabelListSample>
-PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,TListSample,TLabelListSample>
+PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType, TListSample, TLabelListSample>
 ::PersistentDescriptorsListSampleGenerator()
   : m_NeighborhoodRadius(0)
 {
@@ -42,14 +42,14 @@ PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,T
 }
 
 template <class TInputImage, class TVectorData, class TFunctionType, class TListSample, class TLabelListSample>
-PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,TListSample,TLabelListSample>
+PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType, TListSample, TLabelListSample>
 ::~PersistentDescriptorsListSampleGenerator()
 {
 }
 
 template <class TInputImage, class TVectorData, class TFunctionType, class TListSample, class TLabelListSample>
 void
-PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,TListSample,TLabelListSample>
+PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType, TListSample, TLabelListSample>
 ::AllocateOutputs()
 {
   // This is commented to prevent the streaming of the whole image for the first stream strip
@@ -61,7 +61,7 @@ PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,T
 
 template <class TInputImage, class TVectorData, class TFunctionType, class TListSample, class TLabelListSample>
 void
-PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,TListSample,TLabelListSample>
+PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType, TListSample, TLabelListSample>
 ::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
@@ -79,15 +79,15 @@ PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,T
 
 template <class TInputImage, class TVectorData, class TFunctionType, class TListSample, class TLabelListSample>
 void
-PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,TListSample,TLabelListSample>
+PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType, TListSample, TLabelListSample>
 ::SetSamplesLocations(VectorDataType* location)
 {
   this->SetNthInput(1, location);
 }
 
 template <class TInputImage, class TVectorData, class TFunctionType, class TListSample, class TLabelListSample>
-typename PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,TListSample,TLabelListSample>::VectorDataType*
-PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,TListSample,TLabelListSample>
+typename PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType, TListSample, TLabelListSample>::VectorDataType*
+PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType, TListSample, TLabelListSample>
 ::GetSamplesLocations()
 {
 
@@ -95,48 +95,48 @@ PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,T
 }
 
 template <class TInputImage, class TVectorData, class TFunctionType, class TListSample, class TLabelListSample>
-typename PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,TListSample,TLabelListSample>::ListSampleType*
-PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,TListSample,TLabelListSample>
+typename PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType, TListSample, TLabelListSample>::ListSampleType*
+PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType, TListSample, TLabelListSample>
 ::GetListSample()
 {
   return const_cast<ListSampleType*>(this->GetListSampleObject()->Get());
 }
 
 template <class TInputImage, class TVectorData, class TFunctionType, class TListSample, class TLabelListSample>
-typename PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,TListSample,TLabelListSample>::ListSampleObjectType*
-PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,TListSample,TLabelListSample>
+typename PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType, TListSample, TLabelListSample>::ListSampleObjectType*
+PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType, TListSample, TLabelListSample>
 ::GetListSampleObject()
 {
   return dynamic_cast<ListSampleObjectType*>( this->itk::ProcessObject::GetOutput(1) );
 }
 
 template <class TInputImage, class TVectorData, class TFunctionType, class TListSample, class TLabelListSample>
-typename PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,TListSample,TLabelListSample>::LabelListSampleType*
-PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,TListSample,TLabelListSample>
+typename PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType, TListSample, TLabelListSample>::LabelListSampleType*
+PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType, TListSample, TLabelListSample>
 ::GetLabelListSample()
 {
   return const_cast<LabelListSampleType*>(this->GetLabelListSampleObject()->Get());
 }
 
 template <class TInputImage, class TVectorData, class TFunctionType, class TListSample, class TLabelListSample>
-typename PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,TListSample,TLabelListSample>::LabelListSampleObjectType*
-PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,TListSample,TLabelListSample>
+typename PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType, TListSample, TLabelListSample>::LabelListSampleObjectType*
+PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType, TListSample, TLabelListSample>
 ::GetLabelListSampleObject()
 {
   return dynamic_cast<LabelListSampleObjectType*>(this->itk::ProcessObject::GetOutput(2));
 }
 
 template <class TInputImage, class TVectorData, class TFunctionType, class TListSample, class TLabelListSample>
-typename PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,TListSample,TLabelListSample>::SamplesPositionType&
-PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,TListSample,TLabelListSample>
+typename PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType, TListSample, TLabelListSample>::SamplesPositionType&
+PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType, TListSample, TLabelListSample>
 ::GetSamplesPositions()
 {
   return this->GetSamplesPositionsObject()->Get();
 }
 
 template <class TInputImage, class TVectorData, class TFunctionType, class TListSample, class TLabelListSample>
-typename PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,TListSample,TLabelListSample>::SamplesPositionObjectType*
-PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,TListSample,TLabelListSample>
+typename PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType, TListSample, TLabelListSample>::SamplesPositionObjectType*
+PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType, TListSample, TLabelListSample>
 ::GetSamplesPositionsObject()
 {
   return dynamic_cast<SamplesPositionObjectType*>(this->itk::ProcessObject::GetOutput(3));
@@ -144,7 +144,7 @@ PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,T
 
 template <class TInputImage, class TVectorData, class TFunctionType, class TListSample, class TLabelListSample>
 itk::DataObject::Pointer
-PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,TListSample,TLabelListSample>
+PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType, TListSample, TLabelListSample>
 ::MakeOutput(unsigned int idx)
 {
   itk::DataObject::Pointer output;
@@ -182,7 +182,7 @@ PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,T
 
 template <class TInputImage, class TVectorData, class TFunctionType, class TListSample, class TLabelListSample>
 void
-PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,TListSample,TLabelListSample>
+PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType, TListSample, TLabelListSample>
 ::Reset()
 {
   m_ThreadListSample = ListSampleArray(this->GetNumberOfThreads());
@@ -206,7 +206,7 @@ PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,T
 
 template <class TInputImage, class TVectorData, class TFunctionType, class TListSample, class TLabelListSample>
 void
-PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,TListSample,TLabelListSample>
+PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType, TListSample, TLabelListSample>
 ::Synthetize()
 {
   // Merge the ListSample from all the threads
@@ -232,7 +232,7 @@ PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,T
 
 template <class TInputImage, class TVectorData, class TFunctionType, class TListSample, class TLabelListSample>
 void
-PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,TListSample,TLabelListSample>
+PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType, TListSample, TLabelListSample>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
@@ -240,7 +240,7 @@ PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,T
 
 template <class TInputImage, class TVectorData, class TFunctionType, class TListSample, class TLabelListSample>
 void
-PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,TListSample,TLabelListSample>
+PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType, TListSample, TLabelListSample>
 ::GenerateInputRequestedRegion()
 {
   Superclass::GenerateInputRequestedRegion();
@@ -281,14 +281,14 @@ PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,T
 
 template <class TInputImage, class TVectorData, class TFunctionType, class TListSample, class TLabelListSample>
 void
-PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,TListSample,TLabelListSample>
+PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType, TListSample, TLabelListSample>
 ::BeforeThreadedGenerateData()
 {}
 
 
 template <class TInputImage, class TVectorData, class TFunctionType, class TListSample, class TLabelListSample>
 void
-PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,TListSample,TLabelListSample>
+PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType, TListSample, TLabelListSample>
 ::ThreadedGenerateData(const RegionType&  outputRegionForThread,
                        int threadId)
 {
@@ -304,7 +304,7 @@ PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,T
       {
       VectorDataPointType point = vectorDataIt.Get()->GetPoint();
       ContinuousIndexType cidx;
-      this->GetInput()->TransformPhysicalPointToContinuousIndex(point,cidx);
+      this->GetInput()->TransformPhysicalPointToContinuousIndex(point, cidx);
 
       // OGR convention : vector data are recorded with a 0.5 shift
       cidx[0] -= 0.5;
@@ -329,14 +329,14 @@ PersistentDescriptorsListSampleGenerator<TInputImage,TVectorData,TFunctionType,T
 
 
 template <class TInputImage, class TVectorData, class TListSample, class TLabelListSample, class TOutputPrecision, class TCoordRep>
-DescriptorsListSampleGenerator<TInputImage,TVectorData,TListSample,TLabelListSample,TOutputPrecision,TCoordRep>
+DescriptorsListSampleGenerator<TInputImage, TVectorData, TListSample, TLabelListSample, TOutputPrecision, TCoordRep>
 ::DescriptorsListSampleGenerator()
 {
 
 }
 
 template <class TInputImage, class TVectorData, class TListSample, class TLabelListSample, class TOutputPrecision, class TCoordRep>
-DescriptorsListSampleGenerator<TInputImage,TVectorData,TListSample,TLabelListSample,TOutputPrecision,TCoordRep>
+DescriptorsListSampleGenerator<TInputImage, TVectorData, TListSample, TLabelListSample, TOutputPrecision, TCoordRep>
 ::~DescriptorsListSampleGenerator()
 {
 

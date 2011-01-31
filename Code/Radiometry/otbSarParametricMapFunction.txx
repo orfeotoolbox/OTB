@@ -44,7 +44,7 @@ SarParametricMapFunction<TInputImage, TCoordRep>
    m_ProductWidth(0),
    m_ProductHeight(0)
 {
-  m_Coeff.SetSize(1,1);
+  m_Coeff.SetSize(1, 1);
   m_Coeff.Fill(0);
 }
 
@@ -209,7 +209,7 @@ SarParametricMapFunction<TInputImage, TCoordRep>
     }
   else if (m_Coeff.Rows() * m_Coeff.Cols() == 1)
     {
-    result = m_Coeff(0,0);
+    result = m_Coeff(0, 0);
     }
   else
     {

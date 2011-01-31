@@ -56,7 +56,7 @@ int otbMLCToCoherencyDegreeImageFilter(int argc, char * argv[])
   typedef otb::SinclairImageFilter<InputImageType, InputImageType,
                       InputImageType, InputImageType,
                       ImageType, FunctionType >  SinclairToCovarianceFilterType;
-  typedef otb::MLCToCoherencyDegreeImageFilter<ImageType,ImageType> FilterType;
+  typedef otb::MLCToCoherencyDegreeImageFilter<ImageType, ImageType> FilterType;
 
 
   typedef otb::ImageFileReader<InputImageType>  ReaderType;

@@ -35,11 +35,11 @@ typedef double         PixelType;
 typedef otb::AttributesMapLabelObject<LabelType, Dimension, double>             LabelObjectType;
 typedef otb::LabelMapWithAdjacency<LabelObjectType>                             LabelMapType;
 typedef otb::VectorImage<PixelType, Dimension>                                  VectorImageType;
-typedef otb::Image<unsigned int,2>                                              LabeledImageType;
+typedef otb::Image<unsigned int, 2>                                              LabeledImageType;
 
 typedef otb::ImageFileReader<VectorImageType>                                   ReaderType;
 typedef otb::ImageFileReader<LabeledImageType>                                  LabeledReaderType;
-typedef otb::LabelImageToLabelMapWithAdjacencyFilter<LabeledImageType,LabelMapType> LabelMapFilterType;
+typedef otb::LabelImageToLabelMapWithAdjacencyFilter<LabeledImageType, LabelMapType> LabelMapFilterType;
 typedef otb::ShapeAttributesLabelMapFilter<LabelMapType>                        ShapeFilterType;
 typedef otb::MinMaxAttributesLabelMapFilter<LabelMapType>                       MinMaxAttributesLabelMapFilterType;
 

@@ -142,7 +142,7 @@ int main(int argc, char *argv[])
   // \end{figure}
   //
   // The output of the \doxygen{otb}{HarrisImageFilter} is an image
-  // where,for each pixel, we obtain the intensity of the
+  // where, for each pixel, we obtain the intensity of the
   // detection. Often, the user may want to get access to the set of
   // points for which the output of the detector is higher than a
   // given threshold. This can be obtained by using the

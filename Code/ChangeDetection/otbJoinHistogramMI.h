@@ -80,7 +80,7 @@ public:
         jointEntropy = -jointEntropy/static_cast<TOutput>(totalFreq) +
           vcl_log(totalFreq);
 
-        return entropyX + entropyY - jointEntropy;*/
+        return entropyX + entropyY - jointEntropy; */
 
     typename HistogramType::MeasurementVectorType sample;
     for (unsigned long pos = 0; pos < itA.Size(); ++pos)
@@ -125,7 +125,7 @@ public:
     }
 
   protected:
-    HistogramType::Pointer m_Histogram;*/
+    HistogramType::Pointer m_Histogram; */
 };
 }
 } // end namespace otb

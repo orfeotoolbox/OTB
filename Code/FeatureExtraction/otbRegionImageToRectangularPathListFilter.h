@@ -50,7 +50,7 @@ public:
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(RegionImageToRectangularPathListFilter, ImageToPathListFilter);
-//  itkTypeMacro(ImageToPathListAlignFilter,itk::ImageSource);
+//  itkTypeMacro(ImageToPathListAlignFilter, itk::ImageSource);
 
   /** ImageDimension constants */
   itkStaticConstMacro(InputImageDimension, unsigned int,
@@ -75,7 +75,7 @@ public:
 //  typedef          float                                        RealType;
 //typedef typename itk::NumericTraits<PixelType>::RealType       RealType;
   typedef double RealType;
-//  typedef typename itk::Image<RealType,InputImageDimension>      RealImageType;
+//  typedef typename itk::Image<RealType, InputImageDimension>      RealImageType;
   typedef typename otb::Image<RealType, InputImageDimension> RealImageType;
   typedef typename RealImageType::Pointer                    RealImageTypePointer;
   typedef typename RealImageType::IndexType                  RealImageTypeIndexType;

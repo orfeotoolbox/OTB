@@ -23,8 +23,8 @@
 namespace otb {
 
 /** \class StatisticsXMLFileReader
- *  \brief   Read a xml file where are stored several statistics 
- *  
+ *  \brief   Read a xml file where are stored several statistics
+ *
  * To get a specific statistic Measurement vector, use the method
  * GetStatisticVectorByName(name) which allow you to get the
  * Measurement vector for the statistic set as paramater.
@@ -32,7 +32,7 @@ namespace otb {
  *
  */
 template < class TMeasurementVector>
-class  StatisticsXMLFileReader : 
+class  StatisticsXMLFileReader :
     public itk::Object
 {
 public:
@@ -43,7 +43,7 @@ public:
   typedef itk::SmartPointer<const Self>    ConstPointer;
   
   /** Run-time type information (and related methods). */
-  itkTypeMacro(StatisticsXMLFileReader,itk::Object);
+  itkTypeMacro(StatisticsXMLFileReader, itk::Object);
   
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -53,7 +53,7 @@ public:
   typedef typename MeasurementVectorType::ValueType      InputValueType;
 
   /** Convenient typedef */
-  typedef std::pair<std::string ,MeasurementVectorType>  InputDataType;
+  typedef std::pair<std::string , MeasurementVectorType>  InputDataType;
   typedef std::vector< InputDataType >                   MeasurementVectorContainer;
   
   virtual void Modified()
@@ -66,7 +66,7 @@ public:
   itkGetStringMacro(FileName);
 
   /** Get the number of Outputs*/
-  itkGetMacro(NumberOfOutputs,unsigned int);
+  itkGetMacro(NumberOfOutputs, unsigned int);
 
   /** Method to get the MeasurementVector by name */
   MeasurementVectorType GetStatisticVectorByName(const char * statisticName);

@@ -34,9 +34,9 @@ LocalHistogramIFFactory<TImageType, TCoordRep, TPrecision>
 template <class TImageType, class TCoordRep, class TPrecision>
 void
 LocalHistogramIFFactory<TImageType, TCoordRep, TPrecision>
-::Create(InputImageType * image, 
-         ParamContainerType param, 
-         MetaImageFunctionPointerType metaIF, 
+::Create(InputImageType * image,
+         ParamContainerType param,
+         MetaImageFunctionPointerType metaIF,
          DataObjectContainerType * container)
 {
   typename AdaptedLocalHistogramIF::Pointer function = AdaptedLocalHistogramIF::New();

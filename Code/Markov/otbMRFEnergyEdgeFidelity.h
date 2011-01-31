@@ -29,7 +29,7 @@ namespace otb
  *
  * This is the implementation of an edge fidelity model for Markov denoising, to be used for
  * regularization. Energy is:
- * \f[  \sum_{t \in \mathcal{V}_s} U(x_s,x_t) = \Phi(x_s-x_t) \f]
+ * \f[  \sum_{t \in \mathcal{V}_s} U(x_s, x_t) = \Phi(x_s-x_t) \f]
  * with
  * - \f$ x_s \f$ the label on site s
  * - \f$ x_t \f$ the label on site t, a neighbor of s

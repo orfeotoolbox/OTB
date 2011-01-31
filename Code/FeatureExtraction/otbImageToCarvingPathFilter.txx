@@ -86,10 +86,10 @@ ImageToCarvingPathFilter<TInputImage, TOutputPath>
   const typename IteratorType::OffsetType UP     = {{0, -1}};
   const typename IteratorType::OffsetType DOWN   = {{0, 1}};
   const typename IteratorType::OffsetType LEFTUP   = {{-1, -1}};
-//    const typename IteratorType::OffsetType RIGHTDOWN ={{1,1}};
+//    const typename IteratorType::OffsetType RIGHTDOWN ={{1, 1}};
   const typename IteratorType::OffsetType RIGHTUP  = {{1, -1}};
   const typename IteratorType::OffsetType LEFTDOWN = {{-1, 1}};
-//    const typename IteratorType::OffsetType CENTER ={{0,0}};
+//    const typename IteratorType::OffsetType CENTER ={{0, 0}};
 
   if (m_Direction == 0)
     {

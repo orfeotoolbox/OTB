@@ -125,7 +125,7 @@ RealMomentsImageFunction<TInputImage, TCoordRep>
       {
       for (unsigned int q= 0; q <= m_Qmax; q++)
         {
-        moments.at(p).at(q) += valXpY.at(p) * valXqY.at(q) * value;   
+        moments.at(p).at(q) += valXpY.at(p) * valXqY.at(q) * value;
         }
       }
     }
@@ -135,7 +135,7 @@ RealMomentsImageFunction<TInputImage, TCoordRep>
     {
     for (int q= m_Qmax; q >= 0; q--)
       {
-      moments.at(p).at(q) /= moments.at(0).at(0);   
+      moments.at(p).at(q) /= moments.at(0).at(0);
       }
     }
 

@@ -34,7 +34,7 @@ namespace otb
  * \sa otb::SVMSampleListModelEstimator
  */
 
-template <class TInputLabelMap, class TOutputSampleList,class TOutputTrainingSampleList,
+template <class TInputLabelMap, class TOutputSampleList, class TOutputTrainingSampleList,
     class TMeasurementFunctor = Functor::AttributesMapMeasurementFunctor
     <typename TInputLabelMap::LabelObjectType, typename TOutputSampleList::MeasurementVectorType > >
 class ITK_EXPORT LabelMapWithClassLabelToLabeledSampleListFilter : public itk::Object
@@ -73,10 +73,10 @@ public:
   typedef TMeasurementFunctor                         MeasurementFunctorType;
 
   /** Set/Get the input label map  */
-  itkSetConstObjectMacro(InputLabelMap,InputLabelMapType);
-  itkGetConstObjectMacro(InputLabelMap,InputLabelMapType);
-  itkGetObjectMacro(OutputSampleList,OutputSampleListType);
-  itkGetObjectMacro(OutputTrainingSampleList,OutputTrainingSampleListType);
+  itkSetConstObjectMacro(InputLabelMap, InputLabelMapType);
+  itkGetConstObjectMacro(InputLabelMap, InputLabelMapType);
+  itkGetObjectMacro(OutputSampleList, OutputSampleListType);
+  itkGetObjectMacro(OutputTrainingSampleList, OutputTrainingSampleListType);
 
   /** Get a hook on the functor for settings */
   void SetMeasurementFunctor(const MeasurementFunctorType& functor)

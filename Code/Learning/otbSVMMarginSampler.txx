@@ -37,7 +37,7 @@ void
 SVMMarginSampler< TSample, TModel >
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
 template< class TSample, class TModel >
@@ -125,7 +125,7 @@ SVMMarginSampler< TSample, TModel >
     double minDistance = vcl_abs(hdistances[0]);
 
     // Compute th min distances
-    for(unsigned int i = 1; i<hdistances.Size();++i)
+    for(unsigned int i = 1; i<hdistances.Size(); ++i)
       {
       if(vcl_abs(hdistances[i])<minDistance)
   {
@@ -133,7 +133,7 @@ SVMMarginSampler< TSample, TModel >
   }
       }
     // Keep index and min distance
-    IndexAndDistanceType value(iter.GetInstanceIdentifier(),minDistance);
+    IndexAndDistanceType value(iter.GetInstanceIdentifier(), minDistance);
     idDistVector.push_back(value);
 
     ++iter;
@@ -141,7 +141,7 @@ SVMMarginSampler< TSample, TModel >
   }
   
   // Sort index by increasing distances
-  sort(idDistVector.begin(),idDistVector.end(),&Compare);
+  sort(idDistVector.begin(), idDistVector.end(), &Compare);
 
   // Display the first 10 values
   std::cout <<" Margin Sampling: "<<std::endl;
@@ -149,9 +149,9 @@ SVMMarginSampler< TSample, TModel >
   // Clear previous margin samples
   m_MarginSamples.clear();
   
-  for(unsigned int i = 0;i<m_NumberOfCandidates && i<idDistVector.size();++i)
+  for(unsigned int i = 0; i<m_NumberOfCandidates && i<idDistVector.size(); ++i)
     {
-    std::cout<<"Sample "<<idDistVector[i].first<<" (distance= "<<idDistVector[i].second<<")"<<std::endl; 
+    std::cout<<"Sample "<<idDistVector[i].first<<" (distance= "<<idDistVector[i].second<<")"<<std::endl;
     m_MarginSamples.push_back(idDistVector[i].first);
     }
 

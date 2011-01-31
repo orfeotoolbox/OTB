@@ -60,7 +60,7 @@ void Parser::InitConst()
  m_InternalParser.DefineConst( "ln10",   CONST_LN10 );
  m_InternalParser.DefineConst( "pi",     CONST_PI );
  m_InternalParser.DefineConst( "euler",  CONST_EULER );
-} 
+}
 
 void Parser::InitFun()
 {

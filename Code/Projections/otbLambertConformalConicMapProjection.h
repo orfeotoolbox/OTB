@@ -26,7 +26,7 @@ namespace otb
 {
 /** \class LambertConformalConicMapProjection
  * \brief This class implements the Lambert Conformal Conic map projection.
- * It converts coordinates in longitude,latitude (WGS84) to Lambert Conformal Conic map coordinates.
+ * It converts coordinates in longitude, latitude (WGS84) to Lambert Conformal Conic map coordinates.
  *
  */
 template <InverseOrForwardTransformationEnum transform>

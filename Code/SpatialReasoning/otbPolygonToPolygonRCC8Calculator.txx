@@ -209,7 +209,7 @@ PolygonToPolygonRCC8Calculator<TInputPolygon>
 
     if (isInside && nextIsInside)
       {
-      //std::cout<<current<<" is inside and "<<it.Value()<<" is inside, nb crossings: "<<polygon2->NbCrossing(current,it.Value())<<std::endl;
+      //std::cout<<current<<" is inside and "<<it.Value()<<" is inside, nb crossings: "<<polygon2->NbCrossing(current, it.Value())<<std::endl;
       resp = polygon2->NbCrossing(current, it.Value()) > 0;
       }
     current = it.Value();
@@ -229,7 +229,7 @@ PolygonToPolygonRCC8Calculator<TInputPolygon>
   if (!resp && isInside && firstIsInside)
     {
     resp = polygon2->NbCrossing(current, first) > 0;
-    //std::cout<<current<<" is inside and "<<first<<" is inside, nb crossings: "<<polygon2->NbCrossing(current,first)<<std::endl;
+    //std::cout<<current<<" is inside and "<<first<<" is inside, nb crossings: "<<polygon2->NbCrossing(current, first)<<std::endl;
     }
 
   return resp;
@@ -301,12 +301,12 @@ PolygonToPolygonRCC8Calculator<TInputPolygon>
     if (polygon2->NbTouching(current, it.Value()) > 0)
       {
       resp = true;
-      //std::cout<<"NbCrossing: "<<current<<" -> "<<it.Value()<<": "<<polygon2->NbCrossing(current,it.Value())<<std::endl;
+      //std::cout<<"NbCrossing: "<<current<<" -> "<<it.Value()<<": "<<polygon2->NbCrossing(current, it.Value())<<std::endl;
       }
     if (polygon2->NbCrossing(current, it.Value()) > 0)
       {
       resp = true;
-      //std::cout<<"NbTouching: "<<current<<" -> "<<it.Value()<<": "<<polygon2->NbTouching(current,it.Value())<<std::endl;
+      //std::cout<<"NbTouching: "<<current<<" -> "<<it.Value()<<": "<<polygon2->NbTouching(current, it.Value())<<std::endl;
       }
     current = it.Value();
 
@@ -320,12 +320,12 @@ PolygonToPolygonRCC8Calculator<TInputPolygon>
   if (!resp && polygon2->NbTouching(current, first) > 0)
     {
     resp = true;
-    //std::cout<<"NbCrossing: "<<current<<" -> "<<first<<": "<<polygon2->NbCrossing(current,first)<<std::endl;
+    //std::cout<<"NbCrossing: "<<current<<" -> "<<first<<": "<<polygon2->NbCrossing(current, first)<<std::endl;
     }
   if (polygon2->NbCrossing(current, first) > 0)
     {
     resp = true;
-    //std::cout<<"NbTouching: "<<current<<" -> "<<first<<": "<<polygon2->NbTouching(current,first)<<std::endl;
+    //std::cout<<"NbTouching: "<<current<<" -> "<<first<<": "<<polygon2->NbTouching(current, first)<<std::endl;
     }
 
   return resp;

@@ -108,7 +108,7 @@ int otbSVMModelAccessor(int argc, char* argv[])
 //   _evaluateHyperplaneDistance = ptrModel->EvaluateHyperplaneDistance();
 
 //   f << " - EvaluateHyperplaneDistance() VariableLengthVector() nb value(s): "<<_evaluateHyperplaneDistance.Size()<<std::endl;
-//   for (unsigned int i=0;i<_evaluateHyperplaneDistance.Size();i++)
+//   for (unsigned int i=0; i<_evaluateHyperplaneDistance.Size(); i++)
 //   {
 //     f << "     "<<_evaluateHyperplaneDistance[i]<<std::endl;
 //   }

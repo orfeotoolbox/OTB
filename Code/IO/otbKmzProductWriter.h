@@ -48,12 +48,12 @@ namespace otb
  *
  * This class writes kmz files, supported by Google Earth. The input
  * must have metadata (a non empty keywordlist)
- * 
+ *
  * The size of the tiles can be set via the method
  * SetTileSize(unsigned int), the user can also specify the name of
  * the output Kmz filename via SetPath().
- * 
- * 
+ *
+ *
  *
  * \ingroup IO
  *
@@ -84,7 +84,7 @@ public:
   typedef typename InputImageType::Pointer     InputImagePointer;
   typedef typename InputImageType::PixelType   InputImagePixelType;
 
-  typedef VectorData<double,2>                    VectorDataType;
+  typedef VectorData<double, 2>                    VectorDataType;
   typedef typename VectorDataType::DataNodeType   DataNodeType;
   typedef typename DataNodeType::PolygonType      PolygonType;
   typedef typename PolygonType::VertexType        VertexType;
@@ -99,7 +99,7 @@ public:
   typedef ImageFileWriter< VectorImage<OutputPixelType> >     VectorWriterType;
 
   // Resampler
-  typedef StreamingShrinkImageFilter<InputImageType,InputImageType > StreamingShrinkImageFilterType;
+  typedef StreamingShrinkImageFilter<InputImageType, InputImageType > StreamingShrinkImageFilterType;
 
   // Intensity Rescale
   typedef VectorRescaleIntensityImageFilter<InputImageType,
@@ -114,7 +114,7 @@ public:
   typedef itk::CastImageFilter<InputImageType, VectorImage<OutputPixelType> > CastFilterType;
 
   // std::pair description <-> legend (image)
-  typedef std::pair<std::string,InputImagePointer>      LegendPairType;
+  typedef std::pair<std::string, InputImagePointer>      LegendPairType;
   typedef std::vector<LegendPairType>                   LegendVectorType;
   
   /** Dimension of input image. */
@@ -134,8 +134,8 @@ public:
     this->Write();
   }
   
-  // Public method to Add Logo 
-  itkSetMacro(Logo,InputImagePointer);
+  // Public method to Add Logo
+  itkSetMacro(Logo, InputImagePointer);
 
   // Public method to store the legend and their description in the
   // legendVector
@@ -143,18 +143,18 @@ public:
   {
     LegendPairType   legendPair;
     legendPair.first  = description;
-    legendPair.second = legend; 
+    legendPair.second = legend;
     m_LegendVector.push_back(legendPair);
   }
   // Method to add legend with empty description
   void AddLegend(const InputImagePointer legend)
   {
     std::string emptyString ="";
-    this->AddLegend(emptyString,legend);
+    this->AddLegend(emptyString, legend);
   }
 
   // Set the size of the tiles to produce
-  itkSetMacro(TileSize,int);
+  itkSetMacro(TileSize, int);
 
 protected:
   KmzProductWriter();
@@ -311,4 +311,4 @@ private:
 #include "otbKmzProductWriter.txx"
 #endif
 
-#endif 
+#endif

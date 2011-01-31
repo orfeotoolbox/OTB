@@ -25,7 +25,7 @@ namespace otb
 {
 template <class TPrecision, class TCoordRep>
 StandardMetaImageFunctionBuilder<TPrecision, TCoordRep>
-::StandardMetaImageFunctionBuilder() 
+::StandardMetaImageFunctionBuilder()
 {
   m_NeighborhoodRadius = 4;
   
@@ -67,7 +67,7 @@ StandardMetaImageFunctionBuilder<TPrecision, TCoordRep>
 }
 
 template <class TPrecision, class TCoordRep>
-unsigned int 
+unsigned int
 StandardMetaImageFunctionBuilder<TPrecision, TCoordRep>
 ::GetNeighborhoodRadius()
 {
@@ -75,7 +75,7 @@ StandardMetaImageFunctionBuilder<TPrecision, TCoordRep>
 }
 
 template <class TPrecision, class TCoordRep>
-void 
+void
 StandardMetaImageFunctionBuilder<TPrecision, TCoordRep>
 ::SetNeighborhoodRadius(unsigned int radius)
 {
@@ -89,18 +89,18 @@ StandardMetaImageFunctionBuilder<TPrecision, TCoordRep>
     m_FourierMellinDescriptorsParam[0] = static_cast<ValueType>(radius);
     m_HaralickTexturesParam[0]         = static_cast<ValueType>(radius);
     }
-}  
+}
  
 template <class TPrecision, class TCoordRep>
-typename StandardMetaImageFunctionBuilder<TPrecision, TCoordRep>::ParamContainerType 
+typename StandardMetaImageFunctionBuilder<TPrecision, TCoordRep>::ParamContainerType
 StandardMetaImageFunctionBuilder<TPrecision, TCoordRep>
 ::GetFlusserMomentsIFParameters()
 {
   return m_FlusserMomentsParam;
-}  
+}
 
 template <class TPrecision, class TCoordRep>
-void 
+void
 StandardMetaImageFunctionBuilder<TPrecision, TCoordRep>
 ::SetFlusserMomentsIFParameters(ParamContainerType Param)
 {
@@ -112,7 +112,7 @@ StandardMetaImageFunctionBuilder<TPrecision, TCoordRep>
   
 
 template <class TPrecision, class TCoordRep>
-typename StandardMetaImageFunctionBuilder<TPrecision, TCoordRep>::ParamContainerType 
+typename StandardMetaImageFunctionBuilder<TPrecision, TCoordRep>::ParamContainerType
 StandardMetaImageFunctionBuilder<TPrecision, TCoordRep>
 ::GetLocalHistogramIFParameters()
 {
@@ -120,7 +120,7 @@ StandardMetaImageFunctionBuilder<TPrecision, TCoordRep>
 }
  
 template <class TPrecision, class TCoordRep>
-void 
+void
 StandardMetaImageFunctionBuilder<TPrecision, TCoordRep>
 ::SetLocalHistogramIFParameters(ParamContainerType Param)
 {
@@ -142,7 +142,7 @@ StandardMetaImageFunctionBuilder<TPrecision, TCoordRep>
 }
  
 template <class TPrecision, class TCoordRep>
-void 
+void
 StandardMetaImageFunctionBuilder<TPrecision, TCoordRep>
 ::SetRadiometricMomentsIFParameters(ParamContainerType Param)
 {
@@ -153,7 +153,7 @@ StandardMetaImageFunctionBuilder<TPrecision, TCoordRep>
 }
   
 template <class TPrecision, class TCoordRep>
-typename StandardMetaImageFunctionBuilder<TPrecision, TCoordRep>::ParamContainerType 
+typename StandardMetaImageFunctionBuilder<TPrecision, TCoordRep>::ParamContainerType
 StandardMetaImageFunctionBuilder<TPrecision, TCoordRep>
 ::GetFourierMellinDescriptorsIFParameters()
 {
@@ -161,7 +161,7 @@ StandardMetaImageFunctionBuilder<TPrecision, TCoordRep>
 }
  
 template <class TPrecision, class TCoordRep>
-void 
+void
 StandardMetaImageFunctionBuilder<TPrecision, TCoordRep>
 ::SetFourierMellinDescriptorsIFParameters(ParamContainerType Param)
 {
@@ -174,7 +174,7 @@ StandardMetaImageFunctionBuilder<TPrecision, TCoordRep>
 }
 
 template <class TPrecision, class TCoordRep>
-typename StandardMetaImageFunctionBuilder<TPrecision, TCoordRep>::ParamContainerType 
+typename StandardMetaImageFunctionBuilder<TPrecision, TCoordRep>::ParamContainerType
 StandardMetaImageFunctionBuilder<TPrecision, TCoordRep>
 ::GetHaralickTexturesIFParameters()
 {
@@ -182,7 +182,7 @@ StandardMetaImageFunctionBuilder<TPrecision, TCoordRep>
 }
  
 template <class TPrecision, class TCoordRep>
-void 
+void
 StandardMetaImageFunctionBuilder<TPrecision, TCoordRep>
 ::SetHaralickTexturesIFParameters(ParamContainerType Param)
 {

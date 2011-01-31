@@ -36,14 +36,14 @@
 // The output of the filter for pixel p is:
 //      $ \hat I_{s}=\sum_{p\in\eta_{p}} m_{p}I_{p} $
 //
-// where :   $ m_{p}=\frac{KC_{s}^{2}\exp(-KC_{s}^{2}d_{s,p})}{\sum_{p\in\eta_{p}} KC_{s}^{2}\exp(-KC_{s}^{2}d_{s,p})} $
-//    and  $ d_{s,p}=\sqrt{(i-i_{p})^2+(j-j_{p})^2} $
+// where :   $ m_{p}=\frac{KC_{s}^{2}\exp(-KC_{s}^{2}d_{s, p})}{\sum_{p\in\eta_{p}} KC_{s}^{2}\exp(-KC_{s}^{2}d_{s, p})} $
+//    and  $ d_{s, p}=\sqrt{(i-i_{p})^2+(j-j_{p})^2} $
 //
 // \begin{itemize}
 // \item $ K $     : the decrease coefficient
-// \item $ (i,j)$ : the coordinates of the pixel inside the region
+// \item $ (i, j)$ : the coordinates of the pixel inside the region
 // defined by $ \eta_{s} $
-// \item $ (i_{p},j_{p})$ : the coordinates of the pixels belonging to $ \eta_{p} \subset \eta_{s} $
+// \item $ (i_{p}, j_{p})$ : the coordinates of the pixels belonging to $ \eta_{p} \subset \eta_{s} $
 // \item $ C_{s}$ : the variation coefficient computed over $ \eta_{p}$
 // \end{itemize}
 //

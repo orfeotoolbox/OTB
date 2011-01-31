@@ -149,7 +149,7 @@ DecisionTree<AttributeValueType, LabelType>
       KeyType theKey = tmIt->first;
       DecisionTreeTestType theTest = theKey.second;
       AttributeValueType theValue = theKey.first;
-      switch( theTest  ) 
+      switch( theTest  )
         {
         case LT:
           if( attrValue < theValue )
@@ -210,7 +210,7 @@ DecisionTree<AttributeValueType, LabelType>
 
     }
   //added return statement to suppress warning, but if/then/else
-  //conditions make sure it is never reached 
+  //conditions make sure it is never reached
     return static_cast<LabelType>(0);
 }
 

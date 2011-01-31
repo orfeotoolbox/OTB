@@ -25,7 +25,7 @@ namespace otb {
 namespace Statistics {
 
 template < class TInputSampleList, class TOutputSampleList >
-ListSampleToListSampleFilter<TInputSampleList,TOutputSampleList>
+ListSampleToListSampleFilter<TInputSampleList, TOutputSampleList>
 ::ListSampleToListSampleFilter()
 {
   this->SetNumberOfRequiredInputs(1);
@@ -33,7 +33,7 @@ ListSampleToListSampleFilter<TInputSampleList,TOutputSampleList>
 
 template < class TInputSampleList, class TOutputSampleList >
 void
-ListSampleToListSampleFilter<TInputSampleList,TOutputSampleList>
+ListSampleToListSampleFilter<TInputSampleList, TOutputSampleList>
 ::SetInput( const InputSampleListType * input )
 {
   typename InputSampleListObjectType::Pointer inputPtr = InputSampleListObjectType::New();
@@ -43,7 +43,7 @@ ListSampleToListSampleFilter<TInputSampleList,TOutputSampleList>
 
 template < class TInputSampleList, class TOutputSampleList >
 void
-ListSampleToListSampleFilter<TInputSampleList,TOutputSampleList>
+ListSampleToListSampleFilter<TInputSampleList, TOutputSampleList>
 ::SetInput( const InputSampleListObjectType * inputPtr )
 {
   // Process object is not const-correct so the const_cast is required here
@@ -52,9 +52,9 @@ ListSampleToListSampleFilter<TInputSampleList,TOutputSampleList>
 }
 
 template < class TInputSampleList, class TOutputSampleList >
-const typename ListSampleToListSampleFilter<TInputSampleList,TOutputSampleList>
+const typename ListSampleToListSampleFilter<TInputSampleList, TOutputSampleList>
 ::InputSampleListObjectType *
-ListSampleToListSampleFilter<TInputSampleList,TOutputSampleList>
+ListSampleToListSampleFilter<TInputSampleList, TOutputSampleList>
 ::GetInput() const
 {
   if (this->GetNumberOfInputs() < 1)
@@ -67,9 +67,9 @@ ListSampleToListSampleFilter<TInputSampleList,TOutputSampleList>
 }
 
 template < class TInputSampleList, class TOutputSampleList >
-const typename ListSampleToListSampleFilter<TInputSampleList,TOutputSampleList>
+const typename ListSampleToListSampleFilter<TInputSampleList, TOutputSampleList>
 ::InputSampleListType *
-ListSampleToListSampleFilter<TInputSampleList,TOutputSampleList>
+ListSampleToListSampleFilter<TInputSampleList, TOutputSampleList>
 ::GetInputSampleList() const
 {
   if (this->GetNumberOfInputs() < 1)
@@ -84,11 +84,11 @@ ListSampleToListSampleFilter<TInputSampleList,TOutputSampleList>
 
 template < class TInputSampleList, class TOutputSampleList >
 void
-ListSampleToListSampleFilter<TInputSampleList,TOutputSampleList>
+ListSampleToListSampleFilter<TInputSampleList, TOutputSampleList>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
 } // End namespace Statistics

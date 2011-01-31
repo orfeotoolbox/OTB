@@ -57,7 +57,7 @@ template< class TInternalInputType, class TPrecisionType >
 typename VariableLengthVectorConverter< std::vector<std::vector<std::complex<TInternalInputType> > >,
                                         TPrecisionType>
 ::OutputType
-VariableLengthVectorConverter< std::vector<std::vector<std::complex<TInternalInputType> > >, 
+VariableLengthVectorConverter< std::vector<std::vector<std::complex<TInternalInputType> > >,
                                TPrecisionType>
 ::Convert(InputType input)
 {
@@ -104,10 +104,10 @@ VariableLengthVectorConverter< itk::FixedArray<TInternalInputType, VArrayDimensi
 
 // Histogram
 template< class TPixel, class TPrecisionType >
-typename VariableLengthVectorConverter< itk::SmartPointer< itk::Statistics::Histogram<TPixel> >, 
+typename VariableLengthVectorConverter< itk::SmartPointer< itk::Statistics::Histogram<TPixel> >,
                                         TPrecisionType>
 ::OutputType
-VariableLengthVectorConverter< itk::SmartPointer< itk::Statistics::Histogram<TPixel> >, 
+VariableLengthVectorConverter< itk::SmartPointer< itk::Statistics::Histogram<TPixel> >,
                                TPrecisionType>
 ::Convert(InputType input)
 {

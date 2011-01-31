@@ -64,7 +64,7 @@ ConcatenateSampleListFilter<TSampleList>
  // Evaluate the total number of samples for progress reporting
  unsigned long totalNumberOfSamples = 0;
 
- for(unsigned int inputIndex = 0; inputIndex<this->GetNumberOfInputs();++inputIndex)
+ for(unsigned int inputIndex = 0; inputIndex<this->GetNumberOfInputs(); ++inputIndex)
   {
   // Retrieve the ListSample
   typename SampleListObjectType::ConstPointer inputPtr =
@@ -73,9 +73,9 @@ ConcatenateSampleListFilter<TSampleList>
   }
 
  // Set-up progress reporting
- itk::ProgressReporter progress(this,0,totalNumberOfSamples);
+ itk::ProgressReporter progress(this, 0, totalNumberOfSamples);
 
- for(unsigned int inputIndex = 0; inputIndex<this->GetNumberOfInputs();++inputIndex)
+ for(unsigned int inputIndex = 0; inputIndex<this->GetNumberOfInputs(); ++inputIndex)
  {
   // Retrieve the ListSample
   typename SampleListObjectType::ConstPointer inputPtr =
@@ -104,7 +104,7 @@ ConcatenateSampleListFilter<TSampleList>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
  {
  // Call superclass implementation
- Superclass::PrintSelf(os,indent);
+ Superclass::PrintSelf(os, indent);
  os<<indent<<"Number of input SampleList: "<<this->GetNumberOfInputs();
  }
 

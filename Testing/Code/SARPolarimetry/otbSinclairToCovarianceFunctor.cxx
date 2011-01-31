@@ -26,7 +26,7 @@ int otbSinclairToReciprocalCovarianceFunctor(int argc, char * argv[])
   typedef itk::VariableLengthVector<ScalarType>  OutputType;
 
   typedef otb::Functor::SinclairToReciprocalCovarianceFunctor<ScalarType, ScalarType,
-      ScalarType, ScalarType,OutputType >         FunctorType;
+      ScalarType, ScalarType, OutputType >         FunctorType;
 
   OutputType  result(6);
   FunctorType funct;

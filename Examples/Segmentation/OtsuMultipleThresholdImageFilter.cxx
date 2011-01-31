@@ -25,7 +25,7 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {QB_Suburb.png}
-//    OUTPUTS: {OtsuMultipleThresholdsOutput000.png},{OtsuMultipleThresholdsOutput001.png},  {OtsuMultipleThresholdsOutput002.png}
+//    OUTPUTS: {OtsuMultipleThresholdsOutput000.png}, {OtsuMultipleThresholdsOutput001.png},  {OtsuMultipleThresholdsOutput002.png}
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex

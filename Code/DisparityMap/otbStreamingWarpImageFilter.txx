@@ -62,23 +62,23 @@ StreamingWarpImageFilter<TInputImage, TOutputImage, TDeformationField>
   typename OutputImageType::RegionType outputRequestedRegion = outputPtr->GetRequestedRegion();
   typename OutputImageType::IndexType outIndexStart = outputRequestedRegion.GetIndex();
   typename OutputImageType::IndexType outIndexEnd;
-  for(unsigned int dim = 0; dim<OutputImageType::ImageDimension;++dim)
+  for(unsigned int dim = 0; dim<OutputImageType::ImageDimension; ++dim)
     outIndexEnd[dim]= outIndexStart[dim] + outputRequestedRegion.GetSize()[dim]-1;
-  typename OutputImageType::PointType outPointStart,outPointEnd;
-  outputPtr->TransformIndexToPhysicalPoint(outIndexStart,outPointStart);
-  outputPtr->TransformIndexToPhysicalPoint(outIndexEnd,outPointEnd);
+  typename OutputImageType::PointType outPointStart, outPointEnd;
+  outputPtr->TransformIndexToPhysicalPoint(outIndexStart, outPointStart);
+  outputPtr->TransformIndexToPhysicalPoint(outIndexEnd, outPointEnd);
 
-  typename DeformationFieldType::IndexType defIndexStart,defIndexEnd;
-  deformationPtr->TransformPhysicalPointToIndex(outPointStart,defIndexStart);
-  deformationPtr->TransformPhysicalPointToIndex(outPointEnd,defIndexEnd);
+  typename DeformationFieldType::IndexType defIndexStart, defIndexEnd;
+  deformationPtr->TransformPhysicalPointToIndex(outPointStart, defIndexStart);
+  deformationPtr->TransformPhysicalPointToIndex(outPointEnd, defIndexEnd);
 
   typename DeformationFieldType::SizeType defRequestedSize;
   typename DeformationFieldType::IndexType defRequestedIndex;
 
-  for(unsigned int dim = 0; dim<OutputImageType::ImageDimension;++dim)
+  for(unsigned int dim = 0; dim<OutputImageType::ImageDimension; ++dim)
     {
-    defRequestedIndex[dim] = std::min(defIndexStart[dim],defIndexEnd[dim]);
-    defRequestedSize[dim] = std::max(defIndexStart[dim],defIndexEnd[dim]) - defRequestedIndex[dim] + 1;
+    defRequestedIndex[dim] = std::min(defIndexStart[dim], defIndexEnd[dim]);
+    defRequestedSize[dim] = std::max(defIndexStart[dim], defIndexEnd[dim]) - defRequestedIndex[dim] + 1;
     }
 
   // Finally, build the deformation field requested region
@@ -120,15 +120,15 @@ StreamingWarpImageFilter<TInputImage, TOutputImage, TDeformationField>
   deformationPtr->UpdateOutputData();
 
   // Walk the loaded deformation field to derive maximum and minimum
-  itk::ImageRegionIteratorWithIndex<DeformationFieldType> defIt(deformationPtr,deformationRequestedRegion);
+  itk::ImageRegionIteratorWithIndex<DeformationFieldType> defIt(deformationPtr, deformationRequestedRegion);
   defIt.GoToBegin();
 
   typename InputImageType::PointType currentPoint;
   typename InputImageType::PointType inputStartPoint, inputEndPoint;
 
   // Initialise start and end points
-  deformationPtr->TransformIndexToPhysicalPoint(defIt.GetIndex(),currentPoint);
-  for(unsigned int dim = 0; dim<DeformationFieldType::ImageDimension;++dim)
+  deformationPtr->TransformIndexToPhysicalPoint(defIt.GetIndex(), currentPoint);
+  for(unsigned int dim = 0; dim<DeformationFieldType::ImageDimension; ++dim)
     {
     currentPoint[dim]+=defIt.Get()[dim];
     }
@@ -140,8 +140,8 @@ StreamingWarpImageFilter<TInputImage, TOutputImage, TDeformationField>
   // 3) Now Walk the field and compute the physical bounding box
   while(!defIt.IsAtEnd())
     {
-    deformationPtr->TransformIndexToPhysicalPoint(defIt.GetIndex(),currentPoint);
-    for(unsigned int dim = 0; dim<DeformationFieldType::ImageDimension;++dim)
+    deformationPtr->TransformIndexToPhysicalPoint(defIt.GetIndex(), currentPoint);
+    for(unsigned int dim = 0; dim<DeformationFieldType::ImageDimension; ++dim)
       {
       currentPoint[dim]+=defIt.Get()[dim];
       if(inputStartPoint[dim] > currentPoint[dim])
@@ -153,17 +153,17 @@ StreamingWarpImageFilter<TInputImage, TOutputImage, TDeformationField>
     }
 
   // Convert physical bouding box to requested region
-  typename InputImageType::IndexType inputStartIndex,inputEndIndex;
-  inputPtr->TransformPhysicalPointToIndex(inputStartPoint,inputStartIndex);
-  inputPtr->TransformPhysicalPointToIndex(inputEndPoint,inputEndIndex);
+  typename InputImageType::IndexType inputStartIndex, inputEndIndex;
+  inputPtr->TransformPhysicalPointToIndex(inputStartPoint, inputStartIndex);
+  inputPtr->TransformPhysicalPointToIndex(inputEndPoint, inputEndIndex);
 
   typename InputImageType::SizeType inputFinalSize;
   typename InputImageType::IndexType inputFinalIndex;
 
-  for(unsigned int dim = 0; dim<DeformationFieldType::ImageDimension;++dim)
+  for(unsigned int dim = 0; dim<DeformationFieldType::ImageDimension; ++dim)
     {
-    inputFinalIndex[dim] = std::min(inputStartIndex[dim],inputEndIndex[dim]);
-    inputFinalSize[dim] = std::max(inputStartIndex[dim],inputEndIndex[dim])-inputFinalIndex[dim]+1;
+    inputFinalIndex[dim] = std::min(inputStartIndex[dim], inputEndIndex[dim]);
+    inputFinalSize[dim] = std::max(inputStartIndex[dim], inputEndIndex[dim])-inputFinalIndex[dim]+1;
     }
 
   typename InputImageType::RegionType inputRequestedRegion;

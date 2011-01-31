@@ -108,7 +108,7 @@ public:
   typedef typename Superclass::SpacingType SpacingType;
 
   /** Origin typedef support.  The origin is the geometric coordinates
-   * of the index (0,0). */
+   * of the index (0, 0). */
   typedef typename Superclass::PointType PointType;
 
   /** A pointer to the pixel container. */

@@ -302,9 +302,9 @@ int main(int argc, char *argv[])
   //  \begin{tabular}{|l|c|c|c|c|}
   //  \hline
   //  Structure & Seed Index & Lower & Upper & Output Image \\ \hline
-  //  Road & $(110,38)$ & 50 & 100 & Second from left in Figure \ref{fig:NeighborhoodConnectedThresholdOutput} \\ \hline
-  //  Shadow    & $(118,100)$ & 0 & 10 & Third  from left in Figure \ref{fig:NeighborhoodConnectedThresholdOutput} \\ \hline
-  //  Building  & $(169,146)$ & 220 & 255 & Fourth from left in Figure \ref{fig:NeighborhoodConnectedThresholdOutput} \\ \hline
+  //  Road & $(110, 38)$ & 50 & 100 & Second from left in Figure \ref{fig:NeighborhoodConnectedThresholdOutput} \\ \hline
+  //  Shadow    & $(118, 100)$ & 0 & 10 & Third  from left in Figure \ref{fig:NeighborhoodConnectedThresholdOutput} \\ \hline
+  //  Building  & $(169, 146)$ & 220 & 255 & Fourth from left in Figure \ref{fig:NeighborhoodConnectedThresholdOutput} \\ \hline
   //  \end{tabular}
   //  \end{center}
   //  \itkcaption[NeighborhoodConnectedThreshold example parameters]{Parameters used for

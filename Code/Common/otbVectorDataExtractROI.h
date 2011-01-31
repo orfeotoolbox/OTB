@@ -132,7 +132,7 @@ private:
   VectorDataExtractROI(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  int CounterClockWise(PointType firstPoint,PointType secondPoint,PointType thirdPoint);
+  int CounterClockWise(PointType firstPoint, PointType secondPoint, PointType thirdPoint);
   bool IsSegementIntersectSegment(LinePointerType segmentLineAB, LinePointerType segmentLineCD);
 
   bool        m_ProjectionNeeded;

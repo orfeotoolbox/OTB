@@ -54,7 +54,7 @@ InverseSensorModel<TScalarType, NInputDimensions, NOutputDimensions>
     itk::Point<double, 2> currentPoint;
     currentPoint[0] = ossimGPoint.lon;
     currentPoint[1] = ossimGPoint.lat;
-    double height = this->GetDEMFunction()->Evaluate(currentPoint);;
+    double height = this->GetDEMFunction()->Evaluate(currentPoint); ;
 //       otbMsgDevMacro(<< "height : " << height);
     ossimGPoint.height(height);
     }

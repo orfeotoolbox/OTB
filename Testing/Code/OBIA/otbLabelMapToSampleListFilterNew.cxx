@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -27,7 +27,7 @@
 
 int otbLabelMapToSampleListFilterNew(int argc, char* argv[])
 {
-  typedef otb::AttributesMapLabelObject<unsigned short,2,double> LabelObjectType;
+  typedef otb::AttributesMapLabelObject<unsigned short, 2, double> LabelObjectType;
   typedef itk::LabelMap<LabelObjectType>                         LabelMapType;
   typedef itk::VariableLengthVector<double>                      VectorType;
   typedef itk::Statistics::ListSample<VectorType>                ListSampleType;

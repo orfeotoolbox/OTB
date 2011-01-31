@@ -45,19 +45,19 @@ StatisticsXMLFileReader<TMeasurementVector>
     this->Read();
     }
   
-  // Check if the name of the Statistic is present 
+  // Check if the name of the Statistic is present
   bool found = false;
   unsigned int index = 0;
   for(unsigned int  idx = 0; idx < m_NumberOfOutputs; idx++)
     {
-    if(strcmp(m_MeasurementVectorContainer[idx].first.c_str(),statisticName) == 0 )
+    if(strcmp(m_MeasurementVectorContainer[idx].first.c_str(), statisticName) == 0 )
       {
       found = true;
       index = idx;
       }
     }
   
-  // if token not found throw an axception 
+  // if token not found throw an axception
   if(!found)
     itkExceptionMacro(<<"No entry corresponding to the token selected ("<<statisticName<<") in the XML file");
   
@@ -94,14 +94,14 @@ StatisticsXMLFileReader<TMeasurementVector>
   for( TiXmlElement* currentStat = root.FirstChildElement().ToElement();
        currentStat != NULL;
        currentStat = currentStat->NextSiblingElement() )
-    {    
+    {
     InputDataType   currentStatisticVector;
     
     // Store the stat type name
     currentStatisticVector.first = currentStat->Attribute("name");
 
     // The size is not stored in the XML file
-    // Store the value in a std::vector, get the size and then 
+    // Store the value in a std::vector, get the size and then
     // build a measurement vector
     std::vector<double>   tempMeasurementVector;
     
@@ -111,7 +111,7 @@ StatisticsXMLFileReader<TMeasurementVector>
       {
       // Get the current value of the statistic vector
       double value;
-      sample->QueryDoubleAttribute("value",&value);
+      sample->QueryDoubleAttribute("value", &value);
       // Store the value
       tempMeasurementVector.push_back(value);
       }
@@ -137,7 +137,7 @@ StatisticsXMLFileReader<TMeasurementVector>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  //Superclass::PrintSelf(os,indent);
+  //Superclass::PrintSelf(os, indent);
 }
 
 } // End namespace otb

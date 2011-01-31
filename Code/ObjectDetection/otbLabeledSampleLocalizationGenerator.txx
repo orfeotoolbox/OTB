@@ -83,7 +83,7 @@ LabeledSampleLocalizationGenerator<TVectorData>
 ::RandomPointsGenerator(DataNodeType * node)
 {
   // Output
-  PointVectorType vPoint,pPoint;
+  PointVectorType vPoint, pPoint;
 
   // Euclidean distance
   typename EuclideanDistanceType::Pointer euclideanDistance = EuclideanDistanceType::New();
@@ -117,7 +117,7 @@ LabeledSampleLocalizationGenerator<TVectorData>
 
   //std::cout << "insiders: " << insiders.size() << std::endl;
 
-  // Search parametrization 
+  // Search parametrization
   //unsigned int nbMaxIter = (unsigned int)(node->GetPolygonExteriorRing()->GetArea());
   //                                         - insiders.size() * CONST_PI * vcl_pow(this->GetInhibitionRadius(), 2))
   //                                         / (CONST_PI * vcl_pow(this->GetInhibitionRadius(), 2)));
@@ -131,7 +131,7 @@ LabeledSampleLocalizationGenerator<TVectorData>
   unsigned long int nbIter =  this->GetNbMaxIteration();
   unsigned int nbPosition = nbMaxPosition;
 
-  PointType rangeMin,rangeMax;
+  PointType rangeMin, rangeMax;
   
   for(unsigned int dim = 0; dim < 2; ++dim)
     {
@@ -144,7 +144,7 @@ LabeledSampleLocalizationGenerator<TVectorData>
     VertexType candidate;
     for(unsigned int dim = 0; dim < 2; ++dim)
       {
-      candidate[dim] = this->m_RandomGenerator->GetUniformVariate(rangeMin[dim],rangeMax[dim]);
+      candidate[dim] = this->m_RandomGenerator->GetUniformVariate(rangeMin[dim], rangeMax[dim]);
       }
     if(node->GetPolygonExteriorRing()->IsInside(candidate))
       {
@@ -153,7 +153,7 @@ LabeledSampleLocalizationGenerator<TVectorData>
 
       while(valid && pit!=insiders.end())
         {
-        valid = (euclideanDistance->Evaluate(candidate,*pit) > this->GetInhibitionRadius());
+        valid = (euclideanDistance->Evaluate(candidate, *pit) > this->GetInhibitionRadius());
         ++pit;
         }
       PointType point;
@@ -174,20 +174,20 @@ LabeledSampleLocalizationGenerator<TVectorData>
   
   // Densifying positive points
 
-  for(typename PointVectorType::const_iterator iIt = insiders.begin(); iIt != insiders.end();++iIt)
+  for(typename PointVectorType::const_iterator iIt = insiders.begin(); iIt != insiders.end(); ++iIt)
     {
     for(unsigned int i = 0; i < m_NumberOfPositiveSamplesPerPoint; ++i)
       {
       PointType point;
       for(unsigned int dim = 0; dim < 2; ++dim)
         {
-        point[dim] = (*iIt)[dim]+this->m_RandomGenerator->GetUniformVariate(-m_InhibitionRadius,m_InhibitionRadius);
+        point[dim] = (*iIt)[dim]+this->m_RandomGenerator->GetUniformVariate(-m_InhibitionRadius, m_InhibitionRadius);
         }
       pPoint.push_back(point);
       }
     }
 
-  std::pair<PointVectorType,PointVectorType> result;
+  std::pair<PointVectorType, PointVectorType> result;
   result.first = (vPoint);
   result.second = (pPoint);
   return result;
@@ -232,7 +232,7 @@ LabeledSampleLocalizationGenerator<TVectorData>
         this->GetOutput(0)->GetDataTree()->Add(itVector.Get(), document);
         }
        ++itVector;
-      }   
+      }
     }
 
   // Iterates through the polygon features and generates random point inside the polygon with
@@ -247,7 +247,7 @@ LabeledSampleLocalizationGenerator<TVectorData>
       {
       if (itVector.Get()->IsPolygonFeature())
         {
-        std::pair<PointVectorType,PointVectorType> points = RandomPointsGenerator(itVector.Get());
+        std::pair<PointVectorType, PointVectorType> points = RandomPointsGenerator(itVector.Get());
         PointVectorType vPoint = points.first;
         PointVectorType pPoint = points.second;
         
@@ -271,7 +271,7 @@ LabeledSampleLocalizationGenerator<TVectorData>
           }
         }
       ++itVector;
-      }   
+      }
     }
 }
 

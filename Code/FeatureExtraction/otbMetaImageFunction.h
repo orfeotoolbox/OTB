@@ -56,11 +56,11 @@ public:
   itkNewMacro(Self);
 
   // RTTI typeinfo
-  itkTypeMacro(MetaImageFunction,itk::FunctionBase);
+  itkTypeMacro(MetaImageFunction, itk::FunctionBase);
 
   // Input and output typedef
   typedef TCoordRep                                   CoordRepType;
-  typedef itk::Point<CoordRepType,2>                  PointType;
+  typedef itk::Point<CoordRepType, 2>                  PointType;
   typedef TOutputPrecision                            ValueType;
   typedef itk::VariableLengthVector<ValueType>        OutputType;
 
@@ -76,7 +76,7 @@ public:
   void AddFunction(FunctionType * function);
 
   /** Add a new function the functions vector (compatibility via adapters) */
-//  template <typename T1, typename T2> void AddFunction(itk::ImageFunction<T1,T2,TCoordRep> * function);
+//  template <typename T1, typename T2> void AddFunction(itk::ImageFunction<T1, T2, TCoordRep> * function);
 
   /** Clear functions vector */
   void ClearFunctions();

@@ -281,8 +281,8 @@ void JPEG2000ImageIO::Read(void* buffer)
       otbMsgDebugMacro(<< "==========================");
       otbMsgDebugMacro(<< "Tile index: " << tile_index);
       otbMsgDebugMacro(<< "Data size: " << data_size);
-      otbMsgDebugMacro(<< "Tile (x0,y0): " << tile_x0 << " " << tile_y0);
-      otbMsgDebugMacro(<< "Tile (x1,y1): " << tile_x1 << " " << tile_y1);
+      otbMsgDebugMacro(<< "Tile (x0, y0): " << tile_x0 << " " << tile_y0);
+      otbMsgDebugMacro(<< "Tile (x1, y1): " << tile_x1 << " " << tile_y1);
       otbMsgDebugMacro(<< "Tile number of component: " << nb_comps);
       otbMsgDebugMacro(<< "Goes on: " << goesOn);
       otbMsgDevMacro(<< "--------------------------");
@@ -478,7 +478,7 @@ void JPEG2000ImageIO::ReadImageInformation()
 
   otbMsgDebugMacro(<< "==========================");
   otbMsgDebugMacro(<< "ReadImageInformation: ");
-  otbMsgDebugMacro(<< "Tile (x0,y0): " << tile_x0 << " " << tile_y0);
+  otbMsgDebugMacro(<< "Tile (x0, y0): " << tile_x0 << " " << tile_y0);
   otbMsgDebugMacro(<< "Tile size: " << tile_width << " x " << tile_height);
   otbMsgDebugMacro(<< "Number of tiles: " << nb_tiles_x << " " << nb_tiles_y);
   otbMsgDebugMacro(<< "Precision: " << precision);
@@ -602,20 +602,20 @@ void JPEG2000ImageIO::Write(const void* /*buffer*/)
 //     m_Parameters.irreversible = 1;
 
 //     /* do not bother with mct, the rsiz is set when calling opj_set_MCT*/
-//     /*m_Parameters.cp_rsiz = STD_RSIZ;*/
+//     /*m_Parameters.cp_rsiz = STD_RSIZ; */
 
 //     /* no cinema */
-//     /*m_Parameters.cp_cinema = 0;*/
+//     /*m_Parameters.cp_cinema = 0; */
 
 //     /* no not bother using SOP or EPH markers, do not use custom size precinct */
 //     /* number of precincts to specify */
-//     /* m_Parameters.csty = 0;*/
+//     /* m_Parameters.csty = 0; */
 //     /* m_Parameters.res_spec = ... */
 //     /* m_Parameters.prch_init[i] = .. */
 //     /* m_Parameters.prcw_init[i] = .. */
 
 //     /* do not use progression order changes */
-//     /*m_Parameters.numpocs = 0;*/
+//     /*m_Parameters.numpocs = 0; */
 //     /* m_Parameters.POC[i].... */
 
 //     /* do not restrain the size for a component.*/
@@ -623,7 +623,7 @@ void JPEG2000ImageIO::Write(const void* /*buffer*/)
 
 //     /** block encoding style for each component, do not use at the moment */
 //     /** J2K_CCP_CBLKSTY_TERMALL, J2K_CCP_CBLKSTY_LAZY, J2K_CCP_CBLKSTY_VSC, J2K_CCP_CBLKSTY_SEGSYM, J2K_CCP_CBLKSTY_RESET */
-//     /* m_Parameters.mode = 0;*/
+//     /* m_Parameters.mode = 0; */
 
 //     /** number of resolutions */
 //     m_Parameters.numresolution = 6;
@@ -641,15 +641,15 @@ void JPEG2000ImageIO::Write(const void* /*buffer*/)
 //     /* m_Parameters.tp_flag = 0; */
 
 //     /* if we are using mct */
-//     /* opj_set_MCT(&m_Parameters,l_mct,l_offsets,NUM_COMPS); */
+//     /* opj_set_MCT(&m_Parameters, l_mct, l_offsets, NUM_COMPS); */
 
 //     /* image definition */
 //     l_current_param_ptr = m_Parameters;
 //     for
-//       (i=0;i<NUM_COMPS;++i)
+//       (i=0; i<NUM_COMPS; ++i)
 //       {
 //   /* do not bother bpp useless */
-//   /*l_current_param_ptr->bpp = COMP_PREC;*/
+//   /*l_current_param_ptr->bpp = COMP_PREC; */
 //   l_current_param_ptr->dx = 1;
 //   l_current_param_ptr->dy = 1;
 //   l_current_param_ptr->h = m_Dimensions[1];
@@ -662,16 +662,16 @@ void JPEG2000ImageIO::Write(const void* /*buffer*/)
 //       }
 
 //     m_Codec = opj_create_compress(CODEC_JP2);
-//     opj_set_info_handler(m_Codec, info_callback,00);
-//     opj_set_warning_handler(m_Codec, warning_callback,00);
-//     opj_set_error_handler(m_Codec, error_callback,00);
+//     opj_set_info_handler(m_Codec, info_callback, 00);
+//     opj_set_warning_handler(m_Codec, warning_callback, 00);
+//     opj_set_error_handler(m_Codec, error_callback, 00);
 
 //     if(!m_Codec)
 //       {
 //   itkExceptionMacro(<<"Failed to create openjpeg codec.");
 //       }
 
-//     m_OpenJpegImage = opj_image_tile_create(m_NbBands,m_Parameters,CLRSPC_SRGB);
+//     m_OpenJpegImage = opj_image_tile_create(m_NbBands, m_Parameters, CLRSPC_SRGB);
 
 //     m_OpenJpegImage->x0 = 0;
 //     m_OpenJpegImage->y0 = 0;
@@ -689,7 +689,7 @@ void JPEG2000ImageIO::Write(const void* /*buffer*/)
 //     opj_set_default_encoder_parameters(&m_Parameters);
 //     // TODO: add custom parameters here
 
-//     if(!opj_setup_encoder(m_Codec,&m_Parameters,m_OpenJpegImage))
+//     if(!opj_setup_encoder(m_Codec, &m_Parameters, m_OpenJpegImage))
 //       {
 //   itkExceptionMacro(<<"Failed to set up decoder parameters.");
 //       }
@@ -701,7 +701,7 @@ void JPEG2000ImageIO::Write(const void* /*buffer*/)
 //   itkExceptionMacro(<<"Failed to open file: "<<m_FileName);
 //       }
 
-//     m_OpenJpegStream = opj_stream_create_default_file_stream(m_File,true);
+//     m_OpenJpegStream = opj_stream_create_default_file_stream(m_File, true);
 
 //     if(!m_OpenJpegStream)
 //       {
@@ -726,12 +726,12 @@ void JPEG2000ImageIO::Write(const void* /*buffer*/)
 
 //     std::streamsize component_size = new
 
-//     for(comp = 0;comp<m_NbBands;++comp)
+//     for(comp = 0; comp<m_NbBands; ++comp)
 //       {
 
 //       }
 
-//     if(! opj_write_tile(m_Codec,tile_index,charstarbuffer,buffer_size,m_OpenJpegStream))
+//     if(! opj_write_tile(m_Codec, tile_index, charstarbuffer, buffer_size, m_OpenJpegStream))
 //       {
 
 //       }

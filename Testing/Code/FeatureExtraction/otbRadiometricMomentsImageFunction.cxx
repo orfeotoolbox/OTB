@@ -40,7 +40,7 @@ int otbRadiometricMomentsImageFunctionNew(int argc, char * argv[])
   // Instantiating object
   FunctionType::Pointer function       = FunctionType::New();
 
-  std::cout << function << std::endl; 
+  std::cout << function << std::endl;
   
   return EXIT_SUCCESS;
 }
@@ -70,7 +70,7 @@ int otbRadiometricMomentsImageFunction(int argc, char * argv[])
   index[0] = 100;
   index[1] = 100;
 
-  function->SetNeighborhoodRadius(3);  
+  function->SetNeighborhoodRadius(3);
   OutputType Result;
   Result = function->EvaluateAtIndex(index);
 

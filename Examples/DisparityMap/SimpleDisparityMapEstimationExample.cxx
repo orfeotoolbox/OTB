@@ -21,7 +21,7 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {StereoFixed.png}, {StereoMoving.png}
-//    OUTPUTS: {deformationFieldOutput.png},{resampledMovingOutput.png}
+//    OUTPUTS: {deformationFieldOutput.png}, {resampledMovingOutput.png}
 //    5 5 9 7 10 100 0.8
 //  Software Guide : EndCommandLineArgs
 
@@ -268,9 +268,9 @@ int main(int argc, char* argv[])
   // Point data will contains the following data :
   //
   // \begin{enumerate}
-  // \item{The final metric value found in the registration process,}
-  // \item{the deformation value in the first image direction,}
-  // \item{the deformation value in the second image direction,}
+  // \item{The final metric value found in the registration process, }
+  // \item{the deformation value in the first image direction, }
+  // \item{the deformation value in the second image direction, }
   // \item{the final parameters of the transform.}
   // \end{enumerate}
   //

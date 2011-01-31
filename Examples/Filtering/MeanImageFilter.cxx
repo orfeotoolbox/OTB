@@ -35,20 +35,20 @@
 //  with the pixel at the center of the neighborhood.
 //
 //  \begin{center}
-//  \begin{picture}(200,46)
-//  \put(   5.0,  0.0 ){\framebox(30.0,15.0){25}}
-//  \put(  35.0,  0.0 ){\framebox(30.0,15.0){30}}
-//  \put(  65.0,  0.0 ){\framebox(30.0,15.0){32}}
-//  \put(   5.0, 15.0 ){\framebox(30.0,15.0){27}}
-//  \put(  35.0, 15.0 ){\framebox(30.0,15.0){25}}
-//  \put(  65.0, 15.0 ){\framebox(30.0,15.0){29}}
-//  \put(   5.0, 30.0 ){\framebox(30.0,15.0){28}}
-//  \put(  35.0, 30.0 ){\framebox(30.0,15.0){26}}
-//  \put(  65.0, 30.0 ){\framebox(30.0,15.0){50}}
-//  \put( 100.0, 22.0 ){\vector(1,0){20.0}}
-//  \put( 125.0, 15.0 ){\framebox(34.0,15.0){30.22}}
-//  \put( 160.0, 22.0 ){\vector(1,0){20.0}}
-//  \put( 185.0, 15.0 ){\framebox(30.0,15.0){30}}
+//  \begin{picture}(200, 46)
+//  \put(   5.0,  0.0 ){\framebox(30.0, 15.0){25}}
+//  \put(  35.0,  0.0 ){\framebox(30.0, 15.0){30}}
+//  \put(  65.0,  0.0 ){\framebox(30.0, 15.0){32}}
+//  \put(   5.0, 15.0 ){\framebox(30.0, 15.0){27}}
+//  \put(  35.0, 15.0 ){\framebox(30.0, 15.0){25}}
+//  \put(  65.0, 15.0 ){\framebox(30.0, 15.0){29}}
+//  \put(   5.0, 30.0 ){\framebox(30.0, 15.0){28}}
+//  \put(  35.0, 30.0 ){\framebox(30.0, 15.0){26}}
+//  \put(  65.0, 30.0 ){\framebox(30.0, 15.0){50}}
+//  \put( 100.0, 22.0 ){\vector(1, 0){20.0}}
+//  \put( 125.0, 15.0 ){\framebox(34.0, 15.0){30.22}}
+//  \put( 160.0, 22.0 ){\vector(1, 0){20.0}}
+//  \put( 185.0, 15.0 ){\framebox(30.0, 15.0){30}}
 //  \end{picture}
 //  \end{center}
 //
@@ -134,7 +134,7 @@ int main(int argc, char * argv[])
   //  The size of the neighborhood is defined along every dimension by
   //  passing a \code{SizeType} object with the corresponding values. The
   //  value on each dimension is used as the semi-size of a rectangular
-  //  box. For example, in $2D$ a size of \(1,2\) will result in a $3 \times
+  //  box. For example, in $2D$ a size of \(1, 2\) will result in a $3 \times
   //  5$ neighborhood.
   //
   //  \index{itk::MeanImageFilter!Radius}
@@ -181,7 +181,7 @@ int main(int argc, char * argv[])
   //
   //  Figure \ref{fig:MeanImageFilterOutput} illustrates the effect of this
   //  filter using neighborhood radii of
-  //  \(1,1\) which corresponds to a $ 3 \times 3 $ classical neighborhood.
+  //  \(1, 1\) which corresponds to a $ 3 \times 3 $ classical neighborhood.
   //  It can be seen from this picture that edges are rapidly degraded by the
   //  diffusion of intensity values among neighbors.
   //

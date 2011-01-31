@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -27,7 +27,7 @@ namespace otb {
  *        of class labels
  */
 template<class TInputImage, class TOutputImage>
-class ITK_EXPORT LabelMapWithClassLabelToClassLabelImageFilter : 
+class ITK_EXPORT LabelMapWithClassLabelToClassLabelImageFilter :
     public itk::LabelMapFilter<TInputImage, TOutputImage>
 {
 public:
@@ -60,10 +60,10 @@ public:
                       TOutputImage::ImageDimension);
 
   /** Standard New method. */
-  itkNewMacro(Self);  
+  itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(LabelMapWithClassLabelToClassLabelImageFilter, 
+  itkTypeMacro(LabelMapWithClassLabelToClassLabelImageFilter,
                ImageToImageFilter);
 
 protected:
@@ -72,7 +72,7 @@ protected:
 
   virtual void BeforeThreadedGenerateData();
 
-  virtual void ThreadedProcessLabelObject( LabelObjectType * labelObject );  
+  virtual void ThreadedProcessLabelObject( LabelObjectType * labelObject );
 
 private:
   LabelMapWithClassLabelToClassLabelImageFilter(const Self&); //purposely not implemented

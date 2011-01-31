@@ -66,12 +66,12 @@ namespace otb
  * \ingroup IntensityImageFilters, Streamed
  */
 template <class TInputImage, class T0utputCorrelation, class TOutputDeformationField>
-class ITK_EXPORT FineRegistrationImageFilter : public itk::ImageToImageFilter<TInputImage,T0utputCorrelation>
+class ITK_EXPORT FineRegistrationImageFilter : public itk::ImageToImageFilter<TInputImage, T0utputCorrelation>
 {
 public:
   /** Standard class typedefs. */
   typedef FineRegistrationImageFilter                             Self;
-  typedef itk::ImageToImageFilter<TInputImage,T0utputCorrelation> Superclass;
+  typedef itk::ImageToImageFilter<TInputImage, T0utputCorrelation> Superclass;
   typedef itk::SmartPointer<Self>                                 Pointer;
   typedef itk::SmartPointer<const Self>                           ConstPointer;
 
@@ -96,18 +96,18 @@ public:
   typedef itk::ContinuousIndex<double, 2>                         ContinuousIndexType;
   typedef itk::ImageToImageMetric<TInputImage, TInputImage>       MetricType;
   typedef typename MetricType::Pointer                            MetricPointerType;
-  typedef itk::TranslationTransform<double,2>                     TranslationType;
+  typedef itk::TranslationTransform<double, 2>                     TranslationType;
   typedef typename TranslationType::Pointer                       TranslationPointerType;
-  typedef typename itk::Transform<double,2,2>                     TransformType;
+  typedef typename itk::Transform<double, 2, 2>                     TransformType;
   typedef typename TransformType::Pointer                         TransformPointerType;
 
   /** Set/Get the Metric used to compare images */
-  itkSetObjectMacro(Metric,MetricType);
-  itkGetObjectMacro(Metric,MetricType);
+  itkSetObjectMacro(Metric, MetricType);
+  itkGetObjectMacro(Metric, MetricType);
 
   /** Set/Get the interpolator used to interpolate moving image at non-grid positions */
-  itkSetObjectMacro(Interpolator,InterpolatorType);
-  itkGetObjectMacro(Interpolator,InterpolatorType);
+  itkSetObjectMacro(Interpolator, InterpolatorType);
+  itkGetObjectMacro(Interpolator, InterpolatorType);
 
   /** Connect one of the operands for pixel-wise addition */
   void SetFixedInput( const TInputImage * image);
@@ -127,28 +127,28 @@ public:
   itkGetMacro(Radius, SizeType);
 
   /** Set the searh radius */
-  itkSetMacro(SearchRadius,SizeType);
-  itkGetMacro(SearchRadius,SizeType);
+  itkSetMacro(SearchRadius, SizeType);
+  itkGetMacro(SearchRadius, SizeType);
   
   /** Set/Get subpixel accuracy */
-  itkSetMacro(SubPixelAccuracy,double);
-  itkGetMacro(SubPixelAccuracy,double);
+  itkSetMacro(SubPixelAccuracy, double);
+  itkGetMacro(SubPixelAccuracy, double);
 
   /** True if metric should be minimized. False otherwise */
-  itkSetMacro(Minimize,bool);
+  itkSetMacro(Minimize, bool);
   itkBooleanMacro(Minimize);
 
   /** True if deformation field takes spacing into account. False otherwise */
-  itkSetMacro(UseSpacing,bool);
+  itkSetMacro(UseSpacing, bool);
   itkBooleanMacro(UseSpacing);
 
   /** Set default offset between the two images */
-  itkSetMacro(InitialOffset,SpacingType);
-  itkGetConstReferenceMacro(InitialOffset,SpacingType);
+  itkSetMacro(InitialOffset, SpacingType);
+  itkGetConstReferenceMacro(InitialOffset, SpacingType);
 
   /** Set the grid step */
-  itkSetMacro(GridStep,OffsetType);
-  itkGetConstReferenceMacro(GridStep,OffsetType);
+  itkSetMacro(GridStep, OffsetType);
+  itkGetConstReferenceMacro(GridStep, OffsetType);
 
   /** Set unsigned int radius */
   void SetRadius(unsigned int radius)

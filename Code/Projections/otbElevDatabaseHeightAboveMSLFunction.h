@@ -71,7 +71,7 @@ public:
   typedef TCoordRep CoordRepType;
 
   /** Point Type. */
-  typedef itk::Point<TCoordRep,NPointDimension>    PointType;
+  typedef itk::Point<TCoordRep, NPointDimension>    PointType;
 
   /** Get the dimension (size) of the point. */
   static unsigned int GetPointDimension()

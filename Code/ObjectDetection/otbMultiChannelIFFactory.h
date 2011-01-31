@@ -35,7 +35,7 @@ namespace otb
  *  According to the image type, the Create method of this class can
  *  call an ImageFunctionFactory for each band of the input image or
  *  once if the image type is otb::Image.
- *  
+ *
  */
 
 template <class TIFFactory, class TInputImage>
@@ -54,11 +54,11 @@ public:
 
   typedef ImageList<ImageType>                             ImageListType;
   typedef VectorImageToImageListFilter<InputImageType,
-                                                ImageListType>      VIToILFilterType;  
+                                                ImageListType>      VIToILFilterType;
   
-  void Create(InputImageType * image, 
-              ParameterContainerType param, 
-              MetaIFPointerType metaIF, 
+  void Create(InputImageType * image,
+              ParameterContainerType param,
+              MetaIFPointerType metaIF,
               ImageContainer * container)
   {
     m_Factory->Create(image, param, metaIF, container);
@@ -78,7 +78,7 @@ private:
 
 
 template <class TIFFactory, typename TPixel, unsigned int VImageDimension>
-class MultiChannelIFFactory<TIFFactory, otb::VectorImage<TPixel,VImageDimension> >
+class MultiChannelIFFactory<TIFFactory, otb::VectorImage<TPixel, VImageDimension> >
 {
 public:
   typedef TIFFactory                                    IFFactoryType;
@@ -96,9 +96,9 @@ public:
   typedef VectorImageToImageListFilter<InputImageType,
                                                 ImageListType>      VIToILFilterType;
   
-  void Create(InputImageType * image, 
-              ParameterContainerType param, 
-              MetaIFPointerType metaIF, 
+  void Create(InputImageType * image,
+              ParameterContainerType param,
+              MetaIFPointerType metaIF,
               ImageContainer * container)
   {
     unsigned int nbBand;

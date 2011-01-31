@@ -45,7 +45,7 @@ int otbHistogramOfOrientedGradientCovariantImageFunctionNew(int argc, char * arg
   // Instantiating object
   FunctionType::Pointer function       = FunctionType::New();
 
-  std::cout << function << std::endl; 
+  std::cout << function << std::endl;
  
   return EXIT_SUCCESS;
 }
@@ -77,9 +77,9 @@ int otbHistogramOfOrientedGradientCovariantImageFunction(int argc, char * argv[]
 
   std::ofstream ofs(argv[2]);
 
-  for(unsigned i = 0; i < 5;++i)
+  for(unsigned i = 0; i < 5; ++i)
     {
-    for(unsigned j = 0; j<function->GetNumberOfOrientationBins();++j)
+    for(unsigned j = 0; j<function->GetNumberOfOrientationBins(); ++j)
       {
       ofs<<value[i][j]<<"\t";
       }

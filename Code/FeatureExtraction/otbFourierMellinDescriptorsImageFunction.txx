@@ -106,7 +106,7 @@ FourierMellinDescriptorsImageFunction<TInputImage, TCoordRep>
     ScalarRealType     y = static_cast<ScalarRealType>(it.GetOffset(i)[1])/(2*m_NeighborhoodRadius+1);
     
     // Build complex value
-    ScalarComplexType xplusiy(x,y),x2plusy2(x*x+y*y,0.0);
+    ScalarComplexType xplusiy(x, y), x2plusy2(x*x+y*y, 0.0);
     
     // Update cumulants
     for (unsigned int p = 0; p <= m_Pmax; p++)
@@ -117,7 +117,7 @@ FourierMellinDescriptorsImageFunction<TInputImage, TCoordRep>
         
         if (x!=0 || y!=0) // vcl_pow limitations
           {
-          coefs.at(p).at(q) += vcl_pow(xplusiy,-p) * vcl_pow(x2plusy2,power) * value; 
+          coefs.at(p).at(q) += vcl_pow(xplusiy, -p) * vcl_pow(x2plusy2, power) * value;
           }
         }
       }

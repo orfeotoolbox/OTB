@@ -15,11 +15,17 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+
 #include "otbPipelineMemoryPrintCalculator.h"
+
+#include "otbMath.h"
+#include "itkImage.h"
+#include "itkVectorImage.h"
+#include "itkFixedArray.h"
 
 namespace otb
 {
-const double PipelineMemoryPrintCalculator::OctetToMegaOctet = 1./vcl_pow(2.0, 20);
+const double PipelineMemoryPrintCalculator::ByteToMegabyte = 1./vcl_pow(2.0, 20);
 
 PipelineMemoryPrintCalculator
 ::PipelineMemoryPrintCalculator()
@@ -30,26 +36,22 @@ PipelineMemoryPrintCalculator
     m_BiasCorrectionFactor(1.)
 {}
 
-PipelineMemoryPrintCalculator
-::~PipelineMemoryPrintCalculator()
-{}
-
-void 
+void
 PipelineMemoryPrintCalculator
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 
   // Display parameters
   os<<indent<<"Data to write:                      "<<m_DataToWrite<<std::endl;
-  os<<indent<<"Memory print of whole pipeline:     "<<m_MemoryPrint<<" Mo"<<std::endl;
-  os<<indent<<"Available memory:                   "<<m_AvailableMemory<<" Mo"<<std::endl;
+  os<<indent<<"Memory print of whole pipeline:     "<<m_MemoryPrint * ByteToMegabyte <<" Mb"<<std::endl;
+  os<<indent<<"Available memory:                   "<<m_AvailableMemory * ByteToMegabyte <<" Mb"<<std::endl;
   os<<indent<<"Optimal number of stream divisions: "<<m_OptimalNumberOfStreamDivisions<<std::endl;
   os<<indent<<"Bias correction factor applied:     "<<m_BiasCorrectionFactor<<std::endl;
 }
 
-void 
+void
 PipelineMemoryPrintCalculator
 ::Compute()
 {
@@ -74,28 +76,28 @@ PipelineMemoryPrintCalculator
     }
 
   // Apply bias correction factor
-  m_MemoryPrint*=m_BiasCorrectionFactor;
+  m_MemoryPrint *= m_BiasCorrectionFactor;
 
   // Compute the optimal number of stream division
-  m_OptimalNumberOfStreamDivisions = vcl_ceil(m_MemoryPrint
+  m_OptimalNumberOfStreamDivisions = vcl_ceil(static_cast<double>(m_MemoryPrint)
                                               /m_AvailableMemory);
 }
 
-double 
+PipelineMemoryPrintCalculator::MemoryPrintType
 PipelineMemoryPrintCalculator
 ::EvaluateMemoryPrint(ProcessObjectType * process)
 {
   // This variable will store the final print
-  double print = 0;
+  MemoryPrintType print = 0;
 
   // Retrieve the array of inputs
   ProcessObjectType::DataObjectPointerArray inputs = process->GetInputs();
   // First, recurse on each input source
-  for(unsigned int i =0; i < process->GetNumberOfInputs();++i)
+  for(unsigned int i = 0; i < process->GetNumberOfInputs(); ++i)
     {
     // Retrieve the data object
     DataObjectType * input = inputs[i];
-      
+
     // Retrieve possible source
     ProcessObjectType * source = input->GetSource();
 
@@ -106,7 +108,7 @@ PipelineMemoryPrintCalculator
       }
     else
       {
-      double localPrint = this->EvaluateDataObjectPrint(input);
+      MemoryPrintType localPrint = this->EvaluateDataObjectPrint(input);
       print += localPrint;
       }
     }
@@ -114,9 +116,9 @@ PipelineMemoryPrintCalculator
   ProcessObjectType::DataObjectPointerArray outputs = process->GetOutputs();
 
   // Now, evaluate the current object print
-  for(unsigned int i =0; i < process->GetNumberOfOutputs();++i)
+  for(unsigned int i = 0; i < process->GetNumberOfOutputs(); ++i)
     {
-    double localPrint = this->EvaluateDataObjectPrint(outputs[0]);
+    MemoryPrintType localPrint = this->EvaluateDataObjectPrint(outputs[0]);
     print += localPrint;
     }
 
@@ -124,45 +126,45 @@ PipelineMemoryPrintCalculator
   return print;
 }
 
-double 
+PipelineMemoryPrintCalculator::MemoryPrintType
 PipelineMemoryPrintCalculator
-::EvaluateDataObjectPrint(DataObjectType * data)
+::EvaluateDataObjectPrint(DataObjectType * data) const
 {
 
 #define OTB_IMAGE_SIZE_BLOCK(type)                                      \
-  if(dynamic_cast<itk::Image<type,2> *>(data) != NULL)                  \
+  if(dynamic_cast<itk::Image<type, 2> *>(data) != NULL)                  \
     {                                                                   \
-    itk::Image<type,2> * image = dynamic_cast<itk::Image<type,2> *>(data); \
+    itk::Image<type, 2> * image = dynamic_cast<itk::Image<type, 2> *>(data); \
     return image->GetRequestedRegion().GetNumberOfPixels()              \
-      * image->GetNumberOfComponentsPerPixel() * sizeof(type) * OctetToMegaOctet; \
+      * image->GetNumberOfComponentsPerPixel() * sizeof(type); \
     }                                                                   \
-  if(dynamic_cast<itk::VectorImage<type,2> * >(data) != NULL)           \
+  if(dynamic_cast<itk::VectorImage<type, 2> * >(data) != NULL)           \
     {                                                                   \
-    itk::VectorImage<type,2> * image = dynamic_cast<itk::VectorImage<type,2> *>(data); \
+    itk::VectorImage<type, 2> * image = dynamic_cast<itk::VectorImage<type, 2> *>(data); \
     return image->GetRequestedRegion().GetNumberOfPixels()              \
-      * image->GetNumberOfComponentsPerPixel() * sizeof(type) * OctetToMegaOctet; \
+      * image->GetNumberOfComponentsPerPixel() * sizeof(type); \
     }                                                                   \
-  
+
   // Call the macro for each pixel type
   OTB_IMAGE_SIZE_BLOCK(unsigned char)
-    OTB_IMAGE_SIZE_BLOCK(char)
-    OTB_IMAGE_SIZE_BLOCK(unsigned short)
-    OTB_IMAGE_SIZE_BLOCK( short)
-    OTB_IMAGE_SIZE_BLOCK(unsigned int)
-    OTB_IMAGE_SIZE_BLOCK( int)
-    OTB_IMAGE_SIZE_BLOCK(unsigned long)
-    OTB_IMAGE_SIZE_BLOCK( long)
-    OTB_IMAGE_SIZE_BLOCK(float)
-    OTB_IMAGE_SIZE_BLOCK( double)
-    OTB_IMAGE_SIZE_BLOCK(std::complex<float>)
-    OTB_IMAGE_SIZE_BLOCK(std::complex<double>)
-    typedef itk::FixedArray<float,2> FloatFixedArray2Type;
-    typedef itk::FixedArray<float,2> DoubleFixedArray2Type;
-    OTB_IMAGE_SIZE_BLOCK(FloatFixedArray2Type)
-    OTB_IMAGE_SIZE_BLOCK(DoubleFixedArray2Type)
-      
-    // If we are still here, none of the macro call succeed
-    return 0;
+  OTB_IMAGE_SIZE_BLOCK(char)
+  OTB_IMAGE_SIZE_BLOCK(unsigned short)
+  OTB_IMAGE_SIZE_BLOCK(short)
+  OTB_IMAGE_SIZE_BLOCK(unsigned int)
+  OTB_IMAGE_SIZE_BLOCK(int)
+  OTB_IMAGE_SIZE_BLOCK(unsigned long)
+  OTB_IMAGE_SIZE_BLOCK(long)
+  OTB_IMAGE_SIZE_BLOCK(float)
+  OTB_IMAGE_SIZE_BLOCK(double)
+  OTB_IMAGE_SIZE_BLOCK(std::complex<float>)
+  OTB_IMAGE_SIZE_BLOCK(std::complex<double>)
+  typedef itk::FixedArray<float, 2> FloatFixedArray2Type;
+  typedef itk::FixedArray<float, 2> DoubleFixedArray2Type;
+  OTB_IMAGE_SIZE_BLOCK(FloatFixedArray2Type)
+  OTB_IMAGE_SIZE_BLOCK(DoubleFixedArray2Type)
+
+  // If we are still here, none of the macro call succeed
+  return 0;
 }
 
 } // End namespace otb

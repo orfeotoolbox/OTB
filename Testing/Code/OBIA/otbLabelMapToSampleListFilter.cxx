@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -41,11 +41,11 @@ int otbLabelMapToSampleListFilter(int argc, char* argv[])
  // Labeled image type
   const unsigned int Dimension = 2;
   typedef unsigned short                                                 LabelType;
-  typedef otb::Image<LabelType,Dimension>                                LabeledImageType;
+  typedef otb::Image<LabelType, Dimension>                                LabeledImageType;
   typedef otb::ImageFileReader<LabeledImageType>                         LabeledReaderType;
-  typedef otb::AttributesMapLabelObject<LabelType,Dimension,double>      LabelObjectType;
+  typedef otb::AttributesMapLabelObject<LabelType, Dimension, double>      LabelObjectType;
   typedef itk::LabelMap<LabelObjectType>                                 LabelMapType;
-  typedef itk::BinaryImageToLabelMapFilter<LabeledImageType,LabelMapType> LabelMapFilterType;
+  typedef itk::BinaryImageToLabelMapFilter<LabeledImageType, LabelMapType> LabelMapFilterType;
   typedef otb::ShapeAttributesLabelMapFilter<LabelMapType>               ShapeLabelMapFilterType;
 
 
@@ -76,7 +76,7 @@ int otbLabelMapToSampleListFilter(int argc, char* argv[])
    filter->GetMeasurementFunctor().AddAttribute("test");
    filter->GetMeasurementFunctor().ClearAttributes();
 
-   for(int i = 2; i<argc;++i)
+   for(int i = 2; i<argc; ++i)
      {
      filter->GetMeasurementFunctor().AddAttribute(argv[i]);
      }

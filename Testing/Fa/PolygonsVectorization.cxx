@@ -73,9 +73,9 @@ int main(int argc, char * argv[])
   typedef itk::RescaleIntensityImageFilter<LabeledImageType, OutputImageType>    RescalerType;
 /*
   typedef itk::BinaryBallStructuringElement< LabelPixelType, 2 >        StructuringElementType;
-  typedef itk::BinaryErodeImageFilter<LabeledImageType,LabeledImageType,StructuringElementType>   ErodeFilterType;
-  typedef itk::BinaryDilateImageFilter<LabeledImageType,LabeledImageType,StructuringElementType>  DilateFilterType;
-  typedef itk::MedianImageFilter<LabeledImageType,LabeledImageType> MedianFilterType;
+  typedef itk::BinaryErodeImageFilter<LabeledImageType, LabeledImageType, StructuringElementType>   ErodeFilterType;
+  typedef itk::BinaryDilateImageFilter<LabeledImageType, LabeledImageType, StructuringElementType>  DilateFilterType;
+  typedef itk::MedianImageFilter<LabeledImageType, LabeledImageType> MedianFilterType;
   typedef otb::RemoveObjectPreprocessingImageFilter<LabeledImageType>           PreprocessingFilterType;
 */
   typedef otb::ImageFileReader<LabeledImageType> ReaderType;

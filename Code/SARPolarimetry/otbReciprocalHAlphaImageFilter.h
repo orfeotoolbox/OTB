@@ -47,25 +47,25 @@ public:
   typedef typename TOutput::ValueType              OutputValueType;
 
   /** CoherencyMatrix type **/
-  typedef itk::Vector<RealType,9> CoherencyMatrixType;
+  typedef itk::Vector<RealType, 9> CoherencyMatrixType;
 
   /** Vector type used to store eigenvalues. */
   typedef itk::Vector<RealType, 3> EigenvalueType;
 
   /** Matrix type used to store eigenvectors. */
   typedef itk::Vector<float, 2> VectorType;
-  typedef itk::Vector<VectorType,3> EigenVectorFirstComposantType;
+  typedef itk::Vector<VectorType, 3> EigenVectorFirstComposantType;
   typedef itk::Vector<VectorType,3> EigenVectorType; // eigenvector type (real part, imaginary part)
-  typedef itk::Vector<itk::Vector<float, 6>,3> EigenMatrixType;
-  typedef itk::Image<EigenVectorType,2> EigenVectorImageType;
-  typedef itk::Image<double,2> EigenValueImageType;
+  typedef itk::Vector<itk::Vector<float, 6>, 3> EigenMatrixType;
+  typedef itk::Image<EigenVectorType, 2> EigenVectorImageType;
+  typedef itk::Image<double, 2> EigenValueImageType;
 
   typedef itk::Vector<double, 3> OutputVectorType;
 
   typedef itk::Vector<float, 2> ComplexVectorType;
   typedef itk::Vector<ComplexVectorType, 3> HermitianVectorType;
-  typedef itk::Vector<HermitianVectorType,3> HermitianMatrixType;
-  typedef otb::HermitianEigenAnalysis<CoherencyMatrixType,EigenvalueType, EigenMatrixType> HermitianAnalysisType;
+  typedef itk::Vector<HermitianVectorType, 3> HermitianMatrixType;
+  typedef otb::HermitianEigenAnalysis<CoherencyMatrixType, EigenvalueType, EigenMatrixType> HermitianAnalysisType;
 
 
   inline TOutput operator()( const TInput & Coherency ) const
@@ -87,7 +87,7 @@ public:
     T[6] = static_cast<RealType>(Coherency[2].imag());
     T[7] = static_cast<RealType>(Coherency[4].real());
     T[8] = static_cast<RealType>(Coherency[4].imag());
-    HermitianAnalysis.ComputeEigenValuesAndVectors(T,eigenValues,eigenVectors);
+    HermitianAnalysis.ComputeEigenValuesAndVectors(T, eigenValues, eigenVectors);
 
     // Entropy estimation
     RealType  totalEigenValues = 0.0;
@@ -178,12 +178,12 @@ private:
 template <class TInputImage, class TOutputImage, class TFunction = Functor::ReciprocalHAlphaFunctor<
     ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
 class ITK_EXPORT ReciprocalHAlphaImageFilter :
-   public otb::UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction>
+   public otb::UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction>
 {
 public:
    /** Standard class typedefs. */
    typedef ReciprocalHAlphaImageFilter  Self;
-   typedef otb::UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction> Superclass;
+   typedef otb::UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction> Superclass;
    typedef itk::SmartPointer<Self>        Pointer;
    typedef itk::SmartPointer<const Self>  ConstPointer;
 

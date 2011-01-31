@@ -57,34 +57,34 @@ const std::string TileMapImageIOHelper::ConvertDepthToScale(const unsigned int d
       res += "2 million)";
       break;
     case 9:
-      res += "867,000)";
+      res += "867, 000)";
       break;
     case 10:
-      res += "433,000)";
+      res += "433, 000)";
       break;
     case 11:
-      res += "217,000)";
+      res += "217, 000)";
       break;
     case 12:
-      res += "108,000)";
+      res += "108, 000)";
       break;
     case 13:
-      res += "54,000)";
+      res += "54, 000)";
       break;
     case 14:
-      res += "27,000)";
+      res += "27, 000)";
       break;
     case 15:
-      res += "14,000)";
+      res += "14, 000)";
       break;
     case 16:
-      res += "6,771)";
+      res += "6, 771)";
       break;
     case 17:
-      res += "3,385)";
+      res += "3, 385)";
       break;
     case 18:
-      res += "1,693)";
+      res += "1, 693)";
       break;
     default:
       res += "222 million)";

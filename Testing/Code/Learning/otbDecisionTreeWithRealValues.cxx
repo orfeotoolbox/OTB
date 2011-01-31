@@ -24,17 +24,17 @@ int otbDecisionTreeWithRealValues(int argc, char* argv[])
 {
 /** We build the following decision tree
 
-                                         -------------      
-                  ( DOY LE 100  )     
-                   -------------      
-              Yes  -/    --   No     
-                --/      \--        
-           -------------  ------------- 
+                                         -------------
+                  ( DOY LE 100  )
+                   -------------
+              Yes  -/    --   No
+                --/      \--
+           -------------  -------------
           ( NDVI GT 0.7 )    ( NDVI GT 0.7 )
-           -------------  ------------- 
-         / --           /\     
+           -------------  -------------
+         / --           /\
         Yes  -/    \-  No         Yes-/   \- No
-           -/         \     -/     \- 
+           -/         \     -/     \-
          WW           SW           SW        WW
 
   */
@@ -61,7 +61,7 @@ int otbDecisionTreeWithRealValues(int argc, char* argv[])
 
   // Build some examples for testing
 
-  DecisionTreeType::ExampleType ww_in_summer;//(DoY), (NDVI)
+  DecisionTreeType::ExampleType ww_in_summer; //(DoY), (NDVI)
   ww_in_summer.push_back(200);
   ww_in_summer.push_back(0.2);
 

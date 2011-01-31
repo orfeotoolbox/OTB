@@ -41,8 +41,8 @@ class MuellerToPolarisationDegreeAndPowerFunctor
 public:
   typedef double                                    RealType;
   typedef typename TOutput::ValueType               OutputValueType;
-  typedef itk::Matrix<RealType,4,4>                 MuellerMatrixType;
-  typedef itk::Vector<RealType,4>                   StokesVectorType;
+  typedef itk::Matrix<RealType, 4, 4>                 MuellerMatrixType;
+  typedef itk::Vector<RealType, 4>                   StokesVectorType;
 
   inline TOutput operator()( const TInput & Mueller ) const
     {
