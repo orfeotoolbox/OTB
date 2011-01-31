@@ -61,7 +61,7 @@ public:
     ComplexType HHPlusVV = static_cast<ComplexType>(Shh + Svv);
     ComplexType VVMinusVV = static_cast<ComplexType>(Shh - Svv);
     ComplexType HVPlusHV     = static_cast<ComplexType>( Shv + Svh);
-    ComplexType jHVMinusHV     = static_cast<ComplexType>( Shv - Svh) * vcl_complex<RealType>(0.0,1.0);
+    ComplexType jHVMinusHV     = static_cast<ComplexType>( Shv - Svh) * vcl_complex<RealType>(0.0, 1.0);
 
     result[0] = static_cast<OutputValueType>( HHPlusVV * vcl_conj(HHPlusVV) );
     result[1] = static_cast<OutputValueType>( HHPlusVV * vcl_conj(VVMinusVV) );

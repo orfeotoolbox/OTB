@@ -80,12 +80,12 @@ private:
 template <class TInputImage, class TOutputImage, class TFunction = Functor::MuellerToCircularPolarisationFunctor<
     ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
 class ITK_EXPORT MuellerToCircularPolarisationImageFilter :
-   public UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction>
+   public UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction>
 {
 public:
    /** Standard class typedefs. */
    typedef MuellerToCircularPolarisationImageFilter  Self;
-   typedef UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction> Superclass;
+   typedef UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction> Superclass;
    typedef itk::SmartPointer<Self>        Pointer;
    typedef itk::SmartPointer<const Self>  ConstPointer;
 

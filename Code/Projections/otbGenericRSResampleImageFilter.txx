@@ -258,7 +258,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
 
 /**
  * Method used to copy the parameters of the input image
- * 
+ *
  */
 template <class TInputImage, class TOutputImage>
 template <class TImageType>

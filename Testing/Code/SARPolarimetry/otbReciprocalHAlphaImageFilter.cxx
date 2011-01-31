@@ -63,7 +63,7 @@ int otbReciprocalHAlphaImageFilter(int argc, char * argv[])
   typedef otb::PerBandVectorImageFilter<ImageType, ImageType,
                       MeanFilterType>   PerBandMeanFilterType;
 
-  typedef otb::ReciprocalHAlphaImageFilter<ImageType,RealImageType> FilterType;
+  typedef otb::ReciprocalHAlphaImageFilter<ImageType, RealImageType> FilterType;
 
   typedef otb::ImageFileReader<InputImageType>  ReaderType;
   typedef otb::ImageFileWriter<RealImageType> WriterType;

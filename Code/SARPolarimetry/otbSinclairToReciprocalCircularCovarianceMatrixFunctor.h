@@ -53,7 +53,7 @@ public:
     TOutput result;
 
     result.SetSize(m_NumberOfComponentsPerPixel);
-    ComplexType j2Shv = static_cast<ComplexType>(Shv) * vcl_complex<RealType>(0.0,2.0);
+    ComplexType j2Shv = static_cast<ComplexType>(Shv) * vcl_complex<RealType>(0.0, 2.0);
 
     ComplexType Sll = static_cast<ComplexType>( 0.5 * (-Shh-j2Shv+Svv) );
     ComplexType Slr = static_cast<ComplexType>( 0.5 * (-Shh+Svv) );

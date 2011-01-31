@@ -95,12 +95,12 @@ private:
 template <class TInputImage, class TOutputImage, class TFunction = Functor::MLCToCoherencyFunctor<
     ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
 class ITK_EXPORT MLCToCoherencyImageFilter :
-   public UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction>
+   public UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction>
 {
 public:
    /** Standard class typedefs. */
    typedef MLCToCoherencyImageFilter  Self;
-   typedef UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction> Superclass;
+   typedef UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction> Superclass;
    typedef itk::SmartPointer<Self>        Pointer;
    typedef itk::SmartPointer<const Self>  ConstPointer;
 
