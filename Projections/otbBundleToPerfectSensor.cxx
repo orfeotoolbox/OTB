@@ -121,6 +121,7 @@ int BundleToPerfectSensor::Execute(otb::ApplicationOptionsResult* parseResult)
     resampler->SetOutputSize(size);
     resampler->SetOutputStartIndex(start);
     resampler->SetOutputKeywordList(preader->GetOutput()->GetImageKeywordlist());
+    resampler->SetOutputProjectionRef(preader->GetOutput()->GetProjectionRef());
     resampler->SetEdgePaddingValue(defaultValue);
 
     FusionFilterType::Pointer  fusionFilter = FusionFilterType::New();
