@@ -71,8 +71,8 @@ int otbLandsatTMLinguisticLabels(int argc, char * argv[])
   // Bright
   {
   unsigned int goodResult = lo;
-  if( bright > 0.4 ) goodResult = me;
-  if( bright > 0.6 ) goodResult = hi;
+  if( bright > 40/255. ) goodResult = me;
+  if( bright > 60/255. ) goodResult = hi;
 
   if( result[ LVFunctorType::bright ] != goodResult )
     return EXIT_FAILURE;
@@ -81,8 +81,8 @@ int otbLandsatTMLinguisticLabels(int argc, char * argv[])
   // Vis
   {
   unsigned int goodResult = lo;
-  if( vis > 0.3 ) goodResult = me;
-  if( vis > 0.5 ) goodResult = hi;
+  if( vis > 30/255. ) goodResult = me;
+  if( vis > 50/255. ) goodResult = hi;
 
   if( result[ LVFunctorType::vis ] != goodResult )
     return EXIT_FAILURE;
@@ -91,8 +91,8 @@ int otbLandsatTMLinguisticLabels(int argc, char * argv[])
   // Nir
   {
   unsigned int goodResult = lo;
-  if( nir > 0.4 ) goodResult = me;
-  if( nir > 0.6 ) goodResult = hi;
+  if( nir > 40/255. ) goodResult = me;
+  if( nir > 60/255. ) goodResult = hi;
 
   if( result[ LVFunctorType::nir ] != goodResult )
     return EXIT_FAILURE;
@@ -101,8 +101,8 @@ int otbLandsatTMLinguisticLabels(int argc, char * argv[])
   // Mir1
   {
   unsigned int goodResult = lo;
-  if( mir1 > 0.4 ) goodResult = me;
-  if( mir1 > 0.6 ) goodResult = hi;
+  if( mir1 > 40/255. ) goodResult = me;
+  if( mir1 > 60/255. ) goodResult = hi;
 
   if( result[ LVFunctorType::mir1 ] != goodResult )
     return EXIT_FAILURE;
@@ -111,8 +111,8 @@ int otbLandsatTMLinguisticLabels(int argc, char * argv[])
   // Mir2
   {
   unsigned int goodResult = lo;
-  if( mir2 > 0.3 ) goodResult = me;
-  if( mir2 > 0.5 ) goodResult = hi;
+  if( mir2 > 30/255. ) goodResult = me;
+  if( mir2 > 50/255. ) goodResult = hi;
 
   if( result[ LVFunctorType::mir2 ] != goodResult )
     return EXIT_FAILURE;
@@ -162,8 +162,8 @@ int otbLandsatTMLinguisticLabels(int argc, char * argv[])
   // Ndvi
   {
   unsigned int goodResult = lo;
-  if( ndvi > 0.36 ) goodResult = me;
-  if( ndvi > 0.70 ) goodResult = hi;
+  if( ndvi > 0.35 ) goodResult = me;
+  if( ndvi > 0.60 ) goodResult = hi;
 
   if( result[ LVFunctorType::ndvi ] != goodResult )
     return EXIT_FAILURE;
@@ -174,7 +174,7 @@ int otbLandsatTMLinguisticLabels(int argc, char * argv[])
   {
   unsigned int goodResult = lo;
   if( ndbsi > -0.20 ) goodResult = me;
-  if( ndbsi > 0.10 ) goodResult = hi;
+  if( ndbsi > 0.0 ) goodResult = hi;
 
   if( result[ LVFunctorType::ndbsi ] != goodResult )
     return EXIT_FAILURE;
