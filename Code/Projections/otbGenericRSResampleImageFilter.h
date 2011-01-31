@@ -286,16 +286,6 @@ protected:
 
   virtual void UpdateTransform();
 
-  /** Struct to store the extent of the output image when using the
-   *  methods SetOutputParameters.
-   */
-  struct OutputImageExtentType{ 
-    double minX; 
-    double maxX; 
-    double minY; 
-    double maxY; 
-  };
-  
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
@@ -305,10 +295,6 @@ private:
   // Method to estimate the input & output rpc model
   void EstimateOutputRpcModel();
   void EstimateInputRpcModel();
-  //void EstimateOutputSpacing();
-  //void EstimateOutputSize();
-  //void EstimateOutputImageExtent();
-  //void EstimateOutputOrigin();
 
   // boolean that allow the estimation of the input rpc model
   bool                               m_EstimateInputRpcModel;
@@ -320,7 +306,6 @@ private:
   InputRpcModelEstimatorPointerType  m_InputRpcEstimator;
   OutputRpcModelEstimatorPointerType m_OutputRpcEstimator;
   GenericRSTransformPointerType      m_Transform;
-  OutputImageExtentType              m_OutputExtent;
 };
 
 } // namespace otb
