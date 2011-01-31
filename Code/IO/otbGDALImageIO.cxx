@@ -185,6 +185,7 @@ GDALImageIO::GDALImageIO()
 
   m_CanStreamWrite = false;
   m_IsComplex = false;
+  m_IsVectorImage = false;
 }
 
 GDALImageIO::~GDALImageIO()
