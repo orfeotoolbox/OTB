@@ -81,9 +81,12 @@ std::istream& operator>>(std::istream& is, AlosPalsarLeader& data)
       }
       else
       {
-        char* buff = new char[header.get_length()-12];
-        is.read(buff, header.get_length() - 12);
-        delete buff;
+        if (header.get_length() > 12)
+          {
+          char* buff = new char[header.get_length()-12];
+          is.read(buff, header.get_length() - 12);
+          delete [] buff;
+          }
       }
     }
   }

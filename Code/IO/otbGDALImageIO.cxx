@@ -185,6 +185,7 @@ GDALImageIO::GDALImageIO()
 
   m_CanStreamWrite = false;
   m_IsComplex = false;
+  m_IsVectorImage = false;
 }
 
 GDALImageIO::~GDALImageIO()
@@ -311,18 +312,20 @@ void GDALImageIO::Read(void* buffer)
   else
     {
     // Nominal case
+    int bytePerPixel = m_BytePerPixel;
+    int nbBands = m_NbBands;
 
     // In some cases, we need to change some parameters for RasterIO
     // if the file is complex and the reader is based on a vector of scalar
     if(GDALDataTypeIsComplex(m_PxType) && !m_IsComplex && m_IsVectorImage)
     {
-      m_BytePerPixel = m_BytePerPixel * 2;
-      m_NbBands = this->GetNumberOfComponents() / 2;
+      bytePerPixel = m_BytePerPixel * 2;
+      nbBands = this->GetNumberOfComponents() / 2;
     }
     // if the file is scalar with only one band and the reader is based on a vector of complex
     if(!GDALDataTypeIsComplex(m_PxType) && (m_NbBands == 1) && m_IsComplex && m_IsVectorImage )
     {
-      m_BytePerPixel = m_BytePerPixel / 2;
+      bytePerPixel = m_BytePerPixel / 2;
     }
 
     // keep it for the moment
@@ -345,17 +348,17 @@ void GDALImageIO::Read(void* buffer)
                                                        lNbColumns,
                                                        lNbLines,
                                                        m_PxType,
-                                                       m_NbBands,
+                                                       nbBands,
                                                        // We want to read all bands
                                                        NULL,
                                                        // Pixel offset
                                                        // is nbComp * BytePerPixel
-                                                       m_BytePerPixel * m_NbBands,
+                                                       bytePerPixel * nbBands,
                                                        // Line offset
                                                        // is pixelOffset * nbColumns
-                                                       m_BytePerPixel * m_NbBands * lNbColumns,
+                                                       bytePerPixel * nbBands * lNbColumns,
                                                        // Band offset is BytePerPixel
-                                                       m_BytePerPixel);
+                                                       bytePerPixel);
     // Check if gdal call succeed
     if (lCrGdal == CE_Failure)
       {
