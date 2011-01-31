@@ -217,6 +217,11 @@ public:
   /** Useful to set the output parameters from an existing image*/
   void SetOutputParametersFromImage(const ImageBaseType * image);
 
+  /** Useful to set output parmaters form an existing image with type
+    * different from input or ouptut image
+    */
+  template <class TImageType> void SetOutputParametersFromImage(const TImageType * image);
+
   /** Useful to set the output parameters using a map (UTM|WGS84) and
    * a spacing set by the user
    */

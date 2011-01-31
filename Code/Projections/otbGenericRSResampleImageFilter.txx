@@ -255,6 +255,25 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
   this->SetOutputProjectionRef(src->GetProjectionRef());
   this->SetOutputKeywordList(src->GetImageKeywordlist());
 }
+
+/**
+ * Method used to copy the parameters of the input image
+ * 
+ */
+template <class TInputImage, class TOutputImage>
+template <class TImageType>
+void
+GenericRSResampleImageFilter<TInputImage, TOutputImage>
+::SetOutputParametersFromImage(const TImageType * image)
+{
+  this->SetOutputOrigin ( image->GetOrigin() );
+  this->SetOutputSpacing ( image->GetSpacing() );
+  this->SetOutputStartIndex ( image->GetLargestPossibleRegion().GetIndex() );
+  this->SetOutputSize ( image->GetLargestPossibleRegion().GetSize() );
+  this->SetOutputProjectionRef(image->GetProjectionRef());
+  this->SetOutputKeywordList(image->GetImageKeywordlist());
+}
+
 /**
  * Method used to project the input image in a defined srs, estimating
  * the output size and origin. The spacing is set by the user. The
