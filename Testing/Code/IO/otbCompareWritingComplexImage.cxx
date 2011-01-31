@@ -59,7 +59,7 @@ int otbCompareWritingComplexImageTest(int argc, char* argv[])
   typedef otb::ExtractROI<ComplexPixelType, ComplexPixelType>  ExtractROIFilterType;
   typedef otb::StreamingCompareImageFilter<ImageType>          CompareFilterType;
   typedef itk::ComplexToRealImageFilter<ComplexImageType, ImageType>     RealExtractorType;
-  typedef itk::ComplexToImaginaryImageFilter<ComplexImageType,ImageType> ImaginaryExtractorType;
+  typedef itk::ComplexToImaginaryImageFilter<ComplexImageType, ImageType> ImaginaryExtractorType;
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(inputFilename);

@@ -34,7 +34,7 @@ namespace otb
  * Based on ossimProjectionFactoryRegistry and ossimProjection methods.
  * It takes as input a world point and computes the index position of the
  * corresponding point in the input image.
- * (lon,lat,h) -> (i,j).
+ * (lon, lat, h) -> (i, j).
  * Notice that the elevation h is optional.
  *
  * \ingroup Transform

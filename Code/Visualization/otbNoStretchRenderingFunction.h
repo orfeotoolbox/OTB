@@ -144,7 +144,7 @@ namespace otb
               if (this->m_PixelRepresentationFunction->IsUsingDefaultParameters())
               {
                 // Case of image with 4 bands or more : Display in the
-                // B,G,R,NIR channel order
+                // B, G, R, NIR channel order
                 if (this->GetListSample()->GetMeasurementVectorSize() >= 4)
                 {
                   this->m_PixelRepresentationFunction->SetRedChannelIndex(2);

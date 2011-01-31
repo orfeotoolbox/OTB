@@ -40,7 +40,7 @@ int otbProlateValidationTest(int argc, char * argv[])
 
   typedef otb::ProlateInterpolateImageFunction<ImageType> InterpolatorType;
   //typedef InterpolatorType::FunctionType FunctionType;
-  //typedef itk::NearestNeighborInterpolateImageFunction<ImageType,double> DefaultInterpolatorType;
+  //typedef itk::NearestNeighborInterpolateImageFunction<ImageType, double> DefaultInterpolatorType;
   //DefaultInterpolatorType::Pointer def = DefaultInterpolatorType::New();
 
   InterpolatorType::Pointer                 prolate      = InterpolatorType::New();

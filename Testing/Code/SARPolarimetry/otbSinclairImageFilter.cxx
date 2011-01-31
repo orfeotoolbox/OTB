@@ -27,7 +27,11 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbSinclairImageFilter.h"
+#include "otbSinclairToReciprocalCovarianceFunctor.h"
 #include "otbSinclairToCovarianceFunctor.h"
+#include "otbSinclairToReciprocalCircularCovarianceMatrixFunctor.h"
+#include "otbSinclairToCircularCovarianceMatrixFunctor.h"
+#include "otbSinclairToReciprocalCoherencyFunctor.h"
 #include "otbSinclairToCoherencyFunctor.h"
 #include "otbSinclairToMuellerFunctor.h"
 
@@ -93,9 +97,41 @@ int otbSinclairImageFilter(int argc, char * argv[])
   std::string strArgv(argv[1]);
   argc--;
   argv++;
-  if (strArgv == "SinclairToCovariance")
+  if (strArgv == "SinclairToReciprocalCovariance")
+    return (generic_SinclairImageFilter<InputPixelType, OutputPixelType,
+                otb::Functor::SinclairToReciprocalCovarianceFunctor<InputImageType::PixelType,
+                                    InputImageType::PixelType,
+                                    InputImageType::PixelType,
+                                    InputImageType::PixelType,
+                                    OutputImageType::PixelType> >
+                  (argc, argv));
+  else  if (strArgv == "SinclairToCovariance")
     return (generic_SinclairImageFilter<InputPixelType, OutputPixelType,
                 otb::Functor::SinclairToCovarianceFunctor<InputImageType::PixelType,
+                                    InputImageType::PixelType,
+                                    InputImageType::PixelType,
+                                    InputImageType::PixelType,
+                                    OutputImageType::PixelType> >
+                  (argc, argv));
+  else  if (strArgv == "SinclairToReciprocalCircularCovarianceMatrix")
+    return (generic_SinclairImageFilter<InputPixelType, OutputPixelType,
+                otb::Functor::SinclairToReciprocalCircularCovarianceMatrixFunctor<InputImageType::PixelType,
+                                    InputImageType::PixelType,
+                                    InputImageType::PixelType,
+                                    InputImageType::PixelType,
+                                    OutputImageType::PixelType> >
+                  (argc, argv));
+  else  if (strArgv == "SinclairToCircularCovarianceMatrix")
+    return (generic_SinclairImageFilter<InputPixelType, OutputPixelType,
+                otb::Functor::SinclairToCircularCovarianceMatrixFunctor<InputImageType::PixelType,
+                                    InputImageType::PixelType,
+                                    InputImageType::PixelType,
+                                    InputImageType::PixelType,
+                                    OutputImageType::PixelType> >
+                  (argc, argv));
+  else  if (strArgv == "SinclairToReciprocalCoherency")
+    return (generic_SinclairImageFilter<InputPixelType, OutputPixelType,
+                otb::Functor::SinclairToReciprocalCoherencyFunctor<InputImageType::PixelType,
                                     InputImageType::PixelType,
                                     InputImageType::PixelType,
                                     InputImageType::PixelType,

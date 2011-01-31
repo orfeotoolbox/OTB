@@ -116,7 +116,7 @@ public:
   itkSetMacro(Radius, RadiusSizeType);
 
   /** Typedefs for histogram. This should have been defined as
-      Histogram<RealType,2> but a bug in VC++7 produced an internal compiler
+      Histogram<RealType, 2> but a bug in VC++7 produced an internal compiler
       error with such declaration. */
   typedef typename itk::Statistics::Histogram<double, 2> HistogramType;
   typedef typename HistogramType::MeasurementVectorType  MeasurementVectorType;

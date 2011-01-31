@@ -195,16 +195,16 @@ private:
  *    CommandLineArgumentParser parser;
  *    parser.SetProgramDescription("This program is an example");
  *    parser.AddInputImage();
- *    parser.AddOption("-f",1);
+ *    parser.AddOption("-f", 1);
  *    parser.AddSynonim("-f","--filename");
- *    parser.AddOption("-v",0);
+ *    parser.AddOption("-v", 0);
  *    parser.AddSynonim("-v","--verbose");
  *    parser.AddOption("--DetailledName","Help explanation","-d", 1, false);
  * \endcode
  *  - Use the parser:
  * \code
  *    CommandLineArgumentParseResult result;
- *    if(parser.TryParseCommandLine(argc,argv,result))
+ *    if(parser.TryParseCommandLine(argc, argv, result))
  *    {
  *      if(result.IsOptionPresent("--DetailledName"))
  *      {

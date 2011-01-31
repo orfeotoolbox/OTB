@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __HAlphaImageFilter_h
-#define __HAlphaImageFilter_h
+#ifndef __ReciprocalHAlphaImageFilter_h
+#define __ReciprocalHAlphaImageFilter_h
 
 #include "otbUnaryFunctorImageFilter.h"
 #include "otbHermitianEigenAnalysis.h"
@@ -30,7 +30,7 @@ namespace otb
 namespace Functor {
 
 /** \class otbHAlphaFunctor
- * \brief Evaluate the H-Alpha parameters from the coherency matrix image
+ * \brief Evaluate the H-Alpha parameters from the reciprocal coherency matrix image
  *
  * *  Output value are:
  *   channel #0 : entropy
@@ -39,7 +39,7 @@ namespace Functor {
  *
  */
 template< class TInput, class TOutput>
-class HAlphaFunctor
+class ReciprocalHAlphaFunctor
 {
 public:
   typedef double                                   RealType;
@@ -47,31 +47,31 @@ public:
   typedef typename TOutput::ValueType              OutputValueType;
 
   /** CoherencyMatrix type **/
-  typedef itk::Vector<RealType,9> CoherencyMatrixType;
+  typedef itk::Vector<RealType, 9> CoherencyMatrixType;
 
   /** Vector type used to store eigenvalues. */
   typedef itk::Vector<RealType, 3> EigenvalueType;
 
   /** Matrix type used to store eigenvectors. */
   typedef itk::Vector<float, 2> VectorType;
-  typedef itk::Vector<VectorType,3> EigenVectorFirstComposantType;
-  typedef itk::Vector<VectorType,3> EigenVectorType; // type d'un vecteur propre (partie r�elle, partie imaginaire)
-  typedef itk::Vector<itk::Vector<float, 6>,3> EigenMatrixType;
-  typedef itk::Image<EigenVectorType,2> EigenVectorImageType;
-  typedef itk::Image<double,2> EigenValueImageType;
+  typedef itk::Vector<VectorType, 3> EigenVectorFirstComposantType;
+  typedef itk::Vector<VectorType,3> EigenVectorType; // eigenvector type (real part, imaginary part)
+  typedef itk::Vector<itk::Vector<float, 6>, 3> EigenMatrixType;
+  typedef itk::Image<EigenVectorType, 2> EigenVectorImageType;
+  typedef itk::Image<double, 2> EigenValueImageType;
 
   typedef itk::Vector<double, 3> OutputVectorType;
 
   typedef itk::Vector<float, 2> ComplexVectorType;
   typedef itk::Vector<ComplexVectorType, 3> HermitianVectorType;
-  typedef itk::Vector<HermitianVectorType,3> HermitianMatrixType;
-  typedef otb::HermitianEigenAnalysis<CoherencyMatrixType,EigenvalueType, EigenMatrixType> HermitianAnalysisType;
+  typedef itk::Vector<HermitianVectorType, 3> HermitianMatrixType;
+  typedef otb::HermitianEigenAnalysis<CoherencyMatrixType, EigenvalueType, EigenMatrixType> HermitianAnalysisType;
 
 
   inline TOutput operator()( const TInput & Coherency ) const
     {
     TOutput result;
-    result.SetSize(m_NumberOfComponentsPerPixel);
+    result.SetSize(NumberOfComponentsPerPixel);
  
     CoherencyMatrixType T;
     EigenvalueType eigenValues;
@@ -87,7 +87,7 @@ public:
     T[6] = static_cast<RealType>(Coherency[2].imag());
     T[7] = static_cast<RealType>(Coherency[4].real());
     T[8] = static_cast<RealType>(Coherency[4].imag());
-    HermitianAnalysis.ComputeEigenValuesAndVectors(T,eigenValues,eigenVectors);
+    HermitianAnalysis.ComputeEigenValuesAndVectors(T, eigenValues, eigenVectors);
 
     // Entropy estimation
     RealType  totalEigenValues = 0.0;
@@ -95,6 +95,7 @@ public:
     RealType entropy;
     RealType alpha;
     RealType anisotropy;
+    const RealType epsilon = 1.0E-4;
 
 
     totalEigenValues = static_cast<RealType>( eigenValues[0] + eigenValues[1] + eigenValues[2]);
@@ -109,7 +110,7 @@ public:
         p[k] = static_cast<RealType>(eigenValues[k]) / totalEigenValues;
       }
 
-    if ( (p[0]<0.0001) || (p[1]<0.0001) || (p[2]<0.0001) )
+    if ( (p[0] < epsilon) || (p[1] < epsilon) || (p[2] < epsilon) )
       {
       entropy =0.0;
       }
@@ -155,34 +156,34 @@ public:
 
    unsigned int GetOutputSize()
    {
-     return m_NumberOfComponentsPerPixel;
+     return NumberOfComponentsPerPixel;
    }
 
    /** Constructor */
-   HAlphaFunctor() : m_NumberOfComponentsPerPixel(3)  {}
+   ReciprocalHAlphaFunctor()  {}
 
    /** Destructor */
-   ~HAlphaFunctor() {}
+   ~ReciprocalHAlphaFunctor() {}
 
 private:
-    unsigned int m_NumberOfComponentsPerPixel;
+   itkStaticConstMacro(NumberOfComponentsPerPixel, unsigned int, 3);
 };
 }
 
 
 /** \class otbHAlphaImageFilter
  * \brief Compute the H-Alpha image (3 channels)
- * from the coherency image (6 complex channels)
+ * from the Reciprocal coherency image (6 complex channels)
  */
-template <class TInputImage, class TOutputImage, class TFunction = Functor::HAlphaFunctor<
+template <class TInputImage, class TOutputImage, class TFunction = Functor::ReciprocalHAlphaFunctor<
     ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
-class ITK_EXPORT HAlphaImageFilter :
-   public otb::UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction>
+class ITK_EXPORT ReciprocalHAlphaImageFilter :
+   public otb::UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction>
 {
 public:
    /** Standard class typedefs. */
-   typedef HAlphaImageFilter  Self;
-   typedef otb::UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction> Superclass;
+   typedef ReciprocalHAlphaImageFilter  Self;
+   typedef otb::UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction> Superclass;
    typedef itk::SmartPointer<Self>        Pointer;
    typedef itk::SmartPointer<const Self>  ConstPointer;
 
@@ -190,14 +191,14 @@ public:
    itkNewMacro(Self);
 
    /** Runtime information support. */
-   itkTypeMacro(HAlphaImageFilter,UnaryFunctorImageFilter);
+   itkTypeMacro(ReciprocalHAlphaImageFilter,UnaryFunctorImageFilter);
 
 protected:
-   HAlphaImageFilter() {}
-  virtual ~HAlphaImageFilter() {}
+   ReciprocalHAlphaImageFilter() {}
+  virtual ~ReciprocalHAlphaImageFilter() {}
 
 private:
-  HAlphaImageFilter(const Self&); //purposely not implemented
+  ReciprocalHAlphaImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&);            //purposely not implemented
 
 };

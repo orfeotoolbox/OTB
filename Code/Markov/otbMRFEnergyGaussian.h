@@ -32,7 +32,7 @@ namespace otb
  * This is the implementation of the Gaussian model for Markov classification,
  * to be used for data fidelity. Energy is:
  *
- * \f[  U(x_s,x_t) = (x_s-x_t)^2 \f]
+ * \f[  U(x_s, x_t) = (x_s-x_t)^2 \f]
  *
  * with
  * - \f$ x_s \f$ the label on site s

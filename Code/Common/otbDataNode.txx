@@ -235,7 +235,7 @@ DataNode<TPrecision, VDimension, TValuePrecision>
 /*
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 void
-DataNode<TPrecision,VDimension,TValuePrecision>
+DataNode<TPrecision, VDimension, TValuePrecision>
 ::SetField(std::string key, std::string value)
 {
   m_FieldMap[key] = value;
@@ -277,7 +277,7 @@ DataNode<TPrecision, VDimension, TValuePrecision>
 /*
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 std::string
-DataNode<TPrecision,VDimension,TValuePrecision>
+DataNode<TPrecision, VDimension, TValuePrecision>
 ::GetField(std::string key) const
 {
   if (HasField(key))
@@ -326,14 +326,14 @@ DataNode<TPrecision, VDimension, TValuePrecision>
 /*
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 void
-DataNode<TPrecision,VDimension,TValuePrecision>
+DataNode<TPrecision, VDimension, TValuePrecision>
 ::RemoveField(std::string key)
 {
   m_FieldMap.erase(key);
 }
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 bool
-DataNode<TPrecision,VDimension,TValuePrecision>
+DataNode<TPrecision, VDimension, TValuePrecision>
 ::HasField(std::string key) const
 {
   return (m_FieldMap.find(key)!=m_FieldMap.end());
@@ -357,16 +357,16 @@ DataNode<TPrecision, VDimension, TValuePrecision>
 
 /*
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
-typename DataNode<TPrecision,VDimension,TValuePrecision>
+typename DataNode<TPrecision, VDimension, TValuePrecision>
 ::FieldType
-DataNode<TPrecision,VDimension,TValuePrecision>
+DataNode<TPrecision, VDimension, TValuePrecision>
 ::GetNthField(unsigned int index) const
 {
   if (index<GetNumberOfFields())
   {
     FieldMapType::iterator it = m_FieldMap.begin();
 
-    for (unsigned int i = 0;i<index;++i)
+    for (unsigned int i = 0; i<index; ++i)
     {
       ++it;
     }
@@ -376,7 +376,7 @@ DataNode<TPrecision,VDimension,TValuePrecision>
 }
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 unsigned int
-DataNode<TPrecision,VDimension,TValuePrecision>
+DataNode<TPrecision, VDimension, TValuePrecision>
 ::GetNumberOfFields() const
 {
   return m_FieldMap.size();
@@ -402,7 +402,7 @@ DataNode<TPrecision, VDimension, TValuePrecision>
 /*
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 void
-DataNode<TPrecision,VDimension,TValuePrecision>
+DataNode<TPrecision, VDimension, TValuePrecision>
 ::ClearFields()
 {
   m_FieldMap.clear();

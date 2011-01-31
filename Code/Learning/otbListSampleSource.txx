@@ -24,7 +24,7 @@ namespace otb {
 namespace Statistics {
 
 template < class TInputSampleList, class TOutputSampleList >
-ListSampleSource<TInputSampleList,TOutputSampleList>
+ListSampleSource<TInputSampleList, TOutputSampleList>
 ::ListSampleSource()
 {
   this->SetNumberOfRequiredOutputs(1);
@@ -36,9 +36,9 @@ ListSampleSource<TInputSampleList,TOutputSampleList>
 }
 
 template < class TInputSampleList, class TOutputSampleList >
-typename ListSampleSource<TInputSampleList,TOutputSampleList>
+typename ListSampleSource<TInputSampleList, TOutputSampleList>
 ::DataObjectPointer
-ListSampleSource<TInputSampleList,TOutputSampleList>
+ListSampleSource<TInputSampleList, TOutputSampleList>
 ::MakeOutput(unsigned int itkNotUsed(idx))
 {
   typename OutputSampleListObjectType::Pointer outputPtr = OutputSampleListObjectType::New();
@@ -48,9 +48,9 @@ ListSampleSource<TInputSampleList,TOutputSampleList>
 }
 
 template < class TInputSampleList, class TOutputSampleList >
-typename ListSampleSource<TInputSampleList,TOutputSampleList>
+typename ListSampleSource<TInputSampleList, TOutputSampleList>
 ::OutputSampleListType *
-ListSampleSource<TInputSampleList,TOutputSampleList>
+ListSampleSource<TInputSampleList, TOutputSampleList>
 ::GetOutputSampleList()
 {
   typename OutputSampleListObjectType::Pointer dataObjectPointer = static_cast<OutputSampleListObjectType * >
@@ -59,9 +59,9 @@ ListSampleSource<TInputSampleList,TOutputSampleList>
 }
 
 template < class TInputSampleList, class TOutputSampleList >
-typename ListSampleSource<TInputSampleList,TOutputSampleList>
+typename ListSampleSource<TInputSampleList, TOutputSampleList>
 ::OutputSampleListObjectType *
-ListSampleSource<TInputSampleList,TOutputSampleList>
+ListSampleSource<TInputSampleList, TOutputSampleList>
 ::GetOutput()
 {
   return static_cast<OutputSampleListObjectType * >
@@ -70,11 +70,11 @@ ListSampleSource<TInputSampleList,TOutputSampleList>
 
 template < class TInputSampleList, class TOutputSampleList >
 void
-ListSampleSource<TInputSampleList,TOutputSampleList>
+ListSampleSource<TInputSampleList, TOutputSampleList>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
 } // End namespace Statistics

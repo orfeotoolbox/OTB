@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   Insight Segmentation & Registration Toolkit
-  Module:    $RCSfile: itkImagePCAShapeModelEstimatorTest.cxx,v $
+  Module:    $RCSfile: itkImagePCAShapeModelEstimatorTest.cxx, v $
   Language:  C++
   Date:      $Date: 2008-02-03 04:05:34 $
   Version:   $Revision: 1.11 $

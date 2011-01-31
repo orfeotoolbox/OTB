@@ -202,10 +202,10 @@ public:
     if( sat == L5 )
       {
       m_TM1 = 0;
-      m_TM2 = 1; 
+      m_TM2 = 1;
       m_TM3 = 2;
-      m_TM4 = 3; 
-      m_TM5 = 4; 
+      m_TM4 = 3;
+      m_TM5 = 4;
       m_TM60 = 5;
       m_TM7 = 6;
       m_SAT = L5;
@@ -213,10 +213,10 @@ public:
     else
       {
       m_TM1 = 0;
-      m_TM2 = 1; 
+      m_TM2 = 1;
       m_TM3 = 2;
-      m_TM4 = 3; 
-      m_TM5 = 4; 
+      m_TM4 = 3;
+      m_TM5 = 4;
       m_TM61 = 5;
       m_TM62 = 6;
       m_TM7 = 7;
@@ -255,7 +255,7 @@ public:
   }
 
 protected:
-  /// Prepare the values so they are normalized and in °C
+  /// Prepare the values so they are normalized and in degree Celsius
 
   TInput PrepareValues(const TInput& inputPixel)
   {
@@ -320,7 +320,7 @@ protected:
 
 
 /** \class LandsatTMIndex
- * 
+ *
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
@@ -352,7 +352,7 @@ public:
  *  Spectral Rule-Based Preliminary Mapping of Calibrated Landsat TM
  *  and ETM+ Images", IEEE Trans. on Geoscience and Remote Sensing,
  *  vol 44, no 9.
- * 
+ *
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
@@ -370,7 +370,7 @@ public:
   Bright() {}
   virtual ~Bright() {}
 
-  inline TOutput operator ()(const TInput& inputPixel) 
+  inline TOutput operator ()(const TInput& inputPixel)
   {
 
     TInput newPixel(this->PrepareValues( inputPixel ));
@@ -391,7 +391,7 @@ public:
  *  Spectral Rule-Based Preliminary Mapping of Calibrated Landsat TM
  *  and ETM+ Images", IEEE Trans. on Geoscience and Remote Sensing,
  *  vol 44, no 9.
- * 
+ *
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
@@ -409,7 +409,7 @@ public:
   Vis() {}
   virtual ~Vis() {}
 
-  inline TOutput operator ()(const TInput& inputPixel) 
+  inline TOutput operator ()(const TInput& inputPixel)
   {
     TInput newPixel(this->PrepareValues( inputPixel ));
     double result = (newPixel[this->m_TM1]+newPixel[this->m_TM2]+newPixel[this->m_TM3])/3.0;
@@ -422,7 +422,7 @@ public:
 
 /** \class NIR
  *  NIR index for LandsatTM. Alias for the TM4 band.
- * 
+ *
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
@@ -440,7 +440,7 @@ public:
   NIR() {}
   virtual ~NIR() {}
 
-  inline TOutput operator ()(const TInput& inputPixel) 
+  inline TOutput operator ()(const TInput& inputPixel)
   {
     TInput newPixel(this->PrepareValues( inputPixel ));
     double result = newPixel[this->m_TM4];
@@ -452,7 +452,7 @@ public:
 
 /** \class MIR1
  *  MIR1 index for LandsatTM. Alias for the TM5 band.
- * 
+ *
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
@@ -470,7 +470,7 @@ public:
   MIR1() {}
   virtual ~MIR1() {}
 
-  inline TOutput operator ()(const TInput& inputPixel) 
+  inline TOutput operator ()(const TInput& inputPixel)
   {
     TInput newPixel(this->PrepareValues( inputPixel ));
     double result = newPixel[this->m_TM5];
@@ -482,7 +482,7 @@ public:
 
 /** \class MIR2
  *  MIR2 index for LandsatTM. Alias for the TM7 band.
- * 
+ *
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
@@ -500,7 +500,7 @@ public:
   MIR2() {}
   virtual ~MIR2() {}
 
-  inline TOutput operator ()(const TInput& inputPixel) 
+  inline TOutput operator ()(const TInput& inputPixel)
   {
     TInput newPixel(this->PrepareValues( inputPixel ));
     double result = newPixel[this->m_TM7];
@@ -512,7 +512,7 @@ public:
 
 /** \class TIR
  *  TIR index for LandsatTM. This is TM60 for Landsat 5 and TM62 for Landsat 7.
- * 
+ *
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
@@ -530,7 +530,7 @@ public:
   TIR() {}
   virtual ~TIR() {}
 
-  inline TOutput operator ()(const TInput& inputPixel) 
+  inline TOutput operator ()(const TInput& inputPixel)
   {
     TInput newPixel(this->PrepareValues( inputPixel ));
     double result = newPixel[this->m_TM62];
@@ -556,7 +556,7 @@ public:
  *
  *  R. Irish, "Landsat 7 automatic cloud cover assessment (ACCA)",
  *  Poc. of SPIE, vol 4049, pp. 348-355, 2000.
- * 
+ *
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
@@ -574,7 +574,7 @@ public:
   MIRTIR() {}
   virtual ~MIRTIR() {}
 
-  inline TOutput operator ()(const TInput& inputPixel) 
+  inline TOutput operator ()(const TInput& inputPixel)
   {
     TInput newPixel(this->PrepareValues( inputPixel ));
     double tir = newPixel[this->m_TM62];
@@ -594,7 +594,7 @@ public:
 /** \class NDVI
  *
  *  NDVI index for LandsatTM.
- * 
+ *
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
@@ -612,7 +612,7 @@ public:
   NDVI() {}
   virtual ~NDVI() {}
 
-  inline TOutput operator ()(const TInput& inputPixel) 
+  inline TOutput operator ()(const TInput& inputPixel)
   {
     TInput newPixel(this->PrepareValues( inputPixel ));
     double result = (newPixel[this->m_TM4] - newPixel[this->m_TM3])/
@@ -639,7 +639,7 @@ public:
  *
  *  NDBSI > -0.2 is a strong (necesary, but not sufficient)
  *  indication of the presence of bare soil areas.
- * 
+ *
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
@@ -657,7 +657,7 @@ public:
   NDBSI() {}
   virtual ~NDBSI() {}
 
-  inline TOutput operator ()(const TInput& inputPixel) 
+  inline TOutput operator ()(const TInput& inputPixel)
   {
     TInput newPixel(this->PrepareValues( inputPixel ));
     double result = (newPixel[this->m_TM5] - newPixel[this->m_TM4])/
@@ -679,8 +679,8 @@ public:
  *
  *  This expression is the one used in: Roy PS, Miyatake S and Rikimaru
  *  A (1997) Biophysical Spectral Response Modelling Approach for
- *  Forest Density Stratification. FCD Mapper User’s Guide.
- * 
+ *  Forest Density Stratification. FCD Mapper User's Guide.
+ *
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
@@ -698,7 +698,7 @@ public:
   BIO() {}
   virtual ~BIO() {}
 
-  inline TOutput operator ()(const TInput& inputPixel) 
+  inline TOutput operator ()(const TInput& inputPixel)
   {
     TInput newPixel(this->PrepareValues( inputPixel ));
     double result = ((newPixel[this->m_TM5] + newPixel[this->m_TM3])
@@ -724,7 +724,7 @@ public:
  *  This expression is the one used in R. Irish, "Landsat 7 automatic
  *  cloud cover assessment (ACCA)", Poc. of SPIE, vol 4049,
  *  pp. 348-355, 2000.
- * 
+ *
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
@@ -742,7 +742,7 @@ public:
   NDSI() {}
   virtual ~NDSI() {}
 
-  inline TOutput operator ()(const TInput& inputPixel) 
+  inline TOutput operator ()(const TInput& inputPixel)
   {
     TInput newPixel(this->PrepareValues( inputPixel ));
     double result = (newPixel[this->m_TM2] - newPixel[this->m_TM5])
@@ -779,7 +779,7 @@ public:
  *
  *  NDSIVis > 0.5 is a strong (necesary, but not sufficient)
  *  indication of the presence of snow areas.
- * 
+ *
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
@@ -797,7 +797,7 @@ public:
   NDSIVis() {}
   virtual ~NDSIVis() {}
 
-  inline TOutput operator ()(const TInput& inputPixel) 
+  inline TOutput operator ()(const TInput& inputPixel)
   {
     TInput newPixel(this->PrepareValues( inputPixel ));
     double vis = (newPixel[this->m_TM1]+newPixel[this->m_TM2]+newPixel[this->m_TM3])/3.0;
@@ -822,7 +822,7 @@ public:
  *  Spectral Rule-Based Preliminary Mapping of Calibrated Landsat TM
  *  and ETM+ Images", IEEE Trans. on Geoscience and Remote Sensing,
  *  vol 44, no 9.
- * 
+ *
  * \ingroup Functor
  * \ingroup Radiometry
  * \ingroup LandsatTMIndices
@@ -840,7 +840,7 @@ public:
   NDBBBI() {}
   virtual ~NDBBBI() {}
 
-  inline TOutput operator ()(const TInput& inputPixel) 
+  inline TOutput operator ()(const TInput& inputPixel)
   {
     TInput newPixel(this->PrepareValues( inputPixel ));
     double result = (newPixel[this->m_TM1] - newPixel[this->m_TM5])
@@ -952,7 +952,7 @@ public:
     }
   virtual ~LinguisticVariables() {}
 
-  inline itk::FixedArray<unsigned int, 11> operator ()(const TInput& inputPixel) 
+  inline itk::FixedArray<unsigned int, 11> operator ()(const TInput& inputPixel)
   {
     TInput newPixel(this->PrepareValues( inputPixel ));
     itk::FixedArray<unsigned int, 11> result;
@@ -1075,7 +1075,11 @@ protected:
   /** Tolerance value 2*/
   PrecisionType m_TV2;
   
-  void SetMinMax(const TInput& inputPixel, PrecisionType* min123, PrecisionType* max123, PrecisionType* min12347, PrecisionType* max12347, PrecisionType* max234, PrecisionType* max45)
+  void SetMinMax(const TInput& inputPixel,
+                 PrecisionType* min123, PrecisionType* max123,
+                 PrecisionType* min12347, PrecisionType* max12347,
+                 PrecisionType* max234,
+                 PrecisionType* max45)
   {
   std::vector< PrecisionType > v123;
   v123.push_back(inputPixel[this->m_TM1]);

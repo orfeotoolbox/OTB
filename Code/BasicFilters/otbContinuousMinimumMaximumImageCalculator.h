@@ -37,8 +37,8 @@ namespace otb
    * The continuous extrema is assumed to be at the zero of the first order
    * derivative of this polynom.
    *
-   * If we denote \f$ (x_0,y_0) \f$ the extrema and  \f$ (x_{-1},y_{-1}) \f$ and
-   * \f$ (x_1,y_1) \f$ its neighbor, the second degree polynom verify the
+   * If we denote \f$ (x_0, y_0) \f$ the extrema and  \f$ (x_{-1}, y_{-1}) \f$ and
+   * \f$ (x_1, y_1) \f$ its neighbor, the second degree polynom verify the
    * following equations:
    *
    *

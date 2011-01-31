@@ -144,7 +144,7 @@ PostGISTable<TConnectionImplementation, TPrecision, TSpatialDimension>
   //std::cout << "sizeof ext poly: " << polygonExtRing->GetVertexList()->Size()<< std::endl;
   while (itVertex != correctPolygonExtRing->GetVertexList()->End())
     {
-    //polygon->line_to(itVertex.Value()[0],m_SensorModelFlip*itVertex.Value()[1]);
+    //polygon->line_to(itVertex.Value()[0], m_SensorModelFlip*itVertex.Value()[1]);
     //std::cout << "vertex: " << itVertex.Value()<< std::endl;
     for (unsigned int i = 0; i < TSpatialDimension; ++i)
       {
@@ -180,7 +180,7 @@ PostGISTable<TConnectionImplementation, TPrecision, TSpatialDimension>
       itVertex = correctCurrentPolygonIntRing->GetVertexList()->Begin();
       while (itVertex != correctCurrentPolygonIntRing->GetVertexList()->End())
         {
-        //polygon->line_to(itVertex.Value()[0],m_SensorModelFlip*itVertex.Value()[1]);
+        //polygon->line_to(itVertex.Value()[0], m_SensorModelFlip*itVertex.Value()[1]);
         for (unsigned int i = 0; i < TSpatialDimension; i++)
           {
           sqlCmd << itVertex.Value()[i] << " ";

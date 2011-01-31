@@ -91,7 +91,7 @@ public:
   {
     std::string keyname;
     KeyType type;
-  } KeyTypeDef;*/
+  } KeyTypeDef; */
 
   struct KeyTypeDef
   {
@@ -188,8 +188,8 @@ public:
   {
     os << "   GCP Id = " << this->m_Id << std::endl;
     os << "   GCP Info =  " << this->m_Info << std::endl;
-    os << "   GCP (Row,Col) = (" << this->m_GCPRow << "," << this->m_GCPCol << ")" << std::endl;
-    os << "   GCP (X,Y,Z) = (" << this->m_GCPX << "," << this->m_GCPY << "," << this->m_GCPZ << ")" << std::endl;
+    os << "   GCP (Row, Col) = (" << this->m_GCPRow << "," << this->m_GCPCol << ")" << std::endl;
+    os << "   GCP (X, Y, Z) = (" << this->m_GCPX << "," << this->m_GCPY << "," << this->m_GCPZ << ")" << std::endl;
   }
 
 };

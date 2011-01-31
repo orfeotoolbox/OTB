@@ -43,7 +43,7 @@ int otbHuMomentsImageFunctionNew(int argc, char * argv[])
   // Instantiating object
   FunctionType::Pointer function       = FunctionType::New();
 
-  std::cout << function << std::endl; 
+  std::cout << function << std::endl;
  
   return EXIT_SUCCESS;
 }
@@ -100,7 +100,7 @@ int otbHuMomentsImageFunctionScaleInvariant(int argc, char * argv[])
   typedef otb::StreamingResampleImageFilter<InputImageType,
     InputImageType,
     double>                                                               StreamingResampleImageFilterType;
-  typedef otb::BCOInterpolateImageFunction<InputImageType, 
+  typedef otb::BCOInterpolateImageFunction<InputImageType,
     double>                                                               InterpolatorType;
   typedef otb::HuMomentsImageFunction<InputImageType>                     FunctionType;
   typedef FunctionType::OutputType                                        OutputType;
@@ -131,14 +131,14 @@ int otbHuMomentsImageFunctionScaleInvariant(int argc, char * argv[])
   InputImageType::IndexType index1;
   index1[0] = 100;
   index1[1] = 100;
-  function1->SetNeighborhoodRadius(2);  
+  function1->SetNeighborhoodRadius(2);
   OutputType Result1 = function1->EvaluateAtIndex(index1);
 
   function2->SetInputImage(resampler->GetOutput());
   InputImageType::IndexType index2;
   index2[0] = 200;
   index2[1] = 200;
-  function2->SetNeighborhoodRadius(4);  
+  function2->SetNeighborhoodRadius(4);
   OutputType Result2 = function2->EvaluateAtIndex(index2);
 
   double error = 0.0;
@@ -149,7 +149,7 @@ int otbHuMomentsImageFunctionScaleInvariant(int argc, char * argv[])
     
     std::cout << "Original -H" << j
               << " : " << Result1[j-1]
-              << "  /  Scaled - H" << j 
+              << "  /  Scaled - H" << j
               << " : " << Result2[j-1] << std::endl;
     }
 
@@ -178,7 +178,7 @@ int otbHuMomentsImageFunctionRotationInvariant(int argc, char * argv[])
   typedef otb::ImageFileReader<InputImageType>                            ReaderType;
   typedef itk::ResampleImageFilter<
     InputImageType, InputImageType >                                      FilterType;
-  typedef otb::BCOInterpolateImageFunction<InputImageType, 
+  typedef otb::BCOInterpolateImageFunction<InputImageType,
     double>                                                               InterpolatorType;
   typedef otb::HuMomentsImageFunction<InputImageType>                     FunctionType;
   typedef FunctionType::OutputType                                        OutputType;
@@ -204,7 +204,7 @@ int otbHuMomentsImageFunctionRotationInvariant(int argc, char * argv[])
 
   const InputImageType::SpacingType & spacing = reader->GetOutput()->GetSpacing();
   const InputImageType::PointType & origin  = reader->GetOutput()->GetOrigin();
-  InputImageType::SizeType size = 
+  InputImageType::SizeType size =
       reader->GetOutput()->GetLargestPossibleRegion().GetSize();
 
   filter->SetOutputOrigin( origin );
@@ -237,14 +237,14 @@ int otbHuMomentsImageFunctionRotationInvariant(int argc, char * argv[])
   InputImageType::IndexType index1;
   index1[0] = 256;
   index1[1] = 256;
-  function1->SetNeighborhoodRadius(4);  
+  function1->SetNeighborhoodRadius(4);
   OutputType Result1 = function1->EvaluateAtIndex(index1);
 
   function2->SetInputImage(filter->GetOutput());
   InputImageType::IndexType index2;
   index2[0] = 256;
   index2[1] = 256;
-  function2->SetNeighborhoodRadius(4);  
+  function2->SetNeighborhoodRadius(4);
   OutputType Result2 = function2->EvaluateAtIndex(index2);
 
   double error = 0.0;
@@ -255,7 +255,7 @@ int otbHuMomentsImageFunctionRotationInvariant(int argc, char * argv[])
 
     std::cout << "Original -H" << j
               << " : " << Result1[j-1]
-              << "  /  Rotated - H" << j 
+              << "  /  Rotated - H" << j
               << " : " << Result2[j-1] << std::endl;
     }
 

@@ -87,7 +87,7 @@ VectorDataToGISTableFilter<TVectorData, TGISTable>
   InputImagePointer input = const_cast<InputImageType *>(this->GetInput());
   if ( !input )
     { return; }
-  input->SetRequestedRegion( input->GetLargestPossibleRegion() );*/
+  input->SetRequestedRegion( input->GetLargestPossibleRegion() ); */
 }
 
 /*

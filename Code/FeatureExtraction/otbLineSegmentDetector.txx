@@ -133,7 +133,7 @@ LineSegmentDetector<TInputImage, TPrecision>
 
   m_NumberOfImagePixels  = static_cast<unsigned int>(m_ImageSize[1] * m_ImageSize[0]);
 
-  // Compute the minimum region size  
+  // Compute the minimum region size
   double logNT = 5. *
                  (vcl_log10(static_cast<double>(m_ImageSize[0])) + vcl_log10(static_cast<double>(m_ImageSize[1]))) / 2.;
   double log1_p = vcl_log10(m_DirectionsAllowed);
@@ -249,7 +249,7 @@ LineSegmentDetector<TInputImage, TPrecision>
           double density =  (double)region.size() /
             ( vcl_sqrt((rectangle[2]-rectangle[0])*(rectangle[2]-rectangle[0])
                        +(rectangle[3]-rectangle[1])*(rectangle[3]-rectangle[1])) * rectangle[4] );
-          if (density < 0.7) 
+          if (density < 0.7)
             {
             nfa = -1;
             //std::cout << "Density = " << density << std::endl;
@@ -260,7 +260,7 @@ LineSegmentDetector<TInputImage, TPrecision>
             {
             m_RectangleList.push_back(rectangle);
             }
-          else 
+          else
             {
             SetRegionToNotIni(region);
             }
@@ -659,7 +659,7 @@ LineSegmentDetector<TInputImage, TPrecision>
 
 /**************************************************************************************************************/
 /**
- *  The method atan2 gives values of angles modulo PI, put the angle in a rang [0,Pi]
+ *  The method atan2 gives values of angles modulo PI, put the angle in a rang [0, Pi]
  */
 template <class TInputImage, class TPrecision>
 bool
@@ -956,10 +956,10 @@ LineSegmentDetector<TInputImage, TPrecision>
 /**************************************************************************************************************/
 /*
    compute logarithm of binomial NFA
-   NFA = NT.b(n,k,p)
+   NFA = NT.b(n, k, p)
    log10 NFA = log10( NFA )
 
-   n,k,p - binomial parameters.
+   n, k, p - binomial parameters.
    logNT - logarithm of Number of Tests
  */
 template <class TInputImage, class TPrecision>

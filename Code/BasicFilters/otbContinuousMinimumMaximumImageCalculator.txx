@@ -219,7 +219,7 @@ ContinuousMinimumMaximumImageCalculator<TInputImage>
     ++it;
     }
 
-  //Solve equations a,b,c
+  //Solve equations a, b, c
 //     y0 = a*x0^2 + b*x0 +c
 //     y1 = a*x1^2 + b*x1 +c
 //     y2 = a*x2^2 + b*x2 +c

@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   Insight Segmentation & Registration Toolkit
-  Module:    $RCSfile: otbHoughTransform2DLinesImageTest.cxx,v $
+  Module:    $RCSfile: otbHoughTransform2DLinesImageTest.cxx, v $
   Language:  C++
   Date:      $Date: 2007-03-07 14:05:39 $
   Version:   $Revision: 1.10 $

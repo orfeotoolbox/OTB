@@ -193,7 +193,7 @@ int main(int, char *[])
   //  LineCell requires two points, a TriangleCell
   //  requires three and a TetrahedronCell requires four. Cells use
   //  an internal numbering system for points. It is simply an index in the
-  //  range $\{0,NumberOfPoints-1\}$. The association of points and cells is
+  //  range $\{0, NumberOfPoints-1\}$. The association of points and cells is
   //  done by the \code{SetPointId()} method which requires the user to
   //  provide the internal index of the point in the cell and the
   //  corresponding PointIdentifier in the Mesh. The internal cell index is

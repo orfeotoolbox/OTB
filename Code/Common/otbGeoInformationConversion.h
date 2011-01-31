@@ -26,12 +26,12 @@ namespace otb
 
 /** \class GeoInformationConversion
  *  \brief Helper to do the geo informations conversions used
- *         frequently. 
- *  
+ *         frequently.
+ *
  *  This class can help to build a WKT from a  valid EPSG number using
  *  the method ToWKT(int srid).
- *           
- * \sa 
+ *
+ * \sa
  */
 class GeoInformationConversion
 {

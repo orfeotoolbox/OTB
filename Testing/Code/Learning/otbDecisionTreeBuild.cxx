@@ -24,17 +24,17 @@ int otbDecisionTreeBuild(int argc, char* argv[])
 {
 /** We build the following decision tree
 
-                                         -------------      
-                  ( DOY LT 100  )     
-                   -------------      
-              Yes  -/    --   No     
-                --/      \--        
-           -------------  ------------- 
+                                         -------------
+                  ( DOY LT 100  )
+                   -------------
+              Yes  -/    --   No
+                --/      \--
+           -------------  -------------
           ( NDVI GT 0.7 )    ( NDVI GT 0.7 )
-           -------------  ------------- 
-         / --           /\     
+           -------------  -------------
+         / --           /\
         Yes  -/    \-  No         Yes-/   \- No
-           -/         \     -/     \- 
+           -/         \     -/     \-
          WW           SW           SW        WW
 
   */
@@ -61,7 +61,7 @@ int otbDecisionTreeBuild(int argc, char* argv[])
 
   // Build some examples for testing
 
-  DecisionTreeType::ExampleType ww_in_summer;//(DoY<100), (NDVI>0.7)
+  DecisionTreeType::ExampleType ww_in_summer; //(DoY<100), (NDVI>0.7)
   ww_in_summer.push_back(false);
   ww_in_summer.push_back(false);
 

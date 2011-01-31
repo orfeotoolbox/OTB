@@ -35,13 +35,13 @@
 //  to convolving the image with masks of type
 //
 //  \begin{center}
-//  \begin{picture}(200,50)
-//  \put( 5.0,32.0){\framebox(30.0,15.0){-1}}
-//  \put(35.0,32.0){\framebox(30.0,15.0){0}}
-//  \put(65.0,32.0){\framebox(30.0,15.0){1}}
-//  \put(105.0,17.0){\framebox(20.0,15.0){1}}
-//  \put(105.0,32.0){\framebox(20.0,15.0){0}}
-//  \put(105.0,47.0){\framebox(20.0,15.0){-1}}
+//  \begin{picture}(200, 50)
+//  \put( 5.0, 32.0){\framebox(30.0, 15.0){-1}}
+//  \put(35.0, 32.0){\framebox(30.0, 15.0){0}}
+//  \put(65.0, 32.0){\framebox(30.0, 15.0){1}}
+//  \put(105.0, 17.0){\framebox(20.0, 15.0){1}}
+//  \put(105.0, 32.0){\framebox(20.0, 15.0){0}}
+//  \put(105.0, 47.0){\framebox(20.0, 15.0){-1}}
 //  \end{picture}
 //  \end{center}
 //

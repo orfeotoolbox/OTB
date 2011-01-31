@@ -32,7 +32,7 @@ std::string GeoInformationConversion::ToWKT(int srid)
   OGRSpatialReferenceH hSRS = NULL;
   hSRS = OSRNewSpatialReference(NULL);
 
-  if (OSRImportFromEPSG(hSRS,srid ) == OGRERR_NONE)
+  if (OSRImportFromEPSG(hSRS, srid ) == OGRERR_NONE)
     {
     // Get the wkt
     if ( OSRExportToWkt(hSRS, &wkt) == OGRERR_NONE)

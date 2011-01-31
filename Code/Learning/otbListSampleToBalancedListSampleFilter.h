@@ -32,14 +32,14 @@ namespace Statistics {
  *
  * The maximum number of samples with same labels are first
  * computed. This maximum number by the m_BalacingFactor determines
- * the final number of samples belonging to each label.    
- * 
+ * the final number of samples belonging to each label.
+ *
  * Mean and Variance are set via the methods SetMean() and SetVariance().
  *
  * \sa ListSampleToListSampleFilter, GaussianAdditiveNoiseSampleListFilter
  */
-template < class TInputSampleList, 
-           class TLabelSampleList, 
+template < class TInputSampleList,
+           class TLabelSampleList,
            class TOutputSampleList = TInputSampleList >
 class ITK_EXPORT ListSampleToBalancedListSampleFilter :
     public otb::Statistics::ListSampleToListSampleFilter<TInputSampleList,
@@ -49,12 +49,12 @@ public:
   /** Standard class typedefs */
   typedef ListSampleToBalancedListSampleFilter       Self;
   typedef otb::Statistics::ListSampleToListSampleFilter
-  <TInputSampleList,TOutputSampleList>               Superclass;
+  <TInputSampleList, TOutputSampleList>               Superclass;
   typedef itk::SmartPointer< Self >                  Pointer;
   typedef itk::SmartPointer<const Self>              ConstPointer;
   
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ListSampleToBalancedListSampleFilter,otb::Statistics::ListSampleToListSampleFilter);
+  itkTypeMacro(ListSampleToBalancedListSampleFilter, otb::Statistics::ListSampleToListSampleFilter);
   
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -85,12 +85,12 @@ public:
   typedef typename Superclass::DataObjectPointer               DataObjectPointer;
   
   /** Input & Output sample list as data object */
-  typedef typename Superclass::InputSampleListObjectType       InputSampleListObjectType;  
+  typedef typename Superclass::InputSampleListObjectType       InputSampleListObjectType;
   typedef typename Superclass::OutputSampleListObjectType      OutputSampleListObjectType;
   
   /** Filter adding noise to a ListSample */
   typedef otb::Statistics::GaussianAdditiveNoiseSampleListFilter
-  <InputSampleListType,OutputSampleListType>                   GaussianAdditiveNoiseType;
+  <InputSampleListType, OutputSampleListType>                   GaussianAdditiveNoiseType;
   typedef typename GaussianAdditiveNoiseType::Pointer          GaussianAdditiveNoisePointerType;
   
   /** Get/Set the label sample list */
@@ -110,19 +110,19 @@ public:
   LabelSampleListObjectType * GetOutputLabel();
   
   /** Set/Get the mean for the white gaussian noise to generate  */
-  otbSetObjectMemberMacro(AddGaussianNoiseFilter,Mean,double);
-  otbGetObjectMemberConstMacro(AddGaussianNoiseFilter,Mean,double);
+  otbSetObjectMemberMacro(AddGaussianNoiseFilter, Mean, double);
+  otbGetObjectMemberConstMacro(AddGaussianNoiseFilter, Mean, double);
   
   /** Set/Get the variance for the white gaussian noise to generate  */
-  otbSetObjectMemberMacro(AddGaussianNoiseFilter,Variance,double);
-  otbGetObjectMemberConstMacro(AddGaussianNoiseFilter,Variance,double);
+  otbSetObjectMemberMacro(AddGaussianNoiseFilter, Variance, double);
+  otbGetObjectMemberConstMacro(AddGaussianNoiseFilter, Variance, double);
 
   /** Set/Get the multiplicative factor : this value is used to
-    * determine the maximum number of samples in each label in order 
+    * determine the maximum number of samples in each label in order
     * to reach a balanced output ListSample
     */
-  itkSetMacro(BalancingFactor,unsigned int);
-  itkGetMacro(BalancingFactor,unsigned int);
+  itkSetMacro(BalancingFactor, unsigned int);
+  itkGetMacro(BalancingFactor, unsigned int);
   
 protected:
   /** This method causes the filter to generate its output. */

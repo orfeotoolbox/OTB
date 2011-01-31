@@ -218,7 +218,7 @@ Polygon<TValue>
   ++it;
   while (it != it_end)
     {
-    //std::cout<<"Testing Is crossing "<<a<<" "<<b<<current<<it.Value()<<" = "<<IsCrossing(a,b,current,it.Value())<<std::endl;
+    //std::cout<<"Testing Is crossing "<<a<<" "<<b<<current<<it.Value()<<" = "<<IsCrossing(a, b, current, it.Value())<<std::endl;
     if (IsCrossing(a, b, current, it.Value()))
       {
       ++resp;
@@ -226,7 +226,7 @@ Polygon<TValue>
     current = it.Value();
     ++it;
     }
-  //std::cout<<"Testing Is crossing "<<a<<" "<<b<<current<<first<<" = "<<IsCrossing(a,b,current,first)<<std::endl;
+  //std::cout<<"Testing Is crossing "<<a<<" "<<b<<current<<first<<" = "<<IsCrossing(a, b, current, first)<<std::endl;
   if (IsCrossing(a, b, current, first))
     {
     ++resp;
@@ -252,7 +252,7 @@ Polygon<TValue>
   ++it;
   while (it != it_end)
     {
-    //std::cout<<"IsTouching "<<a<<" "<<b<<", "<<current<<" "<<it.Value()<<" -> "<<IsTouching(a,b,current,it.Value())<<std::endl;
+    //std::cout<<"IsTouching "<<a<<" "<<b<<", "<<current<<" "<<it.Value()<<" -> "<<IsTouching(a, b, current, it.Value())<<std::endl;
     if (IsTouching(a, b, current, it.Value()))
       {
       ++resp;
@@ -260,7 +260,7 @@ Polygon<TValue>
     current = it.Value();
     ++it;
     }
-  //std::cout<<"IsTouching "<<a<<" "<<b<<", "<<current<<" "<<first<<" -> "<<IsTouching(a,b,current,first)<<std::endl;
+  //std::cout<<"IsTouching "<<a<<" "<<b<<", "<<current<<" "<<first<<" -> "<<IsTouching(a, b, current, first)<<std::endl;
   if (IsTouching(a, b, current, first))
     {
     ++resp;

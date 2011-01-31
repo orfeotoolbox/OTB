@@ -52,7 +52,7 @@ public:
   inline TOutput operator()( const TInputImageRealPart & real,
                              const TInputImageImaginaryPart & imaginary ) const
     {
-    return TOutput(static_cast<OutputValueType>(real),static_cast<OutputValueType>(imaginary));
+    return TOutput(static_cast<OutputValueType>(real), static_cast<OutputValueType>(imaginary));
     }
 };
 }
@@ -60,7 +60,7 @@ public:
 template <class TInputImageRealPart, class TInputImageImaginaryPart, class TOutputImage>
 class ITK_EXPORT RealAndImaginaryImageToComplexImageFilter :
     public itk::BinaryFunctorImageFilter<TInputImageRealPart,
-                        TInputImageImaginaryPart,TOutputImage,
+                        TInputImageImaginaryPart, TOutputImage,
                         Function::RealAndImaginaryToComplex<
                                   typename TInputImageRealPart::PixelType,
                                   typename TInputImageImaginaryPart::PixelType,
@@ -70,7 +70,7 @@ public:
   /** Standard class typedefs. */
   typedef RealAndImaginaryImageToComplexImageFilter  Self;
   typedef itk::BinaryFunctorImageFilter<
-      TInputImageRealPart, TInputImageImaginaryPart,TOutputImage,
+      TInputImageRealPart, TInputImageImaginaryPart, TOutputImage,
       Function::RealAndImaginaryToComplex< typename TInputImageRealPart::PixelType,
                               typename TInputImageImaginaryPart::PixelType,
                               typename TOutputImage::PixelType> >
@@ -95,7 +95,7 @@ public:
 //  itkConceptMacro(InputConvertibleToOutputCheck,
 //    (Concept::Convertible<InputRealPartPixelType, OutputPixelValueType>));
 //  itkConceptMacro(InputConvertibleToOutputCheck,
-//    (Concept::Convertible<InputImaginaryPartPixelType,OutputPixelValueType>));
+//    (Concept::Convertible<InputImaginaryPartPixelType, OutputPixelValueType>));
   /** End concept checking */
 //#endif
 

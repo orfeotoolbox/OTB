@@ -27,7 +27,7 @@ namespace otb
 
 /** \class VectorImageToASImageAdaptor
  * \brief Presents an image of pixel type Vector as being and image of
- * FixelArray<unsigned short,3> type.
+ * FixelArray<unsigned short, 3> type.
  *
  * \ingroup ImageAdaptors
  *

@@ -243,7 +243,7 @@ int main(int argc, char * argv[])
 //
 //  This example can  convert an ESRI Shapefile to
 //  a MapInfo File but you can also access with the same OTB source code
-//  to a PostgreSQL datasource,using a connection string as :
+//  to a PostgreSQL datasource, using a connection string as :
 //  PG:"dbname='databasename' host='addr' port='5432' user='x' password='y'"
 //  Starting with GDAL 1.6.0, the set of tables to be scanned can be overridden
 //  by specifying tables=schema.table.

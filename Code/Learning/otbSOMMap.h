@@ -63,7 +63,7 @@ public:
   /**
    * There is no runtime informations macro since
    * this class has to be considered to as a simple VectorImage
-   * // itkTypeMacro(SOMMap,VectorImage);
+   * // itkTypeMacro(SOMMap, VectorImage);
    * */
 
   /** Template parameters related typedefs */

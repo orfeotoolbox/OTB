@@ -23,14 +23,14 @@
 #include "otbVectorDataFileWriter.h"
 
 typedef unsigned short                            PixelType;
-typedef otb::Image<PixelType,2>                   ImageType;
+typedef otb::Image<PixelType, 2>                   ImageType;
 typedef otb::ImageFileReader<ImageType>           ReaderType;
 typedef otb::VectorData<>                         VectorDataType;
 typedef otb::VectorDataFileWriter<VectorDataType> WriterType;
 typedef otb::ImageToEnvelopeVectorDataFilter
-    <ImageType,VectorDataType>                    FilterType;
+    <ImageType, VectorDataType>                    FilterType;
 
-int otbImageToEnvelopeVectorDataFilterNew(int argc,char* argv[])
+int otbImageToEnvelopeVectorDataFilterNew(int argc, char* argv[])
 {
   // Instantiation
   FilterType::Pointer filter = FilterType::New();
@@ -38,7 +38,7 @@ int otbImageToEnvelopeVectorDataFilterNew(int argc,char* argv[])
   return EXIT_SUCCESS;
 }
 
-int otbImageToEnvelopeVectorDataFilter(int argc,char* argv[])
+int otbImageToEnvelopeVectorDataFilter(int argc, char* argv[])
 {
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);

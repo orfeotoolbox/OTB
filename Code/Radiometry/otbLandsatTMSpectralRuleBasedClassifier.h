@@ -529,7 +529,7 @@ public:
     bool hVis        = (lv[ LVType::vis ] == LVType::High);
     // snow in shadow areas spectral category
     bool twashsnsc = dbsr && shclsnsr && hNDSIVis && lNIR && lMIR1 && lMIR2 && !(hBright || hVis || hNDBSI || hTIR);
-    if( twashsnsc )    
+    if( twashsnsc )
       return static_cast<TOutput>(TWASHSN);
 
     // non forested wetland spectral category

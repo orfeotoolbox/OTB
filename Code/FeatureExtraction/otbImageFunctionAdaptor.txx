@@ -27,7 +27,7 @@ ImageFunctionAdaptor< TInternalImageFunctionType, TOutputPrecision >
 ::ImageFunctionAdaptor()
 {
   m_InternalImageFunction = InternalImageFunctionType::New();
-  m_Converter = ConverterType::New(); 
+  m_Converter = ConverterType::New();
 }
 
 template< class TInternalImageFunctionType, class TOutputPrecision >

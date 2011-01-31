@@ -78,7 +78,7 @@ public:
   void SetFieldAsString(std::string key, std::string value);
 
   /**
-    * \return the nth field of the node as a std::pair of (key,value).
+    * \return the nth field of the node as a std::pair of (key, value).
     * \param index the index of the field to return.
     */
   FieldType GetNthField(unsigned int index) const;

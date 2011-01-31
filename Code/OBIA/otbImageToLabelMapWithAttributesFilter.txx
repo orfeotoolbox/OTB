@@ -23,7 +23,7 @@
 
 namespace otb
 {
-template <class TInputImage, class TLabeledImage, class TOutputLabel,class TObjectLabel>
+template <class TInputImage, class TLabeledImage, class TOutputLabel, class TObjectLabel>
 ImageToLabelMapWithAttributesFilter<TInputImage, TLabeledImage, TOutputLabel, TObjectLabel>
 ::ImageToLabelMapWithAttributesFilter()
 {
@@ -37,7 +37,7 @@ ImageToLabelMapWithAttributesFilter<TInputImage, TLabeledImage, TOutputLabel, TO
 ::SetInput( const InputImageType *image)
 {
   // Process object is not const-correct so the const_cast is required here
-  this->itk::ProcessObject::SetNthInput(0, 
+  this->itk::ProcessObject::SetNthInput(0,
                     const_cast< InputImageType * >( image ) );
 }
 
@@ -47,7 +47,7 @@ ImageToLabelMapWithAttributesFilter<TInputImage, TLabeledImage, TOutputLabel, TO
 ::SetLabeledImage( const LabeledImageType *image)
 {
   // Process object is not const-correct so the const_cast is required here
-  this->itk::ProcessObject::SetNthInput(1, 
+  this->itk::ProcessObject::SetNthInput(1,
                     const_cast<LabeledImageType * >( image ) );
   
 }

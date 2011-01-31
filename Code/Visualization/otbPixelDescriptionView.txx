@@ -39,7 +39,7 @@ PixelDescriptionView<TInputPixelDescription>
 {
   if (m_PixelDescriptionWidget != NULL)
     {
-//     delete m_PixelDescriptionWidget;//FIXME
+//     delete m_PixelDescriptionWidget; //FIXME
     //NOTE segfault with the previous line, why?
     }
 }

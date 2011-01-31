@@ -98,8 +98,8 @@ public:
   typedef typename PolygonListType::ConstPointer                               PolygonListConstPointerType;
 
   /** Fields typedef */
-//   typedef std::map<std::string,std::string>          FieldMapType;
-//   typedef std::pair<std::string,std::string>         FieldType;
+//   typedef std::map<std::string, std::string>          FieldMapType;
+//   typedef std::pair<std::string, std::string>         FieldType;
 
   /** Accessors */
   itkGetMacro(NodeType, NodeType);
@@ -235,7 +235,7 @@ public:
   bool HasField(std::string key) const;
 
   /**
-   * \return the nth field of the node as a std::pair of (key,value).
+   * \return the nth field of the node as a std::pair of (key, value).
    * \param index the index of the field to return.
    */
 //   FieldType GetNthField(unsigned int index) const;

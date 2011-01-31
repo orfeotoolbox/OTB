@@ -97,7 +97,7 @@ TileMapTransform<TTransformDirection, TScalarType, NInputDimensions, NOutputDime
   return outputPoint;
 }
 
-///\return The geographic point corresponding to (0,0)
+///\return The geographic point corresponding to (0, 0)
 template<InverseOrForwardTransformationEnum TTransformDirection, class TScalarType,
     unsigned int NInputDimensions, unsigned int NOutputDimensions>
 typename TileMapTransform<TTransformDirection, TScalarType, NInputDimensions, NOutputDimensions>::InputPointType

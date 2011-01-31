@@ -290,7 +290,7 @@ void MWImageIO::Write(const void* buffer)
 
 //   std::streamsize counter = 0;
 //   std::cout << "begin conversion" << std::endl;
-//   for (unsigned int i=0;i<m_Dimensions[0]*m_Dimensions[1];++i)
+//   for (unsigned int i=0; i<m_Dimensions[0]*m_Dimensions[1]; ++i)
 //   {
 //     floatImage[i] = static_cast< float > ( *(p+counter) );
 //     std::cout << "float " << floatImage[i] << std::endl;

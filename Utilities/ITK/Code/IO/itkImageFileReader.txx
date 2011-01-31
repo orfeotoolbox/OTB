@@ -482,8 +482,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   OutputImagePixelType *outputData =
     this->GetOutput()->GetPixelContainer()->GetBufferPointer();
 
-
-  // TODO:
+      // TODO:
   // Pass down the PixelType (RGB, VECTOR, etc.) so that any vector to
   // scalar conversion be type specific. i.e. RGB to scalar would use
   // a formula to convert to luminance, VECTOR to scalar would use
@@ -501,7 +500,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
 
 #define ITK_CONVERT_BUFFER_IF_BLOCK(type)               \
  else if( m_ImageIO->GetComponentTypeInfo() == typeid(type) )   \
-   {                                                   \
+   {   \
    if( strcmp( this->GetOutput()->GetNameOfClass(), "VectorImage" ) == 0 ) \
      { \
      ConvertPixelBuffer<                                 \
@@ -510,10 +509,10 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
       ConvertPixelTraits                                \
       >                                                 \
       ::ConvertVectorImage(                             \
-        static_cast<type*>(inputData),                  \
-        m_ImageIO->GetNumberOfComponents(),             \
-        outputData,                                     \
-        numberOfPixels);              \
+       static_cast<type*>(inputData),                  \
+       m_ImageIO->GetNumberOfComponents(),             \
+       outputData,                                     \
+       numberOfPixels);              \
      } \
    else \
      { \
@@ -531,34 +530,54 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     }
 #define ITK_CONVERT_CBUFFER_IF_BLOCK(type)               \
  else if( m_ImageIO->GetComponentTypeInfo() == typeid(type) )   \
-   {                                                   \
+   {  \
    if( strcmp( this->GetOutput()->GetNameOfClass(), "VectorImage" ) == 0 ) \
      { \
-     ConvertPixelBuffer<                                 \
-      type::value_type,        \
-      OutputImagePixelType,                             \
-      ConvertPixelTraits                                \
-      >                                                 \
-      ::ConvertComplexVectorImageToVectorImage(                             \
-        static_cast<type*>(inputData),                \
-        m_ImageIO->GetNumberOfComponents(),             \
-        outputData,                                     \
-        numberOfPixels);              \
+     if( (typeid(OutputImagePixelType) == typeid(std::complex<double>)) \
+         || (typeid(OutputImagePixelType) == typeid(std::complex<float>)) )\
+       {\
+       /*std::cout << "Complex -> OTB::VectorImage Complex" << std::endl;*/ \
+       ConvertPixelBuffer<                                 \
+        type::value_type,        \
+        OutputImagePixelType,                             \
+        ConvertPixelTraits                                \
+        >                                                 \
+        ::ConvertComplexVectorImageToVectorImageComplex(                             \
+         static_cast<type*>(inputData),                \
+         m_ImageIO->GetNumberOfComponents(),             \
+         outputData,                                     \
+         numberOfPixels); \
+       }\
+     else\
+       {\
+       /*std::cout << "Complex -> OTB::VectorImage Double" << std::endl;*/ \
+       ConvertPixelBuffer<                                 \
+        type::value_type,        \
+        OutputImagePixelType,                             \
+        ConvertPixelTraits                                \
+        >                                                  \
+        ::ConvertComplexVectorImageToVectorImage(                             \
+         static_cast<type*>(inputData),                \
+         m_ImageIO->GetNumberOfComponents(),             \
+         outputData,                                     \
+         numberOfPixels);              \
+       }\
      } \
    else \
      { \
+     /*std::cout << "Complex -> OTB::Image" << std::endl;*/ \
      ConvertPixelBuffer<                                 \
       type::value_type,        \
       OutputImagePixelType,                             \
       ConvertPixelTraits                                \
       >                                                 \
       ::ConvertComplexToGray(                                        \
-        static_cast<type*>(inputData),                  \
-        m_ImageIO->GetNumberOfComponents(),             \
-        outputData,                                     \
-        numberOfPixels);              \
-      } \
-    }
+       static_cast<type*>(inputData),                  \
+       m_ImageIO->GetNumberOfComponents(),             \
+       outputData,                                     \
+       numberOfPixels);              \
+     } \
+   }
 
   if(0)
     {

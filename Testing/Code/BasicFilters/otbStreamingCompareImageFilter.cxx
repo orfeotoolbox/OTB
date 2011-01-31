@@ -51,7 +51,7 @@ int otbStreamingCompareImageFilter(int argc, char * argv[])
   typedef otb::Image<PixelType, Dimension>               ImageType;
   typedef otb::ImageFileReader<ImageType>                ReaderType;
   typedef otb::StreamingCompareImageFilter<ImageType> StreamingCompareImageFilterType;
-  typedef itk::ShiftScaleImageFilter <ImageType ,ImageType > ShiftFilterType;
+  typedef itk::ShiftScaleImageFilter <ImageType , ImageType > ShiftFilterType;
 
   // Instantiating object
   StreamingCompareImageFilterType::Pointer filter = StreamingCompareImageFilterType::New();

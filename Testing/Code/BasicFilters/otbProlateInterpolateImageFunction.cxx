@@ -77,7 +77,7 @@ int otbProlateInterpolateImageFunction(int argc, char * argv[])
 
   /**********************************************************/
   //typedef otb::StreamingImageFileWriter<ImageType> WriterType;
-  //typedef otb::StreamingResampleImageFilter<ImageType,ImageType,double> StreamingResampleImageFilterType;
+  //typedef otb::StreamingResampleImageFilter<ImageType, ImageType, double> StreamingResampleImageFilterType;
   typedef otb::ImageFileWriter<ImageType>                        WriterType;
   typedef itk::ResampleImageFilter<ImageType, ImageType, double> StreamingResampleImageFilterType;
   WriterType::Pointer                       prowriter     = WriterType::New();

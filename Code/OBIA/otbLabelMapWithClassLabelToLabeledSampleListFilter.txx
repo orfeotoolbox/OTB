@@ -24,26 +24,26 @@ namespace otb
 {
 
 template <class TInputLabelMap, class TOutputListSample, class TOutputTrainingListSample, class TMeasurementFunctor>
-LabelMapWithClassLabelToLabeledSampleListFilter<TInputLabelMap,TOutputListSample,TOutputTrainingListSample,TMeasurementFunctor>
+LabelMapWithClassLabelToLabeledSampleListFilter<TInputLabelMap, TOutputListSample, TOutputTrainingListSample, TMeasurementFunctor>
 ::LabelMapWithClassLabelToLabeledSampleListFilter()
 {
 }
 
 template <class TInputLabelMap, class TOutputListSample, class TOutputTrainingListSample, class TMeasurementFunctor>
-LabelMapWithClassLabelToLabeledSampleListFilter<TInputLabelMap,TOutputListSample,TOutputTrainingListSample,TMeasurementFunctor>
+LabelMapWithClassLabelToLabeledSampleListFilter<TInputLabelMap, TOutputListSample, TOutputTrainingListSample, TMeasurementFunctor>
 ::~LabelMapWithClassLabelToLabeledSampleListFilter()
 {}
 
 template <class TInputLabelMap, class TOutputListSample, class TOutputTrainingListSample, class TMeasurementFunctor>
-void 
-LabelMapWithClassLabelToLabeledSampleListFilter<TInputLabelMap,TOutputListSample,TOutputTrainingListSample,TMeasurementFunctor>
+void
+LabelMapWithClassLabelToLabeledSampleListFilter<TInputLabelMap, TOutputListSample, TOutputTrainingListSample, TMeasurementFunctor>
 ::Compute()
 {
   // Clear output sample list
   m_OutputSampleList = OutputSampleListType::New();
   m_OutputTrainingSampleList = OutputTrainingSampleListType::New();
   
-  typename InputLabelMapType::LabelObjectContainerType::const_iterator it 
+  typename InputLabelMapType::LabelObjectContainerType::const_iterator it
     = m_InputLabelMap->GetLabelObjectContainer().begin();
 
   // iterate on label objects
@@ -65,11 +65,11 @@ LabelMapWithClassLabelToLabeledSampleListFilter<TInputLabelMap,TOutputListSample
 }
 
 template <class TInputLabelMap, class TOutputListSample, class TOutputTrainingListSample, class TMeasurementFunctor>
-void 
-LabelMapWithClassLabelToLabeledSampleListFilter<TInputLabelMap,TOutputListSample,TOutputTrainingListSample,TMeasurementFunctor>
+void
+LabelMapWithClassLabelToLabeledSampleListFilter<TInputLabelMap, TOutputListSample, TOutputTrainingListSample, TMeasurementFunctor>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
 } // end namespace otb

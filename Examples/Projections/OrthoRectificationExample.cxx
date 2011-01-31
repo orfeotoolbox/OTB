@@ -131,7 +131,7 @@ int main(int argc, char* argv[])
 // We also define the spacing of the deformation grid where actual
 // deformation values are estimated. Choosing a bigger deformation field
 // spacing will speed up computation.
-// 
+//
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet

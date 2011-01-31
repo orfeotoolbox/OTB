@@ -215,7 +215,7 @@ StatisticsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>
       vnl_diag_matrix<double> pm = eigen.D;
       for (unsigned int i = 0; i < TFeatureImage::ImageDimension; i++)
         {
-        //    principalMoments[i] = 4 * vcl_sqrt( pm(i,i) );
+        //    principalMoments[i] = 4 * vcl_sqrt( pm(i, i) );
         principalMoments[i] = pm(i, i);
         }
       principalAxes = eigen.V.transpose();

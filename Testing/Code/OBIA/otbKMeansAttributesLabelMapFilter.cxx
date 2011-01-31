@@ -38,11 +38,11 @@ typedef otb::AttributesMapLabelObjectWithClassLabel<LabelType, Dimension, double
                                                                                     LabelObjectType;
 typedef itk::LabelMap<LabelObjectType>                                              LabelMapType;
 typedef otb::VectorImage<PixelType, Dimension>                                      VectorImageType;
-typedef otb::Image<unsigned int,2>                                                  LabeledImageType;
+typedef otb::Image<unsigned int, 2>                                                  LabeledImageType;
 
 typedef otb::ImageFileReader<VectorImageType>                                       ReaderType;
 typedef otb::ImageFileReader<LabeledImageType>                                      LabeledReaderType;
-typedef itk::LabelImageToLabelMapFilter<LabeledImageType,LabelMapType>              LabelMapFilterType;
+typedef itk::LabelImageToLabelMapFilter<LabeledImageType, LabelMapType>              LabelMapFilterType;
 typedef otb::ShapeAttributesLabelMapFilter<LabelMapType>                            ShapeFilterType;
 typedef otb::KMeansAttributesLabelMapFilter<LabelMapType>                           KMeansAttributesLabelMapFilterType;
 

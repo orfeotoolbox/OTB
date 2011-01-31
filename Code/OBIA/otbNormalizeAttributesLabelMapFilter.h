@@ -34,7 +34,7 @@ namespace Functor
 *
 *   Given the minimum and maximum of all attributes (which can be computed with
 *   MinMaxAttributesLabelMapFilter), this filter rescale the attributes such that
-*   all attributes are in [0,1] interval
+*   all attributes are in [0, 1] interval
 *
 *   \sa MinMaxAttributesLabelMapFilter
 */
@@ -85,7 +85,7 @@ private:
 /** \class NormalizeAttributesLabelMapFilter
  * \brief This class works with AttributesMapLabelObject, and normalizes all attributes
  *        wrt a map of minimal and maximal attribute value, such that the resulting
- *        attributes are in the [0,1] interval
+ *        attributes are in the [0, 1] interval
  *
  * \sa MinMaxAttributesLabelMapFilter
  */

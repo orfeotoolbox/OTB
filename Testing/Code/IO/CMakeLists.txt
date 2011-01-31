@@ -1145,32 +1145,32 @@ ADD_TEST(ioTuVectorImageComplexNew ${IO_TESTS9}
 
 ADD_TEST(ioTvVectorImageComplexFloatTest ${IO_TESTS9}
   otbVectorImageComplexFloatTest
-    ${INPUTDATA}/multibandComplexFloat.hdr
+    ${INPUTDATA}/multibandComplexFloat_2bands.hdr
 )
 
 ADD_TEST(ioTvVectorImageComplexDoubleTest ${IO_TESTS9}
   otbVectorImageComplexDoubleTest
-    ${INPUTDATA}/multibandComplexDouble.hdr
+    ${INPUTDATA}/multibandComplexDouble_2bands.hdr
 )
 
 ADD_TEST(ioTvImageComplexFloatTest ${IO_TESTS9}
   otbImageComplexFloatTest
-    ${INPUTDATA}/multibandComplexFloat.hdr
+    ${INPUTDATA}/multibandComplexFloat_2bands.hdr
 )
 
 ADD_TEST(ioTvImageComplexDoubleTest ${IO_TESTS9}
   otbImageComplexDoubleTest
-    ${INPUTDATA}/multibandComplexDouble.hdr
+    ${INPUTDATA}/multibandComplexDouble_2bands.hdr
 )
 
 ADD_TEST(ioTvVectorImageComplexIntoRealFloatTest ${IO_TESTS9}
   otbVectorImageComplexIntoRealFloatTest
-    ${INPUTDATA}/multibandComplexFloat.hdr
+    ${INPUTDATA}/multibandComplexFloat_2bands.hdr
 )
 
 ADD_TEST(ioTvVectorImageComplexIntoRealDoubleTest ${IO_TESTS9}
   otbVectorImageComplexIntoRealDoubleTest
-    ${INPUTDATA}/multibandComplexDouble.hdr
+    ${INPUTDATA}/multibandComplexDouble_2bands.hdr
 )
 
 
@@ -2788,70 +2788,143 @@ ADD_TEST(ioTvTileMapImageIOHelperTest ${IO_TESTS21}
               ${TEMP}/ioTvTileMapImageIOHelperTest.txt
 )
 
-ADD_TEST(ioTvImageDoubleToImageComplex ${IO_TESTS21}
-         otbImageDoubleToImageComplex
-             ${INPUTDATA}/monobandDouble.tif
-)
+# Tests about complex reading
 
-ADD_TEST(ioTvImageComplexToImageDouble ${IO_TESTS21}
-         otbImageComplexToImageDouble
-              ${INPUTDATA}/monobandComplexDouble
-)
+SET(INPUTFILE_PIXELTYPES_LIST "Float" "Double")
+SET(READING_PIXELTYPES_LIST "Float" "Double")
+SET(NBBANDS_LIST "2" "3" "4")
 
-ADD_TEST(ioTvImageComplexToImageComplex ${IO_TESTS21}
-         otbImageComplexToImageComplex
-              ${INPUTDATA}/monobandComplexDouble.hdr
-)
+FOREACH(INPUTFILE_PIXELTYPE ${INPUTFILE_PIXELTYPES_LIST})
 
-ADD_TEST(ioTvImageComplexToVectorImageDouble ${IO_TESTS21}
-         otbImageComplexToVectorImageDouble
-              ${INPUTDATA}/monobandComplexDouble.hdr
-)
+  FOREACH(READING_PIXELTYPE ${READING_PIXELTYPES_LIST})
 
-ADD_TEST(ioTvImageComplexToVectorImageComplex ${IO_TESTS21}
-         otbImageComplexToVectorImageComplex
-              ${INPUTDATA}/monobandComplexDouble.hdr
-)
+    ADD_TEST(ioTvMonobandScalar${INPUTFILE_PIXELTYPE}ToImageComplex${READING_PIXELTYPE}
+             ${IO_TESTS21}
+             otbMonobandScalarToImageComplex${READING_PIXELTYPE}
+             ${INPUTDATA}/monoband${INPUTFILE_PIXELTYPE}.tif)
+             
+    ADD_TEST(ioTvMonobandScalar${INPUTFILE_PIXELTYPE}ToVectorImageComplex${READING_PIXELTYPE}
+             ${IO_TESTS21}
+             otbMonobandScalarToVectorImageComplex${READING_PIXELTYPE}
+             ${INPUTDATA}/monoband${INPUTFILE_PIXELTYPE}.tif)
 
-ADD_TEST(ioTvVectorImageDoubleToImageComplex ${IO_TESTS21}
-         otbVectorImageDoubleToImageComplex
-              ${INPUTDATA}/multibandDouble.tif
-)
+    ADD_TEST(ioTvMonobandComplex${INPUTFILE_PIXELTYPE}ToImageScalar${READING_PIXELTYPE}
+             ${IO_TESTS21}
+             otbMonobandComplexToImageScalar${READING_PIXELTYPE}
+             ${INPUTDATA}/monobandComplex${INPUTFILE_PIXELTYPE}.hdr)
 
-ADD_TEST(ioTvVectorImageDoubleToVectorImageComplex ${IO_TESTS21}
-         otbVectorImageDoubleToVectorImageComplex
-              ${INPUTDATA}/multibandDouble.tif
-)
+    ADD_TEST(ioTvMonobandComplex${INPUTFILE_PIXELTYPE}ToImageComplex${READING_PIXELTYPE}
+             ${IO_TESTS21}
+             otbMonobandComplexToImageComplex${READING_PIXELTYPE}
+             ${INPUTDATA}/monobandComplex${INPUTFILE_PIXELTYPE}.hdr)
 
-ADD_TEST(ioTvVectorImageComplexToVectorImageDouble ${IO_TESTS21}
-         otbVectorImageComplexToVectorImageDouble
-              ${INPUTDATA}/multibandComplexDouble.hdr
-)
+    ADD_TEST(ioTvMonobandComplex${INPUTFILE_PIXELTYPE}ToVectorImageScalar${READING_PIXELTYPE}
+             ${IO_TESTS21}
+             otbMonobandComplexToVectorImageScalar${READING_PIXELTYPE}
+             ${INPUTDATA}/monobandComplex${INPUTFILE_PIXELTYPE}.hdr)
 
-ADD_TEST(ioTvVectorImageComplexToVectorImageComplex ${IO_TESTS21}
-         otbVectorImageComplexToVectorImageComplex
-              ${INPUTDATA}/multibandComplexDouble.hdr
-)
+    ADD_TEST(ioTvMonobandComplex${INPUTFILE_PIXELTYPE}ToVectorImageComplex${READING_PIXELTYPE}
+             ${IO_TESTS21}
+             otbMonobandComplexToVectorImageComplex${READING_PIXELTYPE}
+             ${INPUTDATA}/monobandComplex${INPUTFILE_PIXELTYPE}.hdr)
 
-ADD_TEST(ioTvImageDoubleToVectorImageComplex ${IO_TESTS21}
-         otbImageDoubleToVectorImageComplex
-              ${INPUTDATA}/monobandDouble.tif
-)
+    ADD_TEST(ioTvMultibandScalar${INPUTFILE_PIXELTYPE}ToImageComplex${READING_PIXELTYPE}
+             ${IO_TESTS21}
+             otbMultibandScalarToImageComplex${READING_PIXELTYPE}
+             ${INPUTDATA}/multiband${INPUTFILE_PIXELTYPE}.tif)
 
-ADD_TEST(ioTvVectorImageComplexToImageDouble_2bands ${IO_TESTS21}
-         otbVectorImageComplexToImageDouble
-              ${INPUTDATA}/multibandComplexDouble.hdr
-)
+    ADD_TEST(ioTvMultibandScalar${INPUTFILE_PIXELTYPE}ToVectorImageComplex${READING_PIXELTYPE}
+             ${IO_TESTS21}
+             otbMultibandScalarToVectorImageComplex${READING_PIXELTYPE}
+             ${INPUTDATA}/multiband${INPUTFILE_PIXELTYPE}.tif)
 
-ADD_TEST(ioTvVectorImageComplexToImageDouble_3bands ${IO_TESTS21}
-         otbVectorImageComplexToImageDouble
-              ${INPUTDATA}/multi3bandsDouble.hdr
-)
+    FOREACH(NBBANDS ${NBBANDS_LIST})
 
-ADD_TEST(ioTvVectorImageComplexToImageDouble_4bands ${IO_TESTS21}
-         otbVectorImageComplexToImageDouble
-              ${INPUTDATA}/mono3bandsDouble.hdr
-)
+      # Weird case : need specifications to write the test
+      # ADD_TEST(ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToImageScalar${READING_PIXELTYPE}
+      #          ${IO_TESTS21}
+      #          otbMultibandComplexToImageScalar${READING_PIXELTYPE}
+      #          ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands.hdr)
+
+      ADD_TEST(ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToVectorImageScalar${READING_PIXELTYPE}
+               ${IO_TESTS21}
+               otbMultibandComplexToVectorImageScalar${READING_PIXELTYPE}
+               ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands.hdr)
+
+      # Weird case : need specifications to write the test
+      # [missing impl]
+      # ADD_TEST(ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToImageComplex${READING_PIXELTYPE})
+  
+      ADD_TEST(ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToVectorImageComplex${READING_PIXELTYPE}
+               ${IO_TESTS21}
+               otbMultibandComplexToVectorImageComplex${READING_PIXELTYPE}
+               ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands.hdr)
+
+    ENDFOREACH(NBBANDS ${NBBANDS_LIST})
+
+  ENDFOREACH(READING_PIXELTYPE ${READING_PIXELTYPES_LIST})  
+ENDFOREACH(INPUTFILE_PIXELTYPE ${INPUTFILE_PIXELTYPES_LIST})
+
+
+# Tests with GDAL only (not deal for this commit)
+#ADD_TEST(ioTvGDALReadPxlComplexDbMono ${IO_TESTS21}
+#  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvGDALReadPxlComplexDbMono.txt
+#                           ${TEMP}/ioTvGDALReadPxlComplexDbMono_Out.txt
+#         otbGDALReadPxlComplexDb
+#              ${INPUTDATA}/monobandComplexDouble
+#              1 1
+#              ${TEMP}/ioTvGDALReadPxlComplexDbMono_Out.txt
+#)
+#ADD_TEST(ioTvGDALReadPxlComplexDbMulti ${IO_TESTS21}
+#  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvGDALReadPxlComplexDbMulti.txt
+#                           ${TEMP}/ioTvGDALReadPxlComplexDbMulti_Out.txt
+#         otbGDALReadPxlComplexDb
+#              ${INPUTDATA}/multibandComplexDouble
+#              1 1
+#              ${TEMP}/ioTvGDALReadPxlComplexDbMulti_Out.txt
+#)
+#ADD_TEST(ioTvGDALReadPxlComplexDbMulti3 ${IO_TESTS21}
+#  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvGDALReadPxlComplexDbMulti3.txt
+#                           ${TEMP}/ioTvGDALReadPxlComplexDbMulti3_Out.txt
+#         otbGDALReadPxlComplexDb
+#              ${INPUTDATA}/multibandComplexDouble_3bands
+#              100 100
+#              ${TEMP}/ioTvGDALReadPxlComplexDbMulti3_Out.txt
+#)
+#ADD_TEST(ioTvGDALReadPxlComplexDbMulti4 ${IO_TESTS21}
+#  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvGDALReadPxlComplexDbMulti4.txt
+#                           ${TEMP}/ioTvGDALReadPxlComplexDbMulti4_Out.txt
+#         otbGDALReadPxlComplexDb
+#              ${INPUTDATA}/multibandComplexDouble_4bands
+#              0 0
+#              ${TEMP}/ioTvGDALReadPxlComplexDbMulti4_Out.txt
+#)
+#
+#
+#ADD_TEST(ioTvGDALReadPxlComplexFlMulti ${IO_TESTS21}
+#  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvGDALReadPxlComplexFlMulti.txt
+#                           ${TEMP}/ioTvGDALReadPxlComplexFlMulti_Out.txt
+#         otbGDALReadPxlComplexFl
+#             ${INPUTDATA}/multibandComplexFloat
+#              100 100
+#              ${TEMP}/ioTvGDALReadPxlComplexFlMulti_Out.txt
+#)
+#ADD_TEST(ioTvGDALReadPxlComplexFlMulti3 ${IO_TESTS21}
+#  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvGDALReadPxlComplexFlMulti3.txt
+#                           ${TEMP}/ioTvGDALReadPxlComplexFlMulti3_Out.txt
+#         otbGDALReadPxlComplexFl
+#              ${INPUTDATA}/multibandComplexFloat_3bands
+#              100 100
+#              ${TEMP}/ioTvGDALReadPxlComplexFlMulti3_Out.txt
+#)
+#ADD_TEST(ioTvGDALReadPxlComplexFlMulti4 ${IO_TESTS21}
+#  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvGDALReadPxlComplexFlMulti4.txt
+#                           ${TEMP}/ioTvGDALReadPxlComplexFlMulti4_Out.txt
+#         otbGDALReadPxlComplexFl
+#              ${INPUTDATA}/multibandComplexFloat_4bands
+#              100 100
+#              ${TEMP}/ioTvGDALReadPxlComplexFlMulti4_Out.txt
+#)
 
 #----------------------------------------------------------------------------------
 SET(BasicIO_SRCS1
@@ -3062,6 +3135,9 @@ otbMapFileProductWriter.cxx
 otbKmzProductWriter.cxx
 otbTileMapImageIOHelperTest.cxx
 otbComplexImageManipulationTest.cxx
+#not deal in this commit
+#otbGDALReadPxlComplexDb.cxx
+#otbGDALReadPxlComplexFl.cxx
 )
 
 

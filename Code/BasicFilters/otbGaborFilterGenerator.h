@@ -46,7 +46,7 @@ namespace otb
  *
  * The formula used to compute these coefficients is as follows:
  *
- * \f$ g(x,y) = \exp\Big(-\pi((a x_\theta)^{2} +(b y_\theta)^{2})\Big) * \cos\big(2\pi(u_0*x + v_0*y)+\phi\big) \f$
+ * \f$ g(x, y) = \exp\Big(-\pi((a x_\theta)^{2} +(b y_\theta)^{2})\Big) * \cos\big(2\pi(u_0*x + v_0*y)+\phi\big) \f$
  *
  * with:
  *

@@ -312,7 +312,7 @@ unsigned int StreamingTraits<TImage>
 }
 
 template <typename TPixel, unsigned int VImageDimension>
-unsigned int StreamingTraits< otb::VectorImage<TPixel,VImageDimension> >
+unsigned int StreamingTraits< otb::VectorImage<TPixel, VImageDimension> >
 ::CalculateNeededRadiusForInterpolator(const InterpolationType* interpolator)
 {
   unsigned int neededRadius = 0;

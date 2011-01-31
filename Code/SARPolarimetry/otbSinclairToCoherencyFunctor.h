@@ -25,16 +25,20 @@ namespace otb
 namespace Functor
 {
 /** \class SinclairToCoherencyFunctor
- *  \brief Construct the reciprocal fully polarimetric coherency matrix
+ *  \brief Construct the fully polarimetric coherency matrix
  *  with Sinclair matrix information.
  *
  *  Output value are:
- *   channel #0 : \f$ S_{hh+vv}.S_{hh+vv}^{*} \f$
- *   channel #1 : \f$ S_{hh+vv}.S_{hh-vv}^{*} \f$
- *   channel #2 : \f$ S_{hh+vv}.S_{2*hv}^{*} \f$
- *   channel #3 : \f$ S_{hh-vv}.S_{hh-vv}^{*} \f$
- *   channel #4 : \f$ S_{hh-vv}.S_{2*hv}^{*} \f$
- *   channel #5 : \f$ S_{2*hv}.S_{2*hv}^{*} \f$
+ *   channel #0 : \f$ (S_{hh}+S_{vv}).(S_{hh}+S_{vv})^{*} \f$
+ *   channel #1 : \f$ (S_{hh}+S_{vv}).(S_{hh}-S_{vv})^{*} \f$
+ *   channel #2 : \f$ (S_{hh}+S_{vv}).(S_{hv}+S_{vh})^{*} \f$
+ *   channel #3 : \f$ (S_{hh}+S_{vv}).(j(S_{hv}-S_{vh}))^{*} \f$
+ *   channel #4 : \f$ (S_{hh}-S_{vv}).(S_{hh}-S_{vv})^{*} \f$
+ *   channel #5 : \f$ (S_{hh}-S_{vv}).(S_{hv}+S_{vh})^{*} \f$
+ *   channel #6 : \f$ (S_{hh}-S_{vv}).(j(S_{hv}-S_{vh}))^{*} \f$
+ *   channel #7 : \f$ (S_{hv}+S_{vh}).(S_{hv}+S_{vh})^{*} \f$
+ *   channel #8 : \f$ (S_{hv}+S_{vh}).(j(S_{hv}-S_{vh}))^{*} \f$
+ *   channel #9 : \f$ j(S_{hv}-S_{vh}).(j(S_{hv}-S_{vh}))^{*} \f$
  *
  *  \ingroup Functor
  */
@@ -44,36 +48,44 @@ class SinclairToCoherencyFunctor
 {
 public:
   /** Some typedefs. */
-  typedef typename std::complex <double>           ComplexType;
+  typedef double                                   RealType;
+  typedef std::complex <RealType>                  ComplexType;
   typedef typename TOutput::ValueType              OutputValueType;
   inline TOutput operator ()(const TInput1& Shh, const TInput2& Shv,
                              const TInput3& Svh, const TInput4& Svv)
   {
     TOutput result;
 
-    result.SetSize(m_NumberOfComponentsPerPixel);
+    result.SetSize(NumberOfComponentsPerPixel);
 
     ComplexType HHPlusVV = static_cast<ComplexType>(Shh + Svv);
     ComplexType VVMinusVV = static_cast<ComplexType>(Shh - Svv);
-    ComplexType twoHV     = static_cast<ComplexType>( 2.0 * Shv);
+    ComplexType HVPlusHV     = static_cast<ComplexType>( Shv + Svh);
+    ComplexType jHVMinusHV     = static_cast<ComplexType>( Shv - Svh) * vcl_complex<RealType>(0.0,1.0);
 
     result[0] = static_cast<OutputValueType>( HHPlusVV * vcl_conj(HHPlusVV) );
     result[1] = static_cast<OutputValueType>( HHPlusVV * vcl_conj(VVMinusVV) );
-    result[2] = static_cast<OutputValueType>( HHPlusVV * vcl_conj(twoHV) );
-    result[3] = static_cast<OutputValueType>( VVMinusVV * vcl_conj(VVMinusVV) );
-    result[4] = static_cast<OutputValueType>( VVMinusVV *vcl_conj(twoHV) );
-    result[5] = static_cast<OutputValueType>( twoHV * vcl_conj(twoHV) );
+    result[2] = static_cast<OutputValueType>( HHPlusVV * vcl_conj(HVPlusHV) );
+    result[3] = static_cast<OutputValueType>( HHPlusVV * vcl_conj(jHVMinusHV) );
+    result[4] = static_cast<OutputValueType>( VVMinusVV * vcl_conj(VVMinusVV) );
+    result[5] = static_cast<OutputValueType>( VVMinusVV * vcl_conj(HVPlusHV) );
+    result[6] = static_cast<OutputValueType>( VVMinusVV * vcl_conj(jHVMinusHV) );
+    result[7] = static_cast<OutputValueType>( HVPlusHV * vcl_conj(HVPlusHV) );
+    result[8] = static_cast<OutputValueType>( HVPlusHV * vcl_conj(jHVMinusHV) );
+    result[9] = static_cast<OutputValueType>( jHVMinusHV * vcl_conj(jHVMinusHV) );
+
+    result /= 2.0;
 
     return (result);
   }
 
   unsigned int GetNumberOfComponentsPerPixel()
   {
-    return m_NumberOfComponentsPerPixel;
+    return NumberOfComponentsPerPixel;
   }
 
   /** Constructor */
-  SinclairToCoherencyFunctor() : m_NumberOfComponentsPerPixel(6) {}
+  SinclairToCoherencyFunctor() {}
 
   /** Destructor */
   virtual ~SinclairToCoherencyFunctor() {}
@@ -82,7 +94,7 @@ protected:
 
 
 private:
-    unsigned int m_NumberOfComponentsPerPixel;
+    itkStaticConstMacro(NumberOfComponentsPerPixel, unsigned int, 10);
 };
 
 } // namespace Functor

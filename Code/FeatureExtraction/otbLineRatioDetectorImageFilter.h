@@ -52,7 +52,7 @@ namespace otb
  * Finally, the intensity of detection formed by the two parallel lines
  * is determined by the minimum response of a ration edge detector on both sides
  * of the linear structure:
- *  \f[ R = \min (R_{12};R_{13}) \f]
+ *  \f[ R = \min (R_{12}; R_{13}) \f]
  * where \f$ R_{12} \f$ and \f$ R_{13}\f$ are the maximum response of the ratio edge
  * detector of \f$ R(\theta_{i}) \f$. The intensity of detection lies in
  * the interval \f$ [0, 1] \f$.

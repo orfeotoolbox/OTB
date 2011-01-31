@@ -27,7 +27,7 @@ namespace otb
 
 /** \class SinusoidalMapProjection
  *  \brief This class implements the Sinusoidal map projection.
- *  It converts coordinates in longitude,latitude (WGS84) to Sinusoidal map coordinates.
+ *  It converts coordinates in longitude, latitude (WGS84) to Sinusoidal map coordinates.
  */
 template <InverseOrForwardTransformationEnum transform>
 class ITK_EXPORT SinusoidalMapProjection : public MapProjection<ossimSinusoidalProjection, transform>

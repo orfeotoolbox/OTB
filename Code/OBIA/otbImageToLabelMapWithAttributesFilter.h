@@ -56,7 +56,7 @@ public:
   typedef itk::LabelMapFilter< LabelMapWithAdjacency<TLabelObject >,
                                LabelMapWithAdjacency<TLabelObject > > Superclass;
   /** Standard type macro */
-  itkTypeMacro(ImageToLabelMapWithAttributesFilter,itk::LabelMapFilter);
+  itkTypeMacro(ImageToLabelMapWithAttributesFilter, itk::LabelMapFilter);
 
   /** New macro*/
   itkNewMacro(Self);
@@ -69,9 +69,9 @@ public:
   typedef LabelMapWithAdjacency<LabelObjectType>                               LabelMapType;
   typedef typename LabelMapType::AdjacentLabelsContainerType                   AdjacentLabelsContainerType;
   
-  typedef LabelImageToLabelMapWithAdjacencyFilter<LabeledImageType,LabelMapType> LabelMapFilterType;
+  typedef LabelImageToLabelMapWithAdjacencyFilter<LabeledImageType, LabelMapType> LabelMapFilterType;
   typedef ShapeAttributesLabelMapFilter<LabelMapType>                            ShapeLabelMapFilterType;
-  typedef BandsStatisticsAttributesLabelMapFilter<LabelMapType,InputImageType>   BandStatisticsLabelMapFilterType;
+  typedef BandsStatisticsAttributesLabelMapFilter<LabelMapType, InputImageType>   BandStatisticsLabelMapFilterType;
 
   virtual void SetInput( const InputImageType *image);
   virtual void SetLabeledImage( const LabeledImageType * image);

@@ -172,7 +172,7 @@ int main(int argc, char *argv[])
 // Software Guide : BeginLatex
 //
 // It is equivalent to use the six corresponding integer array indices instead.
-// For example, the offsets \code{(-1,-1)} and \code{(1, -1)} are
+// For example, the offsets \code{(-1, -1)} and \code{(1, -1)} are
 // equivalent to the integer indices \code{0} and \code{2}, respectively.
 //
 // The calculations are done in a \code{for} loop that moves the input and

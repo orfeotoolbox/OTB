@@ -44,7 +44,7 @@ public:
   typedef itk::SmartPointer<const Self>              ConstPointer;
   
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ListSampleToListSampleFilter,ListSampleSource);
+  itkTypeMacro(ListSampleToListSampleFilter, ListSampleSource);
   
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

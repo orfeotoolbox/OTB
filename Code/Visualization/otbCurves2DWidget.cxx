@@ -281,14 +281,14 @@ void Curves2DWidget::RenderGrid()
   pos = screenGridOrigin[1];
   int scale = 0;
   std::ostringstream oss;
-  gl_font(FL_COURIER_BOLD,8);
+  gl_font(FL_COURIER_BOLD, 8);
   glColor4d(0, 0, 0, 0.5);
 
   while(pos <= this->h()-m_Margins[1])
     {
     oss<<scale;
 
-    gl_draw(oss.str().c_str(),(float)m_Margins[0]-20,(float)pos);
+    gl_draw(oss.str().c_str(), (float)m_Margins[0]-20, (float)pos);
     pos+=screenGridSpacing[1];
     scale += m_GridSpacing[1];
     oss.str("");
@@ -301,7 +301,7 @@ void Curves2DWidget::RenderGrid()
     {
     oss<<scale;
 
-    gl_draw(oss.str().c_str(),(float)pos, m_Margins[1]-5);
+    gl_draw(oss.str().c_str(), (float)pos, m_Margins[1]-5);
     pos+=screenGridSpacing[0];
     scale += m_GridSpacing[0];
     oss.str("");

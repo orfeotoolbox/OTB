@@ -39,9 +39,9 @@ int otbAmplitudeFunctorTest(int argc, char * argv[])
 
   VectorPixelType vectorPixel;
   vectorPixel.SetSize(3);
-  vectorPixel.SetElement(0,1.0);
-  vectorPixel.SetElement(1,2.0);
-  vectorPixel.SetElement(2,3.0);
+  vectorPixel.SetElement(0, 1.0);
+  vectorPixel.SetElement(1, 2.0);
+  vectorPixel.SetElement(2, 3.0);
 
   // Test VectorPixelType
   for(unsigned int i = 0; i < 3; ++i)

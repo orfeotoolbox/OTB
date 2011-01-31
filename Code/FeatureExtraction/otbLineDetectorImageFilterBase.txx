@@ -52,8 +52,8 @@ LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, In
   m_NumberOfDirections = 4;
   m_FaceList.Fill(0);
 // THOMAS : donc contructeur de base
-//  this->SetNthOutput(0,OutputImageType::New());
-//  this->SetNthOutput(1,OutputImageType::New());
+//  this->SetNthOutput(0, OutputImageType::New());
+//  this->SetNthOutput(1, OutputImageType::New());
 }
 
 template <class TInputImage, class TOutputImage, class TOutputImageDirection, class InterpolatorType>
@@ -193,7 +193,7 @@ LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, In
     /*    if(Theta[i]>CONST_PI)
           Theta[i] = Theta[i]-CONST_PI;
         if((i/double(NB_DIR))==0.5)
-          Theta[i]=0.;*/
+          Theta[i]=0.; */
     }
 
   // Number of the zone
@@ -319,7 +319,7 @@ LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, In
           else if ((Yc12 < Y) && (Y < Yc13)) zone = 0;
           else if (Y > Yc13) zone = 2;
           else continue;
-          //otbMsgDevMacro( << "\t\tPoint traite (i,j)=("<<i<<","<<j<<") -> X,Y="<<X<<","<<Y<<"  zone="<<zone);
+          //otbMsgDevMacro( << "\t\tPoint traite (i, j)=("<<i<<","<<j<<") -> X, Y="<<X<<","<<Y<<"  zone="<<zone);
           // Loop on the directions
           for (unsigned int dir = 0; dir < NB_DIR; ++dir)
             {
@@ -353,7 +353,7 @@ LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, In
 
         } // end of the loop on the directions
 
-      //otbMsgDevMacro( << "\t\tR,Direction : "<<R<<","<<Direction);
+      //otbMsgDevMacro( << "\t\tR, Direction : "<<R<<","<<Direction);
       if (R >= this->GetThreshold())
         {
 

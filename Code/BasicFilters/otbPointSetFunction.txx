@@ -64,7 +64,7 @@ PointSetFunction<TPointSet,   TOutput>
 //  */
 // template <class TPointSet, class  TOutput >
 // const
-// typename PointSetFunction< TPointSet,TOutput>
+// typename PointSetFunction< TPointSet, TOutput>
 // ::PointSetType *
 // PointSetFunction< TPointSet,   TOutput>
 // ::GetPointSet() const

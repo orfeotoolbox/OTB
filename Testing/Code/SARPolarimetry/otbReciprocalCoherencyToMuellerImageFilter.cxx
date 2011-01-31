@@ -25,13 +25,12 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbHAlphaImageFilter.h"
+#include "otbReciprocalCoherencyToMuellerImageFilter.h"
 #include "otbSinclairImageFilter.h"
-#include "otbSinclairToCoherencyFunctor.h"
-#include "itkMeanImageFilter.h"
-#include "otbPerBandVectorImageFilter.h"
+#include "otbSinclairToReciprocalCoherencyFunctor.h"
 
-int otbHAlphaImageFilter(int argc, char * argv[])
+
+int otbReciprocalCoherencyToMuellerImageFilter(int argc, char * argv[])
 {
   const char * inputFilename1  = argv[1];
   const char * inputFilename2  = argv[2];
@@ -48,7 +47,7 @@ int otbHAlphaImageFilter(int argc, char * argv[])
   typedef otb::Image<InputPixelType,  Dimension>       InputImageType;
   typedef otb::VectorImage<InputPixelType, Dimension>  ImageType;
   typedef otb::VectorImage<PixelType, Dimension>       RealImageType;
-  typedef otb::Functor::SinclairToCoherencyFunctor<
+  typedef otb::Functor::SinclairToReciprocalCoherencyFunctor<
                       InputImageType::PixelType,
                       InputImageType::PixelType,
                       InputImageType::PixelType,
@@ -58,12 +57,8 @@ int otbHAlphaImageFilter(int argc, char * argv[])
   typedef otb::SinclairImageFilter<InputImageType, InputImageType,
                       InputImageType, InputImageType,
                       ImageType, FunctionType >  SinclairToCoherencyFilterType;
+  typedef otb::ReciprocalCoherencyToMuellerImageFilter<ImageType,RealImageType> FilterType;
 
-  typedef itk::MeanImageFilter<InputImageType, InputImageType>  MeanFilterType;
-  typedef otb::PerBandVectorImageFilter<ImageType, ImageType,
-                      MeanFilterType>   PerBandMeanFilterType;
-
-  typedef otb::HAlphaImageFilter<ImageType,RealImageType> FilterType;
 
   typedef otb::ImageFileReader<InputImageType>  ReaderType;
   typedef otb::ImageFileWriter<RealImageType> WriterType;
@@ -86,11 +81,8 @@ int otbHAlphaImageFilter(int argc, char * argv[])
   sinclairToCoherencyFilter->SetInputVH(reader3->GetOutput());
   sinclairToCoherencyFilter->SetInputVV(reader4->GetOutput());
 
-  PerBandMeanFilterType::Pointer perBandMeanFilter = PerBandMeanFilterType::New();
-  perBandMeanFilter->SetInput(sinclairToCoherencyFilter->GetOutput());
-
   FilterType::Pointer filter = FilterType::New();
-  filter->SetInput(perBandMeanFilter->GetOutput());
+  filter->SetInput(sinclairToCoherencyFilter->GetOutput());
 
   writer->SetFileName(outputFilename);
   writer->SetInput(filter->GetOutput());

@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __CoherencyToMuellerImageFilter_h
-#define __CoherencyToMuellerImageFilter_h
+#ifndef __ReciprocalCoherencyToMuellerImageFilter_h
+#define __ReciprocalCoherencyToMuellerImageFilter_h
 
 #include "otbUnaryFunctorImageFilter.h"
 
@@ -27,11 +27,11 @@ namespace otb
 namespace Functor {
 
 /** \class otbCoherencyToMuellerFunctor
- * \brief Evaluate the Mueller matrix from the coherency matrix image
+ * \brief Evaluate the Mueller matrix from the reciprocal coherency matrix image
  *
  */
 template< class TInput, class TOutput>
-class CoherencyToMuellerFunctor
+class ReciprocalCoherencyToMuellerFunctor
 {
 public:
   typedef double                                   RealType;
@@ -41,7 +41,7 @@ public:
   inline TOutput operator()( const TInput & Coherency ) const
     {
     TOutput result;
-    result.SetSize(m_NumberOfComponentsPerPixel);
+    result.SetSize(NumberOfComponentsPerPixel);
 
     RealType T1 = static_cast<RealType>(Coherency[0].real());
     RealType T2 = static_cast<RealType>(Coherency[3].real());
@@ -69,34 +69,34 @@ public:
 
    unsigned int GetOutputSize()
    {
-     return m_NumberOfComponentsPerPixel;
+     return NumberOfComponentsPerPixel;
    }
 
    /** Constructor */
-   CoherencyToMuellerFunctor() : m_NumberOfComponentsPerPixel(10)  {}
+   ReciprocalCoherencyToMuellerFunctor() {}
 
    /** Destructor */
-   ~CoherencyToMuellerFunctor() {}
+   ~ReciprocalCoherencyToMuellerFunctor() {}
 
 private:
-    unsigned int m_NumberOfComponentsPerPixel;
+   itkStaticConstMacro(NumberOfComponentsPerPixel, unsigned int, 10);
 };
 }
 
 
-/** \class otbCoherencyToMuellerImageFilter
+/** \class otbReciprocalCoherencyToMuellerImageFilter
  * \brief Compute the Mueller matrix image (9 real channels)
- * from the coherency image (6 complex channels)
+ * from the Reciprocal coherency image (6 complex channels)
  */
-template <class TInputImage, class TOutputImage, class TFunction = Functor::CoherencyToMuellerFunctor<
+template <class TInputImage, class TOutputImage, class TFunction = Functor::ReciprocalCoherencyToMuellerFunctor<
     ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
-class ITK_EXPORT CoherencyToMuellerImageFilter :
-   public otb::UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction>
+class ITK_EXPORT ReciprocalCoherencyToMuellerImageFilter :
+   public otb::UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction>
 {
 public:
    /** Standard class typedefs. */
-   typedef CoherencyToMuellerImageFilter  Self;
-   typedef otb::UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction> Superclass;
+   typedef ReciprocalCoherencyToMuellerImageFilter  Self;
+   typedef otb::UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction> Superclass;
    typedef itk::SmartPointer<Self>        Pointer;
    typedef itk::SmartPointer<const Self>  ConstPointer;
 
@@ -104,15 +104,15 @@ public:
    itkNewMacro(Self);
 
    /** Runtime information support. */
-   itkTypeMacro(CoherencyToMuellerImageFilter, UnaryFunctorImageFilter);
+   itkTypeMacro(ReciprocalCoherencyToMuellerImageFilter, UnaryFunctorImageFilter);
 
 
 protected:
-   CoherencyToMuellerImageFilter() {}
-  virtual ~CoherencyToMuellerImageFilter() {}
+   ReciprocalCoherencyToMuellerImageFilter() {}
+  virtual ~ReciprocalCoherencyToMuellerImageFilter() {}
 
 private:
-  CoherencyToMuellerImageFilter(const Self&); //purposely not implemented
+  ReciprocalCoherencyToMuellerImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&);            //purposely not implemented
 
 };

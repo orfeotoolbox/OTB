@@ -43,7 +43,7 @@ namespace otb
  * computing the details lost in the down-sampling.
  *
  * \ingroup MultiScale
- * \sa MorphologicalPyramidSynthesisFilter,OpeningClosingMorphologicalFilter,
+ * \sa MorphologicalPyramidSynthesisFilter, OpeningClosingMorphologicalFilter,
  * ClosingOpeningMorphologicalFilter
  */
 template <class TInputImage, class TOutputImage, class TMorphoFilter>

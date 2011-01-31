@@ -26,7 +26,7 @@ namespace otb
 {
 /** \class Lambert93Projection
 * \brief This class implements the Lambert93 map projection (RGF93 french geodesic system).
-* It converts coordinates in longitude,latitude (WGS84) to Lambert 93 map coordinates.
+* It converts coordinates in longitude, latitude (WGS84) to Lambert 93 map coordinates.
 *
  */
 template <InverseOrForwardTransformationEnum transform>

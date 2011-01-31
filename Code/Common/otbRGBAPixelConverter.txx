@@ -25,10 +25,10 @@ namespace otb
 
 //Base
 template <class TInternalInputPixelType, class TOutputPixelType>
-typename RGBAPixelConverter<TInternalInputPixelType, 
+typename RGBAPixelConverter<TInternalInputPixelType,
                             TOutputPixelType>
 ::OutputPixelType
-RGBAPixelConverter<TInternalInputPixelType, 
+RGBAPixelConverter<TInternalInputPixelType,
                             TOutputPixelType>
 ::Convert(InputPixelType input)
 {

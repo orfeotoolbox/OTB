@@ -104,7 +104,7 @@ BSplinesInterpolateDeformationFieldGenerator<TPointSet, TDeformationField>
   ImageIteratorType inIt(deformer->GetOutput(), outputPtr->GetRequestedRegion());
   OutputIteratorType outIt(outputPtr, outputPtr->GetRequestedRegion());
   int i = 0;
-  // Casting otb::Image<itt::Vector<ValueType,2>,2> to otb::VectorImage<ValueType,2>
+  // Casting otb::Image<itt::Vector<ValueType, 2>, 2> to otb::VectorImage<ValueType, 2>
   for (inIt.GoToBegin(), outIt.GoToBegin(); (!inIt.IsAtEnd()) && (!outIt.IsAtEnd()); ++inIt, ++outIt, ++i)
     {
     typename ImageType::PixelType inPixel;

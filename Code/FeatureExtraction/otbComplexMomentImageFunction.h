@@ -33,17 +33,17 @@ namespace otb
  * For backward compatibility only
  * otb::ComplexMomentImageFunction is deprecated and
  * otb::ComplexMomentsImageFunction sould be used instead
- * 
+ *
  * Calculate the complex moment value over an image.
  * The implemented equation is:
  *
- *  \f[  c_{p,q}=\int_{-\infty}^{\infty} \int_{-\infty}^{\infty} (x+iy)^{p} \cdot (x-iy)^{q} \cdot f(x,y) \cdot
+ *  \f[  c_{p, q}=\int_{-\infty}^{\infty} \int_{-\infty}^{\infty} (x+iy)^{p} \cdot (x-iy)^{q} \cdot f(x, y) \cdot
  dx \cdot dy \f]
  *
  * With:
  *
- *   - \f$ (x,y) \f$ pixel localization;
- *   - \f$ f(x,y) \f$  the pixel value over the \f$(x,y) \f$ coordinate.
+ *   - \f$ (x, y) \f$ pixel localization;
+ *   - \f$ f(x, y) \f$  the pixel value over the \f$(x, y) \f$ coordinate.
  *
  * This class is templated over the input image type and the
  * coordinate representation type (e.g. float or double).

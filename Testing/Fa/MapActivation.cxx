@@ -156,7 +156,7 @@ int main(int argc, char* argv[])
   ClassifierType::OutputType::ConstIterator m_last =  membershipSample->End();
 
   /*int count[16];
-  for(int i=0;i<16;i++)
+  for(int i=0; i<16; i++)
   {
   count[i]=0;
   }
@@ -174,7 +174,7 @@ int main(int argc, char* argv[])
     ++m_iter;
     }
 
-  /*for(int i=0;i<16;i++)
+  /*for(int i=0; i<16; i++)
     {
     std::cout<<" classe: "<< i <<" nb elements= "<<count[i]<<std::endl;
     }*/

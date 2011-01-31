@@ -25,14 +25,14 @@
 
 namespace otb
 {
-/** 
+/**
  * \class RGBAPixelConverter
  * \brief Convert an itk::RGBApixel<InternalType> into another pixel
  * type
- * 
+ *
  * To be usable, the desired convertion must be implemented through
  * partial specialisation mecanism.
- *   
+ *
  */
 
 
@@ -52,7 +52,7 @@ public:
   itkTypeMacro(RGBAPixelConverter, ProcessObject);
 
   /** Method for creation through the object factory. */
-  itkNewMacro(Self); 
+  itkNewMacro(Self);
 
   typedef typename itk::RGBAPixel<TInternalInputPixelType>   InputPixelType;
   typedef TOutputPixelType                                   OutputPixelType;
@@ -89,7 +89,7 @@ public:
   itkTypeMacro(RGBAPixelConverter, ProcessObject);
 
   /** Method for creation through the object factory. */
-  itkNewMacro(Self); 
+  itkNewMacro(Self);
 
   typedef typename itk::RGBAPixel<TInternalInputPixelType>   InputPixelType;
   typedef typename itk::RGBAPixel<TInternalOutputPixelType>  OutputPixelType;
@@ -126,7 +126,7 @@ public:
   itkTypeMacro(RGBAPixelConverter, ProcessObject);
 
   /** Method for creation through the object factory. */
-  itkNewMacro(Self); 
+  itkNewMacro(Self);
 
   typedef typename itk::RGBAPixel<TInternalInputPixelType>   InputPixelType;
   typedef typename itk::RGBPixel<TInternalOutputPixelType>  OutputPixelType;

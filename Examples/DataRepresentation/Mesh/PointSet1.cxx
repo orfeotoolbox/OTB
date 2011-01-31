@@ -121,7 +121,7 @@ int main(int, char *[])
   //  This makes it possible to access its components using index notation. For
   //  efficiency's sake no bounds checking is performed during index access. It is
   //  the user's responsibility to ensure that the index used is in the range
-  //  $\{0,Dimension-1\}$. Each of the components in the point is associated
+  //  $\{0, Dimension-1\}$. Each of the components in the point is associated
   //  with space coordinates. The following code illustrates how to instantiate
   //  a point and initialize its components.
   //
@@ -135,10 +135,10 @@ int main(int, char *[])
 
   PointType p1;
 
-  p1[0] =  1.0; // Point 1 = { 1,-1 }
+  p1[0] =  1.0; // Point 1 = { 1, -1 }
   p1[1] = -1.0;
 
-  PointType p2; // Point 2 = { 1,1 }
+  PointType p2; // Point 2 = { 1, 1 }
   p2[0] =  1.0;
   p2[1] =  1.0;
 

@@ -51,7 +51,7 @@ int main(int, char *[])
   //  Software Guide : BeginLatex
   //
   //  \itkpiccaption[PointSet with Vectors as PixelType]{Vectors as PixelType.\label{fig:PointSetWithVectors}}
-  //  \parpic(6cm,4cm)[r]{\includegraphics[width=4cm]{PointSetWithVectors.eps}}
+  //  \parpic(6cm, 4cm)[r]{\includegraphics[width=4cm]{PointSetWithVectors.eps}}
   //
   //  The Vector class is templated over the type used to represent
   //  the spatial coordinates and over the space dimension.  Since the

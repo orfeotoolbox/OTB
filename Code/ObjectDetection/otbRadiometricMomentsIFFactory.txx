@@ -34,9 +34,9 @@ RadiometricMomentsIFFactory<TImageType, TCoordRep, TPrecision>
 template <class TImageType, class TCoordRep, class TPrecision>
 void
 RadiometricMomentsIFFactory<TImageType, TCoordRep, TPrecision>
-::Create(InputImageType * image, 
-         ParamContainerType param, 
-         MetaImageFunctionPointerType metaIF, 
+::Create(InputImageType * image,
+         ParamContainerType param,
+         MetaImageFunctionPointerType metaIF,
          DataObjectContainerType * container)
 {
   typename AdaptedRadiometricMomentsIF::Pointer function = AdaptedRadiometricMomentsIF::New();

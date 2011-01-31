@@ -65,7 +65,7 @@ int otbForwardSensorModelGrid(int argc, char* argv[])
   sizeOut[1] = size_y;
 
   ImageType::RegionType region;
-  region.SetIndex(0,0);
+  region.SetIndex(0, 0);
   region.SetSize(sizeOut);
 
   ImageType::Pointer outputGeoPointX = ImageType::New();

@@ -70,7 +70,7 @@ otbContinuousMinimumMaximumImageCalculatorTest(int, char *[])
       }
     }
 
-  // Set voxel (10,10) to maximum value
+  // Set voxel (10, 10) to maximum value
   index[0] = 10;
   index[1] = 10;
   image->SetPixel(index, maximum);

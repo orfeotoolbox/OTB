@@ -26,12 +26,12 @@ namespace otb {
 /** \class ImageToGenericRSOutputParameters
  *  \brief This class is a helper class to estimate the output
  *  parameters of an image after projection in a target SRS (defined
- *  here using its projectionRef). 
- *       
+ *  here using its projectionRef).
+ *
  * This class allow the computation of the output Origin|Spacing|Size
  * when projecting an image in a target SRS. The user can set the
  * target projectionRef via SetOutputProjectionRef(std::string).
- *  
+ *
  * This class allow to force using a desired spacing. For
  * instance, if one need to compute the output Size  of an
  * image in the UTM srs with a spacing of 5 m, it can be set via the
@@ -46,7 +46,7 @@ namespace otb {
  **/
 
 template<class TImage>
-class  ImageToGenericRSOutputParameters : 
+class  ImageToGenericRSOutputParameters :
     public itk::Object
 {
 public:
@@ -57,7 +57,7 @@ public:
   typedef itk::SmartPointer<const Self>    ConstPointer;
   
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageToGenericRSOutputParameters,itk::Object);
+  itkTypeMacro(ImageToGenericRSOutputParameters, itk::Object);
   
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -76,33 +76,33 @@ public:
   /** Struct to store the extent of the output image when using the
    *  methods SetOutputParameters.
    */
-  struct OutputImageExtentType{ 
-    double minX; 
-    double maxX; 
-    double minY; 
-    double maxY; 
+  struct OutputImageExtentType{
+    double minX;
+    double maxX;
+    double minY;
+    double maxY;
   };
 
   /** Method to Set/Get the input */
-  itkSetConstObjectMacro(Input,ImageType);
-  itkGetConstObjectMacro(Input,ImageType);
+  itkSetConstObjectMacro(Input, ImageType);
+  itkGetConstObjectMacro(Input, ImageType);
 
   /** Output Origin */
-  itkSetMacro(OutputOrigin,PointType);
-  itkGetMacro(OutputOrigin,PointType);
+  itkSetMacro(OutputOrigin, PointType);
+  itkGetMacro(OutputOrigin, PointType);
 
   /** Output Spacing */
-  itkSetMacro(OutputSpacing,SpacingType);
-  itkGetMacro(OutputSpacing,SpacingType);
+  itkSetMacro(OutputSpacing, SpacingType);
+  itkGetMacro(OutputSpacing, SpacingType);
   
   /** Output Size */
-  itkSetMacro(OutputSize,SizeType);
-  itkGetMacro(OutputSize,SizeType);
+  itkSetMacro(OutputSize, SizeType);
+  itkGetMacro(OutputSize, SizeType);
 
-  /** 
-   * Method to Force the use of the spacing selected by the user 
+  /**
+   * Method to Force the use of the spacing selected by the user
    * The output size is computed using this spacing
-   */ 
+   */
   void ForceSpacingTo(const SpacingType& spacing)
   {
     m_ForceSpacing = true;
@@ -119,8 +119,8 @@ public:
     this->SetOutputSize(size);
   }
   
-  /** 
-   * Method to Set/Get the output projectionRef 
+  /**
+   * Method to Set/Get the output projectionRef
    * We cannot use the macro otbGetObjectMemberConstMacro cause the
    * SetOutputProjectionRef calls actually the method
    * SetInputProjectionRef of the GenericRSTransform class.

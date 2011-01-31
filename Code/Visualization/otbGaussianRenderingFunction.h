@@ -131,7 +131,7 @@ namespace otb
           if ((spixel.Size() == 4) && (output.Size() == 4))
           {
             assert((spixel[3] >= SCREEN_COLOR_MIN_VALUE) && (spixel[3] <= SCREEN_COLOR_MAX_VALUE));
-            output[3] = static_cast<OutputValueType>(spixel[3]);//just copy the alpha channel
+            output[3] = static_cast<OutputValueType>(spixel[3]); //just copy the alpha channel
           }
 
           return output;
@@ -142,7 +142,7 @@ namespace otb
          * p[0]:    mean value of the gaussian curve
          * p[1]:    standard deviation of the gaussian curve
          * p[2..n]: minimum and maximum for the different bands, has to be
-         *          provided as [minBand0, maxBand0, minBand1, maxBand1,...]
+         *          provided as [minBand0, maxBand0, minBand1, maxBand1, ...]
          */
         virtual void SetParameters(const ParametersType & p)
         {
@@ -171,7 +171,7 @@ namespace otb
          * p[0]:    mean value of the gaussian curve
          * p[1]:    standard deviation of the gaussian curve
          * p[2..n]: minimum and maximum for the different bands, has to be
-         *          provided as [minBand0, maxBand0, minBand1, maxBand1,...]
+         *          provided as [minBand0, maxBand0, minBand1, maxBand1, ...]
          */
         virtual ParametersType GetParameters() const
         {

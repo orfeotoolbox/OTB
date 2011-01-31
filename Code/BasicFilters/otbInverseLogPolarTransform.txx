@@ -98,7 +98,7 @@ InverseLogPolarTransform<TScalarType>
     result[0] = (1. / m_Scale[0]) * vcl_asin((point[1] - m_Center[1]) / rho);
     // degree conversion
     result[0] = result[0] * (180. / CONST_PI);
-    // Deplacing the range to [0,90], [270,360]
+    // Deplacing the range to [0, 90], [270, 360]
     result[0] = result[0] > 0. ? result[0] : result[0] + 360.;
     // Avoiding asin indetermination
     if ((point[0] - m_Center[0]) >= 0)
@@ -106,7 +106,7 @@ InverseLogPolarTransform<TScalarType>
       result[0] = result[0] < 90. ? result[0] + 90. : result[0] - 90.;
       }
     result[1] = (1. / m_Scale[1]) * vcl_log(rho);
-    // otbMsgDebugMacro(<<vcl_log(vcl_pow(point[0]-m_Center[0],2)+vcl_pow(point[1]-m_Center[1],2)));
+    // otbMsgDebugMacro(<<vcl_log(vcl_pow(point[0]-m_Center[0], 2)+vcl_pow(point[1]-m_Center[1], 2)));
     }
   else
     {
@@ -134,7 +134,7 @@ InverseLogPolarTransform<TScalarType>
     result[0] = (1 / m_Scale[0]) * vcl_asin((vector[1] - m_Center[1]) / rho);
     // degree conversion
     result[0] = result[0] * (180 / CONST_PI);
-    // Deplacing the range to [0,90], [270,360]
+    // Deplacing the range to [0, 90], [270, 360]
     result[0] = result[0] > 0 ? result[0] : result[0] + 360;
     // Avoiding asin indetermination
     if ((vector[0] - m_Center[0]) >= 0)
@@ -142,7 +142,7 @@ InverseLogPolarTransform<TScalarType>
       result[0] = result[0] < 90 ? result[0] + 90 : result[0] - 90;
       }
     result[1] = (1 / m_Scale[1]) * vcl_log(rho);
-    // otbMsgDebugMacro(<<vcl_log(vcl_pow(vector[0]-m_Center[0],2)+vcl_pow(vector[1]-m_Center[1],2)));
+    // otbMsgDebugMacro(<<vcl_log(vcl_pow(vector[0]-m_Center[0], 2)+vcl_pow(vector[1]-m_Center[1], 2)));
     }
   else
     {
@@ -170,7 +170,7 @@ InverseLogPolarTransform<TScalarType>
     result[0] = (1 / m_Scale[0]) * vcl_asin((vector[1] - m_Center[1]) / rho);
     // degree conversion
     result[0] = result[0] * (180 / CONST_PI);
-    // Deplacing the range to [0,90], [270,360]
+    // Deplacing the range to [0, 90], [270, 360]
     result[0] = result[0] > 0 ? result[0] : result[0] + 360;
     // Avoiding vcl_asin indetermination
     if ((vector[0] - m_Center[0]) >= 0)
@@ -178,7 +178,7 @@ InverseLogPolarTransform<TScalarType>
       result[0] = result[0] < 90 ? result[0] + 90 : result[0] - 90;
       }
     result[1] = (1 / m_Scale[1]) * vcl_log(rho);
-    // otbMsgDebugMacro(<<log(vcl_pow(vector[0]-m_Center[0],2)+vcl_pow(vector[1]-m_Center[1],2)));
+    // otbMsgDebugMacro(<<log(vcl_pow(vector[0]-m_Center[0], 2)+vcl_pow(vector[1]-m_Center[1], 2)));
     }
   else
     {

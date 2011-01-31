@@ -76,6 +76,10 @@ public:
   itkSetMacro(IsComplex, bool);
   itkGetMacro(IsComplex, bool);
 
+  /** Set/Get whether the pixel type (otb side) is Vector or Scalar */
+  itkSetMacro(IsVectorImage, bool);
+  itkGetMacro(IsVectorImage, bool);
+
   /** Set/Get the dataset index to extract (starting at 0)*/
   itkSetMacro(DatasetNumber, unsigned int);
   itkGetMacro(DatasetNumber, unsigned int);
@@ -175,6 +179,9 @@ private:
    * this information has to be provided by the reader */
   bool m_IsComplex;
 
+  /** Whether the pixel type (otb side, not gdal side) is Vector
+   * this information has to be provided by the reader */
+  bool m_IsVectorImage;
 
 };
 

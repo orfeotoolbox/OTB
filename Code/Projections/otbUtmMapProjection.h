@@ -26,7 +26,7 @@ namespace otb
 /** \class UtmMapProjection
  *  \brief This class implements the UTM map projection.
  *
- * It converts coordinates in longitude,latitude (WGS84) to UTM map coordinates.
+ * It converts coordinates in longitude, latitude (WGS84) to UTM map coordinates.
  *
  */
 template <InverseOrForwardTransformationEnum TTransform>

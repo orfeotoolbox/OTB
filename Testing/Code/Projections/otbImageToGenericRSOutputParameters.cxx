@@ -26,7 +26,7 @@
 #include <iostream>
 #include <fstream>
 
-typedef otb::VectorImage<double,2>       ImageType;
+typedef otb::VectorImage<double, 2>       ImageType;
 typedef otb::ImageToGenericRSOutputParameters<ImageType>  FilterType;
 
 int otbImageToGenericRSOutputParametersNew (int argc, char * argv[])
@@ -45,7 +45,7 @@ int otbImageToGenericRSOutputParameters (int argc, char * argv[])
   typedef ImageType::SpacingType           SpacingType;
   typedef otb::ImageFileReader<ImageType>  ReaderType;
   
-  // Reader 
+  // Reader
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
   reader->UpdateOutputInformation();
@@ -65,7 +65,7 @@ int otbImageToGenericRSOutputParameters (int argc, char * argv[])
   filter->SetOutputProjectionRef(otb::GeoInformationConversion::ToWKT(4326));  //WGS84
   filter->Compute();
     
-  // Otuput file 
+  // Otuput file
   std::ofstream outfile(outfname);
 
   outfile<<"Output Parameters for SRID : 4326 (WGS84)"<<std::endl;
@@ -89,7 +89,7 @@ int otbImageToGenericRSOutputParameters (int argc, char * argv[])
   Lambert2Type::Pointer lambert2Projection = Lambert2Type::New();
   std::string  lambertRef = lambert2Projection->GetWkt();
 
-  filter->SetOutputProjectionRef(lambertRef);  
+  filter->SetOutputProjectionRef(lambertRef);
   filter->Compute();
   
   outfile<<"Output Parameters for SRS : Lambert II Etendu"<<std::endl;

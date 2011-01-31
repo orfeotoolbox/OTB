@@ -33,9 +33,9 @@ namespace otb
  *
  * It is of kind:
  *
- * \f$ frac{1}{\sqrt{ c_0 + \cos\textrm{SAM(x,y)} }} \f$ where \f$ \textrm{SAM(x,y)} \f$ is
+ * \f$ frac{1}{\sqrt{ c_0 + \cos\textrm{SAM(x, y)} }} \f$ where \f$ \textrm{SAM(x, y)} \f$ is
  * Spectral Angle Measure:
- * \f$ \textrm{SAM}(x,y) = \cos^{-1}\left( \frac{x \cdot y}{\|x\| \|y\|} \right) \f$.
+ * \f$ \textrm{SAM}(x, y) = \cos^{-1}\left( \frac{x \cdot y}{\|x\| \|y\|} \right) \f$.
  *
  * The only parameter \f$ c_0 \f$ is to be fixed by the \code SetValue \endcode
  * interface with keyword Coef (def 2.0).

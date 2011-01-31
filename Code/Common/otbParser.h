@@ -28,7 +28,7 @@ namespace otb
 {
 /** \class Parser
  * \brief  Definition of the standard floating point parser.
- * Standard implementation of the mathematical expressions parser. 
+ * Standard implementation of the mathematical expressions parser.
  *
  * \sa BandMathImageFilter
  *
@@ -98,7 +98,7 @@ private:
   //----------  User Defined Functions  ----------//END
 
 
-};// end class
+}; // end class
 
 }//end namespace otb
 

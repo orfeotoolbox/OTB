@@ -48,7 +48,7 @@ public:
   typedef ImageKeywordlist Self;
 
   //virtual const char *GetNameOfClass() const
-  //{return "ImageKeywordlist";}
+  //{return "ImageKeywordlist"; }
 
   typedef std::map<ossimString, ossimString> KeywordlistMap;
 

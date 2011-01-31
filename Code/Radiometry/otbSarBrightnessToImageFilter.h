@@ -37,13 +37,13 @@ namespace otb
 
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT SarBrightnessToImageFilter :
-  public FunctionToImageFilter<TInputImage, TOutputImage, 
+  public FunctionToImageFilter<TInputImage, TOutputImage,
                  SarBrightnessFunction<TInputImage> >
 {
 public:
   /** Standard class typedefs. */
   typedef SarBrightnessToImageFilter                         Self;
-  typedef FunctionToImageFilter<TInputImage, TOutputImage, 
+  typedef FunctionToImageFilter<TInputImage, TOutputImage,
                      SarBrightnessFunction<TInputImage> >    Superclass;
   typedef itk::SmartPointer<Self>                            Pointer;
   typedef itk::SmartPointer<const Self>                      ConstPointer;
@@ -56,7 +56,7 @@ public:
 
   /** Some typedefs. */
   /** Image size typedef. */
-  typedef typename Superclass::InputImageType           InputImageType; 
+  typedef typename Superclass::InputImageType           InputImageType;
   typedef typename Superclass::InputImagePointer        InputImagePointer;
   typedef typename Superclass::InputImageRegionType     InputImageRegionType;
   typedef typename Superclass::InputImagePixelType      InputImagePixelType;

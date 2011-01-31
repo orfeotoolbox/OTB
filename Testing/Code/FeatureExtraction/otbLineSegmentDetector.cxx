@@ -83,7 +83,7 @@ int otbLineSegmentDetector(int argc, char * argv[])
 //       float y1 = (*itPoints).GetPosition()[1];
 //       IndexEnd[0]= static_cast<int>(x1); IndexEnd[1] = static_cast<int>(y1);
 
-//       LineIteratorFilter   itLine(reader->GetOutput(),IndexBegin,  IndexEnd);
+//       LineIteratorFilter   itLine(reader->GetOutput(), IndexBegin,  IndexEnd);
 //       itLine.GoToBegin();
 //       while(!itLine.IsAtEnd())
 //         {
@@ -155,7 +155,7 @@ int otbLineSegmentDetector_binary(int argc, char * argv[])
     it.Set(0);
   }
 
-  drawLineFilter->SetInput(image);//Black BCKGRD
+  drawLineFilter->SetInput(image); //Black BCKGRD
   drawLineFilter->SetInputLineSpatialObjectList(lsdFilter->GetOutput());
 
   /** Write The Output Image*/
@@ -165,7 +165,7 @@ int otbLineSegmentDetector_binary(int argc, char * argv[])
   writer->Update();
 
   if (argc > 3)
-    { 
+    {
     //Write the status map
     const char * regfname  = argv[3];
     WriterType::Pointer writer0 = WriterType::New();

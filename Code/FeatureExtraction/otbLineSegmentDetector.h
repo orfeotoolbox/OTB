@@ -74,7 +74,7 @@ public:
 
 template <class TInputImage, class TPrecision = double>
 class ITK_EXPORT LineSegmentDetector :
-    public otb::ImageToLineSpatialObjectListFilter<TInputImage> 
+    public otb::ImageToLineSpatialObjectListFilter<TInputImage>
 //TODO public VectorDataSource<ITK_TYPENAME VectorData<> >
 {
 public:
@@ -147,7 +147,7 @@ public:
   typedef otb::Image<unsigned char, 2>     LabelImageType;
   typedef typename LabelImageType::Pointer LabelImagePointerType;
 
-  /** Vector to store the rectangle characteization  center, width, orientation ,( begin ,end ) of the central line*/
+  /** Vector to store the rectangle characteization  center, width, orientation , ( begin , end ) of the central line*/
   typedef std::vector<double>                  RectangleType;
   typedef typename RectangleType::iterator     RectangleIteratorType;
   typedef std::vector<RectangleType>           RectangleListType;

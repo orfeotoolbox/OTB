@@ -22,644 +22,591 @@
 #include "otbVectorImage.h"
 #include "otbMacro.h"
 #include "itkImageRegionIteratorWithIndex.h"
-#include "itkImageRegionIterator.h"
 
-/***********
- * 1.
- * Read Image<double> as Image<complex>
- * out : real = in, imag = 0
- ***********/
-int otbImageDoubleToImageComplex(int argc, char * argv[])
+// Do all comparison in double precision
+const double Epsilon = 1.E-6;
+
+template<class TPixel>
+bool IsEqual(TPixel output, TPixel expected)
 {
-  typedef double                              RealType;
-  typedef std::complex<RealType>              PixelType;
-  typedef otb::Image<PixelType, 2>            CplxImageType;
-  typedef otb::ImageFileReader<CplxImageType> ReaderType;
+  typedef typename itk::NumericTraits<TPixel>::RealType RealType;
 
-  ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName(argv[1]);
+  RealType outputReal = output;
+  RealType expectedReal = expected;
 
-  CplxImageType::IndexType id;
-  CplxImageType::SizeType size;
-  CplxImageType::RegionType region;
+  // avoid division by zero
+  return output == expected || (vcl_abs(expected - output) / vcl_abs(expected) < Epsilon);
+}
 
-  id.Fill(0);
-  size[0] = 10;
-  size[1] = 1;
+template<class TInternalPixel>
+bool IsEqual(itk::VariableLengthVector<TInternalPixel> output, itk::VariableLengthVector<TInternalPixel> expected)
+{
+  bool result = true;
+  for(unsigned int i = 0; i < output.Size(); i++)
+    {
+    result = result && IsEqual(output[i], expected[i]);
+    }
+  return result;
+}
 
-  region.SetSize( size );
-  region.SetIndex( id ); 
 
+
+template<class TIndex, class TPixel>
+bool TestCompare(TIndex idx, TPixel output, TPixel expected)
+{
+  std::cout << "PIXEL " << idx << "  -->  "
+            << "OUTPUT = "   << output
+            << "   ||   "
+            << "EXPECTED = " << expected
+            << std::endl;
+
+  if (!IsEqual(output, expected))
+    {
+    std::cerr << "ERROR at position " << idx << ". Got " << output << ", expected " << expected << std::endl;
+    return false;
+    }
+  return true;
+}
+
+template<class TImagePointerType>
+itk::ImageRegionIteratorWithIndex<typename TImagePointerType::ObjectType>
+ReadRegion(const char* filename, TImagePointerType& image, unsigned int w, unsigned int h)
+{
+  typedef TImagePointerType               ImagePointerType;
+  typedef typename ImagePointerType::ObjectType    ImageType;
+  typedef typename ImageType::RegionType  RegionType;
+  typedef typename ImageType::IndexType   IndexType;
+  typedef typename ImageType::SizeType    SizeType;
+
+  IndexType idx;
+  idx.Fill(0);
+
+  SizeType  size;
+  size[0] = w;
+  size[1] = h;
+
+  RegionType region;
+  region.SetSize(size);
+  region.SetIndex(idx);
+
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typename ReaderType::Pointer reader = ReaderType::New();
+  reader->SetFileName(filename);
   reader->GetOutput()->SetRequestedRegion(region);
   reader->Update();
 
-  itk::ImageRegionIteratorWithIndex<CplxImageType> it( reader->GetOutput(), region );
+  image = reader->GetOutput();
+
+  return itk::ImageRegionIteratorWithIndex<ImageType>(image, region);
+}
+
+/***********
+ * 1.
+ * Read Monoband Scalar as Image<complex>
+ * out : real = in, imag = 0
+ ***********/
+template<class InternalType>
+int otbMonobandScalarToImageComplexGeneric(int argc, char * argv[])
+{
+  typedef InternalType                        RealType;
+  typedef std::complex<RealType>              ComplexType;
+
+  typedef ComplexType                         PixelType;
+  typedef otb::Image<PixelType, 2>            ImageType;
+
+  const unsigned int w = 10;
+  const unsigned int h = 2;
+
+  typename ImageType::Pointer image;
+  itk::ImageRegionIteratorWithIndex<ImageType> it = ReadRegion(argv[1], image, w, h);
+
+  typename ImageType::SizeType largestRegion;
+  largestRegion = image->GetLargestPossibleRegion().GetSize();
 
   unsigned int count = 0;
-
-  it.GoToBegin();
-  while( it.IsAtEnd()==false )
+  for (it.GoToBegin(); !it.IsAtEnd(); ++it)
     {
-      count = it.GetIndex()[1]*reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]+it.GetIndex()[0];
+    count = it.GetIndex()[1] * largestRegion[0] + it.GetIndex()[0];
 
-      if( (it.Get().real() != static_cast<RealType>(count)) || (it.Get().imag() != static_cast<RealType>(0)) ) 
-  {
-    std::cout<<"Image double read as Image complex error : "<<it.Get()<<", waited for ("<<count<<", 0)"<<std::endl;
-
-    return EXIT_FAILURE;
-  }
-
-      ++it;
+    if ( !TestCompare(it.GetIndex(), it.Get(), ComplexType(count, 0)) )
+      return EXIT_FAILURE;
     }
 
   return EXIT_SUCCESS;
+}
+
+int otbMonobandScalarToImageComplexFloat(int argc, char * argv[])
+{
+  return otbMonobandScalarToImageComplexGeneric<float>(argc, argv);
+}
+
+int otbMonobandScalarToImageComplexDouble(int argc, char * argv[])
+{
+  return otbMonobandScalarToImageComplexGeneric<double>(argc, argv);
 }
 
 /***********
  * 2.
- * Read Image<complex> as Image<double>
+ * Read MonobandComplex as Image<double>
  * out : norm(in)
  ***********/
-int otbImageComplexToImageDouble(int argc, char * argv[])
+template<class InternalType>
+int otbMonobandComplexToImageScalarGeneric(int argc, char * argv[])
 {
-  typedef double                                RealType;
-  typedef otb::Image<RealType, 2>               ScalImageType;
+  typedef InternalType                        RealType;
+  typedef std::complex<RealType>              ComplexType;
 
-  typedef otb::ImageFileReader<ScalImageType>       ReaderType;
+  typedef RealType                            PixelType;
+  typedef otb::Image<PixelType, 2>            ImageType;
 
+  const unsigned int w = 10;
+  const unsigned int h = 2;
 
-  ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName(argv[1]);
+  typename ImageType::Pointer image;
+  itk::ImageRegionIteratorWithIndex<ImageType> it = ReadRegion(argv[1], image, w, h);
 
-  ScalImageType::IndexType id;
-  ScalImageType::SizeType size;
-  ScalImageType::RegionType region;
-
-  id.Fill(0);
-  size[0] = 10;
-  size[1] = 2;
-
-  region.SetSize( size );
-  region.SetIndex( id ); 
-
-  reader->GetOutput()->SetRequestedRegion(region);
-  reader->Update();
-
-  itk::ImageRegionIteratorWithIndex<ScalImageType> it( reader->GetOutput(), region );
+  typename ImageType::SizeType largestRegion;
+  largestRegion = image->GetLargestPossibleRegion().GetSize();
 
   unsigned int count = 0;
-  it.GoToBegin();
-  while( it.IsAtEnd()==false )
+  for (it.GoToBegin(); !it.IsAtEnd(); ++it)
     {
-      count = 2*(it.GetIndex()[1]*reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]+it.GetIndex()[0]);
-   
-      double norm = vcl_sqrt(static_cast<double>( (count*count) + (count+1)*(count+1)));
-
-      if(it.Get() != static_cast<RealType>(norm))
-  {
-    std::cout<<"Image complex read as Image double error : value (should be norm): "<<it.Get()<<", waited for "<<norm<<"."<<std::endl;
-    
-    return EXIT_FAILURE;
-  }
-      ++it;
+    count = 2 * (it.GetIndex()[1] * largestRegion[0] + it.GetIndex()[0]);
+    if ( !TestCompare(it.GetIndex(), it.Get(), vcl_abs(ComplexType(count, count+1)) ) )
+      return EXIT_FAILURE;
     }
-  
-  
+
   return EXIT_SUCCESS;
 }
 
+int otbMonobandComplexToImageScalarFloat(int argc, char * argv[])
+{
+  return otbMonobandComplexToImageScalarGeneric<float>(argc, argv);
+}
+
+int otbMonobandComplexToImageScalarDouble(int argc, char * argv[])
+{
+  return otbMonobandComplexToImageScalarGeneric<double>(argc, argv);
+}
 
 /***********
  * 3.
- * Read Image<complex> as Image<complex>
+ * Read Monoband Complex as Image<complex>
  * out : in
  ***********/
-int otbImageComplexToImageComplex(int argc, char * argv[])
+template<class InternalType>
+int otbMonobandComplexToImageComplexGeneric(int argc, char * argv[])
 {
-  typedef double                                RealType;
-  typedef std::complex<RealType>                PixelType;
-  typedef otb::Image<PixelType, 2>              CplxImageType;
- 
-  typedef otb::ImageFileReader<CplxImageType>       ReaderType;
+  typedef InternalType                        RealType;
+  typedef std::complex<RealType>              ComplexType;
 
+  typedef ComplexType                         PixelType;
+  typedef otb::Image<PixelType, 2>            ImageType;
 
-  ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName(argv[1]);
+  const unsigned int w = 10;
+  const unsigned int h = 2;
 
-  CplxImageType::IndexType id;
-  CplxImageType::SizeType size;
-  CplxImageType::RegionType region;
+  typename ImageType::Pointer image;
+  itk::ImageRegionIteratorWithIndex<ImageType> it = ReadRegion(argv[1], image, w, h);
 
-  id.Fill(0);
-  size[0] = 10;
-  size[1] = 1;
-
-  region.SetSize( size );
-  region.SetIndex( id ); 
-
-  reader->GetOutput()->SetRequestedRegion(region);
-  reader->Update();
-
-  itk::ImageRegionIteratorWithIndex<CplxImageType> it( reader->GetOutput(), region );
+  typename ImageType::SizeType largestRegion;
+  largestRegion = image->GetLargestPossibleRegion().GetSize();
 
   unsigned int count = 0;
-  it.GoToBegin();
-  while( it.IsAtEnd()==false )
+  for (it.GoToBegin(); !it.IsAtEnd(); ++it)
     {
-     count = 2*(it.GetIndex()[1]*reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]+it.GetIndex()[0]);
-
-      if( (it.Get().real() != static_cast<RealType>(count)) || ( it.Get().imag() != static_cast<RealType>(count+1) ) ) 
-  {
-    std::cout<<"Image complex read as Image complex error: "<<it.Get()<<", waited for ("<<count<<", "<<count+1<<")"<<std::endl;
-    
-    return EXIT_FAILURE;
-  }
-      
-
-      ++it;
+    count = 2 * (it.GetIndex()[1] * largestRegion[0] + it.GetIndex()[0]);
+    if ( !TestCompare(it.GetIndex(), it.Get(), ComplexType(count, count+1) ) )
+      return EXIT_FAILURE;
     }
 
-
   return EXIT_SUCCESS;
+}
 
+int otbMonobandComplexToImageComplexFloat(int argc, char * argv[])
+{
+  return otbMonobandComplexToImageComplexGeneric<float>(argc, argv);
+}
+
+int otbMonobandComplexToImageComplexDouble(int argc, char * argv[])
+{
+  return otbMonobandComplexToImageComplexGeneric<double>(argc, argv);
 }
 
 /***********
  * 4.
- * Read Image<complex> as VectorImage<double>
+ * Read Monoband Complex as VectorImage<double>
  * out : [0]=in.real(), [1]=in.imag()
  ***********/
-int otbImageComplexToVectorImageDouble(int argc, char * argv[])
+template<class InternalType>
+int otbMonobandComplexToVectorImageScalarGeneric(int argc, char * argv[])
 {
-  typedef double                                RealType;
-  typedef otb::VectorImage<RealType, 2>               ScalVectorImageType;
-  typedef otb::ImageFileReader<ScalVectorImageType>       ReaderType;
+  typedef InternalType                        RealType;
+  typedef std::complex<RealType>              ComplexType;
 
+  typedef otb::VectorImage<RealType, 2>       ImageType;
+  typedef typename ImageType::PixelType       PixelType;
 
-  ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName(argv[1]);
+  const unsigned int w = 10;
+  const unsigned int h = 2;
 
-  ScalVectorImageType::IndexType id;
-  ScalVectorImageType::SizeType size;
-  ScalVectorImageType::RegionType region;
+  typename ImageType::Pointer image;
+  itk::ImageRegionIteratorWithIndex<ImageType> it = ReadRegion(argv[1], image, w, h);
 
-  id.Fill(0);
-  size[0] = 10;
-  size[1] = 1;
-
-  region.SetSize( size );
-  region.SetIndex( id ); 
-
-  reader->GetOutput()->SetRequestedRegion(region);
-  reader->Update();
-
-  itk::ImageRegionIteratorWithIndex<ScalVectorImageType> it( reader->GetOutput(), region );
+  typename ImageType::SizeType largestRegion;
+  largestRegion = image->GetLargestPossibleRegion().GetSize();
 
   unsigned int count = 0;
-  it.GoToBegin();
-  while( it.IsAtEnd()==false )
+  for (it.GoToBegin(); !it.IsAtEnd(); ++it)
     {
-     count = 2*(it.GetIndex()[1]*reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]+it.GetIndex()[0]);
+    count = 2 * (it.GetIndex()[1] * largestRegion[0] + it.GetIndex()[0]);
 
-     if( (it.Get()[0] != static_cast<RealType>(count)) || (it.Get()[1] != static_cast<RealType>(count+1)) )
-  {
-    std::cout<<"Image complex read as Vector Image double error: "<<it.Get()<<", waited for ("<<count<<", "<<count+1<<")"<<std::endl;
-    
-    return EXIT_FAILURE;
-  }
+    PixelType expected(2);
+    expected[0] = count;
+    expected[1] = count + 1;
 
-      //count += 2;
-      ++it;
+    if ( !TestCompare( it.GetIndex(), it.Get(), expected ) )
+      return EXIT_FAILURE;
     }
-  
-  
+
   return EXIT_SUCCESS;
+}
+
+int otbMonobandComplexToVectorImageScalarFloat(int argc, char * argv[])
+{
+  return otbMonobandComplexToVectorImageScalarGeneric<float>(argc, argv);
+}
+
+int otbMonobandComplexToVectorImageScalarDouble(int argc, char * argv[])
+{
+  return otbMonobandComplexToVectorImageScalarGeneric<double>(argc, argv);
 }
 
 /***********
  * 5.
- * Read Image<complex> as VectorImage<complex>
+ * Read Monoband Complex as VectorImage<complex>
  * out : [0]=in
  ***********/
-int otbImageComplexToVectorImageComplex(int argc, char * argv[])
+template<class InternalType>
+int otbMonobandComplexToVectorImageComplexGeneric(int argc, char * argv[])
 {
-  typedef double                                RealType;
-  typedef std::complex<RealType>                PixelType;
-  typedef otb::VectorImage<PixelType, 2>               CmplxVectorImageType;
-  typedef otb::ImageFileReader<CmplxVectorImageType>       ReaderType;
+  typedef InternalType                        RealType;
+  typedef std::complex<RealType>              ComplexType;
 
+  typedef otb::VectorImage<ComplexType, 2>    ImageType;
+  typedef typename ImageType::PixelType       PixelType;
 
-  ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName(argv[1]);
+  const unsigned int w = 10;
+  const unsigned int h = 2;
 
-  CmplxVectorImageType::IndexType id;
-  CmplxVectorImageType::SizeType size;
-  CmplxVectorImageType::RegionType region;
+  typename ImageType::Pointer image;
+  itk::ImageRegionIteratorWithIndex<ImageType> it = ReadRegion(argv[1], image, w, h);
 
-  id.Fill(0);
-  size[0] = 10;
-  size[1] = 1;
-
-  region.SetSize( size );
-  region.SetIndex( id ); 
-
-  reader->GetOutput()->SetRequestedRegion(region);
-  reader->Update();
-
-  itk::ImageRegionIteratorWithIndex<CmplxVectorImageType> it( reader->GetOutput(), region );
+  typename ImageType::SizeType largestRegion;
+  largestRegion = image->GetLargestPossibleRegion().GetSize();
 
   unsigned int count = 0;
-  it.GoToBegin();
-  while( it.IsAtEnd()==false )
+  for (it.GoToBegin(); !it.IsAtEnd(); ++it)
     {
-      count = 2*(it.GetIndex()[1]*reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]+it.GetIndex()[0]);
+    count = 2 * (it.GetIndex()[1] * largestRegion[0] + it.GetIndex()[0]);
 
-      if( (it.Get()[0].real() != static_cast<RealType>(count)) || ( it.Get()[0].imag() != static_cast<RealType>(count+1) ) ) 
-  {
-    std::cout<<"Image complex read as Vector Image complex error: "<<it.Get()[0]<<", waited for ("<<count<<", "<<count+1<<")"<<std::endl;
-    
-    return EXIT_FAILURE;
-  }
-   
-       ++it;
-    }
-  
-  
-  return EXIT_SUCCESS;
-}
+    PixelType expected(1);
+    expected[0] = ComplexType(count, count + 1);
 
-/***********
- * 6.
- * Read VectorImage<double> as Image<complex>
- * out : out.real=in[0], out.imag=in[1]
- ***********/
-int otbVectorImageDoubleToImageComplex(int argc, char * argv[])
-{
-  typedef double                                RealType;
-  typedef std::complex<RealType>                PixelType;
-  typedef otb::Image<PixelType, 2>               CmplxImageType;
-  typedef otb::ImageFileReader<CmplxImageType>       ReaderType;
-
-
-  ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName(argv[1]);
-
-  CmplxImageType::IndexType id;
-  CmplxImageType::SizeType size;
-  CmplxImageType::RegionType region;
-
-  id.Fill(0);
-  size[0] = 10;
-  size[1] = 1;
-
-  region.SetSize( size );
-  region.SetIndex( id ); 
-
-  reader->GetOutput()->SetRequestedRegion(region);
-  reader->Update();
-
-  itk::ImageRegionIteratorWithIndex<CmplxImageType> it( reader->GetOutput(), region );
-
-  unsigned int count = 0;
-  it.GoToBegin();
-  while( it.IsAtEnd()==false )
-    {
-      count = 2*(it.GetIndex()[1]*reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]+it.GetIndex()[0]);
-  
-      if(it.Get().real() != static_cast<RealType>(count) || (it.Get().imag() != static_cast<RealType>(count+1)) ) 
-  {
-    std::cout<<"Vector Image double read as Image double error: "<<it.Get()<<", waited for ("<<count<<", "<<count+1<<")"<<std::endl;
-    
-    return EXIT_FAILURE;
-  }
-
-      ++it;
-    }
-  
-  
-  return EXIT_SUCCESS;
-}
-
-/***********
- * 7.
- * Read VectorImage<double> as VectorImage<complex>
- * out : (out[0].real=in, out[0].imag=1), (out[1].real=in, out[1].imag=0), ...
- ***********/
-int otbVectorImageDoubleToVectorImageComplex(int argc, char * argv[])
-{
-  typedef double                                RealType;
-  typedef std::complex<RealType>                PixelType;
-  typedef otb::VectorImage<PixelType, 2>               CmplxVectorImageType;
-  typedef otb::ImageFileReader<CmplxVectorImageType>       ReaderType;
-
-
-  ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName(argv[1]);
-
-  CmplxVectorImageType::IndexType id;
-  CmplxVectorImageType::SizeType size;
-  CmplxVectorImageType::RegionType region;
-
-  id.Fill(0);
-  size[0] = 10;
-  size[1] = 1;
-
-  region.SetSize( size );
-  region.SetIndex( id ); 
-
-  reader->GetOutput()->SetRequestedRegion(region);
-  reader->Update();
-
-  itk::ImageRegionIteratorWithIndex<CmplxVectorImageType> it( reader->GetOutput(), region );
-
-  unsigned int count = 0;
-  it.GoToBegin();
-  while( it.IsAtEnd()==false )
-    {
-      count = 2*(it.GetIndex()[1]*reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]+it.GetIndex()[0]);;
-
-      if(it.Get()[0].real() != static_cast<RealType>(count) || (it.Get()[0].imag() != static_cast<RealType>(0)) ) 
-  {
-    std::cout<<"Vector Image double read as Vector Image complex error: "<<it.Get()[0]<<", waited for ("<<count<<", 0)."<<std::endl;
-    
-    return EXIT_FAILURE;
-  }
-
-      ++it;
-    }
-  
-  
-  return EXIT_SUCCESS;
-}
-
-/***********
- * 8.
- * Read VectorImage<complex> as VectorImage<complex>
- * out : out[0]=in[0], out[1]=in[1], ...
- ***********/
-int otbVectorImageComplexToVectorImageDouble(int argc, char * argv[])
-{
-  typedef double                                RealType;
-  typedef otb::VectorImage<RealType, 2>               ScalVectorImageType;
-  typedef otb::ImageFileReader<ScalVectorImageType>       ReaderType;
-
-
-  ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName(argv[1]);
-
-  ScalVectorImageType::IndexType id;
-  ScalVectorImageType::SizeType size;
-  ScalVectorImageType::RegionType region;
-
-  id.Fill(0);
-  size[0] = 10;
-  size[1] = 1;
-
-  region.SetSize( size );
-  region.SetIndex( id ); 
-
-  reader->GetOutput()->SetRequestedRegion(region);
-  reader->Update();
-  unsigned int l_Size = reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0]* reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1];
-
-  itk::ImageRegionIteratorWithIndex<ScalVectorImageType> it( reader->GetOutput(), region );
-  unsigned int count = 0;
-  it.GoToBegin();
-  while( it.IsAtEnd()==false )
-    {
-      count = 2*(it.GetIndex()[1]*reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]+it.GetIndex()[0]);
-      double norm1 = vcl_sqrt(static_cast<double>(count*count + (count+1)*(count+1)));
-      double norm2 = vcl_sqrt(static_cast<double>((2*l_Size+count)*(2*l_Size+count) + (2*l_Size+count+1)*(2*l_Size+count+1)));
- 
-      if( (it.Get()[0] != norm1) || (it.Get()[1] != norm2) ) 
-  {
-    std::cout<<"Vector Image complex read as Vector Image double error: "<<it.Get()<<", waited for ("<<norm1<<", "<<norm2<<")."<<std::endl;
-    
-    return EXIT_FAILURE;
-  }
-
-      ++it;
-    }
-  
-  
-  return EXIT_SUCCESS;
-}
-
-
-/***********
- * 9.
- * Read VectorImage<complex> as VectorImage<complex>
- * out : out[0]=norm(in[0]), out[0]=norm(in[1]), ...
- ***********/
-int otbVectorImageComplexToVectorImageComplex(int argc, char * argv[])
-{
-  typedef double                                RealType;
-  typedef std::complex<RealType>                PixelType;
-  typedef otb::VectorImage<PixelType, 2>               CmplxVectorImageType;
-  typedef otb::ImageFileReader<CmplxVectorImageType>       ReaderType;
-
-
-  ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName(argv[1]);
-
-  CmplxVectorImageType::IndexType id;
-  CmplxVectorImageType::SizeType size;
-  CmplxVectorImageType::RegionType region;
-
-  id.Fill(0);
-  size[0] = 10;
-  size[1] = 1;
-
-  region.SetSize( size );
-  region.SetIndex( id ); 
-
-  reader->GetOutput()->SetRequestedRegion(region);
-  reader->Update();
-
-  itk::ImageRegionIteratorWithIndex<CmplxVectorImageType> it( reader->GetOutput(), region );
-  unsigned int l_Size = reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0]* reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1];
-
-  unsigned int count = 0;
-  it.GoToBegin();
-  while( it.IsAtEnd()==false )
-    {
-     count = 2*(it.GetIndex()[1]*reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]+it.GetIndex()[0]);
-
-      PixelType cmplx1(count, count+1);
-      PixelType cmplx2(2*l_Size+count, 2*l_Size+count+1);
-
-      if( (it.Get()[0] != cmplx1) || (it.Get()[1] != cmplx2) ) 
-  {
-    std::cout<<"Image double read as Vector Image complex error: "<<std::endl;
-    std::cout<<it.Get()[0]<<", waited for "<<cmplx1<<"."<<std::endl;
-    std::cout<<it.Get()[1]<<", waited for "<<cmplx2<<"."<<std::endl;
-
-    return EXIT_FAILURE;
-  }
-
-      ++it;
-    }
-  
-  
-  return EXIT_SUCCESS;
-}
-
-
-/***********
- * 10.
- * Read Image<double> as VectorImage<complex>
- * out : out[0].real()=in, out[0].imag=0
- ***********/
-int otbImageDoubleToVectorImageComplex(int argc, char * argv[])
-{
-  typedef double                                RealType;
-  typedef std::complex<RealType>                PixelType;
-  typedef otb::VectorImage<PixelType, 2>               CmplxVectorImageType;
-  typedef otb::ImageFileReader<CmplxVectorImageType>       ReaderType;
-
-
-  ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName(argv[1]);
-
-  CmplxVectorImageType::IndexType id;
-  CmplxVectorImageType::SizeType size;
-  CmplxVectorImageType::RegionType region;
-
-  id.Fill(0);
-  size[0] = 10;
-  size[1] = 1;
-
-  region.SetSize( size );
-  region.SetIndex( id ); 
-
-  reader->GetOutput()->SetRequestedRegion(region);
-  reader->Update();
-
-  if(reader->GetOutput()->GetNumberOfComponentsPerPixel() != 1)
-    {
-      std::cout<<"Invalid image size, should be 1, no "<<reader->GetOutput()->GetNumberOfComponentsPerPixel()<<"."<<std::endl;
-
+    if ( !TestCompare( it.GetIndex(), it.Get(), expected ) )
       return EXIT_FAILURE;
     }
 
-  itk::ImageRegionIteratorWithIndex<CmplxVectorImageType> it( reader->GetOutput(), region );
+  return EXIT_SUCCESS;
+}
+
+int otbMonobandComplexToVectorImageComplexFloat(int argc, char * argv[])
+{
+  return otbMonobandComplexToVectorImageComplexGeneric<float>(argc, argv);
+}
+
+int otbMonobandComplexToVectorImageComplexDouble(int argc, char * argv[])
+{
+  return otbMonobandComplexToVectorImageComplexGeneric<double>(argc, argv);
+}
+
+
+/***********
+ * 6.
+ * Read Multiband Scalar as Image<complex>
+ * out : out.real=in[0], out.imag=in[1]
+ ***********/
+template<class InternalType>
+int otbMultibandScalarToImageComplexGeneric(int argc, char * argv[])
+{
+  typedef InternalType                        RealType;
+  typedef std::complex<RealType>              ComplexType;
+
+  typedef otb::Image<ComplexType, 2>          ImageType;
+  typedef typename ImageType::PixelType       PixelType;
+
+  const unsigned int w = 10;
+  const unsigned int h = 2;
+
+  typename ImageType::Pointer image;
+  itk::ImageRegionIteratorWithIndex<ImageType> it = ReadRegion(argv[1], image, w, h);
+
+  typename ImageType::SizeType largestRegion;
+  largestRegion = image->GetLargestPossibleRegion().GetSize();
 
   unsigned int count = 0;
-  it.GoToBegin();
-  while( it.IsAtEnd()==false )
+  for (it.GoToBegin(); !it.IsAtEnd(); ++it)
     {
-      count = it.GetIndex()[1]*reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]+it.GetIndex()[0];
+    count = it.GetIndex()[1] * largestRegion[0] + it.GetIndex()[0];
 
-      if( (it.Get()[0].real() != static_cast<RealType>(count)) || (it.Get()[0].imag() != 0) ) 
-  {
-    std::cout<<"Image double read as Vector Image complex error: "<<it.Get()[0]<<", waited for ("<<count<<", 0)."<<std::endl;
-    
-    return EXIT_FAILURE;
-  }
+    PixelType expected(count, count + largestRegion[0] * largestRegion[1] );
 
-      ++it;
+    if ( !TestCompare( it.GetIndex(), it.Get(), expected ) )
+      return EXIT_FAILURE;
     }
-  
-  
+
   return EXIT_SUCCESS;
+}
+
+int otbMultibandScalarToImageComplexFloat(int argc, char * argv[])
+{
+  return otbMultibandScalarToImageComplexGeneric<float>(argc, argv);
+}
+
+int otbMultibandScalarToImageComplexDouble(int argc, char * argv[])
+{
+  return otbMultibandScalarToImageComplexGeneric<double>(argc, argv);
+}
+
+
+/***********
+ * 7.
+ * Read Multiband Scalar as VectorImage<complex>
+ * out : (out[0].real=in[0], out[0].imag=0), (out[1].real=in[1], out[1].imag=0), ...
+ ***********/
+template<class InternalType>
+int otbMultibandScalarToVectorImageComplexGeneric(int argc, char * argv[])
+{
+  typedef InternalType                        RealType;
+  typedef std::complex<RealType>              ComplexType;
+
+  typedef otb::VectorImage<ComplexType, 2>    ImageType;
+  typedef typename ImageType::PixelType       PixelType;
+
+  const unsigned int w = 10;
+  const unsigned int h = 2;
+
+  typename ImageType::Pointer image;
+  itk::ImageRegionIteratorWithIndex<ImageType> it = ReadRegion(argv[1], image, w, h);
+
+  typename ImageType::SizeType largestRegion;
+  largestRegion = image->GetLargestPossibleRegion().GetSize();
+
+  unsigned int count = 0;
+  for (it.GoToBegin(); !it.IsAtEnd(); ++it)
+    {
+    count = it.GetIndex()[1] * largestRegion[0] + it.GetIndex()[0];
+
+    PixelType expected(2);
+    expected[0] = ComplexType(count, 0);
+    expected[1] = ComplexType(count + largestRegion[0] * largestRegion[1], 0);
+
+    if ( !TestCompare( it.GetIndex(), it.Get(), expected ) )
+      return EXIT_FAILURE;
+    }
+
+  return EXIT_SUCCESS;
+}
+
+int otbMultibandScalarToVectorImageComplexFloat(int argc, char * argv[])
+{
+  return otbMultibandScalarToVectorImageComplexGeneric<float>(argc, argv);
+}
+
+int otbMultibandScalarToVectorImageComplexDouble(int argc, char * argv[])
+{
+  return otbMultibandScalarToVectorImageComplexGeneric<double>(argc, argv);
+}
+
+
+/***********
+ * 8.
+ * Read Multiband Complex as VectorImage<scalar>
+ * out : out[0]=in[0].real, out[1]=in[0].imag, out[2]=in[0].real, out[3]=in[0].imag, ...
+ ***********/
+template<class InternalType>
+int otbMultibandComplexToVectorImageScalarGeneric(int argc, char * argv[])
+{
+  typedef InternalType                        RealType;
+  typedef std::complex<RealType>              ComplexType;
+
+  typedef otb::VectorImage<RealType, 2>       ImageType;
+  typedef typename ImageType::PixelType       PixelType;
+
+  const unsigned int w = 10;
+  const unsigned int h = 2;
+
+  typename ImageType::Pointer image;
+  itk::ImageRegionIteratorWithIndex<ImageType> it = ReadRegion(argv[1], image, w, h);
+
+  typename ImageType::SizeType largestRegion;
+  largestRegion = image->GetLargestPossibleRegion().GetSize();
+
+  const unsigned int nbbands = image->GetNumberOfComponentsPerPixel();
+
+  unsigned int count = 0;
+  for (it.GoToBegin(); !it.IsAtEnd(); ++it)
+    {
+    count = 2 * (it.GetIndex()[1] * largestRegion[0] + it.GetIndex()[0]);
+
+    PixelType expected(nbbands);
+    for (unsigned int band = 0; band < nbbands; band += 2 )
+      {
+      expected[band]     = count +     band * largestRegion[0] * largestRegion[1];
+      expected[band + 1] = count + 1 + band * largestRegion[0] * largestRegion[1];
+      }
+
+    if ( !TestCompare( it.GetIndex(), it.Get(), expected ) )
+      return EXIT_FAILURE;
+    }
+
+  return EXIT_SUCCESS;
+}
+
+int otbMultibandComplexToVectorImageScalarFloat(int argc, char * argv[])
+{
+  return otbMultibandComplexToVectorImageScalarGeneric<float>(argc, argv);
+}
+
+int otbMultibandComplexToVectorImageScalarDouble(int argc, char * argv[])
+{
+  return otbMultibandComplexToVectorImageScalarGeneric<double>(argc, argv);
+}
+
+/***********
+ * 9.
+ * Read Multiband Complex as VectorImage<complex>
+ * out : out[0]=in[0], out[1]=in[1], ...
+ ***********/
+template<class InternalType>
+int otbMultibandComplexToVectorImageComplexGeneric(int argc, char * argv[])
+{
+  typedef InternalType                        RealType;
+  typedef std::complex<RealType>              ComplexType;
+
+  typedef otb::VectorImage<ComplexType, 2>    ImageType;
+  typedef typename ImageType::PixelType       PixelType;
+
+  const unsigned int w = 10;
+  const unsigned int h = 2;
+
+  typename ImageType::Pointer image;
+  itk::ImageRegionIteratorWithIndex<ImageType> it = ReadRegion(argv[1], image, w, h);
+
+  typename ImageType::SizeType largestRegion;
+  largestRegion = image->GetLargestPossibleRegion().GetSize();
+
+  const unsigned int nbbands = image->GetNumberOfComponentsPerPixel();
+
+  unsigned int count = 0;
+  for (it.GoToBegin(); !it.IsAtEnd(); ++it)
+    {
+    count = 2 * (it.GetIndex()[1] * largestRegion[0] + it.GetIndex()[0]);
+
+    PixelType expected(nbbands);
+    for (unsigned int band = 0; band < nbbands; ++band )
+      {
+      expected[band]     = ComplexType(count     + band * 2 * largestRegion[0] * largestRegion[1],
+                                       count + 1 + band * 2 * largestRegion[0] * largestRegion[1]);
+      }
+
+    if ( !TestCompare( it.GetIndex(), it.Get(), expected ) )
+      return EXIT_FAILURE;
+    }
+
+  return EXIT_SUCCESS;
+}
+
+int otbMultibandComplexToVectorImageComplexFloat(int argc, char * argv[])
+{
+  return otbMultibandComplexToVectorImageComplexGeneric<float>(argc, argv);
+}
+
+int otbMultibandComplexToVectorImageComplexDouble(int argc, char * argv[])
+{
+  return otbMultibandComplexToVectorImageComplexGeneric<double>(argc, argv);
+}
+
+/***********
+ * 10.
+ * Read Monoband Scalar as VectorImage<complex>
+ * out : out[0].real=in, out[0].imag=0
+ ***********/
+template<class InternalType>
+int otbMonobandScalarToVectorImageComplexGeneric(int argc, char * argv[])
+{
+  typedef InternalType                        RealType;
+  typedef std::complex<RealType>              ComplexType;
+
+  typedef otb::VectorImage<ComplexType, 2>    ImageType;
+  typedef typename ImageType::PixelType       PixelType;
+
+  const unsigned int w = 10;
+  const unsigned int h = 2;
+
+  typename ImageType::Pointer image;
+  itk::ImageRegionIteratorWithIndex<ImageType> it = ReadRegion(argv[1], image, w, h);
+
+  typename ImageType::SizeType largestRegion;
+  largestRegion = image->GetLargestPossibleRegion().GetSize();
+
+  unsigned int count = 0;
+  for (it.GoToBegin(); !it.IsAtEnd(); ++it)
+    {
+    count = it.GetIndex()[1] * largestRegion[0] + it.GetIndex()[0];
+
+    PixelType expected(1);
+    expected[0] = ComplexType(count, 0);
+
+    if ( !TestCompare( it.GetIndex(), it.Get(), expected ) )
+      return EXIT_FAILURE;
+    }
+
+  return EXIT_SUCCESS;
+}
+
+int otbMonobandScalarToVectorImageComplexFloat(int argc, char * argv[])
+{
+  return otbMonobandScalarToVectorImageComplexGeneric<float>(argc, argv);
+}
+
+int otbMonobandScalarToVectorImageComplexDouble(int argc, char * argv[])
+{
+  return otbMonobandScalarToVectorImageComplexGeneric<double>(argc, argv);
 }
 
 /***********
  * 11.
- * Read VectorImage<complex> as Image<double>
- * out : Amplitude(norm(in[0]), norm(in[1], ...)
- * Amplitude is defined as in itkConvertPixelBuffer
+ * Read MultibandComplex as Image<double>
+ * out : ???
  ***********/
-int otbVectorImageComplexToImageDouble(int argc, char * argv[])
+template<class InternalType>
+int otbMultibandComplexToImageScalarGeneric(int argc, char * argv[])
 {
-  typedef double                                RealType;
-  typedef std::complex<RealType>                PixelType;
-  typedef otb::VectorImage<PixelType, 2>               CmplxVectorImageType;
-  typedef otb::ImageFileReader<CmplxVectorImageType>       ReaderType;
-
-
-  ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName(argv[1]);
-
-  CmplxVectorImageType::IndexType id;
-  CmplxVectorImageType::SizeType size;
-  CmplxVectorImageType::RegionType region;
-
-  id.Fill(0);
-  size[0] = 10;
-  size[1] = 1;
-
-  region.SetSize( size );
-  region.SetIndex( id ); 
-
-  reader->GetOutput()->SetRequestedRegion(region);
-  reader->Update();
-
-  if(reader->GetOutput()->GetNumberOfComponentsPerPixel() == 1)
-    {
-      std::cout<<"Invalid image size, should be greater than 1."<<std::endl;
-
-      return EXIT_FAILURE;
-    }
-
-  itk::ImageRegionIteratorWithIndex<CmplxVectorImageType> it( reader->GetOutput(), region );
-  unsigned int l_Size = reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0]* reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1];
-
-  unsigned int count = 0;
-  it.GoToBegin();
-  while( it.IsAtEnd()==false )
-    {
-      count = 2*(it.GetIndex()[1]*reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]+it.GetIndex()[0]);
-
-      if(reader->GetOutput()->GetNumberOfComponentsPerPixel() == 2)
-  {
-    // Amplitude = input[0] norm * input[1] norm
-    double norm1 = vcl_sqrt(static_cast<double>( (count*count) + (count+1)*(count+1)));
-    double norm2 = vcl_sqrt(static_cast<double>( ((2*l_Size+count)*(2*l_Size+count)) + (2*l_Size+count+1)*(2*l_Size+count+1)));    
-
-    if( it.Get() != static_cast<RealType>(norm1*norm2)) 
-      {
-        std::cout<<"Vector Image complex with 2 bands read as Image double error: "<<it.Get()<<", waited for norm value: "<<norm1*norm2<<"."<<std::endl;
-        
-        return EXIT_FAILURE;
-      }
-  }
-      else if(reader->GetOutput()->GetNumberOfComponentsPerPixel() == 3)
-  {
-    // Amplitude = (2125*norm(input[0]) + 7154*norm(input[1]) + 721*norm(input[2])) / 10000
-    double norm1 = vcl_sqrt(static_cast<double>( (count*count) + (count+1)*(count+1)));
-    double norm2 = vcl_sqrt(static_cast<double>( ((2*l_Size+count)*(2*l_Size+count)) + (2*l_Size+count+1)*(2*l_Size+count+1)));    
-    double norm3 = vcl_sqrt(static_cast<double>( ((4*l_Size+count)*(4*l_Size+count)) + (4*l_Size+count+1)*(4*l_Size+count+1)));    
-
-    if( it.Get() != static_cast<RealType>( (2125*norm1+7154*norm2+721*norm3)/10000 ) )
-      {
-        std::cout<<"Vector Image complex with 3 bands read as Image double error: "<<it.Get()<<", waited for norm value: "<<(2125*norm1+7154*norm2+721*norm3)/10000<<"."<<std::endl;
-        std::cout<<"With: norm1="<<norm1<<", norm2=: "<<norm2<<", norm3= "<<norm3<<"."<<std::endl;
-
-        return EXIT_FAILURE;
-      }
-  }
-      else
-  {
-    // Amplitude = (2125*norm(input[0]) + 7154*norm(input[1]) + 721*norm(input[2])) / 10000
-    double norm1 = vcl_sqrt(static_cast<double>( (count*count) + (count+1)*(count+1)));
-    double norm2 = vcl_sqrt(static_cast<double>( ((2*l_Size+count)*(2*l_Size+count)) + (2*l_Size+count+1)*(2*l_Size+count+1)));    
-    double norm3 = vcl_sqrt(static_cast<double>( ((4*l_Size+count)*(4*l_Size+count)) + (4*l_Size+count+1)*(4*l_Size+count+1)));    
-    double norm4 = vcl_sqrt(static_cast<double>( ((6*l_Size+count)*(6*l_Size+count)) + (6*l_Size+count+1)*(6*l_Size+count+1)));    
-
-    if( it.Get() != static_cast<RealType>( (2125*norm1+7154*norm2+721*norm3)/10000 * norm4 ) )
-      {
-        std::cout<<"Vector Image complex with 4 bands read as Image double error: "<<it.Get()<<", waited for norm value: "<<(2125*norm1+7154*norm2+721*norm3)/10000*norm4<<"."<<std::endl;
-        std::cout<<"With: norm1="<<norm1<<", norm2=: "<<norm2<<", norm3= "<<norm3<<", norm4= "<<norm4<<"."<<std::endl;
-        
-        return EXIT_FAILURE;
-      }
-         
-      ++it;
-      }
-  }
-  
-  
-  return EXIT_SUCCESS;
+  // This case is not handled yet.
+  // We need more time to decide what we want to do with this case. ( perhaps return exception ???)
+  std::cout << "This case is not handled yet." \
+            << "Need specification : throw exception ?" \
+            << std::endl;
+  return EXIT_FAILURE;
 }
 
+int otbMultibandComplexToImageScalarFloat(int argc, char * argv[])
+{
+  return otbMultibandComplexToImageScalarGeneric<float>(argc, argv);
+}
+
+int otbMultibandComplexToImageScalarDouble(int argc, char * argv[])
+{
+  return otbMultibandComplexToImageScalarGeneric<double>(argc, argv);
+}

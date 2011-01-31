@@ -157,7 +157,7 @@ protected:
    * due to limited thread-safety of FFTW plan creation.
    */
   void GenerateData();
-  // void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,int threadId);
+  // void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId);
 
 private:
   OverlapSaveConvolutionImageFilter(const Self &); //purposely not implemented

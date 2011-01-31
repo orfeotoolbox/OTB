@@ -19,7 +19,7 @@
 #ifndef __MuellerToMLCImageFilter_h
 #define __MuellerToMLCImageFilter_h
 
-#include "itkUnaryFunctorImageFilter.h"
+#include "otbUnaryFunctorImageFilter.h"
 
 namespace otb
  {
@@ -61,12 +61,12 @@ public:
     RealType M43 =  static_cast<RealType>(Mueller[14]);
     RealType M44 =  static_cast<RealType>(Mueller[15]);
 
-    ComplexType hhhh(M11+M22+2.*M12,0.0);
-    ComplexType hvhv(M11-M22,0.0);
-    ComplexType vvvv(M11+M22-2.*M12,0.0);
-    ComplexType hhhv(M13+M23,-1.*(M14+M24));
-    ComplexType hhvv(M33-M44,-2.*M34);
-    ComplexType hvvv(M13-M23,-1.*(M14-M24));
+    ComplexType hhhh(M11+M22+2.*M12, 0.0);
+    ComplexType hvhv(M11-M22, 0.0);
+    ComplexType vvvv(M11+M22-2.*M12, 0.0);
+    ComplexType hhhv(M13+M23, -1.*(M14+M24));
+    ComplexType hhvv(M33-M44, -2.*M34);
+    ComplexType hvvv(M13-M23, -1.*(M14-M24));
 
     result[0] = static_cast<OutputValueType>( hhhh );
     result[1] = static_cast<OutputValueType>( 2.* hhhv );
@@ -102,12 +102,12 @@ private:
 template <class TInputImage, class TOutputImage, class TFunction = Functor::MuellerToMLCFunctor<
     ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
 class ITK_EXPORT MuellerToMLCImageFilter :
-   public itk::UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction>
+   public UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction>
 {
 public:
    /** Standard class typedefs. */
    typedef MuellerToMLCImageFilter  Self;
-   typedef itk::UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction> Superclass;
+   typedef UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction> Superclass;
    typedef itk::SmartPointer<Self>        Pointer;
    typedef itk::SmartPointer<const Self>  ConstPointer;
 
@@ -115,7 +115,7 @@ public:
    itkNewMacro(Self);
 
    /** Runtime information support. */
-   itkTypeMacro(MuellerToMLCImageFilter,itk::UnaryFunctorImageFilter);
+   itkTypeMacro(MuellerToMLCImageFilter, UnaryFunctorImageFilter);
 
 
 protected:

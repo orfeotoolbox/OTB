@@ -144,7 +144,7 @@ private:
   /// Compare two line in the lexicographical order
   static bool LexicographicalLineCompare(const LineType&  l1, const LineType& l2);
 
-  /// Check if the given run index (index in line,line) is valid
+  /// Check if the given run index (index in line, line) is valid
   inline bool IsRunIndexValid(const IndexType& index) const;
 
   /// Check if the point lies within the range of the line

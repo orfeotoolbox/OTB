@@ -286,7 +286,7 @@ VectorDataToImageFilter<TVectorData, TImage>
       IndexType index;
       if(m_NbTile == 1)
         {
-        index = requestedRegion.GetIndex();      
+        index = requestedRegion.GetIndex();
         size = requestedRegion.GetSize();
         }
       else
@@ -300,7 +300,7 @@ VectorDataToImageFilter<TVectorData, TImage>
       m_TilingRegions[tilingRegionsIdx].SetIndex(index);
       m_TilingRegions[tilingRegionsIdx].SetSize(size);
       
-      //std::cout << "tileRegions[" << tilingRegionsIdx << "] : " 
+      //std::cout << "tileRegions[" << tilingRegionsIdx << "] : "
       //          << m_TilingRegions[tilingRegionsIdx] << std::endl;
       
       //Set Maps
@@ -358,18 +358,18 @@ VectorDataToImageFilter<TVectorData, TImage>
           rsRegion.SetRegionProjection(m_VectorDataProjectionWKT);
           
           //std::cout << "m_SensorModelFlip: " << m_SensorModelFlip << std::endl;
-          //std::cout << "rsTileRegions[" << tilingRegionsIdx << "] : " 
+          //std::cout << "rsTileRegions[" << tilingRegionsIdx << "] : "
           //          << rsRegion << std::endl;
           
           m_VectorDataExtractors[tilingRegionsIdx][idx] = VectorDataExtractROIType::New();
           m_VectorDataExtractors[tilingRegionsIdx][idx]->SetRegion(rsRegion);
-          m_VectorDataExtractors[tilingRegionsIdx][idx]->SetInput(this->GetInput(idx));            
+          m_VectorDataExtractors[tilingRegionsIdx][idx]->SetInput(this->GetInput(idx));
           }
         }
       
       tilingRegionsIdx ++;
-      } 
-    } 
+      }
+    }
 }
 
 /**
@@ -447,14 +447,14 @@ VectorDataToImageFilter<TVectorData, TImage>
         
         m_Maps[tileIdx].addLayer(lyr);
         }
-      } 
+      }
     assert((m_SensorModelFlip == 1) || (m_SensorModelFlip == -1));
 
     mapnik::Envelope<double> envelope(
       m_Origin[0] + m_TilingRegions[tileIdx].GetIndex()[0]*m_Spacing[0],
-      m_SensorModelFlip*(m_Origin[1] + m_TilingRegions[tileIdx].GetIndex()[1] * m_Spacing[1] 
+      m_SensorModelFlip*(m_Origin[1] + m_TilingRegions[tileIdx].GetIndex()[1] * m_Spacing[1]
                          + m_TilingRegions[tileIdx].GetSize()[1] * m_Spacing[1]),
-      m_Origin[0] + m_TilingRegions[tileIdx].GetIndex()[0] * m_Spacing[0] 
+      m_Origin[0] + m_TilingRegions[tileIdx].GetIndex()[0] * m_Spacing[0]
       + m_TilingRegions[tileIdx].GetSize()[0] * m_Spacing[0],
       m_SensorModelFlip*(m_Origin[1] + m_TilingRegions[tileIdx].GetIndex()[1] * m_Spacing[1])
       );

@@ -67,7 +67,7 @@ int otbInverseLogPolarTransform(int argc, char* argv[])
       {
       pprime[0] = (1. / angularStep) * vcl_asin((*it)[1] / rho);
       pprime[0] = pprime[0] * (180. / otb::CONST_PI);
-      // Deplacing the range to [0,90], [270,360]
+      // Deplacing the range to [0, 90], [270, 360]
       pprime[0] = pprime[0] > 0. ? pprime[0] : pprime[0] + 360.;
       // Avoiding asin indetermination
       if (p[0] >= 0)
