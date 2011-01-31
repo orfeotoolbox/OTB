@@ -43,6 +43,12 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
   pixel[6] = TM62;
   pixel[7] = TM7;
 
+  std::vector< PrecisionType > v13;
+  v13.push_back(TM1);
+  v13.push_back(TM3);
+
+  PrecisionType max13 = *(max_element ( v13.begin(), v13.end() ));
+
   std::vector< PrecisionType > v123;
   v123.push_back(TM1);
   v123.push_back(TM2);
@@ -81,12 +87,14 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
   typedef otb::Functor::LandsatTM::ThickCloudsSpectralRule<InputPixelType, OutputPixelType> R1FunctorType;
   R1FunctorType r1Funct = R1FunctorType();
   OutputPixelType result = r1Funct(pixel);
-  OutputPixelType goodResult = static_cast<OutputPixelType>((min123 >= (TV1 * max123))
-                                                            && (max123 >= TV1 * TM4)
-                                                            && (TM5 >= TV1 * TM4)
-                                                            && (TM5 >= TV1 * max123)
-                                                            && (TM7 >= TV1 * TM4));
-
+  OutputPixelType goodResult = static_cast<OutputPixelType>(
+    ((min123 >= (TV1 * max123))
+     && (max123 <= TV1 * TM4))
+    || ((TM2 >= TV1 * max13)
+        && (max123 <= TM4))
+    && (TM5 <= TV1 * TM4)
+    && (TM5 >= TV1 * max123)
+    && (TM7 <= TV1 * TM4));
   
   if( result!=goodResult )
     {
