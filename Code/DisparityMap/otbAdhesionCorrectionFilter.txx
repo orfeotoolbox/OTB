@@ -300,13 +300,13 @@ AdhesionCorrectionFilter<TImage, TMask>
   /* positions around a pixel*/
   IntVectorType ring;
   IntVectorType pix;
-  ring.push_back(-1-old_disparityPtr->GetLargestPossibleRegion().GetSize()[0]);
-  ring.push_back(0-old_disparityPtr->GetLargestPossibleRegion().GetSize()[0]);
-  ring.push_back(1-old_disparityPtr->GetLargestPossibleRegion().GetSize()[0]);
+  ring.push_back(-1-old_disparityPtr->GetRequestedRegion().GetSize()[0]);
+  ring.push_back(0-old_disparityPtr->GetRequestedRegion().GetSize()[0]);
+  ring.push_back(1-old_disparityPtr->GetRequestedRegion().GetSize()[0]);
   ring.push_back(1);
-  ring.push_back(1+old_disparityPtr->GetLargestPossibleRegion().GetSize()[0]);
-  ring.push_back(old_disparityPtr->GetLargestPossibleRegion().GetSize()[0]);
-  ring.push_back(-1+old_disparityPtr->GetLargestPossibleRegion().GetSize()[0]);
+  ring.push_back(1+old_disparityPtr->GetRequestedRegion().GetSize()[0]);
+  ring.push_back(old_disparityPtr->GetRequestedRegion().GetSize()[0]);
+  ring.push_back(-1+old_disparityPtr->GetRequestedRegion().GetSize()[0]);
   ring.push_back(-1);
 
  	
@@ -369,12 +369,12 @@ AdhesionCorrectionFilter<TImage, TMask>
 
 
 	old_maskIt.GoToBegin();
-	while (old_maskIt.GetIndex()[1]<old_disparityPtr->GetLargestPossibleRegion().GetSize()[1]  - m_Radius[1])
+	while (old_maskIt.GetIndex()[1]<old_disparityPtr->GetRequestedRegion().GetSize()[1]  - m_Radius[1])
 	{
 		index_pos=old_maskIt.GetIndex();
-		if (old_maskIt.GetIndex()[1]>=m_Radius[1] && old_maskIt.GetIndex()[1] < old_disparityPtr->GetLargestPossibleRegion().GetSize()[1] - m_Radius[1])
+		if (old_maskIt.GetIndex()[1]>=m_Radius[1] && old_maskIt.GetIndex()[1] < old_disparityPtr->GetRequestedRegion().GetSize()[1] - m_Radius[1])
 		{
-			while (old_maskIt.Get()==0 && old_maskIt.GetIndex()[0]<old_disparityPtr->GetLargestPossibleRegion().GetSize()[0])
+			while (old_maskIt.Get()==0 && old_maskIt.GetIndex()[0]<old_disparityPtr->GetRequestedRegion().GetSize()[0])
 			{
 				++old_maskIt;
 			}
@@ -382,7 +382,7 @@ AdhesionCorrectionFilter<TImage, TMask>
 			disparity_jumpIt.SetIndex(index_pos);
 			disparity_jumpIt.Set(-1);// first disparity in the epipolar line
 			int k=0;
-			while (old_maskIt.GetIndex()[0]<old_disparityPtr->GetLargestPossibleRegion().GetSize()[0]-m_Radius[0])
+			while (old_maskIt.GetIndex()[0]<old_disparityPtr->GetRequestedRegion().GetSize()[0]-m_Radius[0])
 			{
 				index_pos = old_maskIt.GetIndex();
 				if (old_maskPtr->GetPixel(index_pos) == 0) // holes in the disparity map
@@ -394,13 +394,13 @@ AdhesionCorrectionFilter<TImage, TMask>
 						index[0]=index_pos[0]+i;
 						index[1]=index_pos[1];
 						old_maskIt.SetIndex(index);
-						while(old_maskIt.GetIndex()[0]<old_disparityPtr->GetLargestPossibleRegion().GetSize()[0] && old_maskIt.Get()==0)
+						while(old_maskIt.GetIndex()[0]<old_disparityPtr->GetRequestedRegion().GetSize()[0] && old_maskIt.Get()==0)
 						{
 							i++;
 							index[0]=index_pos[0]+i;
 							old_maskIt.SetIndex(index);
 						}
-						if (old_maskIt.GetIndex()[0] ==  old_disparityPtr->GetLargestPossibleRegion().GetSize()[0] - 1)
+						if (old_maskIt.GetIndex()[0] ==  old_disparityPtr->GetRequestedRegion().GetSize()[0] - 1)
 						{
 							disparity_jumpIt.SetIndex(index_pos);
 							disparity_jumpIt.Set(4);
@@ -485,17 +485,17 @@ std::cout<<"Compute jumps of the disparity map in the epipolar direction not det
 
 	old_maskIt.GoToBegin();
 	
-	while (old_maskIt.GetIndex()[1]<old_disparityPtr->GetLargestPossibleRegion().GetSize()[1])
+	while (old_maskIt.GetIndex()[1]<old_disparityPtr->GetRequestedRegion().GetSize()[1])
 	{
 		index_pos = old_maskIt.GetIndex();
-		while (old_maskIt.Get() == 0 && old_maskIt.GetIndex()[0] < old_disparityPtr->GetLargestPossibleRegion().GetSize()[0] - 1)
+		while (old_maskIt.Get() == 0 && old_maskIt.GetIndex()[0] < old_disparityPtr->GetRequestedRegion().GetSize()[0] - 1)
 		{
 			++old_maskIt;
 		}
 		index_pos = old_maskIt.GetIndex();
 		old_disparityIt.SetIndex(index_pos);
 		double disp = old_disparityIt.Get();
-		while (old_maskIt.GetIndex()[0]<old_disparityPtr->GetLargestPossibleRegion().GetSize()[0]-1)
+		while (old_maskIt.GetIndex()[0]<old_disparityPtr->GetRequestedRegion().GetSize()[0]-1)
 		{
 			index_pos = old_maskIt.GetIndex();
 			index = index_pos;
@@ -530,11 +530,11 @@ std::cout<<"Compute intersections between jumps"<<std::endl;
 
 	old_maskIt.GoToBegin();
 
-	while (old_maskIt.GetIndex()[1]<old_disparityPtr->GetLargestPossibleRegion().GetSize()[1])
+	while (old_maskIt.GetIndex()[1]<old_disparityPtr->GetRequestedRegion().GetSize()[1])
 	{
 		index_pos = old_maskIt.GetIndex();
 		++old_maskIt;
-		while (old_maskIt.GetIndex()[0]<old_disparityPtr->GetLargestPossibleRegion().GetSize()[0]-1)
+		while (old_maskIt.GetIndex()[0]<old_disparityPtr->GetRequestedRegion().GetSize()[0]-1)
 		{
 			index_pos = old_maskIt.GetIndex();
 			disparity_jumpIt.SetIndex(index_pos);
@@ -557,7 +557,7 @@ std::cout<<"Compute intersections between jumps"<<std::endl;
 								l++;
 								index2[1] = index_pos[1] + l;
 							}
-							if (index2[0]<old_disparityPtr->GetLargestPossibleRegion().GetSize()[0] && index2[1]<old_disparityPtr->GetLargestPossibleRegion().GetSize()[1]) // add this condition to avoid seg fault
+							if (index2[0]<old_disparityPtr->GetRequestedRegion().GetSize()[0] && index2[1]<old_disparityPtr->GetRequestedRegion().GetSize()[1]) // add this condition to avoid seg fault
 							{
 								disparity_jump2It.SetIndex(index2);
 								disparity_jump2It.Set(7);
@@ -578,14 +578,14 @@ std::cout<<"Only keep 1 pixel for each discontinuity"<<std::endl;
 	//// Only keep 1 pixel for each discontinuity
 	old_maskIt.GoToBegin();
 	
-	while (old_maskIt.GetIndex()[1]<old_disparityPtr->GetLargestPossibleRegion().GetSize()[1])
+	while (old_maskIt.GetIndex()[1]<old_disparityPtr->GetRequestedRegion().GetSize()[1])
 	{
 		index_pos = old_maskIt.GetIndex();
-		while (old_maskIt.Get() == 0 && old_maskIt.GetIndex()[0] < old_disparityPtr->GetLargestPossibleRegion().GetSize()[0] - 1)
+		while (old_maskIt.Get() == 0 && old_maskIt.GetIndex()[0] < old_disparityPtr->GetRequestedRegion().GetSize()[0] - 1)
 		{
 			++old_maskIt;
 		}
-		while (old_maskIt.GetIndex()[0]<old_disparityPtr->GetLargestPossibleRegion().GetSize()[0]-1)
+		while (old_maskIt.GetIndex()[0]<old_disparityPtr->GetRequestedRegion().GetSize()[0]-1)
 		{
 			index_pos = old_maskIt.GetIndex();
 			disparity_jumpIt.SetIndex(index_pos);
@@ -638,10 +638,10 @@ std::cout<<"Inside the risk zone, we look for edges which may cause te adhesion-
 	// Balai dans la direcction epipolaire gauche-droite
 	old_maskIt.GoToBegin();
 	
-	while (old_maskIt.GetIndex()[1]<old_disparityPtr->GetLargestPossibleRegion().GetSize()[1])
+	while (old_maskIt.GetIndex()[1]<old_disparityPtr->GetRequestedRegion().GetSize()[1])
 	{
 		index_pos = old_maskIt.GetIndex();
-		while (old_maskIt.GetIndex()[0]<old_disparityPtr->GetLargestPossibleRegion().GetSize()[0]-1)
+		while (old_maskIt.GetIndex()[0]<old_disparityPtr->GetRequestedRegion().GetSize()[0]-1)
 		{
 			index_pos = old_maskIt.GetIndex();
 			disparity_jumpIt.SetIndex(index_pos);
@@ -650,7 +650,7 @@ std::cout<<"Inside the risk zone, we look for edges which may cause te adhesion-
 			if (disparity_jumpIt.Get() == 1)
 			{
 				int l=1;
-				while (index_pos[0]+l<old_disparityPtr->GetLargestPossibleRegion().GetSize()[0] && l<=big_dist)
+				while (index_pos[0]+l<old_disparityPtr->GetRequestedRegion().GetSize()[0] && l<=big_dist)
 				{
 					index = index_pos;
 					index[0] = index_pos[0] + l;
@@ -665,7 +665,7 @@ std::cout<<"Inside the risk zone, we look for edges which may cause te adhesion-
 			if (disparity_jumpIt.Get() == 3)
 			{
 				int l=1;
-				while (index_pos[0]+l<old_disparityPtr->GetLargestPossibleRegion().GetSize()[0] && l<=big_dist)
+				while (index_pos[0]+l<old_disparityPtr->GetRequestedRegion().GetSize()[0] && l<=big_dist)
 				{
 					index = index_pos;
 					index[0] = index_pos[0] + l;
@@ -730,10 +730,10 @@ std::cout<<"Find extreme of risk edges"<<std::endl;
 	
 	old_maskIt.GoToBegin();
 
-	while (old_maskIt.GetIndex()[1]<old_disparityPtr->GetLargestPossibleRegion().GetSize()[1])
+	while (old_maskIt.GetIndex()[1]<old_disparityPtr->GetRequestedRegion().GetSize()[1])
 	{
 		index_pos = old_maskIt.GetIndex();
-		while (old_maskIt.GetIndex()[0]<old_disparityPtr->GetLargestPossibleRegion().GetSize()[0]-1)
+		while (old_maskIt.GetIndex()[0]<old_disparityPtr->GetRequestedRegion().GetSize()[0]-1)
 		{
 			index_pos = old_maskIt.GetIndex();
 			risk_edgesIt.SetIndex(index_pos);
@@ -784,11 +784,11 @@ std::cout<<"extend extreme edges if necessary "<<std::endl;
 
 	old_maskIt.GoToBegin();
 
-	while (old_maskIt.GetIndex()[1]<old_disparityPtr->GetLargestPossibleRegion().GetSize()[1]-1)
+	while (old_maskIt.GetIndex()[1]<old_disparityPtr->GetRequestedRegion().GetSize()[1]-1)
 	{
 		index_pos = old_maskIt.GetIndex();
 	  ++old_maskIt;
-		while (old_maskIt.GetIndex()[0]<old_disparityPtr->GetLargestPossibleRegion().GetSize()[0]-1)
+		while (old_maskIt.GetIndex()[0]<old_disparityPtr->GetRequestedRegion().GetSize()[0]-1)
 		{
 			index_pos = old_maskIt.GetIndex();
 			risk_edgesIt.SetIndex(index_pos);
@@ -849,12 +849,12 @@ std::cout<<"Cut risk edges"<<std::endl;
 	
 	old_maskIt.GoToBegin();
 	
-	while (old_maskIt.GetIndex()[1]<old_disparityPtr->GetLargestPossibleRegion().GetSize()[1] - big_win)
+	while (old_maskIt.GetIndex()[1]<old_disparityPtr->GetRequestedRegion().GetSize()[1] - big_win)
 	{
 		index_pos = old_maskIt.GetIndex();
 		if (index_pos[1]>=big_win)
 		{
-			while (old_maskIt.GetIndex()[0]<old_disparityPtr->GetLargestPossibleRegion().GetSize()[0] - big_win)
+			while (old_maskIt.GetIndex()[0]<old_disparityPtr->GetRequestedRegion().GetSize()[0] - big_win)
 			{
 				if (old_maskIt.GetIndex()[0]>=big_win)
 				{
@@ -916,10 +916,10 @@ std::cout<<"Remove edges with only 1 or 2 pixels"<<std::endl;
 	
 	old_maskIt.GoToBegin();
 	
-	while (old_maskIt.GetIndex()[1]<old_disparityPtr->GetLargestPossibleRegion().GetSize()[1] - 1)
+	while (old_maskIt.GetIndex()[1]<old_disparityPtr->GetRequestedRegion().GetSize()[1] - 1)
 	{
 	  ++old_maskIt;
-		while (old_maskIt.GetIndex()[0]<old_disparityPtr->GetLargestPossibleRegion().GetSize()[0]-1)
+		while (old_maskIt.GetIndex()[0]<old_disparityPtr->GetRequestedRegion().GetSize()[0]-1)
 		{
 			index_pos = old_maskIt.GetIndex();
 			risk_edgesIt.SetIndex(index_pos);
@@ -960,14 +960,14 @@ std::cout<<"Remove pixels risking adhesion"<<std::endl;
 	////////////////////////////////////////
 	old_maskIt.GoToBegin();
 	
-	while (old_maskIt.GetIndex()[1]<old_disparityPtr->GetLargestPossibleRegion().GetSize()[1])
+	while (old_maskIt.GetIndex()[1]<old_disparityPtr->GetRequestedRegion().GetSize()[1])
 	{
 		index_pos = old_maskIt.GetIndex();
-		while (old_maskIt.Get() == 0 && old_maskIt.GetIndex()[0] < old_disparityPtr->GetLargestPossibleRegion().GetSize()[0] - 1)
+		while (old_maskIt.Get() == 0 && old_maskIt.GetIndex()[0] < old_disparityPtr->GetRequestedRegion().GetSize()[0] - 1)
 		{
 			++old_maskIt;
 		}
-		while (old_maskIt.GetIndex()[0]<old_disparityPtr->GetLargestPossibleRegion().GetSize()[0]-1)
+		while (old_maskIt.GetIndex()[0]<old_disparityPtr->GetRequestedRegion().GetSize()[0]-1)
 		{
 			index_pos = old_maskIt.GetIndex();
 			int pp=0;
@@ -1102,7 +1102,7 @@ std::cout<<"Remove pixels risking adhesion"<<std::endl;
 				l=patch_side;
 				index[0]=index_pos[0]+l;
 				index[1]=index_pos[1];
-				while ( (old_maskIt.GetIndex()[0] + l) < old_disparityPtr->GetLargestPossibleRegion().GetSize()[0] - 1 && l>=0 && disparity_jump->GetPixel(index) != 2)
+				while ( (old_maskIt.GetIndex()[0] + l) < old_disparityPtr->GetRequestedRegion().GetSize()[0] - 1 && l>=0 && disparity_jump->GetPixel(index) != 2)
 				{
 					l--;
 					index[0]=index_pos[0]+l;
@@ -1162,7 +1162,7 @@ std::cout<<"Remove pixels risking adhesion"<<std::endl;
 				l=big_dist;
 				index[0]=index_pos[0]+l;
 				index[1]=index_pos[1];
-				while ((old_maskIt.GetIndex()[0] + l) < old_disparityPtr->GetLargestPossibleRegion().GetSize()[0] - 1 && l>=0 && disparity_jump->GetPixel(index) != 4)
+				while ((old_maskIt.GetIndex()[0] + l) < old_disparityPtr->GetRequestedRegion().GetSize()[0] - 1 && l>=0 && disparity_jump->GetPixel(index) != 4)
 				{
 					l--;
 					index[0]=index_pos[0]+l;
@@ -1228,7 +1228,7 @@ std::cout<<"Remove pixels risking adhesion"<<std::endl;
 					{
 						index2[0]=index_pos[0]+i;
 						index2[1]=index_pos[1]+k;
-						if (index2[0]>=0 && index2[1]>=0 && index2[0]<old_disparityPtr->GetLargestPossibleRegion().GetSize()[0]&&index2[1]<old_disparityPtr->GetLargestPossibleRegion().GetSize()[1])
+						if (index2[0]>=0 && index2[1]>=0 && index2[0]<old_disparityPtr->GetRequestedRegion().GetSize()[0]&&index2[1]<old_disparityPtr->GetRequestedRegion().GetSize()[1])
 						{
 							new_disparityIt.SetIndex(index2);
 							new_maskIt.SetIndex(index2);
@@ -1253,14 +1253,14 @@ std::cout<<"remove around the  disparity jump if no risk_edge have been found"<<
 	// remove around the  disparity jump if no risk_edge have been found
 	old_maskIt.GoToBegin();
 	
-	while (old_maskIt.GetIndex()[1]<old_disparityPtr->GetLargestPossibleRegion().GetSize()[1])
+	while (old_maskIt.GetIndex()[1]<old_disparityPtr->GetRequestedRegion().GetSize()[1])
 	{
 		index_pos = old_maskIt.GetIndex();
-		while (old_maskIt.Get() == 0 && old_maskIt.GetIndex()[0] < old_disparityPtr->GetLargestPossibleRegion().GetSize()[0] - 1)
+		while (old_maskIt.Get() == 0 && old_maskIt.GetIndex()[0] < old_disparityPtr->GetRequestedRegion().GetSize()[0] - 1)
 		{
 			++old_maskIt;
 		}
-		while (old_maskIt.GetIndex()[0]<old_disparityPtr->GetLargestPossibleRegion().GetSize()[0]-1)
+		while (old_maskIt.GetIndex()[0]<old_disparityPtr->GetRequestedRegion().GetSize()[0]-1)
 		{
 			index_pos = old_maskIt.GetIndex();
 			index[0]=index_pos[0]+1;
@@ -1272,7 +1272,7 @@ std::cout<<"remove around the  disparity jump if no risk_edge have been found"<<
 				int i=1;
 				index[0]=index_pos[0]+i;
 				disparity_jumpIt.SetIndex(index);
-				while (i<=patch_side_small && disparity_jumpIt.GetIndex()[0]<old_disparityPtr->GetLargestPossibleRegion().GetSize()[0] - 1 && disparity_jumpIt.Get()==0 )
+				while (i<=patch_side_small && disparity_jumpIt.GetIndex()[0]<old_disparityPtr->GetRequestedRegion().GetSize()[0] - 1 && disparity_jumpIt.Get()==0 )
 				{
 					new_disparityIt.SetIndex(index);
 					new_maskIt.SetIndex(index);
@@ -1292,7 +1292,7 @@ std::cout<<"remove around the  disparity jump if no risk_edge have been found"<<
 				int i=-1;
 				index[0]=index_pos[0]+i;
 				disparity_jumpIt.SetIndex(index);
-				while (i>=-patch_side_small && disparity_jumpIt.GetIndex()[0]<old_disparityPtr->GetLargestPossibleRegion().GetSize()[0] - 1 && disparity_jumpIt.Get()==0 )
+				while (i>=-patch_side_small && disparity_jumpIt.GetIndex()[0]<old_disparityPtr->GetRequestedRegion().GetSize()[0] - 1 && disparity_jumpIt.Get()==0 )
 				{
 					new_disparityIt.SetIndex(index);
 					new_maskIt.SetIndex(index);
@@ -1327,18 +1327,18 @@ std::cout<<"remove around the  disparity jump if no risk_edge have been found"<<
 
 	old_maskIt.GoToBegin();
 	
-	while (old_maskIt.GetIndex()[0]<old_disparityPtr->GetLargestPossibleRegion().GetSize()[0]-1)
+	while (old_maskIt.GetIndex()[0]<old_disparityPtr->GetRequestedRegion().GetSize()[0]-1)
 	{
 		index2 = old_maskIt.GetIndex();
 		index=index2;
-		while (old_maskIt.Get() == 0 && old_maskIt.GetIndex()[1] < old_disparityPtr->GetLargestPossibleRegion().GetSize()[1] -1)
+		while (old_maskIt.Get() == 0 && old_maskIt.GetIndex()[1] < old_disparityPtr->GetRequestedRegion().GetSize()[1] -1)
 		{
 			index[1]=index[1]+1;
 			old_maskIt.SetIndex(index);
 		}
 		double disp=old_disparityPtr->GetPixel(index);
 		int k=0;
-		while (old_maskIt.GetIndex()[1]<old_disparityPtr->GetLargestPossibleRegion().GetSize()[1] -1)
+		while (old_maskIt.GetIndex()[1]<old_disparityPtr->GetRequestedRegion().GetSize()[1] -1)
 		{
 			index_pos = old_maskIt.GetIndex();
 			if (old_maskIt.Get() == 0) k++;
@@ -1369,12 +1369,12 @@ std::cout<<"remove around the  disparity jump if no risk_edge have been found"<<
 
 	old_maskIt.GoToBegin();
 	
-	while (old_maskIt.GetIndex()[0]<old_disparityPtr->GetLargestPossibleRegion().GetSize()[0]-1)
+	while (old_maskIt.GetIndex()[0]<old_disparityPtr->GetRequestedRegion().GetSize()[0]-1)
 	{
 		int k=0;
 		index2 = old_maskIt.GetIndex();
 		index=index2;
-		while (old_maskIt.GetIndex()[1]<old_disparityPtr->GetLargestPossibleRegion().GetSize()[1] - 1)
+		while (old_maskIt.GetIndex()[1]<old_disparityPtr->GetRequestedRegion().GetSize()[1] - 1)
 		{
 			index_pos = old_maskIt.GetIndex();
 			if (disparity_jump2->GetPixel(index_pos) == 7)
@@ -1416,10 +1416,10 @@ std::cout<<"remove neighborhood if there is an edge near the first disparities"<
 
 	old_maskIt.GoToBegin();
 	
-	while (old_maskIt.GetIndex()[1]<old_disparityPtr->GetLargestPossibleRegion().GetSize()[1] -1)
+	while (old_maskIt.GetIndex()[1]<old_disparityPtr->GetRequestedRegion().GetSize()[1] -1)
 	{
 		index_pos = old_maskIt.GetIndex();
-		while (old_maskIt.Get() == 0 && old_maskIt.GetIndex()[0] < old_disparityPtr->GetLargestPossibleRegion().GetSize()[0] - 1)
+		while (old_maskIt.Get() == 0 && old_maskIt.GetIndex()[0] < old_disparityPtr->GetRequestedRegion().GetSize()[0] - 1)
 		{
 			++old_maskIt;
 		}
@@ -1458,10 +1458,10 @@ std::cout<<"Remove pixels risking adhesion in the vertical direction(perpendicul
 //// Remove pixels risking adhesion in the vertical direction(perpendicular to epipolar)
 
 	old_maskIt.GoToBegin();
-	while (old_maskIt.GetIndex()[0]<old_disparityPtr->GetLargestPossibleRegion().GetSize()[0]-1)
+	while (old_maskIt.GetIndex()[0]<old_disparityPtr->GetRequestedRegion().GetSize()[0]-1)
 	{
 		index2 = old_maskIt.GetIndex();
-		while (old_maskIt.GetIndex()[1]<old_disparityPtr->GetLargestPossibleRegion().GetSize()[1] - 1)
+		while (old_maskIt.GetIndex()[1]<old_disparityPtr->GetRequestedRegion().GetSize()[1] - 1)
 		{
 			index_pos = old_maskIt.GetIndex();
 			if (outputriskedgesPtr->GetPixel(index_pos) != 0)
@@ -1558,10 +1558,10 @@ std::cout<<"remove pixels around disparity jumps with no risk edges"<<std::endl;
 //// remove pixels around disparity jumps with no risk edges
 
 	old_maskIt.GoToBegin();
-	while (old_maskIt.GetIndex()[0]<old_disparityPtr->GetLargestPossibleRegion().GetSize()[0]-1)
+	while (old_maskIt.GetIndex()[0]<old_disparityPtr->GetRequestedRegion().GetSize()[0]-1)
 	{
 		index2 = old_maskIt.GetIndex();
-		while (old_maskIt.GetIndex()[1]<old_disparityPtr->GetLargestPossibleRegion().GetSize()[1] - 1)
+		while (old_maskIt.GetIndex()[1]<old_disparityPtr->GetRequestedRegion().GetSize()[1] - 1)
 		{
 			index_pos = old_maskIt.GetIndex();
 			if (disparity_jump2->GetPixel(index_pos) == 5 || disparity_jump2->GetPixel(index_pos) == 8)
@@ -1569,7 +1569,7 @@ std::cout<<"remove pixels around disparity jumps with no risk edges"<<std::endl;
 				int l=0;
 				index[0]=index_pos[0];
 				index[1]=index_pos[1]+l;
-				while (l<=patch_side_small && index_pos[1]+l<old_disparityPtr->GetLargestPossibleRegion().GetSize()[1] -1 && disparity_jump2->GetPixel(index) != 6)
+				while (l<=patch_side_small && index_pos[1]+l<old_disparityPtr->GetRequestedRegion().GetSize()[1] -1 && disparity_jump2->GetPixel(index) != 6)
 				{
 					new_disparityIt.SetIndex(index);
 					new_maskIt.SetIndex(index);
@@ -1611,10 +1611,10 @@ std::cout<<"Reject isolated disparities"<<std::endl;
 	int nb_disp =3;
 	old_maskIt.GoToBegin();
 	
-	while (old_maskIt.GetIndex()[1]<old_disparityPtr->GetLargestPossibleRegion().GetSize()[1] -1)
+	while (old_maskIt.GetIndex()[1]<old_disparityPtr->GetRequestedRegion().GetSize()[1] -1)
 	{
 		index_pos = old_maskIt.GetIndex();
-		while (old_maskIt.GetIndex()[0] <old_disparityPtr->GetLargestPossibleRegion().GetSize()[0] - 1)
+		while (old_maskIt.GetIndex()[0] <old_disparityPtr->GetRequestedRegion().GetSize()[0] - 1)
 		{
 			index_pos = old_maskIt.GetIndex();
 			new_maskIt.SetIndex(index_pos);
