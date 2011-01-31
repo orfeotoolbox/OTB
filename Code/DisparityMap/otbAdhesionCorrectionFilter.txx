@@ -547,8 +547,6 @@ std::cout<<"Compute intersections between jumps"<<std::endl;
 					disparity_jumpIt.SetIndex(index);
 					if ((disparity_jumpIt.Get() == 1 || disparity_jumpIt.Get() == 2) && disparity_jumpIt.Get() != disparity_jump->GetPixel(index_pos))
 					{
-						disparity_jump2It.SetIndex(index_pos);
-						disparity_jump2It.Set(-1);
 						for (int i=-2*win; i<=2*win; i++)
 						{
 							int l=-2-win;
@@ -1453,6 +1451,9 @@ std::cout<<"remove neighborhood if there is an edge near the first disparities"<
 
 
 
+
+
+
 std::cout<<"Remove pixels risking adhesion in the vertical direction(perpendicular to epipolar)"<<std::endl;
 //// Remove pixels risking adhesion in the vertical direction(perpendicular to epipolar)
 
@@ -1465,10 +1466,14 @@ std::cout<<"Remove pixels risking adhesion in the vertical direction(perpendicul
 			index_pos = old_maskIt.GetIndex();
 			if (outputriskedgesPtr->GetPixel(index_pos) != 0)
 			{
-				int l=-big_dist;
+				int l=0-big_dist;
 				index[0]=index_pos[0];
 				index[1]=index_pos[1]+l;
-				while(l<=0 && disparity_jump2->GetPixel(index) != 5) l++;
+				while(l<=0 && disparity_jump2->GetPixel(index) != 5)
+				{
+					l++;
+					index[1]=index_pos[1]+l;
+				}
 				index[1]=index_pos[1]+l;
 				disparity_jump2It.SetIndex(index);
 				if(disparity_jump2It.Get() ==5 && l != 0) disparity_jump2It.Set(0);
@@ -1480,11 +1485,14 @@ std::cout<<"Remove pixels risking adhesion in the vertical direction(perpendicul
 					new_disparityIt.Set(0);
 					new_maskIt.Set(0);
 				}
-
 				l=big_dist;
 				index[0]=index_pos[0];
 				index[1]=index_pos[1]+l;
-				while(l>=0 && disparity_jump2->GetPixel(index) != 6) l--;
+				while(l>=0 && disparity_jump2->GetPixel(index) != 6)
+				{
+					l--;
+					index[1]=index_pos[1]+l;
+				}
 				index[1]=index_pos[1]+l;
 				disparity_jump2It.SetIndex(index);
 				if(disparity_jump2It.Get() == 6 && l != 0) disparity_jump2It.Set(0);
@@ -1496,11 +1504,14 @@ std::cout<<"Remove pixels risking adhesion in the vertical direction(perpendicul
 					new_disparityIt.Set(0);
 					new_maskIt.Set(0);
 				}
-				
 				l=-big_dist;
 				index[0]=index_pos[0];
 				index[1]=index_pos[1]+l;
-				while(l<=0 && disparity_jump2->GetPixel(index) != 8) l++;
+				while(l<=0 && disparity_jump2->GetPixel(index) != 8)
+				{
+					l++;
+					index[1]=index_pos[1]+l;
+				}
 				index[1]=index_pos[1]+l;
 				disparity_jump2It.SetIndex(index);
 				if(disparity_jump2It.Get() == 8 && l != 0) disparity_jump2It.Set(0);
@@ -1512,11 +1523,14 @@ std::cout<<"Remove pixels risking adhesion in the vertical direction(perpendicul
 					new_disparityIt.Set(0);
 					new_maskIt.Set(0);
 				}
-				
 				l=big_dist;
 				index[0]=index_pos[0];
 				index[1]=index_pos[1]+l;
-				while(l>=0 && disparity_jump2->GetPixel(index) != 9) l--;
+				while(l>=0 && disparity_jump2->GetPixel(index) != 9)
+				{
+					l--;
+					index[1]=index_pos[1]+l;
+				}
 				index[1]=index_pos[1]+l;
 				disparity_jump2It.SetIndex(index);
 				if(disparity_jump2It.Get() == 9 && l != 0) disparity_jump2It.Set(0);
@@ -1594,7 +1608,7 @@ std::cout<<"remove pixels around disparity jumps with no risk edges"<<std::endl;
 std::cout<<"Reject isolated disparities"<<std::endl;
 /////////////////////////////// Reject isolated disparities
 /////////////////////////////// ie: In the patch is the only meaningful match
-	int nb_disp =0;
+	int nb_disp =3;
 	old_maskIt.GoToBegin();
 	
 	while (old_maskIt.GetIndex()[1]<old_disparityPtr->GetLargestPossibleRegion().GetSize()[1] -1)
