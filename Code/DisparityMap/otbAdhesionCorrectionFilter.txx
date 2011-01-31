@@ -1010,6 +1010,7 @@ std::cout<<"Remove pixels risking adhesion"<<std::endl;
 					}
 					pp2=0;
 					index[0]=index_pos[0]+i;
+					index[1]=index_pos[1];
 					if(disparity_jump->GetPixel(index) == 1)
 					{//2a adherencia
 						for(int j=1; j<=win; j++)
@@ -1114,7 +1115,7 @@ std::cout<<"Remove pixels risking adhesion"<<std::endl;
 					pp++;
 					for (int i=l-1;i>=0;i--)
 					{
-						index[0]=index_pos[0]+l;
+						index[0]=index_pos[0]+i;
 						new_disparityIt.SetIndex(index);
 						new_disparityIt.Set(0);
 						new_maskIt.SetIndex(index);
@@ -1174,7 +1175,7 @@ std::cout<<"Remove pixels risking adhesion"<<std::endl;
 					pp++;
 					for (int i=l-1;i>=0;i--)
 					{
-						index[0]=index_pos[0]+l;
+						index[0]=index_pos[0]+i;
 						new_disparityIt.SetIndex(index);
 						new_disparityIt.Set(0);
 						new_maskIt.SetIndex(index);
@@ -1240,12 +1241,12 @@ std::cout<<"Remove pixels risking adhesion"<<std::endl;
 				}
 			}
 			++old_maskIt;
-			++disparity_jumpIt;
 		}
 		index[0]=0;
 		index[1]=index_pos[1]+1;
 		old_maskIt.SetIndex(index);
 	}
+
 
 
 std::cout<<"remove around the  disparity jump if no risk_edge have been found"<<std::endl;
