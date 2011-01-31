@@ -53,18 +53,18 @@ namespace otb
  * Next step is to set the expression according to the variable
  * names. For example, in the default case with three input images the
  * following expression is valid :
- * "ndvi(b1,b2)*b3"
+ * "ndvi(b1, b2)*b3"
  *
  * As an additional functionality, the filter also granted access to
  * indexes information under special virtual bands named idxX, idxY
- * for the images indexes and idxPhyX,idxPhyY for the physical
+ * for the images indexes and idxPhyX, idxPhyY for the physical
  * indexes.
  * It allows the user to perform, for example a spatial processing
  * aiming to suppress a determined area :
  * "if(sqrt((idxPhyX-105.3)*(idxPhyX-105.3)+
  *          (idxPhyY-207.1)*(idxPhyY-207.1))>100, b1, 0)"
  * This expression replace the physical zone around the point of
- * physical index (105.3;207.1) by a black area
+ * physical index (105.3; 207.1) by a black area
  * This functionality assumes that all the band involved have the same
  * spacing and origin.
  *

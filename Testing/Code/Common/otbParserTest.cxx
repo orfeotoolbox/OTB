@@ -46,10 +46,10 @@ int otbParserTest(int argc, char * argv[])
   std::string Expression_Numerical       = "10.0+3";
   std::string Expression_BuildInFun      = "cos(1.55)";
   std::string Expression_UserDefinedCst  = "ln10";
-  std::string Expression_UserDefinedFun  = "ndvi(100,10)";
+  std::string Expression_UserDefinedFun  = "ndvi(100, 10)";
   std::string Expression_UserDefinedVars = "(var1+var2-var3)*var4/var5";
-  std::string Expression_Mixed           = "(7+10)/2+cos(pi/4)*10-10*ln10+ndvi(100,10)";
-  std::string Expression_StressTest      = "(7+10)/2+cos(pi/4)*10-10*ln10+ndvi(100,10)*40+rint(83.144)*0.6588";
+  std::string Expression_Mixed           = "(7+10)/2+cos(pi/4)*10-10*ln10+ndvi(100, 10)";
+  std::string Expression_StressTest      = "(7+10)/2+cos(pi/4)*10-10*ln10+ndvi(100, 10)*40+rint(83.144)*0.6588";
   
   typedef otb::Parser                                 ParserType;
   

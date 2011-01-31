@@ -164,7 +164,7 @@ MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOu
   return outputPoint;
 }
 
-///\return The geographic point corresponding to (0,0)
+///\return The geographic point corresponding to (0, 0)
 template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType,
     unsigned int NInputDimensions, unsigned int NOutputDimensions>
 typename MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions,

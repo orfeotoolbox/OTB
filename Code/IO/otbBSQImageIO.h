@@ -95,7 +95,7 @@ public:
   virtual void Write(const void* buffer);
 
   // JULIEN: NOT USED, NOT IMPLEMENTED
-  // void SampleImage(void* buffer,int XBegin, int YBegin, int SizeXRead, int SizeYRead, int XSample, int YSample);
+  // void SampleImage(void* buffer, int XBegin, int YBegin, int SizeXRead, int SizeYRead, int XSample, int YSample);
 
 protected:
   /** Constructor.*/

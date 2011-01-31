@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   Insight Segmentation & Registration Toolkit
-  Module:    $RCSfile: otbHermitianEigenAnalysis.h,v $
+  Module:    $RCSfile: otbHermitianEigenAnalysis.h, v $
   Language:  C++
   Date:      $Date: 2005/07/09 22:43:35 $
   Version:   $Revision: 1.5 $
@@ -70,7 +70,7 @@ public:
 
   typedef itk::Vector<float, 2> ComplexVectorType;
   typedef itk::Vector<ComplexVectorType, 3> HermitianVectorType;
-  typedef itk::Vector<HermitianVectorType,3> HermitianMatrixType;
+  typedef itk::Vector<HermitianVectorType, 3> HermitianMatrixType;
  
   
   HermitianEigenAnalysis():

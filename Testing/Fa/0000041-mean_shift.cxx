@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
   char * outfilenameboundary = argv[8];
 
   typedef otb::VectorImage<unsigned char, 2> ImageType;               // image d'entree, image filtree et image segmente
-  typedef otb::Image<int, 2>                 TLabeledOutput;          // image labelisee,image des contours (de l'image labellisee)
+  typedef otb::Image<int, 2>                 TLabeledOutput;          // image labelisee, image des contours (de l'image labellisee)
 
   // lecture de l'image d'entree a partir d'un fichier
   typedef otb::ImageFileReader<ImageType> ReaderType;

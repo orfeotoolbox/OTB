@@ -34,7 +34,7 @@ typedef itk::VariableLengthVector<float>             FloatSampleType;
 typedef itk::Statistics::ListSample<FloatSampleType> FloatSampleListType;
 
 typedef otb::Statistics::ListSampleToBalancedListSampleFilter
-<FloatSampleListType,IntegerSampleListType,DoubleSampleListType> BalancingFilterType;
+<FloatSampleListType, IntegerSampleListType, DoubleSampleListType> BalancingFilterType;
 
 
 int otbListSampleToBalancedListSampleFilterNew(int argc, char * argv[])
@@ -74,9 +74,9 @@ int otbListSampleToBalancedListSampleFilter(int argc, char * argv[])
   ofs<<"Nb samples : "<<nbSamples<<std::endl;
 
   // InputSampleList and LabelSampleList
-  for(unsigned int sampleId = 0; sampleId<nbSamples;++sampleId)
+  for(unsigned int sampleId = 0; sampleId<nbSamples; ++sampleId)
     {
-    for(unsigned int i = 0; i<sampleSize;++i)
+    for(unsigned int i = 0; i<sampleSize; ++i)
       {
       sample[i]=atof(argv[index]);
       ++index;

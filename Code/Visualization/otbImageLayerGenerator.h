@@ -126,8 +126,8 @@ public:
   itkGetMacro(ScreenRatio, double);
 
   /** Get the generated default rendering function */
-//   itkSetObjectMacro(RenderingFunction,RenderingFunctionType);
-//   itkGetObjectMacro(RenderingFunction,RenderingFunctionType);
+//   itkSetObjectMacro(RenderingFunction, RenderingFunctionType);
+//   itkGetObjectMacro(RenderingFunction, RenderingFunctionType);
   virtual void SetRenderingFunction(RenderingFunctionType* func)
   {
     if (this->m_Layer.IsNull())
@@ -151,8 +151,8 @@ public:
   }
 
   /** Set/Get the blending function */
-//   itkSetObjectMacro(BlendingFunction,BlendingFunctionType);
-//   itkGetObjectMacro(BlendingFunction,BlendingFunctionType);
+//   itkSetObjectMacro(BlendingFunction, BlendingFunctionType);
+//   itkGetObjectMacro(BlendingFunction, BlendingFunctionType);
   virtual void SetBlendingFunction(BlendingFunctionType* func)
   {
     if (this->m_Layer.IsNull())

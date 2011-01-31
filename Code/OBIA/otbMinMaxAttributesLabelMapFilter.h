@@ -30,12 +30,12 @@ namespace otb {
  */
 template<class TInputImage>
 class ITK_EXPORT MinMaxAttributesLabelMapFilter :
-    public itk::LabelMapFilter<TInputImage,TInputImage>
+    public itk::LabelMapFilter<TInputImage, TInputImage>
 {
 public:
   /** Standard class typedefs. */
   typedef MinMaxAttributesLabelMapFilter               Self;
-  typedef itk::LabelMapFilter<TInputImage,TInputImage> Superclass;
+  typedef itk::LabelMapFilter<TInputImage, TInputImage> Superclass;
   typedef itk::SmartPointer<Self>                      Pointer;
   typedef itk::SmartPointer<const Self>                ConstPointer;
 

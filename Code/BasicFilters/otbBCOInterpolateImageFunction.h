@@ -49,12 +49,12 @@ namespace otb
  */
 template< class TInputImage, class TCoordRep = double >
 class ITK_EXPORT BCOInterpolateImageFunctionBase :
-  public itk::InterpolateImageFunction<TInputImage,TCoordRep>
+  public itk::InterpolateImageFunction<TInputImage, TCoordRep>
 {
 public:
   /** Standard class typedefs. */
   typedef BCOInterpolateImageFunctionBase                      Self;
-  typedef itk::InterpolateImageFunction<TInputImage,TCoordRep> Superclass;
+  typedef itk::InterpolateImageFunction<TInputImage, TCoordRep> Superclass;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(BCOInterpolateImageFunctionBase, InterpolateImageFunction);
@@ -131,13 +131,13 @@ class ITK_EXPORT BCOInterpolateImageFunction :
 public:
   /** Standard class typedefs. */
   typedef BCOInterpolateImageFunction                              Self;
-  typedef BCOInterpolateImageFunctionBase<TInputImage,TCoordRep>   Superclass;
+  typedef BCOInterpolateImageFunctionBase<TInputImage, TCoordRep>   Superclass;
   typedef itk::SmartPointer<Self>                                  Pointer;
   typedef itk::SmartPointer<const Self>                            ConstPointer;
 
   itkTypeMacro(BCOInterpolateImageFunction, BCOInterpolateImageFunctionBase);
   itkNewMacro(Self);
-  itkStaticConstMacro(ImageDimension, unsigned int,Superclass::ImageDimension);
+  itkStaticConstMacro(ImageDimension, unsigned int, Superclass::ImageDimension);
 
   typedef typename Superclass::OutputType            OutputType;
   typedef typename Superclass::InputImageType        InputImageType;
@@ -163,20 +163,20 @@ private:
 
 
 template < typename TPixel, unsigned int VImageDimension, class TCoordRep >
-class ITK_EXPORT BCOInterpolateImageFunction< otb::VectorImage<TPixel,VImageDimension> , TCoordRep > :
-    public otb::BCOInterpolateImageFunctionBase< otb::VectorImage<TPixel,VImageDimension> , TCoordRep >
+class ITK_EXPORT BCOInterpolateImageFunction< otb::VectorImage<TPixel, VImageDimension> , TCoordRep > :
+    public otb::BCOInterpolateImageFunctionBase< otb::VectorImage<TPixel, VImageDimension> , TCoordRep >
 {
 public:
   /** Standard class typedefs.*/
   typedef BCOInterpolateImageFunction                              Self;
   typedef BCOInterpolateImageFunctionBase
-      < otb::VectorImage<TPixel,VImageDimension>, TCoordRep >      Superclass;
+      < otb::VectorImage<TPixel, VImageDimension>, TCoordRep >      Superclass;
   typedef itk::SmartPointer<Self>                                  Pointer;
   typedef itk::SmartPointer<const Self>                            ConstPointer;
 
   itkTypeMacro(BCOInterpolateImageFunction, BCOInterpolateImageFunctionBase);
   itkNewMacro(Self);
-  itkStaticConstMacro(ImageDimension, unsigned int,Superclass::ImageDimension);
+  itkStaticConstMacro(ImageDimension, unsigned int, Superclass::ImageDimension);
 
   typedef typename Superclass::OutputType            OutputType;
   typedef typename Superclass::InputImageType        InputImageType;

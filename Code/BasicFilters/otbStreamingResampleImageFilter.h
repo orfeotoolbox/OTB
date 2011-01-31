@@ -67,7 +67,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(StreamingResampleImageFilter,itk::ImageToImageFilter);
+  itkTypeMacro(StreamingResampleImageFilter, itk::ImageToImageFilter);
 
   /** Typedef parameters*/
   typedef TInputImage                InputImageType;
@@ -110,7 +110,7 @@ public:
     m_DeformationFilter->SetTransform(transform);
     this->Modified();
   }
-  otbGetObjectMemberConstMacro(DeformationFilter,Transform,const TransformType*);
+  otbGetObjectMemberConstMacro(DeformationFilter, Transform, const TransformType*);
 
   /** The Deformation field spacing & size */
   void SetDeformationFieldSpacing(const SpacingType & spacing)
@@ -131,19 +131,19 @@ public:
     m_WarpFilter->SetOutputOrigin(origin);
     this->Modified();
   }
-  otbGetObjectMemberConstReferenceMacro(WarpFilter,OutputOrigin,OriginType);
+  otbGetObjectMemberConstReferenceMacro(WarpFilter, OutputOrigin, OriginType);
 
   // Output Start index
-  otbSetObjectMemberMacro(WarpFilter,OutputStartIndex,IndexType);
-  otbGetObjectMemberConstReferenceMacro(WarpFilter,OutputStartIndex,IndexType);
+  otbSetObjectMemberMacro(WarpFilter, OutputStartIndex, IndexType);
+  otbGetObjectMemberConstReferenceMacro(WarpFilter, OutputStartIndex, IndexType);
 
   // Output Size
-  otbSetObjectMemberMacro(WarpFilter,OutputSize,SizeType);
-  otbGetObjectMemberConstReferenceMacro(WarpFilter,OutputSize,SizeType);
+  otbSetObjectMemberMacro(WarpFilter, OutputSize, SizeType);
+  otbGetObjectMemberConstReferenceMacro(WarpFilter, OutputSize, SizeType);
 
   // Output Spacing
-  otbSetObjectMemberMacro(WarpFilter,OutputSpacing,SpacingType);
-  otbGetObjectMemberConstReferenceMacro(WarpFilter,OutputSpacing,SpacingType);
+  otbSetObjectMemberMacro(WarpFilter, OutputSpacing, SpacingType);
+  otbGetObjectMemberConstReferenceMacro(WarpFilter, OutputSpacing, SpacingType);
   
   /** Methods to Set/Get the interpolator */
   void SetInterpolator(InterpolatorType * interpolator)

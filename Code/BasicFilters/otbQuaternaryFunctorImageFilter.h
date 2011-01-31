@@ -34,7 +34,7 @@ namespace otb
  * and the type of the output image.  It is also parameterized by the
  * operation to be applied, using a Functor style.
  *
- * \sa TernaryFunctorImageFilter,BinaryFunctorImageFilter UnaryFunctorImageFilter
+ * \sa TernaryFunctorImageFilter, BinaryFunctorImageFilter UnaryFunctorImageFilter
  *
  * \ingroup IntensityImageFilters Multithreaded
  */

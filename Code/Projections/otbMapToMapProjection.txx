@@ -72,7 +72,7 @@ MapToMapProjection<TInputMapProjection,
     InputPointType geopoint;
     OutputPointType point2;
 
-    //(lat,lon) projection
+    //(lat, lon) projection
     geopoint=m_InputMapProjection->Inverse(point1);
     //map projection
     point2=m_OutputMapProjection->Forward(geopoint);
@@ -101,7 +101,7 @@ MapToMapProjection<TInputMapProjection,
     OutputPointType geopoint;
     InputPointType point1;
 
-    //(lat,lon) projection
+    //(lat, lon) projection
     geopoint=m_OutputMapProjection->Inverse(point2);
     //map projection
     point1=m_InputMapProjection->Forward(geopoint);
@@ -130,7 +130,7 @@ TransformPoint(const InputPointType& point) const
   OutputPointOfInputMapProjectionType geopoint;
   OutputPointType                     point2;
 
-  //(lat,lon) projection
+  //(lat, lon) projection
   geopoint = m_InputMapProjection->TransformPoint(point);
 
   //map projection

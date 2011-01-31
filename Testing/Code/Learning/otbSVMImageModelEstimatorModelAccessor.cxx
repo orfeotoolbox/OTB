@@ -93,9 +93,9 @@ int otbSVMImageModelEstimatorModelAccessor(int argc, char* argv[])
     f << std::endl;
     f << "  SV[" << i << "]:";
     const svm_node *p = SVs[i];
-    /*        for(unsigned int j=0;j<nbSupportVector;j++)
+    /*        for(unsigned int j=0; j<nbSupportVector; j++)
     {
-              f << "       SV["<<i<<"]["<<j<<"]:";*/
+              f << "       SV["<<i<<"]["<<j<<"]:"; */
     if (svmEstimator->GetKernelType() == PRECOMPUTED)
       {
       f << " " << p->value;
@@ -150,7 +150,7 @@ int otbSVMImageModelEstimatorModelAccessor(int argc, char* argv[])
 //   _evaluateHyperplaneDistance = ptrModel->EvaluateHyperplaneDistance();
 
 //   f << " - EvaluateHyperplaneDistance() VariableLengthVector() nb value(s): "<<_evaluateHyperplaneDistance.Size()<<std::endl;
-//   for (unsigned int i=0;i<_evaluateHyperplaneDistance.Size();i++)
+//   for (unsigned int i=0; i<_evaluateHyperplaneDistance.Size(); i++)
 //   {
 //     f << "     "<<_evaluateHyperplaneDistance[i]<<std::endl;
 //   }

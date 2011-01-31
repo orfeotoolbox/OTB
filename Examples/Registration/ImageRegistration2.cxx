@@ -391,7 +391,7 @@ int main(int argc, char *argv[])
   // unstable. Small values, on the other hand, may result in the optimizer
   // needing too many iterations in order to walk to the extrema of the cost
   // function. The easy way of fine tuning this parameter is to start with
-  // small values, probably in the range of $\{5.0,10.0\}$. Once the other
+  // small values, probably in the range of $\{5.0, 10.0\}$. Once the other
   // registration parameters have been tuned for producing convergence, you
   // may want to revisit the learning rate and start increasing its value until
   // you observe that the optimization becomes unstable.  The ideal value for

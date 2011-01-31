@@ -25,12 +25,12 @@ namespace otb {
 namespace Statistics {
 
 template < class TInputSampleList, class TOutputSampleList >
-ShiftScaleSampleListFilter<TInputSampleList,TOutputSampleList>
+ShiftScaleSampleListFilter<TInputSampleList, TOutputSampleList>
 ::ShiftScaleSampleListFilter(){}
 
 template < class TInputSampleList, class TOutputSampleList >
 void
-ShiftScaleSampleListFilter<TInputSampleList,TOutputSampleList>
+ShiftScaleSampleListFilter<TInputSampleList, TOutputSampleList>
 ::GenerateData()
 {
   // Retrieve input and output pointers
@@ -58,7 +58,7 @@ ShiftScaleSampleListFilter<TInputSampleList,TOutputSampleList>
   
   // Compute the 1/(sigma) vector
   InputMeasurementVectorType invertedScales = m_Scales;
-  for(unsigned int idx = 0;idx < invertedScales.Size();++idx)
+  for(unsigned int idx = 0; idx < invertedScales.Size(); ++idx)
     {
     if(m_Scales[idx]-1e-10 < 0.)
       invertedScales[idx] = 0.;
@@ -72,7 +72,7 @@ ShiftScaleSampleListFilter<TInputSampleList,TOutputSampleList>
   typename InputSampleListType::ConstIterator inputIt = inputSampleListPtr->Begin();
 
   // Set-up progress reporting
-  itk::ProgressReporter progress(this,0,inputSampleListPtr->Size());
+  itk::ProgressReporter progress(this, 0, inputSampleListPtr->Size());
 
   // Iterate on the InputSampleList
   while(inputIt != inputSampleListPtr->End())
@@ -85,7 +85,7 @@ ShiftScaleSampleListFilter<TInputSampleList,TOutputSampleList>
     currentOutputMeasurement.SetSize(currentInputMeasurement.GetSize());
   
     // Center and reduce each component
-    for(unsigned int idx = 0;idx < invertedScales.Size();++idx)
+    for(unsigned int idx = 0; idx < invertedScales.Size(); ++idx)
       {
       currentOutputMeasurement[idx] = static_cast<OutputValueType>(
         (currentInputMeasurement[idx]-m_Shifts[idx])*invertedScales[idx]);
@@ -103,11 +103,11 @@ ShiftScaleSampleListFilter<TInputSampleList,TOutputSampleList>
 
 template < class TInputSampleList, class TOutputSampleList >
 void
-ShiftScaleSampleListFilter<TInputSampleList,TOutputSampleList>
+ShiftScaleSampleListFilter<TInputSampleList, TOutputSampleList>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
 } // End namespace Statistics

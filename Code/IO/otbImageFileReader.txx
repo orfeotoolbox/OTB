@@ -178,7 +178,7 @@ ImageFileReader<TOutputImage>
     std::cout<< "size of Buffer to GDALImageIO::read = " << nbBytes << " = " \
         << "ComponentSize ("<< this->m_ImageIO->GetComponentSize() << ") x " \
         << "Nb of Component (" << this->m_ImageIO->GetNumberOfComponents() << ") x " \
-        << "Nb of Pixel to read (" << region.GetNumberOfPixels() << ")" << std::endl;*/
+        << "Nb of Pixel to read (" << region.GetNumberOfPixels() << ")" << std::endl; */
     this->m_ImageIO->Read(loadBuffer);
 
     this->DoConvertBuffer(loadBuffer, region.GetNumberOfPixels());
@@ -563,7 +563,7 @@ ImageFileReader<TOutputImage>
   listFileSearch.push_back("IMAGERY.TIF");
   listFileSearch.push_back("imagery.tif"); //For format SPOT5TIF
 // Not recognized as a supported file format by GDAL.
-//        listFileSearch.push_back("IMAGERY.BIL");listFileSearch.push_back("imagery.bil");//For format SPOT5BIL
+//        listFileSearch.push_back("IMAGERY.BIL"); listFileSearch.push_back("imagery.bil"); //For format SPOT5BIL
   listFileSearch.push_back("IMAG_01.DAT");
   listFileSearch.push_back("imag_01.dat"); //For format SPOT4
 

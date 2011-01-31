@@ -23,7 +23,7 @@
 
 int otbAttributesMapLabelObjectWithClassLabelNew(int argc, char* argv[])
 {
-  typedef otb::AttributesMapLabelObjectWithClassLabel<unsigned short,2,double,unsigned short> LabelObjectType;
+  typedef otb::AttributesMapLabelObjectWithClassLabel<unsigned short, 2, double, unsigned short> LabelObjectType;
 
   // instantiation
   LabelObjectType::Pointer object = LabelObjectType::New();

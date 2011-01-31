@@ -92,7 +92,7 @@ int otbVectorDataToLabelMapFilter(int argc, char * argv[])
   origin[0] = p->GetBoundingRegion().GetImageRegion().GetIndex(0);
   origin[1] = p->GetBoundingRegion().GetImageRegion().GetIndex(1);
 
-  //Set size,origin and spacing of the output labelmap
+  //Set size, origin and spacing of the output labelmap
   myFilter->SetSize(p->GetBoundingRegion().GetImageRegion().GetSize());
   myFilter->SetOrigin(origin);
   myFilter->SetSpacing(reader->GetOutput()->GetSpacing());

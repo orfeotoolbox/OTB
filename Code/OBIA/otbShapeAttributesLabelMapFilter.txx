@@ -396,7 +396,7 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
   vnl_diag_matrix<double> pm = eigen.D;
   for (unsigned int i = 0; i < LabelObjectType::ImageDimension; i++)
     {
-//    principalMoments[i] = 4 * vcl_sqrt( pm(i,i) );
+//    principalMoments[i] = 4 * vcl_sqrt( pm(i, i) );
     principalMoments[i] = pm(i, i);
     }
   itk::Matrix<double, LabelObjectType::ImageDimension, LabelObjectType::ImageDimension>

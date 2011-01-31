@@ -57,7 +57,7 @@ int otbCoherencyToMuellerImageFilter(int argc, char * argv[])
   typedef otb::SinclairImageFilter<InputImageType, InputImageType,
                       InputImageType, InputImageType,
                       ImageType, FunctionType >  SinclairToCoherencyFilterType;
-  typedef otb::CoherencyToMuellerImageFilter<ImageType,RealImageType> FilterType;
+  typedef otb::CoherencyToMuellerImageFilter<ImageType, RealImageType> FilterType;
 
 
   typedef otb::ImageFileReader<InputImageType>  ReaderType;

@@ -189,7 +189,7 @@ public:
   /** Get the list sample used by the rendering function */
   virtual ListSamplePointerType GetListSample()
   {
-//     this->UpdateListSample();//FIXME condition to IsModified
+//     this->UpdateListSample(); //FIXME condition to IsModified
     return m_ListSample;
   }
 

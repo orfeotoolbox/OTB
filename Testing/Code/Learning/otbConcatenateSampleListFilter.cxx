@@ -68,9 +68,9 @@ int otbConcatenateSampleListFilter(int argc, char * argv[])
 
  ofs<<"Input samples 1: "<<std::endl;
 
- for(unsigned int sampleId = 0; sampleId<nbSamples1;++sampleId)
+ for(unsigned int sampleId = 0; sampleId<nbSamples1; ++sampleId)
  {
-  for(unsigned int i = 0; i<sampleSize;++i)
+  for(unsigned int i = 0; i<sampleSize; ++i)
    {
     sample[i]=atof(argv[index]);
     ++index;
@@ -81,9 +81,9 @@ int otbConcatenateSampleListFilter(int argc, char * argv[])
 
  ofs<<"Input samples 2: "<<std::endl;
 
- for(unsigned int sampleId = 0; sampleId<nbSamples2;++sampleId)
+ for(unsigned int sampleId = 0; sampleId<nbSamples2; ++sampleId)
  {
-  for(unsigned int i = 0; i<sampleSize;++i)
+  for(unsigned int i = 0; i<sampleSize; ++i)
   {
    sample[i]=atof(argv[index]);
    ++index;

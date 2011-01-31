@@ -272,14 +272,14 @@ VectorizationPathListFilter<TInputModulus, TInputDirection, TOutputPath>
   offset.reserve(8);
   if (direction > 0)
     {
-    //find the direction in terms of 0,1,2,3
+    //find the direction in terms of 0, 1, 2, 3
     neighborhoodNumber = (int) (direction / (CONST_PI_4) -1);
     }
   else
     {
     neighborhoodNumber = (int) ((direction + CONST_PI) / (CONST_PI_4) -1);
     neighborhoodNumber = (neighborhoodNumber + 4);
-    //if the direction was <0 need to convert to 4,5,6,7
+    //if the direction was <0 need to convert to 4, 5, 6, 7
     }
   if (flagReverse)
     {
@@ -534,14 +534,14 @@ VectorizationPathListFilter<TInputModulus, TInputDirection, TOutputPath>
   offset.reserve(3);
   if (direction > 0)
     {
-    //find the direction in terms of 0,1,2,3
+    //find the direction in terms of 0, 1, 2, 3
     neighborhoodNumber = (int) (direction / (CONST_PI_4) -1);
     }
   else
     {
     neighborhoodNumber = (int) ((direction + CONST_PI) / (CONST_PI_4) -1);
     neighborhoodNumber = (neighborhoodNumber + 4);
-    //if the direction was <0 need to convert to 4,5,6,7
+    //if the direction was <0 need to convert to 4, 5, 6, 7
     }
   if (flagReverse)
     {

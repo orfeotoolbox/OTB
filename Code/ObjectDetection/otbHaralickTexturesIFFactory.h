@@ -55,7 +55,7 @@ public:
   itkNewMacro(Self);
 
   // RTTI typeinfo
-  itkTypeMacro(haralickTexturesIFFactory,itk::LightObject);
+  itkTypeMacro(haralickTexturesIFFactory, itk::LightObject);
 
   // Input and output typedef
   typedef TImageType              InputImageType;

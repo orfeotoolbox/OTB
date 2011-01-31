@@ -181,7 +181,7 @@ LocalHoughFilter<TInputImage>
       filterImage = ROIfilter->GetOutput();
 
       // Create a new image from the extracted region. The starting
-      // index is the corner of the newly generated image (0,0)
+      // index is the corner of the newly generated image (0, 0)
 
       typename InputImageType::RegionType region;
 

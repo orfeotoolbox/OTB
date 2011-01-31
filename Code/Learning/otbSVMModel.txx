@@ -366,7 +366,7 @@ SVMModel<TValue, TLabel>::EvaluateLabel(const MeasurementType& measure) const
       {
       otbMsgDevMacro(
         <<
-        "Prob. model for test data: target value = predicted value + z,\nz: Laplace distribution e^(-|z|/sigma)/(2sigma),sigma="
+        "Prob. model for test data: target value = predicted value + z,\nz: Laplace distribution e^(-|z|/sigma)/(2sigma), sigma="
         << svm_get_svr_probability(m_Model));
       }
     else

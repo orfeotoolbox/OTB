@@ -43,7 +43,7 @@ int otbStreamingResampleImageFilterCompareWithITK(int argc, char * argv[])
 
   typedef otb::Image<InputPixelType, Dimension>  InputImageType;
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
-  //      typedef otb::VectorImage<OutputPixelType,Dimension> InputVectorImageType;
+  //      typedef otb::VectorImage<OutputPixelType, Dimension> InputVectorImageType;
   typedef otb::ImageFileReader<InputImageType>                                                    ReaderType;
   typedef otb::ImageFileWriter<OutputImageType>                                                   WriterType;
   typedef otb::StreamingImageFileWriter<OutputImageType>                                          StreamingWriterType;

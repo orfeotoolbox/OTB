@@ -356,7 +356,7 @@ StreamingImageFileWriter<TInputImage>
                                                    itk::ImageIOFactory::WriteMode));
 
     /*    m_ImageIO = ImageIOFactory::CreateImageIO( m_FileName.c_str(),
-                                                   itk::ImageIOFactory::WriteMode );*/
+                                                   itk::ImageIOFactory::WriteMode ); */
     m_FactorySpecifiedImageIO = true;
     }
   else

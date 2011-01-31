@@ -39,18 +39,18 @@ namespace Statistics {
  */
 template < class TInputSampleList, class TOutputSampleList = TInputSampleList >
 class ITK_EXPORT GaussianAdditiveNoiseSampleListFilter :
-    public otb::Statistics::ListSampleToListSampleFilter<TInputSampleList,TOutputSampleList>
+    public otb::Statistics::ListSampleToListSampleFilter<TInputSampleList, TOutputSampleList>
 {
 public:
   /** Standard class typedefs */
   typedef GaussianAdditiveNoiseSampleListFilter      Self;
   typedef otb::Statistics::ListSampleToListSampleFilter
-  <TInputSampleList,TOutputSampleList>               Superclass;
+  <TInputSampleList, TOutputSampleList>               Superclass;
   typedef itk::SmartPointer< Self >                  Pointer;
   typedef itk::SmartPointer<const Self>              ConstPointer;
   
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GaussianAdditiveNoiseSampleListFilter,otb::Statistics::ListSampleToListSampleFilter);
+  itkTypeMacro(GaussianAdditiveNoiseSampleListFilter, otb::Statistics::ListSampleToListSampleFilter);
   
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -73,16 +73,16 @@ public:
   typedef typename Superclass::OutputSampleListObjectType      OutputSampleListObjectType;
 
   /** Set/Get the Shifts for this sample list */
-  itkSetMacro(Mean,double);
-  itkGetMacro(Mean,double);
+  itkSetMacro(Mean, double);
+  itkGetMacro(Mean, double);
   
   /** Set/Get the Scales for this sample list */
-  itkSetMacro(Variance,double);
-  itkGetMacro(Variance,double);
+  itkSetMacro(Variance, double);
+  itkGetMacro(Variance, double);
 
   /** Set how many times the ListSample must be noised */
-  itkSetMacro(NumberOfIteration,unsigned int);
-  itkGetMacro(NumberOfIteration,unsigned int);
+  itkSetMacro(NumberOfIteration, unsigned int);
+  itkGetMacro(NumberOfIteration, unsigned int);
   
 protected:
   /** This method causes the filter to generate its output. */

@@ -31,7 +31,7 @@ typedef itk::Statistics::ListSample<DoubleSampleType> DoubleSampleListType;
 
 typedef itk::VariableLengthVector<float> FloatSampleType;
 typedef itk::Statistics::ListSample<FloatSampleType> FloatSampleListType;
-typedef otb::Statistics::ShiftScaleSampleListFilter<FloatSampleListType,DoubleSampleListType> ShiftScaleFilterType;
+typedef otb::Statistics::ShiftScaleSampleListFilter<FloatSampleListType, DoubleSampleListType> ShiftScaleFilterType;
 
 
 int otbShiftScaleSampleListFilterNew(int argc, char * argv[])
@@ -63,7 +63,7 @@ int otbShiftScaleSampleListFilter(int argc, char * argv[])
  ofs<<"Sample size: "<<sampleSize<<std::endl;
  ofs<<"Nb samples : "<<nbSamples<<std::endl;
 
- for(unsigned int i = 0; i<sampleSize;++i)
+ for(unsigned int i = 0; i<sampleSize; ++i)
  {
   sample[i]=atof(argv[index]);
   ++index;
@@ -73,7 +73,7 @@ int otbShiftScaleSampleListFilter(int argc, char * argv[])
 
  filter->SetShifts(sample);
 
- for(unsigned int i = 0; i<sampleSize;++i)
+ for(unsigned int i = 0; i<sampleSize; ++i)
  {
   sample[i]=atof(argv[index]);
   ++index;
@@ -85,9 +85,9 @@ int otbShiftScaleSampleListFilter(int argc, char * argv[])
 
  ofs<<"Input samples: "<<std::endl;
 
- for(unsigned int sampleId = 0; sampleId<nbSamples;++sampleId)
+ for(unsigned int sampleId = 0; sampleId<nbSamples; ++sampleId)
  {
-  for(unsigned int i = 0; i<sampleSize;++i)
+  for(unsigned int i = 0; i<sampleSize; ++i)
    {
     sample[i]=atof(argv[index]);
     ++index;

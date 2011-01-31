@@ -583,7 +583,7 @@ AtmosphericRadiativeTerms
   for (unsigned int i = 0; i < m_Values.size(); ++i)
     {
     os << "Channel " << i << " : " << std::endl;
-    //ValueType::(os,indent);
+    //ValueType::(os, indent);
     os << indent << "Intrinsic Atmospheric Reflectance     : "
        << m_Values[i]->GetIntrinsicAtmosphericReflectance() << std::endl;
     os << indent << "Shperical Albedo of the Atmosphere    : "

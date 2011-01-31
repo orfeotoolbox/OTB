@@ -41,7 +41,7 @@ PipelineMemoryPrintCalculator
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 
   // Display parameters
   os<<indent<<"Data to write:                      "<<m_DataToWrite<<std::endl;
@@ -132,15 +132,15 @@ PipelineMemoryPrintCalculator
 {
 
 #define OTB_IMAGE_SIZE_BLOCK(type)                                      \
-  if(dynamic_cast<itk::Image<type,2> *>(data) != NULL)                  \
+  if(dynamic_cast<itk::Image<type, 2> *>(data) != NULL)                  \
     {                                                                   \
-    itk::Image<type,2> * image = dynamic_cast<itk::Image<type,2> *>(data); \
+    itk::Image<type, 2> * image = dynamic_cast<itk::Image<type, 2> *>(data); \
     return image->GetRequestedRegion().GetNumberOfPixels()              \
       * image->GetNumberOfComponentsPerPixel() * sizeof(type); \
     }                                                                   \
-  if(dynamic_cast<itk::VectorImage<type,2> * >(data) != NULL)           \
+  if(dynamic_cast<itk::VectorImage<type, 2> * >(data) != NULL)           \
     {                                                                   \
-    itk::VectorImage<type,2> * image = dynamic_cast<itk::VectorImage<type,2> *>(data); \
+    itk::VectorImage<type, 2> * image = dynamic_cast<itk::VectorImage<type, 2> *>(data); \
     return image->GetRequestedRegion().GetNumberOfPixels()              \
       * image->GetNumberOfComponentsPerPixel() * sizeof(type); \
     }                                                                   \
@@ -158,8 +158,8 @@ PipelineMemoryPrintCalculator
   OTB_IMAGE_SIZE_BLOCK(double)
   OTB_IMAGE_SIZE_BLOCK(std::complex<float>)
   OTB_IMAGE_SIZE_BLOCK(std::complex<double>)
-  typedef itk::FixedArray<float,2> FloatFixedArray2Type;
-  typedef itk::FixedArray<float,2> DoubleFixedArray2Type;
+  typedef itk::FixedArray<float, 2> FloatFixedArray2Type;
+  typedef itk::FixedArray<float, 2> DoubleFixedArray2Type;
   OTB_IMAGE_SIZE_BLOCK(FloatFixedArray2Type)
   OTB_IMAGE_SIZE_BLOCK(DoubleFixedArray2Type)
 

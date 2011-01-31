@@ -102,7 +102,7 @@ public:
 
   /** Set the number of samples position to generate inside the inhibition radius window around a positive point */
   itkGetConstMacro(NumberOfPositiveSamplesPerPoint, unsigned int);
-  itkSetMacro(NumberOfPositiveSamplesPerPoint,unsigned int);
+  itkSetMacro(NumberOfPositiveSamplesPerPoint, unsigned int);
 
   /** Set the seed for random number generator */
   void SetSeed(unsigned int seed)
@@ -118,7 +118,7 @@ protected:
   /** Triggers the Computation of the sample list */
   void GenerateData(void);
 
-  std::pair<PointVectorType,PointVectorType> RandomPointsGenerator(DataNodeType * node);
+  std::pair<PointVectorType, PointVectorType> RandomPointsGenerator(DataNodeType * node);
   
 private:
   LabeledSampleLocalizationGenerator(const Self &); //purposely not implemented

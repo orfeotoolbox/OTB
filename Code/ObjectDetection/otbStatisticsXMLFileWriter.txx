@@ -43,7 +43,7 @@ StatisticsXMLFileWriter<TMeasurementVector>
   // Check if the statistic name is already added
   for(unsigned int idx= 0; idx< m_MeasurementVectorContainer.size(); idx++)
     {
-    if(strcmp(m_MeasurementVectorContainer[idx].first.c_str(),name) == 0 )
+    if(strcmp(m_MeasurementVectorContainer[idx].first.c_str(), name) == 0 )
       {
       itkExceptionMacro(<<"Token selected ("
                         <<name<<") is already added to the XML file");
@@ -95,7 +95,7 @@ StatisticsXMLFileWriter<TMeasurementVector>
     root->LinkEndChild( feature );
 
     // Store the value for this statistic
-    for(unsigned int cindex = 0; cindex < currentMeasurementVector.Size();++cindex)
+    for(unsigned int cindex = 0; cindex < currentMeasurementVector.Size(); ++cindex)
       {
       // For each value in Measurementvector
       TiXmlElement * curStatisticVector = new TiXmlElement("StatisticVector");
@@ -115,7 +115,7 @@ StatisticsXMLFileWriter<TMeasurementVector>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  //Superclass::PrintSelf(os,indent);
+  //Superclass::PrintSelf(os, indent);
 }
 
 } // End namespace otb

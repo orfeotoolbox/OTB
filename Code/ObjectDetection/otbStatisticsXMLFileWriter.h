@@ -28,7 +28,7 @@ namespace otb {
  *  \brief Write in a xml file the values stored in a MeasurementVector set as
  *  input
  *
- * The vector can be set as input via AddInput(name,vector) where name
+ * The vector can be set as input via AddInput(name, vector) where name
  * is the name of the statistic, and vector the values.
  * Supported vector types are those implementing the method GetElement(idx)
  * and defining the type ValueType.
@@ -46,7 +46,7 @@ public:
   typedef itk::SmartPointer<const Self>    ConstPointer;
   
   /** Run-time type information (and related methods). */
-  itkTypeMacro(StatisticsXMLFileWriter,itk::Object);
+  itkTypeMacro(StatisticsXMLFileWriter, itk::Object);
   
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -56,7 +56,7 @@ public:
   typedef typename MeasurementVectorType::ValueType      InputValueType;
 
   /** Convenient typedef */
-  typedef std::pair<std::string ,MeasurementVectorType>  InputDataType;
+  typedef std::pair<std::string , MeasurementVectorType>  InputDataType;
   typedef std::vector< InputDataType >                   MeasurementVectorContainer;
   
   /** Method to set/get the input list sample */

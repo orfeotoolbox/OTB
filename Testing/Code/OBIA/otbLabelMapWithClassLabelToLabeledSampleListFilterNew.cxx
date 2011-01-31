@@ -28,13 +28,13 @@
 int otbLabelMapWithClassLabelToLabeledSampleListFilterNew(int argc, char* argv[])
 {
   typedef otb::AttributesMapLabelObjectWithClassLabel
-    <unsigned short,2,double,unsigned short>                     LabelObjectType;
+    <unsigned short, 2, double, unsigned short>                     LabelObjectType;
   typedef itk::LabelMap<LabelObjectType>                         LabelMapType;
-  typedef itk::FixedArray<unsigned short,1>                      LabelVectorType;
+  typedef itk::FixedArray<unsigned short, 1>                      LabelVectorType;
   typedef itk::VariableLengthVector<double>                      VectorType;
   typedef itk::Statistics::ListSample<VectorType>                ListSampleType;
   typedef itk::Statistics::ListSample<LabelVectorType>           TrainingListSampleType;
-  typedef otb::LabelMapWithClassLabelToLabeledSampleListFilter<LabelMapType,ListSampleType,TrainingListSampleType> LabelMapFilterType;
+  typedef otb::LabelMapWithClassLabelToLabeledSampleListFilter<LabelMapType, ListSampleType, TrainingListSampleType> LabelMapFilterType;
 
   // instantiation
   LabelMapFilterType::Pointer filter = LabelMapFilterType::New();

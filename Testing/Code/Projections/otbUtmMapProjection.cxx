@@ -57,7 +57,7 @@ int otbUtmMapProjection(int argc, char* argv[])
   file << "And back in the north hemisphere\n";
   file << lUtmProjection2->GetWkt() << std::endl << std::endl;
 
-  lUtmProjection2->SetHemisphere('S');//Back in the south to make sure the following works
+  lUtmProjection2->SetHemisphere('S'); //Back in the south to make sure the following works
   otb::UtmForwardProjection::InputPointType groundPoint;
   groundPoint[0] = -4.5;
   groundPoint[1] = 48.5;

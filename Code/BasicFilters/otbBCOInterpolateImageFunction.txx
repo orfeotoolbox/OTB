@@ -188,16 +188,16 @@ BCOInterpolateImageFunction<TInputImage, TCoordRep>
 }
 
 template < typename TPixel, unsigned int VImageDimension, class TCoordRep >
-void BCOInterpolateImageFunction< otb::VectorImage<TPixel,VImageDimension> , TCoordRep >
+void BCOInterpolateImageFunction< otb::VectorImage<TPixel, VImageDimension> , TCoordRep >
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }
 
 template < typename TPixel, unsigned int VImageDimension, class TCoordRep >
-typename BCOInterpolateImageFunction< otb::VectorImage<TPixel,VImageDimension> , TCoordRep >
+typename BCOInterpolateImageFunction< otb::VectorImage<TPixel, VImageDimension> , TCoordRep >
 ::OutputType
-BCOInterpolateImageFunction< otb::VectorImage<TPixel,VImageDimension> , TCoordRep >
+BCOInterpolateImageFunction< otb::VectorImage<TPixel, VImageDimension> , TCoordRep >
 ::EvaluateAtContinuousIndex( const ContinuousIndexType & index ) const
 {
   typedef typename itk::NumericTraits<InputPixelType>::ScalarRealType ScalarRealType;

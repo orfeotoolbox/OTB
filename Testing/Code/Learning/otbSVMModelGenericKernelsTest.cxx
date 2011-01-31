@@ -189,7 +189,7 @@ int otbSVMModelGenericKernelsTest(int argc, char* argv[])
   model->param.kernel_generic = SAMFunctor.Clone();
   svmModel->SetModel(model);
   svmModel->SaveModel(argv[3]);
-  model->param.kernel_generic = kModFunctor.Clone();;
+  model->param.kernel_generic = kModFunctor.Clone(); ;
   svmModel->SetModel(model);
   svmModel->SaveModel(argv[4]);
   model->param.kernel_generic = radialSAMFunctor.Clone();

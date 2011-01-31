@@ -631,7 +631,7 @@ int main(int argc, char *argv[])
   //  \ref{fig:FixedMovingImageRegistration5b}. In order to accelerate
   //  convergence it is convenient to use a larger step length as shown here.
   //
-  //  \code{optimizer->SetMaximumStepLength( 1.0 );}
+  //  \code{optimizer->SetMaximumStepLength( 1.0 ); }
   //
   //  The registration now takes $34$ iterations and produces the following
   //  results:

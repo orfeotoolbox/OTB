@@ -36,9 +36,9 @@ namespace otb
  *  \f$n_r\f$ is the total number of runs
  *   and \f$n_p\f$ is the total number of pixels ):
  *
- * "Short Run Emphasis" \f$ = SRE = \frac{1}{n_r} \sum_{i,j}\frac{p(i, j)}{j^2} \f$
+ * "Short Run Emphasis" \f$ = SRE = \frac{1}{n_r} \sum_{i, j}\frac{p(i, j)}{j^2} \f$
  *
- * "Long Run Emphasis" \f$ = LRE =  \frac{1}{n_r} \sum_{i,j}p(i, j) * j^2 \f$
+ * "Long Run Emphasis" \f$ = LRE =  \frac{1}{n_r} \sum_{i, j}p(i, j) * j^2 \f$
  *
  * "Grey-Level Nonuniformity" \f$ = GLN = \frac{1}{n_r} \sum_{i} \left( \sum_{j}{p(i, j)} \right)^2 \f$
  *
@@ -46,17 +46,17 @@ namespace otb
  *
  * "Run Percentage" \f$ = RP = \frac{n_r}{n_p} \f$
  *
- * "Low Grey-Level Run Emphasis" \f$ = LGRE = \frac{1}{n_r} \sum_{i,j}\frac{p(i, j)}{i^2} \f$
+ * "Low Grey-Level Run Emphasis" \f$ = LGRE = \frac{1}{n_r} \sum_{i, j}\frac{p(i, j)}{i^2} \f$
  *
- * "High Grey-Level Run Emphasis" \f$ = HGRE = \frac{1}{n_r} \sum_{i,j}p(i, j) * i^2  \f$
+ * "High Grey-Level Run Emphasis" \f$ = HGRE = \frac{1}{n_r} \sum_{i, j}p(i, j) * i^2  \f$
  *
- * "Short Run Low Grey-Level Emphasis" \f$ = SRLGE = \frac{1}{n_r} \sum_{i,j}\frac{p(i, j)}{i^2 j^2} \f$
+ * "Short Run Low Grey-Level Emphasis" \f$ = SRLGE = \frac{1}{n_r} \sum_{i, j}\frac{p(i, j)}{i^2 j^2} \f$
  *
- * "Short Run High Grey-Level Emphasis" \f$ = SRHGE = \frac{1}{n_r} \sum_{i,j}\frac{p(i, j) * i^2}{j^2} \f$
+ * "Short Run High Grey-Level Emphasis" \f$ = SRHGE = \frac{1}{n_r} \sum_{i, j}\frac{p(i, j) * i^2}{j^2} \f$
  *
- * "Long Run Low Grey-Level Emphasis" \f$ = LRLGE = \frac{1}{n_r} \sum_{i,j}\frac{p(i, j) * j^2}{i^2} \f$
+ * "Long Run Low Grey-Level Emphasis" \f$ = LRLGE = \frac{1}{n_r} \sum_{i, j}\frac{p(i, j) * j^2}{i^2} \f$
  *
- * "Long Run High Grey-Level Emphasis" \f$ = LRHGE = \frac{1}{n_r} \sum_{i,j} p(i, j) i^2 j^2 \f$
+ * "Long Run High Grey-Level Emphasis" \f$ = LRHGE = \frac{1}{n_r} \sum_{i, j} p(i, j) i^2 j^2 \f$
  *
  * Neighborhood size can be set using the SetRadius() method. Offset for co-occurence estimation
  * is set using the SetOffset() method.

@@ -40,7 +40,7 @@ int otbRealImageToComplexImageFilterTest(int argc, char * argv[])
 
   typedef otb::ImageFileReader<ImageType>  ReaderType;
 
-  typedef otb::RealImageToComplexImageFilter<ImageType,ComplexImageType> FilterType;
+  typedef otb::RealImageToComplexImageFilter<ImageType, ComplexImageType> FilterType;
 
   FilterType::Pointer filter = FilterType::New();
 

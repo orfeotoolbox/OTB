@@ -88,7 +88,7 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
   result = itk::NumericTraits<RealType>::Zero;
 
   IndexType index;
-  this->GetInputImage()->TransformPhysicalPointToIndex(point,index);
+  this->GetInputImage()->TransformPhysicalPointToIndex(point, index);
 
 
   if (!this->GetInputImage())

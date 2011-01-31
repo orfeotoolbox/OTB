@@ -152,7 +152,7 @@ private :
   {
     GDALDestroyDriverManager();
   }
-};// end of GDALDriverManagerWrapper
+}; // end of GDALDriverManagerWrapper
 
 GDALImageIO::GDALImageIO()
 {
@@ -334,7 +334,7 @@ void GDALImageIO::Read(void* buffer)
         << ", sizeY = " << lNbLines \
         << ", GDAL Data Type = " << GDALGetDataTypeName(m_PxType) \
         << ", nb Band to read = " << m_NbBands \
-        << ", nb BytePerPixel = " << m_BytePerPixel <<std::endl;*/
+        << ", nb BytePerPixel = " << m_BytePerPixel <<std::endl; */
 
     CPLErr lCrGdal = m_Dataset->GetDataSet()->RasterIO(GF_Read,
                                                        lFirstColumn,
@@ -612,7 +612,7 @@ void GDALImageIO::InternalReadImageInformation()
   std::cout << " Number of band in file = " << m_NbBands << std::endl;
   std::cout << " Number of component otb = " << this->GetNumberOfComponents() << std::endl;
   std::cout << " Byte per pixel = " << m_BytePerPixel << std::endl;
-  std::cout << " Component Type otb = " << GetComponentTypeAsString(this->GetComponentType()) <<std::endl;*/
+  std::cout << " Component Type otb = " << GetComponentTypeAsString(this->GetComponentType()) <<std::endl; */
 
   /*----------------------------------------------------------------------*/
   /*-------------------------- METADATA ----------------------------------*/
@@ -657,10 +657,10 @@ void GDALImageIO::InternalReadImageInformation()
     const char *         pszProjection = NULL;
     pszProjection =  dataset->GetProjectionRef();
 
-    if (OSRImportFromWkt(pSR,(char **) (&pszProjection)) == OGRERR_NONE)
+    if (OSRImportFromWkt(pSR, (char **) (&pszProjection)) == OGRERR_NONE)
       {
       char * pszPrettyWkt = NULL;
-      OSRExportToPrettyWkt(pSR,&pszPrettyWkt,FALSE);
+      OSRExportToPrettyWkt(pSR, &pszPrettyWkt, FALSE);
 
       itk::EncapsulateMetaData<std::string> (dict, MetaDataKey::ProjectionRefKey,
                                              static_cast<std::string>(pszPrettyWkt));
@@ -746,8 +746,8 @@ void GDALImageIO::InternalReadImageInformation()
     if (projRef.empty())
       {
       projRef =
-        "GEOGCS[\"GCS_WGS_1984\",DATUM[\"D_WGS_1984\",SPHEROID[\"WGS_1984\",6378137,298.257223563]],"
-        "PRIMEM[\"Greenwich\",0],UNIT[\"Degree\",0.017453292519943295]]";
+        "GEOGCS[\"GCS_WGS_1984\", DATUM[\"D_WGS_1984\", SPHEROID[\"WGS_1984\", 6378137, 298.257223563]],"
+        "PRIMEM[\"Greenwich\", 0], UNIT[\"Degree\", 0.017453292519943295]]";
 
       itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projRef);
       }
@@ -1142,7 +1142,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
     m_Dataset = GDALDriverManagerWrapper::GetInstance().Create(
                      driverShortName,
                      GetGdalWriteImageFileName(driverShortName, m_FileName),
-                     m_Dimensions[0],m_Dimensions[1],
+                     m_Dimensions[0], m_Dimensions[1],
                      m_NbBands, m_PxType,
                      papszOptions);
     }

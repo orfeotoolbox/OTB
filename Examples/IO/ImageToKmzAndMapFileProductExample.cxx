@@ -139,7 +139,7 @@ int main(int argc, char* argv[])
 // The last step of the chain, is to export the image to a Google
 // Earth understandable format using the KmzProductWriter. Note that
 // the writer can add legends via the method
-// AddLegend(std::string description,ImageType * legend) and a logo in
+// AddLegend(std::string description, ImageType * legend) and a logo in
 // the kmz using SetLogo(ImageType*).
 //
 // Software Guide : EndLatex
@@ -172,7 +172,7 @@ int main(int argc, char* argv[])
 // configuration file, the tiles to draw, and shapefiles descrining
 // the tiles and where to find them.
 // The Mapfile writer allow setting the complete path to the mapfile
-// via SetFileName(std::string),the path where to store the tiles via
+// via SetFileName(std::string), the path where to store the tiles via
 // the method SetShapeIndexPath() and finally the path to the cgi-bin
 // to use via the method SetGCIPath().
 //

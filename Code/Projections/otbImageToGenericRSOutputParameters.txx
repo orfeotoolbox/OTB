@@ -185,7 +185,7 @@ ImageToGenericRSOutputParameters<TImage>
   double sizeCartoX = vcl_abs(m_OutputExtent.maxX - m_OutputExtent.minX);
   double sizeCartoY = vcl_abs(m_OutputExtent.minY - m_OutputExtent.maxY);
 
-  PointType o,oX, oY;
+  PointType o, oX, oY;
   o[0] = this->GetOutputOrigin()[0];
   o[1] = this->GetOutputOrigin()[1];
   

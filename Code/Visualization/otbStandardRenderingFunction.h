@@ -311,7 +311,7 @@ public:
   }
 
   /** Set the minimum and maximum for the different bands.
-    * Has to be provided as [minBand0, maxBand0, minBand1, maxBand1,...]
+    * Has to be provided as [minBand0, maxBand0, minBand1, maxBand1, ...]
     */
   virtual void SetParameters(const ParametersType& parameters)
   {
@@ -345,7 +345,7 @@ public:
     ParametersType param;
     param.SetSize(2 * nbBands);
 
-    // Edit the parameters as [minBand0, maxBand0, minBand1, maxBand1,...]
+    // Edit the parameters as [minBand0, maxBand0, minBand1, maxBand1, ...]
     for (unsigned int i = 0; i < nbBands; ++i)
       {
       // Min Band

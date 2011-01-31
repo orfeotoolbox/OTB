@@ -63,7 +63,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GenericRSResampleImageFilter,itk::ImageToImageFilter);
+  itkTypeMacro(GenericRSResampleImageFilter, itk::ImageToImageFilter);
 
   /** Typedef parameters*/
   typedef TInputImage                                     InputImageType;
@@ -100,7 +100,7 @@ public:
   typedef itk::ImageBase<OutputImageType::ImageDimension>      ImageBaseType;
   
   /** The Deformation field spacing & size */
-  otbSetObjectMemberMacro(Resampler,DeformationFieldSpacing, SpacingType);
+  otbSetObjectMemberMacro(Resampler, DeformationFieldSpacing, SpacingType);
 
   otbGetObjectMemberConstReferenceMacro(Resampler,
                                         DeformationFieldSpacing,
@@ -113,19 +113,19 @@ public:
     m_Resampler->SetOutputOrigin(origin);
     this->Modified();
   }
-  otbGetObjectMemberConstReferenceMacro(Resampler,OutputOrigin,OriginType);
+  otbGetObjectMemberConstReferenceMacro(Resampler, OutputOrigin, OriginType);
   
   /** Output Start index */
-  otbSetObjectMemberMacro(Resampler,OutputStartIndex,IndexType);
-  otbGetObjectMemberConstReferenceMacro(Resampler,OutputStartIndex,IndexType);
+  otbSetObjectMemberMacro(Resampler, OutputStartIndex, IndexType);
+  otbGetObjectMemberConstReferenceMacro(Resampler, OutputStartIndex, IndexType);
   
   /** Output Size */
-  otbSetObjectMemberMacro(Resampler,OutputSize,SizeType);
-  otbGetObjectMemberConstReferenceMacro(Resampler,OutputSize,SizeType);
+  otbSetObjectMemberMacro(Resampler, OutputSize, SizeType);
+  otbGetObjectMemberConstReferenceMacro(Resampler, OutputSize, SizeType);
   
   /** Output Spacing */
-  otbSetObjectMemberMacro(Resampler,OutputSpacing,SpacingType);
-  otbGetObjectMemberConstReferenceMacro(Resampler,OutputSpacing,SpacingType);
+  otbSetObjectMemberMacro(Resampler, OutputSpacing, SpacingType);
+  otbGetObjectMemberConstReferenceMacro(Resampler, OutputSpacing, SpacingType);
   
   /** Methods to Set/Get the interpolator */
   void SetInterpolator(InterpolatorType * interpolator)
@@ -202,7 +202,7 @@ public:
     m_OutputRpcEstimator->SetDEMDirectory(dem);
     this->Modified();
   }
-  otbGetObjectMemberConstMacro(Transform,DEMDirectory,std::string);
+  otbGetObjectMemberConstMacro(Transform, DEMDirectory, std::string);
 
   /** Method to Set the Average Elevation used */
   void SetAverageElevation(double elevation)
@@ -212,7 +212,7 @@ public:
     m_OutputRpcEstimator->SetAverageElevation(elevation);
     this->Modified();
   }
-  otbGetObjectMemberConstMacro(Transform,AverageElevation,double);
+  otbGetObjectMemberConstMacro(Transform, AverageElevation, double);
   
   /** Useful to set the output parameters from an existing image*/
   void SetOutputParametersFromImage(const ImageBaseType * image);
@@ -223,7 +223,7 @@ public:
   void SetOutputParametersFromMap(const std::string map, const SpacingType& spacing);
 
   /** Useful to set the output parameters from a projectionRef, the
-    * output size,spacing and origin are estimated
+    * output size, spacing and origin are estimated
     */
   void SetOutputParametersFromMap(const std::string projectionRef);
   

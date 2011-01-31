@@ -30,12 +30,12 @@ namespace otb
  *
  * The implemented equation is:
  *
- *  \f[  c_{p,q}=\int\int_{D} (x+iy)^{p} \cdot (x-iy)^{q} \cdot
+ *  \f[  c_{p, q}=\int\int_{D} (x+iy)^{p} \cdot (x-iy)^{q} \cdot
  dx \cdot dy \f]
  *
  * With:
  *
- *   - \f$ (x,y) \f$ pixel localization;
+ *   - \f$ (x, y) \f$ pixel localization;
  *   - \f$ D \f$ the contour domain.
  *
  * This class is templated over :

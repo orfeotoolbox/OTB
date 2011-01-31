@@ -55,7 +55,7 @@ public:
   itkNewMacro(Self);
 
   // RTTI typeinfo
-  itkTypeMacro(FlusserMomentsIFFactory,itk::LightObject);
+  itkTypeMacro(FlusserMomentsIFFactory, itk::LightObject);
 
   // Input and output typedef
   typedef TImageType              InputImageType;

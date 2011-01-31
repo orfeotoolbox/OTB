@@ -57,7 +57,7 @@ public:
   typedef itk::SmartPointer<const Self>    ConstPointer;
   
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageToGenericRSOutputParameters,itk::Object);
+  itkTypeMacro(ImageToGenericRSOutputParameters, itk::Object);
   
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -84,20 +84,20 @@ public:
   };
 
   /** Method to Set/Get the input */
-  itkSetConstObjectMacro(Input,ImageType);
-  itkGetConstObjectMacro(Input,ImageType);
+  itkSetConstObjectMacro(Input, ImageType);
+  itkGetConstObjectMacro(Input, ImageType);
 
   /** Output Origin */
-  itkSetMacro(OutputOrigin,PointType);
-  itkGetMacro(OutputOrigin,PointType);
+  itkSetMacro(OutputOrigin, PointType);
+  itkGetMacro(OutputOrigin, PointType);
 
   /** Output Spacing */
-  itkSetMacro(OutputSpacing,SpacingType);
-  itkGetMacro(OutputSpacing,SpacingType);
+  itkSetMacro(OutputSpacing, SpacingType);
+  itkGetMacro(OutputSpacing, SpacingType);
   
   /** Output Size */
-  itkSetMacro(OutputSize,SizeType);
-  itkGetMacro(OutputSize,SizeType);
+  itkSetMacro(OutputSize, SizeType);
+  itkGetMacro(OutputSize, SizeType);
 
   /**
    * Method to Force the use of the spacing selected by the user

@@ -51,14 +51,14 @@ public:
     }
   inline TOutput operator()( const TInputImageImaginaryPart & imaginary) const
     {
-    return TOutput(static_cast<OutputValueType>(0.0),static_cast<OutputValueType>(imaginary));
+    return TOutput(static_cast<OutputValueType>(0.0), static_cast<OutputValueType>(imaginary));
     }
 };
 }
 
 template <class TInputImageImaginaryPart, class TOutputImage>
 class ITK_EXPORT ImaginaryImageToComplexImageFilter :
-    public itk::UnaryFunctorImageFilter<TInputImageImaginaryPart,TOutputImage,
+    public itk::UnaryFunctorImageFilter<TInputImageImaginaryPart, TOutputImage,
                         Function::ImaginaryToComplex<
                                   typename TInputImageImaginaryPart::PixelType,
                                   typename TOutputImage::PixelType>   >

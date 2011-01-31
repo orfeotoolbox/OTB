@@ -378,7 +378,7 @@ ImageLayer<TImage, TOutputImage>
   this->UpdateListSample();
 
   PixelType pixel;
-  itk::PixelBuilder<PixelType>::Zero(pixel,(m_Image->GetNumberOfComponentsPerPixel()));
+  itk::PixelBuilder<PixelType>::Zero(pixel, (m_Image->GetNumberOfComponentsPerPixel()));
 
   // Ensure rendering function initialization
   m_RenderingFunction->Initialize(m_Image->GetMetaDataDictionary()); //FIXME check, but the call must be done in the generator. To be moved to the layer?

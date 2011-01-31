@@ -212,7 +212,7 @@ int otbVectorDataModelAddVectorDataTest(int argc, char * argv[])
   VectorDataReaderType::Pointer vdReader = VectorDataReaderType::New();
   vdReader->SetFileName(vdataName);
   vdReader->Update();
-    typedef otb::VectorDataProjectionFilter<VectorDataType,VectorDataType> ProjectionFilterType;
+    typedef otb::VectorDataProjectionFilter<VectorDataType, VectorDataType> ProjectionFilterType;
   ProjectionFilterType::Pointer vectorDataProjection = ProjectionFilterType::New();
   vectorDataProjection->SetInput(vdReader->GetOutput());
 

@@ -102,7 +102,7 @@ SIXSTraits::ComputeAtmosphericParameters(
     s = new otb_6s_doublereal[S_6S_SIZE];
     memset(s, 0, S_6S_SIZE * sizeof(otb_6s_doublereal));
     const ValuesVectorType& FilterFunctionValues6S = WavelengthSpectralBand->GetFilterFunctionValues6S();
-    // Set the values of FilterFunctionValues6S in s between [iinf-1;isup]
+    // Set the values of FilterFunctionValues6S in s between [iinf-1; isup]
     for (unsigned int i = 0; i < FilterFunctionValues6S.size() && cpt < S_6S_SIZE; ++i)
       {
       s[cpt] = FilterFunctionValues6S[i];

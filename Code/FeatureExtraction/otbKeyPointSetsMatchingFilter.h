@@ -107,7 +107,7 @@ protected:
 
   /**
    * Find the nearest neighbor of data1 in pointset.
-   * \return a pair of (index,distance).
+   * \return a pair of (index, distance).
    */
   NeighborSearchResultType NearestNeighbor(const PointDataType& data1, const PointSetType * pointset);
 

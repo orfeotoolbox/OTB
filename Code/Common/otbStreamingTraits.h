@@ -168,14 +168,14 @@ public:
   * \sa StreamingResampleImageFilter
   */
 template <typename TPixel, unsigned int VImageDimension>
-class ITK_EXPORT StreamingTraits< otb::VectorImage<TPixel,VImageDimension> >
- : public StreamingTraitsBase<otb::VectorImage<TPixel,VImageDimension> >
+class ITK_EXPORT StreamingTraits< otb::VectorImage<TPixel, VImageDimension> >
+ : public StreamingTraitsBase<otb::VectorImage<TPixel, VImageDimension> >
 {
 public:
   /** Standard class typedefs. */
   typedef StreamingTraits                          Self;
   typedef StreamingTraitsBase
-      < otb::VectorImage<TPixel,VImageDimension> > Superclass;
+      < otb::VectorImage<TPixel, VImageDimension> > Superclass;
 
   typedef typename Superclass::ImageType         ImageType;
   typedef typename Superclass::ImagePointerType  ImagePointerType;

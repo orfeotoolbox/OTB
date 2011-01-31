@@ -119,7 +119,7 @@ int otbKmzProductWriterWithLogoAndLegend(int argc, char* argv[])
 
   try
   {
-    parser->ParseCommandLine(argc,argv,parseResult);
+    parser->ParseCommandLine(argc, argv, parseResult);
   }
   catch ( itk::ExceptionObject & err )
   {
@@ -197,7 +197,7 @@ int otbKmzProductWriterWithLogoAndLegend(int argc, char* argv[])
     ReaderType::Pointer legendReader  = ReaderType::New();
     legendReader->SetFileName(parseResult->GetParameterString("--LegendImage"));
     legendReader->Update();
-    kmzWriter->AddLegend("Input Legend",legendReader->GetOutput());
+    kmzWriter->AddLegend("Input Legend", legendReader->GetOutput());
     kmzWriter->AddLegend(legendReader->GetOutput());
     }
   

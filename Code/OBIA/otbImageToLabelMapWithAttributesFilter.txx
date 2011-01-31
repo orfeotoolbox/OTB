@@ -23,7 +23,7 @@
 
 namespace otb
 {
-template <class TInputImage, class TLabeledImage, class TOutputLabel,class TObjectLabel>
+template <class TInputImage, class TLabeledImage, class TOutputLabel, class TObjectLabel>
 ImageToLabelMapWithAttributesFilter<TInputImage, TLabeledImage, TOutputLabel, TObjectLabel>
 ::ImageToLabelMapWithAttributesFilter()
 {

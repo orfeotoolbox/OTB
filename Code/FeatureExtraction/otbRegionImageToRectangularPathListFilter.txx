@@ -326,7 +326,7 @@ RegionImageToRectangularPathListFilter<TInputImage, TOutputPath>
           }
 
         // Count the proportion of region pixels contained within rectangle model, to evaluate rectangular fit, or "rectangularity"
-        // Rectangle model uses [x1,y1] and [x2,y2] for direction (angle), and size derived from adev matrix
+        // Rectangle model uses [x1, y1] and [x2, y2] for direction (angle), and size derived from adev matrix
         double vx, vy; // x-y coordinates relative to rectangle center
         double halfLength = length / 2, halfWidth = width / 2; // to write formulas more easily
         int    countWithin = 0; // number of pixels contained within rectangle

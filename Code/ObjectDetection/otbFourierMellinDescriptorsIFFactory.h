@@ -55,7 +55,7 @@ public:
   itkNewMacro(Self);
 
   // RTTI typeinfo
-  itkTypeMacro(FourierMellinDescriptorsIFFactory,itk::LightObject);
+  itkTypeMacro(FourierMellinDescriptorsIFFactory, itk::LightObject);
 
   // Input and output typedef
   typedef TImageType              InputImageType;

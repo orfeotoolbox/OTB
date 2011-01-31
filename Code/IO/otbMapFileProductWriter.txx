@@ -29,7 +29,7 @@ namespace otb
  */
 template <class TInputImage>
 MapFileProductWriter<TInputImage>
-::MapFileProductWriter(): m_TileSize(256),m_SRID(26918)
+::MapFileProductWriter(): m_TileSize(256), m_SRID(26918)
 {
   m_GenericRSResampler = GenericRSResamplerType::New();
   
@@ -436,7 +436,7 @@ MapFileProductWriter<TInputImage>
                      unsigned int x, unsigned int y)
 {
   // From PointType to VertexType
-  VertexType pLL,pLR,pUR,pUL;
+  VertexType pLL, pLR, pUR, pUL;
 
   pLL[0]=lowerLeftCorner[0];
   pLL[1]=lowerLeftCorner[1];
@@ -469,10 +469,10 @@ MapFileProductWriter<TInputImage>
   
   // Add the field "LOCATION" used in mapserver clients
   // to get the path to tiles
-  m_Polygon->SetFieldAsString("LOCATION",oss.str());
+  m_Polygon->SetFieldAsString("LOCATION", oss.str());
 
   // Add the to vectordata
-  m_VectorDataIndexTile->GetDataTree()->Add(m_Polygon,m_Folder);
+  m_VectorDataIndexTile->GetDataTree()->Add(m_Polygon, m_Folder);
 }
 
 /**

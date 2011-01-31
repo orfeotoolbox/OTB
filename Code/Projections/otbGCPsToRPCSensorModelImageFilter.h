@@ -72,7 +72,7 @@ namespace otb {
  */
 template <class TImage>
 class ITK_EXPORT GCPsToRPCSensorModelImageFilter :
-  public itk::CastImageFilter<TImage,TImage>
+  public itk::CastImageFilter<TImage, TImage>
 {
 public:
   /** Standard class typedefs. */
@@ -106,8 +106,8 @@ public:
                       TImage::ImageDimension);
 
   /** Set/Get/toogle the UseImageGCPs flag */
-//  itkSetMacro(UseImageGCPs,bool);
-// itkGetMacro(UseImageGCPs,bool);
+//  itkSetMacro(UseImageGCPs, bool);
+// itkGetMacro(UseImageGCPs, bool);
 //  itkBooleanMacro(UseImageGCPs);
   void SetUseImageGCPs(bool use);
   void LoadImageGCPs();

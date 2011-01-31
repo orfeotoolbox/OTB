@@ -95,7 +95,7 @@ public:
   /** Image index typedef. */
   typedef typename TImage::IndexType IndexType;
 
-  /** Image spacing,origin and direction typedef */
+  /** Image spacing, origin and direction typedef */
   typedef typename TImage::SpacingType   SpacingType;
   typedef typename TImage::PointType     OriginType;
   typedef typename TImage::DirectionType DirectionType;

@@ -218,7 +218,7 @@ int main(int, char *[])
   // particular, the \code{[]} operator is available. For efficiency reasons,
   // no bounds checking is performed on the index used to access a particular
   // point component. It is the user's responsibility to make sure that the
-  // index is in the range $\{0,Dimension-1\}$.
+  // index is in the range $\{0, Dimension-1\}$.
   //
   // Software Guide : EndLatex
 

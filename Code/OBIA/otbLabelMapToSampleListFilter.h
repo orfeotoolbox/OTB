@@ -67,9 +67,9 @@ public:
   typedef TMeasurementFunctor                         MeasurementFunctorType;
 
   /** Set/Get the input label map  */
-  itkSetConstObjectMacro(InputLabelMap,InputLabelMapType);
-  itkGetConstObjectMacro(InputLabelMap,InputLabelMapType);
-  itkGetObjectMacro(OutputSampleList,OutputSampleListType);
+  itkSetConstObjectMacro(InputLabelMap, InputLabelMapType);
+  itkGetConstObjectMacro(InputLabelMap, InputLabelMapType);
+  itkGetObjectMacro(OutputSampleList, OutputSampleListType);
 
   /** Get a hook on the functor for settings */
   void SetMeasurementFunctor(const MeasurementFunctorType& functor)

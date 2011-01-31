@@ -49,8 +49,8 @@ SimpleRcsPanSharpeningFusionImageFilter
   // Set-up progress reporting
   m_ProgressAccumulator = itk::ProgressAccumulator::New();
   m_ProgressAccumulator->SetMiniPipelineFilter(this);
-  m_ProgressAccumulator->RegisterInternalFilter(m_ConvolutionFilter,0.9);
-  m_ProgressAccumulator->RegisterInternalFilter(m_FusionFilter,0.1);
+  m_ProgressAccumulator->RegisterInternalFilter(m_ConvolutionFilter, 0.9);
+  m_ProgressAccumulator->RegisterInternalFilter(m_FusionFilter, 0.1);
 }
 
 template <class TPanImageType, class TXsImageType, class TOutputImageType, class TInternalPrecision>

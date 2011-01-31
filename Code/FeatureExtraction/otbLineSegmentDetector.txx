@@ -659,7 +659,7 @@ LineSegmentDetector<TInputImage, TPrecision>
 
 /**************************************************************************************************************/
 /**
- *  The method atan2 gives values of angles modulo PI, put the angle in a rang [0,Pi]
+ *  The method atan2 gives values of angles modulo PI, put the angle in a rang [0, Pi]
  */
 template <class TInputImage, class TPrecision>
 bool
@@ -956,10 +956,10 @@ LineSegmentDetector<TInputImage, TPrecision>
 /**************************************************************************************************************/
 /*
    compute logarithm of binomial NFA
-   NFA = NT.b(n,k,p)
+   NFA = NT.b(n, k, p)
    log10 NFA = log10( NFA )
 
-   n,k,p - binomial parameters.
+   n, k, p - binomial parameters.
    logNT - logarithm of Number of Tests
  */
 template <class TInputImage, class TPrecision>

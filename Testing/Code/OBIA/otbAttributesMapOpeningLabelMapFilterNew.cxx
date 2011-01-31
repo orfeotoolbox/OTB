@@ -25,7 +25,7 @@
 
 int otbAttributesMapOpeningLabelMapFilterNew(int argc, char* argv[])
 {
-  typedef otb::AttributesMapLabelObject<unsigned short,2,double> LabelObjectType;
+  typedef otb::AttributesMapLabelObject<unsigned short, 2, double> LabelObjectType;
   typedef itk::LabelMap<LabelObjectType>                         LabelMapType;
   typedef otb::AttributesMapOpeningLabelMapFilter<LabelMapType>  LabelMapFilterType;
 

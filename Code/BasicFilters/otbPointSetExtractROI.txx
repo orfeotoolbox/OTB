@@ -108,7 +108,7 @@ PointSetExtractROI<TInputPointSet, TOutputPointSet>
       outPoints->push_back(point);
       // Get & Add the data
       typename InputPointSetType::PixelType  data;
-      inputPointSet->GetPointData(inputPoint.Index(),&data);
+      inputPointSet->GetPointData(inputPoint.Index(), &data);
       outData->push_back(data/*inputData.Value()*/);
       }
     

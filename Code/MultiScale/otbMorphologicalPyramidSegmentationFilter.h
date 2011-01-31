@@ -49,7 +49,7 @@ namespace otb
  * unless the user has a very good reason to think that a less precise type will be sufficient.
  *
  * \ingroup MultiScale
- * \sa MorphologicalPyramidSynthesisFilter,OpeningClosingMorphologicalFilter,
+ * \sa MorphologicalPyramidSynthesisFilter, OpeningClosingMorphologicalFilter,
  * ClosingOpeningMorphologicalFilter, Segmenter, MRToMSConverter, Resampler
  */
 template <class TInputImage, class TOutputImage>

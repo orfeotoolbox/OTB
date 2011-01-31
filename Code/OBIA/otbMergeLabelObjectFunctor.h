@@ -63,12 +63,12 @@ public:
     LineContainerType lines2 = l2->GetLineContainer();
 
     // Ensure they are sorted according to our criterion
-    stable_sort(lines1.begin(),lines1.end(),&LexicographicalLineCompare);
-    stable_sort(lines2.begin(),lines2.end(),&LexicographicalLineCompare);
+    stable_sort(lines1.begin(), lines1.end(), &LexicographicalLineCompare);
+    stable_sort(lines2.begin(), lines2.end(), &LexicographicalLineCompare);
     
     // Merge the two containers
     LineContainerType linesOut1(lines1.size()+lines2.size());
-    merge(lines1.begin(),lines1.end(),lines2.begin(),lines2.end(),linesOut1.begin(),&LexicographicalLineCompare);
+    merge(lines1.begin(), lines1.end(), lines2.begin(), lines2.end(), linesOut1.begin(), &LexicographicalLineCompare);
 
     // Merge consecutive and overlapping lines
     LineContainerType linesOut2;
@@ -82,10 +82,10 @@ public:
     while(lit!=linesOut1.end())
       {
       // Test if next line overlaps with current
-      if(LinesOverlap(linesOut2.back(),*lit))
+      if(LinesOverlap(linesOut2.back(), *lit))
    {
    // Merge lines
-   LineType mline = MergesLines(linesOut2.back(),*lit);
+   LineType mline = MergesLines(linesOut2.back(), *lit);
   
    // Replace the last line by the merged line
    linesOut2.pop_back();
@@ -139,7 +139,7 @@ private:
   {
     LineType resp;
     resp.SetIndex(l1.GetIndex());
-    unsigned long length = max(l1.GetLength(),l2.GetIndex()[0]+l2.GetLength()-l1.GetIndex()[0]);
+    unsigned long length = max(l1.GetLength(), l2.GetIndex()[0]+l2.GetLength()-l1.GetIndex()[0]);
     resp.SetLength(length);
     return resp;
   }

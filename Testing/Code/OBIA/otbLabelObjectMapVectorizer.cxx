@@ -91,7 +91,7 @@ int otbLabelObjectMapVectorizer(int argc, char * argv[])
   // If a label is given, extract only this label
   if (argc == 4)
     {
-    std::cout << "Label is given;Vectorizing object " << atoi(argv[3]) << std::endl;
+    std::cout << "Label is given; Vectorizing object " << atoi(argv[3]) << std::endl;
     chrono.Start();
     PolygonType::Pointer polygon = functor(labelMapFilter->GetOutput()->GetLabelObject(atoi(argv[3])));
     chrono.Stop();

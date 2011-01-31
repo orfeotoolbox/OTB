@@ -62,7 +62,7 @@ int ImageWidgetController::HandleWidgetEvent(std::string widgetId, int event)
     {
     // Get the current handler
     handler = it.Get();
-    // Check if it listens to (widget,event)
+    // Check if it listens to (widget, event)
     bool newFound = handler->HandleWidgetEvent(widgetId, event);
     found   =  found || newFound;
     ++it;
@@ -109,7 +109,7 @@ void ImageWidgetController::HandleWidgetMove(std::string widgetId, int x, int y)
     {
     // Get the current handler
     handler = it.Get();
-    // Check if it listens to (widget,event)
+    // Check if it listens to (widget, event)
     handler->HandleWidgetMove(widgetId, x, y);
     ++it;
     }
@@ -128,7 +128,7 @@ void ImageWidgetController::ActivateActionHandlers()
     {
     // Get the current handler
     handler = it.Get();
-    // Check if it listens to (widget,event)
+    // Check if it listens to (widget, event)
     handler->SetIsActive(true);
     ++it;
     }
@@ -147,7 +147,7 @@ void ImageWidgetController::DeactivateActionHandlers()
     {
     // Get the current handler
     handler = it.Get();
-    // Check if it listens to (widget,event)
+    // Check if it listens to (widget, event)
     handler->SetIsActive(false);
     ++it;
     }

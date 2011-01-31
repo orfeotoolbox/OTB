@@ -56,7 +56,7 @@ int otbMuellerToPolarisationDegreeAndPowerImageFilter(int argc, char * argv[])
   typedef otb::SinclairImageFilter<InputImageType, InputImageType,
                       InputImageType, InputImageType,
                       RealImageType, FunctionType >  SinclairToMuellerFilterType;
-  typedef otb::MuellerToPolarisationDegreeAndPowerImageFilter<RealImageType,RealImageType> FilterType;
+  typedef otb::MuellerToPolarisationDegreeAndPowerImageFilter<RealImageType, RealImageType> FilterType;
 
 
   typedef otb::ImageFileReader<InputImageType>  ReaderType;

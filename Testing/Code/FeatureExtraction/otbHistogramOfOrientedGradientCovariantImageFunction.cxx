@@ -77,9 +77,9 @@ int otbHistogramOfOrientedGradientCovariantImageFunction(int argc, char * argv[]
 
   std::ofstream ofs(argv[2]);
 
-  for(unsigned i = 0; i < 5;++i)
+  for(unsigned i = 0; i < 5; ++i)
     {
-    for(unsigned j = 0; j<function->GetNumberOfOrientationBins();++j)
+    for(unsigned j = 0; j<function->GetNumberOfOrientationBins(); ++j)
       {
       ofs<<value[i][j]<<"\t";
       }

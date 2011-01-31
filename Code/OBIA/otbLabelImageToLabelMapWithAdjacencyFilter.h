@@ -100,7 +100,7 @@ protected:
     // Label
     unsigned long int label;
     // Constructor
-    RLE(const IndexType & w,long unsigned int l, unsigned long int la)
+    RLE(const IndexType & w, long unsigned int l, unsigned long int la)
     {
       where = w;
       length = l;

@@ -52,7 +52,7 @@ int otbImageRegionNonUniformMultidimensionalSplitter(int argc, char * argv[])
   outfile << "Input region: " << region << std::endl;
   outfile << "Input NumberOfSplits: " << nbSplitTheoric << std::endl;
   outfile << "Output GetNumberOfSplits: " << nb << std::endl;
-  outfile << "Output GetSplit(" << nbAsked << "," << nb << ",input region): " << std::endl;
+  outfile << "Output GetSplit(" << nbAsked << "," << nb << ", input region): " << std::endl;
   outfile << "    " << region2 << std::endl;
 
   outfile.close();

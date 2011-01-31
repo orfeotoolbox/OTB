@@ -34,7 +34,7 @@ namespace otb
  * \f$ x-xc=exp(\rho)*cos(\theta) \f$
  * \f$ y-yc=exp(\rho)*sin(\theta) \f$
  *
- * Where (xc,yc) is the center of the log-polar transform in the cartesian space.
+ * Where (xc, yc) is the center of the log-polar transform in the cartesian space.
  * Please note that this center can NOT be represented in log-polar.
  *
  * \sa InverseLogPolarTransform

@@ -49,7 +49,7 @@ StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionTy
   // Set up progress reporting
   typename itk::ProgressAccumulator::Pointer progress = itk::ProgressAccumulator::New();
   progress->SetMiniPipelineFilter(this);
-  progress->RegisterInternalFilter(m_WarpFilter,1.f);
+  progress->RegisterInternalFilter(m_WarpFilter, 1.f);
 
   m_WarpFilter->GraftOutput(this->GetOutput());
   m_WarpFilter->Update();
@@ -103,7 +103,7 @@ StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionTy
   // Set up deformation field filter
   SizeType deformationFieldLargestSize;
   
-  for(unsigned int dim = 0; dim < InputImageType::ImageDimension;++dim)
+  for(unsigned int dim = 0; dim < InputImageType::ImageDimension; ++dim)
     {
     // vcl_ceil to avoid numerical problems due to division of
     // spacings

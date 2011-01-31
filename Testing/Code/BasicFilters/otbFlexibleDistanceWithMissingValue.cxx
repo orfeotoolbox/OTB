@@ -46,8 +46,8 @@ int otbFlexibleDistanceWithMissingValue(int argc, char * argv[])
   DistanceType::Pointer dist = DistanceType::New();
   double                distanceValue = dist->Evaluate(x, y);
   std::cout << std::setprecision(20) << std::endl;
-  std::cout << "dim,a,b          : " << dim << "," << a << "," << b << std::endl;
-  std::cout << "dim*vcl_pow(3,b) : " << dim*vcl_pow(3, b) << std::endl;
+  std::cout << "dim, a, b          : " << dim << "," << a << "," << b << std::endl;
+  std::cout << "dim*vcl_pow(3, b) : " << dim*vcl_pow(3, b) << std::endl;
   std::cout << "Distance         : " << distanceValue << std::endl;
   std::cout << "Epsilon          : " << epsilon << std::endl;
   std::cout << "-> Tests diff    : " << vcl_abs(distanceValue - dim * vcl_pow(3, b)) << std::endl;

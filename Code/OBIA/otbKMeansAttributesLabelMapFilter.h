@@ -57,7 +57,7 @@ public:
 
   // LabelMapToSampleList
   typedef itk::VariableLengthVector<AttributesValueType>    VectorType;
-  typedef itk::FixedArray<ClassLabelType,1>                 ClassLabelVectorType;
+  typedef itk::FixedArray<ClassLabelType, 1>                 ClassLabelVectorType;
 
   typedef itk::Statistics::ListSample<VectorType>           ListSampleType;
   typedef itk::Statistics::ListSample<ClassLabelVectorType> TrainingListSampleType;
@@ -95,8 +95,8 @@ public:
     return m_Centroids;
   }
 
-  itkSetObjectMacro(InputLabelMap,InputImageType);
-  itkGetObjectMacro(InputLabelMap,InputImageType);
+  itkSetObjectMacro(InputLabelMap, InputImageType);
+  itkGetObjectMacro(InputLabelMap, InputImageType);
 
   /** Set the number of classes of the input sample list.
    *  It will be used to choose the number of centroids.

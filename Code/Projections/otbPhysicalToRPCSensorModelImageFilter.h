@@ -55,12 +55,12 @@ namespace otb {
  */
 template <class TImage>
 class ITK_EXPORT PhysicalToRPCSensorModelImageFilter :
-  public itk::CastImageFilter<TImage,TImage>
+  public itk::CastImageFilter<TImage, TImage>
 {
 public:
   /** Standard class typedefs. */
   typedef PhysicalToRPCSensorModelImageFilter Self;
-  typedef itk::CastImageFilter<TImage,TImage> Superclass;
+  typedef itk::CastImageFilter<TImage, TImage> Superclass;
   typedef itk::SmartPointer<Self>             Pointer;
   typedef itk::SmartPointer<const Self>       ConstPointer;
 

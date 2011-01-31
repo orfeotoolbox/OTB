@@ -59,7 +59,7 @@ public:
   typedef typename Superclass::InputImageType InputImageType;
 
   /** Dimension underlying input image. */
-  //itkStaticConstMacro(ImageDimension, unsigned int,Superclass::ImageDimension);
+  //itkStaticConstMacro(ImageDimension, unsigned int, Superclass::ImageDimension);
 
   /** Index and typedef support. */
   typedef typename Superclass::IndexType                                     IndexType;
@@ -90,7 +90,7 @@ public:
   {
     return m_Function.GetRadius();
   }
-  //unsigned int GetRadius() { return this->GetFunction().GetRadius();};
+  //unsigned int GetRadius() { return this->GetFunction().GetRadius(); };
 
   /** Set/Get the window radius*/
   // Don't have to be used here, just declared for the inheritance classes.

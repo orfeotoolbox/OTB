@@ -301,7 +301,7 @@ VectorDataExtractROI<TVectorData>
       
       //  -------------------
       // Case 1 : Check if one of the two points are in the region
-      PointType firstPoint,secondPoint;
+      PointType firstPoint, secondPoint;
       firstPoint[0] = firstVertex[0];
       firstPoint[1] = firstVertex[1];
 
@@ -348,7 +348,7 @@ VectorDataExtractROI<TVectorData>
 ::IsSegementIntersectSegment(LinePointerType segmentLineAB, LinePointerType segmentLineCD)
 {
 
-  PointType vertexA,vertexB, vertexC, vertexD;
+  PointType vertexA, vertexB, vertexC, vertexD;
 
   vertexA  = segmentLineAB->GetVertexList()->GetElement(0);
   vertexB = segmentLineAB->GetVertexList()->GetElement(1);
@@ -377,7 +377,7 @@ VectorDataExtractROI<TVectorData>
 template <class TVectorData>
 int
 VectorDataExtractROI<TVectorData>
-::CounterClockWise(PointType firstPoint,PointType secondPoint,PointType thirdPoint)
+::CounterClockWise(PointType firstPoint, PointType secondPoint, PointType thirdPoint)
 {
   PointType  SecondMinusFirstPoint;
   PointType  ThirdMinusFirstPoint;

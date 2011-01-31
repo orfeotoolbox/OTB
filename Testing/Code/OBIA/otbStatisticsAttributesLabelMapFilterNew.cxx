@@ -26,10 +26,10 @@
 
 int otbStatisticsAttributesLabelMapFilterNew(int argc, char* argv[])
 {
-  typedef otb::Image<double,2>                                   ImageType;
-  typedef otb::AttributesMapLabelObject<unsigned short,2,double> LabelObjectType;
+  typedef otb::Image<double, 2>                                   ImageType;
+  typedef otb::AttributesMapLabelObject<unsigned short, 2, double> LabelObjectType;
   typedef itk::LabelMap<LabelObjectType>                         LabelMapType;
-  typedef otb::StatisticsAttributesLabelMapFilter<LabelMapType,ImageType> LabelMapFilterType;
+  typedef otb::StatisticsAttributesLabelMapFilter<LabelMapType, ImageType> LabelMapFilterType;
 
   // instantiation
   LabelMapFilterType::Pointer filter = LabelMapFilterType::New();

@@ -86,7 +86,7 @@ int otbStreamingResampleImageFilterWithAffineTransform(int argc, char* argv[])
 
     // Default value builder
     ImageType::PixelType defaultValue;
-    itk::PixelBuilder<ImageType::PixelType>::Zero(defaultValue,reader->GetOutput()->GetNumberOfComponentsPerPixel());
+    itk::PixelBuilder<ImageType::PixelType>::Zero(defaultValue, reader->GetOutput()->GetNumberOfComponentsPerPixel());
     
     /** Set the OptResampler Parameters*/
     resampler->SetInput(reader->GetOutput());

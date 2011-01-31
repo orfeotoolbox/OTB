@@ -33,7 +33,7 @@
 // \itkpiccaption[BinaryThresholdImageFilter transfer function]{Transfer function
 // of the BinaryThresholdImageFilter.
 // \label{fig:BinaryThresholdTransferFunction}}
-// \parpic(8cm,5cm)[r]{\includegraphics[width=7cm]{BinaryThresholdTransferFunction.eps}}
+// \parpic(8cm, 5cm)[r]{\includegraphics[width=7cm]{BinaryThresholdTransferFunction.eps}}
 //
 // This example illustrates the use of the binary threshold image filter.
 // This filter is used to transform an image into a binary image by changing
@@ -42,7 +42,7 @@
 // thresholds---Upper and Lower---and two intensity values---Inside and
 // Outside. For each pixel in the input image, the value of the pixel is
 // compared with the lower and upper thresholds. If the pixel value is inside
-// the range defined by $[Lower,Upper]$ the output pixel is assigned the
+// the range defined by $[Lower, Upper]$ the output pixel is assigned the
 // InsideValue. Otherwise the output pixels are assigned to the OutsideValue.
 // Thresholding is commonly applied as the last operation of a segmentation
 // pipeline.

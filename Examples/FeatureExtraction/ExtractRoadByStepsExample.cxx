@@ -499,7 +499,7 @@ int main(int argc, char * argv[])
   subtract3->SetInput1(channelExtractor3->GetOutput());
   subtract3->SetInput2(dilater->GetOutput());
 
-  // Threshold outside the [0,255] range
+  // Threshold outside the [0, 255] range
 
   threshold11->SetInput(addFilter->GetOutput());
   threshold11->ThresholdBelow(0);

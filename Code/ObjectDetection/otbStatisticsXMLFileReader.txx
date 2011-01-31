@@ -50,7 +50,7 @@ StatisticsXMLFileReader<TMeasurementVector>
   unsigned int index = 0;
   for(unsigned int  idx = 0; idx < m_NumberOfOutputs; idx++)
     {
-    if(strcmp(m_MeasurementVectorContainer[idx].first.c_str(),statisticName) == 0 )
+    if(strcmp(m_MeasurementVectorContainer[idx].first.c_str(), statisticName) == 0 )
       {
       found = true;
       index = idx;
@@ -111,7 +111,7 @@ StatisticsXMLFileReader<TMeasurementVector>
       {
       // Get the current value of the statistic vector
       double value;
-      sample->QueryDoubleAttribute("value",&value);
+      sample->QueryDoubleAttribute("value", &value);
       // Store the value
       tempMeasurementVector.push_back(value);
       }
@@ -137,7 +137,7 @@ StatisticsXMLFileReader<TMeasurementVector>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  //Superclass::PrintSelf(os,indent);
+  //Superclass::PrintSelf(os, indent);
 }
 
 } // End namespace otb

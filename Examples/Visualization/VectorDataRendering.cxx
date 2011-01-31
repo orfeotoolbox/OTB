@@ -90,10 +90,10 @@ int main( int argc, char * argv[] )
     return EXIT_FAILURE;
     }
 
-  typedef otb::VectorImage<double,2>                  ImageType;
+  typedef otb::VectorImage<double, 2>                  ImageType;
   typedef ImageType::PixelType                        PixelType;
   typedef itk::RGBAPixel<unsigned char>               RGBAPixelType;
-  typedef otb::Image<RGBAPixelType,2>                 OutputImageType;
+  typedef otb::Image<RGBAPixelType, 2>                 OutputImageType;
 
   // Reading input image
   typedef otb::ImageFileReader<ImageType>            ReaderType;
@@ -110,13 +110,13 @@ int main( int argc, char * argv[] )
   typedef otb::ImageView<ModelType>                   ViewType;
   typedef otb::ImageWidgetController                  ControllerType;
   typedef otb::WidgetResizingActionHandler
-    <ModelType,ViewType>                              ResizingHandlerType;
+    <ModelType, ViewType>                              ResizingHandlerType;
   typedef otb::ChangeScaledExtractRegionActionHandler
-    <ModelType,ViewType>                              ChangeScaledRegionHandlerType;
+    <ModelType, ViewType>                              ChangeScaledRegionHandlerType;
   typedef otb::ChangeExtractRegionActionHandler
-    <ModelType,ViewType>                              ChangeRegionHandlerType;
+    <ModelType, ViewType>                              ChangeRegionHandlerType;
   typedef otb::ChangeScaleActionHandler
-    <ModelType,ViewType>                              ChangeScaleHandlerType;
+    <ModelType, ViewType>                              ChangeScaleHandlerType;
   typedef otb::PixelDescriptionModel<OutputImageType> PixelDescriptionModelType;
   typedef otb::PixelDescriptionActionHandler
     < PixelDescriptionModelType, ViewType>            PixelDescriptionActionHandlerType;
@@ -170,7 +170,7 @@ int main( int argc, char * argv[] )
   // set up the rendering of the vector data, the VectorDataToImageFilter uses the
   // mapnik library to obtain a nice rendering
   typedef itk::RGBAPixel<unsigned char>                                AlphaPixelType;
-  typedef otb::Image<AlphaPixelType,2>                                 AlphaImageType;
+  typedef otb::Image<AlphaPixelType, 2>                                 AlphaImageType;
   typedef otb::VectorDataToImageFilter<VectorDataType, AlphaImageType> VectorDataToImageFilterType;
   VectorDataToImageFilterType::Pointer vectorDataRendering = VectorDataToImageFilterType::New();
   vectorDataRendering->SetInput(projection->GetOutput());
@@ -294,7 +294,7 @@ int main( int argc, char * argv[] )
   typedef LayerType::HistogramType            HistogramType;
   typedef otb::HistogramCurve<HistogramType>  HistogramCurveType;
 
-  HistogramCurveType::ColorType red,green,blue;
+  HistogramCurveType::ColorType red, green, blue;
   red.Fill(0);
   red[0]=1.;
   red[3]=0.5;

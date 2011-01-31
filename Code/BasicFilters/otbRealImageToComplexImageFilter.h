@@ -51,14 +51,14 @@ public:
     }
   inline TOutput operator()( const TInputImageRealPart & real) const
     {
-    return TOutput(static_cast<OutputValueType>(real),static_cast<OutputValueType>(0.0));
+    return TOutput(static_cast<OutputValueType>(real), static_cast<OutputValueType>(0.0));
     }
 };
 }
 
 template <class TInputImageRealPart, class TOutputImage>
 class ITK_EXPORT RealImageToComplexImageFilter :
-    public itk::UnaryFunctorImageFilter<TInputImageRealPart,TOutputImage,
+    public itk::UnaryFunctorImageFilter<TInputImageRealPart, TOutputImage,
                         Function::RealToComplex<
                                   typename TInputImageRealPart::PixelType,
                                   typename TOutputImage::PixelType>   >

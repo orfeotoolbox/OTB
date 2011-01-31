@@ -63,7 +63,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
   // Set up progress reporting
   typename itk::ProgressAccumulator::Pointer progress = itk::ProgressAccumulator::New();
   progress->SetMiniPipelineFilter(this);
-  progress->RegisterInternalFilter(m_Resampler,1.f);
+  progress->RegisterInternalFilter(m_Resampler, 1.f);
 
   m_Resampler->GraftOutput(this->GetOutput());
   m_Resampler->Update();
@@ -285,7 +285,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
     // Build the UTM transform : Need the zone & the hemisphere
     // For this we us the geographic coordinate of the input UL corner
     typedef ossimRefPtr<ossimUtmProjection>       OssimMapProjectionPointerType;
-    typedef itk::Point<double,2>                  GeoPointType;
+    typedef itk::Point<double, 2>                  GeoPointType;
   
     // instanciate the projection to get the utm zone
     OssimMapProjectionPointerType  utmMapProjection =  new ossimUtmProjection();
@@ -297,7 +297,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
     GeoPointType   geoPoint;
     index[0] = input->GetLargestPossibleRegion().GetIndex()[0];
     index[1] = input->GetLargestPossibleRegion().GetIndex()[1];
-    input->TransformIndexToPhysicalPoint(index,pSrc);
+    input->TransformIndexToPhysicalPoint(index, pSrc);
   
     // The first transform of the inverse transform : input -> WGS84
     geoPoint = invTransform->GetTransform()->GetFirstTransform()->TransformPoint(pSrc);

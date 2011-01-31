@@ -32,15 +32,15 @@ int otbImageToLabelMapWithAttributesFilter(int argc, char* argv[])
   const char * lfname  = argv[2];
   
   // Convenient typedefs
-  typedef otb::VectorImage<double,2>                           ImageType;
+  typedef otb::VectorImage<double, 2>                           ImageType;
   typedef ImageType::IndexType         IndexType;
   
-  typedef otb::Image<unsigned int,2>                           LabeledImageType;
+  typedef otb::Image<unsigned int, 2>                           LabeledImageType;
 
-  typedef otb::AttributesMapLabelObjectWithClassLabel<double,2,double,double> LabelObjectType;
+  typedef otb::AttributesMapLabelObjectWithClassLabel<double, 2, double, double> LabelObjectType;
 
   typedef otb::ImageToLabelMapWithAttributesFilter<ImageType,
-    LabeledImageType,unsigned int, LabelObjectType>                            FilterType;
+    LabeledImageType, unsigned int, LabelObjectType>                            FilterType;
   typedef otb::ImageFileReader<ImageType>                      ReaderType;
   typedef otb::ImageFileReader<LabeledImageType>               LabeledReaderType;
   
@@ -65,7 +65,7 @@ int otbImageToLabelMapWithAttributesFilter(int argc, char* argv[])
   // tests
   std::vector<std::string> features = filter->GetOutput()->GetNthLabelObject(0)->GetAvailableAttributes();
 
-  for(std::vector<std::string>::const_iterator fit = features.begin();fit!=features.end();++fit)
+  for(std::vector<std::string>::const_iterator fit = features.begin(); fit!=features.end(); ++fit)
     {
     std::cout <<"Label " << *fit << std::endl;
     

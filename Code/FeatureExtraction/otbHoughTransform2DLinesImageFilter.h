@@ -115,7 +115,7 @@ public:
 
   /** Accessors for the parameters of the angle axis.
       The Hough space describes (in the angle direction)
-      [AngleAxisMinimum,AngleAxisMaximum[ with AngleAxisSize values */
+      [AngleAxisMinimum, AngleAxisMaximum[ with AngleAxisSize values */
   /** Accessors for the size of the angle axis */
   itkSetMacro(AngleAxisSize, unsigned int);
   itkGetMacro(AngleAxisSize, unsigned int);
@@ -130,7 +130,7 @@ public:
 
   /** Accessors for the parameters of the distance axis.
       The Hough space describes (in the distance direction)
-      [DistanceAxisMinimum,DistanceAxisMaximum[ with DistanceAxisSize values */
+      [DistanceAxisMinimum, DistanceAxisMaximum[ with DistanceAxisSize values */
   /** Accessors for the actual size of the Distance axis */
   itkSetMacro(DistanceAxisSize, unsigned int);
   itkGetMacro(DistanceAxisSize, unsigned int);

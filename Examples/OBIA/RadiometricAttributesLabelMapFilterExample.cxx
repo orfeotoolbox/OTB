@@ -124,7 +124,7 @@ int main(int argc, char * argv[])
   LabelMapToBinaryImageFilterType;
   typedef otb::MultiChannelRAndNIRIndexImageFilter<VectorImageType,
       ImageType> NDVIImageFilterType;
-  typedef otb::ImageToVectorImageCastFilter<ImageType,VectorImageType>
+  typedef otb::ImageToVectorImageCastFilter<ImageType, VectorImageType>
   ImageToVectorImageCastFilterType;
 
   ReaderType::Pointer reader = ReaderType::New();

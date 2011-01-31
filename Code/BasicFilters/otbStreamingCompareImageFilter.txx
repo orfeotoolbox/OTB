@@ -291,7 +291,7 @@ PersistentCompareImageFilter<TInputImage>
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   RealType  realValue1, realValue2;
-  PixelType value1,value2;
+  PixelType value1, value2;
   
   itk::ImageRegionConstIterator<TInputImage> it1(inputPtr1, outputRegionForThread);
   itk::ImageRegionConstIterator<TInputImage> it2(inputPtr2, outputRegionForThread);

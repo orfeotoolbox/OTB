@@ -105,7 +105,7 @@ int otbOssimElevManagerTest4(int argc, char* argv[])
   headerFile << std::endl;
   headerFile.close();
 
-  //Check for the index 216,51 (difference of 4 in the output)
+  //Check for the index 216, 51 (difference of 4 in the output)
     {
     int    i = 216;
     int    j = 51;
@@ -117,7 +117,7 @@ int otbOssimElevManagerTest4(int argc, char* argv[])
     ossimWorldPoint.lon = point[0];
     ossimWorldPoint.lat = point[1];
     double height = elevManager->getHeightAboveMSL(ossimWorldPoint);
-    std::cout << "Output value at (216,51): " << height << std::endl;
+    std::cout << "Output value at (216, 51): " << height << std::endl;
     std::cout << "At lon: " << ossimWorldPoint.lon <<  " , lat: " << ossimWorldPoint.lat << std::endl;
 
     }

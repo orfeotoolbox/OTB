@@ -179,7 +179,7 @@ int main(int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::OrthoRectificationFilter<VectorImageType,
-      DoubleVectorImageType,utmMapProjectionType>
+      DoubleVectorImageType, utmMapProjectionType>
   VectorOrthoRectifFilterType;
 
 

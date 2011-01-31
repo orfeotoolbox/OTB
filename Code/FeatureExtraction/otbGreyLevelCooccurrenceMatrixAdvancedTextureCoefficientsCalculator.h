@@ -34,9 +34,9 @@ namespace otb {
  * The features calculated are as follows (where \f$ g(i, j) \f$ is the element in
  * cell i, j of a a normalized GLCM):
  *
- * "Mean" \f$ = \sum_{i,j}i g(i,j) \f$
+ * "Mean" \f$ = \sum_{i, j}i g(i, j) \f$
  *
- * "Sum of squares: Variance" \f$ = f_4 = \sum_{i,j}(i -mu)^2 g(i,j) \f$
+ * "Sum of squares: Variance" \f$ = f_4 = \sum_{i, j}(i -mu)^2 g(i, j) \f$
  *
  * "Sum average" \f$ = f_6 = -\sum_{i}i g_{x+y}(i)
  *
@@ -52,12 +52,12 @@ namespace otb {
  *
  * "Information Measures of Correlation IC2" \f$ = f_13 = \sqrt{1 - \exp{-2}|HXY2 - f_9|} \f$
  *
- * Above, \f$ \mu =  \f$ (weighted pixel average) \f$ = \sum_{i,j}i \cdot g(i, j) =
- * \sum_{i,j}j \cdot g(i, j) \f$ (due to matrix summetry), and
+ * Above, \f$ \mu =  \f$ (weighted pixel average) \f$ = \sum_{i, j}i \cdot g(i, j) =
+ * \sum_{i, j}j \cdot g(i, j) \f$ (due to matrix summetry), and
  *
- * \f$ \g_{x+y}(k) =  \sum_{i}\sum_{j}g(i)\f$ where \f$ i+j=k \f$ and \f$ k = 2,3,..,2N_[g}  \f$ and
+ * \f$ \g_{x+y}(k) =  \sum_{i}\sum_{j}g(i)\f$ where \f$ i+j=k \f$ and \f$ k = 2, 3, .., 2N_[g}  \f$ and
  *
- * \f$ \g_{x-y}(k) =  \sum_{i}\sum_{j}g(i)\f$ where \f$ i-j=k \f$ and \f$ k = 0,1,..,N_[g}-1  \f$
+ * \f$ \g_{x-y}(k) =  \sum_{i}\sum_{j}g(i)\f$ where \f$ i-j=k \f$ and \f$ k = 0, 1, .., N_[g}-1  \f$
  *
  * NOTA BENE: The input histogram will be forcably normalized!
  * This algorithm takes three passes through the input

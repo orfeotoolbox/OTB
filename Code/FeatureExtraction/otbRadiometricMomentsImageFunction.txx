@@ -47,8 +47,8 @@ RadiometricMomentsImageFunction<TInputImage, TCoordRep>
 }
 
 template <class TInputImage, class TCoordRep>
-typename RadiometricMomentsImageFunction<TInputImage,TCoordRep>::OutputType
-RadiometricMomentsImageFunction<TInputImage,TCoordRep>
+typename RadiometricMomentsImageFunction<TInputImage, TCoordRep>::OutputType
+RadiometricMomentsImageFunction<TInputImage, TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
   // Build moments vector

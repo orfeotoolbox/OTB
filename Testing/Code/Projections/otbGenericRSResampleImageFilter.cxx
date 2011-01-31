@@ -138,7 +138,7 @@ int otbGenericRSResampleImageFilter(int argc, char* argv[])
 
 int otbGenericRSResampleImageFilterFromMap(int argc, char* argv[])
 {
-  typedef otb::MultiChannelExtractROI<PixelType,PixelType>  ExtractROIType;
+  typedef otb::MultiChannelExtractROI<PixelType, PixelType>  ExtractROIType;
 
   // SmartPointer instanciation
   ExtractROIType::Pointer extractor = ExtractROIType::New();
@@ -190,7 +190,7 @@ int otbGenericRSResampleImageFilterFromMap(int argc, char* argv[])
   // Set the Resampler Parameters
   resampler->SetInput(extractor->GetOutput());
   resampler->SetDeformationFieldSpacing(gridSpacing);
-  resampler->SetOutputParametersFromMap("UTM",spacing);
+  resampler->SetOutputParametersFromMap("UTM", spacing);
   
   if (useInRpc)
     {

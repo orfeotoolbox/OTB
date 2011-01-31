@@ -294,8 +294,8 @@ ImageToImageRCC8Calculator<TInputImage>
   /// Definition of the filters used
   typedef itk::InvertIntensityImageFilter<BoolImageType, BoolImageType>    InvertFilterType;
   typedef itk::AndImageFilter<BoolImageType, BoolImageType, BoolImageType> AndFilterType;
-//TODELETE     typedef otb::Image<unsigned char,2> TmpImageType;
-//TODELETE     typedef itk::CastImageFilter<BoolImageType,TmpImageType> CastFilterType;
+//TODELETE     typedef otb::Image<unsigned char, 2> TmpImageType;
+//TODELETE     typedef itk::CastImageFilter<BoolImageType, TmpImageType> CastFilterType;
 
 //TODELETE     typedef ImageFileWriter<TmpImageType> WriterType;
 /// Declaration and instantiation

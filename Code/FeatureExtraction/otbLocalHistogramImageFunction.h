@@ -35,12 +35,12 @@ namespace otb
  *
  * Pixel count can be optionnaly weighted by a gaussian kernel with
  * $\sigma = 0.5 radius$ so that pixel far from the center position
- * account less in the histogram than pixel near the center position. 
+ * account less in the histogram than pixel near the center position.
  * This option can be deactivated using the GaussianSmoothing flag.
- * 
+ *
  * Histogram mininimum value, maximum value and number of bins can be
  * set using the Setters/Getters.
- * 
+ *
  * This class is templated over the input image type and the
  * coordinate representation type (e.g. float or double).
  *
@@ -103,7 +103,7 @@ public:
   }
 
   /** Get/Set the radius of the neighborhood over which the
-   *  statistics are evaluated 
+   *  statistics are evaluated
    */
   itkSetMacro( NeighborhoodRadius, unsigned int );
   itkGetConstReferenceMacro( NeighborhoodRadius, unsigned int );
@@ -118,8 +118,8 @@ public:
   itkSetMacro( HistogramMax, double );
   itkGetConstReferenceMacro( HistogramMax, double );
 
-  itkSetMacro(GaussianSmoothing,bool);
-  itkGetConstReferenceMacro(GaussianSmoothing,bool);
+  itkSetMacro(GaussianSmoothing, bool);
+  itkGetConstReferenceMacro(GaussianSmoothing, bool);
   itkBooleanMacro(GaussianSmoothing);
 
 protected:

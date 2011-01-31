@@ -42,7 +42,7 @@ int otbImageFileWriterStreamingONERAComplex(int argc, char* argv[])
   typedef otb::ImageFileReader<ImageType>          ReaderType;
   typedef otb::StreamingImageFileWriter<ImageType> WriterType;
   /*        typedef itk::StreamingImageFilter< ImageType,
-      ImageType >       StreamingType;*/
+      ImageType >       StreamingType; */
 
   ReaderType::Pointer complexReader = ReaderType::New();
   complexReader->SetFileName(inputFilename);

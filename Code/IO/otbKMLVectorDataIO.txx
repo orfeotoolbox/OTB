@@ -484,7 +484,7 @@ KMLVectorDataIO<TData>
   //for KML files, this is geographic coordinates
 
   std::string projectionRef =
-    "GEOGCS[\"GCS_WGS_1984\", DATUM[\"WGS_1984\", SPHEROID[\"WGS_1984\",6378137,298.257223563]], PRIMEM[\"Greenwich\",0], UNIT[\"Degree\",0.017453292519943295]]";
+    "GEOGCS[\"GCS_WGS_1984\", DATUM[\"WGS_1984\", SPHEROID[\"WGS_1984\", 6378137, 298.257223563]], PRIMEM[\"Greenwich\", 0], UNIT[\"Degree\", 0.017453292519943295]]";
   itk::MetaDataDictionary& dict = data->GetMetaDataDictionary();
   itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projectionRef);
 
@@ -576,7 +576,7 @@ void KMLVectorDataIO<TData>::Write(const VectorDataConstPointerType data, char *
   std::string xml = kmldom::SerializePretty(kml);
 
   // Write it
-//  kmlbase::File::WriteStringToFile(xml,this->m_FileName);
+//  kmlbase::File::WriteStringToFile(xml, this->m_FileName);
 
   kmlengine::KmlFilePtr kml_file = kmlengine::KmlFile::CreateFromString(xml);
 

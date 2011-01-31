@@ -104,7 +104,7 @@ public:
   itkGetMacro(OutsideValue, ValueType);
 
   /** The origin of the output image. The origin is the geometric
-   * coordinates of the index (0,0,...,0).  It is stored internally
+   * coordinates of the index (0, 0, ..., 0).  It is stored internally
    * as double but may be set from float.
    * \sa GetOrigin() */
   virtual void SetOrigin(const PointType& origin);

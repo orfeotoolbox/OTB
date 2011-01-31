@@ -50,8 +50,8 @@ LocalHistogramImageFunction<TInputImage, TCoordRep>
 }
 
 template <class TInputImage, class TCoordRep>
-typename LocalHistogramImageFunction<TInputImage,TCoordRep>::OutputType
-LocalHistogramImageFunction<TInputImage,TCoordRep>
+typename LocalHistogramImageFunction<TInputImage, TCoordRep>::OutputType
+LocalHistogramImageFunction<TInputImage, TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
 
@@ -99,9 +99,9 @@ LocalHistogramImageFunction<TInputImage,TCoordRep>
   typename InputImageType::OffsetType offset;
 
   // Fill the histogram
-  for(int i = -(int)m_NeighborhoodRadius;i< (int)m_NeighborhoodRadius;++i)
+  for(int i = -(int)m_NeighborhoodRadius; i< (int)m_NeighborhoodRadius; ++i)
     {
-    for(int j = -(int)m_NeighborhoodRadius;j< (int)m_NeighborhoodRadius;++j)
+    for(int j = -(int)m_NeighborhoodRadius; j< (int)m_NeighborhoodRadius; ++j)
       {
       // Check if the current pixel lies within a disc of radius m_NeighborhoodRadius
       double currentSquaredRadius = i*i+j*j;
@@ -124,7 +124,7 @@ LocalHistogramImageFunction<TInputImage,TCoordRep>
         sample[0] = it.GetPixel(offset);
 
         // Populate histogram
-        histogram->IncreaseFrequency(sample,gWeight);
+        histogram->IncreaseFrequency(sample, gWeight);
         }
       }
     }

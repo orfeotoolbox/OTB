@@ -69,7 +69,7 @@ public:
   itkNewMacro(Self);
 
   // RTTI typeinfo
-  itkTypeMacro(StandardMetaImageFunctionBuilder,itk::LightObject);
+  itkTypeMacro(StandardMetaImageFunctionBuilder, itk::LightObject);
 
   // Input and output typedef
   typedef TPrecision                                                ValueType;

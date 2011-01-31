@@ -36,16 +36,16 @@ namespace otb
  * Calculate the Fourier-Mellin descriptors over a specified neighborhood.
  * The implemented equation is:
  *
- * D_{p,q}=|M_{p,q}|
+ * D_{p, q}=|M_{p, q}|
  *
  * With:
  *
- * \f[  M_{p,q}=\frac{1}{2\pi} \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} (x+iy)^{p} \cdot
- (x^{2}+y^{2})^{\frac{p-2+\sigma-iq}{2}} \cdot f(x,y) \cdot dx \cdot dy \f]
+ * \f[  M_{p, q}=\frac{1}{2\pi} \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} (x+iy)^{p} \cdot
+ (x^{2}+y^{2})^{\frac{p-2+\sigma-iq}{2}} \cdot f(x, y) \cdot dx \cdot dy \f]
  *
  * And:
- *  - \f$(x,y)\f$ pixel localization;
- *  - \f$ f(x,y)\f$ the pixel value over the \f$(x,y)\f$ coordinate.
+ *  - \f$(x, y)\f$ pixel localization;
+ *  - \f$ f(x, y)\f$ the pixel value over the \f$(x, y)\f$ coordinate.
  *
  * This class is templated over the input image type and the
  * coordinate representation type (e.g. float or double).

@@ -47,8 +47,8 @@ FlusserMomentsImageFunction<TInputImage, TCoordRep>
 }
 
 template <class TInputImage, class TCoordRep>
-typename FlusserMomentsImageFunction<TInputImage,TCoordRep>::OutputType
-FlusserMomentsImageFunction<TInputImage,TCoordRep>
+typename FlusserMomentsImageFunction<TInputImage, TCoordRep>::OutputType
+FlusserMomentsImageFunction<TInputImage, TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
   // Build moments vector
@@ -73,7 +73,7 @@ FlusserMomentsImageFunction<TInputImage,TCoordRep>
   typedef std::complex<ScalarRealType> ComplexType;
   
   // Define and intialize cumulants for complex moments
-  ComplexType c11, c12, c21,c20, c30, c22, c31, c40;
+  ComplexType c11, c12, c21, c20, c30, c22, c31, c40;
   c11 = itk::NumericTraits<ComplexType>::Zero;
   c12 = itk::NumericTraits<ComplexType>::Zero;
   c21 = itk::NumericTraits<ComplexType>::Zero;
@@ -105,7 +105,7 @@ FlusserMomentsImageFunction<TInputImage,TCoordRep>
     ScalarRealType y = static_cast<ScalarRealType>(it.GetOffset(i)[1])/(2*m_NeighborhoodRadius+1);
     
     // Build complex value
-    ComplexType xpy(x,y),xqy(x,-y);
+    ComplexType xpy(x, y), xqy(x, -y);
     
     // Update cumulants
     c00 += value;

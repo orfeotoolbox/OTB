@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   Insight Segmentation & Registration Toolkit
-  Module:    $RCSfile: otbHermitianEigenAnalysis.txx,v $
+  Module:    $RCSfile: otbHermitianEigenAnalysis.txx, v $
   Language:  C++
   Date:
   Version:
@@ -35,7 +35,7 @@ ComputeEigenValues(const TMatrix  & A,
     {
     for( unsigned int col=0; col < m_Dimension; col++ )
       {
-      inputMatrix[k++] = A(row,col);
+      inputMatrix[k++] = A(row, col);
       }
     }
 
@@ -271,13 +271,13 @@ ComputeEigenValuesAndVectors(
  float eigenVal[3];
 
   for (int i=0; i<3; i++)
-    for (int j=0;j<3; j++)
+    for (int j=0; j<3; j++)
       {
        eigenVect[i][j][0]=0.;
        eigenVect[i][j][1]=0.;
       }
 
-  for (int i=0;i<3;i++)
+  for (int i=0; i<3; i++)
     eigenVal[i]=0.;
     
   
@@ -293,14 +293,14 @@ ComputeEigenValuesAndVectors(
   
   // Recuperation des sorties
   for (int i=0; i<3; i++)
-    for (int j=0;j<3; j++)
+    for (int j=0; j<3; j++)
        {
           EigenVectors[i][2*j]=eigenVect[i][j][0];
           EigenVectors[i][2*j+1]=eigenVect[i][j][1];
        }
   
 
-  for (int i=0;i<3;i++)
+  for (int i=0; i<3; i++)
     EigenValues[i]=eigenVal[i];
    
   

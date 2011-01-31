@@ -91,9 +91,9 @@ int main(int, char *[])
   PointType p0;
   PointType p1;
   p0[0] = -1.0;
-  p0[1] = 0.0;  // Point 0 = {-1,0 }
+  p0[1] = 0.0;  // Point 0 = {-1, 0 }
   p1[0] =  1.0;
-  p1[1] = 0.0;  // Point 1 = { 1,0 }
+  p1[1] = 0.0;  // Point 1 = { 1, 0 }
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex

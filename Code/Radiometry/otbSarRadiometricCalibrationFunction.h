@@ -74,7 +74,7 @@ public:
 
   /** Datatype used for the evaluation */
   typedef double                                                 RealType;
-  typedef otb::Functor::SarRadiometricCalibrationFunctor<RealType,RealType>           FunctorType;
+  typedef otb::Functor::SarRadiometricCalibrationFunctor<RealType, RealType>           FunctorType;
   typedef typename FunctorType::RealType                        FunctorRealType;
 
   typedef otb::SarParametricMapFunction<InputImageType>               ParametricFunctionType;

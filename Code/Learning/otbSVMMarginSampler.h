@@ -50,7 +50,7 @@ public:
   /** typedefs from TSample object */
   typedef typename TSample::MeasurementType MeasurementType;
   typedef typename TSample::MeasurementVectorType MeasurementVectorType;
-  typedef std::pair<unsigned int,double> IndexAndDistanceType;
+  typedef std::pair<unsigned int, double> IndexAndDistanceType;
   typedef std::vector<IndexAndDistanceType> IndexAndDistanceVectorType;
   typedef std::vector<unsigned int>         IndexVectorType;
 
@@ -75,11 +75,11 @@ public:
   typedef typename SVMModelType::Pointer             SVMModelPointer;
   typedef typename SVMModelType::DistancesVectorType DistancesVectorType;
 
-  itkSetMacro(NumberOfCandidates,unsigned int);
-  itkGetMacro(NumberOfCandidates,unsigned int);
+  itkSetMacro(NumberOfCandidates, unsigned int);
+  itkGetMacro(NumberOfCandidates, unsigned int);
 
   /** Set the model */
-  itkSetObjectMacro(Model,SVMModelType);
+  itkSetObjectMacro(Model, SVMModelType);
 
   /** Get the number of classes. */
   itkGetObjectMacro(Model, SVMModelType);

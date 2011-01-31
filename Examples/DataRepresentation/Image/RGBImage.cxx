@@ -120,7 +120,7 @@ int main(int, char * argv[])
   PixelType::ValueType blue  = onePixel.GetBlue();
   // Software Guide : EndCodeSnippet
 
-  std::cout << "Pixel values from GetRed,GetGreen,GetBlue:" << std::endl;
+  std::cout << "Pixel values from GetRed, GetGreen, GetBlue:" << std::endl;
   std::cout << "Red = "
             << itk::NumericTraits<PixelType::ValueType>::PrintType(red)
             << std::endl;

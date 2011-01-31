@@ -64,7 +64,7 @@ ComplexMomentsImageFunction<TInputImage, TCoordRep>
     moments.at(p).resize(m_Qmax+1);
     for (unsigned int q = 0; q <= m_Qmax; q++)
       {
-      moments.at(p).at(q) =  ScalarComplexType(0.0,0.0);
+      moments.at(p).at(q) =  ScalarComplexType(0.0, 0.0);
       }
     }
 
@@ -100,14 +100,14 @@ ComplexMomentsImageFunction<TInputImage, TCoordRep>
     ScalarRealType     y = static_cast<ScalarRealType>(it.GetOffset(i)[1])/(2*m_NeighborhoodRadius+1);
     
     // Build complex value
-    ScalarComplexType xpy(x,y),xqy(x,-y);
+    ScalarComplexType xpy(x, y), xqy(x, -y);
     
     // Update cumulants
     for (unsigned int p = 0; p <= m_Pmax; p++)
       {
       for (unsigned int q= 0; q <= m_Qmax; q++)
         {
-        moments.at(p).at(q) += vcl_pow(xpy,p) * vcl_pow(xqy,q) * value;
+        moments.at(p).at(q) += vcl_pow(xpy, p) * vcl_pow(xqy, q) * value;
         }
       }
     }

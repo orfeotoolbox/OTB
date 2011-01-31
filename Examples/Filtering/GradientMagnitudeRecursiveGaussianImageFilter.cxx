@@ -51,7 +51,7 @@
 //  Response} filter that approximates a convolution with the derivative of the
 //  Gaussian kernel.  Traditional convolution will produce a more accurate
 //  result, but the IIR approach is much faster, especially using large
-//  $\sigma$s \cite{Deriche1990,Deriche1993}.
+//  $\sigma$s \cite{Deriche1990, Deriche1993}.
 //
 //  GradientMagnitudeRecursiveGaussianImageFilter will work on images of
 //  any dimension by taking advantage of the natural separability of the

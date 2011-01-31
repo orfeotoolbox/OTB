@@ -53,7 +53,7 @@ public:
   typedef AttributesMapLabelObjectWithClassLabel      Self;
   typedef AttributesMapLabelObject<TLabel,
       VImageDimension, TAttributesValue>  Superclass;
-  typedef itk::LabelObject<TLabel,VImageDimension>    LabelObjectType;
+  typedef itk::LabelObject<TLabel, VImageDimension>    LabelObjectType;
   typedef itk::SmartPointer<Self>                     Pointer;
   typedef itk::SmartPointer<const Self>               ConstPointer;
   typedef itk::WeakPointer <const Self>               ConstWeakPointer;

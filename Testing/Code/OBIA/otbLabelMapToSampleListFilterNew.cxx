@@ -27,7 +27,7 @@
 
 int otbLabelMapToSampleListFilterNew(int argc, char* argv[])
 {
-  typedef otb::AttributesMapLabelObject<unsigned short,2,double> LabelObjectType;
+  typedef otb::AttributesMapLabelObject<unsigned short, 2, double> LabelObjectType;
   typedef itk::LabelMap<LabelObjectType>                         LabelMapType;
   typedef itk::VariableLengthVector<double>                      VectorType;
   typedef itk::Statistics::ListSample<VectorType>                ListSampleType;

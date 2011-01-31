@@ -84,7 +84,7 @@ public:
   typedef typename InputImageType::Pointer     InputImagePointer;
   typedef typename InputImageType::PixelType   InputImagePixelType;
 
-  typedef VectorData<double,2>                    VectorDataType;
+  typedef VectorData<double, 2>                    VectorDataType;
   typedef typename VectorDataType::DataNodeType   DataNodeType;
   typedef typename DataNodeType::PolygonType      PolygonType;
   typedef typename PolygonType::VertexType        VertexType;
@@ -99,7 +99,7 @@ public:
   typedef ImageFileWriter< VectorImage<OutputPixelType> >     VectorWriterType;
 
   // Resampler
-  typedef StreamingShrinkImageFilter<InputImageType,InputImageType > StreamingShrinkImageFilterType;
+  typedef StreamingShrinkImageFilter<InputImageType, InputImageType > StreamingShrinkImageFilterType;
 
   // Intensity Rescale
   typedef VectorRescaleIntensityImageFilter<InputImageType,
@@ -114,7 +114,7 @@ public:
   typedef itk::CastImageFilter<InputImageType, VectorImage<OutputPixelType> > CastFilterType;
 
   // std::pair description <-> legend (image)
-  typedef std::pair<std::string,InputImagePointer>      LegendPairType;
+  typedef std::pair<std::string, InputImagePointer>      LegendPairType;
   typedef std::vector<LegendPairType>                   LegendVectorType;
   
   /** Dimension of input image. */
@@ -135,7 +135,7 @@ public:
   }
   
   // Public method to Add Logo
-  itkSetMacro(Logo,InputImagePointer);
+  itkSetMacro(Logo, InputImagePointer);
 
   // Public method to store the legend and their description in the
   // legendVector
@@ -150,11 +150,11 @@ public:
   void AddLegend(const InputImagePointer legend)
   {
     std::string emptyString ="";
-    this->AddLegend(emptyString,legend);
+    this->AddLegend(emptyString, legend);
   }
 
   // Set the size of the tiles to produce
-  itkSetMacro(TileSize,int);
+  itkSetMacro(TileSize, int);
 
 protected:
   KmzProductWriter();

@@ -78,7 +78,7 @@ private:
 
 
 template <class TIFFactory, typename TPixel, unsigned int VImageDimension>
-class MultiChannelIFFactory<TIFFactory, otb::VectorImage<TPixel,VImageDimension> >
+class MultiChannelIFFactory<TIFFactory, otb::VectorImage<TPixel, VImageDimension> >
 {
 public:
   typedef TIFFactory                                    IFFactoryType;

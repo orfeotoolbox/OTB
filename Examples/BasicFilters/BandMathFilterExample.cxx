@@ -91,7 +91,7 @@ int main( int argc, char* argv[])
   typedef otb::Image<PixelType, 2>                                        OutputImageType;
   typedef otb::ImageList<OutputImageType>                                 ImageListType;
   typedef OutputImageType::PixelType                                      VPixelType;
-  typedef otb::VectorImageToImageListFilter<InputImageType,ImageListType>
+  typedef otb::VectorImageToImageListFilter<InputImageType, ImageListType>
   VectorImageToImageListType;
   typedef otb::ImageFileReader<InputImageType>                            ReaderType;
   typedef otb::ImageFileWriter<OutputImageType>                           WriterType;
@@ -151,7 +151,7 @@ int main( int argc, char* argv[])
   
 //  Software Guide : BeginLatex
 //
-//  Now we can define the mathematical expression to perform on the layers (b1, b2,b3,b4).
+//  Now we can define the mathematical expression to perform on the layers (b1, b2, b3, b4).
 //  The filter takes advantage of the parsing capabilities of the muParser library and
 //  allows to set the expression as on a digital calculator.
 //
@@ -160,7 +160,7 @@ int main( int argc, char* argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  filter->SetExpression("if((b4-b3)/(b4+b3) > 0.4,255,0)");
+  filter->SetExpression("if((b4-b3)/(b4+b3) > 0.4, 255, 0)");
 // Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex
@@ -176,8 +176,8 @@ int main( int argc, char* argv[])
 //  Software Guide : BeginLatex
 //
 // The muParser library offers also the possibility to extended existing built-in functions. For example,
-// you can use the OTB expression "ndvi(b3,b4)" with the filter. The mathematical expression would be in
-// this case \textit{if($ndvi(b3,b4)>0.4$,255,0)}. It will return the same result.
+// you can use the OTB expression "ndvi(b3, b4)" with the filter. The mathematical expression would be in
+// this case \textit{if($ndvi(b3, b4)>0.4$, 255, 0)}. It will return the same result.
 //
 //  Software Guide : EndLatex
 

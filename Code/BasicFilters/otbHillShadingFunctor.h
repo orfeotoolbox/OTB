@@ -144,7 +144,7 @@ public:
     const typename IteratorType::OffsetType RIGHTDOWN = {{1, 1}};
     const typename IteratorType::OffsetType RIGHTUP  = {{1, -1}};
     const typename IteratorType::OffsetType LEFTDOWN = {{-1, 1}};
-//    const typename IteratorType::OffsetType CENTER ={{0,0}};
+//    const typename IteratorType::OffsetType CENTER ={{0, 0}};
 
     float xSlope =
       ((makeValid(it.GetPixel(LEFTUP)) + 2 * makeValid(it.GetPixel(LEFT)) + makeValid(it.GetPixel(LEFTDOWN)))

@@ -65,7 +65,7 @@ public:
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ComplexToVectorImageCastFilter :
     public
-otb::UnaryFunctorImageFilter<TInputImage,TOutputImage,
+otb::UnaryFunctorImageFilter<TInputImage, TOutputImage,
                         Functor::ComplexToVector<
   typename TInputImage::PixelType,
   typename TOutputImage::PixelType>   >
@@ -74,7 +74,7 @@ public:
   /** Standard class typedefs. */
   typedef ComplexToVectorImageCastFilter  Self;
   typedef otb::UnaryFunctorImageFilter<
-    TInputImage,TOutputImage,
+    TInputImage, TOutputImage,
     Functor::ComplexToVector< typename TInputImage::PixelType,
     typename TOutputImage::PixelType> >                        Superclass;
   typedef itk::SmartPointer<Self>             Pointer;

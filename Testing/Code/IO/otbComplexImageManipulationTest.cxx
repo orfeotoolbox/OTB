@@ -137,12 +137,12 @@ int otbMonobandScalarToImageComplexGeneric(int argc, char * argv[])
 
 int otbMonobandScalarToImageComplexFloat(int argc, char * argv[])
 {
-  return otbMonobandScalarToImageComplexGeneric<float>(argc,argv);
+  return otbMonobandScalarToImageComplexGeneric<float>(argc, argv);
 }
 
 int otbMonobandScalarToImageComplexDouble(int argc, char * argv[])
 {
-  return otbMonobandScalarToImageComplexGeneric<double>(argc,argv);
+  return otbMonobandScalarToImageComplexGeneric<double>(argc, argv);
 }
 
 /***********
@@ -181,12 +181,12 @@ int otbMonobandComplexToImageScalarGeneric(int argc, char * argv[])
 
 int otbMonobandComplexToImageScalarFloat(int argc, char * argv[])
 {
-  return otbMonobandComplexToImageScalarGeneric<float>(argc,argv);
+  return otbMonobandComplexToImageScalarGeneric<float>(argc, argv);
 }
 
 int otbMonobandComplexToImageScalarDouble(int argc, char * argv[])
 {
-  return otbMonobandComplexToImageScalarGeneric<double>(argc,argv);
+  return otbMonobandComplexToImageScalarGeneric<double>(argc, argv);
 }
 
 /***********
@@ -225,12 +225,12 @@ int otbMonobandComplexToImageComplexGeneric(int argc, char * argv[])
 
 int otbMonobandComplexToImageComplexFloat(int argc, char * argv[])
 {
-  return otbMonobandComplexToImageComplexGeneric<float>(argc,argv);
+  return otbMonobandComplexToImageComplexGeneric<float>(argc, argv);
 }
 
 int otbMonobandComplexToImageComplexDouble(int argc, char * argv[])
 {
-  return otbMonobandComplexToImageComplexGeneric<double>(argc,argv);
+  return otbMonobandComplexToImageComplexGeneric<double>(argc, argv);
 }
 
 /***********
@@ -274,12 +274,12 @@ int otbMonobandComplexToVectorImageScalarGeneric(int argc, char * argv[])
 
 int otbMonobandComplexToVectorImageScalarFloat(int argc, char * argv[])
 {
-  return otbMonobandComplexToVectorImageScalarGeneric<float>(argc,argv);
+  return otbMonobandComplexToVectorImageScalarGeneric<float>(argc, argv);
 }
 
 int otbMonobandComplexToVectorImageScalarDouble(int argc, char * argv[])
 {
-  return otbMonobandComplexToVectorImageScalarGeneric<double>(argc,argv);
+  return otbMonobandComplexToVectorImageScalarGeneric<double>(argc, argv);
 }
 
 /***********
@@ -322,12 +322,12 @@ int otbMonobandComplexToVectorImageComplexGeneric(int argc, char * argv[])
 
 int otbMonobandComplexToVectorImageComplexFloat(int argc, char * argv[])
 {
-  return otbMonobandComplexToVectorImageComplexGeneric<float>(argc,argv);
+  return otbMonobandComplexToVectorImageComplexGeneric<float>(argc, argv);
 }
 
 int otbMonobandComplexToVectorImageComplexDouble(int argc, char * argv[])
 {
-  return otbMonobandComplexToVectorImageComplexGeneric<double>(argc,argv);
+  return otbMonobandComplexToVectorImageComplexGeneric<double>(argc, argv);
 }
 
 
@@ -370,12 +370,12 @@ int otbMultibandScalarToImageComplexGeneric(int argc, char * argv[])
 
 int otbMultibandScalarToImageComplexFloat(int argc, char * argv[])
 {
-  return otbMultibandScalarToImageComplexGeneric<float>(argc,argv);
+  return otbMultibandScalarToImageComplexGeneric<float>(argc, argv);
 }
 
 int otbMultibandScalarToImageComplexDouble(int argc, char * argv[])
 {
-  return otbMultibandScalarToImageComplexGeneric<double>(argc,argv);
+  return otbMultibandScalarToImageComplexGeneric<double>(argc, argv);
 }
 
 
@@ -420,19 +420,19 @@ int otbMultibandScalarToVectorImageComplexGeneric(int argc, char * argv[])
 
 int otbMultibandScalarToVectorImageComplexFloat(int argc, char * argv[])
 {
-  return otbMultibandScalarToVectorImageComplexGeneric<float>(argc,argv);
+  return otbMultibandScalarToVectorImageComplexGeneric<float>(argc, argv);
 }
 
 int otbMultibandScalarToVectorImageComplexDouble(int argc, char * argv[])
 {
-  return otbMultibandScalarToVectorImageComplexGeneric<double>(argc,argv);
+  return otbMultibandScalarToVectorImageComplexGeneric<double>(argc, argv);
 }
 
 
 /***********
  * 8.
  * Read Multiband Complex as VectorImage<scalar>
- * out : out[0]=in[0].real, out[1]=in[0].imag, out[2]=in[0].real, out[3]=in[0].imag,...
+ * out : out[0]=in[0].real, out[1]=in[0].imag, out[2]=in[0].real, out[3]=in[0].imag, ...
  ***********/
 template<class InternalType>
 int otbMultibandComplexToVectorImageScalarGeneric(int argc, char * argv[])
@@ -475,12 +475,12 @@ int otbMultibandComplexToVectorImageScalarGeneric(int argc, char * argv[])
 
 int otbMultibandComplexToVectorImageScalarFloat(int argc, char * argv[])
 {
-  return otbMultibandComplexToVectorImageScalarGeneric<float>(argc,argv);
+  return otbMultibandComplexToVectorImageScalarGeneric<float>(argc, argv);
 }
 
 int otbMultibandComplexToVectorImageScalarDouble(int argc, char * argv[])
 {
-  return otbMultibandComplexToVectorImageScalarGeneric<double>(argc,argv);
+  return otbMultibandComplexToVectorImageScalarGeneric<double>(argc, argv);
 }
 
 /***********
@@ -529,12 +529,12 @@ int otbMultibandComplexToVectorImageComplexGeneric(int argc, char * argv[])
 
 int otbMultibandComplexToVectorImageComplexFloat(int argc, char * argv[])
 {
-  return otbMultibandComplexToVectorImageComplexGeneric<float>(argc,argv);
+  return otbMultibandComplexToVectorImageComplexGeneric<float>(argc, argv);
 }
 
 int otbMultibandComplexToVectorImageComplexDouble(int argc, char * argv[])
 {
-  return otbMultibandComplexToVectorImageComplexGeneric<double>(argc,argv);
+  return otbMultibandComplexToVectorImageComplexGeneric<double>(argc, argv);
 }
 
 /***********
@@ -577,12 +577,12 @@ int otbMonobandScalarToVectorImageComplexGeneric(int argc, char * argv[])
 
 int otbMonobandScalarToVectorImageComplexFloat(int argc, char * argv[])
 {
-  return otbMonobandScalarToVectorImageComplexGeneric<float>(argc,argv);
+  return otbMonobandScalarToVectorImageComplexGeneric<float>(argc, argv);
 }
 
 int otbMonobandScalarToVectorImageComplexDouble(int argc, char * argv[])
 {
-  return otbMonobandScalarToVectorImageComplexGeneric<double>(argc,argv);
+  return otbMonobandScalarToVectorImageComplexGeneric<double>(argc, argv);
 }
 
 /***********
@@ -603,10 +603,10 @@ int otbMultibandComplexToImageScalarGeneric(int argc, char * argv[])
 
 int otbMultibandComplexToImageScalarFloat(int argc, char * argv[])
 {
-  return otbMultibandComplexToImageScalarGeneric<float>(argc,argv);
+  return otbMultibandComplexToImageScalarGeneric<float>(argc, argv);
 }
 
 int otbMultibandComplexToImageScalarDouble(int argc, char * argv[])
 {
-  return otbMultibandComplexToImageScalarGeneric<double>(argc,argv);
+  return otbMultibandComplexToImageScalarGeneric<double>(argc, argv);
 }

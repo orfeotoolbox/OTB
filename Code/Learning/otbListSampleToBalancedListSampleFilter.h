@@ -49,12 +49,12 @@ public:
   /** Standard class typedefs */
   typedef ListSampleToBalancedListSampleFilter       Self;
   typedef otb::Statistics::ListSampleToListSampleFilter
-  <TInputSampleList,TOutputSampleList>               Superclass;
+  <TInputSampleList, TOutputSampleList>               Superclass;
   typedef itk::SmartPointer< Self >                  Pointer;
   typedef itk::SmartPointer<const Self>              ConstPointer;
   
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ListSampleToBalancedListSampleFilter,otb::Statistics::ListSampleToListSampleFilter);
+  itkTypeMacro(ListSampleToBalancedListSampleFilter, otb::Statistics::ListSampleToListSampleFilter);
   
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -90,7 +90,7 @@ public:
   
   /** Filter adding noise to a ListSample */
   typedef otb::Statistics::GaussianAdditiveNoiseSampleListFilter
-  <InputSampleListType,OutputSampleListType>                   GaussianAdditiveNoiseType;
+  <InputSampleListType, OutputSampleListType>                   GaussianAdditiveNoiseType;
   typedef typename GaussianAdditiveNoiseType::Pointer          GaussianAdditiveNoisePointerType;
   
   /** Get/Set the label sample list */
@@ -110,19 +110,19 @@ public:
   LabelSampleListObjectType * GetOutputLabel();
   
   /** Set/Get the mean for the white gaussian noise to generate  */
-  otbSetObjectMemberMacro(AddGaussianNoiseFilter,Mean,double);
-  otbGetObjectMemberConstMacro(AddGaussianNoiseFilter,Mean,double);
+  otbSetObjectMemberMacro(AddGaussianNoiseFilter, Mean, double);
+  otbGetObjectMemberConstMacro(AddGaussianNoiseFilter, Mean, double);
   
   /** Set/Get the variance for the white gaussian noise to generate  */
-  otbSetObjectMemberMacro(AddGaussianNoiseFilter,Variance,double);
-  otbGetObjectMemberConstMacro(AddGaussianNoiseFilter,Variance,double);
+  otbSetObjectMemberMacro(AddGaussianNoiseFilter, Variance, double);
+  otbGetObjectMemberConstMacro(AddGaussianNoiseFilter, Variance, double);
 
   /** Set/Get the multiplicative factor : this value is used to
     * determine the maximum number of samples in each label in order
     * to reach a balanced output ListSample
     */
-  itkSetMacro(BalancingFactor,unsigned int);
-  itkGetMacro(BalancingFactor,unsigned int);
+  itkSetMacro(BalancingFactor, unsigned int);
+  itkGetMacro(BalancingFactor, unsigned int);
   
 protected:
   /** This method causes the filter to generate its output. */

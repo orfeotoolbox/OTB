@@ -61,7 +61,7 @@ int otbDecisionTreeWithRealValues(int argc, char* argv[])
 
   // Build some examples for testing
 
-  DecisionTreeType::ExampleType ww_in_summer;//(DoY), (NDVI)
+  DecisionTreeType::ExampleType ww_in_summer; //(DoY), (NDVI)
   ww_in_summer.push_back(200);
   ww_in_summer.push_back(0.2);
 

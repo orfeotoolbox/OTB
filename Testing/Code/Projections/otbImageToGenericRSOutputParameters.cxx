@@ -26,7 +26,7 @@
 #include <iostream>
 #include <fstream>
 
-typedef otb::VectorImage<double,2>       ImageType;
+typedef otb::VectorImage<double, 2>       ImageType;
 typedef otb::ImageToGenericRSOutputParameters<ImageType>  FilterType;
 
 int otbImageToGenericRSOutputParametersNew (int argc, char * argv[])

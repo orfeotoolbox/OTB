@@ -90,7 +90,7 @@ public:
   typedef unsigned char                                OutputPixelType;
   typedef VectorImage<OutputPixelType>                 OutputImageType;
 
-  typedef VectorData<double,2>                         VectorDataType;
+  typedef VectorData<double, 2>                         VectorDataType;
   typedef typename VectorDataType::DataNodeType        DataNodeType;
   typedef typename DataNodeType::PolygonType           PolygonType;
   typedef typename PolygonType::VertexType             VertexType;
@@ -107,14 +107,14 @@ public:
   
   // Resampler
   typedef StreamingShrinkImageFilter
-  <InputImageType,InputImageType >        StreamingShrinkImageFilterType;
+  <InputImageType, InputImageType >        StreamingShrinkImageFilterType;
 
   // Intensity Rescale
   typedef VectorRescaleIntensityImageFilter
-  <InputImageType,InputImageType>          VectorRescaleIntensityImageFilterType;
+  <InputImageType, InputImageType>          VectorRescaleIntensityImageFilterType;
 
   // Project filter
-  typedef GenericRSResampleImageFilter<InputImageType,InputImageType>  GenericRSResamplerType;
+  typedef GenericRSResampleImageFilter<InputImageType, InputImageType>  GenericRSResamplerType;
   typedef typename GenericRSResamplerType::Pointer                   GenericRSResamplerPointerType;
 
   // Transformer
@@ -136,8 +136,8 @@ public:
   itkGetStringMacro(FileName);
 
   /** Set/Get the size of each tile*/
-  itkSetMacro(TileSize,unsigned int);
-  itkGetMacro(TileSize,unsigned int);
+  itkSetMacro(TileSize, unsigned int);
+  itkGetMacro(TileSize, unsigned int);
 
   /** Set CGI filename path */
   itkSetStringMacro(CGIPath);
@@ -154,7 +154,7 @@ public:
   }
 
   /** Macro to set the SRID we want to project Data in*/
-  itkSetMacro(SRID,int);
+  itkSetMacro(SRID, int);
   
 protected:
   MapFileProductWriter();

@@ -55,7 +55,7 @@ public:
   itkNewMacro(Self);
 
   // RTTI typeinfo
-  itkTypeMacro(LocalHistogramIFFactory,itk::LightObject);
+  itkTypeMacro(LocalHistogramIFFactory, itk::LightObject);
 
   // Input and output typedef
   typedef TImageType              InputImageType;

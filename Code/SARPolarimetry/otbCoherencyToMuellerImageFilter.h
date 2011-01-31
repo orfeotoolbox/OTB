@@ -91,12 +91,12 @@ private:
 template <class TInputImage, class TOutputImage, class TFunction = Functor::CoherencyToMuellerFunctor<
     ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
 class ITK_EXPORT CoherencyToMuellerImageFilter :
-   public otb::UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction>
+   public otb::UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction>
 {
 public:
    /** Standard class typedefs. */
    typedef CoherencyToMuellerImageFilter  Self;
-   typedef otb::UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction> Superclass;
+   typedef otb::UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction> Superclass;
    typedef itk::SmartPointer<Self>        Pointer;
    typedef itk::SmartPointer<const Self>  ConstPointer;
 

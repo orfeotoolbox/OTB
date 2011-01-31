@@ -46,7 +46,7 @@ FunctionToImageFilter<TInputImage, TOutputImage, TFunction>
  */
 // template<class TInputImage, class TOutputImage, class TFunction >
 // void
-// FunctionToImageFilter<TInputImage,TOutputImage,TFunction>
+// FunctionToImageFilter<TInputImage, TOutputImage, TFunction>
 // ::SetInput( const TInputImage *image )
 // {
 //   // The ProcessObject is not const-correct so the const_cast is required here

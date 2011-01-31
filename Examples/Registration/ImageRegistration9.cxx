@@ -464,7 +464,7 @@ int main(int argc, char *argv[])
   //  \end{itemize}
   //
   //  The second image is the result of intentionally rotating the first
-  //  image by $10$ degrees and then translating by $(13,17)$.  Both images
+  //  image by $10$ degrees and then translating by $(13, 17)$.  Both images
   //  have unit-spacing and are shown in Figure
   //  \ref{fig:FixedMovingImageRegistration9}. We execute the code using the
   //  following parameters: step length=1.0, translation scale= 0.0001 and

@@ -103,7 +103,7 @@ int otbBandMathImageFilter( int argc, char* argv[])
   filter->SetNthInput(1, image2);
   filter->SetNthInput(2, image3, "canal3");
 
-  filter->SetExpression("cos(2 * pi * b1)/(2 * pi * b2 + 1E-3)*sin(pi * canal3) + ndvi(b1,b2) * sqrt(2) * canal3");
+  filter->SetExpression("cos(2 * pi * b1)/(2 * pi * b2 + 1E-3)*sin(pi * canal3) + ndvi(b1, b2) * sqrt(2) * canal3");
   filter->Update();
 
   std::cout << "\n---  Standard Use\n";
@@ -112,7 +112,7 @@ int otbBandMathImageFilter( int argc, char* argv[])
   ImageType::Pointer output = filter->GetOutput();
   IteratorType it(output, region);
 
-  for (it1.GoToBegin(), it2.GoToBegin(), it3.GoToBegin(), it.GoToBegin(); !it1.IsAtEnd(); ++it1, ++it2, ++it3,++it)
+  for (it1.GoToBegin(), it2.GoToBegin(), it3.GoToBegin(), it.GoToBegin(); !it1.IsAtEnd(); ++it1, ++it2, ++it3, ++it)
     {
     ImageType::IndexType i1 = it1.GetIndex();
     ImageType::IndexType i2 = it2.GetIndex();
@@ -258,7 +258,7 @@ int otbBandMathImageFilterWithIdx( int argc, char* argv[])
   filter->SetNthInput(1, image2);
   filter->SetNthInput(2, image3);
 
-  filter->SetExpression("if(sqrt(idxX*idxX+idxY*idxY) < 50, b2,b3)");
+  filter->SetExpression("if(sqrt(idxX*idxX+idxY*idxY) < 50, b2, b3)");
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput(filter->GetOutput());
   writer->SetFileName(outfname1);
