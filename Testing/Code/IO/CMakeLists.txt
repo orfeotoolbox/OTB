@@ -2790,6 +2790,7 @@ ADD_TEST(ioTvTileMapImageIOHelperTest ${IO_TESTS21}
 
 # Tests about complex reading
 
+#SET(INPUTFILE_PIXELTYPES_LIST "Int" "Short" "Float" "Double")
 SET(INPUTFILE_PIXELTYPES_LIST "Float" "Double")
 SET(READING_PIXELTYPES_LIST "Float" "Double")
 SET(NBBANDS_LIST "2" "3" "4")
@@ -2828,11 +2829,14 @@ FOREACH(INPUTFILE_PIXELTYPE ${INPUTFILE_PIXELTYPES_LIST})
              otbMonobandComplexToVectorImageComplex${READING_PIXELTYPE}
              ${INPUTDATA}/monobandComplex${INPUTFILE_PIXELTYPE}.hdr)
 
+    # Weird case : only the first 2 bands used
     ADD_TEST(ioTvMultibandScalar${INPUTFILE_PIXELTYPE}ToImageComplex${READING_PIXELTYPE}
              ${IO_TESTS21}
              otbMultibandScalarToImageComplex${READING_PIXELTYPE}
              ${INPUTDATA}/multiband${INPUTFILE_PIXELTYPE}.tif)
 
+    # Weird case : one scalar band -> one complex band with imag=0
+    # but interleaving real and imaginary parts can only work for an even nb of bands
     ADD_TEST(ioTvMultibandScalar${INPUTFILE_PIXELTYPE}ToVectorImageComplex${READING_PIXELTYPE}
              ${IO_TESTS21}
              otbMultibandScalarToVectorImageComplex${READING_PIXELTYPE}
