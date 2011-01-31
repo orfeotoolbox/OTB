@@ -905,26 +905,26 @@ public:
     PrecisionType maximumValue = itk::NumericTraits<PrecisionType>::max();
     PrecisionType minimumValue = itk::NumericTraits<PrecisionType>::NonpositiveMin();
 
-    // the thresholds are changed wrt Baraldi's paper
-    m_FvBright->SetMembership(Low, minimumValue, minimumValue, 0.2, 0.2);
-    m_FvBright->SetMembership(Medium, 0.2, 0.2, 0.5, 0.5);
-    m_FvBright->SetMembership(High, 0.5, 0.5, maximumValue, maximumValue);
+    // the thresholds are computed wrt Baraldi's paper (normalized 0-255 values)
+    m_FvBright->SetMembership(Low, minimumValue, minimumValue, 40/255., 40/255.);
+    m_FvBright->SetMembership(Medium, 40/255., 40/255., 60/255., 60/255.);
+    m_FvBright->SetMembership(High, 60/255., 60/255., maximumValue, maximumValue);
 
-    m_FvVis->SetMembership(Low, minimumValue, minimumValue, 0.15, 0.15);
-    m_FvVis->SetMembership(Medium, 0.15, 0.15, 0.5, 0.5);
-    m_FvVis->SetMembership(High, 0.5, 0.5, maximumValue, maximumValue);
+    m_FvVis->SetMembership(Low, minimumValue, minimumValue, 30/255., 30/255.);
+    m_FvVis->SetMembership(Medium, 30/255., 30/255., 50/255., 50/255.);
+    m_FvVis->SetMembership(High, 50/255., 50/255., maximumValue, maximumValue);
 
-    m_FvNIR->SetMembership(Low, minimumValue, minimumValue, 0.2, 0.2);
-    m_FvNIR->SetMembership(Medium, 0.2, 0.2, 0.5, 0.5);
-    m_FvNIR->SetMembership(High, 0.5, 0.5, maximumValue, maximumValue);
+    m_FvNIR->SetMembership(Low, minimumValue, minimumValue, 40/255., 40/255.);
+    m_FvNIR->SetMembership(Medium, 40/255., 40/255., 60/255., 60/255.);
+    m_FvNIR->SetMembership(High, 60/255., 60/255., maximumValue, maximumValue);
 
-    m_FvMIR1->SetMembership(Low, minimumValue, minimumValue, 0.2, 0.2);
-    m_FvMIR1->SetMembership(Medium, 0.2, 0.2, 0.5, 0.5);
-    m_FvMIR1->SetMembership(High, 0.5, 0.5, maximumValue, maximumValue);
+    m_FvMIR1->SetMembership(Low, minimumValue, minimumValue, 40/255., 40/255.);
+    m_FvMIR1->SetMembership(Medium, 40/255., 40/255., 60/255., 60/255.);
+    m_FvMIR1->SetMembership(High, 60/255., 60/255., maximumValue, maximumValue);
 
-    m_FvMIR2->SetMembership(Low, minimumValue, minimumValue, 0.15, 0.15);
-    m_FvMIR2->SetMembership(Medium, 0.15, 0.15, 0.5, 0.5);
-    m_FvMIR2->SetMembership(High, 0.5, 0.5, maximumValue, maximumValue);
+    m_FvMIR2->SetMembership(Low, minimumValue, minimumValue, 30/255., 30/255.);
+    m_FvMIR2->SetMembership(Medium, 30/255., 30/255., 50/255., 50/255.);
+    m_FvMIR2->SetMembership(High, 50/255., 50/255., maximumValue, maximumValue);
 
     m_FvTIR->SetMembership(Low, minimumValue, minimumValue, 0, 0);
     m_FvTIR->SetMembership(Medium, 0, 0, 28, 28);
@@ -942,13 +942,13 @@ public:
     m_FvNDBBBI->SetMembership(Medium, -0.20, -0.20, 0.10, 0.10);
     m_FvNDBBBI->SetMembership(High, 0.10, 0.10, maximumValue, maximumValue);
 
-    m_FvNDVI->SetMembership(Low, minimumValue, minimumValue, 0.36, 0.36);
-    m_FvNDVI->SetMembership(Medium, 0.36, 0.36, 0.7, 0.7);
-    m_FvNDVI->SetMembership(High, 0.7, 0.7, maximumValue, maximumValue);
+    m_FvNDVI->SetMembership(Low, minimumValue, minimumValue, 0.35, 0.35);
+    m_FvNDVI->SetMembership(Medium, 0.35, 0.35, 0.6, 0.6);
+    m_FvNDVI->SetMembership(High, 0.6, 0.6, maximumValue, maximumValue);
 
     m_FvNDBSI->SetMembership(Low, minimumValue, minimumValue, -0.20, -0.20);
-    m_FvNDBSI->SetMembership(Medium, -0.20, -0.20, 0.10, 0.10);
-    m_FvNDBSI->SetMembership(High, 0.10, 0.10, maximumValue, maximumValue);
+    m_FvNDBSI->SetMembership(Medium, -0.20, -0.20, 0.0, 0.0);
+    m_FvNDBSI->SetMembership(High, 0.0, 0.0, maximumValue, maximumValue);
     }
   virtual ~LinguisticVariables() {}
 
