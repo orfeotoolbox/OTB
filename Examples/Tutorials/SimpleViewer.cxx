@@ -68,9 +68,9 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::GradientMagnitudeImageFilter
-  <ImageType, ImageType> FilterType;
-  FilterType::Pointer filter = FilterType::New();
+//  typedef itk::GradientMagnitudeImageFilter
+//  <ImageType, ImageType> FilterType;
+//  FilterType::Pointer filter = FilterType::New();
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -94,8 +94,8 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  filter->SetInput(reader->GetOutput());
-  viewer->SetImage(filter->GetOutput());
+//  filter->SetInput(reader->GetOutput());
+  viewer->SetImage(reader->GetOutput());
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex

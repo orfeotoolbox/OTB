@@ -312,32 +312,46 @@ void GDALImageIO::Read(void* buffer)
   else
     {
     // Nominal case
-    int bytePerPixel = m_BytePerPixel;
-    int nbBands = m_NbBands;
+    int pixelOffset = m_BytePerPixel * m_NbBands;
+    int lineOffset  = m_BytePerPixel * m_NbBands * lNbColumns;
+    int bandOffset  = m_BytePerPixel;
+    int nbBands     = m_NbBands;
 
     // In some cases, we need to change some parameters for RasterIO
-    // if the file is complex and the reader is based on a vector of scalar
+
+    // if the file is complex and the reader is based on a vector of scalar,
+    // output 2 times the number of bands, with real and imaginary parts interleaved
     if(GDALDataTypeIsComplex(m_PxType) && !m_IsComplex && m_IsVectorImage)
     {
-      bytePerPixel = m_BytePerPixel * 2;
+      // ImageIO NbComponents is set to 2 * m_NbBands
+      // m_BytePerPixel is already sizeof(std::complex<m_PxType>) / 2
+      pixelOffset = m_BytePerPixel * this->GetNumberOfComponents();
+      lineOffset  = m_BytePerPixel * this->GetNumberOfComponents() * lNbColumns;
+      bandOffset = 2 * m_BytePerPixel;
       nbBands = this->GetNumberOfComponents() / 2;
     }
+
     // if the file is scalar with only one band and the reader is based on a vector of complex
     if(!GDALDataTypeIsComplex(m_PxType) && (m_NbBands == 1) && m_IsComplex && m_IsVectorImage )
     {
-      bytePerPixel = m_BytePerPixel / 2;
+      pixelOffset = m_BytePerPixel / 2;
+      lineOffset  = m_BytePerPixel * lNbColumns / 2;
+      bandOffset  = m_BytePerPixel / 2;
     }
 
     // keep it for the moment
-    /*std::cout << "*** GDALimageIO::Read: nominal case ***"<<std::endl;
+    /*
+    std::cout << "*** GDALimageIO::Read: nominal case ***"<<std::endl;
     std::cout << "Paremeters RasterIO :" \
         << ", indX = " << lFirstColumn \
         << ", indY = " << lFirstLine \
         << ", sizeX = " << lNbColumns \
         << ", sizeY = " << lNbLines \
         << ", GDAL Data Type = " << GDALGetDataTypeName(m_PxType) \
-        << ", nb Band to read = " << m_NbBands \
-        << ", nb BytePerPixel = " << m_BytePerPixel <<std::endl; */
+        << ", pixelOffset = " << pixelOffset \
+        << ", lineOffset = " << lineOffset
+        << ", bandOffset = " << bandOffset << std::endl;
+    */
 
     CPLErr lCrGdal = m_Dataset->GetDataSet()->RasterIO(GF_Read,
                                                        lFirstColumn,
@@ -351,14 +365,9 @@ void GDALImageIO::Read(void* buffer)
                                                        nbBands,
                                                        // We want to read all bands
                                                        NULL,
-                                                       // Pixel offset
-                                                       // is nbComp * BytePerPixel
-                                                       bytePerPixel * nbBands,
-                                                       // Line offset
-                                                       // is pixelOffset * nbColumns
-                                                       bytePerPixel * nbBands * lNbColumns,
-                                                       // Band offset is BytePerPixel
-                                                       bytePerPixel);
+                                                       pixelOffset,
+                                                       lineOffset,
+                                                       bandOffset);
     // Check if gdal call succeed
     if (lCrGdal == CE_Failure)
       {
