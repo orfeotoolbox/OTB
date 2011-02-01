@@ -32,8 +32,9 @@ namespace otb
 
 template<class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
-::GenericRSTransform() : Superclass(SpaceDimension,
-                                    ParametersDimension), m_DEMDirectory(""),  m_AverageElevation(-32768.0)
+::GenericRSTransform() : Superclass(SpaceDimension,ParametersDimension), 
+                         m_DEMDirectory(""),  
+                         m_AverageElevation(-32768.0)
 {
   m_InputProjectionRef.clear();
   m_OutputProjectionRef.clear();

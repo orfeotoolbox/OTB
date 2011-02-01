@@ -24,7 +24,7 @@
 #include "otbImageKeywordlist.h"
 #include "otbSensorModelAdapter.h"
 
-#include "itkTransform.h"
+#include "otbTransform.h"
 #include "itkSmartPointer.h"
 #include "itkObject.h"
 
@@ -42,7 +42,7 @@ namespace otb
 template <class TScalarType,
     unsigned int NInputDimensions = 3,
     unsigned int NOutputDimensions = 2>
-class ITK_EXPORT SensorModelBase : public itk::Transform<TScalarType,
+class ITK_EXPORT SensorModelBase : public Transform<TScalarType,
       NInputDimensions,
       NOutputDimensions>
 {
@@ -51,7 +51,7 @@ public:
 
   /** Standard class typedefs. */
   typedef SensorModelBase               Self;
-  typedef itk::Transform<TScalarType,
+  typedef Transform<TScalarType,
       NInputDimensions,
       NOutputDimensions>                Superclass;
   typedef itk::SmartPointer<Self>       Pointer;

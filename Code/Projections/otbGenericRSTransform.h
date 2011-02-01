@@ -21,7 +21,7 @@
 #include <iostream>
 #include <sstream>
 #include <stdio.h>
-#include "itkTransform.h"
+#include "otbTransform.h"
 #include "itkMacro.h"
 #include "itkMacro.h"
 #include "otbCompositeTransform.h"
@@ -48,15 +48,15 @@ enum TransformAccuracy {UNKNOWN, ESTIMATE, PRECISE};
 template <class TScalarType = double,
     unsigned int NInputDimensions = 2,
     unsigned int NOutputDimensions = 2>
-class ITK_EXPORT GenericRSTransform : public itk::Transform<TScalarType,          // Data type for scalars
+class ITK_EXPORT GenericRSTransform : public otb::Transform<TScalarType,          // Data type for scalars
       NInputDimensions,                                                       // Number of dimensions in the input space
       NOutputDimensions>                                                       // Number of dimensions in the output space
 {
 public:
   /** Standard class typedefs. */
-  typedef itk::Transform<TScalarType,
+  typedef otb::Transform<TScalarType,
       NInputDimensions,
-      NOutputDimensions>       Superclass;
+      NOutputDimensions>                Superclass;
   typedef GenericRSTransform            Self;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -79,7 +79,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GenericRSTransform, itk::Transform);
+  itkTypeMacro(GenericRSTransform, Transform);
 
   typedef TransformDirection::TransformationDirection DirectionOfMappingEnumType;
 

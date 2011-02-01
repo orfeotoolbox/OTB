@@ -21,7 +21,7 @@
 #include <iostream>
 #include <sstream>
 #include <stdio.h>
-#include "itkTransform.h"
+#include "otbTransform.h"
 #include "itkMacro.h"
 
 namespace otb
@@ -52,14 +52,14 @@ template <class TFirstTransform,
     class TScalarType = typename TFirstTransform::ScalarType,
     unsigned int NInputDimensions = TFirstTransform::InputSpaceDimension,
     unsigned int NOutputDimensions = TSecondTransform::OutputSpaceDimension>
-class ITK_EXPORT CompositeTransform : public itk::Transform<TScalarType,  // Data type for scalars
+class ITK_EXPORT CompositeTransform : public Transform<TScalarType,  // Data type for scalars
       NInputDimensions,                                                       // Number of dimensions in the input space
       NOutputDimensions>                                                       // Number of dimensions in the output space
 {
 public:
 
   /** Standard class typedefs */
-  typedef itk::Transform<TScalarType,
+  typedef Transform<TScalarType,
       NInputDimensions,
       NOutputDimensions>         Superclass;
   typedef CompositeTransform            Self;
@@ -95,7 +95,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(CompositeTransform, itk::Transform);
+  itkTypeMacro(CompositeTransform, Transform);
 
   itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
   itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
