@@ -172,6 +172,10 @@ int otbMonobandComplexToImageScalarGeneric(int argc, char * argv[])
   for (it.GoToBegin(); !it.IsAtEnd(); ++it)
     {
     count = 2 * (it.GetIndex()[1] * largestRegion[0] + it.GetIndex()[0]);
+    std::cout << "it.GetIndex() " << it.GetIndex() << std::endl;
+    std::cout << "largestRegion " << largestRegion << std::endl;
+    std::cout << "count " << count << std::endl;
+
     if ( !TestCompare(it.GetIndex(), it.Get(), vcl_abs(ComplexType(count, count+1)) ) )
       return EXIT_FAILURE;
     }
