@@ -46,17 +46,17 @@ int generic_main(otb::ApplicationOptionsResult* parseResult,
 {
   try
   {
-    typedef otb::VectorImage<double, 2>       ImageType;
-    typedef otb::ImageFileReader<ImageType>           ReaderType;
-    typedef otb::StreamingImageFileWriter<ImageType>  WriterType;
+    typedef otb::VectorImage<double, 2>                                                  ImageType;
+    typedef otb::ImageFileReader<ImageType>                                              ReaderType;
+    typedef otb::StreamingImageFileWriter<ImageType>                                     WriterType;
 
     typedef TMapProjection                            MapProjectionType;
     typedef otb::OrthoRectificationFilter< ImageType, ImageType,  MapProjectionType >    OrthorectifFilterType;
-
-    typedef itk::LinearInterpolateImageFunction<ImageType, double>          LinearInterpolationType;
-    typedef itk::NearestNeighborInterpolateImageFunction<ImageType, double> NearestNeighborInterpolationType;
-    typedef otb::BCOInterpolateImageFunction<ImageType>                     BCOInterpolationType;
-    typedef otb::PipelineMemoryPrintCalculator        MemoryCalculatorType;
+    typedef otb::GenericRSResampleImageFilter < ImageType, ImageType >                   ResampleFilterType;
+    typedef itk::LinearInterpolateImageFunction<ImageType, double>                       LinearInterpolationType;
+    typedef itk::NearestNeighborInterpolateImageFunction<ImageType, double>              NearestNeighborInterpolationType;
+    typedef otb::BCOInterpolateImageFunction<ImageType>                                  BCOInterpolationType;
+    typedef otb::PipelineMemoryPrintCalculator                                           MemoryCalculatorType;
     
     // Read input image information
     ReaderType::Pointer reader=ReaderType::New();
@@ -198,7 +198,24 @@ int generic_main(otb::ApplicationOptionsResult* parseResult,
         itkGenericExceptionMacro(<< "Interpolator type not recognized, choose one with (parameters) : BCO(0/1), NEARESTNEIGHBOR(0), LINEAR(0)");
         }
       }
+    
+    //Resample xs on pan
+    if ( parseResult->IsOptionPresent("XS") )
+    {
+    ReaderType::Pointer xsreader = ReaderType::New();
+    xsreader->SetFileName(parseResult->GetParameterString("XS"));
+    xsreader->GenerateOutputInformation();
+    //TODO manage calibration case here
 
+    //resample result 
+    ResampleFilterType::Pointer resampler = ResampleFilterType::New();
+    resampler->SetInput(xsreader->GetOutput());
+    orthofilter->UpdateOutputInformation();
+    resampler->SetOutputParametersFromImage(orthofilter->GetOutput());
+
+    //Add PAN+XS fusion
+    
+    }
     //Instantiate the writer
     WriterType::Pointer writer = WriterType::New();
     writer->SetFileName(parseResult->GetOutputImage());
@@ -260,6 +277,7 @@ int OrthoRectification::Describe(ApplicationDescriptor* descriptor)
   descriptor->SetName("FastOrthoRectif");
   descriptor->SetDescription("Using available image metadata to determine the sensor model, computes a cartographic projection of the image");
   descriptor->AddInputImage();
+  descriptor->AddOption("XS","The input multi-spectral image (will perform orthofusion","xs", 1,false,otb::ApplicationDescriptor::InputImage);
   descriptor->AddOutputImage();
   descriptor->AddOption("UpperLeft","Cartographic X/Y coordinate of upper left corner ","ul",2, false, otb::ApplicationDescriptor::Real);
   descriptor->AddOption("OutputSize","Size of result image in X/Y","size",2, false, otb::ApplicationDescriptor::Integer);
