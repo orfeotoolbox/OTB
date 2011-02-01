@@ -68,9 +68,7 @@ int otbProjectiveProjectionTestHighSNR(int argc, char * argv[])
   // Apply SVD
   vnl_svd<PrecisionType>    svd(R);
   vnl_matrix<PrecisionType> U = svd.U();
-  std::cout << "U : "<< U.rows() << " " << U.cols() << std::endl;
   vnl_matrix<PrecisionType> Ud = U.get_n_columns(0, nbEndmembers).transpose();
-  std::cout << "Ud : "<< Ud.rows() << " " << Ud.cols() << std::endl;
 
   std::cout << "Apply dimensionnality reduction" << std::endl;
   // Xd = Ud.'*M;
@@ -80,15 +78,6 @@ int otbProjectiveProjectionTestHighSNR(int argc, char * argv[])
   mulUd->UpdateOutputInformation();
 
   VectorImageType::Pointer Xd = mulUd->GetOutput();
-  std::cout << "Xd = " << Xd << std::endl;
-
-/*
-  std::cout << "Write Xd output" << std::endl;
-  WriterType::Pointer writer = WriterType::New();
-  writer->SetFileName(outputImage);
-  wrtier->SetInput(Xd);
-  writer->Update();
-*/
 
   // Compute mean(Xd)
   std::cout << "Compute mean(Xd)" << std::endl;
@@ -97,8 +86,6 @@ int otbProjectiveProjectionTestHighSNR(int argc, char * argv[])
   statsXd->SetInput(Xd);
   statsXd->Update();
   VectorImageType::PixelType Xdmean = statsXd->GetMean();
-  std::cout << "mean(Xd) = " << Xdmean << std::endl;
-  std::cout << "mean(Xd) size = " << Xdmean.Size() << std::endl;
 
   // Compute Xd ./ repmat( sum( Xd .* repmat(u,[1 N]) ) ,[d 1]);
   // -> divides each pixel component by the dot product <Xd(i,j), mean(Xd)>

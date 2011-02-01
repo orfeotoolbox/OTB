@@ -42,7 +42,7 @@ ADD_TEST(vahineElmVCA
 
 
 
-ADD_TEST(bfStreamingStatisticsVectorImageFilter
+ADD_TEST(bfTvStreamingStatisticsVectorImageFilter
          ${TESTEXE_DIR}/otbHyperTests1
          otbStreamingStatisticsVectorImageFilterTest
          ${DATA}/AVIRIS/extract128/extract128_goodbands.hdr
@@ -52,7 +52,7 @@ ADD_TEST(bfStreamingStatisticsVectorImageFilterNew2
          ${TESTEXE_DIR}/otbHyperTests1
          otbStreamingStatisticsVectorImageFilter2NewTest)
 
-ADD_TEST(bfStreamingStatisticsVectorImageFilter2
+ADD_TEST(bfTvStreamingStatisticsVectorImageFilter2
          ${TESTEXE_DIR}/otbHyperTests1
          otbStreamingStatisticsVectorImageFilter2Test
          ${DATA}/AVIRIS/extract128/extract128_goodbands.hdr
@@ -61,11 +61,15 @@ ADD_TEST(bfStreamingStatisticsVectorImageFilter2
 
 
 
-ADD_TEST(bfMatrixMultiplyImageFilterNew
+ADD_TEST(bfTuMatrixMultiplyImageFilterNew
          ${TESTEXE_DIR}/otbHyperTests1
          otbMatrixMultiplyImageFilterNewTest)
 
-ADD_TEST(bfMatrixMultiplyImageFilter
+ADD_TEST(bfTvMatrixMultiplyImageFilter
+         ${TESTEXE_DIR}/otbHyperTests1
+         otbMatrixMultiplyImageFilterTest)
+
+ADD_TEST(bfTvMatrixMultiplyImageFilterRealImageTest
          ${TESTEXE_DIR}/otbHyperTests1
          otbMatrixMultiplyImageFilterTest
          ${DATA}/SYNTHETIC/hsi_cube.tif
@@ -74,11 +78,11 @@ ADD_TEST(bfMatrixMultiplyImageFilter
 
 
 
-ADD_TEST(bfUnConstrainedLeastSquareImageFilterNew
+ADD_TEST(bfTuUnConstrainedLeastSquareImageFilterNew
          ${TESTEXE_DIR}/otbHyperTests1
          otbUnConstrainedLeastSquareImageFilterNewTest)
 
-ADD_TEST(bfUnConstrainedLeastSquareImageFilter
+ADD_TEST(bfTvUnConstrainedLeastSquareImageFilter
          ${TESTEXE_DIR}/otbHyperTests1
          otbUnConstrainedLeastSquareImageFilterTest
          ${DATA}/SYNTHETIC/hsi_cube.tif
@@ -88,11 +92,11 @@ ADD_TEST(bfUnConstrainedLeastSquareImageFilter
 
 
 
-ADD_TEST(bfVectorImageToMatrixNew
+ADD_TEST(bfTuVectorImageToMatrixNew
          ${TESTEXE_DIR}/otbHyperTests1
          otbVectorImageToMatrixNewTest)
 
-ADD_TEST(bfVectorImageToMatrix
+ADD_TEST(bfTvVectorImageToMatrix
          ${TESTEXE_DIR}/otbHyperTests1
          otbVectorImageToMatrixTest)
 
@@ -100,17 +104,17 @@ ADD_TEST(bfVectorImageToMatrix
 
 
 
-ADD_TEST(hyEigenvalueLikelihoodMaximizationNew
+ADD_TEST(hyTuEigenvalueLikelihoodMaximizationNew
          ${TESTEXE_DIR}/otbHyperTests1
          otbEigenvalueLikelihoodMaximizationNewTest)         
 
-ADD_TEST(hyEigenvalueLikelihoodMaximization1
+ADD_TEST(hyTvEigenvalueLikelihoodMaximization1
          ${TESTEXE_DIR}/otbHyperTests1
          otbEigenvalueLikelihoodMaximizationTest
          ${DATA}/AVIRIS/extract128/extract128_goodbands.hdr
          ${TEMP}/extract128_elm.txt)
 
-ADD_TEST(hyEigenvalueLikelihoodMaximization2
+ADD_TEST(hyTvEigenvalueLikelihoodMaximization2
          ${TESTEXE_DIR}/otbHyperTests1
          otbEigenvalueLikelihoodMaximizationTest
          ${DATA}/SYNTHETIC/hsi_cube.tif

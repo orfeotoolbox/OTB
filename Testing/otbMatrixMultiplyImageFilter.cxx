@@ -23,13 +23,14 @@
 #include "otbVectorImageToMatrixImageFilter.h"
 
 const unsigned int Dimension = 2;
-typedef double PixelType;
+typedef double PrecisionType;
 
-typedef otb::VectorImage<PixelType, Dimension> ImageType;
+typedef otb::VectorImage<PrecisionType, Dimension> ImageType;
 typedef otb::ImageFileReader<ImageType> ReaderType;
 typedef otb::MatrixMultiplyImageFilter<ImageType,ImageType,double> MatrixMultiplyImageFilterType;
 typedef otb::VectorImageToMatrixImageFilter<ImageType> VectorImageToMatrixImageFilterType;
 typedef otb::ImageFileWriter<ImageType> WriterType;
+typedef VectorImageToMatrixImageFilterType::MatrixType MatrixType;
 
 int otbMatrixMultiplyImageFilterNewTest(int argc, char * argv[])
 {
@@ -39,6 +40,82 @@ int otbMatrixMultiplyImageFilterNewTest(int argc, char * argv[])
 }
 
 int otbMatrixMultiplyImageFilterTest(int argc, char * argv[])
+{
+  ImageType::Pointer image = ImageType::New();
+
+  const unsigned int Size = 10;
+  const unsigned int NbComponentIn = 4;
+  const unsigned int NbComponentOut = 2;
+  ImageType::RegionType region;
+  region.SetIndex(0, 0);
+  region.SetIndex(1, 0);
+  region.SetSize(0, Size);
+  region.SetSize(1, Size);
+  image->SetRegions(region);
+  image->SetNumberOfComponentsPerPixel(NbComponentIn);
+  image->Allocate();
+
+
+  itk::ImageRegionIteratorWithIndex<ImageType> it(image, image->GetLargestPossibleRegion());
+  for (it.GoToBegin(); !it.IsAtEnd(); ++it)
+    {
+    ImageType::IndexType idx = it.GetIndex();
+    ImageType::PixelType value;
+    value.SetSize(NbComponentIn);
+
+    for (unsigned int k = 0; k < NbComponentIn; ++k)
+      {
+      value[k] = idx[0] + idx[1] * Size + k;
+      }
+
+    it.Set(value);
+    }
+
+  MatrixType matrix(NbComponentOut,NbComponentIn);
+  for (unsigned int i = 0; i < matrix.rows(); ++i)
+    {
+    for (unsigned int j = 0; j < matrix.cols(); ++j)
+      {
+      matrix(i, j) = (i + j) * j;
+      }
+    }
+
+  MatrixMultiplyImageFilterType::Pointer mul = MatrixMultiplyImageFilterType::New();
+  mul->SetInput(image);
+  mul->SetMatrix(matrix);
+
+  mul->Update();
+
+  ImageType::Pointer outImage = mul->GetOutput();
+
+  itk::ImageRegionIteratorWithIndex<ImageType> outIt(outImage, outImage->GetLargestPossibleRegion());
+  for (outIt.GoToBegin(); !outIt.IsAtEnd(); ++outIt)
+    {
+    ImageType::IndexType idx = outIt.GetIndex();
+    ImageType::PixelType value = outIt.Get();
+
+    vnl_vector<PrecisionType> vectorValue(value.GetDataPointer(), value.GetSize());
+
+    vnl_vector<PrecisionType> input(NbComponentIn);
+    for (unsigned int k = 0; k < NbComponentIn; ++k)
+       {
+       input[k] = idx[0] + idx[1] * Size + k;
+       }
+    vnl_vector<PrecisionType> expected = matrix * input;
+    vnl_vector<PrecisionType> diff = expected - vectorValue;
+
+    if ( diff.magnitude() > 1E-10 )
+      {
+      std::cerr << "At index " << idx << ". Expected " << expected << " , got " << vectorValue << std::endl;
+      return EXIT_FAILURE;
+      }
+    }
+
+  return EXIT_SUCCESS;
+}
+
+
+int otbMatrixMultiplyImageFilterRealImageTest(int argc, char * argv[])
 {
   const char * inputImage = argv[1];
   const char * inputEndmembers = argv[2];
@@ -56,7 +133,7 @@ int otbMatrixMultiplyImageFilterTest(int argc, char * argv[])
   endMember2Matrix->Update();
   std::cout << "computing endMember2Matrix done" << std::endl;
 
-  typedef VectorImageToMatrixImageFilterType::MatrixType MatrixType;
+
   MatrixType endMembers = endMember2Matrix->GetMatrix();
   std::cout << "endMembers : "  << endMembers.rows() << " " << endMembers.cols() << std::endl;
   MatrixType pinv = vnl_matrix_inverse<double>(endMembers);

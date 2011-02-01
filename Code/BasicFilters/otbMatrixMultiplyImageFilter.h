@@ -43,7 +43,7 @@ public:
   typedef vnl_matrix<PrecisionType> MatrixType;
 
   MatrixMultiplyFunctor() {}
-  virtual ~MatrixMultiplyFunctor() {}
+  ~MatrixMultiplyFunctor() {}
 
   unsigned int GetOutputSize()
   {
@@ -52,7 +52,7 @@ public:
 
   bool operator !=(const MatrixMultiplyFunctor& other) const
   {
-    return false;
+    return true;
   }
 
   bool operator ==(const MatrixMultiplyFunctor& other) const
@@ -73,10 +73,15 @@ public:
   OutputType operator ()(const InputType& in)
   {
     // TODO : support different types & Precision correctly
-    // TODO : make the multiplication by hand ?
+    // TODO : do the multiplication by hand ?
     VectorType inVector(in.GetDataPointer(), in.Size());
     VectorType outVector = m_Matrix * inVector;
-    return OutputType(outVector.data_block(), outVector.size());
+
+    // make a wrapper around outVector memory (data are not copied here)
+    OutputType outWrapper(outVector.data_block(), outVector.size());
+
+    // do the real copy here
+    return OutputType(outWrapper);
   }
 
 private:
@@ -134,8 +139,9 @@ public:
 
   void SetMatrix(const MatrixType& m)
   {
-    this->GetFunctor().SetMatrix(m);
-    this->Modified();
+    FunctorType f;
+    f.SetMatrix(m);
+    this->SetFunctor(f);
   }
 
 protected:
