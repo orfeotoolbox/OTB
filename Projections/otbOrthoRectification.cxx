@@ -26,11 +26,14 @@
 #include "otbOrthoRectificationFilter.h"
 #include "otbMapProjections.h"
 #include "itkExceptionObject.h"
+#include "otbMacro.h"
 
 #include "itkLinearInterpolateImageFunction.h"
 #include "otbBCOInterpolateImageFunction.h"
 #include "itkNearestNeighborInterpolateImageFunction.h"
 #include "otbImageToGenericRSOutputParameters.h"
+
+#include "projection/ossimUtmProjection.h"
 
 #include "otbPipelineMemoryPrintCalculator.h"
 
@@ -63,7 +66,8 @@ int generic_main(otb::ApplicationOptionsResult* parseResult,
 
     // Orthorectification filter
     typename OrthorectifFilterType::Pointer orthofilter = OrthorectifFilterType::New();
-
+    orthofilter->SetInput(reader->GetOutput());
+   
     // If activated, generate RPC model
     if(parseResult->IsOptionPresent("RPC"))
       {
@@ -94,8 +98,9 @@ int generic_main(otb::ApplicationOptionsResult* parseResult,
       spacing[1] = -(metadataInterface->GetYPixelSpacing());
       }
     genericRSEstimator->ForceSpacingTo(spacing);
-    std::cout << "spacing : " << spacing << std::endl;
 
+    otbMsgDevMacro(<< "Output image spacing: " << spacing);
+    
     genericRSEstimator->Compute();
     // set the start index
     ImageType::IndexType start;
@@ -119,7 +124,8 @@ int generic_main(otb::ApplicationOptionsResult* parseResult,
       {
       origin = genericRSEstimator->GetOutputOrigin();
       }
-    std::cout << "origin : " << origin << std::endl;
+ 
+    otbMsgDevMacro(<< "Output image origin: " << origin);
     
     ImageType::SizeType size;
     if(parseResult->IsOptionPresent("OutputSize"))
@@ -132,7 +138,8 @@ int generic_main(otb::ApplicationOptionsResult* parseResult,
       {
       size = genericRSEstimator->GetOutputSize();
       }
-    std::cout << "size : " << size << std::endl;
+
+    otbMsgDevMacro(<< "Output image size: " << size);
 
     orthofilter->SetOutputOrigin(origin);
     orthofilter->SetOutputSpacing(genericRSEstimator->GetOutputSpacing());
@@ -208,11 +215,10 @@ int generic_main(otb::ApplicationOptionsResult* parseResult,
       }
 
     calculator->SetDataToWrite(orthofilter->GetOutput());
-    calculator->SetBiasCorrectionFactor(2);
     calculator->Compute();
     
-    std::cout << "pipeline memory print estimation: " << calculator->GetMemoryPrint()*byteToMegabyte << " Mo" << std::endl;
-
+    otbMsgDevMacro(<< "Guess the pipeline memory print " << calculator->GetMemoryPrint()*byteToMegabyte << " Mo");
+    
     if ( parseResult->IsOptionPresent("NumStreamDivisions") )
     {
       writer->SetTilingStreamDivisions(parseResult->GetParameterULong("NumStreamDivisions"));
@@ -220,7 +226,8 @@ int generic_main(otb::ApplicationOptionsResult* parseResult,
     else
     {
     writer->SetTilingStreamDivisions(calculator->GetOptimalNumberOfStreamDivisions());
-    std::cout << "number of stream divisions : " << calculator->GetOptimalNumberOfStreamDivisions() << std::endl;
+
+    otbMsgDevMacro(<< "Number of stream divisions : " << calculator->GetOptimalNumberOfStreamDivisions());
     }
 
     otb::StandardFilterWatcher watcher(writer,"Orthorectification");
@@ -245,7 +252,7 @@ int generic_main(otb::ApplicationOptionsResult* parseResult,
   }
   return EXIT_SUCCESS;
 
-}//Fin main()
+}
 
 
 int OrthoRectification::Describe(ApplicationDescriptor* descriptor)
@@ -255,11 +262,8 @@ int OrthoRectification::Describe(ApplicationDescriptor* descriptor)
   descriptor->AddInputImage();
   descriptor->AddOutputImage();
   descriptor->AddOption("UpperLeft","Cartographic X/Y coordinate of upper left corner ","ul",2, false, otb::ApplicationDescriptor::Real);
-  //descriptor->AddOption("yUpperLeft","Cartographic y coordinate of upper left corner","yUL",1, false, otb::ApplicationDescriptor::Real);
   descriptor->AddOption("OutputSize","Size of result image in X/Y","size",2, false, otb::ApplicationDescriptor::Integer);
-  // descriptor->AddOption("OutputYSize","Size of result image","ySize",1, false, otb::ApplicationDescriptor::Integer);
   descriptor->AddOption("OutputSpacing","Spacing resolution in meters on X/Y Axis","spacing",2, false, otb::ApplicationDescriptor::Real);
-  // descriptor->AddOption("OutputYSpacing","Spacing resolution in meters on y Axis","ySpacing",1, false, otb::ApplicationDescriptor::Real);
   descriptor->AddOption("DEMDirectory","Directory where to find the DEM tiles","dem",1,false, otb::ApplicationDescriptor::DirectoryName);
   descriptor->AddOption("NumStreamDivisions","Number of streaming divisions (optional)","stream",1 , false, otb::ApplicationDescriptor::Integer);
   descriptor->AddOptionNParams("MapProjectionType",
@@ -276,7 +280,6 @@ int OrthoRectification::Describe(ApplicationDescriptor* descriptor)
 
 int OrthoRectification::Execute(otb::ApplicationOptionsResult* parseResult)
 {
-  // Code
   if ( parseResult->IsOptionPresent("MapProjectionType"))
     {
     std::string typeMap = parseResult->GetParameterString("MapProjectionType",0);
@@ -373,6 +376,67 @@ int OrthoRectification::Execute(otb::ApplicationOptionsResult* parseResult)
   else
     {
     //TODO get utm zone and hemispher and build wkt
+    typedef otb::VectorImage<double, 2>       ImageType;
+    typedef otb::ImageFileReader<ImageType>           ReaderType;
+
+    typedef otb::UtmInverseProjection UtmProjectionType;
+    typedef otb::GenericRSResampleImageFilter< ImageType, ImageType>    ResamplerImageType;
+    typedef ResamplerImageType::GenericRSTransformType                   TransformType;
+    
+    // Read input image information
+    ReaderType::Pointer reader=ReaderType::New();
+    reader->SetFileName(parseResult->GetInputImage().c_str());
+    reader->GenerateOutputInformation();
+    
+    ImageType::Pointer input = reader->GetOutput();
+    TransformType::Pointer transform=TransformType::New();
+
+    transform->SetOutputDictionary(input->GetMetaDataDictionary());
+    transform->SetOutputProjectionRef(input->GetProjectionRef());
+    transform->SetOutputKeywordList(input->GetImageKeywordlist());
+    //TODO is DEM informations mandatory here?
+    //transform->SetDEMDirectory();
+    
+    // Needed variable
+    std::string projectionRef;
+    // The inverse transform is need here
+    TransformType::Pointer invTransform = TransformType::New();
+    transform->GetInverse(invTransform);
+
+    // Build the UTM transform : Need the zone & the hemisphere
+    // For this we us the geographic coordinate of the input UL corner
+    typedef ossimRefPtr<ossimUtmProjection>       OssimMapProjectionPointerType;
+    typedef itk::Point<double, 2>                  GeoPointType;
+  
+    // instanciate the projection to get the utm zone
+    OssimMapProjectionPointerType  utmMapProjection =  new ossimUtmProjection();
+  
+    // get the utm zone and hemisphere using the input UL corner
+    // geographic coordinates
+    ImageType::PointType  pSrc;
+    ImageType::IndexType      index;
+    GeoPointType   geoPoint;
+    index[0] = input->GetLargestPossibleRegion().GetIndex()[0];
+    index[1] = input->GetLargestPossibleRegion().GetIndex()[1];
+    input->TransformIndexToPhysicalPoint(index, pSrc);
+  
+    // The first transform of the inverse transform : input -> WGS84
+    geoPoint = invTransform->GetTransform()->GetFirstTransform()->TransformPoint(pSrc);
+  
+    // Guess the zone and the hemisphere
+    ossimGpt point(geoPoint[1],  geoPoint[0]);
+    int zone = utmMapProjection->computeZone(point);
+    bool hem = (geoPoint[1]>1e-10)?true:false;
+  
+    typedef otb::UtmInverseProjection UtmProjectionType;
+    UtmProjectionType::Pointer utmProjection = UtmProjectionType::New();
+
+    utmProjection->SetZone(zone);
+    utmProjection->SetHemisphere(hem);
+    
+    otbMsgDevMacro(<< "Guess the UTM parameters, zone: " << zone << " hemisphere: " << hem);
+
+    return generic_main<UtmProjectionType>(parseResult,utmProjection);
     }
 }
 } // namespace otb
