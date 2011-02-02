@@ -538,7 +538,7 @@ public:
       return static_cast<TOutput>(WE);
     
     // turbid water spectral category
-    bool twasc = dbsr && lNDVI && lMIR1 && lMIR2 && !(hBright || hVis || hNIR || lNDSIVis);
+    bool twasc = fbsr && lNDVI && lMIR1 && lMIR2 && !(hBright || hVis || hNIR || lNDSIVis);
     if( twasc )
       return static_cast<TOutput>(TWA);
     
