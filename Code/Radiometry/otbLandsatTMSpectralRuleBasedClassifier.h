@@ -460,7 +460,7 @@ public:
       return static_cast<TOutput>(SBBLTIRNF);
 
     // average barren land or built up spectral category
-    bool abbsc = (bbcsr || fbbsr) && lNDVI && mNDBSI && !( hNIR || lMIR1);
+    bool abbsc = (bbcsr || fbbsr) && lNDVI && mNDBSI && !(lMIR1);
     
     bool abbhtirsc = abbsc && hTIR;
 
