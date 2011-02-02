@@ -53,120 +53,120 @@ class SpectralRuleBasedClassifier : public KernelSpectralRule<TInput, TOutput>
 public:
   // Spectral categories
   enum SpectralCategory {
-    NOCLASS, // if the pixel is not classified; just for error
+    NOCLASS, // 0 -if the pixel is not classified; just for error
              // checking; different from SU, which is a real rejection
              // class
-    TKCL, // thick clouds
-    TNCL, // thin clouds; possible confusions with cold light toned
+    TKCL, // 1 -thick clouds
+    TNCL, // 2 -thin clouds; possible confusions with cold light toned
           // (highly reflective) barren land and range land
-    SN,   // snow
-    ICSN, // ice or snow
-    DPWASH, // deep clear water and shadow areas; possible confusions
+    SN,   // 3 -snow
+    ICSN, // 4 -ice or snow
+    DPWASH, // 5 -deep clear water and shadow areas; possible confusions
             // with lava rocks
-    SLWASH, // shallow clear water and shadow areas
-    PBHNDVI, // pit bog with high NDVI
-    PBMNDVI, // pit bog with medium NDVI
-    PBLNDVI, // pit bog with low NDVI; possible confusions with
+    SLWASH, // 6 -shallow clear water and shadow areas
+    PBHNDVI, // 7 -pit bog with high NDVI
+    PBMNDVI, // 8 -pit bog with medium NDVI
+    PBLNDVI, // 9 -pit bog with low NDVI; possible confusions with
              // greenhouses
-    SVHNIR, // strong vegetation with high NIR; includes broadleaved
+    SVHNIR, // 10 - strong vegetation with high NIR; includes broadleaved
             // decideous forests, vegetated cropland and pastures;
             // possible confusions with mixed forests
-    SVLNIR, // strong vegetation with low NIR; includes evergreen
+    SVLNIR, // 11 -strong vegetation with low NIR; includes evergreen
             // forests and mixed forests; possible confusions with
             // forest land in shadow areas
-    AVHNIR, // average vegetation with high NIR; includes cropland and
+    AVHNIR, // 12 -average vegetation with high NIR; includes cropland and
             // pastures; possible confusions with evergreen forests
             // and mixed forests
-    AVLNIR, // average vegetation with low NIR; includes evergreen
+    AVLNIR, // 13 -average vegetation with low NIR; includes evergreen
             // forests, especially coniferous; possible confusions
             // with forest land in shadow areas
-    WVHNIR, // weak vegetation with high NIR; includes scarcely
+    WVHNIR, // 14 -weak vegetation with high NIR; includes scarcely
             // vegetated areas
-    WVLNIR, // weak vegetation with low NIR; includes forested wetland
-    SSRHNIR, // strong shrub rangeland with high NIR; includes
+    WVLNIR, // 15 -weak vegetation with low NIR; includes forested wetland
+    SSRHNIR, // 16 -strong shrub rangeland with high NIR; includes
              // herbaceous rangeland; possible confusions with shrub
              // and brush rangeland
-    SSRLNIR, // strong shrub rangeland with low NIR; includes shrub
+    SSRLNIR, // 17 -strong shrub rangeland with low NIR; includes shrub
              // and brush rangeland; possible confusions with
              // herbaceous rangeland
-    ASRHNIR, // average shrub rangeland with high NIR; includes
+    ASRHNIR, // 18 -average shrub rangeland with high NIR; includes
              // herbaceous rangeland; possible confusions with shrub
              // and brush rangeland
-    ASRLNIR, // average shrub rangeland with low NIR; includes shrub
+    ASRLNIR, // 19 -average shrub rangeland with low NIR; includes shrub
              // and brush rangeland; possible confusions with
              // herbaceous rangeland
-    SHR,     // strong herbaceous rangeland; possible confusions with
+    SHR,     // 20 - strong herbaceous rangeland; possible confusions with
              // vegetated cropland ans pastures
-    AHR,     // average herbaceous rangeland; includes herbaceous
+    AHR,     // 21 -average herbaceous rangeland; includes herbaceous
              // rangeland and barren land scarcely vegetated; possible
              // confusions with vegetated cropland and pastures
-    DR,      // dark rangeland; includes mixed rangeland eventually in
+    DR,      // 22 -dark rangeland; includes mixed rangeland eventually in
              // shadow areas and non forested wetland; possible
              // confusions with mixed urban or built up
-    BBBHTIRF, // bright barren land or built up with high TIR and flat
+    BBBHTIRF, // 23 -bright barren land or built up with high TIR and flat
               // spectral response; includes urban or built up and
               // concrete roads
-    BBBHTIRNF, // bright barren land or built up with high TIR and non flat
+    BBBHTIRNF, // 24 -bright barren land or built up with high TIR and non flat
               // spectral response;
-    BBBLTIRF, // bright barren land or built up with low TIR and flat
+    BBBLTIRF, // 25 -bright barren land or built up with low TIR and flat
               // spectral response; includes urban or built up and
               // concrete roads
-    BBBLTIRNF, // bright barren land or built up with low TIR and non flat
+    BBBLTIRNF, // 26 -bright barren land or built up with low TIR and non flat
               // spectral response;
-    SBBHTIRF, // strong barren land or built up with high TIR and flat
+    SBBHTIRF, // 27 -strong barren land or built up with high TIR and flat
               // spectral response; includes urban or built up and
               // concrete roads
-    SBBHTIRNF, // strong barren land or built up with high TIR with non flat
+    SBBHTIRNF, // 28 -strong barren land or built up with high TIR with non flat
               // spectral response; includes ploughed fields, barren
               // land -- including bare exposed rocks -- and beaches
-    SBBLTIRF, // strong barren land or built up with low TIR and flat
+    SBBLTIRF, // 29 -strong barren land or built up with low TIR and flat
               // spectral response; includes urban or built up and
               // concrete roads
-    SBBLTIRNF, // strong barren land or built up with low TIR with non flat
+    SBBLTIRNF, // 30 -strong barren land or built up with low TIR with non flat
               // spectral response; includes ploughed fields, barren
               // land -- including bare exposed rocks -- and beaches
-    ABBHTIRF, // average barren land or built up with high TIR and flat
+    ABBHTIRF, // 31 -average barren land or built up with high TIR and flat
               // spectral response; includes urban or built up and
               // concrete roads
-    ABBHTIRNF, // average barren land or built up with high TIR with non flat
+    ABBHTIRNF, // 32 -average barren land or built up with high TIR with non flat
               // spectral response
-    ABBLTIRF, // average barren land or built up with low TIR and flat
+    ABBLTIRF, // 33 -average barren land or built up with low TIR and flat
               // spectral response; includes urban or built up and
               // concrete roads
-    ABBLTIRNF, // average barren land or built up with low TIR with non flat
+    ABBLTIRNF, // 34 -average barren land or built up with low TIR with non flat
               // spectral response
-    DBBHTIRF, // dark barren land or built up with high TIR and flat
+    DBBHTIRF, // 35 -dark barren land or built up with high TIR and flat
               // spectral response; includes urban or built up land,
               // in particular parking lots, concrete roads, asphalt
               // roads, grey-brown tile roofs, tan composite shingle
               // roofs; possible confusions with barren land on dark
               // mountain slopes including burned areas and bare
               // exposed rocks, especially dark-toned soil
-    DBBHTIRNF, // dark barren land or built up with high TIR and non
+    DBBHTIRNF, // 36 -dark barren land or built up with high TIR and non
                // flat spectral response; includes barren land, bare
                // exposed rocks, especially dark-toned soil
-    DBBLTIRF, // dark barren land or built up with low TIR and flat
+    DBBLTIRF, // 37 -dark barren land or built up with low TIR and flat
               // spectral response; includes urban or built up land,
               // in particular parking lots, concrete roads, asphalt
               // roads, grey-brown tile roofs, tan composite shingle
               // roofs; possible confusions with barren land on dark
               // mountain slopes including burned areas and bare
               // exposed rocks, especially dark-toned soil
-    DBBLTIRNF, // dark barren land or built up with low TIR and non
+    DBBLTIRNF, // 38 -dark barren land or built up with low TIR and non
                // flat spectral response; includes barren land, bare
                // exposed rocks, especially dark-toned soil
-    WR,        // weak rangeland; includes herbaceous rangeland
-    SHV,       // shadow area with vegetation; possible confusions
+    WR,        // 39 -weak rangeland; includes herbaceous rangeland
+    SHV,       // 40 -shadow area with vegetation; possible confusions
                // with non forested wetland
-    SHB,       // shadow with barren land; includes also lava rock;
+    SHB,       // 41 -shadow with barren land; includes also lava rock;
                // possible confusions with buil up areas, especially
                // asphalt roads
-    SHCL,      // clouds in shadow areas
-    TWASHSN,   // snow in shadow areas
-    WE,        // non forested wetland; possible confusions with
+    SHCL,      // 42 -clouds in shadow areas
+    TWASHSN,   // 43 -snow in shadow areas
+    WE,        // 44 -non forested wetland; possible confusions with
                // shadow areas with vegetation
-    TWA,       // turbid water; possible confusions with shadow areas
-    SU        // shadow areas or unknown pixels
+    TWA,       // 45 -turbid water; possible confusions with shadow areas
+    SU        // 46 -shadow areas or unknown pixels
   };
   typedef typename TInput::ValueType PrecisionType;
   typedef bool OutputPixelType;
@@ -254,7 +254,7 @@ public:
     
     // snow or ice spectral category
     bool snicsc = (snicsr && lNDBSI && !(lBright ||
-                     lVis || lNDSIVis || lNIR || hMIR1 || hMIR2 || hTIR));
+                     lVis || lNDSIVis || lNIR || hMIR1 || hMIR2 || hTIR ));
 
     // snow spectral category
     if(snicsc && hNDSIVis)
@@ -419,7 +419,7 @@ public:
       return static_cast<TOutput>(DR);
 
     // bright barren land or built up spectral category
-    bool bbbsc = bbcsr && hNIR && hMIR2 && lNDVI && !(lNDBSI || lMIR1);
+    bool bbbsc = bbcsr && hNIR && lNDVI && hNDBSI && !(lMIR1 || lMIR2);
 
     bool lNDBBBI  = (lv[ LVType::ndbbbi ] == LVType::Low);
     
@@ -444,7 +444,7 @@ public:
 
     bool fbbsr = fbbsrf( newPixel );
     // strong barren land or built up spectral category
-    bool sbbsc = (bbcsr || fbbsr) && lNDVI && lNDBSI && !( hNIR || lMIR1);
+    bool sbbsc = (bbcsr || fbbsr) && lNDVI && hNDBSI && !( hNIR || lMIR1);
     
     bool sbbhtirsc = sbbsc && hTIR;
 
@@ -460,7 +460,7 @@ public:
       return static_cast<TOutput>(SBBLTIRNF);
 
     // average barren land or built up spectral category
-    bool abbsc = (bbcsr || fbbsr) && lNDVI && mNDBSI && !( hNIR || lMIR1);
+    bool abbsc = (bbcsr || fbbsr) && lNDVI && mNDBSI && !(lMIR1);
     
     bool abbhtirsc = abbsc && hTIR;
 
@@ -527,7 +527,7 @@ public:
 
     bool hBright     = (lv[ LVType::bright ] == LVType::High);
     bool hVis        = (lv[ LVType::vis ] == LVType::High);
-    // snow in shadow areas spectral category
+    // turbid water or shadow snow spectral category
     bool twashsnsc = dbsr && shclsnsr && hNDSIVis && lNIR && lMIR1 && lMIR2 && !(hBright || hVis || hNDBSI || hTIR);
     if( twashsnsc )
       return static_cast<TOutput>(TWASHSN);
