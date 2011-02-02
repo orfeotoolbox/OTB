@@ -12,6 +12,7 @@ SET( otbHyperTests1_SRC
   otbUnConstrainedLeastSquareImageFilter.cxx
   otbVectorImageToMatrixImageFilter.cxx
   otbProjectiveProjection.cxx
+  otbVCA.cxx
 )
 
 ADD_EXECUTABLE(otbHyperTests1 ${otbHyperTests1_SRC} otbHyperTests1.cxx)
@@ -108,11 +109,18 @@ ADD_TEST(hyTuEigenvalueLikelihoodMaximizationNew
          ${TESTEXE_DIR}/otbHyperTests1
          otbEigenvalueLikelihoodMaximizationNewTest)         
 
-ADD_TEST(hyTvEigenvalueLikelihoodMaximization1
+ADD_TEST(hyTvEigenvalueLikelihoodMaximization_AVIRIS1
          ${TESTEXE_DIR}/otbHyperTests1
          otbEigenvalueLikelihoodMaximizationTest
          ${DATA}/AVIRIS/extract128/extract128_goodbands.hdr
          ${TEMP}/extract128_elm.txt)
+
+
+ADD_TEST(hyTvEigenvalueLikelihoodMaximization_AVIRIS2
+         ${TESTEXE_DIR}/otbHyperTests1
+         otbEigenvalueLikelihoodMaximizationTest
+         ${DATA}/AVIRIS/extract512/f970619t01p02_r02_sc01_goodbands.hdr
+         ${TEMP}/aviris512_elm.txt)
 
 ADD_TEST(hyTvEigenvalueLikelihoodMaximization2
          ${TESTEXE_DIR}/otbHyperTests1
@@ -126,4 +134,25 @@ ADD_TEST(testProjectiveProjection
          ${DATA}/SYNTHETIC/hsi_cube.tif
          8
          ${TEMP}/hsi_cube_projectiveprojected_8.tif )
+
+
+
+
+ADD_TEST(hyVCA_Synthetic
+         ${TESTEXE_DIR}/otbHyperTests1
+         otbVCATestHighSNR
+         ${DATA}/SYNTHETIC/hsi_cube.tif
+         ${TEMP}/synthetic_vca_5.hdr
+         5 )
+
+
+ADD_TEST(hyVCA_AVIRIS
+         ${TESTEXE_DIR}/otbHyperTests1
+         otbVCATestHighSNR
+         ${DATA}/AVIRIS/extract512/f970619t01p02_r02_sc01_goodbands.hdr
+         ${TEMP}/aviris_vca_5.hdr
+         13 )
+
+
+
 

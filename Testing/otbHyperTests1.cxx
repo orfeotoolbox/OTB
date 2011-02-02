@@ -37,4 +37,5 @@ void RegisterTests()
   REGISTER_TEST(vahineVCA);
   REGISTER_TEST(vahineElmVCA);
   REGISTER_TEST(otbProjectiveProjectionTestHighSNR);
+  REGISTER_TEST(otbVCATestHighSNR);
 }
