@@ -1,4 +1,3 @@
-
 /*=========================================================================
 
   Program:   ORFEO Toolbox
@@ -64,17 +63,17 @@ class ITK_EXPORT PipelineMemoryPrintCalculator :
 {
 public:
   /** Standard class typedefs */
-  typedef PipelineMemoryPrintCalculator    Self;
-  typedef itk::Object                      Superclass;
-  typedef itk::SmartPointer<Self>          Pointer;
-  typedef itk::SmartPointer<const Self>    ConstPointer;
+  typedef PipelineMemoryPrintCalculator       Self;
+  typedef itk::Object                         Superclass;
+  typedef itk::SmartPointer<Self>             Pointer;
+  typedef itk::SmartPointer<const Self>       ConstPointer;
 
   /** Useful typedefs */
-  typedef itk::ProcessObject               ProcessObjectType;
-  typedef ProcessObjectType::Pointer       ProcessObjectPointerType;
-  typedef itk::DataObject                  DataObjectType;
-  typedef DataObjectType::Pointer          DataObjectPointerType;
-  typedef long long int                    MemoryPrintType;
+  typedef itk::ProcessObject                  ProcessObjectType;
+  typedef ProcessObjectType::Pointer          ProcessObjectPointerType;
+  typedef itk::DataObject                     DataObjectType;
+  typedef DataObjectType::Pointer             DataObjectPointerType;
+  typedef long long int                       MemoryPrintType;
   typedef std::set<const ProcessObjectType *> ProcessObjectPointerSetType;
 
   /** Run-time type information (and related methods). */
