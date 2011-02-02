@@ -254,7 +254,7 @@ public:
     
     // snow or ice spectral category
     bool snicsc = (snicsr && lNDBSI && !(lBright ||
-                     lVis || lNDSIVis || lNIR || hMIR1 || hMIR2 || hTIR || clsc));
+                     lVis || lNDSIVis || lNIR || hMIR1 || hMIR2 || hTIR ));
 
     // snow spectral category
     if(snicsc && hNDSIVis)
@@ -299,7 +299,7 @@ public:
     bool pbghsr = pbghsrf( newPixel );
     
     // Pit bog spectral category
-    bool pbsc = pbghsr && lMIR1 && lMIR2 && lNDBSI && !(lNIR || snicsc);
+    bool pbsc = pbghsr && lMIR1 && lMIR2 && lNDBSI && !(lNIR);
 
     bool mNDVI = (lv[ LVType::ndvi ] == LVType::Medium);
     bool hNDVI = (lv[ LVType::ndvi ] == LVType::High);
