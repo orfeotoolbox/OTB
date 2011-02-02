@@ -30,7 +30,7 @@ const double PipelineMemoryPrintCalculator::ByteToMegabyte = 1./vcl_pow(2.0, 20)
 PipelineMemoryPrintCalculator
 ::PipelineMemoryPrintCalculator()
   : m_MemoryPrint(0),
-    m_AvailableMemory(256),
+    m_AvailableMemory(256000000),
     m_OptimalNumberOfStreamDivisions(1),
     m_DataToWrite(NULL),
     m_BiasCorrectionFactor(1.)
