@@ -255,7 +255,7 @@ public:
   }
 
 protected:
-  /// Prepare the values so they are normalized and in °C
+  /// Prepare the values so they are normalized and in C
 
   TInput PrepareValues(const TInput& inputPixel)
   {
@@ -679,7 +679,7 @@ public:
  *
  *  This expression is the one used in: Roy PS, Miyatake S and Rikimaru
  *  A (1997) Biophysical Spectral Response Modelling Approach for
- *  Forest Density Stratification. FCD Mapper User’s Guide.
+ *  Forest Density Stratification. FCD Mapper Users Guide.
  * 
  * \ingroup Functor
  * \ingroup Radiometry
