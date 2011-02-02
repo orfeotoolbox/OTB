@@ -244,7 +244,7 @@ ExtractSegmentsImageFilter<TInputImage, TOutput>
 {
   Superclass::PrintSelf(os, indent);
   /*  os << indent << "Length: " << m_LengthLine << std::endl;
-    os << indent << "Width: " << m_WidthLine << std::endl;*/
+    os << indent << "Width: " << m_WidthLine << std::endl; */
 
 }
 

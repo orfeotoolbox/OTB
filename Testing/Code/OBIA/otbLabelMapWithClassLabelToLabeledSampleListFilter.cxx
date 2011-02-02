@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -41,20 +41,20 @@ int otbLabelMapWithClassLabelToLabeledSampleListFilter(int argc, char* argv[])
  // Labeled image type
   const unsigned int Dimension = 2;
   typedef unsigned short                                                 LabelType;
-  typedef otb::Image<LabelType,Dimension>                                LabeledImageType;
+  typedef otb::Image<LabelType, Dimension>                                LabeledImageType;
   typedef otb::ImageFileReader<LabeledImageType>                         LabeledReaderType;
-  typedef otb::AttributesMapLabelObjectWithClassLabel<LabelType,Dimension,double,LabelType> LabelObjectType;
+  typedef otb::AttributesMapLabelObjectWithClassLabel<LabelType, Dimension, double, LabelType> LabelObjectType;
   typedef itk::LabelMap<LabelObjectType>                                 LabelMapType;
-  typedef itk::BinaryImageToLabelMapFilter<LabeledImageType,LabelMapType> LabelMapFilterType;
+  typedef itk::BinaryImageToLabelMapFilter<LabeledImageType, LabelMapType> LabelMapFilterType;
   typedef otb::ShapeAttributesLabelMapFilter<LabelMapType>               ShapeLabelMapFilterType;
 
 
 
   typedef itk::VariableLengthVector<double>                      VectorType;
-  typedef itk::FixedArray<LabelType,1>                           TrainingVectorType;
+  typedef itk::FixedArray<LabelType, 1>                           TrainingVectorType;
   typedef itk::Statistics::ListSample<VectorType>                ListSampleType;
   typedef itk::Statistics::ListSample<TrainingVectorType>        TrainingListSampleType;
-  typedef otb::LabelMapWithClassLabelToLabeledSampleListFilter<LabelMapType,ListSampleType,TrainingListSampleType>        
+  typedef otb::LabelMapWithClassLabelToLabeledSampleListFilter<LabelMapType, ListSampleType, TrainingListSampleType>
                                                                  LabelMap2ListSampleFilterType;
 
   // instantiation
@@ -78,7 +78,7 @@ int otbLabelMapWithClassLabelToLabeledSampleListFilter(int argc, char* argv[])
    filter->GetMeasurementFunctor().AddAttribute("test");
    filter->GetMeasurementFunctor().ClearAttributes();
 
-   for(int i = 2; i<argc;++i)
+   for(int i = 2; i<argc; ++i)
      {
      filter->GetMeasurementFunctor().AddAttribute(argv[i]);
      }

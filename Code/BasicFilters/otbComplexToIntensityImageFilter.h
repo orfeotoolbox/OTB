@@ -57,7 +57,7 @@ public:
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ComplexToIntensityImageFilter :
     public
-itk::UnaryFunctorImageFilter<TInputImage,TOutputImage,
+itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
                         Function::ComplexToIntensity<
   typename TInputImage::PixelType,
   typename TOutputImage::PixelType>   >
@@ -66,7 +66,7 @@ public:
   /** Standard class typedefs. */
   typedef ComplexToIntensityImageFilter  Self;
   typedef itk::UnaryFunctorImageFilter<
-    TInputImage,TOutputImage,
+    TInputImage, TOutputImage,
     Function::ComplexToIntensity< typename TInputImage::PixelType,
                               typename TOutputImage::PixelType> >
                                          Superclass;

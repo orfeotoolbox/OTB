@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -89,7 +89,6 @@ void
 MinMaxAttributesLabelMapFilter<TInputImage>
 ::GenerateData()
 {
-  unsigned int nbAttr = this->GetLabelMap()->GetLabelObject(0)->GetNumberOfAttributes();
   std::vector<std::string> attributes = this->GetLabelMap()->GetLabelObject(0)->GetAvailableAttributes();
 
   AttributesMapType& minAttr = this->GetMinimumOutput()->Get();

@@ -357,7 +357,7 @@ ImageToPathListAlignFilter<TInputImage, TOutputPath>
   m_AngleImage = static_cast<RealImageType*>(lAngleImagePointer.GetPointer());
   this->AngleCalculate(InputImage);
 
-  /*** compute P(k,l) ***/
+  /*** compute P(k, l) ***/
   test = tab(n, 1.0 / (double) (m_NbGradDirection), (double) (nx * ny) * (double) (nx * ny));
 
   /*** initialization ***/
@@ -482,7 +482,7 @@ ImageToPathListAlignFilter<TInputImage, TOutputPath>
                   size_seg = (size_seg * 3) / 2;
                   seg.resize(size_seg);
 //      if (!seg)
-//        mwerror(FATAL,1,"Not enough memory.");
+//        mwerror(FATAL, 1,"Not enough memory.");
                   }
                 }
           }
@@ -520,7 +520,7 @@ ImageToPathListAlignFilter<TInputImage, TOutputPath>
               size_seglist = (size_seglist * 3) / 2;
               seglist.resize(size_seglist);
 //        if (!seglist)
-//    mwerror(FATAL,1,"Not enough memory.");
+//    mwerror(FATAL, 1,"Not enough memory.");
               }
             }
         }

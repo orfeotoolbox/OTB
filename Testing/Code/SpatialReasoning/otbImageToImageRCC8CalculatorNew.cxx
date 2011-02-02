@@ -23,7 +23,7 @@ int otbImageToImageRCC8CalculatorNew(int argc, char* argv[])
 {
   //    const unsigned int Dimension = 2;
   //     typedef unsigned char PixelType;
-  //     typedef otb::Image<PixelType,Dimension> ImageType;
+  //     typedef otb::Image<PixelType, Dimension> ImageType;
   //     typedef otb::ImageToImageRCC8Calculator<ImageType> CalculatorType;
 
   //     //Instantiation

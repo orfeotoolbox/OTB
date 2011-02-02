@@ -357,7 +357,7 @@ int main(int argc, char *argv[])
   //  \end{verbatim}
   //  \normalsize
   //
-  //  $(111,38)$ specifies the index position of a seed point in the image,
+  //  $(111, 38)$ specifies the index position of a seed point in the image,
   //  while $75$ and $20$ are the estimated mean and standard deviation,
   //  respectively, of the object to be segmented.  Finally, $0.5$ and $2.0$
   //  are the tolerance for the mean and standard deviation, respectively.

@@ -32,7 +32,7 @@ namespace otb
  * For backward compatibility only
  * otb::HuImageFunction is deprecated and otb::HuMomentsImageFunction
  * should be used instead
- * 
+ *
  * Calculate the Hu's invariant over an image defined as:
  *
  * - \f$ \phi_{1} = c_{11} \f$
@@ -45,19 +45,19 @@ namespace otb
  *
  * With :
  *
- *  \f[  c_{p,q}=\int_{-\infty}^{\infty} \int_{-\infty}^{\infty} (x+iy)^{p} \cdot (x-iy)^{q} \cdot f(x,y) \cdot
+ *  \f[  c_{p, q}=\int_{-\infty}^{\infty} \int_{-\infty}^{\infty} (x+iy)^{p} \cdot (x-iy)^{q} \cdot f(x, y) \cdot
  dx \cdot dy \f]
  *
  * And:
- *  - \f$(x,y)\f$ pixel localization;
- *  - \f$ f(x,y)\f$  the pixel value over the \f$(x,y)\f$ coordinate.
+ *  - \f$(x, y)\f$ pixel localization;
+ *  - \f$ f(x, y)\f$  the pixel value over the \f$(x, y)\f$ coordinate.
  *
  * This class is templated over the input image type and the
  * coordinate representation type (e.g. float or double).
  *
  * \ingroup ImageFunctions
  */
-//  public itk::ImageFunction< TInput, TOutput,TCoordRep >
+//  public itk::ImageFunction< TInput, TOutput, TCoordRep >
 
 template <class TInput,
     class TOutput    = double,

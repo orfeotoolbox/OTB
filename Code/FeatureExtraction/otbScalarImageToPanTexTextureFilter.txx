@@ -39,27 +39,27 @@ ScalarImageToPanTexTextureFilter<TInputImage, TOutputImage>
   OffsetType off;
   off[0] = 0;
   off[1] = 1;
-  m_OffsetList.push_back(off);   //(0,1)
+  m_OffsetList.push_back(off);   //(0, 1)
   off[1] = 2;
-  m_OffsetList.push_back(off);   //(0,2)
+  m_OffsetList.push_back(off);   //(0, 2)
   off[0] = 1;
   off[1] = -2;
-  m_OffsetList.push_back(off);   //(1,-2)
+  m_OffsetList.push_back(off);   //(1, -2)
   off[1] = -1;
-  m_OffsetList.push_back(off);   //(1,-1)
+  m_OffsetList.push_back(off);   //(1, -1)
   off[1] = 0;
-  m_OffsetList.push_back(off);   //(1,0)
+  m_OffsetList.push_back(off);   //(1, 0)
   off[1] = 1;
-  m_OffsetList.push_back(off);   //(1,1)
+  m_OffsetList.push_back(off);   //(1, 1)
   off[1] = 2;
-  m_OffsetList.push_back(off);   //(1,2)
+  m_OffsetList.push_back(off);   //(1, 2)
   off[0] = 2;
   off[1] = -1;
-  m_OffsetList.push_back(off);   //(2,-1)
+  m_OffsetList.push_back(off);   //(2, -1)
   off[1] = 0;
-  m_OffsetList.push_back(off);   //(2,0)
+  m_OffsetList.push_back(off);   //(2, 0)
   off[1] = 1;
-  m_OffsetList.push_back(off);   //(2,1)
+  m_OffsetList.push_back(off);   //(2, 1)
 }
 
 template <class TInputImage, class TOutputImage>

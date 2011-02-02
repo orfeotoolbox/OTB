@@ -46,6 +46,12 @@ ADD_TEST(coTuSystemTests_IsA_Methods ${COMMON_TESTS1}
         ${OTB_DATA_ROOT}
         )
 
+ADD_TEST(coTvParseHdfSubsetName ${COMMON_TESTS1}
+        otbParseHdfSubsetName)
+
+ADD_TEST(coTvParseHdfFileName ${COMMON_TESTS1}
+        otbParseHdfFileName)
+
 # -------            otb::Configuration  -------------
 ADD_TEST(coTuConfigurationTest ${COMMON_TESTS1}
         otbConfigurationTest
@@ -788,7 +794,7 @@ ADD_TEST(coTvVectorDataToImageFilter ${COMMON_TESTS9}
    otbVectorDataToImageFilter
         ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
 	${TEMP}/coTvVectorDataToImageFilter.png
-        ${BASELINE_FILES}/DejaVuSans.ttf # font
+        ${INPUTDATA}/DejaVuSans.ttf # font
 )
 
 ADD_TEST(coTvVectorDataToImageFilterBinary ${COMMON_TESTS9}
@@ -823,7 +829,7 @@ ADD_TEST(coTvVectorDataToImageFilterSensorModel ${COMMON_TESTS9}
         ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
         ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
 	${TEMP}/coTvVectorDataToImageFilterSensorModel.png
-        ${BASELINE_FILES}/DejaVuSans.ttf # font
+        ${INPUTDATA}/DejaVuSans.ttf # font
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
@@ -838,7 +844,7 @@ ADD_TEST(coTvVectorDataToImageFilterWorld ${COMMON_TESTS9}
         500 500 #Size
         -20 60 #lon/lat
         0.1 -0.1 #spacing lon/lat
-        ${BASELINE_FILES}/DejaVuSans.ttf # font
+        ${INPUTDATA}/DejaVuSans.ttf # font
 )
 
 
@@ -978,9 +984,18 @@ ADD_TEST(coTvRGBAPixelConverter ${COMMON_TESTS12}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbCommonTests13 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+ADD_TEST(coTuPipelineMemoryPrintCalculatorNew ${COMMON_TESTS13}
+  otbPipelineMemoryPrintCalculatorNew
+    )
 
-
-
+ADD_TEST(coTvPipelineMemoryPrintCalculator ${COMMON_TESTS13}
+  --compare-ascii ${NOTOL}
+  ${BASELINE_FILES}//coTvPipelineMemoryPrintCalculatorOutput.txt
+  ${TEMP}/coTvPipelineMemoryPrintCalculatorOutput.txt
+  otbPipelineMemoryPrintCalculatorTest
+  ${INPUTDATA}/qb_RoadExtract.img
+  ${TEMP}/coTvPipelineMemoryPrintCalculatorOutput.txt
+)
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS1
@@ -1141,7 +1156,8 @@ otbRGBAPixelConverter.cxx
 
 SET(BasicCommon_SRCS13
 otbCommonTests13.cxx
-)
+otbPipelineMemoryPrintCalculatorTest.cxx)
+
 
 OTB_ADD_EXECUTABLE(otbCommonTests1 "${BasicCommon_SRCS1}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbCommonTests2 "${BasicCommon_SRCS2}" "OTBIO;OTBTesting")

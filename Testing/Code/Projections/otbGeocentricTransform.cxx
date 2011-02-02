@@ -43,7 +43,7 @@ int otbGeocentricTransform(int argc, char* argv[])
   file << projection->TransformPoint(point);
   file << std::endl << std::endl;
 
-//   itk::Point<double,3> point;
+//   itk::Point<double, 3> point;
   point[0] = 1.4835345f; //lon
   point[1] = 43.559682611111107f; //lat
   point[2] = 192.15; //elev

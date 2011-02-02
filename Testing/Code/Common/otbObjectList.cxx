@@ -169,8 +169,8 @@ int otbObjectList(int argc, char * argv[])
   ImageListType::Iterator end = imageList->End();
   imageList->Erase(begin, end);
 
-  otbControlConditionTestMacro(imageList->Size() != 1, "Erase(Iterator,Iterator)/Size()");
-  otbControlConditionTestMacro(imageList->Back() != reader1->GetOutput(), "Erase(Iterator,Iterator)/Back()");
+  otbControlConditionTestMacro(imageList->Size() != 1, "Erase(Iterator, Iterator)/Size()");
+  otbControlConditionTestMacro(imageList->Back() != reader1->GetOutput(), "Erase(Iterator, Iterator)/Back()");
 
   return EXIT_SUCCESS;
 }

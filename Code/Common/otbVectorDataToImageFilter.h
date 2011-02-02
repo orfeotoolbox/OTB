@@ -38,16 +38,16 @@ namespace otb
    * We assume that all the data have been reprojected before in the desired cartographic,
    * geographic or sensor model projection (using the otb::VectorDataProjectionFilter).
    * This filter does not use the projection capabilities of mapnik.
-   * 
+   *
    * According to the class otb::VectorDataStyle, this filter supports
-   * two different rendering style types: OSM and Binary. 
+   * two different rendering style types: OSM and Binary.
    * The OSM style type provides styles to render a vector data the
    * OSM way. These styles must be specified usind the method
    * "AddStyle()".
    * The Binary style type provides automaticaly a set of styles to
    * render a vectro data as a binary mask (foreground pixel value
    * 255, background pixel value 0).
-   * 
+   *
    * Note:
    * This class only support the following types as TImage template
    * parameter:
@@ -95,7 +95,7 @@ public:
   /** Image index typedef. */
   typedef typename TImage::IndexType IndexType;
 
-  /** Image spacing,origin and direction typedef */
+  /** Image spacing, origin and direction typedef */
   typedef typename TImage::SpacingType   SpacingType;
   typedef typename TImage::PointType     OriginType;
   typedef typename TImage::DirectionType DirectionType;
@@ -238,7 +238,7 @@ private:
   unsigned int                                                   m_NbTile;
   std::vector<RegionType>                                        m_TilingRegions;
   std::vector<mapnik::Map>                                       m_Maps;
-  std::vector< std::vector<typename VectorDataExtractROIType::Pointer> >   
+  std::vector< std::vector<typename VectorDataExtractROIType::Pointer> >
                                                                  m_VectorDataExtractors;
 
 }; // end class

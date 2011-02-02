@@ -45,16 +45,16 @@ namespace otb
  *
  * With :
  *
- *  \f[  c_{p,q}=\int_{-\infty}^{\infty} \int_{-\infty}^{\infty} (x+iy)^{p} \cdot (x-iy)^{q} \cdot f(x,y) \cdot
+ *  \f[  c_{p, q}=\int_{-\infty}^{\infty} \int_{-\infty}^{\infty} (x+iy)^{p} \cdot (x-iy)^{q} \cdot f(x, y) \cdot
  dx \cdot dy \f]
  *
  * And:
- *  - \f$(x,y)\f$ pixel localization;
- *  - \f$ f(x,y)\f$ the pixel value over the \f$(x,y)\f$ coordinate.
- * 
+ *  - \f$(x, y)\f$ pixel localization;
+ *  - \f$ f(x, y)\f$ the pixel value over the \f$(x, y)\f$ coordinate.
+ *
  * Note that the output is defined as:
  * \f$ \psi_{i} = output[i-1] \f$
- *  
+ *
  * This class is templated over the input image type and the
  * coordinate representation type (e.g. float or double).
  *
@@ -121,7 +121,7 @@ public:
   }
 
   /** Get/Set the radius of the neighborhood over which the
-   *  statistics are evaluated 
+   *  statistics are evaluated
    */
   itkSetMacro( NeighborhoodRadius, unsigned int );
   itkGetConstReferenceMacro( NeighborhoodRadius, unsigned int );

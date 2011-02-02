@@ -26,12 +26,12 @@
 namespace otb
 {
 
-/** \class GenericRSResampleImageFilter 
- *  \brief This class is a composite filter that allows you to project 
+/** \class GenericRSResampleImageFilter
+ *  \brief This class is a composite filter that allows you to project
  *  an input image from any  coordinate system to any other one. The
  *  coordinate systems can be  defined by their projection reference,
  *  the keyword list or a meta data dictionary.
- * 
+ *
  *  This class uses the otb::StreamingResampleImageFilter. It defines
  *  and uses a otb::GenericRSTransform using the input/output coordinate
  *  system informations listed below. This class can resample the input to an
@@ -39,7 +39,7 @@ namespace otb
  *  the user. Note that there are no default values for all the
  *  parmeters, so it is mandatory to set correct parameters to have a
  *  correct result.
- * 
+ *
  *  The methods SetOutputParmatersFromMap can estimate the output
  *  image parameters Size/Origin/Spacing so the hole image can be
  *  reprojected without setting any output parameter.
@@ -63,7 +63,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GenericRSResampleImageFilter,itk::ImageToImageFilter);
+  itkTypeMacro(GenericRSResampleImageFilter, itk::ImageToImageFilter);
 
   /** Typedef parameters*/
   typedef TInputImage                                     InputImageType;
@@ -91,8 +91,8 @@ public:
   typedef typename OutputRpcModelEstimatorType::Pointer        OutputRpcModelEstimatorPointerType;
   
   
-  /** Specialisation of OptResampleFilter with a remote 
-    * sensing  transform 
+  /** Specialisation of OptResampleFilter with a remote
+    * sensing  transform
     */
   typedef GenericRSTransform<>                       GenericRSTransformType;
   typedef typename GenericRSTransformType::Pointer   GenericRSTransformPointerType;
@@ -100,7 +100,7 @@ public:
   typedef itk::ImageBase<OutputImageType::ImageDimension>      ImageBaseType;
   
   /** The Deformation field spacing & size */
-  otbSetObjectMemberMacro(Resampler,DeformationFieldSpacing, SpacingType);
+  otbSetObjectMemberMacro(Resampler, DeformationFieldSpacing, SpacingType);
 
   otbGetObjectMemberConstReferenceMacro(Resampler,
                                         DeformationFieldSpacing,
@@ -113,19 +113,19 @@ public:
     m_Resampler->SetOutputOrigin(origin);
     this->Modified();
   }
-  otbGetObjectMemberConstReferenceMacro(Resampler,OutputOrigin,OriginType);
+  otbGetObjectMemberConstReferenceMacro(Resampler, OutputOrigin, OriginType);
   
   /** Output Start index */
-  otbSetObjectMemberMacro(Resampler,OutputStartIndex,IndexType);
-  otbGetObjectMemberConstReferenceMacro(Resampler,OutputStartIndex,IndexType);
+  otbSetObjectMemberMacro(Resampler, OutputStartIndex, IndexType);
+  otbGetObjectMemberConstReferenceMacro(Resampler, OutputStartIndex, IndexType);
   
   /** Output Size */
-  otbSetObjectMemberMacro(Resampler,OutputSize,SizeType);
-  otbGetObjectMemberConstReferenceMacro(Resampler,OutputSize,SizeType);
+  otbSetObjectMemberMacro(Resampler, OutputSize, SizeType);
+  otbGetObjectMemberConstReferenceMacro(Resampler, OutputSize, SizeType);
   
   /** Output Spacing */
-  otbSetObjectMemberMacro(Resampler,OutputSpacing,SpacingType);
-  otbGetObjectMemberConstReferenceMacro(Resampler,OutputSpacing,SpacingType);
+  otbSetObjectMemberMacro(Resampler, OutputSpacing, SpacingType);
+  otbGetObjectMemberConstReferenceMacro(Resampler, OutputSpacing, SpacingType);
   
   /** Methods to Set/Get the interpolator */
   void SetInterpolator(InterpolatorType * interpolator)
@@ -135,19 +135,19 @@ public:
   }
   otbGetObjectMemberConstMacro(Resampler, Interpolator, const InterpolatorType *);
 
-  /** Default Edge padding value */  
+  /** Default Edge padding value */
   otbSetObjectMemberMacro(Resampler,
                           EdgePaddingValue,
                           typename OutputImageType::PixelType);
-  otbGetObjectMemberMacro(Resampler, 
-                          EdgePaddingValue, 
+  otbGetObjectMemberMacro(Resampler,
+                          EdgePaddingValue,
                           typename OutputImageType::PixelType);
   
-  /** 
-   * Set/Get input & output projections. 
+  /**
+   * Set/Get input & output projections.
    * Set/Get input & output keywordlist
    * The macro are not used here cause the input and the output are
-   * inversed. 
+   * inversed.
    */
   void SetInputProjectionRef(const std::string&  ref)
   {
@@ -202,7 +202,7 @@ public:
     m_OutputRpcEstimator->SetDEMDirectory(dem);
     this->Modified();
   }
-  otbGetObjectMemberConstMacro(Transform,DEMDirectory,std::string);
+  otbGetObjectMemberConstMacro(Transform, DEMDirectory, std::string);
 
   /** Method to Set the Average Elevation used */
   void SetAverageElevation(double elevation)
@@ -212,10 +212,15 @@ public:
     m_OutputRpcEstimator->SetAverageElevation(elevation);
     this->Modified();
   }
-  otbGetObjectMemberConstMacro(Transform,AverageElevation,double);
+  otbGetObjectMemberConstMacro(Transform, AverageElevation, double);
   
   /** Useful to set the output parameters from an existing image*/
   void SetOutputParametersFromImage(const ImageBaseType * image);
+
+  /** Useful to set output parmaters form an existing image with type
+    * different from input or ouptut image
+    */
+  template <class TImageType> void SetOutputParametersFromImage(const TImageType * image);
 
   /** Useful to set the output parameters using a map (UTM|WGS84) and
    * a spacing set by the user
@@ -223,7 +228,7 @@ public:
   void SetOutputParametersFromMap(const std::string map, const SpacingType& spacing);
 
   /** Useful to set the output parameters from a projectionRef, the
-    * output size,spacing and origin are estimated
+    * output size, spacing and origin are estimated
     */
   void SetOutputParametersFromMap(const std::string projectionRef);
   
@@ -286,16 +291,6 @@ protected:
 
   virtual void UpdateTransform();
 
-  /** Struct to store the extent of the output image when using the
-   *  methods SetOutputParameters.
-   */
-  struct OutputImageExtentType{ 
-    double minX; 
-    double maxX; 
-    double minY; 
-    double maxY; 
-  };
-  
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
@@ -305,10 +300,6 @@ private:
   // Method to estimate the input & output rpc model
   void EstimateOutputRpcModel();
   void EstimateInputRpcModel();
-  void EstimateOutputSpacing();
-  void EstimateOutputSize();
-  void EstimateOutputImageExtent();
-  void EstimateOutputOrigin();
 
   // boolean that allow the estimation of the input rpc model
   bool                               m_EstimateInputRpcModel;
@@ -320,7 +311,6 @@ private:
   InputRpcModelEstimatorPointerType  m_InputRpcEstimator;
   OutputRpcModelEstimatorPointerType m_OutputRpcEstimator;
   GenericRSTransformPointerType      m_Transform;
-  OutputImageExtentType              m_OutputExtent;
 };
 
 } // namespace otb

@@ -26,7 +26,7 @@ namespace otb
 {
 
 template <class TInputImage, class TOutputVectorData, class TLabel, class TFunctionType>
-PersistentObjectDetectionClassifier<TInputImage,TOutputVectorData,TLabel,TFunctionType>
+PersistentObjectDetectionClassifier<TInputImage, TOutputVectorData, TLabel, TFunctionType>
 ::PersistentObjectDetectionClassifier()
   : m_NeighborhoodRadius(0),
     m_ClassKey("Class"),
@@ -42,14 +42,14 @@ PersistentObjectDetectionClassifier<TInputImage,TOutputVectorData,TLabel,TFuncti
 }
 
 template <class TInputImage, class TOutputVectorData, class TLabel, class TFunctionType>
-PersistentObjectDetectionClassifier<TInputImage,TOutputVectorData,TLabel,TFunctionType>
+PersistentObjectDetectionClassifier<TInputImage, TOutputVectorData, TLabel, TFunctionType>
 ::~PersistentObjectDetectionClassifier()
 {
 }
 
 template <class TInputImage, class TOutputVectorData, class TLabel, class TFunctionType>
 void
-PersistentObjectDetectionClassifier<TInputImage,TOutputVectorData,TLabel,TFunctionType>
+PersistentObjectDetectionClassifier<TInputImage, TOutputVectorData, TLabel, TFunctionType>
 ::AllocateOutputs()
 {
   // This is commented to prevent the streaming of the whole image for the first stream strip
@@ -61,7 +61,7 @@ PersistentObjectDetectionClassifier<TInputImage,TOutputVectorData,TLabel,TFuncti
 
 template <class TInputImage, class TOutputVectorData, class TLabel, class TFunctionType>
 void
-PersistentObjectDetectionClassifier<TInputImage,TOutputVectorData,TLabel,TFunctionType>
+PersistentObjectDetectionClassifier<TInputImage, TOutputVectorData, TLabel, TFunctionType>
 ::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
@@ -79,15 +79,15 @@ PersistentObjectDetectionClassifier<TInputImage,TOutputVectorData,TLabel,TFuncti
 
 template <class TInputImage, class TOutputVectorData, class TLabel, class TFunctionType>
 void
-PersistentObjectDetectionClassifier<TInputImage,TOutputVectorData,TLabel,TFunctionType>
+PersistentObjectDetectionClassifier<TInputImage, TOutputVectorData, TLabel, TFunctionType>
 ::SetSVMModel(SVMModelType* model)
 {
   this->SetNthInput(1, model);
 }
 
 template <class TInputImage, class TOutputVectorData, class TLabel, class TFunctionType>
-typename PersistentObjectDetectionClassifier<TInputImage,TOutputVectorData,TLabel,TFunctionType>::VectorDataType*
-PersistentObjectDetectionClassifier<TInputImage,TOutputVectorData,TLabel,TFunctionType>
+typename PersistentObjectDetectionClassifier<TInputImage, TOutputVectorData, TLabel, TFunctionType>::VectorDataType*
+PersistentObjectDetectionClassifier<TInputImage, TOutputVectorData, TLabel, TFunctionType>
 ::GetOutputVectorData()
 {
   return static_cast<VectorDataType*>(this->itk::ProcessObject::GetOutput(1));
@@ -95,7 +95,7 @@ PersistentObjectDetectionClassifier<TInputImage,TOutputVectorData,TLabel,TFuncti
 
 template <class TInputImage, class TOutputVectorData, class TLabel, class TFunctionType>
 itk::DataObject::Pointer
-PersistentObjectDetectionClassifier<TInputImage,TOutputVectorData,TLabel,TFunctionType>
+PersistentObjectDetectionClassifier<TInputImage, TOutputVectorData, TLabel, TFunctionType>
 ::MakeOutput(unsigned int idx)
 {
   itk::DataObject::Pointer output;
@@ -118,7 +118,7 @@ PersistentObjectDetectionClassifier<TInputImage,TOutputVectorData,TLabel,TFuncti
 
 template <class TInputImage, class TOutputVectorData, class TLabel, class TFunctionType>
 void
-PersistentObjectDetectionClassifier<TInputImage,TOutputVectorData,TLabel,TFunctionType>
+PersistentObjectDetectionClassifier<TInputImage, TOutputVectorData, TLabel, TFunctionType>
 ::Reset()
 {
   m_ThreadPointArray = PointArrayContainer(this->GetNumberOfThreads());
@@ -127,7 +127,7 @@ PersistentObjectDetectionClassifier<TInputImage,TOutputVectorData,TLabel,TFuncti
 
 template <class TInputImage, class TOutputVectorData, class TLabel, class TFunctionType>
 void
-PersistentObjectDetectionClassifier<TInputImage,TOutputVectorData,TLabel,TFunctionType>
+PersistentObjectDetectionClassifier<TInputImage, TOutputVectorData, TLabel, TFunctionType>
 ::Synthetize()
 {
   // merge all points in a single vector data
@@ -170,7 +170,7 @@ PersistentObjectDetectionClassifier<TInputImage,TOutputVectorData,TLabel,TFuncti
 
 template <class TInputImage, class TOutputVectorData, class TLabel, class TFunctionType>
 void
-PersistentObjectDetectionClassifier<TInputImage,TOutputVectorData,TLabel,TFunctionType>
+PersistentObjectDetectionClassifier<TInputImage, TOutputVectorData, TLabel, TFunctionType>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
@@ -178,7 +178,7 @@ PersistentObjectDetectionClassifier<TInputImage,TOutputVectorData,TLabel,TFuncti
 
 template <class TInputImage, class TOutputVectorData, class TLabel, class TFunctionType>
 void
-PersistentObjectDetectionClassifier<TInputImage,TOutputVectorData,TLabel,TFunctionType>
+PersistentObjectDetectionClassifier<TInputImage, TOutputVectorData, TLabel, TFunctionType>
 ::GenerateInputRequestedRegion()
 {
   Superclass::GenerateInputRequestedRegion();
@@ -219,12 +219,12 @@ PersistentObjectDetectionClassifier<TInputImage,TOutputVectorData,TLabel,TFuncti
 
 template <class TInputImage, class TOutputVectorData, class TLabel, class TFunctionType>
 void
-PersistentObjectDetectionClassifier<TInputImage,TOutputVectorData,TLabel,TFunctionType>
+PersistentObjectDetectionClassifier<TInputImage, TOutputVectorData, TLabel, TFunctionType>
 ::BeforeThreadedGenerateData()
 {
   // Compute the 1/(sigma) vector
   m_InvertedScales = m_Scales;
-  for(unsigned int idx = 0;idx < m_Scales.Size();++idx)
+  for(unsigned int idx = 0; idx < m_Scales.Size(); ++idx)
     {
     if(m_Scales[idx]-1e-10 < 0.)
       m_InvertedScales[idx] = 0.;
@@ -236,7 +236,7 @@ PersistentObjectDetectionClassifier<TInputImage,TOutputVectorData,TLabel,TFuncti
 
 template <class TInputImage, class TOutputVectorData, class TLabel, class TFunctionType>
 void
-PersistentObjectDetectionClassifier<TInputImage,TOutputVectorData,TLabel,TFunctionType>
+PersistentObjectDetectionClassifier<TInputImage, TOutputVectorData, TLabel, TFunctionType>
 ::ThreadedGenerateData(const RegionType& outputRegionForThread,
                        int threadId)
 {
@@ -263,13 +263,13 @@ PersistentObjectDetectionClassifier<TInputImage,TOutputVectorData,TLabel,TFuncti
         if (current[0] % step == 0)
           {
           DescriptorsFunctionPointType point;
-          input->TransformIndexToPhysicalPoint(current,point);
+          input->TransformIndexToPhysicalPoint(current, point);
 
           ContinuousIndexType currentContinuous(current);
           currentContinuous[0] += 0.5;
           currentContinuous[1] += 0.5;
           DescriptorsFunctionPointType pointOGR;
-          input->TransformContinuousIndexToPhysicalPoint(currentContinuous,pointOGR);
+          input->TransformContinuousIndexToPhysicalPoint(currentContinuous, pointOGR);
 
           DescriptorType descriptor = m_DescriptorsFunction->Evaluate(point);
           SVMModelMeasurementType modelMeasurement(descriptor.GetSize());
@@ -291,14 +291,14 @@ PersistentObjectDetectionClassifier<TInputImage,TOutputVectorData,TLabel,TFuncti
 
 
 template <class TInputImage, class TOutputVectorData, class TLabel, class TFunctionPrecision, class TCoordRep>
-ObjectDetectionClassifier<TInputImage,TOutputVectorData,TLabel,TFunctionPrecision,TCoordRep>
+ObjectDetectionClassifier<TInputImage, TOutputVectorData, TLabel, TFunctionPrecision, TCoordRep>
 ::ObjectDetectionClassifier()
 {
 
 }
 
 template <class TInputImage, class TOutputVectorData, class TLabel, class TFunctionPrecision, class TCoordRep>
-ObjectDetectionClassifier<TInputImage,TOutputVectorData,TLabel,TFunctionPrecision,TCoordRep>
+ObjectDetectionClassifier<TInputImage, TOutputVectorData, TLabel, TFunctionPrecision, TCoordRep>
 ::~ObjectDetectionClassifier()
 {
 

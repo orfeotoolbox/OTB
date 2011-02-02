@@ -27,7 +27,7 @@ namespace otb
  * \class RealMomentsImageFunction
  * \brief Calculate the moment values in the specified
  * neighborhood.
- * 
+ *
  * Calculate the real moment values over a specified neighborhood.
  *
  * \ingroup ImageFunctions
@@ -36,7 +36,7 @@ namespace otb
 template <class TInputImage, class TCoordRep = double>
 class ITK_EXPORT RealMomentsImageFunction :
     public itk::ImageFunction<TInputImage,
-                              std::vector< std::vector< 
+                              std::vector< std::vector<
                               ITK_TYPENAME itk::NumericTraits<
                               typename TInputImage::PixelType>::RealType > >,
                               TCoordRep>
@@ -44,10 +44,10 @@ class ITK_EXPORT RealMomentsImageFunction :
 public:
   /** Standard class typedefs. */
   typedef RealMomentsImageFunction                                             Self;
-  typedef itk::ImageFunction<TInputImage, 
-                             std::vector< std::vector< 
+  typedef itk::ImageFunction<TInputImage,
+                             std::vector< std::vector<
                              ITK_TYPENAME itk::NumericTraits<
-                             typename TInputImage::PixelType>::RealType > >, 
+                             typename TInputImage::PixelType>::RealType > >,
                              TCoordRep>                                        Superclass;
   typedef itk::SmartPointer<Self>                                              Pointer;
   typedef itk::SmartPointer<const Self>                                        ConstPointer;
@@ -92,7 +92,7 @@ public:
   }
 
   /** Get/Set the radius of the neighborhood over which the
-   *  statistics are evaluated 
+   *  statistics are evaluated
    */
   itkSetMacro( NeighborhoodRadius, unsigned int );
   itkGetConstReferenceMacro( NeighborhoodRadius, unsigned int );

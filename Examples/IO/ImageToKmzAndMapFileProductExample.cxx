@@ -20,17 +20,17 @@
 //
 // This example demonstrates the use of the
 // \doxygen{otb}{KmzProductWriter} and the
-// \doxygen{otb}{MapFileProductWriter}.  
+// \doxygen{otb}{MapFileProductWriter}.
 // The first filter is intended to produce Kmz file (Google Earth
 // Readable), and the second one is intended to produce map files
 // callable through a WMS (Web Map Service) service. In this example
 // we will  use a file with no meta-data, use the
 // \doxygen{otb}{GGCPToRPCSensorModelImageFilter} in order to
-// approximate a rpc model, and then use our filters to produce a kmz 
+// approximate a rpc model, and then use our filters to produce a kmz
 // and MapFile products.
 // Note that the \doxygen{otb}{KmzProductWriter} and the
 // \doxygen{otb}{MapFileProductWriter} can only process inputs with a
-// non empty keyword list. 
+// non empty keyword list.
 //
 // The first step toward the use of these filters is to include the
 // proper header files: the one for the rpc sensor estimation filter and
@@ -67,7 +67,7 @@ int main(int argc, char* argv[])
 // Software Guide : BeginLatex
 //
 // We will start by defining the types for the image and the image file
-// reader. 
+// reader.
 //
 // Software Guide : EndLatex
 // Software Guide : BeginCodeSnippet
@@ -82,7 +82,7 @@ int main(int argc, char* argv[])
 //
 // We can now proceed to declare the type for the rpc sensor model
 // estimation filter. The class \doxygen{otb}{GGCPToRPCSensorModelImageFilter} is
-// templated over the input image type. 
+// templated over the input image type.
 //
 // Software Guide : EndLatex
 
@@ -136,11 +136,11 @@ int main(int argc, char* argv[])
   
 // Software Guide : BeginLatex
 //
-// The last step of the chain, is to export the image to a Google 
-// Earth understandable format using the KmzProductWriter. Note that 
+// The last step of the chain, is to export the image to a Google
+// Earth understandable format using the KmzProductWriter. Note that
 // the writer can add legends via the method
-// AddLegend(std::string description,ImageType * legend) and a logo in
-// the kmz using SetLogo(ImageType*). 
+// AddLegend(std::string description, ImageType * legend) and a logo in
+// the kmz using SetLogo(ImageType*).
 //
 // Software Guide : EndLatex
 
@@ -152,7 +152,7 @@ int main(int argc, char* argv[])
 // Software Guide : BeginLatex
 //
 // Finally, we trigger the kmz writting by calling the \code{Update()}
-// method on the writer. 
+// method on the writer.
 //
 // Software Guide : EndLatex
 
@@ -172,10 +172,10 @@ int main(int argc, char* argv[])
 // configuration file, the tiles to draw, and shapefiles descrining
 // the tiles and where to find them.
 // The Mapfile writer allow setting the complete path to the mapfile
-// via SetFileName(std::string),the path where to store the tiles via
+// via SetFileName(std::string), the path where to store the tiles via
 // the method SetShapeIndexPath() and finally the path to the cgi-bin
 // to use via the method SetGCIPath().
-// 
+//
 //
 // Software Guide : EndLatex
 
@@ -190,7 +190,7 @@ int main(int argc, char* argv[])
 // (SRID) to choose his projection. In this example we choose WGS84 to
 // project our datas in. The SRID relative to WGS84 is 4326.
 // Finally, we trigger the MapFile writting by calling the
-// \code{Update()}  method on the writer. 
+// \code{Update()}  method on the writer.
 //
 // Software Guide : EndLatex
 

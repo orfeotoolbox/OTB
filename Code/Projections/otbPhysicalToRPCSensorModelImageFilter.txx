@@ -52,24 +52,24 @@ PhysicalToRPCSensorModelImageFilter<TImage>
 
 template <class TImage>
 PhysicalToRPCSensorModelImageFilter<TImage>
-::~PhysicalToRPCSensorModelImageFilter() 
+::~PhysicalToRPCSensorModelImageFilter()
 {
 }
 
 template <class TImage>
 void
 PhysicalToRPCSensorModelImageFilter<TImage>
-::GenerateOutputInformation() 
+::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
   
   if(!m_OutputInformationGenerated)
     {
 
-    // Get the input 
+    // Get the input
     ImageType * input = const_cast<ImageType*>(this->GetInput());
 
-    // Build the grid 
+    // Build the grid
     // Generate GCPs from physical sensor model
     RSTransformPointerType  rsTransform = RSTransformType::New();
     rsTransform->SetInputKeywordList(input->GetImageKeywordlist());
@@ -89,20 +89,20 @@ PhysicalToRPCSensorModelImageFilter<TImage>
 
     rsTransform->InstanciateTransform();
   
-    // Compute the size of the grid 
+    // Compute the size of the grid
     typename ImageType::SizeType  size = input->GetLargestPossibleRegion().GetSize();
     double gridSpacingX = size[0]/m_GridSize[0];
     double gridSpacingY = size[1]/m_GridSize[1];
   
-    for(unsigned int px = 0; px<m_GridSize[0];++px)
+    for(unsigned int px = 0; px<m_GridSize[0]; ++px)
       {
-      for(unsigned int py = 0; py<m_GridSize[1];++py)
+      for(unsigned int py = 0; py<m_GridSize[1]; ++py)
         {
         PointType inputPoint =  input->GetOrigin();
         inputPoint[0] += (px * gridSpacingX + 0.5) * input->GetSpacing()[0];
         inputPoint[1] += (py * gridSpacingY + 0.5) * input->GetSpacing()[1];
         PointType outputPoint = rsTransform->TransformPoint(inputPoint);
-        m_GCPsToSensorModelFilter->AddGCP(inputPoint,outputPoint);
+        m_GCPsToSensorModelFilter->AddGCP(inputPoint, outputPoint);
         }
       }
   
@@ -114,7 +114,7 @@ PhysicalToRPCSensorModelImageFilter<TImage>
   
     // Encapsulate the keywordlist
     itk::MetaDataDictionary& dict = this->GetOutput()->GetMetaDataDictionary();
-    itk::EncapsulateMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, 
+    itk::EncapsulateMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey,
                                                m_GCPsToSensorModelFilter->GetKeywordlist());
 
     // put the flag to true

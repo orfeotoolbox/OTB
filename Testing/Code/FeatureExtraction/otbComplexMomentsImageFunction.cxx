@@ -43,7 +43,7 @@ int otbComplexMomentsImageFunctionNew(int argc, char * argv[])
   // Instantiating object
   FunctionType::Pointer function = FunctionType::New();
   
-  std::cout << function << std::endl; 
+  std::cout << function << std::endl;
   
   return EXIT_SUCCESS;
 }
@@ -112,7 +112,7 @@ int otbComplexMomentsImageFunctionScaleInvariant(int argc, char * argv[])
   typedef otb::StreamingResampleImageFilter<InputImageType,
     InputImageType,
     double>                                                               StreamingResampleImageFilterType;
-  typedef otb::BCOInterpolateImageFunction<InputImageType, 
+  typedef otb::BCOInterpolateImageFunction<InputImageType,
     double>                                                               InterpolatorType;
   typedef otb::ComplexMomentsImageFunction<InputImageType>                FunctionType;
   typedef FunctionType::OutputType                                        OutputType;
@@ -154,7 +154,7 @@ int otbComplexMomentsImageFunctionScaleInvariant(int argc, char * argv[])
   InputImageType::IndexType index2;
   index2[0] = 512;
   index2[1] = 512;
-  function2->SetNeighborhoodRadius(8);  
+  function2->SetNeighborhoodRadius(8);
   OutputType Result2 = function2->EvaluateAtIndex(index2);
 
   double error;
@@ -167,7 +167,7 @@ int otbComplexMomentsImageFunctionScaleInvariant(int argc, char * argv[])
       {
       error += vcl_pow(vcl_abs( Result1.at(k).at(l) - Result2.at(k).at(l) ), 2);
       
-      std::cout << "Original - C" << k << l 
+      std::cout << "Original - C" << k << l
                 << " : " << Result1.at(k).at(l)
                 << "  /  Scaled - C" << k << l
                 << " : " << Result2.at(k).at(l) << std::endl;

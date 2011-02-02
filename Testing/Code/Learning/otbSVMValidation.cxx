@@ -64,11 +64,11 @@ int otbSVMValidation(int argc, char* argv[])
   typedef itk::FixedArray<LabelType, 1>                   TrainingSampleType;
   typedef itk::Statistics::ListSample<TrainingSampleType> TrainingListSampleType;
   typedef itk::Statistics::MersenneTwisterRandomVariateGenerator RandomGeneratorType;
-  typedef otb::SVMSampleListModelEstimator<ListSampleType,TrainingListSampleType> EstimatorType;
+  typedef otb::SVMSampleListModelEstimator<ListSampleType, TrainingListSampleType> EstimatorType;
   typedef otb::SVMClassifier<ListSampleType, LabelType>   ClassifierType;
   typedef ClassifierType::OutputType                      ClassifierOutputType;
   typedef otb::ConfusionMatrixCalculator
-      <TrainingListSampleType,TrainingListSampleType> ConfusionMatrixCalculatorType;
+      <TrainingListSampleType, TrainingListSampleType> ConfusionMatrixCalculatorType;
 
 
   RandomGeneratorType::Pointer random = RandomGeneratorType::New();
@@ -86,7 +86,7 @@ int otbSVMValidation(int argc, char* argv[])
   {
     // Generate a positive sample
     double angle = random->GetVariateWithOpenUpperRange( otb::CONST_2PI );
-    double radius = random->GetUniformVariate(prmin,prmax);
+    double radius = random->GetUniformVariate(prmin, prmax);
     SampleType pSample(2);
     pSample[0] = cpx+radius*vcl_sin(angle);
     pSample[1] = cpy+radius*vcl_cos(angle);
@@ -99,7 +99,7 @@ int otbSVMValidation(int argc, char* argv[])
 
     // Generate a negative sample
     angle = random->GetVariateWithOpenUpperRange( otb::CONST_2PI );
-    radius = random->GetUniformVariate(nrmin,nrmax);
+    radius = random->GetUniformVariate(nrmin, nrmax);
     SampleType nSample(2);
     nSample[0] = cnx+radius*vcl_sin(angle);
     nSample[1] = cny+radius*vcl_cos(angle);
@@ -119,7 +119,7 @@ int otbSVMValidation(int argc, char* argv[])
     {
       // Generate a positive sample
       double angle = random->GetVariateWithOpenUpperRange( otb::CONST_2PI );
-      double radius = random->GetUniformVariate(prmin,prmax);
+      double radius = random->GetUniformVariate(prmin, prmax);
       SampleType pSample(2);
       pSample[0] = cpx+radius*vcl_sin(angle);
       pSample[1] = cpy+radius*vcl_cos(angle);
@@ -131,7 +131,7 @@ int otbSVMValidation(int argc, char* argv[])
 
       // Generate a negative sample
       angle = random->GetVariateWithOpenUpperRange( otb::CONST_2PI );
-      radius = random->GetUniformVariate(nrmin,nrmax);
+      radius = random->GetUniformVariate(nrmin, nrmax);
       SampleType nSample(2);
       nSample[0] = cnx+radius*vcl_sin(angle);
       nSample[1] = cny+radius*vcl_cos(angle);

@@ -45,9 +45,6 @@
 namespace otb
 {
 
-/**
- *
- */
 template <class TInputImage, class TPrecision>
 LineSegmentDetector<TInputImage, TPrecision>
 ::LineSegmentDetector()
@@ -55,14 +52,14 @@ LineSegmentDetector<TInputImage, TPrecision>
 
   m_DirectionsAllowed = 1. / 8.;
   m_Prec = CONST_PI * m_DirectionsAllowed;
-  m_Threshold = 2.;
+  m_Threshold = 5.2;
 
   /** Compute the modulus and the orientation gradient images */
   m_GradientFilter = GradientFilterType::New();
   m_MagnitudeFilter = MagnitudeFilterType::New();
   m_OrientationFilter = OrientationFilterType::New();
 
-  /** Image to store the pixels used 0:NotUsed  1:USED*/
+  /** Image to store the pixels used 0:NOTUSED 127:NOTINIT  255:USED*/
   m_UsedPointImage  = LabelImageType::New();
 
   /** A Line List : This is the output*/
@@ -87,10 +84,6 @@ LineSegmentDetector<TInputImage, TPrecision>
   m_UsedPointImage->FillBuffer(0);
 }
 
-/**
- *
- */
-
 template <class TInputImage, class TPrecision>
 void
 LineSegmentDetector<TInputImage, TPrecision>
@@ -108,7 +101,7 @@ LineSegmentDetector<TInputImage, TPrecision>
 
   /** Compute the modulus and the orientation gradient image*/
   m_GradientFilter->SetInput(castFilter->GetOutput());
-  m_GradientFilter->SetSigma(1.3);
+  m_GradientFilter->SetSigma(0.6);
   m_MagnitudeFilter->SetInput(m_GradientFilter->GetOutput());
   m_OrientationFilter->SetInput(m_GradientFilter->GetOutput());
 
@@ -130,11 +123,6 @@ LineSegmentDetector<TInputImage, TPrecision>
   this->ComputeRectangles();
 }
 
-/**************************************************************************************************************/
-/**
- *
- */
-
 template <class TInputImage, class TPrecision>
 typename LineSegmentDetector<TInputImage, TPrecision>
 ::CoordinateHistogramType
@@ -145,20 +133,18 @@ LineSegmentDetector<TInputImage, TPrecision>
 
   m_NumberOfImagePixels  = static_cast<unsigned int>(m_ImageSize[1] * m_ImageSize[0]);
 
-  /**
-   *  Compute the minimum region size
-   */
+  // Compute the minimum region size
   double logNT = 5. *
                  (vcl_log10(static_cast<double>(m_ImageSize[0])) + vcl_log10(static_cast<double>(m_ImageSize[1]))) / 2.;
   double log1_p = vcl_log10(m_DirectionsAllowed);
   double rapport = logNT / log1_p;
   m_MinimumRegionSize = -1 * static_cast<unsigned int>(rapport);
 
-  /** Definition of the min & the max of an image*/
+  // Definition of the min & the max of an image
   OutputPixelType min = itk::NumericTraits<TPrecision>::Zero;
   OutputPixelType max = itk::NumericTraits<TPrecision>::Zero;
 
-  /** Computing the min & max of the image*/
+  // Computing the min & max of the image
   typedef  itk::MinimumMaximumImageCalculator<OutputImageType> MinMaxCalculatorFilter;
   typename MinMaxCalculatorFilter::Pointer minmaxCalculator =   MinMaxCalculatorFilter::New();
 
@@ -169,10 +155,10 @@ LineSegmentDetector<TInputImage, TPrecision>
   max = minmaxCalculator->GetMaximum();
 
   /** Compute the threshold on the gradient*/
-  m_Threshold = 4 * m_Threshold / vcl_sin(m_Prec) * ((max - min) / 255.);     // threshold normalized with min & max of the values
+  m_Threshold = m_Threshold * ((max - min) / 255.);     // threshold normalized with min & max of the values
 
   /** Computing the length of the bins*/
-  unsigned int NbBin = 10;
+  unsigned int NbBin = 1024;
   double       lengthBin = static_cast<double>((max - min)) / static_cast<double>(NbBin - 1);
   CoordinateHistogramType  tempHisto(NbBin);  /** Initializing the histogram */
 
@@ -220,7 +206,7 @@ LineSegmentDetector<TInputImage, TPrecision>
     OutputIndexType index = it.GetIndex();
     unsigned int    bin = static_cast<unsigned int> (static_cast<double>(it.Value()) / lengthBin);
     if (it.Value() - m_Threshold > 1e-10) tempHisto[NbBin - bin - 1].push_back(it.GetIndex());
-
+    else SetPixelToUsed(it.GetIndex());
     ++it;
     }
 
@@ -231,13 +217,11 @@ LineSegmentDetector<TInputImage, TPrecision>
 /**
  * Method used to search the segments
  */
-
 template <class TInputImage, class TPrecision>
 void
 LineSegmentDetector<TInputImage, TPrecision>
 ::LineSegmentDetection(CoordinateHistogramType& CoordinateHistogram)
 {
-
   /** Begin the search of the segments*/
   CoordinateHistogramIteratorType ItCoordinateList = CoordinateHistogram.begin();
 
@@ -249,9 +233,38 @@ LineSegmentDetector<TInputImage, TPrecision>
       InputIndexType index = *(ItIndexVector);
 
       /** If the point is not yet computed */
-      if (!this->IsUsed(index))
+      if (this->IsNotUsed(index))
         {
-        this->GrowRegion(index);
+        IndexVectorType region;
+        double          regionAngle = 0.;
+        bool fail = GrowRegion(index, region, regionAngle);
+        if (!fail)
+          {
+          //region -> rectangle
+          RectangleType rectangle = Region2Rectangle(region, regionAngle);
+
+          //ImprovRectangle(&rectangle)
+          double nfa = ImproveRectangle(rectangle);
+
+          double density =  (double)region.size() /
+            ( vcl_sqrt((rectangle[2]-rectangle[0])*(rectangle[2]-rectangle[0])
+                       +(rectangle[3]-rectangle[1])*(rectangle[3]-rectangle[1])) * rectangle[4] );
+          if (density < 0.7)
+            {
+            nfa = -1;
+            //std::cout << "Density = " << density << std::endl;
+            }
+
+          //if NFA(ImprovRect(rec)) > 0.
+          if (nfa > 0.)
+            {
+            m_RectangleList.push_back(rectangle);
+            }
+          else
+            {
+            SetRegionToNotIni(region);
+            }
+          }
         }
       ++ItIndexVector;
       }
@@ -269,51 +282,28 @@ int
 LineSegmentDetector<TInputImage, TPrecision>
 ::ComputeRectangles()
 {
-  /** Check the size of the region list */
-  unsigned int sizeRegion = m_RegionList.size();
-  if (sizeRegion == 0) return EXIT_FAILURE;
-
-  /** Compute the rectangle*/
-  CoordinateHistogramIteratorType ItRegion = m_RegionList.begin();
-  DirectionVectorIteratorType     ItDir    =  m_DirectionVector.begin();
-
-  while (ItRegion != m_RegionList.end() && ItDir != m_DirectionVector.end())
-    {
-
-    this->Region2Rect(*ItRegion, *ItDir);
-    ++ItRegion;
-    ++ItDir;
-    }
-
-  /** Improve the rectangles & store the lines*/
+  /** store the lines*/
   RectangleListTypeIterator itRec = m_RectangleList.begin();
   while (itRec != m_RectangleList.end())
     {
-    double NFA = this->ComputeRectNFA((*itRec));
-    /**
-     * Here we start building the OUTPUT :a LineSpatialObjectList.
-     */
-    if (NFA > 0.)
-      {
-      PointListType pointList;
-      PointType     point;
-
-      point.SetPosition(static_cast<TPrecision>((*itRec)[0]), static_cast<TPrecision>((*itRec)[1]));
-      pointList.push_back(point);
-      point.SetPosition(static_cast<TPrecision>((*itRec)[2]), static_cast<TPrecision>((*itRec)[3]));
-      pointList.push_back(point);
-
-      typename LineSpatialObjectType::Pointer line = LineSpatialObjectType::New();
-      line->SetId(0);
-      line->SetPoints(pointList);
-      line->ComputeBoundingBox();
-      m_LineList->push_back(line);
-      pointList.clear();
-      }
-
+    PointListType pointList;
+    PointType     point;
+    
+    point.SetPosition(static_cast<TPrecision>((*itRec)[0]), static_cast<TPrecision>((*itRec)[1]));
+    pointList.push_back(point);
+    point.SetPosition(static_cast<TPrecision>((*itRec)[2]), static_cast<TPrecision>((*itRec)[3]));
+    pointList.push_back(point);
+    
+    typename LineSpatialObjectType::Pointer line = LineSpatialObjectType::New();
+    line->SetId(0);
+    line->SetPoints(pointList);
+    line->ComputeBoundingBox();
+    m_LineList->push_back(line);
+    pointList.clear();
+    
     ++itRec;
     }
-
+  
   return EXIT_SUCCESS;
 }
 
@@ -343,7 +333,7 @@ LineSegmentDetector<TInputImage, TPrecision>
 template <class TInputImage, class TPrecision>
 double
 LineSegmentDetector<TInputImage, TPrecision>
-::ImproveRectangle(RectangleType& rec) const
+::ImproveRectangle(RectangleType &rec) const
 {
   int           n = 0;
   double        nfa_new;
@@ -441,15 +431,44 @@ LineSegmentDetector<TInputImage, TPrecision>
       CopyRectangle(rec, r);
       }
     }
-  if (NFA > 0.) return NFA;
-
+ 
   return NFA;
 
 }
 
 /**************************************************************************************************************/
 /**
- * Method IsUsed : Determine if a point was used or not. search in the m_LabelImage
+ * Method IsNotUsed : Determine if a point was NOTUSED or not. search in the m_LabelImage
+ */
+template <class TInputImage, class TPrecision>
+bool
+LineSegmentDetector<TInputImage, TPrecision>
+::IsNotUsed(InputIndexType& index) const
+{
+  bool isNotUsed = false;
+
+  typedef itk::ImageConstIterator<LabelImageType> ImageIteratorType;
+  RegionType     region = m_UsedPointImage->GetLargestPossibleRegion();
+  InputIndexType indexRef = region.GetIndex();
+  ImageIteratorType itLabel(m_UsedPointImage, region);
+  itLabel.GoToBegin();
+
+  if (m_UsedPointImage->GetLargestPossibleRegion().IsInside(index))
+    {
+    itLabel.SetIndex(index);
+    if (itLabel.Get() == 0) isNotUsed = true;
+    }
+  else
+    {
+    itkExceptionMacro(<< "Can't access to index " << index << ", outside the image largest region (" << region.GetIndex(
+                        ) << ", " << region.GetSize() << ")");
+    }
+
+  return isNotUsed;
+}
+/**************************************************************************************************************/
+/**
+ * Method IsUsed : Determine if a point was USED or not. search in the m_LabelImage
  */
 template <class TInputImage, class TPrecision>
 bool
@@ -467,29 +486,52 @@ LineSegmentDetector<TInputImage, TPrecision>
   if (m_UsedPointImage->GetLargestPossibleRegion().IsInside(index))
     {
     itLabel.SetIndex(index);
-    if (itLabel.Get() == 1) isUsed = true;
+    if (itLabel.Get() == 255) isUsed = true;
     }
   else
     {
     itkExceptionMacro(<< "Can't access to index " << index << ", outside the image largest region (" << region.GetIndex(
                         ) << ", " << region.GetSize() << ")");
     }
-//   typedef itk::NeighborhoodIterator<LabelImageType>   NeighborhoodLabelIteratorType;
-//   typename NeighborhoodLabelIteratorType::SizeType    radiusLabel;
-//   radiusLabel.Fill(0);
-//   NeighborhoodLabelIteratorType                       itLabel(radiusLabel,m_UsedPointImage,
-//                                                               m_UsedPointImage->GetRequestedRegion());
-//
-//   itLabel.SetLocation(index);
-//   if(*(itLabel.GetCenterValue()) == 1)
-//     isUsed = true;
+
   return isUsed;
+}
+
+/**************************************************************************************************************/
+/**
+ * Method IsNotIni : Determine if a point was NOTINI or not. search in the m_LabelImage
+ */
+template <class TInputImage, class TPrecision>
+bool
+LineSegmentDetector<TInputImage, TPrecision>
+::IsNotIni(InputIndexType& index) const
+{
+  bool isNotIni = false;
+
+  typedef itk::ImageConstIterator<LabelImageType> ImageIteratorType;
+  RegionType     region = m_UsedPointImage->GetLargestPossibleRegion();
+  InputIndexType indexRef = region.GetIndex();
+  ImageIteratorType itLabel(m_UsedPointImage, region);
+  itLabel.GoToBegin();
+
+  if (m_UsedPointImage->GetLargestPossibleRegion().IsInside(index))
+    {
+    itLabel.SetIndex(index);
+    if (itLabel.Get() == 127) isNotIni = true;
+    }
+  else
+    {
+    itkExceptionMacro(<< "Can't access to index " << index << ", outside the image largest region (" << region.GetIndex(
+                        ) << ", " << region.GetSize() << ")");
+    }
+
+  return isNotIni;
 }
 
 /**************************************************************************************************************/
 
 /**
- * Method SetPixelToUsed : Seta pixel to used
+ * Method SetPixelToUsed : Set a pixel to USED
  */
 template <class TInputImage, class TPrecision>
 void
@@ -502,7 +544,43 @@ LineSegmentDetector<TInputImage, TPrecision>
   NeighborhoodLabelIteratorType                       itLabel(radiusLabel, m_UsedPointImage,
                                                               m_UsedPointImage->GetRequestedRegion());
   itLabel.SetLocation(index);
-  itLabel.SetCenterPixel(1);     // 1 : Set the point status to : Used Point
+  itLabel.SetCenterPixel(255);     // 255 : Set the point status to : Used Point
+}
+
+/**************************************************************************************************************/
+
+/**
+ * Method SetPixelToNotIni : Set a pixel to NOTINI
+ */
+template <class TInputImage, class TPrecision>
+void
+LineSegmentDetector<TInputImage, TPrecision>
+::SetPixelToNotIni(InputIndexType index)
+{
+  typedef itk::NeighborhoodIterator<LabelImageType> NeighborhoodLabelIteratorType;
+  typename NeighborhoodLabelIteratorType::SizeType radiusLabel;
+  radiusLabel.Fill(0);
+  NeighborhoodLabelIteratorType                       itLabel(radiusLabel, m_UsedPointImage,
+                                                              m_UsedPointImage->GetRequestedRegion());
+  itLabel.SetLocation(index);
+  itLabel.SetCenterPixel(127);     // 127 : Set the point status to : Not Ini Point
+}
+
+/**************************************************************************************************************/
+/**
+ * Method SetRegionToNotIni : Set a region pixels to NOTINI
+ */
+template <class TInputImage, class TPrecision>
+void
+LineSegmentDetector<TInputImage, TPrecision>
+::SetRegionToNotIni(IndexVectorType region)
+{
+  IndexVectorIteratorType it = region.begin();
+  while (it != region.end())
+    {
+    this->SetPixelToNotIni(*it);
+    it ++;
+    }
 }
 
 /**************************************************************************************************************/
@@ -511,9 +589,9 @@ LineSegmentDetector<TInputImage, TPrecision>
  * within a precision (m_Prec)
  */
 template <class TInputImage, class TPrecision>
-void
+bool
 LineSegmentDetector<TInputImage, TPrecision>
-::GrowRegion(InputIndexType index)
+::GrowRegion(InputIndexType index, IndexVectorType& region, double& regionAngle)
 {
   /** Add the point to the used list point*/
   this->SetPixelToUsed(index);
@@ -530,23 +608,23 @@ LineSegmentDetector<TInputImage, TPrecision>
 
   /** Vector where to store the point belonging to the current region*/
   unsigned int    neighSize  = itNeigh.GetSize()[0] * itNeigh.GetSize()[1];
-  IndexVectorType reg;
+  //IndexVectorType reg;
 
   /** Angle of the region*/
-  double regionAngle = 0;
+  //double regionAngle = 0;
 
   /** Add the first point to the region */
-  reg.push_back(index);
+  region.push_back(index);
   double sumX = 0.;
   double sumY = 0.;
 
   /**
    * Loop for searching regions
    */
-  for (unsigned int cpt = 0; cpt < reg.size(); cpt++)
+  for (unsigned int cpt = 0; cpt < region.size(); cpt++)
     {
-    itNeigh.SetLocation(reg[cpt]);
-    itNeighDir.SetLocation(reg[cpt]);
+    itNeigh.SetLocation(region[cpt]);
+    itNeighDir.SetLocation(region[cpt]);
     sumX += vcl_cos(*(itNeighDir.GetCenterValue()));
     sumY += vcl_sin(*(itNeighDir.GetCenterValue()));
     regionAngle = vcl_atan2(sumY, sumX);
@@ -555,32 +633,33 @@ LineSegmentDetector<TInputImage, TPrecision>
     while (s < neighSize)
       {
       InputIndexType NeighIndex = itNeigh.GetIndex(s);
-      double         angleComp =   itNeighDir.GetPixel(s);
+      double         angleComp  = itNeighDir.GetPixel(s);
 
       if (this->GetInput()->GetLargestPossibleRegion().IsInside(NeighIndex))    /** Check if the index is inside the image*/
         {
-        if (!this->IsUsed(NeighIndex) && this->IsAligned(angleComp, regionAngle, m_Prec))
+        if ((this->IsNotUsed(NeighIndex) || this->IsNotIni(NeighIndex)) && this->IsAligned(angleComp, regionAngle, m_Prec))
           {
-
           this->SetPixelToUsed(NeighIndex);
-          reg.push_back(NeighIndex);
+          region.push_back(NeighIndex);
           }
         }
       ++s;
       }
     } /** End Searching loop*/
 
-  /** Store the region*/
-  if (reg.size() > m_MinimumRegionSize && reg.size() < static_cast<unsigned int>(m_NumberOfImagePixels / 4))
+  if (region.size() > m_MinimumRegionSize && region.size() < static_cast<unsigned int>(m_NumberOfImagePixels / 4))
     {
-    m_RegionList.push_back(reg);
-    m_DirectionVector.push_back(regionAngle);
+    return EXIT_SUCCESS;
+    }
+  else
+    {
+    return EXIT_FAILURE;
     }
 }
 
 /**************************************************************************************************************/
 /**
- *  The method atan2 gives values of angles modulo PI, put the angle in a rang [0,Pi]
+ *  The method atan2 gives values of angles modulo PI, put the angle in a rang [0, Pi]
  */
 template <class TInputImage, class TPrecision>
 bool
@@ -604,9 +683,10 @@ LineSegmentDetector<TInputImage, TPrecision>
  *  compute the best rectangle possible that
  */
 template <class TInputImage, class TPrecision>
-void
+typename LineSegmentDetector<TInputImage, TPrecision>
+::RectangleType
 LineSegmentDetector<TInputImage, TPrecision>
-::Region2Rect(IndexVectorType region, double angleRegion)
+::Region2Rectangle(IndexVectorType region, double regionAngle)
 {
   /** Local Variables*/
   double weight = 0., sumWeight = 0.;
@@ -642,10 +722,9 @@ LineSegmentDetector<TInputImage, TPrecision>
     }
 
   /** Compute the orientation of the region*/
-  double theta = this->ComputeRegionOrientation(region, x, y, angleRegion);
+  double theta = this->ComputeRegionOrientation(region, x, y, regionAngle);
 
   /* Length & Width of the rectangle **/
-
   typedef std::vector<MagnitudePixelType> MagnitudeVector;
 
   unsigned int Diagonal =
@@ -675,7 +754,6 @@ LineSegmentDetector<TInputImage, TPrecision>
     }
 
   /** Thresholdinq the width and the length*/
-
   double sum_th = 0.01 * sumWeight; /* weight threshold for selecting region */
   double s = 0.;
   int    i = 0;
@@ -709,12 +787,13 @@ LineSegmentDetector<TInputImage, TPrecision>
    *  vec[6] = prec = Pi/8
    *  vec[7] = p =  1/8
    */
-
+  RectangleType          rec(8, 0.);       // Definition of a
+                                           // rectangle : 8 components
+  
   if (vcl_abs(wl -
               wr) - vcl_sqrt(static_cast<double>(m_ImageSize[1] * m_ImageSize[1] + m_ImageSize[0] * m_ImageSize[0])) <
       1e-10)
     {
-    RectangleType          rec(8, 0.);       // Definition of a rectangle : 8 components
     rec[0] = (x + lb * dx > 0) ? x + lb * dx : 0.;
     rec[1] = (y + lb * dy > 0) ? y + lb * dy : 0.;
     rec[2] = (x + lf * dx > 0) ? x + lf * dx : 0.;
@@ -723,10 +802,12 @@ LineSegmentDetector<TInputImage, TPrecision>
     rec[5] = theta;
     rec[6] = m_Prec;
     rec[7] = m_DirectionsAllowed;
-
+    
     if (rec[4] - 1. < 1e-10) rec[4] = 1.;
-    m_RectangleList.push_back(rec);
+    
+    //m_RectangleList.push_back(rec);
     }
+  return rec;
 }
 
 /**************************************************************************************************************/
@@ -753,7 +834,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   NeighborhoodIteratorType                                itNeigh(radius, m_MagnitudeFilter->GetOutput(),
                                                                   m_MagnitudeFilter->GetOutput()->GetRequestedRegion());
 
-  /** Computing the center iof the rectangle*/
+  /** Computing the center of the rectangle*/
   IndexVectorIteratorType it = region.begin();
   while (it != region.end())
     {
@@ -875,10 +956,10 @@ LineSegmentDetector<TInputImage, TPrecision>
 /**************************************************************************************************************/
 /*
    compute logarithm of binomial NFA
-   NFA = NT.b(n,k,p)
+   NFA = NT.b(n, k, p)
    log10 NFA = log10( NFA )
 
-   n,k,p - binomial parameters.
+   n, k, p - binomial parameters.
    logNT - logarithm of Number of Tests
  */
 template <class TInputImage, class TPrecision>

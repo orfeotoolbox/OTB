@@ -100,7 +100,7 @@ public:
  * Data points contains a list of (magnitude, main orientation) for each level
  * of the pyramidal decomposition.
  *
- * Orientation is expressed in degree in the range [0,360] with a precision of 10 degrees.
+ * Orientation is expressed in degree in the range [0, 360] with a precision of 10 degrees.
  *
  * \example FeatureExtraction/SIFTExample.cxx
  *

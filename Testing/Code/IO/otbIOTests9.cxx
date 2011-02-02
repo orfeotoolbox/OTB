@@ -37,4 +37,5 @@ void RegisterTests()
   REGISTER_TEST(otbStreamingImageFilterTest);
   REGISTER_TEST(otbVectorImageFileReaderWriterTest);
   REGISTER_TEST(otbStreamingShortImageFileWriterTest);
+  REGISTER_TEST(otbMultiDatasetReadingInfo);
 }

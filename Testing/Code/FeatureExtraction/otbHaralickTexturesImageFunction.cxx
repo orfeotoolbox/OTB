@@ -30,7 +30,7 @@ typedef otb::Image<InputPixelType,  Dimension>                        InputImage
 typedef otb::ImageFileReader<InputImageType>                          ReaderType;
 
 typedef otb::HaralickTexturesImageFunction<
-        InputImageType,double>                                        HaralickTexturesImageFunctionType;
+        InputImageType, double>                                        HaralickTexturesImageFunctionType;
 typedef HaralickTexturesImageFunctionType::PointType                  PointType;
 typedef HaralickTexturesImageFunctionType::OutputType                 OutputType;
 

@@ -47,7 +47,7 @@ namespace otb
       itkmsg << "Debug: In " __FILE__ ", line " << __LINE__ << "\n" \
              << this->GetNameOfClass() << " (" << this << "): " x  \
              << "\n\n"; \
-      ::itk::OutputWindowDisplayDebugText(itkmsg.str().c_str());} \
+      ::itk::OutputWindowDisplayDebugText(itkmsg.str().c_str()); } \
 }*/
 
 #define otbMsgDebugMacro(x) \

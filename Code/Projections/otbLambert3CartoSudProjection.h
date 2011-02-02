@@ -26,7 +26,7 @@ namespace otb
 {
 /** \class Lambert3CartoSudProjection
 * \brief This class implements the Lambert3CartoSud map projection (RGF93 french geodesic system).
-* It converts coordinates in longitude,latitude (WGS84) to Lambert 3 map coordinates.
+* It converts coordinates in longitude, latitude (WGS84) to Lambert 3 map coordinates.
 *
  */
 template <InverseOrForwardTransformationEnum transform>

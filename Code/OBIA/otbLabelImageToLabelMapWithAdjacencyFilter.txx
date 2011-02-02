@@ -13,8 +13,8 @@
   for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -36,7 +36,7 @@ LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
 }
 
 template <class TInputImage, class TOutputImage>
-void 
+void
 LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
 ::GenerateInputRequestedRegion()
 {
@@ -52,7 +52,7 @@ LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
 
 
 template <class TInputImage, class TOutputImage>
-void 
+void
 LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
 ::EnlargeOutputRequestedRegion(itk::DataObject *)
 {
@@ -137,7 +137,7 @@ LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
     LabelType nextLabel = it->label;
 
     // Add the adjacency
-    this->AddAdjacency(previousLabel,nextLabel,threadId);
+    this->AddAdjacency(previousLabel, nextLabel, threadId);
     
     // Store previous label
     previousLabel = nextLabel;
@@ -154,7 +154,7 @@ LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
   long offset = 1;
 
   // Iterate on line1
-  for(typename RLEVectorType::const_iterator it1 = line1.begin();it1!=line1.end();++it1)
+  for(typename RLEVectorType::const_iterator it1 = line1.begin(); it1!=line1.end(); ++it1)
     {
     // Delimitate RLE1
     long start1 = it1->where[0];
@@ -162,7 +162,7 @@ LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
     LabelType label1 = it1->label;
 
     // Iterate on line2
-    for(typename RLEVectorType::const_iterator it2 = line2.begin();it2!=line2.end();++it2)
+    for(typename RLEVectorType::const_iterator it2 = line2.begin(); it2!=line2.end(); ++it2)
       {
       // Delimitate RLE2
       long start2 = it2->where[0];
@@ -179,7 +179,7 @@ LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
        || ( (end2  +offset >= start1) && (end2  +offset<=end1) ))
     {
     // Add the adjacency
-    this->AddAdjacency(label1,label2,threadId);
+    this->AddAdjacency(label1, label2, threadId);
     }
   }
       }
@@ -227,7 +227,7 @@ LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
           }
         // create the run length object to go in the vector
         m_TemporaryImages[threadId]->SetLine( idx, length, v );
-  currentLine.push_back(RLE(idx,length,v));
+  currentLine.push_back(RLE(idx, length, v));
         }
       else
         {
@@ -236,8 +236,8 @@ LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
         }
       }
     // Parse lines for adjacency
-    this->ParseLine(currentLine,threadId);
-    this->ParseConsecutiveLines(previousLine,currentLine,threadId);
+    this->ParseLine(currentLine, threadId);
+    this->ParseConsecutiveLines(previousLine, currentLine, threadId);
 
     // Store previous line
     previousLine = currentLine;
@@ -284,7 +284,7 @@ LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
   AdjacencyMapType adjMap = m_TemporaryAdjacencyMaps[0];
 
   // For each remaining thread
-  for(int threadId = 1; threadId < this->GetNumberOfThreads();++threadId)
+  for(int threadId = 1; threadId < this->GetNumberOfThreads(); ++threadId)
     {
     // For each label in the thread adjacency map
     for(typename AdjacencyMapType::const_iterator mit = m_TemporaryAdjacencyMaps[threadId].begin();
@@ -297,7 +297,7 @@ LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
   // We need to merge
   AdjacentLabelsContainerType adjLabels1 = adjMap[mit->first];
   AdjacentLabelsContainerType adjLabels2 = mit->second;
-  std::vector<LabelType> mergedLabels(adjLabels1.size()+adjLabels2.size(),0);
+  std::vector<LabelType> mergedLabels(adjLabels1.size()+adjLabels2.size(), 0);
 
   // Merge
   typename std::vector<LabelType>::const_iterator vend = set_union(adjLabels1.begin(), adjLabels1.end(), adjLabels2.begin(), adjLabels2.end(), mergedLabels.begin());
@@ -305,7 +305,7 @@ LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
   AdjacentLabelsContainerType mergedLabelsSet;
 
   for(typename std::vector<LabelType>::const_iterator vit = mergedLabels.begin();
-      vit!=vend;++vit)
+      vit!=vend; ++vit)
     {
     mergedLabelsSet.insert(*vit);
     }

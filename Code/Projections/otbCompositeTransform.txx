@@ -88,7 +88,7 @@ CompositeTransform<TFirstTransform,
 
 /*template<class TFirstTransform, class TSecondTransform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
   typename CompositeTransform<TFirstTransform, TSecondTransform, TScalarType, NInputDimensions, NOutputDimensions>::OutputVectorType
-  CompositeTransform<TFirstTransform, TSecondTransform, TScalarType,NInputDimensions, NOutputDimensions>
+  CompositeTransform<TFirstTransform, TSecondTransform, TScalarType, NInputDimensions, NOutputDimensions>
   ::TransformVector(const InputVectorType &vector1) const
   {
   InputVectorType vectorTmp;
@@ -102,7 +102,7 @@ CompositeTransform<TFirstTransform,
 
   template<class TFirstTransform, class TSecondTransform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
   typename CompositeTransform<TFirstTransform, TSecondTransform, TScalarType, NInputDimensions, NOutputDimensions>::OutputVnlVectorType
-  CompositeTransform<TFirstTransform, TSecondTransform, TScalarType,NInputDimensions, NOutputDimensions>
+  CompositeTransform<TFirstTransform, TSecondTransform, TScalarType, NInputDimensions, NOutputDimensions>
   ::TransformVector(const InputVnlVectorType &vnlVector1) const
   {
   InputVnlVectorType vnlVectorTmp;
@@ -116,7 +116,7 @@ CompositeTransform<TFirstTransform,
 
   template<class TFirstTransform, class TSecondTransform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
   typename CompositeTransform<TFirstTransform, TSecondTransform, TScalarType, NInputDimensions, NOutputDimensions>::OutputCovariantVectorType
-  CompositeTransform<TFirstTransform, TSecondTransform, TScalarType,NInputDimensions, NOutputDimensions>
+  CompositeTransform<TFirstTransform, TSecondTransform, TScalarType, NInputDimensions, NOutputDimensions>
   ::TransformCovariantVector(const InputCovariantVectorType &covariantVector1) const
   {
   InputCovariantVectorType covariantVectorTmp;

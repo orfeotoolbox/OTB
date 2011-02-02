@@ -30,7 +30,7 @@ template<class TGISTable, class TVectorData>
 GISTableToVectorDataFilter<TGISTable, TVectorData>
 ::GISTableToVectorDataFilter()
 { /*
-  m_BackgroundValue = NumericTraits<OutputImagePixelType>::NonpositiveMin();*/
+  m_BackgroundValue = NumericTraits<OutputImagePixelType>::NonpositiveMin(); */
   m_Reader = VectorDataFileReaderType::New();
 }
 
@@ -89,7 +89,7 @@ GISTableToVectorDataFilter<TGISTable, TVectorData>
   InputImagePointer input = const_cast<InputImageType *>(this->GetInput());
   if ( !input )
     { return; }
-  input->SetRequestedRegion( input->GetLargestPossibleRegion() );*/
+  input->SetRequestedRegion( input->GetLargestPossibleRegion() ); */
 }
 
 /*
@@ -124,8 +124,8 @@ GISTableToVectorDataFilter<TGISTable, TVectorData>
 //
 //   DataNodePointerType root = output->GetDataTree()->GetRoot()->Get();
 //
-//   output->GetDataTree()->Add(document,root);
-//   output->GetDataTree()->Add(folder1,document);
+//   output->GetDataTree()->Add(document, root);
+//   output->GetDataTree()->Add(folder1, document);
 
   OGRVectorDataIOPointerType gisReader = OGRVectorDataIOType::New();
 
@@ -142,7 +142,7 @@ GISTableToVectorDataFilter<TGISTable, TVectorData>
     }
   else
     {
-    itkExceptionMacro(<< "The OGR connection is not valid;ogrconnection = " << inputOGRConnStr);
+    itkExceptionMacro(<< "The OGR connection is not valid; ogrconnection = " << inputOGRConnStr);
     }
 
 //   const std::string inputOGRConnStr=input->GetOGRStrConnection();

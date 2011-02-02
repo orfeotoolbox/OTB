@@ -105,7 +105,7 @@ MetaDataKey::KeyType MetaDataKey::GetKeyType(std::string name)
 
   for (unsigned int i = 0; i < NBKEYS; ++i)
     {
-//      if ( strcmp(name.c_str(),Types[i].keyname.c_str()) == 0 )
+//      if ( strcmp(name.c_str(), Types[i].keyname.c_str()) == 0 )
 
     if ((name.find(Types[i].keyname) >= 0) &&
         (name.find(Types[i].keyname) <= name.size()))

@@ -31,28 +31,28 @@ int otbSarBrightnessFunctor(int argc, char * argv[])
   if( abs(funct.GetNoise() -10.0) > 0.0)
   {
     return false;
-  }  
+  }
   funct.SetScale( 10.0);
   if( abs(funct.GetScale() -10.0) > 0.0)
   {
     return false;
-  }  
+  }
   funct.SetAntennaPatternNewGain( 10.0);
   if( abs(funct.GetAntennaPatternNewGain() -10.0) > 0.0)
   {
     return false;
-  }  
+  }
   funct.SetAntennaPatternOldGain( 10.0);
   if( abs(funct.GetAntennaPatternOldGain() -10.0) > 0.0)
   {
     return false;
-  }  
+  }
 
   funct.SetRangeSpreadLoss( 10.0);
   if( abs(funct.GetRangeSpreadLoss() -10.0) > 0.0)
   {
     return false;
-  }  
+  }
   std::cout << "First  BetaNaught : " << funct.operator ()( 0.) << std::endl;
   std::cout << "Second BetaNaught : " << funct.operator ()( 1.) << std::endl;
 

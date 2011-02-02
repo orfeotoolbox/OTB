@@ -37,7 +37,7 @@ int otbVectorDataToImageFilterWorld(int argc, char * argv[])
               << " <output vector filename> "
               << " <sizeX> <sizeY> "
               << " <origin lon> <origin lat> "
-              << " <spacing lon> <spacing lat> "  
+              << " <spacing lon> <spacing lat> "
               << " <font filename>"
               << std::endl;
     return EXIT_FAILURE;

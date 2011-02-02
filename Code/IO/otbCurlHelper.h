@@ -18,9 +18,7 @@
 #ifndef __otbCurlHelper_h
 #define __otbCurlHelper_h
 
-#include <sstream>
-#include "itkObject.h"
-#include "itkObjectFactory.h"
+#include "otbCurlHelperInterface.h"
 
 namespace otb
 {
@@ -30,19 +28,19 @@ namespace otb
  *
  * This class is responsible for behaving properly when curl is
  * not available, i.e. the compilation should pass, the runtime should
- * not segfault but of course, the behaviour will be different.
+ * not segfault but of course, the behavior will be different.
  *
  */
-class ITK_EXPORT CurlHelper : public itk::Object
+class ITK_EXPORT CurlHelper : public CurlHelperInterface
 {
 public:
   /** Standard class typedefs. */
   typedef CurlHelper                    Self;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
-  typedef itk::Object                   Superclass;
+  typedef CurlHelperInterface           Superclass;
 
-  itkTypeMacro(CurlHelper, itk::Object);
+  itkTypeMacro(CurlHelper, CurlHelperInterface);
   itkNewMacro(Self);
 
   int TestUrlAvailability(const std::string& url) const;
@@ -56,7 +54,7 @@ protected:
   CurlHelper() :
     m_Browser("Mozilla/5.0 (Windows; U; Windows NT 6.0; en-GB; rv:1.8.1.11) "
               "Gecko/20071127 Firefox/2.0.0.11") {}
-  ~CurlHelper() {}
+  virtual ~CurlHelper() {}
 
 private:
   CurlHelper(const Self &);  //purposely not implemented

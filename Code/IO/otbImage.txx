@@ -143,7 +143,7 @@ Image<TPixel, VImageDimension>::GetImageKeywordlist(void)
     ImageKeywordlist kwl;
   
   itk::ExposeMetaData<ImageKeywordlist>(this->GetMetaDataDictionary(),
-                                        MetaDataKey::OSSIMKeywordlistKey, 
+                                        MetaDataKey::OSSIMKeywordlistKey,
                                         kwl);
   return  kwl;
 }
@@ -155,7 +155,7 @@ Image<TPixel, VImageDimension>::GetImageKeywordlist(void) const
   ImageKeywordlist kwl;
   
   itk::ExposeMetaData<ImageKeywordlist>(this->GetMetaDataDictionary(),
-                                        MetaDataKey::OSSIMKeywordlistKey, 
+                                        MetaDataKey::OSSIMKeywordlistKey,
                                         kwl);
   return  kwl;
 }

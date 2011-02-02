@@ -35,7 +35,7 @@ namespace otb
  * Pesari, M., A. Gerhardinger, F. Kayitakire. 2008.  A robust built-up area precense
  * index by anisotropic rotation-invariant textural measure.
  * IEEE Journal of selected topics in applied earth observations and remote sensing.
- * Vol1,NO3.
+ * Vol1, NO3.
  *
  *
  * \sa ScalarImageToGreyLevelCooccurrenceMatrixGenerator

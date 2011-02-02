@@ -515,11 +515,11 @@ int main(int argc, char *argv[])
 // \item $\rho_{S}$ is the environment contribution to the pixel target reflectance in the total
 // observed signal.
 // \begin{equation}
-// \rho{S} = \sum{j}\sum{i}f(r(i,j))\times \rho_{S}^{unif}(i,j)
+// \rho{S} = \sum{j}\sum{i}f(r(i, j))\times \rho_{S}^{unif}(i, j)
 // \end{equation}
 // where,
 // \begin{itemize}
-// \item r(i,j) is the distance between the pixel(i,j) and the central pixel of the window in $km$;
+// \item r(i, j) is the distance between the pixel(i, j) and the central pixel of the window in $km$;
 // \item f(r) is the global environment function.
 // \begin{equation}
 // f(r) = \frac{t_{d}^{R}(\mu_{V}).f_{R}(r)+t_{d}^{A}(\mu_{V}).f_{A}(r)}{ t_{d}(\mu_{V}) }

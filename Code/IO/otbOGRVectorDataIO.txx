@@ -148,10 +148,10 @@ OGRVectorDataIO<TData>
 
     /** Retrieving the fields types */
 //     OGRFieldDefn * field;
-//     for (int fieldIndex = 0; fieldIndex<dfn->GetFieldCount();++fieldIndex)
+//     for (int fieldIndex = 0; fieldIndex<dfn->GetFieldCount(); ++fieldIndex)
 //     {
 //       field  = dfn->GetFieldDefn(fieldIndex);
-//       document->SetField(field->GetNameRef(),OGRFieldDefn::GetFieldTypeName(field->GetType()));
+//       document->SetField(field->GetNameRef(), OGRFieldDefn::GetFieldTypeName(field->GetType()));
 //       // std::cout<<"Document "<<document->GetNodeId()<<": Adding field "<<field->GetNameRef()<<" "<<OGRFieldDefn::GetFieldTypeName(field->GetType())<<std::endl;
 //     }
 
@@ -315,7 +315,7 @@ OGRVectorDataIO<TData>::GetOGRDriverName(std::string name) const
 //      driverOGR="KML";
     else driverOGR = "NOT-FOUND";
     }
-  //std::cout << name << " " << driverOGR <<" "<<upperName<< " "<< upperName.substr(0,3) << std::endl;
+  //std::cout << name << " " << driverOGR <<" "<<upperName<< " "<< upperName.substr(0, 3) << std::endl;
   return driverOGR;
 }
 

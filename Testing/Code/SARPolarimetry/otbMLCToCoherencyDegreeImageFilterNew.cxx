@@ -15,17 +15,29 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#if defined(_MSC_VER)
+#pragma warning ( disable : 4786 )
+#endif
+
 #include "itkExceptionObject.h"
-#include "otbPrepareSRTMDirectory.h"
+#include <iostream>
 
-int otbPrepareSRTMDirectoryNew(int argc, char * argv[])
+#include "otbVectorImage.h"
+#include "otbMLCToCoherencyDegreeImageFilter.h"
+
+int otbMLCToCoherencyDegreeImageFilterNew(int argc, char * argv[])
 {
+  const unsigned int Dimension = 2;
 
-  typedef otb::PrepareSRTMDirectory PrepareSRTMDirectoryType;
+  typedef std::complex<double>   PixelType;
+  typedef otb::VectorImage<PixelType, Dimension> ImageType;
 
-  PrepareSRTMDirectoryType::Pointer prepareSRTM = PrepareSRTMDirectoryType::New();
 
-  std::cout << prepareSRTM << std::endl;
+  typedef otb::MLCToCoherencyDegreeImageFilter<ImageType, ImageType> FilterType;
+
+  FilterType::Pointer filter = FilterType::New();
+
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

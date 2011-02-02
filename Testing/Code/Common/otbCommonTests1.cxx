@@ -33,4 +33,6 @@ void RegisterTests()
   REGISTER_TEST(otbTestCommandLineArgumentParserHelp);
   REGISTER_TEST(otbTestCommandLineArgumentParserList);
   REGISTER_TEST(otbTestCommandLineArgumentParserWithError);
+  REGISTER_TEST(otbParseHdfSubsetName);
+  REGISTER_TEST(otbParseHdfFileName);
 }

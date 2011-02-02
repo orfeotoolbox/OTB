@@ -104,7 +104,7 @@ template<class TInputImage, class TOutputImage, class TBoundaryCondition>
 void
 OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition>
 /* TODO commented out since multi-threading is not supported for the moment
- * ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,int threadId) */
+ * ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId) */
 ::GenerateData()
 {
 #if defined USE_FFTWD

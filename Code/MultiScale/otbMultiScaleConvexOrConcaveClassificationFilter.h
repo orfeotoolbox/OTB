@@ -35,7 +35,7 @@ namespace Functor
  * NO. 2, February 2001, p. 309-320.
  * \par
  *
- * Given \f$x_1\f$ and \f$x_2\f$ two membership values, \f$L_1,L_2\f$ two labels associated,
+ * Given \f$x_1\f$ and \f$x_2\f$ two membership values, \f$L_1, L_2\f$ two labels associated,
  * and \f$\sigma\f$ a tolerance value, the following decision rule is applied:
  *
  *  \f[

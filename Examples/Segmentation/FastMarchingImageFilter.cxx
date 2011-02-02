@@ -663,9 +663,9 @@ int main(int argc, char *argv[])
   //  \begin{tabular}{|l|c|c|c|c|c|c|p{2cm}|}
   //  \hline
   //  Structure    & Seed Index & $\sigma$ & $\alpha$ & $\beta$ & Threshold & Output Image from left \\ \hline
-  //  Road & $(91,176)$ & 0.5 & -0.5 & 3.0  & 100 & First   \\  \hline
-  //  Shadow    & $(118,100)$ & 1.0 & -0.5 & 3.0  & 100 & Second  \\  \hline
-  //  Building  & $(145,21)$ & 0.5 & -0.5 & 3.0  & 100 & Third   \\  \hline
+  //  Road & $(91, 176)$ & 0.5 & -0.5 & 3.0  & 100 & First   \\  \hline
+  //  Shadow    & $(118, 100)$ & 1.0 & -0.5 & 3.0  & 100 & Second  \\  \hline
+  //  Building  & $(145, 21)$ & 0.5 & -0.5 & 3.0  & 100 & Third   \\  \hline
   //  \end{tabular}
   //  \end{center}
   //  \itkcaption[FastMarching segmentation example parameters]{Parameters used

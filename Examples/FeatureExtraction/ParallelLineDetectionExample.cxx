@@ -229,7 +229,7 @@ int main(int argc, char * argv[])
   // Parallel lines are drawn on a black background image with \doxygen{otb}{DrawPathListFilter}.
   // The \code{SetUseIternalValues()} tells the drawing filter to draw the path with its likelihood
   // value.
-  //typedef otb::DrawPathListFilter<ImageType,PathType,ImageType> DrawPathType;
+  //typedef otb::DrawPathListFilter<ImageType, PathType, ImageType> DrawPathType;
   DrawPathType::Pointer drawPathListFilterParallel = DrawPathType::New();
   drawPathListFilterParallel->SetInput(outputParallel);
   drawPathListFilterParallel->SetInputPath(

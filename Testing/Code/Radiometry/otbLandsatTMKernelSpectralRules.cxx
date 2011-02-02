@@ -88,10 +88,10 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
   R1FunctorType r1Funct = R1FunctorType();
   OutputPixelType result = r1Funct(pixel);
   OutputPixelType goodResult = static_cast<OutputPixelType>(
-    ((min123 >= (TV1 * max123))
-     && (max123 <= TV1 * TM4))
-    || ((TM2 >= TV1 * max13)
-        && (max123 <= TM4))
+    ( (min123 >= (TV1 * max123))
+      && (max123 <= TV1 * TM4)
+     || ((TM2 >= TV1 * max13)
+         && (max123 <= TM4)))
     && (TM5 <= TV1 * TM4)
     && (TM5 >= TV1 * max123)
     && (TM7 <= TV1 * TM4));
@@ -107,7 +107,7 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
   result = r2Funct(pixel);
   goodResult = static_cast<OutputPixelType>((min123 >= (TV1 * max123))
                                             && (TM4 >= max123)
-                                            && !((TM1<=TM2 && TM2<=TM3 && TM3<=TM4) && TM3 >= TV1*TM4)
+                                            && !((TM1<=TM2 && TM2<=TM3 && TM3<=TM4))
                                             && (TM4 >= TV1*TM5) && (TM5 >= TV1*TM4)
                                             && (TM5 >= TV1*max123) && (TM5 >= TV1*TM7));
 
@@ -142,7 +142,7 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
   goodResult = static_cast<OutputPixelType>((TM1 >= TM2) && (TM2 >= TM3) && (TM3 >= TM4) && (TM4 >= TM5) && (TM4 >= TM7));
 
 
-  if( result!=goodResult ) 
+  if( result!=goodResult )
     {
     std::cerr << "Rule 4 " << goodResult << " " << result << std::endl;
     return EXIT_FAILURE;
@@ -176,7 +176,7 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
                                             && (TM1 >= TV1 * TM7));
 
 
-  if( result!=goodResult ) 
+  if( result!=goodResult )
     {
     std::cerr << "Rule 6 " << goodResult << " " << result << std::endl;
     return EXIT_FAILURE;
@@ -214,7 +214,7 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
                                             && (TM5 >= TM7));
 
 
-  if( result!=goodResult ) 
+  if( result!=goodResult )
     {
     std::cerr << "Rule 8 " << goodResult << " " << result << std::endl;
     return EXIT_FAILURE;
@@ -248,7 +248,7 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
                                             && (min12347 >= TV2 * TM5));
 
 
-  if( result!=goodResult ) 
+  if( result!=goodResult )
     {
     std::cerr << "Rule 10 " << goodResult << " " << result << std::endl;
     return EXIT_FAILURE;
@@ -280,11 +280,11 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
                                             && (TM1 >= TV2 * TM4)
                                             && (TM3 < TV1 * TM4)
                                             && (TM5 < TV1 * TM4)
-                                            && (TM3 >= TV1 * TM5)
+                                            && (TM3 >= TV2 * TM5)
                                             && (TM7 < TV1 * TM4));
 
 
-  if( result!=goodResult ) 
+  if( result!=goodResult )
     {
     std::cerr << "Rule 12 " << goodResult << " " << result << std::endl;
     return EXIT_FAILURE;
@@ -318,7 +318,7 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
                                             && (TM5 >= TM7));
 
 
-  if( result!=goodResult ) 
+  if( result!=goodResult )
     {
     std::cerr << "Rule 14 " << goodResult << " " << result << std::endl;
     return EXIT_FAILURE;

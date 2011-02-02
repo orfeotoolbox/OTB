@@ -30,7 +30,7 @@ typedef itk::Statistics::ListSample<DoubleSampleType> DoubleSampleListType;
 typedef itk::VariableLengthVector<float> FloatSampleType;
 typedef itk::Statistics::ListSample<FloatSampleType> FloatSampleListType;
 typedef otb::Statistics::GaussianAdditiveNoiseSampleListFilter
-<FloatSampleListType,DoubleSampleListType> GaussianFilterType;
+<FloatSampleListType, DoubleSampleListType> GaussianFilterType;
 
 
 int otbGaussianAdditiveNoiseSampleListFilterNew(int argc, char * argv[])
@@ -52,7 +52,7 @@ int otbGaussianAdditiveNoiseSampleListFilter(int argc, char * argv[])
   GaussianFilterType::Pointer filter = GaussianFilterType::New();
   filter->SetInput(inputSampleList);
 
-  // Input Sample 
+  // Input Sample
   FloatSampleType sample(sampleSize);
 
   unsigned int index = 3;
@@ -63,9 +63,9 @@ int otbGaussianAdditiveNoiseSampleListFilter(int argc, char * argv[])
   ofs<<"Nb samples : "<<nbSamples<<std::endl;
 
   // InputSampleList
-  for(unsigned int sampleId = 0; sampleId<nbSamples;++sampleId)
+  for(unsigned int sampleId = 0; sampleId<nbSamples; ++sampleId)
     {
-    for(unsigned int i = 0; i<sampleSize;++i)
+    for(unsigned int i = 0; i<sampleSize; ++i)
       {
       sample[i]=atof(argv[index]);
       ++index;

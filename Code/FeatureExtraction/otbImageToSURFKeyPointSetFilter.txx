@@ -175,7 +175,7 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
           keyPoint[0] =  it.GetIndex()[0];
           keyPoint[1] =  it.GetIndex()[1];
 
-          //keyPoint[2] =  sigma_in/pow(k,(double)jj)*pow(2.,(double)i);
+          //keyPoint[2] =  sigma_in/pow(k, (double)jj)*pow(2., (double)i);
           double sigmaDetected = sigma_in / pow(k, (double) jj) * pow(2., (double) i);
 
           radius.Fill(GetMin((int) (this->GetInput()->GetLargestPossibleRegion().GetSize()[0] - keyPoint[0]),
@@ -191,7 +191,7 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
           itNeighOrientation.SetLocation(it.GetIndex());
 
           /** TO DO*/
-          //keyPoint[3] = AssignOrientation( itNeighOrientation.GetNeighborhood() ,keyPoint[2] );
+          //keyPoint[3] = AssignOrientation( itNeighOrientation.GetNeighborhood() , keyPoint[2] );
           double orientationDetected = AssignOrientation(itNeighOrientation.GetNeighborhood(), sigmaDetected);
 
           /*Filling the Point pointSet Part*/
@@ -210,7 +210,7 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
           itNeighDescriptor.SetLocation(it.GetIndex());
           VectorType descriptor;
           descriptor.resize(64);
-          //descriptor = ComputeDescriptor(itNeighDescriptor.GetNeighborhood(),keyPoint[3],keyPoint[2]);
+          //descriptor = ComputeDescriptor(itNeighDescriptor.GetNeighborhood(), keyPoint[3], keyPoint[2]);
           descriptor = ComputeDescriptor(itNeighDescriptor.GetNeighborhood(), orientationDetected, sigmaDetected);
 
           /*Updating the pointset data with values of the descriptor*/

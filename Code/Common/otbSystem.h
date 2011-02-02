@@ -64,6 +64,12 @@ public:
 
   /** Get list of file find in a directory */
   static std::vector<std::string> Readdir(const std::string& pszPath);
+
+  /** Parse the hdf subset name */
+  static bool ParseHdfSubsetName(const std::string& id, std::string& key, std::string& name);
+
+  /** Parse a filename with dataset information */
+  static bool ParseHdfFileName(const std::string& id, std::string& file, unsigned int& datasetNum);
 };
 
 } // namespace otb

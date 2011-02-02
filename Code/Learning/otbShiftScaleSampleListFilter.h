@@ -39,18 +39,18 @@ namespace Statistics {
  */
 template < class TInputSampleList, class TOutputSampleList = TInputSampleList >
 class ITK_EXPORT ShiftScaleSampleListFilter :
-  public otb::Statistics::ListSampleToListSampleFilter<TInputSampleList,TOutputSampleList>
+  public otb::Statistics::ListSampleToListSampleFilter<TInputSampleList, TOutputSampleList>
 {
 public:
   /** Standard class typedefs */
   typedef ShiftScaleSampleListFilter                 Self;
   typedef otb::Statistics::ListSampleToListSampleFilter
-  <TInputSampleList,TOutputSampleList>               Superclass;
+  <TInputSampleList, TOutputSampleList>               Superclass;
   typedef itk::SmartPointer< Self >                  Pointer;
   typedef itk::SmartPointer<const Self>              ConstPointer;
   
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ShiftScaleSampleListFilter,otb::Statistics::ListSampleToListSampleFilter);
+  itkTypeMacro(ShiftScaleSampleListFilter, otb::Statistics::ListSampleToListSampleFilter);
   
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -73,12 +73,12 @@ public:
   typedef typename Superclass::OutputSampleListObjectType     OutputSampleListObjectType;
 
   /** Set/Get the Shifts for this sample list */
-  itkSetMacro(Shifts,InputMeasurementVectorType);
-  itkGetMacro(Shifts,InputMeasurementVectorType);
+  itkSetMacro(Shifts, InputMeasurementVectorType);
+  itkGetMacro(Shifts, InputMeasurementVectorType);
 
   /** Set/Get the Scales for this sample list */
-  itkSetMacro(Scales,InputMeasurementVectorType);
-  itkGetMacro(Scales,InputMeasurementVectorType);
+  itkSetMacro(Scales, InputMeasurementVectorType);
+  itkGetMacro(Scales, InputMeasurementVectorType);
 
 protected:
   /** This method causes the filter to generate its output. */

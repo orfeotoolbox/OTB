@@ -1045,7 +1045,7 @@ ADD_TEST(feTvImageFittingPolygonListFilter ${FEATUREEXTRACTION_TESTS9}
 
 #--------- SimpleCountStrategy --------------
 
-ADD_TEST(otbSimplePointCountStrategyTest ${FEATUREEXTRACTION_TESTS9}
+ADD_TEST(feTvSimplePointCountStrategyTest ${FEATUREEXTRACTION_TESTS9}
     otbSimplePointCountStrategyTest)
 
 
@@ -1204,6 +1204,18 @@ ADD_TEST(feTvLineSegmentDetector ${FEATUREEXTRACTION_TESTS11}
     otbLineSegmentDetector
      ${INPUTDATA}/scene.png  #prison_toulouse.tif
     ${TEMP}/feTvLineSegmentDetectorOutputImage.tif
+)
+
+ADD_TEST(feTvLineSegmentDetector_binary ${FEATUREEXTRACTION_TESTS11}
+--compare-image ${NOTOL}
+     ${BASELINE}/feTvLineSegmentDetectorOutputImage.tif
+     ${TEMP}/feTvLineSegmentDetectorOutputImage_binary.tif
+    otbLineSegmentDetector_binary
+     ${INPUTDATA}/scene.png
+     ${TEMP}/feTvLineSegmentDetectorOutputImage_binary.tif
+     #${TEMP}/feTvLineSegmentDetectorOutputImage_binary_statusMap.tif
+     #${TEMP}/feTvLineSegmentDetectorOutputImage_binary_gradMod.tif
+     #${TEMP}/feTvLineSegmentDetectorOutputImage_binary_gradOri.tif
 )
 
 # -------            otb::LineSpatialObjectListToRightAnglePointSetFilter   -------------

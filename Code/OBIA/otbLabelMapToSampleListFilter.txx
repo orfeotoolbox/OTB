@@ -24,25 +24,25 @@ namespace otb
 {
 
 template <class TInputLabelMap, class TOutputListSample, class TMeasurementFunctor>
-LabelMapToSampleListFilter<TInputLabelMap,TOutputListSample,TMeasurementFunctor>
+LabelMapToSampleListFilter<TInputLabelMap, TOutputListSample, TMeasurementFunctor>
 ::LabelMapToSampleListFilter()
 {
 }
 
 template <class TInputLabelMap, class TOutputListSample, class TMeasurementFunctor>
-LabelMapToSampleListFilter<TInputLabelMap,TOutputListSample,TMeasurementFunctor>
+LabelMapToSampleListFilter<TInputLabelMap, TOutputListSample, TMeasurementFunctor>
 ::~LabelMapToSampleListFilter()
 {
 }
 
 template <class TInputLabelMap, class TOutputListSample, class TMeasurementFunctor>
-void 
-LabelMapToSampleListFilter<TInputLabelMap,TOutputListSample,TMeasurementFunctor>
+void
+LabelMapToSampleListFilter<TInputLabelMap, TOutputListSample, TMeasurementFunctor>
 ::Compute()
 {
   m_OutputSampleList = OutputSampleListType::New();
   
-  typename InputLabelMapType::LabelObjectContainerType::const_iterator it 
+  typename InputLabelMapType::LabelObjectContainerType::const_iterator it
     = m_InputLabelMap->GetLabelObjectContainer().begin();
 
   // iterate on label objects
@@ -54,11 +54,11 @@ LabelMapToSampleListFilter<TInputLabelMap,TOutputListSample,TMeasurementFunctor>
 }
 
 template <class TInputLabelMap, class TOutputListSample, class TMeasurementFunctor>
-void 
-LabelMapToSampleListFilter<TInputLabelMap,TOutputListSample,TMeasurementFunctor>
+void
+LabelMapToSampleListFilter<TInputLabelMap, TOutputListSample, TMeasurementFunctor>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
 } // end namespace otb

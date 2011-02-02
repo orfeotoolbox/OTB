@@ -93,8 +93,8 @@ ListSampleGenerator<TImage, TVectorData>
  *
  */
 //template < class TImage, class TVectorData >
-//typename ListSampleGenerator<TImage,TVectorData>::DataObjectPointer
-//ListSampleGenerator<TImage,TVectorData>
+//typename ListSampleGenerator<TImage, TVectorData>::DataObjectPointer
+//ListSampleGenerator<TImage, TVectorData>
 //::MakeOutput(unsigned int itkNotUsed(idx))
 //{
 //  typename ListSampleType::Pointer listSample = ListSampleType::New();

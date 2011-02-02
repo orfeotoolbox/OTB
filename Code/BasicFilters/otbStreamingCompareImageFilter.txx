@@ -30,7 +30,7 @@ namespace otb
 
 template<class TInputImage>
 PersistentCompareImageFilter<TInputImage>
-::PersistentCompareImageFilter() : m_SquareOfDifferences(1), m_AbsoluteValueOfDifferences(1),  
+::PersistentCompareImageFilter() : m_SquareOfDifferences(1), m_AbsoluteValueOfDifferences(1),
  m_ThreadMinRef(1), m_ThreadMaxRef(1), m_Count(1)
 {
   this->SetNumberOfRequiredInputs( 2 );
@@ -291,7 +291,7 @@ PersistentCompareImageFilter<TInputImage>
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   RealType  realValue1, realValue2;
-  PixelType value1,value2;
+  PixelType value1, value2;
   
   itk::ImageRegionConstIterator<TInputImage> it1(inputPtr1, outputRegionForThread);
   itk::ImageRegionConstIterator<TInputImage> it2(inputPtr2, outputRegionForThread);

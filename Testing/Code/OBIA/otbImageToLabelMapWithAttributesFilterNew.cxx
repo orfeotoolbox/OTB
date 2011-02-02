@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -29,10 +29,10 @@
 int otbImageToLabelMapWithAttributesFilterNew(int argc, char* argv[])
 {
 
-  typedef otb::VectorImage<double,2>                 ImageType;
-  typedef otb::Image<unsigned int,2>                 LabeledImageType;
-  typedef otb::AttributesMapLabelObjectWithClassLabel<double,2,double,double> LabelObjectType;
-  typedef otb::ImageToLabelMapWithAttributesFilter<ImageType,LabeledImageType,unsigned int ,LabelObjectType>   FilterType;
+  typedef otb::VectorImage<double, 2>                 ImageType;
+  typedef otb::Image<unsigned int, 2>                 LabeledImageType;
+  typedef otb::AttributesMapLabelObjectWithClassLabel<double, 2, double, double> LabelObjectType;
+  typedef otb::ImageToLabelMapWithAttributesFilter<ImageType, LabeledImageType, unsigned int , LabelObjectType>   FilterType;
 
   FilterType::Pointer   filter = FilterType::New();
 

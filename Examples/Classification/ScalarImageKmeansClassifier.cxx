@@ -101,14 +101,14 @@ int main(int argc, char * argv[])
 //
 // In general the classification will produce as output an image whose pixel
 // values are integers associated to the labels of the classes. Since typically
-// these integers will be generated in order (0,1,2,...N), the output image
+// these integers will be generated in order (0, 1, 2, ...N), the output image
 // will tend to look very dark when displayed with naive viewers. It is
 // therefore convenient to have the option of spreading the label values over
 // the dynamic range of the output image pixel type. When this is done, the
 // dynamic range of the pixels is divided by the number of classes in order to
 // define the increment between labels. For example, an output image of 8 bits
 // will have a dynamic range of [0:255], and when it is used for holding four
-// classes, the non-contiguous labels will be (0,64,128,192). The selection of
+// classes, the non-contiguous labels will be (0, 64, 128, 192). The selection of
 // the mode to use is done with the method \code{SetUseContiguousLabels()}.
 //
 // Software Guide : EndLatex

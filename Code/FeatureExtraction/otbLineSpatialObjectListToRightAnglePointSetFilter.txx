@@ -122,8 +122,8 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage, TLinesList, TPointSet>
           /** Use Pythagore to compute the distance between the two segments*/
           double SegmentDistance = vcl_sqrt(dist1 * dist1 + dist2 * dist2);
 
-//                 if(this->ComputeDistanceFromPointToSegment(RightAngleCoordinate,*itLinesListTest) <m_ThresholdDistance &&
-//                    this->ComputeDistanceFromPointToSegment(RightAngleCoordinate,*itLinesListCur) <m_ThresholdDistance)
+//                 if(this->ComputeDistanceFromPointToSegment(RightAngleCoordinate, *itLinesListTest) <m_ThresholdDistance &&
+//                    this->ComputeDistanceFromPointToSegment(RightAngleCoordinate, *itLinesListCur) <m_ThresholdDistance)
           if (SegmentDistance < m_ThresholdDistance)
             {
             /** If Right Angle & not so far from segments:  Add it to the pointSet*/

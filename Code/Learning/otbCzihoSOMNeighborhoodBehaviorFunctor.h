@@ -35,7 +35,7 @@ namespace Functor
 *  "Compression d'images et analyse de contenu par quantification vectorielle"
 *  PhD dissertation, University of Rennes I, Rennes, France. May 5th, 1999.
 *
-*  The behavior of the radius r (\em ie. \code SizeType \endcode component 0, 1,...) is given by:
+*  The behavior of the radius r (\em ie. \code SizeType \endcode component 0, 1, ...) is given by:
 *  \f$
     r = r_{\textrm{init}} \left( 1 - \frac{t}{t_{\textrm{end}}} \right)^2
   \f$

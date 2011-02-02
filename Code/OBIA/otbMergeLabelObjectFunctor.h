@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -19,15 +19,15 @@ PURPOSE.  See the above copyright notices for more information.
 #define __otbMergeLabelObjectFunctor_h
 
 
-namespace otb 
+namespace otb
 {
 
 namespace Functor
 {
 
-/** \class MergeLabelObjectFunctor 
+/** \class MergeLabelObjectFunctor
  *  \brief Merge two LabelObjects
- * 
+ *
  * This functor merges the two inputs label objects into a third label
  * object where the Run have been merged. The resulting label object
  * holds data from first input label object copied via the
@@ -35,9 +35,9 @@ namespace Functor
  *
  * Please note that if the two input label objects are disjoint, the
  * resulting label object will have more than one connected component.
- * 
+ *
  * This functor is thread safe.
- */ 
+ */
 template <class TLabelObject >
 class MergeLabelObjectFunctor
 {
@@ -63,12 +63,12 @@ public:
     LineContainerType lines2 = l2->GetLineContainer();
 
     // Ensure they are sorted according to our criterion
-    stable_sort(lines1.begin(),lines1.end(),&LexicographicalLineCompare);
-    stable_sort(lines2.begin(),lines2.end(),&LexicographicalLineCompare);
+    stable_sort(lines1.begin(), lines1.end(), &LexicographicalLineCompare);
+    stable_sort(lines2.begin(), lines2.end(), &LexicographicalLineCompare);
     
     // Merge the two containers
     LineContainerType linesOut1(lines1.size()+lines2.size());
-    merge(lines1.begin(),lines1.end(),lines2.begin(),lines2.end(),linesOut1.begin(),&LexicographicalLineCompare);
+    merge(lines1.begin(), lines1.end(), lines2.begin(), lines2.end(), linesOut1.begin(), &LexicographicalLineCompare);
 
     // Merge consecutive and overlapping lines
     LineContainerType linesOut2;
@@ -82,10 +82,10 @@ public:
     while(lit!=linesOut1.end())
       {
       // Test if next line overlaps with current
-      if(LinesOverlap(linesOut2.back(),*lit))
+      if(LinesOverlap(linesOut2.back(), *lit))
    {
    // Merge lines
-   LineType mline = MergesLines(linesOut2.back(),*lit);
+   LineType mline = MergesLines(linesOut2.back(), *lit);
   
    // Replace the last line by the merged line
    linesOut2.pop_back();
@@ -139,7 +139,7 @@ private:
   {
     LineType resp;
     resp.SetIndex(l1.GetIndex());
-    unsigned long length = max(l1.GetLength(),l2.GetIndex()[0]+l2.GetLength()-l1.GetIndex()[0]);
+    unsigned long length = max(l1.GetLength(), l2.GetIndex()[0]+l2.GetLength()-l1.GetIndex()[0]);
     resp.SetLength(length);
     return resp;
   }

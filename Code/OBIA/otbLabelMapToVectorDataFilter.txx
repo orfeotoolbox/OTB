@@ -26,7 +26,7 @@ template<class TLabelMap, class TVectorData, class TFieldsFunctor>
 LabelMapToVectorDataFilter<TLabelMap, TVectorData, TFieldsFunctor>
 ::LabelMapToVectorDataFilter()
 { /*
-  m_BackgroundValue = NumericTraits<OutputImagePixelType>::NonpositiveMin();*/
+  m_BackgroundValue = NumericTraits<OutputImagePixelType>::NonpositiveMin(); */
 }
 
 template<class TLabelMap, class TVectorData, class TFieldsFunctor>

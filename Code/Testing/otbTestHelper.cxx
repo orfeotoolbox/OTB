@@ -163,10 +163,10 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
     // between Linux and Win32 plateforms
     if ((!ignoreCurrentLineRef) && (!ignoreCurrentLineTest))
       {
-      if(isStringFound(strfileref))
+      if(isToBeIgnoredForAnyComparison(strfileref))
         ignoreCurrentLineRef = true;
       
-      if(isStringFound(strfiletest))
+      if(isToBeIgnoredForAnyComparison(strfiletest))
         ignoreCurrentLineTest = true;
       }
     
@@ -410,7 +410,7 @@ int TestHelper::RegressionTestImage(int cpt, const char *testImageFilename, cons
     {
     typedef otb::PrintableImageFilter<ImageType> RescaleType;
     typedef RescaleType::OutputImageType         OutputType;
-    /*     typedef itk::ExtractImageFilter<OutputType,DiffOutputType> ExtractType; */
+    /*     typedef itk::ExtractImageFilter<OutputType, DiffOutputType> ExtractType; */
     typedef otb::ImageFileWriter<RescaleType::OutputImageType> WriterType;
 
     RescaleType::Pointer rescale = RescaleType::New();
@@ -830,7 +830,7 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
   /* -------------------------------------------------------------------- */
   otbCheckStringValue("INFO: using driver", ref_poDriver->GetName(), test_poDriver->GetName(), nbdiff, m_ReportErrors);
 
-  //    otbCheckStringValue("INFO: Internal data source name", ref_poDS->GetName(),test_poDS->GetName(),nbdiff,m_ReportErrors );
+  //    otbCheckStringValue("INFO: Internal data source name", ref_poDS->GetName(), test_poDS->GetName(), nbdiff, m_ReportErrors );
   std::string strRefName(ref_poDS->GetName());
   std::string strTestName(test_poDS->GetName());
   if (strRefName != strTestName)
@@ -1165,21 +1165,11 @@ bool TestHelper::isScientificNumeric(std::string str) const
   return true;
 }
 
-bool TestHelper::isStringFound(std::string str) const
+bool TestHelper::isToBeIgnoredForAnyComparison(std::string str) const
 {
-  std::string rttiString = "RTTI";
-   std::string modTimeString = "Modified Time"; 
-  if(str.find(rttiString) != std::string::npos )
-    {
-      return true;
-    }
-  else if(str.find(modTimeString) != std::string::npos )
-    {
-      return true;
-    }
-  
-  
-
+  if (str.find("RTTI") != std::string::npos) return true;
+  if (str.find("Modified Time") != std::string::npos) return true;
+  if (str.find("PipelineMTime:") != std::string::npos) return true;
   return false;
 }
 

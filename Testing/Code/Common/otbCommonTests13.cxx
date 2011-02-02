@@ -27,4 +27,6 @@
 void RegisterTests()
 {
   //  REGISTER_TEST(otbGISTableSourceNew);
+  REGISTER_TEST(otbPipelineMemoryPrintCalculatorNew);
+  REGISTER_TEST(otbPipelineMemoryPrintCalculatorTest);
 }

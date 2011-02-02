@@ -22,6 +22,7 @@
 #include "itkObjectFactory.h"
 #include "itkPoint.h"
 #include "itkMultiThreader.h"
+#include "otbCurlHelperInterface.h"
 
 namespace otb
 {
@@ -107,6 +108,8 @@ public:
   itkSetMacro(Multithread, bool);
   itkBooleanMacro(Multithread);
 
+  itkSetObjectMacro(Curl, CurlHelperInterface);
+
   virtual bool Evaluate();
 
 protected:
@@ -117,8 +120,6 @@ protected:
   void ParseXMLGeonames(std::string& placeName, std::string& countryName) const;
 
   virtual void DoEvaluate();
-
-  bool IsLonLatValid() const;
 
   static ITK_THREAD_RETURN_TYPE ThreadFunction(void*);
 
@@ -139,6 +140,8 @@ private:
   std::string m_PlaceName;
   std::string m_CountryName;
   std::string m_TempFileName;
+
+  CurlHelperInterface::Pointer m_Curl;
 
   itk::MultiThreader::Pointer m_Threader;
 };

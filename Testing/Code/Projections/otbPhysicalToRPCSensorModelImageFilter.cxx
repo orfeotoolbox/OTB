@@ -39,7 +39,7 @@ int otbPhysicalToRPCSensorModelImageFilter(int argc, char* argv[])
     unsigned int gridSize = atoi(argv[2]);
     const char * outfname  = argv[3];
     
-    // Reader 
+    // Reader
     typedef otb::ImageFileReader<ImageType>             ReaderType;
     ReaderType::Pointer                reader    = ReaderType::New();
   

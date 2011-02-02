@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -57,7 +57,7 @@ public:
 
   // LabelMapToSampleList
   typedef itk::VariableLengthVector<AttributesValueType>    VectorType;
-  typedef itk::FixedArray<ClassLabelType,1>                 ClassLabelVectorType;
+  typedef itk::FixedArray<ClassLabelType, 1>                 ClassLabelVectorType;
 
   typedef itk::Statistics::ListSample<VectorType>           ListSampleType;
   typedef itk::Statistics::ListSample<ClassLabelVectorType> TrainingListSampleType;
@@ -79,7 +79,7 @@ public:
                       TInputImage::ImageDimension);
 
   /** Standard New method. */
-  itkNewMacro(Self);  
+  itkNewMacro(Self);
 
   /** Runtime information support. */
   itkTypeMacro(KMeansAttributesLabelMapFilter,
@@ -95,8 +95,8 @@ public:
     return m_Centroids;
   }
 
-  itkSetObjectMacro(InputLabelMap,InputImageType);
-  itkGetObjectMacro(InputLabelMap,InputImageType);
+  itkSetObjectMacro(InputLabelMap, InputImageType);
+  itkGetObjectMacro(InputLabelMap, InputImageType);
 
   /** Set the number of classes of the input sample list.
    *  It will be used to choose the number of centroids.

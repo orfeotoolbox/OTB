@@ -108,7 +108,7 @@ int otbImageWidget(int argc, char * argv[])
   Fl::check();
 
   // Use nearest neighbor interpolation
-//   widget->resize(0,0,region.GetSize()[0],region.GetSize()[1]);
+//   widget->resize(0, 0, region.GetSize()[0], region.GetSize()[1]);
   widget->SetIsotropicZoom(10.0);
   size = region.GetSize();
   size[0] /= 10;

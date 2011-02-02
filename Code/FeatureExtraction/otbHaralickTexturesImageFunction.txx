@@ -54,8 +54,8 @@ HaralickTexturesImageFunction<TInputImage, TCoordRep>
 }
 
 template <class TInputImage, class TCoordRep>
-typename HaralickTexturesImageFunction<TInputImage,TCoordRep>::OutputType
-HaralickTexturesImageFunction<TInputImage,TCoordRep>
+typename HaralickTexturesImageFunction<TInputImage, TCoordRep>::OutputType
+HaralickTexturesImageFunction<TInputImage, TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
   // Build textures vector
@@ -85,7 +85,7 @@ HaralickTexturesImageFunction<TInputImage,TCoordRep>
 
   // Compute the region on which co-occurence will be estimated
   typename InputRegionType::IndexType inputIndex = index;
-  for(unsigned int dim = 0; dim<InputImageType::ImageDimension;++dim)
+  for(unsigned int dim = 0; dim<InputImageType::ImageDimension; ++dim)
     {
     inputIndex[dim]-= m_NeighborhoodRadius;
     }

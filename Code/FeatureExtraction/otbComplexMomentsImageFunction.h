@@ -33,13 +33,13 @@ namespace otb
  * Calculate the complex moment values over a specified neighborhood.
  * The implemented equation is:
  *
- *  \f[  c_{p,q}=\int_{-\infty}^{\infty} \int_{-\infty}^{\infty} (x+iy)^{p} \cdot (x-iy)^{q} \cdot f(x,y) \cdot
+ *  \f[  c_{p, q}=\int_{-\infty}^{\infty} \int_{-\infty}^{\infty} (x+iy)^{p} \cdot (x-iy)^{q} \cdot f(x, y) \cdot
  dx \cdot dy \f]
  *
  * With:
  *
- *   - \f$ (x,y) \f$ pixel localization;
- *   - \f$ f(x,y) \f$  the pixel value over the \f$(x,y) \f$ coordinate.
+ *   - \f$ (x, y) \f$ pixel localization;
+ *   - \f$ f(x, y) \f$  the pixel value over the \f$(x, y) \f$ coordinate.
  *
  * This class is templated over the input image type and the
  * coordinate representation type (e.g. float or double).
@@ -56,10 +56,10 @@ class ITK_EXPORT ComplexMomentsImageFunction :
 public:
   /** Standard class typedefs. */
   typedef ComplexMomentsImageFunction                                          Self;
-  typedef itk::ImageFunction<TInputImage, 
+  typedef itk::ImageFunction<TInputImage,
                              std::vector<
                              std::vector<
-                             std::complex<double> > >, 
+                             std::complex<double> > >,
                              TCoordRep>                                        Superclass;
   typedef itk::SmartPointer<Self>                                              Pointer;
   typedef itk::SmartPointer<const Self>                                        ConstPointer;
@@ -105,7 +105,7 @@ public:
   }
   
   /** Get/Set the radius of the neighborhood over which the
-   *  statistics are evaluated 
+   *  statistics are evaluated
    */
   itkSetMacro( NeighborhoodRadius, unsigned int );
   itkGetConstReferenceMacro( NeighborhoodRadius, unsigned int );

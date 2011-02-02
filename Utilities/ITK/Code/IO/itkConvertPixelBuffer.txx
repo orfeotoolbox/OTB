@@ -739,15 +739,36 @@ template < typename InputPixelType,
            class OutputConvertTraits >
 void
 ConvertPixelBuffer<InputPixelType, OutputPixelType, OutputConvertTraits>
-::ConvertComplexVectorImageToVectorImage(std::complex<InputPixelType>* inputData, 
+::ConvertComplexVectorImageToVectorImage(std::complex<InputPixelType>* inputData,
                      int inputNumberOfComponents, 
+                     OutputPixelType* outputData , size_t size)
+{
+  size_t length = size* (size_t)inputNumberOfComponents;
+  OutputPixelType dummy;
+  for( size_t i=0; i< length/2; i++ )
+    {
+    OutputConvertTraits::SetNthComponent( 0, *outputData, (*inputData).real());
+    ++outputData;
+    OutputConvertTraits::SetNthComponent( 0, *outputData, (*inputData).imag());
+    ++outputData;
+    ++inputData;
+    }
+}
+
+template < typename InputPixelType,
+           typename OutputPixelType,
+           class OutputConvertTraits >
+void
+ConvertPixelBuffer<InputPixelType, OutputPixelType, OutputConvertTraits>
+::ConvertComplexVectorImageToVectorImageComplex(std::complex<InputPixelType>* inputData,
+                     int inputNumberOfComponents,
                      OutputPixelType* outputData , size_t size)
 {
   size_t length = size* (size_t)inputNumberOfComponents;
   OutputPixelType dummy;
   for( size_t i=0; i< length; i++ )
     {
-    OutputConvertTraits::SetNthComponent( 0, *outputData, 
+    OutputConvertTraits::SetNthComponent( 0, *outputData,
                                           SpecialCast(*inputData, dummy));
     ++outputData;
     ++inputData;

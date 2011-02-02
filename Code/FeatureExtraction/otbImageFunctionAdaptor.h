@@ -106,7 +106,7 @@ private:
   // Internal Image Function //
   typename InternalImageFunctionType::Pointer    m_InternalImageFunction;
   // Converter //
-  typename ConverterType::Pointer                m_Converter; 
+  typename ConverterType::Pointer                m_Converter;
 };
 
 } // end namespace otb

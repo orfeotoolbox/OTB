@@ -73,7 +73,7 @@ HuMomentsImageFunction<TInputImage, TCoordRep>
   typedef std::complex<ScalarRealType> ComplexType;
   
   // Define and intialize cumulants for complex moments
-  ComplexType c11, c20, c02,c30, c03, c21, c12;
+  ComplexType c11, c20, c02, c30, c03, c21, c12;
   c11 = itk::NumericTraits<ComplexType>::Zero;
   c20 = itk::NumericTraits<ComplexType>::Zero;
   c02 = itk::NumericTraits<ComplexType>::Zero;
@@ -103,7 +103,7 @@ HuMomentsImageFunction<TInputImage, TCoordRep>
     ScalarRealType x = static_cast<ScalarRealType>(it.GetOffset(i)[0])/(2*m_NeighborhoodRadius+1);
     ScalarRealType y = static_cast<ScalarRealType>(it.GetOffset(i)[1])/(2*m_NeighborhoodRadius+1);
     // Build complex value
-    ComplexType xpy(x,y),xqy(x,-y);
+    ComplexType xpy(x, y), xqy(x, -y);
     
     // Update cumulants
     c00 += value;

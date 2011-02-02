@@ -51,6 +51,7 @@ template <class TOutputImage>
 ImageFileReader<TOutputImage>
 ::ImageFileReader() : itk::ImageFileReader<TOutputImage>(), m_DatasetNumber(0)
 {
+  m_Curl = CurlHelper::New();
 }
 
 template <class TOutputImage>
@@ -173,7 +174,11 @@ ImageFileReader<TOutputImage>
                              * static_cast<std::streamoff>(region.GetNumberOfPixels());
 
     char * loadBuffer = new char[nbBytes];
-
+    /*std::cout<< "*** IFReader : read with conversion ***" << std::endl;
+    std::cout<< "size of Buffer to GDALImageIO::read = " << nbBytes << " = " \
+        << "ComponentSize ("<< this->m_ImageIO->GetComponentSize() << ") x " \
+        << "Nb of Component (" << this->m_ImageIO->GetNumberOfComponents() << ") x " \
+        << "Nb of Pixel to read (" << region.GetNumberOfPixels() << ")" << std::endl; */
     this->m_ImageIO->Read(loadBuffer);
 
     this->DoConvertBuffer(loadBuffer, region.GetNumberOfPixels());
@@ -287,6 +292,12 @@ ImageFileReader<TOutputImage>
     // this will determine the strategy to fill up a vector image
     OutputImagePixelType dummy;
     imageIO->SetIsComplex(PixelIsComplex(dummy));
+
+    // VectorImage ??
+    if (strcmp(output->GetNameOfClass(), "VectorImage") == 0)
+      imageIO->SetIsVectorImage(true);
+    else
+      imageIO->SetIsVectorImage(false);
 
     // Pass the dataset number (used for hdf files for example)
     imageIO->SetDatasetNumber(m_DatasetNumber);
@@ -479,8 +490,7 @@ ImageFileReader<TOutputImage>
        && this->m_FileName[2] == 't'
        && this->m_FileName[3] == 'p')
     {
-    CurlHelper::Pointer curlHelper = CurlHelper::New();
-    int                 res = curlHelper->TestUrlAvailability(this->m_FileName);
+    int res = m_Curl->TestUrlAvailability(this->m_FileName);
     if (res != 0 && res != 63) // 63 stands for filesize exceed
       {
       itk::ImageFileReaderException e(__FILE__, __LINE__);
@@ -493,6 +503,18 @@ ImageFileReader<TOutputImage>
       throw e;
       }
     return;
+    }
+
+  // Test if we have an hdf file with dataset spec
+  std::string realfile(this->m_FileName);
+  unsigned int datasetNum;
+  if (System::ParseHdfFileName(this->m_FileName, realfile, datasetNum))
+    {
+    otbMsgDevMacro(<< "HDF name with dataset specification detected");
+    otbMsgDevMacro(<< " - " << realfile);
+    otbMsgDevMacro(<< " - " << datasetNum);
+    this->m_FileName = realfile;
+    m_DatasetNumber = datasetNum;
     }
 
   // Test if the file exists.
@@ -541,7 +563,7 @@ ImageFileReader<TOutputImage>
   listFileSearch.push_back("IMAGERY.TIF");
   listFileSearch.push_back("imagery.tif"); //For format SPOT5TIF
 // Not recognized as a supported file format by GDAL.
-//        listFileSearch.push_back("IMAGERY.BIL");listFileSearch.push_back("imagery.bil");//For format SPOT5BIL
+//        listFileSearch.push_back("IMAGERY.BIL"); listFileSearch.push_back("imagery.bil"); //For format SPOT5BIL
   listFileSearch.push_back("IMAG_01.DAT");
   listFileSearch.push_back("imag_01.dat"); //For format SPOT4
 

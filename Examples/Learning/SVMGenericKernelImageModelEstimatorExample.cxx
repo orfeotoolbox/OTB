@@ -100,9 +100,9 @@ int main(int argc, char* argv[])
 //
 //  The instanciation of the kernel is to be implemented. The kernel which is
 //  used here is a linear combination of a polynomial kernel and an RBF one.
-//  It is written as $$\mu k_1(x,y) + (1-\mu) k_2(x,y)$$ with
-//  $k_1(x,y)=\left( \gamma_1 x\cdot y + c_0 \right) ^d$ and
-//  $k_2(x,y) = \exp\left( - \gamma_2 \| x-y\|^2 \right)$. Then, the specific
+//  It is written as $$\mu k_1(x, y) + (1-\mu) k_2(x, y)$$ with
+//  $k_1(x, y)=\left( \gamma_1 x\cdot y + c_0 \right) ^d$ and
+//  $k_2(x, y) = \exp\left( - \gamma_2 \| x-y\|^2 \right)$. Then, the specific
 //  parameters of this kernel are:
 //  \begin{itemize}
 //  \item \code{Mixture} ($\mu$),

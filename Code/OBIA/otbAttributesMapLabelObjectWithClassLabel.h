@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -25,7 +25,7 @@ namespace otb
 
 /** \class AttributesMapLabelObjectWithClassLabel
  *  \brief An AttributesMapLabelObject with an optional class label.
- * 
+ *
  *  The label type is defined by the template parameter TClassLabel and
  *  accessible using the ClassLabelType typedef.
  *
@@ -34,16 +34,16 @@ namespace otb
  *
  * The SetClassLabel() method set the class label and set the internal flag
  * m_HasClassLabel to true.
- * 
+ *
  * The GetClassLabel() method returns the class label or an exception if m_HasClassLabel
  * is set to false.
  *
  * The RemoveClassLabel() method set m_HasClassLabel to false and the
  * class label value to a default value.
- * 
+ *
  *\sa LabelObject, ShapeLabelObject, StatisticsLabelObject
  *
- * \ingroup DataRepresentation 
+ * \ingroup DataRepresentation
  */
 template < class TLabel, unsigned int VImageDimension, class TAttributesValue, class TClassLabel >
 class ITK_EXPORT AttributesMapLabelObjectWithClassLabel : public AttributesMapLabelObject<TLabel, VImageDimension, TAttributesValue>
@@ -51,9 +51,9 @@ class ITK_EXPORT AttributesMapLabelObjectWithClassLabel : public AttributesMapLa
 public:
   /** Standard class typedefs */
   typedef AttributesMapLabelObjectWithClassLabel      Self;
-  typedef AttributesMapLabelObject<TLabel, 
+  typedef AttributesMapLabelObject<TLabel,
       VImageDimension, TAttributesValue>  Superclass;
-  typedef itk::LabelObject<TLabel,VImageDimension>    LabelObjectType;
+  typedef itk::LabelObject<TLabel, VImageDimension>    LabelObjectType;
   typedef itk::SmartPointer<Self>                     Pointer;
   typedef itk::SmartPointer<const Self>               ConstPointer;
   typedef itk::WeakPointer <const Self>               ConstWeakPointer;

@@ -11,7 +11,7 @@ ENDIF(OTB_USE_MAPNIK)
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
-SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Visualization)
+SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
 
 SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
 #Remote sensing images (large images )
@@ -26,6 +26,7 @@ SET(EXE_TESTS ${CXX_TEST_PATH}/otbVisualizationExamplesTests)
 SET(TOL 0.0)
 SET(EPSILON_4 0.0001)
 
+# With Font file
 IF(OTB_DATA_USE_LARGEINPUT)
   IF(OTB_USE_MAPNIK)
     ADD_TEST(vrTeVectorDataRendering ${EXE_TESTS}
@@ -34,9 +35,24 @@ IF(OTB_DATA_USE_LARGEINPUT)
       ${INPUTLARGEDATA}/VECTOR/MidiPyrenees/roads.shp
       ${OTB_DATA_ROOT}/Input/DEM/srtm_directory
       0
+      ${INPUTDATA}/DejaVuSans.ttf
       )
   ENDIF(OTB_USE_MAPNIK) 
 ENDIF(OTB_DATA_USE_LARGEINPUT)
+
+# Without Font file
+IF(OTB_DATA_USE_LARGEINPUT)
+  IF(OTB_USE_MAPNIK)
+    ADD_TEST(vrTeVectorDataRenderingWithoutFont ${EXE_TESTS}
+      VectorDataRenderingTest
+      ${INPUTLARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+      ${INPUTLARGEDATA}/VECTOR/MidiPyrenees/roads.shp
+      ${OTB_DATA_ROOT}/Input/DEM/srtm_directory
+      0
+      )
+  ENDIF(OTB_USE_MAPNIK) 
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 

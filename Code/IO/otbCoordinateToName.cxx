@@ -16,9 +16,12 @@
 
 =========================================================================*/
 
+
+#include <sstream>
+
 #include "otbCoordinateToName.h"
 #include "otbMacro.h"
-#include <sstream>
+#include "otbUtils.h"
 
 #include "tinyxml.h"
 #include "otbCurlHelper.h"
@@ -31,24 +34,23 @@ namespace otb
 /**
  * Constructor
  */
-
 CoordinateToName::CoordinateToName() :
-  m_Lon(-1000.0), m_Lat(-1000.0), m_Multithread(false), m_IsValid(false)
+  m_Lon(-1000.0), m_Lat(-1000.0), m_Multithread(false), m_IsValid(false),
+  m_PlaceName(""), m_CountryName("")
 {
-  m_PlaceName = "";
-  m_CountryName = "";
-
   //Avoid collision between different instance of the class
   typedef itk::Statistics::MersenneTwisterRandomVariateGenerator RandomGenType;
   RandomGenType::Pointer randomGen = RandomGenType::GetInstance();
   randomGen->SetSeed(reinterpret_cast<long int>(this)); //make sure the seed is unique for this class
-  int randomNum = randomGen->GetIntegerVariate();
+  unsigned int randomNum = randomGen->GetIntegerVariate();
 
   std::stringstream filename;
   filename << "tmp-coordinateToName-SignayriUt1-";
   filename << randomNum;
   filename << ".xml";
   m_TempFileName = filename.str();
+
+  m_Curl = CurlHelper::New();
 
   m_Threader = itk::MultiThreader::New();
 
@@ -93,7 +95,7 @@ CoordinateToName::ThreadFunction(void *arg)
 
 void CoordinateToName::DoEvaluate()
 {
-  if (IsLonLatValid())
+  if (Utils::IsLonLatValid(m_Lon, m_Lat))
     {
     std::ostringstream urlStream;
     urlStream << "http://ws.geonames.org/findNearbyPlaceName?lat=";
@@ -119,8 +121,7 @@ void CoordinateToName::DoEvaluate()
 
 void CoordinateToName::RetrieveXML(const std::ostringstream& urlStream) const
 {
-  CurlHelper::Pointer curlHelper = CurlHelper::New();
-  curlHelper->RetrieveFile(urlStream, m_TempFileName);
+  m_Curl->RetrieveFile(urlStream, m_TempFileName);
 }
 
 void CoordinateToName::ParseXMLGeonames(std::string& placeName, std::string& countryName) const
@@ -145,15 +146,6 @@ void CoordinateToName::ParseXMLGeonames(std::string& placeName, std::string& cou
     otbMsgDevMacro(<< "Near " << placeName << " in " << countryName);
     remove(m_TempFileName.c_str());
     }
-}
-
-bool CoordinateToName::IsLonLatValid() const
-{
-  if (m_Lon < -180.0) return false;
-  if (m_Lon > 180.0) return false;
-  if (m_Lat < -90.0) return false;
-  if (m_Lat > 90.0) return false;
-  return true;
 }
 
 } // namespace otb

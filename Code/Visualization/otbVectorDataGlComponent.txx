@@ -266,7 +266,7 @@ VectorDataGlComponent<TVectorData>
     {
     case FEATURE_POINT:
       {
-//    this->RenderPoint(node->Get()->GetPoint(),extent,space2ScreenTransform);
+//    this->RenderPoint(node->Get()->GetPoint(), extent, space2ScreenTransform);
       this->RenderPoint(node->Get(), extent, space2ScreenTransform);
       break;
 

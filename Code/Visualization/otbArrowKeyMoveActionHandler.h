@@ -105,7 +105,7 @@ public:
             index[1] = static_cast<int>(imagePoint[1]);
 
             // Move
-            index[1] -= size[1];
+            index[1] -= size[1]/4;
 
             // Change scaled extract region center
             m_Model->SetExtractRegionCenter(index);
@@ -133,7 +133,7 @@ public:
             index[1] = static_cast<int>(imagePoint[1]);
 
             // Move
-            index[1] += size[1];
+            index[1] += size[1]/4;
 
             // Change scaled extract region center
             m_Model->SetExtractRegionCenter(index);
@@ -161,7 +161,7 @@ public:
             index[1] = static_cast<int>(imagePoint[1]);
 
             // Move
-            index[0] -= size[0];
+            index[0] -= size[0]/4;
 
             // Change scaled extract region center
             m_Model->SetExtractRegionCenter(index);
@@ -189,7 +189,7 @@ public:
             index[1] = static_cast<int>(imagePoint[1]);
 
             // Move
-            index[0] += size[0];
+            index[0] += size[0]/4;
 
             // Change scaled extract region center
             m_Model->SetExtractRegionCenter(index);

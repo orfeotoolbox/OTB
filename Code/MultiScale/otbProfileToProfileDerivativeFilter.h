@@ -27,11 +27,11 @@ namespace otb
 /** \class ProfileToProfileDerivativeFilter
  *  \brief This filter computes the derivative of a given profile.
  *
- * For the profile \f$ \Pi_{\phi}(f)= \{\phi_{n}(f), n \in \{n_{1},\ldots,n_{N}\}\}\f$, the
+ * For the profile \f$ \Pi_{\phi}(f)= \{\phi_{n}(f), n \in \{n_{1},\ldots, n_{N}\}\}\f$, the
  * profile derivative is defined by:
  *
  * \f[
- * \Delta\Pi_{\phi}(f)= \{\Delta\phi_{n}(f), n \in \{n_{1},\ldots,n_{N}\}\}
+ * \Delta\Pi_{\phi}(f)= \{\Delta\phi_{n}(f), n \in \{n_{1},\ldots, n_{N}\}\}
  * \f]
  *
  * with \f$ \Delta\phi_{n}(f) = \mid \Pi_{\phi_{n2}}(f)-\Pi_{\phi_{n1}}(f) \mid \f$

@@ -27,11 +27,11 @@ namespace otb
    * Constructor
    */
 
-PlaceNameToLonLat::PlaceNameToLonLat()
+PlaceNameToLonLat::PlaceNameToLonLat() :
+      m_Lon(-1000.0), m_Lat(-1000.0),
+      m_PlaceName("Where everything started")
 {
-  m_Lon = -1000.0;
-  m_Lat = -1000.0;
-  m_PlaceName = "Where everything started";
+  m_Curl = CurlHelper::New();
 }
 
 /**
@@ -62,7 +62,7 @@ bool PlaceNameToLonLat::Evaluate()
     std::ostringstream urlStream;
     urlStream << "http://maps.google.com/maps?q=";
     urlStream << m_PlaceName;
-    urlStream << "&sll=38.9594,-95.2655&sspn=119.526,360&output=kml&ie=utf-8&v=2.2&cv=4.2.0180.1134&hl=en";
+    urlStream << "&sll=38.9594, -95.2655&sspn=119.526, 360&output=kml&ie=utf-8&v=2.2&cv=4.2.0180.1134&hl=en";
     RetrieveXML(urlStream);
     ParseXMLGoogle();
     }
@@ -107,8 +107,7 @@ curlHandlerWriteMemoryCallback(void *ptr, size_t size, size_t nmemb,
 
 void PlaceNameToLonLat::RetrieveXML(const std::ostringstream& urlStream)
 {
-  CurlHelper::Pointer curlHelper = CurlHelper::New();
-  curlHelper->RetrieveFile(urlStream, "out.xml");
+  m_Curl->RetrieveFile(urlStream, "out.xml");
 }
 
 void PlaceNameToLonLat::ParseXMLYahoo()

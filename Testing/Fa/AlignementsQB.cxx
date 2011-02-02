@@ -126,7 +126,7 @@ int main(int argc, char ** argv)
 
   writer->Update();
 
-/*  typedef otb::ColorImageViewer<unsigned char,double>    ViewerType;
+/*  typedef otb::ColorImageViewer<unsigned char, double>    ViewerType;
   ViewerType                      viewer;
 
   viewer.SetLabel( "Input Image" );

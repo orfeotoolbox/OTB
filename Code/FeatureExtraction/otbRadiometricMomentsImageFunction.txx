@@ -47,8 +47,8 @@ RadiometricMomentsImageFunction<TInputImage, TCoordRep>
 }
 
 template <class TInputImage, class TCoordRep>
-typename RadiometricMomentsImageFunction<TInputImage,TCoordRep>::OutputType
-RadiometricMomentsImageFunction<TInputImage,TCoordRep>
+typename RadiometricMomentsImageFunction<TInputImage, TCoordRep>::OutputType
+RadiometricMomentsImageFunction<TInputImage, TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
   // Build moments vector
@@ -120,7 +120,7 @@ RadiometricMomentsImageFunction<TInputImage,TCoordRep>
     // Skewness
     moments[2] = ((sum3 - 3.0 * moments[0] * sum2) / size + 2.0 * moments[0] * mean2) / (moments[1] * sigma);
     // Kurtosis
-    moments[3] = ((sum4 - 4.0 * moments[0] * sum3 + 6.0 * mean2 * sum2) / size - 3.0 * mean2 * mean2) 
+    moments[3] = ((sum4 - 4.0 * moments[0] * sum3 + 6.0 * mean2 * sum2) / size - 3.0 * mean2 * mean2)
       / (moments[1] * moments[1]) - 3.0;
     }
    

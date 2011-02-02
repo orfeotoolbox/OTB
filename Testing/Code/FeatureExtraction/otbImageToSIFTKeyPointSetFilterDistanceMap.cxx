@@ -280,7 +280,7 @@ int otbImageToSIFTKeyPointSetFilterDistanceMap(int argc, char * argv[])
   const float        threshold = atof(argv[4]);
   const float        ratio = atof(argv[5]);
 
-  // Rotation angle [0,360[
+  // Rotation angle [0, 360[
   const unsigned int rotation = atoi(argv[6]);
 
   // Zoom factor

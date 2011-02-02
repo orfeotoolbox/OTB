@@ -46,10 +46,10 @@ int otbParserTest(int argc, char * argv[])
   std::string Expression_Numerical       = "10.0+3";
   std::string Expression_BuildInFun      = "cos(1.55)";
   std::string Expression_UserDefinedCst  = "ln10";
-  std::string Expression_UserDefinedFun  = "ndvi(100,10)";
+  std::string Expression_UserDefinedFun  = "ndvi(100, 10)";
   std::string Expression_UserDefinedVars = "(var1+var2-var3)*var4/var5";
-  std::string Expression_Mixed           = "(7+10)/2+cos(pi/4)*10-10*ln10+ndvi(100,10)";
-  std::string Expression_StressTest      = "(7+10)/2+cos(pi/4)*10-10*ln10+ndvi(100,10)*40+rint(83.144)*0.6588";
+  std::string Expression_Mixed           = "(7+10)/2+cos(pi/4)*10-10*ln10+ndvi(100, 10)";
+  std::string Expression_StressTest      = "(7+10)/2+cos(pi/4)*10-10*ln10+ndvi(100, 10)*40+rint(83.144)*0.6588";
   
   typedef otb::Parser                                 ParserType;
   
@@ -109,7 +109,7 @@ int otbParserTest(int argc, char * argv[])
   parser->SetExpr(Expression_StressTest);
   result = parser->Eval();
   std::cout << "Expression Parsing Result : "                    << std::endl;
-  std::cout << Expression_StressTest << " = " << result          << std::endl; // 14.4983 
+  std::cout << Expression_StressTest << " = " << result          << std::endl; // 14.4983
   std::cout << "Expected Result : " << 14.4983 << std::endl      << std::endl;
   error += sqrt((result - 14.4983)*(result - 14.4983));
 
@@ -118,7 +118,7 @@ int otbParserTest(int argc, char * argv[])
   std::cout << "Error : " << error << std::endl;
 
   if(error > 10E-5)
-    { 
+    {
     itkGenericExceptionMacro(  << "Cumulated Error > 10E-5 -> Test Failled" << std::endl );
     }
 

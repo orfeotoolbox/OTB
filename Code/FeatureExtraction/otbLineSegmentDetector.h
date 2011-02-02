@@ -47,8 +47,8 @@ public:
 };
 
 /** \class OrientationFunctor
- *  \brief This functor computes the orientation of a cavariant vector<br>
- *   Orientation values lies between 0 and 2*Pi.
+ *  \brief This functor computes the orientation of a covariant vector<br>
+ *   Orientation values lies between -Pi and Pi.
  */
 template <class TInputPixel, class TOutputPixel>
 class OrientationFunctor
@@ -57,14 +57,7 @@ public:
 
   inline TOutputPixel operator ()(const TInputPixel& input)
   {
-    TOutputPixel resp = static_cast<TOutputPixel>(vcl_atan2(input[0], -input[1]));
-
-    if (resp < itk::NumericTraits<TOutputPixel>::Zero)
-      {
-      resp = -resp;
-      }
-
-    return resp;
+    return static_cast<TOutputPixel>(vcl_atan2(input[0], -input[1]));
   }
 };
 }  // end namespace Functor
@@ -81,7 +74,8 @@ public:
 
 template <class TInputImage, class TPrecision = double>
 class ITK_EXPORT LineSegmentDetector :
-  public otb::ImageToLineSpatialObjectListFilter<TInputImage>
+    public otb::ImageToLineSpatialObjectListFilter<TInputImage>
+//TODO public VectorDataSource<ITK_TYPENAME VectorData<> >
 {
 public:
 
@@ -153,7 +147,7 @@ public:
   typedef otb::Image<unsigned char, 2>     LabelImageType;
   typedef typename LabelImageType::Pointer LabelImagePointerType;
 
-  /** Vector to store the rectangle characteization  center, width, orientation ,( begin ,end ) of the central line*/
+  /** Vector to store the rectangle characteization  center, width, orientation , ( begin , end ) of the central line*/
   typedef std::vector<double>                  RectangleType;
   typedef typename RectangleType::iterator     RectangleIteratorType;
   typedef std::vector<RectangleType>           RectangleListType;
@@ -161,6 +155,21 @@ public:
 
   itkSetMacro(ImageSize, SizeType);
   itkGetMacro(ImageSize, SizeType);
+
+
+  /** Custom Get methods*/
+  LabelImagePointerType GetMap()
+  {
+    return m_UsedPointImage;
+  }
+  MagnitudeImagePointerType GetGradMod()
+  {
+    return m_MagnitudeFilter->GetOutput();
+  }
+  typename OutputImageDirType::Pointer GetGradOri()
+  {
+    return m_OrientationFilter->GetOutput();
+  }
 
 protected:
   LineSegmentDetector();
@@ -180,14 +189,26 @@ protected:
   /** */
   virtual void LineSegmentDetection(CoordinateHistogramType& CoordinateHistogram);
 
-  /** */
+  /** Return true if the pixel status is NOTUSED*/
+  virtual bool IsNotUsed(InputIndexType& index) const;
+
+  /** Return true if the pixel status is USED*/
   virtual bool IsUsed(InputIndexType& index) const;
+
+  /** Return true if the pixel status is NOTINI*/
+  virtual bool IsNotIni(InputIndexType& index) const;
 
   /** Set Pixel flag to USED*/
   virtual void SetPixelToUsed(InputIndexType index);
 
+  /** Set Pixel flag to NOTINI*/
+  virtual void SetPixelToNotIni(InputIndexType index);
+
+  /** Set Pixels flag to NOTINI*/
+  virtual void SetRegionToNotIni(IndexVectorType region);
+
   /** search for a segment which begins from a seed "index "*/
-  virtual void GrowRegion(InputIndexType index);
+  virtual bool GrowRegion(InputIndexType index, IndexVectorType &region, double &regionAngle);
 
   /** Define if two are aligned */
   virtual bool IsAligned(double Angle, double regionAngle, double prec) const;
@@ -196,7 +217,7 @@ protected:
   virtual int ComputeRectangles();
 
   /** */
-  virtual void Region2Rect(IndexVectorType region, double angleRegion);
+  virtual RectangleType Region2Rectangle(IndexVectorType region, double regionAngle);
 
   /** */
   virtual double ComputeRegionOrientation(IndexVectorType region, double x, double y, double angleRegion) const;
@@ -208,7 +229,7 @@ protected:
   virtual double ComputeRectNFA(const RectangleType& rec) const;
 
   /** */
-  virtual double ImproveRectangle(RectangleType& rec) const;
+  virtual double ImproveRectangle(RectangleType& rectangle) const;
 
   /** NFA For a rectangle*/
   virtual double NFA(int n, int k, double p, double logNT) const;

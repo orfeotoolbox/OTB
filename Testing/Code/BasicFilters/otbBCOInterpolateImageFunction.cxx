@@ -72,7 +72,7 @@ int otbBCOInterpolateImageFunction(int argc, char * argv[])
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
-  reader->Update();//TODO check if necessary
+  reader->Update(); //TODO check if necessary
 
   std::cout << "Alpha Checking : " << std::endl << filter->GetAlpha() << std::endl;
   filter->SetAlpha(-1.0);
@@ -144,7 +144,7 @@ int otbBCOInterpolateImageFunctionOverVectorImage(int argc, char * argv[])
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
-  reader->Update();//TODO check if necessary
+  reader->Update(); //TODO check if necessary
 
   std::cout << "Alpha Checking : " << std::endl << filter->GetAlpha() << std::endl;
   filter->SetAlpha(-1.0);
@@ -181,7 +181,7 @@ int otbBCOInterpolateImageFunctionTest(int argc, char * argv[])
 
   typedef otb::Image<double, 2>                                           ImageType;
   typedef otb::ImageFileReader<ImageType>                                 ReaderType;
-  typedef otb::StreamingResampleImageFilter<ImageType,ImageType,double>   StreamingResampleImageFilterType;
+  typedef otb::StreamingResampleImageFilter<ImageType, ImageType, double>   StreamingResampleImageFilterType;
   typedef otb::BCOInterpolateImageFunction<ImageType, double>             InterpolatorType;
   typedef otb::StreamingImageFileWriter<ImageType>                        WriterType;
 
@@ -224,7 +224,7 @@ int otbBCOInterpolateImageFunctionVectorImageTest(int argc, char * argv[])
 
   typedef otb::VectorImage<double, 2>                                     ImageType;
   typedef otb::ImageFileReader<ImageType>                                 ReaderType;
-  typedef otb::StreamingResampleImageFilter<ImageType,ImageType,double>   StreamingResampleImageFilterType;
+  typedef otb::StreamingResampleImageFilter<ImageType, ImageType, double>   StreamingResampleImageFilterType;
   typedef otb::BCOInterpolateImageFunction<ImageType, double>             InterpolatorType;
   typedef otb::StreamingImageFileWriter<ImageType>                        WriterType;
 

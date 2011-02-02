@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -27,7 +27,7 @@ namespace otb
 {
 /** \class LabelMapWithAdjacency
 *   \brief This class is a LabelMap with additionnal adjacency information.
-*   
+*
 *   The adjacency information is stored as a map of set of labels, in
 *   order to avoid duplicated neighbors.
 */
@@ -65,13 +65,13 @@ public:
   typedef std::set<LabelType>                             AdjacentLabelsContainerType;
 
   /** A map containing the set of adjacent labels per label */
-  typedef std::map<LabelType,AdjacentLabelsContainerType> AdjacencyMapType;
+  typedef std::map<LabelType, AdjacentLabelsContainerType> AdjacencyMapType;
 
   /** The merging functor */
   typedef Functor::MergeLabelObjectFunctor<TLabelObject>  MergeFunctorType;
 
   /** A pair of labels */
-  typedef std::pair<LabelType,LabelType>                  LabelPairType;
+  typedef std::pair<LabelType, LabelType>                  LabelPairType;
 
   /** A vector of pair of labels */
   typedef std::vector<LabelPairType>                      LabelPairVectorType;
@@ -112,7 +112,7 @@ public:
   }
 
   /** Remove the given adjacent label from the given label */
-  void RemoveAdjacentLabel(LabelType label1,LabelType label2)
+  void RemoveAdjacentLabel(LabelType label1, LabelType label2)
   {
     if(m_AdjacencyMap.find(label1)!=m_AdjacencyMap.end())
       {
@@ -156,14 +156,14 @@ public:
 
     // Merges label object
     MergeFunctorType mergeFunctor;
-    typename LabelObjectType::Pointer loOut = mergeFunctor(lo1,lo2);
+    typename LabelObjectType::Pointer loOut = mergeFunctor(lo1, lo2);
     
     // Remove label2 from adjancency table of label1
     m_AdjacencyMap[label1].erase(label2);
     m_AdjacencyMap.erase(label2);
 
     // Move every occurence of label2 to label1 in adjacency map
-    for(typename AdjacencyMapType::iterator it = m_AdjacencyMap.begin();it!=m_AdjacencyMap.end();++it)
+    for(typename AdjacencyMapType::iterator it = m_AdjacencyMap.begin(); it!=m_AdjacencyMap.end(); ++it)
       {
       // Check if label2 is in the adjacent labels
       if(it->second.count(label2))
@@ -190,13 +190,13 @@ public:
 
     typename LabelPairVectorType::iterator lpit1, lpit2;
 
-    for(lpit1 = internalLabelPairs.begin();lpit1 != internalLabelPairs.end();++lpit1)
+    for(lpit1 = internalLabelPairs.begin(); lpit1 != internalLabelPairs.end(); ++lpit1)
       {
       // Merge the current label pair
-      this->MergeLabels(lpit1->first,lpit1->second);
+      this->MergeLabels(lpit1->first, lpit1->second);
 
       // Update the remaining label pairs
-      for(lpit2 = lpit1+1; lpit2 != internalLabelPairs.end();++lpit2)
+      for(lpit2 = lpit1+1; lpit2 != internalLabelPairs.end(); ++lpit2)
   {
   if(lpit2->first == lpit1->second)
     {
@@ -207,7 +207,7 @@ public:
     lpit2->second = lpit1->first;
     }
   }
-      }    
+      }
   }
 
 protected:
@@ -218,7 +218,7 @@ protected:
   /** Printself */
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
-    Superclass::PrintSelf(os,indent);
+    Superclass::PrintSelf(os, indent);
   }
 
 private:

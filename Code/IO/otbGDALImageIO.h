@@ -76,6 +76,10 @@ public:
   itkSetMacro(IsComplex, bool);
   itkGetMacro(IsComplex, bool);
 
+  /** Set/Get whether the pixel type (otb side) is Vector or Scalar */
+  itkSetMacro(IsVectorImage, bool);
+  itkGetMacro(IsVectorImage, bool);
+
   /** Set/Get the dataset index to extract (starting at 0)*/
   itkSetMacro(DatasetNumber, unsigned int);
   itkGetMacro(DatasetNumber, unsigned int);
@@ -100,6 +104,9 @@ public:
 
   /** Reads 3D data from multiple files assuming one slice per file. */
   virtual void ReadVolume(void* buffer);
+
+ // Get Info about all subDataset in hdf file
+bool GetSubDatasetInfo(std::vector<std::string>& names, std::vector<std::string>& desc);
 
   /*-------- This part of the interfaces deals with writing data. ----- */
 
@@ -143,6 +150,7 @@ protected:
   /** Dataset index to extract (starting at 0)*/
   unsigned int m_DatasetNumber;
 
+
 private:
   GDALImageIO(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
@@ -164,14 +172,17 @@ private:
   bool GDALInfoReportCorner(const char * corner_name, double x, double y,
                             double& dfGeoX, double& dfGeoY);
 
-  bool ParseHdfSubsetName(const std::string& id, std::string& key, std::string& name) const;
-
   bool m_FlagWriteImageInformation;
   bool m_CanStreamWrite;
 
   /** Whether the pixel type (otb side, not gdal side) is complex
    * this information has to be provided by the reader */
   bool m_IsComplex;
+
+  /** Whether the pixel type (otb side, not gdal side) is Vector
+   * this information has to be provided by the reader */
+  bool m_IsVectorImage;
+
 };
 
 } // end namespace otb

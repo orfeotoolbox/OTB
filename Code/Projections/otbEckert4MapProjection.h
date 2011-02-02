@@ -27,7 +27,7 @@ namespace otb
 /** \class Eckert4MapProjection
  *  \brief This class implements the Eckert4 map projection.
  *
- * It converts coordinates in longitude,latitude (WGS84) to Eckert4 map coordinates.
+ * It converts coordinates in longitude, latitude (WGS84) to Eckert4 map coordinates.
  */
 template <InverseOrForwardTransformationEnum transform>
 class ITK_EXPORT Eckert4MapProjection : public MapProjection<ossimEckert4Projection, transform>

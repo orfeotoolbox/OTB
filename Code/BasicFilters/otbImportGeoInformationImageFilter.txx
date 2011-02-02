@@ -89,7 +89,7 @@ ImportGeoInformationImageFilter<TImage, TSourceImage>
 
 // template <class TImage, class TSourceImage>
 // void
-//  ImportGeoInformationImageFilter<TImage,TSourceImage>
+//  ImportGeoInformationImageFilter<TImage, TSourceImage>
 // ::GenerateData(void)
 // {
 //   // Get output and source pointer

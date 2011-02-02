@@ -230,7 +230,7 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
   nit.SetLocation(baseIndex);
 
   const unsigned int twiceRadius = static_cast<const unsigned int>(2 * this->GetRadius());
-  /*  double xWeight[ImageDimension][ twiceRadius];*/
+  /*  double xWeight[ImageDimension][ twiceRadius]; */
   std::vector<std::vector<double> > xWeight;
   xWeight.resize(ImageDimension);
   for (unsigned int cpt = 0; cpt < xWeight.size(); cpt++)
@@ -292,7 +292,7 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
   // Iterate over the neighborhood, taking the correct set
   // of weights in each dimension
   RealType xPixelValue;
-  itk::PixelBuilder<RealType>::Zero(xPixelValue,this->GetInputImage()->GetNumberOfComponentsPerPixel());
+  itk::PixelBuilder<RealType>::Zero(xPixelValue, this->GetInputImage()->GetNumberOfComponentsPerPixel());
   for (unsigned int j = 0; j < m_OffsetTableSize; ++j)
     {
     // Get the offset for this neighbor

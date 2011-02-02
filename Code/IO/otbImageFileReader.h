@@ -19,6 +19,7 @@
 #define __otbImageFileReader_h
 
 #include "itkImageFileReader.h"
+#include "otbCurlHelperInterface.h"
 
 namespace otb
 {
@@ -78,6 +79,8 @@ public:
   itkSetMacro(DatasetNumber, unsigned int);
   itkGetMacro(DatasetNumber, unsigned int);
 
+  itkSetObjectMacro(Curl, CurlHelperInterface);
+
 protected:
   ImageFileReader();
   virtual ~ImageFileReader();
@@ -103,6 +106,7 @@ private:
 
   std::string m_ExceptionMessage;
 
+  CurlHelperInterface::Pointer m_Curl;
 };
 
 } //namespace otb

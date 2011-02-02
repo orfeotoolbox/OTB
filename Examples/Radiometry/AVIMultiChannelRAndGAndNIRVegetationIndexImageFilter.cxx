@@ -170,7 +170,7 @@ int main(int argc, char *argv[])
 
   //  Software Guide : BeginLatex
   //
-  // The $\lambda$ R,G and NIR parameters are set. The
+  // The $\lambda$ R, G and NIR parameters are set. The
   // \doxygen{otb}{MultiChannelRAndGAndNIRIndexImageFilter}
   // class sets the default values of $\lambda$ to $660$, $560$ and
   // $830$.

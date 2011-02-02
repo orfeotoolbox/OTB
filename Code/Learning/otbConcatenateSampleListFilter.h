@@ -33,18 +33,18 @@ namespace Statistics {
  */
 template < class TSampleList >
 class ITK_EXPORT ConcatenateSampleListFilter :
-  public otb::Statistics::ListSampleToListSampleFilter<TSampleList,TSampleList>
+  public otb::Statistics::ListSampleToListSampleFilter<TSampleList, TSampleList>
 {
 public:
   /** Standard class typedefs */
   typedef ConcatenateSampleListFilter                Self;
   typedef otb::Statistics::ListSampleToListSampleFilter
-  <TSampleList,TSampleList>                          Superclass;
+  <TSampleList, TSampleList>                          Superclass;
   typedef itk::SmartPointer< Self >                  Pointer;
   typedef itk::SmartPointer<const Self>              ConstPointer;
   
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ConcatenateSampleListFilter,otb::Statistics::ListSampleToListSampleFilter);
+  itkTypeMacro(ConcatenateSampleListFilter, otb::Statistics::ListSampleToListSampleFilter);
   
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

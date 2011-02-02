@@ -181,6 +181,10 @@ public:
   bool GetInverse(Self * inverseTransform) const;
   virtual InverseTransformBasePointer GetInverseTransform() const;
 
+  // Dummy set parameter method
+  virtual void SetParameters(const typename Superclass::ParametersType &)
+  {}
+
 protected:
   GenericRSTransform();
   virtual ~GenericRSTransform() {}

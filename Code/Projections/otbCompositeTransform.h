@@ -32,7 +32,7 @@ namespace otb
 
 * \brief Class which compose two itk::Transform to obtain one itk::Transform
 *    T1    T2      T3
-* (x,y) -> (x',y') -> (x'',y'')   =>    (x,y) -> (x'',y'')
+* (x, y) -> (x', y') -> (x'', y'')   =>    (x, y) -> (x'', y'')
 *
  *
 * \ingroup Transform

@@ -184,7 +184,7 @@ private:
 /** \class VectorRescaleIntensityImageFilter
  *  \brief This filter performs a rescaling of a vector image on a per band basis.
  *
- * This filter rescales each band to match the [OutputMinimum,OutputMaximum] range.
+ * This filter rescales each band to match the [OutputMinimum, OutputMaximum] range.
  * In order to avoid odd values to alter the intensity extent, one can set a clamp percentage.
  *
  * Values lower than the first quantile of this percentage are set to the OutputMinimum.

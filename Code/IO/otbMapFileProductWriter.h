@@ -44,7 +44,7 @@ namespace otb
  *        the tiles to draw in a mapserver, and finally
  *        a shapefile wich describe the tiles and where to find them
  *        on the disk.
- *       
+ *
  * This filter begins by tiling the input image. An accessor
  * SetTileSize allows to set the size of each tile. For each tile
  * generated, an entry is added to the shapefile to store the location
@@ -52,7 +52,7 @@ namespace otb
  * The product generated are a mapfile wich is the configuration file
  * for mapservers, a tile index and finally the tiles.
  * This class allow the user to specify the cgi-bin used (SetCGIPath)
- * and the directory where to store the index shapefile and the tiles 
+ * and the directory where to store the index shapefile and the tiles
  * via SetShapeIndexPath method
  *
  * Note that this class reproject the input image in the projection
@@ -90,7 +90,7 @@ public:
   typedef unsigned char                                OutputPixelType;
   typedef VectorImage<OutputPixelType>                 OutputImageType;
 
-  typedef VectorData<double,2>                         VectorDataType;
+  typedef VectorData<double, 2>                         VectorDataType;
   typedef typename VectorDataType::DataNodeType        DataNodeType;
   typedef typename DataNodeType::PolygonType           PolygonType;
   typedef typename PolygonType::VertexType             VertexType;
@@ -107,14 +107,14 @@ public:
   
   // Resampler
   typedef StreamingShrinkImageFilter
-  <InputImageType,InputImageType >        StreamingShrinkImageFilterType;
+  <InputImageType, InputImageType >        StreamingShrinkImageFilterType;
 
   // Intensity Rescale
   typedef VectorRescaleIntensityImageFilter
-  <InputImageType,InputImageType>          VectorRescaleIntensityImageFilterType;
+  <InputImageType, InputImageType>          VectorRescaleIntensityImageFilterType;
 
-  // Project filter 
-  typedef GenericRSResampleImageFilter<InputImageType,InputImageType>  GenericRSResamplerType;
+  // Project filter
+  typedef GenericRSResampleImageFilter<InputImageType, InputImageType>  GenericRSResamplerType;
   typedef typename GenericRSResamplerType::Pointer                   GenericRSResamplerPointerType;
 
   // Transformer
@@ -136,8 +136,8 @@ public:
   itkGetStringMacro(FileName);
 
   /** Set/Get the size of each tile*/
-  itkSetMacro(TileSize,unsigned int);
-  itkGetMacro(TileSize,unsigned int);
+  itkSetMacro(TileSize, unsigned int);
+  itkGetMacro(TileSize, unsigned int);
 
   /** Set CGI filename path */
   itkSetStringMacro(CGIPath);
@@ -154,7 +154,7 @@ public:
   }
 
   /** Macro to set the SRID we want to project Data in*/
-  itkSetMacro(SRID,int);
+  itkSetMacro(SRID, int);
   
 protected:
   MapFileProductWriter();
@@ -213,7 +213,7 @@ private:
   typename DataNodeType::Pointer                   m_Polygon;
   typename DataNodeType::Pointer                   m_Folder;
 
-  // Projection Filter 
+  // Projection Filter
   GenericRSResamplerPointerType                    m_GenericRSResampler;
   
   // Tile size
@@ -228,7 +228,7 @@ private:
 
   std::ofstream                 m_File;
 
-  int                           m_SRID;    
+  int                           m_SRID;
 };
 
 } // end namespace otb
@@ -237,4 +237,4 @@ private:
 #include "otbMapFileProductWriter.txx"
 #endif
 
-#endif 
+#endif

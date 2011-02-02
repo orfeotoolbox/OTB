@@ -50,19 +50,19 @@ int otbImageFunctionAdapterNew(int argc, char * argv[])
   typedef otb::RadiometricMomentsImageFunction<InputImageType>          RaMFunctionType;
   typedef otb::LocalHistogramImageFunction<InputImageType>              LHFunctionType;
 
-  typedef otb::ImageFunctionAdapter<InputImageType, 
+  typedef otb::ImageFunctionAdapter<InputImageType,
     FMDFunctionType>                                    FMDImageFunctionAdapterType;
-  typedef otb::ImageFunctionAdapter<InputImageType, 
+  typedef otb::ImageFunctionAdapter<InputImageType,
     RMFunctionType>                                     RMImageFunctionAdapterType;
-  typedef otb::ImageFunctionAdapter<InputImageType, 
+  typedef otb::ImageFunctionAdapter<InputImageType,
     CMFunctionType>                                     CMImageFunctionAdapterType;
-  typedef otb::ImageFunctionAdapter<InputImageType, 
+  typedef otb::ImageFunctionAdapter<InputImageType,
     FMFunctionType>                                     FMImageFunctionAdapterType;
-  typedef otb::ImageFunctionAdapter<InputImageType, 
+  typedef otb::ImageFunctionAdapter<InputImageType,
     HMFunctionType>                                     HMImageFunctionAdapterType;
-  typedef otb::ImageFunctionAdapter<InputImageType, 
+  typedef otb::ImageFunctionAdapter<InputImageType,
     RaMFunctionType>                                    RaMImageFunctionAdapterType;
-  typedef otb::ImageFunctionAdapter<InputImageType, 
+  typedef otb::ImageFunctionAdapter<InputImageType,
     LHFunctionType>                                     LHImageFunctionAdapterType;
 
   // Instantiating objects
@@ -104,19 +104,19 @@ int otbImageFunctionAdapter(int argc, char * argv[])
   typedef otb::RadiometricMomentsImageFunction<InputImageType>          RaMFunctionType;
   typedef otb::LocalHistogramImageFunction<InputImageType>              LHFunctionType;
 
-  typedef otb::ImageFunctionAdapter<InputImageType, 
+  typedef otb::ImageFunctionAdapter<InputImageType,
     FMDFunctionType>                                    FMDImageFunctionAdapterType;
-  typedef otb::ImageFunctionAdapter<InputImageType, 
+  typedef otb::ImageFunctionAdapter<InputImageType,
     RMFunctionType>                                     RMImageFunctionAdapterType;
-  typedef otb::ImageFunctionAdapter<InputImageType, 
+  typedef otb::ImageFunctionAdapter<InputImageType,
     CMFunctionType>                                     CMImageFunctionAdapterType;
-  typedef otb::ImageFunctionAdapter<InputImageType, 
+  typedef otb::ImageFunctionAdapter<InputImageType,
     FMFunctionType>                                     FMImageFunctionAdapterType;
-  typedef otb::ImageFunctionAdapter<InputImageType, 
+  typedef otb::ImageFunctionAdapter<InputImageType,
     HMFunctionType>                                     HMImageFunctionAdapterType;
-  typedef otb::ImageFunctionAdapter<InputImageType, 
+  typedef otb::ImageFunctionAdapter<InputImageType,
     RaMFunctionType>                                    RaMImageFunctionAdapterType;
-  typedef otb::ImageFunctionAdapter<InputImageType, 
+  typedef otb::ImageFunctionAdapter<InputImageType,
     LHFunctionType>                                     LHImageFunctionAdapterType;
 
   // Instantiating objects
@@ -147,7 +147,7 @@ int otbImageFunctionAdapter(int argc, char * argv[])
   index[0] = 100;
   index[1] = 100;
   
-  // Content testing 
+  // Content testing
   double error = 0.0;
 
   FMDFunction->SetInputImage(reader->GetOutput());
@@ -169,7 +169,7 @@ int otbImageFunctionAdapter(int argc, char * argv[])
       {
       error += vcl_pow(vcl_abs(resultAdaptedFMD[rsltIdx] - resultFMD.at(i).at(j)), 2);
     
-      std::cout << "resultAdaptedFMD : " << resultAdaptedFMD[rsltIdx] 
+      std::cout << "resultAdaptedFMD : " << resultAdaptedFMD[rsltIdx]
                 << "\t - resultFMD : " << resultFMD.at(i).at(j) << std::endl;
       rsltIdx ++;
       }
@@ -194,7 +194,7 @@ int otbImageFunctionAdapter(int argc, char * argv[])
       {
       error += vcl_pow(vcl_abs(resultAdaptedRM[rsltIdx] - resultRM.at(i).at(j)), 2);
 
-      std::cout << "resultAdaptedRM : " << resultAdaptedRM[rsltIdx] 
+      std::cout << "resultAdaptedRM : " << resultAdaptedRM[rsltIdx]
                 << "\t - resultRM : " << resultRM.at(i).at(j) << std::endl;
       rsltIdx ++;
       }
@@ -240,7 +240,7 @@ int otbImageFunctionAdapter(int argc, char * argv[])
     {
       error += vcl_pow(vcl_abs(resultAdaptedFM[rsltIdx] - resultFM[i]), 2);
 
-      std::cout << "resultAdaptedFM : " << resultAdaptedFM[rsltIdx] 
+      std::cout << "resultAdaptedFM : " << resultAdaptedFM[rsltIdx]
                 << "\t - resultFM : " << resultFM[i] << std::endl;
       rsltIdx ++;
     }
@@ -258,7 +258,7 @@ int otbImageFunctionAdapter(int argc, char * argv[])
     {
     error += vcl_pow(vcl_abs(resultAdaptedHM[rsltIdx] - resultHM[i]), 2);
 
-    std::cout << "resultAdaptedHM : " << resultAdaptedHM[rsltIdx] 
+    std::cout << "resultAdaptedHM : " << resultAdaptedHM[rsltIdx]
               << "\t - resultHM : " << resultHM[i] << std::endl;
     rsltIdx ++;
     }
@@ -273,10 +273,10 @@ int otbImageFunctionAdapter(int argc, char * argv[])
   
   rsltIdx = 0;
   for (unsigned int i=0; i<4; i++)
-    { 
+    {
     error += vcl_pow(vcl_abs(resultAdaptedRaM[rsltIdx] - resultRaM[i]), 2);
 
-    std::cout << "resultAdaptedRaM : " << resultAdaptedRaM[rsltIdx] 
+    std::cout << "resultAdaptedRaM : " << resultAdaptedRaM[rsltIdx]
               << "\t - resultRaM : " << resultRaM[i] << std::endl;
     rsltIdx ++;
     }

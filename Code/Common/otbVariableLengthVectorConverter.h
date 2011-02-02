@@ -35,7 +35,7 @@ namespace otb
  *
  * To be usable, the desired convertion must be implemented through
  * partial specialisation mecanism.
- * 
+ *
  */
 
 //Base
@@ -54,7 +54,7 @@ public:
   itkTypeMacro(VariableLengthVectorConverter, ProcessObject);
 
   /** Method for creation through the object factory. */
-  itkNewMacro(Self); 
+  itkNewMacro(Self);
 
   typedef TPrecisionType                                            OutputPrecisionType;
   typedef typename itk::VariableLengthVector<OutputPrecisionType>   OutputType;
@@ -71,7 +71,7 @@ protected:
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
     Superclass::PrintSelf(os, indent);
-    os << "Attempt to use inexistant implementation of the converter!" 
+    os << "Attempt to use inexistant implementation of the converter!"
        << std::endl;
   }
 
@@ -98,7 +98,7 @@ public:
   itkTypeMacro(VariableLengthVectorConverter, ProcessObject);
 
   /** Method for creation through the object factory. */
-  itkNewMacro(Self); 
+  itkNewMacro(Self);
 
   typedef TPrecisionType                                            OutputPrecisionType;
   typedef typename itk::VariableLengthVector<OutputPrecisionType>   OutputType;
@@ -112,7 +112,7 @@ protected:
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
     Superclass::PrintSelf(os, indent);
-    os << "Converter: std::vector<std::vector<RealType>>  => VariableLengthVector<RealType>" 
+    os << "Converter: std::vector<std::vector<RealType>>  => VariableLengthVector<RealType>"
        << std::endl;
   }
 
@@ -139,7 +139,7 @@ public:
   itkTypeMacro(VariableLengthVectorConverter, ProcessObject);
 
   /** Method for creation through the object factory. */
-  itkNewMacro(Self); 
+  itkNewMacro(Self);
 
   typedef TPrecisionType                                                           OutputPrecisionType;
   typedef typename itk::VariableLengthVector<OutputPrecisionType>                  OutputType;
@@ -153,7 +153,7 @@ protected:
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
     Superclass::PrintSelf(os, indent);
-    os << "Converter: std::vector<std::vector<std::complex<RealType>>>  => VariableLengthVector<RealType>" 
+    os << "Converter: std::vector<std::vector<std::complex<RealType>>>  => VariableLengthVector<RealType>"
        << std::endl;
   }
 
@@ -180,7 +180,7 @@ public:
   itkTypeMacro(VariableLengthVectorConverter, ProcessObject);
 
   /** Method for creation through the object factory. */
-  itkNewMacro(Self); 
+  itkNewMacro(Self);
 
   typedef TPrecisionType                                                           OutputPrecisionType;
   typedef typename itk::VariableLengthVector<OutputPrecisionType>                  OutputType;
@@ -194,7 +194,7 @@ protected:
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
     Superclass::PrintSelf(os, indent);
-    os << "Converter: itk::FixedArray<RealType, VArrayDimension>  => VariableLengthVector<RealType>" 
+    os << "Converter: itk::FixedArray<RealType, VArrayDimension>  => VariableLengthVector<RealType>"
        << std::endl;
   }
 
@@ -220,7 +220,7 @@ public:
   itkTypeMacro(VariableLengthVectorConverter, ProcessObject);
 
   /** Method for creation through the object factory. */
-  itkNewMacro(Self); 
+  itkNewMacro(Self);
 
   typedef TPrecisionType                                                           OutputPrecisionType;
   typedef typename itk::VariableLengthVector<OutputPrecisionType>                  OutputType;
@@ -234,7 +234,7 @@ protected:
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
     Superclass::PrintSelf(os, indent);
-    os << "Converter: itk::Statistics::Histogram<RealType, VMeasurementVectorSize, TFrequencyContainer>  => VariableLengthVector<RealType>" 
+    os << "Converter: itk::Statistics::Histogram<RealType, VMeasurementVectorSize, TFrequencyContainer>  => VariableLengthVector<RealType>"
        << std::endl;
   }
 

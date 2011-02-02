@@ -18,7 +18,7 @@
 
 //  Software Guide : BeginCommandLineArgs
 //  INPUTS: {${INPUTLARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF}, {${INPUTLARGEDATA}/VECTOR/MidiPyrenees/roads.shp}
-//  ${OTB_DATA_ROOT}/Examples/DEM_srtm 1
+//  ${OTB_DATA_ROOT}/Examples/DEM_srtm 1 ${OTB_DATA_ROOT}/Baseline/OTB/Files/DejaVuSans.ttf
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
@@ -69,17 +69,31 @@ int main( int argc, char * argv[] )
   const string infname = argv[1];
   const string vectorfname = argv[2];
   const string demdirectory = argv[3];
-  const string fontfilename = argv[5];
+  std::string fontfilename;
   int run   = 1;
-  if (argc > 4)
-  {
-    run = atoi(argv[4]);
-  }
+  bool inFont = false;
 
-  typedef otb::VectorImage<double,2>                  ImageType;
+  if (argc == 5)
+    {
+      run = atoi(argv[4]);
+    }
+  else if (argc == 6)
+    {
+    inFont = true;
+    std::string fontFilenameArg = argv[5];
+    fontfilename.assign(fontFilenameArg );
+    }
+  else if (argc != 4)
+    {
+    std::cout << "Invalid parameters: " << std::endl;
+    std::cout << argv[0] << " <image filename>  <vector filename> <DEM directory> [<run> = 1] [<font filename> = default font]" << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  typedef otb::VectorImage<double, 2>                  ImageType;
   typedef ImageType::PixelType                        PixelType;
   typedef itk::RGBAPixel<unsigned char>               RGBAPixelType;
-  typedef otb::Image<RGBAPixelType,2>                 OutputImageType;
+  typedef otb::Image<RGBAPixelType, 2>                 OutputImageType;
 
   // Reading input image
   typedef otb::ImageFileReader<ImageType>            ReaderType;
@@ -96,13 +110,13 @@ int main( int argc, char * argv[] )
   typedef otb::ImageView<ModelType>                   ViewType;
   typedef otb::ImageWidgetController                  ControllerType;
   typedef otb::WidgetResizingActionHandler
-    <ModelType,ViewType>                              ResizingHandlerType;
+    <ModelType, ViewType>                              ResizingHandlerType;
   typedef otb::ChangeScaledExtractRegionActionHandler
-    <ModelType,ViewType>                              ChangeScaledRegionHandlerType;
+    <ModelType, ViewType>                              ChangeScaledRegionHandlerType;
   typedef otb::ChangeExtractRegionActionHandler
-    <ModelType,ViewType>                              ChangeRegionHandlerType;
+    <ModelType, ViewType>                              ChangeRegionHandlerType;
   typedef otb::ChangeScaleActionHandler
-    <ModelType,ViewType>                              ChangeScaleHandlerType;
+    <ModelType, ViewType>                              ChangeScaleHandlerType;
   typedef otb::PixelDescriptionModel<OutputImageType> PixelDescriptionModelType;
   typedef otb::PixelDescriptionActionHandler
     < PixelDescriptionModelType, ViewType>            PixelDescriptionActionHandlerType;
@@ -156,7 +170,7 @@ int main( int argc, char * argv[] )
   // set up the rendering of the vector data, the VectorDataToImageFilter uses the
   // mapnik library to obtain a nice rendering
   typedef itk::RGBAPixel<unsigned char>                                AlphaPixelType;
-  typedef otb::Image<AlphaPixelType,2>                                 AlphaImageType;
+  typedef otb::Image<AlphaPixelType, 2>                                 AlphaImageType;
   typedef otb::VectorDataToImageFilter<VectorDataType, AlphaImageType> VectorDataToImageFilterType;
   VectorDataToImageFilterType::Pointer vectorDataRendering = VectorDataToImageFilterType::New();
   vectorDataRendering->SetInput(projection->GetOutput());
@@ -165,7 +179,8 @@ int main( int argc, char * argv[] )
   vectorDataRendering->SetOrigin(origin);
   vectorDataRendering->SetSpacing(spacing);
   vectorDataRendering->SetScaleFactor(2.4);
-  vectorDataRendering->SetFontFileName(fontfilename);
+  if (inFont)
+    vectorDataRendering->SetFontFileName(fontfilename);
   // set up the style we want to use
   vectorDataRendering->AddStyle("minor-roads-casing");
   vectorDataRendering->AddStyle("minor-roads");
@@ -191,7 +206,8 @@ int main( int argc, char * argv[] )
   vectorDataRenderingQL->SetOrigin(origin);
   vectorDataRenderingQL->SetSpacing(spacingQL);
   vectorDataRenderingQL->SetScaleFactor(2.4*qlRatio);
-  vectorDataRenderingQL->SetFontFileName(fontfilename);
+  if (inFont)
+    vectorDataRenderingQL->SetFontFileName(fontfilename);
   vectorDataRenderingQL->AddStyle("minor-roads-casing");
   vectorDataRenderingQL->AddStyle("minor-roads");
   vectorDataRenderingQL->AddStyle("roads");
@@ -278,7 +294,7 @@ int main( int argc, char * argv[] )
   typedef LayerType::HistogramType            HistogramType;
   typedef otb::HistogramCurve<HistogramType>  HistogramCurveType;
 
-  HistogramCurveType::ColorType red,green,blue;
+  HistogramCurveType::ColorType red, green, blue;
   red.Fill(0);
   red[0]=1.;
   red[3]=0.5;

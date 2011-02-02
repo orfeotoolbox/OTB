@@ -49,19 +49,19 @@ namespace otb
  *
  * \par
  * In this work, several 'windows' are estimated. In two dimensions, the
- * interpolation at a position (x,y) is given by the following
+ * interpolation at a position (x, y) is given by the following
  * expression:
  *
  * \par
  * \f[
- *   I(x,y) =
+ *   I(x, y) =
  *     \sum_{i = \lfloor x \rfloor + 1 - m}^{\lfloor x \rfloor + m}
  *     \sum_{j = \lfloor y \rfloor + 1 - m}^{\lfloor y \rfloor + m}
- *     I_{i,j} K(x-i) K(y-j),
+ *     I_{i, j} K(x-i) K(y-j),
  * \f]
  *
  * \par
- * where m is the 'radius' of the window, (3,4 are reasonable numbers),
+ * where m is the 'radius' of the window, (3, 4 are reasonable numbers),
  * and K(t) is the kernel function, composed of the sinc function and
  * one of several possible window functions:
  *
@@ -73,7 +73,7 @@ namespace otb
  * \par
  * Several window functions are provided here in the itk::Function
  * namespace. The conclusions of the referenced paper suggest to use the
- * Welch, Cosine, Kaiser, and Lanczos windows for m = 4,5. These are based
+ * Welch, Cosine, Kaiser, and Lanczos windows for m = 4, 5. These are based
  * on error in rotating medical images w.r.t. the linear interpolation
  * method. In some cases the results achieve a 20-fold improvement in
  * accuracy.
@@ -113,7 +113,7 @@ namespace otb
  * window by the kernel weights. The first is done more or less
  * efficiently in \f$ 2 m d \f$ operations (where d is the
  * dimensionality of the image). The second can be done
- * better. Presently, each pixel \f$ I(i,j,k) \f$ is multiplied by the
+ * better. Presently, each pixel \f$ I(i, j, k) \f$ is multiplied by the
  * weights \f$ K(x-i), K(y-j), K(z-k) \f$ and added to the running
  * total. This results in \f$ d (2m)^d \f$ multiplication
  * operations. However, by keeping intermediate sums, it would be

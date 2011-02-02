@@ -38,13 +38,13 @@ namespace otb
  */
 template <class TInputPixelType, class TOutputPixelType>
 class ITK_EXPORT MultiToMonoChannelExtractROI :
-//    public ExtractROIBase< itk::VectorImage<TInputPixelType,2> , itk::Image<TOutputPixelType,2> >
+//    public ExtractROIBase< itk::VectorImage<TInputPixelType, 2> , itk::Image<TOutputPixelType, 2> >
   public ExtractROIBase<VectorImage<TInputPixelType, 2>, Image<TOutputPixelType, 2> >
 {
 public:
   /** Standard class typedefs. */
   typedef MultiToMonoChannelExtractROI Self;
-//  typedef ExtractROIBase< itk::VectorImage<TInputPixelType,2> , itk::Image<TOutputPixelType,2> > Superclass;
+//  typedef ExtractROIBase< itk::VectorImage<TInputPixelType, 2> , itk::Image<TOutputPixelType, 2> > Superclass;
   typedef ExtractROIBase<VectorImage<TInputPixelType, 2>, Image<TOutputPixelType, 2> > Superclass;
   typedef itk::SmartPointer<Self>                                                      Pointer;
   typedef itk::SmartPointer<const Self>                                                ConstPointer;

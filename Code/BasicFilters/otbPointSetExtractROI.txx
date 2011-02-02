@@ -104,11 +104,11 @@ PointSetExtractROI<TInputPointSet, TOutputPointSet>
         && (((point[1] >= m_StartY) && (point[1] < m_StartY + m_SizeY))
             || ((point[1] <= m_StartY) && (point[1] > m_StartY + m_SizeY))))
       {
-      // Add the point 
+      // Add the point
       outPoints->push_back(point);
       // Get & Add the data
       typename InputPointSetType::PixelType  data;
-      inputPointSet->GetPointData(inputPoint.Index(),&data);
+      inputPointSet->GetPointData(inputPoint.Index(), &data);
       outData->push_back(data/*inputData.Value()*/);
       }
     

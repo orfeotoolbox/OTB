@@ -27,14 +27,14 @@ namespace otb
 
 template <class TInputImage, class TOutputImage, class TInterpolatorPrecisionType>
 StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType>
-::StreamingResampleImageFilter() 
+::StreamingResampleImageFilter()
 {
   // internal filters instanciation
   m_DeformationFilter = DeformationFieldGeneratorType::New();
   m_WarpFilter        = WarpImageFilterType::New();
 
   // Initialize the deformation field spacing to zero : inconsistant
-  // value 
+  // value
   this->SetDeformationFieldSpacing(itk::NumericTraits<SpacingType>::Zero);
 
   // Wire minipipeline
@@ -49,7 +49,7 @@ StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionTy
   // Set up progress reporting
   typename itk::ProgressAccumulator::Pointer progress = itk::ProgressAccumulator::New();
   progress->SetMiniPipelineFilter(this);
-  progress->RegisterInternalFilter(m_WarpFilter,1.f);
+  progress->RegisterInternalFilter(m_WarpFilter, 1.f);
 
   m_WarpFilter->GraftOutput(this->GetOutput());
   m_WarpFilter->Update();
@@ -103,17 +103,17 @@ StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionTy
   // Set up deformation field filter
   SizeType deformationFieldLargestSize;
   
-  for(unsigned int dim = 0; dim < InputImageType::ImageDimension;++dim)
+  for(unsigned int dim = 0; dim < InputImageType::ImageDimension; ++dim)
     {
     // vcl_ceil to avoid numerical problems due to division of
-    // spacings 
+    // spacings
     // + 1 :  We need to enlarge the deformation field size cause
     // itk::WarpImageFilter::EvaluateDeformationAtPhysicalPoint needs
     // 4 neighbors and in the edges we can need 1 neighbor pixel
     // outside the field
     deformationFieldLargestSize[dim] = static_cast<unsigned int>(
-      vcl_ceil( largestSize[dim]* 
-                vcl_abs(this->GetOutputSpacing()[dim] / 
+      vcl_ceil( largestSize[dim]*
+                vcl_abs(this->GetOutputSpacing()[dim] /
                         this->GetDeformationFieldSpacing()[dim]))) + 1;
     }
   m_DeformationFilter->SetOutputSize(deformationFieldLargestSize);
@@ -128,7 +128,7 @@ StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionTy
 
 /**
  * Method used to copy the parameters of the input image
- * 
+ *
  */
 template <class TInputImage, class TOutputImage, class TInterpolatorPrecisionType>
 void

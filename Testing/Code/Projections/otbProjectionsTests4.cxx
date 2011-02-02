@@ -33,4 +33,6 @@ void RegisterTests()
   REGISTER_TEST(otbElevDatabaseHeightAboveMSLFunction);
   REGISTER_TEST(otbImageToEnvelopeVectorDataFilterNew);
   REGISTER_TEST(otbImageToEnvelopeVectorDataFilter);
+  REGISTER_TEST(otbImageToGenericRSOutputParametersNew);
+  REGISTER_TEST(otbImageToGenericRSOutputParameters);
 }

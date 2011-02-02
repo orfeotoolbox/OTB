@@ -29,7 +29,7 @@
 //
 //  \itkpiccaption[DiscreteGaussianImageFilter Gaussian diagram.]{Discretized
 //  Gaussian.\label{fig:DiscretizedGaussian}}
-//  \parpic(7cm,4cm)[r]{\includegraphics[width=6cm]{DiscreteGaussian.eps}}
+//  \parpic(7cm, 4cm)[r]{\includegraphics[width=6cm]{DiscreteGaussian.eps}}
 //
 //  The \doxygen{itk}{DiscreteGaussianImageFilter} computes the convolution of the
 //  input image with a Gaussian kernel.  This is done in $ND$ by taking

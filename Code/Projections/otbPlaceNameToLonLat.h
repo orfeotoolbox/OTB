@@ -20,6 +20,7 @@
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"
+#include "otbCurlHelperInterface.h"
 
 namespace otb
 {
@@ -28,7 +29,6 @@ namespace otb
  * \class PlaceNameToLonLat
  * \brief Retrieve Longitude and Latitude coordinates from a place name
  *
-
  */
 
 class ITK_EXPORT PlaceNameToLonLat : public itk::Object
@@ -72,6 +72,10 @@ private:
   double           m_Lat;
   std::string      m_PlaceName;
   SearchMethodEnum m_SearchMethod; //Not implemented yet TODO
+
+  CurlHelperInterface::Pointer m_Curl;
+
+
 };
 
 } // namespace otb

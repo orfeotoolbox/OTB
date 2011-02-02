@@ -70,7 +70,7 @@ int otbSVMClassifierPointSet(int argc, char* argv[])
     mP[1] = pointId;
 
     InputVectorType measure;
-    //measure.push_back(vcl_pow(pointId,2.0));
+    //measure.push_back(vcl_pow(pointId, 2.0));
     measure.push_back(double(2.0 * pointId));
     measure.push_back(double(-10));
 

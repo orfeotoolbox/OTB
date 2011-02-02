@@ -27,7 +27,7 @@ namespace otb
 {
 /** \class GeocentricTransform
  *
- * \brief Convert coordinates from geocentric (X,Y,Z) to geographic (lon, lat, h)
+ * \brief Convert coordinates from geocentric (X, Y, Z) to geographic (lon, lat, h)
  *
  */
 template <InverseOrForwardTransformationEnum TDirectionOfMapping,

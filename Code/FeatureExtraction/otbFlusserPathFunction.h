@@ -43,12 +43,12 @@ namespace otb
  *
  * With :
  *
- *  \f[  c_{p,q}=\int \int (x+iy)^{p} \cdot (x-iy)^{q} \cdot f(x,y) \cdot
+ *  \f[  c_{p, q}=\int \int (x+iy)^{p} \cdot (x-iy)^{q} \cdot f(x, y) \cdot
  dx \cdot dy \f]
  *
  * And:
- *  - \f$(x,y)\f$ pixel localization;
- *  - \f$ f(x,y)\f$ the pixel value over the \f$(x,y)\f$ coordinate.
+ *  - \f$(x, y)\f$ pixel localization;
+ *  - \f$ f(x, y)\f$ the pixel value over the \f$(x, y)\f$ coordinate.
  *
  * This class is templated over the input image type and the
  * coordinate representation type (e.g. float or double).
