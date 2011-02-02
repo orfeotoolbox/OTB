@@ -299,7 +299,7 @@ public:
     bool pbghsr = pbghsrf( newPixel );
     
     // Pit bog spectral category
-    bool pbsc = pbghsr && lMIR1 && lMIR2 && lNDBSI && !(lNIR);
+    bool pbsc = pbghsr && lMIR1 && lMIR2 && lNDBSI && !(lNIR || snicsc);
 
     bool mNDVI = (lv[ LVType::ndvi ] == LVType::Medium);
     bool hNDVI = (lv[ LVType::ndvi ] == LVType::High);
