@@ -33,7 +33,12 @@ PipelineMemoryPrintCalculator
     m_AvailableMemory(256000000),
     m_OptimalNumberOfStreamDivisions(1),
     m_DataToWrite(NULL),
-    m_BiasCorrectionFactor(1.)
+    m_BiasCorrectionFactor(1.),
+    m_VisitedProcessObjects()
+{}
+
+PipelineMemoryPrintCalculator
+::~PipelineMemoryPrintCalculator()
 {}
 
 void
@@ -55,6 +60,9 @@ void
 PipelineMemoryPrintCalculator
 ::Compute()
 {
+  // Clear the visisted process objects set
+  m_VisitedProcessObjects.clear();
+
   // Dry run of pipeline synchronisation
   m_DataToWrite->UpdateOutputInformation();
   m_DataToWrite->SetRequestedRegionToLargestPossibleRegion();
@@ -89,6 +97,17 @@ PipelineMemoryPrintCalculator
 {
   // This variable will store the final print
   MemoryPrintType print = 0;
+
+  // Check if this process object has already been visited
+  if(m_VisitedProcessObjects.count(process))
+    {
+    return print;
+    }
+  // Else register it as a visited process object
+  else
+    {
+    m_VisitedProcessObjects.insert(process);
+    }
 
   // Retrieve the array of inputs
   ProcessObjectType::DataObjectPointerArray inputs = process->GetInputs();

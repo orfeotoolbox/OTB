@@ -21,6 +21,7 @@
 
 #include "itkProcessObject.h"
 #include "itkDataObject.h"
+#include <set>
 
 namespace otb
 {
@@ -63,18 +64,18 @@ class ITK_EXPORT PipelineMemoryPrintCalculator :
 {
 public:
   /** Standard class typedefs */
-  typedef PipelineMemoryPrintCalculator Self;
-  typedef itk::Object                   Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef PipelineMemoryPrintCalculator    Self;
+  typedef itk::Object                      Superclass;
+  typedef itk::SmartPointer<Self>          Pointer;
+  typedef itk::SmartPointer<const Self>    ConstPointer;
 
   /** Useful typedefs */
-  typedef itk::ProcessObject            ProcessObjectType;
-  typedef ProcessObjectType::Pointer    ProcessObjectPointerType;
-  typedef itk::DataObject               DataObjectType;
-  typedef DataObjectType::Pointer       DataObjectPointerType;
-
-  typedef long long int                 MemoryPrintType;
+  typedef itk::ProcessObject               ProcessObjectType;
+  typedef ProcessObjectType::Pointer       ProcessObjectPointerType;
+  typedef itk::DataObject                  DataObjectType;
+  typedef DataObjectType::Pointer          DataObjectPointerType;
+  typedef long long int                    MemoryPrintType;
+  typedef std::set<const ProcessObjectType *> ProcessObjectPointerSetType;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(PipelineMemoryPrintCalculator, itk::Object);
@@ -113,7 +114,7 @@ protected:
   PipelineMemoryPrintCalculator();
 
   /** Destructor */
-  virtual ~PipelineMemoryPrintCalculator() {};
+  virtual ~PipelineMemoryPrintCalculator();
 
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
@@ -142,6 +143,9 @@ private:
 
   /** Bias correction factor */
   double m_BiasCorrectionFactor;
+
+  /** Visited ProcessObject set */
+  ProcessObjectPointerSetType m_VisitedProcessObjects;
 
 };
 } // end of namespace otb
