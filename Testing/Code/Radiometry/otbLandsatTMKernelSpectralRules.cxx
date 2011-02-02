@@ -107,7 +107,7 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
   result = r2Funct(pixel);
   goodResult = static_cast<OutputPixelType>((min123 >= (TV1 * max123))
                                             && (TM4 >= max123)
-                                            && !((TM1<=TM2 && TM2<=TM3 && TM3<=TM4))
+                                            && !(TM1<=TM2 && TM2<=TM3 && TM3<=TM4 && TM3 >= TV1*TM4)
                                             && (TM4 >= TV1*TM5) && (TM5 >= TV1*TM4)
                                             && (TM5 >= TV1*max123) && (TM5 >= TV1*TM7));
 

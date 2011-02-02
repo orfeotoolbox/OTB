@@ -1162,9 +1162,9 @@ public:
 
     bool result = (
       ((min123 >= (this->m_TV1 * max123))
-       && (max123 <= this->m_TV1 * newPixel[this->m_TM4]))
+       && (max123 <= this->m_TV1 * newPixel[this->m_TM4])
       || ((newPixel[this->m_TM2] >= this->m_TV1 * max13)
-          && (max123 <= newPixel[this->m_TM4]))
+          && (max123 <= newPixel[this->m_TM4])))
       && (newPixel[this->m_TM5] <= this->m_TV1 * newPixel[this->m_TM4])
       && (newPixel[this->m_TM5] >= this->m_TV1 * max123)
       && (newPixel[this->m_TM7] <= this->m_TV1 * newPixel[this->m_TM4]));
