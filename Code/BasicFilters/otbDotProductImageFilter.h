@@ -107,7 +107,6 @@ public:
   typedef Functor::DotProductFunctor<
       typename TInputImage::PixelType,
       typename TOutputImage::PixelType> FunctorType;
-  typedef typename FunctorType::MatrixType MatrixType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
