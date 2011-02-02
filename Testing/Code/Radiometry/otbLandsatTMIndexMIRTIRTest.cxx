@@ -37,7 +37,7 @@ int otbLandsatTMIndexMIRTIR(int argc, char * argv[])
   double TM62 = (::atof(argv[7]));
   double TM7 = (::atof(argv[8]));
 
-  double goodResult = (1-TM5)*TM62;
+  double goodResult = 255(1-TM5)*(TM62+100);
 
   std::cout << goodResult;
 

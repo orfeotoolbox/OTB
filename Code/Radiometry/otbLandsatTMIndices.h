@@ -583,7 +583,7 @@ public:
     if( this->m_SAT == L5 )
       tir = newPixel[this->m_TM60];
 
-    double result = (1 - mir1)*tir;
+    double result = 255*(1 - mir1)*(tir+100);
     
     return static_cast<TOutput>(result);
   }
@@ -930,9 +930,9 @@ public:
     m_FvTIR->SetMembership(Medium, 0, 0, 28, 28);
     m_FvTIR->SetMembership(High, 28, 28, maximumValue, maximumValue);
 
-    m_FvMIRTIR->SetMembership(Low, minimumValue, minimumValue, 180, 180);
-    m_FvMIRTIR->SetMembership(Medium, 180, 180, 220, 220);
-    m_FvMIRTIR->SetMembership(High, 220, 220, maximumValue, maximumValue);
+    m_FvMIRTIR->SetMembership(Low, minimumValue, minimumValue, 18000, 18000);
+    m_FvMIRTIR->SetMembership(Medium, 18000, 18000, 22000, 22000);
+    m_FvMIRTIR->SetMembership(High, 22000, 22000, maximumValue, maximumValue);
 
     m_FvNDSIVis->SetMembership(Low, minimumValue, minimumValue, 0, 0);
     m_FvNDSIVis->SetMembership(Medium, 0, 0, 0.5, 0.5);
