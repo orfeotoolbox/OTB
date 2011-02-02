@@ -987,8 +987,8 @@ public:
     m_FvNDSIVis->SetValue( NDSIVis<TInput, PrecisionType>()( newPixel ) );
     result[ ndsivis ] = m_FvNDSIVis->GetMaxVar();
 
-    m_FvNDBBBI->SetValue( NDBBBI<TInput, PrecisionType>()( newPixel ) );
-    result[ ndbbbi ] = m_FvNDBBBI->GetMaxVar();
+    m_FvNDBBBI->SetValue( NDSI<TInput, PrecisionType>()( newPixel ) );
+    result[ ndbbbi ] = m_FvNDSI->GetMaxVar();
 
     m_FvNDVI->SetValue( NDVI<TInput, PrecisionType>()( newPixel ) );
     result[ ndvi ] = m_FvNDVI->GetMaxVar();
