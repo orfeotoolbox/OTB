@@ -444,7 +444,7 @@ public:
 
     bool fbbsr = fbbsrf( newPixel );
     // strong barren land or built up spectral category
-    bool sbbsc = (bbcsr || fbbsr) && lNDVI && lNDBSI && !( hNIR || lMIR1);
+    bool sbbsc = (bbcsr || fbbsr) && lNDVI && hNDBSI && !( hNIR || lMIR1);
     
     bool sbbhtirsc = sbbsc && hTIR;
 
