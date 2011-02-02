@@ -18,6 +18,7 @@
 #include "otbOrthoRectification.h"
 
 #include "otbVectorImage.h"
+#include "otbImage.h"
 
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
@@ -32,8 +33,12 @@
 #include "otbBCOInterpolateImageFunction.h"
 #include "itkNearestNeighborInterpolateImageFunction.h"
 #include "otbImageToGenericRSOutputParameters.h"
-
 #include "projection/ossimUtmProjection.h"
+#include "otbSimpleRcsPanSharpeningFusionImageFilter.h"
+#include "otbVectorRescaleIntensityImageFilter.h"
+
+#include "otbImageToLuminanceImageFilter.h"
+#include "otbLuminanceToReflectanceImageFilter.h"
 
 #include "otbPipelineMemoryPrintCalculator.h"
 
@@ -46,13 +51,14 @@ int generic_main(otb::ApplicationOptionsResult* parseResult,
 {
   try
   {
-    typedef otb::VectorImage<double, 2>                                                  ImageType;
+    typedef otb::VectorImage<unsigned short int, 2>                                                  ImageType;
+    typedef otb::Image<unsigned short int>                                                           PanImageType;
+    //typedef otb::VectorImage<unsigned short int, 2>                                      IntImageType;
     typedef otb::ImageFileReader<ImageType>                                              ReaderType;
-    typedef otb::StreamingImageFileWriter<ImageType>                                     WriterType;
+    typedef otb::StreamingImageFileWriter<ImageType>                                  WriterType;
 
-    typedef TMapProjection                            MapProjectionType;
+    typedef TMapProjection                                                               MapProjectionType;
     typedef otb::OrthoRectificationFilter< ImageType, ImageType,  MapProjectionType >    OrthorectifFilterType;
-    typedef otb::GenericRSResampleImageFilter < ImageType, ImageType >                   ResampleFilterType;
     typedef itk::LinearInterpolateImageFunction<ImageType, double>                       LinearInterpolationType;
     typedef itk::NearestNeighborInterpolateImageFunction<ImageType, double>              NearestNeighborInterpolationType;
     typedef otb::BCOInterpolateImageFunction<ImageType>                                  BCOInterpolationType;
@@ -66,8 +72,27 @@ int generic_main(otb::ApplicationOptionsResult* parseResult,
 
     // Orthorectification filter
     typename OrthorectifFilterType::Pointer orthofilter = OrthorectifFilterType::New();
-    orthofilter->SetInput(reader->GetOutput());
+
+    //compute TOA
+    if (parseResult->IsOptionPresent("TOA"))
+    {
+    typedef ImageToLuminanceImageFilter<ImageType, ImageType>       ImageToLuminanceImageFilterType;;
+    typedef LuminanceToReflectanceImageFilter<ImageType, ImageType> LuminanceToReflectanceImageFilterType;
+ 
+    ImageToLuminanceImageFilterType::Pointer imageToLuminanceFilter = ImageToLuminanceImageFilterType::New();
+    LuminanceToReflectanceImageFilterType::Pointer luminanceToReflectanceFilter = LuminanceToReflectanceImageFilterType::New();
    
+    imageToLuminanceFilter->SetInput(reader->GetOutput());
+    //TODO compute in reflectance *1000 and cast as unsigned short int
+    luminanceToReflectanceFilter->SetInput(imageToLuminanceFilter->GetOutput());
+
+    orthofilter->SetInput(imageToLuminanceFilter->GetOutput());
+    }
+    else
+    {
+    orthofilter->SetInput(reader->GetOutput());
+    }
+    
     // If activated, generate RPC model
     if(parseResult->IsOptionPresent("RPC"))
       {
@@ -198,28 +223,40 @@ int generic_main(otb::ApplicationOptionsResult* parseResult,
         itkGenericExceptionMacro(<< "Interpolator type not recognized, choose one with (parameters) : BCO(0/1), NEARESTNEIGHBOR(0), LINEAR(0)");
         }
       }
-    
-    //Resample xs on pan
-    if ( parseResult->IsOptionPresent("XS") )
-    {
-    ReaderType::Pointer xsreader = ReaderType::New();
-    xsreader->SetFileName(parseResult->GetParameterString("XS"));
-    xsreader->GenerateOutputInformation();
-    //TODO manage calibration case here
 
-    //resample result 
-    ResampleFilterType::Pointer resampler = ResampleFilterType::New();
-    resampler->SetInput(xsreader->GetOutput());
     orthofilter->UpdateOutputInformation();
-    resampler->SetOutputParametersFromImage(orthofilter->GetOutput());
-
-    //Add PAN+XS fusion
-    
-    }
     //Instantiate the writer
     WriterType::Pointer writer = WriterType::New();
     writer->SetFileName(parseResult->GetOutputImage());
+
+    //Resample xs on pan
+    if ( parseResult->IsOptionPresent("Pan") )
+    {
+    typedef otb::ImageFileReader<PanImageType>         PanReaderType;
+    PanReaderType::Pointer panreader = PanReaderType::New();
+    panreader->SetFileName(parseResult->GetParameterString("Pan"));
+    panreader->GenerateOutputInformation();
+
+    //resample result 
+    typedef otb::GenericRSResampleImageFilter < PanImageType, PanImageType >                   ResampleFilterType;
+    ResampleFilterType::Pointer panresampler = ResampleFilterType::New();
+    panresampler->SetInput(panreader->GetOutput());
+    panresampler->SetOutputParametersFromImage(orthofilter->GetOutput());
+    panresampler->UpdateOutputInformation();
+    //Add PAN+XS fusion
+    typedef otb::SimpleRcsPanSharpeningFusionImageFilter
+      <PanImageType, ImageType, ImageType> FusionFilterType;
+    FusionFilterType::Pointer fusion = FusionFilterType::New();
+    fusion->SetPanInput(panresampler->GetOutput());
+    fusion->SetXsInput(orthofilter->GetOutput());
+    fusion->UpdateOutputInformation();
+    
+    writer->SetInput(fusion->GetOutput());
+    }
+    else
+    {
     writer->SetInput(orthofilter->GetOutput());
+    }
 
     //Instantiate the pipeline memory print estimator
     MemoryCalculatorType::Pointer calculator = MemoryCalculatorType::New();
@@ -231,7 +268,7 @@ int generic_main(otb::ApplicationOptionsResult* parseResult,
       calculator->SetAvailableMemory(memory / byteToMegabyte);
       }
 
-    calculator->SetDataToWrite(orthofilter->GetOutput());
+    calculator->SetDataToWrite(writer->GetOutput());
     calculator->Compute();
     
     otbMsgDevMacro(<< "Guess the pipeline memory print " << calculator->GetMemoryPrint()*byteToMegabyte << " Mo");
@@ -277,7 +314,8 @@ int OrthoRectification::Describe(ApplicationDescriptor* descriptor)
   descriptor->SetName("FastOrthoRectif");
   descriptor->SetDescription("Using available image metadata to determine the sensor model, computes a cartographic projection of the image");
   descriptor->AddInputImage();
-  descriptor->AddOption("XS","The input multi-spectral image (will perform orthofusion","xs", 1,false,otb::ApplicationDescriptor::InputImage);
+  descriptor->AddOption("Pan","The input pan image (will perform orthofusionbetween input image (xs) and pan","pan", 1,false,otb::ApplicationDescriptor::InputImage);
+  descriptor->AddOption("TOA", "compute reflectance on top of the atmosphere","toa", 0, false,ApplicationDescriptor::Boolean);
   descriptor->AddOutputImage();
   descriptor->AddOption("UpperLeft","Cartographic X/Y coordinate of upper left corner ","ul",2, false, otb::ApplicationDescriptor::Real);
   descriptor->AddOption("OutputSize","Size of result image in X/Y","size",2, false, otb::ApplicationDescriptor::Integer);
@@ -292,7 +330,7 @@ int OrthoRectification::Describe(ApplicationDescriptor* descriptor)
   descriptor->AddOptionNParams("InterpolatorType",
                                "Type LINEAR/BCO/NEARESTNEIGHBOR (optional, linear by default)","interp", false, otb::ApplicationDescriptor::String);
   descriptor->AddOption("AvailableMemory","Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default","ram",1,false, otb::ApplicationDescriptor::Integer);
-
+  
   return EXIT_SUCCESS;
 }
 
