@@ -1744,7 +1744,7 @@ public:
       &&  (newPixel[this->m_TM1] >= this->m_TV2 * newPixel[this->m_TM4])
       &&  (newPixel[this->m_TM3] < this->m_TV1 * newPixel[this->m_TM4])
       &&  (newPixel[this->m_TM5] < this->m_TV1 * newPixel[this->m_TM4])
-      &&  (newPixel[this->m_TM3] >= this->m_TV1 * newPixel[this->m_TM5])
+      &&  (newPixel[this->m_TM3] >= this->m_TV2 * newPixel[this->m_TM5])
       &&  (newPixel[this->m_TM7] < this->m_TV1 * newPixel[this->m_TM4]);
 
     return static_cast<TOutput>(result);

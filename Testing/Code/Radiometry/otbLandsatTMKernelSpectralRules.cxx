@@ -280,7 +280,7 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
                                             && (TM1 >= TV2 * TM4)
                                             && (TM3 < TV1 * TM4)
                                             && (TM5 < TV1 * TM4)
-                                            && (TM3 >= TV1 * TM5)
+                                            && (TM3 >= TV2 * TM5)
                                             && (TM7 < TV1 * TM4));
 
 
