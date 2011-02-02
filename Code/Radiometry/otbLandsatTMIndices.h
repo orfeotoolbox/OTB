@@ -583,7 +583,7 @@ public:
     if( this->m_SAT == L5 )
       tir = newPixel[this->m_TM60];
 
-    double result = (1 - mir1)*tir;
+    double result = 255*(1 - mir1)*(tir+100)/100.;
     
     return static_cast<TOutput>(result);
   }
