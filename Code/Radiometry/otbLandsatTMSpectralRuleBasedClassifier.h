@@ -527,7 +527,7 @@ public:
 
     bool hBright     = (lv[ LVType::bright ] == LVType::High);
     bool hVis        = (lv[ LVType::vis ] == LVType::High);
-    // snow in shadow areas spectral category
+    // turbid water or shadow snow spectral category
     bool twashsnsc = dbsr && shclsnsr && hNDSIVis && lNIR && lMIR1 && lMIR2 && !(hBright || hVis || hNDBSI || hTIR);
     if( twashsnsc )
       return static_cast<TOutput>(TWASHSN);
