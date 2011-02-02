@@ -254,7 +254,7 @@ public:
     
     // snow or ice spectral category
     bool snicsc = (snicsr && lNDBSI && !(lBright ||
-                     lVis || lNDSIVis || lNIR || hMIR1 || hMIR2 || hTIR));
+                     lVis || lNDSIVis || lNIR || hMIR1 || hMIR2 || hTIR || clsc));
 
     // snow spectral category
     if(snicsc && hNDSIVis)
