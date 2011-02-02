@@ -164,24 +164,24 @@ PipelineMemoryPrintCalculator
     return image->GetRequestedRegion().GetNumberOfPixels()              \
       * image->GetNumberOfComponentsPerPixel() * sizeof(type); \
     }                                                                   \
-  if(dynamic_cast<ImageList<Image<type,2> > *>(data) != NULL)   \
+  if(dynamic_cast<ImageList<Image<type, 2> > *>(data) != NULL)   \
     {                                                                   \
-    ImageList<Image<type,2> > * imageList = dynamic_cast<otb::ImageList<otb::Image<type,2> > *>(data); \
+    ImageList<Image<type, 2> > * imageList = dynamic_cast<otb::ImageList<otb::Image<type, 2> > *>(data); \
     MemoryPrintType print(0);                                         \
-    for(ImageList<Image<type,2> >::ConstIterator it = imageList->Begin(); \
-       it != imageList->End();++it)                                    \
+    for(ImageList<Image<type, 2> >::ConstIterator it = imageList->Begin(); \
+       it != imageList->End(); ++it)                                    \
        {                                                             \
        print += it.Get()->GetRequestedRegion().GetNumberOfPixels()   \
        * it.Get()->GetNumberOfComponentsPerPixel() * sizeof(type); \
        }                                                           \
     return print;                                                  \
     }                                                              \
-  if(dynamic_cast<ImageList<VectorImage<type,2> > *>(data) != NULL)   \
+  if(dynamic_cast<ImageList<VectorImage<type, 2> > *>(data) != NULL)   \
     {                                                                   \
-    ImageList<VectorImage<type,2> > * imageList = dynamic_cast<otb::ImageList<otb::VectorImage<type,2> > *>(data); \
+    ImageList<VectorImage<type, 2> > * imageList = dynamic_cast<otb::ImageList<otb::VectorImage<type, 2> > *>(data); \
     MemoryPrintType print(0);                                         \
-    for(ImageList<VectorImage<type,2> >::ConstIterator it = imageList->Begin(); \
-       it != imageList->End();++it)                                    \
+    for(ImageList<VectorImage<type, 2> >::ConstIterator it = imageList->Begin(); \
+       it != imageList->End(); ++it)                                    \
        {                                                             \
        print += it.Get()->GetRequestedRegion().GetNumberOfPixels()   \
        * it.Get()->GetNumberOfComponentsPerPixel() * sizeof(type); \
