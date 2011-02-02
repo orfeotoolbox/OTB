@@ -419,7 +419,7 @@ public:
       return static_cast<TOutput>(DR);
 
     // bright barren land or built up spectral category
-    bool bbbsc = bbcsr && hNIR && hMIR2 && lNDVI && !(lNDBSI || lMIR1);
+    bool bbbsc = bbcsr && hNIR && lNDVI && hNDBSI && !(lMIR1 || lMIR2);
 
     bool lNDBBBI  = (lv[ LVType::ndbbbi ] == LVType::Low);
     
