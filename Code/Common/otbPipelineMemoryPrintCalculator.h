@@ -1,3 +1,4 @@
+
 /*=========================================================================
 
   Program:   ORFEO Toolbox
@@ -81,11 +82,11 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** Get the total memory print (in Mo) */
+  /** Get the total memory print (in bytes) */
   itkGetMacro(MemoryPrint, MemoryPrintType);
 
-  /** Set/Get the available memory for pipeline execution (in Mo,
-   *  default is 256 Mo) */
+  /** Set/Get the available memory for pipeline execution (in bytes,
+   *  default is 256 Mb) */
   itkSetMacro(AvailableMemory, MemoryPrintType);
   itkGetMacro(AvailableMemory, MemoryPrintType);
 
