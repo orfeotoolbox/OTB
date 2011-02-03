@@ -326,7 +326,7 @@ void GDALImageIO::Read(void* buffer)
       // ImageIO NbComponents is set to 2 * m_NbBands
       // m_BytePerPixel is already sizeof(std::complex<m_PxType>) / 2
       pixelOffset = m_BytePerPixel * this->GetNumberOfComponents();
-      lineOffset  = m_BytePerPixel * this->GetNumberOfComponents() * lNbColumns;
+      lineOffset  = pixelOffset * lNbColumns;
       bandOffset = 2 * m_BytePerPixel;
       nbBands = this->GetNumberOfComponents() / 2;
     }
@@ -335,9 +335,15 @@ void GDALImageIO::Read(void* buffer)
     if(!GDALDataTypeIsComplex(m_PxType) && (m_NbBands == 1) && m_IsComplex && m_IsVectorImage )
     {
       pixelOffset = m_BytePerPixel / 2;
-      lineOffset  = m_BytePerPixel * lNbColumns / 2;
+      lineOffset  =pixelOffset * lNbColumns ;
       bandOffset  = m_BytePerPixel / 2;
     }
+    if(!GDALDataTypeIsComplex(m_PxType) && ((unsigned int)m_NbBands == this->GetNumberOfComponents()) && m_IsComplex && m_IsVectorImage && (m_NbBands > 1))
+      {
+      pixelOffset = m_BytePerPixel ;
+      lineOffset  = pixelOffset * lNbColumns ;
+      bandOffset  = m_BytePerPixel / 2;
+      }
 
     // keep it for the moment
     /*
@@ -617,8 +623,8 @@ void GDALImageIO::InternalReadImageInformation()
     this->SetPixelType(VECTOR);
     }
 
-  /* keep it for the moment
-   * std::cout << " *** Parameters set in Internal Read function ***" << std::endl;
+  // keep it for the moment
+  /* std::cout << " *** Parameters set in Internal Read function ***" << std::endl;
   std::cout << " Pixel Type GDAL = "  << GDALGetDataTypeName(m_PxType) << std::endl;
   std::cout << " Pixel Type otb = " << GetPixelTypeAsString(this->GetPixelType()) << std::endl;
   std::cout << " Number of band in file = " << m_NbBands << std::endl;
