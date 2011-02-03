@@ -212,24 +212,20 @@ int generic_main(otb::ApplicationOptionsResult* parseResult,
       {
       long long int memory = static_cast <long long int> (parseResult->GetParameterUInt("AvailableMemory"));
       calculator->SetAvailableMemory(memory / byteToMegabyte);
+      calculator->SetDataToWrite(orthofilter->GetOutput());
+      calculator->Compute();
+      
+      writer->SetTilingStreamDivisions(calculator->GetOptimalNumberOfStreamDivisions());
+      
+      otbMsgDevMacro(<< "Guess the pipeline memory print " << calculator->GetMemoryPrint()*byteToMegabyte << " Mo");
+      otbMsgDevMacro(<< "Number of stream divisions : " << calculator->GetOptimalNumberOfStreamDivisions());
       }
-
-    calculator->SetDataToWrite(orthofilter->GetOutput());
-    calculator->Compute();
-    
-    otbMsgDevMacro(<< "Guess the pipeline memory print " << calculator->GetMemoryPrint()*byteToMegabyte << " Mo");
     
     if ( parseResult->IsOptionPresent("NumStreamDivisions") )
     {
       writer->SetTilingStreamDivisions(parseResult->GetParameterULong("NumStreamDivisions"));
     }
-    else
-    {
-    writer->SetTilingStreamDivisions(calculator->GetOptimalNumberOfStreamDivisions());
-
-    otbMsgDevMacro(<< "Number of stream divisions : " << calculator->GetOptimalNumberOfStreamDivisions());
-    }
-
+    
     otb::StandardFilterWatcher watcher(writer,"Orthorectification");
 
     writer->Update();
