@@ -35,6 +35,8 @@
 #include "init/ossimInit.h"
 #include "itkFixedArray.h"
 
+#include "otbPipelineMemoryPrintCalculator.h"
+
 namespace otb
 {
 int BundleToPerfectSensor::Describe(ApplicationDescriptor* descriptor)
@@ -42,10 +44,11 @@ int BundleToPerfectSensor::Describe(ApplicationDescriptor* descriptor)
   descriptor->SetName("BundleToSensorModel");
   descriptor->SetDescription("Using available image metadata to determine the sensor model, computes a cartographic projection of the image");
   descriptor->AddOption("DEMDirectory","Directory were to find the DEM tiles","dem",1,false,otb::ApplicationDescriptor::DirectoryName);
-  descriptor->AddOption("NumStreamDivisions","Number of streaming divisions (optional)","stream",1,false,otb::ApplicationDescriptor::Integer);
   descriptor->AddOption("LocMapSpacing","Generate a coarser deformation field with the given spacing.","lmSpacing",1,false,otb::ApplicationDescriptor::Real);
   descriptor->AddOption("InputPanchro","The input panchromatic image","inP", 1,true,otb::ApplicationDescriptor::InputImage);
   descriptor->AddOption("InputXS","The input multi-spectral image","inXS", 1,true,otb::ApplicationDescriptor::InputImage);
+  descriptor->AddOption("AvailableMemory","Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default)","ram",1,false, otb::ApplicationDescriptor::Integer);
+
   descriptor->AddOutputImage();
 
   return EXIT_SUCCESS;
@@ -108,7 +111,10 @@ int BundleToPerfectSensor::Execute(otb::ApplicationOptionsResult* parseResult)
       }
     else
       {
-      resampler->SetDeformationFieldSpacing(spacing);
+      XsImageType::SpacingType defSpacing;
+      defSpacing[0]=10*spacing[0];
+      defSpacing[1]=10*spacing[1];
+      resampler->SetDeformationFieldSpacing(defSpacing);
       }
     
     XsImageType::PixelType defaultValue;
@@ -136,16 +142,22 @@ int BundleToPerfectSensor::Execute(otb::ApplicationOptionsResult* parseResult)
 
     otb::StandardWriterWatcher w4(writer,resampler,"Perfect sensor fusion");
 
-    if ( parseResult->IsOptionPresent("NumStreamDivisions") )
+    otb::PipelineMemoryPrintCalculator::Pointer memoryPrintCalculator = otb::PipelineMemoryPrintCalculator::New();
+    const double byteToMegabyte = 1./vcl_pow(2.0, 20);
+    memoryPrintCalculator->SetDataToWrite(fusionFilter->GetOutput());
+    memoryPrintCalculator->SetAvailableMemory(256 / byteToMegabyte);
+    
+    if (parseResult->IsOptionPresent("AvailableMemory"))
       {
-      std::cout<<"Setting number of stream division to "<<parseResult->GetParameterULong("NumStreamDivisions")<<std::endl;
-      writer->SetTilingStreamDivisions(parseResult->GetParameterULong("NumStreamDivisions"));
+      long long int memory = static_cast <long long int> (parseResult->GetParameterUInt("AvailableMemory"));
+      memoryPrintCalculator->SetAvailableMemory(memory / byteToMegabyte);
       }
-    else
-      {
-      writer->SetTilingStreamDivisions();
-      }
-
+    
+    memoryPrintCalculator->SetBiasCorrectionFactor(1.27);
+    memoryPrintCalculator->Compute();
+  
+    writer->SetTilingStreamDivisions(memoryPrintCalculator->GetOptimalNumberOfStreamDivisions());
+   
     writer->Update();
     }
   catch ( itk::ExceptionObject & err )
