@@ -21,7 +21,7 @@
 
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
-#include "otbStandardFilterWatcher.h"
+#include "otbStandardWriterWatcher.h"
 
 #include "otbOrthoRectificationFilter.h"
 #include "otbMapProjections.h"
@@ -94,8 +94,10 @@ int generic_main(otb::ApplicationOptionsResult* parseResult,
       typedef otb::ImageMetadataInterfaceBase ImageMetadataInterfaceType;
       ImageMetadataInterfaceType::Pointer metadataInterface = ImageMetadataInterfaceFactory::CreateIMI(
         reader->GetOutput()->GetMetaDataDictionary());
-      spacing[0] = metadataInterface->GetXPixelSpacing();
-      spacing[1] = -(metadataInterface->GetYPixelSpacing());
+      double isotropicSpacing = max(metadataInterface->GetXPixelSpacing(),metadataInterface->GetYPixelSpacing());
+
+      spacing[0] =  isotropicSpacing;
+      spacing[1] = -isotropicSpacing;
       }
     genericRSEstimator->ForceSpacingTo(spacing);
 
@@ -167,7 +169,11 @@ int generic_main(otb::ApplicationOptionsResult* parseResult,
       }
     else
       {
-      orthofilter->SetDeformationFieldSpacing(spacing);
+      // By default, generate a 10 times coarser deformation field
+      ImageType::SpacingType defSpacing;
+      defSpacing[0] = 10*spacing[0];
+      defSpacing[1] = 10*spacing[1];
+      orthofilter->SetDeformationFieldSpacing(defSpacing);
       }
 
     // Set the interpolator type
@@ -198,6 +204,12 @@ int generic_main(otb::ApplicationOptionsResult* parseResult,
         itkGenericExceptionMacro(<< "Interpolator type not recognized, choose one with (parameters) : BCO(0/1), NEARESTNEIGHBOR(0), LINEAR(0)");
         }
       }
+    else
+      {
+      // Default is BCO
+      BCOInterpolationType::Pointer interpolator = BCOInterpolationType::New();
+      orthofilter->SetInterpolator(interpolator);
+      }
 
     //Instantiate the writer
     WriterType::Pointer writer = WriterType::New();
@@ -226,7 +238,7 @@ int generic_main(otb::ApplicationOptionsResult* parseResult,
       writer->SetTilingStreamDivisions(parseResult->GetParameterULong("NumStreamDivisions"));
     }
     
-    otb::StandardFilterWatcher watcher(writer,"Orthorectification");
+    otb::StandardWriterWatcher watcher(writer,orthofilter,"Orthorectification");
 
     writer->Update();
   }
@@ -261,15 +273,14 @@ int OrthoRectification::Describe(ApplicationDescriptor* descriptor)
   descriptor->AddOption("OutputSize","Size of result image in X/Y","size",2, false, otb::ApplicationDescriptor::Integer);
   descriptor->AddOption("OutputSpacing","Spacing resolution in meters on X/Y Axis","spacing",2, false, otb::ApplicationDescriptor::Real);
   descriptor->AddOption("DEMDirectory","Directory where to find the DEM tiles","dem",1,false, otb::ApplicationDescriptor::DirectoryName);
-  descriptor->AddOption("NumStreamDivisions","Number of streaming divisions (optional)","stream",1 , false, otb::ApplicationDescriptor::Integer);
   descriptor->AddOptionNParams("MapProjectionType",
                            "Type (UTM/LAMBERT/LAMBERT2/LAMBERT93/SINUS/ECKERT4/TRANSMERCATOR/MOLLWEID) and parameters of map projection used",
                            "mapProj",false, otb::ApplicationDescriptor::String);
   descriptor->AddOption("RPC","Activate RPC sensor model estimation. Parameter is the number of control points per axis.","rpc",1,false, otb::ApplicationDescriptor::Integer);
   descriptor->AddOption("LocMapSpacing","Generate a coarser deformation field with the given spacing.","lmSpacing",1,false, otb::ApplicationDescriptor::Real);
   descriptor->AddOptionNParams("InterpolatorType",
-                               "Type LINEAR/BCO/NEARESTNEIGHBOR (optional, linear by default)","interp", false, otb::ApplicationDescriptor::String);
-  descriptor->AddOption("AvailableMemory","Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default","ram",1,false, otb::ApplicationDescriptor::Integer);
+                               "Type LINEAR/BCO/NEARESTNEIGHBOR (optional, BCO by default)","interp", false, otb::ApplicationDescriptor::String);
+  descriptor->AddOption("AvailableMemory","Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default)","ram",1,false, otb::ApplicationDescriptor::Integer);
 
   return EXIT_SUCCESS;
 }
