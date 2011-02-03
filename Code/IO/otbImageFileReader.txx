@@ -152,12 +152,13 @@ ImageFileReader<TOutputImage>
 
   this->m_ImageIO->SetIORegion(ioRegion);
 
-  typedef itk::DefaultConvertPixelTraits<ITK_TYPENAME TOutputImage::IOPixelType> ConvertPixelTraits;
+  typedef itk::DefaultConvertPixelTraits<ITK_TYPENAME TOutputImage::IOPixelType> ConvertIOPixelTraits;
+  typedef itk::DefaultConvertPixelTraits<ITK_TYPENAME TOutputImage::PixelType> ConvertPixelTraits;
 
   if (this->m_ImageIO->GetComponentTypeInfo()
       == typeid(ITK_TYPENAME ConvertPixelTraits::ComponentType)
       && (this->m_ImageIO->GetNumberOfComponents()
-          == ConvertPixelTraits::GetNumberOfComponents()))
+          == ConvertIOPixelTraits::GetNumberOfComponents()))
     {
     // Have the ImageIO read directly into the allocated buffer
     this->m_ImageIO->Read(buffer);
