@@ -112,7 +112,7 @@ int OpticalCalibration::Execute(otb::ApplicationOptionsResult* parseResult)
     }
   else
     {
-    itkGenericExceptionMacro(<< "No level specified");
+    itkGenericExceptionMacro(<< "No levels of are  specified");
     }
   
 }
