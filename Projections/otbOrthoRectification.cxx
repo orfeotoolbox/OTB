@@ -46,7 +46,7 @@ int generic_main(otb::ApplicationOptionsResult* parseResult,
 {
   try
   {
-    typedef otb::VectorImage<double, 2>       ImageType;
+    typedef otb::VectorImage<unsigned short int, 2>       ImageType;
     typedef otb::ImageFileReader<ImageType>           ReaderType;
     typedef otb::StreamingImageFileWriter<ImageType>  WriterType;
 
@@ -376,7 +376,7 @@ int OrthoRectification::Execute(otb::ApplicationOptionsResult* parseResult)
   else
     {
     //TODO get utm zone and hemispher and build wkt
-    typedef otb::VectorImage<double, 2>       ImageType;
+    typedef otb::VectorImage<unsigned short int, 2>       ImageType;
     typedef otb::ImageFileReader<ImageType>           ReaderType;
 
     typedef otb::UtmInverseProjection UtmProjectionType;
