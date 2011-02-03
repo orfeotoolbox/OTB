@@ -189,6 +189,7 @@ AdhesionCorrectionFilter<TImage, TMask>
   // Update size and spacing according to grid step
   ImageRegionType largestRegion  = outputPtr->GetLargestPossibleRegion();
   SizeType outputSize       = largestRegion.GetSize();
+  m_ImageSize = outputSize;
   SpacingType outputSpacing = outputPtr->GetSpacing();
 
   // Set spacing
@@ -412,12 +413,12 @@ AdhesionCorrectionFilter<TImage, TMask>
 ////				4--->jump due to a hole. Seems to be a right border
 
 	AuxImagePointerType disparity_jump = AuxImageType::New();
-	disparity_jump->SetRegions(outputPtr->GetRequestedRegion());
+	disparity_jump->SetRegions(old_disparityPtr->GetRequestedRegion());
 	disparity_jump->Allocate();
 	disparity_jump->FillBuffer(0);
 	
 	AuxImagePointerType disparity_jump2 = AuxImageType::New();
-	disparity_jump2->SetRegions(outputPtr->GetRequestedRegion());
+	disparity_jump2->SetRegions(old_disparityPtr->GetRequestedRegion());
 	disparity_jump2->Allocate();
 	disparity_jump2->FillBuffer(0);
 	
@@ -427,11 +428,11 @@ AdhesionCorrectionFilter<TImage, TMask>
 	aux->FillBuffer(0);
 	
 	//input iterators //
-	itk::ImageRegionConstIterator<TImage> old_disparityIt(old_disparityPtr,outputPtr->GetRequestedRegion());
-	itk::ImageRegionConstIterator<TMask> old_maskIt(old_maskPtr,outputPtr->GetRequestedRegion());
-	itk::ImageRegionConstIterator<TImage> canny_disparityIt(canny_disparity,outputPtr->GetRequestedRegion());
-	itk::ImageRegionConstIterator<TImage> canny_edgesIt(canny_edges,outputPtr->GetRequestedRegion());
-	
+	itk::ImageRegionConstIterator<TImage> old_disparityIt(old_disparityPtr,old_disparityPtr->GetRequestedRegion());
+	itk::ImageRegionConstIterator<TMask> old_maskIt(old_maskPtr,old_maskPtr->GetRequestedRegion());
+	itk::ImageRegionConstIterator<TImage> canny_disparityIt(canny_disparity,canny_disparity->GetRequestedRegion());
+	itk::ImageRegionConstIterator<TImage> canny_edgesIt(canny_edges,canny_edges->GetRequestedRegion());
+
 	IndexType index, index2, index_pos, index_pos_actual, index_pos_old, index_pos_new, index_pos0;
 	
 	///** Output iterators */
@@ -444,13 +445,13 @@ AdhesionCorrectionFilter<TImage, TMask>
 
 
 	new_maskIt.GoToBegin();
-	old_maskIt.GoToBegin();
 	new_disparityIt.GoToBegin();
-	old_disparityIt.GoToBegin();
 
 	///// INITIALISATION	
 	while (!new_maskIt.IsAtEnd() && !new_disparityIt.IsAtEnd())
 	{
+		old_maskIt.SetIndex(new_maskIt.GetIndex());
+		old_disparityIt.SetIndex(new_disparityIt.GetIndex());
 		new_maskIt.Set(old_maskIt.Get());
 		new_disparityIt.Set(old_disparityIt.Get());
 		++old_disparityIt;
@@ -465,7 +466,7 @@ AdhesionCorrectionFilter<TImage, TMask>
 	while (new_disparityIt.GetIndex()[1]<outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1])
 	{
 		index_pos=new_disparityIt.GetIndex();
-		if (new_disparityIt.GetIndex()[1]>=outputPtr->GetRequestedRegion().GetIndex()[1] && new_disparityIt.GetIndex()[1] < outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1] - win)
+		if (new_disparityIt.GetIndex()[1]>=outputPtr->GetRequestedRegion().GetIndex()[1] && new_disparityIt.GetIndex()[1] < m_ImageSize[1] - win)
 		{
 			old_maskIt.SetIndex(index_pos);
 			while (old_maskIt.Get()==0 && new_disparityIt.GetIndex()[0]<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0])
@@ -958,15 +959,13 @@ std::cout<<"Cut risk edges"<<std::endl;
 	
 	new_disparityIt.GoToBegin();
 
-	while (new_disparityIt.GetIndex()[1]<outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1] - big_win)
+	while (new_disparityIt.GetIndex()[1]<outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1])
 	{
 		index_pos = new_disparityIt.GetIndex();
 		if (index_pos[1]>=big_win + outputPtr->GetRequestedRegion().GetIndex()[1])
 		{
-			while (new_disparityIt.GetIndex()[0]<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0]- big_win)
+			while (new_disparityIt.GetIndex()[0]<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0] -1)
 			{
-				if (new_disparityIt.GetIndex()[0]>=big_win + outputPtr->GetRequestedRegion().GetIndex()[0])
-				{
 					index_pos = new_disparityIt.GetIndex();
 					auxIt.SetIndex(index_pos);
 					if( auxIt.Get() !=0 )
@@ -978,16 +977,19 @@ std::cout<<"Cut risk edges"<<std::endl;
 						{
 							for(int i= -big_win; i<= big_win; i++)
 							{
-								index_pos0[0] = index_pos[0] + i;
-								index_pos0[1] = index_pos[1] + j;
-								old_maskIt.SetIndex(index_pos0);
-								if (old_maskIt.Get() == 1)
+								if (index_pos[0] + i >= old_disparityPtr->GetRequestedRegion().GetIndex()[0] && index_pos[0] + i < old_disparityPtr->GetRequestedRegion().GetSize()[0] + old_disparityPtr->GetRequestedRegion().GetIndex()[0] && index_pos[1] + j >= old_disparityPtr->GetRequestedRegion().GetIndex()[1] && index_pos[1] + j < old_disparityPtr->GetRequestedRegion().GetSize()[1] + old_disparityPtr->GetRequestedRegion().GetIndex()[1])
 								{
-									if (old_disparityPtr->GetPixel(index_pos0) > m_max) m_max = old_disparityPtr->GetPixel(index_pos0);
-									if (old_disparityPtr->GetPixel(index_pos0) < m_min) m_min = old_disparityPtr->GetPixel(index_pos0);
-									Count++;
+									index_pos0[0] = index_pos[0] + i;
+									index_pos0[1] = index_pos[1] + j;
+									old_maskIt.SetIndex(index_pos0);
+									if (old_maskIt.Get() == 1)
+									{
+										if (old_disparityPtr->GetPixel(index_pos0) > m_max) m_max = old_disparityPtr->GetPixel(index_pos0);
+										if (old_disparityPtr->GetPixel(index_pos0) < m_min) m_min = old_disparityPtr->GetPixel(index_pos0);
+										Count++;
+									}
+									new_disparityIt.SetIndex(index_pos);
 								}
-								new_disparityIt.SetIndex(index_pos);
 							}
 						}
 						/// If we have ~ the same disparity in a patch of radious big_win and we known the disparity for more the half pixels in this patch //
@@ -999,17 +1001,19 @@ std::cout<<"Cut risk edges"<<std::endl;
 							{
 								for(int i= -win; i<= win; i++)
 								{
-									index_pos0[0] = index_pos[0] + i;
-									index_pos0[1] = index_pos[1] + j;
-									new_disparityIt.SetIndex(index_pos0);
-									new_maskIt.SetIndex(index_pos0);
-									new_disparityIt.Set(0);
-									new_maskIt.Set(0);
+									if (index_pos[0] + i >= outputPtr->GetRequestedRegion().GetIndex()[0] && index_pos[0] + i < outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0] && index_pos[1] + j >= outputPtr->GetRequestedRegion().GetIndex()[1] && index_pos[1] + j < outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1])
+									{
+										index_pos0[0] = index_pos[0] + i;
+										index_pos0[1] = index_pos[1] + j;
+										new_disparityIt.SetIndex(index_pos0);
+										new_maskIt.SetIndex(index_pos0);
+										new_disparityIt.Set(0);
+										new_maskIt.Set(0);
+									}
 								}
 							}
 						}
 					}
-				}
 				new_disparityIt.SetIndex(index_pos);
 				++new_disparityIt;
 				index_pos = new_disparityIt.GetIndex();
@@ -1504,22 +1508,25 @@ std::cout<<"Vertical lines (perpendicular to epipolar lines) part2"<<std::endl;
 				double disp=old_disparityPtr->GetPixel(index_pos);
 				for (int i=0;i<=big_dist;i++)
 				{
-					index_pos0[0]=index_pos[0];
-					index_pos0[1]=index_pos[1]+i;
-					if (old_maskPtr->GetPixel(index_pos0)==0) k++;
-					else
+					if (index_pos[1]+i < outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1])
 					{
-						if (std::fabs(old_disparityPtr->GetPixel(index_pos0)-disp)>m_Tolerance/2 && k<=win)
-						{//only small holes
-							disparity_jump2It.SetIndex(index_pos0);
-							if (old_disparityPtr->GetPixel(index_pos0)>disp)  disparity_jump2It.Set(8);
-							index[0]=index_pos0[0]-1;
-							index[1]=index_pos0[1];
-							disparity_jump2It.SetIndex(index);
-							if (old_disparityPtr->GetPixel(index_pos0)<disp)  disparity_jump2It.Set(9);
+						index_pos0[0]=index_pos[0];
+						index_pos0[1]=index_pos[1]+i;
+						if (old_maskPtr->GetPixel(index_pos0)==0) k++;
+						else
+						{
+							if (std::fabs(old_disparityPtr->GetPixel(index_pos0)-disp)>m_Tolerance/2 && k<=win)
+							{//only small holes
+								disparity_jump2It.SetIndex(index_pos0);
+								if (old_disparityPtr->GetPixel(index_pos0)>disp)  disparity_jump2It.Set(8);
+								index[0]=index_pos0[0]-1;
+								index[1]=index_pos0[1];
+								disparity_jump2It.SetIndex(index);
+								if (old_disparityPtr->GetPixel(index_pos0)<disp)  disparity_jump2It.Set(9);
+							}
+							k=0;
+							disp=old_disparityPtr->GetPixel(index_pos0);
 						}
-						k=0;
-						disp=old_disparityPtr->GetPixel(index_pos0);
 					}
 				}
 			}

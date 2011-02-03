@@ -162,6 +162,7 @@ private:
   AdhesionCorrectionFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
+	SizeType                      m_ImageSize;
   /** The radius for correlation */
   SizeType                      m_Radius;
 
