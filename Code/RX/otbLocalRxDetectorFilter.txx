@@ -13,9 +13,8 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 LocalRxDetectorFilter<TInputImage, TOutputImage>
 ::LocalRxDetectorFilter()
+ : m_ExternalRadius(2), m_InternalRadius(1)
 {
-	this->m_ExternalRadius = 0;
-	this->m_InternalRadius = 0;
 }
 
 /**
@@ -58,7 +57,7 @@ LocalRxDetectorFilter<TInputImage, TOutputImage>
 {
 	// Get the input and output pointers
 	InputConstPointerType	inputPtr = this->GetInput();
-	OutputPointerType		outputPtr = this->GetOutput();
+	OutputPointerType	outputPtr = this->GetOutput();
 
 	// Support progress methods/callbacks
 	itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());

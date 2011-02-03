@@ -46,7 +46,7 @@ public:
 
 	/** Standard class typedefs. */
 	typedef LocalRxDetectorFilter           						Self;
-	typedef itk::ImageToImageFilter< TInputImage, TOutputImage >	Superclass;
+	typedef itk::ImageToImageFilter< TInputImage, TOutputImage >	                        Superclass;
 	typedef itk::SmartPointer<Self>        							Pointer;
 	typedef itk::SmartPointer<const Self>   						ConstPointer;
 
@@ -57,13 +57,13 @@ public:
     itkTypeMacro(LocalRxDetectorFilter, ImageToImageFilter);
 
     /** typedef related to input and output images */
-    typedef TInputImage								InputImageType;
+    typedef TInputImage					InputImageType;
     typedef typename InputImageType::Pointer		InputPointerType;
     typedef typename InputImageType::ConstPointer	InputConstPointerType;
     typedef typename InputImageType::IndexType		InputIndexType;
     typedef typename InputImageType::SizeType		InputSizeType;
 
-    typedef TOutputImage 							OutputImageType;
+    typedef TOutputImage 				OutputImageType;
     typedef typename OutputImageType::Pointer		OutputPointerType;
     typedef typename OutputImageType::IndexType		OutputIndexType;
     typedef typename OutputImageType::OffsetType	OutputOffsetType;
@@ -71,17 +71,17 @@ public:
     typedef typename OutputImageType::RegionType	OutputImageRegionType;
 
 	/** typedef related to iterators */
-	typedef itk::ConstShapedNeighborhoodIterator<InputImageType> 						ConstShapedNeighborhoodIteratorType;
+	typedef itk::ConstShapedNeighborhoodIterator<InputImageType> 				ConstShapedNeighborhoodIteratorType;
 	typedef itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType> 	VectorFaceCalculatorType;
 	typedef itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<OutputImageType> 	FaceCalculatorType;
 	typedef itk::ImageRegionIterator<OutputImageType> 									ImageRegionIteratorType;
 
 	/** typedef related to statistics */
-	typedef typename InputImageType::PixelType 						VectorMeasurementType;
+	typedef typename InputImageType::PixelType 				VectorMeasurementType;
 	typedef itk::Statistics::ListSample<VectorMeasurementType> 		ListSampleType;
 	typedef itk::Statistics::MeanCalculator<ListSampleType> 		MeanCalculatorType;
-	typedef itk::Statistics::CovarianceCalculator<ListSampleType> 	CovarianceCalculatorType;
-	typedef typename CovarianceCalculatorType::OutputType					MatrixType;
+	typedef itk::Statistics::CovarianceCalculator<ListSampleType> 	        CovarianceCalculatorType;
+	typedef typename CovarianceCalculatorType::OutputType			MatrixType;
 
 	/** Getter and Setter */
 	itkSetMacro(InternalRadius, int);
