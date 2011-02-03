@@ -34,10 +34,10 @@ int LocalRXDetectorTest(int argc, char * argv[])
 	/////////// PARAMETERS ///////////
 
 
-	const char * filename = "cupriteSubHsi.tif";	//argv[1];
-	const char * outputFilename = "test.tif";	//argv[2];
-	const int externalRadius = 7;					//atoi(argv[3]);
-	const int internalRadius = 1;					//atoi(argv[4]);
+	const char * filename = argv[1];
+	const char * outputFilename = argv[2];
+	const int externalRadius = atoi(argv[3]);
+	const int internalRadius = atoi(argv[4]);
 
 	//////// RX Filtering /////////
 

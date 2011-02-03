@@ -177,6 +177,8 @@ ADD_TEST(tuLocalRXDetectorNew
 ADD_TEST(tvLocalRXDetector
          ${TESTEXE_DIR}/otbAnomalyTests1
          LocalRXDetectorTest
-         ${DATA}//home/grizonnetm/OTB/Dev/Hyperspectral/Data/CupriteSubHsi/cupriteSubHsi.tif
+         ${DATA}/CupriteSubHsi/cupriteSubHsi.tif
          ${TEMP}/localRXCupriteSubHsi.tif
+         7 
+         1
          )
