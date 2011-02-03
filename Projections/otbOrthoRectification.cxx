@@ -257,7 +257,7 @@ int generic_main(otb::ApplicationOptionsResult* parseResult,
 
 int OrthoRectification::Describe(ApplicationDescriptor* descriptor)
 {
-  descriptor->SetName("FastOrthoRectif");
+  descriptor->SetName("Orthorectification");
   descriptor->SetDescription("Using available image metadata to determine the sensor model, computes a cartographic projection of the image");
   descriptor->AddInputImage();
   descriptor->AddOutputImage();
