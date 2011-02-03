@@ -43,10 +43,10 @@ namespace otb
 /** \class PersistentLineSegmentDetector
  *  \brief [internal] Helper class for the implementation of LineSegmentDetector
  *  with streaming capabilities.
- *  
+ *
  *  This class inherits PersistentImageFilter and provides the Reset/Synthesize functions,
  *  plus the ThreadedGenerateData function implementing the image function evaluation
- *  
+ *
  */
 template<class TInputImage, class TPrecision = double>
 class ITK_EXPORT PersistentLineSegmentDetector :
@@ -139,12 +139,12 @@ private:
   /** tolerance to fuse 2 lines in 2 threads. */
   double                        m_ThreadDistanceThreshold;
 
-}; 
+};
 
 
 /** \class StreamingLineSegmentDetector
  *  \brief This class streams the whole input image through the PersistentLineSegmentDetector.
- * 
+ *
  *  This way, it allows to compute the inner product of this image. It calls the
  *  Reset() method of the PersistentLineSegmentDetector before streaming the image and the
  *  Synthetize() method of the PersistentLineSegmentDetector after having streamed the image

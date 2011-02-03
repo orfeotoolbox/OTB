@@ -103,16 +103,15 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
   typedef otb::VectorData<PrecisionType> VectorDataType;
-  typedef otb::VectorDataToImageFilter<VectorDataType, 
+  typedef otb::VectorDataToImageFilter<VectorDataType,
       ImageType> VectorDataRendererType;
   VectorDataRendererType::Pointer vectorDataRender = VectorDataRendererType::New();
 
-  typedef otb::Functor::AlphaBlendingFunctor<InputPixelType, 
-    InputPixelType, InputPixelType> FunctorType;  
-  typedef itk::BinaryFunctorImageFilter<ImageType, ImageType, 
+  typedef otb::Functor::AlphaBlendingFunctor<InputPixelType,
+    InputPixelType, InputPixelType> FunctorType;
+  typedef itk::BinaryFunctorImageFilter<ImageType, ImageType,
     ImageType, FunctorType> BlendingFilterType;
   BlendingFilterType::Pointer blendingFilter = BlendingFilterType::New();
-
   // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //

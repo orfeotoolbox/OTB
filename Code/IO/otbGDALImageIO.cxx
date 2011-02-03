@@ -335,13 +335,13 @@ void GDALImageIO::Read(void* buffer)
     if(!GDALDataTypeIsComplex(m_PxType) && (m_NbBands == 1) && m_IsComplex && m_IsVectorImage )
     {
       pixelOffset = m_BytePerPixel / 2;
-      lineOffset  =pixelOffset * lNbColumns ;
+      lineOffset  =pixelOffset * lNbColumns;
       bandOffset  = m_BytePerPixel / 2;
     }
     if(!GDALDataTypeIsComplex(m_PxType) && ((unsigned int)m_NbBands == this->GetNumberOfComponents()) && m_IsComplex && m_IsVectorImage && (m_NbBands > 1))
       {
-      pixelOffset = m_BytePerPixel ;
-      lineOffset  = pixelOffset * lNbColumns ;
+      pixelOffset = m_BytePerPixel;
+      lineOffset  = pixelOffset * lNbColumns;
       bandOffset  = m_BytePerPixel / 2;
       }
 

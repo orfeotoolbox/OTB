@@ -153,7 +153,7 @@ PersistentLineSegmentDetector<TInputImage, TPrecision>
   outputVData->GetDataTree()->Add(folder, document);
 
   for (unsigned int threadId = 0; threadId < m_VectorDataList.size(); ++threadId)
-    {    
+    {
     TreeIteratorType itCurrentVData(m_VectorDataList[threadId]->GetDataTree());
     itCurrentVData.GoToBegin();
     while (!itCurrentVData.IsAtEnd())
@@ -218,7 +218,6 @@ PersistentLineSegmentDetector<TInputImage, TPrecision>
   m_RegionList[threadId] = outputRegionForThread;
   m_VectorDataList[threadId] =  m_LineDetectorList[threadId]->GetOutput();
 }
-
 
 
 // end of class PersistentLineSegmentDetector

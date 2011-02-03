@@ -322,14 +322,14 @@ LineSegmentDetector<TInputImage, TPrecision>
     {
     VertexType start, end;
     
-    start[0] = origin[0] 
+    start[0] = origin[0]
       + static_cast<TPrecision>((*itRec)[0]) * spacing[0];
-    start[1] = origin[1] 
+    start[1] = origin[1]
       + static_cast<TPrecision>((*itRec)[1]) * spacing[1];
 
-    end[0] = origin[0] 
+    end[0] = origin[0]
       + static_cast<TPrecision>((*itRec)[2]) * spacing[0];
-    end[1] = origin[1] 
+    end[1] = origin[1]
       + static_cast<TPrecision>((*itRec)[3]) * spacing[1];
     
     typename DataNodeType::Pointer CurrentGeometry = DataNodeType::New();
@@ -577,7 +577,7 @@ template <class TInputImage, class TPrecision>
 void
 LineSegmentDetector<TInputImage, TPrecision>
 ::SetPixelToUsed(InputIndexType index)
-{          
+{
   typedef itk::NeighborhoodIterator<LabelImageType> NeighborhoodLabelIteratorType;
   typename NeighborhoodLabelIteratorType::SizeType radiusLabel;
   radiusLabel.Fill(0);
