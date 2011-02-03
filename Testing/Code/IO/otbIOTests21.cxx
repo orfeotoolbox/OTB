@@ -32,6 +32,7 @@ void RegisterTests()
   REGISTER_TEST(otbKmzProductWriter);
   REGISTER_TEST(otbKmzProductWriter);
   REGISTER_TEST(otbTileMapImageIOHelperNew);
+  REGISTER_TEST(otbTileMapImageIOHelperTest);
   REGISTER_TEST(otbKmzProductWriterWithLogoAndLegend);
   // Complex tests
   REGISTER_TEST(otbMonobandScalarToImageComplexFloat);
