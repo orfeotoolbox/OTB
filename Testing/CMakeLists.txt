@@ -162,6 +162,7 @@ ADD_TEST(hyVCA_AVIRIS
 
 SET( otbAnomalyTests1_SRC
      LocalRxDetectorTest.cxx
+     LocalRxDetectorRoiTest.cxx
      #LocalRxDetectorNonTrhreadedTest.cxx
      #LocalRxDetectorRoiNonThreadedTest.cxx
 )
@@ -181,4 +182,15 @@ ADD_TEST(tvLocalRXDetector
          ${TEMP}/localRXCupriteSubHsi.tif
          7 
          1
+         )
+
+ADD_TEST(tvLocalRXDetectorROI
+         ${TESTEXE_DIR}/otbAnomalyTests1
+         LocalRXDetectorROITest
+         ${DATA}/CupriteSubHsi/cupriteSubHsi.tif
+         ${TEMP}/localRXROICupriteSubHsi.tif
+         7 
+         1
+         60 
+         60
          )

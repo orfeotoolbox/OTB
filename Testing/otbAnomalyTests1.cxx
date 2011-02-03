@@ -25,4 +25,5 @@ void RegisterTests()
 {
   REGISTER_TEST(LocalRXDetectorNewTest);
   REGISTER_TEST(LocalRXDetectorTest);
+  REGISTER_TEST(LocalRXDetectorROITest);
 }

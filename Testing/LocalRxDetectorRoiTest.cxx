@@ -7,7 +7,7 @@
 #include "otbExtractROI.h"
 
 
-int main(int argc, char * argv[])
+int LocalRXDetectorROITest(int argc, char * argv[])
 {
 	typedef double PixelType;
 	typedef otb::VectorImage<PixelType, 2> VectorImageType;
@@ -23,14 +23,13 @@ int main(int argc, char * argv[])
 
 
 	//---------------    Parameters   ------------------//
+	const char * filename = argv[1];
+	const char * outputFilename = argv[2];
+	const int externalRadius = atoi(argv[3]);
+	const int internalRadius = atoi(argv[4]);
 
-	const char * filename = "cupriteSubHsi.tif";
-	const char * outputFilename = "roiTest.tif";
-	const int externalRadius = 7;
-	const int internalRadius = 1;
-
-	const int nbCol = atoi(argv[1]);
-	const int nbRow = atoi(argv[2]);
+	const int nbCol = atoi(argv[5]);
+	const int nbRow = atoi(argv[6]);
 
 	const int idxCol = 0;
 	const int idxRow = 0;
