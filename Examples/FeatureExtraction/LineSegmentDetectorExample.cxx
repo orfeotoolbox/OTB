@@ -17,10 +17,12 @@
 =========================================================================*/
 
 #include "otbImage.h"
-#include "otbDrawLineSpatialObjectListFilter.h"
-#include "otbLineSpatialObjectList.h"
+#include "otbVectorData.h"
 
 #include "otbImageFileReader.h"
+#include "otbVectorDataToImageFilter.h"
+#include "otbAlphaBlendingFunctor.h"
+#include "itkBinaryFunctorImageFilter.h"
 #include "otbImageFileWriter.h"
 
 //  Software Guide : BeginCommandLineArgs
@@ -78,7 +80,7 @@ int main(int argc, char * argv[])
 // templated over the input image type and the precision with which
 // the coordinates of the detected segments will be given. It is
 // recommended to set this precision to a real type. The output of the
-// filter will be a list of \doxygen{itk}{LineSpatialObject}s.
+// filter will be a \doxygen{otb}{VectorData}.
 //
 // Software Guide : EndLatex
 
@@ -92,15 +94,25 @@ int main(int argc, char * argv[])
 //
 // In order to be able to display the results, we will draw the
 // detected segments on top of the input image. For this matter, we
-// will use the \doxygen{otb}{DrawLineSpatialObjectListFilter} which
-// is templated over the input and output image types.
+// will use a \doxygen{otb}{VectorDataToImageFilter} which
+// is templated over the input vector data type and the output image
+// type, and a conbination of a \doxygen{itk}{binaryFunctorImageFilter}
+// and the \doxygen{otb}{Functor}{UnaryFunctorImageFilter}.
 //
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef otb::DrawLineSpatialObjectListFilter<ImageType,
-      ImageType> DrawLineListType;
-  DrawLineListType::Pointer drawLineFilter =   DrawLineListType::New();
+  typedef otb::VectorData<PrecisionType> VectorDataType;
+  typedef otb::VectorDataToImageFilter<VectorDataType, 
+      ImageType> VectorDataRendererType;
+  VectorDataRendererType::Pointer vectorDataRender = VectorDataRendererType::New();
+
+  typedef otb::Functor::AlphaBlendingFunctor<InputPixelType, 
+    InputPixelType, InputPixelType> FunctorType;  
+  typedef itk::BinaryFunctorImageFilter<ImageType, ImageType, 
+    ImageType, FunctorType> BlendingFilterType;
+  BlendingFilterType::Pointer blendingFilter = BlendingFilterType::New();
+
   // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -122,11 +134,17 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
   lsdFilter->SetInput(reader->GetOutput());
-  writer->SetInput(drawLineFilter->GetOutput());
 
-  drawLineFilter->SetInput(reader->GetOutput());
-  drawLineFilter->SetInputLineSpatialObjectList(lsdFilter->GetOutput());
-  // Software Guide : EndCodeSnippet
+  vectorDataRender->SetInput(lsdFilter->GetOutput());
+  vectorDataRender->SetSize(reader->GetOutput()->GetLargestPossibleRegion().GetSize());
+  vectorDataRender->SetRenderingStyleType(VectorDataRendererType::Binary);
+
+  blendingFilter->SetInput1(reader->GetOutput());
+  blendingFilter->SetInput2(vectorDataRenderer->GetOutput());
+  blendingFilter->GetFunctor()->SetAlpha(0.5);
+
+  writer->SetInput(blendingFilter->GetOutput());
+// Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
 // Before calling the \code{Update()} method of the writer in order to

@@ -60,7 +60,7 @@ int otbLineSpatialObjectListToRightAnglePointSetFilterByStepsOutputAscii(int arg
   lsdFilter->SetInput(reader->GetOutput());
 
   rightAngleFilter->SetInputImage(reader->GetOutput());
-  rightAngleFilter->SetInput(lsdFilter->GetOutput());
+  //rightAngleFilter->SetInput(lsdFilter->GetOutput());
   rightAngleFilter->Update();
 
   std::cout << "Number of right angles detected  " << rightAngleFilter->GetOutput()->GetNumberOfPoints() << std::endl;

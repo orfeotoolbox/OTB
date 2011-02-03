@@ -160,7 +160,7 @@ int main(int argc, char * argv[])
   // Software Guide : BeginCodeSnippet
   lsdFilter->SetInput(reader->GetOutput());
   rightAngleFilter->SetInputImage(reader->GetOutput());
-  rightAngleFilter->SetInput(lsdFilter->GetOutput());
+  ////////////////////////////////////////////////////////// rightAngleFilter->SetInput(lsdFilter->GetOutput());
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //

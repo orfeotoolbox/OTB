@@ -40,7 +40,6 @@ TARGET_LINK_LIBRARIES(AssymmetricFusionOfLineDetectorExample OTBFeatureExtractio
 ADD_EXECUTABLE(LocalHoughExample LocalHoughExample.cxx )
 TARGET_LINK_LIBRARIES(LocalHoughExample OTBIO OTBFeatureExtraction OTBCommon)
 
-
 ADD_EXECUTABLE(ExtractSegmentsByStepsExample
 ExtractSegmentsByStepsExample.cxx)
 TARGET_LINK_LIBRARIES(ExtractSegmentsByStepsExample OTBFeatureExtraction OTBCommon OTBIO)
@@ -50,7 +49,6 @@ TARGET_LINK_LIBRARIES(LineSegmentDetectorExample OTBFeatureExtraction OTBCommon 
 
 ADD_EXECUTABLE(RightAngleDetectionExample RightAngleDetectionExample.cxx)
 TARGET_LINK_LIBRARIES(RightAngleDetectionExample OTBFeatureExtraction OTBCommon OTBIO)
-
 
 ADD_EXECUTABLE(ExtractSegmentsExample
 ExtractSegmentsExample.cxx)
