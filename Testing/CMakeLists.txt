@@ -156,3 +156,27 @@ ADD_TEST(hyVCA_AVIRIS
 
 
 
+###################
+##Anomaly detection
+###################
+
+SET( otbAnomalyTests1_SRC
+     LocalRxDetectorTest.cxx
+     #LocalRxDetectorNonTrhreadedTest.cxx
+     #LocalRxDetectorRoiNonThreadedTest.cxx
+)
+
+ADD_EXECUTABLE(otbAnomalyTests1 ${otbAnomalyTests1_SRC} otbAnomalyTests1.cxx)
+TARGET_LINK_LIBRARIES(otbAnomalyTests1 OTBCommon OTBIO OTBBasicFilters OTBTesting )
+
+
+ADD_TEST(tuLocalRXDetectorNew
+         ${TESTEXE_DIR}/otbAnomalyTests1
+         LocalRXDetectorNewTest
+         )
+ADD_TEST(tvLocalRXDetector
+         ${TESTEXE_DIR}/otbAnomalyTests1
+         LocalRXDetectorTest
+         ${DATA}//home/grizonnetm/OTB/Dev/Hyperspectral/Data/CupriteSubHsi/cupriteSubHsi.tif
+         ${TEMP}/localRXCupriteSubHsi.tif
+         )

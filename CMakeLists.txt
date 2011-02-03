@@ -23,6 +23,7 @@ INCLUDE_DIRECTORIES(
 ${Hyperspectral_SOURCE_DIR}/Code/BasicFilters
 ${Hyperspectral_SOURCE_DIR}/Code/Hyperspectral
 ${Hyperspectral_SOURCE_DIR}/Code/Vahine
+${Hyperspectral_SOURCE_DIR}/Code/RX
 )
 
 ADD_SUBDIRECTORY(Code)

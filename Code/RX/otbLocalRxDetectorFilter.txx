@@ -1,0 +1,231 @@
+#ifndef __otbLocalRxDetectorFilter_txx
+#define __otbLocalRxDetectorFilter_txx
+
+
+#include "otbLocalRxDetectorFilter.h"
+
+namespace otb
+{
+
+/**
+ *
+ */
+template <class TInputImage, class TOutputImage>
+LocalRxDetectorFilter<TInputImage, TOutputImage>
+::LocalRxDetectorFilter()
+{
+	this->m_ExternalRadius = 0;
+	this->m_InternalRadius = 0;
+}
+
+/**
+ *
+ */
+template <class TInputImage, class TOutputImage>
+void
+LocalRxDetectorFilter<TInputImage, TOutputImage>
+::PrintSelf(std::ostream& os, itk::Indent indent) const
+{
+  Superclass::PrintSelf(os,indent);
+
+  os << indent << "Internal Radius: " << m_InternalRadius << std::endl;
+  os << indent << "External Radius: " << m_ExternalRadius << std::endl;
+}
+
+/**
+ *
+ */
+template <class TInputImage, class TOutputImage>
+void
+LocalRxDetectorFilter<TInputImage, TOutputImage>
+::BeforeThreadedGenerateData()
+{
+	// Get the input and output pointers
+	OutputPointerType	outputPtr = this->GetOutput();
+
+	// Fill the buffer with black pixels
+	outputPtr->FillBuffer(0);
+}
+
+/**
+ *
+ */
+template <class TInputImage, class TOutputImage>
+void
+LocalRxDetectorFilter<TInputImage, TOutputImage>
+::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
+                       int threadId)
+{
+	// Get the input and output pointers
+	InputConstPointerType	inputPtr = this->GetInput();
+	OutputPointerType		outputPtr = this->GetOutput();
+
+	// Support progress methods/callbacks
+	itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
+
+	// Compute input region for thread
+	typename TInputImage::RegionType inputRegionForThread;
+	inputRegionForThread = outputRegionForThread;
+	inputRegionForThread.PadByRadius(m_ExternalRadius);
+	inputRegionForThread.Crop(inputPtr->GetLargestPossibleRegion());
+
+	// Iterator on input region
+	typename ConstShapedNeighborhoodIteratorType::RadiusType radius;
+	radius.Fill(m_ExternalRadius);
+
+	VectorFaceCalculatorType                         		  vectorFaceCalculator;
+	typename VectorFaceCalculatorType::FaceListType           vectorFaceList;
+	typename VectorFaceCalculatorType::FaceListType::iterator vectorFit;
+
+	vectorFaceList = vectorFaceCalculator(inputPtr, inputRegionForThread, radius);
+
+	vectorFit = vectorFaceList.begin();	// Only the first face is used
+
+	ConstShapedNeighborhoodIteratorType inputIt(radius, inputPtr, *vectorFit);
+
+	// Neighborhood Configuration
+	typename ConstShapedNeighborhoodIteratorType::OffsetType off;
+
+	for (int y = -m_ExternalRadius; y <= m_ExternalRadius; y++)
+	{
+		off[1] = y;
+		for (int x = -m_ExternalRadius; x <= m_ExternalRadius; x++)
+		{
+			off[0] = x;
+			if ((abs(x) > m_InternalRadius) || (abs(y) > m_InternalRadius))
+			{
+				inputIt.ActivateOffset(off);
+			}
+		}
+	}
+
+
+	// iterator on output region
+	FaceCalculatorType                         faceCalculator;
+	typename FaceCalculatorType::FaceListType           faceList;
+	typename FaceCalculatorType::FaceListType::iterator fit;
+
+	faceList = faceCalculator(outputPtr, inputRegionForThread,radius);
+	fit = faceList.begin();	// Only the first face is used
+
+	ImageRegionIteratorType outputIt(outputPtr, *fit);
+
+	// Run Input Image
+	int j = 0;
+
+	for (inputIt.GoToBegin(), outputIt.GoToBegin(); !inputIt.IsAtEnd(); ++inputIt, ++outputIt)
+	{
+
+		// Create ListSample
+		typename ListSampleType::Pointer listSample = ListSampleType::New();
+		listSample->SetMeasurementVectorSize(inputPtr->GetNumberOfComponentsPerPixel());
+
+
+		// Run neighborhood
+		typename ConstShapedNeighborhoodIteratorType::ConstIterator ci;
+		for (ci = inputIt.Begin(); !ci.IsAtEnd(); ++ci)
+		{
+			// Pushback element in listSample
+			listSample->PushBack(ci.Get());
+		}
+
+
+		// Compute Mean vector
+		typename MeanCalculatorType::Pointer meanCalculator = MeanCalculatorType::New();
+		meanCalculator->SetInputSample(listSample);
+		meanCalculator->Update();
+
+		typename MeanCalculatorType::OutputType *meanVector;
+		meanVector = meanCalculator->GetOutput();
+
+
+		// Compute covariance matrix
+		typename CovarianceCalculatorType::Pointer covarianceCalculator = CovarianceCalculatorType::New();
+		covarianceCalculator->SetInputSample(listSample);
+		covarianceCalculator->SetMean(meanVector);
+		covarianceCalculator->Update();
+
+		const typename CovarianceCalculatorType::OutputType *covarianceMatrix = covarianceCalculator->GetOutput();
+
+
+		// Compute RX value
+		MatrixType invCovMat;
+		invCovMat = covarianceMatrix->GetInverse();
+
+		VectorMeasurementType testPixVec;
+		testPixVec = inputPtr->GetPixel(inputIt.GetIndex());
+
+		VectorMeasurementType meanVec(meanVector->GetNumberOfElements());
+		for(unsigned int i = 0; i < meanVector->GetNumberOfElements(); i++)
+		{
+			meanVec.SetElement(i, meanVector->GetElement(i));
+		}
+
+		typename MatrixType::InternalMatrixType centeredTestPixMat(meanVector->GetNumberOfElements(), 1);
+		for (unsigned int i = 0; i < centeredTestPixMat.rows() ;i++)
+		{
+			centeredTestPixMat.put(i, 0, (testPixVec.GetElement(i) - meanVector->GetElement(i)));
+		}
+
+		typename MatrixType::InternalMatrixType rxValue = centeredTestPixMat.transpose() * invCovMat.GetVnlMatrix() * centeredTestPixMat;
+
+		outputIt.Set(rxValue.get(0,0));
+	}
+}
+
+/**
+*
+*/
+template <class TInputImage, class TOutputImage>
+void
+LocalRxDetectorFilter<TInputImage, TOutputImage>
+::GenerateInputRequestedRegion()
+{
+	// call the superclass' implementation of this method
+	Superclass::GenerateInputRequestedRegion();
+
+	// get pointers to the input and output
+	InputPointerType  inputPtr =
+			const_cast< InputImageType * >( this->GetInput());
+	OutputPointerType outputPtr = this->GetOutput();
+
+	if ( !inputPtr || !outputPtr )
+	{
+		return;
+	}
+
+	// get a copy of the input requested region (should equal the output
+	// requested region)
+	typename TInputImage::RegionType inputRequestedRegion;
+	inputRequestedRegion = inputPtr->GetRequestedRegion();
+
+	// pad the input requested region by the operator radius
+	inputRequestedRegion.PadByRadius( m_ExternalRadius );
+
+	// crop the input requested region at the input's largest possible region
+	if ( inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()) )
+	{
+		inputPtr->SetRequestedRegion( inputRequestedRegion );
+	    return;
+	}
+	else
+	{
+		// Couldn't crop the region (requested region is outside the largest
+		// possible region).  Throw an exception.
+
+	    // store what we tried to request (prior to trying to crop)
+	    inputPtr->SetRequestedRegion( inputRequestedRegion );
+
+	    // build an exception
+	    itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
+	    e.SetLocation(ITK_LOCATION);
+	    e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
+	    e.SetDataObject(inputPtr);
+	    throw e;
+	}
+}
+
+} // end namespace otb
+
+#endif
+
