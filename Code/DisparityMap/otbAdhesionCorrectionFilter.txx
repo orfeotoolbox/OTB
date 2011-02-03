@@ -385,12 +385,10 @@ AdhesionCorrectionFilter<TImage, TMask>
 	
 	
 	
-	m_Radius[0] = m_Radius[0]+1;
-	m_Radius[1] = m_Radius[1]+1;
-	int win = m_Radius[0]; // should be also equal to m_Radius[1]
-	int patch_side = 2*m_Radius[0]+1;
-	int patch_side_small = 2*(m_Radius[0]-1)+1;
-	int big_dist = 3*m_Radius[0];
+	int win = m_Radius[0]+1; // should be also equal to m_Radius[1]
+	int patch_side = 2*win+1;
+	int patch_side_small = 2*(win-1)+1;
+	int big_dist = 3*win;
 	int dif, new_step;
   /* positions around a pixel*/
   IntVectorType ring;
@@ -464,10 +462,10 @@ AdhesionCorrectionFilter<TImage, TMask>
 
 
 	new_disparityIt.GoToBegin();
-	while (new_disparityIt.GetIndex()[1]<outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1]  - m_Radius[1])
+	while (new_disparityIt.GetIndex()[1]<outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1])
 	{
 		index_pos=new_disparityIt.GetIndex();
-		if (new_disparityIt.GetIndex()[1]>=m_Radius[1] + outputPtr->GetRequestedRegion().GetIndex()[1] && new_disparityIt.GetIndex()[1] < outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1] - m_Radius[1])
+		if (new_disparityIt.GetIndex()[1]>=outputPtr->GetRequestedRegion().GetIndex()[1] && new_disparityIt.GetIndex()[1] < outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1] - win)
 		{
 			old_maskIt.SetIndex(index_pos);
 			while (old_maskIt.Get()==0 && new_disparityIt.GetIndex()[0]<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0])
@@ -479,7 +477,7 @@ AdhesionCorrectionFilter<TImage, TMask>
 			disparity_jumpIt.SetIndex(index_pos);
 			disparity_jumpIt.Set(-1);// first disparity in the epipolar line
 			int k=0;
-			while (new_disparityIt.GetIndex()[0]<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0] - m_Radius[0])
+			while (new_disparityIt.GetIndex()[0]<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0] - win)
 			{
 				index_pos = new_disparityIt.GetIndex();
 				if (old_maskPtr->GetPixel(index_pos) == 0) // holes in the disparity map
@@ -516,7 +514,7 @@ AdhesionCorrectionFilter<TImage, TMask>
 									index2[0] = index_pos[0] + i -1;
 									disparity_jumpIt.SetIndex(index2);
 									disparity_jumpIt.Set(3);
-									if (i>=m_Radius[0]) 
+									if (i>=win) 
 									{
 										disparity_jumpIt.SetIndex(index_pos);
 										disparity_jumpIt.Set(4); // big holes
@@ -526,7 +524,7 @@ AdhesionCorrectionFilter<TImage, TMask>
 								{
 									disparity_jumpIt.SetIndex(index_pos);
 									disparity_jumpIt.Set(4);
-									if (i>=m_Radius[0]) 
+									if (i>=win) 
 									{
 										index[0]=index_pos[0] + i -1;
 										disparity_jumpIt.SetIndex(index);
@@ -744,7 +742,6 @@ std::cout<<"Inside the risk zone, we look for edges which may cause te adhesion-
 
 	// Balai dans la direcction epipolaire gauche-droite
 	new_disparityIt.GoToBegin();
-	
 	while (new_disparityIt.GetIndex()[1]<outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1])
 	{
 		index_pos = new_disparityIt.GetIndex();
@@ -787,7 +784,7 @@ std::cout<<"Inside the risk zone, we look for edges which may cause te adhesion-
 			if (disparity_jumpIt.Get() == 2)
 			{
 				int l=-1;
-				while (index_pos[0]+l>=0 && l>=-big_dist && index_pos[0]+l<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0]&& index_pos[1]<outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1])
+				while (index_pos[0]+l>=outputPtr->GetRequestedRegion().GetIndex()[0] && l>=-big_dist && index_pos[0]+l<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0]&& index_pos[1]<outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1])
 				{
 					index = index_pos;
 					index[0] = index_pos[0] + l;
@@ -802,7 +799,7 @@ std::cout<<"Inside the risk zone, we look for edges which may cause te adhesion-
 			if (disparity_jumpIt.Get() == 4)
 			{
 				int l=-1;
-				while (index_pos[0]+l>=0 && l>=-big_dist && index_pos[0]+l<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0]&& index_pos[1]<outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1])
+				while (index_pos[0]+l>=outputPtr->GetRequestedRegion().GetIndex()[0] && l>=-big_dist && index_pos[0]+l<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0]&& index_pos[1]<outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1])
 				{
 					index = index_pos;
 					index[0] = index_pos[0] + l;
@@ -955,7 +952,7 @@ std::cout<<"Cut risk edges"<<std::endl;
 	// Ie: the patch is in a planar surfarce without jumps
 
 	int Count;
-	int big_win = m_Radius[0] + 1;
+	int big_win = win + 1;
 	int half_big_win = (2*big_win +1)*(2*big_win +1) /2;
 	double Tol2 = m_Tolerance/2;
 	
@@ -1446,9 +1443,8 @@ std::cout<<"remove around the  disparity jump if no risk_edge have been found"<<
 
 std::cout<<"Vertical lines (perpendicular to epipolar lines)"<<std::endl;
 
-
 	new_disparityIt.GoToBegin();
-	
+
 	while (new_disparityIt.GetIndex()[0]<outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0] - 1)
 	{
 		index2 = new_disparityIt.GetIndex();
@@ -1460,7 +1456,7 @@ std::cout<<"Vertical lines (perpendicular to epipolar lines)"<<std::endl;
 			old_maskIt.SetIndex(index);
 			new_disparityIt.SetIndex(index);
 		}
-		double disp=outputPtr->GetPixel(index);
+		double disp=old_disparityPtr->GetPixel(index);
 		int k=0;
 		while (new_disparityIt.GetIndex()[1]<outputPtr->GetRequestedRegion().GetSize()[1] + outputPtr->GetRequestedRegion().GetIndex()[1] -1)
 		{
@@ -1488,6 +1484,7 @@ std::cout<<"Vertical lines (perpendicular to epipolar lines)"<<std::endl;
 		new_disparityIt.SetIndex(index2);
 		++new_disparityIt;
 	}
+
 
 
 std::cout<<"Vertical lines (perpendicular to epipolar lines) part2"<<std::endl;
