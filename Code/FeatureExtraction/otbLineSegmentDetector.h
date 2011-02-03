@@ -18,10 +18,9 @@
 #ifndef __otbLineSegmentDetector_h
 #define __otbLineSegmentDetector_h
 
-#include "otbImageToLineSpatialObjectListFilter.h"
-#include "otbLineSpatialObjectList.h"
 #include "otbImage.h"
-#include "itkPointSet.h"
+#include "otbVectorDataSource.h"
+#include "otbVectorData.h"
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkGradientRecursiveGaussianImageFilter.h"
@@ -74,14 +73,13 @@ public:
 
 template <class TInputImage, class TPrecision = double>
 class ITK_EXPORT LineSegmentDetector :
-    public otb::ImageToLineSpatialObjectListFilter<TInputImage>
-//TODO public VectorDataSource<ITK_TYPENAME VectorData<> >
+    public VectorDataSource< otb::VectorData<TPrecision> >
 {
 public:
 
   /** typedef for the classes standards. */
   typedef LineSegmentDetector                             Self;
-  typedef ImageToLineSpatialObjectListFilter<TInputImage> Superclass;
+  typedef VectorDataSource< VectorData<TPrecision> >      Superclass;
   typedef itk::SmartPointer<Self>                         Pointer;
   typedef itk::SmartPointer<const Self>                   ConstPointer;
 
@@ -89,21 +87,23 @@ public:
   itkNewMacro(Self);
 
   /** Return the name of the class. */
-  itkTypeMacro(LineSegmentDetector, ImageToLineSpatialObjectListFilter);
+  itkTypeMacro(LineSegmentDetector, VectorDataSource);
 
-  /** Definition of the input image and the output ObjectList*/
-  typedef TInputImage                         InputImageType;
-  typedef typename InputImageType::PixelType  InputPixelType;
-  typedef typename InputImageType::IndexType  InputIndexType;
-  typedef typename InputImageType::SizeType   SizeType;
-  typedef typename InputImageType::RegionType RegionType;
+  /** Definition of the input image */
+  typedef TInputImage                           InputImageType;
+  typedef typename InputImageType::PixelType    InputPixelType;
+  typedef typename InputImageType::IndexType    InputIndexType;
+  typedef typename InputImageType::SizeType     SizeType;
+  typedef typename InputImageType::RegionType   RegionType;
+  typedef typename InputImageType::SpacingType  SpacingType;
+  typedef typename InputImageType::PointType    OriginType;
 
-  /** Definition of the list of lines. */
-  typedef LineSpatialObjectList                LineSpatialObjectListType;
-  typedef LineSpatialObjectListType::Pointer   LineSpatialObjectListPointer;
-  typedef LineSpatialObjectListType::LineType  LineSpatialObjectType;
-  typedef LineSpatialObjectType::PointListType PointListType;
-  typedef LineSpatialObjectType::LinePointType PointType;
+  /** Definition of the output vector data. */
+  typedef VectorData<TPrecision>                 VectorDataType;
+  typedef typename VectorDataType::DataNodeType  DataNodeType;
+  typedef typename VectorDataType::LineType      LineType;
+  typedef typename VectorDataType::PointType     PointType;
+  typedef typename LineType::VertexType          VertexType;
 
   /** Definition of temporary image ised to store LABELS*/
   typedef Image<TPrecision, 2>                OutputImageType;
@@ -124,7 +124,6 @@ public:
 
   /** */
   typedef itk::GradientRecursiveGaussianImageFilter<OutputImageType> GradientFilterType;
-  //typedef itk::GradientImageFilter<InputImageType > GradientFilterType;
   typedef typename GradientFilterType::Pointer         GradientFilterPointerType;
   typedef typename GradientFilterType::OutputImageType GradientOutputImageType;
 
@@ -143,7 +142,7 @@ public:
   typedef typename OrientationFilterType::OutputImageType OutputImageDirType;
   typedef typename OutputImageDirType::RegionType         OutputImageDirRegionType;
 
-  /** Create an image to store the label USED(1) or notUsed (0)*/
+  /** Create an image to store the label USED(255), NOTINI(127) or NOTUSED (0)*/
   typedef otb::Image<unsigned char, 2>     LabelImageType;
   typedef typename LabelImageType::Pointer LabelImagePointerType;
 
@@ -153,11 +152,14 @@ public:
   typedef std::vector<RectangleType>           RectangleListType;
   typedef typename RectangleListType::iterator RectangleListTypeIterator;
 
+  /** Set/Get the input image of this process object.  */
+  virtual void SetInput(const InputImageType *input);
+  virtual const InputImageType * GetInput(void);
+
   itkSetMacro(ImageSize, SizeType);
   itkGetMacro(ImageSize, SizeType);
 
-
-  /** Custom Get methods*/
+  /** Custom Get methods to access intermediate data*/
   LabelImagePointerType GetMap()
   {
     return m_UsedPointImage;
@@ -268,9 +270,6 @@ private:
 
   /** Orientation filter */
   OrientationFilterPointerType m_OrientationFilter;
-
-  /** Output*/
-  LineSpatialObjectListPointer m_LineList;
 
 };
 } // end namespace otb

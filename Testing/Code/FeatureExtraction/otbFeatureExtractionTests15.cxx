@@ -26,8 +26,8 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbImageToLineSegmentVectorDataNew);
-  REGISTER_TEST(otbImageToLineSegmentVectorData);
+  REGISTER_TEST(otbStreamingLineSegmentDetectorNew);
+  REGISTER_TEST(otbStreamingLineSegmentDetector);
   REGISTER_TEST(otbSqrtSpectralAngleImageFilter);
   REGISTER_TEST(otbScalarImageToTexturesFilterNew);
   REGISTER_TEST(otbMaskedScalarImageToGreyLevelRunLengthMatrixGeneratorNew);

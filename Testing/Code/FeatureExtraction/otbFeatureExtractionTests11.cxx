@@ -34,9 +34,8 @@ void RegisterTests()
   REGISTER_TEST(otbSimplifyManyPathListFilter);
   REGISTER_TEST(otbLineSegmentDetectorNew);
   REGISTER_TEST(otbLineSegmentDetector);
-  REGISTER_TEST(otbLineSegmentDetector_binary);
   REGISTER_TEST(otbLineSpatialObjectListToRightAnglePointSetFilterNew);
   REGISTER_TEST(otbLineSpatialObjectListToRightAnglePointSetFilter);
   REGISTER_TEST(otbLineSpatialObjectListToRightAnglePointSetFilterByStepsOutputAscii);
-//REGISTER_TEST(otbLineSpatialObjectListToRightAnglePointSetFilterOutputImage);
+  //REGISTER_TEST(otbLineSpatialObjectListToRightAnglePointSetFilterOutputImage);
 }

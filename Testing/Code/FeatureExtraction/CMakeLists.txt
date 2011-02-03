@@ -1198,24 +1198,15 @@ ADD_TEST(feTuLineSegmentDetectorNew ${FEATUREEXTRACTION_TESTS11}
     otbLineSegmentDetectorNew)
 
 ADD_TEST(feTvLineSegmentDetector ${FEATUREEXTRACTION_TESTS11}
---compare-image ${EPSILON_3}
-     ${BASELINE}/feTvLineSegmentDetectorOutputImage.tif
-     ${TEMP}/feTvLineSegmentDetectorOutputImage.tif
+--compare-ogr  ${EPSILON_8}
+            ${BASELINE_FILES}/feTvLineSegmentDetectorOutput.shp
+            ${TEMP}/feTvLineSegmentDetectorOutput.shp
     otbLineSegmentDetector
-     ${INPUTDATA}/scene.png  #prison_toulouse.tif
-    ${TEMP}/feTvLineSegmentDetectorOutputImage.tif
-)
-
-ADD_TEST(feTvLineSegmentDetector_binary ${FEATUREEXTRACTION_TESTS11}
---compare-image ${NOTOL}
-     ${BASELINE}/feTvLineSegmentDetectorOutputImage.tif
-     ${TEMP}/feTvLineSegmentDetectorOutputImage_binary.tif
-    otbLineSegmentDetector_binary
      ${INPUTDATA}/scene.png
-     ${TEMP}/feTvLineSegmentDetectorOutputImage_binary.tif
-     #${TEMP}/feTvLineSegmentDetectorOutputImage_binary_statusMap.tif
-     #${TEMP}/feTvLineSegmentDetectorOutputImage_binary_gradMod.tif
-     #${TEMP}/feTvLineSegmentDetectorOutputImage_binary_gradOri.tif
+     ${TEMP}/feTvLineSegmentDetectorOutput.shp
+     #${TEMP}/feTvLineSegmentDetectorOutputImage_statusMap.tif #a map of pixel status
+     #${TEMP}/feTvLineSegmentDetectorOutputImage_gradMod.tif   #the gardient modulus 
+     #${TEMP}/feTvLineSegmentDetectorOutputImage_gradOri.tif   #the gradient orientation
 )
 
 # -------            otb::LineSpatialObjectListToRightAnglePointSetFilter   -------------
@@ -1325,17 +1316,17 @@ ADD_TEST(feTvRegionImageToRectangularPathListFilter ${FEATUREEXTRACTION_TESTS14}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFeatureExtractionTests15 ~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# -------            otb::ImageToLineSegmentVectorData   -------------
-ADD_TEST(feTuImageToLineSegmentVectorDataNew ${FEATUREEXTRACTION_TESTS15}
-    otbImageToLineSegmentVectorDataNew)
+# -------            otb::StreamingLineSegmentDetector   -------------
+ADD_TEST(feTuStreamingLineSegmentDetectorNew ${FEATUREEXTRACTION_TESTS15}
+    otbStreamingLineSegmentDetectorNew)
 
-ADD_TEST(feTvImageToLineSegmentVectorData ${FEATUREEXTRACTION_TESTS15}
---compare-ascii ${EPSILON_3}
-     ${BASELINE_FILES}/feTvImageToLineSegmentVectorData.kml
-     ${TEMP}/feTvImageToLineSegmentVectorData.kml
-    otbImageToLineSegmentVectorData
-      ${INPUTDATA}/scene.png  #prison_toulouse.tif
-      ${TEMP}/feTvImageToLineSegmentVectorData.kml
+ADD_TEST(feTvStreamingLineSegmentDetector ${FEATUREEXTRACTION_TESTS15}
+--compare-ogr  ${EPSILON_8}
+     ${BASELINE_FILES}/feTvStreamingLineSegmentDetectorOutput.shp
+     ${TEMP}/feTvStreamingLineSegmentDetectorOutput.shp
+    otbStreamingLineSegmentDetector
+      ${INPUTDATA}/scene.png
+      ${TEMP}/feTvStreamingLineSegmentDetectorOutput.shp
 )
 
 # -------            otb::SqrtSpectralAngleImageFilter (Ossman)------------------------------
@@ -1725,7 +1716,6 @@ otbCloudEstimatorFilter.cxx
 otbCloudDetectionFilterNew.cxx
 otbCloudDetectionFilter.cxx
 otbSimplifyManyPathListFilter.cxx
-otbLineSegmentDetectorNew.cxx
 otbLineSegmentDetector.cxx
 otbLineSpatialObjectListToRightAnglePointSetFilterNew.cxx
 otbLineSpatialObjectListToRightAnglePointSetFilter.cxx
@@ -1746,8 +1736,7 @@ otbRegionImageToRectangularPathListFilter.cxx
 
 SET(BasicFeatureExtraction_SRCS15
 otbFeatureExtractionTests15.cxx
-otbImageToLineSegmentVectorDataNew.cxx
-otbImageToLineSegmentVectorData.cxx
+otbStreamingLineSegmentDetector.cxx
 otbSqrtSpectralAngleImageFilter.cxx
 otbMaskedScalarImageToGreyLevelRunLengthMatrixGeneratorNew.cxx
 otbScalarImageToTexturesFilterNew.cxx

@@ -18,94 +18,29 @@
 
 #include "otbImage.h"
 #include "otbLineSegmentDetector.h"
-#include "otbDrawLineSpatialObjectListFilter.h"
-#include "otbLineSpatialObjectList.h"
-#include "itkLineIterator.h"
 
 #include "otbImageFileReader.h"
+#include "otbVectorDataFileWriter.h"
 #include "otbImageFileWriter.h"
 
-int otbLineSegmentDetector(int argc, char * argv[])
+int otbLineSegmentDetectorNew(int argc, char * argv[])
 {
-  const char * infname  = argv[1];
-  const char * outfname  = argv[2];
 
-  typedef double InputPixelType;
+  typedef float InputPixelType;
   const unsigned int Dimension = 2;
 
   /** Typedefs */
-  typedef otb::Image<InputPixelType,  Dimension>                               InputImageType;
-  typedef InputImageType::IndexType                                            IndexType;
-  typedef otb::ImageFileReader<InputImageType>                                 ReaderType;
-  typedef otb::ImageFileWriter<InputImageType>                                 WriterType;
-  typedef otb::DrawLineSpatialObjectListFilter<InputImageType, InputImageType> DrawLineListType;
-  typedef otb::LineSegmentDetector<InputImageType, InputPixelType>             lsdFilterType;
-  typedef itk::LineIterator<InputImageType>                                    LineIteratorFilter;
+  typedef otb::Image<InputPixelType,  Dimension>                   InputImageType;
+  typedef otb::LineSegmentDetector<InputImageType, InputPixelType> lsdFilterType;
 
-  /** Instantiation of smart pointer*/
-  lsdFilterType::Pointer    lsdFilter = lsdFilterType::New();
-  DrawLineListType::Pointer drawLineFilter =   DrawLineListType::New();
-  ReaderType::Pointer       reader = ReaderType::New();
+  lsdFilterType::Pointer filter = lsdFilterType::New();
 
-  /** */
-  //typedef otb::LineSpatialObjectList            LinesListType;
-  //typedef LinesListType::LineType               LineType;
-  //LinesListType::Pointer list = LinesListType::New();
-
-  //LineType::PointListType             pointList;
-  //LineType::LinePointType             pointBegin , pointEnd;
-  //  IndexType                           IndexBegin , IndexEnd;
-
-  /***/
-
-  reader->SetFileName(infname);
-  reader->GenerateOutputInformation();
-  lsdFilter->SetInput(reader->GetOutput());
-
-  drawLineFilter->SetInput(reader->GetOutput());
-  drawLineFilter->SetInputLineSpatialObjectList(lsdFilter->GetOutput());
-
-//   LinesListType::const_iterator it    = lsdFilter->GetOutput()->begin();
-//   LinesListType::const_iterator itEnd  = lsdFilter->GetOutput()->end();
-
-//   while(it != itEnd)
-//     {
-//       LineType::PointListType & pointsList = (*it)->GetPoints();
-//       LineType::PointListType::const_iterator itPoints = pointsList.begin();
-
-//       float x = (*itPoints).GetPosition()[0];
-//       float y = (*itPoints).GetPosition()[1];
-//       IndexBegin[0] = static_cast<int>(x); IndexBegin[1] = static_cast<int>(y);
-
-//       itPoints++;
-
-//       float x1 = (*itPoints).GetPosition()[0];
-//       float y1 = (*itPoints).GetPosition()[1];
-//       IndexEnd[0]= static_cast<int>(x1); IndexEnd[1] = static_cast<int>(y1);
-
-//       LineIteratorFilter   itLine(reader->GetOutput(), IndexBegin,  IndexEnd);
-//       itLine.GoToBegin();
-//       while(!itLine.IsAtEnd())
-//         {
-//           if(reader->GetOutput()->GetRequestedRegion().IsInside(itLine.GetIndex()))
-//             itLine.Set(255.);
-//           ++itLine;
-//         }
-//       ++it;
-//     }
-
-  /** Write The Output Image*/
-  WriterType::Pointer writer = WriterType::New();
-  writer->SetFileName(outfname);
-  writer->SetInput(drawLineFilter->GetOutput());
-  writer->Update();
-
-  std::cout << " lsdFilter Output Size" << lsdFilter->GetOutput()->size() << std::endl;
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }
 
-int otbLineSegmentDetector_binary(int argc, char * argv[])
+int otbLineSegmentDetector(int argc, char * argv[])
 {
   const char * infname  = argv[1];
   const char * outfname  = argv[2];
@@ -115,13 +50,13 @@ int otbLineSegmentDetector_binary(int argc, char * argv[])
   typedef otb::Image<PixelType>                                       ImageType;
   typedef otb::ImageFileReader<ImageType>                             ReaderType;
   typedef otb::LineSegmentDetector<ImageType, double>                 LSDFilterType;
-  typedef otb::DrawLineSpatialObjectListFilter<ImageType, ImageType>  DrawLineListFilterType;
+  typedef LSDFilterType::VectorDataType                               VectorDataType;
+  typedef otb::VectorDataFileWriter<VectorDataType>                   VectorDataWriterType;
   typedef otb::ImageFileWriter<ImageType>                             WriterType;
 
   /** Instantiation of smart pointer*/
   ReaderType::Pointer             reader         = ReaderType::New();
   LSDFilterType::Pointer          lsdFilter      = LSDFilterType::New();
-  DrawLineListFilterType::Pointer drawLineFilter = DrawLineListFilterType::New();
 
   //Reade the input image
   reader->SetFileName(infname);
@@ -130,39 +65,10 @@ int otbLineSegmentDetector_binary(int argc, char * argv[])
   //LSD Detection
   lsdFilter->SetInput(reader->GetOutput());
 
-  //OutputImageRendering
-  ImageType::SizeType size;
-  size[0] = reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0];
-  size[1] = reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1];
-  ImageType::IndexType index;
-  index.Fill(0);
-  ImageType::RegionType region;
-  region.SetSize(size);
-  region.SetIndex(index);
-
-  ImageType::Pointer image = ImageType::New();
-
-  image->SetLargestPossibleRegion( region );
-  image->SetBufferedRegion( region );
-  image->SetRequestedRegion( region );
-  image->Allocate();
-
-  typedef itk::ImageRegionIteratorWithIndex<ImageType> IteratorType;
-  IteratorType it(image, region);
-
-  for (it.GoToBegin(); !it.IsAtEnd(); ++it)
-  {
-    it.Set(0);
-  }
-
-  drawLineFilter->SetInput(image); //Black BCKGRD
-  drawLineFilter->SetInputLineSpatialObjectList(lsdFilter->GetOutput());
-
-  /** Write The Output Image*/
-  WriterType::Pointer writer = WriterType::New();
-  writer->SetFileName(outfname);
-  writer->SetInput(drawLineFilter->GetOutput());
-  writer->Update();
+    VectorDataWriterType::Pointer vdWriter = VectorDataWriterType::New();
+  vdWriter->SetFileName(outfname);
+  vdWriter->SetInput(lsdFilter->GetOutput());
+  vdWriter->Update();
 
   if (argc > 3)
     {

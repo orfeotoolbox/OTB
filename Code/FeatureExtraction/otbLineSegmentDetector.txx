@@ -49,6 +49,8 @@ template <class TInputImage, class TPrecision>
 LineSegmentDetector<TInputImage, TPrecision>
 ::LineSegmentDetector()
 {
+  this->SetNumberOfRequiredInputs(1);
+  this->SetNumberOfRequiredOutputs(1);
 
   m_DirectionsAllowed = 1. / 8.;
   m_Prec = CONST_PI * m_DirectionsAllowed;
@@ -62,10 +64,29 @@ LineSegmentDetector<TInputImage, TPrecision>
   /** Image to store the pixels used 0:NOTUSED 127:NOTINIT  255:USED*/
   m_UsedPointImage  = LabelImageType::New();
 
-  /** A Line List : This is the output*/
-  LineSpatialObjectListType::Pointer m_LineList = LineSpatialObjectListType::New();
-
   m_ImageSize.Fill(0);
+}
+
+template <class TInputImage, class TPrecision>
+void
+LineSegmentDetector<TInputImage, TPrecision>
+::SetInput(const InputImageType *input)
+{
+  this->Superclass::SetNthInput(0, const_cast<InputImageType *>(input));
+}
+
+template <class TInputImage, class TPrecision>
+const typename LineSegmentDetector<TInputImage, TPrecision>
+::InputImageType *
+LineSegmentDetector<TInputImage, TPrecision>
+::GetInput(void)
+{
+  if (this->GetNumberOfInputs() < 1)
+    {
+    return 0;
+    }
+
+  return static_cast<const InputImageType *>(this->Superclass::GetInput(0));
 }
 
 template <class TInputImage, class TPrecision>
@@ -91,15 +112,12 @@ LineSegmentDetector<TInputImage, TPrecision>
 {
   this->BeforeGenerateData();
 
-  /** The Output*/
-  m_LineList = this->GetOutput();
-
   /** Cast the MagnitudeOutput Image in */
   typedef itk::CastImageFilter<InputImageType, OutputImageType> castFilerType;
   typename castFilerType::Pointer castFilter =  castFilerType::New();
   castFilter->SetInput(this->GetInput());
 
-  /** Compute the modulus and the orientation gradient image*/
+  /** Compute the modulus and the orientation gradient image */
   m_GradientFilter->SetInput(castFilter->GetOutput());
   m_GradientFilter->SetSigma(0.6);
   m_MagnitudeFilter->SetInput(m_GradientFilter->GetOutput());
@@ -112,14 +130,10 @@ LineSegmentDetector<TInputImage, TPrecision>
   CoordinateHistogramType CoordinateHistogram;
   CoordinateHistogram = this->SortImageByModulusValue(m_MagnitudeFilter->GetOutput());
 
-  /** Serach the segments on the image by growing a region from a seed   */
+  /** Search the segments on the image by growing a region from a seed */
   this->LineSegmentDetection(CoordinateHistogram);
 
-  /**
-   * Compute The rectangles
-   * Out : - a List of rectangles : m_RectangleList
-   *       - A Line List m_LineList
-   */
+  /** Transfert the detected segment to the output vector data */
   this->ComputeRectangles();
 }
 
@@ -197,16 +211,17 @@ LineSegmentDetector<TInputImage, TPrecision>
 
   region.SetIndex(id);
   region.SetSize(size);
-
+  
   itk::ImageRegionIterator<OutputImageType> it(modulusImage, region);
-
+  
   it.GoToBegin();
   while (!it.IsAtEnd())
     {
-    OutputIndexType index = it.GetIndex();
     unsigned int    bin = static_cast<unsigned int> (static_cast<double>(it.Value()) / lengthBin);
+    
     if (it.Value() - m_Threshold > 1e-10) tempHisto[NbBin - bin - 1].push_back(it.GetIndex());
     else SetPixelToUsed(it.GetIndex());
+
     ++it;
     }
 
@@ -237,7 +252,9 @@ LineSegmentDetector<TInputImage, TPrecision>
         {
         IndexVectorType region;
         double          regionAngle = 0.;
+
         bool fail = GrowRegion(index, region, regionAngle);
+
         if (!fail)
           {
           //region -> rectangle
@@ -282,25 +299,48 @@ int
 LineSegmentDetector<TInputImage, TPrecision>
 ::ComputeRectangles()
 {
+  // Retrieving root node
+  typename DataNodeType::Pointer root = this->GetOutput(0)->GetDataTree()->GetRoot()->Get();
+  // Create the document node
+  typename DataNodeType::Pointer document = DataNodeType::New();
+  document->SetNodeType(otb::DOCUMENT);
+  // Adding the layer to the data tree
+  this->GetOutput(0)->GetDataTree()->Add(document, root);
+  // Create the folder node
+  typename DataNodeType::Pointer folder = DataNodeType::New();
+  folder->SetNodeType(otb::FOLDER);
+  // Adding the layer to the data tree
+  this->GetOutput(0)->GetDataTree()->Add(folder, document);
+  this->GetOutput(0)->SetProjectionRef(this->GetInput()->GetProjectionRef());
+
+  SpacingType spacing = this->GetInput()->GetSpacing();
+  OriginType  origin  = this->GetInput()->GetOrigin();
+
   /** store the lines*/
   RectangleListTypeIterator itRec = m_RectangleList.begin();
   while (itRec != m_RectangleList.end())
     {
-    PointListType pointList;
-    PointType     point;
+    VertexType start, end;
     
-    point.SetPosition(static_cast<TPrecision>((*itRec)[0]), static_cast<TPrecision>((*itRec)[1]));
-    pointList.push_back(point);
-    point.SetPosition(static_cast<TPrecision>((*itRec)[2]), static_cast<TPrecision>((*itRec)[3]));
-    pointList.push_back(point);
+    start[0] = origin[0] 
+      + static_cast<TPrecision>((*itRec)[0]) * spacing[0];
+    start[1] = origin[1] 
+      + static_cast<TPrecision>((*itRec)[1]) * spacing[1];
+
+    end[0] = origin[0] 
+      + static_cast<TPrecision>((*itRec)[2]) * spacing[0];
+    end[1] = origin[1] 
+      + static_cast<TPrecision>((*itRec)[3]) * spacing[1];
     
-    typename LineSpatialObjectType::Pointer line = LineSpatialObjectType::New();
-    line->SetId(0);
-    line->SetPoints(pointList);
-    line->ComputeBoundingBox();
-    m_LineList->push_back(line);
-    pointList.clear();
-    
+    typename DataNodeType::Pointer CurrentGeometry = DataNodeType::New();
+    CurrentGeometry->SetNodeId("FEATURE_LINE");
+    CurrentGeometry->SetNodeType(otb::FEATURE_LINE);
+    typename LineType::Pointer line = LineType::New();
+    CurrentGeometry->SetLine(line);
+    this->GetOutput(0)->GetDataTree()->Add(CurrentGeometry, folder);
+    CurrentGeometry->GetLine()->AddVertex(start);
+    CurrentGeometry->GetLine()->AddVertex(end);
+
     ++itRec;
     }
   
@@ -537,7 +577,7 @@ template <class TInputImage, class TPrecision>
 void
 LineSegmentDetector<TInputImage, TPrecision>
 ::SetPixelToUsed(InputIndexType index)
-{
+{          
   typedef itk::NeighborhoodIterator<LabelImageType> NeighborhoodLabelIteratorType;
   typename NeighborhoodLabelIteratorType::SizeType radiusLabel;
   radiusLabel.Fill(0);
@@ -595,7 +635,7 @@ LineSegmentDetector<TInputImage, TPrecision>
 {
   /** Add the point to the used list point*/
   this->SetPixelToUsed(index);
-
+  
   /** Neighborhooding */
   typedef itk::ConstNeighborhoodIterator<OutputImageType> NeighborhoodIteratorType;
   typename NeighborhoodIteratorType::SizeType radius;
@@ -608,10 +648,6 @@ LineSegmentDetector<TInputImage, TPrecision>
 
   /** Vector where to store the point belonging to the current region*/
   unsigned int    neighSize  = itNeigh.GetSize()[0] * itNeigh.GetSize()[1];
-  //IndexVectorType reg;
-
-  /** Angle of the region*/
-  //double regionAngle = 0;
 
   /** Add the first point to the region */
   region.push_back(index);
@@ -646,7 +682,6 @@ LineSegmentDetector<TInputImage, TPrecision>
       ++s;
       }
     } /** End Searching loop*/
-
   if (region.size() > m_MinimumRegionSize && region.size() < static_cast<unsigned int>(m_NumberOfImagePixels / 4))
     {
     return EXIT_SUCCESS;
@@ -674,7 +709,7 @@ LineSegmentDetector<TInputImage, TPrecision>
     diff -= CONST_2PI;
     if (diff < 0.0) diff = -diff;
     }
-
+  
   return diff < prec;
 }
 
@@ -805,7 +840,6 @@ LineSegmentDetector<TInputImage, TPrecision>
     
     if (rec[4] - 1. < 1e-10) rec[4] = 1.;
     
-    //m_RectangleList.push_back(rec);
     }
   return rec;
 }
@@ -925,17 +959,19 @@ LineSegmentDetector<TInputImage, TPrecision>
   rectangle->SetOrientation(rec[5]);
 
   /** Get The Bounding Region*/
-  OutputImageDirRegionType region = rectangle->GetBoundingRegion();
-  region.Crop(m_OrientationFilter->GetOutput()->GetLargestPossibleRegion());
-  itk::ImageRegionIterator<OutputImageDirType> it(m_OrientationFilter->GetOutput(), region /*m_OrientationFilter->GetOutput()->GetRequestedRegion()*/);
-  it.GoToBegin();
+  OutputImageDirRegionType region = m_OrientationFilter->GetOutput()->GetLargestPossibleRegion();
+  region.Crop(rectangle->GetBoundingRegion());
+  
 
+  itk::ImageRegionIterator<OutputImageDirType> it(m_OrientationFilter->GetOutput(), region);
+  it.GoToBegin();
+  
   int pts = 0;
 
   while (!it.IsAtEnd())
     {
     if (rectangle->IsInside(it.GetIndex()) &&
-        m_OrientationFilter->GetOutput()->GetRequestedRegion().IsInside(it.GetIndex()))
+        m_OrientationFilter->GetOutput()->GetBufferedRegion().IsInside(it.GetIndex()))
       {
       ++pts;
 
