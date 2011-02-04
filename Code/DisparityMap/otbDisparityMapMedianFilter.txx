@@ -120,6 +120,36 @@ DisparityMapMedianFilter<TInputImage, TOutputImage, TMask>
 template <class TInputImage, class TOutputImage, class TMask>
 void 
 DisparityMapMedianFilter<TInputImage, TOutputImage, TMask>
+::GenerateOutputInformation()
+{
+  // Call superclass implementation
+  Superclass::GenerateOutputInformation();
+
+  // Retrieve output pointers
+  typename Superclass::InputImagePointer inputPtr = const_cast< TInputImage * >( this->GetInput() );
+  TMask * inputmaskPtr = const_cast< TMask * >(this->GetMaskInput());
+  typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
+	TMask * outputmaskPtr = this->GetOutputMask();
+  typename Superclass::OutputImagePointer outputdisparitymapPtr = this->GetOutputDisparityMap();
+  TMask * outputdisparitymaskPtr = this->GetOutputDisparityMask();
+
+  // Update size and spacing according to grid step
+  InputImageRegionType largestRegion  = outputPtr->GetLargestPossibleRegion();
+  SizeType outputSize       = largestRegion.GetSize();
+  m_ImageSize = outputSize;
+
+  // Set largest region size
+  largestRegion.SetSize(outputSize);
+  outputPtr->SetLargestPossibleRegion(largestRegion);
+  outputmaskPtr->SetLargestPossibleRegion(largestRegion);
+  outputdisparitymapPtr->SetLargestPossibleRegion(largestRegion);
+  outputdisparitymaskPtr->SetLargestPossibleRegion(largestRegion);
+}
+
+
+template <class TInputImage, class TOutputImage, class TMask>
+void 
+DisparityMapMedianFilter<TInputImage, TOutputImage, TMask>
 ::GenerateInputRequestedRegion() throw (itk::InvalidRequestedRegionError)
 {
   // call the superclass' implementation of this method
@@ -189,10 +219,9 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
 	
 
 	/** Input iterators */
-	itk::ConstNeighborhoodIterator<InputImageType> InputIt(m_Radius, input,outputRegionForThread);
-	itk::ConstNeighborhoodIterator<TMask> MaskInputIt(m_Radius, inputmaskPtr,outputRegionForThread);
-	InputIt.GoToBegin();
-	MaskInputIt.GoToBegin();
+	itk::ConstNeighborhoodIterator<InputImageType> InputIt(m_Radius, input,input->GetRequestedRegion());
+	itk::ConstNeighborhoodIterator<TMask> MaskInputIt(m_Radius, inputmaskPtr,inputmaskPtr->GetRequestedRegion());
+
 
 	/** Output iterators */
 	itk::ImageRegionIteratorWithIndex<OutputImageType> outputIt(output,outputRegionForThread);
@@ -208,13 +237,15 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   std::vector<InputPixelType> pixels;
-  while (!InputIt.IsAtEnd() && !MaskInputIt.IsAtEnd() && !outputIt.IsAtEnd() && !outputMaskIt.IsAtEnd() && !outputDisparityMapIt.IsAtEnd()  && !outputDisparityMapIt.IsAtEnd())
+  while (!outputIt.IsAtEnd() && !outputMaskIt.IsAtEnd() && !outputDisparityMapIt.IsAtEnd()  && !outputDisparityMapIt.IsAtEnd())
   {
-		if (outputIt.GetIndex()[0] >= m_Radius[0] && outputIt.GetIndex()[0] < input->GetRequestedRegion().GetSize()[0] - m_Radius[0] && outputIt.GetIndex()[1]>=m_Radius[1] && outputIt.GetIndex()[1] < input->GetRequestedRegion().GetSize()[1] - m_Radius[1] )
+		if (outputIt.GetIndex()[0] >= m_Radius[0] && outputIt.GetIndex()[0] < m_ImageSize[0] - m_Radius[0] && outputIt.GetIndex()[1]>=m_Radius[1] && outputIt.GetIndex()[1] < m_ImageSize[1] - m_Radius[1] )
 		{
 			// determine pixels in the neighborhood window whose subpixel mask is not equal to 0
 			int p=0;
 			pixels.clear();
+			MaskInputIt.SetLocation(outputIt.GetIndex());
+			InputIt.SetLocation(outputIt.GetIndex());
 			for (int i=0;i<MaskInputIt.Size();i++)
 			{
 				if (MaskInputIt.GetPixel(i) != 0)
@@ -262,39 +293,37 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
 		outputDisparityMaskIt.Set(MaskInputIt.GetCenterPixel());  // copy the input disparity mask
 
 		progress.CompletedPixel();
-		++InputIt;
-		++MaskInputIt;
 		++outputIt;
 		++outputMaskIt;
 		++outputDisparityMapIt;
 		++outputDisparityMaskIt;
   }
 
- /*Remove incoherences between disparity and median*/
+ //Remove incoherences between disparity and median//
   // creation of the auxilliary image that store positions of incoherences between the median and the input disparity map
   MaskImagePointerType image_aux = MaskImageType::New();
-	image_aux->SetRegions(outputRegionForThread);
+	image_aux->SetRegions(input->GetRequestedRegion());
 	image_aux->Allocate();
 	image_aux->FillBuffer(0);
-	itk::NeighborhoodIterator<TMask> image_aux_It(m_Radius, image_aux,outputRegionForThread);
-	image_aux_It.GoToBegin();
-	InputIt.GoToBegin();
-	MaskInputIt.GoToBegin();
+	itk::NeighborhoodIterator<TMask> image_aux_It(m_Radius, image_aux,input->GetRequestedRegion());
 	outputIt.GoToBegin();
 	outputMaskIt.GoToBegin();
-	outputDisparityMapIt.GoToBegin();
-	outputDisparityMaskIt.GoToBegin();
 
 	itk::ImageRegionConstIterator<OutputImageType> MedianIt(output,outputRegionForThread);
-	MedianIt.GoToBegin();
 
-  while (!InputIt.IsAtEnd() && !MaskInputIt.IsAtEnd() && !outputIt.IsAtEnd() && !outputMaskIt.IsAtEnd())
+  while (!outputIt.IsAtEnd() && !outputMaskIt.IsAtEnd())
   {
-		if (outputIt.GetIndex()[0] >= m_Radius[0]  && outputIt.GetIndex()[0] < input->GetRequestedRegion().GetSize()[0] - m_Radius[0]  && outputIt.GetIndex()[1]>=m_Radius[1] && outputIt.GetIndex()[1] < input->GetRequestedRegion().GetSize()[1] - m_Radius[1] )
+		if (outputIt.GetIndex()[0] >= m_Radius[0] && outputIt.GetIndex()[0] < m_ImageSize[0] - m_Radius[0] && outputIt.GetIndex()[1]>=m_Radius[1] && outputIt.GetIndex()[1] < m_ImageSize[1] - m_Radius[1] )
 		{
+			MaskInputIt.SetLocation(outputIt.GetIndex());
+			InputIt.SetLocation(outputIt.GetIndex());
+			MedianIt.SetIndex(outputIt.GetIndex());
+			outputDisparityMapIt.SetIndex(outputIt.GetIndex());
+			outputDisparityMaskIt.SetIndex(outputIt.GetIndex());
+			image_aux_It.SetLocation(outputIt.GetIndex());
 			if (MaskInputIt.GetCenterPixel() != 0 && std::fabs(InputIt.GetCenterPixel() - MedianIt.Get())>m_IncoherenceThreshold)
 			{
-				outputDisparityMapIt.Set(0.0); /*Remove pixel from disparity map*/
+				outputDisparityMapIt.Set(0.0); //Remove pixel from disparity map//
 				outputDisparityMaskIt.Set(0);
 				for (int i=0;i<image_aux_It.Size();i++)
 				{
@@ -302,14 +331,8 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
 				}
 			}
 		}
-		++MedianIt;
-		++image_aux_It;
-		++InputIt;
-		++MaskInputIt;
 		++outputIt;
 		++outputMaskIt;
-		++outputDisparityMapIt;
-		++outputDisparityMaskIt;
 	}
 
 //Recompute median where values had been changed 
@@ -317,18 +340,16 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
 	itk::ConstNeighborhoodIterator<OutputImageType> updatedDisparityMapIt(m_Radius, outputdisparitymapPtr,outputRegionForThread);
 	itk::ConstNeighborhoodIterator<TMask> updatedDisparityMaskIt(m_Radius, outputdisparitymaskPtr,outputRegionForThread);
 
-	image_aux_It.GoToBegin();
 	outputIt.GoToBegin();
 	outputMaskIt.GoToBegin();
-	outputDisparityMapIt.GoToBegin();
-	outputDisparityMaskIt.GoToBegin();
 	updatedDisparityMapIt.GoToBegin();
 	updatedDisparityMaskIt.GoToBegin();
 
 	while (!updatedDisparityMapIt.IsAtEnd() && !updatedDisparityMaskIt.IsAtEnd() && !outputIt.IsAtEnd() && !outputMaskIt.IsAtEnd())
   {
-		if (outputIt.GetIndex()[0] >= m_Radius[0] && outputIt.GetIndex()[0] < input->GetRequestedRegion().GetSize()[0] - m_Radius[0] && outputIt.GetIndex()[1]>=m_Radius[1] && outputIt.GetIndex()[1] < input->GetRequestedRegion().GetSize()[1] - m_Radius[1] )
+		if (outputIt.GetIndex()[0] >= m_Radius[0] && outputIt.GetIndex()[0] < m_ImageSize[0] - m_Radius[0] && outputIt.GetIndex()[1]>=m_Radius[1] && outputIt.GetIndex()[1] < m_ImageSize[1] - m_Radius[1] )
 		{
+			image_aux_It.SetLocation(outputIt.GetIndex());
 			if (image_aux_It.GetCenterPixel() != 0)
 			{
 				// determine pixels in the neighborhood window whose subpixel mask is not equal to 0
@@ -372,7 +393,6 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
 							}
 			}
 		}
-		++image_aux_It;
 		++outputIt;
 		++outputMaskIt;
 		++updatedDisparityMapIt;

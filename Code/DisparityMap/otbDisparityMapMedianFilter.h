@@ -147,6 +147,10 @@ public:
    *
    * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
   virtual void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError);
+  
+  /** Generate output information */
+  virtual void GenerateOutputInformation(void);
+  
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
@@ -182,6 +186,7 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   SizeType m_Radius;
+  SizeType m_ImageSize;
   double m_IncoherenceThreshold;
 };
   
