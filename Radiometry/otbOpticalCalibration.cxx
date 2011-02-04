@@ -30,7 +30,7 @@
 #include "otbStreamingImageFileWriter.h"
 #include "otbStandardWriterWatcher.h"
 #include "otbPipelineMemoryPrintCalculator.h"
-
+#include "otbMultiplyByScalarImageFilter.h"
 
 namespace otb
 {
@@ -38,7 +38,7 @@ namespace otb
 int OpticalCalibration::Describe(ApplicationDescriptor* descriptor)
 {
   descriptor->SetName("OpticalCalibration");
-  descriptor->SetDescription("Perform optical calibration TOA/TOC");
+  descriptor->SetDescription("Perform optical calibration TOA/TOC. Output image is in milli-reflectance.");
   descriptor->AddInputImage();
   descriptor->AddOutputImage();
   descriptor->AddOptionNParams("Level",
@@ -51,14 +51,16 @@ int OpticalCalibration::Describe(ApplicationDescriptor* descriptor)
 int OpticalCalibration::Execute(otb::ApplicationOptionsResult* parseResult)
 {
   typedef otb::VectorImage<unsigned short int, 2>       ImageType;
+  typedef otb::VectorImage<float,2>                     FloatImageType;
   typedef otb::ImageFileReader<ImageType>               ReaderType;
   typedef otb::StreamingImageFileWriter<ImageType>      WriterType;
 
-  typedef ImageToLuminanceImageFilter<ImageType, ImageType> ImageToLuminanceImageFilterType;
-  typedef LuminanceToReflectanceImageFilter<ImageType,
-      ImageType>                      LuminanceToReflectanceImageFilterType;
-  typedef ReflectanceToSurfaceReflectanceImageFilter<ImageType,
-      ImageType>             ReflectanceToSurfaceReflectanceImageFilterType;
+  typedef ImageToLuminanceImageFilter<ImageType, FloatImageType> ImageToLuminanceImageFilterType;
+  typedef LuminanceToReflectanceImageFilter<FloatImageType,
+      FloatImageType>                      LuminanceToReflectanceImageFilterType;
+  typedef otb::MultiplyByScalarImageFilter<FloatImageType,ImageType> ScaleFilterType;
+  typedef ReflectanceToSurfaceReflectanceImageFilter<FloatImageType,
+      FloatImageType>             ReflectanceToSurfaceReflectanceImageFilterType;
   typedef otb::PipelineMemoryPrintCalculator        MemoryCalculatorType;
 
   // calibration process
@@ -77,10 +79,14 @@ int OpticalCalibration::Execute(otb::ApplicationOptionsResult* parseResult)
     luminanceToReflectanceFilter->SetInput(imageToLuminanceFilter->GetOutput());
     reflectanceToSurfaceReflectanceFilter->SetInput(luminanceToReflectanceFilter->GetOutput());
   
+    ScaleFilterType::Pointer scaleFilter = ScaleFilterType::New();
+    scaleFilter->SetInput(luminanceToReflectanceFilter->GetOutput());
+    scaleFilter->SetCoef(1000.);
+
     //Instantiate the writer
     WriterType::Pointer writer = WriterType::New();
     writer->SetFileName(parseResult->GetOutputImage());
-    writer->SetInput(luminanceToReflectanceFilter->GetOutput());
+    writer->SetInput(scaleFilter->GetOutput());
     writer->SetWriteGeomFile(true);
 
     //Instantiate the pipeline memory print estimator
