@@ -28,14 +28,10 @@
 #else
 
 #include "otbDisparityMapMedianFilter.h"
-
 #include "itkConstNeighborhoodIterator.h"
-#include "itkNeighborhoodInnerProduct.h"
 #include "itkImageRegionIterator.h"
 #include "itkImageRegionIteratorWithIndex.h"
 #include "itkNeighborhoodAlgorithm.h"
-#include "itkZeroFluxNeumannBoundaryCondition.h"
-#include "itkOffset.h"
 #include "itkProgressReporter.h"
 
 #include <vector>
@@ -203,7 +199,7 @@ DisparityMapMedianFilter<TInputImage, TOutputImage, TMask>
 template< class TInputImage, class TOutputImage, class TMask>
 void
 DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
-::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId)
+::GenerateData()
 {
 	// Allocate outputs
 	this->AllocateOutputs();
@@ -224,17 +220,14 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
 
 
 	/** Output iterators */
-	itk::ImageRegionIteratorWithIndex<OutputImageType> outputIt(output,outputRegionForThread);
-	itk::ImageRegionIterator<TMask> outputMaskIt(outputmaskPtr,outputRegionForThread);
-	itk::ImageRegionIterator<OutputImageType> outputDisparityMapIt(outputdisparitymapPtr,outputRegionForThread);
-	itk::ImageRegionIterator<TMask> outputDisparityMaskIt(outputdisparitymaskPtr,outputRegionForThread);
+	itk::ImageRegionIteratorWithIndex<OutputImageType> outputIt(output,output->GetRequestedRegion());
+	itk::ImageRegionIterator<TMask> outputMaskIt(outputmaskPtr,output->GetRequestedRegion());
+	itk::ImageRegionIterator<OutputImageType> outputDisparityMapIt(outputdisparitymapPtr,output->GetRequestedRegion());
+	itk::ImageRegionIterator<TMask> outputDisparityMaskIt(outputdisparitymaskPtr,output->GetRequestedRegion());
 	outputIt.GoToBegin();
 	outputMaskIt.GoToBegin();
 	outputDisparityMapIt.GoToBegin();
 	outputDisparityMaskIt.GoToBegin();
-
-  // support progress methods/callbacks
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   std::vector<InputPixelType> pixels;
   while (!outputIt.IsAtEnd() && !outputMaskIt.IsAtEnd() && !outputDisparityMapIt.IsAtEnd()  && !outputDisparityMapIt.IsAtEnd())
@@ -292,7 +285,6 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
 		outputDisparityMapIt.Set( static_cast<typename OutputImageType::PixelType> (InputIt.GetCenterPixel())); // copy the input disparity map
 		outputDisparityMaskIt.Set(MaskInputIt.GetCenterPixel());  // copy the input disparity mask
 
-		progress.CompletedPixel();
 		++outputIt;
 		++outputMaskIt;
 		++outputDisparityMapIt;
@@ -309,7 +301,7 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
 	outputIt.GoToBegin();
 	outputMaskIt.GoToBegin();
 
-	itk::ImageRegionConstIterator<OutputImageType> MedianIt(output,outputRegionForThread);
+	itk::ImageRegionConstIterator<OutputImageType> MedianIt(output,output->GetRequestedRegion());
 
   while (!outputIt.IsAtEnd() && !outputMaskIt.IsAtEnd())
   {
@@ -337,8 +329,8 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
 
 //Recompute median where values had been changed 
   // we  use the updated sub pixel disparity map
-	itk::ConstNeighborhoodIterator<OutputImageType> updatedDisparityMapIt(m_Radius, outputdisparitymapPtr,outputRegionForThread);
-	itk::ConstNeighborhoodIterator<TMask> updatedDisparityMaskIt(m_Radius, outputdisparitymaskPtr,outputRegionForThread);
+	itk::ConstNeighborhoodIterator<OutputImageType> updatedDisparityMapIt(m_Radius, outputdisparitymapPtr,output->GetRequestedRegion());
+	itk::ConstNeighborhoodIterator<TMask> updatedDisparityMaskIt(m_Radius, outputdisparitymaskPtr,output->GetRequestedRegion());
 
 	outputIt.GoToBegin();
 	outputMaskIt.GoToBegin();
