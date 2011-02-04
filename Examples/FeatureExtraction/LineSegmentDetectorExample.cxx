@@ -107,11 +107,11 @@ int main(int argc, char * argv[])
       ImageType> VectorDataRendererType;
   VectorDataRendererType::Pointer vectorDataRender = VectorDataRendererType::New();
 
-  typedef otb::Functor::AlphaBlendingFunctor<InputPixelType,
-    InputPixelType, InputPixelType> FunctorType;
-  typedef itk::BinaryFunctorImageFilter<ImageType, ImageType,
-    ImageType, FunctorType> BlendingFilterType;
-  BlendingFilterType::Pointer blendingFilter = BlendingFilterType::New();
+//  typedef otb::Functor::AlphaBlendingFunctor<InputPixelType,
+//    InputPixelType, InputPixelType> FunctorType;
+//  typedef itk::BinaryFunctorImageFilter<ImageType, ImageType,
+//    ImageType, FunctorType> BlendingFilterType;
+//  BlendingFilterType::Pointer blendingFilter = BlendingFilterType::New();
   // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -133,7 +133,7 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
   lsdFilter->SetInput(reader->GetOutput());
-
+/*
   vectorDataRender->SetInput(lsdFilter->GetOutput());
   vectorDataRender->SetSize(reader->GetOutput()->GetLargestPossibleRegion().GetSize());
   vectorDataRender->SetRenderingStyleType(VectorDataRendererType::Binary);
@@ -143,6 +143,9 @@ int main(int argc, char * argv[])
   blendingFilter->GetFunctor()->SetAlpha(0.5);
 
   writer->SetInput(blendingFilter->GetOutput());
+*/  
+  writer->SetInput(reader->GetOutput());
+
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //

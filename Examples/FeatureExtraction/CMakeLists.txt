@@ -44,8 +44,10 @@ ADD_EXECUTABLE(ExtractSegmentsByStepsExample
 ExtractSegmentsByStepsExample.cxx)
 TARGET_LINK_LIBRARIES(ExtractSegmentsByStepsExample OTBFeatureExtraction OTBCommon OTBIO)
 
+IF(OTB_USE_MAPNIK)
 ADD_EXECUTABLE(LineSegmentDetectorExample LineSegmentDetectorExample.cxx)
 TARGET_LINK_LIBRARIES(LineSegmentDetectorExample OTBFeatureExtraction OTBCommon OTBIO)
+ENDIF(OTB_USE_MAPNIK)
 
 ADD_EXECUTABLE(RightAngleDetectionExample RightAngleDetectionExample.cxx)
 TARGET_LINK_LIBRARIES(RightAngleDetectionExample OTBFeatureExtraction OTBCommon OTBIO)
