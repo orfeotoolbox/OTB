@@ -1161,10 +1161,10 @@ public:
     this->SetMinMax(newPixel, &max13, &min123, &max123, &min12347, &max12347, &max234, &max45);
 
     bool result = (
-      ((min123 >= (this->m_TV1 * max123))
-       && (max123 <= this->m_TV1 * newPixel[this->m_TM4])
-      || ((newPixel[this->m_TM2] >= this->m_TV1 * max13)
-          && (max123 <= newPixel[this->m_TM4])))
+      ((min123 >= (this->m_TV1 * max123)
+        && (max123 <= this->m_TV1 * newPixel[this->m_TM4]))
+       || ((newPixel[this->m_TM2] >= this->m_TV1 * max13)
+           && (max123 <= newPixel[this->m_TM4])))
       && (newPixel[this->m_TM5] <= this->m_TV1 * newPixel[this->m_TM4])
       && (newPixel[this->m_TM5] >= this->m_TV1 * max123)
       && (newPixel[this->m_TM7] <= this->m_TV1 * newPixel[this->m_TM4]));
