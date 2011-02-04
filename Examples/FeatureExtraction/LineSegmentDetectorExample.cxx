@@ -143,9 +143,8 @@ int main(int argc, char * argv[])
   blendingFilter->GetFunctor()->SetAlpha(0.5);
 
   writer->SetInput(blendingFilter->GetOutput());
-*/  
+*/
   writer->SetInput(reader->GetOutput());
-
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //

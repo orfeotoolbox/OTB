@@ -99,19 +99,19 @@ int otbGDALReadPxlComplexGeneric(int argc, char * argv[])
     {
     int indY = (int) ( (int)itPxl / ( sizeX * nbBand) );
     int indX = (int) ( (int)itPxl / nbBand ) - indY*sizeX;
-    int indB = (int)itPxl - (int)((int) (itPxl) / nbBand) * nbBand ;
+    int indB = (int)itPxl - (int)((int) (itPxl) / nbBand) * nbBand;
     count = 2*( sizeImgX*sizeImgY*indB + sizeImgX*(posY + indY) + (posX + indX));
     pxlValue[itPxl] = *(static_cast<ComplexType*>( static_cast<void*>(loadBuffer)) + itPxl );
     std::cout << "loadBuffer["<< itPxl << "] or " \
               << "pxlValue[" << posX + indX << "," << posY + indY << "," << indB << "]" \
               << "= " << pxlValue[itPxl] \
-              << " -> expectedValue = " << ComplexType(count,count+1) \
+              << " -> expectedValue = " << ComplexType(count, count+1) \
               << std::endl;
 
-    if (!IsEqual(pxlValue[itPxl], ComplexType(count,count+1)))
+    if (!IsEqual(pxlValue[itPxl], ComplexType(count, count+1)))
       {
       std::cerr << "ERROR at position " << "[" << posX + indX << "," << posY + indY << "," << indB << "]" \
-                << ". Got " << pxlValue[itPxl] << ", expected " << ComplexType(count,count+1) << std::endl;
+                << ". Got " << pxlValue[itPxl] << ", expected " << ComplexType(count, count+1) << std::endl;
       return EXIT_FAILURE;
       }
     }
@@ -140,18 +140,18 @@ int otbGDALReadPxlComplexGeneric(int argc, char * argv[])
       count = 2*( sizeImgX*sizeImgY*itBand + sizeImgX*(posY + indY) + (posX + indX));
       std::cout << "pixelValue [" << posX + indX << "," << posY + indY << "," << itBand << "] = " \
                 << pPixelValue[itBand][indX + indY * sizeX] \
-                << " -> expectedValue = " << ComplexType(count,count+1)
+                << " -> expectedValue = " << ComplexType(count, count+1)
                 << std::endl;
-      if (!IsEqual(pPixelValue[itBand][indX + indY * sizeX], ComplexType(count,count+1)))
+      if (!IsEqual(pPixelValue[itBand][indX + indY * sizeX], ComplexType(count, count+1)))
         {
         std::cerr << "ERROR at position " << "[" << posX + indX << "," << posY + indY << "," << itBand << "]" \
-                  << ". Got " << pPixelValue[itBand][indX + indY * sizeX] << ", expected " << ComplexType(count,count+1) << std::endl;
+                  << ". Got " << pPixelValue[itBand][indX + indY * sizeX] << ", expected " << ComplexType(count, count+1) << std::endl;
         return EXIT_FAILURE;
         }
       }
     }
 
-  GDALClose(poDataset) ;
+  GDALClose(poDataset);
 
   return EXIT_SUCCESS;
 }
