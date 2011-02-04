@@ -42,7 +42,7 @@ int OpticalCalibration::Describe(ApplicationDescriptor* descriptor)
   descriptor->AddInputImage();
   descriptor->AddOutputImage();
   descriptor->AddOptionNParams("Level",
-                           "Level of calibration toa or toc",
+                           "Level of calibration toa or toc (default is toa)",
                            "level",true, otb::ApplicationDescriptor::String);
   descriptor->AddOption("AvailableMemory","Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default","ram",1,false, otb::ApplicationDescriptor::Integer);
   return EXIT_SUCCESS;
@@ -66,6 +66,12 @@ int OpticalCalibration::Execute(otb::ApplicationOptionsResult* parseResult)
   // calibration process
   if(parseResult->IsOptionPresent("Level"))
     {
+    if(parseResult->GetParameterString("Level") == "toc")
+      {
+      std::cerr<<"Not implemented yet"<<std::endl;
+      return EXIT_FAILURE;
+      }
+
     // Read input image information
     ReaderType::Pointer reader=ReaderType::New();
     reader->SetFileName(parseResult->GetInputImage().c_str());
