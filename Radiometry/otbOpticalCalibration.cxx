@@ -31,6 +31,7 @@
 #include "otbStandardWriterWatcher.h"
 #include "otbPipelineMemoryPrintCalculator.h"
 
+
 namespace otb
 {
 
@@ -43,7 +44,6 @@ int OpticalCalibration::Describe(ApplicationDescriptor* descriptor)
   descriptor->AddOptionNParams("Level",
                            "Level of calibration toa or toc",
                            "level",true, otb::ApplicationDescriptor::String);
-  descriptor->AddOption("NumStreamDivisions","Number of streaming divisions (optional)","stream",1 , false, otb::ApplicationDescriptor::Integer);
   descriptor->AddOption("AvailableMemory","Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default","ram",1,false, otb::ApplicationDescriptor::Integer);
   return EXIT_SUCCESS;
 }
@@ -91,20 +91,20 @@ int OpticalCalibration::Execute(otb::ApplicationOptionsResult* parseResult)
       {
       long long int memory = static_cast <long long int> (parseResult->GetParameterUInt("AvailableMemory"));
       calculator->SetAvailableMemory(memory / byteToMegabyte);
-      calculator->SetDataToWrite(imageToLuminanceFilter->GetOutput());
-      calculator->Compute();
-      
-      writer->SetTilingStreamDivisions(calculator->GetOptimalNumberOfStreamDivisions());
-      
-      otbMsgDevMacro(<< "Guess the pipeline memory print " << calculator->GetMemoryPrint()*byteToMegabyte << " Mo");
-      otbMsgDevMacro(<< "Number of stream divisions : " << calculator->GetOptimalNumberOfStreamDivisions());
       }
-    
-    if ( parseResult->IsOptionPresent("NumStreamDivisions") )
+    else
       {
-      writer->SetTilingStreamDivisions(parseResult->GetParameterULong("NumStreamDivisions"));
+      calculator->SetAvailableMemory(256 * byteToMegabyte);
       }
-    
+
+    calculator->SetDataToWrite(imageToLuminanceFilter->GetOutput());
+    calculator->Compute();
+      
+    writer->SetTilingStreamDivisions(calculator->GetOptimalNumberOfStreamDivisions());
+      
+    otbMsgDevMacro(<< "Guess the pipeline memory print " << calculator->GetMemoryPrint()*byteToMegabyte << " Mo");
+    otbMsgDevMacro(<< "Number of stream divisions : " << calculator->GetOptimalNumberOfStreamDivisions());
+
     otb::StandardWriterWatcher watcher(writer,"OpticalCalibration");
 
     writer->Update();
