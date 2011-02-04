@@ -2870,65 +2870,19 @@ FOREACH(INPUTFILE_PIXELTYPE ${INPUTFILE_PIXELTYPES_LIST})
 ENDFOREACH(INPUTFILE_PIXELTYPE ${INPUTFILE_PIXELTYPES_LIST})
 
 
-# Tests with GDAL only (not deal for this commit)
-#ADD_TEST(ioTvGDALReadPxlComplexDbMono ${IO_TESTS21}
-#  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvGDALReadPxlComplexDbMono.txt
-#                           ${TEMP}/ioTvGDALReadPxlComplexDbMono_Out.txt
-#         otbGDALReadPxlComplexDb
-#              ${INPUTDATA}/monobandComplexDouble
-#              1 1
-#              ${TEMP}/ioTvGDALReadPxlComplexDbMono_Out.txt
-#)
-#ADD_TEST(ioTvGDALReadPxlComplexDbMulti ${IO_TESTS21}
-#  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvGDALReadPxlComplexDbMulti.txt
-#                           ${TEMP}/ioTvGDALReadPxlComplexDbMulti_Out.txt
-#         otbGDALReadPxlComplexDb
-#              ${INPUTDATA}/multibandComplexDouble
-#              1 1
-#              ${TEMP}/ioTvGDALReadPxlComplexDbMulti_Out.txt
-#)
-#ADD_TEST(ioTvGDALReadPxlComplexDbMulti3 ${IO_TESTS21}
-#  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvGDALReadPxlComplexDbMulti3.txt
-#                           ${TEMP}/ioTvGDALReadPxlComplexDbMulti3_Out.txt
-#         otbGDALReadPxlComplexDb
-#              ${INPUTDATA}/multibandComplexDouble_3bands
-#              100 100
-#              ${TEMP}/ioTvGDALReadPxlComplexDbMulti3_Out.txt
-#)
-#ADD_TEST(ioTvGDALReadPxlComplexDbMulti4 ${IO_TESTS21}
-#  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvGDALReadPxlComplexDbMulti4.txt
-#                           ${TEMP}/ioTvGDALReadPxlComplexDbMulti4_Out.txt
-#         otbGDALReadPxlComplexDb
-#              ${INPUTDATA}/multibandComplexDouble_4bands
-#              0 0
-#              ${TEMP}/ioTvGDALReadPxlComplexDbMulti4_Out.txt
-#)
-#
-#
-#ADD_TEST(ioTvGDALReadPxlComplexFlMulti ${IO_TESTS21}
-#  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvGDALReadPxlComplexFlMulti.txt
-#                           ${TEMP}/ioTvGDALReadPxlComplexFlMulti_Out.txt
-#         otbGDALReadPxlComplexFl
-#             ${INPUTDATA}/multibandComplexFloat
-#              100 100
-#              ${TEMP}/ioTvGDALReadPxlComplexFlMulti_Out.txt
-#)
-#ADD_TEST(ioTvGDALReadPxlComplexFlMulti3 ${IO_TESTS21}
-#  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvGDALReadPxlComplexFlMulti3.txt
-#                           ${TEMP}/ioTvGDALReadPxlComplexFlMulti3_Out.txt
-#         otbGDALReadPxlComplexFl
-#              ${INPUTDATA}/multibandComplexFloat_3bands
-#              100 100
-#              ${TEMP}/ioTvGDALReadPxlComplexFlMulti3_Out.txt
-#)
-#ADD_TEST(ioTvGDALReadPxlComplexFlMulti4 ${IO_TESTS21}
-#  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvGDALReadPxlComplexFlMulti4.txt
-#                           ${TEMP}/ioTvGDALReadPxlComplexFlMulti4_Out.txt
-#         otbGDALReadPxlComplexFl
-#              ${INPUTDATA}/multibandComplexFloat_4bands
-#              100 100
-#              ${TEMP}/ioTvGDALReadPxlComplexFlMulti4_Out.txt
-#)
+# Tests with GDAL only to read complex data
+
+#SET(INPUTFILE_PIXELTYPES_LIST "Int" "Short" "Float" "Double")
+SET(INPUTFILE_PIXELTYPES_LIST "Float" "Double")
+
+FOREACH(INPUTFILE_PIXELTYPE ${INPUTFILE_PIXELTYPES_LIST})
+
+ADD_TEST(ioTvGDALReadPxlComplex${INPUTFILE_PIXELTYPE} ${IO_TESTS21}
+         otbGDALReadPxlComplex${INPUTFILE_PIXELTYPE}
+         ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_3bands
+         1 5 10 2)
+
+ENDFOREACH(INPUTFILE_PIXELTYPE ${INPUTFILE_PIXELTYPES_LIST})
 
 #----------------------------------------------------------------------------------
 SET(BasicIO_SRCS1
@@ -3139,9 +3093,7 @@ otbMapFileProductWriter.cxx
 otbKmzProductWriter.cxx
 otbTileMapImageIOHelperTest.cxx
 otbComplexImageManipulationTest.cxx
-#not deal in this commit
-#otbGDALReadPxlComplexDb.cxx
-#otbGDALReadPxlComplexFl.cxx
+otbGDALReadPxlComplex.cxx
 )
 
 
