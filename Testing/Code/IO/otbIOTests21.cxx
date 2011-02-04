@@ -57,8 +57,7 @@ void RegisterTests()
   REGISTER_TEST(otbMonobandScalarToVectorImageComplexDouble);
   REGISTER_TEST(otbMultibandComplexToImageScalarFloat);
   REGISTER_TEST(otbMultibandComplexToImageScalarDouble);
-
-  // not deal in this commit
-  //REGISTER_TEST(otbGDALReadPxlComplexDb);
-  //REGISTER_TEST(otbGDALReadPxlComplexFl);
+  // Complex tests with GDAL only
+  REGISTER_TEST(otbGDALReadPxlComplexDouble);
+  REGISTER_TEST(otbGDALReadPxlComplexFloat);
 }
