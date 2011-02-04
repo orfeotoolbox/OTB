@@ -68,7 +68,7 @@ int otbGDALReadPxlComplexGeneric(int argc, char * argv[])
   std::cout << "Type GDAL = " << GDALGetDataTypeName(poDataset->GetRasterBand(1)->GetRasterDataType()) << std::endl;
 
   //*******************
-  // Method n°1 : use RasterIO directly with the dataset
+  // Method 1 : use RasterIO directly with the dataset
   std::cout << "**** METHOD 1 : Use RasterIO to read all selected data in file ****" << std::endl;
   std::streamoff nbBytes = nbBand * nbPixelToRead * bytePerPixel;
   std::cout << "nbBytes of the buffer = " << nbBytes << " = " \
@@ -120,7 +120,7 @@ int otbGDALReadPxlComplexGeneric(int argc, char * argv[])
   delete pxlValue;
 
   //*******************
-  // Method n°2 : Use RasterIO to read each band included in the file
+  // Method 2 : Use RasterIO to read each band included in the file
   std::cout << "**** METHOD 2 : Use RasterIO to read each band included in the file****" << std::endl;
   GDALRasterBand  *poBand;
   ComplexType pPixelValue[nbBand][nbPixelToRead];
