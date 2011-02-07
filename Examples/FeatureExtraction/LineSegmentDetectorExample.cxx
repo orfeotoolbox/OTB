@@ -146,7 +146,6 @@ int main(int argc, char * argv[])
   writer->SetInput(blendingFilter->GetOutput());
   //writer->SetInput(reader->GetOutput());
   //writer->SetInput(vectorDataRenderer->GetOutput());
-
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //

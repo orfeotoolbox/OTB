@@ -88,10 +88,10 @@ protected:
 };
 
 template<class TInputInternalPixel1, class TInputInternalPixel2, class TOutputInternalPixel>
-class ITK_EXPORT AlphaBlendingFunctor< itk::RGBAPixel<TInputInternalPixel1>,  
+class ITK_EXPORT AlphaBlendingFunctor< itk::RGBAPixel<TInputInternalPixel1>,
                                        itk::RGBAPixel<TInputInternalPixel2>,
                                        itk::RGBAPixel<TOutputInternalPixel> > :
-  public AlphaBlendingFunctorBase<itk::RGBAPixel<TInputInternalPixel1>,  
+  public AlphaBlendingFunctorBase<itk::RGBAPixel<TInputInternalPixel1>,
                                   itk::RGBAPixel<TInputInternalPixel2>,
                                   itk::RGBAPixel<TOutputInternalPixel> >
 {
