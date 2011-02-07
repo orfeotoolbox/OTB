@@ -1,8 +1,8 @@
-#ifndef __otbLocalRxDetectorFilter_txx
-#define __otbLocalRxDetectorFilter_txx
+#ifndef __otbLocalRxDetectorNonThreadFilter_txx
+#define __otbLocalRxDetectorNonThreadFilter_txx
 
 
-#include "otbLocalRxDetectorFilter.h"
+#include "otbLocalRxDetectorNonThreadFilter.h"
 
 namespace otb
 {
@@ -11,8 +11,8 @@ namespace otb
  *
  */
 template <class TInputImage, class TOutputImage>
-LocalRxDetectorFilter<TInputImage, TOutputImage>
-::LocalRxDetectorFilter()
+LocalRxDetectorNonThreadFilter<TInputImage, TOutputImage>
+::LocalRxDetectorNonThreadFilter()
 {
 	this->m_ExternalRadius = 0;
 	this->m_InternalRadius = 0;
@@ -23,7 +23,7 @@ LocalRxDetectorFilter<TInputImage, TOutputImage>
  */
 template <class TInputImage, class TOutputImage>
 void
-LocalRxDetectorFilter<TInputImage, TOutputImage>
+LocalRxDetectorNonThreadFilter<TInputImage, TOutputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
@@ -37,7 +37,7 @@ LocalRxDetectorFilter<TInputImage, TOutputImage>
  */
 template <class TInputImage, class TOutputImage>
 void
-LocalRxDetectorFilter<TInputImage, TOutputImage>
+LocalRxDetectorNonThreadFilter<TInputImage, TOutputImage>
 ::GenerateData()
 {
 
@@ -82,7 +82,7 @@ LocalRxDetectorFilter<TInputImage, TOutputImage>
 	}
 
 	// Iterator on output region
-	FaceCalculatorType                      			faceCalculator;
+	FaceCalculatorType                      			      faceCalculator;
 	typename FaceCalculatorType::FaceListType           faceList;
 	typename FaceCalculatorType::FaceListType::iterator fit;
 
@@ -107,6 +107,7 @@ LocalRxDetectorFilter<TInputImage, TOutputImage>
 		for (ci = inputIt.Begin(); !ci.IsAtEnd(); ++ci)
 		{
 			// Pushback element in listSample
+       //std::cout << "pixel of shaped iteror : " << ci.Get() << std::endl;
 			listSample->PushBack(ci.Get());
 		}
 
@@ -156,7 +157,7 @@ LocalRxDetectorFilter<TInputImage, TOutputImage>
 */
 template <class TInputImage, class TOutputImage>
 void
-LocalRxDetectorFilter<TInputImage, TOutputImage>
+LocalRxDetectorNonThreadFilter<TInputImage, TOutputImage>
 ::GenerateInputRequestedRegion()
 {
 	// Call the superclass' implementation of this method

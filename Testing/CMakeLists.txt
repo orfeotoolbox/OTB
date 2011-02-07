@@ -191,6 +191,6 @@ ADD_TEST(tvLocalRXDetectorROI
          ${TEMP}/localRXROICupriteSubHsi.tif
          7 
          1
-         60 
-         60
+         8
+         8
          )

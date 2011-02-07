@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbLocalRxDetectorFilter_h
-#define __otbLocalRxDetectorFilter_h
+#ifndef __otbLocalRxDetectorNonThreadFilter_h
+#define __otbLocalRxDetectorNonThreadFilter_h
 
 #include "itkImageToImageFilter.h"
 
@@ -32,20 +32,20 @@
 namespace otb
 {
 
-/** \class otbLocalRxDetectorFilter
+/** \class otbLocalRxDetectorNonThreadFilter
  * \brief Local-RX detector algorithm with multichannel VectorImage data as input
  *
  *
  * \ingroup ImageFilters
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT LocalRxDetectorFilter:
+class ITK_EXPORT LocalRxDetectorNonThreadFilter:
 public itk::ImageToImageFilter<TInputImage,TOutputImage>
 {
 public:
 
 	/** Standard class typedefs. */
-	typedef LocalRxDetectorFilter           						Self;
+	typedef LocalRxDetectorNonThreadFilter           						Self;
 	typedef itk::ImageToImageFilter< TInputImage, TOutputImage >	Superclass;
 	typedef itk::SmartPointer<Self>        							Pointer;
 	typedef itk::SmartPointer<const Self>   						ConstPointer;
@@ -54,7 +54,7 @@ public:
     itkNewMacro(Self);
 
     /** Creation through object factory macro */
-    itkTypeMacro(LocalRxDetectorFilter, ImageToImageFilter);
+    itkTypeMacro(LocalRxDetectorNonThreadFilter, ImageToImageFilter);
 
     /** typedef related to input and output images */
     typedef TInputImage								InputImageType;
@@ -97,12 +97,12 @@ public:
 
 
 protected:
-	LocalRxDetectorFilter();
-	virtual ~LocalRxDetectorFilter() {}
+	LocalRxDetectorNonThreadFilter();
+	virtual ~LocalRxDetectorNonThreadFilter() {}
 	void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-	LocalRxDetectorFilter(const Self&); //purposely not implemented
+	LocalRxDetectorNonThreadFilter(const Self&); //purposely not implemented
 	void operator=(const Self&); //purposely not implemented
 
 	int m_InternalRadius;
@@ -113,7 +113,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLocalRxDetectorFilter_nonThreaded.txx"
+#include "otbLocalRxDetectorNonThreadFilter.txx"
 #endif
 
 #endif

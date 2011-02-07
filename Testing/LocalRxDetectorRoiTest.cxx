@@ -2,7 +2,7 @@
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbStreamingImageFileWriter.h"
-#include "otbLocalRxDetectorFilter.h"
+#include "otbLocalRxDetectorNonThreadFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 #include "otbExtractROI.h"
 
@@ -12,11 +12,11 @@ int LocalRXDetectorROITest(int argc, char * argv[])
 	typedef double PixelType;
 	typedef otb::VectorImage<PixelType, 2> VectorImageType;
 	typedef otb::Image<PixelType, 2> ImageType;
-	typedef otb::LocalRxDetectorFilter<VectorImageType, ImageType> LocalRxDetectorFilterType;
+	typedef otb::LocalRxDetectorNonThreadFilter<VectorImageType, ImageType> LocalRxDetectorFilterType;
 	typedef otb::ImageFileReader<VectorImageType> ReaderType;
 	typedef unsigned char WritePixelType;
 	typedef otb::Image<WritePixelType> WriteImageType;
-	typedef otb::StreamingImageFileWriter<WriteImageType> WriterType;
+	typedef otb::StreamingImageFileWriter<ImageType> WriterType;
 	typedef itk::RescaleIntensityImageFilter<ImageType, WriteImageType> RescalerType;
 	typedef otb::ExtractROI<ImageType::PixelType, ImageType::PixelType> ExtractRoiType;
 
@@ -31,20 +31,11 @@ int LocalRXDetectorROITest(int argc, char * argv[])
 	const int nbCol = atoi(argv[5]);
 	const int nbRow = atoi(argv[6]);
 
-	const int idxCol = 0;
-	const int idxRow = 0;
-
-
-
 	//---------------   Read hsi file   -----------------//
 
 	ReaderType::Pointer reader = ReaderType::New();
 	reader->SetFileName(filename);
 	reader->UpdateOutputInformation();
-
-	std::cout << "File read : OK" << std::endl;
-
-
 
 	//-------------   Anomaly detection   ---------------//
 
@@ -53,37 +44,29 @@ int LocalRXDetectorROITest(int argc, char * argv[])
 	rxDetector->SetInternalRadius(internalRadius);
 	rxDetector->SetInput(reader->GetOutput());
 
-	std::cout << "Anomaly detection ok" << std::endl;
-
-
-
 	//---------------   Define the ROI   ----------------//
 
 	ImageType::SizeType size;
 	size[0] = nbCol;
 	size[1] = nbRow;
-
+        
 	ImageType::IndexType index;
-	index[0] = idxCol;
-	index[1] = idxRow;
+	index[0] = 0;
+	index[1] = 0;
 
 	ImageType::RegionType region;
 	region.SetSize(size);
 	region.SetIndex(index);
 
-	std::cout << "ROI defined OK" << std::endl;
-
-
-
 	//------------   Build extractRoiFilter   -----------//
 
 	ExtractRoiType::Pointer roiExtractor = ExtractRoiType::New();
-	roiExtractor->SetExtractionRegion(region);
-	roiExtractor->SetInput(rxDetector->GetOutput());
-
-	std::cout << "build extractor ok" << std::endl;
-
-
+	//roiExtractor->SetExtractionRegion(region);
+	roiExtractor->SetStartX(0);
+        roiExtractor->SetStartY(0);
+        roiExtractor->SetSizeX(nbCol);
+        roiExtractor->SetSizeY(nbRow);
+        roiExtractor->SetInput(rxDetector->GetOutput());
 
 	//------------   rescaling and writing   ------------//
 
@@ -94,9 +77,7 @@ int LocalRXDetectorROITest(int argc, char * argv[])
 
 	WriterType::Pointer writer = WriterType::New();
 	writer->SetFileName(outputFilename);
-	writer->SetInput(rescaler->GetOutput());
-
-	std::cout << "Rescaling and writing ok" << std::endl;
+	writer->SetInput(roiExtractor->GetOutput());
 
 	//----------------   Launching pipeline   ------------//
 
