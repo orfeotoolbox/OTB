@@ -258,7 +258,7 @@ AdhesionCorrectionFilter<TImage, TMask>
                 << "::GenerateInputRequestedRegion()";
     e.SetLocation(msg.str().c_str());
     e.SetDescription("Requested region is (at least partially) outside the largest possible region of image 1.");
-    e.SetDataObject(old_disparityPtr);
+    e.SetDataObject(canny_edges);
     throw e;
   }
   
@@ -305,7 +305,7 @@ AdhesionCorrectionFilter<TImage, TMask>
                 << "::GenerateInputRequestedRegion()";
     e.SetLocation(msg.str().c_str());
     e.SetDescription("Requested region is (at least partially) outside the largest possible region of image 1.");
-    e.SetDataObject(old_disparityPtr);
+    e.SetDataObject(old_maskPtr);
     throw e;
   }
   
@@ -330,7 +330,7 @@ AdhesionCorrectionFilter<TImage, TMask>
                 << "::GenerateInputRequestedRegion()";
     e.SetLocation(msg.str().c_str());
     e.SetDescription("Requested region is (at least partially) outside the largest possible region of image 1.");
-    e.SetDataObject(old_disparityPtr);
+    e.SetDataObject(canny_disparity);
     throw e;
   }
     
@@ -353,7 +353,7 @@ AdhesionCorrectionFilter<TImage, TMask>
                 << "::GenerateInputRequestedRegion()";
     e.SetLocation(msg.str().c_str());
     e.SetDescription("Requested region is (at least partially) outside the largest possible region of image 1.");
-    e.SetDataObject(old_disparityPtr);
+    e.SetDataObject(subpixelmaskPtr);
     throw e;
   }
 
