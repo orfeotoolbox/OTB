@@ -70,7 +70,7 @@ int otbGDALReadPxlComplexGeneric(int argc, char * argv[])
   //*******************
   // Method 1 : use RasterIO directly with the dataset
   std::cout << "**** METHOD 1 : Use RasterIO to read all selected data in file ****" << std::endl;
-  std::streamoff nbBytes = nbBand * nbPixelToRead * bytePerPixel;
+  std::streamoff nbBytes = static_cast<std::streamoff>(nbBand) * static_cast<std::streamoff>(nbPixelToRead) * static_cast<std::streamoff>(bytePerPixel);
   std::cout << "nbBytes of the buffer = " << nbBytes << " = " \
       << nbBand << " x " << nbPixelToRead << " x " << bytePerPixel<< std::endl;
 
@@ -95,6 +95,7 @@ int otbGDALReadPxlComplexGeneric(int argc, char * argv[])
 
   ComplexType *pxlValue = new ComplexType[nbPixelToRead * nbBand];
   unsigned int count = 0;
+  ComplexType expectedValue;
   for (unsigned int itPxl = 0; itPxl < (unsigned int) (nbPixelToRead * nbBand); itPxl++)
     {
     int indY = (int) ( (int)itPxl / ( sizeX * nbBand) );
@@ -102,16 +103,17 @@ int otbGDALReadPxlComplexGeneric(int argc, char * argv[])
     int indB = (int)itPxl - (int)((int) (itPxl) / nbBand) * nbBand;
     count = 2*( sizeImgX*sizeImgY*indB + sizeImgX*(posY + indY) + (posX + indX));
     pxlValue[itPxl] = *(static_cast<ComplexType*>( static_cast<void*>(loadBuffer)) + itPxl );
+    expectedValue = ComplexType(count,count+1);
     std::cout << "loadBuffer["<< itPxl << "] or " \
               << "pxlValue[" << posX + indX << "," << posY + indY << "," << indB << "]" \
               << "= " << pxlValue[itPxl] \
-              << " -> expectedValue = " << ComplexType(count, count+1) \
+              << " -> expectedValue = " << expectedValue \
               << std::endl;
 
-    if (!IsEqual(pxlValue[itPxl], ComplexType(count, count+1)))
+    if (!IsEqual(pxlValue[itPxl], expectedValue))
       {
       std::cerr << "ERROR at position " << "[" << posX + indX << "," << posY + indY << "," << indB << "]" \
-                << ". Got " << pxlValue[itPxl] << ", expected " << ComplexType(count, count+1) << std::endl;
+                << ". Got " << pxlValue[itPxl] << ", expected " << expectedValue << std::endl;
       return EXIT_FAILURE;
       }
     }
@@ -123,14 +125,15 @@ int otbGDALReadPxlComplexGeneric(int argc, char * argv[])
   // Method 2 : Use RasterIO to read each band included in the file
   std::cout << "**** METHOD 2 : Use RasterIO to read each band included in the file****" << std::endl;
   GDALRasterBand  *poBand;
-  ComplexType pPixelValue[nbBand][nbPixelToRead];
+  //ComplexType pPixelValue[nbBand][nbPixelToRead];
+  ComplexType* pPixelValue = new ComplexType[nbBand*nbPixelToRead];
 
   for (unsigned int itBand = 0; itBand < (unsigned int) nbBand; itBand++)
     {
     poBand = poDataset->GetRasterBand( itBand +1 );
 
     poBand->RasterIO( GF_Read, posX, posY, sizeX, sizeY,
-                      &(pPixelValue[itBand]), sizeX, sizeY, poBand->GetRasterDataType(),
+                      &(pPixelValue[itBand*nbPixelToRead]), sizeX, sizeY, poBand->GetRasterDataType(),
                       0, 0 );
 
     for (unsigned int itPxl = 0; itPxl < (unsigned int) nbPixelToRead; itPxl++)
@@ -138,19 +141,21 @@ int otbGDALReadPxlComplexGeneric(int argc, char * argv[])
       int indY = (int) ((int)itPxl/sizeX);
       int indX = itPxl - indY * sizeX;
       count = 2*( sizeImgX*sizeImgY*itBand + sizeImgX*(posY + indY) + (posX + indX));
+      expectedValue = ComplexType(count,count+1);
       std::cout << "pixelValue [" << posX + indX << "," << posY + indY << "," << itBand << "] = " \
-                << pPixelValue[itBand][indX + indY * sizeX] \
-                << " -> expectedValue = " << ComplexType(count, count+1)
+                << pPixelValue[itBand*nbPixelToRead + indX + indY * sizeX] \
+                << " -> expectedValue = " << expectedValue \
                 << std::endl;
-      if (!IsEqual(pPixelValue[itBand][indX + indY * sizeX], ComplexType(count, count+1)))
+      if (!IsEqual(pPixelValue[itBand*nbPixelToRead + indX + indY * sizeX], expectedValue))
         {
         std::cerr << "ERROR at position " << "[" << posX + indX << "," << posY + indY << "," << itBand << "]" \
-                  << ". Got " << pPixelValue[itBand][indX + indY * sizeX] << ", expected " << ComplexType(count, count+1) << std::endl;
+                  << ". Got " << pPixelValue[itBand*nbPixelToRead + indX + indY * sizeX] << ", expected " << expectedValue << std::endl;
         return EXIT_FAILURE;
         }
       }
     }
 
+  delete pPixelValue;
   GDALClose(poDataset);
 
   return EXIT_SUCCESS;
