@@ -105,13 +105,13 @@ int main(int argc, char * argv[])
   typedef otb::VectorData<PrecisionType> VectorDataType;
   typedef otb::VectorDataToImageFilter<VectorDataType,
       ImageType> VectorDataRendererType;
-  VectorDataRendererType::Pointer vectorDataRender = VectorDataRendererType::New();
+  VectorDataRendererType::Pointer vectorDataRenderer = VectorDataRendererType::New();
 
-//  typedef otb::Functor::AlphaBlendingFunctor<InputPixelType,
-//    InputPixelType, InputPixelType> FunctorType;
-//  typedef itk::BinaryFunctorImageFilter<ImageType, ImageType,
-//    ImageType, FunctorType> BlendingFilterType;
-//  BlendingFilterType::Pointer blendingFilter = BlendingFilterType::New();
+  typedef otb::Functor::AlphaBlendingFunctor<InputPixelType,
+    InputPixelType, InputPixelType> FunctorType;
+  typedef itk::BinaryFunctorImageFilter<ImageType, ImageType,
+    ImageType, FunctorType> BlendingFilterType;
+  BlendingFilterType::Pointer blendingFilter = BlendingFilterType::New();
   // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -133,18 +133,20 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
   lsdFilter->SetInput(reader->GetOutput());
-/*
-  vectorDataRender->SetInput(lsdFilter->GetOutput());
-  vectorDataRender->SetSize(reader->GetOutput()->GetLargestPossibleRegion().GetSize());
-  vectorDataRender->SetRenderingStyleType(VectorDataRendererType::Binary);
+  reader->GenerateOutputInformation();
+
+  vectorDataRenderer->SetInput(lsdFilter->GetOutput());
+  vectorDataRenderer->SetSize(reader->GetOutput()->GetLargestPossibleRegion().GetSize());
+  vectorDataRenderer->SetRenderingStyleType(VectorDataRendererType::Binary);
 
   blendingFilter->SetInput1(reader->GetOutput());
   blendingFilter->SetInput2(vectorDataRenderer->GetOutput());
-  blendingFilter->GetFunctor()->SetAlpha(0.5);
-
+  blendingFilter->GetFunctor().SetAlpha(0.25);
+ 
   writer->SetInput(blendingFilter->GetOutput());
-*/
-  writer->SetInput(reader->GetOutput());
+  //writer->SetInput(reader->GetOutput());
+  //writer->SetInput(vectorDataRenderer->GetOutput());
+
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //

@@ -307,6 +307,21 @@ ADD_TEST(feTeCloudDetectionExampleTest ${EXE_TESTS2}
         553 467 734 581 0.4 0.6 1.0
 )
 
+IF(OTB_USE_MAPNIK)
+
+# ------- Line Segment Detector test----------
+
+ADD_TEST(feTeLineSegmentDetectorExampleTest  ${EXE_TESTS2}
+        --compare-image ${TOL}
+        ${BASELINE}/feTeLineSegmentDetectorExampleOutput.png
+        ${TEMP}/feTeLineSegmentDetectorExampleOutput.png
+       LineSegmentDetectorExampleTest
+	${INPUTDATA}/Scene.png
+	${TEMP}/feTeLineSegmentDetectorExampleOutput.png
+)
+
+ENDIF(OTB_USE_MAPNIK)
+
 # ------- Right Angle Detection test----------
 
 ADD_TEST(feTeRightAngleDetectionExample  ${EXE_TESTS2}
