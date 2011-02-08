@@ -40,6 +40,7 @@ SarBrightnessFunction<TInputImage, TCoordRep>
   m_RangeSpreadLoss = ParametricFunctionType::New();
 
   m_Noise->SetConstantValue(0.0);
+  m_EnableNoise = true;
   m_AntennaPatternNewGain->SetConstantValue(1.0);
   m_AntennaPatternOldGain->SetConstantValue(1.0);
   m_RangeSpreadLoss->SetConstantValue(1.0);
@@ -100,13 +101,19 @@ SarBrightnessFunction<TInputImage, TCoordRep>
   FunctorRealType antennaPatternOldGain;
   FunctorRealType rangeSpreadLoss;
 
-  noise = static_cast<FunctorRealType>(m_Noise->EvaluateAtIndex(index));
+  if (m_EnableNoise)
+    {
+    noise = static_cast<FunctorRealType>(m_Noise->EvaluateAtIndex(index));
+    }
   antennaPatternNewGain = static_cast<FunctorRealType>(m_AntennaPatternNewGain->EvaluateAtIndex(index));
   antennaPatternOldGain = static_cast<FunctorRealType>(m_AntennaPatternOldGain->EvaluateAtIndex(index));
   rangeSpreadLoss = static_cast<FunctorRealType>(m_RangeSpreadLoss->EvaluateAtIndex(index));
 
   FunctorType functor;
-  functor.SetNoise(noise);
+  if (m_EnableNoise)
+    {
+    functor.SetNoise(noise);
+    }
   functor.SetScale(m_Scale);
   functor.SetAntennaPatternNewGain(antennaPatternNewGain);
   functor.SetAntennaPatternOldGain(antennaPatternOldGain);

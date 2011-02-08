@@ -115,6 +115,10 @@ public:
   itkGetConstObjectMacro(Noise, ParametricFunctionType);
   itkGetObjectMacro(Noise, ParametricFunctionType);
 
+  /** Get/Set the flag which indicate if we use the Offset value */
+  itkSetMacro(EnableNoise, bool);
+  itkGetMacro(EnableNoise, bool);
+
   /** Get/Set the AntennaPatternNewGain value */
   itkSetObjectMacro(AntennaPatternNewGain, ParametricFunctionType);
   itkGetConstObjectMacro(AntennaPatternNewGain, ParametricFunctionType);
@@ -142,6 +146,7 @@ private:
 
   FunctorRealType             m_Scale;
   ParametricFunctionPointer   m_Noise;
+  bool                        m_EnableNoise;
   ParametricFunctionPointer   m_AntennaPatternNewGain;
   ParametricFunctionPointer   m_AntennaPatternOldGain;
   ParametricFunctionPointer   m_RangeSpreadLoss;
