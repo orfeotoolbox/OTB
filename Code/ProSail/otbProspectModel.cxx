@@ -172,9 +172,9 @@ ProspectModel
 
       SpectralResponseType::PairType refl;
       SpectralResponseType::PairType trans;
-      refl.first=lambda;
+      refl.first=lambda/1000.0;
       refl.second=RN;
-      trans.first=lambda;
+      trans.first=lambda/1000.0;
       trans.second=TN;
       outRefl->GetResponse().push_back(refl);
       outTrans->GetResponse().push_back(trans);

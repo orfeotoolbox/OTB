@@ -387,9 +387,9 @@ SailModel
       resv = (rdot*PARdifo+rsot*PARdiro)/(PARdiro+PARdifo);
       
       SpectralResponseType::PairType tmp1,tmp2;
-      tmp1.first=lambda;
+      tmp1.first=lambda/1000.0;
       tmp1.second=resh;
-      tmp2.first=lambda;
+      tmp2.first=lambda/1000.0;
       tmp2.second=resv;
 
       outVRefl->GetResponse().push_back(tmp2);
