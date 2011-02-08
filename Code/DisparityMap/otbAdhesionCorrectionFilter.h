@@ -139,6 +139,10 @@ public:
   itkSetMacro(MaxEdgeGap, double);
   itkGetMacro(MaxEdgeGap, double);
   
+      /** Set/Get the edge threshold  */
+  itkSetMacro(EdgeThreshold, double);
+  itkGetMacro(EdgeThreshold, double);
+  
   
 
 protected:
@@ -173,6 +177,7 @@ private:
 	double                        m_DiscontinuityThreshold ;
 	double                        m_DiscontinuityHighThreshold;
 	double                        m_MaxEdgeGap;
+	double                        m_EdgeThreshold;
  
 };
 

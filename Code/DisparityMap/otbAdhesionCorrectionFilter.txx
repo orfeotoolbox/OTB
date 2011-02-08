@@ -51,6 +51,7 @@ AdhesionCorrectionFilter<TImage, TMask>
   m_DiscontinuityThreshold  = 10.0;
   m_DiscontinuityHighThreshold = 30.0;
   m_MaxEdgeGap = 10.0;
+  m_EdgeThreshold = 30.0;
 }
 
 
@@ -750,8 +751,8 @@ std::cout<<"Inside the risk zone, we look for edges which may cause te adhesion-
 		{
 			index_pos = new_disparityIt.GetIndex();
 			disparity_jumpIt.SetIndex(index_pos);
-			double m_max = 30;
-			int index_max = -100; // Canny edges should be larger than 30
+			double value_max = m_EdgeThreshold;
+			int index_max = -100; // Canny edges should be larger than m_EdgeThreshold
 			if (disparity_jumpIt.Get() == 1)
 			{
 				int l=1;
@@ -759,9 +760,9 @@ std::cout<<"Inside the risk zone, we look for edges which may cause te adhesion-
 				{
 					index = index_pos;
 					index[0] = index_pos[0] + l;
-					if (canny_edges->GetPixel(index)>m_max)
+					if (canny_edges->GetPixel(index)>value_max)
 					{
-						m_max = canny_edges->GetPixel(index);
+						value_max = canny_edges->GetPixel(index);
 						index_max = index_pos[0] + l;
 					}
 					l++;
@@ -774,9 +775,9 @@ std::cout<<"Inside the risk zone, we look for edges which may cause te adhesion-
 				{
 					index = index_pos;
 					index[0] = index_pos[0] + l;
-					if (canny_edges->GetPixel(index)>m_max)
+					if (canny_edges->GetPixel(index)>value_max)
 					{
-						m_max = canny_edges->GetPixel(index);
+						value_max = canny_edges->GetPixel(index);
 						index_max = index_pos[0] + l;
 					}
 					l++;
@@ -789,9 +790,9 @@ std::cout<<"Inside the risk zone, we look for edges which may cause te adhesion-
 				{
 					index = index_pos;
 					index[0] = index_pos[0] + l;
-					if (canny_edges->GetPixel(index)>m_max)
+					if (canny_edges->GetPixel(index)>value_max)
 					{
-						m_max = canny_edges->GetPixel(index);
+						value_max = canny_edges->GetPixel(index);
 						index_max = index_pos[0] + l;
 					}
 					l--;
@@ -804,9 +805,9 @@ std::cout<<"Inside the risk zone, we look for edges which may cause te adhesion-
 				{
 					index = index_pos;
 					index[0] = index_pos[0] + l;
-					if (canny_edges->GetPixel(index)>m_max)
+					if (canny_edges->GetPixel(index)>value_max)
 					{
-						m_max = canny_edges->GetPixel(index);
+						value_max = canny_edges->GetPixel(index);
 						index_max = index_pos[0] + l;
 					}
 					l--;
