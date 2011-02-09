@@ -67,6 +67,9 @@ int otbMassOfBelief(int argc, char* argv[])
 
   std::cout<<massFunction<<std::endl;
 
+  std::cout<<"Belief of "<<set3<<" is "<<massFunction->GetBelief(set3)<<std::endl;
+  std::cout<<"Plausibility of "<<set3<<" is "<<massFunction->GetPlausibility(set3)<<std::endl;
+
   MassOfBeliefFunctionType::LabelSetType otherSet;
   otherSet.insert("cat");
   otherSet.insert("dog");

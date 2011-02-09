@@ -234,6 +234,115 @@ MassOfBelief<TLabel,TMass>
 }
 
 template <class TLabel, class TMass>
+typename MassOfBelief<TLabel,TMass>
+::MassType 
+MassOfBelief<TLabel,TMass>
+::GetBelief(const LabelSetType & labelSet) const
+{
+  // Retrieve support of mass function
+  LabelSetOfSetType support = this->GetSupport();
+
+  // Define an empty set which will contain contained elements of the power-set
+  LabelSetOfSetType containedSet;
+
+  // Look for elements in the support which are contained in labelSet
+  for(typename LabelSetOfSetType::const_iterator it = support.begin();
+      it!=support.end();++it)
+    {
+    // Temporary set containing intersection
+    LabelSetType intersectionSet;
+    std::insert_iterator<LabelSetType> interIt(intersectionSet,intersectionSet.begin());
+
+      // Perform set union
+      std::set_intersection(labelSet.begin(),labelSet.end(),it->begin(),it->end(),interIt);
+
+      // If labelSet inter (*it) == (*it), then (*it) is contained
+      // inside labelSet
+      if(intersectionSet == (*it))
+        {
+        containedSet.insert((*it));
+        }
+    }
+
+  // Call the generic implementation
+  return this->GetBelief(containedSet);
+}
+
+template <class TLabel, class TMass>
+typename MassOfBelief<TLabel,TMass>
+::MassType 
+MassOfBelief<TLabel,TMass>
+::GetPlausibility(const LabelSetType & labelSet) const
+{
+  // Retrieve support of mass function
+  LabelSetOfSetType support = this->GetSupport();
+
+  // Define an empty set which will contain contained elements of the power-set
+  LabelSetOfSetType intersectedSet;
+
+  // Look for elements in the support which are contained in labelSet
+  for(typename LabelSetOfSetType::const_iterator it = support.begin();
+      it!=support.end();++it)
+    {
+    // Temporary set containing intersection
+    LabelSetType intersectionSet;
+    std::insert_iterator<LabelSetType> interIt(intersectionSet,intersectionSet.begin());
+
+      // Perform set union
+      std::set_intersection(labelSet.begin(),labelSet.end(),it->begin(),it->end(),interIt);
+
+      // If labelSet inter (*it) != {}, then (*it) intersects labelSet
+      if(intersectionSet.empty())
+        {
+        intersectedSet.insert((*it));
+        }
+    }
+
+  // Call the generic implementation
+  return this->GetPlausibility(intersectedSet);
+}
+
+template <class TLabel, class TMass>
+typename MassOfBelief<TLabel,TMass>
+::MassType 
+MassOfBelief<TLabel,TMass>
+::GetBelief(const LabelSetOfSetType & containedLabelSet) const
+{
+  // Define output
+  MassType belief = itk::NumericTraits<MassType>::Zero;
+
+  // Sum masses of contained set
+  for(typename LabelSetOfSetType::const_iterator it = containedLabelSet.begin();
+      it!=containedLabelSet.end();++it)
+    {
+    belief+=this->GetMass((*it));
+    }
+  
+  // return belief
+  return belief;
+}
+
+template <class TLabel, class TMass>
+typename MassOfBelief<TLabel,TMass>
+::MassType 
+MassOfBelief<TLabel,TMass>
+::GetPlausibility(const LabelSetOfSetType & intersectedLabelSet) const
+{
+  // Define output
+  MassType plausibility = itk::NumericTraits<MassType>::Zero;
+
+  // Sum masses of contained set
+  for(typename LabelSetOfSetType::const_iterator it = intersectedLabelSet.begin();
+      it!=intersectedLabelSet.end();++it)
+    {
+    plausibility+=this->GetMass((*it));
+    }
+  
+  // return belief
+  return plausibility;
+}
+
+template <class TLabel, class TMass>
 void 
 MassOfBelief<TLabel,TMass>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const

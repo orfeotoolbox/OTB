@@ -72,6 +72,12 @@ namespace otb
  *  two mass functions will share the exact same universe and
  *  power-set, but is not mandatory, since mass is supposed to be null
  *  for any set if not stated otherwise.
+ * 
+ *  Once masses are set, the GetPlausibility() and GetBelief()
+ *  function allow to compute the belief and plausibility for an
+ *  element of the power-set, or directly for a set of elements of the
+ *  power-set intersecting (resp. contained in) a given hypothesis.
+ *
  */
 template <class TLabel = unsigned short, class TMass = double>
 class ITK_EXPORT MassOfBelief : public itk::DataObject
@@ -130,6 +136,21 @@ public:
    */
   void InitializePowerSetMasses(const LabelSetType & universe);
 
+  /** Get the belief of a given element of the power-set */
+  MassType GetBelief(const LabelSetType & labelSet) const;
+
+  /** Get the plausibility of a given element of the power-set */
+  MassType GetPlausibility(const LabelSetType & labelSet) const;
+
+  /** Get the belief for an hypothesis containing a given set of
+   *  elements from the power-set */
+  MassType GetBelief(const LabelSetOfSetType & containedLabelSet) const;
+
+  /** Get the belief for an hypothesis intersecting a given set of
+   *  elements from the power set.*/
+  MassType GetPlausibility(const LabelSetOfSetType & intersectedLabelSet) const;
+
+  
 protected:
   /** Constructor */
   MassOfBelief() {}
@@ -141,6 +162,9 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
+  MassOfBelief(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
+
   /** The masses map */
   MassMapType  m_MassesMap;
 };
