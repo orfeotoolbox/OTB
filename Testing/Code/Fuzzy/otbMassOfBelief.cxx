@@ -28,9 +28,9 @@ int otbMassOfBelief(int argc, char* argv[])
   // Instantiate function
   MassOfBeliefFunctionType::Pointer massFunction = MassOfBeliefFunctionType::New();
 
-  MassOfBeliefFunctionType::LabelSetType set1,set2,set3,set4;
+  MassOfBeliefFunctionType::LabelSetType set1, set2, set3, set4;
   set1.insert("white");
-  set1.insert("blue");  
+  set1.insert("blue");
   set2.insert("white");
   set2.insert("green");
   set3.insert("red");
@@ -39,9 +39,9 @@ int otbMassOfBelief(int argc, char* argv[])
   set4.insert("green");
   set4.insert("red");
 
-  massFunction->SetMass(set1,0.25);
-  massFunction->SetMass(set2,0.3);
-  massFunction->SetMass(set4,0.1);
+  massFunction->SetMass(set1, 0.25);
+  massFunction->SetMass(set2, 0.3);
+  massFunction->SetMass(set4, 0.1);
 
   std::cout<<massFunction<<std::endl;
   
@@ -58,7 +58,7 @@ int otbMassOfBelief(int argc, char* argv[])
 
   std::cout<<"Removing mass "<<set2<<" and adding mass "<<set3<<std::endl;
   massFunction->RemoveMass(set2);
-  massFunction->SetMass(set3,0.6);
+  massFunction->SetMass(set3, 0.6);
 
   std::cout<<massFunction<<std::endl;
 

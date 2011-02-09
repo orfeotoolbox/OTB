@@ -29,7 +29,7 @@ namespace otb
  *
  *  This filter computes the joint mass of n input masses using
  *  Dempster-Shafer rule of combination.
- * 
+ *
  *  Input masses can be added by using the PushBackInput() method.
  *
  *  \sa MassOfBelief

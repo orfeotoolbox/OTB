@@ -31,19 +31,19 @@ JointMassOfBeliefFilter<TMassFunction>
 
   // Build the output
   typename MassFunctionType::Pointer outputPtr = MassFunctionType::New();
-  this->SetNthOutput(0,outputPtr.GetPointer());
+  this->SetNthOutput(0, outputPtr.GetPointer());
 }
 
 template <class TMassFunction>
-void 
+void
 JointMassOfBeliefFilter<TMassFunction>
-::PushBackInput(const MassFunctionType * input) 
+::PushBackInput(const MassFunctionType * input)
 {
   this->itk::ProcessObject::PushBackInput(input);
 }
 
 template <class TMassFunction>
-void 
+void
 JointMassOfBeliefFilter<TMassFunction>
 ::PushFrontInput(const MassFunctionType * input)
 {
@@ -51,7 +51,7 @@ JointMassOfBeliefFilter<TMassFunction>
 }
 
 template <class TMassFunction>
-void 
+void
 JointMassOfBeliefFilter<TMassFunction>
 ::PopBackInput()
 {
@@ -59,7 +59,7 @@ JointMassOfBeliefFilter<TMassFunction>
 }
 
 template <class TMassFunction>
-void 
+void
 JointMassOfBeliefFilter<TMassFunction>
 ::PopFrontInput()
 {
@@ -68,7 +68,7 @@ JointMassOfBeliefFilter<TMassFunction>
 
 template <class TMassFunction>
 const typename JointMassOfBeliefFilter<TMassFunction>
-::MassFunctionType * 
+::MassFunctionType *
 JointMassOfBeliefFilter<TMassFunction>
 ::GetInput(unsigned int idx)
 {
@@ -77,7 +77,7 @@ JointMassOfBeliefFilter<TMassFunction>
 
 template <class TMassFunction>
 typename JointMassOfBeliefFilter<TMassFunction>
-::MassFunctionType * 
+::MassFunctionType *
 JointMassOfBeliefFilter<TMassFunction>
 ::GetOutput()
 {
@@ -89,7 +89,7 @@ JointMassOfBeliefFilter<TMassFunction>
 }
 
 template <class TMassFunction>
-void 
+void
 JointMassOfBeliefFilter<TMassFunction>
 ::GenerateData()
 {
@@ -97,27 +97,27 @@ JointMassOfBeliefFilter<TMassFunction>
   typename MassFunctionType::Pointer outputPtr = this->GetOutput();
 
   // Walk the inputs
-  for(unsigned int i = 0; i < this->GetNumberOfInputs();++i)
+  for(unsigned int i = 0; i < this->GetNumberOfInputs(); ++i)
     {
     // Retrieve the ith input mass function
     typename MassFunctionType::ConstPointer inputPtr = this->GetInput(i);
     
     // Combine it with the current joint mass
-    this->CombineMasses(inputPtr,outputPtr);
+    this->CombineMasses(inputPtr, outputPtr);
     }
 }
 
 template <class TMassFunction>
-void 
+void
 JointMassOfBeliefFilter<TMassFunction>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
 template <class TMassFunction>
-void 
+void
 JointMassOfBeliefFilter<TMassFunction>
 ::CombineMasses(const MassFunctionType * input, MassFunctionType * output)
 {
@@ -154,10 +154,10 @@ JointMassOfBeliefFilter<TMassFunction>
       {
       // Compute intersection
       LabelSetType intersectionSet;
-      std::insert_iterator<LabelSetType> interIt(intersectionSet,intersectionSet.begin());
+      std::insert_iterator<LabelSetType> interIt(intersectionSet, intersectionSet.begin());
 
       // Perform set intersection
-      std::set_intersection(inputIt->begin(),inputIt->end(),currentIt->begin(),currentIt->end(),interIt);
+      std::set_intersection(inputIt->begin(), inputIt->end(), currentIt->begin(), currentIt->end(), interIt);
     
       // Compute mass product
       MassType massProduct = input->GetMass((*inputIt))*output->GetMass((*currentIt));
@@ -177,7 +177,7 @@ JointMassOfBeliefFilter<TMassFunction>
         intersectionMass+=massProduct;
 
         // Update new joint mass
-        newJointMass->SetMass(intersectionSet,intersectionMass);
+        newJointMass->SetMass(intersectionSet, intersectionMass);
 
         // Store in joint support
         jointSupport.insert(intersectionSet);
@@ -189,7 +189,7 @@ JointMassOfBeliefFilter<TMassFunction>
 
   // Retrieve support of joint mass
   for(typename LabelSetOfSetType::const_iterator it = jointSupport.begin();
-      it!=jointSupport.end();++it)
+      it!=jointSupport.end(); ++it)
     {
     // Retrieve joint mass
     MassType jointMass = newJointMass->GetMass((*it));
@@ -198,7 +198,7 @@ JointMassOfBeliefFilter<TMassFunction>
     jointMass*=conflictCoefficient;
 
     // Update joint mass
-    newJointMass->SetMass((*it),jointMass);
+    newJointMass->SetMass((*it), jointMass);
     }
   
   // Finally, swap output and newJointMass function

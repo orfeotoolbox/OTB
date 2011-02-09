@@ -44,18 +44,18 @@ int otbJointMassOfBeliefFilter(int argc, char* argv[])
   mass1->InitializePowerSetMasses(universe);
   mass2->InitializePowerSetMasses(universe);
 
-  MassOfBeliefFunctionType::LabelSetType a,b,c;
+  MassOfBeliefFunctionType::LabelSetType a, b, c;
   a.insert("a");
   b.insert("b");
   c.insert("c");
 
   // Mass1 is first expert
-  mass1->SetMass(a,0.99);
-  mass1->SetMass(b,0.01);
+  mass1->SetMass(a, 0.99);
+  mass1->SetMass(b, 0.01);
 
   // Mass2 is second expert
-  mass2->SetMass(b,0.01);
-  mass2->SetMass(c,0.99);
+  mass2->SetMass(b, 0.01);
+  mass2->SetMass(c, 0.99);
 
   // Compute joint mass
   jointMassFilter->PushBackInput(mass1);

@@ -33,12 +33,12 @@ namespace otb
  *
  *  This class represent a Mass of Belief function to be used in
  *  Dempster-Shafer theory.
- * 
+ *
  *  Template parameter TLabel is the type of the elements in the
  *  universe set, while TMass is the type of the mass. TLabel can be
  *  any type implementing ordering operator, while TMass should be a
  *  floating point type.
- * 
+ *
  *  An element of the power-set is represented by the sub-type
  *  LabelSetType, which is a std::set<TLabel>.
  *
@@ -46,7 +46,7 @@ namespace otb
  *  by calling the SetMass method. It is not necessary to associate
  *  masses with each element of the power set: mass is supposed to be
  *  null otherwise declared.
- * 
+ *
  *  A mass associated with an element from the power-set can be
  *  removed using the RemoveMass method, and all masses can be cleared
  *  using the Clear() function.
@@ -59,7 +59,7 @@ namespace otb
  *  sum to 1. The EstimateUncertainty() method allows to associate to
  *  the uncertain set (i.e. the universe set) a mass so that all
  *  masses sum to 1.
- * 
+ *
  *  The GetUniverse() method allows to retrieve the set of all symbols
  *  (i.e. the universal set), while the GetSupport() method allows to
  *  retrieve the set of all elements of the power-set for which a mass
@@ -72,7 +72,7 @@ namespace otb
  *  two mass functions will share the exact same universe and
  *  power-set, but is not mandatory, since mass is supposed to be null
  *  for any set if not stated otherwise.
- * 
+ *
  *  Once masses are set, the GetPlausibility() and GetBelief()
  *  function allow to compute the belief and plausibility for an
  *  element of the power-set, or directly for a set of elements of the
@@ -98,7 +98,7 @@ public:
   typedef TLabel                          LabelType;
   typedef TMass                           MassType;
   typedef std::set<LabelType>             LabelSetType;
-  typedef std::map<LabelSetType,MassType> MassMapType;
+  typedef std::map<LabelSetType, MassType> MassMapType;
   typedef std::set<LabelSetType>          LabelSetOfSetType;
 
   /** Register a mass associated with an element of the power-set */
@@ -177,8 +177,8 @@ private:
 } // end namespace otb
 
 /** Define the << operator for label sets */
-template <class TLabel> 
-std::ostream & 
+template <class TLabel>
+std::ostream &
 operator<<(std::ostream & out,
            const std::set<TLabel> & labelSet);
 

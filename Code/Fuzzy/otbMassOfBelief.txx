@@ -28,8 +28,8 @@ namespace otb
 {
 
 template <class TLabel, class TMass>
-void 
-MassOfBelief<TLabel,TMass>
+void
+MassOfBelief<TLabel, TMass>
 ::SetMass(const LabelSetType & labelSet, const MassType & mass)
   {
     // Insert into the mass map
@@ -40,8 +40,8 @@ MassOfBelief<TLabel,TMass>
   }
 
 template <class TLabel, class TMass>
-void 
-MassOfBelief<TLabel,TMass>
+void
+MassOfBelief<TLabel, TMass>
 ::RemoveMass(const LabelSetType & labelSet)
   {
     // Insert into the mass map
@@ -53,9 +53,9 @@ MassOfBelief<TLabel,TMass>
 
   
 template <class TLabel, class TMass>
-typename MassOfBelief<TLabel,TMass>
-::MassType 
-MassOfBelief<TLabel,TMass>
+typename MassOfBelief<TLabel, TMass>
+::MassType
+MassOfBelief<TLabel, TMass>
 ::GetMass(const LabelSetType & labelSet) const
   {
     // Look for mass in the table
@@ -72,9 +72,9 @@ MassOfBelief<TLabel,TMass>
   }
   
 template <class TLabel, class TMass>
-typename MassOfBelief<TLabel,TMass>
-::LabelSetOfSetType 
-MassOfBelief<TLabel,TMass>
+typename MassOfBelief<TLabel, TMass>
+::LabelSetOfSetType
+MassOfBelief<TLabel, TMass>
 ::GetSupport() const
   {
     // Build the output
@@ -95,9 +95,9 @@ MassOfBelief<TLabel,TMass>
   }
 
 template <class TLabel, class TMass>
-typename MassOfBelief<TLabel,TMass>
-::LabelSetType 
-MassOfBelief<TLabel,TMass>
+typename MassOfBelief<TLabel, TMass>
+::LabelSetType
+MassOfBelief<TLabel, TMass>
 ::GetUniverse() const
   {
     // Build the output
@@ -112,10 +112,10 @@ MassOfBelief<TLabel,TMass>
       {
       // Temporary set
       LabelSetType tempSet;
-      std::insert_iterator<LabelSetType> tmpIt(tempSet,tempSet.begin());
+      std::insert_iterator<LabelSetType> tmpIt(tempSet, tempSet.begin());
 
       // Perform set union
-      std::set_union(output.begin(),output.end(),it->begin(),it->end(),tmpIt);
+      std::set_union(output.begin(), output.end(), it->begin(), it->end(), tmpIt);
 
       // swap output and tempSet
       output.swap(tempSet);
@@ -127,7 +127,7 @@ MassOfBelief<TLabel,TMass>
 
 template <class TLabel, class TMass>
 void
-MassOfBelief<TLabel,TMass>
+MassOfBelief<TLabel, TMass>
 ::Normalize()
 {
   // Sum of masses
@@ -156,7 +156,7 @@ MassOfBelief<TLabel,TMass>
 
 template <class TLabel, class TMass>
 void
-MassOfBelief<TLabel,TMass>
+MassOfBelief<TLabel, TMass>
 ::EstimateUncertainty()
 {
   // Retrieve the universe of the mass of belief
@@ -179,7 +179,7 @@ MassOfBelief<TLabel,TMass>
   if(uncertaintyMass > 0)
     {
     // Associate uncertainty mass
-    this->SetMass(universe,uncertaintyMass);
+    this->SetMass(universe, uncertaintyMass);
 
     // Call modified
     this->Modified();
@@ -187,26 +187,26 @@ MassOfBelief<TLabel,TMass>
 }
 
 template <class TLabel, class TMass>
-void 
-MassOfBelief<TLabel,TMass>
+void
+MassOfBelief<TLabel, TMass>
 ::Clear()
 {
   m_MassesMap.clear();
 }
 
 template <class TLabel, class TMass>
-void 
-MassOfBelief<TLabel,TMass>
+void
+MassOfBelief<TLabel, TMass>
 ::InitializePowerSetMasses(const LabelSetType & universe)
 {
   // Clear any previous mass
   this->Clear();
   
   // Compute number of elements
-  unsigned long nbElements = static_cast<unsigned long>(vcl_pow(2.,static_cast<double>(universe.size())));
+  unsigned long nbElements = static_cast<unsigned long>(vcl_pow(2., static_cast<double>(universe.size())));
 
   // Build each element
-  for(unsigned long elementId = 1; elementId <= nbElements;++elementId)
+  for(unsigned long elementId = 1; elementId <= nbElements; ++elementId)
     {
     // Instantiate a new element
     LabelSetType newElement;
@@ -215,7 +215,7 @@ MassOfBelief<TLabel,TMass>
 
     // Walk the universe set
     for(typename LabelSetType::const_iterator it = universe.begin();
-        residu >0 && it!=universe.end();++it)
+        residu >0 && it!=universe.end(); ++it)
       {
       // Retrieve the current bit
       unsigned long bit = residu%2;
@@ -229,14 +229,14 @@ MassOfBelief<TLabel,TMass>
       // Compute residu
       residu/=2;
       }
-    this->SetMass(newElement,itk::NumericTraits<MassType>::Zero);
+    this->SetMass(newElement, itk::NumericTraits<MassType>::Zero);
     }
 }
 
 template <class TLabel, class TMass>
-typename MassOfBelief<TLabel,TMass>
-::MassType 
-MassOfBelief<TLabel,TMass>
+typename MassOfBelief<TLabel, TMass>
+::MassType
+MassOfBelief<TLabel, TMass>
 ::GetBelief(const LabelSetType & labelSet) const
 {
   // Retrieve support of mass function
@@ -247,14 +247,14 @@ MassOfBelief<TLabel,TMass>
 
   // Look for elements in the support which are contained in labelSet
   for(typename LabelSetOfSetType::const_iterator it = support.begin();
-      it!=support.end();++it)
+      it!=support.end(); ++it)
     {
     // Temporary set containing intersection
     LabelSetType intersectionSet;
-    std::insert_iterator<LabelSetType> interIt(intersectionSet,intersectionSet.begin());
+    std::insert_iterator<LabelSetType> interIt(intersectionSet, intersectionSet.begin());
 
       // Perform set union
-      std::set_intersection(labelSet.begin(),labelSet.end(),it->begin(),it->end(),interIt);
+      std::set_intersection(labelSet.begin(), labelSet.end(), it->begin(), it->end(), interIt);
 
       // If labelSet inter (*it) == (*it), then (*it) is contained
       // inside labelSet
@@ -269,9 +269,9 @@ MassOfBelief<TLabel,TMass>
 }
 
 template <class TLabel, class TMass>
-typename MassOfBelief<TLabel,TMass>
-::MassType 
-MassOfBelief<TLabel,TMass>
+typename MassOfBelief<TLabel, TMass>
+::MassType
+MassOfBelief<TLabel, TMass>
 ::GetPlausibility(const LabelSetType & labelSet) const
 {
   // Retrieve support of mass function
@@ -282,14 +282,14 @@ MassOfBelief<TLabel,TMass>
 
   // Look for elements in the support which are contained in labelSet
   for(typename LabelSetOfSetType::const_iterator it = support.begin();
-      it!=support.end();++it)
+      it!=support.end(); ++it)
     {
     // Temporary set containing intersection
     LabelSetType intersectionSet;
-    std::insert_iterator<LabelSetType> interIt(intersectionSet,intersectionSet.begin());
+    std::insert_iterator<LabelSetType> interIt(intersectionSet, intersectionSet.begin());
 
       // Perform set intersection
-      std::set_intersection(labelSet.begin(),labelSet.end(),it->begin(),it->end(),interIt);
+      std::set_intersection(labelSet.begin(), labelSet.end(), it->begin(), it->end(), interIt);
 
       // If labelSet inter (*it) != {}, then (*it) intersects labelSet
       if(intersectionSet.empty())
@@ -303,9 +303,9 @@ MassOfBelief<TLabel,TMass>
 }
 
 template <class TLabel, class TMass>
-typename MassOfBelief<TLabel,TMass>
-::MassType 
-MassOfBelief<TLabel,TMass>
+typename MassOfBelief<TLabel, TMass>
+::MassType
+MassOfBelief<TLabel, TMass>
 ::GetBelief(const LabelSetOfSetType & containedLabelSet) const
 {
   // Define output
@@ -313,7 +313,7 @@ MassOfBelief<TLabel,TMass>
 
   // Sum masses of contained set
   for(typename LabelSetOfSetType::const_iterator it = containedLabelSet.begin();
-      it!=containedLabelSet.end();++it)
+      it!=containedLabelSet.end(); ++it)
     {
     belief+=this->GetMass((*it));
     }
@@ -323,9 +323,9 @@ MassOfBelief<TLabel,TMass>
 }
 
 template <class TLabel, class TMass>
-typename MassOfBelief<TLabel,TMass>
-::MassType 
-MassOfBelief<TLabel,TMass>
+typename MassOfBelief<TLabel, TMass>
+::MassType
+MassOfBelief<TLabel, TMass>
 ::GetPlausibility(const LabelSetOfSetType & intersectedLabelSet) const
 {
   // Define output
@@ -333,7 +333,7 @@ MassOfBelief<TLabel,TMass>
 
   // Sum masses of contained set
   for(typename LabelSetOfSetType::const_iterator it = intersectedLabelSet.begin();
-      it!=intersectedLabelSet.end();++it)
+      it!=intersectedLabelSet.end(); ++it)
     {
     plausibility+=this->GetMass((*it));
     }
@@ -343,8 +343,8 @@ MassOfBelief<TLabel,TMass>
 }
 
 template <class TLabel, class TMass>
-void 
-MassOfBelief<TLabel,TMass>
+void
+MassOfBelief<TLabel, TMass>
 ::Copy(const Self * massOfBelief)
 {
   // Swap content of masses maps
@@ -356,19 +356,19 @@ MassOfBelief<TLabel,TMass>
 
 template <class TLabel, class TMass>
 bool
-MassOfBelief<TLabel,TMass>
+MassOfBelief<TLabel, TMass>
 ::IsEmpty() const
 {
   return m_MassesMap.empty();
 }
 
 template <class TLabel, class TMass>
-void 
-MassOfBelief<TLabel,TMass>
+void
+MassOfBelief<TLabel, TMass>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 
   // Display mass of belief universe
   os<<indent<<"Mass of belief universe: "<<this->GetUniverse()<<std::endl;
@@ -378,17 +378,17 @@ MassOfBelief<TLabel,TMass>
   
   // Display individual masses
   for(typename MassMapType::const_iterator it = m_MassesMap.begin();
-      it!=m_MassesMap.end();++it)
+      it!=m_MassesMap.end(); ++it)
     {
     os<<indent<<(it->first)<< " has mass "<<(it->second)<<std::endl;
     }
   os<<indent<<"Other masses are null"<<std::endl;
-}  
+}
 } // end namespace otb
 
 /** Define the << operator for label sets */
-template <class TLabel> 
-std::ostream & 
+template <class TLabel>
+std::ostream &
 operator<<(std::ostream & out,
            const std::set<TLabel> & labelSet)
 {
