@@ -20,7 +20,7 @@ ADD_TEST(rsrSVMClassifier ${PERFO_TESTS}
         ${SRCLASS2} 
         ${SRCLASS3} 
         ${SRCLASS4} 
-        ${RSR_DATA}/Rsr/Spot5/HRG2/rep6S.dat
+        ${RSR_DATA}/Rsr/SPOT5/HRG2/rep6S.dat
         4 #nbBands
         0.1 #percentage of validation files
         )
@@ -32,7 +32,7 @@ ADD_TEST(atmosphericCorrectionsRSRSVMClassifier ${PERFO_TESTS}
         ${SRCLASS2} 
         ${SRCLASS3} 
         ${SRCLASS4} 
-        ${RSR_DATA}/Rsr/Spot5/HRG2/rep6S.dat
+        ${RSR_DATA}/Rsr/SPOT5/HRG2/rep6S.dat
         4 #nbBands
         4 #day
         12 #month
