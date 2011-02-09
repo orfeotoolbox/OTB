@@ -1,0 +1,10 @@
+Grey calcareous silty soil.
+
+Clay mineralogy : XRD analysis indicated the presence of Fe Chlorite, 
+illite/muscovite and calcite. PIMA SWIR spectra indicated the presence of 
+kaolinite and/or montmorillonite and calcite.
+
+Spectral Description: The FTIR spectrum for fgg017 indicates the presence of a 
+fine grained quartz texture by the strong presence a peak at 6.42 um and the 
+residual reststrahlen features at 8.18 um and 8.625 um. The presence of calcite 
+is also suggested by the spectral peak at 11.2 um. 

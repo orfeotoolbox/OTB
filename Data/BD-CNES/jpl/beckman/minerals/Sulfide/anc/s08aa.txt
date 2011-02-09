@@ -1,0 +1,5 @@
+Mineral:  Chalcocite Cu_2S
+
+File Name:  s08a.txt
+
+XRD Analysis:  Chalcocite(A)

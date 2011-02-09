@@ -1,0 +1,5 @@
+Mineral:  Talc Mg_3Si_4O_10(OH)_2
+
+File Name:  ps14a.txt
+
+XRD Analysis:  Talc(A)

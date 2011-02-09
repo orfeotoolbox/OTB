@@ -1,0 +1,5 @@
+Mineral:  Tourmaline Na(Mg_3,Fe_3^2+)Al_6(BO_3)_3Si_6O_18(OH)_4
+
+File Name:  cs01a.txt
+
+XRD Analysis:  Tourmaline(A)

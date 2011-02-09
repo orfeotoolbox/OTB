@@ -1,0 +1,5 @@
+Mineral:   Wollastonite CaSiO_3
+
+File Name:  in02a.txt
+
+XRD Analysis:  Wollastonite(A), Calcite(T), Quartz(T)

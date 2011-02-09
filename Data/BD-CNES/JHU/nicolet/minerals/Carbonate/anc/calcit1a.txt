@@ -1,0 +1,8 @@
+Mineral:  Calcite CaCO3
+
+Sample No.: calcite.1
+
+XRD Analysis:  Pure calcite.
+
+Chemistry:  No analysis requested in view of optical quality 
+appearance of sample.

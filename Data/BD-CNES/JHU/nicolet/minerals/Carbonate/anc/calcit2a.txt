@@ -1,0 +1,28 @@
+Mineral:  Calcite CaCO3
+
+Sample No.: calcite.2
+
+XRD Analysis:  Pure calcite.
+
+Chemistry:  Volatile analysis by C. S. Papp, J. D. Sharkey, and K. J. 
+Curry, and XRF analysis of the non-volatiles by J. Taggare, A. 
+Bartel,and D. Diems, USGS Branch of Analytical Chemistry, Denver, 
+showed only minor contamination and the expected oxide ratios of Ca 
+and C:
+
+SiO2 	<0.10
+Al2O3	<0.10
+FeTO3	<0.06
+MgO	0.30
+CaO	55.60
+K2O	<0.02
+Na2O	<0.15
+TiO2	<0.02
+P2O5	<0.05
+MnO	0.04
+CO2	43.97
+H2O 	0.06
+	_____
+Total	100.47
+
+NO SOLID SAMPLE IS AVAILABLE

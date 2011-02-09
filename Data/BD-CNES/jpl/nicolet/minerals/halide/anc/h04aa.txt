@@ -1,0 +1,6 @@
+Mineral:  Atacamite Cu_2Cl(OH)_3
+
+File Name:  h04a.txt
+
+XRD Analysis:  Atacamite(A), Chrysocolla(M)
+

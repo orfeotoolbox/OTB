@@ -1,0 +1,23 @@
+Mineral:  Pyrophyllite Al2Si4010(OH)2
+
+Sample No.:  pyroph.1
+
+XRD Analysis:  Pure pyrophyllite.
+
+Chemistry:  Rapid rock analysis by R. A. Robie and B. S. Hemingway 
+yielded: 
+
+SiO2 	66.32
+Al2O3	28.27
+Fe2O3	0.32
+FeO	0.03
+MgO 	0.07
+Na2O	0.05
+K2O	0.02
+TiO2	 0.01
+H2O	4.94
+	_____
+Total 	*100.03
+
+*A second rapid rock analysis also detected 0.01 P2O5, 0.01 CO2, and 
+0.03 F.

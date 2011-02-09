@@ -1,0 +1,22 @@
+Mineral:  Olivine (Fo92) (Fe+2,Mg)2SiO4
+
+Sample No.:  olivine.11
+
+XRD Analysis:  Pure forsterite.
+
+Chemistry:  Microprobe analysis of five grains showed the sample to 
+be homogeneous within and between grains. Average of 10 analyses 
+shows that the sum of the divalent cations is too high, but Fo content 
+is about 92 mole percent:
+
+SiO2	40.27
+TiO2	0.01
+Al2O3	0.02
+MnO	0.15
+FeO	8.70
+MgO 	52.28
+CaO	0.06
+Na2O	0.02
+K2O	0.01
+	_____
+Total	101.52

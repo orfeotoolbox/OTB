@@ -1,0 +1,5 @@
+Mineral:  Realgar AsS
+
+File Name:  s03a.txt
+
+XRD Analysis:  Realgar(A)

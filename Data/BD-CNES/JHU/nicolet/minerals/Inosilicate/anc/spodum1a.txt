@@ -1,0 +1,21 @@
+Mineral:  Spodumene LiAlSi2O6
+
+Sample No.:  spodum.1
+
+XRD Analysis:  Spodumene with extra, small peaks at 4.44 Å and 
+1.847 Å due to unknown material.
+
+Chemistry:  Microprobe analysis showed the sample to be 
+homogeneous within and between grains.  Average of 9 analyses:
+
+SiO2	63.97
+Al2O3	26.88
+FeO	0.01
+MgO	0.01
+CaO	0.01
+K2O	0.01
+Na2O	0.22
+TiO2	0.02
+MnO	0.10
+Total	*91.23
+	*Li not measured.

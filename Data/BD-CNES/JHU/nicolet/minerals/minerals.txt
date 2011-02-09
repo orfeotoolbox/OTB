@@ -1,0 +1,1153 @@
+The Johns Hopkins University mineral library was published as a 
+book by the Johns Hopkins University Press in 1991 (title and 
+authors below).  The Introduction to this book is summarized below 
+to document how samples were selected, characterized and 
+measured, as well as to explain the origins of spectral features for 
+different kinds of minerals.
+
+
+
+
+
+Infrared (2.1 - 25 micrometers) Spectra of Minerals
+
+by 
+
+John W. Salisbury
+The Johns Hopkins University
+
+Louis S. Walter
+Goddard Space Flight Center
+
+Norma Vergo
+U. S. Geological Survey
+
+and
+
+Dana M. D'Aria
+University of Maryland
+
+
+Dedication
+
+To our co-author, Norma Vergo, whose untimely death is mourned by 
+us and all who knew her.
+
+
+Acknowledgments
+
+Most mineral samples were provided courtesy of John White, of the 
+Smithsonian National Museum of Natural History, and Paul Powhat 
+was extremely helpful in their selection.  We are also grateful to 
+Gene Jarosewich and Joseph Nelen for use of the Smithsonian 
+microprobe.  Ms. Jane Jellison, of the Goddard Space Flight Center, 
+kindly prepared samples for microprobe analysis.  This research was 
+supported by the Solid Earth Science and Solar System Exploration 
+Branches of the U.S. National Aeronautics and Space Administration.
+
+
+Introduction
+
+In her thorough review of the use of infrared spectroscopy in 
+mineralogy, Estep-Barnes (1977) listed infrared spectral libraries for 
+minerals, rocks, and inorganic compounds published prior to 1975.  
+Only Hunt and Salisbury (1975, 1976), Lyon and Green (1975), 
+Vincent et al. (1975), and Ferraro (1982) have been published 
+subsequently.  
+
+Most of these libraries consist of transmittance measurements, which 
+have limited application to remote sensing problems because they do 
+not include the effects of scattering (Salisbury et al., 1987a).
+
+Only the works of Lyon (1963, 1964), Lyon and Green (1975), Hunt 
+and Salisbury (1974, 1975, 1976), and Vincent et al. (1975) contain 
+reflectance and/or emittance data that can be used to predict the  
+spectral behavior of minerals and rocks in a remote sensing situation.  
+However, these data lack the potentially significant 3-5 micrometers 
+region of the spectrum, do not document the effects of different 
+particle sizes on the spectra of most samples, typically lack complete 
+chemical and mineralogical sample characterization, and are not 
+available in digital form.  The present work seeks to remedy all of 
+these shortcomings for 130 minerals.  It is an expansion on an Open-
+File Report of the U. S. Geological Survey (Salisbury et al., 1987a) 
+which, not being generally available to the public, was of limited 
+usefulness to the remote sensing community.  The present work also 
+adds digital data for all of the spectra in ASCII format on an 
+accompanying CD-ROM disk.
+
+Experimental Technique
+
+Acquisition and Preparation of Samples  
+Most samples were acquired, often as single crystals, from the 
+Smithsonian National Museum of Natural History.  Other samples 
+were obtained from the Hunt and Salisbury collection in Denver or 
+from individuals.  
+
+Most samples were crushed in a steel percussion mortar, after which 
+steel particles were removed with a hand magnet.  Crushed samples 
+were hand-picked when impurities were present, ultrasonically 
+cleaned, and then subjected, when necessary, to an acid wash to 
+insure purity.  Samples were ground in a sintered sapphire mortar 
+under either acetone or (more commonly) alcohol, which facilitated 
+grinding, avoided disordering of the sheet silicates, and prevented 
+the finest particles from drifting away as aerosols.
+
+Particulate samples were dry-sieved to two different particle-size 
+ranges (75-250 micrometers and 0-75 micrometers), and the coarser 
+particle-size range was subsequently washed in acetone or alcohol to 
+remove clinging fines.  Clay samples were disaggregated 
+ultrasonically, and the <2 micrometers size fraction was concentrated 
+with a centrifuge.
+
+Characterization of Samples:  
+Mineral specimens were initially examined as hand samples and, 
+after grinding to a powder, under a petrographic microscope.  This 
+examination was typically combined with X-ray diffraction and 
+microprobe analysis to identify those samples that were pure 
+mineral phases and to establish their chemical and mineral 
+compositions.  When other approaches to characterization were 
+employed, this is noted in the mineral description sheets.  Unless 
+otherwise noted on the description sheets, petrography was 
+performed by Dana D'Aria, microprobe analyses by Louis Walter, and 
+X-ray diffraction analysis by Norma Vergo.
+
+The 0-75 micrometers fraction (except where noted) of all samples 
+was characterized by X-ray diffraction using a Siemens D-500 X-ray 
+diffractometer with CuKa radiation.  Samples were mounted using a 
+side pack sample holder to achieve random orientation.  There were 
+several samples that appeared to be monomineralic when studied by 
+optical methods, but that had "extra" peaks in the X-ray patterns 
+compared to the Joint Committee on Powder Diffraction Standards 
+(JCPDS) file cards.  These patterns were modeled by calculating 
+allowed d-spacings from input unit cell dimensions using the 
+Appleman and Evans (1973) cell refinement program.  The 
+differences between the JCPDS and modeled patterns typically could 
+be attributed to differences in ionic substitutions.
+
+Additional tests were done to characterize the clay minerals.  The <2 
+micrometers fraction was oriented on a glass slide using a Millipore 
+filter setup (Drever, 1973).  These slides were then analyzed in the 
+air-dried and glycol-solvated states.  K-saturation was done on the 
+vermiculite sample.  The mixed-layer clay minerals were modeled 
+using methods outlined in Reynolds (1980) and using the New Mod 
+computer program written by R. C. Reynolds (Dartmouth College).
+
+Microprobe analyses were performed on 75-250 micrometer sample 
+fractions.  Through kind permission, the Applied Research 
+Laboratory instrument at the Smithsonian Institution Division of 
+Mineral Sciences was used.  Six fixed-wavelength dispersive 
+detectors were used to analyze for Si, Al, Fe, Mg, Ca, and K.  Three 
+movable, wavelength-dispersive detectors were used to analyze for 
+Na, Ti, and Mn.  Quartz was used as a background standard for Al; 
+alumina was used as a background standard for all other elements.
+
+Standards employed were selected from those available at the 
+Smithsonian:  rhodonite for Mn and Kakanui hornblende for all other 
+elements.  The Bence-Albee correction procedure was used to 
+convert intensity ratios to element/oxide abundances.  As usual for 
+microprobe analyses, ferric and ferrous iron were not distinguished 
+and Fe is reported as FeO.
+
+In analyzing a mineral, points were accumulated for 10-second 
+integration times.  Normally, four or five randomly selected points 
+were analyzed on one or two grains.  Then, individual points were 
+run on five or six additional grains.  If these analyses were 
+equivalent within statistical counting error, the material was 
+assumed to be homogeneous.  In some cases, small deviations from 
+homogeneity were found and these are noted in the text.  
+
+Estimated errors (as determined by replicate analyses) are:
+
+Oxide	Coefficient of Variation (Rel. %)
+SiO2	1.7
+Al2O3  2
+FeO	2
+MgO	2
+CaO	2
+K2O	3
+Na2O	5
+TiO2	2
+MnO	1
+
+These estimates apply to cases in which the oxide abundance is 
+greater than 3%.  The limit of reliable detection is generally about 
+0.5%.
+
+We found that all three different modes of sample characterization, 
+microscopic, X-ray, and microprobe or other chemical analysis, were 
+required to assure sample purity.  Based on this sample 
+characterization process, generally two out of every three mineral 
+samples were found to be insufficiently pure to be included in this 
+compilation.  The results of the analyses are documented on each 
+sample description sheet.  Mineral names and ideal formulae used on 
+these sheets were taken from Fleischer (1983).
+
+Acquisition of Spectra  
+Spectra were acquired at 4 cm-1 resolution using either a Nicolet 5 
+DXB or a Nicolet System 510 interferometer spectrometer; both 
+spectrometers have identical optical benches  Transmittance and 
+biconical reflectance spectral data were recorded from 2.08 to 25 
+micrometers with a triglycine sulfate (TGS) detector, and directional 
+hemispherical reflectance data were recorded from 2.08 to 14 
+micrometers with a liquid helium-cooled, mercury-cadmium-
+telluride (MCT) detector.
+
+Transmittance was measured by passing the focused beam ( 6 mm 
+diameter) of the interferometer through a KBr disk (commonly 
+referred to as a pellet) containing sample material made in the 
+manner of Stimson and O'Donnell (1952).  Briefly, these pellets 
+consist of 300 mg of KBr mixed with about 0.7 mg of sample ground 
+under alcohol to a size range less than 2 micrometers.  The pellets 
+were pressed in a dye under vacuum for five minutes at 10,000 
+kg/cm2 pressure to produce transparent disks 13 mm in diameter 
+and 1 mm thick.  A reference pellet composed of pure KBr was used 
+to record a background against which was ratioed the sample pellet 
+transmittance.
+
+Biconical reflectance spectra were recorded using a Spectra Tech 
+"Collector" diffuse reflectance attachment, which uses two 90¡-off-
+axis ellipsoids that act as 6x beam condensers; the focused beam 
+diameter is thus reduced to 1 mm, and illumination and reflection 
+occur at the specular angle over a solid angle that closely approaches 
+p steradians.  Thus, our bidirectional reflectance measurements 
+actually record biconical reflectance over a large solid angle.
+
+An aluminum mirror was used as the background reference against 
+which sample biconical reflectance was ratioed.  A mirror was used 
+as the reference instead of Halon, because the latter exhibits strong 
+absorption bands in most of the spectral range measured here.  Not 
+only does the mirror provide a spectrally flat reference, but its high 
+reflectance is required when measuring the reflectance of solid 
+samples at the wavelengths of the fundamental molecular vibration 
+bands.  As described below, minerals have a mirror-like opacity at 
+such wavelengths, and smooth solid samples may have reflectances 
+close to that of a mirror.  Use of biconical reflectance with a mirror 
+reference makes the measured reflectance of a diffusely reflecting 
+particulate sample roughly a factor of five lower than it would be for 
+the integrating sphere measurements commonly made in the visible 
+and near-infrared.
+
+The Nicolet 5DXB and System 510 can switch the infrared beam from 
+the sample compartment to an external port, through which it exits 
+in collimated form.  An integrating sphere, coated inside with a 
+diffusely reflecting gold surface, was attached to the instrument at 
+this port.  The sphere is 12.7 cm in diameter and has a 2.5 cm 
+diameter entrance port in the top of the sphere at 10¡ off the 
+vertical, through which the beam passes to fall on a 2.5 cm diameter 
+sample/reference port in the bottom of the sphere.  Beam size on the 
+sample in that bottom port is 1.54 cm.  A 2.5 cm detector port is 
+placed at an angle of 90¡ to the principal plane in the side of the 
+sphere, and the liquid-nitrogen-cooled MCT detector chip is baffled 
+to eliminate direct viewing of either the sample or the specular "hot 
+spot" on the sphere wall.  A port at the specular angle was filled 
+during the measurements reported below with a gold-coated plug 
+having a surface curved to match the interior curvature of the 
+sphere.
+
+The integrating sphere uses a Labsphere diffuse gold surface as a 
+reference. Sphere performance was carefully calibrated to provide 
+absolute reflectance by comparing measured reflectances of Halon, a 
+front-surface aluminum mirror, water, and a black body cone with 
+values obtained from the National Bureau of Standards or found in 
+the literature (Salisbury and Milton, 1987).
+
+The usual sample holder for biconical reflectance measurements was 
+13 mm in diameter and 2 mm deep, although a "microreflectance" 
+holder 3 mm x 2 mm could also be used for very small samples.  The 
+usual sample holder for hemispherical reflectance measurements 
+was 2.5 cm in diameter and 3 mm deep.  That samples were optically 
+thick at a depth of 2 mm was verified by comparison of spectra 
+measured in bare aluminum cups with spectra measured in cups 
+painted black.  Most particulate samples were sifted into the sample 
+holders to attempt to achieve random orientation of grains.  For some 
+samples, including all of the clay minerals, solid samples were not 
+available.  In these cases, the fine powder samples were packed into 
+a pseudo-solid sample so that the reflectance peaks of the 
+fundamental molecular vibration (reststrahlen) bands could be seen.  
+This was accomplished with <2 micrometers clays by placing them in 
+a folded weighing paper and gently rolling a sample bottle over the 
+outside surface.  This produced cohesive flakes that could be readily 
+transferred to the reflectance attachment and measured.  Some 
+samples such as the olivines, were not sufficiently fine-grained to 
+produce flakes.  To make packed sample measurements of these 
+samples, they were simply pressed into a sample cup with the flat 
+side of a spatula.  Solid samples were fixed in a bed of moldable 
+erasure to hold the surface being measured in a horizontal position.  
+All samples could be raised or lowered by a micrometer screw 
+mechanism so that the measurement surface was at the beam focus.
+
+The Nicolet scans an interferogram each second.  Interferograms are 
+then averaged to provide the desired signal-to-noise after 
+deconvolution to a spectrum.  This normally required 100 scans for 
+transmittance measurements and 500 to 1000 scans for reflectance.
+
+Major Spectral Features of Minerals
+
+The spectral features of minerals in the wavelength range considered 
+here are the result of vibrational processes.  Their number, intensity 
+and shape are dependent on atomic masses, interatomic force fields 
+and, particularly, molecular geometry.  One goal of the spectroscopist 
+is to quantitatively describe the vibrational process so that the origin 
+of each absorption band can be understood.  Sophisticated 
+calculations have been made that are consistent with observation, at 
+least for the simpler minerals (e.g., Elcombe, 1967), although not 
+necessarily correct or final.  Even if a vibrational mode were 
+understood precisely, it is virtually impossible to describe such a 
+motion simply and concisely for such complex structures as silicates.  
+Consequently, one must rely on some very general description, such 
+as "Si-O symmetric stretch," to describe all those vibrations which 
+predominantly involve the symmetric expansion and contraction of 
+the silicon-oxygen bonds.  Using such simplified visualizations, we 
+can successfully generalize about the spectral behavior of minerals.  
+For example, lighter atoms vibrate at higher frequencies (shorter 
+wavelengths) than heavier atoms when substituted into the same 
+structure (see olivines, p. 168-192).  Higher bond strengths also 
+result in higher frequencies of vibration, and this change in bonding 
+in silicates is related to the degree of polymerization of the Si-O4 ion 
+(Walter and Salisbury, 1989).  This results in a systematic change in 
+wavelengths of the fundamental vibration bands of silicates as the 
+framework structure ultimately gives way to isolated tetrahedra.  
+Finally, bond-stretching vibrations in covalent structures lie at 
+higher frequencies than bending modes, and such internal molecular 
+vibrations typically lie at higher frequencies than lattice modes 
+(Farmer, 1974).
+
+The most prominent features in the infrared spectra of minerals can 
+be understood in the context of the generalizations outlined above 
+and are described below for different types of minerals.  In 
+particular, we point out those bands seen in reflectance or emittance 
+that are not apparent in the transmittance spectra typically studied 
+by others.  This discussion of the origins of spectral features is not 
+repeated in the text for each mineral, because it would prove highly 
+repetitious for the relatively well understood bands, such as the 
+fundamental internal molecular vibration bands of the minerals and 
+associated water and hydroxyl.  Those bands can easily be identified 
+in the spectra of each mineral on the basis of the discussion below.  
+The attribution of more complex features due to overtones and 
+combination tones of the internal vibrations and lattice modes is a 
+more speculative matter, even for the simplest of minerals.  Such 
+speculation would also be repetitious and is not the function of this 
+work.  Farmer (1974) discusses the spectral features of minerals at 
+length, and Farmer and Palmieri (1975) provide an exhaustive list of 
+references categorized by mineral.  Estep-Barnes (1977) presented a 
+good review of the major spectral features of minerals, accompanied 
+by an extensive bibliography.  The interested reader is referred to 
+these works for the best information on the subject of detailed band 
+assignments.
+
+Silicates:  
+The most intense spectral features of silicates, occurring between 8 
+and 12 micrometers, are generally described as due simply to 
+fundamental asymmetric Si-O-Si stretching vibrations, but Si-O-Al 
+stretching vibrations may also contribute when aluminum is part of 
+the crystal lattice (for the classic Si-O-Si stretching feature, see the 
+9.2 micrometers band in quartz).  The appearance of these features 
+typically changes in reflectance because of the role of the refractive 
+index in scattering (see The Role of Surface and Volume Scattering, 
+below).  The weak side band near 8.5 micrometers in the 
+transmittance spectrum of quartz, for example, becomes a well-
+defined lobe of a prominent reflectance doublet  between 8 and 10 
+micrometers .  The reflectance spectrum of a quartz glass displays a 
+much weaker short-wavelength lobe, which in some cases of shocked 
+quartz we have seen is reduced to a shoulder.  This simplification of 
+glass spectra of minerals is well known and is attributed generally to 
+broadening of the bands (e.g., Farmer, 1974, p. 484).  However, 
+broadening would not appear to explain the reduced intensity of the 
+8.5 micrometers band in the spectrum of glass compared to that of 
+crystalline quartz.   An alternative explanation is that the short-
+wavelength lobe of the strong quartz reflectance doublet is not due 
+entirely to internal molecular vibrations but depends to some extent 
+on long-range order (Simon and McMahon, 1953).   Whatever the 
+details of their origin, these most intense features fall in the 8-14 
+micrometers atmospheric window, making them the most useful for 
+terrestrial remote sensing of silicates (Kahle and Goetz, 1983; Walter 
+and Salisbury, 1989).
+
+The second most intense silicate bands are broadly characterized as 
+O-Si-O deformation or bending modes, which occur in the 18-25 
+micrometers region.  Again, aluminum and, indeed, other cations may 
+contribute additional band structure in this region (Farmer, 1974, p. 
+365).  The relative intensities of the two quartz bands in this spectral 
+region appear unchanged in reflectance compared to transmittance, 
+but have been shifted about 1 micrometers to shorter wavelength by 
+the interaction of absorption coefficient and refractive index on the 
+scattered light, which is typical (Salisbury et al., 1987b).  The weaker 
+feature occurring at 18.3 micrometers in reflectance completely 
+disappears in the spectrum of fused silica, indicating such a strong 
+dependence on long-range order that it must be due to a lattice 
+vibration.  
+
+Weaker bands in quartz spectra between 12 and 15 micrometers 
+have been attributed to symmetric Si-O-Si stretching vibrations 
+(Farmer, 1974, p. 366).  When some of the silicon atoms are replaced 
+by aluminum, as in the feldspars, additional Si-O-Al stretching 
+vibrations are added over a longer wavelength range.  For example, 
+albite displays eight highly characteristic bands in its spectrum 
+between 12 and 20 micrometers.  Again, such bands are greatly 
+simplified or eliminated in the spectra of glasses (Nash and Salisbury, 
+1991).
+
+Additional weak bands are displayed as troughs between 3 and 7 
+micrometers.  Such bands in silicate spectra have been largely 
+ignored because they are usually too weak to be seen in 
+transmittance spectra.  However, they can be very useful in the 
+spectral identification of fine particulate minerals and rocks, where 
+they are quite prominent (Salisbury et al., 1987b; Salisbury and 
+Walter, 1989; and Salisbury et al., 1991).  Because they have not 
+been assigned with any certainty, we refer to such bands simply as 
+overtone/combination tone bands of internal and lattice modes. 
+
+Carbonates:
+The strongest bands of carbonates are due primarily to fundamental 
+internal molecular vibration bands of the CO3 ion, which are well 
+understood (Farmer, 1974, p. 231).  Carbonates typically display a 
+strong band near 7 micrometers due to asymmetric C-O stretching 
+vibrations and weaker bands near 11.4 and 14.3 micrometers due to 
+bending modes, which can be seen in the spectrum of calcite.  Very 
+weak bands in the transmittance spectrum to shorter wavelength 
+than 7 micrometers are strongly displayed as troughs in the 
+reflectance spectrum of particulate calcite.  Because of their relative 
+visibility in transmittance spectra, these weak bands have been the 
+subject of study and appear to be due to combination tones of 
+internal and lattice modes (Farmer, 1974, p. 236).
+
+Sulfates:  
+The sulfate ion displays a group of intense stretching fundamentals 
+near 8.7 micrometers and two or more bending modes near 16 
+micrometers, as can be seen in spectra of gypsum and anhydrite.  
+Again, the weaker features in transmittance spectra of sulfates at 
+shorter wavelength than the strong stretching fundamental are 
+strongly displayed in reflectance spectra of particulate samples.  The 
+complex feature near 4.6 micrometers appears to be a combination 
+tone of the sulphate ion, perhaps accompanied by water combination 
+tones (Hass and Sutherland, 1956).  The features near 2.8 and 6.2 
+micrometers are due to water, the spectral features of which are 
+discussed separately below.
+
+Oxides:  
+The metal-oxygen stretching vibration bands in oxides occur at 
+longer wavelength than the Si-O features (e.g., chromite).  An 
+interesting aspect of these features is that, because of the intense 
+dipole oscillations induced by the vibrations of highly ionic oxides, 
+their powder spectra are profoundly modified by the shape and size 
+of the particles (Farmer, 1974, p. 183).  Thus, it is sometimes 
+uncertain whether variations in powder spectra given by different 
+specimens of a given compound are due to real differences in purity 
+or phase, or merely to shape and size.  A case in point is provided by 
+spectra of our two goethite samples.
+
+Sulfides:  
+Most metal-sulphur vibration bands lie beyond our wavelength 
+range in the far-infrared.  We have included two examples (pyrite, 
+and pyrrhotite) that do show bands within our wavelength range.
+
+Water and Hydroxyl:  
+The most common vibration bands in minerals are due to water and 
+hydroxyl, the spectral features of which have been thoroughly 
+reviewed by Aines and Rossman (1984).  When water is not fixed in 
+a crystal lattice but is hydrogen-bonded to other water molecules, it 
+results in a broad spectral feature centered near 2.9 micrometers 
+due to O-H stretching vibrations and another near 6.1 micrometers 
+due to H-O-H bending vibrations.  Such water may be present in fluid 
+inclusions, as interlayer water in sheet silicates, or as water of 
+hydration.  Water in a crystalline environment produces sharper O-H 
+stretching absorption features than occur in the liquid water 
+spectrum, which typically also occur at a shorter wavelength.  
+Multiple O-H stretching vibrations can result when water is present 
+at several sites in the crystal lattice.  Beryl and cordierite, for 
+example, contain water that resides at specific sites in channels 
+parallel to the C axis (Aines and Rossman, 1984).  These minerals are 
+also interesting because they typically have CO2  trapped in these 
+channels, which produces sharp bands near 4.3 micrometers.
+
+Minerals containing hydroxyl without water display O-H stretching 
+features near 2.7 micrometers but lack the broad feature at 2.9 
+micrometers and the H-O-H bending mode at longer wavelength.  A 
+good example is kaolinite, which has no interlayer water.  Most often, 
+however, minerals display a combination of hydroxyl and molecular 
+water bands, as in the case of antigorite.
+
+Many minerals contain a trace of OH and water, although this is not 
+reflected in their chemical formulae.  A good example is quartz, 
+which typically displays multiple sharp O-H stretching features 
+superimposed on a weak broad water band.  The broad water band is 
+probably due to a small amount of liquid water in fluid inclusions.  
+The sharper hydroxyl features are associated with hydroxylated 
+alkali metals that serve to balance charges when aluminum 
+substitutes for silicon (Aines and Rossman, 1984).
+
+In addition to the fundamental O-H and H-O-H features commonly 
+seen in the spectra of minerals in the 2-7 micrometers region, a 
+variety of significant metal cation-OH bands can be found at longer 
+wavelegth, especially in clay minerals (Stubican and Roy, 1964).  
+Kaolinite, for example, displays a prominent Al-OH band near 11 
+micrometers.
+
+OH lattice vibrations are typically seen at still longer wavelengths 
+(Farmer, 1974, p. 348), such as the 16-micrometers feature in the 
+spectrum of antigorite.
+
+Water and hydroxyl bands are spectrally important because most 
+silicate minerals capable of doing so have undergone incipient 
+alteration to hydrous phases and/or contain fluid inclusions, even 
+when appearing quite fresh, because of the ubiquity of water in the 
+terrestrial environment.  This is in marked contrast to other 
+environments, such as that of the moon (Roedder, 1984).  It should 
+be pointed out that water and hydroxyl are usually not present in 
+large amounts where they are not part of the mineral stoichiometry.  
+However, spectral features due to water and hydroxyl may be very 
+prominent, especially in reflectance spectra of fine particulate 
+materials.  This is due to the enhancement of such absorption bands 
+by the increased scattering associated with fine particle size, which is 
+discussed below.  Thus, an estimate of the abundance of water and 
+hydroxyl relative to other phases can best be obtained from 
+transmittance spectra.
+
+Discussion of Spectra
+
+The Role of Surface and Volume Scattering:  
+All major studies of the nature of mineral spectra have used 
+transmittance data (Farmer, 1974; Farmer and Palmieri, 1975, and 
+references therein).  Transmittance spectra are simpler to interpret 
+than reflectance or emittance spectra, because they depend solely on 
+the absorption coefficient.  Reflectance and emittance spectra involve 
+both the absorption coefficient and the refractive index, which causes 
+spectral features to change quite significantly, especially when 
+scattering becomes important in particulate samples (Salisbury et al., 
+1987b).
+
+It is apparent from inspection of our mineral spectra that particle 
+size has a very significant effect on reflectance spectra.  A 
+mathematical model of reflectance from particulate samples has been 
+developed by Hapke (1981).  We focus here on a qualitative physical 
+model to provide a basic understanding of how and why spectral 
+features change with particle size, addressing the role of surface and 
+volume scattering.
+
+The radiation returned to the observer in reflectance from a 
+particulate sample has been scattered by the particles.  This 
+scattering takes place by two processes: surface scattering, which 
+involves rays that have reflected from the surfaces of grains without 
+penetration; and volume scattering, which involves rays that have 
+been refracted into grain interiors and then scattered or refracted 
+back out.  Which of these processes dominates returned radiation is 
+determined primarily by the absorption coefficient and particle size 
+(Vincent and Hunt, 1968).
+
+The wavelength variation in absorption coefficient can be 
+determined from a transmittance spectrum.  This can be illustrated 
+with quartz transmission spectra, where the highest absorption 
+coefficient is associated with the Si-O stretching vibration near 9.2 
+micrometers.  A weaker band due to the bending mode near 21.5 
+micrometers is accompanied by the still weaker feature near 19.5 
+micrometers, and progressively weaker stretching features can be 
+seen near 12.5, 12.7 and 14.5 micrometers.  
+
+The effects of particle size on these spectral features of different 
+intensity can be seen in our spectra of different particle size ranges 
+of quartz.
+
+Reflectance from the smooth surface of a solid sample, of course, 
+eliminates multiple scattering.  As a result, the entire spectrum is 
+dominated by simple Fresnel reflectance from the surface (Salisbury 
+et al., 1987b), and the spectral features are reflectance peaks 
+associated with the strongest molecular vibration bands.  The 
+correlation of reflectance peaks with very strong absorption bands is 
+counterintuitive to those researchers accustomed to working in the 
+visible and near-infrared.  This effect is due to the very strong 
+absorption coefficient associated with these bands, which induces a 
+mirror-like opacity at these wavelengths.
+
+For the coarse particulate 75-250 micrometers particle-size range, 
+the reflectance peaks, or "reststrahlen bands," discussed above are 
+still apparent between 7.5 and 24 micrometers.  However the 
+appearance of the spectrum between 2.1 and 7.5 micrometers has 
+changed significantly.  Weak but distinct alkali metal-OH features can 
+be seen between 2.8 and 3.2 micrometers, and a series of 
+overtone/combination tone bands are visible between 3.5 and 7.5 
+micrometers.  These spectral features are all expressed as troughs, 
+not peaks, showing that this region of the spectrum is dominated by 
+volume scattering.  What has occurred is that the particle size has 
+become small enough, on average, to allow passage of photons 
+completely through the grains in this spectral region of relatively low 
+absorption coefficient.  That is, the grains are optically thin.  More 
+photons are absorbed in band centers than in band wings during 
+volume scattering, and reflectance minima (troughs) occur.
+
+Thus, for particulate silicates, the spectral range documented in this 
+library is generally dominated by volume scattering and absorption 
+band troughs on the left side of each figure and by surface scattering 
+and absorption band peaks on the right side.  The dividing line is the 
+sharp minimum in reflectance associated with the principal 
+Christiansen frequency displayed for quartz at 7.4 micrometers.
+
+Changes in spectral contrast:  
+Considering first the reflectance minima associated with volume 
+scattering, band depth (Clark and Roush, 1984) is a measure of band 
+intensity commonly referred to as spectral contrast.  It is apparent in 
+comparing spectra of coarse and fine particulate size ranges that this 
+spectral contrast changes with changing particle size.  However, the 
+change is not consistent, spectral contrast sometimes increasing and 
+sometimes decreasing with decreasing particle size.  The  explanation 
+for this behavior lies in the relationship between mean optical path 
+length and particle size, which can be illustrated with three cases.  
+Mean optical path length (MOPL) is the mean distance photons will 
+pass through a material before total absorption takes place (Clark 
+and Roush, 1984).  When the absorption coefficient is relatively high 
+and the MOPL is much less than the mean grain diameter in a 
+particulate sample, all photons entering the grains are absorbed.  If 
+the MOPL remains smaller than the mean particle diameter, even at 
+a finer particle-size range, photon absorption remains essentially 
+unchanged.  Something close to this first case is seen in the centers of 
+the overtone/combination tone bands of quartz near 5.4 and 6.2 
+micrometers.  The reflectance in these band centers increases only 
+slightly in the spectrum of the finer particle-size range compared to 
+that of the coarser size range (i.e., the band remains nearly 
+saturated).  A better example is seen in the center of the hydroxyl 
+stretching fundamental near 2.7 micrometers in the spectra of 
+antigorite.  The band center remains saturated at about 1% 
+reflectance for both coarse and fine particle-size ranges.
+
+A second case occurs at intermediate absorption coefficient when the 
+MOPL is initially on the order of the mean grain diameter.  As the 
+particle size decreases, many more photons survive passage through 
+the grains and a significantly larger portion of the incoming radiation 
+will be scattered back in the direction of the observer.  This second 
+case applies to the wings of the 5.4 and 6.2 micrometers bands of 
+quartz and to the wings of the hydroxyl band of antigorite.  Here 
+reflectance increases with decreasing particle size.
+
+When the reflectance in the wings of a band rise significantly with 
+decreasing particle size (Case 2), while the band center remains 
+saturated or nearly so (Case 1), an increase in spectral contrast 
+occurs.  This effect causes absorption bands having the right ranges 
+of absorption coefficient between band wings and band centers to 
+display intense bands at fine particle size.  This occurs not only for 
+many of the silicate overtone/combination tone bands (especially for 
+quartz and olivine) but also for carbonate and sulfate combination 
+tones and the fundamental O-H and C-H stretching vibration bands.  
+Thus, spectra of fine particulate mineral mixtures may be dominated 
+out of proportion to their abundance by minerals that display such 
+spectral behavior, as shown elsewhere for igneous rocks and 
+meteorites (Salisbury et al., 1989; Salisbury et al., 1991).
+
+A third illustrative case occurs when the MOPL is already much 
+greater than mean particle diameter at the coarser particle size.  In 
+this case, the bulk of potentially backscattered radiation is already 
+returned to the observer at large particle size.  Thus, a reduction in 
+mean grain diameter has proportionally less effect than when MOPL 
+starts out close to mean grain diameter.  This third case applies to 
+the wings of the weaker overtone/combinaton tone band of quartz 
+near 4.5 micrometers.  Here the wings rise relatively less than the 
+band center,  which is affected more by Case 2 scattering.  Thus, this 
+band decreases in spectral contrast with decreasing particle size, 
+which is the norm for weak bands displayed in the visible and near-
+infrared.
+
+We turn now to the reststrahlen bands dominated by surface 
+scattering.  These absorption bands produce prominent reflectance 
+peaks for solid samples and at coarse particle size, which are greatly 
+reduced in intensity for the fine particle size range.  In fact, the 
+weakest reststrahlen reflectance peak of quartz at 14.5 micrometers 
+turns into a trough at the finest particle size.  While changing particle 
+size may have resulted in changes in single particle albedo and 
+scattering geometry (Conel, 1969), Salisbury and Eastes (1985) 
+focused on a physical model depending on porosity to explain the 
+decline in spectral contrast of the reststrahlen bands.  They noted 
+that when a very fine (<5 micrometers) powder is packed to reduce 
+porosity, its spectrum displays reflectance peaks as prominent as 
+those displayed by the coarser particle-size ranges.  They suggested 
+that the increased porosity associated with fine particle size resulted 
+in formation of photon traps.  That is, that the pores acted like small 
+black bodies.  A similar explanation was offered earlier by Lyon 
+(1964) and Aronson et al. (1966).  However, research in progress 
+suggests that the change in shape and intensity of the reststrahlen 
+bands is due more to the occurrence of substantial volume scattering 
+at fine particle size rather than to photon trapping, which is 
+essentially a surface scattering effect.  Briefly, it appears that the 
+role of porosity is to physically separate 1-5 micrometers diameter 
+particles that are optically thin, even in the reststrahlen bands (Hunt 
+and Logan, 1972).  When such particles are separated by more than a 
+wavelength, they scatter independently as optically thin, volume-
+scattering particles.  When packed closely together, however, they 
+scatter coherently as if they were large, optically thick, surface-
+scattering particles.  Thus, the loss of spectral contrast of reststrahlen 
+bands for materials of fine particle size appears to be due directly to 
+particle size and only indirectly (but critically) to porosity.
+
+It is important to note in any discussion of the spectral contrast of 
+reststrahlen bands that such bands do persist in spectra of fine 
+materials, even if reduced in intensity and changed in shape.  In 
+addition, the reststrahlen bands of some minerals are more 
+persistent than those of others.  As shown by Salisbury and Walter 
+(1989) and Salisbury et al. (1991), quartz, olivine, and pyroxene 
+display such persistent reststrahlen bands.  Thus, the reststrahlen 
+region may suffer reduced spectral contrast but is by no means 
+either featureless or useless in spectra of particulate mineral 
+mixtures.  
+
+Transparency peaks:  
+We have referred to the region of the spectrum where the 
+reststrahlen bands occur as dominated by surface scattering.  This is 
+obviously true for solid samples of silicates and for the coarse 
+particle-size range, which exhibit prominent reflectance peaks.  
+However, it can be seen in the transmittance spectrum of quartz that 
+a region of relatively high transparency exists between the 
+asymmetric and symmetric stretching vibrational features in the 
+vicinity of 10.5 to 12 micrometers.  The absorption coefficient here is 
+low enough so that grains become optically thin and volume 
+scattering of the Case 2 type (see above) occurs as the particle size 
+range is reduced from 75-250 micrometers to 0-75 micrometers.  
+Because the strong reststrahlen reflectance peaks are greatly 
+diminished at fine particle size, the broad transparency peak 
+becomes a prominent feature centered at about 11 micrometers.  
+Such transparency peaks may be very prominent in the spectra of 
+some minerals (e.g., antigorite).
+
+Transparency peaks were first noted without explanation in 
+reflectance spectra of rocks by Hovis and Callahan (1966).  Conel 
+(1969) described and explained such features (expressed as troughs 
+in emittance) in spectra of quartz.  Salisbury and Walter (1989) 
+showed that the wavelength of the transparency peak could be 
+related to the composition of igneous rocks.  Documented here is the 
+spectral behavior of a wide range of rock-forming minerals, showing 
+the nature and magnitude of transparency peaks that occur in 
+reflectance of fine particulate samples.
+
+Note that the prominence of this feature is dependent on the degree 
+to which the adjacent reflectance peaks associated with the 
+reststrahlen bands are diminished in spectra of the fine particle-size 
+range.  As explained above, the loss of these peaks appears to be 
+related to the increased porosity and volume scattering in a sample 
+due to very fine particle size.  When a sample is sifted into a sample 
+cup, the finest particles tend to be suspended in air and drift away 
+during sifting.  Thus, a sample sifted and measured repeatedly will 
+tend to increase in mean grain diameter and to display progressively 
+stronger reststrahlen bands.  We have attempted to avoid this with 
+our samples, but there is some obvious variability of reststrahen-
+band spectral contrast (compare acmite1f and acmite2f).  Also, a few 
+samples were not prepared by us and vary in particle-size range as a 
+result (olivine4, for example, is completely lacking in very fine 
+particles).
+
+Despite the fact that some minerals fail to display transparency 
+features, it is apparent from the spectra in this volume that such 
+peaks (expressed as troughs in emittance) could be prominent 
+spectral features in the 8-14 micrometers spectrum of a fine-
+particulate regolith.  Salisbury et al. (1991) suggest that the 
+distortion of a spectrum by the sharp thermal gradient associated 
+with a vacuum environment may make such broad features difficult 
+to detect, but further measurements of appropriate candidate 
+materials in a simulated space environment are needed to confirm 
+this.
+
+Christiansen feature:  
+A final spectral feature that is prominent at fine particle size is 
+associated with the principal Christiansen frequency.  This is a 
+reflectance minimum that occurs because the real part of the 
+refractive index undergoes rapid changes (anomalous dispersion) at a 
+slightly shorter wavelength than the most intense molecular 
+vibration band.  Consequently, the refractive index approaches 1, 
+resulting in a minimum of scattering, at a wavelength where 
+absorption is still relatively low.  With little scattering and little 
+absorption, infrared radiation can penetrate a sample relatively 
+easily, resulting in a minimum in reflectance or a maximum in 
+emittance.  This feature can be seen in reflectance at all particle-size 
+ranges, but it is one of the more easily recognized spectral features in 
+reflectance of the finest particle-size range (e.g., near 7.3 
+micrometers for quartz).  Conel (1969) first showed that the 
+wavelength of this feature is a good indicator of mineralogy.  Logan 
+et al. (1973) showed that the wavelength of this feature can also be 
+used to determine igneous rock type and demonstrated its utility for 
+mapping compositional variations in the lunar regolith.  The 
+relationship between wavelength of the Christiansen feature and 
+composition has been determined on a more quantitative basis for 
+igneous rocks by Walter and Salisbury (1989) and for meteorites by 
+Salisbury et al. (1991).
+
+The Effect of Crystallographic Orientation:  
+Many minerals are birefringent and have a different spectral 
+response depending on crystallographic orientation.  This is 
+illustrated in the solid sample spectra of orthoclase.  The occurrence 
+of such orientation effects is what makes it necessary to sift 
+particulate samples, or at least their upper millimeter, into sample 
+cups for measurement.  Tapping a cup or using a knife edge to level a 
+sample tends to orient the grains, especially if the mineral has a 
+prominent cleavage.  Some samples having an extremely asymmetric 
+shape, such as micas, will tend to develop grain orientation despite 
+sifting.  Our laboratory studies of calcite show, however, that more 
+equant grains are randomly oriented when sifted, despite very 
+strongly developed cleavage.
+
+The Effect of Packing:  
+As discussed above in the section on spectral contrast, it has been 
+shown that packing a fine particulate sample to reduce its porosity 
+will greatly increase the prominence of the fundamental molecular 
+vibration bands.  Thus, spectra of packed samples are presented for 
+some minerals, such as clays, for which coarse-grained samples 
+showing the fundamental molecular vibration bands are not 
+available.  Packing will tend to orient the grains parallel to their 
+strongest cleavage or parting, so that these spectra are most similar 
+to solid sample spectra obtained in that orientation. 
+
+The Effect of Atmospheric Gases:  
+A spectrometer must be vigorously purged with dry nitrogen (or dry 
+air from which CO2 has been removed) in order to avoid 
+incorporating band structure due to atmospheric H2O and CO2 in the 
+spectra.  Spectra of some samples were obtained without adequate 
+purging and display extremely weak atmospheric bands (e.g. the 
+solid sample spectrum of acmite1).  These atmospheric bands are 
+usually easy to identify and do not interfere with the major 
+molecular vibration bands of the silicates, so these spectra were 
+retained in the library.  Some minerals, such as beryl, cordierite, and 
+topaz, contain CO2 gas trapped in channels or in fluid inclusions 
+within the minerals.
+
+The Effect of Impurities:  
+Two kinds of impurities introduce spectral artifacts: those that are 
+added to the sample during laboratory processing and those that 
+were an original part of the sample.  Impurities added include water 
+(in KBr pellets) and hydrocarbon, while the most common impurities 
+within samples are quartz, calcite, and products of  exsolution and 
+alteration.
+
+KBr pellets are pressed under vacuum to remove water, but the 
+material is so hygroscopic that this process quickly begins to reverse.  
+The method chosen to compensate for this was to ratio the sample 
+pellet transmittance against that of a blank pellet  made under 
+identical circumstances.  If the KBr for both pellets was initially 
+ground to the same particle size so that the same surface area was 
+available to atmospheric water vapor, held under vacuum for the 
+same amount of time to remove water, and then exposed to humid 
+room air for the same amount of time in transfer (as pellets) to the 
+purged and dry environment of the spectrometer sample 
+compartment, the KBr of both pellets should contain the same 
+amount of water.  Then a ratio of sample transmittance to that of the 
+blank pellet should display water bands that are intrinsic to the 
+sample only.  However, in practice the sample transmittance 
+spectrum sometimes displays more of a water band than the 
+reflectance data suggest is reasonable.  The transmittance spectrum 
+of kyanite, for example, displays a strong molecular water band at 
+2.9 micrometers, but the lack of such a band in the spectrum of the 
+75-250 micrometers size range suggests that the KBr pellet is 
+contaminated by introduced water.  This water appears to be 
+introduced as water absorbed on the very fine (<2 micrometers) 
+particulate sample grains.  We have tried to avoid this effect by 
+grinding the samples under alcohol, but it remains a source of error 
+in the spectral data.  Thus, the broad water-absorption bands 
+centered at 2.9 micrometers in transmittance should be used with 
+caution to estimate sample water content and should be verified with 
+reflectance data.  
+
+It should also be noted that sample pellet and blank pellet 
+sometimes do not contain an identical amount of KBr because of lost 
+material squeezed past the die during pressing.  This has caused a 
+few transmittance spectra to exceed 100%, but it is a significant 
+problem only at the short wavelength end of the spectrum, where 
+the samples typically have very low absorbance.
+
+Sample spectra often display weak fundamental C-H stretching 
+vibration bands (a triplet)near 3.3 micrometers.  Solid samples 
+typically have acquired fingerprints to account for their C-H bands, 
+although some samples appear to have been contaminated by some 
+oily lubricant used with a rock saw.  Particulate samples may be 
+contaminated by hydrocarbons in several ways.  First, they were 
+ground under alcohol or acetone as described above.  Despite oven 
+drying of these samples at 100¡ C, a trace of hydrocarbon may 
+remain.  We also find that particulate samples simply exposed to 
+laboratory air will, over time, develop similar hydrocarbon bands 
+due to adsorbed species.  These spectral artifacts, like the water 
+vapor bands, are usually so weak that they are difficult to detect at 
+the scale at which spectra are presented in this book, but can be see, 
+for example, in the fine particle size spectrum of grossular garnet 
+(grossu2f). 
+
+Samples contaminated with quartz were rejected, because quartz 
+bands are so strong that even a small amount will introduce 
+interfering bands.  Samples contaminated with calcite (or dolomite) 
+were treated with either acetic or hydrochloric acid to remove the 
+contaminant.  It was found that an exceedingly small amount of 
+carbonate can usually be detected as a contaminant, because two of 
+the carbonate overtone/combination band near 4 micrometers that 
+gains spectral contrast at fine particle size occur where silicates tend 
+to be transparent.  The spectrum of the coarse 75-250 micrometers 
+size range of epidote is a good illustration of this and also 
+demonstrates that the infrared spectrum is more sensitive than X-
+ray analysis for detection of very small quantities of carbonate.
+
+Some minerals tend to contain exsolution products, and we have 
+included several of these in our collection, despite their lack of 
+perfect purity, because exsolution is so common.  Microcline.1, for 
+example, contains cryptoperthitic high albite, as does sanidine.3.  
+Hypersthene.1 contains a small amount of exsolved clinopyroxene. 
+
+As discussed above (see Major Spectral Features of Minerals), water 
+is ubiquitous in terrestrial environments and terrestrial minerals 
+subject to alteration have inevitably been slightly altered, even when 
+quite fresh in appearance.  Hydroxyl O-H stretching vibration bands 
+tend to become more prominent (i.e., gain spectral contrast) as 
+particle size decreases, as discussed above.  At the same time, silicate 
+minerals normally lacking hydroxyl tend to be quite transparent in 
+the 2.6-3.0 micrometers region.  Consequently, hydroxyl bands due 
+to a very small amount of alteration product typically are very 
+prominently expressed in reflectance spectra of the 0-75 
+micrometers particle-size range.  Transmittance spectra give a better 
+idea of the absolute amount of alteration product present.  A good 
+example can be seen in spectra of kyanite, which shows no hydroxyl 
+bands superimposed on the broad water band in its transmittance 
+spectrum near 2.7 micrometers, indicating the presence of very little 
+hydroxyl, but does show very strong and distinctive kaolinite 
+hydroxyl bands near 2.7 micrometers in the spectrum of the 0-75 
+micrometers particle-size range.
+
+Relating Laboratory Data to Remote Sensing Measurements:  
+The crossover point (i.e., point of equal energy) for reflectance and 
+emittance for most remote sensing targets in the solar system lies 
+somewhere in the 2.5-5 micrometers region, depending on the 
+albedo and temperature of the surface.  Thus, most of the spectral 
+range presented in this work is dominated by emittance.  Yet, 
+spectral data are presented in reflectance, primarily because 
+reflectance is much easier to measure in the laboratory.  Spectral 
+emissivity is usually predicted from reflectance of opaque materials 
+using Kirchhoff's Law, typically stated in its simplest form (without 
+wavelength or directional subscripts) as E=1-R, where E and R are 
+emissivity and reflectance (Nicodemus, 1965).  Even in regions of 
+relative transparency, where volume scattering dominates the 
+powder spectra, the samples used in this study can be considered 
+opaque because of their thickness.  However, the direct application of 
+Kirchhoff's Law to the spectral library presented here is not possible 
+because measurements were made in biconical, rather than 
+hemispherical, reflectance.  This means that the library spectra do 
+not provide a quantitative measure of the infrared radiation 
+scattered in all directions, as do the relatively few directional 
+hemispherical reflectance spectra described in the next section.  
+However, laboratory and field measurements have repeatedly shown 
+that biconical reflectance measurements may be used qualitatively to 
+predict emissivity (Lyon, 1964; Hunt and Vincent, 1968, 
+Bartholomew et al., 1989).  That is, the shape of the spectral curves 
+in our mineral library can be used to predict the shapes, but not the 
+absolute intensities, of spectral curves in emittance.  Thus, our 
+library of mineral spectra may be used qualitatively in spectral 
+searches of remote sensing data to identify unknown minerals.  
+
+Quantitative prediction of the magnitude, as well as the kind, of 
+spectral features to be seen in spectral emittance requires directional 
+hemispherical reflectance measurements, such as those described in 
+the next section.  Such measurements capture both the forward and 
+backscattered radiation, so that an absolute measurement is obtained 
+of R.  One caveat, however, is that Kirchhoff's Law holds true only 
+under isothermal conditions.  As shown by Logan et al. (1973), a 
+vacuum environment fosters a thermal gradient in the uppermost 
+few micrometers of a particulate sample that may exaggerate 
+spectral contrast and distort spectral features.  As shown by 
+Salisbury and Walter (1989), however, systematic correction factors 
+can be developed to predict the effect of a vacuum environment on 
+spectral features.  Fortunately, the presence of an atmosphere, even 
+a thin martian-type atmosphere, leaves the thermal gradient and 
+spectral contrast little changed from terrestrial conditions.  Thus, it 
+appears that the biconical reflectance spectra illustrated in this book 
+may be used to qualitatively predict spectral emissivity in a variety 
+of potential remote sensing environments.
+
+Mineral Mixing Models:  Using quantitative directional hemispherical 
+reflectance spectra, Thompson and Salisbury (1991) have recently 
+shown that the spectra of silicate minerals in the reststrahlen region 
+combine linearly to make up the spectra of mineral mixtures for 
+particles large enough to be optically thick (e.g., the 75-250 
+micrometers size range).   
+
+
+References
+Aines, R.D., and Rossman, G.R., 1984, Water in Minerals?  A peak in 
+the infrared:  Jour. of Geophysical Research, v. 89, p. 4059-4071.
+
+Appleman, D.E., and Evans, H.T., Jr., 1973, Job 9214 Indexing and 
+least-squares refinement of powder diffraction data:  U. S. 
+Department of Commerce, NTIS Document PB-216188.
+
+Aronson, J.R., Emslie, A.G., and McLinden, H.G., 1966, Infrared spectra 
+from particulate surfaces: Science, v. 152, p. 345-346.
+
+Bailey, S.W., 1980, Structures of layer silicates: in Crystal Structures 
+of Clay Minerals and Their X-ray Identification, G.W. Brindley and G. 
+Brown, eds., Mineralogical Society, London, p. 1-124.
+
+Bartholomew, M.J., Kahle, A.B., and Hoover, G., 1989, Infrared 
+spectroscopy (2.3-20 micrometers) for the geological interpretation 
+of remotely-sensed multispectral thermal infrared data: 
+International Jour. of Remote Sensing, v. 10, p. 529-544.
+
+Conel, J.E., 1969, Infrared emissivities of silicates:  Experimental 
+results and a cloudy atmosphere model of spectral emission from 
+condensed particulate mediums:  Jour. of Geophysical Research, v. 74, 
+p. 1614-1634.
+
+Clark, R.N., and Roush, T.L., 1984, Reflectance spectroscopy:  
+Quantitative analysis techniques for remote sensing applications:  
+Jour. of Geophysical Research, v. 89, p. 6329-6340.
+
+Drever, J.I., 1973, The preparation of oriented clay mineral 
+specimens for X-ray diffraction analysis by a filter membrane peel 
+technique:  American Mineralogist, v. 58, p. 553-554.
+
+Elcombe, M.M., 1967, Some aspects of the lattice dynamics of quartz: 
+Proceedings of the Physics Society of London, v. 91, p. 947-958.
+
+Estep-Barnes, P.A., 1977, Infrared spectroscopy: Chapter 2 in 
+Physical Methods in Determinative Mineralogy, 2nd edition, J. 
+Zussman, ed., Academic Press, New York, p. 529-603.
+
+Farmer, V.C., ed., 1974, The Infrared Spectra of Minerals. Monograph 
+No. 4, Mineralogical Society (London), 539 pp.
+
+Farmer, V.C., and Palmieri, F., 1975, The characterization of soil 
+minerals by infrared spectroscopy: In Soil Components, v. 2 Inorganic 
+Components, J. E. Gieseking, ed.,Springer-Verlag, New York, p. 573-
+670.
+
+Ferraro, J.R., ed., 1982, The Sadtler Infrared Spectra Handbook of 
+Mineral and Clays:  Sadtler Research Laboratories, Philadelphia, 476 
+pp. 
+
+Fleischer, Michael, 1983, Glossary of Mineral Species 1983:  The 
+Mineralogical Record, Inc., Tucson, 202 pp.
+
+Hapke, Bruce, 1981, Bidirectional reflectance spectroscopy: 1. Theory:  
+Jour. of Geophysical Research, v. 86, p. 3039-3054.
+
+Harrington, P.B., and Isenhour, T.L., 1987, A quantitative measure of 
+the reliability of searches of spectral libraries: Analytica Chimica 
+Acta, v. 197, p. 105-119.
+
+Hass, M., and Sutherland, G.B.B.M., 1956, The infra-red spectrum and 
+crystal structure of gypsum:  Proceedings of the Royal Society, 
+(London), v. 236, p. 427-445.
+
+Hoover, Gorden, and Kahle, A.B., 1986, A Portable Spectrometer for 
+Use from 5 to 16 Micrometers:  Jet Propulsion Laboratory 
+Publications 86-19, California Institute of Technology, Pasadena, 53 
+pp.
+
+Hovis, W.A. and Callahan, W.R., 1966, Infrared reflectance spectra of 
+igneous rocks, tuffs and red sandstone from 0.5 to 22 micrometers:  
+Jour. of the Optical Society of America, v. 56, p. 639-643.
+
+Hunt, G.R., and Logan, L. M., 1972, Variation of single particle mid-
+infrared emission spectrum with particle size:  Applied Optics, v. 11, 
+p. 142-147.
+
+Hunt, G.R., and Salisbury, J.W., 1974, Mid-infrared Spectral Behavior 
+of Igneous Rocks:  Air Force Cambridge Research Laboratories 
+Technical Report, TR-74-0625, 143 pp.
+
+Hunt, G.R., and Salisbury, J.W., 1975, Mid-infrared Spectral Behavior 
+of Sedimentary Rocks:  Air Force Cambridge Research Laboratories 
+Technical Report, TR-75-0356, 49 pp.
+
+Hunt, G.R., and Salisbury, J.W., 1976, Mid-infrared Spectral Behavior 
+of Metamorphic Rocks:  Air Force Cambridge Research Laboratories 
+Technical Report, TR-76-0003, 67 pp.
+
+Hunt, G.R., and Vincent, R.K., 1968, The behavior of spectral features 
+in the infrared emission from particulate surfaces of various grain 
+sizes:  Jour. of Geophysical Research, v. 73, p. 6039-6046.
+
+Kahle, A.B., and Goetz, A.F.H., 1983, Mineralogic information from a 
+new airborne thermal infrared multispectral scanner:  Science, v. 
+222, p. 24-27.
+
+Logan, L.M., Hunt, G.R., and Salisbury, J.W., 1974, The use of mid-
+infrared spectroscopy in remote sensing of space targets:  in Infrared 
+and Raman Spectroscopy of Lunar and Terrestrial Minerals, C. Karr, 
+ed., Academic Press, New York, p. 117-142.
+
+Logan, L.M., Hunt, G.R., Salisbury, J.W., and Balsamo, S.R., 1973, 
+Compositional implications of Christiansen frequency maxima for 
+infrared remote sensing applications:  Jour. of Geophysical Research, 
+v. 78, p. 4983-5003.
+
+Lowry, S.R., and Huppler, D.A., 1981, Infrared spectral search system 
+for gas chromatography/Fourier transform infrared spectrometry:  
+Analytical Chemistry, v. 53, p. 889-893.
+
+Lyon, R.J.P., 1963 Evaluation of Infrared Spectrophotometry for 
+Compositional Analysis of Lunar and Planetary Soils:  Stanford 
+Research Institute, Final Report under Contract NASr-49(04) and 
+NASA Technical Note D-1871, 139 pp.
+
+Lyon, R.J.P., 1964, Evaluation of Infrared Spectrophotometry for 
+Compositional Analysis of Lunar and Planetary Soils.  Part II:  Rough 
+and Powdered Surfaces:  NASA Contractor Report CR-100, 262 pp.
+
+Lyon, R.J.P., and Green, A.A., 1975, Reflectance and emittance of 
+terrain in the mid-infrared (6-25 micrometers) region:  in Infrared 
+and Raman Spectroscopy of Lunar and Terrestrial Minerals, C. Karr, 
+ed., Academic Press, New York, p. 165-195.
+
+Nash, D.B., and Salisbury, J.W., 1991, Infrared reflectance spectra of 
+plagioclase feldspars:  Geophysical Research Letters, v. 18, p. 1151-
+1154.
+
+Nicodemus, F.E., 1965, Directional reflectance and emissivity of an 
+opaque surface:  Applied Optics, v. 4, p. 767-773.
+
+Reynolds, R.C., 1980, Interstratified clay minerals:  in Crystal 
+Structures of Clay Minerals and their X-ray identification, G.W. 
+Brindley and G. Brown, eds., Mineralogical Society ( London), p. 249-
+303.
+
+Roedder, Edwin, 1984, Fluid Inclusions:  Reviews in Mineralogy, v. 
+12, Mineralogical Society of America, Washington, 644 pp.
+
+Salisbury, J.W., and Eastes, J.W., 1985, The effect of particle size and 
+porosity on spectral contrast in the mid-infrared:  Icarus, v. 64, p. 
+586-588.
+
+Salisbury, J.W., and Walter, L.S., 1989, Thermal infrared (2.5 to 13.5 
+micrometers) spectroscopic remote sensing of igneous rock types on 
+particulate planetary surfaces:  Jour. of Geophysical Research, v. 94, 
+p. 9192-9202.
+
+Salisbury, J. W., D'Aria, D. M., and Jarosewich, E. J., 1991, Midinfrared 
+(2.5-13.5 micrometers) reflectance spectra of powdered stony 
+meteorites:  Icarus, v. 92, p. 280-297.
+
+Salisbury, J.W., Hapke, Bruce, and Eastes, J.W., 1987b, Usefulness of 
+weak bands in mid-infrared remote sensing of particulate planetary 
+surfaces:  Jour. of Geophysical Research, v. 92, p. 702-710.
+
+Salisbury, J.W., Walter, L.S., and Vergo, Norma, 1987a, Mid-Infrared 
+(2.1-25 micrometers) Spectra of Minerals:  First Edition:  U.S. 
+Geological Survey Open-File Report 87-263, Reston, 386 pp.
+
+
+Simon, I., and McMahon, H. O., 1953, Study of the structure of quartz, 
+cristobalite, and vitreous silica by reflection in the infrared:  Journal 
+of Chemical Physics, v. 21, p. 23-30.
+
+Stimson, M.M., and O'Donnell, M.J., 1952, The infrared and ultraviolet 
+spectra of cystine and isocystine in the solid state:  Jour. of the 
+American Chemical Society, v. 74, p. 1805-1808.
+
+Stubican, V., and Roy, Ruston, 1964, A new approach to assignment of 
+infra-red absorption bands in layer-structure silicates:  Zeitschrift fur 
+Kristallographie, v. 115, p. 200-214.
+
+Thompson, J. L., and Salisbury, J. W., 1991, The mid-infrared 
+reflectance of mineral mixtures (7-14 micrometers): Remote Sensing 
+of Environment, (in press).
+
+Vincent, R.K., and Hunt, G.R., 1968, Infrared reflectance from mat 
+surfaces: Applied Optics, v. 7, p. 53-59.
+
+Vincent, R.K., Rowan, L.C., Gillespie, R.E., and Knapp, Charles, 1975, 
+Thermal-infrared spectra and chemical analyses of twenty-six 
+igneous rock samples:  Remote Sensing of Environment, v. 4, p. 199-
+209. 
+
+Walter, L.S., and Salisbury, J.W., 1989, Spectral characterization of 
+igneous rocks in the 8 to 12 micrometers region:  Jour. of Geophysical 
+Research, v. 94, p. 9203-9213.
+
+
+

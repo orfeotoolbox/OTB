@@ -1,0 +1,481 @@
+The lunar soil spectra on this web site were measured for a paper submitted to 
+the journal Icarus in March of 1997.  Below is an abbreviated summary of the 
+paper without figures which should provide some context in which to understand 
+the soil spectra.  The interested reader is referred to the journal for more 
+information.
+
+
+THERMAL INFRARED SPECTRA OF LUNAR SOILS
+
+by
+
+John W. Salisbury, Johns Hopkins University, Baltimore, MD
+
+Abhijit Basu, Indiana University, Bloomington, IN
+
+Erich M. Fischer, McKinsey & Co., Inc.
+
+
+ABSTRACT
+
+
+We have measured the infrared (2.08-14 µm) directional hemispherical 
+reflectance spectra of lunar soils representing the major lithologic units so far 
+sampled on the lunar surface, and soils of different exposure ages within those 
+units.  Such reflectance (R) spectra can be used to calculate absolute emissivity 
+(E) using Kirchhoff's Law (E=1-R).  The effects of exposure age vary with 
+wavelength region.  In the 2-5 µm and 8-14 µm regions, lunar soils darken with 
+exposure age, consistent with spectral behavior in the VNIR, and the dominant 
+optical effect of increasing amounts of finely divided metallic iron in more mature 
+soils.  However, in the 5-8 µm region soils tend to show higher reflectances with 
+greater exposure age, which suggests some unanticipated change in the optical 
+properties of fine metallic iron at those wavelengths.  The most useful spectral 
+feature for compositional remote sensing is the Christiansen reflectance 
+minimum (emissivity maximum), the spectral contrast of which is enhanced by 
+the lunar environment, and the wavelength position of which is little affected by 
+exposure age.  By contrast, the weak and relatively few overtone/combination 
+tone absorption bands in the volume scattering region between 3 and 8 µm 
+appear to be of limited usefulness.  The reststrahlen bands are also very weak in 
+absolute emissivity spectra, and are evidently not enhanced by the lunar 
+environment in the same fashion as the Christiansen feature.  Thus, they can 
+only be used for remote sensing with measurements of extraordinarily high 
+signal-to-noise (1000/1).  However, these features, as well as the transparency 
+feature, do contain important mineralogical information, such as the relative 
+abundances of plagioclase and pyroxene, and can be used for laboratory studies 
+of lunar soils.  More certain and more quantitative mineralogical analyses of lunar 
+soils appear feasible after additional spectral analysis of soil separates, and 
+additional petrologic analysis of soil samples for which spectral data are 
+available.
+
+
+
+INTRODUCTION
+
+
+Since the earliest days of spectroscopic remote sensing of the lunar surface, 
+electronic transition bands exhibited by lunar soils in the visible and near-infrared 
+(VNIR) regions of the spectrum have been used to determine mineralogical 
+composition (e.g.,McCord and Johnson, 1970; McCord et al., 1972; Adams, 
+1974).  There was also early recognition of the effects of space weathering on 
+lunar soils and on their spectral reflectance (e.g., McKay et al., 1974; Hapke et 
+al., 1975; Morris, 1976; Charette et al., 1976; and Basu, 1977.), resulting in a 
+basic model which does, however, continue to undergo refinement (e.g., Pieters 
+et al., 1993; Fischer and Pieters, 1994; and Clark and Johnson, 1996).  Briefly, 
+lunar soils are derived principally by comminution of the underlying rocks by 
+hypervelocity impact.  Over time, a rain of micrometeorite impacts continues the 
+comminution process but, along with solar wind sputtering, also produces 
+progressively more melt and vapor phase from such a particulate layer.  
+Reduction of Fe2+ results in submicroscopic iron metal particles in the glass and 
+deposited from vapor on the surfaces of grains.  Although other processes affect 
+an aging soil, it is the iron particles in and on grains, primarily in glass-welded 
+agglutinates, that principally account for the darkening and reddening of lunar soil 
+reflectance with age of exposure on the lunar surface, as well as for the decrease 
+in spectral contrast of the electronic transition bands.  Consequently, a good 
+method for relating the exposure age of lunar soil to its changing optical 
+properties is to use ferromagnetic resonance to measure the intensity of the 
+characteristic resonance from single-domain iron within the soil normalized to the 
+FeO content, yielding the widely used exposure index, Is/FeO (Morris, 1976).  
+This approach was used by Fischer (1995) to select suites of lunar soils of similar 
+composition but different exposure ages to study the effect of lunar space 
+weathering on reflectance spectra, a model which we also follow in this paper.
+
+In contrast with the range and sophistication of research done in the VNIR, much 
+less is known about the spectral behavior of lunar soils in the thermal infrared.  
+Early work by Lyon (1965) showed that the fundamental Si-O stretching vibration 
+bands (the "reststrahlen bands") of silicates are greatly diminished in intensity, or 
+spectral contrast, as particle size is reduced, making them difficult to detect in 
+emission from a particulate surface such as the lunar regolith.  
+
+Conel (1969) demonstrated that there exists an ancillary spectral feature, only 
+indirectly related to the reststrahlen bands, that is relatively unaffected by particle 
+size and can be used to determine composition.  More than one explanation has 
+been offered for this so-called Christiansen feature (Hapke, 1996).  The 
+traditional explanation for this feature, located near but not at the Christiansen 
+frequency, is that it occurs in a wavelength region where the real part of the 
+refractive index undergoes rapid change and thus may approach the refractive 
+index of the medium (air or vacuum) surrounding the mineral grains, resulting in 
+minimal scattering.  Because this takes place at a slightly shorter wavelength 
+than the fundamental molecular vibration band, absorption is still relatively low.  
+With little backscattering and little absorption, infrared radiation can pass through 
+a sample relatively easily, resulting in a minimum in reflectance or a maximum in 
+emittance.  This explanation agrees with experimental results, such as those 
+obtained in vacuum described below, and is preferred by us.  Whatever its origin, 
+the wavelength of this Christiansen feature was related to mineral composition by 
+Conel (1969) and to igneous rock type by Logan et al. (1973), and Salisbury and 
+Walter (1989).
+
+Logan and Hunt (1970) found that a vacuum environment can introduce thermal 
+gradients in a particulate sample that will significantly increase spectral contrast 
+of the Christiansen emission peak.  In a vacuum, the lack of interstitial gas 
+molecules results in very slow heat transfer between grains primarily by 
+conduction across the small asperity points of contact, compared to the more 
+rapid convective heat transport when gas is present.  For silicates, the optical 
+depth in the visible region of the spectrum is greater than it is in the thermal 
+infrared region.  Consequently, visible radiation penetrates to a greater depth in 
+the sample than the depth from which particles are radiating heat into space.  
+Logan and Hunt (1970) showed that under such conditions a cold skin of 
+particles develops over a warmer interior.  Given such a thermal gradient, 
+radiation passing relatively easily through the sample in the region of the 
+Christiansen emission peak arises primarily from the relatively warm interior.  In 
+the reststrahlen bands, however, where the absorption coefficient is high, 
+radiation from the warm interior is absorbed before it reaches the surface and, 
+consequently, the relatively cool surface layer dominates sample emittance at 
+these wavelengths.  In effect, different temperatures are being observed at 
+different wavelengths.  The net result, if the brightness temperature at the 
+Christiansen peak is assumed to be the kinetic temperature (which is the usual 
+assumption, because this is the wavelength of maximum emissivity), is a 
+calculated emissivity curve that displays a greatly enhanced Christiansen peak 
+compared to the reststrahlen band region, because of the disparity in radiance 
+associated with the difference in effective temperatures.  It is not clear that this 
+increase in overall contrast of the spectral curve is accompanied by increased 
+contrast of the individual spectral features within the reststrahlen region.  The 
+spectra obtained in a simulated environment by Logan and Hunt (1970) did not 
+appear to have enhanced reststrahlen band fine structure, and they concluded 
+that the prominent Christiansen emission peak was the spectral feature most 
+likely to provide compositional information.  More recent vacuum chamber 
+experiments by Henderson et al. (1996) confirm the enhancement of the 
+Christiansen peak, and appear to show that reststrahlen features are actually 
+slightly reduced in spectral contrast in the vacuum environment.
+
+A second order effect of the enhanced spectral contrast of the Christiansen 
+emission peak is a systematic shift of the peak to shorter wavelength due to the 
+increased steepness of the falloff in emissivity toward the reststrahlen band on its 
+long wavelength side (Salisbury and Walter, 1989; Henderson et al., 1996).  
+Salisbury and Walter (1989) documented this shift of the Christiansen feature by 
+comparing spectral emission measurements of different powdered igneous rock 
+types in vacuum (Logan et al., 1973) with their own directional hemispherical 
+reflectance measurements of the same rock powders in air.  They showed that 
+the shift was systematic and determined a correction factor.  They also showed 
+that the wavelength of the Christiansen feature could be correlated with a 
+chemical index that is a good indicator of igneous rock type. This SCFM index is 
+the ratio of the oxide abundance of silica to the combined oxide abundances of 
+silica, calcium, iron and magnesium.
+
+Another spectral feature that may be useful for compositional remote sensing of 
+particulate surfaces occurs in a wavelength region of relative transparency 
+between regions of high absorption coefficient associated with the Si-O stretching 
+and O-Si-O bending vibration bands.  These fundamental vibration bands are 
+dominated by surface scattering, which is why the reststrahlen bands are 
+reflectance peaks.  In between these bands, the absorption coefficient is 
+sufficiently low that the silicate grains become optically thin and volume 
+scattering comes to dominate the scattering process as particle size is reduced.  
+This enhanced volume scattering also results in a broad reflectance peak, the 
+wavelength of which has been shown to be related to mineral composition and 
+terrestrial igneous rock type (Salisbury and Walter, 1989).
+
+All of these measurements of terrestrial surrogates have been accompanied by 
+relatively few measurements of the Moon and of returned lunar soils.  Remote 
+sensing measurements of the Moon have been badly hampered by atmospheric 
+absorption and other problems.  The controversial results have been reviewed by 
+Nash et al. (1993) and Salisbury et al. (1995), and will not be considered here.  
+Laboratory spectral emission measurements of returned lunar soils in a vacuum 
+environment have shown qualitatively, however, the prominent Christiansen peak 
+and barely discernible reststrahlen features expected from surrogate 
+measurements (Logan et al., 1972; Salisbury et al., 1973).  Some of these 
+laboratory spectra are reproduced in Figure 1a.
+                                                                
+	Figure 1a.  Emission spectra of Apollo 16 soil samples measured in a 
+	simulated lunar environment.  Emissivity has been calculated assuming an 
+	emissivity of 1.0 at the Christiansen peak, and spectra are displaced 
+	vertically by 0.1 increments (from Salisbury et al., 1973). 
+
+To date, only one lunar soil has been measured in both emission in a simulated 
+lunar environment and in directional hemispherical reflectance from which 
+absolute emissivity can be calculated (Figure 1b).  Unfortunately, the emission 
+spectrum does not span the entire wavelength region available for remote 
+sensing through the atmospheric window, and has relatively low (1.5%) spectral 
+resolution.  Still, it does show quantitatively the enhancement of the Christiansen 
+peak in a vacuum environment and, despite the low resolution of emission 
+spectrum, what appears to be reduced spectral contrast of the reststrahlen 
+features.  However, this soil sample had the lowest spectral contrast of all of the 
+soil samples measured by Logan et al. (1972) and Salisbury et al. (1973) in a 
+vacuum environment, making the difference so small between the two 
+measurements that no firm conclusion can be reached.
+
+                                                                
+	Figure 1b.  Comparison of spectra of lunar soil 10084 measured in 
+	emission in a simulated lunar environment and in directional hemispherical 
+	reflectance in air (emission measurement from Logan et al., 1972).  Note 
+	that the shift of wavelength associated with the thermal gradient imposed 
+	by the simulated lunar environment is very small for such mafic rocks, as 
+	found by Salisbury and Walter (1989).  The expanded scale shows subtle 
+	reststrahlen features.
+
+
+Other laboratory measurements of lunar soil spectra in the thermal infrared are 
+few in number, and are difficult to relate to the measurements of lunar soils and 
+soil surrogates outlined above for a variety of reasons.  Aronson and Smith 
+(1978) and Aronson et al. (1979) made some spectral measurements in a 
+vacuum environment, but presented their data in a brightness temperature format 
+instead of calculated emissivity.  Still, they do show brightness temperature 
+curves for samples 67711 and 10084, and conclude that the former has the most 
+spectral contrast of any soil sample they measured, and the latter has the least, 
+which is consistent with the measurements shown in Figure 1.  It is also 
+consistent with the findings in this paper about the effects of soil exposure age.
+
+Nash (1991) made biconical reflectance measurements, which cannot be 
+quantitatively converted to emissivity (Nicodemus, 1965).  In addition, the 
+samples were slightly packed, which slightly enhances the reststrahlen features.  
+Again, however, there is good qualitative agreement with conclusions drawn 
+above.  That is, spectra of rock chips display greater spectral contrast than the 
+spectra of disaggregated breccias, and much greater contrast than the spectra of 
+soils.  
+
+It is the purpose of this paper to: 1) provide the first directional hemispherical 
+reflectance spectra (interpretable in terms of absolute emissivity) of soil samples 
+representative of all of the major lunar lithologic units sampled so far; 2) 
+document the effect of exposure age on the thermal infrared spectral properties 
+of these soils; 3) determine the extent to which the wavelength of the 
+Christiansen peak can be correlated with the SCFM chemical index of lunar soils, 
+and whether or not soil exposure age affects this correlation; 4) identify 
+reststrahlen features in lunar soil spectra that are due to different minerals; and 
+5) determine the extent to which mineral abundances estimated from reststrahlen 
+features correlate with the normative mineral abundances calculated from soil 
+chemistry.
+
+We recognize the need for caution in applying our findings directly to remote 
+sensing of lunar composition because of the effect of the lunar environment on 
+the shape of the spectral curve, especially the magnitude and wavelength of the 
+Christiansen peak.  However, we believe that it is best to start with absolute 
+emissivity and then account for lunar environmental effects, as has been done for 
+the wavelength position of the Christiansen peak by Salisbury and Walter (1989), 
+rather than to use qualitative data obtained with an always questionable 
+environmental simulation.  Further, the results reported here can be directly 
+applied to laboratory investigations of lunar soils.
+
+
+SAMPLE SELECTION
+
+In the absence of any accurate means to artificially mimic the evolution of lunar 
+soils, Fischer (1995) selected suites of returned soils of similar compositions but 
+different exposure ages, which  were then assumed to approximate the evolution 
+of a soil of a given composition.  To this end, he identified soils with a wide range 
+of exposure age as quantified by Is/FeO (Morris, 1976), which were within 1 wt.% 
+FeO, Al2O3, and TiO2 of selected immature soils.  Soils selected in this manner 
+which displayed VNIR absorption band centers different from their counterparts 
+(indicative of mineralogical differences) were discarded.  This process resulted in 
+selection of four compositionally distinct suites of three to four soils each, with 
+each soil sample in a suite presumably representing a distinct evolutionary stage 
+of soil development.  We have adopted this model and used the fine fraction (< 1 
+mm) of each of these soils as representative of the surface layer.  In addition, we 
+have selected an additional mare soil (10084) to extend the soil types to include 
+a high titanium mare soil, and have added several other soil samples similar to 
+those originally selected by Fischer (1995) to guard against possible bias 
+introduced by too few samples.  The Fischer sample suites are described below 
+and all sample selections are documented in Table 1.
+
+Soil Suites
+
+The Apollo 16a Reference Suite:  This suite, consisted of four soils: 61221, 
+67701, 60051 and 64801, in order of increasing exposure age as determined by 
+the Is/FeO index (see Table 1).  Whereas most Apollo 16 soils can be interpreted 
+as mixtures of at least two or three lithologic components (Houck, 1982; Basu 
+and McKay, 1984), the group of soils represented by this reference suite is 
+characterized by relatively higher aluminum and lower iron and titanium 
+concentrations than other Apollo 16 soils, and is likely derived dominantly, but not 
+purely, from the friable light matrix breccia unit sample most notably by the North 
+Ray crater impact.
+
+The Apollo 16b Reference Suite:  This suite consists of soils 67941, 61241, and 
+68501, in order of increasing exposure age as determined by the Is/FeO index 
+(see Table 1).  This suite, slightly less aluminous than the Apollo 16a suite, was 
+selected by Fischer (1995) to determine whether very subtle compositional 
+differences relative to the Apollo 16a suite might have noticeable effects upon 
+optical alteration.  As Fischer (1995) found in the VNIR, we find that the subtle 
+compositional differences are reflected in significant differences in the thermal 
+infrared spectra as described below in the Results section.
+
+The Apollo 14 Reference Suite:  This suite consists of soils 14141, 14149, and 
+14148, in order of increasing exposure age as determined by the Is/FeO index 
+(see Table 1).  This suite represents materials transitional between highlands and 
+mare in terms of major element chemistry.
+
+The Apollo 12 Reference Suite:  The Apollo 12 suite consists of soils 12030, 
+12024, and 12023, in order of increasing exposure age as determined by the 
+Is/FeO index (see Table 1).  This suite is the one mare reference suite for 
+analysis of exposure age effects.  It represents a low-titanium mare lithology.
+
+
+INSTRUMENTATION AND MEASUREMENT TECHNIQUE
+
+Laboratory Directional Hemispherical Reflectance Measurements
+
+Directional hemispherical reflectance measurements were made at 4-
+wavenumber resolution using a Nicolet FTIR spectrometer with a gold-coated 
+integrating sphere and a liquid nitrogen-cooled, mercury-cadmium-telluride 
+detector.  Samples were measured at a wall-mounted port at the bottom of the 
+sphere, and illuminated at 10¡ off of the vertical through a port in the top of the 
+sphere.  Spectra were calibrated to absolute reflectance using a gold mirror and 
+standards traceable to NIST (Salisbury and Walter, 1989).
+
+As shown by Nicodemus (1965), such 10¡ directional hemispherical reflectance 
+measurements (R) can be used to predict directional spectral emissivity (E) using 
+Kirchhoff's Law (E=1-R).
+
+Sample Preparation
+
+Each lunar soil sample (<1 mm fraction) was poured onto a fresh, waxed 
+weighing paper from its container as received from the Lunar Sample Curator, 
+and the paper was gently shaken sideways to flatten the sample prior to spectral 
+measurement while still on the weighing paper.
+
+A better simulation of the underdense nature of the upper surface of the lunar 
+regolith might have been obtained by sifting the samples, but we did not want to 
+risk the sample contamination that would inevitably result.  One sample was 
+measured both sifted through a 75 µm screen and poured as described above to 
+illustrate the spectral differences that might result from the smaller grain size and 
+higher porosity at the surface of the sifted sample.  As shown in Figure 2, the 
+sifted sample has a considerably higher reflectance in the 2-8 µm region, and a 
+slightly lower reflectance in the 8-14 µm region.  This spectral behavior is the 
+result of the changing opacity of silicate minerals with wavelength.  That is, in the 
+wavelength region where the sample is relatively transparent there is an increase 
+of reflectance with decreased particle size, because more photons survive 
+passage through the smaller gains to be backscattered to the observer.  In 
+regions of high opacity, on the other hand, there is a net loss of photons due to 
+the absorption that occurs with the increased volume scattering associated with 
+smaller grain size and higher porosity (Salisbury and Wald, 1992).  The change 
+in spectral reflectance between sifted and poured samples is relatively small in 
+the reststrahlen bands, where the sample is most opaque, because the 
+interaction of radiation with the sample occurs at or near the sample surface.  
+Thus, even when more large grains are present at the surface, as in the case of 
+the poured sample, the smaller particles with which they are invariably coated  
+tend to dominate this near-surface interaction (Salisbury and Wald, 1992).  
+
+
+REFERENCES
+
+
+Adams, J. B. 1974. Visible and near-infrared diffuse reflectance spectra of 
+pyroxenes as applied to remote sensing of solid objects in the solar system. J. 
+Geophys. Res. 79, 4829-4836.
+
+Aronson, J. R. and E. M. Smith 1978. Mid infrared spectra of lunar and analog 
+soils. Proc. Lunar Sci. Conf. 9th, 2911-2917.
+
+Aronson, J. R., A. G. Emslie, E. M. Smith, and P. F. Strong 1979. Infrared 
+spectra of lunar soils and related optical constants. Proc. Lunar Sci. Conf. 10th, 
+1787-1795.
+
+Basu, S. 1977. Steady state, exposure age and growth of agglutinates in lunar 
+soil. Proc. Lunar Sci. Conf. 8th, 3617-3632.
+
+Basu, A. and D. S. McKay 1984. Petrologic comparisons of Cayley and 
+Descartes on the basis of Apollo 16 soils from stations 4 and 11. Proc. Lunar Sci. 
+Conf. 14th, B535-B541.
+
+Charette, M. P., L. A. Soderblom, J. B. Adams, and T. B. McCord 1976. Age-
+color relationships in the lunar highlands. Proc. Lunar Sci. Conf. 7th, 2579-2592.
+
+Clark, B. E. and R. E. Johnson 1996. Interplanetary weathering: Surface erosion 
+in outer space. EOS. 77, 141-145.
+
+Conel, J. E. 1969. Infrared emissivities of silicates: Experimental results and a 
+cloudy atmosphere model of spectral emission from condensed particulate 
+mediums. J. Geophys. Res. 74, 1614-1634.
+
+Estep, P. A., J. Kovach, and C. Karr 1971. Infrared vibrational spectroscopic 
+studies of minerals from Apollo 11 and 12 lunar fines. Lunar Planet. Sci. Conf. 
+2nd, 2134-2151.
+
+Fischer, E. M. 1995. Quantitative compositional analysis of the lunar surface from 
+reflectance spectroscopy: Iron, aluminum, and a model for removing the optical 
+effects of space weathering. Ph.D. thesis, Brown University, 194 pp.
+
+Fischer, E. M. and C. M. Pieters 1994. Remote determination of exposure degree 
+and iron concentration of lunar soils using VIS-NIR spectroscopic methods. 
+Icarus. 111, 475-488.
+
+Hapke, B., 1996. Applications of an energy transfer model to three problems in 
+planetary regoliths: The solid-state greenhouse, thermal beaming, and emittance 
+spectra. J. Geophys. Res. 101,16,833-16,840.
+
+Hapke, B., W. Cassidy, and E. Wells 1975. Effects of vapor-phase deposition 
+processes on the optical, chemical, and magnetic properties of the lunar regolith. 
+The Moon  13, 339-353.
+
+Henderson, B. G., P. G. Lucey, and B. M. Jakosky 1996. New laboratory 
+measurements of mid-IR emission spectra of simulated planetary surfaces. J. 
+Geophys. Res. 101, 14,969-14,975.
+
+Houck, K. J. 1982. Petrologic variations in Apollo 16 surface soils Proc. Lunar 
+Sci. Conf.13th, A197-A209.
+
+Linsay, J. F. 1976. Lunar Stratigraphy and Sedimentology. Elsevier Scientific 
+Publishing Co., New York, 302 pp.
+
+Logan, L. M., and G. R. Hunt 1970. Emission spectra of particulate silicates 
+under simulated lunar conditions. J. Geophys. Res. 75,  6539-6548.
+
+Logan, L. M., G. R. Hunt, S. R. Balsamo, and J. W. Salisbury 1972. Midinfrared 
+emission spectra of Apollo 14 and 15 soils and remote compositional mapping of 
+the moon. Proc. Lunar Sci. Conf. 3rd.,  3069-3076.
+
+Logan, L. M., G. R. Hunt, J. W. Salisbury, and S. R. Balsamo 1973. 
+Compositional implications of Christiansen frequency maxima for infrared remote 
+sensing applications. J. Geophys. Res. 78, 4983-5003.
+
+Lyon, R. J. P. 1965. Analysis of rocks by spectral infrared emission (8-25 
+microns). Econ. Geol. 60, 717-736.
+
+McCord, T. B. and T. V. Johnson 1970. Lunar spectral reflectivity(0.30 to 2.50 
+microns) and implications fro remote mineralogical analysis. Science. 169, 855-
+858.
+
+McCord, T. B., M. P. Charette, T. V. Johnson, L. A. Lebofsky, C. Pieters, and J. 
+B. Adams 1972. Lunar spectral types. J. Geophys. Res. 77, 1349-1359.
+
+McKay, D. S., R. M. Fruland, and G. H. Heiken 1974. Grain size and the 
+evolution of lunar soils. Proc. Lunar Sci. Conf. 5th, 887-906.
+
+Morris, R. V. 1976. Surface exposure indices of lunar rocks: A comparative FMR 
+study. Proc. Lunar Sci. Conf. 7th, 315-335.
+
+Murcray, F. H., D. Murcray, and W. Williams 1970. Infrared emissivity of lunar 
+surface features. I. Balloon-borne observations. J. Geophys. Res. 75, 2662-2669.
+
+Mustard, J. F., and J. E. Hays 1997. Effects of hyperfine particles on reflectance 
+spectra from 0.3-25 µm. Icarus.  125, (in press).
+
+Nash, D. B. 1991. Infrared reflectance spectra (4-12 µm) of typical lunar samples. 
+Geophys. Res. Lett. 18, 2145-2147.
+
+Nash, D. B., and J. W. Salisbury 1991. Infrared reflectance spectra of plagioclase 
+feldspars. Geophys. Res. Lett . 18, 1151-1154.
+
+Nash, D. B., J. W. Salisbury, J. E. Conel, P. G. Lucey, and P. R. Christensen 
+1993. Evaluation of infrared emission spectroscopy for mapping the Moon's 
+surface composition from lunar orbit. J. of Geophys. Res. 98, 23,535-23,552.
+
+Nicodemus, F. E. 1965. Directional reflectance and emissivity of an opaque 
+surface. Appl.. Opt. 4, 767-773.
+
+Pieters, C. M., E. M. Fischer, O. Rode, and A. Basu 1993. Optical effects of 
+space weathering: The role of the finest fraction. J. Geophys. Res. 98, 20,817-
+20,824.
+
+Salisbury, J. W. and A. Wald 1992. The role of volume scattering in reducing 
+spectral contrast of reststrahlen bands in spectra of powdered minerals. Icarus. 
+96, 121-128. 
+
+Salisbury, J. W., and L. S. Walter 1989. Thermal infrared (2.5-13.5 µm) 
+spectroscopic remote sensing of igneous rock types on particulate planetary 
+surfaces. J. Geophys. Res. 94, 9192-9202. 
+
+Salisbury, J. W., G. R. Hunt, and L. M. Logan 1973. Infrared spectra of Apollo 16 
+fines. Lunar Planet. Sci. IV 3, 3191-3196.
+
+Salisbury, J. W., L. S. Walter, Norma Vergo, and D. M. D'Aria 1992. Mid-Infrared 
+(2.1 to 25 mm) Spectra of Minerals, 267 pp, Johns Hopkins University Press, 
+Baltimore.
+
+Salisbury, J. W., D. G. Murcray, W. J. Williams, and R. D. Blatherwick 1995. 
+Thermal infrared spectra of the Moon. Icarus. 115, 181-190.
+
+Thomson, J. L., and J. W. Salisbury 1993. The mid-infrared reflectance of mineral 
+mixtures (7-14 µm). Remote Sens. of Environ. 45, 1-13.
+
+Walter, L. S., and J. W. Salisbury 1989. Spectral characterization of igneous 
+rocks in the 8- to 12-µm region. J. Geophys. Res. 94, 9203-9213.
+
+
+

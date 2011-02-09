@@ -1,0 +1,6 @@
+Mineral:  Corundum Al_2O_3 
+
+File Name:  O15a.txt
+
+XRD Analysis:  Corundum(A)
+

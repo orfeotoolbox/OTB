@@ -1,0 +1,24 @@
+Mineral:  Tourmaline (Elbaite) Na(Li,Al)3Al6(BO3)3Si6018(OH)4
+
+Sample No.: tourmal.1
+
+XRD Analysis:  Pure tourmaline.
+
+Chemistry:  Microprobe analysis showed the sample to be 
+homogeneous within and between grains.  An average of 7 analyses 
+does not include lithium, boron or water, but demonstrates the 
+presence of sufficient manganese to indicate that this is not end 
+member elbaite:
+
+SiO2	36.83
+Al2O3	40.56
+FeO	0.12
+MgO	0.03
+CaO	0.13
+K2O	0.01
+Na2O	2.37
+TiO2	0.04
+MnO	4.40
+	_____
+Total	*84.49
+	*Li, B, and OH not measured.

@@ -1,0 +1,31 @@
+Composition:
+
+Petrographic Description:  A granular hypidiomorphic rock composed of 
+65% orthoclase, 30% quartz, 3% pyroxene, 1.5% riebekite, and 0.9% albite.  
+The turbid orthoclase subhedra are highly albitized perthite frequently 
+showing Carlsbad twinning, while interstital to these are a few albite 
+anhedra.  The anhedral quartz is somewhat undulose.  A bright green, 
+slightly pleochroic pyroxene has been largely replaced by dark blue to 
+brown pleochroic riebekite.  In addition, there are minute blue riebikite 
+needles disseminated throughout the sample.  The spectrum shows extremely 
+weak carbonate features, but no calcite was seen in thin section nor was the 
+rock analyzed for CO2.
+
+Microprobe Analysis:  The microprobe analysis revealed an orthoclase-rich 
+compsition (Or97) with perthitic exsolution.  The sodic pyroxene (aegerine) 
+proved to be homogeneous in composition, as was the riebekite.
+
+Chemical Analysis:
+SiO2  73.44
+CaO  0.39
+TiO2  0.21
+Na2O  4.96
+Al2O3  12.29
+K2O  4.94
+Fe3O3  2.11
+H2O  0.56
+FeO  1.6
+P2O5  0.0
+MnO  0.08
+MgO  0.02
+TOTAL  100.6

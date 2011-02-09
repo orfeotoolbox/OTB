@@ -1,0 +1,5 @@
+Mineral:  Montebrasite LiAlPO_4(OH)
+
+File Name:  p02a.txt
+
+XRD Analysis:  Montebrasite(A), Fluorapatite(T)

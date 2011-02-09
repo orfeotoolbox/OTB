@@ -1,0 +1,5 @@
+Mineral:  Glauberite Na_2Ca(SO_4)_2
+
+File Name:  so08a.txt
+
+XRD Analysis:  Glauberite(A)

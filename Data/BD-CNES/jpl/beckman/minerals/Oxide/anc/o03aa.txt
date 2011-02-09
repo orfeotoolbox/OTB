@@ -1,0 +1,6 @@
+Mineral:  Cassiterite SnO_2  
+
+File Name:  O03a.txt  
+
+XRD Analysis:  Cassiterite(A), Unidentified phase(T)  
+

@@ -1,0 +1,21 @@
+Mineral:  Sanidine (K,Na)Al3O8
+
+Sample No.:  sanidine.1
+
+XRD Analysis:  Pure sanidine.
+
+Chemistry:  Microprobe analysis showed the sample to be 
+homogeneous within and between grains and to be of typical 
+sanidine composition, except for the unusually low albite content.
+
+SiO2	64.53
+Al2O3	18.76
+FeO	0.17
+MgO	0.04
+CaO	0.02
+K2O	13.96
+Na2O	1.30
+TiO2	0.03
+MnO	0.04
+	_____
+Total	98.86

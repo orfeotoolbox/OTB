@@ -1,0 +1,21 @@
+Grey calcareous silty soil containing an estimated texture of 10% finer than 20 
+um (5% finer than 5 um).
+
+Clay mineralogy : XRD analysis indicates predominantly illite/muscovite and some 
+koalinite/chlorite.
+
+Coarse mineralogy : XRF-normative analysis estimated this soil consisted of 49% 
+quartz, 19% illite/muscovite, 22% smectite (chlorite + montmorillonite), 7% 
+calcite. Calcite was confirmed by a distinct effervescence with HCl acid.
+
+Spectral Description: The FTIR spectrum for fgg024 indicates the quartz 
+reststrahlen features at 8.2 and 8.63 um. However the subdued longer wavelength 
+reststrahlen (9.33 um), the absence of the doublet feature at 12.52 and 12.85 
+um, and the presence of the 6.4 um feature is suggestive of a fine grained 
+quartz texture. However the grain size analysis does not clearly confirm this 
+interpretation. The presence of clay is also suggested by the broadened and 
+pronounced longer wavelength quartz reststrahlen feature at 9.333 um and the 
+absorption feature at 9.0 um. No obvious calcite feature appears obvious in the 
+FTIR spectra.
+
+

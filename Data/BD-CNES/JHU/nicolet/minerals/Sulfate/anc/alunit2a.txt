@@ -1,0 +1,26 @@
+Mineral:  Alunite (potassium alunite) KAl3(SO4)2(OH)6
+
+Sample No.: alunite.2
+
+Source:  Hunt and Salisbury Collection #295 B (purchased from 
+Ward's Natural Science Establishment).
+
+XRD Analysis:  Pure alunite.
+
+Chemistry:  XRF analysis by J. Foggert, Ardith Bartel, and K. Stewart, 
+USGS Branch of Analytical Chemistry, Denver, showed this to be a 
+potassium alunite:
+
+SiO2 	0.17
+Al2O3	35.60
+FeTO3	0.14
+MgO 	<0.10
+CaO 	<0.02
+Na2O 	0.34
+K2O 	10.20
+TiO2	<0.02
+P2O5 	0.75
+MnO 	<0.02
+LOI  900¡ C	44.20
+	_____
+Total	91.56

@@ -1,0 +1,5 @@
+Mineral:  Anthophyllite (Mg,Fe^2+)_7Si_8O_22(OH)_2
+
+File Name:  in08a.txt
+
+XRD Analysis:  Anthophyllite(A), Chlorite(M), Serpentine(M?)

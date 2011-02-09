@@ -1,0 +1,32 @@
+Weak fine granular structure, slightly hard and very friable, a few very 
+rounded ironstone nodules, moderately acidic (pH 5.8).  1.44% organic 
+carbon; 8.8% clay, 17.9% silt; 73.3% sand.
+
+Clay mineralogy: medium kaolinite peak, small goethite peak, and weak 
+hematite and mica peaks.  
+
+Coarse mineralogy: 96% quartz, 4% iron oxides, and traces of tourmaline, 
+zircon, kyanite, potassic feldspar, and weathered aggregate.
+
+Spectral Description:  The near-infrared displays a classic kaolinite 
+spectrum, with the short wavelength asymmetry of the 2.21 microns band 
+and the weak features near 2.31, 2.35 and 2.38 microns.  These bands are 
+accompanied by a strong, sharp hydroxyl feature near 2.71 microns, a 
+shoulder near 2.74 microns, and another sharp band near 2.76 microns 
+unbroadened by montmorillonite.  Weak H-C bands are displayed near 3.42 
+and 3.51 microns on the flank of the broad water band, accompanied by a 
+weak, broad hydrocarbon band near 2.49 microns in the near-infrared.  
+Quartz combination tone bands can be seen on the long wavelength side of 
+the primary volume scattering peak and their relative intensities indicate an 
+intermediate particle size for the quartz.  However, the reststrahlen doublet is 
+very strongly expressed between 7.7 and 9.7 microns because of the large 
+amount present.  Absorption by kaolinite grain coatings has reduced the 
+relative height of the long wavelength side of the quartz doublet and 
+introduced an absorption band near 8.98 microns.  Note that the longest 
+wavelength peak of the quartz doublet is near 9.22 microns rather than near 
+9.26 or 9.27 microns, as it is when K-feldspar contributes its reststrahlen 
+bands, and the long wavelength flank of the quartz doublet is not extended to 
+longer wavelength.  There is one small reflectance peak at the base of this 
+flank near 9.88 microns that may be due to hematite. 
+
+

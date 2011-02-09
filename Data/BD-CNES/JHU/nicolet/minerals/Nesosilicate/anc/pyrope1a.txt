@@ -1,0 +1,21 @@
+Mineral:  Pyrope Mg3Al2(SiO4)3
+
+Sample No.:  pyrope.1
+
+XRD Analysis:  Pure pyrope.
+
+Chemistry:  Microprobe analysis showed garnet composition very 
+close to pyrope, but with variable amounts of chrome (1.5-5.0 weight 
+%) indicating a uvarovite component.  Average of 10 analyses:
+
+SiO2	42.81
+Al2O3	22.62
+FeO	7.18
+MgO	20.58
+CaO	4.47
+K2O	0.01
+Na2O	0.04
+TiO2	0.33
+Cr2O3	2.46
+	_____
+Total	100.50

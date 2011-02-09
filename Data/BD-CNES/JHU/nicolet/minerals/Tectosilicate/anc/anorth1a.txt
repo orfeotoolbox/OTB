@@ -1,0 +1,23 @@
+Mineral:  Anorthite CaAl2Si2O8
+
+Sample No.: anorth.1
+
+XRD Analysis:  Pure anorthite.
+
+Chemistry:  Microprobe analysis of the recrystallized mineral showed 
+it to be homogeneous within and between grains.  Average of 10 
+analyses:
+
+SiO2 	43.53
+Al2O3	0.02
+FeO 	0.02
+MgO	0.03
+CaO 	19.26
+K2O	0.04
+Na2O	0.03
+TiO2	0.01
+MnO 	0.03
+	_____
+Total 	100.32
+
+NO SOLID SAMPLE AVAILABLE

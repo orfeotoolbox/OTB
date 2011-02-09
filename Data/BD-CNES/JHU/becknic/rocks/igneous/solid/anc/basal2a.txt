@@ -1,0 +1,23 @@
+Composition:
+
+Petrographic Description:  The glassy rind portions are almost apheric, with
+rare plagioclase and olivine microphenocrysts (in that order of abundance).
+The core of the sample consists of plagioclase and augite (?) in a 1:1 ratio
+with interstitial glass.
+
+Microprobe Analysis:  None.
+
+Chemical Analysis:  (by William Melson, NMNH, Wash., DC)
+SiO2  49.95
+CaO  12.04
+TiO2  1.48
+Na2O  2.48
+Al2O3  14.8
+K2O  0.100
+Fe2O3  -  1.74
+H2O  0.180
+FeO  9.15
+P2O5  0.12
+MnO  0.190
+MgO  7.75
+TOTAL  99.98

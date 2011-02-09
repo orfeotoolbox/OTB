@@ -1,0 +1,21 @@
+Mineral:  Hemimorphite Zn4Si2O7(OH)2.H2O
+
+Sample No.: hemimor.1
+
+XRD Analysis:  Pure hemimorphite.
+
+Chemistry:  Microprobe analysis showed that the sample is 
+homogeneous within and between grains.  Average of 10 analyses:
+
+SiO2	22.51
+Al2O3	0.09
+FeO	0.25
+MgO	0.07
+CaO	0.04
+K2O	0.04
+Na2O	3.24
+TiO2	0.11
+MnO	0.22
+	_____
+Total	26.57
+	*Zn and H2O not measured.

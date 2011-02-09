@@ -1,0 +1,22 @@
+Composition:
+
+Petrographic Description:  The groundmass is glassy, microlitic and 
+spherulitic.  The phenocrysts consist of sanidine > plagioclase (oligoclase in 
+part) > biotite > quartz.  Accessories are apatite and magnetite.
+
+Microprobe Analysis:  None.
+
+Chemical Analysis:
+SiO2  70.87
+CaO  1.58
+TiO2  trace
+Na2O  3.47
+Al2O3  15.18
+K2O  5.04
+Fe2O3  2.18
+H2O  1.08
+FeO  0.12
+P2O5  trace
+MnO  trace
+MgO  0.6
+TOTAL  100.12

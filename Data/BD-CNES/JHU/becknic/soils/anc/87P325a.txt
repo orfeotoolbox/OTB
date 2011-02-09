@@ -1,0 +1,29 @@
+Weak very fine granular structure parting to weak fine granular, soft and 
+very friable, weakly smeary, non-sticky and non-plastic; slightly acidic (pH 
+6.2).  5.43% organic carbon; 2.7% clay, 29.0% silt; 68.3% sand.  
+
+Clay mineralogy: none.  
+
+Coarse mineralogy:  40% weathered aggregates, 24% glass-coated grains, 
+19% glass aggregate, 10% quartz, 7% plagioclase feldspar, and 1% 
+tourmaline.  
+
+Spectral Description:  This is our only soil sample except for the gypsum 
+dune sand (0015) and another soil (87P313) heavy in dark organic matter 
+that does not display hydroxyl bands of at least some clay.  The broad 
+molecular water band shows only weak hydrocarbon bands near 3.4 and 3.5 
+microns, which are accompanied by a broad cellulose feature near 2.51 
+microns and weaker hydrocarbon features near 2.20 and 2.31 microns.  
+Considering how much organic matter is present in this soil, it is surprising 
+that the hydrocarbon bands are not stronger, but the soil also contains some 
+very dark glass beads that serve to lower the overall reflectance and quench 
+absorption bands.  The primary volume scattering reflectance peak displays 
+a very weak CO2 absorption doublet near 4.27 microns due to inadequate 
+purging of the instrument, as well as distinct water vapor bands from 2.5 to 
+1.7 microns and weaker water vapor bands resembling noise from 5.5 to 7.0 
+microns.  The weak bands on the long wavelength side of the primary 
+volume scattering peak near 5.02 and 5.34 microns are probably 
+combination tone bands of fine quartz, which also appears to contribute and 
+extremely weak reststrahlen doublet between 7.7 and 9.7 microns that can 
+barely be discerned in the spectrum.  The ramped reflectance peak near 6.7 
+microns is due to organic matter.

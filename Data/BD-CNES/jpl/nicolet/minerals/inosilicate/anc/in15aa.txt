@@ -1,0 +1,5 @@
+Mineral:  Augite (Ca,Na)(Mg,Fe,Al,Ti)(Si,Al)_2O_6
+
+File Name:  in15a.txt
+
+XRD Analysis:  Augite(A)

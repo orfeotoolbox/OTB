@@ -1,0 +1,105 @@
+
+SNOW AND ICE
+
+
+BACKGROUND
+
+	Spectral data:  Until recently, frost and snow spectra were calculated using 
+the optical constants of ice in a Mie theory and radiative transfer model (Dozier 
+and Warren, 1982).  Field measurements (Warren et al., 1986) show that the 
+Dozier and Warren model is accurate in the VNIR and SWIR.  We have recently 
+measured the directional hemispherical reflectance spectra of such materials for 
+the first time in the MWIR and TIR (Salisbury et al., 1994), and find that the 
+calculated spectra for frost are correct, but calculated snow spectra are in error 
+by up to 6%, depending on grain size and degree of cementation.  We have also 
+developed an improved scattering model to explain the differences (Wald, 1994).  
+As might be expected, our measurement of the spectrum of smooth ice agrees 
+with that calculated from the Fresnel equations.
+
+	BRDF data:  Directional reflectance and emittance for frost and snow have 
+been calculated with the same models used to calculate spectra.  Again, the 
+Dozier and Warren (1982) model appears accurate in the VNIR and SWIR, and 
+we find little difference between the results of their model and that of Wald (1994) 
+for loose snow grains, which have Lambertian-type behavior at all wavelengths.  
+Crusted snow, however, has a very strong specular component in the thermal 
+infrared, as discussed more fully below.  Smooth, clear ice, of course, is specular 
+at all wavelengths.
+
+
+FROST, SNOW AND ICE
+
+	Spectral data:  Our thermal infrared directional hemispherical reflectance 
+measurements of frost and snow (Salisbury et al., 1994) were matched at 2.0 µm 
+with VNIR/SWIR spectra calculated using the Dozier and Warren (1982) delta 
+Eddington model.  The grain size of our frost is not given, and our snow spectra 
+are labeled simply "fine", "medium granular", and "coarse granular".  Precise 
+grain sizes are not given because, as explained more fully in Salisbury et al. 
+(1994), and Wald (1994), grain shape, size range, and cementation effects make 
+a single grain size description misleading.  However, the VNIR/SWIR delta 
+Eddington calculation uses a single grain size.  The single "effective" grain size 
+that matched the reflectance of our measured samples at 2.0 µm wavelength was 
+10 µm for the frost, 24 µm for the fine snow, 82 µm for the medium granular 
+snow, and 178 µm for the coarse granular snow.  The physical grain size of the 
+granular snow was much larger under the microscope, averaging about 400 µm 
+and 1500 µm for the medium and coarse granular, respectively.  The optical grain 
+size was much smaller, because this is a function of the abundance and size 
+range of scattering centers within grains (at least in the VNIR/SWIR, where the 
+grains are relatively transparent), such as air bubbles or internal grain 
+boundaries.
+
+The spectrum for ice was calculated using the Fresnel equations.  Although our 
+measured spectrum was very close to that calculated in the thermal infrared 
+(Salisbury et al., 1994), the slight surface imperfections of our ice would become 
+more and more significant scattering centers with decreasing wavelength.  
+Hence, the Fresnel calculation was used for the generic ice spectrum.  
+
+	Caveat:  As is typical for aged snow, our medium and coarse granular 
+snow grains are cemented into a crust, which introduces a strong specular 
+reflectance component in the thermal infrared, as discussed briefly above.   In 
+fact, we find that as snow ages and grains become larger and more completely 
+cemented together into a continuous crust, snow approaches the spectral and 
+directional behavior of ice in the thermal infrared.  It should be noted here that, 
+just as crusted snow resembles ice in its spectral and BRDF behavior in the 
+thermal infrared, ice tends to resemble coarse, crusted snow in the VNIR/SWIR.  
+That is, smooth, clear ice has an extremely low reflectance in the VNIR/SWIR,  
+forming what is called "black ice", which is rare.  Natural ice typically has some 
+snow on its surface, and/or the surface is rough, and its interior contains grain 
+boundaries and air bubbles.  The presence of these scattering centers results in 
+strong diffuse scattering, especially in the VNIR.  As the wavelength increases 
+beyond the scale of these scattering enters, and predominantly volume scattering 
+is replaced by surface scattering, the BRDF changes from largely diffuse in the 
+VNIR/SWIR to largely specular in the thermal infrared.  Thus, an analyst should 
+not use the spectral and scattering characteristics of smooth ice for an ice-
+covered surface in the VNIR/SWIR, except under unusual (black ice) 
+circumstances.  Most ice has the spectral and BRDF properties of our coarse, 
+granular, crusted snow in both reflectance and emittance.
+
+Both frost and fresh, fine snow should be Lambertian at all wavelengths, just as 
+smooth, clear ice should be specular at all wavelengths.  Aged, crusted snow 
+should be predominantly Lambertian in the VNIR/SWIR and predominantly 
+specular in the thermal infrared.
+
+
+
+REFERENCES
+
+
+Dozier, J., and Warren, S. G., 1982, Effect of viewing angle on the infrared 
+brightness temperature of snow: Water resources Research,, v. 18, p. 1424-
+1434.
+
+Salisbury, J. W. and D'Aria, D. M., 1992, Emissivity of terrestrial materials in the 
+8-14 µm atmospheric window:  Remote Sensing of Environment, v. 42, p. 83-106.
+
+Salisbury, J. W., D'Aria, D. M., and Wald, A. E., 1994, Measurements of thermal 
+infrared spectral reflectance of frost, snow, and ice: Jour. of Geophysical 
+Research, v. 99, p. 24,235-24,240.
+
+Wald, A. E., 1994, Modeling thermal infrared (2-14 µm) reflectance of frost and 
+snow: Jour. of Geophysical Research, v. 99, p. 24,241-24,250. 
+
+Warren, S. G., T. C. Grenfell, and P. C. Mullen, 1986, Optical properties of 
+Antarctic snow, Antarctic Journal of the United States, v.21, p. 247-248
+
+
+

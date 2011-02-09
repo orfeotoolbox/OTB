@@ -1,0 +1,6 @@
+Mineral:  Dolomite CaMg(CO_3)_2
+
+File Name:  c05c.txt
+
+XRD Analysis:  Dolomite(A)
+

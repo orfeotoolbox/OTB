@@ -1,0 +1,16 @@
+Medium grained quartz rich sandstone (finer/equal than 130um) with a 
+ferrugginous/desert varnish coating.
+
+Clay mineralogy  : XRD analysis indicates the presence of kaolinite and 
+muscovite/illite. PIMA SWIR spectra identifies kaolinite and montmorillonite but 
+fails to identify illite. However Fieldspec NIR spectra identifies hematite 
+within the desert varnish suggestive of a multi-layer iron oxide desert varnish.
+
+Coarse mineralogy : XRF normative analysis estimated 71% quartz, 14% 
+illite/muscovite, 5% kaolinite and 7% smectite.
+
+Spectral Description:  The presence of the 12.4-12.8 um doublet suggests the 
+medium quartz grained texture. Spectral features suggestive of kaolinite are 
+observed at 9.0, 9.9 and 11.0 um for fge2, with a broad 9.0-10 um reststrahlen 
+feature suggestive of the significant clay mineral content. 
+

@@ -1,0 +1,5 @@
+Mineral:  Triphylite Li(Mn,Fe)PO_4
+
+File Name:  p04a.txt
+
+XRD Analysis:  Triphylite(A)

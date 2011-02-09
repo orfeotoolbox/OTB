@@ -1,0 +1,20 @@
+Composition:
+
+Petrographic Description:  The sample is chiefly a structurless glass which is
+isotropic and colorless in this section.  There are fluidal arrangements of gas 
+inclusions and microlites of biotite, augite, probably feldspars and other
+unidentified phases.  High magnification shows trichites.  This appearance is 
+not constant throughout the mass.
+
+Microprobe Analysis:  None.
+
+Chemical Analysis:
+SiO2  75.78
+CaO  0.81
+Al2O3  12.39
+Na2O  4.00
+Fe2O3  0.22
+K2O  4.64
+FeO  1.25
+MgO  0.31
+TOTAL  99.4

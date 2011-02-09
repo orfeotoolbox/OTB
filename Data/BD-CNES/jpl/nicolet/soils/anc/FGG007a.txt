@@ -1,0 +1,19 @@
+Red-orange sandy loam/alluvium with 47% finer than 20 um (22% finer than 5 um).
+
+Clay mineralogy : PIMA SWIR spectra indicated the presence of kaolinite and/or 
+montmorillonite.
+
+Coarse mineralogy : XRF-normative analysis estimated this alluvium consisted of 
+72% quartz, 10% illite/muscovite, 8% kaolinite and 7% smectite.
+
+Spectral Description: The FTIR spectrum for fgg007 indicates the quartz 
+reststrahlen features at 8.2 and 8.625 um. However the subdued longer wavelength 
+reststrahlen (9.35 um), the absence of the doublet feature at 12.52 and 12.85 
+um, and the presence of the 6.4 um feature is suggestive of a fine grained 
+quartz texture. The presence of clay is also suggested by the broadened longer 
+wavelength quartz reststrahlen feature at 9.35 um. The absorption feature at 
+8.95 um, shoulder-peak at 9.865 um and rise at 11 um is suggestive of kaolinite.
+
+
+
+

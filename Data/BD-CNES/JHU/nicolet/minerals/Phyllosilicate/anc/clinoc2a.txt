@@ -1,0 +1,22 @@
+Mineral:  Clinochlore (Fe+2,Mg)5Al(Si3Al)O10(OH)8
+
+Sample No.: clinochl.2
+
+XRD Analysis:  Pure ferroan clinochlore (ripidolite).
+
+Chemistry:  XRF analysis by Ardith Bartel, USGS Branch of Analytical 
+Chemistry, Denver, gave the following composition:
+
+SiO2	25.80
+Al2O3	20.70
+FeTO3	26.10
+Mg0 	17.70
+Ca0	<0.02
+K2O	<0.02
+Na2O	0.22
+TiO2	0.85
+MnO	 0.09
+P2O5	<0.05
+LOI 900 C	9.23
+	_____
+Total	100.78

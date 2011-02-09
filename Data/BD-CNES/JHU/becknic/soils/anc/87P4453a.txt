@@ -1,0 +1,26 @@
+Moderate fine granular structure, slightly hard and very friable, slightly 
+sticky and plastic with neutral pH (6.5).  2.87% organic carbon, 17.5% clay, 
+31.9% silt, 50.6% sand.
+
+Clay mineralogy: small montmorillonite, mica and kaolinite peaks.
+
+Coarse mineralogy: 59% quartz, 25% potassic feldspar, 5% opaque, 3% 
+other, 2% plagioclase feldspar, 2% pyroxene, 1% glass, 1% goethite, 1% 
+weathered aggregate, 1% zircon, 1% hematite, and traces of biotite and plant 
+opal.
+
+Spectral description: The short wavelength asymmetry of the 2.21 micron 
+hydroxyl absorption band, very weak 2.31 and 2.35 micron bands, and the 
+distinct 2.71 micron hydroxyl band shows the presence of mixed layer clay.  
+Hydrocarbon bands near 3.42 and 3.51 microns are accompanied by the 
+broad hydrocarbon feature near 2.49 microns and the typical ramped 
+reflectance peak of organic matter near 6.70 microns.  Quartz combination 
+tone bands are displayed on the long wavelength flank of the primary 
+volume scattering reflectance peak, and the relative intensities of these 
+features is characteristic of fine particle size.  The broad H-O-H absorption 
+near 6.1 microns and the ramped peak near 6.70 microns are characteristic of 
+organic matter.  The quartz reststrahlen doublet and its band gap near 8.63 
+microns are overshadowed by reststrahlen peaks to longer wavelength.  
+Presumably, these peaks are due to K-feldspar, but the maximum is not at its 
+usual location near 9.27 microns.  Rather, what is usually a weak side band 
+near 9.56 microns is the maximum.  The reason for this is unknown.

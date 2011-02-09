@@ -1,0 +1,5 @@
+Mineral:  Chabazite CaAl_2Si_4O_12.6H_2O
+
+File Name:  ts15a.txt
+
+XRD Analysis:  Chabazite(A)

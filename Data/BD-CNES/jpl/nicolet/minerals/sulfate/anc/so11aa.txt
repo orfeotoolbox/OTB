@@ -1,0 +1,5 @@
+Mineral:  Antlerite Cu_3(SO_4)(OH)_4
+
+File Name:  so11a.txt
+
+XRD Analysis:  Antlerite(A), Quartz(M), possible Chrysocolla(T)

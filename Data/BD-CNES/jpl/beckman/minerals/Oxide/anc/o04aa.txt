@@ -1,0 +1,6 @@
+Mineral:  Magnetite Fe^2+Fe_2^3+O_4  
+
+File Name:  O04a.txt 
+
+XRD Analysis:  Magnetite(A) 
+

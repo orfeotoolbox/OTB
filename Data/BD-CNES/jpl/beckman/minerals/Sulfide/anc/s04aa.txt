@@ -1,0 +1,5 @@
+Mineral:  Chalcopyrite CuFeS_2  
+
+File Name:  s04a.txt
+
+XRD Analysis:  Chalcopyrite(A), Pyrrhotite(M)

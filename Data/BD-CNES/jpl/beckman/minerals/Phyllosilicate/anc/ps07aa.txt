@@ -1,0 +1,5 @@
+Mineral:  Pyrophyllite Al_2Si_4O_10(OH)_2
+
+File Name:  ps07a.txt
+
+XRD Analysis:  Pyrophyllite(A), Kaolinite(M)

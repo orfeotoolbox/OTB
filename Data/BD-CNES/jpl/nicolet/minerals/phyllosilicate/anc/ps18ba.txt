@@ -1,0 +1,5 @@
+Mineral:  Vermiculite (Mg,Fe^2+,Al)_3(Al,Si)_4O_10(OH)_2.4H_2O
+
+File Name:  ps18b.txt
+
+XRD Analysis:  Vermiculite(A), Smectite(A), possible Kaolinite(T)

@@ -1,0 +1,36 @@
+Mineral:  Topaz Al2SiO4(F,OH)2
+
+Sample No.:  topaz.3
+
+XRD Analysis:  Topaz plus a small amount of quartz (which does not 
+show up in the spectrum).
+
+Chemistry:  Microprobe analysis by Lou Walter and volatile analysis 
+by C. S. Papp, J. D. Sharkey, and K. J. Curry, and XRF analysis of the 
+non-volatiles by J. Taggare, A. Bartel,  USGS Branch of Analytical 
+Chemistry, Denver.  Ten microprobe analyses indicate homogeneity 
+within and between grains.  Composition agrees with that of a topaz 
+that is F-rich and OH-poor, which is consistent with the intensity of 
+the OH bands in the spectrum.  (Note that the spectrum lacks a CO2 
+band at 4.3 micrometers typically seen in the more OH-rich samples.  
+Because F-rich topaz is orthorhombic and OH-rich triclinic, there are 
+also significant differences in the reststrahlen bands between topaz 
+samples.)  Average of 10 analyses:
+
+SiO2	36.60
+Al2O3	62.30
+FeO	0.08
+MgO	0.16
+CaO	<0.02
+K2O	<0.02
+Na2O	<0.17
+TiO2	<0.02
+MnO	<0.02
+P2O5	<0.06
+H2O	0.09
+CO2	<0.01
+F	0.38
+	_____
+Total	99.93
+
+SOLID SAMPLE SPECTRUM  MISSING

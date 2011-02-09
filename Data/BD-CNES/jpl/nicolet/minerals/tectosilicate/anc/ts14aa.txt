@@ -1,0 +1,5 @@
+Mineral:  Sanidine (Feldspar) (K,Na)AlSi_3O_8
+
+File Name:  ts14a.txt
+
+XRD Analysis:  Sanidine(A)

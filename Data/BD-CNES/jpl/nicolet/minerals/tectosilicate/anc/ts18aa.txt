@@ -1,0 +1,5 @@
+Mineral:  Analcime NaAlSi_2O_6.H_2O
+
+File Name:  ts18a.txt
+
+XRD Analysis:  Analcime(A)

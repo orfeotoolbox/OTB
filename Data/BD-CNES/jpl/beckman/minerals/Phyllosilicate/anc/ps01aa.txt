@@ -1,0 +1,5 @@
+Mineral:  Kaolinite Al_2Si_2O_5(OH)_4
+
+File Name:  ps01a.txt
+
+XRD Analysis:  Kaolinite(A)

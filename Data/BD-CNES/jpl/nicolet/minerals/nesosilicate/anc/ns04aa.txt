@@ -1,0 +1,8 @@
+Mineral:  Almandine Garnet Fe_3Al_2(SiO_4)_3
+
+File Name:  ns04a.txt
+
+XRD Analysis:  Almandine Garnet(A)
+
+Chemical Analysis:
+from electron microprobe (Fe_1.41Mg_1.25Mn_0.03Ca_0.32)(Al_2.00)(Si_2.99Al_0.01)O_12

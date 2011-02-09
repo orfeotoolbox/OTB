@@ -1,0 +1,5 @@
+Mineral:  Palygorskite (Mg,Al)_2Si_4O_10(OH).4H_2O
+
+File Name:  ps04a.txt
+
+XRD Analysis:  Palygorskite(A), Quartz(T)

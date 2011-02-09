@@ -1,0 +1,6 @@
+Mineral:  Columbite Fe^2+Nb_2O_6
+
+File Name:  O07a.txt 
+
+XRD Analysis:  Columbite(A)
+

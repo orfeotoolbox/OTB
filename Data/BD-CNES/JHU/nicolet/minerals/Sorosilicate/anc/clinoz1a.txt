@@ -1,0 +1,23 @@
+Mineral:  Clinozoisite Ca2Al3(SiO4)3(OH)
+
+Sample No.: clinozo.1
+
+XRD Analysis:  Clinozoisite with a very small amount of possible 
+mordenite.
+
+Chemistry:  Microprobe analysis showed the sample to be 
+homogeneous within and between grains.  It approaches epidote in 
+composition due to high iron content.  Average of 10 analyses:
+
+SiO2	38.41
+Al2O3	29.52
+FeO	6.30
+MgO	0.06
+CaO	24.00
+K2O	0.02
+Na2O	0.01
+TiO2	0.11
+Cr2O3	0.04
+	_____
+Total 	*98.47
+*OH not measured.

@@ -1,0 +1,5 @@
+Mineral:  Pyrolusite MnO_2  
+
+File Name:  O06a.txt  
+
+XRD Analysis:  Pyrolusite(A), Ramsdellite(M)  

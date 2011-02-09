@@ -1,0 +1,19 @@
+Mineral:  Olivine (Fo41) (Fe+2,Mg)2SiO4
+
+Sample No.:  olivine.4
+
+XRD Analysis:  None.
+
+Chemistry:  Microprobe analysis by W.I. Ridley, USGS, showed good 
+Fo41 composition:
+
+SiO2	33.15
+TiO2	0.04
+Al2O3	0.00
+Cr2O3	0.04
+MnO	0.90
+NiO	0.10
+FeO 	47.65
+MgO 	18.43
+CaO	0.20
+Total	100.51

@@ -1,0 +1,19 @@
+Lithology      Dacite
+Sample#        AP-960-157b
+Chemistry
+SiO2           64.07
+Al2O3          16.46
+Fe             4.59
+CaO            1.97
+TiO2           0.82
+MnO            0.03
+K2O            0.25
+MgO            0.97
+Na2O           7.08
+P2O5           0.11
+PPC            3.65
+X-Ray Diffraction
+               Plagioclase
+               Quartz
+               Chlorite
+               Mica

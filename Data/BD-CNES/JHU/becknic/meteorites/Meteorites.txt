@@ -1,0 +1,32 @@
+METEORITES
+
+This portion of the spectral library contains infrared (2.08-25 micrometer) 
+bidirectional reflectance spectra of 60 powdered stony meteorite samples 
+representing 50 different meteorites.  These spectra show that most powdered 
+meteorite samples have undergone alteration, even if exposed only to water 
+vapor in the air, and many have been contaminated by volatile hydrocarbons 
+characterized by absorption bands near 3.45 micrometers (Salisbury et al., 
+1991).  This hydrocarbon contamination is particularly important in view of the 
+recent claims of an extraterrestrial origin for such volatile (PAH) hydrocarbons 
+in 
+Martian meteorites.  Evidence presented in Salisbury et al. (1991) and in 
+Salisbury and Hunt (1974) strongly suggests that the primary macromolecular 
+hydrocarbons in meteorites, including carbonaceous chondrites, do not display 
+the 3.45 micrometer bands characteristic of aromatic hydrocarbons, or, in fact, 
+any other detectable spectral features in their infrared spectra.  Powdered 
+meteorites do, however, display a variety of other spectral features 
+(reststrahlen 
+bands, absorption bands, and Christiansen features) related to their mineralogy 
+that can be used for their identification and for comparison with the infrared 
+spectra of asteroids (Salisbury et al., 1991).
+
+
+REFERENCES
+
+Salisbury, J. W., D'Aria, D. M., and Jarosewich, E. J., 1991, Midinfrared (2.5-
+13.5 
+micrometer) reflectance spectra of powdered stony meteorites: Icarus, v. 92, p. 
+280-297.
+
+Salisbury, J. W., and Hunt, G. R., 1974, Meteorite spectra and weathering: J. of 
+Geophys. Res., v. 79, p. 4439-4441.

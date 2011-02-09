@@ -1,0 +1,25 @@
+Mineral:  Albite NaAlSi3O8
+
+File Name:  Albite1a.txt
+
+XRD Analysis:  Pure albite.
+
+Chemistry: Flame photometry and atomic absorption analysis of 
+samples from the same location (not the same sample) showed 98.42 
+mole percent albite. 
+
+Microprobe analysis of this sample showed it to be homogeneous 
+within and between grains.  An average of 10 analyses indicates 
+pure albite end member composition:
+
+SiO2 	 68.18
+Al2O3	 20.07
+FeO 	 0.01
+MgO	 0.02
+CaO 	 0.02
+K2O	 0.20
+Na2O	 10.37
+TiO2	 0.01
+MnO 	 0.01
+	_____
+Total 	99.88

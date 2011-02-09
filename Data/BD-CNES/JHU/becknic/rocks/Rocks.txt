@@ -1,0 +1,14 @@
+ROCKS
+
+Directional hemispherical spectra of both solid (usually a freshly 
+broken surface) and finely powdered (0-75 micrometer) igneous 
+rocks were measured for the JHU collection.  The infrared portions of 
+these spectra were originally published as a USGS Open File Report 
+((Salisbury, J. W., Walter, L. S., and D'Aria, D. M., 1988, Mid-Infrared 
+(2.5-13.5 micrometer) Spectra of Igneous Rocks: Open-File Report 
+88-686)). 
+
+Spectra of sedimentary and metamorphic rocks were measured both 
+fine (0-75 micrometer) and coarse (500-1500 micrometer) 
+particulate samples.  Spectra of the very coarse samples were meant 
+to simulate spectra of freshly broken (rough) surfaces.

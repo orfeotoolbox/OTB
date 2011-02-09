@@ -1,0 +1,21 @@
+Mineral:  Aragonite CaCO3
+
+Sample No.: aragon.1
+
+XRD Analysis:  The sample is aragonite with a 30% peak at 2.044 Å 
+due to the presence of gold or silver (?).
+
+Chemistry:  Microprobe analysis was of cations only.  The total is high 
+(104%), but otherwise composition is acceptable and appeared 
+homogeneous within and between grains.  An average of 10 analyses:
+
+SiO2	0.02
+FeO	0.01
+MgO	0.01
+CaO 	104.16
+K2O	0.02
+Na2O	0.01
+TiO2	0.02
+	_____
+Total	*104.25
+	*CO2 not measured

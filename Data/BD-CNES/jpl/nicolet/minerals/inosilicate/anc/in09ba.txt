@@ -1,0 +1,8 @@
+Mineral:  Diopside CaMg(SiO_3)_2
+
+File Name:  in09b.txt
+
+XRD Analysis:  Diopside(A), Mica(A), Talc(M)
+
+Chemical Analysis:
+from electron microprobe (Na_0.02Ca_0.98)(Mg_0.24Fe_0.05Al_0.02)Si_2O_6

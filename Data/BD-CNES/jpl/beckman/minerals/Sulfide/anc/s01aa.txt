@@ -1,0 +1,5 @@
+Mineral:  Sphalerite (Zn,Fe)S  
+
+File Name: s01a.txt
+
+XRD Analysis:  Sphalerite(A), Wurtzite(M)

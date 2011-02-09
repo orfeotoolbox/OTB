@@ -1,0 +1,30 @@
+Composition:
+
+Petrographic Description:  The modes for phenocrysts for this sample gave
+26.75% plagioclase, 8.5% augite, 1.05% magnetite, 0.95% hypersthene, and
+62.75% groundmass.  The groundmass for these samples consists of 
+labradorite, augite, hypersthene, magnetite, ilmenite, trydimite as 
+isolated grains and aggregates of small wedge-shaped crystals closely associated
+with small patches of intergrown granular quartz and chalcedony, anorthoclase, 
+and  partly devitrified glass.
+
+Microprobe Analysis:  The composition of the plagioclase phenocrysts was 
+found to range from An59 to An62 (labradorite), while the composition in the 
+groundmass ranged from An50 to An55.  The augite phenocryst composition 
+was Wo 34%, En 43%, Fs 23%, that of the hypersthene phenocrysts was En 67%, Fs 33%.  
+Augite in the groundmass was W0 24%, En 45%, Fs 31%.
+
+Chemical Analysis:
+SiO2  57.20
+CaO  8.85
+TiO2  0.54
+Na2O  2.50
+Al2O3  16.35
+K2O  0.68
+Fe2O3  2.23
+H2O  0.90
+FeO  5.93
+P2O5  0.36
+MnO  0.14
+MgO  4.65
+TOTAL  100.3

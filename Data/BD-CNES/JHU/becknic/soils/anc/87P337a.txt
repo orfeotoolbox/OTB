@@ -1,0 +1,34 @@
+Fine granular structure, slightly hard, friable, slightly sticky and 
+plastic,mildly alkaline (pH 7.4).  0.89% organic carbon; 7.2% clay; 64.3% 
+silt; 28.5% sand.
+
+Clay mineralogy: not measured.
+
+Coarse mineralogy: 70% quartz, 10% glass, 8% glass aggregate, 4% 
+tourmaline, 3% plagioclase feldspar, 3% muscovite, 2% glass-coated grains 
+and traces of potassic feldspar.
+
+Spectral Description:  This spectrum is a little noisy in the near infrared, but 
+the characteristic long wavelength asymmetry of the absorption band near 
+2.20 microns and a strong absorption near 2.76 microns indicate that the clay 
+present is an illite/smectite, although muscovite would contribute to these 
+bands.  The strength of the feature near 2.76 microns suggests that either 
+more muscovite is present than appears to be, or that the clay is quite illitic.  
+The weak shoulder near 2.71 microns indicates the presence of minor 
+kaolinite.  Both kaolinite and illite/smectite could contribute the very weak 
+features near 2.35 and 2.39 microns.  The weak hydrocarbon features near 
+3.41 and 3.50 microns are accompanied by the typical weak, broad feature 
+near 2.50 microns and strong H-O-H absorption near 6.1 microns.  The long 
+wavelength flank of the primary volume scattering reflectance peak is 
+dominated by quartz combination tone absorption bands, the relative 
+intensities of which indicate this sample is dominated by fine particle size, 
+although the strong H-O-H absorption quenches the 5.93 micron band.  The 
+reflectance doublet centered near 6.5 microns appears to be the result of 
+quartz combination one absorption bands superimposed on the reflectance 
+peak of organic matter common in this spectral region.  The quartz 
+reststrahlen doublet has a typical feldspar reststrahlen peak superimposed on 
+its long wavelength flank near 9.27 microns, with a side band near 9.62 
+microns, to which the muscovite may contribute.  The broad peak between 
+these features and the barely perceptible alpha quartz doublet near 12.6 
+microns is due to secondary volume scattering with a possible contribution 
+by organic matter.

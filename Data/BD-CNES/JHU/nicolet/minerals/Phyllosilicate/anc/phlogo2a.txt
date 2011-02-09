@@ -1,0 +1,22 @@
+Mineral:  Phlogopite KMg3Si3AlO10(F, OH)2
+
+Sample No.: phlogop.2
+
+XRD Analysis:  Pure phlogopite.
+
+Chemistry:  Microprobe analysis was difficult because micas yield 
+poor sections.  However, six analysis were completed, confirming 
+normal phlogopite composition.  Average of 6 analyses:
+
+SiO2	41.24
+Al2O3	14.07
+FeO	1.86
+MgO	25.17
+CaO	0.01
+K2O	10.02
+Na2O	0.29
+TiO2	1.31
+Cr2O3	0.02
+	_____
+Total	*94.62
+	*OH not analysed.

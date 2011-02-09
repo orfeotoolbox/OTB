@@ -1,0 +1,6 @@
+Mineral:  Tincalconite Na_2B_4O_5(OH)_4.3H_2O  
+
+File Name:  b04a.txt  
+
+XRD Analysis:  Tincalconite(A), Borax(A)  
+

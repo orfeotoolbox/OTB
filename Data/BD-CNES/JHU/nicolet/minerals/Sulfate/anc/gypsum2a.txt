@@ -1,0 +1,26 @@
+Mineral:  Gypsum (selenite) CaSO4.2H2O
+
+Sample No.: gypsum.2
+
+XRD Analysis:  Pure gypsum.
+
+Chemistry:  Volatile analysis by C. S. Papp, J. D. Sharkey, and K. J. 
+Curry, and XRF analysis of the non-volatiles by J. Taggare, A. Bartel, 
+and D. Diems, USGS Branch of Analytical Chemistry, Denver, showed a 
+slightly low total but good gypsum composition:
+
+SiO2 	<0.10
+Al2O3 	<0.10
+FeTO3	<0.04
+MgO	<0.10
+CaO	32.90
+K2O 	<0.02
+Na2O	<0.15
+TiO2	<0.02
+MnO 	<0.02
+P2O5	<0.05
+SO3	43.40
+H2O	20.30
+Other LOI	0.60
+	_____
+Total	97.80

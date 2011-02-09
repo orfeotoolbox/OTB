@@ -1,0 +1,5 @@
+Mineral:  Beryl Be_3Al_2Si_6O_18
+
+File Name:  cs02a.txt
+
+XRD Analysis:  Beryl(A)

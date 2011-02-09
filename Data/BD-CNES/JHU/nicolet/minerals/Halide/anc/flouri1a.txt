@@ -1,0 +1,13 @@
+Mineral:  Fluorite CaF2
+
+Sample No.: fluorite.1
+
+XRD Analysis:  Pure fluorite.
+
+Chemistry:  A chemical analysis is not available.  The transparency of 
+the mineral suggests that it is quite pure. However, fluorite is so 
+transparent in the infrared out to 17 micrometers that a small amount 
+of water in fluid inclusions shows up rather prominently in the 
+spectrum near 2.9 and 6.2 micrometers, and a very weak hydroxyl 
+feature due to an unknown contaminant can be seen near 2.7 
+micrometers in the spectrum of the finest size range.

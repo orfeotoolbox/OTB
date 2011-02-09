@@ -1,0 +1,8 @@
+Mineral:  Vesuvianite Ca_10(Mg,Fe^2+)_2Al_4(Si_2O_7)_2(SiO_4)_5(OH,F)_4
+
+File Name:  ss03a.txt
+
+XRD Analysis:  Vesuvianite(A), Calcite(T)
+
+Chemical Analysis:
+from electron microprobe (Ca_9.34Mn_0.01)(Mg_1.37Fe_0.47)(Al_4.53Ti_0.08)(Si_8.69Al_0.31)O_34(OH)_4

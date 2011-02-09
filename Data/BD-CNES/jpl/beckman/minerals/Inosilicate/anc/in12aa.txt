@@ -1,0 +1,8 @@
+Mineral:  Johannsenite Ca(Mn,Fe^2+)(SiO_3)_2
+
+File Name:  in12a.txt
+
+XRD Analysis:  Johannsenite(A)
+
+Chemical Analysis:
+from electron microprobe (Na_0.01Ca_0.99)(Mn_0.48Fe_0.46Mg_0.05Al_0.01)Si_2O_6

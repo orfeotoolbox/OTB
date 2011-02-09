@@ -1,0 +1,39 @@
+Weak fine granular structure, very friable.  3.41% organic carbon; 
+5.9% clay; 18.8% silt; 75.3% sand.
+
+Clay mineralogy: small vermiculite peak, and weak kaolinite, gibbsite and 
+mica peaks.
+
+Coarse mineralogy: 34% biotite, 24% quartz, 16% plagioclase feldspar, 10% 
+muscovite, 8% garnet,, 2% potassic feldspar, 1% epidote, 1% rutile, 1% 
+pyroxene, 1% zircon, 1% opaque, 1% weathered aggregate.
+
+Spectral Description:  Superimposed on the typical broad water band are 
+weak, sharp hydroxyl features near 2.71 and 2.76 microns with a very weak 
+shoulder between them near 2.74 microns, accompanied by a band near 2.21 
+microns with shortwavelength asymmetry in the near-infrared.  All these 
+bands are typical of kaolinite.  Biotite and vermiculite display distinctive 
+bands in the near-infrared that do not appear in this spectrum except as 
+vague features that could as easily be noise, despite their greater abundance 
+(especially biotite) in the soil.  This lack of spectral expression appears 
+typical of these minerals.  On the other hand, despite its relatively low 
+abundance, very weak absorption bands can just be discerned near 2.83 and 
+2.91 microns due to gibbsite.  Like the previous soil (87P325), this sample 
+contains abundant organic matter.  It too is quite dark and the H-C 
+absorption bands near 3.41 and 3.50 microns are surprisingly weak.  These 
+bands are accompanied by a weak, broad absorption band near 2.50 microns 
+and the typical ramped reflectance peak near 6.70 microns.  Quartz 
+combination tone bands appear near 4.47, 4.68, 5.01 and 5.33 microns.  
+These quartz bands, especially the ones at longer wavelength, are subdued 
+by the very strong, broad H-O-H bending vibration band associated with 
+abundant organic matter, which completely eliminates the combination tone 
+bands longward of 5.33 microns, contribution to the ramped peak near 6.70 
+microns.  The quartz reststrahlen doublet between 7.7 and 9.7 microns peak 
+superimposed on its long wavelength margin, which is difficult to assign.  
+Normally, a peak near 9.25 microns is contributed by K-feldspar, but this 
+mineral is not present in large enough amounts to account for the strength of 
+this feature.  We attribute the 9.25 micron peak to plagioclase.  The weak 
+bands near 9.64 and 9.87 microns can be accounted for by muscovite and 
+biotite, respectively.  The very broad reflectance maximum between these 
+peaks and the alpha quartz doublet near 12.6 microns is probably due to 
+organic matter.

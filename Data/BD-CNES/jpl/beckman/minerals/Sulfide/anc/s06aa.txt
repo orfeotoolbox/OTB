@@ -1,0 +1,5 @@
+Mineral:  Stibnite Sb_2S_3
+
+File Name:  s06a.txt
+
+XRD Analysis:  Stibnite(A), Quartz(M)

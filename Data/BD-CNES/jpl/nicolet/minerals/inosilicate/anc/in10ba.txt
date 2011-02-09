@@ -1,0 +1,8 @@
+Mineral:  Enstatite Mg_2(SiO_3)_2
+
+File Name:  in10b.txt
+
+XRD Analysis:  Enstatite(A)
+
+Chemical Analysis:
+from electron microprobe (Mg_0.86Fe_0.14)Si_2O_6

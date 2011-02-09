@@ -1,0 +1,27 @@
+Rock Type:  
+
+Mineral:  Calcite, Dolomite
+
+Sample No.:  ro363
+
+XRD Analysis:  Calcite 87%, Dolomite 13%, Quartz <1%
+
+Chemistry:
+
+SiO2      0.10
+Al2O3    <0.10
+Fe2O3    <0.10
+CaO      52.55
+TiO2     <0.01
+MnO      <0.01
+K2O      <0.10
+MgO       3.54
+Na2O      0.08
+P2O5      0.03
+         43.60
+Total    99.90
+
+              
+            
+ 
+

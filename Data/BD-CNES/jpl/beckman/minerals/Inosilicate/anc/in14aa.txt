@@ -1,0 +1,5 @@
+Mineral: Hypersthene (Mg,Fe^2+)_2Si_2O_6 
+
+File Name:  in14a.txt
+
+XRD Analysis:  Hypersthene(A), Amphibole(M)

@@ -1,0 +1,31 @@
+Composition:
+
+Petrographic Description:  A sample of typical diabasic texture, with 
+euhedral to subhedral plagioclase laths showing albite twinning and zoning 
+(normal and oscillatory).  The plagioclase makes up 48% of the rock.  The 
+anhedral pyroxenes (26% orthopyroxene, 22% clinopyroxene) commonly 
+show exsolution lamellae, and the clinopyroxenes are occasionally twinned 
+and frequently show "herringbone" exsolution.  Minor biotite (0.5%) 
+replaces some pyroxenemarginally, while opaque phases constitute about 
+2% of the sample.
+
+Microprobe Analysis:  The feldspar composition was that of labradorite,
+ranging from An65 to An69.  The hypersthene, according to one analysis, 
+had 40 mol % ferrosilite.  The augite was homogeneous with about 20% 
+FeO, 40% MgO, and 40% CaO.  An analysis of ilmenite indicated about 1% 
+MgO.
+
+Chemical Analysis:
+SiO2  52.41
+CaO  11.70
+TiO2  0.94
+Na2O  1.64
+Al2O3  13.11
+K2O  0.47
+Fe2O3  1.35
+H2O  0.80
+FeO  8.34
+P2O5  0.07
+MnO  0.17
+MgO  9.36
+TOTAL  100.3

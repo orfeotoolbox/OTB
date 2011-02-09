@@ -1,0 +1,12 @@
+Mineral:  Heulandite (Na,Ca)2-3Al3(Al,Si)2Si13O36.12H2O
+
+Sample No.: heulan.1
+
+Petrographic Description:  No solid sample was available.  
+Petrographically the sample was pure heulandite, with <1% of the 
+grains showing parallel sets of (fluid?) inclusions.
+
+XRD Analysis:  The sample is heulandite with a trace of analcime 
+present.
+
+Chemistry:  Sample too small for analysis.

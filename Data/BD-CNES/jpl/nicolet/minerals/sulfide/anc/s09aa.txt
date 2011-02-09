@@ -1,0 +1,5 @@
+Mineral:  Bornite Cu_5FeS_4
+
+File Name:  s09a.txt
+
+XRD Analysis:  Bornite(A)

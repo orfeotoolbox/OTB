@@ -1,0 +1,5 @@
+Mineral:  Tschermigite (NH_4)Al(SO_4)_2.12H_2O
+
+File Name:  so06a.txt
+
+XRD Analysis:  Tschermigite(A)

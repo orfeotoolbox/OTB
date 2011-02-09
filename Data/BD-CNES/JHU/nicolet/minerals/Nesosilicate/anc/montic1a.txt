@@ -1,0 +1,25 @@
+Mineral:  Monticellite CaMgSiO4
+
+Sample No.: minticell.1
+
+XRD Analysis:  After treatment with sodium acetate solution to 
+remove calcite, XRD showed the sample to be pure monticellite.  An 
+extremely weak calcite band in the infrared spectra shows that a 
+very minor amount of calcite remains.
+
+Chemistry:  Microprobe analysis indicated homogeneity within and 
+between grains.  There is a small amount of substitution of Mg by Fe, 
+resulting in departure from the ideal formula.  Average of ten 
+analyses:
+
+SiO2	37.26
+Al2O3	0.01
+FeO	5.14
+MgO	21.69
+CaO	34.94
+K2O	0.02
+Na2O	0.02
+TiO2	0.03
+Cr2O3	0.04
+	_____
+Total	99.15

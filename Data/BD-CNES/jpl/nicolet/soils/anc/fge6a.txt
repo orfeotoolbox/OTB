@@ -1,0 +1,22 @@
+Moderately cleavaged grey-green shale with a fine micaceous matrix.
+
+Clay mineralogy : The petrology indicates a groundmass consisting of 
+chlorite/muscovite/biotite (alteration of biotite to chlorite) and some iron 
+oxides. XRD analysis confirms this composition with the additional 
+identification of expansive clays (and absence of biotite), probably as a 
+weathering product of the chlorite/mica. Fieldspec spectra indicates the 
+presence of goethite, kaolinite and illite.
+
+Coarse mineralogy : The petrology indicates a composition of approximately 50 % 
+quartz with a 20 um or less grain size. XRF-normative analysis indicated this 
+shale consisted of 52% quartz, 30% illite/muscovite, 5% kaolinite, 4% calcite.
+
+Spectral Description: The FTIR spectrum for fge6 shows the quartz reststrahlen 
+features at 8.2, 8.625 and the doublet feature at 12.52 and 12.85 um. The 
+presence of clay minerals (kaolinite, montmorillonite and/or illite) are 
+suggested by the broadened longer wavelength quartz reststrahlen feature with a 
+spectral peak at 9.27 um and a shoulder at 9.6 um. The FTIR spectrum confirm the 
+presence of kaolinite by the spectral trough at 9.0 um and shoulders at 9.9 and 
+10.97 um. 
+
+

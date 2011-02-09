@@ -1,0 +1,18 @@
+Lithology      Dacite
+Sample#        AP-939-213
+Chemistry
+SiO2           66.95
+Al2O3          17.42
+Fe             1.96
+CaO            0.10
+TiO2           0.13
+MnO            0.02
+K2O            10.20
+MgO            0.84
+Na2O           0.43
+P2O5           0.04
+PPC            1.97
+X-Ray Diffraction
+               Quartz
+               Potassium Feldspar, Plagioclase
+               Mica

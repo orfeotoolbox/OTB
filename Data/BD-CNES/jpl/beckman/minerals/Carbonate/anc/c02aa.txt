@@ -1,0 +1,6 @@
+Mineral:  Witherite BaCO_3  
+
+File Name:  c02a.txt  
+
+XRD Analysis:  Witherite(A)  
+

@@ -1,0 +1,5 @@
+Mineral:  Anglesite PbSO_4
+
+File Name:  so10a.txt
+
+XRD Analysis:  Anglesite(A), Cerussite(M)

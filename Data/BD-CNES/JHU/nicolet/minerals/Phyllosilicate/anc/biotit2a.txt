@@ -1,0 +1,22 @@
+Mineral:  Biotite K(Mg,Fe+2)3(Al,Fe+3)Si3O10(OH,F)2
+
+Sample No.: biotite.2
+
+XRD Analysis:  Sample is biotite plus very weak peaks due to another 
+component at 9.3 and 5.98 angstroms.
+
+Chemistry:  Microprobe analysis shows average biotite composition.  
+Average of six analyses:
+
+SiO2	38.80
+Al2O3	11.50
+FeO	17.63
+MgO	13.54
+CaO	0.03
+K2O	8.60
+Na2O	0.59
+TiO2 	2.14
+Cr2O3	0.06
+	_____
+Total	*92.89
+*OH and F not measured

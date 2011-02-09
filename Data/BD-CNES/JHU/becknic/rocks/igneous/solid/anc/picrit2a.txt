@@ -1,0 +1,41 @@
+Composition:
+
+Petrographic Description:  A porphyritic, fine grained rock with a felty 
+texture consisting of olivine phenocrysts and groundmass phases of olivine,
+augite, plagioclase, an orthopyroxene, opaques, some pseudo-brookite and
+apatite, along with minor interstitial glass.  The glass analysis is given
+below.
+
+Microprobe Analysis:  (by Rosalind Helz).  Probe analysis indicated the
+presence of two opaque phases; chromite and ilmenite.  The latter phase
+contained 6% MgO by weight, as did the pseudobrookite, which is typical 
+for high-MgO bulk composition basalts.  Glass composition was:
+
+SiO2  68.90
+Cr2O3  0.00
+TiO2  1.70
+CaO  1.17
+Al2O3  14.81
+Na2  3.40
+FeO  2.72
+K2O  4.79
+MnO  0.02
+P2O5  0.33
+MgO  0.70
+TOTAL  98.54
+
+Chemical Analysis:  (by John Marinenko, USGS, Reston, VA.)
+SiO2  46.23
+CaO  8.68
+TiO2  1.47
+Na2O  1.37
+Al2O3  9.83
+K2O  0.30
+Fe2O3  0.53
+H2O  0.04
+FeO  10.49
+P2O5  0.15
+MnO  0.17
+Cr2O3  0.23
+MgO  20.65
+TOTAL  100.14

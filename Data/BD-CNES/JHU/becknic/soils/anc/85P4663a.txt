@@ -1,0 +1,28 @@
+Moderate fine granular structure parting to moderate very fine granular 
+structure; soft and very friable with a neutral pH (7.0).  6.64% organic 
+carbon, 17.5% clay, 45.9% silt, 36.6% sand.
+
+Clay mineralogy: small montmorillonite peak and weak vermiculite, mica 
+and kaolinite peaks.
+
+Coarse mineralogy: 56% quartz, 30% glass aggregate, 6.4% tourmaline, 6% 
+glass, and 2% plagioclase feldspar.  
+
+Spectral Description:  The short wavelength asymmetry of the hydroxyl 
+absorption band near 2.21 microns in the near-infrared resembles that of 
+kaolinite, which could also account for the very weak absorptions near 2.31 
+and 2.35 microns.  However, the very weak absorptions near 2.71 microns 
+indicates that the amount of kaolinite is too minor to explain the strength of 
+the 2.21 micron band which must be due to a contribution by montmorillonite, 
+despite its shape.  Hydrocarbon bands near 3.42 and 3.50 microns are 
+accompanied by a broad strong absorption near 2.49 microns and the typical 
+ramped peak of organic matter near 6.7 microns.  Very subdued quartz 
+combination tone absorption bands are seen on the long wavelength side of the 
+primary volume scattering reflectance peak, dominated by the feature near 5.36 
+microns, indicating fine particle size.  The quartz reststrahlen doublet is 
+weakly expressed, in part because of fine particle size and in part because 
+most of the grains are coated with ferric oxidematerial.  The quartz doublet 
+is overshadowed by reststrahlen peaks near 9.56 and 9.91 microns evidently 
+due to the glass.  Organic matter probably contributes to the broad secondary 
+volume scattering reflectance peak between the reststrahlen bands and the 
+very weakly expressed alpha quartz doublet near 12.6 microns.

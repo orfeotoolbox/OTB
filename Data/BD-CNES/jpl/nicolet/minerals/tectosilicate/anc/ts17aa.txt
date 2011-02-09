@@ -1,0 +1,8 @@
+Mineral:  Microcline (Feldspar) (K,Na)AlSi_3O_8
+
+File Name:  ts17a.txt
+
+XRD Analysis:  Microcline(A)
+
+Chemical Analysis:
+from electron microprobe (K_0.97Na_0.03)Si_3AlO_8

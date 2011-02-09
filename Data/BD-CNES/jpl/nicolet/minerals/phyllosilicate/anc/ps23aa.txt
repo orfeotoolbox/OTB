@@ -1,0 +1,5 @@
+Mineral:  Biotite K(Mg,Fe^2+)_3(Al,Fe^3+)Si_3O_10(OH,F)_2
+
+File Name:  ps23a.txt
+
+XRD Analysis:  Biotite(A)

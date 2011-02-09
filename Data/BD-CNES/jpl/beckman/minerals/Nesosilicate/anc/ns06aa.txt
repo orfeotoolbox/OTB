@@ -1,0 +1,5 @@
+Mineral: Topaz Al_2SiO_4(F,OH)_2 
+
+File Name:  ns06a.txt
+
+XRD Analysis:  Topaz(A)

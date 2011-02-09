@@ -1,0 +1,21 @@
+Mineral:  Andradite Ca3Fe2+3 (SiO4)3
+
+Sample No.: andrad.1
+
+XRD Analysis:  The hand-picked sample is pure andradite.
+
+Chemistry:  Microprobe analysis showed the sample to be 
+homogeneous within and between grains.  An average of 8 analyses 
+indicates close to end member composition:
+
+SiO2 	35.50
+Al2O3	0.29
+FeO 	28.17
+MgO	0.14
+CaO 	33.11
+K2O	0.01
+Na2O	0.02
+TiO2	0.07
+MnO 	0.11
+	_____
+Total 	97.42

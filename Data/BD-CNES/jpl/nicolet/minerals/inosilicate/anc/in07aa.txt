@@ -1,0 +1,5 @@
+Mineral:  Riebeckite Na_2(Fe^2+,Mg)_3,Fe_2^3+Si_8O_22(OH)_2
+
+File Name:  in07a.txt
+
+XRD Analysis:  Riebeckite(A)

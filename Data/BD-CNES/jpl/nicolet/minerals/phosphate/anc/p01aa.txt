@@ -1,0 +1,5 @@
+Mineral:  Apatite Ca_5(PO_4)_3F
+
+File Name:  p01a.txt
+
+XRD Analysis:  Apatite(A)

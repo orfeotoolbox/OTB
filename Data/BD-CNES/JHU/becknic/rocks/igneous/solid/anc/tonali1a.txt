@@ -1,0 +1,32 @@
+Composition:
+
+Petrographic Description:  In this sample the sodic plagioclase and 
+hornblende are subhedral, the quartz, biotite, and opaques are anhedral.  
+Some of the basal sections of hornblende shown twinning while the biotite is 
+partly chloritized.  Some of the plagioclase show sericitization in the cores, 
+and occasionally normal zoning.  The quartz often show undulose extinction.
+Apatite occurs as a minor accessory mineral, and much less zircon (in 
+biotite) and epidote.  The modes are 53% plagioclase, 21% quartz, 15% 
+biotite, 9% hornblende, 1.4% miscellaneous (apatite, epidote, sericite), and 
+0.6% opaques.  Very weak spectral features indicate the presence of a trace 
+of carbonate.
+
+Microprobe Analysis:  The plagioclase composition ranged from An38 to 
+An50 (andesine-labradorite).  The hornblende composition was relatively
+homogeneous, with a composition equivalent to hastingsite.
+
+
+Chemical Analysis:
+SiO2  63.08
+CaO  2.39
+TiO2  0.67
+Na2O  3.56
+Al2O3  16.88
+K2O  1.3
+Fe2O3  1.41
+H2O  1.06
+FeO  4.08
+P2O5  0.1
+MnO  0.09
+MgO  5.98
+TOTAL  100.6  (CO2 not analyzed)

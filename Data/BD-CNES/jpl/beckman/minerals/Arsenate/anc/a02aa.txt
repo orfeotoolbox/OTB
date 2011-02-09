@@ -1,0 +1,5 @@
+Mineral:  Scorodite Fe^3+AsO_4.2H_2O
+
+File Name:  a02a.txt
+
+XRD Analysis:  Scorodite(A)

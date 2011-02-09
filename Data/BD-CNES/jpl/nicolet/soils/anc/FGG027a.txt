@@ -1,0 +1,14 @@
+Alluvial sand containing an estimated texture of 8% finer than 20 um (5% finer 
+than 5 um).
+
+Clay mineralogy : PIMA SWIR spectra indicate the presence of kaolinite.
+
+Coarse mineralogy : XRF-normative analysis estimated this soil consisted of 94% 
+quartz. 
+
+Spectral Description: The FTIR spectrum for fgg027 indicates the quartz 
+reststrahlen features at 8.2, 8.625 and 9.2 um. The secondary quartz 
+reststrahlen doublet feature is clearly observed at 12.53 and 12.8. A subtle 
+shoulder at 9.9 um and absorption at 9.0 um suggests the presence of kaolinite.
+
+

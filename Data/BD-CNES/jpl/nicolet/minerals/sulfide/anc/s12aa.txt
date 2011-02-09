@@ -1,0 +1,5 @@
+Mineral:  Pyrrhotite Fe_1-xS
+
+File Name:  s12a.txt
+
+XRD Analysis:  Pyrrhotite(A), Pyrite(T)

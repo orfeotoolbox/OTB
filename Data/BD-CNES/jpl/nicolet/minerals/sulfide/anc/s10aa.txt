@@ -1,0 +1,5 @@
+Mineral:  Marcasite FeS_2
+
+File Name:  s10a.txt
+
+XRD Analysis:  Marcasite(A), Pyrite(M)

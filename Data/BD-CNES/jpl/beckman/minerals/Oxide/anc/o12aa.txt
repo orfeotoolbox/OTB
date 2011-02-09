@@ -1,0 +1,6 @@
+Mineral:  Anatase TiO_2  
+
+File Name:  012a.txt
+
+XRD Analysis:  Anatase(A)
+

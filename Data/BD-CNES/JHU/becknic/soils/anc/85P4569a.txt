@@ -1,0 +1,39 @@
+Weak fine granular structure, soft and very friable and violently 
+effervescent.  2.49% organic carbon, 12.0% clay, 26.7% silt, 61.3% sand.  
+9% CaCO3.  
+
+Clay mineralogy: small montmorillonite and mica peaks, and weak calcite 
+and kaolinite peaks.
+
+Coarse mineralogy: 50% quartz, 12% glass, 12% potassic feldspar, 8% glass 
+aggregate, 6% plagioclase feldspar, 4% hornblende, 2% opaque, 1% zircon, 
+1% carb-aggregate, 1% other, 1% other weathered materials, 1% epidote, 
+1% biotite, 1% calcite, and traces of muscovite.
+
+Spectral Description:  The hydroxyl features in the near-infrared are typical 
+of illite/smectite, having a major absorption near 2.21 microns with smaller 
+features near 2.25, 2.30 and 2.35 microns.  A very weak kaolinite shoulder 
+can be found near 2.71 microns. The relative strength of the 2.25 micron 
+feature and the weakness of the hydroxyl feature near 2.76 microns suggests 
+that the mixed layer clay is smectite-rich.  On the long wavelength flank of 
+the broad water band weak hydrocarbon bands can be seen near 3.40 and 
+3.50 microns, accompanied by a broad, weak band near 2.5 microns in the 
+near-infrared.  Weak calcite bands near 3.36 and 3.47 microns are mixed in 
+with the hydrocarbon features and calcite may contribute a sharp 2.54 
+micron margin to the broad 2.5 micron hydrocarbon feature.  The distinctive 
+carbonate absorption band near 3.98 microns tops the primary volume 
+scattering peak.  On the long wavelength flank of this peak quartz 
+combination tone absorption bands dominate the spectrum, sharpened a little 
+by calcite absorption near 4.68 and 5.57 microns.  The relative intensities of 
+these bands indicate a fairly fine particle size for the quartz grains.  The 
+broad minimum near 6.1 microns is typical of strong H-O-H absorption, 
+often in organic matter.  Such material probably accounts for the reflectance 
+peak near 6.5 microns.  The quartz reststrahlen doublet between 7.7 and 9.7 
+microns is not well displayed, considering the amount of quartz present, and 
+is overshadowed by a broad and ill defined reststrahlen on its long 
+wavelength flank due to feldspar and glass.  The weakness of the quartz 
+features relative to the others is probably because the quartz is present 
+primarily in the finer fraction.  Organic matter and secondary volume 
+scattering both probably contribute to the broad, weak reflectance peak 
+between the reststrahlen features just described and the weakly displayed 
+alpha quartz doublet.

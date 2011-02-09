@@ -1,0 +1,12 @@
+Mineral:  Dolomite CaMg(CO3)2
+
+Sample No.: dolomite.1
+
+XRD Analysis:  XRD shows small peaks at 9.4 and 3.11 angstroms,  
+indicating the presence of a very small amount of talc (not seen in IR 
+spectrum).
+
+Chemistry:  Microprobe analysis of 6 grains showed homogeneous 
+grain composition, a Ca/Mg ratio of 53.47/46.50, and only a trace of 
+iron.  The analysis technique was not appropriate for CO3, but the 
+cation abundances indicate a good dolomite.

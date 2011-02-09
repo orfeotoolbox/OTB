@@ -1,0 +1,6 @@
+Mineral:  Fluorite CaF_2
+
+File Name:  h02a.txt
+
+XRD Analysis:  Fluorite(A)
+

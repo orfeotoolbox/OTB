@@ -1,0 +1,299 @@
+THE JPL SPECTRAL LIBRARY 
+
+The JPL spectral library was originally published in Laboratory Reflectance Spectra of
+160 Minerals, 0.4 to 2.5 Micrometers, by C.I. Grove, S.J. Hook, and E.D. Paylor II. The
+following description of the library and the preparation and measurement of the samples it
+contains is taken from that report. The report refers to the measurements made with the
+Beckman spectrometer. The same sample preparation and measurement procedure was used with
+the Nicolet spectrometer.
+
+
+
+Table of Contents 
+
+1.0 INTRODUCTION 
+
+2.0 METHODOLOGY 
+    2.1 Sample Origin
+    2.2 Sample Preparation
+    2.3 X-ray Diffraction
+    2.4 Electron Microprobe
+    2.5 Spectrophotometer 
+
+3.0 REFERENCE 
+
+
+
+1.0 INTRODUCTION 
+
+This JPL Spectral Library includes laboratory reflectance spectra of 160 minerals in
+digital form. No attempt has been made to investigate the causes of the spectral features
+observed. Excellent theoretical studies dealing with the causes of these features are
+available in the open literature. One of the most comprehensive studies was published by
+Hunt and his coworkers in a series of papers between 1970 and 1979. Since then, several
+catalogues of reflectance spectra have been published, including Clark et al., 1990; Lang
+et al., 1990; and Urai et al., 1989. 
+
+Data for 135 of the minerals are presented at three different grain sizes: 125-500µm,
+45-125µm, and &lt;45µm. This study was undertaken to illustrate the effect of particle
+size on the shape of the mineral spectra. Ancillary information is provided with each
+mineral spectrum, including the mineral name, mineralogy, supplier, sampling locality, and
+our designated sample number. Generalized chemical formulae were obtained from Fleischer
+(1983) or electron microprobe analysis, when available. The purity of each mineral sample
+was evaluated by X-ray diffraction (XRD), and identifiable accessory minerals, if present,
+are noted with the ancillary information. 
+
+In the original publication the spectra were separated into classes according to the
+dominant anion or anionic group present, which is the classification scheme traditionally
+used in mineralogy. This format has been followed with the organization of the ftp site
+and each mineral class is a separate subdirectory. Classes include arsenates, borates,
+carbonates, elements, halides, hydroxides, oxides, phosphates, silicates, sulphates,
+sulphides and tungstates. The silicate class has been subdivided further into subclasses
+based on the degree of polymerization of the silicon tetrahedra. These subclasses include
+cyclosilicates, inosilicates, nesosilicates, phyllosilicates, sorosilicates and
+tectosilicates. 
+
+
+
+2.0 METHODOLOGY 
+
+2.1 Sample Origin 
+
+The majority of non-clay minerals used in this report were obtained from Ward's Natural
+Science Establishment, Rochester, New York; the Burnham Mineral Company (Burminco),
+Monrovia, California; or from an in-house collection. Most of the clay minerals were
+obtained from the Source Clay Mineral Repository, University of Missouri, Columbia,
+Missouri. In all cases, the supplier of the sample is listed in the ancillary information
+describing each sample. 
+
+It was not possible to obtain sufficiently large quantities of all natural minerals,
+particularly oxides and some clays. In these cases, synthetic minerals were used. In all
+cases, XRD data for the synthetic mineral agreed with the data reported for the natural
+mineral in the Mineral Powder Diffraction File Data Book (Joint Committee Powder
+Diffraction Standards, 1980). 
+
+
+
+2.2 Sample Preparation 
+
+Mineral samples were pulverized with a steel percussion mortar. A magnet was used to
+remove metallic impurities introduced during this procedure. The pulverized sample was
+then ground with mortar and pestle and separated into different size fractions by
+wet-sieving with distilled water or 2-propanol (for water-soluble minerals) in nested
+sieves. The size fractions selected for reflectance measurements were 125-500µm,
+45-125µm, and &lt;45µm, which correspond to fine-to-medium sand, coarse silt to very
+fine sand, and medium silt to clay, respectively. In certain instances, only one grain
+size was analyzed due to the nature and/or paucity of the sample (e.g., cristobalite, clay
+minerals).
+
+
+
+2.3 X-ray Diffraction 
+
+The purity of each mineral sample was evaluated by using standard XRD methods described
+in Klug and Alexander (1954). A Norelco water-cooled X-ray diffractometer, equipped with a
+vertical scan goniometer and focusing monochromater was used for the analysis. All samples
+were analyzed by Ni-filtered, CuK radiation. Diffraction lines were recorded on a strip
+chart recorder at a scan rate of 1o (2 ) per minute over the angular range of 4o to 65o (2
+). 
+
+The Mineral Powder Diffraction File Search Manual and Data Book (Joint Committee on
+Powder Diffraction Standards, 1980) was used to identify crystalline phases. Additional
+XRD data were obtained from Borg and Smith (1969) and Berry and Thompson (1962).
+Identification of clay mineral phases was facilitated by techniques and diffraction data
+presented by Carroll (1970) and Brindley and Brown (1980). 
+
+The XRD criteria used to determine the purity of our samples were based on the number
+and intensity of diagnostic peaks. If impurities were identified in a sample, a
+semiquantitative estimate of their abundance was made by XRD. Several limitations of XRD
+analysis are applicable to our results. Many crystalline substances are strong diffractors
+of X-rays and can be detected when present in concentrations as small as 1-2 percent.
+Other materials diffract X-rays less efficiently and yield diffraction patterns of
+measurable intensity only when they constitute a major portion of the sample. As a result,
+certain minor constituents cannot be identified by XRD alone. For example, many of the
+feldspars have suffered minor incipient alteration, which manifests as small features in
+the Beckman spectra (for example, the sharp feature around 2.2µm in Sanidine TS-14A). No
+alteration products were identified by XRD in the Sanidine sample. The problems associated
+with the detection limits of XRD analyses are discussed in detail in Klug and Alexander
+(1954). 
+
+
+
+2.4 Electron Microprobe 
+
+Chemical composition data were acquired by electron microprobe analysis for some of our
+minerals known to deviate significantly from idealized end-member compositions. These
+analyses were undertaken with the Cameca CAMEBAX electron microprobe at U.C.L.A. Chemical
+compositions were obtained from polished grain mounts in the wavelength dispersive mode by
+using 15 keV accelerating potential, 1.5 nAo absorbed current and 20s counting intervals.
+Compositionally well-characterized silicate minerals from the U.C.L.A. collection were
+employed as standards. Raw data were reduced according to the ZAF correction scheme (Henog
+et al., 1982). Results for major elements are believed to be accurate to ±1%.
+Quantitative chemical compositions presented for minerals in Appendix B represent the
+average of three or more individual analyses and are indicated by an asterisk (*)
+following the chemical formula.
+
+
+
+2.5 Spectrophotometer 
+
+Hemispherical reflectance measurements in the visible and short-wavelength region of
+the electromagnetic spectrum (0.4 to 2.5µm) were made by using a Beckman UV5240
+spectrophotometer (Price, 1977). The Beckman UV5240 incorporates a single-pass
+monochromator and utilizes a diffraction grating as its dispersing element. The sampling
+interval is .001µm, from 0.4 to 0.8µm, and .004µm, from 0.8 to 2.5µm. Our instrument
+has been modified with an integrating sphere rotated 90 degrees, which facilitates
+measurement of powdered samples and soils by allowing the materials to remain in the
+sample holder in a horizontal position. 
+
+For reflectance measurements, the size-sorted samples were poured into aluminum sample
+holders that measured 3.2 cm in diameter and 0.5 cm in depth. The upper surface was
+carefully smoothed with the edge of a stainless steel spatula. Smoothing with a spatula
+may compact the sample and introduce some preferred orientation of grains. However, every
+effort was made to minimize these effects. The sample was then placed in the sample
+compartment where it and a Halon reference standard were illuminated alternately by
+monochromatic radiation from a high-intensity halogen source lamp. Halon, a trade name for
+polytetrafluoroethylene powder, has been shown to be a good diffuser of incident radiation
+over the spectral range of the 0.2 - 2.5 m region (Weidner and Hsia, 1981). However, Halon
+does have a small absorption feature near 2.2µm. This feature is manifest in spectra with
+a high reflectance in the 2.0 - 2.5µm region. In order to correct this Halon artifact,
+the spectra were multiplied by the reflectance of Halon vs a perfect diffuser given in
+Weidner and Hsia (1981). The correction largely removed the influence of the Halon
+absorption feature in our spectra. 
+
+
+
+3.0 References 
+
+Adams, J. B. (1967), Lunar surface composition and particle size: implication from
+laboratory and lunar spectral reflectance data, J. Geophys. Res., 72, 5717-5720. 
+
+Adams, J. B., and A. L. Filice (1967), Spectral reflectance 0.4 to 2.0 µm of silicate
+rock powders, J. Geophys. Res., 72, 5705-5715. 
+
+Adams, J. B. (1974), Visible and near-infrared diffuse reflectance spectra of pyroxenes
+as applied to remote sensing of solid objects in the solar system, J. Geophys. Res., 79,
+4829-4836. 
+
+Adams, J. B. (1975), Interpretation of visible and near-infrared diffuse reflectance
+spectra of pyroxenes and other rock forming minerals, in Infrared and Raman Spectroscopy
+of Lunar and Terrestrial Materials (C. Karr, ed.), Academic, New York, 91-116. 
+
+Berry, L. G., and R. M. Thompson (1962), X-ray powder data for ore minerals: the
+Peacock atlas, Geol. Soc. of Am. Memoir, 85. 
+
+Borg, I. Y., and D. K. Smith (1969), Calculated X-ray powder patterns for silicate
+minerals, Geol. Soc. of Am. Memoir, 122. 
+
+Brindley, G. W., and G. Brown, eds. (1980), Crystal structures of clay minerals and
+their X-ray identification, London, Mineralogical Society, Monograph, 5. 
+
+Carroll, D. (1970), Clay minerals: a guide to their X-ray identification, Geol. Soc. of
+Am. Special Paper, 126. 
+
+Clark, R. N., and T. L. Roush (1984), Reflectance spectroscopy: quantitative analysis
+techniques for remote sensing applications, J. Geophys. Res., 89, No. B-7, 6329- 6340. 
+
+Clark, R. N., T. V. V. King, M. Klejwa, G. A. Swayze, and N. Vergo (1990), High
+spectral resolution reflectance spectroscopy of minerals, J. Geophys. Res., 95, No. B-8,
+12653-12680. 
+
+Crowley, J. K. (1986), Visible and near-infrared spectra of carbonate rocks:
+Reflectance variations related to petrographic texture and impurites, J. Geophys. Res.,
+91, No. B5, 5001-5012. 
+
+Fleischer, M. (1983), Glossary of mineral species 1983, Tucson, Mineralogical Record,
+Inc. 
+
+Gaffey, S. J. (1986), Spectral reflectance of carbonate minerals in the visible and
+near infrared (0.35-2.55µm): Calcite, Aragonite and Dolomite, American Mineralogist, 71,
+151-162. Green, A. A., and M. D. Craig (1985), Analysis of aircraft spectrometer data with
+logarithmic residuals, Proc. of the Airborne Imaging Spectrometer Data Analysis Workshop,
+Jet Propulsion Laboratory Publication 85-41, Jet Propulsion Laboratory, Pasadena,
+California, U.S.A., April 8-10, 1985, 111-119. 
+
+GSFC (1991), The Pilot Land Data System, PLDS User Guide: unpublished Document, Goddard
+Space Flight Center. 
+
+Hauff, P., and Kruse, F. (1990), I.G.C.P. International Spectral Properties Database.
+Center for the Study of the Earth from Space, Boulder, Colorado - Preliminary version. 
+
+Henog, J., and Maurice, F. (1982), Practical Quantitative Analysis of Bulk Specimens:
+in Microanalysis Scanning Electron Microscopy, Maurice, F., May, L., and Tivier, R., Eds.
+(France), 238-281. 
+
+Hunt, G. R. (1977), Spectral signatures of particulate minerals in the visible and
+near- infrared, Geophysics, 42, No 3, 501-513. 
+
+Hunt, G. R., and J. W. Salisbury (1970), Visible and near-infrared spectra of minerals
+and rocks, I. Silicate minerals, Mod. Geol., 1, 283-300. 
+
+Hunt, G. R., and J. W. Salisbury (1971), Visible and near-infrared spectra of minerals
+and rocks, II. Carbonates, Mod. Geol., 2, 23-30. 
+
+Hunt, G. R., J. W. Salisbury, and C. J. Lenhoff (1971), Visible and near-infrared
+spectra of minerals and rocks, III. Oxides and hydroxides, Mod. Geol., 2, 195-205. 
+
+Hunt, G. R., J. W. Salisbury, and C. J. Lenhoff (1971), Visible and near-infrared
+spectra of minerals and rocks, IV. Sulphides and sulphates, Mod. Geol., 3, 1-14. 
+
+Hunt, G. R., J. W. Salisbury, and C. J. Lenhoff (1972), Visible and near-infrared
+spectra of minerals and rocks, V. Halides, arsenates, vanadates, and borates, Mod. Geol.,
+3, 121-132. 
+
+Hunt, G. R., J. W. Salisbury, and C. J. Lenhoff (1973), Visible and near-infrared
+spectra of minerals and rocks, VI. Additional silicates, Mod. Geol., 4, 85-106. 
+
+Hunt, G. R., J. W. Salisbury, and C. J. Lenhoff (1973), Visible and near-infrared
+spectra of minerals and rocks, VII. Acidic igneous rocks, Mod. Geol., 4, 217-224. 
+
+Hunt, G. R., J. W. Salisbury, and C. J. Lenhoff (1973), Visible and near-infrared
+spectra of minerals and rocks, VIII. Intermediate igneous rocks, Mod. Geol., 4, 237-244. 
+
+Hunt, G. R., J. W. Salisbury, and C. J. Lenhoff (1974), Visible and near-infrared
+spectra of minerals and rocks, IX. Basic and ultrabasic igneous rocks, Mod. Geol., 5, 15-
+22. Hunt, G. R., J. W. Salisbury, and C. J. Lenhoff (1975), Visible and near-infrared
+spectra of minerals and rocks, X. Stony meteorites, Mod. Geol., 5, 115-126. 
+
+Hunt, G. R., and Salisbury, J. W. (1976), Visible and near-infrared spectra of minerals
+and rocks, XII. Metamorphic rocks, Mod. Geol., 5, 219-228. 
+
+Hunt, G. R., and Salisbury, J. W. (1976), Visible and near-infrared spectra of minerals
+and rocks, XI. Sedimentary rocks. Mod. Geol. 5, 211-217. 
+
+Hunt, G. R. (1977), Spectral signatures of particulate minerals in the visible and
+near- infrared. Geophysics, 42, No. 3, 501-513. 
+
+Hunt, G. R. (1979), Near-infrared (1.3-2.4µm) spectra of alteration minerals -
+potential for use in remote sensing, Geophysics, 44, No. 12, 1974-1986. 
+
+Hurlbut, C. S., Jr., and C. Klein (1977), Manual of mineralogy (after James D. Dana),
+19th ed., John Wiley &amp; Sons, Inc., New York. 
+
+J.C.P.D.S. (1980), Mineral powder diffraction file search manual and data book, 1601
+Park Lane, Swarthmore, Pennsylvania. 
+
+Klug, H. P., and L. E. Alexander (1954), X-ray diffraction procedures for
+polycrystalline and amorphous materials, John Wiley &amp; Sons, Inc., New York. 
+
+Krohn, M. D., and Altaner, S. P. (1987), Near-infrared detection of ammonium minerals,
+Geophysics, 52, No. 7, 924-930. 
+
+Lang, H. R., Bartholomew, M. J., Grove, C. I., and Paylor, E. D. (1990), Spectral
+reflectance characterization (0.4-2.5 and 8.0 to 12µm) of Phanerozoic strata, Wind River
+Basin and Southern Bighorn Basin Area, Wyoming, J. Sed. Pet., 60, No. 4, 504-524. 
+
+Lindberg, J. D., and Snyder, D. G. (1972), Diffuse reflectance spectra of several clay
+minerals: American Mineralogist, 57, 485-493. 
+
+Phillips, W. R., and D. T. Griffen (1981), Optical mineralogy: the non-opaque minerals,
+W. H. Freeman and Co., San Francisco. 
+
+Price, A. (1977), Beckman Instructions 015-555416, Fullerton, California. 
+
+Weidner, V. R., and J. J. Hsia (1981), Reflection properties of pressed
+polytetrafluoro- ethylene powder, J. Opt. Soc. Am., 71, 856-861. 
+
+Wendlandt, W. W., and Hecht, H. G. (1966), Reflectance Spectroscopy: John Wiley and
+Sons, New York. 
+

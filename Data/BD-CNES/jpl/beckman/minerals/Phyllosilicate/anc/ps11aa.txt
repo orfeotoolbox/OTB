@@ -1,0 +1,5 @@
+Mineral:  Illite (K,H_3O)(Al,Mg,Fe)_2(Si,Al)_4O_10((OH)_2,H_2O)
+
+File Name:  ps11a.txt
+
+XRD Analysis:  Illite(A)

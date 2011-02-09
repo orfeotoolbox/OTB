@@ -1,0 +1,33 @@
+Composition:
+
+Petrographic Description:  The sample possesses a moderately to strongly
+developed flow texture from the subparallel orientation of slender feldspar
+laths; clear sodic orthoclase (Carlsbad twinning), turbid sodic plagioclase
+(fine albite twinning) amd more highly turbid alkali feldspar.  Pale green
+pyroxene euhedra are frequently rimmed with pleochroic brown amphibole, 
+while the opaques tend to cluster around the pyroxenes.  Apatite is a 
+common accessory mineral.  Both nepheline and sphene occur as scarce, 
+rather minute grains.  Modes were 90% feldspar, 5% pyroxene, 4% opaques, 
+and about 1% amphibole.  No carbonate was seen in thin section, but the 
+weak spectral feature near 4.0 microns indicates that a small amount is 
+present.
+
+Microprobe Analysis:  According to the analysis, the pyroxene phase was
+diopside (salite), the amphibole composition was equivalent to hastingsite,
+while opaques probed were ilmenite and magnetite (with titanomagnetite).
+For complete microprobe analyses of individual phases, see Appendix 2.
+
+Chemical Analysis:
+SiO2  55.28
+CaO  3.08
+TiO2  0.68
+Na2O  7.46
+Al2O3  19.93
+K2O  5.72
+Fe2O3  2.54
+H2O  2.11
+FeO  1.63
+P2O5  0.19
+MnO  0.14
+MgO  0.84
+TOTAL  99.6  (CO2 not analyzed)

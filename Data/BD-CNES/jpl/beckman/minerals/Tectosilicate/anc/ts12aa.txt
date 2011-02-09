@@ -1,0 +1,8 @@
+Mineral: Orthoclase (Feldspar) (K,Na)AlSi_3O_8 
+
+File Name:  ts12a.txt
+
+XRD Analysis:  Orthoclase(A), Albite(T)
+
+Chemical Analysis:
+from electron microprobe (K_0.69Na_0.29Ca_0.01)Si_2.99Al_1.01O_8

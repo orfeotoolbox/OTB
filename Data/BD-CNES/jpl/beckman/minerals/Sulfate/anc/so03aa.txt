@@ -1,0 +1,5 @@
+Mineral:  Barite BaSO_4
+
+File Name:  so03a.txt
+
+XRD Analysis:  Barite(A)

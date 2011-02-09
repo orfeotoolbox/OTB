@@ -1,0 +1,6 @@
+Mineral:  Smithsonite ZnCO_3
+
+File Name:  c11a.txt
+
+XRD Analysis:  Smithsonite(A)
+

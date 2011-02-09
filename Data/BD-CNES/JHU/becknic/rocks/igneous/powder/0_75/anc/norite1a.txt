@@ -1,0 +1,31 @@
+Composition
+
+Petrographic Description:  A slightly deformed metamorphosed norite 
+consisting of large plagioclase anhedra (30%), occasionally showing 
+undulatory extinction, bent twin lamellae and granulation.  The mafic phase 
+(originally pyroxene) has been altered to a pleochroic green, prismatic 
+amphibole (60%).  The opaque anhedra (approx. 4.6%) are frequently 
+aligned along former crystallographic axes of this pyroxene phase.  Minor 
+quartz (2%) was also noted.
+
+Microprobe Analysis:  Microprobe analysis revealed the amphibole to be a
+hornblende, probably tschermakite or hastingsite, with relatively low soda
+(1.5% by weight).  The plagioclase ranged from andesine to bytownite 
+(An45 to An72), with the groundmass more calcic than the coarse 
+plagioclase grains, which is unusual.  An opaque phase probed proved to be 
+ilmenite summing to 92%, with the balance probably made up of chromium.  
+
+Chemical Analysis:
+SiO2  48.42
+CaO  4.96
+TiO2  2.52
+Na2O  2.87
+Al2O3  19.66
+K2O  0.27
+Fe2O3  2.63
+H2O  1.15
+FeO  7.09
+P2O5  0.03
+MnO   0.09
+MgO  10.83
+TOTAL  100.52

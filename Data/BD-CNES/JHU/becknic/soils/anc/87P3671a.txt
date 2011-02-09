@@ -1,0 +1,27 @@
+Weak fine granular structure , soft and very friable, nonsticky and non 
+plastic, neutral pH (7.2).  1.15% organic carbon; 6.4% clay; 45.0% silt; 
+48.6% sand.
+
+Clay mineralogy: small mica, kaolinite and montmorillonite peaks.
+
+Coarse mineralogy: 67% quartz, 17% potassic feldspar, 7% glass, 3% 
+opaque, 2% other, 2% amphibole, 1% biotite, 1% plagioclase feldspar, and 
+traces of zircon, garnet, muscovite, plant opal, pyroxene, and calcite.
+
+Spectral Description:  The long wavelength asymmetry of the 2.21 microns 
+hydroxyl band in the near infrared, the weakness of the 2.71 micron kaolinite 
+hydroxyl band, and the strength and breadth of the 2.76 micron hydroxyl 
+band all indicate that montmorillonite is spectrally dominant in the hydroxyl 
+region.  Barely discernible H-C bands near 3.4 and 3.5 microns and a very 
+weak, broad minimum near 2.5 microns are consistent with the very low 
+organic content of this soil.  The relative intensities of the quartz 
+combination tone bands superimposed on the primary volume scattering 
+reflectance peak, especially the appearance of the weak features near 3.73, 
+3.85 and 4.00 microns and the strong expression of the 4.47 and 4.68 
+microns features, indicates a very coarse particle size for the quartz.  The 
+quartz reststrahlen doublet is strongly expressed between 7.7 and 9.7 
+microns, with a K-feldspar reststrahlen peak near 9.28 microns and weak 
+side bands to longer wavelength superimposed on it.  Despite the small 
+amount of kaolinite present, it effectively coats the quartz grains, resulting in 
+the marked shortening of the long wavelength side of the quartz reststrahlen 
+doublet and the inversion of its peak due to kaolinite absorption.

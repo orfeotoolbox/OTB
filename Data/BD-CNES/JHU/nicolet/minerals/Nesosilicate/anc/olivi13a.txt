@@ -1,0 +1,26 @@
+Mineral:  Olivine (Fo1) (Fe+2,Mg)2SiO4
+
+Sample No.:  olivine.13
+
+XRD Analysis:  Fayalite, with minor grunerite and kaolinite, but pure 
+fayalite is rare, so we include the sample.  (Note very strong 
+hydroxyl bands of contaminants near 2.7 micrometers.  OH probably 
+accounts for the low total in microprobe analysis.)
+
+Chemistry:  Microprobe analysis showed that the sample contains an 
+iron oxide phase and is apparently heterogeneous with respect to 
+silica.  It has less than 1 mole percent fosterite.  
+
+Average of 7 analyses:
+
+SiO2	29.41
+TiO2	0.11
+Al2O3	0.09
+Cr2O3	0.11
+K2O	0.03
+Na2O	0.07
+FeO	67.81
+MgO 	0.15
+CaO	0.10
+	_____
+Total	97.88

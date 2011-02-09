@@ -1,0 +1,5 @@
+Mineral:  Natrolite Na_2Al_2Si_3O_10.2H_2O
+
+File Name:  ts08a.txt
+
+XRD Analysis:  Natrolite(A)

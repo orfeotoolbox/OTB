@@ -1,0 +1,8 @@
+Mineral:  Epidote Ca_2(Al,Fe^3+)_3O.SiO_4.Si_2O_7.OH
+
+File Name:  ss01a.txt
+
+XRD Analysis:  Epidote(A)
+
+Chemical Analysis:
+from electron microprobe (Ca_4.01Mn_0.02)(Al_4.23Fe^3+_1.61)Si_5.99O_24(OH)_2

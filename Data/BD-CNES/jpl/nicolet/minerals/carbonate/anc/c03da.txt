@@ -1,0 +1,6 @@
+Mineral:  Calcite CaCO_3
+
+File Name:  c03d.txt
+
+XRD Analysis:  Calcite(A)
+

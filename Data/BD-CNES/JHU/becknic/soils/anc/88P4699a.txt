@@ -1,0 +1,28 @@
+Coarse mineralogy: 50% quartz, 24% muscovite, 17% biotite, 3% other, 2% 
+garnet, 1% opaque, 1% hornblende, and traces of rutile, plagioclase feldspar, 
+tourmaline, chlorite, zircon.
+
+Spectral Description:  Most of thehydroxyl features seen in this soil 
+spectrum are accounted for primarily by muscovite.  The symmetrical 
+feature near 2.20 microns is accompanied by a 2.35 micron band in the near-
+infrared, while the usual 2.44 micron feature is swamped by a broad 2.49 
+micron hydrocarbon band.  In the mid-infrared, muscovite accounts for the 
+strong 2.76 micron absorption band.  The presence of minor kaolinite is 
+indicated by a weak shoulder near 2.71 microns, and the kaolinite must make 
+a minor contribution to the 2.76 micron band.  Weak hydroxyl features near 
+2.83, 2.90 and 2.95 microns suggest the presence of a small amountof 
+gibbsite that was not seen in the X-ray analysis.  Fairly strong hydrocarbon 
+bands are displayed near 3.41 and 3.50 microns, accompanied by the typical 
+broad absorption near 2.49 microns, a very deep and broad H-O-H 
+absorption band near 6.1 microns, and the ramped reflectance peak near 6.7 
+microns.  All of the absorption bands on the long wavelength flank of the 
+primary volume scattering reflectance peak can be attributed to quartz, with 
+all of them, and the longer wavelength ones in particular, subdued by the 
+strong water absorption band.  The short wavelength side of the quartz 
+reststrahlen doublet can be seen distinctly at about 8.4 microns, but the longer 
+wavelength side of  the quartz doublet is dominated by stronger reststrahlen 
+bands near 9.18 and 9.62 microns.  We suggest that both reststrahlen 
+features are due to muscovite, despite the slight shift in wavelength of these 
+features from those seen in the spectrum of sample 88P2535.  This time no 
+separate biotite feature is displayed, but the muscovite reststrahlen reflectance 
+features may be broadened to longer wavelength by a biotite contribution.

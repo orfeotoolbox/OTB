@@ -1,0 +1,8 @@
+Mineral:  Forsterite Mg_2SiO_4
+
+File Name:  ns02a.txt
+
+XRD Analysis:  Forsterite(A)
+
+Chemical Analysis:
+from electron microprobe (Mg_1.99Ca0.01)SiO_4

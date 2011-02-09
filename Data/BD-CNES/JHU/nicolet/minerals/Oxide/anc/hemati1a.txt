@@ -1,0 +1,26 @@
+Mineral:  Hematite a-Fe2O3
+
+Sample No.: hematite.1
+
+XRD Analysis:  Pure hematite by XRD, but IR spectrum showed some 
+very weak silicate bands. Contaminant was substantially removed 
+via magnetic separation and sample remeasured.  Only the 
+transmittance spectrum still shows a trace of silicate contamination 
+between 10 and 12 micrometers.
+
+Chemistry:  Ten microprobe analyses indicated homogeneity.  
+Composition is a little high in titania and low in iron oxide.  A trace of 
+silicate is present.  The low total is probably due in large part to the 
+lack of analysis for water.  The inevitable limonitic alteration of the 
+hematite is indicated by the water bands in the infrared spectrum.
+
+SiO2	1.03
+Al2O3	0.08
+Fe2O3	88.00
+MgO	0.08
+CaO	0.19
+K2O	0.05
+Na2O	0.04
+TiO2	3.25
+	_____
+Total	92.72

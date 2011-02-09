@@ -1,0 +1,28 @@
+1.88% organic carbon, 25.6% clay, 63.1% silt, 11.3% sand.  9% CaCO3.  
+
+Clay mineralogy:  small calacite, montmorillonte, mica and kaolinite peaks.  
+
+Coarse mineralogy: 78% other weathered materials, 17% quartz, 4% 
+plagioclase feldspar, 1% tourmaline and traces of muscovite and glass.  
+
+Spectral description:   The long wavelength asymmetry of the hydroxyl band 
+near 2.21 microns is consistent with montmorillonite, as is the relatively 
+broad hydroxyl band near 2.76 microns and the broad water band.  A weak 
+shoulder near 2.71 microns indicates the presence of minor kaolinite, which 
+will also contribute to the 2.76 micron band.  H-C bands near 3.4 and 3.5 
+microns are barely discernable, but the accompanying hydrocarbon feature 
+near 2.50 microns is well displayed.  The distinctive calcite absorption band 
+near 3.98 microns can be seen at the top of the primary volume scattering 
+reflectance peak.  The calcite absorption band near 5.56 microns sharpens 
+and deepens the quartz combination tone band at the same wavelength.  
+Quartz combination tones account for the weak shoulders near 4.69, 5.05, 
+and 5.35 microns.  The 6.12 micron minimum can be accounted for by both 
+H-O-H absorption in montmorillonite and organic matter, as well as 
+Christiansen frequency absorption of calcite.  The reflectance peak near 6.44 
+microns is due to a combination of residual reststrahlen band of fine calcite 
+and a gap between quartz absorption bands.  The broad asymmetrical peak 
+near 7.39 microns is more difficult to explain and, in fact, we cannot account 
+for it.  The band gap between the quartz restrahlen doublet is very weakly 
+displayed near 8.63 microns and the absorption band due to the inversion of 
+the calcite bending fundamental at fine particle size can be seen near 11.42 
+microns.  

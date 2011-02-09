@@ -1,0 +1,35 @@
+Composition:
+
+Petrographic Description:  A hypidiomorphic rock with moderately well- 
+developed gneissoid foliation due to the subparallel alignment of subhedral 
+green hornblende, which is partly replaced by biotite.  The anhedral 
+plagioclase is frequently zoned gradationally and often shows either 
+Carlsbad or albite twinning.  The cores of most of the feldspars are slightly 
+sericitized and in a few regions of the sample are heavily sericitized.  
+Epidote was a common accessory mineral, much less commonly apatite.  
+The modal analyses gave: 5l% plagioclase, 39% hornblende, 3.4% biotite, 
+0.8% epidote, with the remaining percentages composed of sericite and 
+apatite.
+
+Microprobe Analysis:  The plagioclase composition was rather 
+homogeneous, ranging from An40 to An48 (andesine).  However, some 
+grains were quite heterogeneous.  One grain had a composition of Or62 at 
+the border where Ab dropped to about 10%; another feldspar was 
+heterogeneous as well, with a composition ranging from 0.5% to 12% CaO.  
+The hornblende analysis revealed a homogeneous composition equivalent to 
+pargasite.
+
+Chemical Analysis:
+SiO2  49.81
+CaO  9.48
+TiO2  1.27
+Na2O  3.86
+Al2O3  19.35
+K2O  1.18
+Fe2O3  2.38
+H2O  1.41
+FeO  5.34
+P2O5  0.08
+MnO  0.08
+MgO  6.16
+TOTAL  100.4

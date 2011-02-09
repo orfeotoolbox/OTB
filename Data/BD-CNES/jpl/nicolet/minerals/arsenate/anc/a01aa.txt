@@ -1,0 +1,5 @@
+Mineral:  Mimetite Pb_5(AsO_4)_3Cl
+
+File Name:  a01a.txt
+
+XRD Analysis:  Mimetite(A)

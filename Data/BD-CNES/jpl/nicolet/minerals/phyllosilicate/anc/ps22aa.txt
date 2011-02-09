@@ -1,0 +1,5 @@
+Mineral: Hydroxyapophyllite KCa_4Si_8O_20(OH,F).8H_2O 
+
+File Name:  ps22a.txt
+
+XRD Analysis:  Hydroxyapophyllite(A)

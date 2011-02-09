@@ -1,0 +1,17 @@
+Lithology      Chlorite Schist
+Sample#        AP-961-197
+Chemistry
+SiO2           63.02
+Al2O3          10.26
+Fe             16.63
+CaO            0.10
+TiO2           0.42
+MnO            0.24
+K2O            0.10
+MgO            5.14
+Na2O           0.08
+P2O5           0.06
+PPC            4.00
+X-Ray Diffraction
+               Quartz
+               Paragonite

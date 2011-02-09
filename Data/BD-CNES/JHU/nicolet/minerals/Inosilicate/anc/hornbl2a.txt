@@ -1,0 +1,24 @@
+Mineral:  Hornblende Ca2(Fe2+,Mg)4Al(Si7,Al)O22(OH,F)2
+
+Sample No.: hornblen.2
+
+XRD Analysis:  Pure magnesiohornblende.
+
+Chemistry:  Microprobe analysis showed that the grains selected 
+were homogeneous within and between grains.  The relatively high 
+soda shows some solid solution towards edenite.  
+
+Average of 12 analyses:
+
+SiO2 	50.66
+Al203	5.45
+FeO	7.73
+MgO	19.33
+CaO	10.84
+K2O	0.30
+Na2O	2.40
+TiO2	1.28
+MnO	0.07
+	_____
+Total	*98.06
+	*OH and F not measured.

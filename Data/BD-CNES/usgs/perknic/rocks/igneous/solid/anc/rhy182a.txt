@@ -1,0 +1,19 @@
+Lithology      Rhyolite
+Sample#        AP-937-182
+Chemistry
+SiO2           73.28
+Al2O3          14.90
+Fe             1.77
+CaO            1.44
+TiO2           0.11
+MnO            0.02
+K2O            4.31
+MgO            1.01
+Na2O           1.04
+P2O5           0.03
+PPC            2.08
+X-Ray Diffraction
+               Quartz
+               Plagioclase
+               Mica
+

@@ -1,0 +1,5 @@
+Mineral:  Cristobalite SiO_2
+
+File Name:  ts07a.txt
+
+XRD Analysis:  Cristobalite(A), Sanidine(A)

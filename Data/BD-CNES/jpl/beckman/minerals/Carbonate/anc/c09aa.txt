@@ -1,0 +1,6 @@
+Mineral:  Siderite Fe^2+CO_3
+
+File Name:  c09a.txt
+
+XRD Analysis:  Siderite(A), Quartz(M)
+

@@ -1,0 +1,6 @@
+Mineral:  Brucite Mg(OH)_2
+
+File Name:  OH01a.txt
+
+XRD Analysis:  Brucite(A)
+

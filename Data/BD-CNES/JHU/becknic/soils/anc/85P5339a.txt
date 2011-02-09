@@ -1,0 +1,34 @@
+Weak medium subangular blocky structure parting to moderate medium 
+granular; slightly hard, sticky, and plastic, friable with moderate acidity.  
+2.29% organic carbon, 30.3% clay, 63.4% silt, 6.3% sand.
+
+Clay mineralogy: medium montmorillonite peak, a small mica peak 
+and weak vermicultie and kaolinite peaks.
+
+Coarse mineralogy:  38% quartz, 15% plagioclase feldspar, 11% potassic 
+feldspar, 10% mica, 8% plant opal, 7% glass, 4% opaque, 3% pyroxene, 2% 
+hornblende, 1% other weathered materials, and traces of tourmaline.
+
+Spectral Description:  The long wavelength asymmetry of the hydroxyl 
+feature near 2.21 microns and the broad hydroxyl band near 2.76 microns are 
+typical of montmorillonite.  A very weak shoulder near 2.71 microns is due 
+to kaolinite, which also contributes to the 2.76 micron feature.  The H-C 
+stretching vibration bands near 3.4 and 35 microns are barely discernible, 
+but the broad hydrocarbon feature near 2.50 microns is quite distinct.  Quartz 
+combination tone absorption bands dominate the long wavelength side of the 
+primary volume scattering reflectance peak, with the relative intensity of the 
+5.36 micron feature indicating the fine particle size of the quartz.  The 
+intensity and sharpness of one feature in this region near 4.27 microns does 
+not seem in proportion to the others.  Such a feature is seen in the spectrum 
+of microcline, which may account for it.  The broad H-O-H absorption band 
+near 6.11 microns may be due in part to montmorillonite, but its intensity 
+and the way in which it has quenched the longer wavelength quartz 
+combination tone bands is consistent with organic matter.  Montmorillonite 
+may contribute to the reflectance peak near 6.61 microns but, again, organic 
+matter also account for it.  A weak quartz reststrahlen doublet indented by 
+the band gap near 8.6 microns is accompanied by a very weak alpha quartz 
+doublet.  A broad reststrahlen feature peaked near 9.27 microns is probably 
+due to feldspar.  Muscovite probably accounts for the very weak reflectance 
+peak near 9.58 microns.  The broad doublet with peaks near 11.25 and 11.68 
+microns and a minimum near 11.40 microns cannot be accounted for by the 
+minerals present in this soil.  We attribute it to organic matter.

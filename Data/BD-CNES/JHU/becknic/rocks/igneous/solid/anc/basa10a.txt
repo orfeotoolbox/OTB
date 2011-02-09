@@ -1,0 +1,39 @@
+Composition:
+
+Petrographic Description:  A fine-grained porphyritic rock with a felty
+texture, bearing olivine phenocrysts.  The groundmass consists of 
+plagioclase, olivine, augite, and chromite with interstitial brownish glass; 
+results of the glass analysis are given below.
+
+Microprobe Analysis:  (by Rosalind Helz).  The olivine composition was 
+Fo80, that of the feldspar An85 (bytownite).  Titanaugite was also probed.  
+Glass composition was:
+
+SiO2  50.54
+Cr2O3  0.00
+TiO2  4.25
+CaO  9.64
+Al2O3  12.83
+Na2  2.83
+FeO  12.60
+K2O   0.86
+MnO  0.14
+P2O5  0.36
+MgO  5.58
+TOTAL  99.49
+
+Chemical Analysis:  (by John Marinenko, USGS, Reston, VA.)
+SiO2  49.11
+CaO  12.22
+TiO2  1.56
+Na2O  1.84
+Al2O3  12.96
+K2O  0.32
+Fe2O3  1.47
+H2O  0.04
+FeO  8.26
+P2O5  0.18
+MnO  0.15
+Cr2O3  0.13
+MgO  11.95
+TOTAL  100.13

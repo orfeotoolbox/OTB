@@ -1,0 +1,22 @@
+Mineral:  Kyanite Al2SiO5
+
+Sample No.: kyanite.1
+
+XRD Analysis:  Pure kyanite according to XRD.  (However, the slight 
+amount of alteration product is clearly identifiable as kaolinite from 
+its characteristic infrared hydroxyl bands near 2.7 micrometers.)
+
+Chemistry:  Microprobe analysis showed hand-picked sample to be 
+homogeneous within and between grains.  Average of 9 analyses:
+
+SiO2	36.73
+Al2O3	63.23
+FeO	0.21
+MgO	0.02
+CaO	0.01
+K2O	0.01
+Na2O	0.02
+TiO2	0.01
+MnO	0.01
+	_____
+Total	100.25

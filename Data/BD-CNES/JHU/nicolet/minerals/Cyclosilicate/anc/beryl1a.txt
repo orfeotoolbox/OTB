@@ -1,0 +1,25 @@
+Mineral:  Beryl Be3Al2Si6O18
+
+Sample No.: beryl.1
+
+XRD Analysis:  Pure beryl.
+
+Chemistry:  Microprobe analysis showed that grains selected were 
+homogeneous within and between grains.  An average of 10 analyses 
+lacking beryllium indicates silica and alumina content appropriate 
+for beryl:
+
+SiO2 	66.12
+Al2O3	17.36
+FeO	0.48
+MgO	0.17
+CaO	0.01
+K2O	0.03
+Na2O	0.35
+TiO2	 0.01
+MnO	0.00	
+Total	*84.53
+*Without beryllium.
+
+*Note the very strong CO2 band near 4.3 micrometers due to CO2 
+trapped in axial channels.

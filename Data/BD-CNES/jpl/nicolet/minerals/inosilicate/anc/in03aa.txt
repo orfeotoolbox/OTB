@@ -1,0 +1,5 @@
+Mineral: Glaucophane Na_2(Mg,Fe^2+)_3Al_2Si_8O_22(OH)_2
+
+File Name:  in03a.txt
+
+XRD Analysis:  Glaucophane(A), Chlorite(M)

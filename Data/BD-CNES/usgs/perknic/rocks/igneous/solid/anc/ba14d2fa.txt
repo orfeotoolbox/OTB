@@ -1,0 +1,23 @@
+Rock Type:  Basalt
+
+Mineral:  
+
+Sample No.:  ba14d2f
+
+XRF Analysis in %
+
+Chemistry:
+
+Al        7.3
+Ca        7.3
+Fe        8.2
+K         0.69
+Mg        >5
+Na        2.8
+P         0.10
+Ti        1.0
+
+              
+            
+ 
+

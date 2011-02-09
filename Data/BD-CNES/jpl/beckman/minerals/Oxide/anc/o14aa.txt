@@ -1,0 +1,6 @@
+Mineral:  Periclase MgO
+
+File Name:  O14a.txt
+
+XRD Analysis:  Periclase(A)
+

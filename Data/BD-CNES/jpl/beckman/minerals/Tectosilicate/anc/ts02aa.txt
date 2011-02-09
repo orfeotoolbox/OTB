@@ -1,0 +1,6 @@
+Mineral:  Labradorite (Feldspar) (NaSi,CaAl)AlSi_2O_8
+
+File Name:  ts02a.txt
+
+XRD Analysis:  Labradorite(A)
+from electron microprobe (Na_0.46K_0.02Ca_0.51)Si_2.49Al_1.51O_8

@@ -1,0 +1,5 @@
+Mineral:  Lepidolite K(Li,Al)3(Si,Al)_4O_10(F,OH)_2
+
+File Name:  ps13b.txt
+
+XRD Analysis:  Lepidolite(A), Feldspar(M)

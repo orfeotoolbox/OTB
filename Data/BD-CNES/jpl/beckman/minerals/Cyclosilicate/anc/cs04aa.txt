@@ -1,0 +1,5 @@
+Mineral:  Ferroaxinite Ca_2Fe^2+Al_2BSi_4O_15(OH)
+
+File Name:  cs04a.txt
+
+XRD Analysis:  Ferroaxinite(A)

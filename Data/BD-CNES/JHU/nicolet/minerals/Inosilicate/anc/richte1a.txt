@@ -1,0 +1,22 @@
+Mineral:  Richterite Na2Ca(Mg,Fe+2)5Si8O22(OH)2
+
+Sample No.:  richter.1
+
+XRD Analysis:  Richterite plus a trace of mica. (Infrared spectra do 
+not, however, show a mica hydroxyl band.)
+
+Chemistry:  Microprobe analysis showed the sample to be 
+homogeneous within and between grains, with a composition typical 
+of richterite.  Average of 9 analyses:
+
+SiO2	54.87
+Al2O3	1.97
+FeO	2.40
+MgO	22.92
+CaO	9.09
+K2O	1.48
+Na2O	4.32
+TiO2	0.39
+MnO	0.20
+	_____
+Total	97.65

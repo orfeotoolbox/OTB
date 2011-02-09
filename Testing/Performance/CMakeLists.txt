@@ -4,12 +4,12 @@ IF(WIN32)
   ADD_DEFINITIONS(-DWIN32)
 ENDIF(WIN32)
 
-SET(SRCLASS0 ${OTB_SPECTRAL_RESPONSE}/JHU/becknic/manmade/txt)
-SET(SRCLASS1 ${OTB_SPECTRAL_RESPONSE}/JHU/becknic/water/txt)
-SET(SRCLASS2 ${OTB_SPECTRAL_RESPONSE}/JHU/becknic/soils/txt)
-SET(SRCLASS3 ${OTB_SPECTRAL_RESPONSE}/JHU/becknic/vegetation/txt)
-SET(SRCLASS4 ${OTB_SPECTRAL_RESPONSE}/JHU/becknic/rocks/sedimentary/powder/0_75/txt)
-SET(SAT_RSR ${OTB_SAT_RSR}/SPOT5/HRG2)
+SET(SRCLASS0 ${RSR_DATA}/BD-CNES/JHU/becknic/manmade/txt)
+SET(SRCLASS1 ${RSR_DATA}/BD-CNES/JHU/becknic/water/txt)
+SET(SRCLASS2 ${RSR_DATA}/BD-CNES/JHU/becknic/soils/txt)
+SET(SRCLASS3 ${RSR_DATA}/BD-CNES/JHU/becknic/vegetation/txt)
+SET(SRCLASS4 ${RSR_DATA}/BD-CNES/JHU/becknic/rocks/sedimentary/powder/0_75/txt)
+
 
 SET(PERFO_TESTS ${CXX_TEST_PATH}/otbPerfoTests)
 
@@ -20,7 +20,7 @@ ADD_TEST(rsrSVMClassifier ${PERFO_TESTS}
         ${SRCLASS2} 
         ${SRCLASS3} 
         ${SRCLASS4} 
-        ${SAT_RSR}/rep6S.dat
+        ${RSR_DATA}/Rsr/Spot5/HRG2/rep6S.dat
         4 #nbBands
         0.1 #percentage of validation files
         )
@@ -32,7 +32,7 @@ ADD_TEST(atmosphericCorrectionsRSRSVMClassifier ${PERFO_TESTS}
         ${SRCLASS2} 
         ${SRCLASS3} 
         ${SRCLASS4} 
-        ${SAT_RSR}/rep6S.dat
+        ${RSR_DATA}/Rsr/Spot5/HRG2/rep6S.dat
         4 #nbBands
         4 #day
         12 #month

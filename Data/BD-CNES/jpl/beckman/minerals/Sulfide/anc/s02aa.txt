@@ -1,0 +1,5 @@
+Mineral:  Pyrite FeS_2 
+
+File Name:  s02A.txt
+
+XRD Analysis:  Pyrite(A)

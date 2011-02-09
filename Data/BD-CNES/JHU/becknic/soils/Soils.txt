@@ -1,0 +1,34 @@
+SOILS SPECTRA OVERVIEW
+
+Soil samples representing all major soil types were provided by Laurence E. 
+Brown (USDA National Soil Survey Laboratory, Lincoln, Nebraska), and sample 
+numbers are those assigned by the Soil Survey Laboratory.  One sample (0015) 
+was provided by M. B. Satterwaite (Army Corps of Engineers Center for Remote 
+Sensing, Fort Belvoir, VA).
+
+A general description of the soil has been used for the soil name, rather than the 
+modern classification system of the USDA Soil Conservation Service.  This 
+classification system, which is little understood outside the field of soil science, is 
+used for Class and Subclass.  Those wishing to understand this classification 
+system are referred to Foth and Schafer (1980).
+
+Detailed descriptions are given for most soils, typically abstracted from Soil 
+Survey Laboratory documentation.  In these descriptions, percentages of sand, 
+silt, and clay refer to particle size ranges as defined by that laboratory.  Clay size 
+is less than 0.002 mm; silt size ranges from 0.002 to 0.05 mm; and sand size 
+ranges from 0.05 to 2 mm.  When available, clay mineralogy was determined 
+semi-quantitatively from the relative intensities of X-ray diffraction peaks, while 
+coarse mineralogy refers to the composition of sand and silt size fractions as 
+determined by petrographic microscope.  Percent organic carbon was obtained 
+by wet combustion analysis (Walkley-Black), and can be converted to an 
+estimate of organic matter by multiplying by 1.7.  
+
+Soil samples were measured air dried and sifted through a 1 mm screen to break 
+up clods and exclude stones and twigs.  Many soils have also been measured 
+after packing, which typically has very little effect on their spectra.
+
+
+REFERENCES
+
+Foth, H. D., and Schafer, J. W., 1980, Soil Geography and Land Use, Wiley, New 
+York, 484 pp.

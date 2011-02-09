@@ -1,0 +1,6 @@
+Mineral:  Cerussite PbCO_3
+
+File Name:  c10a.txt
+
+XRD Analysis:  Cerussite(A)
+

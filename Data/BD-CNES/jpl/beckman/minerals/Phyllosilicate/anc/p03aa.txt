@@ -1,0 +1,5 @@
+Mineral:  Amblygonite (Li,Na)Al(PO_4)(F,OH)
+
+File Name:  p03a.txt
+
+XRD Analysis:  Amblygonite(A)

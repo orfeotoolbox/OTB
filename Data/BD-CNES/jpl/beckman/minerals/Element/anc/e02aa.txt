@@ -1,0 +1,6 @@
+Mineral:  Sulfur S
+
+File Name:  e02a.txt
+
+XRD Analysis:  Sulfur(A)
+

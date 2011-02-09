@@ -1,0 +1,8 @@
+Mineral:  Fayalite Fe_2SiO_4
+
+File Name:  ns01a.txt
+
+XRD Analysis:  Fayalite(A)
+
+Chemical Analysis:
+from electron microprobe (Fe_1.89Mn_0.08Ca_0.03)SiO_4

@@ -1,0 +1,34 @@
+Moderate to fine subangular blocky structure, slightly hard and very friable. 
+0.16% organic carbon; 7.3% clay; 7.7% silt; 85.5% sand.
+
+Clay mineralogy: medium mica peak, small montmorillonite and kaolinite 
+peaks.
+
+Coarse mineralogy: 86% quartz, 12% potassic feldspar, 1% other, and traces 
+of plagioclase feldspar, amphibole, pyroxene, opaque, garnet, calcite, zircon, 
+and tourmaline.  
+
+Spectral Description:  The weakness of the 2.71 montmorillonite kaolinite 
+feature is consistent with the lack of short wavelength asymmetry of the 2.21 
+montmorillonite band.  The intensity of this feature, its long wavelength 
+asymmetry and the breadth of the 2.76 montmorillonite band all are 
+consistent with contributions from both muscovite and montmorillonite.  
+Sifting shows that this sample has the same amount of sand size material as 
+sample 87P3468, yet the quartz combination tone bands clearly show that 
+its spectrum is dominated by larger particle sizes of quartz.  The larger 
+"spectral" particle size can be seen in the stronger expression of the weak 
+bands near 3.73 and 3.84 microns, seem only as faint shoulders for sample 
+87P3468, as well as the stronger 4.47 microns feature.  One result is stronger 
+reststrahlen bands, which are greatly distorted by considerably greater 
+absorption of kaolinite grain coatings than seen in the previous three 
+samples, despite the apparently small amount present.  This produces the 
+characteristic asymmetry of the reststrahlen features by shortening the long 
+wavelength side of the doublet and causes the trough near 8.98 microns.  
+Although this soil has the same amount of K-feldspar as sample 87P3468, 
+the usual side bands on the long wavelength flank of the reststrahlen doublet 
+are not well expressed.  However, the peak of the long wavelength side of 
+the doublet is seen at longer wavelength (9.27 microns) and the flank is 
+broadened compared to a quartz doublet without a K-feldspar contribution 
+(compare 87P473).
+
+

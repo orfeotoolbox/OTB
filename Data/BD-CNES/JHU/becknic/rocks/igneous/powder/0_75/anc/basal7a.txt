@@ -1,0 +1,24 @@
+Composition:
+
+Petrographic Description:  A medium- to fine-grained porphyritic rock with 
+a felty texture.  Phenocrysts of olivine, some with probable reaction rims, are
+set in a groundmass of plagioclase laths, olivine, clinopyroxene (augite?),
+opaques, and interstitial glass.
+
+Microprobe Analysis:  None.
+
+Chemical Analysis:  (by John Marinenko, USGS, Reston, VA.)
+SiO2  49.52
+CaO  10.54
+TiO2  3.11
+Na2O  2.33
+Al2O3  12.91
+K2O  0.62
+Fe2O3  1.78
+H2O  0.19
+FeO  9.45
+P2O5  0.30
+MnO  0.17 
+Cr2O3  0.06
+MgO  9.07
+TOTAL  100.05

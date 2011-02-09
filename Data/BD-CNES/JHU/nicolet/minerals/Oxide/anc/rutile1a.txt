@@ -1,0 +1,29 @@
+Mineral:  Rutile TiO2
+
+Sample No.:  rutile.1
+
+XRD Analysis:  Pure rutile. The crushed sample was given an HCl and 
+HF bath to remove stain, after which microscopic examination 
+indicated a pure sample.  (However, the transmittance spectrum does 
+show weak absorption by quartz near 9.5 micrometers.  This slight 
+contamination is due to abrasion of the agate mortar by the hard 
+rutile during grinding for the pellet; the sintered sapphire mortar 
+used to grind samples to different particle size ranges is too porous 
+for use in final fine grinding for a pellet.)
+
+Chemistry:  Ten microprobe analyses indicate homogeneity with 
+respect to titanium.  The sum, however, is low, most likely due to the 
+presence of niobium and tantalum (common constituents of rutile), 
+which were not analyzed.  In addition, OH is present, which is also 
+common, despite the nominal mineral chemistry, and accounts for 
+the unusual hydroxyl band at 3.05 micrometers.
+
+SiO2	0.09
+FeO	0.38
+MgO	0.02
+CaO	0.04
+K2O	0.02
+Na2O	0.02
+TiO2	95.54
+	_____
+Total	96.11

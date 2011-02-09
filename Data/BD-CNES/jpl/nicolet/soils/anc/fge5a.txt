@@ -1,0 +1,27 @@
+White siltstone composed of a fine grained quartz (<= 90um) and a matrix of 
+muscovite/micaceous minerals within a foliated lenticular fabric. Grain size 
+analysis of crushed quarry debris indicates the fine grained nature of the 
+siltstone (48 % finer than 74 um, 32% finer than 20 um).  
+
+Clay mineralogy : XRD indicates the presence of kaolinite/chlorite and 
+muscovite/illite minerals. Fieldspec and PIMA SWIR spectra of rock/quarry debris 
+also shows the presence of kaolinite, montmorillonite, muscovite/illite, gypsum, 
+calcite and possible chlorite. 
+
+Coarse mineralogy : Petrology of the fresh siltstone showed approximately 95 % 
+fine grained quartz. XRF-normative analysis of crushed quarry debris indicates 
+62% quartz, 22% muscovite/illite, 3% kaolinite, 2% calcite, 8% gypsum.
+
+Spectral Description: The FTIR spectrum for this quarry sample clearly shows the 
+quartz spectral features at 8.2, 8.625 and 12.3 um. The FTIR spectrum also shows 
+a prominent spectral peak at 6.447 um and subdued 12.4 - 12.8 um doublet 
+feature, typical of fine grained quartz. The subdued nature of the longer 
+wavelength reststrahlen quartz band for the quarry debris can possibly be 
+attributed to a coating of absorbing fine kaolinite and quartz grains adhered to 
+larger quartz grains. The presence of kaolinite is also apparent from a FTIR 
+peak at 9.9 um and a trough at 9.0 um. A broad spectral rise for both quarry 
+samples at 11.3 - 11.6 um is possibly attributable to the presence of calcite. 
+The broadened quartz reststrahlen peak at 9.0 - 9.6 um is probably caused by the 
+presence of clay minerals.
+
+

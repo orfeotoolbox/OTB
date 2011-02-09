@@ -1,0 +1,22 @@
+Mineral:  Goethite a-Fe+3O(OH)
+
+Sample No.: goethite.1
+
+XRD Analysis:  Pure goethite.
+
+Chemistry:  Polish on grains used for microprobe analysis was very 
+poor, making a good analysis difficult.  Five microprobe analyses 
+indicated good homogeneity. Total is low, but composition agrees 
+with that of goethite.  Considering its crystalline nature, we conclude 
+that this is probably a relatively pure sample of goethite.
+
+SiO2	0.75
+Al2O3	0.03
+Fe2O3	84.42
+MgO	0.01
+CaO	0.01
+K2O	0.03
+TiO2	0.07
+H2O 	10.1
+	_____
+Total 	95.42
