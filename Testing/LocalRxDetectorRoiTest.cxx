@@ -25,11 +25,14 @@ int LocalRXDetectorROITest(int argc, char * argv[])
 	//---------------    Parameters   ------------------//
 	const char * filename = argv[1];
 	const char * outputFilename = argv[2];
-	const int externalRadius = atoi(argv[3]);
-	const int internalRadius = atoi(argv[4]);
+	const unsigned int externalRadius = atoi(argv[3]);
+	const unsigned int internalRadius = atoi(argv[4]);
 
-	const int nbCol = atoi(argv[5]);
-	const int nbRow = atoi(argv[6]);
+        const unsigned int indexX = atoi(argv[5]);
+	const unsigned int indexY = atoi(argv[6]);
+	
+	const unsigned int sizeX = atoi(argv[7]);
+	const unsigned int sizeY = atoi(argv[8]);
 
 	//---------------   Read hsi file   -----------------//
 
@@ -44,28 +47,14 @@ int LocalRXDetectorROITest(int argc, char * argv[])
 	rxDetector->SetInternalRadius(internalRadius);
 	rxDetector->SetInput(reader->GetOutput());
 
-	//---------------   Define the ROI   ----------------//
-
-	ImageType::SizeType size;
-	size[0] = nbCol;
-	size[1] = nbRow;
-        
-	ImageType::IndexType index;
-	index[0] = 0;
-	index[1] = 0;
-
-	ImageType::RegionType region;
-	region.SetSize(size);
-	region.SetIndex(index);
-
 	//------------   Build extractRoiFilter   -----------//
 
 	ExtractRoiType::Pointer roiExtractor = ExtractRoiType::New();
-	//roiExtractor->SetExtractionRegion(region);
-	roiExtractor->SetStartX(0);
-        roiExtractor->SetStartY(0);
-        roiExtractor->SetSizeX(nbCol);
-        roiExtractor->SetSizeY(nbRow);
+
+	roiExtractor->SetStartX(indexX);
+        roiExtractor->SetStartY(indexY);
+        roiExtractor->SetSizeX(sizeX);
+        roiExtractor->SetSizeY(sizeY);
         roiExtractor->SetInput(rxDetector->GetOutput());
 
 	//------------   rescaling and writing   ------------//

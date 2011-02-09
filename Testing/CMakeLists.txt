@@ -190,7 +190,7 @@ ADD_TEST(tvLocalRXDetectorROI
          ${DATA}/CupriteSubHsi/cupriteSubHsi.tif
          ${TEMP}/localRXROICupriteSubHsi.tif
          7 
+         20
+         20
          1
-         8
-         8
          )
