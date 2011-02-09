@@ -45,7 +45,7 @@ public:
   /** Standard class typedefs. */
   typedef AttributesMapOpeningLabelMapFilter Self;
   typedef itk::AttributeOpeningLabelMapFilter <TImage,
-      Functor::AttributesMapLabelObjectAccessor<TImage> > Superclass;
+      Functor::AttributesMapLabelObjectAccessor<typename TImage::LabelObjectType> > Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
