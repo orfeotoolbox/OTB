@@ -1813,6 +1813,13 @@ ADD_TEST(bfTuComplexToVectorImageCastFilterTest ${BASICFILTERS_TESTS13}
     ${TEMP}/bfTvComplexToVectorImageCastFilterTest.tif
 )
 
+ADD_TEST(bfTvotbLog10ThresholdedImageFilterTest ${BASICFILTERS_TESTS13}
+  --compare-ascii ${NOTOL}
+  ${TEMP}/bfTvLog10ThresholdedImageFilterTest.txt
+  ${BASELINE_FILES}/bfTvLog10ThresholdedImageFilter.txt
+  otbLog10ThresholdedImageFilterTest
+    ${TEMP}/bfTvLog10ThresholdedImageFilterTest.txt
+)
 
 
 # A enrichir
@@ -2067,6 +2074,7 @@ otbRealAndImaginaryImageToComplexImageFilterTest.cxx
 otbRealImageToComplexImageFilterTest.cxx
 otbImaginaryImageToComplexImageFilterTest.cxx
 otbComplexToVectorImageCastFilter.cxx
+otbLog10ThresholdedImageFilterTest.cxx
 )
 
 

@@ -37,12 +37,18 @@ void RegisterTests()
   REGISTER_TEST(otbSarParametricMapFunctionTest);
   REGISTER_TEST(otbSarParametricMapFunctionToImageFilter);
   REGISTER_TEST(otbSarRadiometricCalibrationFunctor);
+  REGISTER_TEST(otbSarRadiometricCalibrationFunctorWithoutNoise);
   REGISTER_TEST(otbSarRadiometricCalibrationFunction);
+  REGISTER_TEST(otbSarRadiometricCalibrationFunctionWithoutNoise);
   REGISTER_TEST(otbSarRadiometricCalibrationToImageFilterWithRealPixelTest);
   REGISTER_TEST(otbSarRadiometricCalibrationToImageFilterWithComplexPixelTest);
-  REGISTER_TEST(otbSarBrightnessFunctor);
-  REGISTER_TEST(otbSarBrightnessFunction);
-  REGISTER_TEST(otbSarBrightnessToImageFilterTest);
+  REGISTER_TEST(otbSarRadiometricCalibrationToImageFilterWithComplexPixelTestWithoutNoise);
   REGISTER_TEST(otbSarRadiometricCalibrationToImageFilterCompareTest);
   REGISTER_TEST(otbSarRadiometricCalibrationToImageFilterWithExtractROIBeforeTest);
+  REGISTER_TEST(otbSarBrightnessFunctor);
+  REGISTER_TEST(otbSarBrightnessFunctorWithoutNoise);
+  REGISTER_TEST(otbSarBrightnessFunction);
+  REGISTER_TEST(otbSarBrightnessFunctionWithoutNoise);
+  REGISTER_TEST(otbSarBrightnessToImageFilterTest);
+  REGISTER_TEST(otbSarBrightnessToImageFilterTestWithoutNoise);
 }

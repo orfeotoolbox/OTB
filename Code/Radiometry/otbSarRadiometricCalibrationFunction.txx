@@ -41,6 +41,7 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
   m_RangeSpreadLoss = ParametricFunctionType::New();
 
   m_Noise->SetConstantValue(0.0);
+  m_EnableNoise = true;
   m_AntennaPatternNewGain->SetConstantValue(1.0);
   m_AntennaPatternOldGain->SetConstantValue(1.0);
   m_IncidenceAngle->SetConstantValue(CONST_PI_2);
@@ -108,15 +109,20 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
   FunctorRealType incidenceAngle;
   FunctorRealType rangeSpreadLoss;
 
-
-  noise = static_cast<FunctorRealType>(m_Noise->Evaluate(point));
+  if (m_EnableNoise)
+    {
+    noise = static_cast<FunctorRealType>(m_Noise->Evaluate(point));
+    }
   antennaPatternNewGain = static_cast<FunctorRealType>(m_AntennaPatternNewGain->Evaluate(point));
   antennaPatternOldGain = static_cast<FunctorRealType>(m_AntennaPatternOldGain->Evaluate(point));
   incidenceAngle = static_cast<FunctorRealType>(m_IncidenceAngle->Evaluate(point));
   rangeSpreadLoss = static_cast<FunctorRealType>(m_RangeSpreadLoss->Evaluate(point));
 
   FunctorType functor;
-  functor.SetNoise(noise);
+  if (m_EnableNoise)
+    {
+    functor.SetNoise(noise);
+    }
   functor.SetScale(m_Scale);
   functor.SetAntennaPatternNewGain(antennaPatternNewGain);
   functor.SetAntennaPatternOldGain(antennaPatternOldGain);

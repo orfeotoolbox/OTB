@@ -21,7 +21,7 @@
 #include "otbImageFileReader.h"
 #include <iostream>
 
-int otbSarBrightnessFunction(int argc, char* argv[])
+int otbSarBrightnessFunctionWithoutNoise(int argc, char* argv[])
 {
 
   const char * infname  = argv[1];
@@ -47,7 +47,8 @@ int otbSarBrightnessFunction(int argc, char* argv[])
 
   /** Computing the density around a pixel  */
   filter->SetInputImage(reader->GetOutput());
-  
+  filter->SetEnableNoise(false);
+
   /** Test on some indexes and some physical coordinates*/
   InputImageType::SizeType size = reader->GetOutput()->GetRequestedRegion().GetSize();
   FunctionType::PointType  pDst;

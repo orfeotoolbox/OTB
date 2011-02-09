@@ -31,4 +31,5 @@ void RegisterTests()
   REGISTER_TEST(otbFuzzyVariable2Values);
   REGISTER_TEST(otbFuzzyVariableSetValue);
   REGISTER_TEST(otbFuzzyVariableGetMaxVar);
+  REGISTER_TEST(otbMassOfBelief);
 }

@@ -74,6 +74,10 @@ public:
   typedef typename FunctionType::ParametricFunctionConstPointer ParametricFunctionConstPointer;
   typedef typename FunctionType::ParametricFunctionType         ParametricFunctionType;
 
+  void SetEnableNoise(bool inArg)
+  {
+    this->GetFunction()->SetEnableNoise(inArg);
+  }
 protected:
   SarRadiometricCalibrationToImageFilter();
   virtual ~SarRadiometricCalibrationToImageFilter() {}
