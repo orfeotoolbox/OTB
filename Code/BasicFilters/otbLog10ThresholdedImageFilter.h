@@ -76,13 +76,13 @@ private:
 
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT Log10ThresholdedImageFilter :
-    public itk::UnaryFunctorImageFilter<TInputImage,TOutputImage, Functor::Log10Thresholded<ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
+    public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage, Functor::Log10Thresholded<ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
 {
 public:
   /** Standard class typedefs. */
   typedef Log10ThresholdedImageFilter                                Self;
   typedef Functor::Log10Thresholded<  ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> FunctorType;
-  typedef itk::UnaryFunctorImageFilter<  TInputImage,TOutputImage, FunctorType>  Superclass;
+  typedef itk::UnaryFunctorImageFilter<  TInputImage, TOutputImage, FunctorType>  Superclass;
   typedef itk::SmartPointer<Self>                              Pointer;
   typedef itk::SmartPointer<const Self>                        ConstPointer;
 
