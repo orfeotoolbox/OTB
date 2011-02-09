@@ -288,7 +288,7 @@ MassOfBelief<TLabel,TMass>
     LabelSetType intersectionSet;
     std::insert_iterator<LabelSetType> interIt(intersectionSet,intersectionSet.begin());
 
-      // Perform set union
+      // Perform set intersection
       std::set_intersection(labelSet.begin(),labelSet.end(),it->begin(),it->end(),interIt);
 
       // If labelSet inter (*it) != {}, then (*it) intersects labelSet
@@ -340,6 +340,26 @@ MassOfBelief<TLabel,TMass>
   
   // return belief
   return plausibility;
+}
+
+template <class TLabel, class TMass>
+void 
+MassOfBelief<TLabel,TMass>
+::Copy(const Self * massOfBelief)
+{
+  // Swap content of masses maps
+  m_MassesMap = massOfBelief->m_MassesMap;
+
+  // Call to Modified()
+  this->Modified();
+}
+
+template <class TLabel, class TMass>
+bool
+MassOfBelief<TLabel,TMass>
+::IsEmpty() const
+{
+  return m_MassesMap.empty();
 }
 
 template <class TLabel, class TMass>

@@ -150,7 +150,12 @@ public:
    *  elements from the power set.*/
   MassType GetPlausibility(const LabelSetOfSetType & intersectedLabelSet) const;
 
-  
+  /** Copy masses of two mass functions */
+  void Copy(const Self * massOfBelief);
+
+  /** Return true if the support set is null */
+  bool IsEmpty() const;
+
 protected:
   /** Constructor */
   MassOfBelief() {}
