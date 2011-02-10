@@ -415,7 +415,12 @@ bool GDALImageIO::GetSubDatasetInfo(std::vector<std::string> &names, std::vector
     return false;
     }
   if (names.empty() || desc.empty()) return false;
-  if (names.size() != desc.size()) return false;
+  if (names.size() != desc.size())
+    {
+    names.clear();
+    desc.clear();
+    return false;
+    }
 
   return true;
 }
