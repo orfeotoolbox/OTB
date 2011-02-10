@@ -391,29 +391,33 @@ void GDALImageIO::ReadImageInformation()
 bool GDALImageIO::GetSubDatasetInfo(std::vector<std::string> &names, std::vector<std::string> &desc)
 {
        // Note: we assume that the subdatasets are in order : SUBDATASET_ID_NAME, SUBDATASET_ID_DESC, SUBDATASET_ID+1_NAME, SUBDATASET_ID+1_DESC
-       char** papszMetadata;
-       papszMetadata = m_Dataset->GetDataSet()->GetMetadata("SUBDATASETS");
+  char** papszMetadata;
+  papszMetadata = m_Dataset->GetDataSet()->GetMetadata("SUBDATASETS");
 
-       if( CSLCount(papszMetadata) > 0 ) // Have we find some dataSet ?
-              {
-              for( int cpt = 0; papszMetadata[cpt] != NULL; cpt++ )
-              {
-                     std::string key, name;
-                     if (System::ParseHdfSubsetName(papszMetadata[cpt], key, name))
-                     {
-                            otbMsgDevMacro(<< "- key:  " << key);
-                            otbMsgDevMacro(<< "- name: " << name);
-                            // check if this is a dataset name
-                            if (key.find("_NAME") != std::string::npos) names.push_back(name);
-                            // check if this is a dataset descriptor
-                            if (key.find("_DESC") != std::string::npos) desc.push_back(name);
-                     }
-              }
-              }
-       if (names.size() != desc.size())
-              return false;
+  if (CSLCount(papszMetadata) > 0) // Have we find some dataSet ?
+    {
+    for (int cpt = 0; papszMetadata[cpt] != NULL; cpt++)
+      {
+      std::string key, name;
+      if (System::ParseHdfSubsetName(papszMetadata[cpt], key, name))
+        {
+        otbMsgDevMacro(<< "- key:  " << key);
+        otbMsgDevMacro(<< "- name: " << name);
+        // check if this is a dataset name
+        if (key.find("_NAME") != std::string::npos) names.push_back(name);
+        // check if this is a dataset descriptor
+        if (key.find("_DESC") != std::string::npos) desc.push_back(name);
+        }
+      }
+    }
+  else
+    {
+    return false;
+    }
+  if (names.empty() || desc.empty()) return false;
+  if (names.size() != desc.size()) return false;
 
-       return true;
+  return true;
 }
 
 void GDALImageIO::InternalReadImageInformation()
