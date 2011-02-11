@@ -94,7 +94,7 @@ int main(int argc, char * argv[])
       // Fill vDataset with subdataset descriptor info
       for( unsigned int itSubDataset = 0; itSubDataset < (unsigned int) vectorSubdatasetDescriptions.size() ; itSubDataset++ )
         {
-        std::cout << "Dataset N° " <<  itSubDataset+1 << " name is " << vectorSubdatasetDescriptions[itSubDataset].c_str() << std::endl;
+        std::cout << "Dataset Number " <<  itSubDataset+1 << " name is " << vectorSubdatasetDescriptions[itSubDataset].c_str() << std::endl;
         }
       }
     }
