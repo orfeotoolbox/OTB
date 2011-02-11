@@ -210,7 +210,7 @@ int main(int argc, char * argv[])
   // \includegraphics[width=0.25\textwidth]{PrettyRighAngleInput.eps}
   // \includegraphics[width=0.25\textwidth]{PrettyRighAngleOutput.eps}
   // \itkcaption[Right Angle Detection Filter]{Result of applying the
-  // \doxygen{otb}{LineSegmentDetector} and the 
+  // \doxygen{otb}{LineSegmentDetector} and the
   // \doxygen{otb}{VectorDataToRightAngleVectorDataFilter} to an image. From left to right :
   // original image, detected right angles.}
   // \label{fig:RIGHTANGLE_FILTER}

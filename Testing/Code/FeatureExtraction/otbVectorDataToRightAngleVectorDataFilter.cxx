@@ -31,7 +31,7 @@ int otbVectorDataToRightAngleVectorDataFilterNew(int argc, char * argv[])
 {
   /** Typedefs */
   typedef otb::VectorData< >                    VectorDataType;
-  typedef otb::VectorDataToRightAngleVectorDataFilter<VectorDataType> 
+  typedef otb::VectorDataToRightAngleVectorDataFilter<VectorDataType>
                                                 RightAngleFilterType;
 
   RightAngleFilterType::Pointer filter  = RightAngleFilterType::New();

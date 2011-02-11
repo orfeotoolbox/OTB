@@ -30,7 +30,7 @@ VectorDataToRightAngleVectorDataFilter<TVectorData>
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfRequiredOutputs(1);
 
-  m_DistanceThreshold = 20.;          
+  m_DistanceThreshold = 20.;
   m_AngleThreshold = CONST_PI / 30.;  //we want a threshold at 6 degrees
 }
 
@@ -89,24 +89,24 @@ VectorDataToRightAngleVectorDataFilter<TVectorData>
         {
         if (itVectorCur.Get()->IsLineFeature())
           {
-          // Compute the angle formed by the two segments 
-          double Angle = this->ComputeAngleFormedBySegments(itVectorRef.Get()->GetLine(), 
+          // Compute the angle formed by the two segments
+          double Angle = this->ComputeAngleFormedBySegments(itVectorRef.Get()->GetLine(),
                                                             itVectorCur.Get()->GetLine());
 
-          // Check if the angle is a right one 
+          // Check if the angle is a right one
           if (vcl_abs(Angle - CONST_PI_2) <= m_AngleThreshold)
             {
 //            std::cout << "ComputeAngleFormedBySegments: " << Angle << std::endl;
 
             // Right angle coordinate
             PointType RightAngleCoordinate;
-            RightAngleCoordinate = this->ComputeRightAngleCoordinate(itVectorRef.Get()->GetLine(), 
+            RightAngleCoordinate = this->ComputeRightAngleCoordinate(itVectorRef.Get()->GetLine(),
                                                                      itVectorCur.Get()->GetLine());
             
             // Compute the distance between the two segments and the right angle formed by this segments
-            double dist1 = this->ComputeDistanceFromPointToSegment(RightAngleCoordinate, 
+            double dist1 = this->ComputeDistanceFromPointToSegment(RightAngleCoordinate,
                                                                    itVectorRef.Get()->GetLine());
-            double dist2 = this->ComputeDistanceFromPointToSegment(RightAngleCoordinate, 
+            double dist2 = this->ComputeDistanceFromPointToSegment(RightAngleCoordinate,
                                                                    itVectorCur.Get()->GetLine());
             
             // Use Pythagore to compute the distance between the two segments

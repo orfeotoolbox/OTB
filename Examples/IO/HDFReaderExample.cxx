@@ -92,14 +92,13 @@ int main(int argc, char * argv[])
     if (readerGDAL->GetSubDatasetInfo(vectSubdatasetNames, vectorSubdatasetDescriptions))
       {
       // Fill vDataset with subdataset descriptor info
-      for( unsigned int itSubDataset = 0; itSubDataset < (unsigned int) vectorSubdatasetDescriptions.size() ; itSubDataset++ )
+      for( unsigned int itSubDataset = 0; itSubDataset < (unsigned int) vectorSubdatasetDescriptions.size(); itSubDataset++ )
         {
         std::cout << "Dataset Number " <<  itSubDataset+1 << " name is " << vectorSubdatasetDescriptions[itSubDataset].c_str() << std::endl;
         }
       }
     }
-
   // Software Guide : EndCodeSnippet
   return EXIT_SUCCESS;
-}	
+}
 

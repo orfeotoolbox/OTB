@@ -31,15 +31,15 @@ namespace otb
 
 /** \class VectorDataToRightAngleVectorDataFilter
  *  \brief Right angle detector
- *  
+ *
  *  This filter aims at detecting right angle formed by the segments
  *  included in the input VectorData. It outputs a vector data
  *  containing right angle localizations symbolized by points.
- * 
+ *
  *  The entire input vector data will be processed concidering the two
  *  firsts vertex of each line features as a segment.
- *  
- *  
+ *
+ *
  */
 
 template <class TVectorData>
@@ -70,7 +70,7 @@ public:
   typedef typename LineType::VertexType          VertexType;
   typedef typename LineType::VertexListType      VertexListType;
   
-  typedef itk::PreOrderTreeIterator<typename VectorDataType::DataTreeType> 
+  typedef itk::PreOrderTreeIterator<typename VectorDataType::DataTreeType>
                                                  TreeIteratorType;
   
   /**  Public Methods */
