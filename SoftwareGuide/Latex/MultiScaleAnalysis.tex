@@ -25,13 +25,14 @@ series of decreasing resolution details $D_k$.
 
 
 \section{Morphological Pyramid}\label{secMorphoPyr}
+
 If the smoothing filter used in the pyramidal analysis is a
 morphological filter, one cannot safely subsample the filtered image
 without loss of information. However, by keeping the details possibly
 lost in the down-sampling operation, such a decomposition can be used.
 
 The Morphological Pyramid is an approach to such a
-decomposition. It's computation process is an iterative analysis
+decomposition. Its computation process is an iterative analysis
 involving smoothing by the morphological filter, computing the
 details lost in the smoothing, down-sampling the current image, and
 computing the details lost in the down-sampling.
