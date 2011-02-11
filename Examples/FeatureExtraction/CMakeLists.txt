@@ -320,8 +320,6 @@ ADD_TEST(feTeLineSegmentDetectorExampleTest  ${EXE_TESTS2}
 	${TEMP}/feTeLineSegmentDetectorExampleOutput.png
 )
 
-ENDIF(OTB_USE_MAPNIK)
-
 # ------- Right Angle Detection test----------
 
 ADD_TEST(feTeRightAngleDetectionExample  ${EXE_TESTS2}
@@ -329,13 +327,15 @@ ADD_TEST(feTeRightAngleDetectionExample  ${EXE_TESTS2}
         ${BASELINE}/RightAngleOutput.png
         ${TEMP}/PrettyRightAngleOutput.png
        RightAngleDetectionExample
-	${INPUTDATA}/qb_RoadExtract2.tif
+	${INPUTDATA}/Scene.png
 	${TEMP}/RighAngleOutput.tif
 	${TEMP}/PrettyRightAngleInput.png
 	${TEMP}/PrettyRightAngleOutput.png
 	0.1
-	35.
+	10.
 )
+
+ENDIF(OTB_USE_MAPNIK)
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbFeatureExtractionExamplesTests1 otbFeatureExtractionExamplesTests1.cxx)
