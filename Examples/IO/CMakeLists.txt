@@ -117,6 +117,9 @@ ENDIF( OTB_USE_CURL )
 ADD_EXECUTABLE(ImageToKmzAndMapFileProductExample ImageToKmzAndMapFileProductExample.cxx)
 TARGET_LINK_LIBRARIES(ImageToKmzAndMapFileProductExample OTBIO)
 
+ADD_EXECUTABLE(HDFReaderExample HDFReaderExample.cxx)
+TARGET_LINK_LIBRARIES(HDFReaderExample OTBIO)
+
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 
