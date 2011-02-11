@@ -1266,57 +1266,9 @@ ADD_TEST(ioTvMultiDatasetReadingInfo ${IO_TESTS9}
       ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf
       ${TEMP}/ioTvMultiDatasetReadingInfoOut.txt
       )
-      
-ADD_TEST(ioTvMultiDatasetReadingInfo_hdf5 ${IO_TESTS9}
-  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReadingInfo.txt
-                             ${TEMP}/ioTvMultiDatasetReadingInfoOut.txt
-      otbMultiDatasetReadingInfo
-      ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf5
-      ${TEMP}/ioTvMultiDatasetReadingInfoOut.txt
-      )
-      
-ADD_TEST(ioTvMultiDatasetReadingInfo_hdf4 ${IO_TESTS9}
-  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReadingInfo.txt
-                             ${TEMP}/ioTvMultiDatasetReadingInfoOut.txt
-      otbMultiDatasetReadingInfo
-      ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf4
-      ${TEMP}/ioTvMultiDatasetReadingInfoOut.txt
-      )
-      
-ADD_TEST(ioTvMultiDatasetReadingInfo_h5 ${IO_TESTS9}
-  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReadingInfo.txt
-                             ${TEMP}/ioTvMultiDatasetReadingInfoOut.txt
-      otbMultiDatasetReadingInfo
-      ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.h5
-      ${TEMP}/ioTvMultiDatasetReadingInfoOut.txt
-      )
-      
-ADD_TEST(ioTvMultiDatasetReadingInfo_h4 ${IO_TESTS9}
-  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReadingInfo.txt
-                             ${TEMP}/ioTvMultiDatasetReadingInfoOut.txt
-      otbMultiDatasetReadingInfo
-      ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.h4
-      ${TEMP}/ioTvMultiDatasetReadingInfoOut.txt
-      )
-      
-ADD_TEST(ioTvMultiDatasetReadingInfo_he5 ${IO_TESTS9}
-  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReadingInfo.txt
-                             ${TEMP}/ioTvMultiDatasetReadingInfoOut.txt
-      otbMultiDatasetReadingInfo
-      ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.he5
-      ${TEMP}/ioTvMultiDatasetReadingInfoOut.txt
-      )
-      
-ADD_TEST(ioTvMultiDatasetReadingInfo_he4 ${IO_TESTS9}
-  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReadingInfo.txt
-                             ${TEMP}/ioTvMultiDatasetReadingInfoOut.txt
-      otbMultiDatasetReadingInfo
-      ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.he4
-      ${TEMP}/ioTvMultiDatasetReadingInfoOut.txt
-      )
    
 # Test reading HDF files (hdf, hdf5, hdf4, h5, h4, he5, he4)           
-ADD_TEST(ioTvMultiChannelROI_HDF2TIF ${COMMON_TESTS2}
+ADD_TEST(ioTvMultiChannelROI_HDF4_2_TIF ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_HDF2TIF_MOD09Q1G_20_25_100_150_channel_1.tif
                      ${TEMP}/ioExtractROI_HDF2TIF_MOD09Q1G_20_25_100_150_channel_1_OUT.tif
          otbMultiChannelExtractROI
@@ -1325,14 +1277,15 @@ ADD_TEST(ioTvMultiChannelROI_HDF2TIF ${COMMON_TESTS2}
          -startX 1400 -startY 3700 -sizeX 100 -sizeY 150
          -channels 1 )
          
-ADD_TEST(ioTvMultiChannelROI_HDF2TIF_hdf5 ${COMMON_TESTS2}
-   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_HDF2TIF_MOD09Q1G_20_25_100_150_channel_1.tif
-                     ${TEMP}/ioExtractROI_HDF2TIF_MOD09Q1G_20_25_100_150_channel_1_OUT.tif
+ADD_TEST(ioTvMultiChannelROI_HDF5_2_TIF ${COMMON_TESTS2}
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_HDF2TIF_GSSTF_NCEP_100_20_200_100_channel_1.tif
+                     ${TEMP}/ioExtractROI_HDF2TIF_GSSTF_NCEP_100_20_200_100_channel_1_OUT.tif
          otbMultiChannelExtractROI
-         ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf5:5
-         ${TEMP}/ioExtractROI_HDF2TIF_MOD09Q1G_20_25_100_150_channel_1_OUT.tif
-         -startX 1400 -startY 3700 -sizeX 100 -sizeY 150
+         ${INPUTDATA}/GSSTF_NCEP.2b.2008.12.31.he5:3
+         ${TEMP}/ioExtractROI_HDF2TIF_GSSTF_NCEP_100_20_200_100_channel_1_OUT.tif
+         -startX 100 -startY 20 -sizeX 200 -sizeY 100
          -channels 1 )
+
       
 # ---  STREAMING  IMAGE   FILE    WRITER  ---
 ADD_TEST(ioTvStreamingIFWriterBSQWithoutStreaming ${IO_TESTS2}
