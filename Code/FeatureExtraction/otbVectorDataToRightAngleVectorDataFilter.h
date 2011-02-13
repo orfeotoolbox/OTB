@@ -22,7 +22,7 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include "otbVectorDataSource.h"
+#include "otbVectorDataToVectorDataFilter.h"
 #include "itkPreOrderTreeIterator.h"
 #include "otbMath.h"
 
@@ -44,12 +44,13 @@ namespace otb
 
 template <class TVectorData>
 class ITK_EXPORT VectorDataToRightAngleVectorDataFilter
-  : public otb::VectorDataSource<TVectorData>
+  : public otb::VectorDataToVectorDataFilter<TVectorData, TVectorData>
 {
 public:
   /** Standard class typedefs. */
   typedef VectorDataToRightAngleVectorDataFilter  Self;
-  typedef VectorDataSource<TVectorData>           Superclass;
+  typedef VectorDataToVectorDataFilter
+    <TVectorData, TVectorData>                    Superclass;
   typedef itk::SmartPointer<Self>                 Pointer;
   typedef itk::SmartPointer<const Self>           ConstPointer;
 
@@ -57,7 +58,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(VectorDataToRightAngleVectorDataFilter, VectorDataSource);
+  itkTypeMacro(VectorDataToRightAngleVectorDataFilter, VectorDataToVectorDataFilter);
 
   /** Typedef support for ProcessObject*/
   typedef itk::ProcessObject ProcessObjectType;
@@ -72,10 +73,6 @@ public:
   
   typedef itk::PreOrderTreeIterator<typename VectorDataType::DataTreeType>
                                                  TreeIteratorType;
-  
-  /**  Public Methods */
-  virtual void SetInput(VectorDataType *);
-  virtual VectorDataType* GetInput(void);
   
   /** Set/Get the thresholds*/
   itkGetMacro(DistanceThreshold, double);

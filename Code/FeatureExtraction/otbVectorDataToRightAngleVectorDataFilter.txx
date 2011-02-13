@@ -37,25 +37,6 @@ VectorDataToRightAngleVectorDataFilter<TVectorData>
 template <class TVectorData>
 void
 VectorDataToRightAngleVectorDataFilter<TVectorData>
-::SetInput(VectorDataType * inputVData)
-{
-  this->itk::ProcessObject::SetNthInput(0,
-                                        const_cast<VectorDataType *>(inputVData));
-}
-
-template <class TVectorData>
-typename VectorDataToRightAngleVectorDataFilter<TVectorData>
-::VectorDataType *
-VectorDataToRightAngleVectorDataFilter<TVectorData>
-::GetInput()
-{
-  return static_cast<VectorDataType *>
-           (this->ProcessObjectType::GetInput(0));
-}
-
-template <class TVectorData>
-void
-VectorDataToRightAngleVectorDataFilter<TVectorData>
 ::GenerateData()
 {
   // Output
