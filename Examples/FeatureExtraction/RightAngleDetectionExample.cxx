@@ -51,6 +51,7 @@
 
 // Software Guide : BeginCodeSnippet
 #include "otbLineSpatialObjectListToRightAnglePointSetFilter.h"
+#include "otbVectorDataToRightAngleVectorDataFilter.h"
 // Software Guide : EndCodeSnippet
 
 int main(int argc, char * argv[])
@@ -84,7 +85,7 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::VectorData< >  VectorDataType;
+  typedef otb::VectorData<float>  VectorDataType;
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -165,13 +166,12 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::VectorData<PrecisionType> VectorDataType;
   typedef otb::VectorDataToImageFilter<VectorDataType,
       ImageType> VectorDataRendererType;
   VectorDataRendererType::Pointer vectorDataRenderer = VectorDataRendererType::New();
 
-  typedef otb::Functor::AlphaBlendingFunctor<InputPixelType,
-    InputPixelType, InputPixelType> FunctorType;
+  typedef otb::Functor::AlphaBlendingFunctor<PixelType,
+    PixelType, PixelType> FunctorType;
   typedef itk::BinaryFunctorImageFilter<ImageType, ImageType,
     ImageType, FunctorType> BlendingFilterType;
   BlendingFilterType::Pointer blendingFilter = BlendingFilterType::New();

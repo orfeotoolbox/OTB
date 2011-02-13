@@ -490,9 +490,8 @@ void
 VectorDataToImageFilter<TVectorData, TImage>
 ::ProcessNode(InternalTreeNodeType * source, datasource_ptr mDatasource)
 {
-
-  typedef otb::DataNode<double, 2, double> DataNodeType; //FIXME check if it should be infered from the input type
-  typedef typename DataNodeType::Pointer   DataNodePointerType;
+  typedef typename VectorDataType::DataNodeType DataNodeType;
+  typedef typename DataNodeType::Pointer        DataNodePointerType;
 
   // Get the children list from the input node
   ChildrenListType children = source->GetChildrenList();
@@ -559,7 +558,7 @@ VectorDataToImageFilter<TVectorData, TImage>
         typedef boost::shared_ptr<line2d>                             line_ptr;
         mapnik::geometry2d * line = new line2d;
 
-        typedef DataNodeType::LineType::VertexListConstIteratorType VertexIterator;
+        typedef typename DataNodeType::LineType::VertexListConstIteratorType VertexIterator;
         VertexIterator itVertex = dataNode->GetLine()->GetVertexList()->Begin();
         while (itVertex != dataNode->GetLine()->GetVertexList()->End())
           {
@@ -613,7 +612,7 @@ VectorDataToImageFilter<TVectorData, TImage>
         typedef boost::shared_ptr<polygon2d>                      polygon_ptr;
         mapnik::geometry2d * polygon = new polygon2d;
 
-        typedef DataNodeType::PolygonType::VertexListConstIteratorType VertexIterator;
+        typedef typename DataNodeType::PolygonType::VertexListConstIteratorType VertexIterator;
         VertexIterator itVertex = dataNode->GetPolygonExteriorRing()->GetVertexList()->Begin();
         while (itVertex != dataNode->GetPolygonExteriorRing()->GetVertexList()->End())
           {
