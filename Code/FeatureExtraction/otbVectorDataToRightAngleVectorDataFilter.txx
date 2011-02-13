@@ -62,50 +62,53 @@ VectorDataToRightAngleVectorDataFilter<TVectorData>
   
   while (!itVectorRef.IsAtEnd())
     {
-    if (itVectorRef.Get()->IsLineFeature())
+    if (!itVectorRef.Get()->IsLineFeature())
       {
-      TreeIteratorType itVectorCur = itVectorRef;    // Current
+      continue; // do not process if it's not a line
+      }
+    TreeIteratorType itVectorCur = itVectorRef;    // Current
       
-      while (!itVectorCur.IsAtEnd())
+    while (!itVectorCur.IsAtEnd())
+      {
+      if (!itVectorCur.Get()->IsLineFeature())
         {
-        if (itVectorCur.Get()->IsLineFeature())
-          {
-          // Compute the angle formed by the two segments
-          double Angle = this->ComputeAngleFormedBySegments(itVectorRef.Get()->GetLine(),
-                                                            itVectorCur.Get()->GetLine());
+        continue; // do not process if it's not a line
+        }
+      // Compute the angle formed by the two segments
+      double Angle = this->ComputeAngleFormedBySegments(itVectorRef.Get()->GetLine(),
+                                                        itVectorCur.Get()->GetLine());
 
-          // Check if the angle is a right one
-          if (vcl_abs(Angle - CONST_PI_2) <= m_AngleThreshold)
-            {
+      // Check if the angle is a right one
+      if (vcl_abs(Angle - CONST_PI_2) <= m_AngleThreshold)
+        {
 //            std::cout << "ComputeAngleFormedBySegments: " << Angle << std::endl;
 
-            // Right angle coordinate
-            PointType RightAngleCoordinate;
-            RightAngleCoordinate = this->ComputeRightAngleCoordinate(itVectorRef.Get()->GetLine(),
-                                                                     itVectorCur.Get()->GetLine());
+        // Right angle coordinate
+        PointType RightAngleCoordinate;
+        RightAngleCoordinate = this->ComputeRightAngleCoordinate(itVectorRef.Get()->GetLine(),
+                                                                 itVectorCur.Get()->GetLine());
             
-            // Compute the distance between the two segments and the right angle formed by this segments
-            double dist1 = this->ComputeDistanceFromPointToSegment(RightAngleCoordinate,
-                                                                   itVectorRef.Get()->GetLine());
-            double dist2 = this->ComputeDistanceFromPointToSegment(RightAngleCoordinate,
-                                                                   itVectorCur.Get()->GetLine());
+        // Compute the distance between the two segments and the right angle formed by this segments
+        double dist1 = this->ComputeDistanceFromPointToSegment(RightAngleCoordinate,
+                                                               itVectorRef.Get()->GetLine());
+        double dist2 = this->ComputeDistanceFromPointToSegment(RightAngleCoordinate,
+                                                               itVectorCur.Get()->GetLine());
             
-            // Use Pythagore to compute the distance between the two segments
-            double SegmentDistance = vcl_sqrt(dist1 * dist1 + dist2 * dist2);
+        // Use Pythagore to compute the distance between the two segments
+        double SegmentDistance = vcl_sqrt(dist1 * dist1 + dist2 * dist2);
             
-            if (SegmentDistance < m_DistanceThreshold)
-              {
-              // If Right Angle & not so far from segments: Add to the output
-              typename DataNodeType::Pointer CurrentGeometry = DataNodeType::New();
-              CurrentGeometry->SetNodeId("FEATURE_POINT");
-              CurrentGeometry->SetNodeType(otb::FEATURE_POINT);
-              CurrentGeometry->SetPoint(RightAngleCoordinate);
-              this->GetOutput(0)->GetDataTree()->Add(CurrentGeometry, folder);
-              }
-            }
+        if (SegmentDistance < m_DistanceThreshold)
+          {
+          // If Right Angle & not so far from segments: Add to the output
+          typename DataNodeType::Pointer CurrentGeometry = DataNodeType::New();
+          CurrentGeometry->SetNodeId("FEATURE_POINT");
+          CurrentGeometry->SetNodeType(otb::FEATURE_POINT);
+          CurrentGeometry->SetPoint(RightAngleCoordinate);
+          this->GetOutput(0)->GetDataTree()->Add(CurrentGeometry, folder);
           }
-        ++itVectorCur;
         }
+      
+      ++itVectorCur;
       }
     ++itVectorRef;
     }
