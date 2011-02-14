@@ -107,8 +107,8 @@ int main(int argc, char * argv[])
 // We can now define the type of the filter to be used by the
 // morphological pyramid. In this case, we choose to use an
 // \doxygen{otb}{OpeningClosingMorphologicalFilter} which is just the
-// concatenation of an opening and a closing. This filter is theplated
-// over the input and output image types and the structurung element
+// concatenation of an opening and a closing. This filter is templated
+// over the input and output image types and the structuring element
 // type that we just define above.
 //
 // Software Guide : EndLatex
@@ -123,7 +123,7 @@ int main(int argc, char * argv[])
 // Software Guide : BeginLatex
 //
 // We can finally define the type of the morpholoical pyramid
-// filter. The filter is templated over the input and output mage
+// filter. The filter is templated over the input and output image
 // types and the {\em lowpas} morphological filter to be used.
 //
 // Software Guide : EndLatex
