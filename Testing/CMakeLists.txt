@@ -16,9 +16,7 @@ SET( otbHyperTests1_SRC
 )
 
 ADD_EXECUTABLE(otbHyperTests1 ${otbHyperTests1_SRC} otbHyperTests1.cxx)
-TARGET_LINK_LIBRARIES(otbHyperTests1 OTBCommon OTBIO OTBBasicFilters OTBTesting )
-
-
+TARGET_LINK_LIBRARIES(otbHyperTests1 OTBCommon OTBIO OTBBasicFilters OTBTesting)
 
 ADD_TEST(vahineVCA1
          ${TESTEXE_DIR}/otbHyperTests1
@@ -30,7 +28,7 @@ ADD_TEST(vahineVCA1
 ADD_TEST(vahineVCA2
          ${TESTEXE_DIR}/otbHyperTests1
          vahineVCA
-         ${DATA}/SYNTHETIC/hsi_cube.tif
+         ${DATA}/SYNTHETIC100/hsi_cube.tif
          ${TEMP}/synthetic_unmix_5endmembers.tif
          5)
 
@@ -49,18 +47,27 @@ ADD_TEST(bfTvStreamingStatisticsVectorImageFilter
          ${DATA}/AVIRIS/extract128/extract128_goodbands.hdr
          ${TEMP}/extract128_stats_otb.txt)
 
-ADD_TEST(bfStreamingStatisticsVectorImageFilterNew2
+ADD_TEST(bfTuStreamingStatisticsVectorImageFilterNew2
          ${TESTEXE_DIR}/otbHyperTests1
          otbStreamingStatisticsVectorImageFilter2NewTest)
 
+#ADD_TEST(bfTvStreamingStatisticsVectorImageFilter_AVIRIS512
+#         ${TESTEXE_DIR}/otbHyperTests1
+#         otbStreamingStatisticsVectorImageFilterTest
+#         ${DATA}/AVIRIS/extract512/f970619t01p02_r02_sc01_goodbands.hdr
+#         ${TEMP}/aviris512_stats_otb.txt)
+       
 ADD_TEST(bfTvStreamingStatisticsVectorImageFilter2
          ${TESTEXE_DIR}/otbHyperTests1
          otbStreamingStatisticsVectorImageFilter2Test
          ${DATA}/AVIRIS/extract128/extract128_goodbands.hdr
          ${TEMP}/extract128_stats_rt.txt)
 
-
-
+ADD_TEST(bfTvStreamingStatisticsVectorImageFilter2_AVIRIS512
+         ${TESTEXE_DIR}/otbHyperTests1
+         otbStreamingStatisticsVectorImageFilter2Test
+         ${DATA}/AVIRIS/extract512/f970619t01p02_r02_sc01_goodbands.hdr
+         ${TEMP}/aviris512_stats_rt.txt)
 
 ADD_TEST(bfTuMatrixMultiplyImageFilterNew
          ${TESTEXE_DIR}/otbHyperTests1
@@ -73,8 +80,8 @@ ADD_TEST(bfTvMatrixMultiplyImageFilter
 ADD_TEST(bfTvMatrixMultiplyImageFilterRealImageTest
          ${TESTEXE_DIR}/otbHyperTests1
          otbMatrixMultiplyImageFilterTest
-         ${DATA}/SYNTHETIC/hsi_cube.tif
-         ${DATA}/SYNTHETIC/endmembers.tif
+         ${DATA}/SYNTHETIC100/hsi_cube.tif
+         ${DATA}/SYNTHETIC100/endmembers.tif
          ${TEMP}/bfMatrixMultiplyImageFilter.tif)
 
 
@@ -86,8 +93,8 @@ ADD_TEST(bfTuUnConstrainedLeastSquareImageFilterNew
 ADD_TEST(bfTvUnConstrainedLeastSquareImageFilter
          ${TESTEXE_DIR}/otbHyperTests1
          otbUnConstrainedLeastSquareImageFilterTest
-         ${DATA}/SYNTHETIC/hsi_cube.tif
-         ${DATA}/SYNTHETIC/endmembers.tif
+         ${DATA}/SYNTHETIC100/hsi_cube.tif
+         ${DATA}/SYNTHETIC100/endmembers.tif
          ${TEMP}/bfUnConstrainedLeastSquareImageFilter.tif)
 
 
@@ -125,39 +132,62 @@ ADD_TEST(hyTvEigenvalueLikelihoodMaximization_AVIRIS2
 ADD_TEST(hyTvEigenvalueLikelihoodMaximization2
          ${TESTEXE_DIR}/otbHyperTests1
          otbEigenvalueLikelihoodMaximizationTest
-         ${DATA}/SYNTHETIC/hsi_cube.tif
+         ${DATA}/SYNTHETIC100/hsi_cube.tif
          ${TEMP}/synthetic_elm.txt)
 
 ADD_TEST(testProjectiveProjection
          ${TESTEXE_DIR}/otbHyperTests1
          otbProjectiveProjectionTestHighSNR
-         ${DATA}/SYNTHETIC/hsi_cube.tif
+         ${DATA}/SYNTHETIC100/hsi_cube.tif
          8
          ${TEMP}/hsi_cube_projectiveprojected_8.tif )
 
 
-
-
-ADD_TEST(hyVCA_Synthetic
+ADD_TEST(hyTvVCA_Synthetic
          ${TESTEXE_DIR}/otbHyperTests1
          otbVCATestHighSNR
-         ${DATA}/SYNTHETIC/hsi_cube.tif
+         ${DATA}/SYNTHETIC100/hsi_cube.tif
          ${TEMP}/synthetic_vca_5.hdr
          5 )
 
 
-ADD_TEST(hyVCA_AVIRIS
+ADD_TEST(hyTvVCA_AVIRIS
          ${TESTEXE_DIR}/otbHyperTests1
          otbVCATestHighSNR
          ${DATA}/AVIRIS/extract512/f970619t01p02_r02_sc01_goodbands.hdr
          ${TEMP}/aviris_vca_5.hdr
          13 )
 
+###################
+## Cublas
+###################
 
+SET( otbHyperCublasTests1_SRC
+  otbCublasStreamingStatisticsVectorImageFilter.cxx
+)
+
+ADD_EXECUTABLE(otbHyperCublasTests1 ${otbHyperCublasTests1_SRC} otbHyperCublasTests1.cxx)
+TARGET_LINK_LIBRARIES(otbHyperCublasTests1 OTBCommon OTBIO OTBBasicFilters OTBTesting OTBBasicFiltersGPUCuda)
+
+ADD_TEST(bfTuCublasStreamingStatisticsVectorImageFilterNew
+         ${TESTEXE_DIR}/otbHyperCublasTests1
+         otbCublasStreamingStatisticsVectorImageFilterNewTest)
+
+ADD_TEST(bfTvCublasStreamingStatisticsVectorImageFilter
+         ${TESTEXE_DIR}/otbHyperCublasTests1
+         otbCublasStreamingStatisticsVectorImageFilterTest
+         ${DATA}/AVIRIS/extract128/extract128_goodbands.hdr
+         ${TEMP}/extract128_stats_cublas.txt)
+
+ADD_TEST(bfTvCublasStreamingStatisticsVectorImageFilter_AVIRIS512
+         ${TESTEXE_DIR}/otbHyperCublasTests1
+         otbCublasStreamingStatisticsVectorImageFilterTest
+         ${DATA}/AVIRIS/extract512/f970619t01p02_r02_sc01_goodbands.hdr
+         ${TEMP}/aviris512_stats_cublas.txt)
 
 
 ###################
-##Anomaly detection
+## Anomaly detection
 ###################
 
 SET( otbAnomalyTests1_SRC
