@@ -227,9 +227,6 @@ VectorDataToImageFilter<TVectorData, TImage>
     input->GetMetaDataDictionary(), MetaDataKey::ProjectionRefKey,  m_VectorDataProjectionWKT);
   otbMsgDebugMacro(<< "WKT -> " << m_VectorDataProjectionWKT);
 
-  itk::MetaDataDictionary& dict = this->GetOutput()->GetMetaDataDictionary();
-  //itk::EncapsulateMetaData<std::string> (dict, MetaDataKey::ProjectionRefKey,
-  //                                         static_cast<std::string>(m_VectorDataProjectionWKT));
   m_SensorModelFlip = 1;
   
   if (m_VectorDataProjectionWKT == "")
