@@ -108,7 +108,8 @@ int main(int argc, char * argv[])
     if (readerGDAL->GetSubDatasetInfo(vectSubdatasetNames, vectorSubdatasetDescriptions))
       {
       // Fill vDataset with subdataset descriptor info
-      for( unsigned int itSubDataset = 0; itSubDataset < (unsigned int) vectorSubdatasetDescriptions.size(); itSubDataset++ )
+      for( unsigned int itSubDataset = 0; itSubDataset < (unsigned int)
+            vectorSubdatasetDescriptions.size(); itSubDataset++ )
         {
         std::cout << "Dataset Number " <<  itSubDataset << " name is: " << vectSubdatasetNames[itSubDataset].c_str()
             << " and description is: " << vectSubdatasetNames[itSubDataset].c_str() << std::endl;
