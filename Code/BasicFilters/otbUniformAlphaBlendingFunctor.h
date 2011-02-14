@@ -15,6 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef __otbUniformAlphaBlendingFunctor_h
+#define __otbUniformAlphaBlendingFunctor_h
 
 namespace otb
 {
@@ -68,3 +70,4 @@ protected:
 
 }
 }
+#endif

@@ -33,12 +33,19 @@ ADD_TEST(fzTvFuzzyVariableSetValue ${Fuzzy_TESTS1}
 ADD_TEST(fzTvFuzzyVariableGetMaxVar ${Fuzzy_TESTS1} 
 	otbFuzzyVariableGetMaxVar)
 
+ADD_TEST(fzTvMassOfBelief ${Fuzzy_TESTS1}
+        otbMassOfBelief)
+
+ADD_TEST(fzTvJointMassOfBeliefFilter ${Fuzzy_TESTS1}
+        otbJointMassOfBeliefFilter)
 
 SET(BasicFuzzy_SRCS1
 otbFuzzyVariableNew.cxx
 otbFuzzyVariable2Values.cxx
 otbFuzzyVariableSetValue.cxx
 otbFuzzyVariableGetMaxVar.cxx
+otbMassOfBelief.cxx
+otbJointMassOfBeliefFilter.cxx
 )
 
 ADD_EXECUTABLE(otbFuzzyTests1 otbFuzzyTests1.cxx ${BasicFuzzy_SRCS1})

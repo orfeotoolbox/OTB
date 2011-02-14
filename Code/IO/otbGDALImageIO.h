@@ -105,8 +105,14 @@ public:
   /** Reads 3D data from multiple files assuming one slice per file. */
   virtual void ReadVolume(void* buffer);
 
- // Get Info about all subDataset in hdf file
-bool GetSubDatasetInfo(std::vector<std::string>& names, std::vector<std::string>& desc);
+  /** Get Info about all subDataset in hdf file */
+  bool GetSubDatasetInfo(std::vector<std::string>& names, std::vector<std::string>& desc);
+
+  /** Get if the pixel type in the file is complex or not (GDAL side)*/
+  bool GDALPixelTypeIsComplex()
+  {
+    return GDALDataTypeIsComplex(m_PxType);
+  }
 
   /*-------- This part of the interfaces deals with writing data. ----- */
 

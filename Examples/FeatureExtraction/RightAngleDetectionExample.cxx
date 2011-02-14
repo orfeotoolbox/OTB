@@ -16,18 +16,17 @@
 
 =========================================================================*/
 
-#include "otbImageFileReader.h"
-#include "otbImageFileWriter.h"
-#include "itkRescaleIntensityImageFilter.h"
-
-#include <iostream>
-#include <fstream>
-
 #include "otbImage.h"
-#include "itkPointSet.h"
-#include "otbLineSpatialObjectList.h"
-#include "otbDrawLineSpatialObjectListFilter.h"
+#include "otbVectorData.h"
+
+#include "otbImageFileReader.h"
 #include "otbLineSegmentDetector.h"
+#include "otbVectorDataToImageFilter.h"
+#include "otbAlphaBlendingFunctor.h"
+#include "itkBinaryFunctorImageFilter.h"
+#include "otbImageFileWriter.h"
+
+#include "itkRescaleIntensityImageFilter.h"
 #include "itkMinimumMaximumImageCalculator.h"
 
 //  Software Guide : BeginCommandLineArgs
@@ -39,7 +38,7 @@
 // Software Guide : BeginLatex
 //
 // This example illustrates the use of the
-// \doxygen{otb}{LineSpatialObjectListToRightAnglePointSetFilter}.
+// \doxygen{otb}{VectorDataToRightAngleVectorDataFilter}.
 // This filter detects the right angles in an image by exploiting the
 // output of a line detection algorithm. Typically the
 // \doxygen{otb}{LineSegmentDetector} class will be used. The right
@@ -52,6 +51,7 @@
 
 // Software Guide : BeginCodeSnippet
 #include "otbLineSpatialObjectListToRightAnglePointSetFilter.h"
+#include "otbVectorDataToRightAngleVectorDataFilter.h"
 // Software Guide : EndCodeSnippet
 
 int main(int argc, char * argv[])
@@ -78,41 +78,22 @@ int main(int argc, char * argv[])
   //
   // After defining, as usual, the types for the input image and the
   // image reader, we define the specific types needed for this
-  // example. First of all, we will use a list of line spatial objects
+  // example. First of all, we will use a vector data
   // to store the detected lines which will be provided by the line
   // segment detector.
   //
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::LineSpatialObjectList LinesListType;
+  typedef otb::VectorData<float>  VectorDataType;
   // Software Guide : EndCodeSnippet
-  // Software Guide : BeginLatex
-  //
-  // The right angle detector's output is a pointset where each point
-  // gives the coordinate of the detected angle. In the data field of
-  // the pointset, the 2 lines which define the right angle are stored
-  // in a vector. Therefore we define the 2 following types.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
-  typedef LinesListType::LineType LineType;
-  typedef std::vector<LineType*>  LineVectorType;
-  // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
-  // And we can now define the pointset type for storing all the
-  // information related to the detected right angles.
+  // The right angle detector's output is a vector data where each point
+  // gives the coordinate of the detected angle.
   //
-  // Software Guide : EndLatex
-
-  // Software Guide : BeginCodeSnippet
-  typedef itk::PointSet<LineVectorType, Dimension> PointSetType;
-  // Software Guide : EndCodeSnippet
-  // Software Guide : BeginLatex
-  //
-  // We define the type for the line segment detector. A detailed
+  // Next, We define the type for the line segment detector. A detailed
   // example for this detector can be found in section \ref{sec:LSD}.
   //
   // Software Guide : EndLatex
@@ -120,23 +101,22 @@ int main(int argc, char * argv[])
   // Software Guide : BeginCodeSnippet
   typedef otb::LineSegmentDetector<ImageType, PixelType> LsdFilterType;
   // Software Guide : EndCodeSnippet
+  
   // Software Guide : BeginLatex
   //
   // We can finally define the type for the right angle detection
-  // filter. This filter is templated over the input image type, the
-  // type of the lines provided by the line segment detector, and the
-  // output pointset type containing the detected right angles.
+  // filter. This filter is templated over the input vector data type
+  // provided by the line segment detector.
   //
   // Software Guide : EndLatex
 
   typedef itk::MinimumMaximumImageCalculator<ImageType> MinMaxFilterType;
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::LineSpatialObjectListToRightAnglePointSetFilter<ImageType,
-      LinesListType,
-      PointSetType>
-  RightAngleFilterType;
+  typedef otb::VectorDataToRightAngleVectorDataFilter<VectorDataType>
+    RightAngleFilterType;
   // Software Guide : EndCodeSnippet
+  
   // Software Guide : BeginLatex
   //
   // We instantiate the line segment detector and the right angle detector.
@@ -152,106 +132,76 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginLatex
   //
-  // We plug the pipeline. The right angle detector has 2 inputs: the
-  // image to be processed and the previously detected lines.
+  // We plug the pipeline.
   //
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   lsdFilter->SetInput(reader->GetOutput());
-  rightAngleFilter->SetInputImage(reader->GetOutput());
-  ////////////////////////////////////////////////////////// rightAngleFilter->SetInput(lsdFilter->GetOutput());
+  rightAngleFilter->SetInput(lsdFilter->GetOutput());
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
   // You can choose how far the right angle segments can be, and the tolerance
   // to consider an angle between two segments as an right one.
   //
-  //
   // Software Guide : EndLatex
-  // Software Guide : BeginCodeSnippet
-  rightAngleFilter->SetThresholdAngle(angleThreshold);
-  rightAngleFilter->SetThresholdDistance(distanceThreshold);
 
+  // Software Guide : BeginCodeSnippet
+  rightAngleFilter->SetAngleThreshold(angleThreshold);
+  rightAngleFilter->SetDistanceThreshold(distanceThreshold);
   rightAngleFilter->Update();
   // Software Guide : EndCodeSnippet
+
   // Software Guide : BeginLatex
   //
   // We will now draw the right angles on top of the input image. For
-  // this, we get the output of the right angle detector.
+  // this, we will draw the detected points on top of the input
+  // image. For this matter, we will use a
+  // \doxygen{otb}{VectorDataToImageFilter}  which is templated over
+  // the  input vector data type and the output image type, and a
+  // conbination of a \doxygen{itk}{binaryFunctorImageFilter}
+  // and the \doxygen{otb}{Functor}{UnaryFunctorImageFilter}.
   //
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  PointSetType::Pointer segmentOrtho      = PointSetType::New();
-  segmentOrtho = rightAngleFilter->GetOutput();
-  // Software Guide : EndCodeSnippet
-  // Software Guide : BeginLatex
-  //
-  // We will iterate through the pointset and get the lines which define
-  // each right angle stored inside each point of the pointset. The
-  // lines will be stored into a line list.
-  //
-  // Software Guide : EndLatex
+  typedef otb::VectorDataToImageFilter<VectorDataType,
+      ImageType> VectorDataRendererType;
+  VectorDataRendererType::Pointer vectorDataRenderer = VectorDataRendererType::New();
 
-  // Software Guide : BeginCodeSnippet
-  PointSetType::PointType pRight;
-  LineVectorType          outputVectorLines;
-  LinesListType::Pointer  outputLinesList = LinesListType::New();
+  typedef otb::Functor::AlphaBlendingFunctor<PixelType,
+    PixelType, PixelType> FunctorType;
+  typedef itk::BinaryFunctorImageFilter<ImageType, ImageType,
+    ImageType, FunctorType> BlendingFilterType;
+  BlendingFilterType::Pointer blendingFilter = BlendingFilterType::New();
+  
+  vectorDataRenderer->SetInput(rightAngleFilter->GetOutput());
+  vectorDataRenderer->SetSize(reader->GetOutput()->GetLargestPossibleRegion().GetSize());
+  vectorDataRenderer->SetRenderingStyleType(VectorDataRendererType::Binary);
 
-  for (unsigned int i = 0; i < segmentOrtho->GetNumberOfPoints(); i++)
-    {
-    // Software Guide : EndCodeSnippet
-    // Software Guide : BeginLatex
-    //
-    // Even if we do not use it in this example, we show here how to get
-    // the coordinates of the right angle.
-    //
-    // Software Guide : EndLatex
+  blendingFilter->SetInput1(reader->GetOutput());
+  blendingFilter->SetInput2(vectorDataRenderer->GetOutput());
+  blendingFilter->GetFunctor().SetAlpha(0.25);
 
-    // Software Guide : BeginCodeSnippet
-    segmentOrtho->GetPoint(i, &pRight);
-    // Software Guide : EndCodeSnippet
-    // Software Guide : BeginLatex
-    //
-    // The lines associated to a given angle are obtained using the
-    // \code{GetPointData} method of the pointset. Then they are stored
-    // into the list of lines.
-    //
-    // Software Guide : EndLatex
-
-    // Software Guide : BeginCodeSnippet
-    segmentOrtho->GetPointData(i, &outputVectorLines);
-    outputLinesList->push_back(outputVectorLines[0]);
-    outputLinesList->push_back(outputVectorLines[1]);
-    }
-  // Software Guide : EndCodeSnippet
-
-  minmaxCalculator->SetImage(reader->GetOutput());
-  minmaxCalculator->ComputeMaximum();
-
-  // Software Guide : BeginLatex
-  //
-  // We will use the \doxygen{otb}{DrawLineSpatialObjectListFilter} to
-  // draw the list of lines on top of the input image.
-  // The value assigned to the line is the maximum of the input image.
-  // Software Guide : EndLatex
-
-  // Software Guide : BeginCodeSnippet
-  typedef otb::DrawLineSpatialObjectListFilter<ImageType,
-      ImageType> DrawLineListType;
-  DrawLineListType::Pointer drawLineFilter =   DrawLineListType::New();
-
-  drawLineFilter->SetInput(reader->GetOutput());
-  drawLineFilter->SetInputLineSpatialObjectList(outputLinesList);
-  drawLineFilter->SetValue(minmaxCalculator->GetMaximum());
-
-  writer->SetInput(drawLineFilter->GetOutput());
+  writer->SetInput(blendingFilter->GetOutput());
   writer->SetFileName(outfname);
+  // Software Guide : EndCodeSnippet
 
+  // Software Guide : BeginLatex
+  //
+  // Before calling the \code{Update()} method of the writer in order to
+  // trigger the pipeline execution, we call the
+  // \doxygen{GenerateOutputInformation()} of the reader, so the
+  // filter gets the information about image size and spacing.
+  //
+  // Software Guide : EndLatex
+
+  // Software Guide : BeginCodeSnippet
   reader->GenerateOutputInformation();
   writer->Update();
   // Software Guide : EndCodeSnippet
+
   //  Software Guide : BeginLatex
   // Figure~\ref{fig:RIGHTANGLE_FILTER} shows the result of applying
   // the right angle detection filter to an image.
@@ -260,7 +210,8 @@ int main(int argc, char * argv[])
   // \includegraphics[width=0.25\textwidth]{PrettyRighAngleInput.eps}
   // \includegraphics[width=0.25\textwidth]{PrettyRighAngleOutput.eps}
   // \itkcaption[Right Angle Detection Filter]{Result of applying the
-  // \doxygen{otb}{LineSpatialObjectListToRightAnglePointSetFilter} to an image. From left to right :
+  // \doxygen{otb}{LineSegmentDetector} and the
+  // \doxygen{otb}{VectorDataToRightAngleVectorDataFilter} to an image. From left to right :
   // original image, detected right angles.}
   // \label{fig:RIGHTANGLE_FILTER}
   // \end{figure}
@@ -288,7 +239,7 @@ int main(int argc, char * argv[])
   outwriter->SetFileName(inprettyfname);
   outwriter->Update();
 
-  rescaler->SetInput(drawLineFilter->GetOutput());
+  rescaler->SetInput(blendingFilter->GetOutput());
   outwriter->SetFileName(outprettyfname);
   outwriter->Update();
 

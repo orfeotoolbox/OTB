@@ -75,7 +75,7 @@ ADD_TEST(ioTvMultiMonoChannelROI_RADARSAT_ENVI2ENVI ${COMMON_TESTS3}
          otbMultiToMonoChannelExtractROI
          -ushort ${TEMP}/ioMultiMonoChannelROI_RADARSAT2ENVI_2559_3591_337_280.hdr
          -ushort ${TEMP}/ioMultiMonoChannelROI_RADARSAT_ENVI2ENVI_2559_3591_337_280_2.hdr
-         -startX 0 -startY 0 -sizeX 337 -sizeY 280 )
+         -startX 0 -startY 0 -sizeX ParseHdfSubsetName337 -sizeY 280 )
 SET_TESTS_PROPERTIES(ioTvMultiMonoChannelROI_RADARSAT_ENVI2ENVI PROPERTIES DEPENDS ioTvMultiMonoChannelROI_RADARSAT2ENVI)
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
@@ -1266,8 +1266,9 @@ ADD_TEST(ioTvMultiDatasetReadingInfo ${IO_TESTS9}
       ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf
       ${TEMP}/ioTvMultiDatasetReadingInfoOut.txt
       )
-            
-ADD_TEST(ioTvMultiChannelROI_HDF2TIF ${COMMON_TESTS2}
+   
+# Test reading HDF files (hdf, hdf5, hdf4, h5, h4, he5, he4)           
+ADD_TEST(ioTvMultiChannelROI_HDF4_2_TIF ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_HDF2TIF_MOD09Q1G_20_25_100_150_channel_1.tif
                      ${TEMP}/ioExtractROI_HDF2TIF_MOD09Q1G_20_25_100_150_channel_1_OUT.tif
          otbMultiChannelExtractROI
@@ -1275,6 +1276,16 @@ ADD_TEST(ioTvMultiChannelROI_HDF2TIF ${COMMON_TESTS2}
          ${TEMP}/ioExtractROI_HDF2TIF_MOD09Q1G_20_25_100_150_channel_1_OUT.tif
          -startX 1400 -startY 3700 -sizeX 100 -sizeY 150
          -channels 1 )
+         
+ADD_TEST(ioTvMultiChannelROI_HDF5_2_TIF ${COMMON_TESTS2}
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_HDF2TIF_GSSTF_NCEP_100_20_200_100_channel_1.tif
+                     ${TEMP}/ioExtractROI_HDF2TIF_GSSTF_NCEP_100_20_200_100_channel_1_OUT.tif
+         otbMultiChannelExtractROI
+         ${INPUTDATA}/GSSTF_NCEP.2b.2008.12.31.he5:3
+         ${TEMP}/ioExtractROI_HDF2TIF_GSSTF_NCEP_100_20_200_100_channel_1_OUT.tif
+         -startX 100 -startY 20 -sizeX 200 -sizeY 100
+         -channels 1 )
+
       
 # ---  STREAMING  IMAGE   FILE    WRITER  ---
 ADD_TEST(ioTvStreamingIFWriterBSQWithoutStreaming ${IO_TESTS2}
