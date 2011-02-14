@@ -21,16 +21,15 @@ FIND_PACKAGE(OTB)
     MESSAGE(FATAL_ERROR "OTB not found.  Please set OTB_DIR")
 ENDIF(OTB_FOUND)
 
-OPTION(OTB_USE_CUBLAS "Use Cuda CUBLAS library." ON)
+OPTION(OTB_USE_CUBLAS "Use Cuda CUBLAS library." OFF)
 IF(OTB_USE_CUBLAS)
   FIND_PACKAGE(CUDA)
-  include_directories(${CUDA_INCLUDE_DIRS})
+  INCLUDE_DIRECTORIES(${CUDA_INCLUDE_DIRS})
 ENDIF(OTB_USE_CUBLAS)
 
 INCLUDE_DIRECTORIES(
 ${Hyperspectral_SOURCE_DIR}/Code/BasicFilters
 ${Hyperspectral_SOURCE_DIR}/Code/BasicFilters/GPUCuda
-${Hyperspectral_SOURCE_DIR}/Code/CudaMath
 ${Hyperspectral_SOURCE_DIR}/Code/Hyperspectral
 ${Hyperspectral_SOURCE_DIR}/Code/Vahine
 ${Hyperspectral_SOURCE_DIR}/Code/RX
