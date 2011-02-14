@@ -456,6 +456,20 @@ The Markov Random Field framework for OTB is more detailled in \ref{sec:MarkovRa
 \input{DanielssonDistanceMapImageFilter.tex}
 \fi
 
+
+\section{Rasterization}
+
+Rasterization is the process of rendering vectorial data on a raster
+grid. This rasterization can be either binary or more complete,
+including different styles and labels for the vectorial features.For
+rasterization purposes, OTB uses the Mapnick library through the
+\doxygen{otb}{VectorDataToImageFilter}. Hence, rasterization will be
+only available to users compiling OTB with the Mapnick CMake option
+set to ON, or using a binary package with Mapnick activated.
+
+\input{RasterizationExample.tex}
+
+
 %% \ifitkFullVersion
 %% %\input{SignedDanielssonDistanceMapImageFilter.tex}
 %% \fi
