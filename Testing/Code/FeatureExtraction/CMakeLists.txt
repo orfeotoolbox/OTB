@@ -1224,10 +1224,10 @@ ADD_TEST(feTvLineSpatialObjectListToRightAnglePointSetFilter ${FEATUREEXTRACTION
 
 ADD_TEST(feTvLineSpatialObjectListToRightAnglePointSetFilterBySteps ${FEATUREEXTRACTION_TESTS11}
  --compare-ascii ${EPSILON_3}
- ${BASELINE_FILES}/feTvLineSpatialObjectListToRightAnglePointSetFilterByStepsOutputAscii.txt
+ ${BASELINE_FILES}/feTvLineSpatialObjectListToRightAnglePointSetFilterOutputAscii.txt
  ${TEMP}/feTvLineSpatialObjectListToRightAnglePointSetFilterByStepsOutputAscii.txt
     otbLineSpatialObjectListToRightAnglePointSetFilterByStepsOutputAscii
-    ${INPUTDATA}/prison_toulouse.tif
+    ${INPUTDATA}/carre.png
     ${TEMP}/feTvLineSpatialObjectListToRightAnglePointSetFilterByStepsOutputAscii.txt
 )
 
