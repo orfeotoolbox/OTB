@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef  __otbDataNode_h
-#define  __otbDataNode_h
+#ifndef __otbDataNode_h
+#define __otbDataNode_h
 
 #include "itkPoint.h"
 #include "otbPolyLineParametricPathWithValue.h"

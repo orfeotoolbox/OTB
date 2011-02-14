@@ -38,4 +38,6 @@ void RegisterTests()
   REGISTER_TEST(otbLineSpatialObjectListToRightAnglePointSetFilter);
   REGISTER_TEST(otbLineSpatialObjectListToRightAnglePointSetFilterByStepsOutputAscii);
   //REGISTER_TEST(otbLineSpatialObjectListToRightAnglePointSetFilterOutputImage);
+  REGISTER_TEST(otbVectorDataToRightAngleVectorDataFilterNew);
+  REGISTER_TEST(otbVectorDataToRightAngleVectorDataFilter);
 }

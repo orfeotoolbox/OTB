@@ -203,7 +203,8 @@ MassOfBelief<TLabel, TMass>
   this->Clear();
   
   // Compute number of elements
-  unsigned long nbElements = static_cast<unsigned long>(vcl_pow(2., static_cast<double>(universe.size())));
+  unsigned long nbElements = 1 << universe.size(); // 2^universe.size()
+
 
   // Build each element
   for(unsigned long elementId = 1; elementId <= nbElements; ++elementId)

@@ -1241,6 +1241,19 @@ ADD_TEST(feTvLineSpatialObjectListToRightAnglePointSetFilterBySteps ${FEATUREEXT
 #    ${TEMP}/feTvLineSpatialObjectListToRightAnglePointSetFilterOutputImage.tif
 #)
 
+# -------            otb::VectorDataToRightAnglePointSetFilter   -------------
+ADD_TEST(feTuVectorDataToRightAngleVectorDataFilterNew ${FEATUREEXTRACTION_TESTS11}
+    otbVectorDataToRightAngleVectorDataFilterNew)
+
+ADD_TEST(feTvVectorDataToRightAngleVectorDataFilter ${FEATUREEXTRACTION_TESTS11}
+ --compare-ogr ${EPSILON_8}
+    ${BASELINE_FILES}/feTvVectorDataToRightAngleVectorDataFilterOutput.shp
+    ${TEMP}/feTvVectorDataToRightAngleVectorDataFilterOutput.shp
+  otbVectorDataToRightAngleVectorDataFilter
+    ${BASELINE_FILES}/feTvLineSegmentDetectorOutput.shp     #input vectordata
+    ${TEMP}/feTvVectorDataToRightAngleVectorDataFilterOutput.shp  #output text file
+    #${TEMP}/feTvVectorDataToRightAngleVectorDataOutput.tif #output image [optional] UNDER CONSTRUCTION
+)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFeatureExtractionTests14 ~~~~~~~~~~~~~~~~~~~~~
@@ -1721,6 +1734,7 @@ otbLineSpatialObjectListToRightAnglePointSetFilterNew.cxx
 otbLineSpatialObjectListToRightAnglePointSetFilter.cxx
 otbLineSpatialObjectListToRightAnglePointSetFilterByStepsOutputAscii.cxx
 #otbLineSpatialObjectListToRightAnglePointSetFilterOutputImage.cxx
+otbVectorDataToRightAngleVectorDataFilter.cxx
 )
 
 

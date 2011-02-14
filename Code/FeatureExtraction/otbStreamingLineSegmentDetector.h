@@ -47,6 +47,10 @@ namespace otb
  *  This class inherits PersistentImageFilter and provides the Reset/Synthesize functions,
  *  plus the ThreadedGenerateData function implementing the image function evaluation
  *
+ *  \sa LineSegmentDetector
+ *  
+ *  \ingroup Streamed
+ *  \ingroup FeatureExtraction
  */
 template<class TInputImage, class TPrecision = double>
 class ITK_EXPORT PersistentLineSegmentDetector :

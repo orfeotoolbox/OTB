@@ -495,8 +495,6 @@ ADD_TEST(raTuAtmosphericCorrectionParametersNew ${RADIOMETRY_TESTS3}
 ##########           otb::FilterFunctionValues -------------------
 # in otbAtmosphericCorrectionParameters.h/.cxx
 ADD_TEST(raTvFilterFunctionValuesTest ${RADIOMETRY_TESTS3}
-    --compare-ascii ${EPSILON_6} ${BASELINE_FILES}/raTvFilterFunctionValuesTest.txt
-                           ${TEMP}/raTvFilterFunctionValuesTest.txt
         otbFilterFunctionValuesTest
 	${TEMP}/raTvFilterFunctionValuesTest.txt
 	0.5             # lambda min
@@ -505,6 +503,15 @@ ADD_TEST(raTvFilterFunctionValuesTest ${RADIOMETRY_TESTS3}
 	0.2 0.5 0.3 0.9 0.8 # vector
 )
 
+##########           otb::FilterFunctionValues DigitalGlobe sensitivity files -------------------
+ADD_TEST(raTvFilterFunctionValuesDigitalGlobeTest ${RADIOMETRY_TESTS3}
+    --compare-ascii ${EPSILON_6} ${BASELINE_FILES}/raTvFilterFunctionValuesDigitalGlobeTest.txt
+                           ${TEMP}/raTvFilterFunctionValuesDigitalGlobeTest.txt
+        otbFilterFunctionValuesDigitalGlobeTest
+    ${INPUTDATA}/Radiometry/DigitalGlobe/radiance_response_QB.txt
+    ${TEMP}/raTvFilterFunctionValuesDigitalGlobeTest.txt
+    0.005            # user step
+)
 
 ##########           otb::SIXSTraits -------------------
 ADD_TEST(raTuSIXSTraitsTest ${RADIOMETRY_TESTS3}
@@ -831,6 +838,17 @@ ADD_TEST(raTvSpectralSensitivityReaderTest ${RADIOMETRY_TESTS5}
         ${TEMP}/rcTuSpectralSensitivityReaderTest.txt	  
 )
 
+
+ADD_TEST(raTvSpectralSensitivityReaderGenericTest ${RADIOMETRY_TESTS5}
+     --compare-ascii ${NOTOL}
+        ${BASELINE_FILES}/raTvSpectralSensitivityReaderTest.txt
+        ${TEMP}/rcTuSpectralSensitivityReaderTest.txt
+     --ignore-lines-with 2 DataPath FileName
+     otbSpectralSensitivityReaderGenericTest
+    ${INPUTDATA}/Radiometry/SPOT5/HRG1/rep6S.dat
+    ${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/Arcachon_extrait_3852_3319_546_542.tif
+        ${TEMP}/rcTuSpectralSensitivityReaderGenericTest.txt     
+)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbRADIOMETRY_TESTS6 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

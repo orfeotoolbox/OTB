@@ -30,9 +30,9 @@ void RegisterTests()
   REGISTER_TEST(SeamCarvingExampleTest);
   REGISTER_TEST(SeamCarvingOtherExampleTest);
   REGISTER_TEST(CloudDetectionExampleTest);
-  REGISTER_TEST(RightAngleDetectionExample);
 #ifdef OTB_USE_MAPNIK
   REGISTER_TEST(LineSegmentDetectorExampleTest);
+  REGISTER_TEST(RightAngleDetectionExample);
 #endif
 }
 
@@ -56,12 +56,11 @@ void RegisterTests()
 #define main CloudDetectionExampleTest
 #include "CloudDetectionExample.cxx"
 
-#undef main
-#define main RightAngleDetectionExample
-#include "RightAngleDetectionExample.cxx"
-
 #ifdef OTB_USE_MAPNIK
 #undef main
 #define main LineSegmentDetectorExampleTest
 #include "LineSegmentDetectorExample.cxx"
+#undef main
+#define main RightAngleDetectionExample
+#include "RightAngleDetectionExample.cxx"
 #endif
