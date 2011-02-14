@@ -64,6 +64,7 @@ VectorDataToRightAngleVectorDataFilter<TVectorData>
     {
     if (!itVectorRef.Get()->IsLineFeature())
       {
+      ++itVectorRef;
       continue; // do not process if it's not a line
       }
     TreeIteratorType itVectorCur = itVectorRef;    // Current
@@ -72,6 +73,7 @@ VectorDataToRightAngleVectorDataFilter<TVectorData>
       {
       if (!itVectorCur.Get()->IsLineFeature())
         {
+        ++itVectorCur;
         continue; // do not process if it's not a line
         }
       // Compute the angle formed by the two segments
