@@ -13,6 +13,7 @@ SET( otbHyperTests1_SRC
   otbVectorImageToMatrixImageFilter.cxx
   otbProjectiveProjection.cxx
   otbVCA.cxx
+  otbVCAImageFilter.cxx
 )
 
 ADD_EXECUTABLE(otbHyperTests1 ${otbHyperTests1_SRC} otbHyperTests1.cxx)
@@ -155,9 +156,25 @@ ADD_TEST(hyTvVCA_AVIRIS
          ${TESTEXE_DIR}/otbHyperTests1
          otbVCATestHighSNR
          ${DATA}/AVIRIS/extract512/f970619t01p02_r02_sc01_goodbands.hdr
-         ${TEMP}/aviris_vca_5.hdr
+         ${TEMP}/aviris_vca_13.hdr
          13 )
 
+
+ADD_TEST(hyTvVCAImageFilter_Synthetic
+         ${TESTEXE_DIR}/otbHyperTests1
+         otbVCAImageFilterTestHighSNR
+         ${DATA}/SYNTHETIC100/hsi_cube.tif
+         ${TEMP}/synthetic_vcaimagefilter_5.hdr
+         5 )
+
+
+ADD_TEST(hyTvVCAImageFilter_AVIRIS
+         ${TESTEXE_DIR}/otbHyperTests1
+         otbVCAImageFilterTestHighSNR
+         ${DATA}/AVIRIS/extract512/f970619t01p02_r02_sc01_goodbands.hdr
+         ${TEMP}/aviris_vcaimagefilter_13.hdr
+         13 )
+         
 ###################
 ## Cublas
 ###################
