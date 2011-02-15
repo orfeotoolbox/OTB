@@ -445,12 +445,27 @@ Now, here is the workaround: Build your own Gdal library (you probably want to h
 Then make and (sudo) make install. Then, do:
 
 \begin{verbatim}
-	sudo cp frmts/gtiff/libgeotiff/*.h   INSTALL_DIR/include/
+        sudo cp frmts/gtiff/libgeotiff/*.h   INSTALL_DIR/include/
 	sudo cp frmts/gtiff/libgeotiff/*.inc INSTALL_DIR/include/
 	sudo cp frmts/gtiff/libtiff/*.h      INSTALL_DIR/include/ 
 \end{verbatim}
 
-This will add the missing headers to the the Gdal include directory, so that your Gdal installation now provide a full Tiff support (headers and symbols). During OTB configuration, be careful to use Gdal include directory as TIFF\_INCLUDE\_DIRS and GEOTIFF\_INCLUDE\_DIRS.
+This will add the missing headers to the the Gdal include directory, so that your Gdal installation now provide a full Tiff support (headers and symbols). During OTB configuration, you will need to set configuration varaible related to gdal to your own Gdal:
+\begin{verbatim}
+       GDALCONFIG_EXECUTABLE            gdal_binary_directory/bin/gdal-config                 
+       GDAL_CONFIG                      gdal_binary_directory/bin/gdal-config                 
+       GDAL_INCLUDE_DIR                 gdal_binary_directory/include                         
+       GDAL_LIBRARY                     gdal_binary_directory/lib/libgdal.so 
+       OGR_INCLUDE_DIRS                 gdal_binary_directory/include  
+\end{verbatim}
+Be careful to use Gdal include directory as TIFF\_INCLUDE\_DIRS and GEOTIFF\_INCLUDE\_DIRS and Gdal library for GEOTIFF\_LIBRARY and TIFF\_LIBRARY.   
+\begin{verbatim}
+       GEOTIFF_INCLUDE_DIRS             gdal_binary_directory/include                         
+       GEOTIFF_LIBRARY                  gdal_binary_directory/lib/libgdal.so 
+            
+       TIFF_INCLUDE_DIRS                gdal_binary_directory/include                         
+       TIFF_LIBRARY                     gdal_binary_directory/lib/libgdal.so
+\end{verbatim}              
 
 \section{Using OTB}
 
