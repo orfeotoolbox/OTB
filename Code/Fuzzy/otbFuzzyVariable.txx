@@ -37,7 +37,7 @@ void
 FuzzyVariable<TLabel, TPrecision>::SetMembership(const LabelType& var,
                                                  const PrecisionType & v1,
                                                  const PrecisionType & v2,
-                                                 const PrecisionType & v3, 
+                                                 const PrecisionType & v3,
                                                  const PrecisionType & v4)
 {
   // Check if values are ordered correctly
@@ -60,7 +60,7 @@ FuzzyVariable<TLabel, TPrecision>::SetMembership(const LabelType& var,
 
 
 template <class TLabel, class TPrecision>
-void 
+void
 FuzzyVariable<TLabel, TPrecision>
 ::RemoveMembership(const LabelType & var)
 {
@@ -72,7 +72,7 @@ FuzzyVariable<TLabel, TPrecision>
 }
 
 template <class TLabel, class TPrecision>
-void 
+void
 FuzzyVariable<TLabel, TPrecision>
 ::Clear()
 {
@@ -85,9 +85,9 @@ FuzzyVariable<TLabel, TPrecision>
 
 
 template <class TLabel, class TPrecision>
-typename FuzzyVariable<TLabel,TPrecision>
-::PrecisionType 
-FuzzyVariable<TLabel,TPrecision>
+typename FuzzyVariable<TLabel, TPrecision>
+::PrecisionType
+FuzzyVariable<TLabel, TPrecision>
 ::GetMembership(const LabelType & var, const PrecisionType & value) const
 {
   // Declare output
@@ -107,7 +107,7 @@ FuzzyVariable<TLabel,TPrecision>
       {
       output = 0;
       }
-    else if( value >= parameters[0] 
+    else if( value >= parameters[0]
              && value < parameters[1] )
       {
       if(parameters[1]>parameters[0])
@@ -115,19 +115,19 @@ FuzzyVariable<TLabel,TPrecision>
         output = static_cast<TPrecision>((value - parameters[0])
                                          /(parameters[1] - parameters[0]));
         }
-      else 
+      else
         {
         output = static_cast<TPrecision>(1);
         }
       }
 
-    if( value >= parameters[1] 
+    if( value >= parameters[1]
         && value < parameters[2] )
       {
       output = static_cast<TPrecision>(1);
       }
 
-    if( value >= parameters[2] 
+    if( value >= parameters[2]
         && value < parameters[3] )
       {
       if(parameters[3]>parameters[2])
@@ -135,7 +135,7 @@ FuzzyVariable<TLabel,TPrecision>
         output = static_cast<TPrecision>((parameters[3] - value)
                                          /(parameters[3] - parameters[2]));
         }
-      else 
+      else
         {
         output = static_cast<TPrecision>(1);
         }
@@ -148,9 +148,9 @@ FuzzyVariable<TLabel,TPrecision>
 }
 
 template <class TLabel, class TPrecision>
-typename FuzzyVariable<TLabel,TPrecision>
-::MembershipValueType 
-FuzzyVariable<TLabel,TPrecision>
+typename FuzzyVariable<TLabel, TPrecision>
+::MembershipValueType
+FuzzyVariable<TLabel, TPrecision>
 ::GetMembership(const PrecisionType & value) const
 {
   // Build the output membership map
@@ -158,10 +158,10 @@ FuzzyVariable<TLabel,TPrecision>
 
   // Walk the membership parameters map
   for(typename ParametersMapType::const_iterator mapIt = m_MembershipFunctions.begin();
-      mapIt!=m_MembershipFunctions.end();++mapIt)
+      mapIt!=m_MembershipFunctions.end(); ++mapIt)
     {
     // Compute the membership
-    output[mapIt->first] = this->GetMembership(mapIt->first,value);
+    output[mapIt->first] = this->GetMembership(mapIt->first, value);
     }
 
   // Return output
@@ -169,9 +169,9 @@ FuzzyVariable<TLabel,TPrecision>
 }
 
 template <class TLabel, class TPrecision>
-typename FuzzyVariable<TLabel,TPrecision>
-::LabelType 
-FuzzyVariable<TLabel,TPrecision>
+typename FuzzyVariable<TLabel, TPrecision>
+::LabelType
+FuzzyVariable<TLabel, TPrecision>
 ::GetMaxVar(const PrecisionType & value) const
 {
   // If parameters map is empty, throw an exception
@@ -215,13 +215,13 @@ FuzzyVariable<TLabel, TPrecision>
 
 } // end namespace otb
 
-template <class TLabel,class TPrecision>
+template <class TLabel, class TPrecision>
 std::ostream &
 operator<<(std::ostream & out,
-           const std::map<TLabel,TPrecision> & labelMap)
+           const std::map<TLabel, TPrecision> & labelMap)
 {
   // Define an iterator on the label set
-  typedef std::map<TLabel,TPrecision> LabelMapType;
+  typedef std::map<TLabel, TPrecision> LabelMapType;
   typename LabelMapType::const_iterator it = labelMap.begin();
 
   // Open the set
