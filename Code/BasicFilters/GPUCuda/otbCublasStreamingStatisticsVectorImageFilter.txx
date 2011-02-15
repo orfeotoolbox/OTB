@@ -23,8 +23,6 @@
 
 #include "otbCublasStreamingStatisticsVectorImageFilter.h"
 
-#include "itkImageRegionIterator.h"
-#include "itkImageRegionConstIteratorWithIndex.h"
 #include "itkNumericTraits.h"
 #include "itkProgressReporter.h"
 #include "otbMacro.h"
@@ -39,7 +37,7 @@ PersistentCublasStreamingStatisticsVectorImageFilter<TInputImage>::PersistentCub
   // superclass
   //
   // allocate the data objects for the outputs which are
-  // just decorators around vector/matric types
+  // just decorators around vector/matrix types
 
   this->itk::ProcessObject::SetNthOutput(1, this->MakeOutput(1).GetPointer());
   this->itk::ProcessObject::SetNthOutput(2, this->MakeOutput(2).GetPointer());
@@ -48,7 +46,7 @@ PersistentCublasStreamingStatisticsVectorImageFilter<TInputImage>::PersistentCub
   cublasStatus status = cublasInit();
   if (status != CUBLAS_STATUS_SUCCESS)
     {
-    printf("cublasInit failed");
+    otbMsgDevMacro( "cublasInit failed" );
     }
 
   m_GPUImage = 0;
@@ -62,7 +60,7 @@ PersistentCublasStreamingStatisticsVectorImageFilter<TInputImage>::~PersistentCu
   cublasStatus status = cublasShutdown();
   if (status != CUBLAS_STATUS_SUCCESS)
     {
-    printf("cublasShutdown failed");
+    otbMsgDevMacro( "cublasShutdown failed" );
     }
 }
 
@@ -206,7 +204,8 @@ void PersistentCublasStreamingStatisticsVectorImageFilter<TInputImage>::Reset()
   if (m_GPUSecondOrderAccumulator == 0)
     {
     cublasStatus status;
-    status = cublasAlloc(numberOfComponent * numberOfComponent, sizeof(float), (void**) &m_GPUSecondOrderAccumulator);
+    status = cublasAlloc(numberOfComponent * numberOfComponent, sizeof(float),
+                         (void**) &m_GPUSecondOrderAccumulator);
 
     // TODO : check status, throw exception on error & clean up GPU memory
     if (status != CUBLAS_STATUS_SUCCESS)
