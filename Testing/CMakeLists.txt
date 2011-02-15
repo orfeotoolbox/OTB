@@ -161,6 +161,7 @@ ADD_TEST(hyTvVCA_AVIRIS
 ###################
 ## Cublas
 ###################
+IF( OTB_USE_CUBLAS )
 
 SET( otbHyperCublasTests1_SRC
   otbCublasStreamingStatisticsVectorImageFilter.cxx
@@ -185,6 +186,7 @@ ADD_TEST(bfTvCublasStreamingStatisticsVectorImageFilter_AVIRIS512
          ${DATA}/AVIRIS/extract512/f970619t01p02_r02_sc01_goodbands.hdr
          ${TEMP}/aviris512_stats_cublas.txt)
 
+ENDIF( OTB_USE_CUBLAS )
 
 ###################
 ## Anomaly detection
@@ -205,6 +207,7 @@ ADD_TEST(tuLocalRXDetectorNew
          ${TESTEXE_DIR}/otbAnomalyTests1
          LocalRXDetectorNewTest
          )
+         
 ADD_TEST(tvLocalRXDetector
          ${TESTEXE_DIR}/otbAnomalyTests1
          LocalRXDetectorTest
