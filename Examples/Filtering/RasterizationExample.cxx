@@ -33,7 +33,7 @@
 // \url{http://dds.cr.usgs.gov/srtm/version2_1/SWBD/}.
 //
 // First step to use this filter is to include the appropriate headers:
-// 
+//
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
@@ -52,10 +52,10 @@
 int main(int argc, char * argv[])
 {
   // Software Guide : BeginLatex
-  // 
+  //
   // Then, we need to define the appropriate VectorData and Image
   // type.
-  // 
+  //
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
@@ -63,7 +63,6 @@ int main(int argc, char * argv[])
   typedef unsigned char                 PixelType;
   typedef otb::Image<PixelType, 2>      ImageType;
   typedef otb::VectorData<>             VectorDataType;
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -74,12 +73,10 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
-  typedef otb::VectorDataToImageFilter<VectorDataType, 
+  typedef otb::VectorDataToImageFilter<VectorDataType,
     ImageType>            VectorDataToImageFilterType;
-  VectorDataToImageFilterType::Pointer vectorDataRendering 
+  VectorDataToImageFilterType::Pointer vectorDataRendering
     = VectorDataToImageFilterType::New();
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -92,22 +89,20 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef otb::VectorDataFileReader<VectorDataType> VectorDataFileReaderType;
   VectorDataFileReaderType::Pointer reader = VectorDataFileReaderType::New();
   reader->SetFileName(argv[1]);
 
-  typedef otb::VectorDataProjectionFilter<VectorDataType, 
+  typedef otb::VectorDataProjectionFilter<VectorDataType,
     VectorDataType> ProjectionFilterType;
   ProjectionFilterType::Pointer projection = ProjectionFilterType::New();
   projection->SetInput(reader->GetOutput());
-
   // Software Guide : EndCodeSnippet
 
-  std::string projectionRefWkt = "PROJCS[\"WGS 84 / UTM zone 30N\",GEOGCS[\"WGS 84\",DATUM[\"WGS_1984\",SPHEROID[\"WGS 84\",6378137,298.257223563,AUTHORITY[\"EPSG\",\"7030\"]],AUTHORITY[\"EPSG\",\"6326\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.01745329251994328,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"4326\"]],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-3],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],AUTHORITY[\"EPSG\",\"32630\"],AXIS[\"Easting\",EAST],AXIS[\"Northing\",NORTH]]";
+  std::string projectionRefWkt = "PROJCS[\"WGS 84 / UTM zone 30N\", GEOGCS[\"WGS 84\", DATUM[\"WGS_1984\", SPHEROID[\"WGS 84\", 6378137, 298.257223563, AUTHORITY[\"EPSG\",\"7030\"]], AUTHORITY[\"EPSG\",\"6326\"]], PRIMEM[\"Greenwich\", 0, AUTHORITY[\"EPSG\",\"8901\"]], UNIT[\"degree\", 0.01745329251994328, AUTHORITY[\"EPSG\",\"9122\"]], AUTHORITY[\"EPSG\",\"4326\"]], UNIT[\"metre\", 1, AUTHORITY[\"EPSG\",\"9001\"]], PROJECTION[\"Transverse_Mercator\"], PARAMETER[\"latitude_of_origin\", 0], PARAMETER[\"central_meridian\", -3], PARAMETER[\"scale_factor\", 0.9996], PARAMETER[\"false_easting\", 500000], PARAMETER[\"false_northing\", 0], AUTHORITY[\"EPSG\",\"32630\"], AXIS[\"Easting\", EAST], AXIS[\"Northing\", NORTH]]";
 
   // Software Guide : BeginLatex
-  // 
+  //
   // Next step is to specify the map projection in which to reproject
   // our vector.
   //
@@ -116,7 +111,6 @@ int main(int argc, char * argv[])
   // Software Guide : BeginCodeSnippet
   
   projection->SetOutputProjectionRef(projectionRefWkt);
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -166,7 +160,6 @@ int main(int argc, char * argv[])
   ExtractROIType::Pointer extractROI = ExtractROIType::New();
   extractROI->SetRegion(region);
   extractROI->SetInput(projection->GetOutput());
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -193,9 +186,7 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
   
   // Software Guide : BeginCodeSnippet
-
   vectorDataRendering->SetRenderingStyleType(VectorDataToImageFilterType::Binary);
-
   // Software Guide : EndCodeSnippet
   
   // Software Guide : BeginLatex
@@ -210,11 +201,11 @@ int main(int argc, char * argv[])
   // Software Guide : BeginCodeSnippet
   
   typedef itk::RGBAPixel<unsigned char> RGBAPixelType;
-  typedef otb::Image<RGBAPixelType,2>   RGBAImageType;
+  typedef otb::Image<RGBAPixelType, 2>   RGBAImageType;
   typedef itk::ChangeLabelImageFilter<ImageType,
     RGBAImageType> ChangeLabelImageFilterType;
   
-  ChangeLabelImageFilterType::Pointer 
+  ChangeLabelImageFilterType::Pointer
     changeLabelFilter = ChangeLabelImageFilterType::New();
   
   RGBAPixelType green, blue;
@@ -223,8 +214,8 @@ int main(int argc, char * argv[])
   blue.SetAlpha(255);
   blue.SetBlue(255);
   
-  changeLabelFilter->SetChange(0,blue);
-  changeLabelFilter->SetChange(255,green);
+  changeLabelFilter->SetChange(0, blue);
+  changeLabelFilter->SetChange(255, green);
   changeLabelFilter->SetInput(vectorDataRendering->GetOutput());
   
   // Software Guide : EndCodeSnippet
@@ -243,7 +234,6 @@ int main(int argc, char * argv[])
   writer->SetInput(changeLabelFilter->GetOutput());
   writer->SetFileName(argv[2]);
   writer->Update();
-
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex

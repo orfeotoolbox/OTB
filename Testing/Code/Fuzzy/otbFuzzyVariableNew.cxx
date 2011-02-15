@@ -24,8 +24,8 @@
 int otbFuzzyVariableNew(int argc, char* argv[])
 {
   typedef float PrecisionType;
-  const unsigned int NumberOfValues = 3;
-  typedef otb::FuzzyVariable<NumberOfValues, PrecisionType> FuzzyVarType;
+  typedef unsigned short LabelType;
+  typedef otb::FuzzyVariable<LabelType, PrecisionType> FuzzyVarType;
 
   FuzzyVarType::Pointer fv = FuzzyVarType::New();
   

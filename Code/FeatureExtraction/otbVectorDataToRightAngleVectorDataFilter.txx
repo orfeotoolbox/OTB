@@ -91,15 +91,15 @@ VectorDataToRightAngleVectorDataFilter<TVectorData>
                                                                  itVectorCur.Get()->GetLine());
             
         // Compute the distance between the two segments and the right angle formed by this segments
-        double dist1 = this->ComputeDistanceFromPointToSegment(RightAngleCoordinate,
+        double dist1_2 = this->ComputeDistanceFromPointToSegment(RightAngleCoordinate,
                                                                itVectorRef.Get()->GetLine());
-        double dist2 = this->ComputeDistanceFromPointToSegment(RightAngleCoordinate,
+        double dist2_2 = this->ComputeDistanceFromPointToSegment(RightAngleCoordinate,
                                                                itVectorCur.Get()->GetLine());
             
         // Use Pythagore to compute the distance between the two segments
-        double SegmentDistance = vcl_sqrt(dist1 * dist1 + dist2 * dist2);
+        double SegmentDistance_2 = dist1_2 + dist2_2;
             
-        if (SegmentDistance < m_DistanceThreshold)
+        if (SegmentDistance_2 < m_DistanceThreshold * m_DistanceThreshold)
           {
           // If Right Angle & not so far from segments: Add to the output
           typename DataNodeType::Pointer CurrentGeometry = DataNodeType::New();
@@ -131,10 +131,10 @@ VectorDataToRightAngleVectorDataFilter<TVectorData>
   double X2 = vertexList->GetElement(1)[0];
   double Y2 = vertexList->GetElement(1)[1];
 
-  double dist1 = vcl_sqrt((X1 - rAngle[0]) * (X1 - rAngle[0]) + (Y1 - rAngle[1]) * (Y1 - rAngle[1]));
-  double dist2 = vcl_sqrt((X2 - rAngle[0]) * (X2 - rAngle[0]) + (Y2 - rAngle[1]) * (Y2 - rAngle[1]));
+  double dist1_2 = (X1 - rAngle[0]) * (X1 - rAngle[0]) + (Y1 - rAngle[1]) * (Y1 - rAngle[1]);
+  double dist2_2 = (X2 - rAngle[0]) * (X2 - rAngle[0]) + (Y2 - rAngle[1]) * (Y2 - rAngle[1]);
 
-  return std::min(dist1, dist2);
+  return std::min(dist1_2, dist2_2);
 }
 
 template <class TVectorData>

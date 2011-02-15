@@ -64,7 +64,7 @@ public:
 /** \class LineSegmentDetector
  *  \brief this class implement a fast line detector with false detection control using
  *         the a contrario method
- *  
+ *
  *  The implementation is based on the online version of the lsd
  *  documentation and code lsd 1.5. The OTB version use a 3x3 filter
  *  to compute the gradient(vs. 2x2 in the original implementation)
@@ -73,8 +73,8 @@ public:
  *
  *  \sa StreamingLineSegmentDetector (streamed version)
  *  \ingroup FeatureExtraction
- *  
- *  See Publication : 
+ *
+ *  See Publication :
  *  " LSD: A line segment detector ", R. Grompone, J.Jackubowicz, J-M.Morel, G.Randall
  *  And Website :
  *  http://www.ipol.im/pub/algo/gjmr_line_segment_detector/
