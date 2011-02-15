@@ -50,7 +50,6 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
    const ossimFilename& filename, ossim_uint32 /*entryIdx*/)const
 {
    static const char MODULE[] = "ossimPluginProjectionFactory::createProjection(ossimFilename& filename)";
-   std::cout << MODULE << std::endl;
    ossimRefPtr<ossimProjection> projection = 0;
 
    if(traceDebug())
@@ -146,7 +145,6 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
         	   << MODULE << " DEBUG: testing ossimRadarSatModel" << std::endl;
    }
 
-   std::cout << "testing ossimRadarSatModel" << std::endl;
    if (!projection)
    {
      ossimRefPtr<ossimRadarSatModel> model = new ossimRadarSatModel();

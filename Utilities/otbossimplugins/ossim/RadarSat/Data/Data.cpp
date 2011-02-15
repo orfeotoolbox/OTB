@@ -73,13 +73,11 @@ std::istream& operator>>(std::istream& is, Data& data)
 			  RadarSatRecord* record = factory.Instanciate(header.get_rec_seq());
 			  if (record != NULL)
 				{
-			    std::cout << "\t\t record->get_mnemonic(): " << record->get_mnemonic() << " = ImageOptionsFileDescriptor" << std::endl;
-			    std::cout << "\t\t function record->Read(is)" << std::endl;
 			    record->Read(is);
 					data._records[Data::ImageOptionsFileDescriptorID] = record;
 
 					nbLin  = ((ImageOptionsFileDescriptor *) record)->get_nlin() ;
-					std::cout << "\t\t nbLin= " << nbLin << std::endl;
+					//std::cout << "\t\t nbLin= " << nbLin << std::endl;
 				}
 				else
 				{
@@ -135,7 +133,6 @@ std::istream& operator>>(std::istream& is, Data& data)
 				if (lineLength != 0)
 				{
 				  // We move in the file
-				  std::cout << "\t\t step = " << (nbLin-2)*lineLength-12 << std::endl;
 				  if ( ((nbLin-2)*lineLength-12) > 0 )
 				  {
 				    //std::cout << "\t\t current position = " << std::ios::cur << std::endl;
@@ -143,7 +140,8 @@ std::istream& operator>>(std::istream& is, Data& data)
 				  }
 				  else
 				  {
-				    std::cout << "\t\t ERROR: step is negative or null" << std::endl;
+				    std::cout << "ERROR in Data.cpp (testing ossimRadarSatModel): step is negative or null, step = " \
+				        << (nbLin-2)*lineLength-12 << std::endl;
 				    data.ClearRecords();
 				    return is;
 				  }

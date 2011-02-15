@@ -54,15 +54,11 @@ int otbImageKeywordlist(int argc, char* argv[])
   bool             hasMetaData = false;
   ossimKeywordlist geom_kwl, geom_kwl2, geom_kwl3;
 
-  std::cout<< "Test ossim plugin factory : init" << std::endl;
-
   /** Don't use FactoryRegistry because of its default factory that can conflict
    * with plugins factor (cf. TSX .tif image read as QB)*/
   // test ossim plugin factory
   ossimProjection * projection = ossimplugins::ossimPluginProjectionFactory::instance()->createProjection(
     ossimFilename(filename), 0);
-
-  std::cout<< "Test ossim plugin factory : pass" << std::endl;
 
   // if ossim plugins factory failed, then test ossim factory
   if (!projection)
