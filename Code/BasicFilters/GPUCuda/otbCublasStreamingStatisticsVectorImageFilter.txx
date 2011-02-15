@@ -179,11 +179,32 @@ void PersistentCublasStreamingStatisticsVectorImageFilter<TInputImage>::Reset()
   m_FirstOrderAccumulator = zeroRealPixel;
   m_SecondOrderAccumulator = zeroMatrix;
 
+
+  if (m_GPUFirstOrderAccumulator == 0)
+    {
+    cublasStatus status;
+    status = cublasAlloc(numberOfComponent, sizeof(float), (void**) &m_GPUFirstOrderAccumulator);
+
+    // TODO : check status, throw exception on error & clean up GPU memory
+    if (status != CUBLAS_STATUS_SUCCESS)
+      {
+      otbMsgDevMacro( "cublasAlloc m_GPUFirstOrderAccumulator failed" );
+      }
+
+    status = cublasSetVector(numberOfComponent, sizeof(float),
+                             m_FirstOrderAccumulator.GetDataPointer(), 1,
+                             m_GPUFirstOrderAccumulator, 1);
+
+    // TODO : check status, throw exception on error & clean up GPU memory
+    if (status != CUBLAS_STATUS_SUCCESS)
+      {
+      otbMsgDevMacro( "cublasSetMatrix m_GPUFirstOrderAccumulator failed" );
+      }
+    }
+
+
   if (m_GPUSecondOrderAccumulator == 0)
     {
-    otbMsgDevMacro( << "Allocating " << numberOfComponent << " * " << numberOfComponent << " matrix on GPU (" <<
-        numberOfComponent * numberOfComponent * sizeof(float) / 1024 / 1024 << " Mo)" );
-
     cublasStatus status;
     status = cublasAlloc(numberOfComponent * numberOfComponent, sizeof(float), (void**) &m_GPUSecondOrderAccumulator);
 
@@ -202,11 +223,7 @@ void PersistentCublasStreamingStatisticsVectorImageFilter<TInputImage>::Reset()
       {
       otbMsgDevMacro( "cublasSetMatrix m_GPUSecondOrderAccumulator failed" );
       }
-
     }
-
-  cublasFree(m_GPUImage);
-  cublasFree(m_GPUSecondOrderAccumulator);
 }
 
 template<class TInputImage>
@@ -214,21 +231,98 @@ void PersistentCublasStreamingStatisticsVectorImageFilter<TInputImage>::Syntheti
 {
   TInputImage * inputPtr = const_cast<TInputImage *> (this->GetInput());
   const unsigned int numberOfComponent = inputPtr->GetNumberOfComponentsPerPixel();
-  const unsigned int nbPixels = inputPtr->GetBufferedRegion().GetNumberOfPixels();
+  const unsigned int nbPixels = inputPtr->GetLargestPossibleRegion().GetNumberOfPixels();
 
+  RealPixelType cpuFirstOrderAccumulator(numberOfComponent);
   MatrixType cpuSecondOrderAccumulator(numberOfComponent, numberOfComponent);
   cublasStatus status;
   status = cublasGetMatrix(numberOfComponent, numberOfComponent, sizeof(float), m_GPUSecondOrderAccumulator,
                            numberOfComponent, cpuSecondOrderAccumulator.GetVnlMatrix().data_block(), numberOfComponent);
+
   // TODO : check status, throw exception on error & clean up GPU memory
   if (status != CUBLAS_STATUS_SUCCESS)
     {
     otbMsgDevMacro( "cublasGetMatrix m_GPUSecondOrderAccumulator failed");
     }
 
+
+  status = cublasGetVector(numberOfComponent, sizeof(float), m_GPUFirstOrderAccumulator, 1,
+                           const_cast<float*>(cpuFirstOrderAccumulator.GetDataPointer()), 1);
+  // TODO : check status, throw exception on error & clean up GPU memory
+  if (status != CUBLAS_STATUS_SUCCESS)
+    {
+    otbMsgDevMacro( "cublasGetMatrix m_GPUSecondOrderAccumulator failed");
+    }
+
+  if (m_GPUImage)
+    {
+    status = cublasFree(m_GPUImage);
+
+    // TODO : check status, throw exception on error & clean up GPU memory
+    if (status != CUBLAS_STATUS_SUCCESS)
+      {
+      otbMsgDevMacro( "cublasFree m_GPUImage failed" );
+      }
+    }
+
+  if (m_GPUFirstOrderAccumulator)
+    {
+    status = cublasFree(m_GPUFirstOrderAccumulator);
+
+    // TODO : check status, throw exception on error & clean up GPU memory
+    if (status != CUBLAS_STATUS_SUCCESS)
+      {
+      otbMsgDevMacro( "cublasFree m_GPUFirstOrderAccumulator failed" );
+      }
+    }
+
+  if (m_GPUOnesVector)
+    {
+    status = cublasFree(m_GPUOnesVector);
+
+    // TODO : check status, throw exception on error & clean up GPU memory
+    if (status != CUBLAS_STATUS_SUCCESS)
+      {
+      otbMsgDevMacro( "cublasFree m_GPUOnesVector failed" );
+      }
+    }
+
+  if (m_GPUSecondOrderAccumulator)
+    {
+    status = cublasFree(m_GPUSecondOrderAccumulator);
+
+    // TODO : check status, throw exception on error & clean up GPU memory
+    if (status != CUBLAS_STATUS_SUCCESS)
+      {
+      otbMsgDevMacro( "cublasFree m_GPUSecondOrderAccumulator failed" );
+      }
+    }
+
+  this->GetMeanOutput()->Set(cpuFirstOrderAccumulator / nbPixels);
+  const RealPixelType& mean = this->GetMeanOutput()->Get();
+
   MatrixType cor = cpuSecondOrderAccumulator / nbPixels;
+  for (unsigned int r = 0; r < numberOfComponent; ++r)
+    {
+    for (unsigned int c = r + 1; c < numberOfComponent; ++c)
+      {
+      cor(r, c) = cor(c, r);
+      }
+    }
+
   this->GetCorrelationOutput()->Set(cor);
 
+  const float regul = static_cast<float>(nbPixels) / (nbPixels - 1);
+  MatrixType cov(numberOfComponent, numberOfComponent);
+  for (unsigned int r = 0; r < numberOfComponent; ++r)
+    {
+    for (unsigned int c = 0; c < numberOfComponent; ++c)
+      {
+      cov(r, c) = regul * (cor(r, c) - mean[r] * mean[c]);
+      }
+    }
+
+  this->GetCovarianceOutput()->Set(cov);
 }
 
 template<class TInputImage>
@@ -247,9 +341,30 @@ void PersistentCublasStreamingStatisticsVectorImageFilter<TInputImage>::Generate
 
   if (inputPtr->GetBufferedRegion().GetSize() != m_GPUImageSize)
     {
+    if (m_GPUImage)
+      {
+      status = cublasFree(m_GPUImage);
+
+      // TODO : check status, throw exception on error & clean up GPU memory
+      if (status != CUBLAS_STATUS_SUCCESS)
+        {
+        otbMsgDevMacro( "cublasFree m_GPUImage failed" );
+        }
+
+      }
+    if (m_GPUOnesVector)
+      {
+      status = cublasFree(m_GPUOnesVector);
+
+      // TODO : check status, throw exception on error & clean up GPU memory
+      if (status != CUBLAS_STATUS_SUCCESS)
+        {
+        otbMsgDevMacro( "cublasFree m_GPUOnesVector failed" );
+        }
+      }
+
     otbMsgDevMacro( "Allocating " << nbPixels << " pixels on GPU (" << numberOfComponent * nbPixels * sizeof(float) / 1024
         / 1024 << " Mo)" );
-
 
     status = cublasAlloc(numberOfComponent * nbPixels, sizeof(float), (void**) &m_GPUImage);
 
@@ -261,16 +376,49 @@ void PersistentCublasStreamingStatisticsVectorImageFilter<TInputImage>::Generate
 
     m_GPUImageSize = inputPtr->GetBufferedRegion().GetSize();
 
-    status = cublasSetMatrix(numberOfComponent, inputPtr->GetBufferedRegion().GetNumberOfPixels(), sizeof(float),
-                             inputPtr->GetBufferPointer(), numberOfComponent, m_GPUImage, numberOfComponent);
+
+    status = cublasAlloc(nbPixels, sizeof(float), (void**) &m_GPUOnesVector);
+
+    // TODO : check status, throw exception on error & clean up GPU memory
     if (status != CUBLAS_STATUS_SUCCESS)
       {
-      otbMsgDevMacro( "cublasSetMatrix m_GPUImage failed" );
+      otbMsgDevMacro( "cublasAlloc m_GPUOnesVector failed" );
       }
 
+    RealPixelType onesRealPixel;
+    onesRealPixel.SetSize(nbPixels);
+    onesRealPixel.Fill(itk::NumericTraits<RealType>::One);
+
+    status = cublasSetVector(nbPixels, sizeof(float),
+                             onesRealPixel.GetDataPointer(), 1,
+                             m_GPUOnesVector, 1);
+
+    // TODO : check status, throw exception on error & clean up GPU memory
+    if (status != CUBLAS_STATUS_SUCCESS)
+      {
+      otbMsgDevMacro( "cublasSetMatrix m_GPUOnesVector failed" );
+      }
     }
 
-  cublasSsyrk('u', 'n', numberOfComponent, inputPtr->GetBufferedRegion().GetNumberOfPixels(), 1.0f, m_GPUImage,
+  status = cublasSetMatrix(numberOfComponent, nbPixels, sizeof(float),
+                           inputPtr->GetBufferPointer(), numberOfComponent, m_GPUImage, numberOfComponent);
+  if (status != CUBLAS_STATUS_SUCCESS)
+    {
+    otbMsgDevMacro( "cublasSetMatrix m_GPUImage failed" );
+    }
+
+  cublasSgemv('n', numberOfComponent, nbPixels, 1.0f, m_GPUImage, numberOfComponent, m_GPUOnesVector, 1, 1.0f,
+              m_GPUFirstOrderAccumulator, 1);
+
+  status = cublasGetError();
+  // TODO : check status, throw exception on error & clean up GPU memory
+  if (status != CUBLAS_STATUS_SUCCESS)
+    {
+    otbMsgDevMacro( "cublasSgemv failed" );
+    }
+
+
+  cublasSsyrk('u', 'n', numberOfComponent, nbPixels, 1.0f, m_GPUImage,
               numberOfComponent, 1, m_GPUSecondOrderAccumulator, numberOfComponent);
 
   status = cublasGetError();
@@ -287,10 +435,11 @@ void PersistentCublasStreamingStatisticsVectorImageFilter<TImage>::PrintSelf(std
 {
   Superclass::PrintSelf(os, indent);
 
-  //os << indent << "Mean: "        << this->GetMeanOutput()->Get()        << std::endl;
-  //os << indent << "Covariance: "  << this->GetCovarianceOutput()->Get()  << std::endl;
+  os << indent << "Mean: "        << this->GetMeanOutput()->Get()        << std::endl;
+  os << indent << "Covariance: "  << this->GetCovarianceOutput()->Get()  << std::endl;
   os << indent << "Correlation: " << this->GetCorrelationOutput()->Get() << std::endl;
 }
 
 } // end namespace otb
+
 #endif

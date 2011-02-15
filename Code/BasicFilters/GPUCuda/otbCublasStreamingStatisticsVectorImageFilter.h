@@ -155,6 +155,9 @@ private:
 
   float*   m_GPUImage;
   SizeType m_GPUImageSize;
+
+  float*   m_GPUOnesVector;
+  float*   m_GPUFirstOrderAccumulator;
   float*   m_GPUSecondOrderAccumulator;
 
 }; // end of class PersistentCublasStreamingStatisticsVectorImageFilter

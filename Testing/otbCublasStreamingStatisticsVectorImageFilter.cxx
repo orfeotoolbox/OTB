@@ -49,14 +49,15 @@ int otbCublasStreamingStatisticsVectorImageFilterTest(int argc, char * argv[])
 
   //filter->GetStreamer()->SetStreamingMode(otb::SET_NUMBER_OF_STREAM_DIVISIONS);
   filter->GetStreamer()->SetBufferMemorySize(100 * 1024 * 1024);
+  //filter->GetStreamer()->SetNumberOfStreamDivisions(2);
   filter->SetInput(reader->GetOutput());
   filter->Update();
 
   std::ofstream file;
   file.open(outfname);
   file.precision(5);
-  //file << "Mean: " << filter->GetMean() << std::endl;
-  //file << "Covariance: " << filter->GetCovariance() << std::endl;
+  file << "Mean: " << filter->GetMean() << std::endl;
+  file << "Covariance: " << filter->GetCovariance() << std::endl;
   file << "Correlation: " << filter->GetCorrelation() << std::endl;
   file.close();
 
