@@ -24,8 +24,8 @@
 int otbFuzzyVariable2Values(int argc, char* argv[])
 {
   typedef float PrecisionType;
-  const unsigned int NumberOfValues = 2;
-  typedef otb::FuzzyVariable<NumberOfValues, PrecisionType> FuzzyVarType;
+
+  typedef otb::FuzzyVariable<std::string, PrecisionType> FuzzyVarType;
 
   FuzzyVarType::Pointer fv = FuzzyVarType::New();
 
@@ -42,43 +42,44 @@ int otbFuzzyVariable2Values(int argc, char* argv[])
        0             0.3   0.7              1
    */
 
-  enum TheValues { Low, High };
 
-  fv->SetMembership(Low, 0, 0, 0.3, 0.7);
-  fv->SetMembership(High, 0.3, 0.7, 1.0, 1.0);
+  fv->SetMembership("Low", 0, 0, 0.3, 0.7);
+  fv->SetMembership("High", 0.3, 0.7, 1.0, 1.0);
 
   PrecisionType mem;
-  mem = fv->GetMembership(Low, 0.2);
+  mem = fv->GetMembership("Low", 0.2);
 
   if( mem != 1 )
     return EXIT_FAILURE;
 
-  mem = fv->GetMembership(Low, 0.9);
+  mem = fv->GetMembership("Low", 0.9);
 
   if( mem != 0 )
     return EXIT_FAILURE;
 
-  mem = fv->GetMembership(Low, 0.5);
+  mem = fv->GetMembership("Low", 0.5);
 
   if( mem != 0.5 )
     return EXIT_FAILURE;
 
-  mem = fv->GetMembership(High, 0.2);
+  mem = fv->GetMembership("High", 0.2);
 
   if( mem != 0 )
     return EXIT_FAILURE;
 
-  mem = fv->GetMembership(High, 0.9);
+  mem = fv->GetMembership("High", 0.9);
 
   if( mem != 1 )
     return EXIT_FAILURE;
 
-  mem = fv->GetMembership(High, 0.5);
+  mem = fv->GetMembership("High", 0.5);
 
   if( mem != 0.5 )
     return EXIT_FAILURE;
 
-
+  // For the sake of coverage
+  fv->RemoveMembership("Low");
+  fv->Clear();
   
   return EXIT_SUCCESS;
 }

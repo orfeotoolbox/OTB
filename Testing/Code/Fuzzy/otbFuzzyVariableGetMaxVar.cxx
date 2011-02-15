@@ -24,23 +24,19 @@
 int otbFuzzyVariableGetMaxVar(int argc, char* argv[])
 {
   typedef float PrecisionType;
-  const unsigned int NumberOfValues = 4;
-  typedef otb::FuzzyVariable<NumberOfValues, PrecisionType> FuzzyVarType;
+  typedef otb::FuzzyVariable<std::string, PrecisionType> FuzzyVarType;
 
   FuzzyVarType::Pointer fv = FuzzyVarType::New();
 
-  enum TheValues { Low, MediumLow, MediumHigh, High };
+  fv->SetMembership("Low", 0, 0, 0.25, 0.5);
+  fv->SetMembership("MediumLow", 0, 0.2, 0.5, 0.6);
+  fv->SetMembership("MediumHigh", 0.5, 0.6, 0.8, 1);
+  fv->SetMembership("High", 0.5, 0.75, 1.0, 1.0);
 
-  fv->SetMembership(Low, 0, 0, 0.25, 0.5);
-  fv->SetMembership(MediumLow, 0, 0.2, 0.5, 0.6);
-  fv->SetMembership(MediumHigh, 0.5, 0.6, 0.8, 1);
-  fv->SetMembership(High, 0.5, 0.75, 1.0, 1.0);
 
-  fv->SetValue( 0.4 );
+  std::string maxVar = fv->GetMaxVar(0.4);
 
-  unsigned int maxVar = fv->GetMaxVar();
-
-  if( maxVar != MediumLow )
+  if( maxVar != "MediumLow" )
     return EXIT_FAILURE;
 
   return EXIT_SUCCESS;

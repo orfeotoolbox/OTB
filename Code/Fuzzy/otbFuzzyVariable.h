@@ -35,12 +35,12 @@ namespace otb
  *  membership function is modeled by a trapezoidal function for which
  *  4 values have to be provided.
  */
-template <unsigned int TNValues = 2, class TPrecision=double>
+template <class TLabel = unsigned short, class TPrecision=double>
 class ITK_EXPORT FuzzyVariable : public itk::DataObject
 {
 public:
   /** Standard class typedefs */
-  typedef FuzzyVariable                      Self;
+  typedef FuzzyVariable                 Self;
   typedef itk::DataObject               Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -48,28 +48,40 @@ public:
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
   itkTypeMacro(FuzzyVariable, DataObject);
+
+  /** Label typedef */
+  typedef TLabel     LabelType;
+
   /** Precision typedef */
   typedef TPrecision PrecisionType;
-  /** Type to hold the membership functions */
-  typedef itk::FixedArray< PrecisionType, TNValues > ValueVectorType;
-  typedef itk::FixedArray< PrecisionType, 4*TNValues > MembershipVectorType;
-  /** Membership value accessors */
-  itkGetMacro(MembershipValues, ValueVectorType);
+ 
+  /** Type to hold the membership values */
 
-  /** Accessors for the value of the variable */
-  void SetValue(TPrecision val)
-  {
-    this->m_Value = val;
-    this->UpdateMembershipValues();
-  }
-  itkGetConstMacro(Value, TPrecision);
+  typedef std::map<LabelType,PrecisionType>        MembershipValueType;
+  typedef itk::FixedArray< PrecisionType, 4 >      ParametersType;
+  typedef std::map<LabelType,ParametersType>       ParametersMapType;
 
-  void SetMembership(unsigned int var, PrecisionType v1, PrecisionType v2, PrecisionType v3, PrecisionType v4);
-  TPrecision GetMembership(unsigned int var, TPrecision val);
+  /** Get the membership related to one label */
+  PrecisionType GetMembership(const LabelType & var, const PrecisionType & value) const;
 
-  /** Get the variable with the maximum membership */
-  unsigned int GetMaxVar();
+  /** Get all the memberships */
+  MembershipValueType GetMembership(const PrecisionType & value) const;
 
+  /** Get the label with the highest membership */
+  LabelType GetMaxVar(const PrecisionType & value) const;
+
+  /** Set the membership for a given Label */
+  void SetMembership(const LabelType & var, 
+                     const PrecisionType & v1, 
+                     const PrecisionType & v2,
+                     const PrecisionType & v3, 
+                     const PrecisionType & v4);
+
+  /** Remove a given label from the membership table */
+  void RemoveMembership(const LabelType & var);
+
+  /** Clear all memberships */
+  void Clear();
 
 protected:
   /** Constructor */
@@ -78,16 +90,19 @@ protected:
   ~FuzzyVariable() {}
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  /** Update the membership values */
-  void UpdateMembershipValues();
 
 private:
-  /** Vector containing the membership functions */
-  ValueVectorType m_MembershipValues;
-  MembershipVectorType m_MembershipFunctions;
-  TPrecision m_Value;
+  /** Map containing the membership functions */
+  ParametersMapType m_MembershipFunctions;
 };
 } // end namespace otb
+
+/** Define the << operator for maps */
+template <class TLabel,class TPrecision>
+std::ostream &
+operator<<(std::ostream & out,
+           const std::map<TLabel,TPrecision> & labelMap);
+
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbFuzzyVariable.txx"
