@@ -155,9 +155,10 @@ bool ossimRadarSatModel::open(const ossimFilename& file)
     {
       record->Read(dataFile);
       /*
-       * Tests if the input File is a Radarsat DAT file
+       * Tests if the input File is a valid Radarsat DAT file
        */
-      if ( (((ImageOptionsFileDescriptor*)record)->get_file_name()).substr(0,10) == "RSAT-1-SAR")
+      if ( ( (((ImageOptionsFileDescriptor*)record)->get_file_name()).substr(0,10) == "RSAT-1-SAR") &&
+           ( (((ImageOptionsFileDescriptor*)record)->get_nlin()) != -1) )
       {
         /*
          * Reading of the remaining of the data file
@@ -165,7 +166,7 @@ bool ossimRadarSatModel::open(const ossimFilename& file)
         dataFile.close();
         dataFile.open(tempFilename, ios::in|ios::binary);
 
-        dataFile>>*_data;
+        dataFile>>*_data; // here infinite loop with SARDEGNA RADARSAT1 file
         _data->InsertRecord(header.get_rec_seq(), record);
 
         dataFile.close();

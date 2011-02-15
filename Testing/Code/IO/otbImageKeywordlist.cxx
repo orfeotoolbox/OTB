@@ -59,6 +59,10 @@ int otbImageKeywordlist(int argc, char* argv[])
   // test ossim plugin factory
   ossimProjection * projection = ossimplugins::ossimPluginProjectionFactory::instance()->createProjection(
     ossimFilename(filename), 0);
+  if (!projection)
+    {
+    std::cout << "WARNING: OSSIM plugin factory instanciate projection FAILED ! We will try now with the ossim factory."<<std::endl;
+    }
 
   // if ossim plugins factory failed, then test ossim factory
   if (!projection)
