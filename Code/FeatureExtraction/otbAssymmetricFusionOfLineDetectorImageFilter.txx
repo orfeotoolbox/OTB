@@ -75,5 +75,4 @@ AssymmetricFusionOfLineDetectorImageFilter<TInputImage, TOutputImage, TOutputIma
 }
 
 } // end namespace otb
-
 #endif
