@@ -128,6 +128,8 @@ std::ostream& operator<<(std::ostream& os, const ImageOptionsFileDescriptor& dat
 
 std::istream& operator>>(std::istream& is, ImageOptionsFileDescriptor& data)
 {
+  //std::cout<< "this operator>> function : ImageOptionsFileDescriptor  " <<std::endl;
+
 	char buf[15805];
 	buf[15804] = '\0';
 
@@ -160,6 +162,7 @@ std::istream& operator>>(std::istream& is, ImageOptionsFileDescriptor& data)
     is.read(buf,16);
 	buf[16] = '\0';
 	data._file_name = buf;
+	std::cout<< "_file_name : " << buf <<std::endl;
 
     is.read(buf,4);
 	buf[4] = '\0';
@@ -237,6 +240,7 @@ std::istream& operator>>(std::istream& is, ImageOptionsFileDescriptor& data)
     is.read(buf,8);
 	buf[8] = '\0';
 	data._nlin = atoi(buf);
+	std::cout<< "_nlin = " << atoi(buf) <<std::endl;
 
     is.read(buf,4);
 	buf[4] = '\0';

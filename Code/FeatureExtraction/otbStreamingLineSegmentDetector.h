@@ -48,7 +48,7 @@ namespace otb
  *  plus the ThreadedGenerateData function implementing the image function evaluation
  *
  *  \sa LineSegmentDetector
- *  
+ *
  *  \ingroup Streamed
  *  \ingroup FeatureExtraction
  */

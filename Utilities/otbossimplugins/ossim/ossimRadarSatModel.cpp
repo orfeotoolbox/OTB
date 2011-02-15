@@ -112,7 +112,7 @@ bool ossimRadarSatModel::open(const ossimFilename& file)
 
   bool retValue = true;
   ossimFilename tempFilename = file;
-
+  std::cout << "Attempting to open file : " << file << std::endl;
   /*
    * Creation of the class allowing to store the metadata from the Data file
    */
@@ -150,7 +150,9 @@ bool ossimRadarSatModel::open(const ossimFilename& file)
       ossimNotify(ossimNotifyLevel_DEBUG)
       << "Begin reading DAT file" << std::endl;
     }
+    std::cout << "Begin reading DAT file" << std::endl;
     RadarSatRecord* record = factory.Instanciate(header.get_rec_seq());
+
     if (record != NULL && header.get_rec_seq() == 1)
     {
       record->Read(dataFile);
@@ -159,14 +161,18 @@ bool ossimRadarSatModel::open(const ossimFilename& file)
        */
       if ( (((ImageOptionsFileDescriptor*)record)->get_file_name()).substr(0,10) == "RSAT-1-SAR")
       {
+        std::cout << "it is a radarsat DAT file" << std::endl;
         /*
          * Reading of the remaining of the data file
          */
         dataFile.close();
         dataFile.open(tempFilename, ios::in|ios::binary);
 
+        std::cout << "try to read from (ifstream) dataFile to (Data*) _data ..." << std::endl;
         dataFile>>*_data;
+        std::cout << " -> OK" << std::endl;
         _data->InsertRecord(header.get_rec_seq(), record);
+
         dataFile.close();
 
         if(traceDebug())
@@ -174,6 +180,7 @@ bool ossimRadarSatModel::open(const ossimFilename& file)
           ossimNotify(ossimNotifyLevel_DEBUG)
           << "End reading DAT file" << std::endl;
         }
+        std::cout << "End reading DAT file" << std::endl;
         /*
          * Leader file path construction from the DAT file path
          * Warning : the filename case has to be homogenous

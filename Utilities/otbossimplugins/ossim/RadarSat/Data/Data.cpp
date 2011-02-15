@@ -60,21 +60,26 @@ std::istream& operator>>(std::istream& is, Data& data)
 
 	while(!eof)
 	{
-		is>>header;
+	  is>>header;
 		if(is.eof())
 		{
-			eof = true;
+		  eof = true;
 		}
 		else
 		{
-			if (header.get_rec_seq() == 1) { // ImageOptionsFileDescriptor
-      				RadarSatRecord* record = factory.Instanciate(header.get_rec_seq());
-				if (record != NULL)
+		  //std::cout << "\t end of file = NO => continue" << std::endl;
+			if (header.get_rec_seq() == 1)
+			{ // ImageOptionsFileDescriptor
+			  RadarSatRecord* record = factory.Instanciate(header.get_rec_seq());
+			  if (record != NULL)
 				{
-					record->Read(is);
+			    std::cout << "\t\t record->get_mnemonic(): " << record->get_mnemonic() << " = ImageOptionsFileDescriptor" << std::endl;
+			    std::cout << "\t\t function record->Read(is)" << std::endl;
+			    record->Read(is);
 					data._records[Data::ImageOptionsFileDescriptorID] = record;
 
 					nbLin  = ((ImageOptionsFileDescriptor *) record)->get_nlin() ;
+					std::cout << "\t\t nbLin= " << nbLin << std::endl;
 				}
 				else
 				{
@@ -84,12 +89,13 @@ std::istream& operator>>(std::istream& is, Data& data)
 				}
 			}
 			else if ((header.get_rec_seq() == 2)) { // First line ProcessedDataRecord
-
+			  //std::cout << "\t\t First line" << std::endl;
 				lineLength = header.get_length() ;
-      				RadarSatRecord* record = factory.Instanciate(2);
+				//std::cout << "\t\t lineLength = " << lineLength << std::endl;
+      	RadarSatRecord* record = factory.Instanciate(2);
 				if (record != NULL)
 				{
-					record->Read(is);
+				  record->Read(is);
 					data._records[Data::FirstProcessedDataRecordID] = record;
 
 					char* buff = new char[header.get_length()-192];
@@ -98,16 +104,18 @@ std::istream& operator>>(std::istream& is, Data& data)
 				}
 				else
 				{
-					char* buff = new char[header.get_length()-12];
+				  char* buff = new char[header.get_length()-12];
 					is.read(buff, header.get_length()-12);
 					delete[] buff;
 				}
 			}
-			else if ((header.get_rec_seq() == (1+nbLin))) { // Last line ProcessedDataRecord
-      				RadarSatRecord* record = factory.Instanciate(2);
+			else if ((header.get_rec_seq() == (1+nbLin)))
+			  { // Last line ProcessedDataRecord
+			  //std::cout << "\t\t Last line" << std::endl;
+			  RadarSatRecord* record = factory.Instanciate(2);
 				if (record != NULL)
 				{
-					record->Read(is);
+				  record->Read(is);
 					data._records[Data::LastProcessedDataRecordID] = record;
 
 					char* buff = new char[header.get_length()-192];
@@ -116,7 +124,7 @@ std::istream& operator>>(std::istream& is, Data& data)
 				}
 				else
 				{
-					char* buff = new char[header.get_length()-12];
+				  char* buff = new char[header.get_length()-12];
 					is.read(buff, header.get_length()-12);
 					delete[] buff;
 				}
@@ -125,9 +133,26 @@ std::istream& operator>>(std::istream& is, Data& data)
 			{
 				// all lines between the first and last ones are skipped
 				if (lineLength != 0)
-					is.seekg((nbLin-2)*lineLength-12, std::ios::cur) ;
+				{
+				  // We move in the file
+				  std::cout << "\t\t step = " << (nbLin-2)*lineLength-12 << std::endl;
+				  if ( ((nbLin-2)*lineLength-12) > 0 )
+				  {
+				    //std::cout << "\t\t current position = " << std::ios::cur << std::endl;
+				    is.seekg((nbLin-2)*lineLength-12, std::ios::cur) ;
+				  }
+				  else
+				  {
+				    std::cout << "\t\t ERROR: step is negative or null" << std::endl;
+				    data.ClearRecords();
+				    return is;
+				  }
+				}
 				else
+				{
+				  // We move to the end of the file
 					is.seekg(0, std::ios::end) ;
+				}
 			}
 
 		}
