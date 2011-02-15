@@ -73,6 +73,7 @@ AssymmetricFusionOfLineDetectorImageFilter<TInputImage, TOutputImage, TOutputIma
 {
   Superclass::PrintSelf(os, indent);
 }
-
-} // end namespace otb
+} //namespace otb
 #endif
+
+
