@@ -33,6 +33,7 @@ AssymmetricFusionOfLineDetectorImageFilter<TInputImage, TOutputImage, TOutputIma
   this->m_Radius.Fill(1);
   this->m_LengthLine = 1;
   this->m_WidthLine = 0;
+  this->m_NumberOfDirections = 8;
 
   m_LineRatio         = LineRatioType::New();
   m_LineCorrelation   = LineCorrelationType::New();
@@ -44,20 +45,22 @@ void
 AssymmetricFusionOfLineDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection, TInterpolator>
 ::GenerateData()
 {
-  m_LineRatio->SetInput(this->GetInput());
-  m_LineRatio->SetLengthLine(this->m_LengthLine);
-  m_LineRatio->SetWidthLine(this->m_WidthLine);
+  m_LineRatio->SetInput( this->GetInput() );
+  m_LineRatio->SetLengthLine( this->m_LengthLine );
+  m_LineRatio->SetWidthLine( this->m_WidthLine );
+  m_LineRatio->SetNumberOfDirections( this->m_NumberOfDirections );     
 
-  m_LineCorrelation->SetInput(this->GetInput());
-  m_LineCorrelation->SetLengthLine(this->m_LengthLine);
-  m_LineCorrelation->SetWidthLine(this->m_WidthLine);
+  m_LineCorrelation->SetInput( this->GetInput() );
+  m_LineCorrelation->SetLengthLine( this->m_LengthLine );
+  m_LineCorrelation->SetWidthLine( this->m_WidthLine );
+  m_LineCorrelation->SetNumberOfDirections( this->m_NumberOfDirections );
 
-  m_AssSymSum->SetInput1(m_LineRatio->GetOutput());
-  m_AssSymSum->SetInput2(m_LineCorrelation->GetOutput());
+  m_AssSymSum->SetInput1( m_LineRatio->GetOutput() );
+  m_AssSymSum->SetInput2( m_LineCorrelation->GetOutput() );
 
-  m_AssSymSum->GraftOutput(this->GetOutput());
+  m_AssSymSum->GraftOutput(this->GetOutput() );
   m_AssSymSum->Update();
-  this->GraftOutput(m_AssSymSum->GetOutput());
+  this->GraftOutput(m_AssSymSum->GetOutput() );
 }
 
 /**
