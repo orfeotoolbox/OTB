@@ -24,7 +24,7 @@
 #include "otbStreamingTraits.h"
 
 const unsigned int Dimension = 2;
-typedef double PixelType;
+typedef float PixelType;
 
 typedef otb::VectorImage<PixelType, Dimension> ImageType;
 typedef otb::ImageFileReader<ImageType> ReaderType;
