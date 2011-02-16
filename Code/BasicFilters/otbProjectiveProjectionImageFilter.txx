@@ -23,9 +23,6 @@
 namespace otb
 {
 
-/**
- *
- */
 template <class TInputImage, class TOutputImage, class TPrecision>
 ProjectiveProjectionImageFilter<TInputImage, TOutputImage, TPrecision>
 ::ProjectiveProjectionImageFilter()
