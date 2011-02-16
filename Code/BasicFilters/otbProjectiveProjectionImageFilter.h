@@ -19,12 +19,9 @@
 #define __otbProjectiveProjectionImageFilter_h
 
 #include "otbUnaryFunctorImageFilter.h"
-#include "vnl/algo/vnl_svd.h"
-#include <boost/shared_ptr.hpp>
 
 namespace otb
 {
-
 
 namespace Functor {
 
