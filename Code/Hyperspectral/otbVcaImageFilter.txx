@@ -1,19 +1,23 @@
-/*
- * VCAFilter.txx
- * Date:     $Date$
- * Version:  $Revision$
- *
- * Vahine Framework
- * Copyright (C) 2008 to 2010 Ludovic Léau-Mercier and Laboratoire de Planétologie de Grenoble
- * See LICENCE and COPYING for details.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * CeCILLl License for more details and http://www.cecill.info
- *
- */
+/*=========================================================================
 
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
+
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
+  Some parts of this code are derived from ITK. See ITKCopyright.txt
+  for details.
+
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANT2ABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
 #ifndef __otbVCAImageFilter_txx
 #define __otbVCAImageFilter_txx
 
@@ -68,14 +72,14 @@ void VCAImageFilter<TImage>::GenerateData()
   VectorImageType* input = const_cast<VectorImageType*>(this->GetInput());
   const unsigned int nbBands = this->GetInput()->GetNumberOfComponentsPerPixel();
 
-  std::cout << "Computing image stats" << std::endl;
+  otbMsgDevMacro( "Computing image stats" );
   typename StreamingStatisticsVectorImageFilterType::Pointer statsInput =
       StreamingStatisticsVectorImageFilterType::New();
 
   statsInput->SetInput(input);
   statsInput->Update();
 
-  std::cout << "Computing SVD of correlation matrix" << std::endl;
+  otbMsgDevMacro( "Computing SVD of correlation matrix" );
   // Take the correlation matrix
   vnl_matrix<PrecisionType> R = statsInput->GetCorrelation().GetVnlMatrix();
 
@@ -85,10 +89,7 @@ void VCAImageFilter<TImage>::GenerateData()
   vnl_matrix<PrecisionType> Ud = U.get_n_columns(0, m_NumberOfEndmembers);
   vnl_matrix<PrecisionType> UdT = Ud.transpose();
 
-//  logmatrixsize(U);
-//  logmatrixsize(Ud);
-
-  std::cout << "Apply dimensionality reduction" << std::endl;
+  otbMsgDevMacro( "Apply dimensionality reduction" );
   // Xd = Ud.'*M;
   typename MatrixMultiplyImageFilterType::Pointer mulUd = MatrixMultiplyImageFilterType::New();
   mulUd->SetInput(this->GetInput());
@@ -96,10 +97,9 @@ void VCAImageFilter<TImage>::GenerateData()
   mulUd->UpdateOutputInformation();
 
   typename VectorImageType::Pointer Xd = mulUd->GetOutput();
-  //  logImagesize(Xd);
 
   // Compute mean(Xd)
-  std::cout << "Compute mean(Xd)" << std::endl;
+  otbMsgDevMacro( "Compute mean(Xd)" );
   typename StreamingStatisticsVectorImageFilterType::Pointer statsXd = \
       StreamingStatisticsVectorImageFilterType::New();
   statsXd->SetInput(Xd);
@@ -108,16 +108,14 @@ void VCAImageFilter<TImage>::GenerateData()
 
   // Projective projection
   // Xd ./ repmat( sum( Xd .* repmat(u,[1 N]) ) ,[d 1]);
-  std::cout << "Compute projective projection" << std::endl;
+  otbMsgDevMacro( "Compute projective projection" );
   typename ProjectiveProjectionImageFilterType::Pointer proj = ProjectiveProjectionImageFilterType::New();
   proj->SetInput(Xd);
   proj->SetProjectionDirection(Xdmean);
   typename  VectorImageType::Pointer Y = proj->GetOutput();
-  //  logImagesize(Y);
 
   // E : result, will contain the endmembers
   vnl_matrix<PrecisionType> E(nbBands, m_NumberOfEndmembers);
-  //  logmatrixsize(E);
 
   // A = zeros(q,q)
   // A(q,1) = 1
@@ -128,10 +126,10 @@ void VCAImageFilter<TImage>::GenerateData()
 
   for (unsigned int i = 0; i < m_NumberOfEndmembers; ++i)
     {
-    std::cout << "Iteration " << i << std::endl;
+    otbMsgDevMacro( "Iteration " << i );
 
     // w = rand(q,1)
-    std::cout << "Random vector generation " << std::endl;
+    otbMsgDevMacro( "Random vector generation " );
     vnl_vector<PrecisionType> w(m_NumberOfEndmembers);
     for (unsigned int j = 0; j < m_NumberOfEndmembers; ++j)
       {
@@ -139,10 +137,10 @@ void VCAImageFilter<TImage>::GenerateData()
       }
 
     // f = ((I - A*pinv(A))*w) / (norm(I - A*pinv(A))*w))
-    std::cout << "f = ((I - A*pinv(A))*w) /(norm(I - A*pinv(A))*w))" << std::endl;
+    otbMsgDevMacro( "f = ((I - A*pinv(A))*w) /(norm(I - A*pinv(A))*w))" );
     vnl_matrix<PrecisionType> tmpMat(m_NumberOfEndmembers,m_NumberOfEndmembers);
     tmpMat.set_identity();
-    std::cout << "A" << std::endl << A << std::endl;
+    otbMsgDevMacro( "A" << std::endl << A );
     vnl_svd<PrecisionType> Asvd(A);
     tmpMat -= A * Asvd.inverse();
 
@@ -150,32 +148,31 @@ void VCAImageFilter<TImage>::GenerateData()
     vnl_vector<PrecisionType> f = tmpNumerator / tmpNumerator.two_norm();
 
     // v = f.'*Y
-    std::cout << "v = f.'*Y" << std::endl;
+    otbMsgDevMacro( "v = f.'*Y" );
     typename DotProductImageFilterType::Pointer dotfY = DotProductImageFilterType::New();
     dotfY->SetInput(Y);
     typename VectorImageType::PixelType fV(f.data_block(), f.size());
     dotfY->SetVector(typename VectorImageType::PixelType(fV));
     typename ImageType::Pointer v = dotfY->GetOutput();
-    //    logImagesize(v);
 
     // abs(v)
-    std::cout << "abs(v)" << std::endl;
+    otbMsgDevMacro( "abs(v)" );
     typename AbsImageFilterType::Pointer absVFilter = AbsImageFilterType::New();
     absVFilter->SetInput(v);
 
     // max(abs(v))
-    std::cout << "max(abs(v))" << std::endl;
+    otbMsgDevMacro( "max(abs(v))" );
     typename StreamingMinMaxImageFilterType::Pointer maxAbs = StreamingMinMaxImageFilterType::New();
     maxAbs->SetInput(absVFilter->GetOutput());
     maxAbs->Update();
 
     // k = arg_max( max(abs(v)) )
-    std::cout << "k = arg_max( max(abs(v)) )" << std::endl;
+    otbMsgDevMacro( "k = arg_max( max(abs(v)) )" );
     IndexType maxIdx = maxAbs->GetMaximumIndex();
-    std::cout << "maxIdx : " << maxIdx << std::endl;
+    otbMsgDevMacro( "maxIdx : " << maxIdx  );
 
     // extract Y(:,k)
-    std::cout << "Y(:,k)" << std::endl;
+    otbMsgDevMacro( "Y(:,k)" );
     RegionType region;
     region.SetIndex( maxIdx );
     SizeType size;
@@ -186,25 +183,22 @@ void VCAImageFilter<TImage>::GenerateData()
 
     // store new endmember in A
     // A(:,i) = Y(:,k)
-    std::cout << "A(:,i) = Y(:,k)" << std::endl;
+    otbMsgDevMacro( "A(:,i) = Y(:,k)" );
     typename VectorImageType::PixelType e = Y->GetPixel(maxIdx);
     A.set_column(i, e.GetDataPointer());
-    std::cout << "A" << std::endl << A << std::endl;
+    otbMsgDevMacro( "A" << std::endl << A );
 
     // reproject in original space
     // u = Ud * Xd(:,k)
-    std::cout << "u = Ud * Xd(:,k)" << std::endl;
+    otbMsgDevMacro( "u = Ud * Xd(:,k)" );
     Xd->SetRequestedRegion(region);
     Xd->Update();
     typename VectorImageType::PixelType xd = Xd->GetPixel(maxIdx);
     vnl_vector<PrecisionType> xdV(xd.GetDataPointer(), xd.GetSize());
-    //    logvectorsize(xdV);
-    //    logmatrixsize(Ud);
     vnl_vector<PrecisionType> u = Ud * xdV;
-    //    logvectorsize(u);
 
     // E(:, i) = u
-    std::cout << "E(:, i) = u" << std::endl;
+    otbMsgDevMacro( "E(:, i) = u" );
     E.set_column(i, u);
     }
 
