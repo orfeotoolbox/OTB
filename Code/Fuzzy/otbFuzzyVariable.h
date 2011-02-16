@@ -57,9 +57,9 @@ public:
  
   /** Type to hold the membership values */
 
-  typedef std::map<LabelType,PrecisionType>        MembershipValueType;
+  typedef std::map<LabelType, PrecisionType>        MembershipValueType;
   typedef itk::FixedArray< PrecisionType, 4 >      ParametersType;
-  typedef std::map<LabelType,ParametersType>       ParametersMapType;
+  typedef std::map<LabelType, ParametersType>       ParametersMapType;
 
   /** Get the membership related to one label */
   PrecisionType GetMembership(const LabelType & var, const PrecisionType & value) const;
@@ -71,10 +71,10 @@ public:
   LabelType GetMaxVar(const PrecisionType & value) const;
 
   /** Set the membership for a given Label */
-  void SetMembership(const LabelType & var, 
-                     const PrecisionType & v1, 
+  void SetMembership(const LabelType & var,
+                     const PrecisionType & v1,
                      const PrecisionType & v2,
-                     const PrecisionType & v3, 
+                     const PrecisionType & v3,
                      const PrecisionType & v4);
 
   /** Remove a given label from the membership table */
@@ -98,10 +98,10 @@ private:
 } // end namespace otb
 
 /** Define the << operator for maps */
-template <class TLabel,class TPrecision>
+template <class TLabel, class TPrecision>
 std::ostream &
 operator<<(std::ostream & out,
-           const std::map<TLabel,TPrecision> & labelMap);
+           const std::map<TLabel, TPrecision> & labelMap);
 
 
 #ifndef OTB_MANUAL_INSTANTIATION

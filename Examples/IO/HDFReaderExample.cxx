@@ -148,7 +148,6 @@ int main(int argc, char * argv[])
 
   writer->Update();
   // Software Guide : EndCodeSnippet
-
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex

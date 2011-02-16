@@ -48,7 +48,7 @@ AssymmetricFusionOfLineDetectorImageFilter<TInputImage, TOutputImage, TOutputIma
   m_LineRatio->SetInput( this->GetInput() );
   m_LineRatio->SetLengthLine( this->m_LengthLine );
   m_LineRatio->SetWidthLine( this->m_WidthLine );
-  m_LineRatio->SetNumberOfDirections( this->m_NumberOfDirections );     
+  m_LineRatio->SetNumberOfDirections( this->m_NumberOfDirections );
 
   m_LineCorrelation->SetInput( this->GetInput() );
   m_LineCorrelation->SetLengthLine( this->m_LengthLine );
