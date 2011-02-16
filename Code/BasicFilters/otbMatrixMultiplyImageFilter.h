@@ -91,7 +91,7 @@ private:
 
 /** \class MatrixMultiplyImageFilter
  *
- * \brief Apply a matrix multiplication to a VectorImage
+ * \brief Applies pixel-wise matrix multiplication to a VectorImage
  *
  * \ingroup Streamed
  * \ingroup Threaded
