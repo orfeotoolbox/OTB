@@ -23,6 +23,7 @@
 #include "itkObjectFactory.h"
 #include "otbSpectralResponse.h"
 #include "dataSpec_P5B.h"
+#include "otbSimulationStep2Base.h"
 
 namespace otb
 {
@@ -32,17 +33,19 @@ namespace otb
    * \sa itk::ProcessObject
  */
 
-class ITK_EXPORT SailModel : public itk::ProcessObject
+
+class ITK_EXPORT SailModel : public SimulationStep2Base
 {
    public:
       /** Standard class typedefs */
       typedef SailModel Self;
-      typedef itk::ProcessObject Superclass;
+      typedef SimulationStep2Base   Superclass;
       typedef itk::SmartPointer<Self> Pointer;
       typedef itk::SmartPointer<const Self> ConstPointer;
       
-      typedef SpectralResponse<double,double>      SpectralResponseType;
+      typedef Superclass::SpectralResponseType      SpectralResponseType;
       typedef std::vector<double> VectorType;
+      typedef Superclass::ParametersType           ParametersType;
       
       /** Standard macros */
       itkNewMacro(Self);
@@ -96,18 +99,8 @@ class ITK_EXPORT SailModel : public itk::ProcessObject
       virtual SpectralResponseType * GetVerticalReflectance();
       virtual SpectralResponseType * GetHorizontalReflectance();
       
-      
-      
-      /** Compute Leaf Angle Distribution */
-      void Calc_LIDF(const double a, VectorType &lidf);
-      void Campbell(const double ala, VectorType &freq);
-      
-      /** J functions */
-      double Jfunc1(const double k, const double l, const double t);
-      double Jfunc2(const double k, const double l, const double t);
-      double Jfunc3(const double k, const double l, const double t);
-      /** Volscatt */
-      void Volscatt(const double tts, const double tto, const double psi, const double ttl, VectorType &result);
+      virtual const ParametersType & GetParameters();
+      virtual  void SetParameters(const ParametersType &);
 
 
    protected:
@@ -120,6 +113,17 @@ class ITK_EXPORT SailModel : public itk::ProcessObject
       
       virtual DataObjectPointer MakeOutput(unsigned int);
 
+      /** Compute Leaf Angle Distribution */
+      void Calc_LIDF(const double a, VectorType &lidf);
+      void Campbell(const double ala, VectorType &freq);
+      
+      /** J functions */
+      double Jfunc1(const double k, const double l, const double t);
+      double Jfunc2(const double k, const double l, const double t);
+      double Jfunc3(const double k, const double l, const double t);
+      /** Volscatt */
+      void Volscatt(const double tts, const double tto, const double psi, const double ttl, VectorType &result);
+      
    private:
       SailModel(const Self&); //purposely not implemented
       void operator=(const Self&); //purposely not implemented

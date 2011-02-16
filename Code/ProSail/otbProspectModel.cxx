@@ -98,6 +98,26 @@ ProspectModel
    return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetOutput(1));
 }
 
+
+/** Set Parameters */
+void
+ProspectModel
+::SetInput(const ParametersType & params)
+{
+//    m_Parameters = params;
+   if(params.Size()!=6) itkExceptionMacro( << "Must have 6 parameters in that order : Cab,Car,CBrown,Cw,Cm,N" );
+   LeafParametersType::Pointer leafParams = LeafParametersType::New();
+   leafParams->SetCab(params[0]);
+   leafParams->SetCar(params[1]);
+   leafParams->SetCBrown(params[2]);
+   leafParams->SetCw(params[3]);
+   leafParams->SetCm(params[4]);
+   leafParams->SetN(params[5]);
+   
+   this->itk::ProcessObject::SetNthInput(0,leafParams);
+}
+
+
 /** Plant Leaf Reflectance and Transmittance computation from 400nm to 2500 nm*/
 void
 ProspectModel
