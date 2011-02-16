@@ -100,7 +100,7 @@ int main(int argc, char * argv[])
   // will use a \doxygen{otb}{VectorDataToImageFilter} which
   // is templated over the input vector data type and the output image
   // type, and a conbination of a \doxygen{itk}{binaryFunctorImageFilter}
-  // and the \doxygen{otb}{Functor}{UnaryFunctorImageFilter}.
+  // and the \doxygen{otb}{Functor}{AlphaBlendingFunctor}.
   //
   // Software Guide : EndLatex
 
