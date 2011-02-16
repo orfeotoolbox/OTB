@@ -10,6 +10,7 @@
 // $Id$
 
 #include <RadarSat/Data/ImageOptionsFileDescriptor.h>
+#include <errno.h>
 
 namespace ossimplugins
 {
@@ -240,7 +241,6 @@ std::istream& operator>>(std::istream& is, ImageOptionsFileDescriptor& data)
 
 	// We should use strtol() to avoid wrong conversion with atoi()
   char* p;
-  int errno = 0;
   int result = strtol(buf, &p, 10);
   if (errno != 0 || *p != 0 || p == buf)
     {
@@ -256,7 +256,7 @@ std::istream& operator>>(std::istream& is, ImageOptionsFileDescriptor& data)
 
     is.read(buf,4);
 	buf[4] = '\0';
-  data._nleft = atoi(buf);
+	data._nleft = atoi(buf);
 
     is.read(buf,8);
 	buf[8] = '\0';
