@@ -73,6 +73,7 @@ int main(int argc, char * argv[])
   // Software Guide : BeginCodeSnippet
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
+  reader->GenerateOutputInformation();
   // Software Guide : EndCodeSnippet
   
   // Software Guide : BeginLatex
@@ -137,7 +138,6 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   lsdFilter->SetInput(reader->GetOutput());
-  reader->GenerateOutputInformation();
 
   vectorDataRenderer->SetInput(lsdFilter->GetOutput());
   vectorDataRenderer->SetSize(reader->GetOutput()->GetLargestPossibleRegion().GetSize());

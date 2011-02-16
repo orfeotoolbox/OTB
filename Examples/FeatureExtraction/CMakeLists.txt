@@ -324,11 +324,11 @@ ADD_TEST(feTeLineSegmentDetectorExampleTest  ${EXE_TESTS2}
 
 ADD_TEST(feTeRightAngleDetectionExample  ${EXE_TESTS2}
         --compare-image ${TOL}
-        ${BASELINE}/RightAngleOutput.png
-        ${TEMP}/PrettyRightAngleOutput.png
+        ${BASELINE}/feTeRightAngleDetectionExampleOutput.png
+        ${TEMP}/feTeRightAngleDetectionExampleOutput.png
        RightAngleDetectionExample
 	${INPUTDATA}/Scene.png
-	${TEMP}/RighAngleOutput.tif
+	${TEMP}/feTeRightAngleDetectionExampleOutput.png
 	${TEMP}/PrettyRightAngleInput.png
 	${TEMP}/PrettyRightAngleOutput.png
 	0.1
