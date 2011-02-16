@@ -23,12 +23,11 @@
 namespace otb
 {
 
-
 namespace Functor {
 
 /** \class DotProductFunctor
  *
- * \brief Apply a matrix multiplication to a VariableLengthVector
+ * \brief Computes the dot product against a specific vector
  *
  */
 template<class TInput, class TOutput>
@@ -81,6 +80,7 @@ private:
  * \brief Applies pixel-wise dot product to a VectorImage
  *
  * Given a vector, this filter outputs the dot product of each pixel of a multiband image
+ * with respect to the specified vector
  *
  * \ingroup Streamed
  * \ingroup Threaded
