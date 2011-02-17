@@ -178,6 +178,22 @@ IF(OTB_USE_EXTERNAL_GDAL)
     "embeds its own libgeotiff and is compiled with --with-hide-internal-symbols=yes.\n"
     "You might consider building GDAL yourself without using --with-hide-internal-symbols" )
   ENDIF(NOT CHECK_XTIFFOPEN_SYMBOL)
+  
+  # This test is known to fail with gdal build with some versions of hdf library
+  #${OTB_DATA_ROOT}/Input/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf  -> Test KO
+  #${OTB_DATA_ROOT}/Input/GSSTF_NCEP.2b.2008.12.31.he5  -> Test OK
+  IF(OTB_DATA_ROOT)
+    SET(CMAKE_REQUIRED_INCLUDES ${GEOTIFF_INCLUDE_DIRS};${TIFF_INCLUDE_DIRS})
+    SET(CMAKE_REQUIRED_LIBRARIES "${GDAL_LIBRARY};${GEOTIFF_LIBRARY};${TIFF_LIBRARY}")
+    CHECK_CXX_SOURCE_RUNS_ARGS(
+            ${CMAKE_CURRENT_SOURCE_DIR}/CMake/TestHDF4Open.cxx
+            ${OTB_DATA_ROOT}/Input/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf 
+            CHECK_HDF4OPEN_SYMBOL
+            )
+    IF(NOT CHECK_HDF4OPEN_SYMBOL)
+     MESSAGE(WARNING "CHECK_HDF4OPEN_SYMBOL test failed : your platform exhibits a problem to read HDF4 files. So the HDF tests will be deactivated" )
+    ENDIF(NOT CHECK_HDF4OPEN_SYMBOL)
+  ENDIF(OTB_DATA_ROOT)
 
 ELSE(OTB_USE_EXTERNAL_GDAL)
 
