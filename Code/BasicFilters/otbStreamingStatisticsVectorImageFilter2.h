@@ -134,6 +134,15 @@ public:
   virtual void Synthetize(void);
   virtual void Reset(void);
 
+  itkSetMacro(EnableMean, bool);
+  itkGetMacro(EnableMean, bool);
+
+  itkSetMacro(EnableCorrelation, bool);
+  itkGetMacro(EnableCorrelation, bool);
+
+  itkSetMacro(EnableCovariance, bool);
+  itkGetMacro(EnableCovariance, bool);
+
 protected:
   PersistentStreamingStatisticsVectorImageFilter2();
   virtual ~PersistentStreamingStatisticsVectorImageFilter2() {}
@@ -145,6 +154,10 @@ private:
   PersistentStreamingStatisticsVectorImageFilter2(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
+  bool m_EnableMean;
+  bool m_EnableCorrelation;
+  bool m_EnableCovariance;
+
   std::vector<RealPixelType> m_FirstOrderAccumulators;
   std::vector<MatrixType>    m_SecondOrderAccumulators;
 
@@ -152,14 +165,14 @@ private:
 
 /**===========================================================================*/
 
-/** \class VectorImageToMatrixImageFilter
+/** \class StreamingStatisticsVectorImageFilter2
  * \brief This class streams the whole input image through the PersistentStatisticsImageFilter.
  *
- * This way, it allows to compute the first order global statistics of this image. It calls the
- * Reset() method of the PersistentStatisticsImageFilter before streaming the image and the
- * Synthetize() method of the PersistentStatisticsImageFilter after having streamed the image
+ * This way, it allows to compute the first and second order global statistics of this image. It calls the
+ * Reset() method of the PersistentStreamingStatisticsVectorImageFilter2 before streaming the image and the
+ * Synthetize() method of the PersistentStreamingStatisticsVectorImageFilter2 after having streamed the image
  * to compute the statistics. The accessor on the results are wrapping the accessors of the
- * internal PersistentStatisticsImageFilter.
+ * internal PersistentStreamingStatisticsVectorImageFilter2.
  *
  * \sa PersistentStreamingStatisticsVectorImageFilter2
  * \sa PersistentImageFilter
@@ -254,6 +267,15 @@ public:
   {
     return this->GetFilter()->GetCorrelationOutput();
   }
+
+  otbSetObjectMemberMacro(Filter, EnableMean, bool);
+  otbGetObjectMemberMacro(Filter, EnableMean, bool);
+
+  otbSetObjectMemberMacro(Filter, EnableCorrelation, bool);
+  otbGetObjectMemberMacro(Filter, EnableCorrelation, bool);
+
+  otbSetObjectMemberMacro(Filter, EnableCovariance, bool);
+  otbGetObjectMemberMacro(Filter, EnableCovariance, bool);
 
 protected:
   /** Constructor */

@@ -34,12 +34,15 @@ namespace otb
 template<class TInputImage>
 PersistentStreamingStatisticsVectorImageFilter2<TInputImage>
 ::PersistentStreamingStatisticsVectorImageFilter2()
+ : m_EnableMean(true),
+   m_EnableCorrelation(true),
+   m_EnableCovariance(true)
 {
   // first output is a copy of the image, DataObject created by
   // superclass
   //
   // allocate the data objects for the outputs which are
-  // just decorators around vector/matric types
+  // just decorators around vector/matrix types
 
   this->itk::ProcessObject::SetNthOutput(1, this->MakeOutput(1).GetPointer());
   this->itk::ProcessObject::SetNthOutput(2, this->MakeOutput(2).GetPointer());
@@ -153,6 +156,11 @@ void
 PersistentStreamingStatisticsVectorImageFilter2<TInputImage>
 ::Reset()
 {
+  if (m_EnableCovariance)
+    {
+    m_EnableMean = true;
+    }
+
   TInputImage * inputPtr = const_cast<TInputImage *>(this->GetInput());
   inputPtr->UpdateOutputInformation();
 
@@ -194,28 +202,39 @@ PersistentStreamingStatisticsVectorImageFilter2<TInputImage>
   const unsigned int numberOfThreads = this->GetNumberOfThreads();
   for (unsigned int i = 0; i < numberOfThreads; ++i)
     {
-    streamFirstOrderAccumulator   += m_FirstOrderAccumulators [i];
-    streamSecondOrderAccumulator  += m_SecondOrderAccumulators[i];
+    if (m_EnableMean)
+      streamFirstOrderAccumulator   += m_FirstOrderAccumulators [i];
+
+    if (m_EnableCorrelation || m_EnableCovariance)
+      streamSecondOrderAccumulator  += m_SecondOrderAccumulators[i];
     }
 
-  const double regul = static_cast<double>(nbPixels) / (nbPixels - 1);
-
-  this->GetMeanOutput()->Set(streamFirstOrderAccumulator / nbPixels);
-  const RealPixelType& mean = this->GetMeanOutput()->Get();
-
-  MatrixType cor = streamSecondOrderAccumulator / nbPixels;
-  this->GetCorrelationOutput()->Set(cor);
-
-  MatrixType cov  = cor;
-  for (unsigned int r = 0; r < numberOfComponent; ++r)
+  if (m_EnableMean)
     {
-    for (unsigned int c = 0; c < numberOfComponent; ++c)
+    this->GetMeanOutput()->Set(streamFirstOrderAccumulator / nbPixels);
+
+    }
+
+  if (m_EnableCorrelation || m_EnableCovariance)
+    {
+    MatrixType cor = streamSecondOrderAccumulator / nbPixels;
+    this->GetCorrelationOutput()->Set(cor);
+
+    if (m_EnableCovariance)
       {
-      cov(r, c) = regul * (cov(r, c) - mean[r] * mean[c]);
+      const RealPixelType& mean = this->GetMeanOutput()->Get();
+      const double regul = static_cast<double>(nbPixels) / (nbPixels - 1);
+      MatrixType cov  = cor;
+      for (unsigned int r = 0; r < numberOfComponent; ++r)
+        {
+        for (unsigned int c = 0; c < numberOfComponent; ++c)
+          {
+          cov(r, c) = regul * (cov(r, c) - mean[r] * mean[c]);
+          }
+        }
+      this->GetCovarianceOutput()->Set(cov);
       }
     }
-
-  this->GetCovarianceOutput()->Set(cov);
 }
 
 template<class TInputImage>
@@ -237,12 +256,20 @@ PersistentStreamingStatisticsVectorImageFilter2<TInputImage>
   for (it.GoToBegin(); !it.IsAtEnd(); ++it, progress.CompletedPixel())
     {
     PixelType vectorValue = it.Get();
-    threadFirstOrder += vectorValue;
-    for (unsigned int r = 0; r < threadSecondOrder.Rows(); ++r)
+
+    if (m_EnableMean)
       {
-      for (unsigned int c = 0; c < threadSecondOrder.Cols(); ++c)
+      threadFirstOrder += vectorValue;
+      }
+
+    if (m_EnableCorrelation || m_EnableCovariance)
+      {
+      for (unsigned int r = 0; r < threadSecondOrder.Rows(); ++r)
         {
-        threadSecondOrder(r,c) += vectorValue[r] * vectorValue[c];
+        for (unsigned int c = 0; c < threadSecondOrder.Cols(); ++c)
+          {
+          threadSecondOrder(r,c) += vectorValue[r] * vectorValue[c];
+          }
         }
       }
     }
