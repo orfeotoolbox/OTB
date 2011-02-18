@@ -95,6 +95,7 @@ private:
  *   "Fully Constrained Least-Squares Based Linear Unmixing." Daniel Heinz,
  *   Chein-I Chang, and Mark L.G. Althouse. IEEE. 1999.
  *
+ * \ingroup Hyperspectral
  * \ingroup Streamed
  * \ingroup Threaded
  */
