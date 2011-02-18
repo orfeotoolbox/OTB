@@ -38,6 +38,8 @@
 
 //Misc
 #include "otbRemoteSensingRegion.h"
+#include "otbStandardWriterWatcher.h"
+#include "otbPipelineMemoryPrintCalculator.h"
 
 namespace otb
 {
@@ -66,11 +68,9 @@ int Rasterization::Describe(ApplicationDescriptor* descriptor)
                         "spy", 1, false, ApplicationDescriptor::Real);
   descriptor->AddOption("ProjRef", "Projection (optional)", 
                         "pr",  1, false, ApplicationDescriptor::String);
+  descriptor->AddOption("AvailableMemory", "Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default)",
+                        "ram",1,false, otb::ApplicationDescriptor::Integer);
   
-  // Testing Purpose
-  descriptor->AddOption("NbStreamDivisions", "Number of Stream Divisions (testing purpose only)",
-                        "nbsd", 1, false, ApplicationDescriptor::Integer);
- 
   return EXIT_SUCCESS;
 }
 
@@ -104,7 +104,8 @@ int Rasterization::Execute(otb::ApplicationOptionsResult* parseResult)
   // Misc
   typedef otb::RemoteSensingRegion<double>                RemoteSensingRegionType;
   typedef RemoteSensingRegionType::SizeType               SizePhyType;
-
+  typedef otb::PipelineMemoryPrintCalculator        MemoryCalculatorType;
+  
   // Reading the VectorData
   std::string vdFilename = parseResult->GetParameterString("InputVData");
   std::cout<<"Processing vector data : "<<vdFilename<<std::endl;
@@ -174,22 +175,40 @@ int Rasterization::Execute(otb::ApplicationOptionsResult* parseResult)
   vectorDataRendering->SetVectorDataProjectionWKT(projectionRef);
   vectorDataRendering->SetRenderingStyleType(VectorDataToImageFilterType::Binary);
 
-  // Writing the produced Image
+  // Instantiate the writer
   std::string oFilename = parseResult->GetParameterString("OutputImage");
-  std::cout<<"Output image : "<<oFilename<<std::endl;
   
   WriterType::Pointer oWriter = WriterType::New();
   oWriter->SetFileName(oFilename);
   oWriter->SetInput(vectorDataRendering->GetOutput());
-  if(parseResult->IsOptionPresent("NbStreamDivisions"))
+  
+
+  //Instantiate the pipeline memory print estimator
+  MemoryCalculatorType::Pointer calculator = MemoryCalculatorType::New();
+  const double byteToMegabyte = 1./vcl_pow(2.0, 20);
+
+  if (parseResult->IsOptionPresent("AvailableMemory"))
     {
-    oWriter->SetTilingStreamDivisions(parseResult->GetParameterInt("NbStreamDivisions"));
-    //std::cout << "[Auto OFF] NbStreamDivisions: " << parseResult->GetParameterInt("NbStreamDivisions") << std::endl;
+    long long int memory = static_cast <long long int> (parseResult->GetParameterUInt("AvailableMemory"));
+    calculator->SetAvailableMemory(memory / byteToMegabyte);
     }
+  else
+    {
+    calculator->SetAvailableMemory(256 * byteToMegabyte);
+    }
+  
+  calculator->SetDataToWrite(vectorDataRendering->GetOutput());
+  calculator->Compute();
+      
+  oWriter->SetTilingStreamDivisions(calculator->GetOptimalNumberOfStreamDivisions());
+      
+  otbMsgDevMacro(<< "Guess the pipeline memory print " << calculator->GetMemoryPrint()*byteToMegabyte << " Mo");
+  otbMsgDevMacro(<< "Number of stream divisions : " << calculator->GetOptimalNumberOfStreamDivisions());
 
+  otb::StandardWriterWatcher watcher(oWriter,"Rasterization");
+  
   oWriter->Update();
-    
-  return EXIT_SUCCESS;
-}
 
+  return EXIT_SUCCESS;  
+}
 }
