@@ -18,6 +18,7 @@
 #ifndef __otbMatrixMultiplyImageFilter_h
 #define __otbMatrixMultiplyImageFilter_h
 
+#include "itkMacro.h"
 #include "otbUnaryFunctorImageFilter.h"
 
 namespace otb

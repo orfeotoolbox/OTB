@@ -18,13 +18,13 @@
 #ifndef __otbUnConstrainedLeastSquareImageFilter_h
 #define __otbUnConstrainedLeastSquareImageFilter_h
 
+#include "itkMacro.h"
 #include "otbUnaryFunctorImageFilter.h"
 #include "vnl/algo/vnl_svd.h"
 #include <boost/shared_ptr.hpp>
 
 namespace otb
 {
-
 
 namespace Functor {
 
@@ -92,15 +92,15 @@ private:
  *
  * This filter takes as input a multiband image and a matrix.
  * If the matrix is called $A$, it solves, for each pixel $p$, the system
- * $A \cdot x = p$ in the least square sense, and saves the result $\hat{x}$
+ * \f$A \cdot x = p\f$ in the least square sense, and saves the result \f$\hat{x}\f$
  * in the output pixel.
  *
  * It can be used as a simple way to unmix an hyperspectral dataset,
- * where $A$ is the matrix in which each row corresponds to an endmember signature,
+ * where \f$A\f$ is the matrix in which each row corresponds to an endmember signature,
  * although better algorithm can be found for this particular task.
  *
- * The number of rows in $A$ must match the input image number of bands.
- * The number of bands in the output image will be the number of columns of $A$
+ * The number of rows in \f$A\f$ must match the input image number of bands.
+ * The number of bands in the output image will be the number of columns of \f$A\f$
  *
  * \ingroup Streamed
  * \ingroup Threaded

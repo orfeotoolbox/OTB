@@ -18,6 +18,7 @@
 #ifndef __otbProjectiveProjectionImageFilter_h
 #define __otbProjectiveProjectionImageFilter_h
 
+#include "itkMacro.h"
 #include "otbUnaryFunctorImageFilter.h"
 
 namespace otb

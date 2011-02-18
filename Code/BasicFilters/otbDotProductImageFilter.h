@@ -18,6 +18,7 @@
 #ifndef __otbDotProductImageFilter_h
 #define __otbDotProductImageFilter_h
 
+#include "itkMacro.h"
 #include "otbUnaryFunctorImageFilter.h"
 
 namespace otb

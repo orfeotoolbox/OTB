@@ -22,6 +22,7 @@
 #define __otbEigenvalueLikelihoodMaximisation_h
 
 #include "itkMacro.h"
+#include "itkObjectFactory.h"
 #include "itkLightObject.h"
 #include "vnl/vnl_vector.h"
 #include "vnl/vnl_matrix.h"
