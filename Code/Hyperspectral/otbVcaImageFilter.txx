@@ -102,6 +102,8 @@ void VCAImageFilter<TImage>::GenerateData()
   otbMsgDevMacro( "Compute mean(Xd)" );
   typename StreamingStatisticsVectorImageFilterType::Pointer statsXd = \
       StreamingStatisticsVectorImageFilterType::New();
+  statsXd->SetEnableCorrelation(false);
+  statsXd->SetEnableCovariance(false);
   statsXd->SetInput(Xd);
   statsXd->Update();
   typename VectorImageType::PixelType Xdmean = statsXd->GetMean();
