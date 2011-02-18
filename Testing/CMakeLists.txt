@@ -10,6 +10,7 @@ SET( otbHyperTests1_SRC
   otbStreamingStatisticsVectorImageFilter2.cxx
   otbMatrixMultiplyImageFilter.cxx
   otbUnConstrainedLeastSquareImageFilter.cxx
+  otbFullyConstrainedLeastSquareImageFilter.cxx
   otbVectorImageToMatrixImageFilter.cxx
   otbProjectiveProjection.cxx
   otbVCA.cxx
@@ -98,6 +99,25 @@ ADD_TEST(bfTvUnConstrainedLeastSquareImageFilter
          ${DATA}/SYNTHETIC100/endmembers.tif
          ${TEMP}/bfUnConstrainedLeastSquareImageFilter.tif)
 
+
+ADD_TEST(bfTuFullyConstrainedLeastSquareImageFilterNew
+         ${TESTEXE_DIR}/otbHyperTests1
+         otbFullyConstrainedLeastSquareImageFilterNewTest)
+
+ADD_TEST(bfTvFullyConstrainedLeastSquareImageFilter_SYNTHETIC
+         ${TESTEXE_DIR}/otbHyperTests1
+         otbFullyConstrainedLeastSquareImageFilterTest
+         ${DATA}/SYNTHETIC100/hsi_cube.tif
+         ${DATA}/SYNTHETIC100/endmembers.tif
+         ${TEMP}/bfFullyConstrainedLeastSquareImageFilter.tif)
+
+
+ADD_TEST(bfTvFullyConstrainedLeastSquareImageFilter_AVIRIS512
+         ${TESTEXE_DIR}/otbHyperTests1
+         otbFullyConstrainedLeastSquareImageFilterTest
+         ${DATA}/AVIRIS/extract512/f970619t01p02_r02_sc01_goodbands.hdr
+         ${TEMP}/aviris_vcaimagefilter_13.hdr
+         ${TEMP}/bfFullyConstrainedLeastSquareImageFilter_AVIRIS512.tif)
 
 
 

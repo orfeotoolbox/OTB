@@ -32,6 +32,8 @@ void RegisterTests()
   REGISTER_TEST(otbMatrixMultiplyImageFilterTest);
   REGISTER_TEST(otbUnConstrainedLeastSquareImageFilterNewTest);
   REGISTER_TEST(otbUnConstrainedLeastSquareImageFilterTest);
+  REGISTER_TEST(otbFullyConstrainedLeastSquareImageFilterNewTest);
+  REGISTER_TEST(otbFullyConstrainedLeastSquareImageFilterTest);
   REGISTER_TEST(otbVectorImageToMatrixNewTest);
   REGISTER_TEST(otbVectorImageToMatrixTest);
   REGISTER_TEST(vahineVCA);
