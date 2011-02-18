@@ -395,7 +395,7 @@ void PersistentCublasStreamingStatisticsVectorImageFilter<TInputImage>::Generate
     // TODO : check status, throw exception on error & clean up GPU memory
     if (status != CUBLAS_STATUS_SUCCESS)
       {
-      otbMsgDevMacro( "cublasSetMatrix m_GPUOnesVector failed" );
+      otbMsgDevMacro( "cublasSetVector m_GPUOnesVector failed" );
       }
     }
 
