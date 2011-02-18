@@ -15,11 +15,12 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#include "otbStreamingStatisticsVectorImageFilter.h"
+
 #include <fstream>
 
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingStatisticsVectorImageFilter.h"
 #include "otbStreamingTraits.h"
 
 int otbStreamingStatisticsVectorImageFilterTest(int argc, char * argv[])

@@ -15,11 +15,11 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#include "otbVcaImageFilter.h"
+
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-
-#include "otbVcaImageFilter.h"
 
 const unsigned int Dimension = 2;
 typedef double PixelType;

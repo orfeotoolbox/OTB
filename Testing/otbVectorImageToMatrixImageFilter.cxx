@@ -15,9 +15,10 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#include "otbVectorImageToMatrixImageFilter.h"
+
 #include "otbVectorImage.h"
 #include "itkImageRegionIteratorWithIndex.h"
-#include "otbVectorImageToMatrixImageFilter.h"
 
 const unsigned int Dimension = 2;
 typedef double PixelType;

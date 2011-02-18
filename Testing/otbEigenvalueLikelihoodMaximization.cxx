@@ -15,9 +15,10 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#include "otbEigenvalueLikelihoodMaximisation.h"
+
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
-#include "otbEigenvalueLikelihoodMaximisation.h"
 #include "otbStreamingStatisticsVectorImageFilter2.h"
 
 const unsigned int Dimension = 2;

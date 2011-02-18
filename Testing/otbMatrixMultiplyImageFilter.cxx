@@ -15,11 +15,11 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#include "otbMatrixMultiplyImageFilter.h"
+
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-
-#include "otbMatrixMultiplyImageFilter.h"
 #include "otbVectorImageToMatrixImageFilter.h"
 
 const unsigned int Dimension = 2;

@@ -15,9 +15,9 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "itkExceptionObject.h"
-
 #include "otbCublasStreamingStatisticsVectorImageFilter.h"
+
+#include "itkExceptionObject.h"
 #include "otbImageFileReader.h"
 #include "otbVectorImage.h"
 #include <fstream>
