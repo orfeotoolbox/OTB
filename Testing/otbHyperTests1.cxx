@@ -41,4 +41,16 @@ void RegisterTests()
   REGISTER_TEST(otbProjectiveProjectionTestHighSNR);
   REGISTER_TEST(otbVCATestHighSNR);
   REGISTER_TEST(otbVCAImageFilterTestHighSNR);
+  REGISTER_TEST(otbHorizontalSobelVectorImageFilterNewTest);
+  REGISTER_TEST(otbHorizontalSobelVectorImageFilterTest);
+  REGISTER_TEST(otbVerticalSobelVectorImageFilterNewTest);
+  REGISTER_TEST(otbVerticalSobelVectorImageFilterTest);
+  REGISTER_TEST(otbSobelVectorImageFilterNewTest);
+  REGISTER_TEST(otbSobelVectorImageFilterTest);
+  REGISTER_TEST(otbLocalActivityVectorImageFilterNewTest);
+  REGISTER_TEST(otbLocalActivityVectorImageFilterTest);
+  REGISTER_TEST(otbPCAImageFilterNewTest);
+  REGISTER_TEST(otbPCAImageFilterTest);
+  REGISTER_TEST(otbMNFImageFilterNewTest);
+  REGISTER_TEST(otbMNFImageFilterTest);
 }

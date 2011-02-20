@@ -15,6 +15,12 @@ SET( otbHyperTests1_SRC
   otbProjectiveProjection.cxx
   otbVCA.cxx
   otbVCAImageFilter.cxx
+  otbHorizontalSobelVectorImageFilter.cxx
+  otbVerticalSobelVectorImageFilter.cxx
+  otbSobelVectorImageFilter.cxx
+  otbLocalActivityVectorImageFilter.cxx
+  otbPCAImageFilter.cxx
+  otbMNFImageFilter.cxx
 )
 
 ADD_EXECUTABLE(otbHyperTests1 ${otbHyperTests1_SRC} otbHyperTests1.cxx)
@@ -87,7 +93,6 @@ ADD_TEST(bfTvMatrixMultiplyImageFilterRealImageTest
          ${TEMP}/bfMatrixMultiplyImageFilter.tif)
 
 
-
 ADD_TEST(bfTuUnConstrainedLeastSquareImageFilterNew
          ${TESTEXE_DIR}/otbHyperTests1
          otbUnConstrainedLeastSquareImageFilterNewTest)
@@ -98,7 +103,6 @@ ADD_TEST(bfTvUnConstrainedLeastSquareImageFilter
          ${DATA}/SYNTHETIC100/hsi_cube.tif
          ${DATA}/SYNTHETIC100/endmembers.tif
          ${TEMP}/bfUnConstrainedLeastSquareImageFilter.tif)
-
 
 ADD_TEST(bfTuFullyConstrainedLeastSquareImageFilterNew
          ${TESTEXE_DIR}/otbHyperTests1
@@ -111,15 +115,12 @@ ADD_TEST(bfTvFullyConstrainedLeastSquareImageFilter_SYNTHETIC
          ${DATA}/SYNTHETIC100/endmembers.tif
          ${TEMP}/bfFullyConstrainedLeastSquareImageFilter_SYNTHETIC.tif)
 
-
 ADD_TEST(bfTvFullyConstrainedLeastSquareImageFilter_AVIRIS512
          ${TESTEXE_DIR}/otbHyperTests1
          otbFullyConstrainedLeastSquareImageFilterTest
          ${DATA}/AVIRIS/extract512/f970619t01p02_r02_sc01_goodbands.hdr
          ${TEMP}/aviris_vcaimagefilter_13.hdr
          ${TEMP}/bfFullyConstrainedLeastSquareImageFilter_AVIRIS512.tif)
-
-
 
 ADD_TEST(bfTuVectorImageToMatrixNew
          ${TESTEXE_DIR}/otbHyperTests1
@@ -129,9 +130,67 @@ ADD_TEST(bfTvVectorImageToMatrix
          ${TESTEXE_DIR}/otbHyperTests1
          otbVectorImageToMatrixTest)
 
+ADD_TEST(bfTuHorizontalSobelVectorImageFilterNew
+         ${TESTEXE_DIR}/otbHyperTests1
+         otbHorizontalSobelVectorImageFilterNewTest)
 
+ADD_TEST(bfTvHorizontalSobelVectorImageFilterNew
+         ${TESTEXE_DIR}/otbHyperTests1
+         otbHorizontalSobelVectorImageFilterTest
+		 -in ${Data}/CupriteSubHsi/cupriteSubHsi.tif 
+		 -out ${TEMP}/cupriteHoriSobelFlt.hdr)
 
+ADD_TEST(bfTuVerticalSobelVectorImageFilterNew
+         ${TESTEXE_DIR}/otbHyperTests1
+         otbVerticalSobelVectorImageFilterNewTest)
 
+ADD_TEST(bfTvVerticalSobelVectorImageFilterNew
+         ${TESTEXE_DIR}/otbHyperTests1
+         otbVerticalSobelVectorImageFilterTest
+		 -in ${Data}/CupriteSubHsi/cupriteSubHsi.tif 
+		 -out ${TEMP}/cupriteVertSobelFlt.hdr)
+
+ADD_TEST(bfTuSobelVectorImageFilterNew
+         ${TESTEXE_DIR}/otbHyperTests1
+         otbSobelVectorImageFilterNewTest)
+
+ADD_TEST(bfTvSobelVectorImageFilterNew
+         ${TESTEXE_DIR}/otbHyperTests1
+         otbSobelVectorImageFilterTest
+		 -in ${Data}/CupriteSubHsi/cupriteSubHsi.tif 
+		 -out ${TEMP}/cupriteSobelFlt.hdr)
+
+ADD_TEST(bfTuLocalActivityVectorImageFilterNew
+         ${TESTEXE_DIR}/otbHyperTests1
+         otbLocalActivityVectorImageFilterNewTest)
+
+ADD_TEST(bfTvLocalActivityVectorImageFilter
+         ${TESTEXE_DIR}/otbHyperTests1
+         otbLocalActivityVectorImageFilterNewTest
+		 -in ${Data}/CupriteSubHsi/cupriteSubHsi.tif 
+		 -out ${TEMP}/cupriteLocalActivityFlt.hdr)
+
+ADD_TEST(hyTuPCAImageFilterNew
+         ${TESTEXE_DIR}/otbHyperTests1
+		 otbPCAImageFilterNewTest)
+
+ADD_TEST(hyTvPCAImageFilter
+         ${TESTEXE_DIR}/otbHyperTests1
+		 otbPCAImageFilterTest 
+		 -in ${Data}/CupriteSubHsi/cupriteSubHsi.tif
+		 -inv ${TEMP}/cupritePCAinv.hdr
+		 -out ${TEMP}/cupritePCA.hdr)
+
+ADD_TEST(hyTuMNFImageFilterNew
+         ${TESTEXE_DIR}/otbHyperTests1
+		 otbMNFImageFilterNewTest)
+
+ADD_TEST(hyTvMNFImageFilter
+         ${TESTEXE_DIR}/otbHyperTests1
+		 otbMNFImageFilterTest 
+		 -in ${Data}/CupriteSubHsi/cupriteSubHsi.tif
+		 -inv ${TEMP}/cupriteMNFinv.hdr
+		 -out ${TEMP}/cupriteMNF.hdr)
 
 ADD_TEST(hyTuEigenvalueLikelihoodMaximizationNew
          ${TESTEXE_DIR}/otbHyperTests1
