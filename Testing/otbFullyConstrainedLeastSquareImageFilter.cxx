@@ -21,6 +21,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbVectorImageToMatrixImageFilter.h"
+#include "otbStandardWriterWatcher.h"
 
 const unsigned int Dimension = 2;
 typedef double PixelType;
@@ -56,7 +57,7 @@ int otbFullyConstrainedLeastSquareImageFilterTest(int argc, char * argv[])
 
   typedef VectorImageToMatrixImageFilterType::MatrixType MatrixType;
   MatrixType endMembers = endMember2Matrix->GetMatrix();
-  MatrixType pinv = vnl_matrix_inverse<double>(endMembers);
+  MatrixType pinv = vnl_matrix_inverse<PixelType>(endMembers);
 
   FullyConstrainedLeastSquareSolverType::Pointer unmixer = \
       FullyConstrainedLeastSquareSolverType::New();
@@ -64,11 +65,16 @@ int otbFullyConstrainedLeastSquareImageFilterTest(int argc, char * argv[])
   unmixer->SetInput(readerImage->GetOutput());
   unmixer->SetMatrix(endMember2Matrix->GetMatrix());
 
-  unmixer->Update();
+//  unmixer->Update();
+
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outputImage);
   writer->SetInput(unmixer->GetOutput());
+  writer->SetBufferNumberOfLinesDivisions(10);
+
+  otb::StandardWriterWatcher w4(writer,unmixer,"FullyConstrainedLeastSquare");
+
   writer->Update();
 
   return EXIT_SUCCESS;
