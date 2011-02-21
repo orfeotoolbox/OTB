@@ -27,7 +27,8 @@
 #include "otbImageFileWriter.h"
 
 #include "itkRescaleIntensityImageFilter.h"
-#include "itkMinimumMaximumImageCalculator.h"
+
+#include "otbVectorDataFileWriter.h"
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {QB_Toulouse_Ortho_PAN.tif}
@@ -50,21 +51,21 @@
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-#include "otbLineSpatialObjectListToRightAnglePointSetFilter.h"
 #include "otbVectorDataToRightAngleVectorDataFilter.h"
 // Software Guide : EndCodeSnippet
 
 int main(int argc, char * argv[])
 {
-  const char * infname   = argv[1];
-  const char * outfname  = argv[2];
-  const char * inprettyfname = argv[3];
-  const char * outprettyfname  = argv[4];
-  double       angleThreshold          = atof(argv[5]);
-  double       distanceThreshold       = atof(argv[6]);
+  const char * infname            = argv[1];
+  const char * outfname           = argv[2];
+  const char * inprettyfname      = argv[3];
+  const char * outprettyfname     = argv[4];
+  double       angleThreshold     = atof(argv[5]);
+  double       distanceThreshold  = atof(argv[6]);
 
-  const unsigned int Dimension = 2;
-  typedef float PixelType;
+  const unsigned int    Dimension = 2;
+  typedef unsigned char PixelType;
+  typedef double        PrecisionType;
 
   typedef otb::Image<PixelType, Dimension> ImageType;
   typedef otb::ImageFileReader<ImageType>  ReaderType;
@@ -72,6 +73,7 @@ int main(int argc, char * argv[])
 
   ReaderType::Pointer reader            = ReaderType::New();
   reader->SetFileName(infname);
+  reader->GenerateOutputInformation();
   WriterType::Pointer writer = WriterType::New();
 
   // Software Guide : BeginLatex
@@ -85,9 +87,8 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::VectorData<float>  VectorDataType;
+  typedef otb::VectorData<PrecisionType>  VectorDataType;
   // Software Guide : EndCodeSnippet
-
   // Software Guide : BeginLatex
   //
   // The right angle detector's output is a vector data where each point
@@ -99,7 +100,7 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::LineSegmentDetector<ImageType, PixelType> LsdFilterType;
+  typedef otb::LineSegmentDetector<ImageType, PrecisionType> LsdFilterType;
   // Software Guide : EndCodeSnippet
   
   // Software Guide : BeginLatex
@@ -109,8 +110,6 @@ int main(int argc, char * argv[])
   // provided by the line segment detector.
   //
   // Software Guide : EndLatex
-
-  typedef itk::MinimumMaximumImageCalculator<ImageType> MinMaxFilterType;
 
   // Software Guide : BeginCodeSnippet
   typedef otb::VectorDataToRightAngleVectorDataFilter<VectorDataType>
@@ -128,8 +127,6 @@ int main(int argc, char * argv[])
   RightAngleFilterType::Pointer rightAngleFilter  = RightAngleFilterType::New();
   // Software Guide : EndCodeSnippet
 
-  MinMaxFilterType::Pointer minmaxCalculator  = MinMaxFilterType::New();
-
   // Software Guide : BeginLatex
   //
   // We plug the pipeline.
@@ -140,6 +137,7 @@ int main(int argc, char * argv[])
   lsdFilter->SetInput(reader->GetOutput());
   rightAngleFilter->SetInput(lsdFilter->GetOutput());
   // Software Guide : EndCodeSnippet
+
   // Software Guide : BeginLatex
   //
   // You can choose how far the right angle segments can be, and the tolerance
@@ -150,7 +148,6 @@ int main(int argc, char * argv[])
   // Software Guide : BeginCodeSnippet
   rightAngleFilter->SetAngleThreshold(angleThreshold);
   rightAngleFilter->SetDistanceThreshold(distanceThreshold);
-  rightAngleFilter->Update();
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -176,8 +173,12 @@ int main(int argc, char * argv[])
     ImageType, FunctorType> BlendingFilterType;
   BlendingFilterType::Pointer blendingFilter = BlendingFilterType::New();
   
+  vectorDataRenderer->SetInput(1, lsdFilter->GetOutput());
   vectorDataRenderer->SetInput(rightAngleFilter->GetOutput());
+ 
   vectorDataRenderer->SetSize(reader->GetOutput()->GetLargestPossibleRegion().GetSize());
+  vectorDataRenderer->SetOrigin(reader->GetOutput()->GetOrigin());
+  vectorDataRenderer->SetSpacing(reader->GetOutput()->GetSpacing());
   vectorDataRenderer->SetRenderingStyleType(VectorDataRendererType::Binary);
 
   blendingFilter->SetInput1(reader->GetOutput());
@@ -233,13 +234,14 @@ int main(int argc, char * argv[])
 
   rescaler->SetOutputMinimum(0);
   rescaler->SetOutputMaximum(255);
-  outwriter->SetInput(rescaler->GetOutput());
 
   rescaler->SetInput(reader->GetOutput());
+  outwriter->SetInput(rescaler->GetOutput());
   outwriter->SetFileName(inprettyfname);
   outwriter->Update();
 
   rescaler->SetInput(blendingFilter->GetOutput());
+  outwriter->SetInput(rescaler->GetOutput());
   outwriter->SetFileName(outprettyfname);
   outwriter->Update();
 

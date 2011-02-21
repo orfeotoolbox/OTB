@@ -73,6 +73,7 @@ int main(int argc, char * argv[])
   // Software Guide : BeginCodeSnippet
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
+  reader->GenerateOutputInformation();
   // Software Guide : EndCodeSnippet
   
   // Software Guide : BeginLatex
@@ -99,7 +100,7 @@ int main(int argc, char * argv[])
   // will use a \doxygen{otb}{VectorDataToImageFilter} which
   // is templated over the input vector data type and the output image
   // type, and a conbination of a \doxygen{itk}{binaryFunctorImageFilter}
-  // and the \doxygen{otb}{Functor}{UnaryFunctorImageFilter}.
+  // and the \doxygen{otb}{Functor}{AlphaBlendingFunctor}.
   //
   // Software Guide : EndLatex
 
@@ -137,7 +138,6 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   lsdFilter->SetInput(reader->GetOutput());
-  reader->GenerateOutputInformation();
 
   vectorDataRenderer->SetInput(lsdFilter->GetOutput());
   vectorDataRenderer->SetSize(reader->GetOutput()->GetLargestPossibleRegion().GetSize());

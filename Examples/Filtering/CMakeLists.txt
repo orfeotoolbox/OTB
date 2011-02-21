@@ -60,8 +60,10 @@ ADD_EXECUTABLE(DanielssonDistanceMapImageFilter DanielssonDistanceMapImageFilter
 TARGET_LINK_LIBRARIES(DanielssonDistanceMapImageFilter OTBCommon OTBIO
 ITKCommon ITKBasicFilters)
 
+IF(OTB_USE_MAPNIK)
 ADD_EXECUTABLE(RasterizationExample RasterizationExample.cxx)
 TARGET_LINK_LIBRARIES(RasterizationExample OTBCommon OTBIO OTBBasicFilters)
+ENDIF(OTB_USE_MAPNIK)
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 

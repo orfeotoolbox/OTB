@@ -20,9 +20,10 @@
 
 #include "otbMassOfBelief.h"
 
-#include "otbMath.h"
-
 #include <algorithm>
+#include <iterator>
+
+#include "otbMath.h"
 
 namespace otb
 {

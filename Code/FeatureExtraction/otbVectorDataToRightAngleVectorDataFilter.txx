@@ -39,8 +39,12 @@ void
 VectorDataToRightAngleVectorDataFilter<TVectorData>
 ::GenerateData()
 {
+  // Get the input segments
+  typename VectorDataType::Pointer vData = const_cast<VectorDataType *>(this->GetInput());
+
   // Output
-  this->GetOutput(0)->SetMetaDataDictionary(this->GetInput()->GetMetaDataDictionary());
+  this->GetOutput(0)->SetMetaDataDictionary(vData->GetMetaDataDictionary());
+  
   // Retrieving root node
   typename DataNodeType::Pointer root = this->GetOutput(0)->GetDataTree()->GetRoot()->Get();
   // Create the document node
@@ -52,10 +56,8 @@ VectorDataToRightAngleVectorDataFilter<TVectorData>
   typename DataNodeType::Pointer folder = DataNodeType::New();
   folder->SetNodeType(otb::FOLDER);
   this->GetOutput(0)->GetDataTree()->Add(folder, document);
-
-  // Get the input segments
-  typename VectorDataType::Pointer vData = const_cast<VectorDataType *>(this->GetInput());
-
+  this->GetOutput(0)->SetProjectionRef(vData->GetProjectionRef());
+  
   // Itterate on the vector data
   TreeIteratorType itVectorRef(vData->GetDataTree());      // Reference
   itVectorRef.GoToBegin();
@@ -83,8 +85,6 @@ VectorDataToRightAngleVectorDataFilter<TVectorData>
       // Check if the angle is a right one
       if (vcl_abs(Angle - CONST_PI_2) <= m_AngleThreshold)
         {
-//            std::cout << "ComputeAngleFormedBySegments: " << Angle << std::endl;
-
         // Right angle coordinate
         PointType RightAngleCoordinate;
         RightAngleCoordinate = this->ComputeRightAngleCoordinate(itVectorRef.Get()->GetLine(),
@@ -222,7 +222,7 @@ VectorDataToRightAngleVectorDataFilter<TVectorData>
   // Compute the coordinate of the intersection point Y =AX+B
   P[0] =  (originB - originA) / denum;
   P[1] =  slopeA * static_cast<double>(P[0]) + originA;
-
+  
   return P;
 }
 

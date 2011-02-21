@@ -523,7 +523,7 @@ VectorDataToImageFilter<TVectorData, TImage>
         typedef boost::shared_ptr<point2d> point_ptr;
         mapnik::geometry2d * point = new point2d;
 
-        point->move_to(dataNode->GetPoint()[0], dataNode->GetPoint()[1]);
+        point->move_to(dataNode->GetPoint()[0], m_SensorModelFlip * dataNode->GetPoint()[1]);
 //           std::cout << dataNode->GetPoint()[0] << ", " << dataNode->GetPoint()[1] << std::endl;
 
         typedef boost::shared_ptr<mapnik::raster>               raster_ptr;
