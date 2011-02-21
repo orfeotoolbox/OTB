@@ -81,7 +81,8 @@ public:
   itkStaticConstMacro(ImageDimension, unsigned int, TInputImage::ImageDimension);
 
   /** Type to use for computations. */
-  typedef typename itk::NumericTraits<InternalPixelType>::RealType RealType;
+  //typedef typename itk::NumericTraits<InternalPixelType>::RealType RealType;
+  typedef InternalPixelType RealType;
   typedef itk::VariableLengthVector<RealType>                      RealPixelType;
 
   /** Smart Pointer type to a DataObject. */
