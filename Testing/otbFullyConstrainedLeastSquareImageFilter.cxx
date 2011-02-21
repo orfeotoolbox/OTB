@@ -19,7 +19,7 @@
 
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
-#include "otbImageFileWriter.h"
+#include "otbStreamingImageFileWriter.h"
 #include "otbVectorImageToMatrixImageFilter.h"
 #include "otbStandardWriterWatcher.h"
 
@@ -30,7 +30,7 @@ typedef otb::VectorImage<PixelType, Dimension> ImageType;
 typedef otb::ImageFileReader<ImageType> ReaderType;
 typedef otb::FullyConstrainedLeastSquareImageFilter<ImageType,ImageType,double> FullyConstrainedLeastSquareSolverType;
 typedef otb::VectorImageToMatrixImageFilter<ImageType> VectorImageToMatrixImageFilterType;
-typedef otb::ImageFileWriter<ImageType> WriterType;
+typedef otb::StreamingImageFileWriter<ImageType> WriterType;
 
 int otbFullyConstrainedLeastSquareImageFilterNewTest(int argc, char * argv[])
 {
@@ -64,9 +64,6 @@ int otbFullyConstrainedLeastSquareImageFilterTest(int argc, char * argv[])
 
   unmixer->SetInput(readerImage->GetOutput());
   unmixer->SetMatrix(endMember2Matrix->GetMatrix());
-
-//  unmixer->Update();
-
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outputImage);
