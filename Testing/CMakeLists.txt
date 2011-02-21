@@ -10,6 +10,7 @@ SET( otbHyperTests1_SRC
   otbStreamingStatisticsVectorImageFilter2.cxx
   otbMatrixMultiplyImageFilter.cxx
   otbUnConstrainedLeastSquareImageFilter.cxx
+  otbISRAUnmixingImageFilter.cxx
   otbFullyConstrainedLeastSquareImageFilter.cxx
   otbVectorImageToMatrixImageFilter.cxx
   otbProjectiveProjection.cxx
@@ -97,12 +98,20 @@ ADD_TEST(bfTuUnConstrainedLeastSquareImageFilterNew
          ${TESTEXE_DIR}/otbHyperTests1
          otbUnConstrainedLeastSquareImageFilterNewTest)
 
-ADD_TEST(bfTvUnConstrainedLeastSquareImageFilter
+ADD_TEST(bfTvUnConstrainedLeastSquareImageFilter_SYNTHETIC100
          ${TESTEXE_DIR}/otbHyperTests1
          otbUnConstrainedLeastSquareImageFilterTest
          ${DATA}/SYNTHETIC100/hsi_cube.tif
          ${DATA}/SYNTHETIC100/endmembers.tif
-         ${TEMP}/bfUnConstrainedLeastSquareImageFilter.tif)
+         ${TEMP}/bfUnConstrainedLeastSquareImageFilter_SYNTHETIC100.tif)
+
+ADD_TEST(bfTvUnConstrainedLeastSquareImageFilter_AVIRIS512
+         ${TESTEXE_DIR}/otbHyperTests1
+         otbUnConstrainedLeastSquareImageFilterTest
+         ${DATA}/AVIRIS/extract512/f970619t01p02_r02_sc01_goodbands.hdr
+         ${TEMP}/aviris_vcaimagefilter_13.hdr
+         ${TEMP}/bfUnConstrainedLeastSquareImageFilter_AVIRIS512.tif)
+
 
 ADD_TEST(bfTuFullyConstrainedLeastSquareImageFilterNew
          ${TESTEXE_DIR}/otbHyperTests1
@@ -122,6 +131,27 @@ ADD_TEST(bfTvFullyConstrainedLeastSquareImageFilter_AVIRIS512
          ${TEMP}/aviris_vcaimagefilter_13.hdr
          ${TEMP}/bfFullyConstrainedLeastSquareImageFilter_AVIRIS512.tif)
 
+
+ADD_TEST(bfTuISRAUnmixingImageFilterNew
+         ${TESTEXE_DIR}/otbHyperTests1
+         otbISRAUnmixingImageFilterNewTest)
+
+ADD_TEST(bfTvISRAUnmixingImageFilter_SYNTHETIC
+         ${TESTEXE_DIR}/otbHyperTests1
+         otbISRAUnmixingImageFilterTest
+         ${DATA}/SYNTHETIC100/hsi_cube.tif
+         ${DATA}/SYNTHETIC100/endmembers.tif
+         ${TEMP}/bfISRAUnmixingImageFilter_SYNTHETIC.tif
+         10)
+
+ADD_TEST(bfTvISRAUnmixingImageFilter_AVIRIS512
+         ${TESTEXE_DIR}/otbHyperTests1
+         otbISRAUnmixingImageFilterTest
+         ${DATA}/AVIRIS/extract512/f970619t01p02_r02_sc01_goodbands.hdr
+         ${TEMP}/aviris_vcaimagefilter_13.hdr
+         ${TEMP}/bfISRAUnmixingImageFilter_AVIRIS512.tif
+         10)
+
 ADD_TEST(bfTuVectorImageToMatrixNew
          ${TESTEXE_DIR}/otbHyperTests1
          otbVectorImageToMatrixNewTest)
@@ -134,30 +164,30 @@ ADD_TEST(bfTuHorizontalSobelVectorImageFilterNew
          ${TESTEXE_DIR}/otbHyperTests1
          otbHorizontalSobelVectorImageFilterNewTest)
 
-ADD_TEST(bfTvHorizontalSobelVectorImageFilterNew
+ADD_TEST(bfTvHorizontalSobelVectorImageFilter
          ${TESTEXE_DIR}/otbHyperTests1
          otbHorizontalSobelVectorImageFilterTest
-		 -in ${Data}/CupriteSubHsi/cupriteSubHsi.tif 
+		 -in ${DATA}/CupriteSubHsi/cupriteSubHsi.tif 
 		 -out ${TEMP}/cupriteHoriSobelFlt.hdr)
 
 ADD_TEST(bfTuVerticalSobelVectorImageFilterNew
          ${TESTEXE_DIR}/otbHyperTests1
          otbVerticalSobelVectorImageFilterNewTest)
 
-ADD_TEST(bfTvVerticalSobelVectorImageFilterNew
+ADD_TEST(bfTvVerticalSobelVectorImageFilter
          ${TESTEXE_DIR}/otbHyperTests1
          otbVerticalSobelVectorImageFilterTest
-		 -in ${Data}/CupriteSubHsi/cupriteSubHsi.tif 
+		 -in ${DATA}/CupriteSubHsi/cupriteSubHsi.tif 
 		 -out ${TEMP}/cupriteVertSobelFlt.hdr)
 
 ADD_TEST(bfTuSobelVectorImageFilterNew
          ${TESTEXE_DIR}/otbHyperTests1
          otbSobelVectorImageFilterNewTest)
 
-ADD_TEST(bfTvSobelVectorImageFilterNew
+ADD_TEST(bfTvSobelVectorImageFilter
          ${TESTEXE_DIR}/otbHyperTests1
          otbSobelVectorImageFilterTest
-		 -in ${Data}/CupriteSubHsi/cupriteSubHsi.tif 
+		 -in ${DATA}/CupriteSubHsi/cupriteSubHsi.tif 
 		 -out ${TEMP}/cupriteSobelFlt.hdr)
 
 ADD_TEST(bfTuLocalActivityVectorImageFilterNew
@@ -166,8 +196,8 @@ ADD_TEST(bfTuLocalActivityVectorImageFilterNew
 
 ADD_TEST(bfTvLocalActivityVectorImageFilter
          ${TESTEXE_DIR}/otbHyperTests1
-         otbLocalActivityVectorImageFilterNewTest
-		 -in ${Data}/CupriteSubHsi/cupriteSubHsi.tif 
+         otbLocalActivityVectorImageFilterTest
+		 -in ${DATA}/CupriteSubHsi/cupriteSubHsi.tif 
 		 -out ${TEMP}/cupriteLocalActivityFlt.hdr)
 
 ADD_TEST(hyTuPCAImageFilterNew
@@ -177,7 +207,7 @@ ADD_TEST(hyTuPCAImageFilterNew
 ADD_TEST(hyTvPCAImageFilter
          ${TESTEXE_DIR}/otbHyperTests1
 		 otbPCAImageFilterTest 
-		 -in ${Data}/CupriteSubHsi/cupriteSubHsi.tif
+		 -in ${DATA}/CupriteSubHsi/cupriteSubHsi.tif
 		 -inv ${TEMP}/cupritePCAinv.hdr
 		 -out ${TEMP}/cupritePCA.hdr)
 
@@ -188,7 +218,7 @@ ADD_TEST(hyTuMNFImageFilterNew
 ADD_TEST(hyTvMNFImageFilter
          ${TESTEXE_DIR}/otbHyperTests1
 		 otbMNFImageFilterTest 
-		 -in ${Data}/CupriteSubHsi/cupriteSubHsi.tif
+		 -in ${DATA}/CupriteSubHsi/cupriteSubHsi.tif
 		 -inv ${TEMP}/cupriteMNFinv.hdr
 		 -out ${TEMP}/cupriteMNF.hdr)
 
@@ -230,7 +260,6 @@ ADD_TEST(hyTvVCA_Synthetic
          ${TEMP}/synthetic_vca_5.hdr
          5 )
 
-
 ADD_TEST(hyTvVCA_AVIRIS
          ${TESTEXE_DIR}/otbHyperTests1
          otbVCATestHighSNR
@@ -246,16 +275,17 @@ ADD_TEST(hyTvVCAImageFilter_Synthetic
          ${TEMP}/synthetic_vcaimagefilter_5.hdr
          5 )
 
-
 ADD_TEST(hyTvVCAImageFilter_AVIRIS
          ${TESTEXE_DIR}/otbHyperTests1
          otbVCAImageFilterTestHighSNR
-         ${DATA}/AVIRIS/extract512/f970619t01p02_r02_sc01_goodbands.hdr
+         ${DATA}/AVIRIS/extract512/f970619t01p02_r02_sc02_goodbands.hdr
          ${TEMP}/aviris_vcaimagefilter_13.hdr
          13 )
-         
+
+
+
 ###################
-## Cublas
+## Cuda
 ###################
 IF( OTB_USE_CUBLAS )
 
@@ -294,7 +324,7 @@ ADD_TEST(bfTvCudaFullyConstrainedLeastSquareImageFilter_SYNTHETIC
          ${DATA}/SYNTHETIC100/hsi_cube.tif
          ${DATA}/SYNTHETIC100/endmembers.tif
          ${TEMP}/bfCudaFullyConstrainedLeastSquareImageFilter_SYNTHETIC.hdr
-         500 # maxiter
+         100 # maxiter
          512 # GPU block size
          1 # stream size in MB
          )
@@ -305,7 +335,7 @@ ADD_TEST(bfTvCudaFullyConstrainedLeastSquareImageFilter_AVIRIS512_block512
          ${DATA}/AVIRIS/extract512/f970619t01p02_r02_sc01_goodbands.hdr
          ${TEMP}/aviris_vcaimagefilter_13.hdr
          ${TEMP}/bfCudaFullyConstrainedLeastSquareImageFilter_AVIRIS512.hdr
-         500 # maxiter
+         100 # maxiter
          512 # GPU block size
          1 # stream size in MB
          )
