@@ -55,7 +55,7 @@ int otbUnConstrainedLeastSquareImageFilterTest(int argc, char * argv[])
 
   typedef VectorImageToMatrixImageFilterType::MatrixType MatrixType;
   MatrixType endMembers = endMember2Matrix->GetMatrix();
-  MatrixType pinv = vnl_matrix_inverse<double>(endMembers);
+  MatrixType pinv = vnl_matrix_inverse<PixelType>(endMembers);
 
   UnConstrainedLeastSquareSolverType::Pointer unmixer = \
       UnConstrainedLeastSquareSolverType::New();
