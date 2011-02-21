@@ -176,10 +176,18 @@ StreamingShrinkImageFilter<TInputImage, TOutputImage>
     readRegion.SetSize(readSize);
     readRegion.SetIndex(readIndex);
     // otbMsgDebugMacro(<<"Read region: "<<readRegion);
-//      otbMsgDebugMacro(<<"Largest input region: "<<inputPtr->GetLargestPossibleRegion());
+    // otbMsgDebugMacro(<<"Largest input region: "<<inputPtr->GetLargestPossibleRegion());
     inputPtr->SetRequestedRegion(readRegion);
     inputPtr->PropagateRequestedRegion();
-    inputPtr->UpdateOutputData();
+    try
+      {
+      inputPtr->UpdateOutputData();
+      }
+    catch (itk::ExceptionObject & err)
+      {
+      this->InvokeEvent(itk::EndEvent());
+      throw;
+      }
     InputIteratorType readIt(inputPtr, readRegion);
     unsigned int count = 0;
     for (readIt.GoToBegin(); !readIt.IsAtEnd() && !it.IsAtEnd(); ++readIt, ++count)

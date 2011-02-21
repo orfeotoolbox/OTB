@@ -146,7 +146,18 @@ ImageLayerGenerator<TImageLayer>
       m_Layer->SetQuicklookSubsamplingRate(ssrate);
       m_Resampler->SetInput(m_Image);
       m_Resampler->SetShrinkFactor(ssrate);
-      m_Resampler->Update();
+
+      try
+        {
+        m_Resampler->Update();
+        }
+      catch(itk::ExceptionObject & err)
+        {
+        // Disconnect pipeline and prepare a new resampler
+        m_Resampler = ResampleFilterType::New();
+        throw;
+        }
+
       otbMsgDevMacro(
         << "ImageLayerGenerator::GenerateQuicklook(): Quicklook generated (ssrate= " << ssrate << ", size= " <<
         m_Resampler->GetOutput()->GetLargestPossibleRegion().GetSize() << ")");
