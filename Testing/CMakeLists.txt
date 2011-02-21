@@ -109,7 +109,7 @@ ADD_TEST(bfTvFullyConstrainedLeastSquareImageFilter_SYNTHETIC
          otbFullyConstrainedLeastSquareImageFilterTest
          ${DATA}/SYNTHETIC100/hsi_cube.tif
          ${DATA}/SYNTHETIC100/endmembers.tif
-         ${TEMP}/bfFullyConstrainedLeastSquareImageFilter.tif)
+         ${TEMP}/bfFullyConstrainedLeastSquareImageFilter_SYNTHETIC.tif)
 
 
 ADD_TEST(bfTvFullyConstrainedLeastSquareImageFilter_AVIRIS512
@@ -202,10 +202,11 @@ IF( OTB_USE_CUBLAS )
 
 SET( otbHyperCublasTests1_SRC
   otbCublasStreamingStatisticsVectorImageFilter.cxx
+  otbCudaFCLSImageFilter.cxx
 )
 
 ADD_EXECUTABLE(otbHyperCublasTests1 ${otbHyperCublasTests1_SRC} otbHyperCublasTests1.cxx)
-TARGET_LINK_LIBRARIES(otbHyperCublasTests1 OTBCommon OTBIO OTBBasicFilters OTBTesting OTBBasicFiltersGPUCuda)
+TARGET_LINK_LIBRARIES(otbHyperCublasTests1 OTBCommon OTBIO OTBBasicFilters OTBTesting OTBBasicFiltersGPUCuda OTBHyperspectralGPUCuda )
 
 ADD_TEST(bfTuCublasStreamingStatisticsVectorImageFilterNew
          ${TESTEXE_DIR}/otbHyperCublasTests1
@@ -222,6 +223,33 @@ ADD_TEST(bfTvCublasStreamingStatisticsVectorImageFilter_AVIRIS512
          otbCublasStreamingStatisticsVectorImageFilterTest
          ${DATA}/AVIRIS/extract512/f970619t01p02_r02_sc01_goodbands.hdr
          ${TEMP}/aviris512_stats_cublas.txt)
+
+
+ADD_TEST(bfTuCudaFullyConstrainedLeastSquareImageFilterNew
+         ${TESTEXE_DIR}/otbHyperCublasTests1
+         otbCudaFullyConstrainedLeastSquareImageFilterNewTest)
+
+ADD_TEST(bfTvCudaFullyConstrainedLeastSquareImageFilter_SYNTHETIC
+         ${TESTEXE_DIR}/otbHyperCublasTests1
+         otbCudaFullyConstrainedLeastSquareImageFilterTest
+         ${DATA}/SYNTHETIC100/hsi_cube.tif
+         ${DATA}/SYNTHETIC100/endmembers.tif
+         ${TEMP}/bfCudaFullyConstrainedLeastSquareImageFilter_SYNTHETIC.hdr
+         500 # maxiter
+         512 # GPU block size
+         1 # stream size in MB
+         )
+
+ADD_TEST(bfTvCudaFullyConstrainedLeastSquareImageFilter_AVIRIS512_block512
+         ${TESTEXE_DIR}/otbHyperCublasTests1
+         otbCudaFullyConstrainedLeastSquareImageFilterTest
+         ${DATA}/AVIRIS/extract512/f970619t01p02_r02_sc01_goodbands.hdr
+         ${TEMP}/aviris_vcaimagefilter_13.hdr
+         ${TEMP}/bfCudaFullyConstrainedLeastSquareImageFilter_AVIRIS512.hdr
+         500 # maxiter
+         512 # GPU block size
+         1 # stream size in MB
+         )
 
 ENDIF( OTB_USE_CUBLAS )
 

@@ -25,5 +25,6 @@ void RegisterTests()
 {
   REGISTER_TEST(otbCublasStreamingStatisticsVectorImageFilterNewTest);
   REGISTER_TEST(otbCublasStreamingStatisticsVectorImageFilterTest);
-//  REGISTER_TEST(otbCudaCorrelationNoStreamingTest);
+  REGISTER_TEST(otbCudaFullyConstrainedLeastSquareImageFilterNewTest);
+  REGISTER_TEST(otbCudaFullyConstrainedLeastSquareImageFilterTest);
 }

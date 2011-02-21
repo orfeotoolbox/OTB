@@ -1,0 +1,13 @@
+FILE(GLOB OTBHyperspectralGPUCuda_CUDASRCS "*.cu" )
+CUDA_ADD_LIBRARY(OTBHyperspectralGPUCuda_nvcc ${OTBHyperspectralGPUCuda_CUDASRCS})
+
+
+FILE(GLOB OTBHyperspectralGPUCuda_CPPSRCS "*.cxx" )
+
+ADD_LIBRARY(OTBHyperspectralGPUCuda ${OTBHyperspectralGPUCuda_CPPSRCS})
+TARGET_LINK_LIBRARIES (OTBHyperspectralGPUCuda OTBHyperspectralGPUCuda_nvcc OTBCommon OTBBasicFilters ITKBasicFilters )
+
+IF(OTB_LIBRARY_PROPERTIES)
+  SET_TARGET_PROPERTIES(OTBHyperspectralGPUCuda PROPERTIES ${OTB_LIBRARY_PROPERTIES})
+ENDIF(OTB_LIBRARY_PROPERTIES)
+
