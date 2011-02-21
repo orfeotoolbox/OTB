@@ -86,27 +86,26 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
   typedef otb::ImageFileReader<VectorImageType>           ReaderType;
   typedef otb::ImageList<ImageType>                       ImageListType;
   typedef otb::VectorImageToImageListFilter
-      <VectorImageType, ImageListType>                      VI2ILFilterType;
+      <VectorImageType, ImageListType>                    VI2ILFilterType;
 
   // Training vectordata
   typedef otb::VectorData<>                               VectorDataType;
   typedef otb::VectorDataFileReader<VectorDataType>       VectorDataReaderType;
-
   typedef itk::VariableLengthVector<ValueType>            MeasurementType;
 
-  typedef otb::ListSampleGenerator<VectorImageType, VectorDataType> ListSampleGeneratorType;
   // SampleList manipulation
+  typedef otb::ListSampleGenerator<VectorImageType, VectorDataType> ListSampleGeneratorType;
 
-  typedef ListSampleGeneratorType::ListSampleType         ListSampleType;
-  typedef ListSampleGeneratorType::LabelType              LabelType;
-  typedef ListSampleGeneratorType::ListLabelType          LabelListSampleType;
+  typedef ListSampleGeneratorType::ListSampleType           ListSampleType;
+  typedef ListSampleGeneratorType::LabelType                LabelType;
+  typedef ListSampleGeneratorType::ListLabelType            LabelListSampleType;
   typedef otb::Statistics::ConcatenateSampleListFilter
-      <ListSampleType>                                    ConcatenateListSampleFilterType;
+      <ListSampleType>                                      ConcatenateListSampleFilterType;
   typedef otb::Statistics::ConcatenateSampleListFilter
-      <LabelListSampleType>                               ConcatenateLabelListSampleFilterType;
+      <LabelListSampleType>                                 ConcatenateLabelListSampleFilterType;
 
   // Statistic XML file Reader 
-  typedef otb::StatisticsXMLFileReader<MeasurementType>   StatisticsReader;
+  typedef otb::StatisticsXMLFileReader<MeasurementType>     StatisticsReader;
 
   typedef otb::Statistics::ShiftScaleSampleListFilter<
       ListSampleType,ListSampleType>                        ShiftScaleFilterType;
@@ -120,14 +119,18 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
       MeasurementVectorFunctorType>                         SVMEstimatorType;
   typedef otb::SVMClassifier<ListSampleType, LabelType>     ClassifierType;
   typedef otb::ConfusionMatrixCalculator<LabelListSampleType,
-      LabelListSampleType>                            ConfusionMatrixCalculatorType;
+      LabelListSampleType>                                  ConfusionMatrixCalculatorType;
   typedef ClassifierType::OutputType ClassifierOutputType;
 
   //Create training and validation for list samples and label list samples
-  ConcatenateLabelListSampleFilterType::Pointer concatenateTrainingLabels = ConcatenateLabelListSampleFilterType::New();
-  ConcatenateListSampleFilterType::Pointer concatenateTrainingSamples = ConcatenateListSampleFilterType::New();
-  ConcatenateLabelListSampleFilterType::Pointer concatenateValidationLabels = ConcatenateLabelListSampleFilterType::New();
-  ConcatenateListSampleFilterType::Pointer concatenateValidationSamples = ConcatenateListSampleFilterType::New();
+  ConcatenateLabelListSampleFilterType::Pointer concatenateTrainingLabels =
+                                                  ConcatenateLabelListSampleFilterType::New();
+  ConcatenateListSampleFilterType::Pointer concatenateTrainingSamples =
+                                             ConcatenateListSampleFilterType::New();
+  ConcatenateLabelListSampleFilterType::Pointer concatenateValidationLabels =
+                                                  ConcatenateLabelListSampleFilterType::New();
+  ConcatenateListSampleFilterType::Pointer concatenateValidationSamples =
+                                            ConcatenateListSampleFilterType::New();
 
   //Set the size of training and validation set
   //TODO use default parameters of the filter?
