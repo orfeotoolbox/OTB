@@ -82,27 +82,27 @@ ADD_TEST(odTuObjectDetectionClassifierNew ${OBJECTDETECTION_TESTS1}
   )
 
 ADD_TEST(odTvObjectDetectionClassifier ${OBJECTDETECTION_TESTS1}
-  --compare-ogr ${NOTOL}
-  ${BASELINE_FILES}/TvObjectDetectionClassifierOutput.shp
-  ${TEMP}/TvObjectDetectionClassifierOutput.shp
+  --compare-ascii ${NOTOL}
+  ${BASELINE_FILES}/TvObjectDetectionClassifierOutput.txt
+  ${TEMP}/TvObjectDetectionClassifierOutput.txt
   otbObjectDetectionClassifier
   ${INPUTDATA}/ObjectReco/Boats/maur_B010202_01_extract_amplitude.tif
   ${INPUTDATA}/ObjectReco/Boats/FeatureStats_RadiometricMoments_amplitude.xml
   ${BASELINE_FILES}/TvDescriptorsSVMModelCreation.svm
-  ${TEMP}/TvObjectDetectionClassifierOutput.shp
+  ${TEMP}/TvObjectDetectionClassifierOutput.txt
   0 # streaming
   5 # neighborhood radius
   )
 
 ADD_TEST(odTvObjectDetectionClassifierStreaming ${OBJECTDETECTION_TESTS1}
-  --compare-ogr ${NOTOL}
-  ${BASELINE_FILES}/TvObjectDetectionClassifierOutput.shp
-  ${TEMP}/TvObjectDetectionClassifierOutputStreaming.shp
+  --compare-ascii ${NOTOL}
+  ${BASELINE_FILES}/TvObjectDetectionClassifierOutput.txt
+  ${TEMP}/TvObjectDetectionClassifierOutputStreaming.txt
   otbObjectDetectionClassifier
   ${INPUTDATA}/ObjectReco/Boats/maur_B010202_01_extract_amplitude.tif
   ${INPUTDATA}/ObjectReco/Boats/FeatureStats_RadiometricMoments_amplitude.xml
   ${BASELINE_FILES}/TvDescriptorsSVMModelCreation.svm
-  ${TEMP}/TvObjectDetectionClassifierOutputStreaming.shp
+  ${TEMP}/TvObjectDetectionClassifierOutputStreaming.txt
   50 # streaming
   5 # neighborhood radius
   )
