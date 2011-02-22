@@ -64,6 +64,7 @@ int otbISRAUnmixingImageFilterTest(int argc, char * argv[])
 
   unmixer->SetInput(readerImage->GetOutput());
   unmixer->SetMaxIteration(maxIter);
+  unmixer->SetNumberOfThreads(1);
   unmixer->SetEndmembersMatrix(endMember2Matrix->GetMatrix());
 
   WriterType::Pointer writer = WriterType::New();
@@ -71,7 +72,7 @@ int otbISRAUnmixingImageFilterTest(int argc, char * argv[])
   writer->SetInput(unmixer->GetOutput());
   writer->SetBufferNumberOfLinesDivisions(10);
 
-  otb::StandardWriterWatcher w4(writer,unmixer,"FullyConstrainedLeastSquare");
+  otb::StandardWriterWatcher w4(writer,unmixer,"ISRAUnmixingImageFilter");
 
   writer->Update();
 
