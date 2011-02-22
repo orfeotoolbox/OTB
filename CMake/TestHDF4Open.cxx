@@ -15,7 +15,7 @@ int main(int argc, char * argv[])
 {
   if (argc != 2)
     {
-    std::cerr << "Usage : " << argv[0] << " <HDF4_filename> <ID number of the dataset>" << std::endl;
+    std::cerr << "Usage : " << argv[0] << " <HDF4_filename>" << std::endl;
     return 1;
     }
 
@@ -47,6 +47,7 @@ int main(int argc, char * argv[])
     subDatasetName.erase ( subDatasetName.begin(), subDatasetName.begin() + found +1);
     }
 
+  GDALClose(poDataset);
   poDatasetSubDS = (GDALDataset *) GDALOpen(subDatasetName.c_str(), GA_ReadOnly);
   if (poDatasetSubDS == NULL)
     {
@@ -65,6 +66,7 @@ int main(int argc, char * argv[])
   int xSizeROI = xSize ;
   int ySizeROI = ySize ;
 
+  int ret = 0;
   if (pxlType == GDT_Byte)
     {
     typedef unsigned char UCHAR;
@@ -72,10 +74,10 @@ int main(int argc, char * argv[])
     CPLErr lCrGdal = rb->RasterIO(GF_Read, 0, 0, xSizeROI, ySizeROI, buffer, xSizeROI, ySizeROI, pxlType, 0, 0);
     if (lCrGdal == CE_Failure)
       {
-      return 1;
+      ret = 1;
       }
     delete[] buffer;
-      }
+    }
   else if (pxlType == GDT_Int16)
     {
     typedef short int SHORT;
@@ -83,7 +85,7 @@ int main(int argc, char * argv[])
     CPLErr lCrGdal = rb->RasterIO(GF_Read, 0, 0, xSizeROI, ySizeROI, buffer, xSizeROI, ySizeROI, pxlType, 0, 0);
     if (lCrGdal == CE_Failure)
       {
-      return 1;
+      ret = 1;
       }
     delete[] buffer;
     }
@@ -93,13 +95,12 @@ int main(int argc, char * argv[])
     CPLErr lCrGdal =  rb->RasterIO(GF_Read, 0, 0, xSizeROI, ySizeROI, buffer, xSizeROI, ySizeROI, pxlType, 0, 0);
     if (lCrGdal == CE_Failure)
       {
-      return 1;
+      ret = 1;
       }
     delete[] buffer;
     }
 
   GDALClose(poDatasetSubDS);
-  GDALClose(poDataset);
 
-  return 0;
+  return ret;
 }
