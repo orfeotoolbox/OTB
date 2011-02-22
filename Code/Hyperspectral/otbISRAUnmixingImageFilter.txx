@@ -41,7 +41,6 @@ ISRAUnmixingFunctor<TInput, TOutput, TPrecision>
 {
 }
 
-
 template <class TInput, class TOutput, class TPrecision>
 unsigned int
 ISRAUnmixingFunctor<TInput, TOutput, TPrecision>
@@ -92,14 +91,20 @@ ISRAUnmixingFunctor<TInput, TOutput, TPrecision>
 {
   // TODO : support different types between input and output ?
   VectorType inVector(in.GetDataPointer(), in.Size());
+
+  // Initialize with Unconstrained Least Square solution
   VectorType outVector = m_Svd->solve(inVector);
 
   unsigned int nbEndmembers = m_OutputSize;
   unsigned int nbBands = in.Size();
 
+  // Apply ISRA iterations
   for (int i = 0; i < m_MaxIteration; ++i)
     {
-    VectorType outVectorTmp = outVector;
+
+    // Use a temporary storage since it is used
+    // inside the iterations
+    VectorType outVectorNew = outVector;
     for (int e = 0; e < nbEndmembers; ++e)
       {
       PrecisionType numerator = 0;
@@ -112,15 +117,17 @@ ISRAUnmixingFunctor<TInput, TOutput, TPrecision>
         PrecisionType dot = 0;
         for (int s = 0; s < nbEndmembers; ++s)
           {
-          dot += m_U(b, s) * outVectorTmp[s];
+          // Use outVector from previous iteration here
+          dot += m_U(b, s) * outVector[s];
           }
-
         denominator += dot * m_U(b, e);
         }
-      outVectorTmp[e] *= (numerator/denominator);
+
+      outVectorNew[e] *= (numerator/denominator);
       }
 
-    outVector = outVectorTmp;
+    // Prepare for next iteration
+    outVector = outVectorNew;
     }
 
   return OutputType(outVector.data_block(), outVector.size());
