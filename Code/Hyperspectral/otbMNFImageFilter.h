@@ -137,10 +137,11 @@ public:
 
   /** If the NoiseTransformation is given, the NoiseImageFilter is useless */
   itkGetMacro( NoiseTransformationMatrix, MatrixType );
-  void SetNoiseTransformationMatrix ( const MatrixType & mat )
+  void SetNoiseTransformationMatrix ( const MatrixType & mat, bool isForward = true )
   {
     m_NoiseTransformationMatrix = mat;
     m_GivenNoiseTransformationMatrix = true;
+    m_IsNoiseTransformationMatrixForward = isForward;
   }
 
   itkGetConstMacro(NoiseRatioValues,VectorType);
@@ -175,6 +176,7 @@ protected:
   /** Internal attributes */
   bool m_GivenNoiseCovarianceMatrix;
   bool m_GivenNoiseTransformationMatrix;
+  bool m_IsNoiseTransformationMatrixForward;
 
   MatrixType m_NoiseCovarianceMatrix;
   MatrixType m_NoiseTransformationMatrix;

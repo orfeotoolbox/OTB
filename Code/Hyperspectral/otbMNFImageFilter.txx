@@ -80,7 +80,7 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
       return ReverseGenerateData();
     default: // should not go so far
       throw itk::ExceptionObject(__FILE__, __LINE__,
-          "Class should be templeted with FORWARD or INVERSE only...",
+          "Class should be templated with FORWARD or INVERSE only...",
           ITK_LOCATION );
   }
 }
@@ -97,7 +97,7 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
 
   if ( !m_GivenNoiseTransformationMatrix )
   {
-    if ( !m_GivenNoiseTransformationMatrix )
+    if ( !m_GivenNoiseCovarianceMatrix )
     {
       otbGenericMsgDebugMacro(<< "Covariance estimation");
 
@@ -116,7 +116,7 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
   if ( m_NoiseTransformationMatrix.GetVnlMatrix().empty() )
   {
     throw itk::ExceptionObject( __FILE__, __LINE__,
-          "Emplty noise transformation matrix",
+          "Empty noise transformation matrix",
           ITK_LOCATION);
   }
 
@@ -155,13 +155,19 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
     {
       GetTransformationMatrixFromCovarianceMatrix();
       m_NoiseTransformationMatrix = m_NoiseTransformationMatrix.GetTranspose();
+      m_IsNoiseTransformationMatrixForward = false;
     }
   }
+
+  if (m_IsNoiseTransformationMatrixForward)
+    {
+    m_NoiseTransformationMatrix = m_NoiseTransformationMatrix.GetTranspose();
+    }
 
   if ( m_NoiseTransformationMatrix.GetVnlMatrix().empty() )
   {
     throw itk::ExceptionObject( __FILE__, __LINE__,
-          "Emplty transformation matrix",
+          "Empty transformation matrix",
           ITK_LOCATION);
   }
 
