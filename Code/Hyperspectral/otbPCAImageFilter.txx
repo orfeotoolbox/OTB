@@ -113,7 +113,7 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
       return ReverseGenerateData();
     default:
       throw itk::ExceptionObject(__FILE__, __LINE__,
-          "Class should be templeted with FORWARD or INVERSE only...",
+          "Class should be templated with FORWARD or INVERSE only...",
           ITK_LOCATION );
   }
 }
@@ -150,7 +150,7 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   if ( m_TransformationMatrix.GetVnlMatrix().empty() )
   {
     throw itk::ExceptionObject( __FILE__, __LINE__,
-          "Emplty transformation matrix",
+          "Empty transformation matrix",
           ITK_LOCATION);
   }
 
@@ -188,7 +188,7 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   if ( m_TransformationMatrix.GetVnlMatrix().empty() )
   {
     throw itk::ExceptionObject( __FILE__, __LINE__,
-          "Emplty transformation matrix",
+          "Empty transformation matrix",
           ITK_LOCATION);
   }
 
