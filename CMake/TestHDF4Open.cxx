@@ -63,8 +63,8 @@ int main(int argc, char * argv[])
   GDALRasterBand *rb = poDatasetSubDS->GetRasterBand(1);
   GDALDataType pxlType = rb->GetRasterDataType();
 
-  int xSizeROI = xSize ;
-  int ySizeROI = ySize ;
+  int xSizeROI = xSize/100 ;
+  int ySizeROI = ySize/100 ;
 
   int ret = 0;
   if (pxlType == GDT_Byte)
