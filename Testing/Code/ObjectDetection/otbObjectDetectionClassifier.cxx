@@ -19,6 +19,7 @@
 #pragma warning ( disable : 4786 )
 #endif
 
+#include <iostream>
 #include <iterator>
 
 #include "otbImage.h"
@@ -29,9 +30,9 @@
 #include "itkVariableLengthVector.h"
 #include "otbObjectDetectionClassifier.h"
 #include "otbImageFileReader.h"
-#include "otbVectorDataFileWriter.h"
 #include "otbImageFunctionAdaptor.h"
 #include "otbStatisticsXMLFileReader.h"
+#include "itkPreOrderTreeIterator.h"
 
 const unsigned int Dimension = 2;
 typedef int        LabelType;
@@ -41,6 +42,8 @@ typedef double     CoordRepType;
 
 typedef otb::Image<PixelType, Dimension>                              ImageType;
 typedef otb::VectorData<>                                             VectorDataType;
+typedef VectorDataType::PointType                                     PointType;
+typedef itk::PreOrderTreeIterator<VectorDataType::DataTreeType>       TreeIteratorType;
 
 typedef otb::ObjectDetectionClassifier
            < ImageType,
@@ -53,12 +56,37 @@ typedef otb::RadiometricMomentsImageFunction<ImageType, CoordRepType>   Function
 typedef otb::ImageFunctionAdaptor<FunctionType, FunctionPrecisionType>  AdapatedFunctionType;
 
 typedef otb::ImageFileReader<ImageType>           ImageReaderType;
-typedef otb::VectorDataFileWriter<VectorDataType> VectorDataWriterType;
 
 typedef ObjectDetectionClassifierType::SVMModelType SVMModelType;
 typedef ObjectDetectionClassifierType::SVMModelPointerType SVMModelPointerType;
 
 typedef otb::StatisticsXMLFileReader<AdapatedFunctionType::OutputType> StatisticsXMLFileReaderType;
+
+
+struct ComparePoint
+{
+  bool operator () (PointType p, PointType q)
+  {
+    // order with the y axis position
+    if (p[1] < q[1])
+      return true;
+    if (p[1] > q[1])
+      return false;
+
+    // If one the same line,
+    // order with the x axis position
+    if (p[0] < q[0])
+      return true;
+
+    return false;
+  }
+};
+
+ostream &operator<<(ostream &stream, PointType p)
+{
+  stream << p[0] << " " << p[1];
+  return stream;
+}
 
 int otbObjectDetectionClassifierNew(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
@@ -118,10 +146,25 @@ int otbObjectDetectionClassifier(int argc, char* argv[])
 
   classifier->Update();
 
-  VectorDataWriterType::Pointer writer = VectorDataWriterType::New();
-  writer->SetFileName(outputVectorDataFileName);
-  writer->SetInput(classifier->GetOutputVectorData());
-  writer->Update();
+  std::vector<ObjectDetectionClassifierType::PointType> points;
+  VectorDataType::Pointer vectorData = classifier->GetOutputVectorData();
+
+  TreeIteratorType itVector(vectorData->GetDataTree());
+  itVector.GoToBegin();
+  while (!itVector.IsAtEnd())
+    {
+    if (itVector.Get()->IsPointFeature())
+      {
+      points.push_back(itVector.Get()->GetPoint());
+      }
+    ++itVector;
+    }
+
+  std::sort(points.begin(), points.end(), ComparePoint());
+  std::ofstream file(outputVectorDataFileName);
+  std::copy(points.begin(), points.end(), std::ostream_iterator<PointType>(file, "\n"));
+  file.close();
+
 
   return EXIT_SUCCESS;
 }
