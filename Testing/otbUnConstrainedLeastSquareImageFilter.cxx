@@ -18,8 +18,9 @@
 #include "otbUnConstrainedLeastSquareImageFilter.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
-#include "otbImageFileWriter.h"
+#include "otbStreamingImageFileWriter.h"
 #include "otbVectorImageToMatrixImageFilter.h"
+#include "otbStandardWriterWatcher.h"
 
 const unsigned int Dimension = 2;
 typedef double PixelType;
@@ -28,7 +29,7 @@ typedef otb::VectorImage<PixelType, Dimension> ImageType;
 typedef otb::ImageFileReader<ImageType> ReaderType;
 typedef otb::UnConstrainedLeastSquareImageFilter<ImageType,ImageType,double> UnConstrainedLeastSquareSolverType;
 typedef otb::VectorImageToMatrixImageFilter<ImageType> VectorImageToMatrixImageFilterType;
-typedef otb::ImageFileWriter<ImageType> WriterType;
+typedef otb::StreamingImageFileWriter<ImageType> WriterType;
 
 int otbUnConstrainedLeastSquareImageFilterNewTest(int argc, char * argv[])
 {
@@ -68,6 +69,8 @@ int otbUnConstrainedLeastSquareImageFilterTest(int argc, char * argv[])
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outputImage);
   writer->SetInput(unmixer->GetOutput());
+
+  otb::StandardWriterWatcher w4(writer,unmixer,"UnConstrainedLeastSquareImageFilter");
   writer->Update();
 
   return EXIT_SUCCESS;
