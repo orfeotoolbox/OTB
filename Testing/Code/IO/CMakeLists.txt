@@ -1267,7 +1267,8 @@ ADD_TEST(ioTvMultiDatasetReadingInfo ${IO_TESTS9}
       ${TEMP}/ioTvMultiDatasetReadingInfoOut.txt
       )
    
-# Test reading HDF files (hdf, hdf5, hdf4, h5, h4, he5, he4)           
+# Test reading HDF files (hdf, hdf5, hdf4, h5, h4, he5, he4) 
+IF(CHECK_HDF4OPEN_SYMBOL)          
 ADD_TEST(ioTvMultiChannelROI_HDF4_2_TIF ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_HDF2TIF_MOD09Q1G_20_25_100_150_channel_1.tif
                      ${TEMP}/ioExtractROI_HDF2TIF_MOD09Q1G_20_25_100_150_channel_1_OUT.tif
@@ -1276,6 +1277,7 @@ ADD_TEST(ioTvMultiChannelROI_HDF4_2_TIF ${COMMON_TESTS2}
          ${TEMP}/ioExtractROI_HDF2TIF_MOD09Q1G_20_25_100_150_channel_1_OUT.tif
          -startX 1400 -startY 3700 -sizeX 100 -sizeY 150
          -channels 1 )
+ENDIF(CHECK_HDF4OPEN_SYMBOL)
          
 ADD_TEST(ioTvMultiChannelROI_HDF5_2_TIF ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_HDF2TIF_GSSTF_NCEP_100_20_200_100_channel_1.tif
