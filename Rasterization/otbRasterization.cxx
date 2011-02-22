@@ -32,6 +32,7 @@
 #include "otbVectorDataProjectionFilter.h"
 #include "otbVectorDataFileReader.h"
 #include "otbVectorDataFileWriter.h"
+#include "otbVectorDataProperties.h"
 
 //Rasterization
 #include "otbVectorDataToImageFilter.h"
@@ -96,7 +97,8 @@ int Rasterization::Execute(otb::ApplicationOptionsResult* parseResult)
   typedef VectorDataProjectionFilter<
     VectorDataType,VectorDataType>                        VectorDataProjectionFilterType;
   typedef VectorDataExtractROI<VectorDataType>            VectorDataExtractROIType;
-  
+  typedef VectorDataProperties<VectorDataType>            VectorDataPropertiesType;
+
   // Rasterization
   typedef otb::VectorDataToImageFilter<VectorDataType, 
     ImageType>                                      VectorDataToImageFilterType;
@@ -104,13 +106,14 @@ int Rasterization::Execute(otb::ApplicationOptionsResult* parseResult)
   // Misc
   typedef otb::RemoteSensingRegion<double>                RemoteSensingRegionType;
   typedef RemoteSensingRegionType::SizeType               SizePhyType;
-  typedef otb::PipelineMemoryPrintCalculator        MemoryCalculatorType;
+  typedef otb::PipelineMemoryPrintCalculator              MemoryCalculatorType;
   
   // Reading the VectorData
   std::string vdFilename = parseResult->GetParameterString("InputVData");
   std::cout<<"Processing vector data : "<<vdFilename<<std::endl;
   VectorDataReaderType::Pointer vdReader = VectorDataReaderType::New();
   vdReader->SetFileName(vdFilename);
+  vdReader->Update();
 
   // Reprojecting the VectorData
   std::string projectionRef;
@@ -127,6 +130,14 @@ int Rasterization::Execute(otb::ApplicationOptionsResult* parseResult)
   vproj->SetOutputProjectionRef(projectionRef);
 
   // Converting the VectorData
+  VectorDataPropertiesType::Pointer vdProperties = VectorDataPropertiesType::New();
+  vdProperties->SetVectorDataObject(vdReader->GetOutput());
+  vdProperties->ComputeBoundingRegion();
+
+  SizeType size;
+  size[0] = parseResult->GetParameterDouble("SizeX");
+  size[1] = parseResult->GetParameterDouble("SizeY");
+
   PointType origin;
   if(parseResult->IsOptionPresent("OriginX") && parseResult->IsOptionPresent("OriginY"))
     {
@@ -135,8 +146,7 @@ int Rasterization::Execute(otb::ApplicationOptionsResult* parseResult)
     }
   else
     {
-    origin[0] = 0.0;
-    origin[1] = 0.0;
+    origin = vdProperties->GetBoundingRegion().GetIndex();
     }
   
   SpacingType spacing;
@@ -147,18 +157,16 @@ int Rasterization::Execute(otb::ApplicationOptionsResult* parseResult)
     }
   else
     {
-    spacing[0] = 1.0;
-    spacing[1] = 1.0;
+    spacing[0] = vdProperties->GetBoundingRegion().GetSize()[0]/size[0];
+    spacing[1] = vdProperties->GetBoundingRegion().GetSize()[1]/size[1];
     }
 
-  SizeType size;
-  size[0] = parseResult->GetParameterDouble("SizeX");
-  size[1] = parseResult->GetParameterDouble("SizeY");
-
-  RemoteSensingRegionType   region;
+  
   SizePhyType               sizePhy;
   sizePhy[0] = size[0] * spacing[0];
   sizePhy[1] = size[1] * spacing[1];
+
+  RemoteSensingRegionType   region;
   region.SetSize(sizePhy);
   region.SetOrigin(origin);
   region.SetRegionProjection(projectionRef);
