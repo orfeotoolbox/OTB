@@ -117,7 +117,7 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
       ListSampleType,
       LabelListSampleType,
       MeasurementVectorFunctorType>                         SVMEstimatorType;
-  typedef otb::SVMClassifier<ListSampleType, LabelType>     ClassifierType;
+  typedef otb::SVMClassifier<ListSampleType, LabelType::ValueType>     ClassifierType;
   typedef otb::ConfusionMatrixCalculator<LabelListSampleType,
       LabelListSampleType>                                  ConfusionMatrixCalculatorType;
   typedef ClassifierType::OutputType ClassifierOutputType;
