@@ -81,6 +81,8 @@ int otbFilterFunctionValuesDigitalGlobeTest(int argc, char * argv[])
   const char *       infname   = argv[1];
   const char *       outname   = argv[2];
   const double       userStep  = atof(argv[3]);
+  const double wavelengthFactor = atof(argv[4]);
+  //std::cout << "wavelengthFactor " << wavelengthFactor << std::endl;
   const double SIXSStepOfWavelengthSpectralBandValues(0.0025);
 
   typedef otb::FilterFunctionValues FilterFunctionValuesType;
@@ -130,13 +132,15 @@ int otbFilterFunctionValuesDigitalGlobeTest(int argc, char * argv[])
     // Store min wavelength
     if (firstLine)
       {
-      mini = keywordStrings[0].toDouble();
-      nbBands = keywordStrings.size() - 2;
-      std::cout << "firstline " << " mini " << mini <<  " nbBands "<< nbBands << std::endl;
+      mini = keywordStrings[0].toDouble() * wavelengthFactor;
+      nbBands = keywordStrings.size() - 1;
+      //std::cout << "firstline " << " mini " << mini <<  " nbBands "<< nbBands << std::endl;
+      //std::cout << "keywordStrings[nbBands] "  << keywordStrings[nbBands] << std::endl;
       for (unsigned int j = 0; j < nbBands; j++)
         {
         wavelengthSpectralBand->PushBack(FilterFunctionValuesType::New());
         ValuesVectorType temp;
+
         valuesVector.push_back(temp);
         }
       firstLine = false;
@@ -153,7 +157,8 @@ int otbFilterFunctionValuesDigitalGlobeTest(int argc, char * argv[])
       }
 
 
-    maxi = keywordStrings[0].toDouble();
+    maxi = keywordStrings[0].toDouble() * wavelengthFactor;
+    //std::cout << " maxi " << maxi << std::endl;
     }
 
   // Call interpolate
@@ -163,9 +168,9 @@ int otbFilterFunctionValuesDigitalGlobeTest(int argc, char * argv[])
   std::ofstream outputFile;
   outputFile.open(outname);
 
-  outputFile << "Input Vector filename: " << infname << std::endl;
-  outputFile << std::endl;
-  outputFile << "Output vector :" << std::endl;
+  //outputFile << "Input Vector filename: " << infname << std::endl;
+  //outputFile << std::endl;
+  //outputFile << "Output vector :" << std::endl;
 
   for (unsigned int j = 0; j < nbBands; j++)
     {
@@ -178,14 +183,17 @@ int otbFilterFunctionValuesDigitalGlobeTest(int argc, char * argv[])
         SIXSStepOfWavelengthSpectralBandValues,
         wavelengthSpectralBand->GetNthElement(j));
 
+    outputFile << "L_min :" << wavelengthSpectralBand->GetNthElement(j)->GetMinSpectralValue() << std::endl;
+    outputFile << "L_max :" << wavelengthSpectralBand->GetNthElement(j)->GetMaxSpectralValue() << std::endl;
+
+    outputFile << std::endl;
+
     for (unsigned int i = 0; i < wavelengthSpectralBand->GetNthElement(j)->GetFilterFunctionValues6S().size(); i++)
       {
       outputFile << wavelengthSpectralBand->GetNthElement(j)->GetFilterFunctionValues6S()[i] << std::endl;
       }
     outputFile << std::endl;
-    outputFile << "L_min :" << wavelengthSpectralBand->GetNthElement(j)->GetMinSpectralValue() << std::endl;
-    outputFile << "L_max :" << wavelengthSpectralBand->GetNthElement(j)->GetMaxSpectralValue() << std::endl;
-    outputFile << std::endl;
+
     }
 
   outputFile.close();

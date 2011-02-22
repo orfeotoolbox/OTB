@@ -521,7 +521,7 @@ StreamingImageFileWriter<TInputImage>
     // Start writing streamregion in the image file
     this->GenerateData();
 
-    this->UpdateProgress((float) piece / numDivisions);
+    this->UpdateProgress((float) (piece+1) / numDivisions);
     }
 
   /**
