@@ -65,13 +65,16 @@ int main(int argc, char * argv[])
 
   int xSizeROI = xSize/100 ;
   int ySizeROI = ySize/100 ;
+  // To solve a weird seg fault with this test under dora and gdal 1.7.2, we move from 0,0 to 0,1.
+  int xBeginROI = 0;
+  int yBeginROI = 1;
 
   int ret = 0;
   if (pxlType == GDT_Byte)
     {
     typedef unsigned char UCHAR;
     UCHAR *buffer = new UCHAR[xSizeROI * ySizeROI];
-    CPLErr lCrGdal = rb->RasterIO(GF_Read, 0, 0, xSizeROI, ySizeROI, buffer, xSizeROI, ySizeROI, pxlType, 0, 0);
+    CPLErr lCrGdal = rb->RasterIO(GF_Read, xBeginROI, yBeginROI, xSizeROI, ySizeROI, buffer, xSizeROI, ySizeROI, pxlType, 0, 0);
     if (lCrGdal == CE_Failure)
       {
       ret = 1;
@@ -82,7 +85,7 @@ int main(int argc, char * argv[])
     {
     typedef short int SHORT;
     SHORT *buffer = new SHORT[xSizeROI * ySizeROI];
-    CPLErr lCrGdal = rb->RasterIO(GF_Read, 0, 0, xSizeROI, ySizeROI, buffer, xSizeROI, ySizeROI, pxlType, 0, 0);
+    CPLErr lCrGdal = rb->RasterIO(GF_Read, xBeginROI, yBeginROI, xSizeROI, ySizeROI, buffer, xSizeROI, ySizeROI, pxlType, 0, 0);
     if (lCrGdal == CE_Failure)
       {
       ret = 1;
@@ -92,7 +95,7 @@ int main(int argc, char * argv[])
   else if (pxlType == GDT_Float32)
     {
     float *buffer = new float[xSizeROI * ySizeROI];
-    CPLErr lCrGdal =  rb->RasterIO(GF_Read, 0, 0, xSizeROI, ySizeROI, buffer, xSizeROI, ySizeROI, pxlType, 0, 0);
+    CPLErr lCrGdal =  rb->RasterIO(GF_Read, xBeginROI, yBeginROI, xSizeROI, ySizeROI, buffer, xSizeROI, ySizeROI, pxlType, 0, 0);
     if (lCrGdal == CE_Failure)
       {
       ret = 1;
