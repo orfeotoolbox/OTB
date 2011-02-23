@@ -287,7 +287,7 @@ ADD_TEST(hyTvVCAImageFilter_AVIRIS
 ###################
 ## Cuda
 ###################
-IF( OTB_USE_CUBLAS )
+IF( OTB_USE_CUDA )
 
 SET( otbHyperCublasTests1_SRC
   otbCublasStreamingStatisticsVectorImageFilter.cxx
@@ -340,7 +340,7 @@ ADD_TEST(bfTvCudaFullyConstrainedLeastSquareImageFilter_AVIRIS512_block512
          1 # stream size in MB
          )
 
-ENDIF( OTB_USE_CUBLAS )
+ENDIF( OTB_USE_CUDA )
 
 ###################
 ## Anomaly detection
