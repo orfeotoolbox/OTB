@@ -44,8 +44,8 @@ class ITK_EXPORT SailModel : public SimulationStep2Base
       typedef itk::SmartPointer<const Self> ConstPointer;
       
       typedef Superclass::SpectralResponseType      SpectralResponseType;
-      typedef std::vector<double> VectorType;
-      typedef Superclass::ParametersType           ParametersType;
+      typedef std::vector<double>                   VectorType;
+      typedef Superclass::ParametersType   ParametersType;
       
       /** Standard macros */
       itkNewMacro(Self);
