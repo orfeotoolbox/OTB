@@ -56,15 +56,12 @@ int otbUnConstrainedLeastSquareImageFilterTest(int argc, char * argv[])
 
   typedef VectorImageToMatrixImageFilterType::MatrixType MatrixType;
   MatrixType endMembers = endMember2Matrix->GetMatrix();
-  MatrixType pinv = vnl_matrix_inverse<PixelType>(endMembers);
 
   UnConstrainedLeastSquareSolverType::Pointer unmixer = \
       UnConstrainedLeastSquareSolverType::New();
 
   unmixer->SetInput(readerImage->GetOutput());
   unmixer->SetMatrix(endMember2Matrix->GetMatrix());
-
-  unmixer->Update();
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outputImage);
