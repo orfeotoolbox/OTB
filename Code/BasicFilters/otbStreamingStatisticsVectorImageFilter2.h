@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingStatisticsVectorImageFilter_h
-#define __otbStreamingStatisticsVectorImageFilter_h
+#ifndef __otbStreamingStatisticsVectorImageFilter2_h
+#define __otbStreamingStatisticsVectorImageFilter2_h
 
 #include "otbPersistentImageFilter.h"
 #include "otbPersistentFilterStreamingDecorator.h"
@@ -49,7 +49,7 @@ namespace otb
  * \ingroup MathematicalStatisticsImageFilters
  *
  */
-template<class TInputImage>
+template<class TInputImage, class TPrecision >
 class ITK_EXPORT PersistentStreamingStatisticsVectorImageFilter2 :
   public PersistentImageFilter<TInputImage, TInputImage>
 {
@@ -75,26 +75,23 @@ public:
   typedef typename TInputImage::PixelType         PixelType;
   typedef typename TInputImage::InternalPixelType InternalPixelType;
 
+  typedef TPrecision                              PrecisionType;
+  typedef PrecisionType                           RealType;
+
   itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
 
   /** Image related typedefs. */
   itkStaticConstMacro(ImageDimension, unsigned int, TInputImage::ImageDimension);
 
   /** Type to use for computations. */
-  typedef typename itk::NumericTraits<InternalPixelType>::RealType RealType;
-  typedef itk::VariableLengthVector<RealType>                      RealPixelType;
+  typedef itk::VariableLengthVector<PrecisionType>      RealPixelType;
 
   /** Smart Pointer type to a DataObject. */
   typedef typename itk::DataObject::Pointer DataObjectPointer;
 
   /** Type of DataObjects used for scalar outputs */
-  typedef itk::VariableSizeMatrix<RealType>    MatrixType;
-  typedef std::vector<MatrixType>              ArrayMatrixType;
-  typedef itk::Array<long>                     ArrayLongPixelType;
-  typedef std::vector<RealPixelType>           ArrayRealPixelType;
-  typedef std::vector<PixelType>               ArrayPixelType;
+  typedef itk::VariableSizeMatrix<PrecisionType>        MatrixType;
   typedef itk::SimpleDataObjectDecorator<RealPixelType> RealPixelObjectType;
-  typedef itk::SimpleDataObjectDecorator<PixelType>     PixelObjectType;
   typedef itk::SimpleDataObjectDecorator<MatrixType>    MatrixObjectType;
 
   /** Return the computed Mean. */
@@ -183,15 +180,15 @@ private:
  * \ingroup MathematicalStatisticsImageFilters
  */
 
-template<class TInputImage>
+template<class TInputImage, class TPrecision = typename itk::NumericTraits<typename TInputImage::InternalPixelType>::RealType>
 class ITK_EXPORT StreamingStatisticsVectorImageFilter2 :
-  public PersistentFilterStreamingDecorator<PersistentStreamingStatisticsVectorImageFilter2<TInputImage> >
+  public PersistentFilterStreamingDecorator<PersistentStreamingStatisticsVectorImageFilter2<TInputImage, TPrecision> >
 {
 public:
   /** Standard Self typedef */
   typedef StreamingStatisticsVectorImageFilter2 Self;
   typedef PersistentFilterStreamingDecorator
-  <PersistentStreamingStatisticsVectorImageFilter2<TInputImage> > Superclass;
+  <PersistentStreamingStatisticsVectorImageFilter2<TInputImage, TPrecision> > Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -203,18 +200,13 @@ public:
 
   typedef TInputImage                                 InputImageType;
   typedef typename Superclass::FilterType             StatFilterType;
-  typedef typename StatFilterType::PixelType          PixelType;
-  typedef typename StatFilterType::RealType           RealType;
-  typedef typename StatFilterType::RealPixelType      RealPixelType;
-  typedef typename StatFilterType::MatrixType         MatrixType;
-  typedef typename StatFilterType::ArrayMatrixType    ArrayMatrixType;
-  typedef typename StatFilterType::ArrayLongPixelType ArrayLongPixelType;
-  typedef typename StatFilterType::ArrayRealPixelType ArrayRealPixelType;
-  typedef typename StatFilterType::ArrayPixelType     ArrayPixelType;
 
-  /** Type of DataObjects used for scalar outputs */
+  /** Type of DataObjects used for outputs */
+  typedef typename StatFilterType::PixelType           PixelType;
+  typedef typename StatFilterType::RealType            RealType;
+  typedef typename StatFilterType::RealPixelType       RealPixelType;
   typedef typename StatFilterType::RealPixelObjectType RealPixelObjectType;
-  typedef typename StatFilterType::PixelObjectType     PixelObjectType;
+  typedef typename StatFilterType::MatrixType          MatrixType;
   typedef typename StatFilterType::MatrixObjectType    MatrixObjectType;
 
   void SetInput(InputImageType * input)
@@ -279,7 +271,8 @@ public:
 
 protected:
   /** Constructor */
-  StreamingStatisticsVectorImageFilter2() {};
+  StreamingStatisticsVectorImageFilter2() {}
+
   /** Destructor */
   virtual ~StreamingStatisticsVectorImageFilter2() {}
 
