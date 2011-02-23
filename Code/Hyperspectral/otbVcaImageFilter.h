@@ -66,7 +66,7 @@ public:
   typedef typename VectorImageType::RegionType         RegionType;
   typedef typename VectorImageType::PixelType          PixelType;
   typedef typename VectorImageType::InternalPixelType  InternalPixelType;
-  typedef double   PrecisionType;
+  typedef InternalPixelType                            PrecisionType;
 
   typedef otb::Image<InternalPixelType>       ImageType;
 
@@ -76,7 +76,7 @@ public:
   typedef otb::MatrixMultiplyImageFilter<VectorImageType,VectorImageType,PrecisionType>       MatrixMultiplyImageFilterType;
   typedef otb::VectorImageToMatrixImageFilter<VectorImageType>                                VectorImageToMatrixImageFilterType;
   typedef otb::StreamingMinMaxImageFilter2<ImageType>                                         StreamingMinMaxImageFilterType;
-  typedef otb::StreamingStatisticsVectorImageFilter2<VectorImageType>                         StreamingStatisticsVectorImageFilterType;
+  typedef otb::StreamingStatisticsVectorImageFilter2<VectorImageType,PrecisionType>           StreamingStatisticsVectorImageFilterType;
   typedef otb::StreamingStatisticsImageFilter<ImageType>                                      StreamingStatisticsImageFilterType;
   typedef itk::Statistics::MersenneTwisterRandomVariateGenerator                              RandomVariateGeneratorType;
 
