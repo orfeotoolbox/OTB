@@ -31,7 +31,7 @@ template <class TInput, class TOutput, class TPrecision>
 ISRAUnmixingFunctor<TInput, TOutput, TPrecision>
 ::ISRAUnmixingFunctor()
  : m_OutputSize(0),
-   m_MaxIteration(10)
+   m_MaxIteration(100)
 {
 }
 
@@ -90,7 +90,11 @@ ISRAUnmixingFunctor<TInput, TOutput, TPrecision>
 ::operator ()(const InputType& in) const
 {
   // TODO : support different types between input and output ?
-  VectorType inVector(in.GetDataPointer(), in.Size());
+  VectorType inVector(in.Size());
+  for (int i = 0; i < in.GetSize(); i++ )
+    {
+    inVector[i] = in[i];
+    }
 
   // Initialize with Unconstrained Least Square solution
   VectorType outVector = m_Svd->solve(inVector);
@@ -130,7 +134,12 @@ ISRAUnmixingFunctor<TInput, TOutput, TPrecision>
     outVector = outVectorNew;
     }
 
-  return OutputType(outVector.data_block(), outVector.size());
+  OutputType out(outVector.size());
+  for (int i = 0; i < out.GetSize(); i++ )
+    {
+    out[i] = outVector[i];
+    }
+  return out;
 }
 
 }

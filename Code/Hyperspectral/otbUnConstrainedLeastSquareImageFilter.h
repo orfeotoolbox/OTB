@@ -54,7 +54,7 @@ public:
 
   bool operator !=(const UnConstrainedLeastSquareFunctor& other) const
   {
-    return false;
+    return true;
   }
 
   bool operator ==(const UnConstrainedLeastSquareFunctor& other) const
@@ -64,16 +64,30 @@ public:
 
   void SetMatrix(const MatrixType& m)
   {
+    std::cout << "m : " << m.rows() << " " << m.cols() << std::endl;
     m_Svd.reset( new SVDType(m) );
+    m_Inv = m_Svd->inverse();
     m_OutputSize = m.cols();
   }
 
   OutputType operator ()(const InputType& in)
   {
     // TODO : support different types between input and output ?
-    VectorType inVector(in.GetDataPointer(), in.Size());
-    VectorType outVector = m_Svd->solve(inVector);
-    return OutputType(outVector.data_block(), outVector.size());
+    VectorType inVector(in.Size());
+    for (int i = 0; i < in.GetSize(); i++ )
+      {
+      inVector[i] = in[i];
+      }
+
+    VectorType outVector = m_Inv * inVector;
+
+    OutputType out(outVector.size());
+    for (int i = 0; i < out.GetSize(); i++ )
+      {
+      out[i] = outVector[i];
+      }
+
+    return out;
   }
 
 private:
@@ -83,6 +97,7 @@ private:
 
   unsigned int   m_OutputSize;
   SVDPointerType m_Svd;
+  MatrixType     m_Inv;
 };
 }
 
