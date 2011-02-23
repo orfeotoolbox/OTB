@@ -1228,6 +1228,7 @@ ADD_TEST(ioTvStreamingImageFilterGDAL_TIFF ${IO_TESTS9}
          )
 
 # Test multidataset
+IF(CHECK_GDAL_BUILDED_WITH_HDF)
 ADD_TEST(ioTvMultiDatasetReading1 ${IO_TESTS9}
   --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReading1.txt
                              ${TEMP}/ioTvMultiDatasetReading1.txt
@@ -1288,6 +1289,7 @@ ADD_TEST(ioTvMultiChannelROI_HDF5_2_TIF ${COMMON_TESTS2}
          -startX 100 -startY 20 -sizeX 200 -sizeY 100
          -channels 1 )
 
+ENDIF(CHECK_GDAL_BUILDED_WITH_HDF)
       
 # ---  STREAMING  IMAGE   FILE    WRITER  ---
 ADD_TEST(ioTvStreamingIFWriterBSQWithoutStreaming ${IO_TESTS2}

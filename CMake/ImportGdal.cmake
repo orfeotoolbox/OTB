@@ -38,7 +38,24 @@ IF(OTB_USE_EXTERNAL_GDAL)
   ELSE (GDALCONFIG_EXECUTABLE)    
       MESSAGE(STATUS "  gdal-config not found")
   ENDIF (GDALCONFIG_EXECUTABLE)
-  
+ 
+  # Detect if gdal support hdf format
+  FIND_PROGRAM(GDALCONFIG_EXECUTABLE gdal-config)
+  IF (GDALCONFIG_EXECUTABLE)  
+     EXECUTE_PROCESS(COMMAND ${GDALCONFIG_EXECUTABLE} --formats
+                     OUTPUT_VARIABLE GDAL_FORMATS
+                     OUTPUT_STRIP_TRAILING_WHITESPACE
+                    )
+      IF ( ${GDAL_FORMATS} MATCHES "hdf3" )
+         SET(CHECK_GDAL_BUILDED_WITH_HDF 1 CACHE INTERNAL "GDAL_BUILDED_WITH_HDF" FORCE)
+         MESSAGE(WARNING "ok" )
+      ELSE ( ${GDAL_FORMATS} MATCHES "hdf3")
+         MESSAGE(WARNING "CHECK_GDAL_BUILDED_WITH_HDF test failed : your GDAL is not builded with a hdf library. So the HDF tests will be deactivated. Formats supported by your GDAL: " [ ${GDAL_FORMATS} ] )
+         SET(CHECK_GDAL_BUILDED_WITH_HDF 0 CACHE INTERNAL "GDAL_BUILDED_WITH_HDF" FORCE)
+      ENDIF(${GDAL_FORMATS} MATCHES "hdf3")
+  ELSE (GDALCONFIG_EXECUTABLE)    
+    MESSAGE(WARNING "gdal-config not found")
+  ENDIF (GDALCONFIG_EXECUTABLE) 
 
   # Find geotiff headers
   FIND_PATH(GEOTIFF_INCLUDE_DIRS geotiff.h $ENV{GDAL_INCLUDE_DIR} ${GDAL_INCLUDE_DIR} /usr/include/geotiff /usr/include/libgeotiff)
@@ -182,18 +199,20 @@ IF(OTB_USE_EXTERNAL_GDAL)
   # This test is known to fail with gdal build with some versions of hdf library
   #${OTB_DATA_ROOT}/Input/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf  -> Test KO
   #${OTB_DATA_ROOT}/Input/GSSTF_NCEP.2b.2008.12.31.he5  -> Test OK
-  IF(OTB_DATA_ROOT)
-    SET(CMAKE_REQUIRED_INCLUDES ${GDAL_INCLUDE_DIR})
-    SET(CMAKE_REQUIRED_LIBRARIES "${GDAL_LIBRARY}")
-    CHECK_CXX_SOURCE_RUNS_ARGS(
-            ${CMAKE_CURRENT_SOURCE_DIR}/CMake/TestHDF4Open.cxx
-            ${OTB_DATA_ROOT}/Input/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf 
-            CHECK_HDF4OPEN_SYMBOL
-            )
-    IF(NOT CHECK_HDF4OPEN_SYMBOL)
-     MESSAGE(WARNING "CHECK_HDF4OPEN_SYMBOL test failed : your platform exhibits a problem to read HDF4 files. So the HDF tests will be deactivated" )
-    ENDIF(NOT CHECK_HDF4OPEN_SYMBOL)
-  ENDIF(OTB_DATA_ROOT)
+  IF(CHECK_GDAL_BUILDED_WITH_HDF)
+    IF(OTB_DATA_ROOT)
+      SET(CMAKE_REQUIRED_INCLUDES ${GDAL_INCLUDE_DIR})
+      SET(CMAKE_REQUIRED_LIBRARIES "${GDAL_LIBRARY}")
+      CHECK_CXX_SOURCE_RUNS_ARGS(
+              ${CMAKE_CURRENT_SOURCE_DIR}/CMake/TestHDF4Open.cxx
+              ${OTB_DATA_ROOT}/Input/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf 
+              CHECK_HDF4OPEN_SYMBOL
+              )
+      IF(NOT CHECK_HDF4OPEN_SYMBOL)
+        MESSAGE(WARNING "CHECK_HDF4OPEN_SYMBOL test failed : your platform exhibits a problem to read HDF4 files. So the tests with HDF4 will be deactivated" )
+      ENDIF(NOT CHECK_HDF4OPEN_SYMBOL)
+    ENDIF(OTB_DATA_ROOT)
+  ENDIF(CHECK_GDAL_BUILDED_WITH_HDF)
 
 ELSE(OTB_USE_EXTERNAL_GDAL)
 
