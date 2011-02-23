@@ -54,6 +54,10 @@ ENDIF(OTB_USE_CURL)
 
 SET(IO_TESTS20    ${CXX_TEST_PATH}/otbIOTests20)
 SET(IO_TESTS21    ${CXX_TEST_PATH}/otbIOTests21)
+
+IF(CHECK_GDAL_BUILDED_WITH_HDF)
+  SET(IO_TESTS22    ${CXX_TEST_PATH}/otbIOTests22)
+ENDIF(CHECK_GDAL_BUILDED_WITH_HDF)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ COMMON_TESTS3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1226,70 +1230,6 @@ ADD_TEST(ioTvStreamingImageFilterGDAL_TIFF ${IO_TESTS9}
          ${INPUTDATA}/poupeesTIF/IMAGERY.TIF
          ${TEMP}/ioStreamingImageFilterTestGDAL_PoupeesTif.png
          )
-
-# Test multidataset
-IF(CHECK_GDAL_BUILDED_WITH_HDF)
-ADD_TEST(ioTvMultiDatasetReading1 ${IO_TESTS9}
-  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReading1.txt
-                             ${TEMP}/ioTvMultiDatasetReading1.txt
-      otbVectorImageTest
-      ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf
-      ${TEMP}/ioTvMultiDatasetReading1.txt
-      0
-      )
-ADD_TEST(ioTvMultiDatasetReading2 ${IO_TESTS9}
-  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReading2.txt
-                             ${TEMP}/ioTvMultiDatasetReading2.txt
-      otbVectorImageTest
-      ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf
-      ${TEMP}/ioTvMultiDatasetReading2.txt
-      5
-      )
-ADD_TEST(ioTvMultiDatasetReadingInName1 ${IO_TESTS9}
-  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReading1.txt
-                             ${TEMP}/ioTvMultiDatasetReadingInName1.txt
-      otbVectorImageTest
-      ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf:0
-      ${TEMP}/ioTvMultiDatasetReadingInName1.txt
-      )
-ADD_TEST(ioTvMultiDatasetReadingInName2 ${IO_TESTS9}
-  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReading2.txt
-                             ${TEMP}/ioTvMultiDatasetReadingInName2.txt
-      otbVectorImageTest
-      ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf:5
-      ${TEMP}/ioTvMultiDatasetReadingInName2.txt
-      )
-
-ADD_TEST(ioTvMultiDatasetReadingInfo ${IO_TESTS9}
-  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReadingInfo.txt
-                             ${TEMP}/ioTvMultiDatasetReadingInfoOut.txt
-      otbMultiDatasetReadingInfo
-      ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf
-      ${TEMP}/ioTvMultiDatasetReadingInfoOut.txt
-      )
-   
-# Test reading HDF files (hdf, hdf5, hdf4, h5, h4, he5, he4) 
-IF(CHECK_HDF4OPEN_SYMBOL)          
-ADD_TEST(ioTvMultiChannelROI_HDF4_2_TIF ${COMMON_TESTS2}
-   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_HDF2TIF_MOD09Q1G_20_25_100_150_channel_1.tif
-                     ${TEMP}/ioExtractROI_HDF2TIF_MOD09Q1G_20_25_100_150_channel_1_OUT.tif
-         otbMultiChannelExtractROI
-         ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf:5
-         ${TEMP}/ioExtractROI_HDF2TIF_MOD09Q1G_20_25_100_150_channel_1_OUT.tif
-         -startX 1400 -startY 3700 -sizeX 100 -sizeY 150
-         -channels 1 )
-ENDIF(CHECK_HDF4OPEN_SYMBOL)
-         
-ADD_TEST(ioTvMultiChannelROI_HDF5_2_TIF ${COMMON_TESTS2}
-   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_HDF2TIF_GSSTF_NCEP_100_20_200_100_channel_1.tif
-                     ${TEMP}/ioExtractROI_HDF2TIF_GSSTF_NCEP_100_20_200_100_channel_1_OUT.tif
-         otbMultiChannelExtractROI
-         ${INPUTDATA}/GSSTF_NCEP.2b.2008.12.31.he5:3
-         ${TEMP}/ioExtractROI_HDF2TIF_GSSTF_NCEP_100_20_200_100_channel_1_OUT.tif
-         -startX 100 -startY 20 -sizeX 200 -sizeY 100
-         -channels 1 )
-
-ENDIF(CHECK_GDAL_BUILDED_WITH_HDF)
       
 # ---  STREAMING  IMAGE   FILE    WRITER  ---
 ADD_TEST(ioTvStreamingIFWriterBSQWithoutStreaming ${IO_TESTS2}
@@ -2913,6 +2853,81 @@ ADD_TEST(ioTvGDALReadPxlComplex${INPUTFILE_PIXELTYPE} ${IO_TESTS21}
 
 ENDFOREACH(INPUTFILE_PIXELTYPE ${INPUTFILE_PIXELTYPES_LIST})
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS22 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Tests about multidataset file like hdf4 or hdf5 (hdf, hdf5, hdf4, h5, h4, he5, he4)
+
+IF(CHECK_GDAL_BUILDED_WITH_HDF)
+
+# Tests to check if we can open hdf files using a otb::VectorImage and IFReader->SetDatasetNumber() function.
+# no access to data only PrintSelf() method.
+ADD_TEST(ioTvMultiDatasetReading1 ${IO_TESTS22}
+  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReading1.txt
+                             ${TEMP}/ioTvMultiDatasetReading1.txt
+      otbVectorImageTest
+      ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf
+      ${TEMP}/ioTvMultiDatasetReading1.txt
+      0
+      )
+ADD_TEST(ioTvMultiDatasetReading2 ${IO_TESTS22}
+  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReading2.txt
+                             ${TEMP}/ioTvMultiDatasetReading2.txt
+      otbVectorImageTest
+      ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf
+      ${TEMP}/ioTvMultiDatasetReading2.txt
+      5
+      )
+      
+# Tests to check if we can open hdf files using a otb::VectorImage and filename:NumSubDataset syntax.
+# no access to data only PrintSelf() method.
+ADD_TEST(ioTvMultiDatasetReadingInName1 ${IO_TESTS22}
+  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReading1.txt
+                             ${TEMP}/ioTvMultiDatasetReadingInName1.txt
+      otbVectorImageTest
+      ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf:0
+      ${TEMP}/ioTvMultiDatasetReadingInName1.txt
+      )
+ADD_TEST(ioTvMultiDatasetReadingInName2 ${IO_TESTS22}
+  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReading2.txt
+                             ${TEMP}/ioTvMultiDatasetReadingInName2.txt
+      otbVectorImageTest
+      ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf:5
+      ${TEMP}/ioTvMultiDatasetReadingInName2.txt
+      )
+
+# Test to check behavior of function readerGDAL->GetSubDatasetInfo() which return info about subdataset. 
+ADD_TEST(ioTvMultiDatasetReadingInfo ${IO_TESTS22}
+  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReadingInfo.txt
+                             ${TEMP}/ioTvMultiDatasetReadingInfoOut.txt
+      otbMultiDatasetReadingInfo
+      ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf
+      ${TEMP}/ioTvMultiDatasetReadingInfoOut.txt
+      )
+   
+# Tests which read data in HDF files.  
+IF(CHECK_HDF4OPEN_SYMBOL)          
+ADD_TEST(ioTvMultiChannelROI_HDF4_2_TIF ${COMMON_TESTS2}
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_HDF2TIF_MOD09Q1G_20_25_100_150_channel_1.tif
+                     ${TEMP}/ioExtractROI_HDF2TIF_MOD09Q1G_20_25_100_150_channel_1_OUT.tif
+         otbMultiChannelExtractROI
+         ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf:5
+         ${TEMP}/ioExtractROI_HDF2TIF_MOD09Q1G_20_25_100_150_channel_1_OUT.tif
+         -startX 1400 -startY 3700 -sizeX 100 -sizeY 150
+         -channels 1 )
+ENDIF(CHECK_HDF4OPEN_SYMBOL)
+         
+ADD_TEST(ioTvMultiChannelROI_HDF5_2_TIF ${COMMON_TESTS2}
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_HDF2TIF_GSSTF_NCEP_100_20_200_100_channel_1.tif
+                     ${TEMP}/ioExtractROI_HDF2TIF_GSSTF_NCEP_100_20_200_100_channel_1_OUT.tif
+         otbMultiChannelExtractROI
+         ${INPUTDATA}/GSSTF_NCEP.2b.2008.12.31.he5:3
+         ${TEMP}/ioExtractROI_HDF2TIF_GSSTF_NCEP_100_20_200_100_channel_1_OUT.tif
+         -startX 100 -startY 20 -sizeX 200 -sizeY 100
+         -channels 1 )
+
+ENDIF(CHECK_GDAL_BUILDED_WITH_HDF)
+
 #----------------------------------------------------------------------------------
 SET(BasicIO_SRCS1
 otbIOTests1.cxx
@@ -3125,6 +3140,13 @@ otbComplexImageManipulationTest.cxx
 otbGDALReadPxlComplex.cxx
 )
 
+IF(CHECK_GDAL_BUILDED_WITH_HDF)
+SET(BasicIO_SRCS22
+otbIOTests22.cxx
+otbVectorImageTest.cxx
+otbMultiDatasetReadingInfo.cxx
+)
+ENDIF(CHECK_GDAL_BUILDED_WITH_HDF)
 
 
 OTB_ADD_EXECUTABLE(otbIOTests1 "${BasicIO_SRCS1}" "OTBIO;OTBTesting")
@@ -3170,3 +3192,7 @@ OTB_ADD_EXECUTABLE(otbIOTests20 "${BasicIO_SRCS20}" "OTBIO;OTBTesting")
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 OTB_ADD_EXECUTABLE(otbIOTests21 "${BasicIO_SRCS21}" "OTBIO;OTBTesting")
+
+IF(CHECK_GDAL_BUILDED_WITH_HDF)
+  OTB_ADD_EXECUTABLE(otbIOTests22 "${BasicIO_SRCS22}" "OTBIO;OTBTesting")
+ENDIF(CHECK_GDAL_BUILDED_WITH_HDF)

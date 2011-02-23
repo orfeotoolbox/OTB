@@ -24,18 +24,6 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbImageTest);
-  REGISTER_TEST(otbVectorImageLegacyTest);
   REGISTER_TEST(otbVectorImageTest);
-  REGISTER_TEST(otbVectorImageComplexNew);
-  REGISTER_TEST(otbVectorImageComplexFloatTest);
-  REGISTER_TEST(otbVectorImageComplexDoubleTest);
-  REGISTER_TEST(otbVectorImageComplexIntoRealFloatTest);
-  REGISTER_TEST(otbVectorImageComplexIntoRealDoubleTest);
-  REGISTER_TEST(otbImageComplexFloatTest);
-  REGISTER_TEST(otbImageComplexDoubleTest);
-  REGISTER_TEST(otbStreamingImageFilterTest);
-  REGISTER_TEST(otbVectorImageFileReaderWriterTest);
-  REGISTER_TEST(otbStreamingShortImageFileWriterTest);
-  //REGISTER_TEST(otbMultiDatasetReadingInfo);
+  REGISTER_TEST(otbMultiDatasetReadingInfo);
 }
