@@ -89,6 +89,14 @@ public:
   {
     os<<*this;
   };
+
+  /**
+   * @brief Set the number of lines per data set
+   */
+  void set_nlin(int inNbLines)
+  {
+    _nlin = inNbLines;
+  };
   /**
    * @brief ASCII flag
    */

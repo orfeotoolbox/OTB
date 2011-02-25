@@ -244,14 +244,13 @@ std::istream& operator>>(std::istream& is, ImageOptionsFileDescriptor& data)
   int result = strtol(buf, &p, 10);
   if (errno != 0 || *p != 0 || p == buf)
     {
-    std::cout << "ERROR strtol() try to convert an empty tab of characters, buf = " << buf << "!" << std::endl;
-    std::cout<< "=> _nlin = -1" <<std::endl;
+    std::cout << "WARNING: strtol() try to convert an empty tab of characters, buf = " << buf << "!" << std::endl;
+    std::cout << "=> _nlin = -1" << std::endl;
     data._nlin = -1;
     }
   else
     {
     data._nlin = result;
-    std::cout<< "_nlin = " << result <<std::endl;
     };
 
     is.read(buf,4);

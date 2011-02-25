@@ -2466,8 +2466,6 @@ ADD_TEST(ioTvImageKeywordlistSardegnaRadarSat1 ${IO_TESTS18}
          ${TEMP}/ioTvImageKeywordlistSardegnaRadarSat1.txt
          ${TEMP}/ioTvImageKeywordlistSardegnaRadarSat1_saveState_loadState.txt
 )
-set_tests_properties ( ioTvImageKeywordlistSardegnaRadarSat1 PROPERTIES TIMEOUT 10)
-
 
 ADD_TEST(ioTvImageKeywordlistRadarSat2 ${IO_TESTS18}
   --ignore-order --compare-n-ascii ${NOTOL} 2
