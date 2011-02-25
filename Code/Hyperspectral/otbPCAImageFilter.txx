@@ -136,8 +136,8 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
       m_CovarianceEstimator->SetInput( inputImgPtr );
       m_CovarianceEstimator->Update();
 
-      //m_CovarianceMatrix = m_CovarianceEstimator->GetCovariance();
-      m_CovarianceMatrix = m_CovarianceEstimator->GetCorrelation();
+      m_CovarianceMatrix = m_CovarianceEstimator->GetCovariance();
+      //m_CovarianceMatrix = m_CovarianceEstimator->GetCorrelation();
     }
 
     GetTransformationMatrixFromCovarianceMatrix();
@@ -209,10 +209,6 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   MatrixType Id ( m_CovarianceMatrix );
   Id.SetIdentity();
 
-  //std::cerr << "\n0--------------------------\n";
-  //std::cerr << m_CovarianceMatrix << "\n1--------------------------\n";
-  //std::cerr << Id << "\n2--------------------------\n";
-
   typename MatrixType::InternalMatrixType A = m_CovarianceMatrix.GetVnlMatrix();
   typename MatrixType::InternalMatrixType I = Id.GetVnlMatrix();
 
@@ -222,22 +218,24 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   transf.fliplr();
   transf.inplace_transpose();
 
+  vnl_vector< double > valP = solver.D.diagonal();
+  valP.flip();
+
+  /*
+   * We used normalized PCA
+   */
+  valP.post_multiply( transf );
+
   if ( m_NumberOfPrincipalComponentsRequired 
       != this->GetInput()->GetNumberOfComponentsPerPixel() )
     m_TransformationMatrix = transf.get_n_rows( 0, m_NumberOfPrincipalComponentsRequired );
   else
     m_TransformationMatrix = transf;
   
-  //std::cerr << m_TransformationMatrix << "\n3--------------------------\n";
-
-  vnl_vector< double > valP = solver.D.diagonal();
-  valP.flip();
-
+ 
   m_EigenValues.SetSize( m_NumberOfPrincipalComponentsRequired );
   for ( unsigned int i = 0; i < m_NumberOfPrincipalComponentsRequired; i++ )
     m_EigenValues[i] = static_cast< RealType >( valP[i] );
-
-  //std::cerr << m_EigenValues << "\n4--------------------------\n";
 }
 
 

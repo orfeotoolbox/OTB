@@ -106,8 +106,8 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
       m_NoiseCovarianceEstimator->SetInput( m_NoiseImageFilter->GetOutput() );
       m_NoiseCovarianceEstimator->Update();
 
-      //m_NoiseCovarianceMatrix = m_NoiseCovarianceEstimator->GetCovariance();
-      m_NoiseCovarianceMatrix = m_NoiseCovarianceEstimator->GetCorrelation();
+      m_NoiseCovarianceMatrix = m_NoiseCovarianceEstimator->GetCovariance();
+      //m_NoiseCovarianceMatrix = m_NoiseCovarianceEstimator->GetCorrelation();
     }
 
     GetTransformationMatrixFromCovarianceMatrix();
