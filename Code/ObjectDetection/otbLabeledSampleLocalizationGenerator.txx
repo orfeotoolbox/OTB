@@ -115,19 +115,8 @@ LabeledSampleLocalizationGenerator<TVectorData>
     ++itVector;
     }
 
-  //std::cout << "insiders: " << insiders.size() << std::endl;
-
-  // Search parametrization
-  //unsigned int nbMaxIter = (unsigned int)(node->GetPolygonExteriorRing()->GetArea());
-  //                                         - insiders.size() * CONST_PI * vcl_pow(this->GetInhibitionRadius(), 2))
-  //                                         / (CONST_PI * vcl_pow(this->GetInhibitionRadius(), 2)));
-  
-  unsigned int nbMaxPosition = (unsigned int)(node->GetPolygonExteriorRing()->GetArea() * this->GetRandomLocalizationDensity());
-  
-  //std::cout << "nbMaxIter: " << this->GetNbMaxIteration() << std::endl;
-  //std::cout << "nbMaxPosition: " << nbMaxPosition << std::endl;
-  
   // Generation
+  unsigned int nbMaxPosition = (unsigned int)(node->GetPolygonExteriorRing()->GetArea() * this->GetRandomLocalizationDensity());
   unsigned long int nbIter =  this->GetNbMaxIteration();
   unsigned int nbPosition = nbMaxPosition;
 
@@ -146,6 +135,7 @@ LabeledSampleLocalizationGenerator<TVectorData>
       {
       candidate[dim] = this->m_RandomGenerator->GetUniformVariate(rangeMin[dim], rangeMax[dim]);
       }
+    
     if(node->GetPolygonExteriorRing()->IsInside(candidate))
       {
       typename PointVectorType::const_iterator pit = insiders.begin();
@@ -173,7 +163,6 @@ LabeledSampleLocalizationGenerator<TVectorData>
     }
   
   // Densifying positive points
-
   for(typename PointVectorType::const_iterator iIt = insiders.begin(); iIt != insiders.end(); ++iIt)
     {
     for(unsigned int i = 0; i < m_NumberOfPositiveSamplesPerPoint; ++i)
@@ -191,14 +180,6 @@ LabeledSampleLocalizationGenerator<TVectorData>
   result.first = (vPoint);
   result.second = (pPoint);
   return result;
-}
-
-template <class TVectorData>
-void
-LabeledSampleLocalizationGenerator<TVectorData>
-::Update()
-{
-  this->GenerateData();
 }
 
 template <class TVectorData>

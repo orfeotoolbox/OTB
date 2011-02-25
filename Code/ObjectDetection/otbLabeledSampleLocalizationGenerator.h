@@ -78,8 +78,6 @@ public:
   void PushBackInput(const VectorDataType *);
   const VectorDataType * GetInput(unsigned int idx) const;
 
-  virtual void Update();
-
   /** Field name containing the class identifier */
   itkGetConstMacro(ClassKey, std::string);
   itkSetMacro(ClassKey, std::string);
