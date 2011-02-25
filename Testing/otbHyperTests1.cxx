@@ -51,6 +51,8 @@ void RegisterTests()
   REGISTER_TEST(otbSobelVectorImageFilterTest);
   REGISTER_TEST(otbLocalActivityVectorImageFilterNewTest);
   REGISTER_TEST(otbLocalActivityVectorImageFilterTest);
+  REGISTER_TEST(otbNormalizeVectorImageFilterNewTest);
+  REGISTER_TEST(otbNormalizeVectorImageFilterTest);
   REGISTER_TEST(otbPCAImageFilterNewTest);
   REGISTER_TEST(otbPCAImageFilterTest);
   REGISTER_TEST(otbMNFImageFilterNewTest);

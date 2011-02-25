@@ -75,7 +75,7 @@ UnaryFunctorVectorImageFilter<TInputImage, TOutputImage, TFunction>
 
   while ( !outputIt.IsAtEnd() && !inputIt.IsAtEnd() )
   {
-    outputIt.Set( m_Functor( neighInputIt ) );
+    outputIt.Set( m_Functor( inputIt.Get() ) );
 
     ++inputIt;
     ++outputIt;

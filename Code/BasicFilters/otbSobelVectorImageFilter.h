@@ -84,6 +84,9 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
+  /** Creation through object factory macro */
+  itkTypeMacro(SobelVectorImageFilter, ImageToImageFilter);
+
 protected:
   SobelVectorImageFilter()
   {

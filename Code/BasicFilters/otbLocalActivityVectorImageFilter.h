@@ -97,6 +97,9 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
+  /** Creation through object factory macro */
+  itkTypeMacro(LocalActivityVectorImageFilter, ImageToImageFilter);
+
 protected:
   LocalActivityVectorImageFilter() { }
   virtual ~LocalActivityVectorImageFilter() { }
