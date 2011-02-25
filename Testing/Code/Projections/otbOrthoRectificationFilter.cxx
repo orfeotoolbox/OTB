@@ -123,7 +123,7 @@ int otbOrthoRectificationComplexFilter(int argc, char* argv[])
   typedef otb::VectorImage<double, 2>                                               ModulusVectorImageType;
   typedef otb::UnaryImageFunctorWithVectorImageFilter<
                         ComplexVectorImageType,
-                        ModulusVectorImageType, 
+                        ModulusVectorImageType,
                         itk::Function::ComplexToModulus<
                           ComplexVectorImageType::InternalPixelType,
                           ModulusVectorImageType::InternalPixelType
