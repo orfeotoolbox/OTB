@@ -475,7 +475,7 @@ ADD_TEST(prTvOrthoRectificationUTM_RADARSAT2_VV ${PROJECTIONS_TESTS2}
 ADD_TEST(prTvOrthoRectificationUTM_ENVISAT ${PROJECTIONS_TESTS2}
   	--compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationUTM_ENVISAT.tif
                           ${TEMP}/prTvOrthoRectificationUTM_ENVISAT.tif
-        otbOrthoRectificationFilter
+        otbOrthoRectificationComplexFilter
     		${LARGEINPUT}/ENVISAT_ASAR_SCENE01/ASA_APS_1PNDPA20030821_7713.N1
         	${TEMP}/prTvOrthoRectificationUTM_ENVISAT.tif
 	        655696.679130 4906584.046495
@@ -485,7 +485,7 @@ ADD_TEST(prTvOrthoRectificationUTM_ENVISAT ${PROJECTIONS_TESTS2}
 ADD_TEST(prTvOrthoRectificationUTM_PALSAR ${PROJECTIONS_TESTS2}
   	--compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationUTM_PALSAR.tif
                           ${TEMP}/prTvOrthoRectificationUTM_PALSAR.tif
-        otbOrthoRectificationFilter
+        otbOrthoRectificationComplexFilter
     		${LARGEINPUT}/PALSAR/200801280007/l1data/VOL-ALPSRP037120700-H1.1__A
         	${TEMP}/prTvOrthoRectificationUTM_PALSAR.tif
 	        309298.731439 3909055.130746
@@ -495,7 +495,7 @@ ADD_TEST(prTvOrthoRectificationUTM_PALSAR ${PROJECTIONS_TESTS2}
 ADD_TEST(prTvOrthoRectificationUTM_TERRASARX_HH ${PROJECTIONS_TESTS2}
   	--compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationUTM_TERRASARX_HH.tif
                           ${TEMP}/prTvOrthoRectificationUTM_TERRASARX_HH.tif
-        otbOrthoRectificationFilter
+        otbOrthoRectificationComplexFilter
     		${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
         	${TEMP}/prTvOrthoRectificationUTM_TERRASARX_HH.tif
 	        591992.001073 9699689.825866
@@ -505,7 +505,7 @@ ADD_TEST(prTvOrthoRectificationUTM_TERRASARX_HH ${PROJECTIONS_TESTS2}
 ADD_TEST(prTvOrthoRectificationUTM_TERRASARX_VV ${PROJECTIONS_TESTS2}
   	--compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationUTM_TERRASARX_VV.tif
                           ${TEMP}/prTvOrthoRectificationUTM_TERRASARX_VV.tif
-        otbOrthoRectificationFilter
+        otbOrthoRectificationComplexFilter
     		${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_VV_SRA_stripFar_008.cos
         	${TEMP}/prTvOrthoRectificationUTM_TERRASARX_VV.tif
 	        591992.001073 9699689.825866
