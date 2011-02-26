@@ -215,7 +215,7 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
     for ( unsigned int i = 0; i < m_MeanValues.Size(); i++ )
       revMean[i] = -m_MeanValues[i];
 
-    m_Normalizer->SetIntput( m_Transformer->GetOutput() );
+    m_Normalizer->SetInput( m_Transformer->GetOutput() );
     m_Normalizer->SetMean( revMean );
     m_Normalizer->SetUseStdDev( false );
 

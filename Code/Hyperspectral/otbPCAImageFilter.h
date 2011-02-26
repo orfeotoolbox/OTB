@@ -82,7 +82,7 @@ public:
   typedef MatrixMultiplyImageFilter< TInputImage, TOutputImage, RealType > TransformFilterType;
   typedef typename TransformFilterType::Pointer TransformFilterPointerType;
 
-  typedef NormalizeVetorImageFilter< TInputImage, TOutputImage > NormalizeFilterType;
+  typedef NormalizeVectorImageFilter< TInputImage, TOutputImage > NormalizeFilterType;
   typedef typename NormalizeFilterType::Pointer NormalizeFilterPointerType;
 
   /** 
