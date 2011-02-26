@@ -35,12 +35,14 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   this->SetNumberOfRequiredInputs(1);
 
   m_NumberOfPrincipalComponentsRequired = 0;
+  m_GivenMeanValues = false;
   m_GivenCovarianceMatrix = false;
   m_GivenTransformationMatrix = false;
   m_IsTransformationMatrixForward = true;
 
   m_CovarianceEstimator = CovarianceEstimatorFilterType::New();
   m_Transformer = TransformFilterType::New();
+  m_Normalizer = NormalizeFilterType::New();
 }
 
 template < class TInputImage, class TOutputImage, 
@@ -131,13 +133,24 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   {
     if ( !m_GivenCovarianceMatrix )
     {
-      otbGenericMsgDebugMacro(<< "Covariance estimation");
+      m_Normalizer->SetInput( inputImgPtr );
+      m_Normalizer->SetUseStdDev( false );
 
-      m_CovarianceEstimator->SetInput( inputImgPtr );
-      m_CovarianceEstimator->Update();
+      if ( m_GivenMeanValues )
+        m_Normalizer->SetMean( m_MeanValues );
+      
+      m_Normalizer->Update();
+
+      if ( !m_GivenMeanValues )
+        m_MeanValues = m_Normalizer->GetFunctor().GetMean();
 
       m_CovarianceMatrix = m_CovarianceEstimator->GetCovariance();
-      //m_CovarianceMatrix = m_CovarianceEstimator->GetCorrelation();
+
+      m_Transformer->SetInput( m_Normalizer->GetOutput() );
+    }
+    else
+    {
+      m_Transformer->SetInput( inputImgPtr );
     }
 
     GetTransformationMatrixFromCovarianceMatrix();
@@ -145,6 +158,8 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   else if ( !m_IsTransformationMatrixForward )
   {
     m_TransformationMatrix = m_TransformationMatrix.GetTranspose();
+
+    m_Transformer->SetInput( inputImgPtr );
   }
 
   if ( m_TransformationMatrix.GetVnlMatrix().empty() )
@@ -154,7 +169,6 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
           ITK_LOCATION);
   }
 
-  m_Transformer->SetInput( inputImgPtr );
   m_Transformer->SetMatrix( m_TransformationMatrix.GetVnlMatrix() );
   m_Transformer->GraftOutput( this->GetOutput() );
   m_Transformer->Update();
@@ -194,10 +208,27 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 
   m_Transformer->SetInput( this->GetInput() );
   m_Transformer->SetMatrix( m_TransformationMatrix.GetVnlMatrix() );
-  m_Transformer->GraftOutput( this->GetOutput() );
-  m_Transformer->Update();
-  this->GraftOutput( m_Transformer->GetOutput() );
 
+  if ( m_GivenMeanValues )
+  {
+    VectorType revMean ( m_MeanValues.Size() );
+    for ( unsigned int i = 0; i < m_MeanValues.Size(); i++ )
+      revMean[i] = -m_MeanValues[i];
+
+    m_Normalizer->SetIntput( m_Transformer->GetOutput() );
+    m_Normalizer->SetMean( revMean );
+    m_Normalizer->SetUseStdDev( false );
+
+    m_Normalizer->GraftOutput( this->GetOutput() );
+    m_Normalizer->Update();
+    this->GraftOutput( m_Normalizer->GetOutput() );
+  }
+  else
+  {
+    m_Transformer->GraftOutput( this->GetOutput() );
+    m_Transformer->Update();
+    this->GraftOutput( m_Transformer->GetOutput() );
+  }
 }
 
 template < class TInputImage, class TOutputImage, 

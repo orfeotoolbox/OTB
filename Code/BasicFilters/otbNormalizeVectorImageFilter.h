@@ -64,6 +64,11 @@ public:
       m_Mean[i] = static_cast< RealType >( m[i] );
   }
 
+  RealVectorType GetMean() const
+  {
+    return this->m_Mean;
+  }
+
   template < class T>
   void SetStdDev ( const itk::VariableLengthVector<T> & sigma )
   {
@@ -92,6 +97,11 @@ public:
                 "Cannot divide by zero !", ITK_LOCATION);
       }
     }
+  }
+
+  RealVectorType GetStdDev() const
+  {
+    return this->m_StdDev;
   }
 
 protected:

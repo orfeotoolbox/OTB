@@ -22,6 +22,7 @@
 #include "itkImageToImageFilter.h"
 #include "otbStreamingStatisticsVectorImageFilter2.h"
 #include "otbMatrixMultiplyImageFilter.h"
+#include "otbNormalizeVectorImageFilter.h"
 
 
 namespace otb 
@@ -81,6 +82,8 @@ public:
   typedef MatrixMultiplyImageFilter< TInputImage, TOutputImage, RealType > TransformFilterType;
   typedef typename TransformFilterType::Pointer TransformFilterPointerType;
 
+  typedef NormalizeVetorImageFilter< TInputImage, TOutputImage > NormalizeFilterType;
+  typedef typename NormalizeFilterType::Pointer NormalizeFilterPointerType;
 
   /** 
    * Set/Get the number of required largest principal components. 
@@ -120,7 +123,14 @@ public:
   }
 
   itkGetConstMacro(EigenValues,VectorType);
-
+  
+  itkGetConstMacro(MeanValues,VectorType);
+  void SetMeanValues ( const VectorType & data )
+  {
+    m_GivenMeanValues = true;
+    m_MeanValues = data;
+    this->Modified();
+  }
 
 protected:
   PCAImageFilter();
@@ -151,16 +161,19 @@ protected:
 
   /** Internal attributes */
   unsigned int m_NumberOfPrincipalComponentsRequired;
+  bool m_GivenMeanValues;
   bool m_GivenCovarianceMatrix;
   bool m_GivenTransformationMatrix;
   bool m_IsTransformationMatrixForward;
 
+  VectorType m_MeanValues;
   MatrixType m_CovarianceMatrix;
   VectorType m_EigenValues;
   MatrixType m_TransformationMatrix;
 
   CovarianceEstimatorFilterPointerType m_CovarianceEstimator;
   TransformFilterPointerType m_Transformer;
+  NormalizeFilterPointerType m_Normalizer;
 };
 
 } // end of namespace otb
