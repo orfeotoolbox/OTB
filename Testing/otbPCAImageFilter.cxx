@@ -107,6 +107,7 @@ int otbPCAImageFilterTest ( int argc, char* argv[] )
     typedef otb::PCAImageFilter< ImageType, ImageType, otb::Transform::INVERSE > InvFilterType;
     InvFilterType::Pointer invFilter = InvFilterType::New();
     invFilter->SetInput( filter->GetOutput() );
+    invFilter->SetMeanValues( filter->GetMeanValues() );
     invFilter->SetTransformationMatrix( filter->GetTransformationMatrix() );
 
     typedef otb::CommandProgressUpdate< InvFilterType > CommandType2;
