@@ -128,6 +128,7 @@ int otbMNFImageFilterTest ( int argc, char* argv[] )
       NoiseFilterType, otb::Transform::INVERSE > InvFilterType;
     InvFilterType::Pointer invFilter = InvFilterType::New();
     invFilter->SetInput( filter->GetOutput() );
+    invFilter->SetMeanValues( filter->GetMeanValues() );
     invFilter->SetTransformationMatrix( filter->GetTransformationMatrix() );
     invFilter->SetNoiseTransformationMatrix( filter->GetNoiseTransformationMatrix() );
 

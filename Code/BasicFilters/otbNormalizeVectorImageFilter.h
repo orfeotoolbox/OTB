@@ -26,6 +26,8 @@
 #include <otbVectorImage.h>
 #include <otbUnaryFunctorVectorImageFilter.h>
 
+#include <otbStreamingStatisticsVectorImageFilter2.h>
+
 namespace otb 
 {
 namespace Functor
@@ -153,10 +155,15 @@ public:
   typedef typename itk::NumericTraits< typename TInputImage::PixelType >::RealType RealVectorType;
   typedef typename  itk::NumericTraits< typename RealVectorType::ValueType >::RealType RealType;
 
+  typedef StreamingStatisticsVectorImageFilter2< InputImageType > CovarianceEstimatorFilterType;
+  typedef typename CovarianceEstimatorFilterType::Pointer CovarianceEstimatorFilterPointerType;
+
+  itkGetConstMacro(CovarianceEstimator,CovarianceEstimatorFilterType*);
+
   template < class T >
   void SetMean ( const itk::VariableLengthVector<T> & m )
   {
-    this->m_Functor->SetMean( m );
+    this->GetFunctor().SetMean( m );
     m_IsGivenMean = true;
     m_UseMean = true;
     this->Modified();
@@ -165,7 +172,7 @@ public:
   template < class T >
   void SetStdDev ( const itk::VariableLengthVector<T> & sigma )
   {
-    this->m_Functor->SetStdDev( sigma );
+    this->GetFunctor().SetStdDev( sigma );
     m_IsGivenStdDev = true;
     m_UseStdDev = true;
     this->Modified();
@@ -174,7 +181,7 @@ public:
   template < class T >
   void SetVariance ( const itk::VariableLengthVector<T> & var )
   {
-    this->m_Functor->SetVariance( var );
+    this->GetFunctor().SetVariance( var );
     m_IsGivenStdDev = true;
     m_UseStdDev = true;
     this->Modified();
@@ -199,6 +206,9 @@ private:
 
   bool m_UseMean;
   bool m_UseStdDev;
+
+  CovarianceEstimatorFilterPointerType m_CovarianceEstimator;
+
 }; // end of class NormalizeVectorImageFilter
 
 } // end of namespace otb

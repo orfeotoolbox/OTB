@@ -142,9 +142,17 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
       m_Normalizer->Update();
 
       if ( !m_GivenMeanValues )
-        m_MeanValues = m_Normalizer->GetFunctor().GetMean();
+      {
+        m_MeanValues = m_Normalizer->GetCovarianceEstimator()->GetMean();
+        m_CovarianceMatrix = m_Normalizer->GetCovarianceEstimator()->GetCovariance();
+      }
+      else
+      {
+        m_CovarianceEstimator->SetInput( m_Normalizer->GetOutput() );
+        m_CovarianceEstimator->Update();
 
-      m_CovarianceMatrix = m_CovarianceEstimator->GetCovariance();
+        m_CovarianceMatrix = m_CovarianceEstimator->GetCovariance();
+      }
 
       m_Transformer->SetInput( m_Normalizer->GetOutput() );
     }

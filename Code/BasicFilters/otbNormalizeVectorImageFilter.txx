@@ -19,8 +19,6 @@
 #define __otbNormalizeVectorImageFilter_txx
 #include "otbNormalizeVectorImageFilter.h"
 
-#include "otbStreamingStatisticsVectorImageFilter2.h"
-
 namespace otb 
 {
 
@@ -33,6 +31,8 @@ NormalizeVectorImageFilter< TInputImage, TOutputImage >
 
   m_UseMean = true;
   m_UseStdDev = true;
+
+  m_CovarianceEstimator = CovarianceEstimatorFilterType::New();
 }
 
 template < class TInputImage, class TOutputImage >
@@ -56,19 +56,17 @@ NormalizeVectorImageFilter< TInputImage, TOutputImage >
 
   if ( !m_IsGivenMean )
   {
-    typedef StreamingStatisticsVectorImageFilter2< InputImageType > CovarianceEstimatorFilterType;
-    typename CovarianceEstimatorFilterType::Pointer estimator = CovarianceEstimatorFilterType::New();
-    estimator->SetInput( const_cast<InputImageType*>( this->GetInput() ) );
-    estimator->Update();
+    m_CovarianceEstimator->SetInput( const_cast<InputImageType*>( this->GetInput() ) );
+    m_CovarianceEstimator->Update();
 
-    this->GetFunctor().SetMean( estimator->GetMean() );
+    this->GetFunctor().SetMean( m_CovarianceEstimator->GetMean() );
 
     if ( !m_IsGivenStdDev && m_UseStdDev )
     {
       typename StreamingStatisticsVectorImageFilter2< InputImageType >::RealPixelType sigma
         ( this->GetInput()->GetNumberOfComponentsPerPixel() );
       for ( unsigned int i = 0; i < sigma.Size(); i++ )
-        sigma[i] = vcl_sqrt( estimator->GetCovariance()(i,i) );
+        sigma[i] = vcl_sqrt( m_CovarianceEstimator->GetCovariance()(i,i) );
 
       this->GetFunctor().SetStdDev( sigma );
     }

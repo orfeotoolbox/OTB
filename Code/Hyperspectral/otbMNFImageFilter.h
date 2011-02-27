@@ -107,6 +107,15 @@ public:
   itkGetMacro(Transformer, TransformFilterType *);
   itkGetMacro(NoiseImageFilter, NoiseImageFilterType *);
 
+  VectorType GetMeanValues () const
+  {
+    return this->GetPCAImageFilter()->GetMeanValues();
+  }
+  void SetMeanValues ( const VectorType & vec )
+  {
+    this->GetPCAImageFilter()->SetMeanValues( vec );
+  }
+
   MatrixType GetCovarianceMatrix () const
   {
     return this->GetPCAImageFilter()->GetGovarianceMatrix();
