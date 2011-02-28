@@ -23,15 +23,22 @@
 #include <boost/algorithm/string.hpp>
 
 #include "otbStreamingStatisticsVectorImageFilter2.h"
+
 #include "otbEigenvalueLikelihoodMaximisation.h"
 #include "otbVcaImageFilter.h"
+
 #include "otbUnConstrainedLeastSquareImageFilter.h"
 #include "otbISRAUnmixingImageFilter.h"
-#include "otbUnConstrainedLeastSquareImageFilter.h"
+#include "otbNCLSUnmixingImageFilter.h"
+#include "otbFCLSUnmixingImageFilter.h"
+#include "otbCLSPSTOUnmixingImageFilter.h"
+
 #include "otbVectorImageToMatrixImageFilter.h"
 
+#include "otbStandardWriterWatcher.h"
+
 const unsigned int Dimension = 2;
-typedef float PixelType;
+typedef double PixelType;
 
 typedef otb::VectorImage<PixelType, Dimension> VectorImageType;
 
@@ -44,6 +51,9 @@ typedef otb::VCAImageFilter<VectorImageType> VCAFilterType;
 
 typedef otb::UnConstrainedLeastSquareImageFilter<VectorImageType,VectorImageType,PixelType> UCLSUnmixingFilterType;
 typedef otb::ISRAUnmixingImageFilter<VectorImageType,VectorImageType,PixelType>             ISRAUnmixingFilterType;
+typedef otb::NCLSUnmixingImageFilter<VectorImageType,VectorImageType,PixelType>             NCLSUnmixingFilterType;
+typedef otb::FCLSUnmixingImageFilter<VectorImageType,VectorImageType,PixelType>             FCLSUnmixingFilterType;
+typedef otb::CLSPSTOUnmixingImageFilter<VectorImageType,VectorImageType,PixelType>          CLSPSTOUnmixingFilterType;
 
 typedef otb::VectorImageToMatrixImageFilter<VectorImageType> VectorImageToMatrixImageFilterType;
 
@@ -73,8 +83,13 @@ enum UnMixingMethod
 {
   UnMixingMethod_NONE,
   UnMixingMethod_UCLS,
-  UnMixingMethod_ISRA
+  UnMixingMethod_ISRA,
+  UnMixingMethod_NCLS,
+  UnMixingMethod_FCLS,
+  UnMixingMethod_CLSPSTO
 };
+
+const char* UnMixingMethodNames [] = { "NONE", "UCLS", "ISRA", "NCLS", "FCLS", "CLSPSTO" };
 
 int main(int argc, char * argv[])
 {
@@ -93,7 +108,7 @@ int main(int argc, char * argv[])
   parser->AddOption( "--DimensionalityEstimationMethod", "Dimensionality estimation method (ELM)", "-de", 1, false );
   parser->AddOption( "--EndmembersEstimationMethod", "Endmembers estimation method (VCA)", "-ee", 1, false );
   parser->AddOption( "--InputEndmembers", "Input endmembers image (must have NumComponents components or fit the input image nb of components)", "-ie", 1, false );
-  parser->AddOption( "--UnmixingAlgorithm", "Unmixing algorithm (NONE, UCLS, ISRA)", "-ua", 1, false );
+  parser->AddOption( "--UnmixingAlgorithm", "Unmixing algorithm (NONE, UCLS, ISRA, NCLS, FCLS, CLSPSTO)", "-ua", 1, false );
   parser->AddOption( "--OutputEndmembers", "Output estimated endmembers image", "-oe", 1, false );
   parser->AddOutputImage();
 
@@ -138,7 +153,7 @@ int main(int argc, char * argv[])
       }
     }
   otbMsgDevMacro( << "Using "
-                  << (dimReduction == DimReductionMethod_NONE ? "NONE" : (dimReduction == DimReductionMethod_PCA ? : "PCA" : "MNF") )
+                  << (dimReduction == DimReductionMethod_NONE ? "NONE" : (dimReduction == DimReductionMethod_PCA ? "PCA" : "MNF") )
                   << " dimensionality reduction method" );
 
   unsigned int nbEndmembers = 0;
@@ -170,7 +185,7 @@ int main(int argc, char * argv[])
   const char * inputEndmembers = parseResult->IsOptionPresent("--InputEndmembers") ?
     parseResult->GetParameterString("--InputEndmembers").c_str() : NULL;
 
-  UnMixingMethod unmixingAlgo = UnMixingMethod_NONE;
+  UnMixingMethod unmixingAlgo = UnMixingMethod_FCLS;
   if ( parseResult->IsOptionPresent("--UnmixingAlgorithm") )
     {
     std::string unmixingAlgoStr = parseResult->GetParameterString("--UnmixingAlgorithm");
@@ -184,7 +199,7 @@ int main(int argc, char * argv[])
       }
     }
   otbMsgDevMacro( << "Using "
-                  << (unmixingAlgo == UnMixingMethod_NONE ? "NONE" : (unmixingAlgo == UnMixingMethod_UCLS ? : "UCLS" : "ISRA") )
+                  << UnMixingMethodNames[unmixingAlgo]
                   << " unmixing algorithm" );
 
   const char * outputEndmembers = parseResult->IsOptionPresent("--OutputEndmembers") ?
@@ -206,19 +221,6 @@ int main(int argc, char * argv[])
 
   VectorImageType::Pointer inputImage = readerImage->GetOutput();
 
-  /*
-   * Compute stats of input image, we will need this all along the road
-   */
-  std::cout << "Computing stats" << std::endl;
-
-  StreamingStatisticsVectorImageFilterType::Pointer stats = StreamingStatisticsVectorImageFilterType::New();
-
-  stats->SetInput(inputImage);
-  stats->Update();
-
-  VectorType mean (stats->GetMean().GetDataPointer(), stats->GetMean().GetSize());
-  MatrixType covariance  = stats->GetCovariance().GetVnlMatrix();
-  MatrixType correlation = stats->GetCorrelation().GetVnlMatrix();
 
   VectorImageType::Pointer endmembersImage;
   itk::ProcessObject::Pointer endmembersRef;
@@ -227,6 +229,22 @@ int main(int argc, char * argv[])
     {
     if( nbEndmembers == 0 )
       {
+      /*
+       * Compute stats of input image
+       */
+
+      std::cout << "Computing stats" << std::endl;
+
+      StreamingStatisticsVectorImageFilterType::Pointer stats = StreamingStatisticsVectorImageFilterType::New();
+
+      stats->SetInput(inputImage);
+      otb::StandardWriterWatcher watcher(stats->GetStreamer(), stats->GetFilter(), "Computing image stats");
+      stats->Update();
+
+      VectorType mean (stats->GetMean().GetDataPointer(), stats->GetMean().GetSize());
+      MatrixType covariance  = stats->GetCovariance().GetVnlMatrix();
+      MatrixType correlation = stats->GetCorrelation().GetVnlMatrix();
+
       /*
        * Estimate Endmembers Numbers
        */
@@ -241,6 +259,10 @@ int main(int argc, char * argv[])
       nbEndmembers = elm->GetNumberOfEndmembers();
 
       std::cout << "ELM : " << nbEndmembers << " estimated endmembers" << std::endl;
+      }
+    else
+      {
+      std::cout << "Using " << nbEndmembers << " endmembers" << std::endl;
       }
 
     /*
@@ -268,15 +290,19 @@ int main(int argc, char * argv[])
 
     endmembersRef = readerEndmembers;
     }
+//  endmembersRef->Update();
 
   /*
    * Transform Endmembers image to matrix representation
    */
+  std::cout << "Endmembers extracted" << std::endl;
+  std::cout << "Converting endmembers to matrix" << std::endl;
   VectorImageToMatrixImageFilterType::Pointer endMember2Matrix = VectorImageToMatrixImageFilterType::New();
   endMember2Matrix->SetInput(endmembersImage);
   endMember2Matrix->Update();
 
   MatrixType endMembersMatrix = endMember2Matrix->GetMatrix();
+  std::cout << "Endmembers matrix : " << endMembersMatrix << std::endl;
 
   /*
    * Unmix
@@ -316,6 +342,45 @@ int main(int argc, char * argv[])
     abundanceMap = unmixer->GetOutput();
     }
     break;
+  case UnMixingMethod_NCLS:
+    {
+    std::cout << "NCLS Unmixing" << std::endl;
+
+    NCLSUnmixingFilterType::Pointer unmixer =
+        NCLSUnmixingFilterType::New();
+
+    unmixer->SetInput(readerImage->GetOutput());
+    unmixer->SetEndmembersMatrix(endMembersMatrix);
+    unmixerRef = unmixer;
+    abundanceMap = unmixer->GetOutput();
+    }
+    break;
+  case UnMixingMethod_FCLS:
+    {
+    std::cout << "FCLS Unmixing" << std::endl;
+
+    FCLSUnmixingFilterType::Pointer unmixer =
+        FCLSUnmixingFilterType::New();
+
+    unmixer->SetInput(readerImage->GetOutput());
+    unmixer->SetEndmembersMatrix(endMembersMatrix);
+    unmixerRef = unmixer;
+    abundanceMap = unmixer->GetOutput();
+    }
+    break;
+  case UnMixingMethod_CLSPSTO:
+    {
+    std::cout << "CLSPSTO Unmixing" << std::endl;
+
+    CLSPSTOUnmixingFilterType::Pointer unmixer =
+        CLSPSTOUnmixingFilterType::New();
+
+    unmixer->SetInput(readerImage->GetOutput());
+    unmixer->SetEndmembersMatrix(endMembersMatrix);
+    unmixerRef = unmixer;
+    abundanceMap = unmixer->GetOutput();
+    }
+    break;
   default:
     break;
   }
@@ -338,9 +403,12 @@ int main(int argc, char * argv[])
      * Write abundance map
      */
     std::cout << "Write abundance map" << outputImageName << std::endl;
+
+
     WriterType::Pointer writer = WriterType::New();
     writer->SetFileName(outputImageName);
     writer->SetInput(abundanceMap);
+    otb::StandardWriterWatcher watcher(writer,unmixerRef,"Unmixing");
     writer->Update();
     }
 
