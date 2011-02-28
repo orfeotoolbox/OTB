@@ -744,7 +744,6 @@ ConvertPixelBuffer<InputPixelType, OutputPixelType, OutputConvertTraits>
                      OutputPixelType* outputData , size_t size)
 {
   size_t length = size* (size_t)inputNumberOfComponents;
-  OutputPixelType dummy;
   for( size_t i=0; i< length/2; i++ )
     {
     OutputConvertTraits::SetNthComponent( 0, *outputData, (*inputData).real());
