@@ -35,4 +35,6 @@ void RegisterTests()
   REGISTER_TEST(otbSarDefaultImageMetadataInterfaceFactoryNew);
   REGISTER_TEST(otbSarDefaultImageMetadataInterfaceNew);
   REGISTER_TEST(otbSarDefaultImageMetadataInterface);
+  REGISTER_TEST(otbScalarBufferToImageFileWriterNew);
+  REGISTER_TEST(otbScalarBufferToImageFileWriterTest);
 }
