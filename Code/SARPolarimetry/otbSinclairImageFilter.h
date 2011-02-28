@@ -33,6 +33,16 @@ namespace otb
  * the type of the output image.  It is also parameterized by the
  * operation to be applied, using a Functor style.
  *
+ *  \ingroup SARPolarimetry
+ *
+ *  \sa SinclairImageFilter
+ *  \sa SinclairToCircularCovarianceMatrixFunctor
+ *  \sa SinclairToCoherencyFunctor
+ *  \sa SinclairToCovarianceFunctor
+ *  \sa SinclairToMuellerFunctor
+ *  \sa SinclairToReciprocalCircularCovarianceMatrixFunctor
+ *  \sa SinclairToReciprocalCoherencyFunctor
+ *  \sa SinclairToReciprocalCovarianceFunctor
  */
 
 template <class TInputImageHH, class TInputImageHV,

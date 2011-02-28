@@ -30,6 +30,11 @@ namespace Functor {
  * \brief Evaluate the  Circular Polarisation image
  * (3 channels : LL, RR and LR)  from the Mueller image
  *
+ * \ingroup Functor
+ * \ingroup SARPolarimetry
+ *
+ * \sa MuellerToMLCImageFilter 
+ * \sa MuellerToPolarisationDegreeAndPowerImageFilter
  *
  */
 template< class TInput, class TOutput>
@@ -44,10 +49,10 @@ public:
     TOutput result;
     result.SetSize(m_NumberOfComponentsPerPixel);
 
-    RealType M11 =  static_cast<RealType>(Mueller[0]);
-    RealType M14 =  static_cast<RealType>(Mueller[3]);
-    RealType M41 =  static_cast<RealType>(Mueller[12]);
-    RealType M44 =  static_cast<RealType>(Mueller[15]);
+    const RealType M11 =  static_cast<RealType>(Mueller[0]);
+    const RealType M14 =  static_cast<RealType>(Mueller[3]);
+    const RealType M41 =  static_cast<RealType>(Mueller[12]);
+    const RealType M44 =  static_cast<RealType>(Mueller[15]);
 
     result[0] = static_cast<OutputValueType>( M11 + M14 + M41 + M44 ); // LL
     result[1] = static_cast<OutputValueType>( M11 - M14 - M41 + M44 ); // RR
@@ -65,7 +70,7 @@ public:
    MuellerToCircularPolarisationFunctor() : m_NumberOfComponentsPerPixel(3)  {}
 
    /** Destructor */
-   ~MuellerToCircularPolarisationFunctor() {}
+   virtual ~MuellerToCircularPolarisationFunctor() {}
 
 private:
     unsigned int m_NumberOfComponentsPerPixel;

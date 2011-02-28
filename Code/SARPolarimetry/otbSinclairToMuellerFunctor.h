@@ -29,7 +29,40 @@ namespace Functor
  *  Elements of the Mueller matrix are extract from Antennas for radar and communications
  *  Harold Mott p 503
  *
+ *  Output value are:
+ *   channel #0  : \f$ 0.5 * \mathcal{Re}( T_{xx}.T_{xx}^{*} + T_{xy}.T_{xy}^{*} + T_{yx}.T_{yx}^{*} + T_{yy}.T_{yy}^{*} ) \f$
+ *   channel #1  : \f$ 0.5 * \mathcal{Re}( T_{xx}.T_{xx}^{*} - T_{xy}.T_{xy}^{*} + T_{yx}.T_{yx}^{*} - T_{yy}.T_{yy}^{*} ) \f$
+ *   channel #2  : \f$ \mathcal{Re}( T_{xx}.T_{xy}^{*} + T_{yx}.T_{yy}^{*} ) \f$
+ *   channel #3  : \f$ \mathcal{Im}( T_{xx}.T_{xy}^{*} + T_{yx}.T_{yy}^{*} ) \f$
+ *   channel #4  : \f$ 0.5 * \mathcal{Re}( T_{xx}.T_{xx}^{*} + T_{xy}.T_{xy}^{*} - T_{yx}.T_{yx}^{*} - T_{yy}.T_{yy}^{*} ) \f$
+ *   channel #5  : \f$ 0.5 * \mathcal{Re}( T_{xx}.T_{xx}^{*} - T_{xy}.T_{xy}^{*} - T_{yx}.T_{yx}^{*} + T_{yy}.T_{yy}^{*} ) \f$
+ *   channel #6  : \f$ \mathcal{Re}( T_{xx}.T_{xy}^{*} - T_{yx}.T_{yy}^{*} ) \f$
+ *   channel #7  : \f$ \mathcal{Im}( T_{xx}.T_{xy}^{*} - T_{yx}.T_{yy}^{*} ) \f$
+ *   channel #8  : \f$ \mathcal{Re}( T_{xx}.T_{yx}^{*} + T_{xy}.T_{yy}^{*} ) \f$
+ *   channel #9  : \f$ \mathcal{Im}( T_{xx}.T_{yx}^{*} - T_{xy}.T_{yy}^{*} ) \f$
+ *   channel #10 : \f$ \mathcal{Re}( T_{xx}.T_{yy}^{*} + T_{xy}.T_{yx}^{*} ) \f$
+ *   channel #11 : \f$ \mathcal{Im}( T_{xx}.T_{yy}^{*} - T_{xy}.T_{yx}^{*} ) \f$
+ *   channel #12 : \f$ \mathcal{Re}( T_{xx}.T_{yx}^{*} + T_{xy}.T_{yy}^{*} ) \f$
+ *   channel #13 : \f$ \mathcal{Im}( T_{xx}.T_{yx}^{*} - T_{xy}.T_{yy}^{*} ) \f$
+ *   channel #14 : \f$ \mathcal{Re}( T_{xx}.T_{yy}^{*} + T_{xy}.T_{yx}^{*} ) \f$
+ *   channel #15 : \f$ \mathcal{Im}( T_{xx}.T_{yy}^{*} - T_{xy}.T_{yx}^{*} ) \f$
+ *
+ * With :
+ * \f$ T_{xx} = -S_{hh} \f$ 
+ * \f$ T_{xy} = -S_{hv} \f$
+ * \f$ T_{yx} = -S_{vh} \f$
+ * \f$ T_{yy} = -S_{vv} \f$
+ *
  *  \ingroup Functor
+ *  \ingroup SARPolarimetry
+ *
+ *  \sa SinclairImageFilter
+ *  \sa SinclairToCircularCovarianceMatrixFunctor
+ *  \sa SinclairToCoherencyFunctor
+ *  \sa SinclairToCovarianceFunctor
+ *  \sa SinclairToReciprocalCircularCovarianceMatrixFunctor
+ *  \sa SinclairToReciprocalCoherencyFunctor
+ *  \sa SinclairToReciprocalCovarianceFunctor
  */
 template <class TInput1, class TInput2, class TInput3,
           class TInput4, class TOutput>
@@ -48,15 +81,15 @@ public:
 
     result.SetSize(m_NumberOfComponentsPerPixel);
 
-    ComplexType Txx = static_cast<ComplexType>(-Shh);
-    ComplexType Txy = static_cast<ComplexType>(-Shv);
-    ComplexType Tyx = static_cast<ComplexType>(Svh);
-    ComplexType Tyy = static_cast<ComplexType>(Svv);
+    const ComplexType Txx = static_cast<ComplexType>(-Shh);
+    const ComplexType Txy = static_cast<ComplexType>(-Shv);
+    const ComplexType Tyx = static_cast<ComplexType>(Svh);
+    const ComplexType Tyy = static_cast<ComplexType>(Svv);
 
-    ComplexType conjTxx = vcl_conj(static_cast<ComplexType>(-Shh));
-    ComplexType conjTxy = vcl_conj(static_cast<ComplexType>(-Shv));
-    ComplexType conjTyx = vcl_conj(static_cast<ComplexType>(Svh));
-    ComplexType conjTyy = vcl_conj(static_cast<ComplexType>(Svv));
+    const ComplexType conjTxx = vcl_conj(static_cast<ComplexType>(-Shh));
+    const ComplexType conjTxy = vcl_conj(static_cast<ComplexType>(-Shv));
+    const ComplexType conjTyx = vcl_conj(static_cast<ComplexType>(Svh));
+    const ComplexType conjTyy = vcl_conj(static_cast<ComplexType>(Svv));
 
     result[0]  = static_cast<OutputValueType>( 0.5 * (Txx*conjTxx + Txy*conjTxy + Tyx*conjTyx + Tyy*conjTyy).real()  );
     result[1]  = static_cast<OutputValueType>( 0.5 * (Txx*conjTxx - Txy*conjTxy + Tyx*conjTyx - Tyy*conjTyy).real()  );
@@ -70,8 +103,10 @@ public:
     result[9]  = static_cast<OutputValueType>( (Txx*conjTyx - Txy*conjTyy).real()  );
     result[10] = static_cast<OutputValueType>( (Txx*conjTyy + Txy*conjTyx).real()  );
     result[11] = static_cast<OutputValueType>( (Txx*conjTyy - Txy*conjTyx).imag()  );
+
     result[12] = static_cast<OutputValueType>( (conjTxx*Tyx + conjTxy*Tyy).imag()  );
     result[13] = static_cast<OutputValueType>( (conjTxx*Tyx - conjTxy*Tyy).imag()  );
+
     result[14] = static_cast<OutputValueType>( (conjTxx*Tyy + conjTxy*Tyx).imag()  );
     result[15] = static_cast<OutputValueType>( (Txx*conjTyy - Txy*conjTyx).real()  );
 
