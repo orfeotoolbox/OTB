@@ -23,6 +23,8 @@
 #include "otbStreamingStatisticsVectorImageFilter2.h"
 #include "otbMatrixMultiplyImageFilter.h"
 #include "otbPCAImageFilter.h"
+#include "otbNormalizeVectorImageFilter.h"
+
 
 namespace otb {
 
@@ -87,6 +89,9 @@ public:
   typedef typename PCAImageFilterType::VectorType VectorType;
   typedef typename PCAImageFilterType::MatrixType MatrixType;
 
+  typedef NormalizeVectorImageFilter< TInputImage, TOutputImage > NormalizeFilterType;
+  typedef typename NormalizeFilterType::Pointer NormalizeFilterPointerType;
+
   /** 
    * Set/Get the number of required largest principal components. 
    * The noise removal is not concerned by this part, only the PCA part...
@@ -101,19 +106,31 @@ public:
     return this->GetPCAImageFilter()->GetNumberOfPrincipalComponentsRequired();
   }
 
+  itkGetConstMacro(Normalizer,NormalizeFilterType*);
+  itkGetMacro(Normalizer,NormalizeFilterType*);
   itkGetConstMacro(PCAImageFilter, PCAImageFilterType *);
   itkGetMacro(PCAImageFilter, PCAImageFilterType *);
   itkGetMacro(NoiseCovarianceEstimator, CovarianceEstimatorFilterType *);
   itkGetMacro(Transformer, TransformFilterType *);
   itkGetMacro(NoiseImageFilter, NoiseImageFilterType *);
 
-  VectorType GetMeanValues () const
-  {
-    return this->GetPCAImageFilter()->GetMeanValues();
-  }
+  itkGetMacro(UseNormalization,bool);
+  itkSetMacro(UseNormalization,bool);
+
+  itkGetConstMacro(MeanValues,VectorType);
   void SetMeanValues ( const VectorType & vec )
   {
-    this->GetPCAImageFilter()->SetMeanValues( vec );
+    m_MeanValues = vec;
+    m_UseNormalization = true;
+    m_GivenMeanValues = true;
+  }
+
+  itkGetConstMacro(StdDevValues,VectorType);
+  void SetStdDevValues ( const VectorType & vec )
+  {
+    m_StdDevValues = vec;
+    m_UseNormalization = true;
+    m_GivenStdDevValues = true;
   }
 
   MatrixType GetCovarianceMatrix () const
@@ -183,14 +200,21 @@ protected:
   void GetTransformationMatrixFromCovarianceMatrix();
 
   /** Internal attributes */
+  bool m_UseNormalization;
+  bool m_GivenMeanValues;
+  bool m_GivenStdDevValues;
+
   bool m_GivenNoiseCovarianceMatrix;
   bool m_GivenNoiseTransformationMatrix;
   bool m_IsNoiseTransformationMatrixForward;
 
+  VectorType m_MeanValues;
+  VectorType m_StdDevValues;
   MatrixType m_NoiseCovarianceMatrix;
   MatrixType m_NoiseTransformationMatrix;
   VectorType m_NoiseRatioValues;
 
+  NormalizeFilterPointerType m_Normalizer;
   NoiseImageFilterPointerType m_NoiseImageFilter;
   PCAImageFilterPointerType m_PCAImageFilter;
   CovarianceEstimatorFilterPointerType m_NoiseCovarianceEstimator;

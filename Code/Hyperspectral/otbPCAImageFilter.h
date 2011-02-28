@@ -124,9 +124,13 @@ public:
 
   itkGetConstMacro(EigenValues,VectorType);
   
+  itkGetMacro(UseNormalization,bool);
+  itkSetMacro(UseNormalization,bool);
+
   itkGetConstMacro(MeanValues,VectorType);
   void SetMeanValues ( const VectorType & data )
   {
+    m_UseNormalization = true;
     m_GivenMeanValues = true;
     m_MeanValues = data;
     this->Modified();
@@ -138,6 +142,8 @@ public:
   itkGetConstMacro(StdDevValues,VectorType);
   void SetStdDevValues ( const VectorType & vec )
   {
+    m_UseNormalization = true;
+    m_UseVarianceForNormalization = true;
     m_GivenStdDevValues = true;
     m_UseVarianceForNormalization = true;
     m_StdDevValues = vec;
@@ -173,12 +179,13 @@ protected:
 
   /** Internal attributes */
   unsigned int m_NumberOfPrincipalComponentsRequired;
+  bool m_UseNormalization;
+  bool m_UseVarianceForNormalization;
   bool m_GivenMeanValues;
   bool m_GivenStdDevValues;
   bool m_GivenCovarianceMatrix;
   bool m_GivenTransformationMatrix;
   bool m_IsTransformationMatrixForward;
-  bool m_UseVarianceForNormalization;
 
   VectorType m_MeanValues;
   VectorType m_StdDevValues;

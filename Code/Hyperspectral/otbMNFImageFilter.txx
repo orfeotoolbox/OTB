@@ -34,9 +34,14 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
 {
   this->SetNumberOfRequiredInputs(1);
 
+  m_UseNormalization = false;
+  m_GivenMeanValues = false;
+  m_GivenStdDevValues = false;
+
   m_GivenNoiseCovarianceMatrix = false;
   m_GivenNoiseTransformationMatrix = false;
 
+  m_Normalizer = NormalizeFilterType::New();
   m_NoiseImageFilter = NoiseImageFilterType::New();
   m_PCAImageFilter = PCAImageFilterType::New();
   m_NoiseCovarianceEstimator = CovarianceEstimatorFilterType::New();
@@ -95,13 +100,27 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
   typename InputImageType::Pointer inputImgPtr 
     = const_cast<InputImageType*>( this->GetInput() );
 
+  if ( m_UseNormalization )
+  {
+    if ( m_GivenMeanValues )
+      m_Normalizer->SetMean( this->GetMeanValues() );
+
+    if ( m_GivenStdDevValues )
+      m_Normalizer->SetStdDev( this->GetStdDevValues() );
+
+    m_Normalizer->SetInput( inputImgPtr );
+  }
+
   if ( !m_GivenNoiseTransformationMatrix )
   {
     if ( !m_GivenNoiseCovarianceMatrix )
     {
       otbGenericMsgDebugMacro(<< "Covariance estimation");
 
-      m_NoiseImageFilter->SetInput( inputImgPtr );
+      if ( m_UseNormalization )
+        m_NoiseImageFilter->SetInput( m_Normalizer->GetOutput() );
+      else
+        m_NoiseImageFilter->SetInput( inputImgPtr );
 
       m_NoiseCovarianceEstimator->SetInput( m_NoiseImageFilter->GetOutput() );
       m_NoiseCovarianceEstimator->Update();
@@ -120,7 +139,11 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
           ITK_LOCATION);
   }
 
-  m_Transformer->SetInput( inputImgPtr );
+  if ( m_UseNormalization )
+    m_Transformer->SetInput( m_Normalizer->GetOutput() );
+  else
+    m_Transformer->SetInput( inputImgPtr );
+
   m_Transformer->SetMatrix( m_NoiseTransformationMatrix.GetVnlMatrix() );
   m_PCAImageFilter->SetInput( m_Transformer->GetOutput() );
   m_PCAImageFilter->GraftOutput( this->GetOutput() );
@@ -160,9 +183,11 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
   }
 
   if (m_IsNoiseTransformationMatrixForward)
-    {
+  {
+    // Prevents from multiple transposition in pipeline... 
+    m_IsNoiseTransformationMatrixForward = false;
     m_NoiseTransformationMatrix = m_NoiseTransformationMatrix.GetTranspose();
-    }
+  }
 
   if ( m_NoiseTransformationMatrix.GetVnlMatrix().empty() )
   {
@@ -173,10 +198,39 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
 
   m_Transformer->SetInput( m_PCAImageFilter->GetOutput() );
   m_Transformer->SetMatrix( m_NoiseTransformationMatrix.GetVnlMatrix() );
-  m_Transformer->GraftOutput( this->GetOutput() );
-  m_Transformer->Update();
 
-  this->GraftOutput( m_Transformer->GetOutput() );
+  if ( m_UseNormalization )
+  {
+    if ( !m_GivenMeanValues || !m_GivenStdDevValues )
+    {
+      throw itk::ExceptionObject( __FILE__, __LINE__,
+            "Initial means and StdDevs required for de-normalization",
+            ITK_LOCATION );
+    }
+
+    VectorType revStdDev ( m_StdDevValues.Size() );
+    for ( unsigned int i = 0; i < m_StdDevValues.Size(); i++ )
+      revStdDev[i] = 1. / m_StdDevValues[i];
+    m_Normalizer->SetStdDev( revStdDev );
+
+    VectorType revMean ( m_MeanValues.Size() );
+    for ( unsigned int i = 0; i < m_MeanValues.Size(); i++ )
+      revMean[i] = - m_MeanValues[i] / m_StdDevValues[i];
+    m_Normalizer->SetMean( revMean );
+
+    m_Normalizer->SetInput( m_Transformer->GetOutput() );
+    m_Normalizer->GraftOutput( this->GetOutput() );
+    m_Normalizer->Update();
+
+    this->GraftOutput( m_Normalizer->GetOutput() );
+  }
+  else
+  {
+    m_Transformer->GraftOutput( this->GetOutput() );
+    m_Transformer->Update();
+
+    this->GraftOutput( m_Transformer->GetOutput() );
+  }
 }
 
 template <class TInputImage, class TOutputImage, 
@@ -189,10 +243,6 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
   MatrixType Id ( m_NoiseCovarianceMatrix );
   Id.SetIdentity();
 
-  //std::cerr << "\n0--------------------------\n";
-  //std::cerr << m_NoiseCovarianceMatrix << "\n1--------------------------\n";
-  //std::cerr << Id << "\n2--------------------------\n";
-
   typename MatrixType::InternalMatrixType A = m_NoiseCovarianceMatrix.GetVnlMatrix();
   typename MatrixType::InternalMatrixType I = Id.GetVnlMatrix();
 
@@ -203,16 +253,12 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
   transf.inplace_transpose();
   m_NoiseTransformationMatrix = transf;
   
-  //std::cerr << m_NoiseTransformationMatrix << "\n3--------------------------\n";
-
   vnl_vector< double > valP = solver.D.diagonal();
   valP.flip();
 
   m_NoiseRatioValues.SetSize( valP.size() );
   for ( unsigned int i = 0; i < valP.size(); i++ )
     m_NoiseRatioValues[i] = static_cast< RealType >( valP[i] );
-
-  //std::cerr << m_NoiseEigenValues << "\n4--------------------------\n";
 }
 
 template <class TInputImage, class TOutputImage, 

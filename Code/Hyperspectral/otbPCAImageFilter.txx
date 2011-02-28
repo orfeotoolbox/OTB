@@ -35,12 +35,15 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   this->SetNumberOfRequiredInputs(1);
 
   m_NumberOfPrincipalComponentsRequired = 0;
+
+  m_UseNormalization = false;
+  m_UseVarianceForNormalization = false;
   m_GivenMeanValues = false;
   m_GivenStdDevValues = false;
+
   m_GivenCovarianceMatrix = false;
   m_GivenTransformationMatrix = false;
   m_IsTransformationMatrixForward = true;
-  m_UseVarianceForNormalization = false;
 
   m_CovarianceEstimator = CovarianceEstimatorFilterType::New();
   m_Transformer = TransformFilterType::New();
@@ -109,7 +112,6 @@ void
 PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 ::GenerateData ()
 {
-  std::cerr << __PRETTY_FUNCTION__ << "\n";
   switch ( DirectionOfTransformation )
   {
     case Transform::FORWARD:
@@ -136,38 +138,50 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   {
     if ( !m_GivenCovarianceMatrix )
     {
-      m_Normalizer->SetInput( inputImgPtr );
-      m_Normalizer->SetUseStdDev( m_UseVarianceForNormalization );
-
-      if ( m_GivenMeanValues )
-        m_Normalizer->SetMean( m_MeanValues );
-       
-      if ( m_GivenStdDevValues )
-        m_Normalizer->SetStdDev( m_StdDevValues );
-      
-      m_Normalizer->Update();
-
-      if ( !m_GivenMeanValues )
+      if ( m_UseNormalization )
       {
-        m_MeanValues = m_Normalizer->GetCovarianceEstimator()->GetMean();
+        m_Normalizer->SetInput( inputImgPtr );
+        m_Normalizer->SetUseStdDev( m_UseVarianceForNormalization );
 
-        if ( !m_GivenStdDevValues )
-          m_StdDevValues = m_Normalizer->GetFunctor().GetStdDev();
+        if ( m_GivenMeanValues )
+          m_Normalizer->SetMean( m_MeanValues );
+         
+        if ( m_GivenStdDevValues )
+          m_Normalizer->SetStdDev( m_StdDevValues );
+        
+        m_Normalizer->Update();
 
-        if ( m_UseVarianceForNormalization )
-          m_CovarianceMatrix = m_Normalizer->GetCovarianceEstimator()->GetCorrelation();
+        if ( !m_GivenMeanValues )
+        {
+          m_MeanValues = m_Normalizer->GetCovarianceEstimator()->GetMean();
+
+          if ( !m_GivenStdDevValues )
+            m_StdDevValues = m_Normalizer->GetFunctor().GetStdDev();
+
+          if ( m_UseVarianceForNormalization )
+            m_CovarianceMatrix = m_Normalizer->GetCovarianceEstimator()->GetCorrelation();
+          else
+            m_CovarianceMatrix = m_Normalizer->GetCovarianceEstimator()->GetCovariance();
+        }
         else
-          m_CovarianceMatrix = m_Normalizer->GetCovarianceEstimator()->GetCovariance();
+        {
+          m_CovarianceEstimator->SetInput( m_Normalizer->GetOutput() );
+          m_CovarianceEstimator->Update();
+
+          m_CovarianceMatrix = m_CovarianceEstimator->GetCovariance();
+        }
+
+        m_Transformer->SetInput( m_Normalizer->GetOutput() );
       }
       else
       {
-        m_CovarianceEstimator->SetInput( m_Normalizer->GetOutput() );
+        m_CovarianceEstimator->SetInput( inputImgPtr );
         m_CovarianceEstimator->Update();
 
         m_CovarianceMatrix = m_CovarianceEstimator->GetCovariance();
-      }
 
-      m_Transformer->SetInput( m_Normalizer->GetOutput() );
+        m_Transformer->SetInput( inputImgPtr );
+      }
     }
     else
     {
@@ -319,6 +333,14 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 ::PrintSelf ( std::ostream& os, itk::Indent indent ) const
 {
   Superclass::PrintSelf( os, indent );
+
+  os << indent << "m_UseNormalization = " << (m_UseNormalization ? "true\n" : "false\n");
+  
+  if ( m_GivenMeanValues )
+    os << indent << "Given Mean : " << m_MeanValues << "\n";
+
+  if ( m_GivenStdDevValues )
+    os << indent << "Given StdDev : " << m_StdDevValues << "\n";
 
   if ( !m_CovarianceMatrix.GetVnlMatrix().empty() )
   {
