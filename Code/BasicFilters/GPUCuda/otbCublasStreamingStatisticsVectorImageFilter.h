@@ -21,6 +21,7 @@
 #ifndef __otbCublasStreamingStatisticsVectorImageFilter_h
 #define __otbCublasStreamingStatisticsVectorImageFilter_h
 
+#include "otbMacro.h"
 #include "otbPersistentImageFilter.h"
 #include "otbPersistentFilterStreamingDecorator.h"
 #include "itkNumericTraits.h"
