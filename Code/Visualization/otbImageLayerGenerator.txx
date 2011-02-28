@@ -151,7 +151,7 @@ ImageLayerGenerator<TImageLayer>
         {
         m_Resampler->Update();
         }
-      catch(itk::ExceptionObject & err)
+      catch(itk::ExceptionObject &)
         {
         // Disconnect pipeline and prepare a new resampler
         m_Resampler = ResampleFilterType::New();
