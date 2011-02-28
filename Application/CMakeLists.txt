@@ -2,6 +2,15 @@
 ADD_EXECUTABLE(otbAvirisBandSelection otbAvirisBandSelection.cxx)
 TARGET_LINK_LIBRARIES(otbAvirisBandSelection OTBCommon OTBIO OTBBasicFilters )
 
+ADD_EXECUTABLE(otbEndmembersSubset otbEndmembersSubset.cxx)
+TARGET_LINK_LIBRARIES(otbEndmembersSubset OTBCommon OTBIO OTBBasicFilters )
+
+ADD_EXECUTABLE(otbHyperspectralCompare otbHyperspectralCompare.cxx)
+TARGET_LINK_LIBRARIES(otbHyperspectralCompare OTBCommon OTBIO OTBBasicFilters )
+
+ADD_EXECUTABLE(otbHyperspectralRecompose otbHyperspectralRecompose.cxx)
+TARGET_LINK_LIBRARIES(otbHyperspectralRecompose OTBCommon OTBIO OTBBasicFilters )
+
 ADD_EXECUTABLE(otbHyperspectralUnmixing otbHyperspectralUnmixing.cxx)
 TARGET_LINK_LIBRARIES(otbHyperspectralUnmixing OTBCommon OTBIO OTBBasicFilters )
 
