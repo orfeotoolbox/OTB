@@ -1006,7 +1006,21 @@ ADD_TEST(prTvImageToGenericRSOutputParameters ${PROJECTIONS_TESTS4}
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
+#----- otb::RationalTransform ------------------------
+ADD_TEST(prTuRationalTransformNew ${PROJECTIONS_TESTS4}
+otbRationalTransformNew)
 
+ADD_TEST(prTvRationalTransform ${PROJECTIONS_TESTS4}
+  --compare-ascii ${NOTOL}
+  ${BASELINE_FILES}/otbRationalTransformOutput.txt
+  ${TEMP}/otbRationalTransformOutput.txt
+otbRationalTransform
+${TEMP}/otbRationalTransformOutput.txt
+0 0
+1 1
+10 10
+-10 -10
+)
 
 
 #=======================================================================================
@@ -1067,6 +1081,7 @@ otbGenericRSResampleImageFilter.cxx
 otbElevDatabaseHeightAboveMSLFunction.cxx
 otbImageToEnvelopeVectorDataFilter.cxx
 otbImageToGenericRSOutputParameters.cxx
+otbRationalTransform.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbProjectionsTests1 "${Projections_SRCS1}" "OTBProjections;OTBIO;OTBTesting")
