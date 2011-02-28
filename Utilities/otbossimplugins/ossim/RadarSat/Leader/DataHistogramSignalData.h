@@ -154,5 +154,7 @@ private:
 
 
 };
+
+typedef DataHistogramSignalData DataHistogramProcessedData8;
 }
 #endif

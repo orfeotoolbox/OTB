@@ -48,7 +48,8 @@ ossimRadarSatModel::ossimRadarSatModel():
   _n_srgr(0),
   _pixel_spacing(0),
   _data(NULL),
-  _leader(NULL)
+  _leader(NULL),
+  _trailer(NULL)
 {
 }
 
@@ -64,6 +65,11 @@ ossimRadarSatModel::~ossimRadarSatModel()
     delete _leader;
   }
   
+  if (_trailer != 0)
+  {
+    delete _trailer;
+  }
+
 }
 
 ossimObject* ossimRadarSatModel::dup() const
@@ -132,6 +138,16 @@ bool ossimRadarSatModel::open(const ossimFilename& file)
     }
   _leader = new Leader();
 
+  /*
+   * Creation of the class allowing to store the metadata from the Trailer file
+   */
+  if(_trailer != NULL)
+    {
+    delete _trailer;
+    _trailer = NULL;
+    }
+  _trailer = new Trailer();
+
   RadarSatRecordHeader header;
   DataFactory factory;
   ifstream dataFile (tempFilename, ios::in|ios::binary);
@@ -158,6 +174,8 @@ bool ossimRadarSatModel::open(const ossimFilename& file)
        */
       if ( (((ImageOptionsFileDescriptor*)record)->get_file_name()).substr(0,10) == "RSAT-1-SAR" )
         {
+        /*m_SubProduct = (((ImageOptionsFileDescriptor*)record)->get_file_name()).substr(11,3);
+        std::cout << "m_SubProduct: " << m_SubProduct << std::endl;*/
         /*
          * Reading of the remaining of the data file
          */
@@ -220,6 +238,50 @@ bool ossimRadarSatModel::open(const ossimFilename& file)
             << "End reading Leader file" << std::endl;
             }
           }
+        /*
+         * Trailer file path construction from the DAT file path
+         * Warning : the filename case has to be homogenous
+         */
+        std::string trailer_file = file;
+        loc = trailer_file.find( "DAT_01", 0 );
+        if( loc != string::npos ) trailer_file.replace(loc, 6, "TRA_01" ); // upper case test
+        else
+          {
+          loc = trailer_file.find( "dat_01", 0 );
+          if( loc != string::npos ) trailer_file.replace(loc, 6, "tra_01" ); // lower case test
+          else
+            {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+                   << "File Name not coherent (searching for *DAT_01* or *dat_01*)  : " << file << std::endl;
+            }
+          }
+        ossimFilename trailerFilePath(trailer_file);
+
+        if (!trailerFilePath.exists())
+          {
+          ossimNotify(ossimNotifyLevel_DEBUG)
+                  << "Trailer file not found (searching for *tra_01* coherent with *dat_01*)  : " << file << std::endl;
+                  retValue = false;
+          }
+        else
+          {
+          if(traceDebug())
+            {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+              << "Begin reading Trailer file" << std::endl;
+            }
+          /*
+           * Trailer file data reading
+           */
+          ifstream trailerFile (trailerFilePath, ios::in|ios::binary);
+          trailerFile>>*_trailer;
+          trailerFile.close();
+          if(traceDebug())
+            {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+              << "End reading Trailer file" << std::endl;
+            }
+          }
         }
       else
         {
@@ -263,6 +325,12 @@ bool ossimRadarSatModel::saveState(ossimKeywordlist& kwl,
      * Ajout des donn�es n�cessaires au mod�le de capteur dans la liste des mots clefs
      */
     DataSetSummary * datasetSummary = _leader->get_DataSetSummary();
+    if(datasetSummary == NULL)
+      {
+      delete datasetSummary;
+      datasetSummary = _trailer->get_DataSetSummary();
+      }
+
     if(datasetSummary != NULL)
     {
       kwl.add(prefix, "inp_sctim",datasetSummary->get_inp_sctim().c_str(),true);
@@ -316,6 +384,7 @@ bool ossimRadarSatModel::saveState(ossimKeywordlist& kwl,
     }
     else
     {
+      std::cerr << "It is not possible to add dataSetSummary from _leader or _trailer file" <<std::endl;
       return false;
     }
 
@@ -323,6 +392,12 @@ bool ossimRadarSatModel::saveState(ossimKeywordlist& kwl,
      * Ajout des donn�es n�cessaires au mod�le de capteur dans la liste des mots clefs
      */
     ProcessingParameters * processingParameters = _leader->get_ProcessingParameters();
+    if(processingParameters == NULL)
+      {
+      delete processingParameters;
+      processingParameters = _trailer->get_ProcessingParameters();
+      }
+
     if(processingParameters != NULL)
     {
       kwl.add(prefix, "n_srgr",processingParameters->get_n_srgr(),true);
@@ -352,7 +427,7 @@ bool ossimRadarSatModel::saveState(ossimKeywordlist& kwl,
     }
     else
     {
-      std::cerr << "ERROR: Problem occurs when we try to add ProcessingParameters from _leader object to the keyword list." <<std::endl;
+      std::cerr << "It is not possible to add processingParameters from _leader or _trailer file" <<std::endl;
       return false;
     }
 
@@ -390,6 +465,7 @@ bool ossimRadarSatModel::saveState(ossimKeywordlist& kwl,
     }
     else
     {
+      std::cerr << "It is not possible to add platformPositionData from _leader file" <<std::endl;
       return false;
     }
 
@@ -401,6 +477,7 @@ bool ossimRadarSatModel::saveState(ossimKeywordlist& kwl,
     }
     else
     {
+      std::cerr << "It is not possible to add imageOptionsFileDescriptor from _data file" <<std::endl;
       return false;
     }
 
@@ -419,6 +496,7 @@ bool ossimRadarSatModel::saveState(ossimKeywordlist& kwl,
     }
     else
     {
+      std::cerr << "It is not possible to add firstProcessedDataRecord from _data file" <<std::endl;
       return false;
     }
 
@@ -437,6 +515,7 @@ bool ossimRadarSatModel::saveState(ossimKeywordlist& kwl,
     }
     else
     {
+      std::cerr << "It is not possible to add lastProcessedDataRecord from _data file" <<std::endl;
       return false;
     }
 

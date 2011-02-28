@@ -68,31 +68,49 @@ std::istream& operator>>(std::istream& is, Leader& data)
 	RadarSatRecordHeader header;
 	bool eof = false;
 	while(!eof)
-	{
+	  {
 		is>>header;
 		if(is.eof())
-		{
+		  {
 			eof = true;
-		}
+		  }
 		else
-		{
-			RadarSatRecord* record = factory.Instanciate(header.get_rec_seq());
-			if (record != NULL)
-			{
-				record->Read(is);
-				data._records[header.get_rec_seq()] = record;
-			}
-			else
-			{
-				char* buff = new char[header.get_length()-12];
-				is.read(buff, header.get_length()-12);
-				delete[] buff;
-			}
-		}
-	}
+		  {
+		  RadarSatRecord* record;
+		  if ( (header.get_rec_seq() == 2) && (header.get_length() == 8960) )
+		    {
+		    record = factory.Instanciate(header.get_rec_seq() + 5); // case of SCN, SCW
+        if (record != NULL)
+          {
+          record->Read(is);
+          data._records[header.get_rec_seq() + 5] = record;
+          }
+        else
+          {
+          char* buff = new char[header.get_length()-12];
+          is.read(buff, header.get_length()-12);
+          delete[] buff;
+          }
+		    }
+		  else
+		    {
+        record = factory.Instanciate(header.get_rec_seq());
+        if (record != NULL)
+          {
+          record->Read(is);
+          data._records[header.get_rec_seq()] = record;
+          }
+        else
+          {
+          char* buff = new char[header.get_length()-12];
+          is.read(buff, header.get_length()-12);
+          delete[] buff;
+          }
+		    }
+		  }
+	  }
 	return is;
 }
-
 
 Leader::Leader(const Leader& rhs)
 {
