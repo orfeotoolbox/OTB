@@ -36,9 +36,11 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 
   m_NumberOfPrincipalComponentsRequired = 0;
   m_GivenMeanValues = false;
+  m_GivenStdDevValues = false;
   m_GivenCovarianceMatrix = false;
   m_GivenTransformationMatrix = false;
   m_IsTransformationMatrixForward = true;
+  m_UseVarianceForNormalization = false;
 
   m_CovarianceEstimator = CovarianceEstimatorFilterType::New();
   m_Transformer = TransformFilterType::New();
@@ -107,6 +109,7 @@ void
 PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 ::GenerateData ()
 {
+  std::cerr << __PRETTY_FUNCTION__ << "\n";
   switch ( DirectionOfTransformation )
   {
     case Transform::FORWARD:
@@ -134,17 +137,27 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
     if ( !m_GivenCovarianceMatrix )
     {
       m_Normalizer->SetInput( inputImgPtr );
-      m_Normalizer->SetUseStdDev( false );
+      m_Normalizer->SetUseStdDev( m_UseVarianceForNormalization );
 
       if ( m_GivenMeanValues )
         m_Normalizer->SetMean( m_MeanValues );
+       
+      if ( m_GivenStdDevValues )
+        m_Normalizer->SetStdDev( m_StdDevValues );
       
       m_Normalizer->Update();
 
       if ( !m_GivenMeanValues )
       {
         m_MeanValues = m_Normalizer->GetCovarianceEstimator()->GetMean();
-        m_CovarianceMatrix = m_Normalizer->GetCovarianceEstimator()->GetCovariance();
+
+        if ( !m_GivenStdDevValues )
+          m_StdDevValues = m_Normalizer->GetFunctor().GetStdDev();
+
+        if ( m_UseVarianceForNormalization )
+          m_CovarianceMatrix = m_Normalizer->GetCovarianceEstimator()->GetCorrelation();
+        else
+          m_CovarianceMatrix = m_Normalizer->GetCovarianceEstimator()->GetCovariance();
       }
       else
       {
@@ -203,7 +216,8 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   }
   else if ( m_IsTransformationMatrixForward )
   {
-    std::cerr << "Transposition\n";
+    // prevents from multiple transpositions...
+    m_IsTransformationMatrixForward = false;
     m_TransformationMatrix = m_TransformationMatrix.GetTranspose();
   }
 
@@ -217,15 +231,35 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   m_Transformer->SetInput( this->GetInput() );
   m_Transformer->SetMatrix( m_TransformationMatrix.GetVnlMatrix() );
 
-  if ( m_GivenMeanValues )
+  if ( m_GivenMeanValues || m_GivenStdDevValues )
   {
-    VectorType revMean ( m_MeanValues.Size() );
-    for ( unsigned int i = 0; i < m_MeanValues.Size(); i++ )
-      revMean[i] = -m_MeanValues[i];
-
     m_Normalizer->SetInput( m_Transformer->GetOutput() );
-    m_Normalizer->SetMean( revMean );
-    m_Normalizer->SetUseStdDev( false );
+
+    if ( m_GivenStdDevValues )
+    {
+      VectorType revStdDev ( m_StdDevValues.Size() );
+      for ( unsigned int i = 0; i < m_StdDevValues.Size(); i++ )
+        revStdDev[i] = 1. / m_StdDevValues[i];
+      m_Normalizer->SetStdDev( revStdDev );
+    }
+
+    if ( m_GivenMeanValues )
+    {
+      VectorType revMean ( m_MeanValues.Size() );
+      if ( m_GivenStdDevValues )
+      {
+        for ( unsigned int i = 0; i < m_MeanValues.Size(); i++ )
+          revMean[i] = - m_MeanValues[i] / m_StdDevValues[i];
+        m_Normalizer->SetUseStdDev( true );
+      }
+      else
+      {
+        for ( unsigned int i = 0; i < m_MeanValues.Size(); i++ )
+          revMean[i] = -m_MeanValues[i];
+        m_Normalizer->SetUseStdDev( false );
+      }
+      m_Normalizer->SetMean( revMean );
+    }
 
     m_Normalizer->GraftOutput( this->GetOutput() );
     m_Normalizer->Update();

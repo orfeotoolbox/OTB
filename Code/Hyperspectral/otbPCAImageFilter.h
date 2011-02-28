@@ -132,6 +132,18 @@ public:
     this->Modified();
   }
 
+  itkGetConstMacro(UseVarianceForNormalization,bool);
+  itkSetMacro(UseVarianceForNormalization,bool);
+
+  itkGetConstMacro(StdDevValues,VectorType);
+  void SetStdDevValues ( const VectorType & vec )
+  {
+    m_GivenStdDevValues = true;
+    m_UseVarianceForNormalization = true;
+    m_StdDevValues = vec;
+    this->Modified();
+  }
+
 protected:
   PCAImageFilter();
   virtual ~PCAImageFilter() { }
@@ -162,11 +174,14 @@ protected:
   /** Internal attributes */
   unsigned int m_NumberOfPrincipalComponentsRequired;
   bool m_GivenMeanValues;
+  bool m_GivenStdDevValues;
   bool m_GivenCovarianceMatrix;
   bool m_GivenTransformationMatrix;
   bool m_IsTransformationMatrixForward;
+  bool m_UseVarianceForNormalization;
 
   VectorType m_MeanValues;
+  VectorType m_StdDevValues;
   MatrixType m_CovarianceMatrix;
   VectorType m_EigenValues;
   MatrixType m_TransformationMatrix;

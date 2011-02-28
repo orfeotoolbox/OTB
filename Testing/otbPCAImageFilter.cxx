@@ -47,6 +47,7 @@ int otbPCAImageFilterTest ( int argc, char* argv[] )
   parser->AddInputImage();
   parser->AddOption( "--NumComponents", "Number of components to keep for output", "-n", 1, false );
   parser->AddOption( "--Inverse", "Performs also the inverse transformation (give the output name)", "-inv", 1, false );
+  parser->AddOption( "--NormalizeVariance", "center AND reduce data before PCA", "-norm", 0, false );
   parser->AddOutputImage();
 
   typedef otb::CommandLineArgumentParseResult ParserResultType;  
@@ -73,6 +74,7 @@ int otbPCAImageFilterTest ( int argc, char* argv[] )
   const char * outputImageName = parseResult->GetOutputImage().c_str();
   const unsigned int nbComponents = parseResult->IsOptionPresent("--NumComponents") ?
     parseResult->GetParameterUInt("--NumComponents") : 0;
+  const bool normalization = parseResult->IsOptionPresent("--NormalizeVariance");
 
   // Main type definition
   const unsigned int Dimension = 2;
@@ -89,6 +91,7 @@ int otbPCAImageFilterTest ( int argc, char* argv[] )
   FilterType::Pointer filter = FilterType::New();
   filter->SetInput( reader->GetOutput() );
   filter->SetNumberOfPrincipalComponentsRequired( nbComponents );
+  filter->SetUseVarianceForNormalization( normalization );
 
   typedef otb::CommandProgressUpdate< FilterType > CommandType;
   CommandType::Pointer observer = CommandType::New();
@@ -108,6 +111,8 @@ int otbPCAImageFilterTest ( int argc, char* argv[] )
     InvFilterType::Pointer invFilter = InvFilterType::New();
     invFilter->SetInput( filter->GetOutput() );
     invFilter->SetMeanValues( filter->GetMeanValues() );
+    if ( normalization )
+      invFilter->SetStdDevValues( filter->GetStdDevValues() );
     invFilter->SetTransformationMatrix( filter->GetTransformationMatrix() );
 
     typedef otb::CommandProgressUpdate< InvFilterType > CommandType2;
