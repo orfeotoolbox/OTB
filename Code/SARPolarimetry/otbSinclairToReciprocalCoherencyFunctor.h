@@ -38,7 +38,7 @@ namespace Functor
  *
  *  \ingroup Functor
  *  \ingroup SARPolarimetry
- * 
+ *
  *  \sa SinclairImageFilter
  *  \sa SinclairToCircularCovarianceMatrixFunctor
  *  \sa SinclairToCoherencyFunctor

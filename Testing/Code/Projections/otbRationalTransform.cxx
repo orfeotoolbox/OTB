@@ -45,8 +45,8 @@ int otbRationalTransform(int argc, char* argv[])
   params.Fill(1.);
 
   // Rational is
-  // fx(x,y) = (1+2*x+3*x^2+4*x^3+5*x^4)/(6+7*x+8*x^2+9*x^3+10*x^4)
-  // fy(x,y) = (11+12*y+13*y^2+14*y^3+15*y^4)/(16+17*y+18*y^2+19*y^3+20*y^4)
+  // fx(x, y) = (1+2*x+3*x^2+4*x^3+5*x^4)/(6+7*x+8*x^2+9*x^3+10*x^4)
+  // fy(x, y) = (11+12*y+13*y^2+14*y^3+15*y^4)/(16+17*y+18*y^2+19*y^3+20*y^4)
   params[0]=1;
   params[1]=2;
   params[2]=3;
@@ -83,8 +83,8 @@ int otbRationalTransform(int argc, char* argv[])
   unsigned int idx = 2;
  
   ofs<<"Rational function is: "<<std::endl;
-  ofs<<"fx(x,y) = (1+2*x+3*x^2+4*x^3+5*x^4)/(6+7*x+8*x^2+9*x^3+10*x^4)"<<std::endl;
-  ofs<<"fy(x,y) = (11+12*y+13*y^2+14*y^3+15*y^4)/(16+17*y+18*y^2+19*y^3+20*y^4)"<<std::endl;
+  ofs<<"fx(x, y) = (1+2*x+3*x^2+4*x^3+5*x^4)/(6+7*x+8*x^2+9*x^3+10*x^4)"<<std::endl;
+  ofs<<"fy(x, y) = (11+12*y+13*y^2+14*y^3+15*y^4)/(16+17*y+18*y^2+19*y^3+20*y^4)"<<std::endl;
   while(idx+1<(unsigned int)argc)
     {
     inputPoint[0] = atof(argv[idx]);
@@ -94,7 +94,7 @@ int otbRationalTransform(int argc, char* argv[])
     idx+=2;
     }
 
-  ofs.close();  
+  ofs.close();
 
   return EXIT_SUCCESS;
 }

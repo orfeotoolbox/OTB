@@ -38,7 +38,7 @@ namespace Functor {
  * \ingroup SARPolarimetry
  *
  * \sa MuellerToCircularPolarisationImageFilter
- * \sa MuellerToMLCImageFilter 
+ * \sa MuellerToMLCImageFilter
  *
  */
 template< class TInput, class TOutput>

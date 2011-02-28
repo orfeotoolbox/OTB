@@ -218,24 +218,24 @@ public:
   itkGetObjectMacro(View, ViewType);
 
 /** Set key mapping */
-  itkSetMacro(UpKey,unsigned int);
-  itkGetMacro(UpKey,unsigned int);
-  itkSetMacro(DownKey,unsigned int);
-  itkGetMacro(DownKey,unsigned int);
-  itkSetMacro(LeftKey,unsigned int);
-  itkGetMacro(LeftKey,unsigned int);
-  itkSetMacro(RightKey,unsigned int);
-  itkGetMacro(RightKey,unsigned int);
-  itkSetMacro(Composed,bool);
-  itkGetMacro(Composed,bool);
-  itkSetMacro(ComposeKey,unsigned int);
-  itkGetMacro(ComposeKey,unsigned int);
+  itkSetMacro(UpKey, unsigned int);
+  itkGetMacro(UpKey, unsigned int);
+  itkSetMacro(DownKey, unsigned int);
+  itkGetMacro(DownKey, unsigned int);
+  itkSetMacro(LeftKey, unsigned int);
+  itkGetMacro(LeftKey, unsigned int);
+  itkSetMacro(RightKey, unsigned int);
+  itkGetMacro(RightKey, unsigned int);
+  itkSetMacro(Composed, bool);
+  itkGetMacro(Composed, bool);
+  itkSetMacro(ComposeKey, unsigned int);
+  itkGetMacro(ComposeKey, unsigned int);
 
 protected:
 /** Constructor */
-  ArrowKeyMoveActionHandler() : m_View(), m_Model(), 
-                                m_UpKey(FL_Up), m_DownKey(FL_Down), 
-                                m_LeftKey(FL_Left),m_RightKey(FL_Right),
+  ArrowKeyMoveActionHandler() : m_View(), m_Model(),
+                                m_UpKey(FL_Up), m_DownKey(FL_Down),
+                                m_LeftKey(FL_Left), m_RightKey(FL_Right),
                                 m_Composed(false), m_ComposeKey(FL_SHIFT)
   {}
 
@@ -257,7 +257,7 @@ private:
 // Pointer to the model
   ModelPointerType m_Model;
 
-// Key mapping for up,down,left and right
+// Key mapping for up, down, left and right
   unsigned int m_UpKey;
   unsigned int m_DownKey;
   unsigned int m_LeftKey;

@@ -33,7 +33,7 @@ namespace Functor {
  * \ingroup Functor
  * \ingroup SARPolarimetry
  *
- * \sa MuellerToMLCImageFilter 
+ * \sa MuellerToMLCImageFilter
  * \sa MuellerToPolarisationDegreeAndPowerImageFilter
  *
  */

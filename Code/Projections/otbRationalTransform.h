@@ -22,16 +22,16 @@
 #include "itkExceptionObject.h"
 #include "itkMacro.h"
 
-namespace otb 
+namespace otb
 {
 /** \class RationalTransform
  *  \brief This class implements a rational transfom
  *
  *  A rational transform is a quotient of two polynomial functions.
- * 
+ *
  *  The degree of the numerator and denominator polynomial functions
  *  can be set using the appropriate setters.
- * 
+ *
  *  The number of parameters is then the number of dimensions times
  *  the numerator degree plus one times the denominator degree plus
  *  one.
@@ -45,11 +45,11 @@ namespace otb
 
 template <class TScalarType = double,
           unsigned int Dimension = 2>
-class ITK_EXPORT RationalTransform : public itk::Transform<TScalarType,Dimension,Dimension>                                                     
+class ITK_EXPORT RationalTransform : public itk::Transform<TScalarType, Dimension, Dimension>
 {
 public:
   /** Standard class typedefs. */
-  typedef itk::Transform<TScalarType,Dimension,
+  typedef itk::Transform<TScalarType, Dimension,
     Dimension>                                      Superclass;
   typedef RationalTransform                         Self;
   typedef itk::SmartPointer<Self>                   Pointer;
@@ -70,16 +70,16 @@ public:
   itkStaticConstMacro(SpaceDimension, unsigned int, Dimension);
 
   /** Set the numerator degree */
-  itkSetMacro(NumeratorDegree,unsigned int);
+  itkSetMacro(NumeratorDegree, unsigned int);
 
   /** Get the numerator degree */
-  itkGetMacro(NumeratorDegree,unsigned int);
+  itkGetMacro(NumeratorDegree, unsigned int);
 
   /** Set the numerator degree */
-  itkSetMacro(DenominatorDegree,unsigned int);
+  itkSetMacro(DenominatorDegree, unsigned int);
 
   /** Get the denominator degree */
-  itkGetMacro(DenominatorDegree,unsigned int);
+  itkGetMacro(DenominatorDegree, unsigned int);
 
 
   /** The transform point method */
@@ -122,7 +122,7 @@ public:
         }
 
       // Finally, fill the output
-      outputPoint[dim]=num/denom;   
+      outputPoint[dim]=num/denom;
       }
 
     // Return the output point
@@ -149,7 +149,7 @@ public:
   }
 
 protected:
-  RationalTransform() : Superclass(SpaceDimension,16), m_NumeratorDegree(3), m_DenominatorDegree(3) 
+  RationalTransform() : Superclass(SpaceDimension, 16), m_NumeratorDegree(3), m_DenominatorDegree(3)
     {
     this->m_Parameters.SetSize(this->GetNumberOfParameters());
     this->m_Parameters.Fill(0);
@@ -161,7 +161,7 @@ protected:
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
-    Superclass::PrintSelf(os,indent);
+    Superclass::PrintSelf(os, indent);
   }
 
 private:

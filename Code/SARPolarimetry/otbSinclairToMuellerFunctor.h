@@ -48,7 +48,7 @@ namespace Functor
  *   channel #15 : \f$ \mathcal{Im}( T_{xx}.T_{yy}^{*} - T_{xy}.T_{yx}^{*} ) \f$
  *
  * With :
- * \f$ T_{xx} = -S_{hh} \f$ 
+ * \f$ T_{xx} = -S_{hh} \f$
  * \f$ T_{xy} = -S_{hv} \f$
  * \f$ T_{yx} = -S_{vh} \f$
  * \f$ T_{yy} = -S_{vv} \f$
