@@ -22,8 +22,8 @@
 #include "otbImageFileWriter.h"
 
 const unsigned int Dimension = 2;
-typedef float PixelType;
-typedef float PrecisionType;
+typedef double PixelType;
+typedef double PrecisionType;
 
 typedef otb::Image<PixelType, Dimension> ImageType;
 typedef otb::VectorImage<PixelType, Dimension> VectorImageType;

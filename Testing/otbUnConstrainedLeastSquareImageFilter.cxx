@@ -27,7 +27,7 @@ typedef double PixelType;
 
 typedef otb::VectorImage<PixelType, Dimension> ImageType;
 typedef otb::ImageFileReader<ImageType> ReaderType;
-typedef otb::UnConstrainedLeastSquareImageFilter<ImageType,ImageType,double> UnConstrainedLeastSquareSolverType;
+typedef otb::UnConstrainedLeastSquareImageFilter<ImageType,ImageType,PixelType> UnConstrainedLeastSquareSolverType;
 typedef otb::VectorImageToMatrixImageFilter<ImageType> VectorImageToMatrixImageFilterType;
 typedef otb::StreamingImageFileWriter<ImageType> WriterType;
 
