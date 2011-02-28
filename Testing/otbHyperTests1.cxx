@@ -34,6 +34,12 @@ void RegisterTests()
   REGISTER_TEST(otbUnConstrainedLeastSquareImageFilterTest);
   REGISTER_TEST(otbISRAUnmixingImageFilterNewTest);
   REGISTER_TEST(otbISRAUnmixingImageFilterTest);
+  REGISTER_TEST(otbNCLSUnmixingImageFilterNewTest);
+  REGISTER_TEST(otbNCLSUnmixingImageFilterTest);
+  REGISTER_TEST(otbFCLSUnmixingImageFilterNewTest);
+  REGISTER_TEST(otbFCLSUnmixingImageFilterTest);
+  REGISTER_TEST(otbCLSPSTOUnmixingImageFilterNewTest);
+  REGISTER_TEST(otbCLSPSTOUnmixingImageFilterTest);
   REGISTER_TEST(otbFullyConstrainedLeastSquareImageFilterNewTest);
   REGISTER_TEST(otbFullyConstrainedLeastSquareImageFilterTest);
   REGISTER_TEST(otbVectorImageToMatrixNewTest);
