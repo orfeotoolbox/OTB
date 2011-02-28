@@ -17,19 +17,21 @@
 =========================================================================*/
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
-#include "otbImageFileWriter.h"
+#include "otbStreamingImageFileWriter.h"
 
 #include "otbMultiChannelExtractROI.h"
 #include "otbVectorRescaleIntensityImageFilter.h"
 
+#include "otbStandardWriterWatcher.h"
+
 const unsigned int Dimension = 2;
-typedef double PixelType;
+typedef float PixelType;
 
 typedef otb::VectorImage<PixelType, Dimension> ImageType;
 typedef otb::ImageFileReader<ImageType> ReaderType;
 typedef otb::MultiChannelExtractROI<PixelType,PixelType> MultiChannelExtractROIType;
 typedef otb::VectorRescaleIntensityImageFilter<ImageType,ImageType> RescaleImageFilterType;
-typedef otb::ImageFileWriter<ImageType> WriterType;
+typedef otb::StreamingImageFileWriter<ImageType> WriterType;
 
 int main(int argc, char * argv[])
 {
@@ -56,8 +58,6 @@ int main(int argc, char * argv[])
     extractROI->SetChannel(i);
     }
 
-  //extractROI->GenerateOutputInformation();
-
   RescaleImageFilterType::Pointer scale = RescaleImageFilterType::New();
   scale->SetInput(extractROI->GetOutput());
 
@@ -76,7 +76,7 @@ int main(int argc, char * argv[])
   scale->SetInputMinimum(inputMin);
 
   inputMax.SetSize(nbBands);
-  inputMax.Fill(100000.0);
+  inputMax.Fill(2500.0);
   scale->SetInputMaximum(inputMax);
 
   outputMin.SetSize(nbBands);
@@ -84,7 +84,7 @@ int main(int argc, char * argv[])
   scale->SetOutputMinimum(outputMin);
 
   outputMax.SetSize(nbBands);
-  outputMax.Fill(10.0);
+  outputMax.Fill(1.0);
   scale->SetOutputMaximum(outputMax);
 
 
@@ -93,6 +93,7 @@ int main(int argc, char * argv[])
   writer->SetFileName(outfname);
   writer->SetInput(scale->GetOutput());
 
+  otb::StandardWriterWatcher w4(writer,scale,"Band extraction + rescaling");
   writer->Update();
 
   return EXIT_SUCCESS;
