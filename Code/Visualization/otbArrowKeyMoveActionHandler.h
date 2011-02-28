@@ -81,150 +81,167 @@ public:
         sourceWidget = m_View->GetZoomWidget();
         handle = true;
         }
+      if(handle && event == FL_FOCUS)
+        {
+        return true;
+        }
       if ((handle)
           && ((event == FL_KEYBOARD) || (event == FL_SHORTCUT)))
         {
-        switch (Fl::event_key())
+        // handle compose mode
+        if(m_Composed && Fl::event_state() != (int)m_ComposeKey)
           {
-          case FL_Up:
-            {
-            typename ViewType::SizeType size;
-            size = m_View->GetFullWidget()->GetExtent().GetSize();
+          return false;
+          }
 
-            // Get the current position
-            typename ViewType::ImageWidgetType::PointType screenPoint, imagePoint;
-            screenPoint[0] = size[0] / 2;
-            screenPoint[1] = size[1] / 2;
+        unsigned int eventKey = Fl::event_key();
+        
+        if(eventKey == m_UpKey)
+          {
+          typename ViewType::SizeType size;
+          size = m_View->GetFullWidget()->GetExtent().GetSize();
+          
+          // Get the current position
+          typename ViewType::ImageWidgetType::PointType screenPoint, imagePoint;
+          screenPoint[0] = size[0] / 2;
+          screenPoint[1] = size[1] / 2;
 
-            // Transform to image point
-            imagePoint = m_View->GetFullWidget()->GetScreenToImageTransform()->TransformPoint(screenPoint);
+          // Transform to image point
+          imagePoint = m_View->GetFullWidget()->GetScreenToImageTransform()->TransformPoint(screenPoint);
 
-            // Transform to index
-            typename ViewType::IndexType index;
-            index[0] = static_cast<int>(imagePoint[0]);
-            index[1] = static_cast<int>(imagePoint[1]);
+          // Transform to index
+          typename ViewType::IndexType index;
+          index[0] = static_cast<int>(imagePoint[0]);
+          index[1] = static_cast<int>(imagePoint[1]);
 
-            // Move
-            index[1] -= size[1]/4;
+          // Move
+          index[1] -= size[1]/4;
 
-            // Change scaled extract region center
-            m_Model->SetExtractRegionCenter(index);
-            // Update model
-            m_Model->Update();
-            return true;
-            break;
-            }
-          case FL_Down:
-            {
-            typename ViewType::SizeType size;
-            size = m_View->GetFullWidget()->GetExtent().GetSize();
+          // Change scaled extract region center
+          m_Model->SetExtractRegionCenter(index);
+          // Update model
+          m_Model->Update();
+          return true;
+          }
+        else if(eventKey == m_DownKey)
+          {
+          typename ViewType::SizeType size;
+          size = m_View->GetFullWidget()->GetExtent().GetSize();
 
-            // Get the current position
-            typename ViewType::ImageWidgetType::PointType screenPoint, imagePoint;
-            screenPoint[0] = size[0] / 2;
-            screenPoint[1] = size[1] / 2;
+          // Get the current position
+          typename ViewType::ImageWidgetType::PointType screenPoint, imagePoint;
+          screenPoint[0] = size[0] / 2;
+          screenPoint[1] = size[1] / 2;
 
-            // Transform to image point
-            imagePoint = m_View->GetFullWidget()->GetScreenToImageTransform()->TransformPoint(screenPoint);
+          // Transform to image point
+          imagePoint = m_View->GetFullWidget()->GetScreenToImageTransform()->TransformPoint(screenPoint);
 
-            // Transform to index
-            typename ViewType::IndexType index;
-            index[0] = static_cast<int>(imagePoint[0]);
-            index[1] = static_cast<int>(imagePoint[1]);
+          // Transform to index
+          typename ViewType::IndexType index;
+          index[0] = static_cast<int>(imagePoint[0]);
+          index[1] = static_cast<int>(imagePoint[1]);
 
-            // Move
-            index[1] += size[1]/4;
+          // Move
+          index[1] += size[1]/4;
 
-            // Change scaled extract region center
-            m_Model->SetExtractRegionCenter(index);
-            // Update model
-            m_Model->Update();
-            return true;
-            break;
-            }
-          case FL_Left:
-            {
-            typename ViewType::SizeType size;
-            size = m_View->GetFullWidget()->GetExtent().GetSize();
+          // Change scaled extract region center
+          m_Model->SetExtractRegionCenter(index);
+          // Update model
+          m_Model->Update();
+          return true;
+          }
+        else if(eventKey == m_LeftKey)
+          {
+          typename ViewType::SizeType size;
+          size = m_View->GetFullWidget()->GetExtent().GetSize();
 
-            // Get the current position
-            typename ViewType::ImageWidgetType::PointType screenPoint, imagePoint;
-            screenPoint[0] = size[0] / 2;
-            screenPoint[1] = size[1] / 2;
+          // Get the current position
+          typename ViewType::ImageWidgetType::PointType screenPoint, imagePoint;
+          screenPoint[0] = size[0] / 2;
+          screenPoint[1] = size[1] / 2;
 
-            // Transform to image point
-            imagePoint = m_View->GetFullWidget()->GetScreenToImageTransform()->TransformPoint(screenPoint);
+          // Transform to image point
+          imagePoint = m_View->GetFullWidget()->GetScreenToImageTransform()->TransformPoint(screenPoint);
 
-            // Transform to index
-            typename ViewType::IndexType index;
-            index[0] = static_cast<int>(imagePoint[0]);
-            index[1] = static_cast<int>(imagePoint[1]);
+          // Transform to index
+          typename ViewType::IndexType index;
+          index[0] = static_cast<int>(imagePoint[0]);
+          index[1] = static_cast<int>(imagePoint[1]);
 
-            // Move
-            index[0] -= size[0]/4;
+          // Move
+          index[0] -= size[0]/4;
 
-            // Change scaled extract region center
-            m_Model->SetExtractRegionCenter(index);
-            // Update model
-            m_Model->Update();
-            return true;
-            break;
-            }
-          case FL_Right:
-            {
-            typename ViewType::SizeType size;
-            size = m_View->GetFullWidget()->GetExtent().GetSize();
+          // Change scaled extract region center
+          m_Model->SetExtractRegionCenter(index);
+          // Update model
+          m_Model->Update();
+          return true;
+          }
+        else if(eventKey ==  m_RightKey)
+          {
+          typename ViewType::SizeType size;
+          size = m_View->GetFullWidget()->GetExtent().GetSize();
 
-            // Get the current position
-            typename ViewType::ImageWidgetType::PointType screenPoint, imagePoint;
-            screenPoint[0] = size[0] / 2;
-            screenPoint[1] = size[1] / 2;
+          // Get the current position
+          typename ViewType::ImageWidgetType::PointType screenPoint, imagePoint;
+          screenPoint[0] = size[0] / 2;
+          screenPoint[1] = size[1] / 2;
 
-            // Transform to image point
-            imagePoint = m_View->GetFullWidget()->GetScreenToImageTransform()->TransformPoint(screenPoint);
+          // Transform to image point
+          imagePoint = m_View->GetFullWidget()->GetScreenToImageTransform()->TransformPoint(screenPoint);
 
-            // Transform to index
-            typename ViewType::IndexType index;
-            index[0] = static_cast<int>(imagePoint[0]);
-            index[1] = static_cast<int>(imagePoint[1]);
+          // Transform to index
+          typename ViewType::IndexType index;
+          index[0] = static_cast<int>(imagePoint[0]);
+          index[1] = static_cast<int>(imagePoint[1]);
 
-            // Move
-            index[0] += size[0]/4;
+          // Move
+          index[0] += size[0]/4;
 
-            // Change scaled extract region center
-            m_Model->SetExtractRegionCenter(index);
-            // Update model
-            m_Model->Update();
-            return true;
-            break;
-            }
-          default:
-            {
-            return false;
-            break;
-            }
+          // Change scaled extract region center
+          m_Model->SetExtractRegionCenter(index);
+          // Update model
+          m_Model->Update();
+          return true;
           }
         }
       }
     return false;
   }
 
-  /** Set/Get the pointer to the model */
+/** Set/Get the pointer to the model */
   itkSetObjectMacro(Model, ModelType);
   itkGetObjectMacro(Model, ModelType);
 
-  /** Set/Get the pointer to the view */
+/** Set/Get the pointer to the view */
   itkSetObjectMacro(View, ViewType);
   itkGetObjectMacro(View, ViewType);
 
+/** Set key mapping */
+  itkSetMacro(UpKey,unsigned int);
+  itkGetMacro(UpKey,unsigned int);
+  itkSetMacro(DownKey,unsigned int);
+  itkGetMacro(DownKey,unsigned int);
+  itkSetMacro(LeftKey,unsigned int);
+  itkGetMacro(LeftKey,unsigned int);
+  itkSetMacro(RightKey,unsigned int);
+  itkGetMacro(RightKey,unsigned int);
+  itkSetMacro(Composed,bool);
+  itkGetMacro(Composed,bool);
+  itkSetMacro(ComposeKey,unsigned int);
+  itkGetMacro(ComposeKey,unsigned int);
+
 protected:
-  /** Constructor */
-  ArrowKeyMoveActionHandler() : m_View(), m_Model()
+/** Constructor */
+  ArrowKeyMoveActionHandler() : m_View(), m_Model(), 
+                                m_UpKey(FL_Up), m_DownKey(FL_Down), 
+                                m_LeftKey(FL_Left),m_RightKey(FL_Right),
+                                m_Composed(false), m_ComposeKey(FL_SHIFT)
   {}
 
-  /** Destructor */
+/** Destructor */
   virtual ~ArrowKeyMoveActionHandler(){}
-  /** Printself method */
+/** Printself method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
     Superclass::PrintSelf(os, indent);
@@ -234,11 +251,23 @@ private:
   ArrowKeyMoveActionHandler(const Self&);      // purposely not implemented
   void operator =(const Self&);  // purposely not implemented
 
-  // Pointer to the view
+// Pointer to the view
   ViewPointerType m_View;
 
-  // Pointer to the model
+// Pointer to the model
   ModelPointerType m_Model;
+
+// Key mapping for up,down,left and right
+  unsigned int m_UpKey;
+  unsigned int m_DownKey;
+  unsigned int m_LeftKey;
+  unsigned int m_RightKey;
+
+  // Use composed shortcuts
+  bool m_Composed;
+
+// Key state (for Ctrl - shortcuts)
+  unsigned int m_ComposeKey;
 
 }; // end class
 } // end namespace otb
