@@ -125,7 +125,12 @@ public:
   itkGetConstMacro(EigenValues,VectorType);
   
   itkGetMacro(UseNormalization,bool);
-  itkSetMacro(UseNormalization,bool);
+  void SetUseNormalization ( bool norm )
+  {
+    m_UseNormalization = norm;
+    m_UseVarianceForNormalization = norm;
+    this->Modified();
+  }
 
   itkGetConstMacro(MeanValues,VectorType);
   void SetMeanValues ( const VectorType & data )

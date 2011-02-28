@@ -256,6 +256,19 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
   vnl_vector< double > valP = solver.D.diagonal();
   valP.flip();
 
+  /*
+   * We used normalized PCA
+   */
+  for ( unsigned int i = 0; i < valP.size(); i++ )
+  {
+    if (  valP[i] != 0. )
+      valP[i] = 1. / vcl_sqrt( vcl_abs( valP[i] ) );
+    else
+      throw itk::ExceptionObject( __FILE__, __LINE__,
+            "Null Eigen value !!", ITK_LOCATION );
+  }
+  valP.post_multiply( transf );
+
   m_NoiseRatioValues.SetSize( valP.size() );
   for ( unsigned int i = 0; i < valP.size(); i++ )
     m_NoiseRatioValues[i] = static_cast< RealType >( valP[i] );

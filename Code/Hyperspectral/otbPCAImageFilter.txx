@@ -311,6 +311,14 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   /*
    * We used normalized PCA
    */
+  for ( unsigned int i = 0; i < valP.size(); i++ )
+  {
+    if (  valP[i] != 0. )
+      valP[i] = 1. / vcl_sqrt( vcl_abs( valP[i] ) );
+    else
+      throw itk::ExceptionObject( __FILE__, __LINE__,
+            "Null Eigen value !!", ITK_LOCATION );
+  }
   valP.post_multiply( transf );
 
   if ( m_NumberOfPrincipalComponentsRequired 
@@ -334,7 +342,11 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 {
   Superclass::PrintSelf( os, indent );
 
-  os << indent << "m_UseNormalization = " << (m_UseNormalization ? "true\n" : "false\n");
+  os << indent << "m_UseNormalization = ";
+  if ( m_UseNormalization )
+    os << "true\n";
+  else
+    os << "false\n";
   
   if ( m_GivenMeanValues )
     os << indent << "Given Mean : " << m_MeanValues << "\n";
