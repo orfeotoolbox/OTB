@@ -96,15 +96,8 @@ public:
    * Set/Get the number of required largest principal components. 
    * The noise removal is not concerned by this part, only the PCA part...
    */
-  void SetNumberOfPrincipalComponentsRequired ( unsigned int num )
-  {
-    this->GetPCAImageFilter()->SetNumberOfPrincipalComponentsRequired( num );
-  }
-
-  unsigned int GetNumberOfPrincipalComponentsRequired () const
-  {
-    return this->GetPCAImageFilter()->GetNumberOfPrincipalComponentsRequired();
-  }
+  itkGetMacro(NumberOfPrincipalComponentsRequired,unsigned int);
+  itkSetMacro(NumberOfPrincipalComponentsRequired,unsigned int);
 
   itkGetConstMacro(Normalizer,NormalizeFilterType*);
   itkGetMacro(Normalizer,NormalizeFilterType*);
@@ -133,44 +126,29 @@ public:
     m_GivenStdDevValues = true;
   }
 
-  MatrixType GetCovarianceMatrix () const
-  {
-    return this->GetPCAImageFilter()->GetGovarianceMatrix();
-  }
-  
+  itkGetConstMacro(CovarianceMatrix,MatrixType);
   void SetCovarianceMatrix ( const MatrixType & cov )
   {
-    this->GetPCAImageFilter()->SetCovarianceMatrix();
+    m_CovarianceMatrix = cov;
+    m_GivenCovarianceMatrix = true;
   }
 
-  itkGetMacro(NoiseCovarianceMatrix, MatrixType);
-
+  itkGetConstMacro(NoiseCovarianceMatrix, MatrixType);
   void SetNoiseCovarianceMatrix ( const MatrixType & mat )
   {
     m_NoiseCovarianceMatrix = mat;
     m_GivenNoiseCovarianceMatrix = true;
   }
 
-  MatrixType GetTransformationMatrix () const
-  {
-    return this->GetPCAImageFilter()->GetTransformationMatrix();
-  }
-
+  itkGetConstMacro(TransformationMatrix,MatrixType);
   void SetTransformationMatrix( const MatrixType & transf, bool isForward = true )
   {
-    return this->GetPCAImageFilter()->SetTransformationMatrix( transf, isForward );
+    m_TransformationMatrix = transf;
+    m_GivenTransformationMatrix = true;
+    m_IsTransformationMatrixForward = isForward;
   }
 
-  /** If the NoiseTransformation is given, the NoiseImageFilter is useless */
-  itkGetMacro( NoiseTransformationMatrix, MatrixType );
-  void SetNoiseTransformationMatrix ( const MatrixType & mat, bool isForward = true )
-  {
-    m_NoiseTransformationMatrix = mat;
-    m_GivenNoiseTransformationMatrix = true;
-    m_IsNoiseTransformationMatrixForward = isForward;
-  }
-
-  itkGetConstMacro(NoiseRatioValues,VectorType);
+  itkGetConstMacro(EigenValues,VectorType);
 
 protected:
   MNFImageFilter();
@@ -200,24 +178,29 @@ protected:
   void GetTransformationMatrixFromCovarianceMatrix();
 
   /** Internal attributes */
+  unsigned int m_NumberOfPrincipalComponentsRequired;
+
   bool m_UseNormalization;
   bool m_GivenMeanValues;
   bool m_GivenStdDevValues;
 
+  bool m_GivenCovarianceMatrix;
   bool m_GivenNoiseCovarianceMatrix;
-  bool m_GivenNoiseTransformationMatrix;
-  bool m_IsNoiseTransformationMatrixForward;
+  bool m_GivenTransformationMatrix;
+  bool m_IsTransformationMatrixForward;
 
   VectorType m_MeanValues;
   VectorType m_StdDevValues;
+  MatrixType m_CovarianceMatrix;
   MatrixType m_NoiseCovarianceMatrix;
-  MatrixType m_NoiseTransformationMatrix;
-  VectorType m_NoiseRatioValues;
+  MatrixType m_TransformationMatrix;
+  VectorType m_EigenValues;
 
   NormalizeFilterPointerType m_Normalizer;
   NoiseImageFilterPointerType m_NoiseImageFilter;
-  PCAImageFilterPointerType m_PCAImageFilter;
+  CovarianceEstimatorFilterPointerType m_CovarianceEstimator;
   CovarianceEstimatorFilterPointerType m_NoiseCovarianceEstimator;
+  PCAImageFilterPointerType m_PCAImageFilter;
   TransformFilterPointerType m_Transformer;
 }; // end of class
 
