@@ -32,10 +32,12 @@ namespace Functor {
 /** \class otbHAlphaFunctor
  * \brief Evaluate the H-Alpha parameters from the reciprocal coherency matrix image
  *
- * *  Output value are:
+ *   Output value are:
  *   channel #0 : entropy
  *   channel #1 : \f$ \alpha \f$ parameter
  *   channel #2 : anisotropy
+ *
+ * \ingroup SARPolarimetry
  *
  */
 template< class TInput, class TOutput>
@@ -71,7 +73,7 @@ public:
   inline TOutput operator()( const TInput & Coherency ) const
     {
     TOutput result;
-    result.SetSize(NumberOfComponentsPerPixel);
+    result.SetSize(m_NumberOfComponentsPerPixel);
  
     CoherencyMatrixType T;
     EigenvalueType eigenValues;
@@ -95,7 +97,7 @@ public:
     RealType entropy;
     RealType alpha;
     RealType anisotropy;
-    const RealType epsilon = 1.0E-4;
+    //const RealType epsilon = 1.0E-4;
 
 
     totalEigenValues = static_cast<RealType>( eigenValues[0] + eigenValues[1] + eigenValues[2]);
@@ -110,7 +112,7 @@ public:
         p[k] = static_cast<RealType>(eigenValues[k]) / totalEigenValues;
       }
 
-    if ( (p[0] < epsilon) || (p[1] < epsilon) || (p[2] < epsilon) )
+    if ( (p[0] < m_Epsilon) || (p[1] < m_Epsilon) || (p[2] < m_Epsilon) )
       {
       entropy =0.0;
       }
@@ -131,14 +133,14 @@ public:
          if (p[k] > 1.) p[k] = 1.;
       }
 
-    val0=sqrt(eigenVectors[0][0]*eigenVectors[0][0] + eigenVectors[0][1]*eigenVectors[0][1]);
-    a0=acos(abs(val0)) * CONST_180_PI;
+    val0=sqrt(static_cast<double>(eigenVectors[0][0]*eigenVectors[0][0]) + static_cast<double>(eigenVectors[0][1]*eigenVectors[0][1]));
+    a0=acos(vcl_abs(val0)) * CONST_180_PI;
 
-    val1=sqrt(eigenVectors[0][2]*eigenVectors[0][2] + eigenVectors[0][3]*eigenVectors[0][3]);
-    a1=acos(abs(val1)) * CONST_180_PI;
+    val1=sqrt(static_cast<double>(eigenVectors[0][2]*eigenVectors[0][2]) + static_cast<double>(eigenVectors[0][3]*eigenVectors[0][3]));
+    a1=acos(vcl_abs(val1)) * CONST_180_PI;
 
-    val2=sqrt(eigenVectors[0][4]*eigenVectors[0][4] + eigenVectors[0][5]*eigenVectors[0][5]);
-    a2=acos(abs(val2)) * CONST_180_PI;
+    val2=sqrt(static_cast<double>(eigenVectors[0][4]*eigenVectors[0][4]) + static_cast<double>(eigenVectors[0][5]*eigenVectors[0][5]));
+    a2=acos(vcl_abs(val2)) * CONST_180_PI;
 
     alpha=p[0]*a0 + p[1]*a1 + p[2]*a2;
 
@@ -156,17 +158,18 @@ public:
 
    unsigned int GetOutputSize()
    {
-     return NumberOfComponentsPerPixel;
+     return m_NumberOfComponentsPerPixel;
    }
 
    /** Constructor */
-   ReciprocalHAlphaFunctor()  {}
+   ReciprocalHAlphaFunctor() : m_Epsilon(1e-4) {}
 
    /** Destructor */
-   ~ReciprocalHAlphaFunctor() {}
+   virtual ~ReciprocalHAlphaFunctor() {}
 
 private:
-   itkStaticConstMacro(NumberOfComponentsPerPixel, unsigned int, 3);
+   itkStaticConstMacro(m_NumberOfComponentsPerPixel, unsigned int, 3);
+   const double m_Epsilon;
 };
 }
 

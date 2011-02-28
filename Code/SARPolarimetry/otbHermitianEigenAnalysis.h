@@ -1,13 +1,14 @@
 /*=========================================================================
 
-  Program:   Insight Segmentation & Registration Toolkit
-  Module:    $RCSfile: otbHermitianEigenAnalysis.h, v $
+  Program:   ORFEO Toolbox
   Language:  C++
-  Date:      $Date: 2005/07/09 22:43:35 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date$
+  Version:   $Revision$
 
-  Copyright (c) Insight Software Consortium. All rights reserved.
-  See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
 
      This software is distributed WITHOUT ANY WARRANTY; without even
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
@@ -56,6 +57,8 @@ namespace otb
  *     num. math. 11, 293-306(1968) by bowdler, martin, reinsch, and
  *     wilkinson.
  *     handbook for auto. comp., vol.ii-linear algebra, 227-240(1971).
+ *
+ * \ingroup SARPolarimetry
  */
 
 template < typename TMatrix, typename TVector, typename TEigenMatrix=TMatrix >
@@ -85,7 +88,7 @@ public:
       m_OrderEigenValues(OrderByValue)
     {};
 
-  ~HermitianEigenAnalysis() {};
+  virtual ~HermitianEigenAnalysis() {};
 
   typedef TMatrix      MatrixType;
   typedef TEigenMatrix EigenMatrixType;

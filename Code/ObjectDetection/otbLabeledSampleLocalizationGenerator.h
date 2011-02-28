@@ -122,6 +122,13 @@ private:
   LabeledSampleLocalizationGenerator(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
+  std::string GetNextID()
+  {
+    std::ostringstream oss;
+    oss << m_CurrentID++;
+    return oss.str();
+  }
+
   RandomGeneratorType::Pointer m_RandomGenerator;
 
   std::string               m_ClassKey;
@@ -130,6 +137,7 @@ private:
   double                    m_InhibitionRadius;
   unsigned long int         m_NbMaxIteration;
   unsigned int              m_NumberOfPositiveSamplesPerPoint;
+  unsigned int              m_CurrentID;
 };
 
 } // end namespace otb

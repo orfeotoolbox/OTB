@@ -45,6 +45,12 @@ namespace Functor {
  *   \f$ S_{ll} = S_{ll}^{*} = 1/2 * ( -S_{xx} - j*2*S_{xy} + S_{yy})  \f$
  *   \f$ S_{lr} = S_{rl}     = 1/2 * ( -S_{xx} - S_{yy})  \f$
  *
+ * \infgroup Functor
+ * \ingroup SARPolarimetry
+ *
+ * \sa MLCToCoherencyDegreeImageFilter
+ * \sa MLCToCoherencyImageFilter
+ *
  */
 template< class TInput, class TOutput>
 class MLCToCircularCoherencyDegreeFunctor
@@ -60,24 +66,24 @@ public:
     result.SetSize(m_NumberOfComponentsPerPixel);
     result.Fill(0.0);
 
-    RealType C1 =  static_cast<RealType>(Covariance[0].real()); // C1  <hh.hh*>
-    RealType C2 =  static_cast<RealType>(Covariance[3].real()); // C2  <hv.hv*>
-    RealType C3 =  static_cast<RealType>(Covariance[5].real()); // C3  <vv.vv*>
-    RealType C4 =  static_cast<RealType>(Covariance[1].real()); // C4  Re<hh.hv*>
-    RealType C5 =  static_cast<RealType>(Covariance[1].imag()); // C5  Im<hh.hv*>
-    RealType C6 =  static_cast<RealType>(Covariance[2].real()); // C6  Re<hh.vv*>
-    RealType C7 =  static_cast<RealType>(Covariance[2].imag()); // C7  Im<hh.vv*>
-    RealType C8 =  static_cast<RealType>(Covariance[4].real()); // C8  Re<hv.vv*>
-    RealType C9 =  static_cast<RealType>(Covariance[4].imag()); // C9  Im<hv.vv*>
+    const RealType C1 =  static_cast<RealType>(Covariance[0].real()); // C1  <hh.hh*>
+    const RealType C2 =  static_cast<RealType>(Covariance[3].real()); // C2  <hv.hv*>
+    const RealType C3 =  static_cast<RealType>(Covariance[5].real()); // C3  <vv.vv*>
+    const RealType C4 =  static_cast<RealType>(Covariance[1].real()); // C4  Re<hh.hv*>
+    const RealType C5 =  static_cast<RealType>(Covariance[1].imag()); // C5  Im<hh.hv*>
+    const RealType C6 =  static_cast<RealType>(Covariance[2].real()); // C6  Re<hh.vv*>
+    const RealType C7 =  static_cast<RealType>(Covariance[2].imag()); // C7  Im<hh.vv*>
+    const RealType C8 =  static_cast<RealType>(Covariance[4].real()); // C8  Re<hv.vv*>
+    const RealType C9 =  static_cast<RealType>(Covariance[4].imag()); // C9  Im<hv.vv*>
 
-    RealType llrrReal = 0.25 * ( C1 + C3 -4*C2 -2*C6);
-    RealType llrrImag = -(C4 + C8);
+    const RealType llrrReal = 0.25 * ( C1 + C3 -4*C2 -2*C6);
+    const RealType llrrImag = -(C4 + C8);
 
-    RealType lllrReal = 0.25 * ( C1 - C3 - 2*C5 + 2*C9);
-    RealType lllrImag = -0.5*(C7+C4+C8);
+    const RealType lllrReal = 0.25 * ( C1 - C3 - 2*C5 + 2*C9);
+    const RealType lllrImag = -0.5*(C7+C4+C8);
 
-    RealType rrlrReal = 0.25 * ( C1 -C3 + 2*C5 - 2*C9);
-    RealType rrlrImag = 0.5 * (C4+C8-C7);
+    const RealType rrlrReal = 0.25 * ( C1 -C3 + 2*C5 - 2*C9);
+    const RealType rrlrImag = 0.5 * (C4+C8-C7);
 
     RealType ll2    = 0.25 * ( C1 + C3 + 4*C2 - 2*C6 - 4*C5 - 4*C9);
     RealType rr2    = 0.25 * ( C1 + C3 + 4*C2 - 2*C6 + 4*C5 + 4*C9);
@@ -114,7 +120,7 @@ public:
    MLCToCircularCoherencyDegreeFunctor() : m_NumberOfComponentsPerPixel(3)  {}
 
    /** Destructor */
-   ~MLCToCircularCoherencyDegreeFunctor() {}
+   virtual ~MLCToCircularCoherencyDegreeFunctor() {}
 
 private:
     unsigned int m_NumberOfComponentsPerPixel;

@@ -41,6 +41,15 @@ namespace Functor
  *   channel #9 : \f$ j(S_{hv}-S_{vh}).(j(S_{hv}-S_{vh}))^{*} \f$
  *
  *  \ingroup Functor
+ *  \ingroup SARPolarimetry
+ *
+ *  \sa SinclairImageFilter
+ *  \sa SinclairToCircularCovarianceMatrixFunctor
+ *  \sa SinclairToCovarianceFunctor
+ *  \sa SinclairToMuellerFunctor
+ *  \sa SinclairToReciprocalCircularCovarianceMatrixFunctor
+ *  \sa SinclairToReciprocalCoherencyFunctor
+ *  \sa SinclairToReciprocalCovarianceFunctor
  */
 template <class TInput1, class TInput2, class TInput3,
           class TInput4, class TOutput>
@@ -58,10 +67,10 @@ public:
 
     result.SetSize(NumberOfComponentsPerPixel);
 
-    ComplexType HHPlusVV = static_cast<ComplexType>(Shh + Svv);
-    ComplexType VVMinusVV = static_cast<ComplexType>(Shh - Svv);
-    ComplexType HVPlusHV     = static_cast<ComplexType>( Shv + Svh);
-    ComplexType jHVMinusHV     = static_cast<ComplexType>( Shv - Svh) * vcl_complex<RealType>(0.0, 1.0);
+    const ComplexType HHPlusVV = static_cast<ComplexType>(Shh + Svv);
+    const ComplexType VVMinusVV = static_cast<ComplexType>(Shh - Svv);
+    const ComplexType HVPlusHV     = static_cast<ComplexType>( Shv + Svh);
+    const ComplexType jHVMinusHV     = static_cast<ComplexType>( Shv - Svh) * vcl_complex<RealType>(0.0, 1.0);
 
     result[0] = static_cast<OutputValueType>( HHPlusVV * vcl_conj(HHPlusVV) );
     result[1] = static_cast<OutputValueType>( HHPlusVV * vcl_conj(VVMinusVV) );

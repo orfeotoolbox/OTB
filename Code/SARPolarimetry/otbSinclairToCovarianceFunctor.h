@@ -41,6 +41,15 @@ namespace Functor
  *   channel #9 : \f$ S_{vv}.S_{vv}^{*} \f$
  *
  *  \ingroup Functor
+ *  \ingroup SARPolarimetry
+ *
+ *  \sa SinclairImageFilter
+ *  \sa SinclairToCircularCovarianceMatrixFunctor
+ *  \sa SinclairToCoherencyFunctor
+ *  \sa SinclairToMuellerFunctor
+ *  \sa SinclairToReciprocalCircularCovarianceMatrixFunctor
+ *  \sa SinclairToReciprocalCoherencyFunctor
+ *  \sa SinclairToReciprocalCovarianceFunctor
  */
 template <class TInput1, class TInput2, class TInput3,
           class TInput4, class TOutput>
@@ -55,7 +64,7 @@ public:
   {
     TOutput result;
 
-    result.SetSize(NumberOfComponentsPerPixel);
+    result.SetSize(m_NumberOfComponentsPerPixel);
 
     result[0] = static_cast<OutputValueType>( static_cast<ComplexType>(Shh)*vcl_conj(static_cast<ComplexType>(Shh)) );
     result[1] = static_cast<OutputValueType>( static_cast<ComplexType>(Shh)*vcl_conj(static_cast<ComplexType>(Shv)) );
@@ -73,7 +82,7 @@ public:
 
   unsigned int GetNumberOfComponentsPerPixel()
   {
-    return NumberOfComponentsPerPixel;
+    return m_NumberOfComponentsPerPixel;
   }
 
   /** Constructor */
@@ -86,7 +95,7 @@ protected:
 
 
 private:
-    itkStaticConstMacro(NumberOfComponentsPerPixel, unsigned int, 10);
+    itkStaticConstMacro(m_NumberOfComponentsPerPixel, unsigned int, 10);
 
 };
 

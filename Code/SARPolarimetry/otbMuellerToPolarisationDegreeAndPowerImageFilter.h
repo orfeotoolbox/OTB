@@ -34,6 +34,12 @@ namespace Functor {
  * \brief Evaluate the  min and max polarisation degree and min and max power
  *   from the Mueller image
  *
+ * \ingroup Functor
+ * \ingroup SARPolarimetry
+ *
+ * \sa MuellerToCircularPolarisationImageFilter
+ * \sa MuellerToMLCImageFilter
+ *
  */
 template< class TInput, class TOutput>
 class MuellerToPolarisationDegreeAndPowerFunctor
@@ -151,7 +157,7 @@ public:
    MuellerToPolarisationDegreeAndPowerFunctor() : m_NumberOfComponentsPerPixel(4) {}
 
    /** Destructor */
-   ~MuellerToPolarisationDegreeAndPowerFunctor() {}
+   virtual ~MuellerToPolarisationDegreeAndPowerFunctor() {}
 
 private:
     unsigned int m_NumberOfComponentsPerPixel;
