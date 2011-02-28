@@ -77,15 +77,16 @@ EigenvalueLikelihoodMaximisation<TInputImage>
     m_Likelihood(i) = -0.5*t.sum() - 0.5*sigma.sum();
     }
 
-  // Extract Global  Maximum
+  // Extract first local maximum
   double max = m_Likelihood[0];
   unsigned int iMax = 0;
-  for (unsigned int i = 1; i < m_Likelihood.size(); i++)
+  for (unsigned int i = 1; i < m_Likelihood.size() - 1; i++)
     {
-    if ( m_Likelihood[i] > max )
+    if ( m_Likelihood[i] > m_Likelihood[i - 1] && m_Likelihood[i] > m_Likelihood[i + 1] )
       {
       max = m_Likelihood[i];
       iMax = i;
+      break;
       }
     }
   m_NumberOfEndmembers = iMax;
