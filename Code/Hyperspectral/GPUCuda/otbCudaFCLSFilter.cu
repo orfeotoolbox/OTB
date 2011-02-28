@@ -11,8 +11,8 @@
 //Block thread size
 #define BLOCK_SIZE (16*16)
 
-#define num_bands 152
-#define num_endmembers 13
+//#define num_bands 224
+//#define num_endmembers 5
 
 #define CUDA_SAFE_CALL( call ) \
   do \
@@ -59,58 +59,80 @@ void check_error(cudaError_t error)
 __global__ void UnconstrainedKernel(float* d_image_vector,
                                     float* d_image_unmixed,
                                     float* d_endmembersInv,
-                                    int numSamples)
+                                    int numSamples,
+                                    int num_endmembers,
+                                    int num_bands)
 {
   int x = blockIdx.x * blockDim.x + threadIdx.x;
-  float l_abu[num_endmembers];
   
   if (x < numSamples)
     {
-    float l_pixel[num_bands];
-  
-    for (int t=0; t < num_bands; t++)
-      {
-      l_pixel[t] = d_image_vector[ t + num_bands*x ];
-      }
-  
+    // Unconstrained    
     for(int e = 0; e < num_endmembers; e++)
       {
-      l_abu[e] = 0;
-      for (int k = 0; k < num_bands; k++)
+      d_image_unmixed[e + num_endmembers*x] = 0;
+      for (int t = 0; t < num_bands; t++)
         {
-        l_abu[e] += d_endmembersInv[k + e*num_bands] * l_pixel[k];
+        d_image_unmixed[e + num_endmembers*x] += d_endmembersInv[t + e*num_bands] * d_image_vector[ t + num_bands*x ];
         }
-      d_image_unmixed[e + num_endmembers*x] = l_abu[e];
       }
     }
-    //syncthreads();
 }
 
 
-__global__ void ISRAKernel(float* d_image_vector, float* d_image_unmixed, float* d_endmembers, 
-                           float* d_endmembersT, int numSamples, int maxiter)
+__global__ void FCLSUKernel(float* d_image_unmixed,int numSamples,
+                                    int num_endmembers)
 {
+  float sum;
+  
   int x = blockIdx.x * blockDim.x + threadIdx.x;
-
   if (x < numSamples)
     {
-    float l_pixel[num_bands];
-    float l_abu[num_endmembers];
-    
-    float numerator;
-    float denominator;
-    float dot = 0.0;
-    
-    for (int t=0; t < num_bands; t++)
+    sum = 0;
+    for(int i = 0; i < num_endmembers; i++)
       {
-      l_pixel[t] = d_image_vector[ t + num_bands*x ];
+      sum += d_image_unmixed[ i + num_endmembers*x ];
       }
       
-    for (int t=0; t < num_endmembers; t++)
+    for (int k = 0; k < num_endmembers; k++)
       {
-      l_abu[t] = d_image_unmixed[t + num_endmembers*x];
+      d_image_unmixed[k + num_endmembers*x] = d_image_unmixed[k + num_endmembers*x ] / sum;
       }
-      
+    }
+}
+
+
+__global__ void UnconstrainedISRAKernel(float* d_image_vector,
+                                        float* d_image_unmixed,
+                                        float* d_image_unmixed_tmp,
+                                        float* d_endmembers, 
+                                        float* d_endmembersT,
+                                        float* d_endmembersInv,
+                                        int numSamples,
+                                        int num_endmembers,
+                                        int num_bands,
+                                        int maxiter)
+{
+  int x = blockIdx.x * blockDim.x + threadIdx.x;
+  
+  float numerator = 0;
+  float denominator = 0;
+  float dot = 0;
+  
+  if (x < numSamples)
+    {
+    // Unconstrained    
+    for(int e = 0; e < num_endmembers; e++)
+      {
+      d_image_unmixed[e + num_endmembers*x] = 0;
+      for (int t = 0; t < num_bands; t++)
+        {
+        d_image_unmixed[e + num_endmembers*x] += d_endmembersInv[t + e*num_bands] * d_image_vector[ t + num_bands*x ];
+        }
+      d_image_unmixed_tmp[e + num_endmembers*x] = d_image_unmixed[e + num_endmembers*x];
+      }
+
+    // ISRA
     for(int it = 0; it < maxiter; it++)
       {      
       for(int e = 0; e < num_endmembers; e++)
@@ -121,137 +143,38 @@ __global__ void ISRAKernel(float* d_image_vector, float* d_image_unmixed, float*
         // For all bands
         for (int k = 0; k < num_bands; k++)
           {
-          numerator = numerator + d_endmembers[k + e*num_bands] * l_pixel[k];
+//          numerator = numerator + d_endmembers[k + e*num_bands] * l_pixel[k];
+          numerator = numerator + d_endmembers[k + e*num_bands] * d_image_vector[ k + num_bands*x ];;
   
           // Calculate dot product
           dot = 0;
           for (int s = 0; s < num_endmembers; s++)
             {
-            dot += d_endmembersT[s + k*num_endmembers] * l_abu[s];
+//            dot += d_endmembersT[s + k*num_endmembers] * l_abu[s];
+            dot += d_endmembersT[s + k*num_endmembers] * d_image_unmixed_tmp[s + num_endmembers*x];
             }
   
           denominator += dot * d_endmembers[k + e*num_bands];        
           
           }
   
-        l_abu[e] = l_abu[e] * (numerator/denominator);
-        l_abu[e] = numerator/denominator;
+//        l_abu[e] = l_abu[e] * (numerator/denominator);
+//        l_abu[e] = numerator/denominator;
+        d_image_unmixed[e + num_endmembers*x] = d_image_unmixed_tmp[e + num_endmembers*x] * (numerator/denominator);
         }
-      }
         
-    for(int k=0; k < num_endmembers;k++)
-      {
-      d_image_unmixed[k + num_endmembers*x] = l_abu[k];
-      }
-    }
-    //syncthreads();
-}
-
-__global__ void FCLSUKernel(float* d_image_unmixed,int numSamples)
-{
-  float sum;
-  // float pixel[num_endmembers];
-  
-  int x = blockIdx.x * blockDim.x + threadIdx.x;
-  if (x < numSamples)
-    {
-    sum = 0;
-    for(int i = 0; i < num_endmembers; i++)
-      {
-      //pixel[i] = d_image_unmixed[i + num_endmembers*x ];
-      //sum += pixel[i];
-      sum += d_image_unmixed[ i + num_endmembers*x ];
-      }
-      
-    for (int k = 0; k < num_endmembers; k++)
-      {
-      //pixel[k] = pixel[k] / sum;
-      d_image_unmixed[k + num_endmembers*x] = d_image_unmixed[k + num_endmembers*x ] / sum;
-      }
-    }
-    //syncthreads();
-}
-
-
-__global__ void UnconstrainedISRAKernel(float* d_image_vector,
-                                        float* d_image_unmixed,
-                                        float* d_endmembers, 
-                                        float* d_endmembersT,
-                                        float* d_endmembersInv,
-                                        int numSamples,
-                                        int maxiter)
-{
-  int x = blockIdx.x * blockDim.x + threadIdx.x;
-
-  float l_pixel[num_bands];
-  float l_abu[num_endmembers];
-  float l_abu2[num_endmembers];
-  
-  float numerator = 0;
-  float denominator = 0;
-  float dot = 0;
-  
-  if (x < numSamples)
-    {
-    // Unconstrained  
-    for (int t=0; t < num_bands; t++)
-      {
-      l_pixel[t] = d_image_vector[ t + num_bands*x ];
-      }
-  
-    for(int e = 0; e < num_endmembers; e++)
-      {
-      l_abu[e] = 0;
-      for (int k1 = 0; k1 < num_bands; k1++)
-        {
-        l_abu[e] += d_endmembersInv[k1 + e*num_bands] * l_pixel[k1];
-        }
-      }
-
-    // ISRA
-    /*
-    for(int it = 0; it < maxiter; it++)
-      {      
       for(int e = 0; e < num_endmembers; e++)
         {
-        numerator   = 0;
-        denominator = 0;
-        
-        // For all bands
-        for (int k = 0; k < num_bands; k++)
-          {
-          numerator = numerator + d_endmembers[k + e*num_bands] * l_pixel[k];
-  
-          // Calculate dot product
-          dot = 0;
-          for (int s = 0; s < num_endmembers; s++)
-            {
-            dot += d_endmembersT[s + k*num_endmembers] * l_abu[s];
-            }
-  
-          denominator += dot * d_endmembers[k + e*num_bands];
-          //denominator = dot;        
-          }
-        l_abu2[e] = l_abu[e] * (numerator/denominator);
+        d_image_unmixed_tmp[e + num_endmembers*x] = d_image_unmixed[e + num_endmembers*x];
         }
-        
-       for(int e = 0; e < num_endmembers; e++)
-        {
-        l_abu[e] = l_abu2[e];
-        }       
       }
-    syncthreads();
-    */
 
-    for(int e = 0; e < num_endmembers; e++)
-      {
-      d_image_unmixed[e + num_endmembers*x] = l_abu[e];
-      }
     }
 }
 
 extern "C" void fclsProcessing( float* d_image_vector, 
                                 float* d_image_unmixed,
+                                float* d_image_unmixed_tmp,
                                 float* d_endmembers,
                                 float* d_endmembersT,             
                                 float* d_endmembersInv,  
@@ -266,13 +189,10 @@ extern "C" void fclsProcessing( float* d_image_vector,
   
   printf( " %d \n " , (numSamples + blockSize) / blockSize );
   
-  UnconstrainedISRAKernel<<<dimGrid,dimBlock>>>(d_image_vector, d_image_unmixed, d_endmembers, d_endmembersT, d_endmembersInv, numSamples, maxIter);
+  UnconstrainedKernel<<<dimGrid,dimBlock>>>(d_image_vector, d_image_unmixed, d_endmembersInv, numSamples, nbEndmembers, numBands);
   cudaThreadSynchronize();
 
-  //UnconstrainedKernel<<<dimGrid,dimBlock>>>(d_image_vector, d_image_unmixed, d_endmembersInv, numSamples);
-  //cudaThreadSynchronize();
-
-  //ISRAKernel<<<dimGrid,dimBlock>>>(d_image_vector, d_image_unmixed, d_endmembers, d_endmembersT, numSamples, maxIter);
+  //UnconstrainedISRAKernel<<<dimGrid,dimBlock>>>(d_image_vector, d_image_unmixed, d_image_unmixed_tmp, d_endmembers, d_endmembersT, d_endmembersInv, numSamples, nbEndmembers, numBands, maxIter);
   //cudaThreadSynchronize();
   
   //FCLSUKernel<<<dimGrid,dimBlock>>>(d_image_unmixed, numSamples);
@@ -292,14 +212,17 @@ extern "C" void fclsMallocEndMembers(
   float* d_endmembersT_ = 0;
   float* d_endmembersInv_ = 0;
 
-//  printf( "Allocating %d KB\n", numBands*nbEndmembers*sizeof(float) /  1024 );
+  printf( "Allocating %d KB\n", numBands*nbEndmembers*sizeof(float) /  1024 );
   CUDA_SAFE_CALL( cudaMalloc((void**) &d_endmembers_, nbEndmembers*numBands*sizeof(float)));
+  CUDA_SAFE_CALL( cudaMemset(d_endmembers_, 0, nbEndmembers*numBands*sizeof(float)));
 
-//  printf( "Allocating %d KB\n", numBands*nbEndmembers*sizeof(float) /  1024 );
+  printf( "Allocating %d KB\n", numBands*nbEndmembers*sizeof(float) /  1024 );
   CUDA_SAFE_CALL( cudaMalloc((void**) &d_endmembersT_, nbEndmembers*numBands*sizeof(float)));
+  CUDA_SAFE_CALL( cudaMemset(d_endmembersT_, 0, nbEndmembers*numBands*sizeof(float)));
 
-//  printf( "Allocating %d KB\n", numBands*nbEndmembers*sizeof(float) /  1024 );
+  printf( "Allocating %d KB\n", numBands*nbEndmembers*sizeof(float) /  1024 );
   CUDA_SAFE_CALL( cudaMalloc((void**) &d_endmembersInv_, nbEndmembers*numBands*sizeof(float)));
+  CUDA_SAFE_CALL( cudaMemset(d_endmembersInv_, 0, nbEndmembers*numBands*sizeof(float)));
   
   
   *d_endmembers = d_endmembers_;
@@ -309,22 +232,23 @@ extern "C" void fclsMallocEndMembers(
 
 extern "C" void fclsMallocImage( float** d_image_vector,
                             float** d_image_unmixed,
+                            float** d_image_unmixed_tmp,
                             int imageWidth,
                             int imageHeight,
                             int numBands,
                             int nbEndmembers)
 {
-  float* d_image_vector_ = 0;
-  float* d_image_unmixed_ = 0;
+  printf( "Allocating %d KB\n", numBands*imageWidth*imageHeight*sizeof(float) /  1024);
+  CUDA_SAFE_CALL(cudaMalloc((void**) d_image_vector, numBands*imageWidth*imageHeight*sizeof(float)));
+  CUDA_SAFE_CALL( cudaMemset(*d_image_vector, 0, nbEndmembers*numBands*sizeof(float)));
 
-//  printf( "Allocating %d KB\n", numBands*imageWidth*imageHeight*sizeof(float) /  1024);
-  CUDA_SAFE_CALL(cudaMalloc((void**) &d_image_vector_, numBands*imageWidth*imageHeight*sizeof(float)));
+  printf( "Allocating %d KB\n", nbEndmembers*imageWidth*imageHeight*sizeof(float) /  1024);
+  CUDA_SAFE_CALL( cudaMalloc((void**) d_image_unmixed, nbEndmembers*imageWidth*imageHeight*sizeof(float)));
+  CUDA_SAFE_CALL( cudaMemset(*d_image_unmixed, 0, nbEndmembers*numBands*sizeof(float)));
 
-//  printf( "Allocating %d KB\n", nbEndmembers*imageWidth*imageHeight*sizeof(float) /  1024 /1024);
-  CUDA_SAFE_CALL( cudaMalloc((void**) &d_image_unmixed_, nbEndmembers*imageWidth*imageHeight*sizeof(float)));
-
-  *d_image_vector = d_image_vector_;
-  *d_image_unmixed = d_image_unmixed_;
+  printf( "Allocating %d KB\n", nbEndmembers*imageWidth*imageHeight*sizeof(float) /  1024);
+  CUDA_SAFE_CALL( cudaMalloc((void**) d_image_unmixed_tmp, nbEndmembers*imageWidth*imageHeight*sizeof(float)));
+  CUDA_SAFE_CALL( cudaMemset(*d_image_unmixed_tmp, 0, nbEndmembers*numBands*sizeof(float)));
 }
 
          

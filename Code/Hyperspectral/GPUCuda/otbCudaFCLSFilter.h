@@ -160,6 +160,7 @@ private:
 
   float*   m_GPUInputImage;
   float*   m_GPUOutputImage;
+  float*   m_GPUOutputImageTmp;
   SizeType m_GPUImageSize;
 
   float*   m_GPUU;

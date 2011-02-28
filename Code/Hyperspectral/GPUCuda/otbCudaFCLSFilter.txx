@@ -34,6 +34,7 @@ extern "C" void fclsMallocEndMembers(
 
 extern "C" void fclsMallocImage( float** d_image_vector,
                             float** d_image_unmixed,
+                            float** d_image_unmixed_tmp,
                             int imageWidth,
                             int imageHeight,
                             int numBands,
@@ -41,6 +42,7 @@ extern "C" void fclsMallocImage( float** d_image_vector,
 
 extern "C" void fclsProcessing(float* d_image_vector,
                                float* d_image_unmixed,
+                               float* d_image_unmixed_tmp,
                                float* d_endmembers,
                                float* d_endmembersT,
                                float* d_endmembersInv,
@@ -74,6 +76,7 @@ CudaFCLSFilter<TInputPointSet, TOutputImage>
   m_GPUUinv = 0;
   m_GPUInputImage = 0;
   m_GPUOutputImage = 0;
+  m_GPUOutputImageTmp = 0;
   m_GPUImageSize.Fill(0);
   this->SetNumberOfThreads(1);
 }
@@ -85,6 +88,7 @@ CudaFCLSFilter<TInputPointSet, TOutputImage>
     const   OutputImageRegionType&     outputRegionForThread,
     int   threadId)
 {
+  std::cout << "Region : " << outputRegionForThread << std::endl;
   //std::cout << "Region : " << outputRegionForThread << std::endl;
   typename InputImageType::Pointer inputPtr = dynamic_cast<InputImageType *> (this->itk::ProcessObject::GetInput(0));
   typename OutputImageType::Pointer outputPtr = dynamic_cast<OutputImageType *> (this->itk::ProcessObject::GetOutput(0));
@@ -112,16 +116,30 @@ CudaFCLSFilter<TInputPointSet, TOutputImage>
       {
       fclsFree(m_GPUInputImage);
       fclsFree(m_GPUOutputImage);
+      fclsFree(m_GPUOutputImageTmp);
       }
 
-    fclsMallocImage(&m_GPUInputImage, &m_GPUOutputImage, imageWidth, imageHeight, numBands, numEndmembers);
+    fclsMallocImage(&m_GPUInputImage, &m_GPUOutputImage, &m_GPUOutputImageTmp, imageWidth, imageHeight, numBands, numEndmembers);
     m_GPUImageSize = inputPtr->GetBufferedRegion().GetSize();
     }
 
   fclsCopyHostToDevice(m_GPUInputImage, pix, numBands * imageWidth * imageHeight * sizeof(float));
 
+  std::cout << "m_GPUInputImage " << m_GPUInputImage << std::endl
+      <<     "m_GPUOutputImage" << m_GPUOutputImage << std::endl
+      <<     "m_GPUOutputImageTmp" << m_GPUOutputImageTmp << std::endl
+      <<     "m_GPUU" << m_GPUU << std::endl
+      <<     "m_GPUUt" << m_GPUUt << std::endl
+      <<     "m_GPUUinv" << m_GPUUinv << std::endl
+      <<     "imageWidth * imageHeight" << imageWidth* imageHeight << std::endl
+      <<     "numBands" << numBands << std::endl
+      <<     "numEndmembers" << numEndmembers << std::endl
+      <<     "m_MaxIter" << m_MaxIter << std::endl
+      <<     "m_BlockSize" << m_BlockSize << std::endl;
+
   fclsProcessing(m_GPUInputImage,
                  m_GPUOutputImage,
+                 m_GPUOutputImageTmp,
                  m_GPUU,
                  m_GPUUt,
                  m_GPUUinv,
