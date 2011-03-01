@@ -1793,7 +1793,10 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS15 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+ADD_TEST(ioTuVectorDataIOFactory ${IO_TESTS15}
+         otbVectorDataIOFactory
+         ${INPUTDATA}/ToulouseRoad-examples.shp )
+        
 ADD_TEST(ioTuOGRVectorDataIO ${IO_TESTS15}
         otbOGRVectorDataIONew )
 
@@ -2682,6 +2685,20 @@ ADD_TEST(ioTuSarDefaultImageMetadataInterfaceNew ${IO_TESTS20}
 ADD_TEST(ioTuSarDefaultImageMetadataInterface ${IO_TESTS20}
         otbSarDefaultImageMetadataInterface )
 
+ADD_TEST(ioTuScalarBufferToImageFileWriter ${IO_TESTS20}
+        otbScalarBufferToImageFileWriterNew )		
+
+ADD_TEST(ioTvScalarBufferToImageFileWriterTest ${IO_TESTS20}
+  --compare-image ${NOTOL}
+         ${BASELINE}/ioTvScalarBufferToImageFileWriterTest.tif
+         ${TEMP}/ioTvScalarBufferToImageFileWriterTest.tif
+  otbScalarBufferToImageFileWriterTest 
+		4
+		50
+		75
+         ${TEMP}/ioTvScalarBufferToImageFileWriterTest.tif
+)	
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS21 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2875,6 +2892,8 @@ ADD_TEST(ioTvGDALReadPxlComplex${INPUTFILE_PIXELTYPE} ${IO_TESTS21}
 
 ENDFOREACH(INPUTFILE_PIXELTYPE ${INPUTFILE_PIXELTYPES_LIST})
 
+
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS22 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2949,6 +2968,7 @@ ADD_TEST(ioTvMultiChannelROI_HDF5_2_TIF ${COMMON_TESTS2}
          -channels 1 )
 
 ENDIF(CHECK_GDAL_BUILDED_WITH_HDF)
+
 
 #----------------------------------------------------------------------------------
 SET(BasicIO_SRCS1
@@ -3074,6 +3094,7 @@ otbWritingComplexDataWithComplexImageTest.cxx
 
 SET(BasicIO_SRCS15
 otbIOTests15.cxx
+otbVectorDataIOFactory.cxx
 otbVectorDataSourceNew.cxx
 otbVectorDataFileReaderNew.cxx
 otbVectorDataFileReader.cxx
@@ -3150,6 +3171,8 @@ otbOpticalDefaultImageMetadataInterface.cxx
 otbSarDefaultImageMetadataInterfaceFactoryNew.cxx
 otbSarDefaultImageMetadataInterfaceNew.cxx
 otbSarDefaultImageMetadataInterface.cxx
+otbScalarBufferToImageFileWriterNew.cxx
+otbScalarBufferToImageFileWriterTest.cxx
 )
 
 SET(BasicIO_SRCS21

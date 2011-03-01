@@ -28,6 +28,7 @@ void RegisterTests()
 {
   REGISTER_TEST(otbOrthoRectificationFilterNew);
   REGISTER_TEST(otbOrthoRectificationFilter);
+  REGISTER_TEST(otbOrthoRectificationComplexFilter);
   REGISTER_TEST(otbOrthoRectificationFilterWithDEM);
   REGISTER_TEST(otbOrthoRectificationMonoThreadFilter);
   REGISTER_TEST(otbGCPsToRPCSensorModelImageFilterNew);

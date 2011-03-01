@@ -613,7 +613,7 @@ unsigned int OGRIOHelper<TVectorData>
   for (typename ChildrenListType::iterator it = children.begin(); it != children.end(); ++it)
     {
     DataNodePointerType dataNode = (*it)->Get();
-    otbMsgDevMacro(<< "Type of node " << dataNode->GetNodeType() << " id" << dataNode->GetNodeId());
+    //otbMsgDevMacro(<< "Type of node " << dataNode->GetNodeType() << " id " << dataNode->GetNodeId());
     ++m_Kept;
 
     // Get the kwl
@@ -621,6 +621,7 @@ unsigned int OGRIOHelper<TVectorData>
     itk::ExposeMetaData<VectorDataKeywordlist>(dataNode->GetMetaDataDictionary(),
                                                MetaDataKey::VectorDataKeywordlistKey,
                                                kwl);
+    
     // Create the field once
     if (ogrCurrentLayer != NULL && ogrCurrentLayer->GetFeatureCount() == 0)
       {
@@ -628,11 +629,19 @@ unsigned int OGRIOHelper<TVectorData>
       // vectordatakeywordlist
       for (unsigned int fieldIdx  = 0; fieldIdx < kwl.GetNumberOfFields(); fieldIdx++)
         {
-  if (ogrCurrentLayer->CreateField(kwl.GetNthField(fieldIdx).first) != OGRERR_NONE )
-    {
-    itkExceptionMacro(<< "Failed to create Field "<<kwl.GetNthField(fieldIdx).first->GetNameRef());
-    }
-  }
+        if ( std::string(kwl.GetNthField(fieldIdx).first->GetNameRef()) != "FID" )
+          {
+          otbMsgDevMacro(<< " CreateField '" << kwl.GetNthField(fieldIdx).first->GetNameRef() << "'");
+          if (ogrCurrentLayer->CreateField(kwl.GetNthField(fieldIdx).first) != OGRERR_NONE )
+            {
+            itkExceptionMacro(<< "Failed to create Field "<<kwl.GetNthField(fieldIdx).first->GetNameRef());
+            }
+          }
+         else
+          {
+          otbMsgDevMacro(<< "WARNING: Skipping OGR field 'FID'");
+          }
+        }
       }
 
     switch (dataNode->GetNodeType())
@@ -680,11 +689,15 @@ unsigned int OGRIOHelper<TVectorData>
           {
           // Get the key of the Nth OGRFieldRefn
           const char * key = kwl.GetNthField(i).first->GetNameRef();
-          // Edit the value of the field and add it to the current feature
-          ogrFeature->SetField(ogrFeature->GetFieldIndex(key) , kwl.GetFieldAsString(key).c_str());
+          
+          if (std::string(key) != "FID")
+            {
+            // Edit the value of the field and add it to the current feature
+            ogrFeature->SetField(ogrFeature->GetFieldIndex(key) , kwl.GetFieldAsString(key).c_str());
+            }
           }
     
-        ogrFeature->SetField("Name", dataNode->GetNodeId());
+//        ogrFeature->SetField("Name", dataNode->GetNodeId());
         ogrFeature->SetGeometry(&ogrPoint);
 
         if (ogrCurrentLayer->CreateFeature(ogrFeature) != OGRERR_NONE)
@@ -738,7 +751,7 @@ unsigned int OGRIOHelper<TVectorData>
           ogrFeature->SetField(ogrFeature->GetFieldIndex(key) , kwl.GetFieldAsString(key).c_str());
           }
     
-        ogrFeature->SetField("Name", dataNode->GetNodeId());
+//        ogrFeature->SetField("Name", dataNode->GetNodeId());
         ogrFeature->SetGeometry(&ogrLine);
 
         if (ogrCurrentLayer->CreateFeature(ogrFeature) != OGRERR_NONE)
@@ -851,7 +864,7 @@ unsigned int OGRIOHelper<TVectorData>
       OGRFeature *   ogrFeature;
 
       ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
-      ogrFeature->SetField("Name", dataNode->GetNodeId());
+//      ogrFeature->SetField("Name", dataNode->GetNodeId());
       ogrFeature->GetDefnRef()->SetGeomType(wkbMultiPoint);
       ogrFeature->SetGeometry(ogrMultiPoint);
 
@@ -877,7 +890,7 @@ unsigned int OGRIOHelper<TVectorData>
       OGRFeature *ogrFeature;
 
       ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
-      ogrFeature->SetField("Name", dataNode->GetNodeId());
+//      ogrFeature->SetField("Name", dataNode->GetNodeId());
       ogrFeature->GetDefnRef()->SetGeomType(wkbMultiLineString);
       ogrFeature->SetGeometry(ogrMultiLineString);
 
@@ -900,7 +913,7 @@ unsigned int OGRIOHelper<TVectorData>
       OGRFeature *     ogrFeature;
 
       ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
-      ogrFeature->SetField("Name", dataNode->GetNodeId());
+//      ogrFeature->SetField("Name", dataNode->GetNodeId());
       ogrFeature->GetDefnRef()->SetGeomType(wkbMultiPolygon);
       ogrFeature->SetGeometry(ogrMultiPolygon);
 
@@ -924,7 +937,7 @@ unsigned int OGRIOHelper<TVectorData>
       OGRFeature *ogrFeature;
 
       ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
-      ogrFeature->SetField("Name", dataNode->GetNodeId());
+//      ogrFeature->SetField("Name", dataNode->GetNodeId());
       ogrFeature->GetDefnRef()->SetGeomType(wkbGeometryCollection);
       ogrFeature->SetGeometry(ogrCollectionGeometry);
 

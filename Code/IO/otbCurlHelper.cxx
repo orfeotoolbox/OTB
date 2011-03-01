@@ -42,12 +42,58 @@ int CurlHelper::TestUrlAvailability(const std::string& url) const
     curl_easy_setopt(curl, CURLOPT_USERAGENT, m_Browser.data());
     curl_easy_setopt(curl, CURLOPT_URL, url.data());
     // Set the dummy write function
-    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &Self::curlDummyWriteFunction);
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &Self::CallbackWriteDataDummy);
     curl_easy_setopt(curl, CURLOPT_MAXFILESIZE, 1);
 
     // Perform requet
     res = curl_easy_perform(curl);
+
+    /* always cleanup */
+    curl_easy_cleanup(curl);
+
     }
+  return res;
+#else
+  otbMsgDevMacro(<< "Curl is not available, compile with OTB_USE_CURL to ON");
+  return -1;
+#endif
+}
+
+int CurlHelper::RetrieveUrlInMemory(const std::string& url, std::string& output) const
+{
+#ifdef OTB_USE_CURL
+  otbMsgDevMacro(<< "Retrieving: " << url);
+  CURL *   curl;
+  CURLcode res = CURL_LAST;
+
+  curl = curl_easy_init();
+  if (curl)
+    {
+    curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+
+    // Set 5s timeout
+    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 5);
+
+    // Use our writing static function to avoid file descriptor
+    // pointer crash on windows
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &Self::CallbackWriteDataToStringStream);
+
+    // Say the file where to write the received data
+    std::ostringstream* outputStream = new std::ostringstream;
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void*) outputStream);
+
+    // Perform request
+    res = curl_easy_perform(curl);
+
+    // Save output
+    output = outputStream->str();
+    otbMsgDevMacro("curl output : " << output)
+
+    // Clean up
+    delete outputStream;
+    curl_easy_cleanup(curl);
+    }
+  otbMsgDevMacro(<< " -> " << res);
   return res;
 #else
   otbMsgDevMacro(<< "Curl is not available, compile with OTB_USE_CURL to ON");
@@ -83,7 +129,7 @@ int CurlHelper::RetrieveFile(const std::string& urlString, std::string filename)
 
     // Use our writing static function to avoid file descriptor
     // pointer crash on windows
-    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &Self::write_data);
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &Self::CallbackWriteDataToFile);
 
     // Say the file where to write the received data
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void*) output_file);
@@ -160,7 +206,7 @@ int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs,
     // Param easy handle
     curl_easy_setopt(lEasyHandle, CURLOPT_USERAGENT, m_Browser.data());
     curl_easy_setopt(lEasyHandle, CURLOPT_URL, (*url).data());
-    curl_easy_setopt(lEasyHandle, CURLOPT_WRITEFUNCTION, &Self::write_data);
+    curl_easy_setopt(lEasyHandle, CURLOPT_WRITEFUNCTION, &Self::CallbackWriteDataToFile);
     curl_easy_setopt(lEasyHandle, CURLOPT_WRITEDATA, (void*) (*file));
 
     // Add easy handle to multi handle
@@ -279,7 +325,7 @@ int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs,
 #endif
 }
 
-size_t CurlHelper::write_data(void* ptr, size_t size, size_t nmemb, void* data)
+size_t CurlHelper::CallbackWriteDataToFile(void* ptr, size_t size, size_t nmemb, void* data)
 {
   size_t written;
 
@@ -288,6 +334,33 @@ size_t CurlHelper::write_data(void* ptr, size_t size, size_t nmemb, void* data)
   written = fwrite(ptr, size, nmemb, fDescriptor);
 
   return written;
+}
+
+/*
+size_t CurlHelper::CallbackWriteDataToCharVector(void *ptr, size_t size, size_t nmemb, void *data)
+{
+  register int realsize = (int)(size * nmemb);
+
+  std::vector<char> *vec
+    = static_cast<std::vector<char>*>(data);
+  const char* chPtr = static_cast<char*>(ptr);
+  vec->insert(vec->end(), chPtr, chPtr + realsize);
+
+  return realsize;
+}
+*/
+
+size_t CurlHelper::CallbackWriteDataToStringStream(void *ptr, size_t size, size_t nmemb, void *data)
+{
+  std::ostringstream& stream = *reinterpret_cast<std::ostringstream*>(data);
+  stream << reinterpret_cast<char*>(ptr);
+  return size * nmemb;
+}
+
+
+size_t CurlHelper::CallbackWriteDataDummy(void *ptr, size_t size, size_t nmemb, void *data)
+{
+  return size * nmemb;
 }
 
 }

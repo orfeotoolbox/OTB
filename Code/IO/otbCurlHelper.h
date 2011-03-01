@@ -47,6 +47,8 @@ public:
   int RetrieveFile(const std::ostringstream& urlStream, std::string filename) const;
   int RetrieveFile(const std::string& urlString, std::string filename) const;
 
+  int RetrieveUrlInMemory(const std::string& urlString, std::string& output) const;
+
   int RetrieveFileMulti(const std::vector<std::string>& listURLs,
                         const std::vector<std::string>& listFiles,
                         int maxConnect) const;
@@ -60,15 +62,14 @@ private:
   CurlHelper(const Self &);  //purposely not implemented
   void operator =(const Self&);  //purposely not implemented
 
-  size_t curlDummyWriteFunction(void*, size_t, size_t nmemb, void*)
-  {
-    return nmemb;
-  }
-
   // Need to use our writing function to handle windows segfaults
   // Need to be static cause the CURL_OPT is expecting a pure C
   // function or a static c++ method.
-  static size_t write_data(void* ptr, size_t size, size_t nmemb, void* data);
+  static size_t CallbackWriteDataToFile(void* ptr, size_t size, size_t nmemb, void* data);
+
+  static size_t CallbackWriteDataToStringStream(void* ptr, size_t size, size_t nmemb, void* data);
+
+  static size_t CallbackWriteDataDummy(void* ptr, size_t size, size_t nmemb, void* data);
 
   // Browser Agent used
   std::string m_Browser;

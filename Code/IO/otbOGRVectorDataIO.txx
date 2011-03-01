@@ -282,8 +282,8 @@ void OGRVectorDataIO<TData>::Write(const VectorDataConstPointerType data, char *
     }
 
   chrono.Stop();
-  std::cout << "OGRVectorDataIO: file saved in " << chrono.GetMeanTime() << " seconds. (" << layerKept <<
-  " elements)" << std::endl;
+  otbMsgDevMacro( << "OGRVectorDataIO: file saved in " << chrono.GetMeanTime() << " seconds. (" << layerKept <<
+  " elements)" );
 
   otbMsgDevMacro(<< " OGRVectorDataIO::Write()  ");
 }

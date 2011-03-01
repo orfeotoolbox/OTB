@@ -32,7 +32,8 @@ LabeledSampleLocalizationGenerator<TVectorData>
   m_RandomLocalizationDensity(.005),
   m_InhibitionRadius(5.0),
   m_NbMaxIteration(10000),
-  m_NumberOfPositiveSamplesPerPoint(50)
+  m_NumberOfPositiveSamplesPerPoint(50),
+  m_CurrentID(0)
 {
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfRequiredOutputs(1);
@@ -115,19 +116,8 @@ LabeledSampleLocalizationGenerator<TVectorData>
     ++itVector;
     }
 
-  //std::cout << "insiders: " << insiders.size() << std::endl;
-
-  // Search parametrization
-  //unsigned int nbMaxIter = (unsigned int)(node->GetPolygonExteriorRing()->GetArea());
-  //                                         - insiders.size() * CONST_PI * vcl_pow(this->GetInhibitionRadius(), 2))
-  //                                         / (CONST_PI * vcl_pow(this->GetInhibitionRadius(), 2)));
-  
-  unsigned int nbMaxPosition = (unsigned int)(node->GetPolygonExteriorRing()->GetArea() * this->GetRandomLocalizationDensity());
-  
-  //std::cout << "nbMaxIter: " << this->GetNbMaxIteration() << std::endl;
-  //std::cout << "nbMaxPosition: " << nbMaxPosition << std::endl;
-  
   // Generation
+  unsigned int nbMaxPosition = (unsigned int)(node->GetPolygonExteriorRing()->GetArea() * this->GetRandomLocalizationDensity());
   unsigned long int nbIter =  this->GetNbMaxIteration();
   unsigned int nbPosition = nbMaxPosition;
 
@@ -146,6 +136,7 @@ LabeledSampleLocalizationGenerator<TVectorData>
       {
       candidate[dim] = this->m_RandomGenerator->GetUniformVariate(rangeMin[dim], rangeMax[dim]);
       }
+    
     if(node->GetPolygonExteriorRing()->IsInside(candidate))
       {
       typename PointVectorType::const_iterator pit = insiders.begin();
@@ -173,7 +164,6 @@ LabeledSampleLocalizationGenerator<TVectorData>
     }
   
   // Densifying positive points
-
   for(typename PointVectorType::const_iterator iIt = insiders.begin(); iIt != insiders.end(); ++iIt)
     {
     for(unsigned int i = 0; i < m_NumberOfPositiveSamplesPerPoint; ++i)
@@ -191,14 +181,6 @@ LabeledSampleLocalizationGenerator<TVectorData>
   result.first = (vPoint);
   result.second = (pPoint);
   return result;
-}
-
-template <class TVectorData>
-void
-LabeledSampleLocalizationGenerator<TVectorData>
-::Update()
-{
-  this->GenerateData();
 }
 
 template <class TVectorData>
@@ -229,7 +211,19 @@ LabeledSampleLocalizationGenerator<TVectorData>
       {
       if (itVector.Get()->IsPointFeature())
         {
-        this->GetOutput(0)->GetDataTree()->Add(itVector.Get(), document);
+        // Duplicate input feature
+        typename DataNodeType::Pointer currentGeometry = DataNodeType::New();
+        currentGeometry->SetNodeId(this->GetNextID());
+        currentGeometry->SetNodeType(otb::FEATURE_POINT);
+        currentGeometry->SetPoint(itVector.Get()->GetPoint());
+        
+        std::vector<std::string> fields = itVector.Get()->GetFieldList();
+        for (std::vector<std::string>::const_iterator it = fields.begin(); it != fields.end(); ++it)
+          {
+          currentGeometry->SetFieldAsString( *it, itVector.Get()->GetFieldAsString(*it) );
+          }
+
+        this->GetOutput(0)->GetDataTree()->Add(currentGeometry, document);
         }
        ++itVector;
       }
@@ -253,21 +247,21 @@ LabeledSampleLocalizationGenerator<TVectorData>
         
         for (typename PointVectorType::const_iterator it = vPoint.begin(); it != vPoint.end(); ++it)
           {
-          typename DataNodeType::Pointer CurrentGeometry = DataNodeType::New();
-          CurrentGeometry->SetNodeId("FEATURE_POINT");
-          CurrentGeometry->SetNodeType(otb::FEATURE_POINT);
-          CurrentGeometry->SetPoint(*it);
-          CurrentGeometry->SetFieldAsInt(this->GetClassKey(), this->GetNoClassIdentifier());
-          this->GetOutput(0)->GetDataTree()->Add(CurrentGeometry, document);
+          typename DataNodeType::Pointer currentGeometry = DataNodeType::New();
+          currentGeometry->SetNodeId(this->GetNextID());
+          currentGeometry->SetNodeType(otb::FEATURE_POINT);
+          currentGeometry->SetPoint(*it);
+          currentGeometry->SetFieldAsInt(this->GetClassKey(), this->GetNoClassIdentifier());
+          this->GetOutput(0)->GetDataTree()->Add(currentGeometry, document);
           }
         for (typename PointVectorType::const_iterator it = pPoint.begin(); it != pPoint.end(); ++it)
           {
-          typename DataNodeType::Pointer CurrentGeometry = DataNodeType::New();
-          CurrentGeometry->SetNodeId("FEATURE_POINT");
-          CurrentGeometry->SetNodeType(otb::FEATURE_POINT);
-          CurrentGeometry->SetPoint(*it);
-          CurrentGeometry->SetFieldAsInt(this->GetClassKey(), 1);
-          this->GetOutput(0)->GetDataTree()->Add(CurrentGeometry, document);
+          typename DataNodeType::Pointer currentGeometry = DataNodeType::New();
+          currentGeometry->SetNodeId(this->GetNextID());
+          currentGeometry->SetNodeType(otb::FEATURE_POINT);
+          currentGeometry->SetPoint(*it);
+          currentGeometry->SetFieldAsInt(this->GetClassKey(), 1);
+          this->GetOutput(0)->GetDataTree()->Add(currentGeometry, document);
           }
         }
       ++itVector;

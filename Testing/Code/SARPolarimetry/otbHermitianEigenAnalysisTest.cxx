@@ -24,20 +24,17 @@
 
 #include "otbImage.h"
 #include "otbVectorImage.h"
-#include "otbMultiChannelsPolarimetricSynthesisFilter.h"
+#include "otbHermitianEigenAnalysis.h"
 
-int otbMultiChannelsPolarimetricSynthesisFilterNew(int argc, char * argv[])
+int otbHermitianEigenAnalysisTest(int argc, char * argv[])
 {
-  typedef double InputPixelType;
-  typedef double OutputPixelType;
-  const unsigned int Dimension = 2;
+  typedef vnl_matrix<double> MatrixType;
+  typedef std::vector<double> VectorType;
 
-  typedef otb::VectorImage<InputPixelType,  Dimension> InputImageType;
-  typedef otb::Image<OutputPixelType, Dimension>       OutputImageType;
 
-  typedef otb::MultiChannelsPolarimetricSynthesisFilter<InputImageType, OutputImageType> FilterType;
+  typedef otb::HermitianEigenAnalysis<MatrixType, VectorType> FilterType;
 
-  FilterType::Pointer filter = FilterType::New();
+  FilterType filter;
 
   return EXIT_SUCCESS;
 }

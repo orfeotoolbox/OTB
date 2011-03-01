@@ -76,6 +76,9 @@ public:
         typename ViewType::ImageWidgetType::PointType screenPoint, imagePoint;
         screenPoint = m_View->GetScrollWidget()->GetMousePosition();
 
+        // Give focus to the widget
+        m_View->GetScrollWidget()->take_focus();
+
         // Transform to image point
         imagePoint = m_View->GetScrollWidget()->GetScreenToImageTransform()->TransformPoint(screenPoint);
 

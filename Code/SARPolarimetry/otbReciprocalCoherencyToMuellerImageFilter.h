@@ -29,6 +29,7 @@ namespace Functor {
 /** \class otbCoherencyToMuellerFunctor
  * \brief Evaluate the Mueller matrix from the reciprocal coherency matrix image
  *
+ * \ingroup SARPolarimetry
  */
 template< class TInput, class TOutput>
 class ReciprocalCoherencyToMuellerFunctor
@@ -76,7 +77,7 @@ public:
    ReciprocalCoherencyToMuellerFunctor() {}
 
    /** Destructor */
-   ~ReciprocalCoherencyToMuellerFunctor() {}
+   virtual ~ReciprocalCoherencyToMuellerFunctor() {}
 
 private:
    itkStaticConstMacro(NumberOfComponentsPerPixel, unsigned int, 10);

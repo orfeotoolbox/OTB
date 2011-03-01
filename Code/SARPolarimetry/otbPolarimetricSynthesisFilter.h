@@ -54,6 +54,10 @@ namespace otb
  * the type of the output image.  It is also parameterized by the
  * operation to be applied, using a Functor style.
  *
+ *
+ * \ingroup SARPolarimetry
+ * \sa PolarimetricSynthesisFunctor
+ *
  */
 
 template <class TInputImageHH, class TInputImageHV, class TInputImageVH, class TInputImageVV, class TOutputImage,
