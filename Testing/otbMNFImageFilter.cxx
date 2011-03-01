@@ -54,6 +54,7 @@ int otbMNFImageFilterTest ( int argc, char* argv[] )
   parser->AddOption( "--NumComponents", "Number of components to keep for output", "-n", 1, false );
   parser->AddOption( "--Inverse", "Performs also the inverse transformation (give the output name)", "-inv", 1, false );
   parser->AddOption( "--Radius", "Set the radius of the sliding window (def.1)", "-r", 2, false );
+  parser->AddOption( "--Normalize", "center and reduce data before MNF", "-norm", 0, false );
   parser->AddOutputImage();
 
   typedef otb::CommandLineArgumentParseResult ParserResultType;  
@@ -87,6 +88,7 @@ int otbMNFImageFilterTest ( int argc, char* argv[] )
     radiusX = parseResult->GetParameterUInt("--Radius",0);
     radiusY = parseResult->GetParameterUInt("--Radius",1);
   }
+  const bool normalization = parseResult->IsOptionPresent("--Normalize");
 
   // Main type definition
   const unsigned int Dimension = 2;
@@ -108,6 +110,7 @@ int otbMNFImageFilterTest ( int argc, char* argv[] )
   FilterType::Pointer filter = FilterType::New();
   filter->SetInput( reader->GetOutput() );
   filter->SetNumberOfPrincipalComponentsRequired( nbComponents );
+  filter->SetUseNormalization( normalization );
   filter->GetNoiseImageFilter()->SetRadius( radius );
 
   typedef otb::CommandProgressUpdate< FilterType > CommandType;
@@ -129,8 +132,9 @@ int otbMNFImageFilterTest ( int argc, char* argv[] )
     InvFilterType::Pointer invFilter = InvFilterType::New();
     invFilter->SetInput( filter->GetOutput() );
     invFilter->SetMeanValues( filter->GetMeanValues() );
+    if ( normalization )
+      invFilter->SetStdDevValues( filter->GetStdDevValues() );
     invFilter->SetTransformationMatrix( filter->GetTransformationMatrix() );
-    invFilter->SetNoiseTransformationMatrix( filter->GetNoiseTransformationMatrix() );
 
     typedef otb::CommandProgressUpdate< InvFilterType > CommandType2;
     CommandType2::Pointer invObserver = CommandType2::New();

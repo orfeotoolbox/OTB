@@ -416,6 +416,7 @@ ADD_TEST(hyTuMNFImageFilterNew
 ADD_TEST(hyTvMNFImageFilter
          ${TESTEXE_DIR}/otbHyperTests1
 		 otbMNFImageFilterTest 
+		 -norm 
 		 -in ${DATA}/CupriteSubHsi/cupriteSubHsi.tif
 		 -inv ${TEMP}/cupriteMNFinv.hdr
 		 -out ${TEMP}/cupriteMNF.hdr)
