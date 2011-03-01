@@ -133,14 +133,14 @@ For further informations about ubuntu packages go to href{https://launchpad.net/
 For OpenSuse 11.2 and higher, OTB, OTB-Applications, Monteverdi and (soon)
 OTB-Wrapping packages are available through \emph{zypper}.
 
-First, you need to add the appropriate repositories with these command-lines (please replace $11.3$ by your OpenSuse version):
+First, you need to add the appropriate repositories with these command-lines (please replace $11.4$ by your OpenSuse version):
 \begin{verbatim}
 sudo zypper ar 
-http://download.opensuse.org/repositories/games/openSUSE_11.3/ Games
+http://download.opensuse.org/repositories/games/openSUSE_11.4/ Games
 sudo zypper ar 
-http://download.opensuse.org/repositories/Application:/Geo/openSUSE_11.3/ GEO
+http://download.opensuse.org/repositories/Application:/Geo/openSUSE_11.4/ GEO
 sudo zypper ar 
-http://download.opensuse.org/repositories/home:/tzotsos/openSUSE_11.3/ tzotsos
+http://download.opensuse.org/repositories/home:/tzotsos/openSUSE_11.4/ tzotsos
 \end{verbatim}
 
 Now run:
@@ -151,6 +151,9 @@ sudo zypper install OrfeoToolbox-devel
 sudo zypper install Monteverdi
 sudo zypper install Orfeo-Applications
 \end{verbatim}
+
+Alternatively you can use the One-Click Installer from the \href{http://software.opensuse.org/search?q=Orfeo&baseproject=openSUSE\%3A11.4&lang=en&include_home=true&exclude_debug=true}{openSUSE Download page} or add the above repositories and install through Yast Package Management.
+
 
 \section{Building from sources}
 \label{sec:source}
