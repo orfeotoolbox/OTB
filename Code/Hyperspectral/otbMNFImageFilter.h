@@ -23,6 +23,7 @@
 #include "otbStreamingStatisticsVectorImageFilter2.h"
 #include "otbMatrixMultiplyImageFilter.h"
 #include "otbNormalizeVectorImageFilter.h"
+#include "otbPCAImageFilter.h"
 
 
 namespace otb {
@@ -79,14 +80,16 @@ public:
   typedef typename CovarianceEstimatorFilterType::RealPixelType VectorType;
   typedef typename CovarianceEstimatorFilterType::MatrixObjectType MatrixObjectType;
   typedef typename MatrixObjectType::ComponentType MatrixType;
+  typedef typename MatrixType::InternalMatrixType InternalMatrixType;
+  typedef typename InternalMatrixType::element_type MatrixElementType;
   
-  typedef MatrixMultiplyImageFilter< TInputImage, TOutputImage, RealType > TransformFilterType;
+  typedef MatrixMultiplyImageFilter< InputImageType, OutputImageType, RealType > TransformFilterType;
   typedef typename TransformFilterType::Pointer TransformFilterPointerType;
 
   typedef TNoiseImageFilter NoiseImageFilterType;
   typedef typename NoiseImageFilterType::Pointer NoiseImageFilterPointerType;
 
-  typedef NormalizeVectorImageFilter< TInputImage, TOutputImage > NormalizeFilterType;
+  typedef NormalizeVectorImageFilter< InputImageType, OutputImageType > NormalizeFilterType;
   typedef typename NormalizeFilterType::Pointer NormalizeFilterPointerType;
 
   /** 
@@ -101,6 +104,7 @@ public:
   itkGetMacro(Transformer, TransformFilterType *);
   itkGetMacro(NoiseImageFilter, NoiseImageFilterType *);
 
+  /** Normalization only impact the use of variance. The data is always centered */
   itkGetMacro(UseNormalization,bool);
   itkSetMacro(UseNormalization,bool);
 
@@ -108,7 +112,6 @@ public:
   void SetMeanValues ( const VectorType & vec )
   {
     m_MeanValues = vec;
-    m_UseNormalization = true;
     m_GivenMeanValues = true;
   }
 
@@ -169,7 +172,8 @@ protected:
   virtual void ForwardGenerateData();
   virtual void ReverseGenerateData();
 
-  void GetTransformationMatrixFromCovarianceMatrix();
+  /** Specific functionality of MNF */
+  virtual void GetTransformationMatrixFromCovarianceMatrix();
 
   /** Internal attributes */
   unsigned int m_NumberOfPrincipalComponentsRequired;
