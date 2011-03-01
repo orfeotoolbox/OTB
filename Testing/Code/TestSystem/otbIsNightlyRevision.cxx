@@ -15,21 +15,33 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#include <iostream>
+#include <fstream>
 
-// this file defines the otbGISFiltersTest for the test driver
-// and all it expects is that you have a function called RegisterTests
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
+#include "otbCurlHelper.h"
 
-#include "otbTestMain.h"
-
-void RegisterTests()
+int otbIsNightlyRevision(int argc, char * argv[])
 {
-  REGISTER_TEST(otbIsNightlyRevision);
-  REGISTER_TEST(otbCompareAsciiTests);
-  REGISTER_TEST(otbCompareAsciiTests2);
-  REGISTER_TEST(otbCompareAsciiTests3);
-  REGISTER_TEST(otbCompareAsciiTests4);
-  REGISTER_TEST(otbCompareAsciiTests5);
+  if (argc != 2)
+    {
+    return EXIT_FAILURE;
+    }
+
+  std::string wcRevision = argv[1];
+  std::string nightlyRevisionUrl = argv[2];
+
+  otb::CurlHelper::Pointer curl = otb::CurlHelper::New();
+
+  std::string nightlyRevision;
+  curl->RetrieveUrlInMemory(nightlyRevisionUrl, nightlyRevision);
+
+  if (nightlyRevision == wcRevision)
+    {
+    return EXIT_SUCCESS;
+    }
+  else
+    {
+    return EXIT_FAILURE;
+    }
+
 }

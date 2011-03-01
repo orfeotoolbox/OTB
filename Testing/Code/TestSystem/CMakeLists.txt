@@ -20,6 +20,12 @@ SET(EPSILON_3 0.001)
 
 SET(TESTSYSTEM_TESTS ${CXX_TEST_PATH}/otbTestSystemTests)
 
+#Test if the current working copy corresponds to the nightly revision number
+ADD_TEST(tsTuIsNightlyRevision ${TESTSYSTEM_TESTS}   
+         otbIsNightlyRevision
+         ${OTB_WC_REVISION}
+         http://www.orfeo-toolbox.org/nightly/libNightlyNumber )
+  
 #Test a basic ascii comparison
 ADD_TEST(tsTvCompareAscii ${TESTSYSTEM_TESTS}
    --compare-ascii ${NOTOL}
@@ -124,6 +130,7 @@ ADD_TEST(tsTvCompareAscii5epsilon2 ${TESTSYSTEM_TESTS}
 # -------       CXX source files -----------------------------------
 SET(TESTSYSTEM_SRCS
 otbTestSystemTests.cxx
+otbIsNightlyRevision.cxx
 otbCompareAsciiTests.cxx
 otbCompareAsciiTests2.cxx
 otbCompareAsciiTests3.cxx
