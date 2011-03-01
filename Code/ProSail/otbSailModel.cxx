@@ -104,7 +104,7 @@ SailModel
 /** Get output vertical reflectance */
 SailModel::SpectralResponseType *
 SailModel
-::GetVerticalReflectance()
+::GetViewingReflectance()
 {
    if(this->GetNumberOfOutputs() < 2)
    {
@@ -117,7 +117,7 @@ SailModel
 /** Get output horizontal reflectance */
 SailModel::SpectralResponseType *
 SailModel
-::GetHorizontalReflectance()
+::GetHemisphericalReflectance()
 {
    if(this->GetNumberOfOutputs() < 2)
    {
@@ -174,8 +174,8 @@ SailModel
 
    SpectralResponseType::Pointer inRefl = this->GetReflectance();
    SpectralResponseType::Pointer inTrans = this->GetTransmittance();
-   SpectralResponseType::Pointer outVRefl = this->GetVerticalReflectance();
-   SpectralResponseType::Pointer outHRefl = this->GetHorizontalReflectance();
+   SpectralResponseType::Pointer outVRefl = this->GetViewingReflectance();
+   SpectralResponseType::Pointer outHRefl = this->GetHemisphericalReflectance();
    
    // LEAF ANGLE DISTRIBUTION
    double rd = CONST_PI/180;
@@ -625,10 +625,7 @@ SailModel
    result[1] = chi_o;
    result[2] = frho;
    result[3] = ftau;
-//    result.push_back(chi_s);
-//    result.push_back(chi_o);
-//    result.push_back(frho);
-//    result.push_back(ftau);
+
 }
 
 
@@ -637,15 +634,7 @@ SailModel
 double
 SailModel
 ::Jfunc1(const double k, const double l, const double t)
-{
-// function Jout=Jfunc1(k,l,t)
-// %	J1 function with avoidance of singularity problem
-// del=(k-l)*t;
-// Jout(abs(del)>1e-3)=(exp(-l(abs(del)>1e-3)*t)-exp(-k*t))./(k-l(abs(del)>1e-3));
-// Jout(abs(del)<=1e-3)=0.5*t*(exp(-k*t)+exp(-l(abs(del)<=1e-3)*t)).*(1-del(abs(del)<=1e-3).*del(abs(del)<=1e-3)/12);
-// Jout=transpose(Jout);
-
-   
+{   
    //J1 function with avoidance of singularity problem
    double v;
    double del=(k-l)*t;
@@ -666,9 +655,6 @@ double
 SailModel
 ::Jfunc2(const double k, const double l, const double t)
 {
-// function Jout=Jfunc2(k,l,t)
-// %	J2 function
-// Jout=(1.-exp(-(k+l)*t))./(k+l);
    double v;
    v = (1.-exp(-(k+l)*t))/(k+l);
    return v;
@@ -679,8 +665,6 @@ double
 SailModel
 ::Jfunc3(const double k, const double l, const double t)
 {
-// function out=Jfunc3(k,l,t)
-// out=(1.-exp(-(k+l)*t))/(k+l);
    double v;
    v =  (1.-exp(-(k+l)*t))/(k+l);
    return v;

@@ -27,7 +27,7 @@
 namespace otb
 {
 /** \class LeafParameters
-   * \brief this class implements the LeafParameters lib.
+   * \brief data class containing Leaf Parameters.
    *
    * \sa itk::DataObject
  */

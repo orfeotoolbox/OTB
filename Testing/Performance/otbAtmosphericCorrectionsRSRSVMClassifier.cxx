@@ -195,26 +195,22 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
       std::cout<<"training file : "<<trainingFiles[i]<<std::endl;
       spectralResponse->Load(trainingFiles[i], 100.0);
       
-      std::cout<<"Befor Reduce Response"<<std::endl;
       //Compute Reduce Spectral Response
       reduceSpectralResponse->SetInputSatRSR(satRSR);
       reduceSpectralResponse->SetInputSpectralResponse(spectralResponse);
       reduceSpectralResponse->CalculateResponse();
       
-      std::cout<<"After Reduce Response"<<std::endl;
-      
       atmosphericEffectsFilter->SetDataAtmosphericCorrectionParameters(dataAtmosphericCorrectionParameters);
       atmosphericEffectsFilter->SetInputSatRSR(satRSR);
       atmosphericEffectsFilter->SetInputSpectralResponse(reduceSpectralResponse->GetReduceResponse());
       atmosphericEffectsFilter->Process6S();
-      
-      std::cout<<"After Atmospheric effect"<<std::endl;
+
 
       //Get the response in an itk::VariableLengthVector and add it to the sample list for SVMModelEstimator
       SampleType sample;
       TrainingSampleType trainingSample;
       sample.SetSize(atmosphericEffectsFilter->GetCorrectedSpectralResponse()->Size());
-      std::cout<<"reduce response : [";
+      std::cout<<"corrected response : [";
       for(unsigned int j=0;j<atmosphericEffectsFilter->GetCorrectedSpectralResponse()->Size();j++)
       {
          sample[j]=atmosphericEffectsFilter->GetCorrectedSpectralResponse()->GetResponse()[j].second;

@@ -82,9 +82,9 @@ int otbSailReflHTest(int argc, char * argv[])
    sail->Update();
    
    std::ofstream outputFile(OutputName,std::ios::out);
-   for(unsigned int i=0;i<sail->GetHorizontalReflectance()->Size();i++)
+   for(unsigned int i=0;i<sail->GetHemisphericalReflectance()->Size();i++)
    {
-      outputFile<<sail->GetHorizontalReflectance()->GetResponse()[i].second<<std::endl;
+      outputFile<<sail->GetHemisphericalReflectance()->GetResponse()[i].second<<std::endl;
    }
 
    

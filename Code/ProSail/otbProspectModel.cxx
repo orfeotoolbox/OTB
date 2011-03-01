@@ -199,9 +199,6 @@ ProspectModel
       outRefl->GetResponse().push_back(refl);
       outTrans->GetResponse().push_back(trans);
    }
-//    output->SetReflectance(reflVector);
-//    output->SetTransmittance(transVector);
-   
 }
 
 

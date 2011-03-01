@@ -152,7 +152,6 @@ SurfaceReflectanceToReflectanceFilter<TInputImage,TOutputImage>
       functor.SetCoefficient(coef);
       functor.SetResidu(res);
       functor.SetSphericalAlbedo(static_cast<double>(m_AtmosphericRadiativeTerms->GetSphericalAlbedo(i)));
-          std::cout << "m_SphericalAlbedo "<< m_AtmosphericRadiativeTerms->GetSphericalAlbedo(i) << std::endl;
    
       this->GetFunctorVector().push_back(functor);
 //       this->SetFunctor(functor);
@@ -167,7 +166,6 @@ SurfaceReflectanceToReflectanceFilter<TInputImage,TOutputImage>
 {
   if(m_IsSetAtmosphericRadiativeTerms==false)
     {
-      std::cout << "update radiative terms"<< std::endl;
       this->UpdateAtmosphericRadiativeTerms();
     }
   
