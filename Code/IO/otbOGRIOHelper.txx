@@ -631,11 +631,15 @@ unsigned int OGRIOHelper<TVectorData>
         {
         if ( std::string(kwl.GetNthField(fieldIdx).first->GetNameRef()) != "FID" )
           {
-          otbMsgDevMacro(<< " CreateField " << kwl.GetNthField(fieldIdx).first);
+          otbMsgDevMacro(<< " CreateField '" << kwl.GetNthField(fieldIdx).first->GetNameRef() << "'");
           if (ogrCurrentLayer->CreateField(kwl.GetNthField(fieldIdx).first) != OGRERR_NONE )
             {
             itkExceptionMacro(<< "Failed to create Field "<<kwl.GetNthField(fieldIdx).first->GetNameRef());
             }
+          }
+         else
+          {
+          otbMsgDevMacro(<< "WARNING: Skipping OGR field 'FID'");
           }
         }
       }
@@ -687,11 +691,10 @@ unsigned int OGRIOHelper<TVectorData>
           const char * key = kwl.GetNthField(i).first->GetNameRef();
           
           if (std::string(key) != "FID")
-          {
-          // Edit the value of the field and add it to the current feature
-          ogrFeature->SetField(ogrFeature->GetFieldIndex(key) , kwl.GetFieldAsString(key).c_str());
-          otbMsgDevMacro( << "kwl.GetFieldAsString(key) " << ogrFeature->GetFieldIndex(key) << " " << kwl.GetFieldAsString(key) )
-          }
+            {
+            // Edit the value of the field and add it to the current feature
+            ogrFeature->SetField(ogrFeature->GetFieldIndex(key) , kwl.GetFieldAsString(key).c_str());
+            }
           }
     
 //        ogrFeature->SetField("Name", dataNode->GetNodeId());
