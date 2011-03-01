@@ -83,7 +83,18 @@ int otbImageKeywordlist(int argc, char* argv[])
   otb_kwl.convertToOSSIMKeywordlist(geom_kwl2);
 
   hasMetaData = projection->loadState(geom_kwl2);
+  if (!hasMetaData)
+    {
+    std::cerr << "ERROR: projection loadState return with a false flag !" << std::endl;
+    return EXIT_FAILURE;
+    }
   hasMetaData = projection->saveState(geom_kwl3);
+  if (!hasMetaData)
+    {
+    std::cerr << "ERROR: projection saveState return with a false flag !" << std::endl;
+    return EXIT_FAILURE;
+    }
+
   otb::ImageKeywordlist otb_kwl2;
   otb_kwl2.SetKeywordlist(geom_kwl3);
 

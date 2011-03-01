@@ -2455,6 +2455,18 @@ ADD_TEST(ioTvImageKeywordlistRadarSat1 ${IO_TESTS18}
          ${TEMP}/ioTvImageKeywordlistRadarSat1_saveState_loadState.txt
 )
 
+ADD_TEST(ioTvImageKeywordlistRadarSat1_vdf ${IO_TESTS18}
+  --ignore-order --compare-n-ascii ${NOTOL} 2
+         ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1.txt
+         ${TEMP}/ioTvImageKeywordlistRadarSat1.txt
+         ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1.txt
+         ${TEMP}/ioTvImageKeywordlistRadarSat1_saveState_loadState.txt
+    otbImageKeywordlist
+         ${LARGEDATA}/RADARSAT1/GOMA/SCENE01/VDF_DAT.001
+         ${TEMP}/ioTvImageKeywordlistRadarSat1.txt
+         ${TEMP}/ioTvImageKeywordlistRadarSat1_saveState_loadState.txt
+)
+
 ADD_TEST(ioTvImageKeywordlistSardegnaRadarSat1 ${IO_TESTS18}
   --ignore-order --compare-n-ascii ${NOTOL} 2
          ${BASELINE_FILES}/ioTvImageKeywordlistSardegnaRadarSat1.txt
@@ -2463,6 +2475,18 @@ ADD_TEST(ioTvImageKeywordlistSardegnaRadarSat1 ${IO_TESTS18}
          ${TEMP}/ioTvImageKeywordlistSardegnaRadarSat1_saveState_loadState.txt
     otbImageKeywordlist
          ${LARGEDATA}/RADARSAT1/SARDEGNA/scene01/dat_01.001
+         ${TEMP}/ioTvImageKeywordlistSardegnaRadarSat1.txt
+         ${TEMP}/ioTvImageKeywordlistSardegnaRadarSat1_saveState_loadState.txt
+)
+
+ADD_TEST(ioTvImageKeywordlistSardegnaRadarSat1_vdf ${IO_TESTS18}
+  --ignore-order --compare-n-ascii ${NOTOL} 2
+         ${BASELINE_FILES}/ioTvImageKeywordlistSardegnaRadarSat1.txt
+         ${TEMP}/ioTvImageKeywordlistSardegnaRadarSat1.txt
+         ${BASELINE_FILES}/ioTvImageKeywordlistSardegnaRadarSat1.txt
+         ${TEMP}/ioTvImageKeywordlistSardegnaRadarSat1_saveState_loadState.txt
+    otbImageKeywordlist
+         ${LARGEDATA}/RADARSAT1/SARDEGNA/scene01/vdf_dat.001
          ${TEMP}/ioTvImageKeywordlistSardegnaRadarSat1.txt
          ${TEMP}/ioTvImageKeywordlistSardegnaRadarSat1_saveState_loadState.txt
 )
