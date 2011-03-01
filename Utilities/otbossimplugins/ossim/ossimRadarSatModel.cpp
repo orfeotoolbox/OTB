@@ -31,7 +31,7 @@
 #include <RadarSat/Data/DataFactory.h>
 #include <RadarSat/Data/ImageOptionsFileDescriptor.h>
 #include <RadarSat/Data/ProcessedDataRecord.h>
-#include <RadarSat/Leader/ProcessingParameters.h>
+#include <RadarSat/CommonRecord/ProcessingParameters.h>
 #include <RadarSat/Leader/PlatformPositionData.h>
 
 namespace ossimplugins
@@ -49,7 +49,8 @@ ossimRadarSatModel::ossimRadarSatModel():
   _pixel_spacing(0),
   _data(NULL),
   _leader(NULL),
-  _trailer(NULL)
+  _trailer(NULL),
+  _volumeDir(NULL)
 {
 }
 
@@ -70,6 +71,10 @@ ossimRadarSatModel::~ossimRadarSatModel()
     delete _trailer;
   }
 
+  if (_volumeDir != 0)
+  {
+    delete _volumeDir;
+  }
 }
 
 ossimObject* ossimRadarSatModel::dup() const
@@ -118,6 +123,16 @@ bool ossimRadarSatModel::open(const ossimFilename& file)
 
   bool retValue = true;
   ossimFilename tempFilename = file;
+  /*
+   * Creation of the class allowing to store the metadata from the Volume Directory File
+   */
+  if (_volumeDir != NULL)
+    {
+    delete _volumeDir;
+    _volumeDir = NULL;
+    }
+  _volumeDir = new VolumeDir();
+
   /*
    * Creation of the class allowing to store the metadata from the Data file
    */

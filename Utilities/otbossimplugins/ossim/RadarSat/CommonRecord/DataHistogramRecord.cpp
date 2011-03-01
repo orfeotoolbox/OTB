@@ -9,7 +9,7 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <RadarSat/Leader/DataHistogramRecord.h>
+#include "DataHistogramRecord.h"
 
 namespace ossimplugins
 {

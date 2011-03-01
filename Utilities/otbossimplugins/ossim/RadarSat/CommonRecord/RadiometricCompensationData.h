@@ -17,7 +17,7 @@
 #include <RadarSat/RadarSatRecord.h>
 #include <RadarSat/RadarSatRecordHeader.h>
 
-#include <RadarSat/Leader/CompensationDataRecord.h>
+#include "CompensationDataRecord.h"
 
 namespace ossimplugins
 {

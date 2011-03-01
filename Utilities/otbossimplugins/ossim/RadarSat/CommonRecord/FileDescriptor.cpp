@@ -9,7 +9,7 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <RadarSat/Leader/FileDescriptor.h>
+#include "FileDescriptor.h"
 
 namespace ossimplugins
 {

@@ -9,7 +9,7 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <RadarSat/Leader/BeamPixelCountRecord.h>
+#include "BeamPixelCountRecord.h"
 
 namespace ossimplugins
 {

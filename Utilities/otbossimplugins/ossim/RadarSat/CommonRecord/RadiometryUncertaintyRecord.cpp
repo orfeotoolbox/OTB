@@ -9,7 +9,7 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <RadarSat/Leader/RadiometryUncertaintyRecord.h>
+#include "RadiometryUncertaintyRecord.h"
 
 namespace ossimplugins
 {

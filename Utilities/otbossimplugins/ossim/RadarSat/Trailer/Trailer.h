@@ -13,10 +13,10 @@
 #define Trailer_h
 
 #include <iostream>
-#include <RadarSat/Leader/FileDescriptor.h>
-#include <RadarSat/Leader/DataSetSummary.h>
-#include <RadarSat/Leader/DataQuality.h>
-#include <RadarSat/Leader/DataHistogramSignalData.h>
+#include <RadarSat/CommonRecord/FileDescriptor.h>
+#include <RadarSat/CommonRecord/DataSetSummary.h>
+#include <RadarSat/CommonRecord/DataQuality.h>
+#include <RadarSat/CommonRecord/DataHistogramSignalData.h>
 #include <map>
 
 namespace ossimplugins

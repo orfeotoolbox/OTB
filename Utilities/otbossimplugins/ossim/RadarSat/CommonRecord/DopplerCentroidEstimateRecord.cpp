@@ -9,7 +9,7 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <RadarSat/Leader/DopplerCentroidEstimateRecord.h>
+#include "DopplerCentroidEstimateRecord.h"
 
 namespace ossimplugins
 {

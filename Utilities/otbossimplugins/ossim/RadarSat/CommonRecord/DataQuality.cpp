@@ -9,7 +9,7 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <RadarSat/Leader/DataQuality.h>
+#include "DataQuality.h"
 
 namespace ossimplugins
 {

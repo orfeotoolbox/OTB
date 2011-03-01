@@ -9,7 +9,7 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <RadarSat/Leader/RadiometricCompensationData.h>
+#include "RadiometricCompensationData.h"
 
 namespace ossimplugins
 {

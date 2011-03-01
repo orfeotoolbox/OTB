@@ -10,7 +10,7 @@
 // $Id$
 
 
-#include <RadarSat/Leader/AttitudeData.h>
+#include "AttitudeData.h"
 
 namespace ossimplugins
 {

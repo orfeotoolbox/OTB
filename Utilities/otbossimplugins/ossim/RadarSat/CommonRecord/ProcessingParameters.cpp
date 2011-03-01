@@ -9,7 +9,7 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <RadarSat/Leader/ProcessingParameters.h>
+#include "ProcessingParameters.h"
 
 namespace ossimplugins
 {

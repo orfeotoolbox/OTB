@@ -9,7 +9,7 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <RadarSat/Leader/SRGRCoefficientSetRecord.h>
+#include "SRGRCoefficientSetRecord.h"
 
 namespace ossimplugins
 {

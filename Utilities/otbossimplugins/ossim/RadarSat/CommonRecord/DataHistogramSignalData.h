@@ -16,7 +16,7 @@
 
 #include <RadarSat/RadarSatRecord.h>
 #include <RadarSat/RadarSatRecordHeader.h>
-#include <RadarSat/Leader/DataHistogramRecord.h>
+#include "DataHistogramRecord.h"
 
 namespace ossimplugins
 {

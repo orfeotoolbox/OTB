@@ -11,15 +11,15 @@
 
 #include <RadarSat/Trailer/TrailerFactory.h>
 
-#include <RadarSat/Leader/DataHistogramSignalData.h>
-#include <RadarSat/Leader/DataQuality.h>
-#include <RadarSat/Leader/DataSetSummary.h>
-#include <RadarSat/Leader/FileDescriptor.h>
+#include <RadarSat/CommonRecord/DataHistogramSignalData.h>
+#include <RadarSat/CommonRecord/DataQuality.h>
+#include <RadarSat/CommonRecord/DataSetSummary.h>
+#include <RadarSat/CommonRecord/FileDescriptor.h>
 #include <RadarSat/Leader/DataHistogramProcessedData.h>
-#include <RadarSat/Leader/ProcessingParameters.h>
-#include <RadarSat/Leader/AttitudeData.h>
-#include <RadarSat/Leader/RadiometricData.h>
-#include <RadarSat/Leader/RadiometricCompensationData.h>
+#include <RadarSat/CommonRecord/ProcessingParameters.h>
+#include <RadarSat/CommonRecord/AttitudeData.h>
+#include <RadarSat/CommonRecord/RadiometricData.h>
+#include <RadarSat/CommonRecord/RadiometricCompensationData.h>
 
 namespace ossimplugins
 {

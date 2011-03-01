@@ -17,8 +17,8 @@
 #include <RadarSat/RadarSatRecord.h>
 #include <RadarSat/RadarSatRecordHeader.h>
 
-#include <RadarSat/Leader/RadiometryUncertaintyRecord.h>
-#include <RadarSat/Leader/MisregistrationRecord.h>
+#include "RadiometryUncertaintyRecord.h"
+#include "MisregistrationRecord.h"
 
 namespace ossimplugins
 {

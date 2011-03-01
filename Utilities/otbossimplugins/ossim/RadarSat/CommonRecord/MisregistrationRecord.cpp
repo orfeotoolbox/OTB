@@ -9,7 +9,7 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <RadarSat/Leader/MisregistrationRecord.h>
+#include "MisregistrationRecord.h"
 
 namespace ossimplugins
 {

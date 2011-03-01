@@ -9,7 +9,7 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <RadarSat/Leader/TemperatureSettingsRecord.h>
+#include "TemperatureSettingsRecord.h"
 
 namespace ossimplugins
 {

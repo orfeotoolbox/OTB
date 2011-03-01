@@ -16,11 +16,11 @@
 #include <RadarSat/RadarSatRecord.h>
 #include <RadarSat/RadarSatRecordHeader.h>
 
-#include <RadarSat/Leader/BeamInformationRecord.h>
-#include <RadarSat/Leader/DopplerCentroidEstimateRecord.h>
-#include <RadarSat/Leader/BeamPixelCountRecord.h>
-#include <RadarSat/Leader/SRGRCoefficientSetRecord.h>
-#include <RadarSat/Leader/TemperatureSettingsRecord.h>
+#include "BeamInformationRecord.h"
+#include "DopplerCentroidEstimateRecord.h"
+#include "BeamPixelCountRecord.h"
+#include "SRGRCoefficientSetRecord.h"
+#include "TemperatureSettingsRecord.h"
 
 namespace ossimplugins
 {
