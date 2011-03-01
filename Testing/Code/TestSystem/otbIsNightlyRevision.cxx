@@ -22,7 +22,7 @@
 
 int otbIsNightlyRevision(int argc, char * argv[])
 {
-  if (argc != 2)
+  if (argc != 3)
     {
     return EXIT_FAILURE;
     }
@@ -41,6 +41,7 @@ int otbIsNightlyRevision(int argc, char * argv[])
     }
   else
     {
+    std::cerr << "Nightly revision is " << nightlyRevision << " but working copy revision is " << wcRevision << std::endl;
     return EXIT_FAILURE;
     }
 
