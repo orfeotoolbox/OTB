@@ -1793,7 +1793,10 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS15 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+ADD_TEST(ioTuVectorDataIOFactory ${IO_TESTS15}
+         otbVectorDataIOFactory
+         ${INPUTDATA}/ToulouseRoad-examples.shp )
+        
 ADD_TEST(ioTuOGRVectorDataIO ${IO_TESTS15}
         otbOGRVectorDataIONew )
 
@@ -3069,6 +3072,7 @@ otbWritingComplexDataWithComplexImageTest.cxx
 
 SET(BasicIO_SRCS15
 otbIOTests15.cxx
+otbVectorDataIOFactory.cxx
 otbVectorDataSourceNew.cxx
 otbVectorDataFileReaderNew.cxx
 otbVectorDataFileReader.cxx
