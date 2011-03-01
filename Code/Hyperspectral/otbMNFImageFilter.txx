@@ -50,7 +50,6 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
   m_NoiseImageFilter = NoiseImageFilterType::New();
   m_CovarianceEstimator = CovarianceEstimatorFilterType::New();
   m_NoiseCovarianceEstimator = CovarianceEstimatorFilterType::New();
-  m_PCAImageFilter = PCAImageFilterType::New();
   m_Transformer = TransformFilterType::New();
 }
 
@@ -64,16 +63,51 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
 {
   Superclass::GenerateOutputInformation();
 
-  /*
-   * Even if PCAImageFilter does not use this input,
-   * the effective one has the same characteristics...
-   */
-  GetPCAImageFilter()->SetInput( this->GetInput() );
-  GetPCAImageFilter()->UpdateOutputInformation();
+  switch ( DirectionOfTransformation )
+  {
+    case Transform::FORWARD:
+    {
+      if ( m_NumberOfPrincipalComponentsRequired == 0 
+          || m_NumberOfPrincipalComponentsRequired 
+            > this->GetInput()->GetNumberOfComponentsPerPixel() )
+      {
+        m_NumberOfPrincipalComponentsRequired = 
+          this->GetInput()->GetNumberOfComponentsPerPixel();
+      }
 
-  this->GetOutput()->SetNumberOfComponentsPerPixel( 
-    GetPCAImageFilter()->GetOutput()->GetNumberOfComponentsPerPixel() );
+      this->GetOutput()->SetNumberOfComponentsPerPixel(
+        m_NumberOfPrincipalComponentsRequired );
+      break;
+    }
+    case Transform::INVERSE:
+    {
+      unsigned int theOutputDimension = 0;
+      if ( m_GivenTransformationMatrix )
+      {
+        theOutputDimension = m_TransformationMatrix.Rows() >= m_TransformationMatrix.Cols() ?
+          m_TransformationMatrix.Rows() : m_TransformationMatrix.Cols();
+      }
+      else if ( m_GivenCovarianceMatrix )
+      {
+        theOutputDimension = m_CovarianceMatrix.Rows() >= m_CovarianceMatrix.Cols() ?
+          m_CovarianceMatrix.Rows() : m_CovarianceMatrix.Cols();
+      }
+      else
+      {
+        throw itk::ExceptionObject(__FILE__, __LINE__,
+          "Covariance or transformation matrix required to know the output size",
+          ITK_LOCATION);
+      }
 
+      this->GetOutput()->SetNumberOfComponentsPerPixel( theOutputDimension );
+
+      break;
+    }
+    default: // should not go so far...
+      throw itk::ExceptionObject(__FILE__, __LINE__,
+          "Class should be templeted with FORWARD or INVERSE only...",
+          ITK_LOCATION );
+  }
 }
 
 template <class TInputImage, class TOutputImage, 
@@ -115,6 +149,8 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
       m_Normalizer->SetStdDev( this->GetStdDevValues() );
 
     m_Normalizer->SetInput( inputImgPtr );
+
+    std::cerr << m_Normalizer << "\n";
   }
 
   if ( !m_GivenTransformationMatrix )
@@ -155,12 +191,20 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
   if ( m_TransformationMatrix.GetVnlMatrix().empty() )
   {
     throw itk::ExceptionObject( __FILE__, __LINE__,
-          "Empty noise transformation matrix",
+          "Empty transformation matrix",
           ITK_LOCATION);
   }
 
   if ( m_UseNormalization )
+  {
     m_Transformer->SetInput( m_Normalizer->GetOutput() );
+
+    if ( !m_GivenMeanValues )
+      m_MeanValues = m_Normalizer->GetFunctor().GetMean();
+
+    if ( !m_GivenStdDevValues )
+      m_StdDevValues = m_Normalizer->GetFunctor().GetStdDev();
+  }
   else
     m_Transformer->SetInput( inputImgPtr );
 
@@ -239,6 +283,8 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
     m_Normalizer->GraftOutput( this->GetOutput() );
     m_Normalizer->Update();
 
+    std::cerr << m_Normalizer << "\n";
+
     this->GraftOutput( m_Normalizer->GetOutput() );
   }
   else
@@ -275,7 +321,7 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
 
   for ( unsigned int i = 0; i < transf.rows(); i++ )
   {
-    double norm = 1. / vnl_sqrt( normMat.get(i,i) );
+    double norm = 1. / vcl_sqrt( normMat.get(i,i) );
     for ( unsigned int j = 0; j < transf.cols(); j++ )
       transf.put( i, j, transf.get(i,j) * norm );
   }
@@ -288,7 +334,7 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
     m_TransformationMatrix = transf.get_n_rows( 0, m_NumberOfPrincipalComponentsRequired );
   else
     m_TransformationMatrix = transf;
-  
+
   vnl_vector< double > valP = solver.D.diagonal();
   valP.flip();
 
@@ -306,6 +352,19 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
 {
   Superclass::PrintSelf( os, indent );
 
+  if ( m_UseNormalization )
+  {
+    os << indent << "Normalisation with :\n" << indent << "Mean:  ";
+    for ( unsigned int i = 0; i < m_MeanValues.Size(); i++ )
+      os << m_MeanValues[i] << "  ";
+    os << "\n" << indent << "StdDev:  ";
+    for ( unsigned int i = 0; i < m_StdDevValues.Size(); i++ )
+      os << m_StdDevValues[i] << "  ";
+    os << "\n";
+  }
+  else
+    os << indent << "No normalisation\n";
+
   if ( !m_NoiseCovarianceMatrix.GetVnlMatrix().empty() )
   {
     os << indent << "Noise Covariance matrix";
@@ -319,7 +378,7 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
   if ( !m_CovarianceMatrix.GetVnlMatrix().empty() )
   {
     os << indent << "Covariance matrix";
-    if ( m_NoiseCovarianceMatrix )
+    if ( m_GivenCovarianceMatrix )
       os << " (given)";
     os << "\n";
 

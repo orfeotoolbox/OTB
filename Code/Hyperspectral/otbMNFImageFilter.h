@@ -22,7 +22,6 @@
 #include "itkImageToImageFilter.h"
 #include "otbStreamingStatisticsVectorImageFilter2.h"
 #include "otbMatrixMultiplyImageFilter.h"
-#include "otbPCAImageFilter.h"
 #include "otbNormalizeVectorImageFilter.h"
 
 
@@ -73,36 +72,31 @@ public:
   typedef TOutputImage OutputImageType;
 
   /** Filter types and related */
-  typedef PCAImageFilter< InputImageType, OutputImageType, TDirectionOfTransformation > PCAImageFilterType;
-  typedef typename PCAImageFilterType::Pointer PCAImageFilterPointerType;
+  typedef StreamingStatisticsVectorImageFilter2< InputImageType > CovarianceEstimatorFilterType;
+  typedef typename CovarianceEstimatorFilterType::Pointer CovarianceEstimatorFilterPointerType;
 
-  typedef typename PCAImageFilterType::CovarianceEstimatorFilterType CovarianceEstimatorFilterType;
-  typedef typename PCAImageFilterType::CovarianceEstimatorFilterPointerType CovarianceEstimatorFilterPointerType;
-
-  typedef typename PCAImageFilterType::TransformFilterType TransformFilterType;
-  typedef typename PCAImageFilterType::TransformFilterPointerType TransformFilterPointerType;
+  typedef typename CovarianceEstimatorFilterType::RealType RealType;
+  typedef typename CovarianceEstimatorFilterType::RealPixelType VectorType;
+  typedef typename CovarianceEstimatorFilterType::MatrixObjectType MatrixObjectType;
+  typedef typename MatrixObjectType::ComponentType MatrixType;
+  
+  typedef MatrixMultiplyImageFilter< TInputImage, TOutputImage, RealType > TransformFilterType;
+  typedef typename TransformFilterType::Pointer TransformFilterPointerType;
 
   typedef TNoiseImageFilter NoiseImageFilterType;
   typedef typename NoiseImageFilterType::Pointer NoiseImageFilterPointerType;
-
-  typedef typename PCAImageFilterType::RealType RealType;
-  typedef typename PCAImageFilterType::VectorType VectorType;
-  typedef typename PCAImageFilterType::MatrixType MatrixType;
 
   typedef NormalizeVectorImageFilter< TInputImage, TOutputImage > NormalizeFilterType;
   typedef typename NormalizeFilterType::Pointer NormalizeFilterPointerType;
 
   /** 
    * Set/Get the number of required largest principal components. 
-   * The noise removal is not concerned by this part, only the PCA part...
    */
   itkGetMacro(NumberOfPrincipalComponentsRequired,unsigned int);
   itkSetMacro(NumberOfPrincipalComponentsRequired,unsigned int);
 
   itkGetConstMacro(Normalizer,NormalizeFilterType*);
   itkGetMacro(Normalizer,NormalizeFilterType*);
-  itkGetConstMacro(PCAImageFilter, PCAImageFilterType *);
-  itkGetMacro(PCAImageFilter, PCAImageFilterType *);
   itkGetMacro(NoiseCovarianceEstimator, CovarianceEstimatorFilterType *);
   itkGetMacro(Transformer, TransformFilterType *);
   itkGetMacro(NoiseImageFilter, NoiseImageFilterType *);
@@ -200,7 +194,6 @@ protected:
   NoiseImageFilterPointerType m_NoiseImageFilter;
   CovarianceEstimatorFilterPointerType m_CovarianceEstimator;
   CovarianceEstimatorFilterPointerType m_NoiseCovarianceEstimator;
-  PCAImageFilterPointerType m_PCAImageFilter;
   TransformFilterPointerType m_Transformer;
 }; // end of class
 
