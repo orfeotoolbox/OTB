@@ -59,13 +59,13 @@ int otbImageToGenericRSOutputParameters (int argc, char * argv[])
   spacing[0] = 0.000006;
   spacing[1] = -0.000006;
   
-  // Filter  : Taget SRS : WGS84
+  // Filter  : Target SRS : WGS84
   FilterType::Pointer filter = FilterType::New();
   filter->SetInput(reader->GetOutput());
   filter->SetOutputProjectionRef(otb::GeoInformationConversion::ToWKT(4326));  //WGS84
   filter->Compute();
     
-  // Otuput file
+  // Output file
   std::ofstream outfile(outfname);
 
   outfile<<"Output Parameters for SRID : 4326 (WGS84)"<<std::endl;
@@ -74,7 +74,7 @@ int otbImageToGenericRSOutputParameters (int argc, char * argv[])
   outfile<<"Output Size : "<<filter->GetOutputSize()<<std::endl;
   outfile<< std::endl;
 
-  // target SRS : 32631 UTM 31 N
+  // Target SRS : 32631 UTM 31 N
   filter->SetOutputProjectionRef(otb::GeoInformationConversion::ToWKT(32631));  //WGS84
   filter->Compute();
   
@@ -84,7 +84,7 @@ int otbImageToGenericRSOutputParameters (int argc, char * argv[])
   outfile<<"Output Size : "<<filter->GetOutputSize()<<std::endl;
   outfile<< std::endl;
 
-  // target SRS : lambertII
+  // Target SRS : lambertII
   typedef otb::Lambert2EtenduForwardProjection Lambert2Type;
   Lambert2Type::Pointer lambert2Projection = Lambert2Type::New();
   std::string  lambertRef = lambert2Projection->GetWkt();

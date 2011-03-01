@@ -819,6 +819,10 @@ ADD_TEST(prTvGenericRSTransformWithSRID ${PROJECTIONS_TESTS3}
 )
 
 
+ADD_TEST(prTvGenericRSTransformFromImage ${PROJECTIONS_TESTS3} 
+	       otbGenericRSTransformFromImage
+	       ${INPUTDATA}/WithoutProjRefWithKeywordlist.tif)
+
 ADD_TEST(prTuVectorDataProjectionFilterNew ${PROJECTIONS_TESTS3}  otbVectorDataProjectionFilterNew )
 
 #test points
@@ -1062,6 +1066,7 @@ otbGenericMapProjection.cxx
 otbGenericRSTransformNew.cxx
 otbGenericRSTransform.cxx
 otbGenericRSTransformWithSRID.cxx
+otbGenericRSTransformFromImage.cxx
 otbVectorDataProjectionFilterNew.cxx
 otbVectorDataProjectionFilter.cxx
 otbVectorDataProjectionFilterFromMapToSensor.cxx
