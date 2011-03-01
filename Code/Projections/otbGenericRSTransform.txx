@@ -137,7 +137,7 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
       sensorModel->SetImageGeometry(m_InputKeywordList);
       imageGeometrySet = true;
       }
-    catch( itk::ExceptionObject& )
+    catch( itk::ExceptionObject& e)
       {
       otbMsgDevMacro(<< "Unable to instanciate a sensor model with the provided keyword list. Exception caught : " << e)
       }
