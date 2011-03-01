@@ -95,7 +95,7 @@ public:
    virtual void Update()
    {
      this->GenerateData();
-}
+   }
 
 protected:
   ScalarBufferToImageFileWriter();

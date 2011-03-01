@@ -58,7 +58,7 @@ ScalarBufferToImageFileWriter<TBufferType, TOutputPixelType>::GenerateData()
 	l_Region.SetIndex(l_Id);
 	l_Region.SetSize(m_ImageSize);
 
-	ImageType::Pointer l_Image = ImageType::New();
+	typename ImageType::Pointer l_Image = ImageType::New();
 	l_Image->SetRegions( l_Region );
 	l_Image->SetNumberOfComponentsPerPixel(m_NumberOfChannels);
 	l_Image->Allocate();
