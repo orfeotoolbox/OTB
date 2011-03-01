@@ -116,7 +116,6 @@ protected:
   CoordinateToName();
   virtual ~CoordinateToName() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  void RetrieveXML(const std::ostringstream& urlStream) const;
   void ParseXMLGeonames(std::string& placeName, std::string& countryName) const;
 
   virtual void DoEvaluate();
@@ -139,7 +138,7 @@ private:
 
   std::string m_PlaceName;
   std::string m_CountryName;
-  std::string m_TempFileName;
+  std::string m_CurlOutput;
 
   CurlHelperInterface::Pointer m_Curl;
 

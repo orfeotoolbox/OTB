@@ -38,6 +38,7 @@ CoordinateToName::CoordinateToName() :
   m_Lon(-1000.0), m_Lat(-1000.0), m_Multithread(false), m_IsValid(false),
   m_PlaceName(""), m_CountryName("")
 {
+  /*
   //Avoid collision between different instance of the class
   typedef itk::Statistics::MersenneTwisterRandomVariateGenerator RandomGenType;
   RandomGenType::Pointer randomGen = RandomGenType::GetInstance();
@@ -49,6 +50,7 @@ CoordinateToName::CoordinateToName() :
   filename << randomNum;
   filename << ".xml";
   m_TempFileName = filename.str();
+  */
 
   m_Curl = CurlHelper::New();
 
@@ -103,7 +105,9 @@ void CoordinateToName::DoEvaluate()
     urlStream << "&lng=";
     urlStream << m_Lon;
     otbMsgDevMacro("CoordinateToName: retrieve url " << urlStream.str());
-    RetrieveXML(urlStream);
+
+    m_Curl->RetrieveUrlInMemory(urlStream.str(), m_CurlOutput);
+
     std::string placeName = "";
     std::string countryName = "";
     ParseXMLGeonames(placeName, countryName);
@@ -119,15 +123,12 @@ void CoordinateToName::DoEvaluate()
     }
 }
 
-void CoordinateToName::RetrieveXML(const std::ostringstream& urlStream) const
-{
-  m_Curl->RetrieveFile(urlStream, m_TempFileName);
-}
-
 void CoordinateToName::ParseXMLGeonames(std::string& placeName, std::string& countryName) const
 {
-  TiXmlDocument doc(m_TempFileName.c_str());
-  if (doc.LoadFile())
+  TiXmlDocument doc;
+  doc.Parse(m_CurlOutput.c_str());
+
+  if (!doc.Error())
     {
     TiXmlHandle docHandle(&doc);
 
@@ -144,7 +145,6 @@ void CoordinateToName::ParseXMLGeonames(std::string& placeName, std::string& cou
       countryName = childCountryName->GetText();
       }
     otbMsgDevMacro(<< "Near " << placeName << " in " << countryName);
-    remove(m_TempFileName.c_str());
     }
 }
 
