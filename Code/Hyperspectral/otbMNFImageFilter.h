@@ -199,6 +199,10 @@ protected:
   CovarianceEstimatorFilterPointerType m_CovarianceEstimator;
   CovarianceEstimatorFilterPointerType m_NoiseCovarianceEstimator;
   TransformFilterPointerType m_Transformer;
+
+private:
+  MNFImageFilter( const Self & ); // not implemented
+  void operator=( const Self & ); // not implemented
 }; // end of class
 
 } // end of namespace otb

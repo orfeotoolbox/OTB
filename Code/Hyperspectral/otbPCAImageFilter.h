@@ -201,6 +201,10 @@ protected:
   CovarianceEstimatorFilterPointerType m_CovarianceEstimator;
   TransformFilterPointerType m_Transformer;
   NormalizeFilterPointerType m_Normalizer;
+
+private:
+  PCAImageFilter( const Self & ); // not implemented
+  void operator ( const Self & ); // not implemented
 };
 
 } // end of namespace otb
