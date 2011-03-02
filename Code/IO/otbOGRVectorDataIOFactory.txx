@@ -29,8 +29,11 @@ namespace otb
 template<class TData>
 OGRVectorDataIOFactory<TData>::OGRVectorDataIOFactory()
 {
-  this->RegisterOverride("otbVectorDataIOBase",
-                         "otbOGRVectorDataIO",
+  static std::string classOverride = std::string("otbVectorDataIOBase<") + typeid(TData).name() + ">";
+  static std::string subclass = std::string("otbOGRVectorDataIO<") + typeid(TData).name() + ">";
+
+  this->RegisterOverride(classOverride.c_str(),
+                         subclass.c_str(),
                          "OGR Vectordata IO",
                          1,
                          itk::CreateObjectFunction<OGRVectorDataIO<TData> >::New());
