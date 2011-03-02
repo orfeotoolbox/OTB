@@ -35,8 +35,8 @@ void
 NAPCAImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransformation >
 ::GetTransformationMatrixFromCovarianceMatrix ()
 {
-  InternalMatrixType An = m_NoiseCovarianceMatrix.GetVnlMatrix();
-  InternalMatrixType Ax = m_CovarianceMatrix.GetVnlMatrix();
+  InternalMatrixType An = this->GetNoiseCovarianceMatrix().GetVnlMatrix();
+  InternalMatrixType Ax = this->GetCovarianceMatrix().GetVnlMatrix();
 
   vnl_svd< MatrixElementType > An_solver ( An );
   InternalMatrixType U_cholesky = An_solver.U();
@@ -44,24 +44,24 @@ NAPCAImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTran
   InternalMatrixType C = U.transpose() * Ax * U;
 
   InternalMatrixType Id ( C.rows(), C.cols(), vnl_matrix_identity );
-  vnl_generalized_eigensystem solver ( C, I );
+  vnl_generalized_eigensystem solver ( C, Id );
 
   InternalMatrixType transf = solver.V;
   transf *= U.transpose();
   transf.fliplr();
 
-  if ( m_NumberOfPrincipalComponentsRequired 
+  if ( this->GetNumberOfPrincipalComponentsRequired() 
       != this->GetInput()->GetNumberOfComponentsPerPixel() )
-    m_TransformationMatrix = transf.get_n_rows( 0, m_NumberOfPrincipalComponentsRequired );
+    this->m_TransformationMatrix = transf.get_n_rows( 0, this->GetNumberOfPrincipalComponentsRequired() );
   else
-    m_TransformationMatrix = transf;
+    this->m_TransformationMatrix = transf;
 
   vnl_vector< double > valP = solver.D.diagonal();
   valP.flip();
 
-  m_EigenValues.SetSize( m_NumberOfPrincipalComponentsRequired );
-  for ( unsigned int i = 0; i < m_NumberOfPrincipalComponentsRequired; i++ )
-    m_EigenValues[i] = static_cast< RealType >( valP[i] );
+  this->m_EigenValues.SetSize( this->GetNumberOfPrincipalComponentsRequired() );
+  for ( unsigned int i = 0; i < this->GetNumberOfPrincipalComponentsRequired(); i++ )
+    this->m_EigenValues[i] = static_cast< RealType >( valP[i] );
 }
 
 

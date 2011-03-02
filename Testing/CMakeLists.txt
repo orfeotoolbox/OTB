@@ -26,6 +26,7 @@ SET( otbHyperTests1_SRC
   otbNormalizeVectorImageFilter.cxx
   otbPCAImageFilter.cxx
   otbMNFImageFilter.cxx
+  otbNAPCAImageFilter.cxx
 )
 
 ADD_EXECUTABLE(otbHyperTests1 ${otbHyperTests1_SRC} otbHyperTests1.cxx)
@@ -420,6 +421,17 @@ ADD_TEST(hyTvMNFImageFilter
 		 -in ${DATA}/CupriteSubHsi/cupriteSubHsi.tif
 		 -inv ${TEMP}/cupriteMNFinv.hdr
 		 -out ${TEMP}/cupriteMNF.hdr)
+
+ADD_TEST(hyTuNAPCAImageFilterNew
+         ${TESTEXE_DIR}/otbHyperTests1
+		 otbNAPCAImageFilterNewTest)
+
+ADD_TEST(hyTvNAPCAImageFilter
+         ${TESTEXE_DIR}/otbHyperTests1
+		 otbNAPCAImageFilterTest 
+		 -in ${DATA}/CupriteSubHsi/cupriteSubHsi.tif
+		 -inv ${TEMP}/cupriteNAPCAinv.hdr
+		 -out ${TEMP}/cupriteNAPCA.hdr)
 
 ADD_TEST(hyTuEigenvalueLikelihoodMaximizationNew
          ${TESTEXE_DIR}/otbHyperTests1
