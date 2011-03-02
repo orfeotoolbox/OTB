@@ -38,10 +38,12 @@ VectorDataIOFactory<TData>
 ::CreateVectorDataIO(const char* path, FileModeType mode)
 {
   RegisterBuiltInFactories();
+  
+  std::string baseclassID = std::string("otbVectorDataIOBase<") + typeid(TData).name() + ">";
 
   std::list<VectorDataIOBasePointerType> possibleVectorDataIO;
   std::list<itk::LightObject::Pointer>   allobjects =
-    itk::ObjectFactoryBase::CreateAllInstance("otbVectorDataIOBase");
+    itk::ObjectFactoryBase::CreateAllInstance(baseclassID.c_str());
   for (std::list<itk::LightObject::Pointer>::iterator i = allobjects.begin();
        i != allobjects.end(); ++i)
     {
