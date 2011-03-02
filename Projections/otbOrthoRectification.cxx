@@ -47,18 +47,18 @@ int generic_main(otb::ApplicationOptionsResult* parseResult,
 {
   try
   {
-    typedef otb::VectorImage<unsigned short int, 2>       ImageType;
+    typedef otb::VectorImage<unsigned short int, 2>   ImageType;
     typedef otb::ImageFileReader<ImageType>           ReaderType;
     typedef otb::StreamingImageFileWriter<ImageType>  WriterType;
 
-    typedef TMapProjection                            MapProjectionType;
-    typedef otb::OrthoRectificationFilter< ImageType, ImageType,  MapProjectionType >    OrthorectifFilterType;
+    typedef TMapProjection                                                            MapProjectionType;
+    typedef otb::OrthoRectificationFilter< ImageType, ImageType,  MapProjectionType > OrthorectifFilterType;
 
     typedef itk::LinearInterpolateImageFunction<ImageType, double>          LinearInterpolationType;
     typedef itk::NearestNeighborInterpolateImageFunction<ImageType, double> NearestNeighborInterpolationType;
     typedef otb::BCOInterpolateImageFunction<ImageType>                     BCOInterpolationType;
 
-    typedef otb::PipelineMemoryPrintCalculator        MemoryCalculatorType;
+    typedef otb::PipelineMemoryPrintCalculator           MemoryCalculatorType;
     typedef itk::ExtractImageFilter<ImageType,ImageType> ExtractFilterType;
 
     // Read input image information
@@ -342,7 +342,7 @@ int OrthoRectification::Execute(otb::ApplicationOptionsResult* parseResult)
       }
     else
       {
-      std::vector<double> parameters ;
+      std::vector<double> parameters;
 
       for (int i=1; i<nbParams+1; i++)
         {
