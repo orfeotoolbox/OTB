@@ -37,7 +37,8 @@ std::ostream& operator<<(std::ostream& os, const VolumeDescriptorRecord& data)
   os<<"curr_phyvol:"<<data._curr_phyvol<<std::endl;
   os<<"first_file:"<<data._first_file<<std::endl;
   os<<"volset_log:"<<data._volset_log<<std::endl;
-  os<<"logvol_date:"<<data._logvol_date<<std::endl;
+  os<<"phyvol_log:"<<data._phyvol_log<<std::endl;
+  os<<"logvol_date:"<<data._logvol_date.c_str()<<std::endl;
   os<<"logvol_time:"<<data._logvol_time.c_str()<<std::endl;
   os<<"logvol_country:"<<data._logvol_country.c_str()<<std::endl;
   os<<"logvol_agency:"<<data._logvol_agency.c_str()<<std::endl;

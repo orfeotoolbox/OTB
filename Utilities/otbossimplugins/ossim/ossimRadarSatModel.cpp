@@ -385,7 +385,6 @@ bool ossimRadarSatModel::open(const ossimFilename& file)
     {
     ossimNotify(ossimNotifyLevel_DEBUG) << "ossimRadarSatTileSource::open() DEBUG: returning..." << std::endl;
     }
-
   return retValue;
 }
 
