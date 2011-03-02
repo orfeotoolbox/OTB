@@ -10,10 +10,13 @@
 // $Id$
 
 #include <RadarSat/Data/ImageOptionsFileDescriptor.h>
-#include <errno.h>
+#include <ossim/base/ossimNotify.h>
+#include <ossim/base/ossimTrace.h>
 
 namespace ossimplugins
 {
+static ossimTrace traceDebug("ImageOptionsFileDescriptor:debug");
+
 ImageOptionsFileDescriptor::ImageOptionsFileDescriptor() : RadarSatRecord("imop_desc_rec")
 {
 }
@@ -161,7 +164,6 @@ std::istream& operator>>(std::istream& is, ImageOptionsFileDescriptor& data)
     is.read(buf,16);
 	buf[16] = '\0';
 	data._file_name = buf;
-	//std::cout<< "_file_name : " << buf <<std::endl;
 
     is.read(buf,4);
 	buf[4] = '\0';
@@ -242,10 +244,13 @@ std::istream& operator>>(std::istream& is, ImageOptionsFileDescriptor& data)
 	// We should use strtol() to avoid wrong conversion with atoi()
   char* p;
   int result = strtol(buf, &p, 10);
-  if (errno != 0 || *p != 0 || p == buf)
+  if ( *p != 0 || p == buf)
     {
-    std::cout << "WARNING: strtol() try to convert an empty tab of characters, buf = " << buf << "!" << std::endl;
-    std::cout << "=> _nlin = -1" << std::endl;
+    if(traceDebug())
+      {
+      ossimNotify(ossimNotifyLevel_DEBUG) << "WARNING: strtol() try to convert an empty tab of characters. It may be possible in case of SCN and SCW format" << buf << "!" << std::endl;
+      ossimNotify(ossimNotifyLevel_DEBUG) << "=> _nlin = -1" << std::endl;
+      }
     data._nlin = -1;
     }
   else

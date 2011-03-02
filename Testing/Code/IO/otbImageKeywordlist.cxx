@@ -36,7 +36,6 @@ int otbImageKeywordlist(int argc, char* argv[])
   if (argc != 4)
     {
     std::cout << argv[0] << " <input filename> <output filename> <output filename2>" << std::endl;
-
     return EXIT_FAILURE;
     }
 

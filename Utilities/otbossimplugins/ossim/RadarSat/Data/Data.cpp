@@ -14,8 +14,12 @@
 #include <RadarSat/RadarSatRecordHeader.h>
 #include <RadarSat/Data/ImageOptionsFileDescriptor.h>
 
+#include <ossim/base/ossimTrace.h>
+
 namespace ossimplugins
 {
+// Static trace for debugging
+static ossimTrace traceDebug("Data:debug");
 
 const int Data::ImageOptionsFileDescriptorID = 1;
 const int Data::FirstProcessedDataRecordID = 2;
@@ -48,9 +52,9 @@ std::istream& operator>>(std::istream& is, Data& data)
 
 	data.ClearRecords();
 
-	if (sizeof(int)!=4) std::cout << "RadarSat Data WARNING : (int) not coded over 32 bits, metadata might not be byte swapped correctly"<< std::endl ;
-	if (sizeof(float)!=4) std::cout << "RadarSat Data WARNING : (float) not coded over 32 bits, metadata might not be byte swapped correctly"<< std::endl ;
-	if (sizeof(double)!=8) std::cout << "RadarSat Data WARNING : (double) not coded over 64 bits, metadata might not be byte swapped correctly"<< std::endl ;
+	if (sizeof(int)!=4) ossimNotify(ossimNotifyLevel_WARN)  << "RadarSat Data WARNING : (int) not coded over 32 bits, metadata might not be byte swapped correctly"<< std::endl ;
+	if (sizeof(float)!=4) ossimNotify(ossimNotifyLevel_WARN)  << "RadarSat Data WARNING : (float) not coded over 32 bits, metadata might not be byte swapped correctly"<< std::endl ;
+	if (sizeof(double)!=8) ossimNotify(ossimNotifyLevel_WARN)  << "RadarSat Data WARNING : (double) not coded over 64 bits, metadata might not be byte swapped correctly"<< std::endl ;
 
 	RadarSatRecordHeader header;
 	bool eof = false;
@@ -81,7 +85,7 @@ std::istream& operator>>(std::istream& is, Data& data)
 					nbLin  = ((ImageOptionsFileDescriptor *) record)->get_nlin() ;
 					if (nbLin == -1)
 					  {
-					  std::cout << "WARNING: nbLin is not read in the file, it will produce some errors later !!!" << std::endl;
+					  ossimNotify(ossimNotifyLevel_DEBUG) << "WARNING: nbLin is not read in the file !" << std::endl;
 					  }
 				  }
 				else
@@ -137,9 +141,9 @@ std::istream& operator>>(std::istream& is, Data& data)
 				  {
 				  if (nbLin == -1)
 				    {
-				    // Compute the number of line per dataset from the size of file and the different header
+				    // Compute the number of line per dataset from the size of file and current position
 				    int nbLines = ( ( lengthOfFile - is.tellg() ) / lineLength ) + 2;
-				    std::cout<< "MSG: To move in the dat file we compute the nb of lines = " << nbLines << std::endl;
+				    ossimNotify(ossimNotifyLevel_DEBUG) << "To move in the dat file we compute the nb of lines = " << nbLines << std::endl;
 
 				    // We move in the file to the last line
 				    is.seekg((nbLines - 2) * lineLength - 12, std::ios::cur);

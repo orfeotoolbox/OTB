@@ -40,9 +40,6 @@
 
 namespace ossimplugins
 {
-
-
-
 RTTI_DEF1(ossimRadarSatModel, "ossimRadarSatModel", ossimGeometricSarSensorModel);
 
 // Static trace for debugging
@@ -117,6 +114,7 @@ double ossimRadarSatModel::getSlantRangeFromGeoreferenced(double col) const
 
 bool ossimRadarSatModel::open(const ossimFilename& file)
 {
+  //traceDebug.setTraceFlag(true);
   if(traceDebug())
     {
     ossimNotify(ossimNotifyLevel_DEBUG)
@@ -156,8 +154,11 @@ bool ossimRadarSatModel::open(const ossimFilename& file)
       }
     else
       {
-      ossimNotify(ossimNotifyLevel_DEBUG)
+      if(traceDebug())
+        {
+        ossimNotify(ossimNotifyLevel_DEBUG)
              << "File Name not coherent (searching for *DAT_01* or *dat_01* or *vdf_dat* or *VDF_DAT* )  : " << file << std::endl;
+        }
       return false;
       }
     }
@@ -220,24 +221,24 @@ bool ossimRadarSatModel::open(const ossimFilename& file)
       if ((((VolumeDescriptorRecord*) recordVDF)->get_logvol_id()).substr(0, 10) == "RSAT-1-SAR")
         {
         std::string subProduct = (((VolumeDescriptorRecord*) recordVDF)->get_logvol_id()).substr(11, 3);
-        if  (subProduct == "RAW")
-          std::cout << "FATAL_ERROR: RAW format is not supported" <<std::endl;
-        else if (subProduct == "SCN")
-          std::cout << "WARNING: SCN format is supported but not tested" <<std::endl;
-        else if (subProduct ==  "SCW")
-          std::cout << "MSG: SCW format is supported and tested" <<std::endl;
-        else if (subProduct == "SGF")
-          std::cout << "MSG: SGF format is supported and tested" <<std::endl;
-        else if (subProduct == "SGX")
-          std::cout << "WARNING: SGX format is supported but not tested" <<std::endl;
-        else if (subProduct == "SLC")
-          std::cout << "WARNING: SLC format is supported but not tested" <<std::endl;
-        else if (subProduct == "SPG")
-            std::cout << "FATAL_ERROR: SPG format is not supported" <<std::endl;
-        else if (subProduct == "SSG")
-            std::cout << "FATAL_ERROR: SSG format is not supported" <<std::endl;
+        if  ( (subProduct == "RAW") || (subProduct == "SPG") || (subProduct == "SSG") )
+          {
+          if(traceDebug())
+            ossimNotify(ossimNotifyLevel_DEBUG) << "RAW, SPG and SSG format are not supported" <<std::endl;
 
-
+          volumeDirFile.close();
+          return false;
+          }
+        else if ( (subProduct == "SCN") || (subProduct == "SGX") || (subProduct == "SLC") )
+          {
+          if(traceDebug())
+            ossimNotify(ossimNotifyLevel_DEBUG) << "SCN, SGX and SLC format are supported but not tested" <<std::endl;
+          }
+        else if ( (subProduct ==  "SCW") || (subProduct == "SGF") )
+          {
+          if(traceDebug())
+            ossimNotify(ossimNotifyLevel_DEBUG) << "SCW and SGF format are supported and tested" <<std::endl;
+          }
 
         //Reading of the remaining of the volume directory file
 
@@ -468,7 +469,7 @@ bool ossimRadarSatModel::saveState(ossimKeywordlist& kwl,
     }
     else
     {
-      std::cerr << "It is not possible to add dataSetSummary from _leader or _trailer file" <<std::endl;
+      ossimNotify(ossimNotifyLevel_DEBUG) << "It is not possible to add dataSetSummary from _leader or _trailer file" <<std::endl;
       return false;
     }
 
@@ -511,7 +512,7 @@ bool ossimRadarSatModel::saveState(ossimKeywordlist& kwl,
     }
     else
     {
-      std::cerr << "It is not possible to add processingParameters from _leader or _trailer file" <<std::endl;
+      ossimNotify(ossimNotifyLevel_DEBUG) << "It is not possible to add processingParameters from _leader or _trailer file" <<std::endl;
       return false;
     }
 
@@ -549,7 +550,7 @@ bool ossimRadarSatModel::saveState(ossimKeywordlist& kwl,
     }
     else
     {
-      std::cerr << "It is not possible to add platformPositionData from _leader file" <<std::endl;
+      ossimNotify(ossimNotifyLevel_DEBUG) << "It is not possible to add platformPositionData from _leader file" <<std::endl;
       return false;
     }
 
@@ -561,7 +562,7 @@ bool ossimRadarSatModel::saveState(ossimKeywordlist& kwl,
     }
     else
     {
-      std::cerr << "It is not possible to add imageOptionsFileDescriptor from _data file" <<std::endl;
+      ossimNotify(ossimNotifyLevel_DEBUG) << "It is not possible to add imageOptionsFileDescriptor from _data file" <<std::endl;
       return false;
     }
 
@@ -580,7 +581,7 @@ bool ossimRadarSatModel::saveState(ossimKeywordlist& kwl,
     }
     else
     {
-      std::cerr << "It is not possible to add firstProcessedDataRecord from _data file" <<std::endl;
+      ossimNotify(ossimNotifyLevel_DEBUG) << "It is not possible to add firstProcessedDataRecord from _data file" <<std::endl;
       return false;
     }
 
@@ -599,7 +600,7 @@ bool ossimRadarSatModel::saveState(ossimKeywordlist& kwl,
     }
     else
     {
-      std::cerr << "It is not possible to add lastProcessedDataRecord from _data file" <<std::endl;
+      ossimNotify(ossimNotifyLevel_DEBUG) << "It is not possible to add lastProcessedDataRecord from _data file" <<std::endl;
       return false;
     }
 
@@ -1037,10 +1038,6 @@ bool ossimRadarSatModel::InitSRGR(const ossimKeywordlist &kwl, const char *prefi
 
   // pixel spacing
   const char* pixel_spacing_str = kwl.find(prefix,"pixel_spacing");
-  if (!pixel_spacing_str)
-    {
-    std::cout << "pixel_spacing_str is NULL" <<std::endl;
-    }
   _pixel_spacing = atof(pixel_spacing_str);
 
   // number of SRGR sets
