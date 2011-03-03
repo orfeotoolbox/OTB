@@ -57,6 +57,36 @@ void RegisterTests()
   REGISTER_TEST(otbMonobandScalarToVectorImageComplexDouble);
   REGISTER_TEST(otbMultibandComplexToImageScalarFloat);
   REGISTER_TEST(otbMultibandComplexToImageScalarDouble);
+  //new tests
+  REGISTER_TEST(otbMonobandScalarToImageComplexInt);
+  REGISTER_TEST(otbMonobandScalarToImageComplexShort);
+
+  REGISTER_TEST(otbMonobandComplexToImageScalarInt);
+  REGISTER_TEST(otbMonobandComplexToImageScalarShort);
+
+  REGISTER_TEST(otbMonobandComplexToImageComplexInt);
+  REGISTER_TEST(otbMonobandComplexToImageComplexShort);
+
+  REGISTER_TEST(otbMonobandComplexToVectorImageScalarInt);
+  REGISTER_TEST(otbMonobandComplexToVectorImageScalarShort);
+
+  REGISTER_TEST(otbMonobandComplexToVectorImageComplexInt);
+  REGISTER_TEST(otbMonobandComplexToVectorImageComplexShort);
+
+  REGISTER_TEST(otbMultibandScalarToImageComplexInt);
+  REGISTER_TEST(otbMultibandScalarToImageComplexShort);
+
+  REGISTER_TEST(otbMultibandScalarToVectorImageComplexInt);
+  REGISTER_TEST(otbMultibandScalarToVectorImageComplexShort);
+
+  REGISTER_TEST(otbMultibandComplexToVectorImageScalarInt);
+  REGISTER_TEST(otbMultibandComplexToVectorImageScalarShort);
+
+  REGISTER_TEST(otbMultibandComplexToVectorImageComplexInt);
+  REGISTER_TEST(otbMultibandComplexToVectorImageComplexShort);
+
+  REGISTER_TEST(otbMonobandScalarToVectorImageComplexInt);
+  REGISTER_TEST(otbMonobandScalarToVectorImageComplexShort);
   // Complex tests with GDAL only
   REGISTER_TEST(otbGDALReadPxlComplexDouble);
   REGISTER_TEST(otbGDALReadPxlComplexFloat);

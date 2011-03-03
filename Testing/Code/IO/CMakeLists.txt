@@ -2798,9 +2798,10 @@ ADD_TEST(ioTvTileMapImageIOHelperTest ${IO_TESTS21}
 
 # Tests about complex reading
 
-#SET(INPUTFILE_PIXELTYPES_LIST "Int" "Short" "Float" "Double")
-SET(INPUTFILE_PIXELTYPES_LIST "Float" "Double")
-SET(READING_PIXELTYPES_LIST "Float" "Double")
+SET(INPUTFILE_PIXELTYPES_LIST "Int" "Short" "Float" "Double")
+#SET(INPUTFILE_PIXELTYPES_LIST "Float" "Double")
+#SET(READING_PIXELTYPES_LIST "Float" "Double")
+SET(READING_PIXELTYPES_LIST "Int" "Short" "Float" "Double")
 SET(NBBANDS_LIST "2" "3" "4")
 
 FOREACH(INPUTFILE_PIXELTYPE ${INPUTFILE_PIXELTYPES_LIST})
@@ -2820,22 +2821,22 @@ FOREACH(INPUTFILE_PIXELTYPE ${INPUTFILE_PIXELTYPES_LIST})
     ADD_TEST(ioTvMonobandComplex${INPUTFILE_PIXELTYPE}ToImageScalar${READING_PIXELTYPE}
              ${IO_TESTS21}
              otbMonobandComplexToImageScalar${READING_PIXELTYPE}
-             ${INPUTDATA}/monobandComplex${INPUTFILE_PIXELTYPE}.hdr)
+             ${INPUTDATA}/monobandComplex${INPUTFILE_PIXELTYPE}.tif) #hdr)
 
     ADD_TEST(ioTvMonobandComplex${INPUTFILE_PIXELTYPE}ToImageComplex${READING_PIXELTYPE}
              ${IO_TESTS21}
              otbMonobandComplexToImageComplex${READING_PIXELTYPE}
-             ${INPUTDATA}/monobandComplex${INPUTFILE_PIXELTYPE}.hdr)
+             ${INPUTDATA}/monobandComplex${INPUTFILE_PIXELTYPE}.tif) #hdr)
 
     ADD_TEST(ioTvMonobandComplex${INPUTFILE_PIXELTYPE}ToVectorImageScalar${READING_PIXELTYPE}
              ${IO_TESTS21}
              otbMonobandComplexToVectorImageScalar${READING_PIXELTYPE}
-             ${INPUTDATA}/monobandComplex${INPUTFILE_PIXELTYPE}.hdr)
+             ${INPUTDATA}/monobandComplex${INPUTFILE_PIXELTYPE}.tif) #hdr)
 
     ADD_TEST(ioTvMonobandComplex${INPUTFILE_PIXELTYPE}ToVectorImageComplex${READING_PIXELTYPE}
              ${IO_TESTS21}
              otbMonobandComplexToVectorImageComplex${READING_PIXELTYPE}
-             ${INPUTDATA}/monobandComplex${INPUTFILE_PIXELTYPE}.hdr)
+             ${INPUTDATA}/monobandComplex${INPUTFILE_PIXELTYPE}.tif) #hdr)
 
     # Weird case : only the first 2 bands used
     ADD_TEST(ioTvMultibandScalar${INPUTFILE_PIXELTYPE}ToImageComplex${READING_PIXELTYPE}
@@ -2856,12 +2857,12 @@ FOREACH(INPUTFILE_PIXELTYPE ${INPUTFILE_PIXELTYPES_LIST})
       # ADD_TEST(ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToImageScalar${READING_PIXELTYPE}
       #          ${IO_TESTS21}
       #          otbMultibandComplexToImageScalar${READING_PIXELTYPE}
-      #          ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands.hdr)
+      #          ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands.tif) #hdr)
 
       ADD_TEST(ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToVectorImageScalar${READING_PIXELTYPE}
                ${IO_TESTS21}
                otbMultibandComplexToVectorImageScalar${READING_PIXELTYPE}
-               ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands.hdr)
+               ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands.tif) #hdr)
 
       # Weird case : need specifications to write the test
       # [missing impl]
@@ -2870,7 +2871,7 @@ FOREACH(INPUTFILE_PIXELTYPE ${INPUTFILE_PIXELTYPES_LIST})
       ADD_TEST(ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToVectorImageComplex${READING_PIXELTYPE}
                ${IO_TESTS21}
                otbMultibandComplexToVectorImageComplex${READING_PIXELTYPE}
-               ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands.hdr)
+               ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands.tif) #hdr)
 
     ENDFOREACH(NBBANDS ${NBBANDS_LIST})
 
@@ -2887,8 +2888,8 @@ FOREACH(INPUTFILE_PIXELTYPE ${INPUTFILE_PIXELTYPES_LIST})
 
 ADD_TEST(ioTvGDALReadPxlComplex${INPUTFILE_PIXELTYPE} ${IO_TESTS21}
          otbGDALReadPxlComplex${INPUTFILE_PIXELTYPE}
-         ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_3bands
-         1 5 10 2)
+         ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_3bands.tif
+         1 5 10 2) #old file hdr sans extesions
 
 ENDFOREACH(INPUTFILE_PIXELTYPE ${INPUTFILE_PIXELTYPES_LIST})
 
