@@ -101,7 +101,11 @@ public:
 
   /** Get the 3 spectral band numbers corresponding to the default display for visualization,
    *  in the order R, G, B */
-  virtual std::vector<unsigned int> GetDefaultDisplay() const;
+  std::vector<unsigned int> GetDefaultDisplay() const;
+
+  /** Vector that contains the filter function value in 6S format (step of 0.0025µm).
+     * There values a computed by 6S. */
+  WavelengthSpectralBandVectorType GetSpectralSensitivity()  const;
 
 protected:
   IkonosImageMetadataInterface();

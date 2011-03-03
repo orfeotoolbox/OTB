@@ -710,4 +710,14 @@ FormosatImageMetadataInterface::GetDefaultDisplay() const
   return rgb;
 }
 
+FormosatImageMetadataInterface::WavelengthSpectralBandVectorType
+FormosatImageMetadataInterface
+::GetSpectralSensitivity()  const
+{
+  //TODO tabulate spectral responses
+  WavelengthSpectralBandVectorType wavelengthSpectralBand (this->GetNumberOfBands());
+  //wavelengthSpectralBand [0][0] = {0};
+  return wavelengthSpectralBand;
+}
+
 } // end namespace otb

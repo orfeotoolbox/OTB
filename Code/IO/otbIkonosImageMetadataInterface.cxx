@@ -609,4 +609,14 @@ IkonosImageMetadataInterface::GetDefaultDisplay() const
   return rgb;
 }
 
+IkonosImageMetadataInterface::WavelengthSpectralBandVectorType
+IkonosImageMetadataInterface
+::GetSpectralSensitivity()  const
+{
+  //TODO tabulate spectral responses
+  WavelengthSpectralBandVectorType wavelengthSpectralBand (this->GetNumberOfBands());
+  //wavelengthSpectralBand [0][0] = {0};
+  return wavelengthSpectralBand;
+}
+
 } // end namespace otb

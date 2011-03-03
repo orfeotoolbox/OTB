@@ -153,12 +153,19 @@ public:
   /** Get the 3 spectral band numbers corresponding to the default display for visualization,
    *  in the order R, G, B */
   virtual std::vector<unsigned int> GetDefaultDisplay() const
-  {
+      {
     std::vector<unsigned int> rgb(3);
     rgb[0] = 0;
     rgb[1] = 1;
     rgb[2] = 2;
     return rgb;
+      }
+
+  /** Vector that contains the filter function value in 6S format (step of 0.0025µm).
+   * There values a computed by 6S. */
+  WavelengthSpectralBandVectorType GetSpectralSensitivity()  const
+  {
+    itkExceptionMacro("GetSpectralSensitivity not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
 protected:

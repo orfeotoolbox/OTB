@@ -767,4 +767,13 @@ WorldView2ImageMetadataInterface::GetDefaultDisplay() const
   return rgb;
 }
 
+WorldView2ImageMetadataInterface::WavelengthSpectralBandVectorType
+WorldView2ImageMetadataInterface
+::GetSpectralSensitivity()  const
+{
+  //TODO tabulate spectral responses
+  WavelengthSpectralBandVectorType wavelengthSpectralBand (this->GetNumberOfBands());
+  return wavelengthSpectralBand;
+}
+
 } // end namespace otb
