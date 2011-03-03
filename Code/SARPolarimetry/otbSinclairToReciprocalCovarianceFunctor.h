@@ -37,6 +37,15 @@ namespace Functor
  *   channel #5 : \f$ S_{vv}.S_{vv}^{*} \f$
  *
  *  \ingroup Functor
+ *  \ingroup SARPolarimetry
+ *
+ *  \sa SinclairImageFilter
+ *  \sa SinclairToCircularCovarianceMatrixFunctor
+ *  \sa SinclairToCoherencyFunctor
+ *  \sa SinclairToCovarianceFunctor
+ *  \sa SinclairToMuellerFunctor
+ *  \sa SinclairToReciprocalCircularCovarianceMatrixFunctor
+ *  \sa SinclairToReciprocalCoherencyFunctor
  */
 template <class TInput1, class TInput2, class TInput3,
           class TInput4, class TOutput>

@@ -41,6 +41,15 @@ namespace Functor
  *   channel #9 : \f$ S_{rr}.S_{rr}^{*} \f$
  *
  *  \ingroup Functor
+ *  \ingroup SARPolarimetry
+ *
+ *  \sa SinclairImageFilter
+ *  \sa SinclairToCoherencyFunctor
+ *  \sa SinclairToCovarianceFunctor
+ *  \sa SinclairToMuellerFunctor
+ *  \sa SinclairToReciprocalCircularCovarianceMatrixFunctor
+ *  \sa SinclairToReciprocalCoherencyFunctor
+ *  \sa SinclairToReciprocalCovarianceFunctor
  */
 template <class TInput1, class TInput2, class TInput3,
           class TInput4, class TOutput>
@@ -57,18 +66,18 @@ public:
     TOutput result;
 
     result.SetSize(m_NumberOfComponentsPerPixel);
-    ComplexType jShv = static_cast<ComplexType>(Shv) * vcl_complex<RealType>(0.0, 1.0);
-    ComplexType jSvh = static_cast<ComplexType>(Svh) * vcl_complex<RealType>(0.0, 1.0);
+    const ComplexType jShv = static_cast<ComplexType>(Shv) * vcl_complex<RealType>(0.0, 1.0);
+    const ComplexType jSvh = static_cast<ComplexType>(Svh) * vcl_complex<RealType>(0.0, 1.0);
 
-    ComplexType Sll = static_cast<ComplexType>( 0.5 * (-Shh-jShv-jSvh+Svv) );
-    ComplexType Slr = static_cast<ComplexType>( 0.5 * (-Shh+jShv-jSvh+Svv) );
-    ComplexType Srl = static_cast<ComplexType>( 0.5 * (-Shh-jShv+jSvh-Svv) );
-    ComplexType Srr = static_cast<ComplexType>( 0.5 * (-Shh+jShv+jSvh+Svv) );
+    const ComplexType Sll = static_cast<ComplexType>( 0.5 * (-Shh-jShv-jSvh+Svv) );
+    const ComplexType Slr = static_cast<ComplexType>( 0.5 * (-Shh+jShv-jSvh+Svv) );
+    const ComplexType Srl = static_cast<ComplexType>( 0.5 * (-Shh-jShv+jSvh-Svv) );
+    const ComplexType Srr = static_cast<ComplexType>( 0.5 * (-Shh+jShv+jSvh+Svv) );
 
-    ComplexType conjSll = vcl_conj(Sll);
-    ComplexType conjSlr = vcl_conj(Slr);
-    ComplexType conjSrl = vcl_conj(Srl);
-    ComplexType conjSrr = vcl_conj(Srr);
+    const ComplexType conjSll = vcl_conj(Sll);
+    const ComplexType conjSlr = vcl_conj(Slr);
+    const ComplexType conjSrl = vcl_conj(Srl);
+    const ComplexType conjSrr = vcl_conj(Srr);
 
     result[0]  = static_cast<OutputValueType>( Sll * conjSll  );
     result[1]  = static_cast<OutputValueType>( Sll * conjSlr  );

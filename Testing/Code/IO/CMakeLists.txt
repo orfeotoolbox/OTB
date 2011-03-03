@@ -1793,7 +1793,10 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS15 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+ADD_TEST(ioTuVectorDataIOFactory ${IO_TESTS15}
+         otbVectorDataIOFactory
+         ${INPUTDATA}/ToulouseRoad-examples.shp )
+        
 ADD_TEST(ioTuOGRVectorDataIO ${IO_TESTS15}
         otbOGRVectorDataIONew )
 
@@ -2455,6 +2458,18 @@ ADD_TEST(ioTvImageKeywordlistRadarSat1 ${IO_TESTS18}
          ${TEMP}/ioTvImageKeywordlistRadarSat1_saveState_loadState.txt
 )
 
+ADD_TEST(ioTvImageKeywordlistRadarSat1_vdf ${IO_TESTS18}
+  --ignore-order --compare-n-ascii ${NOTOL} 2
+         ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1.txt
+         ${TEMP}/ioTvImageKeywordlistRadarSat1.txt
+         ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1.txt
+         ${TEMP}/ioTvImageKeywordlistRadarSat1_saveState_loadState.txt
+    otbImageKeywordlist
+         ${LARGEDATA}/RADARSAT1/GOMA/SCENE01/VDF_DAT.001
+         ${TEMP}/ioTvImageKeywordlistRadarSat1.txt
+         ${TEMP}/ioTvImageKeywordlistRadarSat1_saveState_loadState.txt
+)
+
 ADD_TEST(ioTvImageKeywordlistSardegnaRadarSat1 ${IO_TESTS18}
   --ignore-order --compare-n-ascii ${NOTOL} 2
          ${BASELINE_FILES}/ioTvImageKeywordlistSardegnaRadarSat1.txt
@@ -2466,8 +2481,18 @@ ADD_TEST(ioTvImageKeywordlistSardegnaRadarSat1 ${IO_TESTS18}
          ${TEMP}/ioTvImageKeywordlistSardegnaRadarSat1.txt
          ${TEMP}/ioTvImageKeywordlistSardegnaRadarSat1_saveState_loadState.txt
 )
-set_tests_properties ( ioTvImageKeywordlistSardegnaRadarSat1 PROPERTIES TIMEOUT 10)
 
+ADD_TEST(ioTvImageKeywordlistSardegnaRadarSat1_vdf ${IO_TESTS18}
+  --ignore-order --compare-n-ascii ${NOTOL} 2
+         ${BASELINE_FILES}/ioTvImageKeywordlistSardegnaRadarSat1.txt
+         ${TEMP}/ioTvImageKeywordlistSardegnaRadarSat1.txt
+         ${BASELINE_FILES}/ioTvImageKeywordlistSardegnaRadarSat1.txt
+         ${TEMP}/ioTvImageKeywordlistSardegnaRadarSat1_saveState_loadState.txt
+    otbImageKeywordlist
+         ${LARGEDATA}/RADARSAT1/SARDEGNA/scene01/vdf_dat.001
+         ${TEMP}/ioTvImageKeywordlistSardegnaRadarSat1.txt
+         ${TEMP}/ioTvImageKeywordlistSardegnaRadarSat1_saveState_loadState.txt
+)
 
 ADD_TEST(ioTvImageKeywordlistRadarSat2 ${IO_TESTS18}
   --ignore-order --compare-n-ascii ${NOTOL} 2
@@ -2659,6 +2684,20 @@ ADD_TEST(ioTuSarDefaultImageMetadataInterfaceNew ${IO_TESTS20}
 
 ADD_TEST(ioTuSarDefaultImageMetadataInterface ${IO_TESTS20}
         otbSarDefaultImageMetadataInterface )
+
+ADD_TEST(ioTuScalarBufferToImageFileWriter ${IO_TESTS20}
+        otbScalarBufferToImageFileWriterNew )		
+
+ADD_TEST(ioTvScalarBufferToImageFileWriterTest ${IO_TESTS20}
+  --compare-image ${NOTOL}
+         ${BASELINE}/ioTvScalarBufferToImageFileWriterTest.tif
+         ${TEMP}/ioTvScalarBufferToImageFileWriterTest.tif
+  otbScalarBufferToImageFileWriterTest 
+		4
+		50
+		75
+         ${TEMP}/ioTvScalarBufferToImageFileWriterTest.tif
+)	
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2853,6 +2892,8 @@ ADD_TEST(ioTvGDALReadPxlComplex${INPUTFILE_PIXELTYPE} ${IO_TESTS21}
 
 ENDFOREACH(INPUTFILE_PIXELTYPE ${INPUTFILE_PIXELTYPES_LIST})
 
+
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS22 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2927,6 +2968,7 @@ ADD_TEST(ioTvMultiChannelROI_HDF5_2_TIF ${COMMON_TESTS2}
          -channels 1 )
 
 ENDIF(CHECK_GDAL_BUILDED_WITH_HDF)
+
 
 #----------------------------------------------------------------------------------
 SET(BasicIO_SRCS1
@@ -3052,6 +3094,7 @@ otbWritingComplexDataWithComplexImageTest.cxx
 
 SET(BasicIO_SRCS15
 otbIOTests15.cxx
+otbVectorDataIOFactory.cxx
 otbVectorDataSourceNew.cxx
 otbVectorDataFileReaderNew.cxx
 otbVectorDataFileReader.cxx
@@ -3128,6 +3171,8 @@ otbOpticalDefaultImageMetadataInterface.cxx
 otbSarDefaultImageMetadataInterfaceFactoryNew.cxx
 otbSarDefaultImageMetadataInterfaceNew.cxx
 otbSarDefaultImageMetadataInterface.cxx
+otbScalarBufferToImageFileWriterNew.cxx
+otbScalarBufferToImageFileWriterTest.cxx
 )
 
 SET(BasicIO_SRCS21

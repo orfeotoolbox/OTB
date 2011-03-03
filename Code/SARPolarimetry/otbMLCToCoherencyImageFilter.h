@@ -29,7 +29,7 @@ namespace Functor {
 /** \class otbMLCToCoherencyFunctor
  * \brief Evaluate the Coherency matrix from from the MLC image
  *
- * *  Output value are:
+ *   Output value are:
  *   channel #0 : \f$ 0.5 * (S_{hh}+S_{vv}.(S_{hh}+S_{vv})^{*} \f$
  *   channel #1 : \f$ 0.5 * (S_{hh}+S_{vv}.(S_{hh}-S_{vv})^{*} \f$
  *   channel #2 : \f$ (S_{hh}+S_{vv}.(S_{hv})^{*} \f$
@@ -37,6 +37,11 @@ namespace Functor {
  *   channel #4 : \f$ (S_{hh}-S_{vv}.(S_{hv})^{*}  \f$
  *   channel #5 : \f$ 2.0*S_{hv}.S_{hv}^{*} \f$
  *
+ * \infgroup Functor
+ * \ingroup SARPolarimetry
+ *
+ * \sa MLCToCircularCoherencyDegreeImageFilter
+ * \sa MLCToCoherencyDegreeImageFilter
  */
 template< class TInput, class TOutput>
 class MLCToCoherencyFunctor
@@ -50,16 +55,16 @@ public:
     TOutput result;
     result.SetSize(m_NumberOfComponentsPerPixel);
 
-    ComplexType C11 =  static_cast<ComplexType>(Covariance[0]);
-    ComplexType C12 =  static_cast<ComplexType>(Covariance[1]);
-    ComplexType C13 =  static_cast<ComplexType>(Covariance[2]);
-    ComplexType C22 =  static_cast<ComplexType>(Covariance[3]);
-    ComplexType C23 =  static_cast<ComplexType>(Covariance[4]);
-    ComplexType C33 =  static_cast<ComplexType>(Covariance[5]);
+    const ComplexType C11 =  static_cast<ComplexType>(Covariance[0]);
+    const ComplexType C12 =  static_cast<ComplexType>(Covariance[1]);
+    const ComplexType C13 =  static_cast<ComplexType>(Covariance[2]);
+    const ComplexType C22 =  static_cast<ComplexType>(Covariance[3]);
+    const ComplexType C23 =  static_cast<ComplexType>(Covariance[4]);
+    const ComplexType C33 =  static_cast<ComplexType>(Covariance[5]);
 
-    ComplexType C21 =  vcl_conj(C12);
-    ComplexType C31 =  vcl_conj(C13);
-    ComplexType C32 =  vcl_conj(C23);
+    const ComplexType C21 =  vcl_conj(C12);
+    const ComplexType C31 =  vcl_conj(C13);
+    const ComplexType C32 =  vcl_conj(C23);
 
     result[0] = static_cast<OutputValueType>( 0.5*(C11 + C13 + C31 + C33) );
     result[1] = static_cast<OutputValueType>( 0.5*(C11 - C13 + C31 - C33) );
@@ -80,7 +85,7 @@ public:
    MLCToCoherencyFunctor() : m_NumberOfComponentsPerPixel(6)  {}
 
    /** Destructor */
-   ~MLCToCoherencyFunctor() {}
+   virtual ~MLCToCoherencyFunctor() {}
 
 private:
     unsigned int m_NumberOfComponentsPerPixel;

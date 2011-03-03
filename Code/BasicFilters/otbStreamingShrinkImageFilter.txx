@@ -183,7 +183,7 @@ StreamingShrinkImageFilter<TInputImage, TOutputImage>
       {
       inputPtr->UpdateOutputData();
       }
-    catch (itk::ExceptionObject & err)
+    catch (itk::ExceptionObject & )
       {
       this->InvokeEvent(itk::EndEvent());
       throw;

@@ -37,6 +37,15 @@ namespace Functor
  *   channel #5 : \f$ S_{rr}.S_{rr}^{*} \f$
  *
  *  \ingroup Functor
+ *  \ingroup SARPolarimetry
+ *
+ *  \sa SinclairImageFilter
+ *  \sa SinclairToCoherencyFunctor
+ *  \sa SinclairToCovarianceFunctor
+ *  \sa SinclairToMuellerFunctor
+ *  \sa SinclairToReciprocalCircularCovarianceMatrixFunctor
+ *  \sa SinclairToReciprocalCoherencyFunctor
+ *  \sa SinclairToReciprocalCovarianceFunctor
  */
 template <class TInput1, class TInput2, class TInput3,
           class TInput4, class TOutput>
@@ -53,15 +62,15 @@ public:
     TOutput result;
 
     result.SetSize(m_NumberOfComponentsPerPixel);
-    ComplexType j2Shv = static_cast<ComplexType>(Shv) * vcl_complex<RealType>(0.0, 2.0);
+    const ComplexType j2Shv = static_cast<ComplexType>(Shv) * vcl_complex<RealType>(0.0, 2.0);
 
-    ComplexType Sll = static_cast<ComplexType>( 0.5 * (-Shh-j2Shv+Svv) );
-    ComplexType Slr = static_cast<ComplexType>( 0.5 * (-Shh+Svv) );
-    ComplexType Srr = vcl_conj(Sll);
+    const ComplexType Sll = static_cast<ComplexType>( 0.5 * (-Shh-j2Shv+Svv) );
+    const ComplexType Slr = static_cast<ComplexType>( 0.5 * (-Shh+Svv) );
+    const ComplexType Srr = vcl_conj(Sll);
 
-    ComplexType conjSll = vcl_conj(Sll);
-    ComplexType conjSlr = vcl_conj(Slr);
-    ComplexType conjSrr = vcl_conj(Srr);
+    const ComplexType conjSll = vcl_conj(Sll);
+    const ComplexType conjSlr = vcl_conj(Slr);
+    const ComplexType conjSrr = vcl_conj(Srr);
 
     result[0]  = static_cast<OutputValueType>( Sll * conjSll  );
     result[1]  = static_cast<OutputValueType>( Sll * conjSlr  );

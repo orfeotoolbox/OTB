@@ -29,11 +29,16 @@ namespace Functor {
 /** \class otbMLCToCoherencyDegreeFunctor
  * \brief Evaluate the Coherency Degree coefficient from from the MLC image
  *
- * *  Output value are:
+ *   Output value are:
  *   channel #0 : \f$ abs(S_{hh}*S_{vv}}^{*}) / sqrt(S_{hh}*S_{hh}}^{*}) / sqrt(S_{vv}*S_{vv}}^{*})\f$
  *   channel #1 : \f$ abs(S_{hv}*S_{vv}}^{*}) / sqrt(S_{hv}*S_{hv}}^{*}) / sqrt(S_{vv}*S_{vv}}^{*}) \f$
  *   channel #2 : \f$ abs(S_{hh}*S_{hv}}^{*}) / sqrt(S_{hh}*S_{hh}}^{*}) / sqrt(S_{hv}*S_{hv}}^{*}) \f$
  *
+ * \infgroup Functor
+ * \ingroup SARPolarimetry
+ *
+ * \sa MLCToCircularCoherencyDegreeImageFilter
+ * \sa MLCToCoherencyImageFilter
  */
 template< class TInput, class TOutput>
 class MLCToCoherencyDegreeFunctor
@@ -49,12 +54,12 @@ public:
     result.SetSize(m_NumberOfComponentsPerPixel);
     result.Fill(0.0);
 
-    RealType C11 =  static_cast<RealType>(Covariance[0].real());
-    ComplexType C12 =  static_cast<ComplexType>(Covariance[1]);
-    ComplexType C13 =  static_cast<ComplexType>(Covariance[2]);
-    RealType C22 =  static_cast<RealType>(Covariance[3].real());
-    ComplexType C23 =  static_cast<ComplexType>(Covariance[4]);
-    RealType C33 =  static_cast<RealType>(Covariance[5].real());
+    const RealType C11 =  static_cast<RealType>(Covariance[0].real());
+    const ComplexType C12 =  static_cast<ComplexType>(Covariance[1]);
+    const ComplexType C13 =  static_cast<ComplexType>(Covariance[2]);
+    const RealType C22 =  static_cast<RealType>(Covariance[3].real());
+    const ComplexType C23 =  static_cast<ComplexType>(Covariance[4]);
+    const RealType C33 =  static_cast<RealType>(Covariance[5].real());
 
     if ((C11 >0.00001) && (C33 > 0.0001))
       {
@@ -83,7 +88,7 @@ public:
    MLCToCoherencyDegreeFunctor() : m_NumberOfComponentsPerPixel(3)  {}
 
    /** Destructor */
-   ~MLCToCoherencyDegreeFunctor() {}
+   virtual ~MLCToCoherencyDegreeFunctor() {}
 
 private:
     unsigned int m_NumberOfComponentsPerPixel;

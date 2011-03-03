@@ -47,7 +47,7 @@ std::istream& operator>>(std::istream& is, DataHistogramProcessedData& data)
 	buff[4] = '\0';
 	data._rec_seq = atoi(buff);
 
-    is.read(buff,4);
+  is.read(buff,4);
 	buff[4] = '\0';
 	data._sar_chn = atoi(buff);
 

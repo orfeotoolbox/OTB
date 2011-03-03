@@ -33,6 +33,7 @@ void RegisterTests()
   REGISTER_TEST(otbGenericRSTransformNew);
   REGISTER_TEST(otbGenericRSTransform);
   REGISTER_TEST(otbGenericRSTransformWithSRID);
+  REGISTER_TEST(otbGenericRSTransformFromImage);
   REGISTER_TEST(otbVectorDataProjectionFilterNew);
   REGISTER_TEST(otbVectorDataProjectionFilter);
   REGISTER_TEST(otbVectorDataProjectionFilterFromMapToSensor);

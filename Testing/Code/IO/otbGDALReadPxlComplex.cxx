@@ -74,7 +74,7 @@ int otbGDALReadPxlComplexGeneric(int argc, char * argv[])
   std::cout << "nbBytes of the buffer = " << nbBytes << " = " \
       << nbBand << " x " << nbPixelToRead << " x " << bytePerPixel<< std::endl;
 
-  char * loadBuffer = new char[nbBytes];
+  char * loadBuffer = new char[static_cast<unsigned int>(nbBytes)];
 
   int pixelOffset = bytePerPixel * nbBand;
   int lineOffset  = bytePerPixel * nbBand * sizeX;

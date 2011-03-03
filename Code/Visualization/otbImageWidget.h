@@ -113,6 +113,9 @@ public:
   itkGetObjectMacro(ImageToScreenTransform, AffineTransformType);
   itkGetObjectMacro(ScreenToImageTransform, AffineTransformType);
 
+  /** GetopenGL buffer */
+  itkGetConstMacro(OpenGlBuffer, unsigned char *);
+
   /** Get The GlBuffered Region*/
   itkGetMacro(OpenGlBufferedRegion, RegionType);
 

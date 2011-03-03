@@ -266,7 +266,7 @@ ADD_TEST(saTuReciprocalHAlphaImageFilterNew ${SARPOLARIMETRY_TESTS1}
 ADD_TEST(saTvReciprocalHAlphaImageFilter ${SARPOLARIMETRY_TESTS1}
   --compare-image ${EPSILON_12}   ${BASELINE}/saTvReciprocalHAlphaImageFilter.tif
                     ${TEMP}/saTvReciprocalHAlphaImageFilter.tif
-        otbHAlphaImageFilter
+        otbReciprocalHAlphaImageFilter
         ${INPUTDATA}/RSAT_imagery_HH.tif
         ${INPUTDATA}/RSAT_imagery_HV.tif
         ${INPUTDATA}/RSAT_imagery_HV.tif
@@ -337,6 +337,10 @@ ADD_TEST(saTvMuellerToMLCImageFilter ${SARPOLARIMETRY_TESTS1}
         ${INPUTDATA}/RSAT_imagery_VV.tif
         ${TEMP}/saTvMuellerToMLCImageFilter.tif
 	)
+# Hermitian eigen analysis class
+ADD_TEST(saTvHermitianEigenAnalysisTest ${SARPOLARIMETRY_TESTS1}
+		otbHermitianEigenAnalysisTest
+)
 
 # A enrichir
 SET(SARPOLARIMETRY_SRCS1
@@ -350,6 +354,7 @@ otbMultiChannelsPolarimetricSynthesisFilterNew.cxx
 otbMultiChannelsPolarimetricSynthesisFilter.cxx
 otbVectorMultiChannelsPolarimetricSynthesisFilter.cxx
 otbSinclairToCovarianceFunctor.cxx
+otbSinclairToReciprocalCovarianceFunctor.cxx
 otbSinclairImageFilter.cxx
 otbMLCToCoherencyImageFilterNew.cxx
 otbMLCToCoherencyImageFilter.cxx
@@ -367,6 +372,7 @@ otbMuellerToPolarisationDegreeAndPowerImageFilterNew.cxx
 otbMuellerToPolarisationDegreeAndPowerImageFilter.cxx
 otbMuellerToMLCImageFilterNew.cxx
 otbMuellerToMLCImageFilter.cxx
+otbHermitianEigenAnalysisTest.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbSARPolarimetryTests1 "${SARPOLARIMETRY_SRCS1}" "OTBSARPolarimetry;OTBIO;OTBTesting")

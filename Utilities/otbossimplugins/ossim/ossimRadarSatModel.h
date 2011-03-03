@@ -22,6 +22,8 @@
 #include <ossim/base/ossimDpt.h>
 #include <RadarSat/Data/Data.h>
 #include <RadarSat/Leader/Leader.h>
+#include <RadarSat/Trailer/Trailer.h>
+#include <RadarSat/VolumeDir/VolumeDir.h>
 
 #include <iostream>
 
@@ -114,6 +116,16 @@ protected:
    * @brief List of metadata contained in the Leader file
    */
   Leader * _leader;
+
+  /**
+   * @brief List of metadata contained in the Trailer file
+   */
+  Trailer * _trailer;
+
+  /**
+   * @brief List of metadata contained in the Volume Directory file
+   */
+  VolumeDir * _volumeDir;
 
 private:
   virtual bool InitPlatformPosition(const ossimKeywordlist &kwl, const char *prefix);

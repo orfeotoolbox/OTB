@@ -13,16 +13,18 @@
 #include <RadarSat/Leader/LeaderFactory.h>
 #include <RadarSat/RadarSatRecordHeader.h>
 
-#include <RadarSat/Leader/DataHistogramSignalData.h>
-#include <RadarSat/Leader/DataQuality.h>
-#include <RadarSat/Leader/DataSetSummary.h>
-#include <RadarSat/Leader/FileDescriptor.h>
 #include <RadarSat/Leader/DataHistogramProcessedData.h>
-#include <RadarSat/Leader/ProcessingParameters.h>
 #include <RadarSat/Leader/PlatformPositionData.h>
-#include <RadarSat/Leader/AttitudeData.h>
-#include <RadarSat/Leader/RadiometricData.h>
-#include <RadarSat/Leader/RadiometricCompensationData.h>
+
+#include <RadarSat/CommonRecord/DataHistogramSignalData.h>
+#include <RadarSat/CommonRecord/DataQuality.h>
+#include <RadarSat/CommonRecord/DataSetSummary.h>
+#include <RadarSat/CommonRecord/FileDescriptor.h>
+#include <RadarSat/CommonRecord/ProcessingParameters.h>
+#include <RadarSat/CommonRecord/AttitudeData.h>
+#include <RadarSat/CommonRecord/RadiometricData.h>
+#include <RadarSat/CommonRecord/RadiometricCompensationData.h>
+
 
 namespace ossimplugins
 {
@@ -68,31 +70,49 @@ std::istream& operator>>(std::istream& is, Leader& data)
 	RadarSatRecordHeader header;
 	bool eof = false;
 	while(!eof)
-	{
+	  {
 		is>>header;
 		if(is.eof())
-		{
+		  {
 			eof = true;
-		}
+		  }
 		else
-		{
-			RadarSatRecord* record = factory.Instanciate(header.get_rec_seq());
-			if (record != NULL)
-			{
-				record->Read(is);
-				data._records[header.get_rec_seq()] = record;
-			}
-			else
-			{
-				char* buff = new char[header.get_length()-12];
-				is.read(buff, header.get_length()-12);
-				delete[] buff;
-			}
-		}
-	}
+		  {
+		  RadarSatRecord* record;
+		  if ( (header.get_rec_seq() == 2) && (header.get_length() == 8960) )
+		    {
+		    record = factory.Instanciate(header.get_rec_seq() + 5); // case of SCN, SCW
+        if (record != NULL)
+          {
+          record->Read(is);
+          data._records[header.get_rec_seq() + 5] = record;
+          }
+        else
+          {
+          char* buff = new char[header.get_length()-12];
+          is.read(buff, header.get_length()-12);
+          delete[] buff;
+          }
+		    }
+		  else
+		    {
+        record = factory.Instanciate(header.get_rec_seq());
+        if (record != NULL)
+          {
+          record->Read(is);
+          data._records[header.get_rec_seq()] = record;
+          }
+        else
+          {
+          char* buff = new char[header.get_length()-12];
+          is.read(buff, header.get_length()-12);
+          delete[] buff;
+          }
+		    }
+		  }
+	  }
 	return is;
 }
-
 
 Leader::Leader(const Leader& rhs)
 {

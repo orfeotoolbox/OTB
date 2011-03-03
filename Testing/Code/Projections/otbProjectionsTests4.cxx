@@ -35,4 +35,6 @@ void RegisterTests()
   REGISTER_TEST(otbImageToEnvelopeVectorDataFilter);
   REGISTER_TEST(otbImageToGenericRSOutputParametersNew);
   REGISTER_TEST(otbImageToGenericRSOutputParameters);
+  REGISTER_TEST(otbRationalTransformNew);
+  REGISTER_TEST(otbRationalTransform);
 }
