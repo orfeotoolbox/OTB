@@ -66,7 +66,7 @@ int otbSpectralSensitivityReaderGenericTest(int argc, char* argv[])
   SpectralSensitivityReader::Pointer spectSen = SpectralSensitivityReader::New();
 
   spectSen->SetFileName(sensitivityFileName);
-   std::cout << "test : " << "filemane " << spectSen->GetFileName() <<std::endl;
+//   std::cout << "test : " << "filemane " << spectSen->GetFileName() <<std::endl;
   spectSen->SetImage(reader->GetOutput());
 
   spectSen->Update();
