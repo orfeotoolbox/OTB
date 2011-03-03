@@ -59,11 +59,11 @@ public:
 
   /** Graft the specified DataObject onto this ProcessObject's output.
    * This method grabs a handle to the specified DataObject's bulk
-   * data to used as its output's own bulk data. 
+   * data to used as its output's own bulk data.
    * Most importantly, however, it leaves the Source ivar untouched so
-   * the original pipeline routing is intact. This method is used when 
+   * the original pipeline routing is intact. This method is used when
    * a process object is implemented using a mini-pipeline which is
-   * defined in its GenerateData() method.  
+   * defined in its GenerateData() method.
    *  */
   virtual void GraftOutput(itk::DataObject *output);
 
