@@ -65,4 +65,7 @@ void RegisterTests()
   REGISTER_TEST(otbMNFImageFilterTest);
   REGISTER_TEST(otbNAPCAImageFilterNewTest);
   REGISTER_TEST(otbNAPCAImageFilterTest);
+  REGISTER_TEST(otbFastICAInternalOptimizerVectorImageFilterNewTest);
+  REGISTER_TEST(otbFastICAImageFilterNewTest);
+  REGISTER_TEST(otbFastICAImageFilterTest);
 }
