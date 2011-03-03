@@ -863,7 +863,7 @@ ADD_TEST(raTvSpectralSensitivityReaderTest ${RADIOMETRY_TESTS5}
 ADD_TEST(raTvSpectralSensitivityReaderGenericTest ${RADIOMETRY_TESTS5}
      --compare-ascii ${NOTOL}
         ${BASELINE_FILES}/raTvSpectralSensitivityReaderTest.txt
-        ${TEMP}/rcTuSpectralSensitivityReaderTest.txt
+        ${TEMP}/rcTuSpectralSensitivityReaderGenericTest.txt
      --ignore-lines-with 2 DataPath FileName
      otbSpectralSensitivityReaderGenericTest
     ${INPUTDATA}/Radiometry/SPOT5/HRG1/rep6S.dat
