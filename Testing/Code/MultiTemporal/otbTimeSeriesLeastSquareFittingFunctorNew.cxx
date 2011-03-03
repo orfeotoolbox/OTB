@@ -19,14 +19,20 @@
 #pragma warning ( disable : 4786 )
 #endif
 
+#include "itkFixedArray.h"
 #include "otbTimeSeriesLeastSquareFittingFunctor.h"
 
 int otbTimeSeriesLeastSquareFittingFunctorNew(int argc, char* argv[])
 {
 
-  typedef otb::TimeSeriesLeastSquareFittingFunctor<SeriesType, DatesType> FunctorType;
+  typedef float PixelType;
+  typedef unsigned int DoYType;
+  typedef itk::FixedArray< PixelType > SeriesType;
+  typedef itk::FixedArray< DoYType > DatesType;
+  
+  typedef otb::Functor::TimeSeriesLeastSquareFittingFunctor<SeriesType, DatesType> FunctorType;
 
-  FunctorType::Pointer f = FunctorType::New();
+  FunctorType f();
   
   return EXIT_SUCCESS;
 }

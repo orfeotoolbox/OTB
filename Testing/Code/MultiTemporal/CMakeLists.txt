@@ -26,10 +26,11 @@ ADD_TEST(mtTuTimeSeriesLeastSquaresFittingFunctor ${MULTITEMPORAL_TESTS1}
 
 # -------  CXX Source Files -----------------------------------
 SET(BasicMultiTemporal_SRCS1 
-otbMultiTemporalTests1.cxx 
+otbTimeSeriesLeastSquareFittingFunctorNew.cxx
 )
 
-OTB_ADD_EXECUTABLE(otbMultiTemporalTests1 "${BasicMultiTemporal_SRCS1}" "OTBMultiTemporal;OTBIO;OTBTesting")
+ADD_EXECUTABLE(otbMultiTemporalTests1 otbMultiTemporalTests1.cxx ${BasicMultiTemporal_SRCS1})
+TARGET_LINK_LIBRARIES(otbMultiTemporalTests1 OTBIO OTBMultiTemporal  OTBTesting)
 
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
