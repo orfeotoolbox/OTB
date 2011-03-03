@@ -15,16 +15,18 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
-// this file defines the otbCommonTest for the test driver
-// and all it expects is that you have a function called RegisterTests
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
 #endif
 
-#include "otbTestMain.h"
+#include "otbTimeSeriesLeastSquareFittingFunctor.h"
 
-void RegisterTests()
+int otbTimeSeriesLeastSquareFittingFunctorNew(int argc, char* argv[])
 {
-  REGISTER_TEST(otbTimeSeriesLeastSquareFittingFunctorNew);
+
+  typedef otb::TimeSeriesLeastSquareFittingFunctor<SeriesType, DatesType> FunctorType;
+
+  FunctorType::Pointer f = FunctorType::New();
+  
+  return EXIT_SUCCESS;
 }
