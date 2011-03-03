@@ -52,14 +52,14 @@ namespace itk
 
 template <class TInputImage, class TOutputImage, class TFunctor, class TMaskImage=TInputImage>
 class ITK_EXPORT ConnectedComponentFunctorImageFilter : 
-    public ConnectedComponentImageFilter< TInputImage, TOutputImage, TMaskImage > 
+    public ImageToImageFilter< TInputImage, TOutputImage > 
 {
 public:
   /**
    * Standard "Self" & Superclass typedef.
    */
   typedef ConnectedComponentFunctorImageFilter Self;
-  typedef ConnectedComponentImageFilter< TInputImage, TOutputImage, TMaskImage > Superclass;
+  typedef ImageToImageFilter< TInputImage, TOutputImage > Superclass;
 
   /**
    * Types from the Superclass
@@ -150,9 +150,33 @@ public:
     (Concept::IncrementDecrementOperators<OutputPixelType>));
   /** End concept checking */
 #endif
+  
+  
+  /**
+   * Set/Get whether the connected components are defined strictly by
+   * face connectivity or by face+edge+vertex connectivity.  Default is
+   * FullyConnectedOff.  For objects that are 1 pixel wide, use
+   * FullyConnectedOn.
+   */
+  itkSetMacro(FullyConnected, bool);
+  itkGetConstReferenceMacro(FullyConnected, bool);
+  itkBooleanMacro(FullyConnected);
+
+  void SetMaskImage(TMaskImage* mask)
+  {
+    this->SetNthInput(1, const_cast<TMaskImage *>( mask ));
+  }
+
+  const TMaskImage* GetMaskImage() const
+  {
+    return (static_cast<const TMaskImage*>(this->ProcessObject::GetInput(1)));
+  }
 
 protected:
-  ConnectedComponentFunctorImageFilter() {}
+  ConnectedComponentFunctorImageFilter() 
+    {
+    m_FullyConnected = false;
+    }
   virtual ~ConnectedComponentFunctorImageFilter() {}
   ConnectedComponentFunctorImageFilter(const Self&) {}
 
@@ -162,6 +186,9 @@ protected:
    * Standard pipeline method. 
    */
   void GenerateData();
+
+  bool m_FullyConnected;
+
 
 };
   
