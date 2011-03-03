@@ -22,6 +22,8 @@
 #include "itkImageToImageFilter.h"
 #include "otbPCAImageFilter.h"
 #include "otbMatrixMultiplyImageFilter.h"
+#include "otbStreamingStatisticsVectorImageFilter2.h"
+#include "otbFastICAInternalOptimizerVectorImageFilter.h"
 
 namespace otb 
 {
@@ -74,8 +76,14 @@ public:
   typedef MatrixMultiplyImageFilter< TInputImage, TOutputImage, RealType > TransformFilterType;
   typedef typename TransformFilterType::Pointer TransformFilterPointerType;
 
-  typedef double (*ContrastFunctionType) ( double );
+  typedef FastICAInternalOptimizerVectorImageFilter< InputImageType, InputImageType >
+      InternalOptimizerType;
+  typedef typename InternalOptimizerType::Pointer InternalOptimizerPointerType;
 
+  typedef StreamingStatisticsVectorImageFilter2< InputImageType > MeanEstimatorFilterType;
+  typedef typename MeanEstimatorFilterType::Pointer MeanEstimatorFilterPointerType;
+
+  typedef double (*ContrastFunctionType) ( double );
 
   /** 
    * Set/Get the number of required largest principal components. 
@@ -85,11 +93,9 @@ public:
 
   itkGetConstMacro(PCAFilter,PCAFilterType *);
   itkGetMacro(PCAFilter,PCAFilterType *);
-  itkSetMacro(PCAFilter,PCAFilterType *);
 
   itkGetConstMacro(TransformFilter,TransformFilterType *);
   itkGetMacro(TransformFilter,TransformFilterType *);
-  itkSetMacro(TransformFilter,TransformFilterType *);
 
   VectorType GetMeanValues () const
   {
@@ -113,7 +119,7 @@ public:
   {
     return this->GetPCAFilter()->GetTransformationMatrix();
   }
-  void SetPCACovarianceMatrix ( const MatrixType & mat, bool isForward = true )
+  void SetPCATransformationMatrix ( const MatrixType & mat, bool isForward = true )
   {
     m_PCAFilter->SetTransformationMatrix(mat,isForward);
   }
@@ -128,13 +134,16 @@ public:
     this->Modified();
   }
 
-  itkGetMacro(MaximumOfIterations,unsigned int);
-  itkSetMacro(MaximumOfIterations,unsigned int);
+  itkGetMacro(NumberOfIterations,unsigned int);
+  itkSetMacro(NumberOfIterations,unsigned int);
 
   itkGetMacro(ConvergenceThreshold,double);
   itkSetMacro(ConvergenceThreshold,double);
 
   itkGetMacro(ContrastFunction,ContrastFunctionType);
+
+  itkGetMacro(Mu,double);
+  itkSetMacro(Mu,double);
 
 protected:
   FastICAImageFilter ();
@@ -155,8 +164,6 @@ protected:
    */
   virtual void GenerateData ();
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
-
   /** Internal methods */
   virtual void ForwardGenerateData();
   virtual void ReverseGenerateData();
@@ -172,9 +179,10 @@ protected:
   MatrixType m_TransformationMatrix;
 
   /** FastICA parameters */
-  unsigned int m_MaximumOfIterations; // def is 50
+  unsigned int m_NumberOfIterations; // def is 50
   double m_ConvergenceThreshold; // def is 1e-4
-  ContrastFunctionType m_ConstrastFunction; // see g() function in the biblio. Def is tanh
+  ContrastFunctionType m_ContrastFunction; // see g() function in the biblio. Def is tanh
+  double m_Mu; // def is 1. in [0,1]
 
   PCAFilterPointerType m_PCAFilter;
   TransformFilterPointerType m_TransformFilter;

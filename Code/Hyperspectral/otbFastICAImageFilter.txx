@@ -23,6 +23,7 @@
 
 #include "itkExceptionObject.h"
 #include "itkNumericTraits.h"
+#include "itkProgressReporter.h"
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_matrix_inverse.h>
@@ -43,12 +44,13 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   m_GivenTransformationMatrix = false;
   m_IsTransformationForward = true;
 
-  m_MaximumOfIterations = 50;
+  m_NumberOfIterations = 50;
   m_ConvergenceThreshold = 1E-4;
-  m_ConstrastFunction = &vcl_tanh;
+  m_ContrastFunction = &vcl_tanh;
+  m_Mu = 1.;
 
   m_PCAFilter = PCAFilterType::New();
-  m_PCAFilter->UseNormalization();
+  m_PCAFilter->SetUseNormalization(true);
 
   m_TransformFilter = TransformFilterType::New();
 }
@@ -85,11 +87,6 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
       {
         theOutputDimension = m_TransformationMatrix.Rows() >= m_TransformationMatrix.Cols() ?
           m_TransformationMatrix.Rows() : m_TransformationMatrix.Cols();
-      }
-      else if ( m_GivenCovarianceMatrix )
-      {
-        theOutputDimension = m_CovarianceMatrix.Rows() >= m_CovarianceMatrix.Cols() ?
-          m_CovarianceMatrix.Rows() : m_CovarianceMatrix.Cols();
       }
       else
       {
@@ -216,31 +213,81 @@ void
 FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 ::GenerateTransformationMatrix ()
 {
-  double convergence = itk::NumericTraits<double>::Max();
+  itk::ProgressReporter reporter ( this, 0, GetNumberOfIterations(), GetNumberOfIterations() );
+
+  double convergence = itk::NumericTraits<double>::max();
   unsigned int iteration = 0;
 
-  unsigned int size = this->GetInput()->GetNumberOfComponentsPerPixel();
+  const unsigned int size = this->GetInput()->GetNumberOfComponentsPerPixel();
 
   // transformation matrix
   InternalMatrixType W ( size, size, vnl_matrix_identity );
 
-  while ( iteration++ < GetMaximumOfIterations() 
+  while ( iteration++ < GetNumberOfIterations() 
           && convergence > GetConvergenceThreshold() )
   {
-    otbMsgDebugMacro( "Iteration " << iteration << " / " << GetMaximumOfIterations() 
-      << ", MSE = " << convergence );
-
     InternalMatrixType W_old ( W );
 
-    // TODO le premier coup ne sert a rien
+    typename InputImageType::Pointer img = const_cast<InputImageType*>( this->GetInput() );
     TransformFilterPointerType transformer = TransformFilterType::New();
-    transformer->SetIntput( GetPCAFilter()->GetOutput() );
-    transformer->SetMatrix( W );
-    transformer->Update();
+    if ( !W.is_identity() )
+    {
+      transformer->SetInput( GetPCAFilter()->GetOutput() );
+      transformer->SetMatrix( W );
+      transformer->Update();
+      img = const_cast<InputImageType*>( transformer->GetOutput() );
+    }
 
-    // Faire un image to image filter...
+    for ( unsigned int band = 0; band < size; band++ )
+    {
+      InternalOptimizerPointerType optimizer = InternalOptimizerType::New();
+      optimizer->SetInput( 0, m_PCAFilter->GetOutput() );
+      optimizer->SetInput( 1, img );
+      optimizer->SetW( W );
+      optimizer->SetContrastFunction( this->GetContrastFunction() );
+      optimizer->SetCurrentBandForLoop( band );
 
+      MeanEstimatorFilterPointerType estimator = MeanEstimatorFilterType::New();
+      estimator->SetInput( optimizer->GetOutput() );
+      estimator->Update();
+
+      double norm = 0.;
+      for ( unsigned int bd = 0; bd < size; bd++ )
+      {
+        W(bd,band) -= m_Mu * ( estimator->GetMean()[bd] 
+                              - optimizer->GetBeta() * W(bd,band) / optimizer->GetDen() );
+        norm += vcl_pow( W(bd,band), 2. );
+      }
+      for ( unsigned int bd = 0; bd < size; bd++ )
+        W(bd,band) /= norm;
+    }
+
+    // Decorrelation of the W vectors
+    InternalMatrixType W_tmp = W * W.transpose();
+    InternalMatrixType Id ( W.rows(), W.cols(), vnl_matrix_identity );
+    vnl_generalized_eigensystem solver ( W_tmp, Id );
+    InternalMatrixType valP = solver.D;
+    for ( unsigned int i = 0; i < valP.size(); i++ )
+      valP(i,i) = 1. / vcl_sqrt( static_cast<double>( valP(i,i) ) ); // Watch for 0 or neg
+    W_tmp = solver.V * valP * solver.V.transpose();
+    W = W.transpose() * W;
+
+    // Convergence evaluation
+    convergence = 0.;
+    for ( unsigned int i = 0; i < W.rows(); i++ )
+      for ( unsigned int j = 0; j < W.cols(); j++ )
+        convergence += vcl_abs( W(i,j) - W_old(i,j) );
+
+    reporter.CompletedPixel();
   } // end of while loop
+
+  if ( size != this->GetNumberOfPrincipalComponentsRequired() )
+    this->m_TransformationMatrix = W.get_n_rows( 0, this->GetNumberOfPrincipalComponentsRequired() );
+  else
+    this->m_TransformationMatrix = W;
+
+  otbMsgDebugMacro( << "Final convergence " << convergence 
+    << " after " << iteration << " iterations" );
 }
 
 } // end of namespace otb
