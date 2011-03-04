@@ -32,7 +32,7 @@ int otbTimeSeriesLeastSquareFittingFunctorNew(int argc, char* argv[])
   
   typedef otb::Functor::TimeSeriesLeastSquareFittingFunctor<SeriesType, DatesType> FunctorType;
 
-  FunctorType f();
+  FunctorType f;
   
   return EXIT_SUCCESS;
 }
