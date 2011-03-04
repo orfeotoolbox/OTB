@@ -26,6 +26,7 @@
 int otbTimeSeriesLeastSquareFittingFunctorTest(int argc, char* argv[])
 {
 
+  const unsigned int Degree = 2;
   typedef double CoefficientPrecisionType;
   typedef otb::PolynomialTimeSeries< Degree, CoefficientPrecisionType > FunctionType;
   const unsigned int nbDates = 100;
@@ -34,7 +35,7 @@ int otbTimeSeriesLeastSquareFittingFunctorTest(int argc, char* argv[])
   typedef itk::FixedArray< PixelType, nbDates > SeriesType;
   typedef itk::FixedArray< DoYType, nbDates > DatesType;
   
-  typedef otb::Functor::TimeSeriesLeastSquareFittingFunctor<SeriesType, DatesType, FunctionType> FunctorType;
+  typedef otb::Functor::TimeSeriesLeastSquareFittingFunctor<SeriesType, FunctionType, DatesType> FunctorType;
 
   FunctorType f;
 
@@ -43,7 +44,7 @@ int otbTimeSeriesLeastSquareFittingFunctorTest(int argc, char* argv[])
 
   SeriesType outSeries = f(inSeries);
 
-  FunctorType::CoefficientsType outCoefs = f.GetCoefs();
+  FunctorType::CoefficientsType outCoefs = f.GetCoefficients();
   
   return EXIT_SUCCESS;
 }

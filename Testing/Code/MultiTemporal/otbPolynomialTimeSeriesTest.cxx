@@ -39,8 +39,13 @@ int otbPolynomialTimeSeriesTest(int argc, char* argv[])
   FunctionType f;
   f.SetCoefficients( coefs );
 
-  for( int i=0; i<Degree; ++i)
+  for( unsigned int i=0; i<=Degree; ++i)
     if(coefs[i] != f.GetCoefficient(i))
+      return EXIT_FAILURE;
+
+  int VALMAX = 10;
+  for(int val = -VALMAX; val <= VALMAX; ++val)
+    if( f.GetValue( val ) != (coefs[0]+coefs[1]*val+coefs[2]*val*val) )
       return EXIT_FAILURE;
   
   return EXIT_SUCCESS;

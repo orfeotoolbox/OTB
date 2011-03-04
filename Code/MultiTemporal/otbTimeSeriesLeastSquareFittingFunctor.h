@@ -29,10 +29,13 @@ namespace Functor
    *  syntax to get the values and the Size() method to get their length.
  *
  */
-template <class TSeriesType, class TDateType = TSeriesType>
+template <class TSeriesType, class TTimeFunction, class TDateType = TSeriesType>
 class TimeSeriesLeastSquareFittingFunctor
 {
 public:
+
+  typedef typename TTimeFunction::CoefficientsType CoefficientsType;
+
   /// Constructor
   TimeSeriesLeastSquareFittingFunctor()
   {
@@ -46,9 +49,15 @@ public:
     return outSeries;
   }
 
+  inline CoefficientsType GetCoefficients() const
+  {
+    return m_TimeFunction.GetCoefficients();
+  }
+
 
 private:
   /// 
+  TTimeFunction m_TimeFunction;
 };
 }
 }

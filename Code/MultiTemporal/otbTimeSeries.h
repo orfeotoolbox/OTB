@@ -19,6 +19,7 @@
 #define __otbTimeSeries_h
 
 #include "itkFixedArray.h"
+#include <vcl_cmath.h>
 
 namespace otb
 {
@@ -38,6 +39,29 @@ public:
   /// Destructor
   virtual ~PolynomialTimeSeries() {}
 
+  inline void SetCoefficients(CoefficientsType& coeffs)
+  {
+    for(unsigned int i=0; i<=TDegree; ++i)
+      m_Coefficients[i] = coeffs[i];
+  }
+
+  inline TCoefPrecision GetCoefficient(unsigned int co) const
+  {
+    return m_Coefficients[co];
+  }
+
+  inline CoefficientsType GetCoefficients() const
+  {
+    return m_Coefficients;
+  }
+
+  inline CoefficientsPrecisionType GetValue( CoefficientsPrecisionType val)
+  {
+    CoefficientsPrecisionType tmpVal = 0;
+    for( unsigned int i=0; i<=TDegree; ++i)
+      tmpVal += m_Coefficients[i]*vcl_pow(val, i);
+    return tmpVal;
+  }
 
 private:
   CoefficientsType m_Coefficients;
