@@ -36,6 +36,8 @@ namespace Functor
  *   channel #4 : \f$ S_{hv}.S_{vv}^{*} \f$
  *   channel #5 : \f$ S_{vv}.S_{vv}^{*} \f$
  *
+ * Output is a complex.
+ *
  *  \ingroup Functor
  *  \ingroup SARPolarimetry
  *

@@ -40,6 +40,13 @@ namespace Functor
  *   channel #8 : \f$ S_{rl}.S_{rr}^{*} \f$
  *   channel #9 : \f$ S_{rr}.S_{rr}^{*} \f$
  *
+ * With:
+ * \f$ S_{ll} = 0.5 * (-S_{hh}-i*S_{hv}-i*S_{vh}+S_{vv}) \f$
+ * \f$ S_{lr} = 0.5 * (-S_{hh}+i*S_{hv}-i*S_{vh}+S_{vv}) \f$
+ * \f$ S_{rl} = 0.5 * (-S_{hh}-i*S_{hv}+i*S_{vh}-S_{vv}) \f$
+ * \f$ S_{rr} = 0.5 * (-S_{hh}+i*S_{hv}+i*S_{vh}+S_{vv}) \f$
+ *
+ *
  *  \ingroup Functor
  *  \ingroup SARPolarimetry
  *

@@ -53,6 +53,8 @@ namespace Functor
  * \f$ T_{yx} = -S_{vh} \f$
  * \f$ T_{yy} = -S_{vv} \f$
  *
+ * Output is a not a complex.
+ *
  *  \ingroup Functor
  *  \ingroup SARPolarimetry
  *
@@ -86,6 +88,7 @@ public:
     const ComplexType Tyx = static_cast<ComplexType>(Svh);
     const ComplexType Tyy = static_cast<ComplexType>(Svv);
 
+    // TODO : use Txx...
     const ComplexType conjTxx = vcl_conj(static_cast<ComplexType>(-Shh));
     const ComplexType conjTxy = vcl_conj(static_cast<ComplexType>(-Shv));
     const ComplexType conjTyx = vcl_conj(static_cast<ComplexType>(Svh));
@@ -103,10 +106,8 @@ public:
     result[9]  = static_cast<OutputValueType>( (Txx*conjTyx - Txy*conjTyy).real()  );
     result[10] = static_cast<OutputValueType>( (Txx*conjTyy + Txy*conjTyx).real()  );
     result[11] = static_cast<OutputValueType>( (Txx*conjTyy - Txy*conjTyx).imag()  );
-
     result[12] = static_cast<OutputValueType>( (conjTxx*Tyx + conjTxy*Tyy).imag()  );
     result[13] = static_cast<OutputValueType>( (conjTxx*Tyx - conjTxy*Tyy).imag()  );
-
     result[14] = static_cast<OutputValueType>( (conjTxx*Tyy + conjTxy*Tyx).imag()  );
     result[15] = static_cast<OutputValueType>( (Txx*conjTyy - Txy*conjTyx).real()  );
 
