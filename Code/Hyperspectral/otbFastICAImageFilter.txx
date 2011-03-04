@@ -240,6 +240,9 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 
     for ( unsigned int band = 0; band < size; band++ )
     {
+      std::cerr << "Iteration " << iteration << ", bande " << band 
+        << ", convergence " << convergence << "\n";
+
       InternalOptimizerPointerType optimizer = InternalOptimizerType::New();
       optimizer->SetInput( 0, m_PCAFilter->GetOutput() );
       optimizer->SetInput( 1, img );
@@ -267,7 +270,7 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
     InternalMatrixType Id ( W.rows(), W.cols(), vnl_matrix_identity );
     vnl_generalized_eigensystem solver ( W_tmp, Id );
     InternalMatrixType valP = solver.D;
-    for ( unsigned int i = 0; i < valP.size(); i++ )
+    for ( unsigned int i = 0; i < valP.rows(); i++ )
       valP(i,i) = 1. / vcl_sqrt( static_cast<double>( valP(i,i) ) ); // Watch for 0 or neg
     W_tmp = solver.V * valP * solver.V.transpose();
     W = W.transpose() * W;
@@ -278,7 +281,7 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
       for ( unsigned int j = 0; j < W.cols(); j++ )
         convergence += vcl_abs( W(i,j) - W_old(i,j) );
 
-    reporter.CompletedPixel();
+    //reporter.CompletedPixel();
   } // end of while loop
 
   if ( size != this->GetNumberOfPrincipalComponentsRequired() )

@@ -66,7 +66,7 @@ int otbFastICAImageFilterTest ( int argc, char* argv[] )
   }
   catch( itk::ExceptionObject & err )
   {
-    std::cerr << argv[0] << " applies MNF transformations\n";
+    std::cerr << argv[0] << " applies FastICA transformations\n";
     std::string descriptionException = err.GetDescription();
     if ( descriptionException.find("ParseCommandLine(): Help Parser")
         != std::string::npos )
