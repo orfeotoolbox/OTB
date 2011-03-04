@@ -19,6 +19,10 @@ SET(MULTITEMPORAL_TESTS1 ${CXX_TEST_PATH}/otbMultiTemporalTests1)
 
 # -------            otb::testname   ------------------------------
 
+ADD_TEST(mtTvPolynomialTimeSeriesTest1 ${MULTITEMPORAL_TESTS1}
+        otbPolynomialTimeSeriesTest
+	 )
+
 ADD_TEST(mtTuTimeSeriesLeastSquaresFittingFunctor ${MULTITEMPORAL_TESTS1}
         otbTimeSeriesLeastSquareFittingFunctorNew
 	 )
@@ -30,6 +34,7 @@ ADD_TEST(mtTvTimeSeriesLeastSquaresFittingFunctor ${MULTITEMPORAL_TESTS1}
 
 # -------  CXX Source Files -----------------------------------
 SET(BasicMultiTemporal_SRCS1 
+otbPolynomialTimeSeriesTest.cxx
 otbTimeSeriesLeastSquareFittingFunctorNew.cxx
 otbTimeSeriesLeastSquareFittingFunctorTest.cxx
 )

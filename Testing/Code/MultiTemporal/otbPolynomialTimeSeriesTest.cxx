@@ -15,18 +15,33 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
-// this file defines the otbCommonTest for the test driver
-// and all it expects is that you have a function called RegisterTests
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
 #endif
 
-#include "otbTestMain.h"
+#include "itkFixedArray.h"
+#include "otbTimeSeries.h"
 
-void RegisterTests()
+int otbPolynomialTimeSeriesTest(int argc, char* argv[])
 {
-  REGISTER_TEST(otbPolynomialTimeTimeSeriesTest);
-  REGISTER_TEST(otbTimeSeriesLeastSquareFittingFunctorNew);
-  REGISTER_TEST(otbTimeSeriesLeastSquareFittingFunctorTest);
+
+  typedef double CoefficientPrecisionType;
+  const unsigned int Degree = 2;
+  typedef otb::PolynomialTimeSeries< Degree, CoefficientPrecisionType > FunctionType;
+  typedef FunctionType::CoefficientsType CoefficientsType;
+
+  CoefficientsType coefs;
+
+  coefs[0] = 1;
+  coefs[1] = 2;
+  coefs[2] = 4;
+
+  FunctionType f;
+  f.SetCoefficients( coefs );
+
+  for( int i=0; i<Degree; ++i)
+    if(coefs[i] != f.GetCoefficient(i))
+      return EXIT_FAILURE;
+  
+  return EXIT_SUCCESS;
 }

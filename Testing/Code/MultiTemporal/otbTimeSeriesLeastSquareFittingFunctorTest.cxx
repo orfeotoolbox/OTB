@@ -21,17 +21,20 @@
 
 #include "itkFixedArray.h"
 #include "otbTimeSeriesLeastSquareFittingFunctor.h"
+#include "otbTimeSeries.h"
 
 int otbTimeSeriesLeastSquareFittingFunctorTest(int argc, char* argv[])
 {
 
+  typedef double CoefficientPrecisionType;
+  typedef otb::PolynomialTimeSeries< Degree, CoefficientPrecisionType > FunctionType;
   const unsigned int nbDates = 100;
   typedef float PixelType;
   typedef unsigned int DoYType;
   typedef itk::FixedArray< PixelType, nbDates > SeriesType;
   typedef itk::FixedArray< DoYType, nbDates > DatesType;
   
-  typedef otb::Functor::TimeSeriesLeastSquareFittingFunctor<SeriesType, DatesType> FunctorType;
+  typedef otb::Functor::TimeSeriesLeastSquareFittingFunctor<SeriesType, DatesType, FunctionType> FunctorType;
 
   FunctorType f;
 
