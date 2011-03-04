@@ -48,15 +48,38 @@ ADD_TEST(atmosphericCorrectionsRSRSVMClassifier ${PERFO_TESTS}
         0.2 #percentage of validation files
         )
 
+ADD_TEST(ImageSimulationMethodKMeansClassif ${PERFO_TESTS}
+        otbImageSimulationMethodKMeansClassif
+        ${RSR_DATA}/Rsr/SPOT5/HRG2/rep6S.dat
+        4 #nb bands
+        ${RSR_DATA}/BD-CNES/ #root path of spectrum
+        3 #prolate radius
+        ${TEMP}/ImageSimulationMethodKMeansClassif.tif
+        ${TEMP}/KMeansClassifLabelImage.tif
+        )
+
+#warning the svm model estimation does not converge.
+ADD_TEST(ImageSimulationMethodSVMClassif ${PERFO_TESTS}
+        otbImageSimulationMethodSVMClassif
+        ${RSR_DATA}/Rsr/SPOT5/HRG2/rep6S.dat
+        4 #nb bands
+        ${RSR_DATA}/BD-CNES/ #root path of spectrum
+        3 #prolate radius
+        ${TEMP}/ImageSimulationMethodSVMClassif.tif
+        ${TEMP}/SVMClassifLabelImage.tif
+        )
+
 SET(PERFO_SRCS
 otbPerfoTests.cxx
 otbReduceSpectralResponseSVMClassifier.cxx
 otbAtmosphericCorrectionsRSRSVMClassifier.cxx
+otbImageSimulationMethodKMeansClassif.cxx
+otbImageSimulationMethodSVMClassif.cxx
 )
 
 
 ADD_EXECUTABLE(otbPerfoTests ${PERFO_SRCS})
-TARGET_LINK_LIBRARIES(otbPerfoTests OTBIO OTBCommon OTBRadiometry OTBLearning OTBTesting)
+TARGET_LINK_LIBRARIES(otbPerfoTests OTBIO OTBCommon OTBRadiometry OTBLearning OTBTesting PROSAIL)
 
 
 # INSTALL_TARGETS(/bin otbReduceSpectralResponseSVMClassifier)

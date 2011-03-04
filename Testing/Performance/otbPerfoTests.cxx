@@ -28,4 +28,6 @@ void RegisterTests()
 {
   REGISTER_TEST(otbReduceSpectralResponseSVMClassifier);
   REGISTER_TEST(otbAtmosphericCorrectionsRSRSVMClassifier);
+  REGISTER_TEST(otbImageSimulationMethodKMeansClassif);
+  REGISTER_TEST(otbImageSimulationMethodSVMClassif);
 }
