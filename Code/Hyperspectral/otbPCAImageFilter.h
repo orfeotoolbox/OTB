@@ -78,6 +78,8 @@ public:
   typedef typename CovarianceEstimatorFilterType::RealPixelType VectorType;
   typedef typename CovarianceEstimatorFilterType::MatrixObjectType MatrixObjectType;
   typedef typename MatrixObjectType::ComponentType MatrixType;
+  typedef typename MatrixType::InternalMatrixType InternalMatrixType;
+  typedef typename InternalMatrixType::element_type MatrixElementType;
   
   typedef MatrixMultiplyImageFilter< TInputImage, TOutputImage, RealType > TransformFilterType;
   typedef typename TransformFilterType::Pointer TransformFilterPointerType;
@@ -180,7 +182,7 @@ protected:
   virtual void ForwardGenerateData();
   virtual void ReverseGenerateData();
 
-  void GetTransformationMatrixFromCovarianceMatrix();
+  void GenerateTransformationMatrix();
 
   /** Internal attributes */
   unsigned int m_NumberOfPrincipalComponentsRequired;

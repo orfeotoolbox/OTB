@@ -188,7 +188,7 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
       m_Transformer->SetInput( inputImgPtr );
     }
 
-    GetTransformationMatrixFromCovarianceMatrix();
+    GenerateTransformationMatrix();
   }
   else if ( !m_IsTransformationMatrixForward )
   {
@@ -225,7 +225,7 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
           ITK_LOCATION );
     }
 
-    GetTransformationMatrixFromCovarianceMatrix();
+    GenerateTransformationMatrix();
     m_TransformationMatrix = m_TransformationMatrix.GetTranspose();
   }
   else if ( m_IsTransformationMatrixForward )
@@ -291,8 +291,13 @@ template < class TInputImage, class TOutputImage,
             Transform::TransformDirection TDirectionOfTransformation >
 void
 PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
-::GetTransformationMatrixFromCovarianceMatrix ()
+::GenerateTransformationMatrix ()
 {
+#if 0 
+  /*
+   * Old stuff but did work !
+   */
+
   MatrixType Id ( m_CovarianceMatrix );
   Id.SetIdentity();
 
@@ -331,6 +336,42 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   m_EigenValues.SetSize( m_NumberOfPrincipalComponentsRequired );
   for ( unsigned int i = 0; i < m_NumberOfPrincipalComponentsRequired; i++ )
     m_EigenValues[i] = static_cast< RealType >( valP[i] );
+#else
+  vnl_svd< MatrixElementType > solver ( m_CovarianceMatrix.GetVnlMatrix() );
+  InternalMatrixType transf = solver.U();
+
+  InternalMatrixType valP = solver.W();
+  /* We used normalized PCA */
+  for ( unsigned int i = 0; i < valP.rows(); i++ )
+  {
+    if (  valP(i,i) == 0. )
+      valP(i,i) = 1. / vcl_sqrt( vcl_abs( valP(i,i) ) );
+    else
+      otbMsgDebugMacro( << "ValP(" << i << ") null : " << valP(i,i) );
+      //throw itk::ExceptionObject( __FILE__, __LINE__,
+      //      "Null Eigen value !!", ITK_LOCATION );
+  }
+  transf = valP * transf.transpose();
+
+  if ( m_NumberOfPrincipalComponentsRequired 
+      != this->GetInput()->GetNumberOfComponentsPerPixel() )
+    m_TransformationMatrix = transf.get_n_rows( 0, m_NumberOfPrincipalComponentsRequired );
+  else
+    m_TransformationMatrix = transf;
+  
+ 
+  m_EigenValues.SetSize( m_NumberOfPrincipalComponentsRequired );
+  for ( unsigned int i = 0; i < m_NumberOfPrincipalComponentsRequired; i++ )
+    m_EigenValues[i] = static_cast< RealType >( valP(i,i) );
+
+  std::cerr << "Matrice de transformation \n";
+  std::cerr << m_TransformationMatrix << "\n";
+
+  std::cerr << "Vecteurs propres\n";
+  std::cerr << m_EigenValues << "\n";
+
+  std::cerr << "Matrice W\n" << solver.W();
+#endif
 }
 
 
