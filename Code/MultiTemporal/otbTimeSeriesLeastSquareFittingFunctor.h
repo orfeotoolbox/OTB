@@ -23,7 +23,8 @@ public:
 
   inline TSeriesType operator ()(const TSeriesType& series)
   {
-    return ;
+    TSeriesType outSeries;
+    return outSeries;
   }
 
 

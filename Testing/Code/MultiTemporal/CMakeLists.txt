@@ -23,10 +23,15 @@ ADD_TEST(mtTuTimeSeriesLeastSquaresFittingFunctor ${MULTITEMPORAL_TESTS1}
         otbTimeSeriesLeastSquareFittingFunctorNew
 	 )
 
+ADD_TEST(mtTvTimeSeriesLeastSquaresFittingFunctor ${MULTITEMPORAL_TESTS1}
+        otbTimeSeriesLeastSquareFittingFunctorTest
+	 )
+
 
 # -------  CXX Source Files -----------------------------------
 SET(BasicMultiTemporal_SRCS1 
 otbTimeSeriesLeastSquareFittingFunctorNew.cxx
+otbTimeSeriesLeastSquareFittingFunctorTest.cxx
 )
 
 ADD_EXECUTABLE(otbMultiTemporalTests1 otbMultiTemporalTests1.cxx ${BasicMultiTemporal_SRCS1})

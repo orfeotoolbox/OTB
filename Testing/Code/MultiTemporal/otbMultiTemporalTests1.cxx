@@ -27,4 +27,5 @@
 void RegisterTests()
 {
   REGISTER_TEST(otbTimeSeriesLeastSquareFittingFunctorNew);
+  REGISTER_TEST(otbTimeSeriesLeastSquareFittingFunctorTest);
 }
