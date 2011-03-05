@@ -850,7 +850,7 @@ ADD_TEST(raTuSpectralSensitivityReaderNew ${RADIOMETRY_TESTS5}
 
 ADD_TEST(raTvSpectralSensitivityReaderTest ${RADIOMETRY_TESTS5}
      --compare-ascii ${NOTOL}
-        ${BASELINE_FILES}/raTvSpectralSensitivityReaderTest.txt
+        ${BASELINE_FILES}/raTvSpectralSensitivityReaderGenericTest.txt
         ${TEMP}/rcTuSpectralSensitivityReaderTest.txt
      --ignore-lines-with 2 DataPath FileName
      otbSpectralSensitivityReaderTest
