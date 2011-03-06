@@ -75,7 +75,7 @@ FineRegistrationImageFilter<TInputImage, T0utputCorrelation, TOutputDeformationF
 ::SetFixedInput( const TInputImage * image )
  {
   // Process object is not const-correct so the const casting is required.
-  SetNthInput(0, const_cast<TInputImage *>( image ));
+  this->SetNthInput(0, const_cast<TInputImage *>( image ));
  }
 
 template <class TInputImage, class T0utputCorrelation, class TOutputDeformationField>
@@ -84,7 +84,7 @@ FineRegistrationImageFilter<TInputImage, T0utputCorrelation, TOutputDeformationF
 ::SetMovingInput( const TInputImage * image)
  {
   // Process object is not const-correct so the const casting is required.
-  SetNthInput(1, const_cast<TInputImage *>( image ));
+  this->SetNthInput(1, const_cast<TInputImage *>( image ));
  }
 
 template <class TInputImage, class T0utputCorrelation, class TOutputDeformationField>
