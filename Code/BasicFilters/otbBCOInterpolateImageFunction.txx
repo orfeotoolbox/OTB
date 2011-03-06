@@ -140,8 +140,8 @@ BCOInterpolateImageFunction<TInputImage, TCoordRep>
 
   RealType value = itk::NumericTraits<RealType>::Zero;
 
-  CoefContainerType BCOCoefX = EvaluateCoef(index[0]);
-  CoefContainerType BCOCoefY = EvaluateCoef(index[1]);
+  CoefContainerType BCOCoefX = this->EvaluateCoef(index[0]);
+  CoefContainerType BCOCoefY = this->EvaluateCoef(index[1]);
 
   // Compute base index = closet index
   for( dim = 0; dim < ImageDimension; dim++ )
@@ -235,8 +235,8 @@ BCOInterpolateImageFunction< otb::VectorImage<TPixel, VImageDimension> , TCoordR
 
   output.SetSize(componentNumber);
 
-  CoefContainerType BCOCoefX = EvaluateCoef(index[0]);
-  CoefContainerType BCOCoefY = EvaluateCoef(index[1]);
+  CoefContainerType BCOCoefX = this->EvaluateCoef(index[0]);
+  CoefContainerType BCOCoefY = this->EvaluateCoef(index[1]);
 
   //Compute base index = closet index
   for( dim = 0; dim < ImageDimension; dim++ )
