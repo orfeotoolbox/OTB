@@ -48,50 +48,40 @@ TileMapTransform<TTransformDirection, TScalarType, NInputDimensions, NOutputDime
 {
   OutputPointType outputPoint;
 
-  switch (DirectionOfMapping)
+  if (DirectionOfMapping == INVERSE)
     {
-    case INVERSE:
-      {
 //         otbMsgDevMacro(<< "Cartographic coordinates: (" << point[0] << "," << point[1] << ")");
 
-      //from "itk::point" to "ossim::ossimDpt"
-      ossimDpt ossimDPoint(point[0], point[1]);
+    //from "itk::point" to "ossim::ossimDpt"
+    ossimDpt ossimDPoint(point[0], point[1]);
 
-      //map projection
-      ossimGpt ossimGPoint;
+    //map projection
+    ossimGpt ossimGPoint;
 //         ossimGPoint=m_TileMapTransform->inverse(ossimDPoint);
-      m_TileMapTransform->lineSampleToWorld(ossimDPoint, ossimGPoint);
+    m_TileMapTransform->lineSampleToWorld(ossimDPoint, ossimGPoint);
 //     otbGenericMsgDebugMacro(<< "Inverse : " << std::endl << m_TileMapTransform->print(std::cout));
 
-      outputPoint[0] = ossimGPoint.lon;
-      outputPoint[1] = ossimGPoint.lat;
+    outputPoint[0] = ossimGPoint.lon;
+    outputPoint[1] = ossimGPoint.lat;
 //         otbMsgDevMacro(<< "Geographic coordinates (long/lat) : (" << outputPoint[0] << "," << outputPoint[1] << ")");
-      break;
-      }
-    case FORWARD:
-      {
+    }
+  if (DirectionOfMapping == FORWARD)
+    {
 //         otbMsgDevMacro(<< "Geographic coordinates (long/lat) : (" << point[1] << "," << point[0] << ")");
-      //from "itk::point" to "ossim::ossimGpt"
-      ossimGpt ossimGPoint(point[1], point[0]);
+    //from "itk::point" to "ossim::ossimGpt"
+    ossimGpt ossimGPoint(point[1], point[0]);
 
-      //map projection
-      ossimDpt ossimDPoint;
+    //map projection
+    ossimDpt ossimDPoint;
 //         ossimDPoint=m_TileMapTransform->forward(ossimGPoint);
-      m_TileMapTransform->worldToLineSample(ossimGPoint, ossimDPoint);
+    m_TileMapTransform->worldToLineSample(ossimGPoint, ossimDPoint);
 //     otbGenericMsgDebugMacro(<< "Forward : ========================= \n"
 //                             << m_TileMapTransform->print(std::cout));
-      outputPoint[0] = ossimDPoint.x;
-      outputPoint[1] = ossimDPoint.y;
+    outputPoint[0] = ossimDPoint.x;
+    outputPoint[1] = ossimDPoint.y;
 
 //         otbMsgDevMacro(<< "Cartographic coordinates: (" << outputPoint[0] << "," << outputPoint[1] << ")");
 
-      break;
-      }
-    default:
-      {
-      itkExceptionMacro(<< "Model is INVERSE or FORWARD only !!");
-      break;
-      }
     }
 
   return outputPoint;
