@@ -47,6 +47,17 @@
 namespace otb
 {
 
+template<class T>
+bool PixelIsComplex(const std::complex<T>& dummy)
+{
+  return true;
+}
+template<class T>
+bool PixelIsComplex(const T& dummy)
+{
+  return false;
+}
+
 template <class TOutputImage>
 ImageFileReader<TOutputImage>
 ::ImageFileReader() : itk::ImageFileReader<TOutputImage>(), m_DatasetNumber(0)
@@ -613,18 +624,6 @@ ImageFileReader<TOutputImage>
   otbMsgDevMacro(<< "fic_trouve : " << fic_trouve);
   return (fic_trouve);
 }
-
-template<class T>
-bool PixelIsComplex(const std::complex<T>& dummy)
-{
-  return true;
-}
-template<class T>
-bool PixelIsComplex(const T& dummy)
-{
-  return false;
-}
-
 
 } //namespace otb
 
