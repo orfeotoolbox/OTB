@@ -46,7 +46,7 @@ FlexibleDistanceWithMissingValue<TVector>
 
   for (unsigned int i = 0; i < x1.Size(); i++)
     {
-    if (!IsMissingValue(x1[i]) && !IsMissingValue(x2[i]))
+    if (!this->IsMissingValue(x1[i]) && !this->IsMissingValue(x2[i]))
       {
       temp = vcl_pow(vcl_abs(vcl_pow(x1[i], this->Alpha) - vcl_pow(x2[i], this->Alpha)), this->Beta);
       distance += temp;
@@ -78,7 +78,7 @@ FlexibleDistanceWithMissingValue<TVector>
 
   for (unsigned int i = 0; i < measurementVectorSize; i++)
     {
-    if (!IsMissingValue(this->GetOrigin()[i]) && !IsMissingValue(x[i]))
+    if (!this->IsMissingValue(this->GetOrigin()[i]) && !this->IsMissingValue(x[i]))
       {
       temp = vcl_pow(vcl_abs(vcl_pow(this->GetOrigin()[i], this->Alpha) - vcl_pow(x[i], this->Alpha)), this->Beta);
       distance += temp;
@@ -96,7 +96,7 @@ FlexibleDistanceWithMissingValue<TVector>
   if (IsEuclidean()) return Superclass::Evaluate(a, b);
 
   // FIXME throw NaN exception instaed of returning 0. ??
-  if (IsMissingValue(a) || IsMissingValue(b)) return 0.0;
+  if (this->IsMissingValue(a) || this->IsMissingValue(b)) return 0.0;
 
   double temp = vcl_pow(vcl_abs(vcl_pow(a, this->Alpha) - vcl_pow(b, this->Alpha)), this->Beta);
   return temp;

@@ -52,7 +52,7 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TO
 ::SetInput1(const TInputImage1 * image1)
 {
   // Process object is not const-correct so the const casting is required.
-  SetNthInput(0, const_cast<TInputImage1 *>(image1));
+  this->SetNthInput(0, const_cast<TInputImage1 *>(image1));
 }
 
 /**
@@ -65,7 +65,7 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TO
 ::SetInput2(const TInputImage2 * image2)
 {
   // Process object is not const-correct so the const casting is required.
-  SetNthInput(1, const_cast<TInputImage2 *>(image2));
+  this->SetNthInput(1, const_cast<TInputImage2 *>(image2));
 }
 
 template <class TInputImage1, class TInputImage2,
