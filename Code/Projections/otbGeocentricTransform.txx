@@ -50,29 +50,17 @@ GeocentricTransform<TransformDirection, TScalarType, NInputDimensions, NOutputDi
 {
   OutputPointType outputPoint;
 
-  switch (DirectionOfMapping)
+  if (DirectionOfMapping == INVERSE)
     {
-    case INVERSE:
-      {
-      m_Ellipsoid->XYZToLatLonHeight(point[0], point[1], point[2], outputPoint[1], outputPoint[0], outputPoint[2]);
-      break;
-      }
-    case FORWARD:
-      {
-      m_Ellipsoid->latLonHeightToXYZ(point[1], point[0], point[2], outputPoint[0], outputPoint[1], outputPoint[2]);
-
-      break;
-      }
-    default:
-      {
-      itkExceptionMacro(<< "Model is INVERSE or FORWARD only !!");
-      break;
-      }
+    m_Ellipsoid->XYZToLatLonHeight(point[0], point[1], point[2], outputPoint[1], outputPoint[0], outputPoint[2]);
+    }
+  if (DirectionOfMapping == FORWARD)
+    {
+    m_Ellipsoid->latLonHeightToXYZ(point[1], point[0], point[2], outputPoint[0], outputPoint[1], outputPoint[2]);
     }
   //To be completed
   return outputPoint;
 }
 
 } // namespace otb
-
 #endif
