@@ -148,55 +148,46 @@ GenericMapProjection<Transform, TScalarType, NInputDimensions, NOutputDimensions
 {
   OutputPointType outputPoint;
 
-//     otbMsgDevMacro(<< "DirectionOfMapping: " << DirectionOfMapping);
-  switch (DirectionOfMapping)
+//     otbMsgDevMacro(<< "DirectionOfMapping: " <<
+//     DirectionOfMapping);
+  if (DirectionOfMapping == INVERSE)
     {
-    case INVERSE:
-      {
 //     otbMsgDevMacro(<< "Cartographic coordinates: (" << point[0] << "," << point[1] << ")");
 
-      //from "itk::point" to "ossim::ossimDpt"
-      ossimDpt ossimDPoint(point[0], point[1]);
+    //from "itk::point" to "ossim::ossimDpt"
+    ossimDpt ossimDPoint(point[0], point[1]);
 
-      //map projection
-      ossimGpt ossimGPoint;
-      ossimGPoint = this->GetMapProjection()->inverse(ossimDPoint);
-      ossimGPoint.changeDatum(ossimDatumFactory::instance()->wgs84());
+    //map projection
+    ossimGpt ossimGPoint;
+    ossimGPoint = this->GetMapProjection()->inverse(ossimDPoint);
+    ossimGPoint.changeDatum(ossimDatumFactory::instance()->wgs84());
 //     otbGenericMsgDebugMacro(<< "Inverse : " << std::endl << m_MapProjection->print(std::cout));
 
-      outputPoint[0] = ossimGPoint.lon;
-      outputPoint[1] = ossimGPoint.lat;
+    outputPoint[0] = ossimGPoint.lon;
+    outputPoint[1] = ossimGPoint.lat;
 //     otbMsgDevMacro(<< "Geographic coordinates (lon, lat) : (" << outputPoint[0] << "," << outputPoint[1] << ")");
-      if ((InputPointType::PointDimension == 3) && (OutputPointType::PointDimension == 3))
-        {
-        outputPoint[2] = point[2];
-        }
-      break;
-      }
-    case FORWARD:
+    if ((InputPointType::PointDimension == 3) && (OutputPointType::PointDimension == 3))
       {
+      outputPoint[2] = point[2];
+      }
+    }
+  if (DirectionOfMapping == FORWARD)
+    {
 //     otbMsgDevMacro(<< "Geographic coordinates (lon, lat) : (" << point[1] << "," << point[0] << ")");
-      //from "itk::point" to "ossim::ossimGpt"
-      ossimGpt ossimGPoint(point[1], point[0]);
+    //from "itk::point" to "ossim::ossimGpt"
+    ossimGpt ossimGPoint(point[1], point[0]);
 
-      //map projection
-      ossimDpt ossimDPoint;
-      ossimDPoint = this->GetMapProjection()->forward(ossimGPoint);
+    //map projection
+    ossimDpt ossimDPoint;
+    ossimDPoint = this->GetMapProjection()->forward(ossimGPoint);
 //     otbGenericMsgDebugMacro(<< "Forward : ========================= " << std::endl << m_MapProjection->print(std::cout));
-      outputPoint[0] = ossimDPoint.x;
-      outputPoint[1] = ossimDPoint.y;
+    outputPoint[0] = ossimDPoint.x;
+    outputPoint[1] = ossimDPoint.y;
 
 //     otbMsgDevMacro(<< "Cartographic coordinates: (" << outputPoint[0] << "," << outputPoint[1] << ")");
-      if ((InputPointType::PointDimension == 3) && (OutputPointType::PointDimension == 3))
-        {
-        outputPoint[2] = point[2];
-        }
-      break;
-      }
-    default:
+    if ((InputPointType::PointDimension == 3) && (OutputPointType::PointDimension == 3))
       {
-      itkExceptionMacro(<< "Model is INVERSE or FORWARD only !!");
-      break;
+      outputPoint[2] = point[2];
       }
     }
 
