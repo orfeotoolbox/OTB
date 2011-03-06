@@ -47,7 +47,7 @@ RAndNIRIndexImageFilter<TInputImageR, TInputImageNIR, TOutputImage, TFunction>
 ::SetInputR(const TInputImageR * image1)
 {
   // Process object is not const-correct so the const casting is required.
-  SetInput1(image1);
+  this->SetInput1(image1);
 }
 
 /**
@@ -61,7 +61,7 @@ RAndNIRIndexImageFilter<TInputImageR, TInputImageNIR, TOutputImage, TFunction>
 {
   // Process object is not const-correct so the const casting is required.
 //  SetNthInput(1, const_cast<TInputImageNIR *>( image2 ));
-  SetInput2(image2);
+  this->SetInput2(image2);
 }
 
 /**

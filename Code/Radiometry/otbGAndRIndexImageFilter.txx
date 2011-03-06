@@ -47,7 +47,7 @@ GAndRIndexImageFilter<TInputImageG, TInputImageR, TOutputImage, TFunction>
 ::SetInputG(const TInputImageG * image1)
 {
   // Process object is not const-correct so the const casting is required.
-  SetInput1(image1);
+  this->SetInput1(image1);
 }
 
 /**
@@ -61,7 +61,7 @@ GAndRIndexImageFilter<TInputImageG, TInputImageR, TOutputImage, TFunction>
 {
   // Process object is not const-correct so the const casting is required.
 //  SetNthInput(1, const_cast<TInputImageR *>( image2 ));
-  SetInput2(image2);
+  this->SetInput2(image2);
 }
 
 /**

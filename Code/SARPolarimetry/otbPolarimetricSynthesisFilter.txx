@@ -75,7 +75,7 @@ PolarimetricSynthesisFilter<TInputImageHH, TInputImageHV, TInputImageVH, TInputI
 ::SetInputHH(const TInputImageHH * image)
 {
   // Process object is not const-correct so the const casting is required.
-  SetInput1(image);
+  this->SetInput1(image);
   m_PresentInputImages[0] = true;
 }
 
@@ -88,7 +88,7 @@ void
 PolarimetricSynthesisFilter<TInputImageHH, TInputImageHV, TInputImageVH, TInputImageVV, TOutputImage, TFunction>
 ::SetInputHV(const TInputImageHV * image)
 {
-  SetInput2(image);
+  this->SetInput2(image);
   m_PresentInputImages[1] = true;
 }
 
@@ -101,7 +101,7 @@ void
 PolarimetricSynthesisFilter<TInputImageHH, TInputImageHV, TInputImageVH, TInputImageVV, TOutputImage, TFunction>
 ::SetInputVH(const TInputImageVH * image)
 {
-  SetInput3(image);
+  this->SetInput3(image);
   m_PresentInputImages[2] = true;
 }
 
@@ -114,7 +114,7 @@ void
 PolarimetricSynthesisFilter<TInputImageHH, TInputImageHV, TInputImageVH, TInputImageVV, TOutputImage, TFunction>
 ::SetInputVV(const TInputImageVV * image)
 {
-  SetInput4(image);
+  this->SetInput4(image);
   m_PresentInputImages[3] = true;
 }
 
