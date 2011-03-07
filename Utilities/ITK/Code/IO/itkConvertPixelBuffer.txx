@@ -726,7 +726,6 @@ SpecialCast(const std::complex<InputType>& in, const OutputType& itkNotUsed(dumm
   typedef typename itk::NumericTraits<std::complex<InputType> >::RealType       RealType;
   typedef typename itk::NumericTraits<std::complex<InputType> >::ScalarRealType ScalarRealType;
 
-  //RealType inReal   = static_cast<RealType>(in);
   RealType    inReal( static_cast<ScalarRealType>(in.real()), static_cast<ScalarRealType>(in.imag()) );
 
   return static_cast < OutputType >( vcl_abs(inReal) );

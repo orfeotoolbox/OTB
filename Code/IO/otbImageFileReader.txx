@@ -92,23 +92,16 @@ ImageFileReader<TOutputImage>
   output->SetBufferedRegion(output->GetRequestedRegion());
   output->Allocate();
 
-//otbMsgDebugMacro( <<"ImageFileReader<TOutputImage>::GenerateData : ");
-//otbMsgDebugMacro( <<" output->GetRequestedRegion() : "<<output->GetRequestedRegion());
-
   // Test if the file exist and if it can be open.
   // An exception will be thrown otherwise.
   this->TestFileExistanceAndReadability();
 
   // Tell the ImageIO to read the file
-  //
   OutputImagePixelType *buffer =
     output->GetPixelContainer()->GetBufferPointer();
   this->m_ImageIO->SetFileName(this->m_FileName.c_str());
 
   itk::ImageIORegion ioRegion(TOutputImage::ImageDimension);
-//otbMsgDebugMacro( <<" Avant ioRegion : "<<ioRegion);
-
-//  itk::ImageIORegion ioRegionStreaming = output->GetRequestedRegion();
 
   itk::ImageIORegion::SizeType  ioSize = ioRegion.GetSize();
   itk::ImageIORegion::IndexType ioStart = ioRegion.GetIndex();
@@ -148,8 +141,6 @@ ImageFileReader<TOutputImage>
   ioRegion.SetSize(ioSize);
   ioRegion.SetIndex(ioStart);
 
-//otbMsgDebugMacro( <<" Apres ioRegion : "<<ioRegion);
-
   this->m_ImageIO->SetIORegion(ioRegion);
 
   typedef itk::DefaultConvertPixelTraits<ITK_TYPENAME TOutputImage::IOPixelType> ConvertIOPixelTraits;
@@ -175,11 +166,12 @@ ImageFileReader<TOutputImage>
                              * static_cast<std::streamoff>(region.GetNumberOfPixels());
 
     char * loadBuffer = new char[nbBytes];
-    std::cout<< "*** IFReader : read with conversion ***" << std::endl;
-    std::cout<< "size of Buffer to GDALImageIO::read = " << nbBytes << " = " \
+
+    otbMsgDevMacro(<< "size of Buffer to GDALImageIO::read = " << nbBytes << " = \n"
         << "ComponentSize ("<< this->m_ImageIO->GetComponentSize() << ") x " \
         << "Nb of Component (" << this->m_ImageIO->GetNumberOfComponents() << ") x " \
-        << "Nb of Pixel to read (" << region.GetNumberOfPixels() << ")" << std::endl;
+        << "Nb of Pixel to read (" << region.GetNumberOfPixels() << ")" );
+
     this->m_ImageIO->Read(loadBuffer);
 
     this->DoConvertBuffer(loadBuffer, region.GetNumberOfPixels());
