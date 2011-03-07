@@ -431,7 +431,7 @@ void GDALImageIO::Read(void* buffer)
     // In some cases, we need to change some parameters for RasterIO
     if(!GDALDataTypeIsComplex(m_PxType) && m_IsComplex && m_IsVectorImage && (m_NbBands > 1))
       {
-      pixelOffset = m_BytePerPixel * 2 ;
+      pixelOffset = m_BytePerPixel * 2;
       lineOffset  = pixelOffset * lNbColumns;
       bandOffset  = m_BytePerPixel;
       }

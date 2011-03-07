@@ -36,7 +36,7 @@ namespace otb
  *  4 values have to be provided.
  *  In addition, 2 more values can be provided to define the min and
  *  the max. By default, they ar 0 and 1 respectively.
- *  
+ *
  */
 template <class TLabel = unsigned short, class TPrecision=double>
 class ITK_EXPORT FuzzyVariable : public itk::DataObject

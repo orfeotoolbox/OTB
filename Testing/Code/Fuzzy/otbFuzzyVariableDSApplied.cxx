@@ -31,7 +31,7 @@ int otbFuzzyVariableDSApplied(int argc, char* argv[])
 
   fv->SetMembership("H1", 0, 0, 0.1, 0.5, 0, 0.8);
   fv->SetMembership("!H1", 0.5, 0.8, 1.0, 1.0, 0, 0.8);
-  fv->SetMembership("Theta",0.1, 0.5, 0.5, 0.8, 0.2, 1);
+  fv->SetMembership("Theta", 0.1, 0.5, 0.5, 0.8, 0.2, 1);
   
   std::string maxVar;
   PrecisionType pos;
@@ -57,9 +57,9 @@ int otbFuzzyVariableDSApplied(int argc, char* argv[])
               << memH1_
               << ", "
               << memTheta
-              <<"] - MaxVar(" 
+              <<"] - MaxVar("
               << pos
-              << ") : " 
+              << ") : "
               << maxVar
               << std::endl;
     }

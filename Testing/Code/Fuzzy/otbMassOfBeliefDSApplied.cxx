@@ -27,7 +27,7 @@
 int otbMassOfBeliefDSApplied(int argc, char* argv[])
 {
   typedef float                           PrecisionType;
-  typedef otb::FuzzyVariable<std::string, 
+  typedef otb::FuzzyVariable<std::string,
     PrecisionType>                        FuzzyVarType;
   
   typedef otb::MassOfBelief<std::string>  MassOfBeliefFunctionType;
