@@ -329,10 +329,21 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
   InternalMatrixType An = m_NoiseCovarianceMatrix.GetVnlMatrix();
   InternalMatrixType W = An * Ax_inv;
 
+  std::cerr << "Matrice C \n";
+  W.print( std::cerr );
+
   InternalMatrixType transf;
   vnl_vector<double> vectValP;
 
   vnl_symmetric_eigensystem_compute( W, transf, vectValP );
+
+  std::cerr << "Matrice de transf\n";
+  transf.print( std::cerr );
+
+  std::cerr << "VectPropres\n";
+  for ( unsigned int i = 0; i < vectValP.size(); i++ )
+    std::cerr << vectValP[i] << "  ";
+  std::cerr << "\n";
 
   InternalMatrixType normMat //= transf.transpose() * An * transf;
     = transf.transpose() * Ax_inv * transf;

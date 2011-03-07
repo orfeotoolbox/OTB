@@ -48,8 +48,8 @@ public:
     {
       output[i] = static_cast<typename TOutput::ValueType>(
                   input.GetPixel(4)[i] 
-                  - input.GetPixel(5)[i] / 2.
-                  - input.GetPixel(7)[i] / 2. );
+                  - input.GetPixel(1)[i] / 2.
+                  - input.GetPixel(3)[i] / 2. );
     }
     return output;
   }
@@ -84,7 +84,11 @@ public:
   itkTypeMacro(LocalGradientVectorImageFilter, ImageToImageFilter);
 
 protected:
-  LocalGradientVectorImageFilter() { }
+  LocalGradientVectorImageFilter() 
+  {
+    typename Superclass::RadiusType radius = {{1,1}};
+    SetRadius( radius );  
+  }
   virtual ~LocalGradientVectorImageFilter() { }
 
 private:
