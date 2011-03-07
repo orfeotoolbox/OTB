@@ -67,6 +67,9 @@ int generic_SinclairImageFilter(int argc, char * argv[])
   typename ReaderType::Pointer reader3 = ReaderType::New();
   typename WriterType::Pointer writer = WriterType::New();
 
+  TFunction funct;
+  funct.operator ()( ComplexType(-58630, 0), ComplexType(-26400, 0), ComplexType(-26400, 0), ComplexType(183645,0) );
+
   reader1->SetFileName(inputFilename1);
   reader2->SetFileName(inputFilename2);
   reader3->SetFileName(inputFilename3);

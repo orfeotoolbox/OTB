@@ -1822,6 +1822,20 @@ ADD_TEST(bfTvotbLog10ThresholdedImageFilterTest ${BASICFILTERS_TESTS13}
 )
 
 
+ADD_TEST(bfTuApplyTransitionMatrixImageFilterNew ${BASICFILTERS_TESTS13}
+  otbApplyTransitionMatrixImageFilterNew
+)
+
+ADD_TEST(bfTvApplyTransitionMatrixImageFilterTest ${BASICFILTERS_TESTS13}
+  --compare-ascii ${NOTOL}
+  ${TEMP}/bfTvApplyTransitionMatrixImageFilterTest.tif
+  ${BASELINE_FILES}/bfTvApplyTransitionMatrixImageFilterTest.tif
+  otbApplyTransitionMatrixImageFilterTest
+    ${INPUTDATA}/poupees.tif
+    ${TEMP}/bfTvApplyTransitionMatrixImageFilterTest.tif
+)
+
+
 # A enrichir
 SET(BasicFilters_SRCS1
 otbBasicFiltersTests1.cxx
@@ -2075,6 +2089,8 @@ otbRealImageToComplexImageFilterTest.cxx
 otbImaginaryImageToComplexImageFilterTest.cxx
 otbComplexToVectorImageCastFilter.cxx
 otbLog10ThresholdedImageFilterTest.cxx
+otbApplyTransitionMatrixImageFilterNew.cxx
+otbApplyTransitionMatrixImageFilterTest.cxx
 )
 
 
