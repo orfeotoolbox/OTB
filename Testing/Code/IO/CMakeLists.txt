@@ -2859,19 +2859,43 @@ FOREACH(INPUTFILE_PIXELTYPE ${INPUTFILE_PIXELTYPES_LIST})
       #          otbMultibandComplexToImageScalar${READING_PIXELTYPE}
       #          ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands.tif) #hdr)
 
-      ADD_TEST(ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToVectorImageScalar${READING_PIXELTYPE}
-               ${IO_TESTS21}
-               otbMultibandComplexToVectorImageScalar${READING_PIXELTYPE}
-               ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands.tif) #hdr)
+      # Size: 100x100 is to large to store pixel values coded as short. 
+      IF ( NOT ${INPUTFILE_PIXELTYPE} MATCHES "Short" )
 
+        ADD_TEST(ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToVectorImageScalar${READING_PIXELTYPE}
+                 ${IO_TESTS21}
+                 otbMultibandComplexToVectorImageScalar${READING_PIXELTYPE}
+                 ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands.tif) #hdr)
+
+      ELSE ( NOT ${INPUTFILE_PIXELTYPE} MATCHES "Short" )
+
+        ADD_TEST(ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToVectorImageScalar${READING_PIXELTYPE}
+                 ${IO_TESTS21}
+                 otbMultibandComplexToVectorImageScalar${READING_PIXELTYPE}
+                 ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands_50x50.tif) #hdr)
+
+      ENDIF (  NOT ${INPUTFILE_PIXELTYPE} MATCHES "Short" )
+      
       # Weird case : need specifications to write the test
       # [missing impl]
       # ADD_TEST(ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToImageComplex${READING_PIXELTYPE})
-  
-      ADD_TEST(ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToVectorImageComplex${READING_PIXELTYPE}
-               ${IO_TESTS21}
-               otbMultibandComplexToVectorImageComplex${READING_PIXELTYPE}
-               ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands.tif) #hdr)
+
+      # Size: 100x100 is to large to store pixel values coded as short. 
+      IF ( NOT ${INPUTFILE_PIXELTYPE} MATCHES "Short" )  
+
+        ADD_TEST(ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToVectorImageComplex${READING_PIXELTYPE}
+                 ${IO_TESTS21}
+                 otbMultibandComplexToVectorImageComplex${READING_PIXELTYPE}
+                 ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands.tif) #hdr)
+
+      ELSE ( NOT ${INPUTFILE_PIXELTYPE} MATCHES "Short" )
+
+        ADD_TEST(ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToVectorImageComplex${READING_PIXELTYPE}
+                 ${IO_TESTS21}
+                 otbMultibandComplexToVectorImageComplex${READING_PIXELTYPE}
+                 ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands_50x50.tif) #hdr)
+
+      ENDIF (  NOT ${INPUTFILE_PIXELTYPE} MATCHES "Short" )
 
     ENDFOREACH(NBBANDS ${NBBANDS_LIST})
 

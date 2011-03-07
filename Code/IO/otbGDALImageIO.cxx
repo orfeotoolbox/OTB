@@ -247,22 +247,101 @@ void GDALImageIO::Read(void* buffer)
       && (m_PxType != GDT_CFloat32)
       && (m_PxType != GDT_CFloat64))
     {
-    CPLErr lCrGdal = dataset->GetRasterBand(1)->RasterIO(GF_Read,
-                                                  lFirstColumn,
-                                                  lFirstLine,
-                                                  lNbColumns,
-                                                  lNbLines,
-                                                  p,
-                                                  lNbColumns,
-                                                  lNbLines,
-                                                  m_PxType,
-                                                  0,
-                                                  0);
+    std::cout << "*** GDT_INT32 AND GDT_INT16 CASE ***" << std::endl;
+    int pixelOffset = m_BytePerPixel * m_NbBands;
+    int lineOffset  = m_BytePerPixel * m_NbBands * lNbColumns;
+    int bandOffset  = m_BytePerPixel;
+    int nbBands     = m_NbBands;
+
+    int nbPixelToRead = lNbColumns *  lNbLines;
+    std::streamoff nbBytes = static_cast<std::streamoff>(m_NbBands) * static_cast<std::streamoff>(nbPixelToRead) * static_cast<std::streamoff>(m_BytePerPixel);
+    unsigned char *pBufferTemp = new unsigned char[static_cast<unsigned int>(nbBytes)];
+
+
+    // keep it for the moment
+    std::cout << "*** GDALimageIO::Read: nominal case ***"<<std::endl;
+    std::cout << "Paremeters RasterIO :" \
+        << ", indX = " << lFirstColumn \
+        << ", indY = " << lFirstLine \
+        << ", sizeX = " << lNbColumns \
+        << ", sizeY = " << lNbLines \
+        << ", GDAL Data Type = " << GDALGetDataTypeName(m_PxType) \
+        << ", pixelOffset = " << pixelOffset \
+        << ", lineOffset = " << lineOffset
+        << ", bandOffset = " << bandOffset << std::endl;
+
+
+    CPLErr lCrGdal = m_Dataset->GetDataSet()->RasterIO(GF_Read,
+                                                       lFirstColumn,
+                                                       lFirstLine,
+                                                       lNbColumns,
+                                                       lNbLines,
+                                                       pBufferTemp, //p, // pData
+                                                       lNbColumns,
+                                                       lNbLines,
+                                                       m_PxType,
+                                                       nbBands,
+                                                       // We want to read all bands
+                                                       NULL,
+                                                       pixelOffset,
+                                                       lineOffset,
+                                                       bandOffset);
     // Check for gdal error
     if (lCrGdal == CE_Failure)
       {
       itkExceptionMacro(<< "Error while reading image (GDAL format) " << m_FileName );
       }
+
+    // Reorganiser le buffer pour le faire fitter avec p qui doit contenir des GDT_Float64
+    typedef std::complex<double>           RealType;
+    typedef double                         ScalarRealType;
+
+    RealType *realPxlValue = new RealType[nbPixelToRead * m_NbBands];
+    if (m_PxType == GDT_CInt32)
+      {
+      std::cout << "Convert from input File from GDT_CInt32 to GDT_CFloat64" << std::endl;
+      typedef std::complex<int>              ComplexIntType;
+
+      ComplexIntType *pxlValue = new ComplexIntType[nbPixelToRead * m_NbBands];
+      for (unsigned int itPxl = 0; itPxl < (unsigned int) (nbPixelToRead * m_NbBands); itPxl++)
+        {
+        pxlValue[itPxl] = *(static_cast<ComplexIntType*>( static_cast<void*>(pBufferTemp)) + itPxl );
+        std::cout << "originalBuffer["<< itPxl << "] = " << pxlValue[itPxl] << std::endl;
+
+        RealType    pxlValueReal( static_cast<ScalarRealType>(pxlValue[itPxl].real()), static_cast<ScalarRealType>(pxlValue[itPxl].imag()) );
+        realPxlValue[itPxl] = pxlValueReal;
+        std::cout << "newBuffer["<< itPxl << "] = " << realPxlValue[itPxl] << std::endl;
+
+        memcpy((void*) (&(p[itPxl*sizeof(RealType)])), (const void*) (&(realPxlValue[itPxl])), (size_t) (sizeof(RealType)));
+
+        RealType    pxlValueRealOut = *(static_cast<RealType*>( static_cast<void*>(p)) + itPxl );
+        std::cout << "p["<< itPxl << "] = " << pxlValueRealOut << std::endl;
+        }
+      delete[] pxlValue;
+      }
+    else if (m_PxType == GDT_CInt16)
+      {
+      std::cout << "Convert from input File from GDT_CInt16 to GDT_CFloat64" << std::endl;
+      typedef std::complex<short>            ComplexShortType;
+      ComplexShortType *pxlValue = new ComplexShortType[nbPixelToRead * m_NbBands];
+      for (unsigned int itPxl = 0; itPxl < (unsigned int) (nbPixelToRead * m_NbBands); itPxl++)
+        {
+        pxlValue[itPxl] = *(static_cast<ComplexShortType*>( static_cast<void*>(pBufferTemp)) + itPxl );
+        std::cout << "originalBuffer["<< itPxl << "] = " << pxlValue[itPxl] << std::endl;
+
+        RealType    pxlValueReal( static_cast<ScalarRealType>(pxlValue[itPxl].real()), static_cast<ScalarRealType>(pxlValue[itPxl].imag()) );
+        realPxlValue[itPxl] = pxlValueReal;
+        std::cout << "newBuffer["<< itPxl << "] = " << realPxlValue[itPxl] << std::endl;
+
+        memcpy((void*) (&(p[itPxl*sizeof(RealType)])), (const void*) (&(realPxlValue[itPxl])), (size_t) (sizeof(RealType)));
+
+        RealType    pxlValueRealOut = *(static_cast<RealType*>( static_cast<void*>(p)) + itPxl );
+        std::cout << "p["<< itPxl << "] = " << pxlValueRealOut << std::endl;
+        }
+      delete[] pxlValue;
+      }
+    delete[] realPxlValue;
+
     }
 
   // In the indexed case, one has to retrieve the index image and the
@@ -312,6 +391,7 @@ void GDALImageIO::Read(void* buffer)
   else
     {
     // Nominal case
+    std::cout << "*** NOMINAL CASE ***" << std::endl;
     int pixelOffset = m_BytePerPixel * m_NbBands;
     int lineOffset  = m_BytePerPixel * m_NbBands * lNbColumns;
     int bandOffset  = m_BytePerPixel;
@@ -321,7 +401,7 @@ void GDALImageIO::Read(void* buffer)
 
     // if the file is complex and the reader is based on a vector of scalar,
     // output 2 times the number of bands, with real and imaginary parts interleaved
-    if(GDALDataTypeIsComplex(m_PxType) && !m_IsComplex && m_IsVectorImage)
+    /*if(GDALDataTypeIsComplex(m_PxType) && !m_IsComplex && m_IsVectorImage)
     {
       // ImageIO NbComponents is set to 2 * m_NbBands
       // m_BytePerPixel is already sizeof(std::complex<m_PxType>) / 2
@@ -329,24 +409,24 @@ void GDALImageIO::Read(void* buffer)
       lineOffset  = pixelOffset * lNbColumns;
       bandOffset = 2 * m_BytePerPixel;
       nbBands = this->GetNumberOfComponents() / 2;
-    }
+    }*/
 
     // if the file is scalar with only one band and the reader is based on a vector of complex
-    if(!GDALDataTypeIsComplex(m_PxType) && (m_NbBands == 1) && m_IsComplex && m_IsVectorImage )
+    /*if(!GDALDataTypeIsComplex(m_PxType) && (m_NbBands == 1) && m_IsComplex && m_IsVectorImage )
     {
       pixelOffset = m_BytePerPixel / 2;
       lineOffset  =pixelOffset * lNbColumns;
       bandOffset  = m_BytePerPixel / 2;
-    }
-    if(!GDALDataTypeIsComplex(m_PxType) && ((unsigned int)m_NbBands == this->GetNumberOfComponents()) && m_IsComplex && m_IsVectorImage && (m_NbBands > 1))
+    }*/
+    if(!GDALDataTypeIsComplex(m_PxType) /*&& ((unsigned int)m_NbBands == this->GetNumberOfComponents())*/ && m_IsComplex && m_IsVectorImage && (m_NbBands > 1))
       {
-      pixelOffset = m_BytePerPixel;
+      pixelOffset = m_BytePerPixel * 2 ;
       lineOffset  = pixelOffset * lNbColumns;
-      bandOffset  = m_BytePerPixel / 2;
+      bandOffset  = m_BytePerPixel /*/ 2*/;
       }
 
     // keep it for the moment
-    /*
+
     std::cout << "*** GDALimageIO::Read: nominal case ***"<<std::endl;
     std::cout << "Paremeters RasterIO :" \
         << ", indX = " << lFirstColumn \
@@ -357,7 +437,7 @@ void GDALImageIO::Read(void* buffer)
         << ", pixelOffset = " << pixelOffset \
         << ", lineOffset = " << lineOffset
         << ", bandOffset = " << bandOffset << std::endl;
-    */
+
 
     CPLErr lCrGdal = m_Dataset->GetDataSet()->RasterIO(GF_Read,
                                                        lFirstColumn,
@@ -379,14 +459,19 @@ void GDALImageIO::Read(void* buffer)
       {
       itkExceptionMacro(<< "Error while reading image (GDAL format) " << m_FileName.c_str() << ".");
       }
+    typedef std::complex<int>              ComplexType;
+    int nbPixelToRead = lNbColumns *  lNbLines;
+    ComplexType *pxlValue = new ComplexType[nbPixelToRead * m_NbBands];
+    unsigned int count = 0;
+    ComplexType expectedValue;
+    for (unsigned int itPxl = 0; itPxl < (unsigned int) (nbPixelToRead * m_NbBands); itPxl++)
+      {
+      pxlValue[itPxl] = *(static_cast<ComplexType*>( static_cast<void*>(p)) + itPxl );
+      std::cout << "loadBuffer["<< itPxl << "] = " << pxlValue[itPxl] << std::endl;
+      }
     }
 }
 
-void GDALImageIO::ReadImageInformation()
-{
-  //std::ifstream file;
-  this->InternalReadImageInformation();
-}
 
 bool GDALImageIO::GetSubDatasetInfo(std::vector<std::string> &names, std::vector<std::string> &desc)
 {
@@ -423,6 +508,12 @@ bool GDALImageIO::GetSubDatasetInfo(std::vector<std::string> &names, std::vector
     }
 
   return true;
+}
+
+void GDALImageIO::ReadImageInformation()
+{
+  //std::ifstream file;
+  this->InternalReadImageInformation();
 }
 
 void GDALImageIO::InternalReadImageInformation()
@@ -481,15 +572,15 @@ void GDALImageIO::InternalReadImageInformation()
   // Get Number of Bands
   m_NbBands = dataset->GetRasterCount();
 
-  otbMsgDevMacro(<< "Dimension: " << m_Dimensions[0] << ", " << m_Dimensions[1]);
-  otbMsgDevMacro(<< "Number of bands: " << m_NbBands);
+  otbMsgDevMacro(<< "Input file dimension: " << m_Dimensions[0] << ", " << m_Dimensions[1]);
+  otbMsgDevMacro(<< "Number of bands inside input file: " << m_NbBands);
 
   this->SetNumberOfComponents(m_NbBands);
 
   // Set the number of dimensions (verify for the dim )
   this->SetNumberOfDimensions(2);
 
-  otbMsgDevMacro(<< "Nb of Dimensions : " << m_NumberOfDimensions);
+  otbMsgDevMacro(<< "Nb of Dimensions of the input file: " << m_NumberOfDimensions);
 
   // Automatically set the Type to Binary for GDAL data
   this->SetFileTypeToBinary();
@@ -498,7 +589,7 @@ void GDALImageIO::InternalReadImageInformation()
   // Consider only the data type given by the first band
   // Maybe be could changed (to check)
   m_PxType = dataset->GetRasterBand(1)->GetRasterDataType();
-
+  otbMsgDevMacro(<< "PixelType inside input file: "<< GDALGetDataTypeName(m_PxType) );
   if (m_PxType == GDT_Byte)
     {
     SetComponentType(UCHAR);
@@ -507,7 +598,7 @@ void GDALImageIO::InternalReadImageInformation()
     {
     SetComponentType(USHORT);
     }
-  else if ((m_PxType == GDT_Int16) || (m_PxType == GDT_CInt16))
+  else if (m_PxType == GDT_Int16)
     {
     SetComponentType(SHORT);
     }
@@ -515,7 +606,7 @@ void GDALImageIO::InternalReadImageInformation()
     {
     SetComponentType(UINT);
     }
-  else if ((m_PxType == GDT_Int32) || (m_PxType == GDT_CInt32))
+  else if (m_PxType == GDT_Int32)
     {
     SetComponentType(INT);
     }
@@ -531,7 +622,7 @@ void GDALImageIO::InternalReadImageInformation()
     {
     SetComponentType(CFLOAT);
     }
-  else if (m_PxType == GDT_CFloat64)
+  else if ( (m_PxType == GDT_CFloat64) || (m_PxType == GDT_CInt32) || (m_PxType == GDT_CInt16) )
     {
     SetComponentType(CDOUBLE);
     }
@@ -578,7 +669,12 @@ void GDALImageIO::InternalReadImageInformation()
     }
   else if (this->GetComponentType() == CDOUBLE)
     {
-    m_BytePerPixel = sizeof(std::complex<double>);
+    if (m_PxType == GDT_CInt16)
+      m_BytePerPixel = sizeof(std::complex<short>);
+    else if (m_PxType == GDT_CInt32)
+      m_BytePerPixel = sizeof(std::complex<int>);
+    else
+      m_BytePerPixel = sizeof(std::complex<double>);
     }
   else
     {
@@ -590,15 +686,27 @@ void GDALImageIO::InternalReadImageInformation()
 
   //Once all sorts of gdal complex image are handle, this won't be
   //necessary any more
-  if (GDALDataTypeIsComplex(m_PxType) //TODO should disappear
-      && (m_PxType != GDT_CFloat32) && (m_PxType != GDT_CFloat64))
+
+  // Set the pixel type with some special cases linked to the fact
+  //  we read some data with complex type
+  if ( GDALDataTypeIsComplex(m_PxType) ) // Try to read data with complex type with GDAL
     {
-    m_BytePerPixel = m_BytePerPixel * 2;
-    this->SetNumberOfComponents(2);
-    this->SetPixelType(COMPLEX);
-    // Is this necessary ?
+    if ( !m_IsComplex && m_IsVectorImage )
+      {
+      // we are reading a complex data set into an image where the pixel
+      // type is Vector<real>: we have to double the number of component
+      // for that to work
+      otbDebugMacro( "GDALtypeIO= Complex and IFReader::InternalPixelType= Scalar and IFReader::PixelType= Vector");
+      this->SetNumberOfComponents(m_NbBands*2);
+      this->SetPixelType(VECTOR);
+      }
+    else
+      {
+      this->SetPixelType(COMPLEX);
+      }
     }
-  else
+  else // Try to read data with scalar type with GDAL
+  //if ( !GDALDataTypeIsComplex(m_PxType) )
     {
     this->SetNumberOfComponents(m_NbBands);
     if (this->GetNumberOfComponents() == 1)
@@ -611,35 +719,39 @@ void GDALImageIO::InternalReadImageInformation()
       }
     }
 
-  if (GDALDataTypeIsComplex(m_PxType) && !m_IsComplex && m_IsVectorImage)
+  /*if (GDALDataTypeIsComplex(m_PxType) && )
     {
     // we are reading a complex data set into an image where the pixel
     // type is Vector<real>: we have to double the number of component
     // for that to work
-    //std::cout << "GDALtypeIO = complex and OTB::OutputPixelType = double and OTB::PixelType = Vector" << std::endl;
-    m_BytePerPixel = m_BytePerPixel / 2;
+    std::cout << "GDALtypeIO = Complex and IFReader::InternalPixelType = Scalar and IFReader::PixelType = Vector" << std::endl;
+    //if ( (m_PxType != GDT_CInt32) && (m_PxType != GDT_CInt16) )
+    //  m_BytePerPixel = m_BytePerPixel / 2;
     this->SetNumberOfComponents(m_NbBands*2);
     this->SetPixelType(VECTOR);
-    }
+    }*/
 
-  if (!GDALDataTypeIsComplex(m_PxType) && m_IsComplex && m_IsVectorImage)
+  /*if (!GDALDataTypeIsComplex(m_PxType) && m_IsComplex && m_IsVectorImage && (m_NbBands > 1))
     {
     // we are reading a non-complex data set into an image where the pixel
     // type is Vector<complex>: we have to double the number of byte per pixel
     // for that to work
-    //std::cout << "GDALtypeIO = double and OTB::OutputPixelType = complex and OTB::PixelType = Vector" << std::endl;
-    m_BytePerPixel = m_BytePerPixel * 2;
+    std::cout << "GDALtypeIO = Scalar and IFReader::InternalPixelType = Complex and IFReader::PixelType = Vector" << std::endl;
+    //if ( (m_PxType != GDT_CInt32) && (m_PxType != GDT_CInt16) )
+      //m_BytePerPixel = m_BytePerPixel * 2;
     this->SetPixelType(VECTOR);
-    }
+    }*/
 
-  // keep it for the moment
-  /* std::cout << " *** Parameters set in Internal Read function ***" << std::endl;
-  std::cout << " Pixel Type GDAL = "  << GDALGetDataTypeName(m_PxType) << std::endl;
-  std::cout << " Pixel Type otb = " << GetPixelTypeAsString(this->GetPixelType()) << std::endl;
-  std::cout << " Number of band in file = " << m_NbBands << std::endl;
-  std::cout << " Number of component otb = " << this->GetNumberOfComponents() << std::endl;
-  std::cout << " Byte per pixel = " << m_BytePerPixel << std::endl;
-  std::cout << " Component Type otb = " << GetComponentTypeAsString(this->GetComponentType()) <<std::endl; */
+ /* if (!GDALDataTypeIsComplex(m_PxType) && m_IsComplex && !m_IsVectorImage && ( (m_PxType == GDT_CInt32) || (m_PxType == GDT_CInt16) )  )
+    {
+    m_BytePerPixel = m_BytePerPixel / 2;
+    }*/
+
+  /*** Parameters set by Internal Read function ***/
+  otbMsgDevMacro( << " Pixel Type IFReader = " << GetPixelTypeAsString(this->GetPixelType()) )
+  otbMsgDevMacro( << " Number of component IFReader = " << this->GetNumberOfComponents() )
+  otbMsgDevMacro( << " Byte per pixel set = " << m_BytePerPixel )
+  otbMsgDevMacro( << " Component Type set = " << GetComponentTypeAsString(this->GetComponentType()) );
 
   /*----------------------------------------------------------------------*/
   /*-------------------------- METADATA ----------------------------------*/

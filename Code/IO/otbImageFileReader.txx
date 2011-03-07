@@ -175,11 +175,11 @@ ImageFileReader<TOutputImage>
                              * static_cast<std::streamoff>(region.GetNumberOfPixels());
 
     char * loadBuffer = new char[nbBytes];
-    /*std::cout<< "*** IFReader : read with conversion ***" << std::endl;
+    std::cout<< "*** IFReader : read with conversion ***" << std::endl;
     std::cout<< "size of Buffer to GDALImageIO::read = " << nbBytes << " = " \
         << "ComponentSize ("<< this->m_ImageIO->GetComponentSize() << ") x " \
         << "Nb of Component (" << this->m_ImageIO->GetNumberOfComponents() << ") x " \
-        << "Nb of Pixel to read (" << region.GetNumberOfPixels() << ")" << std::endl; */
+        << "Nb of Pixel to read (" << region.GetNumberOfPixels() << ")" << std::endl;
     this->m_ImageIO->Read(loadBuffer);
 
     this->DoConvertBuffer(loadBuffer, region.GetNumberOfPixels());
