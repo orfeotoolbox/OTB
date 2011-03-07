@@ -23,6 +23,7 @@
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_matrix_inverse.h>
+#include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vnl/algo/vnl_generalized_eigensystem.h>
 
 namespace otb
@@ -99,6 +100,7 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
           ITK_LOCATION);
       }
 
+      m_NumberOfPrincipalComponentsRequired = 0;
       this->GetOutput()->SetNumberOfComponentsPerPixel( theOutputDimension );
 
       break;
@@ -172,7 +174,7 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
       m_CovarianceMatrix = m_CovarianceEstimator->GetCovariance();
     }
 
-    GetTransformationMatrixFromCovarianceMatrix();
+    GenerateTransformationMatrix();
   }
   else if ( !m_IsTransformationMatrixForward )
   {
@@ -237,7 +239,7 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
         ITK_LOCATION );
     }
 
-    GetTransformationMatrixFromCovarianceMatrix();
+    GenerateTransformationMatrix();
     
     m_IsTransformationMatrixForward = false;
     if ( m_TransformationMatrix.Rows() == m_TransformationMatrix.Cols() )
@@ -321,19 +323,17 @@ template <class TInputImage, class TOutputImage,
             Transform::TransformDirection TDirectionOfTransformation >
 void
 MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransformation >
-::GetTransformationMatrixFromCovarianceMatrix ()
+::GenerateTransformationMatrix ()
 {
-  MatrixType Id ( m_NoiseCovarianceMatrix );
-  Id.SetIdentity();
-
   InternalMatrixType Ax_inv = vnl_matrix_inverse< MatrixElementType > ( m_CovarianceMatrix.GetVnlMatrix() );
   InternalMatrixType An = m_NoiseCovarianceMatrix.GetVnlMatrix();
   InternalMatrixType W = An * Ax_inv;
-  InternalMatrixType I = Id.GetVnlMatrix();
 
-  vnl_generalized_eigensystem solver ( W, I );
+  InternalMatrixType transf;
+  vnl_vector<double> vectValP;
 
-  InternalMatrixType transf = solver.V;
+  vnl_symmetric_eigensystem_compute( W, transf, vectValP );
+
   InternalMatrixType normMat //= transf.transpose() * An * transf;
     = transf.transpose() * Ax_inv * transf;
 
@@ -341,11 +341,11 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
   {
     double norm = 1. / vcl_sqrt( normMat.get(i,i) );
     for ( unsigned int j = 0; j < transf.cols(); j++ )
-      transf.put( i, j, transf.get(i,j) * norm );
+      transf.put( j, i, transf.get(j,i) * norm );
   }
 
-  transf.fliplr();
   transf.inplace_transpose();
+  transf.fliplr();
 
   if ( m_NumberOfPrincipalComponentsRequired 
       != this->GetInput()->GetNumberOfComponentsPerPixel() )
@@ -353,12 +353,14 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
   else
     m_TransformationMatrix = transf;
 
-  vnl_vector< double > valP = solver.D.diagonal();
-  valP.flip();
+  std::cerr << "Matrice de projection \n" << m_TransformationMatrix << "\n";
 
   m_EigenValues.SetSize( m_NumberOfPrincipalComponentsRequired );
   for ( unsigned int i = 0; i < m_NumberOfPrincipalComponentsRequired; i++ )
-    m_EigenValues[i] = static_cast< RealType >( valP[i] );
+    m_EigenValues[i] 
+      = static_cast< RealType >( vectValP[m_NumberOfPrincipalComponentsRequired-1-i] );
+
+  std::cerr << "Valeurs propores \n" << m_EigenValues << "\n";
 }
 
 template <class TInputImage, class TOutputImage, 

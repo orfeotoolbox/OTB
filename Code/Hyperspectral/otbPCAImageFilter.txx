@@ -353,10 +353,6 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   for ( unsigned int i = 0; i < vectValP.size(); i++ )
     valP(i,i) = vectValP[i];
 
-  std::cerr << "Matrice U\n";
-  transf.print( std::cerr );
-
-
   /* We used normalized PCA */
   for ( unsigned int i = 0; i < valP.rows(); i++ )
   {
@@ -383,16 +379,14 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   else
     m_TransformationMatrix = transf;
   
+  // std::cerr << "Matrice de projection \n" << m_TransformationMatrix << "\n";
  
   m_EigenValues.SetSize( m_NumberOfPrincipalComponentsRequired );
   for ( unsigned int i = 0; i < m_NumberOfPrincipalComponentsRequired; i++ )
     m_EigenValues[i] = static_cast< RealType >( valP(i,i) );
 
-  std::cerr << "Matrice de transformation \n";
-  std::cerr << m_TransformationMatrix << "\n";
+  // std::cerr << "Valeurs propores \n" << m_EigenValues << "\n";
 
-  std::cerr << "Vecteurs propres\n";
-  std::cerr << m_EigenValues << "\n";
 #endif
 }
 

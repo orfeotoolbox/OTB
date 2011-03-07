@@ -173,7 +173,7 @@ protected:
   virtual void ReverseGenerateData();
 
   /** Specific functionality of MNF */
-  virtual void GetTransformationMatrixFromCovarianceMatrix();
+  virtual void GenerateTransformationMatrix();
 
   /** Internal attributes */
   unsigned int m_NumberOfPrincipalComponentsRequired;
