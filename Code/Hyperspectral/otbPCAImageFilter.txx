@@ -22,6 +22,7 @@
 #include "itkExceptionObject.h"
 
 #include <vnl/vnl_matrix.h>
+#include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vnl/algo/vnl_generalized_eigensystem.h>
 
 namespace otb
@@ -192,7 +193,8 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   }
   else if ( !m_IsTransformationMatrixForward )
   {
-    m_TransformationMatrix = m_TransformationMatrix.GetTranspose();
+    //m_TransformationMatrix = m_TransformationMatrix.GetTranspose();
+    m_TransformationMatrix = m_TransformationMatrix.GetInverse();
 
     m_Transformer->SetInput( inputImgPtr );
   }
@@ -226,13 +228,15 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
     }
 
     GenerateTransformationMatrix();
-    m_TransformationMatrix = m_TransformationMatrix.GetTranspose();
+    //m_TransformationMatrix = m_TransformationMatrix.GetTranspose();
+    m_TransformationMatrix = m_TransformationMatrix.GetInverse();
   }
   else if ( m_IsTransformationMatrixForward )
   {
     // prevents from multiple transpositions...
     m_IsTransformationMatrixForward = false;
-    m_TransformationMatrix = m_TransformationMatrix.GetTranspose();
+    //m_TransformationMatrix = m_TransformationMatrix.GetTranspose();
+    m_TransformationMatrix = m_TransformationMatrix.GetInverse();
   }
 
   if ( m_TransformationMatrix.GetVnlMatrix().empty() )
@@ -337,19 +341,39 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   for ( unsigned int i = 0; i < m_NumberOfPrincipalComponentsRequired; i++ )
     m_EigenValues[i] = static_cast< RealType >( valP[i] );
 #else
-  vnl_svd< MatrixElementType > solver ( m_CovarianceMatrix.GetVnlMatrix() );
-  InternalMatrixType transf = solver.U();
+  //vnl_svd< MatrixElementType > solver ( m_CovarianceMatrix.GetVnlMatrix() );
+  //InternalMatrixType transf = solver.U();
+  //InternalMatrixType valP = solver.W();
 
-  InternalMatrixType valP = solver.W();
+  InternalMatrixType transf;
+  vnl_vector<double> vectValP;
+  vnl_symmetric_eigensystem_compute( m_CovarianceMatrix.GetVnlMatrix(), transf, vectValP );
+
+  InternalMatrixType valP ( vectValP.size(), vectValP.size(), vnl_matrix_null );
+  for ( unsigned int i = 0; i < vectValP.size(); i++ )
+    valP(i,i) = vectValP[i];
+
+  std::cerr << "Matrice U\n";
+  transf.print( std::cerr );
+
+
   /* We used normalized PCA */
   for ( unsigned int i = 0; i < valP.rows(); i++ )
   {
-    if (  valP(i,i) == 0. )
+    if (  valP(i,i) > 0. )
+    {
+      valP(i,i) = 1. / vcl_sqrt( valP(i,i) );
+    }
+    else if ( valP(i,i) < 0. )
+    {
+      otbMsgDebugMacro( << "ValP(" << i << ") neg : " << valP(i,i) << " taking abs value" );
       valP(i,i) = 1. / vcl_sqrt( vcl_abs( valP(i,i) ) );
+    }
     else
-      otbMsgDebugMacro( << "ValP(" << i << ") null : " << valP(i,i) );
-      //throw itk::ExceptionObject( __FILE__, __LINE__,
-      //      "Null Eigen value !!", ITK_LOCATION );
+    {
+      throw itk::ExceptionObject( __FILE__, __LINE__,
+            "Null Eigen value !!", ITK_LOCATION );
+    }
   }
   transf = valP * transf.transpose();
 
@@ -369,8 +393,6 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 
   std::cerr << "Vecteurs propres\n";
   std::cerr << m_EigenValues << "\n";
-
-  std::cerr << "Matrice W\n" << solver.W();
 #endif
 }
 
