@@ -50,6 +50,8 @@ FuzzyVariable<TLabel, TPrecision>::SetMembership(const LabelType& var,
   parameters[1] = v2;
   parameters[2] = v3;
   parameters[3] = v4;
+  parameters[4] = static_cast<TPrecision>(0);
+  parameters[5] = static_cast<TPrecision>(1);
 
   // Insert it in the parameters map
   m_MembershipFunctions[var]=parameters;
@@ -58,6 +60,35 @@ FuzzyVariable<TLabel, TPrecision>::SetMembership(const LabelType& var,
   this->Modified();
 }
 
+template <class TLabel, class TPrecision>
+void
+FuzzyVariable<TLabel, TPrecision>::SetMembership(const LabelType& var,
+                                                 const PrecisionType & v1,
+                                                 const PrecisionType & v2,
+                                                 const PrecisionType & v3,
+                                                 const PrecisionType & v4,
+                                                 const PrecisionType & min,
+                                                 const PrecisionType & max)
+{
+  // Check if values are ordered correctly
+  if( v1>v2 || v2>v3 || v3>v4)
+    itkExceptionMacro(<< "Values have to be v1<=v2<=v3<=v4");
+
+  // Build the membership parameters
+  ParametersType parameters;
+  parameters[0] = v1;
+  parameters[1] = v2;
+  parameters[2] = v3;
+  parameters[3] = v4;
+  parameters[4] = min;
+  parameters[5] = max;
+
+  // Insert it in the parameters map
+  m_MembershipFunctions[var]=parameters;
+
+  // Call modified
+  this->Modified();
+}
 
 template <class TLabel, class TPrecision>
 void
@@ -105,7 +136,7 @@ FuzzyVariable<TLabel, TPrecision>
     // Remaining of the code is trapezoidal function
     if( value < parameters[0] || value > parameters[3] )
       {
-      output = 0;
+      output = parameters[4];
       }
     else if( value >= parameters[0]
              && value < parameters[1] )
@@ -113,18 +144,19 @@ FuzzyVariable<TLabel, TPrecision>
       if(parameters[1]>parameters[0])
         {
         output = static_cast<TPrecision>((value - parameters[0])
-                                         /(parameters[1] - parameters[0]));
+                                         /(parameters[1] - parameters[0])
+                                         *(parameters[5] - parameters[4]));
         }
       else
         {
-        output = static_cast<TPrecision>(1);
+        output = parameters[5];
         }
       }
 
     if( value >= parameters[1]
         && value < parameters[2] )
       {
-      output = static_cast<TPrecision>(1);
+      output = parameters[5];
       }
 
     if( value >= parameters[2]
@@ -133,11 +165,12 @@ FuzzyVariable<TLabel, TPrecision>
       if(parameters[3]>parameters[2])
         {
         output = static_cast<TPrecision>((parameters[3] - value)
-                                         /(parameters[3] - parameters[2]));
+                                         /(parameters[3] - parameters[2])
+                                         *(parameters[5] - parameters[4]));
         }
       else
         {
-        output = static_cast<TPrecision>(1);
+        output = parameters[5];
         }
       }
 

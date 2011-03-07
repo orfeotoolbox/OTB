@@ -34,6 +34,9 @@ namespace otb
  *  of the qualitative values of the variable (MEDIUM = 0.9). Each
  *  membership function is modeled by a trapezoidal function for which
  *  4 values have to be provided.
+ *  In addition, 2 more values can be provided to define the min and
+ *  the max. By default, they ar 0 and 1 respectively.
+ *  
  */
 template <class TLabel = unsigned short, class TPrecision=double>
 class ITK_EXPORT FuzzyVariable : public itk::DataObject
@@ -56,9 +59,8 @@ public:
   typedef TPrecision PrecisionType;
  
   /** Type to hold the membership values */
-
   typedef std::map<LabelType, PrecisionType>        MembershipValueType;
-  typedef itk::FixedArray< PrecisionType, 4 >      ParametersType;
+  typedef itk::FixedArray< PrecisionType, 6>        ParametersType;
   typedef std::map<LabelType, ParametersType>       ParametersMapType;
 
   /** Get the membership related to one label */
@@ -76,6 +78,14 @@ public:
                      const PrecisionType & v2,
                      const PrecisionType & v3,
                      const PrecisionType & v4);
+
+  void SetMembership(const LabelType & var,
+                     const PrecisionType & v1,
+                     const PrecisionType & v2,
+                     const PrecisionType & v3,
+                     const PrecisionType & v4,
+                     const PrecisionType & min,
+                     const PrecisionType & max);
 
   /** Remove a given label from the membership table */
   void RemoveMembership(const LabelType & var);
