@@ -309,7 +309,7 @@ VectorDataExtractROI<TVectorData>
       secondPoint[1] = secondVertex[1];
     
       if (m_GeoROI.IsInside(this->PointToContinuousIndex(firstPoint))
-          | m_GeoROI.IsInside(this->PointToContinuousIndex(secondPoint)))
+          || m_GeoROI.IsInside(this->PointToContinuousIndex(secondPoint)))
         {
         return true;
         }
