@@ -73,6 +73,8 @@ FuzzyVariable<TLabel, TPrecision>::SetMembership(const LabelType& var,
   // Check if values are ordered correctly
   if( v1>v2 || v2>v3 || v3>v4)
     itkExceptionMacro(<< "Values have to be v1<=v2<=v3<=v4");
+  if( min>=max)
+    itkExceptionMacro(<< "Values have to be min<max");
 
   // Build the membership parameters
   ParametersType parameters;
