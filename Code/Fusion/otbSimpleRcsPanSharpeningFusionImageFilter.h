@@ -123,11 +123,18 @@ private:
       // Build output pixel
       typename TOutputImageType::PixelType output(xsPixel.Size());
 
+      TInternalPrecision scale = 1.;
+
+      if(vcl_abs(smoothPanchroPixel) > 1e-10)
+        {
+        scale = sharpPanchroPixel/smoothPanchroPixel;
+        }
+
       // Perform fusion for each band with appropriate casting
       for(unsigned int i = 0; i < xsPixel.Size(); ++i)
         {
         output[i] = static_cast<typename TOutputImageType::InternalPixelType>(
-          xsPixel[i] * static_cast<TInternalPrecision>(sharpPanchroPixel/smoothPanchroPixel));
+          xsPixel[i] * scale);
         }
       // Returns the output pixel
       return output;

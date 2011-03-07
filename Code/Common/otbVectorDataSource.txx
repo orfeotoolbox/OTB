@@ -40,6 +40,47 @@ VectorDataSource<TOutputVectorData>
 {
 }
 
+/**
+ *
+ */
+
+template <class TOutputVectorData>
+void
+VectorDataSource<TOutputVectorData>
+::GraftOutput(itk::DataObject *graft)
+{
+  this->GraftNthOutput(0, graft);
+}
+
+/**
+ *
+ */
+
+template <class TOutputVectorData>
+void
+VectorDataSource<TOutputVectorData>
+::GraftNthOutput(unsigned int idx, itk::DataObject *graft)
+{
+  if ( idx >= this->GetNumberOfOutputs() )
+    {
+    itkExceptionMacro(<<"Requested to graft output " << idx <<
+        " but this filter only has " << this->GetNumberOfOutputs() << " Outputs.");
+    }
+
+  if ( !graft )
+    {
+    itkExceptionMacro(<<"Requested to graft output that is a NULL pointer" );
+    }
+
+  // we use the process object method since all out output may not be
+  // of the same type
+  itk::DataObject * output = this->ProcessObject::GetOutput(idx);
+
+  // Call GraftImage to copy meta-information, regions, and the pixel container
+  output->Graft( graft );
+}
+
+
 template <class TOutputVectorData>
 void
 VectorDataSource<TOutputVectorData>

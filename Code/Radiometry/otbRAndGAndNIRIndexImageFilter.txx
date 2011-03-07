@@ -43,7 +43,7 @@ RAndGAndNIRIndexImageFilter<TInputImageR, TInputImageG, TInputImageNIR, TOutputI
 ::SetInputR(const TInputImageR * image)
 {
   // Process object is not const-correct so the const casting is required.
-  SetInput1(image);
+  this->SetInput1(image);
 }
 
 /**
@@ -55,7 +55,7 @@ void
 RAndGAndNIRIndexImageFilter<TInputImageR, TInputImageG, TInputImageNIR, TOutputImage, TFunction>
 ::SetInputG(const TInputImageG * image)
 {
-  SetInput2(image);
+  this->SetInput2(image);
 }
 
 /**
@@ -67,7 +67,7 @@ void
 RAndGAndNIRIndexImageFilter<TInputImageR, TInputImageG, TInputImageNIR, TOutputImage, TFunction>
 ::SetInputNIR(const TInputImageNIR * image)
 {
-  SetInput3(image);
+  this->SetInput3(image);
 }
 
 template <class TInputImageR, class TInputImageG, class TInputImageNIR, class TOutputImage, class TFunction>

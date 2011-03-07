@@ -28,7 +28,7 @@
 int otbGenericMapProjectionNew(int argc, char* argv[])
 {
 
-  typedef otb::GenericMapProjection<otb::FORWARD> MapProjectionType;
+  typedef otb::GenericMapProjection<otb::Transform::FORWARD> MapProjectionType;
   MapProjectionType::Pointer mapProjection = MapProjectionType::New();
 
   std::cout << mapProjection << std::endl;

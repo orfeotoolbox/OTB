@@ -87,7 +87,7 @@ typename ImageToLabelMapWithAttributesFilter<TInputImage, TLabeledImage, TOutput
 ImageToLabelMapWithAttributesFilter<TInputImage, TLabeledImage, TOutputLabel, TObjectLabel>
 ::GetOutput()
 {
-  return dynamic_cast< const  LabelMapType* >
+  return dynamic_cast< LabelMapType* >
     (this->Superclass::GetOutput(0));
 }
 

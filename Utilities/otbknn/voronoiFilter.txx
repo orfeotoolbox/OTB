@@ -64,7 +64,7 @@ namespace itk
   ::SetInput(const  TDomain * domain1 ) 
   {
     // Process object is not const-correct so the const casting is required.
-    SetNthInput(0, const_cast<TDomain *>( domain1 ));
+    this->SetNthInput(0, const_cast<TDomain *>( domain1 ));
    
   }
   

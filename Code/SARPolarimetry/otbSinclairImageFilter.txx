@@ -34,7 +34,7 @@ void
 SinclairImageFilter<TInputImageHH, TInputImageHV, TInputImageVH, TInputImageVV, TOutputImage, TFunction>
 ::SetInputHH(const TInputImageHH * image)
 {
-  SetInput1(image);
+  this->SetInput1(image);
 }
 
 /**
@@ -46,7 +46,7 @@ void
 SinclairImageFilter<TInputImageHH, TInputImageHV, TInputImageVH, TInputImageVV, TOutputImage, TFunction>
 ::SetInputHV(const TInputImageHV * image)
 {
-  SetInput2(image);
+  this->SetInput2(image);
 }
 
 /**
@@ -58,7 +58,7 @@ void
 SinclairImageFilter<TInputImageHH, TInputImageHV, TInputImageVH, TInputImageVV, TOutputImage, TFunction>
 ::SetInputVH(const TInputImageVH * image)
 {
-  SetInput3(image);
+  this->SetInput3(image);
 }
 
 /**
@@ -70,7 +70,7 @@ void
 SinclairImageFilter<TInputImageHH, TInputImageHV, TInputImageVH, TInputImageVV, TOutputImage, TFunction>
 ::SetInputVV(const TInputImageVV * image)
 {
-  SetInput4(image);
+  this->SetInput4(image);
 }
 
 /**

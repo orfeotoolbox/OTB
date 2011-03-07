@@ -15,21 +15,21 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+
+// this file defines the otbCommonTest for the test driver
+// and all it expects is that you have a function called RegisterTests
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
 #endif
 
-#include "otbMacro.h"
-#include "otbImage.h"
-#include "otbGeocentricTransform.h"
+//
+#include "otbTestMain.h"
 
-int otbGeocentricTransformNew(int argc, char* argv[])
+void RegisterTests()
 {
-
-  typedef otb::GeocentricTransform<otb::Transform::FORWARD> ProjectionType;
-  ProjectionType::Pointer projection = ProjectionType::New();
-
-  std::cout << projection << std::endl;
-
-  return EXIT_SUCCESS;
+  REGISTER_TEST(otbFuzzyVariableDSApplied);
+  REGISTER_TEST(otbMassOfBeliefDSApplied);
+  //REGISTER_TEST(otbVectorDataToSpecificDescriptionFilterBaseNew);
+  //REGISTER_TEST(otbVectorDataToRoadDescriptionFilterNew);
+  //REGISTER_TEST(otbVectorDataToRoadDescriptionFilter);
 }

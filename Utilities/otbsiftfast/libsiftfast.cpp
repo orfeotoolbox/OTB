@@ -1729,11 +1729,11 @@ vec_float4 C-style expressions
 #define VEC_XOR(a,b)   asm ("xorps %2, %1":"=x" (a) :"0" (a),"x" (b))
 #define VEC_SUB(a,b)   asm ("subps %2, %1":"=x" (a) :"0" (a),"x" (b))
 
-#define VEC_GT(a,b)     __builtin_ia32_cmpgtps((vec_float4)a,(vec_float4)b)
-#define VEC_LT(a,b)     __builtin_ia32_cmpltps(a,b)
-#define VEC_EQ(a,b)     __builtin_ia32_cmpeqps(a,b)
-#define VEC_NE(a,b)     __builtin_ia32_cmpneqps(a,b)
-#define VEC_GE(a,b)     __builtin_ia32_cmpgeps(a,b)
+#define VEC_GT(a,b)     _mm_cmpgt_ps((vec_float4)a,(vec_float4)b)
+#define VEC_LT(a,b)     _mm_cmplt_ps(a,b)
+#define VEC_EQ(a,b)     _mm_cmpeq_ps(a,b)
+#define VEC_NE(a,b)     _mm_cmpneq_ps(a,b)
+#define VEC_GE(a,b)     _mm_cmpge_ps(a,b)
 #define VEC_SR(v,n)     _mm_srli_epi32(v,n)
 #define VEC_SL(v,n)     _mm_slli_epi32(v,n)
 

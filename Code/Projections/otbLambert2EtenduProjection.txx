@@ -24,7 +24,7 @@
 namespace otb
 {
 
-template <InverseOrForwardTransformationEnum transform>
+template <Transform::TransformationDirection transform>
 Lambert2EtenduProjection<transform>
 ::Lambert2EtenduProjection()
 {
@@ -46,7 +46,7 @@ Lambert2EtenduProjection<transform>
   this->SetParameters(parall1, parall2, falseEasting, falseNorthing);
 }
 
-template <InverseOrForwardTransformationEnum transform>
+template <Transform::TransformationDirection transform>
 Lambert2EtenduProjection<transform>
 ::~Lambert2EtenduProjection()
 {

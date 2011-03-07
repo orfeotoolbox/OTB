@@ -24,20 +24,20 @@
 namespace otb
 {
 
-template <InverseOrForwardTransformationEnum transform>
+template <Transform::TransformationDirection transform>
 MollweidMapProjection<transform>
 ::MollweidMapProjection()
 {
 }
 
-template <InverseOrForwardTransformationEnum transform>
+template <Transform::TransformationDirection transform>
 MollweidMapProjection<transform>
 ::~MollweidMapProjection()
 {
 }
 
 ///Set the false easting
-template <InverseOrForwardTransformationEnum transform>
+template <Transform::TransformationDirection transform>
 void MollweidMapProjection<transform>
 ::SetFalseEasting(double falseEasting)
 {
@@ -45,7 +45,7 @@ void MollweidMapProjection<transform>
 }
 
 ///Set the false Northing
-template <InverseOrForwardTransformationEnum transform>
+template <Transform::TransformationDirection transform>
 void MollweidMapProjection<transform>
 ::SetFalseNorthing(double falseNorthing)
 {
@@ -53,7 +53,7 @@ void MollweidMapProjection<transform>
 }
 
 ///Set the default parameters
-template <InverseOrForwardTransformationEnum transform>
+template <Transform::TransformationDirection transform>
 void MollweidMapProjection<transform>
 ::SetDefaults()
 {
@@ -61,7 +61,7 @@ void MollweidMapProjection<transform>
 }
 
 ///\return the false northing (avoid negative coordinates)
-template <InverseOrForwardTransformationEnum transform>
+template <Transform::TransformationDirection transform>
 double MollweidMapProjection<transform>
 ::GetFalseNorthing() const
 {
@@ -71,7 +71,7 @@ double MollweidMapProjection<transform>
 }
 
 ///\return the false easting (avoid negative coordinates)
-template <InverseOrForwardTransformationEnum transform>
+template <Transform::TransformationDirection transform>
 double MollweidMapProjection<transform>
 ::GetFalseEasting() const
 {
@@ -80,7 +80,7 @@ double MollweidMapProjection<transform>
   return falseEasting;
 }
 
-template <InverseOrForwardTransformationEnum transform>
+template <Transform::TransformationDirection transform>
 void MollweidMapProjection<transform>
 ::SetParameters(double falseEasting, double falseNorthing)
 {
