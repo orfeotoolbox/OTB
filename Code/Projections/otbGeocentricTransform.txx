@@ -23,7 +23,7 @@
 namespace otb
 {
 
-template<InverseOrForwardTransformationEnum TransformDirection, class TScalarType, unsigned int NInputDimensions,
+template<Transform::TransformationDirection TransformDirection, class TScalarType, unsigned int NInputDimensions,
     unsigned int NOutputDimensions>
 GeocentricTransform<TransformDirection, TScalarType, NInputDimensions, NOutputDimensions>
 ::GeocentricTransform() : Superclass(SpaceDimension, ParametersDimension)
@@ -31,7 +31,7 @@ GeocentricTransform<TransformDirection, TScalarType, NInputDimensions, NOutputDi
   m_Ellipsoid = new ossimEllipsoid();
 }
 
-template<InverseOrForwardTransformationEnum TransformDirection, class TScalarType, unsigned int NInputDimensions,
+template<Transform::TransformationDirection TransformDirection, class TScalarType, unsigned int NInputDimensions,
     unsigned int NOutputDimensions>
 GeocentricTransform<TransformDirection, TScalarType, NInputDimensions, NOutputDimensions>
 ::~GeocentricTransform()
@@ -42,7 +42,7 @@ GeocentricTransform<TransformDirection, TScalarType, NInputDimensions, NOutputDi
     }
 }
 
-template<InverseOrForwardTransformationEnum TransformDirection, class TScalarType, unsigned int NInputDimensions,
+template<Transform::TransformationDirection TransformDirection, class TScalarType, unsigned int NInputDimensions,
     unsigned int NOutputDimensions>
 typename GeocentricTransform<TransformDirection, TScalarType, NInputDimensions, NOutputDimensions>::OutputPointType
 GeocentricTransform<TransformDirection, TScalarType, NInputDimensions, NOutputDimensions>
@@ -50,11 +50,11 @@ GeocentricTransform<TransformDirection, TScalarType, NInputDimensions, NOutputDi
 {
   OutputPointType outputPoint;
 
-  if (DirectionOfMapping == INVERSE)
+  if (DirectionOfMapping == Transform::INVERSE)
     {
     m_Ellipsoid->XYZToLatLonHeight(point[0], point[1], point[2], outputPoint[1], outputPoint[0], outputPoint[2]);
     }
-  if (DirectionOfMapping == FORWARD)
+  if (DirectionOfMapping == Transform::FORWARD)
     {
     m_Ellipsoid->latLonHeightToXYZ(point[1], point[0], point[2], outputPoint[0], outputPoint[1], outputPoint[2]);
     }

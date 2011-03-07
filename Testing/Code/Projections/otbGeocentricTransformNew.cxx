@@ -26,7 +26,7 @@
 int otbGeocentricTransformNew(int argc, char* argv[])
 {
 
-  typedef otb::GeocentricTransform<otb::FORWARD> ProjectionType;
+  typedef otb::GeocentricTransform<otb::Transform::FORWARD> ProjectionType;
   ProjectionType::Pointer projection = ProjectionType::New();
 
   std::cout << projection << std::endl;

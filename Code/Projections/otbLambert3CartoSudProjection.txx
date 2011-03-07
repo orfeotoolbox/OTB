@@ -24,7 +24,7 @@
 namespace otb
 {
 
-template <InverseOrForwardTransformationEnum transform>
+template <Transform::TransformationDirection transform>
 Lambert3CartoSudProjection<transform>
 ::Lambert3CartoSudProjection()
 {
@@ -46,7 +46,7 @@ Lambert3CartoSudProjection<transform>
   this->SetParameters(parall1, parall2, falseEasting, falseNorthing);
 }
 
-template <InverseOrForwardTransformationEnum transform>
+template <Transform::TransformationDirection transform>
 Lambert3CartoSudProjection<transform>
 ::~Lambert3CartoSudProjection()
 {
