@@ -47,9 +47,9 @@ public:
     for ( unsigned int i = 0; i < length; i++ )
     {
       output[i] = static_cast<typename TOutput::ValueType>(
-                  input.GetPixel(4)[i] 
-                  - input.GetPixel(1)[i] / 2.
-                  - input.GetPixel(3)[i] / 2. );
+                  input.GetCenterPixel()[i] 
+                  - input.GetPixel(5)[i] / 2.
+                  - input.GetPixel(7)[i] / 2. );
     }
     return output;
   }

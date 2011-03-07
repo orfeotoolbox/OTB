@@ -37,7 +37,7 @@ namespace otb {
  * for a better scalability...
  *
  * This class is very similar to the MNFImageFilter one since only the projection 
- * matrix definition (through GetTransformationMatrixFromCovarianceMatrix function)
+ * matrix definition (through GenerateTransformationMatrix function)
  * differs.
  *
  * TODO? Utiliser une 2e entree pour donner directement une image de bruit ??
@@ -92,7 +92,7 @@ protected:
   virtual ~NAPCAImageFilter () { }
 
   /** Specific functionality of NAPCA */
-  virtual void GetTransformationMatrixFromCovarianceMatrix();
+  virtual void GenerateTransformationMatrix();
 }; // end of class
 
 } // end of namespace otb

@@ -33,22 +33,24 @@ template <class TInputImage, class TOutputImage,
             Transform::TransformDirection TDirectionOfTransformation >
 void
 NAPCAImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransformation >
-::GetTransformationMatrixFromCovarianceMatrix ()
+::GenerateTransformationMatrix ()
 {
   InternalMatrixType An = this->GetNoiseCovarianceMatrix().GetVnlMatrix();
+  InternalMatrixType Fn;
+  vnl_vector<double> vectValPn;
+  vnl_symmetric_eigensystem_compute( An, Fn, vectValPn );
+  Fn.inplace_transpose();
+
   InternalMatrixType Ax = this->GetCovarianceMatrix().GetVnlMatrix();
+  InternalMatrixType Aadj = Fn.transpose() * Ax * Fn;
 
-  vnl_svd< MatrixElementType > An_solver ( An );
-  InternalMatrixType U_cholesky = An_solver.U();
-  InternalMatrixType U = vnl_matrix_inverse< MatrixElementType > ( U_cholesky );
-  InternalMatrixType C = U.transpose() * Ax * U;
+  InternalMatrixType Fadj;
+  vnl_vector<double> vectValPadj;
+  vnl_symmetric_eigensystem_compute( Aadj, Fadj, vectValPadj );
 
-  InternalMatrixType Id ( C.rows(), C.cols(), vnl_matrix_identity );
-  vnl_generalized_eigensystem solver ( C, Id );
-
-  InternalMatrixType transf = solver.V;
-  transf *= U.transpose();
+  InternalMatrixType transf = Fn * Fadj;
   transf.fliplr();
+  transf.inplace_transpose();
 
   if ( this->GetNumberOfPrincipalComponentsRequired() 
       != this->GetInput()->GetNumberOfComponentsPerPixel() )
@@ -56,12 +58,10 @@ NAPCAImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTran
   else
     this->m_TransformationMatrix = transf;
 
-  vnl_vector< double > valP = solver.D.diagonal();
-  valP.flip();
-
   this->m_EigenValues.SetSize( this->GetNumberOfPrincipalComponentsRequired() );
   for ( unsigned int i = 0; i < this->GetNumberOfPrincipalComponentsRequired(); i++ )
-    this->m_EigenValues[i] = static_cast< RealType >( valP[i] );
+    this->m_EigenValues[this->GetNumberOfPrincipalComponentsRequired()-1-i] 
+      = static_cast< RealType >( vectValPadj[i] );
 }
 
 

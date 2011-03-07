@@ -341,10 +341,6 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   for ( unsigned int i = 0; i < m_NumberOfPrincipalComponentsRequired; i++ )
     m_EigenValues[i] = static_cast< RealType >( valP[i] );
 #else
-  //vnl_svd< MatrixElementType > solver ( m_CovarianceMatrix.GetVnlMatrix() );
-  //InternalMatrixType transf = solver.U();
-  //InternalMatrixType valP = solver.W();
-
   InternalMatrixType transf;
   vnl_vector<double> vectValP;
   vnl_symmetric_eigensystem_compute( m_CovarianceMatrix.GetVnlMatrix(), transf, vectValP );
@@ -372,6 +368,7 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
     }
   }
   transf = valP * transf.transpose();
+  transf.flipud();
 
   if ( m_NumberOfPrincipalComponentsRequired 
       != this->GetInput()->GetNumberOfComponentsPerPixel() )
@@ -379,13 +376,9 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   else
     m_TransformationMatrix = transf;
   
-  // std::cerr << "Matrice de projection \n" << m_TransformationMatrix << "\n";
- 
   m_EigenValues.SetSize( m_NumberOfPrincipalComponentsRequired );
   for ( unsigned int i = 0; i < m_NumberOfPrincipalComponentsRequired; i++ )
     m_EigenValues[i] = static_cast< RealType >( valP(i,i) );
-
-  // std::cerr << "Valeurs propores \n" << m_EigenValues << "\n";
 
 #endif
 }

@@ -154,6 +154,16 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
     m_Normalizer->SetUseStdDev( false );
 
   m_Normalizer->SetInput( inputImgPtr );
+  m_Normalizer->Update();
+
+  if ( !m_GivenMeanValues )
+    m_MeanValues = m_Normalizer->GetFunctor().GetMean();
+
+  if ( m_UseNormalization )
+  {
+    if ( !m_GivenStdDevValues )
+      m_StdDevValues = m_Normalizer->GetFunctor().GetStdDev();
+  }
 
   if ( !m_GivenTransformationMatrix )
   {
@@ -205,15 +215,6 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
 
   this->GraftOutput( m_Transformer->GetOutput() );
 
-  /** Once the Normalizer has been updated */
-  if ( !m_GivenMeanValues )
-    m_MeanValues = m_Normalizer->GetFunctor().GetMean();
-
-  if ( m_UseNormalization )
-  {
-    if ( !m_GivenStdDevValues )
-      m_StdDevValues = m_Normalizer->GetFunctor().GetStdDev();
-  }
 }
 
 template <class TInputImage, class TOutputImage, 
@@ -258,7 +259,7 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
     if ( m_TransformationMatrix.Rows() == m_TransformationMatrix.Cols() )
     {
       m_TransformationMatrix = vnl_matrix_inverse< MatrixElementType >
-                                ( m_TransformationMatrix.GetTranspose() );
+                                ( m_TransformationMatrix.GetVnlMatrix() );
     }
     else
     {
@@ -329,21 +330,9 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
   InternalMatrixType An = m_NoiseCovarianceMatrix.GetVnlMatrix();
   InternalMatrixType W = An * Ax_inv;
 
-  std::cerr << "Matrice C \n";
-  W.print( std::cerr );
-
-  InternalMatrixType transf;
-  vnl_vector<double> vectValP;
-
-  vnl_symmetric_eigensystem_compute( W, transf, vectValP );
-
-  std::cerr << "Matrice de transf\n";
-  transf.print( std::cerr );
-
-  std::cerr << "VectPropres\n";
-  for ( unsigned int i = 0; i < vectValP.size(); i++ )
-    std::cerr << vectValP[i] << "  ";
-  std::cerr << "\n";
+  vnl_svd< MatrixElementType > solver ( m_CovarianceMatrix.GetVnlMatrix() );
+  InternalMatrixType transf = solver.U();
+  InternalMatrixType valP = solver.W();
 
   InternalMatrixType normMat //= transf.transpose() * An * transf;
     = transf.transpose() * Ax_inv * transf;
@@ -356,7 +345,6 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
   }
 
   transf.inplace_transpose();
-  transf.fliplr();
 
   if ( m_NumberOfPrincipalComponentsRequired 
       != this->GetInput()->GetNumberOfComponentsPerPixel() )
@@ -364,14 +352,9 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
   else
     m_TransformationMatrix = transf;
 
-  std::cerr << "Matrice de projection \n" << m_TransformationMatrix << "\n";
-
   m_EigenValues.SetSize( m_NumberOfPrincipalComponentsRequired );
   for ( unsigned int i = 0; i < m_NumberOfPrincipalComponentsRequired; i++ )
-    m_EigenValues[i] 
-      = static_cast< RealType >( vectValP[m_NumberOfPrincipalComponentsRequired-1-i] );
-
-  std::cerr << "Valeurs propores \n" << m_EigenValues << "\n";
+    m_EigenValues[i] = static_cast< RealType >( valP(i,i) );
 }
 
 template <class TInputImage, class TOutputImage, 
