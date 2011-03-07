@@ -240,8 +240,8 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 
     for ( unsigned int band = 0; band < size; band++ )
     {
-      std::cerr << "Iteration " << iteration << ", bande " << band 
-        << ", convergence " << convergence << "\n";
+      otbMsgDebugMacro( << "Iteration " << iteration << ", bande " << band 
+                        << ", convergence " << convergence );
 
       InternalOptimizerPointerType optimizer = InternalOptimizerType::New();
       optimizer->SetInput( 0, m_PCAFilter->GetOutput() );
@@ -257,23 +257,23 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
       double norm = 0.;
       for ( unsigned int bd = 0; bd < size; bd++ )
       {
-        W(bd,band) -= m_Mu * ( estimator->GetMean()[bd] 
-                              - optimizer->GetBeta() * W(bd,band) / optimizer->GetDen() );
-        norm += vcl_pow( W(bd,band), 2. );
+        W(band,bd) -= m_Mu * ( estimator->GetMean()[bd] 
+                              - optimizer->GetBeta() * W(band,bd) / optimizer->GetDen() );
+        norm += vcl_pow( W(band,bd), 2. );
       }
       for ( unsigned int bd = 0; bd < size; bd++ )
-        W(bd,band) /= norm;
+        W(band,bd) /= vcl_sqrt( norm );
     }
 
     // Decorrelation of the W vectors
     InternalMatrixType W_tmp = W * W.transpose();
-    InternalMatrixType Id ( W.rows(), W.cols(), vnl_matrix_identity );
-    vnl_generalized_eigensystem solver ( W_tmp, Id );
-    InternalMatrixType valP = solver.D;
+    vnl_svd< MatrixElementType > solver ( W_tmp );
+    InternalMatrixType valP = solver.W();
     for ( unsigned int i = 0; i < valP.rows(); i++ )
       valP(i,i) = 1. / vcl_sqrt( static_cast<double>( valP(i,i) ) ); // Watch for 0 or neg
-    W_tmp = solver.V * valP * solver.V.transpose();
-    W = W.transpose() * W;
+    InternalMatrixType transf = solver.U();
+    W_tmp = transf * valP * transf.transpose();
+    W = W_tmp * W;
 
     // Convergence evaluation
     convergence = 0.;
@@ -281,7 +281,7 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
       for ( unsigned int j = 0; j < W.cols(); j++ )
         convergence += vcl_abs( W(i,j) - W_old(i,j) );
 
-    //reporter.CompletedPixel();
+    reporter.CompletedPixel();
   } // end of while loop
 
   if ( size != this->GetNumberOfPrincipalComponentsRequired() )

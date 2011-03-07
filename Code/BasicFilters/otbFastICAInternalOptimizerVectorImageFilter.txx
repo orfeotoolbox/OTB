@@ -110,7 +110,7 @@ FastICAInternalOptimizerVectorImageFilter< TInputImage, TOutputImage >
 
     typename OutputImageType::PixelType z ( nbBands );
     for ( unsigned int bd = 0; bd < nbBands; bd++ )
-      z[bd] = x * input0It.Get()[bd];
+      z[bd] = g_x * input0It.Get()[bd];
     outputIt.Set(z);
 
     ++input0It;
