@@ -22,6 +22,7 @@ SET( otbHyperTests1_SRC
   otbHorizontalSobelVectorImageFilter.cxx
   otbVerticalSobelVectorImageFilter.cxx
   otbSobelVectorImageFilter.cxx
+  otbLocalGradientVectorImageFilter.cxx
   otbLocalActivityVectorImageFilter.cxx
   otbNormalizeVectorImageFilter.cxx
   otbPCAImageFilter.cxx
@@ -379,6 +380,16 @@ ADD_TEST(bfTvSobelVectorImageFilter
          otbSobelVectorImageFilterTest
 		 -in ${DATA}/CupriteSubHsi/cupriteSubHsi.tif 
 		 -out ${TEMP}/cupriteSobelFlt.hdr)
+
+ADD_TEST(bfTuLocalGradientVectorImageFilterNew
+         ${TESTEXE_DIR}/otbHyperTests1
+         otbLocalGradientVectorImageFilterNewTest)
+
+ADD_TEST(bfTvLocalGradientVectorImageFilter
+         ${TESTEXE_DIR}/otbHyperTests1
+         otbLocalGradientVectorImageFilterTest
+		 -in ${DATA}/CupriteSubHsi/cupriteSubHsi.tif 
+		 -out ${TEMP}/cupriteLocalGradientFlt.hdr)
 
 ADD_TEST(bfTuLocalActivityVectorImageFilterNew
          ${TESTEXE_DIR}/otbHyperTests1
