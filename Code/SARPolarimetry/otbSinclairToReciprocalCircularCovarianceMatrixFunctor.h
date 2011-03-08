@@ -62,22 +62,31 @@ public:
     TOutput result;
 
     result.SetSize(m_NumberOfComponentsPerPixel);
-    const ComplexType j2Shv = static_cast<ComplexType>(Shv) * vcl_complex<RealType>(0.0, 2.0);
 
-    const ComplexType Sll = static_cast<ComplexType>( 0.5 * (-Shh-j2Shv+Svv) );
-    const ComplexType Slr = static_cast<ComplexType>( 0.5 * (-Shh+Svv) );
+
+    const ComplexType S_hh = static_cast<ComplexType>(Shh);
+    const ComplexType S_hv = static_cast<ComplexType>(Shv);
+    const ComplexType S_vh = static_cast<ComplexType>(Svh);
+    const ComplexType S_vv = static_cast<ComplexType>(Svv);
+
+    const ComplexType coef(0.5);
+
+    const ComplexType j2S_hv = S_hv * ComplexType(0.0, 2.0);
+
+    const ComplexType Sll = coef * (-S_hh-j2S_hv+S_vv );
+    const ComplexType Slr = coef * (-S_hh+S_vv );
     const ComplexType Srr = vcl_conj(Sll);
 
     const ComplexType conjSll = vcl_conj(Sll);
     const ComplexType conjSlr = vcl_conj(Slr);
     const ComplexType conjSrr = vcl_conj(Srr);
 
-    result[0]  = static_cast<OutputValueType>( Sll * conjSll  );
+    result[0]  = static_cast<OutputValueType>( std::norm(Sll) );
     result[1]  = static_cast<OutputValueType>( Sll * conjSlr  );
     result[2]  = static_cast<OutputValueType>( Sll * conjSrr  );
-    result[3]  = static_cast<OutputValueType>( Slr * conjSlr  );
+    result[3]  = static_cast<OutputValueType>( std::norm(Slr) );
     result[4]  = static_cast<OutputValueType>( Slr * conjSrr  );
-    result[5]  = static_cast<OutputValueType>( Srr * conjSrr  );
+    result[5]  = static_cast<OutputValueType>( std::norm(Srr) );
 
     return (result);
   }

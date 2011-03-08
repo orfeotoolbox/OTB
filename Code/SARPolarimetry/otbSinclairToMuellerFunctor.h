@@ -53,6 +53,8 @@ namespace Functor
  * \f$ T_{yx} = -S_{vh} \f$
  * \f$ T_{yy} = -S_{vv} \f$
  *
+ * Output is a not a complex.
+ *
  *  \ingroup Functor
  *  \ingroup SARPolarimetry
  *
@@ -86,27 +88,25 @@ public:
     const ComplexType Tyx = static_cast<ComplexType>(Svh);
     const ComplexType Tyy = static_cast<ComplexType>(Svv);
 
-    const ComplexType conjTxx = vcl_conj(static_cast<ComplexType>(-Shh));
-    const ComplexType conjTxy = vcl_conj(static_cast<ComplexType>(-Shv));
-    const ComplexType conjTyx = vcl_conj(static_cast<ComplexType>(Svh));
-    const ComplexType conjTyy = vcl_conj(static_cast<ComplexType>(Svv));
+    const ComplexType conjTxx = vcl_conj(Txx);
+    const ComplexType conjTxy = vcl_conj(Txy);
+    const ComplexType conjTyx = vcl_conj(Tyx);
+    const ComplexType conjTyy = vcl_conj(Tyy);
 
-    result[0]  = static_cast<OutputValueType>( 0.5 * (Txx*conjTxx + Txy*conjTxy + Tyx*conjTyx + Tyy*conjTyy).real()  );
-    result[1]  = static_cast<OutputValueType>( 0.5 * (Txx*conjTxx - Txy*conjTxy + Tyx*conjTyx - Tyy*conjTyy).real()  );
+    result[0]  = static_cast<OutputValueType>( 0.5 * ( std::norm(Txx) + std::norm(Txy) + std::norm(Tyx) + std::norm(Tyy) ) );
+    result[1]  = static_cast<OutputValueType>( 0.5 * ( std::norm(Txx) - std::norm(Txy) + std::norm(Tyx) - std::norm(Tyy) ) );
     result[2]  = static_cast<OutputValueType>( (Txx*conjTxy + Tyx*conjTyy).real()  );
     result[3]  = static_cast<OutputValueType>( (Txx*conjTxy + Tyx*conjTyy).imag()  );
-    result[4]  = static_cast<OutputValueType>( 0.5 * (Txx*conjTxx + Txy*conjTxy - Tyx*conjTyx - Tyy*conjTyy).real()  );
-    result[5]  = static_cast<OutputValueType>( 0.5 * (Txx*conjTxx - Txy*conjTxy - Tyx*conjTyx + Tyy*conjTyy).real()  );
+    result[4]  = static_cast<OutputValueType>( 0.5 * (std::norm(Txx) + std::norm(Txy) - std::norm(Tyx) - std::norm(Tyy) ) );
+    result[5]  = static_cast<OutputValueType>( 0.5 * (std::norm(Txx) - std::norm(Txy) - std::norm(Tyx) + std::norm(Tyy) ) );
     result[6]  = static_cast<OutputValueType>( (Txx*conjTxy - Tyx*conjTyy).real()  );
     result[7]  = static_cast<OutputValueType>( (Txx*conjTxy - Tyx*conjTyy).imag()  );
     result[8]  = static_cast<OutputValueType>( (Txx*conjTyx + Txy*conjTyy).real()  );
     result[9]  = static_cast<OutputValueType>( (Txx*conjTyx - Txy*conjTyy).real()  );
     result[10] = static_cast<OutputValueType>( (Txx*conjTyy + Txy*conjTyx).real()  );
     result[11] = static_cast<OutputValueType>( (Txx*conjTyy - Txy*conjTyx).imag()  );
-
     result[12] = static_cast<OutputValueType>( (conjTxx*Tyx + conjTxy*Tyy).imag()  );
     result[13] = static_cast<OutputValueType>( (conjTxx*Tyx - conjTxy*Tyy).imag()  );
-
     result[14] = static_cast<OutputValueType>( (conjTxx*Tyy + conjTxy*Tyx).imag()  );
     result[15] = static_cast<OutputValueType>( (Txx*conjTyy - Txy*conjTyx).real()  );
 

@@ -27,7 +27,7 @@
 int otbComplexToVectorImageCastFilterNew(int argc, char * argv[])
 {
   typedef std::complex<float>        ComplexType;
-  typedef otb::Image<ComplexType, 2> CplxImageType;
+  typedef otb::VectorImage<ComplexType, 2> CplxImageType;
   typedef otb::VectorImage<float, 2> VectorImageType;
 
   typedef otb::ComplexToVectorImageCastFilter<CplxImageType, VectorImageType> FilterType;
@@ -43,24 +43,39 @@ int otbComplexToVectorImageCastFilterTest(int argc, char * argv[])
 {
   typedef std::complex<float>        ComplexType;
   typedef otb::Image<ComplexType, 2> CplxImageType;
+  typedef otb::VectorImage<ComplexType, 2> VCplxImageType;
   typedef otb::VectorImage<float, 2> VectorImageType;
 
-  typedef otb::ComplexToVectorImageCastFilter<CplxImageType, VectorImageType> FilterType;
+  typedef otb::ComplexToVectorImageCastFilter<VCplxImageType, VectorImageType> VFilterType;
+  typedef otb::ComplexToVectorImageCastFilter<CplxImageType, VectorImageType>  FilterType;
+
   typedef otb::ImageFileReader<CplxImageType>                                 ReaderType;
+  typedef otb::ImageFileReader<VCplxImageType>                                VReaderType;
+
   typedef otb::ImageFileWriter<VectorImageType>                               WriterType;
  
 
    // Instantiating objects
   ReaderType::Pointer reader = ReaderType::New();
+  VReaderType::Pointer vreader = VReaderType::New();
   WriterType::Pointer writer = WriterType::New();
+  WriterType::Pointer vwriter = WriterType::New();
   FilterType::Pointer caster = FilterType::New();
+  VFilterType::Pointer vcaster = VFilterType::New();
 
   reader->SetFileName(argv[1]);
+  vreader->SetFileName(argv[1]);
+
   caster->SetInput(reader->GetOutput());
+  vcaster->SetInput(vreader->GetOutput());
+
   writer->SetFileName(argv[2]);
   writer->SetInput( caster->GetOutput());
+  vwriter->SetFileName(argv[3]);
+  vwriter->SetInput( vcaster->GetOutput());
 
   writer->Update();
+  vwriter->Update();
 
   return EXIT_SUCCESS;
 }

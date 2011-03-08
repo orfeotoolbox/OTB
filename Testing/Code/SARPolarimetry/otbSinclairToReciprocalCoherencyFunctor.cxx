@@ -17,35 +17,36 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 
-#include "otbSinclairToReciprocalCovarianceFunctor.h"
+#include "otbSinclairToReciprocalCoherencyFunctor.h"
 #include "itkVariableLengthVector.h"
 
-int otbSinclairToReciprocalCovarianceFunctor(int argc, char * argv[])
+int otbSinclairToReciprocalCoherencyFunctor(int argc, char * argv[])
 {
   typedef std::complex<double>                   ComplexType;
   typedef itk::VariableLengthVector<ComplexType> OutputType;
 
-  typedef otb::Functor::SinclairToReciprocalCovarianceFunctor<ComplexType, ComplexType, ComplexType, ComplexType, OutputType >         FunctorType;
+  typedef otb::Functor::SinclairToReciprocalCoherencyFunctor<ComplexType, ComplexType, ComplexType, ComplexType, OutputType >         FunctorType;
 
   OutputType  result(6);
   FunctorType funct;
   OutputType outputFunct;
 
-  result[0] = ComplexType(17.,  0.);
-  result[1] = ComplexType(14.,  5.); 
-  result[2] = ComplexType( 8., 15.); 
-  result[3] = ComplexType(13.,  0.); 
-  result[4] = ComplexType(11., 10.); 
-  result[5] = ComplexType(17.,  0.); 
+  result[0] = ComplexType(25.,  0.);
+  result[1] = ComplexType( 0., -15.);
+  result[2] = ComplexType(25., -5.);
+  result[3] = ComplexType( 9.,  0.);
+  result[4] = ComplexType( 3., 15.);
+  result[5] = ComplexType(26.,  0.);
 
-  outputFunct = funct.operator ()( ComplexType(1., 4.), ComplexType(2.,3.), ComplexType(3.,2.), ComplexType(4.,1.) );
+
+ outputFunct = funct.operator ()( ComplexType(1., 4.), ComplexType(2.,3.), ComplexType(3.,2.), ComplexType(4.,1.) );
 
   if( vcl_abs(result[0]-outputFunct[0]) > 1e-10 ||
       vcl_abs(result[1]-outputFunct[1]) > 1e-10 ||
       vcl_abs(result[2]-outputFunct[2]) > 1e-10 ||
       vcl_abs(result[3]-outputFunct[3]) > 1e-10 ||
       vcl_abs(result[4]-outputFunct[4]) > 1e-10 ||
-      vcl_abs(result[5]-outputFunct[5]) > 1e-10)
+      vcl_abs(result[5]-outputFunct[5]) > 1e-10   )
   {
     std::cout<<"Test gives :"<<std::endl;
     std::cout<<outputFunct<<std::endl;
