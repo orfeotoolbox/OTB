@@ -42,6 +42,7 @@ public:
   itkNewMacro(Self);
 
   int TestUrlAvailability(const std::string& url) const;
+  int RetrieveUrlInMemory(const std::string& urlString, std::string& output) const;
   int RetrieveFile(const std::ostringstream& urlStream, std::string filename) const;
   int RetrieveFile(const std::string& urlString, std::string filename) const;
 

@@ -44,12 +44,16 @@ public:
   itkTypeMacro(CurlHelperInterface, itk::Object);
 
   virtual int TestUrlAvailability(const std::string& url) const = 0;
+
   virtual int RetrieveFile(const std::ostringstream& urlStream, std::string filename) const = 0;
+
   virtual int RetrieveFile(const std::string& urlString, std::string filename) const = 0;
 
+  virtual int RetrieveUrlInMemory(const std::string& urlString, std::string& output) const = 0;
+
   virtual int RetrieveFileMulti(const std::vector<std::string>& listURLs,
-                        const std::vector<std::string>& listFiles,
-                        int maxConnect) const = 0;
+                                const std::vector<std::string>& listFiles,
+                                int maxConnect) const = 0;
 protected:
   CurlHelperInterface() {}
   virtual ~CurlHelperInterface() {}

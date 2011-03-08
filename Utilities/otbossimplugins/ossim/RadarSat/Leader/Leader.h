@@ -13,10 +13,10 @@
 #define Leader_h
 
 #include <iostream>
-#include "FileDescriptor.h"
-#include "DataSetSummary.h"
-#include "DataQuality.h"
-#include "DataHistogramSignalData.h"
+#include <RadarSat/CommonRecord/FileDescriptor.h>
+#include <RadarSat/CommonRecord/DataSetSummary.h>
+#include <RadarSat/CommonRecord/DataQuality.h>
+#include <RadarSat/CommonRecord/DataHistogramSignalData.h>
 #include "DataHistogramProcessedData.h"
 #include <map>
 

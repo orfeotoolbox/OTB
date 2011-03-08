@@ -31,7 +31,7 @@ namespace otb
 /** \class ScalarBufferToImageFileWriter
  *
  * \brief Record an image stored in a buffer.
- * 
+ *
  * TBufferType is the scalar buffer type, TOutputPixelType is the type in which the image will be recorded.
  * User have to precise the image size, the number of channel will be computed automatically.
  * The SetFilename method precises the image name.
@@ -87,7 +87,7 @@ public:
   /** Buffer accessors */
   void SetBuffer( BufferType * pBuff )
   {
-	m_Buffer = pBuff;
+       m_Buffer = pBuff;
   }
   
    virtual void GenerateData();
@@ -95,7 +95,7 @@ public:
    virtual void Update()
    {
      this->GenerateData();
-}
+   }
 
 protected:
   ScalarBufferToImageFileWriter();
@@ -116,7 +116,7 @@ private:
 
   /**Output image number of channels */
   unsigned int m_NumberOfChannels;
-	  
+         
   /** Output image size */
   SizeType m_ImageSize;
 

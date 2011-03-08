@@ -154,6 +154,47 @@ VectorData<TPrecision, VDimension, TValuePrecision>
     ++it;
     }
 }
+
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
+void
+VectorData<TPrecision, VDimension, TValuePrecision>
+::Graft(const itk::DataObject *data)
+{
+  // call the superclass' implementation
+  Superclass::Graft( data );
+  
+  if ( data )
+    {
+    // Attempt to cast data to an Image
+    const Self * vdData;
+
+    try
+      {
+      vdData = dynamic_cast<const Self *>( data );
+      }
+    catch( ... )
+      {
+      return;
+      }
+    
+    if ( vdData )
+      {
+      // Copy all the needed data : DataTree, spacing, origin and
+      // Projection Ref
+      m_DataTree = const_cast<DataTreeType*> (vdData->GetDataTree());
+      this->SetSpacing(vdData->GetSpacing());
+      this->SetOrigin(vdData->GetOrigin());
+      this->SetProjectionRef(vdData->GetProjectionRef());
+      }
+    else
+      {
+      // pointer could not be cast back down
+      itkExceptionMacro( << "otb::VectorData::Graft() cannot cast "
+                         << typeid(data).name() << " to "
+                         << typeid(const Self *).name() );
+      }
+    }
+}
 } // end namespace otb
 
 #endif

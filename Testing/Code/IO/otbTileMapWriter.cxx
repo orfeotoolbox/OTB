@@ -58,7 +58,7 @@ int otbTileMapWriter(int argc, char *argv[])
   VectorReaderType::Pointer readerXS = VectorReaderType::New();
   readerXS->SetFileName(argv[1]);
 
-  typedef otb::TileMapTransform<otb::INVERSE> MapProjectionType;
+  typedef otb::TileMapTransform<otb::Transform::INVERSE> MapProjectionType;
   typedef otb::OrthoRectificationFilter
   <ImageType, DoubleImageType, MapProjectionType> OrthoRectifFilterType;
   typedef otb::ImageFileWriter<CharVectorImageType> WriterType;
@@ -93,7 +93,7 @@ int otbTileMapWriter(int argc, char *argv[])
   lonLatUL[0] = 51.15; //Tests Iran spot5
   lonLatUL[1] = 35.9;
 
-  typedef otb::TileMapTransform<otb::FORWARD> MapProjectionForwardType;
+  typedef otb::TileMapTransform<otb::Transform::FORWARD> MapProjectionForwardType;
   MapProjectionForwardType::Pointer mapProjectionForward = MapProjectionForwardType::New();
   mapProjectionForward->SetLevel(depth);
   PointType pointULexact;

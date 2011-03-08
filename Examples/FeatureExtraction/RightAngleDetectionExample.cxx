@@ -31,7 +31,7 @@
 #include "otbVectorDataFileWriter.h"
 
 //  Software Guide : BeginCommandLineArgs
-//    INPUTS: {QB_Toulouse_Ortho_PAN.tif}
+//    INPUTS: {Scene.png}
 //    OUTPUTS: {RighAngleOutput.tif}, {PrettyRighAngleInput.png},  {PrettyRighAngleOutput.png}
 //  0.1 20
 //  Software Guide : EndCommandLineArgs

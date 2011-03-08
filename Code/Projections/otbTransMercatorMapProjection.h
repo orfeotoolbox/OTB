@@ -29,7 +29,7 @@ namespace otb
  * It converts coordinates in longitude, latitude (WGS84) to TransMercator map coordinates.
  *
  */
-template <InverseOrForwardTransformationEnum transform>
+template <Transform::TransformationDirection transform>
 class ITK_EXPORT TransMercatorMapProjection : public MapProjection<ossimTransMercatorProjection, transform>
 {
 public:

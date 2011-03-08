@@ -43,7 +43,7 @@ namespace otb
  *  \brief to do
  **/
 
-template <InverseOrForwardTransformationEnum TTransformDirection,
+template <Transform::TransformationDirection TTransformDirection,
     class TScalarType = double,
     unsigned int NInputDimensions = 2,
     unsigned int NOutputDimensions = 2>
@@ -70,9 +70,8 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(TileMapTransform, Transform);
 
-  typedef InverseOrForwardTransformationEnum DirectionOfMappingEnumType;
+  static const Transform::TransformationDirection DirectionOfMapping = TTransformDirection;
 
-  itkStaticConstMacro(DirectionOfMapping, DirectionOfMappingEnumType, TTransformDirection);
   itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
   itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
   itkStaticConstMacro(SpaceDimension, unsigned int, NInputDimensions);

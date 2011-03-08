@@ -30,15 +30,16 @@
 
 #include <RadarSat/Data/DataFactory.h>
 #include <RadarSat/Data/ImageOptionsFileDescriptor.h>
+
+#include <RadarSat/VolumeDir/VolumeDescriptorRecord.h>
+#include <RadarSat/VolumeDir/VolumeDirFactory.h>
+
 #include <RadarSat/Data/ProcessedDataRecord.h>
-#include <RadarSat/Leader/ProcessingParameters.h>
+#include <RadarSat/CommonRecord/ProcessingParameters.h>
 #include <RadarSat/Leader/PlatformPositionData.h>
 
 namespace ossimplugins
 {
-
-
-
 RTTI_DEF1(ossimRadarSatModel, "ossimRadarSatModel", ossimGeometricSarSensorModel);
 
 // Static trace for debugging
@@ -48,7 +49,9 @@ ossimRadarSatModel::ossimRadarSatModel():
   _n_srgr(0),
   _pixel_spacing(0),
   _data(NULL),
-  _leader(NULL)
+  _leader(NULL),
+  _trailer(NULL),
+  _volumeDir(NULL)
 {
 }
 
@@ -64,6 +67,15 @@ ossimRadarSatModel::~ossimRadarSatModel()
     delete _leader;
   }
   
+  if (_trailer != 0)
+  {
+    delete _trailer;
+  }
+
+  if (_volumeDir != 0)
+  {
+    delete _volumeDir;
+  }
 }
 
 ossimObject* ossimRadarSatModel::dup() const
@@ -102,109 +114,209 @@ double ossimRadarSatModel::getSlantRangeFromGeoreferenced(double col) const
 
 bool ossimRadarSatModel::open(const ossimFilename& file)
 {
+  //traceDebug.setTraceFlag(true);
   if(traceDebug())
-  {
+    {
     ossimNotify(ossimNotifyLevel_DEBUG)
       << "ossimRadarSatTileSource::open(filename) DEBUG: entered..."
       << std::endl
       << "Attempting to open file " << file << std::endl;
-  }
+    }
 
   bool retValue = true;
   ossimFilename tempFilename = file;
+
   /*
-   * Creation of the class allowing to store the metadata from the Data file
+   * Detect if we use vdf file or dat file
    */
+  ossimFilename dataFilePath;
+  ossimFilename volumeDirectoryFilePath;
+  std::string input_file = file;
+  string::size_type loc_DAT = input_file.find( "DAT_01", 0 );
+  string::size_type loc_dat = input_file.find( "dat_01", 0 );
+  if ( (loc_DAT != string::npos ) || ( loc_dat != string::npos ) )
+    {
+    dataFilePath = input_file.c_str();
+    if (loc_DAT != string::npos ) input_file.replace(loc_DAT, 6, "VDF_DAT");
+    if (loc_dat != string::npos ) input_file.replace(loc_dat, 6, "vdf_dat");
+    volumeDirectoryFilePath = input_file.c_str();
+    }
+  else
+    {
+    string::size_type loc_VDF = input_file.find( "VDF_DAT", 0 );
+    string::size_type loc_vdf = input_file.find( "vdf_dat", 0 );
+    if ( (loc_VDF != string::npos ) || ( loc_vdf != string::npos ) )
+      {
+      volumeDirectoryFilePath = input_file.c_str();
+      if (loc_VDF != string::npos ) input_file.replace(loc_VDF, 7, "DAT_01");
+      if (loc_vdf != string::npos ) input_file.replace(loc_vdf, 7, "dat_01");
+      dataFilePath = input_file.c_str();
+      }
+    else
+      {
+      if(traceDebug())
+        {
+        ossimNotify(ossimNotifyLevel_DEBUG)
+             << "File Name not coherent (searching for *DAT_01* or *dat_01* or *vdf_dat* or *VDF_DAT* )  : " << file << std::endl;
+        }
+      return false;
+      }
+    }
+
+   //Creation of the class allowing to store the metadata from the Volume Directory File
+  if (_volumeDir != NULL)
+    {
+    delete _volumeDir;
+    _volumeDir = NULL;
+    }
+  _volumeDir = new VolumeDir();
+
+  //Creation of the class allowing to store the metadata from the Data file
   if (_data != NULL)
-  {
+    {
     delete _data;
     _data = NULL;
-  }
+    }
   _data = new Data();
 
-  /*
-   * Creation of the class allowing to store the metadata from the Leader file
-   */
+  //Creation of the class allowing to store the metadata from the Leader file
   if(_leader != NULL)
-  {
+    {
     delete _leader;
     _leader = NULL;
-  }
-
+    }
   _leader = new Leader();
 
-  RadarSatRecordHeader header;
-  DataFactory factory;
-  ifstream dataFile (tempFilename, ios::in|ios::binary);
-  dataFile>>header;
-  if(dataFile.eof())
-  {
-    dataFile.close();
-    retValue =  false;
-  }
-  else
-  {
-    if(traceDebug())
+  // Creation of the class allowing to store the metadata from the Trailer file
+  if(_trailer != NULL)
     {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-      << "Begin reading DAT file" << std::endl;
+    delete _trailer;
+    _trailer = NULL;
     }
-    RadarSatRecord* record = factory.Instanciate(header.get_rec_seq());
+  _trailer = new Trailer();
 
-    if (record != NULL && header.get_rec_seq() == 1)
+
+  RadarSatRecordHeader headerVDF;
+  VolumeDirFactory factoryVDF;
+  ifstream volumeDirFile (volumeDirectoryFilePath, ios::in|ios::binary);
+  volumeDirFile>>headerVDF;
+  if(volumeDirFile.eof())
     {
-      record->Read(dataFile);
-      /*
-       * Tests if the input File is a valid Radarsat DAT file
-       */
-      if ( ( (((ImageOptionsFileDescriptor*)record)->get_file_name()).substr(0,10) == "RSAT-1-SAR") &&
-           ( (((ImageOptionsFileDescriptor*)record)->get_nlin()) != -1) )
+    volumeDirFile.close();
+    retValue =  false;
+    }
+  else
+    {
+    if(traceDebug())
       {
-        /*
-         * Reading of the remaining of the data file
-         */
-        dataFile.close();
-        dataFile.open(tempFilename, ios::in|ios::binary);
+      ossimNotify(ossimNotifyLevel_DEBUG) << "Begin reading VDF file" << std::endl;
+      }
 
-        dataFile>>*_data; // here infinite loop with SARDEGNA RADARSAT1 file
-        _data->InsertRecord(header.get_rec_seq(), record);
+    RadarSatRecord* recordVDF = factoryVDF.Instanciate(headerVDF.get_rec_seq());
+    if (recordVDF != NULL && headerVDF.get_rec_seq() == 1)
+      {
+      recordVDF->Read(volumeDirFile);
 
-        dataFile.close();
-
-        if(traceDebug())
+      //Test if the input File is a valid Radarsat VDF file
+      if ((((VolumeDescriptorRecord*) recordVDF)->get_logvol_id()).substr(0, 10) == "RSAT-1-SAR")
         {
-          ossimNotify(ossimNotifyLevel_DEBUG)
-          << "End reading DAT file" << std::endl;
-        }
+        std::string subProduct = (((VolumeDescriptorRecord*) recordVDF)->get_logvol_id()).substr(11, 3);
+        if  ( (subProduct == "RAW") || (subProduct == "SPG") || (subProduct == "SSG") )
+          {
+          if(traceDebug())
+            ossimNotify(ossimNotifyLevel_DEBUG) << "RAW, SPG and SSG format are not supported" <<std::endl;
+
+          volumeDirFile.close();
+          return false;
+          }
+        else if ( (subProduct == "SCN") || (subProduct == "SGX") || (subProduct == "SLC") )
+          {
+          if(traceDebug())
+            ossimNotify(ossimNotifyLevel_DEBUG) << "SCN, SGX and SLC format are supported but not tested" <<std::endl;
+          }
+        else if ( (subProduct ==  "SCW") || (subProduct == "SGF") )
+          {
+          if(traceDebug())
+            ossimNotify(ossimNotifyLevel_DEBUG) << "SCW and SGF format are supported and tested" <<std::endl;
+          }
+
+        //Reading of the remaining of the volume directory file
+
+        volumeDirFile.close();
+        volumeDirFile.open(volumeDirectoryFilePath, ios::in | ios::binary);
+        volumeDirFile >> *_volumeDir;
+        volumeDirFile.close();
+
+        if (traceDebug())
+          {
+          ossimNotify(ossimNotifyLevel_DEBUG) << "End reading VDF file" << std::endl;
+          }
+
+        RadarSatRecordHeader headerDAT;
+        DataFactory factoryDAT;
+        ifstream dataFile (dataFilePath, ios::in|ios::binary);
+        dataFile>>headerDAT;
+        if(dataFile.eof())
+          {
+          dataFile.close();
+          retValue =  false;
+          }
+        else
+          {
+          if(traceDebug())
+            {
+            ossimNotify(ossimNotifyLevel_DEBUG)<< "Begin reading DAT file" << std::endl;
+            }
+
+          RadarSatRecord* recordDAT = factoryDAT.Instanciate(headerDAT.get_rec_seq());
+          if (recordDAT != NULL && headerDAT.get_rec_seq() == 1)
+            {
+            recordDAT->Read(dataFile);
+            dataFile.close();
+            /*
+             * Reading the remaining of the data file
+             */
+            dataFile.open(dataFilePath, ios::in|ios::binary);
+            dataFile>>*_data;
+            dataFile.close();
+
+            _data->InsertRecord(headerDAT.get_rec_seq(), recordDAT);
+
+            if(traceDebug())
+              {
+              ossimNotify(ossimNotifyLevel_DEBUG) << "End reading DAT file" << std::endl;
+              }
+            } // TODO move to end
+          }// TODO move to end
+
         /*
          * Leader file path construction from the DAT file path
          * Warning : the filename case has to be homogenous
          */
-        std::string leader_file = file;
+        std::string leader_file = dataFilePath;
         string::size_type loc = leader_file.find( "DAT_01", 0 );
         if( loc != string::npos ) leader_file.replace(loc, 6, "LEA_01" ); // upper case test
-        else {
+        else
+          {
           loc = leader_file.find( "dat_01", 0 );
           if( loc != string::npos ) leader_file.replace(loc, 6, "lea_01" ); // lower case test
-          else {
-            ossimNotify(ossimNotifyLevel_DEBUG)
-              << "File Name not coherent (searching for *DAT_01* or *dat_01*)  : " << file << std::endl;
+          else
+            {
+            ossimNotify(ossimNotifyLevel_DEBUG) << "File Name not coherent (searching for *DAT_01* or *dat_01*)  : " << file << std::endl;
+            }
           }
-        }
         ossimFilename leaderFilePath(leader_file);
-
-        if (!leaderFilePath.exists()){
-            ossimNotify(ossimNotifyLevel_DEBUG)
-              << "Leader file not found (searching for *lea_01* coherent with *dat_01*)  : " << file << std::endl;
-            retValue = false;
-        }
-        else
-        {
-          if(traceDebug())
+        if (!leaderFilePath.exists())
           {
-            ossimNotify(ossimNotifyLevel_DEBUG)
-            << "Begin reading Leader file" << std::endl;
+          ossimNotify(ossimNotifyLevel_DEBUG) << "Leader file not found (searching for *lea_01* coherent with *dat_01*)  : " << file << std::endl;
+          retValue = false;
           }
+        else
+          {
+          if(traceDebug())
+            {
+            ossimNotify(ossimNotifyLevel_DEBUG) << "Begin reading Leader file" << std::endl;
+            }
           /*
            * Leader file data reading
            */
@@ -212,30 +324,68 @@ bool ossimRadarSatModel::open(const ossimFilename& file)
           leaderFile>>*_leader;
           leaderFile.close();
           if(traceDebug())
+            {
+            ossimNotify(ossimNotifyLevel_DEBUG) << "End reading Leader file" << std::endl;
+            }
+          }
+
+        /*
+         * Trailer file path construction from the DAT file path
+         * Warning : the filename case has to be homogenous
+         */
+        std::string trailer_file = dataFilePath;
+        loc = trailer_file.find( "DAT_01", 0 );
+        if( loc != string::npos ) trailer_file.replace(loc, 6, "TRA_01" ); // upper case test
+        else
           {
-            ossimNotify(ossimNotifyLevel_DEBUG)
-            << "End reading Leader file" << std::endl;
+          loc = trailer_file.find( "dat_01", 0 );
+          if( loc != string::npos ) trailer_file.replace(loc, 6, "tra_01" ); // lower case test
+          else
+            {
+            ossimNotify(ossimNotifyLevel_DEBUG) << "File Name not coherent (searching for *DAT_01* or *dat_01*)  : " << file << std::endl;
+            }
+          }
+        ossimFilename trailerFilePath(trailer_file);
+        if (!trailerFilePath.exists())
+          {
+          ossimNotify(ossimNotifyLevel_DEBUG) << "Trailer file not found (searching for *tra_01* coherent with *dat_01*)  : " << file << std::endl;
+          retValue = false;
+          }
+        else
+          {
+          if(traceDebug())
+            {
+            ossimNotify(ossimNotifyLevel_DEBUG) << "Begin reading Trailer file" << std::endl;
+            }
+          /*
+           * Trailer file data reading
+           */
+          ifstream trailerFile (trailerFilePath, ios::in|ios::binary);
+          trailerFile>>*_trailer;
+          trailerFile.close();
+          if(traceDebug())
+            {
+            ossimNotify(ossimNotifyLevel_DEBUG) << "End reading Trailer file" << std::endl;
+            }
           }
         }
-      }
       else
-      {
-        dataFile.close();
+        {
+        volumeDirFile.close();
         retValue = false;
+        }
+      }
+    else
+      {
+      volumeDirFile.close();
+      retValue = false;
       }
     }
-    else
-    {
-      dataFile.close();
-      retValue = false;
-    }
-  }
 
   if(traceDebug())
-  {
-    ossimNotify(ossimNotifyLevel_DEBUG)
-      << "ossimRadarSatTileSource::open() DEBUG: returning..." << std::endl;
-  }
+    {
+    ossimNotify(ossimNotifyLevel_DEBUG) << "ossimRadarSatTileSource::open() DEBUG: returning..." << std::endl;
+    }
   return retValue;
 }
 
@@ -260,6 +410,12 @@ bool ossimRadarSatModel::saveState(ossimKeywordlist& kwl,
      * Ajout des donn�es n�cessaires au mod�le de capteur dans la liste des mots clefs
      */
     DataSetSummary * datasetSummary = _leader->get_DataSetSummary();
+    if(datasetSummary == NULL)
+      {
+      delete datasetSummary;
+      datasetSummary = _trailer->get_DataSetSummary();
+      }
+
     if(datasetSummary != NULL)
     {
       kwl.add(prefix, "inp_sctim",datasetSummary->get_inp_sctim().c_str(),true);
@@ -313,6 +469,7 @@ bool ossimRadarSatModel::saveState(ossimKeywordlist& kwl,
     }
     else
     {
+      ossimNotify(ossimNotifyLevel_DEBUG) << "It is not possible to add dataSetSummary from _leader or _trailer file" <<std::endl;
       return false;
     }
 
@@ -320,6 +477,12 @@ bool ossimRadarSatModel::saveState(ossimKeywordlist& kwl,
      * Ajout des donn�es n�cessaires au mod�le de capteur dans la liste des mots clefs
      */
     ProcessingParameters * processingParameters = _leader->get_ProcessingParameters();
+    if(processingParameters == NULL)
+      {
+      delete processingParameters;
+      processingParameters = _trailer->get_ProcessingParameters();
+      }
+
     if(processingParameters != NULL)
     {
       kwl.add(prefix, "n_srgr",processingParameters->get_n_srgr(),true);
@@ -349,6 +512,7 @@ bool ossimRadarSatModel::saveState(ossimKeywordlist& kwl,
     }
     else
     {
+      ossimNotify(ossimNotifyLevel_DEBUG) << "It is not possible to add processingParameters from _leader or _trailer file" <<std::endl;
       return false;
     }
 
@@ -386,6 +550,7 @@ bool ossimRadarSatModel::saveState(ossimKeywordlist& kwl,
     }
     else
     {
+      ossimNotify(ossimNotifyLevel_DEBUG) << "It is not possible to add platformPositionData from _leader file" <<std::endl;
       return false;
     }
 
@@ -397,6 +562,7 @@ bool ossimRadarSatModel::saveState(ossimKeywordlist& kwl,
     }
     else
     {
+      ossimNotify(ossimNotifyLevel_DEBUG) << "It is not possible to add imageOptionsFileDescriptor from _data file" <<std::endl;
       return false;
     }
 
@@ -415,6 +581,7 @@ bool ossimRadarSatModel::saveState(ossimKeywordlist& kwl,
     }
     else
     {
+      ossimNotify(ossimNotifyLevel_DEBUG) << "It is not possible to add firstProcessedDataRecord from _data file" <<std::endl;
       return false;
     }
 
@@ -433,6 +600,7 @@ bool ossimRadarSatModel::saveState(ossimKeywordlist& kwl,
     }
     else
     {
+      ossimNotify(ossimNotifyLevel_DEBUG) << "It is not possible to add lastProcessedDataRecord from _data file" <<std::endl;
       return false;
     }
 

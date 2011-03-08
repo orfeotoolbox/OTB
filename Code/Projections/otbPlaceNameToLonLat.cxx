@@ -23,20 +23,12 @@
 namespace otb
 {
 
-/**
-   * Constructor
-   */
-
 PlaceNameToLonLat::PlaceNameToLonLat() :
       m_Lon(-1000.0), m_Lat(-1000.0),
       m_PlaceName("Where everything started")
 {
   m_Curl = CurlHelper::New();
 }
-
-/**
-   *
-   */
 
 void
 PlaceNameToLonLat
@@ -86,36 +78,17 @@ bool PlaceNameToLonLat::Evaluate()
   return true;
 }
 
-/*
-//This method will be necessary to process the file directly in memory
-//without writing it to the disk. Waiting for the xml lib to handle that
-//also
-static size_t
-curlHandlerWriteMemoryCallback(void *ptr, size_t size, size_t nmemb,
-  void *data)
-{
-  register int realsize = (int)(size * nmemb);
-
-  std::vector<char> *vec
-    = static_cast<std::vector<char>*>(data);
-  const char* chPtr = static_cast<char*>(ptr);
-  vec->insert(vec->end(), chPtr, chPtr + realsize);
-
-  return realsize;
-}
-*/
-
 void PlaceNameToLonLat::RetrieveXML(const std::ostringstream& urlStream)
 {
-  m_Curl->RetrieveFile(urlStream, "out.xml");
+  m_Curl->RetrieveUrlInMemory(urlStream.str(), m_CurlOutput);
 }
 
 void PlaceNameToLonLat::ParseXMLYahoo()
 {
-  TiXmlDocument doc("out.xml");
-  doc.LoadFile();
-  TiXmlHandle docHandle(&doc);
+  TiXmlDocument doc;
+  doc.Parse(m_CurlOutput.c_str());
 
+  TiXmlHandle docHandle(&doc);
   TiXmlElement* childLat = docHandle.FirstChild("ResultSet").FirstChild("Result").FirstChild("Latitude").Element();
   if (childLat)
     {
@@ -126,15 +99,14 @@ void PlaceNameToLonLat::ParseXMLYahoo()
     {
     m_Lon = atof(childLon->GetText());
     }
-
 }
 
 void PlaceNameToLonLat::ParseXMLGoogle()
 {
-  TiXmlDocument doc("out.xml");
-  doc.LoadFile();
-  TiXmlHandle docHandle(&doc);
+  TiXmlDocument doc;
+  doc.Parse(m_CurlOutput.c_str());
 
+  TiXmlHandle docHandle(&doc);
   TiXmlElement* childLat = docHandle.FirstChild("kml").FirstChild("Placemark").FirstChild("LookAt").FirstChild(
     "latitude").Element();
   if (childLat)
@@ -147,8 +119,8 @@ void PlaceNameToLonLat::ParseXMLGoogle()
     {
     m_Lon = atof(childLon->GetText());
     }
-
 }
+
 void PlaceNameToLonLat::ParseXMLGeonames()
 {
 

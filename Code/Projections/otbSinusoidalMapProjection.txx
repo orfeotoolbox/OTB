@@ -24,20 +24,20 @@
 namespace otb
 {
 
-template <InverseOrForwardTransformationEnum transform>
+template <Transform::TransformationDirection transform>
 SinusoidalMapProjection<transform>
 ::SinusoidalMapProjection()
 {
 }
 
-template <InverseOrForwardTransformationEnum transform>
+template <Transform::TransformationDirection transform>
 SinusoidalMapProjection<transform>
 ::~SinusoidalMapProjection()
 {
 }
 
 ///Set the false Easting
-template <InverseOrForwardTransformationEnum transform>
+template <Transform::TransformationDirection transform>
 void SinusoidalMapProjection<transform>
 ::SetFalseEasting(double falseEasting)
 {
@@ -45,7 +45,7 @@ void SinusoidalMapProjection<transform>
 }
 
 ///Set the False Northing
-template <InverseOrForwardTransformationEnum transform>
+template <Transform::TransformationDirection transform>
 void SinusoidalMapProjection<transform>
 ::SetFalseNorthing(double falseNorthing)
 {
@@ -53,7 +53,7 @@ void SinusoidalMapProjection<transform>
 }
 
 ///Set the default parameter
-template <InverseOrForwardTransformationEnum transform>
+template <Transform::TransformationDirection transform>
 void SinusoidalMapProjection<transform>
 ::SetDefaults()
 {
@@ -61,7 +61,7 @@ void SinusoidalMapProjection<transform>
 }
 
 ///\return the False Northing (avoid negative coordinates)
-template <InverseOrForwardTransformationEnum transform>
+template <Transform::TransformationDirection transform>
 double SinusoidalMapProjection<transform>
 ::GetFalseNorthing() const
 {
@@ -71,7 +71,7 @@ double SinusoidalMapProjection<transform>
 }
 
 ///\return the False Easting (avoid negative coordinates)
-template <InverseOrForwardTransformationEnum transform>
+template <Transform::TransformationDirection transform>
 double SinusoidalMapProjection<transform>
 ::GetFalseEasting() const
 {
@@ -80,7 +80,7 @@ double SinusoidalMapProjection<transform>
   return falseEasting;
 }
 
-template <InverseOrForwardTransformationEnum transform>
+template <Transform::TransformationDirection transform>
 void SinusoidalMapProjection<transform>
 ::SetParameters(double falseEasting, double falseNorthing)
 {

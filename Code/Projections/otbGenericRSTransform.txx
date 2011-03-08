@@ -113,7 +113,7 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
     // First, try to make a geo transform
   if (!m_InputProjectionRef.empty()) //map projection
     {
-    typedef otb::GenericMapProjection<otb::INVERSE, ScalarType, InputSpaceDimension, InputSpaceDimension>
+    typedef otb::GenericMapProjection<Transform::INVERSE, ScalarType, InputSpaceDimension, InputSpaceDimension>
         InverseMapProjectionType;
     typename InverseMapProjectionType::Pointer mapTransform = InverseMapProjectionType::New();
     mapTransform->SetWkt(m_InputProjectionRef);
@@ -137,7 +137,7 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
       sensorModel->SetImageGeometry(m_InputKeywordList);
       imageGeometrySet = true;
       }
-    catch( itk::ExceptionObject& )
+    catch( itk::ExceptionObject& e)
       {
       otbMsgDevMacro(<< "Unable to instanciate a sensor model with the provided keyword list. Exception caught : " << e)
       }
@@ -191,7 +191,7 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
   //*****************************
   if (!m_OutputProjectionRef.empty()) //map projection
     {
-    typedef otb::GenericMapProjection<otb::FORWARD, ScalarType, InputSpaceDimension,
+    typedef otb::GenericMapProjection<Transform::FORWARD, ScalarType, InputSpaceDimension,
     OutputSpaceDimension> ForwardMapProjectionType;
     typename ForwardMapProjectionType::Pointer mapTransform = ForwardMapProjectionType::New();
     mapTransform->SetWkt(m_OutputProjectionRef);
@@ -208,18 +208,33 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
     {
     typedef otb::InverseSensorModel<double, InputSpaceDimension, OutputSpaceDimension> InverseSensorModelType;
     typename InverseSensorModelType::Pointer sensorModel = InverseSensorModelType::New();
-    sensorModel->SetImageGeometry(m_OutputKeywordList);
-    if (!m_DEMDirectory.empty())
+    
+    bool imageGeometrySet = false;
+    try
       {
-      sensorModel->SetDEMDirectory(m_DEMDirectory);
+      sensorModel->SetImageGeometry(m_OutputKeywordList);
+      imageGeometrySet = true;
       }
-    else if (m_AverageElevation != -32768.0)
+    catch( itk::ExceptionObject& e)
       {
-      sensorModel->SetAverageElevation(m_AverageElevation);
+      otbMsgDevMacro(<< "Unable to instanciate a sensor model with the provided output keyword list. Exception caught : " << e)
       }
-    m_OutputTransform = sensorModel.GetPointer();
-    outputTransformIsSensor = true;
-    otbMsgDevMacro(<< "Output projection set to sensor model");
+
+    
+    if (imageGeometrySet)
+      {
+      if (!m_DEMDirectory.empty())
+        {
+        sensorModel->SetDEMDirectory(m_DEMDirectory);
+        }
+      else if (m_AverageElevation != -32768.0)
+        {
+        sensorModel->SetAverageElevation(m_AverageElevation);
+        }
+      m_OutputTransform = sensorModel.GetPointer();
+      outputTransformIsSensor = true;
+      otbMsgDevMacro(<< "Output projection set to sensor model");
+      }
     }
 
 
