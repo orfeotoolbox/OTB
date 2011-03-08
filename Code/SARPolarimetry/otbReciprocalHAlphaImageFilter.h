@@ -44,15 +44,14 @@ template< class TInput, class TOutput>
 class ReciprocalHAlphaFunctor
 {
 public:
-  typedef double                                   RealType;
-  typedef typename std::complex <RealType>         ComplexType;
+  typedef typename std::complex <double>         ComplexType;
   typedef typename TOutput::ValueType              OutputValueType;
 
   /** CoherencyMatrix type **/
-  typedef itk::Vector<RealType, 9> CoherencyMatrixType;
+  typedef itk::Vector<double, 9> CoherencyMatrixType;
 
   /** Vector type used to store eigenvalues. */
-  typedef itk::Vector<RealType, 3> EigenvalueType;
+  typedef itk::Vector<double, 3> EigenvalueType;
 
   /** Matrix type used to store eigenvectors. */
   typedef itk::Vector<float, 2> VectorType;
@@ -80,45 +79,47 @@ public:
     EigenMatrixType eigenVectors;
     HermitianAnalysisType HermitianAnalysis;
 
-    T[0] = static_cast<RealType>(Coherency[0].real());
-    T[1] = static_cast<RealType>(Coherency[3].real());
-    T[2] = static_cast<RealType>(Coherency[5].real());
-    T[3] = static_cast<RealType>(Coherency[1].real());
-    T[4] = static_cast<RealType>(Coherency[1].imag());
-    T[5] = static_cast<RealType>(Coherency[2].real());
-    T[6] = static_cast<RealType>(Coherency[2].imag());
-    T[7] = static_cast<RealType>(Coherency[4].real());
-    T[8] = static_cast<RealType>(Coherency[4].imag());
+    T[0] = static_cast<double>(Coherency[0].real());
+    T[1] = static_cast<double>(Coherency[3].real());
+    T[2] = static_cast<double>(Coherency[5].real());
+    T[3] = static_cast<double>(Coherency[1].real());
+    T[4] = static_cast<double>(Coherency[1].imag());
+    T[5] = static_cast<double>(Coherency[2].real());
+    T[6] = static_cast<double>(Coherency[2].imag());
+    T[7] = static_cast<double>(Coherency[4].real());
+    T[8] = static_cast<double>(Coherency[4].imag());
     HermitianAnalysis.ComputeEigenValuesAndVectors(T, eigenValues, eigenVectors);
 
     // Entropy estimation
-    RealType  totalEigenValues = 0.0;
-    RealType  p[3];
-    RealType entropy;
-    RealType alpha;
-    RealType anisotropy;
-    //const RealType epsilon = 1.0E-4;
+    double  totalEigenValues(0.0);
+    double  p[3];
+    double entropy;
+    double alpha;
+    double anisotropy;
 
-
-    totalEigenValues = static_cast<RealType>( eigenValues[0] + eigenValues[1] + eigenValues[2]);
-    if (totalEigenValues <0.00001)
-      totalEigenValues = 0.0001;
+    totalEigenValues = static_cast<double>( eigenValues[0] + eigenValues[1] + eigenValues[2]);
+    if (totalEigenValues <m_Epsilon)
+      {
+        totalEigenValues = m_Epsilon;
+      }
 
     for (unsigned int k = 0; k < 3; k++)
       {
         if (eigenValues[k] <0.)
-              eigenValues[k] = 0.;
+          {
+            eigenValues[k] = 0.;
+          }
 
-        p[k] = static_cast<RealType>(eigenValues[k]) / totalEigenValues;
+        p[k] = static_cast<double>(eigenValues[k]) / totalEigenValues;
       }
 
     if ( (p[0] < m_Epsilon) || (p[1] < m_Epsilon) || (p[2] < m_Epsilon) )
       {
-      entropy =0.0;
+        entropy =0.0;
       }
     else
       {
-        entropy = static_cast<RealType>( p[0]*log(p[0]) + p[1]*log(p[1]) + p[2]*log(p[2]) );
+        entropy = p[0]*log(p[0]) + p[1]*log(p[1]) + p[2]*log(p[2]);
         entropy /= -log(3.);
       }
 
@@ -129,8 +130,16 @@ public:
     for(unsigned int k = 0; k < 3; k++)
       {
          p[k] = eigenValues[k] / totalEigenValues;
-         if (p[k] < 0.) p[k] = 0.;
-         if (p[k] > 1.) p[k] = 1.;
+
+         if (p[k] < 0.) 
+           {
+             p[k] = 0.;
+           }
+
+         if (p[k] > 1.)
+           {
+             p[k] = 1.;
+           }
       }
 
     val0=sqrt(static_cast<double>(eigenVectors[0][0]*eigenVectors[0][0]) + static_cast<double>(eigenVectors[0][1]*eigenVectors[0][1]));
@@ -144,10 +153,13 @@ public:
 
     alpha=p[0]*a0 + p[1]*a1 + p[2]*a2;
 
-    if (alpha>90) alpha=0.;
+    if (alpha>90)
+      {
+        alpha=0.;
+      }
 
     // Anisotropy estimation
-    anisotropy=(eigenValues[1] - eigenValues[2])/(eigenValues[1] + eigenValues[2]+0.000001);
+    anisotropy=(eigenValues[1] - eigenValues[2])/(eigenValues[1] + eigenValues[2]+m_Epsilon);
 
     result[0] = entropy;
     result[1] = alpha;
@@ -162,7 +174,7 @@ public:
    }
 
    /** Constructor */
-   ReciprocalHAlphaFunctor() : m_Epsilon(1e-4) {}
+   ReciprocalHAlphaFunctor() : m_Epsilon(1e-6) {}
 
    /** Destructor */
    virtual ~ReciprocalHAlphaFunctor() {}
