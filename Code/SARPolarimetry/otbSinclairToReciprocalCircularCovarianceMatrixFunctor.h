@@ -62,10 +62,19 @@ public:
     TOutput result;
 
     result.SetSize(m_NumberOfComponentsPerPixel);
-    const ComplexType j2Shv = static_cast<ComplexType>(Shv) * vcl_complex<RealType>(0.0, 2.0);
 
-    const ComplexType Sll = static_cast<ComplexType>( 0.5 * (-Shh-j2Shv+Svv) );
-    const ComplexType Slr = static_cast<ComplexType>( 0.5 * (-Shh+Svv) );
+
+    const ComplexType S_hh = static_cast<ComplexType>(Shh);
+    const ComplexType S_hv = static_cast<ComplexType>(Shv);
+    const ComplexType S_vh = static_cast<ComplexType>(Svh);
+    const ComplexType S_vv = static_cast<ComplexType>(Svv);
+
+    const ComplexType coef(0.5);
+
+    const ComplexType j2S_hv = S_hv * ComplexType(0.0, 2.0);
+
+    const ComplexType Sll = coef * (-S_hh-j2S_hv+S_vv );
+    const ComplexType Slr = coef * (-S_hh+S_vv );
     const ComplexType Srr = vcl_conj(Sll);
 
     const ComplexType conjSll = vcl_conj(Sll);

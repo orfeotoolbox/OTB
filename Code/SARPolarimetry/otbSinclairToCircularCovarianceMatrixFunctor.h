@@ -72,14 +72,21 @@ public:
   {
     TOutput result;
 
-    result.SetSize(m_NumberOfComponentsPerPixel);
-    const ComplexType jShv = static_cast<ComplexType>(Shv) * vcl_complex<RealType>(0.0, 1.0);
-    const ComplexType jSvh = static_cast<ComplexType>(Svh) * vcl_complex<RealType>(0.0, 1.0);
+    const ComplexType S_hh = static_cast<ComplexType>(Shh);
+    const ComplexType S_hv = static_cast<ComplexType>(Shv);
+    const ComplexType S_vh = static_cast<ComplexType>(Svh);
+    const ComplexType S_vv = static_cast<ComplexType>(Svv);
 
-    const ComplexType Sll = static_cast<ComplexType>( 0.5 * (-Shh-jShv-jSvh+Svv) );
-    const ComplexType Slr = static_cast<ComplexType>( 0.5 * (-Shh+jShv-jSvh+Svv) );
-    const ComplexType Srl = static_cast<ComplexType>( 0.5 * (-Shh-jShv+jSvh-Svv) );
-    const ComplexType Srr = static_cast<ComplexType>( 0.5 * (-Shh+jShv+jSvh+Svv) );
+    result.SetSize(m_NumberOfComponentsPerPixel);
+    const ComplexType jS_hv = S_hv * ComplexType(0., 1.);
+    const ComplexType jS_vh = S_vh * ComplexType(0., 1.);
+
+    const ComplexType coef(0.5);
+
+    const ComplexType Sll = coef*( -S_hh-jS_hv-jS_vh+S_vv );
+    const ComplexType Slr = coef*( -S_hh+jS_hv-jS_vh+S_vv );
+    const ComplexType Srl = coef*( -S_hh-jS_hv+jS_vh-S_vv );
+    const ComplexType Srr = coef*( -S_hh+jS_hv+jS_vh+S_vv );
 
     const ComplexType conjSll = vcl_conj(Sll);
     const ComplexType conjSlr = vcl_conj(Slr);

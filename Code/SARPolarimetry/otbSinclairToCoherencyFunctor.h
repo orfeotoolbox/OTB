@@ -67,10 +67,15 @@ public:
 
     result.SetSize(NumberOfComponentsPerPixel);
 
-    const ComplexType HHPlusVV = static_cast<ComplexType>(Shh + Svv);
-    const ComplexType VVMinusVV = static_cast<ComplexType>(Shh - Svv);
-    const ComplexType HVPlusHV     = static_cast<ComplexType>( Shv + Svh);
-    const ComplexType jHVMinusHV     = static_cast<ComplexType>( Shv - Svh) * vcl_complex<RealType>(0.0, 1.0);
+    const ComplexType S_hh = static_cast<ComplexType>(Shh);
+    const ComplexType S_hv = static_cast<ComplexType>(Shv);
+    const ComplexType S_vh = static_cast<ComplexType>(Svh);
+    const ComplexType S_vv = static_cast<ComplexType>(Svv);
+
+    const ComplexType HHPlusVV   = S_hh + S_vv;
+    const ComplexType VVMinusVV  = S_hh - S_vv;
+    const ComplexType HVPlusHV   =  S_hv + S_vh;
+    const ComplexType jHVMinusHV = (S_hv - S_vh) * ComplexType(0., 1.);
 
     result[0] = static_cast<OutputValueType>( std::norm(HHPlusVV) );
     result[1] = static_cast<OutputValueType>( HHPlusVV * vcl_conj(VVMinusVV) );

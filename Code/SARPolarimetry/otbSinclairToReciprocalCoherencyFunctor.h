@@ -64,9 +64,14 @@ public:
 
     result.SetSize(NumberOfComponentsPerPixel);
 
-    const ComplexType HHPlusVV = static_cast<ComplexType>(Shh + Svv);
-    const ComplexType VVMinusVV = static_cast<ComplexType>(Shh - Svv);
-    const ComplexType twoHV     = static_cast<ComplexType>( 2.0 * Shv);
+    const ComplexType S_hh = static_cast<ComplexType>(Shh);
+    const ComplexType S_hv = static_cast<ComplexType>(Shv);
+    const ComplexType S_vh = static_cast<ComplexType>(Svh);
+    const ComplexType S_vv = static_cast<ComplexType>(Svv);
+
+    const ComplexType HHPlusVV  = S_hh + S_vv;
+    const ComplexType VVMinusVV = S_hh - S_vv;
+    const ComplexType twoHV     = ComplexType( 2.0 ) * S_hv;
 
     result[0] = static_cast<OutputValueType>( HHPlusVV * vcl_conj(HHPlusVV) );
     result[1] = static_cast<OutputValueType>( HHPlusVV * vcl_conj(VVMinusVV) );

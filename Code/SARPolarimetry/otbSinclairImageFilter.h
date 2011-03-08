@@ -74,8 +74,6 @@ public:
   itkTypeMacro(SinclairImageFilter, QuaternaryFunctorImageFilter);
 
   /** Template parameters typedefs */
-  //typedef std::complex <double>                    InputPixelType;
-  //typedef otb::Image<InputPixelType,  2>           InputImageType;
   typedef typename Superclass::Input1ImageType     HHInputImageType;
   typedef typename Superclass::Input1ImagePointer  HHInputImagePointer;
   typedef typename Superclass::Input2ImageType     HVInputImageType;
@@ -88,8 +86,6 @@ public:
   typedef typename OutputImageType::Pointer        OutputImagePointer;
   typedef typename OutputImageType::RegionType     OutputImageRegionType;
   typedef typename Superclass::FunctorType         FunctorType;
-  //typedef typename std::complex <double>           ComplexType;
-  //typedef typename itk::FixedArray<ComplexType, 2> ComplexArrayType;
 
   void SetInputHH(const TInputImageHH * image);
   void SetInputHV(const TInputImageHV * image);
