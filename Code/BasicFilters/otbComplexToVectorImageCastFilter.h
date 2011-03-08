@@ -86,7 +86,6 @@ public:
 };
 
 
-
 template< class TInput, class TOutput >
 class ComplexToVector
 {
@@ -103,7 +102,6 @@ public:
 };
 
 }
-
 
 
 template <class TInputImage, class TOutputImage>

@@ -72,7 +72,7 @@ void ApplyTransitionMatrixImageFilter<TInputImage, TOutputImage>::ThreadedGenera
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   inIt.GoToBegin();
-  outIt.GoToBegin();   
+  outIt.GoToBegin();
   
   const unsigned int inSize =  m_TransitionMatrix.cols();
   const unsigned int outSize =  m_TransitionMatrix.rows();
