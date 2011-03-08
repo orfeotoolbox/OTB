@@ -36,7 +36,7 @@
 #include "otbSinclairToCoherencyFunctor.h"
 #include "otbSinclairToMuellerFunctor.h"
 #include "otbComplexToVectorImageCastFilter.h"
-
+#include "otbExtractROI.h"
 
 #define generic_SinclairImageFilterMacro(T_InputPixel, T_OutputPixel, T_Function, _argc, _argv) \
   const char * inputFilename1  = _argv[1]; \
@@ -47,19 +47,38 @@
   typedef otb::Image<InputPixelType> InputImageType; \
   typedef otb::VectorImage<OutputPixelType> OutputImageType; \
   typedef otb::ImageFileReader<InputImageType> ReaderType; \
+  typedef otb::ExtractROI<InputPixelType,InputPixelType > ExtractROIType; \
   typedef otb::SinclairImageFilter<InputImageType, InputImageType, InputImageType, InputImageType, OutputImageType, T_Function> FilterType; \
   typename FilterType::Pointer filter = FilterType::New(); \
   typename ReaderType::Pointer reader1 = ReaderType::New(); \
   typename ReaderType::Pointer reader2 = ReaderType::New(); \
   typename ReaderType::Pointer reader3 = ReaderType::New(); \
+  typename ExtractROIType::Pointer  extract1 = ExtractROIType::New(); \
+  typename ExtractROIType::Pointer  extract2 = ExtractROIType::New(); \
+  typename ExtractROIType::Pointer  extract3 = ExtractROIType::New(); \
+  extract1->SetStartX(10); \
+  extract1->SetStartY(10); \
+  extract1->SetSizeX(30); \
+  extract1->SetSizeY(30); \
+  extract2->SetStartX(10); \
+  extract2->SetStartY(10); \
+  extract2->SetSizeX(30); \
+  extract2->SetSizeY(30); \
+  extract3->SetStartX(10); \
+  extract3->SetStartY(10); \
+  extract3->SetSizeX(30); \
+  extract3->SetSizeY(30); \
   reader1->SetFileName(inputFilename1); \
   reader2->SetFileName(inputFilename2); \
   reader3->SetFileName(inputFilename3); \
-  filter->SetInputHH(reader1->GetOutput()); \
-  filter->SetInputHV(reader2->GetOutput()); \
-  filter->SetInputVH(reader2->GetOutput()); \
-  filter->SetInputVV(reader3->GetOutput()); \
-  filter->UpdateOutputInformation(); \
+  extract1->SetInput(reader1->GetOutput()); \
+  extract2->SetInput(reader3->GetOutput()); \
+  extract3->SetInput(reader3->GetOutput()); \
+  filter->SetInputHH(extract1->GetOutput()); \
+  filter->SetInputHV(extract2->GetOutput()); \
+  filter->SetInputVH(extract2->GetOutput()); \
+  filter->SetInputVV(extract3->GetOutput()); \
+  filter->UpdateOutputInformation();
 
 
 template<class TInputPixel, class TOutputPixel, class TFunction>
