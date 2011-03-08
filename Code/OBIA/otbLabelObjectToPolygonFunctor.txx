@@ -331,7 +331,7 @@ template<class TLabelObject, class TPolygon>
 inline typename LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
 ::IndexType
 LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
-::Within(const IndexType& point, unsigned int line)
+::Within(const IndexType& point, int line)
 {
   unsigned int idx = 0;
   IndexType    resp;
@@ -397,7 +397,7 @@ template<class TLabelObject, class TPolygon>
 inline typename LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
 ::IndexType
 LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
-::RightMostLeftEndInside(unsigned int line, const IndexType& point, const IndexType& run) const
+::RightMostLeftEndInside(int line, const IndexType& point, const IndexType& run) const
 {
   unsigned int idx = 0;
   IndexType    resp;
@@ -434,7 +434,7 @@ template<class TLabelObject, class TPolygon>
 inline typename LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
 ::IndexType
 LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
-::LeftMostRightEndInside(unsigned int line, const IndexType& point, const IndexType& run) const
+::LeftMostRightEndInside(int line, const IndexType& point, const IndexType& run) const
 {
   IndexType resp;
   resp[0] = -1;
@@ -471,7 +471,7 @@ LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
 template<class TLabelObject, class TPolygon>
 void
 LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
-::WalkLeft(unsigned int line,
+::WalkLeft(int line,
            const IndexType& startPoint,
            const IndexType& endPoint,
            PolygonType * polygon,
@@ -544,7 +544,7 @@ LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
 template<class TLabelObject, class TPolygon>
 void
 LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
-::WalkRight(unsigned int line,
+::WalkRight(int line,
             const IndexType& startPoint,
             const IndexType& endPoint,
             PolygonType * polygon,
