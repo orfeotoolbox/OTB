@@ -20,6 +20,8 @@
 
 #include "otbUnaryFunctorImageFilter.h"
 #include "vnl/vnl_math.h"
+#include "itkVariableLengthVector.h"
+
 
 namespace otb
 {
@@ -33,15 +35,15 @@ namespace otb
  * \sa ComplexToRealImageFilter
  */
 namespace Functor {
-  
-template< class TInput, class TOutput>
-class ComplexToVector
+ 
+template<class TInput, class TOutput>
+class SingleComplexToVector
 {
 public:
   typedef typename TOutput::ValueType OutputValueType;
 
- ComplexToVector() {}
-  ~ComplexToVector() {}
+ SingleComplexToVector() : m_InputSize(1) {}
+  ~SingleComplexToVector() {}
 
   // This is an obligation to use the functor in otbUnaryFunctorImageFilter
   unsigned int GetOutputSize()
@@ -49,34 +51,104 @@ public:
       return 2;
     }
 
+  void SetInputSize(unsigned int ls )
+    {
+      m_InputSize = 1;
+    }
+
   inline TOutput operator()( const TInput & A ) const
     {
       TOutput output;
-      output.SetSize(2);
+      output.SetSize( 2 );
       
       output[0] = static_cast<OutputValueType>(A.real());
       output[1] = static_cast<OutputValueType>(A.imag());
-      
+
       return output;
     }
+ protected:
+  unsigned int m_InputSize;
 };
+
+
+template<class TInput, class TOutput>
+class VectorComplexToVector
+{
+public:
+  typedef typename TOutput::ValueType OutputValueType;
+  typedef typename TInput::ValueType ValueType;
+  typedef itk::VariableLengthVector<ValueType> TestType;
+
+  VectorComplexToVector() : m_InputSize(1) {}
+  ~VectorComplexToVector() {}
+
+ // This is an obligation to use the functor in otbUnaryFunctorImageFilter
+  unsigned int GetOutputSize()
+    {
+      return 2*m_InputSize;
+    }
+
+
+  void SetInputSize(unsigned int ls )
+    {
+      m_InputSize = ls;
+    }
+
+  inline TOutput operator()( const TInput & A ) const
+    {
+      TOutput output;
+      output.SetSize( 2*m_InputSize );
+      
+      for(unsigned int i=0; i<m_InputSize; i++)
+        {
+          output[2*i] = static_cast<OutputValueType>(A[i].real());
+          output[2*i+1] = static_cast<OutputValueType>(A[i].imag());
+        }
+
+      return output;
+    }
+
+ protected:
+  unsigned int m_InputSize;
+};
+
+
+
+template< class TInput, class TOutput >
+class ComplexToVector
+{
+public:
+  typedef SingleComplexToVector<TInput, TOutput> FunctorType;
+};
+ 
+
+template< class TInput, class TOutput >
+class ComplexToVector<itk::VariableLengthVector<TInput>, TOutput>
+{
+public:
+  typedef VectorComplexToVector<itk::VariableLengthVector<TInput>, TOutput> FunctorType;
+};
+
 }
+
+
 
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ComplexToVectorImageCastFilter :
     public
 otb::UnaryFunctorImageFilter<TInputImage, TOutputImage,
-                        Functor::ComplexToVector<
+                        typename Functor::ComplexToVector<
   typename TInputImage::PixelType,
-  typename TOutputImage::PixelType>   >
+  typename TOutputImage::PixelType>::FunctorType   >
 {
 public:
   /** Standard class typedefs. */
   typedef ComplexToVectorImageCastFilter  Self;
+  //typedef Functor::ComplexToVector< typename TInputImage::PixelType, typename TOutputImage::PixelType>::FunctorType FunctorType;
   typedef otb::UnaryFunctorImageFilter<
     TInputImage, TOutputImage,
-    Functor::ComplexToVector< typename TInputImage::PixelType,
-    typename TOutputImage::PixelType> >                        Superclass;
+    typename Functor::ComplexToVector< typename TInputImage::PixelType,
+    typename TOutputImage::PixelType>::FunctorType >                        Superclass;
   typedef itk::SmartPointer<Self>             Pointer;
   typedef itk::SmartPointer<const Self>       ConstPointer;
 
@@ -94,6 +166,14 @@ public:
 protected:
   ComplexToVectorImageCastFilter() {}
   virtual ~ComplexToVectorImageCastFilter() {}
+
+  void GenerateOutputInformation()
+    {
+      Superclass::GenerateOutputInformation();
+
+      this->GetFunctor().SetInputSize(this->GetInput()->GetNumberOfComponentsPerPixel());
+      this->GetOutput()->SetNumberOfComponentsPerPixel( 2*this->GetInput()->GetNumberOfComponentsPerPixel() );
+    }
 
 private:
   ComplexToVectorImageCastFilter(const Self&); //purposely not implemented

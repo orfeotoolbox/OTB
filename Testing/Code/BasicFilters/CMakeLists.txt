@@ -1805,12 +1805,15 @@ ADD_TEST(bfTuComplexToVectorImageCastFilterNew ${BASICFILTERS_TESTS13}
 )
 
 ADD_TEST(bfTuComplexToVectorImageCastFilterTest ${BASICFILTERS_TESTS13}
-  --compare-image ${NOTOL}
+  --compare-n-images ${NOTOL} 2
   ${TEMP}/bfTvComplexToVectorImageCastFilterTest.tif
   ${BASELINE}/bfTvComplexToVectorImageCastFilterTest.tif
+  ${TEMP}/bfTvVectorComplexToVectorImageCastFilterTest.tif
+  ${BASELINE}/bfTvComplexToVectorImageCastFilterTest.tif
   otbComplexToVectorImageCastFilterTest
-    ${INPUTDATA}/RSAT_imagery_HH.tif
+    ${INPUTDATA}/monobandComplexDouble
     ${TEMP}/bfTvComplexToVectorImageCastFilterTest.tif
+    ${TEMP}/bfTvVectorComplexToVectorImageCastFilterTest.tif
 )
 
 ADD_TEST(bfTvotbLog10ThresholdedImageFilterTest ${BASICFILTERS_TESTS13}
