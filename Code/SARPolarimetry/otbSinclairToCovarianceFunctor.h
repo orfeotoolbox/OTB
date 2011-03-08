@@ -66,16 +66,16 @@ public:
 
     result.SetSize(m_NumberOfComponentsPerPixel);
 
-    result[0] = static_cast<OutputValueType>( static_cast<ComplexType>(Shh)*vcl_conj(static_cast<ComplexType>(Shh)) );
+    result[0] = static_cast<OutputValueType>( std::norm(Shh) );
     result[1] = static_cast<OutputValueType>( static_cast<ComplexType>(Shh)*vcl_conj(static_cast<ComplexType>(Shv)) );
     result[2] = static_cast<OutputValueType>( static_cast<ComplexType>(Shh)*vcl_conj(static_cast<ComplexType>(Svh)) );
     result[3] = static_cast<OutputValueType>( static_cast<ComplexType>(Shh)*vcl_conj(static_cast<ComplexType>(Svv)) );
-    result[4] = static_cast<OutputValueType>( static_cast<ComplexType>(Shv)*vcl_conj(static_cast<ComplexType>(Shv)) );
+    result[4] = static_cast<OutputValueType>( std::norm(Shv) );
     result[5] = static_cast<OutputValueType>( static_cast<ComplexType>(Shv)*vcl_conj(static_cast<ComplexType>(Svh)) );
     result[6] = static_cast<OutputValueType>( static_cast<ComplexType>(Shv)*vcl_conj(static_cast<ComplexType>(Svv)) );
-    result[7] = static_cast<OutputValueType>( static_cast<ComplexType>(Svh)*vcl_conj(static_cast<ComplexType>(Svh)) );
+    result[7] = static_cast<OutputValueType>( std::norm(Svh) );
     result[8] = static_cast<OutputValueType>( static_cast<ComplexType>(Svh)*vcl_conj(static_cast<ComplexType>(Svv)) );
-    result[9] = static_cast<OutputValueType>( static_cast<ComplexType>(Svv)*vcl_conj(static_cast<ComplexType>(Svv)) );
+    result[9] = static_cast<OutputValueType>( std::norm(Svv) );
 
     return (result);
   }

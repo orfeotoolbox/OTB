@@ -18,7 +18,7 @@
 #ifndef __otbComplexToVectorImageCastFilter_h
 #define __otbComplexToVectorImageCastFilter_h
 
-#include "otbUnaryFunctorImageFilter.h"
+#include "itkUnaryFunctorImageFilter.h"
 #include "vnl/vnl_math.h"
 #include "itkVariableLengthVector.h"
 
@@ -42,19 +42,8 @@ class SingleComplexToVector
 public:
   typedef typename TOutput::ValueType OutputValueType;
 
- SingleComplexToVector() : m_InputSize(1) {}
+  SingleComplexToVector() {}
   ~SingleComplexToVector() {}
-
-  // This is an obligation to use the functor in otbUnaryFunctorImageFilter
-  unsigned int GetOutputSize()
-    {
-      return 2;
-    }
-
-  void SetInputSize(unsigned int ls )
-    {
-      m_InputSize = 1;
-    }
 
   inline TOutput operator()( const TInput & A ) const
     {
@@ -66,8 +55,6 @@ public:
 
       return output;
     }
- protected:
-  unsigned int m_InputSize;
 };
 
 
@@ -79,27 +66,15 @@ public:
   typedef typename TInput::ValueType ValueType;
   typedef itk::VariableLengthVector<ValueType> TestType;
 
-  VectorComplexToVector() : m_InputSize(1) {}
+  VectorComplexToVector() {}
   ~VectorComplexToVector() {}
-
- // This is an obligation to use the functor in otbUnaryFunctorImageFilter
-  unsigned int GetOutputSize()
-    {
-      return 2*m_InputSize;
-    }
-
-
-  void SetInputSize(unsigned int ls )
-    {
-      m_InputSize = ls;
-    }
 
   inline TOutput operator()( const TInput & A ) const
     {
       TOutput output;
-      output.SetSize( 2*m_InputSize );
+      output.SetSize( 2*A.Size() );
       
-      for(unsigned int i=0; i<m_InputSize; i++)
+      for(unsigned int i=0; i<A.Size(); i++)
         {
           output[2*i] = static_cast<OutputValueType>(A[i].real());
           output[2*i+1] = static_cast<OutputValueType>(A[i].imag());
@@ -108,8 +83,6 @@ public:
       return output;
     }
 
- protected:
-  unsigned int m_InputSize;
 };
 
 
@@ -136,7 +109,7 @@ public:
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ComplexToVectorImageCastFilter :
     public
-otb::UnaryFunctorImageFilter<TInputImage, TOutputImage,
+itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
                         typename Functor::ComplexToVector<
   typename TInputImage::PixelType,
   typename TOutputImage::PixelType>::FunctorType   >
@@ -144,8 +117,7 @@ otb::UnaryFunctorImageFilter<TInputImage, TOutputImage,
 public:
   /** Standard class typedefs. */
   typedef ComplexToVectorImageCastFilter  Self;
-  //typedef Functor::ComplexToVector< typename TInputImage::PixelType, typename TOutputImage::PixelType>::FunctorType FunctorType;
-  typedef otb::UnaryFunctorImageFilter<
+  typedef itk::UnaryFunctorImageFilter<
     TInputImage, TOutputImage,
     typename Functor::ComplexToVector< typename TInputImage::PixelType,
     typename TOutputImage::PixelType>::FunctorType >                        Superclass;
@@ -157,7 +129,7 @@ public:
 
   /** Runtime information support. */
   itkTypeMacro(ComplexToVectorImageCastFilter,
-               otb::UnaryFunctorImageFilter);
+               itk::UnaryFunctorImageFilter);
 
   typedef typename TInputImage::PixelType    InputPixelType;
   typedef typename TOutputImage::PixelType   OutputPixelType;
@@ -171,7 +143,6 @@ protected:
     {
       Superclass::GenerateOutputInformation();
 
-      this->GetFunctor().SetInputSize(this->GetInput()->GetNumberOfComponentsPerPixel());
       this->GetOutput()->SetNumberOfComponentsPerPixel( 2*this->GetInput()->GetNumberOfComponentsPerPixel() );
     }
 

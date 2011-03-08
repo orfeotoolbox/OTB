@@ -64,12 +64,12 @@ public:
 
     result.SetSize(NumberOfComponentsPerPixel);
 
-    result[0] = static_cast<OutputValueType>( static_cast<ComplexType>(Shh)*vcl_conj(static_cast<ComplexType>(Shh)) );
+    result[0] = static_cast<OutputValueType>( std::norm(Shh) );
     result[1] = static_cast<OutputValueType>( static_cast<ComplexType>(Shh)*vcl_conj(static_cast<ComplexType>(Shv)) );
     result[2] = static_cast<OutputValueType>( static_cast<ComplexType>(Shh)*vcl_conj(static_cast<ComplexType>(Svv)) );
-    result[3] = static_cast<OutputValueType>( static_cast<ComplexType>(Shv)*vcl_conj(static_cast<ComplexType>(Shv)) );
+    result[3] = static_cast<OutputValueType>( std::norm(Shv) );
     result[4] = static_cast<OutputValueType>( static_cast<ComplexType>(Shv)*vcl_conj(static_cast<ComplexType>(Svv)) );
-    result[5] = static_cast<OutputValueType>( static_cast<ComplexType>(Svv)*vcl_conj(static_cast<ComplexType>(Svv)) );
+    result[5] = static_cast<OutputValueType>( std::norm(Svv) );
 
     return (result);
   }
@@ -89,7 +89,7 @@ protected:
 
 
 private:
-    itkStaticConstMacro(NumberOfComponentsPerPixel, unsigned int, 6);
+    itkStaticConstMacro(NumberOfComponentsPerPixel, unsigned int, 6 );
 
 };
 

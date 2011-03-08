@@ -72,12 +72,12 @@ public:
     const ComplexType conjSlr = vcl_conj(Slr);
     const ComplexType conjSrr = vcl_conj(Srr);
 
-    result[0]  = static_cast<OutputValueType>( Sll * conjSll  );
+    result[0]  = static_cast<OutputValueType>( std::norm(Sll) );
     result[1]  = static_cast<OutputValueType>( Sll * conjSlr  );
     result[2]  = static_cast<OutputValueType>( Sll * conjSrr  );
-    result[3]  = static_cast<OutputValueType>( Slr * conjSlr  );
+    result[3]  = static_cast<OutputValueType>( std::norm(Slr) );
     result[4]  = static_cast<OutputValueType>( Slr * conjSrr  );
-    result[5]  = static_cast<OutputValueType>( Srr * conjSrr  );
+    result[5]  = static_cast<OutputValueType>( std::norm(Srr) );
 
     return (result);
   }
