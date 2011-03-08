@@ -195,20 +195,16 @@ private:
  *    CommandLineArgumentParser parser;
  *    parser.SetProgramDescription("This program is an example");
  *    parser.AddInputImage();
- *    parser.AddOption("-f", 1);
- *    parser.AddSynonim("-f","--filename");
- *    parser.AddOption("-v", 0);
- *    parser.AddSynonim("-v","--verbose");
- *    parser.AddOption("--DetailledName","Help explanation","-d", 1, false);
+ *    parser.AddOption("--DetailedName","Help explanation","-d", 1, false);
  * \endcode
  *  - Use the parser:
  * \code
  *    CommandLineArgumentParseResult result;
- *    if(parser.TryParseCommandLine(argc, argv, result))
+ *    if( parser.ParseCommandLine(argc, argv, &result) )
  *    {
- *      if(result.IsOptionPresent("--DetailledName"))
+ *      if( result.IsOptionPresent("--DetailledName") )
  *      {
- *        cout << "Option " << result.GetParameterString("--DetailledName") << endl;
+ *        std::cout << "DetailedName : " << result.GetParameterString("--DetailedName") << std::endl;
  *        ...
  *      }
  *    }
@@ -230,30 +226,27 @@ public:
   /** Add an output image option */
   void AddOutputImage(bool obligatory = true);
 
+  /** Set the program name */
   itkSetStringMacro(ProgramDescription);
+
+  /** Get the program name */
   itkGetStringMacro(ProgramDescription);
 
-  /** Add an option with 0 or more parameters (words that follow it) */
-//  void AddOption(const char *name, const int nParameters, const char * comment);
-// at least one value
-
+  /** Add a new option with fixed number of parameters */
   void AddOption(std::string name,
                  std::string comment,
                  std::string synonim = NULL,
                  int nParameters = 1,
                  bool obligatory = true);
-  // if -1 we do not know the number of parameters
+
+  /** Add a new option with unknown number of parameters */
   void AddOptionNParams(std::string name, std::string comment, std::string synonim = NULL, bool obligatory = true);
 
-  /** Add a different string that envokes the same option (--file and -f) */
-//  void AddSynonim(const char *option, const char *synonim);
-
+  /** Interpret options from the command line */
   void ParseCommandLine(int argc, char *argv[],
                         CommandLineArgumentParseResult * outResult,
                         bool failOnUnknownTrailingParameters = true);
 
-  void ParseGUI(CommandLineArgumentParseResult * outResult,
-                bool failOnUnknownTrailingParameters = true);
 protected:
   CommandLineArgumentParser();
   virtual ~CommandLineArgumentParser() {}
@@ -277,17 +270,17 @@ private:
     std::string Description;            // option description
     std::string Synonim;                // shortcut
     bool NumberOfParametersFixed;       // required number of values
-    int NumberOfParameters;          // number of values
+    int NumberOfParameters;             // number of values
     bool Obligatory;                    // is the option mandatory ?
     bool Finded;                        // check if the option is present
   } OptionType;
+
   typedef std::vector<OptionType> ListOptionType;
 
   ListOptionType m_OptionList;
 
   std::string m_ProgramName;
   std::string m_ProgramDescription;
-
 };
 
 }
