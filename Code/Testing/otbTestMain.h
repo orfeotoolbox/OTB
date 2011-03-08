@@ -27,6 +27,7 @@
 #include "itkMultiThreader.h"
 
 #include "otbTestHelper.h"
+#include "otbMacro.h"
 
 typedef int (*MainFuncPointer)(int, char*[]);
 std::map<std::string, MainFuncPointer> StringToTestFunctionMap;
@@ -180,6 +181,8 @@ int main(int ac, char* av[])
       av += 2 + 2 * nbComparisons;
       ac -= 2 + 2 * nbComparisons;
       }
+    /************************************************************************/
+    // COMPARE ASCII
     else if (strcmp(av[1], "--compare-ascii") == 0)
       {
       lFlagRegression = true;
@@ -205,6 +208,7 @@ int main(int ac, char* av[])
           }
         }
       }
+    /************************************************************************/
     else if (strcmp(av[1], "--compare-n-ascii") == 0)
       {
       lFlagRegression = true;
@@ -422,6 +426,7 @@ int main(int ac, char* av[])
               }
             }
 
+          /***********************************************************************************/
           // Non regression test for ascii files
           if ((baselineFilenamesAscii.size() > 0) && (testFilenamesAscii.size() > 0))
             {

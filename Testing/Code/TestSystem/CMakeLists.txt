@@ -117,6 +117,16 @@ ADD_TEST(tsTvCompareAscii4epsilon3 ${TESTSYSTEM_TESTS}
 
 SET_TESTS_PROPERTIES(tsTvCompareAscii4epsilon3 PROPERTIES WILL_FAIL true)
 
+# Tests about precision (10^-3) and strings with white space
+ADD_TEST(tsTvCompareAsciiepsilon3_WhiteSpace ${TESTSYSTEM_TESTS}
+   --compare-ascii ${EPSILON_3}
+       ${TEMP}/tsTvCompareAsciiRefepsilon3_WS.txt
+       ${TEMP}/tsTvCompareAsciiTestepsilon3_WS.txt
+     otbCompareAsciiTestsEpsilon3_WhiteSpace
+       ${TEMP}/tsTvCompareAsciiRefepsilon3_WS.txt
+       ${TEMP}/tsTvCompareAsciiTestepsilon3_WS.txt
+  )
+
 #Check that the order and the tolerance works together
 ADD_TEST(tsTvCompareAscii5epsilon2 ${TESTSYSTEM_TESTS}
   --ignore-order  --compare-ascii ${EPSILON_2}
@@ -127,6 +137,7 @@ ADD_TEST(tsTvCompareAscii5epsilon2 ${TESTSYSTEM_TESTS}
        ${TEMP}/tsTvCompareAsciiTest5epsilon2.txt
   )
 
+
 # -------       CXX source files -----------------------------------
 SET(TESTSYSTEM_SRCS
 otbTestSystemTests.cxx
@@ -136,6 +147,7 @@ otbCompareAsciiTests2.cxx
 otbCompareAsciiTests3.cxx
 otbCompareAsciiTests4.cxx
 otbCompareAsciiTests5.cxx
+otbCompareAsciiTestsEpsilon3_WhiteSpace.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbTestSystemTests "${TESTSYSTEM_SRCS}" "OTBTesting;OTBCommon;OTBIO")
