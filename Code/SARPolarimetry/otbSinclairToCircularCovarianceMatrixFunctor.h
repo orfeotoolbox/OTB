@@ -19,6 +19,7 @@
 #define __otbSinclairToCircularCovarianceMatrixFunctor_h
 
 #include "vcl_complex.h"
+#include "otbSinclairToCovarianceFunctor.h"
 
 namespace otb
 {
@@ -45,7 +46,7 @@ namespace Functor
  * \f$ S_{lr} = 0.5 * (-S_{hh}+i*S_{hv}-i*S_{vh}+S_{vv}) \f$
  * \f$ S_{rl} = 0.5 * (-S_{hh}-i*S_{hv}+i*S_{vh}-S_{vv}) \f$
  * \f$ S_{rr} = 0.5 * (-S_{hh}+i*S_{hv}+i*S_{vh}+S_{vv}) \f$
- *
+ * Extract from Antennas for radar and communications Harold Mott p 317.
  *
  *  \ingroup Functor
  *  \ingroup SARPolarimetry
@@ -67,6 +68,7 @@ public:
   typedef double                                   RealType;
   typedef std::complex <RealType>                  ComplexType;
   typedef typename TOutput::ValueType              OutputValueType;
+  typedef SinclairToCovarianceFunctor<ComplexType, ComplexType, ComplexType, ComplexType, TOutput> SinclairToCovarianceFunctorType;
   inline TOutput operator ()(const TInput1& Shh, const TInput2& Shv,
                              const TInput3& Svh, const TInput4& Svv)
   {
@@ -84,7 +86,7 @@ public:
     const ComplexType coef(0.5);
 
     const ComplexType Sll = coef*( -S_hh-jS_hv-jS_vh+S_vv );
-    const ComplexType Slr = coef*( -S_hh+jS_hv-jS_vh+S_vv );
+    const ComplexType Slr = coef*( -S_hh+jS_hv-jS_vh-S_vv );
     const ComplexType Srl = coef*( -S_hh-jS_hv+jS_vh-S_vv );
     const ComplexType Srr = coef*( -S_hh+jS_hv+jS_vh+S_vv );
 
@@ -93,18 +95,8 @@ public:
     const ComplexType conjSrl = vcl_conj(Srl);
     const ComplexType conjSrr = vcl_conj(Srr);
 
-    result[0]  = static_cast<OutputValueType>( std::norm(Sll) );
-    result[1]  = static_cast<OutputValueType>( Sll * conjSlr  );
-    result[2]  = static_cast<OutputValueType>( Sll * conjSrl  );
-    result[3]  = static_cast<OutputValueType>( Sll * conjSrr  );
-    result[4]  = static_cast<OutputValueType>( std::norm(Slr) );
-    result[5]  = static_cast<OutputValueType>( Slr * conjSrl  );
-    result[6]  = static_cast<OutputValueType>( Slr * conjSrr  );
-    result[7]  = static_cast<OutputValueType>( std::norm(Srl) );
-    result[8]  = static_cast<OutputValueType>( Srl * conjSrr  );
-    result[9]  = static_cast<OutputValueType>( std::norm(Srr) );
-
-    return (result);
+    SinclairToCovarianceFunctorType funct;
+    return ( funct( Sll, Slr, Srl, Srr ) ); 
   }
 
   unsigned int GetNumberOfComponentsPerPixel()

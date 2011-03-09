@@ -36,29 +36,27 @@ namespace Functor
  *   channel #4 : \f$ S_{hv}.S_{vv}^{*} \f$
  *   channel #5 : \f$ S_{vv}.S_{vv}^{*} \f$
  *
- * Output is a complex.
+ * This is a adaptation of the SinclairToCovarianceFunctor, where \f$ S_{hv}=S_{vh} \f$.
  *
  *  \ingroup Functor
  *  \ingroup SARPolarimetry
  *
+ *  \sa SinclairToCovarianceFunctor
  *  \sa SinclairImageFilter
  *  \sa SinclairToCircularCovarianceMatrixFunctor
  *  \sa SinclairToCoherencyFunctor
- *  \sa SinclairToCovarianceFunctor
  *  \sa SinclairToMuellerFunctor
  *  \sa SinclairToReciprocalCircularCovarianceMatrixFunctor
  *  \sa SinclairToReciprocalCoherencyFunctor
  */
-template <class TInput1, class TInput2, class TInput3,
-          class TInput4, class TOutput>
+template <class TInput1, class TInput2, class TInput3, class TOutput>
 class SinclairToReciprocalCovarianceFunctor
 {
 public:
   /** Some typedefs. */
   typedef typename std::complex <double>           ComplexType;
   typedef typename TOutput::ValueType              OutputValueType;
-  inline TOutput operator ()(const TInput1& Shh, const TInput2& Shv,
-                             const TInput3& Svh, const TInput4& Svv)
+  inline TOutput operator ()(const TInput1& Shh, const TInput2& Shv, const TInput3& Svv)
   {
     TOutput result;
 
@@ -66,7 +64,6 @@ public:
 
     const ComplexType S_hh = static_cast<ComplexType>(Shh);
     const ComplexType S_hv = static_cast<ComplexType>(Shv);
-    const ComplexType S_vh = static_cast<ComplexType>(Svh);
     const ComplexType S_vv = static_cast<ComplexType>(Svv);
 
     result[0] = static_cast<OutputValueType>( std::norm( S_hh ) );

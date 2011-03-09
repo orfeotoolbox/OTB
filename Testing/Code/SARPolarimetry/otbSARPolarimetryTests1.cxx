@@ -41,5 +41,8 @@ void RegisterTests()
   REGISTER_TEST(otbSinclairToReciprocalCircularCovarianceMatrixFunctor);
   REGISTER_TEST(otbSinclairToReciprocalCoherencyFunctor);
   REGISTER_TEST(otbSinclairToCovarianceFunctor);
+  REGISTER_TEST(otbSinclairImageFilterNew);
   REGISTER_TEST(otbSinclairImageFilter);
+  REGISTER_TEST(otbSinclairReciprocalImageFilterNew);
+  REGISTER_TEST(otbSinclairReciprocalImageFilter);
 }

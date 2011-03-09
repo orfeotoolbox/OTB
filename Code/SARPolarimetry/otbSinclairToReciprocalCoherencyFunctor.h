@@ -36,6 +36,8 @@ namespace Functor
  *   channel #4 : \f$ (S_{hh}-S_{vv}).(2*S_{hv})^{*} \f$
  *   channel #5 : \f$ (2*S_{hv}).(2*S_{hv})^{*} \f$
  *
+ * This is a adaptation of the SinclairToCoherencyFunctor, where \f$ S_{hv}=S_{vh} \f$.
+ *
  *  \ingroup Functor
  *  \ingroup SARPolarimetry
  *
@@ -49,16 +51,14 @@ namespace Functor
 
  *  \sa SinclairToReciprocalCovarianceFunctor
  */
-template <class TInput1, class TInput2, class TInput3,
-          class TInput4, class TOutput>
+template <class TInput1, class TInput2, class TInput3, class TOutput>
 class SinclairToReciprocalCoherencyFunctor
 {
 public:
   /** Some typedefs. */
   typedef typename std::complex <double>           ComplexType;
   typedef typename TOutput::ValueType              OutputValueType;
-  inline TOutput operator ()(const TInput1& Shh, const TInput2& Shv,
-                             const TInput3& Svh, const TInput4& Svv)
+  inline TOutput operator ()(const TInput1& Shh, const TInput2& Shv, const TInput3& Svv)
   {
     TOutput result;
 
@@ -66,19 +66,18 @@ public:
 
     const ComplexType S_hh = static_cast<ComplexType>(Shh);
     const ComplexType S_hv = static_cast<ComplexType>(Shv);
-    const ComplexType S_vh = static_cast<ComplexType>(Svh);
     const ComplexType S_vv = static_cast<ComplexType>(Svv);
 
     const ComplexType HHPlusVV  = S_hh + S_vv;
-    const ComplexType VVMinusVV = S_hh - S_vv;
+    const ComplexType HHMinusVV = S_hh - S_vv;
     const ComplexType twoHV     = ComplexType( 2.0 ) * S_hv;
 
-    result[0] = static_cast<OutputValueType>( HHPlusVV * vcl_conj(HHPlusVV) );
-    result[1] = static_cast<OutputValueType>( HHPlusVV * vcl_conj(VVMinusVV) );
+    result[0] = static_cast<OutputValueType>( std::norm(HHPlusVV) );
+    result[1] = static_cast<OutputValueType>( HHPlusVV * vcl_conj(HHMinusVV) );
     result[2] = static_cast<OutputValueType>( HHPlusVV * vcl_conj(twoHV) );
-    result[3] = static_cast<OutputValueType>( VVMinusVV * vcl_conj(VVMinusVV) );
-    result[4] = static_cast<OutputValueType>( VVMinusVV *vcl_conj(twoHV) );
-    result[5] = static_cast<OutputValueType>( twoHV * vcl_conj(twoHV) );
+    result[3] = static_cast<OutputValueType>( std::norm(HHMinusVV) );
+    result[4] = static_cast<OutputValueType>( HHMinusVV *vcl_conj(twoHV) );
+    result[5] = static_cast<OutputValueType>( std::norm(twoHV) );
 
     result /= 2.0;
 

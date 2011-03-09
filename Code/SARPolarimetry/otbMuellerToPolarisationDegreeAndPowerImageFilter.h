@@ -45,27 +45,26 @@ template< class TInput, class TOutput>
 class MuellerToPolarisationDegreeAndPowerFunctor
 {
 public:
-  typedef double                                    RealType;
   typedef typename TOutput::ValueType               OutputValueType;
-  typedef itk::Matrix<RealType, 4, 4>                 MuellerMatrixType;
-  typedef itk::Vector<RealType, 4>                   StokesVectorType;
+  typedef itk::Matrix<double, 4, 4>                 MuellerMatrixType;
+  typedef itk::Vector<double, 4>                   StokesVectorType;
 
   inline TOutput operator()( const TInput & Mueller ) const
     {
-    RealType P;
-    RealType deg_pol;
-    RealType tau;
-    RealType psi;
+    double P;
+    double deg_pol;
+    double tau;
+    double psi;
     StokesVectorType Si;
     StokesVectorType Sr;
 
-    RealType m_PowerMin(itk::NumericTraits<RealType>::max());
-    RealType m_PowerMax(itk::NumericTraits<RealType>::min());
-    RealType m_PolarisationDegreeMin(itk::NumericTraits<RealType>::max());
-    RealType m_PolarisationDegreeMax(itk::NumericTraits<RealType>::min());
+    double m_PowerMin(itk::NumericTraits<double>::max());
+    double m_PowerMax(itk::NumericTraits<double>::min());
+    double m_PolarisationDegreeMin(itk::NumericTraits<double>::max());
+    double m_PolarisationDegreeMax(itk::NumericTraits<double>::min());
 
-    RealType PI_90;
-    PI_90 = static_cast<RealType>( 2 * CONST_PI_180);
+    double PI_90;
+    PI_90 = static_cast<double>( 2 * CONST_PI_180);
 
     TOutput result;
     result.SetSize(m_NumberOfComponentsPerPixel);

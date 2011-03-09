@@ -1486,7 +1486,7 @@ ADD_TEST(bfTvFunctionWithNeighborhoodToImageFilter ${BASICFILTERS_TESTS11}
 	    ${TEMP}/bfTvFunctionWithNeighborhoodToImageFilterTest.tif
         otbFunctionWithNeighborhoodToImageFilter
 	    ${INPUTDATA}/poupees_1canal.hd
-	    ${TEMP}/bfTvFunctionWithNeighborhoodToImageFilterTest.tif
+matriximagef    ${TEMP}/bfTvFunctionWithNeighborhoodToImageFilterTest.tif
 	    2 # radius
 )
 
@@ -1825,17 +1825,17 @@ ADD_TEST(bfTvotbLog10ThresholdedImageFilterTest ${BASICFILTERS_TESTS13}
 )
 
 
-ADD_TEST(bfTuApplyTransitionMatrixImageFilterNew ${BASICFILTERS_TESTS13}
-  otbApplyTransitionMatrixImageFilterNew
+ADD_TEST(bfTuMatrixImageFilterNew ${BASICFILTERS_TESTS13}
+  otbMatrixImageFilterNew
 )
 
-ADD_TEST(bfTvApplyTransitionMatrixImageFilterTest ${BASICFILTERS_TESTS13}
-  --compare-ascii ${NOTOL}
-  ${TEMP}/bfTvApplyTransitionMatrixImageFilterTest.tif
-  ${BASELINE_FILES}/bfTvApplyTransitionMatrixImageFilterTest.tif
-  otbApplyTransitionMatrixImageFilterTest
+ADD_TEST(bfTvMatrixImageFilterTest ${BASICFILTERS_TESTS13}
+  --compare-image ${NOTOL}
+  ${TEMP}/bfTvMatrixImageFilterTest.tif
+  ${BASELINE}/bfTvMatrixImageFilterTest.tif
+  otbMatrixImageFilterTest
     ${INPUTDATA}/poupees.tif
-    ${TEMP}/bfTvApplyTransitionMatrixImageFilterTest.tif
+    ${TEMP}/bfTvMatrixImageFilterTest.tif
 )
 
 
@@ -2092,8 +2092,7 @@ otbRealImageToComplexImageFilterTest.cxx
 otbImaginaryImageToComplexImageFilterTest.cxx
 otbComplexToVectorImageCastFilter.cxx
 otbLog10ThresholdedImageFilterTest.cxx
-otbApplyTransitionMatrixImageFilterNew.cxx
-otbApplyTransitionMatrixImageFilterTest.cxx
+otbMatrixImageFilterTest.cxx
 )
 
 

@@ -29,6 +29,18 @@ namespace Functor {
 /** \class otbMuellerToMLCFunctor
  * \brief Evaluate the  MLC image from the Mueller image
  *
+ * Output value are:
+ *   channel #0  : \f$ M_{11} + M_{22} + 2*M_{12} \f$
+ *   channel #1  : \f$ M_{11} - M_{22}            \f$
+ *   channel #2  : \f$ M_{11} + M_{22} - 2*M_{12} \f$
+ *   channel #3  : \f$ M_{13} + M_{23}            + i*(M_{14}+M_{24}) \f$
+ *   channel #4  : \f$ M_{33} - M_{44}            - 2*i*M_{34}        \f$
+ *   channel #5  : \f$ M_{13} - M_{23}            - i*(M_{14}-M_{24}) \f$
+ *
+ * Where \f$ M_{ij} are the coefficients of the input Mueeler matrix.
+ * Input pixel must have 10 channels (one for each Mueller matrix coeffcients).
+ * The returned output pixel have 6 channles.
+ *
  * \ingroup Functor
  * \ingroup SARPolarimetry
  *
@@ -36,71 +48,65 @@ namespace Functor {
  * \sa MuellerToPolarisationDegreeAndPowerImageFilter
  *
  */
+
 template< class TInput, class TOutput>
 class MuellerToMLCFunctor
 {
 public:
-  typedef double                                    RealType;
   typedef std::complex<double>                      ComplexType;
   typedef typename TOutput::ValueType               OutputValueType;
-
-
+  
+  
   inline TOutput operator()( const TInput & Mueller ) const
     {
-    TOutput result;
-    result.SetSize(m_NumberOfComponentsPerPixel);
-
-    const RealType M11 =  static_cast<RealType>(Mueller[0]);
-    const RealType M12 =  static_cast<RealType>(Mueller[1]);
-    const RealType M13 =  static_cast<RealType>(Mueller[2]);
-    const RealType M14 =  static_cast<RealType>(Mueller[3]);
-    const RealType M21 =  static_cast<RealType>(Mueller[4]);
-    const RealType M22 =  static_cast<RealType>(Mueller[5]);
-    const RealType M23 =  static_cast<RealType>(Mueller[6]);
-    const RealType M24 =  static_cast<RealType>(Mueller[7]);
-    const RealType M31 =  static_cast<RealType>(Mueller[8]);
-    const RealType M32 =  static_cast<RealType>(Mueller[9]);
-    const RealType M33 =  static_cast<RealType>(Mueller[10]);
-    const RealType M34 =  static_cast<RealType>(Mueller[11]);
-    const RealType M41 =  static_cast<RealType>(Mueller[12]);
-    const RealType M42 =  static_cast<RealType>(Mueller[13]);
-    const RealType M43 =  static_cast<RealType>(Mueller[14]);
-    const RealType M44 =  static_cast<RealType>(Mueller[15]);
-
-    const ComplexType hhhh(M11+M22+2.*M12, 0.0);
-    const ComplexType hvhv(M11-M22, 0.0);
-    const ComplexType vvvv(M11+M22-2.*M12, 0.0);
-    const ComplexType hhhv(M13+M23, -1.*(M14+M24));
-    const ComplexType hhvv(M33-M44, -2.*M34);
-    const ComplexType hvvv(M13-M23, -1.*(M14-M24));
-
-    result[0] = static_cast<OutputValueType>( hhhh );
-    result[1] = static_cast<OutputValueType>( 2.* hhhv );
-    result[2] = static_cast<OutputValueType>( hhvv );
-    result[3] = static_cast<OutputValueType>( 4.* hvhv );
-    result[4] = static_cast<OutputValueType>( 2.* hvvv );
-    result[5] = static_cast<OutputValueType>( vvvv );
-
-    return result;
+      TOutput result;
+      result.SetSize(m_NumberOfComponentsPerPixel);
+      
+      const double M11 =  static_cast<double>(Mueller[0]);
+      const double M12 =  static_cast<double>(Mueller[1]);
+      const double M13 =  static_cast<double>(Mueller[2]);
+      const double M14 =  static_cast<double>(Mueller[3]);
+      const double M22 =  static_cast<double>(Mueller[5]);
+      const double M23 =  static_cast<double>(Mueller[6]);
+      const double M24 =  static_cast<double>(Mueller[7]);
+      const double M33 =  static_cast<double>(Mueller[10]);
+      const double M34 =  static_cast<double>(Mueller[11]);
+      const double M44 =  static_cast<double>(Mueller[15]);
+      
+      const ComplexType hhhh(M11+M22+2.*M12, 0.0);
+      const ComplexType hvhv(M11-M22, 0.0);
+      const ComplexType vvvv(M11+M22-2.*M12, 0.0);
+      const ComplexType hhhv(M13+M23, -1.*(M14+M24));
+      const ComplexType hhvv(M33-M44, -2.*M34);
+      const ComplexType hvvv(M13-M23, -1.*(M14-M24));
+      
+      result[0] = static_cast<OutputValueType>( hhhh );
+      result[1] = static_cast<OutputValueType>( 2.* hhhv );
+      result[2] = static_cast<OutputValueType>( hhvv );
+      result[3] = static_cast<OutputValueType>( 4.* hvhv );
+      result[4] = static_cast<OutputValueType>( 2.* hvvv );
+      result[5] = static_cast<OutputValueType>( vvvv );
+      
+      return result;
     }
-
-   unsigned int GetOutputSize()
-   {
+  
+  unsigned int GetOutputSize()
+    {
      return m_NumberOfComponentsPerPixel;
-   }
-
-   /** Constructor */
-   MuellerToMLCFunctor() : m_NumberOfComponentsPerPixel(6)  {}
-
-   /** Destructor */
-   virtual ~MuellerToMLCFunctor() {}
-
-private:
-    unsigned int m_NumberOfComponentsPerPixel;
+    }
+  
+  /** Constructor */
+  MuellerToMLCFunctor() : m_NumberOfComponentsPerPixel(6)  {}
+  
+  /** Destructor */
+  virtual ~MuellerToMLCFunctor() {}
+  
+ private:
+  unsigned int m_NumberOfComponentsPerPixel;
 };
 }
-
-
+ 
+ 
 /** \class otbMuellerToMLCImageFilter
  * \brief Compute the MLC  image
  * from the Mueller image (16 real channels)

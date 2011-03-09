@@ -25,20 +25,20 @@ int otbSinclairToReciprocalCircularCovarianceMatrixFunctor(int argc, char * argv
   typedef std::complex<double>                   ComplexType;
   typedef itk::VariableLengthVector<ComplexType> OutputType;
 
-  typedef otb::Functor::SinclairToReciprocalCircularCovarianceMatrixFunctor<ComplexType, ComplexType, ComplexType, ComplexType, OutputType >         FunctorType;
+  typedef otb::Functor::SinclairToReciprocalCircularCovarianceMatrixFunctor<ComplexType, ComplexType, ComplexType, OutputType >         FunctorType;
 
   OutputType  result(6);
   FunctorType funct;
   OutputType outputFunct;
 
-  result[0] = ComplexType(32.5,  0.);
-  result[1] = ComplexType(12.,   1.5);
-  result[2] = ComplexType( 8., -31.5);
-  result[3] = ComplexType( 4.5,  0.);
-  result[4] = ComplexType( 1.5, -12.);
-  result[5] = ComplexType(32.5, 0.);
+  result[0] = ComplexType( 25.,  0.);
+  result[1] = ComplexType(  1., 18.);
+  result[2] = ComplexType(-11.,  2.);
+  result[3] = ComplexType( 13.,  0.);
+  result[4] = ComplexType(  1.,  8.);
+  result[5] = ComplexType(  5.,  0.);
 
-  outputFunct = funct.operator ()( ComplexType(1., 4.), ComplexType(2., 3.), ComplexType(3., 2.), ComplexType(4., 1.) );
+  outputFunct = funct.operator ()( ComplexType(1., 4.), ComplexType(2.,3.), ComplexType(3.,2.) );
 
   if( vcl_abs(result[0]-outputFunct[0]) > 1e-10 ||
       vcl_abs(result[1]-outputFunct[1]) > 1e-10 ||

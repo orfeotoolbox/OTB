@@ -15,18 +15,18 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSinclairImageFilter_h
-#define __otbSinclairImageFilter_h
+#ifndef __otbSinclairReciprocalImageFilter_h
+#define __otbSinclairReciprocalImageFilter_h
 
-#include "otbQuaternaryFunctorImageFilter.h"
-#include "otbSinclairToCovarianceFunctor.h"
+#include "itkTernaryFunctorImageFilter.h"
+#include "otbSinclairToReciprocalCovarianceFunctor.h"
 #include <complex>
 
 namespace otb
 {
 
-/** \class SinclairImageFilter
- * \brief Convert the Sinclair matrix
+/** \class SinclairReciprocalImageFilter
+ * \brief Convert the Sinclair reciprocal matrix.
  *
  * This class is parameterized over the type of the input images and
  * the type of the output image.  It is also parameterized by the
@@ -35,31 +35,29 @@ namespace otb
  *  \ingroup SARPolarimetry
  *
  *  \sa SinclairImageFilter
- *  \sa SinclairToCircularCovarianceMatrixFunctor
- *  \sa SinclairToCoherencyFunctor
- *  \sa SinclairToCovarianceFunctor
- *  \sa SinclairToMuellerFunctor
+ *  \sa SinclairToReciprocalCircularCovarianceMatrixFunctor
+ *  \sa SinclairToReciprocalCoherencyFunctor
+ *  \sa SinclairToReciprocalCovarianceFunctor
  */
 
-template <class TInputImageHH, class TInputImageHV,
-          class TInputImageVH, class TInputImageVV, class TOutputImage,
-    class TFunction = Functor::SinclairToCovarianceFunctor<
+
+template <class TInputImageHH, class TInputImageHV_VH,
+          class TInputImageVV, class TOutputImage,
+    class TFunction = Functor::SinclairToReciprocalCovarianceFunctor<
         typename TInputImageHH::PixelType,
-        typename TInputImageHV::PixelType,
-        typename TInputImageVH::PixelType,
+        typename TInputImageHV_VH::PixelType,
         typename TInputImageVV::PixelType,
         typename TOutputImage::PixelType> >
-class ITK_EXPORT SinclairImageFilter :  public otb::QuaternaryFunctorImageFilter<TInputImageHH,
-      TInputImageHV, TInputImageVH,
-      TInputImageVV, TOutputImage,
-      TFunction>
+class ITK_EXPORT SinclairReciprocalImageFilter :  public itk::TernaryFunctorImageFilter<TInputImageHH,
+      TInputImageHV_VH, TInputImageVV,
+      TOutputImage, TFunction>
 {
 public:
 
   /** Standard typedefs */
-  typedef SinclairImageFilter Self;
-  typedef otb::QuaternaryFunctorImageFilter<TInputImageHH, TInputImageHV,
-      TInputImageVH, TInputImageVV, TOutputImage, TFunction>  Superclass;
+  typedef SinclairReciprocalImageFilter Self;
+  typedef itk::TernaryFunctorImageFilter<TInputImageHH, TInputImageHV_VH,
+      TInputImageVV, TOutputImage, TFunction>  Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -67,33 +65,33 @@ public:
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(SinclairImageFilter, QuaternaryFunctorImageFilter);
+  itkTypeMacro(SinclairReciprocalImageFilter, itk::TernaryFunctorImageFilter);
 
   /** Template parameters typedefs */
   typedef typename Superclass::Input1ImageType     HHInputImageType;
   typedef typename Superclass::Input1ImagePointer  HHInputImagePointer;
-  typedef typename Superclass::Input2ImageType     HVInputImageType;
-  typedef typename Superclass::Input2ImagePointer  HVInputImagePointer;
-  typedef typename Superclass::Input3ImageType     VHInputImageType;
-  typedef typename Superclass::Input3ImagePointer  VHInputImagePointer;
-  typedef typename Superclass::Input4ImageType     VVInputImageType;
-  typedef typename Superclass::Input4ImagePointer  VVInputImagePointer;
+  typedef typename Superclass::Input2ImageType     HV_VHInputImageType;
+  typedef typename Superclass::Input2ImagePointer  HV_VHInputImagePointer;
+  typedef typename Superclass::Input3ImageType     VVInputImageType;
+  typedef typename Superclass::Input3ImagePointer  VVInputImagePointer;
   typedef typename Superclass::OutputImageType     OutputImageType;
   typedef typename OutputImageType::Pointer        OutputImagePointer;
   typedef typename OutputImageType::RegionType     OutputImageRegionType;
   typedef typename Superclass::FunctorType         FunctorType;
 
   void SetInputHH(const TInputImageHH * image);
-  void SetInputHV(const TInputImageHV * image);
-  void SetInputVH(const TInputImageVH * image);
+  // This method set the second input, same as SetInputVH
+  void SetInputHV(const TInputImageHV_VH * image);
+  // This method set the second input, same as SetInputHV 
+  void SetInputVH(const TInputImageHV_VH * image);
   void SetInputVV(const TInputImageVV * image);
 
 
 protected:
   /**  Constructor */
-  SinclairImageFilter() {}
+  SinclairReciprocalImageFilter() {}
   /**  Destructor */
-  virtual ~SinclairImageFilter() {}
+  virtual ~SinclairReciprocalImageFilter() {}
 
   virtual void GenerateOutputInformation();
 
@@ -101,7 +99,7 @@ protected:
 
 private:
 
-  SinclairImageFilter(const Self &); //purposely not implemented
+  SinclairReciprocalImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
 };
@@ -111,7 +109,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSinclairImageFilter.txx"
+#include "otbSinclairReciprocalImageFilter.txx"
 #endif
 
 #endif

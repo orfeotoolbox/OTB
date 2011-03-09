@@ -28,7 +28,8 @@
 #include "otbMuellerToMLCImageFilter.h"
 #include "otbSinclairImageFilter.h"
 #include "otbSinclairToMuellerFunctor.h"
-
+#include "otbComplexToVectorImageCastFilter.h"
+#include "otbExtractROI.h"
 
 int otbMuellerToMLCImageFilter(int argc, char * argv[])
 {
@@ -41,6 +42,7 @@ int otbMuellerToMLCImageFilter(int argc, char * argv[])
 
   typedef double                   PixelType;
   typedef std::complex<PixelType>  InputPixelType;
+
   const unsigned int Dimension = 2;
 
   
@@ -59,9 +61,10 @@ int otbMuellerToMLCImageFilter(int argc, char * argv[])
                       RealImageType, FunctionType >  SinclairToMuellerFilterType;
   typedef otb::MuellerToMLCImageFilter<RealImageType, ComplexImageType> FilterType;
 
+  typedef otb::ComplexToVectorImageCastFilter<ComplexImageType, RealImageType> Castertype;
 
   typedef otb::ImageFileReader<InputImageType>  ReaderType;
-  typedef otb::ImageFileWriter<ComplexImageType> WriterType;
+  typedef otb::ImageFileWriter<RealImageType> WriterType;
 
   ReaderType::Pointer reader1 = ReaderType::New();
   ReaderType::Pointer reader2 = ReaderType::New();
@@ -84,8 +87,11 @@ int otbMuellerToMLCImageFilter(int argc, char * argv[])
   FilterType::Pointer filter = FilterType::New();
   filter->SetInput(sinclairToMuellerFilter->GetOutput());
 
+  Castertype::Pointer caster = Castertype::New();
+  caster->SetInput(filter->GetOutput());
+
   writer->SetFileName(outputFilename);
-  writer->SetInput(filter->GetOutput());
+  writer->SetInput(caster->GetOutput());
   writer->Update();
 
   return EXIT_SUCCESS;

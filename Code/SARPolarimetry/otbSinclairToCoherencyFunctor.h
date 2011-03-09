@@ -73,20 +73,20 @@ public:
     const ComplexType S_vv = static_cast<ComplexType>(Svv);
 
     const ComplexType HHPlusVV   = S_hh + S_vv;
-    const ComplexType VVMinusVV  = S_hh - S_vv;
-    const ComplexType HVPlusHV   =  S_hv + S_vh;
-    const ComplexType jHVMinusHV = (S_hv - S_vh) * ComplexType(0., 1.);
+    const ComplexType HHMinusVV  = S_hh - S_vv;
+    const ComplexType HVPlusVH   =  S_hv + S_vh;
+    const ComplexType jHVMinusVH = (S_hv - S_vh) * ComplexType(0., 1.);
 
     result[0] = static_cast<OutputValueType>( std::norm(HHPlusVV) );
-    result[1] = static_cast<OutputValueType>( HHPlusVV * vcl_conj(VVMinusVV) );
-    result[2] = static_cast<OutputValueType>( HHPlusVV * vcl_conj(HVPlusHV) );
-    result[3] = static_cast<OutputValueType>( HHPlusVV * vcl_conj(jHVMinusHV) );
-    result[4] = static_cast<OutputValueType>( std::norm(VVMinusVV) );
-    result[5] = static_cast<OutputValueType>( VVMinusVV * vcl_conj(HVPlusHV) );
-    result[6] = static_cast<OutputValueType>( VVMinusVV * vcl_conj(jHVMinusHV) );
-    result[7] = static_cast<OutputValueType>( std::norm(HVPlusHV) );
-    result[8] = static_cast<OutputValueType>( HVPlusHV * vcl_conj(jHVMinusHV) );
-    result[9] = static_cast<OutputValueType>( std::norm(jHVMinusHV) );
+    result[1] = static_cast<OutputValueType>( HHPlusVV * vcl_conj(HHMinusVV) );
+    result[2] = static_cast<OutputValueType>( HHPlusVV * vcl_conj(HVPlusVH) );
+    result[3] = static_cast<OutputValueType>( HHPlusVV * vcl_conj(jHVMinusVH) );
+    result[4] = static_cast<OutputValueType>( std::norm(HHMinusVV) );
+    result[5] = static_cast<OutputValueType>( HHMinusVV * vcl_conj(HVPlusVH) );
+    result[6] = static_cast<OutputValueType>( HHMinusVV * vcl_conj(jHVMinusVH) );
+    result[7] = static_cast<OutputValueType>( std::norm(HVPlusVH) );
+    result[8] = static_cast<OutputValueType>( HVPlusVH * vcl_conj(jHVMinusVH) );
+    result[9] = static_cast<OutputValueType>( std::norm(jHVMinusVH) );
 
     result /= 2.0;
 

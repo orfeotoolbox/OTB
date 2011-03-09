@@ -25,22 +25,20 @@ int otbSinclairToReciprocalCoherencyFunctor(int argc, char * argv[])
   typedef std::complex<double>                   ComplexType;
   typedef itk::VariableLengthVector<ComplexType> OutputType;
 
-  typedef otb::Functor::SinclairToReciprocalCoherencyFunctor<ComplexType, ComplexType, ComplexType, ComplexType, OutputType >         FunctorType;
+  typedef otb::Functor::SinclairToReciprocalCoherencyFunctor<ComplexType, ComplexType, ComplexType, OutputType >         FunctorType;
 
   OutputType  result(6);
   FunctorType funct;
   OutputType outputFunct;
 
-  result[0] = ComplexType(25.,  0.);
-  result[1] = ComplexType( 0., -15.);
-  result[2] = ComplexType(25., -5.);
-  result[3] = ComplexType( 9.,  0.);
-  result[4] = ComplexType( 3., 15.);
+  result[0] = ComplexType(26.,  0.);
+  result[1] = ComplexType( 2.,-10.);
+  result[2] = ComplexType(26.,  0.);
+  result[3] = ComplexType( 4.,  0.);
+  result[4] = ComplexType( 2., 10.);
   result[5] = ComplexType(26.,  0.);
 
-
- outputFunct = funct.operator ()( ComplexType(1., 4.), ComplexType(2., 3.), ComplexType(3., 2.), ComplexType(4., 1.) );
-
+ outputFunct = funct.operator ()( ComplexType(1., 4.), ComplexType(2.,3.), ComplexType(3.,2.) );
   if( vcl_abs(result[0]-outputFunct[0]) > 1e-10 ||
       vcl_abs(result[1]-outputFunct[1]) > 1e-10 ||
       vcl_abs(result[2]-outputFunct[2]) > 1e-10 ||
