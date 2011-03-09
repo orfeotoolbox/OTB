@@ -154,14 +154,14 @@ public:
    * \deprecated use SetMaximumInputValue() */
   void SetMaximum(ScalarType max)
   {
-    SetMaximumInputValue(max);
+    this->SetMaximumInputValue(max);
   }
 
   /** Set the input minimum to be mapped to blue
    * \deprecated use SetMinimumInputValue() */
   void SetMinimum(ScalarType min)
   {
-    SetMinimumInputValue(min);
+    this->SetMinimumInputValue(min);
   }
 
 protected:

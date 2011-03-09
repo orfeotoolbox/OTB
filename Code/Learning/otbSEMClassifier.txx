@@ -110,7 +110,8 @@ SEMClassifier<TInputImage, TOutputImage>
     while (iterLabels != labels->End());
     m_ExternalLabels = 1;
     }
-  else if (labels.size() == m_NbSamples)
+  else if (m_ClassLabels.size() == m_NbSamples) //FIXME check if this
+                                                //is really the right condition
     {
     m_ClassLabels.resize(labels->Size());
 

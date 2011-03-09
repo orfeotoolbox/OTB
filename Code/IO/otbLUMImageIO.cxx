@@ -470,12 +470,9 @@ int LUMImageIO::CaiGetTypeLum(const char *          type_code,
   pch0 = NULL;
 
   std::string str_type_code(type_code);
-
   while ((trouve == -1) && (ind < m_CaiLumTyp.size()))
     {
-    if ((str_type_code.find(m_CaiLumTyp[ind]) >= 0) &&
-        (str_type_code.find(m_CaiLumTyp[ind]) <= str_type_code.size()))
-
+    if ( str_type_code.find(m_CaiLumTyp[ind]) != std::string::npos )
       {
       trouve = ind;
       }

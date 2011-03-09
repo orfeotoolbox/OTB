@@ -850,7 +850,7 @@ ADD_TEST(raTuSpectralSensitivityReaderNew ${RADIOMETRY_TESTS5}
 
 ADD_TEST(raTvSpectralSensitivityReaderTest ${RADIOMETRY_TESTS5}
      --compare-ascii ${NOTOL}
-        ${BASELINE_FILES}/raTvSpectralSensitivityReaderTest.txt
+        ${BASELINE_FILES}/raTvSpectralSensitivityReaderGenericTest.txt
         ${TEMP}/rcTuSpectralSensitivityReaderTest.txt
      --ignore-lines-with 2 DataPath FileName
      otbSpectralSensitivityReaderTest
@@ -862,13 +862,13 @@ ADD_TEST(raTvSpectralSensitivityReaderTest ${RADIOMETRY_TESTS5}
 
 ADD_TEST(raTvSpectralSensitivityReaderGenericTest ${RADIOMETRY_TESTS5}
      --compare-ascii ${NOTOL}
-        ${BASELINE_FILES}/raTvSpectralSensitivityReaderTest.txt
-        ${TEMP}/rcTuSpectralSensitivityReaderGenericTest.txt
+        ${BASELINE_FILES}/raTvSpectralSensitivityReaderGenericTest.txt
+        ${TEMP}/raTvSpectralSensitivityReaderGenericTest.txt
      --ignore-lines-with 2 DataPath FileName
      otbSpectralSensitivityReaderGenericTest
     ${INPUTDATA}/Radiometry/SPOT5/HRG1/rep6S.dat
     ${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/Arcachon_extrait_3852_3319_546_542.tif
-        ${TEMP}/rcTuSpectralSensitivityReaderGenericTest.txt     
+        ${TEMP}/raTvSpectralSensitivityReaderGenericTest.txt     
 )
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbRADIOMETRY_TESTS6 ~~~~~~~~~~~~~~~~~~~~~~~~~~~

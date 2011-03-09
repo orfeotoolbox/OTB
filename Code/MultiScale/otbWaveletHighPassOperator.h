@@ -76,17 +76,14 @@ protected:
   CoefficientVector GenerateCoefficients()
   {
     CoefficientVector coeff;
-    switch (DirectionOfTransformation)
+    if (DirectionOfTransformation == Wavelet::FORWARD)
       {
-      case Wavelet::FORWARD:
-        this->m_WaveletGenerator->GetHighPassCoefficientVector(coeff);
-        break;
-      case Wavelet::INVERSE:
-        this->m_WaveletGenerator->GetLowPassCoefficientVector(coeff);
-        Superclass::GenerateInverseHighPassFilterFromLowPassFilter(coeff);
-        break;
-      default: // Here to prevent from compilation warnings
-        break;
+      this->m_WaveletGenerator->GetHighPassCoefficientVector(coeff);
+      }
+    if (DirectionOfTransformation == Wavelet::INVERSE)
+      {
+      this->m_WaveletGenerator->GetLowPassCoefficientVector(coeff);
+      Superclass::GenerateInverseHighPassFilterFromLowPassFilter(coeff);
       }
 
     Superclass::UpSamplingCoefficients(coeff);

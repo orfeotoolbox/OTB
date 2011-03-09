@@ -24,20 +24,20 @@
 namespace otb
 {
 
-template <InverseOrForwardTransformationEnum transform>
+template <Transform::TransformationDirection transform>
 Eckert4MapProjection<transform>
 ::Eckert4MapProjection()
 {
 }
 
-template <InverseOrForwardTransformationEnum transform>
+template <Transform::TransformationDirection transform>
 Eckert4MapProjection<transform>
 ::~Eckert4MapProjection()
 {
 }
 
 ///False easting specification
-template <InverseOrForwardTransformationEnum transform>
+template <Transform::TransformationDirection transform>
 void Eckert4MapProjection<transform>
 ::SetFalseEasting(double falseEasting)
 {
@@ -45,7 +45,7 @@ void Eckert4MapProjection<transform>
 }
 
 ///False Northing specification
-template <InverseOrForwardTransformationEnum transform>
+template <Transform::TransformationDirection transform>
 void Eckert4MapProjection<transform>
 ::SetFalseNorthing(double falseNorthing)
 {
@@ -53,7 +53,7 @@ void Eckert4MapProjection<transform>
 }
 
 ///Set the defaul parameters
-template <InverseOrForwardTransformationEnum transform>
+template <Transform::TransformationDirection transform>
 void Eckert4MapProjection<transform>
 ::SetDefaults()
 {
@@ -61,7 +61,7 @@ void Eckert4MapProjection<transform>
 }
 
 ///Get the false northing coordinates (avoid negative values)
-template <InverseOrForwardTransformationEnum transform>
+template <Transform::TransformationDirection transform>
 double Eckert4MapProjection<transform>
 ::GetFalseNorthing() const
 {
@@ -70,7 +70,7 @@ double Eckert4MapProjection<transform>
 }
 
 ///Get the false easting coordinates (avoid negative values)
-template <InverseOrForwardTransformationEnum transform>
+template <Transform::TransformationDirection transform>
 double Eckert4MapProjection<transform>
 ::GetFalseEasting() const
 {
@@ -78,7 +78,7 @@ double Eckert4MapProjection<transform>
   return falseEasting;
 }
 
-template <InverseOrForwardTransformationEnum transform>
+template <Transform::TransformationDirection transform>
 void Eckert4MapProjection<transform>
 ::SetParameters(double falseEasting, double falseNorthing)
 {

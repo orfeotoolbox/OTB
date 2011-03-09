@@ -534,6 +534,92 @@ public:
 
 };
 
+/** \class NumericTraits< std::complex<short> >
+ * \brief Define traits for type std::complex<short>.
+ * \ingroup DataRepresentation
+ */
+template <>
+class NumericTraits< std::complex<short> >  {
+public:
+  typedef std::complex<short>     TheType;
+  typedef short                   ValueType;
+  typedef TheType                 PrintType;
+  typedef double                  AbsType;
+  typedef TheType                 AccumulateType;
+  typedef std::complex<double>    RealType;
+  typedef double                  ScalarRealType;
+  typedef std::complex<float>     FloatType;
+
+  static const TheType ITKCommon_EXPORT Zero;
+  static const TheType ITKCommon_EXPORT One;
+
+  static TheType min() { return TheType(vcl_numeric_limits<ValueType>::min(),
+    vcl_numeric_limits<ValueType>::min());}
+  static TheType max() {return TheType(vcl_numeric_limits<ValueType>::max(),
+    vcl_numeric_limits<ValueType>::max()); }
+  static TheType min( TheType ) { return TheType(vcl_numeric_limits<ValueType>::min(),
+    vcl_numeric_limits<ValueType>::min()); }
+  static TheType max( TheType ) { return TheType(vcl_numeric_limits<ValueType>::max(),
+    vcl_numeric_limits<ValueType>::max()); }
+  static TheType NonpositiveMin() {
+    return TheType(NumericTraits<float>::NonpositiveMin(),NumericTraits<float>::NonpositiveMin()); }
+  static bool IsPositive(TheType val) { return val.real() > 0.0; }
+  static bool IsNonpositive(TheType val) { return val.real() <= 0.0; }
+  static bool IsNegative(TheType val) { return val.real() < 0.0; }
+  static bool IsNonnegative(TheType val) {return val.real() >= 0.0; }
+  static TheType ZeroValue() { return Zero; }
+  static TheType OneValue() { return One; }
+  static TheType Clamp(TheType val,TheType minVal, TheType maxVal)
+  {
+    return TheType(NumericTraits<ValueType>::Clamp(val.real(),minVal.real(),maxVal.real()),
+                   NumericTraits<ValueType>::Clamp(val.imag(),minVal.imag(),maxVal.imag()));
+  }
+
+};
+
+/** \class NumericTraits< std::complex<int> >
+ * \brief Define traits for type std::complex<int>.
+ * \ingroup DataRepresentation
+ */
+template <>
+class NumericTraits< std::complex<int> >  {
+public:
+  typedef std::complex<int>     TheType;
+  typedef int                   ValueType;
+  typedef TheType               PrintType;
+  typedef double                AbsType; // or int ?
+  typedef TheType               AccumulateType;
+  typedef std::complex<double>  RealType;  // or std::complex<int>
+  typedef double                ScalarRealType; // or int
+  typedef std::complex<float>   FloatType;
+
+  static const TheType ITKCommon_EXPORT Zero;
+  static const TheType ITKCommon_EXPORT One;
+
+  static TheType min() { return TheType(vcl_numeric_limits<ValueType>::min(),
+    vcl_numeric_limits<ValueType>::min());}
+  static TheType max() {return TheType(vcl_numeric_limits<ValueType>::max(),
+    vcl_numeric_limits<ValueType>::max()); }
+  static TheType min( TheType ) { return TheType(vcl_numeric_limits<ValueType>::min(),
+    vcl_numeric_limits<ValueType>::min()); }
+  static TheType max( TheType ) { return TheType(vcl_numeric_limits<ValueType>::max(),
+    vcl_numeric_limits<ValueType>::max()); }
+  static TheType NonpositiveMin() {
+    return TheType(NumericTraits<float>::NonpositiveMin(),NumericTraits<float>::NonpositiveMin()); }
+  static bool IsPositive(TheType val) { return val.real() > 0.0; }
+  static bool IsNonpositive(TheType val) { return val.real() <= 0.0; }
+  static bool IsNegative(TheType val) { return val.real() < 0.0; }
+  static bool IsNonnegative(TheType val) {return val.real() >= 0.0; }
+  static TheType ZeroValue() { return Zero; }
+  static TheType OneValue() { return One; }
+  static TheType Clamp(TheType val,TheType minVal, TheType maxVal)
+  {
+    return TheType(NumericTraits<ValueType>::Clamp(val.real(),minVal.real(),maxVal.real()),
+                   NumericTraits<ValueType>::Clamp(val.imag(),minVal.imag(),maxVal.imag()));
+  }
+
+};
+
 /** \class NumericTraits< std::complex<float> >
  * \brief Define traits for type std::complex<float>.
  * \ingroup DataRepresentation

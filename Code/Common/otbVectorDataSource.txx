@@ -41,7 +41,7 @@ VectorDataSource<TOutputVectorData>
 }
 
 /**
- * 
+ *
  */
 
 template <class TOutputVectorData>
@@ -53,7 +53,7 @@ VectorDataSource<TOutputVectorData>
 }
 
 /**
- * 
+ *
  */
 
 template <class TOutputVectorData>
@@ -63,9 +63,9 @@ VectorDataSource<TOutputVectorData>
 {
   if ( idx >= this->GetNumberOfOutputs() )
     {
-    itkExceptionMacro(<<"Requested to graft output " << idx << 
+    itkExceptionMacro(<<"Requested to graft output " << idx <<
         " but this filter only has " << this->GetNumberOfOutputs() << " Outputs.");
-    }  
+    }
 
   if ( !graft )
     {

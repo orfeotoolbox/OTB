@@ -47,7 +47,7 @@ template <class TCh1, class TCh2, class TDiagram, class TOutput, unsigned int m_
   classifyKNNCore<TCh1, TCh2, TDiagram,  TOutput, m_ImageDimension>
   ::SetCh1( const TCh1 * channel1 ) 
   {
-    SetNthInput(0, const_cast<TCh1 *>( channel1 ));
+    this->SetNthInput(0, const_cast<TCh1 *>( channel1 ));
    
   }
 
@@ -56,7 +56,7 @@ template <class TCh1, class TCh2, class TDiagram, class TOutput, unsigned int m_
   classifyKNNCore<TCh1, TCh2, TDiagram,  TOutput, m_ImageDimension>
   ::SetCh2( const TCh2 * channel2 ) 
   {
-    SetNthInput(1, const_cast<TCh2 *>( channel2 ));
+    this->SetNthInput(1, const_cast<TCh2 *>( channel2 ));
    
   }
 
@@ -66,7 +66,7 @@ template <class TCh1, class TCh2, class TDiagram, class TOutput, unsigned int m_
   classifyKNNCore<TCh1, TCh2, TDiagram, TOutput, m_ImageDimension>
   ::SetDiagram( const TDiagram * diagram ) 
   {
-    SetNthInput(2, const_cast<TDiagram *>( diagram ));
+    this->SetNthInput(2, const_cast<TDiagram *>( diagram ));
    
   }
 

@@ -26,8 +26,8 @@
 #include "otbImageFileWriter.h"
 
 //  Software Guide : BeginCommandLineArgs
-//    INPUTS: {QB_Suburb.png}
-//    OUTPUTS: {QB_SuburbLSD.png}
+//    INPUTS: {Scene.png}
+//    OUTPUTS: {LSDOutput.png}
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
@@ -166,13 +166,13 @@ int main(int argc, char * argv[])
 
   //  Software Guide : BeginLatex
   // Figure~\ref{fig:LSD} shows the result of applying the line segment
-  // detection to a small patch extracted from a VHR image.
+  // detection to an image.
   // \begin{figure}
   // \center
-  // \includegraphics[width=0.35\textwidth]{QB_Suburb.eps}
-  // \includegraphics[width=0.35\textwidth]{QB_SuburbLSD.eps}
+  // \includegraphics[width=0.35\textwidth]{Scene.eps}
+  // \includegraphics[width=0.35\textwidth]{LSDOutput.eps}
   // \itkcaption[LSD Application]{Result of applying the
-  // \doxygen{otb}{LineSegmentDetector} to a VHR image of a suburb.}
+  // \doxygen{otb}{LineSegmentDetector} to an image.}
   // \label{fig:LSD}
   // \end{figure}
   //

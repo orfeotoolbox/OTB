@@ -36,6 +36,15 @@
 namespace otb
 {
 
+namespace Transform
+{
+enum TransformationDirection
+  {
+  FORWARD = 0,
+  INVERSE = 1
+  };
+}
+
 /** \class GenericMapProjection
  *  \brief This is the base class for generic map projection transformation
  *
@@ -49,9 +58,7 @@ namespace otb
  *
  **/
 
-typedef enum {FORWARD = 0, INVERSE = 1} InverseOrForwardTransformationEnum;
-
-template <InverseOrForwardTransformationEnum TDirectionOfMapping,
+template <Transform::TransformationDirection TDirectionOfMapping,
     class TScalarType = double,
     unsigned int NInputDimensions = 2,
     unsigned int NOutputDimensions = 2>
@@ -63,7 +70,7 @@ public:
   /** Standard class typedefs. */
   typedef itk::Transform<TScalarType,
       NInputDimensions,
-      NOutputDimensions>       Superclass;
+      NOutputDimensions>                Superclass;
   typedef GenericMapProjection          Self;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -83,9 +90,8 @@ public:
   virtual OssimMapProjectionType* GetMapProjection();
   virtual const OssimMapProjectionType* GetMapProjection() const;
 
-  typedef InverseOrForwardTransformationEnum DirectionOfMappingEnumType;
+  static const Transform::TransformationDirection DirectionOfMapping = TDirectionOfMapping;
 
-  itkStaticConstMacro(DirectionOfMapping, DirectionOfMappingEnumType, TDirectionOfMapping);
   itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
   itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
   itkStaticConstMacro(SpaceDimension, unsigned int, NInputDimensions);

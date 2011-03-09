@@ -62,7 +62,7 @@ PersistentCompareImageFilter<TInputImage>
 ::SetInput1(const TInputImage *image)
 {
   // The ProcessObject is not const-correct so the const_cast is required here
-  SetNthInput(0, const_cast<TInputImage *>(image));
+  this->SetNthInput(0, const_cast<TInputImage *>(image));
 }
 
 /**
@@ -74,7 +74,7 @@ PersistentCompareImageFilter<TInputImage>
 ::SetInput2(const TInputImage *image)
 {
   // The ProcessObject is not const-correct so the const_cast is required here
-  SetNthInput(1, const_cast<TInputImage *>(image));
+  this->SetNthInput(1, const_cast<TInputImage *>(image));
 }
 
 template<class TInputImage>

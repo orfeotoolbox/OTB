@@ -30,6 +30,7 @@
 #include "otbSinclairToReciprocalCoherencyFunctor.h"
 #include "itkMeanImageFilter.h"
 #include "otbPerBandVectorImageFilter.h"
+#include "otbMultiChannelExtractROI.h"
 
 int otbReciprocalHAlphaImageFilter(int argc, char * argv[])
 {
@@ -64,6 +65,7 @@ int otbReciprocalHAlphaImageFilter(int argc, char * argv[])
                       MeanFilterType>   PerBandMeanFilterType;
 
   typedef otb::ReciprocalHAlphaImageFilter<ImageType, RealImageType> FilterType;
+  typedef otb::MultiChannelExtractROI<PixelType, PixelType> ExtractType;
 
   typedef otb::ImageFileReader<InputImageType>  ReaderType;
   typedef otb::ImageFileWriter<RealImageType> WriterType;
@@ -92,8 +94,15 @@ int otbReciprocalHAlphaImageFilter(int argc, char * argv[])
   FilterType::Pointer filter = FilterType::New();
   filter->SetInput(perBandMeanFilter->GetOutput());
 
+  ExtractType::Pointer extract = ExtractType::New();
+  extract->SetInput(filter->GetOutput());
+  extract->SetStartX(10);
+  extract->SetStartY(10);
+  extract->SetSizeX(30);
+  extract->SetSizeY(30);
+
   writer->SetFileName(outputFilename);
-  writer->SetInput(filter->GetOutput());
+  writer->SetInput(extract->GetOutput());
   writer->Update();
 
   return EXIT_SUCCESS;

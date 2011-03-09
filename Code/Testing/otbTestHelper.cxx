@@ -129,12 +129,12 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
   std::vector<std::string>::iterator itRef = listLineFileRef.begin();
   std::vector<std::string>::iterator itTest = listLineFileTest.begin();
 //   while (std::getline(fluxfileref, strfileref) != 0)
-  while ((itRef != listLineFileRef.end()) && (itTest != listLineFileTest.end()))
+ while ((itRef != listLineFileRef.end()) && (itTest != listLineFileTest.end()))
     {
     strfileref = *itRef;
     strfiletest = *itTest;
 
-    //otbMsgDevMacro(<< "Comparing " << strfileref << " -with- " << strfiletest);
+    otbMsgDevMacro(<< "Comparing " << strfileref << " -with- " << strfiletest);
 
     //Check is the current line should be ignored
     bool ignoreCurrentLineRef = false;
@@ -180,8 +180,6 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
 //      }
     if ((!ignoreCurrentLineRef) && (!ignoreCurrentLineTest))
       {
-//       std::cout << "Ref line:  " << strfileref << std::endl;
-//       std::cout << "Test line: " << strfiletest << std::endl;
       differenceFoundInCurrentLine = CompareLines(strfileref, strfiletest, nbdiff, fluxfilediff, numLine,
                                                   listStrDiffLineFileRef, listStrDiffLineFileTest, epsilon);
 //      if (!differenceFoundInCurrentLine)
@@ -1243,6 +1241,7 @@ bool TestHelper::CompareLines(std::string strfileref,
 
     buffstreamRef >> strRef;
     buffstreamTest >> strTest;
+    otbMsgDevMacro(<< "sub comparison of the line, strRef: " << strRef << " || strTest: " << strTest);
 
     bool        chgt = false;
     std::string charTmpRef = "";
@@ -1293,6 +1292,8 @@ bool TestHelper::CompareLines(std::string strfileref,
             {
             charTmpTest = strTest[i];
             }
+
+          otbMsgDevMacro(<< "characterRef: " << charTmpRef << " || characterTest: " << charTmpTest );
 
           if (isNumeric(charTmpRef)) etatCour = ETAT_NUM;
           else etatCour = ETAT_CHAR;

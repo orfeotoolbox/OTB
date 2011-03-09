@@ -1805,12 +1805,15 @@ ADD_TEST(bfTuComplexToVectorImageCastFilterNew ${BASICFILTERS_TESTS13}
 )
 
 ADD_TEST(bfTuComplexToVectorImageCastFilterTest ${BASICFILTERS_TESTS13}
-  --compare-image ${NOTOL}
+  --compare-n-images ${NOTOL} 2
   ${TEMP}/bfTvComplexToVectorImageCastFilterTest.tif
   ${BASELINE}/bfTvComplexToVectorImageCastFilterTest.tif
+  ${TEMP}/bfTvVectorComplexToVectorImageCastFilterTest.tif
+  ${BASELINE}/bfTvComplexToVectorImageCastFilterTest.tif
   otbComplexToVectorImageCastFilterTest
-    ${INPUTDATA}/RSAT_imagery_HH.tif
+    ${INPUTDATA}/monobandComplexDouble
     ${TEMP}/bfTvComplexToVectorImageCastFilterTest.tif
+    ${TEMP}/bfTvVectorComplexToVectorImageCastFilterTest.tif
 )
 
 ADD_TEST(bfTvotbLog10ThresholdedImageFilterTest ${BASICFILTERS_TESTS13}
@@ -1819,6 +1822,20 @@ ADD_TEST(bfTvotbLog10ThresholdedImageFilterTest ${BASICFILTERS_TESTS13}
   ${BASELINE_FILES}/bfTvLog10ThresholdedImageFilter.txt
   otbLog10ThresholdedImageFilterTest
     ${TEMP}/bfTvLog10ThresholdedImageFilterTest.txt
+)
+
+
+ADD_TEST(bfTuApplyTransitionMatrixImageFilterNew ${BASICFILTERS_TESTS13}
+  otbApplyTransitionMatrixImageFilterNew
+)
+
+ADD_TEST(bfTvApplyTransitionMatrixImageFilterTest ${BASICFILTERS_TESTS13}
+  --compare-ascii ${NOTOL}
+  ${TEMP}/bfTvApplyTransitionMatrixImageFilterTest.tif
+  ${BASELINE_FILES}/bfTvApplyTransitionMatrixImageFilterTest.tif
+  otbApplyTransitionMatrixImageFilterTest
+    ${INPUTDATA}/poupees.tif
+    ${TEMP}/bfTvApplyTransitionMatrixImageFilterTest.tif
 )
 
 
@@ -2075,6 +2092,8 @@ otbRealImageToComplexImageFilterTest.cxx
 otbImaginaryImageToComplexImageFilterTest.cxx
 otbComplexToVectorImageCastFilter.cxx
 otbLog10ThresholdedImageFilterTest.cxx
+otbApplyTransitionMatrixImageFilterNew.cxx
+otbApplyTransitionMatrixImageFilterTest.cxx
 )
 
 

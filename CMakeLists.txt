@@ -21,8 +21,6 @@ SET(CMAKE_MODULE_PATH
     ${CMAKE_SOURCE_DIR}/CMake
     ${CMAKE_MODULE_PATH})
 
-INCLUDE_REGULAR_EXPRESSION("^(otb|itk|vtk|vnl|vcl|vxl|f2c|netlib|ce|itpack|DICOM|meta|png|dbh|tif|jpeg|zlib).*$")
-SOURCE_GROUP("XML Files" REGULAR_EXPRESSION "[.]xml$")
 INCLUDE(CMakeDependentOption)
 
 INCLUDE(SourceStatus)

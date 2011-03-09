@@ -50,7 +50,7 @@ class ITK_EXPORT PersistentCompareImageFilter :
 {
 public:
   /** Standard Self typedef */
-  typedef PersistentCompareImageFilter                 Self;
+  typedef PersistentCompareImageFilter                    Self;
   typedef PersistentImageFilter<TInputImage, TInputImage> Superclass;
   typedef itk::SmartPointer<Self>                         Pointer;
   typedef itk::SmartPointer<const Self>                   ConstPointer;

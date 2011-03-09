@@ -40,6 +40,13 @@ namespace Functor
  *   channel #8 : \f$ S_{rl}.S_{rr}^{*} \f$
  *   channel #9 : \f$ S_{rr}.S_{rr}^{*} \f$
  *
+ * With:
+ * \f$ S_{ll} = 0.5 * (-S_{hh}-i*S_{hv}-i*S_{vh}+S_{vv}) \f$
+ * \f$ S_{lr} = 0.5 * (-S_{hh}+i*S_{hv}-i*S_{vh}+S_{vv}) \f$
+ * \f$ S_{rl} = 0.5 * (-S_{hh}-i*S_{hv}+i*S_{vh}-S_{vv}) \f$
+ * \f$ S_{rr} = 0.5 * (-S_{hh}+i*S_{hv}+i*S_{vh}+S_{vv}) \f$
+ *
+ *
  *  \ingroup Functor
  *  \ingroup SARPolarimetry
  *
@@ -65,30 +72,37 @@ public:
   {
     TOutput result;
 
-    result.SetSize(m_NumberOfComponentsPerPixel);
-    const ComplexType jShv = static_cast<ComplexType>(Shv) * vcl_complex<RealType>(0.0, 1.0);
-    const ComplexType jSvh = static_cast<ComplexType>(Svh) * vcl_complex<RealType>(0.0, 1.0);
+    const ComplexType S_hh = static_cast<ComplexType>(Shh);
+    const ComplexType S_hv = static_cast<ComplexType>(Shv);
+    const ComplexType S_vh = static_cast<ComplexType>(Svh);
+    const ComplexType S_vv = static_cast<ComplexType>(Svv);
 
-    const ComplexType Sll = static_cast<ComplexType>( 0.5 * (-Shh-jShv-jSvh+Svv) );
-    const ComplexType Slr = static_cast<ComplexType>( 0.5 * (-Shh+jShv-jSvh+Svv) );
-    const ComplexType Srl = static_cast<ComplexType>( 0.5 * (-Shh-jShv+jSvh-Svv) );
-    const ComplexType Srr = static_cast<ComplexType>( 0.5 * (-Shh+jShv+jSvh+Svv) );
+    result.SetSize(m_NumberOfComponentsPerPixel);
+    const ComplexType jS_hv = S_hv * ComplexType(0., 1.);
+    const ComplexType jS_vh = S_vh * ComplexType(0., 1.);
+
+    const ComplexType coef(0.5);
+
+    const ComplexType Sll = coef*( -S_hh-jS_hv-jS_vh+S_vv );
+    const ComplexType Slr = coef*( -S_hh+jS_hv-jS_vh+S_vv );
+    const ComplexType Srl = coef*( -S_hh-jS_hv+jS_vh-S_vv );
+    const ComplexType Srr = coef*( -S_hh+jS_hv+jS_vh+S_vv );
 
     const ComplexType conjSll = vcl_conj(Sll);
     const ComplexType conjSlr = vcl_conj(Slr);
     const ComplexType conjSrl = vcl_conj(Srl);
     const ComplexType conjSrr = vcl_conj(Srr);
 
-    result[0]  = static_cast<OutputValueType>( Sll * conjSll  );
+    result[0]  = static_cast<OutputValueType>( std::norm(Sll) );
     result[1]  = static_cast<OutputValueType>( Sll * conjSlr  );
     result[2]  = static_cast<OutputValueType>( Sll * conjSrl  );
     result[3]  = static_cast<OutputValueType>( Sll * conjSrr  );
-    result[4]  = static_cast<OutputValueType>( Slr * conjSlr  );
+    result[4]  = static_cast<OutputValueType>( std::norm(Slr) );
     result[5]  = static_cast<OutputValueType>( Slr * conjSrl  );
     result[6]  = static_cast<OutputValueType>( Slr * conjSrr  );
-    result[7]  = static_cast<OutputValueType>( Srl * conjSrl  );
+    result[7]  = static_cast<OutputValueType>( std::norm(Srl) );
     result[8]  = static_cast<OutputValueType>( Srl * conjSrr  );
-    result[9]  = static_cast<OutputValueType>( Srr * conjSrr  );
+    result[9]  = static_cast<OutputValueType>( std::norm(Srr) );
 
     return (result);
   }

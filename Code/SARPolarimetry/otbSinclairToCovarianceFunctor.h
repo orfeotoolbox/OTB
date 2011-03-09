@@ -66,16 +66,21 @@ public:
 
     result.SetSize(m_NumberOfComponentsPerPixel);
 
-    result[0] = static_cast<OutputValueType>( static_cast<ComplexType>(Shh)*vcl_conj(static_cast<ComplexType>(Shh)) );
-    result[1] = static_cast<OutputValueType>( static_cast<ComplexType>(Shh)*vcl_conj(static_cast<ComplexType>(Shv)) );
-    result[2] = static_cast<OutputValueType>( static_cast<ComplexType>(Shh)*vcl_conj(static_cast<ComplexType>(Svh)) );
-    result[3] = static_cast<OutputValueType>( static_cast<ComplexType>(Shh)*vcl_conj(static_cast<ComplexType>(Svv)) );
-    result[4] = static_cast<OutputValueType>( static_cast<ComplexType>(Shv)*vcl_conj(static_cast<ComplexType>(Shv)) );
-    result[5] = static_cast<OutputValueType>( static_cast<ComplexType>(Shv)*vcl_conj(static_cast<ComplexType>(Svh)) );
-    result[6] = static_cast<OutputValueType>( static_cast<ComplexType>(Shv)*vcl_conj(static_cast<ComplexType>(Svv)) );
-    result[7] = static_cast<OutputValueType>( static_cast<ComplexType>(Svh)*vcl_conj(static_cast<ComplexType>(Svh)) );
-    result[8] = static_cast<OutputValueType>( static_cast<ComplexType>(Svh)*vcl_conj(static_cast<ComplexType>(Svv)) );
-    result[9] = static_cast<OutputValueType>( static_cast<ComplexType>(Svv)*vcl_conj(static_cast<ComplexType>(Svv)) );
+    const ComplexType S_hh = static_cast<ComplexType>(Shh);
+    const ComplexType S_hv = static_cast<ComplexType>(Shv);
+    const ComplexType S_vh = static_cast<ComplexType>(Svh);
+    const ComplexType S_vv = static_cast<ComplexType>(Svv);
+
+    result[0] = static_cast<OutputValueType>( std::norm(S_hh) );
+    result[1] = static_cast<OutputValueType>( S_hh*vcl_conj(S_hv) );
+    result[2] = static_cast<OutputValueType>( S_hh*vcl_conj(S_vh) );
+    result[3] = static_cast<OutputValueType>( S_hh*vcl_conj(S_vv) );
+    result[4] = static_cast<OutputValueType>( std::norm(S_hv) );
+    result[5] = static_cast<OutputValueType>( S_hv*vcl_conj(S_vh) );
+    result[6] = static_cast<OutputValueType>( S_hv*vcl_conj(S_vv) );
+    result[7] = static_cast<OutputValueType>( std::norm(S_vh) );
+    result[8] = static_cast<OutputValueType>( S_vh*vcl_conj(S_vv) );
+    result[9] = static_cast<OutputValueType>( std::norm(S_vv) );
 
     return (result);
   }

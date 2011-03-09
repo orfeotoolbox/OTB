@@ -533,8 +533,10 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
    {  \
    if( strcmp( this->GetOutput()->GetNameOfClass(), "VectorImage" ) == 0 ) \
      { \
-     if( (typeid(OutputImagePixelType) == typeid(std::complex<double>)) \
-         || (typeid(OutputImagePixelType) == typeid(std::complex<float>)) )\
+     if( (typeid(OutputImagePixelType) == typeid(std::complex<double>))     \
+         || (typeid(OutputImagePixelType) == typeid(std::complex<float>))   \
+         || (typeid(OutputImagePixelType) == typeid(std::complex<int>))     \
+         || (typeid(OutputImagePixelType) == typeid(std::complex<short>)) ) \
        {\
        /*std::cout << "Complex -> OTB::VectorImage Complex" << std::endl;*/ \
        ConvertPixelBuffer<                                 \
@@ -592,6 +594,8 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   ITK_CONVERT_BUFFER_IF_BLOCK( long)
   ITK_CONVERT_BUFFER_IF_BLOCK(float)
   ITK_CONVERT_BUFFER_IF_BLOCK( double)
+  ITK_CONVERT_CBUFFER_IF_BLOCK(std::complex<short>)
+  ITK_CONVERT_CBUFFER_IF_BLOCK(std::complex<int>)
   ITK_CONVERT_CBUFFER_IF_BLOCK(std::complex<float>)
   ITK_CONVERT_CBUFFER_IF_BLOCK(std::complex<double>)
   else

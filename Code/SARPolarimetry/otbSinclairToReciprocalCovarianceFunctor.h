@@ -36,6 +36,8 @@ namespace Functor
  *   channel #4 : \f$ S_{hv}.S_{vv}^{*} \f$
  *   channel #5 : \f$ S_{vv}.S_{vv}^{*} \f$
  *
+ * Output is a complex.
+ *
  *  \ingroup Functor
  *  \ingroup SARPolarimetry
  *
@@ -62,12 +64,17 @@ public:
 
     result.SetSize(NumberOfComponentsPerPixel);
 
-    result[0] = static_cast<OutputValueType>( static_cast<ComplexType>(Shh)*vcl_conj(static_cast<ComplexType>(Shh)) );
-    result[1] = static_cast<OutputValueType>( static_cast<ComplexType>(Shh)*vcl_conj(static_cast<ComplexType>(Shv)) );
-    result[2] = static_cast<OutputValueType>( static_cast<ComplexType>(Shh)*vcl_conj(static_cast<ComplexType>(Svv)) );
-    result[3] = static_cast<OutputValueType>( static_cast<ComplexType>(Shv)*vcl_conj(static_cast<ComplexType>(Shv)) );
-    result[4] = static_cast<OutputValueType>( static_cast<ComplexType>(Shv)*vcl_conj(static_cast<ComplexType>(Svv)) );
-    result[5] = static_cast<OutputValueType>( static_cast<ComplexType>(Svv)*vcl_conj(static_cast<ComplexType>(Svv)) );
+    const ComplexType S_hh = static_cast<ComplexType>(Shh);
+    const ComplexType S_hv = static_cast<ComplexType>(Shv);
+    const ComplexType S_vh = static_cast<ComplexType>(Svh);
+    const ComplexType S_vv = static_cast<ComplexType>(Svv);
+
+    result[0] = static_cast<OutputValueType>( std::norm( S_hh ) );
+    result[1] = static_cast<OutputValueType>( S_hh*vcl_conj(S_hv) );
+    result[2] = static_cast<OutputValueType>( S_hh*vcl_conj(S_vv) );
+    result[3] = static_cast<OutputValueType>( std::norm( S_hv ) );
+    result[4] = static_cast<OutputValueType>( S_hv*vcl_conj(S_vv) );
+    result[5] = static_cast<OutputValueType>( std::norm( S_vv ) );
 
     return (result);
   }
@@ -87,7 +94,7 @@ protected:
 
 
 private:
-    itkStaticConstMacro(NumberOfComponentsPerPixel, unsigned int, 6);
+    itkStaticConstMacro(NumberOfComponentsPerPixel, unsigned int, 6 );
 
 };
 
