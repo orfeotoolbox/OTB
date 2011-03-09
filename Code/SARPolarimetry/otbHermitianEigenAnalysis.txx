@@ -87,9 +87,9 @@ static void HermitianDiagonalisation( float HM[3][3][2], float EigenVect[3][3][2
    
   
 
-    for (i = 1; i < n + 1; i++) 
+    for (i = 1; i < n + 1; i++)
       {
-        for (j = 1; j < n + 1; j++) 
+        for (j = 1; j < n + 1; j++)
           {
             a[i][j][0] = HM[i - 1][j - 1][0];
             a[i][j][1] = HM[i - 1][j - 1][1];
@@ -100,19 +100,19 @@ static void HermitianDiagonalisation( float HM[3][3][2], float EigenVect[3][3][2
         v[i][i][1] = 0.;
       }
 
-    for (p = 1; p < n + 1; p++) 
+    for (p = 1; p < n + 1; p++)
       {
         d[p] = a[p][p][0];
         b[p] = d[p];
         z[p] = 0.;
       }
 
-    for (ii = 1; ii < 1000 * n * n; ii++) 
+    for (ii = 1; ii < 1000 * n * n; ii++)
       {
         sm = 0.;
-        for (p = 1; p < n; p++) 
+        for (p = 1; p < n; p++)
           {
-            for (q = p + 1; q < n + 1; q++) 
+            for (q = p + 1; q < n + 1; q++)
               {
                 sm = sm + 2. * sqrt(a[p][q][0] * a[p][q][0] + a[p][q][1] * a[p][q][1]);
               }
@@ -123,17 +123,17 @@ static void HermitianDiagonalisation( float HM[3][3][2], float EigenVect[3][3][2
             goto Sortie;
           }
         tresh = 1.E-17;
-        if (ii < 4) 
+        if (ii < 4)
           {
             tresh = (long) 0.2 *sm / (n * n);
           }
         x = -1.E-15;
-        for (i = 1; i < n; i++) 
+        for (i = 1; i < n; i++)
           {
-            for (j = i + 1; j < n + 1; j++) 
+            for (j = i + 1; j < n + 1; j++)
               {
                 toto = sqrt(a[i][j][0] * a[i][j][0] + a[i][j][1] * a[i][j][1]);
-                if (x < toto) 
+                if (x < toto)
                   {
                     x = toto;
                     p = i;
@@ -142,7 +142,7 @@ static void HermitianDiagonalisation( float HM[3][3][2], float EigenVect[3][3][2
               }
           }
         toto = sqrt(a[p][q][0] * a[p][q][0] + a[p][q][1] * a[p][q][1]);
-        if (toto > tresh) 
+        if (toto > tresh)
           {
             e = d[p] - d[q];
             w[0] = a[p][q][0];
@@ -152,7 +152,7 @@ static void HermitianDiagonalisation( float HM[3][3][2], float EigenVect[3][3][2
             f = sqrt(e * e + 4. * g);
             d1 = e + f;
             d2 = e - f;
-            if (fabs(d2) > fabs(d1)) 
+            if (fabs(d2) > fabs(d1))
               {
                 d1 = d2;
               }
@@ -173,7 +173,7 @@ static void HermitianDiagonalisation( float HM[3][3][2], float EigenVect[3][3][2
             a[p][q][0] = 0.;
             a[p][q][1] = 0.;
             
-            for (j = 1; j < p; j++) 
+            for (j = 1; j < p; j++)
               {
                 gc[0] = a[j][p][0];
                 gc[1] = a[j][p][1];
@@ -184,7 +184,7 @@ static void HermitianDiagonalisation( float HM[3][3][2], float EigenVect[3][3][2
                 a[j][q][0] = s[0] * gc[0] - s[1] * gc[1] + c[0] * hc[0] + c[1] * hc[1];
                 a[j][q][1] = s[0] * gc[1] + s[1] * gc[0] + c[0] * hc[1] - c[1] * hc[0];
               }
-            for (j = p + 1; j < q; j++) 
+            for (j = p + 1; j < q; j++)
               {
                 gc[0] = a[p][j][0];
                 gc[1] = a[p][j][1];
@@ -195,7 +195,7 @@ static void HermitianDiagonalisation( float HM[3][3][2], float EigenVect[3][3][2
                 a[j][q][0] = s[0] * gc[0] + s[1] * gc[1] + c[0] * hc[0] + c[1] * hc[1];
                 a[j][q][1] = -s[0] * gc[1] + s[1] * gc[0] + c[0] * hc[1] - c[1] * hc[0];
               }
-            for (j = q + 1; j < n + 1; j++) 
+            for (j = q + 1; j < n + 1; j++)
               {
                 gc[0] = a[p][j][0];
                 gc[1] = a[p][j][1];
@@ -206,7 +206,7 @@ static void HermitianDiagonalisation( float HM[3][3][2], float EigenVect[3][3][2
                 a[q][j][0] = s[0] * gc[0] + s[1] * gc[1] + c[0] * hc[0] - c[1] * hc[1];
                 a[q][j][1] = s[0] * gc[1] - s[1] * gc[0] + c[0] * hc[1] + c[1] * hc[0];
               }
-            for (j = 1; j < n + 1; j++) 
+            for (j = 1; j < n + 1; j++)
               {
                 gc[0] = v[j][p][0];
                 gc[1] = v[j][p][1];
@@ -222,12 +222,12 @@ static void HermitianDiagonalisation( float HM[3][3][2], float EigenVect[3][3][2
     
  Sortie:
     
-    for (k = 1; k < n + 1; k++) 
+    for (k = 1; k < n + 1; k++)
       {
         d[k] = 0;
-        for (i = 1; i < n + 1; i++) 
+        for (i = 1; i < n + 1; i++)
           {
-            for (j = 1; j < n + 1; j++) 
+            for (j = 1; j < n + 1; j++)
               {
                 d[k] = d[k] + v[i][k][0] * (HM[i - 1][j - 1][0] * v[j][k][0] - HM[i - 1][j - 1][1] * v[j][k][1]);
                 d[k] = d[k] + v[i][k][1] * (HM[i - 1][j - 1][0] * v[j][k][1] + HM[i - 1][j - 1][1] * v[j][k][0]);
@@ -235,16 +235,16 @@ static void HermitianDiagonalisation( float HM[3][3][2], float EigenVect[3][3][2
           }
       }
     
-    for (i = 1; i < n + 1; i++) 
+    for (i = 1; i < n + 1; i++)
       {
-        for (j = i + 1; j < n + 1; j++) 
+        for (j = i + 1; j < n + 1; j++)
           {
-            if (d[j] > d[i]) 
+            if (d[j] > d[i])
               {
                 x = d[i];
                 d[i] = d[j];
                 d[j] = x;
-                for (k = 1; k < n + 1; k++) 
+                for (k = 1; k < n + 1; k++)
                   {
                     c[0] = v[k][i][0];
                     c[1] = v[k][i][1];
@@ -257,10 +257,10 @@ static void HermitianDiagonalisation( float HM[3][3][2], float EigenVect[3][3][2
           }
       }
     
-    for (i = 0; i < n; i++) 
+    for (i = 0; i < n; i++)
       {
         EigenVal[i] = d[i + 1];
-        for (j = 0; j < n; j++) 
+        for (j = 0; j < n; j++)
           {
             EigenVect[i][j][0] = v[i + 1][j + 1][0];
             EigenVect[i][j][1] = v[i + 1][j + 1][1];

@@ -39,7 +39,7 @@ ScalarBufferToImageFileWriter<TBufferType, TOutputPixelType>
   
 template<class TBufferType, class TOutputPixelType>
 void
-ScalarBufferToImageFileWriter<TBufferType, TOutputPixelType>::GenerateData() 
+ScalarBufferToImageFileWriter<TBufferType, TOutputPixelType>::GenerateData()
 {
   // Check image parameters
   if( (m_ImageSize[0]==0) || (m_ImageSize[0]==0) )
@@ -86,12 +86,12 @@ ScalarBufferToImageFileWriter<TBufferType, TOutputPixelType>::GenerateData()
           it.Set( lPix );
           ++it;
         }
-    }		
+    }
   else
     {
       itk::ImageRegionIteratorWithIndex<ImageType> it(lImage, lRegion);
       it.GoToBegin();
-      // cpt is the first component of the last pixel 
+      // cpt is the first component of the last pixel
       unsigned int cpt(0);
       while( it.IsAtEnd()==false )
         {

@@ -131,7 +131,7 @@ public:
       {
          p[k] = eigenValues[k] / totalEigenValues;
 
-         if (p[k] < 0.) 
+         if (p[k] < 0.)
            {
              p[k] = 0.;
            }

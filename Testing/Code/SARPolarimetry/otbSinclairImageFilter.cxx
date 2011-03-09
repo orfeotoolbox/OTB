@@ -47,7 +47,7 @@
   typedef otb::Image<InputPixelType> InputImageType; \
   typedef otb::VectorImage<OutputPixelType> OutputImageType; \
   typedef otb::ImageFileReader<InputImageType> ReaderType; \
-  typedef otb::ExtractROI<InputPixelType,InputPixelType > ExtractROIType; \
+  typedef otb::ExtractROI<InputPixelType, InputPixelType > ExtractROIType; \
   typedef otb::SinclairImageFilter<InputImageType, InputImageType, InputImageType, InputImageType, OutputImageType, T_Function> FilterType; \
   typename FilterType::Pointer filter = FilterType::New(); \
   typename ReaderType::Pointer reader1 = ReaderType::New(); \
