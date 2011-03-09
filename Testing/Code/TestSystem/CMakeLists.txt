@@ -137,6 +137,15 @@ ADD_TEST(tsTvCompareAscii5epsilon2 ${TESTSYSTEM_TESTS}
        ${TEMP}/tsTvCompareAsciiTest5epsilon2.txt
   )
 
+#Check the case of scientific notation 1e25 vs 1E025
+ADD_TEST(tsTvCompareAsciiScientificNotation ${TESTSYSTEM_TESTS}
+    --compare-ascii ${EPSILON_2}
+       ${TEMP}/tsTvCompareAsciiRef_SN.txt
+       ${TEMP}/tsTvCompareAsciiTest_SN.txt
+     otbCompareAsciiTestScientificNotation
+       ${TEMP}/tsTvCompareAsciiRef_SN.txt
+       ${TEMP}/tsTvCompareAsciiTest_SN.txt
+  )
 
 # -------       CXX source files -----------------------------------
 SET(TESTSYSTEM_SRCS
@@ -148,6 +157,7 @@ otbCompareAsciiTests3.cxx
 otbCompareAsciiTests4.cxx
 otbCompareAsciiTests5.cxx
 otbCompareAsciiTestsEpsilon3_WhiteSpace.cxx
+otbCompareAsciiTestScientificNotation.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbTestSystemTests "${TESTSYSTEM_SRCS}" "OTBTesting;OTBCommon;OTBIO")
