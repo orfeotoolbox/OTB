@@ -43,7 +43,7 @@ namespace otb
  *  \brief to do
  **/
 
-template <Transform::TransformationDirection TTransformDirection,
+template <TransformDirection::TransformationDirection TTransformDirection,
     class TScalarType = double,
     unsigned int NInputDimensions = 2,
     unsigned int NOutputDimensions = 2>
@@ -70,7 +70,7 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(TileMapTransform, Transform);
 
-  static const Transform::TransformationDirection DirectionOfMapping = TTransformDirection;
+  static const TransformDirection::TransformationDirection DirectionOfMapping = TTransformDirection;
 
   itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
   itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);

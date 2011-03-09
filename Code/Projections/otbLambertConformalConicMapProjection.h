@@ -29,7 +29,7 @@ namespace otb
  * It converts coordinates in longitude, latitude (WGS84) to Lambert Conformal Conic map coordinates.
  *
  */
-template <Transform::TransformationDirection transform>
+template <TransformDirection::TransformationDirection transform>
 class ITK_EXPORT LambertConformalConicMapProjection : public MapProjection<ossimLambertConformalConicProjection,
       transform>
 {

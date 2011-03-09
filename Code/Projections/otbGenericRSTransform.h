@@ -82,7 +82,7 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(GenericRSTransform, itk::Transform);
 
-  typedef Transform::TransformationDirection DirectionOfMappingEnumType;
+  typedef TransformDirection::TransformationDirection DirectionOfMappingEnumType;
 
   itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
   itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
