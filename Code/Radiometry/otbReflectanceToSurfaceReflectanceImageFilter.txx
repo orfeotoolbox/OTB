@@ -143,6 +143,18 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
+::GenerateAtmosphericRadiativeTerms()
+{
+    Parameters2RadiativeTermsPointerType param2Terms = Parameters2RadiativeTermsType::New();
+    param2Terms->SetInput(m_CorrectionParameters);
+    //std::cout << " in GenerateAtmosphericRadiativeTerms before update vector values size before sixtraits " << m_CorrectionParameters->GetWavelengthSpectralBand()->GetNthElement(0)->GetFilterFunctionValues().size() << std::endl;
+    param2Terms->Update();
+    m_AtmosphericRadiativeTerms = param2Terms->GetOutput();
+}
+
+template <class TInputImage, class TOutputImage>
+void
+ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
 ::UpdateFunctors()
 {
   if (this->GetInput() == NULL)
