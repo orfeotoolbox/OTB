@@ -93,6 +93,7 @@ int OpticalCalibration::Execute(otb::ApplicationOptionsResult* parseResult)
       //Declare the class to store atmospheric parameters default parameters for now
       //TODO implement accessor to those parameters
 
+
       //reflectanceToSurfaceReflectanceFilter->
       AtmosphericCorrectionParametersType::Pointer atmosphericParam = reflectanceToSurfaceReflectanceFilter->GetCorrectionParameters();
       AerosolModelType aeroMod = AtmosphericCorrectionParametersType::NO_AEROSOL;
@@ -103,31 +104,71 @@ int OpticalCalibration::Execute(otb::ApplicationOptionsResult* parseResult)
       atmosphericParam->SetAerosolOptical(0.2);
       atmosphericParam->SetWaterVaporAmount(2.5);
 
+
+      AtmosphericRadiativeTerms::Pointer radTerms = AtmosphericRadiativeTerms::New();
+      radTerms->ValuesInitialization(reader->GetOutput()->GetNumberOfComponentsPerPixel());
+      reflectanceToSurfaceReflectanceFilter->SetAtmosphericRadiativeTerms(radTerms);
+
       itk::MetaDataDictionary             dict = reader->GetOutput()->GetMetaDataDictionary();
       OpticalImageMetadataInterface::Pointer lImageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(dict);
 
       std::string sensorID = lImageMetadataInterface->GetSensorID();
       if (sensorID == "QB02")
         {
+        std::cout << "QB sensor" << std::endl;
+        // Test if needed data are available.
+        try
+        {
+          // ImageToLuminance
+          lImageMetadataInterface->GetPhysicalGain();
+          lImageMetadataInterface->GetPhysicalBias();
+
+          // LuminanceToReflectance
+          lImageMetadataInterface->GetDay();
+          lImageMetadataInterface->GetMonth();
+
+          lImageMetadataInterface->GetSolarIrradiance();
+          lImageMetadataInterface->GetSunElevation();
+
+        }
+        catch (itk::ExceptionObject& err)
+        {
+          std::cout << "Invalid input image medadata. The parsing returns the following error:\n" << std::endl;
+          return EXIT_FAILURE;
+        }
         //Get the filter function values
         for (unsigned int i = 0; i < reader->GetOutput()->GetNumberOfComponentsPerPixel(); i++)
           {
-          FilterFunctionValuesType::Pointer functionValues = FilterFunctionValuesType::New();
-
-//          functionValues->SetMinSpectralValue(imageMetadataInterface->GetFirstWavelengths()[i]);
-//          functionValues->SetMaxSpectralValue(imageMetadataInterface->GetLastWavelengths()[i]);
-//          functionValues->SetUserStep(0.0025);
-//          //functionValues->
-
-          atmosphericParam->SetWavelengthSpectralBandWithIndex(i, functionValues);
+          atmosphericParam->GetWavelengthSpectralBand()->PushBack(FilterFunctionValues::New());
+          //ValuesVectorType * temp = new ValuesVectorType;
           }
-        reflectanceToSurfaceReflectanceFilter->SetFilterFunctionCoef(lImageMetadataInterface->GetSpectralSensitivity());
+        for (unsigned int i = 0; i < reader->GetOutput()->GetNumberOfComponentsPerPixel(); i++)
+          {
+          //FilterFunctionValuesType::Pointer functionValues = FilterFunctionValuesType::New();
+
+          //ValuesVectorType temp;
+          //valuesVector.push_back(temp);
+          //functionValues->SetMinSpectralValue(lImageMetadataInterface->GetFirstWavelengths()[i]);
+          //functionValues->SetMaxSpectralValue(lImageMetadataInterface->GetLastWavelengths()[i]);
+          //functionValues->SetUserStep(0.0025);
+          //functionValues->SetFilterFunctionValues6S(lImageMetadataInterface->GetSpectralSensitivity()[i+1]);
+          ValuesVectorType temp = lImageMetadataInterface->GetSpectralSensitivity()[i+1];
+
+          atmosphericParam->GetWavelengthSpectralBand()->GetNthElement(i)->SetFilterFunctionValues6S(temp);
+          atmosphericParam->GetWavelengthSpectralBand()->GetNthElement(i)->SetUserStep(0.0025);
+          atmosphericParam->GetWavelengthSpectralBand()->GetNthElement(i)->SetMinSpectralValue(0.300);
+          atmosphericParam->GetWavelengthSpectralBand()->GetNthElement(i)->SetMaxSpectralValue(1.100);
+
+          std::cout << " vector values size in for statement " << reflectanceToSurfaceReflectanceFilter->GetCorrectionParameters()->GetWavelengthSpectralBand()->GetNthElement(0)->GetFilterFunctionValues6S().size() << std::endl;
+          }
         }
 
-      reflectanceToSurfaceReflectanceFilter->SetIsSetAtmosphericRadiativeTerms(false);
-      reflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(true);
-//      bProgress->show();
-//      Fl::check();
+      reflectanceToSurfaceReflectanceFilter->SetIsSetAtmosphericRadiativeTerms(true);
+      std::cout << " vector values size before method " << reflectanceToSurfaceReflectanceFilter->GetCorrectionParameters()->GetWavelengthSpectralBand()->GetNthElement(0)->GetFilterFunctionValues6S().size() << std::endl;
+      reflectanceToSurfaceReflectanceFilter->GenerateAtmosphericRadiativeTerms();
+      std::cout << " vector values size before method " << reflectanceToSurfaceReflectanceFilter->GetCorrectionParameters()->GetWavelengthSpectralBand()->GetNthElement(0)->GetFilterFunctionValues6S().size() << std::endl;
+
+      std::cout << "Generate atmospheric parameters" << std::endl;
       reflectanceToSurfaceReflectanceFilter->GenerateParameters();
       }
 
@@ -156,9 +197,9 @@ int OpticalCalibration::Execute(otb::ApplicationOptionsResult* parseResult)
     calculator->Compute();
       
     writer->SetTilingStreamDivisions(calculator->GetOptimalNumberOfStreamDivisions());
-      
-    otbMsgDevMacro(<< "Guess the pipeline memory print " << calculator->GetMemoryPrint()*byteToMegabyte << " Mo");
-    otbMsgDevMacro(<< "Number of stream divisions : " << calculator->GetOptimalNumberOfStreamDivisions());
+    
+    std::cout << "Guess the pipeline memory print " << calculator->GetMemoryPrint()*byteToMegabyte << " Mo" << std::endl;
+    std::cout << "Number of stream divisions : " << calculator->GetOptimalNumberOfStreamDivisions() << std::endl;
 
     otb::StandardWriterWatcher watcher(writer,"OpticalCalibration");
 
