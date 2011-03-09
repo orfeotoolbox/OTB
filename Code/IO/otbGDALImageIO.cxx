@@ -335,18 +335,19 @@ void GDALImageIO::Read(void* buffer)
     if (lCrGdal == CE_Failure)
       {
       itkExceptionMacro(<< "Error while reading image (GDAL format) " << m_FileName );
+      delete[] pBufferTemp;
       return;
       }
     //std::cout << "RAW BUFFER:" <<std::endl;
     //printDataBuffer(pBufferTemp, m_PxType, m_NbBands, lNbColumns*lNbLines);
 
     // Convert the buffer to GDT_Float64 type
-    typedef std::complex<double>           RealType;
+    typedef std::complex<float>           RealType;
     typedef double                         ScalarRealType;
 
     if (m_PxType == GDT_CInt32)
       {
-      //std::cout << "Convert input File from GDT_CInt32 to GDT_CFloat64" << std::endl;
+      //std::cout << "Convert input File from GDT_CInt32 to GDT_CFloat32" << std::endl;
       typedef std::complex<int>              ComplexIntType;
 
       for (unsigned int itPxl = 0; itPxl < (unsigned int) (nbPixelToRead * m_NbBands); itPxl++)
@@ -360,7 +361,7 @@ void GDALImageIO::Read(void* buffer)
       }
     else if (m_PxType == GDT_CInt16)
       {
-      //std::cout << "Convert input File from GDT_CInt16 to GDT_CFloat64" << std::endl;
+      //std::cout << "Convert input File from GDT_CInt16 to GDT_CFloat32" << std::endl;
       typedef std::complex<short>            ComplexShortType;
 
       for (unsigned int itPxl = 0; itPxl < (unsigned int) (nbPixelToRead * m_NbBands); itPxl++)
@@ -374,6 +375,7 @@ void GDALImageIO::Read(void* buffer)
       }
     //std::cout << "CONVERTED BUFFER:" <<std::endl;
     //printDataBuffer(p, GDT_CFloat64, m_NbBands, lNbColumns*lNbLines);
+    delete[] pBufferTemp;
     }
 
   // In the indexed case, one has to retrieve the index image and the
@@ -618,11 +620,11 @@ void GDALImageIO::InternalReadImageInformation()
     {
     SetComponentType(DOUBLE);
     }
-  else if (m_PxType == GDT_CFloat32)
+  else if ( (m_PxType == GDT_CFloat32) || (m_PxType == GDT_CInt32) || (m_PxType == GDT_CInt16) )
     {
     SetComponentType(CFLOAT);
     }
-  else if ( (m_PxType == GDT_CFloat64) || (m_PxType == GDT_CInt32) || (m_PxType == GDT_CInt16) )
+  else if (m_PxType == GDT_CFloat64)
     {
     SetComponentType(CDOUBLE);
     }
@@ -665,15 +667,15 @@ void GDALImageIO::InternalReadImageInformation()
     }
   else if (this->GetComponentType() == CFLOAT)
     {
-    m_BytePerPixel = sizeof(std::complex<float>);
-    }
-  else if (this->GetComponentType() == CDOUBLE)
-    {
     if (m_PxType == GDT_CInt16)
       m_BytePerPixel = sizeof(std::complex<short>);
     else if (m_PxType == GDT_CInt32)
       m_BytePerPixel = sizeof(std::complex<int>);
     else
+      m_BytePerPixel = sizeof(std::complex<float>);
+    }
+  else if (this->GetComponentType() == CDOUBLE)
+    {
       m_BytePerPixel = sizeof(std::complex<double>);
     }
   else
