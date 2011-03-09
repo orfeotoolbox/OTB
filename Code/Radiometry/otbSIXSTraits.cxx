@@ -171,11 +171,11 @@ SIXSTraits::ComputeWavelengthSpectralBandValuesFor6S(
     {
     itkGenericExceptionMacro(<< "The FilterFunctionValues vector must have more than 1 values !");
     }
-  if (L_min + static_cast<double>(FilterFunctionValues.size() - 1) * L_userStep < (L_max - epsilon))
+  if (! (L_min + static_cast<double>(FilterFunctionValues.size() - 1) * L_userStep < (L_max - epsilon) ) )
     {
     itkGenericExceptionMacro(
-      << "The following condition: " << L_min << "+(" << FilterFunctionValues.size() << "-1)*" << L_userStep <<
-      " < (" << L_max << "-" << epsilon << ") is not respected !");
+      << "The following condition manu: " << L_min << "+(" << FilterFunctionValues.size() << "-1)*" << L_userStep <<
+      " < (" << L_max << "-" << epsilon << ") is not respected !" << "val1 " << L_min + static_cast<double>(FilterFunctionValues.size() - 1) * L_userStep << " val2 " << L_max - epsilon);
     }
 
   // Generate WavelengthSpectralBand if the step is not the offical 6S step value
