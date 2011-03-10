@@ -23,6 +23,9 @@ SET(SARPOLARIMETRY_TESTS2 ${CXX_TEST_PATH}/otbSARPolarimetryTests2)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbSARPolarimetry_TESTS1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+ADD_TEST(saTuPolarimetricSynthesisFunctor ${SARPOLARIMETRY_TESTS1}
+        otbPolarimetricSynthesisFunctor )
+
 
 ADD_TEST(saTuPolarimetricSynthesisFilterNew ${SARPOLARIMETRY_TESTS1}
         otbPolarimetricSynthesisFilterNew )
@@ -388,6 +391,7 @@ ADD_TEST(saTvPolarimetricDataTest ${SARPOLARIMETRY_TESTS2}
 # A enrichir
 SET(SARPOLARIMETRY_SRCS1
 otbSARPolarimetryTests1.cxx
+otbPolarimetricSynthesisFunctor.cxx
 otbPolarimetricSynthesisFilterNew.cxx
 otbPolarimetricSynthesisFilter.cxx
 otbHHnHVnVVPolarimetricSynthesisFilter.cxx

@@ -25,7 +25,8 @@
 #include "otbTestMain.h"
 
 void RegisterTests()
-{
+{ 
+  REGISTER_TEST(otbPolarimetricSynthesisFunctor);
   REGISTER_TEST(otbPolarimetricSynthesisFilterNew);
   REGISTER_TEST(otbPolarimetricSynthesisFilter);
   REGISTER_TEST(otbHHnHVnVVPolarimetricSynthesisFilter);
