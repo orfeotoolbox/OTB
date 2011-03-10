@@ -40,6 +40,14 @@ int otbCompareAsciiTestScientificNotation(int argc, char * argv[])
   fileRef << "6e-3\n";
   fileRef << "7e-3\n";
   fileRef << "8e-3\n";
+  fileRef << "A = 1e15\n";
+  fileRef << "A = 2e15\n";
+  fileRef << "A = 3e15\n";
+  fileRef << "A = 4e15\n";
+  fileRef << "A = 5e-3\n";
+  fileRef << "A = 6e-3\n";
+  fileRef << "A = 7e-3\n";
+  fileRef << "A = 8e-3\n";
   fileRef.close();
 
   std::ofstream fileTest;
@@ -52,6 +60,14 @@ int otbCompareAsciiTestScientificNotation(int argc, char * argv[])
   fileTest << "6E-3\n";
   fileTest << "7e-03\n";
   fileTest << "8E-03\n";
+  fileTest << "A = 1e15\n";
+  fileTest << "A = 2E15\n";
+  fileTest << "A = 3e015\n";
+  fileTest << "A = 4E015\n";
+  fileTest << "A = 5e-3\n";
+  fileTest << "A = 6E-3\n";
+  fileTest << "A = 7e-03\n";
+  fileTest << "A = 8E-03\n";
   fileTest.close();
 
   return EXIT_SUCCESS;
