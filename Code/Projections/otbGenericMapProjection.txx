@@ -26,7 +26,7 @@
 namespace otb
 {
 
-template<Transform::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions,
+template<TransformDirection::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions,
     unsigned int NOutputDimensions>
 GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>
 ::GenericMapProjection() : Superclass(SpaceDimension, ParametersDimension)
@@ -36,7 +36,7 @@ GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutput
   reinstanciateProjection = true;
 }
 
-template<Transform::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions,
+template<TransformDirection::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions,
     unsigned int NOutputDimensions>
 GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>
 ::~GenericMapProjection()
@@ -47,7 +47,7 @@ GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutput
     }
 }
 
-template<Transform::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions,
+template<TransformDirection::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions,
     unsigned int NOutputDimensions>
 typename GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>::OssimMapProjectionType*
 GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>
@@ -62,7 +62,7 @@ GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutput
   return this->m_MapProjection;
 }
 
-template<Transform::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions,
+template<TransformDirection::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions,
     unsigned int NOutputDimensions>
 const typename GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions,
     NOutputDimensions>::OssimMapProjectionType*
@@ -78,7 +78,7 @@ GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutput
   return this->m_MapProjection;
 }
 
-template<Transform::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions,
+template<TransformDirection::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions,
     unsigned int NOutputDimensions>
 std::string
 GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>
@@ -92,7 +92,7 @@ GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutput
   return wkt;
 }
 
-template<Transform::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions,
+template<TransformDirection::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions,
     unsigned int NOutputDimensions>
 void
 GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>
@@ -104,7 +104,7 @@ GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutput
   this->Modified();
 }
 
-template<Transform::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions,
+template<TransformDirection::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions,
     unsigned int NOutputDimensions>
 bool
 GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>
@@ -140,7 +140,7 @@ GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutput
   return false;
 }
 
-template<Transform::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions,
+template<TransformDirection::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions,
     unsigned int NOutputDimensions>
 typename GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>::OutputPointType
 GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>
@@ -150,7 +150,7 @@ GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutput
 
 //     otbMsgDevMacro(<< "DirectionOfMapping: " <<
 //     DirectionOfMapping);
-  if (DirectionOfMapping == Transform::INVERSE)
+  if (DirectionOfMapping == TransformDirection::INVERSE)
     {
 //     otbMsgDevMacro(<< "Cartographic coordinates: (" << point[0] << "," << point[1] << ")");
 
@@ -171,7 +171,7 @@ GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutput
       outputPoint[2] = point[2];
       }
     }
-  if (DirectionOfMapping == Transform::FORWARD)
+  if (DirectionOfMapping == TransformDirection::FORWARD)
     {
 //     otbMsgDevMacro(<< "Geographic coordinates (lon, lat) : (" << point[1] << "," << point[0] << ")");
     //from "itk::point" to "ossim::ossimGpt"
@@ -194,7 +194,7 @@ GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutput
   return outputPoint;
 }
 
-template<Transform::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions,
+template<TransformDirection::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions,
     unsigned int NOutputDimensions>
 void
 GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>
@@ -204,7 +204,7 @@ GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutput
 }
 
 
-template<Transform::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions,
+template<TransformDirection::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions,
     unsigned int NOutputDimensions>
 void
 GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>

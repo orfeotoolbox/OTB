@@ -24,7 +24,7 @@
 namespace otb
 {
 
-template <Transform::TransformationDirection transform>
+template <TransformDirection::TransformationDirection transform>
 SVY21MapProjection<transform>
 ::SVY21MapProjection()
 {
@@ -45,7 +45,7 @@ SVY21MapProjection<transform>
   this->SetParameters(falseEasting, falseNorthing, scaleFactor);
 }
 
-template <Transform::TransformationDirection transform>
+template <TransformDirection::TransformationDirection transform>
 SVY21MapProjection<transform>
 ::~SVY21MapProjection()
 {

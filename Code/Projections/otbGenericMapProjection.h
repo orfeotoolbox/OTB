@@ -36,7 +36,7 @@
 namespace otb
 {
 
-namespace Transform
+namespace TransformDirection
 {
 enum TransformationDirection
   {
@@ -58,7 +58,7 @@ enum TransformationDirection
  *
  **/
 
-template <Transform::TransformationDirection TDirectionOfMapping,
+template <TransformDirection::TransformationDirection TDirectionOfMapping,
     class TScalarType = double,
     unsigned int NInputDimensions = 2,
     unsigned int NOutputDimensions = 2>
@@ -90,7 +90,7 @@ public:
   virtual OssimMapProjectionType* GetMapProjection();
   virtual const OssimMapProjectionType* GetMapProjection() const;
 
-  static const Transform::TransformationDirection DirectionOfMapping = TDirectionOfMapping;
+  static const TransformDirection::TransformationDirection DirectionOfMapping = TDirectionOfMapping;
 
   itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
   itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
