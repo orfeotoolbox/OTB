@@ -96,7 +96,7 @@ public:
     const ComplexType conjSrr = vcl_conj(Srr);
 
     SinclairToCovarianceFunctorType funct;
-    return ( funct( Sll, Slr, Srl, Srr ) ); 
+    return ( funct( Sll, Slr, Srl, Srr ) );
   }
 
   unsigned int GetNumberOfComponentsPerPixel()

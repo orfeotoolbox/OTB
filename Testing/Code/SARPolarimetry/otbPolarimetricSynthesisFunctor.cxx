@@ -31,7 +31,7 @@ int otbPolarimetricSynthesisFunctor(int argc, char * argv[])
   FunctorType::ComplexArrayType l_Ei;
   FunctorType::ComplexArrayType l_Er;
 
-  l_Ei[0] = ComplexType(0.5,0);
+  l_Ei[0] = ComplexType(0.5, 0);
   l_Ei[1] = ComplexType(1., 1.2);
   l_Er[0] = ComplexType(-2.5, 0.);
   l_Er[1] = ComplexType(0., 1.5);

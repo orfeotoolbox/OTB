@@ -72,7 +72,7 @@ void MatrixImageFilter<TInputImage, TOutputImage, TMatrix>::ThreadedGenerateData
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   inIt.GoToBegin();
-  outIt.GoToBegin();   
+  outIt.GoToBegin();
   
   const unsigned int inSize =  m_Matrix.cols();
   const unsigned int outSize =  m_Matrix.rows();

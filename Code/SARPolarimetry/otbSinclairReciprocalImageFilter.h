@@ -82,7 +82,7 @@ public:
   void SetInputHH(const TInputImageHH * image);
   // This method set the second input, same as SetInputVH
   void SetInputHV(const TInputImageHV_VH * image);
-  // This method set the second input, same as SetInputHV 
+  // This method set the second input, same as SetInputHV
   void SetInputVH(const TInputImageHV_VH * image);
   void SetInputVV(const TInputImageVV * image);
 
@@ -103,7 +103,6 @@ private:
   void operator =(const Self&); //purposely not implemented
 
 };
-
 
 
 } // end namespace otb

@@ -41,7 +41,7 @@ int otbSinclairReciprocalImageFilterNew(int argc, char * argv[])
   typedef otb::Image<ComplexType, 2> CplxImageType;
   typedef otb::VectorImage<ComplexType, 2> VCplxImageType;
 
-  typedef otb::SinclairReciprocalImageFilter<CplxImageType, CplxImageType, CplxImageType, VCplxImageType> FilterType; 
+  typedef otb::SinclairReciprocalImageFilter<CplxImageType, CplxImageType, CplxImageType, VCplxImageType> FilterType;
 
   // Instantiating object
   FilterType::Pointer filter = FilterType::New();
@@ -58,7 +58,7 @@ int otbSinclairReciprocalImageFilterNew(int argc, char * argv[])
   typedef otb::Image<InputPixelType> InputImageType; \
   typedef otb::VectorImage<OutputPixelType> OutputImageType; \
   typedef otb::ImageFileReader<InputImageType> ReaderType; \
-  typedef otb::ExtractROI<InputPixelType,InputPixelType > ExtractROIType; \
+  typedef otb::ExtractROI<InputPixelType, InputPixelType > ExtractROIType; \
   typedef otb::SinclairReciprocalImageFilter<InputImageType, InputImageType, InputImageType, OutputImageType, T_Function> FilterType; \
   typename FilterType::Pointer filter = FilterType::New(); \
   typename ReaderType::Pointer reader1 = ReaderType::New(); \

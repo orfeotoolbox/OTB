@@ -32,13 +32,13 @@ int otbSinclairToReciprocalCoherencyMatrixFunctor(int argc, char * argv[])
   OutputType outputFunct;
 
   result[0] = ComplexType(26.,  0.);
-  result[1] = ComplexType( 2.,-10.);
+  result[1] = ComplexType( 2., -10.);
   result[2] = ComplexType(26.,  0.);
   result[3] = ComplexType( 4.,  0.);
   result[4] = ComplexType( 2., 10.);
   result[5] = ComplexType(26.,  0.);
 
- outputFunct = funct.operator ()( ComplexType(1., 4.), ComplexType(2.,3.), ComplexType(3.,2.) );
+ outputFunct = funct.operator ()( ComplexType(1., 4.), ComplexType(2., 3.), ComplexType(3., 2.) );
   if( vcl_abs(result[0]-outputFunct[0]) > 1e-10 ||
       vcl_abs(result[1]-outputFunct[1]) > 1e-10 ||
       vcl_abs(result[2]-outputFunct[2]) > 1e-10 ||

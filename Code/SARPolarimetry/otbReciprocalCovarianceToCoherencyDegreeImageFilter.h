@@ -55,7 +55,7 @@ public:
     result.SetSize(m_NumberOfComponentsPerPixel);
     result.Fill(0.0);
 
-    /* Using the convention  
+    /* Using the convention
      * \f$ C_{11} = S_{hh}*S_{hh}^* \f$
      * \f$ C_{12} = S_{hh}*S_{hv}^* \f$
      * \f$ C_{13} = S_{hh}*S_{vv}^* \f$

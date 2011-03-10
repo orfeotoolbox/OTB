@@ -36,7 +36,7 @@ namespace Functor
  *   channel #3 : \f$ S_{lr}.S_{lr}^{*} \f$
  *   channel #4 : \f$ S_{lr}.S_{rr}^{*} \f$
  *   channel #5 : \f$ S_{rr}.S_{rr}^{*} \f$
- * 
+ *
  * This is a adaptation of the SinclairToCircularCovarianceMatrixFunctor, where \f$ S_{hv}=S_{vh} \f$.
  *
  *  \ingroup Functor

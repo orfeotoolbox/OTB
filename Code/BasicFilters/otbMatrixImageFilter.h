@@ -30,10 +30,10 @@ namespace otb
  * The templates are the input and putput image type.
  * The transition matrix is giver using the SetTransitionMatrix() method. The waiting type is a vnl_matrix<double> (ie. MatrixType).
  * The number of columns of the matrix must be the input image number of channels, the number of rows is the number of channels of the output image.
- * 
+ *
  * For example, if the image has 2 bands, the matrix is \f$ \begin{pmatrix} \alpha & \beta \\ \gama & \delta \end{pmatrix} \f$
  * The pixel \f$ [a, b] \f$ will give the output pixel \f$ [\alpha.a + \beta.b, \gamma.a + \delta.b  ]. \f$
- * 
+ *
  */
 
 template <class TInputImage, class TOutputImage, class TMatrix = vnl_matrix<typename itk::NumericTraits<typename TInputImage::InternalPixelType>::RealType> >

@@ -38,7 +38,7 @@ int otbSinclairToReciprocalCircularCovarianceMatrixFunctor(int argc, char * argv
   result[4] = ComplexType(  1.,  8.);
   result[5] = ComplexType(  5.,  0.);
 
-  outputFunct = funct.operator ()( ComplexType(1., 4.), ComplexType(2.,3.), ComplexType(3.,2.) );
+  outputFunct = funct.operator ()( ComplexType(1., 4.), ComplexType(2., 3.), ComplexType(3., 2.) );
 
   if( vcl_abs(result[0]-outputFunct[0]) > 1e-10 ||
       vcl_abs(result[1]-outputFunct[1]) > 1e-10 ||
