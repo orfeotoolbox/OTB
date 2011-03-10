@@ -26,10 +26,10 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbCovarianceToCoherencyImageFilterNew);
-  REGISTER_TEST(otbCovarianceToCoherencyImageFilter);
-  REGISTER_TEST(otbCovarianceToCoherencyDegreeImageFilterNew);
-  REGISTER_TEST(otbCovarianceToCoherencyDegreeImageFilter);
+  REGISTER_TEST(otbReciprocalCovarianceToReciprocalCoherencyImageFilterNew);
+  REGISTER_TEST(otbReciprocalCovarianceToReciprocalCoherencyImageFilter);
+  REGISTER_TEST(otbReciprocalCovarianceToCoherencyDegreeImageFilterNew);
+  REGISTER_TEST(otbReciprocalCovarianceToCoherencyDegreeImageFilter);
   REGISTER_TEST(otbReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilterNew);
   REGISTER_TEST(otbReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter);
   REGISTER_TEST(otbReciprocalHAlphaImageFilterNew);
@@ -43,4 +43,6 @@ void RegisterTests()
   REGISTER_TEST(otbMuellerToCovarianceImageFilterNew);
   REGISTER_TEST(otbMuellerToCovarianceImageFilter);
   REGISTER_TEST(otbHermitianEigenAnalysisTest);
+  REGISTER_TEST(otbPolarimetricDataNew);
+  REGISTER_TEST(otbPolarimetricDataTest);
 }

@@ -63,10 +63,7 @@ public:
     double m_PolarisationDegreeMin(itk::NumericTraits<double>::max());
     double m_PolarisationDegreeMax(itk::NumericTraits<double>::min());
 
-    double PI_90;
-    PI_90 = static_cast<double>( 2 * CONST_PI_180);
-
-    TOutput result;
+     TOutput result;
     result.SetSize(m_NumberOfComponentsPerPixel);
 
     MuellerMatrixType muellerMatrix;
@@ -90,60 +87,58 @@ public:
     tau = -45.0;
     while (tau < 46.0)
       {
-      psi = -90.0;
-      while (psi < 91.0)
-        {
-        // Define the incident Stokes vector
-        Si[0] = 1.0;
-        Si[1] = cos(psi * PI_90) * cos(tau * PI_90);
-        Si[2] = sin(psi * PI_90) * cos(tau * PI_90);
-        Si[3] = sin(tau * PI_90);
-
-        // Evaluate the received Stokes vector
-        Sr = muellerMatrix * Si;
-
-        //Evaluate Power and Polarisation degree
-        P = Sr[0];
-
-        if (P < 0.00001)
+        psi = -90.0;
+        while (psi < 91.0)
           {
-          deg_pol = 0.;
+            // Define the incident Stokes vector
+            Si[0] = 1.0;
+            Si[1] = cos(psi * m_PI_90) * cos(tau * m_PI_90);
+            Si[2] = sin(psi * m_PI_90) * cos(tau * m_PI_90);
+            Si[3] = sin(tau * m_PI_90);
+            
+            // Evaluate the received Stokes vector
+            Sr = muellerMatrix * Si;
+            
+            //Evaluate Power and Polarisation degree
+            P = Sr[0];
+            
+            if (P < m_Epsilon)
+              {
+                deg_pol = 0.;
+              }
+            else
+              {
+                deg_pol = vcl_sqrt(Sr[1] * Sr[1] + Sr[2] * Sr[2] + Sr[3] * Sr[3]) / Sr[0];
+              }
+            
+            if (P > m_PowerMax)
+              {
+                m_PowerMax = P;
+              }
+            else
+              {
+                m_PowerMin = P;
+              }
+            
+            if (deg_pol > m_PolarisationDegreeMax)
+              {
+                m_PolarisationDegreeMax = deg_pol;
+              }
+            else
+              {
+                m_PolarisationDegreeMin = deg_pol;
+              }
+            psi += 5.0;
           }
-        else
-          {
-          deg_pol = vcl_sqrt(Sr[1] * Sr[1] + Sr[2] * Sr[2] + Sr[3] * Sr[3]) / Sr[0];
-          }
-
-        if (P > m_PowerMax)
-          {
-          m_PowerMax = P;
-          }
-
-        if (P < m_PowerMin)
-          {
-          m_PowerMin = P;
-          }
-
-        if (deg_pol > m_PolarisationDegreeMax)
-          {
-          m_PolarisationDegreeMax = deg_pol;
-          }
-
-        if (deg_pol < m_PolarisationDegreeMin)
-          {
-          m_PolarisationDegreeMin = deg_pol;
-          }
-        psi += 5.0;
-        }
-      tau += 5.0;
+        tau += 5.0;
       }
-
+    
     result[0] = m_PowerMin;
     result[1] = m_PowerMax;
     result[2] = m_PolarisationDegreeMin;
     result[3] = m_PolarisationDegreeMax;
-
-
+    
+    
     return result;
     }
 
@@ -153,14 +148,15 @@ public:
   }
 
    /** Constructor */
-   MuellerToPolarisationDegreeAndPowerFunctor() : m_NumberOfComponentsPerPixel(4) {}
+   MuellerToPolarisationDegreeAndPowerFunctor() : m_NumberOfComponentsPerPixel(4), m_Epsilon(1e-6), m_PI_90(2*CONST_PI_180) {}
 
    /** Destructor */
    virtual ~MuellerToPolarisationDegreeAndPowerFunctor() {}
 
 private:
     unsigned int m_NumberOfComponentsPerPixel;
-
+    const double m_Epsilon;
+    const double m_PI_90;
 };
 }
 

@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __CovarianceToCoherencyDegreeImageFilter_h
-#define __CovarianceToCoherencyDegreeImageFilter_h
+#ifndef __ReciprocalCovarianceToCoherencyDegreeImageFilter_h
+#define __ReciprocalCovarianceToCoherencyDegreeImageFilter_h
 
 #include "otbUnaryFunctorImageFilter.h"
 
@@ -26,7 +26,7 @@ namespace otb
 
 namespace Functor {
 
-/** \class otbCovarianceToCoherencyDegreeFunctor
+/** \class otbReciprocalCovarianceToCoherencyDegreeFunctor
  * \brief Evaluate the Coherency Degree coefficient from from the MLC image
  *
  *   Output value are:
@@ -39,10 +39,10 @@ namespace Functor {
  * \ingroup SARPolarimetry
  *
  * \sa MLCToCircularCoherencyDegreeImageFilter
- * \sa CovarianceToCoherencyImageFilter
+ * \sa ReciprocalCovarianceToCoherencyImageFilter
  */
 template< class TInput, class TOutput>
-class CovarianceToCoherencyDegreeFunctor
+class ReciprocalCovarianceToCoherencyDegreeFunctor
 {
 public:
   typedef double                                   RealType;
@@ -94,10 +94,10 @@ public:
    }
 
    /** Constructor */
-   CovarianceToCoherencyDegreeFunctor() : m_NumberOfComponentsPerPixel(3), m_Epsilon(1e-6) {}
+   ReciprocalCovarianceToCoherencyDegreeFunctor() : m_NumberOfComponentsPerPixel(3), m_Epsilon(1e-6) {}
 
    /** Destructor */
-   virtual ~CovarianceToCoherencyDegreeFunctor() {}
+   virtual ~ReciprocalCovarianceToCoherencyDegreeFunctor() {}
 
 private:
     unsigned int m_NumberOfComponentsPerPixel;
@@ -106,18 +106,18 @@ private:
 }
 
 
-/** \class otbCovarianceToCoherencyDegreeImageFilter
+/** \class otbReciprocalCovarianceToCoherencyDegreeImageFilter
  * \brief Compute the Coherency Degree coefficient
  * from the MLC image (6 complex channels)
  */
-template <class TInputImage, class TOutputImage, class TFunction = Functor::CovarianceToCoherencyDegreeFunctor<
+template <class TInputImage, class TOutputImage, class TFunction = Functor::ReciprocalCovarianceToCoherencyDegreeFunctor<
     ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
-class ITK_EXPORT CovarianceToCoherencyDegreeImageFilter :
+class ITK_EXPORT ReciprocalCovarianceToCoherencyDegreeImageFilter :
    public UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction>
 {
 public:
    /** Standard class typedefs. */
-   typedef CovarianceToCoherencyDegreeImageFilter  Self;
+   typedef ReciprocalCovarianceToCoherencyDegreeImageFilter  Self;
    typedef UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction> Superclass;
    typedef itk::SmartPointer<Self>        Pointer;
    typedef itk::SmartPointer<const Self>  ConstPointer;
@@ -126,15 +126,15 @@ public:
    itkNewMacro(Self);
 
    /** Runtime information support. */
-   itkTypeMacro(CovarianceToCoherencyDegreeImageFilter, UnaryFunctorImageFilter);
+   itkTypeMacro(ReciprocalCovarianceToCoherencyDegreeImageFilter, UnaryFunctorImageFilter);
 
 
 protected:
-  CovarianceToCoherencyDegreeImageFilter() {}
-  virtual ~CovarianceToCoherencyDegreeImageFilter() {}
+  ReciprocalCovarianceToCoherencyDegreeImageFilter() {}
+  virtual ~ReciprocalCovarianceToCoherencyDegreeImageFilter() {}
 
 private:
-  CovarianceToCoherencyDegreeImageFilter(const Self&); //purposely not implemented
+  ReciprocalCovarianceToCoherencyDegreeImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&);                  //purposely not implemented
 
  

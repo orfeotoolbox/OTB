@@ -24,35 +24,36 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbMuellerToCovarianceImageFilter.h"
+#include "otbReciprocalCovarianceToReciprocalCoherencyImageFilter.h"
 #include "otbComplexToVectorImageCastFilter.h"
-#include "otbExtractROI.h"
 
-int otbMuellerToCovarianceImageFilter(int argc, char * argv[])
+int otbReciprocalCovarianceToReciprocalCoherencyImageFilter(int argc, char * argv[])
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
 
   typedef double                   PixelType;
-  typedef std::complex<PixelType>  ComplexPixelType;
+  typedef std::complex<PixelType>  InputPixelType;
+ 
+  typedef otb::VectorImage<PixelType>      RealImageType;
+  typedef otb::VectorImage<InputPixelType> ImageType;
 
-  typedef otb::VectorImage<PixelType>                                          RealImageType;
-  typedef otb::VectorImage<ComplexPixelType>                                   ComplexImageType;
-  typedef otb::MuellerToCovarianceImageFilter<RealImageType, ComplexImageType> FilterType;
-  typedef otb::ComplexToVectorImageCastFilter<ComplexImageType, RealImageType> Castertype;
+  typedef otb::ReciprocalCovarianceToReciprocalCoherencyImageFilter<ImageType, ImageType> FilterType;
 
-  typedef otb::ImageFileReader<RealImageType>  ReaderType;
+
+  typedef otb::ImageFileReader<ImageType>  ReaderType;
   typedef otb::ImageFileWriter<RealImageType> WriterType;
+  typedef otb::ComplexToVectorImageCastFilter<ImageType, RealImageType> CasterType;
 
   ReaderType::Pointer reader = ReaderType::New();
+  CasterType::Pointer caster = CasterType::New();
   WriterType::Pointer writer = WriterType::New();
 
-  reader->SetFileName(inputFilename );
+  reader->SetFileName(inputFilename);
 
   FilterType::Pointer filter = FilterType::New();
   filter->SetInput(reader->GetOutput());
 
-  Castertype::Pointer caster = Castertype::New();
   caster->SetInput(filter->GetOutput());
 
   writer->SetFileName(outputFilename);
