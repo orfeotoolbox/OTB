@@ -70,17 +70,17 @@ public:
     const ComplexType C23 =  static_cast<ComplexType>(Covariance[4]);
     const RealType    C33 =  static_cast<RealType>(Covariance[5].real());
 
-    if ((C11 >0.00001) && (C33 > 0.0001))
+    if ((C11 >m_Epsilon) && (C33 > m_Epsilon))
       {
       result[0] = vcl_abs(C13) / vcl_sqrt(C11 * C33); // |<hh.vv*|/sqrt(<hh.hh*><vv.vv*>)
       }
 
-    if ((C22 > 0.00001) && (C33 > 0.00001))
+    if ((C22 > m_Epsilon) && (C33 > m_Epsilon))
       {
       result[1] = vcl_abs(C23) / vcl_sqrt(C22 * C33);  // |<hv.vv*|/sqrt(<hv.hv*><vv.vv*>)
       }
 
-    if ((C11 > 0.00001) && (C22 > 0.00001) )
+    if ((C11 > m_Epsilon) && (C22 > m_Epsilon) )
       {
       result[2] = vcl_abs(C12) / vcl_sqrt(C11 * C22);  // |<hh.hv*|/sqrt(<hh.hh*><hv.hv*>)
       }
@@ -94,13 +94,14 @@ public:
    }
 
    /** Constructor */
-   CovarianceToCoherencyDegreeFunctor() : m_NumberOfComponentsPerPixel(3)  {}
+   CovarianceToCoherencyDegreeFunctor() : m_NumberOfComponentsPerPixel(3), m_Epsilon(1e-6) {}
 
    /** Destructor */
    virtual ~CovarianceToCoherencyDegreeFunctor() {}
 
 private:
     unsigned int m_NumberOfComponentsPerPixel;
+    const double m_Epsilon;
 };
 }
 
