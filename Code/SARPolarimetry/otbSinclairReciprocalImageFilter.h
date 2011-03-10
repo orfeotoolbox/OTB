@@ -19,7 +19,7 @@
 #define __otbSinclairReciprocalImageFilter_h
 
 #include "itkTernaryFunctorImageFilter.h"
-#include "otbSinclairToReciprocalCovarianceFunctor.h"
+#include "otbSinclairToReciprocalCovarianceMatrixFunctor.h"
 #include <complex>
 
 namespace otb
@@ -36,14 +36,14 @@ namespace otb
  *
  *  \sa SinclairImageFilter
  *  \sa SinclairToReciprocalCircularCovarianceMatrixFunctor
- *  \sa SinclairToReciprocalCoherencyFunctor
- *  \sa SinclairToReciprocalCovarianceFunctor
+ *  \sa SinclairToReciprocalCoherencyMatrixFunctor
+ *  \sa SinclairToReciprocalCovarianceMatrixFunctor
  */
 
 
 template <class TInputImageHH, class TInputImageHV_VH,
           class TInputImageVV, class TOutputImage,
-    class TFunction = Functor::SinclairToReciprocalCovarianceFunctor<
+    class TFunction = Functor::SinclairToReciprocalCovarianceMatrixFunctor<
         typename TInputImageHH::PixelType,
         typename TInputImageHV_VH::PixelType,
         typename TInputImageVV::PixelType,

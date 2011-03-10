@@ -23,9 +23,9 @@
 #include <iostream>
 
 #include "otbVectorImage.h"
-#include "otbMLCToCircularCoherencyDegreeImageFilter.h"
+#include "otbCovarianceToCoherencyImageFilter.h"
 
-int otbMLCToCircularCoherencyDegreeImageFilterNew(int argc, char * argv[])
+int otbCovarianceToCoherencyImageFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
 
@@ -33,7 +33,7 @@ int otbMLCToCircularCoherencyDegreeImageFilterNew(int argc, char * argv[])
   typedef otb::VectorImage<PixelType, Dimension> ImageType;
 
 
-  typedef otb::MLCToCircularCoherencyDegreeImageFilter<ImageType, ImageType> FilterType;
+  typedef otb::CovarianceToCoherencyImageFilter<ImageType, ImageType> FilterType;
 
   FilterType::Pointer filter = FilterType::New();
 

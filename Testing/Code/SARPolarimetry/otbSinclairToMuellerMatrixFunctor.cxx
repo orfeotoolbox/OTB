@@ -17,15 +17,15 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 
-#include "otbSinclairToMuellerFunctor.h"
+#include "otbSinclairToMuellerMatrixFunctor.h"
 #include "itkVariableLengthVector.h"
 
-int otbSinclairToMuellerFunctor(int argc, char * argv[])
+int otbSinclairToMuellerMatrixFunctor(int argc, char * argv[])
 {
   typedef std::complex<double>                   ComplexType;
   typedef itk::VariableLengthVector<double>  OutputType;
 
-  typedef otb::Functor::SinclairToMuellerFunctor<ComplexType, ComplexType, ComplexType, ComplexType, OutputType >         FunctorType;
+  typedef otb::Functor::SinclairToMuellerMatrixFunctor<ComplexType, ComplexType, ComplexType, ComplexType, OutputType >         FunctorType;
 
   OutputType  result(16);
   FunctorType funct;

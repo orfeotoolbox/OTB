@@ -28,9 +28,9 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbSinclairReciprocalImageFilter.h"
-#include "otbSinclairToReciprocalCovarianceFunctor.h"
+#include "otbSinclairToReciprocalCovarianceMatrixFunctor.h"
 #include "otbSinclairToReciprocalCircularCovarianceMatrixFunctor.h"
-#include "otbSinclairToReciprocalCoherencyFunctor.h"
+#include "otbSinclairToReciprocalCoherencyMatrixFunctor.h"
 #include "otbComplexToVectorImageCastFilter.h"
 #include "otbExtractROI.h"
 
@@ -150,9 +150,9 @@ int otbSinclairReciprocalImageFilter(int argc, char * argv[])
   std::string strArgv(argv[1]);
   argc--;
   argv++;
-  if (strArgv == "SinclairToReciprocalCovariance")
+  if (strArgv == "SinclairToReciprocalCovarianceMatrix")
     return (generic_SinclairReciprocalImageFilterWithCast<InputPixelType, OutputPixelType,
-                otb::Functor::SinclairToReciprocalCovarianceFunctor<InputImageType::PixelType,
+                otb::Functor::SinclairToReciprocalCovarianceMatrixFunctor<InputImageType::PixelType,
                                     InputImageType::PixelType,
                                     InputImageType::PixelType,
                                     OutputImageType::PixelType> >
@@ -164,9 +164,9 @@ int otbSinclairReciprocalImageFilter(int argc, char * argv[])
                                     InputImageType::PixelType,
                                     OutputImageType::PixelType> >
                   (argc, argv));
-  else  if (strArgv == "SinclairToReciprocalCoherency")
+  else  if (strArgv == "SinclairToReciprocalCoherencyMatrix")
     return (generic_SinclairReciprocalImageFilterWithCast<InputPixelType, OutputPixelType,
-                otb::Functor::SinclairToReciprocalCoherencyFunctor<InputImageType::PixelType,
+                otb::Functor::SinclairToReciprocalCoherencyMatrixFunctor<InputImageType::PixelType,
                                     InputImageType::PixelType,
                                     InputImageType::PixelType,
                                     OutputImageType::PixelType> >

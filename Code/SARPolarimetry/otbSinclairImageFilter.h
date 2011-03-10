@@ -19,7 +19,7 @@
 #define __otbSinclairImageFilter_h
 
 #include "otbQuaternaryFunctorImageFilter.h"
-#include "otbSinclairToCovarianceFunctor.h"
+#include "otbSinclairToCovarianceMatrixFunctor.h"
 #include <complex>
 
 namespace otb
@@ -36,14 +36,14 @@ namespace otb
  *
  *  \sa SinclairImageFilter
  *  \sa SinclairToCircularCovarianceMatrixFunctor
- *  \sa SinclairToCoherencyFunctor
- *  \sa SinclairToCovarianceFunctor
- *  \sa SinclairToMuellerFunctor
+ *  \sa SinclairToCoherencyMatrixFunctor
+ *  \sa SinclairToCovarianceMatrixFunctor
+ *  \sa SinclairToMuelleMatrixrFunctor
  */
 
 template <class TInputImageHH, class TInputImageHV,
           class TInputImageVH, class TInputImageVV, class TOutputImage,
-    class TFunction = Functor::SinclairToCovarianceFunctor<
+    class TFunction = Functor::SinclairToCovarianceMatrixFunctor<
         typename TInputImageHH::PixelType,
         typename TInputImageHV::PixelType,
         typename TInputImageVH::PixelType,

@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __MLCToCoherencyImageFilter_h
-#define __MLCToCoherencyImageFilter_h
+#ifndef __CovarianceToCoherencyImageFilter_h
+#define __CovarianceToCoherencyImageFilter_h
 
 #include "otbUnaryFunctorImageFilter.h"
 
@@ -26,8 +26,8 @@ namespace otb
 
 namespace Functor {
 
-/** \class otbMLCToCoherencyFunctor
- * \brief Evaluate the Coherency matrix from from the MLC image
+/** \class otbCovarianceToCoherencyFunctor
+ * \brief Evaluate the Coherency matrix from from the Covariance image
  *
  *   Output value are:
  *   channel #0 : \f$ 0.5 * (S_{hh}+S_{vv}.(S_{hh}+S_{vv})^{*} \f$
@@ -40,11 +40,11 @@ namespace Functor {
  * \infgroup Functor
  * \ingroup SARPolarimetry
  *
- * \sa MLCToCircularCoherencyDegreeImageFilter
- * \sa MLCToCoherencyDegreeImageFilter
+ * \sa CovarianceToCircularCoherencyDegreeImageFilter
+ * \sa CovarianceToCoherencyDegreeImageFilter
  */
 template< class TInput, class TOutput>
-class MLCToCoherencyFunctor
+class CovarianceToCoherencyFunctor
 {
 public:
   typedef typename std::complex <double>           ComplexType;
@@ -82,10 +82,10 @@ public:
    }
 
    /** Constructor */
-   MLCToCoherencyFunctor() : m_NumberOfComponentsPerPixel(6)  {}
+   CovarianceToCoherencyFunctor() : m_NumberOfComponentsPerPixel(6)  {}
 
    /** Destructor */
-   virtual ~MLCToCoherencyFunctor() {}
+   virtual ~CovarianceToCoherencyFunctor() {}
 
 private:
     unsigned int m_NumberOfComponentsPerPixel;
@@ -93,18 +93,18 @@ private:
 }
 
 
-/** \class otbMLCToCoherencyImageFilter
+/** \class otbCovarianceToCoherencyImageFilter
  * \brief Compute the Coherency image (6 complex channels)
- * from the MLC image (6 complex channels)
+ * from the Covariance image (6 complex channels)
  */
-template <class TInputImage, class TOutputImage, class TFunction = Functor::MLCToCoherencyFunctor<
+template <class TInputImage, class TOutputImage, class TFunction = Functor::CovarianceToCoherencyFunctor<
     ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
-class ITK_EXPORT MLCToCoherencyImageFilter :
+class ITK_EXPORT CovarianceToCoherencyImageFilter :
    public UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction>
 {
 public:
    /** Standard class typedefs. */
-   typedef MLCToCoherencyImageFilter  Self;
+   typedef CovarianceToCoherencyImageFilter  Self;
    typedef UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction> Superclass;
    typedef itk::SmartPointer<Self>        Pointer;
    typedef itk::SmartPointer<const Self>  ConstPointer;
@@ -113,15 +113,15 @@ public:
    itkNewMacro(Self);
 
    /** Runtime information support. */
-   itkTypeMacro(MLCToCoherencyImageFilter, UnaryFunctorImageFilter);
+   itkTypeMacro(CovarianceToCoherencyImageFilter, UnaryFunctorImageFilter);
 
 
 protected:
-  MLCToCoherencyImageFilter() {}
-  virtual ~MLCToCoherencyImageFilter() {}
+  CovarianceToCoherencyImageFilter() {}
+  virtual ~CovarianceToCoherencyImageFilter() {}
 
 private:
-  MLCToCoherencyImageFilter(const Self&); //purposely not implemented
+  CovarianceToCoherencyImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&);            //purposely not implemented
 
  

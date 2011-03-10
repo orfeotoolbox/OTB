@@ -23,17 +23,18 @@
 #include <iostream>
 
 #include "otbVectorImage.h"
-#include "otbMLCToCoherencyImageFilter.h"
+#include "otbMuellerToCovarianceImageFilter.h"
 
-int otbMLCToCoherencyImageFilterNew(int argc, char * argv[])
+int otbMuellerToCovarianceImageFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
 
-  typedef std::complex<double>   PixelType;
-  typedef otb::VectorImage<PixelType, Dimension> ImageType;
+  typedef double                                        PixelType;
+  typedef std::complex<PixelType>                       ComplexPixelType;
+  typedef otb::VectorImage<PixelType, Dimension>        ImageType;
+  typedef otb::VectorImage<ComplexPixelType, Dimension> ComplexImageType;
 
-
-  typedef otb::MLCToCoherencyImageFilter<ImageType, ImageType> FilterType;
+  typedef otb::MuellerToCovarianceImageFilter<ImageType, ComplexImageType> FilterType;
 
   FilterType::Pointer filter = FilterType::New();
 

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSinclairToReciprocalCoherencyFunctor_h
-#define __otbSinclairToReciprocalCoherencyFunctor_h
+#ifndef __otbSinclairToReciprocalCovarianceMatrixFunctor_h
+#define __otbSinclairToReciprocalCovarianceMatrixFunctor_h
 
 #include "vcl_complex.h"
 
@@ -24,35 +24,33 @@ namespace otb
 {
 namespace Functor
 {
-/** \class SinclairToReciprocalCoherencyFunctor
- *  \brief Construct the reciprocal fully polarimetric coherency matrix
+/** \class SinclairToReciprocalCovarianceMatrixFunctor
+ *  \brief Construct the reciprocal fully polarimetric covariance matrix
  *  with Sinclair matrix information.
  *
  *  Output value are:
- *   channel #0 : \f$ (S_{hh}+S_{vv}).(S_{hh}+S_{vv})^{*} \f$
- *   channel #1 : \f$ (S_{hh}+S_{vv}).(S_{hh}-S_{vv})^{*} \f$
- *   channel #2 : \f$ (S_{hh}+S_{vv}).(2*S_{hv})^{*} \f$
- *   channel #3 : \f$ (S_{hh}-S_{vv}).(S_{hh}-S_{vv})^{*} \f$
- *   channel #4 : \f$ (S_{hh}-S_{vv}).(2*S_{hv})^{*} \f$
- *   channel #5 : \f$ (2*S_{hv}).(2*S_{hv})^{*} \f$
+ *   channel #0 : \f$ S_{hh}.S_{hh}^{*} \f$
+ *   channel #1 : \f$ S_{hh}.S_{hv}^{*} \f$
+ *   channel #2 : \f$ S_{hh}.S_{vv}^{*} \f$
+ *   channel #3 : \f$ S_{hv}.S_{hv}^{*} \f$
+ *   channel #4 : \f$ S_{hv}.S_{vv}^{*} \f$
+ *   channel #5 : \f$ S_{vv}.S_{vv}^{*} \f$
  *
- * This is a adaptation of the SinclairToCoherencyFunctor, where \f$ S_{hv}=S_{vh} \f$.
+ * This is a adaptation of the SinclairToCovarianceMatrixFunctor, where \f$ S_{hv}=S_{vh} \f$.
  *
  *  \ingroup Functor
  *  \ingroup SARPolarimetry
  *
+ *  \sa SinclairToCovarianceMatrixFunctor
  *  \sa SinclairImageFilter
  *  \sa SinclairToCircularCovarianceMatrixFunctor
- *  \sa SinclairToCoherencyFunctor
- *  \sa SinclairToCovarianceFunctor
- *  \sa SinclairToMuellerFunctor
+ *  \sa SinclairToCoherencyeMatrixFunctor
+ *  \sa SinclairToMuellereMatrixFunctor
  *  \sa SinclairToReciprocalCircularCovarianceMatrixFunctor
- *  \sa SinclairToReciprocalCovarianceFunctor
-
- *  \sa SinclairToReciprocalCovarianceFunctor
+ *  \sa SinclairToReciprocalCoherencyeMatrixFunctor
  */
 template <class TInput1, class TInput2, class TInput3, class TOutput>
-class SinclairToReciprocalCoherencyFunctor
+class SinclairToReciprocalCovarianceMatrixFunctor
 {
 public:
   /** Some typedefs. */
@@ -68,18 +66,12 @@ public:
     const ComplexType S_hv = static_cast<ComplexType>(Shv);
     const ComplexType S_vv = static_cast<ComplexType>(Svv);
 
-    const ComplexType HHPlusVV  = S_hh + S_vv;
-    const ComplexType HHMinusVV = S_hh - S_vv;
-    const ComplexType twoHV     = ComplexType( 2.0 ) * S_hv;
-
-    result[0] = static_cast<OutputValueType>( std::norm(HHPlusVV) );
-    result[1] = static_cast<OutputValueType>( HHPlusVV * vcl_conj(HHMinusVV) );
-    result[2] = static_cast<OutputValueType>( HHPlusVV * vcl_conj(twoHV) );
-    result[3] = static_cast<OutputValueType>( std::norm(HHMinusVV) );
-    result[4] = static_cast<OutputValueType>( HHMinusVV *vcl_conj(twoHV) );
-    result[5] = static_cast<OutputValueType>( std::norm(twoHV) );
-
-    result /= 2.0;
+    result[0] = static_cast<OutputValueType>( std::norm( S_hh ) );
+    result[1] = static_cast<OutputValueType>( S_hh*vcl_conj(S_hv) );
+    result[2] = static_cast<OutputValueType>( S_hh*vcl_conj(S_vv) );
+    result[3] = static_cast<OutputValueType>( std::norm( S_hv ) );
+    result[4] = static_cast<OutputValueType>( S_hv*vcl_conj(S_vv) );
+    result[5] = static_cast<OutputValueType>( std::norm( S_vv ) );
 
     return (result);
   }
@@ -90,16 +82,17 @@ public:
   }
 
   /** Constructor */
-  SinclairToReciprocalCoherencyFunctor() {}
+  SinclairToReciprocalCovarianceMatrixFunctor() {}
 
   /** Destructor */
-  virtual ~SinclairToReciprocalCoherencyFunctor() {}
+  virtual ~SinclairToReciprocalCovarianceMatrixFunctor() {}
 
 protected:
 
 
 private:
-    itkStaticConstMacro(NumberOfComponentsPerPixel, unsigned int, 6);
+    itkStaticConstMacro(NumberOfComponentsPerPixel, unsigned int, 6 );
+
 };
 
 } // namespace Functor

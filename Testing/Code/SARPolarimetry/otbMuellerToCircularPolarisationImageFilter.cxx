@@ -27,7 +27,7 @@
 #include "otbImageFileWriter.h"
 #include "otbMuellerToCircularPolarisationImageFilter.h"
 #include "otbSinclairImageFilter.h"
-#include "otbSinclairToMuellerFunctor.h"
+#include "otbSinclairToMuellerMatrixFunctor.h"
 
 
 int otbMuellerToCircularPolarisationImageFilter(int argc, char * argv[])
@@ -46,7 +46,7 @@ int otbMuellerToCircularPolarisationImageFilter(int argc, char * argv[])
   
   typedef otb::Image<InputPixelType,  Dimension>       InputImageType;
   typedef otb::VectorImage<PixelType, Dimension>       RealImageType;
-  typedef otb::Functor::SinclairToMuellerFunctor<
+  typedef otb::Functor::SinclairToMuellerMatrixFunctor<
                       InputImageType::PixelType,
                       InputImageType::PixelType,
                       InputImageType::PixelType,

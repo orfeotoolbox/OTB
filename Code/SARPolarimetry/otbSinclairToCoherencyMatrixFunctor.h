@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSinclairToCoherencyFunctor_h
-#define __otbSinclairToCoherencyFunctor_h
+#ifndef __otbSinclairToCoherencyMatrixFunctor_h
+#define __otbSinclairToCoherencyMatrixFunctor_h
 
 #include "vcl_complex.h"
 
@@ -24,7 +24,7 @@ namespace otb
 {
 namespace Functor
 {
-/** \class SinclairToCoherencyFunctor
+/** \class SinclairToCoherencyMatrixFunctor
  *  \brief Construct the fully polarimetric coherency matrix
  *  with Sinclair matrix information.
  *
@@ -48,12 +48,12 @@ namespace Functor
  *  \sa SinclairToCovarianceFunctor
  *  \sa SinclairToMuellerFunctor
  *  \sa SinclairToReciprocalCircularCovarianceMatrixFunctor
- *  \sa SinclairToReciprocalCoherencyFunctor
+ *  \sa SinclairToReciprocalCoherencyMatrixFunctor
  *  \sa SinclairToReciprocalCovarianceFunctor
  */
 template <class TInput1, class TInput2, class TInput3,
           class TInput4, class TOutput>
-class SinclairToCoherencyFunctor
+class SinclairToCoherencyMatrixFunctor
 {
 public:
   /** Some typedefs. */
@@ -99,10 +99,10 @@ public:
   }
 
   /** Constructor */
-  SinclairToCoherencyFunctor() {}
+  SinclairToCoherencyMatrixFunctor() {}
 
   /** Destructor */
-  virtual ~SinclairToCoherencyFunctor() {}
+  virtual ~SinclairToCoherencyMatrixFunctor() {}
 
 protected:
 

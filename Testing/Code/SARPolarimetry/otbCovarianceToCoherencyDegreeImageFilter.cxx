@@ -25,13 +25,12 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbMuellerToMLCImageFilter.h"
-#include "otbSinclairImageFilter.h"
-#include "otbSinclairToMuellerFunctor.h"
-#include "otbComplexToVectorImageCastFilter.h"
-#include "otbExtractROI.h"
+#include "otbCovarianceToCoherencyDegreeImageFilter.h"
+#include "otbSinclairReciprocalImageFilter.h"
+#include "otbSinclairToReciprocalCovarianceMatrixFunctor.h"
 
-int otbMuellerToMLCImageFilter(int argc, char * argv[])
+
+int otbCovarianceToCoherencyDegreeImageFilter(int argc, char * argv[])
 {
   const char * inputFilename1  = argv[1];
   const char * inputFilename2  = argv[2];
@@ -42,29 +41,25 @@ int otbMuellerToMLCImageFilter(int argc, char * argv[])
 
   typedef double                   PixelType;
   typedef std::complex<PixelType>  InputPixelType;
-
   const unsigned int Dimension = 2;
 
   
   typedef otb::Image<InputPixelType,  Dimension>       InputImageType;
-  typedef otb::VectorImage<PixelType, Dimension>       RealImageType;
-  typedef otb::VectorImage<InputPixelType, Dimension>  ComplexImageType;
-  typedef otb::Functor::SinclairToMuellerFunctor<
+  typedef otb::VectorImage<InputPixelType, Dimension>  ImageType;
+  typedef otb::Functor::SinclairToReciprocalCovarianceMatrixFunctor<
                       InputImageType::PixelType,
                       InputImageType::PixelType,
                       InputImageType::PixelType,
-                      InputImageType::PixelType,
-                      RealImageType::PixelType>       FunctionType;
+                      ImageType::PixelType>              FunctionType;
 
-  typedef otb::SinclairImageFilter<InputImageType, InputImageType,
+  typedef otb::SinclairReciprocalImageFilter<InputImageType,
                       InputImageType, InputImageType,
-                      RealImageType, FunctionType >  SinclairToMuellerFilterType;
-  typedef otb::MuellerToMLCImageFilter<RealImageType, ComplexImageType> FilterType;
+                      ImageType, FunctionType >  SinclairToCovarianceFilterType;
+  typedef otb::CovarianceToCoherencyDegreeImageFilter<ImageType, ImageType> FilterType;
 
-  typedef otb::ComplexToVectorImageCastFilter<ComplexImageType, RealImageType> Castertype;
 
   typedef otb::ImageFileReader<InputImageType>  ReaderType;
-  typedef otb::ImageFileWriter<RealImageType> WriterType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
 
   ReaderType::Pointer reader1 = ReaderType::New();
   ReaderType::Pointer reader2 = ReaderType::New();
@@ -77,21 +72,18 @@ int otbMuellerToMLCImageFilter(int argc, char * argv[])
   reader3->SetFileName(inputFilename3);
   reader4->SetFileName(inputFilename4);
 
-  SinclairToMuellerFilterType::Pointer sinclairToMuellerFilter
-                                       = SinclairToMuellerFilterType::New();
-  sinclairToMuellerFilter->SetInputHH(reader1->GetOutput());
-  sinclairToMuellerFilter->SetInputHV(reader2->GetOutput());
-  sinclairToMuellerFilter->SetInputVH(reader3->GetOutput());
-  sinclairToMuellerFilter->SetInputVV(reader4->GetOutput());
+  SinclairToCovarianceFilterType::Pointer sinclairToCovarianceFilter
+                                       = SinclairToCovarianceFilterType::New();
+  sinclairToCovarianceFilter->SetInputHH(reader1->GetOutput());
+  sinclairToCovarianceFilter->SetInputHV(reader2->GetOutput());
+  sinclairToCovarianceFilter->SetInputVH(reader3->GetOutput());
+  sinclairToCovarianceFilter->SetInputVV(reader4->GetOutput());
 
   FilterType::Pointer filter = FilterType::New();
-  filter->SetInput(sinclairToMuellerFilter->GetOutput());
-
-  Castertype::Pointer caster = Castertype::New();
-  caster->SetInput(filter->GetOutput());
+  filter->SetInput(sinclairToCovarianceFilter->GetOutput());
 
   writer->SetFileName(outputFilename);
-  writer->SetInput(caster->GetOutput());
+  writer->SetInput(filter->GetOutput());
   writer->Update();
 
   return EXIT_SUCCESS;

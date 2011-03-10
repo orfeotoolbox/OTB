@@ -28,10 +28,10 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbSinclairImageFilter.h"
-#include "otbSinclairToCovarianceFunctor.h"
+#include "otbSinclairToCovarianceMatrixFunctor.h"
 #include "otbSinclairToCircularCovarianceMatrixFunctor.h"
-#include "otbSinclairToCoherencyFunctor.h"
-#include "otbSinclairToMuellerFunctor.h"
+#include "otbSinclairToCoherencyMatrixFunctor.h"
+#include "otbSinclairToMuellerMatrixFunctor.h"
 #include "otbComplexToVectorImageCastFilter.h"
 #include "otbExtractROI.h"
 
@@ -41,8 +41,7 @@ int otbSinclairImageFilterNew(int argc, char * argv[])
   typedef otb::Image<ComplexType, 2> CplxImageType;
   typedef otb::VectorImage<ComplexType, 2> VCplxImageType;
 
-  //typedef otb::SinclairImageFilter<CplxImageType, VCplxImageType> FilterType; 
-typedef otb::SinclairImageFilter<CplxImageType, CplxImageType, CplxImageType, CplxImageType, VCplxImageType> FilterType; 
+  typedef otb::SinclairImageFilter<CplxImageType, CplxImageType, CplxImageType, CplxImageType, VCplxImageType> FilterType; 
 
   // Instantiating object
   FilterType::Pointer filter = FilterType::New();
@@ -153,9 +152,9 @@ int otbSinclairImageFilter(int argc, char * argv[])
   std::string strArgv(argv[1]);
   argc--;
   argv++;
-  if (strArgv == "SinclairToCovariance")
+  if (strArgv == "SinclairToCovarianceMatrix")
     return (generic_SinclairImageFilterWithCast<InputPixelType, OutputPixelType,
-                otb::Functor::SinclairToCovarianceFunctor<InputImageType::PixelType,
+                otb::Functor::SinclairToCovarianceMatrixFunctor<InputImageType::PixelType,
                                     InputImageType::PixelType,
                                     InputImageType::PixelType,
                                     InputImageType::PixelType,
@@ -169,17 +168,17 @@ int otbSinclairImageFilter(int argc, char * argv[])
                                     InputImageType::PixelType,
                                     OutputImageType::PixelType> >
                   (argc, argv));
-  else  if (strArgv == "SinclairToCoherency")
+  else  if (strArgv == "SinclairToCoherencyMatrix")
     return (generic_SinclairImageFilterWithCast<InputPixelType, OutputPixelType,
-                otb::Functor::SinclairToCoherencyFunctor<InputImageType::PixelType,
+                otb::Functor::SinclairToCoherencyMatrixFunctor<InputImageType::PixelType,
                                     InputImageType::PixelType,
                                     InputImageType::PixelType,
                                     InputImageType::PixelType,
                                     OutputImageType::PixelType> >
                   (argc, argv));
-  else  if (strArgv == "SinclairToMueller")
+  else  if (strArgv == "SinclairToMuellerMatrix")
     return (generic_SinclairImageFilter<InputPixelType, OutputRealPixelType,
-                otb::Functor::SinclairToMuellerFunctor<InputImageType::PixelType,
+                otb::Functor::SinclairToMuellerMatrixFunctor<InputImageType::PixelType,
                                     InputImageType::PixelType,
                                     InputImageType::PixelType,
                                     InputImageType::PixelType,

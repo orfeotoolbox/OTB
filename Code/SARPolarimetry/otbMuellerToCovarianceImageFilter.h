@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __MuellerToMLCImageFilter_h
-#define __MuellerToMLCImageFilter_h
+#ifndef __MuellerToCovarianceImageFilter_h
+#define __MuellerToCovarianceImageFilter_h
 
 #include "otbUnaryFunctorImageFilter.h"
 
@@ -26,7 +26,7 @@ namespace otb
 
 namespace Functor {
 
-/** \class otbMuellerToMLCFunctor
+/** \class otbMuellerToCovarianceFunctor
  * \brief Evaluate the  MLC image from the Mueller image
  *
  * Output value are:
@@ -50,7 +50,7 @@ namespace Functor {
  */
 
 template< class TInput, class TOutput>
-class MuellerToMLCFunctor
+class MuellerToCovarianceFunctor
 {
 public:
   typedef std::complex<double>                      ComplexType;
@@ -96,10 +96,10 @@ public:
     }
   
   /** Constructor */
-  MuellerToMLCFunctor() : m_NumberOfComponentsPerPixel(6)  {}
+  MuellerToCovarianceFunctor() : m_NumberOfComponentsPerPixel(6)  {}
   
   /** Destructor */
-  virtual ~MuellerToMLCFunctor() {}
+  virtual ~MuellerToCovarianceFunctor() {}
   
  private:
   unsigned int m_NumberOfComponentsPerPixel;
@@ -107,18 +107,18 @@ public:
 }
  
  
-/** \class otbMuellerToMLCImageFilter
+/** \class otbMuellerToCovarianceImageFilter
  * \brief Compute the MLC  image
  * from the Mueller image (16 real channels)
  */
-template <class TInputImage, class TOutputImage, class TFunction = Functor::MuellerToMLCFunctor<
+template <class TInputImage, class TOutputImage, class TFunction = Functor::MuellerToCovarianceFunctor<
     ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
-class ITK_EXPORT MuellerToMLCImageFilter :
+class ITK_EXPORT MuellerToCovarianceImageFilter :
    public UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction>
 {
 public:
    /** Standard class typedefs. */
-   typedef MuellerToMLCImageFilter  Self;
+   typedef MuellerToCovarianceImageFilter  Self;
    typedef UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction> Superclass;
    typedef itk::SmartPointer<Self>        Pointer;
    typedef itk::SmartPointer<const Self>  ConstPointer;
@@ -127,15 +127,15 @@ public:
    itkNewMacro(Self);
 
    /** Runtime information support. */
-   itkTypeMacro(MuellerToMLCImageFilter, UnaryFunctorImageFilter);
+   itkTypeMacro(MuellerToCovarianceImageFilter, UnaryFunctorImageFilter);
 
 
 protected:
-   MuellerToMLCImageFilter() {}
-  virtual ~MuellerToMLCImageFilter() {}
+   MuellerToCovarianceImageFilter() {}
+  virtual ~MuellerToCovarianceImageFilter() {}
 
 private:
-  MuellerToMLCImageFilter(const Self&); // purposely not implemented
+  MuellerToCovarianceImageFilter(const Self&); // purposely not implemented
   void operator=(const Self&);          // purposely not implemented
 };
   

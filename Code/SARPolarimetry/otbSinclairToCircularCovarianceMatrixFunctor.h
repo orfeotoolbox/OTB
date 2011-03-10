@@ -19,7 +19,7 @@
 #define __otbSinclairToCircularCovarianceMatrixFunctor_h
 
 #include "vcl_complex.h"
-#include "otbSinclairToCovarianceFunctor.h"
+#include "otbSinclairToCovarianceMatrixFunctor.h"
 
 namespace otb
 {
@@ -52,12 +52,12 @@ namespace Functor
  *  \ingroup SARPolarimetry
  *
  *  \sa SinclairImageFilter
- *  \sa SinclairToCoherencyFunctor
- *  \sa SinclairToCovarianceFunctor
- *  \sa SinclairToMuellerFunctor
+ *  \sa SinclairToCoherencyMatrixFunctor
+ *  \sa SinclairToCovarianceMatrixFunctor
+ *  \sa SinclairToMuellerMatrixFunctor
  *  \sa SinclairToReciprocalCircularCovarianceMatrixFunctor
- *  \sa SinclairToReciprocalCoherencyFunctor
- *  \sa SinclairToReciprocalCovarianceFunctor
+ *  \sa SinclairToReciprocalCoherencyMatrixFunctor
+ *  \sa SinclairToReciprocalCovarianceMatrixFunctor
  */
 template <class TInput1, class TInput2, class TInput3,
           class TInput4, class TOutput>
@@ -68,7 +68,7 @@ public:
   typedef double                                   RealType;
   typedef std::complex <RealType>                  ComplexType;
   typedef typename TOutput::ValueType              OutputValueType;
-  typedef SinclairToCovarianceFunctor<ComplexType, ComplexType, ComplexType, ComplexType, TOutput> SinclairToCovarianceFunctorType;
+  typedef SinclairToCovarianceMatrixFunctor<ComplexType, ComplexType, ComplexType, ComplexType, TOutput> SinclairToCovarianceFunctorType;
   inline TOutput operator ()(const TInput1& Shh, const TInput2& Shv,
                              const TInput3& Svh, const TInput4& Svv)
   {

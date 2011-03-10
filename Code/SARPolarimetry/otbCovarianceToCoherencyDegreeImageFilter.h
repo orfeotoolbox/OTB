@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __MLCToCoherencyDegreeImageFilter_h
-#define __MLCToCoherencyDegreeImageFilter_h
+#ifndef __CovarianceToCoherencyDegreeImageFilter_h
+#define __CovarianceToCoherencyDegreeImageFilter_h
 
 #include "otbUnaryFunctorImageFilter.h"
 
@@ -26,22 +26,23 @@ namespace otb
 
 namespace Functor {
 
-/** \class otbMLCToCoherencyDegreeFunctor
+/** \class otbCovarianceToCoherencyDegreeFunctor
  * \brief Evaluate the Coherency Degree coefficient from from the MLC image
  *
  *   Output value are:
- *   channel #0 : \f$ abs(S_{hh}*S_{vv}}^{*}) / sqrt(S_{hh}*S_{hh}}^{*}) / sqrt(S_{vv}*S_{vv}}^{*})\f$
+ *   channel #0 : \f$ abs(S_{hh}*S_{vv}}^{*}) / sqrt(S_{hh}*S_{hh}}^{*}) / sqrt(S_{vv}*S_{vv}}^{*}) \f$
  *   channel #1 : \f$ abs(S_{hv}*S_{vv}}^{*}) / sqrt(S_{hv}*S_{hv}}^{*}) / sqrt(S_{vv}*S_{vv}}^{*}) \f$
  *   channel #2 : \f$ abs(S_{hh}*S_{hv}}^{*}) / sqrt(S_{hh}*S_{hh}}^{*}) / sqrt(S_{hv}*S_{hv}}^{*}) \f$
+ *
  *
  * \infgroup Functor
  * \ingroup SARPolarimetry
  *
  * \sa MLCToCircularCoherencyDegreeImageFilter
- * \sa MLCToCoherencyImageFilter
+ * \sa CovarianceToCoherencyImageFilter
  */
 template< class TInput, class TOutput>
-class MLCToCoherencyDegreeFunctor
+class CovarianceToCoherencyDegreeFunctor
 {
 public:
   typedef double                                   RealType;
@@ -54,16 +55,24 @@ public:
     result.SetSize(m_NumberOfComponentsPerPixel);
     result.Fill(0.0);
 
-    const RealType C11 =  static_cast<RealType>(Covariance[0].real());
+    /* Using the convention  
+     * \f$ C_{11} = S_{hh}*S_{hh}^* \f$
+     * \f$ C_{12} = S_{hh}*S_{hv}^* \f$
+     * \f$ C_{13} = S_{hh}*S_{vv}^* \f$
+     * \f$ C_{22} = S_{hv}*S_{hv}^* \f$
+     * \f$ C_{23} = S_{hv}*S_{vv}^* \f$
+     * \f$ C_{33} = S_{vv}*S_{vv}^* \f$
+     */
+    const RealType    C11 =  static_cast<RealType>(Covariance[0].real());
     const ComplexType C12 =  static_cast<ComplexType>(Covariance[1]);
     const ComplexType C13 =  static_cast<ComplexType>(Covariance[2]);
-    const RealType C22 =  static_cast<RealType>(Covariance[3].real());
+    const RealType    C22 =  static_cast<RealType>(Covariance[3].real());
     const ComplexType C23 =  static_cast<ComplexType>(Covariance[4]);
-    const RealType C33 =  static_cast<RealType>(Covariance[5].real());
+    const RealType    C33 =  static_cast<RealType>(Covariance[5].real());
 
     if ((C11 >0.00001) && (C33 > 0.0001))
       {
-      result[0] = vcl_abs(C13) / vcl_sqrt(C11 *C33); // |<hh.vv*|/sqrt(<hh.hh*><vv.vv*>)
+      result[0] = vcl_abs(C13) / vcl_sqrt(C11 * C33); // |<hh.vv*|/sqrt(<hh.hh*><vv.vv*>)
       }
 
     if ((C22 > 0.00001) && (C33 > 0.00001))
@@ -85,10 +94,10 @@ public:
    }
 
    /** Constructor */
-   MLCToCoherencyDegreeFunctor() : m_NumberOfComponentsPerPixel(3)  {}
+   CovarianceToCoherencyDegreeFunctor() : m_NumberOfComponentsPerPixel(3)  {}
 
    /** Destructor */
-   virtual ~MLCToCoherencyDegreeFunctor() {}
+   virtual ~CovarianceToCoherencyDegreeFunctor() {}
 
 private:
     unsigned int m_NumberOfComponentsPerPixel;
@@ -96,18 +105,18 @@ private:
 }
 
 
-/** \class otbMLCToCoherencyDegreeImageFilter
+/** \class otbCovarianceToCoherencyDegreeImageFilter
  * \brief Compute the Coherency Degree coefficient
  * from the MLC image (6 complex channels)
  */
-template <class TInputImage, class TOutputImage, class TFunction = Functor::MLCToCoherencyDegreeFunctor<
+template <class TInputImage, class TOutputImage, class TFunction = Functor::CovarianceToCoherencyDegreeFunctor<
     ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
-class ITK_EXPORT MLCToCoherencyDegreeImageFilter :
+class ITK_EXPORT CovarianceToCoherencyDegreeImageFilter :
    public UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction>
 {
 public:
    /** Standard class typedefs. */
-   typedef MLCToCoherencyDegreeImageFilter  Self;
+   typedef CovarianceToCoherencyDegreeImageFilter  Self;
    typedef UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction> Superclass;
    typedef itk::SmartPointer<Self>        Pointer;
    typedef itk::SmartPointer<const Self>  ConstPointer;
@@ -116,15 +125,15 @@ public:
    itkNewMacro(Self);
 
    /** Runtime information support. */
-   itkTypeMacro(MLCToCoherencyDegreeImageFilter, UnaryFunctorImageFilter);
+   itkTypeMacro(CovarianceToCoherencyDegreeImageFilter, UnaryFunctorImageFilter);
 
 
 protected:
-  MLCToCoherencyDegreeImageFilter() {}
-  virtual ~MLCToCoherencyDegreeImageFilter() {}
+  CovarianceToCoherencyDegreeImageFilter() {}
+  virtual ~CovarianceToCoherencyDegreeImageFilter() {}
 
 private:
-  MLCToCoherencyDegreeImageFilter(const Self&); //purposely not implemented
+  CovarianceToCoherencyDegreeImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&);                  //purposely not implemented
 
  
