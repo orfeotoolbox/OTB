@@ -76,15 +76,34 @@ LabeledSampleLocalizationGenerator<TVectorData>
 }
 
 template <class TVectorData>
-std::pair<typename LabeledSampleLocalizationGenerator<TVectorData>
-::PointVectorType,
- typename LabeledSampleLocalizationGenerator<TVectorData>
- ::PointVectorType>
+typename LabeledSampleLocalizationGenerator<TVectorData>
+::PointVectorType
+LabeledSampleLocalizationGenerator<TVectorData>
+::PointDensification(DataNodeType * node)
+{
+  PointVectorType pPoint;
+  PointType centerPoint = node->GetPoint();
+
+  for(unsigned int i = 0; i < m_NumberOfPositiveSamplesPerPoint; ++i)
+    {
+    PointType point;
+    for(unsigned int dim = 0; dim < 2; ++dim)
+      {
+      point[dim] = centerPoint[dim]+this->m_RandomGenerator->GetUniformVariate(-m_InhibitionRadius, m_InhibitionRadius);
+      }
+    pPoint.push_back(point);
+    }
+  return pPoint;
+}
+
+template <class TVectorData>
+typename LabeledSampleLocalizationGenerator<TVectorData>
+::PointVectorType
 LabeledSampleLocalizationGenerator<TVectorData>
 ::RandomPointsGenerator(DataNodeType * node)
 {
   // Output
-  PointVectorType vPoint, pPoint;
+  PointVectorType vPoint;
 
   // Euclidean distance
   typename EuclideanDistanceType::Pointer euclideanDistance = EuclideanDistanceType::New();
@@ -118,7 +137,7 @@ LabeledSampleLocalizationGenerator<TVectorData>
 
   // Generation
   unsigned int nbMaxPosition = (unsigned int)(node->GetPolygonExteriorRing()->GetArea()
-                                * this->GetRandomLocalizationDensity());
+                                              * this->GetRandomLocalizationDensity());
   unsigned long int nbIter =  this->GetNbMaxIteration();
   unsigned int nbPosition = nbMaxPosition;
 
@@ -155,33 +174,11 @@ LabeledSampleLocalizationGenerator<TVectorData>
         {
         vPoint.push_back(point);
         }
-      else
-        {
-        pPoint.push_back(point);
-        }
-        nbPosition --;
+      nbPosition --;
       }
     nbIter --;
     }
-  
-  // Densifying positive points
-  for(typename PointVectorType::const_iterator iIt = insiders.begin(); iIt != insiders.end(); ++iIt)
-    {
-    for(unsigned int i = 0; i < m_NumberOfPositiveSamplesPerPoint; ++i)
-      {
-      PointType point;
-      for(unsigned int dim = 0; dim < 2; ++dim)
-        {
-        point[dim] = (*iIt)[dim]+this->m_RandomGenerator->GetUniformVariate(-m_InhibitionRadius, m_InhibitionRadius);
-        }
-      pPoint.push_back(point);
-      }
-    }
-
-  std::pair<PointVectorType, PointVectorType> result;
-  result.first = (vPoint);
-  result.second = (pPoint);
-  return result;
+  return vPoint;
 }
 
 template <class TVectorData>
@@ -234,7 +231,7 @@ LabeledSampleLocalizationGenerator<TVectorData>
 
         this->GetOutput(0)->GetDataTree()->Add(currentGeometry, document);
         }
-       ++itVector;
+      ++itVector;
       }
     }
 
@@ -250,11 +247,9 @@ LabeledSampleLocalizationGenerator<TVectorData>
       {
       if (itVector.Get()->IsPolygonFeature())
         {
-        std::pair<PointVectorType, PointVectorType> points = RandomPointsGenerator(itVector.Get());
-        PointVectorType vPoint = points.first;
-        PointVectorType pPoint = points.second;
+        PointVectorType vPoints = RandomPointsGenerator(itVector.Get());
         
-        for (typename PointVectorType::const_iterator it = vPoint.begin(); it != vPoint.end(); ++it)
+        for (typename PointVectorType::const_iterator it = vPoints.begin(); it != vPoints.end(); ++it)
           {
           typename DataNodeType::Pointer currentGeometry = DataNodeType::New();
           currentGeometry->SetNodeId(this->GetNextID());
@@ -263,7 +258,24 @@ LabeledSampleLocalizationGenerator<TVectorData>
           currentGeometry->SetFieldAsInt(this->GetClassKey(), this->GetNoClassIdentifier());
           this->GetOutput(0)->GetDataTree()->Add(currentGeometry, document);
           }
-        for (typename PointVectorType::const_iterator it = pPoint.begin(); it != pPoint.end(); ++it)
+        }
+      ++itVector;
+      }
+    }
+  // Densify positive points
+  for (unsigned int i=0; i<nbInputs; i++)
+    {
+    typename VectorDataType::ConstPointer vectorData = static_cast<const VectorDataType *>(this->GetInput(i));
+    
+    TreeIteratorType itVector(vectorData->GetDataTree());
+    itVector.GoToBegin();
+    while (!itVector.IsAtEnd())
+      {
+      if (itVector.Get()->IsPointFeature())
+        {
+        PointVectorType pPoints = PointDensification(itVector.Get());
+
+        for (typename PointVectorType::const_iterator it = pPoints.begin(); it != pPoints.end(); ++it)
           {
           typename DataNodeType::Pointer currentGeometry = DataNodeType::New();
           currentGeometry->SetNodeId(this->GetNextID());
@@ -275,7 +287,7 @@ LabeledSampleLocalizationGenerator<TVectorData>
         }
       ++itVector;
       }
-    }
+    }    
 }
 
 } // end namespace otb
