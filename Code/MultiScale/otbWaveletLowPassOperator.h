@@ -51,8 +51,7 @@ public:
   itkTypeMacro(WaveletLowPassOperator, WaveletOperatorBase);
 
   typedef typename Superclass::SizeType SizeType;
-  typedef Wavelet::WaveletDirection     DirectionOfTransformationEnumType;
-  itkStaticConstMacro(DirectionOfTransformation, DirectionOfTransformationEnumType, TDirectionOfTransformation);
+  static const Wavelet::WaveletDirection DirectionOfTransformation = TDirectionOfTransformation;
 
 protected:
 

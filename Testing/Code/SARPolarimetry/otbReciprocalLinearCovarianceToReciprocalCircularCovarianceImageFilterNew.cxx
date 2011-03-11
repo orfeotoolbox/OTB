@@ -23,18 +23,17 @@
 #include <iostream>
 
 #include "otbVectorImage.h"
-#include "otbMuellerToMLCImageFilter.h"
+#include "otbReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter.h"
 
-int otbMuellerToMLCImageFilterNew(int argc, char * argv[])
+int otbReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
 
-  typedef double                                        PixelType;
-  typedef std::complex<PixelType>                       ComplexPixelType;
-  typedef otb::VectorImage<PixelType, Dimension>        ImageType;
-  typedef otb::VectorImage<ComplexPixelType, Dimension> ComplexImageType;
+  typedef std::complex<double>   PixelType;
+  typedef otb::VectorImage<PixelType, Dimension> ImageType;
 
-  typedef otb::MuellerToMLCImageFilter<ImageType, ComplexImageType> FilterType;
+
+  typedef otb::ReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter<ImageType, ImageType> FilterType;
 
   FilterType::Pointer filter = FilterType::New();
 

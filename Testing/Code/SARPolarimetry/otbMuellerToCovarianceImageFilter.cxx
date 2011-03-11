@@ -21,25 +21,25 @@
 
 #include "itkExceptionObject.h"
 
-#include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbMuellerToPolarisationDegreeAndPowerImageFilter.h"
-#include "otbSinclairImageFilter.h"
-#include "otbSinclairToMuellerMatrixFunctor.h"
+#include "otbMuellerToCovarianceImageFilter.h"
+#include "otbComplexToVectorImageCastFilter.h"
+#include "otbExtractROI.h"
 
-
-int otbMuellerToPolarisationDegreeAndPowerImageFilter(int argc, char * argv[])
+int otbMuellerToCovarianceImageFilter(int argc, char * argv[])
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
 
-  typedef double                      PixelType;
-  typedef otb::VectorImage<PixelType> RealImageType;
+  typedef double                   PixelType;
+  typedef std::complex<PixelType>  ComplexPixelType;
 
-  typedef otb::MuellerToPolarisationDegreeAndPowerImageFilter<RealImageType, RealImageType> FilterType;
-
+  typedef otb::VectorImage<PixelType>                                          RealImageType;
+  typedef otb::VectorImage<ComplexPixelType>                                   ComplexImageType;
+  typedef otb::MuellerToCovarianceImageFilter<RealImageType, ComplexImageType> FilterType;
+  typedef otb::ComplexToVectorImageCastFilter<ComplexImageType, RealImageType> Castertype;
 
   typedef otb::ImageFileReader<RealImageType>  ReaderType;
   typedef otb::ImageFileWriter<RealImageType> WriterType;
@@ -47,13 +47,16 @@ int otbMuellerToPolarisationDegreeAndPowerImageFilter(int argc, char * argv[])
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
 
-  reader->SetFileName(inputFilename);
+  reader->SetFileName(inputFilename );
 
   FilterType::Pointer filter = FilterType::New();
   filter->SetInput(reader->GetOutput());
 
+  Castertype::Pointer caster = Castertype::New();
+  caster->SetInput(filter->GetOutput());
+
   writer->SetFileName(outputFilename);
-  writer->SetInput(filter->GetOutput());
+  writer->SetInput(caster->GetOutput());
   writer->Update();
 
   return EXIT_SUCCESS;

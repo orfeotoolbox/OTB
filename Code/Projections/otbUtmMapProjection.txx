@@ -25,7 +25,7 @@ namespace otb
 {
 
 ///Set the zone
-template <Transform::TransformationDirection TTransform>
+template <TransformDirection::TransformationDirection TTransform>
 void UtmMapProjection<TTransform>
 ::SetZone(long zone)
 {
@@ -34,7 +34,7 @@ void UtmMapProjection<TTransform>
 }
 
 ///Set the hemisphere
-template <Transform::TransformationDirection TTransform>
+template <TransformDirection::TransformationDirection TTransform>
 void UtmMapProjection<TTransform>
 ::SetHemisphere(char hemisphere)
 {
@@ -42,7 +42,7 @@ void UtmMapProjection<TTransform>
   this->Modified();
 }
 
-template <Transform::TransformationDirection TTransform>
+template <TransformDirection::TransformationDirection TTransform>
 void UtmMapProjection<TTransform>
 ::SetZoneAndHemisphereFromGeoPoint(const InputPointType& geoPoint)
 {
@@ -57,7 +57,7 @@ void UtmMapProjection<TTransform>
 }
 
 ///\return the zone
-template <Transform::TransformationDirection TTransform>
+template <TransformDirection::TransformationDirection TTransform>
 int UtmMapProjection<TTransform>
 ::GetZone() const
 {
@@ -67,7 +67,7 @@ int UtmMapProjection<TTransform>
 }
 
 ///\return the hemisphere
-template <Transform::TransformationDirection TTransform>
+template <TransformDirection::TransformationDirection TTransform>
 const char UtmMapProjection<TTransform>
 ::GetHemisphere() const
 {
@@ -76,7 +76,7 @@ const char UtmMapProjection<TTransform>
   return hemisphere;
 }
 
-template <Transform::TransformationDirection TTransform>
+template <TransformDirection::TransformationDirection TTransform>
 int UtmMapProjection<TTransform>
 ::GetZoneFromGeoPoint(const InputPointType& geoPoint) const
 {

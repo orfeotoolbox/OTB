@@ -20,17 +20,16 @@
 #endif
 
 #include "itkExceptionObject.h"
-
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbMLCToCircularCoherencyDegreeImageFilter.h"
-#include "otbSinclairImageFilter.h"
-#include "otbSinclairToReciprocalCovarianceFunctor.h"
+#include "otbReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter.h"
+#include "otbSinclairReciprocalImageFilter.h"
+#include "otbSinclairToReciprocalCovarianceMatrixFunctor.h"
+#include "otbComplexToVectorImageCastFilter.h"
 
-
-int otbMLCToCircularCoherencyDegreeImageFilter(int argc, char * argv[])
+int otbReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter(int argc, char * argv[])
 {
   const char * inputFilename1  = argv[1];
   const char * inputFilename2  = argv[2];
@@ -47,20 +46,19 @@ int otbMLCToCircularCoherencyDegreeImageFilter(int argc, char * argv[])
   typedef otb::Image<InputPixelType,  Dimension>       InputImageType;
   typedef otb::VectorImage<InputPixelType, Dimension>  ImageType;
   typedef otb::VectorImage<PixelType, Dimension>       RealImageType;
-  typedef otb::Functor::SinclairToReciprocalCovarianceFunctor<
-                      InputImageType::PixelType,
+  typedef otb::Functor::SinclairToReciprocalCovarianceMatrixFunctor<
                       InputImageType::PixelType,
                       InputImageType::PixelType,
                       InputImageType::PixelType,
                       ImageType::PixelType>              FunctionType;
 
-  typedef otb::SinclairImageFilter<InputImageType, InputImageType,
+  typedef otb::SinclairReciprocalImageFilter<InputImageType,
                       InputImageType, InputImageType,
                       ImageType, FunctionType >  SinclairToCovarianceFilterType;
 
-  typedef otb::MLCToCircularCoherencyDegreeImageFilter<ImageType, RealImageType> FilterType;
+  typedef otb::ReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter<ImageType, ImageType> FilterType;
 
-
+  typedef otb::ComplexToVectorImageCastFilter<ImageType, RealImageType> CasterType;
   typedef otb::ImageFileReader<InputImageType>  ReaderType;
   typedef otb::ImageFileWriter<RealImageType> WriterType;
 
@@ -85,8 +83,11 @@ int otbMLCToCircularCoherencyDegreeImageFilter(int argc, char * argv[])
   FilterType::Pointer filter = FilterType::New();
   filter->SetInput(sinclairToCovarianceFilter->GetOutput());
 
+  CasterType::Pointer caster = CasterType::New();
+  caster->SetInput(filter->GetOutput());
+  
   writer->SetFileName(outputFilename);
-  writer->SetInput(filter->GetOutput());
+  writer->SetInput(caster->GetOutput());
   writer->Update();
 
   return EXIT_SUCCESS;

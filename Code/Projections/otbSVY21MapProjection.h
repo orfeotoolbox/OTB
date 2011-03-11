@@ -29,7 +29,7 @@ namespace otb
 * It converts coordinates in longitude, latitude (WGS84) to SVY21 map coordinates.
 *
  */
-template <Transform::TransformationDirection transform>
+template <TransformDirection::TransformationDirection transform>
 class ITK_EXPORT SVY21MapProjection : public TransMercatorMapProjection<transform>
 {
 public:

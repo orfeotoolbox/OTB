@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __MLCToCoherencyDegreeImageFilter_h
-#define __MLCToCoherencyDegreeImageFilter_h
+#ifndef __ReciprocalCovarianceToCoherencyDegreeImageFilter_h
+#define __ReciprocalCovarianceToCoherencyDegreeImageFilter_h
 
 #include "otbUnaryFunctorImageFilter.h"
 
@@ -26,22 +26,23 @@ namespace otb
 
 namespace Functor {
 
-/** \class otbMLCToCoherencyDegreeFunctor
+/** \class otbReciprocalCovarianceToCoherencyDegreeFunctor
  * \brief Evaluate the Coherency Degree coefficient from from the MLC image
  *
  *   Output value are:
- *   channel #0 : \f$ abs(S_{hh}*S_{vv}}^{*}) / sqrt(S_{hh}*S_{hh}}^{*}) / sqrt(S_{vv}*S_{vv}}^{*})\f$
+ *   channel #0 : \f$ abs(S_{hh}*S_{vv}}^{*}) / sqrt(S_{hh}*S_{hh}}^{*}) / sqrt(S_{vv}*S_{vv}}^{*}) \f$
  *   channel #1 : \f$ abs(S_{hv}*S_{vv}}^{*}) / sqrt(S_{hv}*S_{hv}}^{*}) / sqrt(S_{vv}*S_{vv}}^{*}) \f$
  *   channel #2 : \f$ abs(S_{hh}*S_{hv}}^{*}) / sqrt(S_{hh}*S_{hh}}^{*}) / sqrt(S_{hv}*S_{hv}}^{*}) \f$
+ *
  *
  * \infgroup Functor
  * \ingroup SARPolarimetry
  *
  * \sa MLCToCircularCoherencyDegreeImageFilter
- * \sa MLCToCoherencyImageFilter
+ * \sa ReciprocalCovarianceToCoherencyImageFilter
  */
 template< class TInput, class TOutput>
-class MLCToCoherencyDegreeFunctor
+class ReciprocalCovarianceToCoherencyDegreeFunctor
 {
 public:
   typedef double                                   RealType;
@@ -54,24 +55,32 @@ public:
     result.SetSize(m_NumberOfComponentsPerPixel);
     result.Fill(0.0);
 
-    const RealType C11 =  static_cast<RealType>(Covariance[0].real());
+    /* Using the convention
+     * \f$ C_{11} = S_{hh}*S_{hh}^* \f$
+     * \f$ C_{12} = S_{hh}*S_{hv}^* \f$
+     * \f$ C_{13} = S_{hh}*S_{vv}^* \f$
+     * \f$ C_{22} = S_{hv}*S_{hv}^* \f$
+     * \f$ C_{23} = S_{hv}*S_{vv}^* \f$
+     * \f$ C_{33} = S_{vv}*S_{vv}^* \f$
+     */
+    const RealType    C11 =  static_cast<RealType>(Covariance[0].real());
     const ComplexType C12 =  static_cast<ComplexType>(Covariance[1]);
     const ComplexType C13 =  static_cast<ComplexType>(Covariance[2]);
-    const RealType C22 =  static_cast<RealType>(Covariance[3].real());
+    const RealType    C22 =  static_cast<RealType>(Covariance[3].real());
     const ComplexType C23 =  static_cast<ComplexType>(Covariance[4]);
-    const RealType C33 =  static_cast<RealType>(Covariance[5].real());
+    const RealType    C33 =  static_cast<RealType>(Covariance[5].real());
 
-    if ((C11 >0.00001) && (C33 > 0.0001))
+    if ((C11 >m_Epsilon) && (C33 > m_Epsilon))
       {
-      result[0] = vcl_abs(C13) / vcl_sqrt(C11 *C33); // |<hh.vv*|/sqrt(<hh.hh*><vv.vv*>)
+      result[0] = vcl_abs(C13) / vcl_sqrt(C11 * C33); // |<hh.vv*|/sqrt(<hh.hh*><vv.vv*>)
       }
 
-    if ((C22 > 0.00001) && (C33 > 0.00001))
+    if ((C22 > m_Epsilon) && (C33 > m_Epsilon))
       {
       result[1] = vcl_abs(C23) / vcl_sqrt(C22 * C33);  // |<hv.vv*|/sqrt(<hv.hv*><vv.vv*>)
       }
 
-    if ((C11 > 0.00001) && (C22 > 0.00001) )
+    if ((C11 > m_Epsilon) && (C22 > m_Epsilon) )
       {
       result[2] = vcl_abs(C12) / vcl_sqrt(C11 * C22);  // |<hh.hv*|/sqrt(<hh.hh*><hv.hv*>)
       }
@@ -85,29 +94,30 @@ public:
    }
 
    /** Constructor */
-   MLCToCoherencyDegreeFunctor() : m_NumberOfComponentsPerPixel(3)  {}
+   ReciprocalCovarianceToCoherencyDegreeFunctor() : m_NumberOfComponentsPerPixel(3), m_Epsilon(1e-6) {}
 
    /** Destructor */
-   virtual ~MLCToCoherencyDegreeFunctor() {}
+   virtual ~ReciprocalCovarianceToCoherencyDegreeFunctor() {}
 
 private:
     unsigned int m_NumberOfComponentsPerPixel;
+    const double m_Epsilon;
 };
 }
 
 
-/** \class otbMLCToCoherencyDegreeImageFilter
+/** \class otbReciprocalCovarianceToCoherencyDegreeImageFilter
  * \brief Compute the Coherency Degree coefficient
  * from the MLC image (6 complex channels)
  */
-template <class TInputImage, class TOutputImage, class TFunction = Functor::MLCToCoherencyDegreeFunctor<
+template <class TInputImage, class TOutputImage, class TFunction = Functor::ReciprocalCovarianceToCoherencyDegreeFunctor<
     ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
-class ITK_EXPORT MLCToCoherencyDegreeImageFilter :
+class ITK_EXPORT ReciprocalCovarianceToCoherencyDegreeImageFilter :
    public UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction>
 {
 public:
    /** Standard class typedefs. */
-   typedef MLCToCoherencyDegreeImageFilter  Self;
+   typedef ReciprocalCovarianceToCoherencyDegreeImageFilter  Self;
    typedef UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction> Superclass;
    typedef itk::SmartPointer<Self>        Pointer;
    typedef itk::SmartPointer<const Self>  ConstPointer;
@@ -116,15 +126,15 @@ public:
    itkNewMacro(Self);
 
    /** Runtime information support. */
-   itkTypeMacro(MLCToCoherencyDegreeImageFilter, UnaryFunctorImageFilter);
+   itkTypeMacro(ReciprocalCovarianceToCoherencyDegreeImageFilter, UnaryFunctorImageFilter);
 
 
 protected:
-  MLCToCoherencyDegreeImageFilter() {}
-  virtual ~MLCToCoherencyDegreeImageFilter() {}
+  ReciprocalCovarianceToCoherencyDegreeImageFilter() {}
+  virtual ~ReciprocalCovarianceToCoherencyDegreeImageFilter() {}
 
 private:
-  MLCToCoherencyDegreeImageFilter(const Self&); //purposely not implemented
+  ReciprocalCovarianceToCoherencyDegreeImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&);                  //purposely not implemented
 
  

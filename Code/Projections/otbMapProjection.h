@@ -54,7 +54,7 @@ namespace otb
  **/
 
 template <class TOssimMapProjection,
-    Transform::TransformationDirection TDirectionOfMapping,
+    TransformDirection::TransformationDirection TDirectionOfMapping,
     class TScalarType = double,
     unsigned int NInputDimensions = 2,
     unsigned int NOutputDimensions = 2>
@@ -86,7 +86,7 @@ public:
   virtual const OssimMapProjectionType* GetMapProjection() const;
   virtual OssimMapProjectionType* GetMapProjection();
 
-  static const Transform::TransformationDirection DirectionOfMapping = TDirectionOfMapping;
+  static const TransformDirection::TransformationDirection DirectionOfMapping = TDirectionOfMapping;
 
   itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
   itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);

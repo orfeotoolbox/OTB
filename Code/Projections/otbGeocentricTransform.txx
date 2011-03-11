@@ -23,7 +23,7 @@
 namespace otb
 {
 
-template<Transform::TransformationDirection TransformDirection, class TScalarType, unsigned int NInputDimensions,
+template<TransformDirection::TransformationDirection TransformDirection, class TScalarType, unsigned int NInputDimensions,
     unsigned int NOutputDimensions>
 GeocentricTransform<TransformDirection, TScalarType, NInputDimensions, NOutputDimensions>
 ::GeocentricTransform() : Superclass(SpaceDimension, ParametersDimension)
@@ -31,7 +31,7 @@ GeocentricTransform<TransformDirection, TScalarType, NInputDimensions, NOutputDi
   m_Ellipsoid = new ossimEllipsoid();
 }
 
-template<Transform::TransformationDirection TransformDirection, class TScalarType, unsigned int NInputDimensions,
+template<TransformDirection::TransformationDirection TransformDirection, class TScalarType, unsigned int NInputDimensions,
     unsigned int NOutputDimensions>
 GeocentricTransform<TransformDirection, TScalarType, NInputDimensions, NOutputDimensions>
 ::~GeocentricTransform()
@@ -42,7 +42,7 @@ GeocentricTransform<TransformDirection, TScalarType, NInputDimensions, NOutputDi
     }
 }
 
-template<Transform::TransformationDirection TransformDirection, class TScalarType, unsigned int NInputDimensions,
+template<TransformDirection::TransformationDirection TransformDirection, class TScalarType, unsigned int NInputDimensions,
     unsigned int NOutputDimensions>
 typename GeocentricTransform<TransformDirection, TScalarType, NInputDimensions, NOutputDimensions>::OutputPointType
 GeocentricTransform<TransformDirection, TScalarType, NInputDimensions, NOutputDimensions>
@@ -50,11 +50,11 @@ GeocentricTransform<TransformDirection, TScalarType, NInputDimensions, NOutputDi
 {
   OutputPointType outputPoint;
 
-  if (DirectionOfMapping == Transform::INVERSE)
+  if (DirectionOfMapping == TransformDirection::INVERSE)
     {
     m_Ellipsoid->XYZToLatLonHeight(point[0], point[1], point[2], outputPoint[1], outputPoint[0], outputPoint[2]);
     }
-  if (DirectionOfMapping == Transform::FORWARD)
+  if (DirectionOfMapping == TransformDirection::FORWARD)
     {
     m_Ellipsoid->latLonHeightToXYZ(point[1], point[0], point[2], outputPoint[0], outputPoint[1], outputPoint[2]);
     }

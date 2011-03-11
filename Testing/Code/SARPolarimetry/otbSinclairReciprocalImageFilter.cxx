@@ -27,21 +27,21 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbSinclairImageFilter.h"
-#include "otbSinclairToCovarianceMatrixFunctor.h"
-#include "otbSinclairToCircularCovarianceMatrixFunctor.h"
-#include "otbSinclairToCoherencyMatrixFunctor.h"
-#include "otbSinclairToMuellerMatrixFunctor.h"
+#include "otbSinclairReciprocalImageFilter.h"
+#include "otbSinclairToReciprocalCovarianceMatrixFunctor.h"
+#include "otbSinclairToReciprocalCircularCovarianceMatrixFunctor.h"
+#include "otbSinclairToReciprocalCoherencyMatrixFunctor.h"
 #include "otbComplexToVectorImageCastFilter.h"
 #include "otbExtractROI.h"
 
-int otbSinclairImageFilterNew(int argc, char * argv[])
+
+int otbSinclairReciprocalImageFilterNew(int argc, char * argv[])
 {
   typedef std::complex<float>        ComplexType;
   typedef otb::Image<ComplexType, 2> CplxImageType;
   typedef otb::VectorImage<ComplexType, 2> VCplxImageType;
 
-  typedef otb::SinclairImageFilter<CplxImageType, CplxImageType, CplxImageType, CplxImageType, VCplxImageType> FilterType;
+  typedef otb::SinclairReciprocalImageFilter<CplxImageType, CplxImageType, CplxImageType, VCplxImageType> FilterType;
 
   // Instantiating object
   FilterType::Pointer filter = FilterType::New();
@@ -49,9 +49,7 @@ int otbSinclairImageFilterNew(int argc, char * argv[])
 
   return EXIT_SUCCESS;
 }
-
-
-#define generic_SinclairImageFilterMacro(T_InputPixel, T_OutputPixel, T_Function, _argc, _argv) \
+#define generic_SinclairReciprocalImageFilterMacro(T_InputPixel, T_OutputPixel, T_Function, _argc, _argv) \
   const char * inputFilename1  = _argv[1]; \
   const char * inputFilename2  = _argv[2]; \
   const char * inputFilename3  = _argv[3]; \
@@ -61,7 +59,7 @@ int otbSinclairImageFilterNew(int argc, char * argv[])
   typedef otb::VectorImage<OutputPixelType> OutputImageType; \
   typedef otb::ImageFileReader<InputImageType> ReaderType; \
   typedef otb::ExtractROI<InputPixelType, InputPixelType > ExtractROIType; \
-  typedef otb::SinclairImageFilter<InputImageType, InputImageType, InputImageType, InputImageType, OutputImageType, T_Function> FilterType; \
+  typedef otb::SinclairReciprocalImageFilter<InputImageType, InputImageType, InputImageType, OutputImageType, T_Function> FilterType; \
   typename FilterType::Pointer filter = FilterType::New(); \
   typename ReaderType::Pointer reader1 = ReaderType::New(); \
   typename ReaderType::Pointer reader2 = ReaderType::New(); \
@@ -95,14 +93,14 @@ int otbSinclairImageFilterNew(int argc, char * argv[])
 
 
 template<class TInputPixel, class TOutputPixel, class TFunction>
-int generic_SinclairImageFilter(int argc, char * argv[])
+int generic_SinclairReciprocalImageFilter(int argc, char * argv[])
 {
   const char * outputFilename = argv[4];
 
   typedef otb::VectorImage<TOutputPixel> OutputImageType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
-  generic_SinclairImageFilterMacro( TInputPixel, TOutputPixel, TFunction, argc, argv);
+  generic_SinclairReciprocalImageFilterMacro( TInputPixel, TOutputPixel, TFunction, argc, argv);
   
   typename WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outputFilename);
@@ -114,7 +112,7 @@ int generic_SinclairImageFilter(int argc, char * argv[])
 }
 
 template<class TInputPixel, class TOutputPixel, class TFunction>
-int generic_SinclairImageFilterWithCast(int argc, char * argv[])
+int generic_SinclairReciprocalImageFilterWithCast(int argc, char * argv[])
 {
   const char * outputFilename = argv[4];
 
@@ -123,7 +121,7 @@ int generic_SinclairImageFilterWithCast(int argc, char * argv[])
   typedef otb::ImageFileWriter<OutputRealImageType> WriterType;
   typedef typename otb::ComplexToVectorImageCastFilter<OutputImageType, OutputRealImageType>  CasterType;
 
-  generic_SinclairImageFilterMacro( TInputPixel, TOutputPixel, TFunction, argc, argv);
+  generic_SinclairReciprocalImageFilterMacro( TInputPixel, TOutputPixel, TFunction, argc, argv);
 
   typename WriterType::Pointer writer = WriterType::New();
   typename CasterType::Pointer caster = CasterType::New();
@@ -138,7 +136,7 @@ int generic_SinclairImageFilterWithCast(int argc, char * argv[])
 }
 
 
-int otbSinclairImageFilter(int argc, char * argv[])
+int otbSinclairReciprocalImageFilter(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
   typedef std::complex <double> InputPixelType;
@@ -152,37 +150,26 @@ int otbSinclairImageFilter(int argc, char * argv[])
   std::string strArgv(argv[1]);
   argc--;
   argv++;
-  if (strArgv == "SinclairToCovarianceMatrix")
-    return (generic_SinclairImageFilterWithCast<InputPixelType, OutputPixelType,
-                otb::Functor::SinclairToCovarianceMatrixFunctor<InputImageType::PixelType,
-                                    InputImageType::PixelType,
-                                    InputImageType::PixelType,
-                                    InputImageType::PixelType,
-                                    OutputImageType::PixelType> >
-                  (argc, argv));
-  else  if (strArgv == "SinclairToCircularCovarianceMatrix")
-    return (generic_SinclairImageFilterWithCast<InputPixelType, OutputPixelType,
-                otb::Functor::SinclairToCircularCovarianceMatrixFunctor<InputImageType::PixelType,
-                                    InputImageType::PixelType,
+  if (strArgv == "SinclairToReciprocalCovarianceMatrix")
+    return (generic_SinclairReciprocalImageFilterWithCast<InputPixelType, OutputPixelType,
+                otb::Functor::SinclairToReciprocalCovarianceMatrixFunctor<InputImageType::PixelType,
                                     InputImageType::PixelType,
                                     InputImageType::PixelType,
                                     OutputImageType::PixelType> >
                   (argc, argv));
-  else  if (strArgv == "SinclairToCoherencyMatrix")
-    return (generic_SinclairImageFilterWithCast<InputPixelType, OutputPixelType,
-                otb::Functor::SinclairToCoherencyMatrixFunctor<InputImageType::PixelType,
-                                    InputImageType::PixelType,
+  else  if (strArgv == "SinclairToReciprocalCircularCovarianceMatrix")
+    return (generic_SinclairReciprocalImageFilterWithCast<InputPixelType, OutputPixelType,
+                otb::Functor::SinclairToReciprocalCircularCovarianceMatrixFunctor<InputImageType::PixelType,
                                     InputImageType::PixelType,
                                     InputImageType::PixelType,
                                     OutputImageType::PixelType> >
                   (argc, argv));
-  else  if (strArgv == "SinclairToMuellerMatrix")
-    return (generic_SinclairImageFilter<InputPixelType, OutputRealPixelType,
-                otb::Functor::SinclairToMuellerMatrixFunctor<InputImageType::PixelType,
+  else  if (strArgv == "SinclairToReciprocalCoherencyMatrix")
+    return (generic_SinclairReciprocalImageFilterWithCast<InputPixelType, OutputPixelType,
+                otb::Functor::SinclairToReciprocalCoherencyMatrixFunctor<InputImageType::PixelType,
                                     InputImageType::PixelType,
                                     InputImageType::PixelType,
-                                    InputImageType::PixelType,
-                                    OutputRealImageType::PixelType> >
+                                    OutputImageType::PixelType> >
                   (argc, argv));
   else return EXIT_FAILURE;
 

@@ -22,20 +22,32 @@
 #include "itkExceptionObject.h"
 #include <iostream>
 
-#include "otbVectorImage.h"
-#include "otbMLCToCoherencyImageFilter.h"
+#include "otbPolarimetricData.h"
 
-int otbMLCToCoherencyImageFilterNew(int argc, char * argv[])
+int otbPolarimetricDataNew(int argc, char * argv[])
 {
-  const unsigned int Dimension = 2;
+  otb::PolarimetricData::Pointer  data = otb::PolarimetricData::New();
 
-  typedef std::complex<double>   PixelType;
-  typedef otb::VectorImage<PixelType, Dimension> ImageType;
+  return EXIT_SUCCESS;
+}
 
 
-  typedef otb::MLCToCoherencyImageFilter<ImageType, ImageType> FilterType;
 
-  FilterType::Pointer filter = FilterType::New();
+int otbPolarimetricDataTest(int argc, char * argv[])
+{
+  otb::PolarimetricData::Pointer  data = otb::PolarimetricData::New();
+
+  data->SetArchitectureType(static_cast<otb::ArchitectureType>(5));
+
+  data->DetermineArchitecture(3, true, false);
+
+  bool tab[4];
+  tab[0] = true;
+  tab[1] = false;
+  tab[2] = false;
+  tab[3] = true;
+
+  data->DetermineArchitecture(tab);
 
   return EXIT_SUCCESS;
 }

@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __MLCToCoherencyImageFilter_h
-#define __MLCToCoherencyImageFilter_h
+#ifndef __ReciprocalCovarianceToReciprocalCoherencyImageFilter_h
+#define __ReciprocalCovarianceToReciprocalCoherencyImageFilter_h
 
 #include "otbUnaryFunctorImageFilter.h"
 
@@ -26,8 +26,8 @@ namespace otb
 
 namespace Functor {
 
-/** \class otbMLCToCoherencyFunctor
- * \brief Evaluate the Coherency matrix from from the MLC image
+/** \class otbReciprocalCovarianceToReciprocalCoherencyFunctor
+ * \brief Evaluate the Coherency matrix from the Covariance image
  *
  *   Output value are:
  *   channel #0 : \f$ 0.5 * (S_{hh}+S_{vv}.(S_{hh}+S_{vv})^{*} \f$
@@ -40,11 +40,11 @@ namespace Functor {
  * \infgroup Functor
  * \ingroup SARPolarimetry
  *
- * \sa MLCToCircularCoherencyDegreeImageFilter
- * \sa MLCToCoherencyDegreeImageFilter
+ * \sa CovarianceToCircularCoherencyDegreeImageFilter
+ * \sa ReciprocalCovarianceToReciprocalCoherencyDegreeImageFilter
  */
 template< class TInput, class TOutput>
-class MLCToCoherencyFunctor
+class ReciprocalCovarianceToReciprocalCoherencyFunctor
 {
 public:
   typedef typename std::complex <double>           ComplexType;
@@ -55,6 +55,14 @@ public:
     TOutput result;
     result.SetSize(m_NumberOfComponentsPerPixel);
 
+    /* Using the convention
+     * \f$ C_{11} = S_{hh}*S_{hh}^* \f$
+     * \f$ C_{12} = S_{hh}*S_{hv}^* \f$
+     * \f$ C_{13} = S_{hh}*S_{vv}^* \f$
+     * \f$ C_{22} = S_{hv}*S_{hv}^* \f$
+     * \f$ C_{23} = S_{hv}*S_{vv}^* \f$
+     * \f$ C_{33} = S_{vv}*S_{vv}^* \f$
+     */
     const ComplexType C11 =  static_cast<ComplexType>(Covariance[0]);
     const ComplexType C12 =  static_cast<ComplexType>(Covariance[1]);
     const ComplexType C13 =  static_cast<ComplexType>(Covariance[2]);
@@ -82,10 +90,10 @@ public:
    }
 
    /** Constructor */
-   MLCToCoherencyFunctor() : m_NumberOfComponentsPerPixel(6)  {}
+   ReciprocalCovarianceToReciprocalCoherencyFunctor() : m_NumberOfComponentsPerPixel(6)  {}
 
    /** Destructor */
-   virtual ~MLCToCoherencyFunctor() {}
+   virtual ~ReciprocalCovarianceToReciprocalCoherencyFunctor() {}
 
 private:
     unsigned int m_NumberOfComponentsPerPixel;
@@ -93,18 +101,18 @@ private:
 }
 
 
-/** \class otbMLCToCoherencyImageFilter
+/** \class otbReciprocalCovarianceToReciprocalCoherencyImageFilter
  * \brief Compute the Coherency image (6 complex channels)
- * from the MLC image (6 complex channels)
+ * from the Covariance image (6 complex channels)
  */
-template <class TInputImage, class TOutputImage, class TFunction = Functor::MLCToCoherencyFunctor<
+template <class TInputImage, class TOutputImage, class TFunction = Functor::ReciprocalCovarianceToReciprocalCoherencyFunctor<
     ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
-class ITK_EXPORT MLCToCoherencyImageFilter :
+class ITK_EXPORT ReciprocalCovarianceToReciprocalCoherencyImageFilter :
    public UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction>
 {
 public:
    /** Standard class typedefs. */
-   typedef MLCToCoherencyImageFilter  Self;
+   typedef ReciprocalCovarianceToReciprocalCoherencyImageFilter  Self;
    typedef UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction> Superclass;
    typedef itk::SmartPointer<Self>        Pointer;
    typedef itk::SmartPointer<const Self>  ConstPointer;
@@ -113,15 +121,15 @@ public:
    itkNewMacro(Self);
 
    /** Runtime information support. */
-   itkTypeMacro(MLCToCoherencyImageFilter, UnaryFunctorImageFilter);
+   itkTypeMacro(ReciprocalCovarianceToReciprocalCoherencyImageFilter, UnaryFunctorImageFilter);
 
 
 protected:
-  MLCToCoherencyImageFilter() {}
-  virtual ~MLCToCoherencyImageFilter() {}
+  ReciprocalCovarianceToReciprocalCoherencyImageFilter() {}
+  virtual ~ReciprocalCovarianceToReciprocalCoherencyImageFilter() {}
 
 private:
-  MLCToCoherencyImageFilter(const Self&); //purposely not implemented
+  ReciprocalCovarianceToReciprocalCoherencyImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&);            //purposely not implemented
 
  

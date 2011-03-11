@@ -15,10 +15,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbApplyTransitionMatrixImageFilter_txx
-#define __otbApplyTransitionMatrixImageFilter_txx
+#ifndef __otbMatrixImageFilter_txx
+#define __otbMatrixImageFilter_txx
 
-#include "otbApplyTransitionMatrixImageFilter.h"
+#include "otbMatrixImageFilter.h"
 #include "itkImageRegionConstIterator.h"
 #include "itkImageRegionIterator.h"
 #include "itkProgressReporter.h"
@@ -29,33 +29,33 @@ namespace otb
 /**
  *
  */
-template <class TInputImage, class TOutputImage>
-ApplyTransitionMatrixImageFilter<TInputImage, TOutputImage>::ApplyTransitionMatrixImageFilter() : m_TransitionMatrix()
+template <class TInputImage, class TOutputImage, class TMatrix>
+MatrixImageFilter<TInputImage, TOutputImage, TMatrix>::MatrixImageFilter() : m_Matrix()
 {
 }
 
-template <class TInputImage, class TOutputImage>
-void ApplyTransitionMatrixImageFilter<TInputImage, TOutputImage>::GenerateOutputInformation()
+template <class TInputImage, class TOutputImage, class TMatrix>
+void MatrixImageFilter<TInputImage, TOutputImage, TMatrix>::GenerateOutputInformation()
 {
   // call the superclass' implementation of this method
   Superclass::GenerateOutputInformation();
 
-  if( this->GetInput()->GetNumberOfComponentsPerPixel() != m_TransitionMatrix.cols() )
+  if( this->GetInput()->GetNumberOfComponentsPerPixel() != m_Matrix.rows() )
     {
       itkExceptionMacro("Invalid Matrix size. Number of columns must be the same as the image number of channels.");
     }
 
-  if( m_TransitionMatrix.rows() == 0 )
+  if( m_Matrix.cols() == 0 )
     {
       itkExceptionMacro("Invalid Matrix size. Number of rows can't be null.");
     }
 
-  this->GetOutput()->SetNumberOfComponentsPerPixel( m_TransitionMatrix.rows() );
+  this->GetOutput()->SetNumberOfComponentsPerPixel( m_Matrix.cols() );
   
 }
 
-template<class TInputImage, class TOutputImage>
-void ApplyTransitionMatrixImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(
+template<class TInputImage, class TOutputImage, class TMatrix>
+void MatrixImageFilter<TInputImage, TOutputImage, TMatrix>::ThreadedGenerateData(
   const OutputImageRegionType&     outputRegionForThread,
   int threadId
   )
@@ -74,30 +74,34 @@ void ApplyTransitionMatrixImageFilter<TInputImage, TOutputImage>::ThreadedGenera
   inIt.GoToBegin();
   outIt.GoToBegin();
   
-  const unsigned int inSize =  m_TransitionMatrix.cols();
-  const unsigned int outSize =  m_TransitionMatrix.rows();
+  const unsigned int inSize =  m_Matrix.cols();
+  const unsigned int outSize =  m_Matrix.rows();
+
+  VectorType inVect(outSize, InputRealType(0.));
+  VectorType outVect(outSize, InputRealType(0.));
 
   while (!outIt.IsAtEnd())
     {
       const InputPixelType & inPix = inIt.Get();
       OutputPixelType outPix;
       outPix.SetSize(outSize);
+      
+      for(unsigned int i=0; i<outSize; i++)
+        {
+          inVect[i] = static_cast<InputRealType>(inPix[i]);
+        }
+
+      outVect = inVect*m_Matrix;
 
       for(unsigned int i=0; i<outSize; i++)
         {
-          double res = 0;
-          for(unsigned int j=0; j<inSize; j++)
-            {
-              res += static_cast<double>(inPix[j])*m_TransitionMatrix(i, j);
-            }
-          outPix[i] = static_cast<OutputInternalPixelType>(res);
+          outPix[i] = static_cast<OutputInternalPixelType>(outVect[i]);
         }
       outIt.Set(outPix);
 
       ++inIt;
       ++outIt;
       progress.CompletedPixel();
-
     }
 }
 
@@ -105,12 +109,12 @@ void ApplyTransitionMatrixImageFilter<TInputImage, TOutputImage>::ThreadedGenera
 /**
  * Standard "PrintSelf" method
  */
-template <class TInputImage, class TOutput>
+template <class TInputImage, class TOutputImage, class TMatrix>
 void
-ApplyTransitionMatrixImageFilter<TInputImage, TOutput>::PrintSelf(std::ostream& os, itk::Indent indent) const
+MatrixImageFilter<TInputImage, TOutputImage, TMatrix>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "Matrix: " << m_TransitionMatrix << std::endl;
+  os << indent << "Matrix: " << m_Matrix << std::endl;
 }
 
 } // end namespace otb

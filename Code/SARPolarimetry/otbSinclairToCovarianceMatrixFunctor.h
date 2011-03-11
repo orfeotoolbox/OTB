@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSinclairToReciprocalCoherencyFunctor_h
-#define __otbSinclairToReciprocalCoherencyFunctor_h
+#ifndef __otbSinclairToCovarianceMatrixFunctor_h
+#define __otbSinclairToCovarianceMatrixFunctor_h
 
 #include "vcl_complex.h"
 
@@ -24,17 +24,21 @@ namespace otb
 {
 namespace Functor
 {
-/** \class SinclairToReciprocalCoherencyFunctor
- *  \brief Construct the reciprocal fully polarimetric coherency matrix
+/** \class SinclairToCovarianceMatrixFunctor
+ *  \brief Construct the fully polarimetric covariance matrix
  *  with Sinclair matrix information.
  *
  *  Output value are:
- *   channel #0 : \f$ (S_{hh}+S_{vv}).(S_{hh}+S_{vv})^{*} \f$
- *   channel #1 : \f$ (S_{hh}+S_{vv}).(S_{hh}-S_{vv})^{*} \f$
- *   channel #2 : \f$ (S_{hh}+S_{vv}).(2*S_{hv})^{*} \f$
- *   channel #3 : \f$ (S_{hh}-S_{vv}).(S_{hh}-S_{vv})^{*} \f$
- *   channel #4 : \f$ (S_{hh}-S_{vv}).(2*S_{hv})^{*} \f$
- *   channel #5 : \f$ (2*S_{hv}).(2*S_{hv})^{*} \f$
+ *   channel #0 : \f$ S_{hh}.S_{hh}^{*} \f$
+ *   channel #1 : \f$ S_{hh}.S_{hv}^{*} \f$
+ *   channel #2 : \f$ S_{hh}.S_{vh}^{*} \f$
+ *   channel #3 : \f$ S_{hh}.S_{vv}^{*} \f$
+ *   channel #4 : \f$ S_{hv}.S_{hv}^{*} \f$
+ *   channel #5 : \f$ S_{hv}.S_{vh}^{*} \f$
+ *   channel #6 : \f$ S_{hv}.S_{vv}^{*} \f$
+ *   channel #7 : \f$ S_{vh}.S_{vh}^{*} \f$
+ *   channel #8 : \f$ S_{vh}.S_{vv}^{*} \f$
+ *   channel #9 : \f$ S_{vv}.S_{vv}^{*} \f$
  *
  *  \ingroup Functor
  *  \ingroup SARPolarimetry
@@ -42,16 +46,14 @@ namespace Functor
  *  \sa SinclairImageFilter
  *  \sa SinclairToCircularCovarianceMatrixFunctor
  *  \sa SinclairToCoherencyFunctor
- *  \sa SinclairToCovarianceFunctor
  *  \sa SinclairToMuellerFunctor
  *  \sa SinclairToReciprocalCircularCovarianceMatrixFunctor
- *  \sa SinclairToReciprocalCovarianceFunctor
-
- *  \sa SinclairToReciprocalCovarianceFunctor
+ *  \sa SinclairToReciprocalCoherencyFunctor
+ *  \sa SinclairToReciprocalCovarianceMatrixFunctor
  */
 template <class TInput1, class TInput2, class TInput3,
           class TInput4, class TOutput>
-class SinclairToReciprocalCoherencyFunctor
+class SinclairToCovarianceMatrixFunctor
 {
 public:
   /** Some typedefs. */
@@ -62,45 +64,44 @@ public:
   {
     TOutput result;
 
-    result.SetSize(NumberOfComponentsPerPixel);
+    result.SetSize(m_NumberOfComponentsPerPixel);
 
     const ComplexType S_hh = static_cast<ComplexType>(Shh);
     const ComplexType S_hv = static_cast<ComplexType>(Shv);
     const ComplexType S_vh = static_cast<ComplexType>(Svh);
     const ComplexType S_vv = static_cast<ComplexType>(Svv);
 
-    const ComplexType HHPlusVV  = S_hh + S_vv;
-    const ComplexType VVMinusVV = S_hh - S_vv;
-    const ComplexType twoHV     = ComplexType( 2.0 ) * S_hv;
-
-    result[0] = static_cast<OutputValueType>( HHPlusVV * vcl_conj(HHPlusVV) );
-    result[1] = static_cast<OutputValueType>( HHPlusVV * vcl_conj(VVMinusVV) );
-    result[2] = static_cast<OutputValueType>( HHPlusVV * vcl_conj(twoHV) );
-    result[3] = static_cast<OutputValueType>( VVMinusVV * vcl_conj(VVMinusVV) );
-    result[4] = static_cast<OutputValueType>( VVMinusVV *vcl_conj(twoHV) );
-    result[5] = static_cast<OutputValueType>( twoHV * vcl_conj(twoHV) );
-
-    result /= 2.0;
+    result[0] = static_cast<OutputValueType>( std::norm(S_hh) );
+    result[1] = static_cast<OutputValueType>( S_hh*vcl_conj(S_hv) );
+    result[2] = static_cast<OutputValueType>( S_hh*vcl_conj(S_vh) );
+    result[3] = static_cast<OutputValueType>( S_hh*vcl_conj(S_vv) );
+    result[4] = static_cast<OutputValueType>( std::norm(S_hv) );
+    result[5] = static_cast<OutputValueType>( S_hv*vcl_conj(S_vh) );
+    result[6] = static_cast<OutputValueType>( S_hv*vcl_conj(S_vv) );
+    result[7] = static_cast<OutputValueType>( std::norm(S_vh) );
+    result[8] = static_cast<OutputValueType>( S_vh*vcl_conj(S_vv) );
+    result[9] = static_cast<OutputValueType>( std::norm(S_vv) );
 
     return (result);
   }
 
   unsigned int GetNumberOfComponentsPerPixel()
   {
-    return NumberOfComponentsPerPixel;
+    return m_NumberOfComponentsPerPixel;
   }
 
   /** Constructor */
-  SinclairToReciprocalCoherencyFunctor() {}
+  SinclairToCovarianceMatrixFunctor() {}
 
   /** Destructor */
-  virtual ~SinclairToReciprocalCoherencyFunctor() {}
+  virtual ~SinclairToCovarianceMatrixFunctor() {}
 
 protected:
 
 
 private:
-    itkStaticConstMacro(NumberOfComponentsPerPixel, unsigned int, 6);
+    itkStaticConstMacro(m_NumberOfComponentsPerPixel, unsigned int, 10);
+
 };
 
 } // namespace Functor

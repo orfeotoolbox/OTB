@@ -173,7 +173,7 @@ int main(int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::GenericMapProjection<otb::Transform::FORWARD> GenericMapProjection;
+  typedef otb::GenericMapProjection<otb::TransformDirection::FORWARD> GenericMapProjection;
   GenericMapProjection::Pointer genericMapProjection =
     GenericMapProjection::New();
   genericMapProjection->SetWkt(projectionRefWkt);

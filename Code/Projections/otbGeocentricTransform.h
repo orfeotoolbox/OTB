@@ -30,7 +30,7 @@ namespace otb
  * \brief Convert coordinates from geocentric (X, Y, Z) to geographic (lon, lat, h)
  *
  */
-template <Transform::TransformationDirection TDirectionOfMapping,
+template <TransformDirection::TransformationDirection TDirectionOfMapping,
     class TScalarType = double,
     unsigned int NInputDimensions = 3,
     unsigned int NOutputDimensions = 3>
@@ -58,7 +58,7 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(GeocentricTransform, itk::Transform);
 
-  static const Transform::TransformationDirection DirectionOfMapping = TDirectionOfMapping;
+  static const TransformDirection::TransformationDirection DirectionOfMapping = TDirectionOfMapping;
 
   itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
   itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);

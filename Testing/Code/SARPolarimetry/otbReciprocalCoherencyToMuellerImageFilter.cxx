@@ -26,8 +26,8 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbReciprocalCoherencyToMuellerImageFilter.h"
-#include "otbSinclairImageFilter.h"
-#include "otbSinclairToReciprocalCoherencyFunctor.h"
+#include "otbSinclairReciprocalImageFilter.h"
+#include "otbSinclairToReciprocalCoherencyMatrixFunctor.h"
 
 
 int otbReciprocalCoherencyToMuellerImageFilter(int argc, char * argv[])
@@ -47,14 +47,13 @@ int otbReciprocalCoherencyToMuellerImageFilter(int argc, char * argv[])
   typedef otb::Image<InputPixelType,  Dimension>       InputImageType;
   typedef otb::VectorImage<InputPixelType, Dimension>  ImageType;
   typedef otb::VectorImage<PixelType, Dimension>       RealImageType;
-  typedef otb::Functor::SinclairToReciprocalCoherencyFunctor<
-                      InputImageType::PixelType,
+  typedef otb::Functor::SinclairToReciprocalCoherencyMatrixFunctor<
                       InputImageType::PixelType,
                       InputImageType::PixelType,
                       InputImageType::PixelType,
                       ImageType::PixelType>              FunctionType;
 
-  typedef otb::SinclairImageFilter<InputImageType, InputImageType,
+  typedef otb::SinclairReciprocalImageFilter<InputImageType,
                       InputImageType, InputImageType,
                       ImageType, FunctionType >  SinclairToCoherencyFilterType;
   typedef otb::ReciprocalCoherencyToMuellerImageFilter<ImageType, RealImageType> FilterType;

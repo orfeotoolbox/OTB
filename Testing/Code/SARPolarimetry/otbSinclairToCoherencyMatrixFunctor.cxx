@@ -17,15 +17,15 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 
-#include "otbSinclairToCoherencyFunctor.h"
+#include "otbSinclairToCoherencyMatrixFunctor.h"
 #include "itkVariableLengthVector.h"
 
-int otbSinclairToCoherencyFunctor(int argc, char * argv[])
+int otbSinclairToCoherencyMatrixFunctor(int argc, char * argv[])
 {
   typedef std::complex<double>                   ComplexType;
   typedef itk::VariableLengthVector<ComplexType> OutputType;
 
-  typedef otb::Functor::SinclairToCoherencyFunctor<ComplexType, ComplexType, ComplexType, ComplexType, OutputType >         FunctorType;
+  typedef otb::Functor::SinclairToCoherencyMatrixFunctor<ComplexType, ComplexType, ComplexType, ComplexType, OutputType >         FunctorType;
 
   OutputType  result(10);
   FunctorType funct;

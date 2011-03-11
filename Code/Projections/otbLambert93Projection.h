@@ -29,7 +29,7 @@ namespace otb
 * It converts coordinates in longitude, latitude (WGS84) to Lambert 93 map coordinates.
 *
  */
-template <Transform::TransformationDirection transform>
+template <TransformDirection::TransformationDirection transform>
 class ITK_EXPORT Lambert93Projection : public LambertConformalConicMapProjection<transform>
 {
 public:

@@ -59,9 +59,9 @@ int otbCompareAsciiTestsEpsilon3_WhiteSpace(int argc, char * argv[])
   fileRef << "E = 10\n";
   fileRef << "E = 11\n";
   fileRef << "E = 12\n";
-  fileRef << "F = [20,21,22]\n";
-  fileRef << "F = [20,21,22]\n";
-  fileRef << "F = [20,21,22]\n";
+  fileRef << "F = [20, 21, 22]\n";
+  fileRef << "F = [20, 21, 22]\n";
+  fileRef << "F = [20, 21, 22]\n";
   fileRef << "G = [20, 21, 22]\n";
   fileRef << "G = [20, 21, 22]\n";
   fileRef << "G = [20, 21, 22]\n";
@@ -99,9 +99,9 @@ int otbCompareAsciiTestsEpsilon3_WhiteSpace(int argc, char * argv[])
   fileTest << "E =         10\n";
   fileTest << "E =         11.001\n";
   fileTest << "E =         12.010\n";
-  fileTest << "F = [20,21,22]\n";
-  fileTest << "F = [20.001,21.001,22.001]\n";
-  fileTest << "F = [20.010,21.010,22.010]\n";
+  fileTest << "F = [20, 21, 22]\n";
+  fileTest << "F = [20.001, 21.001, 22.001]\n";
+  fileTest << "F = [20.010, 21.010, 22.010]\n";
   fileTest << "G = [20, 21, 22]\n";
   fileTest << "G = [20.001, 21.001, 22.001]\n";
   fileTest << "G = [20.010, 21.010, 22.010]\n";

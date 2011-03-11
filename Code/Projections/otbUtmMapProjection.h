@@ -29,7 +29,7 @@ namespace otb
  * It converts coordinates in longitude, latitude (WGS84) to UTM map coordinates.
  *
  */
-template <Transform::TransformationDirection TTransform>
+template <TransformDirection::TransformationDirection TTransform>
 class ITK_EXPORT UtmMapProjection : public MapProjection<ossimUtmProjection, TTransform>
 {
 public:

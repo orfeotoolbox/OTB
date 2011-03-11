@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbApplyTransitionMatrixImageFilter_h
-#define __otbApplyTransitionMatrixImageFilter_h
+#ifndef __otbMatrixImageFilter_h
+#define __otbMatrixImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "otbMath.h"
@@ -24,7 +24,7 @@
 namespace otb
 {
 
-/** \class ApplyTransitionMatrixImageFilter
+/** \class MatrixImageFilter
  * \brief Apply a transition matric over the channel of an image.
  *
  * The templates are the input and putput image type.
@@ -36,8 +36,8 @@ namespace otb
  *
  */
 
-template <class TInputImage, class TOutputImage=TInputImage>
-class ITK_EXPORT ApplyTransitionMatrixImageFilter :  public itk::ImageToImageFilter<TInputImage, TOutputImage>
+template <class TInputImage, class TOutputImage, class TMatrix = vnl_matrix<typename itk::NumericTraits<typename TInputImage::InternalPixelType>::RealType> >
+class ITK_EXPORT MatrixImageFilter :  public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Extract input and output images sizes. */
@@ -54,7 +54,7 @@ public:
   typedef TOutputImage OutputImageType;
 
   /** typedef for standard classes. */
-  typedef ApplyTransitionMatrixImageFilter                                         Self;
+  typedef MatrixImageFilter                                         Self;
   typedef itk::ImageToImageFilter<InputImageType, OutputImageType> Superclass;
   typedef itk::SmartPointer<Self>                                  Pointer;
   typedef itk::SmartPointer<const Self>                            ConstPointer;
@@ -63,7 +63,7 @@ public:
   itkNewMacro(Self);
 
   /** Return the class name. */
-  itkTypeMacro(ApplyTransitionMatrixImageFilter, ImageToImageFilter);
+  itkTypeMacro(MatrixImageFilter, ImageToImageFilter);
 
   /** Supported images definition. */
   typedef typename InputImageType::PixelType  InputPixelType;
@@ -72,12 +72,12 @@ public:
   typedef typename OutputImageType::InternalPixelType OutputInternalPixelType;
 
   /** MatrixType definition */
-  typedef vnl_matrix<double> MatrixType;
+  // To support complexe...
+  typedef typename itk::NumericTraits<InputInternalPixelType>::RealType InputRealType;
+  typedef TMatrix MatrixType;
+  typedef vnl_vector<InputRealType> VectorType;
 
   /** "typedef" to define a real. */
-  //typedef typename itk::NumericTraits<InputPixelType>::RealType InputRealType;
-
-  //typedef typename InputImageType::RegionType  InputImageRegionType;
   typedef typename OutputImageType::RegionType OutputImageRegionType;
 
   /** "typedef" to define an image size. */
@@ -85,19 +85,19 @@ public:
 
 
   /** Transition matrix accessors. */
-  void SetTransitionMatrix( MatrixType mat)
+  void SetMatrix( MatrixType mat)
     {
-      m_TransitionMatrix = mat;
+      m_Matrix = mat;
       this->Modified();
     }
-  MatrixType GetTransitionMatrix()
+  MatrixType GetMatrix()
     {
-     return  m_TransitionMatrix;
+     return  m_Matrix;
     }
  
 protected:
-  ApplyTransitionMatrixImageFilter();
-  virtual ~ApplyTransitionMatrixImageFilter() {}
+  MatrixImageFilter();
+  virtual ~MatrixImageFilter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /**
@@ -105,7 +105,7 @@ protected:
    */
   void GenerateOutputInformation();
 
-  /** ApplyTransitionMatrixImageFilter can be implemented for a multithreaded filter treatment.
+  /** MatrixImageFilter can be implemented for a multithreaded filter treatment.
    * Thus, this implementation give the ThreadedGenerateData() method.
    * that is called for each process thread. Image datas are automatically allocated
    * throught the parent class calling the ThreadedGenerateData() method.
@@ -117,18 +117,18 @@ protected:
                             int threadId);
 
 private:
-  ApplyTransitionMatrixImageFilter(const Self &); //purposely not implemented
+  MatrixImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
   /** Radius declaration */
   //SizeType m_Radius;
   /** Matrix declaration */
-  MatrixType m_TransitionMatrix;
+  MatrixType m_Matrix;
 };
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbApplyTransitionMatrixImageFilter.txx"
+#include "otbMatrixImageFilter.txx"
 #endif
 
 #endif

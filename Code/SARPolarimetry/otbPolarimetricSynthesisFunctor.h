@@ -17,7 +17,10 @@
 =========================================================================*/
 #ifndef __otbPolarimetricSynthesisFunctor_h
 #define __otbPolarimetricSynthesisFunctor_h
+
+
 #include "vcl_complex.h"
+#include "itkFixedArray.h"
 
 namespace otb
 {

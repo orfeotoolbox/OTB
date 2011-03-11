@@ -20,18 +20,22 @@
 #endif
 
 #include "itkExceptionObject.h"
-#include "itkImage.h"
 #include <iostream>
 
-#include "otbGenericMapProjection.h"
+#include "otbVectorImage.h"
+#include "otbReciprocalCovarianceToReciprocalCoherencyImageFilter.h"
 
-int otbGenericMapProjectionNew(int argc, char* argv[])
+int otbReciprocalCovarianceToReciprocalCoherencyImageFilterNew(int argc, char * argv[])
 {
+  const unsigned int Dimension = 2;
 
-  typedef otb::GenericMapProjection<otb::TransformDirection::FORWARD> MapProjectionType;
-  MapProjectionType::Pointer mapProjection = MapProjectionType::New();
+  typedef std::complex<double>   PixelType;
+  typedef otb::VectorImage<PixelType, Dimension> ImageType;
 
-  std::cout << mapProjection << std::endl;
+
+  typedef otb::ReciprocalCovarianceToReciprocalCoherencyImageFilter<ImageType, ImageType> FilterType;
+
+  FilterType::Pointer filter = FilterType::New();
 
   return EXIT_SUCCESS;
 }

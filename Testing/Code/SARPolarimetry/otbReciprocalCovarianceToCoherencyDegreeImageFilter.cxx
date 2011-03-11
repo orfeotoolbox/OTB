@@ -25,12 +25,12 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbMLCToCoherencyDegreeImageFilter.h"
-#include "otbSinclairImageFilter.h"
-#include "otbSinclairToReciprocalCovarianceFunctor.h"
+#include "otbReciprocalCovarianceToCoherencyDegreeImageFilter.h"
+#include "otbSinclairReciprocalImageFilter.h"
+#include "otbSinclairToReciprocalCovarianceMatrixFunctor.h"
 
 
-int otbMLCToCoherencyDegreeImageFilter(int argc, char * argv[])
+int otbReciprocalCovarianceToCoherencyDegreeImageFilter(int argc, char * argv[])
 {
   const char * inputFilename1  = argv[1];
   const char * inputFilename2  = argv[2];
@@ -46,17 +46,16 @@ int otbMLCToCoherencyDegreeImageFilter(int argc, char * argv[])
   
   typedef otb::Image<InputPixelType,  Dimension>       InputImageType;
   typedef otb::VectorImage<InputPixelType, Dimension>  ImageType;
-  typedef otb::Functor::SinclairToReciprocalCovarianceFunctor<
-                      InputImageType::PixelType,
+  typedef otb::Functor::SinclairToReciprocalCovarianceMatrixFunctor<
                       InputImageType::PixelType,
                       InputImageType::PixelType,
                       InputImageType::PixelType,
                       ImageType::PixelType>              FunctionType;
 
-  typedef otb::SinclairImageFilter<InputImageType, InputImageType,
+  typedef otb::SinclairReciprocalImageFilter<InputImageType,
                       InputImageType, InputImageType,
                       ImageType, FunctionType >  SinclairToCovarianceFilterType;
-  typedef otb::MLCToCoherencyDegreeImageFilter<ImageType, ImageType> FilterType;
+  typedef otb::ReciprocalCovarianceToCoherencyDegreeImageFilter<ImageType, ImageType> FilterType;
 
 
   typedef otb::ImageFileReader<InputImageType>  ReaderType;

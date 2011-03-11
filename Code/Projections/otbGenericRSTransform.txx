@@ -113,7 +113,7 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
     // First, try to make a geo transform
   if (!m_InputProjectionRef.empty()) //map projection
     {
-    typedef otb::GenericMapProjection<Transform::INVERSE, ScalarType, InputSpaceDimension, InputSpaceDimension>
+    typedef otb::GenericMapProjection<TransformDirection::INVERSE, ScalarType, InputSpaceDimension, InputSpaceDimension>
         InverseMapProjectionType;
     typename InverseMapProjectionType::Pointer mapTransform = InverseMapProjectionType::New();
     mapTransform->SetWkt(m_InputProjectionRef);
@@ -191,7 +191,7 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
   //*****************************
   if (!m_OutputProjectionRef.empty()) //map projection
     {
-    typedef otb::GenericMapProjection<Transform::FORWARD, ScalarType, InputSpaceDimension,
+    typedef otb::GenericMapProjection<TransformDirection::FORWARD, ScalarType, InputSpaceDimension,
     OutputSpaceDimension> ForwardMapProjectionType;
     typename ForwardMapProjectionType::Pointer mapTransform = ForwardMapProjectionType::New();
     mapTransform->SetWkt(m_OutputProjectionRef);

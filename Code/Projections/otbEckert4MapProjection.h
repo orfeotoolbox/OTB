@@ -29,7 +29,7 @@ namespace otb
  *
  * It converts coordinates in longitude, latitude (WGS84) to Eckert4 map coordinates.
  */
-template <Transform::TransformationDirection transform>
+template <TransformDirection::TransformationDirection transform>
 class ITK_EXPORT Eckert4MapProjection : public MapProjection<ossimEckert4Projection, transform>
 {
 public:

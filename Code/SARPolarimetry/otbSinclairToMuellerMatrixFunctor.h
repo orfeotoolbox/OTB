@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSinclairToMuellerFunctor_h
-#define __otbSinclairToMuellerFunctor_h
+#ifndef __otbSinclairToMuellerMatrixFunctor_h
+#define __otbSinclairToMuellerMatrixFunctor_h
 
 #include "vcl_complex.h"
 
@@ -24,7 +24,7 @@ namespace otb
 {
 namespace Functor
 {
-/** \class SinclairToMuellerFunctor
+/** \class SinclairToMuellerMatrixFunctor
  *  \brief Construct Mueller matrix with Sinclair matrix information.
  *  Elements of the Mueller matrix are extract from Antennas for radar and communications
  *  Harold Mott p 503
@@ -60,15 +60,15 @@ namespace Functor
  *
  *  \sa SinclairImageFilter
  *  \sa SinclairToCircularCovarianceMatrixFunctor
- *  \sa SinclairToCoherencyFunctor
- *  \sa SinclairToCovarianceFunctor
+ *  \sa SinclairToCoherencyMatrixFunctor
+ *  \sa SinclairToCovarianceMatrixFunctor
  *  \sa SinclairToReciprocalCircularCovarianceMatrixFunctor
- *  \sa SinclairToReciprocalCoherencyFunctor
- *  \sa SinclairToReciprocalCovarianceFunctor
+ *  \sa SinclairToReciprocalCoherencyMatrixFunctor
+ *  \sa SinclairToReciprocalCovarianceMatrixFunctor
  */
 template <class TInput1, class TInput2, class TInput3,
           class TInput4, class TOutput>
-class SinclairToMuellerFunctor
+class SinclairToMuellerMatrixFunctor
 {
 public:
   /** Some typedefs. */
@@ -119,10 +119,10 @@ public:
   }
 
   /** Constructor */
-  SinclairToMuellerFunctor() : m_NumberOfComponentsPerPixel(16) {}
+  SinclairToMuellerMatrixFunctor() : m_NumberOfComponentsPerPixel(16) {}
 
   /** Destructor */
-  virtual ~SinclairToMuellerFunctor() {}
+  virtual ~SinclairToMuellerMatrixFunctor() {}
 
 protected:
 

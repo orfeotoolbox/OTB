@@ -19,14 +19,30 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include "otbApplyTransitionMatrixImageFilter.h"
+#include "otbMatrixImageFilter.h"
 
 #include "otbImageFileReader.h"
 #include "otbVectorImage.h"
 #include "otbImageFileWriter.h"
+#include <complex>
+
+int otbMatrixImageFilterNew(int argc, char * argv[])
+{
+  const char * inputFilename  = argv[1];
+  const char * outputFilename = argv[2];
+
+  typedef std::complex<double> PixelType;
+
+  typedef otb::VectorImage<PixelType> ImageType;
+  typedef otb::MatrixImageFilter<ImageType, ImageType> FilterType;
+
+  FilterType::Pointer filter = FilterType::New();
+
+  return EXIT_SUCCESS;
+}
 
 
-int otbApplyTransitionMatrixImageFilterTest(int argc, char * argv[])
+int otbMatrixImageFilterTest(int argc, char * argv[])
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
@@ -38,9 +54,18 @@ int otbApplyTransitionMatrixImageFilterTest(int argc, char * argv[])
   typedef otb::ImageFileReader<ImageType>  ReaderType;
   typedef otb::ImageFileWriter<ImageType> WriterType;
 
-  typedef otb::ApplyTransitionMatrixImageFilter<ImageType, ImageType> FilterType;
+  typedef otb::MatrixImageFilter<ImageType, ImageType> FilterType;
 
-  FilterType::MatrixType mat(2, 3, 0.);
+  ReaderType::Pointer reader = ReaderType::New();
+  WriterType::Pointer writer = WriterType::New();
+  FilterType::Pointer filter = FilterType::New();
+
+  reader->SetFileName(inputFilename);
+  reader->GenerateOutputInformation();
+  writer->SetFileName(outputFilename);
+
+
+  FilterType::MatrixType mat(reader->GetOutput()->GetNumberOfComponentsPerPixel(), 2, 0.);
 
   double val = 0;
   for(unsigned int i=0; i<mat.rows(); i++)
@@ -53,15 +78,8 @@ int otbApplyTransitionMatrixImageFilterTest(int argc, char * argv[])
     }
 
 
-  ReaderType::Pointer reader = ReaderType::New();
-  WriterType::Pointer writer = WriterType::New();
-  FilterType::Pointer filter = FilterType::New();
-
-  reader->SetFileName(inputFilename);
-  writer->SetFileName(outputFilename);
-
   filter->SetInput(reader->GetOutput());
-  filter->SetTransitionMatrix(mat);
+  filter->SetMatrix(mat);
 
   writer->SetInput(filter->GetOutput());
   writer->Update();

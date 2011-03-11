@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSinclairToReciprocalCovarianceFunctor_h
-#define __otbSinclairToReciprocalCovarianceFunctor_h
+#ifndef __otbSinclairToReciprocalCovarianceMatrixFunctor_h
+#define __otbSinclairToReciprocalCovarianceMatrixFunctor_h
 
 #include "vcl_complex.h"
 
@@ -24,7 +24,7 @@ namespace otb
 {
 namespace Functor
 {
-/** \class SinclairToReciprocalCovarianceFunctor
+/** \class SinclairToReciprocalCovarianceMatrixFunctor
  *  \brief Construct the reciprocal fully polarimetric covariance matrix
  *  with Sinclair matrix information.
  *
@@ -36,29 +36,27 @@ namespace Functor
  *   channel #4 : \f$ S_{hv}.S_{vv}^{*} \f$
  *   channel #5 : \f$ S_{vv}.S_{vv}^{*} \f$
  *
- * Output is a complex.
+ * This is a adaptation of the SinclairToCovarianceMatrixFunctor, where \f$ S_{hv}=S_{vh} \f$.
  *
  *  \ingroup Functor
  *  \ingroup SARPolarimetry
  *
+ *  \sa SinclairToCovarianceMatrixFunctor
  *  \sa SinclairImageFilter
  *  \sa SinclairToCircularCovarianceMatrixFunctor
- *  \sa SinclairToCoherencyFunctor
- *  \sa SinclairToCovarianceFunctor
- *  \sa SinclairToMuellerFunctor
+ *  \sa SinclairToCoherencyeMatrixFunctor
+ *  \sa SinclairToMuellereMatrixFunctor
  *  \sa SinclairToReciprocalCircularCovarianceMatrixFunctor
- *  \sa SinclairToReciprocalCoherencyFunctor
+ *  \sa SinclairToReciprocalCoherencyeMatrixFunctor
  */
-template <class TInput1, class TInput2, class TInput3,
-          class TInput4, class TOutput>
-class SinclairToReciprocalCovarianceFunctor
+template <class TInput1, class TInput2, class TInput3, class TOutput>
+class SinclairToReciprocalCovarianceMatrixFunctor
 {
 public:
   /** Some typedefs. */
   typedef typename std::complex <double>           ComplexType;
   typedef typename TOutput::ValueType              OutputValueType;
-  inline TOutput operator ()(const TInput1& Shh, const TInput2& Shv,
-                             const TInput3& Svh, const TInput4& Svv)
+  inline TOutput operator ()(const TInput1& Shh, const TInput2& Shv, const TInput3& Svv)
   {
     TOutput result;
 
@@ -66,7 +64,6 @@ public:
 
     const ComplexType S_hh = static_cast<ComplexType>(Shh);
     const ComplexType S_hv = static_cast<ComplexType>(Shv);
-    const ComplexType S_vh = static_cast<ComplexType>(Svh);
     const ComplexType S_vv = static_cast<ComplexType>(Svv);
 
     result[0] = static_cast<OutputValueType>( std::norm( S_hh ) );
@@ -85,10 +82,10 @@ public:
   }
 
   /** Constructor */
-  SinclairToReciprocalCovarianceFunctor() {}
+  SinclairToReciprocalCovarianceMatrixFunctor() {}
 
   /** Destructor */
-  virtual ~SinclairToReciprocalCovarianceFunctor() {}
+  virtual ~SinclairToReciprocalCovarianceMatrixFunctor() {}
 
 protected:
 
