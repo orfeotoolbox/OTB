@@ -200,6 +200,8 @@ LabeledSampleLocalizationGenerator<TVectorData>
   // Adding the layer to the data tree
   this->GetOutput(0)->GetDataTree()->Add(document, root);
 
+  std::string positiveClassIdentifier;
+  bool firstFeature = true;
   // Copy all point feature in output VectorData
   for (unsigned int i=0; i<nbInputs; i++)
     {
@@ -221,6 +223,12 @@ LabeledSampleLocalizationGenerator<TVectorData>
         for (std::vector<std::string>::const_iterator it = fields.begin(); it != fields.end(); ++it)
           {
           currentGeometry->SetFieldAsString( *it, itVector.Get()->GetFieldAsString(*it) );
+          // The PositiveClass identifier must be an attribute of the class
+          if (firstFeature)
+            {
+            positiveClassIdentifier = itVector.Get()->GetFieldAsString(*it);
+            firstFeature = false;
+            }
           }
 
         this->GetOutput(0)->GetDataTree()->Add(currentGeometry, document);
@@ -260,7 +268,7 @@ LabeledSampleLocalizationGenerator<TVectorData>
           currentGeometry->SetNodeId(this->GetNextID());
           currentGeometry->SetNodeType(otb::FEATURE_POINT);
           currentGeometry->SetPoint(*it);
-          currentGeometry->SetFieldAsInt(this->GetClassKey(), 1);
+          currentGeometry->SetFieldAsInt(this->GetClassKey(), atoi(positiveClassIdentifier.c_str()) );
           this->GetOutput(0)->GetDataTree()->Add(currentGeometry, document);
           }
         }
