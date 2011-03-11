@@ -331,7 +331,7 @@ template<class TLabelObject, class TPolygon>
 inline typename LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
 ::IndexType
 LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
-::Within(const IndexType& point, int line)
+::Within(const IndexType& point, int line) const
 {
   unsigned int idx = 0;
   IndexType    resp;
@@ -357,7 +357,7 @@ LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
       break;
     }
 
-  typename RunsPerLineType::iterator it = m_InternalDataSet.at(line).begin();
+  typename RunsPerLineType::const_iterator it = m_InternalDataSet.at(line).begin();
   resp[1] = line;
 
   while (resp[0] < 0 && it != m_InternalDataSet.at(line).end())

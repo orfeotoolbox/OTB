@@ -148,7 +148,7 @@ private:
   inline bool IsRunIndexValid(const IndexType& index) const;
 
   /// Check if the point lies within the range of the line
-  inline IndexType Within(const IndexType& point, int line);
+  inline IndexType Within(const IndexType& point, int line) const;
 
   /// Return the left-end of the run
   inline IndexType LeftEnd(const IndexType& runIndex) const;
