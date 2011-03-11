@@ -81,6 +81,7 @@ typename LabeledSampleLocalizationGenerator<TVectorData>
 LabeledSampleLocalizationGenerator<TVectorData>
 ::PointDensification(DataNodeType * node)
 {
+
   PointVectorType pPoint;
   PointType centerPoint = node->GetPoint();
 
@@ -211,6 +212,12 @@ LabeledSampleLocalizationGenerator<TVectorData>
       {
       if (itVector.Get()->IsPointFeature())
         {
+        //Get the value of the positive value of
+        if (firstFeature)
+          {
+          positiveClassIdentifier = itVector.Get()->GetFieldAsString(m_ClassKey);
+          firstFeature = false;
+          }
         // Duplicate input feature
         typename DataNodeType::Pointer currentGeometry = DataNodeType::New();
         currentGeometry->SetNodeId(this->GetNextID());
@@ -222,11 +229,7 @@ LabeledSampleLocalizationGenerator<TVectorData>
           {
           currentGeometry->SetFieldAsString( *it, itVector.Get()->GetFieldAsString(*it) );
           // The PositiveClass identifier must be an attribute of the class
-          if (firstFeature)
-            {
-            positiveClassIdentifier = itVector.Get()->GetFieldAsString(*it);
-            firstFeature = false;
-            }
+
           }
 
         this->GetOutput(0)->GetDataTree()->Add(currentGeometry, document);
