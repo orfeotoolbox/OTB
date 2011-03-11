@@ -102,7 +102,7 @@ LabeledSampleLocalizationGenerator<TVectorData>
   itVector.GoToBegin();
   while (!itVector.IsAtEnd())
     {
-    if (itVector.Get()->IsPointFeature() && itVector.Get()->GetFieldAsInt(m_ClassKey)!=m_NoClassIdentifier)
+    if (itVector.Get()->IsPointFeature() && itVector.Get()->GetFieldAsInt(m_ClassKey) != m_NoClassIdentifier)
       {
       VertexType vertex;
       vertex[0] = itVector.Get()->GetPoint()[0];
@@ -117,7 +117,8 @@ LabeledSampleLocalizationGenerator<TVectorData>
     }
 
   // Generation
-  unsigned int nbMaxPosition = (unsigned int)(node->GetPolygonExteriorRing()->GetArea() * this->GetRandomLocalizationDensity());
+  unsigned int nbMaxPosition = (unsigned int)(node->GetPolygonExteriorRing()->GetArea()
+                                * this->GetRandomLocalizationDensity());
   unsigned long int nbIter =  this->GetNbMaxIteration();
   unsigned int nbPosition = nbMaxPosition;
 
