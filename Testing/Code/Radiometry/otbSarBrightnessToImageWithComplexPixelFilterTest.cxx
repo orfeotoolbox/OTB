@@ -22,11 +22,11 @@
 #include "otbImageFileWriter.h"
 #include "itkExtractImageFilter.h"
 
-int otbSarBrightnessToImageFilterTestWithoutNoise(int argc, char * argv[])
+int otbSarBrightnessToImageWithComplexPixelFilterTest(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
   typedef float                                                            RealType;
-  typedef RealType                                                         PixelType;
+  typedef std::complex<RealType>                                           PixelType;
   typedef otb::Image<PixelType, Dimension>                                 InputImageType;
   typedef otb::Image<RealType, Dimension>                                  OutputImageType;
   typedef otb::ImageFileReader<InputImageType>                             ReaderType;
@@ -43,7 +43,6 @@ int otbSarBrightnessToImageFilterTestWithoutNoise(int argc, char * argv[])
   reader->SetFileName(argv[1]);
   writer->SetFileName(argv[2]);
   filter->SetInput(reader->GetOutput());
-  filter->SetEnableNoise(false);
 
   if (argc > 3)
     {

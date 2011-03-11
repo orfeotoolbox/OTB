@@ -51,4 +51,5 @@ void RegisterTests()
   REGISTER_TEST(otbSarBrightnessFunctionWithoutNoise);
   REGISTER_TEST(otbSarBrightnessToImageFilterTest);
   REGISTER_TEST(otbSarBrightnessToImageFilterTestWithoutNoise);
+  REGISTER_TEST(otbSarBrightnessToImageWithComplexPixelFilterTest);
 }

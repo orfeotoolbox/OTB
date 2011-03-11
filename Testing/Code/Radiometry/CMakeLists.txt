@@ -1545,62 +1545,85 @@ ADD_TEST(raTvSarRadiometricCalibrationFunctionWithoutNoise ${RADIOMETRY_TESTS9}
 # -------  SarRadiometricCalibrationToImageFilter   ------------------------------
 
 IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(raTvSarRadiometricCalibrationToImageWithComplexPixelFilter_TSX_PANGKALANBUUN  ${RADIOMETRY_TESTS9}
-	--compare-image ${EPSILON_12}
+
+# Read data with a complex IFreader (Input data type = CInt16) and done ExtractROIFilter 
+# after RadiometricCalibFilter.
+  ADD_TEST(raTvSarRadiometricCalibrationToImageWithComplexPixelFilter_TSX_PANGKALANBUUN  ${RADIOMETRY_TESTS9}
+	    --compare-image ${EPSILON_12}
 	    	${BASELINE}/raTvSarRadiometricCalibrationToImageFilter_TSX_PANGKALANBUUN_HH.tif
 	    	${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_PANGKALANBUUN_HH.tif
         otbSarRadiometricCalibrationToImageFilterWithComplexPixelTest
-	    ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
-	    ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_PANGKALANBUUN_HH.tif
-	    1000 1000 250 250 # Extract
-)
+	        ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+	        ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_PANGKALANBUUN_HH.tif
+	        1000 1000 250 250 # Extract
+          )
 
-ADD_TEST(raTvSarRadiometricCalibrationToImageWithComplexPixelFilterWithoutNoise_TSX_PANGKALANBUUN  ${RADIOMETRY_TESTS9}
-	--compare-image ${EPSILON_12}
+# Read data with a complex IFreader (Input data type = CInt16) and done ExtractROIFilter 
+# after RadiometricCalibFilter without take into account Noise. 
+  ADD_TEST(raTvSarRadiometricCalibrationToImageWithComplexPixelFilterWithoutNoise_TSX_PANGKALANBUUN  ${RADIOMETRY_TESTS9}
+	    --compare-image ${EPSILON_12}
 	    	${BASELINE}/raTvSarRadiometricCalibrationToImageFilter_TSX_PANGKALANBUUN_HH_WN.tif
 	    	${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_PANGKALANBUUN_HH_WN.tif
         otbSarRadiometricCalibrationToImageFilterWithComplexPixelTestWithoutNoise
-	    ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
-	    ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_PANGKALANBUUN_HH_WN.tif
-	    1000 1000 250 250 # Extract
-)
+	        ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+	        ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_PANGKALANBUUN_HH_WN.tif
+	        1000 1000 250 250 # Extract
+          )    
 
-ADD_TEST(raTvSarRadiometricCalibrationToImagePixelFilterWithExtractROIBefore_TSX_PANGKALANBUUN  ${RADIOMETRY_TESTS9}
-	--compare-image ${EPSILON_12}
+# Read data with a scalar IFreader (Input data type = CInt16) and done ExtractROIFilter 
+# after RadiometricCalibFilter. 
+  ADD_TEST(raTvSarRadiometricCalibrationToImageWithRealPixelFilter_TSX_PANGKALANBUUN  ${RADIOMETRY_TESTS9}
+	    --compare-image ${EPSILON_12}
+	    	${BASELINE}/raTvSarRadiometricCalibrationToImageFilter_TSX_PANGKALANBUUN_HH.tif
+	    	${TEMP}/raTvSarRadiometricCalibrationToImageFilterRealPixel_TSX_PANGKALANBUUN_HH.tif
+        otbSarRadiometricCalibrationToImageFilterWithRealPixelTest
+	        ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+	        ${TEMP}/raTvSarRadiometricCalibrationToImageFilterRealPixel_TSX_PANGKALANBUUN_HH.tif
+	         1000 1000 250 250 # Extract
+          )
+          
+# Read data with a complex IFreader (Input data type = CInt16) and done ExtractROIFilter 
+# before RadiometricCalibFilter. 
+  ADD_TEST(raTvSarRadiometricCalibrationToImagePixelFilterWithExtractROIBefore_TSX_PANGKALANBUUN  ${RADIOMETRY_TESTS9}
+	    --compare-image ${EPSILON_12}
 	    	${BASELINE}/raTvSarRadiometricCalibrationToImageFilterWithExtractROIBefore_TSX_PANGKALANBUUN_HH.tif
 	    	${TEMP}/raTvSarRadiometricCalibrationToImageFilterWithExtractROIBefore_TSX_PANGKALANBUUN_HH.tif
         otbSarRadiometricCalibrationToImageFilterWithExtractROIBeforeTest
 	    ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
-	    ${TEMP}/raTvSarRadiometricCalibrationToImageFilterWithExtractROIBefore_TSX_PANGKALANBUUN_HH.tif
-	    1000 1000 250 250 # Extract
-)
+	        ${TEMP}/raTvSarRadiometricCalibrationToImageFilterWithExtractROIBefore_TSX_PANGKALANBUUN_HH.tif
+	        1000 1000 250 250 # Extract
+          )
 
-ADD_TEST(raTvSarRadiometricCalibrationToImageCompareFilter_TSX_PANGKALANBUUN  ${RADIOMETRY_TESTS9}
+# Read data with a complex IFreader (Input data type = CInt16) and compare the result of 
+# CReader->SarRadiometricCalibFilter with CReader->ModulusFilter->SarRadiometricCalibFilter 
+  ADD_TEST(raTvSarRadiometricCalibrationToImageCompareFilter_TSX_PANGKALANBUUN  ${RADIOMETRY_TESTS9}
         otbSarRadiometricCalibrationToImageFilterCompareTest
-	    ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
-	    1000 1000 250 250 # Extract
-)
+	       ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+	       1000 1000 250 250 # Extract
+          )
 
 
-ADD_TEST(raTvSarRadiometricCalibrationToImageWithComplexPixelFilter_TSX_TORONTO ${RADIOMETRY_TESTS9}
-    --compare-image ${EPSILON_12}  
-                ${BASELINE}/raTvSarRadiometricCalibrationToImageFilter_TSX_TORONTO.tif
-                ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_TORONTO.tif
+# Read data with a complex IFreader (Input data type = CInt16)
+  ADD_TEST(raTvSarRadiometricCalibrationToImageWithComplexPixelFilter_TSX_TORONTO ${RADIOMETRY_TESTS9}
+        --compare-image ${EPSILON_12}  
+           ${BASELINE}/raTvSarRadiometricCalibrationToImageFilter_TSX_TORONTO.tif
+           ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_TORONTO.tif
         otbSarRadiometricCalibrationToImageFilterWithComplexPixelTest
-        ${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
-        ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_TORONTO.tif
-		2000 2000 250 250 # Extract
-)
+           ${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
+           ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_TORONTO.tif
+		   2000 2000 250 250 # Extract
+          )
 
-ADD_TEST(raTvSarRadiometricCalibrationToImageWithRealPixelFilter_TSX_UPSALA ${RADIOMETRY_TESTS9}
-    --compare-image ${EPSILON_12}  
-                ${BASELINE}/raTvSarRadiometricCalibrationToImageFilter_TSX_UPSALA.tif
-                ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_UPSALA.tif
+# Read data with a scalar IFreader (Input data type = UInt16)
+  ADD_TEST(raTvSarRadiometricCalibrationToImageWithRealPixelFilter_TSX_UPSALA ${RADIOMETRY_TESTS9}
+        --compare-image ${EPSILON_12}  
+           ${BASELINE}/raTvSarRadiometricCalibrationToImageFilter_TSX_UPSALA.tif
+           ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_UPSALA.tif
         otbSarRadiometricCalibrationToImageFilterWithRealPixelTest
-        ${LARGEINPUT}/TERRASARX/UPSALA_GLACIER/TSX1_SAR__MGD/IMAGEDATA/IMAGE_HH_SRA_strip_012.tif
-        ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_UPSALA.tif
-	2000 2000 250 250 # Extract
-)
+           ${LARGEINPUT}/TERRASARX/UPSALA_GLACIER/TSX1_SAR__MGD/IMAGEDATA/IMAGE_HH_SRA_strip_012.tif
+           ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_UPSALA.tif
+	       2000 2000 250 250 # Extract
+          )
 
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
@@ -1633,25 +1656,41 @@ ADD_TEST(raTvSarBrightnessFunctionWithoutNoise ${RADIOMETRY_TESTS9}
 
 # ------- SarBrightnessToImageFilter   ------------------------------
 IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(raTvSarBrightnessToImageFilter  ${RADIOMETRY_TESTS9}
-	--compare-image ${EPSILON_12}
+
+# Read data with a scalar IFreader (Input data type = CInt16)
+  ADD_TEST(raTvSarBrightnessToImageFilter  ${RADIOMETRY_TESTS9}
+	    --compare-image ${EPSILON_12}
 	    	${BASELINE}/raTvSarBrightnessToImageFilter_TSX_PANGKALANBUUN_HH.tif
 	    	${TEMP}/raTvSarBrightnessToImageFilter_TSX_PANGKALANBUUN_HH.tif
         otbSarBrightnessToImageFilterTest
-	    ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
-	    ${TEMP}/raTvSarBrightnessToImageFilter_TSX_PANGKALANBUUN_HH.tif
-	    1000 1000 250 250 # Extract
-)
+	        ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+	        ${TEMP}/raTvSarBrightnessToImageFilter_TSX_PANGKALANBUUN_HH.tif
+	        1000 1000 250 250 # Extract
+          )
 
-ADD_TEST(raTvSarBrightnessToImageFilterWithoutNoise  ${RADIOMETRY_TESTS9}
-	--compare-image ${EPSILON_12}
+# Read data with a real IFreader (Input data type = CInt16) and done ExtractROIFilter 
+# after BrightnessCalibFilter without take into account Noise. 
+  ADD_TEST(raTvSarBrightnessToImageFilterWithoutNoise  ${RADIOMETRY_TESTS9}
+	    --compare-image ${EPSILON_12}
 	    	${BASELINE}/raTvSarBrightnessToImageFilter_TSX_PANGKALANBUUN_HH_WN.tif
 	    	${TEMP}/raTvSarBrightnessToImageFilter_TSX_PANGKALANBUUN_HH_WN.tif
         otbSarBrightnessToImageFilterTestWithoutNoise
-	    ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
-	    ${TEMP}/raTvSarBrightnessToImageFilter_TSX_PANGKALANBUUN_HH_WN.tif
-	    1000 1000 250 250 # Extract
-)
+	        ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+	        ${TEMP}/raTvSarBrightnessToImageFilter_TSX_PANGKALANBUUN_HH_WN.tif
+	        1000 1000 250 250 # Extract
+          )
+
+# Read data with a scalar IFreader (Input data type = CInt16)
+ADD_TEST(raTvSarBrightnessToImageWithComplexPixelFilter  ${RADIOMETRY_TESTS9}
+	    --compare-image ${EPSILON_12}
+	    	${BASELINE}/raTvSarBrightnessToImageFilter_TSX_PANGKALANBUUN_HH.tif
+	    	${TEMP}/raTvSarBrightnessToImageFilterComplexPixel_TSX_PANGKALANBUUN_HH.tif
+        otbSarBrightnessToImageWithComplexPixelFilterTest
+	        ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+	        ${TEMP}/raTvSarBrightnessToImageFilterComplexPixel_TSX_PANGKALANBUUN_HH.tif
+	        1000 1000 250 250 # Extract
+        )
+
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 
@@ -2059,6 +2098,7 @@ otbSarBrightnessFunction.cxx
 otbSarBrightnessFunctionWithoutNoise.cxx
 otbSarBrightnessToImageFilterTest.cxx
 otbSarBrightnessToImageFilterTestWithoutNoise.cxx
+otbSarBrightnessToImageWithComplexPixelFilterTest.cxx
 )
 
 SET(Radiometry_SRCS10
