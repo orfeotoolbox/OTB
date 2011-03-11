@@ -290,7 +290,7 @@ LabeledSampleLocalizationGenerator<TVectorData>
         }
       ++itVector;
       }
-    }    
+    }
 }
 
 } // end namespace otb
