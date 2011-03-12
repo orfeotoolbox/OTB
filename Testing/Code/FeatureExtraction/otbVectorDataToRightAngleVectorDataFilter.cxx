@@ -69,16 +69,6 @@ int otbVectorDataToRightAngleVectorDataFilter(int argc, char * argv[])
   vDataWriter->SetInput(rightAngleFilter->GetOutput());
   vDataWriter->Update();
 
-  // Draw the points onto the input image
-  if(argc>3)
-    {
-    const char * outImgfname   = argv[3];
-    typedef otb::Image<unsigned char, 2>        ImageType;
-    typedef otb::ImageFileWriter<ImageType>     ImageWriterType;
-  
-    
-    }
-
   return EXIT_SUCCESS;
 }
 
