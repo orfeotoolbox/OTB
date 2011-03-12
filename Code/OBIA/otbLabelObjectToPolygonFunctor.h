@@ -148,7 +148,7 @@ private:
   inline bool IsRunIndexValid(const IndexType& index) const;
 
   /// Check if the point lies within the range of the line
-  inline IndexType Within(const IndexType& point, int line) const;
+  inline IndexType Within(const IndexType& point, unsigned int line) const;
 
   /// Return the left-end of the run
   inline IndexType LeftEnd(const IndexType& runIndex) const;
@@ -159,22 +159,22 @@ private:
   /** Return the right-most run whose left end lies within the range of
    * the given run.
    */
-  inline IndexType RightMostLeftEndInside(int line, const IndexType& point, const IndexType& run) const;
+  inline IndexType RightMostLeftEndInside(unsigned int line, const IndexType& point, const IndexType& run) const;
 
   /** Return the left-most run whose right end lies within the range of
    * the given run.
    */
-  inline IndexType LeftMostRightEndInside(int line, const IndexType& point, const IndexType& run) const;
+  inline IndexType LeftMostRightEndInside(unsigned int line, const IndexType& point, const IndexType& run) const;
 
   /// Walk left to update the finite states machine.
-  inline void WalkLeft(int line,
+  inline void WalkLeft(unsigned int line,
                        const IndexType& startPoint,
                        const IndexType& endPoint,
                        PolygonType * polygon,
                        const StateType state);
 
   /// Walk right to update the finite states machine.
-  inline void WalkRight(int line,
+  inline void WalkRight(unsigned int line,
                         const IndexType& startPoint,
                         const IndexType& endPoint,
                         PolygonType * polygon,
