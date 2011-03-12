@@ -75,7 +75,7 @@ void Parser::SetExpr(const std::string & Expression)
 
 Parser::ValueType Parser::Eval()
 {
-  Parser::ValueType result;
+  Parser::ValueType result = 0.0;
   try
     {
     result = m_InternalParser.Eval();
