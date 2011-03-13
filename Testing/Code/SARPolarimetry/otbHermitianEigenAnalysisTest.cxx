@@ -101,7 +101,7 @@ int otbHermitianEigenAnalysisTest(int argc, char * argv[])
         {
           if(vcl_abs(eigVal[j][i] - resEigVal[j][i]) > 1e-5)
             {
-              isOK == false;
+              isOK = false;
             }
         }
     }
