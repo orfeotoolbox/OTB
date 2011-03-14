@@ -138,13 +138,13 @@ unsigned long StreamingTraitsBase<TImage>
                                              static_cast<std::streamoff>(image->GetNumberOfComponentsPerPixel()) * \
                                              static_cast<std::streamoff>(sizeof(PixelType));
       const std::streamoff regionSizeInBytes = region.GetSize()[1] * sizeLineInBytes;
-      otbMsgDevMacro(<< "streamImageSizeToActivateStreaming in Bytes  = " << streamImageSizeToActivateStreamingBytes);
-      otbMsgDevMacro(<< "streamMaxSizeBufferForStreaming in Bytes     = " << streamMaxSizeBufferForStreamingBytes);
-      otbMsgDevMacro(<< "image->GetNumberOfComponentsPerPixel()   = " << image->GetNumberOfComponentsPerPixel());
-      otbMsgDevMacro(<< "sizeof(PixelType)                 = " << sizeof(PixelType));
+      otbMsgDevMacro(<< "streamImageSizeToActivateStreaming in Bytes  = " << streamImageSizeToActivateStreamingInBytes);
+      otbMsgDevMacro(<< "streamMaxSizeBufferForStreaming in Bytes     = " << streamMaxSizeBufferForStreamingInBytes);
+      otbMsgDevMacro(<< "image->GetNumberOfComponentsPerPixel()       = " << image->GetNumberOfComponentsPerPixel());
+      otbMsgDevMacro(<< "sizeof(PixelType)                            = " << sizeof(PixelType));
       otbMsgDevMacro(<< "numberColumnsOfRegion                        = " << numberColumnsOfRegion);
-      otbMsgDevMacro(<< "sizeLine                                     = " << sizeLine);
-      otbMsgDevMacro(<< "regionSize                                   = " << regionSizeInBytes);
+      otbMsgDevMacro(<< "sizeLine in Bytes                            = " << sizeLineInBytes);
+      otbMsgDevMacro(<< "regionSizeInBytes                            = " << regionSizeInBytes);
 
       if (regionSizeInBytes > streamImageSizeToActivateStreamingInBytes)
         {
@@ -159,7 +159,7 @@ unsigned long StreamingTraitsBase<TImage>
           streamMaxSizeBufferForStreamingInBytes = sizeLineInBytes;
           }
 
-        otbMsgDevMacro(<< "Buffer size : " << streamMaxSizeBufferForStreaming);
+        otbMsgDevMacro(<< "streamMaxSizeBufferForStreaming in Bytes     = " << streamMaxSizeBufferForStreamingInBytes);
 
         //Calculate NumberOfStreamDivisions
         numDivisions =
@@ -178,6 +178,7 @@ unsigned long StreamingTraitsBase<TImage>
       itkGenericExceptionMacro(<< "Method use to calculate number of stream divisions is not set !");
       break;
     }
+
   if (numDivisions == 0) numDivisions = 1;
   otbMsgDevMacro(<< " -> Resume : method : " << mode << "\n -> Number of divisions = " << numDivisions);
 
