@@ -115,13 +115,13 @@ unsigned long StreamingTraitsBase<TImage>
       {
       typedef otb::ConfigurationFile ConfigurationType;
       ConfigurationType::Pointer conf = ConfigurationType::GetInstance();
-      std::streamoff             streamMaxSizeBufferForStreamingBytes;
-      std::streamoff             streamImageSizeToActivateStreamingBytes;
+      std::streamoff             streamMaxSizeBufferForStreamingInBytes;
+      std::streamoff             streamImageSizeToActivateStreamingInBytes;
       try
         {
-        streamMaxSizeBufferForStreamingBytes = conf->GetParameter<std::streamoff>(
+        streamMaxSizeBufferForStreamingInBytes = conf->GetParameter<std::streamoff>(
           "OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING");
-        streamImageSizeToActivateStreamingBytes = conf->GetParameter<std::streamoff>(
+        streamImageSizeToActivateStreamingInBytes = conf->GetParameter<std::streamoff>(
           "OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING");
         }
       catch(...)
@@ -129,44 +129,42 @@ unsigned long StreamingTraitsBase<TImage>
         // We should never have to go here if the configuration file is
         // correct and found. In case it is not fallback on the cmake
         // defined constants.
-        streamMaxSizeBufferForStreamingBytes = OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING;
-        streamImageSizeToActivateStreamingBytes = OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING;
+        streamMaxSizeBufferForStreamingInBytes = OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING;
+        streamImageSizeToActivateStreamingInBytes = OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING;
         }
 
-      //Convert in octet unit
-      std::streamoff       streamMaxSizeBufferForStreaming = streamMaxSizeBufferForStreamingBytes / 8;
-      const std::streamoff streamImageSizeToActivateStreaming = streamImageSizeToActivateStreamingBytes / 8;
-
       std::streamoff       numberColumnsOfRegion = region.GetSize()[0]; // X dimension
-      const std::streamoff sizeLine = static_cast<std::streamoff>(numberColumnsOfRegion) * \
-                                      static_cast<std::streamoff>(image->GetNumberOfComponentsPerPixel()) * \
-                                      static_cast<std::streamoff>(sizeof(PixelType));
-      const std::streamoff regionSize = region.GetSize()[1] * sizeLine;
+      const std::streamoff sizeLineInBytes = static_cast<std::streamoff>(numberColumnsOfRegion) * \
+                                             static_cast<std::streamoff>(image->GetNumberOfComponentsPerPixel()) * \
+                                             static_cast<std::streamoff>(sizeof(PixelType));
+      const std::streamoff regionSizeInBytes = region.GetSize()[1] * sizeLineInBytes;
       otbMsgDevMacro(<< "streamImageSizeToActivateStreaming in Bytes  = " << streamImageSizeToActivateStreamingBytes);
       otbMsgDevMacro(<< "streamMaxSizeBufferForStreaming in Bytes     = " << streamMaxSizeBufferForStreamingBytes);
-      otbMsgDevMacro(<< "streamImageSizeToActivateStreaming           = " << streamImageSizeToActivateStreaming);
-      otbMsgDevMacro(<< "streamMaxSizeBufferForStreaming              = " << streamMaxSizeBufferForStreaming);
       otbMsgDevMacro(<< "image->GetNumberOfComponentsPerPixel()   = " << image->GetNumberOfComponentsPerPixel());
       otbMsgDevMacro(<< "sizeof(PixelType)                 = " << sizeof(PixelType));
       otbMsgDevMacro(<< "numberColumnsOfRegion                        = " << numberColumnsOfRegion);
       otbMsgDevMacro(<< "sizeLine                                     = " << sizeLine);
-      otbMsgDevMacro(<< "regionSize                                   = " << regionSize);
+      otbMsgDevMacro(<< "regionSize                                   = " << regionSizeInBytes);
 
-      //Active streaming
-      if (regionSize > streamImageSizeToActivateStreaming)
+      if (regionSizeInBytes > streamImageSizeToActivateStreamingInBytes)
         {
-        //On s'assure que la taille du bandeau fait au moins une ligne de l'image si pas TILING
-        if ((mode != SET_TILING_WITH_SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS)
-            && (streamMaxSizeBufferForStreaming < sizeLine))
+        // Activate streaming
+
+        // If no tiling, make sure there is at least one line
+        if ( mode != SET_TILING_WITH_SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS
+            && mode != SET_TILING_WITH_SET_NUMBER_OF_STREAM_DIVISIONS
+            && (streamMaxSizeBufferForStreamingInBytes < sizeLineInBytes))
           {
           otbMsgDevMacro(<< "Force buffer size.");
-          streamMaxSizeBufferForStreaming = sizeLine;
+          streamMaxSizeBufferForStreamingInBytes = sizeLineInBytes;
           }
+
         otbMsgDevMacro(<< "Buffer size : " << streamMaxSizeBufferForStreaming);
+
         //Calculate NumberOfStreamDivisions
         numDivisions =
-          static_cast<unsigned long>(vcl_ceil(static_cast<double>(regionSize) /
-                                              static_cast<double>(streamMaxSizeBufferForStreaming)));
+          static_cast<unsigned long>(vcl_ceil(static_cast<double>(regionSizeInBytes) /
+                                              static_cast<double>(streamMaxSizeBufferForStreamingInBytes)));
         }
       else
         {
