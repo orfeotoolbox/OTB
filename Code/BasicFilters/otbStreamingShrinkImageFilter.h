@@ -122,7 +122,6 @@ private:
 }; // end of class PersistentStatisticsVectorImageFilter
 
 
-
 /** \class StreamingShrinkImageFilter
  * \brief
  *
@@ -133,13 +132,13 @@ private:
  */
 template<class TInputImage, class TOutputImage>
 class ITK_EXPORT StreamingShrinkImageFilter :
-  public PersistentFilterStreamingDecorator< PersistentShrinkImageFilter<TInputImage,TOutputImage> >
+  public PersistentFilterStreamingDecorator< PersistentShrinkImageFilter<TInputImage, TOutputImage> >
 {
 public:
   /** Standard Self typedef */
   typedef StreamingShrinkImageFilter                Self;
   typedef PersistentFilterStreamingDecorator
-    <PersistentShrinkImageFilter<TInputImage,TOutputImage> >  Superclass;
+    <PersistentShrinkImageFilter<TInputImage, TOutputImage> >  Superclass;
   typedef itk::SmartPointer<Self>                   Pointer;
   typedef itk::SmartPointer<const Self>             ConstPointer;
 
