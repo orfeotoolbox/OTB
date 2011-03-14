@@ -22,12 +22,9 @@
 
 #include "otbMacro.h"
 #include "itkExceptionObject.h"
+
 #include "projection/ossimSensorModelFactory.h"
-#include "projection/ossimProjectionFactoryRegistry.h"
 #include "base/ossimKeywordlist.h"
-#include "base/ossimRefPtr.h"
-#include "imaging/ossimImageHandlerRegistry.h"
-#include "imaging/ossimImageHandler.h"
 #include "ossim/ossimPluginProjectionFactory.h"
 
 namespace otb
