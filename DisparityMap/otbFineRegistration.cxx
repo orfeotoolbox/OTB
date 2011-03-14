@@ -39,9 +39,42 @@
 #include "itkAbsImageFilter.h"
 #include "itkVectorIndexSelectionCastImageFilter.h"
 #include "itkBinaryThresholdImageFilter.h"
+#include "otbStreamingWarpImageFilter.h"
+#include "otbMultiChannelExtractROI.h"
+#include "itkCastImageFilter.h"
 
 namespace otb
 {
+
+const unsigned int Dimension = 2;
+typedef double     PixelType;
+
+typedef itk::FixedArray<PixelType,Dimension>                                 DeformationValueType;
+typedef otb::Image< PixelType,  Dimension >                                  ImageType;
+typedef otb::VectorImage<PixelType,Dimension>                                VectorImageType;
+typedef otb::ImageList<ImageType>                                            ImageListType;
+typedef otb::ImageListToVectorImageFilter<ImageListType,VectorImageType>     IL2VIFilterType;
+typedef otb::Image<DeformationValueType,Dimension>                           FieldImageType;
+typedef otb::ImageFileReader< ImageType >                                    ReaderType;
+typedef otb::ImageFileReader< VectorImageType >                              VectorReaderType;
+typedef otb::StreamingImageFileWriter< VectorImageType >                     WriterType;
+typedef otb::FineRegistrationImageFilter<ImageType,ImageType,FieldImageType> RegistrationFilterType;
+typedef itk::DiscreteGaussianImageFilter<ImageType,ImageType>                GaussianFilterType;
+typedef itk::VectorIndexSelectionCastImageFilter<FieldImageType,ImageType>   VectorImageToImageFilterType;
+typedef itk::AbsImageFilter<ImageType,ImageType>                             AbsFilterType;
+typedef itk::BinaryThresholdImageFilter<ImageType,ImageType>                 BinaryThresholdImageFilterType;
+
+template<class TVLV, class TFixedArray>
+class VLVToFixedArray
+{
+public:
+  TFixedArray operator()(const TVLV& vlv)
+  {
+    TFixedArray output;
+    output[0] = vlv[0];
+    output[1] = vlv[1];
+  }
+};
 
 int FineRegistration::Describe(ApplicationDescriptor* descriptor)
 {
@@ -50,9 +83,13 @@ int FineRegistration::Describe(ApplicationDescriptor* descriptor)
   descriptor->AddOption("Reference", "The reference image", 
                         "ref", 1, true, ApplicationDescriptor::InputImage);  
   descriptor->AddOption("Secondary", "The secondary image", 
-                        "sec", 1, true, ApplicationDescriptor::FileName);  
-  descriptor->AddOption("Output", "The output image", 
+                        "sec", 1, true, ApplicationDescriptor::InputImage);
+  descriptor->AddOption("OutputImage", "The output image",
                         "out", 1, true, ApplicationDescriptor::OutputImage);
+  descriptor->AddOption("ImageToWarp", "The image to warp after disparity estimation is complete",
+                        "w", 1, true, ApplicationDescriptor::InputImage);
+  descriptor->AddOption("WarpOutput", "The output warped image",
+                        "wo", 1, true, ApplicationDescriptor::OutputImage);
   descriptor->AddOption("ExplorationRadius","Radius (in pixels) of the exploration window",
                         "er",2,true, ApplicationDescriptor::Integer);
   descriptor->AddOption("MetricRadius","Radius (in pixels) of the metric computation window",
@@ -77,22 +114,6 @@ int FineRegistration::Describe(ApplicationDescriptor* descriptor)
 
 int FineRegistration::Execute(otb::ApplicationOptionsResult* parseResult)
 {
-  const unsigned int Dimension = 2;
-  typedef double     PixelType;
-
-  typedef itk::FixedArray<PixelType,Dimension>                                 DeformationValueType;
-  typedef otb::Image< PixelType,  Dimension >                                  ImageType;
-  typedef otb::VectorImage<PixelType,Dimension>                                VectorImageType;
-  typedef otb::ImageList<ImageType>                                            ImageListType;
-  typedef otb::ImageListToVectorImageFilter<ImageListType,VectorImageType>     IL2VIFilterType;
-  typedef otb::Image<DeformationValueType,Dimension>                           FieldImageType;
-  typedef otb::ImageFileReader< ImageType >                                    ReaderType;
-  typedef otb::StreamingImageFileWriter< VectorImageType >                     WriterType;
-  typedef otb::FineRegistrationImageFilter<ImageType,ImageType,FieldImageType> RegistrationFilterType;
-  typedef itk::DiscreteGaussianImageFilter<ImageType,ImageType>                GaussianFilterType;
-  typedef itk::VectorIndexSelectionCastImageFilter<FieldImageType,ImageType>   VectorImageToImageFilterType;
-  typedef itk::AbsImageFilter<ImageType,ImageType>                             AbsFilterType;
-  typedef itk::BinaryThresholdImageFilter<ImageType,ImageType>                 BinaryThresholdImageFilterType;
 
   // Read reference image
   ReaderType::Pointer freader = ReaderType::New();
@@ -239,7 +260,7 @@ int FineRegistration::Execute(otb::ApplicationOptionsResult* parseResult)
   else
     {
     std::cerr<<"Metric "<<metricId<<" not recognized."<<std::endl;
-    std::cerr<<"Possible choices are: CC, CCMS, MSD, MRSD, MI"<<std::endl;
+    std::cerr<<"Possible choices are: CC, CCSM, MSD, MRSD, MI"<<std::endl;
     return EXIT_FAILURE;
     }
   VectorImageToImageFilterType::Pointer xExtractor = VectorImageToImageFilterType::New();
@@ -267,6 +288,8 @@ int FineRegistration::Execute(otb::ApplicationOptionsResult* parseResult)
     {
     il->PushBack(registration->GetOutput());
     }
+
+  registration->UpdateOutputInformation();
 
   BinaryThresholdImageFilterType::Pointer threshold;
   if(parseResult->IsOptionPresent("ValidityMask"))
@@ -315,6 +338,39 @@ int FineRegistration::Execute(otb::ApplicationOptionsResult* parseResult)
   otb::StandardWriterWatcher watcher(writer,registration,"Fine Registration");
 
   writer->Update();
+
+  std::cout << "Start warping" << std::endl;
+
+  // Now reuse the written deformation field to warp
+  VectorReaderType::Pointer deformationReader = VectorReaderType::New();
+  deformationReader->SetFileName(parseResult->GetOutputImage());
+
+  typedef otb::MultiChannelExtractROI<PixelType, PixelType> ExtractROIFilterType;
+  ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
+  extractROIFilter->SetChannel(1);
+  extractROIFilter->SetChannel(2);
+  extractROIFilter->SetInput(deformationReader->GetOutput());
+
+  typedef VLVToFixedArray<VectorImageType::PixelType, FieldImageType::PixelType> VLVToFixedArrayType;
+  typedef itk::UnaryFunctorImageFilter<VectorImageType, FieldImageType, VLVToFixedArrayType> CastFilterType;
+  CastFilterType::Pointer cast = CastFilterType::New();
+  cast->SetInput(extractROIFilter->GetOutput());
+
+  VectorReaderType::Pointer imageToWarpReader = VectorReaderType::New();
+  imageToWarpReader->SetFileName(parseResult->GetParameterString("ImageToWarp"));
+
+  typedef StreamingWarpImageFilter<VectorImageType,VectorImageType,FieldImageType> WarpFilterType;
+  WarpFilterType::Pointer warp = WarpFilterType::New();
+
+  warp->SetDeformationField(cast->GetOutput());
+  warp->SetInput(imageToWarpReader->GetOutput());
+  warp->SetOutputParametersFromImage(freader->GetOutput());
+
+  WriterType::Pointer wrappedWriter = WriterType::New();
+  wrappedWriter->SetFileName(parseResult->GetParameterString("WarpOutput"));
+  wrappedWriter->SetInput(warp->GetOutput());
+  otb::StandardWriterWatcher watcher2(wrappedWriter,warp,"Warp");
+  wrappedWriter->Update();
 
   return EXIT_SUCCESS;
 }
