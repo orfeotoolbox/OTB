@@ -24,10 +24,8 @@
 #include "itkObjectFactoryBase.h"
 #include "vnl/vnl_vector.h"
 
-#include "imaging/ossimImageHandlerRegistry.h"
-#include "imaging/ossimImageHandler.h"
-#include "init/ossimInit.h"
 #include "base/ossimKeywordlist.h"
+#include "base/ossimFilename.h"
 
 #include "itkMetaDataObject.h"
 #include "otbImageKeywordlist.h"
