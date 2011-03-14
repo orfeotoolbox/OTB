@@ -87,9 +87,9 @@ int FineRegistration::Describe(ApplicationDescriptor* descriptor)
   descriptor->AddOption("OutputImage", "The output image",
                         "out", 1, true, ApplicationDescriptor::OutputImage);
   descriptor->AddOption("ImageToWarp", "The image to warp after disparity estimation is complete",
-                        "w", 1, true, ApplicationDescriptor::InputImage);
+                        "w", 1, false, ApplicationDescriptor::InputImage);
   descriptor->AddOption("WarpOutput", "The output warped image",
-                        "wo", 1, true, ApplicationDescriptor::OutputImage);
+                        "wo", 1, false, ApplicationDescriptor::OutputImage);
   descriptor->AddOption("ExplorationRadius","Radius (in pixels) of the exploration window",
                         "er",2,true, ApplicationDescriptor::Integer);
   descriptor->AddOption("MetricRadius","Radius (in pixels) of the metric computation window",
@@ -339,38 +339,39 @@ int FineRegistration::Execute(otb::ApplicationOptionsResult* parseResult)
 
   writer->Update();
 
-  std::cout << "Start warping" << std::endl;
+  if (parseResult->IsOptionPresent("ImageToWarp") && parseResult->IsOptionPresent("WarpOutput") )
+    {
+    // Now reuse the written deformation field to warp
+    VectorReaderType::Pointer deformationReader = VectorReaderType::New();
+    deformationReader->SetFileName(parseResult->GetOutputImage());
 
-  // Now reuse the written deformation field to warp
-  VectorReaderType::Pointer deformationReader = VectorReaderType::New();
-  deformationReader->SetFileName(parseResult->GetOutputImage());
+    typedef otb::MultiChannelExtractROI<PixelType, PixelType> ExtractROIFilterType;
+    ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
+    extractROIFilter->SetChannel(1);
+    extractROIFilter->SetChannel(2);
+    extractROIFilter->SetInput(deformationReader->GetOutput());
 
-  typedef otb::MultiChannelExtractROI<PixelType, PixelType> ExtractROIFilterType;
-  ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
-  extractROIFilter->SetChannel(1);
-  extractROIFilter->SetChannel(2);
-  extractROIFilter->SetInput(deformationReader->GetOutput());
+    typedef VLVToFixedArray<VectorImageType::PixelType, FieldImageType::PixelType> VLVToFixedArrayType;
+    typedef itk::UnaryFunctorImageFilter<VectorImageType, FieldImageType, VLVToFixedArrayType> CastFilterType;
+    CastFilterType::Pointer cast = CastFilterType::New();
+    cast->SetInput(extractROIFilter->GetOutput());
 
-  typedef VLVToFixedArray<VectorImageType::PixelType, FieldImageType::PixelType> VLVToFixedArrayType;
-  typedef itk::UnaryFunctorImageFilter<VectorImageType, FieldImageType, VLVToFixedArrayType> CastFilterType;
-  CastFilterType::Pointer cast = CastFilterType::New();
-  cast->SetInput(extractROIFilter->GetOutput());
+    VectorReaderType::Pointer imageToWarpReader = VectorReaderType::New();
+    imageToWarpReader->SetFileName(parseResult->GetParameterString("ImageToWarp"));
 
-  VectorReaderType::Pointer imageToWarpReader = VectorReaderType::New();
-  imageToWarpReader->SetFileName(parseResult->GetParameterString("ImageToWarp"));
+    typedef StreamingWarpImageFilter<VectorImageType,VectorImageType,FieldImageType> WarpFilterType;
+    WarpFilterType::Pointer warp = WarpFilterType::New();
 
-  typedef StreamingWarpImageFilter<VectorImageType,VectorImageType,FieldImageType> WarpFilterType;
-  WarpFilterType::Pointer warp = WarpFilterType::New();
+    warp->SetDeformationField(cast->GetOutput());
+    warp->SetInput(imageToWarpReader->GetOutput());
+    warp->SetOutputParametersFromImage(freader->GetOutput());
 
-  warp->SetDeformationField(cast->GetOutput());
-  warp->SetInput(imageToWarpReader->GetOutput());
-  warp->SetOutputParametersFromImage(freader->GetOutput());
-
-  WriterType::Pointer wrappedWriter = WriterType::New();
-  wrappedWriter->SetFileName(parseResult->GetParameterString("WarpOutput"));
-  wrappedWriter->SetInput(warp->GetOutput());
-  otb::StandardWriterWatcher watcher2(wrappedWriter,warp,"Warp");
-  wrappedWriter->Update();
+    WriterType::Pointer wrappedWriter = WriterType::New();
+    wrappedWriter->SetFileName(parseResult->GetParameterString("WarpOutput"));
+    wrappedWriter->SetInput(warp->GetOutput());
+    otb::StandardWriterWatcher watcher2(wrappedWriter,warp,"Warp");
+    wrappedWriter->Update();
+    }
 
   return EXIT_SUCCESS;
 }
