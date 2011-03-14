@@ -25,44 +25,12 @@
 #include "otbVectorImage.h"
 #include "otbGenericRSResampleImageFilter.h"
 #include "otbBCOInterpolateImageFunction.h"
-
 #include "itkExceptionObject.h"
-
 #include "otbStandardWriterWatcher.h"
-#include "otbSimpleRcsPanSharpeningFusionImageFilter.h"
-#include "otbHCSPanSharpeningFusionImageFilter.h"
-
-#include "otbStreamingStatisticsImageFilter.h"
-#include "otbStreamingStatisticsVectorImageFilter.h"
-
-#include "itkSquareImageFilter.h"
-
-#include "itkPixelBuilder.h"
-#include "init/ossimInit.h"
-#include "itkFixedArray.h"
-
 #include "otbPipelineMemoryPrintCalculator.h"
 
 namespace otb
 {
-
-namespace Functor
-{
-template <class TInput, class TOutput>
-class VectorToSquaredNormFunctor
-{
-public:
-  inline TOutput operator ()(const TInput& A)
-  {
-    return static_cast<TOutput>(A.GetSquaredNorm());
-  }
-
-  itkConceptMacro(OutputShouldNotBeVectorImageCheck,
-                  (itk::Concept::Convertible<TOutput, double>));
-
-}; // end namespace Functor
-}
-
 
 int Superimpose::Describe(ApplicationDescriptor* descriptor)
 {
