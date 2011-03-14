@@ -18,6 +18,7 @@
 #include "otbImageKeywordlist.h"
 
 #include "base/ossimKeywordlist.h"
+#include "base/ossimString.h"
 
 namespace otb
 {
@@ -48,12 +49,20 @@ void
 ImageKeywordlist::
 SetKeywordlist(const ossimKeywordlist& kwl)
 {
-  m_Keywordlist = kwl.getMap();
+  m_Keywordlist.clear();
+  for (ossimKeywordlist::KeywordMap::const_iterator it = kwl.getMap().begin();
+       it != kwl.getMap().end();
+       ++it)
+    {
+    std::string first(it->first.stringDup());
+    std::string second(it->second.stringDup());
+    m_Keywordlist[first] = second;
+    }
 }
 
-const ossimString&
+const std::string&
 ImageKeywordlist::
-GetMetadataByKey(const ossimString& key) const
+GetMetadataByKey(const std::string& key) const
 {
   // Search for the key in the output map
   KeywordlistMap::const_iterator it = m_Keywordlist.find(key);
@@ -71,7 +80,16 @@ void
 ImageKeywordlist::
 convertToOSSIMKeywordlist(ossimKeywordlist& kwl) const
 {
-  kwl.getMap() = m_Keywordlist;
+  ossimKeywordlist::KeywordMap ossimMap;
+  for(KeywordlistMap::const_iterator it = m_Keywordlist.begin();
+      it != m_Keywordlist.end();
+      ++it)
+    {
+    ossimString first(it->first);
+    ossimString second(it->second);
+    ossimMap[first] = second;
+    }
+  kwl.getMap() = ossimMap;
 }
 
 void
