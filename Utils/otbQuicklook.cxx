@@ -170,7 +170,7 @@ int Quicklook::Execute(otb::ApplicationOptionsResult* parseResult)
     ShrinkImageFilterType::Pointer ResamplingFilter = ShrinkImageFilterType::New();
     ResamplingFilter->SetInput( extractROIFilter->GetOutput() );
     ResamplingFilter->SetShrinkFactor( Ratio );
-    ResamplingFilter->GenerateOutputInformation();
+    ResamplingFilter->Update();
     otbGenericMsgDebugMacro(<<ResamplingFilter->GetOutput()->GetLargestPossibleRegion());
 
     writer->SetInput(ResamplingFilter->GetOutput() );
