@@ -79,7 +79,7 @@ int otbVectorImageFileWriterScalarTestWithoutInputGeneric(int argc, char* argv[]
     {
     pix0[i] = static_cast<PixelType> (0);
     }
-  image->FillBuffer(pix0); // Mise à zéro
+  image->FillBuffer(pix0);
 
   IteratorType it(image, image->GetLargestPossibleRegion());
   it.GoToBegin();
@@ -174,7 +174,7 @@ int otbVectorImageFileWriterComplexTestWithoutInputGeneric(int argc, char* argv[
     {
     pix0[i] = static_cast<PixelType> (0);
     }
-  image->FillBuffer(pix0); // Mise à zéro
+  image->FillBuffer(pix0);
 
   IteratorType it(image, image->GetLargestPossibleRegion());
   it.GoToBegin();
