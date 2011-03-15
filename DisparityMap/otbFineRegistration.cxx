@@ -73,6 +73,7 @@ public:
     TFixedArray output;
     output[0] = vlv[0];
     output[1] = vlv[1];
+    return output;
   }
 };
 
