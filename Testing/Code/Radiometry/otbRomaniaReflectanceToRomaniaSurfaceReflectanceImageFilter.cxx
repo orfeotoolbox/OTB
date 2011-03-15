@@ -134,10 +134,17 @@ int otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter(int argc, char *
 
     while (fin.good())
       {
-      fin >> value;
-      vect.push_back(value);
+      std::string line;
+      std::getline(fin, line);
+      if (!line.empty())
+	{
+	value = atof(line.c_str());
+	vect.push_back(value);
+	}
       }
+    
     fin.close();
+
     functionValues->SetFilterFunctionValues(vect);
     functionValues->SetMinSpectralValue(minSpectralValue);
     functionValues->SetMaxSpectralValue(maxSpectralValue);
