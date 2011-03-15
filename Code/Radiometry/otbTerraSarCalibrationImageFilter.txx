@@ -285,7 +285,7 @@ TerraSarCalibrationImageFilter<TInputImage, TOutputImage>
       }
     // Set the offset to the mean angle
     m_IncidenceAngleOffset /= m_IncidenceAngleRecords.size();
-    m_IncidenceAngleOffset *= M_PI / 180.;
+    m_IncidenceAngleOffset *= otb::CONST_PI_180;
     return;
     }
 
@@ -300,7 +300,7 @@ TerraSarCalibrationImageFilter<TInputImage, TOutputImage>
     a(i, 0) = m_IncidenceAngleRecords.at(i).first[0];
     a(i, 1) = m_IncidenceAngleRecords.at(i).first[1];
     a(i, 2) = 1.;
-    b[i] = m_IncidenceAngleRecords.at(i).second * M_PI / 180.;
+    b[i] = m_IncidenceAngleRecords.at(i).second * otb::CONST_PI_180;
     }
 
   // Create the linear system

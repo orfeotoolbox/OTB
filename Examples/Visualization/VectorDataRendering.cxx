@@ -75,10 +75,11 @@ int main( int argc, char * argv[] )
 
   if (argc == 5)
     {
-      run = atoi(argv[4]);
+    run = atoi(argv[4]);
     }
   else if (argc == 6)
     {
+    run = atoi(argv[4]);
     inFont = true;
     std::string fontFilenameArg = argv[5];
     fontfilename.assign(fontFilenameArg );

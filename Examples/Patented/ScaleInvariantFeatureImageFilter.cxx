@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
   // mode is s (synthetic)
 
   double test_scale = atof(argv[6]);
-  float  test_rotate = atof(argv[7]) * M_PI * 2.0 / 360.0;
+  float  test_rotate = atof(argv[7]) * otb::CONST_PI_180;
   double test_crop = atof(argv[8]);
   int    rotate_middle = atoi(argv[9]);
   int    mode = 's';

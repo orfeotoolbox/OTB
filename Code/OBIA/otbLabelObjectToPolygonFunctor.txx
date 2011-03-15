@@ -331,7 +331,7 @@ template<class TLabelObject, class TPolygon>
 inline typename LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
 ::IndexType
 LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
-::Within(const IndexType& point, int line)
+::Within(const IndexType& point, unsigned int line) const
 {
   unsigned int idx = 0;
   IndexType    resp;
@@ -357,7 +357,7 @@ LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
       break;
     }
 
-  typename RunsPerLineType::iterator it = m_InternalDataSet.at(line).begin();
+  typename RunsPerLineType::const_iterator it = m_InternalDataSet.at(line).begin();
   resp[1] = line;
 
   while (resp[0] < 0 && it != m_InternalDataSet.at(line).end())
@@ -397,7 +397,7 @@ template<class TLabelObject, class TPolygon>
 inline typename LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
 ::IndexType
 LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
-::RightMostLeftEndInside(int line, const IndexType& point, const IndexType& run) const
+::RightMostLeftEndInside(unsigned int line, const IndexType& point, const IndexType& run) const
 {
   unsigned int idx = 0;
   IndexType    resp;
@@ -434,7 +434,7 @@ template<class TLabelObject, class TPolygon>
 inline typename LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
 ::IndexType
 LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
-::LeftMostRightEndInside(int line, const IndexType& point, const IndexType& run) const
+::LeftMostRightEndInside(unsigned int line, const IndexType& point, const IndexType& run) const
 {
   IndexType resp;
   resp[0] = -1;
@@ -471,7 +471,7 @@ LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
 template<class TLabelObject, class TPolygon>
 void
 LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
-::WalkLeft(int line,
+::WalkLeft(unsigned int line,
            const IndexType& startPoint,
            const IndexType& endPoint,
            PolygonType * polygon,
@@ -544,7 +544,7 @@ LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
 template<class TLabelObject, class TPolygon>
 void
 LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
-::WalkRight(int line,
+::WalkRight(unsigned int line,
             const IndexType& startPoint,
             const IndexType& endPoint,
             PolygonType * polygon,

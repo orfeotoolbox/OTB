@@ -20,7 +20,6 @@
 
 #include "otbDEMToImageGenerator.h"
 #include "otbMacro.h"
-#include "base/ossimCommon.h"
 #include "itkProgressReporter.h"
 
 namespace otb

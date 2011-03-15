@@ -410,6 +410,25 @@ ADD_TEST(prTlOrthoRectificationSPOT5 ${PROJECTIONS_TESTS2}
         )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
+#============= Test for bug 253 ===============================================
+ADD_TEST(prTvOrthoRectificationCoastalZoneWithSRTMNoData ${PROJECTIONS_TESTS2}
+ --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationCoastalZoneWithSRTMNoData.tif
+                               ${TEMP}/prTvOrthoRectificationCoastalZoneWithSRTMNoData.tif
+        otbOrthoRectificationFilterWithDEM
+        ${INPUTDATA}/qb_coastal.tif
+        ${TEMP}/prTvOrthoRectificationCoastalZoneWithSRTMNoData.tif
+        536724
+        4.07959e+06
+        741
+        781
+        24
+        -24
+        31
+        N
+        ${INPUTDATA}/DEM/srtm_directory/
+        24
+        )
+
 
 #========================= Ortho rectif SAR data  ===============================
 

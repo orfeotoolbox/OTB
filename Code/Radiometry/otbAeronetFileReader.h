@@ -18,13 +18,14 @@
 #ifndef __otbAeronetFileReader_h
 #define __otbAeronetFileReader_h
 
+#include <string>
+#include <vector>
+
 #include "itkExceptionObject.h"
 #include "itkProcessObject.h"
 #include "otbMacro.h"
 #include "otbAeronetData.h"
-#include <string>
-#include <vector>
-#include <ossim/base/ossimDate.h>
+#include "base/ossimDate.h"
 
 namespace otb
 {
