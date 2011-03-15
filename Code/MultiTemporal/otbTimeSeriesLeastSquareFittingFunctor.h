@@ -18,6 +18,10 @@
 #ifndef __otbTimeSeriesLSFF_h
 #define __otbTimeSeriesLSFF_h
 
+#include "vnl/algo/vnl_matrix_inverse.h"
+#include "vnl/vnl_transpose.h"
+#include "vnl/vnl_matrix.h"
+
 
 namespace otb
 {
@@ -86,7 +90,40 @@ public:
 
   inline void EstimateTimeFunction(const TSeriesType& series)
   {
+    unsigned int nbDates = m_DoySeries.Size();
+    unsigned int nbCoefs = m_TimeFunction.GetCoefficients().Size();
 
+    // b = A * c
+    vnl_matrix<double> A(nbDates, nbCoefs);
+    vnl_matrix<double> b(nbDates, 1);
+
+    // fill the matrices
+
+    typename TTimeFunction::CoefficientsType tmpCoefs;
+    for(unsigned int j = 0; j<nbCoefs; ++j)
+      tmpCoefs[j] = 0.0;
+
+    for(unsigned int i = 0; i<nbDates; ++i)
+      {
+      b.put(i,0, series[ m_DoySeries[i] ]/m_WeightSeries[m_DoySeries[i]]);
+      for(unsigned int j = 0; j<nbCoefs; ++j)
+        {
+        tmpCoefs[j] = 1.0;
+        m_TimeFunction.SetCoefficients(tmpCoefs);
+        A.put(i,j, m_TimeFunction.GetValue(m_DoySeries[i])/m_WeightSeries[m_DoySeries[i]]);
+        tmpCoefs[j] = 0.0;
+        }
+      }
+    // solve the problem c = (At * A)^-1*At*b
+
+    vnl_matrix<double> atainv =  vnl_matrix_inverse<double>(vnl_transpose(A) * A);
+
+    vnl_matrix<double> atainvat = atainv * vnl_transpose(A);
+    vnl_matrix<double> c = atainvat * b;
+
+    for(unsigned int j = 0; j<nbCoefs; ++j)
+      tmpCoefs[j] = c.get(j,0);
+    m_TimeFunction.SetCoefficients(tmpCoefs);
   }
 
 
