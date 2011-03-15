@@ -675,7 +675,7 @@ double ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
     }
   else
     {
-    return vcl_sqrt(M_PI) * doubleFactorial(n) / vcl_pow(2, (n + 1) / 2.0);
+    return otb::CONST_SQRTPI * doubleFactorial(n) / vcl_pow(2, (n + 1) / 2.0);
     }
 }
 
@@ -684,7 +684,7 @@ template <class TLabelObject, class TLabelImage>
 double ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
 ::hyperSphereVolume(double radius)
 {
-  return vcl_pow(M_PI, LabelObjectType::ImageDimension /
+  return vcl_pow(otb::CONST_PI, LabelObjectType::ImageDimension /
                  2.0) * vcl_pow(radius, LabelObjectType::ImageDimension) / gammaN2p1(LabelObjectType::ImageDimension);
 }
 
@@ -702,7 +702,7 @@ double ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
 ::hyperSphereRadiusFromVolume(double volume)
 {
   return vcl_pow(volume * gammaN2p1(LabelObjectType::ImageDimension) /
-                 vcl_pow(M_PI, LabelObjectType::ImageDimension / 2.0), 1.0 / LabelObjectType::ImageDimension);
+                 vcl_pow(otb::CONST_PI, LabelObjectType::ImageDimension / 2.0), 1.0 / LabelObjectType::ImageDimension);
 }
 
 } // End namespace Functor
