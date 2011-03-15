@@ -1,4 +1,4 @@
-/*=========================================================================
+3/*=========================================================================
 
   Program:   ORFEO Toolbox
   Language:  C++
@@ -23,6 +23,7 @@
 #include "itkNumericTraits.h"
 #include "itkMacro.h"
 #include "itkExtractImageFilter.h"
+#include "otbMath.h"
 
 namespace otb
 {
