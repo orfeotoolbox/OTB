@@ -20,10 +20,10 @@
 #endif
 
 #include "itkFixedArray.h"
-#include "otbSavitzkyGolayInterpolationFunctorFunctor.h"
+#include "otbSavitzkyGolayInterpolationFunctor.h"
 #include "otbTimeSeries.h"
 
-int otbSavitzkyGolayInterpolationFunctorFunctorNew(int argc, char* argv[])
+int otbSavitzkyGolayInterpolationFunctorNew(int argc, char* argv[])
 {
 
   typedef float PixelType;
@@ -32,7 +32,7 @@ int otbSavitzkyGolayInterpolationFunctorFunctorNew(int argc, char* argv[])
   typedef itk::FixedArray< DoYType > DatesType;
   const unsigned int Radius = 2;
   
-  typedef otb::Functor::SavitzkyGolayInterpolationFunctorFunctor<Radius, SeriesType, DatesType> FunctorType;
+  typedef otb::Functor::SavitzkyGolayInterpolationFunctor<Radius, SeriesType, DatesType> FunctorType;
 
   FunctorType f;
   
