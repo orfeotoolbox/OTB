@@ -29,6 +29,7 @@ ADD_TEST(mtTuTimeSeriesLeastSquaresFittingFunctor ${MULTITEMPORAL_TESTS1}
 
 ADD_TEST(mtTvTimeSeriesLeastSquaresFittingFunctor ${MULTITEMPORAL_TESTS1}
         otbTimeSeriesLeastSquareFittingFunctorTest
+        1 2 3
 	 )
 
 

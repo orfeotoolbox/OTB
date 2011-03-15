@@ -37,14 +37,34 @@ int otbTimeSeriesLeastSquareFittingFunctorTest(int argc, char* argv[])
   
   typedef otb::Functor::TimeSeriesLeastSquareFittingFunctor<SeriesType, FunctionType, DatesType> FunctorType;
 
-  FunctorType f;
+  DatesType doySeries;
+  // one acquisition every 2 days
+  for(unsigned int i = 0; i<nbDates; i++)
+    doySeries[i] = 2*i;
+  
 
   SeriesType inSeries;
+  FunctorType::CoefficientsType inCoefs;
+  inCoefs[0] = ::atof(argv[1]);
+  inCoefs[1] = ::atof(argv[2]);
+  inCoefs[2] = ::atof(argv[3]);
+
+  // x = a + b * t + c * t^2
+  for(unsigned int i = 0; i<nbDates; i++)
+    inSeries[i] = inCoefs[0]+inCoefs[1]*doySeries[i]+inCoefs[2]*vcl_pow(doySeries[i],2.0);
 
 
+  FunctorType f;
   SeriesType outSeries = f(inSeries);
 
   FunctorType::CoefficientsType outCoefs = f.GetCoefficients();
+
+  for(unsigned int i=0; i<= Degree; i++)
+    if(outCoefs[i]!=inCoefs[i])
+      {
+      std::cout << outCoefs[i] << " != " << inCoefs[i] << std::endl;
+      return EXIT_FAILURE;
+      }
   
   return EXIT_SUCCESS;
 }
