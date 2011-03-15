@@ -150,10 +150,11 @@ PersistentShrinkImageFilter<TInputImage, TOutputImage>
 ::ThreadedGenerateData(const RegionType& outputRegionForThread, int threadId)
 {
   //std::cout << "outputRegionForThread " << threadId << "  " << outputRegionForThread << std::endl;
+  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
   const InputImageType*  inputPtr = this->GetInput();
 
   itk::ImageRegionConstIteratorWithIndex<InputImageType> inIt(inputPtr, outputRegionForThread);
-  for(inIt.GoToBegin(); !inIt.IsAtEnd(); ++inIt)
+  for(inIt.GoToBegin(); !inIt.IsAtEnd(); ++inIt, progress.CompletedPixel())
     {
     const IndexType& inIndex = inIt.GetIndex();
     if (inIndex[0] % m_ShrinkFactor == 0
