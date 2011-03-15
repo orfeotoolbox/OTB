@@ -57,6 +57,8 @@ public:
   /// Constructor
   TimeSeriesLeastSquareFittingFunctor()
   {
+    for(unsigned int i=0; i<m_WeightSeries.Size(); ++i)
+      m_WeightSeries[i] = 1.0;
   }
   /// Destructor
   virtual ~TimeSeriesLeastSquareFittingFunctor() {}
