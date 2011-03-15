@@ -307,6 +307,7 @@ KmzProductWriter<TInputImage>
 
       m_StreamingShrinkImageFilter->SetShrinkFactor(sampleRatioValue);
       m_StreamingShrinkImageFilter->SetInput(m_VectorImage);
+      m_StreamingShrinkImageFilter->Update();
 
       m_VectorRescaleIntensityImageFilter = VectorRescaleIntensityImageFilterType::New();
       m_VectorRescaleIntensityImageFilter->SetInput(m_StreamingShrinkImageFilter->GetOutput()); //m_ResampleVectorImage);
