@@ -35,6 +35,7 @@
 #include "itkMacro.h"
 #include "itkRGBPixel.h"
 #include "itkRGBAPixel.h"
+#include "itkTimeProbe.h"
 
 namespace otb
 {
@@ -307,14 +308,14 @@ void GDALImageIO::Read(void* buffer)
 
     // keep it for the moment
     otbMsgDevMacro(<< "Parameters RasterIO (case CInt and CShort):"
-                   << "\n, indX = " << lFirstColumn
-                   << "\n, indY = " << lFirstLine
-                   << "\n, sizeX = " << lNbColumns
-                   << "\n, sizeY = " << lNbLines
-                   << "\n, GDAL Data Type = " << GDALGetDataTypeName(m_PxType)
-                   << "\n, pixelOffset = " << pixelOffset
-                   << "\n, lineOffset = " << lineOffset
-                   << "\n, bandOffset = " << bandOffset);
+                   << "\n indX = " << lFirstColumn
+                   << "\n indY = " << lFirstLine
+                   << "\n sizeX = " << lNbColumns
+                   << "\n sizeY = " << lNbLines
+                   << "\n GDAL Data Type = " << GDALGetDataTypeName(m_PxType)
+                   << "\n pixelOffset = " << pixelOffset
+                   << "\n lineOffset = " << lineOffset
+                   << "\n bandOffset = " << bandOffset);
 
     CPLErr lCrGdal = m_Dataset->GetDataSet()->RasterIO(GF_Read,
                                                        lFirstColumn,
@@ -441,15 +442,17 @@ void GDALImageIO::Read(void* buffer)
     // keep it for the moment
     //otbMsgDevMacro(<< "Number of bands inside input file: " << m_NbBands);
     otbMsgDevMacro(<< "Parameters RasterIO : \n"
-                   << ", indX = " << lFirstColumn << "\n"
-                   << ", indY = " << lFirstLine << "\n"
-                   << ", sizeX = " << lNbColumns << "\n"
-                   << ", sizeY = " << lNbLines << "\n"
-                   << ", GDAL Data Type = " << GDALGetDataTypeName(m_PxType) << "\n"
-                   << ", pixelOffset = " << pixelOffset << "\n"
-                   << ", lineOffset = " << lineOffset << "\n"
-                   << ", bandOffset = " << bandOffset);
+                   << " indX = " << lFirstColumn << "\n"
+                   << " indY = " << lFirstLine << "\n"
+                   << " sizeX = " << lNbColumns << "\n"
+                   << " sizeY = " << lNbLines << "\n"
+                   << " GDAL Data Type = " << GDALGetDataTypeName(m_PxType) << "\n"
+                   << " pixelOffset = " << pixelOffset << "\n"
+                   << " lineOffset = " << lineOffset << "\n"
+                   << " bandOffset = " << bandOffset);
 
+    itk::TimeProbe chrono;
+    chrono.Start();
     CPLErr lCrGdal = m_Dataset->GetDataSet()->RasterIO(GF_Read,
                                                        lFirstColumn,
                                                        lFirstLine,
@@ -465,6 +468,8 @@ void GDALImageIO::Read(void* buffer)
                                                        pixelOffset,
                                                        lineOffset,
                                                        bandOffset);
+    chrono.Stop();
+    otbMsgDevMacro(<< "RasterIO Read took " << chrono.GetTotal() << " sec")
 
     // Check if gdal call succeed
     if (lCrGdal == CE_Failure)
@@ -1073,7 +1078,9 @@ void GDALImageIO::Write(const void* buffer)
   // If driver supports streaming
   if (m_CanStreamWrite)
     {
-
+    otbMsgDevMacro(<< "RasterIO Write requested region : " << this->GetIORegion())
+    itk::TimeProbe chrono;
+    chrono.Start();
     CPLErr lCrGdal = m_Dataset->GetDataSet()->RasterIO(GF_Write,
                                                        lFirstColumn,
                                                        lFirstLine,
@@ -1094,6 +1101,8 @@ void GDALImageIO::Write(const void* buffer)
                                                        m_BytePerPixel * m_NbBands * lNbColumns,
                                                        // Band offset is BytePerPixel
                                                        m_BytePerPixel);
+    chrono.Stop();
+    otbMsgDevMacro(<< "RasterIO Write took " << chrono.GetTotal() << " sec")
 
     // Check if writing succeed
     if (lCrGdal == CE_Failure)
@@ -1246,6 +1255,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
     // efficient when writing huge tiffs
     if( driverShortName.compare("GTiff") == 0 )
       {
+      otbMsgDevMacro(<< "Enabling TIFF Tiled mode")
       papszOptions = CSLAddNameValue( papszOptions, "TILED", "YES" );
 
       unsigned int nbColumns = this->GetIORegion().GetSize()[0];
@@ -1260,6 +1270,8 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
 
       // align the tile dimension to the next multiple of 16 (needed by TIFF spec)
       tileDimension = ( tileDimension + 15 ) / 16 * 16;
+
+      otbMsgDevMacro(<< "Tile dimension : " << tileDimension << " * " << tileDimension)
 
       std::ostringstream oss;
       oss << tileDimension;
