@@ -419,7 +419,7 @@ ADD_TEST(prTvOrthoRectificationCoastalZoneWithSRTMNoData ${PROJECTIONS_TESTS2}
         ${TEMP}/prTvOrthoRectificationCoastalZoneWithSRTMNoData.tif
         536724
         4.07959e+06
-        1209
+        741
         781
         24
         -24
