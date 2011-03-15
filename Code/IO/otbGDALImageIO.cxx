@@ -1098,9 +1098,8 @@ void GDALImageIO::Write(const void* buffer)
   // If driver supports streaming
   if (m_CanStreamWrite)
     {
-    otbMsgDevMacro(<< "RasterIO Write requested region : " << this->GetIORegion())
-    itk::TimeProbe chrono;
-    chrono.Start();
+
+    otbMsgDevMacro(<< "RasterIO Write requested region : " << this->GetIORegion() <<
                  "\n, lNbColumns =" << lNbColumns <<
                  "\n, lNbLines =" << lNbLines <<
                  "\n, m_PxType =" << GDALGetDataTypeName(m_PxType) <<
@@ -1108,9 +1107,10 @@ void GDALImageIO::Write(const void* buffer)
                  "\n, m_BytePerPixel ="<< m_BytePerPixel <<
                  "\n, Pixel offset =" << m_BytePerPixel * m_NbBands <<  // is nbComp * BytePerPixel
                  "\n, Line offset =" << m_BytePerPixel * m_NbBands * lNbColumns << // is pixelOffset * nbColumns
-                 "\n, Band offset =" <<  m_BytePerPixel << //  is BytePerPixel
-                 std::endl;*/
+                 "\n, Band offset =" <<  m_BytePerPixel) //  is BytePerPixel
 
+                 itk::TimeProbe chrono;
+    chrono.Start();
     CPLErr lCrGdal = m_Dataset->GetDataSet()->RasterIO(GF_Write,
                                                        lFirstColumn,
                                                        lFirstLine,
