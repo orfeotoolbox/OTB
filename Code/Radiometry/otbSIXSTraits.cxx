@@ -174,7 +174,7 @@ SIXSTraits::ComputeWavelengthSpectralBandValuesFor6S(
   if (! (L_min + static_cast<double>(FilterFunctionValues.size() - 1) * L_userStep < (L_max - epsilon) ) )
     {
     itkGenericExceptionMacro(
-      << "The following condition manu: " << L_min << "+(" << FilterFunctionValues.size() << "-1)*" << L_userStep <<
+      << "The following condition: " << L_min << "+(" << FilterFunctionValues.size() << "-1)*" << L_userStep <<
       " < (" << L_max << "-" << epsilon << ") is not respected !" << "val1 " << L_min + static_cast<double>(FilterFunctionValues.size() - 1) * L_userStep << " val2 " << L_max - epsilon);
     }
 
