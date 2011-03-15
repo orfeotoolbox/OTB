@@ -32,4 +32,5 @@ void RegisterTests()
   REGISTER_TEST(otbTimeSeriesLeastSquareFittingFunctorWeightsTest);
   REGISTER_TEST(otbSavitzkyGolayInterpolationFunctorNew);
   REGISTER_TEST(otbSavitzkyGolayInterpolationFunctorTest);
+  REGISTER_TEST(otbEnvelopeSavitzkyGolayInterpolationFunctorTest);
 }

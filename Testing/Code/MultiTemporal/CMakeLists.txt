@@ -51,6 +51,10 @@ ADD_TEST(mtTvSavitzkyGolayInterpolationFunctorTest ${MULTITEMPORAL_TESTS1}
         otbSavitzkyGolayInterpolationFunctorTest
 	 )
 
+ADD_TEST(mtTvEnvelopeSavitzkyGolayInterpolationFunctorTest ${MULTITEMPORAL_TESTS1}
+        otbEnvelopeSavitzkyGolayInterpolationFunctorTest
+	 )
+
 # -------  CXX Source Files -----------------------------------
 SET(BasicMultiTemporal_SRCS1 
 otbPolynomialTimeSeriesTest.cxx
@@ -59,6 +63,7 @@ otbTimeSeriesLeastSquareFittingFunctorTest.cxx
 otbTimeSeriesLeastSquareFittingFunctorWeightsTest.cxx
 otbSavitzkyGolayInterpolationFunctorNew.cxx
 otbSavitzkyGolayInterpolationFunctorTest.cxx
+otbEnvelopeSavitzkyGolayInterpolationFunctorTest.cxx
 )
 
 ADD_EXECUTABLE(otbMultiTemporalTests1 otbMultiTemporalTests1.cxx ${BasicMultiTemporal_SRCS1})
