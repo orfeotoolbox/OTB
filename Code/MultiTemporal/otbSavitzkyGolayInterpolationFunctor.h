@@ -42,6 +42,13 @@ public:
       m_WeightSeries[i] = weights[i];
   }
 
+  inline void SetDates(const TDates doy)
+  {
+    for(unsigned int i=0; i<m_DoySeries.Size(); ++i)
+      m_DoySeries[i] = doy[i];
+  }
+
+
   inline TSeries operator ()(const TSeries& series)
   {
 
@@ -50,6 +57,7 @@ public:
 private:
 
   TWeight m_WeightSeries;
+  TDates m_DoySeries;
   
 };
 }
