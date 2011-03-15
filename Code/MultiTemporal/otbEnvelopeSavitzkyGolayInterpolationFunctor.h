@@ -49,6 +49,8 @@ public:
 
   inline void SetWeights(const TWeight weights)
   {
+    for(unsigned int i=0; i<m_WeightSeries.Size(); ++i)
+      m_WeightSeries[i] = weights[i];
     m_SGFunctor.SetWeights( weights );
   }
 
@@ -73,6 +75,10 @@ public:
       m_DecreaseFactor = df;
   }
 
+  inline void SetIterations(unsigned int its)
+  {
+    m_Iterations = its;
+  }
 
   inline TSeries operator ()(const TSeries& series)
   {
@@ -82,7 +88,16 @@ public:
 
     for(unsigned int i=0; i<m_Iterations-1; ++i)
       {
-       // 
+      for(unsigned int j=0; j<nbDates; ++j)
+        {
+        tmpSeries[j] = outSeries[j];
+        if( m_UpperEnvelope && outSeries[j]>series[j] )
+          m_WeightSeries[j] = m_WeightSeries[j]*m_DecreaseFactor;
+        if( !m_UpperEnvelope && outSeries[j]<series[j] )
+          m_WeightSeries[j] = m_WeightSeries[j]*m_DecreaseFactor;
+
+        outSeries = m_SGFunctor(series);
+        }    
       }
     
 
@@ -91,6 +106,7 @@ public:
 
 private:
 
+  TWeight m_WeightSeries;
   SGFunctorType m_SGFunctor;
   unsigned int m_Iterations;
   bool m_UpperEnvelope;

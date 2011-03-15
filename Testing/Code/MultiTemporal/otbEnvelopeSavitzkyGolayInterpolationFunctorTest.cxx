@@ -61,6 +61,7 @@ int otbEnvelopeSavitzkyGolayInterpolationFunctorTest(int argc, char* argv[])
   f.SetDates( doySeries );
   f.SetUpperEnvelope();
   f.SetDecreaseFactor(0.9);
+  f.SetIterations(4);
 
   SeriesType outSeries = f(inSeries);
 
