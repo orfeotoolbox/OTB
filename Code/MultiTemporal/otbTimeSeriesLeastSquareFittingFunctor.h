@@ -107,12 +107,12 @@ public:
 
     for(unsigned int i = 0; i<nbDates; ++i)
       {
-      b.put(i,0, series[ m_DoySeries[i] ]/m_WeightSeries[m_DoySeries[i]]);
+      b.put(i,0, series[i]/m_WeightSeries[i]);
       for(unsigned int j = 0; j<nbCoefs; ++j)
         {
         tmpCoefs[j] = 1.0;
         m_TimeFunction.SetCoefficients(tmpCoefs);
-        A.put(i,j, m_TimeFunction.GetValue(m_DoySeries[i])/m_WeightSeries[m_DoySeries[i]]);
+        A.put(i,j, m_TimeFunction.GetValue(m_DoySeries[i])/m_WeightSeries[i]);
         tmpCoefs[j] = 0.0;
         }
       }
