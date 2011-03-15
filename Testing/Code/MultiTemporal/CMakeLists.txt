@@ -32,6 +32,11 @@ ADD_TEST(mtTvTimeSeriesLeastSquaresFittingFunctor ${MULTITEMPORAL_TESTS1}
         1 2 3
 	 )
 
+ADD_TEST(mtTvTimeSeriesLeastSquaresFittingFunctor2 ${MULTITEMPORAL_TESTS1}
+        otbTimeSeriesLeastSquareFittingFunctorTest
+        10 0.3 3.123
+	 )
+
 
 # -------  CXX Source Files -----------------------------------
 SET(BasicMultiTemporal_SRCS1 
