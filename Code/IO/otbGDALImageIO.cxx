@@ -1040,6 +1040,8 @@ bool GDALImageIO::CanStreamWrite()
 
 void GDALImageIO::Write(const void* buffer)
 {
+  std::cout << "otbGDALImageIO:Write -> BEGIN ..." <<std::endl;
+
   // Check if we have to write the image information
   if (m_FlagWriteImageInformation == true)
     {
@@ -1069,9 +1071,26 @@ void GDALImageIO::Write(const void* buffer)
     lFirstColumn = 0;
     }
 
+  // Convert buffer from void * to unsigned char *
+  unsigned char *p = static_cast<unsigned char*>( const_cast<void *>(buffer));
+  printDataBuffer(p,  m_PxType, m_NbBands, 10*2); // Buffer incorrect
+
   // If driver supports streaming
   if (m_CanStreamWrite)
     {
+    std::cout << "*** StreamWriteCase RasterIO***" <<std::endl;
+    std::cout << "\n, lFirstColumn =" << lFirstColumn <<
+                 "\n, lFirstLine =" << lFirstLine <<
+                 "\n, lNbColumns =" << lNbColumns <<
+                 "\n, lNbLines =" << lNbLines <<
+                 "\n, m_PxType =" << GDALGetDataTypeName(m_PxType) <<
+                 "\n, m_NbBands =" << m_NbBands <<
+                 "\n, m_BytePerPixel ="<< m_BytePerPixel <<
+                 "\n, Pixel offset =" << m_BytePerPixel * m_NbBands <<  // is nbComp * BytePerPixel
+                 "\n, Line offset =" << m_BytePerPixel * m_NbBands * lNbColumns << // is pixelOffset * nbColumns
+                 "\n, Band offset =" <<  m_BytePerPixel << //  is BytePerPixel
+                 std::endl;
+
     CPLErr lCrGdal = m_Dataset->GetDataSet()->RasterIO(GF_Write,
                                                        lFirstColumn,
                                                        lFirstLine,
@@ -1128,6 +1147,7 @@ void GDALImageIO::Write(const void* buffer)
                                                  option, NULL, NULL );
     GDALClose(hOutputDS);
     }
+  std::cout << "otbGDALImageIO:Write -> ... END" <<std::endl;
 }
 
 /** TODO : Methode WriteImageInformation non implementee */
@@ -1146,35 +1166,33 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
     itkExceptionMacro(<< "Dimensions are not defined.");
     }
 
-  if ((this->GetPixelType() == COMPLEX) && (m_NbBands / 2 > 0))
+  if ((this->GetPixelType() == COMPLEX) /*&& (m_NbBands / 2 > 0)*/)
     {
-    m_NbBands /= 2;
+    //m_NbBands /= 2;
 
-    if (this->GetComponentType() == SHORT)
+    /*if (this->GetComponentType() == CSHORT)
       {
       m_BytePerPixel = 4;
       m_PxType = GDT_CInt16;
-      }
-    else if (this->GetComponentType() == INT)
+      }*/
+    /*else if (this->GetComponentType() == CINT)
       {
       m_BytePerPixel = 8;
       m_PxType = GDT_CInt32;
       }
-    else if (this->GetComponentType() == DOUBLE)
+    else*/ if (this->GetComponentType() == CFLOAT)
+      {
+      m_BytePerPixel = 8;
+      m_PxType = GDT_CFloat32;
+      }
+    else if (this->GetComponentType() == CDOUBLE)
       {
       m_BytePerPixel = 16;
       m_PxType = GDT_CFloat64;
       }
-    else if (this->GetComponentType() == FLOAT)
-      {
-      m_BytePerPixel = 8;
-      m_PxType = GDT_CFloat32;
-      }
     else
       {
-      this->SetComponentType(FLOAT);
-      m_BytePerPixel = 8;
-      m_PxType = GDT_CFloat32;
+      itkExceptionMacro(<< "This complex type is not defined :" << this->GetPixelTypeAsString(this->GetPixelType()) );
       }
     }
   else

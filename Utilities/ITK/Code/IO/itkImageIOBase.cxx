@@ -226,6 +226,10 @@ itkSetPixelType(ImageIOBase *This,
                 ImageIOBase::IOComponentType ntype, 
                 T itkNotUsed( dummy ) )
 {
+  std::cout << "itkSetPixelType() original way" << std::endl;
+  std::cout << "ptype.name() = " << ptype.name() <<std::endl;
+  std::cout << "ntype = " << ntype <<std::endl;
+
   if( ptype == typeid(T) )
     {
     This->SetNumberOfComponents(1);
@@ -415,22 +419,55 @@ itkSetPixelType(ImageIOBase *This,
     This->SetPixelType(ImageIOBase::MATRIX);
     return true;
     }
-  else if ( ptype == typeid(std::complex<T>) )
+  /*else if ( ptype == typeid(std::complex<T>) )
     {
+    std::cout << "complex detected" <<std::endl;
     This->SetNumberOfComponents(2);
     This->SetComponentType(ntype);
     This->SetPixelType(ImageIOBase::COMPLEX);
     return true;
-    } 
+    }*/
   return false;
 }
   
+//
+// This macro enforces pixel type information to be available for all different
+// pixel types.
+//
+template <typename T>
+bool
+itkSetPixelType(ImageIOBase *This,
+                const std::type_info &ptype,
+                ImageIOBase::IOComponentType ntype,
+                std::complex<T> itkNotUsed( dummy ) )
+{
+  std::cout << "itkSetPixelType() specialized way" << std::endl;
+  std::cout << "ptype.name() = " << ptype.name() <<std::endl;
+  std::cout << "ntype = " << ntype <<std::endl;
  
+  if ( ptype == typeid(std::complex<float>) )
+    {
+  std::cout << "complex float detected" <<std::endl;
+  This->SetNumberOfComponents(1);
+  This->SetComponentType(ImageIOBase::CFLOAT);
+  This->SetPixelType(ImageIOBase::COMPLEX);
+  return true;
+    }
+  if ( ptype == typeid(std::complex<double>) )
+    {
+  std::cout << "complex double detected" <<std::endl;
+  This->SetNumberOfComponents(1);
+  This->SetComponentType(ImageIOBase::CDOUBLE);
+  This->SetPixelType(ImageIOBase::COMPLEX);
+  return true;
+    }
+  return false;
+}
 
 
 bool ImageIOBase::SetPixelTypeInfo(const std::type_info& ptype)
 {
-
+  std::cout << " SetPixelTypeInfo -> BEGIN ..." <<std::endl;
   this->SetNumberOfComponents(1);
   this->SetPixelType(ImageIOBase::UNKNOWNPIXELTYPE);
   this->SetComponentType(ImageIOBase::UNKNOWNCOMPONENTTYPE);
@@ -482,7 +519,10 @@ bool ImageIOBase::SetPixelTypeInfo(const std::type_info& ptype)
     return false;
     }
 
-
+  std::cout << "ComponentType: " << this->GetComponentTypeInfo().name() <<std::endl;
+  std::cout << "ComponentSize: " <<this->GetComponentSize() <<std::endl;
+  std::cout << "Nb of Component: " <<this->GetNumberOfComponents() <<std::endl;
+  std::cout << "Pixel Type: " <<this->GetPixelTypeAsString(this->GetPixelType()) <<std::endl;
   return true;
 }
 

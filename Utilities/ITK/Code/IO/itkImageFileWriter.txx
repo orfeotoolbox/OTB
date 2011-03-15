@@ -108,6 +108,7 @@ void
 ImageFileWriter<TInputImage>
 ::Write()
 {
+  std::cout << "itk:ImageFileWriter:Write -> BEGIN ..." <<std::endl;
   const InputImageType * input = this->GetInput();
 
   itkDebugMacro( <<"Writing an image file" );
@@ -228,7 +229,8 @@ ImageFileWriter<TInputImage>
   else
     {
       // Set the pixel and component type; the number of components.
-      m_ImageIO->SetPixelTypeInfo(typeid(InputImagePixelType));  
+    std::cout << "typeid(InputImagePixelType) = " << typeid(InputImagePixelType).name() <<std::endl;
+    m_ImageIO->SetPixelTypeInfo(typeid(InputImagePixelType));
     }
 
   // Setup the image IO for writing.
@@ -347,6 +349,8 @@ ImageFileWriter<TInputImage>
 
   // Release upstream data if requested
   this->ReleaseInputs();
+
+  std::cout << "itk:ImageFileWriter:Write -> ... END" <<std::endl;
 }
 
 
@@ -356,6 +360,7 @@ void
 ImageFileWriter<TInputImage>
 ::GenerateData(void)
 {
+  std::cout << "itk:ImageFileWriter:GenerateData -> BEGIN ..." <<std::endl;
   const InputImageType * input = this->GetInput();  
   InputImageRegionType largestRegion = input->GetLargestPossibleRegion();
   InputImagePointer cacheImage;  
@@ -417,7 +422,7 @@ ImageFileWriter<TInputImage>
 
 
   m_ImageIO->Write(dataPtr);
-
+  std::cout << "itk:ImageFileWriter:GenerateData -> ... END" <<std::endl;
 }
 
 

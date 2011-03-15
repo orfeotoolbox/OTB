@@ -68,6 +68,7 @@ void
 ImageFileWriter<TInputImage>
 ::Write()
 {
+  std::cout << "otb:ImageFileWriter:Write -> BEGIN ..." <<std::endl;
   // NOTE: this const_cast<> is due to the lack of const-correctness
   // of the ProcessObject.
   InputImageType * nonConstInput = const_cast<InputImageType *>(this->GetInput());
@@ -103,6 +104,7 @@ ImageFileWriter<TInputImage>
       geom_kwl.write(geomFileName.chars());
       }
     }
+  std::cout << "otb:ImageFileWriter:Write -> ... END" <<std::endl;
 }
 
 /**

@@ -3018,9 +3018,9 @@ FOREACH(DATA_PIXELTYPE ${DATA_PIXELTYPES_LIST})
 
   ADD_TEST(ioTvWriteImageComplex${DATA_PIXELTYPE}
            ${IO_TESTS23}
-           #--compare-image ${NOTOL}
-           #   ${INPUTDATA}/monobandComplex${DATA_PIXELTYPE}.tif
-           #   ${TEMP}/monobandComplexOut${DATA_PIXELTYPE}.tif
+           --compare-image ${NOTOL}
+              ${INPUTDATA}/monobandComplex${DATA_PIXELTYPE}.tif
+              ${TEMP}/monobandComplexOut${DATA_PIXELTYPE}.tif
            otbImageComplexFileWriterTestWithoutInput${DATA_PIXELTYPE}
               ${TEMP}/monobandComplexOut${DATA_PIXELTYPE}.tif
               100
@@ -3028,27 +3028,57 @@ FOREACH(DATA_PIXELTYPE ${DATA_PIXELTYPES_LIST})
         
   FOREACH(NBBANDS ${NBBANDS_LIST})       
      
-    ADD_TEST(ioTvWriteVectorImageScalar${DATA_PIXELTYPE}${NBBANDS}Bands
-             ${IO_TESTS23}
-             --compare-image ${NOTOL}
-                ${INPUTDATA}/multiband${DATA_PIXELTYPE}_${NBBANDS}bands.tif
-                ${TEMP}/multibandOut${DATA_PIXELTYPE}_${NBBANDS}bands.tif
-             otbVectorImageFileWriterScalarTestWithoutInput${DATA_PIXELTYPE}
-                ${TEMP}/multibandOut${DATA_PIXELTYPE}_${NBBANDS}bands.tif
-                100
-                ${NBBANDS}
-             )         
        
-    ADD_TEST(ioTvWriteVectorImageComplex${DATA_PIXELTYPE}${NBBANDS}Bands
+               
+    IF ( NOT ${DATA_PIXELTYPE} MATCHES "Short" )   
+      
+      ADD_TEST(ioTvWriteVectorImageScalar${DATA_PIXELTYPE}${NBBANDS}Bands
+               ${IO_TESTS23}
+               --compare-image ${NOTOL}
+                  ${INPUTDATA}/multiband${DATA_PIXELTYPE}_${NBBANDS}bands.tif
+                  ${TEMP}/multibandOut${DATA_PIXELTYPE}_${NBBANDS}bands.tif
+               otbVectorImageFileWriterScalarTestWithoutInput${DATA_PIXELTYPE}
+                  ${TEMP}/multibandOut${DATA_PIXELTYPE}_${NBBANDS}bands.tif
+                  100
+                  ${NBBANDS}
+               ) 
+      
+      ADD_TEST(ioTvWriteVectorImageComplex${DATA_PIXELTYPE}${NBBANDS}Bands
+               ${IO_TESTS23}
+               --compare-image ${NOTOL}
+                  ${INPUTDATA}/multibandComplex${DATA_PIXELTYPE}_${NBBANDS}bands.tif
+                  ${TEMP}/multibandComplexOut${DATA_PIXELTYPE}_${NBBANDS}bands.tif
+               otbVectorImageFileWriterComplexTestWithoutInput${DATA_PIXELTYPE}
+                  ${TEMP}/multibandComplexOut${DATA_PIXELTYPE}_${NBBANDS}bands.tif
+                  100
+                  ${NBBANDS}
+               )
+                      
+    ELSE ( NOT ${DATA_PIXELTYPE} MATCHES "Short" )
+      
+      ADD_TEST(ioTvWriteVectorImageScalar${DATA_PIXELTYPE}${NBBANDS}Bands
              ${IO_TESTS23}
              --compare-image ${NOTOL}
-                ${INPUTDATA}/multibandComplex${DATA_PIXELTYPE}_${NBBANDS}bands.tif
-                ${TEMP}/multibandComplexOut${DATA_PIXELTYPE}_${NBBANDS}bands.tif
-             otbVectorImageFileWriterComplexTestWithoutInput${DATA_PIXELTYPE}
-                ${TEMP}/multibandComplexOut${DATA_PIXELTYPE}_${NBBANDS}bands.tif
-                100
+                ${INPUTDATA}/multiband${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
+                ${TEMP}/multibandOut${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
+             otbVectorImageFileWriterScalarTestWithoutInput${DATA_PIXELTYPE}
+                ${TEMP}/multibandOut${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
+                50
                 ${NBBANDS}
              )
+      
+      ADD_TEST(ioTvWriteVectorImageComplex${DATA_PIXELTYPE}${NBBANDS}Bands
+               ${IO_TESTS23}
+               --compare-image ${NOTOL}
+                  ${INPUTDATA}/multibandComplex${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
+                  ${TEMP}/multibandComplexOut${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
+               otbVectorImageFileWriterComplexTestWithoutInput${DATA_PIXELTYPE}
+                  ${TEMP}/multibandComplexOut${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
+                  50
+                  ${NBBANDS}
+               )
+    
+    ENDIF (  NOT ${DATA_PIXELTYPE} MATCHES "Short" )
              
   ENDFOREACH(NBBANDS ${NBBANDS_LIST})
   

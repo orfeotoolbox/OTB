@@ -692,10 +692,10 @@ bool ossimTiffTileSource::open()
    }
    else
    {
-      ossimNotify(ossimNotifyLevel_WARN)
+      /*ossimNotify(ossimNotifyLevel_WARN)
          << MODULE << " Error:\nCannot determine scalar type.\n"
          << "Trace dump follows:\n";
-      print(ossimNotify(ossimNotifyLevel_WARN));
+      print(ossimNotify(ossimNotifyLevel_WARN));*/
       
       return false;
    }
