@@ -50,7 +50,8 @@ PersistentShrinkImageFilter<TInputImage, TOutputImage>
 {
   Superclass::GenerateOutputInformation();
 
-  const InputImageType* input = this->GetInput();
+  const InputImageType*  input = this->GetInput();
+
   OutputImageType* output = this->GetOutput();
 
   if (input)
@@ -86,7 +87,8 @@ PersistentShrinkImageFilter<TInputImage, TOutputImage>
   m_Chrono = itk::TimeProbe();
 
   // get pointers to the input and output
-  const InputImageType*  inputPtr = this->GetInput();
+  InputImageType* inputPtr = const_cast<InputImageType*>(this->GetInput());
+  inputPtr->UpdateOutputInformation();
 
   m_ShrinkedOutput = OutputImageType::New();
 
