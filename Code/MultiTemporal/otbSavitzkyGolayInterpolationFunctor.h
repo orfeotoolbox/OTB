@@ -80,16 +80,15 @@ public:
 
     for(unsigned int i=firstSample; i<=lastSample; ++i)
       {
-
       InterpolatedSeriesType tmpInSeries;
       InterpolatedDatesType tmpDates;
       InterpolatedWeightType tmpWeights;
 
-      for(int j=-Radius; j<=Radius; ++j)
+      for(unsigned int j=0; j<=2*Radius; ++j)
         {
-        tmpInSeries[j+Radius] = series[i+j];
-        tmpDates[j+Radius] = m_DoySeries[i+j];
-        tmpWeights[j+Radius] = m_WeightSeries[i+j];
+        tmpInSeries[j] = series[i+j-Radius];
+        tmpDates[j] = m_DoySeries[i+j-Radius];
+        tmpWeights[j] = m_WeightSeries[i+j-Radius];
         }
       
 
