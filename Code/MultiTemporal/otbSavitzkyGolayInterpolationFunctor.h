@@ -23,7 +23,7 @@ namespace otb
 {
 namespace Functor
 {
-template <unsigned int Radius, class TSeries, class TDates>
+template <unsigned int Radius, class TSeries, class TDates, class TWeight = TSeries>
 class SavitzkyGolayInterpolationFunctor
 {
 public:
@@ -36,12 +36,20 @@ public:
   /// Destructor
   virtual ~SavitzkyGolayInterpolationFunctor() {}
 
+  inline void SetWeights(const TWeight weights)
+  {
+    for(unsigned int i=0; i<m_WeightSeries.Size(); ++i)
+      m_WeightSeries[i] = weights[i];
+  }
+
   inline TSeries operator ()(const TSeries& series)
   {
 
   }
 
 private:
+
+  TWeight m_WeightSeries;
   
 };
 }
