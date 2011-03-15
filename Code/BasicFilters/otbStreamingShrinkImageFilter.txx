@@ -131,7 +131,7 @@ void
 PersistentShrinkImageFilter<TInputImage, TOutputImage>
 ::Synthetize()
 {
-  std::cout << "Shrink time : " << m_Chrono.GetTotal() << std::endl;
+  otbMsgDevMacro( "Shrink time : " << m_Chrono.GetTotal() )
 }
 
 template<class TInputImage, class TOutputImage>
