@@ -55,6 +55,7 @@ int otbTimeSeriesLeastSquareFittingFunctorTest(int argc, char* argv[])
 
 
   FunctorType f;
+  f.SetDates( doySeries );
   SeriesType outSeries = f(inSeries);
 
   FunctorType::CoefficientsType outCoefs = f.GetCoefficients();

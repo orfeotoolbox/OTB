@@ -49,6 +49,12 @@ public:
     return outSeries;
   }
 
+  inline void SetDates(const TDateType& doy)
+  {
+    for(unsigned int i=0; i<doy.Size(); ++i)
+      m_DoySeries[i] = doy[i];
+  }
+
   inline CoefficientsType GetCoefficients() const
   {
     return m_TimeFunction.GetCoefficients();
@@ -58,6 +64,7 @@ public:
 private:
   /// 
   TTimeFunction m_TimeFunction;
+  TDateType m_DoySeries;
 };
 }
 }
