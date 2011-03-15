@@ -61,7 +61,7 @@ int otbTimeSeriesLeastSquareFittingFunctorTest(int argc, char* argv[])
   FunctorType::CoefficientsType outCoefs = f.GetCoefficients();
 
   for(unsigned int i=0; i<= Degree; i++)
-    if(outCoefs[i]!=inCoefs[i])
+    if(fabs((outCoefs[i]-inCoefs[i])/inCoefs[i])>0.01)
       {
       std::cout << outCoefs[i] << " != " << inCoefs[i] << std::endl;
       return EXIT_FAILURE;
