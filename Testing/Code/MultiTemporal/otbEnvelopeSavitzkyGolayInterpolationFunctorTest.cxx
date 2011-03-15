@@ -75,7 +75,8 @@ int otbEnvelopeSavitzkyGolayInterpolationFunctorTest(int argc, char* argv[])
 
   interpolError/=nbDates;
 
-  if(interpolError > 0.10)
+
+  if(interpolError > 0.1)
     {
     std::cout << "Interpolation error = " << interpolError << std::endl;
     return EXIT_FAILURE;
