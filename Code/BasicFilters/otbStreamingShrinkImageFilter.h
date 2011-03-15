@@ -124,7 +124,11 @@ private:
 
 
 /** \class StreamingShrinkImageFilter
- * \brief
+ * \brief Generates a quicklook of the input image
+ *
+ * This filter computes a subsampled version of the input image with streaming capabilities
+ *
+ * The subsampling ration is set with SetShrinkFactor
  *
  * \sa PersistentImageFilter
  * \ingroup Streamed
