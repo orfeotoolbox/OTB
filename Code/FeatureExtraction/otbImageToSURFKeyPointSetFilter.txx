@@ -55,7 +55,6 @@ void
 ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
 ::GenerateData(void)
 {
-
   double   k;
   double   sigma_in = 2.;
   SizeType radius;
@@ -378,7 +377,7 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
 
         if (pt[0] + pt[1] != 0)
           {
-          angle = atan(pt[0] / pt[1]) * (Pi / M_PI);
+          angle = atan(pt[0] / pt[1]) * (Pi / otb::CONST_PI);
           if (angle < 0) angle += 2 * Pi;
 
           bin = (int) (angle / LengthBin);
@@ -428,7 +427,7 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
   TransformType::Pointer eulerTransform = TransformType::New();
   TransformType::ParametersType  ParamVec(5);
   PointImageType pSrc, pDst;
-  double         angle = O * M_PI / 180;
+  double         angle = O * otb::CONST_PI / 180;
 
   int    i = 0,  col, raw, Nbin, pas = 1;
   double xx = 0, yy = 0;
