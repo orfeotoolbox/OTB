@@ -2994,6 +2994,37 @@ ADD_TEST(ioTvMultiChannelROI_HDF5_2_TIF ${COMMON_TESTS2}
 
 ENDIF(CHECK_GDAL_BUILDED_WITH_HDF)
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS23 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Tests about relative sepctral responses from file or OpticalMetadataInterface 
+
+ADD_TEST(raTuSpectralSensitivityReaderNew ${IO_TESTS23}
+     otbSpectralSensitivityReaderNew
+)
+
+ADD_TEST(raTvSpectralSensitivityReaderTest ${IO_TESTS23}
+     --compare-ascii ${NOTOL}
+        ${BASELINE_FILES}/raTvSpectralSensitivityReaderGenericTest.txt
+        ${TEMP}/rcTuSpectralSensitivityReaderTest.txt
+     --ignore-lines-with 2 DataPath FileName
+     otbSpectralSensitivityReaderTest
+	${INPUTDATA}/Radiometry
+	${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/Arcachon_extrait_3852_3319_546_542.tif
+        ${TEMP}/rcTuSpectralSensitivityReaderTest.txt	  
+)
+
+
+ADD_TEST(raTvSpectralSensitivityReaderGenericTest ${RADIOMETRY_TESTS5}
+     --compare-ascii ${NOTOL}
+        ${BASELINE_FILES}/raTvSpectralSensitivityReaderGenericTest.txt
+        ${TEMP}/raTvSpectralSensitivityReaderGenericTest.txt
+     --ignore-lines-with 2 DataPath FileName
+     otbSpectralSensitivityReaderGenericTest
+    ${INPUTDATA}/Radiometry/SPOT5/HRG1/rep6S.dat
+    ${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/Arcachon_extrait_3852_3319_546_542.tif
+        ${TEMP}/raTvSpectralSensitivityReaderGenericTest.txt     
+)
 
 #----------------------------------------------------------------------------------
 SET(BasicIO_SRCS1
@@ -3218,6 +3249,10 @@ otbMultiDatasetReadingInfo.cxx
 )
 ENDIF(CHECK_GDAL_BUILDED_WITH_HDF)
 
+SET(BasicIO_SRCS23
+otbIOTests23.cxx
+otbSpectralSensitivityReaderTest.cxx
+)
 
 OTB_ADD_EXECUTABLE(otbIOTests1 "${BasicIO_SRCS1}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbIOTests2 "${BasicIO_SRCS2}" "OTBIO;OTBTesting")
@@ -3231,8 +3266,6 @@ OTB_ADD_EXECUTABLE(otbIOTests9 "${BasicIO_SRCS9}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbIOTests10 "${BasicIO_SRCS10}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbIOTests11 "${BasicIO_SRCS11}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbIOTests12 "${BasicIO_SRCS12}" "OTBIO;OTBTesting")
-
-
 
 # Case for releae 2.2.1
 IF(OTB_COMPILE_JPEG2000)
@@ -3266,3 +3299,5 @@ OTB_ADD_EXECUTABLE(otbIOTests21 "${BasicIO_SRCS21}" "OTBIO;OTBTesting")
 IF(CHECK_GDAL_BUILDED_WITH_HDF)
   OTB_ADD_EXECUTABLE(otbIOTests22 "${BasicIO_SRCS22}" "OTBIO;OTBTesting")
 ENDIF(CHECK_GDAL_BUILDED_WITH_HDF)
+
+OTB_ADD_EXECUTABLE(otbIOTests23 "${BasicIO_SRCS23}" "OTBIO;OTBTesting")

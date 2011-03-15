@@ -10,14 +10,12 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.  See the above copyright notices for more information.
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+  PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
-// this file defines the otbCommonTest for the test driver
-// and all it expects is that you have a function called RegisterTests
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
 #endif
@@ -26,7 +24,7 @@
 
 void RegisterTests()
 {
-
-  REGISTER_TEST(otbRAndNIRVegetationIndexImageFilterNew);
-  REGISTER_TEST(otbRAndNIRVegetationIndexImageFilter);
+  REGISTER_TEST(otbSpectralSensitivityReaderNew);
+  REGISTER_TEST(otbSpectralSensitivityReaderTest);
+  REGISTER_TEST(otbSpectralSensitivityReaderGenericTest);
 }

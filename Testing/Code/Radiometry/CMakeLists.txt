@@ -844,32 +844,6 @@ ADD_TEST(raTvTSAVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS5}
         ${TEMP}/raRAndNIRVegetationIndex_TSAVI_verySmallFSATSWcRcNir.tif
 )
 
-ADD_TEST(raTuSpectralSensitivityReaderNew ${RADIOMETRY_TESTS5}
-     otbSpectralSensitivityReaderNew
-)
-
-ADD_TEST(raTvSpectralSensitivityReaderTest ${RADIOMETRY_TESTS5}
-     --compare-ascii ${NOTOL}
-        ${BASELINE_FILES}/raTvSpectralSensitivityReaderGenericTest.txt
-        ${TEMP}/rcTuSpectralSensitivityReaderTest.txt
-     --ignore-lines-with 2 DataPath FileName
-     otbSpectralSensitivityReaderTest
-	${INPUTDATA}/Radiometry
-	${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/Arcachon_extrait_3852_3319_546_542.tif
-        ${TEMP}/rcTuSpectralSensitivityReaderTest.txt	  
-)
-
-
-ADD_TEST(raTvSpectralSensitivityReaderGenericTest ${RADIOMETRY_TESTS5}
-     --compare-ascii ${NOTOL}
-        ${BASELINE_FILES}/raTvSpectralSensitivityReaderGenericTest.txt
-        ${TEMP}/raTvSpectralSensitivityReaderGenericTest.txt
-     --ignore-lines-with 2 DataPath FileName
-     otbSpectralSensitivityReaderGenericTest
-    ${INPUTDATA}/Radiometry/SPOT5/HRG1/rep6S.dat
-    ${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/Arcachon_extrait_3852_3319_546_542.tif
-        ${TEMP}/raTvSpectralSensitivityReaderGenericTest.txt     
-)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbRADIOMETRY_TESTS6 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1988,8 +1962,6 @@ SET(Radiometry_SRCS5
 otbRadiometryTests5.cxx
 otbRAndNIRVegetationIndexImageFilterNew.cxx
 otbRAndNIRVegetationIndexImageFilter.cxx
-otbSpectralSensitivityReaderNew.cxx
-otbSpectralSensitivityReaderTest.cxx
 )
 
 SET(Radiometry_SRCS6
