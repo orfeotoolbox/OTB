@@ -40,7 +40,7 @@ int otbSavitzkyGolayInterpolationFunctorTest(int argc, char* argv[])
   SeriesType weightSeries;
   DatesType doySeries;
 
-  for(int i=0; i<nbDates; ++i)
+  for(unsigned int i=0; i<nbDates; ++i)
     {
     inSeries[i] = vcl_cos(i/100.0);
     doySeries[i] = i;
@@ -58,8 +58,23 @@ int otbSavitzkyGolayInterpolationFunctorTest(int argc, char* argv[])
 
   FunctorType f;
   f.SetWeights( weightSeries );
+  f.SetDates( doySeries );
 
   SeriesType outSeries = f(inSeries);
+
+  double interpolError = 0.0;
+
+  for(unsigned int i=0; i<nbDates; ++i)
+    {
+
+    interpolError += vcl_fabs(outSeries[i]-inSeries[i]);
+
+    }
+
+  interpolError/=nbDates;
+
+  if(interpolError > 0.1)
+    return EXIT_FAILURE;
   
   return EXIT_SUCCESS;
 }
