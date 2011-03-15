@@ -29,6 +29,7 @@ void RegisterTests()
   REGISTER_TEST(otbPolynomialTimeSeriesTest);
   REGISTER_TEST(otbTimeSeriesLeastSquareFittingFunctorNew);
   REGISTER_TEST(otbTimeSeriesLeastSquareFittingFunctorTest);
+  REGISTER_TEST(otbTimeSeriesLeastSquareFittingFunctorWeightsTest);
   REGISTER_TEST(otbSavitzkyGolayInterpolationFunctorNew);
   REGISTER_TEST(otbSavitzkyGolayInterpolationFunctorTest);
 }

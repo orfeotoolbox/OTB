@@ -37,6 +37,12 @@ ADD_TEST(mtTvTimeSeriesLeastSquaresFittingFunctor2 ${MULTITEMPORAL_TESTS1}
         10 0.3 3.123
 	 )
 
+ADD_TEST(mtTvTimeSeriesLeastSquaresFittingFunctorWeights ${MULTITEMPORAL_TESTS1}
+        otbTimeSeriesLeastSquareFittingFunctorWeightsTest
+        1 2 3
+	 )
+
+
 ADD_TEST(mtTuSavitzkyGolayInterpolationFunctor ${MULTITEMPORAL_TESTS1}
         otbSavitzkyGolayInterpolationFunctorNew
 	 )
@@ -50,6 +56,7 @@ SET(BasicMultiTemporal_SRCS1
 otbPolynomialTimeSeriesTest.cxx
 otbTimeSeriesLeastSquareFittingFunctorNew.cxx
 otbTimeSeriesLeastSquareFittingFunctorTest.cxx
+otbTimeSeriesLeastSquareFittingFunctorWeightsTest.cxx
 otbSavitzkyGolayInterpolationFunctorNew.cxx
 otbSavitzkyGolayInterpolationFunctorTest.cxx
 )
