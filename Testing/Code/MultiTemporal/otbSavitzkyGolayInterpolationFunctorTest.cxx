@@ -42,7 +42,7 @@ int otbSavitzkyGolayInterpolationFunctorTest(int argc, char* argv[])
 
   for(unsigned int i=0; i<nbDates; ++i)
     {
-    inSeries[i] = vcl_cos(i/100.0);
+    inSeries[i] = 10*vcl_cos(i/10.0);
     doySeries[i] = i;
     weightSeries[i] = 1;
     }
@@ -51,8 +51,8 @@ int otbSavitzkyGolayInterpolationFunctorTest(int argc, char* argv[])
   inSeries[nbDates/4] = 0.0;
   inSeries[nbDates/2] = 0.0;
 
-  weightSeries[nbDates/4] = 10.0;
-  weightSeries[nbDates/2] = 10.0;
+  weightSeries[nbDates/4] = 1000.0;
+  weightSeries[nbDates/2] = 1000.0;
   
   typedef otb::Functor::SavitzkyGolayInterpolationFunctor<Radius, SeriesType, DatesType, SeriesType> FunctorType;
 
