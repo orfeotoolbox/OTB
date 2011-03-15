@@ -727,3 +727,14 @@ int otbMultibandComplexToImageScalarDouble(int argc, char * argv[])
 {
   return otbMultibandComplexToImageScalarGeneric<double>(argc, argv);
 }
+
+int otbMultibandComplexToImageScalarShort(int argc, char * argv[])
+{
+  return otbMultibandComplexToImageScalarGeneric<short>(argc, argv);
+}
+
+int otbMultibandComplexToImageScalarInt(int argc, char * argv[])
+{
+  return otbMultibandComplexToImageScalarGeneric<int>(argc, argv);
+}
+

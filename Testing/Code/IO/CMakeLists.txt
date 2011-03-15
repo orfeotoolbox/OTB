@@ -58,6 +58,8 @@ SET(IO_TESTS21    ${CXX_TEST_PATH}/otbIOTests21)
 IF(CHECK_GDAL_BUILDED_WITH_HDF)
   SET(IO_TESTS22    ${CXX_TEST_PATH}/otbIOTests22)
 ENDIF(CHECK_GDAL_BUILDED_WITH_HDF)
+
+SET(IO_TESTS23    ${CXX_TEST_PATH}/otbIOTests23)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ COMMON_TESTS3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -101,34 +103,37 @@ ADD_TEST(ioTvMultiMonoChannelROI_ENVI2PNG ${COMMON_TESTS3}
 IF(OTB_DATA_USE_LARGEINPUT)
 # ---  SAR_ERS2_SLCI (GDAL)  ---
 ADD_TEST(ioTvImageFileReaderWithComplexPixel_PALSAR ${IO_TESTS1}
-   --compare-image ${EPSILON_9}   ${BASELINE}/ioImageFileReaderWithComplexPixel_PALSAR_l1.1.tif
-                            ${TEMP}/ioImageFileReaderWithComplexPixel_PALSAR_l1.1.tif
-         otbImageFileReaderWithComplexPixelTest
-         ${LARGEDATA}/PALSAR/200801280007/l1data/VOL-ALPSRP037120700-H1.1__A
-         ${TEMP}/ioImageFileReaderWithComplexPixel_PALSAR_l1.1.tif
-         0 0 100 100)
+        --compare-image ${EPSILON_9}  
+            ${BASELINE}/ioImageFileReaderWithComplexPixel_PALSAR_l1.1.tif
+            ${TEMP}/ioImageFileReaderWithComplexPixel_PALSAR_l1.1.tif
+        otbImageFileReaderWithComplexPixelTest
+            ${LARGEDATA}/PALSAR/200801280007/l1data/VOL-ALPSRP037120700-H1.1__A
+            ${TEMP}/ioImageFileReaderWithComplexPixel_PALSAR_l1.1.tif
+            0 0 100 100)
 
 ADD_TEST(ioTvImageFileReaderWithComplexPixel_ERS ${IO_TESTS1}
-   --compare-image ${EPSILON_9}   ${BASELINE}/ioImageFileReaderWithComplexPixel_ERS_SLCI.tif
-                            ${TEMP}/ioImageFileReaderWithComplexPixel_ERS_SLCI.tif
-         otbImageFileReaderWithComplexPixelTest
-         ${LARGEDATA}/SAR_ERS2_SLCI_SCENE1/
-         ${TEMP}/ioImageFileReaderWithComplexPixel_ERS_SLCI.tif
-         0 0 100 100)
+        --compare-image ${EPSILON_9}   
+            ${BASELINE}/ioImageFileReaderWithComplexPixel_ERS_SLCI.tif
+            ${TEMP}/ioImageFileReaderWithComplexPixel_ERS_SLCI.tif
+        otbImageFileReaderWithComplexPixelTest
+            ${LARGEDATA}/SAR_ERS2_SLCI_SCENE1/
+            ${TEMP}/ioImageFileReaderWithComplexPixel_ERS_SLCI.tif
+            0 0 100 100)
 
 ADD_TEST(ioTvImageFileReaderWithComplexPixel_RADARSAT ${IO_TESTS1}
-   --compare-image ${EPSILON_9} ${BASELINE}/ioImageFileReaderWithComplexPixel_RADARSAT.tif
-                           ${TEMP}/ioImageFileReaderWithComplexPixel_RADARSAT.tif
-         otbImageFileReaderWithComplexPixelTest
-         ${LARGEDATA}/RADARSAT1/GOMA/SCENE01/
-         ${TEMP}/ioImageFileReaderWithComplexPixel_RADARSAT.tif
-         0 0 100 100)
+        --compare-image ${EPSILON_9} 
+            ${BASELINE}/ioImageFileReaderWithComplexPixel_RADARSAT.tif
+            ${TEMP}/ioImageFileReaderWithComplexPixel_RADARSAT.tif
+        otbImageFileReaderWithComplexPixelTest
+            ${LARGEDATA}/RADARSAT1/GOMA/SCENE01/
+            ${TEMP}/ioImageFileReaderWithComplexPixel_RADARSAT.tif
+            0 0 100 100)
 
 ADD_TEST(ioTvCompareWritingComplexImage_TIF ${IO_TESTS1}
-         otbCompareWritingComplexImageTest
-         ${LARGEDATA}/PALSAR/200801280007/l1data/VOL-ALPSRP037120700-H1.1__A
-         ${TEMP}/ioTvImageFileReaderCompareComplexPixelWithFloatPixel_PALSAR.tif
-         0 0 100 100)
+        otbCompareWritingComplexImageTest
+            ${LARGEDATA}/PALSAR/200801280007/l1data/VOL-ALPSRP037120700-H1.1__A
+            ${TEMP}/ioTvImageFileReaderCompareComplexPixelWithFloatPixel_PALSAR.tif
+            0 0 100 100)
 
 ADD_TEST(ioTvCompareWritingComplexImage_HDR ${IO_TESTS1}
          otbCompareWritingComplexImageTest
@@ -2796,129 +2801,6 @@ ADD_TEST(ioTvTileMapImageIOHelperTest ${IO_TESTS21}
               ${TEMP}/ioTvTileMapImageIOHelperTest.txt
 )
 
-# Tests about complex reading
-
-SET(INPUTFILE_PIXELTYPES_LIST "Int" "Short" "Float" "Double")
-#SET(INPUTFILE_PIXELTYPES_LIST "Float" "Double")
-#SET(READING_PIXELTYPES_LIST "Float" "Double")
-SET(READING_PIXELTYPES_LIST "Int" "Short" "Float" "Double")
-SET(NBBANDS_LIST "2" "3" "4")
-
-FOREACH(INPUTFILE_PIXELTYPE ${INPUTFILE_PIXELTYPES_LIST})
-
-  FOREACH(READING_PIXELTYPE ${READING_PIXELTYPES_LIST})
-
-    ADD_TEST(ioTvMonobandScalar${INPUTFILE_PIXELTYPE}ToImageComplex${READING_PIXELTYPE}
-             ${IO_TESTS21}
-             otbMonobandScalarToImageComplex${READING_PIXELTYPE}
-             ${INPUTDATA}/monoband${INPUTFILE_PIXELTYPE}.tif)
-             
-    ADD_TEST(ioTvMonobandScalar${INPUTFILE_PIXELTYPE}ToVectorImageComplex${READING_PIXELTYPE}
-             ${IO_TESTS21}
-             otbMonobandScalarToVectorImageComplex${READING_PIXELTYPE}
-             ${INPUTDATA}/monoband${INPUTFILE_PIXELTYPE}.tif)
-
-    ADD_TEST(ioTvMonobandComplex${INPUTFILE_PIXELTYPE}ToImageScalar${READING_PIXELTYPE}
-             ${IO_TESTS21}
-             otbMonobandComplexToImageScalar${READING_PIXELTYPE}
-             ${INPUTDATA}/monobandComplex${INPUTFILE_PIXELTYPE}.tif) #hdr)
-
-    ADD_TEST(ioTvMonobandComplex${INPUTFILE_PIXELTYPE}ToImageComplex${READING_PIXELTYPE}
-             ${IO_TESTS21}
-             otbMonobandComplexToImageComplex${READING_PIXELTYPE}
-             ${INPUTDATA}/monobandComplex${INPUTFILE_PIXELTYPE}.tif) #hdr)
-
-    ADD_TEST(ioTvMonobandComplex${INPUTFILE_PIXELTYPE}ToVectorImageScalar${READING_PIXELTYPE}
-             ${IO_TESTS21}
-             otbMonobandComplexToVectorImageScalar${READING_PIXELTYPE}
-             ${INPUTDATA}/monobandComplex${INPUTFILE_PIXELTYPE}.tif) #hdr)
-
-    ADD_TEST(ioTvMonobandComplex${INPUTFILE_PIXELTYPE}ToVectorImageComplex${READING_PIXELTYPE}
-             ${IO_TESTS21}
-             otbMonobandComplexToVectorImageComplex${READING_PIXELTYPE}
-             ${INPUTDATA}/monobandComplex${INPUTFILE_PIXELTYPE}.tif) #hdr)
-
-    # Weird case : only the first 2 bands used
-    ADD_TEST(ioTvMultibandScalar${INPUTFILE_PIXELTYPE}ToImageComplex${READING_PIXELTYPE}
-             ${IO_TESTS21}
-             otbMultibandScalarToImageComplex${READING_PIXELTYPE}
-             ${INPUTDATA}/multiband${INPUTFILE_PIXELTYPE}.tif)
-
-    # Weird case : one scalar band -> one complex band with imag=0
-    # but interleaving real and imaginary parts can only work for an even nb of bands
-    ADD_TEST(ioTvMultibandScalar${INPUTFILE_PIXELTYPE}ToVectorImageComplex${READING_PIXELTYPE}
-             ${IO_TESTS21}
-             otbMultibandScalarToVectorImageComplex${READING_PIXELTYPE}
-             ${INPUTDATA}/multiband${INPUTFILE_PIXELTYPE}.tif)
-
-    FOREACH(NBBANDS ${NBBANDS_LIST})
-
-      # Weird case : need specifications to write the test
-      # ADD_TEST(ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToImageScalar${READING_PIXELTYPE}
-      #          ${IO_TESTS21}
-      #          otbMultibandComplexToImageScalar${READING_PIXELTYPE}
-      #          ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands.tif) #hdr)
-
-      # Size: 100x100 is to large to store pixel values coded as short. 
-      IF ( NOT ${INPUTFILE_PIXELTYPE} MATCHES "Short" )
-
-        ADD_TEST(ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToVectorImageScalar${READING_PIXELTYPE}
-                 ${IO_TESTS21}
-                 otbMultibandComplexToVectorImageScalar${READING_PIXELTYPE}
-                 ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands.tif) #hdr)
-
-      ELSE ( NOT ${INPUTFILE_PIXELTYPE} MATCHES "Short" )
-
-        ADD_TEST(ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToVectorImageScalar${READING_PIXELTYPE}
-                 ${IO_TESTS21}
-                 otbMultibandComplexToVectorImageScalar${READING_PIXELTYPE}
-                 ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands_50x50.tif) #hdr)
-
-      ENDIF (  NOT ${INPUTFILE_PIXELTYPE} MATCHES "Short" )
-      
-      # Weird case : need specifications to write the test
-      # [missing impl]
-      # ADD_TEST(ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToImageComplex${READING_PIXELTYPE})
-
-      # Size: 100x100 is to large to store pixel values coded as short. 
-      IF ( NOT ${INPUTFILE_PIXELTYPE} MATCHES "Short" )  
-
-        ADD_TEST(ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToVectorImageComplex${READING_PIXELTYPE}
-                 ${IO_TESTS21}
-                 otbMultibandComplexToVectorImageComplex${READING_PIXELTYPE}
-                 ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands.tif) #hdr)
-
-      ELSE ( NOT ${INPUTFILE_PIXELTYPE} MATCHES "Short" )
-
-        ADD_TEST(ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToVectorImageComplex${READING_PIXELTYPE}
-                 ${IO_TESTS21}
-                 otbMultibandComplexToVectorImageComplex${READING_PIXELTYPE}
-                 ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands_50x50.tif) #hdr)
-
-      ENDIF (  NOT ${INPUTFILE_PIXELTYPE} MATCHES "Short" )
-
-    ENDFOREACH(NBBANDS ${NBBANDS_LIST})
-
-  ENDFOREACH(READING_PIXELTYPE ${READING_PIXELTYPES_LIST})  
-ENDFOREACH(INPUTFILE_PIXELTYPE ${INPUTFILE_PIXELTYPES_LIST})
-
-
-# Tests with GDAL only to read complex data
-
-#SET(INPUTFILE_PIXELTYPES_LIST "Int" "Short" "Float" "Double")
-SET(INPUTFILE_PIXELTYPES_LIST "Float" "Double")
-
-FOREACH(INPUTFILE_PIXELTYPE ${INPUTFILE_PIXELTYPES_LIST})
-
-ADD_TEST(ioTvGDALReadPxlComplex${INPUTFILE_PIXELTYPE} ${IO_TESTS21}
-         otbGDALReadPxlComplex${INPUTFILE_PIXELTYPE}
-         ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_3bands.tif
-         1 5 10 2) #old file hdr sans extesions
-
-ENDFOREACH(INPUTFILE_PIXELTYPE ${INPUTFILE_PIXELTYPES_LIST})
-
-
-
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS22 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2994,7 +2876,183 @@ ADD_TEST(ioTvMultiChannelROI_HDF5_2_TIF ${COMMON_TESTS2}
 
 ENDIF(CHECK_GDAL_BUILDED_WITH_HDF)
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTests23 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+# Tests about complex reading
+
+SET(INPUTFILE_PIXELTYPES_LIST "Int" "Short" "Float" "Double")
+SET(READING_PIXELTYPES_LIST "Int" "Short" "Float" "Double")
+SET(NBBANDS_LIST "2" "3" "4")
+
+FOREACH(INPUTFILE_PIXELTYPE ${INPUTFILE_PIXELTYPES_LIST})
+
+  FOREACH(READING_PIXELTYPE ${READING_PIXELTYPES_LIST})
+
+    ADD_TEST(ioTvMonobandScalar${INPUTFILE_PIXELTYPE}ToImageComplex${READING_PIXELTYPE}
+             ${IO_TESTS23}
+             otbMonobandScalarToImageComplex${READING_PIXELTYPE}
+             ${INPUTDATA}/monoband${INPUTFILE_PIXELTYPE}.tif)
+             
+    ADD_TEST(ioTvMonobandScalar${INPUTFILE_PIXELTYPE}ToVectorImageComplex${READING_PIXELTYPE}
+             ${IO_TESTS23}
+             otbMonobandScalarToVectorImageComplex${READING_PIXELTYPE}
+             ${INPUTDATA}/monoband${INPUTFILE_PIXELTYPE}.tif)
+
+    ADD_TEST(ioTvMonobandComplex${INPUTFILE_PIXELTYPE}ToImageScalar${READING_PIXELTYPE}
+             ${IO_TESTS23}
+             otbMonobandComplexToImageScalar${READING_PIXELTYPE}
+             ${INPUTDATA}/monobandComplex${INPUTFILE_PIXELTYPE}.tif) #hdr)
+
+    ADD_TEST(ioTvMonobandComplex${INPUTFILE_PIXELTYPE}ToImageComplex${READING_PIXELTYPE}
+             ${IO_TESTS23}
+             otbMonobandComplexToImageComplex${READING_PIXELTYPE}
+             ${INPUTDATA}/monobandComplex${INPUTFILE_PIXELTYPE}.tif) #hdr)
+
+    ADD_TEST(ioTvMonobandComplex${INPUTFILE_PIXELTYPE}ToVectorImageScalar${READING_PIXELTYPE}
+             ${IO_TESTS23}
+             otbMonobandComplexToVectorImageScalar${READING_PIXELTYPE}
+             ${INPUTDATA}/monobandComplex${INPUTFILE_PIXELTYPE}.tif) #hdr)
+
+    ADD_TEST(ioTvMonobandComplex${INPUTFILE_PIXELTYPE}ToVectorImageComplex${READING_PIXELTYPE}
+             ${IO_TESTS23}
+             otbMonobandComplexToVectorImageComplex${READING_PIXELTYPE}
+             ${INPUTDATA}/monobandComplex${INPUTFILE_PIXELTYPE}.tif) #hdr)
+
+    # Weird case : only the first 2 bands used
+    ADD_TEST(ioTvMultibandScalar${INPUTFILE_PIXELTYPE}ToImageComplex${READING_PIXELTYPE}
+             ${IO_TESTS23}
+             otbMultibandScalarToImageComplex${READING_PIXELTYPE}
+             ${INPUTDATA}/multiband${INPUTFILE_PIXELTYPE}.tif)
+
+    # Weird case : one scalar band -> one complex band with imag=0
+    # but interleaving real and imaginary parts can only work for an even nb of bands
+    ADD_TEST(ioTvMultibandScalar${INPUTFILE_PIXELTYPE}ToVectorImageComplex${READING_PIXELTYPE}
+             ${IO_TESTS23}
+             otbMultibandScalarToVectorImageComplex${READING_PIXELTYPE}
+             ${INPUTDATA}/multiband${INPUTFILE_PIXELTYPE}.tif)
+
+    FOREACH(NBBANDS ${NBBANDS_LIST})
+
+      # Weird case : need specifications to write the test
+      # ADD_TEST(ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToImageScalar${READING_PIXELTYPE}
+      #          ${IO_TESTS23}
+      #          otbMultibandComplexToImageScalar${READING_PIXELTYPE}
+      #          ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands.tif) #hdr)
+
+      # Size: 100x100 is to large to store pixel values coded as short. 
+      IF ( NOT ${INPUTFILE_PIXELTYPE} MATCHES "Short" )
+
+        ADD_TEST(ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToVectorImageScalar${READING_PIXELTYPE}
+                 ${IO_TESTS23}
+                 otbMultibandComplexToVectorImageScalar${READING_PIXELTYPE}
+                 ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands.tif) #hdr)
+
+      ELSE ( NOT ${INPUTFILE_PIXELTYPE} MATCHES "Short" )
+
+        ADD_TEST(ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToVectorImageScalar${READING_PIXELTYPE}
+                 ${IO_TESTS23}
+                 otbMultibandComplexToVectorImageScalar${READING_PIXELTYPE}
+                 ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands_50x50.tif) #hdr)
+
+      ENDIF (  NOT ${INPUTFILE_PIXELTYPE} MATCHES "Short" )
+      
+      # Weird case : need specifications to write the test
+      # [missing impl]
+      # ADD_TEST(ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToImageComplex${READING_PIXELTYPE})
+
+      # Size: 100x100 is to large to store pixel values coded as short. 
+      IF ( NOT ${INPUTFILE_PIXELTYPE} MATCHES "Short" )  
+
+        ADD_TEST(ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToVectorImageComplex${READING_PIXELTYPE}
+                 ${IO_TESTS23}
+                 otbMultibandComplexToVectorImageComplex${READING_PIXELTYPE}
+                 ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands.tif) #hdr)
+
+      ELSE ( NOT ${INPUTFILE_PIXELTYPE} MATCHES "Short" )
+
+        ADD_TEST(ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToVectorImageComplex${READING_PIXELTYPE}
+                 ${IO_TESTS23}
+                 otbMultibandComplexToVectorImageComplex${READING_PIXELTYPE}
+                 ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands_50x50.tif) #hdr)
+
+      ENDIF (  NOT ${INPUTFILE_PIXELTYPE} MATCHES "Short" )
+
+    ENDFOREACH(NBBANDS ${NBBANDS_LIST})
+
+  ENDFOREACH(READING_PIXELTYPE ${READING_PIXELTYPES_LIST})  
+ENDFOREACH(INPUTFILE_PIXELTYPE ${INPUTFILE_PIXELTYPES_LIST})
+
+
+# Tests with GDAL only to read complex data
+
+#SET(INPUTFILE_PIXELTYPES_LIST "Int" "Short" "Float" "Double")
+SET(INPUTFILE_PIXELTYPES_LIST "Float" "Double")
+
+FOREACH(INPUTFILE_PIXELTYPE ${INPUTFILE_PIXELTYPES_LIST})
+
+ADD_TEST(ioTvGDALReadPxlComplex${INPUTFILE_PIXELTYPE} ${IO_TESTS23}
+         otbGDALReadPxlComplex${INPUTFILE_PIXELTYPE}
+         ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_3bands.tif
+         1 5 10 2) #old file hdr sans extesions
+
+ENDFOREACH(INPUTFILE_PIXELTYPE ${INPUTFILE_PIXELTYPES_LIST})
+
+# Tests about writing Scalar / Complex data
+
+SET(DATA_PIXELTYPES_LIST "Int" "Short" "Float" "Double")
+SET(WRITING_PIXELTYPES_LIST "Int" "Short" "Float" "Double")
+
+FOREACH(DATA_PIXELTYPE ${DATA_PIXELTYPES_LIST})
+
+  ADD_TEST(ioTvWriteImageScalar${DATA_PIXELTYPE}
+           ${IO_TESTS23}
+           --compare-image ${NOTOL}
+              ${INPUTDATA}/monoband${DATA_PIXELTYPE}.tif
+              ${TEMP}/monobandOut${DATA_PIXELTYPE}.tif
+           otbImageScalarFileWriterTestWithoutInput${DATA_PIXELTYPE}
+              ${TEMP}/monobandOut${DATA_PIXELTYPE}.tif
+              100
+           )
+
+  ADD_TEST(ioTvWriteImageComplex${DATA_PIXELTYPE}
+           ${IO_TESTS23}
+           #--compare-image ${NOTOL}
+           #   ${INPUTDATA}/monobandComplex${DATA_PIXELTYPE}.tif
+           #   ${TEMP}/monobandComplexOut${DATA_PIXELTYPE}.tif
+           otbImageComplexFileWriterTestWithoutInput${DATA_PIXELTYPE}
+              ${TEMP}/monobandComplexOut${DATA_PIXELTYPE}.tif
+              100
+           )
+        
+  FOREACH(NBBANDS ${NBBANDS_LIST})       
+     
+    ADD_TEST(ioTvWriteVectorImageScalar${DATA_PIXELTYPE}${NBBANDS}Bands
+             ${IO_TESTS23}
+             --compare-image ${NOTOL}
+                ${INPUTDATA}/multiband${DATA_PIXELTYPE}_${NBBANDS}bands.tif
+                ${TEMP}/multibandOut${DATA_PIXELTYPE}_${NBBANDS}bands.tif
+             otbVectorImageFileWriterScalarTestWithoutInput${DATA_PIXELTYPE}
+                ${TEMP}/multibandOut${DATA_PIXELTYPE}_${NBBANDS}bands.tif
+                100
+                ${NBBANDS}
+             )         
+       
+    ADD_TEST(ioTvWriteVectorImageComplex${DATA_PIXELTYPE}${NBBANDS}Bands
+             ${IO_TESTS23}
+             --compare-image ${NOTOL}
+                ${INPUTDATA}/multibandComplex${DATA_PIXELTYPE}_${NBBANDS}bands.tif
+                ${TEMP}/multibandComplexOut${DATA_PIXELTYPE}_${NBBANDS}bands.tif
+             otbVectorImageFileWriterComplexTestWithoutInput${DATA_PIXELTYPE}
+                ${TEMP}/multibandComplexOut${DATA_PIXELTYPE}_${NBBANDS}bands.tif
+                100
+                ${NBBANDS}
+             )
+             
+  ENDFOREACH(NBBANDS ${NBBANDS_LIST})
+  
+ENDFOREACH(DATA_PIXELTYPE ${DATA_PIXELTYPES_LIST})
 #----------------------------------------------------------------------------------
 SET(BasicIO_SRCS1
 otbIOTests1.cxx
@@ -3218,6 +3276,13 @@ otbMultiDatasetReadingInfo.cxx
 )
 ENDIF(CHECK_GDAL_BUILDED_WITH_HDF)
 
+SET(BasicIO_SRCS23
+otbIOTests23.cxx
+otbComplexImageManipulationTest.cxx
+otbImageFileWriterTestWithoutInput.cxx
+otbVectorImageFileWriterTestWithoutInput.cxx
+otbGDALReadPxlComplex.cxx
+)
 
 OTB_ADD_EXECUTABLE(otbIOTests1 "${BasicIO_SRCS1}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbIOTests2 "${BasicIO_SRCS2}" "OTBIO;OTBTesting")
@@ -3266,3 +3331,5 @@ OTB_ADD_EXECUTABLE(otbIOTests21 "${BasicIO_SRCS21}" "OTBIO;OTBTesting")
 IF(CHECK_GDAL_BUILDED_WITH_HDF)
   OTB_ADD_EXECUTABLE(otbIOTests22 "${BasicIO_SRCS22}" "OTBIO;OTBTesting")
 ENDIF(CHECK_GDAL_BUILDED_WITH_HDF)
+
+OTB_ADD_EXECUTABLE(otbIOTests23 "${BasicIO_SRCS23}" "OTBIO;OTBTesting")
