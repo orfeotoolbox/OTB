@@ -204,6 +204,10 @@ const std::type_info& ImageIOBase::GetComponentTypeInfo() const
       return typeid(float);
     case DOUBLE:
       return typeid(double);
+    case CSHORT:
+      return typeid(std::complex<short>);
+    case CINT:
+      return typeid(std::complex<int>);
     case CFLOAT:
       return typeid(std::complex<float>);
     case CDOUBLE:
@@ -445,6 +449,22 @@ itkSetPixelType(ImageIOBase *This,
   std::cout << "ptype.name() = " << ptype.name() <<std::endl;
   std::cout << "ntype = " << ntype <<std::endl;
  
+  if ( ptype == typeid(std::complex<short>) )
+    {
+  std::cout << "complex short detected" <<std::endl;
+  This->SetNumberOfComponents(1);
+  This->SetComponentType(ImageIOBase::CSHORT);
+  This->SetPixelType(ImageIOBase::COMPLEX);
+  return true;
+    }
+  if ( ptype == typeid(std::complex<int>) )
+    {
+  std::cout << "complex int detected" <<std::endl;
+  This->SetNumberOfComponents(1);
+  This->SetComponentType(ImageIOBase::CINT);
+  This->SetPixelType(ImageIOBase::COMPLEX);
+  return true;
+    }
   if ( ptype == typeid(std::complex<float>) )
     {
   std::cout << "complex float detected" <<std::endl;
@@ -483,6 +503,8 @@ bool ImageIOBase::SetPixelTypeInfo(const std::type_info& ptype)
       !itkSetPixelType(this,ptype,ImageIOBase::ULONG,(unsigned long)(0)) &&
       !itkSetPixelType(this,ptype,ImageIOBase::FLOAT,(float)(0)) &&
       !itkSetPixelType(this,ptype,ImageIOBase::DOUBLE,(double)(0)) &&
+      !itkSetPixelType(this,ptype,ImageIOBase::CSHORT,(std::complex<short>)(0)) &&
+      !itkSetPixelType(this,ptype,ImageIOBase::CINT,(std::complex<int>)(0)) &&
       !itkSetPixelType(this,ptype,ImageIOBase::CFLOAT,(std::complex<float>)(0)) &&
       !itkSetPixelType(this,ptype,ImageIOBase::CDOUBLE,(std::complex<double>)(0)) )
     {
@@ -693,6 +715,10 @@ unsigned int ImageIOBase::GetComponentSize() const
       return sizeof(float);
     case DOUBLE:
       return sizeof(double);
+    case CSHORT:
+      return sizeof(std::complex<short>);
+    case CINT:
+      return sizeof(std::complex<int>);
     case CFLOAT:
       return sizeof(std::complex<float>);
     case CDOUBLE:
@@ -762,6 +788,10 @@ std::string ImageIOBase::GetComponentTypeAsString(IOComponentType t) const
       return (s = "float");
     case DOUBLE:
       return (s = "double");
+    case CSHORT:
+      return (s = "complex_short");
+    case CINT:
+      return (s = "complex_int");
     case CFLOAT:
       return (s = "complex_float");
     case CDOUBLE:
@@ -906,6 +936,22 @@ void ImageIOBase::WriteBufferAsASCII(std::ostream& os, const void *buffer,
       }
       break;
 
+    case CSHORT:
+      {
+      typedef const std::complex<short> * Type;
+      Type buf = reinterpret_cast<Type>(buffer);
+      WriteBuffer(os, buf, numComp);
+      }
+      break;
+
+    case CINT:
+      {
+      typedef const std::complex<int> * Type;
+      Type buf = reinterpret_cast<Type>(buffer);
+      WriteBuffer(os, buf, numComp);
+      }
+      break;
+
     case CFLOAT:
       {
       typedef const std::complex<float> * Type;
@@ -1014,6 +1060,20 @@ void ImageIOBase::ReadBufferAsASCII(std::istream& is, void *buffer,
     case DOUBLE:
       {
       double *buf = reinterpret_cast<double*>(buffer);
+      ReadBuffer(is, buf, numComp);
+      }
+      break;
+
+    case CSHORT:
+      {
+      std::complex<short> *buf = reinterpret_cast<std::complex<short>*>(buffer);
+      ReadBuffer(is, buf, numComp);
+      }
+      break;
+
+    case CINT:
+      {
+      std::complex<int> *buf = reinterpret_cast<std::complex<int>*>(buffer);
       ReadBuffer(is, buf, numComp);
       }
       break;

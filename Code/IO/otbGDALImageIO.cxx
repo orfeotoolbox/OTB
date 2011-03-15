@@ -1170,17 +1170,17 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
     {
     //m_NbBands /= 2;
 
-    /*if (this->GetComponentType() == CSHORT)
+    if (this->GetComponentType() == CSHORT)
       {
       m_BytePerPixel = 4;
       m_PxType = GDT_CInt16;
-      }*/
-    /*else if (this->GetComponentType() == CINT)
+      }
+    else if (this->GetComponentType() == CINT)
       {
       m_BytePerPixel = 8;
       m_PxType = GDT_CInt32;
       }
-    else*/ if (this->GetComponentType() == CFLOAT)
+    else if (this->GetComponentType() == CFLOAT)
       {
       m_BytePerPixel = 8;
       m_PxType = GDT_CFloat32;
