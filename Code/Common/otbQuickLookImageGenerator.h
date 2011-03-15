@@ -21,6 +21,7 @@
 // This class is deprecated. Use StreamingShrinkImageFilter instead
 #include "vcl_deprecated_header.h"
 
+#include "otbMacro.h"
 #include "otbStreamingShrinkImageFilter.h"
 
 namespace otb
@@ -52,32 +53,46 @@ public:
   {
     itkWarningMacro(<< "DEPRECATED function")
   }
-  itkGetMacro(Variance, double);
+  double GetVariance()
+  {
+    itkWarningMacro(<< "DEPRECATED function")
+    return 0;
+  }
 
   void UseImageSpacing(bool boo)
   {
     itkWarningMacro(<< "DEPRECATED function")
   }
-  itkGetMacro(UseImageSpacing, bool);
+  bool GetUseImageSpacing()
+  {
+    itkWarningMacro(<< "DEPRECATED function")
+    return true;
+  }
 
   void SetMaximumKernelWidth(unsigned int width)
   {
     itkWarningMacro(<< "DEPRECATED function")
   }
-  itkGetMacro(MaximumKernelWidth, unsigned int);
+  unsigned int GetMaximumKernelWidth()
+  {
+    itkWarningMacro(<< "DEPRECATED function")
+    return 0;
+  }
 
   void SetMaximumError(double error)
   {
     itkWarningMacro(<< "DEPRECATED function")
   }
-  itkGetMacro(MaximumError, double);
-
+  double GetMaximumError()
+  {
+    itkWarningMacro(<< "DEPRECATED function")
+    return 0;
+  }
 
   void SetSampleRatio(unsigned int sr)
   {
     this->SetShrinkFactor(sr);
   }
-
   unsigned int GetSampleRatio(unsigned int sr)
   {
     return this->GetShrinkFactor(sr);
