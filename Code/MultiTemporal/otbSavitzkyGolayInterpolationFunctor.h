@@ -36,6 +36,7 @@ In this implementation, the interpolation is performed by least squares fitting.
 
 Savitzky, A.; Golay, M.J.E. (1964). "Smoothing and Differentiation of Data by Simplified Least Squares Procedures". Analytical Chemistry 36 (8): 1627–1639. doi:10.1021/ac60214a047
 
+\sa otbTimeSeriesLeastSquareFittingFunctor
  *
  */
 template <unsigned int Radius, class TSeries, class TDates, class TWeight = TSeries, unsigned int Degree=2>
