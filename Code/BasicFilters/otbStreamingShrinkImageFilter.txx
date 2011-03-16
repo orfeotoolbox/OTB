@@ -21,6 +21,7 @@
 #include "otbStreamingShrinkImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
 #include "otbMacro.h"
+#include "itkProgressReporter.h"
 
 namespace otb
 {
