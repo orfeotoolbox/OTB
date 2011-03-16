@@ -15,7 +15,9 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 #Tolerance on  pixel image diff
 SET(NOTOL 0.0)
 SET(EPSILON_3 0.001)
+SET(EPSILON_4 0.0001)
 SET(EPSILON_5 0.00001)
+SET(EPSILON_6 0.000001)
 SET(EPSILON_9 0.000000001)
 
 # !!!!!  Pointe sur un exe généré dans le repertoire Common
@@ -2452,7 +2454,7 @@ ADD_TEST(ioTvImageKeywordlistAlosPalsar ${IO_TESTS18}
 )
 
 ADD_TEST(ioTvImageKeywordlistRadarSat1 ${IO_TESTS18}
-  --ignore-order --compare-n-ascii ${NOTOL} 2
+    --compare-n-ascii ${EPSILON_6} 2
          ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1.txt
          ${TEMP}/ioTvImageKeywordlistRadarSat1.txt
          ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1.txt
@@ -2464,7 +2466,7 @@ ADD_TEST(ioTvImageKeywordlistRadarSat1 ${IO_TESTS18}
 )
 
 ADD_TEST(ioTvImageKeywordlistRadarSat1_vdf ${IO_TESTS18}
-  --ignore-order --compare-n-ascii ${NOTOL} 2
+    --compare-n-ascii ${EPSILON_6} 2
          ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1.txt
          ${TEMP}/ioTvImageKeywordlistRadarSat1.txt
          ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1.txt
@@ -2476,7 +2478,7 @@ ADD_TEST(ioTvImageKeywordlistRadarSat1_vdf ${IO_TESTS18}
 )
 
 ADD_TEST(ioTvImageKeywordlistSardegnaRadarSat1 ${IO_TESTS18}
-  --ignore-order --compare-n-ascii ${NOTOL} 2
+    --compare-n-ascii ${EPSILON_6} 2
          ${BASELINE_FILES}/ioTvImageKeywordlistSardegnaRadarSat1.txt
          ${TEMP}/ioTvImageKeywordlistSardegnaRadarSat1.txt
          ${BASELINE_FILES}/ioTvImageKeywordlistSardegnaRadarSat1.txt
@@ -2488,7 +2490,7 @@ ADD_TEST(ioTvImageKeywordlistSardegnaRadarSat1 ${IO_TESTS18}
 )
 
 ADD_TEST(ioTvImageKeywordlistSardegnaRadarSat1_vdf ${IO_TESTS18}
-  --ignore-order --compare-n-ascii ${NOTOL} 2
+  --ignore-order --compare-n-ascii ${EPSILON_6} 2
          ${BASELINE_FILES}/ioTvImageKeywordlistSardegnaRadarSat1.txt
          ${TEMP}/ioTvImageKeywordlistSardegnaRadarSat1.txt
          ${BASELINE_FILES}/ioTvImageKeywordlistSardegnaRadarSat1.txt
