@@ -15,22 +15,26 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
-// this file defines the otbCommonTest for the test driver
-// and all it expects is that you have a function called RegisterTests
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
 #endif
 
-#include "otbTestMain.h"
+#include "itkFixedArray.h"
+#include "otbSavitzkyGolayInterpolationFunctor.h"
+#include "otbTimeSeries.h"
 
-void RegisterTests()
+int otbSavitzkyGolayInterpolationFunctorNew(int argc, char* argv[])
 {
-  REGISTER_TEST(otbPolynomialTimeSeriesTest);
-  REGISTER_TEST(otbTimeSeriesLeastSquareFittingFunctorNew);
-  REGISTER_TEST(otbTimeSeriesLeastSquareFittingFunctorTest);
-  REGISTER_TEST(otbTimeSeriesLeastSquareFittingFunctorWeightsTest);
-  REGISTER_TEST(otbSavitzkyGolayInterpolationFunctorNew);
-  REGISTER_TEST(otbSavitzkyGolayInterpolationFunctorTest);
-  REGISTER_TEST(otbEnvelopeSavitzkyGolayInterpolationFunctorTest);
+
+  typedef float PixelType;
+  typedef unsigned int DoYType;
+  typedef itk::FixedArray< PixelType > SeriesType;
+  typedef itk::FixedArray< DoYType > DatesType;
+  const unsigned int Radius = 2;
+  
+  typedef otb::Functor::SavitzkyGolayInterpolationFunctor<Radius, SeriesType, DatesType> FunctorType;
+
+  FunctorType f;
+  
+  return EXIT_SUCCESS;
 }
