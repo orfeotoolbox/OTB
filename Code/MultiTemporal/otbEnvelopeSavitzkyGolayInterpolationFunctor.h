@@ -90,10 +90,12 @@ public:
         {
         if( m_UpperEnvelope && outSeries[j]<series[j] )
           m_WeightSeries[j] = m_WeightSeries[j]*m_DecreaseFactor;
-        if( !m_UpperEnvelope && outSeries[j]<series[j] )
+        if( !m_UpperEnvelope && outSeries[j]>series[j] )
           m_WeightSeries[j] = m_WeightSeries[j]*m_DecreaseFactor;
         }    
-        outSeries = m_SGFunctor(series);
+
+      m_SGFunctor.SetWeights(m_WeightSeries);
+      outSeries = m_SGFunctor(series);
       }
     
 
