@@ -34,11 +34,11 @@ namespace Functor
    *  length. The fitting is performed using a time function which is
    *  just a weighted sum of basis functions : \f$ f(t) = c_0 *
    *  \phi_0(t) + c_1 * \phi_1(t) + c_1 * \phi_1(t) + \cdots \f$ Using
-   *  a matrix notation, this can be written as follows : 
-   *  \f$ F = \Phi c \f$ 
-   *  \f$ F = ( f(t_i) ) \f$ 
-   *  \f$ c = ( c_j ) \f$ 
-   *  \f$ \Phi_{ij} = ( \phi_j(t_i) ) \f$ 
+   *  a matrix notation, this can be written as follows :
+   *  \f$ F = \Phi c \f$
+   *  \f$ F = ( f(t_i) ) \f$
+   *  \f$ c = ( c_j ) \f$
+   *  \f$ \Phi_{ij} = ( \phi_j(t_i) ) \f$
    *  If information about the error
    *  of each measure is available, it can be provided using a weight
    *  series \f$\sigma_i\f$ (the higher the error, the higher the \f$ \sigma_i \f$. The problem then becomes:
@@ -107,12 +107,12 @@ public:
 
     for(unsigned int i = 0; i<nbDates; ++i)
       {
-      b.put(i,0, series[i]/m_WeightSeries[i]);
+      b.put(i, 0, series[i]/m_WeightSeries[i]);
       for(unsigned int j = 0; j<nbCoefs; ++j)
         {
         tmpCoefs[j] = 1.0;
         m_TimeFunction.SetCoefficients(tmpCoefs);
-        A.put(i,j, m_TimeFunction.GetValue(m_DoySeries[i])/m_WeightSeries[i]);
+        A.put(i, j, m_TimeFunction.GetValue(m_DoySeries[i])/m_WeightSeries[i]);
         tmpCoefs[j] = 0.0;
         }
       }
@@ -124,13 +124,13 @@ public:
     vnl_matrix<double> c = atainvat * b;
 
     for(unsigned int j = 0; j<nbCoefs; ++j)
-      tmpCoefs[j] = c.get(j,0);
+      tmpCoefs[j] = c.get(j, 0);
     m_TimeFunction.SetCoefficients(tmpCoefs);
   }
 
 
 private:
-  /// 
+  ///
   TTimeFunction m_TimeFunction;
   TDateType m_DoySeries;
   TWeightType m_WeightSeries;

@@ -98,7 +98,7 @@ public:
           m_WeightSeries[j] = m_WeightSeries[j]*m_DecreaseFactor;
         if( !m_UpperEnvelope && outSeries[j]>series[j] )
           m_WeightSeries[j] = m_WeightSeries[j]*m_DecreaseFactor;
-        }    
+        }
 
       m_SGFunctor.SetWeights(m_WeightSeries);
       outSeries = m_SGFunctor(series);
