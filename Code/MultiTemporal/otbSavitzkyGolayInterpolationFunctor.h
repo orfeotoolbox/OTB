@@ -36,7 +36,7 @@ Savitzky, A.; Golay, M.J.E. (1964). "Smoothing and Differentiation of Data by Si
 
  *
  */
-template <unsigned int Radius, class TSeries, class TDates, class TWeight = TSeries>
+template <unsigned int Radius, class TSeries, class TDates, class TWeight = TSeries, unsigned int Degree=2>
 class SavitzkyGolayInterpolationFunctor
 {
 public:
@@ -44,7 +44,6 @@ public:
   typedef typename TSeries::ValueType ValueType;
   typedef typename TDates::ValueType DateType;
   typedef typename TWeight::ValueType WeightType;
-  static const unsigned int Degree = 2;
   typedef double CoefficientPrecisionType;
   typedef otb::PolynomialTimeSeries< Degree, CoefficientPrecisionType > TSFunctionType;
   static const unsigned int nbDates = TSeries::Dimension;
