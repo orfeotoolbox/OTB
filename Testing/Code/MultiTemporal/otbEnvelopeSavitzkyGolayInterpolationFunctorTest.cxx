@@ -37,12 +37,14 @@ int otbEnvelopeSavitzkyGolayInterpolationFunctorTest(int argc, char* argv[])
 
   // Create a time series
   SeriesType inSeries;
+  SeriesType cleanSeries;
   SeriesType weightSeries;
   DatesType doySeries;
 
   for(unsigned int i=0; i<nbDates; ++i)
     {
     inSeries[i] = 10*vcl_cos(i/10.0);
+    cleanSeries[i] = inSeries[i];
     doySeries[i] = i;
     weightSeries[i] = 1;
     }
@@ -70,7 +72,7 @@ int otbEnvelopeSavitzkyGolayInterpolationFunctorTest(int argc, char* argv[])
   for(unsigned int i=0; i<nbDates; ++i)
     {
 
-    interpolError += vcl_fabs(outSeries[i]-inSeries[i]);
+    interpolError += vcl_fabs(outSeries[i]-cleanSeries[i]);
 
     }
 
