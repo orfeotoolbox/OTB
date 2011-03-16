@@ -25,6 +25,12 @@ namespace otb
 {
 namespace Functor
 {
+/** \class otbEnvelopeSavitzkyGolayInterpolationFunctor
+
+   \brief: This class implements a Savitzky-Golay interpolation fitting the upper or lower envelope of the series being interpolated.
+
+\sa otbSavitzkyGolayInterpolationFunctor
+*/
 template <unsigned int Radius, class TSeries, class TDates, class TWeight = TSeries>
 class EnvelopeSavitzkyGolayInterpolationFunctor
 {
