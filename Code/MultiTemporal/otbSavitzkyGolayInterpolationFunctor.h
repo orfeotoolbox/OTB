@@ -30,11 +30,21 @@ namespace Functor
 
 /** \class otbSavitzkyGolayInterpolationFunctor
 
-   \brief: This functor implements a local polynomial regression (of degree k) on a series of values (of at least k+1 points which are treated as being equally spaced in the series) to determine the smoothed value for each point.
+   \brief: This functor implements a local polynomial regression (of
+   degree k) on a series of values (of at least k+1 points which are
+   treated as being equally spaced in the series) to determine the
+   smoothed value for each point.
 
-In this implementation, the interpolation is performed by least squares fitting. The size of the moving window for the interpolation can be set using the radius variable. If needed, weights for each value of the series to be used by the least squares estimation can be set (the higher the weight, the lower the confidence in the value).
+   In this implementation, the interpolation is performed by least
+   squares fitting. The size of the moving window for the
+   interpolation can be set using the radius variable. If needed,
+   weights for each value of the series to be used by the least
+   squares estimation can be set (the higher the weight, the lower the
+   confidence in the value).
 
-Savitzky, A.; Golay, M.J.E. (1964). "Smoothing and Differentiation of Data by Simplified Least Squares Procedures". Analytical Chemistry 36 (8): 1627–1639. doi:10.1021/ac60214a047
+   Savitzky, A.; Golay, M.J.E. (1964). "Smoothing and Differentiation of
+   Data by Simplified Least Squares Procedures". Analytical Chemistry 36
+   (8): 1627-1639. doi:10.1021/ac60214a047
 
 \sa otbTimeSeriesLeastSquareFittingFunctor
  *
