@@ -38,6 +38,20 @@ int otbWaveletTransform_generic(int argc, char * argv[])
   const char *       outputFileName = argv[2];
   const unsigned int level = atoi(argv[3]);
   const unsigned int decimFactor = atoi(argv[4]);
+  unsigned int NbOfThreadsForward = 0;
+  unsigned int NbOfThreadsInverse = 0;
+
+  if (argc == 7)
+  {
+	  NbOfThreadsForward = atoi(argv[6]);
+	  NbOfThreadsInverse = NbOfThreadsForward;
+  }
+
+  if (argc == 8)
+   {
+ 	  NbOfThreadsForward = atoi(argv[6]);
+ 	  NbOfThreadsInverse = atoi(argv[7]);
+   }
 
   const int Dimension = 2;
   typedef double                           PixelType;
@@ -47,7 +61,6 @@ int otbWaveletTransform_generic(int argc, char * argv[])
   /* Reading */
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(inputFileName);
-
   /* Wavelet choice */
   const otb::Wavelet::Wavelet wvltID = TWavelet;
 
@@ -60,6 +73,11 @@ int otbWaveletTransform_generic(int argc, char * argv[])
   filter->SetInput(reader->GetOutput());
   filter->SetNumberOfDecompositions(level);
   filter->SetSubsampleImageFactor(decimFactor);
+
+
+  if(NbOfThreadsForward>0)
+   filter->SetNumberOfThreads(NbOfThreadsForward);
+
   filter->Update();
 
   /* Inverse Transformation */
@@ -70,6 +88,8 @@ int otbWaveletTransform_generic(int argc, char * argv[])
   typename InvFilterType::Pointer invFilter = InvFilterType::New();
   invFilter->SetInput(filter->GetOutput());
   invFilter->SetSubsampleImageFactor(decimFactor);
+  if(NbOfThreadsInverse>0)
+  invFilter->SetNumberOfThreads(NbOfThreadsInverse);
   invFilter->Update();
 
   /* Writing the output */
@@ -84,10 +104,10 @@ int otbWaveletTransform_generic(int argc, char * argv[])
 
 int otbWaveletTransform(int argc, char * argv[])
 {
-  if (argc != 6)
+  if (argc > 8)
     {
     std::cerr << "Usage: " << argv[0]
-              << "<InputImage> <OutputImage> <level> <decimFactor> <waveletType>" << std::endl;
+              << "<InputImage> <OutputImage> <level> <decimFactor> <waveletType> (optional)<NumberOfThreadsForward> (optional)<NumberOfThreadsInverse>" << std::endl;
     return EXIT_FAILURE;
     }
   int waveletType = atoi(argv[5]);
