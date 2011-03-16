@@ -43,14 +43,14 @@ int otbWaveletTransform_generic(int argc, char * argv[])
 
   if (argc == 7)
   {
-	  NbOfThreadsForward = atoi(argv[6]);
-	  NbOfThreadsInverse = NbOfThreadsForward;
+         NbOfThreadsForward = atoi(argv[6]);
+         NbOfThreadsInverse = NbOfThreadsForward;
   }
 
   if (argc == 8)
    {
- 	  NbOfThreadsForward = atoi(argv[6]);
- 	  NbOfThreadsInverse = atoi(argv[7]);
+          NbOfThreadsForward = atoi(argv[6]);
+          NbOfThreadsInverse = atoi(argv[7]);
    }
 
   const int Dimension = 2;
