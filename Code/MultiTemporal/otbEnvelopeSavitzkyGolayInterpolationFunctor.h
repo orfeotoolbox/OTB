@@ -86,7 +86,7 @@ public:
 
     TSeries tmpSeries ;
 
-    for(unsigned int i=0; i<m_Iterations-1; ++i)
+    for(unsigned int i=0; i<m_Iterations; ++i)
       {
       for(unsigned int j=0; j<nbDates; ++j)
         {
