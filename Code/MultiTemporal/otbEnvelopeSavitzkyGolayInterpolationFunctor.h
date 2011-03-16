@@ -41,7 +41,7 @@ public:
   typedef otb::Functor::SavitzkyGolayInterpolationFunctor<Radius, TSeries, TDates, TWeight> SGFunctorType;
 
   /// Constructor
-  EnvelopeSavitzkyGolayInterpolationFunctor() : m_Iterations(1), m_UpperEnvelope(true), m_DecreaseFactor(0.9)
+  EnvelopeSavitzkyGolayInterpolationFunctor() : m_Iterations(2), m_UpperEnvelope(true), m_DecreaseFactor(0.5)
   {
   }
   /// Destructor
