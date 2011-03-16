@@ -84,19 +84,19 @@ public:
   {
     TSeries outSeries = m_SGFunctor(series);
 
-    TSeries tmpSeries ;
+    TSeries tmpSeries = outSeries;
 
     for(unsigned int i=0; i<m_Iterations; ++i)
       {
       for(unsigned int j=0; j<nbDates; ++j)
         {
-        tmpSeries[j] = outSeries[j];
         if( m_UpperEnvelope && outSeries[j]>series[j] )
           m_WeightSeries[j] = m_WeightSeries[j]*m_DecreaseFactor;
         if( !m_UpperEnvelope && outSeries[j]<series[j] )
           m_WeightSeries[j] = m_WeightSeries[j]*m_DecreaseFactor;
         }    
         outSeries = m_SGFunctor(tmpSeries);
+        tmpSeries = outSeries;
       }
     
 
