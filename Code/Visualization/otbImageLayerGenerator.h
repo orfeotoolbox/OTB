@@ -178,7 +178,7 @@ public:
   /** Get a hook on the resample filter to report progress */
   itk::ProcessObject* GetProgressSource() const
   {
-    return m_Resampler;
+    return m_Resampler->GetStreamer();
   }
 
 protected:
