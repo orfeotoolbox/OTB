@@ -53,7 +53,7 @@ int otbTimeSeriesLeastSquareFittingFunctorWeightsTest(int argc, char* argv[])
   // x = a + b * t + c * t^2
   for(unsigned int i = 0; i<nbDates; i++)
     {
-    inSeries[i] = inCoefs[0]+inCoefs[1]*doySeries[i]+inCoefs[2]*vcl_pow(doySeries[i],2.0);
+    inSeries[i] = inCoefs[0]+inCoefs[1]*doySeries[i]+inCoefs[2]*vcl_pow(doySeries[i], 2.0);
     weightSeries[i] = 1;
     }
 

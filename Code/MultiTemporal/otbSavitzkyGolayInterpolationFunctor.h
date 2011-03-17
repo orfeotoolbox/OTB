@@ -22,7 +22,6 @@
 #include "otbTimeSeriesLeastSquareFittingFunctor.h"
 
 
-
 namespace otb
 {
 namespace Functor
@@ -66,7 +65,7 @@ public:
   typedef itk::FixedArray< DateType, InterpolatedLength> InterpolatedDatesType;
   typedef itk::FixedArray< WeightType, InterpolatedLength> InterpolatedWeightType;
 
-  typedef otb::Functor::TimeSeriesLeastSquareFittingFunctor<InterpolatedSeriesType, 
+  typedef otb::Functor::TimeSeriesLeastSquareFittingFunctor<InterpolatedSeriesType,
             TSFunctionType, InterpolatedDatesType, InterpolatedWeightType> TLSFunctorType;
 
   /// Constructor
@@ -118,7 +117,7 @@ public:
       TLSFunctorType f;
       f.SetDates( tmpDates );
       f.SetWeights( tmpWeights);
-      InterpolatedSeriesType tmpOutSeries = f(tmpInSeries); 
+      InterpolatedSeriesType tmpOutSeries = f(tmpInSeries);
       outSeries[i] = tmpOutSeries[Radius];
       }
 
