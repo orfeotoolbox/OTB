@@ -294,7 +294,7 @@ void
 StreamingImageFileWriter<TInputImage>
 ::UpdateOutputData(itk::DataObject *itkNotUsed(output))
 {
-
+  std::cout << "StreamingImageFileWriter::UpdateOutputData()  BEGIN..." << std::endl;
   unsigned int idx;
 
   /**
@@ -559,6 +559,8 @@ StreamingImageFileWriter<TInputImage>
 
   // Mark that we are no longer updating the data in this filter
   this->m_Updating = false;
+
+  std::cout << "StreamingImageFileWriter::UpdateOutputData()  ... END" << std::endl;
 }
 
 //---------------------------------------------------------
@@ -571,6 +573,7 @@ void
 StreamingImageFileWriter<TInputImage>
 ::GenerateData(void)
 {
+  std::cout << "StreamingImageFileWriter::GenerateData()  BEGIN..." << std::endl;
 // otbGenericMsgDebugMacro(<< "TEST GenerateData");
 
   const InputImageType * input = this->GetInput();
@@ -590,6 +593,7 @@ StreamingImageFileWriter<TInputImage>
   else
     {
     // Set the pixel and component type; the number of components.
+    std::cout << "typeid(ScalarType) = " << typeid(ScalarType).name() <<std::endl;
     m_ImageIO->SetPixelTypeInfo(typeid(ScalarType));
     }
 
@@ -617,7 +621,7 @@ StreamingImageFileWriter<TInputImage>
       geom_kwl.write(geomFileName.chars());
       }
     }
-  
+  std::cout << "StreamingImageFileWriter::GenerateData() ... END" << std::endl;
 }
 
 } // end namespace otb

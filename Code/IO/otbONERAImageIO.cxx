@@ -467,14 +467,14 @@ bool ONERAImageIO::CanWriteFile(const char* FileNameToWrite)
 
 void ONERAImageIO::Write(const void* buffer)
 {
-
+  std::cout << "ONERAImageIO::Write()  BEGIN..." << std::endl;
   if (m_FlagWriteImageInformation == true)
     {
     this->WriteImageInformation();
     m_FlagWriteImageInformation = false;
     }
 
-  unsigned long step = this->GetNumberOfComponents();
+  unsigned long step = this->GetNumberOfComponents() * 2;
 
   // variable not used.
   // const unsigned long numberOfComponents = this->GetImageSizeInComponents();
@@ -518,11 +518,12 @@ void ONERAImageIO::Write(const void* buffer)
 
   delete[] tempmemory;
   tempmemory = NULL;
+  std::cout << "ONERAImageIO::Write()  ... END" << std::endl;
 }
 
 void ONERAImageIO::WriteImageInformation()
 {
-
+  std::cout << "ONERAImageIO::WriteImageInformation()  BEGIN..." << std::endl;
   if (!this->OpenOneraHeaderFileForWriting(m_FileName.c_str()))
     {
     itkExceptionMacro(<< "Cannot read requested file");
@@ -547,13 +548,15 @@ void ONERAImageIO::WriteImageInformation()
   m_Headerfile << "# [dans ordre LSBfirst = big-endian]" << std::endl;
 
   std::string sPixelType("cmplx_real_4");
-  if ((m_PixelType == COMPLEX) && (m_ComponentType == FLOAT))
+  if ((m_PixelType == COMPLEX) && (m_ComponentType == CFLOAT))
     {
     sPixelType = "cmplx_real_4";
     }
   else
     {
-    itkExceptionMacro(<< "data format not supported by OTB (only 'complex_real_4' is available)");
+    itkExceptionMacro(<< "data format not supported by OTB (only 'complex_real_4' is available) : " <<
+                      this->GetComponentTypeAsString(m_ComponentType) <<
+                      ", " << this->GetPixelTypeAsString(m_PixelType) );
     }
 
   m_Headerfile << "Format_valeurs_look=    \t" << sPixelType << std::endl;
@@ -591,7 +594,7 @@ void ONERAImageIO::WriteImageInformation()
   otbMsgDebugMacro(<< "         NumberOfComponents : " << this->GetNumberOfComponents());
   otbMsgDebugMacro(<< "         BytePerPixel       : " << m_BytePerPixel);
   otbMsgDebugMacro(<< "         Host byte order    : " << this->GetByteOrderAsString(m_ByteOrder));
-
+  std::cout << "ONERAImageIO::WriteImageInformation()  ... END" << std::endl;
 }
 
 } // end namespace otb

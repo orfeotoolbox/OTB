@@ -661,38 +661,47 @@ IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(ioTuONERAImageIOCanRead ${IO_TESTS6} otbONERAImageIOTestCanRead
         ${LARGEDATA}/ONERA/spa3_0215_rad.ent)
 
-
+# Read one ONERAimage type CFloat32 with IFreaderScalar and write to a 2 bands hdr file OK
+# crop 10 10 100 100
 ADD_TEST(ioTvONERAImageFileReader ${IO_TESTS6}
-  --compare-image ${EPSILON_9}  ${BASELINE}/ioImageFileReaderONERA.hdr
-                          ${TEMP}/ioImageFileReaderONERA.hdr
-        otbImageFileReaderONERATest
-        ${LARGEDATA}/ONERA/spa3_0215_rad.ent
-        ${TEMP}/ioImageFileReaderONERA.hdr )
+         --compare-image ${EPSILON_9}  
+            ${BASELINE}/ioImageFileReaderONERA.hdr
+            ${TEMP}/ioImageFileReaderONERA.hdr
+         otbImageFileReaderONERATest
+            ${LARGEDATA}/ONERA/spa3_0215_rad.ent
+            ${TEMP}/ioImageFileReaderONERA.hdr 
+            10 10 100 100 )
 
+# Read one ONERAimage type CFloat32 with IFreaderComplex and write to 2 hdr file (Re and Im)  => OK
+# crop 10 10 100 100
 ADD_TEST(ioTvONERAImageFileReaderComplex ${IO_TESTS6}
-  --compare-n-images ${EPSILON_9} 2
-			  ${BASELINE}/ioImageFileReaderONERAComplexReal.hdr
-			  ${TEMP}/ioImageFileReaderONERAComplexReal.hdr
-			  ${BASELINE}/ioImageFileReaderONERAComplexImag.hdr
-			  ${TEMP}/ioImageFileReaderONERAComplexImag.hdr
-        otbImageFileReaderONERAComplex
-        ${LARGEDATA}/ONERA/spa3_0215_rad.ent
-        ${TEMP}/ioImageFileReaderONERAComplexReal.hdr
-	${TEMP}/ioImageFileReaderONERAComplexImag.hdr )
+         --compare-n-images ${EPSILON_9} 2
+			${BASELINE}/ioImageFileReaderONERAComplexReal.hdr
+			${TEMP}/ioImageFileReaderONERAComplexReal.hdr
+			${BASELINE}/ioImageFileReaderONERAComplexImag.hdr
+			${TEMP}/ioImageFileReaderONERAComplexImag.hdr
+         otbImageFileReaderONERAComplex
+            ${LARGEDATA}/ONERA/spa3_0215_rad.ent
+            ${TEMP}/ioImageFileReaderONERAComplexReal.hdr
+	        ${TEMP}/ioImageFileReaderONERAComplexImag.hdr )
 
+# Read one ONERAimage type CFloat32 with IFreaderComplex and write to the same type of file  => OK
+# crop 20 20 100 100 
 ADD_TEST(ioTvONERAImageFileWriterComplex ${IO_TESTS6}
-  --compare-image ${EPSILON_9}   ${BASELINE}/ioImageFileReaderONERAComplexWrite.ent
-                           ${TEMP}/ioImageFileReaderONERAComplexWrite.ent
-        otbImageFileWriterONERAComplex
-        ${LARGEDATA}/ONERA/spa3_0215_rad.ent
-        ${TEMP}/ioImageFileReaderONERAComplexWrite.ent )
+         --compare-image ${EPSILON_9}   
+            ${BASELINE}/ioImageFileReaderONERAComplexWrite.ent
+            ${TEMP}/ioImageFileReaderONERAComplexWrite.ent
+         otbImageFileWriterONERAComplex
+            ${LARGEDATA}/ONERA/spa3_0215_rad.ent
+            ${TEMP}/ioImageFileReaderONERAComplexWrite.ent )
 
 ADD_TEST(ioTvONERAImageStreamWriter ${IO_TESTS6}
-  --compare-image ${EPSILON_9}   ${TEMP}/ioImageFileReaderONERAComplexWrite.ent
-  			   ${TEMP}/ioImageFileReaderONERAStreamWrite.ent
-        otbImageFileWriterStreamingONERAComplex
-        ${TEMP}/ioImageFileReaderONERAComplexWrite.ent
-        ${TEMP}/ioImageFileReaderONERAStreamWrite.ent )
+         --compare-image ${EPSILON_9}
+            ${TEMP}/ioImageFileReaderONERAComplexWrite.ent
+  			${TEMP}/ioImageFileReaderONERAStreamWrite.ent
+         otbImageFileWriterStreamingONERAComplex
+            ${TEMP}/ioImageFileReaderONERAComplexWrite.ent
+            ${TEMP}/ioImageFileReaderONERAStreamWrite.ent )
 SET_TESTS_PROPERTIES(ioTvONERAImageStreamWriter PROPERTIES DEPENDS ioTvONERAImageFileWriterComplex)
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
