@@ -74,7 +74,7 @@ ImageViewerManagerModel
   /** Generate the layer*/
   LayerGeneratorPointerType visuGenerator = LayerGeneratorType::New();
   visuGenerator->SetImage(reader->GetOutput());
-  FltkFilterWatcher qlwatcher(visuGenerator->GetResampler(),0,0,200,20,"Generating QuickLook ...");
+  FltkFilterWatcher qlwatcher(visuGenerator->GetProgressSource(),0,0,200,20,"Generating QuickLook ...");
   visuGenerator->GenerateLayer();
   RenderingFunctionType::Pointer  rendrerFunction  = visuGenerator->GetRenderingFunction();
 
@@ -155,7 +155,7 @@ ImageViewerManagerModel
     /** Generate the layer*/
     LayerGeneratorPointerType visuGenerator = LayerGeneratorType::New();
     visuGenerator->SetImage(reader->GetOutput()->GetNthElement(i));
-    FltkFilterWatcher qlwatcher(visuGenerator->GetResampler(),0,0,200,20,"Generating QuickLook ...");
+    FltkFilterWatcher qlwatcher(visuGenerator->GetProgressSource(),0,0,200,20,"Generating QuickLook ...");
     visuGenerator->GenerateLayer();
     RenderingFunctionType::Pointer  rendrerFunction  = visuGenerator->GetRenderingFunction();
 
