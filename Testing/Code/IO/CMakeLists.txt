@@ -3038,9 +3038,6 @@ FOREACH(DATA_PIXELTYPE ${DATA_PIXELTYPES_LIST})
            )
         
   FOREACH(NBBANDS ${NBBANDS_LIST})       
-     
-       
-               
     IF ( NOT ${DATA_PIXELTYPE} MATCHES "Short" )   
       
       ADD_TEST(ioTvWriteVectorImageScalar${DATA_PIXELTYPE}${NBBANDS}Bands
@@ -3089,10 +3086,84 @@ FOREACH(DATA_PIXELTYPE ${DATA_PIXELTYPES_LIST})
                   ${NBBANDS}
                )
     
+    ENDIF (  NOT ${DATA_PIXELTYPE} MATCHES "Short" )         
+  ENDFOREACH(NBBANDS ${NBBANDS_LIST})
+
+############
+# Tests about Streaming writing Scalar / Complex data
+  ADD_TEST(ioTvStreamingWriteImageScalar${DATA_PIXELTYPE}
+           ${IO_TESTS23}
+           --compare-image ${NOTOL}
+              ${INPUTDATA}/monoband${DATA_PIXELTYPE}.tif
+              ${TEMP}/monobandStrOut${DATA_PIXELTYPE}.tif
+           otbImageScalarStreamingFileWriterTestWithoutInput${DATA_PIXELTYPE}
+              ${TEMP}/monobandStrOut${DATA_PIXELTYPE}.tif
+              100
+           )
+
+  ADD_TEST(ioTvStreamingWriteImageComplex${DATA_PIXELTYPE}
+           ${IO_TESTS23}
+           --compare-image ${NOTOL}
+              ${INPUTDATA}/monobandComplex${DATA_PIXELTYPE}.tif
+              ${TEMP}/monobandStrComplexOut${DATA_PIXELTYPE}.tif
+           otbImageComplexStreamingFileWriterTestWithoutInput${DATA_PIXELTYPE}
+              ${TEMP}/monobandStrComplexOut${DATA_PIXELTYPE}.tif
+              100
+           )
+        
+  FOREACH(NBBANDS ${NBBANDS_LIST})       
+    IF ( NOT ${DATA_PIXELTYPE} MATCHES "Short" )   
+      
+      ADD_TEST(ioTvStreamingWriteVectorImageScalar${DATA_PIXELTYPE}${NBBANDS}Bands
+               ${IO_TESTS23}
+               --compare-image ${NOTOL}
+                  ${INPUTDATA}/multiband${DATA_PIXELTYPE}_${NBBANDS}bands.tif
+                  ${TEMP}/multibandStrOut${DATA_PIXELTYPE}_${NBBANDS}bands.tif
+               otbVectorImageStreamingFileWriterScalarTestWithoutInput${DATA_PIXELTYPE}
+                  ${TEMP}/multibandStrOut${DATA_PIXELTYPE}_${NBBANDS}bands.tif
+                  100
+                  ${NBBANDS}
+               ) 
+      
+      ADD_TEST(ioTvStreamingWriteVectorImageComplex${DATA_PIXELTYPE}${NBBANDS}Bands
+               ${IO_TESTS23}
+               --compare-image ${NOTOL}
+                  ${INPUTDATA}/multibandComplex${DATA_PIXELTYPE}_${NBBANDS}bands.tif
+                  ${TEMP}/multibandStrComplexOut${DATA_PIXELTYPE}_${NBBANDS}bands.tif
+               otbVectorImageStreamingFileWriterComplexTestWithoutInput${DATA_PIXELTYPE}
+                  ${TEMP}/multibandStrComplexOut${DATA_PIXELTYPE}_${NBBANDS}bands.tif
+                  100
+                  ${NBBANDS}
+               )
+                      
+    ELSE ( NOT ${DATA_PIXELTYPE} MATCHES "Short" )
+      
+      ADD_TEST(ioTvStreamingWriteVectorImageScalar${DATA_PIXELTYPE}${NBBANDS}Bands
+             ${IO_TESTS23}
+             --compare-image ${NOTOL}
+                ${INPUTDATA}/multiband${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
+                ${TEMP}/multibandStrOut${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
+             otbVectorImageStreamingFileWriterScalarTestWithoutInput${DATA_PIXELTYPE}
+                ${TEMP}/multibandStrOut${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
+                50
+                ${NBBANDS}
+             )
+      
+      ADD_TEST(ioTvStreamingWriteVectorImageComplex${DATA_PIXELTYPE}${NBBANDS}Bands
+               ${IO_TESTS23}
+               --compare-image ${NOTOL}
+                  ${INPUTDATA}/multibandComplex${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
+                  ${TEMP}/multibandStrComplexOut${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
+               otbVectorImageStreamingFileWriterComplexTestWithoutInput${DATA_PIXELTYPE}
+                  ${TEMP}/multibandStrComplexOut${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
+                  50
+                  ${NBBANDS}
+               )
+    
     ENDIF (  NOT ${DATA_PIXELTYPE} MATCHES "Short" )
              
   ENDFOREACH(NBBANDS ${NBBANDS_LIST})
-  
+
 ENDFOREACH(DATA_PIXELTYPE ${DATA_PIXELTYPES_LIST})
 #----------------------------------------------------------------------------------
 SET(BasicIO_SRCS1
@@ -3322,6 +3393,8 @@ otbIOTests23.cxx
 otbComplexImageManipulationTest.cxx
 otbImageFileWriterTestWithoutInput.cxx
 otbVectorImageFileWriterTestWithoutInput.cxx
+otbImageStreamingFileWriterTestWithoutInput.cxx
+otbVectorImageStreamingFileWriterTestWithoutInput.cxx
 otbGDALReadPxlComplex.cxx
 )
 

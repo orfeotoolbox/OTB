@@ -104,6 +104,8 @@ protected:
   bool OpenOneraHeaderFileForReading(const char* filename);
   void InternalReadImageInformation();
 
+  void InternalWriteImageInformation();
+
   bool OpenOneraDataFileForWriting(const char* filename);
   bool OpenOneraHeaderFileForWriting(const char* filename);
 

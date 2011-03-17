@@ -294,7 +294,6 @@ void
 StreamingImageFileWriter<TInputImage>
 ::UpdateOutputData(itk::DataObject *itkNotUsed(output))
 {
-  std::cout << "StreamingImageFileWriter::UpdateOutputData()  BEGIN..." << std::endl;
   unsigned int idx;
 
   /**
@@ -474,6 +473,7 @@ StreamingImageFileWriter<TInputImage>
   // Setup the image IO for writing.
   //
   m_ImageIO->SetFileName(m_FileName.c_str());
+
   m_ImageIO->WriteImageInformation();
 
   /**
@@ -560,7 +560,6 @@ StreamingImageFileWriter<TInputImage>
   // Mark that we are no longer updating the data in this filter
   this->m_Updating = false;
 
-  std::cout << "StreamingImageFileWriter::UpdateOutputData()  ... END" << std::endl;
 }
 
 //---------------------------------------------------------
@@ -573,19 +572,16 @@ void
 StreamingImageFileWriter<TInputImage>
 ::GenerateData(void)
 {
-  std::cout << "StreamingImageFileWriter::GenerateData()  BEGIN..." << std::endl;
-// otbGenericMsgDebugMacro(<< "TEST GenerateData");
-
   const InputImageType * input = this->GetInput();
 
   // Make sure that the image is the right type and no more than
   // four components.
-  typedef typename InputImageType::PixelType ScalarType;
+  typedef typename InputImageType::PixelType ImagePixelType;
 
   if (strcmp(input->GetNameOfClass(), "VectorImage") == 0)
     {
-    typedef typename InputImageType::InternalPixelType VectorImageScalarType;
-    m_ImageIO->SetPixelTypeInfo(typeid(VectorImageScalarType));
+    typedef typename InputImageType::InternalPixelType VectorImagePixelType;
+    m_ImageIO->SetPixelTypeInfo(typeid(VectorImagePixelType));
 
     typedef typename InputImageType::AccessorFunctorType AccessorFunctorType;
     m_ImageIO->SetNumberOfComponents(AccessorFunctorType::GetVectorLength(input));
@@ -593,8 +589,7 @@ StreamingImageFileWriter<TInputImage>
   else
     {
     // Set the pixel and component type; the number of components.
-    std::cout << "typeid(ScalarType) = " << typeid(ScalarType).name() <<std::endl;
-    m_ImageIO->SetPixelTypeInfo(typeid(ScalarType));
+    m_ImageIO->SetPixelTypeInfo(typeid(ImagePixelType));
     }
 
   // Setup the image IO for writing.
@@ -621,7 +616,6 @@ StreamingImageFileWriter<TInputImage>
       geom_kwl.write(geomFileName.chars());
       }
     }
-  std::cout << "StreamingImageFileWriter::GenerateData() ... END" << std::endl;
 }
 
 } // end namespace otb
