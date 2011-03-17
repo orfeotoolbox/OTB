@@ -176,7 +176,10 @@ public:
   }
 
   /** Get a hook on the resample filter to report progress */
-  itkGetObjectMacro(Resampler, ResampleFilterType);
+  itk::ProcessObject* GetProgressSource() const
+  {
+    return m_Resampler;
+  }
 
 protected:
   /** Constructor */

@@ -23,6 +23,7 @@ namespace otb
 {
 /** Initialize the singleton */
 BasicApplicationModel::Pointer BasicApplicationModel::Instance = NULL;
+
 /** Manage the singleton */
 BasicApplicationModel::Pointer
 BasicApplicationModel::GetInstance()
@@ -62,7 +63,7 @@ BasicApplicationModel
   generator->SetImage(m_Reader->GetOutput());
   generator->GenerateQuicklookOn();
   FltkFilterWatcher qlwatcher(
-    generator->GetResampler(), 0, 0, 200, 20, "Generating QuickLook ...");
+    generator->GetProgressSource(), 0, 0, 200, 20, "Generating QuickLook ...");
   generator->GenerateLayer();
 
   generator->GetLayer()->SetName("Image");
@@ -74,7 +75,6 @@ BasicApplicationModel
   m_VisualizationModel->AddLayer(generator->GetLayer());
 
   m_VisualizationModel->Update();
-
   this->NotifyAll();
 }
 
