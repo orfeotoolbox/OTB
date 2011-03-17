@@ -41,8 +41,8 @@ int otbWaveletTransform_generic(int argc, char * argv[])
 
   if (argc == 7)
   {
-	unsigned int  NbOfThreads = atoi(argv[6]);
-	itk::MultiThreader::SetGlobalDefaultNumberOfThreads(NbOfThreads);
+       unsigned int  NbOfThreads = atoi(argv[6]);
+       itk::MultiThreader::SetGlobalDefaultNumberOfThreads(NbOfThreads);
   }
 
   const int Dimension = 2;
