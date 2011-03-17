@@ -104,7 +104,8 @@ protected:
 
 
 private:
-    itkStaticConstMacro(m_NumberOfComponentsPerPixel, unsigned int, 10);
+  //itkStaticConstMacro(m_NumberOfComponentsPerPixel, unsigned int, 10);
+  static const  unsigned int m_NumberOfComponentsPerPixel = 10;
 
 };
 
