@@ -26,6 +26,7 @@
 #include "otbStreamingShrinkImageFilter.h"
 #include "otbStreamingImageFileWriter.h"
 #include "otbConfigure.h"
+#include "otbStandardWriterWatcher.h"
 
 namespace otb
 {
@@ -170,6 +171,8 @@ int Quicklook::Execute(otb::ApplicationOptionsResult* parseResult)
     ShrinkImageFilterType::Pointer ResamplingFilter = ShrinkImageFilterType::New();
     ResamplingFilter->SetInput( extractROIFilter->GetOutput() );
     ResamplingFilter->SetShrinkFactor( Ratio );
+
+    otb::StandardWriterWatcher watcher (ResamplingFilter->GetStreamer(), ResamplingFilter->GetFilter(), "Quicklook geenration");
     ResamplingFilter->Update();
     otbGenericMsgDebugMacro(<<ResamplingFilter->GetOutput()->GetLargestPossibleRegion());
 
