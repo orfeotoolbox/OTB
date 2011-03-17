@@ -39,7 +39,7 @@ namespace otb
  * \ingroup Multithreaded
  *
  */
-template<class TInputImage, class TOutputImage>
+template<class TInputImage, class TOutputImage = TInputImage>
 class ITK_EXPORT PersistentShrinkImageFilter :
   public PersistentImageFilter<TInputImage, TOutputImage>
 {
@@ -134,7 +134,7 @@ private:
  * \ingroup Multithreaded
  *
  */
-template<class TInputImage, class TOutputImage>
+template<class TInputImage, class TOutputImage = TInputImage>
 class ITK_EXPORT StreamingShrinkImageFilter :
   public PersistentFilterStreamingDecorator< PersistentShrinkImageFilter<TInputImage, TOutputImage> >
 {
