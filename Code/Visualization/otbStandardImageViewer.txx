@@ -206,7 +206,7 @@ StandardImageViewer<TImage, TVectorData, TWidgetManager>
   // Generate the layer
   ImageLayerGeneratorPointerType generator = ImageLayerGeneratorType::New();
   generator->SetImage(m_Image);
-  FltkFilterWatcher qlwatcher(generator->GetResampler(), 0, 0, 200, 20, "Generating QuickLook ...");
+  FltkFilterWatcher qlwatcher(generator->GetProgressSource(), 0, 0, 200, 20, "Generating QuickLook ...");
   generator->GenerateLayer();
   m_ImageLayer = generator->GetLayer();
   m_RenderingFunction = generator->GetRenderingFunction();
