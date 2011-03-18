@@ -27,13 +27,16 @@
 #include "otbImageKeywordlist.h"
 #include "otbMetaDataKey.h"
 
+
+#include "base/ossimKeywordlist.h"
+#include "projection/ossimProjection.h"
+#include "ossim/ossimPluginProjectionFactory.h"
+
 #include "imaging/ossimImageHandlerRegistry.h"
 #include "imaging/ossimImageHandler.h"
 #include "init/ossimInit.h"
-#include "base/ossimKeywordlist.h"
-#include "projection/ossimProjection.h"
 #include "projection/ossimProjectionFactoryRegistry.h"
-#include "ossim/ossimPluginProjectionFactory.h"
+
 
 #include "otbTileMapImageIO.h" //FIXME find a better way
 #include "otbGDALImageIO.h" //FIXME find a better way

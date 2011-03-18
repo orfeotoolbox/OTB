@@ -29,7 +29,7 @@ ImageKeywordlist
 }
 
 ImageKeywordlist
-::ImageKeywordlist(const Self& p) : m_Keywordlist(p.m_Keywordlist) //m_Keywordlist(Self.m_Keywordlist), m_Delimiter(Self.m_Delimiter)
+::ImageKeywordlist(const Self& p) : m_Keywordlist(p.m_Keywordlist)
 {
 }
 
