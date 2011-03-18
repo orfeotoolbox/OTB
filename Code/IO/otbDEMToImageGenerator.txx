@@ -39,6 +39,7 @@ DEMToImageGenerator<TDEMImage>
   m_Transform         = GenericRSTransformType::New();
   m_DEMFunction       = SRTMFunctionType::New();
 
+  this->SetUnknownDefaultElevationValue(static_cast<PixelValueType>(0.0));
 }
 
 // DEM folder specification method
@@ -125,15 +126,31 @@ DEMToImageGenerator<TDEMImage>
     if(m_Transform.IsNotNull())
       {
         geoPoint = m_Transform->TransformPoint(phyPoint);
-        DEMImage->SetPixel(currentindex, m_DEMFunction->Evaluate(geoPoint) );
+        if (vnl_math_isnan(this->m_DEMFunction->Evaluate(geoPoint)))
+          {
+          DEMImage->SetPixel(currentindex, this->GetUnknownDefaultElevationValue() );
+          }
+        else
+          {
+          DEMImage->SetPixel(currentindex, m_DEMFunction->Evaluate(geoPoint) );
+          }
       }
     else
       {
+      if (vnl_math_isnan(this->m_DEMFunction->Evaluate(phyPoint)))
+        {
+        DEMImage->SetPixel(currentindex, this->GetUnknownDefaultElevationValue() );
+        }
+      else
+        {
         DEMImage->SetPixel(currentindex, m_DEMFunction->Evaluate(phyPoint) );
+        }
       }
-    progress.CompletedPixel();
+
     }
+    progress.CompletedPixel();
 }
+
 
 template <class TDEMImage>
 void
