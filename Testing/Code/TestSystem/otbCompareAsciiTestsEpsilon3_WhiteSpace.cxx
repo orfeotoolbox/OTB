@@ -113,7 +113,7 @@ int otbCompareAsciiTestsEpsilon3_WhiteSpace(int argc, char * argv[])
   fileTest << "H = [ 20.010 , 21.010 , 22.010 ]\n";
   fileTest << "I = [320, 321, 322]\n";
   fileTest << "I = [120, 321, 122]\n";
-  fileTest << "I = [120,320,122]\n";
+  fileTest << "I = [120, 320, 122]\n";
   fileTest.close();
 */
   return EXIT_SUCCESS;

@@ -97,7 +97,7 @@ VectorDataToRightAngleVectorDataFilter<TVectorData>
                                                                itVectorCur.Get()->GetLine());
         
         double threshold_2 = m_DistanceThreshold * m_DistanceThreshold;
-	if (dist1_2 < threshold_2 && dist2_2 < threshold_2)
+       if (dist1_2 < threshold_2 && dist2_2 < threshold_2)
           {
           // If Right Angle & not so far from segments: Add to the output
           typename DataNodeType::Pointer CurrentGeometry = DataNodeType::New();
@@ -121,15 +121,15 @@ VectorDataToRightAngleVectorDataFilter<TVectorData>
 {
   VertexListType * vertexList = const_cast<VertexListType *>(line->GetVertexList());
   
-  VertexType v0 = vertexList->GetElement(0); 
-  VertexType v1 = vertexList->GetElement(1); 
+  VertexType v0 = vertexList->GetElement(0);
+  VertexType v1 = vertexList->GetElement(1);
   
   // Case the extremities of the segment are the same
   double l2 = v0.SquaredEuclideanDistanceTo(v1);
 
   // Is the projection of rAngle on the segment inside (0<u<1) or
   // inside the segment bounds
-  double u = ((rAngle[0] - v0[0]) *(v1[0] - v0[0] ) + 
+  double u = ((rAngle[0] - v0[0]) *(v1[0] - v0[0] ) +
     (rAngle[1] - v0[1]) *(v1[1] - v0[1])) / l2;
 
   if( u < 1e-10 ) u = 0.;
