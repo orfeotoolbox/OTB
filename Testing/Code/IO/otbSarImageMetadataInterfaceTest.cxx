@@ -36,7 +36,9 @@ void printPointSet(otb::SarImageMetadataInterface::PointSetPointer pointSet, std
     {
     stream << "PointSet values :" << std::endl;
     otb::SarImageMetadataInterface::PointSetType::PointType point;
+    point.Fill(0);
     otb::SarImageMetadataInterface::PointSetType::PixelType pointValue;
+    pointValue.Fill(0);
     for (unsigned int i = 0; i < pointSet->GetNumberOfPoints(); ++i)
        {
        pointSet->GetPoint(i, &point);
