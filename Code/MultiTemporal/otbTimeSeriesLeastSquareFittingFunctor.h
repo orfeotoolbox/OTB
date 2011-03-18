@@ -22,7 +22,6 @@
 #include "vnl/vnl_transpose.h"
 #include "vnl/vnl_matrix.h"
 
-
 namespace otb
 {
 namespace Functor
@@ -67,14 +66,14 @@ public:
   {
     this->EstimateTimeFunction(series);
     TSeriesType outSeries;
-    for(unsigned int i=0; i<m_DoySeries.Size(); ++i)
+    for(unsigned int i = 0; i < m_DoySeries.Size(); ++i)
       outSeries[i] = m_TimeFunction.GetValue( m_DoySeries[i] );
     return outSeries;
   }
 
   inline void SetDates(const TDateType& doy)
   {
-    for(unsigned int i=0; i<doy.Size(); ++i)
+    for(unsigned int i = 0; i < doy.Size(); ++i)
       m_DoySeries[i] = doy[i];
   }
 
@@ -83,7 +82,6 @@ public:
     for(unsigned int i=0; i<weights.Size(); ++i)
       m_WeightSeries[i] = weights[i];
   }
-
 
   inline CoefficientsType GetCoefficients() const
   {
@@ -102,17 +100,17 @@ public:
     // fill the matrices
 
     typename TTimeFunction::CoefficientsType tmpCoefs;
-    for(unsigned int j = 0; j<nbCoefs; ++j)
+    for(unsigned int j = 0; j < nbCoefs; ++j)
       tmpCoefs[j] = 0.0;
 
-    for(unsigned int i = 0; i<nbDates; ++i)
+    for(unsigned int i = 0; i < nbDates; ++i)
       {
-      b.put(i, 0, series[i]/m_WeightSeries[i]);
-      for(unsigned int j = 0; j<nbCoefs; ++j)
+      b.put(i, 0, series[i] / m_WeightSeries[i]);
+      for(unsigned int j = 0; j < nbCoefs; ++j)
         {
         tmpCoefs[j] = 1.0;
         m_TimeFunction.SetCoefficients(tmpCoefs);
-        A.put(i, j, m_TimeFunction.GetValue(m_DoySeries[i])/m_WeightSeries[i]);
+        A.put(i, j, m_TimeFunction.GetValue(m_DoySeries[i]) / m_WeightSeries[i]);
         tmpCoefs[j] = 0.0;
         }
       }
@@ -123,11 +121,10 @@ public:
     vnl_matrix<double> atainvat = atainv * vnl_transpose(A);
     vnl_matrix<double> c = atainvat * b;
 
-    for(unsigned int j = 0; j<nbCoefs; ++j)
+    for(unsigned int j = 0; j < nbCoefs; ++j)
       tmpCoefs[j] = c.get(j, 0);
     m_TimeFunction.SetCoefficients(tmpCoefs);
   }
-
 
 private:
   ///
@@ -136,5 +133,5 @@ private:
   TWeightType m_WeightSeries;
 };
 }
-}
+} //namespace otb
 #endif
