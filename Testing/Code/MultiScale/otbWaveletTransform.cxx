@@ -89,7 +89,7 @@ int otbWaveletTransform_generic(int argc, char * argv[])
 
 int otbWaveletTransform(int argc, char * argv[])
 {
-  if (argc > 7)
+  if ((argc > 7) || (argc<6))
     {
     std::cerr << "Usage: " << argv[0]
               << "<InputImage> <OutputImage> <level> <decimFactor> <waveletType> (optional)<NumberOfThreads>" << std::endl;
