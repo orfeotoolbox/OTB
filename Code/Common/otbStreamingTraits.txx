@@ -28,6 +28,8 @@
 #include "itkLinearInterpolateImageFunction.h"
 #include "itkNearestNeighborInterpolateImageFunction.h"
 
+#include "otbImageRegionSquareTileSplitter.h"
+
 namespace otb
 {
 
@@ -53,32 +55,30 @@ unsigned long StreamingTraitsBase<TImage>
       break;
     case SET_BUFFER_MEMORY_SIZE:
       {
-      const unsigned long bufferMemorySizeOctet = bufferMemorySize / 8;
       unsigned long       numberColumnsOfRegion = region.GetSize()[0]; // X dimension
-      const unsigned long sizeLine = numberColumnsOfRegion * \
+      const unsigned long sizeLineInBytes = numberColumnsOfRegion * \
                                      image->GetNumberOfComponentsPerPixel() * \
                                      sizeof(PixelType);
-      unsigned long regionSize = region.GetSize()[1] * sizeLine;
+      unsigned long regionSizeInBytes = region.GetSize()[1] * sizeLineInBytes;
       otbMsgDevMacro(<< "image->GetNumberOfComponentsPerPixel()   = " << image->GetNumberOfComponentsPerPixel());
       otbMsgDevMacro(<< "sizeof(PixelType)                        = " << sizeof(PixelType));
       otbMsgDevMacro(<< "numberColumnsOfRegion                    = " << numberColumnsOfRegion);
-      otbMsgDevMacro(<< "sizeLine                                 = " << sizeLine);
-      otbMsgDevMacro(<< "regionSize                               = " << regionSize);
+      otbMsgDevMacro(<< "sizeLine                                 = " << sizeLineInBytes);
+      otbMsgDevMacro(<< "regionSize                               = " << regionSizeInBytes);
       otbMsgDevMacro(<< "BufferMemorySize                         = " << bufferMemorySize);
-      otbMsgDevMacro(<< "bufferMemorySizeOctet                    = " << bufferMemorySizeOctet);
 
       //Active streaming
-      if (regionSize > bufferMemorySizeOctet)
+      if (regionSizeInBytes > bufferMemorySize)
         {
         //The regionSize must be at list equal to the sizeLine
-        if (regionSize < sizeLine)
+        if (regionSizeInBytes < sizeLineInBytes)
           {
           otbMsgDevMacro(<< "Force buffer size.");
-          regionSize = sizeLine;
+          regionSizeInBytes = sizeLineInBytes;
           }
         //Calculate NumberOfStreamDivisions
         numDivisions = static_cast<unsigned long>(
-          vcl_ceil(static_cast<double>(regionSize) / static_cast<double>(bufferMemorySizeOctet))
+          vcl_ceil(static_cast<double>(regionSizeInBytes) / static_cast<double>(bufferMemorySize))
           );
         }
       else
@@ -160,6 +160,19 @@ unsigned long StreamingTraitsBase<TImage>
           }
 
         otbMsgDevMacro(<< "streamMaxSizeBufferForStreaming in Bytes     = " << streamMaxSizeBufferForStreamingInBytes);
+
+
+        // Is the splitter a otb::ImageRegionSquareTileSplitter ?
+        otb::ImageRegionSquareTileSplitter<2>* squareTileSplitter = dynamic_cast<otb::ImageRegionSquareTileSplitter<2>*>(splitter);
+        if (squareTileSplitter)
+          {
+          // in that case, inform it about PixelSize so that the tiles
+          squareTileSplitter->SetPixelSizeInBytes(static_cast<std::streamoff>(image->GetNumberOfComponentsPerPixel()) *
+                                                  static_cast<std::streamoff>(sizeof(PixelType)));
+
+          squareTileSplitter->SetTileSizeInBytes(streamMaxSizeBufferForStreamingInBytes);
+          }
+
 
         //Calculate NumberOfStreamDivisions
         numDivisions =
