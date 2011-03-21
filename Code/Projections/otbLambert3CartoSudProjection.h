@@ -32,10 +32,10 @@ class ITK_EXPORT Lambert3CartoSudProjection : public LambertConformalConicMapPro
 {
 public:
   /** Standard class typedefs. */
-  typedef Lambert3CartoSudProjection                    Self;
-  typedef LambertConformalConicMapProjection<transform> Superclass;
-  typedef itk::SmartPointer<Self>                       Pointer;
-  typedef itk::SmartPointer<const Self>                 ConstPointer;
+  typedef Lambert3CartoSudProjection                     Self;
+  typedef LambertConformalConicMapProjection<TTransform> Superclass;
+  typedef itk::SmartPointer<Self>                        Pointer;
+  typedef itk::SmartPointer<const Self>                  ConstPointer;
 
   typedef typename Superclass::ScalarType ScalarType;
   typedef itk::Point<ScalarType, 2>       InputPointType;
