@@ -64,10 +64,10 @@ public:
 
   inline TSeriesType operator ()(const TSeriesType& series)
   {
-    this->EstimateTimeFunction(series);
+    TTimeFunction estFunction = this->EstimateTimeFunction(series);
     TSeriesType outSeries;
     for(unsigned int i = 0; i < m_DoySeries.Size(); ++i)
-      outSeries[i] = m_TimeFunction.GetValue( m_DoySeries[i] );
+      outSeries[i] = estFunction.GetValue( m_DoySeries[i] );
     return outSeries;
   }
 
@@ -83,15 +83,16 @@ public:
       m_WeightSeries[i] = weights[i];
   }
 
-  inline CoefficientsType GetCoefficients() const
+  inline CoefficientsType GetCoefficients(const TSeriesType& series) const
   {
-    return m_TimeFunction.GetCoefficients();
+    return (this->EstimateTimeFunction(series)).GetCoefficients();
   }
 
-  inline void EstimateTimeFunction(const TSeriesType& series)
+  inline TTimeFunction EstimateTimeFunction(const TSeriesType& series) const
   {
+    TTimeFunction estFunction;
     unsigned int nbDates = m_DoySeries.Size();
-    unsigned int nbCoefs = m_TimeFunction.GetCoefficients().Size();
+    unsigned int nbCoefs = estFunction.GetCoefficients().Size();
 
     // b = A * c
     vnl_matrix<double> A(nbDates, nbCoefs);
@@ -109,8 +110,8 @@ public:
       for(unsigned int j = 0; j < nbCoefs; ++j)
         {
         tmpCoefs[j] = 1.0;
-        m_TimeFunction.SetCoefficients(tmpCoefs);
-        A.put(i, j, m_TimeFunction.GetValue(m_DoySeries[i]) / m_WeightSeries[i]);
+        estFunction.SetCoefficients(tmpCoefs);
+        A.put(i, j, estFunction.GetValue(m_DoySeries[i]) / m_WeightSeries[i]);
         tmpCoefs[j] = 0.0;
         }
       }
@@ -123,12 +124,13 @@ public:
 
     for(unsigned int j = 0; j < nbCoefs; ++j)
       tmpCoefs[j] = c.get(j, 0);
-    m_TimeFunction.SetCoefficients(tmpCoefs);
+    estFunction.SetCoefficients(tmpCoefs);
+
+    return estFunction;
   }
 
 private:
   ///
-  TTimeFunction m_TimeFunction;
   TDateType m_DoySeries;
   TWeightType m_WeightSeries;
 };

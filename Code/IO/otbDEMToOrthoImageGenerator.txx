@@ -88,7 +88,15 @@ DEMToOrthoImageGenerator<TDEMImage, TMapProjection>
 //                   << geoPoint[0] << "," << geoPoint[1] << ") -> height " << height);
 
 //     otbMsgDevMacro(<< "height: " << height);
-    DEMImage->SetPixel(currentindex, this->m_DEMFunction->Evaluate(geoPoint) );
+
+    if (vnl_math_isnan(this->m_DEMFunction->Evaluate(geoPoint)))
+      {
+      DEMImage->SetPixel(currentindex, this->GetUnknownDefaultElevationValue());
+      }
+    else
+      {
+      DEMImage->SetPixel(currentindex, this->m_DEMFunction->Evaluate(geoPoint) );
+      }
 
     progress.CompletedPixel();
     }

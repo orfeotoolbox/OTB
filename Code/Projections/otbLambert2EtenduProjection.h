@@ -18,8 +18,6 @@
 #ifndef __otbLambert2EtenduProjection_h
 #define __otbLambert2EtenduProjection_h
 
-#include "projection/ossimMapProjection.h"
-#include "projection/ossimLambertConformalConicProjection.h"
 #include "otbMapProjection.h"
 
 namespace otb
@@ -29,15 +27,15 @@ namespace otb
 * It converts coordinates in longitude, latitude (WGS84) to Lambert 2 Etendu map coordinates.
 *
  */
-template <TransformDirection::TransformationDirection transform>
-class ITK_EXPORT Lambert2EtenduProjection : public LambertConformalConicMapProjection<transform>
+template <TransformDirection::TransformationDirection TTransform>
+class ITK_EXPORT Lambert2EtenduProjection : public LambertConformalConicMapProjection<TTransform>
 {
 public:
   /** Standard class typedefs. */
-  typedef Lambert2EtenduProjection                      Self;
-  typedef LambertConformalConicMapProjection<transform> Superclass;
-  typedef itk::SmartPointer<Self>                       Pointer;
-  typedef itk::SmartPointer<const Self>                 ConstPointer;
+  typedef Lambert2EtenduProjection                       Self;
+  typedef LambertConformalConicMapProjection<TTransform> Superclass;
+  typedef itk::SmartPointer<Self>                        Pointer;
+  typedef itk::SmartPointer<const Self>                  ConstPointer;
 
   typedef typename Superclass::ScalarType ScalarType;
   typedef itk::Point<ScalarType, 2>       InputPointType;

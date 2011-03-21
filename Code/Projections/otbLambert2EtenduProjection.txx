@@ -24,8 +24,8 @@
 namespace otb
 {
 
-template <TransformDirection::TransformationDirection transform>
-Lambert2EtenduProjection<transform>
+template <TransformDirection::TransformationDirection TTransform>
+Lambert2EtenduProjection<TTransform>
 ::Lambert2EtenduProjection()
 {
   itk::Point<double, 2> origin;
@@ -46,8 +46,8 @@ Lambert2EtenduProjection<transform>
   this->SetParameters(parall1, parall2, falseEasting, falseNorthing);
 }
 
-template <TransformDirection::TransformationDirection transform>
-Lambert2EtenduProjection<transform>
+template <TransformDirection::TransformationDirection TTransform>
+Lambert2EtenduProjection<TTransform>
 ::~Lambert2EtenduProjection()
 {
 }

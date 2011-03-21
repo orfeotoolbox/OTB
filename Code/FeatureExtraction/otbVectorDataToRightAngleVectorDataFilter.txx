@@ -95,11 +95,9 @@ VectorDataToRightAngleVectorDataFilter<TVectorData>
                                                                itVectorRef.Get()->GetLine());
         double dist2_2 = this->ComputeDistanceFromPointToSegment(RightAngleCoordinate,
                                                                itVectorCur.Get()->GetLine());
-            
-        // Use Pythagore to compute the distance between the two segments
-        double SegmentDistance_2 = dist1_2 + dist2_2;
-            
-        if (SegmentDistance_2 < m_DistanceThreshold * m_DistanceThreshold)
+        
+        double threshold_2 = m_DistanceThreshold * m_DistanceThreshold;
+       if (dist1_2 < threshold_2 && dist2_2 < threshold_2)
           {
           // If Right Angle & not so far from segments: Add to the output
           typename DataNodeType::Pointer CurrentGeometry = DataNodeType::New();
@@ -121,20 +119,29 @@ double
 VectorDataToRightAngleVectorDataFilter<TVectorData>
 ::ComputeDistanceFromPointToSegment(PointType rAngle, LineType * line)
 {
-  /** Extract Indexes from the Dst line to instantiate the line iterator*/
-  
   VertexListType * vertexList = const_cast<VertexListType *>(line->GetVertexList());
+  
+  VertexType v0 = vertexList->GetElement(0);
+  VertexType v1 = vertexList->GetElement(1);
+  
+  // Case the extremities of the segment are the same
+  double l2 = v0.SquaredEuclideanDistanceTo(v1);
 
-  double X1 = vertexList->GetElement(0)[0];
-  double Y1 = vertexList->GetElement(0)[1];
+  // Is the projection of rAngle on the segment inside (0<u<1) or
+  // inside the segment bounds
+  double u = ((rAngle[0] - v0[0]) *(v1[0] - v0[0] ) +
+    (rAngle[1] - v0[1]) *(v1[1] - v0[1])) / l2;
 
-  double X2 = vertexList->GetElement(1)[0];
-  double Y2 = vertexList->GetElement(1)[1];
+  if( u < 1e-10 ) u = 0.;
+  if( u -1. > 1e-10 ) u = 1.;
+  
+  double x = v0[0] + u *(v1[0] - v0[0] );
+  double y = v0[1] + u *(v1[1] - v0[1] );
 
-  double dist1_2 = (X1 - rAngle[0]) * (X1 - rAngle[0]) + (Y1 - rAngle[1]) * (Y1 - rAngle[1]);
-  double dist2_2 = (X2 - rAngle[0]) * (X2 - rAngle[0]) + (Y2 - rAngle[1]) * (Y2 - rAngle[1]);
+  double dx = x - rAngle[0];
+  double dy = y - rAngle[1];
 
-  return std::min(dist1_2, dist2_2);
+  return dx*dx + dy*dy;
 }
 
 template <class TVectorData>
@@ -189,39 +196,14 @@ VectorDataToRightAngleVectorDataFilter<TVectorData>
   double Yq1 = vertexListDst->GetElement(0)[1];
   double Xq2 = vertexListDst->GetElement(1)[0];
   double Yq2 = vertexListDst->GetElement(1)[1];
+  
+  double numU = (Xq2 - Xq1)*(Yp1-Yq1) - (Yq2-Yq1)*(Xp1-Xq1);
+  double denumU = (Yq2-Yq1)*(Xp2-Xp1)-(Xq2-Xq1)*(Yp2-Yp1);
 
-  // Compute the equation of the lines A and B  which are support of the segments Src & Dst
-  // - Line 1 : slope and origin
-  double originA = 0., slopeA = 0.;
-  double originB = 0., slopeB = 0.;
-  double LengthSegmentAy = 0., lengthSegmentBy = 0.;
+  double u  = numU/ denumU;
 
-  // Equation of the first Line
-  if (vcl_abs(Xp2 - Xp1) < 1e-10) Xp2 = 0.0001;
-
-  if (Xp1 < Xp2) LengthSegmentAy = Yp2 - Yp1;
-  else LengthSegmentAy = Yp1 - Yp2;
-
-  slopeA = LengthSegmentAy / (Xp2 - Xp1);
-  originA = Yp1 - (slopeA * Xp1);
-
-  // Equation of the second Line
-  if (vcl_abs(Xq2 - Xq1) < 1e-10) Xq2 = 0.0001;
-
-  if (Xq1 < Xq2) lengthSegmentBy = Yq2 - Yq1;
-  else lengthSegmentBy = Yq1 - Yq2;
-
-  slopeB = lengthSegmentBy / (Xq2 - Xq1);
-  originB = Yq1 - (slopeB * Xq1);
-
-  // Avoid the case of parallel lines
-  double denum = 0.;
-  if (vcl_abs(slopeA - slopeB) < 1e-5) denum = 0.001;
-  else denum = slopeA - slopeB;
-
-  // Compute the coordinate of the intersection point Y =AX+B
-  P[0] =  (originB - originA) / denum;
-  P[1] =  slopeA * static_cast<double>(P[0]) + originA;
+  P[0] = Xp1 + u*(Xp2-Xp1);
+  P[1] = Yp1 + u * (Yp2-Yp1);
   
   return P;
 }

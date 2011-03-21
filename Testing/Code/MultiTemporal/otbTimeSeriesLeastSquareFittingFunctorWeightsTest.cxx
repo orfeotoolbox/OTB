@@ -69,9 +69,8 @@ int otbTimeSeriesLeastSquareFittingFunctorWeightsTest(int argc, char* argv[])
   FunctorType f;
   f.SetDates( doySeries );
   f.SetWeights (weightSeries);
-  SeriesType outSeries = f(inSeries);
 
-  FunctorType::CoefficientsType outCoefs = f.GetCoefficients();
+  FunctorType::CoefficientsType outCoefs = f.GetCoefficients(inSeries);
 
   for(unsigned int i=0; i<= Degree; i++)
     if(fabs((outCoefs[i]-inCoefs[i])/inCoefs[i])>0.01)

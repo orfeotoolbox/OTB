@@ -21,18 +21,15 @@
 #include <iostream>
 #include <sstream>
 #include <stdio.h>
-#include "projection/ossimMapProjection.h"
+
 #include "itkTransform.h"
 #include "itkExceptionObject.h"
 #include "itkMacro.h"
-#include "base/ossimGpt.h"
-#include "base/ossimDpt.h"
-#include "projection/ossimProjection.h"
-#include "base/ossimEllipsoid.h"
-#include "base/ossimEllipsoidFactory.h"
-#include "base/ossimString.h"
-#include "gdal/ossimOgcWktTranslator.h"
 #include "otbGenericMapProjection.h"
+
+#include "base/ossimRefPtr.h"
+
+class ossimEllipsoid;
 
 namespace otb
 {

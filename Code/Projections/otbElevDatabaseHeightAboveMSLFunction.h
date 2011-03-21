@@ -97,10 +97,6 @@ public:
   /** Set the default height above ellipsoid in case no information is available*/
   virtual void SetDefaultHeightAboveEllipsoid(double h);
 
-  /** Set/Get the DEM Function. */
-  itkSetMacro(DefaultUnknownValue, PixelType);
-  itkGetConstMacro(DefaultUnknownValue, PixelType);
-
 protected:
   ElevDatabaseHeightAboveMSLFunction();
   ~ElevDatabaseHeightAboveMSLFunction() {}
@@ -111,7 +107,6 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   ossimElevManager* m_ElevManager;
-  PixelType         m_DefaultUnknownValue;
 };
 
 }// end namespace otb

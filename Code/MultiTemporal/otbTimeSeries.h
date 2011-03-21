@@ -55,7 +55,7 @@ public:
     return m_Coefficients;
   }
 
-  inline CoefficientsPrecisionType GetValue( CoefficientsPrecisionType val)
+  inline CoefficientsPrecisionType GetValue( CoefficientsPrecisionType val) const
   {
     CoefficientsPrecisionType tmpVal = 0;
     for( unsigned int i=0; i<=TDegree; ++i)
