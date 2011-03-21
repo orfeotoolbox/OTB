@@ -92,6 +92,8 @@ private:
 
   /** Stars coutning */
   int m_StarsCount;
+
+  int m_CurrentNbStars;
 };
 
 } // end namespace otb

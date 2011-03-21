@@ -46,11 +46,11 @@ FilterWatcherBase
 
   // Assign the callbacks
   m_StartFilterCommand->SetCallbackFunction(this,
-                                            &FilterWatcherBase::StartFilter);
+                                            &FilterWatcherBase::StartFilterCallback);
   m_EndFilterCommand->SetCallbackFunction(this,
-                                          &FilterWatcherBase::EndFilter);
+                                          &FilterWatcherBase::EndFilterCallback);
   m_ProgressFilterCommand->SetCallbackFunction(this,
-                                               &FilterWatcherBase::ShowProgress);
+                                               &FilterWatcherBase::ShowProgressCallback);
 
   // Add the commands as observers
   m_StartTag = m_Process->AddObserver(itk::StartEvent(),
@@ -90,11 +90,11 @@ FilterWatcherBase
 
     // Assign the callbacks
     m_StartFilterCommand->SetCallbackFunction(this,
-                                              &FilterWatcherBase::StartFilter);
+                                              &FilterWatcherBase::StartFilterCallback);
     m_EndFilterCommand->SetCallbackFunction(this,
-                                            &FilterWatcherBase::EndFilter);
+                                            &FilterWatcherBase::EndFilterCallback);
     m_ProgressFilterCommand->SetCallbackFunction(this,
-                                                 &FilterWatcherBase::ShowProgress);
+                                                 &FilterWatcherBase::ShowProgressCallback);
 
     // Add the commands as observers
     m_StartTag = m_Process->AddObserver(itk::StartEvent(), m_StartFilterCommand);
@@ -132,11 +132,11 @@ FilterWatcherBase
 
     // Assign the callbacks
     m_StartFilterCommand->SetCallbackFunction(this,
-                                              &FilterWatcherBase::StartFilter);
+                                              &FilterWatcherBase::StartFilterCallback);
     m_EndFilterCommand->SetCallbackFunction(this,
-                                            &FilterWatcherBase::EndFilter);
+                                            &FilterWatcherBase::EndFilterCallback);
     m_ProgressFilterCommand->SetCallbackFunction(this,
-                                                 &FilterWatcherBase::ShowProgress);
+                                                 &FilterWatcherBase::ShowProgressCallback);
 
     // Add the commands as observers
     m_StartTag = m_Process->AddObserver(itk::StartEvent(), m_StartFilterCommand);

@@ -29,6 +29,7 @@ StandardFilterWatcher
   : FilterWatcherBase(process, comment)
 {
   m_StarsCount = 50;
+  m_CurrentNbStars = -1;
 }
 
 StandardFilterWatcher
@@ -80,9 +81,14 @@ StandardFilterWatcher
       progressPercent = 100;
       }
 
-    std::string stars(nbStars, '*');
-    std::string blanks(nbBlanks, ' ');
-    std::cout << "\rProcessing progress: " << progressPercent << "% [" << stars << blanks << "]" << std::flush;
+    if (nbStars > m_CurrentNbStars)
+      {
+      std::string stars(nbStars, '*');
+      std::string blanks(nbBlanks, ' ');
+      std::cout << "\rProcessing progress: " << progressPercent << "% [" << stars << blanks << "]" << std::flush;
+      }
+
+    m_CurrentNbStars = nbStars;
     }
 }
 
