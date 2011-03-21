@@ -76,16 +76,7 @@ ElevDatabaseHeightAboveMSLFunction<TOutputPixel, TCoordRep, NPointDimension>
   ossimWorldPoint.lat = point[1];
   height = m_ElevManager->getHeightAboveMSL(ossimWorldPoint);
 
-  if (!ossim::isnan(height))
-    {
-    return static_cast<PixelType>( height );
-    }
-  else
-    {
-    // Back to the MNT default value
-    return static_cast<PixelType>( m_DefaultUnknownValue );
-    }
-
+  return static_cast<PixelType>( height );
 }
 
 template <class TOutputPixel, class TCoordRep, unsigned int NPointDimension>
