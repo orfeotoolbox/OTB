@@ -27,8 +27,8 @@ namespace otb
 * It converts coordinates in longitude, latitude (WGS84) to Lambert 2 Etendu map coordinates.
 *
  */
-template <TransformDirection::TransformationDirection transform>
-class ITK_EXPORT Lambert2EtenduProjection : public LambertConformalConicMapProjection<transform>
+template <TransformDirection::TransformationDirection TTransform>
+class ITK_EXPORT Lambert2EtenduProjection : public LambertConformalConicMapProjection<TTransform>
 {
 public:
   /** Standard class typedefs. */

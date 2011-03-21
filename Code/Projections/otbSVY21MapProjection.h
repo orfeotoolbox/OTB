@@ -27,15 +27,15 @@ namespace otb
 * It converts coordinates in longitude, latitude (WGS84) to SVY21 map coordinates.
 *
  */
-template <TransformDirection::TransformationDirection transform>
-class ITK_EXPORT SVY21MapProjection : public TransMercatorMapProjection<transform>
+template <TransformDirection::TransformationDirection TTransform>
+class ITK_EXPORT SVY21MapProjection : public TransMercatorMapProjection<TTransform>
 {
 public:
   /** Standard class typedefs. */
-  typedef SVY21MapProjection                    Self;
-  typedef TransMercatorMapProjection<transform> Superclass;
-  typedef itk::SmartPointer<Self>               Pointer;
-  typedef itk::SmartPointer<const Self>         ConstPointer;
+  typedef SVY21MapProjection                     Self;
+  typedef TransMercatorMapProjection<TTransform> Superclass;
+  typedef itk::SmartPointer<Self>                Pointer;
+  typedef itk::SmartPointer<const Self>          ConstPointer;
 
   typedef typename Superclass::ScalarType ScalarType;
   typedef itk::Point<ScalarType, 2>       InputPointType;
