@@ -21,9 +21,9 @@
 #include "otbGenericRSTransform.h"
 #include "otbMacro.h"
 #include "otbMetaDataKey.h"
-// #include "projection/ossimMapProjectionFactory.h"
-// #include "projection/ossimMapProjection.h"
 #include "itkMetaDataObject.h"
+
+#include "ogr_spatialref.h"
 
 //TODO OTB wrapper around the WKT/ossimProjection/isGeographic, etc.
 

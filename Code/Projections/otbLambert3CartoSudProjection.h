@@ -18,8 +18,6 @@
 #ifndef __otbLambert3CartoSudProjection_h
 #define __otbLambert3CartoSudProjection_h
 
-#include "projection/ossimMapProjection.h"
-#include "projection/ossimLambertConformalConicProjection.h"
 #include "otbMapProjection.h"
 
 namespace otb

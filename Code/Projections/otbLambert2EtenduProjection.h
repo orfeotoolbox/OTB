@@ -18,8 +18,6 @@
 #ifndef __otbLambert2EtenduProjection_h
 #define __otbLambert2EtenduProjection_h
 
-#include "projection/ossimMapProjection.h"
-#include "projection/ossimLambertConformalConicProjection.h"
 #include "otbMapProjection.h"
 
 namespace otb

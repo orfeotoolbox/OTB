@@ -18,8 +18,6 @@
 #ifndef __otbSVY21MapProjection_h
 #define __otbSVY21MapProjection_h
 
-#include "projection/ossimMapProjection.h"
-#include "projection/ossimTransMercatorProjection.h"
 #include "otbMapProjection.h"
 
 namespace otb
@@ -55,7 +53,7 @@ protected:
 
 private:
   SVY21MapProjection(const Self &); //purposely not implemented
-  void operator =(const Self&);                       //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 };
 
 } // namespace otb
