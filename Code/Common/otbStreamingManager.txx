@@ -102,14 +102,13 @@ StreamingManager<TImage>::PrepareStreaming( itk::DataObject * input, const Regio
       otbMsgDevMacro(<< "Activating STRIPPED_SET_NUMBEROFLINES streaming mode")
       if (m_DesiredNumberOfLines < 1)
         {
-        itkWarningMacro(<< "DesiredNumberOfLines set to 0 : use 1 as strip number of lines")
-        m_DesiredNumberOfLines = 1;
+        itkWarningMacro(<< "DesiredNumberOfLines set to 0 : streaming disabled")
         }
 
       /* Calculate number of split */
       unsigned long numberLinesOfRegion = region.GetSize()[1]; // Y dimension
       unsigned long nbSplit;
-      if (numberLinesOfRegion > m_DesiredNumberOfLines)
+      if (numberLinesOfRegion > m_DesiredNumberOfLines && m_DesiredNumberOfLines > 0)
         {
         nbSplit =
           static_cast<unsigned long>(vcl_ceil(static_cast<double>(numberLinesOfRegion) /
@@ -139,6 +138,14 @@ StreamingManager<TImage>::PrepareStreaming( itk::DataObject * input, const Regio
 
     case StreamingManagement::TILED_SET_TILE_SIZE:
       {
+      if (m_DesiredTileDimension  == 0)
+        {
+        itkWarningMacro(<< "DesiredTileDimension is 0 : switching to mode STRIPPED_SET_NUMBEROFLINES, disabling streaming")
+        this->SetStrippedNumberOfLinesStreamingMode(0);
+        this->PrepareStreaming(input, region);
+        break;
+        }
+
       otbMsgDevMacro(<< "Activating TILED_SET_TILE_SIZE streaming mode")
       if (m_DesiredTileDimension < 16)
         {
