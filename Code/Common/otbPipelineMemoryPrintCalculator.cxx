@@ -61,7 +61,7 @@ void
 PipelineMemoryPrintCalculator
 ::Compute()
 {
-  // Clear the visisted process objects set
+  // Clear the visited process objects set
   m_VisitedProcessObjects.clear();
 
   // Dry run of pipeline synchronisation
@@ -96,6 +96,7 @@ PipelineMemoryPrintCalculator::MemoryPrintType
 PipelineMemoryPrintCalculator
 ::EvaluateMemoryPrint(ProcessObjectType * process)
 {
+  otbMsgDevMacro(<< "EvaluateMemoryPrint for " << process->GetNameOfClass() << " (" << process << ")")
   // This variable will store the final print
   MemoryPrintType print = 0;
 
@@ -150,6 +151,7 @@ PipelineMemoryPrintCalculator::MemoryPrintType
 PipelineMemoryPrintCalculator
 ::EvaluateDataObjectPrint(DataObjectType * data) const
 {
+  otbMsgDevMacro(<< "EvaluateMemoryPrint for " << data->GetNameOfClass() << " (" << data << ")")
 
 #define OTB_IMAGE_SIZE_BLOCK(type)                                      \
   if(dynamic_cast<itk::Image<type, 2> *>(data) != NULL)                  \

@@ -66,7 +66,7 @@ public:
 
 protected:
   /** Constructor */
-  PersistentImageFilter() {};
+  PersistentImageFilter() {}
   /** Destructor */
   virtual ~PersistentImageFilter() {}
   /**PrintSelf method */

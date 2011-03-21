@@ -84,7 +84,6 @@ int otbVectorImageFileWriterScalarTestWithoutInputGeneric(int argc, char* argv[]
   IteratorType it(image, image->GetLargestPossibleRegion());
   it.GoToBegin();
 
-  double val = 0.;
   ImagePixelType pixVal;
   pixVal.SetSize(atoi(argv[3]));
 
@@ -179,7 +178,6 @@ int otbVectorImageFileWriterComplexTestWithoutInputGeneric(int argc, char* argv[
   IteratorType it(image, image->GetLargestPossibleRegion());
   it.GoToBegin();
 
-  double val = 0.;
   ImagePixelType pixVal;
   pixVal.SetSize(atoi(argv[3]));
 

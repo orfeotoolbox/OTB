@@ -70,9 +70,6 @@ int otbImageScalarFileWriterTestWithoutInputGeneric(int argc, char* argv[])
   IteratorType it(image, image->GetLargestPossibleRegion());
   it.GoToBegin();
 
-  double val = 0.;
-  ImagePixelType pixVal;
-
   while (!it.IsAtEnd())
     {
     it.Set(static_cast<PixelType> (size[0] * it.GetIndex()[1] + it.GetIndex()[0]));

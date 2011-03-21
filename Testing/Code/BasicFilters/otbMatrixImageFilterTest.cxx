@@ -28,9 +28,6 @@
 
 int otbMatrixImageFilterNew(int argc, char * argv[])
 {
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
-
   typedef std::complex<double> PixelType;
 
   typedef otb::VectorImage<PixelType> ImageType;

@@ -736,6 +736,19 @@ ADD_TEST(coTvImageRegionTileMapSplitter ${COMMON_TESTS8}
         ${TEMP}/coImageRegionTileMapSplitter.txt
 )
 
+# -------------  otb::ImageRegionSquareTileSplitter ----------------------------
+ADD_TEST(coTuImageRegionSquareTileSplitterNew ${COMMON_TESTS8}
+         otbImageRegionSquareTileSplitterNew
+)
+
+ADD_TEST(coTvImageRegionSquareTileSplitter ${COMMON_TESTS8}
+    --compare-ascii ${NOTOL}
+        ${BASELINE_FILES}/coImageRegionSquareTileSplitter.txt
+        ${TEMP}/coImageRegionSquareTileSplitter.txt
+    otbImageRegionSquareTileSplitter
+        ${TEMP}/coImageRegionSquareTileSplitter.txt
+)
+
 # -------------  otb::ImageOfVectorsToMonoChannelExtractROI ----------------------------
 ADD_TEST(coTuImageOfVectorsToMonoChannelExtractROINew ${COMMON_TESTS8}
 otbImageOfVectorsToMonoChannelExtractROINew
@@ -1103,6 +1116,7 @@ otbQuickLookImageGeneratorNew.cxx
 otbQuickLookImageGenerator.cxx
 otbImageRegionTileMapSplitterNew.cxx
 otbImageRegionTileMapSplitter.cxx
+otbImageRegionSquareTileSplitter.cxx
 otbImageOfVectorsToMonoChannelExtractROINew.cxx
 otbImageOfVectorsToMonoChannelExtractROI.cxx
 otbImageRegionNonUniformMultidimensionalSplitterNew.cxx
