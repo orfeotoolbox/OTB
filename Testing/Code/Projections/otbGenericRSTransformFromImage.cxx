@@ -73,7 +73,7 @@ int otbGenericRSTransformImageAndMNTToWGS84ConversionChecking(int argc, char* ar
   std::string infname = argv[1];
   std::string demdir = argv[2];
   
-  ImageType::PointType refImgPt,refGeoPt, estimatedImgPt, estimatedGeoPt;
+  ImageType::PointType refImgPt, refGeoPt, estimatedImgPt, estimatedGeoPt;
   refImgPt[0] = atof(argv[3]);
   refImgPt[1] = atof(argv[4]);
   refGeoPt[0] = atof(argv[5]);
@@ -128,8 +128,8 @@ int otbGenericRSTransformImageAndMNTToWGS84ConversionChecking(int argc, char* ar
   std::cout<<"Forward(refImg): "<<refImgPt<<" -> " << estimatedGeoPt<<std::endl;
   std::cout<<"Inverse(refGeo): "<<refGeoPt<<" -> "<< estimatedImgPt <<std::endl;
 
-  double imgRes = distance->Evaluate(refImgPt,estimatedImgPt);
-  double geoRes = distance->Evaluate(refGeoPt,estimatedGeoPt);
+  double imgRes = distance->Evaluate(refImgPt, estimatedImgPt);
+  double geoRes = distance->Evaluate(refGeoPt, estimatedGeoPt);
 
   if(imgRes > imgTol)
     {
@@ -164,8 +164,8 @@ int otbGenericRSTransformImageAndMNTToWGS84ConversionChecking(int argc, char* ar
   std::cout<<"Forward(refImg): "<<refImgPt<<" -> " << estimatedGeoPt<<std::endl;
   std::cout<<"Inverse(refGeo): "<<refGeoPt<<" -> "<< estimatedImgPt <<std::endl;
   
-  imgRes = distance->Evaluate(refImgPt,estimatedImgPt);
-  geoRes = distance->Evaluate(refGeoPt,estimatedGeoPt);
+  imgRes = distance->Evaluate(refImgPt, estimatedImgPt);
+  geoRes = distance->Evaluate(refGeoPt, estimatedGeoPt);
   
   if(imgRes > imgTol)
     {

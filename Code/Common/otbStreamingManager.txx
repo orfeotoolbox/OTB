@@ -211,7 +211,7 @@ StreamingManager<TImage>::EstimateOptimalNumberOfDivisions(itk::DataObject * inp
   if (inputImage)
     {
 
-    typedef itk::ExtractImageFilter<ImageType,ImageType> ExtractFilterType;
+    typedef itk::ExtractImageFilter<ImageType, ImageType> ExtractFilterType;
     typename ExtractFilterType::Pointer extractFilter = ExtractFilterType::New();
     extractFilter->SetInput(inputImage);
 

@@ -123,7 +123,7 @@ int otbHermitianEigenAnalysisTest(int argc, char * argv[])
 
 
   typedef std::complex<double> ComplexType;
-  vnl_matrix<ComplexType> vnlMat(3,3,0);
+  vnl_matrix<ComplexType> vnlMat(3, 3, 0);
   vnlMat[0][0] = ComplexType(0., 0.);
   vnlMat[0][1] = ComplexType(1.5, 2.);
   vnlMat[0][2] = ComplexType(2.5, 3.);
@@ -142,7 +142,7 @@ int otbHermitianEigenAnalysisTest(int argc, char * argv[])
   vnl_matrix< ComplexType > pm = syst.L;
  std::cout<<"Left:: "<<std::endl;
   pm.print(std::cout);
-  std::cout<<"Right:: "<<std::endl; 
+  std::cout<<"Right:: "<<std::endl;
 
 
   pm = syst.R;

@@ -95,7 +95,7 @@ public:
     VNLVectorType sortedEigenVectors(3, eigenVectors[0][0]);
     
     if( (eigenValues[1].real() >= eigenValues[0].real()) && (eigenValues[1].real() >= eigenValues[2].real()) )
-      { 
+      {
         sortedRealEigenValues[0] = eigenValues[1].real();
         sortedEigenVectors[0] = eigenVectors[1][0];
         if( sortedRealEigenValues[2] >= eigenValues[0].real() )
@@ -111,7 +111,7 @@ public:
           }
       }
     else if( (eigenValues[2].real() >= eigenValues[0].real()) && (eigenValues[2].real() >= eigenValues[1].real()) )
-     { 
+     {
         sortedRealEigenValues[0] = eigenValues[2].real();
         sortedEigenVectors[0] = eigenVectors[2][0];
         if( sortedRealEigenValues[1] >= eigenValues[0].real() )

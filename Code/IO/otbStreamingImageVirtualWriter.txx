@@ -27,21 +27,21 @@ namespace otb
 {
 
 template <class TInputImage, class TStreamingManager>
-StreamingImageVirtualWriter<TInputImage,TStreamingManager>
+StreamingImageVirtualWriter<TInputImage, TStreamingManager>
 ::StreamingImageVirtualWriter()
 {
   m_StreamingManager = StreamingManagerType::New();
 }
 
 template <class TInputImage, class TStreamingManager>
-StreamingImageVirtualWriter<TInputImage,TStreamingManager>
+StreamingImageVirtualWriter<TInputImage, TStreamingManager>
 ::~StreamingImageVirtualWriter()
 {
 }
 
 template <class TInputImage, class TStreamingManager>
 void
-StreamingImageVirtualWriter<TInputImage,TStreamingManager>
+StreamingImageVirtualWriter<TInputImage, TStreamingManager>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
@@ -49,7 +49,7 @@ StreamingImageVirtualWriter<TInputImage,TStreamingManager>
 
 template <class TInputImage, class TStreamingManager>
 void
-StreamingImageVirtualWriter<TInputImage,TStreamingManager>
+StreamingImageVirtualWriter<TInputImage, TStreamingManager>
 ::GenerateInputRequestedRegion(void)
 {
   InputImagePointer                        inputPtr = const_cast<InputImageType *>(this->GetInput(0));
@@ -67,7 +67,7 @@ StreamingImageVirtualWriter<TInputImage,TStreamingManager>
 
 template<class TInputImage, class TStreamingManager>
 void
-StreamingImageVirtualWriter<TInputImage,TStreamingManager>
+StreamingImageVirtualWriter<TInputImage, TStreamingManager>
 ::GenerateData(void)
 {
   /**
