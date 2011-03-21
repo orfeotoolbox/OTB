@@ -49,6 +49,8 @@ int otbQuickLookImageGenerator(int argc, char* argv[])
   filter->SetMaximumKernelWidth(atoi(argv[6]));
   filter->UseImageSpacing(atoi(argv[7]));
 
+  filter->Update();
+
   writer->SetInput(filter->GetOutput());
   writer->SetFileName(outputFileName);
 

@@ -120,11 +120,13 @@ SET_TESTS_PROPERTIES(tsTvCompareAscii4epsilon3 PROPERTIES WILL_FAIL true)
 # Tests about precision (10^-3) and strings with white space
 ADD_TEST(tsTvCompareAsciiepsilon3_WhiteSpace ${TESTSYSTEM_TESTS}
    --compare-ascii ${EPSILON_3}
-       ${TEMP}/tsTvCompareAsciiRefepsilon3_WS.txt
-       ${TEMP}/tsTvCompareAsciiTestepsilon3_WS.txt
+       ${BASELINE_FILES}/tsTvCompareAsciiEpsilon3_Base.txt
+       ${INPUTDATA}/tsTvCompareAsciiEpsilon3_Test.txt
+       #${TEMP}/tsTvCompareAsciiRefepsilon3_WS.txt
+       #${TEMP}/tsTvCompareAsciiTestepsilon3_WS.txt
      otbCompareAsciiTestsEpsilon3_WhiteSpace
-       ${TEMP}/tsTvCompareAsciiRefepsilon3_WS.txt
-       ${TEMP}/tsTvCompareAsciiTestepsilon3_WS.txt
+       #${TEMP}/tsTvCompareAsciiRefepsilon3_WS.txt
+       #${TEMP}/tsTvCompareAsciiTestepsilon3_WS.txt
   )
 
 #Check that the order and the tolerance works together

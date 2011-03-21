@@ -26,11 +26,12 @@ namespace otb
 namespace Functor
 {
 /** \class otbEnvelopeSavitzkyGolayInterpolationFunctor
-
-   \brief: This class implements a Savitzky-Golay interpolation fitting the upper or lower envelope of the series being interpolated.
-
-\sa otbSavitzkyGolayInterpolationFunctor
-*/
+ *
+ *  \brief: This class implements a Savitzky-Golay interpolation
+ *  fitting the upper or lower envelope of the series being interpolated.
+ *
+ * \sa otbSavitzkyGolayInterpolationFunctor
+ */
 template <unsigned int Radius, class TSeries, class TDates, class TWeight = TSeries>
 class EnvelopeSavitzkyGolayInterpolationFunctor
 {
@@ -103,7 +104,6 @@ public:
       m_SGFunctor.SetWeights(m_WeightSeries);
       outSeries = m_SGFunctor(series);
       }
-    
 
     return outSeries;
   }
@@ -115,8 +115,8 @@ private:
   unsigned int m_Iterations;
   bool m_UpperEnvelope;
   double m_DecreaseFactor;
-  
+
 };
 }
-}
+} //namespace otb
 #endif
