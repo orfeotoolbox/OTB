@@ -111,9 +111,12 @@ bool MapProjectionWrapper::InstanciateProjection()
     //we don't want to have a ossimEquDistCylProjection here:
     //see discussion in May 2009 on ossim list;
     //a better solution might be available...
-    if (std::string(kwl.find("type")) == "ossimEquDistCylProjection") //FIXME
+    std::string projectionString(kwl.find("type"));
+    if (projectionString.find("ossimEquDistCylProjection") != string::npos)
       {
-      otbMsgDevMacro(<< "WARNING: Not instanciating a ossimEquDistCylProjection");
+      otbMsgDevMacro(<< "WARNING: Not instanciating a ossimEquDistCylProjection: " << projectionString);
+      otbMsgDevMacro(<< "Wkt was: " << kwl);
+      otbMsgDevMacro(<< "From RefWkt: " << m_ProjectionRefWkt);
       return false;
       }
 
@@ -128,6 +131,15 @@ bool MapProjectionWrapper::InstanciateProjection()
 void MapProjectionWrapper::InverseTransform(double x, double y, double z,
                                        double& lon, double& lat, double& h)
 {
+  if (m_MapProjection == NULL)
+    {
+    otbMsgDevMacro(<< "WARNING: Using identity");
+    lon = x;
+    lat = y;
+    h = z;
+    return;
+    }
+
   ossimDpt ossimDPoint(x, y);
 
   //map projection
@@ -143,6 +155,15 @@ void MapProjectionWrapper::InverseTransform(double x, double y, double z,
 void MapProjectionWrapper::ForwardTransform(double lon, double lat, double h,
                                        double& x, double& y, double& z)
 {
+  if (m_MapProjection == NULL)
+    {
+    otbMsgDevMacro(<< "WARNING: Using identity");
+    x = lon;
+    y = lat;
+    z = h;
+    return;
+    }
+
   ossimGpt ossimGPoint(lat, lon, h);
 
   //map projection
