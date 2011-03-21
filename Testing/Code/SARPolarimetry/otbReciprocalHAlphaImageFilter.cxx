@@ -89,9 +89,10 @@ int otbReciprocalHAlphaImageFilter(int argc, char * argv[])
 
   PerBandMeanFilterType::Pointer perBandMeanFilter = PerBandMeanFilterType::New();
   perBandMeanFilter->SetInput(sinclairToCoherencyFilter->GetOutput());
-
+ 
   FilterType::Pointer filter = FilterType::New();
   filter->SetInput(perBandMeanFilter->GetOutput());
+  filter->SetNumberOfThreads(1);
 
   ExtractType::Pointer extract = ExtractType::New();
   extract->SetInput(filter->GetOutput());
@@ -102,6 +103,8 @@ int otbReciprocalHAlphaImageFilter(int argc, char * argv[])
 
   writer->SetFileName(outputFilename);
   writer->SetInput(extract->GetOutput());
+  writer->SetNumberOfThreads(1);
+writer->SetNumberOfStreamDivisions(1);
   writer->Update();
 
   return EXIT_SUCCESS;

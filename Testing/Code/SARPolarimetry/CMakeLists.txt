@@ -373,10 +373,6 @@ ADD_TEST(saTvMuellerToCovarianceImageFilter ${SARPOLARIMETRY_TESTS2}
         ${BASELINE}/saTvSinclairImageFilter_SinclairToMueller.tif
         ${TEMP}/saTvMuellerToMLCImageFilter.tif
 	)
-# Hermitian eigen analysis class
-ADD_TEST(saTvHermitianEigenAnalysisTest ${SARPOLARIMETRY_TESTS2}
-		otbHermitianEigenAnalysisTest
-)
 
 # Polarimetric Data
 ADD_TEST(saTuPolarimetricDataNew ${SARPOLARIMETRY_TESTS2}
@@ -430,7 +426,6 @@ otbMuellerToPolarisationDegreeAndPowerImageFilterNew.cxx
 otbMuellerToPolarisationDegreeAndPowerImageFilter.cxx
 otbMuellerToCovarianceImageFilterNew.cxx
 otbMuellerToCovarianceImageFilter.cxx
-otbHermitianEigenAnalysisTest.cxx
 otbPolarimetricData.cxx
 )
 

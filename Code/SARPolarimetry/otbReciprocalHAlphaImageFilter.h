@@ -20,9 +20,9 @@
 #define __ReciprocalHAlphaImageFilter_h
 
 #include "otbUnaryFunctorImageFilter.h"
-#include "otbHermitianEigenAnalysis.h"
 #include "itkVector.h"
 #include "otbMath.h"
+#include "vnl/algo/vnl_complex_eigensystem.h"
 
 namespace otb
  {
@@ -44,60 +44,108 @@ template< class TInput, class TOutput>
 class ReciprocalHAlphaFunctor
 {
 public:
-  typedef typename std::complex <double>         ComplexType;
-  typedef typename TOutput::ValueType              OutputValueType;
-
-  /** CoherencyMatrix type **/
-  typedef itk::Vector<double, 9> CoherencyMatrixType;
-
-  /** Vector type used to store eigenvalues. */
-  typedef itk::Vector<double, 3> EigenvalueType;
-
-  /** Matrix type used to store eigenvectors. */
-  typedef itk::Vector<float, 2> VectorType;
-  typedef itk::Vector<VectorType, 3> EigenVectorFirstComposantType;
-  typedef itk::Vector<VectorType, 3> EigenVectorType; // eigenvector type (real part, imaginary part)
-  typedef itk::Vector<itk::Vector<float, 6>, 3> EigenMatrixType;
-  typedef itk::Image<EigenVectorType, 2> EigenVectorImageType;
-  typedef itk::Image<double, 2> EigenValueImageType;
-
-  typedef itk::Vector<double, 3> OutputVectorType;
-
-  typedef itk::Vector<float, 2> ComplexVectorType;
-  typedef itk::Vector<ComplexVectorType, 3> HermitianVectorType;
-  typedef itk::Vector<HermitianVectorType, 3> HermitianMatrixType;
-  typedef otb::HermitianEigenAnalysis<CoherencyMatrixType, EigenvalueType, EigenMatrixType> HermitianAnalysisType;
-
-
+  typedef typename std::complex<double> ComplexType;
+  typedef vnl_matrix<ComplexType>       VNLMatrixType;
+  typedef vnl_vector<ComplexType>       VNLVectorType;
+  typedef vnl_vector<double>            VNLDoubleVectorType;
+  typedef typename TOutput::ValueType   OutputValueType;
+  
+  
   inline TOutput operator()( const TInput & Coherency ) const
     {
     TOutput result;
     result.SetSize(m_NumberOfComponentsPerPixel);
  
-    CoherencyMatrixType T;
-    EigenvalueType eigenValues;
-    EigenMatrixType eigenVectors;
-    HermitianAnalysisType HermitianAnalysis;
-
-    T[0] = static_cast<double>(Coherency[0].real());
-    T[1] = static_cast<double>(Coherency[3].real());
-    T[2] = static_cast<double>(Coherency[5].real());
-    T[3] = static_cast<double>(Coherency[1].real());
-    T[4] = static_cast<double>(Coherency[1].imag());
-    T[5] = static_cast<double>(Coherency[2].real());
-    T[6] = static_cast<double>(Coherency[2].imag());
-    T[7] = static_cast<double>(Coherency[4].real());
-    T[8] = static_cast<double>(Coherency[4].imag());
-    HermitianAnalysis.ComputeEigenValuesAndVectors(T, eigenValues, eigenVectors);
-
+    double T0 = static_cast<double>(Coherency[0].real());
+    double T1 = static_cast<double>(Coherency[3].real());
+    double T2 = static_cast<double>(Coherency[5].real());
+    double T3 = static_cast<double>(Coherency[1].real());
+    double T4 = static_cast<double>(Coherency[1].imag());
+    double T5 = static_cast<double>(Coherency[2].real());
+    double T6 = static_cast<double>(Coherency[2].imag());
+    double T7 = static_cast<double>(Coherency[4].real());
+    double T8 = static_cast<double>(Coherency[4].imag());
+    
+    VNLMatrixType vnlMat(3, 3, 0.);
+    vnlMat[0][0] = ComplexType(T0,  0.);
+    vnlMat[0][1] = std::conj(ComplexType(Coherency[1]));
+    vnlMat[0][2] = std::conj(ComplexType(Coherency[2]));
+    vnlMat[1][0] = ComplexType(Coherency[1]);
+    vnlMat[1][1] = ComplexType(T1,  0.);
+    vnlMat[1][2] = std::conj(ComplexType(Coherency[4]));
+    vnlMat[2][0] = ComplexType(Coherency[2]);
+    vnlMat[2][1] = ComplexType(Coherency[4]);
+    vnlMat[2][2] = ComplexType(T2,  0.);
+    
+    // Only compute the left symetry to respect the previous Hermitian Analisys code
+    vnl_complex_eigensystem syst(vnlMat, false, true);
+    const VNLMatrixType eigenVectors( syst.L );
+    const VNLVectorType eigenValues(syst.W);
+    
     // Entropy estimation
     double  totalEigenValues(0.0);
     double  p[3];
     double entropy;
     double alpha;
     double anisotropy;
+    
 
-    totalEigenValues = static_cast<double>( eigenValues[0] + eigenValues[1] + eigenValues[2]);
+    // Sort eigne values and adapt eigen vectors first component
+    VNLDoubleVectorType sortedRealEigenValues(3, eigenValues[0].real());
+    VNLVectorType sortedEigenVectors(3, eigenVectors[0][0]);
+    
+    if( (eigenValues[1].real() >= eigenValues[0].real()) && (eigenValues[1].real() >= eigenValues[2].real()) )
+      { 
+        sortedRealEigenValues[0] = eigenValues[1].real();
+        sortedEigenVectors[0] = eigenVectors[1][0];
+        if( sortedRealEigenValues[2] >= eigenValues[0].real() )
+          {
+            sortedRealEigenValues[1] = eigenValues[2].real();
+            sortedEigenVectors[1] = eigenVectors[2][0];
+          }
+        else
+          {
+            sortedRealEigenValues[2] = eigenValues[2].real();
+            sortedEigenVectors[2] = eigenVectors[2][0];
+            //init do that sortedRealEigenValues[0] = eigenValues[1].real();
+          }
+      }
+    else if( (eigenValues[2].real() >= eigenValues[0].real()) && (eigenValues[2].real() >= eigenValues[1].real()) )
+     { 
+        sortedRealEigenValues[0] = eigenValues[2].real();
+        sortedEigenVectors[0] = eigenVectors[2][0];
+        if( sortedRealEigenValues[1] >= eigenValues[0].real() )
+          {
+            sortedRealEigenValues[1] = eigenValues[1].real();
+            sortedEigenVectors[1] = eigenVectors[1][0];
+          }
+        else
+          {
+            sortedRealEigenValues[2] = eigenValues[1].real();
+            sortedEigenVectors[2] = eigenVectors[1][0];
+            //init do that sortedRealEigenValues[0] = eigenValues[1].real();
+          }
+      }
+    else
+      {
+        if( eigenValues[1].real() >= eigenValues[2].real() )
+          {
+            sortedRealEigenValues[1] = eigenValues[1].real();
+            sortedRealEigenValues[2] = eigenValues[2].real();
+            sortedEigenVectors[1] = eigenVectors[1][0];
+            sortedEigenVectors[2] = eigenVectors[2][0];
+          }
+        else
+          {
+            sortedRealEigenValues[1] = eigenValues[2].real();
+            sortedRealEigenValues[2] = eigenValues[1].real();
+            sortedEigenVectors[1] = eigenVectors[2][0];
+            sortedEigenVectors[2] = eigenVectors[1][0];
+          }
+      }
+
+ 
+    totalEigenValues = sortedRealEigenValues[0] + sortedRealEigenValues[1] + sortedRealEigenValues[2];
     if (totalEigenValues <m_Epsilon)
       {
         totalEigenValues = m_Epsilon;
@@ -105,12 +153,7 @@ public:
 
     for (unsigned int k = 0; k < 3; k++)
       {
-        if (eigenValues[k] <0.)
-          {
-            eigenValues[k] = 0.;
-          }
-
-        p[k] = static_cast<double>(eigenValues[k]) / totalEigenValues;
+        p[k] = std::max(sortedRealEigenValues[k], 0.) / totalEigenValues;
       }
 
     if ( (p[0] < m_Epsilon) || (p[1] < m_Epsilon) || (p[2] < m_Epsilon) )
@@ -129,7 +172,7 @@ public:
 
     for(unsigned int k = 0; k < 3; k++)
       {
-         p[k] = eigenValues[k] / totalEigenValues;
+         p[k] = sortedRealEigenValues[k] / totalEigenValues;
 
          if (p[k] < 0.)
            {
@@ -142,13 +185,13 @@ public:
            }
       }
 
-    val0=sqrt(static_cast<double>(eigenVectors[0][0]*eigenVectors[0][0]) + static_cast<double>(eigenVectors[0][1]*eigenVectors[0][1]));
+    val0 = std::abs(sortedEigenVectors[0]);
     a0=acos(vcl_abs(val0)) * CONST_180_PI;
 
-    val1=sqrt(static_cast<double>(eigenVectors[0][2]*eigenVectors[0][2]) + static_cast<double>(eigenVectors[0][3]*eigenVectors[0][3]));
+    val1 = std::abs(sortedEigenVectors[1]);
     a1=acos(vcl_abs(val1)) * CONST_180_PI;
 
-    val2=sqrt(static_cast<double>(eigenVectors[0][4]*eigenVectors[0][4]) + static_cast<double>(eigenVectors[0][5]*eigenVectors[0][5]));
+    val2= std::abs(sortedEigenVectors[2]);
     a2=acos(vcl_abs(val2)) * CONST_180_PI;
 
     alpha=p[0]*a0 + p[1]*a1 + p[2]*a2;
@@ -159,11 +202,11 @@ public:
       }
 
     // Anisotropy estimation
-    anisotropy=(eigenValues[1] - eigenValues[2])/(eigenValues[1] + eigenValues[2]+m_Epsilon);
+    anisotropy=(sortedRealEigenValues[1] - sortedRealEigenValues[2])/(sortedRealEigenValues[1] + sortedRealEigenValues[2] + m_Epsilon);
 
-    result[0] = entropy;
-    result[1] = alpha;
-    result[2] = anisotropy;
+    result[0] = static_cast<OutputValueType>(entropy);
+    result[1] = static_cast<OutputValueType>(alpha);
+    result[2] = static_cast<OutputValueType>(anisotropy);
 
     return result;
     }
