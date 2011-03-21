@@ -16,6 +16,9 @@
 
 =========================================================================*/
 
+#include <fstream>
+#include <iomanip>
+
 #include "otbMacro.h"
 #include "otbImage.h"
 #include "otbGenericMapProjection.h"

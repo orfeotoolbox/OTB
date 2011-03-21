@@ -27,6 +27,10 @@
 #include "itkMacro.h"
 #include "otbGenericMapProjection.h"
 
+#include "base/ossimRefPtr.h"
+
+class ossimEllipsoid;
+
 namespace otb
 {
 

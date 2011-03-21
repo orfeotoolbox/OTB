@@ -19,6 +19,9 @@
 #pragma warning ( disable : 4786 )
 #endif
 
+#include <fstream>
+#include <iomanip>
+
 #include "otbMacro.h"
 #include "otbImage.h"
 #include "otbGeocentricTransform.h"
