@@ -19,160 +19,126 @@
 #include <fstream>
 
 const int Dimension = 2;
-typedef otb::ImageRegionSquareTileSplitter<Dimension> SplitterType;
+typedef otb::ImageRegionSquareTileSplitter<Dimension> SquareTileSplitterType;
+typedef SquareTileSplitterType::IndexType                       IndexType;
+typedef SquareTileSplitterType::SizeType                        SizeType;
+typedef SquareTileSplitterType::RegionType                      RegionType;
+
 
 int otbImageRegionSquareTileSplitterNew(int argc, char * argv[])
 {
-  SplitterType::Pointer splitter = SplitterType::New();
+  SquareTileSplitterType::Pointer splitter = SquareTileSplitterType::New();
 
   std::cout << splitter << std::endl;
 
   return EXIT_SUCCESS;
 }
 
+int TestSplitter(const RegionType& region, unsigned int PixelSize, unsigned int MaxTileSize, std::ostream& os)
+{
+  os << "----------------------------------" << std::endl;
+  os << "Region    : " << region << std::endl;
+  os << "PixelSize : " << PixelSize << std::endl;
+  os << "MaxTileSize  : " << MaxTileSize << std::endl;
+
+  SquareTileSplitterType::Pointer splitter;
+  splitter = SquareTileSplitterType::New();
+
+  unsigned int requestedNbSplits = region.GetNumberOfPixels() * PixelSize / MaxTileSize;
+  if (requestedNbSplits == 0)
+    requestedNbSplits = 1;
+  os << "Requested Number of splits  : " << requestedNbSplits << std::endl;
+
+  const unsigned int nbSplits = splitter->GetNumberOfSplits(region, requestedNbSplits);
+  os << "Actual Number of splits  : " << nbSplits << std::endl;
+
+
+  RegionType split;
+
+  // First split :
+  split = splitter->GetSplit(0, nbSplits, region);
+  os << "First Split : " << split
+     << "(" << split.GetNumberOfPixels() * PixelSize << " bytes)" << std::endl;
+
+  if (nbSplits > 1)
+    {
+    // Second split :
+    split = splitter->GetSplit(1, nbSplits, region);
+    os << "Second Split : " << split
+       << "(" << split.GetNumberOfPixels() * PixelSize << " bytes)" << std::endl;
+    }
+
+  if (nbSplits > 2)
+    {
+    // Last split :
+    split = splitter->GetSplit(nbSplits - 1, nbSplits, region);
+    os << "Last Split : " << split
+       << "(" << split.GetNumberOfPixels() * PixelSize << " bytes)" << std::endl;
+    }
+
+  return EXIT_SUCCESS;
+}
+
+
 int otbImageRegionSquareTileSplitter(int argc, char * argv[])
 {
-  typedef SplitterType::IndexType                      IndexType;
-  typedef SplitterType::SizeType                       SizeType;
-  typedef SplitterType::RegionType                     RegionType;
-
-  typedef unsigned short PixelPrecisionType;
-  const unsigned int NbComponents = 8;
-  const unsigned int PixelSizeInBytes = NbComponents * sizeof(PixelPrecisionType);
-
   std::ofstream outfile(argv[1]);
-  SplitterType::Pointer filter = FilterType::New();
+  RegionType region;
 
-  RegionType   region, region2;
-  unsigned int nb, nbSplitTheoric, nbAsked;
-  IndexType    index;
-  SizeType     size;
+  // Test with a 0-based indexed region
+  region.SetIndex(0, 0);
+  region.SetIndex(1, 0);
+  region.SetSize(0, 1024);
+  region.SetSize(1, 1024);
+  TestSplitter(region, 1, 128, outfile);
+  TestSplitter(region, 1, 512*512, outfile);
+  TestSplitter(region, 2, 512*512, outfile);
+  TestSplitter(region, 4, 512*512, outfile);
+  TestSplitter(region, 8, 512*512, outfile);
 
-  //Case 1
-  index[0] = 45;
-  index[1] = 45;
-  size[0] = 1000;
-  size[1] = 1500;
-  nbSplitTheoric = 10;
-  nbAsked = 2;
+  // Test with a shifted region
+  region.SetIndex(0, 42);
+  region.SetIndex(1, 42);
+  region.SetSize(0, 1000);
+  region.SetSize(1, 1000);
+  TestSplitter(region, 1, 128, outfile);
+  TestSplitter(region, 1, 512*512, outfile);
+  TestSplitter(region, 2, 512*512, outfile);
+  TestSplitter(region, 4, 512*512, outfile);
+  TestSplitter(region, 8, 512*512, outfile);
 
-  region.SetSize(size);
-  region.SetIndex(index);
+  // Test with a negative shift
+  region.SetIndex(0, -42);
+  region.SetIndex(1, -42);
+  region.SetSize(0, 1000);
+  region.SetSize(1, 1000);
+  TestSplitter(region, 1, 128, outfile);
+  TestSplitter(region, 1, 512*512, outfile);
+  TestSplitter(region, 2, 512*512, outfile);
+  TestSplitter(region, 4, 512*512, outfile);
+  TestSplitter(region, 8, 512*512, outfile);
 
-  nb = filter->GetNumberOfSplits(region, nbSplitTheoric);
-  region2 = filter->GetSplit(nbAsked, nb, region);
+  // Test with a reduced size
+  region.SetIndex(0, 0);
+  region.SetIndex(1, 0);
+  region.SetSize(0, 1);
+  region.SetSize(1, 1);
+  TestSplitter(region, 1, 128, outfile);
+  TestSplitter(region, 1, 512*512, outfile);
+  TestSplitter(region, 2, 512*512, outfile);
+  TestSplitter(region, 4, 512*512, outfile);
+  TestSplitter(region, 8, 512*512, outfile);
 
-  outfile << "\nCase 1 \n";
-  outfile << "Input region: " << region << std::endl;
-  outfile << "Input NumberOfSplits: " << nbSplitTheoric << std::endl;
-  outfile << "Output GetNumberOfSplits: " << nb << std::endl;
-  outfile << "Output GetSplit(" << nbAsked << "," << nb << ", input region): " << std::endl;
-  outfile << "Output region: " << region2 << std::endl;
-
-  //Case 2
-  index[0] = 45;
-  index[1] = 45;
-  size[0] = 1048576;
-  size[1] = 1048576;
-  nbSplitTheoric = 16777216;
-  nbAsked = 2;
-
-  region.SetSize(size);
-  region.SetIndex(index);
-
-  nb = filter->GetNumberOfSplits(region, nbSplitTheoric);
-  region2 = filter->GetSplit(nbAsked, nb, region);
-
-  outfile << "\nCase 2 \n";
-  outfile << "Input region: " << region << std::endl;
-  outfile << "Input NumberOfSplits: " << nbSplitTheoric << std::endl;
-  outfile << "Output GetNumberOfSplits: " << nb << std::endl;
-  outfile << "Output GetSplit(" << nbAsked << "," << nb << ", input region): " << std::endl;
-  outfile << "Output region: " << region2 << std::endl;
-
-  //Case 3
-  index[0] = 45;
-  index[1] = 45;
-  size[0] = 1048576;
-  size[1] = 1048576;
-  nbSplitTheoric = 23;
-  nbAsked = 4;
-
-  region.SetSize(size);
-  region.SetIndex(index);
-
-  nb = filter->GetNumberOfSplits(region, nbSplitTheoric);
-  region2 = filter->GetSplit(nbAsked, nb, region);
-
-  outfile << "\nCase 3 \n";
-  outfile << "Input region: " << region << std::endl;
-  outfile << "Input NumberOfSplits: " << nbSplitTheoric << std::endl;
-  outfile << "Output GetNumberOfSplits: " << nb << std::endl;
-  outfile << "Output GetSplit(" << nbAsked << "," << nb << ", input region): " << std::endl;
-  outfile << "Output region: " << region2 << std::endl;
-
-  //Case 4
-  index[0] = 45;
-  index[1] = 45;
-  size[0] = 1048576;
-  size[1] = 1024;
-  nbSplitTheoric = 16777216;
-  nbAsked = 16387;
-
-  region.SetSize(size);
-  region.SetIndex(index);
-
-  nb = filter->GetNumberOfSplits(region, nbSplitTheoric);
-  region2 = filter->GetSplit(nbAsked, nb, region);
-
-  outfile << "\nCase 4 \n";
-  outfile << "Input region: " << region << std::endl;
-  outfile << "Input NumberOfSplits: " << nbSplitTheoric << std::endl;
-  outfile << "Output GetNumberOfSplits: " << nb << std::endl;
-  outfile << "Output GetSplit(" << nbAsked << "," << nb << ", input region): " << std::endl;
-  outfile << "Output region: " << region2 << std::endl;
-
-  //Case 5
-  index[0] = 0;
-  index[1] = 0;
-  size[0] = 513;
-  size[1] = 5376;
-  nbSplitTheoric = 8;
-  nbAsked = 9;
-
-  region.SetSize(size);
-  region.SetIndex(index);
-
-  nb = filter->GetNumberOfSplits(region, nbSplitTheoric);
-  region2 = filter->GetSplit(nbAsked, nb, region);
-
-  outfile << "\nCase 5 \n";
-  outfile << "Input region: " << region << std::endl;
-  outfile << "Input NumberOfSplits: " << nbSplitTheoric << std::endl;
-  outfile << "Output GetNumberOfSplits: " << nb << std::endl;
-  outfile << "Output GetSplit(" << nbAsked << "," << nb << ", input region): " << std::endl;
-  outfile << "Output region: " << region2 << std::endl;
-
-  //Case 6
-  index[0] = 0;
-  index[1] = 0;
-  size[0] = 3;
-  size[1] = 2;
-  nbSplitTheoric = 5;
-  nbAsked = 0;
-
-  region.SetSize(size);
-  region.SetIndex(index);
-
-  nb = filter->GetNumberOfSplits(region, nbSplitTheoric);
-  region2 = filter->GetSplit(nbAsked, nb, region);
-
-  outfile << "\nCase 5 \n";
-  outfile << "Input region: " << region << std::endl;
-  outfile << "Input NumberOfSplits: " << nbSplitTheoric << std::endl;
-  outfile << "Output GetNumberOfSplits: " << nb << std::endl;
-  outfile << "Output GetSplit(" << nbAsked << "," << nb << ", input region): " << std::endl;
-  outfile << "Output region: " << region2 << std::endl;
+  // Test with a reduced size, shifted
+  region.SetIndex(0, 42);
+  region.SetIndex(1, 42);
+  region.SetSize(0, 1);
+  region.SetSize(1, 1);
+  TestSplitter(region, 1, 128, outfile);
+  TestSplitter(region, 1, 512*512, outfile);
+  TestSplitter(region, 2, 512*512, outfile);
+  TestSplitter(region, 4, 512*512, outfile);
+  TestSplitter(region, 8, 512*512, outfile);
 
   outfile.close();
 

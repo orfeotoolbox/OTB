@@ -743,10 +743,10 @@ ADD_TEST(coTuImageRegionSquareTileSplitterNew ${COMMON_TESTS8}
 
 ADD_TEST(coTvImageRegionSquareTileSplitter ${COMMON_TESTS8}
     --compare-ascii ${NOTOL}
-        ${BASELINE_FILES}/coImageRegionTileMapSplitter.txt
-                ${TEMP}/coImageRegionTileMapSplitter.txt
+        ${BASELINE_FILES}/coImageRegionSquareTileSplitter.txt
+        ${TEMP}/coImageRegionSquareTileSplitter.txt
     otbImageRegionSquareTileSplitter
-        ${TEMP}/coImageRegionTileMapSplitter.txt
+        ${TEMP}/coImageRegionSquareTileSplitter.txt
 )
 
 # -------------  otb::ImageOfVectorsToMonoChannelExtractROI ----------------------------

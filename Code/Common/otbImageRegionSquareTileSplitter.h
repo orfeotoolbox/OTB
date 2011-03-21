@@ -104,29 +104,27 @@ public:
   /** Region typedef support.   */
   typedef itk::ImageRegion<VImageDimension> RegionType;
 
-  itkSetMacro(PixelSizeInBytes, unsigned int);
-  itkGetMacro(PixelSizeInBytes, unsigned int);
-
-  itkSetMacro(TileSizeInBytes, unsigned int);
-  itkGetMacro(TileSizeInBytes, unsigned int);
-
-  /** How many pieces can the specifed region be split? A given region
-       * cannot always be divided into the requested number of pieces.  For
-       * instance, if the numberOfPieces exceeds the number of pixels along
-       * a certain dimensions, then some splits will not be possible. This
-       * method returns a number less than or equal to the requested number
-   * of pieces. */
+  /** How many pieces can the specified region be split? A given region
+   *  cannot always be divided into the requested number of pieces.  For
+   *  instance, if the numberOfPieces exceeds the number of pixels along
+   *  a certain dimensions, then some splits will not be possible.
+   */
   virtual unsigned int GetNumberOfSplits(const RegionType& region,
                                          unsigned int requestedNumber);
 
   /** Get a region definition that represents the ith piece a specified region.
-       * The "numberOfPieces" specified should be less than or equal to what
+   * The "numberOfPieces" specified should be less than or equal to what
    * GetNumberOfSplits() returns. */
   virtual RegionType GetSplit(unsigned int i, unsigned int numberOfPieces,
                               const RegionType& region);
 
+  itkGetMacro(TileSizeAlignment, unsigned int);
+  itkSetMacro(TileSizeAlignment, unsigned int);
+
+  itkGetMacro(TileDimension, unsigned int);
+
 protected:
-  ImageRegionSquareTileSplitter() : m_AlignStep(0), m_PixelSizeInBytes(0), m_TileSizeInBytes(0){}
+  ImageRegionSquareTileSplitter() : m_SplitsPerDimension(0U), m_TileDimension(0), m_TileSizeAlignment(16) {}
   virtual ~ImageRegionSquareTileSplitter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
@@ -134,10 +132,9 @@ private:
   ImageRegionSquareTileSplitter(const ImageRegionSquareTileSplitter &); //purposely not implemented
   void operator =(const ImageRegionSquareTileSplitter&); //purposely not implemented
 
-  unsigned int m_SplitsPerDimension[VImageDimension];
-  unsigned int m_AlignStep;
-  unsigned int m_PixelSizeInBytes;
-  unsigned int m_TileSizeInBytes;
+  itk::FixedArray<unsigned int, VImageDimension> m_SplitsPerDimension;
+  unsigned int m_TileDimension;
+  unsigned int m_TileSizeAlignment;
 };
 
 } // end namespace otb
