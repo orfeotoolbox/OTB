@@ -21,10 +21,12 @@
 #include <iostream>
 #include <sstream>
 #include <stdio.h>
-#include "projection/ossimProjection.h"
+
 #include "itkTransform.h"
 #include "itkExceptionObject.h"
 #include "itkMacro.h"
+
+#include "projection/ossimProjection.h"
 #include "base/ossimGpt.h"
 #include "base/ossimDpt.h"
 #include "projection/ossimProjection.h"

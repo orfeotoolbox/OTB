@@ -20,8 +20,16 @@
 
 #include "otbGenericMapProjection.h"
 #include "otbMacro.h"
+
 #include "projection/ossimMapProjectionFactory.h"
 #include "projection/ossimMapProjection.h"
+#include "base/ossimGpt.h"
+#include "base/ossimDpt.h"
+#include "projection/ossimProjection.h"
+#include "base/ossimEllipsoid.h"
+#include "base/ossimEllipsoidFactory.h"
+#include "base/ossimString.h"
+#include "gdal/ossimOgcWktTranslator.h"
 
 namespace otb
 {
