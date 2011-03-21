@@ -192,7 +192,7 @@ MeanShiftImageFilter<TInputImage, TOutputImage, TLabeledOutput, TBufferConverter
 template <class TInputImage, class TOutputImage, class TLabeledOutput, class TBufferConverter>
 void
 MeanShiftImageFilter<TInputImage, TOutputImage, TLabeledOutput, TBufferConverter>
-::ThreadedGenerateData(const RegionType& outputRegionForThread, int threadId)
+::ThreadedGenerateData(const RegionType& outputRegionForThread, int itkNotUsed(threadId))
 {
   // Input and output pointers
   typename InputImageType::ConstPointer inputPtr  = this->GetInput();

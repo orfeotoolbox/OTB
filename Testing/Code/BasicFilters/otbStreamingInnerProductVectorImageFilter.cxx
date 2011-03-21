@@ -40,7 +40,7 @@ int otbStreamingInnerProductVectorImageFilter(int argc, char* argv[])
   // Instantiation object
   FilterType::Pointer filter = FilterType::New();
 
-  filter->GetStreamer()->SetNumberOfStreamDivisions(10);
+  //filter->GetStreamer()->SetNumberOfStreamDivisions(10);
   filter->SetCenterData(centerdata);
   filter->SetInput(reader->GetOutput());
   filter->Update();

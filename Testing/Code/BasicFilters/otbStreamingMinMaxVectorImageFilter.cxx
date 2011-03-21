@@ -43,7 +43,7 @@ int otbStreamingMinMaxVectorImageFilter(int argc, char * argv[])
   reader->SetFileName(infname);
 
   //filter->SetStreamingMode(otb::SET_NUMBER_OF_STREAM_DIVISIONS);
-  filter->GetStreamer()->SetNumberOfStreamDivisions(200);
+  //filter->GetStreamer()->SetNumberOfStreamDivisions(200);
   filter->SetInput(reader->GetOutput());
   otb::StandardFilterWatcher watcher(filter, "Min Max Computation");
   filter->Update();

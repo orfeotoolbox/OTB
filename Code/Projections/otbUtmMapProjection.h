@@ -53,7 +53,7 @@ public:
   virtual void SetZone(long zone);
   virtual void SetHemisphere(char hemisphere);
   virtual int GetZone() const;
-  virtual const char GetHemisphere() const;
+  virtual char GetHemisphere() const;
 
   virtual void SetZoneAndHemisphereFromGeoPoint(const InputPointType& geoPoint);
   virtual int GetZoneFromGeoPoint(const InputPointType& geoPoint) const;

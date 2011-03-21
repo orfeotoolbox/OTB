@@ -38,9 +38,6 @@ namespace otb
 class ITK_EXPORT FltkFilterWatcher : public FilterWatcherBase
 {
 public:
-  /** Classes that need access to filter's private data */
-  // friend class XMLFilterWatcher;
-
   /** Constructor. Takes a ProcessObject to monitor and an optional
    * comment string that is prepended to each event message. */
   FltkFilterWatcher(itk::ProcessObject * process,
@@ -50,35 +47,21 @@ public:
   /** Destructor. */
   virtual ~FltkFilterWatcher();
 
-  /** Callback method to show the EndEvent */
-  virtual void EndFilter()
-  {
-    m_Window->hide();
-  }
-
 protected:
-
   /** Callback method to show the ProgressEvent */
-  virtual void ShowProgress()
-  {
-    if (m_Process)
-      {
-      m_Progress->value(m_Process->GetProgress());
-      Fl::check();
-      }
-  }
+  virtual void ShowProgress();
 
   /** Callback method to show the StartEvent */
-  virtual void StartFilter()
-  {
-    m_Window->show();
-    m_Progress->show();
-  }
+  virtual void StartFilter();
+
+  /** Callback method to show the EndEvent */
+  virtual void EndFilter();
 
 private:
-
   Fl_Window *   m_Window;
   Fl_Progress * m_Progress;
+
+  double m_CurrentProgress;
 };
 
 } // end namespace otb
