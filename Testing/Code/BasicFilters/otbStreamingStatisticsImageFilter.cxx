@@ -43,7 +43,7 @@ int otbStreamingStatisticsImageFilter(int argc, char * argv[])
   reader->SetFileName(infname);
 
   //filter->GetStreamer()->SetStreamingMode(otb::SET_NUMBER_OF_STREAM_DIVISIONS);
-  filter->GetStreamer()->SetNumberOfStreamDivisions(200);
+  //filter->GetStreamer()->SetNumberOfStreamDivisions(200);
   filter->SetInput(reader->GetOutput());
   filter->Update();
 

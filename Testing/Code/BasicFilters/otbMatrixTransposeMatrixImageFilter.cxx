@@ -50,7 +50,7 @@ int otbMatrixTransposeMatrixImageFilter(int argc, char * argv[])
   reader2->SetFileName(infname2);
 
   // filter->SetStreamingMode(otb::SET_NUMBER_OF_STREAM_DIVISIONS);
-  filter->GetStreamer()->SetNumberOfStreamDivisions(200);
+  //filter->GetStreamer()->SetNumberOfStreamDivisions(200);
   filter->SetFirstInput(reader1->GetOutput());
   filter->SetSecondInput(reader2->GetOutput());
   filter->SetUsePadFirstInput(true);
