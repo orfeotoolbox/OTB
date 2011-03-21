@@ -842,6 +842,20 @@ ADD_TEST(prTvGenericRSTransformFromImage ${PROJECTIONS_TESTS3}
 	       otbGenericRSTransformFromImage
 	       ${INPUTDATA}/WithoutProjRefWithKeywordlist.tif)
 
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(prTvGenericRSTransformQuickbirdToulouseGeodesicPointChecking ${PROJECTIONS_TESTS3}
+otbGenericRSTransformImageAndMNTToWGS84ConversionChecking
+${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+${INPUTDATA}/DEM/srtm_directory/
+16271 15647 # IGN reference point in front of st sernin church pointed in image
+1.48353 43.55968 # IGN reference point lon/lat
+192.205 # IGN reference point elevation (prec < 10 cm)
+5
+0.00001
+)
+
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
 ADD_TEST(prTuVectorDataProjectionFilterNew ${PROJECTIONS_TESTS3}  otbVectorDataProjectionFilterNew )
 
 #test points

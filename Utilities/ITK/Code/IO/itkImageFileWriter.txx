@@ -216,19 +216,18 @@ ImageFileWriter<TInputImage>
     }
 
   // Make sure that the image is the right type
-  // confiugure pixel type
+  // configure pixel type
   if( strcmp( input->GetNameOfClass(), "VectorImage" ) == 0 ) 
     {
-      typedef typename InputImageType::InternalPixelType VectorImageScalarType;
-      m_ImageIO->SetPixelTypeInfo( typeid(VectorImageScalarType) );
-    
-      typedef typename InputImageType::AccessorFunctorType AccessorFunctorType;
-      m_ImageIO->SetNumberOfComponents( AccessorFunctorType::GetVectorLength(input) );
+    typedef typename InputImageType::InternalPixelType VectorImageScalarType;
+    m_ImageIO->SetPixelTypeInfo( typeid(VectorImageScalarType) );
+
+    typedef typename InputImageType::AccessorFunctorType AccessorFunctorType;
+    m_ImageIO->SetNumberOfComponents( AccessorFunctorType::GetVectorLength(input) );
     }
   else
     {
-      // Set the pixel and component type; the number of components.
-    std::cout << "typeid(InputImagePixelType) = " << typeid(InputImagePixelType).name() <<std::endl;
+    // Set the pixel and component type; the number of components.
     m_ImageIO->SetPixelTypeInfo(typeid(InputImagePixelType));
     }
 

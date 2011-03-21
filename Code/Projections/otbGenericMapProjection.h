@@ -21,17 +21,11 @@
 #include <iostream>
 #include <sstream>
 #include <stdio.h>
-#include "projection/ossimProjection.h"
+
 #include "itkTransform.h"
 #include "itkExceptionObject.h"
 #include "itkMacro.h"
-#include "base/ossimGpt.h"
-#include "base/ossimDpt.h"
-#include "projection/ossimProjection.h"
-#include "base/ossimEllipsoid.h"
-#include "base/ossimEllipsoidFactory.h"
-#include "base/ossimString.h"
-#include "gdal/ossimOgcWktTranslator.h"
+#include "otbMapProjectionWrapper.h"
 
 namespace otb
 {
@@ -76,7 +70,7 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   typedef typename Superclass::ScalarType           ScalarType;
-  typedef ossimProjection                           OssimMapProjectionType;
+  typedef MapProjectionWrapper                      MapProjectionType;
   typedef itk::Point<ScalarType, NInputDimensions>  InputPointType;
   typedef itk::Point<ScalarType, NOutputDimensions> OutputPointType;
 
@@ -85,10 +79,6 @@ public:
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(GenericMapProjection, itk::Transform);
-
-  itkSetObjectMacro(MapProjection, OssimMapProjectionType);
-  virtual OssimMapProjectionType* GetMapProjection();
-  virtual const OssimMapProjectionType* GetMapProjection() const;
 
   static const TransformDirection::TransformationDirection DirectionOfMapping = TDirectionOfMapping;
 
@@ -109,16 +99,15 @@ public:
 
   virtual bool InstanciateProjection();
 
+  const MapProjectionWrapper* GetMapProjection() const;
+
 protected:
   GenericMapProjection();
   virtual ~GenericMapProjection();
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  OssimMapProjectionType* m_MapProjection;
-  std::string             m_ProjectionRefWkt;
-
-  bool reinstanciateProjection;
+  MapProjectionWrapper::Pointer m_MapProjection;
 
 private:
   GenericMapProjection(const Self &); //purposely not implemented

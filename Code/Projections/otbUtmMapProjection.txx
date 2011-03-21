@@ -68,7 +68,7 @@ int UtmMapProjection<TTransform>
 
 ///\return the hemisphere
 template <TransformDirection::TransformationDirection TTransform>
-const char UtmMapProjection<TTransform>
+char UtmMapProjection<TTransform>
 ::GetHemisphere() const
 {
   char hemisphere = this->m_MapProjection->getHemisphere();

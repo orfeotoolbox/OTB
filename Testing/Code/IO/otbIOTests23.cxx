@@ -80,7 +80,7 @@ void RegisterTests()
   REGISTER_TEST(otbGDALReadPxlComplexFloat);
 
 
-
+  // Write Complex data
   REGISTER_TEST(otbImageScalarFileWriterTestWithoutInputShort);
   REGISTER_TEST(otbImageScalarFileWriterTestWithoutInputInt);
   REGISTER_TEST(otbImageScalarFileWriterTestWithoutInputFloat);
@@ -102,4 +102,25 @@ void RegisterTests()
   REGISTER_TEST(otbVectorImageFileWriterComplexTestWithoutInputFloat);
   REGISTER_TEST(otbVectorImageFileWriterComplexTestWithoutInputDouble);
 
+  // Streaming Write Complex data
+  REGISTER_TEST(otbImageScalarStreamingFileWriterTestWithoutInputShort);
+  REGISTER_TEST(otbImageScalarStreamingFileWriterTestWithoutInputInt);
+  REGISTER_TEST(otbImageScalarStreamingFileWriterTestWithoutInputFloat);
+  REGISTER_TEST(otbImageScalarStreamingFileWriterTestWithoutInputDouble);
+
+  REGISTER_TEST(otbImageComplexStreamingFileWriterTestWithoutInputShort);
+  REGISTER_TEST(otbImageComplexStreamingFileWriterTestWithoutInputInt);
+  REGISTER_TEST(otbImageComplexStreamingFileWriterTestWithoutInputFloat);
+  REGISTER_TEST(otbImageComplexStreamingFileWriterTestWithoutInputDouble);
+
+
+  REGISTER_TEST(otbVectorImageStreamingFileWriterScalarTestWithoutInputShort);
+  REGISTER_TEST(otbVectorImageStreamingFileWriterScalarTestWithoutInputInt);
+  REGISTER_TEST(otbVectorImageStreamingFileWriterScalarTestWithoutInputFloat);
+  REGISTER_TEST(otbVectorImageStreamingFileWriterScalarTestWithoutInputDouble);
+
+  REGISTER_TEST(otbVectorImageStreamingFileWriterComplexTestWithoutInputShort);
+  REGISTER_TEST(otbVectorImageStreamingFileWriterComplexTestWithoutInputInt);
+  REGISTER_TEST(otbVectorImageStreamingFileWriterComplexTestWithoutInputFloat);
+  REGISTER_TEST(otbVectorImageStreamingFileWriterComplexTestWithoutInputDouble);
 }

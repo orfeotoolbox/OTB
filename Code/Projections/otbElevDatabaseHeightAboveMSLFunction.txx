@@ -43,8 +43,7 @@ ElevDatabaseHeightAboveMSLFunction<TOutputPixel, TCoordRep, NPointDimension>
      m_ElevManager(ossimElevManager::instance())
 {
   // Value defined in the norm for points SRTM doesn't have information.
-  m_DefaultUnknownValue = static_cast<PixelType>(-32768);
-
+  //m_DefaultUnknownValue = static_cast<PixelType>(-32768);
 }
 
 
@@ -58,8 +57,7 @@ ElevDatabaseHeightAboveMSLFunction<TOutputPixel, TCoordRep, NPointDimension>
   std::ostream& os,
   itk::Indent indent) const
 {
-  os << indent << " m_DefaultUnknownValue           : "  << m_DefaultUnknownValue << std::endl;
-
+  Superclass::PrintSelf(os, indent);
 }
 
 /**
@@ -76,16 +74,7 @@ ElevDatabaseHeightAboveMSLFunction<TOutputPixel, TCoordRep, NPointDimension>
   ossimWorldPoint.lat = point[1];
   height = m_ElevManager->getHeightAboveMSL(ossimWorldPoint);
 
-  if (!ossim::isnan(height))
-    {
-    return static_cast<PixelType>( height );
-    }
-  else
-    {
-    // Back to the MNT default value
-    return static_cast<PixelType>( m_DefaultUnknownValue );
-    }
-
+  return static_cast<PixelType>( height );
 }
 
 template <class TOutputPixel, class TCoordRep, unsigned int NPointDimension>

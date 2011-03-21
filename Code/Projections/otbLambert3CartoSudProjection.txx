@@ -24,8 +24,8 @@
 namespace otb
 {
 
-template <TransformDirection::TransformationDirection transform>
-Lambert3CartoSudProjection<transform>
+template <TransformDirection::TransformationDirection TTransform>
+Lambert3CartoSudProjection<TTransform>
 ::Lambert3CartoSudProjection()
 {
   itk::Point<double, 2> origin;
@@ -46,8 +46,8 @@ Lambert3CartoSudProjection<transform>
   this->SetParameters(parall1, parall2, falseEasting, falseNorthing);
 }
 
-template <TransformDirection::TransformationDirection transform>
-Lambert3CartoSudProjection<transform>
+template <TransformDirection::TransformationDirection TTransform>
+Lambert3CartoSudProjection<TTransform>
 ::~Lambert3CartoSudProjection()
 {
 }

@@ -22,7 +22,6 @@
 #include "vnl/vnl_transpose.h"
 #include "vnl/vnl_matrix.h"
 
-
 namespace otb
 {
 namespace Functor
@@ -65,16 +64,16 @@ public:
 
   inline TSeriesType operator ()(const TSeriesType& series)
   {
-    this->EstimateTimeFunction(series);
+    TTimeFunction estFunction = this->EstimateTimeFunction(series);
     TSeriesType outSeries;
-    for(unsigned int i=0; i<m_DoySeries.Size(); ++i)
-      outSeries[i] = m_TimeFunction.GetValue( m_DoySeries[i] );
+    for(unsigned int i = 0; i < m_DoySeries.Size(); ++i)
+      outSeries[i] = estFunction.GetValue( m_DoySeries[i] );
     return outSeries;
   }
 
   inline void SetDates(const TDateType& doy)
   {
-    for(unsigned int i=0; i<doy.Size(); ++i)
+    for(unsigned int i = 0; i < doy.Size(); ++i)
       m_DoySeries[i] = doy[i];
   }
 
@@ -84,16 +83,16 @@ public:
       m_WeightSeries[i] = weights[i];
   }
 
-
-  inline CoefficientsType GetCoefficients() const
+  inline CoefficientsType GetCoefficients(const TSeriesType& series) const
   {
-    return m_TimeFunction.GetCoefficients();
+    return (this->EstimateTimeFunction(series)).GetCoefficients();
   }
 
-  inline void EstimateTimeFunction(const TSeriesType& series)
+  inline TTimeFunction EstimateTimeFunction(const TSeriesType& series) const
   {
+    TTimeFunction estFunction;
     unsigned int nbDates = m_DoySeries.Size();
-    unsigned int nbCoefs = m_TimeFunction.GetCoefficients().Size();
+    unsigned int nbCoefs = estFunction.GetCoefficients().Size();
 
     // b = A * c
     vnl_matrix<double> A(nbDates, nbCoefs);
@@ -102,17 +101,17 @@ public:
     // fill the matrices
 
     typename TTimeFunction::CoefficientsType tmpCoefs;
-    for(unsigned int j = 0; j<nbCoefs; ++j)
+    for(unsigned int j = 0; j < nbCoefs; ++j)
       tmpCoefs[j] = 0.0;
 
-    for(unsigned int i = 0; i<nbDates; ++i)
+    for(unsigned int i = 0; i < nbDates; ++i)
       {
-      b.put(i, 0, series[i]/m_WeightSeries[i]);
-      for(unsigned int j = 0; j<nbCoefs; ++j)
+      b.put(i, 0, series[i] / m_WeightSeries[i]);
+      for(unsigned int j = 0; j < nbCoefs; ++j)
         {
         tmpCoefs[j] = 1.0;
-        m_TimeFunction.SetCoefficients(tmpCoefs);
-        A.put(i, j, m_TimeFunction.GetValue(m_DoySeries[i])/m_WeightSeries[i]);
+        estFunction.SetCoefficients(tmpCoefs);
+        A.put(i, j, estFunction.GetValue(m_DoySeries[i]) / m_WeightSeries[i]);
         tmpCoefs[j] = 0.0;
         }
       }
@@ -123,18 +122,18 @@ public:
     vnl_matrix<double> atainvat = atainv * vnl_transpose(A);
     vnl_matrix<double> c = atainvat * b;
 
-    for(unsigned int j = 0; j<nbCoefs; ++j)
+    for(unsigned int j = 0; j < nbCoefs; ++j)
       tmpCoefs[j] = c.get(j, 0);
-    m_TimeFunction.SetCoefficients(tmpCoefs);
-  }
+    estFunction.SetCoefficients(tmpCoefs);
 
+    return estFunction;
+  }
 
 private:
   ///
-  TTimeFunction m_TimeFunction;
   TDateType m_DoySeries;
   TWeightType m_WeightSeries;
 };
 }
-}
+} //namespace otb
 #endif

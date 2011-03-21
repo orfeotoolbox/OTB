@@ -54,6 +54,7 @@ public:
   typedef TDEMImage                        DEMImageType;
   typedef typename DEMImageType::Pointer   DEMImagePointerType;
   typedef typename DEMImageType::PixelType PixelType;
+  typedef typename DEMImageType::InternalPixelType     PixelValueType;
 
   typedef TMapProjection                      MapProjectionType;
   typedef typename MapProjectionType::Pointer MapProjectionPointerType;

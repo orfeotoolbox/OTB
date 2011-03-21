@@ -21,9 +21,38 @@
 #include "otbStreamingShrinkImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
 #include "otbMacro.h"
+#include "itkProgressReporter.h"
 
 namespace otb
 {
+
+template <class TImage>
+StreamingShrinkStreamingManager<TImage>::StreamingShrinkStreamingManager()
+{
+}
+
+template <class TImage>
+StreamingShrinkStreamingManager<TImage>::~StreamingShrinkStreamingManager()
+{
+}
+
+template <class TImage>
+void
+StreamingShrinkStreamingManager<TImage>::PrepareStreaming( itk::DataObject * input, const RegionType &region )
+{
+  typedef otb::StreamingShrinkImageRegionSplitter TileSplitterType;
+  TileSplitterType::Pointer splitter = TileSplitterType::New();
+  splitter->SetTileSizeAlignment(m_ShrinkFactor);
+  this->m_Splitter = splitter;
+
+  unsigned long nbDivisions = EstimateOptimalNumberOfDivisions(input, region);
+  this->m_ComputedNumberOfSplits = this->m_Splitter->GetNumberOfSplits(region, nbDivisions);
+  otbMsgDevMacro(<< "Number of split : " << this->m_ComputedNumberOfSplits)
+
+  // Save the region to generate the splits later
+  this->m_Region = region;
+}
+
 
 /** Constructor */
 template <class TInputImage, class TOutputImage>
@@ -78,31 +107,22 @@ PersistentShrinkImageFilter<TInputImage, TOutputImage>
   // Nothing that needs to be allocated for the remaining outputs
 }
 
+
 template<class TInputImage, class TOutputImage>
 void
 PersistentShrinkImageFilter<TInputImage, TOutputImage>
 ::Reset()
 {
-  // Reinit the chrono
-  m_Chrono = itk::TimeProbe();
-
-  // get pointers to the input and output
+  // Get pointers to the input and output
   InputImageType* inputPtr = const_cast<InputImageType*>(this->GetInput());
   inputPtr->UpdateOutputInformation();
 
   m_ShrinkedOutput = OutputImageType::New();
 
-  // we need to compute the output spacing, the output image size, and the
-  // output image start index
   const typename InputImageType::SpacingType&
                                            inputSpacing = inputPtr->GetSpacing();
   const typename InputImageType::SizeType& inputSize
     = inputPtr->GetLargestPossibleRegion().GetSize();
-  const typename InputImageType::IndexType& inputStartIndex
-    = inputPtr->GetLargestPossibleRegion().GetIndex();
-  
-  otbMsgDebugMacro(<< "Input index " << inputStartIndex);
-  otbMsgDebugMacro(<< "Input size: " << inputSize);
 
   typename OutputImageType::SpacingType shrinkedOutputSpacing;
   typename OutputImageType::RegionType  shrinkedOutputLargestPossibleRegion;
@@ -112,9 +132,7 @@ PersistentShrinkImageFilter<TInputImage, TOutputImage>
   for (unsigned int i = 0; i < OutputImageType::ImageDimension; ++i)
     {
     shrinkedOutputSpacing[i] = inputSpacing[i] * static_cast<double>(m_ShrinkFactor);
-    //shrinkedOutputSize[i] = static_cast<int>(static_cast<double>(inputSize[i]) / static_cast<double>(m_ShrinkFactor));
     shrinkedOutputSize[i] = inputSize[i] / m_ShrinkFactor;
-    //outputStartIndex[i] = inputStartIndex[i];
     shrinkedOutputStartIndex[i] = 0;
     }
 
@@ -133,7 +151,6 @@ void
 PersistentShrinkImageFilter<TInputImage, TOutputImage>
 ::Synthetize()
 {
-  otbMsgDevMacro( "Shrink time : " << m_Chrono.GetTotal() )
 }
 
 template<class TInputImage, class TOutputImage>
@@ -141,7 +158,6 @@ void
 PersistentShrinkImageFilter<TInputImage, TOutputImage>
 ::BeforeThreadedGenerateData()
 {
-  m_Chrono.Start();
 }
 
 template<class TInputImage, class TOutputImage>
@@ -174,7 +190,6 @@ void
 PersistentShrinkImageFilter<TInputImage, TOutputImage>
 ::AfterThreadedGenerateData()
 {
-  m_Chrono.Stop();
 }
 
 template <class TImage, class TOutputImage>

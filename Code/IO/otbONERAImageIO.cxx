@@ -467,17 +467,13 @@ bool ONERAImageIO::CanWriteFile(const char* FileNameToWrite)
 
 void ONERAImageIO::Write(const void* buffer)
 {
-
   if (m_FlagWriteImageInformation == true)
     {
-    this->WriteImageInformation();
+    this->InternalWriteImageInformation();
     m_FlagWriteImageInformation = false;
     }
 
-  unsigned long step = this->GetNumberOfComponents();
-
-  // variable not used.
-  // const unsigned long numberOfComponents = this->GetImageSizeInComponents();
+  unsigned long step = this->GetNumberOfComponents() * 2;
 
   unsigned int lNbLines   = this->GetIORegion().GetSize()[1];
   unsigned int lNbColumns = this->GetIORegion().GetSize()[0];
@@ -489,8 +485,8 @@ void ONERAImageIO::Write(const void* buffer)
   otbMsgDevMacro(<< " Region read (IORegion)  : " << this->GetIORegion());
   otbMsgDevMacro(<< " Nb Of Components  : " << this->GetNumberOfComponents());
 
-  // Cas particuliers : on controle que si la r�gion � �crire est de la m�me dimension que l'image enti�re,
-  // on commence l'offset � 0 (lorsque que l'on est pas en "Streaming")
+  // Special case: we check if the region to write is the same as the whole image
+  // We begin with a zero offset when we are not in streaming
   if ((lNbLines == m_Dimensions[1]) && (lNbColumns == m_Dimensions[0]))
     {
     otbMsgDevMacro(<< "Force l'offset de l'IORegion a 0");
@@ -520,78 +516,82 @@ void ONERAImageIO::Write(const void* buffer)
   tempmemory = NULL;
 }
 
+// To be consistent with the behavior of GDALImageIO
 void ONERAImageIO::WriteImageInformation()
 {
 
-  if (!this->OpenOneraHeaderFileForWriting(m_FileName.c_str()))
-    {
-    itkExceptionMacro(<< "Cannot read requested file");
-    }
+}
 
-  if (!this->OpenOneraDataFileForWriting(m_FileName.c_str()))
-    {
-    itkExceptionMacro(<< "Cannot read requested file");
-    }
+void ONERAImageIO::InternalWriteImageInformation()
+{
+    if (!this->OpenOneraHeaderFileForWriting(m_FileName.c_str()))
+      {
+      itkExceptionMacro(<< "Cannot read requested file");
+      }
 
-  /*-------- This part deals with writing header information ------ */
-  const std::string DataFileName = System::GetRootName(m_FileName.c_str()) + ".dat";
+    if (!this->OpenOneraDataFileForWriting(m_FileName.c_str()))
+      {
+      itkExceptionMacro(<< "Cannot read requested file");
+      }
 
-  m_Headerfile << "#                    [fichier en-tete produit par les routines de otb (Orfeo ToolBox) ]" <<
-  std::endl;
-  m_Headerfile << "# Nom du look :" << std::endl;
-  m_Headerfile << "Look.dat= \t" << DataFileName.c_str() <<  std::endl;
-  m_Headerfile << std::endl;
-  m_Headerfile << "# Structure du fichier et codage des pixels :" << std::endl;
-  m_Headerfile << "# 4 octets precedent la premiere ligne : ils correspondent a un nombre magique [I4= 33554433] " <<
-  std::endl;
-  m_Headerfile << "# [dans ordre LSBfirst = big-endian]" << std::endl;
+    /*-------- This part deals with writing header information ------ */
+    const std::string DataFileName = System::GetRootName(m_FileName.c_str()) + ".dat";
 
-  std::string sPixelType("cmplx_real_4");
-  if ((m_PixelType == COMPLEX) && (m_ComponentType == FLOAT))
-    {
-    sPixelType = "cmplx_real_4";
-    }
-  else
-    {
-    itkExceptionMacro(<< "data format not supported by OTB (only 'complex_real_4' is available)");
-    }
+    m_Headerfile << "#                    [fichier en-tete produit par les routines de otb (Orfeo ToolBox) ]" <<
+    std::endl;
+    m_Headerfile << "# Nom du look :" << std::endl;
+    m_Headerfile << "Look.dat= \t" << DataFileName.c_str() <<  std::endl;
+    m_Headerfile << std::endl;
+    m_Headerfile << "# Structure du fichier et codage des pixels :" << std::endl;
+    m_Headerfile << "# 4 octets precedent la premiere ligne : ils correspondent a un nombre magique [I4= 33554433] " <<
+    std::endl;
+    m_Headerfile << "# [dans ordre LSBfirst = big-endian]" << std::endl;
 
-  m_Headerfile << "Format_valeurs_look=    \t" << sPixelType << std::endl;
-  m_Headerfile << "Nb_case_par_ligne_look= \t" << m_Dimensions[0] << std::endl;
-  m_Headerfile << "Nb_ligne_look=          \t" << m_Dimensions[1] <<
-  " + 1 ligne en-tete en binaire (entiers 16 bit) " << std::endl;
+    std::string sPixelType("cmplx_real_4");
+    if ((m_PixelType == COMPLEX) && (m_ComponentType == CFLOAT))
+      {
+      sPixelType = "cmplx_real_4";
+      }
+    else
+      {
+      itkExceptionMacro(<< "data format not supported by OTB (only 'complex_real_4' is available) : ");
+      }
 
-  // write magic_number
-  int   magicNumber = ONERA_MAGIC_NUMBER;
-  short NbCol = static_cast<short>(m_Dimensions[0]);
-  short NbRow = static_cast<short>(m_Dimensions[1]);
-  int   ByteSizeCol = NbCol * 4 * 2;
+    m_Headerfile << "Format_valeurs_look=    \t" << sPixelType << std::endl;
+    m_Headerfile << "Nb_case_par_ligne_look= \t" << m_Dimensions[0] << std::endl;
+    m_Headerfile << "Nb_ligne_look=          \t" << m_Dimensions[1] <<
+    " + 1 ligne en-tete en binaire (entiers 16 bit) " << std::endl;
 
-//  itk::ByteSwapper< int>::SwapFromSystemToLittleEndian(&magicNumber);
-  m_Datafile.seekp(0, std::ios::beg);
-  m_Datafile.write((char*) (&magicNumber), 4);
+    // write magic_number
+    int   magicNumber = ONERA_MAGIC_NUMBER;
+    short NbCol = static_cast<short>(m_Dimensions[0]);
+    short NbRow = static_cast<short>(m_Dimensions[1]);
+    int   ByteSizeCol = NbCol * 4 * 2;
 
-  char * tab = new char[ByteSizeCol];
-  for (int i = 0; i < (NbRow + 1); ++i)
-    {
-    m_Datafile.write((char*) (tab), ByteSizeCol);
-    }
-  delete[] tab;
+  //  itk::ByteSwapper< int>::SwapFromSystemToLittleEndian(&magicNumber);
+    m_Datafile.seekp(0, std::ios::beg);
+    m_Datafile.write((char*) (&magicNumber), 4);
 
-  // write number of columns
-//  itk::ByteSwapper<short>::SwapFromSystemToLittleEndian(&NbCol);
+    char * tab = new char[ByteSizeCol];
+    for (int i = 0; i < (NbRow + 1); ++i)
+      {
+      m_Datafile.write((char*) (tab), ByteSizeCol);
+      }
+    delete[] tab;
 
-  m_Datafile.seekp(ONERA_HEADER_LENGTH + 2, std::ios::beg);
-  m_Datafile.write((char*) (&NbCol), 2);
+    // write number of columns
+  //  itk::ByteSwapper<short>::SwapFromSystemToLittleEndian(&NbCol);
 
-  otbMsgDebugMacro(<< "Driver to write: ONERA");
-  otbMsgDebugMacro(<< "         Write file         : " << m_FileName);
-  otbMsgDebugMacro(<< "         Size               : " << m_Dimensions[0] << "," << m_Dimensions[1]);
-  otbMsgDebugMacro(<< "         ComponentType      : " << this->GetComponentType());
-  otbMsgDebugMacro(<< "         NumberOfComponents : " << this->GetNumberOfComponents());
-  otbMsgDebugMacro(<< "         BytePerPixel       : " << m_BytePerPixel);
-  otbMsgDebugMacro(<< "         Host byte order    : " << this->GetByteOrderAsString(m_ByteOrder));
+    m_Datafile.seekp(ONERA_HEADER_LENGTH + 2, std::ios::beg);
+    m_Datafile.write((char*) (&NbCol), 2);
 
+    otbMsgDebugMacro(<< "Driver to write: ONERA");
+    otbMsgDebugMacro(<< "         Write file         : " << m_FileName);
+    otbMsgDebugMacro(<< "         Size               : " << m_Dimensions[0] << "," << m_Dimensions[1]);
+    otbMsgDebugMacro(<< "         ComponentType      : " << this->GetComponentType());
+    otbMsgDebugMacro(<< "         NumberOfComponents : " << this->GetNumberOfComponents());
+    otbMsgDebugMacro(<< "         BytePerPixel       : " << m_BytePerPixel);
+    otbMsgDebugMacro(<< "         Host byte order    : " << this->GetByteOrderAsString(m_ByteOrder));
 }
 
 } // end namespace otb

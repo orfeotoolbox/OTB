@@ -37,19 +37,19 @@ int otbImageFileWriterONERAComplex(int argc, char* argv[])
   const unsigned int Dimension = 2;
 
   typedef otb::Image<PixelType,  Dimension> ImageType;
+  typedef otb::ExtractROI<PixelType, PixelType>  ExtractROIFilterType;
 
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::ImageFileWriter<ImageType> WriterType;
 
   ReaderType::Pointer complexReader = ReaderType::New();
+  ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
+  WriterType::Pointer complexWriter = WriterType::New();
 
+  // Reader Parameters
   complexReader->SetFileName(inputFilename);
 
-  typedef otb::ExtractROI<PixelType,
-      PixelType>  ExtractROIFilterType;
-
-  ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
-
+  // Extract ROI Parameters
   extractROIFilter->SetStartX(20);
   extractROIFilter->SetStartY(20);
   extractROIFilter->SetSizeX(100);
@@ -57,9 +57,11 @@ int otbImageFileWriterONERAComplex(int argc, char* argv[])
   extractROIFilter->SetInput(complexReader->GetOutput());
   extractROIFilter->Update();
 
-  WriterType::Pointer complexWriter = WriterType::New();
+  // Writer Parameters
   complexWriter->SetFileName(outputFilename);
   complexWriter->SetInput(extractROIFilter->GetOutput());
+
+  // Update the pipeline and Write the data
   complexWriter->Update();
 
   return EXIT_SUCCESS;

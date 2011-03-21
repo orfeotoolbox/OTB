@@ -27,7 +27,9 @@ FltkWriterWatcher
 ::FltkWriterWatcher(itk::ProcessObject* process,
                     int x, int y, int w, int h,
                     const char *comment)
-  : WriterWatcherBase(process, comment)
+  : WriterWatcherBase(process, comment),
+    m_CurrentFilterProgress(0),
+    m_CurrentWriterProgress(0)
 {
   this->BuildGUI(x, y, w, h, comment);
 }
@@ -37,7 +39,9 @@ FltkWriterWatcher
                     itk::ProcessObject* source,
                     int x, int y, int w, int h,
                     const char *comment)
-  : WriterWatcherBase(process, source, comment)
+  : WriterWatcherBase(process, source, comment),
+    m_CurrentFilterProgress(0),
+    m_CurrentWriterProgress(0)
 {
   this->BuildGUI(x, y, w, h, comment);
 }
@@ -76,6 +80,76 @@ FltkWriterWatcher
   delete m_WriterProgress;
   delete m_FilterProgress;
   delete m_Window;
+}
+
+
+void
+FltkWriterWatcher
+::StartFilter()
+{
+  m_Window->show();
+  m_FilterProgress->show();
+  m_WriterProgress->show();
+  Fl::check();
+}
+
+void
+FltkWriterWatcher
+::ShowFilterProgress()
+{
+  if (m_SourceProcess)
+    {
+    double progress = m_SourceProcess->GetProgress();
+
+    // Update only at each 0.5 percent
+    if (progress - m_CurrentFilterProgress > 0.005)
+      {
+      m_FilterProgress->value(progress);
+      m_CurrentFilterProgress = progress;
+      Fl::check();
+      }
+    }
+}
+
+void
+FltkWriterWatcher
+::EndFilter()
+{
+}
+
+void
+FltkWriterWatcher
+::StartWriter()
+{
+  m_Window->show();
+  m_FilterProgress->show();
+  m_WriterProgress->show();
+  Fl::check();
+}
+
+void
+FltkWriterWatcher
+::ShowWriterProgress()
+{
+  if (m_Process)
+    {
+    double progress = m_Process->GetProgress();
+
+    // Update only at each 0.5 percent
+    if (progress - m_CurrentWriterProgress > 0.005)
+      {
+      m_WriterProgress->value(progress);
+      m_CurrentWriterProgress = progress;
+      Fl::check();
+      }
+    }
+}
+
+void
+FltkWriterWatcher
+::EndWriter()
+{
+  m_Window->hide();
 }
 
 } // end namespace otb

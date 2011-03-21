@@ -20,8 +20,7 @@
 
 #include "itkMacro.h"
 #include "itkImageToImageFilter.h"
-#include "itkImageRegionSplitter.h"
-#include "otbStreamingTraits.h"
+#include "otbStreamingManager.h"
 
 namespace otb
 {
@@ -45,7 +44,7 @@ namespace otb
  * \sa PersistentStatisticsImageFilter
  * \sa PersistentImageStreamingDecorator.
  */
-template <class TInputImage>
+template <class TInputImage, class TStreamingManager = StreamingManager<TInputImage> >
 class ITK_EXPORT StreamingImageVirtualWriter : public itk::ImageToImageFilter<TInputImage, TInputImage>
 {
 public:
@@ -68,86 +67,62 @@ public:
   typedef typename InputImageType::PixelType  InputImagePixelType;
 
   /** Streaming traits helper typedef */
-  typedef StreamingTraits<InputImageType> StreamingTraitsType;
+  typedef TStreamingManager                      StreamingManagerType;
+  typedef typename StreamingManagerType::Pointer StreamingManagerPointerType;
 
   /** Dimension of input image. */
   itkStaticConstMacro(InputImageDimension, unsigned int,
                       InputImageType::ImageDimension);
 
-  /** Set/Get the image input of this writer.  */
-  void SetInput(const InputImageType *input);
-  const InputImageType * GetInput(void);
-  const InputImageType * GetInput(unsigned int idx);
+  StreamingManagerType* GetStreamingManager(void)
+    {
+    return m_StreamingManager;
+    }
 
-  void SetNthInput(unsigned int idx, const InputImageType *input);
-
-
-  /** SmartPointer to a region splitting object */
-  typedef itk::ImageRegionSplitter<itkGetStaticConstMacro(InputImageDimension)> SplitterType;
-  typedef typename SplitterType::Pointer                                        RegionSplitterPointer;
-
-  /**  Set buffer memory size (in bytes) use to calculate the number of stream divisions */
-  void SetBufferMemorySize(unsigned long);
-
-  /**  Set the buffer number of lines use to calculate the number of stream divisions */
-  void SetBufferNumberOfLinesDivisions(unsigned long);
-
-  /**  The number of stream divisions is calculate by using
-   * OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING and
-   * OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING cmake variables.
-   */
-  void SetAutomaticNumberOfStreamDivisions(void);
-
-  /** Set the tiling automatic mode for streaming division */
-  void SetTilingStreamDivisions(void);
-  /** Choose number of divisions in tiling streaming division */
-  void SetTilingStreamDivisions(unsigned long);
-
-  /** Return the string to indicate the method use to calculate number of stream divisions. */
-  std::string GetMethodUseToCalculateNumberOfStreamDivisions(void);
-
-  /** Set the number of pieces to divide the input.  The upstream pipeline
-   * will be executed this many times. */
-  void SetNumberOfStreamDivisions(unsigned long);
-
-  /** Get the number of pieces to divide the input. The upstream pipeline
-   * will be executed this many times. */
-  unsigned long GetNumberOfStreamDivisions(void);
-
-  /** Set the helper class for dividing the input into chunks. */
-  itkSetObjectMacro(RegionSplitter, SplitterType);
-
-  /** Get the helper class for dividing the input into chunks. */
-  itkGetObjectMacro(RegionSplitter, SplitterType);
-
-  /** Type use to define number of divisions */
-  typedef StreamingMode CalculationDivisionEnumType;
-
-  virtual void GenerateInputRequestedRegion(void);
+  void SetStreamingManager(StreamingManagerType* streamingManager)
+    {
+    m_StreamingManager = streamingManager;
+    }
 
 protected:
   StreamingImageVirtualWriter();
+
   virtual ~StreamingImageVirtualWriter();
+
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   virtual void GenerateData(void);
+
+  virtual void GenerateInputRequestedRegion(void);
 
 private:
   StreamingImageVirtualWriter(const StreamingImageVirtualWriter &); //purposely not implemented
   void operator =(const StreamingImageVirtualWriter&); //purposely not implemented
 
-  /** This method calculate the number of stream divisions, by using the CalculationDivision type */
-  unsigned long CalculateNumberOfStreamDivisions(void);
+  void ObserveSourceFilterProgress(itk::Object* object, const itk::EventObject & event )
+  {
+    if (typeid(event) != typeid(itk::ProgressEvent))
+      {
+      return;
+      }
 
-  /** Use to define the method used to calculate number of divisions */
-  unsigned long m_BufferMemorySize;
-  unsigned long m_BufferNumberOfLinesDivisions;
-  unsigned long m_NumberOfStreamDivisions;
+    itk::ProcessObject* processObject = dynamic_cast<itk::ProcessObject*>(object);
+    if (processObject)
+      m_DivisionProgress = processObject->GetProgress();
 
-  RegionSplitterPointer m_RegionSplitter;
+    this->UpdateFilterProgress();
+  }
 
-  /** Use to determine method of calculation number of divisions */
-  CalculationDivisionEnumType m_CalculationDivision;
+  void UpdateFilterProgress()
+  {
+    this->UpdateProgress( (m_DivisionProgress + m_CurrentDivision) / m_NumberOfDivisions );
+  }
+
+  unsigned int m_NumberOfDivisions;
+  unsigned int m_CurrentDivision;
+  float m_DivisionProgress;
+
+  StreamingManagerPointerType m_StreamingManager;
 };
 
 } // end namespace otb

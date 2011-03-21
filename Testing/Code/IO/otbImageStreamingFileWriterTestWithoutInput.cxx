@@ -26,6 +26,7 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
+#include "otbStreamingImageFileWriter.h"
 
 #include "itkExceptionObject.h"
 #include "itkImageRegionIterator.h"
@@ -36,21 +37,21 @@
  * Write Image<scalar> with an ImageFileWriter<scalar>
  ***********/
 template<class InternalType>
-int otbImageScalarFileWriterTestWithoutInputGeneric(int argc, char* argv[])
+int otbImageScalarStreamingFileWriterTestWithoutInputGeneric(int argc, char* argv[])
 {
   // Verify the number of parameters in the command line
   const char * outputFilename = argv[1];
 
-  typedef InternalType                         PixelType;
-  typedef otb::Image<PixelType, 2>             ImageType;
-  typedef typename ImageType::PixelType        ImagePixelType;
-  typedef typename ImageType::RegionType       RegionType;
-  typedef typename ImageType::SizeType         SizeType;
-  typedef typename ImageType::IndexType        IndexType;
-  typedef itk::ImageRegionIterator<ImageType>  IteratorType;
-  typedef otb::ImageFileWriter<ImageType>      WriterType;
+  typedef InternalType                                  PixelType;
+  typedef otb::Image<PixelType, 2>                      ImageType;
+  typedef typename ImageType::PixelType                 ImagePixelType;
+  typedef typename ImageType::RegionType                RegionType;
+  typedef typename ImageType::SizeType                  SizeType;
+  typedef typename ImageType::IndexType                 IndexType;
+  typedef itk::ImageRegionIterator<ImageType>           IteratorType;
+  typedef otb::StreamingImageFileWriter<ImageType>      WriterType;
 
-  typename ImageType::Pointer image = ImageType::New();
+  typename ImageType::Pointer  image = ImageType::New();
   typename WriterType::Pointer writer = WriterType::New();
 
   SizeType size;
@@ -77,6 +78,7 @@ int otbImageScalarFileWriterTestWithoutInputGeneric(int argc, char* argv[])
     }
 
   writer->SetFileName(outputFilename);
+  writer->SetNumberOfStreamDivisions(10);
   writer->SetInput(image);
   writer->Update();
 
@@ -84,21 +86,21 @@ int otbImageScalarFileWriterTestWithoutInputGeneric(int argc, char* argv[])
   return EXIT_SUCCESS;
 }
 
-int otbImageScalarFileWriterTestWithoutInputShort(int argc, char * argv[])
+int otbImageScalarStreamingFileWriterTestWithoutInputShort(int argc, char * argv[])
 {
-  return otbImageScalarFileWriterTestWithoutInputGeneric<short>(argc, argv);
+  return otbImageScalarStreamingFileWriterTestWithoutInputGeneric<short>(argc, argv);
 }
-int otbImageScalarFileWriterTestWithoutInputInt(int argc, char * argv[])
+int otbImageScalarStreamingFileWriterTestWithoutInputInt(int argc, char * argv[])
 {
-  return otbImageScalarFileWriterTestWithoutInputGeneric<int>(argc, argv);
+  return otbImageScalarStreamingFileWriterTestWithoutInputGeneric<int>(argc, argv);
 }
-int otbImageScalarFileWriterTestWithoutInputFloat(int argc, char * argv[])
+int otbImageScalarStreamingFileWriterTestWithoutInputFloat(int argc, char * argv[])
 {
-  return otbImageScalarFileWriterTestWithoutInputGeneric<float>(argc, argv);
+  return otbImageScalarStreamingFileWriterTestWithoutInputGeneric<float>(argc, argv);
 }
-int otbImageScalarFileWriterTestWithoutInputDouble(int argc, char * argv[])
+int otbImageScalarStreamingFileWriterTestWithoutInputDouble(int argc, char * argv[])
 {
-  return otbImageScalarFileWriterTestWithoutInputGeneric<double>(argc, argv);
+  return otbImageScalarStreamingFileWriterTestWithoutInputGeneric<double>(argc, argv);
 }
 
 /***********
@@ -106,19 +108,19 @@ int otbImageScalarFileWriterTestWithoutInputDouble(int argc, char * argv[])
  * Write Image<scalar> with an ImageFileWriter<scalar>
  ***********/
 template<class InternalType>
-int otbImageComplexFileWriterTestWithoutInputGeneric(int argc, char* argv[])
+int otbImageComplexStreamingFileWriterTestWithoutInputGeneric(int argc, char* argv[])
 {
   // Verify the number of parameters in the command line
   const char * outputFilename = argv[1];
 
-  typedef std::complex<InternalType>           PixelType;
-  typedef otb::Image<PixelType, 2>             ImageType;
-  typedef typename ImageType::PixelType        ImagePixelType;
-  typedef typename ImageType::RegionType       RegionType;
-  typedef typename ImageType::SizeType         SizeType;
-  typedef typename ImageType::IndexType        IndexType;
-  typedef itk::ImageRegionIterator<ImageType>  IteratorType;
-  typedef otb::ImageFileWriter<ImageType>      WriterType;
+  typedef std::complex<InternalType>                    PixelType;
+  typedef otb::Image<PixelType, 2>                      ImageType;
+  typedef typename ImageType::PixelType                 ImagePixelType;
+  typedef typename ImageType::RegionType                RegionType;
+  typedef typename ImageType::SizeType                  SizeType;
+  typedef typename ImageType::IndexType                 IndexType;
+  typedef itk::ImageRegionIterator<ImageType>           IteratorType;
+  typedef otb::StreamingImageFileWriter<ImageType>      WriterType;
 
   typename ImageType::Pointer image = ImageType::New();
   typename WriterType::Pointer writer = WriterType::New();
@@ -148,13 +150,12 @@ int otbImageComplexFileWriterTestWithoutInputGeneric(int argc, char* argv[])
 
     PixelType pixelVal  (realPart, imagPart);
 
-    //std::cout << "pixelVal = " << pixelVal <<std::endl;
     it.Set(pixelVal);
-    //std::cout << "pixelVal = " <<it.Get() <<std::endl;
     ++it;
     }
 
   writer->SetFileName(outputFilename);
+  writer->SetNumberOfStreamDivisions(10);
   writer->SetInput(image);
   writer->Update();
 
@@ -163,19 +164,19 @@ int otbImageComplexFileWriterTestWithoutInputGeneric(int argc, char* argv[])
 }
 
 
-int otbImageComplexFileWriterTestWithoutInputShort(int argc, char * argv[])
+int otbImageComplexStreamingFileWriterTestWithoutInputShort(int argc, char * argv[])
 {
-  return otbImageComplexFileWriterTestWithoutInputGeneric<short>(argc, argv);
+  return otbImageComplexStreamingFileWriterTestWithoutInputGeneric<short>(argc, argv);
 }
-int otbImageComplexFileWriterTestWithoutInputInt(int argc, char * argv[])
+int otbImageComplexStreamingFileWriterTestWithoutInputInt(int argc, char * argv[])
 {
-  return otbImageComplexFileWriterTestWithoutInputGeneric<int>(argc, argv);
+  return otbImageComplexStreamingFileWriterTestWithoutInputGeneric<int>(argc, argv);
 }
-int otbImageComplexFileWriterTestWithoutInputFloat(int argc, char * argv[])
+int otbImageComplexStreamingFileWriterTestWithoutInputFloat(int argc, char * argv[])
 {
-  return otbImageComplexFileWriterTestWithoutInputGeneric<float>(argc, argv);
+  return otbImageComplexStreamingFileWriterTestWithoutInputGeneric<float>(argc, argv);
 }
-int otbImageComplexFileWriterTestWithoutInputDouble(int argc, char * argv[])
+int otbImageComplexStreamingFileWriterTestWithoutInputDouble(int argc, char * argv[])
 {
-  return otbImageComplexFileWriterTestWithoutInputGeneric<double>(argc, argv);
+  return otbImageComplexStreamingFileWriterTestWithoutInputGeneric<double>(argc, argv);
 }

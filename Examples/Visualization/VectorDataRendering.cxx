@@ -101,7 +101,7 @@ int main( int argc, char * argv[] )
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
   reader->UpdateOutputInformation();
-  std::cout << "NumBands: " << reader->GetOutput()->GetNumberOfComponentsPerPixel() << std::endl;
+  //std::cout << "NumBands: " << reader->GetOutput()->GetNumberOfComponentsPerPixel() << std::endl;
 
   // Instantiation of the visualization elements
   typedef otb::ImageLayerRenderingModel<OutputImageType>     ModelType;
@@ -181,12 +181,14 @@ int main( int argc, char * argv[] )
   vectorDataRendering->SetSpacing(spacing);
   vectorDataRendering->SetScaleFactor(2.4);
   if (inFont)
+    {
     vectorDataRendering->SetFontFileName(fontfilename);
+    vectorDataRendering->AddStyle("roads-text");
+    }
   // set up the style we want to use
   vectorDataRendering->AddStyle("minor-roads-casing");
   vectorDataRendering->AddStyle("minor-roads");
   vectorDataRendering->AddStyle("roads");
-  vectorDataRendering->AddStyle("roads-text");
 
   // rendering of the quicklook: the quicklook is at an entire different scale, so we don't want to
   // render the same roads (only the main one).
@@ -194,7 +196,7 @@ int main( int argc, char * argv[] )
   vectorDataRenderingQL->SetInput(projection->GetOutput());
 
   double qlRatio = generator->GetOptimalSubSamplingRate();
-  std::cout << "Subsampling for QL: " << qlRatio << std::endl;
+  //std::cout << "Subsampling for QL: " << qlRatio << std::endl;
   ImageType::SizeType sizeQL;
   sizeQL[0] = size[0]/qlRatio;
   sizeQL[1] = size[1]/qlRatio;
@@ -208,11 +210,14 @@ int main( int argc, char * argv[] )
   vectorDataRenderingQL->SetSpacing(spacingQL);
   vectorDataRenderingQL->SetScaleFactor(2.4*qlRatio);
   if (inFont)
+    {
     vectorDataRenderingQL->SetFontFileName(fontfilename);
+    vectorDataRenderingQL->AddStyle("roads-text");
+    }
   vectorDataRenderingQL->AddStyle("minor-roads-casing");
   vectorDataRenderingQL->AddStyle("minor-roads");
   vectorDataRenderingQL->AddStyle("roads");
-  vectorDataRenderingQL->AddStyle("roads-text");
+
 
   // Now we are ready to create this second layer
   typedef otb::ImageLayer<OutputImageType, OutputImageType>                 LayerRGBAType;

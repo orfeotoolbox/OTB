@@ -86,6 +86,24 @@ public:
 protected:
 
   /** Callback method to show the ProgressEvent */
+  virtual void ShowProgressCallback()
+  {
+    this->ShowProgress();
+  }
+
+  /** Callback method to show the StartEvent */
+  virtual void StartFilterCallback()
+  {
+    this->StartFilter();
+  }
+
+  /** Callback method to show the EndEvent */
+  virtual void EndFilterCallback()
+  {
+    this->EndFilter();
+  }
+
+  /** Callback method to show the ProgressEvent */
   virtual void ShowProgress() = 0;
 
   /** Callback method to show the StartEvent */
