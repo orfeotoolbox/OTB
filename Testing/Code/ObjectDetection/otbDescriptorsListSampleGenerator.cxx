@@ -157,15 +157,7 @@ int otbDescriptorsListSampleGenerator(int argc, char* argv[])
   descriptorsGenerator->SetDescriptorsFunction(descriptorsFunction.GetPointer());
   descriptorsGenerator->SetNeighborhoodRadius(neighborhood);
 
-  if (streaming == 0)
-    {
-    descriptorsGenerator->GetStreamer()->SetNumberOfStreamDivisions(1);
-    }
-  else
-    {
-    descriptorsGenerator->GetStreamer()->SetNumberOfStreamDivisions(streaming);
-    }
-
+  descriptorsGenerator->GetStreamer()->GetStreamingManager()->SetStrippedNumberOfLinesStreamingMode(streaming);
   descriptorsGenerator->Update();
 
 
@@ -240,16 +232,7 @@ int otbDescriptorsSVMModelCreation(int argc, char* argv[])
   descriptorsGenerator->SetSamplesLocations(vectorDataReader->GetOutput());
   descriptorsGenerator->SetDescriptorsFunction(descriptorsFunction.GetPointer());
   descriptorsGenerator->SetNeighborhoodRadius(5);
-
-  if (streaming == 0)
-    {
-    descriptorsGenerator->GetStreamer()->SetNumberOfStreamDivisions(1);
-    }
-  else
-    {
-    descriptorsGenerator->GetStreamer()->SetNumberOfStreamDivisions(streaming);
-    }
-
+  descriptorsGenerator->GetStreamer()->GetStreamingManager()->SetStrippedNumberOfLinesStreamingMode(streaming);
   descriptorsGenerator->Update();
 
   // Normalize the samples

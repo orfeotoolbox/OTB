@@ -84,7 +84,6 @@ int otbVectorImageStreamingFileWriterScalarTestWithoutInputGeneric(int argc, cha
   IteratorType it(image, image->GetLargestPossibleRegion());
   it.GoToBegin();
 
-  double val = 0.;
   ImagePixelType pixVal;
   pixVal.SetSize(atoi(argv[3]));
 
@@ -104,7 +103,6 @@ int otbVectorImageStreamingFileWriterScalarTestWithoutInputGeneric(int argc, cha
   writer->SetNumberOfStreamDivisions(10);
   writer->SetInput(image);
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }
@@ -180,7 +178,6 @@ int otbVectorImageStreamingFileWriterComplexTestWithoutInputGeneric(int argc, ch
   IteratorType it(image, image->GetLargestPossibleRegion());
   it.GoToBegin();
 
-  double val = 0.;
   ImagePixelType pixVal;
   pixVal.SetSize(atoi(argv[3]));
 

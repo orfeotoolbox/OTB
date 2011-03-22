@@ -26,6 +26,8 @@
 #include "otbVectorImage.h"
 #include "otbHermitianEigenAnalysis.h"
 #include "itkVariableLengthVector.h"
+#include "vnl/algo/vnl_complex_eigensystem.h"
+#include <complex>
 
 
 int otbHermitianEigenAnalysisTest(int argc, char * argv[])
@@ -37,6 +39,7 @@ int otbHermitianEigenAnalysisTest(int argc, char * argv[])
   typedef otb::HermitianEigenAnalysis<MatrixType, EigenvalueType, EigenMatrixType> FilterType;
 
   EigenMatrixType resEigVal;
+
   itk::Vector<float, 6> temp;
   temp[0] = 0.162793;
   temp[1] = -0.432753;
@@ -114,6 +117,44 @@ int otbHermitianEigenAnalysisTest(int argc, char * argv[])
    
     return EXIT_FAILURE;
   }
+
+  std::cout<<"Values: "<<vect<<std::endl;
+  std::cout<<"Vectors: "<<eigVal<<std::endl;
+
+
+  typedef std::complex<double> ComplexType;
+  vnl_matrix<ComplexType> vnlMat(3, 3, 0);
+  vnlMat[0][0] = ComplexType(0., 0.);
+  vnlMat[0][1] = ComplexType(1.5, 2.);
+  vnlMat[0][2] = ComplexType(2.5, 3.);
+  vnlMat[1][0] = ComplexType(1.5, -2.);
+  vnlMat[1][1] = ComplexType(0.5, 0.);
+  vnlMat[1][2] = ComplexType(3.5, 4.);
+  vnlMat[2][0] = ComplexType(2.5, -3.);
+  vnlMat[2][1] = ComplexType(3.5, -4.);
+  vnlMat[2][2] = ComplexType(1., 0.);
+
+  std::cout<<"Matrix:: "<<std::endl;
+  vnlMat.print(std::cout);
+
+  vnl_complex_eigensystem syst(vnlMat, true, true);
+
+  vnl_matrix< ComplexType > pm = syst.L;
+ std::cout<<"Left:: "<<std::endl;
+  pm.print(std::cout);
+  std::cout<<"Right:: "<<std::endl;
+
+
+  pm = syst.R;
+  pm.print(std::cout);
+  std::cout<<"W:: "<<std::endl;
+  vnl_vector< ComplexType > lol = syst.W;
+
+  for(unsigned i=0; i<lol.size(); i++)
+  {
+    std::cout<<"  "<<lol[i];
+  }
+  std::cout<<std::endl;
 
   return EXIT_SUCCESS;
 }

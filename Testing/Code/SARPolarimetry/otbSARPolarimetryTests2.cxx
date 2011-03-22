@@ -42,7 +42,6 @@ void RegisterTests()
   REGISTER_TEST(otbMuellerToPolarisationDegreeAndPowerImageFilter);
   REGISTER_TEST(otbMuellerToCovarianceImageFilterNew);
   REGISTER_TEST(otbMuellerToCovarianceImageFilter);
-  REGISTER_TEST(otbHermitianEigenAnalysisTest);
   REGISTER_TEST(otbPolarimetricDataNew);
   REGISTER_TEST(otbPolarimetricDataTest);
 }

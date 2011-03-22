@@ -53,6 +53,7 @@ int otbImageLayerScalar(int argc, char * argv[])
   // Quicklook
   shrinker->SetInput(reader->GetOutput());
   shrinker->SetShrinkFactor(ssrate);
+  shrinker->Update();
 
   // new layer
   LayerType::Pointer layer = LayerType::New();
