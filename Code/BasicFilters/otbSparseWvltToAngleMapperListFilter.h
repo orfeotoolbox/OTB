@@ -22,6 +22,8 @@
 
 #include "itkNumericTraits.h"
 
+#include "otbMath.h"
+
 namespace otb {
 
 namespace Functor {
@@ -55,7 +57,7 @@ namespace Functor {
 
       TOutput operator() ( const TInput & x1, const TInput & x2 ) const
       {
-        return vcl_atan2( x2 / x1 );
+        return vcl_atan2( x2, x1 );
       }
 
     protected:
@@ -76,18 +78,16 @@ class SparseWvltToAngleMapperListFilter
   : public ITK_EXPORT BinaryFunctorImageListToSampleListFilter < 
                         TInputImageList, TOutputSampleList,
                         Functor::SparseWvltToAngleMapperFunctor< 
-                          typename itk::ImageRegionConstIterator< 
-                            typename TInputImageList::ImageType >,
+                          typename TInputImageList::ImageType::PixelType,
                           typename TOutputSampleList::MeasurementVectorType::ValueType > >
 {
 public:
   /** Standard typedefs. */
-  typedef SparseWvltToAngleMapperFunctor Self;
+  typedef SparseWvltToAngleMapperListFilter Self;
   typedef BinaryFunctorImageListToSampleListFilter < 
             TInputImageList, TOutputSampleList,
             Functor::SparseWvltToAngleMapperFunctor< 
-              typename itk::ImageRegionConstIterator< 
-                typename TInputImageList::ImageType >,
+                typename TInputImageList::ImageType::PixelType,
               typename TOutputSampleList::MeasurementVectorType::ValueType > >
           Superclass;
   typedef itk::SmartPointer<Self> Pointer;
@@ -100,11 +100,11 @@ public:
   itkTypeMacro(SparseWvltToAngleMapperListFilter, BinaryFunctorImageListToSampleListFilter);
 
 protected:
-  SparseWvltToAngleMapperFunctor() { }
-  virtual ~SparseWvltToAngleMapperFunctor() { }
+  SparseWvltToAngleMapperListFilter() { }
+  virtual ~SparseWvltToAngleMapperListFilter() { }
 
 private:
-  SparseWvltToAngleMapperFunctor(const Self &); // not implemented
+  SparseWvltToAngleMapperListFilter(const Self &); // not implemented
   void operator=(const Self &);
 }; // end of class
                         

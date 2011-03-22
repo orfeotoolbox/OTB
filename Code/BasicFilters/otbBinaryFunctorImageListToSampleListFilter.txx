@@ -19,6 +19,8 @@
 #define __otbBinaryFunctorImageListToSampleListFilter_txx
 #include "otbBinaryFunctorImageListToSampleListFilter.h"
 
+#include "itkProgressReporter.h"
+
 namespace otb {
 
 template < class TInputImageList, class TOutputSampleList, class TFunction >
@@ -129,13 +131,13 @@ void
 BinaryFunctorImageListToSampleListFilter< TInputImageList, TOutputSampleList, TFunction >
 ::GenerateData ()
 {
-  InputImageListType * list1 = this->GetInput1();
+  const InputImageListType * list1 = this->GetInput1();
   InputImageListConstIteratorType listIterator1 = list1->Begin();
 
-  InputImageListType * list2 = this->GetInput2();
+  const InputImageListType * list2 = this->GetInput2();
   InputImageListConstIteratorType listIterator2 = list2->Begin();
 
-  OutputSampleListType * outputList = this->GetOutput();
+  OutputSampleListType * outputList = this->GetOutputSampleList();
 
   // Set-up progress reporting
   itk::ProgressReporter progress(this, 0, list1->Size());
@@ -144,11 +146,11 @@ BinaryFunctorImageListToSampleListFilter< TInputImageList, TOutputSampleList, TF
           && listIterator2 != list2->End() )
   {
     InputImageType * img1 = listIterator1.Get();
-    ImageRegionConstIterator it1 ( img1, img1->GetLargestPossibleRegion() );
+    ImageConstIteratorType it1 ( img1, img1->GetLargestPossibleRegion() );
     it1.GoToBegin();
 
     InputImageType * img2 = listIterator2.Get();
-    ImageRegionConstIterator it2 ( img2, img2->GetLargestPossibleRegion() );
+    ImageConstIteratorType it2 ( img2, img2->GetLargestPossibleRegion() );
     it2.GoToBegin();
 
     while ( !it1.IsAtEnd() && !it2.IsAtEnd() )

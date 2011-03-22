@@ -523,7 +523,7 @@ ADD_TEST(hyTvVCAImageFilter_AVIRIS
 
 ADD_TEST(bfTuSparseWvltToAngleMapperListFilter
 		${TESTEXE_DIR}/otbHyperTests1
-		otbSparseWvltToAngleMapperListFilter)
+		otbSparseWvltToAngleMapperListFilterNewTest)
 
 
 ###################

@@ -145,7 +145,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbBinaryFunctorImageListToSampleListFilter.h"
+#include "otbBinaryFunctorImageListToSampleListFilter.txx"
 #endif
 
 #endif 

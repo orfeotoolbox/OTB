@@ -19,6 +19,7 @@
 #include "otbImage.h"
 #include "otbImageList.h"
 #include "itkListSample.h"
+#include "itkFixedArray.h"
 
 #include "otbSparseWvltToAngleMapperListFilter.h"
 
@@ -29,7 +30,7 @@ int otbSparseWvltToAngleMapperListFilterNewTest ( int argc, char * argv[] )
   typedef otb::Image< PixelType, Dimension > ImageType;
   typedef otb::ImageList< ImageType > ImageListType;
 
-  typedef itk::Statistics::ListSample< PixelType > SampleType;
+  typedef itk::Statistics::ListSample< itk::FixedArray< ImageType::PixelType, 1 > > SampleType;
 
   typedef otb::SparseWvltToAngleMapperListFilter< ImageListType, SampleType > FilterType;
 
