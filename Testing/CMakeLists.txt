@@ -29,6 +29,7 @@ SET( otbHyperTests1_SRC
   otbMNFImageFilter.cxx
   otbNAPCAImageFilter.cxx
   otbFastICAImageFilter.cxx
+  otbSparseWvltToAngleMapperListFilter.cxx
 )
 
 ADD_EXECUTABLE(otbHyperTests1 ${otbHyperTests1_SRC} otbHyperTests1.cxx)
@@ -520,6 +521,9 @@ ADD_TEST(hyTvVCAImageFilter_AVIRIS
          ${TEMP}/aviris_vcaimagefilter_13.hdr
          13 )
 
+ADD_TEST(bfTuSparseWvltToAngleMapperListFilter
+		${TESTEXE_DIR}/otbHyperTests1
+		otbSparseWvltToAngleMapperListFilter)
 
 
 ###################

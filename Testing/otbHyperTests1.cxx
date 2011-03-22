@@ -70,4 +70,5 @@ void RegisterTests()
   REGISTER_TEST(otbFastICAInternalOptimizerVectorImageFilterNewTest);
   REGISTER_TEST(otbFastICAImageFilterNewTest);
   REGISTER_TEST(otbFastICAImageFilterTest);
+  REGISTER_TEST(otbSparseWvltToAngleMapperListFilter);
 }
