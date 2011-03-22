@@ -23,98 +23,88 @@
 
 int otbCompareAsciiTestsEpsilon3_WhiteSpace(int argc, char * argv[])
 {
-  /*if (argc != 3)
-    {
-    std::cerr << "Usage: " << argv[0];
-    std::cerr << " referenceFile testFile" << std::endl;
-    return EXIT_FAILURE;
-    }
+  std::cout << "ASCII COMPARISON TEST :" << std::endl;
 
-  std::ofstream fileRef;
-  fileRef.open(argv[1]);
-  fileRef << "1\n";
-  fileRef << "1\n";
-  fileRef << "1\n";
-  fileRef << "2\n";
-  fileRef << "2\n";
-  fileRef << "2\n";
-  fileRef << "3\n";
-  fileRef << "3\n";
-  fileRef << "3\n";
-  fileRef << "4\n";
-  fileRef << "4\n";
-  fileRef << "4\n";
-  fileRef << "A = 10\n";
-  fileRef << "A = 11\n";
-  fileRef << "A = 12\n";
-  fileRef << "B =10\n";
-  fileRef << "B =11\n";
-  fileRef << "B =12\n";
-  fileRef << "C= 10\n";
-  fileRef << "C= 11\n";
-  fileRef << "C= 12\n";
-  fileRef << "D=10\n";
-  fileRef << "D=11\n";
-  fileRef << "D=12\n";
-  fileRef << "E = 10\n";
-  fileRef << "E = 11\n";
-  fileRef << "E = 12\n";
-  fileRef << "F = [20, 21, 22]\n";
-  fileRef << "F = [20, 21, 22]\n";
-  fileRef << "F = [20, 21, 22]\n";
-  fileRef << "G = [20, 21, 22]\n";
-  fileRef << "G = [20, 21, 22]\n";
-  fileRef << "G = [20, 21, 22]\n";
-  fileRef << "H = [ 20 , 21 , 22 ]\n";
-  fileRef << "H = [ 20 , 21 , 22 ]\n";
-  fileRef << "H = [ 20 , 21 , 22 ]\n";
-  fileRef << "I = [120, 121, 122]\n";
-  fileRef << "I = [120, 121, 122]\n";
-  fileRef << "I = [120, 121, 122]\n";
-  fileRef.close();
+  std::cout << "nb of differences should be equal to 30 (for more details see the test function)" << std::endl;
 
-  std::ofstream fileTest;
-  fileTest.open(argv[2]);
-  fileTest << "1\n";
-  fileTest << "1.001\n";
-  fileTest << "1.010\n";
-  fileTest << " 2\n";
-  fileTest << " 2.001\n";
-  fileTest << " 2.010\n";
-  fileTest << "3\n ";
-  fileTest << "3.001 \n";
-  fileTest << "3.010 \n";
-  fileTest << "     4     \n ";
-  fileTest << "     4.001     \n";
-  fileTest << "     4.010     \n";
-  fileTest << "A = 10\n";
-  fileTest << "A = 11.001\n";
-  fileTest << "A = 12.010\n";
-  fileTest << "B =10\n";
-  fileTest << "B =11.001\n";
-  fileTest << "B =12.010\n";
-  fileTest << "C= 10\n";
-  fileTest << "C= 11.001\n";
-  fileTest << "C= 12.010\n";
-  fileTest << "D=10\n";
-  fileTest << "D=11.001\n";
-  fileTest << "D=12.010\n";
-  fileTest << "E =         10\n";
-  fileTest << "E =         11.001\n";
-  fileTest << "E =         12.010\n";
-  fileTest << "F = [20, 21, 22]\n";
-  fileTest << "F = [20.001, 21.001, 22.001]\n";
-  fileTest << "F = [20.010, 21.010, 22.010]\n";
-  fileTest << "G = [20, 21, 22]\n";
-  fileTest << "G = [20.001, 21.001, 22.001]\n";
-  fileTest << "G = [20.010, 21.010, 22.010]\n";
-  fileTest << "H = [ 20 , 21 , 22 ]\n";
-  fileTest << "H = [ 20.001 , 21.001 , 22.001 ]\n";
-  fileTest << "H = [ 20.010 , 21.010 , 22.010 ]\n";
-  fileTest << "I = [320, 321, 322]\n";
-  fileTest << "I = [120, 321, 122]\n";
-  fileTest << "I = [120, 320, 122]\n";
-  fileTest.close();
+  /*std::cout << "L1 expected = true and output = true" << std::endl;
+  std::cout << "L2 expected = true and output = true" << std::endl;
+  std::cout << "L3 expected = false and output = false" << std::endl;
+  std::cout << "L4 expected = true and output = true" << std::endl;
+  std::cout << "L5 expected = true and output = true" << std::endl;
+  std::cout << "L6 expected = false and output = false" << std::endl;
+  std::cout << "L7 expected = true and output = true" << std::endl;
+  std::cout << "L8 expected = true and output = true" << std::endl;
+  std::cout << "L9 expected = false and output = false" << std::endl;
+  std::cout << "L10 expected = true and output = true" << std::endl;
+  std::cout << "L11 expected = true and output = true" << std::endl;
+  std::cout << "L12 expected = false and output = false" << std::endl;
+
+  // A
+  std::cout << "L13 expected = true and output = true" << std::endl;
+  std::cout << "L14 expected = true and output = true" << std::endl;
+  std::cout << "L15 expected = false and output = false" << std::endl;
+
+  // B
+  std::cout << "L16 expected = true and output = true" << std::endl;
+  std::cout << "L17 expected = true and output = true" << std::endl;
+  std::cout << "L18 expected = false and output = false" << std::endl;
+
+  // C
+  std::cout << "L19 expected = true and output = true" << std::endl;
+  std::cout << "L20 expected = true and output = true" << std::endl;
+  std::cout << "L21 expected = false and output = false" << std::endl;
+
+  // D
+  std::cout << "L22 expected = true and output = true" << std::endl;
+  std::cout << "L23 expected = true and output = true" << std::endl;
+  std::cout << "L24 expected = false and output = false" << std::endl;
+
+  // E
+  std::cout << "L25 expected = true and output = true" << std::endl;
+  std::cout << "L26 expected = true and output = true" << std::endl;
+  std::cout << "L27 expected = false and output = false" << std::endl;
+
+  // F
+  std::cout << "L29: expected = true and output = true" << std::endl;
+  std::cout << "L30: expected = true and output = true" << std::endl;
+  std::cout << "L31: expected = false and output = false" << std::endl;
+  std::cout << "L32: expected = false and output = false" << std::endl;
+  std::cout << "L33: expected = false and output = false" << std::endl;
+  std::cout << "L34: expected = false and output = false" << std::endl;
+  std::cout << "L35: expected = false and output = false" << std::endl;
+
+  // G
+  std::cout << "L37: expected = true and output = true" << std::endl;
+  std::cout << "L38: expected = true and output = true" << std::endl;
+  std::cout << "L39: expected = false and output = false" << std::endl;
+  std::cout << "L40: expected = false and output = false" << std::endl;
+  std::cout << "L41: expected = false and output = false" << std::endl;
+  std::cout << "L42: expected = false and output = false" << std::endl;
+  std::cout << "L43: expected = false and output = false" << std::endl;
+
+  // H
+  std::cout << "L45: expected = true and output = true" << std::endl;
+  std::cout << "L46: expected = true and output = true" << std::endl;
+  std::cout << "L44: expected = false and output = false" << std::endl;
+  std::cout << "L48: expected = false and output = false" << std::endl;
+  std::cout << "L49: expected = false and output = false" << std::endl;
+  std::cout << "L50: expected = false and output = false" << std::endl;
+  std::cout << "L51: expected = false and output = false" << std::endl;
+
+  // I
+  std::cout << "L53: expected = true and output = true" << std::endl;
+  std::cout << "L54: expected = true and output = true" << std::endl;
+  std::cout << "L55: expected = false and output = false" << std::endl;
+  std::cout << "L56: expected = false and output = false" << std::endl;
+  std::cout << "L57: expected = false and output = false" << std::endl;
+  std::cout << "L58: expected = false and output = false" << std::endl;
+  std::cout << "L59: expected = false and output = false" << std::endl;
+
+  // J
+  std::cout << "L61: expected = false and output = false" << std::endl;
+  std::cout << "L62: expected = false and output = false" << std::endl;
+  std::cout << "L63: expected = false and output = false" << std::endl;
 */
   return EXIT_SUCCESS;
 }

@@ -1207,6 +1207,42 @@ bool TestHelper::isHexaPointerAddress(std::string str) const
   return result;
 }
 
+void TestHelper::AddWhiteSpace(std::string strIn, std::string &strOut) const
+{
+  std::string strLine = strIn;
+
+  std::vector<std::string> keys;
+  keys.push_back("[");
+  keys.push_back("]");
+  keys.push_back("(");
+  keys.push_back(")");
+  keys.push_back(",");
+  keys.push_back("=");
+  keys.push_back(":");
+
+  std::vector<std::string> keysOut;
+  keysOut.push_back("[ ");
+  keysOut.push_back(" ]");
+  keysOut.push_back("( ");
+  keysOut.push_back(" )");
+  keysOut.push_back(" , ");
+  keysOut.push_back(" = ");
+  keysOut.push_back(" : ");
+
+  for (unsigned int it = 0; it < keys.size(); it++)
+    {
+    size_t found;
+    found=strLine.find(keys[it]);
+    while (found!=string::npos)
+      {
+        strLine.replace(found, 1, keysOut[it]);
+        found=strLine.find(keys[it], found + keysOut[it].size());
+      }
+    }
+
+  strOut = strLine;
+}
+
 bool TestHelper::CompareLines(std::string strfileref,
                               std::string strfiletest,
                               int& nbdiff,
@@ -1216,9 +1252,16 @@ bool TestHelper::CompareLines(std::string strfileref,
                               std::vector<std::string>& listStrDiffLineFileTest,
                               double epsilon) const
 {
+  // add white spaces
+  std::string strLineRef;
+  std::string strLineTest;
+  AddWhiteSpace(strfileref, strLineRef);
+  AddWhiteSpace(strfiletest, strLineTest);
+  //otbMsgDevMacro(<<"Comparing (after replace) : " << strLineRef << " vs " << strLineTest);
+
   otb::StringStream buffstreamRef, buffstreamTest;
-  buffstreamRef << strfileref;
-  buffstreamTest << strfiletest;
+  buffstreamRef << strLineRef;
+  buffstreamTest << strLineTest;
   //Number of differences in the current line
   bool differenceFoundInCurrentLine = false;
 
@@ -1268,6 +1311,9 @@ bool TestHelper::CompareLines(std::string strfileref,
           float vRef = atof(strRef.c_str());
           float vTest = atof(strTest.c_str());
           float vNorm = (vcl_abs(vRef) + vcl_abs(vTest))/2;
+          //otbMsgDevMacro(<< "numerical comparison: " <<vRef << " vs " <<vTest << " -> "
+          //               << "vNorm= " << vNorm << ", " << vcl_abs(vRef-vTest) << " > "<< epsilon * vNorm
+          //               << "? -> " << (vcl_abs(vRef-vTest) > epsilon * vNorm ));
           if ((vNorm > m_EpsilonBoundaryChecking) //make sure that either the test of the ref are non 0
               && (vcl_abs(vRef-vTest) > epsilon * vNorm)) //epsilon as relative error
             {
