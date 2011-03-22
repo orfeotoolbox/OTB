@@ -69,7 +69,7 @@ public:
   {
     TOutput result;
 
-    result.SetSize(NumberOfComponentsPerPixel);
+    result.SetSize(m_NumberOfComponentsPerPixel);
 
     const ComplexType S_hh = static_cast<ComplexType>(Shh);
     const ComplexType S_hv = static_cast<ComplexType>(Shv);
@@ -99,7 +99,7 @@ public:
 
   unsigned int GetNumberOfComponentsPerPixel()
   {
-    return NumberOfComponentsPerPixel;
+    return m_NumberOfComponentsPerPixel;
   }
 
   /** Constructor */
@@ -112,7 +112,8 @@ protected:
 
 
 private:
-    itkStaticConstMacro(NumberOfComponentsPerPixel, unsigned int, 10);
+  //itkStaticConstMacro(NumberOfComponentsPerPixel, unsigned int, 10);
+  static const  unsigned int m_NumberOfComponentsPerPixel = 10;
 };
 
 } // namespace Functor
