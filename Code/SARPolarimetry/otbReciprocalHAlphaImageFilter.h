@@ -99,7 +99,7 @@ public:
           {
             sortedGreaterEigenVector[i] = eigenVectors[1][0];
           }
-        else if( vcl_abs( eigenValues[2].real()-sortedRealEigenValues[i] ) < m_Epsilon )  
+        else if( vcl_abs( eigenValues[2].real()-sortedRealEigenValues[i] ) < m_Epsilon )
           {
             sortedGreaterEigenVector[i] = eigenVectors[2][0];
           }
