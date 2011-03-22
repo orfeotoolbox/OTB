@@ -20,9 +20,9 @@
 #define __ReciprocalHAlphaImageFilter_h
 
 #include "otbUnaryFunctorImageFilter.h"
-#include "itkVector.h"
 #include "otbMath.h"
 #include "vnl/algo/vnl_complex_eigensystem.h"
+#include <algorithm>
 
 namespace otb
  {
@@ -47,7 +47,8 @@ public:
   typedef typename std::complex<double> ComplexType;
   typedef vnl_matrix<ComplexType>       VNLMatrixType;
   typedef vnl_vector<ComplexType>       VNLVectorType;
-  typedef vnl_vector<double>            VNLDoubleVectorType;
+  typedef vnl_vector<double>           VNLDoubleVectorType;
+  typedef std::vector<double>           VectorType;
   typedef typename TOutput::ValueType   OutputValueType;
   
   
@@ -56,15 +57,9 @@ public:
     TOutput result;
     result.SetSize(m_NumberOfComponentsPerPixel);
  
-    double T0 = static_cast<double>(Coherency[0].real());
-    double T1 = static_cast<double>(Coherency[3].real());
-    double T2 = static_cast<double>(Coherency[5].real());
-    double T3 = static_cast<double>(Coherency[1].real());
-    double T4 = static_cast<double>(Coherency[1].imag());
-    double T5 = static_cast<double>(Coherency[2].real());
-    double T6 = static_cast<double>(Coherency[2].imag());
-    double T7 = static_cast<double>(Coherency[4].real());
-    double T8 = static_cast<double>(Coherency[4].imag());
+    const double T0 = static_cast<double>(Coherency[0].real());
+    const double T1 = static_cast<double>(Coherency[3].real());
+    const double T2 = static_cast<double>(Coherency[5].real());
     
     VNLMatrixType vnlMat(3, 3, 0.);
     vnlMat[0][0] = ComplexType(T0,  0.);
@@ -89,61 +84,26 @@ public:
     double alpha;
     double anisotropy;
     
-
-    // Sort eigne values and adapt eigen vectors first component
-    VNLDoubleVectorType sortedRealEigenValues(3, eigenValues[0].real());
-    VNLVectorType sortedEigenVectors(3, eigenVectors[0][0]);
+    // Sort eigen values in decreasing order
+    VectorType sortedRealEigenValues(3,  eigenValues[0].real());
+    sortedRealEigenValues[1] = eigenValues[1].real();
+    sortedRealEigenValues[2] = eigenValues[2].real();
+    std::sort( sortedRealEigenValues.begin(), sortedRealEigenValues.end() );
+    std::reverse( sortedRealEigenValues.begin(), sortedRealEigenValues.end() );
     
-    if( (eigenValues[1].real() >= eigenValues[0].real()) && (eigenValues[1].real() >= eigenValues[2].real()) )
+    // Extract the first component of each the eigen vector sorted by eigen value decrease order
+    VNLVectorType sortedGreaterEigenVector(3, eigenVectors[0][0]);
+    for(unsigned int i=0; i<3; i++)
       {
-        sortedRealEigenValues[0] = eigenValues[1].real();
-        sortedEigenVectors[0] = eigenVectors[1][0];
-        if( sortedRealEigenValues[2] >= eigenValues[0].real() )
+        if( vcl_abs( eigenValues[1].real()-sortedRealEigenValues[i] ) < m_Epsilon )
           {
-            sortedRealEigenValues[1] = eigenValues[2].real();
-            sortedEigenVectors[1] = eigenVectors[2][0];
+            sortedGreaterEigenVector[i] = eigenVectors[1][0];
           }
-        else
+        else if( vcl_abs( eigenValues[2].real()-sortedRealEigenValues[i] ) < m_Epsilon )  
           {
-            sortedRealEigenValues[2] = eigenValues[2].real();
-            sortedEigenVectors[2] = eigenVectors[2][0];
-            //init do that sortedRealEigenValues[0] = eigenValues[1].real();
+            sortedGreaterEigenVector[i] = eigenVectors[2][0];
           }
       }
-    else if( (eigenValues[2].real() >= eigenValues[0].real()) && (eigenValues[2].real() >= eigenValues[1].real()) )
-     {
-        sortedRealEigenValues[0] = eigenValues[2].real();
-        sortedEigenVectors[0] = eigenVectors[2][0];
-        if( sortedRealEigenValues[1] >= eigenValues[0].real() )
-          {
-            sortedRealEigenValues[1] = eigenValues[1].real();
-            sortedEigenVectors[1] = eigenVectors[1][0];
-          }
-        else
-          {
-            sortedRealEigenValues[2] = eigenValues[1].real();
-            sortedEigenVectors[2] = eigenVectors[1][0];
-            //init do that sortedRealEigenValues[0] = eigenValues[1].real();
-          }
-      }
-    else
-      {
-        if( eigenValues[1].real() >= eigenValues[2].real() )
-          {
-            sortedRealEigenValues[1] = eigenValues[1].real();
-            sortedRealEigenValues[2] = eigenValues[2].real();
-            sortedEigenVectors[1] = eigenVectors[1][0];
-            sortedEigenVectors[2] = eigenVectors[2][0];
-          }
-        else
-          {
-            sortedRealEigenValues[1] = eigenValues[2].real();
-            sortedRealEigenValues[2] = eigenValues[1].real();
-            sortedEigenVectors[1] = eigenVectors[2][0];
-            sortedEigenVectors[2] = eigenVectors[1][0];
-          }
-      }
-
  
     totalEigenValues = sortedRealEigenValues[0] + sortedRealEigenValues[1] + sortedRealEigenValues[2];
     if (totalEigenValues <m_Epsilon)
@@ -185,13 +145,13 @@ public:
            }
       }
 
-    val0 = std::abs(sortedEigenVectors[0]);
+    val0 = std::abs(sortedGreaterEigenVector[0]);
     a0=acos(vcl_abs(val0)) * CONST_180_PI;
 
-    val1 = std::abs(sortedEigenVectors[1]);
+    val1 = std::abs(sortedGreaterEigenVector[1]);
     a1=acos(vcl_abs(val1)) * CONST_180_PI;
 
-    val2= std::abs(sortedEigenVectors[2]);
+    val2= std::abs(sortedGreaterEigenVector[2]);
     a2=acos(vcl_abs(val2)) * CONST_180_PI;
 
     alpha=p[0]*a0 + p[1]*a1 + p[2]*a2;
