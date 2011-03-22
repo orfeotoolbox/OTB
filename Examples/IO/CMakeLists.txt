@@ -115,7 +115,7 @@ ENDIF( OTB_USE_CURL )
 #TARGET_LINK_LIBRARIES(TransformReadWrite)
 
 ADD_EXECUTABLE(ImageToKmzAndMapFileProductExample ImageToKmzAndMapFileProductExample.cxx)
-TARGET_LINK_LIBRARIES(ImageToKmzAndMapFileProductExample OTBIO OTBCommon OTBBasicFilters)
+TARGET_LINK_LIBRARIES(ImageToKmzAndMapFileProductExample OTBIO)
 
 ADD_EXECUTABLE(HDFReaderExample HDFReaderExample.cxx)
 TARGET_LINK_LIBRARIES(HDFReaderExample OTBIO)
