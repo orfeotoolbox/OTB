@@ -1286,9 +1286,6 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
       otbMsgDevMacro(<< "Enabling TIFF Tiled mode")
       papszOptions = CSLAddNameValue( papszOptions, "TILED", "YES" );
 
-      unsigned int nbColumns = this->GetIORegion().GetSize()[0];
-      unsigned int nbLines   = this->GetIORegion().GetSize()[1];
-
       // Use a fixed tile size
       // Take as reference is a 256*256 short int 4 bands tile
       const unsigned int ReferenceTileSizeInBytes = 256 * 256 * 4 * 2;
