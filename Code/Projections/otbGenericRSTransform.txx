@@ -117,7 +117,7 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
         InverseMapProjectionType;
     typename InverseMapProjectionType::Pointer mapTransform = InverseMapProjectionType::New();
     mapTransform->SetWkt(m_InputProjectionRef);
-    if (mapTransform->GetMapProjection() != NULL)
+    if (mapTransform->GetMapProjection()->GetMapProjection() != NULL)
       {
       m_InputTransform = mapTransform.GetPointer();
       inputTransformIsMap = true;
@@ -195,7 +195,7 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
     OutputSpaceDimension> ForwardMapProjectionType;
     typename ForwardMapProjectionType::Pointer mapTransform = ForwardMapProjectionType::New();
     mapTransform->SetWkt(m_OutputProjectionRef);
-    if (mapTransform->GetMapProjection() != NULL)
+    if (mapTransform->GetMapProjection()->GetMapProjection() != NULL)
       {
       m_OutputTransform = mapTransform.GetPointer();
       outputTransformIsMap = true;
