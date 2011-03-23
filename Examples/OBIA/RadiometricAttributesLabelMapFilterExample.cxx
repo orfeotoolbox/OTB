@@ -74,7 +74,7 @@ int main(int argc, char * argv[])
   const char * outfname = argv[2];
   const char * outprettyfname = argv[3];
   const char * attr     = argv[4];
-  double       lowerThan      = atof(argv[5]);
+  bool       lowerThan      = atoi(argv[5]);
   double       thresh         = atof(argv[6]);
 
   const unsigned int spatialRadius          = atoi(argv[7]);
