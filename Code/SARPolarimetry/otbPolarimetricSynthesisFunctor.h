@@ -18,7 +18,7 @@
 #ifndef __otbPolarimetricSynthesisFunctor_h
 #define __otbPolarimetricSynthesisFunctor_h
 
-
+#include "otbMath.h"
 #include "vcl_complex.h"
 #include "itkFixedArray.h"
 
