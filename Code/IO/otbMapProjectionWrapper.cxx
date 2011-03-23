@@ -50,7 +50,7 @@ MapProjectionWrapper::~MapProjectionWrapper()
 MapProjectionWrapper::InternalMapProjectionPointer MapProjectionWrapper::GetMapProjection()
 {
   itkDebugMacro("returning MapProjection address " << this->m_MapProjection);
-  if ((reinstanciateProjection) || (m_MapProjection == NULL))
+  if ((reinstanciateProjection) /*|| (m_MapProjection == NULL)*/)
     {
     this->InstanciateProjection();
     }
@@ -61,7 +61,7 @@ MapProjectionWrapper::InternalMapProjectionPointer MapProjectionWrapper::GetMapP
 MapProjectionWrapper::InternalMapProjectionConstPointer MapProjectionWrapper::GetMapProjection() const
 {
   itkDebugMacro("returning MapProjection address " << this->m_MapProjection);
-  if ((reinstanciateProjection) || (m_MapProjection == NULL))
+  if ((reinstanciateProjection) /*|| (m_MapProjection == NULL)*/)
     {
     itkExceptionMacro(<< "m_MapProjection not up-to-date, call InstanciateProjection() first");
     }
