@@ -124,6 +124,15 @@ GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutput
   m_MapProjection->PrintMap();
 }
 
+template<TransformDirection::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions,
+    unsigned int NOutputDimensions>
+bool
+GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>
+::IsProjectionDefined()
+{
+  return (m_MapProjection->GetMapProjection() != NULL);
+}
+
 
 template<TransformDirection::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions,
     unsigned int NOutputDimensions>
