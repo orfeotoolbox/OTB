@@ -844,6 +844,10 @@ ADD_TEST(ioTvGDALImageFileWriterTIF2TIF ${IO_TESTS7}
         ${INPUTDATA}/poupeesTIF/IMAGERY.TIF
         ${TEMP}/poupees.tiff )
 
+ADD_TEST(ioTvGDALImageFileWriterTIF2RAS ${IO_TESTS7}
+	otbImageFileWriterRGBTest
+        ${INPUTDATA}/poupees.tif
+        ${TEMP}/poupees.ras )
 
 # -------            otb::ImageFileReader pour GDAL  ------------------------------
 # -------            otb::ImageFileWriter pour GDAL  ------------------------------
