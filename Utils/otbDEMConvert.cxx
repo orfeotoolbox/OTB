@@ -22,6 +22,7 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
+#include "otbStreamingMinMaxVectorImageFilter.h"
 
 // OSSIM include
 #include <ossim/base/ossimKeywordNames.h>
@@ -35,26 +36,32 @@
 #include <ossim/imaging/ossimImageWriterFactoryRegistry.h>
 #include <ossim/imaging/ossimImageWriterFactory.h>
 #include <ossim/imaging/ossimImageFileWriter.h>
-#include <ossim/imaging/ossimCacheTileSource.h>
-#include <ossim/imaging/ossimBandSelector.h>
-#include <ossim/imaging/ossimCibCadrgTileSource.h>
+//#include <ossim/imaging/ossimCacheTileSource.h>
+//#include <ossim/imaging/ossimBandSelector.h>
+//#include <ossim/imaging/ossimCibCadrgTileSource.h>
+#include <ossim/base/ossimEndian.h>
+#include <ossim/base/ossimScalarTypeLut.h>
+#include <ossim/imaging/ossimMetadataFileWriter.h>
+//#include <ossim/base/ossimSource.h>
+#include <ossim/imaging/ossimGeomFileWriter.h>
 
 namespace otb
 {
 
 
 template<typename TPixelType>
-int generic_convert_to_tif(otb::ApplicationOptionsResult* parseResult, ossimFilename tempFilename)
+int generic_convert_to_ras(otb::ApplicationOptionsResult* parseResult, ossimFilename rasFilename)
 {
   typedef otb::VectorImage<TPixelType>              ImageType;
   typedef otb::ImageFileReader<ImageType>          ReaderType;
   typedef otb::StreamingImageFileWriter<ImageType> WriterType;
+ 
 
   typename ReaderType::Pointer reader = ReaderType::New();
   typename WriterType::Pointer writer = WriterType::New();
 
   reader->SetFileName(parseResult->GetInputImage().c_str());
-  writer->SetFileName(tempFilename); 
+  writer->SetFileName(rasFilename); 
 
   writer->SetInput(reader->GetOutput());
   writer->Update();
@@ -68,8 +75,7 @@ int DEMConvert::Describe(ApplicationDescriptor* descriptor)
   descriptor->SetName("DEMConvertApplication");
   descriptor->SetDescription("Convert a DEM file into a general raster (.ras, .geom and .omd)");
   descriptor->AddInputImage();
-  descriptor->AddOption("OutputPath", "The filename (or path filename) of the output. It generates a Output.geom, Output.omd and Output.ras file.","out", 1, true,ApplicationDescriptor::String);
-  descriptor->AddOption("KeepTif", "Keep the temporary generate tif file.","ktif", 0, false,ApplicationDescriptor::Boolean);
+  descriptor->AddOption("OutputPath", "The filename (or path filename) of the output. It generates a Output.geom, Output.omd and Output.ras file.","out", 1, true, ApplicationDescriptor::String);
   
   return EXIT_SUCCESS;
 }
@@ -86,12 +92,14 @@ int DEMConvert::Execute(otb::ApplicationOptionsResult* parseResult)
   // Load input and output filename
   const char * input_file = parseResult->GetInputImage().c_str();
 
-  ossimFilename tempFilename(parseResult->GetParameterString("OutputPath"));
-  tempFilename += "_DEMConvert.tif";
+  ossimFilename rasFilename(parseResult->GetParameterString("OutputPath"));
+  rasFilename += ".ras";
   
   // Search for the input 
   typedef otb::VectorImage<double, 2> InputImageType;
   typedef otb::ImageFileReader<InputImageType> ReaderType;
+  typedef otb::StreamingMinMaxVectorImageFilter<InputImageType> MinMaxCalculatorType;
+ 
   ReaderType::Pointer reader=ReaderType::New();
   reader->SetFileName(input_file);
   reader->UpdateOutputInformation();
@@ -101,43 +109,43 @@ int DEMConvert::Execute(otb::ApplicationOptionsResult* parseResult)
   std::string componentTypeInfo(reader->GetImageIO()->GetComponentTypeInfo().name());
   if( componentTypeInfo == typeid(unsigned char).name())
     {
-      generic_convert_to_tif<unsigned char>(parseResult, tempFilename);
+      generic_convert_to_ras<unsigned char>(parseResult, rasFilename);
     }
   else if( componentTypeInfo == typeid(char).name())
     {
-      generic_convert_to_tif<char>(parseResult, tempFilename);
+      generic_convert_to_ras<char>(parseResult, rasFilename);
     }
   else if( componentTypeInfo == typeid(unsigned short).name())
     {
-      generic_convert_to_tif<unsigned short>(parseResult, tempFilename);
+      generic_convert_to_ras<unsigned short>(parseResult, rasFilename);
     }
   else if( componentTypeInfo == typeid(short).name())
     {
-      generic_convert_to_tif<short>(parseResult, tempFilename);
+      generic_convert_to_ras<short>(parseResult, rasFilename);
     }
   else if( componentTypeInfo == typeid(unsigned int).name())
     {
-      generic_convert_to_tif<unsigned int>(parseResult, tempFilename);
+      generic_convert_to_ras<unsigned int>(parseResult, rasFilename);
     }
   else if( componentTypeInfo == typeid(int).name())
     {
-      generic_convert_to_tif<int>(parseResult, tempFilename);
+      generic_convert_to_ras<int>(parseResult, rasFilename);
     }
   else if( componentTypeInfo == typeid(unsigned long).name())
     {
-      generic_convert_to_tif<unsigned long>(parseResult, tempFilename);
+      generic_convert_to_ras<unsigned long>(parseResult, rasFilename);
     }
   else if( componentTypeInfo == typeid(long).name())
     {
-      generic_convert_to_tif<long>(parseResult, tempFilename);
+      generic_convert_to_ras<long>(parseResult, rasFilename);
     }
   else if( componentTypeInfo == typeid(float).name())
     {
-      generic_convert_to_tif<float>(parseResult, tempFilename);
+      generic_convert_to_ras<float>(parseResult, rasFilename);
     }
   else if( componentTypeInfo == typeid(double).name())
     {
-      generic_convert_to_tif<double>(parseResult, tempFilename);
+      generic_convert_to_ras<double>(parseResult, rasFilename);
     }
   else
     {
@@ -147,98 +155,135 @@ int DEMConvert::Execute(otb::ApplicationOptionsResult* parseResult)
 
 
   // Keyword list to initialize image writers with.
-   ossimKeywordlist kwl;
-   const char* PREFIX = "imagewriter.";
-   // Define the output file type
-   const ossimString output_type("general_raster_bil");
-   kwl.add(PREFIX, ossimKeywordNames::TYPE_KW, output_type.c_str(), true);
+  ossimKeywordlist kwl;
+  const char* PREFIX = "imagewriter.";
+  // Define the output file type
+  const ossimString output_type("general_raster_bil");
+  kwl.add(PREFIX, ossimKeywordNames::TYPE_KW, output_type.c_str(), true);
     
-   // Get an image handler for the input file.
-   ossimRefPtr<ossimImageHandler> ih = ossimImageHandlerRegistry::instance()->open(tempFilename);
-   
-   // Initialize the 
-   if (ih->getErrorStatus() == ossimErrorCodes::OSSIM_ERROR)
+  // Get an image handler for the input file.
+  ossimRefPtr<ossimImageHandler> ih = ossimImageHandlerRegistry::instance()->open(rasFilename);
+  
+  // Initialize the 
+  if (ih->getErrorStatus() == ossimErrorCodes::OSSIM_ERROR)
+    {
+      itkExceptionMacro("Error reading image:  " << input_file << "Exiting application..."); 
+      return EXIT_FAILURE;
+    }
+  
+  ih->initialize();
+  
+  ossimRefPtr<ossimImageSource> source = ih.get();
+  
+  ossimString interleaveType = "bil";
+  ossimString scalar = ossimScalarTypeLut::instance()->getEntryString(ih->getOutputScalarType());
+  
+  // Compute image min/max
+  MinMaxCalculatorType::Pointer minMax = MinMaxCalculatorType::New();
+  minMax->SetInput(reader->GetOutput());
+  minMax->Update();
+  
+/*
+  std::vector<double> minVect;
+  std::vector<double> maxVect;
+  for (unsigned int i=0; i<reader->GetOutput()->GetNumberOfComponentsPerPixel(); ++i)
+    {
+      minVect.push_back( static_cast<double>(ih->getMinPixelValue(i) ) );
+      maxVect.push_back( static_cast<double>(ih->getMaxPixelValue(i) ) );
+    }
+  */
+  
+  /***************************************************************************
+   ************************** WRITE OMD file
+   ****************************************************************************/
+  // Make a header file name from the image file.
+   ossimFilename headerFile(rasFilename);
+   headerFile.setExtension(".omd"); // ossim meta data
+
+   std::ofstream os;
+   os.open(headerFile.c_str(), ios::out);
+   if (!os)
    {
-     itkExceptionMacro("Error reading image:  " << input_file << "Exiting application..."); 
-     return EXIT_FAILURE;
+      itkExceptionMacro(" Error: Could not open:  " << headerFile);
+      return EXIT_FAILURE;
    }
    
-   ih->initialize();
-   
-   ossimRefPtr<ossimImageSource> source = ih.get();
-   ossimRefPtr<ossimBandSelector> bs = 0;
-   
-   
-   // Get the image rectangle for the rrLevel selected.
-   ossimIrect output_rect;
-   output_rect = source->getBoundingRect(0);
+   os << "// *** ossim meta data general raster header file ***\n"
+      << ossimKeywordNames::IMAGE_FILE_KW << ":  "
+      << rasFilename.file().c_str() << "\n"
+      << ossimKeywordNames::IMAGE_TYPE_KW << ":  "
+      << output_type << "\n"
+      << ossimKeywordNames::INTERLEAVE_TYPE_KW << ":  "
+      << interleaveType.c_str() << "\n"
+      << ossimKeywordNames::NUMBER_BANDS_KW << ":  "
+      << reader->GetOutput()->GetNumberOfComponentsPerPixel() << "\n"
+      << ossimKeywordNames::NUMBER_LINES_KW << ":  "
+      << ih->getNumberOfLines() << "\n"//(theAreaOfInterest.lr().y - theAreaOfInterest.ul().y + 1) << "\n"
+      << ossimKeywordNames::NUMBER_SAMPLES_KW << ":  "
+      << ih->getNumberOfSamples() << "\n"//(theAreaOfInterest.lr().x - theAreaOfInterest.ul().x + 1) << "\n"
+      << ossimKeywordNames::SCALAR_TYPE_KW << ":  "
+      << scalar.c_str() << "\n"
+      << ossimKeywordNames::BYTE_ORDER_KW <<": "
+      << ((ossimEndian().getSystemEndianType()==OSSIM_BIG_ENDIAN)?"big_endian":"little_endian")
+      << "\n"
+      << std::endl;
 
-   ossimRefPtr<ossimImageFileWriter> writer =
-     ossimImageWriterFactoryRegistry::instance()->createWriter(kwl, PREFIX);
+   // Output the null/min/max for each band.
+   os << "\n// NOTE:  Bands are one based, band1 is the first band."
+      << std::endl;
 
-   writer->connectMyInputTo(0, source.get());
-   writer->open(ossimFilename(parseResult->GetParameterString("OutputPath"))+".ras");
-   
-   // Add a listener to get percent complete.
-   ossimStdOutProgress prog(0, true);
-   writer->addListener(&prog);
-
-   if (writer->getErrorStatus() == ossimErrorCodes::OSSIM_OK)
+   for (ossim_uint32 i=0; i<reader->GetOutput()->GetNumberOfComponentsPerPixel(); ++i)
    {
-      if( (ih->getOutputScalarType() != OSSIM_UCHAR) &&
-          (PTR_CAST(ossimJpegWriter, writer.get()) ) )
-      {
-         writer->setScaleToEightBitFlag(true);
-      }
-
-      ossimRefPtr<ossimCacheTileSource> cache = new ossimCacheTileSource;
-      ossimIpt tileWidthHeight(ih->getImageTileWidth(),
-                               ih->getImageTileHeight());
-      // only use the cache if its stripped
-      if(static_cast<ossim_uint32>(tileWidthHeight.x) ==
-         ih->getBoundingRect().width())
-      {
-         cache->connectMyInputTo(0, source.get());
-         cache->setTileSize(tileWidthHeight);
-         writer->connectMyInputTo(0, cache.get());
-      }
-      else
-      {
-         writer->connectMyInputTo(0, source.get());
-      }
-      writer->initialize();
-      writer->setAreaOfInterest(output_rect); // Set the output rectangle.
+      ossimString prefix = ossimKeywordNames::BAND_KW +
+                           ossimString::toString(i+1) + ".";
       
-      try
-      {
-         writer->execute();
-      }
-      catch(std::exception& e)
-      {
-        itkExceptionMacro("Error occurs writing the ouput image...");
-        return EXIT_FAILURE;
-      }
+      ossimString null_pix = ossimString::toString(ih->getNullPixelValue(i));
+      ossimString  min_pix   = ossimString::toString(minMax->GetMinimum()[i]);
+      ossimString max_pix  = ossimString::toString(minMax->GetMaximum()[i]);
       
+      os << prefix.c_str() << ossimKeywordNames::NULL_VALUE_KW << ":  "
+         << null_pix.c_str() << "\n"
+         << prefix << ossimKeywordNames::MIN_VALUE_KW << ":  "
+         << min_pix.c_str() << "\n"
+         << prefix << ossimKeywordNames::MAX_VALUE_KW << ":  "
+         << max_pix.c_str() << std::endl;
    }
-   else
+   
+   os.close();
+
+
+   /***************************************************************************
+   ************************** WRITE GEOM file
+   ***************************************************************************/
+   // Make the file name.
+   ossimFilename geomFile( rasFilename );
+   geomFile.setExtension(ossimString("geom"));
+     
+   // Make the writer.
+   ossimRefPtr<ossimMetadataFileWriter> geoWriter = new ossimGeomFileWriter();
+
+   // Set things up.
+   geoWriter->connectMyInputTo(0, source.get());
+   geoWriter->setFilename(geomFile);
+   geoWriter->initialize();
+   geoWriter->setPixelType(OSSIM_PIXEL_IS_POINT);
+   source.get()->initialize();
+   geoWriter->setAreaOfInterest( ih->getBoundingRect() );
+
+   // Write it to disk.
+   try
      {
-       itkExceptionMacro("Error detected in the image writer...");
-       return EXIT_FAILURE;
+       geoWriter->execute();
      }
-
-
-
-   if ( parseResult->IsOptionPresent("KeepTif") == false)
+   catch(std::exception& e)
      {
-       bool resRemove = tempFilename.remove();
-       if( resRemove == false )
-         {
-           std::cout<<"Enable to erase the output temporary file "<<tempFilename<<"."<<std::endl;
-         }
+       itkExceptionMacro("Error occurs writing geom file...");
+       return EXIT_FAILURE;
      }
 
    return EXIT_SUCCESS;
 }
+
 
 
 } // namespace otb
