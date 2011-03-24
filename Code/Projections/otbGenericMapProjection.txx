@@ -128,7 +128,7 @@ template<TransformDirection::TransformationDirection TDirectionOfMapping, class 
     unsigned int NOutputDimensions>
 bool
 GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>
-::IsProjectionDefined()
+::IsProjectionDefined() const
 {
   return (m_MapProjection->GetMapProjection() != NULL);
 }

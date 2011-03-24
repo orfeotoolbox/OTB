@@ -101,7 +101,7 @@ public:
 
   const MapProjectionWrapper* GetMapProjection() const;
 
-  virtual bool IsProjectionDefined();
+  virtual bool IsProjectionDefined() const;
 
 protected:
   GenericMapProjection();
