@@ -26,7 +26,7 @@
 #include "itkListSample.h"
 #include "itkFixedArray.h"
 #include "itkHistogram.h"
-#include "otbMatrixMultiplyImageFilter.h"
+#include "otbAngularProjectionBinaryImageFilter.h"
 
 namespace otb {
 
@@ -43,7 +43,7 @@ namespace otb {
  *
  */
 template < class TInputImage, class TOutputImage, 
-            class TPixelPrecision = double, 
+            class TPrecision = double, 
             Wavelet::Wavelet TMotherWaveletOperator = Wavelet::SYMLET8 >
 class ITK_EXPORT SparseUnmixingImageFilter
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
@@ -83,14 +83,21 @@ public:
   typedef itk::Statistics::ListSample< itk::FixedArray< PrecisionType, 1 > > SampleType;
   typedef SparseWvltToAngleMapperListFilter< InternalImageListType, SampleType > ListFilterType;
   typedef typename ListFilterType::Pointer ListFilterPointerType;
+  typedef typename ListFilterType::OutputSampleListType InternalSampleListType;
 
   typedef typename itk::Statistics::Histogram< PrecisionType > HistogramType;
   typedef typename HistogramType::Pointer HistogramPointerType;
 
-  typedef MatrixMultiplyImageFilter< InternalImageType, OutputImageType, PrecisionType > TransformFilterType;
+  typedef AngularProjectionBinaryImageFilter< InternalImageType, OutputImageType, PrecisionType > TransformFilterType;
   typedef typename TransformFilterType::Pointer TransformFilterPointerType;
 
   /** Sets/Gets */
+  void SetInput1 ( const InputImageType * );
+  const InputImageType * GetInput1 () const;
+
+  void SetInput2 ( const InputImageType * );
+  const InputImageType * GetInput2 () const;
+
   void SetNumberOfDecomposition ( unsigned int nb )
   {
     m_WvltFilter1->SetNumberOfDecomposition( nb );
@@ -102,14 +109,45 @@ public:
     return m_WvltFilter1->GetNumberOfDecomposition();
   }
 
+  void SetLowerThreshold( PrecisionType th )
+  {
+    m_ListFilter->GetFunctor().SetLowerThreshold( th );
+    this->Modified();
+  }
+  PrecisionType GetLowerThreshold () const
+  {
+    return m_ListFilter->GetFunctor().GetLowerThreshold();
+  }
+
+  /**
+   * This number of end-members is estimated from number of modes in the histogram.
+   */
+  unsigned int GetNumberOfComponentsRequired () const
+  {
+    if ( m_NumberOfComponentsRequired == 0 )
+      GenerateNumberOfComponentsRequired();
+    return m_NumberOfComponentsRequired;
+  }
+  itkSetMacro(NumberOfComponentsRequired,unsigned int);
+
+  itkGetConstMacro(WvltFilter1,WvltFilterType*);
+  itkGetConstMacro(WvltFilter2,WvltFilterType*);
+  itkGetConstMacro(ListFilter,ListFilterType*);
+  itkGetConstMacro(Histogram,HistogramType*);
+  itkGetConstMacro(Transformer,TransformFilterType*);
+
 protected:
   SparseUnmixingImageFilter();
   virtual ~SparseUnmixingImageFilter() { }
 
+  virtual void GenerateData();
+  virtual void GenerateNumberOfComponentsRequired () const;
 private:
   SparseUnmixingImageFilter(const Self &); // not implemented
   void operator=(const Self &);
 
+  unsigned int m_NumberOfComponentsRequired;
+  std::vector<PrecisionType> m_AngleValue;
 
   WvltFilterPointerType m_WvltFilter1;
   WvltFilterPointerType m_WvltFilter2;
@@ -119,6 +157,11 @@ private:
 }; // end of class 
 
 } // end of namespace otb
+
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbSparseUnmixingImageFilter.txx"
+#endif
+
 #endif
 
 

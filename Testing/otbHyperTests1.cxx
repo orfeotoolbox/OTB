@@ -71,4 +71,8 @@ void RegisterTests()
   REGISTER_TEST(otbFastICAImageFilterNewTest);
   REGISTER_TEST(otbFastICAImageFilterTest);
   REGISTER_TEST(otbSparseWvltToAngleMapperListFilterNewTest);
+  REGISTER_TEST(otbAngularProjectionBinaryImageFilterNewTest);
+  REGISTER_TEST(otbAngularProjectionBinaryImageFilterTest);
+  REGISTER_TEST(otbSparseUnmixingImageFilterNewTest);
+  REGISTER_TEST(otbSparseUnmixingImageFilterTest);
 }

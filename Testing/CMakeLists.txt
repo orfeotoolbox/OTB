@@ -30,6 +30,8 @@ SET( otbHyperTests1_SRC
   otbNAPCAImageFilter.cxx
   otbFastICAImageFilter.cxx
   otbSparseWvltToAngleMapperListFilter.cxx
+  otbAngularProjectionBinaryImageFilter.cxx
+  otbSparseUnmixingImageFilter.cxx
 )
 
 ADD_EXECUTABLE(otbHyperTests1 ${otbHyperTests1_SRC} otbHyperTests1.cxx)
@@ -525,6 +527,36 @@ ADD_TEST(bfTuSparseWvltToAngleMapperListFilter
 		${TESTEXE_DIR}/otbHyperTests1
 		otbSparseWvltToAngleMapperListFilterNewTest)
 
+ADD_TEST(bfTuAngularProjectionBinaryImageFilter
+		${TESTEXE_DIR}/otbHyperTests1
+		otbAngularProjectionBinaryImageFilterNewTest)
+
+# Il faut 2 images scalaires pour tester ca...
+
+#ADD_TEST(bfTvAngularProjectionBinaryImageFilte
+#		${TESTEXE_DIR}/otbHyperTests1
+#		--compare-image 0.000001 
+#			${DATA}/AVIRIS/extract512/img1
+#			${TEMP}/img_out_2
+#		otbAngularProjectionBinaryImageFilterTest
+#			-in ${DATA}/AVIRIS/extract512/img1 ${DATA}/AVIRIS/extract512/img2
+#			-out ${TEMP}/img_out)
+
+ADD_TEST(hyTuSparseUnmixingImageFilter
+		${TESTEXE_DIR}/otbHyperTests1
+		otbSparseUnmixingImageFilterNewTest)
+
+# Il faut 2 images scalaires pour tester ca...
+
+#ADD_TEST(hyTuSparseUnmixingImageFilter
+#		${TESTEXE_DIR}/otbHyperTests1
+#		--compare-image 0.000001 
+#			${DATA}/AVIRIS/extract512/img1
+#			${TEMP}/img_out_2
+#		otbSparseUnmixingImageFilterTest
+#			-in ${DATA}/AVIRIS/extract512/img1 ${DATA}/AVIRIS/extract512/img2
+#			-out ${TEMP}/img_out
+#			-th 5)
 
 ###################
 ## Cuda

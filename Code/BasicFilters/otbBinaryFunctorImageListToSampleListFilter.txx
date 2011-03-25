@@ -27,7 +27,7 @@ template < class TInputImageList, class TOutputSampleList, class TFunction >
 BinaryFunctorImageListToSampleListFilter< TInputImageList, TOutputSampleList, TFunction >
 ::BinaryFunctorImageListToSampleListFilter()
 {
-  this->SetNumberOfRequiredOutputs(2);
+  this->SetNumberOfRequiredInputs(2);
 
   // Generate the output sample list
   typename OutputSampleListObjectType::Pointer outputPtr =
