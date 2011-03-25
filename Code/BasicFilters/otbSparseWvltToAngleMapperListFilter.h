@@ -46,6 +46,11 @@ namespace Functor {
         m_Lowerthreshold = value;
       }
 
+      TInput GetLowerThreshold() const
+      {
+        return m_Lowerthreshold;
+      }
+
       bool IsToGenerate ( const TInput & x1, const TInput & x2 ) const
       {
         if ( vcl_abs(x1) <= m_Lowerthreshold )
