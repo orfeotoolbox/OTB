@@ -19,8 +19,6 @@
 #include <fstream>
 #include <iomanip>
 
-#include "otbMacro.h"
-#include "otbImage.h"
 #include "otbGenericMapProjection.h"
 
 int otbGenericMapProjection(int argc, char* argv[])
