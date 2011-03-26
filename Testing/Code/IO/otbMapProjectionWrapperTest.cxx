@@ -179,7 +179,7 @@ int otbMapProjectionWrapperTest(int argc, char* argv[])
   genericMapProjection->SetWkt(projectionRefWkt);
   genericMapProjection->SetParameter("Zone", "46");
   genericMapProjection->SetParameter("Hemisphere", "S");
-  file << "Instanciating from : " << projectionRefWkt << std::endl;
+  file << "Instanciating from : " << projectionRefWkt << " with some extra parameters" << std::endl;
   file << genericMapProjection->GetWkt() << std::endl << std::endl;
 
   double lon = 91.44;

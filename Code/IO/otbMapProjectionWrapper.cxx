@@ -21,6 +21,7 @@
 #include <cassert>
 
 #include "otbMacro.h"
+#include "otbUtils.h"
 
 #include "projection/ossimMapProjection.h"
 #include "projection/ossimMapProjectionFactory.h"
@@ -73,8 +74,7 @@ MapProjectionWrapper::InternalMapProjectionConstPointer MapProjectionWrapper::Ge
   return this->m_MapProjection;
 }
 
-
-std::string MapProjectionWrapper::GetWkt()
+std::string MapProjectionWrapper::GetWkt() const
 {
   ossimKeywordlist kwl;
   this->GetMapProjection();
@@ -93,7 +93,7 @@ void MapProjectionWrapper::SetWkt(std::string projectionRefWkt)
 {
   this->m_ProjectionRefWkt = projectionRefWkt;
   m_ReinstanciateProjection = true;
-//  this->InstanciateProjection(); Should not be needed...
+  this->InstanciateProjection(); //Should not be needed, but it is...
   this->Modified();
 }
 
@@ -101,7 +101,76 @@ void MapProjectionWrapper::SetParameter(std::string key, std::string value)
 {
   m_ParameterStore[key] = value;
   m_ReinstanciateProjection = true;
+  this->InstanciateProjection(); //Should not be needed, but it is...
   this->Modified();
+}
+
+std::string MapProjectionWrapper::GetParameter(std::string key) const
+{
+  // Please refer to the note in the header filer
+  // we do NOT want to read from m_ParameterStore here!
+
+  std::string projectionName = this->GetMapProjection()->getClassName();
+
+  // Start by matching generic parameters
+  const ossimMapProjection* projection = dynamic_cast<const ossimMapProjection*>(this->GetMapProjection());
+  if (key.compare("Origin") == 0)
+    {
+    return Utils::ConvertToString(projection->origin());
+    }
+  if (key.compare("FalseNorthing") == 0)
+    {
+    return Utils::ConvertToString(projection->getFalseNorthing());
+    }
+  if (key.compare("FalseEasting") == 0)
+    {
+    return Utils::ConvertToString(projection->getFalseEasting());
+    }
+  if (key.compare("StandardParallel1") == 0)
+    {
+    return Utils::ConvertToString(projection->getStandardParallel1());
+    }
+  if (key.compare("StandardParallel2") == 0)
+    {
+    return Utils::ConvertToString(projection->getStandardParallel2());
+    }
+  if (key.compare("A") == 0)
+    {
+    return Utils::ConvertToString(projection->getA());
+    }
+  if (key.compare("B") == 0)
+    {
+    return Utils::ConvertToString(projection->getB());
+    }
+  if (key.compare("F") == 0)
+    {
+    return Utils::ConvertToString(projection->getF());
+    }
+  if (key.compare("MetersPerPixel") == 0)
+    {
+    return Utils::ConvertToString(projection->getMetersPerPixel());
+    }
+  if (key.compare("DecimalDegreesPerPixel") == 0)
+    {
+    return Utils::ConvertToString(projection->getDecimalDegreesPerPixel());
+    }
+
+
+  // Apply parameters to Utm
+  if (projectionName.compare("ossimUtmProjection") == 0)
+    {
+    const ossimUtmProjection* projection = dynamic_cast<const ossimUtmProjection*>(this->GetMapProjection());
+    if (key.compare("Zone") == 0)
+      {
+      return Utils::ConvertToString(projection->getZone());
+      }
+    if (key.compare("Hemisphere") == 0)
+      {
+      return Utils::ConvertToString(projection->getHemisphere());
+      }
+    }
+
+  return "";
 }
 
 bool MapProjectionWrapper::InstanciateProjection()
@@ -244,4 +313,20 @@ void MapProjectionWrapper::PrintMap() const
     std::cout << "  " << (*it).first << ": " << (*it).second << "\n";
     }
 }
+
+
+namespace Utils
+{
+
+int GetZoneFromGeoPoint(double lon, double lat)
+{
+  //use ossim to handle the special case of UTM
+  ossimGpt point(lat, lon);
+  ossimUtmProjection projection;
+  int zone = projection.computeZone(point);
+  return zone;
+}
+
+}
+
 } // namespace otb

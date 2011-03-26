@@ -34,7 +34,8 @@ namespace otb
  * \brief Wrapper class to group all dependencies to ossim for map projection
  *
  * This class is NOT intented to be used outside of OTB. Use the
- * GenericMapProjection.
+ * GenericMapProjection. If you feel that you need to use it directly,
+ * think again!
  *
  * \sa GenericMapProjection
  * \ingroup Projection
@@ -62,9 +63,11 @@ public:
   InternalMapProjectionPointer GetMapProjection();
   InternalMapProjectionConstPointer GetMapProjection() const;
 
-  std::string GetWkt();
+  std::string GetWkt() const;
   void SetWkt(std::string projectionRefWkt);
+
   void SetParameter(std::string key, std::string value);
+  std::string GetParameter(std::string key) const;
 
   bool InstanciateProjection();
 
@@ -88,11 +91,23 @@ private:
   InternalMapProjectionPointer m_MapProjection;
   std::string                  m_ProjectionRefWkt;
 
+  // Hold the parameters specified directly from the user of the class
+  // Consistency is done from ParameterStore -> MapProjection
+  // But NOT MapProjection -> ParameterStore
+  // so DO NOT use that to read the projection parameters
   typedef std::map<std::string, std::string> StoreType;
   StoreType m_ParameterStore;
 
   bool m_ReinstanciateProjection;
 };
+
+// Some usefull free functions related to ossim
+namespace Utils
+{
+int GetZoneFromGeoPoint(double lon, double lat);
+}
+
+
 } // namespace otb
 
 #endif
