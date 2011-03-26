@@ -17,10 +17,12 @@
 =========================================================================*/
 
 #include "otbMapProjectionWrapper.h"
+
+#include <cassert>
+
 #include "otbMacro.h"
 
 #include "projection/ossimMapProjection.h"
-
 #include "projection/ossimMapProjectionFactory.h"
 #include "projection/ossimMapProjection.h"
 #include "base/ossimGpt.h"
@@ -30,6 +32,8 @@
 #include "base/ossimEllipsoidFactory.h"
 #include "base/ossimString.h"
 #include "gdal/ossimOgcWktTranslator.h"
+
+#include "projection/ossimUtmProjection.h"
 
 namespace otb
 {
@@ -89,7 +93,14 @@ void MapProjectionWrapper::SetWkt(std::string projectionRefWkt)
 {
   this->m_ProjectionRefWkt = projectionRefWkt;
   reinstanciateProjection = true;
-  this->InstanciateProjection();
+//  this->InstanciateProjection(); Should not be needed...
+  this->Modified();
+}
+
+void MapProjectionWrapper::SetParameter(std::string key, std::string value)
+{
+  m_ParameterStore[key] = value;
+  reinstanciateProjection = true;
   this->Modified();
 }
 
@@ -143,6 +154,7 @@ bool MapProjectionWrapper::InstanciateProjection()
       }
 
     this->reinstanciateProjection = false;
+    this->ApplyParametersToProjection();
     return true;
     }
   return false;
@@ -195,8 +207,41 @@ void MapProjectionWrapper::ForwardTransform(double lon, double lat, double h,
   z = h;
 }
 
+void MapProjectionWrapper::ApplyParametersToProjection()
+{
+  // Start by identifying the projection, that will be necessary for
+  // the casting.
+  std::string projectionName = this->GetMapProjection()->getClassName();
+
+  StoreType::const_iterator it;
+
+  // Apply parameters to Utm
+  if (projectionName.compare("ossimUtmProjection") == 0)
+    {
+    ossimUtmProjection* projection = dynamic_cast<ossimUtmProjection*>(this->GetMapProjection());
+    it = m_ParameterStore.find("Zone");
+    if (it != m_ParameterStore.end())
+      {
+      int zone = atoi((*it).second.c_str());
+      projection->setZone(zone);
+      }
+    it = m_ParameterStore.find("Hemisphere");
+    if (it != m_ParameterStore.end())
+      {
+      projection->setHemisphere((*it).second[0]);
+      }
+    }
+}
+
 void MapProjectionWrapper::PrintMap() const
 {
   std::cout << m_MapProjection->print(std::cout);
+  std::cout << "Parameter store:\n";
+  for (StoreType::const_iterator it = m_ParameterStore.begin();
+       it != m_ParameterStore.end();
+       ++it)
+    {
+    std::cout << "  " << (*it).first << ": " << (*it).second << "\n";
+    }
 }
 } // namespace otb

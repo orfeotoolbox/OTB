@@ -18,6 +18,9 @@
 #ifndef __otbMapProjectionWrapper_h
 #define __otbMapProjectionWrapper_h
 
+#include <string>
+#include <map>
+
 #include "itkObject.h"
 #include "itkObjectFactory.h"
 
@@ -61,6 +64,8 @@ public:
 
   std::string GetWkt();
   void SetWkt(std::string projectionRefWkt);
+  void SetParameter(std::string key, std::string value);
+
   bool InstanciateProjection();
 
   void InverseTransform(double x, double y, double z,
@@ -69,17 +74,24 @@ public:
                         double& x, double& y, double& z);
 
   void PrintMap() const;
+
 protected:
   MapProjectionWrapper();
   virtual ~MapProjectionWrapper();
+
 
 
 private:
   MapProjectionWrapper(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
+  void ApplyParametersToProjection();
+
   InternalMapProjectionPointer m_MapProjection;
   std::string                  m_ProjectionRefWkt;
+
+  typedef std::map<std::string, std::string> StoreType;
+  StoreType m_ParameterStore;
 
   bool reinstanciateProjection;
 };
