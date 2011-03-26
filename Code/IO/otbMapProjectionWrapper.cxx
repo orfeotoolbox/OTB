@@ -102,25 +102,45 @@ bool MapProjectionWrapper::InstanciateProjection()
 
     bool projectionInformationAvailable = wktTranslator.toOssimKwl(m_ProjectionRefWkt, kwl);
 
-    if (!projectionInformationAvailable)
+    if (projectionInformationAvailable)
       {
-      otbMsgDevMacro(<< "WARNING: Impossible to create the projection from string: " << m_ProjectionRefWkt);
-      return false;
-      }
 
-    //we don't want to have a ossimEquDistCylProjection here:
-    //see discussion in May 2009 on ossim list;
-    //a better solution might be available...
-    std::string projectionString(kwl.find("type"));
-    if (projectionString.find("ossimEquDistCylProjection") != string::npos)
+      //we don't want to have a ossimEquDistCylProjection here:
+      //see discussion in May 2009 on ossim list;
+      //a better solution might be available...
+      std::string projectionString(kwl.find("type"));
+      if (projectionString.find("ossimEquDistCylProjection") != string::npos)
+        {
+        otbMsgDevMacro(<< "WARNING: Not instanciating a ossimEquDistCylProjection: " << projectionString);
+        otbMsgDevMacro(<< "Wkt was: " << kwl);
+        otbMsgDevMacro(<< "From RefWkt: " << m_ProjectionRefWkt);
+        return false;
+        }
+
+      m_MapProjection = ossimMapProjectionFactory::instance()->createProjection(kwl);
+
+      }
+    else
       {
-      otbMsgDevMacro(<< "WARNING: Not instanciating a ossimEquDistCylProjection: " << projectionString);
-      otbMsgDevMacro(<< "Wkt was: " << kwl);
-      otbMsgDevMacro(<< "From RefWkt: " << m_ProjectionRefWkt);
-      return false;
-      }
+      otbMsgDevMacro(<< "WARNING: Impossible to create the projection from Wkt: " << m_ProjectionRefWkt);
+      otbMsgDevMacro(<< "Trying with string as a string (ossimUtmProjection or Utm would qualify");
+      // Trying directly with the m_ProjectionRefWkt (is
+      // ossimUtmProjection for example)
+      ossimString name(m_ProjectionRefWkt);
+      m_MapProjection = ossimMapProjectionFactory::instance()->createProjection(name);
+      if (m_MapProjection == NULL)
+        {
+        // Trying directly extending the m_ProjectionRefWkt (convert the
+        // Utm to ossimUtmProjection for example)
+        ossimString extendedName("ossim");
+        extendedName += m_ProjectionRefWkt;
+        extendedName += "Projection";
+        m_MapProjection = ossimMapProjectionFactory::instance()->createProjection(extendedName);
+        }
 
-    m_MapProjection = ossimMapProjectionFactory::instance()->createProjection(kwl);
+      if (m_MapProjection == NULL) return false;
+
+      }
 
     this->reinstanciateProjection = false;
     return true;
