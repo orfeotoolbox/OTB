@@ -39,7 +39,7 @@ namespace otb
 {
 
 MapProjectionWrapper::MapProjectionWrapper():
-  m_MapProjection(NULL), m_ProjectionRefWkt(""), reinstanciateProjection(true)
+  m_MapProjection(NULL), m_ProjectionRefWkt(""), m_ReinstanciateProjection(true)
 {
 }
 
@@ -54,7 +54,7 @@ MapProjectionWrapper::~MapProjectionWrapper()
 MapProjectionWrapper::InternalMapProjectionPointer MapProjectionWrapper::GetMapProjection()
 {
   itkDebugMacro("returning MapProjection address " << this->m_MapProjection);
-  if ((reinstanciateProjection) || (m_MapProjection == NULL))
+  if ((m_ReinstanciateProjection) || (m_MapProjection == NULL))
     {
     this->InstanciateProjection();
     }
@@ -65,7 +65,7 @@ MapProjectionWrapper::InternalMapProjectionPointer MapProjectionWrapper::GetMapP
 MapProjectionWrapper::InternalMapProjectionConstPointer MapProjectionWrapper::GetMapProjection() const
 {
   itkDebugMacro("returning MapProjection address " << this->m_MapProjection);
-  if ((reinstanciateProjection) || (m_MapProjection == NULL))
+  if ((m_ReinstanciateProjection) || (m_MapProjection == NULL))
     {
     itkExceptionMacro(<< "m_MapProjection not up-to-date, call InstanciateProjection() first");
     }
@@ -92,7 +92,7 @@ std::string MapProjectionWrapper::GetWkt()
 void MapProjectionWrapper::SetWkt(std::string projectionRefWkt)
 {
   this->m_ProjectionRefWkt = projectionRefWkt;
-  reinstanciateProjection = true;
+  m_ReinstanciateProjection = true;
 //  this->InstanciateProjection(); Should not be needed...
   this->Modified();
 }
@@ -100,13 +100,13 @@ void MapProjectionWrapper::SetWkt(std::string projectionRefWkt)
 void MapProjectionWrapper::SetParameter(std::string key, std::string value)
 {
   m_ParameterStore[key] = value;
-  reinstanciateProjection = true;
+  m_ReinstanciateProjection = true;
   this->Modified();
 }
 
 bool MapProjectionWrapper::InstanciateProjection()
 {
-  if ((this->reinstanciateProjection) || (m_MapProjection == NULL))
+  if ((this->m_ReinstanciateProjection) || (m_MapProjection == NULL))
     {
     ossimKeywordlist      kwl;
     ossimOgcWktTranslator wktTranslator;
@@ -153,7 +153,7 @@ bool MapProjectionWrapper::InstanciateProjection()
 
       }
 
-    this->reinstanciateProjection = false;
+    this->m_ReinstanciateProjection = false;
     this->ApplyParametersToProjection();
     return true;
     }

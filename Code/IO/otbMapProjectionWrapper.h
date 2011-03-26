@@ -50,7 +50,7 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef ossimProjection* InternalMapProjectionPointer;
+  typedef ossimProjection*       InternalMapProjectionPointer;
   typedef const ossimProjection* InternalMapProjectionConstPointer;
 
   /** Method for creation through the object factory. */
@@ -79,8 +79,6 @@ protected:
   MapProjectionWrapper();
   virtual ~MapProjectionWrapper();
 
-
-
 private:
   MapProjectionWrapper(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
@@ -93,7 +91,7 @@ private:
   typedef std::map<std::string, std::string> StoreType;
   StoreType m_ParameterStore;
 
-  bool reinstanciateProjection;
+  bool m_ReinstanciateProjection;
 };
 } // namespace otb
 
