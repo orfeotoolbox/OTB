@@ -18,7 +18,7 @@
 #ifndef __otbLambert2EtenduProjection_h
 #define __otbLambert2EtenduProjection_h
 
-#include "otbMapProjection.h"
+#include "otbLambertConformalConicMapProjection.h"
 
 namespace otb
 {
@@ -37,10 +37,6 @@ public:
   typedef itk::SmartPointer<Self>                        Pointer;
   typedef itk::SmartPointer<const Self>                  ConstPointer;
 
-  typedef typename Superclass::ScalarType ScalarType;
-  typedef itk::Point<ScalarType, 2>       InputPointType;
-  typedef itk::Point<ScalarType, 2>       OutputPointType;
-
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
@@ -48,18 +44,24 @@ public:
   itkTypeMacro(Lambert2EtenduProjection, LambertConformalConicMapProjection);
 
 protected:
-  Lambert2EtenduProjection();
-  virtual ~Lambert2EtenduProjection();
+  Lambert2EtenduProjection()
+  {
+    this->SetParameter("OriginX", "2.33722778");
+    this->SetParameter("OriginY", "46.8");
+    this->SetParameter("Datum", "NTF");
+    this->SetParameter("FalseNorthing", "2200000");
+    this->SetParameter("FalseEasting", "600000");
+    this->SetParameter("StandardParallel1", "45.89891944");
+    this->SetParameter("StandardParallel2", "47.69601389");
+  }
+
+  virtual ~Lambert2EtenduProjection() {}
 
 private:
   Lambert2EtenduProjection(const Self &); //purposely not implemented
-  void operator =(const Self&);                       //purposely not implemented
+  void operator =(const Self&);           //purposely not implemented
 };
 
 } // namespace otb
-
-#ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLambert2EtenduProjection.txx"
-#endif
 
 #endif
