@@ -35,6 +35,7 @@
 #include "gdal/ossimOgcWktTranslator.h"
 
 #include "projection/ossimUtmProjection.h"
+#include "projection/ossimLambertConformalConicProjection.h"
 
 namespace otb
 {
@@ -184,7 +185,6 @@ bool MapProjectionWrapper::InstanciateProjection()
 
     if (projectionInformationAvailable)
       {
-
       //we don't want to have a ossimEquDistCylProjection here:
       //see discussion in May 2009 on ossim list;
       //a better solution might be available...
@@ -283,6 +283,71 @@ void MapProjectionWrapper::ApplyParametersToProjection()
   std::string projectionName = this->GetMapProjection()->getClassName();
 
   StoreType::const_iterator it;
+
+  // Apply standard map projection parameters
+  ossimMapProjection* projection = dynamic_cast<ossimMapProjection*>(this->GetMapProjection());
+  // Set up origin
+  double originX = 0;
+  double originY = 0;
+  double originZ = 0;
+  const ossimDatum* datum = ossimDatumFactory::instance()->wgs84();//default value
+  it = m_ParameterStore.find("OriginX");
+  if (it != m_ParameterStore.end())
+    {
+    originX = atof((*it).second.c_str());
+    }
+  it = m_ParameterStore.find("OriginY");
+  if (it != m_ParameterStore.end())
+    {
+    originY = atof((*it).second.c_str());
+    }
+  it = m_ParameterStore.find("OriginZ");
+  if (it != m_ParameterStore.end())
+    {
+    originZ = atof((*it).second.c_str());
+    }
+  it = m_ParameterStore.find("Datum");
+  if (it != m_ParameterStore.end())
+    {
+    datum = ossimDatumFactory::instance()->create((*it).second);
+    projection->setDatum(datum);
+    }
+  ossimGpt origin(originY, originX, originZ, datum);
+  projection->setOrigin(origin);
+
+  // Apply parameters to LambertConformalConic
+  if (projectionName.compare("ossimLambertConformalConicProjection") == 0)
+    {
+    ossimLambertConformalConicProjection* projection = dynamic_cast<ossimLambertConformalConicProjection*>(this->GetMapProjection());
+
+//    projection->setOrigin(origin);//???
+
+    it = m_ParameterStore.find("FalseNorthing");
+    if (it != m_ParameterStore.end())
+      {
+      double value = atof((*it).second.c_str());
+      projection->setFalseNorthing(value);
+      }
+    it = m_ParameterStore.find("FalseEasting");
+    if (it != m_ParameterStore.end())
+      {
+      double value = atof((*it).second.c_str());
+      projection->setFalseEasting(value);
+      }
+    it = m_ParameterStore.find("StandardParallel1");
+    if (it != m_ParameterStore.end())
+      {
+      double value = atof((*it).second.c_str());
+      projection->setStandardParallel1(value);
+      }
+    it = m_ParameterStore.find("StandardParallel2");
+    if (it != m_ParameterStore.end())
+      {
+      double value = atof((*it).second.c_str());
+      projection->setStandardParallel2(value);
+      }
+    }
+
 
   // Apply parameters to Utm
   if (projectionName.compare("ossimUtmProjection") == 0)
