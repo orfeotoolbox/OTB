@@ -287,40 +287,36 @@ void MapProjectionWrapper::ApplyParametersToProjection()
   // Apply standard map projection parameters
   ossimMapProjection* projection = dynamic_cast<ossimMapProjection*>(this->GetMapProjection());
   // Set up origin
-  double originX = 0;
-  double originY = 0;
-  double originZ = 0;
+
   const ossimDatum* datum = ossimDatumFactory::instance()->wgs84();//default value
-  it = m_ParameterStore.find("OriginX");
-  if (it != m_ParameterStore.end())
-    {
-    originX = atof((*it).second.c_str());
-    }
-  it = m_ParameterStore.find("OriginY");
-  if (it != m_ParameterStore.end())
-    {
-    originY = atof((*it).second.c_str());
-    }
-  it = m_ParameterStore.find("OriginZ");
-  if (it != m_ParameterStore.end())
-    {
-    originZ = atof((*it).second.c_str());
-    }
   it = m_ParameterStore.find("Datum");
   if (it != m_ParameterStore.end())
     {
     datum = ossimDatumFactory::instance()->create((*it).second);
     projection->setDatum(datum);
     }
-  ossimGpt origin(originY, originX, originZ, datum);
-  projection->setOrigin(origin);
+
+  StoreType::const_iterator itX = m_ParameterStore.find("OriginX");
+  StoreType::const_iterator itY = m_ParameterStore.find("OriginY");
+  StoreType::const_iterator itZ = m_ParameterStore.find("OriginZ");
+
+  if (itX != m_ParameterStore.end() && itY != m_ParameterStore.end())
+    {
+    double originX = atof((*itX).second.c_str());
+    double originY = atof((*itY).second.c_str());
+    double originZ = 0;
+    if (itZ != m_ParameterStore.end())
+      {
+      originZ = atof((*itZ).second.c_str());
+      }
+    ossimGpt origin(originY, originX, originZ, datum);
+    projection->setOrigin(origin);
+    }
 
   // Apply parameters to LambertConformalConic
   if (projectionName.compare("ossimLambertConformalConicProjection") == 0)
     {
     ossimLambertConformalConicProjection* projection = dynamic_cast<ossimLambertConformalConicProjection*>(this->GetMapProjection());
-
-//    projection->setOrigin(origin);//???
 
     it = m_ParameterStore.find("FalseNorthing");
     if (it != m_ParameterStore.end())
