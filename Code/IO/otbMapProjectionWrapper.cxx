@@ -288,7 +288,7 @@ void MapProjectionWrapper::ApplyParametersToProjection()
   ossimMapProjection* projection = dynamic_cast<ossimMapProjection*>(this->GetMapProjection());
   // Set up origin
 
-  const ossimDatum* datum = ossimDatumFactory::instance()->wgs84();//default value
+  const ossimDatum* datum = ossimDatumFactory::instance()->wgs84(); //default value
   it = m_ParameterStore.find("Datum");
   if (it != m_ParameterStore.end())
     {
