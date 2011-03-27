@@ -205,7 +205,7 @@ int main(int argc, char* argv[])
   //   Forward Lambert93 projection:
   //      [1.4835345, 43.55968261] -> [577437.889798954, 6274578.791561]
   //
-  //   Forward gerenic projection:
+  //   Forward generic projection:
   //      [1.4835345, 43.55968261] -> [377522.448427013, 4824086.71129131]
   //   \end{verbatim}
   //
