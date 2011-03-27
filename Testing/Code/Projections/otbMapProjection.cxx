@@ -24,32 +24,80 @@ int otbMapProjection(int argc, char* argv[])
 {
   const char *  outFileName = argv[1];
   std::ofstream file;
+
+  itk::Point<double, 2> point;
+  point[0] = 1.44;
+  point[1] = 43.6050;
+  itk::Point<double, 2> point2;
   file.open(outFileName);
+  file << std::setprecision(15);
 
   /** Test the output of the projection in Wkt format*/
+  otb::UtmForwardProjection::Pointer lUtmProjection2 = otb::UtmForwardProjection::New();
+  point2 = lUtmProjection2->TransformPoint(point);
+  file << lUtmProjection2->GetWkt() << std::endl << std::endl;
+  file << "Forward projection: " << std::endl;
+  file << point << " -> ";
+  file << point2;
+  file << std::endl << std::endl;
+
+
   otb::UtmInverseProjection::Pointer lUtmProjection = otb::UtmInverseProjection::New();
   file << lUtmProjection->GetWkt() << std::endl << std::endl;
+  file << "Inverse projection: " << std::endl;
+  file << point2 << " -> ";
+  file << lUtmProjection->TransformPoint(point2);
+  file << std::endl << std::endl;
 
-  otb::UtmForwardProjection::Pointer lUtmProjection2 = otb::UtmForwardProjection::New();
-  file << lUtmProjection2->GetWkt() << std::endl << std::endl;
+
+  otb::Lambert2EtenduForwardProjection::Pointer lLambert2Etendu2 = otb::Lambert2EtenduForwardProjection::New();
+  point2 = lLambert2Etendu2->TransformPoint(point);
+  file << lLambert2Etendu2->GetWkt() << std::endl << std::endl;
+  file << "Forward projection: " << std::endl;
+  file << point << " -> ";
+  file << point2;
+  file << std::endl << std::endl;
 
   otb::Lambert2EtenduInverseProjection::Pointer lLambert2Etendu = otb::Lambert2EtenduInverseProjection::New();
   file << lLambert2Etendu->GetWkt() << std::endl << std::endl;
+  file << "Inverse projection: " << std::endl;
+  file << point2 << " -> ";
+  file << lLambert2Etendu->TransformPoint(point2);
+  file << std::endl << std::endl;
 
-  otb::Lambert2EtenduForwardProjection::Pointer lLambert2Etendu2 = otb::Lambert2EtenduForwardProjection::New();
-  file << lLambert2Etendu2->GetWkt() << std::endl << std::endl;
+
+  otb::Lambert93ForwardProjection::Pointer lLambert93_2 = otb::Lambert93ForwardProjection::New();
+  point2 = lLambert93_2->TransformPoint(point);
+  file << lLambert93_2->GetWkt() << std::endl << std::endl;
+  file << "Forward projection: " << std::endl;
+  file << point << " -> ";
+  file << point2;
+  file << std::endl << std::endl;
 
   otb::Lambert93InverseProjection::Pointer lLambert93 = otb::Lambert93InverseProjection::New();
   file << lLambert93->GetWkt() << std::endl << std::endl;
+  file << "Inverse projection: " << std::endl;
+  file << point2 << " -> ";
+  file << lLambert93->TransformPoint(point2);
+  file << std::endl << std::endl;
 
-  otb::Lambert93ForwardProjection::Pointer lLambert93_2 = otb::Lambert93ForwardProjection::New();
-  file << lLambert93_2->GetWkt() << std::endl << std::endl;
+
+
+  otb::MercatorForwardProjection::Pointer lMercatorProjection2 = otb::MercatorForwardProjection::New();
+  point2 = lMercatorProjection2->TransformPoint(point);
+  file << lMercatorProjection2->GetWkt() << std::endl << std::endl;
+  file << "Forward projection: " << std::endl;
+  file << point << " -> ";
+  file << point2;
+  file << std::endl << std::endl;
+
 
   otb::MercatorInverseProjection::Pointer lMercatorProjection = otb::MercatorInverseProjection::New();
   file << lMercatorProjection->GetWkt() << std::endl << std::endl;
-
-  otb::MercatorForwardProjection::Pointer lMercatorProjection2 = otb::MercatorForwardProjection::New();
-  file << lMercatorProjection2->GetWkt() << std::endl << std::endl;
+  file << "Inverse projection: " << std::endl;
+  file << point2 << " -> ";
+  file << lMercatorProjection->TransformPoint(point2);
+  file << std::endl << std::endl;
 
 
   // Moving to GenericMapProjection, change the access
