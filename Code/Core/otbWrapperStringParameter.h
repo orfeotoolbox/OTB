@@ -25,17 +25,15 @@ namespace otb
 namespace Wrapper
 {
 
-
-
 /** \class StringParameter
  *  \brief This class represent a string parameter for the wrapper framework
  */
 class StringParameter
-  : public itk::LightObject
+  : public Parameter
 {
 public:
   /** Standard class typedef */
-  typedef Parameter                     Self;
+  typedef StringParameter               Self;
   typedef itk::LightObject              Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -44,8 +42,7 @@ public:
   itkNewMacro(Self);
 
   /** RTTI support */
-  itkTypeMacro(Parameter,itk::LightObject);
-
+  itkTypeMacro(StringParameter, Parameter);
 
 protected:
   /** Constructor */
