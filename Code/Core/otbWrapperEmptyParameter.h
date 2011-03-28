@@ -44,6 +44,23 @@ public:
   /** RTTI support */
   itkTypeMacro(EmptyParameter, Parameter);
 
+  /** Set any value */
+  virtual void SetAnyValue(boost::any v)
+  {
+    // Perform any cast
+    m_Value = boost::any_cast<bool>(v);
+
+    // Call Modified();
+    this->Modified();
+  }
+
+  /** Return any value */
+  virtual boost::any GetAnyValue()
+  {
+    return boost::any(m_Value);
+  }
+
+
 protected:
   /** Constructor */
   EmptyParameter()
@@ -56,6 +73,8 @@ protected:
 private:
   EmptyParameter(const EmptyParameter &); //purposely not implemented
   void operator =(const EmptyParameter&); //purposely not implemented
+
+  bool m_Value;
 
 }; // End class Parameter
 

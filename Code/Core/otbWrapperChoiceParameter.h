@@ -53,6 +53,23 @@ public:
     m_ChoiceMap[key] = param;
   }
 
+  /** Set any value */
+  virtual void SetAnyValue(boost::any v)
+  {
+    // Perform any cast
+    m_CurrentChoice = boost::any_cast<bool>(v);
+
+    // Call Modified();
+    this->Modified();
+  }
+
+  /** Return any value */
+  virtual boost::any GetAnyValue()
+  {
+    return boost::any(m_CurrentChoice);
+  }
+
+
 protected:
   /** Constructor */
   ChoiceParameter()
@@ -69,7 +86,7 @@ private:
   typedef std::map<std::string, Parameter::Pointer> ChoiceMap;
   ChoiceMap m_ChoiceMap;
 
-
+  unsigned int m_CurrentChoice;
 
 }; // End class Parameter
 
