@@ -50,7 +50,7 @@ protected:
   ~QtWidgetIntParameterFactory();
 
 private:
-  QtWidgeIntParameterFactory(const Self&); //purposely not implemented
+  QtWidgetIntParameterFactory(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 };
 }
