@@ -27,6 +27,11 @@ namespace otb
 namespace wrapper
 {
 
+/** \class Application
+ *  \brief This class represent an application
+ *
+ *
+ */
 class ITK_EXPORT Application : public itk::Object
 {
 public:
@@ -35,6 +40,12 @@ public:
   typedef itk::Object                          Superclass;
   typedef itk::SmartPointer<Self>              Pointer;
   typedef itk::SmartPointer<const Self>        ConstPointer;
+
+  /** Defining ::New() static method */
+  itkNewMacro(Self);
+
+  /** RTTI support */
+  itkTypeMacro(Parameter,itk::LightObject);
 
   std::string GetName()
   {

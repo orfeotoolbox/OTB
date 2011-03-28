@@ -19,7 +19,6 @@
 #define __otbWrapperParameterList_h
 
 #include "itkObject.h"
-#include "itkObjectList.h"
 #include "otbWrapperParameter.h"
 #include <vector>
 
