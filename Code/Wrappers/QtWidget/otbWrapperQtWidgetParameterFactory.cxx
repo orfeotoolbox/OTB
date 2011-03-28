@@ -66,5 +66,3 @@ QtWidgetParameterFactory::CreateQtWidget( Parameter* param )
 
 }
 }
-
-#endif
