@@ -26,7 +26,10 @@ namespace Wrapper
 {
 
 /** \class ChoiceParameter
- *  \brief This class represent a string parameter for the wrapper framework
+ *  \brief This class represent a multiple choice parameter for the wrapper framework
+ *
+ *  Represents an enumerated parameter.
+ *  The different values of the enumeration can be associated with a parameter
  */
 class ChoiceParameter
   : public Parameter
@@ -44,7 +47,11 @@ public:
   /** RTTI support */
   itkTypeMacro(ChoiceParameter, Parameter);
 
-  void AddChoice( std::string key, Parameter::Pointer param );
+  /** Add a value to the choice */
+  void AddChoice( std::string key, Parameter::Pointer param )
+  {
+    m_ChoiceMap[key] = param;
+  }
 
 protected:
   /** Constructor */

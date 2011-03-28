@@ -41,7 +41,7 @@ public:
 
   void AddParameter();
 
-  Parameter* GetParameter(Key& key);
+  Parameter* GetParameter(std::string& key);
 
 protected:
 
