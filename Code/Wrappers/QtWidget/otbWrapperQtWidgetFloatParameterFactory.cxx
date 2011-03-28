@@ -38,7 +38,7 @@ QWidget * QtWidgetFloatParameterFactory::CreateQtWidget(Parameter * param)
   FloatParameter * floatParam = dynamic_cast<FloatParameter *>(param);
 
   // Check if dynamic cast succeeds
-  if(!param)
+  if(!floatParam)
     {
     return 0;
     }
@@ -52,6 +52,7 @@ QWidget * QtWidgetFloatParameterFactory::CreateQtWidget(Parameter * param)
   input->setDecimals(5);
   input->setRange(floatParam->GetMinimumValue(), floatParam->GetMaximumValue());
   input->setToolTip(floatParam->GetDescription());
+  
 
   QString optionID(floatParam->GetName());
   hLayout->addWidget(input);

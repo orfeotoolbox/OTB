@@ -38,28 +38,33 @@ QWidget * QtWidgetIntParameterFactory::CreateQtWidget(Parameter * param)
   IntParameter * intParam = dynamic_cast<IntParameter *>(param);
 
   // Check if dynamic cast succeeds
-  if(!param)
+  if(!intParam)
     {
     return 0;
     }
+  
+  // a GridLayout with two colums : option name / option inputs
+  QGroupBox *gridGroup = new QGroupBox;
+  gridGroup->setFlat(true);
 
-  // Set up input text edit
-  QHBoxLayout *hLayout = new QHBoxLayout;
-  hLayout->setSpacing(0);
-  hLayout->setContentsMargins(0,0,0,0);
+  QGridLayout *gridLayout = new QGridLayout;
+  gridLayout->setSpacing(1);
+  gridLayout->setContentsMargins(0,0,0,0);
+  gridGroup->setLayout(gridLayout);
   
   QSpinBox* input = new QSpinBox;
   input->setRange(intParam->GetMinimumValue(), intParam->GetMaximumValue());
   input->setToolTip(intParam->GetDescription());
-  
-  QString optionID(intParam->GetName());
 
-  hLayout->addWidget(input);
-  hLayout->addStretch();
+  // Set up label
+  QLabel *label = new QLabel;
+  label->setText(intParam->GetName());
+  label->setToolTip(intParam->GetDescription());
 
-  QGroupBox *paramHGroup = new QGroupBox;
-  paramHGroup->setLayout(hLayout);
-  return paramHGroup;
+  gridLayout->addWidget(label,0,0);
+  gridLayout->addWidget(input,0,1);
+
+  return gridGroup;
 }
 }
 }
