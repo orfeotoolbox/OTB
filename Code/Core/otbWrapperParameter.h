@@ -19,7 +19,8 @@
 #define __otbWrapperParameter_h
 
 #include "otbMacro.h"
-#include "itkLightObject.h"
+#include "itkObject.h"
+#include "itkObjectFactory.h"
 
 namespace otb
 {
@@ -53,7 +54,7 @@ enum DefaultValueMode
  *  kinds of parameters 
  */
 class Parameter
-  : public itk::LightObject
+  : public itk::Object
 {
 public:
   /** Standard class typedef */
