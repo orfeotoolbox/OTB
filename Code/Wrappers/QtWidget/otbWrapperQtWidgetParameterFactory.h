@@ -49,7 +49,7 @@ public:
 
 protected:
   QtWidgetParameterFactory();
-  ~QtWidgetParameterFactory();
+  virtual ~QtWidgetParameterFactory();
 
 private:
   QtWidgetParameterFactory(const Self&); //purposely not implemented

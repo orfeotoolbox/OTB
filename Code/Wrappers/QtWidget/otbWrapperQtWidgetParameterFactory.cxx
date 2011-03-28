@@ -33,6 +33,21 @@ QtWidgetParameterFactory::~QtWidgetParameterFactory()
 
 }
 
+void
+QtWidgetParameterFactory::RegisterBuiltInFactories()
+{
+
+}
+
+QWidget*
+QtWidgetParameterFactory::CreateQtWidget( Parameter* param )
+{
+
+
+
+  return 0;
+}
+
 
 }
 }
