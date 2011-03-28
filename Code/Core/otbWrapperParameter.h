@@ -44,7 +44,7 @@ enum DefaultValueMode
      */
     ABSOLUTE
   };
-}
+
 
 
 /** \class Parameter
