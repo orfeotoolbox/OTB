@@ -54,7 +54,7 @@ public:
   }
 
   /** Set any value */
-  virtual SetAnyValue(boost::any v)
+  virtual void SetAnyValue(boost::any v)
   {
     // Perform any cast
     m_Value=boost::any_cast<T>(v);
