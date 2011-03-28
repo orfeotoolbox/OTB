@@ -15,21 +15,16 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
-// this file defines the otbProjectionsTest for the test driver
-// and all it expects is that you have a function called RegisterTests
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
 #endif
 
-#include "otbTestMain.h"
+#include "otbWrapperNumericalParameter.h"
 
-void RegisterTests()
+int otbWrapperNumericalParameterNew(int argc, char* argv[])
 {
-  REGISTER_TEST(otbWrapperParameterNew);
-  REGISTER_TEST(otbWrapperParameterTest1);
-  REGISTER_TEST(otbWrapperNumericalParameterNew);
-  REGISTER_TEST(otbWrapperEmptyParameterNew);
-  //REGISTER_TEST(otbWrapperApplicationNew);
-  REGISTER_TEST(otbWrapperParameterListNew);
+  typedef otb::Wrapper::NumericalParameter <int> NumericalParameterType;
+  NumericalParameterType::Pointer parameter = NumericalParameterType::New();
+
+  return EXIT_SUCCESS;
 }

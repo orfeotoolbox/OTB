@@ -15,13 +15,32 @@ ADD_TEST(owTvParameter ${OTB_WRAPPER_TESTS}
 	"param1"
   )
   
-# -------       Source files CXX -----------------------------------
+  
+# NumericalParameter class test
+ADD_TEST(owTuNumericalParameter ${OTB_WRAPPER_TESTS}
+	otbWrapperNumericalParameterNew
+  ) 
+  
+# EmptyParameter class test
+ADD_TEST(owTuEmptyParameter ${OTB_WRAPPER_TESTS}
+	otbWrapperEmptyParameterNew
+  )
+  
+# NumericalParameter class test
+ADD_TEST(owTuNumericalParameter ${OTB_WRAPPER_TESTS}
+	otbWrapperNumericalParameterNew
+  )
+# ----------------Source files CXX -----------------------------------
 
 SET(Wrapper_SRCS
 otbWrapperTests.cxx
 otbWrapperParameterTest.cxx
+otbWrapperNumericalParameterTest.cxx
+otbWrapperEmptyParameterTest.cxx
+#otbWrapperApplicationTest.cxx
+otbWrapperParameterListTest.cxx
 )
 
 ADD_EXECUTABLE(otbWrapperTests ${Wrapper_SRCS})
-TARGET_LINK_LIBRARIES(otbWrapperTests OTBIO OTBCommon  ITKIO ITKCommon OTBTesting)
+TARGET_LINK_LIBRARIES(otbWrapperTests OTBIO OTBCommon ITKIO ITKCommon OTBTesting)
 

@@ -67,7 +67,7 @@ public:
   itkNewMacro(Self);
 
   /** RTTI support */
-  itkTypeMacro(Parameter,itk::LightObject);
+  itkTypeMacro(Parameter,itk::Object);
 
   /** Set the parameter name */
   itkSetStringMacro(Name);

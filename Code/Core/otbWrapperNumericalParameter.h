@@ -28,8 +28,8 @@ namespace Wrapper
 /** \class NumericalParameter
  *  \brief This class represents a numerical parameter
  */ 
-template <typename T> NumericalParameter
-: public Parameter
+template <class T>
+class ITK_EXPORT NumericalParameter : public Parameter
 {
 public:
   /** Standard class typedef */
@@ -80,8 +80,8 @@ public:
 protected:
   /** Constructor */
   NumericalParameter() 
-    : m_Value(itk::NumericTraits<T>::Zero()),
-    m_DefaultValue(itk::NumericTraits<T>::Zero()),
+    : m_Value(itk::NumericTraits<T>::Zero),
+    m_DefaultValue(itk::NumericTraits<T>::Zero),
     m_MinimumValue(itk::NumericTraits<T>::min()),
     m_MaximumValue(itk::NumericTraits<T>::max())
   {}
