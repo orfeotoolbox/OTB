@@ -105,7 +105,7 @@ public:
   /** Reset to the the default value. Default implementation does
    * nothing 
    */
-  virtual void Reset();
+  virtual void Reset() {}
 
 protected:
   /** Constructor */

@@ -24,7 +24,7 @@
 
 namespace otb
 {
-namespace wrapper
+namespace Wrapper
 {
 
 /** \class Application
@@ -45,7 +45,7 @@ public:
   itkNewMacro(Self);
 
   /** RTTI support */
-  itkTypeMacro(Parameter,itk::LightObject);
+  itkTypeMacro(Application,itk::Object);
 
   std::string GetName()
   {
@@ -59,11 +59,15 @@ public:
 
   ParameterList* GetParameterList();
 
-  virtual int Execute() = 0;
+  virtual int Execute() { return 0;}
 
 protected:
   Application();
   virtual ~Application();
+
+private:
+  Application(const Application &); //purposely not implemented
+  void operator =(const Application&); //purposely not implemented
 
   void SetName(std::string s)
   {

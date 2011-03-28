@@ -26,7 +26,7 @@ int otbWrapperParameterNew(int argc, char* argv[])
   typedef otb::Wrapper::Parameter ParameterBaseType;
   ParameterBaseType::Pointer parameter = ParameterBaseType::New();
 
-  std::cout << parameter << std::endl;
+  //std::cout << parameter << std::endl;
 
   return EXIT_SUCCESS;
 }
@@ -36,7 +36,7 @@ int otbWrapperParameterTest1(int argc, char* argv[])
   typedef otb::Wrapper::Parameter ParameterBaseType;
   ParameterBaseType::Pointer parameter = ParameterBaseType::New();
 
-  const string name = argv[1];
+  const std::string name = argv[1];
 
   parameter->SetName(name);
 

@@ -20,12 +20,12 @@
 
 namespace otb
 {
-namespace wrapper
+namespace Wrapper
 {
 
 Application::Application()
 {
-  m_ParameterList = ParameterList::New();
+  //m_ParameterList = ParameterList::New();
 }
 
 Application::~Application()
