@@ -34,7 +34,7 @@ class ITK_EXPORT NumericalParameter : public Parameter
 public:
   /** Standard class typedef */
   typedef NumericalParameter            Self;
-  typedef itk::LightObject              Superclass;
+  typedef Parameter                     Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -42,7 +42,7 @@ public:
   itkNewMacro(Self);
 
   /** RTTI support */
-  itkTypeMacro(NumericalParameter,otb::Wrapper::Parameter);
+  itkTypeMacro(NumericalParameter,Parameter);
 
   /** Typedef of the scalar type */
   typedef T ScalarType;
