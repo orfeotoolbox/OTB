@@ -17,10 +17,11 @@
 =========================================================================*/
 #include "otbWrapperQtWidgetParameterFactory.h"
 
-#include "otbWrapperQtWidgetNumericalParameterFactory.h"
+
+//#include "otbWrapperQtWidgetNumericalParameterFactory.h"
 #include "otbWrapperQtWidgetEmptyParameterFactory.h"
-#include "otbWrapperQtWidgetStringParameterFactory.h"
-#include "otbWrapperQtWidgetChoiceParameterFactory.h"
+//#include "otbWrapperQtWidgetStringParameterFactory.h"
+//#include "otbWrapperQtWidgetChoiceParameterFactory.h"
 
 namespace otb
 {
@@ -47,17 +48,17 @@ QtWidgetParameterFactory::CreateQtWidget( Parameter* param )
   if (!widget)
     widget = QtWidgetIntParameterFactory::CreateQtWidget( param );
 
-  if (!widget)
-    widget = QtWidgetFloatParameterFactory::CreateQtWidget( param );
+  //  if (!widget)
+  //    widget = QtWidgetFloatParameterFactory::CreateQtWidget( param );
 
   if (!widget)
     widget = QtWidgetEmptyParameterFactory::CreateQtWidget( param );
 
-  if (!widget)
-    widget = QtWidgetStringParameterFactory::CreateQtWidget( param );
+  //  if (!widget)
+  //   widget = QtWidgetStringParameterFactory::CreateQtWidget( param );
 
-  if (!widget)
-    widget = QtWidgetChoiceParameterFactory::CreateQtWidget( param );
+  //if (!widget)
+  //  widget = QtWidgetChoiceParameterFactory::CreateQtWidget( param );
 
   return 0;
 }
