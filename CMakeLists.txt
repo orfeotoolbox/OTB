@@ -51,7 +51,7 @@ ENDIF(OTB_FOUND)
 
 
 
-OPTION(OTB_USE_QT "Generate Qt wrappers for Applications" OFF)
+OPTION(OTB_USE_QT "Generate Qt wrappers for Applications" ON)
 IF(OTB_USE_QT)
   FIND_PACKAGE(Qt4 REQUIRED)
   SET(QT_USE_QTXML 1)

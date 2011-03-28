@@ -19,8 +19,10 @@
 #define __otbWrapperApplication_h
 
 #include <string>
+#include "otbMacro.h"
 #include "itkObject.h"
 #include "otbWrapperParameterList.h"
+#include "itkObjectFactory.h"
 
 namespace otb
 {
@@ -35,57 +37,53 @@ namespace Wrapper
 class ITK_EXPORT Application : public itk::Object
 {
 public:
-  /** Standard class typedefs. */
-  typedef Application                          Self;
-  typedef itk::Object                          Superclass;
-  typedef itk::SmartPointer<Self>              Pointer;
-  typedef itk::SmartPointer<const Self>        ConstPointer;
+/** Standard class typedefs. */
+typedef Application                          Self;
+typedef itk::Object                          Superclass;
+typedef itk::SmartPointer<Self>              Pointer;
+typedef itk::SmartPointer<const Self>        ConstPointer;
 
-  /** Defining ::New() static method */
-  itkNewMacro(Self);
+/** Defining ::New() static method */
+itkNewMacro(Self);
 
-  /** RTTI support */
-  itkTypeMacro(Application,itk::Object);
+/** RTTI support */
+itkTypeMacro(Application,itk::Object);
 
-  std::string GetName()
-  {
-    return m_Name;
-  }
+/** Set the parameter name */
+itkSetStringMacro(Name);
 
-  std::string GetDescription()
-  {
-    return m_Description;
-  }
+/** Get the parameter name */
+itkGetStringMacro(Name);
 
-  ParameterList* GetParameterList();
+/** Set the parameter description */
+itkSetStringMacro(Description);
 
-  virtual int Execute() { return 0;}
+/** Get the parameter description */
+itkGetStringMacro(Description);
+
+ParameterList* GetParameterList()
+          {
+  return m_ParameterList;
+          }
+
+virtual int Execute() {return 0;}
 
 protected:
-  Application();
-  virtual ~Application();
+/** Constructor */
+Application();
+virtual ~Application();
 
 private:
-  Application(const Application &); //purposely not implemented
-  void operator =(const Application&); //purposely not implemented
+Application(const Application &); //purposely not implemented
+void operator =(const Application&); //purposely not implemented
 
-  void SetName(std::string s)
-  {
-    m_Name = s;
-  }
+std::string            m_Name;
+std::string            m_Description;
+ParameterList::Pointer m_ParameterList;
 
-  void SetDescription(std::string s)
-  {
-    m_Description = s;
-  }
+}; //end class
 
-  std::string            m_Name;
-  std::string            m_Description;
-  ParameterList::Pointer m_ParameterList;
-};
+} // end namespace Wrapper
+} //end namespace otb
 
-
-}
-}
-
-#endif // __otbWrapperApplicationOptions_h_
+#endif // __otbWrapperApplication_h_
