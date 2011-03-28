@@ -124,6 +124,12 @@ private:
 
 }; // End class Numerical Parameter
 
+// Helper typedef for float
+typedef NumericalParameter<float> FloatParameter;
+
+// Helper typedef for int
+typedef NumericalParameter<int> IntParameter;
+
 } // End namespace Wrapper
 } // End namespace otb
 

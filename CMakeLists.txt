@@ -67,16 +67,18 @@ ENDIF(OTB_USE_QT)
 #By default, import the option from the OTB configuration
 SET(BUILD_SHARED_LIBS ${OTB_BUILD_SHARED_LIBS})
 
-ADD_SUBDIRECTORY(Code)
 INCLUDE_DIRECTORIES(
     ${CMAKE_CURRENT_SOURCE_DIR}/Code
     ${CMAKE_CURRENT_SOURCE_DIR}/Code/Core
     ${CMAKE_CURRENT_SOURCE_DIR}/Code/Wrappers
+    ${CMAKE_CURRENT_SOURCE_DIR}/Code/Wrappers/QtWidget
     ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}/Code
     ${CMAKE_CURRENT_BINARY_DIR}/Code/Wrappers
-
+    ${CMAKE_CURRENT_BINARY_DIR}/Code/Wrappers/QtWidget
 )
+
+ADD_SUBDIRECTORY(Code)
 
 # Enable / Disable testing
 OPTION(BUILD_TESTING  "Build testing." OFF)
