@@ -32,12 +32,11 @@ QtWidgetEmptyParameter::QtWidgetEmptyParameter(EmptyParameter* emptyParam)
   QCheckBox* checkbox = new QCheckBox;
   checkbox->setToolTip(emptyParam->GetDescription());
 
-  QString optionID(emptyParam->GetName());
+  //QString optionID(emptyParam->GetName());
   hLayout->addWidget(checkbox);
   hLayout->addStretch();
 
-  QGroupBox *paramHGroup = new QGroupBox;
-  paramHGroup->setLayout(hLayout);
+  this->setLayout(hLayout);
 }
 
 QtWidgetEmptyParameter::~QtWidgetEmptyParameter()

@@ -33,20 +33,14 @@ namespace Wrapper
 class QtWidgetEmptyParameter : public QWidget
 {
   Q_OBJECT
-public:
-  /** Standard class typedefs. */
-  typedef QtWidgetEmptyParameter        Self;
-  typedef itk::Object                   Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
 
 public:
   QtWidgetEmptyParameter(EmptyParameter*);
   virtual ~QtWidgetEmptyParameter();
 
 private:
-  QtWidgetEmptyParameter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  QtWidgetEmptyParameter(const QtWidgetEmptyParameter&); //purposely not implemented
+  void operator=(const QtWidgetEmptyParameter&); //purposely not implemented
 
 };
 

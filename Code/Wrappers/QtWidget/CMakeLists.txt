@@ -1,6 +1,6 @@
 
 FILE(GLOB srcs "*.cxx")
-SET( WrappersQtWidget_MOC_HDR otbWrapperQtWidgetEmptyParameter.h )   
+SET( WrappersQtWidget_MOC_HDR otbWrapperQtWidgetEmptyParameter.h otbWrapperQtWidgetFloatParameter.h )   
 QT4_WRAP_CPP(WrappersQtWidget_MOC_SRC ${WrappersQtWidget_MOC_HDR})
 
 ADD_LIBRARY(OTBWrapperQtWidget ${srcs} ${WrappersQtWidget_MOC_SRC})

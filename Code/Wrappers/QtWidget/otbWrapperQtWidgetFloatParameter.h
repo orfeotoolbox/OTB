@@ -15,35 +15,36 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef __otbWrapperQtWidgetFloatParameter_h
+#define __otbWrapperQtWidgetFloatParameter_h
 
-#include "otbWrapperQtWidgetFloatParameterFactory.h"
+#include <QtGui>
+#include "otbWrapperParameter.h"
 #include "otbWrapperNumericalParameter.h"
-#include "otbWrapperQtWidgetFloatParameter.h"
 
 namespace otb
 {
-
 namespace Wrapper
 {
 
-QtWidgetFloatParameterFactory::QtWidgetFloatParameterFactory()
-{}
-
-QtWidgetFloatParameterFactory::~QtWidgetFloatParameterFactory()
-{}
-
-QWidget * QtWidgetFloatParameterFactory::CreateQtWidget(Parameter * param)
+/** \class
+ * \brief
+ */
+class QtWidgetFloatParameter : public QWidget
 {
-  // Try to cast to int parameter
-  FloatParameter * floatParam = dynamic_cast<FloatParameter *>(param);
+  Q_OBJECT
+public:
+  QtWidgetFloatParameter(FloatParameter*);
+  virtual ~QtWidgetFloatParameter();
 
-  // Check if dynamic cast succeeds
-  if(!floatParam)
-    {
-    return 0;
-    }
-  
-  return new QtWidgetFloatParameter(floatParam);
+private:
+  QtWidgetFloatParameter(const QtWidgetFloatParameter&); //purposely not implemented
+  void operator=(const QtWidgetFloatParameter&); //purposely not implemented
+
+};
+
+
 }
 }
-}
+
+#endif

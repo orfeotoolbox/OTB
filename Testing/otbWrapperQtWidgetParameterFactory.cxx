@@ -64,6 +64,7 @@ int otbWrapperQtWidgetParameterFactory(int argc, char* argv[])
     floatWidget->show();
     emptyWidget->show();
 
+    return app.exec();
     return EXIT_SUCCESS;
     }
 
