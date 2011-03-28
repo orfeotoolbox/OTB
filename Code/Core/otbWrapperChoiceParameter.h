@@ -37,7 +37,7 @@ class ChoiceParameter
 public:
   /** Standard class typedef */
   typedef ChoiceParameter               Self;
-  typedef itk::LightObject              Superclass;
+  typedef Parameter                     Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -50,8 +50,35 @@ public:
   /** Add a value to the choice */
   void AddChoice( std::string key, Parameter::Pointer param )
   {
-    m_ChoiceMap[key] = param;
+    m_ChoiceList.push_back(std::make_pair(key, param));
   }
+
+  Parameter::Pointer GetChoice( int i )
+  {
+    return m_ChoiceList[i].second;
+  }
+
+  unsigned int GetNbChoice( void )
+  {
+    return m_ChoiceList.size();
+  }
+
+  /** Set any value */
+  virtual void SetAnyValue(boost::any v)
+  {
+    // Perform any cast
+    m_CurrentChoice = boost::any_cast<bool>(v);
+
+    // Call Modified();
+    this->Modified();
+  }
+
+  /** Return any value */
+  virtual boost::any GetAnyValue()
+  {
+    return boost::any(m_CurrentChoice);
+  }
+
 
 protected:
   /** Constructor */
@@ -66,10 +93,12 @@ private:
   ChoiceParameter(const ChoiceParameter &); //purposely not implemented
   void operator =(const ChoiceParameter&); //purposely not implemented
 
-  typedef std::map<std::string, Parameter::Pointer> ChoiceMap;
-  ChoiceMap m_ChoiceMap;
+  typedef std::pair<std::string, Parameter::Pointer> Choice;
 
+  typedef std::vector<Choice> ChoiceList;
+  ChoiceList m_ChoiceList;
 
+  unsigned int m_CurrentChoice;
 
 }; // End class Parameter
 

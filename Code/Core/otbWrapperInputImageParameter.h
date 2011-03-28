@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperEmptyParameter_h
-#define __otbWrapperEmptyParameter_h
+#ifndef __otbWrapperInputImageParameter_h
+#define __otbWrapperInputImageParameter_h
 
 #include "otbWrapperParameter.h"
 
@@ -24,16 +24,15 @@ namespace otb
 {
 namespace Wrapper
 {
-
-/** \class EmptyParameter
- *  \brief This class represent an empty parameter for the wrapper framework (boolean value)
+/** \class InputImageParameter
+ *  \brief This class represents a InputImage parameter
  */
-class EmptyParameter
-  : public Parameter
+
+class ITK_EXPORT InputImageParameter : public Parameter
 {
 public:
   /** Standard class typedef */
-  typedef EmptyParameter                Self;
+  typedef InputImageParameter           Self;
   typedef Parameter                     Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -42,41 +41,22 @@ public:
   itkNewMacro(Self);
 
   /** RTTI support */
-  itkTypeMacro(EmptyParameter, Parameter);
-
-  /** Set any value */
-  virtual void SetAnyValue(boost::any v)
-  {
-    // Perform any cast
-    m_Value = boost::any_cast<bool>(v);
-
-    // Call Modified();
-    this->Modified();
-  }
-
-  /** Return any value */
-  virtual boost::any GetAnyValue()
-  {
-    return boost::any(m_Value);
-  }
-
+  itkTypeMacro(InputImageParameter,Parameter);
 
 protected:
   /** Constructor */
-  EmptyParameter()
+  InputImageParameter()
   {}
 
   /** Destructor */
-  ~EmptyParameter()
+  virtual ~InputImageParameter()
   {}
 
 private:
-  EmptyParameter(const EmptyParameter &); //purposely not implemented
-  void operator =(const EmptyParameter&); //purposely not implemented
+  InputImageParameter(const Parameter &); //purposely not implemented
+  void operator =(const Parameter&); //purposely not implemented
 
-  bool m_Value;
-
-}; // End class Parameter
+}; // End class InputImage Parameter
 
 } // End namespace Wrapper
 } // End namespace otb

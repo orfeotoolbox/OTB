@@ -34,7 +34,7 @@ class StringParameter
 public:
   /** Standard class typedef */
   typedef StringParameter               Self;
-  typedef itk::LightObject              Superclass;
+  typedef Parameter                     Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -44,6 +44,21 @@ public:
   /** RTTI support */
   itkTypeMacro(StringParameter, Parameter);
 
+  /** Set any value */
+  virtual void SetAnyValue(boost::any v)
+  {
+    // Perform any cast
+    m_Value = boost::any_cast<std::string>(v);
+
+    // Call Modified();
+    this->Modified();
+  }
+
+  /** Return any value */
+  virtual boost::any GetAnyValue()
+  {
+    return boost::any(m_Value);
+  }
 
 protected:
   /** Constructor */

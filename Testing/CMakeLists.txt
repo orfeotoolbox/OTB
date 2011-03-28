@@ -38,7 +38,12 @@ ADD_TEST(owTvNumericalParameter ${OTB_WRAPPER_TESTS}
 	"mykey"
 	"my description"
   )
-  
+
+# Input Image parameter class test
+ADD_TEST(owTuInputImageParameter ${OTB_WRAPPER_TESTS}
+	otbWrapperInputImageParameterNew
+  )
+    
 # Application class test
 ADD_TEST(owTuApplication ${OTB_WRAPPER_TESTS}
 	otbWrapperApplicationNew
@@ -60,6 +65,7 @@ otbWrapperNumericalParameterTest.cxx
 otbWrapperEmptyParameterTest.cxx
 otbWrapperApplicationTest.cxx
 otbWrapperParameterListTest.cxx
+otbWrapperInputImageParameterTest.cxx
 )
 
 ADD_EXECUTABLE(otbWrapperTests ${Wrapper_SRCS})
