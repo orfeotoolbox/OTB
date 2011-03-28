@@ -15,24 +15,17 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbWrapperApplication.h"
 
+// this file defines the otbProjectionsTest for the test driver
+// and all it expects is that you have a function called RegisterTests
+#if defined(_MSC_VER)
+#pragma warning ( disable : 4786 )
+#endif
 
-namespace otb
+#include "otbTestMain.h"
+
+void RegisterTests()
 {
-namespace Wrapper
-{
-
-Application::Application()
-{
-  //m_ParameterList = ParameterList::New();
+  REGISTER_TEST(otbWrapperParameterNew);
+  REGISTER_TEST(otbWrapperParameterTest1);
 }
-
-Application::~Application()
-{
-
-}
-
-}
-}
-
