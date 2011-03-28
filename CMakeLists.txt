@@ -49,6 +49,19 @@ ELSE(OTB_FOUND)
           "OTB not found. Please set OTB_DIR")
 ENDIF(OTB_FOUND)
 
+
+
+OPTION(OTB_USE_QT "Generate Qt wrappers for Applications" OFF)
+IF(OTB_USE_QT)
+  FIND_PACKAGE(Qt4 REQUIRED)
+  SET(QT_USE_QTXML 1)
+  INCLUDE(${QT_USE_FILE})
+  INCLUDE_DIRECTORIES(${QT_INCLUDE_DIRS})
+ENDIF(OTB_USE_QT)
+
+
+
+
 #-----------------------------------------------------------------------------
 #Build shared libraries for monteverdi
 #By default, import the option from the OTB configuration
@@ -76,17 +89,6 @@ IF(BUILD_TESTING)
   MARK_AS_ADVANCED(BUILDNAME)
   ADD_SUBDIRECTORY(Testing)
 ENDIF(BUILD_TESTING)
-
-
-
-OPTION(OTB_USE_QT "Generate Qt wrappers for Applications" OFF)
-IF(OTB_USE_QT)
-  FIND_PACKAGE(Qt4 REQUIRED)
-  SET(QT_USE_QTXML 1)
-  INCLUDE(${QT_USE_FILE})
-  INCLUDE_DIRECTORIES(${QT_INCLUDE_DIRS})
-ENDIF(OTB_USE_QT)
-
 
 
 
