@@ -38,7 +38,7 @@ QWidget * QtWidgetFloatParameterFactory::CreateQtWidget(Parameter * param)
   FloatParameter * floatParam = dynamic_cast<FloatParameter *>(param);
 
   // Check if dynamic cast succeeds
-  if(!param)
+  if(!floatParam)
     {
     return 0;
     }
