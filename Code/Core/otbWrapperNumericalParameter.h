@@ -53,6 +53,22 @@ public:
     m_Value = m_DefaultValue;
   }
 
+  /** Set any value */
+  virtual SetAnyValue(boost::any v)
+  {
+    // Perform any cast
+    m_Value=boost::any_cast<T>(v);
+
+    // Call Modified();
+    this->Modified();
+  }
+  
+  /** Return any value */
+  virtual boost::any GetAnyValue()
+  {
+    return boost::any(m_Value);
+  }
+
   /** Set the value */
   itkSetMacro(Value,ScalarType);
 

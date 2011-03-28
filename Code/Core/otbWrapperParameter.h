@@ -19,7 +19,9 @@
 #define __otbWrapperParameter_h
 
 #include "otbMacro.h"
-#include "itkLightObject.h"
+#include "itkObject.h"
+#include "boost/any.hpp"
+#include "itkObjectFactory.h"
 
 namespace otb
 {
@@ -44,7 +46,7 @@ enum DefaultValueMode
      */
     ABSOLUTE
   };
-}
+
 
 /** \class Parameter
  *  \brief This class represent a parameter for the wrapper framework
@@ -53,7 +55,7 @@ enum DefaultValueMode
  *  kinds of parameters 
  */
 class Parameter
-  : public itk::LightObject
+  : public itk::Object
 {
 public:
   /** Standard class typedef */
@@ -104,7 +106,24 @@ public:
   /** Reset to the the default value. Default implementation does
    * nothing 
    */
-  virtual void Reset();
+  virtual void Reset() {}
+
+  /** Return the parameter value as a boost:any. Should be
+   * reimplemented in each relevant sub-class (default implementation
+   * raise exception) */
+  virtual boost::any GetAnyValue()
+  {
+    itkExceptionMacro(<<"GetAnyValue() method must be re-implemented by sub-classes.");
+  }
+  
+  /** Set the parameter value as a boost:any. Should be
+   * reimplemented in each relevant sub-class (default implementation
+   * raise exception) */
+  virtual void SetAnyValue(boost::any)
+  {
+    itkExceptionMacro(<<"SetAnyValue() method must be re-implemented by sub-classes.");
+  }
+
 
 protected:
   /** Constructor */

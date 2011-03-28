@@ -30,7 +30,7 @@ namespace Wrapper
 /**
  * \class WrapperParameterList
  */
-class ITK_EXPORT ParameterList : public itk::LightObject
+class ITK_EXPORT ParameterList : public itk::Object
 {
 public:
   /** Standard class typedefs. */
@@ -38,12 +38,21 @@ public:
   typedef itk::Object                          Superclass;
   typedef itk::SmartPointer<Self>              Pointer;
   typedef itk::SmartPointer<const Self>        ConstPointer;
+  typedef Parameter                            ParameterType;
 
   void AddParameter();
 
-  Parameter* GetParameter(std::string& key);
+  ParameterType * GetParameter(std::string & key);
 
 protected:
+  ParameterList()
+  {}
+  virtual ~ParameterList()
+  {}
+
+private:
+  ParameterList(const ParameterList &); //purposely not implemented
+  void operator =(const ParameterList&); //purposely not implemented
 
   std::vector<Parameter::Pointer> m_ParameterList;
 
