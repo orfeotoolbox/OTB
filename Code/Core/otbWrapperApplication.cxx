@@ -20,7 +20,7 @@
 
 namespace otb
 {
-namespace wrapper
+namespace Wrapper
 {
 
 Application::Application()

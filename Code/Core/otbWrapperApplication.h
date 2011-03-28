@@ -24,7 +24,7 @@
 
 namespace otb
 {
-namespace wrapper
+namespace Wrapper
 {
 
 /** \class Application
