@@ -46,7 +46,6 @@ enum DefaultValueMode
   };
 
 
-
 /** \class Parameter
  *  \brief This class represent a parameter for the wrapper framework
  *  This class is a high level class representing a parameter for the
@@ -102,6 +101,11 @@ public:
   /** Get the default value mode */
   itkGetEnumMacro(DefaultValueMode,DefaultValueMode);
 
+  /** Reset to the the default value. Default implementation does
+   * nothing 
+   */
+  virtual void Reset();
+
 protected:
   /** Constructor */
   Parameter() : m_Name(""),
@@ -112,7 +116,7 @@ protected:
   {}
 
   /** Destructor */
-  ~Parameter()
+  virtual ~Parameter()
   {}
 
 private:
