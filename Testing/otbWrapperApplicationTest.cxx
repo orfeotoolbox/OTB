@@ -15,20 +15,16 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#if defined(_MSC_VER)
+#pragma warning ( disable : 4786 )
+#endif
+
 #include "otbWrapperApplication.h"
 
-
-namespace otb
+int otbWrapperApplicationNew(int argc, char* argv[])
 {
-namespace Wrapper
-{
+  typedef otb::Wrapper::Application ApplicationType;
+  ApplicationType::Pointer application = ApplicationType::New();
 
-Application::Application(): m_Name(""), m_Description("")
-{}
-
-Application::~Application()
-{}
-
+  return EXIT_SUCCESS;
 }
-}
-

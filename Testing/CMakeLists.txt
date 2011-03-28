@@ -37,6 +37,12 @@ ADD_TEST(owTvNumericalParameter ${OTB_WRAPPER_TESTS}
 	"mykey"
 	"my description"
   )
+  
+# Application class test
+ADD_TEST(owTuApplication ${OTB_WRAPPER_TESTS}
+	otbWrapperApplicationNew
+  )
+  
 # ----------------Source files CXX -----------------------------------
 
 SET(Wrapper_SRCS
@@ -44,10 +50,10 @@ otbWrapperTests.cxx
 otbWrapperParameterTest.cxx
 otbWrapperNumericalParameterTest.cxx
 otbWrapperEmptyParameterTest.cxx
-#otbWrapperApplicationTest.cxx
+otbWrapperApplicationTest.cxx
 otbWrapperParameterListTest.cxx
 )
 
 ADD_EXECUTABLE(otbWrapperTests ${Wrapper_SRCS})
-TARGET_LINK_LIBRARIES(otbWrapperTests OTBIO OTBCommon ITKIO ITKCommon OTBTesting)
+TARGET_LINK_LIBRARIES(otbWrapperTests OTBIO OTBCommon ITKIO ITKCommon OTBTesting OTBWrapperCore)
 
