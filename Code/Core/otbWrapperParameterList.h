@@ -40,6 +40,12 @@ public:
   typedef itk::SmartPointer<const Self>        ConstPointer;
   typedef Parameter                            ParameterType;
 
+  /** Defining ::New() static method */
+  itkNewMacro(Self);
+
+  /** RTTI support */
+  itkTypeMacro(ParameterList,itk::Object);
+
   void AddParameter();
 
   ParameterType * GetParameter(std::string & key);

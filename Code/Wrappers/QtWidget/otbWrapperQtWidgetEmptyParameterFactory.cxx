@@ -15,22 +15,30 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#include "otbWrapperQtWidgetEmptyParameterFactory.h"
 
-// this file defines the otbProjectionsTest for the test driver
-// and all it expects is that you have a function called RegisterTests
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
-
-#include "otbTestMain.h"
-
-void RegisterTests()
+namespace otb
 {
-  REGISTER_TEST(otbWrapperParameterNew);
-  REGISTER_TEST(otbWrapperParameterTest1);
-  REGISTER_TEST(otbWrapperNumericalParameterNew);
-  REGISTER_TEST(otbWrapperNumericalParameterTest1);
-  REGISTER_TEST(otbWrapperEmptyParameterNew);
-  //REGISTER_TEST(otbWrapperApplicationNew);
-  REGISTER_TEST(otbWrapperParameterListNew);
+namespace Wrapper
+{
+
+QtWidgetEmptyParameterFactory::QtWidgetEmptyParameterFactory()
+{
 }
+
+QtWidgetEmptyParameterFactory::~QtWidgetEmptyParameterFactory()
+{
+
+}
+
+QWidget*
+QtWidgetEmptyParameterFactory::CreateQtWidget( Parameter* param )
+{
+
+}
+
+
+}
+}
+
+#endif
