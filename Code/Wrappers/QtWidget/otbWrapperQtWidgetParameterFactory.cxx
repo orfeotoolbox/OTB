@@ -20,6 +20,7 @@
 
 //#include "otbWrapperQtWidgetNumericalParameterFactory.h"
 #include "otbWrapperQtWidgetEmptyParameterFactory.h"
+#include "otbWrapperQtWidgetIntParameterFactory.h"
 //#include "otbWrapperQtWidgetStringParameterFactory.h"
 //#include "otbWrapperQtWidgetChoiceParameterFactory.h"
 

@@ -32,13 +32,13 @@ QtWidgetIntParameterFactory::QtWidgetIntParameterFactory()
 QtWidgetIntParameterFactory::~QtWidgetIntParameterFactory()
 {}
 
-static QWidget * QtWidgetIntParameterFactory::CreateQtWidget(Parameter * param)
+QWidget * QtWidgetIntParameterFactory::CreateQtWidget(Parameter * param)
 {
   // Try to cast to int parameter
   IntParameter * intParam = dynamic_cast<IntParameter *>(param);
 
   // Check if dynamic cast succeeds
-  if(param.IsNull())
+  if(!param)
     {
     return 0;
     }
@@ -50,9 +50,9 @@ static QWidget * QtWidgetIntParameterFactory::CreateQtWidget(Parameter * param)
   
   QSpinBox* input = new QSpinBox;
   input->setRange(intParam->GetMinimumValue(), intParam->GetMaximumValue());
-  input->setToolTip(intParam->GetDescription().c_str());
+  input->setToolTip(intParam->GetDescription());
   
-  QString optionID(intParam->GetName().c_str());
+  QString optionID(intParam->GetName());
 
   hLayout->addWidget(input);
   hLayout->addStretch();
@@ -60,4 +60,6 @@ static QWidget * QtWidgetIntParameterFactory::CreateQtWidget(Parameter * param)
   QGroupBox *paramHGroup = new QGroupBox;
   paramHGroup->setLayout(hLayout);
   return paramHGroup;
+}
+}
 }
