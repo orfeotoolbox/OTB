@@ -15,12 +15,11 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperQtWidgetFloatParameter_h
-#define __otbWrapperQtWidgetFloatParameter_h
+#ifndef __otbWrapperQtWidgetChoiceParameter_h
+#define __otbWrapperQtWidgetChoiceParameter_h
 
 #include <QtGui>
-#include "otbWrapperParameter.h"
-#include "otbWrapperNumericalParameter.h"
+#include "otbWrapperChoiceParameter.h"
 
 namespace otb
 {
@@ -30,18 +29,20 @@ namespace Wrapper
 /** \class
  * \brief
  */
-class QtWidgetFloatParameter : public QWidget
+class QtWidgetChoiceParameter : public QWidget
 {
   Q_OBJECT
 public:
-  QtWidgetFloatParameter(FloatParameter*);
-  virtual ~QtWidgetFloatParameter();
+  QtWidgetChoiceParameter(ChoiceParameter*);
+  virtual ~QtWidgetChoiceParameter();
 
 private:
-  QtWidgetFloatParameter(const QtWidgetFloatParameter&); //purposely not implemented
-  void operator=(const QtWidgetFloatParameter&); //purposely not implemented
+  QtWidgetChoiceParameter(const QtWidgetChoiceParameter&); //purposely not implemented
+  void operator=(const QtWidgetChoiceParameter&); //purposely not implemented
 
-  FloatParameter::Pointer m_FloatParam;
+  void CreateWidget();
+
+  ChoiceParameter::Pointer m_ChoiceParam;
 };
 
 

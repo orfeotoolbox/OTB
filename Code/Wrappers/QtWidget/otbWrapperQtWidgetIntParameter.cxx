@@ -15,35 +15,34 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
-#include "otbWrapperQtWidgetFloatParameterFactory.h"
-#include "otbWrapperNumericalParameter.h"
-#include "otbWrapperQtWidgetFloatParameter.h"
+#include "otbWrapperQtWidgetIntParameter.h"
 
 namespace otb
 {
-
 namespace Wrapper
 {
 
-QtWidgetFloatParameterFactory::QtWidgetFloatParameterFactory()
-{}
-
-QtWidgetFloatParameterFactory::~QtWidgetFloatParameterFactory()
-{}
-
-QWidget * QtWidgetFloatParameterFactory::CreateQtWidget(Parameter * param)
+QtWidgetIntParameter::QtWidgetIntParameter(IntParameter* param)
+: m_IntParam(param)
 {
-  // Try to cast to int parameter
-  FloatParameter * floatParam = dynamic_cast<FloatParameter *>(param);
+  // Set up input text edit
+  QHBoxLayout *hLayout = new QHBoxLayout;
+  hLayout->setSpacing(0);
+  hLayout->setContentsMargins(0,0,0,0);
 
-  // Check if dynamic cast succeeds
-  if(!floatParam)
-    {
-    return 0;
-    }
-  
-  return new QtWidgetFloatParameter(floatParam);
+  QSpinBox* input = new QSpinBox;
+  input->setRange(param->GetMinimumValue(), param->GetMaximumValue());
+  input->setToolTip(param->GetDescription());
+
+  hLayout->addWidget(input);
+  hLayout->addStretch();
+
+  this->setLayout(hLayout);
 }
+
+QtWidgetIntParameter::~QtWidgetIntParameter()
+{
+}
+
 }
 }

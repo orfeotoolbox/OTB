@@ -60,6 +60,12 @@ public:
     return boost::any(m_Value);
   }
 
+  /** Set the value */
+  itkSetMacro(Value,bool);
+
+  /** Get the value */
+  itkGetMacro(Value,bool);
+
 
 protected:
   /** Constructor */

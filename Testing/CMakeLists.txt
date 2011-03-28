@@ -54,6 +54,10 @@ ADD_TEST(owTvQtWidgetParameterFactory ${OTB_WRAPPER_QT_TESTS}
         otbWrapperQtWidgetParameterFactory
 )
 
+ADD_TEST(owTvQtWidgetParameterGroup ${OTB_WRAPPER_QT_TESTS}
+        otbWrapperQtWidgetParameterGroup
+)
+
 ENDIF(OTB_USE_QT)
 
 # ----------------Source files CXX -----------------------------------

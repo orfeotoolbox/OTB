@@ -15,37 +15,37 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperQtWidgetFloatParameter_h
-#define __otbWrapperQtWidgetFloatParameter_h
-
-#include <QtGui>
-#include "otbWrapperParameter.h"
-#include "otbWrapperNumericalParameter.h"
+#include "otbWrapperQtWidgetStringParameter.h"
 
 namespace otb
 {
 namespace Wrapper
 {
 
-/** \class
- * \brief
- */
-class QtWidgetFloatParameter : public QWidget
+QtWidgetStringParameter::QtWidgetStringParameter(StringParameter* param)
+: m_StringParam(param)
 {
-  Q_OBJECT
-public:
-  QtWidgetFloatParameter(FloatParameter*);
-  virtual ~QtWidgetFloatParameter();
+  this->CreateWidget();
+}
 
-private:
-  QtWidgetFloatParameter(const QtWidgetFloatParameter&); //purposely not implemented
-  void operator=(const QtWidgetFloatParameter&); //purposely not implemented
+QtWidgetStringParameter::~QtWidgetStringParameter()
+{
+}
 
-  FloatParameter::Pointer m_FloatParam;
-};
 
+void QtWidgetStringParameter::CreateWidget()
+{
+  // Set up input text edit
+  QHBoxLayout *hLayout = new QHBoxLayout;
+  hLayout->setSpacing(0);
+  hLayout->setContentsMargins(0,0,0,0);
+
+  QLineEdit* input = new QLineEdit;
+  input->setToolTip(m_StringParam->GetDescription());
+  hLayout->addWidget(input);
+
+  this->setLayout(hLayout);
+}
 
 }
 }
-
-#endif

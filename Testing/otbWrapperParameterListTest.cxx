@@ -24,7 +24,7 @@
 int otbWrapperParameterListNew(int argc, char* argv[])
 {
   typedef otb::Wrapper::ParameterList ParameterListType;
-  ParameterListType::Pointer parameter = ParameterListType::New();
+  ParameterListType parameters;
 
   //std::cout << parameter << std::endl;
 

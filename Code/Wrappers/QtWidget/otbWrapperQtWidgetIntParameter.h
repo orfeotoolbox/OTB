@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperQtWidgetFloatParameter_h
-#define __otbWrapperQtWidgetFloatParameter_h
+#ifndef __otbWrapperQtWidgetIntParameter_h
+#define __otbWrapperQtWidgetIntParameter_h
 
 #include <QtGui>
 #include "otbWrapperParameter.h"
@@ -30,18 +30,18 @@ namespace Wrapper
 /** \class
  * \brief
  */
-class QtWidgetFloatParameter : public QWidget
+class QtWidgetIntParameter : public QWidget
 {
   Q_OBJECT
 public:
-  QtWidgetFloatParameter(FloatParameter*);
-  virtual ~QtWidgetFloatParameter();
+  QtWidgetIntParameter(IntParameter*);
+  virtual ~QtWidgetIntParameter();
 
 private:
-  QtWidgetFloatParameter(const QtWidgetFloatParameter&); //purposely not implemented
-  void operator=(const QtWidgetFloatParameter&); //purposely not implemented
+  QtWidgetIntParameter(const QtWidgetIntParameter&); //purposely not implemented
+  void operator=(const QtWidgetIntParameter&); //purposely not implemented
 
-  FloatParameter::Pointer m_FloatParam;
+  IntParameter::Pointer m_IntParam;
 };
 
 

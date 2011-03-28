@@ -15,55 +15,43 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
-#include "otbWrapperQtWidgetChoiceParameterFactory.h"
-#include "otbWrapperChoiceParameter.h"
-
+#include "otbWrapperQtWidgetChoiceParameter.h"
 
 namespace otb
 {
-
 namespace Wrapper
 {
 
-QtWidgetChoiceParameterFactory::QtWidgetChoiceParameterFactory()
+QtWidgetChoiceParameter::QtWidgetChoiceParameter(ChoiceParameter* param)
+: m_ChoiceParam(param)
 {
+  this->CreateWidget();
 }
 
-QtWidgetChoiceParameterFactory::~QtWidgetChoiceParameterFactory()
+QtWidgetChoiceParameter::~QtWidgetChoiceParameter()
 {
+
 }
 
-QWidget * QtWidgetChoiceParameterFactory::CreateQtWidget(Parameter * param)
+void QtWidgetChoiceParameter::CreateWidget()
 {
-  // Try to cast to choice parameter
-  ChoiceParameter * choiceParam = dynamic_cast<ChoiceParameter *>(param);
-
-  // Check if dynamic cast succeeds
-  if(!choiceParam)
-    {
-    return 0;
-    }
-
   // Set up input text edit
   QHBoxLayout *hLayout = new QHBoxLayout;
   hLayout->setSpacing(0);
   hLayout->setContentsMargins(0,0,0,0);
 
   QComboBox* combobox = new QComboBox;
-  combobox->setToolTip(choiceParam->GetDescription());
+  combobox->setToolTip(m_ChoiceParam->GetDescription());
 
-
-  for (unsigned int i = 0; i < choiceParam->GetNbChoice(); ++i)
+  for (unsigned int i = 0; i < m_ChoiceParam->GetNbChoices(); ++i)
     {
-    combobox->addItem( "test", QVariant("test") );
+    QString key = QString::fromStdString( m_ChoiceParam->GetChoiceKey(i) );
+    combobox->addItem( key, QVariant(key) );
     }
 
   hLayout->addWidget(combobox);
-  QGroupBox *paramHGroup = new QGroupBox;
-  paramHGroup->setLayout(hLayout);
-  return paramHGroup;
-
+  this->setLayout(hLayout);
 }
+
 }
 }

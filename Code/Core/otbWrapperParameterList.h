@@ -27,28 +27,32 @@ namespace otb
 namespace Wrapper
 {
 
+// We'll see if we need more than that later...
+typedef std::vector<Parameter::Pointer> ParameterList;
+
 /**
  * \class WrapperParameterList
  */
+
+/*
 class ITK_EXPORT ParameterList : public itk::Object
 {
 public:
-  /** Standard class typedefs. */
   typedef ParameterList                        Self;
   typedef itk::Object                          Superclass;
   typedef itk::SmartPointer<Self>              Pointer;
   typedef itk::SmartPointer<const Self>        ConstPointer;
   typedef Parameter                            ParameterType;
 
-  /** Defining ::New() static method */
   itkNewMacro(Self);
 
-  /** RTTI support */
   itkTypeMacro(ParameterList,itk::Object);
 
   void AddParameter();
 
   ParameterType * GetParameter(std::string & key);
+
+  std::vector<Parameter::Pointer>& GetList();
 
 protected:
   ParameterList()
@@ -63,7 +67,7 @@ private:
   std::vector<Parameter::Pointer> m_ParameterList;
 
 };
-
+*/
 }
 }
 

@@ -17,50 +17,80 @@
 =========================================================================*/
 #include "otbWrapperQtWidgetParameterFactory.h"
 
-
-//#include "otbWrapperQtWidgetNumericalParameterFactory.h"
-#include "otbWrapperQtWidgetEmptyParameterFactory.h"
-#include "otbWrapperQtWidgetIntParameterFactory.h"
-#include "otbWrapperQtWidgetFloatParameterFactory.h"
-//#include "otbWrapperQtWidgetStringParameterFactory.h"
-//#include "otbWrapperQtWidgetChoiceParameterFactory.h"
+#include "otbWrapperQtWidgetEmptyParameter.h"
+#include "otbWrapperQtWidgetIntParameter.h"
+#include "otbWrapperQtWidgetFloatParameter.h"
+#include "otbWrapperQtWidgetStringParameter.h"
+#include "otbWrapperQtWidgetChoiceParameter.h"
 
 namespace otb
 {
 namespace Wrapper
 {
 
+template <class TParameterType, class TQtWidget>
+class QtWidgetParameterGenericFactory
+{
+public:
+
+  static bool CanCreate( Parameter* param )
+  {
+    return dynamic_cast<TParameterType *>(param) != 0;
+  }
+
+  static QWidget* Create( Parameter* param )
+  {
+  QWidget* widget = 0;
+  TParameterType* specificParam = dynamic_cast<TParameterType *>(param);
+
+  if (specificParam)
+    {
+    widget = new TQtWidget(specificParam);
+    }
+  return widget;
+  }
+};
+
 QtWidgetParameterFactory::QtWidgetParameterFactory()
 {
-
 }
 
 
 QtWidgetParameterFactory::~QtWidgetParameterFactory()
 {
-
 }
 
 QWidget*
 QtWidgetParameterFactory::CreateQtWidget( Parameter* param )
 {
-
   QWidget* widget = 0;
 
-  if (!widget)
-    widget = QtWidgetIntParameterFactory::CreateQtWidget( param );
+  typedef QtWidgetParameterGenericFactory<EmptyParameter, QtWidgetEmptyParameter>   EmptyWidgetFactory;
+  typedef QtWidgetParameterGenericFactory<IntParameter, QtWidgetIntParameter>       IntWidgetFactory;
+  typedef QtWidgetParameterGenericFactory<FloatParameter, QtWidgetFloatParameter>   FloatWidgetFactory;
+  typedef QtWidgetParameterGenericFactory<StringParameter, QtWidgetStringParameter> StringWidgetFactory;
+  typedef QtWidgetParameterGenericFactory<ChoiceParameter, QtWidgetChoiceParameter> ChoiceWidgetFactory;
 
-    if (!widget)
-      widget = QtWidgetFloatParameterFactory::CreateQtWidget( param );
-
-  if (!widget)
-    widget = QtWidgetEmptyParameterFactory::CreateQtWidget( param );
-
-  //  if (!widget)
-  //   widget = QtWidgetStringParameterFactory::CreateQtWidget( param );
-
-  //if (!widget)
-  //  widget = QtWidgetChoiceParameterFactory::CreateQtWidget( param );
+  if ( EmptyWidgetFactory::CanCreate(param) )
+    {
+    widget = EmptyWidgetFactory::Create(param);
+    }
+  else if ( IntWidgetFactory::CanCreate(param) )
+    {
+    widget = IntWidgetFactory::Create(param);
+    }
+  else if ( FloatWidgetFactory::CanCreate(param) )
+    {
+    widget = FloatWidgetFactory::Create(param);
+    }
+  else if ( ChoiceWidgetFactory::CanCreate(param) )
+    {
+    widget = ChoiceWidgetFactory::Create(param);
+    }
+  else if ( StringWidgetFactory::CanCreate(param) )
+    {
+    widget = StringWidgetFactory::Create(param);
+    }
 
   return widget;
 }

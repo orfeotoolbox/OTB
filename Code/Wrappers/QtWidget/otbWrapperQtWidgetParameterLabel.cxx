@@ -15,15 +15,32 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#include "otbWrapperQtWidgetParameterLabel.h"
 
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
-
-#include "otbTestMain.h"
-
-void RegisterTests()
+namespace otb
 {
-  REGISTER_TEST(otbWrapperQtWidgetParameterFactory);
-  REGISTER_TEST(otbWrapperQtWidgetParameterGroup);
+namespace Wrapper
+{
+
+QtWidgetParameterLabel::QtWidgetParameterLabel(Parameter* param)
+{
+  // Set up label
+  QLabel *label = new QLabel;
+
+  label->setText(param->GetName());
+  label->setToolTip(param->GetName());
+
+  QHBoxLayout *labelLayout = new QHBoxLayout;
+  labelLayout->setSpacing(0);
+  labelLayout->setContentsMargins(0,0,0,0);
+  labelLayout->addWidget(label);
+
+  this->setLayout(labelLayout);
+}
+
+QtWidgetParameterLabel::~QtWidgetParameterLabel()
+{
+}
+
+}
 }

@@ -53,21 +53,42 @@ public:
     m_ChoiceList.push_back(std::make_pair(key, param));
   }
 
-  Parameter::Pointer GetChoice( int i )
+  std::string GetChoiceKey( int i )
+  {
+    return m_ChoiceList[i].first;
+  }
+
+  Parameter::Pointer GetChoiceAssociatedParameter( int i )
   {
     return m_ChoiceList[i].second;
   }
 
-  unsigned int GetNbChoice( void )
+  unsigned int GetNbChoices( void )
   {
     return m_ChoiceList.size();
+  }
+
+  /** Set any value */
+  virtual void SetValue(unsigned int v)
+  {
+    // Perform any cast
+    m_CurrentChoice = v;
+
+    // Call Modified();
+    this->Modified();
+  }
+
+  /** Return any value */
+  virtual unsigned int GetValue()
+  {
+    return m_CurrentChoice;
   }
 
   /** Set any value */
   virtual void SetAnyValue(boost::any v)
   {
     // Perform any cast
-    m_CurrentChoice = boost::any_cast<bool>(v);
+    m_CurrentChoice = boost::any_cast<unsigned int>(v);
 
     // Call Modified();
     this->Modified();

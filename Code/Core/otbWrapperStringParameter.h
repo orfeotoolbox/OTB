@@ -60,13 +60,19 @@ public:
     return boost::any(m_Value);
   }
 
+  /** Set the value */
+  itkSetMacro(Value,std::string);
+
+  /** Get the value */
+  itkGetMacro(Value,std::string);
+
 protected:
   /** Constructor */
   StringParameter()
   {}
 
   /** Destructor */
-  ~StringParameter()
+  virtual ~StringParameter()
   {}
 
 private:

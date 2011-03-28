@@ -15,15 +15,34 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef __otbWrapperQtWidgetParameterLabel_h
+#define __otbWrapperQtWidgetParameterLabel_h
 
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
+#include <QtGui>
+#include "otbWrapperParameter.h"
 
-#include "otbTestMain.h"
-
-void RegisterTests()
+namespace otb
 {
-  REGISTER_TEST(otbWrapperQtWidgetParameterFactory);
-  REGISTER_TEST(otbWrapperQtWidgetParameterGroup);
+namespace Wrapper
+{
+
+/** \class
+ * \brief
+ */
+class QtWidgetParameterLabel : public QWidget
+{
+  Q_OBJECT
+public:
+  QtWidgetParameterLabel(Parameter*);
+  virtual ~QtWidgetParameterLabel();
+
+private:
+  QtWidgetParameterLabel(const QtWidgetParameterLabel&); //purposely not implemented
+  void operator=(const QtWidgetParameterLabel&); //purposely not implemented
+};
+
+
 }
+}
+
+#endif
