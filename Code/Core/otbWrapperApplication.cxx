@@ -23,15 +23,11 @@ namespace otb
 namespace Wrapper
 {
 
-Application::Application()
-{
-  //m_ParameterList = ParameterList::New();
-}
+Application::Application(): m_Name(""), m_Description("")
+{}
 
 Application::~Application()
-{
-
-}
+{}
 
 }
 }

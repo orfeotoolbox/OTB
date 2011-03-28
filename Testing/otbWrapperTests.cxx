@@ -31,6 +31,6 @@ void RegisterTests()
   REGISTER_TEST(otbWrapperNumericalParameterNew);
   REGISTER_TEST(otbWrapperNumericalParameterTest1);
   REGISTER_TEST(otbWrapperEmptyParameterNew);
-  //REGISTER_TEST(otbWrapperApplicationNew);
+  REGISTER_TEST(otbWrapperApplicationNew);
   REGISTER_TEST(otbWrapperParameterListNew);
 }
