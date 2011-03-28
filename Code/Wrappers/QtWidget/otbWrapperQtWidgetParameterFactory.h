@@ -44,9 +44,6 @@ public:
   /** Create the appropriate ImageIO depending on the particulars of the file. */
   static QWidget* CreateQtWidget( Parameter* param );
 
-  /** Register Built-in factories */
-  static void RegisterBuiltInFactories();
-
 protected:
   QtWidgetParameterFactory();
   virtual ~QtWidgetParameterFactory();
