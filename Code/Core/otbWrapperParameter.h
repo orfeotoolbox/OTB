@@ -20,6 +20,7 @@
 
 #include "otbMacro.h"
 #include "itkObject.h"
+#include "boost/any.hpp"
 #include "itkObjectFactory.h"
 
 namespace otb
@@ -106,6 +107,23 @@ public:
    * nothing 
    */
   virtual void Reset() {}
+
+  /** Return the parameter value as a boost:any. Should be
+   * reimplemented in each relevant sub-class (default implementation
+   * raise exception) */
+  virtual boost::any GetAnyValue()
+  {
+    itkExceptionMacro(<<"GetAnyValue() method must be re-implemented by sub-classes.");
+  }
+  
+  /** Set the parameter value as a boost:any. Should be
+   * reimplemented in each relevant sub-class (default implementation
+   * raise exception) */
+  virtual void SetAnyValue(boost::any)
+  {
+    itkExceptionMacro(<<"SetAnyValue() method must be re-implemented by sub-classes.");
+  }
+
 
 protected:
   /** Constructor */
