@@ -28,3 +28,24 @@ int otbWrapperNumericalParameterNew(int argc, char* argv[])
 
   return EXIT_SUCCESS;
 }
+
+
+int otbWrapperNumericalParameterTest1(int argc, char* argv[])
+{
+  typedef otb::Wrapper::NumericalParameter <double> NumericalParameterType;
+  NumericalParameterType::Pointer numParam = NumericalParameterType::New();
+
+  const double value = atof (argv[1]);
+  const std::string key = argv[2];
+  const std::string desc = argv[3];
+
+  numParam->SetValue(value);
+  numParam->SetKey(key);
+  numParam->SetDescription(desc);
+
+  boost::any myAny = numParam->GetAnyValue();
+
+  std::cout << "value: " << boost::any_cast<double>(myAny) << std::endl;
+
+  return EXIT_SUCCESS;
+}

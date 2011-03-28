@@ -30,6 +30,13 @@ ADD_TEST(owTuEmptyParameter ${OTB_WRAPPER_TESTS}
 ADD_TEST(owTuNumericalParameter ${OTB_WRAPPER_TESTS}
 	otbWrapperNumericalParameterNew
   )
+
+ADD_TEST(owTvNumericalParameter ${OTB_WRAPPER_TESTS}
+	otbWrapperNumericalParameterTest1
+	42.42
+	"mykey"
+	"my description"
+  )
 # ----------------Source files CXX -----------------------------------
 
 SET(Wrapper_SRCS
