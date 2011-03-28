@@ -128,7 +128,7 @@ private:
 typedef NumericalParameter<float> FloatParameter;
 
 // Helper typedef for int
-typedef NumericalParameter<int> FloatParameter;
+typedef NumericalParameter<int> IntParameter;
 
 } // End namespace Wrapper
 } // End namespace otb
