@@ -50,7 +50,17 @@ public:
   /** Add a value to the choice */
   void AddChoice( std::string key, Parameter::Pointer param )
   {
-    m_ChoiceMap[key] = param;
+    m_ChoiceList.push_back(key, param);
+  }
+
+  Parameter::Pointer GetChoice( int i )
+  {
+    return m_ChoiceList[i];
+  }
+
+  unsigned int GetNbChoice( void )
+  {
+    return m_ChoiceList.size();
   }
 
   /** Set any value */
@@ -83,8 +93,8 @@ private:
   ChoiceParameter(const ChoiceParameter &); //purposely not implemented
   void operator =(const ChoiceParameter&); //purposely not implemented
 
-  typedef std::map<std::string, Parameter::Pointer> ChoiceMap;
-  ChoiceMap m_ChoiceMap;
+  typedef std::vector<std::string, Parameter::Pointer> ChoiceList;
+  ChoiceList m_ChoiceList;
 
   unsigned int m_CurrentChoice;
 
