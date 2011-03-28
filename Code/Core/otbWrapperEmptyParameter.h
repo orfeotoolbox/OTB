@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperStringParameter_h
-#define __otbWrapperStringParameter_h
+#ifndef __otbWrapperEmptyParameter_h
+#define __otbWrapperEmptyParameter_h
 
 #include "otbWrapperParameter.h"
 
@@ -25,15 +25,15 @@ namespace otb
 namespace Wrapper
 {
 
-/** \class StringParameter
- *  \brief This class represent a string parameter for the wrapper framework
+/** \class EmptyParameter
+ *  \brief This class represent an empty parameter for the wrapper framework (boolean value)
  */
-class StringParameter
+class EmptyParameter
   : public Parameter
 {
 public:
   /** Standard class typedef */
-  typedef StringParameter               Self;
+  typedef EmptyParameter                Self;
   typedef itk::LightObject              Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -42,23 +42,20 @@ public:
   itkNewMacro(Self);
 
   /** RTTI support */
-  itkTypeMacro(StringParameter, Parameter);
-
+  itkTypeMacro(EmptyParameter, Parameter);
 
 protected:
   /** Constructor */
-  StringParameter()
+  EmptyParameter()
   {}
 
   /** Destructor */
-  ~StringParameter()
+  ~EmptyParameter()
   {}
 
 private:
-  StringParameter(const StringParameter &); //purposely not implemented
-  void operator =(const StringParameter&); //purposely not implemented
-
-  std::string m_Value;
+  EmptyParameter(const EmptyParameter &); //purposely not implemented
+  void operator =(const EmptyParameter&); //purposely not implemented
 
 }; // End class Parameter
 
