@@ -47,7 +47,7 @@ public:
 
 protected:
   QtWidgetChoiceParameterFactory();
-  ~QtWidgetChoiceParameterFactory();
+  virtual ~QtWidgetChoiceParameterFactory();
 
 private:
   QtWidgetChoiceParameterFactory(const Self&); //purposely not implemented

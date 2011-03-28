@@ -54,7 +54,7 @@ QWidget * QtWidgetChoiceParameterFactory::CreateQtWidget(Parameter * param)
   combobox->setToolTip(choiceParam->GetDescription());
 
 
-  for (unsigned int i = O; i < choiceParam->GetNbChoice(); ++i)
+  for (unsigned int i = 0; i < choiceParam->GetNbChoice(); ++i)
     {
     combobox->addItem( "test", QVariant("test") );
     }

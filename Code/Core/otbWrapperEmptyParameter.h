@@ -34,7 +34,7 @@ class EmptyParameter
 public:
   /** Standard class typedef */
   typedef EmptyParameter                Self;
-  typedef itk::LightObject              Superclass;
+  typedef Parameter                     Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
