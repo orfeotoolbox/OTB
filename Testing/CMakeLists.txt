@@ -5,6 +5,7 @@ IF(WIN32)
 ENDIF(WIN32)
 
 SET(OTB_WRAPPER_TESTS ${CXX_TEST_PATH}/otbWrapperTests)
+SET(OTB_WRAPPER_QT_TESTS ${CXX_TEST_PATH}/otbWrapperQtWidgetTests)
 
 ADD_TEST(owTuParameterNew ${OTB_WRAPPER_TESTS}
 	otbWrapperParameterNew
@@ -48,6 +49,13 @@ ADD_TEST(owTuApplication ${OTB_WRAPPER_TESTS}
 	otbWrapperApplicationNew
   )
   
+IF(OTB_USE_QT)
+ADD_TEST(owTvQtWidgetParameterFactory ${OTB_WRAPPER_QT_TESTS}
+        otbWrapperQtWidgetParameterFactory
+)
+
+ENDIF(OTB_USE_QT)
+
 # ----------------Source files CXX -----------------------------------
 
 SET(Wrapper_SRCS
@@ -63,3 +71,14 @@ otbWrapperInputImageParameterTest.cxx
 ADD_EXECUTABLE(otbWrapperTests ${Wrapper_SRCS})
 TARGET_LINK_LIBRARIES(otbWrapperTests OTBIO OTBCommon ITKIO ITKCommon OTBTesting OTBWrapperCore)
 
+IF(OTB_USE_QT)
+
+SET(WrapperQtWidget_SRCS
+otbWrapperQtWidgetTests.cxx
+otbWrapperQtWidgetParameterFactory.cxx
+)
+
+ADD_EXECUTABLE(otbWrapperQtWidgetTests ${WrapperQtWidget_SRCS})
+TARGET_LINK_LIBRARIES(otbWrapperQtWidgetTests OTBIO OTBCommon ITKIO ITKCommon OTBTesting OTBWrapperCore OTBWrapperQtWidget)
+
+ENDIF(OTB_USE_QT)

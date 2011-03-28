@@ -21,6 +21,7 @@
 //#include "otbWrapperQtWidgetNumericalParameterFactory.h"
 #include "otbWrapperQtWidgetEmptyParameterFactory.h"
 #include "otbWrapperQtWidgetIntParameterFactory.h"
+#include "otbWrapperQtWidgetFloatParameterFactory.h"
 //#include "otbWrapperQtWidgetStringParameterFactory.h"
 //#include "otbWrapperQtWidgetChoiceParameterFactory.h"
 
@@ -49,8 +50,8 @@ QtWidgetParameterFactory::CreateQtWidget( Parameter* param )
   if (!widget)
     widget = QtWidgetIntParameterFactory::CreateQtWidget( param );
 
-  //  if (!widget)
-  //    widget = QtWidgetFloatParameterFactory::CreateQtWidget( param );
+    if (!widget)
+      widget = QtWidgetFloatParameterFactory::CreateQtWidget( param );
 
   if (!widget)
     widget = QtWidgetEmptyParameterFactory::CreateQtWidget( param );
@@ -61,7 +62,7 @@ QtWidgetParameterFactory::CreateQtWidget( Parameter* param )
   //if (!widget)
   //  widget = QtWidgetChoiceParameterFactory::CreateQtWidget( param );
 
-  return 0;
+  return widget;
 }
 
 

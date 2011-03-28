@@ -52,6 +52,7 @@ QWidget * QtWidgetFloatParameterFactory::CreateQtWidget(Parameter * param)
   input->setDecimals(5);
   input->setRange(floatParam->GetMinimumValue(), floatParam->GetMaximumValue());
   input->setToolTip(floatParam->GetDescription());
+  
 
   QString optionID(floatParam->GetName());
   hLayout->addWidget(input);
