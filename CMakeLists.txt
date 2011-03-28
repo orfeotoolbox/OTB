@@ -1,0 +1,72 @@
+PROJECT(OTB-Wrapper)
+
+cmake_minimum_required(VERSION 2.6)
+
+IF(COMMAND CMAKE_POLICY)
+  CMAKE_POLICY(SET CMP0003 NEW)
+ENDIF(COMMAND CMAKE_POLICY)
+
+# ensure WIN32 definition
+IF(WIN32)
+  ADD_DEFINITIONS(-DWIN32)
+ENDIF(WIN32)
+
+# On Visual Studio 8 MS deprecated C. This removes all 1.276E1265 security
+# warnings
+IF(WIN32)
+    IF(NOT CYGWIN)
+      IF(NOT MINGW)
+        IF(NOT ITK_ENABLE_VISUAL_STUDIO_DEPRECATED_C_WARNINGS)
+          ADD_DEFINITIONS(
+            -D_CRT_FAR_MAPPINGS_NO_DEPRECATE
+            -D_CRT_IS_WCTYPE_NO_DEPRECATE
+            -D_CRT_MANAGED_FP_NO_DEPRECATE
+            -D_CRT_NONSTDC_NO_DEPRECATE
+            -D_CRT_SECURE_NO_DEPRECATE
+            -D_CRT_SECURE_NO_DEPRECATE_GLOBALS
+            -D_CRT_SETERRORMODE_BEEP_SLEEP_NO_DEPRECATE
+            -D_CRT_TIME_FUNCTIONS_NO_DEPRECATE
+            -D_CRT_VCCLRIT_NO_DEPRECATE
+            -D_SCL_SECURE_NO_DEPRECATE
+            )
+        ENDIF(NOT ITK_ENABLE_VISUAL_STUDIO_DEPRECATED_C_WARNINGS)
+
+        IF (MSVC)
+          ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS)
+          ADD_DEFINITIONS(-D_CRT_NONSTDC_NO_WARNING)
+        ENDIF(MSVC)
+
+      ENDIF(NOT MINGW)
+    ENDIF(NOT CYGWIN)
+ENDIF(WIN32)
+
+# Link to the Orfeo ToolBox
+FIND_PACKAGE(OTB PATHS /usr/lib/otb)
+IF(OTB_FOUND)
+  INCLUDE(${OTB_USE_FILE})
+ELSE(OTB_FOUND)
+  MESSAGE(FATAL_ERROR
+          "OTB not found. Please set OTB_DIR")
+ENDIF(OTB_FOUND)
+
+#-----------------------------------------------------------------------------
+#Build shared libraries for monteverdi
+#By default, import the option from the OTB configuration
+SET(BUILD_SHARED_LIBS ${OTB_BUILD_SHARED_LIBS})
+
+ADD_SUBDIRECTORY(Code)
+INCLUDE_DIRECTORIES(${OTB_Wrapper_Source_Dir}/Code)
+
+
+# Enable / Disable testing
+OPTION(BUILD_TESTING  "Build testing." OFF)
+
+INCLUDE(${CMAKE_ROOT}/Modules/Dart.cmake)
+MARK_AS_ADVANCED(TCL_TCLSH DART_ROOT)
+IF(BUILD_TESTING)
+  ENABLE_TESTING()
+  SET(BUILDNAME "${BUILDNAME}" CACHE STRING "Name of build on the dashboard")
+  MARK_AS_ADVANCED(BUILDNAME)
+  ADD_SUBDIRECTORY(Testing)
+ENDIF(BUILD_TESTING)
+
