@@ -38,6 +38,9 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
+  /** New() method */
+  itkNewMacro(Self);
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(QtWidgetParameterFactory, Object);
 
