@@ -36,7 +36,16 @@ int otbWrapperParameterTest1(int argc, char* argv[])
   typedef otb::Wrapper::Parameter ParameterBaseType;
   ParameterBaseType::Pointer parameter = ParameterBaseType::New();
 
-  std::cout << parameter << std::endl;
+  const string name = argv[1];
 
-  return EXIT_SUCCESS;
+  parameter->SetName(name);
+
+  if (name == parameter->GetName())
+    {
+    return EXIT_SUCCESS;
+    }
+  else
+    {
+    return EXIT_FAILURE;
+    }
 }

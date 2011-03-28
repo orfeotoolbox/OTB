@@ -12,6 +12,7 @@ ADD_TEST(owTuParameterNew ${OTB_WRAPPER_TESTS}
 
 ADD_TEST(owTvParameter ${OTB_WRAPPER_TESTS}
 	otbWrapperParameterTest1
+	"param1"
   )
   
 # -------       Source files CXX -----------------------------------
