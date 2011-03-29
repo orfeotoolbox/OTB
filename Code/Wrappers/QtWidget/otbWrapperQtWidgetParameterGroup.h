@@ -33,7 +33,7 @@ class QtWidgetParameterGroup : public QWidget
 {
   Q_OBJECT
 public:
-  QtWidgetParameterGroup(ParameterList);
+  QtWidgetParameterGroup(ParameterList::Pointer);
   virtual ~QtWidgetParameterGroup();
 
 private:
@@ -42,7 +42,7 @@ private:
 
   void CreateWidget();
 
-  ParameterList m_ParamList;
+  ParameterList::Pointer m_ParamList;
 
 };
 

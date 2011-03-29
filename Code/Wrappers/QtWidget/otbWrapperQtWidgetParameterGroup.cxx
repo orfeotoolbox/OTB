@@ -24,7 +24,7 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetParameterGroup::QtWidgetParameterGroup(ParameterList paramList)
+QtWidgetParameterGroup::QtWidgetParameterGroup(ParameterList::Pointer paramList)
 : m_ParamList(paramList)
 {
   this->CreateWidget();
@@ -41,16 +41,13 @@ void QtWidgetParameterGroup::CreateWidget()
   gridLayout->setSpacing(1);
   gridLayout->setContentsMargins(0,0,0,0);
 
-  ParameterList::const_iterator it  = m_ParamList.begin();
-  ParameterList::const_iterator end = m_ParamList.end();
-
-  unsigned int i = 0;
-  for (; it != end; ++it, ++i)
+  unsigned int nbParams = m_ParamList->GetNumberOfParameters();
+  for (unsigned int i = 0; i < nbParams; ++i)
     {
-    QWidget* label = new QtWidgetParameterLabel( *it );
+    Parameter* param = m_ParamList->GetParameter(i);
+    QWidget* label = new QtWidgetParameterLabel( param );
     gridLayout->addWidget(label, i, 0);
-
-    QWidget* specificWidget = QtWidgetParameterFactory::CreateQtWidget( *it );
+    QWidget* specificWidget = QtWidgetParameterFactory::CreateQtWidget( param );
     gridLayout->addWidget(specificWidget, i, 1);
     }
 

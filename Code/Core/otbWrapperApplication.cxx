@@ -24,7 +24,9 @@ namespace Wrapper
 {
 
 Application::Application(): m_Name(""), m_Description("")
-{}
+{
+  m_ParameterList = ParameterList::New();
+}
 
 Application::~Application()
 {}

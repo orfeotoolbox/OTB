@@ -61,7 +61,7 @@ public:
   /** Get the parameter description */
   itkGetStringMacro(Description);
 
-  ParameterList& GetParameterList()
+  ParameterList* GetParameterList()
   {
     return m_ParameterList;
   }
@@ -82,7 +82,7 @@ private:
 
   std::string m_Name;
   std::string m_Description;
-  ParameterList m_ParameterList;
+  ParameterList::Pointer m_ParameterList;
 
 }; //end class
 

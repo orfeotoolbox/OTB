@@ -27,36 +27,43 @@ namespace otb
 namespace Wrapper
 {
 
-// We'll see if we need more than that later...
-typedef std::vector<Parameter::Pointer> ParameterList;
-
 /**
  * \class WrapperParameterList
  */
-
-/*
-class ITK_EXPORT ParameterList : public itk::Object
+class ITK_EXPORT ParameterList
+  : public Parameter
 {
 public:
   typedef ParameterList                        Self;
-  typedef itk::Object                          Superclass;
+  typedef Parameter                            Superclass;
   typedef itk::SmartPointer<Self>              Pointer;
   typedef itk::SmartPointer<const Self>        ConstPointer;
+
   typedef Parameter                            ParameterType;
 
   itkNewMacro(Self);
 
-  itkTypeMacro(ParameterList,itk::Object);
+  itkTypeMacro(ParameterList,Parameter);
 
-  void AddParameter();
+  void AddParameter(ParameterType::Pointer p)
+  {
+    m_ParameterList.push_back(p);
+  }
 
-  ParameterType * GetParameter(std::string & key);
+  ParameterType::Pointer GetParameter(unsigned int i)
+  {
+    return m_ParameterList[i];
+  }
 
-  std::vector<Parameter::Pointer>& GetList();
+  unsigned int GetNumberOfParameters()
+  {
+    m_ParameterList.size();
+  }
 
 protected:
   ParameterList()
   {}
+
   virtual ~ParameterList()
   {}
 
@@ -67,8 +74,8 @@ private:
   std::vector<Parameter::Pointer> m_ParameterList;
 
 };
-*/
+
 }
 }
 
-#endif // __otbWrapperParameter_h
+#endif

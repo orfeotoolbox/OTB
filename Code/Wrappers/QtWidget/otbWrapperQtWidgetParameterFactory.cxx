@@ -22,6 +22,7 @@
 #include "otbWrapperQtWidgetFloatParameter.h"
 #include "otbWrapperQtWidgetStringParameter.h"
 #include "otbWrapperQtWidgetChoiceParameter.h"
+#include "otbWrapperQtWidgetParameterGroup.h"
 
 namespace otb
 {
@@ -40,14 +41,14 @@ public:
 
   static QWidget* Create( Parameter* param )
   {
-  QWidget* widget = 0;
-  TParameterType* specificParam = dynamic_cast<TParameterType *>(param);
+    QWidget* widget = 0;
+    TParameterType* specificParam = dynamic_cast<TParameterType *>(param);
 
-  if (specificParam)
-    {
-    widget = new TQtWidget(specificParam);
-    }
-  return widget;
+    if (specificParam)
+      {
+      widget = new TQtWidget(specificParam);
+      }
+    return widget;
   }
 };
 
@@ -70,6 +71,7 @@ QtWidgetParameterFactory::CreateQtWidget( Parameter* param )
   typedef QtWidgetParameterGenericFactory<FloatParameter, QtWidgetFloatParameter>   FloatWidgetFactory;
   typedef QtWidgetParameterGenericFactory<StringParameter, QtWidgetStringParameter> StringWidgetFactory;
   typedef QtWidgetParameterGenericFactory<ChoiceParameter, QtWidgetChoiceParameter> ChoiceWidgetFactory;
+  typedef QtWidgetParameterGenericFactory<ParameterList, QtWidgetParameterGroup> GroupWidgetFactory;
 
   if ( EmptyWidgetFactory::CanCreate(param) )
     {
@@ -90,6 +92,10 @@ QtWidgetParameterFactory::CreateQtWidget( Parameter* param )
   else if ( StringWidgetFactory::CanCreate(param) )
     {
     widget = StringWidgetFactory::Create(param);
+    }
+  else if ( GroupWidgetFactory::CanCreate(param) )
+    {
+    widget = GroupWidgetFactory::Create(param);
     }
 
   return widget;
