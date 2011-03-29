@@ -27,4 +27,6 @@ void RegisterTests()
   REGISTER_TEST(otbSpectralSensitivityReaderNew);
   REGISTER_TEST(otbSpectralSensitivityReaderTest);
   REGISTER_TEST(otbSpectralSensitivityReaderGenericTest);
+  REGISTER_TEST(otbFilterFunctionValuesNew);
+  REGISTER_TEST(otbWavelengthSpectralBandsNew);
 }

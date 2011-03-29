@@ -25,6 +25,7 @@
 #include "otbQuickBirdImageMetadataInterface.h"
 #include "itkMetaDataObject.h"
 #include "base/ossimKeywordlist.h"
+#include <list>
 
 namespace otb
 {
@@ -713,7 +714,9 @@ QuickBirdImageMetadataInterface::WavelengthSpectralBandVectorType
 QuickBirdImageMetadataInterface
 ::GetSpectralSensitivity()  const
 {
-  WavelengthSpectralBandVectorType wavelengthSpectralBand(5);
+  //TODO tabulate spectral responses
+  WavelengthSpectralBandVectorType wavelengthSpectralBand = InternalWavelengthSpectralBandVectorType::New();
+  //return wavelengthSpectralBand;
 
   //Tabulate relative spectral response for QB
   const double b0[321] =
@@ -1005,17 +1008,31 @@ QuickBirdImageMetadataInterface
    0,   0,   0,   0,   0,   0,
    0,   0,   0
   };
-  const std::vector<double> vb0 (b0, b0 + sizeof(b0) / sizeof(double) );
-  const std::vector<double> vb1 (b1, b1 + sizeof(b1) / sizeof(double) );
-  const std::vector<double> vb2 (b2, b2 + sizeof(b2) / sizeof(double) );
-  const std::vector<double> vb3 (b3, b3 + sizeof(b3) / sizeof(double) );
-  const std::vector<double> vb4 (b4, b4 + sizeof(b4) / sizeof(double) );
 
-  wavelengthSpectralBand [0] = vb0;
-  wavelengthSpectralBand [1] = vb1;
-  wavelengthSpectralBand [2] = vb2;
-  wavelengthSpectralBand [3] = vb3;
-  wavelengthSpectralBand [4] = vb4;
+  std::list <std::vector<double> > mylist;
+
+  const std::vector<double> vb0 (b0, b0 + sizeof(b0) / sizeof(double) );
+  mylist.push_back(vb0);
+  const std::vector<double> vb1 (b1, b1 + sizeof(b1) / sizeof(double) );
+  mylist.push_back(vb1);
+  const std::vector<double> vb2 (b2, b2 + sizeof(b2) / sizeof(double) );
+  mylist.push_back(vb2);
+  const std::vector<double> vb3 (b3, b3 + sizeof(b3) / sizeof(double) );
+  mylist.push_back(vb3);
+  const std::vector<double> vb4 (b4, b4 + sizeof(b4) / sizeof(double) );
+  mylist.push_back(vb4);
+
+  //wavelengthSpectralBand->SetNbBands(this->GetNumberOfBands());
+
+  unsigned int j = 0;
+  for (std::list <std::vector<double> >::const_iterator it = mylist.begin(); it != mylist.end(); it++)
+      {
+      wavelengthSpectralBand->PushBack(FilterFunctionValues::New());
+      wavelengthSpectralBand->GetNthElement(j)->SetFilterFunctionValues(*it);
+      wavelengthSpectralBand->GetNthElement(j)->SetMinSpectralValue(0.450);
+      wavelengthSpectralBand->GetNthElement(j)->SetMaxSpectralValue(1.1);
+      ++j;
+      }
 
   return wavelengthSpectralBand;
 }

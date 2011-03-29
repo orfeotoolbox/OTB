@@ -772,7 +772,7 @@ WorldView2ImageMetadataInterface
 ::GetSpectralSensitivity()  const
 {
   //TODO tabulate spectral responses
-  WavelengthSpectralBandVectorType wavelengthSpectralBand (this->GetNumberOfBands());
+  WavelengthSpectralBandVectorType wavelengthSpectralBand = InternalWavelengthSpectralBandVectorType::New();
   return wavelengthSpectralBand;
 }
 

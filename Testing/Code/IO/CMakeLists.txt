@@ -3015,7 +3015,7 @@ ADD_TEST(raTvSpectralSensitivityReaderTest ${IO_TESTS23}
 )
 
 
-ADD_TEST(raTvSpectralSensitivityReaderGenericTest ${RADIOMETRY_TESTS5}
+ADD_TEST(raTvSpectralSensitivityReaderGenericTest ${IO_TESTS23}
      --compare-ascii ${NOTOL}
         ${BASELINE_FILES}/raTvSpectralSensitivityReaderGenericTest.txt
         ${TEMP}/raTvSpectralSensitivityReaderGenericTest.txt
@@ -3024,6 +3024,14 @@ ADD_TEST(raTvSpectralSensitivityReaderGenericTest ${RADIOMETRY_TESTS5}
     ${INPUTDATA}/Radiometry/SPOT5/HRG1/rep6S.dat
     ${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/Arcachon_extrait_3852_3319_546_542.tif
         ${TEMP}/raTvSpectralSensitivityReaderGenericTest.txt     
+)
+
+ADD_TEST(raTuFilterFunctionValuesNew ${IO_TESTS23}
+     otbFilterFunctionValuesNew
+)
+
+ADD_TEST(raTuWavelengthSpectralBandsNew ${IO_TESTS23}
+     otbWavelengthSpectralBandsNew
 )
 
 #----------------------------------------------------------------------------------
@@ -3252,6 +3260,7 @@ ENDIF(CHECK_GDAL_BUILDED_WITH_HDF)
 SET(BasicIO_SRCS23
 otbIOTests23.cxx
 otbSpectralSensitivityReaderTest.cxx
+otbWavelengthSpectralBandsTest.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbIOTests1 "${BasicIO_SRCS1}" "OTBIO;OTBTesting")
