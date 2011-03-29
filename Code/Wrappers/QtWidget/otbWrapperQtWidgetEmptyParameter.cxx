@@ -29,11 +29,11 @@ QtWidgetEmptyParameter::QtWidgetEmptyParameter(EmptyParameter* emptyParam)
   hLayout->setSpacing(0);
   hLayout->setContentsMargins(0,0,0,0);
 
-  QCheckBox* checkbox = new QCheckBox;
-  checkbox->setToolTip(emptyParam->GetDescription());
+  //QCheckBox* checkbox = new QCheckBox;
+  //checkbox->setToolTip(emptyParam->GetDescription());
 
   //QString optionID(emptyParam->GetName());
-  hLayout->addWidget(checkbox);
+  //hLayout->addWidget(checkbox);
   hLayout->addStretch();
 
   this->setLayout(hLayout);

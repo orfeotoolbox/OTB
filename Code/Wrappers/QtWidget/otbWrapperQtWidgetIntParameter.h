@@ -37,6 +37,9 @@ public:
   QtWidgetIntParameter(IntParameter*);
   virtual ~QtWidgetIntParameter();
 
+protected slots:
+  void SetValue( int value );
+
 private:
   QtWidgetIntParameter(const QtWidgetIntParameter&); //purposely not implemented
   void operator=(const QtWidgetIntParameter&); //purposely not implemented

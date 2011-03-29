@@ -49,9 +49,18 @@ void QtWidgetChoiceParameter::CreateWidget()
     combobox->addItem( key, QVariant(key) );
     }
 
+  connect( combobox, SIGNAL(currentIndexChanged(int)), this, SLOT(SetValue(int)) );
+
   hLayout->addWidget(combobox);
   this->setLayout(hLayout);
 }
+
+void QtWidgetChoiceParameter::SetValue(int value)
+{
+  std::cout << "QtWidgetChoiceParameter::SetValue " << value << std::endl;
+  m_ChoiceParam->SetValue( value );
+}
+
 
 }
 }

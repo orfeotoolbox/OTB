@@ -23,6 +23,7 @@ namespace Wrapper
 {
 
 QtWidgetFloatParameter::QtWidgetFloatParameter(FloatParameter* floatParam)
+ : m_FloatParam(floatParam)
 {
   // Set up input text edit
   QHBoxLayout *hLayout = new QHBoxLayout;
@@ -34,6 +35,7 @@ QtWidgetFloatParameter::QtWidgetFloatParameter(FloatParameter* floatParam)
   input->setRange(floatParam->GetMinimumValue(), floatParam->GetMaximumValue());
   input->setToolTip(floatParam->GetDescription());
 
+  connect( input, SIGNAL(valueChanged(double)), this, SLOT(SetValue(double)) );
 
   //QString optionID(floatParam->GetName());
   hLayout->addWidget(input);
@@ -44,6 +46,12 @@ QtWidgetFloatParameter::QtWidgetFloatParameter(FloatParameter* floatParam)
 
 QtWidgetFloatParameter::~QtWidgetFloatParameter()
 {
+}
+
+void QtWidgetFloatParameter::SetValue(double value)
+{
+  std::cout << "QtWidgetFloatParameter::SetValue " << value << std::endl;
+  m_FloatParam->SetValue( static_cast<float>(value) );
 }
 
 }

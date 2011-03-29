@@ -36,6 +36,9 @@ public:
   QtWidgetChoiceParameter(ChoiceParameter*);
   virtual ~QtWidgetChoiceParameter();
 
+protected slots:
+  void SetValue( int value );
+
 private:
   QtWidgetChoiceParameter(const QtWidgetChoiceParameter&); //purposely not implemented
   void operator=(const QtWidgetChoiceParameter&); //purposely not implemented

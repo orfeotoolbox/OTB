@@ -34,6 +34,8 @@ QtWidgetIntParameter::QtWidgetIntParameter(IntParameter* param)
   input->setRange(param->GetMinimumValue(), param->GetMaximumValue());
   input->setToolTip(param->GetDescription());
 
+  connect( input, SIGNAL(valueChanged(int)), this, SLOT(SetValue(int)) );
+
   hLayout->addWidget(input);
   hLayout->addStretch();
 
@@ -42,6 +44,12 @@ QtWidgetIntParameter::QtWidgetIntParameter(IntParameter* param)
 
 QtWidgetIntParameter::~QtWidgetIntParameter()
 {
+}
+
+void QtWidgetIntParameter::SetValue(int value)
+{
+  std::cout << "QtWidgetIntParameter::SetValue " << value << std::endl;
+  m_IntParam->SetValue(value);
 }
 
 }
