@@ -19,8 +19,8 @@
 #define __otbWrapperQtWidgetFloatParameter_h
 
 #include <QtGui>
-#include "otbWrapperParameter.h"
 #include "otbWrapperNumericalParameter.h"
+#include "otbWrapperQtWidgetParameterBase.h"
 
 namespace otb
 {
@@ -30,11 +30,11 @@ namespace Wrapper
 /** \class
  * \brief
  */
-class QtWidgetFloatParameter : public QWidget
+class QtWidgetFloatParameter : public QtWidgetParameterBase
 {
   Q_OBJECT
 public:
-  QtWidgetFloatParameter(FloatParameter*);
+  QtWidgetFloatParameter(FloatParameter*, QtWidgetModel*);
   virtual ~QtWidgetFloatParameter();
 
 protected slots:

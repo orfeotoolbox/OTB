@@ -22,7 +22,8 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetEmptyParameter::QtWidgetEmptyParameter(EmptyParameter* emptyParam)
+QtWidgetEmptyParameter::QtWidgetEmptyParameter(EmptyParameter* emptyParam, QtWidgetModel* m)
+: QtWidgetParameterBase(m)
 {
   // Set up input text edit
   QHBoxLayout *hLayout = new QHBoxLayout;

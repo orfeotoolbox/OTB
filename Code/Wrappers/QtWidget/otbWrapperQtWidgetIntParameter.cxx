@@ -22,8 +22,9 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetIntParameter::QtWidgetIntParameter(IntParameter* param)
-: m_IntParam(param)
+QtWidgetIntParameter::QtWidgetIntParameter(IntParameter* param, QtWidgetModel* m)
+: QtWidgetParameterBase(m),
+  m_IntParam(param)
 {
   // Set up input text edit
   QHBoxLayout *hLayout = new QHBoxLayout;
@@ -35,6 +36,7 @@ QtWidgetIntParameter::QtWidgetIntParameter(IntParameter* param)
   input->setToolTip(param->GetDescription());
 
   connect( input, SIGNAL(valueChanged(int)), this, SLOT(SetValue(int)) );
+  connect( input, SIGNAL(valueChanged(int)), GetModel(), SLOT(NotifyUpdate()) );
 
   hLayout->addWidget(input);
   hLayout->addStretch();

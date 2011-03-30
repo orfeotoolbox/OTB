@@ -15,41 +15,32 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperQtWidgetIntParameter_h
-#define __otbWrapperQtWidgetIntParameter_h
-
-#include <QtGui>
-#include "otbWrapperNumericalParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
-
 
 namespace otb
 {
 namespace Wrapper
 {
 
-/** \class
- * \brief
- */
-class QtWidgetIntParameter : public QtWidgetParameterBase
+QtWidgetParameterBase::QtWidgetParameterBase(QtWidgetModel* m)
+  : m_Model(m)
 {
-  Q_OBJECT
-public:
-  QtWidgetIntParameter(IntParameter*, QtWidgetModel*);
-  virtual ~QtWidgetIntParameter();
-
-protected slots:
-  void SetValue( int value );
-
-private:
-  QtWidgetIntParameter(const QtWidgetIntParameter&); //purposely not implemented
-  void operator=(const QtWidgetIntParameter&); //purposely not implemented
-
-  IntParameter::Pointer m_IntParam;
-};
-
-
-}
 }
 
-#endif
+QtWidgetParameterBase::~QtWidgetParameterBase()
+{
+}
+
+void QtWidgetParameterBase::ParameterChanged(const QString& key)
+{
+
+}
+
+QtWidgetModel* QtWidgetParameterBase::GetModel()
+{
+  return m_Model;
+}
+
+}
+
+}

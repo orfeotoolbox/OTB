@@ -22,8 +22,9 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetStringParameter::QtWidgetStringParameter(StringParameter* param)
-: m_StringParam(param)
+QtWidgetStringParameter::QtWidgetStringParameter(StringParameter* param, QtWidgetModel* m)
+: QtWidgetParameterBase(m),
+  m_StringParam(param)
 {
   this->CreateWidget();
 }
@@ -44,7 +45,18 @@ void QtWidgetStringParameter::CreateWidget()
   input->setToolTip(m_StringParam->GetDescription());
   hLayout->addWidget(input);
 
+  connect( input, SIGNAL(textChanged(const QString&)), this, SLOT(SetValue(const QString&)) );
+
   this->setLayout(hLayout);
+}
+
+void QtWidgetStringParameter::SetValue(const QString& value)
+{
+  std::cout << "QtWidgetStringParameter::SetValue " << m_StringParam->GetKey() << " " << value.toStdString() << std::endl;
+  m_StringParam->SetValue(value.toStdString());
+
+  QString key( QString::fromStdString(m_StringParam->GetKey()) );
+  emit ParameterChanged(key);
 }
 
 }

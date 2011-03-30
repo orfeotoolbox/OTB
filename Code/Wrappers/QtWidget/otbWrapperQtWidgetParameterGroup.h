@@ -20,6 +20,7 @@
 
 #include <QtGui>
 #include "otbWrapperParameterList.h"
+#include "otbWrapperQtWidgetParameterBase.h"
 
 namespace otb
 {
@@ -29,11 +30,11 @@ namespace Wrapper
 /** \class
  * \brief
  */
-class QtWidgetParameterGroup : public QWidget
+class QtWidgetParameterGroup : public QtWidgetParameterBase
 {
   Q_OBJECT
 public:
-  QtWidgetParameterGroup(ParameterList::Pointer);
+  QtWidgetParameterGroup(ParameterList::Pointer, QtWidgetModel*);
   virtual ~QtWidgetParameterGroup();
 
 private:

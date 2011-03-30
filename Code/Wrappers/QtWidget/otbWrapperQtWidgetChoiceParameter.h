@@ -20,6 +20,7 @@
 
 #include <QtGui>
 #include "otbWrapperChoiceParameter.h"
+#include "otbWrapperQtWidgetParameterBase.h"
 
 namespace otb
 {
@@ -29,11 +30,11 @@ namespace Wrapper
 /** \class
  * \brief
  */
-class QtWidgetChoiceParameter : public QWidget
+class QtWidgetChoiceParameter : public QtWidgetParameterBase
 {
   Q_OBJECT
 public:
-  QtWidgetChoiceParameter(ChoiceParameter*);
+  QtWidgetChoiceParameter(ChoiceParameter*, QtWidgetModel*);
   virtual ~QtWidgetChoiceParameter();
 
 protected slots:

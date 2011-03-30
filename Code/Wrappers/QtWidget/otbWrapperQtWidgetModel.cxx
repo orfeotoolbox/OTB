@@ -15,21 +15,34 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbWrapperApplication.h"
-
+#include "otbWrapperQtWidgetModel.h"
 
 namespace otb
 {
 namespace Wrapper
 {
 
-Application::Application(): m_Name(""), m_Description("")
+QtWidgetModel::QtWidgetModel(Application* app)
+ : m_Application(app)
+{
+
+  m_Application->Init();
+
+}
+
+QtWidgetModel::~QtWidgetModel()
 {
 }
 
-Application::~Application()
-{}
+void QtWidgetModel::NotifyUpdate()
+{
+  m_Application->UpdateParameters();
+}
+
+void QtWidgetModel::Execute()
+{
+  m_Application->Execute();
+}
 
 }
 }
-

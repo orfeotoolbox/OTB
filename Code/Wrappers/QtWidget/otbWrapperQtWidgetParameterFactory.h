@@ -20,6 +20,7 @@
 
 #include <QtGui>
 #include "otbWrapperParameter.h"
+#include "otbWrapperQtWidgetModel.h"
 
 namespace otb
 {
@@ -45,7 +46,7 @@ public:
   itkTypeMacro(QtWidgetParameterFactory, Object);
 
   /** Create the appropriate ImageIO depending on the particulars of the file. */
-  static QWidget* CreateQtWidget( Parameter* param );
+  static QWidget* CreateQtWidget( Parameter* param, QtWidgetModel* model );
 
 protected:
   QtWidgetParameterFactory();

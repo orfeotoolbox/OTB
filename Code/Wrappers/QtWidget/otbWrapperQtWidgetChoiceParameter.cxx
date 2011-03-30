@@ -22,8 +22,9 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetChoiceParameter::QtWidgetChoiceParameter(ChoiceParameter* param)
-: m_ChoiceParam(param)
+QtWidgetChoiceParameter::QtWidgetChoiceParameter(ChoiceParameter* param, QtWidgetModel* m)
+: QtWidgetParameterBase(m),
+  m_ChoiceParam(param)
 {
   this->CreateWidget();
 }

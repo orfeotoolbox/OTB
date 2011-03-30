@@ -79,6 +79,7 @@ INCLUDE_DIRECTORIES(
 )
 
 ADD_SUBDIRECTORY(Code)
+ADD_SUBDIRECTORY(Example)
 
 # Enable / Disable testing
 OPTION(BUILD_TESTING  "Build testing." OFF)

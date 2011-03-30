@@ -39,14 +39,14 @@ public:
     return dynamic_cast<TParameterType *>(param) != 0;
   }
 
-  static QWidget* Create( Parameter* param )
+  static QWidget* Create( Parameter* param, QtWidgetModel* model )
   {
     QWidget* widget = 0;
     TParameterType* specificParam = dynamic_cast<TParameterType *>(param);
 
     if (specificParam)
       {
-      widget = new TQtWidget(specificParam);
+      widget = new TQtWidget(specificParam, model);
       }
     return widget;
   }
@@ -56,13 +56,12 @@ QtWidgetParameterFactory::QtWidgetParameterFactory()
 {
 }
 
-
 QtWidgetParameterFactory::~QtWidgetParameterFactory()
 {
 }
 
 QWidget*
-QtWidgetParameterFactory::CreateQtWidget( Parameter* param )
+QtWidgetParameterFactory::CreateQtWidget( Parameter* param, QtWidgetModel* model )
 {
   QWidget* widget = 0;
 
@@ -75,27 +74,27 @@ QtWidgetParameterFactory::CreateQtWidget( Parameter* param )
 
   if ( EmptyWidgetFactory::CanCreate(param) )
     {
-    widget = EmptyWidgetFactory::Create(param);
+    widget = EmptyWidgetFactory::Create(param, model);
     }
   else if ( IntWidgetFactory::CanCreate(param) )
     {
-    widget = IntWidgetFactory::Create(param);
+    widget = IntWidgetFactory::Create(param, model);
     }
   else if ( FloatWidgetFactory::CanCreate(param) )
     {
-    widget = FloatWidgetFactory::Create(param);
+    widget = FloatWidgetFactory::Create(param, model);
     }
   else if ( ChoiceWidgetFactory::CanCreate(param) )
     {
-    widget = ChoiceWidgetFactory::Create(param);
+    widget = ChoiceWidgetFactory::Create(param, model);
     }
   else if ( StringWidgetFactory::CanCreate(param) )
     {
-    widget = StringWidgetFactory::Create(param);
+    widget = StringWidgetFactory::Create(param, model);
     }
   else if ( GroupWidgetFactory::CanCreate(param) )
     {
-    widget = GroupWidgetFactory::Create(param);
+    widget = GroupWidgetFactory::Create(param, model);
     }
 
   return widget;

@@ -19,8 +19,8 @@
 #define __otbWrapperQtEmptyWidgetFactory_h
 
 #include <QtGui>
-#include "otbWrapperParameter.h"
 #include "otbWrapperEmptyParameter.h"
+#include "otbWrapperQtWidgetParameterBase.h"
 
 namespace otb
 {
@@ -30,12 +30,12 @@ namespace Wrapper
 /** \class
  * \brief
  */
-class QtWidgetEmptyParameter : public QWidget
+class QtWidgetEmptyParameter : public QtWidgetParameterBase
 {
   Q_OBJECT
 
 public:
-  QtWidgetEmptyParameter(EmptyParameter*);
+  QtWidgetEmptyParameter(EmptyParameter*, QtWidgetModel*);
   virtual ~QtWidgetEmptyParameter();
 
 private:

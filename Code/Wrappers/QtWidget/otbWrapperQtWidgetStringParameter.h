@@ -20,6 +20,7 @@
 
 #include <QtGui>
 #include "otbWrapperStringParameter.h"
+#include "otbWrapperQtWidgetParameterBase.h"
 
 namespace otb
 {
@@ -29,12 +30,15 @@ namespace Wrapper
 /** \class
  * \brief
  */
-class QtWidgetStringParameter : public QWidget
+class QtWidgetStringParameter : public QtWidgetParameterBase
 {
   Q_OBJECT
 public:
-  QtWidgetStringParameter(StringParameter*);
+  QtWidgetStringParameter(StringParameter*, QtWidgetModel*);
   virtual ~QtWidgetStringParameter();
+
+protected slots:
+  void SetValue( const QString& value );
 
 private:
   QtWidgetStringParameter(const QtWidgetStringParameter&); //purposely not implemented

@@ -24,7 +24,7 @@
 int otbWrapperApplicationNew(int argc, char* argv[])
 {
   typedef otb::Wrapper::Application ApplicationType;
-  ApplicationType::Pointer application = ApplicationType::New();
+  //ApplicationType::Pointer application = ApplicationType::New();
 
   return EXIT_SUCCESS;
 }

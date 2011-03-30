@@ -44,7 +44,7 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Defining ::New() static method */
-  itkNewMacro(Self);
+  //itkNewMacro(Self);
 
   /** RTTI support */
   itkTypeMacro(Application,itk::Object);
@@ -61,20 +61,39 @@ public:
   /** Get the parameter description */
   itkGetStringMacro(Description);
 
+  void Init()
+  {
+    m_ParameterList = ParameterList::New();
+    this->DoCreateParameters();
+  }
+
+  void UpdateParameters()
+  {
+    this->DoUpdateParameters();
+  }
+
+  void Execute()
+  {
+    this->DoExecute();
+  }
+
   ParameterList* GetParameterList()
   {
     return m_ParameterList;
   }
 
-  virtual int Execute()
-  {
-    return 0;
-  }
-
 protected:
   /** Constructor */
   Application();
+
   virtual ~Application();
+
+protected:
+  virtual void DoCreateParameters() = 0;
+
+  virtual void DoUpdateParameters() = 0;
+
+  virtual void DoExecute() = 0;
 
 private:
   Application(const Application &); //purposely not implemented

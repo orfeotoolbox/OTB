@@ -15,13 +15,12 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperQtWidgetIntParameter_h
-#define __otbWrapperQtWidgetIntParameter_h
+#ifndef __otbWrapperQtWidgetView_h
+#define __otbWrapperQtWidgetView_h
 
 #include <QtGui>
-#include "otbWrapperNumericalParameter.h"
-#include "otbWrapperQtWidgetParameterBase.h"
-
+#include "otbWrapperApplication.h"
+#include "otbWrapperQtWidgetModel.h"
 
 namespace otb
 {
@@ -31,21 +30,31 @@ namespace Wrapper
 /** \class
  * \brief
  */
-class QtWidgetIntParameter : public QtWidgetParameterBase
+class QtWidgetView : public QWidget
 {
   Q_OBJECT
 public:
-  QtWidgetIntParameter(IntParameter*, QtWidgetModel*);
-  virtual ~QtWidgetIntParameter();
+  QtWidgetView(Application* app);
+  virtual ~QtWidgetView();
 
-protected slots:
-  void SetValue( int value );
+  void CreateGui();
 
 private:
-  QtWidgetIntParameter(const QtWidgetIntParameter&); //purposely not implemented
-  void operator=(const QtWidgetIntParameter&); //purposely not implemented
+  QtWidgetView(const QtWidgetView&); //purposely not implemented
+  void operator=(const QtWidgetView&); //purposely not implemented
 
-  IntParameter::Pointer m_IntParam;
+  QWidget* CreateHeader();
+
+  QWidget* CreateFooter();
+
+  QWidget* CreateInputWidgets();
+
+  Application::Pointer m_Application;
+
+  QtWidgetModel* m_Model;
+
+  QPushButton* m_ExecButton;
+  QPushButton* m_QuitButton;
 };
 
 

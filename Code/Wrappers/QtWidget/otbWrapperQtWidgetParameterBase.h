@@ -15,13 +15,12 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperQtWidgetIntParameter_h
-#define __otbWrapperQtWidgetIntParameter_h
+#ifndef __otbWrapperQtWidgetParameterBase_h
+#define __otbWrapperQtWidgetParameterBase_h
 
 #include <QtGui>
-#include "otbWrapperNumericalParameter.h"
-#include "otbWrapperQtWidgetParameterBase.h"
-
+#include "otbWrapperParameter.h"
+#include "otbWrapperQtWidgetModel.h"
 
 namespace otb
 {
@@ -31,21 +30,24 @@ namespace Wrapper
 /** \class
  * \brief
  */
-class QtWidgetIntParameter : public QtWidgetParameterBase
+class QtWidgetParameterBase : public QWidget
 {
   Q_OBJECT
 public:
-  QtWidgetIntParameter(IntParameter*, QtWidgetModel*);
-  virtual ~QtWidgetIntParameter();
+  QtWidgetParameterBase(QtWidgetModel*);
+  virtual ~QtWidgetParameterBase();
 
 protected slots:
-  void SetValue( int value );
+  void ParameterChanged(const QString& key);
+
+protected:
+  QtWidgetModel* GetModel();
 
 private:
-  QtWidgetIntParameter(const QtWidgetIntParameter&); //purposely not implemented
-  void operator=(const QtWidgetIntParameter&); //purposely not implemented
+  QtWidgetParameterBase(const QtWidgetParameterBase&); //purposely not implemented
+  void operator=(const QtWidgetParameterBase&); //purposely not implemented
 
-  IntParameter::Pointer m_IntParam;
+  QtWidgetModel* m_Model;
 };
 
 

@@ -15,13 +15,12 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperQtWidgetIntParameter_h
-#define __otbWrapperQtWidgetIntParameter_h
+#ifndef __otbWrapperQtWidgetModel_h
+#define __otbWrapperQtWidgetModel_h
 
 #include <QtGui>
-#include "otbWrapperNumericalParameter.h"
-#include "otbWrapperQtWidgetParameterBase.h"
-
+#include "otbWrapperApplication.h"
+#include "otbWrapperChoiceParameter.h"
 
 namespace otb
 {
@@ -31,21 +30,31 @@ namespace Wrapper
 /** \class
  * \brief
  */
-class QtWidgetIntParameter : public QtWidgetParameterBase
+class QtWidgetModel : public QObject
 {
   Q_OBJECT
 public:
-  QtWidgetIntParameter(IntParameter*, QtWidgetModel*);
-  virtual ~QtWidgetIntParameter();
+  QtWidgetModel(Application* app);
+
+  virtual ~QtWidgetModel();
+
+  Application* GetApplication()
+  {
+    return m_Application;
+  }
 
 protected slots:
-  void SetValue( int value );
+  // slot called everytime one of the widget is updated
+  void NotifyUpdate();
+
+  // slot called when execution is requested
+  void Execute();
 
 private:
-  QtWidgetIntParameter(const QtWidgetIntParameter&); //purposely not implemented
-  void operator=(const QtWidgetIntParameter&); //purposely not implemented
+  QtWidgetModel(const QtWidgetModel&); //purposely not implemented
+  void operator=(const QtWidgetModel&); //purposely not implemented
 
-  IntParameter::Pointer m_IntParam;
+  Application::Pointer m_Application;
 };
 
 
