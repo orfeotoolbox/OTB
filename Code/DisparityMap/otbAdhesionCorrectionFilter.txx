@@ -50,8 +50,8 @@ AdhesionCorrectionFilter<TImage, TMask>
   // Default Thresholds
   m_DiscontinuityThreshold  = 10.0;
   m_DiscontinuityHighThreshold = 30.0;
-  m_MaxEdgeGap = 10.0;
-  m_EdgeThreshold = 30.0;
+  m_MaxEdgeGap = 100.0;
+  m_EdgeThreshold = 100.0;
 }
 
 
