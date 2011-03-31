@@ -20,7 +20,7 @@
 
 
 #include "itkImageToImageFilter.h"
-#include "itkImage.h"
+#include "otbImage.h"
 #include "itkLineSpatialObject.h"
 
 namespace otb
@@ -58,7 +58,7 @@ namespace otb
 
 template<typename TInputPixelType, typename TOutputPixelType>
 class ITK_EXPORT HoughTransform2DLinesImageFilter :
-  public itk::ImageToImageFilter<itk::Image<TInputPixelType, 2>, itk::Image<TOutputPixelType, 2> >
+  public itk::ImageToImageFilter< Image<TInputPixelType, 2>, Image<TOutputPixelType, 2> >
 {
 public:
 
@@ -66,12 +66,12 @@ public:
   typedef HoughTransform2DLinesImageFilter Self;
 
   /** Input Image typedef */
-  typedef itk::Image<TInputPixelType, 2>        InputImageType;
+  typedef otb::Image<TInputPixelType, 2>        InputImageType;
   typedef typename InputImageType::Pointer      InputImagePointer;
   typedef typename InputImageType::ConstPointer InputImageConstPointer;
 
   /** Output Image typedef */
-  typedef itk::Image<TOutputPixelType, 2>   OutputImageType;
+  typedef otb::Image<TOutputPixelType, 2>   OutputImageType;
   typedef typename OutputImageType::Pointer OutputImagePointer;
 
   /** Smart pointer typedef support. */

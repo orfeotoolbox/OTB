@@ -19,7 +19,7 @@
 
 
 #include "itkMacro.h"
-#include "itkImage.h"
+#include "otbImage.h"
 #include "itkListSample.h"
 #include "itkSampleClassifier.h"
 #include "otbVectorImage.h"
@@ -32,7 +32,7 @@ int otbSEMClassifierNew(int argc, char* argv[])
 {
   typedef double                                            PixelType;
   typedef otb::VectorImage<PixelType, 2>                    ImageType;
-  typedef itk::Image<unsigned char, 2>                      OutputImageType;
+  typedef otb::Image<unsigned char, 2>                      OutputImageType;
   typedef otb::SEMClassifier<ImageType, OutputImageType>    ClassifType;
   typedef itk::Statistics::ListSample<ImageType::PixelType> SampleType;
   typedef itk::Statistics::Subsample<SampleType>            ClassSampleType;

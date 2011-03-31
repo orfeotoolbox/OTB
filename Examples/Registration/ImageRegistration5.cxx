@@ -548,7 +548,7 @@ int main(int argc, char *argv[])
     return EXIT_FAILURE;
     }
 
-  typedef itk::Image<float, Dimension> DifferenceImageType;
+  typedef otb::Image<float, Dimension> DifferenceImageType;
 
   typedef itk::SubtractImageFilter<
       FixedImageType,
@@ -559,7 +559,7 @@ int main(int argc, char *argv[])
 
   typedef  unsigned char OutputPixelType;
 
-  typedef itk::Image<OutputPixelType, Dimension> OutputImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
   typedef itk::RescaleIntensityImageFilter<
       DifferenceImageType,

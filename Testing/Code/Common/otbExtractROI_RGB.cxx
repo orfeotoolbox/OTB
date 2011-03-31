@@ -21,7 +21,6 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbExtractROI.h"
-#include "itkImage.h"
 #include "itkRGBPixel.h"
 
 int otbExtractROI_RGB(int argc, char * argv[])

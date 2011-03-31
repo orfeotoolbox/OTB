@@ -21,7 +21,7 @@
 #include <fstream>
 
 #include "itkMacro.h"
-#include "itkImage.h"
+#include "otbImage.h"
 #include "otbMapProjections.h"
 
 int otbMapProjectionsNew(int argc, char* argv[])

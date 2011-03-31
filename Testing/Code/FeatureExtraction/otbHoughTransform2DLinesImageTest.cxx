@@ -25,6 +25,7 @@
 
 #include <list>
 
+#include "otbImage.h"
 #include "otbImageFileWriter.h"
 
 /**
@@ -54,8 +55,8 @@ int otbHoughTransform2DLinesImageTest(int argc, char* argv[])
   /** Typedefs */
   typedef   unsigned char                        PixelType;
   typedef   double                               HoughSpacePixelType;
-  typedef   itk::Image<HoughSpacePixelType, 2>   HoughImageType;
-  typedef   itk::Image<PixelType, 2>             ImageType;
+  typedef   otb::Image<HoughSpacePixelType, 2>   HoughImageType;
+  typedef   otb::Image<PixelType, 2>             ImageType;
   typedef   otb::ImageFileWriter<HoughImageType> WriterType;
 
   itk::Index<2> m_Index;

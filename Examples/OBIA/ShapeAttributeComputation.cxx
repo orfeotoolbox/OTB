@@ -36,6 +36,7 @@
 #include "itkLabelImageToLabelMapFilter.h"
 #include "itkShapeLabelMapFilter.h"
 // Software Guide : EndCodeSnippet
+#include "otbImage.h"
 #include "otbImageFileReader.h"
 #include <fstream>
 
@@ -59,7 +60,7 @@ int main(int argc, char * argv[])
   // Software Guide : BeginCodeSnippet
   const int dim = 2;
   typedef unsigned long                         PixelType;
-  typedef itk::Image<PixelType, dim>            ImageType;
+  typedef otb::Image<PixelType, dim>            ImageType;
   typedef unsigned long                         LabelType;
   typedef itk::ShapeLabelObject<LabelType, dim> LabelObjectType;
   typedef itk::LabelMap<LabelObjectType>        LabelMapType;

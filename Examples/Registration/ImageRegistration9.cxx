@@ -546,7 +546,7 @@ int main(int argc, char *argv[])
 
   typedef  unsigned char OutputPixelType;
 
-  typedef itk::Image<OutputPixelType, Dimension> OutputImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
   typedef itk::CastImageFilter<
       FixedImageType,

@@ -18,7 +18,6 @@
 
 
 #include "itkMacro.h"
-#include "itkImage.h"
 #include <iostream>
 
 #include "otbGenericMapProjection.h"

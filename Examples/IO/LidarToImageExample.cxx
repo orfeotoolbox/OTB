@@ -90,7 +90,7 @@ int main(int argc, char* argv[])
   typedef itk::Vector<RealType, 1>      VectorType;
   typedef itk::PointSet <VectorType, 2> PointSetType;
   typedef otb::Image<RealType, 2>       ImageType;
-  typedef itk::Image<VectorType, 2>     VectorImageType;
+  typedef otb::Image<VectorType, 2>     VectorImageType;
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex

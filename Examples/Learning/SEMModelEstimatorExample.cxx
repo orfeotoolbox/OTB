@@ -96,7 +96,7 @@ int main(int argc, char * argv[])
     typedef otb::VectorImage<PixelType, 2>  ImageType;
     typedef otb::ImageFileReader<ImageType> ReaderType;
 
-    typedef itk::Image<unsigned char, 2>          OutputImageType;
+    typedef otb::Image<unsigned char, 2>          OutputImageType;
     typedef otb::ImageFileWriter<OutputImageType> WriterType;
 //  Software Guide : EndCodeSnippet
 

@@ -19,7 +19,7 @@
 
 
 #include "itkMacro.h"
-#include "itkImage.h"
+#include "otbImage.h"
 #include "itkImageRegionIteratorWithIndex.h"
 #include "otbMultiplyByScalarImageFilter.h"
 
@@ -28,8 +28,8 @@ int otbMultiplyByScalarImageFilterTest(int argc, char * argv[])
   // Define the dimension of the images
   const unsigned int ImageDimension = 2;
   // Declare the types of the images
-  typedef itk::Image<float, ImageDimension> InputImageType;
-  typedef itk::Image<float, ImageDimension> OutputImageType;
+  typedef otb::Image<float, ImageDimension> InputImageType;
+  typedef otb::Image<float, ImageDimension> OutputImageType;
 
   // Declare Iterator types apropriated for each image
   typedef itk::ImageRegionIteratorWithIndex<

@@ -19,7 +19,7 @@
 
 
 #include "otbImageToPointSetFilter.h"
-#include "itkImage.h"
+#include "otbImage.h"
 #include "itkPointSet.h"
 
 int otbImageToPointSetFilterTest(int argc, char *argv[])
@@ -28,7 +28,7 @@ int otbImageToPointSetFilterTest(int argc, char *argv[])
 
   typedef unsigned char PixelType;
 
-  typedef itk::Image<PixelType, Dimension>                    ImageType;
+  typedef otb::Image<PixelType, Dimension>                    ImageType;
   typedef itk::PointSet<PixelType, Dimension>                 PointSetType;
   typedef otb::ImageToPointSetFilter<ImageType, PointSetType> FunctionType;
 

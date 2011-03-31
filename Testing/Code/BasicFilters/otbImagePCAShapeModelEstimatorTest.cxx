@@ -16,7 +16,7 @@
 =========================================================================*/
 
 // Insight classes
-#include "itkImage.h"
+#include "otbImage.h"
 #include "itkVector.h"
 #include "vnl/vnl_matrix_fixed.h"
 #include "vnl/vnl_math.h"
@@ -75,8 +75,8 @@ int otbImagePCAShapeModelEstimatorTest(int argc, char* argv[])
   //------------------------------------------------------
   //Create 3 simple test images with
   //------------------------------------------------------
-  typedef itk::Image<double, NDIMENSION> InputImageType;
-  typedef itk::Image<double, NDIMENSION> OutputImageType;
+  typedef otb::Image<double, NDIMENSION> InputImageType;
+  typedef otb::Image<double, NDIMENSION> OutputImageType;
   typedef
   itk::ImageRegionIterator<InputImageType> InputImageIterator;
 

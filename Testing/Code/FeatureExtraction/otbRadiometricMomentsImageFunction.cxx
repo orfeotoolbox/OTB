@@ -52,7 +52,7 @@ int otbRadiometricMomentsImageFunction(int argc, char * argv[])
   typedef unsigned char InputPixelType;
   const unsigned int Dimension = 2;
 
-  typedef itk::Image<InputPixelType,  Dimension>                  InputImageType;
+  typedef otb::Image<InputPixelType,  Dimension>                  InputImageType;
   typedef otb::ImageFileReader<InputImageType>                    ReaderType;
   typedef otb::RadiometricMomentsImageFunction<InputImageType>    FunctionType;
   typedef FunctionType::OutputType                                OutputType;

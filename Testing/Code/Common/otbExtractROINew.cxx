@@ -17,7 +17,6 @@
 =========================================================================*/
 
 #include "itkMacro.h"
-#include "itkImage.h"
 
 #include "otbExtractROI.h"
 

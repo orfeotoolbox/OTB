@@ -19,7 +19,6 @@
 
 
 #include "otbImage.h"
-#include "itkImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "itkVnlFFTRealToComplexConjugateImageFilter.h"
@@ -36,7 +35,7 @@ int otbFourierMellinImageFilterTestFFT(int argc, char* argv[])
   typedef itk::VnlFFTRealToComplexConjugateImageFilter<InputPixelType, Dimension> FourierImageFilterType;
 
   typedef otb::Image<InputPixelType, Dimension>  InputImageType;
-  typedef itk::Image<OutputPixelType, Dimension> OutputImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
   typedef otb::ImageFileReader<InputImageType>  ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;

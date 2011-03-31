@@ -43,9 +43,9 @@ int otbLineCorrelationDetectorLinear(int argc, char* argv[])
   typedef double        OutputPixelType;
   const unsigned int Dimension = 2;
 
-  typedef itk::Image<InputPixelType,  Dimension> InputImageType;
-  typedef itk::Image<OutputPixelType, Dimension> OutputImageType;
-  typedef itk::Image<OutputPixelType, Dimension> OutputImageDirectionType;
+  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageDirectionType;
 
   typedef otb::ImageFileReader<InputImageType>  ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;

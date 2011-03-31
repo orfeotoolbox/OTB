@@ -18,7 +18,7 @@
 
 
 
-#include "itkImage.h"
+#include "otbImage.h"
 #include "itkRGBPixel.h"
 #include "itkMacro.h"
 #include <iostream>
@@ -36,8 +36,8 @@ int otbImageFileWriterRGBTest(int argc, char* argv[])
   typedef itk::RGBPixel<unsigned char> OutputPixelType;
   const unsigned int Dimension = 2;
 
-  typedef itk::Image<InputPixelType,  Dimension> InputImageType;
-  typedef itk::Image<OutputPixelType, Dimension> OutputImageType;
+  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
   typedef otb::ImageFileReader<InputImageType>  ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;

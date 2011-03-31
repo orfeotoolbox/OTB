@@ -21,7 +21,6 @@
 #include <iomanip>
 
 #include "itkMacro.h"
-#include "itkImage.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 

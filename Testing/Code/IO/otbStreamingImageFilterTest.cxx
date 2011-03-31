@@ -21,7 +21,7 @@
 #include "itkMacro.h"
 #include <iostream>
 
-#include "itkImage.h"
+#include "otbImage.h"
 #include "itkStreamingImageFilter.h"
 
 #include "otbImageFileReader.h"
@@ -37,8 +37,8 @@ int otbStreamingImageFilterTest(int argc, char* argv[])
   typedef unsigned char OutputPixelType;
   const unsigned int Dimension = 2;
 
-  typedef itk::Image<InputPixelType,  Dimension> InputImageType;
-  typedef itk::Image<OutputPixelType, Dimension> OutputImageType;
+  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
   typedef otb::ImageFileReader<InputImageType>  ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;

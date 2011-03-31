@@ -19,7 +19,7 @@
 
 
 #include "itkMacro.h"
-#include "itkImage.h"
+#include "otbImage.h"
 
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -41,7 +41,7 @@ int otbHarrisToPointSet(int argc, char * argv[])
   PixelType LowerThreshold((PixelType) ::atoi(argv[6]));
   PixelType UpperThreshold((PixelType) ::atoi(argv[7]));
 
-  typedef itk::Image<PixelType,  Dimension>           ImageType;
+  typedef otb::Image<PixelType,  Dimension>           ImageType;
   typedef otb::ImageFileReader<ImageType>             ReaderType;
   typedef otb::HarrisImageToPointSetFilter<ImageType> FunctionType;
   typedef FunctionType::OutputPointSetType            OutputPointSetType;
