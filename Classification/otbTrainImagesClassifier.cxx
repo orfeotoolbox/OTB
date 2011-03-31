@@ -29,6 +29,7 @@
 #include "otbVectorData.h"
 #include "otbVectorDataFileReader.h"
 #include "otbListSampleGenerator.h"
+//#include "otbTypeManager.h"
 
 // ListSample
 #include "itkListSample.h"
@@ -53,6 +54,9 @@
 
 // List sample concatenation
 #include "otbConcatenateSampleListFilter.h"
+
+// Balancing ListSample
+#include "otbListSampleToBalancedListSampleFilter.h"
 
 namespace otb
 {
@@ -79,8 +83,9 @@ int TrainImagesClassifier::Describe(ApplicationDescriptor* descriptor)
 int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
 {
   // Input Image
-  typedef double                                          ValueType;
-  typedef unsigned short                                  PixelType;
+  //typedef double                                          ValueType;
+  //typedef unsigned short                                  PixelType; // def by manuel
+  typedef float                                           PixelType;
   typedef otb::VectorImage<PixelType,2>                   VectorImageType;
   typedef otb::Image<PixelType,2>                         ImageType;
   typedef otb::ImageFileReader<VectorImageType>           ReaderType;
@@ -91,7 +96,7 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
   // Training vectordata
   typedef otb::VectorData<>                               VectorDataType;
   typedef otb::VectorDataFileReader<VectorDataType>       VectorDataReaderType;
-  typedef itk::VariableLengthVector<ValueType>            MeasurementType;
+  typedef itk::VariableLengthVector<PixelType>            MeasurementType;
 
   // SampleList manipulation
   typedef otb::ListSampleGenerator<VectorImageType, VectorDataType> ListSampleGeneratorType;
@@ -107,10 +112,15 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
   // Statistic XML file Reader 
   typedef otb::StatisticsXMLFileReader<MeasurementType>     StatisticsReader;
 
+  typedef otb::Statistics::ListSampleToBalancedListSampleFilter<
+      ListSampleType, LabelListSampleType>                  BalancingListSampleFilterType;
+
   typedef otb::Statistics::ShiftScaleSampleListFilter<
-      ListSampleType,ListSampleType>                        ShiftScaleFilterType;
+      ListSampleType, ListSampleType>                       ShiftScaleFilterType;
 
   // SVM Estimator
+  //typedef itk::Statistics::ListSample<MeasurementType>    ListSampleType2;
+
   typedef otb::Functor::VariableLengthVectorToMeasurementVectorFunctor<
       MeasurementType>                                      MeasurementVectorFunctorType;
   typedef otb::SVMSampleListModelEstimator<
@@ -151,6 +161,8 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
     // read the Vectordata
     VectorDataReaderType::Pointer vdreader = VectorDataReaderType::New();
     vdreader->SetFileName(parseResult->GetParameterString("VectorDataSamples",imgIndex));
+    vdreader->Update();
+    std::cout<<"Set VectorData filename: "<< parseResult->GetParameterString("VectorDataSamples",imgIndex) <<std::endl;
 
     //Sample list generator
     ListSampleGeneratorType::Pointer sampleGenerator = ListSampleGeneratorType::New();
@@ -164,7 +176,10 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
     sampleGenerator->SetValidationTrainingProportion(validationTrainingProportion);
 
     sampleGenerator->SetClassKey("Class");
+
     sampleGenerator->Update();
+
+    std::cout << "output size: " << sampleGenerator->GetTrainingListLabel()->GetMeasurementVectorSize() <<std::endl;
 
     //Concatenate training and validation samples from the image
     concatenateTrainingLabels->AddInput(sampleGenerator->GetTrainingListLabel());
@@ -173,12 +188,21 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
     concatenateValidationSamples->AddInput(sampleGenerator->GetValidationListSample());
     }
 
+  // Update
+  concatenateTrainingSamples->Update();
+  concatenateTrainingLabels->Update();
+  concatenateValidationSamples->Update();
+  concatenateValidationLabels->Update();
+
   // Normalize the samples
   // Read the mean and variance form the XML file (estimate with the otbEstimateImagesStatistics application)
   StatisticsReader::Pointer  statisticsReader = StatisticsReader::New();
-  statisticsReader->SetFileName(parseResult->GetParameterString("FeaturesStatistics").c_str());
+  statisticsReader->SetFileName(parseResult->GetParameterString("ImagesStatistics").c_str());
   MeasurementType  meanMeasurentVector     = statisticsReader->GetStatisticVectorByName("mean");
   MeasurementType  varianceMeasurentVector = statisticsReader->GetStatisticVectorByName("variance");
+
+  std::cout << "MeanVector: " << meanMeasurentVector  << std::endl;
+  std::cout << "Variance Vector: " << varianceMeasurentVector  << std::endl;
 
   // Shift scale the samples
   ShiftScaleFilterType::Pointer trainingShiftScaleFilter = ShiftScaleFilterType::New();
@@ -193,30 +217,53 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
   validationShiftScaleFilter->SetScales(varianceMeasurentVector);
   validationShiftScaleFilter->Update();
 
-  // split the data set into training/validation set
-  ListSampleType::Pointer trainingListSample = trainingShiftScaleFilter->GetOutputSampleList();
-  ListSampleType::Pointer validationListSample = validationShiftScaleFilter->GetOutputSampleList();
-  LabelListSampleType::Pointer trainingLabeledListSample = concatenateTrainingLabels->GetOutputSampleList();
-  LabelListSampleType::Pointer validationLabeledListSample = concatenateValidationLabels->GetOutputSampleList();
+  ListSampleType::Pointer listSample;
+  LabelListSampleType::Pointer labelListSample;
 
+  if(parseResult->IsOptionPresent("Balancing"))
+    {
+    // Balance the list sample.
+    std::cout<<"Number of training samples before balancing: "<<concatenateTrainingSamples->GetOutputSampleList()->Size()<<std::endl;
+    BalancingListSampleFilterType::Pointer balancingFilter = BalancingListSampleFilterType::New();
+    balancingFilter->SetInput(trainingShiftScaleFilter->GetOutput()/*GetOutputSampleList()*/);
+    balancingFilter->SetInputLabel(concatenateTrainingLabels->GetOutput()/*GetOutputSampleList()*/);
+    balancingFilter->SetBalancingFactor(parseResult->GetParameterUInt("Balancing"));
+    balancingFilter->Update();
+    listSample = balancingFilter->GetOutputSampleList();
+    labelListSample = balancingFilter->GetOutputLabelSampleList();
+    std::cout<<"Number of samples after balancing: "<<balancingFilter->GetOutputSampleList()->Size()<<std::endl;
+    }
+  else
+    {
+    listSample = trainingShiftScaleFilter->GetOutputSampleList();
+    labelListSample = concatenateTrainingLabels->GetOutputSampleList();
+    std::cout<<"Number of training samples: "<<concatenateTrainingSamples->GetOutputSampleList()->Size()<<std::endl;
+    }
+
+  // split the data set into training/validation set
+  ListSampleType::Pointer trainingListSample = listSample;
+  ListSampleType::Pointer validationListSample = validationShiftScaleFilter->GetOutputSampleList();
+  LabelListSampleType::Pointer trainingLabeledListSample = labelListSample;
+  LabelListSampleType::Pointer validationLabeledListSample = concatenateValidationLabels->GetOutputSampleList();
 
   std::cout<<"Size of training set: "<<trainingListSample->Size()<<std::endl;
   std::cout<<"Size of validation set: "<<validationListSample->Size()<<std::endl;
+  std::cout<<"Size of labeled training set: "<<trainingLabeledListSample->Size()<<std::endl;
+  std::cout<<"Size of labeled validation set: "<<validationLabeledListSample->Size()<<std::endl;
 
-  //TODO problem with template parameters of the SVM model estimator in the learning step
-  // Estimate the svm model
-  //SVMEstimatorType::Pointer svmestimator = SVMEstimatorType::New();
-  //  svmestimator->SetInputSampleList(trainingListSample);
-  //  svmestimator->SetTrainingSampleList(trainingLabeledListSample);
-  //
-  //  if(parseResult->IsOptionPresent("Margin"))
-  //    {
-  //    svmestimator->SetC(parseResult->GetParameterDouble("Margin"));
-  //    }
-  //
-  //  svmestimator->SetKernelType(RBF);
-  //  svmestimator->Update();
-  //  svmestimator->GetModel()->SaveModel(parseResult->GetParameterString("Output"));
+  // Estimate SVM model
+  SVMEstimatorType::Pointer svmestimator = SVMEstimatorType::New();
+  svmestimator->SetInputSampleList(trainingListSample);
+  svmestimator->SetTrainingSampleList(trainingLabeledListSample);
+
+  if(parseResult->IsOptionPresent("Margin"))
+    {
+    svmestimator->SetC(parseResult->GetParameterDouble("Margin"));
+    }
+
+  svmestimator->SetKernelType(LINEAR);
+  svmestimator->Update();
+  svmestimator->GetModel()->SaveModel(parseResult->GetParameterString("Output"));
 
   std::cout<<"Learning done ... "<<std::endl;
 
