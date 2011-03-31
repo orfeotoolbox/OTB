@@ -26,14 +26,19 @@
 
 int otbMassOfBeliefDSApplied(int argc, char* argv[])
 {
+  const char * hyp_1  = argv[1];
+  const char * hyp_2  = argv[2];
+  double desc1Val = atof(argv[3]);
+  double desc2Val = atof(argv[4]);
+
   typedef float                           PrecisionType;
-  typedef otb::FuzzyVariable<std::string,
-    PrecisionType>                        FuzzyVarType;
-  
+  typedef otb::FuzzyVariable<std::string, PrecisionType>
+                                          FuzzyVarType;
   typedef otb::MassOfBelief<std::string>  MassOfBeliefFunctionType;
+  typedef otb::JointMassOfBeliefFilter<MassOfBeliefFunctionType> 
+                                          JointMassOfBeliefFilterType;
 
-  typedef otb::JointMassOfBeliefFilter<MassOfBeliefFunctionType> JointMassOfBeliefFilterType;
-
+  // Descriptors and associated fuzzy variables
   FuzzyVarType::Pointer desc1 = FuzzyVarType::New();
   FuzzyVarType::Pointer desc2 = FuzzyVarType::New();
 
@@ -43,22 +48,23 @@ int otbMassOfBeliefDSApplied(int argc, char* argv[])
   desc2->SetMembership("H2", 0, 0, 0.58, 0.68, 0, 0.99);
   desc2->SetMembership("H2_", 0.68, 0.98, 1.0, 1.0, 0, 0.99);
 
-  PrecisionType desc1Val = 0.9;
-  PrecisionType desc2Val = 0.9;
-
+  // Corresponding masses
   MassOfBeliefFunctionType::Pointer mass1 = MassOfBeliefFunctionType::New();
   MassOfBeliefFunctionType::Pointer mass2 = MassOfBeliefFunctionType::New();
   MassOfBeliefFunctionType::Pointer jointMass = MassOfBeliefFunctionType::New();
 
   MassOfBeliefFunctionType::LabelSetType H1, H1_, H2, H2_, universe, Hyp;
+  // Defining universe
   universe.insert("H1");
   universe.insert("H1_");
   universe.insert("H2");
   universe.insert("H2_");
-
-  Hyp.insert("H1");
-  Hyp.insert("H2_");
   
+  // Studied hypothesis
+  Hyp.insert(hyp_1);
+  Hyp.insert(hyp_2);
+  
+  // Initialize masses
   mass1->InitializePowerSetMasses(universe);
   mass2->InitializePowerSetMasses(universe);
 
@@ -82,22 +88,11 @@ int otbMassOfBeliefDSApplied(int argc, char* argv[])
   jointMass = jointMassFilter->GetOutput();
 
   std::cout<<mass1<<std::endl;
-  std::cout << "["
-            << desc1->GetMembership("H1", desc1Val)
-            << ","
-            << desc1->GetMembership("H1_", desc1Val)
-            << "]"
-            << std::endl;
-
+  
   std::cout<<mass2<<std::endl;
-  std::cout << "["
-            << desc2->GetMembership("H2", desc2Val)
-            << ","
-            << desc2->GetMembership("H2_", desc2Val)
-            << "]"
-            << std::endl;
-
+  
   std::cout << jointMass << std::endl;
+  std::cout << "Considered Hypothesis : " << Hyp << std::endl;
   std::cout << "Belief(Hyp) : "
             << jointMass->GetBelief(Hyp)
             << "  -  Plausibility(Hyp) : "
@@ -105,8 +100,14 @@ int otbMassOfBeliefDSApplied(int argc, char* argv[])
             << "  -  Score(Hyp) : "
             << (jointMass->GetBelief(Hyp) + jointMass->GetPlausibility(Hyp))/2.0
             << std::endl;
-  
-  return EXIT_SUCCESS;
+
+  if (jointMass->GetBelief(Hyp) > jointMass->GetPlausibility(Hyp))
+    {
+    std::cout << "Belief > Plausibility" << std::endl;
+    return EXIT_FAILURE;
+    }
+  else
+    {
+    return EXIT_SUCCESS;
+    }
 }
-  
-  
