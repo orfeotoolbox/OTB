@@ -106,13 +106,13 @@ class ITK_EXPORT SVMSampleListModelEstimator :
 {
 public:
   /** Standard class typedefs. */
-  typedef SVMSampleListModelEstimator Self;
+  typedef SVMSampleListModelEstimator                                       Self;
   typedef SVMModelEstimator<typename TInputSampleList::MeasurementType,
-      typename TTrainingSampleList::MeasurementType>
-  Superclass;
+                            typename TTrainingSampleList::MeasurementType>
+                                                                            Superclass;
 
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef itk::SmartPointer<Self>                                           Pointer;
+  typedef itk::SmartPointer<const Self>                                     ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
