@@ -35,7 +35,7 @@ int otbMassOfBeliefDSApplied(int argc, char* argv[])
   typedef otb::FuzzyVariable<std::string, PrecisionType>
                                           FuzzyVarType;
   typedef otb::MassOfBelief<std::string>  MassOfBeliefFunctionType;
-  typedef otb::JointMassOfBeliefFilter<MassOfBeliefFunctionType> 
+  typedef otb::JointMassOfBeliefFilter<MassOfBeliefFunctionType>
                                           JointMassOfBeliefFilterType;
 
   // Descriptors and associated fuzzy variables
