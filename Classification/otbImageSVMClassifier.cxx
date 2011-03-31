@@ -54,11 +54,9 @@ int ImageSVMClassifier::Describe(ApplicationDescriptor* descriptor)
   descriptor->AddOption("InputImage", "A new image to classify",
                         "in", 1, true, ApplicationDescriptor::InputImage);
   descriptor->AddOption("ImageStatistics", "a XML file containing mean and variance of input image.",
-                        "is", 1, true, ApplicationDescriptor::FileName);
+                        "is", 1, false, ApplicationDescriptor::FileName);
   descriptor->AddOption("SVMmodel", "Estimator model previously computed",
                         "svm", 1, true, ApplicationDescriptor::FileName);
-  descriptor->AddOption("ShiftScaleImage", "Shift Scale the input image",
-                        "ssi", 0, false, ApplicationDescriptor::Boolean);
   descriptor->AddOption("OutputLabeledImage", "Output labeled image",
                         "out", 1, true, ApplicationDescriptor::FileName);
   return EXIT_SUCCESS;
@@ -95,32 +93,35 @@ int ImageSVMClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
   reader->SetFileName(parseResult->GetParameterString("InputImage"));
   reader->UpdateOutputInformation();
 
-  // Load input image statistics
-  StatisticsReader::Pointer  statisticsReader = StatisticsReader::New();
-  statisticsReader->SetFileName(parseResult->GetParameterString("ImageStatistics"));
-  MeasurementType  meanMeasurementVector     = statisticsReader->GetStatisticVectorByName("mean");
-  MeasurementType  varianceMeasurementVector = statisticsReader->GetStatisticVectorByName("variance");
-
-  std::cout << "mean: " << meanMeasurementVector << std::endl;
-  std::cout << "variance: " << varianceMeasurementVector << std::endl;
-
   // Load svm model
   ModelPointerType modelSVM = ModelType::New();
   modelSVM->LoadModel(parseResult->GetParameterString("SVMmodel").c_str());
 
+  // Normalize input image (optinal)
+  StatisticsReader::Pointer  statisticsReader = StatisticsReader::New();
+  MeasurementType  meanMeasurementVector;
+  MeasurementType  varianceMeasurementVector;
+  RescalerType::Pointer rescaler = RescalerType::New();
 
   // Classify
-  RescalerType::Pointer rescaler = RescalerType::New();
   ClassificationFilterPointerType classificationFilter = ClassificationFilterType::New();
   classificationFilter->SetModel(modelSVM);
 
   // Normalize input image
-  if (parseResult->IsOptionPresent("ShiftScaleImage"))
+  if (parseResult->IsOptionPresent("ImageStatistics"))
     {
+    // Load input image statistics
+    statisticsReader->SetFileName(parseResult->GetParameterString("ImageStatistics"));
+    meanMeasurementVector     = statisticsReader->GetStatisticVectorByName("mean");
+    varianceMeasurementVector = statisticsReader->GetStatisticVectorByName("variance");
+    std::cout << "mean: " << meanMeasurementVector << std::endl;
+    std::cout << "variance: " << varianceMeasurementVector << std::endl;
     std::cout << "Shift and scale of the input image !" << std::endl;
+    // Rescale vector image
     rescaler->SetScale(varianceMeasurementVector);
     rescaler->SetShift(meanMeasurementVector);
     rescaler->SetInput(reader->GetOutput());
+
     classificationFilter->SetInput(rescaler->GetOutput());
     }
   else
