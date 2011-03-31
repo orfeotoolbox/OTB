@@ -148,6 +148,7 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
   const long int maxValidationSize = 100;
   const double validationTrainingProportion = 0.5;
 
+  unsigned int nbBands = 0;
   //Iterate over all input images
   for(int imgIndex = 0; imgIndex<parseResult->GetNumberOfParameters("InputImages");++imgIndex)
     {
@@ -157,6 +158,11 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
     reader->UpdateOutputInformation();
 
     std::cout<<"Processing image ("<<imgIndex<<"): "<<reader->GetFileName()<<std::endl;
+
+    if (imgIndex == 0)
+      {
+      nbBands = reader->GetOutput()->GetNumberOfComponentsPerPixel();
+      }
 
     // read the Vectordata
     VectorDataReaderType::Pointer vdreader = VectorDataReaderType::New();
@@ -196,10 +202,23 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
 
   // Normalize the samples
   // Read the mean and variance form the XML file (estimate with the otbEstimateImagesStatistics application)
-  StatisticsReader::Pointer  statisticsReader = StatisticsReader::New();
-  statisticsReader->SetFileName(parseResult->GetParameterString("ImagesStatistics").c_str());
-  MeasurementType  meanMeasurentVector     = statisticsReader->GetStatisticVectorByName("mean");
-  MeasurementType  varianceMeasurentVector = statisticsReader->GetStatisticVectorByName("variance");
+
+  MeasurementType  meanMeasurentVector;
+  MeasurementType  varianceMeasurentVector;
+  if(parseResult->IsOptionPresent("ImagesStatistics"))
+    {
+    StatisticsReader::Pointer  statisticsReader = StatisticsReader::New();
+    statisticsReader->SetFileName(parseResult->GetParameterString("ImagesStatistics").c_str());
+    meanMeasurentVector     = statisticsReader->GetStatisticVectorByName("mean");
+    varianceMeasurentVector = statisticsReader->GetStatisticVectorByName("variance");
+    }
+  else
+    {
+    meanMeasurentVector.SetSize(nbBands);
+    meanMeasurentVector.Fill(0.);
+    varianceMeasurentVector.SetSize(nbBands);
+    varianceMeasurentVector.Fill(1.);
+    }
 
   std::cout << "MeanVector: " << meanMeasurentVector  << std::endl;
   std::cout << "Variance Vector: " << varianceMeasurentVector  << std::endl;
