@@ -286,6 +286,43 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
 
   std::cout<<"Learning done ... "<<std::endl;
 
+  //--------------------------
+  // Performances estimation
+  ClassifierType::Pointer validationClassifier = ClassifierType::New();
+  validationClassifier->SetSample(validationListSample);
+  validationClassifier->SetNumberOfClasses(svmestimator->GetModel()->GetNumberOfClasses());
+  validationClassifier->SetModel(svmestimator->GetModel());
+  validationClassifier->Update();
+
+  // Estimate performances
+  ClassifierOutputType::ConstIterator it = validationClassifier->GetOutput()->Begin();
+  ClassifierOutputType::ConstIterator itEnd = validationClassifier->GetOutput()->End();
+
+  LabelListSampleType::Pointer classifierListLabel = LabelListSampleType::New();
+
+  while (it != itEnd)
+    {
+    // Due to a bug in SVMClassifier, outlier in one-class SVM are labeled with unsigned int max
+    classifierListLabel->PushBack(
+        it.GetClassLabel() == itk::NumericTraits<unsigned int>::max() ? 2 : it.GetClassLabel()
+                                 );
+    ++it;
+    }
+
+  ConfusionMatrixCalculatorType::Pointer confMatCalc = ConfusionMatrixCalculatorType::New();
+
+  confMatCalc->SetReferenceLabels(validationLabeledListSample);
+  confMatCalc->SetProducedLabels(classifierListLabel);
+
+  confMatCalc->Update();
+
+  std::cout<< "confusion matrix: \n" << confMatCalc->GetConfusionMatrix() << std::endl;
+
+  // TODO: cout more information about the confusion matrix
+
+  // TODO: implement hyperplan validation (cf. object detection)
+
+
   return EXIT_SUCCESS;
 }
 
