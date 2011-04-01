@@ -166,7 +166,8 @@ SVMModelEstimator<InputPixelType, LabelPixelType>
   m_InitialCrossValidationAccuracy = crossValidationFunction->GetValue(initialParameters);
   m_FinalCrossValidationAccuracy = m_InitialCrossValidationAccuracy;
 
-  otbMsgDebugMacro(<< "Initial accuracy : " << m_InitialCrossValidationAccuracy);
+  otbMsgDebugMacro(<< "Initial accuracy : " << m_InitialCrossValidationAccuracy
+                   << ", Parameters Optimization" << m_ParametersOptimization);
 
   if (m_ParametersOptimization)
     {
