@@ -53,9 +53,9 @@ int ImageSVMClassifier::Describe(ApplicationDescriptor* descriptor)
   descriptor->SetDescription("Perform SVM classification based a previous computed svm model to an new input image.");
   descriptor->AddOption("InputImage", "A new image to classify",
                         "in", 1, true, ApplicationDescriptor::InputImage);
-  descriptor->AddOption("ImageStatistics", "a XML file containing mean and variance of input image.",
+  descriptor->AddOption("ImageStatistics", "a XML file containing mean and variance of input images used to train svm model.",
                         "is", 1, false, ApplicationDescriptor::FileName);
-  descriptor->AddOption("SVMmodel", "Estimator model previously computed",
+  descriptor->AddOption("SVMmodel", "Estimated model previously computed",
                         "svm", 1, true, ApplicationDescriptor::FileName);
   descriptor->AddOption("OutputLabeledImage", "Output labeled image",
                         "out", 1, true, ApplicationDescriptor::FileName);
@@ -88,6 +88,7 @@ int ImageSVMClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
   typedef ChangeLabelFilterType::Pointer                                         ChangeLabelFilterPointerType;
 
 
+  //--------------------------
   // Load input image
   ReaderType::Pointer    reader  = ReaderType::New();
   reader->SetFileName(parseResult->GetParameterString("InputImage"));
@@ -97,12 +98,14 @@ int ImageSVMClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
   ModelPointerType modelSVM = ModelType::New();
   modelSVM->LoadModel(parseResult->GetParameterString("SVMmodel").c_str());
 
-  // Normalize input image (optinal)
+  //--------------------------
+  // Normalize input image (optional)
   StatisticsReader::Pointer  statisticsReader = StatisticsReader::New();
   MeasurementType  meanMeasurementVector;
   MeasurementType  varianceMeasurementVector;
   RescalerType::Pointer rescaler = RescalerType::New();
 
+  //--------------------------
   // Classify
   ClassificationFilterPointerType classificationFilter = ClassificationFilterType::New();
   classificationFilter->SetModel(modelSVM);
@@ -130,7 +133,6 @@ int ImageSVMClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
     classificationFilter->SetInput(reader->GetOutput());
     }
 
-
   ChangeLabelFilterPointerType changeLabelFilter = ChangeLabelFilterType::New();
   changeLabelFilter->SetInput(classificationFilter->GetOutput());
   changeLabelFilter->SetNumberOfComponentsPerPixel(3);
@@ -145,6 +147,7 @@ int ImageSVMClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
     changeLabelFilter->SetChange((*it)->GetId(), color);
     }*/
 
+  //--------------------------
   // Save labeled Image
   WriterType::Pointer    writer  = WriterType::New();
   writer->SetFileName(parseResult->GetParameterString("OutputLabeledImage"));
