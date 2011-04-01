@@ -24,9 +24,7 @@
 //Image
 #include "otbImage.h"
 #include "otbVectorImage.h"
-#include "otbImageList.h"
 #include "otbImageFileReader.h"
-#include "otbVectorImageToImageListFilter.h"
 #include "otbVectorData.h"
 #include "otbVectorDataFileReader.h"
 #include "otbListSampleGenerator.h"
@@ -82,13 +80,11 @@ int ValidateImagesClassifier::Describe(ApplicationDescriptor* descriptor)
 int ValidateImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
 {
   // Input Image
-  //typedef double                                          ValueType;
-  //typedef unsigned short                                  PixelType; // def by manuel
   typedef float                                           PixelType;
   typedef otb::VectorImage<PixelType,2>                   VectorImageType;
   typedef otb::Image<PixelType,2>                         ImageType;
   typedef otb::ImageFileReader<VectorImageType>           ReaderType;
-  typedef int                                   LabeledPixelType;
+  typedef int                                             LabeledPixelType;
   typedef otb::Image<LabeledPixelType, 2>                 LabeledImageType;
 
   // Training vectordata
@@ -110,6 +106,7 @@ int ValidateImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult
   // Statistic XML file Reader
   typedef otb::StatisticsXMLFileReader<MeasurementType>     StatisticsReader;
 
+  // Enhance List Sample
   typedef otb::Statistics::ShiftScaleSampleListFilter<
       ListSampleType, ListSampleType>                       ShiftScaleFilterType;
 
@@ -125,17 +122,21 @@ int ValidateImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult
       ListSampleType,
       LabelListSampleType,
       MeasurementVectorFunctorType>                         SVMEstimatorType;
+
+  // Estimate performance on validation sample
   typedef otb::SVMClassifier<ListSampleType, LabelType::ValueType>     ClassifierType;
   typedef otb::ConfusionMatrixCalculator<LabelListSampleType,
       LabelListSampleType>                                  ConfusionMatrixCalculatorType;
   typedef ClassifierType::OutputType ClassifierOutputType;
+
 
   //Create validation list samples and validation label list samples
   ConcatenateLabelListSampleFilterType::Pointer concatenateValidationLabels =
                                                   ConcatenateLabelListSampleFilterType::New();
   ConcatenateListSampleFilterType::Pointer concatenateValidationSamples =
                                             ConcatenateListSampleFilterType::New();
-
+  //--------------------------
+  // Load measuremnts from input images
   unsigned int nbBands = 0;
   //Iterate over all input images
   for(int imgIndex = 0; imgIndex < parseResult->GetNumberOfParameters("InputImages");++imgIndex)
@@ -180,9 +181,9 @@ int ValidateImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult
   concatenateValidationSamples->Update();
   concatenateValidationLabels->Update();
 
+  //--------------------------
   // Normalize the samples
   // Read the mean and variance form the XML file (estimate with the otbEstimateImagesStatistics application)
-
   MeasurementType  meanMeasurentVector;
   MeasurementType  varianceMeasurentVector;
   if(parseResult->IsOptionPresent("ImagesStatistics"))
@@ -210,6 +211,7 @@ int ValidateImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult
   validationShiftScaleFilter->SetScales(varianceMeasurentVector);
   validationShiftScaleFilter->Update();
 
+  //--------------------------
   // split the data set into training/validation set
   ListSampleType::Pointer validationListSample = validationShiftScaleFilter->GetOutputSampleList();
   LabelListSampleType::Pointer validationLabeledListSample = concatenateValidationLabels->GetOutputSampleList();
@@ -217,6 +219,7 @@ int ValidateImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult
   std::cout<<"Size of validation set: "<<validationListSample->Size()<<std::endl;
   std::cout<<"Size of labeled validation set: "<<validationLabeledListSample->Size()<<std::endl;
 
+  //--------------------------
   // Load svm model
   ModelPointerType modelSVM = ModelType::New();
   modelSVM->LoadModel(parseResult->GetParameterString("SVMmodel").c_str());
@@ -258,6 +261,7 @@ int ValidateImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult
   std::cout << "F-score of the different class: " << confMatCalc->GetFScores() << std::endl;
   std::cout << "Kappa index: " << confMatCalc->GetKappaIndex() << std::endl;
 
+  //--------------------------
   // Save output in a ascii file (if needed)
   if(parseResult->IsOptionPresent("OutputPerfEstimation"))
     {
