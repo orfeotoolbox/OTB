@@ -23,9 +23,7 @@
 //Image 
 #include "otbImage.h"
 #include "otbVectorImage.h"
-#include "otbImageList.h"
 #include "otbImageFileReader.h"
-#include "otbVectorImageToImageListFilter.h"
 #include "otbVectorData.h"
 #include "otbVectorDataFileReader.h"
 #include "otbListSampleGenerator.h"
@@ -77,6 +75,8 @@ int TrainImagesClassifier::Describe(ApplicationDescriptor* descriptor)
                         "m", 1, false, ApplicationDescriptor::Real);
   descriptor->AddOption("Balancing", "Balance and grow the training set.",
                         "b", 1, false, ApplicationDescriptor::Integer);
+  descriptor->AddOption("SVM_Kernel", "Type of kernel use to estimate SVM model : 0 = LINEAR (default), 1 = RBF,  2 = POLY, 3 = SIGMOID",
+                        "k", 1, false, ApplicationDescriptor::Integer);
   return EXIT_SUCCESS;
 }
 
@@ -89,9 +89,6 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
   typedef otb::VectorImage<PixelType,2>                   VectorImageType;
   typedef otb::Image<PixelType,2>                         ImageType;
   typedef otb::ImageFileReader<VectorImageType>           ReaderType;
-  typedef otb::ImageList<ImageType>                       ImageListType;
-  typedef otb::VectorImageToImageListFilter
-      <VectorImageType, ImageListType>                    VI2ILFilterType;
 
   // Training vectordata
   typedef otb::VectorData<>                               VectorDataType;
@@ -119,8 +116,6 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
       ListSampleType, ListSampleType>                       ShiftScaleFilterType;
 
   // SVM Estimator
-  //typedef itk::Statistics::ListSample<MeasurementType>    ListSampleType2;
-
   typedef otb::Functor::VariableLengthVectorToMeasurementVectorFunctor<
       MeasurementType>                                      MeasurementVectorFunctorType;
   typedef otb::SVMSampleListModelEstimator<
@@ -128,6 +123,7 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
       LabelListSampleType,
       MeasurementVectorFunctorType>                         SVMEstimatorType;
   typedef otb::SVMClassifier<ListSampleType, LabelType::ValueType>     ClassifierType;
+
   typedef otb::ConfusionMatrixCalculator<LabelListSampleType,
       LabelListSampleType>                                  ConfusionMatrixCalculatorType;
   typedef ClassifierType::OutputType ClassifierOutputType;
@@ -202,7 +198,6 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
 
   // Normalize the samples
   // Read the mean and variance form the XML file (estimate with the otbEstimateImagesStatistics application)
-
   MeasurementType  meanMeasurentVector;
   MeasurementType  varianceMeasurentVector;
   if(parseResult->IsOptionPresent("ImagesStatistics"))
@@ -274,17 +269,44 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
   SVMEstimatorType::Pointer svmestimator = SVMEstimatorType::New();
   svmestimator->SetInputSampleList(trainingListSample);
   svmestimator->SetTrainingSampleList(trainingLabeledListSample);
+  svmestimator->SetParametersOptimization(true);
+
+  //TODO : Add some other options
 
   if(parseResult->IsOptionPresent("Margin"))
     {
     svmestimator->SetC(parseResult->GetParameterDouble("Margin"));
     }
 
-  svmestimator->SetKernelType(LINEAR);
+  if(parseResult->IsOptionPresent("Margin"))
+    {
+    switch (parseResult->GetParameterInt("SVM_Kernel"))
+      {
+      case 0: // LINEAR
+        svmestimator->SetKernelType(LINEAR);
+        break;
+      case 1: // RBF
+        svmestimator->SetKernelType(RBF);
+        break;
+      case 2: // POLY
+        svmestimator->SetKernelType(POLY);
+        break;
+      case 3: // SIGMOID
+        svmestimator->SetKernelType(SIGMOID);
+        break;
+      default: // DEFAULT = LINEAR
+        svmestimator->SetKernelType(LINEAR);
+        break;
+      }
+    }
+  else
+    {
+    svmestimator->SetKernelType(LINEAR);
+    }
   svmestimator->Update();
   svmestimator->GetModel()->SaveModel(parseResult->GetParameterString("Output"));
 
-  std::cout<<"Learning done ... "<<std::endl;
+  std::cout<<"Learning done -> Final SVM accuracy: " << svmestimator->GetFinalCrossValidationAccuracy() <<std::endl;
 
   //--------------------------
   // Performances estimation
@@ -318,9 +340,13 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
 
   std::cout<< "confusion matrix: \n" << confMatCalc->GetConfusionMatrix() << std::endl;
 
-  // TODO: cout more information about the confusion matrix
+  std::cout << "Precision of the different class: " << confMatCalc->GetPrecisions() << std::endl;
+  std::cout << "Recall of the different class: " << confMatCalc->GetRecalls() << std::endl;
+  std::cout << "F-score of the different class: " << confMatCalc->GetFScores() << std::endl;
+  std::cout << "Kappa index: " << confMatCalc->GetKappaIndex() << std::endl;
 
-  // TODO: implement hyperplan validation (cf. object detection)
+  // TODO: implement hyperplan distance classifier and performance validation (cf. object detection) ?
+
 
 
   return EXIT_SUCCESS;
